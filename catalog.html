@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>PLUS ULTRA 도감</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/catalog.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="mark">PLUS ULTRA</span>
+    <span class="kind">도감</span>
+  </div>
+  <p class="summary" id="summary">게임에 나오는 도시·인물·발견물을 그림과 함께 보여 줍니다.</p>
+  <div class="tools">
+    <label class="search" for="q"><span class="sr">찾기</span><input id="q" type="search" placeholder="이름, 번호, 파일 이름으로 찾기" autocomplete="off"></label>
+    <button class="help-btn" id="helpBtn" type="button">그림 교체 방법</button>
+  </div>
+</header>
+<nav class="tabs" id="tabs" role="tablist" aria-label="분류"></nav>
+<section class="bar">
+  <div class="chips" id="chips" role="group" aria-label="걸러 보기"></div>
+  <p class="note" id="note"></p>
+</section>
+<main id="grid" class="grid" aria-live="polite"></main>
+<p class="empty" id="empty" hidden>찾는 항목이 없습니다. 다른 낱말로 찾아보세요.</p>
+
+<dialog id="detail" class="sheet" aria-labelledby="dTitle">
+  <form method="dialog" class="close-row"><button class="x" value="close" aria-label="닫기">닫기</button></form>
+  <div id="dBody"></div>
+</dialog>
+
+<dialog id="help" class="sheet" aria-labelledby="hTitle">
+  <form method="dialog" class="close-row"><button class="x" value="close" aria-label="닫기">닫기</button></form>
+  <div class="help">
+    <h2 id="hTitle">그림을 바꾸는 방법</h2>
+    <p>게임의 그림은 모두 코드로 그립니다. WebGame 폴더의 <code>images</code> 폴더에 정해진 이름으로 그림 파일을 넣으면 그 자리의 그림이 파일로 바뀌고, 넣지 않은 그림은 원래대로 코드가 그립니다.</p>
+    <ol class="steps">
+      <li><b>파일 넣기</b> — 이 도감에서 바꿀 항목을 눌러 파일 이름을 확인하고, 그 이름으로 <code>images</code> 폴더에 넣습니다. PNG·JPG·WEBP 모두 됩니다.</li>
+      <li><b>목록 갱신</b> — WebGame 폴더에서 <code>python tools/images.py</code>를 실행합니다. <code>images/manifest.js</code>가 새로 만들어지고, 이름이 틀린 파일을 알려 줍니다.</li>
+      <li><b>확인</b> — <code>index.html</code>을 새로 고치면 바로 보입니다. 한 파일짜리 <code>PLUS_ULTRA.html</code>에 넣으려면 <code>python tools/bundle.py</code>, 웹 배포판은 <code>python tools/build_web.py</code>를 다시 실행합니다.</li>
+    </ol>
+    <h3>파일 이름 규칙</h3>
+    <div class="scroll-x">
+    <table class="rules">
+      <thead><tr><th>그림</th><th>파일 이름</th><th>권장 크기</th></tr></thead>
+      <tbody>
+        <tr><td>타이틀 화면</td><td><code>title.jpg</code></td><td>1600×900</td></tr>
+        <tr><td>도시 풍경</td><td><code>cities/0.jpg</code> (도시 번호)<br><code>cities/0_golden.jpg</code> 해질녘 · <code>cities/0_dusk.jpg</code> 저녁</td><td>1600×900</td></tr>
+        <tr><td>같은 양식 도시 모두</td><td><code>city-styles/ib.jpg</code> (양식 기호는 기타 탭)</td><td>1600×900</td></tr>
+        <tr><td>건물 내부</td><td><code>interiors/tavern.jpg</code><br>문화권별 <code>interiors/tavern_islam.jpg</code> · 도시별 <code>interiors/tavern@0.jpg</code></td><td>1600×900</td></tr>
+        <tr><td>동료 · 여급</td><td><code>portraits/mates/rocco.png</code> · <code>portraits/maids/m_lis.png</code></td><td>512×512</td></tr>
+        <tr><td>후원자</td><td><code>portraits/sponsors/pt_king.png</code><br>시대별 인물 <code>portraits/sponsors/pt_king_2.png</code></td><td>512×512</td></tr>
+        <tr><td>경쟁자</td><td><code>portraits/rivals/바르톨로메우 디아스.png</code></td><td>512×512</td></tr>
+        <tr><td>마을 사람</td><td><code>portraits/npc/trader.png</code><br>문화권별 <code>_islam</code> · 도시별 <code>@0</code></td><td>512×512</td></tr>
+        <tr><td>제독 얼굴</td><td><code>portraits/player/아무이름.png</code> — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고릅니다</td><td>512×512</td></tr>
+        <tr><td>자녀</td><td><code>portraits/family/son.png</code> · <code>daughter.png</code> · 둘째 아들 <code>son_2.png</code></td><td>512×512</td></tr>
+        <tr><td>발견물</td><td><code>discoveries/capegood.jpg</code> · 분류 공통 <code>discovery-cats/geo.jpg</code></td><td>1440×640</td></tr>
+        <tr><td>배</td><td><code>ships/caravel.png</code></td><td>880×480</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>알아 둘 점</h3>
+    <ul class="notes">
+      <li>한 자리에 여러 이름이 있으면 더 구체적인 이름을 먼저 찾습니다. 예) 리스본 술집: <code>tavern@0</code> → <code>tavern_europe</code> → <code>tavern</code> → 코드 그림.</li>
+      <li>그림은 칸을 꽉 채우도록 가운데를 기준으로 잘라 씁니다. 인물은 위쪽 4분의 1 지점을 기준으로 자르므로 얼굴을 위쪽에 두세요.</li>
+      <li>해질녘·저녁 전용 그림이 없으면 기본 그림에 옅은 노을빛을 입혀 씁니다.</li>
+      <li>바다 지도, 육상 탐험 지도, 해전 화면은 실시간으로 그리는 화면이라 파일로 바꾸지 않습니다.</li>
+      <li>claude.ai에 올리는 한 파일짜리 판은 16MB까지입니다. 그림을 많이 넣을 때는 JPG(품질 80 안팎)로 저장하세요.</li>
+    </ul>
+    <div id="manifestCheck"></div>
+  </div>
+</dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="js/core/util.js"></script>
+<script src="images/manifest.js"></script>
+<script src="js/core/images.js"></script>
+<script src="js/data/base.js"></script>
+<script src="js/data/ships.js"></script>
+<script src="js/data/discoveries.js"></script>
+<script src="js/data/people.js"></script>
+<script src="js/data/books.js"></script>
+<script src="js/data/frontiers.js"></script>
+<script src="js/data/cities.js"></script>
+<script src="js/art/paint.js"></script>
+<script src="js/art/city.js"></script>
+<script src="js/art/portrait.js"></script>
+<script src="js/art/interior.js"></script>
+<script src="js/art/pictures.js"></script>
+<script src="js/art/ships.js"></script>
+<script src="js/catalog.js"></script>
+</body>
+</html>

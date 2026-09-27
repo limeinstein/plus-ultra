@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1600" height="900"></canvas>
+<script src="js/core/inflate.js"></script>
+<script src="js/data/world_data.js"></script>
+<script src="js/world/geo.js"></script>
+<script src="js/world/renderer.js"></script>
+<script>
+const q=new URLSearchParams(location.search);
+window.onload=()=>{
+  try{
+  const t0=performance.now(); G.Geo.init(); const t1=performance.now();
+  const r=new G.WorldRenderer(document.getElementById('c'));
+  const view={lon:+q.get('lon')||-9.5,lat:+q.get('lat')||38.5,zoom:+q.get('zoom')||64,time:+q.get('t')||10,wind:[0.6,0.3],cloud:+(q.get('cloud')||0.35),edge:+(q.get('edge')||0.8),mode:+(q.get('mode')||0),cssWidth:1600};
+  const t2=performance.now(); r.draw(view); r.gl.finish(); const t3=performance.now();
+  document.title='done '+(t1-t0).toFixed(0)+' '+(t3-t2).toFixed(0);
+  }catch(e){document.title='err '+e.message; console.error(e);}
+};
+</script></body></html>

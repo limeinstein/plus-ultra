@@ -1,0 +1,337 @@
+/* 그림 교체: images/manifest.js 에 등록된 파일이 있으면 코드로 그린 그림 대신 그 파일을 보여 줍니다.
+   키는 images/ 폴더 기준 경로에서 확장자를 뺀 것입니다. 예) images/cities/0.jpg → 'cities/0'
+   하나의 그림 자리에는 [가장 구체적인 키, ..., 가장 일반적인 키] 순서의 후보 목록(체인)을 씁니다. */
+(function (G) {
+  'use strict';
+  var I = {};
+  G.Img = I;
+  var BASE = 'images/';
+  var files = null;
+  var imgs = {}, state = {}, waiters = {};
+
+  function man() {
+    if (!files) {
+      files = {};
+      var m = G.IMAGE_FILES || {};
+      for (var k in m) if (Object.prototype.hasOwnProperty.call(m, k) && m[k]) files[k] = m[k];
+    }
+    return files;
+  }
+  I.base = function (b) { if (b != null) BASE = b; return BASE; };
+  /** re-read G.IMAGE_FILES (e.g. after the manifest changed) */
+  I.reset = function () {
+    for (var b in blobs) { try { URL.revokeObjectURL(blobs[b]); } catch (e) { /* 무시 */ } }
+    files = null; imgs = {}; state = {}; waiters = {}; blobs = {};
+  };
+  I.count = function () { return Object.keys(man()).length; };
+  /** sorted keys that start with prefix */
+  I.list = function (prefix) { return Object.keys(man()).filter(function (k) { return !prefix || k.indexOf(prefix) === 0; }).sort(natural); };
+  function natural(a, b) { return a.localeCompare(b, undefined, { numeric: true }); }
+  I.has = function (k) { return !!(k && man()[k]) && state[k] !== 'fail'; };
+  /** first key of the chain that has a file */
+  I.pick = function (chain) { chain = [].concat(chain || []); for (var i = 0; i < chain.length; i++) if (I.has(chain[i])) return chain[i]; return null; };
+  I.file = function (k) { return man()[k] || null; };
+  /** 사람이 읽을 파일 이름. 한 파일짜리 판에서는 data: 주소 대신 원래 이름을 돌려준다 */
+  I.path = function (k) {
+    if (!k) return null;
+    var p = G.IMAGE_PATHS && G.IMAGE_PATHS[k];
+    if (p) return p;
+    var f = man()[k];
+    if (!f) return null;
+    if (f.indexOf('data:') === 0) {
+      var m = /^data:image\/([a-z]+)/.exec(f);
+      return k + '.' + (m ? (m[1] === 'jpeg' ? 'jpg' : m[1]) : 'png');
+    }
+    return f;
+  };
+  /* 한 파일짜리 판은 그림이 아주 긴 data: 주소로 들어 있다. 그대로 쓰면 주소가 수십만 자여서
+     그림을 따로 열어 보거나 주소를 다루기 어렵다. 처음 쓸 때 짧은 blob: 주소로 바꿔 둔다. */
+  var blobs = {};
+  function blobUrl(k, f) {
+    if (blobs[k]) return blobs[k];
+    try {
+      var i = f.indexOf(','), head = f.slice(5, i);
+      var type = head.replace(/;base64$/, '') || 'image/png';
+      var bin = atob(f.slice(i + 1)), n = bin.length, a = new Uint8Array(n);
+      for (var j = 0; j < n; j++) a[j] = bin.charCodeAt(j);
+      blobs[k] = URL.createObjectURL(new Blob([a], { type: type }));
+    } catch (e) { blobs[k] = f; }
+    return blobs[k];
+  }
+  I.src = function (k) {
+    var f = man()[k]; if (!f) return null;
+    if (f.indexOf('data:') === 0) {
+      if (blobs[k]) return blobs[k];
+      if (window.URL && URL.createObjectURL && f.indexOf(';base64,') > 0) return blobUrl(k, f);
+      return f;
+    }
+    if (/^(blob:|https?:)/.test(f)) return f;
+    return BASE + f.split('/').map(encodeURIComponent).join('/');
+  };
+  I.get = function (k) { return state[k] === 'ok' ? imgs[k] : null; };
+  I.status = function (k) { return state[k] || (man()[k] ? 'idle' : 'none'); };
+  I.load = function (k) {
+    return new Promise(function (resolve) {
+      if (!k || !man()[k] || state[k] === 'fail') return resolve(null);
+      if (state[k] === 'ok') return resolve(imgs[k]);
+      (waiters[k] = waiters[k] || []).push(resolve);
+      if (state[k] === 'loading') return;
+      state[k] = 'loading';
+      var im = new Image();
+      im.decoding = 'async';
+      im.onload = function () { state[k] = 'ok'; imgs[k] = im; flush(k, im); };
+      im.onerror = function () { state[k] = 'fail'; if (window.console) console.warn('[그림 교체] 파일을 불러오지 못했습니다: ' + (man()[k] || k)); flush(k, null); };
+      im.src = I.src(k);
+    });
+  };
+  function flush(k, im) { var w = waiters[k] || []; delete waiters[k]; w.forEach(function (f) { try { f(im); } catch (e) { console.error(e); } }); }
+  /** walk the chain: the first file that loads wins. resolves {key, img} or null */
+  I.resolve = function (chain) {
+    chain = [].concat(chain || []);
+    var i = 0;
+    function next() {
+      while (i < chain.length && !I.has(chain[i])) i++;
+      if (i >= chain.length) return Promise.resolve(null);
+      var k = chain[i++];
+      return I.load(k).then(function (im) { return im ? { key: k, img: im } : next(); });
+    }
+    return next();
+  };
+  /** load the pictures for several chains; resolves when done or after ms */
+  I.preload = function (chains, ms) {
+    var list = (chains || []).filter(function (c) { return I.pick(c); });
+    if (!list.length) return Promise.resolve();
+    var all = Promise.all(list.map(I.resolve));
+    return ms ? Promise.race([all, new Promise(function (r) { setTimeout(r, ms); })]) : all;
+  };
+
+  /** draw so the picture covers the rect (cropping the overflow). fx/fy: focus 0..1 */
+  I.drawCover = function (ctx, im, x, y, w, h, fx, fy) {
+    var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
+    if (!iw || !ih) return;
+    var s = Math.max(w / iw, h / ih), dw = iw * s, dh = ih * s;
+    ctx.drawImage(im, x + (w - dw) * (fx == null ? 0.5 : fx), y + (h - dh) * (fy == null ? 0.5 : fy), dw, dh);
+  };
+  /** draw so the whole picture fits inside the rect */
+  I.drawContain = function (ctx, im, x, y, w, h) {
+    var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
+    if (!iw || !ih) return;
+    var s = Math.min(w / iw, h / ih), dw = iw * s, dh = ih * s;
+    ctx.drawImage(im, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+  };
+
+  /** paint the override for chain onto canvas cv — now if loaded, otherwise as soon as the file arrives.
+      opts: {fit:'cover'|'contain', fx, fy, bg, post(ctx,w,h,key)} . returns true when an override exists */
+  I.apply = function (cv, chain, opts) {
+    opts = opts || {};
+    var key = I.pick(chain); if (!key) return false;
+    function paint(res) {
+      if (!res) return;
+      var ctx = cv.getContext('2d'), w = cv.width, h = cv.height;
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, w, h);
+      if (opts.bg) { ctx.fillStyle = opts.bg; ctx.fillRect(0, 0, w, h); }
+      if (opts.fit === 'contain') I.drawContain(ctx, res.img, 0, 0, w, h);
+      else I.drawCover(ctx, res.img, 0, 0, w, h, opts.fx, opts.fy);
+      ctx.restore();
+      if (opts.post) { ctx.save(); opts.post(ctx, w, h, res.key); ctx.restore(); }
+      cv.setAttribute('data-img', res.key);
+      if (G.Game && G.Game._sceneSrc === cv && G.Game.setScene) G.Game.setScene(cv);
+      if (opts.onPaint) opts.onPaint(cv, res.key);
+    }
+    var ready = I.get(key);
+    if (ready) paint({ key: key, img: ready });
+    else I.resolve(chain).then(paint);
+    return true;
+  };
+  /** canvas w×h showing the override when there is one, otherwise procedural() */
+  I.make = function (chain, w, h, procedural, opts) {
+    var key = I.pick(chain);
+    if (!key) return procedural();
+    var cv;
+    if (I.get(key)) { cv = document.createElement('canvas'); cv.width = w; cv.height = h; }
+    else cv = procedural();
+    I.apply(cv, chain, opts);
+    return cv;
+  };
+  // ---------------------------------------------------------------- key chains (파일 이름 규칙)
+  I.STYLES = [['ib', '이베리아'], ['ne', '서·북유럽'], ['it', '이탈리아·남프랑스'], ['gr', '그리스·발칸'], ['ru', '러시아'], ['is', '아랍·북아프리카'],
+    ['pe', '페르시아·중앙아시아'], ['af', '사헬(흙벽 도시)'], ['sw', '동아프리카 해안'], ['tr', '열대 토착 마을'], ['in', '인도'], ['se', '동남아시아'],
+    ['cn', '중국'], ['kr', '조선'], ['jp', '일본'], ['st', '초원(유르트)'], ['co', '신대륙 식민 도시'], ['az', '메소아메리카'], ['an', '안데스']];
+  /** 도시 양식 → 건물 겉모습 묶음 (images/exterior-styles/<묶음>/<건물>.webp) */
+  I.EXTSTYLES = [['iberia', '포르투갈'], ['espana', '에스파냐·식민'], ['france', '서·북유럽'], ['italy', '이탈리아·남프랑스'],
+    ['easteurope', '동유럽'], ['ottoman', '오스만·레반트'], ['russia', '러시아'], ['arabia', '아랍·북아프리카·페르시아'],
+    ['swahili', '동아프리카 해안'], ['africa', '아프리카 내륙'], ['masai', '아프리카 초원'], ['india', '인도'],
+    ['seasia', '동남아시아 본토'], ['tropic', '섬·열대 마을'], ['china', '중국'],
+    ['korea', '조선'], ['japan', '일본'], ['steppe', '초원'], ['aztec', '메소아메리카'], ['inca', '안데스']];
+  I.EXT_BY_STYLE = { ib: 'iberia', co: 'espana', ne: 'france', it: 'italy', gr: 'easteurope', ru: 'russia',
+    is: 'arabia', pe: 'arabia', sw: 'swahili', af: 'africa', tr: 'masai', 'in': 'india', se: 'seasia',
+    cn: 'china', kr: 'korea', jp: 'japan', st: 'steppe', az: 'aztec', an: 'inca' };
+  /** 같은 양식이라도 다른 묶음을 쓰는 도시 */
+  I.EXT_BY_CITY = {
+    // 카스티야·아라곤·그라나다의 에스파냐 도시
+    2: 'espana', 3: 'espana', 4: 'espana', 5: 'espana', 6: 'espana', 7: 'espana', 8: 'espana',
+    11: 'espana', 12: 'espana', 13: 'espana', 88: 'espana',
+    // 오스만이 다스리는 발칸·레반트
+    72: 'ottoman', 73: 'ottoman', 76: 'ottoman', 112: 'ottoman', 113: 'ottoman', 114: 'ottoman',
+    115: 'ottoman', 116: 'ottoman', 117: 'ottoman', 118: 'ottoman', 119: 'ottoman', 120: 'ottoman',
+    121: 'ottoman', 
+    // 베네치아가 쥔 섬
+    74: 'italy', 75: 'italy',
+    // 섬 동남아시아·열대 아메리카는 대나무 고상가옥
+    160: 'tropic', 166: 'tropic', 167: 'tropic', 168: 'tropic', 169: 'tropic',
+    170: 'tropic', 171: 'tropic', 172: 'tropic', 208: 'tropic', 209: 'tropic', 211: 'tropic',
+    212: 'tropic', 213: 'tropic' };
+  /** 그 묶음에 없는 건물은 이웃 묶음에서 빌려 온다 */
+  I.EXT_NEXT = { china: 'korea', tropic: 'seasia', korea: 'china', japan: 'china', steppe: 'china',
+    espana: 'iberia', ottoman: 'arabia', masai: 'africa', inca: 'aztec' };
+  I.extStyle = function (c) { return (c && I.EXT_BY_CITY[c.id]) || (c && I.EXT_BY_STYLE[c.style]) || null; };
+  I.CULTURES = [['europe', '유럽'], ['islam', '이슬람권'], ['eastasia', '동아시아'], ['south', '인도·동남아시아'], ['native', '아프리카·아메리카 토착']];
+  I.INTERIORS = [['harbor', '항구'], ['trade', '교역소'], ['shipyard', '조선소'], ['tavern', '술집'], ['inn', '여관'], ['market', '시장'], ['church', '교회·사원'], ['library', '도서관'], ['palace', '왕궁'], ['mansion', '저택'], ['guild', '조합'], ['gate', '성문'], ['home', '자택']];
+  I.NPCS = [['trader', '교역소 주인'], ['vendor', '시장 상인'], ['harbormaster', '항구 관리인'], ['innkeeper', '여관 안주인'], ['tavernkeeper', '술집 주인'],
+    ['shipwright', '조선소 목수'], ['priest', '성직자(신부·이맘·승려)'], ['librarian', '도서관 사서'], ['guildmaster', '조합장'], ['guard', '위병·수위·수비병'],
+    ['butler', '저택 집사'], ['drunk', '술 취한 선원'], ['brawler', '거친 사내'], ['gambler', '포카 상대'], ['native', '원주민'], ['pirate', '해적 두목'],
+    ['captain', '적 함장'], ['boatswain', '갑판장(부하가 없을 때)']];
+  function cul(c) { return G.Art && G.Art.cultureOf ? G.Art.cultureOf(c) : 'europe'; }
+  var K = I.chain = {};
+  K.title = function () { return ['title']; };
+  /** town background: per-city file, then a numbered variant for the style (port / inland), then the style */
+  K.bg = function (c) {
+    var out = ['backgrounds/' + c.id];
+    var base = 'bg-styles/' + c.style + (c.port ? '_port' : '_inland');
+    var list = I.list(base + '_');
+    if (list.length) out.push(list[Math.abs(G.U ? G.U.strHash('bg' + c.id) : c.id) % list.length]);
+    out.push(base, 'bg-styles/' + c.style);
+    return out;
+  };
+  /** building seen from the street: this very building, then the city, the culture, and the common one */
+  K.exterior = function (kind, c, variant) {
+    var out = [];
+    if (variant) out.push('exteriors/' + kind + '@' + variant);
+    out.push('exteriors/' + kind + '@' + c.id);
+    var es = I.extStyle(c);
+    if (es) {
+      out.push('exterior-styles/' + es + '/' + kind);
+      var nx = I.EXT_NEXT[es];
+      if (nx) out.push('exterior-styles/' + nx + '/' + kind);
+    }
+    out.push('exteriors/' + kind + '_' + cul(c), 'exteriors/' + kind);
+    return out;
+  };
+  /** the admiral walking along the street (drawn only when the file exists) */
+  K.hero = function () { return ['characters/player']; };
+  /** 걷는 그림 여러 장 (characters/walk_1 … ) */
+  K.heroWalk = function () { return I.list('characters/walk_'); };
+  /** 수첩에서 보는 반신상 */
+  K.heroHalf = function () { return ['characters/player_half']; };
+  /** a landmark that only stands there to be looked at */
+  K.landmark = function (id) { return ['landmarks/' + id]; };
+  K.city = function (c, time) {
+    var t = time && time !== 'day' ? time : null, out = [];
+    if (t) out.push('cities/' + c.id + '_' + t);
+    out.push('cities/' + c.id);
+    if (t) out.push('city-styles/' + c.style + '_' + t);
+    out.push('city-styles/' + c.style);
+    return out;
+  };
+  K.interior = function (kind, c, variant) {
+    var out = [];
+    if (variant) out.push('interiors/' + kind + '@' + variant);
+    out.push('interiors/' + kind + '@' + c.id, 'interiors/' + kind + '_' + cul(c), 'interiors/' + kind);
+    return out;
+  };
+  /** 같은 역할이라도 도시마다 다른 얼굴이 나오도록: _f(여) _m(남) _2 _3 가 있으면 도시 번호로 하나를 고른다 */
+  function variants(base, seed) {
+    var opts = [];
+    ['_f', '_m', '_2', '_3'].forEach(function (sfx) { if (I.has(base + sfx)) opts.push(base + sfx); });
+    if (!opts.length) return [base];
+    opts.push(base);
+    var i = Math.abs(G.U ? G.U.strHash(seed + base) : 0) % opts.length;
+    return opts[i] === base ? [base] : [opts[i], base];
+  }
+  K.npc = function (id, c) {
+    if (!c) return ['portraits/npc/' + id];
+    var seed = 'npc' + c.id;
+    return ['portraits/npc/' + id + '@' + c.id]
+      .concat(variants('portraits/npc/' + id + '_' + cul(c), seed))
+      .concat(variants('portraits/npc/' + id, seed));
+  };
+  /** 그 도시에서 고른 그림이 여자(f)인지 남자(m)인지 — 호칭을 맞출 때 쓴다 */
+  I.npcGender = function (id, c) {
+    var k = I.pick(K.npc(id, c));
+    return !k ? null : /_f$/.test(k) ? 'f' : /_m$/.test(k) ? 'm' : null;
+  };
+  K.mate = function (id) { return ['portraits/mates/' + id]; };
+  /** 지역별 술집 여급 그림 (images/maid-styles/이름.png = 흉상, 이름_half.png = 서 있는 모습) */
+  I.MAIDSTYLES = [['westeurope', '서유럽 맥주집'], ['iberia', '이베리아·안달루시아'], ['britain', '브리튼·아일랜드'], ['germany', '독일·북해'],
+    ['france', '프랑스'], ['lowlands', '네덜란드·플랑드르'], ['greece', '그리스·마살리아'], ['slav', '슬라브·발트'],
+    ['russia', '러시아·북방'], ['italy', '이탈리아'], ['arabia', '아랍·이집트'], ['ottoman', '오스만·레반트'],
+    ['persia', '페르시아·중앙아시아'], ['india', '인도'], ['seasia', '동남아시아'], ['tropic', '열대 토착'],
+    ['china', '중국'], ['japan', '일본'], ['korea', '조선'], ['africa', '아프리카'], ['native', '아메리카 토착']];
+  /** 도시 style → 어울리는 여급 그림 묶음. 여급마다 묶음 안에서 한 장이 고정으로 뽑힌다 */
+  I.MAID_POOL = {
+    ib: ['iberia', 'france', 'westeurope', 'italy'], ne: ['westeurope', 'britain', 'germany', 'lowlands', 'slav'],
+    it: ['italy', 'france', 'greece'], gr: ['greece', 'italy', 'ottoman'], ru: ['russia', 'slav'],
+    is: ['arabia', 'ottoman', 'persia'], pe: ['persia', 'arabia'],
+    af: ['africa', 'arabia'], sw: ['africa', 'arabia'], tr: ['tropic', 'native'],
+    'in': ['india'], se: ['seasia', 'tropic'], cn: ['china'], jp: ['japan'], kr: ['korea'], st: ['persia', 'china'],
+    co: ['iberia', 'france', 'westeurope'], az: ['native', 'tropic'], an: ['native', 'tropic']
+  };
+  /** 이 여급에게는 이 묶음을 고정으로. 없으면 도시 style 후보에서 고른다 */
+  I.MAID_FACE = {
+    m_lis: 'iberia', m_sev: 'iberia', m_cad: 'westeurope', m_bar: 'italy',
+    m_gra: 'arabia', m_ale: 'arabia', m_ist: 'ottoman', m_tun: 'ottoman',
+    m_par: 'france', m_mar: 'greece', m_lon: 'britain', m_bri: 'britain', m_ams: 'lowlands', m_ant: 'lowlands',
+    m_ham: 'germany', m_cph: 'russia', m_rig: 'slav', m_ven: 'italy', m_gen: 'france', m_nap: 'greece',
+    m_goa: 'iberia', m_cal: 'india', m_mal: 'seasia', m_mac: 'china', m_nag: 'japan', m_han: 'korea'
+  };
+  /** 이 여급이 쓸 지역 묶음 이름 (없으면 null → 코드로 그린 초상) */
+  I.maidStyle = function (id, c) {
+    if (I.MAID_FACE[id]) return I.MAID_FACE[id];
+    var pool = c && I.MAID_POOL[c.style];
+    if (!pool || !pool.length) return null;
+    return pool[Math.abs(G.U ? G.U.strHash('maid' + id) : 0) % pool.length];
+  };
+  /** 묶음 안에서 이 여급의 그림 한 장 (maid-styles/묶음/번호) */
+  I.maidPic = function (id, c) {
+    var st = I.maidStyle(id, c); if (!st) return null;
+    var list = I.list('maid-styles/' + st + '/').filter(function (k) { return !/_half$/.test(k); });
+    if (!list.length) return I.has('maid-styles/' + st) ? 'maid-styles/' + st : null;
+    return list[Math.abs(G.U ? G.U.strHash('maidpic' + id) : 0) % list.length];
+  };
+  K.maid = function (id, c) {
+    var out = ['portraits/maids/' + id], k = I.maidPic(id, c);
+    if (k) out.push(k);
+    return out;
+  };
+  /** 이름 있는 여급이 없는 도시의 술집에 서 있는 그 지역 여급 */
+  I.maidPicCity = function (c) {
+    var pool = c && I.MAID_POOL[c.style];
+    if (!pool || !pool.length) return null;
+    var st = pool[Math.abs(G.U ? G.U.strHash('city' + c.id) : 0) % pool.length];
+    var list = I.list('maid-styles/' + st + '/').filter(function (k) { return !/_half$/.test(k); });
+    if (!list.length) return I.has('maid-styles/' + st) ? 'maid-styles/' + st : null;
+    return list[Math.abs(G.U ? G.U.strHash('citypic' + c.id) : 0) % list.length];
+  };
+  K.maidCity = function (c) { var k = I.maidPicCity(c); return k ? [k] : []; };
+  K.maidCityHalf = function (c) { var k = I.maidPicCity(c); return k ? [k + '_half'] : []; };
+  /** 술집에 서 있는 여급의 전신(무릎까지) 그림 */
+  K.maidHalf = function (id, c) {
+    var out = ['portraits/maids/' + id + '_half'], k = I.maidPic(id, c);
+    if (k) out.push(k + '_half');
+    return out;
+  };
+  /** holder: 1-based index into sp.holders (the person holding the title at that time) */
+  K.sponsor = function (sp, holder) { var out = []; if (holder) out.push('portraits/sponsors/' + sp.id + '_' + holder); out.push('portraits/sponsors/' + sp.id); return out; };
+  K.rival = function (name) {
+    var out = ['portraits/rivals/' + name];
+    var m = (G.MATES || []).filter(function (x) { return x.name === name; })[0];
+    if (m) out.push('portraits/mates/' + m.id);
+    return out;
+  };
+  K.player = function (face) { var l = I.list('portraits/player/'); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
+  K.kid = function (sex, order) { var b = sex === 'f' ? 'daughter' : 'son'; return ['portraits/family/' + b + '_' + order, 'portraits/family/' + b]; };
+  K.discovery = function (d) { return ['discoveries/' + d.id, 'discovery-cats/' + d.cat]; };
+  K.ship = function (id) { return ['ships/' + id]; };
+})(window.G = window.G || {});

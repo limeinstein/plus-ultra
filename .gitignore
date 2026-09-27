@@ -1,0 +1,12 @@
+# 만들어지는 배포판 (tools/bundle.py · tools/build_web.py 가 다시 만든다)
+dist/
+PLUS_ULTRA.html
+# 파이썬 캐시
+__pycache__/
+*.pyc
+# 게임에 쓰지 않는 원본·여분 그림
+images/_extra/
+# 편집기·운영체제 찌꺼기
+.DS_Store
+Thumbs.db
+desktop.ini
