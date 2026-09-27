@@ -34,7 +34,7 @@
     return {
       side: side, src: src, name: src.name, type: src.type, x: x + U.rf(-30, 30), y: y + U.rf(-20, 20), heading: side === 'me' ? 0 : Math.PI,
       hp: src.hp, maxHp: src.maxHp, crew: 0, crew0: 0, guns: { type: src.guns.type, n: src.guns.n }, sails: src.sails, len: len,
-      reload: [U.rf(0, 2), U.rf(0, 2), U.rf(0, 2)], alive: true, captured: false, fled: false, target: null, moveTo: null, sink: 0, flag: i === 0, speedK: t.spd, turn: t.turn || 1,
+      reload: [U.rf(0, 2), U.rf(0, 2), U.rf(0, 2)], alive: true, captured: false, fled: false, target: null, moveTo: null, sink: 0, flag: i === 0, no: i + 1, speedK: t.spd, turn: t.turn || 1,
       t: t, tr: t.traits, ramCd: 0, bulk: false,
       vel: null, spd: 0, lat: 0, turnRate: 0,
       fx: G.SeaFX ? G.SeaFX.create({ spacing: BFX.wakeSpacing, life: BFX.wakeLife, maxPoints: 280, kz: 1 }) : null   // 해전 좌표(px)와 해전 시간(1.5초 = 물보라의 하루)으로
@@ -57,7 +57,11 @@
     en.forEach(function (sh, i) { var b = makeShip(sh, 'en', i, en.length); b.crew = b.crew0 = sh.crew; st.ships.push(b); });
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
     s.stats.battles++;
+    // 기함: 양쪽 모두 1번 배. 적 기함을 가라앉히거나 나포하면 이기고, 우리 기함을 잃으면 진다
+    st.myFlag = st.ships.filter(function (b) { return b.side === 'me'; })[0] || null;
+    st.enFlag = st.ships.filter(function (b) { return b.side === 'en'; })[0] || null;
     buildUI();
+    if (st.enFlag && st.ships.filter(function (b) { return b.side === 'en'; }).length > 1) setTimeout(function () { if (st && !st.over) UI.toast('적 기함(1번 · ' + st.enFlag.name + ')을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.', 'flag', 5200); }, 600);
     if (G.Audio) G.Audio.music('battle');
     var foe = npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
     UI.toast(foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! 방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5000);
@@ -129,11 +133,30 @@
   function pos(e) { var r = G.Game.canvases().overlay.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
   function toScreen(x, y) { return [800 + (x - st.cx) * SCALE, 450 + (y - st.cy) * SCALE]; }
   function toWorld(px, py) { return [st.cx + (px - 800) / SCALE, st.cy + (py - 450) / SCALE]; }
-  /** 기함: 살아 있는 우리 배 가운데 첫 배. 기함을 잃으면 다음 배가 기함이 된다 (지휘·일기토) */
+  /** 기함: 우리 1번 배 (지휘·일기토). 기함을 잃으면 해전에 진다 */
+  /** 배 이름표: 번호 동그라미(기함은 1번 — 금빛·붉은빛 테와 「기함」 표) + 이름 */
+  function drawShipTag(ctx, b, x, y) {
+    var me = b.side === 'me', txt = b.name, tw = ctx.measureText(txt).width, r = b.flag ? 11 : 9.5;
+    var tagW = b.flag ? 34 : 0, total = r * 2 + 6 + tw + (tagW ? 6 + tagW : 0), x0 = x - total / 2;
+    // 번호
+    ctx.beginPath(); ctx.arc(x0 + r, y - 5, r, 0, 7);
+    ctx.fillStyle = b.flag ? (me ? '#e2b04a' : '#d8503a') : 'rgba(10,14,24,.72)'; ctx.fill();
+    ctx.lineWidth = b.flag ? 2 : 1.2; ctx.strokeStyle = b.flag ? '#fff2cc' : (me ? '#b8d0a0' : '#ffb0a0'); ctx.stroke();
+    ctx.fillStyle = b.flag ? '#2a1606' : (me ? '#e8f0d8' : '#ffd0c4'); ctx.textAlign = 'center';
+    var f0 = ctx.font; ctx.font = '800 ' + (b.flag ? 14 : 12) + 'px ' + getComputedStyle(document.body).fontFamily; ctx.fillText(String(b.no || ''), x0 + r, y); ctx.font = f0;
+    // 이름
+    ctx.textAlign = 'left'; ctx.fillStyle = me ? '#f2e7cc' : '#ffb0a0'; ctx.fillText(txt, x0 + r * 2 + 6, y);
+    // 기함 표
+    if (tagW) {
+      var tx = x0 + r * 2 + 6 + tw + 6;
+      ctx.fillStyle = me ? 'rgba(226,176,74,.9)' : 'rgba(216,80,58,.9)'; ctx.fillRect(tx, y - 13, tagW, 17);
+      ctx.fillStyle = '#1a0e04'; var f1 = ctx.font; ctx.font = '800 11px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.fillText('기함', tx + tagW / 2, y); ctx.font = f1;
+    }
+    ctx.textAlign = 'center';
+  }
   function flagship() {
-    var fs = st.ships.filter(function (b) { return b.side === 'me' && b.alive; })[0] || null;
-    if (fs && !fs.flag) st.ships.forEach(function (b) { if (b.side === 'me') b.flag = b === fs; });
-    return fs;
+    var fs = st.myFlag;
+    return fs && fs.alive ? fs : null;
   }
   function onDown(e) {
     if (e.button !== 0 || UI.busy() || st.over) return;
@@ -261,7 +284,9 @@
       else { b.target = near; b.moveTo = null; }
       return;
     }
-    // enemy AI
+    // enemy AI — 우리 기함이 가까이 있으면 기함을 노린다 (기함을 잡으면 이기니까)
+    var mfl = st.myFlag;
+    if (mfl && mfl.alive && near !== mfl && Math.hypot(mfl.x - b.x, mfl.y - b.y) < 1.4 * Math.hypot(near.x - b.x, near.y - b.y)) near = mfl;
     var kind = st.npc.kind;
     var myCrew = b.crew, theirCrew = near.crew;
     if (kind === 'merchant' || (b.hp < b.maxHp * 0.25 && kind !== 'navy')) { b.moveTo = [b.x + (b.x - near.x) * 3, b.y + (b.y - near.y) * 3]; b.target = null; b.fleeing = true; return; }
@@ -503,7 +528,7 @@
     clashFx(me, en, 1);
     await UI.say(enemyStarted ? '적이 우리 배에 갈고리를 걸었다! 백병전이다!' : '갈고리를 걸어라! 적선에 뛰어든다!', G.Scenes.mateSpeaker('first'));
     // captain duel between flagships
-    if (me.flag && en === st.ships.filter(function (o) { return o.side === 'en'; })[0] && st.npc.kind !== 'merchant' && !st.dueled) {
+    if (me.flag && en.flag && st.npc.kind !== 'merchant' && !st.dueled) {
       var px = G.Games.proxy(), pd = px && G.MATE[px.id];
       var v = await UI.ask('적의 두목이 나섰다. "제독끼리 승부를 내자!"', [{ label: '일기토를 받는다', value: 1 }].concat(pd ? [{ label: '부관 ' + pd.name + '에게 맡긴다', value: 2 }] : []).concat([{ label: '병사끼리 싸운다', value: 0 }]), {});
       if (v) {
@@ -567,6 +592,33 @@
     if (st.over) return;
     var mine = st.ships.filter(function (b) { return b.side === 'me' && b.alive; });
     var foes = st.ships.filter(function (b) { return b.side === 'en' && b.alive; });
+    var ef = st.enFlag, mf = st.myFlag;
+    // 적 기함을 무찔렀다: 남은 적은 싸울 뜻을 잃고 흩어져 달아난다 → 승리
+    if (ef && !ef.alive && (ef.sunk || ef.captured) && foes.length) {
+      foes.forEach(function (b) { b.alive = false; b.fled = true; b.routed = true; });
+      st.over = true; st.flagWin = true;
+      log('적 기함 ' + ef.name + U.jx(ef.name, '이/가') + ' ' + (ef.captured ? '나포되었다' : '가라앉았다') + '! 남은 적이 흩어져 달아난다.');
+      UI.toast('적 기함을 무찔렀다! 남은 적 ' + foes.length + '척이 흩어져 달아난다.', 'flag', 4200);
+      finish('win'); return;
+    }
+    // 적 기함이 달아났다: 따르던 배도 모두 물러난다
+    if (ef && ef.fled && !ef.routed && foes.length) {
+      foes.forEach(function (b) { b.alive = false; b.fled = true; b.routed = true; });
+      st.over = true; log('적 기함이 달아나자 남은 적도 모두 물러났다.');
+      finish(st.ships.some(function (b) { return b.side === 'en' && (b.sunk || b.captured); }) ? 'win' : 'escaped-enemy'); return;
+    }
+    // 우리 기함을 잃었다 (가라앉거나 빼앗김): 남은 배는 흩어져 달아난다 → 패배
+    if (mf && !mf.alive && !mf.fled && mine.length) {
+      mine.forEach(function (b) { b.alive = false; b.fled = true; b.routed = true; });
+      st.over = true; st.flagLost = true;
+      log('기함 ' + mf.name + '호를 잃었다! 남은 배가 흩어져 달아난다.');
+      finish('flaglost'); return;
+    }
+    // 우리 기함이 전장을 벗어났다: 함대 전체가 물러난다
+    if (mf && mf.fled && !mf.routed && mine.length) {
+      mine.forEach(function (b) { b.alive = false; b.fled = true; b.routed = true; });
+      st.over = true; finish('retreat'); return;
+    }
     if (!foes.length) { st.over = true; finish(st.ships.some(function (b) { return b.side === 'en' && (b.sunk || b.captured); }) ? 'win' : 'escaped-enemy'); }
     else if (!mine.length) { st.over = true; var anyFled = st.ships.some(function (b) { return b.side === 'me' && b.fled; }); finish(anyFled ? 'retreat' : 'lose'); }
   }
@@ -599,11 +651,18 @@
         var beaten = st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length;
         if (beaten) G.Quest.onPirateBeaten(beaten);
       }
-      lines.push('승리했다! 전리품으로 금화 ' + U.num(gold) + '닢을 얻었다. (명성 +' + fame + ')');
+      if (st.flagWin) { s.player.fame += 10; fame += 10; }
+      lines.push((st.flagWin ? '적 기함을 무찔러 이겼다! ' : '승리했다! ') + '전리품으로 금화 ' + U.num(gold) + '닢을 얻었다. (명성 +' + fame + ')' + (st.flagWin ? '<br><span class="muted">남은 적 배는 흩어져 달아났다.</span>' : ''));
       G.State.log((st.npc.kind === 'pirate' ? '해적' : st.npc.kind === 'navy' ? '함대' : '상선단') + '과의 해전에서 승리했다.');
       if (G.Audio) G.Audio.sfx('coin');
       await UI.alert(lines.join('<br>'), '해전 승리');
       for (var i = 0; i < caps.length; i++) await prize(caps[i]);
+    } else if (res === 'flaglost') {
+      // 기함을 잃고 흩어져 달아났다: 쫓기며 짐 절반을 버렸다
+      var lostK = 0;
+      Object.keys(f.cargo).forEach(function (k) { var c = f.cargo[k], d = Math.ceil(c.q / 2); c.q -= d; lostK += d; if (c.q <= 0) delete f.cargo[k]; });
+      await UI.alert((st.myFlag ? '기함 ' + st.myFlag.name + '호를 잃었다! ' : '') + '지휘를 잃은 함대가 흩어져 달아났다...' + (lostK ? '<br>쫓기는 동안 짐 ' + lostK + '통을 바다에 버렸다.' : '') + (f.ships.length ? '<br><span class="muted">새 기함: ' + U.esc(f.ships[0].name) + '호</span>' : ''), '패배 — 기함 상실');
+      if (!f.ships.length) { await ransom(); }
     } else if (res === 'escaped-enemy') {
       await UI.alert('적이 모두 달아났다.', '해전 종료');
     } else if (res === 'retreat') {
@@ -844,7 +903,7 @@
       ctx.fillStyle = b.side === 'me' ? '#5b9a5d' : '#c0463a'; ctx.fillRect(p[0] - w / 2 + 1, p[1] - b.len * 0.5 - 17, (w - 2) * Math.max(0, b.hp / b.maxHp), 3.5);
       ctx.fillStyle = '#d9c9a6'; ctx.fillRect(p[0] - w / 2 + 1, p[1] - b.len * 0.5 - 12.5, (w - 2) * Math.min(1, b.crew / Math.max(1, b.crew0)), 3);
       ctx.font = '600 13px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center';
-      ctx.fillStyle = b.side === 'me' ? '#f2e7cc' : '#ffb0a0'; ctx.fillText((b.flag && b.side === 'me' ? '★ ' : '') + b.name + (b.side === 'me' ? '' : ''), p[0], p[1] - b.len * 0.5 - 24);
+      drawShipTag(ctx, b, p[0], p[1] - b.len * 0.5 - 24);
       if (b.side === 'me' && b.flag && b.steer != null && b.alive) {
         var sx = p[0] + Math.cos(b.steer) * (b.len * 0.9 + 70), sy = p[1] + Math.sin(b.steer) * (b.len * 0.9 + 70);
         ctx.strokeStyle = 'rgba(255,240,200,.75)'; ctx.lineWidth = 2; ctx.setLineDash([6, 6]); ctx.beginPath(); ctx.moveTo(p[0] + Math.cos(b.steer) * b.len * 0.6, p[1] + Math.sin(b.steer) * b.len * 0.6); ctx.lineTo(sx, sy); ctx.stroke(); ctx.setLineDash([]);
@@ -881,7 +940,9 @@
     UI.hud.set('wind', U.dirName(st.wind.dir + Math.PI) + '풍');
     if ((st.pf = (st.pf || 0) + 1) % 15 === 0 && el.panel) {
       el.panel.innerHTML = '<div class="fp-h">' + G.icon('ship') + '아군 함대</div>' + st.ships.filter(function (b) { return b.side === 'me'; }).map(function (b) {
-        return '<div class="fp-ship"><div class="flex"><b>' + (b.flag ? '★ ' : '') + U.esc(b.name) + '</b><small class="cream-muted" style="margin-left:6px">' + U.esc(R.captainName(b.src)) + '</small><span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.fled ? '이탈' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'green dark') + '</div>';
+        return '<div class="fp-ship"><div class="flex"><span class="shipno' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag">기함</span>' : '') + '<small class="cream-muted" style="margin-left:6px">' + U.esc(R.captainName(b.src)) + '</small><span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.fled ? '이탈' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'green dark') + '</div>';
+      }).join('') + '<div class="fp-h" style="margin-top:8px">' + G.icon('flag') + '적 함대 <small class="cream-muted">— 1번 기함을 무찌르면 승리</small></div>' + st.ships.filter(function (b) { return b.side === 'en'; }).map(function (b) {
+        return '<div class="fp-ship en"><div class="flex"><span class="shipno en' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag en">기함</span>' : '') + '<span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.captured ? '나포' : b.fled ? '달아남' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '</div>';
       }).join('') + '<div class="cream-muted" style="font-size:14px;margin-top:6px">방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · P: 일시정지</div>';
     }
   }

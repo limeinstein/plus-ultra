@@ -22,8 +22,8 @@
       if (arg.from != null) { var c = G.CITY_DATA[arg.from]; base = { type: 'city', city: c.id, lon: c.lon, lat: c.lat }; }
       else base = { type: 'ship', lon: arg.landing.shipLon, lat: arg.landing.shipLat };
       var start = arg.from != null ? [base.lon, base.lat] : [arg.landing.lon, arg.landing.lat];
-      var party = Math.min(s.fleet.crew, Math.max(5, Math.round(s.fleet.crew * 0.5)));
-      party = Math.min(party, 30);
+      // 대항해시대 3처럼 선원 모두가 탐험대로 나선다 (배는 닻을 내리고 기다린다)
+      var party = s.fleet.crew;
       var mt = cleanMount(arg.mount);
       s.loc = { mode: 'land', lon: start[0], lat: start[1], heading: 0, base: base, party: party, days: 0, party0: party, found0: s.stats.found, marks0: Object.keys(s.marks || {}).length, mount: mt };
       st = newSt(start);
@@ -281,6 +281,9 @@
         } else await UI.say(landLine(d), G.Scenes.mateSpeaker('surveyor'));
         await G.Disc.find(d, 'land');
       }
+      // 두고 온 유물을 가지러 왔다
+      var lefts = G.Disc.leftHere('land', l.lon, l.lat);
+      for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
       // 정찰대: 가까운 발견물을 알아채고 지도에 표식을 남긴다
       var sensed = G.Explore.sense('land', l.lon, l.lat, Math.max(st.scoutBoost || 1, 1 + G.Mounts.scout(MT(), l.party)));
       st.scoutBoost = 0;
@@ -305,21 +308,18 @@
       var who = { name: '원주민', portrait: A.withImg(A.npcSpec('native' + Math.floor(l.lon) + Math.floor(l.lat), 'native', l.lon < -30 ? 'az' : 'af'), G.Img.chain.npc('native')), lang: 1 };
       var v = await UI.ask('원주민 무리를 만났다. 이쪽을 경계하고 있다.', [{ label: '선물을 준다', value: 'gift' }, { label: '말을 건다', value: 'talk' }, { label: '물건을 바꾼다', value: 'trade' }, { label: '지나간다', value: null }], who);
       if (v === 'trade') { await nativeTrade(who); refreshHud(); return; }
-      if (v === 'gift') {
-        var g = Math.min(s.player.gold, 100 + l.party * 5); s.player.gold -= g;
-        if (U.chance(0.7)) { f_food(Math.round(R.dailyUse() * 6)); UI.toast('원주민들이 기뻐하며 식량을 나누어 주었다.', 'bread'); var d = nearHint(); if (d) { G.Disc.addHint(d.id, 'native'); await UI.say('(손짓발짓으로) ' + d.hint, who); } }
-        else UI.toast('원주민들은 선물만 받고 사라졌다.', 'people');
-      } else if (v === 'talk') {
+      if (v === 'gift') { await nativeGift(who); refreshHud(); return; }
+      else if (v === 'talk') {
         if (U.chance(0.5 + R.skill('speech') * 0.1)) { var d2 = nearHint(); if (d2) { G.Disc.addHint(d2.id, 'native'); await UI.say('(알아듣기 힘든 말이지만) ' + d2.hint, who); } else UI.toast('원주민들이 길을 가르쳐 주었다.', 'compass'); }
-        else { await UI.say('원주민들이 화가 나서 달려든다!', {}); await landBattle('원주민 전사', U.ri(8, 25)); }
+        else { await UI.say('원주민들이 화가 나서 달려든다!', {}); await landBattle('원주민 전사', foeSize(0.45, 0.95, 8), false, { kind: 'native' }); }
       }
     } else if (r < 0.55) {
       await UI.say(U.pick(['사나운 짐승 떼가 습격해 왔다!', '굶주린 들짐승이 야영지를 덮쳤다!']), {});
-      await landBattle('들짐승', U.ri(4, 12), true);
+      await landBattle('들짐승', foeSize(0.15, 0.35, 5, 40), true);
     } else if (r < 0.72) {
       await UI.say('도적 떼가 길을 막아섰다! "가진 것을 모두 내놓아라!"', {});
       var v2 = await UI.ask('어떻게 할까?', [{ label: '싸운다', value: 1 }, { label: '돈을 준다', value: 0 }], G.Scenes.mateSpeaker('first'));
-      if (v2) await landBattle('도적 떼', U.ri(10, 30));
+      if (v2) await landBattle('도적 떼', foeSize(0.4, 0.9, 10), false, { kind: 'bandit' });
       else { var lost = Math.min(s.player.gold, Math.round(150 + s.player.gold * 0.08)); s.player.gold -= lost; UI.toast('도적에게 금화 ' + U.num(lost) + '닢을 주었다.', 'coin'); }   // 바다의 통행료처럼 150 + 가진 돈의 8%
     } else if (r < 0.85) {
       await UI.say('맑은 샘을 발견했다! 물을 가득 채우고 잠시 쉬었다.', {});
@@ -332,44 +332,119 @@
     refreshHud();
   }
   function f_food(n) { S().fleet.food += n; }
+  /** 적의 수: 탐험대(선원 전원)에 맞춰 잡는다 */
+  function foeSize(a, b, lo, hi) { var p = S().loc.party || 10; return U.clamp(Math.round(p * U.rf(a, b)), lo || 3, hi || 400); }
+  /** 원주민에게 선물한다: 기뻐하면 식량과 물을 나누어 주고(보급), 때로는 더 얹어 주거나 모닥불 곁에 재워 준다(캠프파이어 — 여관처럼 쉰다) */
+  async function nativeGift(who) {
+    var s = S(), l = s.loc, f = s.fleet, use = R.dailyUse();
+    var cost = Math.round((60 + l.party * 3) / 10) * 10;
+    var trinkets = s.player.items.filter(function (it) { var d = G.ITEM[it.id]; return d && d.kind === 'gift' && !d.ring && !R.isProof(it); });
+    var opts = [{ label: '자잘한 물건을 건넨다 (금화 ' + U.num(cost) + '닢어치 — 유리구슬·천·칼)', value: 'gold', dis: s.player.gold < cost }]
+      .concat(trinkets.slice(0, 4).map(function (it, i) { return { label: '장신구를 건넨다: ' + R.itemName(it), value: 'it' + i }; }))
+      .concat([{ label: '그만둔다', value: null }]);
+    var v = await UI.ask('무엇을 선물할까? 장신구처럼 귀한 것을 건네면 더 반긴다.', opts, G.Scenes.mateSpeaker('first'));
+    if (!v) return;
+    var worth;
+    if (v === 'gold') { s.player.gold -= cost; worth = 1; }
+    else { var it = trinkets[+v.slice(2)]; s.player.items.splice(s.player.items.indexOf(it), 1); worth = 1.4 + (G.ITEM[it.id].gv || 5) / 25; }
+    var pOk = U.clamp(0.72 + R.skill('speech') * 0.06 + (worth - 1) * 0.3, 0, 0.97);
+    if (!U.chance(pOk)) { UI.toast('원주민들은 선물만 받고 숲으로 사라졌다.', 'people', 4000); return; }
+    // 보급: 탐험대 전원이 며칠 먹고 마실 만큼
+    var days = Math.round(U.rf(6, 10) * worth), roll = U.rand();
+    var extra = roll < 0.28 + (worth - 1) * 0.2, fire = !extra && roll < 0.28 + (worth - 1) * 0.2 + 0.3 + (f.fatigue > 40 ? 0.15 : 0);
+    if (extra) days = Math.round(days * 1.8);
+    f.food += Math.round(use * days); f.water += Math.round(use * days);
+    s.player.fame += 1;
+    if (extra) {
+      await UI.say(U.pick(['(손짓으로) 먼 길을 가는 손님이니 넉넉히 가져가라고 한다.', '(웃으며) 선물이 마음에 든 모양이다. 광주리 가득 먹을 것을 내온다.']), who);
+      UI.toast('추가 보급! 식량과 물을 약 ' + days + '일분씩 얻었다.', 'bread', 4800);
+    } else UI.toast('원주민들이 기뻐하며 식량과 물을 약 ' + days + '일분씩 나누어 주었다.', 'bread', 4200);
+    if (fire) await campfire(who);
+    var d = U.chance(fire ? 0.8 : 0.45) ? nearHint() : null;
+    if (d) { G.Disc.addHint(d.id, 'native'); await UI.say('(손짓발짓으로) ' + d.hint, who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
+  }
+  /** 캠프파이어: 원주민의 모닥불 곁에서 하룻밤 — 여관에서처럼 피로가 풀리고 몸이 낫는다 */
+  async function campfire(who) {
+    var s = S(), f = s.fleet, l = s.loc;
+    spendDays(1);
+    var fat0 = f.fatigue, hp0 = s.player.hp;
+    f.fatigue = 0; s.player.hp = 100;
+    (s.mates || []).forEach(function (m) { if (m.hurt) m.hurt = Math.max(0, m.hurt - 3); });
+    var cv = A.canvas(720, 300);
+    var win = UI.window({ title: '캠프파이어', icon: 'tent', width: 780, html: '<div class="campfire"><div class="cf-art"></div><div class="cf-text">' +
+      U.pick(['원주민들이 모닥불 곁에 자리를 내주었다. 구운 고기와 곡물 죽이 돌고, 북소리에 맞춰 노래가 이어진다.', '밤이 되자 원주민들이 커다란 모닥불을 피웠다. 대원들은 오랜만에 배불리 먹고, 불 곁에서 깊이 잠들었다.', '모닥불 너머로 원주민의 이야기꾼이 조상들의 긴 여행 이야기를 들려준다. 말은 몰라도 대원들의 얼굴이 밝아진다.']) +
+      '</div><div class="cf-res">피로 ' + Math.round(fat0) + ' → 0 · 제독 체력 ' + Math.round(hp0) + ' → 100 · 하루가 지났다</div></div>', buttons: [{ label: '날이 밝았다', value: 1, cls: 'navy' }] });
+    win.content.querySelector('.cf-art').appendChild(cv);
+    var t0 = performance.now(), live = true;
+    win.result.then(function () { live = false; });
+    (function loop() { if (!live) return; drawCampfire(cv.getContext('2d'), 720, 300, (performance.now() - t0) / 1000, l.lon); requestAnimationFrame(loop); })();
+    if (G.Audio) G.Audio.sfx('discover');
+    await win.result;
+    refreshHud();
+  }
+  /** 모닥불 그림 (밤하늘·불꽃·둘러앉은 그림자) */
+  function drawCampfire(x, w, h, t, lon) {
+    var g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#070b1e'); g.addColorStop(0.7, '#1a1426'); g.addColorStop(1, '#2a160c'); x.fillStyle = g; x.fillRect(0, 0, w, h);
+    var rng = U.makeRng(7);
+    for (var i = 0; i < 90; i++) { var sx = rng() * w, sy = rng() * h * 0.6, tw = 0.5 + 0.5 * Math.sin(t * 2 + i); x.fillStyle = 'rgba(255,255,240,' + (0.25 + tw * 0.5) * rng() + ')'; x.fillRect(sx, sy, 1.5, 1.5); }
+    // 나무 그림자
+    x.fillStyle = '#05070c';
+    for (var tr = 0; tr < 7; tr++) { var tx = rng() * w, th = 90 + rng() * 80; x.beginPath(); x.moveTo(tx - 30, h * 0.72); x.lineTo(tx, h * 0.72 - th); x.lineTo(tx + 30, h * 0.72); x.fill(); }
+    x.fillRect(0, h * 0.72, w, h);
+    var cx = w / 2, cy = h * 0.8, fl = 1 + 0.08 * Math.sin(t * 9) + 0.05 * Math.sin(t * 23);
+    var glow = x.createRadialGradient(cx, cy, 5, cx, cy, 260 * fl); glow.addColorStop(0, 'rgba(255,170,70,.55)'); glow.addColorStop(1, 'rgba(255,120,40,0)'); x.fillStyle = glow; x.fillRect(0, 0, w, h);
+    // 둘러앉은 사람들 (불빛을 받은 실루엣)
+    for (var p = 0; p < 9; p++) {
+      var side = p % 2 ? 1 : -1, px = cx + side * (70 + Math.floor(p / 2) * 48), py = cy - 6 + Math.floor(p / 2) * 3, sway = Math.sin(t * 1.6 + p) * 2;
+      x.fillStyle = p % 3 === 0 ? '#1e120a' : '#140c06';
+      x.beginPath(); x.ellipse(px + sway, py - 26, 11, 20, 0, 0, 7); x.fill(); x.beginPath(); x.arc(px + sway, py - 52, 8, 0, 7); x.fill();
+      x.fillStyle = 'rgba(255,150,70,.35)'; x.beginPath(); x.ellipse(px + sway - side * 6, py - 26, 4, 16, 0, 0, 7); x.fill();
+    }
+    // 장작과 불꽃
+    x.fillStyle = '#3a2210'; x.save(); x.translate(cx, cy + 6); x.rotate(0.35); x.fillRect(-34, -4, 68, 8); x.rotate(-0.7); x.fillRect(-34, -4, 68, 8); x.restore();
+    x.globalCompositeOperation = 'lighter';
+    for (var k = 0; k < 26; k++) {
+      var ph = (t * 1.4 + k * 0.137) % 1, fx = cx + Math.sin(k * 12.9 + t * 3) * 16 * (1 - ph), fy = cy - ph * 90 * fl, r = (1 - ph) * 16 + 3;
+      x.fillStyle = 'rgba(' + (255) + ',' + Math.round(200 - ph * 150) + ',' + Math.round(80 - ph * 70) + ',' + (0.55 * (1 - ph)) + ')';
+      x.beginPath(); x.arc(fx, fy, r, 0, 7); x.fill();
+    }
+    for (var e = 0; e < 8; e++) { var eph = (t * 0.5 + e * 0.13) % 1; x.fillStyle = 'rgba(255,190,90,' + (1 - eph) + ')'; x.fillRect(cx + Math.sin(e * 7 + t) * 40 * eph, cy - 40 - eph * 160, 2, 2); }
+    x.globalCompositeOperation = 'source-over';
+  }
   function nearHint() {
     var s = S(), l = s.loc;
     var cand = G.DISCOVERIES.filter(function (d) { return d.how === 'land' && !G.Disc.foundByMe(d.id) && !s.hints[d.id] && G.Disc.available(d) && G.Geo.dist(l.lon, l.lat, d.lon, d.lat) < 12; });
     return cand.length ? U.pick(cand) : null;
   }
-  /** simple land skirmish resolved in a few exchanges */
-  async function landBattle(enemyName, n, beasts) {
-    var s = S(), l = s.loc;
-    var mine = l.party, en = n;
-    var power = function () { return (1 + R.skill('sword') * 0.2 + R.skill('shoot') * 0.25 + R.atk() / 50) * (1 - s.fleet.fatigue / 250) * (1 + G.Mounts.combat(MT(), l.party)); };
-    var html = '<div class="lb"><div class="flex"><b>탐험대</b><span class="right lbm">' + mine + '명</span></div><div class="lbar1"></div><div class="flex" style="margin-top:10px"><b>' + enemyName + '</b><span class="right lbe">' + en + '</span></div><div class="lbar2"></div><div class="lbl" style="margin-top:12px;min-height:50px;font-size:18px"></div></div>';
-    var win = UI.window({ title: '지상전', icon: 'sword', width: 620, html: html, closable: false });
-    var c = win.content;
-    function draw(t) { c.querySelector('.lbar1').innerHTML = UI.bar(mine, l.party, 'green'); c.querySelector('.lbar2').innerHTML = UI.bar(en, n, 'red'); c.querySelector('.lbm').textContent = mine + '명'; c.querySelector('.lbe').textContent = en; if (t) c.querySelector('.lbl').innerHTML = t; }
-    draw('');
-    var foot = U.el('div', 'foot'); win.el.appendChild(foot);
-    var res = await new Promise(function (resolve) {
-      function round(kind) {
-        var myA = mine * power() * (kind === 'shoot' ? 0.9 + R.skill('shoot') * 0.15 : kind === 'charge' ? 1.1 + R.skill('sword') * 0.1 : 0.5), enA = en * (beasts ? 1.2 : 1.0) * (kind === 'defend' ? 0.4 : 1);
-        var k1 = Math.min(en, Math.round(myA * U.rf(0.12, 0.25))), k2 = Math.min(mine, Math.round(enA * U.rf(0.08, 0.18) * (1 - R.def() / 40)));
-        en -= k1; mine -= k2;
-        if (G.Audio) G.Audio.sfx(kind === 'shoot' ? 'cannon' : 'sword');
-        draw((kind === 'shoot' ? '일제 사격!' : kind === 'charge' ? '돌격!' : '방어 태세!') + ' 적 ' + k1 + ' 쓰러뜨림 · 아군 ' + k2 + '명 부상');
-        if (en <= 0) return resolve('win');
-        if (mine <= 0 || mine < l.party * 0.25) return resolve('lose');
-      }
-      [['shoot', '사격'], ['charge', '돌격'], ['defend', '방어']].forEach(function (a) { var b = U.el('button', 'btn' + (a[0] === 'charge' ? ' red' : a[0] === 'shoot' ? ' navy' : ''), a[1]); b.onclick = function () { round(a[0]); }; foot.appendChild(b); });
-      var fl = U.el('button', 'btn ghost', '도망친다'); fl.onclick = function () { if (U.chance(0.6)) resolve('flee'); else { round('defend'); } }; foot.appendChild(fl);
-    });
-    win.close(res);
-    var lost = l.party - mine; l.party = Math.max(0, mine); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
-    if (res === 'win') { s.player.fame += beasts ? 2 : 5; if (!beasts) { var loot = n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + loot + '닢)', 'sword'); } else UI.toast('짐승들을 물리쳤다!', 'sword'); }
-    else if (res === 'lose') { UI.toast('패배했다... 대원 ' + lost + '명을 잃었다.', 'skull'); s.fleet.fatigue = Math.min(100, s.fleet.fatigue + 20); }
-    else UI.toast('간신히 도망쳤다.', 'boot');
-    refreshHud();
+  /** 짐 나르는 짐승·마차가 있고 배에 포가 넉넉하면 가벼운 포를 끌고 다닌다 (육상전의 포병) */
+  function packGuns() {
+    var s = S(), mt = (s.loc && s.loc.mount) || { id: 'walk' };
+    var pack = ['wagon', 'donkey', 'llama', 'yak', 'porter', 'camel', 'elephant'].indexOf(mt.id) >= 0 && mt.n > 0;
+    return pack && U.sum(s.fleet.ships, function (sh) { return sh.guns.n; }) >= 4;
+  }
+  /** 육상전 (대항해시대 3식 부대전 — js/games/landwar.js). o: {kind: native|bandit|beast|garrison, guns} */
+  async function landBattle(enemyName, n, beasts, o) {
+    var s = S(), l = s.loc; o = o || {};
+    var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');
+    var terr = l.lon != null ? G.Geo.terrain(l.lon, l.lat) : 'grass';
+    if (terr === 'sea') terr = 'grass';
+    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns() });
+    var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
+    var res = r.res;
+    if (res === 'win') {
+      s.player.fame += kind === 'beast' ? 2 : 5 + (r.leaderDown ? 3 : 0);
+      if (kind === 'beast') { var meat = Math.round(R.dailyUse() * U.rf(1.5, 3) * Math.min(3, n / 8)); s.fleet.food += meat; UI.toast('짐승들을 물리쳤다! 고기로 식량 약 ' + Math.round(meat / R.dailyUse()) + '일분을 얻었다.', 'bread', 4200); }
+      else if (kind === 'native') UI.toast('원주민 전사들을 물리쳤다.', 'sword');
+      else { var loot = n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + loot + '닢)', 'sword'); }
+    }
+    else if (res === 'lose') { UI.toast('패배했다... 대원 ' + (r.dead) + '명을 잃었다.', 'skull'); s.fleet.fatigue = Math.min(100, s.fleet.fatigue + 20); }
+    else UI.toast('싸움을 피해 물러났다.', 'boot');
+    if (r.back) setTimeout(function () { UI.toast('쓰러졌던 대원 ' + r.back + '명이 치료를 받고 다시 일어섰다.', 'drop', 3800); }, 700);
+    if (G.Game.scene === L) refreshHud();
     return res;
   }
   L.landBattle = landBattle;
+  L._test = { encounter: function (t) { return encounter(t); }, nativeGift: function (w) { return nativeGift(w); }, campfire: function (w) { return campfire(w); } };
 
   // ---------------------------------------------------------------- actions
   /** 야영지에서 며칠을 보낸다 (식량·물을 쓰고 날이 간다) */
@@ -395,7 +470,7 @@
         spendDays(1);
         var rich = { grass: 1.3, steppe: 1.2, forest: 1.2, jungle: 1.0, desert: 0.35, mountain: 0.6, snow: 0.4, tundra: 0.7, ice: 0.2 }[terr] || 0.8;
         var sk = 1 + R.skill('shoot') * 0.3 + R.skill('sword') * 0.1;
-        if (U.chance(0.12)) { await UI.say('사냥감을 쫓다가 도리어 사나운 짐승 떼와 마주쳤다!', {}); await landBattle('들짐승', U.ri(4, 10), true); }
+        if (U.chance(0.12)) { await UI.say('사냥감을 쫓다가 도리어 사나운 짐승 떼와 마주쳤다!', {}); await landBattle('들짐승', foeSize(0.12, 0.3, 4, 30), true); }
         var got = Math.round(R.dailyUse() * U.rf(2, 6) * rich * sk);
         if (got > 0) { f.food += got; UI.toast('사냥에 성공했다! 식량 ' + got + '통 (약 ' + Math.round(got / R.dailyUse()) + '일분)', 'bread', 4200); }
         else UI.toast('사냥감이 보이지 않았다.', 'boot');

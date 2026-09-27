@@ -946,6 +946,8 @@
         await UI.say(seaLine(ds[i]), G.Scenes.mateSpeaker(R.skill('survey') ? 'surveyor' : 'first'));
         await G.Disc.find(ds[i], 'sea');
       }
+      var lefts = G.Disc.leftHere('sea', l.lon, l.lat);
+      for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
       if (G.Disc.foundByMe('circum') === false && s.circ && s.circ.done && !s.circ.told) { s.circ.told = true; UI.toast('지구를 한 바퀴 돌았다! 모항에 돌아가면 세계일주가 완성된다.', 'globe', 5000); }
       // crises
       await crises(msgs);

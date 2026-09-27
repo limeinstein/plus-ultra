@@ -3,6 +3,110 @@
   'use strict';
   var A = G.Art, U = G.U;
 
+  // ---------------------------------------------------------------- 발견 유물 (images/relics/ID 가 없을 때 그리는 진열대 그림)
+  var RELIC_BG = { treasure: ['#5a1420', '#1e0608'], gift: ['#4a1e4e', '#16061a'], weapon: ['#1e3048', '#070c16'], armor: ['#4a3218', '#140c04'],
+    book: ['#1e3e2a', '#06120a'], fig: ['#12404a', '#041216'], animal: ['#34401a', '#0e1206'] };
+  A.relicArt = function (r, w, h) {
+    w = w || 256; h = h || w;
+    var c = A.canvas(w, h), x = c.getContext('2d'), rng = U.makeRng(U.strHash(r.id || 'relic'));
+    var bg = RELIC_BG[r.kind] || RELIC_BG.treasure, m = Math.min(w, h), nm = r.name || '';
+    var g = x.createRadialGradient(w / 2, h * 0.42, m * 0.05, w / 2, h / 2, m * 0.75);
+    g.addColorStop(0, bg[0]); g.addColorStop(1, bg[1]); x.fillStyle = g; x.fillRect(0, 0, w, h);
+    // 벨벳 결
+    for (var i = 0; i < 60; i++) { x.fillStyle = 'rgba(255,255,255,' + (rng() * 0.025) + ')'; x.fillRect(rng() * w, rng() * h, 1 + rng() * m * 0.02, 1); }
+    // 받침대
+    x.fillStyle = 'rgba(0,0,0,.45)'; x.beginPath(); x.ellipse(w / 2, h * 0.84, m * 0.34, m * 0.07, 0, 0, 7); x.fill();
+    x.save(); x.translate(w / 2, h * 0.5); var S = m * 0.36; x.scale(S, S); x.lineJoin = 'round'; x.lineCap = 'round';
+    function gold(a, b) { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, a || '#fbe39a'); gg.addColorStop(0.5, '#d9a93e'); gg.addColorStop(1, b || '#7a4e12'); return gg; }
+    function steel() { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, '#f0f4f8'); gg.addColorStop(0.5, '#a9b4bf'); gg.addColorStop(1, '#4a5560'); return gg; }
+    function line(col, wd) { x.strokeStyle = col; x.lineWidth = wd / S * m * 0.01; }
+    var has = function (k) { return nm.indexOf(k) >= 0; };
+    var K = r.kind;
+    if (K === 'weapon') {
+      x.rotate(-0.75);
+      if (has('도끼')) { x.fillStyle = '#6a4a2a'; x.fillRect(-0.05, -1, 0.1, 2); x.fillStyle = gold('#fff1c0', '#8a6020'); [-1, 1].forEach(function (sd) { x.beginPath(); x.moveTo(0, -0.75); x.quadraticCurveTo(sd * 0.75, -1.05, sd * 0.6, -0.3); x.quadraticCurveTo(sd * 0.3, -0.45, 0, -0.35); x.fill(); }); }
+      else if (has('곤봉')) { x.fillStyle = '#5a3a1e'; x.fillRect(-0.06, -0.3, 0.12, 1.3); x.fillStyle = has('청동') ? gold('#f0c070', '#6a4010') : '#6a4a28'; x.beginPath(); for (var a = 0; a < 12; a++) { var rr = a % 2 ? 0.22 : 0.42; x.lineTo(Math.cos(a / 12 * 6.283) * rr, -0.5 + Math.sin(a / 12 * 6.283) * rr); } x.fill(); }
+      else if (has('부메랑')) { x.rotate(0.75); x.fillStyle = '#9a6a3a'; x.beginPath(); x.moveTo(-0.95, 0.35); x.quadraticCurveTo(0, -0.95, 0.95, 0.35); x.quadraticCurveTo(0, -0.55, -0.95, 0.35); x.fill(); line('#e8d0a0', 2); x.beginPath(); x.moveTo(-0.5, -0.05); x.quadraticCurveTo(0, -0.55, 0.5, -0.05); x.stroke(); }
+      else if (has('작살')) { x.fillStyle = '#e8dcc0'; x.fillRect(-0.035, -0.6, 0.07, 1.65); x.beginPath(); x.moveTo(0, -1.05); x.lineTo(0.14, -0.6); x.lineTo(-0.14, -0.6); x.fill(); x.fillRect(0.03, -0.72, 0.18, 0.05); }
+      else {
+        var blade = has('청동') || has('운철') ? gold('#f6e0a8', '#7a5020') : steel(); var short = has('단검') ? 0.6 : 1;
+        x.fillStyle = blade; x.beginPath(); x.moveTo(0, -1.05 * short - 0.05); x.lineTo(0.09, -0.2); x.lineTo(0.09, 0.25); x.lineTo(-0.09, 0.25); x.lineTo(-0.09, -0.2); x.closePath(); x.fill();
+        line('rgba(255,255,255,.6)', 1.5); x.beginPath(); x.moveTo(0, -1.0 * short); x.lineTo(0, 0.2); x.stroke();
+        x.fillStyle = gold(); x.fillRect(-0.34, 0.25, 0.68, 0.09); x.fillStyle = '#3a2210'; x.fillRect(-0.06, 0.34, 0.12, 0.42);
+        x.fillStyle = gold(); x.beginPath(); x.arc(0, 0.84, 0.1, 0, 7); x.fill(); x.fillStyle = '#c0203a'; x.beginPath(); x.arc(0, 0.29, 0.05, 0, 7); x.fill();
+      }
+    } else if (K === 'armor') {
+      if (has('방패')) { x.fillStyle = '#2e7a4a'; x.beginPath(); x.arc(0, 0, 0.85, 0, 7); x.fill(); for (var f = 0; f < 18; f++) { x.fillStyle = ['#2fa86a', '#e8c040', '#c83a2a'][f % 3]; x.beginPath(); x.ellipse(Math.cos(f / 18 * 6.283) * 0.62, Math.sin(f / 18 * 6.283) * 0.62, 0.16, 0.06, f / 18 * 6.283, 0, 7); x.fill(); } line('#e8c040', 3); x.beginPath(); x.arc(0, 0, 0.85, 0, 7); x.stroke(); }
+      else if (has('망토') || has('외투') || has('갑옷')) {
+        var fur = has('호랑이') ? '#d8902a' : has('흰곰') ? '#eeeae0' : has('악어') || has('괴수') ? '#5a6a3a' : '#a07a4a';
+        x.fillStyle = fur; x.beginPath(); x.moveTo(-0.35, -0.85); x.lineTo(0.35, -0.85); x.quadraticCurveTo(0.6, 0, 0.85, 0.85); x.lineTo(-0.85, 0.85); x.quadraticCurveTo(-0.6, 0, -0.35, -0.85); x.fill();
+        x.fillStyle = 'rgba(0,0,0,.25)'; for (var st = 0; st < 7; st++) { if (has('호랑이')) { x.fillRect(-0.6 + st * 0.18, -0.3 + (st % 2) * 0.2, 0.06, 0.6); } else if (has('악어') || has('괴수')) { x.fillRect(-0.55 + st * 0.16, -0.1, 0.12, 0.12); x.fillRect(-0.5 + st * 0.16, 0.2, 0.12, 0.12); } }
+        line('rgba(0,0,0,.35)', 2); x.beginPath(); x.moveTo(0, -0.85); x.lineTo(0, 0.85); x.stroke();
+      } else { // 투구
+        x.fillStyle = gold('#fff0b0', '#6a4410'); x.beginPath(); x.arc(0, 0.1, 0.62, Math.PI, 0); x.lineTo(0.62, 0.6); x.lineTo(0.3, 0.6); x.lineTo(0.3, 0.2); x.lineTo(-0.3, 0.2); x.lineTo(-0.3, 0.6); x.lineTo(-0.62, 0.6); x.closePath(); x.fill();
+        x.fillRect(-0.05, 0.1, 0.1, 0.5); x.fillStyle = '#5a3a14'; x.beginPath(); x.ellipse(0, -0.62, 0.32, 0.12, 0, 0, 7); x.fill(); x.fillStyle = gold(); x.beginPath(); x.ellipse(0, -0.68, 0.28, 0.11, 0, 0, 7); x.fill();
+      }
+    } else if (K === 'book') {
+      if (has('두루마리') || has('탁본') || has('편지') || has('다라니')) {
+        x.fillStyle = '#e8d8b0'; x.fillRect(-0.7, -0.55, 1.4, 1.05); x.fillStyle = '#8a5a2a'; x.fillRect(-0.82, -0.62, 0.14, 1.2); x.fillRect(0.68, -0.62, 0.14, 1.2);
+        x.fillStyle = 'rgba(40,30,20,.7)'; for (var ln = 0; ln < 7; ln++) for (var ch = 0; ch < 8; ch++) if (rng() < 0.8) x.fillRect(-0.55 + ch * 0.14, -0.42 + ln * 0.13, 0.08 + rng() * 0.03, 0.05);
+      } else if (has('점토판') || has('벽돌') || has('목판')) {
+        x.fillStyle = has('목판') ? '#6a4a2a' : '#b08a5a'; x.fillRect(-0.62, -0.78, 1.24, 1.5);
+        x.fillStyle = 'rgba(40,24,10,.55)'; for (var l2 = 0; l2 < 9; l2++) for (var c2 = 0; c2 < 7; c2++) if (rng() < 0.75) { x.beginPath(); x.moveTo(-0.5 + c2 * 0.16, -0.64 + l2 * 0.15); x.lineTo(-0.42 + c2 * 0.16, -0.6 + l2 * 0.15); x.lineTo(-0.5 + c2 * 0.16, -0.56 + l2 * 0.15); x.fill(); }
+      } else {
+        x.fillStyle = '#6a2418'; x.fillRect(-0.62, -0.8, 1.24, 1.6); x.fillStyle = '#efe2c0'; x.fillRect(0.5, -0.74, 0.1, 1.48);
+        line(gold(), 4); x.strokeRect(-0.5, -0.66, 1.0, 1.32); x.fillStyle = gold(); x.beginPath(); x.arc(0, 0, 0.2, 0, 7); x.fill(); x.fillStyle = '#2a5ab0'; x.beginPath(); x.arc(0, 0, 0.09, 0, 7); x.fill();
+      }
+    } else if (K === 'gift') {
+      line(gold(), 5); x.beginPath(); x.arc(0, -0.45, 0.7, 0.15, Math.PI - 0.15); x.stroke();
+      var gem = has('루비') ? '#d0203a' : has('청록') ? '#3ac0c0' : has('깃털') ? '#2fa86a' : has('비취') ? '#3a9a5a' : ['#d0203a', '#2a6ad0', '#e0b020', '#30a070'][Math.floor(rng() * 4)];
+      for (var b = 0; b < 9; b++) { var an = 0.3 + b / 8 * (Math.PI - 0.6); x.fillStyle = b % 2 ? gold() : gem; x.beginPath(); x.arc(Math.cos(an) * 0.7, -0.45 + Math.sin(an) * 0.7, 0.07, 0, 7); x.fill(); }
+      x.fillStyle = gold(); x.beginPath(); x.moveTo(0, 0.2); x.lineTo(0.28, 0.5); x.lineTo(0, 0.9); x.lineTo(-0.28, 0.5); x.closePath(); x.fill();
+      x.fillStyle = gem; x.beginPath(); x.moveTo(0, 0.32); x.lineTo(0.17, 0.52); x.lineTo(0, 0.76); x.lineTo(-0.17, 0.52); x.closePath(); x.fill();
+      x.fillStyle = 'rgba(255,255,255,.7)'; x.beginPath(); x.arc(-0.05, 0.46, 0.04, 0, 7); x.fill();
+    } else if (K === 'fig') {
+      var wood = has('금동') ? gold() : has('여신') ? '#e8e0d0' : '#8a5a30';
+      x.fillStyle = wood; x.beginPath(); x.moveTo(-0.7, 0.9); x.quadraticCurveTo(-0.55, -0.2, 0.05, -0.55); x.quadraticCurveTo(0.35, -0.85, 0.7, -0.6); x.quadraticCurveTo(0.8, -0.45, 0.55, -0.35); x.quadraticCurveTo(0.2, -0.25, 0.05, 0.1); x.quadraticCurveTo(-0.1, 0.5, 0.1, 0.9); x.closePath(); x.fill();
+      x.fillStyle = '#1a0e06'; x.beginPath(); x.arc(0.42, -0.6, 0.05, 0, 7); x.fill();
+      line('rgba(0,0,0,.3)', 2); for (var sc = 0; sc < 5; sc++) { x.beginPath(); x.arc(-0.35 + sc * 0.08, 0.5 - sc * 0.22, 0.12, 0.2, 2.2); x.stroke(); }
+      if (has('봉황') || has('신천옹') || has('군함조')) { x.fillStyle = wood; x.beginPath(); x.moveTo(-0.2, -0.05); x.quadraticCurveTo(-0.9, -0.6, -0.95, 0.15); x.quadraticCurveTo(-0.55, -0.05, -0.2, 0.25); x.fill(); }
+    } else if (K === 'animal') {
+      if (has('씨앗') || has('묘목') || has('솔방울')) { x.fillStyle = '#6a4a2a'; x.beginPath(); x.moveTo(-0.45, 0.35); x.lineTo(0.45, 0.35); x.lineTo(0.35, 0.85); x.lineTo(-0.35, 0.85); x.fill(); line('#3a7a2a', 5); x.beginPath(); x.moveTo(0, 0.35); x.quadraticCurveTo(-0.05, -0.2, 0.05, -0.6); x.stroke(); x.fillStyle = '#5aa83a'; [[-0.35, -0.15, -0.5], [0.35, -0.4, 0.5], [-0.25, -0.65, -0.3]].forEach(function (lf) { x.beginPath(); x.ellipse(lf[0], lf[1], 0.3, 0.12, lf[2], 0, 7); x.fill(); }); }
+      else if (has('깃털') || has('털')) { x.rotate(0.5); x.fillStyle = has('붉은') ? '#b0502a' : '#e8e0d0'; x.beginPath(); x.moveTo(0, -1); x.quadraticCurveTo(0.35, -0.2, 0, 0.8); x.quadraticCurveTo(-0.35, -0.2, 0, -1); x.fill(); line('#6a5a4a', 2); x.beginPath(); x.moveTo(0, -0.95); x.lineTo(0, 0.95); x.stroke(); }
+      else if (has('뿔')) { line('#d8c8a0', 7); x.beginPath(); x.moveTo(0, 0.8); x.quadraticCurveTo(-0.1, 0, -0.7, -0.5); x.stroke(); x.beginPath(); x.moveTo(-0.25, 0.05); x.lineTo(-0.1, -0.6); x.stroke(); x.beginPath(); x.moveTo(-0.5, -0.3); x.lineTo(-0.55, -0.9); x.stroke(); x.fillStyle = '#d8c8a0'; x.beginPath(); x.ellipse(-0.45, -0.55, 0.35, 0.2, -0.6, 0, 7); x.fill(); }
+      else if (has('등딱지') || has('비늘')) { x.fillStyle = has('비늘') ? '#3a8a8a' : '#6a5a2a'; x.beginPath(); x.ellipse(0, 0.05, 0.8, 0.6, 0, 0, 7); x.fill(); line('rgba(0,0,0,.35)', 3); for (var hx = -1; hx <= 1; hx++) for (var hy = -1; hy <= 1; hy++) { x.beginPath(); x.arc(hx * 0.38, 0.05 + hy * 0.32, 0.17, 0, 7); x.stroke(); } }
+      else { // 유리 종 안의 표본
+        x.fillStyle = 'rgba(200,230,240,.12)'; x.beginPath(); x.moveTo(-0.6, 0.8); x.lineTo(-0.6, -0.3); x.quadraticCurveTo(-0.6, -0.95, 0, -0.95); x.quadraticCurveTo(0.6, -0.95, 0.6, -0.3); x.lineTo(0.6, 0.8); x.fill(); line('rgba(220,240,255,.5)', 2); x.stroke();
+        x.fillStyle = '#5a3a1e'; x.fillRect(-0.7, 0.8, 1.4, 0.14);
+        x.fillStyle = has('물고기') ? '#3a6a9a' : has('거미') ? '#3a2a1a' : has('새') ? '#222' : '#8a6a3a';
+        x.beginPath(); x.ellipse(0, 0.2, 0.36, 0.22, 0, 0, 7); x.fill(); x.beginPath(); x.arc(0.3, 0.02, 0.13, 0, 7); x.fill();
+        if (has('거미')) { line('#3a2a1a', 3); for (var lg = 0; lg < 4; lg++) { x.beginPath(); x.moveTo(-0.1 + lg * 0.08, 0.2); x.lineTo(-0.45 + lg * 0.25, 0.65); x.stroke(); } }
+        if (has('새')) { x.fillStyle = '#eee'; x.beginPath(); x.ellipse(0.05, 0.28, 0.2, 0.12, 0, 0, 7); x.fill(); }
+      }
+    } else { // treasure
+      var v = has('가면') || has('두상') ? 1 : has('원반') || has('기초판') || has('명판') || has('장식판') || has('인장') || has('도장') ? 2 : has('잔') || has('뿔잔') ? 0 : has('상') || has('코끼리') || has('말') || has('불') ? 4 : has('타일') || has('부조') || has('모자이크') || has('조각') || has('이콘') ? 5 : has('항아리') || has('토기') || has('주전자') || has('그릇') || has('솥') || has('등잔') || has('합') || has('함') || has('물통') ? 3 : Math.floor(rng() * 4);
+      var metal = has('은 ') || has('은주') || has('사산') ? function () { return steel(); } : has('비취') || has('옥') ? function () { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, '#a8e0b8'); gg.addColorStop(1, '#1e6a3a'); return gg; } : has('수정') || has('유리') || has('결정') ? function () { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, 'rgba(255,255,255,.95)'); gg.addColorStop(1, 'rgba(150,190,220,.6)'); return gg; } : has('청동') || has('칠보') ? function () { return gold('#e0c890', '#3a5a4a'); } : has('토기') || has('테라코타') || has('벽돌') || has('항아리') ? function () { return gold('#e8a070', '#7a3a1a'); } : has('돌') || has('석') || has('대리석') || has('사암') ? function () { return gold('#f0e8d8', '#8a7a60'); } : function () { return gold(); };
+      if (has('결정') || (has('수정') && !has('해골'))) v = 6; else if (has('도끼')) v = 7; else if (has('공')) v = 8; else if (has('깃털')) v = 9;
+      x.fillStyle = metal();
+      if (v === 6) { [[-0.35, 0.15, 0.22, 0.95, -0.25], [0.05, 0.05, 0.26, 1.2, 0.05], [0.4, 0.2, 0.2, 0.85, 0.3], [-0.1, 0.35, 0.16, 0.6, -0.5]].forEach(function (c) { x.save(); x.translate(c[0], c[1]); x.rotate(c[4]); x.fillStyle = metal(); x.beginPath(); x.moveTo(-c[2], 0.5); x.lineTo(-c[2], -c[3] * 0.55); x.lineTo(0, -c[3] * 0.8); x.lineTo(c[2], -c[3] * 0.55); x.lineTo(c[2], 0.5); x.closePath(); x.fill(); x.fillStyle = 'rgba(255,255,255,.35)'; x.fillRect(-c[2] * 0.6, -c[3] * 0.5, c[2] * 0.4, c[3] * 0.9); x.restore(); }); }
+      else if (v === 7) { x.rotate(-0.4); x.beginPath(); x.moveTo(0, -0.85); x.quadraticCurveTo(0.45, -0.3, 0.3, 0.75); x.quadraticCurveTo(0, 0.9, -0.3, 0.75); x.quadraticCurveTo(-0.45, -0.3, 0, -0.85); x.fill(); x.fillStyle = 'rgba(255,255,255,.3)'; x.beginPath(); x.ellipse(-0.1, -0.1, 0.08, 0.45, 0, 0, 7); x.fill(); }
+      else if (v === 8) { var bg2 = x.createRadialGradient(-0.25, -0.3, 0.05, 0, 0, 0.7); bg2.addColorStop(0, '#e8e0c8'); bg2.addColorStop(1, '#5a4a30'); x.fillStyle = bg2; x.beginPath(); x.arc(0, 0.05, 0.62, 0, 7); x.fill(); }
+      else if (v === 9) { x.rotate(0.5); x.fillStyle = '#6a8a4a'; x.beginPath(); x.moveTo(0, -1.05); x.quadraticCurveTo(0.45, -0.2, 0, 0.9); x.quadraticCurveTo(-0.45, -0.2, 0, -1.05); x.fill(); line('#3a4a2a', 2); x.beginPath(); x.moveTo(0, -1); x.lineTo(0, 1); x.stroke(); for (var fb = 0; fb < 8; fb++) { x.beginPath(); x.moveTo(0, -0.7 + fb * 0.18); x.lineTo(0.3, -0.85 + fb * 0.18); x.moveTo(0, -0.7 + fb * 0.18); x.lineTo(-0.3, -0.85 + fb * 0.18); x.stroke(); } }
+      else if (v === 0) { x.beginPath(); x.moveTo(-0.55, -0.7); x.quadraticCurveTo(-0.5, 0.05, 0, 0.1); x.quadraticCurveTo(0.5, 0.05, 0.55, -0.7); x.closePath(); x.fill(); x.fillRect(-0.06, 0.08, 0.12, 0.5); x.beginPath(); x.ellipse(0, 0.66, 0.36, 0.1, 0, 0, 7); x.fill(); x.fillStyle = '#c0203a'; x.beginPath(); x.arc(0, -0.3, 0.07, 0, 7); x.fill(); }
+      else if (v === 1) { x.beginPath(); x.ellipse(0, 0, 0.58, 0.8, 0, 0, 7); x.fill(); x.fillStyle = 'rgba(40,20,0,.7)'; x.beginPath(); x.ellipse(-0.22, -0.15, 0.14, 0.05, 0, 0, 7); x.fill(); x.beginPath(); x.ellipse(0.22, -0.15, 0.14, 0.05, 0, 0, 7); x.fill(); x.fillRect(-0.18, 0.35, 0.36, 0.04); line('rgba(60,30,0,.5)', 2); x.beginPath(); x.moveTo(0, -0.1); x.lineTo(-0.06, 0.18); x.lineTo(0.06, 0.18); x.stroke(); }
+      else if (v === 2) { x.beginPath(); x.arc(0, 0, 0.75, 0, 7); x.fill(); line('rgba(70,40,0,.55)', 2.5); x.beginPath(); x.arc(0, 0, 0.55, 0, 7); x.stroke(); for (var ry = 0; ry < 16; ry++) { var ra = ry / 16 * 6.283; x.beginPath(); x.moveTo(Math.cos(ra) * 0.58, Math.sin(ra) * 0.58); x.lineTo(Math.cos(ra) * 0.72, Math.sin(ra) * 0.72); x.stroke(); } x.beginPath(); x.arc(-0.15, -0.08, 0.06, 0, 7); x.arc(0.15, -0.08, 0.06, 0, 7); x.stroke(); x.beginPath(); x.arc(0, 0.12, 0.18, 0.3, 2.8); x.stroke(); }
+      else if (v === 3) { x.beginPath(); x.moveTo(-0.25, -0.8); x.lineTo(0.25, -0.8); x.quadraticCurveTo(0.2, -0.5, 0.5, -0.2); x.quadraticCurveTo(0.8, 0.4, 0.3, 0.8); x.lineTo(-0.3, 0.8); x.quadraticCurveTo(-0.8, 0.4, -0.5, -0.2); x.quadraticCurveTo(-0.2, -0.5, -0.25, -0.8); x.fill(); line('rgba(20,10,0,.55)', 3); x.beginPath(); x.moveTo(-0.62, 0.05); x.lineTo(0.62, 0.05); x.stroke(); for (var zz = 0; zz < 6; zz++) { x.beginPath(); x.moveTo(-0.55 + zz * 0.2, 0.2); x.lineTo(-0.45 + zz * 0.2, 0.4); x.lineTo(-0.35 + zz * 0.2, 0.2); x.stroke(); } }
+      else if (v === 4) { x.beginPath(); x.ellipse(0, -0.5, 0.22, 0.26, 0, 0, 7); x.fill(); x.beginPath(); x.moveTo(-0.2, -0.28); x.quadraticCurveTo(-0.55, 0.1, -0.5, 0.75); x.lineTo(0.5, 0.75); x.quadraticCurveTo(0.55, 0.1, 0.2, -0.28); x.fill(); x.fillRect(-0.62, 0.72, 1.24, 0.12); }
+      else { x.fillRect(-0.72, -0.62, 1.44, 1.24); line('rgba(40,20,0,.45)', 2.5); x.strokeRect(-0.62, -0.52, 1.24, 1.04); for (var q = 0; q < 5; q++) { x.beginPath(); x.moveTo(-0.5 + q * 0.25, 0.4); x.quadraticCurveTo(-0.4 + q * 0.25, -0.35, -0.3 + q * 0.25, 0.4); x.stroke(); } }
+    }
+    x.restore();
+    // 반짝임
+    x.globalCompositeOperation = 'lighter';
+    for (var sp = 0; sp < 3; sp++) { var sx = w * (0.3 + rng() * 0.4), sy = h * (0.25 + rng() * 0.4), sz = m * (0.02 + rng() * 0.03); x.strokeStyle = 'rgba(255,245,210,.55)'; x.lineWidth = Math.max(1, m * 0.006); x.beginPath(); x.moveTo(sx - sz, sy); x.lineTo(sx + sz, sy); x.moveTo(sx, sy - sz); x.lineTo(sx, sy + sz); x.stroke(); }
+    x.globalCompositeOperation = 'source-over';
+    return c;
+  };
+
   // ---------------------------------------------------------------- discovery vignette
   var CAT_COL = { geo: '#3d679a', nature: '#4f8a52', ruin: '#9a6a3a', treasure: '#c9a030', creature: '#7a5a2a', people: '#8a3a2a', trade: '#6a4a8a' };
   A.discoveryArt = function (d, w, h) {

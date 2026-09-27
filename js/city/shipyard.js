@@ -306,12 +306,37 @@
   async function refitFig(c, sh) {
     var s = S(), rng = U.makeRng(c.id * 17 + Math.floor(s.day / 60));
     var sold = G.FIGUREHEADS.filter(function (f) { return !f.rare; }).filter(function () { return rng() < 0.45; });
-    if (!sold.length) { await C.say(keeper(), '지금은 선수상이 하나도 없네.'); return; }
-    var v = await UI.choose('선수상', sold.map(function (f) { return { label: f.name, right: U.num(f.price) + '닢', value: f.id, desc: f.desc, icon: 'feather' }; }).concat(sh.fig ? [{ label: '선수상 떼어내기', value: '_off', icon: 'tools' }] : []), { width: 640, text: '선수상은 배를 지켜 주는 수호상입니다. 배마다 하나씩 달 수 있습니다.' });
+    // 소지품의 유물 선수상도 달 수 있다
+    var mine = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { return G.FIGUREHEAD[x.it.id] && G.FIGUREHEAD[x.it.id].relic; });
+    if (!sold.length && !mine.length && !sh.fig) { await C.say(keeper(), '지금은 선수상이 하나도 없네.'); return; }
+    var opts = mine.map(function (x, k) { var f = G.FIGUREHEAD[x.it.id]; return { label: f.name + ' <span class="tag">소지품 · 유물</span>' + (R.isProof(x.it) ? ' <span class="tag">증거</span>' : ''), right: '달기 150닢', value: 'my' + k, desc: f.desc, icon: 'feather' }; })
+      .concat(sold.map(function (f) { return { label: f.name, right: U.num(f.price) + '닢', value: f.id, desc: f.desc, icon: 'feather' }; }))
+      .concat(sh.fig ? [{ label: '선수상 떼어내기', value: '_off', icon: 'tools', desc: G.FIGUREHEAD[sh.fig] && G.FIGUREHEAD[sh.fig].relic ? '유물 선수상은 떼어 소지품으로 돌려받는다' : '' }] : []);
+    var v = await UI.choose('선수상', opts, { width: 660, text: '선수상은 배를 지켜 주는 수호상입니다. 배마다 하나씩 달 수 있습니다.' + (sh.fig ? ' 지금: <b>' + G.FIGUREHEAD[sh.fig].name + '</b>' : '') });
     if (!v) return;
-    if (v === '_off') { sh.fig = null; UI.toast('선수상을 떼어냈다.', 'tools'); return; }
+    if (v === '_off') { if (!(await takeOffFig(sh))) return; UI.toast('선수상을 떼어냈다.', 'tools'); return; }
+    if (String(v).indexOf('my') === 0) {
+      var x = mine[+String(v).slice(2)], rf = G.FIGUREHEAD[x.it.id];
+      if (s.player.gold < 150) { await C.say(keeper(), '다는 품삯 150닢은 받아야겠네.'); return; }
+      if (R.isProof(x.it) && !(await UI.confirm(rf.name + U.jx(rf.name, '은/는') + ' 아직 보고·발표하지 않은 「' + G.DISC[x.it.disc].name + '」 발견의 증거입니다. 배에 달면 증거로 내보일 수 없습니다. 그래도 달겠습니까?', '단다', '그만둔다'))) return;
+      if (sh.fig && !(await takeOffFig(sh))) return;
+      s.player.items.splice(s.player.items.indexOf(x.it), 1);
+      s.player.gold -= 150; sh.fig = rf.id;
+      UI.toast(sh.name + '호에 ' + rf.name + U.jx(rf.name, '을/를') + ' 달았다.', 'feather', 4200);
+      return;
+    }
     var f = G.FIGUREHEAD[v];
     if (s.player.gold < f.price) { await C.say(keeper(), '돈이 모자라는군.'); return; }
+    if (sh.fig && !(await takeOffFig(sh))) return;
     s.player.gold -= f.price; sh.fig = v; UI.toast(sh.name + '호에 ' + f.name + U.j(f.name, '을/를').slice(f.name.length) + ' 달았다. ' + f.desc, 'feather');
+  }
+  /** 달린 선수상을 뗀다. 유물 선수상은 소지품으로 돌려받는다 (칸이 없으면 묻는다) */
+  async function takeOffFig(sh) {
+    var f = G.FIGUREHEAD[sh.fig];
+    if (f && f.relic) {
+      if (R.itemsFull()) { if (!(await UI.confirm('소지품이 가득 차서 ' + f.name + U.jx(f.name, '을/를') + ' 돌려받을 자리가 없습니다. 버리겠습니까? (다시 구할 수 없는 유물입니다)', '버린다', '그만둔다'))) return false; }
+      else { R.addItem(f.id, { disc: f.relic, done: true }); UI.toast(f.name + U.jx(f.name, '을/를') + ' 소지품으로 돌려받았다.', 'chest'); }
+    }
+    sh.fig = null; return true;
   }
 })(window.G = window.G || {});

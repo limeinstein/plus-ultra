@@ -594,3 +594,65 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 /* 대리 결투: 지시한 수 · 빨리 보기 */
 .duel .acts .btn.on { box-shadow: 0 0 0 3px var(--gold), 0 0 12px rgba(217,180,95,.6); }
 .tag.hurt { background: var(--red); color: var(--cream); }
+/* 발견 유물 */
+.relic-strip { border-top: 1px dashed rgba(90,65,35,.45); padding-top: 10px; }
+.relic-strip .rs-head { font-size: 15px; font-weight: 700; color: var(--ink-soft); letter-spacing: .04em; margin-bottom: 8px; text-align: center; }
+.relic-strip .rs-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.relic-strip .rs-item { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 132px; text-align: center; }
+.relic-strip .rs-item b { font-size: 16px; line-height: 1.25; }
+.relic-strip .rs-item small { font-size: 13px; color: var(--ink-soft); }
+.disc-card .relic-strip canvas { width: 76px; height: 76px; border: 1px solid #7a5c33; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
+.relic-strip .rs-note { font-size: 14px; color: var(--ink-soft); text-align: center; margin-top: 8px; }
+.items-tbl td.ic { width: 54px; padding: 4px 6px; }
+.items-tbl canvas.relic-ic { width: 46px; height: 46px; border-radius: 5px; border: 1px solid #7a5c33; display: block; }
+.items-tbl td:nth-child(3) { white-space: nowrap; }
+/* 캠프파이어 */
+.campfire { display: flex; flex-direction: column; gap: 10px; }
+.campfire canvas { width: 100%; height: auto; display: block; border: 2px solid #7a5c33; }
+.campfire .cf-text { font-size: 19px; line-height: 1.7; }
+.campfire .cf-res { font-size: 16px; color: var(--ink-soft); text-align: center; }
+/* 해전: 배 번호·기함 표 */
+.shipno { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; border-radius: 50%; margin-right: 6px; font-size: 12px; font-weight: 800; background: rgba(10,14,24,.6); color: #e8f0d8; border: 1px solid #b8d0a0; }
+.shipno.en { color: #ffd0c4; border-color: #ffb0a0; }
+.shipno.flag { background: #e2b04a; color: #2a1606; border: 2px solid #fff2cc; }
+.shipno.en.flag { background: #d8503a; }
+.flagtag { margin-left: 6px; padding: 0 5px; font-size: 11px; font-weight: 800; color: #1a0e04; background: rgba(226,176,74,.9); border-radius: 3px; }
+.flagtag.en { background: rgba(216,80,58,.9); }
+/* 일기토 (패) */
+.duel.dk2 { grid-template-columns: 220px 1fr 220px; row-gap: 12px; }
+.duel.dk2 .hand, .duel.dk2 .acts, .duel.dk2 .rule { grid-column: 1 / -1; }
+.duel.dk2 .hand { display: flex; gap: 12px; justify-content: center; }
+.duel.dk2 .sty { font-size: 14px; color: var(--ink-soft); margin-top: 4px; }
+.duel.dk2 .table { display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 130px; }
+.duel.dk2 .vs { font-size: 38px; }
+.duel.dk2 .enhand { display: flex; gap: 6px; justify-content: center; margin-top: 4px; }
+.duel.dk2 .enhand .dcard { width: 34px; height: 48px; }
+.duel.dk2 .dlog { min-height: 60px; margin: 8px 0; }
+.dcard { width: 84px; height: 118px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 8px 4px; box-sizing: border-box;
+  background: linear-gradient(180deg, #f6ecd2, #e2cfa4); border: 2px solid #7a5c33; box-shadow: 0 3px 8px rgba(0,0,0,.35); color: var(--ink); }
+.dcard .ct { font-size: 15px; font-weight: 800; letter-spacing: .04em; }
+.dcard .cv { font-family: var(--latin); font-size: 44px; line-height: 1; font-weight: 700; }
+.dcard.atk { border-color: #8a2a1e; }
+.dcard.atk .ct, .dcard.atk .cv { color: #8a2a1e; }
+.dcard.def { border-color: #1e4a7a; }
+.dcard.def .ct, .dcard.def .cv { color: #1e4a7a; }
+.dcard.back { background: repeating-linear-gradient(45deg, #5a3a1e 0 6px, #6a4a2a 6px 12px); border-color: #3a2410; padding: 0; }
+.dcard.played { transform: scale(1.06); }
+.dcard.on { box-shadow: 0 0 0 3px var(--gold), 0 0 14px rgba(217,180,95,.7); }
+.dcard-btn { background: none; border: 0; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font: inherit; color: var(--ink-soft); }
+.dcard-btn:hover .dcard, .dcard-btn:focus-visible .dcard { transform: translateY(-6px); box-shadow: 0 8px 14px rgba(0,0,0,.4); }
+.dcard-btn .dcard { transition: transform .12s; }
+.dcard-btn small { font-size: 13px; }
+/* 육상전 */
+.lwar { display: flex; flex-direction: column; gap: 10px; }
+.lwar canvas { width: 100%; height: auto; display: block; border: 2px solid #7a5c33; box-shadow: 0 0 0 1px #2a1f16; cursor: crosshair; }
+.lwar .lw-bar { display: flex; flex-direction: column; gap: 8px; }
+.lwar .lw-log { min-height: 52px; font-size: 17px; line-height: 1.5; }
+.lwar .lw-log .old { color: var(--ink-soft); font-size: 15px; }
+.lwar .lw-btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.lwar .lw-btns .btn small { opacity: .8; margin-left: 3px; }
+.lwar .lw-btns .btn.on { box-shadow: 0 0 0 3px var(--gold); }
+.lwar .lw-form { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; }
+.lwar .lw-slot { display: flex; flex-direction: column; align-items: center; min-width: 92px; line-height: 1.2; }
+.lwar .lw-slot small { font-size: 13px; opacity: .8; }
+.lwar .lw-help { font-size: 14px; text-align: center; }

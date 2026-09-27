@@ -71,7 +71,7 @@
     return [
       { label: '구입', icon: 'coin', onClick: function () { return MK.buy(c); } },
       { label: '매각', icon: 'sack', onClick: function () { return MK.sell(c); } },
-      { label: '소지품', icon: 'chest', sub: S().player.items.length + '/30', onClick: function () { return G.Info.open('items'); } }
+      { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } }
     ];
   };
   MK.buy = async function (c) {
@@ -85,7 +85,7 @@
       }), { width: 700 });
       if (!v) return;
       var it = G.ITEM[v];
-      if (s.player.items.length >= 30) { await C.mate('이 이상 가질 수 없습니다!'); return; }
+      if (s.player.items.length >= R.ITEM_MAX) { await C.mate('이 이상 가질 수 없습니다!'); return; }
       if (!(await UI.confirm(it.name + '<br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(it.price) + '닢에 사겠습니까?', '산다', '그만둔다'))) continue;
       s.player.gold -= it.price; R.addItem(v);
       if ((it.kind === 'weapon' && (!s.player.equip.weapon || G.ITEM[s.player.equip.weapon].atk < it.atk)) || (it.kind === 'armor' && (!s.player.equip.armor || G.ITEM[s.player.equip.armor].def < it.def))) {
@@ -102,19 +102,22 @@
       var v = await UI.choose('매각', list.map(function (x, k) {
         var d = G.ITEM[x.it.id] || {}, val = itemValue(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
-        return { label: R.itemName(x.it) + (eq ? ' <span class="tag">장비 중</span>' : ''), right: U.num(val) + '닢', value: k, icon: 'coin' };
-      }), { width: 640, text: '팔고 싶은 물건이 있으면 어디 보여주게!' });
+        var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
+        return { label: R.itemName(x.it) + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, icon: rl ? 'crown' : 'coin' };
+      }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
       if (v == null) return;
-      var x = list[v], val = itemValue(x.it);
-      await C.say(vendor(), '으~음. 금화 ' + U.num(val) + '닢이란 말이군.');
-      if (!(await UI.confirm(R.itemName(x.it) + U.j(R.itemName(x.it), '을/를').slice(R.itemName(x.it).length) + ' 금화 ' + U.num(val) + '닢에 팔겠습니까?', '판다', '그만둔다'))) continue;
+      var x = list[v], val = itemValue(x.it), rel = G.RELIC && G.RELIC[x.it.id];
+      await C.say(vendor(), rel ? U.pick(['이, 이건...! 이런 물건은 평생 한 번 볼까 말까 하지. 금화 ' + U.num(val) + '닢 내겠네.', '호오, 진귀한 물건이로군. 금화 ' + U.num(val) + '닢이면 어떤가?']) : '으~음. 금화 ' + U.num(val) + '닢이란 말이군.');
+      var warn = R.isProof(x.it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[x.it.disc].name) + '」 발견의 증거입니다. 아직 보고·발표하지 않았으니, 팔면 증거가 모자라 사례금과 명성이 줄 수 있습니다.</span>' : '';
+      if (!(await UI.confirm(R.itemName(x.it) + U.j(R.itemName(x.it), '을/를').slice(R.itemName(x.it).length) + ' 금화 ' + U.num(val) + '닢에 팔겠습니까?' + warn, '판다', '그만둔다'))) continue;
       var id = x.it.id;
       s.player.items.splice(x.i, 1); s.player.gold += val;
       if (s.player.equip.weapon === id && !R.hasItem(id)) s.player.equip.weapon = null;
       if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
     }
   };
-  function itemValue(it) { if (it.value) return it.value; var d = G.ITEM[it.id]; return d ? Math.floor((d.price || 500) * (d.rare ? 1 : 0.5)) : 100; }
+  function itemValue(it) { if (it.value) return it.value; if (G.RELIC && G.RELIC[it.id] && G.Disc.relicValue) return G.Disc.relicValue(it); var d = G.ITEM[it.id]; return d ? Math.floor((d.price || 500) * (d.rare ? 1 : 0.5)) : 100; }
+  MK.itemValue = itemValue;
 
   // ================================================================ 교회 / 모스크 / 사원
   var CH = { icon: 'church', paint: 'church' };
@@ -412,7 +415,8 @@
     ];
   };
   function unitOf(id) { return id === 'porter' ? '패' : id === 'wagon' ? '대' : id === 'reindeer' ? '대' : '필'; }
-  GT.partySize = function () { var s = S(); return Math.min(30, s.fleet.crew, Math.max(5, Math.round(s.fleet.crew * 0.5))); };
+  /** 탐험대 인원: 대항해시대 3처럼 선원 모두가 나선다 */
+  GT.partySize = function () { return S().fleet.crew; };
   GT.explore = async function (c) {
     var s = S();
     if (s.loc.via === 'land') return GT.backToParty(c);

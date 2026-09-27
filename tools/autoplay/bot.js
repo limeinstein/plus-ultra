@@ -224,6 +224,15 @@
       ev('duel', { who: me.name, vs: enemy.name, proxy: !!mate, p: Math.round(pw * 100), res: res });
       return res;
     };
+    // 육상전: 부대전 화면 대신 힘을 견주어 판정 (js/games/landwar.js 와 같은 모양의 결과)
+    G.Games.landWar = async function (o) {
+      var P = o.party, n = o.enemy.n, k = o.enemy.kind === 'beast' ? 1.35 : 1.1;
+      var me = P * (1 + R.skill('sword') * 0.1 + R.skill('shoot') * 0.1) * (1 - S().fleet.fatigue / 250), en = n * k;
+      var pw = U.clamp(0.5 + (me - en) / Math.max(20, me + en), 0.1, 0.95), res = Math.random() < pw ? 'win' : 'lose';
+      var dead = Math.min(P - 1, Math.round(en * U.rf(0.15, 0.35) * (res === 'win' ? 0.6 : 1.4))), back = Math.round(dead * (0.25 + R.skill('med') * 0.15));
+      ev('landwar', { vs: o.enemy.name, kind: o.enemy.kind, party: P, n: n, p: Math.round(pw * 100), res: res, dead: dead - back });
+      return { res: res, dead: dead - back, back: back, left: P - dead + back, leaderDown: res === 'win' };
+    };
     // 도시·그림 준비는 건너뛴다 (빠르게)
     C.preloadImages = async function () {};
     G.Img.preload = async function () {};

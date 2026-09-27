@@ -144,17 +144,31 @@
   PAGES.items = function (el, win) {
     var s = S(), p = s.player;
     function render() {
-      el.innerHTML = '<div class="muted" style="margin-bottom:10px">소지품 ' + p.items.length + '/30</div><table class="tbl"><tr><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
+      var nRel = p.items.filter(function (it) { return G.RELIC && G.RELIC[it.id]; }).length;
+      el.innerHTML = '<div class="muted" style="margin-bottom:10px">소지품 ' + p.items.length + '/' + R.ITEM_MAX + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div><table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
         p.items.map(function (it, i) {
-          var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind;
+          var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind, rl = G.RELIC && G.RELIC[it.id];
           var eq = (kind === 'weapon' && p.equip.weapon === it.id) || (kind === 'armor' && p.equip.armor === it.id);
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
-          return '<tr><td><b>' + U.esc(R.itemName(it)) + '</b>' + (it.n > 1 ? ' ×' + it.n : '') + '</td><td>' + (G.ITEM_KIND[kind] || '') + '</td><td style="font-size:16px">' + U.esc(it.desc || d.desc || '') + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
+          if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
+          var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : '';
+          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '');
+          var extra = rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '';
+          var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
+          return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (it.n > 1 ? ' ×' + it.n : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || '') + '</td><td style="font-size:16px">' + U.esc(it.desc || d.desc || '') + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
         }).join('') + '</table>';
+      // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
+      U.$$('[data-ic]', el).forEach(function (td) {
+        var it = p.items[+td.dataset.ic], rl = G.RELIC && G.RELIC[it.id];
+        if (rl && A.relicArt) { var cv = G.Img.make(G.Img.chain.relic(rl), 96, 96, function () { return A.relicArt(rl, 96, 96); }); cv.className = 'relic-ic'; td.appendChild(cv); }
+      });
       U.$$('[data-eq]', el).forEach(function (b) { b.onclick = function () { var it = p.items[+b.dataset.eq], d = G.ITEM[it.id]; p.equip[d.kind === 'weapon' ? 'weapon' : 'armor'] = it.id; render(); }; });
+      U.$$('[data-read]', el).forEach(function (b) { b.onclick = async function () { await G.Disc.readRelic(p.items[+b.dataset.read]); render(); }; });
       U.$$('[data-del]', el).forEach(function (b) { b.onclick = async function () {
         var it = p.items[+b.dataset.del], nm = R.itemName(it);
-        var warn = it.kind === 'evidence' ? '<br><span class="warn-text">발견을 보고할 때 건넬 증거품입니다. 버리면 후원자가 반만 믿어 사례금이 줄어듭니다.</span>' : '';
+        var warn = it.kind === 'evidence' ? '<br><span class="warn-text">발견을 보고할 때 건넬 증거품입니다. 버리면 후원자가 반만 믿어 사례금이 줄어듭니다.</span>'
+          : R.isProof(it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[it.disc].name) + '」 발견의 증거인 유물입니다. 버리면 증거가 모자라 사례금과 명성이 줄 수 있고, 다시 구할 수 없습니다.</span>'
+          : G.RELIC && G.RELIC[it.id] ? '<br><span class="warn-text">다시 구할 수 없는 유물입니다. 시장에 팔면 금화 ' + U.num(G.Disc.relicValue(it)) + '닢을 받을 수 있습니다.</span>' : '';
         if (await UI.confirm(nm + U.jx(nm, '을/를') + ' 버리겠습니까?' + warn)) { p.items.splice(+b.dataset.del, 1); render(); }
       }; });
     }
@@ -173,7 +187,7 @@
         all.map(function (d) {
           var st = s.disc[d.id] || {};
           var nmTag = d.aka ? '<div class="muted" style="font-size:13px">' + U.esc(d.aka) + (S().nameBy && S().nameBy[d.id] === 'me' ? ' — 제독이 이름을 붙임' : '') + '</div>' : '';
-          if (st.me) return '<div class="card" data-d="' + d.id + '"><b>' + U.esc(d.name) + '</b>' + nmTag + '<div class="muted" style="font-size:14px">' + (st.reported ? '보고 완료' : st.announced ? '발표 완료' : '미보고') + '</div></div>';
+          if (st.me) return '<div class="card" data-d="' + d.id + '"><b>' + U.esc(d.name) + '</b>' + nmTag + '<div class="muted" style="font-size:14px">' + (st.reported ? '보고 완료' : st.announced ? '발표 완료' : '미보고') + (G.RELICS && G.RELICS[d.id] ? ' · 유물 ' + G.RELICS[d.id].length : '') + (st.left && st.left.length ? ' · 두고 온 것 있음' : '') + '</div></div>';
           if (st.rival) return '<div class="card off" title="' + U.esc(st.rival) + ' 발견"><b>' + U.esc(d.name) + '</b>' + nmTag + '<div class="muted" style="font-size:14px">' + U.esc(st.rival) + ' 발견</div></div>';
           return '<div class="card off"><b>？？？</b></div>';
         }).join('') + '</div>';
@@ -219,6 +233,7 @@
     if (p[0] === 'trade') return (G.CITY_DATA[p[1]] ? G.CITY_DATA[p[1]].name + ' ' : '') + '교역소';
     if (p[0] === 'mate') return '동료의 이야기';
     if (p[0] === 'chain' && G.DISC[p[1]]) return '「' + G.DISC[p[1]].name + '」에서 이어진 실마리';
+    if (p[0] === 'relic' && G.RELIC && G.RELIC[p[1]]) return '「' + G.RELIC[p[1]].name + '」에 적힌 이야기';
     var SRC = { sponsor: '후원자의 이야기', contract: '후원자 계약', rival: '경쟁자에게서', lookout: '망루·정찰대', bottle: '병 속 편지', hail: '지나가던 배',
       native: '원주민', nomad: '유목민', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
     return SRC[p[0]] || '';

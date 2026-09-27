@@ -87,8 +87,13 @@
 
   // ---------------------------------------------------------------- items
   R.hasItem = function (id) { return R.S().player.items.some(function (it) { return it.id === id; }); };
+  /** 소지품 칸 수 */
+  R.ITEM_MAX = 40;
+  R.itemsFull = function (n) { return R.S().player.items.length + (n || 1) > R.ITEM_MAX; };
+  /** 아직 보고·발표하지 않은 발견의 증거로 쓰이는 물건인가 (해도·지도 증거품, 발견 유물) */
+  R.isProof = function (it) { return !!(it && it.disc && !it.done && (it.evidence || (G.RELIC && G.RELIC[it.id]))); };
   R.addItem = function (id, extra) {
-    var S = R.S(); if (S.player.items.length >= 30) return false;
+    var S = R.S(); if (S.player.items.length >= R.ITEM_MAX) return false;
     var o = { id: id }; if (extra) for (var k in extra) o[k] = extra[k];
     var def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
     S.player.items.push(o); return true;

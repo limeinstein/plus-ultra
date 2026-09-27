@@ -265,7 +265,8 @@
           G.frontierText ? ['단서가 열리는 때', G.frontierText(d)] : null,
           (bs => bs.length ? ['단서가 실린 책', bs.map(b => b.title + ' (' + G.LANGS[b.lang] + (b.y > 1480 ? ' · ' + b.y + '년 간행' : '') + (b.sk ? ' · ' + (G.SKILL_BY_ID[b.sk] || {}).name + ' ' + b.lv : '') + ')').join(' / ')] : null)(G.BOOKS.filter(b => b.discs.indexOf(d.id) >= 0)),
           d.rival ? ['경쟁자', d.rival[2] + ' — ' + d.rival[0] + '년 ' + d.rival[1] + '월에 발표'] : null,
-          d.evidence ? ['증거품', d.evidence] : null
+          d.evidence ? ['증거품', d.evidence] : null,
+          (G.RELICS && G.RELICS[d.id]) ? ['유물 (발견의 증거)', G.RELICS[d.id].map(r => r.name + ' — ' + G.RELIC_KIND[r.kind] + ' · 값 ' + num(r.price) + '닢').join(' / ')] : null
         ],
         files: [
           { key: 'discoveries/' + d.id, kind: 'jpg', note: '이 발견물의 그림' },
@@ -274,6 +275,31 @@
       })
     });
   });
+
+  // ------------------------------------------------ relics
+  if (G.RELIC) {
+    const tRel = tab('relics', '유물', {
+      chips: [['all', '전체']].concat(Object.keys(G.RELIC_KIND).map(k => [k, G.RELIC_KIND[k]])),
+      note: '발견한 자리에서 손에 넣는 물건 — 발견의 증거가 됩니다. 후원자에게 보고하면 바치고(서적·다음 탐험으로 이어지는 물건은 돌려받기도 함), 항구에서 스스로 발표하면 제독의 것이 되어 시장에 팔 수 있습니다. 파일: <code>images/relics/ID.png</code> · 권장 256×256 · 종류 공통 <code>relic-kinds/종류.png</code>'
+    });
+    const STAT = r => r.kind === 'weapon' ? '공격 ' + r.atk : r.kind === 'armor' ? '방어 ' + r.def : r.kind === 'gift' && r.gv ? '호감 ' + r.gv : r.kind === 'fig' ? Object.entries({ spd: '속도', storm: '폭풍', morale: '사기', battle: '해전', hp: '선체', luck: '행운', monster: '괴물 쫓기' }).filter(([k]) => r[k]).map(([k, n]) => n + ' +' + Math.round(r[k] * 100) + '%').join(' · ') : '';
+    Object.keys(G.RELIC).forEach(id => {
+      const r = G.RELIC[id], d = G.DISC[r.relic];
+      add(tRel, {
+        group: r.kind, name: r.name, sub: G.RELIC_KIND[r.kind] + ' · ' + d.name, meta: '값 ' + num(r.price) + '닢' + (STAT(r) ? ' · ' + STAT(r) : '') + (r.lead ? ' · 읽으면 「' + r.lead.map(x => G.DISC[x].name).join('·') + '」 단서' : ''),
+        key: 'relics/' + id, kind: 'png', chain: I.chain.relic(r), ar: '1 / 1', extra: (r.desc || '') + ' ' + d.name,
+        pic: () => I.make(I.chain.relic(r), 256, 256, () => A.relicArt(r, 256, 256)),
+        detail: () => ({
+          text: r.desc,
+          facts: [['종류', G.RELIC_KIND[r.kind]], ['나오는 발견', d.name + ' (' + G.DISC_CATS[d.cat] + ')'], ['값', num(r.price) + '닢 (세공 특기 1단계마다 +8%)'],
+            STAT(r) ? ['효과', STAT(r)] : null,
+            r.lead ? ['이어지는 발견', r.lead.map(x => G.DISC[x].name).join(', ') + ' — 소지품에서 읽으면 단서'] : r.kind === 'book' ? ['읽으면', '같은 지역의 발견 단서 하나'] : null,
+            ['보고할 때', r.kind === 'book' || r.lead ? '후원자에게 바치지만 돌려받기도 한다' : '후원자에게 바친다'], ['발표할 때', '제독의 것 — 팔거나 쓸 수 있다']],
+          files: [{ key: 'relics/' + id, kind: 'png', note: '이 유물의 그림 (256×256, 배경 포함)' }, { key: 'relic-kinds/' + r.kind, kind: 'png', note: G.RELIC_KIND[r.kind] + ' 공통' }]
+        })
+      });
+    });
+  }
 
   // ------------------------------------------------ ships
   const tShip = tab('ships', '배', {

@@ -515,11 +515,12 @@
           else await UI.say(U.pick(['바다 너머에는 뭐가 있을까요? 언젠가 저도 가 보고 싶어요.', '항해 이야기 더 들려주세요!', '몸조심하세요. 바다는 무서운 곳이니까요.']), who);
         }
       } else if (v === 'gift') {
-        var gifts = s.player.items.filter(function (it) { return G.ITEM[it.id] && G.ITEM[it.id].kind === 'gift' && !G.ITEM[it.id].ring; });
-        if (!gifts.length) { UI.toast('선물할 장신구가 없습니다. 시장에서 살 수 있습니다.', 'info'); continue; }
-        var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name, value: i, icon: 'heart' }; }), { width: 460 });
+        // 아직 보고·발표하지 않은 발견의 유물(증거)은 선물로 내놓지 않는다
+        var gifts = s.player.items.filter(function (it) { return G.ITEM[it.id] && G.ITEM[it.id].kind === 'gift' && !G.ITEM[it.id].ring && !R.isProof(it); });
+        if (!gifts.length) { UI.toast('선물할 장신구가 없습니다. 시장에서 살 수 있습니다.' + (s.player.items.some(function (it) { return G.ITEM[it.id] && G.ITEM[it.id].kind === 'gift' && R.isProof(it); }) ? ' (발견의 증거인 장신구는 보고·발표한 뒤에 선물할 수 있습니다)' : ''), 'info'); continue; }
+        var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name + (G.RELIC && G.RELIC[it.id] ? ' <span class="tag">유물</span>' : ''), right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart' }; }), { width: 460 });
         if (gi == null) continue;
-        var it = gifts[gi]; R.removeItem(it.id);
+        var it = gifts[gi]; s.player.items.splice(s.player.items.indexOf(it), 1);
         st.aff = Math.min(100, st.aff + G.ITEM[it.id].gv + likeBonus(like) + R.skill('craft'));
         await UI.say(U.pick(['어머, 이렇게 고운 걸 저에게요? 정말 고마워요!', '예뻐라! 소중히 간직할게요.']), who);
       } else if (v === 'wed') {

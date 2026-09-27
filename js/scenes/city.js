@@ -163,6 +163,8 @@
       await C.mate('제독, 저기를 보십시오! 소문으로만 듣던 ' + U.eul(ds[i].name).replace(ds[i].name, '「' + ds[i].name + '」') + ' 이 눈으로 보게 되다니...');
       await G.Disc.find(ds[i], 'city');
     }
+    var lefts = G.Disc.leftHere('city', 0, 0, c.id);
+    for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
     // contract reminder
     if (s.contract) {
       var sp = G.SPONSOR[s.contract.sponsor];
@@ -440,8 +442,8 @@
         var sure = await UI.confirm('정말로 ' + c.name + U.j(c.name, '을/를').slice(c.name.length) + ' 공격하겠습니까? 악명이 크게 오릅니다.', '공격한다', '그만둔다');
         if (!sure) continue;
         var keepParty = s.loc.party;
-        s.loc.party = Math.max(1, Math.min(s.fleet.crew, 80));
-        var res = await G.Scenes.land.landBattle(c.name + ' 수비대', 20 + c.size * 25);
+        s.loc.party = Math.max(1, s.fleet.crew);
+        var res = await G.Scenes.land.landBattle(c.name + ' 수비대', 20 + c.size * 25, false, { kind: 'garrison', guns: true });
         if (keepParty != null) s.loc.party = keepParty; else delete s.loc.party;
         s.player.notoriety += 10;
         if (res === 'win') { await C.mate('마을을 공략했습니다. 이것으로 마을에 들어갈 수 있습니다.'); return true; }

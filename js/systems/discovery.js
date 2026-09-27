@@ -40,16 +40,27 @@
       s.player.items.push({ id: 'evidence', kind: 'evidence', evidence: true, name: d.evidence, disc: d.id,
         desc: '「' + d.name + '」의 발견을 증명한다. 후원자에게 보고하거나 항구에서 발표할 때 건넨다.' });
     }
-    // 보물·공예 발견은 그 자리에서 값나가는 것을 챙긴다 (세공 솜씨만큼 더)
+    // 발견 유물: 그 자리에서 보물·장신구·무기·서적·선수상 같은 것을 손에 넣는다 — 발견의 증거가 된다
+    var rel = D.relicsOf(d.id), got = [];
+    // 유물이 없는 보물·유적 발견은 예전처럼 값나가는 것을 조금 챙긴다 (세공 솜씨만큼 더)
     var loot = 0;
-    if (d.cat === 'treasure' || d.cat === 'ruin') {
+    if (!rel.length && (d.cat === 'treasure' || d.cat === 'ruin')) {
       loot = Math.round(d.val * (0.05 + R.skill('craft') * 0.035) * (st.rival ? 0.5 : 1));
       if (loot > 0) s.player.gold += loot;
     }
     G.State.log(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 발견했다.');
     if (G.Audio) G.Audio.sfx('discover');
-    await G.Scenes.discoveryCard(d, fame);
+    // 칸이 남는 만큼 먼저 챙기고, 모자라면 카드를 본 뒤에 무엇을 버릴지 묻는다
+    var wait = [];
+    rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });
+    st.relics = got.map(function (r) { return r.id; });
+    await G.Scenes.discoveryCard(d, fame, got.concat(wait));
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
+    for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);
+    if (rel.length && !s.flags.relicTip) {
+      s.flags.relicTip = 1;
+      await UI.say('제독, 이것은 이 발견의 틀림없는 증거입니다. 후원자에게 보고하면 증거로 바쳐야 하지만, 항구에서 제독 스스로 발표하면 제독의 것이 됩니다 — 시장에 팔아 자금을 마련할 수도 있습니다. 서적은 소지품에서 읽어 볼 수 있습니다.', G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first'));
+    }
     // 곶·해협·항로·대륙: 처음 찾은 사람이 이름을 붙인다
     if (G.Names) await G.Names.offer(d);
     // contract check
@@ -72,6 +83,83 @@
     if (G.Frontier) { var fm = G.Frontier.tick(); if (fm.length && G.Scenes.city && G.Scenes.city.news) await G.Scenes.city.news(fm); }
     G.Game.refreshHud && G.Game.refreshHud();
     return true;
+  };
+
+  // ---------------------------------------------------------------- 발견 유물·증거
+  D.relicsOf = function (id) { return (G.RELICS && G.RELICS[id]) || []; };
+  /** 보고·발표할 때 증거를 보여야 하는 발견인가 (해도·지도 증거품이나 유물이 있는 발견) */
+  D.needsProof = function (d) { return !!(d && (d.evidence || D.relicsOf(d.id).length)); };
+  /** 이 발견의 증거로 쓸 수 있는 소지품 (아직 쓰지 않은 해도·지도와 유물) */
+  D.proofItems = function (id) { return S().player.items.filter(function (it) { return it.disc === id && R.isProof(it); }); };
+  D.hasProof = function (id) { return D.proofItems(id).length > 0; };
+  /** 소지품이 가득 찬 채 유물을 찾았다: 무엇을 버리고 챙길지, 두고 갈지 (두고 가면 다시 와서 가져갈 수 있다) */
+  D.takeRelic = async function (d, r) {
+    var s = S(), st = s.disc[d.id] || (s.disc[d.id] = {});
+    for (;;) {
+      if (R.addItem(r.id, { disc: d.id })) { (st.relics = st.relics || []).push(r.id); UI.toast(r.name + U.jx(r.name, '을/를') + ' 챙겼다.', 'chest'); return true; }
+      var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { return !R.isProof(x.it); });
+      var v = await UI.choose('소지품이 가득 찼습니다', list.map(function (x, k) {
+        var dd = G.ITEM[x.it.id] || {};
+        return { label: '버린다: ' + U.esc(R.itemName(x.it)), right: G.ITEM_KIND[dd.kind || x.it.kind] || '', value: k, icon: 'chest' };
+      }).concat([{ label: '두고 간다', right: '다시 오면 가져갈 수 있다', value: 'leave', icon: 'boot' }]),
+        { width: 620, text: '「' + r.name + '」' + U.jx(r.name, '을/를') + ' 챙기려면 소지품 하나를 버려야 합니다. (' + (G.ITEM_KIND[r.kind] || '') + ' · 값 ' + U.num(r.price) + '닢)' });
+      if (v == null || v === 'leave') {
+        (st.left = st.left || []).push(r.id);
+        UI.toast(r.name + U.jx(r.name, '을/를') + ' 그 자리에 두었다. 다시 오면 가져갈 수 있다.', 'boot', 4200);
+        return false;
+      }
+      var x = list[v], nm = R.itemName(x.it);
+      if (s.player.equip.weapon === x.it.id) s.player.equip.weapon = null;
+      if (s.player.equip.armor === x.it.id) s.player.equip.armor = null;
+      s.player.items.splice(x.i, 1);
+      UI.toast(nm + U.jx(nm, '을/를') + ' 버렸다.', 'chest');
+    }
+  };
+  /** 두고 온 유물이 있는 발견물 가운데 지금 닿은 곳 (how: land/sea/city) */
+  D.leftHere = function (how, lon, lat, cityId) {
+    var s = S();
+    return G.DISCOVERIES.filter(function (d) {
+      var st = s.disc[d.id]; if (!st || !st.me || !st.left || !st.left.length) return false;
+      if (how === 'city') return d.how === 'city' && d.city === cityId;
+      if (d.how === 'city' || d.how === 'trade' || d.lon == null) return false;
+      var near = how === 'sea' ? (d.how === 'sea' || d.how === 'special') : d.how === 'land';
+      return near && G.Geo.dist(lon, lat, d.lon, d.lat) < (d.r || 0.5) * 1.5;
+    });
+  };
+  /** 두고 온 유물을 가지러 왔다 */
+  D.pickupLeft = async function (d) {
+    var st = S().disc[d.id], ids = (st.left || []).slice();
+    st.left = [];
+    await UI.say('「' + d.name + '」에 두고 갔던 것이 그대로 있습니다: ' + ids.map(function (id) { return G.RELIC[id] ? G.RELIC[id].name : id; }).join(', '), G.Scenes.mateSpeaker('first'));
+    for (var i = 0; i < ids.length; i++) if (G.RELIC[ids[i]]) await D.takeRelic(d, G.RELIC[ids[i]]);
+  };
+  /** 스스로 발표: 해도·지도 증거품은 왕실 해도소에 넘기고, 유물은 제독의 것이 된다 (done → 팔거나 써도 된다) */
+  D.keepRelics = function (id) {
+    var kept = [];
+    S().player.items.forEach(function (it) { if (it.disc === id && !it.evidence && G.RELIC[it.id] && !it.done) { it.done = true; kept.push(it); } });
+    return kept;
+  };
+  /** 유물의 값 (세공 솜씨가 좋으면 제값을 더 받아 낸다) */
+  D.relicValue = function (it) {
+    var r = G.RELIC[it.id]; if (!r) return 0;
+    return Math.round(r.price * (1 + R.skill('craft') * 0.08) / 10) * 10;
+  };
+  /** 서적·지도를 읽는다: 이어지는 발견의 단서를 얻는다 (없으면 가까운 고장의 발견 하나). 처음 한 번만 */
+  D.readRelic = async function (it) {
+    var s = S(), r = G.RELIC[it.id]; if (!r) return;
+    var who = G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first');
+    if (it.read) { await UI.say('이미 읽은 것입니다. 적힌 이야기는 수첩에 옮겨 두었습니다.', who); return; }
+    it.read = true;
+    var ids = (r.lead || []).filter(function (id) { return G.DISC[id] && !D.foundByMe(id) && !s.hints[id]; });
+    if (!ids.length) {
+      var reg = G.DISC[r.relic] ? G.DISC[r.relic].reg : -1;
+      var pool = G.DISCOVERIES.filter(function (d) { return d.reg === reg && d.how !== 'trade' && d.how !== 'special' && !D.foundByMe(d.id) && !s.hints[d.id] && D.available(d) && !(s.disc[d.id] && s.disc[d.id].rival); });
+      if (pool.length) ids = [pool[Math.abs(U.strHash(it.id + (s.player.name || ''))) % pool.length].id];
+    }
+    var got = ids.filter(function (id) { return D.addHint(id, 'relic:' + r.id); });
+    if (!got.length) { await UI.say('「' + r.name + '」' + U.jx(r.name, '을/를') + ' 꼼꼼히 읽었지만, 이미 아는 이야기뿐입니다.', who); return; }
+    await UI.say('「' + r.name + '」' + U.jx(r.name, '을/를') + ' 읽어 보니 이런 대목이 있습니다.\n\n' + got.map(function (id) { return G.DISC[id].hint; }).join('\n') + '\n\n— 새 단서: ' + got.map(function (id) { return '「' + G.DISC[id].name + '」'; }).join(', '), who);
+    UI.toast('단서를 얻었다: ' + got.map(function (id) { return '「' + G.DISC[id].name + '」'; }).join(', '), 'scroll', 4200);
   };
 
   /** 발견을 일정 수 모을 때마다 모국 왕실이 포상한다 */
@@ -137,10 +225,14 @@
     if (!st || !st.me || st.reported || st.announced) return 0;
     st.announced = true;
     var fame = D.isLate(id) ? Math.round(D.fameFor(d) * 0.9 * D.LATE_FAME) : Math.round(D.fameFor(d) * (st.rival ? 0.35 : 0.9));
-    // 증거품을 내보이면 제값, 없으면 덜 믿는다
-    if (d.evidence) { var ev = G.Sponsor && G.Sponsor.takeEvidence ? G.Sponsor.takeEvidence(id) : null; if (!ev) fame = Math.round(fame * 0.8); }
+    // 증거(해도·지도, 유물)를 내보이면 제값, 없으면 덜 믿는다. 해도·지도는 왕실 해도소에 넘기고, 유물은 제독이 갖는다
+    var proof = D.hasProof(id);
+    if (d.evidence && G.Sponsor && G.Sponsor.takeEvidence) G.Sponsor.takeEvidence(id);
+    var kept = D.keepRelics(id);
+    if (D.needsProof(d) && !proof) fame = Math.round(fame * 0.8);
+    D.lastAnnounce = { kept: kept, noProof: D.needsProof(d) && !proof };
     s.player.fame += fame;
-    G.State.log('「' + d.name + '」의 발견을 발표했다. (명성 +' + fame + (D.isLate(id) ? ', 늦은 발표라 절반' : '') + ')');
+    G.State.log('「' + d.name + '」의 발견을 발표했다. (명성 +' + fame + (D.isLate(id) ? ', 늦은 발표라 절반' : '') + (kept.length ? ', 유물 ' + kept.map(function (it) { return R.itemName(it); }).join('·') + U.jx(R.itemName(kept[kept.length - 1]), '은/는') + ' 제독의 것' : '') + ')');
     return fame;
   };
 

@@ -342,8 +342,12 @@
     var list = G.Disc.unreported();
     if (!list.length) { await C.mate('발표할 발견이 없습니다. 후원자와 계약한 발견은 후원자에게 보고하십시오.'); return; }
     var s = S();
-    var opts = list.map(function (d) { return { label: d.name + (G.Disc.isLate(d.id) ? ' <span class="tag">늦은 발표 · 명성 절반</span>' : ''), right: G.DISC_CATS[d.cat], value: d.id, desc: d.desc }; });
-    var id = await UI.choose('발표할 발견물', opts, { width: 620, text: '후원자 없이 발견을 세상에 발표하면 명성을 얻을 수 있습니다. 단, 계약 중인 발견은 후원자에게 보고하는 편이 유리합니다.' });
+    var opts = list.map(function (d) {
+      var pf = G.Disc.proofItems(d.id).filter(function (it) { return !it.evidence; });
+      return { label: d.name + (G.Disc.isLate(d.id) ? ' <span class="tag">늦은 발표 · 명성 절반</span>' : '') + (G.Disc.needsProof(d) && !G.Disc.hasProof(d.id) ? ' <span class="tag">증거 없음</span>' : ''),
+        right: G.DISC_CATS[d.cat], value: d.id, desc: d.desc + (pf.length ? ' — 유물: ' + pf.map(function (it) { return R.itemName(it); }).join(', ') + ' (발표하면 제독의 것)' : '') };
+    });
+    var id = await UI.choose('발표할 발견물', opts, { width: 660, text: '후원자 없이 발견을 세상에 발표하면 명성을 얻고, 그 자리에서 가져온 유물은 제독의 것이 됩니다(시장에 팔 수 있다). 후원자에게 보고하면 사례금을 받는 대신 유물을 바칩니다.' });
     if (id == null) return;
     if (s.contract && s.contract.disc === id && !(await UI.confirm('이것은 후원자와 계약한 발견입니다. 그래도 발표하겠습니까? 계약은 실패로 처리됩니다.'))) return;
     var broke = s.contract && s.contract.disc === id ? G.SPONSOR[s.contract.sponsor] : null;
@@ -351,7 +355,10 @@
     // 계약한 발견을 스스로 발표하면 계약은 깨진다 — 선금을 돌려주고, 후원자에게 보고해 사례금을 또 받을 수는 없다
     if (broke) await G.Sponsor.breakContract(broke, 'announce');
     else if (s.contract && s.contract.disc === id) s.contract = null;
-    await UI.alert('「' + G.DISC[id].name + '」의 발견을 발표했다!<br>명성 +' + fame + (G.Disc.isLate(id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤라 명성은 절반</span>' : ''), '발표');
+    var la = G.Disc.lastAnnounce || {};
+    await UI.alert('「' + G.DISC[id].name + '」의 발견을 발표했다!<br>명성 +' + fame + (G.Disc.isLate(id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤라 명성은 절반</span>' : '') +
+      (la.noProof ? '<br><span class="muted">증거를 보이지 못해 사람들이 반신반의한다 (명성 8할)</span>' : '') +
+      (la.kept && la.kept.length ? '<br><br>' + la.kept.map(function (it) { return '<b>' + U.esc(R.itemName(it)) + '</b>'; }).join(', ') + U.jx(R.itemName(la.kept[la.kept.length - 1]), '은/는') + ' 이제 제독의 것이다.<br><span class="muted">시장에 팔아 자금을 마련하거나, 장비하고 선물할 수 있다.</span>' : ''), '발표');
     if (G.Names) await G.Names.onReport(G.DISC[id]);
   };
 })(window.G = window.G || {});

@@ -82,7 +82,7 @@
   F.canHint = function (d, src) {
     if (F.available(d)) return true;
     var sr = String(src || '');
-    if (sr.indexOf('contract') === 0 || sr.indexOf('lead') === 0) return true;
+    if (sr.indexOf('contract') === 0 || sr.indexOf('lead') === 0 || sr.indexOf('relic') === 0) return true;
     var m = G.DISC_FRONT[d.id];
     return sr === 'rival' && !!m && F.state(m.f).lv >= 1;
   };

@@ -196,6 +196,8 @@
   function cul(c) { return G.Art && G.Art.cultureOf ? G.Art.cultureOf(c) : 'europe'; }
   var K = I.chain = {};
   K.title = function () { return ['title']; };
+  /** 발견 유물: 그 유물 그림, 없으면 종류 공통 그림 (relic-kinds/treasure 등) */
+  K.relic = function (r) { return ['relics/' + r.id, 'relic-kinds/' + r.kind]; };
   /** town background: per-city file, then a numbered variant for the style (port / inland), then the style */
   K.bg = function (c) {
     var out = ['backgrounds/' + c.id];
