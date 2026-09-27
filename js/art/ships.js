@@ -288,6 +288,7 @@
       var bil = W * (0.18 + 0.03 * Math.sin(t * 2.5 + i)), span = W * (span0 || 1.5);
       var fu = spec.furl || 0, sqk = kind !== 'lat' && kind !== 'lateen';
       ctx.save();
+      bil *= A.rigSail(ctx, mx, kind, spec.rig, W, t, i);
       if (fu > 0) { var ax = sqk ? mx - W * 0.08 : mx, ay = sqk ? 0 : W * 0.27; ctx.translate(ax, ay); ctx.scale(1 - 0.72 * fu, sqk ? 1 : 1 - 0.72 * fu); ctx.translate(-ax, -ay); bil *= 1 - 0.6 * fu; }
       ctx.strokeStyle = 'rgba(70,50,30,.6)'; ctx.lineWidth = Math.max(0.6, L / 140);
       if (kind === 'bat') {
@@ -427,7 +428,13 @@
     if (spec.pose) { var ps = spec.pose, hv = 1 + (ps.heave || 0); ctx.scale(hv, hv * (1 - Math.abs(ps.roll || 0) * 0.35)); }
     fn(ctx, len, len * 0.34, spec, t);
     A.pose = null;
-    if (spec.flag) { ctx.fillStyle = spec.flag; ctx.beginPath(); ctx.moveTo(-len * 0.47, -len * 0.02); ctx.lineTo(-len * 0.62, -len * 0.06 + Math.sin(t * 6) * len * 0.02); ctx.lineTo(-len * 0.47, len * 0.04); ctx.closePath(); ctx.fill(); }
+    var fk = (G.FX && G.FX.ride && G.FX.ride.flag != null) ? G.FX.ride.flag : 1;
+    if (spec.rig && spec.rig.wind != null && spec.flag) {
+      var ps2 = spec.pose || {}; ctx.save(); ctx.translate(-(ps2.pitch || 0) * len * 0.12, -(ps2.roll || 0) * len * 0.34);
+      if (fk > 0) A.streamer(ctx, len * 0.05, 0, spec.rig.wind, len * 0.28 * fk, Math.max(1.5, len * 0.034 * fk), t, spec.pennant || '#c8312a', spec.rig.aws);
+      ctx.restore();
+      A.streamer(ctx, -len * 0.47, 0, spec.rig.wind, len * 0.15, len * 0.07, t + 1.3, spec.flag, spec.rig.aws);
+    } else if (spec.flag) { ctx.fillStyle = spec.flag; ctx.beginPath(); ctx.moveTo(-len * 0.47, -len * 0.02); ctx.lineTo(-len * 0.62, -len * 0.06 + Math.sin(t * 6) * len * 0.02); ctx.lineTo(-len * 0.47, len * 0.04); ctx.closePath(); ctx.fill(); }
     ctx.restore();
   };
 })(window.G = window.G || {});

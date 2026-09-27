@@ -679,11 +679,57 @@
     var turnHeel = U.clamp(-(st.turnRate || 0) * sr * 0.045, -0.22, 0.22);                 // 도는 반대쪽(바깥)으로 기운다
     var rel = st.windVis ? U.angDiff(S().loc.heading, st.windVis.dir) : 0;
     var windHeel = Math.sin(rel) * ws * 0.10 * Math.min(1, sr * 2);                           // 옆바람을 받으면 바람 아래로
-    var roll = P.roll * (turnHeel + windHeel + Math.sin(t * 0.9 + 1.3) * 0.030 * sea);
-    var pitch = P.pitch * (Math.sin(t * 1.15 + 0.4) * 0.030 * sea + U.clamp((st.accel || 0) * 0.06, -0.05, 0.06));
-    var heave = P.heave * (Math.sin(t * 1.35) * 0.6 + Math.sin(t * 0.73 + 2.0) * 0.4) * 0.018 * sea;
-    var k = Math.min(1, dt * 4), ps = st.pose;
-    ps.roll += (roll - ps.roll) * k; ps.pitch += (pitch - ps.pitch) * k; ps.heave += (heave - ps.heave) * k;
+    var accPitch = U.clamp((st.accel || 0) * 0.06, -0.05, 0.06);
+    var RD = G.FX && G.FX.ride, WV = G.Waves, ps = st.pose;
+    if (RD && RD.on !== false && WV && dt > 0) {
+      // 보이는 파도를 탄다: 화면의 바다 셰이더와 같은 식으로 선체 위 다섯 점의 높이를 재고, 용수철-감쇠로 따라간다
+      var l = S().loc, stK = st.storm > 0 ? RD.storm : 1;
+      var w = rideWave(l.lon, l.lat, l.heading, shipPx());
+      var tgt = { roll: P.roll * (turnHeel + windHeel + w.roll * stK), pitch: P.pitch * (w.pitch * stK + accPitch), heave: P.heave * w.heave * stK };
+      st.ride = st.ride || WV.newRide();
+      var R = st.ride, vp0 = R.vp;
+      WV.spring(R, tgt, RD, Math.min(dt, 0.1));
+      ps.roll = U.clamp(R.roll, -RD.maxRoll, RD.maxRoll); ps.pitch = U.clamp(R.pitch, -RD.maxPitch, RD.maxPitch); ps.heave = U.clamp(R.heave, -RD.maxHeave, RD.maxHeave);
+      // 선수가 파도에 박힌다: 뱃머리가 빠르게 내려가는 순간, 달리고 있으면 선수 물보라가 크게 튄다
+      R.cool = Math.max(0, R.cool - dt);
+      if (R.vp < -RD.slam && vp0 >= -RD.slam && sr > 0.35 && !R.cool && st.fx && G.SeaFX && G.SeaFX.burst && !st.paused) {
+        R.cool = RD.slamCool;
+        G.SeaFX.burst(st.fx, l.lon, l.lat, l.heading, shipGeom(), shipSpeed(), RD.slamSpray * Math.min(2, (0.6 + sr * 0.7) * (-R.vp / RD.slam) * 0.8));
+        st.slams = (st.slams || 0) + 1;
+      }
+      // 따르는 배: 제 자리의 파도를 탄다 (자리는 기함 기준 화면 px — 세상 좌표로 바꾼다)
+      var z = st.cam ? st.cam.zoom : 110, f = S().fleet;
+      st.rideF = st.rideF || [];
+      for (var si = 1; si < f.ships.length; si++) {
+        var sp0 = st.slotPos && st.slotPos[si]; if (!sp0) continue;
+        var wf = rideWave(l.lon + sp0[0] / z, l.lat - sp0[1] / z, l.heading, followPx()), fk = RD.follow * stK;
+        var RF = st.rideF[si] = st.rideF[si] || WV.newRide();
+        WV.spring(RF, { roll: P.roll * (turnHeel * 0.9 + windHeel + wf.roll * fk), pitch: P.pitch * (wf.pitch * fk + accPitch), heave: P.heave * wf.heave * fk }, RD, Math.min(dt, 0.1));
+      }
+    } else {
+      var roll = P.roll * (turnHeel + windHeel + Math.sin(t * 0.9 + 1.3) * 0.030 * sea);
+      var pitch = P.pitch * (Math.sin(t * 1.15 + 0.4) * 0.030 * sea + accPitch);
+      var heave = P.heave * (Math.sin(t * 1.35) * 0.6 + Math.sin(t * 0.73 + 2.0) * 0.4) * 0.018 * sea;
+      var k = Math.min(1, dt * 4);
+      ps.roll += (roll - ps.roll) * k; ps.pitch += (pitch - ps.pitch) * k; ps.heave += (heave - ps.heave) * k;
+      st.rideF = null;
+    }
+    // 돛·깃발: 겉바람(참바람 − 배의 속도)을 따라 활대가 돌고, 삼각돛은 바람 아래쪽으로 넘어가며, 맞바람이면 펄럭인다
+    if (WV && st.windVis && dt > 0) {
+      var wsK = (RD && RD.windScale) || 1.6, vk = 0.5 / P.refSpeed;
+      var ap = WV.apparent({ dir: st.windVis.dir, spd: st.windVis.spd * wsK }, (st.vel ? st.vel[0] : 0) * vk, (st.vel ? st.vel[1] : 0) * vk, S().loc.heading);
+      st.rig = WV.rigStep(st.rig || {}, ap, Math.min(dt, 0.1), st.furl || 0);
+    }
+  }
+  /** 이 자리의 파도가 미는 흔들림 (G.FX.ride.sea 배율을 곱한 값) — 배 그림 길이 lenPx의 선체 위 다섯 점 */
+  function rideWave(lon, lat, heading, lenPx) {
+    var WV = G.Waves, RD = G.FX.ride, K = RD.sea, z = st.cam ? st.cam.zoom : 110, r = G.Game.renderer;
+    var pxD = z * (r && r.canvas ? r.canvas.width / 1600 : 1);
+    var wind = st.windVis ? [Math.cos(st.windVis.dir) * st.windVis.spd, Math.sin(st.windVis.dir) * st.windVis.spd] : [0.5, 0.3];
+    var Lb = Math.min(lenPx / z, 0.45 * WV.seaSwell()), cst = WV.coast(lon, lat), t = st.t;
+    var h = WV.hull(function (x, y) { return WV.sea(x, y, t, wind, pxD, cst); }, lon, lat, heading, Lb, Lb * 0.5);
+    var ch = K.chop || 0;
+    return { roll: (h.roll + ch * h.lr) * K.roll, pitch: (h.pitch + ch * h.lp) * K.pitch, heave: h.heave * K.heave };
   }
   function arrived() {
     var tgt = st.target;
@@ -1171,6 +1217,15 @@
         var nty = n.ships && n.ships[j], nlook = nty ? A.shipLook(nty, { flag: kk.flag, cross: false }) : { sails: ['sq', 'sq', 'lat'], hull: kk.hull, sail: kk.sail, flag: kk.flag };
         if (n.kind === 'pirate') { nlook.hull = kk.hull; if (nlook.hullType === 'west' || nlook.hullType === 'galley' || nlook.hullType === 'dhow') nlook.sail = kk.sail; }
         var nk = npcPx() / 30;
+        // 다른 배도 제 자리의 파도를 타고(용수철 없이 바로), 돛·깃발이 바람을 따른다
+        if (G.FX.ride && G.FX.ride.on !== false && G.Waves && j === 0) {
+          var nw = rideWave(n.lon, n.lat, n.heading, npcPx());
+          n.pose = n.pose || { roll: 0, pitch: 0, heave: 0 }; var nkk = Math.min(1, (st.dtLast || 0.016) * 3);
+          n.pose.roll += (U.clamp(nw.roll, -0.2, 0.2) - n.pose.roll) * nkk; n.pose.pitch += (U.clamp(nw.pitch, -0.08, 0.08) - n.pose.pitch) * nkk; n.pose.heave += (U.clamp(nw.heave, -0.05, 0.05) - n.pose.heave) * nkk;
+          if (st.windVis) n.rig = G.Waves.rigStep(n.rig || {}, G.Waves.apparent({ dir: st.windVis.dir, spd: st.windVis.spd * 1.6 }, Math.cos(n.heading) * 0.3, Math.sin(n.heading) * 0.3, n.heading), Math.min(0.1, st.dtLast || 0.016), 0);
+        }
+        if (n.pose) nlook.pose = j ? { roll: n.pose.roll * 0.8, pitch: -n.pose.pitch * 0.6, heave: n.pose.heave * 0.5 } : n.pose;
+        if (n.rig) nlook.rig = n.rig;
         A.shipTop(ctx, p[0] - Math.cos(n.heading) * j * 18 * nk + j * 6 * nk, p[1] + Math.sin(n.heading) * j * 18 * nk + j * 8 * nk, n.heading, npcPx(), nlook, st.t + j);
       }
       if ((n.kind === 'pirate' && !n.awed) || n.hostile) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - npcPx() * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - npcPx() * 0.72); ctx.textAlign = 'left'; }
@@ -1195,9 +1250,10 @@
       // 선체에 붙은 물: 선수 파도와 선측 물줄기 (따르는 배는 조금 약하게)
       if (st.fx && G.SeaFX) G.SeaFX.drawHull(st.fx, ctx, bx, by, l.heading, lenS, sr * (si ? 0.7 : 1), slip * (si ? 0.5 : 1), sideS, st.t);
       var lk = A.shipLook(sh.type, { sails: sh.sails, flag: '#1d3f7a' });
-      var ps = st.pose || {}, ph = si * 1.7;
-      lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };
-      lk.noWake = true; lk.furl = st.furl || 0;
+      var ps = st.pose || {}, ph = si * 1.7, RF = si && st.rideF && st.rideF[si], RDm = G.FX.ride || {};
+      if (RF) lk.pose = { roll: U.clamp(RF.roll, -RDm.maxRoll, RDm.maxRoll), pitch: U.clamp(RF.pitch, -RDm.maxPitch, RDm.maxPitch), heave: U.clamp(RF.heave, -RDm.maxHeave, RDm.maxHeave) };
+      else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };
+      lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null;
       A.shipTop(ctx, bx, by, l.heading, lenS, lk, st.t + si);
     }
     drawCities(ctx);

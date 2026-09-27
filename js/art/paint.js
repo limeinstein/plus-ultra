@@ -299,6 +299,36 @@
     ctx.restore();
   };
 
+  // ---------------------------------------------------------------- 돛·깃발이 바람을 따른다 (G.Waves.rigStep이 만든 rig)
+  /** 돛 하나를 겉바람에 맞춘다: 가로돛은 활대를 돌리고(brace), 삼각돛은 바람 아래쪽으로 넘기고(lee), 맞바람이면 떤다(luff).
+      ctx.save() 뒤에 부른다. 돌려줌 = 돛이 부푼 정도에 곱할 값 */
+  A.rigSail = function (ctx, mx, kind, rig, W, t, i) {
+    if (!rig || rig.brace == null) return 1;
+    var fa = kind === 'lat' || kind === 'lateen', lu = rig.luff || 0;
+    if (lu > 0.02) ctx.translate(Math.sin(t * 23 + i * 2.1) * W * 0.03 * lu, Math.sin(t * 19 + i) * W * 0.025 * lu);
+    ctx.translate(mx, 0);
+    if (fa) { var le = rig.lee; if (Math.abs(le) < 0.12) le = le < 0 ? -0.12 : 0.12; ctx.scale(1, le); }
+    else ctx.rotate(rig.brace * (kind === 'bat' ? 1.3 : 1));
+    ctx.translate(-mx, 0);
+    var fl = rig.fill == null ? 1 : rig.fill;
+    return fl * (1 - lu) + lu * (0.12 + 0.55 * Math.abs(Math.sin(t * 16 + i * 1.7)));
+  };
+  /** 바람에 날리는 긴 깃발: (x, y)에서 dir(캔버스 rad) 쪽으로, 끝으로 갈수록 크게 물결친다 */
+  A.streamer = function (ctx, x, y, dir, len, wid, t, col, aws) {
+    var n = 9, c = Math.cos(dir), s = Math.sin(dir), px = -s, py = c, f = 7 + 9 * (aws || 0.5), amp = wid * (0.9 + 0.8 * (aws || 0.5));
+    var top = [], bot = [];
+    for (var k = 0; k <= n; k++) {
+      var u = k / n, o = Math.sin(t * f - u * 5.5) * amp * u, w = wid * 0.5 * (1 - 0.8 * u);
+      var bx = x + c * len * u + px * o, by = y + s * len * u + py * o;
+      top.push([bx + px * w, by + py * w]); bot.push([bx - px * w, by - py * w]);
+    }
+    ctx.beginPath(); ctx.moveTo(top[0][0], top[0][1]);
+    for (k = 1; k <= n; k++) ctx.lineTo(top[k][0], top[k][1]);
+    for (k = n; k >= 0; k--) ctx.lineTo(bot[k][0], bot[k][1]);
+    ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 0.6; ctx.stroke();
+  };
+
   // ---------------------------------------------------------------- ship (top view, for maps)
   /** draws a ship seen from above, pointing along angle (radians, 0 = east, CCW positive with y-up world) */
   A.shipTop = function (ctx, x, y, ang, len, spec, t) {
@@ -352,6 +382,7 @@
       var bil = W * (0.18 + 0.03 * Math.sin(t * 2.5 + i));
       var fu = spec.furl || 0;               // 돛을 거둔 정도 (0 = 활짝, 1 = 활대에 말아 묶음)
       ctx.save();
+      bil *= A.rigSail(ctx, mx, kind, spec.rig, W, t, i);
       if (fu > 0) { var ax = kind === 'sq' || kind === 'bat' ? mx - W * 0.08 : mx; ctx.translate(ax, kind === 'sq' || kind === 'bat' ? 0 : W * 0.27); ctx.scale(1 - 0.72 * fu, kind === 'sq' || kind === 'bat' ? 1 : 1 - 0.72 * fu); ctx.translate(-ax, kind === 'sq' || kind === 'bat' ? 0 : -W * 0.27); bil *= 1 - 0.6 * fu; }
       if (kind === 'sq' || kind === 'bat') {
         var span = W * (i === 0 && n > 2 ? 1.35 : 1.6);
@@ -382,8 +413,15 @@
       // mast top
       ctx.fillStyle = '#2a1a0e'; ctx.beginPath(); ctx.arc(mx, 0, Math.max(1.2, L / 55), 0, Math.PI * 2); ctx.fill();
     }
+    // 돛대 위 긴 깃발 — 겉바람이 불어 가는 쪽으로 날린다
+    var fk = (G.FX && G.FX.ride && G.FX.ride.flag != null) ? G.FX.ride.flag : 1;
+    if (spec.rig && spec.rig.wind != null && fk > 0) {
+      var mm = n === 1 ? 0 : L * 0.26 - Math.floor((n - 1) / 2) * (L * 0.58 / (n - 1));
+      A.streamer(ctx, mm, 0, spec.rig.wind, L * 0.30 * fk, Math.max(1.5, W * 0.1 * fk), t, spec.pennant || '#c8312a', spec.rig.aws);
+    }
     // pennant at the stern
-    if (spec.flag) { ctx.fillStyle = spec.flag; ctx.beginPath(); ctx.moveTo(-L * 0.47, -W * 0.05); ctx.lineTo(-L * 0.62, -W * 0.18 + Math.sin(t * 6) * W * 0.05); ctx.lineTo(-L * 0.47, W * 0.12); ctx.closePath(); ctx.fill(); }
+    if (spec.rig && spec.rig.wind != null && spec.flag) A.streamer(ctx, -L * 0.47, 0, spec.rig.wind, L * 0.16, W * 0.22, t + 1.3, spec.flag, spec.rig.aws);
+    else if (spec.flag) { ctx.fillStyle = spec.flag; ctx.beginPath(); ctx.moveTo(-L * 0.47, -W * 0.05); ctx.lineTo(-L * 0.62, -W * 0.18 + Math.sin(t * 6) * W * 0.05); ctx.lineTo(-L * 0.47, W * 0.12); ctx.closePath(); ctx.fill(); }
     ctx.restore();
   };
 })(window.G = window.G || {});

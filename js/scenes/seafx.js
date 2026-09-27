@@ -88,6 +88,18 @@
     F.last = { x: o.x, y: o.y, h: o.h, sr: sr, slip: slip, turnK: turnK, side: sideT };
   };
 
+  /** 선수가 파도에 박힐 때 한꺼번에 튀는 물보라 (G.Waves가 앞뒤 흔들림으로 판정).
+      (x, y) 배 가운데, h 선수 방향, g = {len, wid, ref}, sp = 속력(세상 단위/d), amt = 세기(0.5~2) */
+  FXS.burst = function (F, x, y, h, g, sp, amt) {
+    var S = SP(), L = g.len, Wd = g.wid, hx = Math.cos(h), hy = Math.sin(h), px = -hy, py = hx;
+    var n = Math.round(10 * amt * (S.bow == null ? 1 : S.bow)), v = Math.max(sp, g.ref * 0.35);
+    for (var i = 0; i < n; i++) {
+      var sd = i % 2 ? 1 : -1, bx = x + hx * L * (0.40 + rnd() * 0.12) + px * sd * Wd * (0.1 + 0.3 * rnd()), by = y + hy * L * (0.40 + rnd() * 0.12) + py * sd * Wd * (0.1 + 0.3 * rnd());
+      var out = (0.35 + 0.45 * rnd()) * v, fw = (0.2 + 0.35 * rnd()) * v;
+      spawn(F, bx, by, hx * fw + px * sd * out, hy * fw + py * sd * out, 0.18 + 0.18 * rnd(), Wd * 0.16 * S.size, Wd * (0.55 + 0.45 * rnd()) * Math.min(1.6, amt) * S.size, 0.75, 0);
+    }
+  };
+
   /** 시간이 흐른다 (게임 속 날) */
   FXS.age = function (F, days) {
     if (!(days > 0)) return;

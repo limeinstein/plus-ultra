@@ -211,9 +211,36 @@
   }
   /** 연기가 바람에 밀려가는 방향 (px/초, 화면 좌표) */
   function windDrift() { return [Math.cos(st.wind.dir) * (8 + 18 * st.wind.spd), -Math.sin(st.wind.dir) * (8 + 18 * st.wind.spd)]; }
+  B.runtime = function () { return st; };
   B.feel = function () { return st ? { shake: st.shake || 0, flash: st.flash ? st.flash.a : 0, hitstop: st.hitstop || 0 } : null; };
 
   // ---------------------------------------------------------------- simulation
+  /** 배마다 보이는 파도를 탄다(G.Waves.battle — 해전 바다 셰이더와 같은 식)와 돛·깃발이 겉바람을 따른다 */
+  function rideShips(dt, frozen) {
+    var RD = G.FX && G.FX.ride, WV = G.Waves;
+    if (!RD || RD.on === false || !WV || !(dt > 0)) return;
+    var K = RD.battle, wind = [Math.cos(st.wind.dir) * st.wind.spd, Math.sin(st.wind.dir) * st.wind.spd], t = st.t, pxU = 100 * (G.Game.renderer && G.Game.renderer.canvas ? G.Game.renderer.canvas.width / 1600 : 1);
+    var fn = function (x, y) { return WV.battle(x, y, t, wind, pxU); }, refV = BFX.ref / BFX.day;
+    st.ships.forEach(function (b) {
+      if (b.fled) return;
+      var sr = Math.min(1.4, Math.max(0, b.spd || 0) / refV), L = b.len / 100;
+      var h = WV.hull(fn, b.x / 100, -b.y / 100, -b.heading, Math.min(L, 0.45 * WV.battleSwell()), L * 0.34);
+      var heel = U.clamp(-(b.turnRate || 0) * sr * 0.08, -0.12, 0.12);
+      var R = b.ride = b.ride || WV.newRide(), vp0 = R.vp;
+      var ch = K.chop || 0;
+      WV.spring(R, { roll: heel + (h.roll + ch * h.lr) * K.roll, pitch: (h.pitch + ch * h.lp) * K.pitch, heave: h.heave * K.heave }, RD, dt);
+      R.cool = Math.max(0, R.cool - dt);
+      if (!frozen && b.alive && b.fx && G.SeaFX.burst && R.vp < -RD.slam && vp0 >= -RD.slam && sr > 0.35 && !R.cool) {
+        R.cool = RD.slamCool;
+        G.SeaFX.burst(b.fx, b.x, -b.y, -b.heading, { len: b.len, wid: b.len * 0.3, ref: BFX.ref }, (b.spd || 0) * BFX.day, RD.slamSpray * Math.min(2, (0.6 + sr * 0.7) * (-R.vp / RD.slam) * 0.8));
+        st.slams = (st.slams || 0) + 1;
+      }
+      if (b.alive && !b.sunk) {
+        var vk = 0.5 / refV, v = b.vel || [0, 0];
+        b.rig = WV.rigStep(b.rig || {}, WV.apparent({ dir: st.wind.dir, spd: st.wind.spd * (RD.windScale || 1.6) }, v[0] * vk, -v[1] * vk, -b.heading), dt, 0);
+      }
+    });
+  }
   B.update = function (dt) {
     if (!st) return;
     st.t += dt;
@@ -253,6 +280,7 @@
     if (frozen) st.ships.forEach(function (b) { if (b.fx) G.SeaFX.age(b.fx, dt / BFX.day * 0.3); });
     // sinking animations
     st.ships.forEach(function (b) { if (!b.alive && b.sink < 1) b.sink = Math.min(1, b.sink + dt * 0.35); });
+    rideShips(Math.min(dt, 0.1), frozen);
     // 이 장면에서 막 생긴 효과는 다음 장면부터 나이를 먹는다 (느린 컴퓨터에서 한 장면이 길어도 번쩍임이 한 번은 보이게)
     if (!(st.hitstop > 0)) st.fx = st.fx.filter(function (f) { if (!f.seen) { f.seen = 1; return true; } f.t += dt; return f.t < f.life; });
     // camera: centre between fleets
@@ -893,7 +921,9 @@
       if (b.side === 'en') { spec.cross = false; if (st.npc.kind === 'pirate') { spec.hull = '#2a2420'; if (spec.hullType === 'west' || spec.hullType === 'galley' || spec.hullType === 'dhow') spec.sail = '#4a4440'; } }
       // 선체의 흔들림(선회 때 바깥으로 기울고, 물결에 오르내림)과 선체에 붙은 물(선수 파도·선측 물줄기)
       var sr = Math.min(1.4, Math.max(0, b.spd || 0) / (BFX.ref / BFX.day)), slp = Math.min(1.2, Math.abs(b.lat || 0) / (BFX.ref / BFX.day) * 2.2), ph0 = (b.x + b.y) * 0.01;
-      spec.pose = { roll: U.clamp(-(b.turnRate || 0) * sr * 0.08 + Math.sin(st.t * 0.9 + ph0) * 0.02, -0.12, 0.12), pitch: Math.sin(st.t * 1.3 + ph0 * 2) * 0.012 * (1 + sr), heave: Math.sin(st.t * 0.8 + ph0) * 0.012 };
+      var RDb = G.FX.ride;
+      if (b.ride && RDb) { spec.pose = { roll: U.clamp(b.ride.roll, -RDb.maxRoll, RDb.maxRoll), pitch: U.clamp(b.ride.pitch, -RDb.maxPitch, RDb.maxPitch), heave: U.clamp(b.ride.heave, -RDb.maxHeave, RDb.maxHeave) }; spec.rig = b.rig || null; }
+      else spec.pose = { roll: U.clamp(-(b.turnRate || 0) * sr * 0.08 + Math.sin(st.t * 0.9 + ph0) * 0.02, -0.12, 0.12), pitch: Math.sin(st.t * 1.3 + ph0 * 2) * 0.012 * (1 + sr), heave: Math.sin(st.t * 0.8 + ph0) * 0.012 };
       spec.noWake = true;
       if (b.alive && b.fx) G.SeaFX.drawHull(b.fx, ctx, p[0], p[1], -b.heading, b.len, sr, slp, (b.lat || 0) <= 0 ? 1 : -1, st.t);
       A.shipTop(ctx, p[0], p[1], -b.heading + (b.sunk ? b.sink * 0.6 : 0), b.len * (b.sunk ? 1 - b.sink * 0.3 : 1), spec, st.t);
