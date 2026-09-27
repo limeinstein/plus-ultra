@@ -534,16 +534,22 @@
       if (v) {
         st.dueled = true;
         if (v === 2) await UI.say(U.pick(['제독께서 나서실 것까지 없습니다. 제가 상대하겠습니다!', '저런 녀석은 제게 맡기십시오.', '제독의 칼을 더럽힐 것 없습니다. 제가 나가지요.']), G.Scenes.mateSpeaker('first'));
-        var boss = { name: st.npc.kind === 'pirate' ? '해적 두목' : '적 함장', portrait: A.withImg(A.npcSpec('boss' + st.t, st.npc.kind === 'pirate' ? 'sailor' : 'soldier', 'ib'), G.Img.chain.npc(st.npc.kind === 'pirate' ? 'pirate' : 'captain', G.Game.state && G.CITY_DATA[G.Game.state.player.city])), str: U.ri(55, 80), atk: U.ri(6, 12), def: U.ri(2, 6), skill: U.ri(0, 1) };
-        var res = await G.Games.duel(boss, v === 2 ? { mate: px } : null);
+        var boss = { name: st.npc.kind === 'pirate' ? '해적 두목' : '적 함장', look: st.npc.kind === 'pirate' ? 'pirate' : 'captain', portrait: A.withImg(A.npcSpec('boss' + st.t, st.npc.kind === 'pirate' ? 'sailor' : 'soldier', 'ib'), G.Img.chain.npc(st.npc.kind === 'pirate' ? 'pirate' : 'captain', G.Game.state && G.CITY_DATA[G.Game.state.player.city])), str: U.ri(55, 80), atk: U.ri(6, 12), def: U.ri(2, 6), skill: U.ri(0, 1), mar: U.ri(55, 78), int: U.ri(30, 60), cha: U.ri(30, 55) };
+        var res = await G.Games.duel(boss, v === 2 ? { mate: px, place: 'deck' } : { place: 'deck' });
+        var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
         if (res === 'win') {
-          if (v === 2) { px.loyal = Math.min(100, (px.loyal || 70) + 8); S().player.fame += 5; await UI.say(pd.name + U.jx(pd.name, '이/가') + ' 두목을 쓰러뜨리자 적의 전의가 꺾였다! 적 함대가 항복했다!', {}); UI.toast(pd.name + '의 충성이 올랐다. (명성 +5)', 'sword', 3500); }
-          else await UI.say('두목이 쓰러지자 적의 전의가 꺾였다! 적 함대가 항복했다!', {});
+          var how = ld.how, lead = fd ? fd.name + U.jx(fd.name, '이/가') + ' ' : '';
+          if (fm) { fm.loyal = Math.min(100, (fm.loyal || 70) + 8); S().player.fame += 5; UI.toast(fd.name + '의 충성이 올랐다. (명성 +5)', 'sword', 3500); }
+          if (how === 'capture') { var ransomG = U.ri(600, 1400); S().player.gold += ransomG; S().player.fame += 8; await UI.say(lead + '두목을 사로잡자 적의 전의가 꺾였다! 적 함대가 항복했다! (두목의 몸값 금화 ' + U.num(ransomG) + '닢, 명성 +8)', {}); }
+          else if (how === 'persuade') { S().player.fame += 6; await UI.say(lead + '두목을 설득하자 두목이 칼을 거두었다. 적 함대가 피를 더 흘리지 않고 항복했다! (명성 +6)', {}); }
+          else if (how === 'rout') await UI.say(lead + '호통에 두목이 달아나자 적이 우왕좌왕하다 항복했다!', {});
+          else await UI.say(lead + '두목을 쓰러뜨리자 적의 전의가 꺾였다! 적 함대가 항복했다!', {});
+          if (ld.secret) { S().player.notoriety += 2; UI.toast('비밀무기를 쓴 일로 뒷말이 돈다. (악명 +2)', 'skull', 3500); }
           st.ships.forEach(function (o) { if (o.side === 'en' && o.alive) { o.alive = false; o.captured = true; } });
           st.busy--; checkEnd(); return;
         }
         if (res === 'lose') {
-          if (v === 2) { px.hurt = S().day + 30; me.crew = Math.max(0, Math.round(me.crew * 0.88)); await UI.say(pd.name + U.jx(pd.name, '이/가') + ' 쓰러졌다! 부하들이 부관을 끌어내 물러선다... (부관은 30일 동안 다쳐 능력이 절반이 된다)', {}); }
+          if (fm) { fm.hurt = S().day + 30; me.crew = Math.max(0, Math.round(me.crew * 0.88)); await UI.say(fd.name + U.jx(fd.name, '이/가') + ' 쓰러졌다! 부하들이 끌어내 물러선다... (30일 동안 다쳐 능력이 절반이 된다)', {}); }
           else { me.crew = Math.max(0, Math.round(me.crew * 0.8)); await UI.say('제독이 쓰러졌다! 부하들의 사기가 떨어진다...', {}); }
         }
       }

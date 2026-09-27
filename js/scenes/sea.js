@@ -62,15 +62,20 @@
   function buildUI() {
     var s = S();
     UI.clearScreen();
+    // 항해 중: 날짜 · 위도 · 경도 · 항해 일수 · 식량·물 · 선원 · 피로 · 계약 | 소지금 · 명성
+    var H = G.Game.hud;
     UI.hud.show([
-      { k: 'date', icon: 'calendar', text: U.fmtDate(s.date) },
-      { k: 'pos', icon: 'compass', text: posText() },
-      { k: 'sup', icon: 'bread', text: '' },
-      { k: 'crew', icon: 'people', text: '' },
-      { k: 'fat', icon: 'hourglass', text: '' },
+      { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
+      { k: 'lat', icon: 'compass', label: '위도', text: H.lat() },
+      { k: 'lon', label: '경도', text: H.lon() },
+      { k: 'days', icon: 'sail', label: '항해', text: '' },
+      { k: 'sup', icon: 'bread', label: '식량·물', text: '' },
+      { k: 'crew', icon: 'people', label: '선원', text: '' },
+      { k: 'fat', icon: 'hourglass', label: '피로', text: '' },
+      { k: 'contract', icon: 'seal', label: '계약', text: '' },
       { grow: true },
-      { k: 'gold', icon: 'coin', text: U.num(s.player.gold) + '<small>닢</small>' },
-      { k: 'fame', icon: 'laurel', text: '명성 ' + U.num(s.player.fame) }
+      { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
+      { k: 'fame', icon: 'laurel', label: '명성', text: U.num(s.player.fame) }
     ]);
     // input catcher
     var catcher = U.el('div', 'mapcatch');
@@ -123,15 +128,17 @@
     return (hasLat ? U.fmtLat(l.lat) : '위도 ?') + ' ' + (hasLon ? U.fmtLon(l.lon) : '경도 ?');
   }
   function refreshHud() {
-    var s = S(), f = s.fleet;
-    UI.hud.set('date', U.fmtDate(s.date));
-    UI.hud.set('pos', posText());
+    var s = S(), f = s.fleet, H = G.Game.hud;
+    UI.hud.set('date', H.date());
+    UI.hud.set('lat', H.lat()); UI.hud.set('lon', H.lon());
+    UI.hud.set('days', (f.daysOut || 0) + '일째');
     var days = Math.min(R.daysOfFood(), R.daysOfWater());
-    UI.hud.set('sup', '식량·물 ' + days + '일', days < 7);
-    UI.hud.set('crew', '선원 ' + f.crew + (f.crew < R.crewMin() ? '<small>/' + R.crewMin() + '</small>' : ''), f.crew < R.crewMin());
-    UI.hud.set('fat', '피로 ' + Math.round(f.fatigue) + '%', f.fatigue > 60);
-    UI.hud.set('gold', U.num(s.player.gold) + '<small>닢</small>');
-    UI.hud.set('fame', '명성 ' + U.num(s.player.fame));
+    UI.hud.set('sup', days + '일분', days < 7);
+    UI.hud.set('crew', f.crew + '명' + (f.crew < R.crewMin() ? '<small>/' + R.crewMin() + '</small>' : ''), f.crew < R.crewMin());
+    UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
+    var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
+    UI.hud.set('gold', H.gold());
+    UI.hud.set('fame', U.num(s.player.fame));
   }
   SEA.refreshHud = refreshHud;
 

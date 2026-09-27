@@ -36,10 +36,17 @@
       var h = '<svg class="emb" viewBox="0 0 48 48">' + emblemSvg() + '</svg>';
       cells.forEach(function (c) {
         if (c.grow) { h += '<div class="grow"></div>'; return; }
-        h += '<div class="cell' + (c.cls ? ' ' + c.cls : '') + '" data-k="' + (c.k || '') + '">' + (c.icon ? G.icon(c.icon) : '') + '<span>' + c.text + '</span></div>';
+        // label이 있으면 두 줄 칸 (작은 이름 + 값) — 대항해시대 3의 윗줄 상태 표시처럼
+        if (c.label) h += '<div class="cell two' + (c.cls ? ' ' + c.cls : '') + '" data-k="' + (c.k || '') + '"' + (c.tip ? ' title="' + U.esc(c.tip) + '"' : '') + '>' + (c.icon ? G.icon(c.icon) : '') + '<div class="tv"><em>' + c.label + '</em><span>' + (c.text || '') + '</span></div></div>';
+        else h += '<div class="cell' + (c.cls ? ' ' + c.cls : '') + '" data-k="' + (c.k || '') + '">' + (c.icon ? G.icon(c.icon) : '') + '<span>' + c.text + '</span></div>';
       });
       hudEl.innerHTML = h;
+      hudEl.classList.toggle('dense', cells.length > 9);
     },
+    /** 칸에 마우스를 올리면 보이는 설명 */
+    tip: function (k, text) { var c = hudEl.querySelector('[data-k="' + k + '"]'); if (c) c.title = text || ''; },
+    /** 칸의 작은 이름 */
+    label: function (k, text) { var c = hudEl.querySelector('[data-k="' + k + '"] em'); if (c) c.innerHTML = text; },
     hide: function () { hudEl.classList.add('hidden'); },
     set: function (k, text, warn) {
       var c = hudEl.querySelector('[data-k="' + k + '"] span'); if (c) { c.innerHTML = text; c.parentNode.classList.toggle('val-warn', !!warn); }

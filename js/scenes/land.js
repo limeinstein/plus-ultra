@@ -51,15 +51,22 @@
   function buildUI() {
     var s = S();
     UI.clearScreen();
+    // 육상 탐험 중: 날짜 · 위도 · 경도 · 탐험 일수 · 대원 · 식량·물 · 피로 · 지형 · 탈것 · 계약 | 소지금 · 명성
+    var H = G.Game.hud;
     UI.hud.show([
-      { k: 'date', icon: 'calendar', text: U.fmtDate(s.date) },
-      { k: 'party', icon: 'people', text: '' },
-      { k: 'sup', icon: 'bread', text: '' },
-      { k: 'fat', icon: 'hourglass', text: '' },
-      { k: 'terr', icon: 'land', text: '' },
-      { k: 'mount', icon: 'boot', text: '' },
+      { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
+      { k: 'lat', icon: 'compass', label: '위도', text: H.lat() },
+      { k: 'lon', label: '경도', text: H.lon() },
+      { k: 'days', icon: 'tent', label: '탐험', text: '' },
+      { k: 'party', icon: 'people', label: '대원', text: '' },
+      { k: 'sup', icon: 'bread', label: '식량·물', text: '' },
+      { k: 'fat', icon: 'hourglass', label: '피로', text: '' },
+      { k: 'terr', icon: 'land', label: '지형', text: '' },
+      { k: 'mount', icon: 'boot', label: '탈것', text: '' },
+      { k: 'contract', icon: 'seal', label: '계약', text: '' },
       { grow: true },
-      { k: 'gold', icon: 'coin', text: U.num(s.player.gold) + '<small>닢</small>' }
+      { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
+      { k: 'fame', icon: 'laurel', label: '명성', text: U.num(s.player.fame) }
     ]);
     var catcher = U.el('div', 'mapcatch'); catcher.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:crosshair';
     catcher.addEventListener('mousedown', onDown);
@@ -127,16 +134,21 @@
   function refreshBar() { if (el.pause) el.pause.innerHTML = G.icon(st.paused ? 'boot' : 'pause') + (st.paused ? '출발' : '정지'); }
   function refreshHud() {
     var s = S(), l = s.loc, f = s.fleet;
-    UI.hud.set('date', U.fmtDate(s.date));
-    UI.hud.set('party', '탐험대 ' + l.party + '명');
+    var H = G.Game.hud;
+    UI.hud.set('date', H.date());
+    UI.hud.set('lat', H.lat()); UI.hud.set('lon', H.lon());
+    UI.hud.set('days', (l.days || 0) + '일째');
+    UI.hud.set('party', l.party + '명');
     var days = Math.min(R.daysOfFood(), R.daysOfWater());
-    UI.hud.set('sup', '식량·물 ' + days + '일', days < 7);
-    UI.hud.set('fat', '피로 ' + Math.round(f.fatigue) + '%', f.fatigue > 60);
+    UI.hud.set('sup', days + '일분', days < 7);
+    UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
+    var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
+    UI.hud.set('fame', U.num(s.player.fame));
     var t = G.Geo.terrain(l.lon, l.lat), mt = MT(), M = G.Mounts;
     UI.hud.set('terr', (TERR[t] || TERR.grass).name);
     var sk = t === 'sea' ? 'grass' : t, sp = M.speed(mt, sk, l.party), su = M.suit(mt.id, sk);
     UI.hud.set('mount', mt.id === 'walk' ? '도보' : M.get(mt.id).name + ' ×' + sp.toFixed(1) + ' <small class="suit ' + su.cls + '">' + su.mark + '</small>', mt.id !== 'walk' && su.cls === 'bad');
-    UI.hud.set('gold', U.num(s.player.gold) + '<small>닢</small>');
+    UI.hud.set('gold', H.gold());
   }
   function pos(e) { var r = G.Game.canvases().overlay.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
   function toScreen(lon, lat) { return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom, 450 - (lat - st.cam.lat) * st.cam.zoom]; }

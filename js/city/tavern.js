@@ -439,14 +439,17 @@
     if (!v) { await UI.say(U.pick(['흥, 꼬리를 감추고 도망치긴가!', '겁쟁이! 너는 바다의 사나이가 아니다!', '싫다면 어쩔 수 없군.']), who); return; }
     if (v === 2) { await C.mate(U.pick(['제독께서 나서실 것까지 없습니다. 제가 상대하지요.', '이런 녀석은 제게 맡겨 두십시오.'])); await UI.say('흥, 부하를 내세우겠다고? 좋다, 누구든 덤벼라!', who); }
     else await UI.say('그럼 그래야지! 그래야 바다의 사나이다. 죽더라도 원망하지 말게.', who);
-    var res = await G.Games.duel({ name: who.name, portrait: who.portrait, str: U.ri(45, 75), atk: U.ri(5, 12), def: U.ri(0, 5), skill: U.ri(0, 2) }, v === 2 ? { mate: px } : null);
+    var res = await G.Games.duel({ name: who.name, portrait: who.portrait, look: 'brawler', str: U.ri(45, 75), atk: U.ri(5, 12), def: U.ri(0, 5), skill: U.ri(0, 2), mar: U.ri(50, 75), int: U.ri(25, 50), cha: U.ri(30, 50) }, v === 2 ? { mate: px, place: 'tavern' } : { place: 'tavern' });
+    var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
     if (res === 'win') {
       var prize = U.ri(100, 300) + c.size * 60; s.player.gold += prize;
-      if (v === 2) { s.player.fame += 3; px.loyal = Math.min(100, (px.loyal || 70) + 5); await UI.say('크윽... 부하가 이 정도라니. 자, 가져가라! (금화 ' + prize + '닢)', who); }
-      else { s.player.fame += 5; await UI.say('크윽... 졌다. 자, 가져가라! (금화 ' + prize + '닢)', who); }
+      var line = ld.how === 'persuade' ? '...자네 말이 맞군. 내가 경솔했네. 사과의 뜻이야, 받아 두게.' : ld.how === 'capture' ? '놔, 놔라! ...알았어, 내가 졌다. 이거 가져가!' : ld.how === 'rout' ? '(허둥지둥 달아나며) 돈은 두고 간다!' : '크윽... 졌다. 자, 가져가라!';
+      if (fm) { s.player.fame += 3; fm.loyal = Math.min(100, (fm.loyal || 70) + 5); await UI.say((ld.how === 'ko' ? '크윽... 부하가 이 정도라니. 자, 가져가라!' : line) + ' (금화 ' + prize + '닢)', who); }
+      else { s.player.fame += 5; await UI.say(line + ' (금화 ' + prize + '닢)', who); }
+      if (ld.secret) { s.player.notoriety += 1; UI.toast('술집에서 비밀무기를 꺼낸 일로 뒷말이 돈다. (악명 +1)', 'skull', 3500); }
     } else if (res === 'lose') {
       var loss = Math.min(Math.floor(s.player.gold * 0.1), 400 + c.size * 120); s.player.gold -= loss;   // 판돈보다 터무니없이 많이 잃지는 않는다
-      if (v === 2) { px.hurt = s.day + 20; await C.mate('면목 없습니다, 제독... 저 녀석, 보통 솜씨가 아니었습니다. (금화 ' + U.num(loss) + '닢을 빼앗겼다. 부관은 20일 동안 다쳐 능력이 절반이 된다)'); }
+      if (fm) { fm.hurt = s.day + 20; await C.mate('면목 없습니다, 제독... 저 녀석, 보통 솜씨가 아니었습니다. (금화 ' + U.num(loss) + '닢을 빼앗겼다. ' + fd.name + U.jx(fd.name, '은/는') + ' 20일 동안 다쳐 능력이 절반이 된다)'); }
       else await C.mate('제독! 이봐요, 제독! 괜찮습니까? ...돈주머니가 가벼워졌군요. (금화 ' + U.num(loss) + '닢)');
     }
   };
@@ -475,9 +478,11 @@
       var px = G.Games.proxy(), pd = px && G.MATE[px.id];
       var fv = await UI.ask('일기토를 신청합니다. 누가 나섭니까?', [{ label: '내가 싸운다', value: 1 }].concat(pd ? [{ label: '부관 ' + pd.name + '에게 맡긴다', value: 2 }] : []).concat([{ label: '그만둔다', value: 0 }]), { name: s.player.name, portrait: s.player.portrait });
       if (!fv) continue;
-      var res = await G.Games.duel({ name: nm, portrait: who.portrait, str: 70, atk: 12, def: 6, skill: 2 }, fv === 2 ? { mate: px } : null);
-      if (res === 'lose' && fv === 2) { px.hurt = s.day + 30; UI.toast(pd.name + U.jx(pd.name, '은/는') + ' 30일 동안 다쳐 능력이 절반이 된다.', 'skull', 4000); }
-      if (res === 'win' && fv === 2) px.loyal = Math.min(100, (px.loyal || 70) + 5);
+      var res = await G.Games.duel({ name: nm, portrait: who.portrait, look: 'rival', str: 70, atk: 12, def: 6, skill: 2, mar: 72, int: 70, cha: 65, style: 'thrust' }, fv === 2 ? { mate: px, place: 'tavern' } : { place: 'tavern' });
+      var ldr = G.Games.lastDuel || {}, fmr = ldr.mate, fdr = fmr && G.MATE[fmr.id];
+      if (res === 'lose' && fmr) { fmr.hurt = s.day + 30; UI.toast(fdr.name + U.jx(fdr.name, '은/는') + ' 30일 동안 다쳐 능력이 절반이 된다.', 'skull', 4000); }
+      if (res === 'win' && fmr) fmr.loyal = Math.min(100, (fmr.loyal || 70) + 5);
+      if (res === 'win' && ldr.how === 'persuade') { await UI.say('...자네 말대로 서두를 일은 아니군. 이번 항해는 한 해쯤 미루겠네.', who); }
       if (res === 'win') {
         var yrs = U.ri(1, 2);
         s.flags['delay_' + d.id] = (s.flags['delay_' + d.id] || 0) + yrs;

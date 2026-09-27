@@ -222,6 +222,7 @@
       var en = (60 + (enemy.str || 60) * 0.6) * 0.5 + (enemy.atk || 8) * 4 + (enemy.def || 3) * 3 + (enemy.skill || 1) * 10;
       var pw = U.clamp(0.5 + (me.pow - en) / 80, 0.15, 0.9), res = Math.random() < pw ? 'win' : 'lose';
       ev('duel', { who: me.name, vs: enemy.name, proxy: !!mate, p: Math.round(pw * 100), res: res });
+      G.Games.lastDuel = { how: res === 'win' ? 'ko' : 'lose', mate: mate || null, secret: false };
       return res;
     };
     // 육상전: 부대전 화면 대신 힘을 견주어 판정 (js/games/landwar.js 와 같은 모양의 결과)

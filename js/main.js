@@ -96,21 +96,55 @@
   }
 
   // ---------------------------------------------------------------- HUD helpers
+  // 윗줄 상태 표시 (대항해시대 3처럼 도시·항해·육상 탐험마다 보이는 것이 다르다)
+  var H = Game.hud = {};
+  function dnDate(n) { return new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100); }
+  /** 계약 남은 날: {text, warn, tip} */
+  H.contract = function () {
+    var S = Game.state, k = S && S.contract;
+    if (!k) return { text: '없음', warn: false, tip: '맺은 계약이 없습니다.' };
+    var cur = new Date(S.date.y, S.date.m - 1, S.date.d), left = Math.round((dnDate(k.due) - cur) / 86400000);
+    var sp = G.SPONSOR && G.SPONSOR[k.sponsor], who = sp ? (G.Sponsor ? G.Sponsor.holderName(sp) : sp.title) : '';
+    var what = k.small && G.Errand ? G.Errand.name(k) : k.circ ? '세계일주' : (G.DISC[k.disc] ? G.DISC[k.disc].name : '');
+    var done = k.small && G.Errand ? G.Errand.done(k) : k.circ ? (G.Disc && G.Disc.foundByMe('circum')) : (G.Disc && G.Disc.foundByMe(k.disc));
+    var tip = who + ' — 「' + what + '」 · 기한 ' + Math.floor(k.due / 10000) + '년 ' + (Math.floor(k.due / 100) % 100) + '월 ' + (k.due % 100) + '일' + (done ? ' · 찾았다 — 보고하러 가십시오' : '');
+    if (left < 0) return { text: '기한 넘김 ' + (-left) + '일', warn: true, tip: tip };
+    return { text: (done ? '✓ ' : '') + '남은 ' + U.num(left) + '일', warn: !done && left < 60, tip: tip };
+  };
+  /** 위도·경도: 천문판·육분의가 있어야(측량 2단계면 위도) 보인다 */
+  H.lat = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') || R.hasItem('astrolabe') || R.skill('survey') >= 2 ? U.fmtLat(l.lat) : '? <small>(천문판)</small>'; };
+  H.lon = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') ? U.fmtLon(l.lon) : '? <small>(육분의)</small>'; };
+  H.title = function () { return R.fameTitle(Game.state.player.fame); };
+  H.lang = function (c) {
+    if (!c) return '';
+    var lv = R.lang(c.lang) || 0;
+    return G.LANGS[c.lang] + ' <span class="dots">' + '●●●'.slice(0, lv) + '○○○'.slice(0, 3 - lv) + '</span>';
+  };
+  H.gold = function () { return U.num(Game.state.player.gold) + '<small>닢</small>'; };
+  H.date = function () { return U.fmtDate(Game.state.date); };
+  /** 도시에 있을 때: 날짜 · 도시 · 언어 · 계약 | 소지금 · 명성 · 직위 */
   Game.cityHud = function () {
-    var S = Game.state, c = G.CITY_DATA[S.loc.city];
+    var S = Game.state, c = G.CITY_DATA[S.loc.city], k = H.contract();
+    var own = c && R.cityOwner ? R.cityOwner(c) : '';
     UI.hud.show([
-      { k: 'date', icon: 'calendar', text: U.fmtDate(S.date) },
-      { k: 'place', icon: 'castle', text: c ? c.name : '' },
+      { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
+      { k: 'place', icon: 'castle', label: own ? '도시 · ' + own : '도시', text: c ? c.name : '' },
+      { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: c ? '이 도시의 말과 제독 일행이 하는 수준 (동료 통역·부관 포함) — ' + G.LANG_LV[R.lang(c.lang) || 0] : '' },
+      { k: 'contract', icon: 'seal', label: '계약', text: k.text, tip: k.tip },
       { grow: true },
-      { k: 'gold', icon: 'coin', text: U.num(S.player.gold) + '<small>닢</small>' },
-      { k: 'fame', icon: 'laurel', text: '명성 ' + U.num(S.player.fame) }
+      { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
+      { k: 'fame', icon: 'laurel', label: '명성', text: U.num(S.player.fame) },
+      { k: 'title', icon: 'crown', label: '직위', text: H.title() }
     ]);
+    UI.hud.set('contract', k.text, k.warn);
   };
   Game.refreshHud = function () {
     var S = Game.state; if (!S) return;
-    UI.hud.set('date', U.fmtDate(S.date));
-    UI.hud.set('gold', U.num(S.player.gold) + '<small>닢</small>');
-    UI.hud.set('fame', '명성 ' + U.num(S.player.fame));
+    UI.hud.set('date', H.date());
+    UI.hud.set('gold', H.gold());
+    UI.hud.set('fame', U.num(S.player.fame));
+    UI.hud.set('title', H.title());
+    var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     Game.checkTitle();
   };
   /** 명성이 올라 부르는 이름이 바뀌면 축하해 준다 */

@@ -656,3 +656,60 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .lwar .lw-slot { display: flex; flex-direction: column; align-items: center; min-width: 92px; line-height: 1.2; }
 .lwar .lw-slot small { font-size: 13px; opacity: .8; }
 .lwar .lw-help { font-size: 14px; text-align: center; }
+/* 윗줄 상태 표시: 두 줄 칸 (대항해시대 3처럼 이름 + 값) */
+.hud .cell.two { gap: 7px; padding: 0 12px; height: 42px; }
+.hud .cell.two .tv { display: flex; flex-direction: column; justify-content: center; line-height: 1.12; }
+.hud .cell.two em { font-style: normal; font-size: 12px; color: var(--cream-dim); letter-spacing: .08em; }
+.hud .cell.two span { font-size: 17px; }
+.hud .cell.two svg { width: 18px; height: 18px; flex: 0 0 18px; opacity: .85; }
+.hud.dense .cell.two { padding: 0 9px; }
+.hud.dense .cell.two span { font-size: 16px; }
+.hud .cell.two.val-warn span { color: #ff9f7a; }
+.hud .cell .dots { letter-spacing: -1px; color: #e8c878; font-size: 13px; margin-left: 3px; }
+/* 일기토 (삼국지 6식 방침·기술 + 대항해시대 2식 갑판 결투) */
+.rduel { display: flex; flex-direction: column; gap: 8px; }
+.rduel .rd-top { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; }
+.rduel .rd-side { display: flex; gap: 10px; align-items: center; }
+.rduel .rd-side.en { justify-content: flex-end; text-align: right; }
+.rduel .rd-side .pp canvas { width: 72px; height: 72px; border: 2px solid #7a5c33; display: block; }
+.rduel .rd-side .info { flex: 1; max-width: 360px; }
+.rduel .rd-side .nm { font-weight: 800; font-size: 19px; }
+.rduel .rd-side .nm small { font-weight: 400; color: var(--ink-soft); }
+.rduel .bar { position: relative; height: 16px; background: rgba(40,24,10,.25); border: 1px solid rgba(90,65,35,.5); margin-top: 3px; }
+.rduel .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(180deg, #c0503a, #7a2a1e); transition: width .25s; }
+.rduel .rd-side.en .bar i { left: auto; right: 0; }
+.rduel .bar.sp i { background: linear-gradient(180deg, #e8c060, #a87a20); }
+.rduel .bar b { position: relative; font-size: 12px; padding: 0 6px; color: #fff; text-shadow: 0 1px 2px #000; line-height: 16px; }
+.rduel .rd-side .sub { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+.rduel .rd-mid { text-align: center; }
+.rduel .rd-round { font-family: var(--latin); font-size: 22px; color: #7a2a1e; letter-spacing: .08em; }
+.rduel .rd-rps { font-size: 14px; color: var(--ink-soft); }
+.rduel .rd-rps span { color: #7a2a1e; font-weight: 800; }
+.rduel .rd-rps small { display: block; font-size: 12px; }
+.rduel .rd-stage { position: relative; }
+.rduel .rd-stage canvas { width: 100%; height: auto; display: block; border: 2px solid #7a5c33; box-shadow: 0 0 0 1px #2a1f16; }
+.rduel .rd-stance { position: absolute; inset: 0; background: rgba(20,12,6,.72); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 0 20px; }
+.rduel .rd-stance.gone { display: none; }
+.rduel .rd-stance .st-h { color: #ffe08a; font-size: 26px; font-weight: 800; letter-spacing: .06em; }
+.rduel .rd-stance .st-cmp { color: #f2e7cc; font-size: 15px; text-align: center; line-height: 1.6; }
+.rduel .rd-stance .st-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
+.rduel .st-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left; padding: 10px 12px; height: auto; white-space: normal; line-height: 1.35; }
+.rduel .st-btn b { font-size: 18px; }
+.rduel .st-btn small { font-size: 12px; opacity: .8; font-style: italic; }
+.rduel .st-btn span { font-size: 13px; opacity: .92; }
+.rduel .rd-log { min-height: 48px; font-size: 16px; line-height: 1.5; }
+.rduel .rd-log .old { color: var(--ink-soft); font-size: 14px; }
+.rduel .rd-ctrl { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; }
+.rduel .rd-ctrl.done { opacity: .5; pointer-events: none; }
+.rduel .rd-ctrl .lbl { font-size: 13px; color: var(--ink-soft); margin-bottom: 4px; }
+.rduel .rd-ctrl .lbl .intent { color: var(--ink); }
+.rduel .rd-moves .row { display: grid; grid-template-columns: repeat(2, auto); gap: 6px; }
+.rduel .rd-moves .btn small { opacity: .75; margin-left: 2px; font-size: 11px; }
+.rduel .rd-moves .btn small.en { font-style: italic; }
+.rduel .rd-moves .btn.on, .rduel .rd-techs .btn.on, .rduel .rd-sys .btn.on { box-shadow: 0 0 0 3px var(--gold); }
+.rduel .rd-moves .btn.good { border-color: #6aa84a; }
+.rduel .rd-techs .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+.rduel .rd-techs .btn.tech { padding: 4px 4px; font-size: 14px; position: relative; justify-content: center; white-space: nowrap; letter-spacing: -.02em; }
+.rduel .rd-techs .btn.tech small { font-size: 11px; opacity: .8; margin-left: 3px; }
+.rduel .rd-techs .btn.tech i { font-style: normal; font-size: 11px; margin-left: 4px; color: #e8c060; }
+.rduel .rd-sys { display: flex; flex-direction: column; gap: 5px; }
