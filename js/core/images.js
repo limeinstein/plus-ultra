@@ -337,7 +337,12 @@
     return out;
   };
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */
-  K.sponsor = function (sp, holder) { var out = []; if (holder) out.push('portraits/sponsors/' + sp.id + '_' + holder); out.push('portraits/sponsors/' + sp.id); return out; };
+  K.sponsor = function (sp, holder) {
+    var out = [];
+    if (typeof holder === 'string' && holder) out.push('portraits/sponsors/' + holder);   // 다른 후원자의 그림을 빌림 (포르투갈 펠리페 1세 = 에스파냐 펠리페 2세)
+    else if (holder) out.push('portraits/sponsors/' + sp.id + '_' + holder);
+    out.push('portraits/sponsors/' + sp.id); return out;
+  };
   K.rival = function (name) {
     var out = ['portraits/rivals/' + name];
     var m = (G.MATES || []).filter(function (x) { return x.name === name; })[0];

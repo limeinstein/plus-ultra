@@ -21,7 +21,11 @@
       var ok = await SP.audience(sp);
       if (!ok) return false;
       var who = SP.speaker(sp), rel = SP.rel(sp.id), s = S();
-      var greet = rel.met <= 1 ? SP.holderName(sp) + '일세. 자네가 요즘 소문난 항해자인가? 무슨 일로 왔나?' : U.pick(['오오, ' + s.player.name + ', 잘 왔네.', '무슨 일인가, ' + s.player.name + '?', '자네로군. 이번에는 무슨 이야기를 가져왔나?']);
+      var first = rel.met <= 1 || (G.Succession && G.Succession.firstMeetingBefore);
+      var succ = G.Succession && G.Succession.newHolderBefore;
+      var greet = succ ? U.pick([SP.holderName(sp) + '일세. 선대께서 자네 이야기를 하시곤 했지. 이제는 내가 이 자리의 주인이니, 자네가 어떤 사람인지 내 눈으로 보겠네.',
+          SP.holderName(sp) + '일세. 선대와 자네 사이의 일은 들었네. 하지만 믿음은 새로 쌓아야 하는 법이지.'])
+        : first ? SP.holderName(sp) + '일세. 자네가 요즘 소문난 항해자인가? 무슨 일로 왔나?' : U.pick(['오오, ' + s.player.name + ', 잘 왔네.', '무슨 일인가, ' + s.player.name + '?', '자네로군. 이번에는 무슨 이야기를 가져왔나?']);
       await C.say(who, greet);
       return true;
     };

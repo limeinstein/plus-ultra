@@ -38,13 +38,10 @@
       s.fleet.discipline = Math.min(100, s.fleet.discipline + 0.5);
       s.fleet.daysOut = 0; s.fleet.scurvy = Math.max(0, (s.fleet.scurvy || 0) * 0.75 - 2);   // 뭍의 신선한 먹을거리로 빨리 낫는다
     }
-    // children growing / family events
-    if (s.player.wife && U.chance(1 / 540) && s.player.kids.length < 2) {
-      var sex = s.player.kids.some(function (k) { return k.sex === 'm'; }) ? 'f' : (s.player.kids.some(function (k) { return k.sex === 'f'; }) ? 'm' : U.pick(['m', 'f']));
-      s.player.kids.push({ name: sex === 'm' ? U.pick(['후안', '페드로', '루이스', '디오고', '안토니오']) : U.pick(['마리아', '이사벨', '레오노르', '베아트리스']), sex: sex, born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {} });
-      out.push({ icon: 'heart', text: '고향에서 아이가 태어났다는 소식이 왔다!' });
-      G.State.log('아이가 태어났다.');
-    }
+    // 가족: 임신 소식·출산 (family.js — 아이는 자택에 들러야 생긴다)
+    if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
+    // 후원자의 대(代) — 옛 저장이면 지금 자리에 있는 사람들을 기억해 둔다
+    if (!s.spHolder && G.Succession) G.Succession.sync();
     return out;
   };
 
@@ -75,6 +72,11 @@
 
   W.newYear = function () {
     var s = S(), out = [];
+    // 군주·후원자가 세상을 떠나거나 물러나면 다음 사람이 뒤를 잇는다 (신뢰 절반, 회상, 유산 — succession.js)
+    if (G.Succession) out = out.concat(G.Succession.year());
+    // 아이들이 자란다
+    if (G.Family && G.Family.newYear) out = out.concat(G.Family.newYear());
+    if (G.Wander) out = out.concat(G.Wander.newYear());
     // 새로 간행된 책: 도서관을 다시 찾을 이유가 생긴다
     G.BOOKS.forEach(function (b) {
       if (b.y !== s.date.y || b.y <= 1480) return;

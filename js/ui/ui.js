@@ -161,8 +161,10 @@
         var oldName = U.el('div', 'name wood', U.esc(opts.name));
         if (!opts.portrait) oldName.style.left = '24px';
         box.appendChild(oldName);
+        if (G.Bio) G.Bio.tag(oldName, opts);
       }
       if (opts.portrait) box.querySelector('.pframe').appendChild(portraitNode(opts, 134));
+      if (opts.portrait && G.Bio) G.Bio.tag(box.querySelector('.pframe'), opts);
       back.appendChild(box);
       return { box: box, destroy: function () {} };
     }
@@ -184,7 +186,7 @@
       } else {
         var p = portraitNode(who, 280); if (p) art.appendChild(p);
       }
-      if (who && who.name) actor.appendChild(U.el('div', 'actor-name wood', U.esc(who.name)));
+      if (who && who.name) { var an = U.el('div', 'actor-name wood', U.esc(who.name)); actor.appendChild(an); if (G.Bio) { G.Bio.tag(an, who); G.Bio.tag(art, who); } }
       stage.appendChild(actor);
     }
     var left = speakerSide === 'left' ? opts : opts.partner;
@@ -192,7 +194,7 @@
     addActor(left, 'left'); addActor(right, 'right');
     box = U.el('div', 'dlg duo' + (asking ? ' ask' : '') + ' speaker-' + speakerSide);
     box.innerHTML = '<div class="body parch"></div>';
-    if (opts.name) box.appendChild(U.el('div', 'name wood', U.esc(opts.name)));
+    if (opts.name) { var nmEl = U.el('div', 'name wood', U.esc(opts.name)); box.appendChild(nmEl); if (G.Bio) G.Bio.tag(nmEl, opts); }
     stage.appendChild(box); back.appendChild(stage);
     return { box: box, destroy: function () { rigs.forEach(function (r) { if (r) r.destroy(); }); } };
   }

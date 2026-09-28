@@ -134,11 +134,11 @@
   G.MATES.forEach(m => {
     const spec = A.mateSpec(m.id);
     add(tPeople, {
-      group: 'mate', portrait: true, name: m.name, sub: '동료 · 명성 ' + num(m.fame) + ' 이상 · ' + m.y[0] + '~' + m.y[1] + '년',
+      group: 'mate', portrait: true, name: m.name, sub: (m.witch ? (m.legend ? '전설의 마녀' : '마녀로 몰렸던 여인') : '동료') + ' · 명성 ' + num(m.fame) + ' 이상 · ' + m.y[0] + '~' + m.y[1] + '년',
       meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: spec.img, ar: '1 / 1', extra: m.desc,
       pic: () => portrait(spec),
       detail: () => ({
-        text: m.desc,
+        text: m.desc + (G.BIOS && G.BIOS[m.name] ? ' 〔인물 이야기〕 ' + G.BIOS[m.name] : ''),
         facts: [
           ['능력치', G.STATS.map((s, i) => s.name + ' ' + m.st[i]).join(' · ')], ['특기', skillTxt(m.sk)], ['어학', langTxt(m.lg)],
           ['만나는 곳', (G.MATE_RANGE && G.MATE_RANGE[m.id] ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
@@ -154,16 +154,20 @@
     const spec0 = A.sponsorSpec(sp, 0);
     add(tPeople, {
       group: 'sponsor', portrait: true, name: sp.title, sub: '후원자 · ' + c.name + ' · ' + G.SPONSOR_TYPE[sp.type],
-      meta: sp.holders.map(h => h[2]).join(' → '), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: spec0.img, ar: '1 / 1',
+      meta: (hs => hs.slice(0, 6).map(h => h[2]).join(' → ') + (hs.length > 6 ? ' → … (' + hs.length + '대)' : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: spec0.img, ar: '1 / 1',
       pic: () => portrait(spec0),
       detail: () => ({
+        text: (bs => bs.length ? '인물 이야기 — ' + bs.join(' / ') : '')(sp.holders.filter(h => h[4] !== 'g').map(h => {
+          const k = G.BIOS && (G.BIOS[h[2]] ? h[2] : Object.keys(G.BIOS).filter(x => x.length >= 3 && h[2].indexOf(x) >= 0).sort((a, b) => b.length - a.length)[0]);
+          return k ? h[2] + ': ' + G.BIOS[k] : null;
+        }).filter(Boolean)),
         facts: [
           ['사는 곳', c.name + ' · ' + (sp.place || (sp.bld === 'palace' ? palaceName(c) : '저택'))], ['신분', G.SPONSOR_TYPE[sp.type]],
           ['세력', G.POWER_NAME[sp.pw] + ' (만나려면 명성 ' + num(G.POWER_FAME[sp.pw]) + ')'], ['재력', '★'.repeat(sp.wealth)],
           ['좋아하는 발견', sp.taste.map(t => G.DISC_CATS[t]).join(', ')], ['말', G.LANGS[sp.lang]],
           sp.nation ? ['나라', NATION[sp.nation]] : null
         ],
-        strip: sp.holders.map((h, i) => ({ label: h[2] + ' (' + h[0] + '~' + h[1] + ')', key: 'portraits/sponsors/' + sp.id + '_' + (i + 1), kind: 'png', pic: () => portrait(A.sponsorSpec(sp, i)) })),
+        strip: sp.holders.map((h, i) => ({ label: h[2] + ' (' + h[0] + '~' + (h[1] >= 9999 ? '' : h[1]) + ')', key: (p => typeof p === 'string' ? 'portraits/sponsors/' + p : p ? 'portraits/sponsors/' + sp.id + '_' + p : 'portraits/sponsors/' + sp.id)(A.sponsorPic(sp, i)), kind: 'png', pic: () => portrait(A.sponsorSpec(sp, i)) })),
         files: [
           { key: 'portraits/sponsors/' + sp.id + '_1', kind: 'png', note: '시대별 인물 — 아래 그림의 번호(1, 2, …)를 붙입니다' },
           { key: 'portraits/sponsors/' + sp.id, kind: 'png', note: '인물이 바뀌어도 같은 그림' }
@@ -220,7 +224,7 @@
       meta: ds.map(d => d.name + ' ' + d.rival[0] + '년').join(', '), key: 'portraits/rivals/' + nm, kind: 'png', chain: spec.img, ar: '1 / 1',
       pic: () => portrait(spec),
       detail: () => ({
-        text: '정해진 때가 되면 아래 발견을 먼저 발표합니다. 술집에서 만나 일기토로 이기면 발표를 1~2년 늦출 수 있습니다.',
+        text: (G.BIOS && G.BIOS[nm] ? G.BIOS[nm] + ' 〔게임에서〕 ' : '') + '정해진 때가 되면 아래 발견을 먼저 발표합니다. 술집에서 만나 일기토로 이기면 발표를 1~2년 늦출 수 있습니다.',
         facts: ds.map(d => [d.rival[0] + '년 ' + d.rival[1] + '월', d.name]),
         files: [{ key: 'portraits/rivals/' + nm, kind: 'png', note: '경쟁자로 나올 때의 초상' }].concat(mate ? [{ key: 'portraits/mates/' + mate.id, kind: 'png', note: '위 파일이 없으면 동료 그림을 씀' }] : [])
       })

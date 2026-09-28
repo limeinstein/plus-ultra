@@ -30,7 +30,7 @@
   };
 
   // ---------------------------------------------------------------- main info window with tabs
-  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['map', '해도'], ['log', '일지'], ['menu', '설정']];
+  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['map', '해도'], ['log', '일지'], ['menu', '설정']];
   I.open = function (tab) {
     var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
     var tabs = U.el('div', 'tabs');
@@ -61,7 +61,7 @@
       '<div>소지금</div><div>' + U.num(p.gold) + '닢</div><div>예금</div><div>' + U.num(p.bank) + '닢</div>' +
       '<div>악명</div><div>' + U.num(p.notoriety) + '</div><div>건강</div><div>' + Math.round(p.hp) + ' / 100</div>' +
       '<div>무기</div><div>' + (p.equip.weapon ? G.ITEM[p.equip.weapon].name + ' (공격 ' + G.ITEM[p.equip.weapon].atk + ')' : '없음') + '</div><div>방어구</div><div>' + (p.equip.armor ? G.ITEM[p.equip.armor].name + ' (방어 ' + G.ITEM[p.equip.armor].def + ')' : '없음') + '</div>' +
-      '<div>배우자</div><div>' + (p.wife ? G.MAID[p.wife].name : '없음') + '</div><div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return k.name; }).join(', ') : '없음') + '</div></div>' +
+      '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') : '없음') + '</div><div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return G.Family.kidName(k) + ' <small class="muted">' + G.Family.kidAge(k) + '세</small>'; }).join(', ') : '없음') + '</div></div>' +
       '<div class="sep"></div><div class="grid2">' +
       '<div><h4 style="margin:0 0 8px">능력치</h4>' + G.STATS.map(function (st) { return '<div class="statrow"><span>' + st.name + '</span>' + UI.bar(p.st[st.id], 100, 'gold') + '<b>' + p.st[st.id] + '</b></div>'; }).join('') + '</div>' +
       '<div><h4 style="margin:0 0 8px">특기 <small class="muted">(동료 포함 실효 수준)</small></h4><div class="skillgrid" style="grid-template-columns:1fr 1fr">' +
@@ -131,7 +131,7 @@
     R.tidyCaptains();
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
-      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b><span class="tag">' + U.esc(R.roleName(m)) + '</span>' + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
+      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(R.roleName(m)) + '</span>' + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
         '<div class="muted" style="font-size:16px;margin:4px 0">' + d.desc + '</div>' +
         '<div style="font-size:16px">' + Object.keys(d.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + pips(d.sk[k]); }).join(' &nbsp; ') + '</div>' +
         '<div style="font-size:15px;margin-top:4px" class="muted">' + Object.keys(d.lg).map(function (k) { return G.LANGS[k] + ' ' + G.LANG_LV[d.lg[k]]; }).join(' · ') + '</div></div>');
@@ -139,6 +139,29 @@
       row.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 96));
       box2.appendChild(row);
     });
+  };
+
+  /** 철새 명부: 지금 항구를 떠도는 떠돌이 항해사와 마녀 (소문으로 들은 머무는 곳) */
+  PAGES.wander = function (el) {
+    var s = S(), y = s.date.y, hired = {};
+    s.mates.forEach(function (m) { hired[m.id] = 1; });
+    var ready = function (m) { return G.Frontier ? G.Frontier.mateReady(m, y) : true; };
+    var list = G.MATES.filter(function (m) { return (m.wd || m.witch) && !hired[m.id] && !s.flags['gone_' + m.id] && ready(m); });
+    var c = G.BALANCE.wander || {}, gen = G.Wander ? G.Wander.genOf(y) : 0, ep = (c.epoch || 1480) + (gen + 1) * (c.cycle || 30);
+    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 ' + (c.perYear || 5) + '명씩 새로 항구에 나타나고, ' + (c.cycle || 30) + '년마다 세대가 바뀌어 이름·국적·성별이 달라진 다음 세대가 나타납니다 (다음 세대: ' + ep + '년). 얼굴이 겹치는 사람도 있습니다. 마녀는 전설 속 마녀와 15~17세기에 마녀로 몰렸던 여인들입니다. 머무는 곳은 소문이라 한 달쯤 지나면 달라집니다.</div>' +
+      '<table class="tbl"><tr><th></th><th>이름</th><th>국적·갈래</th><th>특기</th><th>명성</th><th>월급</th><th>머무는 곳</th></tr></table>';
+    var tb = el.querySelector('table');
+    list.sort(function (a, b) { return (b.witch ? 1 : 0) - (a.witch ? 1 : 0) || a.fame - b.fame; });
+    list.forEach(function (m) {
+      var at = G.MateMove && G.MateMove.where(m.id);
+      var tr = U.el('tr', '', '<td class="pp"></td><td><b>' + U.esc(m.name) + '</b>' + (G.Bio ? G.Bio.link(m.name) : '') + ' <small class="muted">' + (m.g === 'f' ? '여' : '남') + '</small></td>' +
+        '<td>' + (m.witch ? '<span class="tag">' + (m.legend ? '전설의 마녀' : '마녀') + '</span>' : U.esc(m.natName + ' · ' + m.typeName) + (m.prevName ? ' <small class="muted">(' + (m.gen + 1) + '세대)</small>' : '')) + '</td>' +
+        '<td>' + Object.keys(m.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + m.sk[k]; }).join(' · ') + '</td>' +
+        '<td>' + U.num(m.fame) + '</td><td>' + m.wage + '닢</td><td>' + (at ? U.esc(at.name) : '—') + '</td>');
+      try { tr.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 48)); } catch (e) { /* 그림 없음 */ }
+      tb.appendChild(tr);
+    });
+    if (!list.length) el.appendChild(U.el('div', 'muted', '지금은 소문난 철새가 없습니다.'));
   };
 
   PAGES.items = function (el, win) {

@@ -73,7 +73,8 @@
       m ? { label: '여급과 이야기', icon: 'heart', sub: m.name, onClick: function () { return T.maid(c, m); } }
         : (G.Img && G.Img.pick(G.Img.chain.maidCity(c)) ? { label: '여급과 이야기', icon: 'heart', onClick: function () { return T.servant(c); } } : null),
       { label: '포카를 권한다', icon: 'dice', onClick: function () { return G.Games.poker(c); } },
-      { label: '부하편성', icon: 'people', sub: S().mates.length + '/' + G.MAX_MATES, onClick: function () { return T.organize(); } }
+      { label: '부하편성', icon: 'people', sub: S().mates.length + '/' + G.MAX_MATES, onClick: function () { return T.organize(); } },
+      G.MateTalk ? G.MateTalk.menuItem(c) : null
     ];
   };
 
@@ -375,7 +376,7 @@
     try { pf.appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 150)); } catch (e) { /* 그림이 없으면 비워 둔다 */ }
     head.appendChild(pf);
     head.appendChild(U.el('div', 'mc-id',
-      '<div class="nm">' + U.esc(m.name) + '</div>' +
+      '<div class="nm">' + U.esc(m.name) + (G.Bio ? G.Bio.link(m.name, '📜 이야기') : '') + '</div>' +
       '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
       ' · ' + m.y[0] + '~' + m.y[1] + '년</div>' +
       '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +

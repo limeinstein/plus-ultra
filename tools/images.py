@@ -40,6 +40,19 @@ def game_data():
     d['sponsors'] = [{'id': m[0], 'title': m[1], 'type': m[2], 'city': int(m[3]),
                       'holders': re.findall(r"\[(\d+), (\d+), '([^']*)'\]", m[4])}
                      for m in re.findall(r"\{ id: '(\w+)', title: '([^']*)', type: '(\w+)', city: (\d+),.*?holders: (\[\[.*?\]\]) \}", people, re.S)]
+    # js/data/rulers.js: 군주의 대(代)를 역사대로 이어 붙인 목록과 초상 그림 번호 (JS의 numberPics와 같은 규칙)
+    if os.path.exists(os.path.join(ROOT, 'js/data/rulers.js')):
+        rul = read('js/data/rulers.js')
+        body = rul[rul.index('var RULERS = {'):rul.index('G.RULERS = RULERS')]
+        byid = {sp['id']: sp for sp in d['sponsors']}
+        for sid, lst in re.findall(r"(\w+): \[(\[\d+, \d+, '.*?)\](?=,\n    (?://[^\n]*\n    )?\w+: \[|\n  \};)", body, re.S):
+            hs = [list(h) for h in re.findall(r"\[(\d+), (\d+), '([^']*)', ('[^']*'|\d+)(?:, '(\w)')?\]", lst)]
+            used = max([int(h[3]) for h in hs if h[3].isdigit()] + [0])
+            for h in hs:
+                if h[3] == '0' and h[4] != 'g':
+                    used += 1; h[3] = str(used)
+            if sid in byid:
+                byid[sid]['holders'] = [(h[0], h[1], h[2], h[3]) for h in hs]
     d['mates'] = [{'id': m[0], 'name': m[1], 'g': m[2]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)', g: '(\w)'", people)]
     d['maids'] = [{'id': m[0], 'city': int(m[1]), 'name': m[2]} for m in re.findall(r"\{ id: '(m_\w+)', city: (\d+), name: '([^']*)'", people)]
     disc = read('js/data/discoveries.js')
@@ -143,7 +156,10 @@ def valid_keys(d):
     for sp in d['sponsors']:
         k['portraits/sponsors/' + sp['id']] = '후원자 · ' + sp['title']
         for i, h in enumerate(sp['holders']):
-            k['portraits/sponsors/%s_%d' % (sp['id'], i + 1)] = '후원자 · %s — %s (%s~%s)' % (sp['title'], h[2], h[0], h[1])
+            pic = h[3] if len(h) > 3 else str(i + 1)
+            if not pic.isdigit() or pic == '0':
+                continue                                   # 다른 후원자 그림을 빌리거나 이름 없는 그 자리 사람
+            k['portraits/sponsors/%s_%s' % (sp['id'], pic)] = '후원자 · %s — %s (%s~%s)' % (sp['title'], h[2], h[0], h[1])
     for r in d['rivals']:
         k['portraits/rivals/' + r] = '경쟁자 · ' + r
     for b, label in (('son', '아들'), ('daughter', '딸')):

@@ -814,3 +814,16 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 /* 화면 위 쪽지 (도서관: 이야기하는 동안 읽은 책과 얻은 단서) */
 .pinnote { position: absolute; left: 50%; top: 64px; transform: translateX(-50%); z-index: 75; max-width: 980px; padding: 10px 20px; font-size: 17px; line-height: 1.5; box-shadow: 0 6px 18px rgba(0,0,0,.5); pointer-events: none; }
 .pinnote .pn-g { margin-top: 2px; }
+
+/* 실존 인물 이야기 (js/ui/bio.js) */
+.has-bio { cursor: pointer; }
+.dlg .name.has-bio::after, .dlg-actor .actor-name.has-bio::after { content: ' 📜'; font-size: 13px; opacity: .85; }
+.dlg .name.has-bio:hover, .dlg-actor .actor-name.has-bio:hover { filter: brightness(1.25); }
+.biolink { cursor: pointer; margin-left: 6px; font-size: 15px; opacity: .85; }
+.biolink:hover { opacity: 1; filter: drop-shadow(0 0 3px #e8c060); }
+.biobox { display: flex; gap: 22px; align-items: flex-start; padding: 6px 4px; }
+.biobox .bio-face canvas { width: 180px; height: 180px; border: 3px solid #6a4a22; border-radius: 6px; }
+.biobox .bio-text { flex: 1; font-size: 17px; line-height: 1.75; }
+.biobox .bio-name { font-size: 22px; font-weight: bold; color: #5a2e0c; margin-bottom: 6px; }
+.biobox .small { font-size: 14px; }
+.mc-head .nm .biolink { font-size: 16px; }

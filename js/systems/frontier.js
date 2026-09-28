@@ -155,6 +155,7 @@
     s.front.fr = snapshot(all);
     var now = matesNow(), was = s.front.mates || {};
     G.MATES.forEach(function (m) {
+      if (m.wd) return;                   // 철새는 해마다 한데 모아 알린다 (wanderers.js)
       if (!now[m.id] || was[m.id]) return;
       if (s.mates.some(function (x) { return x.id === m.id; }) || s.flags['gone_' + m.id]) return;
       var at = G.MateMove && G.MateMove.where(m.id);

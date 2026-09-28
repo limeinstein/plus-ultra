@@ -212,7 +212,21 @@
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작
     matPerHp: 0.4, matStart: 10,
     // 시세의 출렁임: 도시·품목 갈래마다 천천히 오르내린다 (최대 ± driftAmp, 주기 driftPeriod[0]~[1]일)
-    driftAmp: [0.08, 0.15], driftPeriod: [70, 200]
+    driftAmp: [0.08, 0.15], driftPeriod: [70, 200],
+    // 후원자의 대가 바뀔 때 (succession.js): 그 자리의 신뢰는 sponsorKeep만 남고, 제독의 자녀가 뒤를 이으면 모든 신뢰가 heirKeep만 남는다.
+    // 유산: 떠난 사람과의 신뢰가 legacyTrust 이상이면 legacyBase + (신뢰 − legacyTrust)/60 확률로 물건·돈(재력 × 세력 × legacyGold)을 남긴다
+    succession: { sponsorKeep: 0.5, heirKeep: 0.3, legacyTrust: 70, legacyBase: 0.35, legacyGold: 250 },
+    // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야, 자녀 maxKids명까지).
+    // gestation일 뒤에 태어나고(쌍둥이 twins), adult세가 되면 뒤를 이을 수 있다. 가정교사는 한 아이에게 해마다 한 번, 값 eduCost닢
+    family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, eduCost: 800 },
+    // 철새(떠돌이 항해사, wanderers.js): 새 게임에 startN명, 해마다 perYear명이 새로 나타난다.
+    // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
+    // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).
+    // 떠도는 고장: 제 나라 고장에 더해 farZone 확률로 먼 고장 하나를 더 다닌다. 마녀 전설(legend)은 한 세대에 legendMax명까지 소문이 돈다
+    wander: { perYear: 5, startN: 12, cycle: 30, epoch: 1480, rebornMax: 30, keepNation: 0.55, keepGender: 0.7, farZone: 0.35, legendMax: 2 },
+    // 부하와 이야기 (matetalk.js): 하루 한 번 이야기(충성 chatLoyal·호감 chatAff), 한잔(값 drinkCost × 도시 크기, 충성 drinkLoyal·호감 drinkAff).
+    // 여성 부하는 호감이 wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다. 마녀의 점괘는 fortuneDays일에 한 번
+    mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30 }
   };
 
   // 계절풍 바다 (바람 모델 R.wind와 안내 G.Monsoon이 함께 쓴다)

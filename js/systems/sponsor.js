@@ -74,6 +74,7 @@
       if (!rel.met) await UI.say('오래 기다리셨습니다. 제가 ' + SP.holderName(sp) + ' ' + SP.honor(sp) + '의 집사입니다. 무기는 여기서 보관하겠습니다. 그러면 안으로 들어가십시오.', bt);
     }
     rel.met = (rel.met || 0) + 1;
+    if (G.Succession) { G.Succession.sync(); G.Succession.meet(sp); }
     return true;
   };
 

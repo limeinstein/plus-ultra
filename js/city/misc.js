@@ -15,6 +15,7 @@
       { label: '숙박', icon: 'bed', onClick: function () { return INN.stay(c); } },
       { label: '항해사를 찾는다', icon: 'people', sub: (function () { var n = C.B.tavern.candidates(c).length; return n ? n + '명' : '없다'; })(), onClick: function () { return C.B.tavern.hire(c, innWife()); } },
       { label: '부하편성', icon: 'people', sub: S().mates.length + '/' + G.MAX_MATES, onClick: function () { return C.B.tavern.organize(); } },
+      G.MateTalk ? G.MateTalk.menuItem(c) : null,
       { label: '허드렛일', icon: 'tools', onClick: function () { return INN.work(c); } },
       { label: '기능', icon: 'gear', sub: INN.canSave(c) ? '저장 가능' : '', onClick: function () { return INN.func(c); } }
     ];
@@ -596,13 +597,14 @@
     var s = S();
     if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
     else await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
+    if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
   };
   HM.sub = function () { var s = S(); return s.player.wife ? '가족이 기다리는 집' : '혼자 사는 집'; };
   HM.menu = function (c) {
     var s = S();
     return [
       { label: '쉰다', icon: 'bed', onClick: function () { return HM.rest(c); } },
-      s.player.wife ? { label: '가족', icon: 'heart', sub: s.player.kids.length ? '자녀 ' + s.player.kids.length : '', onClick: function () { return G.Family.talk(); } } : null,
+      s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
       { label: '은퇴', icon: 'log', onClick: function () { return G.Family.retire(); } }
     ];
@@ -611,7 +613,8 @@
     var s = S();
     await UI.fade(function () { G.Game.passDays(3); });
     s.player.hp = 100; s.fleet.fatigue = 0;
-    await UI.say('집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.', {});
+    await UI.say(s.player.wife ? '가족과 함께 집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.' : '집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.', {});
+    if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(true);
   };
   HM.bank = async function (c) {
     var s = S(), p = s.player;

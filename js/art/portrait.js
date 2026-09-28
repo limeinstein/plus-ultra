@@ -201,12 +201,12 @@
     else if (sk.sci >= 2 || sk.med >= 2 || sk.hist >= 2 || (sk.survey >= 3 && d.st[1] > 70)) role = 'scholar';
     else if (sk.sword >= 3 || sk.gun >= 2) role = 'soldier';
     else if (sk.acct >= 2) role = 'merchant';
-    var style = REGION_STYLE[d.reg[0]] || 'ib';
+    var style = d.style || REGION_STYLE[(d.reg || [])[0]] || 'ib';
     if (id === 'rocco') style = 'it';
-    if (d.g === 'f') role = 'maid';
+    if (d.g === 'f') role = d.role || 'maid';
     var sp = A.npcSpec('mate_' + id, role, style, d.g);
     if (id === 'rocco') { sp.beard = 2; sp.hat = 'cap'; sp.age = 'mid'; }
-    A.withImg(sp, G.Img.chain.mate(id));
+    A.withImg(sp, G.Img.chain.mate(id).concat(d.face ? [d.face] : []));   // 철새·마녀는 이미 있는 얼굴을 빌린다
     return (mateSpecCache[id] = sp);
   };
   A.maidSpec = function (m) {
@@ -218,8 +218,26 @@
     var h = sp.holders[holder], name = h ? h[2] : sp.title;
     var role = sp.type === 'official' || sp.type === 'gov' ? 'noble' : sp.type;
     var c = G.CITY_DATA[sp.city];
-    var spec = A.npcSpec('sp_' + sp.id + '_' + name, role, c.style, /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/.test(name) ? 'f' : 'm');
-    return A.withImg(spec, G.Img.chain.sponsor(sp, h ? holder + 1 : 0));
+    var female = (G.SPONSOR_FEMALE || /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/).test(name);
+    var spec = A.npcSpec('sp_' + sp.id + '_' + name, role, c.style, female ? 'f' : 'm');
+    var chain = G.Img.chain.sponsor(sp, A.sponsorPic(sp, holder));
+    // 자리 공통 그림(<ID>.webp)은 한 사람의 얼굴이다 — 성별이 다른 대(代)에는 쓰지 않는다 (잉글랜드 국왕 그림이 메리 1세·앤 여왕에게 붙지 않게)
+    if (female !== A.sponsorBaseFemale(sp)) chain = chain.filter(function (k) { return k !== 'portraits/sponsors/' + sp.id; });
+    // 그림이 없는 여왕·여제는 그 고장 귀부인 그림(npc-roles/<양식>/noble — 여성)으로
+    if (female && A.rolePortraitGender('noble', c.style) === 'f') chain = chain.concat(['portraits/npc-roles/' + c.style + '/noble']);
+    return A.withImg(spec, chain);
+  };
+  /** 그 대(代) 사람의 초상 그림 번호: holders의 네 번째 값(숫자·다른 후원자 그림 이름, 0 = 공통 그림), 없으면 순번 */
+  A.sponsorPic = function (sp, holder) {
+    var h = sp.holders[holder];
+    if (!h) return 0;
+    return h[3] != null ? h[3] : holder + 1;
+  };
+  /** 자리 공통 그림이 여성인가 — 그 자리의 사람이 모두 여성일 때 (포르투갈 왕비) */
+  A.sponsorBaseFemale = function (sp) {
+    var re = G.SPONSOR_FEMALE || /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/;
+    var named = sp.holders.filter(function (h) { return h[4] !== 'g'; });
+    return named.length > 0 && named.every(function (h) { return re.test(h[2]); });
   };
   A.rivalSpec = function (name) { return A.withImg(A.npcSpec('rival_' + name, 'noble', 'ib'), G.Img.chain.rival(name)); };
   /** townsfolk who greet you in buildings: id → [portrait role, seed variant, gender] */
@@ -523,6 +541,8 @@
   A.portraitKeys = function (spec) {
     if (!spec || !G.Img) return null;
     var out = spec.img ? [].concat(spec.img) : [], roleKey = A.rolePortraitKey(spec);
+    // 역할 그림(npc-roles)은 성별이 정해져 있다 — 다른 성별의 인물에게는 쓰지 않는다 (조선 국왕에게 왕비 그림이 붙지 않게)
+    if (roleKey && spec.g && A.rolePortraitGender(spec.role, spec.style) !== spec.g) roleKey = null;
     if (roleKey && out.indexOf(roleKey) < 0) out.push(roleKey);
     if (out.length) return out;
     var m = /^player(\d+)/.exec(String(spec.seed || ''));
