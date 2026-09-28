@@ -48,6 +48,17 @@
   };
 
   /** big discovery announcement card */
+  /** 발견 그림 요소. 유적 복원 GIF는 움직임을 살리고, 나머지는 기존 Canvas 교체 체계를 쓴다. */
+  SC.discoveryPicture = function (d, chain) {
+    chain = chain || G.Img.chain.discovery(d);
+    var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art;
+    if (d.cat === 'ruin' && file && /\.gif(?:$|[?#])/i.test(file)) {
+      art = document.createElement('img');
+      art.className = 'disc-build-gif'; art.src = G.Img.src(picked); art.alt = d.name + ' 7단계 복원과 360도 상공 회전';
+      return art;
+    }
+    return G.Img.make(chain, 720, 320, function () { return A.discoveryArt(d, 720, 320); });
+  };
   /** 발견 카드 아래의 유물 줄: 새로 찾았을 때는 손에 넣은 것, 수첩에서 볼 때는 지금 어디에 있는지 */
   SC.relicStrip = function (d, relics) {
     var all = G.RELICS && G.RELICS[d.id]; if (!all || !all.length) return '';
@@ -69,7 +80,8 @@
   SC.discoveryCard = async function (d, fame, relics) {
     var chain = G.Img.chain.discovery(d);
     if (G.Img.pick(chain)) await G.Img.preload([chain], 1500);
-    var art = G.Img.make(chain, 720, 320, function () { return A.discoveryArt(d, 720, 320); });
+    // 애니메이션 GIF를 Canvas에 그리면 한 프레임만 남는다. 유적은 원본 <img>로 올린다.
+    var art = SC.discoveryPicture(d, chain);
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
       '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +

@@ -33,6 +33,13 @@
     if (w || h) I.drawCover(ctx, src, 0, 0, c.width, c.height); else ctx.drawImage(src, 0, 0);
     return c;
   }
+  /** GIF를 Canvas로 복사하면 첫 프레임만 남는다. 애니메이션 항목은 원본 요소를 쓴다. */
+  function animatedImage(it) {
+    const k = it.animated && it.chain && I.pick(it.chain), f = k && I.file(k);
+    if (!f || !/\.gif(?:$|[?#])/i.test(f)) return null;
+    const img = new Image(); img.src = I.src(k); img.alt = it.name + ' 복원 애니메이션';
+    return img;
+  }
   const portrait = spec => A.portraitCanvas(spec, 160);
   function churchName(c) { if (c.places && c.places.church) return c.places.church; return c.rel === 'I' ? '모스크' : 'HBJ'.includes(c.rel) ? '사원' : c.rel === 'K' ? '사당' : c.rel === 'N' ? '신전' : '교회'; }
   function palaceName(c) {
@@ -253,14 +260,14 @@
   // ------------------------------------------------ discoveries
   const tDisc = tab('discoveries', '발견물', {
     chips: [['all', '전체']].concat(Object.keys(G.DISC_CATS).map(k => [k, G.DISC_CATS[k]])),
-    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 발견했을 때 뜨는 카드에 들어갑니다.'
+    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 유적은 <code>tools/ruin_gifs/build.py</code>가 만든 GIF로 7단계 복원과 360° 상공 회전을 보여 줍니다.'
   });
   G.DISCOVERIES.forEach(d => {
     const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : G.REGIONS[d.reg];
     const place = d.how === 'city' ? CITY[d.city].name + ' 시내' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
     add(tDisc, {
       group: d.cat, name: d.name, sub: G.DISC_CATS[d.cat] + ' · ' + where, meta: HOW[d.how] + ' · 가치 ' + num(d.val) + (d.rival ? ' · 경쟁자 ' + d.rival[2] : ''),
-      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc,
+      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: d.cat === 'ruin',
       pic: () => I.make(I.chain.discovery(d), 720, 320, () => A.discoveryArt(d, 720, 320)),
       detail: () => ({
         text: d.desc, hint: '단서 — ' + d.hint, real: d.real,
@@ -512,7 +519,7 @@
     pumping = true;
     while (queue.length) {
       const el = queue.shift();
-      if (el.isConnected && !el.querySelector('canvas')) {
+      if (el.isConnected && !el.querySelector('canvas, img')) {
         await drawThumb(el);
         await new Promise(r => requestAnimationFrame(() => r()));
       }
@@ -523,6 +530,8 @@
     const it = ITEM[el.dataset.uid];
     if (!it) return;
     if (it.chain && I.pick(it.chain)) await I.preload([it.chain], 4000);
+    const moving = animatedImage(it);
+    if (moving) { el.appendChild(moving); return; }
     let src;
     try { src = it.pic(); } catch (e) { console.error(e); return; }
     const r = el.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -631,8 +640,8 @@
     if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
     dlg.scrollTop = 0;
     if (it.chain && I.pick(it.chain)) await I.preload([it.chain], 4000);
-    const src = it.pic();
-    $('#dHero').appendChild(copyCanvas(src));
+    const moving = animatedImage(it), src = moving ? null : it.pic();
+    $('#dHero').appendChild(moving || copyCanvas(src));
     if (d.strip) {
       const box = $('#dStrip');
       for (const s of d.strip) {

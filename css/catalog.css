@@ -107,7 +107,7 @@ button { font: inherit; color: inherit; }
 .card:hover { border-color: var(--brass); transform: translateY(-1px); }
 .thumb, .body, .name, .sub, .meta { display: block; }
 .thumb { position: relative; width: 100%; background: var(--thumb); aspect-ratio: var(--ar, 16 / 9); overflow: hidden; }
-.thumb canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.thumb canvas, .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
 .thumb::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(40, 25, 10, .12); pointer-events: none; }
 .card .body { padding: 9px 11px 11px; display: grid; gap: 3px; width: 100%; }
 .name { font: 800 16.5px/1.3 var(--serif); color: var(--ink); text-wrap: balance; }
@@ -129,7 +129,7 @@ button { font: inherit; color: inherit; }
 .close-row { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 8px 8px 0; z-index: 2; pointer-events: none; }
 .x { pointer-events: auto; border: 1px solid var(--rule-2); background: var(--paper-hi); border-radius: 3px; padding: 4px 12px; cursor: pointer; font-size: 13.5px; }
 .d-hero { margin: -34px 0 0; background: var(--thumb); }
-.d-hero canvas { display: block; width: 100%; height: auto; }
+.d-hero canvas, .d-hero img { display: block; width: 100%; height: auto; }
 .d-hero.portrait { display: flex; justify-content: center; padding: 34px 0 0; background: linear-gradient(180deg, #2c1f14, #1f150e); }
 .d-hero.portrait canvas { width: min(300px, 70%); }
 .d-main { padding: 16px 22px 24px; display: grid; gap: 16px; }

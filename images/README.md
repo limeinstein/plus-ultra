@@ -42,7 +42,7 @@
 | 마을 사람 — 도시 양식×역할 240장 | `portraits/npc-roles/양식/역할.webp` (예: 조선 상인 `kr/merchant.webp`). 양식 20종×역할 12종이며, `portraits/npc/역할@도시번호`가 있으면 도시 전용 그림을 먼저 씁니다. | 512×512, 투명 배경 |
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |
 | 자녀 | `portraits/family/son.png`, `daughter.png`, 둘째는 `son_2.png` | 512×512 |
-| 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`) | 1440×640 |
+| 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`). 유적은 `tools/ruin_gifs/build.py`로 만든 GIF를 쓰면 7단계 복원과 360° 상공 회전이 재생됨 | 1440×640 정지화상 또는 576×256 GIF |
 | 발견물 — 분류 공통 | `discovery-cats/geo.jpg` (geo·nature·ruin·treasure·creature·people·trade) | 1440×640 |
 | 배 | `ships/배ID.png` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
 | 항해·해전 16방향 배 | `ships-nav/배ID.webp` — `python tools/render_ship_sprites.py`가 만드는 선체·돛 상태 시트 | 자동 생성 1792×3136, 투명 배경 |
