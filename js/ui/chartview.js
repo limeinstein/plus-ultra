@@ -1,5 +1,5 @@
-/* 해도 보기 (G.ChartView): 확대·축소·끌어 옮기기, 도시는 이름 없이 동그라미로.
-   표식: 청록 고리 = 지금 있는 항구(또는 이번 항해를 시작한 항구)에서 자동항해 가능 · 금색 마름모 = 후원자 · 붉은 깃발 = 탐험 계약한 후원자
+/* 해도 보기 (G.ChartView): 확대·축소·끌어 옮기기, 도시는 문화권별 투명 모형으로.
+   표식: 청록 모서리 = 지금 있는 항구(또는 이번 항해를 시작한 항구)에서 자동항해 가능 · 금색 마름모 = 후원자 · 붉은 깃발 = 탐험 계약한 후원자
    도시를 누르면 요약(G.CityInfo)이 오른쪽에 나온다. 무엇을 알 수 있는지는 제독과 부하의 능력에 따라 다르다. */
 (function (G) {
   'use strict';
@@ -28,7 +28,7 @@
     var wrap = U.el('div', 'chartview');
     wrap.innerHTML = '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
       '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="세계 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
-      '<div class="cv-legend"><span><i class="lg dot v"></i>가 본 도시</span><span><i class="lg dot k"></i>아는 도시</span><span><i class="lg dot in"></i>내륙</span><span><i class="lg ring"></i>자동항해</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
+      '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
       '<div class="cv-info" hidden></div><div class="cv-tip" hidden></div>';
     host.appendChild(wrap);
     var cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d'), info = wrap.querySelector('.cv-info'), tipEl = wrap.querySelector('.cv-tip');
@@ -64,6 +64,7 @@
     function draw() {
       if (dead) return;
       var b = box(), zk = Math.pow(U.clamp(360 / view.span, 1, 40), 0.28);
+      var cityScale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15);
       ctx.save(); terrain();
       // 항로 경험 (열린 항로 진한 선, 익히는 중 점선)
       if (G.Routes) G.Routes.list().forEach(function (r) {
@@ -74,17 +75,15 @@
       });
       var fs = 13, font = getComputedStyle(document.body).fontFamily;
       I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {});
-      // 도시: 이름 없이 동그라미 (마우스를 올리거나 고르면 이름)
+      // 도시: 지역별 건축 양식과 규모를 작은 실루엣으로 표시한다.
       var labels = [];
       cities().forEach(function (c) {
         var p = px(c.lon, c.lat, b); if (p[0] < -12 || p[0] > W + 12 || p[1] < -12 || p[1] > H + 12) return;
-        var f = G.CityInfo.flags(c, ref), r = (2 + c.size * 1.1) * zk, visited = s.visited && s.visited[c.id];
-        if (f.auto) { ctx.strokeStyle = '#1f7a78'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(p[0], p[1], r + 3.5, 0, 7); ctx.stroke(); }
-        ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, 7);
-        if (c.port) { ctx.fillStyle = visited ? '#7a1e1e' : '#3a2a1a'; ctx.fill(); ctx.strokeStyle = 'rgba(242,231,204,.8)'; ctx.lineWidth = 1; ctx.stroke(); }
-        else { ctx.fillStyle = 'rgba(242,231,204,.85)'; ctx.fill(); ctx.strokeStyle = visited ? '#7a1e1e' : '#3a2a1a'; ctx.lineWidth = 1.6; ctx.stroke(); }
-        if (f.sponsor) { var dx = p[0] + r + 1, dy = p[1] - r - 1, dz = 3.6 * zk; ctx.fillStyle = '#c9a030'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-        if (f.contract) { var fx = p[0] - 1, fy = p[1] - r; ctx.strokeStyle = '#2a1a10'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 15); ctx.stroke(); ctx.fillStyle = '#b01e1e'; ctx.beginPath(); ctx.moveTo(fx, fy - 15); ctx.lineTo(fx - 11, fy - 11.5); ctx.lineTo(fx, fy - 8); ctx.closePath(); ctx.fill(); }
+        var f = G.CityInfo.flags(c, ref), visited = s.visited && s.visited[c.id];
+        var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { scale: cityScale, visited: visited, auto: f.auto });
+        var r = mark.radius;
+        if (f.sponsor) { var dx = p[0] + mark.width / 2, dy = p[1] + mark.top, dz = 3.6 * zk; ctx.fillStyle = '#c9a030'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+        if (f.contract) { var fx = p[0] - mark.width * 0.18, fy = p[1] + mark.top; ctx.strokeStyle = '#2a1a10'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 15); ctx.stroke(); ctx.fillStyle = '#b01e1e'; ctx.beginPath(); ctx.moveTo(fx, fy - 15); ctx.lineTo(fx - 11, fy - 11.5); ctx.lineTo(fx, fy - 8); ctx.closePath(); ctx.fill(); }
         if (c === sel || c === hover) labels.push([c, p, r]);
         else if (view.span <= 16 && c.port) labels.push([c, p, r, true]);
       });
@@ -123,8 +122,13 @@
       return cityList;
     }
     function cityAt(x, y) {
-      var b = box(), best = null, bd = 11 * 11;
-      cities().forEach(function (c) { var p = px(c.lon, c.lat, b), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = c; } });
+      var b = box(), best = null, bd = Infinity;
+      var scale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15);
+      cities().forEach(function (c) {
+        var p = px(c.lon, c.lat, b), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y);
+        var hit = Math.max(11, G.CityIcon.metrics(c, scale).radius + 3);
+        if (d <= hit * hit && d < bd) { bd = d; best = c; }
+      });
       return best;
     }
 

@@ -13,7 +13,7 @@
   G.CityInfo = CI;
   function S() { return G.Game.state; }
 
-  CI.SIZE = ['', '작은 항구 마을', '도시', '대도시'];
+  CI.SIZE = ['', '소도시', '중도시', '대도시'];
   CI.FRESH = 90;   // 이 날수 안에 들렀으면 지금 사정을 안다
 
   /** 그 특기를 가장 잘 아는 사람 (제독 또는 그 자리를 맡은 기함 참모) — "이름(특기 n)" 또는 null */
@@ -69,7 +69,8 @@
     function row(k, v, src, hint) { rows.push({ k: k, v: v, src: src || '', hint: hint || '' }); }
     // 국가·규모
     row('국가', U.esc(owner) + (owner !== c.nation ? ' <small class="muted">(원래 ' + U.esc(c.nation) + ')</small>' : ''));
-    row('도시 규모', CI.SIZE[c.size] + ' · ' + (c.port ? '항구' : '내륙 도시') + (R.facilities(c).shipyard ? ' · 조선소' : ''));
+    row('도시 규모', (G.CityIcon ? G.CityIcon.label(c) : CI.SIZE[c.size]) + ' · ' + (c.port ? '항구' : '내륙 도시') + (R.facilities(c).shipyard ? ' · 조선소' : ''));
+    if (G.CityIcon) row('도시 양식', G.CityIcon.cultureName(c));
     // 지도자
     if (visited || own || hist >= 1 || (speak && speech >= 2)) row('지도자', U.esc(CI.leader(c)), visited ? '가 봄' : own ? '우리나라' : hist >= 1 ? CI.who('hist') : CI.who('speech'));
     else row('지도자', '?', '', '가 보거나 역사학을 아는 사람(또는 그 고장 말과 웅변 2)이 있으면 압니다');

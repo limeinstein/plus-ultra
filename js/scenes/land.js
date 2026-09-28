@@ -172,7 +172,7 @@
     kiCache = G.CITY_DATA.filter(function (c) { return set[c.id] && R.cityExists(c); });
     return kiCache;
   }
-  function cityAt(x, y) { var best = null, bd = 24 * 24; knownInland().forEach(function (c) { var p = toScreen(c.lon, c.lat), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = c; } }); return best; }
+  function cityAt(x, y) { var best = null, bd = Infinity; knownInland().forEach(function (c) { var p = toScreen(c.lon, c.lat), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y), hit = Math.max(24, G.CityIcon.metrics(c, 1.15).radius + 5); if (d <= hit * hit && d < bd) { bd = d; best = c; } }); return best; }
   function cityNear() { var s = S(), l = s.loc, best = null, bd = 0.3; G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c)) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } }); return best; }
   function atBase() { var s = S(), l = s.loc, b = l.base; return G.Geo.dist(l.lon, l.lat, b.lon, b.lat) < (b.type === 'ship' ? 0.45 : 0.3); }
 
@@ -317,7 +317,7 @@
   async function encounter(terr) {
     var s = S(), l = s.loc, r = U.rand();
     if (r < 0.35) {
-      var who = { name: '원주민', portrait: A.withImg(A.npcSpec('native' + Math.floor(l.lon) + Math.floor(l.lat), 'native', l.lon < -30 ? 'az' : 'af'), G.Img.chain.npc('native')), lang: 3, li: l.lon < -30 ? 11 : l.lon > 90 ? 12 : 10, minLv: 1 };
+      var who = { name: '원주민', portrait: A.withImg(A.npcSpec('native' + Math.floor(l.lon) + Math.floor(l.lat), 'native', l.lon < -30 ? 'az' : 'af'), (l.lon < -30 ? G.Img.chain.npc('native') : [])), lang: 3, li: l.lon < -30 ? 11 : l.lon > 90 ? 12 : 10, minLv: 1 };
       var v = await UI.ask('원주민 무리를 만났다. 이쪽을 경계하고 있다.', [{ label: '선물을 준다', value: 'gift' }, { label: '말을 건다', value: 'talk' }, { label: '물건을 바꾼다', value: 'trade' }, { label: '지나간다', value: null }], who);
       if (v === 'trade') { await nativeTrade(who); refreshHud(); return; }
       if (v === 'gift') { await nativeGift(who); refreshHud(); return; }
@@ -668,11 +668,12 @@
     // base marker
     var bp = toScreen(l.base.lon, l.base.lat);
     if (l.base.type === 'ship') { var bsh = S().fleet.ships[0], blk = bsh ? A.shipLook(bsh.type, { sails: bsh.sails, flag: '#1d3f7a' }) : { sails: ['sq', 'lat'], hull: '#5a3a22', cross: true }; blk.furl = 1; A.shipTop(ctx, bp[0], bp[1], 0.5, G.Scenes.sea.shipPx ? G.Scenes.sea.shipPx() * 0.85 : 80, blk, st.t); }
-    // cities
+    // 내륙 도시도 항해·해도와 같은 투명 문화권 모형으로 표시한다.
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;
-      ctx.fillStyle = '#5a2a1a'; ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 2; ctx.beginPath(); ctx.rect(p[0] - 7, p[1] - 7, 14, 14); ctx.fill(); ctx.stroke();
-      ctx.font = '700 16px ' + ff; var tw = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width); ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(p[0] + 10, p[1] - 11, tw + 10, 21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name, p[0] + 15, p[1] + 5);
+      var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { scale: 1.15, visited: s.visited && s.visited[c.id] });
+      ctx.font = '700 16px ' + ff; var tw = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width), lx = p[0] + mark.radius + 4;
+      ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx, p[1] - 11, tw + 10, 21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name, lx + 5, p[1] + 5);
     });
     // contract zone
     var ct = s.contract && G.DISC[s.contract.disc];
@@ -705,7 +706,7 @@
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;
       if (Math.abs(p[0] - pp[0]) > 160 || Math.abs(p[1] - pp[1]) > 90) return;
-      ctx.font = '700 16px ' + ff; var tw2 = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width); ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(p[0] + 10, p[1] - 11, tw2 + 10, 21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name, p[0] + 15, p[1] + 5);
+      ctx.font = '700 16px ' + ff; var tw2 = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width), lx2 = p[0] + G.CityIcon.metrics(c, 1.15).radius + 4; ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx2, p[1] - 11, tw2 + 10, 21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name, lx2 + 5, p[1] + 5);
     });
     // status
     if ((st.f = (st.f || 0) + 1) % 8 === 0 && el.status) {

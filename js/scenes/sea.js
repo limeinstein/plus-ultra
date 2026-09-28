@@ -1290,7 +1290,7 @@
     // hover tooltip
     if (st.mouse && !UI.busy()) {
       var hc = cityAt(st.mouse[0], st.mouse[1]);
-      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : ' — 클릭하면 이곳으로 향합니다')); }
+      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.CityIcon.cultureName(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : ' — 클릭하면 이곳으로 향합니다')); }
       else {
         var hn = npcAt(st.mouse[0], st.mouse[1]);
         if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));
@@ -1353,16 +1353,11 @@
     knownCities().forEach(function (c) {
       var p = toScreen(c.lon, c.lat);
       if (p[0] < -60 || p[0] > 1660 || p[1] < -30 || p[1] > 930) return;
-      var visited = s.visited && s.visited[c.id];
-      var r2 = 5 + c.size * 1.5, fl = G.CityInfo.flags(c, refPort);
-      // 도시는 동그라미만: 자동항해 가능(청록 고리)·후원자(금색 마름모)·탐험 계약(붉은 깃발)
-      if (fl.auto) { ctx.strokeStyle = '#2aa6a2'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(p[0], p[1], r2 + 5, 0, 7); ctx.stroke(); }
-      ctx.fillStyle = c.port ? (visited ? '#8a1e1e' : '#3a2a1a') : '#f2e7cc';
-      ctx.strokeStyle = c.port ? '#f2e7cc' : (visited ? '#8a1e1e' : '#3a2a1a'); ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.arc(p[0], p[1], r2, 0, 7);
-      ctx.fill(); ctx.stroke();
-      if (fl.sponsor) { var dx = p[0] + r2 + 2, dy = p[1] - r2 - 2, dz = 5; ctx.fillStyle = '#d9b040'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      if (fl.contract) { var fx = p[0], fy = p[1] - r2; ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 20); ctx.stroke(); ctx.fillStyle = '#c0281e'; ctx.beginPath(); ctx.moveTo(fx, fy - 20); ctx.lineTo(fx - 14, fy - 15.5); ctx.lineTo(fx, fy - 11); ctx.closePath(); ctx.fill(); }
+      var visited = s.visited && s.visited[c.id], fl = G.CityInfo.flags(c, refPort);
+      var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { visited: visited, auto: fl.auto });
+      var r2 = mark.radius;
+      if (fl.sponsor) { var dx = p[0] + mark.width / 2, dy = p[1] + mark.top, dz = 5; ctx.fillStyle = '#d9b040'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      if (fl.contract) { var fx = p[0] - mark.width * 0.18, fy = p[1] + mark.top; ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 20); ctx.stroke(); ctx.fillStyle = '#c0281e'; ctx.beginPath(); ctx.moveTo(fx, fy - 20); ctx.lineTo(fx - 14, fy - 15.5); ctx.lineTo(fx, fy - 11); ctx.closePath(); ctx.fill(); }
       // 이름은 가고 있는 곳과 곁의 항구만 (나머지는 마우스를 올리면)
       if ((st.target && st.target.city === c) || c === nearPort) {
         ctx.font = (c.size >= 3 ? '700 17px ' : '600 15px ') + fontFam();

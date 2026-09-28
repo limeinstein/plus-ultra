@@ -42,8 +42,9 @@ window.onload = function () {
     function draw(state) { if(rig)rig.destroy(); host.innerHTML=''; var m=maid(), c=G.CITY_DATA[m.city]; rig=G.PortraitRig.mount(host,{chain:G.Img.chain.maidHalf(m.id,c),profile:'half',state:state||'idle',alt:m.name}); }
     sel.onchange=function(){draw('idle');};
     document.querySelectorAll('[data-state]').forEach(function(b){b.onclick=function(){rig.setState(b.getAttribute('data-state'));};});
-    document.getElementById('duo').onclick=function(){var w=speaker(maid()); G.UI.say('어서 오세요. 먼 항해에서 돌아오셨군요.',Object.assign({},w,{layout:'duo',side:'right',partner:G.Game.state.player,emotion:'warm'}));};
+    document.getElementById('duo').onclick=function(){if(rig)rig.destroy(); host.innerHTML=''; var w=speaker(maid()); G.UI.say('어서 오세요. 먼 항해에서 돌아오셨군요.',Object.assign({},w,{layout:'duo',side:'right',partner:G.Game.state.player,emotion:'warm'}));};
     draw('idle');
+    if (location.search.indexOf('duo=1') >= 0) document.getElementById('duo').click();
     document.title='done';
   } catch (e) { document.title='err '+e.message; console.error(e); }
 };

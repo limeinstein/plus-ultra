@@ -129,6 +129,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg-stage > * { pointer-events: auto; }
 .dlg-stage .dlg.duo { width: 1060px; min-height: 164px; }
 .dlg-stage .dlg.duo .body { padding: 26px 42px 24px; }
+.dlg-stage .dlg.duo > .name { display: none; }
 .dlg-stage .dlg.duo .name { left: 24px; }
 .dlg-stage .dlg.duo.speaker-right .name { left: auto; right: 24px; }
 .dlg-stage .dlg.duo .interp { left: 24px; right: 24px; }
@@ -171,7 +172,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 @keyframes rig-breathe { 0%,100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(var(--rig-breath-y)) scaleY(var(--rig-breath-s)); } }
 @keyframes rig-sway { 0%,100% { transform: rotate(var(--rig-sway-b)) translateY(0); } 50% { transform: rotate(var(--rig-sway-a)) translateY(var(--rig-sway-y)); } }
 @keyframes rig-talk-head { 0%,100% { transform: rotate(var(--rig-talk-b)) translateY(0); } 50% { transform: rotate(var(--rig-talk-a)) translateY(var(--rig-talk-y)); } }
-@keyframes rig-mouth { from { transform: translate(-50%,-50%) scaleY(.3); } to { transform: translate(-50%,-50%) scaleY(1.35); } }
+@keyframes rig-mouth { from { transform: translate(-50%,-50%) rotate(var(--rig-mouth-rot, 0deg)) scaleY(.3); } to { transform: translate(-50%,-50%) rotate(var(--rig-mouth-rot, 0deg)) scaleY(1.35); } }
 @keyframes rig-listen { 0%,76%,100% { transform: rotate(0) translateY(0); } 82% { transform: rotate(.35deg) translateY(1px); } 89% { transform: rotate(-.12deg) translateY(0); } }
 @keyframes rig-react { 0% { transform: translateY(5px) rotate(-.8deg); } 55% { transform: translateY(-3px) rotate(.4deg); } 100% { transform: none; } }
 @keyframes rig-card { 0%,100% { transform: translateY(0) rotate(-.15deg); } 50% { transform: translateY(-2px) rotate(.18deg); } }

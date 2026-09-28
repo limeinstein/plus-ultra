@@ -1,0 +1,32 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>도시 아이콘 시험</title>
+<style>html,body{margin:0;background:#263c45}canvas{display:block}</style></head>
+<body><canvas id="c" width="1600" height="900"></canvas>
+<script src="js/core/util.js"></script>
+<script src="js/data/base.js"></script>
+<script src="js/data/cities.js"></script>
+<script src="js/art/paint.js"></script>
+<script src="js/art/city.js"></script>
+<script src="js/art/city_icon.js"></script>
+<script>
+(function () {
+  'use strict';
+  var labels = { iberia:'이베리아', italy:'이탈리아', greek:'그리스', islam:'이슬람권', arabia:'아라비아', persia:'페르시아·중앙아시아', france:'프랑스', britain:'영국·아일랜드', germany:'독일·저지대', easteurope:'동유럽', nordic:'북유럽', russia:'러시아', china:'중국', mongolia:'몽골·초원', korea:'조선', japan:'일본', vietnam:'대월', india:'인도', southeast:'동남아시아', maritime:'해양 동남아시아', philippines:'필리핀', westafrica:'서아프리카', eastafrica:'동아프리카', inca:'안데스·잉카', aztec:'아즈텍·마야', mexico:'누에바 에스파냐', colonial:'아메리카 개척도시', native:'토착 마을' };
+  var cultures = Object.keys(labels), cv = document.getElementById('c'), ctx = cv.getContext('2d');
+  ctx.fillStyle = '#d7c8a5'; ctx.fillRect(0, 0, cv.width, cv.height);
+  for (var y = 0; y < cv.height; y += 24) { ctx.strokeStyle = 'rgba(91,68,38,.1)'; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cv.width, y); ctx.stroke(); }
+  cultures.forEach(function (culture, i) {
+    var col = i % 6, row = Math.floor(i / 6), x0 = 16 + col * 262, y0 = 15 + row * 174;
+    ctx.fillStyle = 'rgba(246,237,213,.76)'; ctx.fillRect(x0, y0, 246, 158);
+    ctx.strokeStyle = 'rgba(73,49,28,.45)'; ctx.strokeRect(x0, y0, 246, 158);
+    ctx.fillStyle = '#35251a'; ctx.font = '700 17px serif'; ctx.textAlign = 'left'; ctx.fillText(labels[culture], x0 + 11, y0 + 24);
+    [1, 2, 4].forEach(function (tier, j) {
+      var sample = { iconCulture:culture, style:'ib', size:Math.min(3, tier), flags:tier === 4 ? 'P' : '', port:j !== 1 };
+      var x = x0 + 48 + j * 74, y = y0 + 84;
+      G.CityIcon.draw(ctx, sample, x, y, { scale:j === 2 ? 1.55 : 1.4, visited:j === 2, auto:j === 1 });
+      ctx.fillStyle = '#4a3422'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(G.CityIcon.label(sample), x, y0 + 139);
+    });
+    ctx.textAlign = 'left';
+  });
+  document.title = 'done';
+})();
+</script></body></html>

@@ -1,0 +1,17 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>도시 아이콘 육상 시험</title>
+<style>html,body{margin:0;overflow:hidden;background:#08151c}iframe{width:1600px;height:900px;border:0;display:block}</style></head>
+<body><iframe id="game" src="index.html"></iframe><script>
+document.getElementById('game').onload = async function () {
+  try {
+    var G = this.contentWindow.G, lg = [], sk = {}, i;
+    for (i = 0; i < G.LANGS.length; i++) lg.push(0);
+    lg[G.R.nativeLang('PT')] = 3; lg[0] = 2; lg[5] = 1;
+    G.SKILLS.forEach(function (x) { sk[x.id] = 0; }); sk.nav = 2; sk.survey = 2; sk.ops = 1;
+    G.State.newGame({ name:'시험 제독', nation:'PT', job:'explorer', age:22, birth:{m:4,d:12}, st:{str:58,int:50,mar:55,cha:52}, sk:sk, lg:lg, diff:'normal', gold:3000 });
+    G.Game.state.settings.res = 0.35;
+    await G.Game.ensureGeo();
+    G.Game.go('land', { from:0 });
+    setTimeout(function () { document.title = 'land done'; }, 1200);
+  } catch (e) { document.title = 'land err ' + e.message; console.error(e); }
+};
+</script></body></html>
