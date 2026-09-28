@@ -7,7 +7,7 @@
   /** 배 종류에 맞는 그림 설정 (over로 덮어쓴다) */
   A.shipLook = function (typeId, over) {
     var t = G.SHIP[typeId] || {}, c = t.cult || 'eu', h = t.hull || 'west';
-    var k = { sails: t.sails || ['sq', 'sq', 'lat'], hullType: h, hull: '#3a2416', sail: '#efe4c9', cross: c === 'eu', flag: '#1d3f7a', big: (t.cap || 0) >= 250, type: typeId };
+    var k = { sails: t.sails || ['sq', 'sq', 'lat'], hullType: h, hull: '#3a2416', sail: '#efe4c9', cross: false, flag: '#1d3f7a', big: (t.cap || 0) >= 250, type: typeId };
     if (c === 'is') { k.hull = '#5a3a1e'; k.sail = '#ece0c4'; k.flag = '#2f6a3a'; }
     if (c === 'sa') { k.hull = '#4a3020'; k.sail = '#c9a878'; k.flag = '#b3261e'; }
     if (h === 'junk') { k.hull = '#4a2c1c'; k.sail = '#a95f36'; k.flag = '#b3261e'; }

@@ -61,7 +61,7 @@ def game_data():
     d['rivals'] = names
     shipjs = read('js/data/ships.js')
     ships = shipjs[shipjs.index('G.SHIP_TYPES = ['):]
-    d['ships'] = [{'id': m[0], 'name': m[1]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)', (?:cult|cap):", ships[:ships.index('\n  ];')])]
+    d['ships'] = [{'id': m[0], 'name': m[1]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)'", ships[:ships.index('\n  ];')])]
     imgjs = read('js/core/images.js')
     d['npcs'] = pairs(imgjs, 'NPCS')
     d['interiors'] = pairs(imgjs, 'INTERIORS')
@@ -151,6 +151,7 @@ def valid_keys(d):
         k['discovery-cats/' + c] = '발견물 분류 공통 · ' + c
     for s in d['ships']:
         k['ships/' + s['id']] = '배 · ' + s['name']
+        k['ships-nav/' + s['id']] = '항해·해전 16방향 배 · ' + s['name']
     return k
 
 
@@ -191,7 +192,7 @@ def report(found, dups, keys):
               ('거리 볼거리', 'landmarks/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('자녀', 'portraits/family/'),
-              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('배', 'ships/')]
+              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('배', 'ships/'), ('항해 배', 'ships-nav/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

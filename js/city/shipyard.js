@@ -145,6 +145,7 @@
     s.player.gold -= price;
     if (opt.how === 'cargo') SH().useCargoWood(opt.id, opt.need);
     var sh = R.newShip(picked, name, opt.id);
+    if (G.ShipSprite) G.ShipSprite.want([sh.type]);
     if (s.fleet.ships.length < G.MAX_SHIPS) { s.fleet.ships.push(sh); UI.toast(name + '호가 함대에 편입되었다.', 'ship'); }
     else { C.B.harbor.moored(c).push(sh); UI.toast(name + '호는 이 항구에 계류되었다. (함대가 가득 참)', 'anchor'); }
     G.State.log(c.name + '에서 ' + wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + ' ' + name + '호를 샀다.');

@@ -21,8 +21,8 @@ except ImportError:
 # 키 앞부분 → (가장 긴 변, 저장 형식, 품질). 형식 'auto' = 투명하면 WEBP, 아니면 JPEG
 RULES = [
     ('exterior-styles/', 225, 'webp', 63),
-    ('maid-styles/', 196, 'webp', 63),
-    ('portraits/', 218, 'webp', 66),
+    ('maid-styles/', 384, 'webp', 68),
+    ('portraits/', 384, 'webp', 70),
     ('characters/player_half', 340, 'webp', 76),
     ('characters/', 300, 'webp', 78),
     ('exteriors/', 380, 'webp', 72),
@@ -34,13 +34,19 @@ RULES = [
     ('discoveries/', 1100, 'auto', 72),
     ('discovery-cats/', 1100, 'auto', 72),
     ('ships/', 640, 'webp', 78),
+    ('ships-nav/', 3136, 'keep', 88),   # 16방향 배 시트: 칸 좌표가 원본 기준이라 되도록 그대로 둔다(게임이 배율을 알아서 맞춤)
     ('title', 1100, 'auto', 66),
 ]
 
 
 def rule_for(key):
+    # 이름 있는 여급은 대화창과 2인 구도에서 크게 보인다. 지역 공용 그림보다 한 단계 선명하게 남긴다.
+    if key.startswith('portraits/maids/') and key.endswith('_half'):
+        return 768, 'webp', 74
+    if key.startswith('portraits/maids/'):
+        return 512, 'webp', 74
     if key.startswith('maid-styles/') and key.endswith('_half'):
-        return 250, 'webp', 63          # 술집에 서 있는 모습은 크게 보이므로 덜 줄인다
+        return 512, 'webp', 68          # 술집에 서 있는 모습은 580px로 보여 지나치게 줄이지 않는다
     for pre, side, fmt, q in RULES:
         if key.startswith(pre):
             return side, fmt, q
@@ -61,6 +67,13 @@ def shrink_one(src, dst_noext, side, fmt, q):
     s = min(1.0, side / max(w, h))
     if s < 1.0:
         im = im.resize((max(1, round(w * s)), max(1, round(h * s))), Image.LANCZOS)
+    if fmt == 'keep':
+        if s >= 1.0:                      # 줄일 필요가 없으면 다시 굽지 않고 원본을 그대로 복사한다
+            path = dst_noext + os.path.splitext(src)[1]
+            with open(src, 'rb') as a, open(path, 'wb') as b:
+                b.write(a.read())
+            return path
+        fmt = 'webp'
     if fmt == 'auto':
         fmt = 'webp' if im.mode == 'RGBA' else 'jpeg'
     if fmt == 'jpeg':

@@ -109,6 +109,8 @@
   I.drawCover = function (ctx, im, x, y, w, h, fx, fy) {
     var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
     if (!iw || !ih) return;
+    ctx.imageSmoothingEnabled = true;
+    try { ctx.imageSmoothingQuality = 'high'; } catch (e) { /* 옛 브라우저 */ }
     var s = Math.max(w / iw, h / ih), dw = iw * s, dh = ih * s;
     ctx.drawImage(im, x + (w - dw) * (fx == null ? 0.5 : fx), y + (h - dh) * (fy == null ? 0.5 : fy), dw, dh);
   };
@@ -116,6 +118,8 @@
   I.drawContain = function (ctx, im, x, y, w, h) {
     var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
     if (!iw || !ih) return;
+    ctx.imageSmoothingEnabled = true;
+    try { ctx.imageSmoothingQuality = 'high'; } catch (e) { /* 옛 브라우저 */ }
     var s = Math.min(w / iw, h / ih), dw = iw * s, dh = ih * s;
     ctx.drawImage(im, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
   };
@@ -336,4 +340,5 @@
   K.kid = function (sex, order) { var b = sex === 'f' ? 'daughter' : 'son'; return ['portraits/family/' + b + '_' + order, 'portraits/family/' + b]; };
   K.discovery = function (d) { return ['discoveries/' + d.id, 'discovery-cats/' + d.cat]; };
   K.ship = function (id) { return ['ships/' + id]; };
+  K.shipNav = function (id) { return ['ships-nav/' + id]; };
 })(window.G = window.G || {});

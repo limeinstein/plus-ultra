@@ -1,0 +1,42 @@
+/* tools/render_ship_sprites.py가 만든 16방향 선박 시트 메타데이터. */
+(function (G) {
+  'use strict';
+  G.SHIP_ART = {
+    "barca": {"key":"ships-nav/barca","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq"],"hullType":"west"},
+    "cog": {"key":"ships-nav/cog","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq"],"hullType":"west"},
+    "hulk": {"key":"ships-nav/hulk","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq"],"hullType":"west"},
+    "caravel": {"key":"ships-nav/caravel","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","lat"],"hullType":"west"},
+    "lcaravel": {"key":"ships-nav/lcaravel","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","lat","lat"],"hullType":"west"},
+    "pinnace": {"key":"ships-nav/pinnace","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","lat"],"hullType":"west"},
+    "carrack": {"key":"ships-nav/carrack","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq","lat"],"hullType":"west"},
+    "lcarrack": {"key":"ships-nav/lcarrack","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq","lat","lat"],"hullType":"west"},
+    "hcarrack": {"key":"ships-nav/hcarrack","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq","sq","lat"],"hullType":"west"},
+    "galleon": {"key":"ships-nav/galleon","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq","lat","lat"],"hullType":"west"},
+    "lgalleon": {"key":"ships-nav/lgalleon","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq","sq","lat"],"hullType":"west"},
+    "fluyt": {"key":"ships-nav/fluyt","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq","lat"],"hullType":"west"},
+    "frigate": {"key":"ships-nav/frigate","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq","sq","sq","lat"],"hullType":"west"},
+    "tartane": {"key":"ships-nav/tartane","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat"],"hullType":"west"},
+    "galley": {"key":"ships-nav/galley","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat"],"hullType":"galley"},
+    "greatgalley": {"key":"ships-nav/greatgalley","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","lat","lat"],"hullType":"galley"},
+    "galleass": {"key":"ships-nav/galleass","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","lat","lat"],"hullType":"galley"},
+    "fusta": {"key":"ships-nav/fusta","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat"],"hullType":"galley"},
+    "xebec": {"key":"ships-nav/xebec","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","lat","lat"],"hullType":"galley"},
+    "dhow": {"key":"ships-nav/dhow","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","lat"],"hullType":"dhow"},
+    "sambuk": {"key":"ships-nav/sambuk","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","lat"],"hullType":"dhow"},
+    "baghlah": {"key":"ships-nav/baghlah","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","lat","lat"],"hullType":"dhow"},
+    "parau": {"key":"ships-nav/parau","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat"],"hullType":"galley"},
+    "jong": {"key":"ships-nav/jong","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat","sq","lat","lat"],"hullType":"jong"},
+    "korakora": {"key":"ships-nav/korakora","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["lat"],"hullType":"outrigger"},
+    "junk": {"key":"ships-nav/junk","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["bat","bat"],"hullType":"junk"},
+    "shachuan": {"key":"ships-nav/shachuan","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["bat","bat","bat"],"hullType":"junk"},
+    "ljunk": {"key":"ships-nav/ljunk","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["bat","bat","bat"],"hullType":"junk"},
+    "baochuan": {"key":"ships-nav/baochuan","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["bat","bat","bat","bat","bat"],"hullType":"junk"},
+    "maengseon": {"key":"ships-nav/maengseon","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["bat","bat"],"hullType":"kr"},
+    "panokseon": {"key":"ships-nav/panokseon","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["bat","bat"],"hullType":"panok"},
+    "geobukseon": {"key":"ships-nav/geobukseon","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["bat","bat"],"hullType":"turtle"},
+    "kobaya": {"key":"ships-nav/kobaya","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq"],"hullType":"jp"},
+    "sekibune": {"key":"ships-nav/sekibune","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq"],"hullType":"jp"},
+    "atakebune": {"key":"ships-nav/atakebune","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq"],"hullType":"atake"},
+    "balsa": {"key":"ships-nav/balsa","cell":224,"cols":8,"dirs":16,"anchor":[112,139],"baseLen":166,"layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},"sails":["sq"],"hullType":"raft"}
+  };
+})(window.G = window.G || {});

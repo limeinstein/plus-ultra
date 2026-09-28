@@ -42,6 +42,7 @@
 | 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`) | 1440×640 |
 | 발견물 — 분류 공통 | `discovery-cats/geo.jpg` (geo·nature·ruin·treasure·creature·people·trade) | 1440×640 |
 | 배 | `ships/배ID.png` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
+| 항해·해전 16방향 배 | `ships-nav/배ID.webp` — `python tools/render_ship_sprites.py`가 만드는 선체·돛 상태 시트 | 자동 생성 1792×3136, 투명 배경 |
 
 전체 이름 목록은 `catalog.html`에서 그림과 함께 보거나, `python tools/images.py --list`로 글자로 볼 수 있습니다.
 

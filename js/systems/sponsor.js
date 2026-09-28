@@ -319,7 +319,7 @@
       if (s.fleet.ships.length >= G.MAX_SHIPS) await UI.say('배도 한 척 내주려 했는데, 자네 함대는 이미 꽉 찼군.', who);
       else {
         var lv = await UI.ask('먼 길이니 배도 한 척 필요하겠지. 원정이 끝나면 돌려준다는 조건으로 우리 ' + G.SHIP[lt].name + U.jx(G.SHIP[lt].name, '을/를') + ' 빌려주겠네. 선원은 자네가 채우게.', [{ label: '빌린다', value: 1 }, { label: '괜찮습니다', value: 0 }], who);
-        if (lv) { loanShip = R.newShip(lt, U.pick(G.SHIP_NAMES), G.Ships.localWood(G.CITY_DATA[sp.city]).id); loanShip.loan = sp.id; s.fleet.ships.push(loanShip); }
+        if (lv) { loanShip = R.newShip(lt, U.pick(G.SHIP_NAMES), G.Ships.localWood(G.CITY_DATA[sp.city]).id); loanShip.loan = sp.id; s.fleet.ships.push(loanShip); if (G.ShipSprite) G.ShipSprite.want([lt]); }
       }
     }
     var due = U.addDays(s.date, o.years * 365);

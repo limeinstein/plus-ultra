@@ -295,6 +295,7 @@
         if (s.fleet.ships.length >= MAX_SHIPS) { UI.toast('이 이상 편입할 수 없습니다.', 'info'); continue; }
         var j = await pickShip('편입선박 선택', dock); if (j == null) continue;
         s.fleet.ships.push(dock.splice(j, 1)[0]);
+        if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes());
       } else if (v === 'remove') {
         if (s.fleet.ships.length < 2) { UI.toast('이 이상 삭제할 수 없습니다.', 'info'); continue; }
         var k = await pickShip('계류할 배 선택', s.fleet.ships.slice(1)); if (k == null) continue;

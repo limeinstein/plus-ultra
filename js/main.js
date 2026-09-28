@@ -73,6 +73,7 @@
     if (Game.scene && Game.scene.exit) Game.scene.exit();
     UI.clearScreen();
     Game.sceneName = name;
+    if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes());   // 함대 배 그림을 미리 풀어 둔다 (바다에 나가기 전에)
     Game.scene = Game.scenes[name];
     if (Game.scene && Game.scene.enter) Game.scene.enter(arg);
   };

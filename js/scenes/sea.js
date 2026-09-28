@@ -43,6 +43,7 @@
     if (arg.resume && arg.msg) UI.toast(arg.msg, 'info');
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
     st.windVis = { dir: st.wind.dir, spd: st.wind.spd };
+    if (G.ShipSprite) G.ShipSprite.preload(s.fleet.ships.map(function (sh) { return sh.type; }), 3000);
     buildUI();
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
@@ -216,16 +217,16 @@
     if (k === 'm' || k === 'M') { SEA.chart(); return true; }
     if (k === 'Enter') { tryEnterPort(); return true; }
     if (k === 'l' || k === 'L') { tryLand(); return true; }
-    // 방향키 = 그 방위로 침로를 잡고 계속 간다 (Space로 정지). 두 키를 함께 누르면 대각선
+    // 방향키 = 대항해시대 3처럼: 누르고 있는 동안 뱃머리가 그 방위(← 서 · → 동 · ↑ 북 · ↓ 남, 두 키 = 북서·남동 …) 쪽으로
+    // 차츰 돌아가고, 떼면 그때 향한 쪽으로 곧게 나아간다. 지그재그 없이 뱃머리 쪽으로 가며(맞바람이면 느림), Space로 정지
     if (!helmMode() && ARROWDIR[String(k).toLowerCase()]) {
       st.arrows = st.arrows || {}; st.arrows[String(k).toLowerCase()] = true;
-      if (e.repeat) return true;          // 누르고 있는 동안 되풀이되는 신호는 무시 (대각선에서 한 키를 먼저 떼도 방위가 흔들리지 않게)
+      if (e.repeat) return true;          // 누르고 있는 동안 되풀이되는 신호는 무시
       var ang = arrowAngle(); if (ang == null) return true;
-      var same = st.dirCrs != null && Math.abs(U.angDiff(st.dirCrs, ang)) < 0.01 && !st.paused && !st.stopping;
-      if (!same) {
-        takeCourse(ang);
-        var l0 = S().loc; monsoonWarn(l0.lon + Math.cos(ang) * 15, l0.lat + Math.sin(ang) * 15);
-      }
+      var l0 = S().loc;
+      if (!st.arrowSteer || st.dirCrs == null || st.paused || st.stopping) takeCourse(st.paused && shipSpeed() < 0.02 ? l0.heading : (st.dirCrs != null ? st.dirCrs : l0.heading));
+      st.arrowSteer = true;
+      monsoonWarn(l0.lon + Math.cos(ang) * 15, l0.lat + Math.sin(ang) * 15);
       return true;
     }
     // (손으로 키 잡기 방식) 방향키 = 손으로 키를 잡는다: ↑ 누르는 동안 돛을 펴고 나아감(떼면 서서히 멈춤), ←→ 뱃머리, ↓ 돛을 거둬 세움
@@ -294,13 +295,13 @@
   SEA.setCourse = setCourse;
   /** 숫자판 여덟 방향: 그 방위로 계속 간다 (맞바람이면 지그재그로 거슬러 오른다) */
   function takeCourse(ang) {
-    st.path = null; st.target = null; st.manual = false; st.direct = false; st.keys = {};
+    st.path = null; st.target = null; st.manual = false; st.direct = false; st.keys = {}; st.arrowSteer = false;
     freshCourse(ang); st.dirCrs = ang; st.stopping = false;     // 멈추던 중이어도 다시 돛을 편다
     if (st.paused) st.paused = false;
     refreshBar(); refreshButtons();
   }
   SEA.takeCourse = takeCourse;
-  function freshCourse(crs) { st.braking = false; st.dirCrs = null; st.crs = crs; st.dW = Infinity; st.xt = 0; st.tackSide = 0; st.tackTheta = 0; st.noTack = 0; st.cruise = false; st.thr = 0; }
+  function freshCourse(crs) { st.arrowSteer = false; st.braking = false; st.dirCrs = null; st.crs = crs; st.dW = Infinity; st.xt = 0; st.tackSide = 0; st.tackTheta = 0; st.noTack = 0; st.cruise = false; st.thr = 0; }
   /** 멈춘다: 나아가던 힘도 없앤다 (항로·침로는 남겨 둬 다시 출발할 수 있다) */
   /** 멈춘다: 돛을 거두고 남은 관성으로 미끄러지다 선다 (거의 서 있으면 곧바로). 항로·침로는 남겨 둔다 */
   function halt() {
@@ -321,6 +322,18 @@
     S().fleet.ships.forEach(function (s) { var t = G.SHIP[s.type]; if (t) m = m == null ? (t.turn || 1) : Math.min(m, t.turn || 1); });
     return U.clamp(m == null ? 1 : m, 0.6, 1.5);
   }
+  /** 방향키로 침로 돌리기 (실제 시간 기준 — 배속과 상관없이 같은 손맛): 누른 방위 쪽으로 초당 약 75°(가장 둔한 배의 키만큼), 떼면 멈춘다 */
+  var ARROW_TURN = 0.9;
+  function arrowTurn(dt) {
+    if (!st.arrowSteer || st.dirCrs == null || helmMode()) return;
+    var want = arrowAngle(); if (want == null) { st.arrowHeld = 0; return; }
+    st.arrowHeld = (st.arrowHeld || 0) + dt;
+    var diff = U.angDiff(st.dirCrs, want);
+    if (Math.abs(diff) > 3.1) diff = Math.abs(diff);          // 정반대면 왼쪽(반시계)으로 돈다
+    var rate = ARROW_TURN * turnAbility() * Math.min(1, 0.5 + st.arrowHeld * 1.5) * dt;
+    st.dirCrs += U.clamp(diff, -rate, rate); st.crs = st.dirCrs;
+  }
+  SEA.arrowTurn = arrowTurn;
   function turnKey() { var k = st.keys; return ((k.arrowleft || k.a) ? 1 : 0) - ((k.arrowright || k.d) ? 1 : 0); }
   function setCityTarget(c) {
     var d = c.dock || [c.lat, c.lon];
@@ -475,6 +488,7 @@
       // 위용: 기함이 거대한 보선이면 작은 해적 떼는 덤비지 않는다
       if (kind === 'pirate' && n <= 2 && f0 && G.Ships.has(f0, 'awe')) { npc.hostile = false; npc.awed = true; }
       st.npcs.push(npc);
+      if (G.ShipSprite) G.ShipSprite.want(ships);   // 화면에 들어오기 전에 그 배 그림을 풀어 둔다
       return;
     }
   }
@@ -588,6 +602,7 @@
     // 멈춘 채 ←→: 시간은 흐르지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것)
     if (!frozen && st.paused && st.manual && turnKey()) { st.turnHeld = (st.turnHeld || 0) + dt; l.heading += turnKey() * 1.4 * dt * turnAbility() * Math.min(1, 0.45 + st.turnHeld * 1.6); }
     st.handSteer = false;
+    if (!frozen) arrowTurn(dt);
     if (!frozen && !st.paused) {
       // 손으로 키를 돌리는 동안은 ×1로 흐른다: 배속을 올려도 도는 반경과 손맛이 같다
       var spd = st.speed;
@@ -763,7 +778,7 @@
     } else if (st.path || st.dirCrs != null) {
       var crs = st.crs != null ? st.crs : h;
       m = R.fleetMotion(crs, wind);
-      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0);
+      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer;   // 방향키로 몰 때는 지그재그 없이 뱃머리 쪽으로 (맞바람이면 그만큼 느리게)
       if (tack) {
         if (!st.tackTheta || !st.tackSide) st.tackSide = st.tackSide || (m.legP >= m.legM ? 1 : -1);
         st.tackTheta = m.theta;
@@ -1163,7 +1178,7 @@
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
     var s = S(), l = s.loc;
     var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + ' 항해 중' : '목적지로 항해 중')
-      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — 방향키를 누르면 그쪽으로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 침로를 잡고 항해 중 · 방향키로 방위 바꾸기 · Space 정지')
+      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — 방향키를 누르면 그쪽으로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
       : st.manual ? (st.paused ? '수동 조타 — ↑ 돛을 펴고 출발 · ←→ 제자리에서 뱃머리 · Space 순항' : st.cruise ? '수동 조타(순항) — ←→ 뱃머리 · ↓·Space 멈춤' : '수동 조타 — ↑ 누르는 동안 나아가고 떼면 서서히 멈춤 · Space 순항')
       : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : '정지 — 방향키로 그쪽으로 출발 · 항구 곁에서는 Space로 정박') : '표류 중 — 바다를 클릭하거나 방향키·숫자판으로 나아가십시오');
     if (!st.manual && st.tackTheta && !st.paused) tgt += ' · <span style="color:#ffd98a">맞바람 — 지그재그로 거슬러 오르는 중</span>';
@@ -1224,6 +1239,7 @@
     });
     // npcs
     st.npcs.forEach(function (n) {
+      if (G.ShipSprite && n.ships) G.ShipSprite.want(n.ships);
       var p = toScreen(n.lon, n.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;
       var kk = NPC_KIND[n.kind];
       for (var j = 0; j < Math.min(3, n.n); j++) {
@@ -1239,6 +1255,7 @@
         }
         if (n.pose) nlook.pose = j ? { roll: n.pose.roll * 0.8, pitch: -n.pose.pitch * 0.6, heave: n.pose.heave * 0.5 } : n.pose;
         if (n.rig) nlook.rig = n.rig;
+        nlook.sid = n.id + ':' + j;
         A.shipTop(ctx, p[0] - Math.cos(n.heading) * j * 18 * nk + j * 6 * nk, p[1] + Math.sin(n.heading) * j * 18 * nk + j * 8 * nk, n.heading, npcPx(), nlook, st.t + j);
       }
       if ((n.kind === 'pirate' && !n.awed) || n.hostile) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - npcPx() * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - npcPx() * 0.72); ctx.textAlign = 'left'; }
@@ -1266,7 +1283,7 @@
       var ps = st.pose || {}, ph = si * 1.7, RF = si && st.rideF && st.rideF[si], RDm = G.FX.ride || {};
       if (RF) lk.pose = { roll: U.clamp(RF.roll, -RDm.maxRoll, RDm.maxRoll), pitch: U.clamp(RF.pitch, -RDm.maxPitch, RDm.maxPitch), heave: U.clamp(RF.heave, -RDm.maxHeave, RDm.maxHeave) };
       else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };
-      lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null;
+      lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null; lk.sid = 'f' + si;
       A.shipTop(ctx, bx, by, l.heading, lenS, lk, st.t + si);
     }
     drawCities(ctx);
