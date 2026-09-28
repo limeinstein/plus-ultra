@@ -211,8 +211,8 @@
     { id: 'giorgio', name: '조르조 칸티노', g: 'm', st: [52, 64, 48, 58], sk: { acct: 2, survey: 1 }, lg: { 2: 3, 1: 2 }, fame: 200, wage: 80, y: [1490, 1530], reg: [2, 0], desc: '포르투갈의 비밀 해도를 빼돌렸다는 이탈리아 첩자.' },
     { id: 'ahmad', name: '아흐마드 이븐 샤밥', g: 'm', st: [60, 68, 60, 55], sk: { nav: 2, gun: 1 }, lg: { 5: 3, 6: 2, 8: 1 }, fame: 500, wage: 100, y: [1480, 1560], reg: [4, 5], desc: '호르무즈의 선장. 페르시아만 바닷길을 꿰뚫고 있다.' },
     { id: 'chen', name: '진조의', g: 'm', st: [55, 70, 52, 56], sk: { nav: 2, acct: 2 }, lg: { 7: 3, 12: 2, 13: 1, 14: 1 }, fame: 800, wage: 110, y: [1480, 1600], after: ['malacca'], reg: [6, 8], desc: '명의 해금을 피해 바다를 누비는 복건 출신의 상인.' },
-    { id: 'kim', name: '김서진', g: 'm', st: [58, 72, 55, 60], sk: { survey: 2, hist: 1 }, lg: { 14: 3, 7: 2, 13: 2 }, fame: 600, wage: 100, y: [1480, 1600], after: ['china'], reg: [6, 9], desc: '조선의 역관. 한문과 동방의 여러 말에 밝다.' },
-    { id: 'tupac', name: '투팍', g: 'm', st: [65, 60, 66, 55], sk: { ops: 2, survey: 1 }, lg: { 11: 3 }, fame: 500, wage: 70, y: [1480, 1580], after: ['inca'], reg: [10], desc: '안데스의 길잡이. 험한 산길을 두려워하지 않는다.' },
+    { id: 'kim', name: '김서진', g: 'm', style: 'kr', st: [58, 72, 55, 60], sk: { survey: 2, hist: 1 }, lg: { 14: 3, 7: 2, 13: 2 }, fame: 600, wage: 100, y: [1480, 1600], after: ['china'], reg: [6, 9], desc: '조선의 역관. 한문과 동방의 여러 말에 밝다.' },
+    { id: 'tupac', name: '투팍', g: 'm', style: 'an', st: [65, 60, 66, 55], sk: { ops: 2, survey: 1 }, lg: { 11: 3 }, fame: 500, wage: 70, y: [1480, 1580], after: ['inca'], reg: [10], desc: '안데스의 길잡이. 험한 산길을 두려워하지 않는다.' },
     { id: 'kisk', name: '누징가 은쿠우', g: 'm', st: [66, 55, 64, 58], sk: { ops: 2, sword: 1 }, lg: { 10: 3, 1: 1 }, fame: 300, wage: 60, y: [1480, 1580], reg: [3], desc: '콩고 왕국의 귀족. 아프리카 오지의 길을 잘 안다.' }
   ];
   G.MATE = {}; G.MATES.forEach(function (m) { G.MATE[m.id] = m; });

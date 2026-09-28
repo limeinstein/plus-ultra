@@ -245,7 +245,9 @@
     tavernkeeper: ['keeper', 'tav', null], shipwright: ['keeper', 'yard', null], priest: ['priest', '', null], librarian: ['scholar', '', null], guildmaster: ['official', 'gd', null] };
   A.townSpec = function (id, c) {
     var t = A.TOWNFOLK[id] || ['merchant', id, 'm'];
-    return A.withImg(A.npcSpec('c' + c.id + ':' + t[0] + t[1], t[0], c.style, t[2]), G.Img.chain.npc(id, c));
+    var sp = A.withImg(A.npcSpec('c' + c.id + ':' + t[0] + t[1], t[0], c.style, t[2]), G.Img.chain.npc(id, c));
+    if (G.Img.NPC_ROLE_PORTRAIT && !G.Img.NPC_ROLE_PORTRAIT[id]) sp.noRole = true;   // 역할 공통 그림을 붙이지 않는 건물 사람
+    return sp;
   };
   function headPath(ctx, s, cx, cy, R) {
     // profile facing right. R = head radius
@@ -540,7 +542,7 @@
   /** override-image chain for a portrait spec (spec.img, or the player's face index) */
   A.portraitKeys = function (spec) {
     if (!spec || !G.Img) return null;
-    var out = spec.img ? [].concat(spec.img) : [], roleKey = A.rolePortraitKey(spec);
+    var out = spec.img ? [].concat(spec.img) : [], roleKey = spec.noRole ? null : A.rolePortraitKey(spec);
     // 역할 그림(npc-roles)은 성별이 정해져 있다 — 다른 성별의 인물에게는 쓰지 않는다 (조선 국왕에게 왕비 그림이 붙지 않게)
     if (roleKey && spec.g && A.rolePortraitGender(spec.role, spec.style) !== spec.g) roleKey = null;
     if (roleKey && out.indexOf(roleKey) < 0) out.push(roleKey);

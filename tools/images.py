@@ -142,6 +142,12 @@ def valid_keys(d):
     for style in portrait_styles:
         for role in portrait_roles:
             k['portraits/npc-roles/%s/%s' % (style, role)] = '도시 양식·역할별 NPC · %s · %s' % (style, role)
+    pool_nations = ['pt', 'es', 'fr', 'de', 'en', 'nl', 'na', 'kr', 'cn', 'jp', 'ot', 'af', 'az', 'inca', 'vn', 'eg', 'pe', 'ind', 'se']
+    for kind, label in [('mates', '항해사 후보'), ('sponsors', '후원자')]:
+        for nation in pool_nations:
+            for gender in ['f', 'm']:
+                for index in range(1, 11):
+                    k['portraits/pools/%s/%s/%s/%02d' % (kind, nation, gender, index)] = '%s 초상 묶음 · %s · %s · %02d' % (label, nation, gender, index)
     for m in d['mates']:
         k['portraits/mates/' + m['id']] = '동료 · ' + m['name']
     for m in d['maids']:
@@ -173,6 +179,8 @@ def valid_keys(d):
     for s in d['ships']:
         k['ships/' + s['id']] = '배 · ' + s['name']
         k['ships-nav/' + s['id']] = '항해·해전 16방향 배 · ' + s['name']
+    k['effects/ship_spray'] = '항해 효과 · 선수 물보라 스프라이트 시트'
+    k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
     return k
 
 
@@ -205,7 +213,7 @@ def write_manifest(found):
 
 
 def is_valid(key, keys):
-    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'characters/', 'relics/', 'relic-kinds/'))  # 유물 사진은 tools/heritage 가 넣는다
+    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'characters/', 'relics/', 'relic-kinds/', 'discovery-ends/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
 
 def report(found, dups, keys):
@@ -213,7 +221,8 @@ def report(found, dups, keys):
               ('거리 볼거리', 'landmarks/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('자녀', 'portraits/family/'),
-              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('유물', 'relics/'), ('배', 'ships/'), ('항해 배', 'ships-nav/')]
+              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),
+              ('항해 효과', 'effects/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

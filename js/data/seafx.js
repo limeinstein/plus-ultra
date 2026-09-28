@@ -5,6 +5,15 @@
 (function (G) {
   'use strict';
   G.FX = {
+    // 유적 발견 연출 (js/scenes/common.js SC.discoveryReveal): 화면이 어두워지고 복원 GIF가 빛나며 한 바퀴 돈 뒤 마지막 장면에서 멈춘다
+    reveal: {
+      dim: 0.7,           // 뒤쪽 탐험 지도가 어두워지는 정도 (0~1, 가운데는 이것의 80%)
+      dimMs: 900,         // 어두워지는 데 걸리는 시간
+      gifMs: 9870,        // 유적 GIF 한 바퀴 (tools/ruin_gifs/build.py: 25프레임) — 이 뒤에 마지막 장면으로 멈춘다
+      scale: 1.9,         // GIF(576×256)를 몇 배로 크게 보이나
+      titleMs: 1600,      // 「○○ 발견」 글자가 떠오른 뒤 대화가 시작될 때까지
+      loadWaitMs: 2500    // GIF를 기다리는 가장 긴 시간
+    },
     terrain: {
       relief: 1.0,        // 음영(높낮이가 얼마나 도드라져 보이나)
       mountain: 1.0,      // 산맥 높이
@@ -137,5 +146,24 @@
       maxParticles: 700,
       size: 1.0
     }
+  };
+  // 항해 효과 스프라이트 (js/scenes/voyagefx.js · images/effects/ship_spray.png·departure_gull.png)
+  G.FX.voyage = {
+    spray: true,         // 배가 속력을 낼 때 선수 양옆 물보라
+    accelFrom: 0.35,     // 이 가속(°/일²)부터 보이기 시작해 (출발할 때 약 2.5, 순풍으로 돌 때 0.5~1)
+    accelFull: 1.8,      // 이 가속에서 가장 세다
+    sprayScale: 0.95,    // 물보라 한 장의 너비 = 배 그림 길이 × 이 값 (세기에 따라 0.65~1.1배)
+    sprayFrameMs: 80,    // 한 프레임 (그림 설명: 70~90ms)
+    sprayFollow: 0.6,    // 따르는 배는 이만큼
+    sprayAlpha: 0.9,
+    burstFrom: 0.55,     // 세기가 이 값을 넘어서는 순간 한 번 크게 튄다
+    burstCool: 2.5,      // 크게 튄 뒤 쉬는 시간(초)
+    burstScale: 1.35,
+    sendoffMonths: 3,    // 모항 출항 배웅: 지난번 모항 출항에서 이만큼(달)이 지나야 (처음 출항 포함)
+    gulls: 9,            // 배웅하는 갈매기 수
+    gullFrameMs: 95,     // 날갯짓 한 프레임 (그림 설명: 85~110ms)
+    gullSize: 0.62,      // 갈매기 한 마리 = 배 그림 길이 × 이 값 (가까이 올수록 커진다)
+    sendoffSec: 7.5,     // 배웅이 이어지는 시간(초)
+    title: true          // 「모항 ○○을 떠나다」 글귀
   };
 })(window.G = window.G || {});

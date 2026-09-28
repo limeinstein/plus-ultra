@@ -32,8 +32,15 @@
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d)); };
   D.fameFor = function (d) { return Math.round(D.value(d) / 26 + d.pw * 30); };
-  /** 예전 그림 보너스 — 이제 그림은 D.value에 들어가므로 1 (옛 호출과 호환) */
-  D.artBonus = function () { return 1; };
+  /** 현장 기록 보너스 — 유적은 그림(정밀한 도판)·세공(짜임·재료 기록)에 밝은 사람이 있으면 명성이 더 오른다.
+      값어치(D.value)와 따로, 명성에만 곱한다. 발견 순간·후원자 보고·늦은 보고에 모두 쓴다. d 없이 부르면 1(옛 호출과 호환). */
+  D.RECORD_K = { art: 0.05, craft: 0.04 };
+  D.recordParts = function (d) {
+    if (!d || d.cat !== 'ruin') return { art: 0, craft: 0, k: 1 };
+    var art = R.skillRead ? R.skillRead('art') : R.skill('art'), craft = R.skillRead ? R.skillRead('craft') : R.skill('craft');
+    return { art: art, craft: craft, k: 1 + art * D.RECORD_K.art + craft * D.RECORD_K.craft };
+  };
+  D.artBonus = function (d) { return D.recordParts(d).k; };
   /** 발견 카드의 「가치」 칸: 올린 값과 그 까닭 */
   D.valueTag = function (d) {
     var v = D.valueParts(d); if (v.k <= 1.0001) return '가치 ' + U.num(d.val);
@@ -50,7 +57,7 @@
     s.stats.found++;
     D.collectionReward(s.stats.found);
     delete s.hints[d.id];
-    var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus());
+    var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d));
     s.player.fame += fame;
     // 증거품: 이름 붙은 증거(해도·지도)는 소지품으로 챙긴다 — 보고·발표할 때 건넨다 (잃으면 믿어 주지 않는다)
     if (d.evidence && !s.player.items.some(function (it) { return it.kind === 'evidence' && it.disc === d.id; })) {
@@ -67,6 +74,8 @@
     }
     G.State.log(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 발견했다.');
     if (G.Audio) G.Audio.sfx('discover');
+    // 유적은 복원 GIF가 빛나며 돌고, 「○○ 발견」과 함께 제독·부하의 대화가 이어진다 (그림·세공 솜씨만큼 자세히)
+    if (G.Scenes.discoveryReveal) { try { await G.Scenes.discoveryReveal(d, fame); } catch (e) { console.error(e); } }
     // 칸이 남는 만큼 먼저 챙기고, 모자라면 카드를 본 뒤에 무엇을 버릴지 묻는다
     var wait = [];
     rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });

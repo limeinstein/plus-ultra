@@ -166,7 +166,7 @@
     // city discoveries (landmarks)
     var ds = G.Disc.checkCity(c.id);
     for (var i = 0; i < ds.length; i++) {
-      await C.mate('제독, 저기를 보십시오! 소문으로만 듣던 ' + U.eul(ds[i].name).replace(ds[i].name, '「' + ds[i].name + '」') + ' 이 눈으로 보게 되다니...');
+      if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(ds[i]))) await C.mate('제독, 저기를 보십시오! 소문으로만 듣던 ' + U.eul(ds[i].name).replace(ds[i].name, '「' + ds[i].name + '」') + ' 이 눈으로 보게 되다니...');
       await G.Disc.find(ds[i], 'city');
     }
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);

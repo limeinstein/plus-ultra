@@ -31,9 +31,10 @@ RULES = [
     ('backgrounds/', 1100, 'auto', 66),
     ('cities/', 1100, 'auto', 66),
     ('city-styles/', 1100, 'auto', 66),
-    ('discoveries/', 1100, 'auto', 72),
+    ('discoveries/', 1100, 'auto', 72),   # 움직이는 GIF(유적)는 shrink_anim 이 움직이는 WEBP로
     ('discovery-cats/', 1100, 'auto', 72),
     ('relics/', 256, 'auto', 70),
+    ('discovery-ends/', 576, 'auto', 74),
     ('ships/', 640, 'webp', 78),
     ('ships-nav/', 3136, 'keep', 88),   # 16방향 배 시트: 칸 좌표가 원본 기준이라 되도록 그대로 둔다(게임이 배율을 알아서 맞춤)
     ('title', 1100, 'auto', 66),
@@ -61,7 +62,36 @@ def has_alpha(im):
     return im.mode == 'P' and 'transparency' in im.info
 
 
+def shrink_anim(src, dst_noext, side, q):
+    """움직이는 GIF(유적 복원) → 움직이는 WEBP. 이름을 .anim.webp 로 해서 게임(G.Img.isAnim)이 <img>로 올리게 한다.
+    프레임 수·시간은 그대로 둔다 — 발견 연출이 G.FX.reveal.gifMs 뒤에 마지막 장면으로 멈추기 때문."""
+    from PIL import ImageSequence
+    im = Image.open(src)
+    frames, durs = [], []
+    for fr in ImageSequence.Iterator(im):
+        f = fr.convert('RGB')
+        s = min(1.0, side / max(f.size))
+        if s < 1.0:
+            f = f.resize((max(1, round(f.width * s)), max(1, round(f.height * s))), Image.LANCZOS)
+        frames.append(f)
+        durs.append(fr.info.get('duration', 100))
+    path = dst_noext + '.anim.webp'
+    frames[0].save(path, 'WEBP', save_all=True, append_images=frames[1:], duration=durs, loop=0, quality=min(q, 55), method=4)
+    return path
+
+
+def is_anim(src):
+    if not src.lower().endswith('.gif'):
+        return False
+    try:
+        return getattr(Image.open(src), 'n_frames', 1) > 1
+    except Exception:
+        return False
+
+
 def shrink_one(src, dst_noext, side, fmt, q):
+    if is_anim(src):
+        return shrink_anim(src, dst_noext, side, q)
     im = Image.open(src)
     im = im.convert('RGBA') if has_alpha(im) else im.convert('RGB')
     w, h = im.size

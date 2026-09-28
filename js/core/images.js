@@ -44,6 +44,13 @@
     }
     return f;
   };
+  /** 움직이는 그림인가 — 원본 GIF, 아티팩트·한 파일짜리 판에서 줄인 움직이는 WEBP(이름이 .anim.webp), data:image/gif.
+      움직이는 그림은 Canvas에 옮기면 첫 장면만 남으므로 <img>로 올려야 한다. */
+  I.isAnim = function (k) {
+    if (!k) return false;
+    var f = man()[k] || '', p = I.path(k) || '';
+    return /\.(gif|anim\.webp)(?:$|[?#])/i.test(p) || /^data:image\/gif/i.test(f);
+  };
   /* 한 파일짜리 판은 그림이 아주 긴 data: 주소로 들어 있다. 그대로 쓰면 주소가 수십만 자여서
      그림을 따로 열어 보거나 주소를 다루기 어렵다. 처음 쓸 때 짧은 blob: 주소로 바꿔 둔다. */
   var blobs = {};
@@ -260,15 +267,21 @@
     var i = Math.abs(G.U ? G.U.strHash(seed + base) : 0) % opts.length;
     return opts[i] === base ? [base] : [opts[i], base];
   }
-  var NPC_ROLE_PORTRAIT = { trader: 'merchant', vendor: 'merchant', harbormaster: 'official', guildmaster: 'official', innkeeper: 'keeper', tavernkeeper: 'keeper', shipwright: 'keeper',
+  // 한 도시 안에서 같은 얼굴이 두 건물에 나오지 않게 — 시장 상인·술집 주인·조선소 목수는 역할 공통 그림을 쓰지 않는다(전용 그림이 없으면 코드로 그린 얼굴)
+  var NPC_ROLE_PORTRAIT = I.NPC_ROLE_PORTRAIT = { trader: 'merchant', harbormaster: 'captain', guildmaster: 'official', innkeeper: 'keeper',
     priest: 'priest', librarian: 'scholar', guard: 'soldier', brawler: 'soldier', drunk: 'sailor', gambler: 'sailor', butler: 'keeper', native: 'native', pirate: 'captain', captain: 'captain', boatswain: 'sailor' };
+  /** 마을 사람 그림의 문화권 — 초원(st: 아스트라한·카잔·호브드·카라코룸)은 건물 안 모습과 달리 유럽 얼굴을 쓰지 않는다 */
+  function npcCul(c) {
+    if (c.style === 'st') return c.rel === 'I' ? 'islam' : 'steppe';
+    return cul(c);
+  }
   K.npc = function (id, c) {
     if (!c) return ['portraits/npc/' + id];
     var seed = 'npc' + c.id, role = NPC_ROLE_PORTRAIT[id], rolePic = role ? ['portraits/npc-roles/' + c.style + '/' + role] : [];
-    return ['portraits/npc/' + id + '@' + c.id]
-      .concat(rolePic)
-      .concat(variants('portraits/npc/' + id + '_' + cul(c), seed))
-      .concat(variants('portraits/npc/' + id, seed));
+    var cc = npcCul(c), own = ['portraits/npc/' + id + '@' + c.id].concat(variants('portraits/npc/' + id + '_' + cc, seed));
+    // 손으로 고른 건물 사람 그림(portraits/npc/<id>_<문화권>)이 먼저. 문화권 표시 없는 그림(captain·pirate·native 등)은
+    // 유럽 사람 얼굴이라 유럽 밖에서는 그 고장의 역할 공통 그림(npc-roles) 뒤로 미룬다 (명나라 선장이 유럽인으로 나오지 않게)
+    return cc === 'europe' ? own.concat(variants('portraits/npc/' + id, seed), rolePic) : own.concat(rolePic, variants('portraits/npc/' + id, seed));
   };
   /** 그 도시에서 고른 그림이 여자(f)인지 남자(m)인지 — 호칭을 맞출 때 쓴다 */
   I.npcGender = function (id, c) {
@@ -277,6 +290,10 @@
     return !k ? null : /_f$/.test(k) ? 'f' : /_m$/.test(k) ? 'm' : null;
   };
   K.mate = function (id) { return ['portraits/mates/' + id]; };
+  /** 새 항해사·후원자를 만들 때 쓰는 국가별 얼굴 묶음. 번호는 1~10이다. */
+  K.peoplePool = function (kind, nation, gender, index) {
+    return ['portraits/pools/' + kind + '/' + nation + '/' + gender + '/' + String(Math.max(1, Math.min(10, index || 1))).padStart(2, '0')];
+  };
   /** 지역별 술집 여급 그림 (images/maid-styles/이름.png = 흉상, 이름_half.png = 서 있는 모습) */
   I.MAIDSTYLES = [['westeurope', '서유럽 맥주집'], ['iberia', '이베리아·안달루시아'], ['britain', '브리튼·아일랜드'], ['germany', '독일·북해'],
     ['france', '프랑스'], ['lowlands', '네덜란드·플랑드르'], ['greece', '그리스·마살리아'], ['slav', '슬라브·발트'],
@@ -354,4 +371,5 @@
   K.discovery = function (d) { return ['discoveries/' + d.id, 'discovery-cats/' + d.cat]; };
   K.ship = function (id) { return ['ships/' + id]; };
   K.shipNav = function (id) { return ['ships-nav/' + id]; };
+  K.effect = function (id) { return ['effects/' + id]; };
 })(window.G = window.G || {});

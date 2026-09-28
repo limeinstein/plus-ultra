@@ -36,7 +36,7 @@
   /** GIF를 Canvas로 복사하면 첫 프레임만 남는다. 애니메이션 항목은 원본 요소를 쓴다. */
   function animatedImage(it) {
     const k = it.animated && it.chain && I.pick(it.chain), f = k && I.file(k);
-    if (!f || !/\.gif(?:$|[?#])/i.test(f)) return null;
+    if (!f || !(I.isAnim ? I.isAnim(k) : /\.gif(?:$|[?#])/i.test(f))) return null;
     const img = new Image(); img.src = I.src(k); img.alt = it.name + ' 복원 애니메이션';
     return img;
   }
@@ -249,7 +249,7 @@
       key: 'portraits/npc/' + id, kind: 'png', chain: spec.img, ar: '1 / 1', extra: id,
       pic: () => portrait(spec),
       detail: () => ({
-        text: local ? '같은 역할이라도 도시 양식마다 얼굴이 달라집니다. portraits/npc-roles/양식/역할.webp를 기본으로 쓰며, 도시 번호가 붙은 전용 그림이 있으면 그쪽을 먼저 씁니다.' : '',
+        text: local ? '같은 역할이라도 도시 양식마다 얼굴이 달라집니다. 도시 번호가 붙은 전용 그림, 그다음 문화권별 건물 사람 그림(portraits/npc/)을 먼저 쓰고, 둘 다 없는 고장에서 portraits/npc-roles/양식/역할.webp를 씁니다.' : '',
         facts: [['나오는 곳', NPC_WHERE[id]]],
         strip: local ? Object.keys(CUL_CITY).map(cu => ({ label: CUL[cu] + ' (예: ' + CUL_CITY[cu].name + ')', key: 'portraits/npc/' + id + '_' + cu, kind: 'png', pic: () => portrait(npcSpec(id, CUL_CITY[cu])) })) : null,
         files: local ? [

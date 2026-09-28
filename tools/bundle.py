@@ -62,6 +62,10 @@ def inline(page, found, artifact, title=None, extra_css='', base=None, packs=Non
             parts.extend('<script src="' + rel + '"></script>' for rel, _ in packs)
         elif s == 'images/manifest.js':
             js, _ = pages.manifest_js(found, embed=True, base=base)
+            # data: 주소만으로는 움직이는 WEBP를 알 수 없어서 그 그림들의 원래 이름을 함께 넣는다 (G.Img.isAnim)
+            anim = {k: rel for k, rel in sorted(found.items()) if rel.lower().endswith(('.anim.webp', '.gif'))}
+            if anim:
+                js += '\nG.IMAGE_PATHS = Object.assign(G.IMAGE_PATHS || {}, ' + json.dumps(anim, ensure_ascii=False) + ');\n'
             parts.append('<script>/* images (embedded) */\n' + js + '</script>')
         else:
             parts.append('<script>/* ' + s + ' */\n' + pages.script_text(s) + '\n</script>')

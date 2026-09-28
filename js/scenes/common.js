@@ -52,7 +52,7 @@
   SC.discoveryPicture = function (d, chain) {
     chain = chain || G.Img.chain.discovery(d);
     var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art;
-    if (d.cat === 'ruin' && file && /\.gif(?:$|[?#])/i.test(file)) {
+    if (d.cat === 'ruin' && file && G.Img.isAnim(picked)) {
       art = document.createElement('img');
       art.className = 'disc-build-gif'; art.src = G.Img.src(picked); art.alt = d.name + ' 7단계 복원과 360도 상공 회전';
       return art;
@@ -94,6 +94,104 @@
       el.insertBefore(G.Img.make(G.Img.chain.relic(r), 112, 112, function () { return A.relicArt(r, 112, 112); }), el.firstChild);
     });
     return win.result;
+  };
+
+  // ---------------------------------------------------------------- 유적 발견 연출
+  /* 화면(탐험 지도·거리)이 살짝 어두워지고 복원 GIF만 빛나며 한 바퀴 돈다 → 마지막 장면에서 멈추고
+     「○○ 발견」이 크게 빛나며 떠오른다 → 제독과 부하들이 이야기한다. 그림·세공에 밝은 사람이 있으면
+     그만큼 자세히 기록하고(발견 설명·실제 자료에서 그 시대에 알 수 있는 것만 골라 말한다) 명성이 더 오른다(D.recordParts).
+     GIF를 멈출 수 없어 마지막 장면은 images/discovery-ends/ID.jpg (tools/ruin_gifs/end_frames.py)로 바꿔 끼운다. */
+  function revealKeys(d) {
+    var chain = G.Img.chain.discovery(d), picked = G.Img.pick(chain), file = picked && G.Img.file(picked);
+    if (d.cat !== 'ruin' || !file || !G.Img.isAnim(picked)) return null;
+    var end = G.Img.file('discovery-ends/' + d.id) ? 'discovery-ends/' + d.id : null;
+    return { gif: picked, end: end };
+  }
+  SC.hasReveal = function (d) { return !!revealKeys(d); };
+  /** 그 기술을 가장 잘하는 사람: {lv, speaker, me} (제독 자신일 수도 있다) */
+  function bestHand(id) {
+    var s = S(), p = s.player, best = { lv: p.sk[id] || 0, speaker: { name: p.name, portrait: p.portrait }, me: true };
+    s.mates.forEach(function (m) {
+      var d = G.MATE[m.id]; if (!d) return;
+      var lv = R.mateSkill(m, id);
+      if (lv > best.lv) best = { lv: lv, speaker: { name: d.name, portrait: SC.mateSpec(m.id), lang: 3 }, me: false };
+    });
+    return best;
+  }
+  /** 발견 설명과 실제 자료에서 그 시대 사람이 말할 수 있는 문장만 (오늘날의 연도·등재 이야기는 뺀다) */
+  function periodSentences(d) {
+    var y = S().date.y, out = [];
+    function ok(t) {
+      if (/세계유산|등재|오늘날|실제로는|박물관|발굴 조사|성분 조사/.test(t)) return false;
+      var yrs = t.match(/\d{4}/g) || []; return !yrs.some(function (x) { return +x > y; });
+    }
+    function split(t) { return String(t || '').split(/(?<=[.。!?])\s+/).map(function (x) { return x.trim(); }).filter(Boolean); }
+    split(d.desc).forEach(function (t) { if (ok(t)) out.push(t); });
+    var H = d.real || {};
+    (H.lore || []).forEach(function (l) { split(l).forEach(function (t) { if (ok(t) && out.indexOf(t) < 0) out.push(t); }); });
+    return out;
+  }
+  function lineFor(kind, lv, d) {
+    var sent = periodSentences(d);
+    if (kind === 'art') {
+      if (lv >= 3) return '빛이 기우는 방향과 그림자의 깊이까지 살려 채색 도판으로 남기겠습니다.\f' + (sent.length ? '「' + sent.join(' ') + '」\f' : '') + '— 이만한 기록이면 학자들도 앞다투어 들여다볼 겁니다.';
+      if (lv >= 2) return '기둥 사이 간격과 지붕선의 기울기까지 재어, 비례를 맞춰 그려 두겠습니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
+      return '대강의 윤곽이라도 화첩에 옮겨 두겠습니다.' + (sent.length ? '\f「' + sent[0] + '」' : '');
+    }
+    if (lv >= 3) return '쓰인 재료와 짜 맞춘 방식을 하나하나 적어 두겠습니다. 이음새의 각도, 장식의 두께, 장인이 쓴 연장까지 — 어느 고장의 장인이 어떻게 지었는지 짐작이 갑니다.';
+    if (lv >= 2) return '이음새와 장식의 마감에 빈틈이 없군요. 장인의 연장 자국까지 고스란히 남아 있습니다. 재어서 적어 두겠습니다.';
+    return '다듬은 솜씨가 예사롭지 않습니다. 눈에 띄는 장식만이라도 적어 두지요.';
+  }
+  SC.discoveryReveal = async function (d, fame) {
+    var keys = revealKeys(d); if (!keys) return false;
+    var FX = (G.FX && G.FX.reveal) || {}, W = Math.round(576 * (FX.scale || 1.9)), H = Math.round(256 * (FX.scale || 1.9));
+    var el = U.el('div', 'reveal');
+    el.style.setProperty('--rv-dim', FX.dim != null ? FX.dim : 0.62);
+    el.style.setProperty('--rv-dim-ms', (FX.dimMs || 900) + 'ms');
+    el.innerHTML = '<div class="rv-dim"></div><div class="rv-rays"></div>' +
+      '<div class="rv-frame" style="width:' + W + 'px;height:' + H + 'px"><img class="rv-gif" alt=""><img class="rv-end" alt=""></div>' +
+      '<div class="rv-title"><b>' + U.esc(d.name) + '</b> 발견</div><div class="rv-skip">누르면 건너뜁니다</div>';
+    // 화면 층(#screen) 위, 대화창 층 아래 — 윗줄 HUD와 지도 이름표까지 함께 어두워진다
+    var uiRoot = document.getElementById('ui'); if (uiRoot) uiRoot.appendChild(el); else UI.add(el);
+    var gif = el.querySelector('.rv-gif'), end = el.querySelector('.rv-end');
+    // 이미 한 번 불러 둔 GIF도 처음 장면부터 돌도록 새로 불러온다 (파일 주소일 때만 — 한 파일짜리 판의 data: 주소는 그대로)
+    var src = G.Img.src(keys.gif); if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
+    var loaded = new Promise(function (r) { gif.onload = r; gif.onerror = r; setTimeout(r, FX.loadWaitMs || 2500); });
+    gif.src = src;
+    if (keys.end) end.src = G.Img.src(keys.end);
+    await loaded;
+    setTimeout(function () { el.classList.add('on'); }, 30);
+    // 한 바퀴 돌 때까지 — 누르거나 Enter·Space·Esc면 곧장 마지막 장면으로
+    await new Promise(function (resolve) {
+      var t = setTimeout(fin, (FX.gifMs || 9870) + 80), done = false;
+      function fin() { if (done) return; done = true; clearTimeout(t); unkey(); el.removeEventListener('click', fin); resolve(); }
+      var unkey = UI.pushKey(function (e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { fin(); return true; } return true; });
+      el.addEventListener('click', fin);
+    });
+    if (keys.end) el.classList.add('ended');      // 마지막 장면에서 멈춤
+    el.classList.add('titled');
+    if (G.Audio) G.Audio.sfx('discover');
+    await U.sleep(FX.titleMs || 1600);
+    el.classList.add('talk');
+    // ---- 대화
+    var s = S(), p = s.player, me = { name: p.name, portrait: p.portrait };
+    var lead = SC.mateSpeaker('first');
+    var legend = d.real && d.real.legend;
+    await UI.say(U.pick(['제독, 보십시오! 저것이 바로 소문으로만 듣던 ' + d.name + '입니다!', '제독…! 이야기 속에서나 듣던 ' + d.name + U.jx(d.name, '이/가') + ' 정말 눈앞에 있습니다!', '다들 멈춰! 제독, ' + d.name + '입니다. 우리가 찾아낸 겁니다!']), lead);
+    await UI.say(legend ? U.pick(['전설이 거짓이 아니었군… 모두 잘해 주었다.', '꿈을 꾸는 것만 같구나. 이 광경을 잊지 말자.']) : U.pick(['마침내 찾았구나. 먼 길을 함께 와 준 덕분이다.', '이 눈으로 직접 보게 될 줄이야… 모두 수고했다.', '세상에 이런 것이 있었다니. 빠짐없이 기록해 두자.']), me);
+    var art = bestHand('art'), craft = bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
+    if (art.lv) await UI.say(lineFor('art', art.lv, d), art.speaker);
+    if (craft.lv) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
+    if (!art.lv && !craft.lv) await UI.say(U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 모습을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '솜씨 좋은 화가나 장인이 함께였다면 짜임새까지 자세히 적어 갔을 텐데, 아쉽습니다.']), lead);
+    if (rec.k > 1.0001) {
+      var extra = Math.round(fame - fame / rec.k);
+      await UI.say('이만큼 자세한 ' + (art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록') + '이라면 유럽의 학자와 궁정도 믿지 않을 수 없겠지요. 제독의 이름이 한층 더 널리 알려질 겁니다.', lead);
+      if (extra > 0) UI.toast('현장 기록 — ' + (art.lv ? '그림 ' + art.lv + '단계' : '') + (art.lv && craft.lv ? ' · ' : '') + (craft.lv ? '세공 ' + craft.lv + '단계' : '') + ' · 명성 +' + U.num(extra) + ' 더', 'star', 4200);
+    }
+    el.classList.add('out');
+    await U.sleep(450);
+    if (el.parentNode) el.parentNode.removeChild(el);
+    return true;
   };
 
   // ---------------------------------------------------------------- resume from a loaded save

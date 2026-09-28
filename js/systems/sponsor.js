@@ -188,7 +188,7 @@
     var cutK = 1 + ((G.BALANCE && G.BALANCE.lateRepCut) || 0) * rel.lateN, cutTxt = '';
     if (cutK > 1) { pay = Math.max(100, Math.round(pay / cutK / 100) * 100); cutTxt = ' 올해는 벌써 자네에게 여러 번 사례했으니 이번에는 조금 줄이겠네.'; }
     rel.lateN++;
-    var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) * 0.9 + sp.pw * 25) * G.Disc.artBonus() * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.4 : 0.9) + sp.pw * 25) * G.Disc.artBonus());
+    var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) * 0.9 + sp.pw * 25) * G.Disc.artBonus(d) * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.4 : 0.9) + sp.pw * 25) * G.Disc.artBonus(d));
     var pr = SP.submitProof(sp, d);
     if (pr.noProof) { pay = Math.round(pay * 0.7 / 100) * 100; fame = Math.round(fame * 0.8); }
     await UI.say(SP.proofLine(pr, d, true) + (G.Disc.isLate(d.id) ? '자네가 먼저 찾았다니 놀랍군. 하지만 ' + st.rival + U.jx(st.rival, '이/가') + ' 이미 발표해 버렸으니 세상이 알아주는 공은 절반이겠지. ' : '훌륭하군! 그 공적은 내가 세상에 널리 알리겠네. ') + '약소하지만 사례로 금화 ' + U.num(pay) + '닢을 주겠네.' + cutTxt, who);
@@ -384,7 +384,7 @@
     var reward = k.reward;
     // 계약 뒤에 그림·세공에 밝은 부하가 생겼으면(또는 떠났으면) 발견물의 값어치가 달라진 만큼 사례금도 달라진다
     if (!k.circ && k.valueK) { var kNow = G.Disc.valueK(d); if (Math.abs(kNow - k.valueK) > 0.001) reward = Math.round(reward * kNow / k.valueK / 100) * 100; }
-    var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) + sp.pw * 40) * G.Disc.artBonus() * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.5 : 1) + sp.pw * 40) * G.Disc.artBonus());
+    var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) + sp.pw * 40) * G.Disc.artBonus(d) * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.5 : 1) + sp.pw * 40) * G.Disc.artBonus(d));
     if (late) { reward = Math.round(reward * 0.5); fame = Math.round(fame * 0.7); }
     // 증거: 해도·지도와 유물을 건넨다 (서적·다음 탐험으로 이어지는 물건은 돌려받기도 한다). 하나도 없으면 반신반의
     var pr = k.circ ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), noProof = pr.noProof;
