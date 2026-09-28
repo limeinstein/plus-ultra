@@ -138,40 +138,93 @@
   function rememberPick(k, label) { var m = pickStore(); if (!m) return; m[k] = label; var ks = Object.keys(m); if (ks.length > 300) delete m[ks[0]]; }
   UI.pickKey = pickKey;
 
+  function copyOpts(a, extra) {
+    var o = {}, k;
+    for (k in (a || {})) o[k] = a[k];
+    for (k in (extra || {})) o[k] = extra[k];
+    return o;
+  }
+
+  function portraitNode(who, size) {
+    if (!who || !who.portrait) return null;
+    return who.portrait instanceof HTMLCanvasElement ? who.portrait : G.Art.portraitCanvas(who.portrait, size);
+  }
+
+  /** 대화 껍데기. partner가 있는 duo만 새 구도를 쓰고, 나머지는 예전 DOM을 그대로 만든다. */
+  function dialogShell(back, opts, asking) {
+    var duo = opts.layout === 'duo' && opts.partner;
+    var rigs = [], box;
+    if (!duo) {
+      box = U.el('div', 'dlg' + (asking ? ' ask' : '') + (opts.portrait ? '' : ' noportrait'));
+      box.innerHTML = (opts.portrait ? '<div class="pframe wood"></div>' : '') + '<div class="body parch"></div>';
+      if (opts.name) {
+        var oldName = U.el('div', 'name wood', U.esc(opts.name));
+        if (!opts.portrait) oldName.style.left = '24px';
+        box.appendChild(oldName);
+      }
+      if (opts.portrait) box.querySelector('.pframe').appendChild(portraitNode(opts, 134));
+      back.appendChild(box);
+      return { box: box, destroy: function () {} };
+    }
+
+    var stage = U.el('div', 'dlg-stage duo' + (asking ? ' ask' : ''));
+    var speakerSide = opts.side === 'left' ? 'left' : 'right';
+    var otherSide = speakerSide === 'left' ? 'right' : 'left';
+    var activeSide = asking ? (opts.choiceSide || otherSide) : speakerSide;
+    function addActor(who, side) {
+      var active = side === activeSide;
+      var actor = U.el('div', 'dlg-actor ' + side + (active ? ' active' : ''));
+      var art = U.el('div', 'actor-art'); actor.appendChild(art);
+      if (G.PortraitRig) {
+        rigs.push(G.PortraitRig.mount(art, {
+          portrait: who && who.portrait, chain: who && who.portraitChain, profile: 'bust', side: side,
+          state: active ? (asking ? 'react' : 'talk') : 'listen', emotion: active ? (opts.emotion || 'neutral') : 'neutral',
+          anchors: who && who.rigAnchors, alt: who && who.name
+        }));
+      } else {
+        var p = portraitNode(who, 280); if (p) art.appendChild(p);
+      }
+      if (who && who.name) actor.appendChild(U.el('div', 'actor-name wood', U.esc(who.name)));
+      stage.appendChild(actor);
+    }
+    var left = speakerSide === 'left' ? opts : opts.partner;
+    var right = speakerSide === 'right' ? opts : opts.partner;
+    addActor(left, 'left'); addActor(right, 'right');
+    box = U.el('div', 'dlg duo' + (asking ? ' ask' : '') + ' speaker-' + speakerSide);
+    box.innerHTML = '<div class="body parch"></div>';
+    if (opts.name) box.appendChild(U.el('div', 'name wood', U.esc(opts.name)));
+    stage.appendChild(box); back.appendChild(stage);
+    return { box: box, destroy: function () { rigs.forEach(function (r) { if (r) r.destroy(); }); } };
+  }
+
+  /** 화면 위쪽에 붙여 두는 작은 쪽지 (대화가 이어지는 동안 무엇에 관한 이야기인지 보여 준다). 돌려준 함수를 부르면 사라진다 */
+  UI.pin = function (html) {
+    var el = U.el('div', 'pinnote parch', html);
+    (modalRoot || document.body).appendChild(el);
+    return function () { if (el.parentNode) el.parentNode.removeChild(el); };
+  };
+
   // ---------------------------------------------------------------- dialog (say)
-  /** opts: {name, portrait:(spec|canvas|null), lang:(level 0..3 for garble), dark:bool} */
+  /** opts: 기존 화자 필드 + {layout:'duo', partner:화자, side, emotion} */
   UI.say = function (text, opts) {
     opts = withFace(opts || {});
     var pages = Array.isArray(text) ? text.slice() : String(text).split('\f');
     return new Promise(function (resolve) {
       var back = U.el('div', 'modal-back clear catch');
-      var box = U.el('div', 'dlg' + (opts.portrait ? '' : ' noportrait'));
-      var inner = '';
-      if (opts.portrait) inner += '<div class="pframe wood"></div>';
-      inner += '<div class="body parch"></div>';
-      box.innerHTML = inner;
-      if (opts.name) {
-        var nm = U.el('div', 'name wood', U.esc(opts.name));
-        if (!opts.portrait) nm.style.left = '24px';
-        box.appendChild(nm);
-      }
-      if (opts.portrait) {
-        var pc = opts.portrait instanceof HTMLCanvasElement ? opts.portrait : G.Art.portraitCanvas(opts.portrait, 134);
-        box.querySelector('.pframe').appendChild(pc);
-      }
-      back.appendChild(box);
+      var shell = dialogShell(back, opts, false), box = shell.box;
       modalRoot.appendChild(back);
       var body = box.querySelector('.body');
       var idx = 0, finished = false;
       function show() {
-        body.innerHTML = speech(box, pages[idx], opts) + '<div class="more">▼</div>';
+        body.innerHTML = speech(box, pages[idx], opts) + '<div class="more">▼</div>'; shownAt = Date.now();
       }
+      var shownAt = 0;
       function next() {
-        if (finished) return;
+        if (finished || Date.now() - shownAt < 220) return;      // 두 번 눌러(더블클릭) 한 쪽을 건너뛰지 않게
         idx++;
         if (idx >= pages.length) { done(); } else show();
       }
-      function done() { if (finished) return; finished = true; unkey(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
+      function done() { if (finished) return; finished = true; unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
       var unkey = pushKey(function (e) {
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { next(); return true; }
         return false;
@@ -187,15 +240,12 @@
     var list = choices.map(function (o, i) { return typeof o === 'string' ? { label: o, value: i } : o; });
     return new Promise(function (resolve) {
       var back = U.el('div', 'modal-back clear');
-      var box = U.el('div', 'dlg ask' + (opts.portrait ? '' : ' noportrait'));
-      box.innerHTML = (opts.portrait ? '<div class="pframe wood"></div>' : '') + '<div class="body parch"></div>';
-      if (opts.name) { var nm = U.el('div', 'name wood', U.esc(opts.name)); if (!opts.portrait) nm.style.left = '24px'; box.appendChild(nm); }
-      if (opts.portrait) box.querySelector('.pframe').appendChild(opts.portrait instanceof HTMLCanvasElement ? opts.portrait : G.Art.portraitCanvas(opts.portrait, 134));
-      back.appendChild(box); modalRoot.appendChild(back);
+      var shell = dialogShell(back, opts, true), box = shell.box;
+      modalRoot.appendChild(back);
       var body = box.querySelector('.body');
       body.innerHTML = '<div>' + speech(box, String(text), opts) + '</div><div class="askrow"></div>';
       var row = body.querySelector('.askrow');
-      function done(v) { unkey(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
+      function done(v) { unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
       var pk = pickKey(text, list, opts), prev = lastPick(pk);
       list.forEach(function (o, i) {
         var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
@@ -211,11 +261,18 @@
     });
   };
 
-  /** sequence of speeches: [[speakerSpec, text], ...] */
-  UI.talk = async function (lines) {
+  /** sequence of speeches: [[speakerSpec, text], ...] 또는 {speaker,text,emotion} */
+  UI.talk = async function (lines, talkOpts) {
+    talkOpts = talkOpts || {};
+    var speakers = [];
+    lines.forEach(function (l) { var s = Array.isArray(l) ? l[0] : l.speaker; if (s && speakers.indexOf(s) < 0) speakers.push(s); });
     for (var i = 0; i < lines.length; i++) {
-      var l = lines[i];
-      await UI.say(l[1], { name: l[0] && l[0].name, portrait: l[0] && l[0].portrait, lang: l[0] && l[0].lang, li: l[0] && l[0].li });
+      var l = lines[i], sp = Array.isArray(l) ? l[0] : l.speaker, tx = Array.isArray(l) ? l[1] : l.text;
+      var o = copyOpts(sp, { emotion: (!Array.isArray(l) && l.emotion) || 'neutral' });
+      if (talkOpts.layout === 'duo' && speakers.length === 2) {
+        o.layout = 'duo'; o.side = speakers.indexOf(sp) === 0 ? 'left' : 'right'; o.partner = speakers[sp === speakers[0] ? 1 : 0];
+      }
+      await UI.say(tx, o);
     }
   };
 
@@ -250,7 +307,8 @@
     // 알림처럼 누를 단추가 하나뿐인 창(내용이 정적인 창): Enter·Space나 아무 데나 누르면 그 단추를 누른 것으로 — 고를 것이 있는 창은 기다린다
     //   · 창 바깥(어두운 바탕)을 누르거나 Enter → 그 단추. 창 안을 눌러도 되는 것은 내용이 글·그림뿐인 창(opts.clickAny: 알림·소식·발견·열람 결과…)
     var solo = opts.buttons && opts.buttons.length === 1 && !opts.onKey && opts.clickAny !== false ? opts.buttons[0] : null;
-    function pressSolo() { if (closed) return; if (solo.onClick) { var r = solo.onClick(api); if (r === false) return; } api.close(solo.value); }
+    var openedAt = Date.now();     // 막 연 창은 잠깐(0.4초) 누름을 받지 않는다 — 앞 창을 두 번 눌러(더블클릭) 새 창까지 넘겨 버리지 않게
+    function pressSolo() { if (closed || Date.now() - openedAt < 400) return; if (solo.onClick) { var r = solo.onClick(api); if (r === false) return; } api.close(solo.value); }
     var unkey = pushKey(function (e) {
       if (e.key === 'Escape' && opts.closable !== false) { api.close(null); return true; }
       if (solo && e.key === 'Enter' && !(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))) { pressSolo(); return true; }

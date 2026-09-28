@@ -237,19 +237,25 @@
   };
   A.portraitCanvas = function (spec, size) {
     size = size || 134;
+    // 무대 전체가 CSS로 확대되므로 논리 크기 2배만 그리면 큰 화면에서 다시 흐려진다.
+    // 현재 무대 배율과 화면 DPR을 반영하되 지나친 메모리 사용을 막아 4배에서 멈춘다.
+    var stageScale = G.Game && G.Game.scale ? G.Game.scale : 1;
+    var dpr = window.devicePixelRatio || 1;
+    var ratio = Math.max(2, Math.min(4, stageScale * dpr));
+    var px = Math.max(1, Math.round(size * ratio));
     var chain = A.portraitKeys(spec);
     if (chain && G.Img.pick(chain)) {
-      var oc = G.Img.make(chain, size * 2, size * 2, function () { var pc = A.canvas(size * 2, size * 2); A.drawPortrait(pc.getContext('2d'), size * 2, spec); return pc; }, { fy: 0.25, bg: '#1a120c' });
+      var oc = G.Img.make(chain, px, px, function () { var pc = A.canvas(px, px); A.drawPortrait(pc.getContext('2d'), px, spec); return pc; }, { fy: 0.25, bg: '#1a120c' });
       oc.style.width = size + 'px'; oc.style.height = size + 'px';
       return oc;
     }
-    var key = JSON.stringify(spec) + size;
-    var c = A.canvas(size * 2, size * 2);
+    var key = JSON.stringify(spec) + '@' + px;
+    var c = A.canvas(px, px);
     c.style.width = size + 'px'; c.style.height = size + 'px';
     var ctx = c.getContext('2d');
     if (cache[key]) { ctx.drawImage(cache[key], 0, 0); return c; }
-    A.drawPortrait(ctx, size * 2, spec);
-    var copy = A.canvas(size * 2, size * 2); copy.getContext('2d').drawImage(c, 0, 0); cache[key] = copy;
+    A.drawPortrait(ctx, px, spec);
+    var copy = A.canvas(px, px); copy.getContext('2d').drawImage(c, 0, 0); cache[key] = copy;
     return c;
   };
 })(window.G = window.G || {});

@@ -124,6 +124,57 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg .askrow .btn.prevpick { box-shadow: 0 0 0 2px #e3c68d, 0 0 10px rgba(227,198,141,.6); }
 .dlg .askrow .btn .prevtag { margin-left: 8px; font-size: 12px; padding: 1px 6px; border-radius: 8px; background: rgba(227,198,141,.85); color: #3a2710; vertical-align: 2px; }
 .dlg .garble { color: var(--ink-soft); letter-spacing: .12em; }
+/* 두 인물이 마주 보는 대화. 기존 한 사람 대화창은 그대로 둔다. */
+.dlg-stage { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.dlg-stage > * { pointer-events: auto; }
+.dlg-stage .dlg.duo { width: 1060px; min-height: 164px; }
+.dlg-stage .dlg.duo .body { padding: 26px 42px 24px; }
+.dlg-stage .dlg.duo .name { left: 24px; }
+.dlg-stage .dlg.duo.speaker-right .name { left: auto; right: 24px; }
+.dlg-stage .dlg.duo .interp { left: 24px; right: 24px; }
+.dlg-actor { position: absolute; bottom: 184px; width: 310px; height: 330px; z-index: 1; opacity: .72; filter: brightness(.72) saturate(.72); transform: translateY(12px) scale(.96); transition: opacity .22s, filter .22s, transform .22s; }
+.dlg-actor.left { left: 68px; }
+.dlg-actor.right { right: 68px; }
+.dlg-actor.active { opacity: 1; filter: brightness(1.06) saturate(1.04); transform: translateY(0) scale(1.015); }
+.dlg-actor.right .portrait-rig { transform-origin: 50% 100%; }
+.dlg-actor.left .portrait-rig { transform-origin: 50% 100%; }
+.dlg-actor .actor-art { position: absolute; inset: 0 0 24px; }
+.dlg-actor .actor-name { position: absolute; left: 50%; bottom: 4px; transform: translateX(-50%); min-width: 104px; padding: 4px 12px; text-align: center; white-space: nowrap; color: var(--cream); font-size: 15px; z-index: 5; }
+
+/* 한 장짜리 인물 그림을 머리·몸통·하체로 나눈 가벼운 2.5D 리그 */
+.portrait-rig-host { position: relative; overflow: visible; }
+.portrait-rig { position: absolute; inset: 0; overflow: visible; transform-origin: 50% 100%; }
+.portrait-rig .rig-layer, .portrait-rig .rig-fallback { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; pointer-events: none; user-select: none; image-rendering: auto; }
+.portrait-rig-bust .rig-layer { object-position: 50% 50%; }
+.portrait-rig .rig-lower { clip-path: inset(calc(var(--rig-chest) - 3%) 0 0 0); transform-origin: 50% 94%; }
+.portrait-rig .rig-torso { clip-path: inset(calc(var(--rig-neck) - 4%) 0 calc(100% - var(--rig-chest) - 4%) 0); transform-origin: 50% var(--rig-chest); }
+.portrait-rig .rig-head { clip-path: inset(0 0 calc(100% - var(--rig-neck) - 4%) 0); transform-origin: var(--rig-face-x) var(--rig-neck); }
+.portrait-rig .rig-facefx { position: absolute; inset: 0; pointer-events: none; opacity: .74; }
+.portrait-rig .rig-facefx i { position: absolute; display: block; pointer-events: none; }
+.portrait-rig .rig-facefx .eye { top: var(--rig-eye-y); width: 7%; height: 1.2%; border-top: 2px solid rgba(45,24,20,.72); border-radius: 50%; opacity: 0; transform: translate(-50%, -50%) scaleY(.15); }
+.portrait-rig .rig-facefx .eye-l { left: calc(var(--rig-face-x) - var(--rig-eye-gap)); }
+.portrait-rig .rig-facefx .eye-r { left: calc(var(--rig-face-x) + var(--rig-eye-gap)); }
+.portrait-rig .rig-facefx .mouth { left: var(--rig-face-x); top: var(--rig-mouth-y); width: 8%; height: 1.4%; border-bottom: 2px solid rgba(80,33,35,.55); border-radius: 50%; opacity: 0; transform: translate(-50%, -50%); }
+.portrait-rig.is-blink .rig-facefx .eye { opacity: .95; }
+.portrait-rig .rig-torso { animation: rig-breathe 4.6s ease-in-out infinite; }
+.portrait-rig .rig-head { animation: rig-sway 6.8s ease-in-out infinite; }
+.portrait-rig.is-talk .rig-head { animation: rig-talk-head .72s ease-in-out infinite; }
+.portrait-rig.is-talk .rig-torso { animation-duration: 2.6s; }
+.portrait-rig.is-talk .rig-facefx .mouth { opacity: .5; animation: rig-mouth .28s ease-in-out infinite alternate; }
+.portrait-rig.is-listen .rig-head { animation: rig-listen 5.4s ease-in-out infinite; }
+.portrait-rig.is-react .rig-head { animation: rig-react .5s ease-out 1; }
+.portrait-rig.emotion-happy { filter: brightness(1.04) saturate(1.07); }
+.portrait-rig.emotion-warm { filter: sepia(.04) saturate(1.04); }
+.portrait-rig.emotion-shy { filter: sepia(.08) saturate(1.03); }
+.portrait-rig.emotion-surprised .rig-head { animation: rig-react .45s ease-out 1; }
+.portrait-rig.rig-single { animation: rig-card 5.8s ease-in-out infinite; }
+@keyframes rig-breathe { 0%,100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(var(--rig-breath-y)) scaleY(var(--rig-breath-s)); } }
+@keyframes rig-sway { 0%,100% { transform: rotate(var(--rig-sway-b)) translateY(0); } 50% { transform: rotate(var(--rig-sway-a)) translateY(var(--rig-sway-y)); } }
+@keyframes rig-talk-head { 0%,100% { transform: rotate(var(--rig-talk-b)) translateY(0); } 50% { transform: rotate(var(--rig-talk-a)) translateY(var(--rig-talk-y)); } }
+@keyframes rig-mouth { from { transform: translate(-50%,-50%) scaleY(.3); } to { transform: translate(-50%,-50%) scaleY(1.35); } }
+@keyframes rig-listen { 0%,76%,100% { transform: rotate(0) translateY(0); } 82% { transform: rotate(.35deg) translateY(1px); } 89% { transform: rotate(-.12deg) translateY(0); } }
+@keyframes rig-react { 0% { transform: translateY(5px) rotate(-.8deg); } 55% { transform: translateY(-3px) rotate(.4deg); } 100% { transform: none; } }
+@keyframes rig-card { 0%,100% { transform: translateY(0) rotate(-.15deg); } 50% { transform: translateY(-2px) rotate(.18deg); } }
 /* 낯선 말 (js/ui/tongues.js): 알아듣지 못한 낱말은 그 고장 글자로, 알아들은 낱말은 한글로 도드라지게 */
 .dlg .foreign { color: #6a5638; letter-spacing: .04em; font-family: 'Palatino Linotype', 'Segoe UI', 'Segoe UI Historic', 'Nirmala UI', 'Ebrima', 'Gadugi', 'Leelawadee UI', 'Yu Gothic', 'Meiryo', 'Noto Sans', serif; opacity: .9; }
 .dlg .foreign.ltrx { unicode-bidi: bidi-override; direction: ltr; }
@@ -327,7 +378,8 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .win .tabs { margin: 0 10px 8px; }
 /* ---------------------------------------------------------------- 술집에 서 있는 여급 */
 .tavern-maid { position: absolute; left: 46px; bottom: 6px; display: flex; flex-direction: column; align-items: center; z-index: 12; cursor: pointer; }
-.tavern-maid .fig { display: block; height: 580px; width: auto; max-width: 520px; filter: drop-shadow(0 16px 24px rgba(0, 0, 0, .6)); transition: transform .18s ease; }
+.tavern-maid .fig { display: block; height: 580px; width: 520px; filter: drop-shadow(0 16px 24px rgba(0, 0, 0, .6)); transition: transform .18s ease; }
+.tavern-maid .fig > img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; }
 .tavern-maid:hover .fig { transform: translateY(-5px) scale(1.012); }
 .tavern-maid .tag {
   margin-top: -10px; white-space: nowrap; padding: 4px 14px; border-radius: 3px;
@@ -336,6 +388,10 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
   border: 1px solid rgba(184, 146, 90, .55); box-shadow: 0 3px 10px rgba(0, 0, 0, .45); opacity: .85;
 }
 .tavern-maid:hover .tag { opacity: 1; color: var(--brass-hi); border-color: var(--brass); }
+@media (prefers-reduced-motion: reduce) {
+  .portrait-rig .rig-layer, .portrait-rig.rig-single, .portrait-rig .rig-facefx .mouth { animation: none !important; }
+  .dlg-actor { transition: opacity .12s, filter .12s; }
+}
 /* ---------------------------------------------------------------- duel & poker */
 .duel { display: grid; grid-template-columns: 220px 1fr 220px; gap: 18px; align-items: start; }
 .duel .side { text-align: center; }
@@ -743,3 +799,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .tbl.supply td:first-child { white-space: normal; max-width: 240px; }
 .tbl.supply input[type=range] { width: 220px !important; vertical-align: middle; }
 .pf-body td { white-space: nowrap; }
+
+/* 화면 위 쪽지 (도서관: 이야기하는 동안 읽은 책과 얻은 단서) */
+.pinnote { position: absolute; left: 50%; top: 64px; transform: translateX(-50%); z-index: 75; max-width: 980px; padding: 10px 20px; font-size: 17px; line-height: 1.5; box-shadow: 0 6px 18px rgba(0,0,0,.5); pointer-events: none; }
+.pinnote .pn-g { margin-top: 2px; }

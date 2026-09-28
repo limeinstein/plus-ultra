@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>대화 리그 시험</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { background: #18110b; }
+  #stage { transform: none !important; left: 0 !important; top: 0 !important; }
+  #backdrop { position:absolute; inset:0; background:radial-gradient(circle at 50% 35%,#5f4329,#18110b 72%); }
+  #tools { position:absolute; z-index:120; left:18px; top:16px; display:flex; gap:8px; align-items:center; padding:8px 10px; }
+  #tools select, #tools button { font:16px var(--serif); padding:6px 10px; }
+  #sample { position:absolute; left:60px; bottom:60px; width:420px; height:700px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="backdrop"></div><div id="sample"></div><div id="ui"></div>
+  <div id="tools" class="wood"><select id="maid"></select><button data-state="idle">쉬기</button><button data-state="talk">말하기</button><button data-state="listen">듣기</button><button data-state="react">반응</button><button id="duo">2인 대화</button></div>
+</div>
+<script src="js/core/util.js"></script>
+<script src="images/manifest.js"></script>
+<script src="js/core/images.js"></script>
+<script src="js/data/base.js"></script>
+<script src="js/data/people.js"></script>
+<script src="js/data/cities.js"></script>
+<script src="js/art/paint.js"></script>
+<script src="js/art/portrait.js"></script>
+<script src="js/art/portrait_rig.js"></script>
+<script src="js/ui/icons.js"></script>
+<script src="js/ui/ui.js"></script>
+<script>
+window.onload = function () {
+  try {
+    G.Game = { scale: 1, state: { player: { name: '제독', portrait: G.Art.npcSpec('rig-player', 'sailor', 'ib') } } };
+    G.UI.init();
+    var sel = document.getElementById('maid'), host = document.getElementById('sample'), rig = null;
+    G.MAIDS.forEach(function (m) { var o=document.createElement('option'); o.value=m.id; o.textContent=m.name+' · '+G.CITY_DATA[m.city].name; sel.appendChild(o); });
+    function maid() { return G.MAID[sel.value] || G.MAIDS[0]; }
+    function speaker(m) { var c=G.CITY_DATA[m.city]; return { name:m.name, portrait:G.Art.maidSpec(m), rigId:'maid:'+m.id, lang:3, li:c.lang }; }
+    function draw(state) { if(rig)rig.destroy(); host.innerHTML=''; var m=maid(), c=G.CITY_DATA[m.city]; rig=G.PortraitRig.mount(host,{chain:G.Img.chain.maidHalf(m.id,c),profile:'half',state:state||'idle',alt:m.name}); }
+    sel.onchange=function(){draw('idle');};
+    document.querySelectorAll('[data-state]').forEach(function(b){b.onclick=function(){rig.setState(b.getAttribute('data-state'));};});
+    document.getElementById('duo').onclick=function(){var w=speaker(maid()); G.UI.say('어서 오세요. 먼 항해에서 돌아오셨군요.',Object.assign({},w,{layout:'duo',side:'right',partner:G.Game.state.player,emotion:'warm'}));};
+    draw('idle');
+    document.title='done';
+  } catch (e) { document.title='err '+e.message; console.error(e); }
+};
+</script>
+</body>
+</html>

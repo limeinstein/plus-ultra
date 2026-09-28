@@ -11,7 +11,8 @@
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
   function maidOf(c) { return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }
   T.maidOf = maidOf;
-  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, portrait: A.maidSpec(m), lang: R.lang(c.lang), li: c.lang }; };
+  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), lang: R.lang(c.lang), li: c.lang }; };
+  T.playerSpeaker = function () { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait }; };
   /** 이름 있는 여급이 없는 도시의 그 지역 여급 */
   T.servantSpeaker = function (c) {
     return { name: '여급', lang: R.lang(c.lang), li: c.lang,
@@ -42,10 +43,11 @@
     var chain = m ? G.Img.chain.maidHalf(m.id, c) : G.Img.chain.maidCityHalf(c);
     var key = G.Img.pick(chain); if (!key) return null;
     var wrap = U.el('div', 'tavern-maid');
-    var im = new Image();
-    im.className = 'fig'; im.alt = m ? m.name : '여급'; im.decoding = 'async';
-    im.src = G.Img.src(key);
-    wrap.appendChild(im);
+    var fig = U.el('div', 'fig'); wrap.appendChild(fig);
+    if (G.PortraitRig) G.PortraitRig.mount(fig, { chain: chain, profile: 'half', side: 'right', state: 'idle', alt: m ? m.name : '여급' });
+    else {
+      var im = new Image(); im.alt = m ? m.name : '여급'; im.decoding = 'async'; im.src = G.Img.src(key); fig.appendChild(im);
+    }
     wrap.appendChild(U.el('div', 'tag', m ? '여급 ' + U.esc(m.name) : '여급'));
     wrap.title = (m ? m.name : '여급') + '에게 말을 건다';
     wrap.onclick = function () { C.run(function () { return m ? T.maid(c, m) : T.servant(c); }); };
@@ -496,28 +498,36 @@
   // ---------------------------------------------------------------- barmaid
   T.maid = async function (c, m) {
     var s = S(), st = s.maids[m.id] || (s.maids[m.id] = { aff: 0, met: 0 }), who = T.maidSpeaker(m), like = G.LIKES[m.like];
+    function scene(emotion, asking) {
+      var o = {}, k; for (k in who) o[k] = who[k];
+      o.layout = 'duo'; o.side = 'right'; o.partner = T.playerSpeaker(); o.emotion = emotion || 'warm';
+      if (asking) o.choiceSide = 'left';
+      return o;
+    }
+    function say(text, emotion) { return UI.say(text, scene(emotion, false)); }
+    function ask(text, choices) { return UI.ask(text, choices, scene('warm', true)); }
     st.met++;
-    if (s.player.wife === m.id) { await UI.say('어머, 당신! 여기서 뭐 해요? 집에서 기다릴게요.', who); return; }
+    if (s.player.wife === m.id) { await say('어머, 당신! 여기서 뭐 해요? 집에서 기다릴게요.', 'happy'); return; }
     var greet = st.aff < 20 ? '어서 오세요. 처음 뵙는 분이네요.' : st.aff < 50 ? '어머, 또 오셨네요!' : st.aff < 80 ? '와 주셨군요! 기다리고 있었어요.' : '당신 얼굴을 보니 정말 기뻐요.';
-    await UI.say(greet, who);
+    await say(greet, st.aff >= 50 ? 'happy' : 'warm');
     for (;;) {
-      var v = await UI.ask(m.name + ' — 호감 ' + heart(st.aff), [
+      var v = await ask(m.name + ' — 호감 ' + heart(st.aff), [
         { label: '한잔 산다', value: 'drink' }, { label: '이야기한다', value: 'talk' }, { label: '선물한다', value: 'gift' },
-        { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }], who);
+        { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }]);
       if (!v) return;
       if (v === 'drink') {
         var pr = 10 + c.size * 5; if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다.', 'coin'); continue; }
         s.player.gold -= pr;
-        var today = U.dateNum(s.date); if (st.last === today) { await UI.say('오늘은 벌써 많이 마셨어요. 또 와 주세요.', who); continue; }
+        var today = U.dateNum(s.date); if (st.last === today) { await say('오늘은 벌써 많이 마셨어요. 또 와 주세요.', 'warm'); continue; }
         st.last = today; var gain = 2 + likeBonus(like);
         st.aff = Math.min(100, st.aff + gain);
-        await UI.say(U.pick(['고마워요! 건배!', '어머, 저한테요? 잘 마실게요.', '당신이랑 마시니까 더 맛있네요.']), who);
+        await say(U.pick(['고마워요! 건배!', '어머, 저한테요? 잘 마실게요.', '당신이랑 마시니까 더 맛있네요.']), 'happy');
       } else if (v === 'talk') {
-        if (st.aff < 30) await UI.say('저는 ' + like.name + ' 남자가 좋아요. ' + (m.like === 'generous' ? '역시 남자는 통이 커야죠.' : '그런 사람이 이상형이에요.'), who);
+        if (st.aff < 30) await say('저는 ' + like.name + ' 남자가 좋아요. ' + (m.like === 'generous' ? '역시 남자는 통이 커야죠.' : '그런 사람이 이상형이에요.'), 'warm');
         else {
           var d = U.chance(0.5) ? T.rumour(c) : null;
-          if (d) { G.Disc.addHint(d.id, 'tavern:' + c.id); await UI.say('손님들이 이런 이야기를 하더라고요. ' + d.hint, who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
-          else await UI.say(U.pick(['바다 너머에는 뭐가 있을까요? 언젠가 저도 가 보고 싶어요.', '항해 이야기 더 들려주세요!', '몸조심하세요. 바다는 무서운 곳이니까요.']), who);
+          if (d) { G.Disc.addHint(d.id, 'tavern:' + c.id); await say('손님들이 이런 이야기를 하더라고요. ' + d.hint, 'warm'); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
+          else await say(U.pick(['바다 너머에는 뭐가 있을까요? 언젠가 저도 가 보고 싶어요.', '항해 이야기 더 들려주세요!', '몸조심하세요. 바다는 무서운 곳이니까요.']), 'warm');
         }
       } else if (v === 'gift') {
         // 아직 보고·발표하지 않은 발견의 유물(증거)은 선물로 내놓지 않는다
@@ -527,14 +537,14 @@
         if (gi == null) continue;
         var it = gifts[gi]; s.player.items.splice(s.player.items.indexOf(it), 1);
         st.aff = Math.min(100, st.aff + G.ITEM[it.id].gv + likeBonus(like) + R.skill('craft'));
-        await UI.say(U.pick(['어머, 이렇게 고운 걸 저에게요? 정말 고마워요!', '예뻐라! 소중히 간직할게요.']), who);
+        await say(U.pick(['어머, 이렇게 고운 걸 저에게요? 정말 고마워요!', '예뻐라! 소중히 간직할게요.']), 'happy');
       } else if (v === 'wed') {
         if (!R.hasItem('ring')) { UI.toast('청혼하려면 약속 반지가 필요합니다.', 'ring'); continue; }
         if (s.player.wife) { UI.toast('이미 결혼했습니다.', 'ring'); continue; }
         var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?', '청혼한다', '그만둔다');
         if (!ok) continue;
         R.removeItem('ring');
-        await UI.say('...정말요? 저, 저라도 괜찮다면... 네, 기꺼이!', who);
+        await say('...정말요? 저, 저라도 괜찮다면... 네, 기꺼이!', 'shy');
         s.player.wife = m.id; st.aff = 100;
         G.State.log(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다.');
         await UI.alert(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.', '결혼');

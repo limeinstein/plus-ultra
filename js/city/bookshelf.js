@@ -256,7 +256,7 @@
       '<div class="bm">' + metaLine(b) + '</div><div class="orn low">✦</div></div>' +
       '<div class="pg r"><div class="tx">' + U.esc(b.text || b.title) + '</div></div></div>' + gain +
       (note ? '<div class="bnote">' + note + '</div>' : '');
-    return UI.window({ title: b.title, icon: 'book', width: 1000, parch: false, clickAny: true, html: html, buttons: [{ label: '책을 덮는다', value: 1, cls: 'navy' }] }).result;
+    return UI.window({ title: b.title, icon: 'book', width: 1000, parch: false, html: html, buttons: [{ label: '책을 덮는다', value: 1, cls: 'navy' }] }).result;
   }
   /** 빨간 책: 표지만 보고 까닭을 듣는다 */
   function lockedBook(b, st) {
@@ -277,14 +277,19 @@
     var first = !st.read;
     var res = readOnce(b);
     await openBook(b, res, '읽는 데 하루가 걸렸다.');
-    if (first) {
-      var t = LB.talk(b, res.got);
-      s.bookLog = s.bookLog || {};
-      s.bookLog[b.id] = { y: s.date.y, m: s.date.m, w: t.log.w, g: t.log.g };
-      await UI.talk(t.lines);
-    } else {
-      await UI.say(LB.recall(b) + (res.got.length ? ' 그때는 몰랐던 대목이 이제는 눈에 들어온다.' : ''), meSpk());
-    }
+    // 이야기하는 동안 무슨 책에서 무엇을 읽었는지 위에 붙여 둔다
+    var unpin = UI.pin('<div class="pn-t">' + G.icon('book') + ' 읽은 책 — <b>' + U.esc(b.title) + '</b> <span class="muted">(' + U.esc(b.author || '') + ')</span></div>' +
+      (res.got.length ? '<div class="pn-g">얻은 단서: ' + res.got.map(function (d) { return '<b>' + U.esc(d.name) + '</b>'; }).join(' · ') + '</div>' : '<div class="pn-g muted">새로 알게 된 단서는 없었다' + (res.known ? ' (이미 아는 이야기 ' + res.known + '곳)' : '') + '</div>'));
+    try {
+      if (first) {
+        var t = LB.talk(b, res.got);
+        s.bookLog = s.bookLog || {};
+        s.bookLog[b.id] = { y: s.date.y, m: s.date.m, w: t.log.w, g: t.log.g };
+        await UI.talk(t.lines);
+      } else {
+        await UI.say(LB.recall(b) + (res.got.length ? ' 그때는 몰랐던 대목이 이제는 눈에 들어온다.' : ''), meSpk());
+      }
+    } finally { unpin(); }
   };
 
   // ---------------------------------------------------------------- 서가 화면
