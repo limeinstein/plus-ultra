@@ -32,7 +32,8 @@
 | 건물 내부 — 도시별 | `interiors/tavern@0.jpg` | 1600×900 |
 | 후원자의 왕궁·저택 | `interiors/palace@pt_king.jpg`, `interiors/mansion@pt_behaim.jpg` | 1600×900 |
 | 동료 | `portraits/mates/동료ID.png` (예: `rocco`) | 512×512 |
-| 여급 | `portraits/maids/여급ID.png` (예: `m_lis`) | 512×512 |
+| 술집 접대부 — 대화창 얼굴 | `portraits/maids/여급ID.webp` (예: `m_lis`) | 1024×1024, 투명 배경 |
+| 술집 접대부 — 리깅 반신 | `portraits/maids/여급ID_half.webp` (예: `m_lis_half`) | 1024×1536, 투명 배경·머리부터 무릎까지 |
 | 후원자 | `portraits/sponsors/후원자ID.png`, 시대별 인물은 `_2`, `_3` … | 512×512 |
 | 경쟁자 | `portraits/rivals/이름.png` (예: `바르톨로메우 디아스.png`) | 512×512 |
 | 마을 사람 | `portraits/npc/역할.png` (예: `trader`), 문화권별 `_islam`, 도시별 `@0` | 512×512 |
