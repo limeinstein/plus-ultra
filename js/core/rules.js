@@ -51,11 +51,25 @@
       var lv = (m.sk && m.sk[id] != null ? m.sk[id] : d.sk[id]) || 0;
       if (lv && R.mateHurt(m)) lv = Math.floor(lv / 2);      // 다친 동안은 절반
       if (!lv) return;
-      var roleOK = m.role === 'first' ? G.ROLE_SKILLS.first.indexOf(id) >= 0 : m.role === 'nav' ? G.ROLE_SKILLS.nav.indexOf(id) >= 0 : m.role === 'surveyor' ? G.ROLE_SKILLS.surveyor.indexOf(id) >= 0 : false;
+      var roleOK = m.role === 'first' ? G.ROLE_SKILLS.first.indexOf(id) >= 0 : m.role === 'nav' ? G.ROLE_SKILLS.nav.indexOf(id) >= 0 : m.role === 'surveyor' ? G.ROLE_SKILLS.surveyor.indexOf(id) >= 0 : m.role === 'purser' ? G.ROLE_SKILLS.purser.indexOf(id) >= 0 : false;
       if (roleOK && lv > best) best = lv;
     });
     return best;
   };
+  /** 도서관: 데리고 있는 모든 부하(역할·배와 상관없이)와 제독의 능력을 합친다 — {lv, who: 가장 잘하는 사람 이름(제독이면 null)}.
+      아랍어를 못하는 통역뿐이어도 아랍어를 아는 다른 부하가 있으면 함께 읽는다. 다친 동료는 학문이 절반 */
+  R.langBest = function (li) {
+    var S = R.S(), best = { lv: S.player.lg[li] || 0, who: null };
+    S.mates.forEach(function (m) { var d = G.MATE[m.id]; if (!d) return; var lv = d.lg[li] || 0; if (lv > best.lv) best = { lv: lv, who: d.name }; });
+    return best;
+  };
+  R.langRead = function (li) { return R.langBest(li).lv; };
+  R.skillBest = function (id) {
+    var S = R.S(), best = { lv: S.player.sk[id] || 0, who: null };
+    S.mates.forEach(function (m) { var d = G.MATE[m.id]; if (!d) return; var lv = R.mateSkill(m, id); if (lv > best.lv) best = { lv: lv, who: d.name }; });
+    return best;
+  };
+  R.skillRead = function (id) { return R.skillBest(id).lv; };
   /** language level (admiral, 부관, 통역) */
   R.lang = function (li) {
     var S = R.S(); var best = S.player.lg[li] || 0;
@@ -210,7 +224,13 @@
     if (c === 'admiral') return R.skill(id);
     return c ? R.mateSkill(c, id) : 0;
   };
-  /** 역할 이름: 부관·항해사·측량사·통역·선장(○○호)·대기 */
+  /** 경리: 경리 자리의 동료 {m, name, acct} — 없으면 null. 다친 동안은 회계가 절반(R.mateSkill) */
+  R.purser = function () {
+    var S = R.S(), m = S && S.mates.filter(function (x) { return x.role === 'purser'; })[0];
+    if (!m || !G.MATE[m.id]) return null;
+    return { m: m, id: m.id, name: G.MATE[m.id].name, acct: R.mateSkill(m, 'acct') };
+  };
+  /** 역할 이름: 부관·항해사·측량사·통역·경리·선장(○○호)·대기 */
   R.roleName = function (m) {
     var role = typeof m === 'string' ? m : m && m.role;
     if (role === 'captain') { var sh = m && R.S().fleet.ships.filter(function (x) { return x.uid === m.ship; })[0]; return sh ? '선장 · ' + sh.name + '호' : '선장'; }

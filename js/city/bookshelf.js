@@ -13,7 +13,7 @@
   LB.shelfBooks = function (c) { return G.BOOKS.filter(function (b) { return b.libs.indexOf(c.id) >= 0; }); };
   /** 지금 언어 실력으로 읽어 낼 수 있는 대목(발견물 id) — 늘 같은 순서라 실력이 늘면 대목이 늘어난다 */
   LB.readable = function (b) {
-    var s = S(), lv = R.lang(b.lang);
+    var s = S(), lv = R.langRead(b.lang);
     var discs = b.discs.filter(function (id) { return G.DISC[id]; });
     var n = lv >= 3 ? discs.length : lv === 2 ? Math.ceil(discs.length * 0.7) : lv === 1 ? Math.ceil(discs.length * 0.35) : 0;
     var rng = U.makeRng(U.strHash(b.id + s.seed));
@@ -33,20 +33,20 @@
   LB.shelfState = function (b) {
     var s = S(), y = s.date.y, read = !!s.flags['read_' + b.id];
     if ((b.y || 0) > y) return { kind: 'lock', why: 'era', read: read, text: '아직 쓰이지 않은 책 — ' + b.y + '년 무렵에야 나온다' };
-    var lv = R.lang(b.lang), L = langNm(b);
-    if (!lv) return { kind: 'lock', why: 'lang', read: read, text: L + U.jx(L, '을/를') + ' 읽을 사람이 없다 — 제독이 배우거나, 그 말을 아는 부관·통역을 두자' };
-    if (b.sk && R.skill(b.sk) < (b.lv || 1)) {
+    var lv = R.langRead(b.lang), L = langNm(b);
+    if (!lv) return { kind: 'lock', why: 'lang', read: read, text: L + U.jx(L, '을/를') + ' 읽을 사람이 없다 — 제독이 배우거나, 그 말을 아는 부하를 데려오자' };
+    if (b.sk && R.skillRead(b.sk) < (b.lv || 1)) {
       var sk = G.SKILL_BY_ID[b.sk].name;
-      return { kind: 'lock', why: 'skill', read: read, text: sk + ' ' + (b.lv || 1) + '단계가 있어야 뜻을 푼다 — 제독이 배우거나, ' + LB.whoKnows(b.sk) + ' 자리에 그 학문을 아는 동료를 두자' };
+      return { kind: 'lock', why: 'skill', read: read, text: sk + ' ' + (b.lv || 1) + '단계가 있어야 뜻을 푼다 — 제독이 배우거나, 그 학문을 아는 부하를 데려오자' };
     }
-    var r = LB.readable(b), t = tally(r.part);
-    if (t.fresh > 0) return { kind: read ? 'again' : 'open', read: read, t: t, text: read ? '전에 읽은 책 — 이제는 새로 알아들을 대목이 있다' : '읽을 수 있다 — 새 단서가 있을지도 모른다' };
+    var r = LB.readable(b), t = tally(r.part), rd = R.langBest(b.lang).who, by = rd ? ' · ' + L + U.jx(L, '은/는') + ' ' + rd + U.jx(rd, '이/가') + ' 읽어 준다' : '';
+    if (t.fresh > 0) return { kind: read ? 'again' : 'open', read: read, t: t, text: (read ? '전에 읽은 책 — 이제는 새로 알아들을 대목이 있다' : '읽을 수 있다 — 새 단서가 있을지도 모른다') + by };
     if (read) return { kind: 'read', read: true, t: t, text: '읽은 책 — ' + recallShort(b) };
     if (t.later > 0 && t.known === 0) {
       var d = G.DISC[t.laterIds[0]], f = G.Frontier && G.Frontier.of(d);
       return { kind: 'lock', why: 'later', read: false, t: t, text: '아직 알려지지 않은 땅의 이야기뿐이다 — ' + (f ? '〈' + f.name + '〉에 관한 소문이 돌기 시작하면' : '세상을 더 알게 되면') + ' 뜻이 통한다' };
     }
-    return { kind: 'open', read: false, t: t, text: t.known ? '읽을 수 있다 — 이미 아는 이야기가 많다' : '읽을 수 있다' };
+    return { kind: 'open', read: false, t: t, text: (t.known ? '읽을 수 있다 — 이미 아는 이야기가 많다' : '읽을 수 있다') + by };
   };
 
   // ---------------------------------------------------------------- 부하들
@@ -233,7 +233,7 @@
     return { got: got, later: later, known: known, missed: r.all.length - r.part.length };
   }
   function metaLine(b) {
-    var bits = [langNm(b) + ' ' + C.langPips(R.lang(b.lang))];
+    var lb = R.langBest(b.lang), bits = [langNm(b) + ' ' + C.langPips(lb.lv) + (lb.who ? ' (' + lb.who + ')' : '')];
     bits.push(b.y > 1480 ? b.y + '년 무렵' : '옛 책');
     if (b.sk) bits.push(G.SKILL_BY_ID[b.sk].name + ' ' + (b.lv || 1));
     return bits.join(' · ');
@@ -256,14 +256,14 @@
       '<div class="bm">' + metaLine(b) + '</div><div class="orn low">✦</div></div>' +
       '<div class="pg r"><div class="tx">' + U.esc(b.text || b.title) + '</div></div></div>' + gain +
       (note ? '<div class="bnote">' + note + '</div>' : '');
-    return UI.window({ title: b.title, icon: 'book', width: 1000, parch: false, html: html, buttons: [{ label: '책을 덮는다', value: 1, cls: 'navy' }] }).result;
+    return UI.window({ title: b.title, icon: 'book', width: 1000, parch: false, clickAny: true, html: html, buttons: [{ label: '책을 덮는다', value: 1, cls: 'navy' }] }).result;
   }
   /** 빨간 책: 표지만 보고 까닭을 듣는다 */
   function lockedBook(b, st) {
     var era = st.why === 'era';
     var html = '<div class="bshut"><div class="spine lock"></div><div><div class="bt">' + U.esc(b.name) + '</div><div class="ba">' + U.esc(b.author || '지은이 모름') + (era ? '' : ' 지음') + '</div>' +
       '<div class="bm">' + metaLine(b) + '</div><div class="why">' + U.esc(st.text) + '</div></div></div>';
-    return UI.window({ title: era ? '아직 때가 이르다' : '지금은 읽을 수 없다', icon: 'book', width: 700, html: html, buttons: [{ label: '책장에 도로 꽂는다', value: 1 }] }).result;
+    return UI.window({ title: era ? '아직 때가 이르다' : '지금은 읽을 수 없다', icon: 'book', width: 700, clickAny: true, html: html, buttons: [{ label: '책장에 도로 꽂는다', value: 1 }] }).result;
   }
   /** 서가에서 책 한 권을 골랐을 때 */
   LB.pick = async function (c, b) {

@@ -19,10 +19,27 @@
   };
   /** 지금 단서를 들을 수 있는 발견물인가 */
   D.available = function (d) { return !G.Frontier || G.Frontier.available(d); };
-  D.value = function (d) { return d.val; };
-  D.fameFor = function (d) { return Math.round(d.val / 26 + d.pw * 30); };
-  /** 발견을 그림으로 남기면 값어치가 오른다 (그림 특기) */
-  D.artBonus = function () { return 1 + R.skill('art') * 0.08; };
+  /** 그림·세공이 발견물의 값어치를 올린다 — 제독이든 부하든(역할·배 상관없이) 가장 잘하는 사람의 솜씨.
+      그림: 단계마다 +6% (무엇이든 그려 남긴 기록이 값을 더한다), 세공: 보물·유적·민족(공예)은 단계마다 +7%, 그 밖은 +3%.
+      발견 명성·보고 사례금·명명 하사금·보물 노획에 쓰인다 (선금·후원자 관심은 원래 값). */
+  D.VALUE_K = { art: 0.06, craft: 0.07, craftOther: 0.03 };
+  D.valueParts = function (d) {
+    var art = R.skillRead ? R.skillRead('art') : R.skill('art'), craft = R.skillRead ? R.skillRead('craft') : R.skill('craft');
+    var hand = d && (d.cat === 'treasure' || d.cat === 'ruin' || d.cat === 'people');
+    var ka = art * D.VALUE_K.art, kc = craft * (hand ? D.VALUE_K.craft : D.VALUE_K.craftOther);
+    return { art: art, craft: craft, ka: ka, kc: kc, k: 1 + ka + kc, artWho: R.skillBest ? R.skillBest('art').who : null, craftWho: R.skillBest ? R.skillBest('craft').who : null };
+  };
+  D.valueK = function (d) { return D.valueParts(d).k; };
+  D.value = function (d) { return Math.round(d.val * D.valueK(d)); };
+  D.fameFor = function (d) { return Math.round(D.value(d) / 26 + d.pw * 30); };
+  /** 예전 그림 보너스 — 이제 그림은 D.value에 들어가므로 1 (옛 호출과 호환) */
+  D.artBonus = function () { return 1; };
+  /** 발견 카드의 「가치」 칸: 올린 값과 그 까닭 */
+  D.valueTag = function (d) {
+    var v = D.valueParts(d); if (v.k <= 1.0001) return '가치 ' + U.num(d.val);
+    var why = []; if (v.ka) why.push('그림' + (v.artWho ? '·' + v.artWho : '') + ' +' + Math.round(v.ka * 100) + '%'); if (v.kc) why.push('세공' + (v.craftWho ? '·' + v.craftWho : '') + ' +' + Math.round(v.kc * 100) + '%');
+    return '가치 ' + U.num(D.value(d)) + ' <small>(' + why.join(', ') + ')</small>';
+  };
 
   /** player discovers d (object). returns promise after showing the event */
   D.find = async function (d, how) {
@@ -45,7 +62,7 @@
     // 유물이 없는 보물·유적 발견은 예전처럼 값나가는 것을 조금 챙긴다 (세공 솜씨만큼 더)
     var loot = 0;
     if (!rel.length && (d.cat === 'treasure' || d.cat === 'ruin')) {
-      loot = Math.round(d.val * (0.05 + R.skill('craft') * 0.035) * (st.rival ? 0.5 : 1));
+      loot = Math.round(D.value(d) * (0.05 + (R.skillRead ? R.skillRead('craft') : R.skill('craft')) * 0.02) * (st.rival ? 0.5 : 1));
       if (loot > 0) s.player.gold += loot;
     }
     G.State.log(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 발견했다.');
@@ -142,7 +159,7 @@
   /** 유물의 값 (세공 솜씨가 좋으면 제값을 더 받아 낸다) */
   D.relicValue = function (it) {
     var r = G.RELIC[it.id]; if (!r) return 0;
-    return Math.round(r.price * (1 + R.skill('craft') * 0.08) / 10) * 10;
+    return Math.round(r.price * (1 + (R.skillRead ? R.skillRead('craft') : R.skill('craft')) * 0.08) / 10) * 10;
   };
   /** 서적·지도를 읽는다: 이어지는 발견의 단서를 얻는다 (없으면 가까운 고장의 발견 하나). 처음 한 번만 */
   D.readRelic = async function (it) {

@@ -65,12 +65,17 @@
     // 라임 절임은 파는 고장이면 늘 있다 (긴 항해의 목숨줄)
     return G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && it.reg.indexOf(c.region) >= 0 && (!it.from || s.date.y >= it.from); }).filter(function (it) { return rng() < 0.7 || it.id === 'lime'; });
   };
-  MK.enter = async function (c) { await C.say(vendor(), U.pick(['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
+  /** 경리가 흥정해 둔 값 (이번 방문): {ok, buy, sell} */
+  function mkDeal() { var cur = C.current(); return cur && cur.mk && cur.mk.buy ? cur.mk : null; }
+  function mkBuy(it) { var d = mkDeal(); return d ? Math.max(1, Math.round(it.price * d.buy)) : it.price; }
+  function mkSell(it) { var d = mkDeal(), v = itemValue(it); return d ? Math.round(v * d.sell) : v; }
+  MK.enter = async function (c) { var cur = C.current(); if (cur) cur.mk = null; await C.say(vendor(), U.pick(['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
   MK.sub = function () { return '무기·도구·장신구'; };
   MK.menu = function (c) {
     return [
       { label: '구입', icon: 'coin', onClick: function () { return MK.buy(c); } },
       { label: '매각', icon: 'sack', onClick: function () { return MK.sell(c); } },
+      R.purser() ? { label: '값 후려치기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공' : '실패') : '경리 ' + R.purser().name, dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
       { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } }
     ];
   };
@@ -81,13 +86,14 @@
       if (!st.length) { await C.say(vendor(), '미안하네, 지금 물건이 떨어지고 없네.'); return; }
       var v = await UI.choose('구입 아이템 선택 — 소지금 ' + U.num(s.player.gold) + '닢', st.map(function (it) {
         var ex = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : G.ITEM_KIND[it.kind];
-        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(it.price) + '닢', value: it.id, desc: it.desc, icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: it.price > s.player.gold };
+        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) !== it.price ? ' <s class="muted">' + U.num(it.price) + '</s>' : ''), value: it.id, desc: it.desc, icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: mkBuy(it) > s.player.gold };
       }), { width: 700 });
       if (!v) return;
       var it = G.ITEM[v];
       if (s.player.items.length >= R.ITEM_MAX) { await C.mate('이 이상 가질 수 없습니다!'); return; }
-      if (!(await UI.confirm(it.name + '<br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(it.price) + '닢에 사겠습니까?', '산다', '그만둔다'))) continue;
-      s.player.gold -= it.price; R.addItem(v);
+      var pr = mkBuy(it);
+      if (!(await UI.confirm(it.name + '<br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(pr) + '닢에 사겠습니까?', '산다', '그만둔다'))) continue;
+      s.player.gold -= pr; R.addItem(v);
       if ((it.kind === 'weapon' && (!s.player.equip.weapon || G.ITEM[s.player.equip.weapon].atk < it.atk)) || (it.kind === 'armor' && (!s.player.equip.armor || G.ITEM[s.player.equip.armor].def < it.def))) {
         if (await UI.confirm(it.name + U.j(it.name, '을/를').slice(it.name.length) + ' 바로 장비하겠습니까?')) s.player.equip[it.kind] = v;
       }
@@ -100,13 +106,13 @@
       var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { var d = G.ITEM[x.it.id]; return !(x.it.evidence); });
       if (!list.length) { await C.say(vendor(), '응? 도대체 무엇을 팔겠다는 건가?'); return; }
       var v = await UI.choose('매각', list.map(function (x, k) {
-        var d = G.ITEM[x.it.id] || {}, val = itemValue(x.it);
+        var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
         var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
         return { label: R.itemName(x.it) + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, icon: rl ? 'crown' : 'coin' };
       }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
       if (v == null) return;
-      var x = list[v], val = itemValue(x.it), rel = G.RELIC && G.RELIC[x.it.id];
+      var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id];
       await C.say(vendor(), rel ? U.pick(['이, 이건...! 이런 물건은 평생 한 번 볼까 말까 하지. 금화 ' + U.num(val) + '닢 내겠네.', '호오, 진귀한 물건이로군. 금화 ' + U.num(val) + '닢이면 어떤가?']) : '으~음. 금화 ' + U.num(val) + '닢이란 말이군.');
       var warn = R.isProof(x.it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[x.it.disc].name) + '」 발견의 증거입니다. 아직 보고·발표하지 않았으니, 팔면 증거가 모자라 사례금과 명성이 줄 수 있습니다.</span>' : '';
       if (!(await UI.confirm(R.itemName(x.it) + U.j(R.itemName(x.it), '을/를').slice(R.itemName(x.it).length) + ' 금화 ' + U.num(val) + '닢에 팔겠습니까?' + warn, '판다', '그만둔다'))) continue;
@@ -114,6 +120,26 @@
       s.player.items.splice(x.i, 1); s.player.gold += val;
       if (s.player.equip.weapon === id && !R.hasItem(id)) s.player.equip.weapon = null;
       if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
+    }
+  };
+  /** 경리의 흥정: 성공하면 이번 방문 동안 사는 값 −(8~22)%, 파는 값 +(6~15)% — 실패하면 상인이 언짢아 반대로 조금 */
+  MK.haggle = async function (c) {
+    var cur = C.current(), pu = R.purser();
+    if (!pu) return;
+    if (cur.mk) { await C.say(vendor(), cur.mk.ok ? '이미 밑지고 판다니까!' : '흥, 자네들하고는 더 할 말 없네.'); return; }
+    if (C.langLv(c) === 0) { await C.mate('말이 통하지 않아 흥정이 안 됩니다.'); cur.mk = { ok: false }; return; }
+    var sp = G.Scenes.mateSpeaker('purser');
+    await UI.say(U.pick(['이 칼 한 자루에 그 값이라니, 날에 금이라도 발랐소? 절반만 받으시오.', '물건은 좋소. 다만 값이 틀렸구려 — 이 도시 시세는 내가 다 적어 두었소.', '여기서 여럿 사 갈 테니 한꺼번에 셈합시다. 덤도 좀 얹고.']), sp);
+    var acct = R.skill('acct'), p = U.clamp(0.35 + acct * 0.12 + pu.acct * 0.06 + (C.langLv(c) - 1) * 0.06 + (R.stat('cha') - 50) * 0.003, 0.1, 0.92);
+    if (U.chance(p)) {
+      var disc = Math.min(0.22, 0.08 + pu.acct * 0.03 + acct * 0.01 + U.rf(0, 0.03));
+      cur.mk = { ok: true, buy: 1 - disc, sell: 1 + disc * 0.7 };
+      await C.say(vendor(), U.pick(['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.']));
+      UI.toast('흥정 성공(경리 ' + pu.name + ')! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '%', 'scales');
+    } else {
+      cur.mk = { ok: false, buy: 1.03, sell: 0.97 };
+      await C.say(vendor(), U.pick(['흥! 그 값에 팔 바에야 바다에 던지겠네.', '장사를 모르는구먼. 싫으면 관두게!']));
+      UI.toast('흥정 실패 — 상인이 언짢아 이번에는 사는 값 +3%, 파는 값 −3%', 'scales');
     }
   };
   function itemValue(it) { if (it.value) return it.value; if (G.RELIC && G.RELIC[it.id] && G.Disc.relicValue) return G.Disc.relicValue(it); var d = G.ITEM[it.id]; return d ? Math.floor((d.price || 500) * (d.rare ? 1 : 0.5)) : 100; }
@@ -181,7 +207,7 @@
   LB.whoKnows = whoKnows;
   /** 이 책을 지금 읽으면: 언어 수준, 학문 조건, 단서 상태(새 것·이미 앎·아직 이해 못 함) */
   LB.status = function (b) {
-    var s = S(), lv = R.lang(b.lang), need = b.sk ? (b.lv || 1) : 0, have = b.sk ? R.skill(b.sk) : 0;
+    var s = S(), lv = R.langRead(b.lang), need = b.sk ? (b.lv || 1) : 0, have = b.sk ? R.skillRead(b.sk) : 0;
     var fresh = 0, known = 0, later = 0;
     b.discs.forEach(function (id) {
       if (!G.DISC[id]) return;
@@ -205,21 +231,21 @@
     var v = await UI.choose('서적 선택', books.map(function (b) {
       var st = LB.status(b), skName = b.sk ? G.SKILL_BY_ID[b.sk].name : '';
       var need = b.sk ? ' · ' + skName + ' ' + st.need + (st.skOK ? ' ✓' : ' ✗') : '';
-      var desc = !st.lang ? G.LANGS[b.lang] + '를 읽을 사람이 없다 (통역·부관)' :
-        !st.skOK ? skName + U.jx(skName, '을/를') + ' 아는 사람(제독·' + whoKnows(b.sk) + ')이 있어야 뜻을 풀 수 있다' :
+      var desc = !st.lang ? G.LANGS[b.lang] + '를 읽을 사람이 없다 (제독과 부하 모두)' :
+        !st.skOK ? skName + U.jx(skName, '을/를') + ' 아는 사람(제독 또는 부하 누구든)이 있어야 뜻을 풀 수 있다' :
         st.fresh ? '새 단서가 있을지도 모른다' : st.later ? '아직은 알아듣기 어려운 이야기가 남아 있다 — 세상을 더 알게 되면 다시 읽어 보자' : st.known ? '이미 아는 이야기뿐이다' : '';
       return { label: b.title, right: G.LANGS[b.lang] + ' ' + C.langPips(st.lang) + need + (s.flags['read_' + b.id] ? ' · 읽음' : ''), value: b.id, icon: 'book', disabled: false, desc: desc };
-    }), { width: 860, text: '책을 읽는 데 하루가 걸립니다. 그 책의 말을 읽을 수 있어야 하고(제독·부관·통역), 학문서는 그 학문을 아는 사람(제독, 또는 그 학문을 맡는 자리의 동료)이 있어야 뜻을 풉니다.' });
+    }), { width: 860, text: '책을 읽는 데 하루가 걸립니다. 도서관에서는 데리고 있는 부하 모두가 함께 읽습니다 — 그 책의 말을 읽을 사람과, 학문서는 그 학문을 아는 사람이 일행 가운데 있으면 됩니다.' });
     if (!v) return;
-    var b = G.BOOKS.filter(function (x) { return x.id === v; })[0], lv = R.lang(b.lang);
+    var b = G.BOOKS.filter(function (x) { return x.id === v; })[0], lv = R.langRead(b.lang);
     await C.say(librarian(c), '오래 기다리셨습니다. 이 책입니다.');
     if (lv === 0) { await UI.say('「' + b.title + '」\n…전혀 읽을 수 없는 글자다. ' + G.LANGS[b.lang] + '를 아는 사람이 있으면 좋을 텐데.', {}); return; }
     G.Game.passDays(1); G.Game.refreshHud();
     s.flags['read_' + b.id] = 1;
     // 학문: 글자는 읽어도 뜻을 풀 사람이 없으면 단서가 되지 않는다
-    if (b.sk && R.skill(b.sk) < (b.lv || 1)) {
+    if (b.sk && R.skillRead(b.sk) < (b.lv || 1)) {
       var skn = G.SKILL_BY_ID[b.sk].name;
-      await UI.say('「' + b.title + '」' + U.jx(b.title, '을/를') + ' 펼쳤다.\n글자는 읽을 수 있지만, ' + skn + U.jx(skn, '을/를') + ' 아는 사람이 없어 무슨 뜻인지 풀지 못했다.\n(' + skn + ' ' + (b.lv || 1) + '단계 필요 — 제독이 배우거나, ' + whoKnows(b.sk) + ' 자리에 그 학문을 아는 동료를 두면 된다)', {});
+      await UI.say('「' + b.title + '」' + U.jx(b.title, '을/를') + ' 펼쳤다.\n글자는 읽을 수 있지만, ' + skn + U.jx(skn, '을/를') + ' 아는 사람이 없어 무슨 뜻인지 풀지 못했다.\n(' + skn + ' ' + (b.lv || 1) + '단계 필요 — 제독이 배우거나, 그 학문을 아는 부하를 데려오면 된다)', {});
       return;
     }
     var got = [];
@@ -241,7 +267,7 @@
       got.map(function (d) { return '<div class="hint-item"><div class="nm">' + d.name + ' <span class="tag">' + G.DISC_CATS[d.cat] + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>'; }).join('') +
       (laterTxt ? '<div class="muted" style="margin-top:10px;font-size:16px">' + laterTxt + '</div>' : '') +
       (notes.length ? '<div class="muted" style="margin-top:6px;font-size:15px">' + notes.join(' · ') + '</div>' : '');
-    await UI.window({ title: '열람', icon: 'book', width: 760, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result;
+    await UI.window({ title: '열람', icon: 'book', width: 760, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result;
   };
   LB.search = async function (c) {
     var s = S();
@@ -401,7 +427,7 @@
   var GT = { title: '성문', icon: 'gate', paint: 'gate', exitLabel: '마을로 돌아간다' };
   C.B.gate = GT;
   GT.enter = async function (c) {
-    var guard = { name: '수위', portrait: A.withImg(A.npcSpec('gate' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c) };
+    var guard = { name: '수위', portrait: A.withImg(A.npcSpec('gate' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
     var of = G.Mounts.offers(c, S().date.y).map(function (id) { return G.Mounts.get(id).name; });
     await C.say(guard, U.pick(['성 밖은 위험하다. 조심해서 다녀오게.', '어디로 가려는가? 성 밖에는 도적과 들짐승이 많다네.', '탐험이라도 떠나려는가?']) + (of.length ? ' 성문 옆 마구간에서 ' + of.join('·') + U.jx(of[of.length - 1], '을/를') + ' 구할 수 있지.' : ''));
   };

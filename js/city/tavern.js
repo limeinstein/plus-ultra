@@ -6,15 +6,15 @@
   function roleName(m) { return R.roleName(m); }
   var T = { title: '술집', icon: 'mug', paint: 'tavern', exitLabel: '술집을 나온다' };
   C.B.tavern = T;
-  G.MAX_MATES = 8;     // 기함 참모 네 자리(부관·항해사·측량사·통역) + 다른 배의 선장 네 자리
+  G.MAX_MATES = 9;     // 기함 참모 다섯 자리(부관·항해사·측량사·통역·경리) + 다른 배의 선장 네 자리
 
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
   function maidOf(c) { return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }
   T.maidOf = maidOf;
-  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, portrait: A.maidSpec(m), lang: R.lang(c.lang) }; };
+  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, portrait: A.maidSpec(m), lang: R.lang(c.lang), li: c.lang }; };
   /** 이름 있는 여급이 없는 도시의 그 지역 여급 */
   T.servantSpeaker = function (c) {
-    return { name: '여급', lang: R.lang(c.lang),
+    return { name: '여급', lang: R.lang(c.lang), li: c.lang,
       portrait: A.withImg(A.npcSpec('svc' + c.id, 'maid', c.style, 'f'), G.Img.chain.maidCity(c)) };
   };
   T.servant = async function (c) {
@@ -256,7 +256,7 @@
     return best;
   }
   T.comm = comm;
-  T.mateSpeaker = function (m) { return { name: m.name, portrait: G.Scenes.mateSpec(m.id), lang: comm(m).lv }; };
+  T.mateSpeaker = function (m) { var cm = comm(m), li = cm.li; if (li < 0) for (var k in m.lg) { if (li < 0 || m.lg[k] > m.lg[li]) li = +k; } return { name: m.name, portrait: G.Scenes.mateSpec(m.id), lang: cm.lv, li: li >= 0 ? li : null }; };
   function skillLine(m) {
     var out = [];
     for (var k in m.sk) { var d = G.SKILL_BY_ID[k]; if (d) out.push(d.name + ' ' + m.sk[k]); }
@@ -409,7 +409,7 @@
   }
 
   T.drinker = async function (c) {
-    var s = S(), who = { name: '술 취한 선원', portrait: A.withImg(A.npcSpec('drunk' + c.id + s.day, 'sailor', c.style), G.Img.chain.npc('drunk', c)), lang: C.langLv(c) };
+    var s = S(), who = { name: '술 취한 선원', portrait: A.withImg(A.npcSpec('drunk' + c.id + s.day, 'sailor', c.style), G.Img.chain.npc('drunk', c)), lang: C.langLv(c), li: c.lang };
     var v = await UI.ask('술을 마시고 있는 남자가 있다.', [{ label: '한잔 산다', value: 1 }, { label: '무시한다', value: 0 }], {});
     if (!v) return;
     var price = 6 + c.size * 3;
@@ -431,7 +431,7 @@
   };
 
   T.challenger = async function (c) {
-    var s = S(), who = { name: '거친 사내', portrait: A.withImg(A.npcSpec('brawler' + c.id + s.day, 'soldier', c.style), G.Img.chain.npc('brawler', c)), lang: C.langLv(c) };
+    var s = S(), who = { name: '거친 사내', portrait: A.withImg(A.npcSpec('brawler' + c.id + s.day, 'soldier', c.style), G.Img.chain.npc('brawler', c)), lang: C.langLv(c), li: c.lang };
     await UI.say(U.pick(['거기 자네! 마음에 안 드는군, 나랑 결투하자.', '어이, 거기 겁쟁이! 바다의 사나이라면 검을 뽑아라.', '어이, 나보다 강한 놈을 찾고 있다네. 우선 나와 결투해 주겠나?']), who);
     await C.mate(U.pick(['제독, 상대하지 않는 편이 좋습니다.', '그런 말을 듣고 가만히 있을 수 없다. 제독! 해치웁시다.']));
     var px = G.Games.proxy(), pd = px && G.MATE[px.id];
@@ -557,7 +557,7 @@
     for (;;) {
       R.tidyCaptains();
       if (!s.mates.length) { UI.toast('동료가 없습니다.', 'people'); return; }
-      var i = await UI.choose('부하편성', s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: roleName(m), value: k, icon: 'people', desc: skillLine(d) + ' — ' + d.desc }; }), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역은 한 명씩이고, 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });
+      var i = await UI.choose('부하편성', s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: roleName(m), value: k, icon: 'people', desc: skillLine(d) + ' — ' + d.desc }; }), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역·경리는 한 명씩이고(경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다), 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });
       if (i == null) return;
       var m = s.mates[i], d = G.MATE[m.id];
       var opts = G.ROLES.map(function (r) {

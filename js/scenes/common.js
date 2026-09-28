@@ -41,10 +41,10 @@
     var art = G.Img.make(chain, 720, 320, function () { return A.discoveryArt(d, 720, 320); });
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
-      '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">가치 ' + U.num(d.val) + '</span></div>' +
+      '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +
       '<div class="desc">' + U.esc(d.desc) + '</div>' +
       (fame ? '<div class="center big" style="color:#6a3a14">명성 +' + U.num(fame) + '</div>' : '') + SC.relicStrip(d, relics) + '</div>';
-    var win = UI.window({ title: fame ? '새로운 발견' : d.name, icon: 'star', width: 780, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
+    var win = UI.window({ title: fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
     win.content.querySelector('.art').appendChild(art);
     U.$$('[data-relic]', win.content).forEach(function (el) {
       var r = G.RELIC[el.dataset.relic]; if (!r || !A.relicArt) return;

@@ -32,12 +32,12 @@
     { id: 'speech', name: '웅변', desc: '후원자 설득과 입항 교섭의 성공률을 높인다.' },
     { id: 'survey', name: '측량', desc: '미발견 항구를 찾는 범위와 해도 작성 범위를 넓힌다.' },
     { id: 'hist', name: '역사학', desc: '육상의 발견물을 찾기 쉽게 하고 모조품을 가려낸다.' },
-    { id: 'acct', name: '회계', desc: '교역소에서 값을 깎는 교섭의 성공률을 높인다.' },
+    { id: 'acct', name: '회계', desc: '교역소에서 값을 깎는 교섭의 성공률을 높인다. 경리 자리에 두면 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 낸다.' },
     { id: 'ship', name: '조선기술', desc: '항해 중 자재로 배를 수리할 수 있다.' },
     { id: 'theo', name: '신학', desc: '교회와 성직자에게 신뢰를 얻고 선원의 사기를 붙든다.' },
     { id: 'sci', name: '과학', desc: '자연·생물 발견에 유리하며 괴혈병 예방에 도움이 된다.' },
-    { id: 'art', name: '그림', desc: '발견한 것을 그려 남긴다. 보고할 때 사례금과 명성이 오르고, 그림을 팔 수도 있다.' },
-    { id: 'craft', name: '세공', desc: '보물과 공예품을 알아보고 손질한다. 보물의 값어치와 장신구의 값을 높인다.' }
+    { id: 'art', name: '그림', desc: '발견한 것을 그려 남긴다. 제독이나 부하 누구든 그림에 밝으면 발견물의 가치가 오른다(명성·사례금·하사금).' },
+    { id: 'craft', name: '세공', desc: '보물과 공예품을 알아보고 손질한다. 제독이나 부하 누구든 세공에 밝으면 발견물(특히 보물·유적)의 가치와 유물 값이 오른다.' }
   ];
   G.SKILL_BY_ID = {}; G.SKILLS.forEach(function (s, i) { s.idx = i; G.SKILL_BY_ID[s.id] = s; });
   // which fleet role lets a companion's skill apply (DKJ3 style)
@@ -46,10 +46,11 @@
     first: ['sword', 'gun', 'shoot', 'med', 'ship', 'sci', 'acct', 'speech', 'theo', 'hist', 'craft'],
     nav: ['nav', 'ops'],
     surveyor: ['survey', 'hist', 'art'],
-    interp: []
+    interp: [],
+    purser: ['acct']          // 경리: 회계 — 교역소·시장·후원자 앞에서 값을 후려치고 셈을 따진다
   };
   G.ROLES = [
-    { id: 'first', name: '부관' }, { id: 'nav', name: '항해사' }, { id: 'surveyor', name: '측량사' }, { id: 'interp', name: '통역' }
+    { id: 'first', name: '부관' }, { id: 'nav', name: '항해사' }, { id: 'surveyor', name: '측량사' }, { id: 'interp', name: '통역' }, { id: 'purser', name: '경리' }
   ];
 
   G.JOBS = [

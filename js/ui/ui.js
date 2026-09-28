@@ -93,13 +93,58 @@
     });
   };
 
+  // ---------------------------------------------------------------- 낯선 말과 통역 (G.Tongues)
+  /** 대화 본문 HTML과, 통역이 있으면 대화창 아래 작은 통역 창을 붙인다. box = .dlg, raw = 원문 한 쪽 */
+  function speech(box, raw, opts) {
+    var TG = G.Tongues, sit = TG ? TG.situation(opts) : { plain: true };
+    var old = box.querySelector('.interp'); if (old) old.parentNode.removeChild(old);
+    box.style.bottom = '';
+    if (sit.plain) return U.esc(raw).replace(/\n/g, '<br>');
+    var html = TG.heard(raw, sit.own, sit.li);
+    if (sit.team > sit.own && sit.mate) {
+      var sub = U.el('div', 'interp parch');
+      var who = (sit.mate.role === 'interp' ? '통역' : '부관') + ' ' + sit.mate.name;
+      var how = sit.team >= 3 ? '' : sit.team === 2 ? ' <small>(대강 알아들음)</small>' : ' <small>(띄엄띄엄 알아들음)</small>';
+      sub.innerHTML = '<div class="ipf"></div><div class="itext"><div class="iname">' + U.esc(who) + how + '</div>' + TG.relay(raw, sit.own, sit.team) + '</div>';
+      try { var pc = G.Art.portraitCanvas(G.Scenes.mateSpec(sit.mate.id), 56); sub.querySelector('.ipf').appendChild(pc); } catch (e) { sub.querySelector('.ipf').style.display = 'none'; }
+      box.appendChild(sub);
+      box.classList.add('withinterp');
+      requestAnimationFrame(function () { box.style.bottom = (34 + sub.offsetHeight + 14) + 'px'; });
+      box.style.bottom = (34 + 96) + 'px';
+    } else box.classList.remove('withinterp');
+    return html;
+  }
+  UI.speechHtml = speech;
+  /** 낯선 말을 하는 화자는 늘 얼굴을 보인다 — 초상이 없으면 지금 도시(없으면 그 말의 고장) 양식의 마을 사람 얼굴을 만든다 */
+  var LI_STYLE = ['ib', 'ib', 'it', 'ne', 'ru', 'is', 'pe', 'cn', 'in', 'st', 'af', 'az', 'se', 'jp', 'kr'];
+  function withFace(opts) {
+    if (!opts || opts.portrait || opts.li == null || opts.noFace) return opts;
+    var S = G.Game && G.Game.state, c = S && S.loc && S.loc.mode === 'city' ? G.CITY_DATA[S.loc.city] : null;
+    var style = c && c.lang === opts.li ? c.style : LI_STYLE[opts.li] || 'ib', o = {}, k;
+    for (k in opts) o[k] = opts[k];
+    try { o.portrait = G.Art.npcSpec('spk:' + (opts.name || '') + ':' + style, 'merchant', style); } catch (e) { return opts; }
+    return o;
+  }
+  UI.withFace = withFace;
+
+  // ---------------------------------------------------------------- 지난번 선택 (골라야 하는 창은 기다리되, 지난번에 고른 것을 표시해 둔다)
+  /** 같은 물음인지: 말하는 사람 + 선택지 이름들 + 물음의 앞부분(숫자는 뺌 — 값·날짜가 달라도 같은 사건) */
+  function pickKey(text, list, opts) {
+    var q = String(text || '').replace(/[0-9,.]+/g, '#').slice(0, 40);
+    return U.strHash(((opts && (opts.name || opts.title)) || '') + '|' + q + '|' + list.map(function (o) { return String(o.label).replace(/<[^>]+>/g, '').replace(/[0-9,.]+/g, '#'); }).join('/'));
+  }
+  function pickStore() { var S = G.Game && G.Game.state; if (!S) return null; return S.lastPick || (S.lastPick = {}); }
+  function lastPick(k) { var m = pickStore(); return m ? m[k] : null; }
+  function rememberPick(k, label) { var m = pickStore(); if (!m) return; m[k] = label; var ks = Object.keys(m); if (ks.length > 300) delete m[ks[0]]; }
+  UI.pickKey = pickKey;
+
   // ---------------------------------------------------------------- dialog (say)
   /** opts: {name, portrait:(spec|canvas|null), lang:(level 0..3 for garble), dark:bool} */
   UI.say = function (text, opts) {
-    opts = opts || {};
+    opts = withFace(opts || {});
     var pages = Array.isArray(text) ? text.slice() : String(text).split('\f');
     return new Promise(function (resolve) {
-      var back = U.el('div', 'modal-back clear');
+      var back = U.el('div', 'modal-back clear catch');
       var box = U.el('div', 'dlg' + (opts.portrait ? '' : ' noportrait'));
       var inner = '';
       if (opts.portrait) inner += '<div class="pframe wood"></div>';
@@ -119,9 +164,7 @@
       var body = box.querySelector('.body');
       var idx = 0, finished = false;
       function show() {
-        var t = U.esc(pages[idx]).replace(/\n/g, '<br>');
-        if (opts.lang != null && opts.lang < 3) t = UI.garble(pages[idx], opts.lang).replace(/\n/g, '<br>');
-        body.innerHTML = t + '<div class="more">▼</div>';
+        body.innerHTML = speech(box, pages[idx], opts) + '<div class="more">▼</div>';
       }
       function next() {
         if (finished) return;
@@ -133,14 +176,14 @@
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { next(); return true; }
         return false;
       });
-      box.addEventListener('click', next);
+      back.addEventListener('click', next);       // 대화창이든 바깥이든 누르면 Enter처럼 넘어간다 (대화창 클릭은 여기로 올라온다)
       show();
     });
   };
 
   /** speech + inline choices. choices: [{label, value, dis}] | strings. returns value (null on Esc if cancel !== false) */
   UI.ask = function (text, choices, opts) {
-    opts = opts || {};
+    opts = withFace(opts || {});
     var list = choices.map(function (o, i) { return typeof o === 'string' ? { label: o, value: i } : o; });
     return new Promise(function (resolve) {
       var back = U.el('div', 'modal-back clear');
@@ -150,18 +193,18 @@
       if (opts.portrait) box.querySelector('.pframe').appendChild(opts.portrait instanceof HTMLCanvasElement ? opts.portrait : G.Art.portraitCanvas(opts.portrait, 134));
       back.appendChild(box); modalRoot.appendChild(back);
       var body = box.querySelector('.body');
-      var t = opts.lang != null && opts.lang < 3 ? UI.garble(String(text), opts.lang) : U.esc(String(text));
-      body.innerHTML = '<div>' + t.replace(/\n/g, '<br>') + '</div><div class="askrow"></div>';
+      body.innerHTML = '<div>' + speech(box, String(text), opts) + '</div><div class="askrow"></div>';
       var row = body.querySelector('.askrow');
       function done(v) { unkey(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
+      var pk = pickKey(text, list, opts), prev = lastPick(pk);
       list.forEach(function (o, i) {
-        var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : ''), (o.icon ? G.icon(o.icon) : '') + o.label);
-        b.onclick = function (e) { e.stopPropagation(); done(o.value); };
+        var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
+        b.onclick = function (e) { e.stopPropagation(); rememberPick(pk, o.label); done(o.value); };
         row.appendChild(b);
       });
       var unkey = pushKey(function (e) {
         if (e.key === 'Escape' && opts.cancel !== false) { done(opts.cancelValue != null ? opts.cancelValue : null); return true; }
-        var n = parseInt(e.key, 10); if (n >= 1 && n <= list.length && !list[n - 1].dis) { done(list[n - 1].value); return true; }
+        var n = parseInt(e.key, 10); if (n >= 1 && n <= list.length && !list[n - 1].dis) { rememberPick(pk, list[n - 1].label); done(list[n - 1].value); return true; }
         return false;
       });
       box.style.cursor = 'default';
@@ -172,7 +215,7 @@
   UI.talk = async function (lines) {
     for (var i = 0; i < lines.length; i++) {
       var l = lines[i];
-      await UI.say(l[1], { name: l[0] && l[0].name, portrait: l[0] && l[0].portrait, lang: l[0] && l[0].lang });
+      await UI.say(l[1], { name: l[0] && l[0].name, portrait: l[0] && l[0].portrait, lang: l[0] && l[0].lang, li: l[0] && l[0].li });
     }
   };
 
@@ -204,11 +247,25 @@
       if (opts.onClose) opts.onClose(v);
       resolveFn(v);
     };
+    // 알림처럼 누를 단추가 하나뿐인 창(내용이 정적인 창): Enter·Space나 아무 데나 누르면 그 단추를 누른 것으로 — 고를 것이 있는 창은 기다린다
+    //   · 창 바깥(어두운 바탕)을 누르거나 Enter → 그 단추. 창 안을 눌러도 되는 것은 내용이 글·그림뿐인 창(opts.clickAny: 알림·소식·발견·열람 결과…)
+    var solo = opts.buttons && opts.buttons.length === 1 && !opts.onKey && opts.clickAny !== false ? opts.buttons[0] : null;
+    function pressSolo() { if (closed) return; if (solo.onClick) { var r = solo.onClick(api); if (r === false) return; } api.close(solo.value); }
     var unkey = pushKey(function (e) {
       if (e.key === 'Escape' && opts.closable !== false) { api.close(null); return true; }
+      if (solo && e.key === 'Enter' && !(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))) { pressSolo(); return true; }
       if (opts.onKey) return opts.onKey(e);
       return false;
     });
+    if (solo) {
+      back.addEventListener('click', function (e) {
+        var t = e.target;
+        if (t !== back && !opts.clickAny) return;
+        if (t.closest && t.closest('button, a, input, select, textarea, .choice, .title .x')) return;
+        pressSolo();
+      });
+      if (opts.clickAny) w.style.cursor = 'pointer';
+    }
     var x = w.querySelector('.title .x'); if (x) x.onclick = function () { api.close(null); };
     if (opts.buttons) {
       var foot = w.querySelector('.foot');
@@ -246,7 +303,7 @@
   };
 
   UI.alert = function (text, title) {
-    var win = UI.window({ title: title || '알림', width: 560, html: '<div style="font-size:20px;line-height:1.6">' + text + '</div>', buttons: [{ label: '확인', value: true, cls: 'navy' }] });
+    var win = UI.window({ title: title || '알림', width: 560, clickAny: true, html: '<div style="font-size:20px;line-height:1.6">' + text + '</div>', buttons: [{ label: '확인', value: true, cls: 'navy' }] });
     return win.result;
   };
 

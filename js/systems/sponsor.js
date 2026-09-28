@@ -23,10 +23,12 @@
   var HONOR = { king: '폐하', pope: '성하', gov: '각하', noble: '각하', priest: '신부님', official: '각하', scholar: '박사님', merchant: '회장님' };
   SP.honor = function (sp) { return HONOR[sp.type] || '님'; };
   SP.speaker = function (sp) {
-    return { name: SP.holderName(sp), portrait: A.sponsorSpec(sp, SP.holderIndex(sp)), lang: SP.langLv(sp) };
+    return { name: SP.holderName(sp), portrait: A.sponsorSpec(sp, SP.holderIndex(sp)), lang: SP.langLv(sp), li: SP.langLi(sp) };
   };
   SP.langLv = function (sp) { return Math.max(R.lang(sp.lang), R.lang(G.CITY_DATA[sp.city].lang)); };
-  SP.butler = function (sp) { var c = G.CITY_DATA[sp.city]; return { name: '집사', portrait: A.withImg(A.npcSpec('butler_' + sp.id, 'keeper', c.style), G.Img.chain.npc('butler', c)), lang: SP.langLv(sp) }; };
+  /** 후원자와 나누는 말: 후원자의 말과 그 도시의 말 가운데 일행이 더 잘하는 쪽 */
+  SP.langLi = function (sp) { var a = sp.lang, b = G.CITY_DATA[sp.city].lang; return a == null ? b : b == null ? a : (R.lang(b) > R.lang(a) ? b : a); };
+  SP.butler = function (sp) { var c = G.CITY_DATA[sp.city]; return { name: '집사', portrait: A.withImg(A.npcSpec('butler_' + sp.id, 'keeper', c.style), G.Img.chain.npc('butler', c)), lang: SP.langLv(sp), li: SP.langLi(sp) }; };
   SP.fameNeed = function (sp) { return G.POWER_FAME[sp.pw] || 0; };
   SP.isRivalNation = function (sp) {
     var n = S().player.nation;
@@ -103,7 +105,7 @@
     var w = sp.wealth;
     var art = G.Disc.artBonus();     // 그림 솜씨가 좋으면 값을 더 쳐 준다
     var adv = Math.round(d.val * (0.2 + 0.055 * w) / 100) * 100;
-    var rew = Math.round(d.val * (0.62 + 0.12 * w) * art / 100) * 100;
+    var rew = Math.round(G.Disc.value(d) * (0.62 + 0.12 * w) * art / 100) * 100;   // 그림·세공은 G.Disc.value에 들어 있다
     return { advance: Math.max(400, adv), reward: Math.max(1200, rew), years: years };
   }
 
@@ -283,22 +285,26 @@
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
     var o = offerFor(sp, d);
     o.advance = Math.round(o.advance * mood / 100) * 100;
-    var asked = 0;
+    var asked = 0, pu = R.purser(), maxAsk = pu ? 3 : 2;    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
     for (;;) {
       await UI.say('모험하는 데 돈은 필요하겠지. 먼저 금화 ' + U.num(o.advance) + '닢을 주겠네. ' + o.years + '년 안에 성공하면 거기다 금화 ' + U.num(o.reward) + '닢의 사례를 약속하겠네. 이것으로 어떤가.', who);
-      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢', [{ label: '승낙한다', value: 'ok' }, { label: '교섭한다', value: 'nego', dis: asked >= 2 }, { label: '그만둔다', value: 'no' }], { name: s.player.name, portrait: s.player.portrait });
+      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢', [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], { name: s.player.name, portrait: s.player.portrait });
       if (v === 'ok') break;
       if (v === 'no' || v == null) { await UI.say('그런가. 마음이 바뀌면 다시 오게.', who); return; }
       var w = await UI.choose('무엇을 요구할까?', [{ label: '자금 증가', value: 'money', icon: 'coin' }, { label: '기간 연장', value: 'time', icon: 'hourglass' }, { label: '변경 없음', value: 'none', icon: 'check' }], { width: 420 });
       if (!w || w === 'none') continue;
       asked++;
-      var p = 0.55 + R.skill('speech') * 0.12 + (R.stat('cha') - 50) * 0.006 + rel.trust * 0.004 - (asked - 1) * 0.25;
+      if (pu) await UI.say(w === 'money' ? U.pick(['각하, 선원 급료와 보급을 셈해 보면 이 선금으로는 절반도 못 갑니다. 장부를 보시지요.', '배 수리와 식량 값이 올해 크게 올랐습니다. 선금을 조금만 더 얹어 주시면 기한 안에 반드시 해내겠습니다.'])
+        : U.pick(['뱃길과 계절풍을 따져 보면 이 기한은 빠듯합니다. 한 해만 더 주시면 선금은 그대로 두셔도 됩니다.', '각하의 돈이 헛되이 쓰이지 않도록, 서두르지 않을 시간을 조금만 더 주십시오.']), G.Scenes.mateSpeaker('purser'));
+      var p = 0.55 + R.skill('speech') * 0.12 + (R.stat('cha') - 50) * 0.006 + rel.trust * 0.004 - (asked - 1) * 0.25 + (pu ? 0.10 + pu.acct * 0.05 : 0);
       if (!U.chance(U.clamp(p, 0.05, 0.95))) {
         await UI.say(U.pick(['탐욕스러운 놈! 너 같은 녀석에게 볼일 없다. 썩 꺼져라!', '너 같이 욕심 많은 녀석에게 원조할 수 없다! 썩 꺼져라!!']), who);
         rel.trust = Math.max(0, rel.trust - 10); rel.anger = U.dateNum(U.addDays(s.date, 90));
         return;
       }
-      if (w === 'money') { o.advance = Math.round(o.advance * 1.4 / 100) * 100; o.years = Math.max(1, o.years - 1); await UI.say('뭐, 돈을 더 달라고? 흐~음, 좋다. 대신 기간은 ' + o.years + '년으로 줄이겠네. 이의 없겠지.', who); }
+      if (w === 'money' && pu) { o.advance = Math.round(o.advance * (1.35 + pu.acct * 0.05) / 100) * 100; await UI.say('허, 셈이 빈틈없군. 좋다, 선금을 ' + U.num(o.advance) + '닢으로 올리지. 기한은 그대로 ' + o.years + '년일세.', who); }
+      else if (w === 'money') { o.advance = Math.round(o.advance * 1.4 / 100) * 100; o.years = Math.max(1, o.years - 1); await UI.say('뭐, 돈을 더 달라고? 흐~음, 좋다. 대신 기간은 ' + o.years + '년으로 줄이겠네. 이의 없겠지.', who); }
+      else if (pu) { o.years += 1; o.advance = Math.round(o.advance * (pu.acct >= 2 ? 1 : 0.92) / 100) * 100; await UI.say('자네 경리 말이 옳군. 기간을 ' + o.years + '년으로 늘리지' + (pu.acct >= 2 ? '. 선금은 그대로 두겠네.' : '. 선금은 조금만 줄여 ' + U.num(o.advance) + '닢일세.'), who); }
       else { o.years += 1; o.advance = Math.round(o.advance * 0.8 / 100) * 100; await UI.say('그것도 그렇군. 기간을 ' + o.years + '년으로 늘리지. 대신 돈은 전부 ' + U.num(o.advance) + '닢이 되겠군.', who); }
     }
     // treaty warning
@@ -317,7 +323,7 @@
       }
     }
     var due = U.addDays(s.date, o.years * 365);
-    s.contract = { sponsor: sp.id, disc: d.id, advance: o.advance, reward: o.reward, due: U.dateNum(due), start: U.dateNum(s.date), circ: !!circ,
+    s.contract = { sponsor: sp.id, disc: d.id, advance: o.advance, reward: o.reward, valueK: circ ? null : G.Disc.valueK(d), due: U.dateNum(due), start: U.dateNum(s.date), circ: !!circ,
       loan: loanShip ? loanShip.uid : null, loanType: loanShip ? lt : null, loanName: loanShip ? loanShip.name : null };
     if (!circ) G.Disc.addHint(d.id, 'contract:' + sp.id);
     s.player.gold += o.advance;
@@ -374,7 +380,10 @@
       return;
     }
     var st = s.disc[k.disc] || {};
-    var reward = k.reward, fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) + sp.pw * 40) * G.Disc.artBonus() * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.5 : 1) + sp.pw * 40) * G.Disc.artBonus());
+    var reward = k.reward;
+    // 계약 뒤에 그림·세공에 밝은 부하가 생겼으면(또는 떠났으면) 발견물의 값어치가 달라진 만큼 사례금도 달라진다
+    if (!k.circ && k.valueK) { var kNow = G.Disc.valueK(d); if (Math.abs(kNow - k.valueK) > 0.001) reward = Math.round(reward * kNow / k.valueK / 100) * 100; }
+    var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) + sp.pw * 40) * G.Disc.artBonus() * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.5 : 1) + sp.pw * 40) * G.Disc.artBonus());
     if (late) { reward = Math.round(reward * 0.5); fame = Math.round(fame * 0.7); }
     // 증거: 해도·지도와 유물을 건넨다 (서적·다음 탐험으로 이어지는 물건은 돌려받기도 한다). 하나도 없으면 반신반의
     var pr = k.circ ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), noProof = pr.noProof;

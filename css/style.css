@@ -120,12 +120,31 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg.noportrait .body { padding-left: 38px; }
 .dlg .askrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .dlg .askrow .btn { font-size: 18px; min-height: 40px; }
+/* 지난번에 고른 선택지 */
+.dlg .askrow .btn.prevpick { box-shadow: 0 0 0 2px #e3c68d, 0 0 10px rgba(227,198,141,.6); }
+.dlg .askrow .btn .prevtag { margin-left: 8px; font-size: 12px; padding: 1px 6px; border-radius: 8px; background: rgba(227,198,141,.85); color: #3a2710; vertical-align: 2px; }
 .dlg .garble { color: var(--ink-soft); letter-spacing: .12em; }
+/* 낯선 말 (js/ui/tongues.js): 알아듣지 못한 낱말은 그 고장 글자로, 알아들은 낱말은 한글로 도드라지게 */
+.dlg .foreign { color: #6a5638; letter-spacing: .04em; font-family: 'Palatino Linotype', 'Segoe UI', 'Segoe UI Historic', 'Nirmala UI', 'Ebrima', 'Gadugi', 'Leelawadee UI', 'Yu Gothic', 'Meiryo', 'Noto Sans', serif; opacity: .9; }
+.dlg .foreign.ltrx { unicode-bidi: bidi-override; direction: ltr; }
+.dlg .foreign.arabic, .dlg .foreign.persian, .dlg .foreign.uyghur { font-family: 'Segoe UI', 'Tahoma', 'Noto Naskh Arabic', serif; }
+.dlg .foreign.hanzi, .dlg .foreign.idu { font-family: 'SimSun', 'MS Mincho', 'Noto Serif CJK KR', serif; letter-spacing: .02em; }
+.dlg .heard { color: #1f3b6b; font-weight: 700; }
+/* 통역 창: 대화창 아래 작게 */
+.dlg .interp { position: absolute; left: 150px; right: 40px; top: calc(100% + 12px); display: flex; gap: 10px; align-items: flex-start; padding: 8px 16px 10px 10px; font-size: 17px; line-height: 1.5; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+.dlg.noportrait .interp { left: 24px; }
+.dlg .interp .ipf canvas { position: static; display: block; width: 56px; height: 56px; border-radius: 4px; border: 2px solid rgba(90,60,30,.6); }
+.dlg .interp .itext { flex: 1; color: var(--ink); }
+.dlg .interp .iname { font-size: 14px; color: var(--brass-deep, #7a5a26); letter-spacing: .06em; margin-bottom: 2px; }
+.dlg .interp .iname small { color: var(--ink-soft); letter-spacing: 0; }
+.dlg .interp .caught { color: #1f3b6b; font-weight: 700; border-bottom: 2px solid rgba(31,59,107,.55); }
+.dlg .interp .lost { color: var(--ink-soft); letter-spacing: .1em; }
 
 /* ---------------------------------------------------------------- modal / choose */
 .modal-back { position: absolute; inset: 0; background: rgba(5,3,2,.45); z-index: 70; display: flex; align-items: center; justify-content: center; pointer-events: auto; }
 .modal-back.clear { background: transparent; pointer-events: none; }
 .modal-back.clear > * { pointer-events: auto; }
+.modal-back.clear.catch { pointer-events: auto; cursor: pointer; }   /* 대화 중에는 화면 어디를 눌러도 다음으로 (아래 장면에 클릭이 새지 않게) */
 .win { min-width: 380px; max-width: 1400px; max-height: 820px; display: flex; flex-direction: column; }
 .win .title { padding: 12px 22px; font-size: 22px; color: var(--brass-hi); letter-spacing: .06em; display: flex; align-items: center; gap: 10px; }
 .win .title .x { margin-left: auto; cursor: pointer; font-size: 22px; color: var(--cream-dim); padding: 0 6px; }

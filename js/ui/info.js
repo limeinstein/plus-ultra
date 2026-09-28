@@ -126,7 +126,7 @@
   PAGES.mates = function (el) {
     var s = S();
     if (!s.mates.length) { el.innerHTML = '<div class="muted">동료가 없습니다. 술집에서 동료를 찾아보십시오.</div>'; return; }
-    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」이나 항구의 「함대편성 → 선장 임명」에서 바꿉니다.</div><div class="mates"></div>';
+    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」이나 항구의 「함대편성 → 선장 임명」에서 바꿉니다.</div><div class="mates"></div>';
     var box2 = el.querySelector('.mates');
     R.tidyCaptains();
     s.mates.forEach(function (m) {

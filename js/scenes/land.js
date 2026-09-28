@@ -317,7 +317,7 @@
   async function encounter(terr) {
     var s = S(), l = s.loc, r = U.rand();
     if (r < 0.35) {
-      var who = { name: '원주민', portrait: A.withImg(A.npcSpec('native' + Math.floor(l.lon) + Math.floor(l.lat), 'native', l.lon < -30 ? 'az' : 'af'), G.Img.chain.npc('native')), lang: 1 };
+      var who = { name: '원주민', portrait: A.withImg(A.npcSpec('native' + Math.floor(l.lon) + Math.floor(l.lat), 'native', l.lon < -30 ? 'az' : 'af'), G.Img.chain.npc('native')), lang: 3, li: l.lon < -30 ? 11 : l.lon > 90 ? 12 : 10, minLv: 1 };
       var v = await UI.ask('원주민 무리를 만났다. 이쪽을 경계하고 있다.', [{ label: '선물을 준다', value: 'gift' }, { label: '말을 건다', value: 'talk' }, { label: '물건을 바꾼다', value: 'trade' }, { label: '지나간다', value: null }], who);
       if (v === 'trade') { await nativeTrade(who); refreshHud(); return; }
       if (v === 'gift') { await nativeGift(who); refreshHud(); return; }

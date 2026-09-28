@@ -92,7 +92,7 @@
 
   // ---------------------------------------------------------------- 발견한 곳에 이름을 붙인다
   N.fameFor = function (d) { return 150 + d.pw * 80; };
-  N.goldFor = function (d) { return Math.round(d.val * 0.5 / 100) * 100; };
+  N.goldFor = function (d) { return Math.round((G.Disc.value ? G.Disc.value(d) : d.val) * 0.5 / 100) * 100; };
   /** 발견한 직후 (discovery.js) */
   N.offer = async function (d) {
     var s = S(), nm = G.NAMEABLE[d.id]; if (!nm) return;

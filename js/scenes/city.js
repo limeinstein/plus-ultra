@@ -58,10 +58,10 @@
   /** a townsperson speaker for this city */
   C.npc = function (id, title) {
     var c = C.city();
-    return { name: title, portrait: A.townSpec(id, c), lang: C.langLv(c) };
+    return { name: title, portrait: A.townSpec(id, c), lang: C.langLv(c), li: c.lang };
   };
   C.say = function (who, text) { return UI.say(text, who); };
-  C.ask = function (who, text, choices, opts) { opts = opts || {}; return UI.ask(text, choices, { name: who && who.name, portrait: who && who.portrait, lang: opts.plain ? 3 : who && who.lang, cancel: opts.cancel }); };
+  C.ask = function (who, text, choices, opts) { opts = opts || {}; return UI.ask(text, choices, { name: who && who.name, portrait: who && who.portrait, lang: opts.plain ? 3 : who && who.lang, li: opts.plain ? null : who && who.li, minLv: who && who.minLv, cancel: opts.cancel }); };
   C.me = function (text) { var p = S().player; return UI.say(text, { name: p.name, portrait: p.portrait }); };
   C.mate = function (text, role) { return UI.say(text, G.Scenes.mateSpeaker(role || 'first')); };
   C.mateAsk = function (text, choices, role) { var sp = G.Scenes.mateSpeaker(role || 'first'); return UI.ask(text, choices, sp); };
@@ -177,7 +177,7 @@
 
   C.news = async function (list) {
     var html = '<div style="font-size:19px;line-height:1.7">' + list.map(function (m) { return '<div class="flex" style="align-items:flex-start;gap:10px;margin:6px 0">' + G.icon(m.icon || 'scroll') + '<div>' + U.esc(m.text) + '</div></div>'; }).join('') + '</div>';
-    await UI.window({ title: '세상의 소식', icon: 'scroll', width: 720, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result;
+    await UI.window({ title: '세상의 소식', icon: 'scroll', width: 720, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result;
   };
 
   // ---------------------------------------------------------------- main town view
@@ -402,7 +402,7 @@
   C.handleEntry = async function (c) {
     var chk = C.entryCheck(c); if (!chk) return true;
     var s = S();
-    var guard = { name: c.name + ' 수비병', portrait: A.withImg(A.npcSpec('guard' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c) };
+    var guard = { name: c.name + ' 수비병', portrait: A.withImg(A.npcSpec('guard' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
     await UI.say(chk.text, guard);
     for (;;) {
       var opts = [];
