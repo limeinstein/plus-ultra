@@ -149,10 +149,21 @@ def main():
         # 올릴 때 쓸 목록: 새 묶음 파일, 지난번에 '올린' 묶음 가운데 이제는 없는 것(아티팩트에서 지울 것)
         # 올린 뒤 python tools/bundle.py --mark-published 로 '올린 목록'을 새로 적는다
         new = [rel for rel, _ in packs]
+        # 배경 음악은 페이지에 넣지 않고 music/*.mp3 파일 그대로 아티팩트에 올린다 (한 번에 64MB 한도 — 그림 묶음과 따로 올려도 된다)
+        music = []
+        mdir = os.path.join(pages.ROOT, 'music')
+        if os.path.isdir(mdir):
+            import shutil
+            os.makedirs(os.path.join(out, 'music'), exist_ok=True)
+            for fn in sorted(os.listdir(mdir)):
+                if fn.lower().endswith(('.mp3', '.ogg', '.m4a')):
+                    shutil.copy2(os.path.join(mdir, fn), os.path.join(out, 'music', fn))
+                    music.append('music/' + fn)
+            print('배경 음악 %d곡: %s' % (len(music), pages.human(sum(os.path.getsize(os.path.join(out, m)) for m in music))))
         published = old.get('published', [])
         removed = [rel for rel in published if rel not in new]
         with open(pub_path, 'w', encoding='utf-8') as f:
-            json.dump({'pages': ['game.html', 'catalog.html'], 'packs': new, 'published': published, 'removed': removed, 'bytes': total}, f, ensure_ascii=False, indent=1)
+            json.dump({'pages': ['game.html', 'catalog.html'], 'packs': new, 'music': music, 'published': published, 'removed': removed, 'bytes': total}, f, ensure_ascii=False, indent=1)
         print('올릴 파일 목록: ' + os.path.relpath(pub_path, pages.ROOT) if pub_path.startswith(pages.ROOT) else '올릴 파일 목록: ' + pub_path)
 
 

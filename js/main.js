@@ -178,6 +178,7 @@
     if (S.date.m !== prev.m) out = out.concat(G.World.newMonth());
     if (S.date.y !== prev.y) out = out.concat(G.World.newYear());
     out = out.concat(G.World.daily());
+    if (G.Audio && G.Audio.daily) G.Audio.daily();   // 바다·뭍에서 지역이 바뀌면 음악도
     if (G.Quest) out = out.concat(G.Quest.daily());
     Game.checkTitle();
     return out;
