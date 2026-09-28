@@ -45,6 +45,7 @@
     S.fleet.crew = Math.min(ship.crewMax, ship.crewMin + 8);
     S.fleet.food = Math.ceil(R.dailyUse(S.fleet.crew) * 20);
     S.fleet.water = Math.ceil(R.dailyUse(S.fleet.crew) * 20);
+    S.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;     // 자재(수리용 목재·밧줄·돛천) — 바다 위 수리에 쓴다
     S.fleet.cargo = {};
     // starting mate
     S.mates.push({ id: 'rocco', role: 'first', joined: 0, loyal: 80 });

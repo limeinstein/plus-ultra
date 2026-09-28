@@ -25,6 +25,7 @@
       { label: '매각', icon: 'sack', sub: R.cargoQty() ? R.cargoQty() + '통' : '', onClick: function () { return T.sell(c); } },
       { label: '투자', icon: 'seal', sub: lv ? '출자 ' + lv + '등급' + (div >= 1 ? ' · 배당 ' + U.num(div) + '닢' : '') : '', onClick: function () { return T.invest(c); } },
       { label: '회화', icon: 'people', onClick: function () { return T.talk(c); } },
+      { label: '시세', icon: 'chart', sub: R.market(c.id).ev ? R.market(c.id).ev : '품목 갈래별 값', onClick: function () { return T.quotes(c); } },
       { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : R.purser() ? '경리 ' + R.purser().name : '', dim: !!h, onClick: function () { return T.haggle(c); } },
       debts.length ? { label: '빚을 받으러 간다', icon: 'scroll', sub: debts[0].who, onClick: function () { return T.debt(c, debts[0]); } } : null
     ];
@@ -36,9 +37,10 @@
     var ag = b.age;
     return U.num(b.price) + ' <small class="muted">' + G.CITY_DATA[b.city].name + (ag > 60 ? ' · ' + ag + '일 전' : '') + '</small>';
   }
-  function hag() { var cur = C.current(); return cur && cur.haggle && cur.haggle.buy ? cur.haggle : null; }   // 성공(싸게) 또는 경리가 밀어붙이다 실패(비싸게)
-  function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(); return h ? Math.max(1, Math.round(p * h.buy)) : p; }
-  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(); return h ? Math.round(p * h.sell) : p; }
+  function hag() { var cur = C.current(); return cur && cur.haggle && cur.haggle.ok && cur.haggle.buy ? cur.haggle : null; }   // 값 깎기에 성공했을 때만
+  // 값 깎기는 사는 값을 올리거나 파는 값을 내리는 일이 없다 (예전: 실패 벌칙 ×1.03이 「후려쳤더니 값이 오른」 것처럼 보였다)
+  function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(); return h ? Math.max(1, Math.round(p * Math.min(1, h.buy))) : p; }
+  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(); return h ? Math.round(p * Math.max(1, h.sell)) : p; }
   T.buyP = buyP; T.sellP = sellP;
 
   // ---------------------------------------------------------------- buy
@@ -55,7 +57,7 @@
       var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, R.free()) + '</b>통 · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
         '<table class="tbl"><tr><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table>' +
         '<div class="muted" style="margin-top:6px;font-size:14px">매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다.</div>' +
-        (hag() ? (hag().ok ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 싸게 살 수 있습니다.</div>' : '<div class="warn-text" style="margin-top:8px">주인이 언짢아해 이번에는 값을 더 받습니다.</div>') : '');
+        (hag() ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 ' + Math.round((1 - hag().buy) * 100) + '% 싸게 살 수 있습니다.</div>' : '');
       var picked = null;
       var win = UI.window({ title: '구입 — ' + c.name, icon: 'coin', width: 1040, html: html, buttons: [{ label: '돌아간다', value: null }],
         onBuild: function (el, w) { U.$$('tr.click', el).forEach(function (tr) { tr.onclick = function () { picked = tr.dataset.id; w.close('pick'); }; }); } });
@@ -270,6 +272,40 @@
     }
   };
 
+  // ---------------------------------------------------------------- 시세 (대항해시대 2·3의 시세표)
+  /** 품목 갈래마다 이 도시의 시세(보통 = 100%)와 스무 날 전보다 오르내림, 시장 사건, 시장 물건 값, 시세 수첩에 적힌 다른 도시 */
+  function idxCell(v, prev) {
+    var col = v >= 115 ? '#a3321e' : v >= 105 ? '#b8662a' : v <= 85 ? '#1f6b3a' : v <= 95 ? '#3d7a4a' : '#4a3b2c';
+    var arrow = prev == null ? '' : v - prev >= 3 ? ' <small style="color:#a3321e">▲</small>' : prev - v >= 3 ? ' <small style="color:#1f6b3a">▼</small>' : ' <small class="muted">―</small>';
+    return '<span style="color:' + col + ';font-weight:700">' + v + '%</span>' + arrow;
+  }
+  function bar(v) { var w = Math.max(4, Math.min(100, (v - 60) * 1.25)); return '<span class="qbar"><span style="width:' + w + '%;background:' + (v >= 105 ? '#b8662a' : v <= 95 ? '#3d7a4a' : '#8a7a5a') + '"></span></span>'; }
+  T.quoteTable = function (c) {
+    var s = S(), m = R.market(c.id), cats = Object.keys(G.GOOD_CATS);
+    var here = cats.map(function (k) {
+      var v = Math.round(R.catIndex(c, k) * 100), was = Math.round(R.drift(c.id, k, s.day - 20) * 100 * (R.catIndex(c, k) / R.drift(c.id, k)));
+      var ours = G.GOODS.filter(function (g) { return g.cat === k && R.sells(c, g.id); }).map(function (g) { return g.name; });
+      return '<tr><td><b>' + G.GOOD_CATS[k] + '</b>' + (ours.length ? '<div class="muted" style="font-size:12px">이 도시 산물: ' + ours.slice(0, 3).join('·') + (ours.length > 3 ? ' 외' : '') + '</div>' : '') + '</td><td>' + bar(v) + '</td><td class="num">' + idxCell(v, was) + '</td></tr>';
+    }).join('');
+    var items = Object.keys(R.ITEM_CATS).map(function (kind) {
+      var v = Math.round(U.sum(R.ITEM_CATS[kind], function (k) { return R.catIndex(c, k); }) / R.ITEM_CATS[kind].length * 100);
+      return '<span class="chip">' + G.ITEM_KIND[kind] + ' ' + idxCell(v) + '</span>';
+    }).join(' ');
+    var others = G.Ledger ? G.Ledger.quoteRows(c.id, 8) : [];
+    var otherHtml = others.length ? '<table class="tbl quotes" style="margin-top:6px"><tr><th>도시</th>' + cats.map(function (k) { return '<th class="num" style="font-size:12px">' + G.GOOD_CATS[k] + '</th>'; }).join('') + '</tr>' +
+      others.map(function (o) { return '<tr><td>' + G.CITY_DATA[o.city].name + '<div class="muted" style="font-size:11px">' + (o.age ? o.age + '일 전' : '오늘') + (o.ev ? ' · ' + o.ev : '') + '</div></td>' + cats.map(function (k) { return '<td class="num" style="font-size:13px">' + idxCell(o.ci[k]) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>'
+      : '<div class="muted">아직 다른 도시의 시세를 적어 둔 것이 없습니다. 교역소에 들를 때마다 시세 수첩에 적힙니다.</div>';
+    return '<div style="display:flex;gap:22px;align-items:flex-start"><div style="flex:0 0 440px">' +
+      '<div class="muted" style="font-size:15px;margin-bottom:6px">100% = 보통 값. 시세는 도시마다 품목 갈래별로 천천히 오르내리고, 시장 사건(풍작·기근·전쟁·축제·호경기…)이 겹칩니다. 화살표는 스무 날 전과 견준 것.</div>' +
+      (m.ev ? '<div class="plan-note" style="margin-bottom:6px"><b>' + m.ev + '</b> — 이 도시에 일이 벌어져 값이 크게 흔들리고 있습니다 (' + Math.max(0, m.evEnd - s.day) + '일쯤 더)</div>' : '') +
+      '<table class="tbl quotes"><tr><th>갈래</th><th></th><th class="num">시세</th></tr>' + here + '</table>' +
+      '<div style="margin-top:8px;font-size:15px">시장 물건 값: ' + items + '</div></div>' +
+      '<div style="flex:1;min-width:0"><div style="font-weight:700;margin-bottom:2px">다른 도시 (시세 수첩)</div>' + otherHtml + '</div></div>';
+  };
+  T.quotes = async function (c) {
+    await UI.window({ title: c.name + ' 시세', icon: 'chart', width: 1360, html: T.quoteTable(c), buttons: [{ label: '닫는다', value: 1, cls: 'navy' }] }).result;
+  };
+
   // ---------------------------------------------------------------- haggle
   /** 값 깎기. 경리(R.purser)가 있으면 경리가 나서서 값을 후려친다 — 성공률·깎는 폭이 커지고, 한 번 거절당해도 한 번 더 밀어붙일 수 있다.
       결과는 이번 방문 동안 사는 값 ×buy, 파는 값 ×sell (cur.haggle) */
@@ -289,11 +325,11 @@
     var ok = U.chance(o.p);
     if (!ok && pu) {
       await C.say(k, U.pick(['허, 그 값에는 못 주네.', '어림없는 소리 말게.']));
-      var again = await UI.ask('경리가 한 번 더 밀어붙일까요? (실패하면 주인이 언짢아합니다)', [{ label: '후려친다', value: 1 }, { label: '그만둔다', value: 0 }], puSp);
+      var again = await UI.ask('경리가 한 번 더 밀어붙일까요?', [{ label: '후려친다', value: 1 }, { label: '그만둔다', value: 0 }], puSp);
       if (again) {
         await UI.say(U.pick(['그럼 이 장부를 보시오. 이 항구에서 이 값에 판 날이 한 번도 없소.', '좋소, 우리는 오늘 여기서 사지 않겠소. …정말 이 값이 마지막이오?']), puSp);
         ok = U.chance(o.p * 0.6);
-        if (!ok) { cur.haggle = { ok: false, buy: 1.03, sell: 0.97 }; await C.say(k, '자네들 같은 손님은 처음 보네! 오늘은 값을 더 받아야겠어.'); UI.toast('주인이 언짢아했다 — 이번에는 사는 값 +3%, 파는 값 −3%', 'scales'); return; }
+        if (!ok) { cur.haggle = { ok: false }; await C.say(k, '자네들 같은 손님은 처음 보네! 그 값에는 절대 못 주네.'); UI.toast('값 후려치기 실패 — 값은 그대로입니다.', 'scales'); return; }
         o.disc += 0.02;
       }
     }

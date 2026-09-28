@@ -138,14 +138,28 @@
   R.shipCargoCap = function (s) { return Math.max(0, Math.floor(s.cap - R.gunLoad(s))); };
   R.fleetCap = function () { return U.sum(R.S().fleet.ships, R.shipCargoCap); };
   R.cargoQty = function () { var c = R.S().fleet.cargo, n = 0; for (var k in c) n += c[k].q; return n; };
-  R.used = function () { var f = R.S().fleet; return R.cargoQty() + Math.ceil(f.food) + Math.ceil(f.water) + (G.Quest ? G.Quest.load() : 0); };
+  R.used = function () { var f = R.S().fleet; return R.cargoQty() + Math.ceil(f.food) + Math.ceil(f.water) + Math.ceil(f.mat || 0) + (G.Quest ? G.Quest.load() : 0); };
   R.free = function () { return R.fleetCap() - R.used(); };
   R.crewMin = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMin; }); };
   R.crewMax = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMax; }); };
   R.maxKinds = function () { return 3 + R.S().fleet.ships.length * 2; };
-  R.dailyUse = function (crew) { return Math.max(0.5, (crew == null ? R.S().fleet.crew : crew) * 0.04); };
-  R.daysOfFood = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor(f.food / R.dailyUse() + 1e-6) : 999; };
-  R.daysOfWater = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor(f.water / R.dailyUse() + 1e-6) : 999; };
+  R.dailyUse = function (crew) { var k = (G.BALANCE && G.BALANCE.ration) || 0.025; return Math.max(0.4, (crew == null ? R.S().fleet.crew : crew) * k); };
+  /** 교역품 가운데 먹고 마실 수 있는 것: 식량이 떨어지면 곡식·어육·고기·유제품을, 물이 떨어지면 맥주·포도주를 먹고 마신다
+      (상하기 쉬운 것부터). 1통 = 식량·물 1통 */
+  R.PROVISION = { food: ['fish', 'beef', 'dairy', 'potato', 'maize', 'wheat', 'rice', 'beans'], water: ['beer', 'wine'] };
+  R.provisionCargo = function (kind) { var c = R.S().fleet.cargo; return U.sum(R.PROVISION[kind], function (id) { return c[id] ? c[id].q : 0; }); };
+  /** 교역품에서 need통까지 덜어 먹는다 — 덜어 낸 양을 돌려준다 */
+  R.eatCargo = function (kind, need) {
+    var c = R.S().fleet.cargo, got = 0;
+    R.PROVISION[kind].forEach(function (id) {
+      if (got >= need || !c[id]) return;
+      var take = Math.min(c[id].q, Math.ceil(need - got));
+      c[id].q -= take; got += take; if (c[id].q <= 0) delete c[id];
+    });
+    return got;
+  };
+  R.daysOfFood = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.food + R.provisionCargo('food')) / R.dailyUse() + 1e-6) : 999; };
+  R.daysOfWater = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.water + R.provisionCargo('water')) / R.dailyUse() + 1e-6) : 999; };
   R.shipPrice = function (typeId) { return G.SHIP[typeId].price; };
   R.shipValue = function (s) {
     var t = G.SHIP[s.type]; var v = t.price * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
@@ -403,6 +417,23 @@
     '노동력부족': { cats: { craft: 1.3, cloth: 1.25 } }
   };
   R.MARKET_EVENTS = EVENTS;
+  /** 시세의 출렁임 (대항해시대 2·3처럼 도시마다 품목 갈래의 값이 천천히 오르내린다): 도시·갈래마다 정해진 주기와 폭의 물결 두 개 */
+  R.drift = function (cityId, cat, day) {
+    var S = R.S(), B = G.BALANCE || {}, A = B.driftAmp || [0.08, 0.15], P = B.driftPeriod || [70, 200];
+    var h = U.strHash('drift:' + cityId + ':' + cat) >>> 0, d = day == null ? S.day : day;
+    var per = P[0] + (h % 1000) / 1000 * (P[1] - P[0]), ph = ((h >>> 10) % 628) / 100, amp = A[0] + ((h >>> 20) % 100) / 100 * (A[1] - A[0]);
+    return 1 + amp * 0.8 * Math.sin(6.2832 * d / per + ph) + amp * 0.2 * Math.sin(6.2832 * d / (per * 0.37) + ph * 1.7);
+  };
+  function eventCat(m, cat) { if (!m.ev) return 1; var e = EVENTS[m.ev]; if (!e) return 1; return (e.all || 1) * (e.cats && e.cats[cat] || 1); }
+  /** 이 도시의 품목 갈래 시세 (1 = 보통): 출렁임 × 시장 사건 */
+  R.catIndex = function (c, cat, day) { return R.drift(c.id, cat, day) * (day == null ? eventCat(R.market(c.id), cat) : 1); };
+  /** 시장 물건(무기·방어구·도구·선물)이 따르는 교역품 갈래 */
+  R.ITEM_CATS = { weapon: ['arms'], armor: ['arms', 'metal'], tool: ['misc', 'craft'], gift: ['gem', 'lux', 'craft'] };
+  R.itemMult = function (c, item) {
+    var d = G.ITEM[item.id] || item, cats = R.ITEM_CATS[d.kind];
+    if (!c || !cats || d.rare || (G.RELIC && G.RELIC[item.id])) return 1;
+    return U.sum(cats, function (k) { return R.catIndex(c, k); }) / cats.length;
+  };
   function eventMult(m, g) {
     if (!m.ev) return 1; var e = EVENTS[m.ev]; if (!e) return 1;
     var v = e.all || 1;
@@ -414,7 +445,7 @@
   /** price the city asks when you buy */
   R.buyPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
-    var p = g.p * 0.62 * (1 + st.dep * 0.9) * eventMult(m, g) * R.investBuyMult(c.id);
+    var p = g.p * 0.62 * (1 + st.dep * 0.9) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
     return Math.max(1, Math.round(p));
   };
@@ -422,7 +453,7 @@
   R.sellPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var base = R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
-    var p = base * Math.exp(-st.sat * 0.55) * eventMult(m, g) * R.investSellMult(c.id);
+    var p = base * Math.exp(-st.sat * 0.55) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자
@@ -484,6 +515,9 @@
 
   // ---------------------------------------------------------------- misc formulas
   R.hireCost = function (c) { return Math.round((c.region <= 2 ? 12 : 18) * (1 + c.size * 0.1)); };
+  /** 물·자재 한 통 값 */
+  R.waterCost = function (c) { return Math.max(1, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.waterPrice) || 0.5))); };
+  R.matCost = function (c) { return Math.max(2, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.matPrice) || 3) * (R.facilities(c).shipyard ? 0.85 : 1) * R.catIndex(c, 'misc'))); };
   R.supplyCost = function (c) { return Math.max(1, Math.round((c.region <= 2 ? 2 : 3) * (1 - 0.06 * R.investLv(c.id)))); }; // per 통
   R.innCost = function (c) { return 8 + c.size * 6; };
   R.surveyRange = function () { return [0.9, 1.4, 1.9, 2.6][R.skill('survey')] + (G.Ships && G.Ships.fleetHas('scout') ? 0.4 : 0); };

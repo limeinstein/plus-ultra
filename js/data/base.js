@@ -204,7 +204,15 @@
     // 해적선 1척 전리품 기준(금화, 짐칸 200 기준), 나포선을 그 자리에서 팔 때 값의 비율 (battle.js)
     pirateLoot: 1400, prizeSale: 0.8,
     // 후원자 신뢰의 상한 (sponsor.js, errand.js)
-    trustMax: 100
+    trustMax: 100,
+    // 보급: 선원 한 사람이 하루에 먹고 마시는 양(통) — 식량·물 따로 (예전 0.04 → 0.025: 같은 짐칸으로 약 1.6배 오래)
+    ration: 0.025,
+    // 물은 식량보다 싸다 (보급값 × waterPrice). 자재(수리용 목재·밧줄·돛천): 한 통 값 = 보급값 × matPrice
+    waterPrice: 0.5, matPrice: 3,
+    // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작
+    matPerHp: 0.4, matStart: 10,
+    // 시세의 출렁임: 도시·품목 갈래마다 천천히 오르내린다 (최대 ± driftAmp, 주기 driftPeriod[0]~[1]일)
+    driftAmp: [0.08, 0.15], driftPeriod: [70, 200]
   };
 
   // 계절풍 바다 (바람 모델 R.wind와 안내 G.Monsoon이 함께 쓴다)

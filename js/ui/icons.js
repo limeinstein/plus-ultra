@@ -23,6 +23,7 @@
     mosque: '<path d="M12 4c3 1.5 5 3.8 5 6.5H7C7 7.8 9 5.5 12 4z"/><path d="M12 2v2"/><path d="M6 21v-10.5h12V21"/><path d="M3 21V9M21 21V9M2.3 9h1.4M20.3 9h1.4"/><path d="M10.5 21v-4a1.5 1.5 0 013 0v4"/>',
     temple: '<path d="M3 10l9-6 9 6z"/><path d="M5 10v9M9 10v9M15 10v9M19 10v9M3 21h18M4 19h16"/>',
     castle: '<path d="M3 21V9h3V6h2v3h2V6h4v3h2V6h2v3h3v12z"/><path d="M10 21v-4a2 2 0 014 0v4"/><path d="M6 13h2M16 13h2"/>',
+    chart: '<path d="M3 21h18"/><path d="M6 17v-5M11 17V8M16 17v-7M20 17V5"/><path d="M4 9l5-4 5 3 6-5"/>',
     hammer: '<path d="M14 4l6 6-2 2-2-1-8.5 8.5a1.5 1.5 0 01-2-2L14 9l-1-2z"/><path d="M11 4h5l1 1"/>',
     bed: '<path d="M3 18V8M3 14h18v4M21 14v-2.5a3 3 0 00-3-3h-7.5V14"/><circle cx="7" cy="11.5" r="1.8"/>',
     scroll: '<path d="M7 4h11a2 2 0 012 2v1h-4"/><path d="M16 7v11a2 2 0 01-2 2H6a2 2 0 01-2-2v-1h10v1"/><path d="M7 4a2 2 0 00-2 2v11"/><path d="M9 9h5M9 12h5"/>',

@@ -58,6 +58,7 @@
     if (G.Names) G.Names.apply();
     var s = G.Game.state;
     if (!s.settings) s.settings = { diff: 'normal', speed: 1 };
+    if (s.fleet && s.fleet.mat == null) s.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;   // 자재가 생기기 전 저장 파일
     UI.fade(function () {
       if (s.loc.mode === 'sea') G.Game.go('sea', { resume: true });
       else if (s.loc.mode === 'land' && G.Scenes.land) G.Game.go('land', { resume: true });

@@ -212,6 +212,7 @@
   /** 연기가 바람에 밀려가는 방향 (px/초, 화면 좌표) */
   function windDrift() { return [Math.cos(st.wind.dir) * (8 + 18 * st.wind.spd), -Math.sin(st.wind.dir) * (8 + 18 * st.wind.spd)]; }
   B.runtime = function () { return st; };
+  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops }; };   // 시험용
   B.feel = function () { return st ? { shake: st.shake || 0, flash: st.flash ? st.flash.a : 0, hitstop: st.hitstop || 0 } : null; };
 
   // ---------------------------------------------------------------- simulation
@@ -689,8 +690,11 @@
       lines.push((st.flagWin ? '적 기함을 무찔러 이겼다! ' : '승리했다! ') + '전리품으로 금화 ' + U.num(gold) + '닢을 얻었다. (명성 +' + fame + ')' + (st.flagWin ? '<br><span class="muted">남은 적 배는 흩어져 달아났다.</span>' : ''));
       G.State.log((st.npc.kind === 'pirate' ? '해적' : st.npc.kind === 'navy' ? '함대' : '상선단') + '과의 해전에서 승리했다.');
       if (G.Audio) G.Audio.sfx('coin');
+      // 해적은 장신구·무기·도구 같은 물건을 떨어뜨리기도 한다
+      var drops = st.npc.kind === 'pirate' ? pirateDrops(st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); })) : [];
+      if (drops.length) lines.push('해적선에서 ' + drops.map(function (d) { return '<b>' + d.name + '</b>' + (d.kept ? '' : ' <span class="muted">(소지품이 가득 차 버렸다)</span>'); }).join(', ') + U.jx(drops[drops.length - 1].name, '을/를') + ' 건졌다.');
       await UI.alert(lines.join('<br>'), '해전 승리');
-      for (var i = 0; i < caps.length; i++) await prize(caps[i]);
+      if (caps.length) await prizeFleet(caps.map(prizeShip));
     } else if (res === 'flaglost') {
       // 기함을 잃고 흩어져 달아났다: 쫓기며 짐 절반을 버렸다
       var lostK = 0;
@@ -718,16 +722,96 @@
     if (!f.ships.length) return;
     UI.fade(function () { G.Game.go('sea', { resume: true }); });
   }
-  async function prize(b) {
-    var s = S(), f = s.fleet, t = G.SHIP[b.type];
+  /** 해적의 물건: 무찌른 배마다 45%로 하나 — 장신구(선물)가 가장 흔하고, 무기·방어구·항해도구. 값진 것일수록 드물다 */
+  function pirateDrops(beaten) {
+    var s = S(), out = [];
+    var pool = G.ITEMS.filter(function (it) { return !it.rare && it.price > 0 && (it.kind === 'gift' || it.kind === 'weapon' || it.kind === 'armor' || it.kind === 'tool') && (!it.from || s.date.y >= it.from); });
+    beaten.forEach(function (b) {
+      if (!U.chance(0.45) || !pool.length) return;
+      var w = pool.map(function (it) { return (it.kind === 'gift' ? 3 : it.kind === 'weapon' ? 1.6 : 1) * 1000 / Math.max(200, it.price); });
+      var tot = U.sum(w), r = U.rand() * tot, it = pool[0];
+      for (var i = 0; i < pool.length; i++) { r -= w[i]; if (r <= 0) { it = pool[i]; break; } }
+      var kept = s.player.items.length < R.ITEM_MAX;
+      if (kept) R.addItem(it.id);
+      out.push({ id: it.id, name: it.name, kept: kept });
+    });
+    return out;
+  }
+  /** 나포한 배를 우리 배처럼 만든다 */
+  function prizeShip(b) {
+    var t = G.SHIP[b.type];
     var sh = R.newShip(b.type, b.name.replace(/ \d+호$/, '') === b.name ? b.name : U.pick(G.SHIP_NAMES));
     sh.hp = Math.max(1, Math.round(b.hp > 0 ? b.hp : t.hp * 0.3)); sh.guns = { type: b.guns.type, n: Math.min(b.guns.n, sh.ports) };
-    var val = R.shipValue(sh);
-    var sale = Math.round(val * ((G.BALANCE && G.BALANCE.prizeSale) || 0.6));
-    var opts = [{ label: '함대에 편입한다', value: 'keep', dis: f.ships.length >= G.MAX_SHIPS }, { label: '팔아 치운다 (금화 ' + U.num(sale) + '닢)', value: 'sell' }, { label: '가라앉힌다', value: 'sink' }];
-    var v = await UI.ask('나포한 ' + t.name + U.j(t.name, '을/를').slice(t.name.length) + ' 어떻게 할까요? (내구 ' + Math.round(sh.hp) + '/' + sh.maxHp + ')', opts, G.Scenes.mateSpeaker('first'));
-    if (v === 'keep' && f.ships.length < G.MAX_SHIPS) { f.ships.push(sh); s.stats.captured++; UI.toast(sh.name + '호를 함대에 편입했다.', 'ship'); }
-    else if (v === 'sell' || v === 'keep') { s.player.gold += sale; }
+    sh._prize = true;
+    return sh;
+  }
+  /** 나포한 뒤 함대 정리: 지금 배와 나포한 배 가운데 가져갈 배를 고른다 (최대 G.MAX_SHIPS척).
+      나포선은 「판다」(값의 prizeSale)·「가라앉힌다」, 우리 배는 「버린다」(기함·빌린 배는 버릴 수 없다). 짐칸이 모자라면 넘치는 교역품을 버린다 */
+  async function prizeFleet(prizes) {
+    var s = S(), f = s.fleet, MAX = G.MAX_SHIPS, BAL = G.BALANCE || {};
+    var list = f.ships.map(function (sh, i) { return { sh: sh, own: true, keep: true, lock: i === 0 ? '기함' : sh.loan ? '빌린 배' : null }; })
+      .concat(prizes.map(function (sh) { return { sh: sh, own: false, keep: false, sale: Math.round(R.shipValue(sh) * (BAL.prizeSale || 0.6)), sink: false }; }));
+    // 자리가 남으면 나포선을 먼저 넣어 둔다 (값이 큰 배부터)
+    prizes.map(function (sh, i) { return list[f.ships.length + i]; }).sort(function (a, b) { return b.sale - a.sale; }).forEach(function (x) { if (list.filter(function (y) { return y.keep; }).length < MAX) x.keep = true; });
+    var win = UI.window({ title: '나포한 배 — 함대 정리', icon: 'ship', width: 1100, closable: false,
+      html: '<div class="muted" style="font-size:16px;margin-bottom:8px">함대에는 ' + MAX + '척까지 둘 수 있습니다. 가져갈 배를 고르십시오. 두고 가는 나포선은 팔거나 가라앉히고, 우리 배를 버리면 그 배는 여기 남습니다(선원·짐은 옮겨 싣습니다).</div><div class="pf-body"></div><div class="pf-info" style="margin-top:10px;font-size:17px"></div>',
+      buttons: [{ label: '이대로 정한다', value: 'ok', cls: 'navy' }] });
+    var body = win.content.querySelector('.pf-body'), info = win.content.querySelector('.pf-info'), okBtn = win.el.querySelector('.foot .btn.navy');
+    function row(x, i) {
+      var sh = x.sh, t = G.SHIP[sh.type];
+      var st = x.keep ? '<span class="good-text">가져간다</span>' : x.own ? '<span class="warn-text">버린다</span>' : x.sink ? '<span class="muted">가라앉힌다</span>' : '판다 (금화 ' + U.num(x.sale) + ')';
+      var btns = x.lock ? '<span class="muted">' + x.lock + '</span>' :
+        '<button class="btn small" data-i="' + i + '" data-a="keep"' + (x.keep ? ' disabled' : '') + '>가져간다</button> ' +
+        (x.own ? '<button class="btn small" data-i="' + i + '" data-a="drop"' + (!x.keep ? ' disabled' : '') + '>버린다</button>'
+          : '<button class="btn small" data-i="' + i + '" data-a="sell"' + (!x.keep && !x.sink ? ' disabled' : '') + '>판다</button> <button class="btn small" data-i="' + i + '" data-a="sink"' + (x.sink ? ' disabled' : '') + '>가라앉힌다</button>');
+      return '<tr' + (x.keep ? '' : ' style="opacity:.6"') + '><td>' + (x.own ? '우리 배' : '<b>나포</b>') + '</td><td><b>' + U.esc(sh.name) + '</b></td><td>' + t.name + ' <small class="muted">' + (G.SHIP_LV ? G.SHIP_LV[t.lv] || '' : '') + '</small></td>' +
+        '<td class="num">' + Math.round(sh.hp) + '/' + sh.maxHp + '</td><td class="num">' + R.shipCargoCap(sh) + '</td><td class="num">' + sh.crewMin + '~' + sh.crewMax + '</td><td class="num">' + sh.guns.n + '</td><td>' + st + '</td><td>' + btns + '</td></tr>';
+    }
+    function draw() {
+      body.innerHTML = '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th class="num">내구</th><th class="num">짐칸</th><th class="num">선원</th><th class="num">대포</th><th>정한 것</th><th></th></tr>' + list.map(row).join('') + '</table>';
+      var keep = list.filter(function (x) { return x.keep; }), cap = U.sum(keep, function (x) { return R.shipCargoCap(x.sh); });
+      var cmin = U.sum(keep, function (x) { return x.sh.crewMin; }), cmax = U.sum(keep, function (x) { return x.sh.crewMax; });
+      var sale = U.sum(list, function (x) { return !x.own && !x.keep && !x.sink ? x.sale : 0; });
+      var over = R.used() - cap;
+      info.innerHTML = '가져가는 배 <b>' + keep.length + '/' + MAX + '척</b> · 짐칸 ' + U.num(cap) + '통 (지금 실은 것 ' + U.num(R.used()) + '통' + (over > 0 ? ' — <span class="warn-text">넘치는 ' + Math.ceil(over) + '통은 버림</span>' : '') + ') · 필요한 선원 ' + cmin + '~' + cmax + '명 (지금 ' + f.crew + '명' + (f.crew > cmax ? ' — <span class="warn-text">' + (f.crew - cmax) + '명은 탈 자리가 없음</span>' : f.crew < cmin ? ' — <span class="warn-text">모자람</span>' : '') + ')' + (sale ? ' · 파는 값 금화 <b>' + U.num(sale) + '</b>닢' : '');
+      okBtn.disabled = keep.length > MAX; okBtn.classList.toggle('disabled', keep.length > MAX);
+      U.$$('button[data-i]', body).forEach(function (b) {
+        b.onclick = function () {
+          var x = list[+b.dataset.i], a = b.dataset.a;
+          if (a === 'keep') { if (list.filter(function (y) { return y.keep; }).length >= MAX) { UI.toast('함대에는 ' + MAX + '척까지입니다. 먼저 다른 배를 빼십시오.', 'ship'); return; } x.keep = true; x.sink = false; }
+          else if (a === 'drop') x.keep = false;
+          else if (a === 'sell') { x.keep = false; x.sink = false; }
+          else if (a === 'sink') { x.keep = false; x.sink = true; }
+          draw();
+        };
+      });
+    }
+    draw();
+    await win.result;
+    var keepShips = [], got = 0, dropped = [];
+    list.forEach(function (x) {
+      if (x.keep) { keepShips.push(x.sh); if (!x.own) { delete x.sh._prize; s.stats.captured++; } }
+      else if (x.own) dropped.push(x.sh.name);
+      else if (!x.sink) got += x.sale;
+    });
+    // 기함은 늘 맨 앞
+    f.ships = keepShips;
+    s.player.gold += got;
+    R.tidyCaptains();
+    var leftCrew = Math.max(0, f.crew - R.crewMax()); if (leftCrew) f.crew = R.crewMax();   // 탈 자리가 없는 선원은 버린 배에 남는다
+    var over = Math.ceil(R.used() - R.fleetCap()), lost = 0;
+    if (over > 0) {      // 넘치는 짐: 싼 교역품부터 버린다
+      Object.keys(f.cargo).sort(function (a, b) { return G.GOOD[a].p - G.GOOD[b].p; }).forEach(function (k) { if (over <= 0) return; var c = f.cargo[k], d = Math.min(c.q, over); c.q -= d; over -= d; lost += d; if (c.q <= 0) delete f.cargo[k]; });
+      if (over > 0) { var fw = Math.min(over, f.food * 0.5); f.food -= fw; f.water = Math.max(0, f.water - (over - fw)); }
+    }
+    var msg = [];
+    var newOnes = keepShips.filter(function (sh) { return prizes.indexOf(sh) >= 0; });
+    if (newOnes.length) msg.push(newOnes.map(function (sh) { return sh.name + '호'; }).join('·') + U.jx(newOnes[newOnes.length - 1].name + '호', '을/를') + ' 함대에 넣었다');
+    if (got) msg.push('나포선을 팔아 금화 ' + U.num(got) + '닢');
+    if (dropped.length) msg.push(dropped.join('·') + '호를 두고 왔다');
+    if (lost) msg.push('짐칸이 모자라 교역품 ' + lost + '통을 버렸다');
+    if (leftCrew) msg.push('선원 ' + leftCrew + '명은 버린 배에 남았다');
+    if (msg.length) UI.toast(msg.join(' · '), 'ship', 5200);
   }
   async function ransom() {
     var s = S(), p = s.player;

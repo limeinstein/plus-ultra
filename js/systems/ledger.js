@@ -14,8 +14,16 @@
     var s = S(), row = { t: s.day, s: [], b: {} };
     G.GOODS.forEach(function (g) { row.s.push(R.sellPrice(c, g.id)); });
     R.cityGoods(c).forEach(function (id) { if (G.GOOD[id]) row.b[id] = R.buyPrice(c, id); });
+    row.ci = {}; Object.keys(G.GOOD_CATS).forEach(function (k) { row.ci[k] = Math.round(R.catIndex(c, k) * 100); });   // 갈래별 시세(%) — 교역소 「시세」 창에서 다른 도시와 견준다
+    row.ev = R.market(c.id).ev || null;
     book()[c.id] = row;
     return row;
+  };
+  /** 시세 기록이 있는 다른 도시들 (최근 들른 순) */
+  L.quoteRows = function (except, n) {
+    var b = book(), out = [];
+    for (var id in b) { if (+id === except || !fresh(b[id]) || !b[id].ci) continue; out.push({ city: +id, age: S().day - b[id].t, ci: b[id].ci, ev: b[id].ev }); }
+    return out.sort(function (a, b) { return a.age - b.age; }).slice(0, n || 8);
   };
   function fresh(row) { return row && S().day - row.t <= L.OLD; }
   L.age = function (cityId) { var row = book()[cityId]; return row ? S().day - row.t : null; };

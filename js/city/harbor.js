@@ -23,9 +23,9 @@
       { label: '출항 준비', icon: 'check', sub: H.prepNote(c), onClick: function () { return H.prep(c); } },
       { label: '출항', icon: 'sail', onClick: function () { return H.depart(c); } },
       (G.Monsoon && G.Monsoon.rim(c)) ? { label: '계절풍 형편', icon: 'wind', sub: G.Monsoon.NAME[G.Monsoon.portNote(c).phase], onClick: function () { return H.monsoon(c); } } : null,
-      { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : Math.min(R.daysOfFood(), R.daysOfWater()) + '일분', onClick: function () { return H.supply(c); } },
+      { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : R.daysOfFood() + '·' + R.daysOfWater() + '일 · 자재 ' + Math.floor(S().fleet.mat || 0), onClick: function () { return H.supply(c); } },
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
-      { label: '선원편성', icon: 'people', sub: s.fleet.crew + '명', onClick: function () { return H.crew(c); } },
+      { label: '선원 수 조정', icon: 'people', sub: s.fleet.crew + '명 / ' + R.crewMin() + '~' + R.crewMax(), onClick: function () { return H.crew(c); } },
       { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } },
       { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } }
     ];
@@ -67,13 +67,15 @@
     var broken = f.ships.filter(function (sh) { return sh.hp < sh.maxHp; });
     var repCost = yard ? U.sum(broken, C.B.shipyard.repairCost) : 0;
     var use = R.dailyUse(crewTo), price = R.supplyCost(c);
-    var room = R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0);
+    // 자재: 배마다 3통 + 6통을 채워 둔다 (바다 위 수리용)
+    var matTo = Math.max(f.mat || 0, 6 + f.ships.length * 3), needM = Math.ceil(matTo - (f.mat || 0));
+    var room = R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0) - matTo;
     var maxDays = Math.max(0, Math.floor(room / (use * 2)));
-    var maxEmpty = Math.max(0, Math.floor((R.fleetCap() - (G.Quest ? G.Quest.load() : 0)) / (use * 2)));   // 짐이 없을 때
+    var maxEmpty = Math.max(0, Math.floor((R.fleetCap() - (G.Quest ? G.Quest.load() : 0) - matTo) / (use * 2)));   // 짐이 없을 때
     var d = Math.min(days, maxDays);
     var needF = Math.max(0, d * use - f.food), needW = Math.max(0, d * use - f.water);
-    var supCost = Math.ceil(needF + needW) * price;
-    return { crewTo: crewTo, hire: hire, hireCost: hireCost, yard: yard, broken: broken, repCost: repCost,
+    var supCost = Math.ceil(needF) * price + Math.ceil(needW) * R.waterCost(c) + needM * R.matCost(c);
+    return { crewTo: crewTo, hire: hire, hireCost: hireCost, yard: yard, broken: broken, repCost: repCost, matTo: matTo, needM: needM,
       days: d, maxDays: maxDays, maxEmpty: maxEmpty, cargo: R.cargoQty(), use: use, supCost: supCost, total: hireCost + repCost + supCost };
   }
   H.prepNote = function (c) {
@@ -125,7 +127,7 @@
     if (plan) quick.unshift({ label: '목표까지 ' + Math.min(probe.maxDays, plan.oneWaySafe) + '일', value: Math.min(probe.maxDays, plan.oneWaySafe) }, { label: '왕복 ' + Math.min(probe.maxDays, plan.need) + '일', value: Math.min(probe.maxDays, plan.need) });
     var d = await UI.number({
       title: '출항 준비', width: plan ? 720 : 560,
-      text: (plan ? G.Plan.html(plan, probe.maxDays) : '') + (planWind(plan) ? '' : monsoonNote(c)) + cargoNote(probe) + scurvyNote(c, probe, plan) + routesFrom(c) + '부관이 선원을 채우고' + (probe.yard ? ' 배를 고치고' : '') + ' 식량과 물을 싣습니다. 며칠 항해할 만큼 준비할까요?',
+      text: (plan ? G.Plan.html(plan, probe.maxDays) : '') + (planWind(plan) ? '' : monsoonNote(c)) + cargoNote(probe) + scurvyNote(c, probe, plan) + routesFrom(c) + '부관이 선원을 채우고' + (probe.yard ? ' 배를 고치고' : '') + ' 식량·물과 수리 자재(' + probe.matTo + '통까지)를 싣습니다. 따로 정하려면 항구의 「보급」을 쓰십시오. 며칠 항해할 만큼 준비할까요?',
       min: 5, max: probe.maxDays, value: Math.min(probe.maxDays, plan ? Math.max(20, plan.need) : Math.max(20, last)), unit: '일분',
       quick: quick,
       info: function (v) {
@@ -142,10 +144,10 @@
     if (pl.hire) { f.crew += pl.hire; f.discipline = Math.max(30, f.discipline - pl.hire * 0.2); }
     if (pl.repCost) pl.broken.forEach(function (sh) { sh.hp = sh.maxHp; });
     var use = R.dailyUse();
-    f.food = Math.max(f.food, pl.days * use); f.water = Math.max(f.water, pl.days * use);
+    f.food = Math.max(f.food, pl.days * use); f.water = Math.max(f.water, pl.days * use); f.mat = Math.max(f.mat || 0, pl.matTo);
     s.lastSupply = d;
     G.Game.refreshHud();
-    var go = await C.mateAsk('준비를 마쳤습니다! ' + (pl.hire ? '선원 ' + pl.hire + '명을 새로 태우고, ' : '') + (pl.repCost ? '배를 고치고, ' : '') + pl.days + '일분 식량과 물을 실었습니다. (금화 ' + U.num(pl.total) + '닢)\n바로 출항할까요?', [{ label: '출항한다', value: true }, { label: '아직', value: false }]);
+    var go = await C.mateAsk('준비를 마쳤습니다! ' + (pl.hire ? '선원 ' + pl.hire + '명을 새로 태우고, ' : '') + (pl.repCost ? '배를 고치고, ' : '') + pl.days + '일분 식량과 물' + (pl.needM ? '·자재 ' + pl.needM + '통' : '') + '을 실었습니다. (금화 ' + U.num(pl.total) + '닢)\n바로 출항할까요?', [{ label: '출항한다', value: true }, { label: '아직', value: false }]);
     if (go) await H.depart(c);
   };
 
@@ -168,35 +170,89 @@
   };
 
   // ---------------------------------------------------------------- supply
+  /** 보급: 식량(일분)·물(일분)·자재(통)를 따로 싣는다 (대항해시대 2식). 셋 다 짐칸을 차지한다 */
   H.supply = async function (c) {
     var s = S(), f = s.fleet;
     if (!f.ships.length) { await C.mate('배가 없으면 보급할 수 없습니다.'); return; }
-    var use = R.dailyUse(), price = R.supplyCost(c);
-    var haveF = f.food, haveW = f.water;
-    var freeCap = R.fleetCap() - R.cargoQty();       // space for food+water
-    var maxDays = Math.max(0, Math.floor(freeCap / (use * 2)));
-    var afford = function (d) { var need = Math.max(0, d * use - haveF) + Math.max(0, d * use - haveW); return Math.ceil(need) * price; };
-    var maxByGold = maxDays; while (maxByGold > 0 && afford(maxByGold) > s.player.gold) maxByGold--;
-    var hi = Math.min(maxDays, maxByGold);
-    var cur = Math.floor(Math.min(haveF, haveW) / use);
-    if (hi <= cur) {
-      if (maxDays <= cur) await C.mate('이 이상 실을 여유가 없습니다.');
-      else await C.mate('제독, 금화가 모자랍니다!');
-      return;
+    var use = R.dailyUse(), pF = R.supplyCost(c), pW = R.waterCost(c), pM = R.matCost(c);
+    var room = R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0);   // 식량·물·자재에 쓸 수 있는 칸
+    var cur = { food: Math.floor(f.food / use), water: Math.floor(f.water / use), mat: Math.floor(f.mat || 0) };
+    var want = { food: Math.max(cur.food, s.lastSupply || 30), water: Math.max(cur.water, s.lastSupply || 30), mat: Math.max(cur.mat, s.lastMat != null ? s.lastMat : 6 + f.ships.length * 3) };
+    function load(w) { return Math.max(f.food, w.food * use) + Math.max(f.water, w.water * use) + Math.max(f.mat || 0, w.mat); }
+    function cost(w) { return Math.ceil(Math.max(0, w.food * use - f.food)) * pF + Math.ceil(Math.max(0, w.water * use - f.water)) * pW + Math.ceil(Math.max(0, w.mat - (f.mat || 0))) * pM; }
+    function fit(w, key) {        // 짐칸·소지금에 맞게 key 쪽을 줄인다
+      while (w[key] > cur[key] && (load(w) > room + 1e-6 || cost(w) > s.player.gold)) w[key]--;
     }
-    var last = s.lastSupply || 30;
-    var d = await UI.number({
-      title: '항해일수 보급', text: '몇 일분 보급하시겠습니까? (승원 ' + f.crew + '명, 하루 식량·물 각 ' + use.toFixed(1) + '통)', min: cur, max: hi, value: Math.min(hi, Math.max(cur, last)), unit: '일분',
-      quick: [{ label: '최대', value: hi }, { label: '10일분', value: Math.min(hi, Math.max(cur, 10)) }, { label: '30일분', value: Math.min(hi, Math.max(cur, 30)) }, { label: '전회분', value: Math.min(hi, Math.max(cur, last)) }],
-      info: function (v) { return '비용 금화 <b>' + U.num(afford(v)) + '</b>닢 · 적재 후 여유 ' + Math.max(0, Math.floor(freeCap - v * use * 2)) + '통'; }
+    ['mat', 'water', 'food'].forEach(function (k) { fit(want, k); });
+    var rows = [['food', '식량', 'bread', '일분', pF + '닢/통 · 하루 ' + use.toFixed(1) + '통'], ['water', '물', 'drop', '일분', pW + '닢/통 · 하루 ' + use.toFixed(1) + '통'], ['mat', '자재', 'hammer', '통', pM + '닢/통 · 바다 위 수리에 씀 (내구 1에 ' + ((G.BALANCE && G.BALANCE.matPerHp) || 0.4) + '통)']];
+    var html = '<div class="muted" style="font-size:16px;margin-bottom:10px">승원 ' + f.crew + '명 · 짐칸 ' + U.num(R.fleetCap()) + '통 (교역품 ' + U.num(R.cargoQty()) + '통) — 식량·물·자재를 따로 정합니다.</div>' +
+      '<div class="sup-both" style="margin-bottom:10px;padding:8px 10px;border-radius:6px;background:rgba(90,60,30,.08)"><b>' + G.icon('calendar') + ' 식량·물 함께</b> <span class="muted" style="font-size:14px">(며칠 항해할 만큼)</span><br>' +
+        '<input type="range" class="b-rng" style="width:230px;vertical-align:middle"> <input type="number" class="b-num num-in" style="width:70px"> 일분 ' +
+        [20, 40, 60, 90].map(function (d) { return '<button class="btn small bq" data-d="' + d + '">' + d + '일</button>'; }).join(' ') + ' <button class="btn small bq" data-d="max">최대</button></div>' +
+      '<table class="tbl supply"><tr><th></th><th class="num">지금</th><th>실을 양</th><th></th></tr>' +
+      rows.map(function (r) { return '<tr data-k="' + r[0] + '"><td>' + G.icon(r[2]) + ' <b>' + r[1] + '</b><div class="muted" style="font-size:13px">' + r[4] + '</div></td><td class="num">' + cur[r[0]] + r[3] + '</td>' +
+        '<td><input type="range" min="' + cur[r[0]] + '" max="' + Math.max(cur[r[0]], r[0] === 'mat' ? cur.mat + Math.floor(room) : Math.floor(room / use)) + '" value="' + want[r[0]] + '" style="width:260px"> <input type="number" class="num-in" min="' + cur[r[0]] + '" value="' + want[r[0]] + '" style="width:74px"> ' + r[3] + '</td>' +
+        '<td><button class="btn small q" data-q="max">최대</button> <button class="btn small q" data-q="cur">그대로</button></td></tr>'; }).join('') + '</table>' +
+      '<div class="sup-info" style="margin-top:10px;font-size:17px"></div><div class="sup-cargo" style="margin-top:8px;font-size:15px"></div>';
+    var win = UI.window({ title: '보급 — ' + c.name, icon: 'bread', width: 820, html: html, buttons: [{ label: '그만둔다', value: null }, { label: '싣는다', value: 'ok', cls: 'navy' }] });
+    var el = win.content, info = el.querySelector('.sup-info');
+    // 식량·물을 같은 날수로 한꺼번에: 짐칸·소지금에 맞게 둘을 함께 줄인다
+    var bMin = Math.min(cur.food, cur.water), bMax = Math.max(bMin, Math.floor(room / (use * 2)) + bMin);
+    var bR = el.querySelector('.b-rng'), bN = el.querySelector('.b-num');
+    bR.min = bMin; bR.max = bMax; bN.min = bMin;
+    function setBoth(d) {
+      d = Math.max(bMin, Math.floor(+d || 0));
+      want.food = Math.max(cur.food, d); want.water = Math.max(cur.water, d);
+      while ((load(want) > room + 1e-6 || cost(want) > s.player.gold) && (want.food > cur.food || want.water > cur.water)) {
+        if (want.food > cur.food) want.food--; if (want.water > cur.water && (load(want) > room + 1e-6 || cost(want) > s.player.gold)) want.water--;
+      }
+      refresh();
+    }
+    bR.oninput = function () { setBoth(this.value); };
+    bN.onchange = function () { setBoth(this.value); };
+    U.$$('.bq', el).forEach(function (b) { b.onclick = function () { setBoth(b.dataset.d === 'max' ? 99999 : +b.dataset.d); }; });
+    function refresh(changed) {
+      if (changed) fit(want, changed);
+      var both = Math.min(want.food, want.water); bR.value = both; bN.value = both;
+      rows.forEach(function (r) { var tr = el.querySelector('tr[data-k="' + r[0] + '"]'); tr.querySelector('input[type=range]').value = want[r[0]]; tr.querySelector('input[type=number]').value = want[r[0]]; });
+      var free = room - load(want), days = Math.min(want.food, want.water);
+      info.innerHTML = '항해 가능 <b>' + days + '일</b> (식량 ' + want.food + '일 · 물 ' + want.water + '일) · 자재 ' + want.mat + '통 · 비용 금화 <b>' + U.num(cost(want)) + '</b>닢 · 남는 짐칸 ' + Math.max(0, Math.floor(free)) + '통';
+    }
+    rows.forEach(function (r) {
+      var tr = el.querySelector('tr[data-k="' + r[0] + '"]');
+      var set = function (v) { want[r[0]] = Math.max(cur[r[0]], Math.floor(+v || 0)); refresh(r[0]); };
+      tr.querySelector('input[type=range]').oninput = function () { set(this.value); };
+      tr.querySelector('input[type=number]').onchange = function () { set(this.value); };
+      U.$$('.q', tr).forEach(function (b) { b.onclick = function () { set(b.dataset.q === 'max' ? 99999 : cur[r[0]]); }; });
     });
-    if (d == null || d <= cur) return;
-    var cost = afford(d);
-    if (cost > s.player.gold) { await C.mate('소지금이 모자랍니다.'); return; }
-    s.player.gold -= cost;
-    f.food = Math.max(haveF, d * use); f.water = Math.max(haveW, d * use);
-    s.lastSupply = d;
-    UI.toast('식량과 물을 ' + d + '일분 실었다. (금화 ' + U.num(cost) + '닢)', 'bread');
+    // 교역품 식량·주류: 모자라면 바다에서 먹고 마시고, 여기서 보급품으로 옮겨 둘 수도 있다
+    var cargoEl = el.querySelector('.sup-cargo');
+    function cargoLine() {
+      var cf = R.provisionCargo('food'), cw = R.provisionCargo('water');
+      if (!cf && !cw) { cargoEl.innerHTML = '<span class="muted">곡식·어육·고기·유제품 같은 교역품은 식량으로, 맥주·포도주는 물 대신 쓸 수 있습니다(모자라면 바다에서 먹고 마십니다).</span>'; return; }
+      cargoEl.innerHTML = '교역품 가운데 식량 <b>' + cf + '통</b>' + (cw ? ' · 맥주·포도주 <b>' + cw + '통</b>' : '') + ' — 바다에서 식량·물이 모자라면 먹고 마십니다. <button class="btn small mv">지금 보급품으로 옮긴다</button>';
+      cargoEl.querySelector('.mv').onclick = function () {
+        f.food += R.eatCargo('food', cf); f.water += R.eatCargo('water', cw);
+        room = R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0);
+        cur.food = Math.floor(f.food / use); cur.water = Math.floor(f.water / use);
+        want.food = Math.max(want.food, cur.food); want.water = Math.max(want.water, cur.water);
+        rows.forEach(function (r) { var tr = el.querySelector('tr[data-k="' + r[0] + '"]'); tr.children[1].textContent = cur[r[0]] + r[3]; tr.querySelector('input[type=range]').min = cur[r[0]]; tr.querySelector('input[type=number]').min = cur[r[0]]; });
+        UI.toast('교역품을 식량 ' + cf + '통' + (cw ? '·물 ' + cw + '통' : '') + '으로 옮겼다.', 'bread');
+        cargoLine(); refresh();
+      };
+    }
+    cargoLine();
+    refresh();
+    var v = await win.result;
+    if (v !== 'ok') return;
+    var pay = cost(want);
+    if (pay <= 0) return;
+    if (pay > s.player.gold) { await C.mate('소지금이 모자랍니다.'); return; }
+    s.player.gold -= pay;
+    f.food = Math.max(f.food, want.food * use); f.water = Math.max(f.water, want.water * use); f.mat = Math.max(f.mat || 0, want.mat);
+    s.lastSupply = Math.min(want.food, want.water); s.lastMat = want.mat;
+    G.Game.refreshHud();
+    UI.toast('식량 ' + want.food + '일분 · 물 ' + want.water + '일분 · 자재 ' + want.mat + '통을 실었다. (금화 ' + U.num(pay) + '닢)', 'bread');
   };
 
   // ---------------------------------------------------------------- fleet organisation
@@ -281,34 +337,36 @@
   H.pickShip = pickShip;
 
   // ---------------------------------------------------------------- crew
+  /** 선원 수 조정: 목표 인원을 정하면 모자란 만큼 고용하고 남는 만큼 내린다 (한 번에) */
   H.crew = async function (c) {
-    var s = S(), f = s.fleet, cost = R.hireCost(c);
-    for (;;) {
-      var v = await C.mateAsk('현재 선원은 ' + f.crew + '명입니다. (최저 ' + R.crewMin() + '명 · 최대 ' + R.crewMax() + '명)', [{ label: '선원모집', value: 'hire' }, { label: '선원해고', value: 'fire' }, { label: '돌아간다', value: null }]);
-      if (!v) return;
-      if (v === 'hire') {
-        var room = R.crewMax() - f.crew;
-        if (room <= 0) { await C.mate('선원수가 함대의 상한에 달하고 있습니다! 이 이상 고용해도 승선할 수 없습니다.'); continue; }
-        var byGold = Math.floor(s.player.gold / cost);
-        if (byGold <= 0) { await C.mate('그렇게 고용할 수 있을 정도로 돈이 없습니다.'); continue; }
-        var need = Math.max(0, R.crewMin() - f.crew);
-        var n = await UI.number({ title: '선원고용', text: '몇 명 모집하겠습니까? 한 사람 당 금화 ' + cost + '닢 필요합니다.', min: 1, max: Math.min(room, byGold), value: Math.min(room, byGold, Math.max(need, 10)), unit: '명',
-          quick: [{ label: '최저까지', value: Math.max(1, Math.min(room, byGold, need || 1)) }, { label: '최대', value: Math.min(room, byGold) }],
-          info: function (x) { return '비용 금화 <b>' + U.num(x * cost) + '</b>닢 → 선원 ' + (f.crew + x) + '명'; } });
-        if (!n) continue;
-        s.player.gold -= n * cost; f.crew += n;
-        f.discipline = Math.max(30, f.discipline - n * 0.2);
-        UI.toast('선원 ' + n + '명을 고용했다.', 'people');
-        var left = R.crewMin() - f.crew;
-        if (left > 0) await C.mate('앞으로 적어도 ' + left + '명은 필요합니다.');
-      } else {
-        if (f.crew <= 0) continue;
-        var m = await UI.number({ title: '선원해고', text: '선원을 몇 명 해고시키겠습니까?', min: 1, max: f.crew, value: Math.max(1, f.crew - R.crewMin()), unit: '명' });
-        if (!m) continue;
-        if (f.crew - m < R.crewMin() && !(await UI.confirm('선원 수가 최저 승원 수를 밑돌게 됩니다. 괜찮습니까?'))) continue;
-        f.crew -= m; UI.toast('선원 ' + m + '명을 해고했다.', 'people');
+    var s = S(), f = s.fleet, cost = R.hireCost(c), cmin = R.crewMin(), cmax = R.crewMax();
+    var BAL = G.BALANCE || {}, spare = Math.min(cmax, Math.ceil(cmin * (BAL.spareWatch || 1.3)));
+    var byGold = f.crew + Math.floor(s.player.gold / cost), hi = Math.min(cmax, Math.max(f.crew, byGold));
+    var n = await UI.number({
+      title: '선원 수 조정 — 지금 ' + f.crew + '명',
+      text: '함대 전체 선원을 몇 명으로 할까요? 모자라면 모집하고(한 사람 금화 ' + cost + '닢), 남으면 이 항구에서 내립니다.<br>' +
+        '<span class="muted">최저 ' + cmin + '명(모자라면 느리고 쉽게 지침) · 교대가 넉넉한 ' + spare + '명(피로가 덜 쌓임) · 최대 ' + cmax + '명(백병전·일손). 사람이 많을수록 식량·물이 빨리 줄어듭니다.</span>',
+      min: 0, max: hi, value: f.crew, unit: '명',
+      quick: [{ label: '최저 ' + cmin, value: Math.min(hi, cmin) }, { label: '교대 넉넉 ' + spare, value: Math.min(hi, spare) }, { label: '최대', value: hi }, { label: '그대로', value: f.crew }],
+      info: function (x) {
+        var d = x - f.crew, use = R.dailyUse(x);
+        var days = x > 0 ? Math.floor(Math.min(f.food, f.water) / use) : 0;
+        return (d > 0 ? '모집 <b>' + d + '명</b> · 금화 <b>' + U.num(d * cost) + '</b>닢' : d < 0 ? '내림 <b>' + (-d) + '명</b>' : '그대로') +
+          ' · 하루 식량·물 각 ' + use.toFixed(1) + '통 · 지금 실은 것으로 ' + days + '일' + (x < cmin ? ' <span class="warn-text">(최저 인원 모자람)</span>' : '');
       }
+    });
+    if (n == null || n === f.crew) return;
+    if (n > f.crew) {
+      var add = n - f.crew;
+      if (add * cost > s.player.gold) { await C.mate('그렇게 고용할 수 있을 정도로 돈이 없습니다.'); return; }
+      s.player.gold -= add * cost; f.crew = n; f.discipline = Math.max(30, f.discipline - add * 0.2);
+      UI.toast('선원 ' + add + '명을 모집했다. (금화 ' + U.num(add * cost) + '닢)', 'people');
+    } else {
+      if (n < cmin && !(await UI.confirm('선원 수가 최저 승원 수(' + cmin + '명)를 밑돌게 됩니다. 배가 느려지고 쉽게 지칩니다. 괜찮습니까?'))) return;
+      UI.toast('선원 ' + (f.crew - n) + '명을 내렸다.', 'people');
+      f.crew = n;
     }
+    G.Game.refreshHud();
   };
 
   // ---------------------------------------------------------------- town information

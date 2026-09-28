@@ -67,14 +67,20 @@
   };
   /** 경리가 흥정해 둔 값 (이번 방문): {ok, buy, sell} */
   function mkDeal() { var cur = C.current(); return cur && cur.mk && cur.mk.buy ? cur.mk : null; }
-  function mkBuy(it) { var d = mkDeal(); return d ? Math.max(1, Math.round(it.price * d.buy)) : it.price; }
-  function mkSell(it) { var d = mkDeal(), v = itemValue(it); return d ? Math.round(v * d.sell) : v; }
+  /** 시장 값: 기본값 × 이 도시 시세(무기는 무기 갈래, 선물은 사치품·기호품·공예품 …) × 경리가 흥정한 값 */
+  function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
+  function mkBuy(it) { var d = mkDeal(), b = mkBase(it); return d ? Math.max(1, Math.round(b * Math.min(1, d.buy))) : b; }
+  function mkSell(it) { var d = mkDeal(), v = Math.round(itemValue(it) * R.itemMult(C.city(), it)); return d ? Math.round(v * Math.max(1, d.sell)) : v; }
+  MK.price = mkBuy;
+  /** 값이 보통보다 5% 넘게 비싸면 ▲, 싸면 ▼ */
+  function mkTrend(it) { var k = R.itemMult(C.city(), it); return k > 1.05 ? ' <span class="warn-text" title="시세 ' + Math.round(k * 100) + '%">▲</span>' : k < 0.95 ? ' <span class="good-text" title="시세 ' + Math.round(k * 100) + '%">▼</span>' : ''; }
   MK.enter = async function (c) { var cur = C.current(); if (cur) cur.mk = null; await C.say(vendor(), U.pick(['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
   MK.sub = function () { return '무기·도구·장신구'; };
   MK.menu = function (c) {
     return [
       { label: '구입', icon: 'coin', onClick: function () { return MK.buy(c); } },
       { label: '매각', icon: 'sack', onClick: function () { return MK.sell(c); } },
+      { label: '시세', icon: 'chart', sub: '물건 값 ' + Math.round(U.sum(Object.keys(R.ITEM_CATS), function (k) { return R.itemMult(c, { id: '_', kind: k }); }) / 4 * 100) + '%', onClick: function () { return C.B.trade.quotes(c); } },
       R.purser() ? { label: '값 후려치기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공' : '실패') : '경리 ' + R.purser().name, dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
       { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } }
     ];
@@ -86,7 +92,7 @@
       if (!st.length) { await C.say(vendor(), '미안하네, 지금 물건이 떨어지고 없네.'); return; }
       var v = await UI.choose('구입 아이템 선택 — 소지금 ' + U.num(s.player.gold) + '닢', st.map(function (it) {
         var ex = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : G.ITEM_KIND[it.kind];
-        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) !== it.price ? ' <s class="muted">' + U.num(it.price) + '</s>' : ''), value: it.id, desc: it.desc, icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: mkBuy(it) > s.player.gold };
+        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, desc: it.desc, icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: mkBuy(it) > s.player.gold };
       }), { width: 700 });
       if (!v) return;
       var it = G.ITEM[v];
@@ -122,7 +128,7 @@
       if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
     }
   };
-  /** 경리의 흥정: 성공하면 이번 방문 동안 사는 값 −(8~22)%, 파는 값 +(6~15)% — 실패하면 상인이 언짢아 반대로 조금 */
+  /** 경리의 흥정: 성공하면 이번 방문 동안 사는 값 −(8~22)%, 파는 값 +(6~15)% — 실패해도 값은 그대로 */
   MK.haggle = async function (c) {
     var cur = C.current(), pu = R.purser();
     if (!pu) return;
@@ -137,9 +143,9 @@
       await C.say(vendor(), U.pick(['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.']));
       UI.toast('흥정 성공(경리 ' + pu.name + ')! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '%', 'scales');
     } else {
-      cur.mk = { ok: false, buy: 1.03, sell: 0.97 };
+      cur.mk = { ok: false };      // 실패하면 값은 그대로 (올라가지 않는다)
       await C.say(vendor(), U.pick(['흥! 그 값에 팔 바에야 바다에 던지겠네.', '장사를 모르는구먼. 싫으면 관두게!']));
-      UI.toast('흥정 실패 — 상인이 언짢아 이번에는 사는 값 +3%, 파는 값 −3%', 'scales');
+      UI.toast('흥정 실패 — 값은 그대로입니다.', 'scales');
     }
   };
   function itemValue(it) { if (it.value) return it.value; if (G.RELIC && G.RELIC[it.id] && G.Disc.relicValue) return G.Disc.relicValue(it); var d = G.ITEM[it.id]; return d ? Math.floor((d.price || 500) * (d.rare ? 1 : 0.5)) : 100; }

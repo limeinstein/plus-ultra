@@ -913,6 +913,9 @@
       if (st.calm > 0) st.calm--;
       // supplies
       var use = R.dailyUse();
+      // 식량·물이 모자라면 싣고 가는 교역품(곡식·어육·고기 / 맥주·포도주)을 먹고 마신다
+      if (f.food < use) { var ef = R.eatCargo('food', use - f.food); if (ef) { f.food += ef; if (!st.ateCargo) { st.ateCargo = true; msgs.push({ icon: 'bread', text: '식량이 떨어져 싣고 가던 교역품을 먹기 시작했다.' }); } } }
+      if (f.water < use) { var ew = R.eatCargo('water', use - f.water); if (ew) { f.water += ew; if (!st.drankCargo) { st.drankCargo = true; msgs.push({ icon: 'drop', text: '물이 떨어져 싣고 가던 맥주·포도주를 마시기 시작했다.' }); } } }
       f.food = Math.max(0, f.food - use); f.water = Math.max(0, f.water - use);
       if (f.food <= 0 || f.water <= 0) {
         var dead = Math.max(1, Math.ceil(f.crew * U.rf(0.03, 0.07)));
@@ -950,7 +953,17 @@
       }
       // repairs at sea
       // 바다 위 수리: 배마다 그 배 선장(기함은 제독·부관)의 조선기술
-      f.ships.forEach(function (sh) { var k = R.shipSkill(sh, 'ship'); if (k && sh.hp < sh.maxHp) sh.hp = Math.min(sh.maxHp, sh.hp + 0.25 * k); });
+      //   자재(f.mat)가 있어야 고친다 — 내구 1마다 자재 BAL.matPerHp통. 자재가 떨어지면 한 번 알린다
+      var mph = BAL.matPerHp != null ? BAL.matPerHp : 0.4, wanted = false;
+      f.ships.forEach(function (sh) {
+        var k = R.shipSkill(sh, 'ship'); if (!k || sh.hp >= sh.maxHp) return;
+        wanted = true;
+        var fix = Math.min(0.25 * k, sh.maxHp - sh.hp, (f.mat || 0) / mph);
+        if (fix <= 0) return;
+        sh.hp += fix; f.mat = Math.max(0, (f.mat || 0) - fix * mph);
+      });
+      if (wanted && (f.mat || 0) < 0.05 && !st.noMatWarned) { st.noMatWarned = true; msgs.push({ icon: 'sack', text: '자재가 떨어져 바다 위에서 배를 고칠 수 없다. 항구에서 자재를 실어야 한다.' }); }
+      if ((f.mat || 0) >= 1) st.noMatWarned = false;
       // 연안선은 먼 바다의 큰 파도에 상한다
       var off = G.Ships.offshore(l.lon, l.lat);
       if (off > G.Ships.OPEN) f.ships.forEach(function (sh) {
