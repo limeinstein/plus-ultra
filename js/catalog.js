@@ -34,7 +34,7 @@
     return c;
   }
   const portrait = spec => A.portraitCanvas(spec, 160);
-  function churchName(c) { return c.rel === 'I' ? '모스크' : 'HBJ'.includes(c.rel) ? '사원' : c.rel === 'K' ? '사당' : c.rel === 'N' ? '신전' : '교회'; }
+  function churchName(c) { if (c.places && c.places.church) return c.places.church; return c.rel === 'I' ? '모스크' : 'HBJ'.includes(c.rel) ? '사원' : c.rel === 'K' ? '사당' : c.rel === 'N' ? '신전' : '교회'; }
   function palaceName(c) {
     const sp = G.SPONSORS.find(s => s.city === c.id && s.bld === 'palace');
     return sp && sp.type === 'gov' ? '총독부' : sp && sp.type === 'pope' ? '교황청' : sp && sp.type === 'official' ? '시청' : '왕궁';
@@ -48,11 +48,15 @@
     out.push('술집', '여관');
     if (c.size >= 2 && c.id !== 92) out.push('시장');
     out.push(churchName(c));
-    if (c.flags.includes('L') || G.BOOKS.some(b => b.libs.includes(c.id))) out.push('도서관');
+    if (c.flags.includes('L') || G.BOOKS.some(b => b.libs.includes(c.id))) out.push((c.places && c.places.library) || '도서관');
     const sps = G.SPONSORS.filter(s => s.city === c.id);
-    if (c.flags.includes('P') || sps.some(s => s.bld === 'palace')) out.push(palaceName(c));
-    const mans = sps.filter(s => s.bld !== 'palace').length;
-    if (mans) out.push(mans > 1 ? '저택 ' + mans + '채' : '저택');
+    const named = sps.filter(s => s.bld === 'palace' && s.place);
+    if (named.length) named.forEach(s => out.push(s.place));
+    else if (c.flags.includes('P') || sps.some(s => s.bld === 'palace')) out.push(palaceName(c));
+    const mans = sps.filter(s => s.bld !== 'palace');
+    mans.filter(s => s.place).forEach(s => out.push(s.place));
+    const plain = mans.filter(s => !s.place).length;
+    if (plain) out.push(plain > 1 ? '저택 ' + plain + '채' : '저택');
     if (c.flags.includes('G') || c.size >= 3) out.push('조합');
     out.push('성문');
     return out;
@@ -92,6 +96,7 @@
           ['규모', SIZE[c.size] + (c.port ? ' · 항구' : ' · 내륙')], ['건물', facilities(c).join(', ')],
           ['특산품', c.goods.map(goodName).join(', ')], ['건축 양식', STYLE[c.style] + ' (' + c.style + ')'],
           c.founded ? ['건설', c.founded + '년'] : null,
+          c.until ? ['사라짐', c.until + '년'] : null,
           c.flags.includes('H') ? ['입항', '성지 — 다른 종교의 함대는 들어갈 수 없음'] : null,
           c.flags.includes('X') ? ['입항', '쇄국 — 교섭이나 잠입이 필요함'] : null,
           c.flags.includes('E') ? ['지위', '제국의 수도'] : null,
@@ -146,7 +151,7 @@
       pic: () => portrait(spec0),
       detail: () => ({
         facts: [
-          ['사는 곳', c.name + ' · ' + (sp.bld === 'palace' ? palaceName(c) : '저택')], ['신분', G.SPONSOR_TYPE[sp.type]],
+          ['사는 곳', c.name + ' · ' + (sp.place || (sp.bld === 'palace' ? palaceName(c) : '저택'))], ['신분', G.SPONSOR_TYPE[sp.type]],
           ['세력', G.POWER_NAME[sp.pw] + ' (만나려면 명성 ' + num(G.POWER_FAME[sp.pw]) + ')'], ['재력', '★'.repeat(sp.wealth)],
           ['좋아하는 발견', sp.taste.map(t => G.DISC_CATS[t]).join(', ')], ['말', G.LANGS[sp.lang]],
           sp.nation ? ['나라', NATION[sp.nation]] : null
@@ -233,7 +238,7 @@
       key: 'portraits/npc/' + id, kind: 'png', chain: spec.img, ar: '1 / 1', extra: id,
       pic: () => portrait(spec),
       detail: () => ({
-        text: local ? '같은 역할이라도 도시의 문화권마다 얼굴이 달라집니다. 파일을 하나만 넣으면 모든 도시에서 그 그림을 쓰고, 문화권별·도시별 파일을 더 넣으면 그쪽을 먼저 씁니다.' : '',
+        text: local ? '같은 역할이라도 도시 양식마다 얼굴이 달라집니다. portraits/npc-roles/양식/역할.webp를 기본으로 쓰며, 도시 번호가 붙은 전용 그림이 있으면 그쪽을 먼저 씁니다.' : '',
         facts: [['나오는 곳', NPC_WHERE[id]]],
         strip: local ? Object.keys(CUL_CITY).map(cu => ({ label: CUL[cu] + ' (예: ' + CUL_CITY[cu].name + ')', key: 'portraits/npc/' + id + '_' + cu, kind: 'png', pic: () => portrait(npcSpec(id, CUL_CITY[cu])) })) : null,
         files: local ? [
@@ -258,7 +263,7 @@
       key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc,
       pic: () => I.make(I.chain.discovery(d), 720, 320, () => A.discoveryArt(d, 720, 320)),
       detail: () => ({
-        text: d.desc, hint: '단서 — ' + d.hint,
+        text: d.desc, hint: '단서 — ' + d.hint, real: d.real,
         facts: [
           ['분류', G.DISC_CATS[d.cat]], ['지역', where], ['찾는 방법', HOW[d.how]], ['위치', place],
           ['가치', num(d.val)], ['명성 (직접 보고하면)', '+' + num(fameFor(d))], ['단서에 쓰인 말', G.LANGS[d.lang]],
@@ -290,7 +295,7 @@
         key: 'relics/' + id, kind: 'png', chain: I.chain.relic(r), ar: '1 / 1', extra: (r.desc || '') + ' ' + d.name,
         pic: () => I.make(I.chain.relic(r), 256, 256, () => A.relicArt(r, 256, 256)),
         detail: () => ({
-          text: r.desc,
+          text: r.desc, real: r.real,
           facts: [['종류', G.RELIC_KIND[r.kind]], ['나오는 발견', d.name + ' (' + G.DISC_CATS[d.cat] + ')'], ['값', num(r.price) + '닢 (세공 특기 1단계마다 +8%)'],
             STAT(r) ? ['효과', STAT(r)] : null,
             r.lead ? ['이어지는 발견', r.lead.map(x => G.DISC[x].name).join(', ') + ' — 소지품에서 읽으면 단서'] : r.kind === 'book' ? ['읽으면', '같은 지역의 발견 단서 하나'] : null,
@@ -592,6 +597,22 @@
           (has ? ' <span class="state on">있음</span>' : '') + '</td><td>' + esc(f.note || '') + '</td></tr>';
       }).join('') + '</tbody></table></div>';
   }
+  /** 실제 자료 (tools/heritage): 세계유산 등재·생물 분류·소장품과 출처 */
+  function realHtml(H) {
+    if (!H) return '';
+    const a = (url, t) => url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(t) + '</a>' : esc(t);
+    const rows = [];
+    if (H.whc) rows.push(['UNESCO 세계유산', a(H.whc.url, (H.whc.no ? '#' + H.whc.no + ' ' : '') + (H.whc.name || '')) + (H.whc.year ? ' · ' + H.whc.year + '년 등재' : '') + (H.whc.crit ? ' · 기준 ' + esc(H.whc.crit) : '') + (H.whc.states ? ' · ' + esc(H.whc.states) : '') + (H.whc.danger ? ' · 위험에 처한 유산' : '')]);
+    if (H.record) rows.push([H.whc ? '세계유산 기록' : H.legend ? '전설의 배경' : '오늘날의 기록', esc(H.record)]);
+    (H.lore || []).forEach(t => rows.push(['이야기', esc(t)]));
+    if (H.bio) rows.push(['생물 (GBIF)', a(H.bio.url, H.bio.sci) + [H.bio.ko, H.bio.en, H.bio.family, H.bio.records ? '관찰 기록 ' + num(H.bio.records) + '건' : '', H.bio.extinct ? '멸종' : ''].filter(Boolean).map(x => ' · ' + esc(x)).join('')]);
+    if (H.sea) rows.push(['바다 기록 (OBIS)', a(H.sea.url, num(H.sea.records || 0) + '건') + (H.sea.depth ? ' · 깊이 ' + H.sea.depth[0] + '–' + H.sea.depth[2] + 'm (가운데 ' + H.sea.depth[1] + 'm)' : '') + (H.sea.lat ? ' · 위도 ' + H.sea.lat[0] + '°~' + H.sea.lat[1] + '°' : '')]);
+    if (H.obj) rows.push(['실존 소장품', a(H.obj.url, H.obj.title || '') + [H.obj.museum, H.obj.date, H.obj.culture, H.obj.place, H.obj.medium, H.obj.no ? '소장 번호 ' + H.obj.no : ''].filter(Boolean).map(x => ' · ' + esc(x)).join('')]);
+    if (H.wiki) rows.push(['위키백과', a(H.wiki.url, H.wiki.title) + (H.wiki.ko ? ' · 한국어: ' + esc(H.wiki.ko) : '')]);
+    if (H.photo) rows.push(['사진', a(H.photo.url, [H.photo.by, H.photo.src].filter(Boolean).join(' · ') || '출처') + (H.photo.lic ? ' · ' + esc(H.photo.lic) : '')]);
+    return '<h3>실제 자료</h3><dl class="facts">' + rows.map(r => '<dt>' + esc(r[0]) + '</dt><dd>' + r[1] + '</dd>').join('') + '</dl>' +
+      '<p class="d-text hint">설명은 UNESCO 세계유산센터(CC BY-SA 3.0 IGO)·위키백과(CC BY-SA 4.0)를 바탕으로 새로 쓴 글이며, 소장품 자료는 The Met·Smithsonian Open Access(CC0), 생물 자료는 GBIF.org·OBIS에서 가져왔습니다. 다시 모으려면 <code>python tools/heritage/fetch.py</code>.</p>';
+  }
   async function openDetail(it) {
     const d = it.detail ? it.detail() : {};
     const body = $('#dBody');
@@ -602,6 +623,7 @@
       (d.text ? '<p class="d-text">' + esc(d.text) + '</p>' : '') +
       (d.hint ? '<p class="d-text hint">' + esc(d.hint) + '</p>' : '') +
       (facts.length ? '<dl class="facts">' + facts.map(f => '<dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + '</dd>').join('') + '</dl>' : '') +
+      realHtml(d.real) +
       (d.strip ? '<h3>그림 종류</h3><div class="strip" id="dStrip"></div>' : '') +
       '<h3>이 그림을 바꾸려면</h3><p class="d-text hint">위에서부터 먼저 찾습니다. 파일을 넣은 뒤 <code>python tools/images.py</code>를 실행하세요.</p>' + filesTable(d.files || []) +
       '</div>';

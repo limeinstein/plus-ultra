@@ -43,7 +43,7 @@
     if (c.style === 'gr') return has(name, ['아테네', '살로니카', '간디아', '파마가스타']) ? 'greek' : 'easteurope';
     if (c.style === 'ne') {
       if (has(n, ['프랑스', '브르타뉴'])) return 'france';
-      if (has(n, ['잉글랜드', '스코틀랜드', '아일랜드'])) return 'britain';
+      if (has(n, ['잉글랜드', '스코틀랜드', '아일랜드', '영국'])) return 'britain';
       if (has(n, ['스웨덴', '덴마크']) || has(name, ['리가', '비즈비', '단치히', '쾨니히스베르크'])) return 'nordic';
       if (has(n, ['폴란드', '보헤미아', '헝가리'])) return 'easteurope';
       return 'germany';
@@ -62,6 +62,7 @@
     if (c.style === 'jp') return 'japan';
     if (c.style === 'st') return 'mongolia';
     if (c.style === 'az') return 'aztec';
+    if (c.style === 'na') return 'native';
     if (c.style === 'an') return (c.founded || 0) >= 1492 ? 'colonial' : 'inca';
     if (c.style === 'co') return has(name, ['멕시코', '베라크루스', '아카풀코']) ? 'mexico' : 'colonial';
     if (c.style === 'se') {

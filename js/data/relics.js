@@ -160,8 +160,11 @@
       r = { id: id, name: x.name, kind: x.kind, desc: x.desc, relic: x.disc, rare: true, reg: [],
         price: Math.max(300, Math.round(d.val * x.v / 50) * 50) };
       for (var k in x.extra) r[k] = x.extra[k];
+      // 실존 소장품·출토품으로 바꾼 이름과 설명 (tools/heritage → js/data/heritage.js)
+      var RH = G.HERITAGE && G.HERITAGE.relic[id];
+      if (RH) { r.real = RH; if (RH.name) { r.name0 = r.name; r.name = RH.name; } if (RH.desc) { r.desc0 = r.desc; r.desc = RH.desc; } }
       if (x.kind === 'fig' && G.FIGUREHEADS) {
-        var f = { id: id, name: x.name, price: r.price, rare: true, relic: x.disc, desc: x.desc };
+        var f = { id: id, name: r.name, price: r.price, rare: true, relic: x.disc, desc: r.desc };
         ['spd', 'hp', 'luck', 'storm', 'monster', 'morale', 'battle'].forEach(function (b) { if (x.extra[b]) f[b] = x.extra[b]; });
         G.FIGUREHEADS.push(f); G.FIGUREHEAD[id] = f;
       }

@@ -76,8 +76,13 @@
     out.push({ kind: 'inn', name: '여관', icon: 'bed' });
     if (f.market) out.push({ kind: 'market', name: '시장', icon: 'sack' });
     out.push({ kind: 'church', name: R.churchName(c), icon: c.rel === 'I' ? 'mosque' : c.rel === 'C' || c.rel === 'O' ? 'church' : 'temple' });
-    if (f.library) out.push({ kind: 'library', name: '도서관', icon: 'book' });
-    if (f.palace) out.push({ kind: 'palace', name: R.palaceName(c), icon: 'crown' });
+    if (f.library) out.push({ kind: 'library', name: R.libraryName(c), icon: 'book' });
+    if (f.palace) {
+      // 이름 있는 왕궁은 지금 주인이 있는 곳마다 따로 (한양: 국왕의 경복궁, 세자의 창덕궁)
+      var pals = R.namedPalaces(c) ? G.SPONSORS.filter(function (x) { return x.city === c.id && x.bld === 'palace' && G.Sponsor && G.Sponsor.present(x); }) : [];
+      if (pals.length) pals.forEach(function (x) { out.push({ kind: 'palace', arg: x.id, name: R.palaceName(c, x), icon: 'crown' }); });
+      else out.push({ kind: 'palace', name: R.palaceName(c), icon: 'crown' });
+    }
     f.mansion.forEach(function (sid) {
       var sp = G.SPONSOR[sid]; if (!G.Sponsor || !G.Sponsor.present(sp)) return;
       out.push({ kind: 'mansion', arg: sid, name: C.mansionName(sp), icon: 'mansion' });
@@ -89,6 +94,7 @@
   };
 
   C.mansionName = function (sp) {
+    if (sp.place) return sp.place;   // 이름 있는 저택 (압구정·제승당 등)
     var h = G.Sponsor.holderName(sp), parts = h.split(' ');
     var short = /가문|학당|대학|수도원|조합|평의회|회합/.test(h) ? parts.slice(0, 2).join(' ') : parts[parts.length - 1];
     return short + ' 저택';
@@ -231,7 +237,7 @@
       if (s.contract) {
         var sp = G.SPONSOR[s.contract.sponsor];
         var done = G.Errand.done(s.contract);
-        if (sp && sp.city === c.id && done && G.Sponsor.present(sp)) out.push({ kind: sp.bld === 'palace' ? 'palace' : 'mansion', arg: sp.bld === 'palace' ? undefined : sp.id, icon: 'crown', hot: true, text: G.Sponsor.holderName(sp) + '에게 ' + (s.contract.task ? '「' + G.Errand.name(s.contract) + '」' + U.jx(G.Errand.name(s.contract), '을/를') : '발견을') + ' 보고한다' });
+        if (sp && sp.city === c.id && done && G.Sponsor.present(sp)) out.push({ kind: sp.bld === 'palace' ? 'palace' : 'mansion', arg: R.bldArg(sp), icon: 'crown', hot: true, text: G.Sponsor.holderName(sp) + '에게 ' + (s.contract.task ? '「' + G.Errand.name(s.contract) + '」' + U.jx(G.Errand.name(s.contract), '을/를') : '발견을') + ' 보고한다' });
       }
       // 조합 의뢰
       if (G.Quest) {
@@ -244,7 +250,7 @@
       var un = G.Disc.unreported().length;
       if (un) {
         var here = G.SPONSORS.filter(function (x) { return x.city === c.id && G.Sponsor.present(x) && !G.Sponsor.isRivalNation(x); });
-        if (here.length) out.push({ kind: here[0].bld === 'palace' ? 'palace' : 'mansion', arg: here[0].bld === 'palace' ? undefined : here[0].id, icon: 'star', text: '알리지 않은 발견 ' + un + '건 — ' + G.Sponsor.holderName(here[0]) + '에게 이야기해 볼 만하다' });
+        if (here.length) out.push({ kind: here[0].bld === 'palace' ? 'palace' : 'mansion', arg: R.bldArg(here[0]), icon: 'star', text: '알리지 않은 발견 ' + un + '건 — ' + G.Sponsor.holderName(here[0]) + '에게 이야기해 볼 만하다' });
         else if (f.harbor) out.push({ kind: 'harbor', icon: 'flag', text: '알리지 않은 발견 ' + un + '건 — 항구에서 발표할 수 있다' });
       }
       // 교역: 배당과 남는 장사

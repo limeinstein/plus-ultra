@@ -236,7 +236,7 @@
       if (style === 'is' || style === 'pe' || style === 'in') { if (rng() < 0.6) o.turban = rng() < 0.5 ? '#e8e0cc' : '#b44a2a'; o.robe = rng() < 0.7; }
       else if (style === 'af' || style === 'sw') { o.robe = rng() < 0.6; if (rng() < 0.3) o.turban = '#e8e0cc'; }
       else if (style === 'cn' || style === 'kr' || style === 'jp') { o.robe = true; if (rng() < 0.5) o.hat = '#222'; }
-      else if (style === 'az' || style === 'an' || style === 'tr') { o.robe = rng() < 0.4; }
+      else if (style === 'az' || style === 'an' || style === 'na' || style === 'tr') { o.robe = rng() < 0.4; }
       else { if (rng() < 0.3) o.hat = '#2a1c14'; if (rng() < 0.25) o.veil = rng() < 0.5 ? '#2f5a5a' : '#6b3a2a'; o.robe = rng() < 0.35; }
       ctx.globalAlpha = 0.55 + p.t * 0.45;
       A.person(ctx, p.x, y, h, col, rng, o);

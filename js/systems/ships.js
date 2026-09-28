@@ -148,7 +148,7 @@
     if (LEVANT.indexOf(id) >= 0) return { id: 'cedar', k: 1 };
     if (id === 78 || id === 79) return { id: 'cedar', k: 1.1, imp: true };      // 레바논에서 들여온다
     if (ARABIA.indexOf(id) >= 0) return { id: 'teak', k: 1.2, imp: true };   // 인도에서 들여온 티크
-    if (id === 190) return { id: 'kpine', k: 1 };
+    if (c.style === 'kr') return { id: 'kpine', k: 1 };   // 조선 소나무 (한양·동래·한산도)
     if (BRAZIL.indexOf(id) >= 0) return { id: 'brazil', k: 1 };
     if (r === 0) return { id: 'iberian', k: 1 };
     if (r === 1) return { id: 'oak', k: 1.05 };

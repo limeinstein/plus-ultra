@@ -1,13 +1,26 @@
-<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#222}canvas{display:inline-block;margin:4px}</style></head>
-<body><div id="d"></div>
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:#181614;color:#eee;font-family:Arial,sans-serif}body{padding:12px}.matrix{display:grid;grid-template-columns:82px repeat(12,78px);gap:4px;align-items:center}.head,.style{font-size:11px;text-align:center;color:#d8c79f}.style{font-weight:bold;font-size:13px}.cell{position:relative;width:78px;height:78px}.cell canvas{display:block}.cell i{position:absolute;right:3px;bottom:2px;font:10px Arial;color:#fff;text-shadow:0 1px 2px #000}h1{font-size:18px;margin:0 0 10px}
+</style></head>
+<body><h1>도시 양식 20종 × 역할 12종 NPC 초상 240장</h1><div id="d" class="matrix"></div>
 <script src="js/core/util.js"></script>
+<script src="images/manifest.js"></script>
+<script src="js/core/images.js"></script>
 <script src="js/art/paint.js"></script>
 <script src="js/art/portrait.js"></script>
 <script>
-window.onload=()=>{ try{
- const roles=[['king','ib'],['pope','it'],['priest','ne'],['noble','it'],['merchant','is'],['scholar','ne'],['keeper','ib'],['sailor','ib'],['soldier','ib'],['maid','ib'],['maid','is'],['native','az'],['king','is'],['merchant','cn'],['king','jp'],['sailor','af'],['scholar','in'],['maid','jp']];
+window.onload=async()=>{ try{
+ const styles=G.Art.NPC_STYLES,roles=G.Art.NPC_ROLES;
+ const styleName={ib:'이베리아',ne:'북유럽',it:'이탈리아',gr:'그리스',ru:'루스',is:'이슬람',pe:'페르시아',af:'서아프리카',sw:'스와힐리',in:'인도',se:'동남아',cn:'명',kr:'조선',jp:'일본',az:'메소아메리카',an:'안데스',co:'식민도시',tr:'중앙아프리카',st:'초원',na:'북아메리카'};
+ const roleName={king:'군주',priest:'성직자',noble:'귀족',official:'관리',merchant:'상인',scholar:'학자',keeper:'점주',sailor:'선원',soldier:'군인',maid:'여급',native:'주민',captain:'선장'};
  const d=document.getElementById('d');
- roles.forEach((r,i)=>{ const c=G.Art.portraitCanvas(G.Art.npcSpec('p'+i,r[0],r[1]),180); d.appendChild(c); });
+ const entries=styles.flatMap(style=>roles.map(role=>({style,role,spec:G.Art.npcSpec('matrix:'+style+':'+role,role,style)})));
+ await G.Img.preload(entries.map(e=>G.Art.portraitKeys(e.spec)),30000);
+ d.appendChild(Object.assign(document.createElement('div'),{className:'head',textContent:'양식 / 역할'}));
+ roles.forEach(role=>d.appendChild(Object.assign(document.createElement('div'),{className:'head',textContent:roleName[role]})));
+ styles.forEach(style=>{
+   d.appendChild(Object.assign(document.createElement('div'),{className:'style',textContent:styleName[style]}));
+   entries.filter(e=>e.style===style).forEach(e=>{ const spec=e.spec,role=e.role,box=document.createElement('div'),c=G.Art.portraitCanvas(spec,78),sex=document.createElement('i'); box.className='cell'; box.title=style+' / '+role+' / '+spec.g; sex.textContent=spec.g==='f'?'♀':'♂'; box.append(c,sex); d.appendChild(box); });
+ });
  document.title='done';
 }catch(e){document.title='err '+e.message;console.error(e)} };
 </script></body></html>

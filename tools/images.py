@@ -124,6 +124,11 @@ def valid_keys(d):
                 k['portraits/npc/%s_%s%s' % (nid, cu, vs)] = '마을 사람 · %s (%s)%s' % (label, cl, vl)
         for c in d['cities']:
             k['portraits/npc/%s@%d' % (nid, c['id'])] = '마을 사람 · %s (%s)' % (label, c['name'])
+    portrait_styles = ['ib', 'ne', 'it', 'gr', 'ru', 'is', 'pe', 'af', 'sw', 'in', 'se', 'cn', 'kr', 'jp', 'az', 'an', 'co', 'tr', 'st', 'na']
+    portrait_roles = ['king', 'priest', 'noble', 'official', 'merchant', 'scholar', 'keeper', 'sailor', 'soldier', 'maid', 'native', 'captain']
+    for style in portrait_styles:
+        for role in portrait_roles:
+            k['portraits/npc-roles/%s/%s' % (style, role)] = '도시 양식·역할별 NPC · %s · %s' % (style, role)
     for m in d['mates']:
         k['portraits/mates/' + m['id']] = '동료 · ' + m['name']
     for m in d['maids']:
@@ -184,7 +189,7 @@ def write_manifest(found):
 
 
 def is_valid(key, keys):
-    return key in keys or key.startswith('portraits/player/') or key.startswith('landmarks/') or key.startswith('characters/')
+    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'characters/', 'relics/', 'relic-kinds/'))  # 유물 사진은 tools/heritage 가 넣는다
 
 
 def report(found, dups, keys):
@@ -192,7 +197,7 @@ def report(found, dups, keys):
               ('거리 볼거리', 'landmarks/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('자녀', 'portraits/family/'),
-              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('배', 'ships/'), ('항해 배', 'ships-nav/')]
+              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('유물', 'relics/'), ('배', 'ships/'), ('항해 배', 'ships-nav/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

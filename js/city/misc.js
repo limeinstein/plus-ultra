@@ -203,7 +203,7 @@
   };
 
   // ================================================================ 도서관 (library)
-  var LB = { title: '도서관', icon: 'book', paint: 'library', exitLabel: '도서관을 나온다' };
+  var LB = { title: function (c) { return R.libraryName(c); }, icon: 'book', paint: 'library' };  // 나가는 말은 건물 이름을 따라 (「첨성대를 나온다」)
   C.B.library = LB;
   function librarian(c) { return C.npc('librarian', '사서'); }
   /** 이 도시 도서관에 지금 꽂혀 있는 책 (이미 간행된 것만) */

@@ -50,7 +50,7 @@
       add('dhow'); if (MALABAR.indexOf(id) >= 0) add('parau'); add('baghlah');
       if (iber) { iberian(); add('fusta'); }
     } else if (r === 6) {
-      if (id === 190) { add('maengseon'); add('panokseon'); add('geobukseon'); }
+      if (c.style === 'kr') { add('maengseon'); add('panokseon'); add('geobukseon'); }
       else { add('junk'); if (NORTH_CN.indexOf(id) >= 0) add('shachuan'); add('ljunk'); add('baochuan'); if (iber) iberian(); }
     } else if (r === 8) {
       if (MOLUCCA.indexOf(id) >= 0) add('korakora');

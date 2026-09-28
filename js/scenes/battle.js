@@ -564,7 +564,10 @@
       if (v) {
         st.dueled = true;
         if (v === 2) await UI.say(U.pick(['제독께서 나서실 것까지 없습니다. 제가 상대하겠습니다!', '저런 녀석은 제게 맡기십시오.', '제독의 칼을 더럽힐 것 없습니다. 제가 나가지요.']), G.Scenes.mateSpeaker('first'));
-        var boss = { name: st.npc.kind === 'pirate' ? '해적 두목' : '적 함장', look: st.npc.kind === 'pirate' ? 'pirate' : 'captain', portrait: A.withImg(A.npcSpec('boss' + st.t, st.npc.kind === 'pirate' ? 'sailor' : 'soldier', 'ib'), G.Img.chain.npc(st.npc.kind === 'pirate' ? 'pirate' : 'captain', G.Game.state && G.CITY_DATA[G.Game.state.player.city])), str: U.ri(55, 80), atk: U.ri(6, 12), def: U.ri(2, 6), skill: U.ri(0, 1), mar: U.ri(55, 78), int: U.ri(30, 60), cha: U.ri(30, 55) };
+        var bossZone = st.npc.zone || G.Ships.zone(st.center.lon, st.center.lat), bossStyle = A.fleetStyle(bossZone, st.npc.nation);
+        var bossLook = st.npc.kind === 'pirate' ? 'pirate' : 'captain', bossSpec = A.npcSpec('boss' + st.t, 'captain', bossStyle);
+        A.withImg(bossSpec, [A.rolePortraitKey(bossSpec), 'portraits/npc/' + bossLook + '_' + A.imageCulture(bossStyle)]);
+        var boss = { name: st.npc.kind === 'pirate' ? '해적 두목' : '적 함장', look: bossLook, portrait: bossSpec, str: U.ri(55, 80), atk: U.ri(6, 12), def: U.ri(2, 6), skill: U.ri(0, 1), mar: U.ri(55, 78), int: U.ri(30, 60), cha: U.ri(30, 55) };
         var res = await G.Games.duel(boss, v === 2 ? { mate: px, place: 'deck' } : { place: 'deck' });
         var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
         if (res === 'win') {

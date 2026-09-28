@@ -9,7 +9,7 @@
     if (s === 'is' || s === 'pe' || s === 'sw' || (s === 'af' && city.rel === 'I')) return 'islam';
     if (s === 'cn' || s === 'kr' || s === 'jp') return 'eastasia';
     if (s === 'in' || s === 'se') return 'south';
-    if (s === 'az' || s === 'an' || s === 'tr' || s === 'af') return 'native';
+    if (s === 'az' || s === 'an' || s === 'na' || s === 'tr' || s === 'af') return 'native';
     return 'europe';
   }
   A.cultureOf = cultureOf;

@@ -136,13 +136,13 @@
 
     // ------------------------------------------------ 조선
     { id: 'maengseon', name: '맹선', lv: 2, cult: 'ea', cap: 240, hp: 58, crew: [30, 80], ports: 8, spd: 1.06, oar: 0.55, sails: ['bat', 'bat'], maxMast: 2, price: 9000, turn: 0.95, hull: 'kr',
-      traits: ['oar', 'sturdy', 'shallow'], feat: '조선 수군의 평저 군선', where: '한양',
+      traits: ['oar', 'sturdy', 'shallow'], feat: '조선 수군의 평저 군선', where: '한양·동래·한산도',
       desc: '경국대전에 실린 조선 전기의 군선. 소나무로 두껍게 지은 평저선으로, 노와 돛을 함께 쓴다.' },
     { id: 'panokseon', name: '판옥선', lv: 4, cult: 'ea', cap: 300, hp: 112, crew: [100, 180], ports: 24, spd: 1.0, oar: 0.75, sails: ['bat', 'bat'], maxMast: 2, price: 38000, turn: 1.2, from: 1555, hull: 'panok',
-      traits: ['oar', 'highdeck', 'heavygun', 'coast'], feat: '큰 총통을 싣는 2층 군선', where: '한양 (1555년~)',
+      traits: ['oar', 'highdeck', 'heavygun', 'coast'], feat: '큰 총통을 싣는 2층 군선', where: '한양·동래·한산도 (1555년~)',
       desc: '을묘왜변 뒤 지은 조선의 주력 군선. 노꾼은 아래층, 군사는 위층에 두어 높은 곳에서 큰 총통을 쏜다. 평저선이라 제자리에서 잘 돈다.' },
     { id: 'geobukseon', name: '거북선', lv: 5, cult: 'ea', cap: 150, hp: 130, crew: [80, 150], ports: 20, spd: 1.0, oar: 0.9, sails: ['bat', 'bat'], maxMast: 2, price: 62000, turn: 1.25, armor: 0.5, hull: 'turtle',
-      traits: ['oar', 'armor', 'spikes', 'ram', 'dragon', 'coast'], feat: '적진을 헤집는 돌격선', where: '한양 (조선 기술 5등급)',
+      traits: ['oar', 'armor', 'spikes', 'ram', 'dragon', 'coast'], feat: '적진을 헤집는 돌격선', where: '한양·동래·한산도 (조선 기술 5등급)',
       desc: '등을 판자로 덮고 쇠못을 박은 조선의 돌격선(龜船). 태종 때 이미 기록에 나온다. 용머리로도 쏘고 적선을 들이받는다.' },
 
     // ------------------------------------------------ 일본

@@ -27,7 +27,7 @@
   var HIRA = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだでどばびぶべぼぱぴぷぺぽ';
 
   /** 말 번호(G.LANGS) → 글자 */
-  TG.SCRIPT = ['greek', 'greek', 'greek', 'greek', 'cyrillic', 'arabic', 'persian', 'hanzi', 'deva', 'uyghur', 'ethiopic', 'cherokee', 'thai', 'hira', 'idu'];
+  TG.SCRIPT = ['greek', 'greek', 'greek', 'greek', 'cyrillic', 'arabic', 'persian', 'hanzi', 'deva', 'uyghur', 'ethiopic', 'cherokee', 'thai', 'hira', 'idu', 'cherokee'];
   TG.RTL = { arabic: 1, persian: 1, uyghur: 1 };
 
   function pick(r, s) { return s.charAt(Math.floor(r() * s.length)); }

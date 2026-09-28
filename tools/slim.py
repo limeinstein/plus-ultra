@@ -33,6 +33,7 @@ RULES = [
     ('city-styles/', 1100, 'auto', 66),
     ('discoveries/', 1100, 'auto', 72),
     ('discovery-cats/', 1100, 'auto', 72),
+    ('relics/', 256, 'auto', 70),
     ('ships/', 640, 'webp', 78),
     ('ships-nav/', 3136, 'keep', 88),   # 16방향 배 시트: 칸 좌표가 원본 기준이라 되도록 그대로 둔다(게임이 배율을 알아서 맞춤)
     ('title', 1100, 'auto', 66),

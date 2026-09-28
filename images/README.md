@@ -20,6 +20,7 @@
 | 거리 배경 (도시 화면) | `bg-styles/ib_port_a.jpg` 항구 · `bg-styles/ib_inland_a.jpg` 내륙 (여러 장이면 _a, _b …) | 1600×900 |
 | 거리 배경 — 한 도시만 | `backgrounds/도시번호.jpg` | 1600×900 |
 | 건물 겉모습 (거리에 세움) | `exteriors/건물.webp` (tavern, trade, inn …) · 도시별 `@도시번호` · 후원자 저택 `mansion@후원자ID` | 배경 지운 PNG·WEBP, 높이 660 |
+| 지역별 건물 묶음 | `exterior-styles/<묶음>/건물.webp` — 북미 원주민은 `woodland`(숲: 나무껍질 긴 집·위그웜·티피·울타리·카누), `plains`(평원 티피, 다코타 230·만단 243), `pueblo`(흙벽돌 계단 집·키바, 타오스 241·아코마 242). 없는 건물은 plains·pueblo → woodland → tropic 순으로 빌림. `tools/natives/make.py`가 기존 그림(마사이 시장 지붕 결)을 재료로 다시 만든다 | 배경 지운 WEBP, 높이 520(시장 660) |
 | 거리 볼거리 (장식) | `landmarks/이름.webp` | 배경 지운 PNG·WEBP |
 | 제독 — 거리에서 걷는 모습 | `characters/walk_1.webp` … `walk_8.webp` (옆모습, 발끝이 아래) | 높이 430 |
 | 제독 — 수첩 반신상 | `characters/player_half.webp` | 512×512 |
@@ -38,6 +39,7 @@
 | 경쟁자 | `portraits/rivals/이름.png` (예: `바르톨로메우 디아스.png`) | 512×512 |
 | 마을 사람 | `portraits/npc/역할.png` (예: `trader`), 문화권별 `_islam`, 도시별 `@0` | 512×512 |
 | 마을 사람 — 도시마다 다른 얼굴 | 같은 이름 뒤에 `_f`(여) `_m`(남) `_2` `_3` 을 붙이면 도시 번호에 따라 번갈아 나옵니다. 예: `portraits/npc/priest_europe_f.webp` (수녀) | 512×512 |
+| 마을 사람 — 도시 양식×역할 240장 | `portraits/npc-roles/양식/역할.webp` (예: 조선 상인 `kr/merchant.webp`). 양식 20종×역할 12종이며, `portraits/npc/역할@도시번호`가 있으면 도시 전용 그림을 먼저 씁니다. | 512×512, 투명 배경 |
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |
 | 자녀 | `portraits/family/son.png`, `daughter.png`, 둘째는 `son_2.png` | 512×512 |
 | 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`) | 1440×640 |

@@ -116,7 +116,7 @@
   }
   UI.speechHtml = speech;
   /** 낯선 말을 하는 화자는 늘 얼굴을 보인다 — 초상이 없으면 지금 도시(없으면 그 말의 고장) 양식의 마을 사람 얼굴을 만든다 */
-  var LI_STYLE = ['ib', 'ib', 'it', 'ne', 'ru', 'is', 'pe', 'cn', 'in', 'st', 'af', 'az', 'se', 'jp', 'kr'];
+  var LI_STYLE = ['ib', 'ib', 'it', 'ne', 'ru', 'is', 'pe', 'cn', 'in', 'st', 'af', 'az', 'se', 'jp', 'kr', 'na'];
   function withFace(opts) {
     if (!opts || opts.portrait || opts.li == null || opts.noFace) return opts;
     var S = G.Game && G.Game.state, c = S && S.loc && S.loc.mode === 'city' ? G.CITY_DATA[S.loc.city] : null;

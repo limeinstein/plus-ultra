@@ -111,6 +111,7 @@
       cn: ['horse', 'donkey', 'wagon'], jp: ['horse', 'porter'], kr: ['horse', 'porter'],
       az: ['porter', { id: 'horse', from: 1525 }, { id: 'donkey', from: 1525 }],
       co: ['horse', 'donkey', 'wagon'],
+      na: ['porter', { id: 'horse', from: 1680 }],   // 북미 원주민: 평원에 말이 퍼진 것은 1680년 무렵부터
       an: ['llama', 'porter', { id: 'horse', from: 1540 }, { id: 'donkey', from: 1540 }]
     },
     city: {

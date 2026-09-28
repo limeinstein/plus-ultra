@@ -564,7 +564,10 @@
   async function hail(n) {
     var s = S(), f = s.fleet;
     st.busy++; st.paused = true; refreshBar();
-    var who = { name: (n.nation ? n.nation + ' ' : '') + NPC_KIND[n.kind].name + ' 선장', portrait: A.withImg(A.npcSpec('hail' + n.id, 'sailor', 'ib'), G.Img.chain.npc('captain')) };
+    var capStyle = A.fleetStyle(n.zone || G.Ships.zone(n.lon, n.lat), n.nation);
+    var capSpec = A.npcSpec('hail' + n.id, 'captain', capStyle);
+    A.withImg(capSpec, [A.rolePortraitKey(capSpec), 'portraits/npc/captain_' + A.imageCulture(capStyle)]);
+    var who = { name: (n.nation ? n.nation + ' ' : '') + NPC_KIND[n.kind].name + ' 선장', portrait: capSpec };
     try {
       var opts = [{ label: '소식을 묻는다', value: 'news' }];
       if (n.kind === 'merchant') opts.push({ label: '식량·물을 산다', value: 'buy' });

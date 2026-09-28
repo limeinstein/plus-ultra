@@ -8,7 +8,7 @@
   function S() { return G.Game.state; }
   function CFG() { return G.MATE_MOVE || {}; }
   function city(id) { return G.CITY_DATA[id]; }
-  function exists(c, y) { return c && !(c.founded && y < c.founded); }
+  function exists(c, y) { return c && !(c.founded && y < c.founded) && !(c.until && y >= c.until); }
   function dist(a, b) {
     var dl = Math.abs(a.lon - b.lon); if (dl > 180) dl = 360 - dl;
     var dx = dl * Math.cos((a.lat + b.lat) / 2 * Math.PI / 180), dy = a.lat - b.lat;

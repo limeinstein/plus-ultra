@@ -16,6 +16,37 @@
   };
   SC.hasMate = function (role) { var s = S(); return s.mates.some(function (x) { return x.role === role; }); };
 
+  // ---------------------------------------------------------------- 실제 자료 (tools/heritage → G.HERITAGE)
+  function link(url, text) { return url ? '<a href="' + U.esc(url) + '" target="_blank" rel="noopener">' + U.esc(text) + '</a>' : U.esc(text); }
+  /** 출처 한 줄: 설명·자료·사진이 어디서 왔는지 (재사용 조건 표시) */
+  SC.realCredit = function (H) {
+    if (!H) return '';
+    var p = [];
+    if (H.whc) p.push(link(H.whc.url, 'UNESCO 세계유산센터') + ' (CC BY-SA 3.0 IGO)');
+    if (H.wiki) p.push(link(H.wiki.url, '위키백과') + ' (CC BY-SA 4.0)');
+    if (H.bio) p.push(link(H.bio.url, 'GBIF.org'));
+    if (H.sea) p.push(link(H.sea.url, 'OBIS'));
+    if (H.obj) p.push(link(H.obj.url, H.obj.museum) + ' (CC0)');
+    var ph = H.photo ? '사진: ' + link(H.photo.url, [H.photo.by, H.photo.src].filter(Boolean).join(' · ') || '출처') + (H.photo.lic ? ' (' + U.esc(H.photo.lic) + ')' : '') : '';
+    if (!p.length && !ph) return '';
+    return '<div class="real-credit">' + (p.length ? '자료: ' + p.join(' · ') + (H.desc || H.record ? ' — 한국어 글은 이를 바탕으로 새로 씀' : '') : '') + (p.length && ph ? '<br>' : '') + ph + '</div>';
+  };
+  /** 발견물의 실제 모습: 세계유산 등재·생물 분류·소장품 — 발견 카드와 수첩에서 쓴다 */
+  SC.realInfo = function (H) {
+    if (!H) return '';
+    var tags = [], out = '';
+    if (H.whc) tags.push('<span class="tag whc">UNESCO 세계유산' + (H.whc.year ? ' · ' + H.whc.year + '년 등재' : '') + '</span>' + (H.whc.crit ? '<span class="tag">기준 ' + U.esc(H.whc.crit) + '</span>' : '') + (H.whc.danger ? '<span class="tag warn-text">위험에 처한 유산</span>' : ''));
+    if (H.bio) tags.push('<span class="tag"><i>' + U.esc(H.bio.sci) + '</i></span>' + (H.bio.family ? '<span class="tag">' + U.esc(H.bio.family) + '</span>' : '') + (H.bio.records ? '<span class="tag">관찰 기록 ' + U.num(H.bio.records) + '건</span>' : '') + (H.bio.extinct ? '<span class="tag warn-text">멸종</span>' : ''));
+    if (H.sea) tags.push('<span class="tag">바다 기록 ' + U.num(H.sea.records || 0) + '건' + (H.sea.depth ? ' · 깊이 ' + H.sea.depth[0] + '–' + H.sea.depth[2] + 'm' : '') + '</span>');
+    if (H.obj) tags.push('<span class="tag">' + U.esc(H.obj.museum) + ' 소장</span>');
+    if (H.legend) tags.push('<span class="tag">전설</span>');
+    if (tags.length) out += '<div class="center real-tags">' + tags.join(' ') + '</div>';
+    if (H.record) out += '<div class="real-record"><b>' + (H.whc ? '세계유산 기록' : H.legend ? '전설의 배경' : '오늘날의 기록') + '</b> ' + U.esc(H.record) + '</div>';
+    if (H.lore && H.lore.length) out += H.lore.map(function (t) { return '<div class="real-lore">' + U.esc(t) + '</div>'; }).join('');
+    if (H.obj && H.obj.title) out += '<div class="real-obj">' + link(H.obj.url, H.obj.title) + [H.obj.date, H.obj.culture, H.obj.no ? '소장 번호 ' + H.obj.no : ''].filter(Boolean).map(function (x) { return ' · ' + U.esc(x); }).join('') + '</div>';
+    return out + SC.realCredit(H);
+  };
+
   /** big discovery announcement card */
   /** 발견 카드 아래의 유물 줄: 새로 찾았을 때는 손에 넣은 것, 수첩에서 볼 때는 지금 어디에 있는지 */
   SC.relicStrip = function (d, relics) {
@@ -32,7 +63,7 @@
       return st.reported && st.gaveTo ? '후원자에게 바침' : '손을 떠남';
     }
     return '<div class="relic-strip"><div class="rs-head">' + (relics ? '손에 넣은 유물 — 발견의 증거가 됩니다' : '이 발견의 유물') + '</div><div class="rs-row">' +
-      list.map(function (r) { return '<div class="rs-item" data-relic="' + r.id + '"><b>' + U.esc(r.name) + '</b><small>' + where(r) + '</small></div>'; }).join('') + '</div>' +
+      list.map(function (r) { var ob = r.real && r.real.obj; return '<div class="rs-item" data-relic="' + r.id + '"><b>' + U.esc(r.name) + '</b><small>' + where(r) + '</small>' + (ob ? '<small class="rs-museum">' + U.esc(ob.museum) + '</small>' : '') + '</div>'; }).join('') + '</div>' +
       (relics ? '<div class="rs-note">후원자에게 보고하면 증거로 바치고, 항구에서 스스로 발표하면 제독의 것이 됩니다.</div>' : '') + '</div>';
   };
   SC.discoveryCard = async function (d, fame, relics) {
@@ -42,7 +73,7 @@
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
       '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +
-      '<div class="desc">' + U.esc(d.desc) + '</div>' +
+      '<div class="desc">' + U.esc(d.desc) + '</div>' + SC.realInfo(d.real) +
       (fame ? '<div class="center big" style="color:#6a3a14">명성 +' + U.num(fame) + '</div>' : '') + SC.relicStrip(d, relics) + '</div>';
     var win = UI.window({ title: fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
     win.content.querySelector('.art').appendChild(art);

@@ -81,6 +81,19 @@
       var libs = b.libs.map(function (id) { return G.CITY_DATA[id].name; }).join('·');
       out.push({ icon: 'book', history: true, text: '새 책: ' + b.title + U.jx(b.title, '이/가') + ' 나왔다. ' + libs + '의 도서관에서 읽을 수 있다.' });
     });
+    // 새로 세워진 도시·사라진 마을 (cities.js 의 founded / until): 개척 도시가 역사 연도에 맞춰 열린다
+    var born = [], gone = [];
+    G.CITY_DATA.forEach(function (c) {
+      if (c.founded === s.date.y && c.founded > 1480) born.push(c);
+      if (c.until === s.date.y) gone.push(c);
+    });
+    if (born.length) out.push({ icon: 'castle', history: true, text: '새 도시 소식: ' + born.map(function (c) { return c.nation + '의 ' + c.name; }).join(', ') +
+      U.jx(born[born.length - 1].name, '이/가') + ' 세워졌다.' });
+    gone.forEach(function (c) {   // 같은 자리에 새 도시가 섰으면 이름이 바뀐 것 (뉴암스테르담 → 뉴욕)
+      var nw = born.filter(function (b) { return Math.abs(b.lat - c.lat) + Math.abs(b.lon - c.lon) < 0.5; })[0];
+      out.push({ icon: 'castle', history: true, text: nw ? c.name + U.jx(c.name, '이/가') + ' ' + nw.nation + '의 ' + nw.name + U.jx(nw.name, '으로/로') + ' 바뀌었다.'
+        : c.name + '의 옛 마을은 이제 남아 있지 않다고 한다.' });
+    });
     var age = R.age();
     // aging effects
     if (age >= 45) { s.player.st.str = Math.max(10, s.player.st.str - U.ri(1, 3)); s.player.st.mar = Math.max(10, s.player.st.mar - U.ri(0, 2)); }

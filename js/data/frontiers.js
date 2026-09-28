@@ -47,7 +47,7 @@
     inner: [[], ['t_musk', 't_jade'], ['sable'], ['potala', 'yeti']],
     malacca: [['t_sandal', 't_rice'], ['shwedagon', 'ayubuddha', 'goldelephant', 'padaung'], ['ananda', 'cannibal', 'rafflesia', 'orangutan', 'carnivplant'], ['angkor', 'borobudur']],
     spice: [['t_nutmeg'], ['breadfruit'], ['komodo'], ['paradise']],
-    china: [['t_silkraw', 't_herbs'], ['t_tea', 'greatwall', 'cloisonne'], ['huangshan', 'yungang', 'qianling', 'muryeong', 'bulguksa', 'bronze', 'nestorian', 'seismo'], ['qinshi', 'jadesuit', 'panda']],
+    china: [['t_silkraw', 't_herbs'], ['t_tea', 'greatwall', 'cloisonne', 'jongmyo', 'emille', 'hwangnyong'], ['huangshan', 'yungang', 'qianling', 'muryeong', 'bulguksa', 'seokguram', 'munmu', 'bronze', 'nestorian', 'seismo'], ['qinshi', 'jadesuit', 'panda']],
     japan: [[], ['goldseal'], ['glassbowl', 'konjiki'], ['fertile']],
     austral: [[], ['kangaroo'], ['aborigine'], ['uluru']],
     west: [[], ['t_tobacco', 't_allspice'], ['tarantula', 'eldorado'], ['blemmyes']],

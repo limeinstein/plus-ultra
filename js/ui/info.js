@@ -153,7 +153,8 @@
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
           var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : '';
           var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '');
-          var extra = rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '';
+          var ob = rl && rl.real && rl.real.obj;
+          var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '');
           var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
           return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (it.n > 1 ? ' ×' + it.n : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || '') + '</td><td style="font-size:16px">' + U.esc(it.desc || d.desc || '') + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
         }).join('') + '</table>';

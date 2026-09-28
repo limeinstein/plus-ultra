@@ -21,7 +21,7 @@
   SP.holderName = function (sp) { return SP.holder(sp) || sp.title; };
   SP.rel = function (id) { var s = S(); return s.sponsors[id] || (s.sponsors[id] = { trust: 20, done: 0, fail: 0, anger: 0, met: 0 }); };
   var HONOR = { king: '폐하', pope: '성하', gov: '각하', noble: '각하', priest: '신부님', official: '각하', scholar: '박사님', merchant: '회장님' };
-  SP.honor = function (sp) { return HONOR[sp.type] || '님'; };
+  SP.honor = function (sp) { return sp.honor || HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
   SP.speaker = function (sp) {
     return { name: SP.holderName(sp), portrait: A.sponsorSpec(sp, SP.holderIndex(sp)), lang: SP.langLv(sp), li: SP.langLi(sp) };
   };

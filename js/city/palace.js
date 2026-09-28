@@ -7,10 +7,10 @@
   function palaceSponsor(c) { return G.SPONSORS.filter(function (s) { return s.city === c.id && s.bld === 'palace' && SP.present(s); })[0] || null; }
   function make(kind) {
     var B = { paint: kind, icon: kind === 'palace' ? 'crown' : 'mansion' };
-    B.title = function (c, arg) { return kind === 'palace' ? R.palaceName(c) : C.mansionName(G.SPONSOR[arg]); };
+    B.title = function (c, arg) { return kind === 'palace' ? R.palaceName(c, arg && G.SPONSOR[arg]) : C.mansionName(G.SPONSOR[arg]); };
     B.variant = function (c, arg) { return arg || ''; };
     B.exitLabel = kind === 'palace' ? '물러난다' : '저택을 나온다';
-    B.sp = function (c, arg) { return kind === 'palace' ? palaceSponsor(c) : G.SPONSOR[arg]; };
+    B.sp = function (c, arg) { if (kind !== 'palace') return G.SPONSOR[arg]; var own = arg && G.SPONSOR[arg]; return own ? (SP.present(own) ? own : null) : palaceSponsor(c); };
     B.enter = async function (c, arg) {
       var sp = B.sp(c, arg);
       if (!sp) {

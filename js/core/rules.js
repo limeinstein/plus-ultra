@@ -12,6 +12,7 @@
   R.cityExists = function (c, date) {
     date = date || R.S().date;
     if (c.founded && date.y < c.founded) return false;
+    if (c.until && date.y >= c.until) return false;   // 사라진 마을 (호셸라가·스타다코나, 뉴암스테르담 → 뉴욕)
     if (c.id === 200 && (date.y > 1521 || (date.y === 1521 && date.m >= 8))) return false; // Tenochtitlan -> Mexico
     return true;
   };
@@ -19,7 +20,7 @@
     var S = R.S(); return (S && S.owners && S.owners[c.id]) || c.nation;
   };
   // 작은 항구지만 그 고장 배를 짓는 조선소가 있는 곳 (나가사키·향료 제도·잉카 해안·말라바르·요동 등)
-  R.SMALL_YARDS = [191, 171, 172, 220, 221, 151, 125, 106, 166, 167, 189, 205];
+  R.SMALL_YARDS = [191, 171, 172, 220, 221, 151, 125, 106, 166, 167, 189, 205, 229];
   R.facilities = function (c) {
     var f = { harbor: !!c.port, trade: true, tavern: true, inn: true, gate: true, church: true, market: c.size >= 2, shipyard: !!c.port && (c.size >= 2 || R.SMALL_YARDS.indexOf(c.id) >= 0), palace: false, library: false, guild: false, mansion: [] };
     if (c.flags.indexOf('P') >= 0) f.palace = true;
@@ -31,9 +32,16 @@
     return f;
   };
   R.churchName = function (c) {
+    if (c.places && c.places.church) return c.places.church;   // 이름 있는 곳 (경주 불국사 등)
     return c.rel === 'I' ? '모스크' : c.rel === 'H' || c.rel === 'B' || c.rel === 'J' ? '사원' : c.rel === 'K' ? '사당' : c.rel === 'N' ? '신전' : '교회';
   };
-  R.palaceName = function (c) {
+  R.libraryName = function (c) { return (c.places && c.places.library) || '도서관'; };
+  /** 이름을 가진 왕궁 (한양 경복궁·창덕궁, 경주 반월성처럼 후원자 자료에 place가 있는 곳)이면 왕궁마다 따로 세운다 */
+  R.namedPalaces = function (c) { return G.SPONSORS.some(function (s) { return s.city === c.id && s.bld === 'palace' && s.place; }); };
+  /** 후원자가 사는 건물을 여는 인자: 저택은 후원자 id, 왕궁은 이름 있는 왕궁일 때만 id */
+  R.bldArg = function (sp) { return sp.bld !== 'palace' || R.namedPalaces(G.CITY_DATA[sp.city]) ? sp.id : undefined; };
+  R.palaceName = function (c, who) {
+    if (who && who.place) return who.place;
     var sp = G.SPONSORS.filter(function (s) { return s.city === c.id && s.bld === 'palace'; })[0];
     if (sp && sp.type === 'gov') return '총독부';
     if (sp && sp.type === 'pope') return '교황청';

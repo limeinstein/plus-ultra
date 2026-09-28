@@ -22,6 +22,8 @@
     an: { walls: ['#9a9084', '#8a8074', '#aaa092'], roofs: ['#b89a5a', '#a88a4a'], roof: 'thatch', tower: 'stonetower', dome: null, veg: ['round'], hills: '#7a8060', water: ['#4f8aa8', '#265a7a'] },
     co: { walls: ['#f1ece0', '#efe0c0', '#e8cfa6', '#f0dcd0'], roofs: ['#b5592f', '#a94f2a'], roof: 'tile', tower: 'baroque', dome: '#b86a3a', veg: ['palm', 'round'], hills: '#6f8a52', water: ['#3fa0b8', '#1f6f90'] },
     tr: { walls: ['#a07a50', '#8a6a44'], roofs: ['#9a7a44', '#8a6a3a'], roof: 'cone', tower: null, dome: null, veg: ['palm', 'round'], hills: '#6f8a4a', water: ['#3f98a8', '#1f6a80'] },
+    // 북미 원주민 마을: 가죽 원뿔 천막(티피)·나무껍질 긴 집, 침엽수와 활엽수 숲
+    na: { walls: ['#c9ae86', '#b89a70', '#a8865a'], roofs: ['#d8c4a0', '#c2a67a', '#8a6a44'], roof: 'cone', lodge: true, tower: null, dome: null, veg: ['pine', 'round'], hills: '#6d7a52', water: ['#5a8aa8', '#2d5a7a'] },
     st: { walls: ['#e8e0cc', '#a08060', '#8a6a4a'], roofs: ['#6a5a4a'], roof: 'yurt', tower: 'minaret', dome: '#4a8aa0', veg: ['round'], hills: '#a09a70', water: ['#6a8aa0', '#3a5a70'] }
   };
   A.STYLE = STYLE;
@@ -65,7 +67,43 @@
     }
   }
 
+  /** 북미 원주민 마을의 집: 가죽 원뿔 천막(티피) 또는 나무껍질을 덮은 긴 집 (house 대신) */
+  function lodge(ctx, st, x, base, w, h, rng, hazeCol, haze) {
+    var wc = A.hex(st.roofs[Math.floor(rng() * st.roofs.length)]);
+    if (haze) wc = A.mix(wc, hazeCol, haze);
+    var lit = A.rgba(A.shade(wc, 1.08)), dark = A.rgba(A.shade(wc, 0.66)), line = 'rgba(50,32,18,' + (haze ? 0.25 : 0.6) + ')';
+    if (rng() < 0.6) {                       // 티피: 장대 끝이 엇갈려 솟은 원뿔
+      var tw = Math.min(w, h * 1.1), th = tw * 1.15, cx = x + w / 2, top = base - th;
+      var g = ctx.createLinearGradient(cx - tw / 2, 0, cx + tw / 2, 0);
+      g.addColorStop(0, lit); g.addColorStop(0.62, lit); g.addColorStop(1, dark);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx - tw / 2, base); ctx.quadraticCurveTo(cx - tw * 0.2, base - th * 0.5, cx - tw * 0.05, top + th * 0.1);
+      ctx.lineTo(cx + tw * 0.05, top + th * 0.1); ctx.quadraticCurveTo(cx + tw * 0.2, base - th * 0.5, cx + tw / 2, base); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = line; ctx.lineWidth = Math.max(1, tw * 0.025);
+      for (var k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(cx + k * tw * 0.03, top + th * 0.12); ctx.lineTo(cx + k * tw * 0.09, top - th * 0.1); ctx.stroke(); }
+      if (!haze || haze < 0.4) {
+        var band = ['#8a2d25', '#2e4a6a', '#c98a2a', '#2a2a2a'][Math.floor(rng() * 4)];
+        ctx.fillStyle = band; ctx.globalAlpha = haze ? 1 - haze : 0.85;
+        ctx.beginPath(); ctx.moveTo(cx - tw * 0.36, base - th * 0.2); ctx.lineTo(cx + tw * 0.36, base - th * 0.2); ctx.lineTo(cx + tw * 0.33, base - th * 0.27); ctx.lineTo(cx - tw * 0.33, base - th * 0.27); ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = 'rgba(30,20,12,.8)'; ctx.beginPath(); ctx.moveTo(cx - tw * 0.08, base); ctx.lineTo(cx, base - th * 0.28); ctx.lineTo(cx + tw * 0.08, base); ctx.fill();
+      }
+      return;
+    }
+    var lh = Math.min(h * 0.5, w * 0.42), lw = w, y = base - lh;   // 긴 집: 둥근 지붕, 나무껍질 판, 연기 구멍
+    ctx.fillStyle = dark; ctx.fillRect(x + lw * 0.9, y + lh * 0.3, lw * 0.14, lh * 0.7);
+    var g2 = ctx.createLinearGradient(0, y - lh * 0.4, 0, base);
+    g2.addColorStop(0, lit); g2.addColorStop(1, A.rgba(A.shade(wc, 0.82)));
+    ctx.fillStyle = g2; ctx.beginPath(); ctx.moveTo(x, base); ctx.lineTo(x, y + lh * 0.3); ctx.quadraticCurveTo(x + lw / 2, y - lh * 0.55, x + lw, y + lh * 0.3); ctx.lineTo(x + lw, base); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = line; ctx.lineWidth = 1;
+    for (var b = 1; b < 6; b++) { var bx = x + lw * b / 6; ctx.beginPath(); ctx.moveTo(bx, base); ctx.lineTo(bx, y + lh * 0.3 - Math.sin(Math.PI * b / 6) * lh * 0.4); ctx.stroke(); }
+    if (!haze || haze < 0.4) {
+      ctx.fillStyle = 'rgba(30,20,12,.8)'; ctx.fillRect(x + lw * 0.45, base - lh * 0.5, lw * 0.1, lh * 0.5);
+      ctx.fillStyle = 'rgba(200,200,200,.18)'; ctx.beginPath(); ctx.ellipse(x + lw * 0.3, y - lh * 0.45, lw * 0.05, lh * 0.18, 0.3, 0, 7); ctx.fill();
+    }
+  }
+
   function house(ctx, st, x, base, w, h, rng, hazeCol, haze) {
+    if (st.lodge) return lodge(ctx, st, x, base, w, h, rng, hazeCol, haze);
     var wc = A.hex(st.walls[Math.floor(rng() * st.walls.length)]);
     var rc = A.hex(st.roofs ? st.roofs[Math.floor(rng() * st.roofs.length)] : wc);
     if (haze) { wc = A.mix(wc, hazeCol, haze); rc = A.mix(rc, hazeCol, haze); }

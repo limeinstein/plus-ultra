@@ -1,0 +1,123 @@
+{
+ "disc": {
+  "seokguram": {
+   "id": "seokguram",
+   "unesco": {
+    "no": 736,
+    "name": "Seokguram Grotto and Bulguksa Temple",
+    "year": 1995,
+    "crit": "(i)(iv)",
+    "states": "Republic of Korea",
+    "url": "https://whc.unesco.org/en/list/736",
+    "license": "CC BY-SA 3.0 IGO",
+    "credit": "UNESCO World Heritage Centre",
+    "src": "whc.unesco.org (시험분, WebFetch)"
+   },
+   "wiki": {
+    "title": "Seokguram",
+    "ko": "석굴암",
+    "url": "https://en.wikipedia.org/wiki/Seokguram",
+    "license": "CC BY-SA 4.0"
+   }
+  },
+  "bulguksa": {
+   "id": "bulguksa",
+   "unesco": {
+    "no": 736,
+    "name": "Seokguram Grotto and Bulguksa Temple",
+    "year": 1995,
+    "crit": "(i)(iv)",
+    "states": "Republic of Korea",
+    "url": "https://whc.unesco.org/en/list/736",
+    "license": "CC BY-SA 3.0 IGO",
+    "credit": "UNESCO World Heritage Centre",
+    "src": "whc.unesco.org (시험분, WebFetch)"
+   },
+   "wiki": {
+    "title": "Bulguksa",
+    "ko": "불국사",
+    "url": "https://en.wikipedia.org/wiki/Bulguksa",
+    "license": "CC BY-SA 4.0"
+   }
+  },
+  "jongmyo": {
+   "id": "jongmyo",
+   "unesco": {
+    "no": 738,
+    "name": "Jongmyo Shrine",
+    "year": 1995,
+    "crit": "(iv)",
+    "states": "Republic of Korea",
+    "url": "https://whc.unesco.org/en/list/738",
+    "license": "CC BY-SA 3.0 IGO",
+    "credit": "UNESCO World Heritage Centre",
+    "src": "whc.unesco.org (시험분, WebFetch)"
+   },
+   "wiki": {
+    "title": "Jongmyo",
+    "ko": "종묘",
+    "url": "https://en.wikipedia.org/wiki/Jongmyo",
+    "license": "CC BY-SA 4.0"
+   }
+  },
+  "hwangnyong": {
+   "id": "hwangnyong",
+   "unesco": {
+    "no": 976,
+    "name": "Gyeongju Historic Areas",
+    "year": 2000,
+    "crit": "(ii)(iii)",
+    "states": "Republic of Korea",
+    "url": "https://whc.unesco.org/en/list/976",
+    "license": "CC BY-SA 3.0 IGO",
+    "credit": "UNESCO World Heritage Centre",
+    "src": "whc.unesco.org (시험분, WebFetch)"
+   },
+   "wiki": {
+    "title": "Hwangnyongsa",
+    "ko": "황룡사",
+    "url": "https://en.wikipedia.org/wiki/Hwangnyongsa",
+    "license": "CC BY-SA 4.0"
+   }
+  },
+  "muryeong": {
+   "id": "muryeong",
+   "unesco": {
+    "no": 1477,
+    "name": "Baekje Historic Areas",
+    "year": 2015,
+    "crit": "(ii)(iii)",
+    "states": "Republic of Korea",
+    "url": "https://whc.unesco.org/en/list/1477",
+    "license": "CC BY-SA 3.0 IGO",
+    "credit": "UNESCO World Heritage Centre",
+    "src": "whc.unesco.org (시험분, WebFetch)"
+   },
+   "wiki": {
+    "title": "Tomb of King Muryeong",
+    "ko": "무령왕릉",
+    "url": "https://en.wikipedia.org/wiki/Tomb_of_King_Muryeong",
+    "license": "CC BY-SA 4.0"
+   }
+  },
+  "munmu": {
+   "id": "munmu",
+   "wiki": {
+    "title": "Underwater Tomb of King Munmu",
+    "ko": "문무대왕릉",
+    "url": "https://en.wikipedia.org/wiki/Underwater_Tomb_of_King_Munmu",
+    "license": "CC BY-SA 4.0"
+   }
+  },
+  "emille": {
+   "id": "emille",
+   "wiki": {
+    "title": "Bell of King Seongdeok",
+    "ko": "성덕대왕신종",
+    "url": "https://en.wikipedia.org/wiki/Bell_of_King_Seongdeok",
+    "license": "CC BY-SA 4.0"
+   }
+  }
+ },
+ "relic": {}
+}

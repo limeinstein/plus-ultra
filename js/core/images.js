@@ -162,16 +162,17 @@
   // ---------------------------------------------------------------- key chains (파일 이름 규칙)
   I.STYLES = [['ib', '이베리아'], ['ne', '서·북유럽'], ['it', '이탈리아·남프랑스'], ['gr', '그리스·발칸'], ['ru', '러시아'], ['is', '아랍·북아프리카'],
     ['pe', '페르시아·중앙아시아'], ['af', '사헬(흙벽 도시)'], ['sw', '동아프리카 해안'], ['tr', '열대 토착 마을'], ['in', '인도'], ['se', '동남아시아'],
-    ['cn', '중국'], ['kr', '조선'], ['jp', '일본'], ['st', '초원(유르트)'], ['co', '신대륙 식민 도시'], ['az', '메소아메리카'], ['an', '안데스']];
+    ['cn', '중국'], ['kr', '조선'], ['jp', '일본'], ['st', '초원(유르트)'], ['co', '신대륙 식민 도시'], ['az', '메소아메리카'], ['an', '안데스'], ['na', '북미 원주민 마을']];
   /** 도시 양식 → 건물 겉모습 묶음 (images/exterior-styles/<묶음>/<건물>.webp) */
   I.EXTSTYLES = [['iberia', '포르투갈'], ['espana', '에스파냐·식민'], ['france', '서·북유럽'], ['italy', '이탈리아·남프랑스'],
     ['easteurope', '동유럽'], ['ottoman', '오스만·레반트'], ['russia', '러시아'], ['arabia', '아랍·북아프리카·페르시아'],
     ['swahili', '동아프리카 해안'], ['africa', '아프리카 내륙'], ['masai', '아프리카 초원'], ['india', '인도'],
     ['seasia', '동남아시아 본토'], ['tropic', '섬·열대 마을'], ['china', '중국'],
-    ['korea', '조선'], ['japan', '일본'], ['steppe', '초원'], ['aztec', '메소아메리카'], ['inca', '안데스']];
+    ['korea', '조선'], ['japan', '일본'], ['steppe', '초원'], ['aztec', '메소아메리카'], ['inca', '안데스'],
+    ['woodland', '북미 숲 마을'], ['plains', '북미 평원 마을'], ['pueblo', '푸에블로']];
   I.EXT_BY_STYLE = { ib: 'iberia', co: 'espana', ne: 'france', it: 'italy', gr: 'easteurope', ru: 'russia',
     is: 'arabia', pe: 'arabia', sw: 'swahili', af: 'africa', tr: 'masai', 'in': 'india', se: 'seasia',
-    cn: 'china', kr: 'korea', jp: 'japan', st: 'steppe', az: 'aztec', an: 'inca' };
+    cn: 'china', kr: 'korea', jp: 'japan', st: 'steppe', az: 'aztec', an: 'inca', na: 'woodland' };
   /** 같은 양식이라도 다른 묶음을 쓰는 도시 */
   I.EXT_BY_CITY = {
     // 카스티야·아라곤·그라나다의 에스파냐 도시
@@ -186,10 +187,13 @@
     // 섬 동남아시아·열대 아메리카는 대나무 고상가옥
     160: 'tropic', 166: 'tropic', 167: 'tropic', 168: 'tropic', 169: 'tropic',
     170: 'tropic', 171: 'tropic', 172: 'tropic', 208: 'tropic', 209: 'tropic', 211: 'tropic',
-    212: 'tropic', 213: 'tropic' };
+    212: 'tropic', 213: 'tropic',
+    // 북미 원주민: 평원(다코타 수우·만단)은 티피, 푸에블로(타오스·아코마)는 흙벽돌 계단 집
+    230: 'plains', 243: 'plains', 241: 'pueblo', 242: 'pueblo' };
   /** 그 묶음에 없는 건물은 이웃 묶음에서 빌려 온다 */
   I.EXT_NEXT = { china: 'korea', tropic: 'seasia', korea: 'china', japan: 'china', steppe: 'china',
-    espana: 'iberia', ottoman: 'arabia', masai: 'africa', inca: 'aztec' };
+    espana: 'iberia', ottoman: 'arabia', masai: 'africa', inca: 'aztec',
+    plains: 'woodland', pueblo: 'woodland', woodland: 'tropic' };
   I.extStyle = function (c) { return (c && I.EXT_BY_CITY[c.id]) || (c && I.EXT_BY_STYLE[c.style]) || null; };
   I.CULTURES = [['europe', '유럽'], ['islam', '이슬람권'], ['eastasia', '동아시아'], ['south', '인도·동남아시아'], ['native', '아프리카·아메리카 토착']];
   I.INTERIORS = [['harbor', '항구'], ['trade', '교역소'], ['shipyard', '조선소'], ['tavern', '술집'], ['inn', '여관'], ['market', '시장'], ['church', '교회·사원'], ['library', '도서관'], ['palace', '왕궁'], ['mansion', '저택'], ['guild', '조합'], ['gate', '성문'], ['home', '자택']];
@@ -256,16 +260,20 @@
     var i = Math.abs(G.U ? G.U.strHash(seed + base) : 0) % opts.length;
     return opts[i] === base ? [base] : [opts[i], base];
   }
+  var NPC_ROLE_PORTRAIT = { trader: 'merchant', vendor: 'merchant', harbormaster: 'official', guildmaster: 'official', innkeeper: 'keeper', tavernkeeper: 'keeper', shipwright: 'keeper',
+    priest: 'priest', librarian: 'scholar', guard: 'soldier', brawler: 'soldier', drunk: 'sailor', gambler: 'sailor', butler: 'keeper', native: 'native', pirate: 'captain', captain: 'captain', boatswain: 'sailor' };
   K.npc = function (id, c) {
     if (!c) return ['portraits/npc/' + id];
-    var seed = 'npc' + c.id;
+    var seed = 'npc' + c.id, role = NPC_ROLE_PORTRAIT[id], rolePic = role ? ['portraits/npc-roles/' + c.style + '/' + role] : [];
     return ['portraits/npc/' + id + '@' + c.id]
+      .concat(rolePic)
       .concat(variants('portraits/npc/' + id + '_' + cul(c), seed))
       .concat(variants('portraits/npc/' + id, seed));
   };
   /** 그 도시에서 고른 그림이 여자(f)인지 남자(m)인지 — 호칭을 맞출 때 쓴다 */
   I.npcGender = function (id, c) {
     var k = I.pick(K.npc(id, c));
+    if (k && k.indexOf('portraits/npc-roles/') === 0 && G.Art && G.Art.rolePortraitGender) return G.Art.rolePortraitGender(NPC_ROLE_PORTRAIT[id], c.style);
     return !k ? null : /_f$/.test(k) ? 'f' : /_m$/.test(k) ? 'm' : null;
   };
   K.mate = function (id) { return ['portraits/mates/' + id]; };
@@ -282,7 +290,7 @@
     is: ['arabia', 'ottoman', 'persia'], pe: ['persia', 'arabia'],
     af: ['africa', 'arabia'], sw: ['africa', 'arabia'], tr: ['tropic', 'native'],
     'in': ['india'], se: ['seasia', 'tropic'], cn: ['china'], jp: ['japan'], kr: ['korea'], st: ['persia', 'china'],
-    co: ['iberia', 'france', 'westeurope'], az: ['native', 'tropic'], an: ['native', 'tropic']
+    co: ['iberia', 'france', 'westeurope'], az: ['native', 'tropic'], an: ['native', 'tropic'], na: ['native']
   };
   /** 이 여급에게는 이 묶음을 고정으로. 없으면 도시 style 후보에서 고른다 */
   I.MAID_FACE = {
