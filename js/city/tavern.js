@@ -228,11 +228,23 @@
   };
   T.candidates = function (c) {
     var s = S(), y = s.date.y;
-    return G.MATES.filter(function (m) {
-      if (m.reg.indexOf(c.region) < 0 || s.mates.some(function (x) { return x.id === m.id; }) || s.flags['gone_' + m.id]) return false;
+    // 항해사는 저마다 한 도시에 머물다 한 달에 한 번 옮겨 다닌다(G.MateMove) — 지금 이 도시에 있는 사람만
+    var pool = G.MateMove ? G.MateMove.here(c.id) : G.MATES.filter(function (m) { return m.reg.indexOf(c.region) >= 0; });
+    return pool.filter(function (m) {
+      if (s.mates.some(function (x) { return x.id === m.id; }) || s.flags['gone_' + m.id]) return false;
       // 해가 맞고, 그 사람이 활약한 바닷길이 알려진 뒤에야 나타난다
       return G.Frontier ? G.Frontier.mateReady(m, y) : (y >= m.y[0] && y <= m.y[1]);
     });
+  };
+  /** 술집 주인·여관 안주인의 귀띔: 근처 도시에 머문다는 항해사 (많아야 둘). 없으면 빈 글 */
+  T.mateHint = function (c) {
+    if (!G.MateMove) return '';
+    var y = S().date.y;
+    var near = G.MateMove.nearby(c, function (m) { return G.Frontier ? G.Frontier.mateReady(m, y) : (y >= m.y[0] && y <= m.y[1]); }).slice(0, 2);
+    if (!near.length) return '';
+    var by = [];   // 같은 도시면 한데 묶는다
+    near.forEach(function (n) { var g = by.filter(function (b) { return b.c === n.c; })[0]; if (g) g.names.push(n.m.name); else by.push({ c: n.c, names: [n.m.name] }); });
+    return '\n' + by.map(function (b) { var nm = b.names.join('·'); return U.j(nm, '은/는') + ' 요즘 ' + b.c.name + '에 머문다더군'; }).join('. ') + '. 사람은 늘 옮겨 다니니, 한 달쯤 지나면 또 모르지.';
   };
   T.encounter = async function (c, force) {
     var cur = C.current(); cur.looked = true;
@@ -309,7 +321,7 @@
   T.hire = async function (c, keeper) {
     var s = S();
     var cands = T.candidates(c);
-    if (!cands.length) { await C.say(keeper || master(), '배를 타겠다는 사람 말인가? 지금 이 근방에는 눈에 띄는 자가 없군.'); return; }
+    if (!cands.length) { await C.say(keeper || master(), '배를 타겠다는 사람 말인가? 지금 이 도시에는 눈에 띄는 자가 없군.' + T.mateHint(c)); return; }
     for (;;) {
       var m = await pickMate(c, cands);
       if (!m) return;
@@ -364,7 +376,7 @@
     head.appendChild(pf);
     head.appendChild(U.el('div', 'mc-id',
       '<div class="nm">' + U.esc(m.name) + '</div>' +
-      '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + m.reg.map(function (r) { return G.REGIONS[r]; }).join('·') +
+      '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
       ' · ' + m.y[0] + '~' + m.y[1] + '년</div>' +
       '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +
       ' · 월급 <b>금화 ' + U.num(m.wage) + '닢</b></div>' +

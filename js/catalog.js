@@ -129,7 +129,7 @@
         text: m.desc,
         facts: [
           ['능력치', G.STATS.map((s, i) => s.name + ' ' + m.st[i]).join(' · ')], ['특기', skillTxt(m.sk)], ['어학', langTxt(m.lg)],
-          ['만나는 곳', m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집'],
+          ['만나는 곳', (G.MATE_RANGE && G.MATE_RANGE[m.id] ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
           ['만날 수 있는 때', m.y[0] + '~' + m.y[1] + '년' + (m.after ? (nm => ' · ' + nm + G.U.jx(nm, '이/가') + ' 알려진 뒤')(m.after.map(id => G.DISC[id] ? G.DISC[id].name : id).join('·')) : '')],
           ['필요한 명성', num(m.fame)], ['월급', num(m.wage) + '닢']
         ],

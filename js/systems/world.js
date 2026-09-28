@@ -64,6 +64,8 @@
         s.mates = s.mates.filter(function (m) { return leaving.indexOf(m) < 0; });
       }
     }
+    // 항해사들이 이웃 도시로 옮기거나 머문다
+    if (G.MateMove) G.MateMove.month();
     // bank interest
     if (s.player.bank > 0) s.player.bank = Math.floor(s.player.bank * 1.003);
     // maid affection slowly fades
