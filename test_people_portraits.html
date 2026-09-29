@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:#181614;color:#eee;font-family:Arial,sans-serif}body{padding:12px}h1{font-size:19px;margin:0 0 14px}h2{font-size:16px;color:#e7d29a;margin:22px 0 8px}.matrix{display:grid;grid-template-columns:118px repeat(10,78px);gap:4px;align-items:center}.head,.nation{font-size:11px;text-align:center;color:#d8c79f}.nation{font-weight:bold;font-size:12px}.cell{position:relative;width:78px;height:78px}.cell canvas{display:block}.cell i{position:absolute;right:3px;bottom:2px;font:10px Arial;color:#fff;text-shadow:0 1px 2px #000}
+</style></head><body><h1>국가별 항해사 후보·후원자 초상 760장</h1><div id="root"></div>
+<script src="js/core/util.js"></script><script src="images/manifest.js"></script><script src="js/core/images.js"></script>
+<script>
+window.onload=async()=>{try{
+ const nations=[['pt','포르투갈'],['es','에스파냐'],['fr','프랑스'],['de','독일'],['en','잉글랜드'],['nl','네덜란드'],['na','북미 원주민'],['kr','조선'],['cn','명'],['jp','일본'],['ot','오스만'],['af','아프리카 원주민'],['az','아즈텍'],['inca','잉카'],['vn','베트남'],['eg','이집트'],['pe','페르시아'],['ind','인도'],['se','동남아시아']];
+ const groups=[['mates','f','여성 항해사 후보'],['mates','m','남성 항해사 후보'],['sponsors','f','여성 후원자'],['sponsors','m','남성 후원자']];
+ const keys=groups.flatMap(([kind,g])=>nations.flatMap(([nation])=>Array.from({length:10},(_,i)=>`portraits/pools/${kind}/${nation}/${g}/${String(i+1).padStart(2,'0')}`)));
+ await G.Img.preload(keys,60000); const root=document.getElementById('root');
+ groups.forEach(([kind,g,label])=>{const h=document.createElement('h2');h.textContent=label;root.appendChild(h);const grid=document.createElement('div');grid.className='matrix';root.appendChild(grid);grid.appendChild(Object.assign(document.createElement('div'),{className:'head',textContent:'국가 / 번호'}));for(let i=1;i<=10;i++)grid.appendChild(Object.assign(document.createElement('div'),{className:'head',textContent:String(i).padStart(2,'0')}));nations.forEach(([nation,name])=>{grid.appendChild(Object.assign(document.createElement('div'),{className:'nation',textContent:name}));for(let i=1;i<=10;i++){const key=`portraits/pools/${kind}/${nation}/${g}/${String(i).padStart(2,'0')}`,box=document.createElement('div'),c=G.Img.make([key],156,156,()=>{const x=document.createElement('canvas');x.width=x.height=156;return x},{fit:'contain',bg:'#2a211c'}),tag=document.createElement('i');box.className='cell';c.style.width=c.style.height='78px';tag.textContent=nation.toUpperCase();box.append(c,tag);grid.appendChild(box)}})});
+ document.title='done';
+}catch(e){document.title='err '+e.message;console.error(e)}};
+</script></body></html>

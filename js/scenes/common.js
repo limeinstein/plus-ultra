@@ -163,7 +163,7 @@
     setTimeout(function () { el.classList.add('on'); }, 30);
     // 한 바퀴 돌 때까지 — 누르거나 Enter·Space·Esc면 곧장 마지막 장면으로
     await new Promise(function (resolve) {
-      var t = setTimeout(fin, (FX.gifMs || 9870) + 80), done = false;
+      var t = setTimeout(fin, (FX.gifMs || 9820) + 80), done = false;
       function fin() { if (done) return; done = true; clearTimeout(t); unkey(); el.removeEventListener('click', fin); resolve(); }
       var unkey = UI.pushKey(function (e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { fin(); return true; } return true; });
       el.addEventListener('click', fin);

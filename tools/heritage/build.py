@@ -76,7 +76,7 @@ def main():
           '   GBIF.org·OBIS(CC BY 4.0). 한국어 글은 이 자료를 바탕으로 게임에 맞게 새로 쓴 것이며 같은 조건(CC BY-SA)으로 공개한다. */\n'
           '(function (G) {\n  G.HERITAGE = ' + body + ';\n})(window.G = window.G || {});\n')
     open(DST, 'w', encoding='utf-8', newline='\n').write(js)
-    print('heritage.js — 발견물 %d, 유물 %d (%.0f KB)' % (len(data['disc']), len(data['relic']), len(js.encode('utf-8')) / 1024))
+    print('heritage.js - discoveries %d, relics %d (%.0f KB)' % (len(data['disc']), len(data['relic']), len(js.encode('utf-8')) / 1024))
 
 
 if __name__ == '__main__':

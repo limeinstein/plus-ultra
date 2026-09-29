@@ -109,8 +109,8 @@ def main():
     mdir = os.path.join(pages.ROOT, 'music')
     if os.path.isdir(mdir):
         shutil.copytree(mdir, os.path.join(OUT, 'music'), ignore=shutil.ignore_patterns('*.txt', '*.md'))
-    game = build_page('index.html', 'game', 'index.html', 'PLUS ULTRA — 더 먼 바다로', DESC, esbuild, manifest_rel)
-    cat = build_page('catalog.html', 'catalog', 'catalog.html', 'PLUS ULTRA 도감', '게임에 나오는 도시·인물·발견물을 그림과 함께 보여 주고, 그림을 바꿀 때 쓸 파일 이름을 알려 주는 도감.', esbuild, manifest_rel)
+    game = build_page('index.html', 'game', 'index.html', 'Loop of Good Hope — 더 먼 바다로', DESC, esbuild, manifest_rel)
+    cat = build_page('catalog.html', 'catalog', 'catalog.html', 'Loop of Good Hope 도감', '게임에 나오는 도시·인물·발견물을 그림과 함께 보여 주고, 그림을 바꿀 때 쓸 파일 이름을 알려 주는 도감.', esbuild, manifest_rel)
     emit('.nojekyll', '')
     # zip for itch.io / Netlify drop
     if os.path.exists(ZIP):

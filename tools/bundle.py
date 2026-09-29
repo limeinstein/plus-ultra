@@ -136,7 +136,7 @@ def main():
             if scale != 1.0:
                 sfound = slim.build(found, slim_dir, scale)
             packs = image_packs(sfound, slim_dir, out)
-            n1 = write(os.path.join(out, 'game.html'), inline('index.html', sfound, True, title='PLUS ULTRA 더 먼 바다로', extra_css='\nhtml, body { height: 100%; }\n', base=slim_dir, packs=packs))
+            n1 = write(os.path.join(out, 'game.html'), inline('index.html', sfound, True, title='Loop of Good Hope 더 먼 바다로', extra_css='\nhtml, body { height: 100%; }\n', base=slim_dir, packs=packs))
             n2 = write(os.path.join(out, 'catalog.html'), inline('catalog.html', sfound, True, base=slim_dir, packs=packs))
             total = n1 + sum(b for _, b in packs)
             for rel, b in packs:

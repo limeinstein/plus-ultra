@@ -16,6 +16,7 @@
    - `images/discoveries/ID.jpg`(1440×640), `images/relics/유물ID.jpg`(512×512)를 저장합니다. 사람이 넣은 그림은 덮어쓰지 않습니다.
    - 끝나면 `tools/images.py`, `tools/heritage/build.py`를 저절로 실행합니다.
    - 사진 크기를 맞추려면 Pillow가 있어야 합니다 (`pip install pillow`). 없으면 받은 크기 그대로 저장합니다.
+   - 게임 그림은 건드리지 않고 복원·작화용 기준 사진만 받으려면 `--reference-images`를 붙입니다. 파일은 `tools/heritage/references/`에 들어갑니다.
 2. `out/report.md`를 보고 어긋난 항목은 `sources.py`를 고쳐 `--only ID`로 다시 모읍니다.
 3. `ko.json`에 한국어 글을 씁니다(Claude에게 맡기면 `out/raw.json`을 읽고 씁니다).
    - `desc` 게임 속 설명(그 시대 사람이 보는 말투), `record` 세계유산 기록(오늘날의 사실), `lore` 덧붙일 이야기, 유물은 `name`·`desc`.

@@ -5,6 +5,7 @@
     python tools/heritage/fetch.py --only seokguram,r_bulguksa
     python tools/heritage/fetch.py --no-images  # 글·자료만
     python tools/heritage/fetch.py --force-images   # 사람이 넣은 그림까지 덮어쓰기 (보통은 건너뜀)
+    python tools/heritage/fetch.py --reference-images --only stonehenge,...
 
 쓰는 API (모두 열쇠 없이 됨. 스미스소니언만 api.data.gov 열쇠 — 없으면 DEMO_KEY, 하루 50번 제한)
   - UNESCO 세계유산 (data.unesco.org 의 whc001, 안 되면 whc.unesco.org/en/list/xml)
@@ -19,6 +20,8 @@
   tools/heritage/out/raw.json      발견물·유물별로 정리한 실제 자료 (build.py·한국어 글쓰기에 씀)
   tools/heritage/out/report.md     찾은 것·못 찾은 것·이름이 어긋난 것
   images/discoveries/ID.jpg        발견 카드 사진 (1440×640)   — 이미 사람이 넣은 그림이 있으면 건너뜀
+  tools/heritage/references/discoveries/ID.jpg
+                                    --reference-images를 쓸 때의 복원·작화용 기준 사진
   images/relics/유물ID.jpg         유물 사진 (512×512)
 끝나면 tools/images.py 와 tools/heritage/build.py 를 이어서 실행한다.
 
@@ -26,10 +29,12 @@
 게임(발견 카드·도감)이 그대로 보여 준다. UNESCO 설명은 CC BY-SA 3.0 IGO — 게임에는 한국어로 다시 쓴 글과 출처를 싣는다.
 """
 import html
+import hashlib
 import io
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -46,7 +51,7 @@ OUT = os.path.join(HERE, 'out')
 IMG = os.path.join(ROOT, 'images')
 UA = 'PLUS-ULTRA-game heritage fetcher/1.0 (https://github.com/limeinstein/plus-ultra; educational game)'
 SI_KEY = os.environ.get('SI_API_KEY', 'DEMO_KEY')
-OK_LICENSE = re.compile(r'public domain|cc0|cc[- ]by|creativecommons\.org/(licenses/by|publicdomain)|pdm|no restrictions', re.I)
+OK_LICENSE = re.compile(r'public domain|cc0|cc[- ]by|creativecommons\.org/(licenses/by|publicdomain)|pdm|no restrictions|kogl type 1|공공누리 제1유형', re.I)
 NC_ND = re.compile(r'\b(nc|nd)\b|noncommercial|noderiv', re.I)
 
 try:
@@ -374,12 +379,14 @@ def save_image(pic, rel_path, size, force=False, cover=True):
     if not pic or not pic.get('url'):
         return None
     stem = os.path.join(IMG, rel_path)
-    mine = os.path.join(OUT, 'fetched_images.json')
+    regular_img = os.path.abspath(IMG) == os.path.abspath(os.path.join(ROOT, 'images'))
+    mine = os.path.join(OUT, 'fetched_images.json' if regular_img else 'fetched_reference_images.json')
     owned = json.load(open(mine, encoding='utf-8')) if os.path.exists(mine) else {}
     for ext in ('.jpg', '.jpeg', '.png', '.webp'):
         if os.path.exists(stem + ext) and not force and rel_path not in owned:
             return dict(skipped='이미 있는 그림 — 건너뜀', file=rel_path + ext)
-    raw = get(pic['url'], 'bytes', cache_key='img/' + re.sub(r'\W+', '_', rel_path), gap=0.5)
+    url_tag = hashlib.sha1(pic['url'].encode('utf-8')).hexdigest()[:12]
+    raw = get(pic['url'], 'bytes', cache_key='img/' + re.sub(r'\W+', '_', rel_path) + '_' + url_tag, gap=0.5)
     if not raw:
         return None
     os.makedirs(os.path.dirname(stem), exist_ok=True)
@@ -437,9 +444,9 @@ def collect_disc(did, s, images, force):
         m = si(s['si'], s.get('must'))
         if m:
             rec['object'] = m
-    # 사진: 위키백과 대표 사진 → 소장품 → GBIF 관찰 사진
-    pic = None
-    if rec.get('wiki') and rec['wiki'].get('image'):
+    # 사진: 직접 지정한 공용 파일 → 위키백과 대표 사진 → 소장품 → GBIF 관찰 사진
+    pic = commons_file(s.get('commons')) if s.get('commons') else None
+    if not pic and rec.get('wiki') and rec['wiki'].get('image'):
         pic = commons_file(rec['wiki']['image'])
     if not pic and rec.get('object'):
         pic = rec['object'].get('image')
@@ -505,6 +512,7 @@ def report(res):
 
 
 def main():
+    global IMG
     try:
         sys.stdout.reconfigure(errors='replace')
     except Exception:
@@ -512,6 +520,10 @@ def main():
     args = sys.argv[1:]
     images = '--no-images' not in args
     force = '--force-images' in args
+    references = '--reference-images' in args
+    if references:
+        IMG = os.path.join(HERE, 'references')
+        images = True
     only = None
     for a in args:
         if a.startswith('--only'):
@@ -539,11 +551,13 @@ def main():
     json.dump(res, open(rawp, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     report(res)
     print('\n끝 (%.0f초). tools/heritage/out/report.md 를 보세요.' % (time.time() - t0))
-    if images:
+    if images and not references:
         print('그림 목록을 새로 만듭니다: tools/images.py')
-        os.system('"%s" "%s"' % (sys.executable, os.path.join(ROOT, 'tools', 'images.py')))
+        subprocess.call([sys.executable, os.path.join(ROOT, 'tools', 'images.py')])
+    elif references:
+        print('복원 기준 사진: ' + os.path.join(HERE, 'references', 'discoveries'))
     print('게임 자료를 만듭니다: tools/heritage/build.py')
-    os.system('"%s" "%s"' % (sys.executable, os.path.join(HERE, 'build.py')))
+    subprocess.call([sys.executable, os.path.join(HERE, 'build.py')])
 
 
 if __name__ == '__main__':

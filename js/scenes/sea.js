@@ -35,6 +35,8 @@
       G.State.revealChart(s.loc.lon, s.loc.lat, chartR());
       UI.toast(c.name + '에서 출항했다.', 'sail');
       if (G.Audio) G.Audio.sfx('bell');
+      // 모항 출항 배웅 (지난번 모항 출항에서 3개월이 지났으면 갈매기 떼) — js/scenes/voyagefx.js
+      if (G.VoyageFX) G.VoyageFX.onDepart(st, c);
     } else {
       s.loc.mode = 'sea';
       if (!st.cam) st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: 110 };
@@ -629,6 +631,7 @@
     st.fxAged = false;
     if (frozen || st.paused) st.turnRate *= Math.exp(-dt * 3);
     updatePose(dt);
+    if (G.VoyageFX) G.VoyageFX.step(st, dt, { speed: shipSpeed(), frozen: frozen });   // 가속 물보라·배웅
     if (G.Errand) G.Errand.onSea(l.lon, l.lat);
     // 돛: 멈추면 활대에 말아 올리고, 나아가면 편다 (약 1초)
     var furlT = (st.paused || st.stopping || shipSpeed() < 0.05) ? 1 : 0;
@@ -1288,8 +1291,10 @@
       else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };
       lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null; lk.sid = 'f' + si;
       A.shipTop(ctx, bx, by, l.heading, lenS, lk, st.t + si);
+      if (G.VoyageFX) G.VoyageFX.drawSpray(st, ctx, bx, by, l.heading, lenS, si);   // 속력을 낼 때 선수 물보라
     }
     drawCities(ctx);
+    if (G.VoyageFX) G.VoyageFX.drawSky(st, ctx, pp, l.heading, SP, toScreen);      // 모항 배웅 갈매기
     // hover tooltip
     if (st.mouse && !UI.busy()) {
       var hc = cityAt(st.mouse[0], st.mouse[1]);

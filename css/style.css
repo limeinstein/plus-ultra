@@ -1,4 +1,4 @@
-/* PLUS ULTRA — theme: dark wood, brass trim, parchment, Myeongjo serif */
+/* Loop of Good Hope — theme: dark wood, brass trim, parchment, Myeongjo serif */
 :root {
   --wood-950: #120c08; --wood-900: #1a120c; --wood-800: #231810; --wood-700: #2e2016; --wood-600: #3b2a1c; --wood-500: #4d3825;
   --brass: #b8925a; --brass-hi: #e3c68d; --brass-dk: #7a5c33; --brass-deep: #57401f;
@@ -245,7 +245,7 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 /* ---------------------------------------------------------------- title screen */
 .title-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; z-index: 10; }
 .title-logo { margin-top: 110px; text-align: center; }
-.title-logo .latin { font-family: var(--latin); font-size: 96px; letter-spacing: .18em; color: #f3e2b5; text-shadow: 0 2px 0 #3a2710, 0 0 30px rgba(255,210,140,.35), 0 6px 22px rgba(0,0,0,.8); font-weight: 700; }
+.title-logo .latin { font-family: var(--latin); font-size: 80px; letter-spacing: .08em; color: #f3e2b5; text-shadow: 0 2px 0 #3a2710, 0 0 30px rgba(255,210,140,.35), 0 6px 22px rgba(0,0,0,.8); font-weight: 700; }
 .title-logo .ko { font-size: 30px; letter-spacing: .5em; color: #fbecc6; margin-top: 6px; font-weight: 700; text-shadow: 0 0 2px #1a0f06, 0 2px 12px rgba(0,0,0,.95), 0 0 26px rgba(60,30,10,.8); }
 .title-logo .rule { width: 520px; height: 1px; margin: 18px auto 0; background: linear-gradient(90deg, transparent, var(--brass), transparent); }
 .title-menu { margin-top: 70px; display: flex; flex-direction: column; gap: 14px; width: 340px; }

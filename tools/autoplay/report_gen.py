@@ -352,7 +352,7 @@ tr.wp td{{color:var(--muted)}} tr.jn td{{background:var(--soft)}} tr.lg2 td{{fon
 @media (prefers-reduced-motion:reduce){{*{{scroll-behavior:auto}}}}
 </style>
 <div class="wrap">
-<div class="eyebrow">PLUS ULTRA · 자동 플레이 기록</div>
+<div class="eyebrow">Loop of Good Hope · 자동 플레이 기록</div>
 <h1>주앙 다 시우바의 세계일주</h1>
 <p class="lede">실제 게임 코드를 그대로 돌리면서 대화와 선택만 봇이 대신 골랐습니다. 포르투갈의 탐험가로 1480년 리스본에서 카라벨 한 척과 금화 3,000닢으로 시작했고, {E(f['date'])}에 세계일주 항로를 찾아 국왕에게 보고했습니다. 한 번도 불러오기 없이 이어진 한 판의 기록입니다.</p>
 <div class="stats">

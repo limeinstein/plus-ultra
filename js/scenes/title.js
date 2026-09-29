@@ -13,7 +13,7 @@
     if (!bg) bg = G.Img.make(G.Img.chain.title(), 1600, 900, A.titleScene);
     Game.setScene(bg);
     var wrap = U.el('div', 'title-wrap');
-    wrap.innerHTML = '<div class="title-logo"><div class="latin">PLUS ULTRA</div><div class="rule"></div><div class="ko">더 먼 바다로</div></div>' +
+    wrap.innerHTML = '<div class="title-logo"><div class="latin">Loop of Good Hope</div><div class="rule"></div><div class="ko">더 먼 바다로</div></div>' +
       '<div class="title-menu"></div><div class="loading">해도를 펼치는 중...</div>' +
       '<div class="title-foot">대항해의 시대, 1480 — 이베리아 반도</div>';
     UI.add(wrap);
