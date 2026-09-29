@@ -57,6 +57,11 @@
     peru: [['t_potato'], ['llama', 'nazca'], ['sacsay', 'tiwanaku'], ['machupicchu']],
     pacific: [[], ['frigatebird', 'tortoise'], ['moai', 'northstrait'], ['mu']]
   };
+  // 건물 불가사의 (js/data/wonders.js — 1700년까지 세워진 것만)
+  if (G.WONDERS) Object.keys(G.WONDERS.front).forEach(function (fk) {
+    if (!MAP[fk]) MAP[fk] = [[], [], [], []];
+    G.WONDERS.front[fk].forEach(function (ids, t) { ids.forEach(function (id) { MAP[fk][t].push(id); }); });
+  });
   G.FRONTIER = {};
   G.DISC_FRONT = {};            // 발견물 번호 → { f: 단계, t: 0 맛보기 | 'G' 관문 | 1 | 2 | 3 }
   G.FRONTIERS.forEach(function (f, i) {

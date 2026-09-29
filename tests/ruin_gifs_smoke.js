@@ -1,4 +1,4 @@
-/* 설치된 Chrome으로 유적 GIF 66개의 등록·로딩·발견 카드 요소를 확인한다. */
+/* 설치된 Chrome으로 유적 GIF 162개의 등록·로딩·발견 카드 요소를 확인한다. */
 'use strict';
 const fs = require('fs');
 const os = require('os');
@@ -35,7 +35,11 @@ function socket(url) {
     if (m.id && pending.has(m.id)) { const p = pending.get(m.id); pending.delete(m.id); return m.error ? p.reject(new Error(m.error.message)) : p.resolve(m.result); }
     if (m.method === 'Runtime.exceptionThrown') errors.push(m.params.exceptionDetails.text || '스크립트 예외');
     if (m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error') errors.push(m.params.args.map(x => x.value || x.description || '').join(' '));
-    if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error') errors.push(m.params.entry.text);
+    if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error') {
+      const entry = m.params.entry, url = entry.url || '';
+      // file:// 오프라인 시험에서는 선택 글꼴 CDN만 막힐 수 있다. 게임 자원 오류는 그대로 실패시킨다.
+      if (!/^https:\/\/fonts\.(?:googleapis|gstatic)\.com\//.test(url)) errors.push(entry.text);
+    }
   };
   return new Promise((resolve, reject) => { ws.onopen = () => resolve({ ws, call, errors }); ws.onerror = reject; });
 }
@@ -90,7 +94,7 @@ function socket(url) {
     })()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.ruins !== 66 || result.gifs !== 66 || result.tag !== 'IMG' || result.size[0] !== 576 || result.size[1] !== 256 || !catalog || catalog.cards !== 66 || !catalog.animated || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.ruins !== 162 || result.gifs !== 162 || result.tag !== 'IMG' || result.size[0] !== 576 || result.size[1] !== 256 || !catalog || catalog.cards !== 162 || !catalog.animated || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

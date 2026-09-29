@@ -67,6 +67,11 @@ def game_data():
         r = re.search(r"rival: \[(\d+), (\d+), '([^']+)'\]", line)
         if r and d['discoveries']:
             d['discoveries'][-1]['rival'] = r.group(3)
+    wonders_path = os.path.join(ROOT, 'js/data/wonders.js')
+    if os.path.exists(wonders_path):
+        wonders = read('js/data/wonders.js')
+        for wid, name in re.findall(r"^\s*w\('([^']+)',\s*'([^']+)'", wonders, re.M):
+            d['discoveries'].append({'id': wid, 'name': name, 'cat': 'ruin'})
     names = []
     for x in d['discoveries']:
         if x.get('rival') and x['rival'] not in names:
@@ -213,7 +218,7 @@ def write_manifest(found):
 
 
 def is_valid(key, keys):
-    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'characters/', 'relics/', 'relic-kinds/', 'discovery-ends/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
+    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'characters/', 'relics/', 'relic-kinds/', 'discovery-ends/', 'duel/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
 
 def report(found, dups, keys):
@@ -222,7 +227,7 @@ def report(found, dups, keys):
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),
-              ('항해 효과', 'effects/')]
+              ('항해 효과', 'effects/'), ('일기토 그림', 'duel/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

@@ -115,6 +115,11 @@
     b_samguk: { sk: 'hist' }, b_kojiki: {}, b_haedong: {}, b_shoso: { sk: 'hist' },
     b_southland: { y: 1569, sk: 'survey' }, b_northpass: { y: 1576, sk: 'survey' }
   };
+  // 건물 불가사의를 증언하는 책과, 이미 있는 책에 덧붙이는 단서 (js/data/wonders.js)
+  if (G.WONDERS) {
+    G.WONDERS.books.forEach(function (b) { G.BOOKS.push(b); META[b.id] = G.WONDERS.meta[b.id]; });
+    G.BOOKS.forEach(function (b) { (G.WONDERS.leads[b.id] || []).forEach(function (id) { if (b.discs.indexOf(id) < 0) b.discs.push(id); }); });
+  }
   G.BOOKS.forEach(function (b) {
     var m = META[b.id] || {};
     b.y = m.y || 1480;
@@ -196,6 +201,7 @@
     b_southland: ['여러 지리학자|지리학자들', '여러 지리학자의 추론을 엮은 책. 북쪽의 큰 땅덩이와 균형을 이루려면 남쪽에도 거대한 대륙이 있어야 한다는 주장과, 그 땅에 산다는 기이한 짐승과 사람들의 이야기가 담겨 있다.'],
     b_northpass: ['험프리 길버트|길버트', '잉글랜드의 험프리 길버트가 아메리카 북쪽을 돌아 중국으로 가는 바닷길이 있다고 주장한 글. 얼음 바다와 흰 곰, 가죽 배를 탄 사람들, 밤하늘을 물들이는 빛에 관한 뱃사람들의 증언을 모았다.']
   };
+  if (G.WONDERS) for (var wk in G.WONDERS.text) TEXT[wk] = G.WONDERS.text[wk];
   G.BOOKS.forEach(function (b) {
     var t = TEXT[b.id]; if (!t) return;
     var au = t[0].split('|');

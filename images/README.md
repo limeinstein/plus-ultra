@@ -48,6 +48,8 @@
 | 배 | `ships/배ID.png` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
 | 항해·해전 16방향 배 | `ships-nav/배ID.webp` — `python tools/render_ship_sprites.py`가 만드는 선체·돛 상태 시트 | 자동 생성 1792×3136, 투명 배경 |
 | 항해 효과 스프라이트 시트 | `effects/ship_spray.png`, `effects/departure_gull.png` | 1024×512, 4열×2행, 셀 256×256, 투명 배경 |
+| 일기토 전투원 | `duel/fighters/이름.png` | 2592×1216, 6열×4행, 칸 432×304, 발밑 피벗 (165, 278), 투명 배경 — 1536×1024(칸 256) 원본을 `tools/duel_repack.py`로 다시 짠 것 |
+| 일기토 배경 | `duel/backgrounds/deck.png` 등 | 초광폭 2094×751 안팎 |
 
 전체 이름 목록은 `catalog.html`에서 그림과 함께 보거나, `python tools/images.py --list`로 글자로 볼 수 있습니다.
 
@@ -58,6 +60,14 @@
 - `departure_gull`은 오른쪽을 보는 갈매기의 한 번 날갯짓 순환입니다. 왼쪽 비행은 좌우 반전하고, 이동 경로는 게임에서 따로 적용하며, 프레임당 85~110ms가 어울립니다.
 - 게임에서 쓰는 곳: `js/scenes/voyagefx.js` — 물보라는 선수 양옆에 하나씩(우현은 위아래를 뒤집어) 물마루 밑동(셀 안 x 150, y 226)을 선수 옆에 맞춰 그리고, 갈매기는 모항 배웅 때 항구에서 날아올라 함대를 지나갑니다(그림자는 같은 시트의 검은 실루엣). 조정값 `G.FX.voyage`.
 - 각 셀 가장자리에 4px 투명 여백이 있어 텍스처 보간 시 이웃 프레임이 번지지 않습니다.
+
+## 일기토 시트 규격
+
+- 자세한 인물 목록과 좌표는 `images/duel/README.md`, 게임에서 읽는 값은 `js/data/duelart.js`에 있습니다.
+- 모든 시트는 6열×4행입니다. 1행 공격 6장, 2행 방어 4장, 3행 피격 3장, 4행 행동 6장입니다. 남는 칸은 완전히 투명합니다. 상대편은 게임에서 좌우 반전합니다.
+- 그림을 만들 때 규격은 1536×1024(셀 256, 발밑 피벗 `(128, 246)`)입니다. 그런데 찌르기 칼날·긴 병기·대기 동작의 머리가 옆 칸으로 60~125px 넘어가는 일이 잦아, 게임에는 `python tools/duel_repack.py 원본폴더 images/duel/fighters`로 **칸 432×304, 피벗 `(165, 278)`** 시트(2592×1216)로 다시 짜서 넣습니다. 도구가 장면마다 몸통에서 이어진 픽셀을 따라가 어느 장면의 것인지 가려 옮기므로 그림 크기(픽셀)는 그대로이고 잘리지 않습니다. 원본은 `images/_extra/duel_fighters_src/`(저장소 밖)에 둡니다.
+- 게임(`js/data/duelart.js` `layout`)은 그림 너비로 두 규격을 알아봅니다 — 1536 너비 원본을 그대로 넣어도 그려지지만 넘친 칼날은 잘립니다. 점검: `node tests/duel_assets_smoke.js`, `python tools/duel_repack.py --check images/duel/fighters`.
+- 배경은 `deck`, `land_battle`, `exploration`, `city`, `tavern` 다섯 장이며 1060×380 일기토 화면에 맞춰 덮어 그립니다.
 
 ## 알아 둘 점
 

@@ -219,6 +219,9 @@
   trade('t_tortoise', '별갑', 'tortoise', [3, 8], 3, 5400, 5, '바다거북 등딱지로 만든 반투명의 재료. 빗과 장신구에 쓰인다.', '아프리카 동해안이나 동방의 섬에서 별갑을 판다고 한다.');
   trade('t_herbs', '약재', 'herbs', [6, 4], 3, 5000, 7, '인삼과 감초 같은 동방의 생약.', '한양이나 동방의 도시에서 귀한 약재를 판다고 한다.');
 
+  // 건물 불가사의 96곳 (js/data/wonders.js)
+  if (G.WONDERS) G.WONDERS.list.forEach(function (a) { add.apply(null, a); });
+
   G.DISCOVERIES = D;
   G.DISC = {}; D.forEach(function (d, i) { d.idx = i; G.DISC[d.id] = d; });
   G.DISC_CATS = { geo: '지리', nature: '자연', ruin: '유적', treasure: '보물', creature: '생물', people: '민족', trade: '교역품' };

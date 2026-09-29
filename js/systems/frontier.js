@@ -63,6 +63,7 @@
   /** 이 발견물의 단서를 지금 들을 수 있는가 */
   F.available = function (d) {
     if (!d) return false;
+    if (d.built && S().date.y < d.built) return false;                                            // 아직 세워지지 않은 건물
     if (d.need && !d.need.every(function (id) { return G.Disc.foundByMe(id); })) return false;   // 발견의 연쇄
     var m = G.DISC_FRONT[d.id]; if (!m) return true;
     var o = F.state(m.f);
@@ -80,6 +81,7 @@
   };
   /** 단서를 얻을 수 있는가: 들을 수 있는 것, 또는 그 단계에 소문이 돌 때 경쟁자 본인에게서 듣는 관문 이야기 */
   F.canHint = function (d, src) {
+    if (d && d.built && S().date.y < d.built) return false;   // 아직 없는 건물은 책·유물로도 단서가 나오지 않는다
     if (F.available(d)) return true;
     var sr = String(src || '');
     if (sr.indexOf('contract') === 0 || sr.indexOf('lead') === 0 || sr.indexOf('relic') === 0) return true;

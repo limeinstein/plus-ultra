@@ -8,16 +8,22 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 src = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
-ids = re.findall(r"^\s*add\('([^']+)', '[^']+', 'ruin'", src, re.M)
-assert len(ids) == 66, len(ids)
+legacy_ids = re.findall(r"^\s*add\('([^']+)', '[^']+', 'ruin'", src, re.M)
+wonders = (ROOT / "js" / "data" / "wonders.js").read_text(encoding="utf-8")
+wonder_ids = re.findall(r"^\s*w\('([^']+)',\s*'[^']+'", wonders, re.M)
+ids = legacy_ids + wonder_ids
+assert len(legacy_ids) == 66, len(legacy_ids)
+assert len(wonder_ids) == 96, len(wonder_ids)
+assert len(ids) == len(set(ids)) == 162, len(ids)
 for did in ids:
     ref = ROOT / "tools" / "heritage" / "references" / "discoveries" / f"{did}.jpg"
     turn = ROOT / "tools" / "ruin_gifs" / "reconstructions" / f"{did}.png"
     master = ROOT / "tools" / "ruin_gifs" / "v2" / "master" / f"{did}.png"
     gif = ROOT / "images" / "discoveries" / f"{did}.gif"
     end = ROOT / "images" / "discovery-ends" / f"{did}.jpg"
-    assert ref.exists(), ref
-    assert turn.exists(), turn
+    if did in legacy_ids:
+        assert ref.exists(), ref
+        assert turn.exists(), turn
     assert master.exists(), master
     assert end.exists(), end
     with Image.open(gif) as im:
@@ -29,4 +35,4 @@ for did in ids:
             im.seek(frame)
             duration += im.info["duration"]
         assert duration == 9820, (did, duration)
-print(f"OK: {len(ids)} references, V2 master sheets, and animated GIFs")
+print(f"OK: {len(ids)} V2 master sheets, animated GIFs, and final frames")

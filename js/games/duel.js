@@ -5,13 +5,18 @@
    · 대항해시대 2처럼: 갑판 위에서 두 사람이 칼을 겨루는 모습. 한 합마다 베기·찌르기·치기를 내고 상성이 있다
      찌르기 → 베기 → 치기 → 찌르기 (화살표 쪽을 이긴다). 상대가 노리는 수는 검술이 높을수록 잘 읽힌다
    G.Games.duel(enemy, opt) → 'win' | 'lose' | 'flee'  (자세한 결과는 G.Games.lastDuel)
-     enemy: {name, portrait, str, atk, def, skill, mar, int, cha, style, look}
-     opt: {mate: 대신 싸울 동료, place: 'deck'|'tavern', noSwap} */
+     enemy: {name, portrait, str, atk, def, skill, mar, int, cha, style, look, sprite}
+     opt: {mate: 대신 싸울 동료, place: 'deck'|'land'|'explore'|'city'|'tavern', sprite, noSwap} */
 (function (G) {
   'use strict';
-  var U = G.U, UI = G.UI, R = G.R, A = G.Art;
+  var U = G.U, UI = G.UI, R = G.R, A = G.Art, I = G.Img;
   G.Games = G.Games || {};
   var W = 1060, H = 380;
+
+  function duelFx() {
+    return (G.FX && G.FX.duel) || { spriteSize: 230, shakeX: 10, shakeY: 6, shakeHit: 0.25, shakeBig: 0.6, shakeDecay: 2.5,
+      flashHit: 0.10, flashTaken: 0.16, flashBig: 0.25, flashDecay: 6, knockback: 26, knockReturnMs: 260, hitParticles: 10, particleLife: 0.42 };
+  }
 
   // ---------------------------------------------------------------- 이름표
   var MOVE = { slash: '베기', thrust: '찌르기', bash: '치기' };
@@ -94,17 +99,19 @@
     var s = G.Game.state, p = s.player;
     var me = opt.mate ? G.Games.mateFighter(opt.mate) : playerFighter();
     if (me.hp == null) me.hp = me.maxHp;
+    if (opt.sprite) me.sprite = opt.sprite;
     var look = enemy.look || (/해적|두목/.test(enemy.name) ? 'pirate' : /함장|수비|장교/.test(enemy.name) ? 'captain' : /사내|주정/.test(enemy.name) ? 'brawler' : 'rival');
     var en = { name: enemy.name, portrait: enemy.portrait, maxHp: Math.round(60 + (enemy.str || 60) * 0.6), atk: enemy.atk || 8, def: enemy.def || 2, sword: enemy.skill || 0, might: enemy.mar || 55 + (enemy.skill || 0) * 5,
-      int: enemy.int || 45, cha: enemy.cha || 40, speech: 0, shoot: 0, style: enemy.style || (look === 'pirate' ? 'slash' : look === 'captain' ? 'thrust' : U.pick(['slash', 'thrust', 'bash'])), look: look };
+      int: enemy.int || 45, cha: enemy.cha || 40, speech: 0, shoot: 0, style: enemy.style || (look === 'pirate' ? 'slash' : look === 'captain' ? 'thrust' : U.pick(['slash', 'thrust', 'bash'])), look: look, sprite: enemy.sprite || null };
     en.hp = en.maxHp;
     [me, en].forEach(function (f) { f.spirit = 20; f.x = 0; f.pose = 'idle'; f.pt = 0; f.stun = 0; f.dizzy = 0; f.flash = 0; f.used = {}; });
     me.side = 'me'; en.side = 'en';
     var place = opt.place || (G.Game.sceneName === 'battle' || G.Game.sceneName === 'sea' ? 'deck' : 'tavern');
+    var art = G.DUEL_ART || {}, D = duelFx(), bgImg = null;
     var result = G.Games.lastDuel = { how: null, stance: null, mate: opt.mate || null, swapped: null, secret: false };
     var stance = null, myNext = 'auto', enIntent = null, intentSeen = false, round = 0, over = false, busy = false, paused = false, fast = false;
     var flags = { first: false, feintMe: false, feintEn: false, bluffEn: 0, lureEn: false };
-    var fx = [], shakeT = 0, logs = [], swapped = false;
+    var fx = [], shakeT = 0, screenFlash = 0, screenFlashRgb = '255,244,220', logs = [], swapped = false;
     if (G.Audio) G.Audio.music('battle');
 
     return new Promise(function (resolve) {
@@ -117,6 +124,22 @@
         '<div class="rd-ctrl"><div class="rd-moves"><div class="lbl">다음 수 <span class="intent"></span></div><div class="row"></div></div><div class="rd-techs"><div class="lbl">기술 <small>기세를 쓴다</small></div><div class="grid"></div></div><div class="rd-sys"></div></div></div>';
       var win = UI.window({ title: '일기토', icon: 'sword', width: 1120, html: html, closable: false });
       var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d');
+      // 초상에 양식이 없으면 지금 있는 도시(바다면 가까운 도시)의 양식으로 전투원 그림을 고른다
+      var hereStyle = (function () { var s0 = G.Game.state, c0 = s0 && s0.loc && G.CITY_DATA && G.CITY_DATA[s0.loc.city]; return c0 && c0.style; })();
+      function fighterSprite(f) {
+        var id = art.pick ? art.pick(f, { style: hereStyle }) : (f.sprite || (art.byName && art.byName[f.name]) || (f.admiral ? 'main_admiral' : f.m ? 'first_mate' : art.byLook && art.byLook[f.look]));
+        if (!id || !I) return;
+        f.spriteId = id;
+        var key = 'duel/fighters/' + id;
+        f.spriteImg = I.get(key);
+        I.load(key).then(function (im) { if (im) f.spriteImg = im; });
+      }
+      fighterSprite(me); fighterSprite(en);
+      if (I && art.backgrounds) {
+        var bgid = art.backgrounds[place] || art.backgrounds.tavern, bgkey = 'duel/backgrounds/' + bgid;
+        bgImg = I.get(bgkey);
+        I.load(bgkey).then(function (im) { if (im) bgImg = im; });
+      }
       var logEl = el.querySelector('.rd-log');
       function setPortrait(f, sel) { var box = el.querySelector(sel + ' .pp'); box.innerHTML = ''; if (f.portrait) box.appendChild(A.portraitCanvas(f.portrait, 84)); }
       setPortrait(me, '.rd-side.me'); setPortrait(en, '.rd-side.en');
@@ -137,6 +160,13 @@
       var t0 = performance.now(), live = true, last = t0;
       var ROPE = U.makeRng(5);
       function drawScene(t) {
+        if (bgImg && I) {
+          I.drawCover(ctx, bgImg, 0, 0, W, H, 0.5, 0.5);
+          var shade = ctx.createLinearGradient(0, 0, 0, H);
+          shade.addColorStop(0, 'rgba(20,14,8,.04)'); shade.addColorStop(0.58, 'rgba(20,14,8,.02)'); shade.addColorStop(1, 'rgba(20,12,6,.16)');
+          ctx.fillStyle = shade; ctx.fillRect(0, 0, W, H);
+          return;
+        }
         if (place === 'tavern') {
           var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#2a1a10'); g.addColorStop(0.62, '#4a3020'); g.addColorStop(0.63, '#5a3c22'); g.addColorStop(1, '#3a2614'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
           for (var b = 0; b < 12; b++) { ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(b * 92, 0, 6, H * 0.62); }
@@ -186,8 +216,38 @@
         brawler: { coat: '#6a5030', trim: '#3a2a18', pants: '#4a3a28', hat: 'none', hatc: '#000', skin: '#d8a070', hair: '#3a2010', beard: 1, bare: 1 },
         rival: { coat: '#2a4a3a', trim: '#e0c890', pants: '#d8ccb0', hat: 'bicorne', hatc: '#161616', skin: '#e2b890', hair: '#6a4a2a' }
       };
+      function spriteFrame(f, t) {
+        var p = Math.max(0, Math.min(0.999, f.pt || 0)), pose = f.pose;
+        if (pose === 'windup') return [0, 1];
+        if (pose === 'lunge') return [0, Math.min(5, 2 + Math.floor(p * 4))];
+        if (pose === 'block') return [1, Math.min(3, Math.floor(p * 4))];
+        if (pose === 'hit') return [2, Math.min(2, Math.floor(p * 3))];
+        if (pose === 'down') return [2, 0];                       // 뒤로 젖혀지는 장면으로 쓰러진다
+        if (pose === 'kneel') return [2, 1];                      // 비틀거리며 주저앉음(항복·생포)
+        if (pose === 'shout' || pose === 'shoot') return [3, 4];
+        if (pose === 'run') return [3, Math.floor(t * 8) % 4];    // 물러설 때는 대기 동작을 빨리
+        return [3, Math.floor(t * 5.5) % 4];                      // 대기: 180ms 안팎
+      }
+      function drawSpriteFighter(f, bx, by, face, t) {
+        var fr = spriteFrame(f, t), L = art.layout ? art.layout(f.spriteImg) : { cw: 256, ch: 256, px: 128, py: 246, f: 1 };
+        // spriteSize = 원본 256px이 화면에서 차지하는 크기 (줄인 사본이면 그만큼 키운다)
+        var k = (D.spriteSize || 230) / 256 / (L.f || 1), w = L.cw * k, h = L.ch * k, sx = fr[1] * L.cw, sy = fr[0] * L.ch;
+        var bob = f.pose === 'idle' ? Math.sin(t * 3 + (face > 0 ? 0 : 1.5)) * 1.2 : 0;
+        ctx.save(); ctx.translate(bx + f.x * face, by + bob); ctx.scale(face, 1);
+        // 쓰러짐: 발을 축으로 뒤로 넘어감(0.45초), 항복·생포: 조금 주저앉음
+        var q = Math.min(1, (f.pt || 0) * (f.poseDur || 0.35) / 0.45);
+        if (f.pose === 'down') { ctx.rotate(-q * 0.95); ctx.translate(0, q * 6); }   // 피격 첫 장면이 이미 30° 남짓 젖혀져 있어 합쳐 눕는다
+        else if (f.pose === 'kneel') ctx.translate(0, q * 12);
+        ctx.drawImage(f.spriteImg, sx, sy, L.cw, L.ch, -L.px * k, -L.py * k, w, h);
+        if (f.flash > 0) {
+          ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = Math.min(0.7, f.flash * 0.5);
+          ctx.drawImage(f.spriteImg, sx, sy, L.cw, L.ch, -L.px * k, -L.py * k, w, h);
+        }
+        ctx.restore();
+      }
       /** 사람 그리기 (옆모습). face 1 = 오른쪽을 본다 */
       function drawFighter(f, bx, by, face, t) {
+        if (f.spriteImg) { drawSpriteFighter(f, bx, by, face, t); return; }
         var L = LOOK[f.look] || LOOK.brawler, k = f.pt, pose = f.pose, bob = pose === 'idle' ? Math.sin(t * 3 + (face > 0 ? 0 : 1.5)) * 1.8 : 0;
         ctx.save(); ctx.translate(bx + f.x * face, by); ctx.scale(1.4, 1.4);
         if (pose === 'down') { ctx.rotate(-face * Math.PI / 2 * Math.min(1, k * 2)); ctx.translate(0, -10 * Math.min(1, k * 2)); }
@@ -262,7 +322,7 @@
         [me, en].forEach(function (f) { if (f.flash > 0) f.flash = Math.max(0, f.flash - dt * 3); if (f.poseT > 0) { f.poseT -= dt; f.pt = Math.min(1, f.pt + dt / Math.max(0.05, f.poseDur || 0.3)); if (f.poseT <= 0 && f.pose !== 'down' && f.pose !== 'kneel' && f.pose !== 'run') { f.pose = 'idle'; } } if (f.pose === 'run') f.x -= dt * 260; if (f.tx != null) { f.x += (f.tx - f.x) * Math.min(1, dt * 10); } });
         cheer = cheer.map(function (c) { return Math.max(0, c - dt); });
         ctx.save();
-        if (shakeT > 0 && G.Game.state.settings.shake !== false) ctx.translate(U.rf(-1, 1) * shakeT * 10, U.rf(-1, 1) * shakeT * 6);
+        if (shakeT > 0 && G.Game.state.settings.shake !== false) ctx.translate(U.rf(-1, 1) * shakeT * D.shakeX, U.rf(-1, 1) * shakeT * D.shakeY);
         drawScene(t);
         var gy = H * 0.86;
         drawFighter(me, W / 2 - 160, gy, 1, t);
@@ -270,6 +330,7 @@
         fx.forEach(function (e) {
           e.t += dt; var q = e.t / e.life; if (q < 0) return;
           if (e.kind === 'spark') { ctx.strokeStyle = 'rgba(255,240,180,' + (1 - q) + ')'; ctx.lineWidth = 2.5; for (var i = 0; i < 8; i++) { var a = i / 8 * 6.28 + e.seed; ctx.beginPath(); ctx.moveTo(e.x + Math.cos(a) * 5, e.y + Math.sin(a) * 5); ctx.lineTo(e.x + Math.cos(a) * (12 + q * 30), e.y + Math.sin(a) * (12 + q * 30)); ctx.stroke(); } }
+          else if (e.kind === 'hitParticle') { ctx.fillStyle = 'rgba(' + e.col + ',' + (1 - q) + ')'; ctx.beginPath(); ctx.arc(e.x + e.vx * e.t, e.y + e.vy * e.t + 90 * e.t * e.t, e.r * (1 - q * 0.55), 0, 7); ctx.fill(); }
           else if (e.kind === 'slashArc') { ctx.strokeStyle = 'rgba(255,255,255,' + (0.8 * (1 - q)) + ')'; ctx.lineWidth = 6 * (1 - q) + 1; ctx.beginPath(); ctx.arc(e.x, e.y, 62, e.a0, e.a0 + e.dir * (1.6 * Math.min(1, q * 3)), e.dir < 0); ctx.stroke(); }
           else if (e.kind === 'num') { ctx.font = '800 ' + (e.big ? 34 : 26) + 'px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(0,0,0,' + (1 - q) + ')'; ctx.strokeText(e.text, e.x, e.y - q * 46); ctx.fillStyle = 'rgba(' + e.col + ',' + (1 - q) + ')'; ctx.fillText(e.text, e.x, e.y - q * 46); }
           else if (e.kind === 'bubble') { var al = q < 0.1 ? q * 10 : q > 0.85 ? (1 - q) / 0.15 : 1; ctx.font = '800 20px ' + getComputedStyle(document.body).fontFamily; var tw = ctx.measureText(e.text).width + 24; ctx.fillStyle = 'rgba(255,250,236,' + al * 0.95 + ')'; ctx.strokeStyle = 'rgba(40,24,10,' + al + ')'; ctx.lineWidth = 2; ctx.beginPath(); ctx.rect(e.x - tw / 2, e.y - 40, tw, 32); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.x - 8, e.y - 8); ctx.lineTo(e.x, e.y + 6); ctx.lineTo(e.x + 8, e.y - 8); ctx.fill(); ctx.fillStyle = 'rgba(40,20,8,' + al + ')'; ctx.textAlign = 'center'; ctx.fillText(e.text, e.x, e.y - 17); }
@@ -278,8 +339,10 @@
           else if (e.kind === 'flashS') { ctx.fillStyle = 'rgba(255,230,140,' + (1 - q) + ')'; ctx.beginPath(); ctx.arc(e.x, e.y, 10 + q * 8, 0, 7); ctx.fill(); }
         });
         fx = fx.filter(function (e) { return e.t < e.life; });
-        if (shakeT > 0) shakeT = Math.max(0, shakeT - dt * 2.5);
+        if (shakeT > 0) shakeT = Math.max(0, shakeT - dt * D.shakeDecay);
         ctx.restore();
+        if (screenFlash > 0 && G.Game.state.settings.shake !== false) { ctx.fillStyle = 'rgba(' + screenFlashRgb + ',' + screenFlash + ')'; ctx.fillRect(0, 0, W, H); }
+        if (screenFlash > 0) screenFlash = Math.max(0, screenFlash - dt * D.flashDecay);
       }
       (function loop() { if (!live) return; draw(); requestAnimationFrame(loop); })();
 
@@ -291,8 +354,9 @@
       function bubble(f, text) { fx.push({ kind: 'bubble', text: text, x: posX(f) + f.x * (f === me ? 1 : -1), y: H * 0.86 - 190, t: 0, life: 1.6 }); }
       function num(f, text, col, big) { fx.push({ kind: 'num', text: text, col: col || '255,236,160', big: big, x: posX(f) + U.rf(-12, 12), y: H * 0.86 - 170, t: 0, life: 1.1 }); }
       function hurt(f, d, big) {
-        d = Math.max(1, Math.round(d)); f.hp = Math.max(0, f.hp - d); f.flash = 0.9; pose(f, 'hit', 0.3); f.tx = -26; setTimeout(function () { f.tx = 0; }, 260);
-        num(f, '−' + d, f === me ? '255,140,120' : '255,236,160', big); shakeT = Math.min(1, shakeT + (big ? 0.6 : 0.25));
+        d = Math.max(1, Math.round(d)); f.hp = Math.max(0, f.hp - d); f.flash = 0.9; pose(f, 'hit', 0.3); f.tx = -D.knockback; setTimeout(function () { f.tx = 0; }, D.knockReturnMs);
+        num(f, '−' + d, f === me ? '255,140,120' : '255,236,160', big); shakeT = Math.min(1, shakeT + (big ? D.shakeBig : D.shakeHit));
+        screenFlash = Math.max(screenFlash, big ? D.flashBig : f === me ? D.flashTaken : D.flashHit); screenFlashRgb = f === me ? '255,120,100' : '255,244,220';
         (f === me ? en : me).spirit = Math.min(100, (f === me ? en : me).spirit + 10); f.spirit = Math.min(100, f.spirit + 4);
         cheer[f === me ? 1 : 0] = 1.2;
         return d;
@@ -329,6 +393,7 @@
           if (crit) h *= 1.6;
           if (opts.ignoreArmor) h += b.def * 0.5;
           fx.push({ kind: 'spark', x: hx, y: H * 0.86 - 110, seed: U.rand() * 6, t: 0, life: 0.4 });
+          for (var hp = 0; hp < D.hitParticles; hp++) fx.push({ kind: 'hitParticle', x: hx + U.rf(-5, 5), y: H * 0.86 - 110 + U.rf(-5, 5), vx: U.rf(-75, 75), vy: U.rf(-95, 20), r: U.rf(1.5, 3.8), col: U.chance(0.55) ? '255,226,130' : '210,70,45', t: 0, life: D.particleLife });
           hurt(b, h, crit || opts.big);
           if (crit) bubble(a, '일섬!');
         } else {
@@ -444,7 +509,9 @@
           else G.Game.state.player.hp = U.clamp(Math.round(100 * me.hp / me.maxHp), 5, 100);
           var keep = { spirit: Math.max(20, me.spirit * 0.5), used: me.used };
           Object.keys(me).forEach(function (kk) { if (kk !== 'side') delete me[kk]; });
-          Object.assign(me, nf, { side: 'me', spirit: keep.spirit, used: keep.used, x: -200, tx: 0, pose: 'idle', pt: 0, stun: 0, dizzy: 0, flash: 0 });
+          Object.assign(me, nf, { side: 'me', spirit: keep.spirit, used: keep.used, x: -200, tx: 0, pose: 'idle', pt: 0, stun: 0, dizzy: 0, flash: 0,
+            sprite: null, spriteImg: null, spriteId: null });
+          fighterSprite(me);
           if (me.hp == null) me.hp = me.maxHp;
           result.mate = nf.m || null;
           setPortrait(me, '.rd-side.me'); bubble(me, '제가 상대하겠습니다!');

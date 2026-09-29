@@ -372,4 +372,7 @@
   K.ship = function (id) { return ['ships/' + id]; };
   K.shipNav = function (id) { return ['ships-nav/' + id]; };
   K.effect = function (id) { return ['effects/' + id]; };
+  /** 일기토 전투원 6×4 시트와 초광폭 배경 */
+  K.duelFighter = function (id) { return ['duel/fighters/' + id]; };
+  K.duelBackground = function (id) { return ['duel/backgrounds/' + id]; };
 })(window.G = window.G || {});

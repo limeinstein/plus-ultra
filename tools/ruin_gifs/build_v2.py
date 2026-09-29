@@ -14,13 +14,18 @@ from build import H, W, paper, pencil, tint_for_time, vertical_mask, wash_mask, 
 
 ROOT = Path(__file__).resolve().parents[2]
 DISCOVERIES = ROOT / "js" / "data" / "discoveries.js"
+WONDERS = ROOT / "js" / "data" / "wonders.js"
 MASTER = ROOT / "tools" / "ruin_gifs" / "v2" / "master"
 PREVIEW_OUT = ROOT / "images" / "discoveries_v2"
 
 
 def ruin_ids() -> list[str]:
     src = DISCOVERIES.read_text(encoding="utf-8")
-    return re.findall(r"^\s*add\('([^']+)', '[^']+', 'ruin'", src, re.M)
+    ids = re.findall(r"^\s*add\('([^']+)', '[^']+', 'ruin'", src, re.M)
+    if WONDERS.exists():
+        wonders = WONDERS.read_text(encoding="utf-8")
+        ids.extend(re.findall(r"^\s*w\('([^']+)',\s*'[^']+'", wonders, re.M))
+    return ids
 
 
 def cells(path: Path, rows: int = 4) -> list[Image.Image]:

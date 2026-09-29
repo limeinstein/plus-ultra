@@ -5,8 +5,10 @@
     python tools/bundle.py                      # PLUS_ULTRA.html 다시 만들기
     python tools/bundle.py --artifact 폴더       # Claude 아티팩트용 게임(game.html)·도감(catalog.html)도 만들기
                                                 #   그림은 폴더/img/pack-NN-해시.js 묶음으로 따로 (페이지 16MiB 한도와 상관없게)
-                                                #   올릴 목록은 폴더/publish.json (packs = 올릴 묶음, removed = 아티팩트에서 지울 옛 묶음)
+                                                #   움직이는 그림(유적 GIF)은 묶음 대신 폴더/images/… 파일로 따로 (필요할 때만 읽힘)
+                                                #   올릴 목록은 폴더/publish.json (packs = 올릴 묶음, files = 그림 파일, removed = 아티팩트에서 지울 옛 것)
     python tools/bundle.py --mark-published 폴더 # 아티팩트에 올린 뒤 '올린 목록'을 적어 둔다
+    python tools/bundle.py --artifact 폴더 --scale 0.4   # 그림 배율을 이 값부터 시작 (한도를 넘을 걸 알 때 시간 절약)
 """
 import json, os, sys
 
@@ -16,7 +18,7 @@ import images as imgtool  # noqa: E402
 import pages  # noqa: E402
 
 ARTIFACT_LIMIT = 16 * 1024 * 1024      # 아티팩트 페이지 하나·텍스트 파일 하나의 한도 (16MiB)
-PUBLISH_LIMIT = 60 * 1000 * 1000       # 한 번에 올릴 수 있는 합계 64MB보다 조금 적게
+PUBLISH_LIMIT = 60 * 1000 * 1000       # 페이지를 열 때 읽는 합계(페이지 + 그림 묶음). 움직이는 그림 파일은 따로 올려 여기에 넣지 않는다
 PACK_TARGET = 4 * 1024 * 1024          # 그림 묶음 파일 하나의 크기 (대략)
 
 
@@ -50,7 +52,15 @@ def image_packs(found, base, out_dir):
     return out
 
 
-def inline(page, found, artifact, title=None, extra_css='', base=None, packs=None):
+def split_anim(found):
+    """아티팩트용: 움직이는 그림(유적 GIF → .anim.webp)은 묶음에 넣지 않고 images/ 아래 파일로 따로 올린다.
+    묶음은 페이지를 열 때 모두 읽히지만, 따로 올린 파일은 발견 연출·도감에서 필요할 때만 읽힌다."""
+    anim = {k: rel for k, rel in found.items() if rel.lower().endswith(('.anim.webp', '.gif'))}
+    rest = {k: rel for k, rel in found.items() if k not in anim}
+    return rest, anim
+
+
+def inline(page, found, artifact, title=None, extra_css='', base=None, packs=None, files=None):
     p = pages.parse(page)
     css = '\n'.join(pages.read(c) for c in p['css']) + extra_css
     parts = []
@@ -58,7 +68,8 @@ def inline(page, found, artifact, title=None, extra_css='', base=None, packs=Non
         if s == 'images/manifest.js' and packs is not None:
             # 그림은 따로 올린 묶음 파일에서 읽는다 (차례대로 읽히므로 게임 코드보다 먼저 준비된다)
             paths = {k: rel for k, rel in sorted(found.items())}
-            parts.append('<script>/* images (packs) */\nwindow.G = window.G || {};\nG.IMAGE_FILES = G.IMAGE_FILES || {};\nG.IMAGE_PATHS = ' + json.dumps(paths, ensure_ascii=False) + ';\n</script>')
+            # 따로 올린 그림 파일(images/…)은 G.IMAGE_FILES에 상대 경로로 — G.Img가 images/ 를 붙여 필요할 때 읽는다
+            parts.append('<script>/* images (packs) */\nwindow.G = window.G || {};\nG.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, ' + json.dumps(files or {}, ensure_ascii=False) + ');\nG.IMAGE_PATHS = ' + json.dumps(paths, ensure_ascii=False) + ';\n</script>')
             parts.extend('<script src="' + rel + '"></script>' for rel, _ in packs)
         elif s == 'images/manifest.js':
             js, _ = pages.manifest_js(found, embed=True, base=base)
@@ -93,6 +104,7 @@ def mark_published(out):
     with open(pub_path, encoding='utf-8') as f:
         d = json.load(f)
     d['published'] = d.get('packs', [])
+    d['published_files'] = d.get('files', [])
     d['removed'] = []
     with open(pub_path, 'w', encoding='utf-8') as f:
         json.dump(d, f, ensure_ascii=False, indent=1)
@@ -131,13 +143,23 @@ def main():
                     old = json.load(f)
             except Exception:
                 old = {}
-        scale = 1.0
+        scale = float(sys.argv[sys.argv.index('--scale') + 1]) if '--scale' in sys.argv else 1.0
         while True:
             if scale != 1.0:
                 sfound = slim.build(found, slim_dir, scale)
-            packs = image_packs(sfound, slim_dir, out)
-            n1 = write(os.path.join(out, 'game.html'), inline('index.html', sfound, True, title='Loop of Good Hope 더 먼 바다로', extra_css='\nhtml, body { height: 100%; }\n', base=slim_dir, packs=packs))
-            n2 = write(os.path.join(out, 'catalog.html'), inline('catalog.html', sfound, True, base=slim_dir, packs=packs))
+            pfound, afound = split_anim(sfound)
+            packs = image_packs(pfound, slim_dir, out)
+            import shutil
+            if os.path.isdir(os.path.join(out, 'images')):
+                shutil.rmtree(os.path.join(out, 'images'))
+            for rel in afound.values():
+                dst = os.path.join(out, 'images', rel)
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                shutil.copy2(os.path.join(slim_dir, rel), dst)
+            n1 = write(os.path.join(out, 'game.html'), inline('index.html', sfound, True, title='Loop of Good Hope 더 먼 바다로', extra_css='\nhtml, body { height: 100%; }\n', base=slim_dir, packs=packs, files=afound))
+            n2 = write(os.path.join(out, 'catalog.html'), inline('catalog.html', sfound, True, base=slim_dir, packs=packs, files=afound))
+            nf = sum(os.path.getsize(os.path.join(out, 'images', rel)) for rel in afound.values())
+            print('따로 올리는 움직이는 그림 %d장: %s (필요할 때만 읽힘)' % (len(afound), pages.human(nf)))
             total = n1 + sum(b for _, b in packs)
             for rel, b in packs:
                 print('%-42s %s' % (rel, pages.human(b)))
@@ -166,8 +188,12 @@ def main():
             print('배경 음악 %d곡: %s' % (len(music), pages.human(sum(os.path.getsize(os.path.join(out, m)) for m in music))))
         published = old.get('published', [])
         removed = [rel for rel in published if rel not in new]
+        img_files = sorted('images/' + rel for rel in afound.values())
+        old_files = old.get('published_files', [])
+        removed += [rel for rel in old_files if rel not in img_files]
         with open(pub_path, 'w', encoding='utf-8') as f:
-            json.dump({'pages': ['game.html', 'catalog.html'], 'packs': new, 'music': music, 'published': published, 'removed': removed, 'bytes': total}, f, ensure_ascii=False, indent=1)
+            json.dump({'pages': ['game.html', 'catalog.html'], 'packs': new, 'files': img_files, 'music': music, 'published': published,
+                       'published_files': old_files, 'removed': removed, 'bytes': total, 'files_bytes': nf}, f, ensure_ascii=False, indent=1)
         print('올릴 파일 목록: ' + os.path.relpath(pub_path, pages.ROOT) if pub_path.startswith(pages.ROOT) else '올릴 파일 목록: ' + pub_path)
 
 

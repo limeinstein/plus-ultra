@@ -36,9 +36,25 @@ RULES = [
     ('relics/', 256, 'auto', 70),
     ('discovery-ends/', 576, 'auto', 74),
     ('ships/', 640, 'webp', 78),
-    ('ships-nav/', 3136, 'keep', 88),   # 16방향 배 시트: 칸 좌표가 원본 기준이라 되도록 그대로 둔다(게임이 배율을 알아서 맞춤)
+    ('ships-nav/', 3136, 'keep', 88),
+    ('duel/fighters/', 2592, 'webp', 84),   # 일기토 전투원 시트: 칸이 화면에 390px 안팎으로 커져 원본 크기를 지킨다(게임이 배율을 알아서 맞춤)
+    ('duel/backgrounds/', 1400, 'auto', 72),   # 16방향 배 시트: 칸 좌표가 원본 기준이라 되도록 그대로 둔다(게임이 배율을 알아서 맞춤)
     ('title', 1100, 'auto', 66),
 ]
+
+
+# 전체 배율을 낮춰도 이보다 작게는 줄이지 않는 그림 (가장 긴 변)
+FLOOR = {
+    'duel/fighters/': 1944,   # 일기토 전투원: 칸 324px 이상 — 화면 390px로 늘려도 뭉개지지 않게
+    'duel/backgrounds/': 1100,  # 일기토 배경: 1060×380 화면에 깔린다
+}
+
+
+def floor_for(key):
+    for pre, side in FLOOR.items():
+        if key.startswith(pre):
+            return side
+    return 64
 
 
 def rule_for(key):
@@ -128,7 +144,7 @@ def build(found, out_dir, scale=1.0, quiet=False):
     for key, rel in sorted(found.items()):
         src = os.path.join(src_root, rel)
         side, fmt, q = rule_for(key)
-        side = max(64, int(side * scale))
+        side = max(floor_for(key), int(side * scale))
         q = max(45, int(q * (0.85 + 0.15 * scale)))
         dst_noext = os.path.join(out_dir, os.path.splitext(rel)[0])
         os.makedirs(os.path.dirname(dst_noext), exist_ok=True)

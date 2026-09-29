@@ -141,6 +141,9 @@
   add('aztec', '케찰 깃털 머리장식', 'gift', 0.3, '신성한 새의 긴 초록 깃털 수백 개를 금판에 꽂은 머리장식.', { gv: 30 });
   add('inca', '황금 옥수수', 'treasure', 0.35, '금으로 빚은 옥수수 이삭. 태양 신전의 정원에 심겨 있었다고 한다.');
 
+  // 건물 불가사의의 유물 (js/data/wonders.js)
+  if (G.WONDERS) G.WONDERS.relics.forEach(function (a) { add.apply(null, a); });
+
   // ------------------------------------------------------------------ 등록
   G.RELICS = {};      // 발견 id → [유물]
   G.RELIC = {};       // 유물 id → 유물

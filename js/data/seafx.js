@@ -120,6 +120,22 @@
       burnAt: 0.55,       // 내구가 이만큼 아래로 떨어진 배는 검은 연기를 뿜는다
       fireAt: 0.3         // 이만큼 아래면 불길이 보인다
     },
+    duel: {               // 일기토 스프라이트와 타격감 (js/games/duel.js)
+      spriteSize: 230,    // 256px 셀을 화면에 그리는 크기
+      shakeX: 10,         // 흔들림 가로 최대 거리(px, shakeT=1)
+      shakeY: 6,          // 흔들림 세로 최대 거리
+      shakeHit: 0.25,     // 보통 명중 때 더하는 흔들림
+      shakeBig: 0.6,      // 치명타·큰 공격
+      shakeDecay: 2.5,    // 흔들림이 줄어드는 빠르기(1/초)
+      flashHit: 0.10,     // 적 명중 때 화면 번쩍임
+      flashTaken: 0.16,   // 아군 피격 때 붉은 번쩍임
+      flashBig: 0.25,     // 큰 공격의 번쩍임 하한
+      flashDecay: 6,      // 번쩍임이 줄어드는 빠르기(1/초)
+      knockback: 26,      // 피격자가 밀리는 거리(px)
+      knockReturnMs: 260, // 제자리로 돌아오기 시작하는 때
+      hitParticles: 10,   // 명중점에서 튀는 작은 파편 수
+      particleLife: 0.42  // 파편이 남는 시간(초)
+    },
     ride: {               // 배가 보이는 파도를 탄다 (js/world/waves.js — 셰이더와 같은 파도 식으로 선체 위 다섯 점의 높이를 잰다)
       on: true,           // 끄면 예전처럼 사인 곡선으로만 흔들린다
       sea: { roll: 0.18, pitch: 0.10, heave: 0.56, chop: 0.13 },       // 항해 지도: 물 기울기·높이 → 흔들림 (바람 0.5에서 좌우 약 ±0.05, 앞뒤 ±0.025)

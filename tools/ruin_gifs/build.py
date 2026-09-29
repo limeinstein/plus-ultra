@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parents[2]
 DISCOVERIES = ROOT / "js" / "data" / "discoveries.js"
+WONDERS = ROOT / "js" / "data" / "wonders.js"
 SOURCES = ROOT / "tools" / "ruin_gifs" / "reconstructions"
 OUT = ROOT / "images" / "discoveries"
 W, H = 576, 256
@@ -20,7 +21,10 @@ W, H = 576, 256
 
 def ruin_rows() -> list[tuple[str, str]]:
     src = DISCOVERIES.read_text(encoding="utf-8")
-    return re.findall(r"^\s*add\('([^']+)', '([^']+)', 'ruin'", src, re.M)
+    rows = re.findall(r"^\s*add\('([^']+)', '([^']+)', 'ruin'", src, re.M)
+    if WONDERS.exists():
+        rows.extend(re.findall(r"^\s*w\('([^']+)',\s*'([^']+)'", WONDERS.read_text(encoding="utf-8"), re.M))
+    return rows
 
 
 def paper(seed: int) -> Image.Image:

@@ -17,6 +17,8 @@
     if (G.Frontier && G.DISC[id] && !G.Frontier.canHint(G.DISC[id], src)) return false;
     s.hints[id] = { src: src, d: U.dateNum(s.date) }; return true;
   };
+  /** 세워진 건물인가 (불가사의의 built 해) */
+  D.built = function (d) { return !d || !d.built || S().date.y >= d.built; };
   /** 지금 단서를 들을 수 있는 발견물인가 */
   D.available = function (d) { return !G.Frontier || G.Frontier.available(d); };
   /** 그림·세공이 발견물의 값어치를 올린다 — 제독이든 부하든(역할·배 상관없이) 가장 잘하는 사람의 솜씨.
@@ -272,7 +274,7 @@
   D.checkSea = function (lon, lat) {
     var s = S(), hits = [];
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'sea' || D.foundByMe(d.id)) return;
+      if (d.how !== 'sea' || D.foundByMe(d.id) || !D.built(d)) return;
       if (G.Geo.dist(lon, lat, d.lon, d.lat) < d.r) hits.push(d);
     });
     // special geography conditions
@@ -292,7 +294,7 @@
   D.checkLand = function (lon, lat) {
     var hits = [], near = null, nearD = 99;
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'land' || D.foundByMe(d.id)) return;
+      if (d.how !== 'land' || D.foundByMe(d.id) || !D.built(d)) return;
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1);
       if (dist < r) hits.push(d);
@@ -301,7 +303,7 @@
     return { hits: hits, near: near, nearDist: nearD };
   };
   D.checkCity = function (cityId) {
-    return G.DISCOVERIES.filter(function (d) { return d.how === 'city' && d.city === cityId && !D.foundByMe(d.id); });
+    return G.DISCOVERIES.filter(function (d) { return d.how === 'city' && d.city === cityId && !D.foundByMe(d.id) && D.built(d); });
   };
   D.checkTrade = function (goodId, city) {
     return G.DISCOVERIES.filter(function (d) { return d.how === 'trade' && d.good === goodId && d.regions.indexOf(city.region) >= 0 && !D.foundByMe(d.id); });
