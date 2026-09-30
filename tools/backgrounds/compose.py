@@ -16,7 +16,7 @@ def sp(path):
 SETS = {
     'kr': ['exterior-styles/korea/' + k for k in ['trade', 'tavern', 'inn', 'guild', 'library', 'mansion', 'palace', 'gate', 'market']],
     'wood': [NA + 'woodland/' + k for k in ['trade', 'tavern', 'inn', 'church', 'trade', 'inn']],
-    'plains': [NA + 'plains/' + k for k in ['trade', 'inn', 'tavern']] + [NA + 'woodland/church'],
+    'plains': [NA + 'plains/' + k for k in ['trade', 'inn', 'tavern', 'market', 'church', 'gate']],
     'pueblo': [NA + 'pueblo/' + k for k in ['trade', 'tavern', 'inn', 'gate', 'church']],
     'fr': ['exterior-styles/france/' + k for k in ['trade', 'tavern', 'inn', 'guild']] + ['exteriors/church', 'exteriors/home'],
     'es': ['exterior-styles/espana/' + k for k in ['trade', 'tavern', 'inn', 'guild', 'mansion']] + ['exteriors/church'],

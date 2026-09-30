@@ -80,15 +80,33 @@
   Game.onKey = function (e) { if (Game.scene && Game.scene.onKey) Game.scene.onKey(e); };
 
   var last = 0;
+  function LP() { return (G.FX && G.FX.loop) || { maxDt: 0.1, resDown: 0.028, resUp: 0.0185, resMin: 0.45, resStep: 0.1, resHold: 40 }; }
   function loop(t) {
-    var dt = Math.min(0.25, (t - last) / 1000 || 0); last = t;
+    var raw = (t - last) / 1000 || 0; last = t;
+    var K = LP(), dt = Math.min(K.maxDt, Math.max(0, raw));   // 오래 멈췄던 장면(탭 전환·무거운 일) 뒤에 배가 순간 이동하지 않게
     Game.time += dt;
-    // adaptive resolution for the WebGL world view
-    if (worldCanvas && worldCanvas.style.display !== 'none' && dt > 0) {
-      Game.ftAvg = (Game.ftAvg || 0.016) * 0.97 + dt * 0.03;
+    // 바다(WebGL) 해상도 자동 조절: 평균 장면 시간을 보고 한 단계씩.
+    //   · 버벅여 내려온 단계는 한동안(resHold초) 다시 올리지 않는다 (올렸다 내렸다 하며 화면을 새로 만드는 끊김 방지)
+    //   · 낮췄는데도 빨라지지 않으면(화면 주사율이 30Hz로 묶인 기기 등) 원래대로 되돌리고 그 아래로는 내리지 않는다
+    if (worldCanvas && worldCanvas.style.display !== 'none' && raw > 0 && raw < 0.25) {
+      Game.ftAvg = (Game.ftAvg || 0.016) * 0.96 + raw * 0.04;
       Game.ftN = (Game.ftN || 0) + 1;
-      if (Game.ftN > 24 && Game.ftAvg > 0.045 && (Game.autoRes || 1) > 0.55) { Game.autoRes = (Game.autoRes || 1) - 0.15; Game.ftN = 0; resizeCanvases(); }
-      else if (Game.ftN > 240 && Game.ftAvg < 0.02 && (Game.autoRes || 1) < 1) { Game.autoRes = Math.min(1, Game.autoRes + 0.1); Game.ftN = 0; resizeCanvases(); }
+      var ar = Game.autoRes || 1, now = t / 1000, tr = Game.resTry;
+      Game.resBad = Game.resBad || {};
+      if (tr) {
+        if (Game.ftN > 60) {
+          if (Game.ftAvg > tr.ft * 0.9) { Game.resFloor = tr.from; Game.autoRes = tr.from; Game.ftAvg = tr.ft; resizeCanvases(); }
+          Game.resTry = null; Game.ftN = 0;
+        }
+      } else if (Game.ftN > 30 && Game.ftAvg > K.resDown && ar > Math.max(K.resMin, Game.resFloor || 0) + 1e-6) {
+        Game.resBad[ar.toFixed(2)] = now;
+        Game.resTry = { from: ar, ft: Game.ftAvg };
+        Game.autoRes = Math.max(K.resMin, ar - K.resStep); Game.ftN = 0; resizeCanvases();
+      } else if (Game.ftN > 300 && Game.ftAvg < K.resUp && ar < 1) {
+        var up = Math.min(1, ar + K.resStep), bad = Game.resBad[up.toFixed(2)];
+        if (bad == null || now - bad > K.resHold) { Game.autoRes = up; resizeCanvases(); }
+        Game.ftN = 0;
+      }
     }
     if (Game.scene && Game.scene.update) {
       try { Game.scene.update(dt); } catch (e) { console.error(e); }

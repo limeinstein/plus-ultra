@@ -7,6 +7,8 @@
   var DAY_SEC = 1.25;               // real seconds per game day at speed x1
   var st = null;                    // runtime state
   function S() { return G.Game.state; }
+  /** 장면 시간 dt 동안 목표 쪽으로 다가가는 비율 (빠르기 k/초) — 장면 수가 달라도 같은 속도로 */
+  function ease(dt, k) { return 1 - Math.exp(-dt * k); }
 
   // ================================================================ enter / exit
   SEA.enter = function (arg) {
@@ -87,6 +89,7 @@
     catcher.addEventListener('mousemove', onMove);
     catcher.addEventListener('mouseleave', function () { st.mouse = null; });
     catcher.addEventListener('wheel', onWheel, { passive: false });
+    UI.pinch(catcher, zoomBy);
     catcher.addEventListener('contextmenu', function (e) { e.preventDefault(); st.path = null; st.target = null; st.dirCrs = null; st.tackTheta = 0; });
     UI.add(catcher);
     // status strip
@@ -110,7 +113,7 @@
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open('fleet').then(function () { st.busy--; }); });
     var zb = U.el('div', 'zoomctl');
-    [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); st.cam.zoom = U.clamp(st.cam.zoom * z[1], 26, 420); }; zb.appendChild(b); });
+    [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
     UI.add(bar);
     refreshBar(); refreshHud();
@@ -154,8 +157,9 @@
   function onWheel(e) {
     e.preventDefault();
     var k = e.deltaY > 0 ? 1 / 1.15 : 1.15;
-    st.cam.zoom = U.clamp(st.cam.zoom * k, 26, 420);
+    zoomBy(k);
   }
+  function zoomBy(k) { st.cam.zoomT = U.clamp((st.cam.zoomT || st.cam.zoom) * k, 26, 420); }
   function onDown(e) {
     if (e.button !== 0 || UI.busy() || st.busy) return;
     var p = stagePos(e);
@@ -243,8 +247,8 @@
       else if (kk === 'arrowup' || kk === 'w') { st.braking = false; st.stopping = false; if (st.paused) { st.paused = false; refreshBar(); } }
       return true;
     }
-    if (k === '+' || k === '=') { st.cam.zoom = Math.min(420, st.cam.zoom * 1.2); return true; }
-    if (k === '-') { st.cam.zoom = Math.max(26, st.cam.zoom / 1.2); return true; }
+    if (k === '+' || k === '=') { zoomBy(1.2); return true; }
+    if (k === '-') { zoomBy(1 / 1.2); return true; }
     return false;
   }
   function buildSpeed() { U.$$('.speedctl .opt').forEach(function (o, i) { o.classList.toggle('on', [1, 2, 4][i] === st.speed); }); }
@@ -388,6 +392,7 @@
   async function tryEnterPort() {
     var c = portNear();
     if (!c) { UI.toast('가까운 곳에 들를 수 있는 항구가 없습니다.', 'anchor'); return; }
+    if (G.Disc.prefetchCity) G.Disc.prefetchCity(c.id);
     st.busy++;
     try {
       var ok = await G.Scenes.city.handleEntry(c);
@@ -614,6 +619,7 @@
       if (st.manual && turnKey() && spd > 1) { spd = 1; st.handSteer = true; }
       var daysDt = dt * spd / DAY_SEC;
       var nsub = Math.max(1, Math.ceil(daysDt / 0.08)), subD = daysDt / nsub, subT = dt / nsub;
+      var dayDue = false;
       for (var k = 0; k < nsub && !st.busy && !st.paused; k++) {
         var h0 = l.heading;
         steer(subT, spd);
@@ -622,8 +628,9 @@
         if (st.fx && G.SeaFX) { G.SeaFX.age(st.fx, subD); st.fxAged = true; }
         updateNpcs(subD);
         st.dayAcc += subD;
-        if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); break; }
+        if (st.dayAcc >= 1 && !dayDue) { st.dayAcc -= 1; dayDue = true; }   // 하루가 지났다 — 이 장면의 남은 걸음을 마저 간 뒤에 처리 (걸음을 잃지 않게)
       }
+      if (dayDue) runDay();
       if (!st.busy && (st.frame = (st.frame || 0) + 1) % 10 === 0) checkEncounters();
     }
     // 물보라·항적의 시간: 항해 중에는 게임 속 시간으로, 멈추거나 대화 중에는 천천히 사라진다
@@ -635,22 +642,31 @@
     if (G.Errand) G.Errand.onSea(l.lon, l.lat);
     // 돛: 멈추면 활대에 말아 올리고, 나아가면 편다 (약 1초)
     var furlT = (st.paused || st.stopping || shipSpeed() < 0.05) ? 1 : 0;
-    st.furl = (st.furl || 0) + (furlT - (st.furl || 0)) * Math.min(1, dt * 1.6);
+    st.furl = (st.furl || 0) + (furlT - (st.furl || 0)) * ease(dt, 1.6);
     // 해안 가까이 멈춰 있으면 닻을 내린 배처럼 뱃머리가 해안선과 나란해진다 (커진 배가 뭍에 걸쳐 보이지 않게)
     if (!st.manual && !st.path && st.dirCrs == null && shipSpeed() < 0.05 && !UI.busy()) alongCoast(dt);
     // 카메라: 진행 방향으로 조금 앞서 (속력에 비례, 최대 0.3°) — 흔들기·급한 확대는 쓰지 않는다
+    //   배는 그대로 따라가고(속도만큼 뒤처지지 않아 배속을 올려도 배가 화면에서 떠밀리지 않는다), 어긋난 만큼만 부드럽게 좁힌다
     var P = FXS(), vsp = shipSpeed(), lead = Math.min(0.3, vsp * P.camLead);
     var ld = vsp > 0.02 ? Math.atan2(st.vel[1], st.vel[0]) : l.heading;
     st.camLead = st.camLead || [0, 0];
-    st.camLead[0] += (Math.cos(ld) * lead - st.camLead[0]) * Math.min(1, dt * 1.2);
-    st.camLead[1] += (Math.sin(ld) * lead - st.camLead[1]) * Math.min(1, dt * 1.2);
+    var kl = ease(dt, 1.2);
+    st.camLead[0] += (Math.cos(ld) * lead - st.camLead[0]) * kl;
+    st.camLead[1] += (Math.sin(ld) * lead - st.camLead[1]) * kl;
     var cx = l.lon + st.camLead[0], cy = l.lat + st.camLead[1];
-    var dx = G.Geo.wrapLon(cx - st.cam.lon);
-    st.cam.lon = G.Geo.wrapLon(st.cam.lon + dx * Math.min(1, dt * 3));
-    st.cam.lat += (cy - st.cam.lat) * Math.min(1, dt * 3);
+    var ex = G.Geo.wrapLon(st.cam.lon - cx), ey = st.cam.lat - cy, keep = 1 - ease(dt, P.camCatch || 4);
+    if (Math.abs(ex) > 4 || Math.abs(ey) > 4) keep = 0;             // 멀리 떨어졌으면(출항 직후 등) 바로 옮긴다
+    st.cam.lon = G.Geo.wrapLon(cx + ex * keep);
+    st.cam.lat = cy + ey * keep;
+    // 확대·축소: 휠·단추는 목표만 바꾸고, 여기서 부드럽게 다가간다
+    if (st.cam.zoomT) {
+      var zr = st.cam.zoomT / st.cam.zoom;
+      if (Math.abs(zr - 1) < 0.004) { st.cam.zoom = st.cam.zoomT; st.cam.zoomT = 0; }
+      else st.cam.zoom *= Math.pow(zr, ease(dt, P.zoomEase || 12));
+    }
     // wind visual smoothing
-    var wd = U.angDiff(st.windVis.dir, st.wind.dir);
-    st.windVis.dir += wd * Math.min(1, dt * 1.5); st.windVis.spd += (st.wind.spd - st.windVis.spd) * Math.min(1, dt * 1.5);
+    var wd = U.angDiff(st.windVis.dir, st.wind.dir), kw = ease(dt, 1.5);
+    st.windVis.dir += wd * kw; st.windVis.spd += (st.wind.spd - st.windVis.spd) * kw;
     render(dt);
   };
 
@@ -1180,7 +1196,7 @@
   }
   function refreshButtons() {
     var pn = portNear();
-    if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); hudEl.port.innerHTML = G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항'); }
+    if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
     var s = S(), l = s.loc;
     var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + ' 항해 중' : '목적지로 항해 중')
@@ -1196,8 +1212,10 @@
     var eta = etaDays(), have = Math.min(R.daysOfFood(), R.daysOfWater());
     var etaTxt = eta != null ? ' · <span style="color:' + (have < eta + 2 ? '#ff9f7a' : '#cfe8b0') + '">도착까지 약 ' + eta + '일 / 보급 ' + have + '일분</span>' : '';
     var oc = G.Explore.oceanOf(l.lon, l.lat);
-    if (hudEl.status) hudEl.status.innerHTML = (st.paused ? '<b>⏸ 정지</b> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (st.calm ? ' · 무풍' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>';
+    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⏸ 정지</b> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (st.calm ? ' · 무풍' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
   }
+  /** 글이 바뀌었을 때만 고친다 (같은 글을 다시 넣으면 브라우저가 매번 새로 배치한다) */
+  function setHtml(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }
   function drawOverlay() {
     var cv = G.Game.canvases().overlay, ctx = cv.getContext('2d'), k = G.Game.overlayScale || 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
@@ -1410,7 +1428,7 @@
     var from = U.dirName(st.wind.dir + Math.PI);
     var mz = G.Monsoon ? G.Monsoon.at(l.lon, l.lat) : null, mtxt = '';
     if (mz) { var mph = G.Monsoon.phase(mz), mnx = G.Monsoon.next(mz); mtxt = '<div style="font-size:12.5px;color:#9fd0c8" title="' + mz.name + '의 계절풍">' + (mph === 'sw' ? '남서' : '북동') + ' 계절풍 ~' + mnx.date.m + '/' + mnx.date.d + '</div>'; }
-    hudEl.wtxt.innerHTML = '<div style="font-size:15px;color:#e3c68d">' + from + '풍</div><div style="font-size:14px">풍속 ' + '●●●●●'.slice(0, Math.max(1, Math.round(ws * 5))) + '</div><div style="font-size:14px;color:#d9c9a6">' + rn + '</div>' + mtxt;
+    setHtml(hudEl.wtxt, '<div style="font-size:15px;color:#e3c68d">' + from + '풍</div><div style="font-size:14px">풍속 ' + '●●●●●'.slice(0, Math.max(1, Math.round(ws * 5))) + '</div><div style="font-size:14px;color:#d9c9a6">' + rn + '</div>' + mtxt);
   }
   function drawMini() {
     if (!hudEl.mini) return;

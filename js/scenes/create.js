@@ -48,6 +48,7 @@
   }
 
   C.enter = function () {
+    starting = false;
     UI.hud.hide();
     G.Game.showLayers(false, false, true);
     p = { name: U.pick(NAMES.PT), nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1 };
@@ -109,7 +110,11 @@
     // events
     box.querySelector('#face').onclick = function () { p.face++; render(); };
     box.querySelector('#nm').oninput = function (e) { p.name = e.target.value; };
-    box.querySelector('#nm').onkeydown = function (e) { e.stopPropagation(); };
+    box.querySelector('#nm').onkeydown = function (e) {
+      e.stopPropagation();
+      // 테스트용: 이름에 「이강희」를 치고 엔터 → 모든 능력 만렙, 소지금 10만으로 바로 시작
+      if (e.key === 'Enter' && e.target.value.trim() === TEST_NAME) { e.preventDefault(); startTest(); }
+    };
     box.querySelector('#rn').onclick = function () { p.name = U.pick(NAMES[p.nation]); render(); };
     box.querySelector('#bm').onchange = function (e) { p.birth.m = +e.target.value; p.birth.d = Math.min(p.birth.d, U.daysInMonth(1460, p.birth.m)); rollStats(); render(); };
     box.querySelector('#bd').onchange = function (e) { p.birth.d = +e.target.value; rollStats(); render(); };
@@ -164,12 +169,30 @@
   }
   C.playerSpec = playerSpec;
 
-  async function start() {
+  // ---------------------------------------------------------------- 테스트용 캐릭터
+  var TEST_NAME = '이강희', starting = false;
+  function startTest() {
+    if (starting) return;          // 한글 입력 중 엔터가 두 번 들어와도 한 번만
+    var T = G.BALANCE.testChar;
+    p.name = TEST_NAME;
+    p.st = {}; G.STATS.forEach(function (s) { p.st[s.id] = T.stat; });
+    p.sk = {}; G.SKILLS.forEach(function (s) { p.sk[s.id] = 3; });
+    p.lg = G.LANGS.map(function () { return 3; });
+    UI.toast('테스트용 캐릭터: 모든 능력 만렙, 소지금 ' + T.gold.toLocaleString() + '닢', 'info');
+    start(true);
+  }
+
+  async function start(test) {
+    test = test === true;          // 버튼 클릭이면 이벤트 객체가 들어온다
+    if (starting) return;
     p.name = (p.name || '').trim();
     if (!p.name) { UI.toast('이름을 입력하세요.', 'info'); return; }
-    if (spent() > points()) { UI.toast('특기 점수를 너무 많이 썼습니다.', 'info'); return; }
+    if (!test && spent() > points()) { UI.toast('특기 점수를 너무 많이 썼습니다.', 'info'); return; }
+    starting = true;
     await G.Game.ensureGeo();
-    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: p.diff === 'easy' ? 5000 : 3000 });
+    var T = test ? G.BALANCE.testChar : null;
+    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000 });
+    if (T) S.player.luck = T.luck;
     S.player.portrait = playerSpec();
     G.Game.state = S;
     await UI.fade(function () { G.Game.go('city', { cityId: S.player.home, prologue: true }); });

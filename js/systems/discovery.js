@@ -274,8 +274,10 @@
   D.checkSea = function (lon, lat) {
     var s = S(), hits = [];
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'sea' || D.foundByMe(d.id) || !D.built(d)) return;
-      if (G.Geo.dist(lon, lat, d.lon, d.lat) < d.r) hits.push(d);
+      if (d.how !== 'sea' || D.foundByMe(d.id)) return;
+      if (G.Geo.dist(lon, lat, d.lon, d.lat) >= d.r) return;
+      if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return; }   // 아직 세워지지 않았다 — 1600년부터는 신기루로 보인다
+      hits.push(d);
     });
     // special geography conditions
     function sp(id) { if (!D.foundByMe(id)) hits.push(G.DISC[id]); }
@@ -294,16 +296,27 @@
   D.checkLand = function (lon, lat) {
     var hits = [], near = null, nearD = 99;
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'land' || D.foundByMe(d.id) || !D.built(d)) return;
+      if (d.how !== 'land' || D.foundByMe(d.id)) return;
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1);
+      if (!D.built(d)) { if (dist < r && G.Mirage) G.Mirage.see(d); return; }   // 신기루
       if (dist < r) hits.push(d);
       else if (dist < nearD) { nearD = dist; near = d; }
     });
+    if (near && G.Reel && nearD < Math.max(1.2, near.r * 4)) G.Reel.prefetch(near);   // 가까워지면 발견 장면 판을 미리 받아 둔다
     return { hits: hits, near: near, nearDist: nearD };
   };
   D.checkCity = function (cityId) {
-    return G.DISCOVERIES.filter(function (d) { return d.how === 'city' && d.city === cityId && !D.foundByMe(d.id) && D.built(d); });
+    return G.DISCOVERIES.filter(function (d) {
+      if (d.how !== 'city' || d.city !== cityId || D.foundByMe(d.id)) return false;
+      if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return false; }   // 신기루
+      return true;
+    });
+  };
+  /** 이 도시에서 찾을 수 있는 발견물의 장면 판을 미리 받는다 (입항하기 전에 — 도시에 들어서는 동안 받아진다) */
+  D.prefetchCity = function (cityId) {
+    if (!G.Reel) return;
+    G.DISCOVERIES.forEach(function (d) { if (d.how === 'city' && d.city === cityId && !D.foundByMe(d.id) && D.built(d)) G.Reel.prefetch(d); });
   };
   D.checkTrade = function (goodId, city) {
     return G.DISCOVERIES.filter(function (d) { return d.how === 'trade' && d.good === goodId && d.regions.indexOf(city.region) >= 0 && !D.foundByMe(d.id); });

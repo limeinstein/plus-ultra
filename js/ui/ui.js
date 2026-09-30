@@ -77,7 +77,7 @@
         Promise.resolve(fn && fn()).then(function () {
           setTimeout(function () { fadeEl.classList.remove('on'); resolve(); }, 60);
         });
-      }, 460);
+      }, 300);    // 검은 막이 다 덮을 때까지 (css .fade-black 의 transition 과 같게)
     });
   };
 
@@ -418,6 +418,18 @@
     return m;
   };
 
+  /** 두 손가락 벌리기·오므리기로 확대 (휴대폰·태블릿). fn(배율) — 한 번 움직일 때마다 앞 모양 대비 배율 */
+  UI.pinch = function (el, fn) {
+    var d0 = 0;
+    function dist(e) { var a = e.touches[0], b = e.touches[1]; return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); }
+    el.addEventListener('touchstart', function (e) { if (e.touches.length === 2) d0 = dist(e); }, { passive: true });
+    el.addEventListener('touchmove', function (e) {
+      if (e.touches.length !== 2 || !d0) return;
+      e.preventDefault();
+      var d = dist(e); if (d > 0) { fn(d / d0); d0 = d; }
+    }, { passive: false });
+    el.addEventListener('touchend', function (e) { if (e.touches.length < 2) d0 = 0; }, { passive: true });
+  };
   UI.bar = function (v, max, cls) {
     var p = max ? U.clamp(v / max, 0, 1) : 0;
     return '<div class="bar ' + (cls || '') + '"><i style="width:' + (p * 100).toFixed(1) + '%"></i></div>';

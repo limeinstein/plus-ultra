@@ -878,48 +878,57 @@ void main(){
     gl.disable(gl.SCISSOR_TEST);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   };
+  /** 판 c가 이 화면을 덮는가 — 세상 좌표(°)로 따진다. 확대가 조금 달라도(ZOOM_KEEP 배 안) 늘이거나 줄여서 쓴다 */
+  var ZOOM_KEEP = 2;
   Renderer.prototype._covers = function (c, lon, lat, zoom, W, H, key, slack) {
-    if (!c || !c.ready || c.zoom !== zoom || c.key !== key) return false;
-    var dx = Math.abs(wrap(lon - c.lon)) * zoom, dy = Math.abs(lat - c.lat) * zoom;
-    return dx + W / 2 <= c.w / 2 - slack && dy + H / 2 <= c.h / 2 - slack;
+    if (!c || !c.ready || c.key !== key) return false;
+    var r = zoom / c.zoom; if (r > ZOOM_KEEP || r < 1 / ZOOM_KEEP) return false;
+    var dx = Math.abs(wrap(lon - c.lon)), dy = Math.abs(lat - c.lat);
+    return dx + W / 2 / zoom <= (c.w / 2 - slack) / c.zoom && dy + H / 2 / zoom <= (c.h / 2 - slack) / c.zoom;
   };
+  /** 뒤에서 판을 몇 줄로 나눠 그릴지: 판이 클수록 잘게 (한 장면에 무거운 육지 패스를 조금씩) */
+  function stripsFor(cw, ch) { return Math.max(4, Math.min(10, Math.round(cw * ch / 450000))); }
   Renderer.prototype._ensureCache = function (view, W, H, zoom) {
-    var FX = G.FX || {};
+    var FX = G.FX || {}, gl = this.gl, self = this;
     var key = JSON.stringify(FX.terrain || {}) + '|' + (view.quality == null ? 1 : view.quality);
     var cw = Math.min(this.maxTex, Math.ceil(W * 1.45)), ch = Math.min(this.maxTex, Math.ceil(H * 1.45));
-    for (var i = 0; i < 2; i++) { var c = this.caches[i]; if (!c || c.w !== cw || c.h !== ch) { if (c) { this.gl.deleteTexture(c.tex); this.gl.deleteFramebuffer(c.fbo); } this.caches[i] = this._newCache(cw, ch); this.job = null; } }
+    // 뒤 판은 늘 지금 크기로 — 앞 판은 크기가 달라도(해상도를 막 바꿨을 때) 화면을 덮는 동안 그대로 쓴다
+    var bk = this.caches[1];
+    if (!bk || bk.w !== cw || bk.h !== ch) { if (bk) { gl.deleteTexture(bk.tex); gl.deleteFramebuffer(bk.fbo); } this.caches[1] = this._newCache(cw, ch); this.job = null; }
     // 카메라가 움직이는 빠르기 (화면 px/장면, 부드럽게)
     var lv = this._lastView, vx = 0, vy = 0;
     if (lv && lv.zoom === zoom) { vx = wrap(view.lon - lv.lon) * zoom; vy = (view.lat - lv.lat) * zoom; }
     this._vel = this._vel || [0, 0];
     this._vel[0] = this._vel[0] * 0.9 + vx * 0.1; this._vel[1] = this._vel[1] * 0.9 + vy * 0.1;
+    this._zoomStill = lv && lv.zoom === zoom ? (this._zoomStill || 0) + 1 : 0;   // 확대가 몇 장면째 그대로인가
     this._lastView = { lon: view.lon, lat: view.lat, zoom: zoom };
     var mX = (cw - W) / 2, mY = (ch - H) / 2;
-    var self = this;
     function plan(c) {   // 새 판의 가운데: 지금 카메라에서 진행 방향으로 여유의 절반까지 앞서
       var lx = Math.max(-mX * 0.5, Math.min(mX * 0.5, self._vel[0] * 40)), ly = Math.max(-mY * 0.5, Math.min(mY * 0.5, self._vel[1] * 40));
       c.lon = wrap(view.lon + lx / zoom); c.lat = view.lat + ly / zoom; c.zoom = zoom; c.key = key; c.ready = false;
     }
-    var front = this.caches[0], back = this.caches[1], N = 4;
+    var front = this.caches[0], back = this.caches[1], j = this.job;
     if (!this._covers(front, view.lon, view.lat, zoom, W, H, key, 1)) {
       // 뒤에서 그리던 판이 이 자리를 덮으면 마저 그려 쓰고, 아니면 여기서 한 번에 새로 그린다
-      var j = this.job;
       if (j && back.zoom === zoom && back.key === key) {
         back.ready = true; var okBack = this._covers(back, view.lon, view.lat, zoom, W, H, key, 1); back.ready = false;
-        if (okBack) { for (var k = j.i; k < N; k++) this._renderStrip(back, view, Math.floor(k * ch / N), Math.floor((k + 1) * ch / N)); back.ready = true; this.job = null; this.caches = [back, front]; this.stats.swaps++; return this.caches[0]; }
+        if (okBack) { for (var k = j.i; k < j.n; k++) this._renderStrip(back, view, Math.floor(k * ch / j.n), Math.floor((k + 1) * ch / j.n)); back.ready = true; this.job = null; this.caches = [back, front]; this.stats.swaps++; return this.caches[0]; }
       }
       plan(back);
       this._renderStrip(back, view, 0, ch); back.ready = true; this.job = null;
       this.caches = [back, front]; this.stats.full++;
       return this.caches[0];
     }
-    if (this.job) {
-      var jb = this.job;
-      this._renderStrip(back, view, Math.floor(jb.i * ch / N), Math.floor((jb.i + 1) * ch / N)); jb.i++; this.stats.strips++;
-      if (jb.i >= N) { back.ready = true; this.job = null; this.caches = [back, front]; this.stats.swaps++; }
+    // 그리는 사이 확대가 또 바뀌었으면 멈췄다가 확대가 가라앉으면 새로
+    if (j && (back.zoom !== zoom || back.key !== key)) { this.job = j = null; }
+    if (j) {
+      this._renderStrip(back, view, Math.floor(j.i * ch / j.n), Math.floor((j.i + 1) * ch / j.n)); j.i++; this.stats.strips++;
+      if (j.i >= j.n) { back.ready = true; this.job = null; this.caches = [back, front]; this.stats.swaps++; }
     } else {
+      // 확대·해상도가 바뀐 판(늘여 쓰는 중)은 확대가 멈추면 새로, 아니면 여유의 40%를 쓰면 진행 방향으로 앞선 판을
+      var stale = front.zoom !== zoom || front.w !== cw || front.h !== ch;
       var used = Math.max(Math.abs(wrap(view.lon - front.lon)) * zoom / Math.max(1, mX), Math.abs(view.lat - front.lat) * zoom / Math.max(1, mY));
-      if (used > 0.4) { plan(back); this.job = { i: 0 }; }
+      if ((stale && this._zoomStill >= 3) || (!stale && used > 0.4)) { plan(back); this.job = { i: 0, n: stripsFor(cw, ch) }; }
     }
     return this.caches[0];
   };

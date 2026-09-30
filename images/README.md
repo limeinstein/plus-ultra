@@ -20,7 +20,7 @@
 | 거리 배경 (도시 화면) | `bg-styles/ib_port_a.jpg` 항구 · `bg-styles/ib_inland_a.jpg` 내륙 (여러 장이면 _a, _b …) | 1600×900 |
 | 거리 배경 — 한 도시만 | `backgrounds/도시번호.jpg` | 1600×900 |
 | 건물 겉모습 (거리에 세움) | `exteriors/건물.webp` (tavern, trade, inn …) · 도시별 `@도시번호` · 후원자 저택 `mansion@후원자ID` | 배경 지운 PNG·WEBP, 높이 660 |
-| 지역별 건물 묶음 | `exterior-styles/<묶음>/건물.webp` — 북미 원주민은 `woodland`(숲: 나무껍질 긴 집·위그웜·티피·울타리·카누), `plains`(평원 티피, 다코타 230·만단 243), `pueblo`(흙벽돌 계단 집·키바, 타오스 241·아코마 242). 없는 건물은 plains·pueblo → woodland → tropic 순으로 빌림. `tools/natives/make.py`가 기존 그림(마사이 시장 지붕 결)을 재료로 다시 만든다 | 배경 지운 WEBP, 높이 520(시장 660) |
+| 지역별 건물 묶음 | `exterior-styles/<묶음>/건물.webp` — 북미 원주민은 `woodland`(숲: 나무껍질 긴 집·위그웜·티피·울타리·카누), `plains`(평원 티피·가죽 천막 시장·의식용 큰 티피·목책 성문, 다코타 230·만단 243), `pueblo`(흙벽돌 계단 집·키바, 타오스 241·아코마 242). 없는 건물은 plains·pueblo → woodland → tropic 순으로 빌림. `tools/natives/make.py`가 기본 그림을 다시 만든다 | 배경 지운 WEBP, 높이 520(시장 660) |
 | 거리 볼거리 (장식) | `landmarks/이름.webp` | 배경 지운 PNG·WEBP |
 | 제독 — 거리에서 걷는 모습 | `characters/walk_1.webp` … `walk_8.webp` (옆모습, 발끝이 아래) | 높이 430 |
 | 제독 — 수첩 반신상 | `characters/player_half.webp` | 512×512 |

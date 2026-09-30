@@ -34,7 +34,21 @@
     return c;
   }
   /** GIF를 Canvas로 복사하면 첫 프레임만 남는다. 애니메이션 항목은 원본 요소를 쓴다. */
-  function animatedImage(it) {
+  /*  장면 판(G.Reel)이 있으면 Canvas로 — 목록의 작은 그림은 마지막 장면을 멈춰 두고 마우스를 올리면 한 번 돈다
+      (GIF 수십 장이 한꺼번에 돌면 목록이 버벅인다), 자세히 보기는 계속 돈다 */
+  function animatedImage(it, thumb) {
+    if (it.animated && it.disc && G.Reel && G.Reel.has(it.disc)) {
+      const key = G.Reel.key(it.disc), cv = document.createElement('canvas');
+      cv.width = thumb ? 480 : 1152; cv.height = thumb ? 213 : 512; cv.className = 'reel'; cv.setAttribute('aria-label', it.name);
+      G.Reel.load(key).then(L => {
+        if (!L) return;
+        if (!thumb) { G.Reel.play(cv, L, { loop: true }); return; }
+        G.Reel.drawLast(cv, L);
+        let p = null;
+        cv.addEventListener('mouseenter', () => { if (!p) p = G.Reel.play(cv, L, { onEnd: () => { p = null; } }); });
+      });
+      return cv;
+    }
     const k = it.animated && it.chain && I.pick(it.chain), f = k && I.file(k);
     if (!f || !(I.isAnim ? I.isAnim(k) : /\.gif(?:$|[?#])/i.test(f))) return null;
     const img = new Image(); img.src = I.src(k); img.alt = it.name + ' 복원 애니메이션';
@@ -264,14 +278,14 @@
   // ------------------------------------------------ discoveries
   const tDisc = tab('discoveries', '발견물', {
     chips: [['all', '전체']].concat(Object.keys(G.DISC_CATS).map(k => [k, G.DISC_CATS[k]])),
-    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 유적은 <code>tools/ruin_gifs/build.py</code>가 만든 GIF로 7단계 복원과 360° 상공 회전을 보여 줍니다.'
+    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 유적은 7단계 복원과 360° 상공 회전, 자연 경관은 일출부터 밤까지 이어지는 파노라마 GIF를 보여 줍니다.'
   });
   G.DISCOVERIES.forEach(d => {
     const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : G.REGIONS[d.reg];
     const place = d.how === 'city' ? CITY[d.city].name + ' 시내' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
     add(tDisc, {
       group: d.cat, name: d.name, sub: G.DISC_CATS[d.cat] + ' · ' + where, meta: HOW[d.how] + ' · 가치 ' + num(d.val) + (d.rival ? ' · 경쟁자 ' + d.rival[2] : ''),
-      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: d.cat === 'ruin',
+      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: d.cat === 'ruin' || d.cat === 'nature' || d.natural, disc: d,
       pic: () => I.make(I.chain.discovery(d), 720, 320, () => A.discoveryArt(d, 720, 320)),
       detail: () => ({
         text: d.desc, hint: '단서 — ' + d.hint, real: d.real,
@@ -533,8 +547,10 @@
   async function drawThumb(el) {
     const it = ITEM[el.dataset.uid];
     if (!it) return;
+    const early = animatedImage(it, true);          // 장면 판은 GIF를 받지 않고 곧장
+    if (early && early.tagName === 'CANVAS') { el.appendChild(early); return; }
     if (it.chain && I.pick(it.chain)) await I.preload([it.chain], 4000);
-    const moving = animatedImage(it);
+    const moving = early;
     if (moving) { el.appendChild(moving); return; }
     let src;
     try { src = it.pic(); } catch (e) { console.error(e); return; }

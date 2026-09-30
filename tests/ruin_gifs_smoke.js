@@ -1,4 +1,4 @@
-/* 설치된 Chrome으로 유적 GIF 162개의 등록·로딩·발견 카드 요소를 확인한다. */
+/* 설치된 Chrome으로 유적·자연 경관 GIF의 등록·로딩·발견 카드 요소를 확인한다. */
 'use strict';
 const fs = require('fs');
 const os = require('os');
@@ -66,11 +66,28 @@ function socket(url) {
     }
     const q = await cdp.call('Runtime.evaluate', { expression: `new Promise(resolve=>{
       const ruins=G.DISCOVERIES.filter(d=>d.cat==='ruin'), files=ruins.map(d=>G.Img.file('discoveries/'+d.id));
+      const natures=G.DISCOVERIES.filter(d=>d.cat==='nature'), natureFiles=natures.map(d=>G.Img.file('discoveries/'+d.id));
+      const landscapeIds=[...new Set(natures.map(d=>d.id).concat(G.NATURALS||[]))];
+      const landscapes=landscapeIds.map(id=>G.DISC[id]).filter(Boolean);
+      const landscapeFiles=landscapes.map(d=>G.Img.file('discoveries/'+d.id));
+      const landscapeSheets=landscapes.map(d=>G.Img.file('discovery-sheets/'+d.id));
       const d=G.DISC.stonehenge, pic=G.Scenes.discoveryPicture(d); pic.id='ruin-gif-test';
+      const naturePic=G.Scenes.discoveryPicture(G.DISC.uluru);
+      const solomonPic=G.Scenes.discoveryPicture(G.DISC.solomon);
       document.body.innerHTML='<main class="disc-card" style="width:720px;margin:20px auto"><div class="disc-head">RUIN RESTORATION</div><div class="art"></div><div class="dname">'+d.name+'</div></main>';
       document.querySelector('.art').appendChild(pic);
-      pic.onload=()=>resolve({ruins:ruins.length,gifs:files.filter(f=>/\\.gif$/.test(f||'')).length,tag:pic.tagName,size:[pic.naturalWidth,pic.naturalHeight],alt:pic.alt});
-      pic.onerror=()=>resolve({error:'GIF 로딩 실패',src:pic.src});
+      const load=[d,G.DISC.uluru,G.DISC.solomon].map(x=>G.Reel.load(G.Reel.key(x)));
+      Promise.all(load).then(loaded=>resolve({
+        ruins:ruins.length,gifs:files.filter(f=>/\\.gif$/.test(f||'')).length,
+        natures:natures.length,natureGifs:natureFiles.filter(f=>/\\.gif$/.test(f||'')).length,
+        naturals:(G.NATURALS||[]).length,landscapes:landscapes.length,
+        landscapeGifs:landscapeFiles.filter(f=>/\\.gif$/.test(f||'')).length,
+        landscapeSheets:landscapeSheets.filter(f=>/\\.webp$/.test(f||'')).length,
+        landscapeReveals:landscapes.filter(d=>G.Scenes.hasReveal(d)).length,
+        loaded:loaded.every(Boolean),tag:pic.tagName,size:[pic.width,pic.height],
+        natureTag:naturePic.tagName,natureAria:naturePic.getAttribute('aria-label'),
+        solomonTag:solomonPic.tagName,solomonAria:solomonPic.getAttribute('aria-label')
+      }));
     })`, awaitPromise: true, returnByValue: true });
     result = q.result.value;
     await sleep(2400); // 적어도 두 단계가 재생된 시점의 사진
@@ -89,12 +106,12 @@ function socket(url) {
     }
     await sleep(1000);
     const c = await cdp.call('Runtime.evaluate', { expression: `(()=>{
-      const pic=document.querySelector('#grid .thumb img');
-      return {cards:document.querySelectorAll('#grid .card').length,animated:document.querySelectorAll('#grid .thumb img').length,src:pic&&pic.src};
+      const pic=document.querySelector('#grid .thumb canvas.reel');
+      return {cards:document.querySelectorAll('#grid .card').length,animated:document.querySelectorAll('#grid .thumb canvas.reel').length,tag:pic&&pic.tagName};
     })()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.ruins !== 162 || result.gifs !== 162 || result.tag !== 'IMG' || result.size[0] !== 576 || result.size[1] !== 256 || !catalog || catalog.cards !== 162 || !catalog.animated || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.ruins !== 162 || result.gifs !== 162 || result.natures !== 40 || result.natureGifs !== 40 || result.naturals !== 34 || result.landscapes !== 41 || result.landscapeGifs !== 41 || result.landscapeSheets !== 41 || result.landscapeReveals !== 41 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.natureTag !== 'CANVAS' || result.natureAria !== '지구의 배꼽' || result.solomonTag !== 'CANVAS' || result.solomonAria !== '솔로몬의 광산' || !catalog || catalog.cards !== 162 || catalog.animated < 1 || catalog.tag !== 'CANVAS' || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

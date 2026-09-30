@@ -35,6 +35,7 @@ RULES = [
     ('discovery-cats/', 1100, 'auto', 72),
     ('relics/', 256, 'auto', 70),
     ('discovery-ends/', 576, 'auto', 74),
+    ('discovery-sheets/', 2304, 'webp', 72),   # 발견 장면 판(6칸 × n줄): 칸 384px — 화면 1094px로 늘어나도 GIF(256색)보다 곱다
     ('ships/', 640, 'webp', 78),
     ('ships-nav/', 3136, 'keep', 88),
     ('duel/fighters/', 2592, 'webp', 84),   # 일기토 전투원 시트: 칸이 화면에 390px 안팎으로 커져 원본 크기를 지킨다(게임이 배율을 알아서 맞춤)
@@ -47,6 +48,7 @@ RULES = [
 FLOOR = {
     'duel/fighters/': 1944,   # 일기토 전투원: 칸 324px 이상 — 화면 390px로 늘려도 뭉개지지 않게
     'duel/backgrounds/': 1100,  # 일기토 배경: 1060×380 화면에 깔린다
+    'discovery-sheets/': 2304,  # 발견 장면 판: 전체 배율을 낮춰도 칸 384px 아래로 줄이지 않는다
 }
 
 

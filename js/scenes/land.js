@@ -7,6 +7,7 @@
   var DAY_SEC = 1.3;
   var st = null;
   function S() { return G.Game.state; }
+  function zoomBy(k) { st.cam.zoomT = U.clamp((st.cam.zoomT || st.cam.zoom) * k, 80, 700); }
   var TERR = {
     grass: { name: '초원', spd: 0.34 }, steppe: { name: '스텝', spd: 0.36 }, desert: { name: '사막', spd: 0.26, thirst: 2 }, forest: { name: '숲', spd: 0.2 },
     jungle: { name: '밀림', spd: 0.14, sick: 1 }, mountain: { name: '산악', spd: 0.1 }, snow: { name: '설원', spd: 0.1, cold: 1 }, tundra: { name: '툰드라', spd: 0.2, cold: 1 }, ice: { name: '빙원', spd: 0.07, cold: 2 }, sea: { name: '바다', spd: 0 }
@@ -71,7 +72,8 @@
     var catcher = U.el('div', 'mapcatch'); catcher.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:crosshair';
     catcher.addEventListener('mousedown', onDown);
     catcher.addEventListener('mousemove', function (e) { st.mouse = pos(e); });
-    catcher.addEventListener('wheel', function (e) { e.preventDefault(); st.cam.zoom = U.clamp(st.cam.zoom * (e.deltaY > 0 ? 1 / 1.15 : 1.15), 80, 700); }, { passive: false });
+    catcher.addEventListener('wheel', function (e) { e.preventDefault(); zoomBy(e.deltaY > 0 ? 1 / 1.15 : 1.15); }, { passive: false });
+    UI.pinch(catcher, zoomBy);
     UI.add(catcher);
     el.status = UI.add(U.el('div', 'status-strip wood', ''));
     var bar = U.el('div', 'sailbar wood brass-frame');
@@ -83,7 +85,7 @@
     btn('해도', 'map', function () { chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open('admiral').then(function () { st.busy--; }); });
     var zb = U.el('div', 'zoomctl');
-    [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); st.cam.zoom = U.clamp(st.cam.zoom * z[1], 80, 700); }; zb.appendChild(b); });
+    [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
     UI.add(bar);
     refreshBar(); refreshHud();
@@ -118,8 +120,8 @@
     if (k === 'm' || k === 'M') { chart(); return true; }
     if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; st.paused = true; refreshBar(); return true; }
     if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; st.paused = false; refreshBar(); return true; }
-    if (k === '+' || k === '=') { st.cam.zoom = Math.min(700, st.cam.zoom * 1.2); return true; }
-    if (k === '-') { st.cam.zoom = Math.max(80, st.cam.zoom / 1.2); return true; }
+    if (k === '+' || k === '=') { zoomBy(1.2); return true; }
+    if (k === '-') { zoomBy(1 / 1.2); return true; }
     // 방향키·WASD = 그 방위로 계속 걷는다 (두 키를 함께 누르면 대각선, Space로 정지)
     if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'd', 'w', 's', 'A', 'D', 'W', 'S'].indexOf(k) >= 0) {
       st.keys[k.toLowerCase()] = true;
@@ -212,8 +214,14 @@
       if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); }
     }
     animate(dt, px0, py0);
-    var dxc = G.Geo.wrapLon(l.lon - st.cam.lon);
-    st.cam.lon = G.Geo.wrapLon(st.cam.lon + dxc * Math.min(1, dt * 3)); st.cam.lat += (l.lat - st.cam.lat) * Math.min(1, dt * 3);
+    var dxc = G.Geo.wrapLon(l.lon - st.cam.lon), kc = 1 - Math.exp(-dt * 3);
+    st.cam.lon = G.Geo.wrapLon(st.cam.lon + dxc * kc); st.cam.lat += (l.lat - st.cam.lat) * kc;
+    // 확대·축소: 목표 쪽으로 부드럽게 (바다와 같은 빠르기)
+    if (st.cam.zoomT) {
+      var zr = st.cam.zoomT / st.cam.zoom;
+      if (Math.abs(zr - 1) < 0.004) { st.cam.zoom = st.cam.zoomT; st.cam.zoomT = 0; }
+      else st.cam.zoom *= Math.pow(zr, 1 - Math.exp(-dt * ((G.FX.ship && G.FX.ship.zoomEase) || 12)));
+    }
     st.rframe = (st.rframe || 0) + 1;
     var idle = st.busy > 0 || UI.busy();
     if (idle && st.rframe % 3 !== 0) return;              // 대화 중에는 20fps

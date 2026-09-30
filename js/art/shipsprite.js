@@ -88,18 +88,21 @@
   };
 
   /* ── 방위 칸 고르기 (배마다 히스테리시스) ── */
+  //   칸이 바뀌면 앞 칸 위에 새 칸을 잠깐(FX.sprite.fade초) 겹쳐 올려 그림이 툭 바뀌지 않게 한다
   var held = {}, heldN = 0;
+  function nowS() { return (window.performance ? performance.now() : Date.now()) / 1000; }
   function pickDir(meta, a, sid) {
     var step = TAU / meta.dirs, raw = a / step, dir = Math.round(raw) % meta.dirs;
-    if (sid == null) return dir;
-    var key = meta.key + '|' + sid, prev = held[key];
-    if (prev != null && prev !== dir) {
+    if (sid == null) return { dir: dir, from: dir, k: 1 };
+    var key = meta.key + '|' + sid, h = held[key];
+    if (h && h.dir !== dir) {
       var hy = CF().hold == null ? 0.12 : CF().hold;          // 칸 폭의 몇 배만큼 더 붙잡나
-      if (Math.abs(angd(a - prev * step)) < step * (0.5 + hy)) dir = prev;
+      if (Math.abs(angd(a - h.dir * step)) < step * (0.5 + hy)) dir = h.dir;
     }
-    if (prev == null && ++heldN > 400) { held = {}; heldN = 0; }  // 오래된 배는 가끔 비운다
-    held[key] = dir;
-    return dir;
+    if (!h) { if (++heldN > 400) { held = {}; heldN = 0; } h = held[key] = { dir: dir, from: dir, t0: -9 }; }   // 오래된 배는 가끔 비운다
+    else if (h.dir !== dir) { h.from = h.dir; h.dir = dir; h.t0 = nowS(); }
+    var fd = CF().fade == null ? 0.14 : CF().fade, k = fd > 0 ? Math.min(1, (nowS() - h.t0) / fd) : 1;
+    return { dir: dir, from: h.from, k: k };
   }
 
   function sourceFor(sh, meta, drawScale) {
@@ -167,7 +170,7 @@
     var meta = G.SHIP_ART && G.SHIP_ART[spec.type], sh = ready(meta);
     if (!sh) return false;
     var a = wrap(ang), step = TAU / meta.dirs;
-    var dir = pickDir(meta, a, spec.sid);
+    var pk = pickDir(meta, a, spec.sid), dir = pk.dir;
     var ps = spec.pose || {}, hv = 1 + (ps.heave || 0), scale = len / meta.baseLen;
     var m = ctx.getTransform ? ctx.getTransform() : null, dev = m ? Math.sqrt(m.a * m.a + m.b * m.b) : 1;
     var so = sourceFor(sh, meta, scale * dev);
@@ -182,7 +185,8 @@
     ctx.scale(hv, hv * (1 - Math.abs(ps.roll || 0) * 0.32));
     ctx.translate(-(ps.pitch || 0) * len * 0.10, -(ps.roll || 0) * len * 0.24);
     ctx.imageSmoothingEnabled = true;
-    drawDirection(ctx, so, meta, dir, a, scale, spec, t || 0, 1 - blend);
+    if (pk.k < 1 && pk.from !== dir) { drawDirection(ctx, so, meta, pk.from, a, scale, spec, t || 0, 1); drawDirection(ctx, so, meta, dir, a, scale, spec, t || 0, pk.k * pk.k * (3 - 2 * pk.k)); }   // 앞 칸 위에 새 칸을 서서히
+    else drawDirection(ctx, so, meta, dir, a, scale, spec, t || 0, 1 - blend);
     if (blend > 0.001) drawDirection(ctx, so, meta, other, a, scale, spec, t || 0, blend);
     ctx.restore();
     flags(ctx, x, y, ang, len, spec, t || 0);

@@ -54,9 +54,12 @@ def image_packs(found, base, out_dir):
 
 def split_anim(found):
     """아티팩트용: 움직이는 그림(유적 GIF → .anim.webp)은 묶음에 넣지 않고 images/ 아래 파일로 따로 올린다.
-    묶음은 페이지를 열 때 모두 읽히지만, 따로 올린 파일은 발견 연출·도감에서 필요할 때만 읽힌다."""
-    anim = {k: rel for k, rel in found.items() if rel.lower().endswith(('.anim.webp', '.gif'))}
-    rest = {k: rel for k, rel in found.items() if k not in anim}
+    묶음은 페이지를 열 때 모두 읽히지만, 따로 올린 파일은 발견 연출·도감에서 필요할 때만 읽힌다.
+    발견 장면 판(discovery-sheets/)도 따로 올린다. 장면 판이 있는 발견물의 움직이는 그림은 게임이 쓰지 않으므로 뺀다."""
+    sheets = {k[len('discovery-sheets/'):] for k in found if k.startswith('discovery-sheets/')}
+    anim = {k: rel for k, rel in found.items() if rel.lower().endswith(('.anim.webp', '.gif')) or k.startswith('discovery-sheets/')}
+    anim = {k: rel for k, rel in anim.items() if not (k.startswith('discoveries/') and k[len('discoveries/'):] in sheets)}
+    rest = {k: rel for k, rel in found.items() if k not in anim and not (k.startswith('discoveries/') and k[len('discoveries/'):] in sheets and rel.lower().endswith(('.anim.webp', '.gif')))}
     return rest, anim
 
 

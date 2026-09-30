@@ -53,6 +53,7 @@
     for (var i = 0; i < list.length && i < 2; i++) {
       var d = list[i].d;
       mk[d.id] = { t: s.day, mode: mode };
+      if (G.Reel) G.Reel.prefetch(d);            // 곧 닿을지 모르니 발견 장면 판을 미리 받아 둔다
       var dx = G.Geo.wrapLon(d.lon - lon), dy = d.lat - lat;
       var dir = U.dirName(Math.atan2(dy, dx));
       var far = list[i].dist < 1 ? '가까운' : list[i].dist < 2.5 ? '멀지 않은' : '먼';

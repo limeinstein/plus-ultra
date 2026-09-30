@@ -211,6 +211,8 @@
     waterPrice: 0.5, matPrice: 3,
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작
     matPerHp: 0.4, matStart: 10,
+    // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금
+    testChar: { stat: 99, luck: 99, gold: 100000 },
     // 시세의 출렁임: 도시·품목 갈래마다 천천히 오르내린다 (최대 ± driftAmp, 주기 driftPeriod[0]~[1]일)
     driftAmp: [0.08, 0.15], driftPeriod: [70, 200],
     // 후원자의 대가 바뀔 때 (succession.js): 그 자리의 신뢰는 sponsorKeep만 남고, 제독의 자녀가 뒤를 이으면 모든 신뢰가 heirKeep만 남는다.
