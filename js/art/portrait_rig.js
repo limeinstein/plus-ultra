@@ -126,7 +126,9 @@
         var posY = profile === 'half' ? 1 : 0.5;
         var fit = function () { if (!dead && headIm.naturalWidth) placeFace(root, faceAt, headIm.naturalWidth, headIm.naturalHeight, posY); };
         root.classList.add('rig-faced');
-        if (headIm.complete) setTimeout(fit, 0); else headIm.addEventListener('load', fit);
+        // 그림 묶음을 늦게 읽는 판(아티팩트)에서는 자리표 그림이 먼저 오고 나중에 진짜 그림으로 바뀌므로 load 를 늘 듣는다
+        if (headIm.complete) setTimeout(fit, 0);
+        headIm.addEventListener('load', fit);
         if (window.ResizeObserver) { ro = new ResizeObserver(fit); ro.observe(root); }
         else if (window.requestAnimationFrame) requestAnimationFrame(function () { requestAnimationFrame(fit); });
       }

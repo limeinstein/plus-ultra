@@ -44,8 +44,41 @@ RULES = [
 ]
 
 
+# 아티팩트(HQ)용 크기: 그림 묶음을 필요할 때만 읽으므로(G.Img 지연 읽기) 화면(1600×900)에 맞는 크기로 남긴다.
+# 키 앞부분 → (가장 긴 변, 품질). 여기 없는 자리는 RULES 크기를 그대로 쓴다. 원본보다 크게 늘리지는 않는다.
+HQ = [
+    ('portraits/maids/', 640, 78),
+    ('maid-styles/', 512, 74),
+    ('portraits/', 416, 74),
+    ('exterior-styles/', 360, 72),
+    ('exteriors/', 520, 74),
+    ('landmarks/', 640, 76),
+    ('characters/player_half', 520, 78),
+    ('characters/', 400, 78),
+    ('bg-styles/', 1440, 70),
+    ('backgrounds/', 1440, 70),
+    ('cities/', 1440, 70),
+    ('city-styles/', 1440, 70),
+    ('interiors/', 1440, 70),
+    ('discovery-cats/', 1440, 74),
+    ('discoveries/', 1440, 74),
+    ('relics/', 384, 74),
+    ('ships/', 880, 78),
+    ('duel/backgrounds/', 1600, 74),
+    ('title', 1600, 76),
+]
+
+
+def hq_for(key):
+    for pre, side, q in HQ:
+        if key.startswith(pre):
+            return side, q
+    return None
+
+
 # 전체 배율을 낮춰도 이보다 작게는 줄이지 않는 그림 (가장 긴 변)
 FLOOR = {
+    'ships-nav/': 3136,       # 16방향 배 시트: 줄이면 다시 굽느라 오히려 커진다 — 원본 그대로
     'duel/fighters/': 1944,   # 일기토 전투원: 칸 324px 이상 — 화면 390px로 늘려도 뭉개지지 않게
     'duel/backgrounds/': 1100,  # 일기토 배경: 1060×380 화면에 깔린다
     'discovery-sheets/': 2304,  # 발견 장면 판: 전체 배율을 낮춰도 칸 384px 아래로 줄이지 않는다
@@ -134,8 +167,9 @@ def shrink_one(src, dst_noext, side, fmt, q):
     return path
 
 
-def build(found, out_dir, scale=1.0, quiet=False):
-    """found: 키 → images 기준 상대 경로. 줄인 사본을 out_dir 에 만들고 새 found 를 돌려준다."""
+def build(found, out_dir, scale=1.0, quiet=False, hq=False, skip=()):
+    """found: 키 → images 기준 상대 경로. 줄인 사본을 out_dir 에 만들고 새 found 를 돌려준다.
+    hq=True: 아티팩트용 큰 크기(HQ 표). skip: 만들지 않을 키(쓰지 않는 그림 — 시간 절약)."""
     if Image is None:
         if not quiet:
             print('Pillow 가 없어 그림을 줄이지 못했습니다 (pip install pillow). 원본을 그대로 씁니다.')
@@ -143,13 +177,32 @@ def build(found, out_dir, scale=1.0, quiet=False):
     src_root = os.path.join(pages.ROOT, 'images')
     out = {}
     total_in = total_out = 0
+    import json
+    made_path = os.path.join(out_dir, '.made.json')
+    try:
+        with open(made_path, encoding='utf-8') as f:
+            made = json.load(f)
+    except Exception:
+        made = {}
     for key, rel in sorted(found.items()):
         src = os.path.join(src_root, rel)
+        if key in skip:
+            continue
         side, fmt, q = rule_for(key)
+        if hq and hq_for(key):
+            side, q = hq_for(key)
         side = max(floor_for(key), int(side * scale))
         q = max(45, int(q * (0.85 + 0.15 * scale)))
         dst_noext = os.path.join(out_dir, os.path.splitext(rel)[0])
         os.makedirs(os.path.dirname(dst_noext), exist_ok=True)
+        st = os.stat(src)
+        sig = [int(st.st_mtime), st.st_size, side, fmt, q]
+        old = made.get(key)
+        if old and old[0] == sig and os.path.exists(os.path.join(out_dir, old[1])):
+            total_in += st.st_size
+            total_out += os.path.getsize(os.path.join(out_dir, old[1]))
+            out[key] = old[1]
+            continue
         try:
             path = shrink_one(src, dst_noext, side, fmt, q)
         except Exception as e:  # 못 줄이면 원본 복사
@@ -162,6 +215,9 @@ def build(found, out_dir, scale=1.0, quiet=False):
         total_in += os.path.getsize(src)
         total_out += os.path.getsize(path)
         out[key] = os.path.relpath(path, out_dir).replace('\\', '/')
+        made[key] = [sig, out[key]]
+    with open(made_path, 'w', encoding='utf-8') as f:
+        json.dump(made, f)
     if not quiet:
         print('가벼운 그림 %d장: %s → %s' % (len(out), pages.human(total_in), pages.human(total_out)))
     return out

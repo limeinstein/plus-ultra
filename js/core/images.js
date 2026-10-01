@@ -65,8 +65,46 @@
     } catch (e) { blobs[k] = f; }
     return blobs[k];
   }
+  /* 아티팩트판: 그림은 묶음 파일(img/pack-NN.js)에 나뉘어 있고, 묶음 안의 그림이 처음 필요할 때 그 묶음을 읽는다.
+     읽기 전에는 G.IMAGE_FILES 에 'pack:번호' 자리표만 있다. */
+  var packs = {}, PACK = /^pack:(\d+)$/;
+  function packOf(k) { var m = PACK.exec(man()[k] || ''); return m ? +m[1] : -1; }
+  function loadPack(i) {
+    if (packs[i]) return packs[i];
+    var url = (G.IMAGE_PACK_URLS || [])[i];
+    packs[i] = new Promise(function (resolve) {
+      if (!url) return resolve(false);
+      var s = document.createElement('script');
+      s.src = url; s.async = true;
+      s.onload = function () {
+        var m = G.IMAGE_FILES || {}, tag = 'pack:' + i, done = [];
+        for (var k in files) if (files[k] === tag && m[k] && m[k] !== tag) { files[k] = m[k]; done.push(k); }
+        // 읽기 전에 I.src 로 자리표 주소를 받아 간 <img> 를 진짜 그림으로 바꾼다
+        done.forEach(function (k) {
+          var ph = holder(k);
+          Array.prototype.forEach.call(document.querySelectorAll('img'), function (im) { if (im.getAttribute('src') === ph) im.src = I.src(k); });
+        });
+        resolve(true);
+      };
+      s.onerror = function () { delete packs[i]; if (window.console) console.warn('[그림 교체] 그림 묶음을 불러오지 못했습니다: ' + url); resolve(false); };
+      document.head.appendChild(s);
+    });
+    return packs[i];
+  }
+  /** 묶음을 아직 읽지 않은 그림의 자리표 주소 (투명한 빈 SVG — 그림마다 달라서 나중에 찾아 바꿀 수 있다) */
+  function holder(k) { return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"><desc>' + k.replace(/[<&]/g, '') + '</desc></svg>'); }
+  /** 이 그림이 바로 쓸 수 있게 준비되었나 (묶음까지 읽혔나) — 묶음을 읽는 중이면 Promise */
+  I.ready = function (k) { var p = packOf(k); return p < 0 ? Promise.resolve(true) : loadPack(p); };
+  /** 묶음 여러 개를 미리 읽어 둔다 (키 앞부분 목록) */
+  I.prefetch = function (prefixes) {
+    var want = {};
+    Object.keys(man()).forEach(function (k) { var p = packOf(k); if (p >= 0 && [].concat(prefixes || ['']).some(function (x) { return k.indexOf(x) === 0; })) want[p] = 1; });
+    return Promise.all(Object.keys(want).map(function (p) { return loadPack(+p); }));
+  };
   I.src = function (k) {
     var f = man()[k]; if (!f) return null;
+    var pk = packOf(k);
+    if (pk >= 0) { loadPack(pk); return holder(k); }
     if (f.indexOf('data:') === 0) {
       if (blobs[k]) return blobs[k];
       if (window.URL && URL.createObjectURL && f.indexOf(';base64,') > 0) return blobUrl(k, f);
@@ -78,6 +116,11 @@
   I.get = function (k) { return state[k] === 'ok' ? imgs[k] : null; };
   I.status = function (k) { return state[k] || (man()[k] ? 'idle' : 'none'); };
   I.load = function (k) {
+    var pk = k ? packOf(k) : -1;
+    if (pk >= 0) return loadPack(pk).then(function (ok) {
+      if (ok && packOf(k) < 0) return I.load(k);
+      state[k] = 'fail'; return null;
+    });
     return new Promise(function (resolve) {
       if (!k || !man()[k] || state[k] === 'fail') return resolve(null);
       if (state[k] === 'ok') return resolve(imgs[k]);

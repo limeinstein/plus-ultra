@@ -4,7 +4,8 @@
 사용법 (WebGame 폴더에서):
     python tools/bundle.py                      # PLUS_ULTRA.html 다시 만들기
     python tools/bundle.py --artifact 폴더       # Claude 아티팩트용 게임(game.html)·도감(catalog.html)도 만들기
-                                                #   그림은 폴더/img/pack-NN-해시.js 묶음으로 따로 (페이지 16MiB 한도와 상관없게)
+                                                #   그림은 폴더/img/pack-NN-해시.js 묶음으로 따로 — 페이지를 열 때 읽지 않고, 그 묶음의 그림이 처음 필요할 때 읽는다
+                                                #   (그래서 화면 크기에 맞는 큰 그림(slim.HQ)을 쓸 수 있다. 한도는 아티팩트 한 판 256MB 안에서 PACK_BUDGET)
                                                 #   움직이는 그림(유적 GIF)은 묶음 대신 폴더/images/… 파일로 따로 (필요할 때만 읽힘)
                                                 #   올릴 목록은 폴더/publish.json (packs = 올릴 묶음, files = 그림 파일, removed = 아티팩트에서 지울 옛 것)
     python tools/bundle.py --mark-published 폴더 # 아티팩트에 올린 뒤 '올린 목록'을 적어 둔다
@@ -18,8 +19,8 @@ import images as imgtool  # noqa: E402
 import pages  # noqa: E402
 
 ARTIFACT_LIMIT = 16 * 1024 * 1024      # 아티팩트 페이지 하나·텍스트 파일 하나의 한도 (16MiB)
-PUBLISH_LIMIT = 60 * 1000 * 1000       # 페이지를 열 때 읽는 합계(페이지 + 그림 묶음). 움직이는 그림 파일은 따로 올려 여기에 넣지 않는다
-PACK_TARGET = 4 * 1024 * 1024          # 그림 묶음 파일 하나의 크기 (대략)
+PACK_BUDGET = 170 * 1000 * 1000        # 그림 묶음 합계 한도. 아티팩트 한 판은 256MB까지 — 장면 판·음악·페이지(약 80MB)를 빼고 남는 만큼
+PACK_TARGET = 3 * 1024 * 1024          # 그림 묶음 파일 하나의 크기 (대략) — 작을수록 한 장면에서 덜 받는다
 
 
 def image_packs(found, base, out_dir):
@@ -31,13 +32,15 @@ def image_packs(found, base, out_dir):
     for f in os.listdir(img_dir):
         if f.startswith('pack-') and f.endswith('.js'):
             os.remove(os.path.join(img_dir, f))
-    packs, cur, n = [], {}, 0
+    packs, cur, n, cat = [], {}, 0, None
     for k, rel in sorted(found.items()):
         uri = pages.data_uri(os.path.join(base or os.path.join(pages.ROOT, 'images'), rel))
-        if cur and n + len(uri) > PACK_TARGET:
+        c = k.split('/')[0]
+        if cur and (n + len(uri) > PACK_TARGET or (c != cat and n > PACK_TARGET // 4)):
             packs.append(cur)
             cur, n = {}, 0
         cur[k] = uri
+        cat = c
         n += len(uri) + len(k) + 8
     if cur:
         packs.append(cur)
@@ -48,7 +51,7 @@ def image_packs(found, base, out_dir):
         rel = 'img/pack-%02d-%s.js' % (i, pages.short_hash(js))
         with open(os.path.join(out_dir, rel), 'w', encoding='utf-8', newline='\n') as f:
             f.write(js)
-        out.append((rel, len(js.encode('utf-8'))))
+        out.append((rel, len(js.encode('utf-8')), sorted(pk)))
     return out
 
 
@@ -69,11 +72,16 @@ def inline(page, found, artifact, title=None, extra_css='', base=None, packs=Non
     parts = []
     for s in p['scripts']:
         if s == 'images/manifest.js' and packs is not None:
-            # 그림은 따로 올린 묶음 파일에서 읽는다 (차례대로 읽히므로 게임 코드보다 먼저 준비된다)
+            # 그림은 따로 올린 묶음 파일(img/pack-NN.js)에 있다. 페이지를 열 때는 읽지 않고, 묶음 안의 그림이 처음 필요할 때
+            # G.Img가 그 묶음을 읽는다 — 그때까지 G.IMAGE_FILES 에는 'pack:번호' 자리표만 둔다 (has·pick·list는 바로 된다)
             paths = {k: rel for k, rel in sorted(found.items())}
-            # 따로 올린 그림 파일(images/…)은 G.IMAGE_FILES에 상대 경로로 — G.Img가 images/ 를 붙여 필요할 때 읽는다
-            parts.append('<script>/* images (packs) */\nwindow.G = window.G || {};\nG.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, ' + json.dumps(files or {}, ensure_ascii=False) + ');\nG.IMAGE_PATHS = ' + json.dumps(paths, ensure_ascii=False) + ';\n</script>')
-            parts.extend('<script src="' + rel + '"></script>' for rel, _ in packs)
+            lazy = {}
+            for i, (_, _, keys) in enumerate(packs):
+                for k in keys:
+                    lazy[k] = 'pack:%d' % i
+            lazy.update(files or {})   # 따로 올린 그림 파일(images/…)은 상대 경로로 — G.Img가 images/ 를 붙여 필요할 때 읽는다
+            parts.append('<script>/* images (lazy packs) */\nwindow.G = window.G || {};\nG.IMAGE_PACK_URLS = ' + json.dumps([rel for rel, _, _ in packs]) +
+                         ';\nG.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, ' + json.dumps(lazy, ensure_ascii=False) + ');\nG.IMAGE_PATHS = ' + json.dumps(paths, ensure_ascii=False) + ';\n</script>')
         elif s == 'images/manifest.js':
             js, _ = pages.manifest_js(found, embed=True, base=base)
             # data: 주소만으로는 움직이는 WEBP를 알 수 없어서 그 그림들의 원래 이름을 함께 넣는다 (G.Img.isAnim)
@@ -147,9 +155,13 @@ def main():
             except Exception:
                 old = {}
         scale = float(sys.argv[sys.argv.index('--scale') + 1]) if '--scale' in sys.argv else 1.0
+        hq_dir = os.path.join(pages.ROOT, 'dist', 'slim-hq')
+        # 장면 판이 있는 발견물의 움직이는 그림은 아티팩트에 넣지 않으므로 줄이지도 않는다 (시간 절약)
+        sheet_ids = {k[len('discovery-sheets/'):] for k in found if k.startswith('discovery-sheets/')}
+        skip = {k for k, rel in found.items() if k.startswith('discoveries/') and k[len('discoveries/'):] in sheet_ids and rel.lower().endswith('.gif')}
+        slim_dir = hq_dir
         while True:
-            if scale != 1.0:
-                sfound = slim.build(found, slim_dir, scale)
+            sfound = slim.build(found, hq_dir, scale, hq=True, skip=skip)
             pfound, afound = split_anim(sfound)
             packs = image_packs(pfound, slim_dir, out)
             import shutil
@@ -163,21 +175,21 @@ def main():
             n2 = write(os.path.join(out, 'catalog.html'), inline('catalog.html', sfound, True, base=slim_dir, packs=packs, files=afound))
             nf = sum(os.path.getsize(os.path.join(out, 'images', rel)) for rel in afound.values())
             print('따로 올리는 움직이는 그림 %d장: %s (필요할 때만 읽힘)' % (len(afound), pages.human(nf)))
-            total = n1 + sum(b for _, b in packs)
-            for rel, b in packs:
+            total = n1 + sum(b for _, b, _ in packs)
+            for rel, b, _ in packs:
                 print('%-42s %s' % (rel, pages.human(b)))
-            ok = max([n1, n2] + [b for _, b in packs]) <= ARTIFACT_LIMIT and total <= PUBLISH_LIMIT
-            if ok or scale < 0.4:
+            ok = max([n1, n2] + [b for _, b, _ in packs]) <= ARTIFACT_LIMIT and total - n1 <= PACK_BUDGET
+            if ok or scale < 0.5:
                 break
-            scale -= 0.15
+            scale -= 0.05
             print('한도를 넘어 그림을 더 줄입니다 (배율 %.2f)' % scale)
         print('아티팩트 합계 %s (페이지 %s + 그림 묶음 %d개 %s) — 페이지 한도 %s까지 %s 남음' % (
             pages.human(total), pages.human(n1), len(packs), pages.human(total - n1), pages.human(ARTIFACT_LIMIT), pages.human(ARTIFACT_LIMIT - max(n1, n2))))
         if not ok:
-            print('주의: 아티팩트 한도(파일 하나 16MiB, 합계 64MB)를 넘습니다. 그림 수를 줄여야 합니다.')
+            print('주의: 아티팩트 한도(파일 하나 16MiB, 그림 묶음 합계 %s)를 넘습니다. 그림 수를 줄여야 합니다.' % pages.human(PACK_BUDGET))
         # 올릴 때 쓸 목록: 새 묶음 파일, 지난번에 '올린' 묶음 가운데 이제는 없는 것(아티팩트에서 지울 것)
         # 올린 뒤 python tools/bundle.py --mark-published 로 '올린 목록'을 새로 적는다
-        new = [rel for rel, _ in packs]
+        new = [rel for rel, _, _ in packs]
         # 배경 음악은 페이지에 넣지 않고 music/*.mp3 파일 그대로 아티팩트에 올린다 (한 번에 64MB 한도 — 그림 묶음과 따로 올려도 된다)
         music = []
         mdir = os.path.join(pages.ROOT, 'music')

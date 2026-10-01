@@ -232,13 +232,14 @@ dist/               만들어진 배포판
 
 ## Claude 아티팩트로 올리기
 
-아티팩트는 **페이지 하나 16MiB**, 한 번에 올리는 합계 64MB, 한 판에 파일 511개까지입니다. 예전에는 그림 668장을 모두 페이지 안에 data: 주소로 넣어 페이지가 16MB에 닿았습니다(그림 14MB + 코드 2MB). 이제는 나눠 올립니다.
+아티팩트는 **페이지·텍스트 파일 하나 16MiB**, 한 번에 올리는 합계 64MB, 한 판에 파일 511개·합계 256MB까지입니다.
 
-1. `python tools/bundle.py --artifact dist/artifact` — `game.html`(코드, 약 2MB)·`catalog.html`(약 0.5MB)과 그림 묶음 `img/pack-01-해시.js` … (약 4MB씩)을 만듭니다. 묶음은 `G.IMAGE_FILES`에 그림을 더하는 스크립트이고, 페이지가 게임 코드보다 먼저 차례로 읽습니다. 파일 이름에 내용 해시가 붙어 옛 묶음이 캐시에 남아도 섞이지 않습니다.
-2. `dist/artifact/publish.json`의 `packs`를 페이지와 함께 올립니다(게임 아티팩트는 파일에서, 도감 아티팩트는 게임 아티팩트의 같은 경로에서 서버끼리 복사). `removed`에 적힌 옛 묶음은 아티팩트에서 지웁니다(null).
-3. 올린 뒤 `python tools/bundle.py --mark-published dist/artifact` — 다음 번에 지울 옛 묶음을 알 수 있게 '올린 목록'을 적어 둡니다.
+1. `python tools/bundle.py --artifact dist/artifact` — `game.html`(코드, 약 3MB)·`catalog.html`(약 1MB)과 그림 묶음 `img/pack-01-해시.js` … (약 3MB씩, 같은 갈래의 그림끼리)을 만듭니다. 파일 이름에 내용 해시가 붙어 옛 묶음이 캐시에 남아도 섞이지 않습니다.
+2. **그림 묶음은 필요할 때만 읽습니다.** 페이지에는 그림 이름과 `pack:번호` 자리표(`G.IMAGE_FILES`)와 묶음 주소(`G.IMAGE_PACK_URLS`)만 있고, 어떤 그림이 처음 쓰일 때 `G.Img`가 그 묶음을 읽습니다(`js/core/images.js` `loadPack`). 그래서 페이지는 그림 없이 바로 열리고, 그림은 화면에 맞는 큰 크기(`tools/slim.py`의 `HQ` 표 — 배경·건물 내부 1440px, 인물 416px, 여급 640px …)로 넣습니다. 묶음을 읽기 전에 `G.Img.src()`로 받은 주소는 빈 자리표 그림이고, 묶음이 오면 그 `<img>`를 진짜 그림으로 바꿉니다.
+3. `dist/artifact/publish.json`의 `packs`·`files`(발견 장면 판)를 페이지와 함께 올립니다. 한 번에 64MB까지라 여러 번에 나눠 같은 주소로 올리고, `removed`에 적힌 옛 묶음은 첫 번에 지웁니다(null — 한 판 256MB를 넘지 않게).
+4. 올린 뒤 `python tools/bundle.py --mark-published dist/artifact` — 다음 번에 지울 옛 묶음을 알 수 있게 '올린 목록'을 적어 둡니다.
 
-한도를 넘으면 bundle.py가 그림을 자동으로 더 줄입니다(배율 0.15씩). 지금은 페이지 약 2MB로 14MB쯤 남습니다. 묶음 파일을 읽지 못하는 곳에서는 그림 대신 코드로 그린 그림이 나옵니다(게임은 그대로 됩니다). `PLUS_ULTRA.html`(내 컴퓨터용 한 파일 판)은 예전처럼 그림을 모두 품습니다.
+그림 묶음 합계가 `PACK_BUDGET`(170MB — 한 판 256MB에서 장면 판·음악·페이지를 뺀 만큼)을 넘으면 bundle.py가 HQ 크기를 0.05씩 줄입니다(지금은 0.85배: 배경 1224px, 인물 354px). 줄인 그림은 `dist/slim-hq`에 두고, 원본과 설정이 같으면 다시 굽지 않습니다(`.made.json`). 16방향 배 시트(`ships-nav`)는 다시 구우면 오히려 커져서 원본 그대로 씁니다. 묶음 파일을 읽지 못하는 곳에서는 그림 대신 코드로 그린 그림이 나옵니다(게임은 그대로 됩니다). `PLUS_ULTRA.html`(내 컴퓨터용 한 파일 판)은 예전처럼 그림을 모두 품습니다.
 
 ## 원작과 다른 점
 
