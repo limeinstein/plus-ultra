@@ -89,9 +89,14 @@
     var s = G.Game.state, p = s.player;
     var f = { name: p.name, portrait: p.portrait, maxHp: Math.round(60 + p.st.str * 0.6), atk: R.atk(), def: R.def(), sword: p.sk.sword || 0, might: p.st.mar, int: p.st.int, cha: p.st.cha,
       speech: R.skill('speech'), shoot: R.skill('shoot'), style: G.Games.weaponStyle(p.equip.weapon), look: 'admiral', admiral: true };
+    // 생김새에 맞는 전투원 시트(이강희 → duel/fighters/ganghui), 없으면 main_admiral
+    var hk = G.Img && G.Img.pick(G.Img.chain.heroDuel());
+    f.hero = hk ? hk.slice('duel/fighters/'.length) : 'main_admiral';
     f.hp = Math.max(8, Math.round(f.maxHp * p.hp / 100));
     return f;
   }
+
+  G.Games.playerFighter = playerFighter;
 
   // ================================================================ 일기토
   G.Games.duel = function (enemy, opt) {

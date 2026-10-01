@@ -25,6 +25,7 @@
 | 제독 — 거리에서 걷는 모습 | `characters/walk_1.webp` … `walk_8.webp` (옆모습, 발끝이 아래) | 높이 430 |
 | 제독 — 수첩 반신상 | `characters/player_half.webp` | 512×512 |
 | 제독 — 대화창 얼굴 | `portraits/player/이름.webp` (가슴 위) | 512×512 |
+| 제독 — 생김새별 그림 | 만들기 화면에서 얼굴 `portraits/player/<이름>`을 고르면 반신상 `characters/player_half_<이름>`, 걷는 그림 `characters/<이름>/walk_1…8`, 일기토 시트 `duel/fighters/<이름>`을 쓴다(없으면 기본 제독 그림). 테스트 캐릭터 이강희 = `ganghui` | 위와 같음 |
 | 도시 풍경 | `cities/도시번호.jpg` (예: `cities/0.jpg` = 리스본) | 1600×900 |
 | 도시 풍경 — 해질녘·저녁 | `cities/0_golden.jpg`, `cities/0_dusk.jpg` | 1600×900 |
 | 같은 양식의 도시 모두 | `city-styles/양식.jpg` (예: `city-styles/ib.jpg` = 이베리아 양식) | 1600×900 |

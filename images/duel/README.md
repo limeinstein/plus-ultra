@@ -7,6 +7,7 @@
 - 만드는 규격(원본): 1536×1024 PNG(RGBA), 6열×4행, 셀 256×256, 발밑 피벗 `(128, 246)`
 - 게임에 넣는 규격: **2592×1216, 칸 432×304, 발밑 피벗 `(165, 278)`** — 원본은 찌르기 칼날(옆 칸으로 60~125px)·긴 병기·대기 동작의 머리(윗칸으로 5~19px)가 칸을 넘어, 칸 256으로 자르면 칼이 사라지고 다음 장면에 남의 칼끝이 떠 보였다. `python tools/duel_repack.py 원본폴더 images/duel/fighters`가 장면마다 몸통에서 이어진 픽셀을 따라 주인을 가려 큰 칸으로 옮긴다(픽셀 그대로, 알파 4 이하 먼지는 버림). 원본은 `images/_extra/duel_fighters_src/`.
 - 읽는 순서: 왼쪽에서 오른쪽, 모든 동작에서 피벗 고정
+- `ganghui`(이강희)는 `--soft-edge 10`으로 짰다: 대기 5장째 치켜든 칼끝 7px이 칸 위로 넘어가 칸 경계에서 흐려지며 사라진다(다른 장면은 그대로).
 - 알려진 흠: `zhang_fei` 공격 4~6장은 장팔사모가 다음 장면 몸에 겹쳐 그려져 있어 창끝 일부가 다음 장면에 남는다(다시 그리면 좋음).
 
 | 행 | 동작 | 프레임 | 권장 시간(ms) |
@@ -29,12 +30,15 @@
 | 술집 사내 | western_brawler | western_brawler | barbary_corsair | 명 zhang_fei · 조선 joseon_swordsman · 일본 samurai | indian_warrior | african_warrior | mesoamerican_warrior·native_chief |
 | 부관 | first_mate | first_mate | barbary_corsair | (술집 사내와 같음) | indian_warrior | african_warrior | (같음) |
 
-- 제독 = `main_admiral`, 경쟁자 = `explorer`(크리스토발 콜론 = `columbus`, 에르난 코르테스 = `cortes`).
+- 제독 = `main_admiral`. 얼굴 그림으로 생김새가 정해지면(이강희 = `ganghui`) `fighters/<이름>.png`를 쓰고, 없으면 `main_admiral` — 21종과 같은 규격(`tools/duel_repack.py`를 거친 2592×1216).
+- 경쟁자 = `explorer`(크리스토발 콜론 = `columbus`, 에르난 코르테스 = `cortes`).
 - 여자(초상 g = f): 동아시아 `east_asian_attendant`, 인도·동남아 `vietnamese_woman`, 그 밖 `redhair_pirate`·`blonde_pirate`.
 
 ## 전투원 파일
 
 `main_admiral`, `first_mate`, `western_brawler`, `columbus`, `cortes`, `redhair_pirate`, `blonde_pirate`, `african_warrior`, `mesoamerican_warrior`, `guan_yu`, `zhang_fei`, `joseon_swordsman`, `east_asian_attendant`, `samurai`, `barbary_corsair`, `caribbean_pirate`, `explorer`, `vietnamese_woman`, `indian_warrior`, `native_chief`, `spanish_soldier`.
+
+제독 생김새 시트(21종 밖, 얼굴 그림 이름과 같음): `ganghui` (이강희).
 
 ## 배경 파일
 

@@ -279,12 +279,29 @@
     out.push('exteriors/' + kind + '_' + cul(c), 'exteriors/' + kind);
     return out;
   };
+  /** 제독의 생김새 이름 — 만들기 화면에서 고른 얼굴 그림 portraits/player/<이름> 의 <이름> (기본 'admiral').
+      이 이름으로 반신상·걷는 그림·일기토 시트를 고른다. 이름에 맞는 그림이 없으면 기본 제독 그림.
+      저장된 player.look 이 먼저, 옛 저장 파일은 초상의 얼굴 그림에서 알아낸다. */
+  var FACE = 'portraits/player/';
+  I.heroLook = function (p) {
+    if (!p) { var s = G.Game && G.Game.state; p = s && s.player; }
+    if (!p) return 'admiral';
+    if (p.look) return p.look;
+    var keys = (G.Art && G.Art.portraitKeys && G.Art.portraitKeys(p.portrait)) || [];
+    var k = keys.filter(function (x) { return x.indexOf(FACE) === 0; })[0];
+    return k ? k.slice(FACE.length) : 'admiral';
+  };
   /** the admiral walking along the street (drawn only when the file exists) */
   K.hero = function () { return ['characters/player']; };
-  /** 걷는 그림 여러 장 (characters/walk_1 … ) */
-  K.heroWalk = function () { return I.list('characters/walk_'); };
-  /** 수첩에서 보는 반신상 */
-  K.heroHalf = function () { return ['characters/player_half']; };
+  /** 걷는 그림 여러 장 (기본 제독 characters/walk_1 …, 다른 생김새는 characters/<이름>/walk_1 …) */
+  K.heroWalk = function () {
+    var id = I.heroLook(), l = id === 'admiral' ? [] : I.list('characters/' + id + '/walk_');
+    return l.length ? l : I.list('characters/walk_');
+  };
+  /** 수첩에서 보는 반신상 (기본 characters/player_half, 다른 생김새는 characters/player_half_<이름> — 없으면 코드 초상) */
+  K.heroHalf = function () { var id = I.heroLook(); return [id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id]; };
+  /** 일기토에서 제독의 전투원 시트 (duel/fighters/<이름>, 없으면 main_admiral) */
+  K.heroDuel = function () { var id = I.heroLook(); return (id === 'admiral' ? [] : ['duel/fighters/' + id]).concat(['duel/fighters/main_admiral']); };
   /** a landmark that only stands there to be looked at */
   K.landmark = function (id) { return ['landmarks/' + id]; };
   K.city = function (c, time) {

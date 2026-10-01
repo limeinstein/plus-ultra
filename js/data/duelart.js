@@ -85,7 +85,7 @@
     var sp = f.portrait && typeof f.portrait === 'object' ? f.portrait : {};
     var style = sp.style || (ctx && ctx.style) || 'ib', grp = GROUP[style] || 'eu', seed = (f.name || '') + (sp.seed || '');
     if (sp.g === 'f') return one(FEMALE[grp] || FEMALE['*'], seed);
-    if (f.admiral) return 'main_admiral';
+    if (f.admiral) return f.hero || 'main_admiral';           // 제독: 생김새의 시트(playerFighter가 있는 것만 넣음)
     var look = f.m ? 'mate' : f.look, t = BY_LOOK[look];
     if (!t) return G.DUEL_ART.byLook[look] || 'western_brawler';
     return one(t[grp] || t['*'], seed);

@@ -934,6 +934,7 @@ G.IMAGE_FILES = {
   "duel/fighters/east_asian_attendant": "duel/fighters/east_asian_attendant.png",
   "duel/fighters/explorer": "duel/fighters/explorer.png",
   "duel/fighters/first_mate": "duel/fighters/first_mate.png",
+  "duel/fighters/ganghui": "duel/fighters/ganghui.png",
   "duel/fighters/guan_yu": "duel/fighters/guan_yu.png",
   "duel/fighters/indian_warrior": "duel/fighters/indian_warrior.png",
   "duel/fighters/joseon_swordsman": "duel/fighters/joseon_swordsman.png",

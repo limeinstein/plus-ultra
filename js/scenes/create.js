@@ -178,6 +178,8 @@
     p.st = {}; G.STATS.forEach(function (s) { p.st[s.id] = T.stat; });
     p.sk = {}; G.SKILLS.forEach(function (s) { p.sk[s.id] = 3; });
     p.lg = G.LANGS.map(function () { return 3; });
+    var fi = T.look ? G.Img.list('portraits/player/').indexOf('portraits/player/' + T.look) : -1;
+    if (fi >= 0) p.face = fi;      // 이강희 얼굴 그림 → 반신상·일기토 시트도 이강희 것
     UI.toast('테스트용 캐릭터: 모든 능력 만렙, 소지금 ' + T.gold.toLocaleString() + '닢', 'info');
     start(true);
   }
@@ -194,6 +196,10 @@
     var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000 });
     if (T) S.player.luck = T.luck;
     S.player.portrait = playerSpec();
+    // 고른 얼굴 그림을 초상에 못 박아 둔다(얼굴 그림이 늘어 순서가 바뀌어도 그대로) — 그 이름이 제독의 생김새
+    var faceKey = G.Img.chain.player(p.face);
+    A.withImg(S.player.portrait, faceKey);
+    S.player.look = faceKey.length ? faceKey[0].slice('portraits/player/'.length) : 'admiral';
     G.Game.state = S;
     await UI.fade(function () { G.Game.go('city', { cityId: S.player.home, prologue: true }); });
   }

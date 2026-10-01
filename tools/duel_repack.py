@@ -8,7 +8,9 @@ Codex가 만든 원본(1536×1024, 6열×4행, 칸 256, 발밑 피벗 (128, 246)
 각 픽셀이 어느 장면의 것인지 가린 뒤, 모든 장면을 같은 피벗에 맞춰 더 큰 칸에 옮겨 담는다.
 픽셀 값은 그대로 옮기며(다시 뽑기 없음) 행·열·동작 순서도 원본과 같다.
 
-  python tools/duel_repack.py SRC_DIR OUT_DIR [--cell 448x320 --pivot 176,292]
+  python tools/duel_repack.py SRC_DIR OUT_DIR [--cell 448x320 --pivot 176,292] [--soft-edge 10]
+  --soft-edge N: 칸 가장자리 N px 안의 픽셀을 가장자리로 갈수록 흐리게 — 정한 칸에 다 들어가지 않는 장면
+                 (이강희 대기 4장의 치켜든 칼끝 7px)이 칸 경계에서 칼로 자른 듯 끊기지 않고 사라지게 한다.
   python tools/duel_repack.py --check OUT_DIR     # 다시 짠 시트 점검
 원본은 images/_extra/duel_fighters_src/ 에 둔다(저장소에는 올리지 않음).
 """
@@ -69,6 +71,18 @@ def extents(labels):
     return out
 
 
+def soften(out, cell, n):
+    """칸마다 가장자리 n px 안의 알파를 거리에 비례해 줄인다(가장자리 줄은 0)."""
+    cw, ch = cell
+    y = np.arange(ch)[:, None]; x = np.arange(cw)[None, :]
+    d = np.minimum(np.minimum(y, ch - 1 - y), np.minimum(x, cw - 1 - x)).astype(np.float32)
+    ramp = np.clip(d / n, 0, 1)
+    for r, c in USED:
+        cellv = out[r * ch:(r + 1) * ch, c * cw:(c + 1) * cw, 3]
+        cellv[:] = np.round(cellv * ramp).astype(np.uint8)
+    return out
+
+
 def repack(a, labels, cell, pivot):
     cw, ch = cell
     out = np.zeros((ch * 4, cw * 6, 4), np.uint8)
@@ -92,6 +106,7 @@ def main():
     ap.add_argument('--cell', default='')
     ap.add_argument('--pivot', default='')
     ap.add_argument('--margin', type=int, default=8)
+    ap.add_argument('--soft-edge', type=int, default=0)
     ap.add_argument('--check', default='')
     ap.add_argument('--report', default='')
     args = ap.parse_args()
@@ -120,6 +135,8 @@ def main():
     rep = {}
     for f, (a, lab) in data.items():
         out, clipped = repack(a, lab, cell, pivot)
+        if args.soft_edge:
+            out = soften(out, cell, args.soft_edge)
         name = os.path.basename(f)
         Image.fromarray(out, 'RGBA').save(os.path.join(args.out, name), optimize=True)
         rep[name] = {'clipped': clipped}

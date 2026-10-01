@@ -54,7 +54,9 @@ ok(S.source && S.source.width === 1536 && S.source.height === 1024 && S.source.c
 ok(art.sheet.animations.attack.frames === 6 && art.sheet.animations.defense.frames === 4 && art.sheet.animations.hit.frames === 3 && art.sheet.animations.action.frames === 6, '동작별 프레임 수');
 
 const fighterDir = path.join(ROOT, 'images/duel/fighters');
-for (const f of art.fighters) {
+// 제독 생김새 시트(이강희 = ganghui 등): 21종 밖의 파일이 있으면 같은 규격으로 점검 — 없으면 main_admiral로 대신 나온다
+const heroes = fs.readdirSync(fighterDir).filter(n => /\.png$/.test(n)).map(n => n.slice(0, -4)).filter(id => !art.fighters.some(f => f.id === id));
+for (const f of art.fighters.concat(heroes.map(id => ({ id })))) {
   const file = path.join(fighterDir, f.id + '.png'), im = png(file, true);
   ok(im.width === S.width && im.height === S.height, f.id + ': ' + S.width + '×' + S.height + ' (tools/duel_repack.py로 다시 짠 시트)');
   ok(im.alpha(0, 0) === 0, f.id + ': 바깥 여백 투명');
@@ -75,7 +77,7 @@ for (const id of Object.values(art.backgrounds).filter((v, i, a) => a.indexOf(v)
 }
 
 const manifest = fs.readFileSync(path.join(ROOT, 'images/manifest.js'), 'utf8');
-for (const f of art.fighters) ok(manifest.includes('"duel/fighters/' + f.id + '"'), f.id + ': 매니페스트 등록');
+for (const f of art.fighters.concat(heroes.map(id => ({ id })))) ok(manifest.includes('"duel/fighters/' + f.id + '"'), f.id + ': 매니페스트 등록 (python tools/images.py)');
 for (const id of ['deck', 'land_battle', 'exploration', 'city', 'tavern']) ok(manifest.includes('"duel/backgrounds/' + id + '"'), id + ': 배경 매니페스트 등록');
 
 const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -94,9 +96,10 @@ for (const style of styles) { seen.add(art.pick({ name: '부관', look: 'mate', 
 seen.add(art.pick({ name: '나', admiral: true, portrait: { g: 'm' } }));
 for (const n of Object.keys(art.byName)) seen.add(art.pick({ name: n, look: 'rival' }));
 ok(art.pick({ name: '나', admiral: true, portrait: { g: 'm' } }) === 'main_admiral', '제독 = main_admiral');
+ok(art.pick({ name: '이강희', admiral: true, hero: 'ganghui', portrait: { g: 'm' } }) === 'ganghui', '생김새 시트가 있는 제독 = 그 시트');
 const unused = [...ids].filter(id => !seen.has(id));
 ok(!unused.length, '쓰이지 않는 전투원: ' + unused.join(', '));
 const L1 = art.layout({ naturalWidth: 1536, naturalHeight: 1024 }), L2 = art.layout({ naturalWidth: S.width, naturalHeight: S.height }), L3 = art.layout({ naturalWidth: S.width / 2, naturalHeight: S.height / 2 });
 ok(L1.cw === 256 && L1.py === 246 && L2.cw === CW && L2.py === S.pivot[1] && L3.cw === CW / 2 && L3.f === 0.5, '그림 크기로 칸·배율 고르기');
 
-console.log('일기토 전투원 21종(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');
+console.log('일기토 전투원 21종' + (heroes.length ? ' + 제독 생김새 ' + heroes.join('·') : '') + '(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');
