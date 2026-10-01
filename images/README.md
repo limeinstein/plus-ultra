@@ -21,7 +21,7 @@
 | 거리 배경 — 한 도시만 | `backgrounds/도시번호.jpg` | 1600×900 |
 | 건물 겉모습 (거리에 세움) | `exteriors/건물.webp` (tavern, trade, inn …) · 도시별 `@도시번호` · 후원자 저택 `mansion@후원자ID` | 배경 지운 PNG·WEBP, 높이 660 |
 | 지역별 건물 묶음 | `exterior-styles/<묶음>/건물.webp` — 북미 원주민은 `woodland`(숲: 나무껍질 긴 집·위그웜·티피·울타리·카누), `plains`(평원 티피·가죽 천막 시장·의식용 큰 티피·목책 성문, 다코타 230·만단 243), `pueblo`(흙벽돌 계단 집·키바, 타오스 241·아코마 242). 없는 건물은 plains·pueblo → woodland → tropic 순으로 빌림. `tools/natives/make.py`가 기본 그림을 다시 만든다 | 배경 지운 WEBP, 높이 520(시장 660) |
-| 거리 볼거리 (장식) | `landmarks/이름.webp` | 배경 지운 PNG·WEBP |
+| 거리 볼거리 (장식) | 도시 건축 발견물은 `landmarks/발견물ID.webp`로 두면 해당 도시·건축 연도에 자동 배치. 그 밖의 장식은 `landmarks/이름.webp`와 `js/scenes/town.js`의 `LANDMARKS`로 수동 배치 | 배경 지운 PNG·WEBP, 권장 높이 520 |
 | 제독 — 거리에서 걷는 모습 | `characters/walk_1.webp` … `walk_8.webp` (옆모습, 발끝이 아래) | 높이 430 |
 | 제독 — 수첩 반신상 | `characters/player_half.webp` | 512×512 |
 | 제독 — 대화창 얼굴 | `portraits/player/이름.webp` (가슴 위) | 512×512 |
@@ -44,7 +44,7 @@
 | 국가별 항해사 후보·후원자 760장 | `portraits/pools/mates/국가/f/01.webp`, `portraits/pools/sponsors/국가/m/01.webp`. 국가 19종×항해사·후원자×여·남×10명 | 512×512, 투명 배경 |
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |
 | 자녀 | `portraits/family/son.png`, `daughter.png`, 둘째는 `son_2.png` | 512×512 |
-| 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`). 유적은 `tools/ruin_gifs/build.py`로 만든 GIF를 쓰면 7단계 복원과 360° 상공 회전이 재생됨 | 1440×640 정지화상 또는 576×256 GIF |
+| 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`). 유적은 `tools/ruin_gifs`, 자연 경관은 `tools/nature_gifs`, 동물은 `tools/animal_gifs`, 보물은 `tools/treasure_gifs`로 만든 GIF를 쓰면 전용 발견 연출이 재생됨 | 1440×640 정지화상 또는 576×256 GIF |
 | 발견물 — 분류 공통 | `discovery-cats/geo.jpg` (geo·nature·ruin·treasure·creature·people·trade) | 1440×640 |
 | 배 | `ships/배ID.png` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
 | 항해·해전 16방향 배 | `ships-nav/배ID.webp` — `python tools/render_ship_sprites.py`가 만드는 선체·돛 상태 시트 | 자동 생성 1792×3136, 투명 배경 |

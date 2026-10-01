@@ -294,8 +294,8 @@
       var chk = G.Disc.checkLand(l.lon, l.lat);
       for (var i = 0; i < chk.hits.length; i++) {
         var d = chk.hits[i];
-        if (d.cat === 'treasure' || (d.cat === 'ruin' && U.chance(0.5))) {
-          await UI.say('제독, 이 유적 안쪽에 무언가 있습니다. 하지만 장치로 굳게 잠겨 있군요...', G.Scenes.mateSpeaker('surveyor'));
+        if (G.Games.puzzleKind ? G.Games.puzzleKind(d) : (d.cat === 'treasure' || (d.cat === 'ruin' && U.chance(0.5)))) {   // 어느 장치로 잠겼는지는 js/games/puzzle.js
+          await UI.say(G.Games.puzzleLine ? G.Games.puzzleLine(d) : '제독, 이 유적 안쪽에 무언가 있습니다. 하지만 장치로 굳게 잠겨 있군요...', G.Scenes.mateSpeaker('surveyor'));
           var ok = await G.Games.puzzle(d);
           if (!ok) { await UI.say('장치를 풀지 못했다. 다음에 다시 와 보자.', {}); continue; }
         } else await UI.say(landLine(d), G.Scenes.mateSpeaker('surveyor'));
@@ -436,7 +436,7 @@
   }
   function nearHint() {
     var s = S(), l = s.loc;
-    var cand = G.DISCOVERIES.filter(function (d) { return d.how === 'land' && !G.Disc.foundByMe(d.id) && !s.hints[d.id] && G.Disc.available(d) && G.Geo.dist(l.lon, l.lat, d.lon, d.lat) < 12; });
+    var cand = G.DISCOVERIES.filter(function (d) { return d.how === 'land' && !d.bookOnly && !G.Disc.foundByMe(d.id) && !s.hints[d.id] && G.Disc.available(d) && G.Geo.dist(l.lon, l.lat, d.lon, d.lat) < 12; });
     return cand.length ? U.pick(cand) : null;
   }
   /** 짐 나르는 짐승·마차가 있고 배에 포가 넉넉하면 가벼운 포를 끌고 다닌다 (육상전의 포병) */

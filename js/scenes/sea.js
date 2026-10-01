@@ -21,6 +21,7 @@
     if (!st.vel) st.vel = [0, 0];
     if (!st.fx && G.SeaFX) st.fx = G.SeaFX.create();
     if (!st.pose) st.pose = { roll: 0, pitch: 0, heave: 0 };
+    if (G.Img.prefetchCrew) G.Img.prefetchCrew();     // 바다에서 말을 거는 동료들의 얼굴
     if (arg.depart != null) {
       var c = G.CITY_DATA[arg.depart];
       var dock = c.dock || [c.lat, c.lon];
@@ -110,6 +111,7 @@
     bar.appendChild(sp);
     hudEl.port = btn('입항', 'anchor', function () { tryEnterPort(); }, 'navy');
     hudEl.land = btn('상륙', 'boot', function () { tryLand(); });
+    if (G.Fishing) btn('낚시', 'fish', function () { goFish(); });
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open('fleet').then(function () { st.busy--; }); });
     var zb = U.el('div', 'zoomctl');
@@ -223,6 +225,7 @@
     if (k === 'm' || k === 'M') { SEA.chart(); return true; }
     if (k === 'Enter') { tryEnterPort(); return true; }
     if (k === 'l' || k === 'L') { tryLand(); return true; }
+    if ((k === 'f' || k === 'F') && G.Fishing) { goFish(); return true; }
     // 방향키 = 대항해시대 3처럼: 누르고 있는 동안 뱃머리가 그 방위(← 서 · → 동 · ↑ 북 · ↓ 남, 두 키 = 북서·남동 …) 쪽으로
     // 차츰 돌아가고, 떼면 그때 향한 쪽으로 곧게 나아간다. 지그재그 없이 뱃머리 쪽으로 가며(맞바람이면 느림), Space로 정지
     if (!helmMode() && ARROWDIR[String(k).toLowerCase()]) {
@@ -382,6 +385,16 @@
     return best;
   }
   SEA.portNear = portNear;
+  /** 곧 들를 항구의 거리 그림을 미리 받는다 (아티팩트판은 그림 묶음을 처음 쓸 때 받으므로) — 하루에 한 번.
+      목적지 항구는 3° 안에서, 지나가는 항구는 1.5° 안에서 */
+  function prefetchAhead() {
+    if (!G.Img.prefetchCity) return;
+    var s = S(), l = s.loc, tc = st.target && st.target.city;
+    if (tc && G.Geo.dist(l.lon, l.lat, tc.lon, tc.lat) < 3) G.Img.prefetchCity(tc, 'near');
+    knownCities().forEach(function (c) {
+      if (c.port && Math.abs(c.lat - l.lat) < 1.5 && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 1.5) G.Img.prefetchCity(c, 'near');
+    });
+  }
   function landNear() {
     var s = S(), l = s.loc;
     for (var a = 0; a < 16; a++) { var ang = a / 16 * Math.PI * 2; for (var r = 0.1; r <= 0.4; r += 0.1) if (G.Geo.isLand(l.lon + Math.cos(ang) * r, l.lat + Math.sin(ang) * r)) return [l.lon + Math.cos(ang) * r, l.lat + Math.sin(ang) * r]; }
@@ -393,6 +406,7 @@
     var c = portNear();
     if (!c) { UI.toast('가까운 곳에 들를 수 있는 항구가 없습니다.', 'anchor'); return; }
     if (G.Disc.prefetchCity) G.Disc.prefetchCity(c.id);
+    if (G.Img.prefetchCity) G.Img.prefetchCity(c, 'near');
     st.busy++;
     try {
       var ok = await G.Scenes.city.handleEntry(c);
@@ -405,6 +419,13 @@
   }
   SEA.enterPort = tryEnterPort;
   function s_flags() { return S().flags; }
+  /** 바다 낚시 (js/games/fishing.js): 낚는 동안 배는 멈춰 있다 */
+  async function goFish() {
+    if (st.busy) return;
+    st.busy++; st.paused = true; st.vel = [0, 0]; refreshBar();
+    try { await G.Fishing.open({ storm: st.storm > 0 }); } catch (e) { console.error(e); }
+    st.busy--; refreshHud();
+  }
   async function tryLand() {
     var p = landNear();
     if (!p) { UI.toast('해안에서 너무 멉니다. 육지에 더 가까이 가십시오.', 'boot'); return; }
@@ -475,6 +496,8 @@
   SEA.canPlead = canPlead;
   function spawnNpcs() {
     var s = S(), l = s.loc;
+    // 탐험가의 함대(항로 위)·적대국의 추격 함대 (js/systems/seafolk.js)
+    if (G.SeaFolk) { var sfN = G.SeaFolk.spawn(st.npcs); if (sfN) { st.npcs.push(sfN); if (G.ShipSprite) G.ShipSprite.want(sfN.ships); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
     var pr = pirateRate(l.lon, l.lat) * (s.settings.diff === 'easy' ? 0.6 : 1);
@@ -494,6 +517,7 @@
       var npc = { id: Math.random().toString(36).slice(2), kind: kind, lon: lon, lat: lat, heading: U.rf(0, 6.28), n: n, K: K, spd: U.rf(0.9, 1.4), life: U.ri(6, 14), hostile: NPC_KIND[kind].hostile || (kind === 'navy' && s.player.notoriety > 40), nation: nation, zone: zone, ships: ships };
       // 위용: 기함이 거대한 보선이면 작은 해적 떼는 덤비지 않는다
       if (kind === 'pirate' && n <= 2 && f0 && G.Ships.has(f0, 'awe')) { npc.hostile = false; npc.awed = true; }
+      if (G.SeaFolk) G.SeaFolk.decorate(npc, st.npcs);   // 상선의 나라·선장(항해사), 적대국 함대는 덤빈다
       st.npcs.push(npc);
       if (G.ShipSprite) G.ShipSprite.want(ships);   // 화면에 들어오기 전에 그 배 그림을 풀어 둔다
       return;
@@ -504,7 +528,8 @@
     for (var i = st.npcs.length - 1; i >= 0; i--) {
       var n = st.npcs[i];
       var d = G.Geo.dist(l.lon, l.lat, n.lon, n.lat);
-      if (n.hostile && d < 4.5 && !n.fled) n.heading = Math.atan2(l.lat - n.lat, G.Geo.wrapLon(l.lon - n.lon));
+      if (n.exp && G.SeaFolk && G.SeaFolk.place(n, st.dayAcc)) { if (n.gone || d > 9) st.npcs.splice(i, 1); continue; }   // 탐험 함대는 날짜대로 항로를 간다
+      if (n.hostile && d < (n.hunt ? 8 : 4.5) && !n.fled) n.heading = Math.atan2(l.lat - n.lat, G.Geo.wrapLon(l.lon - n.lon));
       else if ((n.kind === 'merchant' || n.awed) && d < 1.2) { n.heading = Math.atan2(n.lat - l.lat, G.Geo.wrapLon(n.lon - l.lon)); if (n.awed && !n.awedTold) { n.awedTold = true; UI.toast(G.Ships.pirateLabel(n.zone) + '의 배가 ' + s.fleet.ships[0].name + '호의 거대한 모습을 보고 달아난다.', 'ship', 3600); } }
       var sp = n.spd * days;
       var nl = n.lon + Math.cos(n.heading) * sp, nt = n.lat + Math.sin(n.heading) * sp;
@@ -526,10 +551,10 @@
     st.paused = true; refreshBar();
     var k = NPC_KIND[n.kind];
     var pl = G.Ships.pirateLabel(n.zone);
-    var who = n.kind === 'pirate' ? pl + ' 함대' : (n.nation || '') + ' ' + k.name;
+    var who = n.kind === 'pirate' ? pl + ' 함대' : n.label || (n.nation || '') + ' ' + k.name;
     var kinds = n.ships ? n.ships.filter(function (id, i) { return n.ships.indexOf(id) === i; }).map(function (id) { return G.SHIP[id].name; }).join('·') : '';
     var kt = kinds ? ' (' + kinds + ')' : '';
-    var text = byMe ? who + ' ' + n.n + '척이 있다' + kt + '. 어떻게 할까요?' : (n.kind === 'pirate' ? '제독! ' + pl + '입니다! ' + n.n + '척의 해적선이 다가옵니다!' + kt : who + ' ' + n.n + '척이 우리를 막아섭니다!' + kt);
+    var text = byMe ? who + ' ' + n.n + '척이 있다' + kt + '. 어떻게 할까요?' : (n.kind === 'pirate' ? '제독! ' + pl + '입니다! ' + n.n + '척의 해적선이 다가옵니다!' + kt : n.hunt && G.Hostile ? '제독! ' + who + ' ' + n.n + '척이 우리를 잡으러 왔습니다!' + kt + ' (' + n.nation + ' 적대 ' + G.Hostile.get(n.nation) + ')' : who + ' ' + n.n + '척이 우리를 막아섭니다!' + kt);
     // 회피는 전투의 실패가 아니라 따로 고르는 운영 선택이다 — 가능성을 미리 보여 준다
     var fleeP = U.clamp(0.35 + (R.fleetSpeed(S().loc.heading, curWind()) - n.spd) * 0.5 + R.skill('nav') * 0.08, 0.1, 0.9);
     var opts = [{ label: '싸운다', value: 'fight' }, { label: '도망친다 (약 ' + Math.round(fleeP * 100) + '%)', value: 'flee' }];
@@ -537,6 +562,7 @@
       opts.push({ label: '통행료를 낸다 (금화 ' + U.num(tollOf()) + '닢)', value: 'pay' });
       if (canPlead()) opts.push({ label: '사정한다 (털어 갈 것이 없다)', value: 'plead' });
     }
+    if (!byMe && n.hunt && G.Hostile) opts.push({ label: '배상금을 낸다 (금화 ' + U.num(G.Hostile.fee(n.nation)) + '닢 · 적대 −' + G.BALANCE.hostility.payCut + ')', value: 'repay' });
     if (byMe) opts.push({ label: '그냥 둔다', value: null });
     var v = await UI.ask(text, opts, G.Scenes.mateSpeaker('first'));
     st.busy--;
@@ -545,6 +571,10 @@
       var boss = { name: pl + ' 두목' };
       await UI.say(U.pick(['뭐? 가진 게 그것뿐이라고? ...배를 뒤져 봐야 쥐새끼나 나오겠군. 가라, 가!', '흥, 빈털터리 뱃놈들이로군. 쏠 화약이 아깝다. 꺼져라!', '거지 떼를 털어서 뭐 하나. 오늘은 봐주지. 다음엔 두둑이 채워 오라고!']), boss);
       UI.toast('해적들이 비웃으며 길을 비켜 주었다.', 'sail'); n.hostile = false; n.fled = true; n.cooldown = 12; refreshHud(); return;
+    }
+    if (v === 'repay') {
+      if (await G.SeaFolk.pay(n)) { n.hostile = false; n.hunt = false; n.fled = true; n.cooldown = 12; n.heading += Math.PI; refreshHud(); return; }
+      v = 'fight';
     }
     if (v === 'pay') {
       var toll = tollOf();
@@ -558,6 +588,7 @@
     // battle
     if (!byMe && n.kind !== 'pirate') s.player.notoriety += 0;
     if (byMe && n.kind !== 'pirate') s.player.notoriety += n.kind === 'navy' ? 12 : 8;
+    if (byMe && G.SeaFolk) G.SeaFolk.attacked(n);   // 먼저 공격하면 그 나라의 적대가 오른다
     st.npcs.splice(st.npcs.indexOf(n), 1);
     await UI.fade(function () { G.Game.go('battle', { npc: n }); });
   }
@@ -575,12 +606,15 @@
     var capSpec = A.npcSpec('hail' + n.id, 'captain', capStyle);
     A.withImg(capSpec, [A.rolePortraitKey(capSpec), 'portraits/npc/captain_' + A.imageCulture(capStyle)]);
     var who = { name: (n.nation ? n.nation + ' ' : '') + NPC_KIND[n.kind].name + ' 선장', portrait: capSpec };
+    if (G.SeaFolk) who = G.SeaFolk.captain(n, who);   // 탐험가·아직 동료가 아닌 항해사
     try {
       var opts = [{ label: '소식을 묻는다', value: 'news' }];
+      if (G.SeaFolk && G.SeaFolk.canTalk(n)) opts.unshift({ label: '선장과 이야기한다', value: 'talk' });
       if (n.kind === 'merchant') opts.push({ label: '식량·물을 산다', value: 'buy' });
       opts.push({ label: '공격한다', value: 'attack' }, { label: '인사만 하고 지나간다', value: null });
-      var v = await UI.ask((n.kind === 'merchant' ? '상선' : '함대') + '이 신호에 답했다. "좋은 바람이오! 무슨 일이오?"', opts, who);
-      if (v === 'news') {
+      var v = await UI.ask((G.SeaFolk && G.SeaFolk.greet(n)) || (n.kind === 'merchant' ? '상선' : '함대') + '이 신호에 답했다. "좋은 바람이오! 무슨 일이오?"', opts, who);
+      if (v === 'talk') await G.SeaFolk.talk(n, who);
+      else if (v === 'news') {
         if (n.talked) { await UI.say('더 해 줄 이야기는 없소. 좋은 항해 되시오.', who); }
         else {
           n.talked = true;
@@ -1042,6 +1076,7 @@
       st.prevLat = l.lat;
       // 보급 경고 (목적지까지 모자라면 한 번 알린다)
       supplyWarn();
+      prefetchAhead();
       // discoveries at sea
       var ds = G.Disc.checkSea(l.lon, l.lat);
       for (var i = 0; i < ds.length; i++) {
@@ -1280,17 +1315,19 @@
         if (n.pose) nlook.pose = j ? { roll: n.pose.roll * 0.8, pitch: -n.pose.pitch * 0.6, heave: n.pose.heave * 0.5 } : n.pose;
         if (n.rig) nlook.rig = n.rig;
         nlook.sid = n.id + ':' + j;
-        A.shipTop(ctx, p[0] - Math.cos(n.heading) * j * 18 * nk + j * 6 * nk, p[1] + Math.sin(n.heading) * j * 18 * nk + j * 8 * nk, n.heading, npcPx(), nlook, st.t + j);
+        var nsv = sideView('n' + n.id, n.heading); nlook.face = nsv.face; nlook.squash = nsv.squash;
+        A.shipTop(ctx, p[0] - Math.cos(nsv.ang) * j * 18 * nk + j * 6 * nk, p[1] + Math.sin(nsv.ang) * j * 18 * nk + j * 8 * nk, nsv.ang, npcPx(), nlook, st.t + j);
       }
-      if ((n.kind === 'pirate' && !n.awed) || n.hostile) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - npcPx() * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - npcPx() * 0.72); ctx.textAlign = 'left'; }
+      if ((n.kind === 'pirate' && !n.awed) || n.hostile || n.exp) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.label || n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - npcPx() * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = n.exp && !n.hostile ? '#ffe08a' : '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - npcPx() * 0.72); ctx.textAlign = 'left'; }
     });
     // player fleet
     var pp = toScreen(l.lon, l.lat);
     var f = s.fleet;
     var sr = Math.min(1.4, shipSpeed() / FXS().refSpeed), slip = Math.min(1.2, Math.abs(st.lat || 0) / FXS().refSpeed * 2.2), sideS = (st.lat || 0) >= 0 ? 1 : -1;
     var SP = shipPx(), FP = followPx();
-    selectionRing(ctx, pp, l.heading, SP);
-    var slots = followSlots(f.ships.length), fc = Math.cos(l.heading), fs = Math.sin(l.heading);
+    var sv = sideView('flag', l.heading), ha = sv.ang;      // 그림에 쓰는 뱃머리 방향 (옆모습)
+    selectionRing(ctx, pp, ha, SP);
+    var slots = followSlots(f.ships.length, ha), fc = Math.cos(ha), fs = Math.sin(ha);
     st.slotPos = st.slotPos || [];
     for (var si = f.ships.length - 1; si >= 0; si--) {
       var sh = f.ships[si], sl = si ? slots[si] : [0, 0];
@@ -1302,14 +1339,14 @@
       var bx = pp[0] + sp0[0], by = pp[1] + sp0[1];
       var lenS = si === 0 ? SP : FP;
       // 선체에 붙은 물: 선수 파도와 선측 물줄기 (따르는 배는 조금 약하게)
-      if (st.fx && G.SeaFX) G.SeaFX.drawHull(st.fx, ctx, bx, by, l.heading, lenS, sr * (si ? 0.7 : 1), slip * (si ? 0.5 : 1), sideS, st.t);
+      if (st.fx && G.SeaFX) G.SeaFX.drawHull(st.fx, ctx, bx, by, ha, lenS * sv.squash, sr * (si ? 0.7 : 1), slip * (si ? 0.5 : 1), sideS, st.t);
       var lk = A.shipLook(sh.type, { sails: sh.sails, flag: '#1d3f7a' });
       var ps = st.pose || {}, ph = si * 1.7, RF = si && st.rideF && st.rideF[si], RDm = G.FX.ride || {};
       if (RF) lk.pose = { roll: U.clamp(RF.roll, -RDm.maxRoll, RDm.maxRoll), pitch: U.clamp(RF.pitch, -RDm.maxPitch, RDm.maxPitch), heave: U.clamp(RF.heave, -RDm.maxHeave, RDm.maxHeave) };
       else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };
-      lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null; lk.sid = 'f' + si;
-      A.shipTop(ctx, bx, by, l.heading, lenS, lk, st.t + si);
-      if (G.VoyageFX) G.VoyageFX.drawSpray(st, ctx, bx, by, l.heading, lenS, si);   // 속력을 낼 때 선수 물보라
+      lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null; lk.sid = 'f' + si; lk.face = sv.face; lk.squash = sv.squash;
+      A.shipTop(ctx, bx, by, ha, lenS, lk, st.t + si);
+      if (G.VoyageFX) G.VoyageFX.drawSpray(st, ctx, bx, by, ha, lenS, si);   // 속력을 낼 때 선수 물보라
     }
     drawCities(ctx);
     if (G.VoyageFX) G.VoyageFX.drawSky(st, ctx, pp, l.heading, SP, toScreen);      // 모항 배웅 갈매기
@@ -1319,7 +1356,7 @@
       if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.CityIcon.cultureName(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : ' — 클릭하면 이곳으로 향합니다')); }
       else {
         var hn = npcAt(st.mouse[0], st.mouse[1]);
-        if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));
+        if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : hn.label || (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));
         else { var hm = G.Explore.markerAt(st.marks || [], toScreen, st.mouse[0], st.mouse[1]); if (hm) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, '망루가 본 것 (' + G.DISC_CATS[hm.d.cat] + ') · 약 ' + hm.dist.toFixed(1) + '° — 클릭하면 향합니다'); }
       }
     }
@@ -1332,12 +1369,29 @@
     var a = Math.atan2(gx, -gy), da = U.angDiff(l.heading, a), db = U.angDiff(l.heading, a + Math.PI), want = Math.abs(da) < Math.abs(db) ? da : db;
     l.heading += want * Math.min(1, dt * 0.9);
   }
+  /* 옆모습: 지도 위의 배를 늘 옆에서 본 모습으로 그린다 (G.FX.ship.side).
+     동쪽(오른쪽)으로 가면 오른쪽을, 서쪽이면 왼쪽을 보고, 위·아래로 갈 때는 그만큼(최대 tilt°) 뱃머리를 들거나 숙인다.
+     좌우가 바뀌면 배가 뒤집히듯 돌아간다(flipSec초). 경계에서 깜박이지 않게 hold만큼 넘어가야 바뀐다.
+     뱃길·속력·충돌 같은 규칙은 그대로 참 진로(l.heading)를 쓴다 — 그림만 바뀐다. */
+  var sideMem = {};
+  function sideView(id, h) {
+    var SD = FXS().side || {};
+    if (SD.on === false) return { ang: h, face: 0, squash: 1 };
+    var c = Math.cos(h), o = sideMem[id];
+    if (!o) o = sideMem[id] = { face: c >= 0 ? 1 : -1, from: c >= 0 ? 1 : -1, k: 1 };
+    var hold = SD.hold != null ? SD.hold : 0.2;
+    if ((o.face > 0 && c < -hold) || (o.face < 0 && c > hold)) { o.from = o.k < 0.5 ? o.from : o.face; o.face = -o.face; o.k = 0; }
+    o.k = Math.min(1, o.k + (st.dtLast || 0.016) / Math.max(0.01, SD.flipSec || 0.35));
+    var shown = o.k < 0.5 ? o.from : o.face, tilt = Math.sin(h) * (SD.tilt != null ? SD.tilt : 20) * Math.PI / 180;
+    return { ang: shown > 0 ? tilt : Math.PI - tilt, face: shown, squash: Math.max(0.06, Math.abs(Math.cos(Math.PI * o.k))) };
+  }
   /* 따르는 배의 자리: 기함 뒤로 비스듬히 줄지어 — 그 자리가 뭍이면 바다 쪽 다른 자리로 (자주 바뀌지 않게 잠시 기억) */
   var SLOTS = [[-0.52, 0.27], [-0.52, -0.27], [-1.04, 0.27], [-1.04, -0.27], [0.0, 0.55], [0.0, -0.55], [-0.52, 0.8], [-0.52, -0.8], [0.52, 0.55], [0.52, -0.55]];
-  function followSlots(n) {
+  function followSlots(n, ang) {
     var l = S().loc, z = st.cam.zoom, SPx = shipPx(), out = [], used = {};
     st.slotMem = st.slotMem || {};
-    var c = Math.cos(l.heading), sn = Math.sin(l.heading);
+    if (ang == null) ang = l.heading;
+    var c = Math.cos(ang), sn = Math.sin(ang);
     var hl = followPx() * 0.42;
     function sea(k) {
       var sl = SLOTS[k];

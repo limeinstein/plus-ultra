@@ -14,6 +14,13 @@
   var GAP = 12;              // 건물 사이 최소 간격 (닿지 않을 만큼만)
   var GAP_VAR = 16;          // 간격에 주는 들쭉날쭉함
   var HERO_H = 178;          // 주인공 키
+  var WALK_V = 380;          // 가까운 건물로 걸어갈 때 빠르기 (px/초) — 뛰는 그림이 있을 때만
+  var RUN_DIST = 420;        // 이보다 먼 건물은 뛰어간다 (뛰는 그림 characters/<이름>/run_N 이 있을 때)
+  var RUN_V = 900;           // 뛰는 빠르기 (px/초). 아주 먼 건물은 1초 남짓에 닿도록 더 빨라진다
+  var WALK_STRIDE = 52;      // 걷는 그림 한 장이 넘어가는 걸음 거리 (px)
+  var KEY_WALK_V = 300;      // ←→로 걸을 때 빠르기 (px/초)
+  var KEY_RUN_V = 680;       // Shift를 누르고 뛸 때 빠르기 (px/초)
+  var RUN_FPS = 14;          // 뛰는 그림이 넘어가는 빠르기 (장/초) — 먼 길은 아주 빨리 지나가므로 거리 대신 시간으로 넘긴다
 
   // 건물마다 화면에 그릴 높이
   var SIZE = { harbor: 405, shipyard: 385, trade: 360, market: 320, tavern: 345, inn: 352, church: 425,
@@ -24,28 +31,59 @@
   // 아직 전용 그림이 없는 건물은 비슷한 건물 그림을 좌우로 뒤집어 쓴다
   var SUBSTITUTE = {};   // 전용 그림이 오면 여기서 비슷한 건물로 돌려 쓸 수 있다
   var LANDMARKS = { 7: [['giralda', 0.60, 430], ['columns', 0.10, 250]] };
+  // 도시 발견물은 landmarks/<발견물 id> 그림이 있을 때 자동으로 거리 뒤편에 선다.
+  var LANDMARK_HEIGHT = {
+    pharos: 500, hwangnyong: 460, hagiasophia: 400, djenne: 370, delhimosque: 370,
+    potala: 360, isfahanmosque: 380, rockdome: 350, notredame: 410, templomayor: 390,
+    apostolic: 400, whitetower: 370, askia: 390, stbasil: 430, belem: 400,
+    pisa: 450, porcelain: 470, eiffel: 500, bigben: 460, biosphere: 360,
+    unhq: 390, sydneyopera: 320, hue: 330,
+    jongmyo: 250, colosseum: 300, uffizi: 250, versailles: 250, orszaghaz: 250,
+    maracana: 270, battersea: 290
+  };
 
   var st = null;
 
   function S() { return G.Game.state; }
   function rngOf(c) { return U.makeRng(U.strHash('town' + c.id)); }
 
+  /** 전용 그림이 있는 도시 건축 발견물을, 이미 놓인 수동 볼거리와 덜 겹치는 자리에 더한다. */
+  function landmarksFor(c) {
+    var out = (LANDMARKS[c.id] || []).slice(), seen = {}, used = [0, 1];
+    out.forEach(function (l) { seen[l[0]] = true; used.push(l[1]); });
+    (G.DISCOVERIES || []).filter(function (d) {
+      return d.cat === 'ruin' && d.how === 'city' && d.city === c.id && !seen[d.id] &&
+        (!G.Disc || !G.Disc.built || G.Disc.built(d)) && I.pick(I.chain.landmark(d.id));
+    }).forEach(function (d) {
+      var best = 0.5, bestGap = -1;
+      for (var i = 1; i < 20; i++) {
+        var p = i / 20, gap = Math.min.apply(null, used.map(function (x) { return Math.abs(x - p); }));
+        if (gap > bestGap) { best = p; bestGap = gap; }
+      }
+      used.push(best); seen[d.id] = true;
+      out.push([d.id, best, LANDMARK_HEIGHT[d.id] || 340]);
+    });
+    return out;
+  }
+
   // ---------------------------------------------------------------- 만들기
   T.available = function (c) { return !!(I.count() && (I.pick(I.chain.bg(c)) || (I.extStyle && I.extStyle(c)))); };
 
   /** 도시의 거리를 준비한다. buildings: G.Scenes.city.buildings(c) */
   T.open = function (c, buildings) {
-    var chains = [I.chain.bg(c), I.chain.hero()];
+    var landmarks = landmarksFor(c), chains = [I.chain.bg(c), I.chain.hero()];
     I.chain.heroWalk().forEach(function (k) { chains.push([k]); });
+    I.chain.heroRun().forEach(function (k) { chains.push([k]); });
     buildings.forEach(function (b) { chains.push(I.chain.exterior(b.kind, c, b.arg)); });
-    (LANDMARKS[c.id] || []).forEach(function (l) { chains.push(I.chain.landmark(l[0])); });
-    return I.preload(chains, 5000).then(function () { build(c, buildings); return st; });
+    landmarks.forEach(function (l) { chains.push(I.chain.landmark(l[0])); });
+    return I.preload(chains, 5000).then(function () { build(c, buildings, landmarks); return st; });
   };
   T.close = function () { st = null; };
   T.active = function () { return !!st; };
+  T.runtime = function () { return st; };   // 시험용
   T.city = function () { return st && st.city; };
   T.hidden = function (v) {
-    if (st && v != null) { st.hidden = !!v; if (!st.hidden) { st.hero.fade = 1; st.hero.entering = false; st.dirty = true; } }
+    if (st && v != null) { st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.entering = false; st.dirty = true; } }
     return st ? st.hidden : true;
   };
 
@@ -61,7 +99,7 @@
     return cv;
   }
 
-  function build(c, buildings) {
+  function build(c, buildings, landmarks) {
     var rng = rngOf(c);
     var bgKey = I.pick(I.chain.bg(c));
     var es = I.extStyle && I.extStyle(c);
@@ -91,7 +129,7 @@
       x += it.w + GAP + Math.round(rng() * GAP_VAR);
     });
     var streetW = Math.max(W, x - 56 + MARGIN);
-    var marks = (LANDMARKS[c.id] || []).map(function (l) {
+    var marks = landmarks.map(function (l) {
       var key = I.pick(I.chain.landmark(l[0])), img = key && I.get(key);
       if (!img) return null;
       return { cv: prescale(img, l[2]), x: Math.round(streetW * l[1]), y: GROUND - 54 };
@@ -101,7 +139,8 @@
       bg: bgKey ? I.get(bgKey) : cityBackdrop(c), ground: groundStrip(c, rng), hidden: false,
       cam: 0, camTo: 0, hover: null, focus: null, t: 0,
       hero: { x: items.length ? items[0].x + items[0].w / 2 : W / 2, to: null, dir: 1, walking: false, dist: 0, fade: 1, entering: false },
-      heroFrames: heroFrames()
+      heroFrames: heroFrames(), keys: {}, near: null, onPick: null,
+      runFrames: I.chain.heroRun().map(function (k) { return I.get(k); }).filter(Boolean)
     };
     prepare();
     st.dirty = true;
@@ -390,6 +429,8 @@
   // ---------------------------------------------------------------- 입력
   /** 거리 클릭을 받는 투명한 판. onPick(kind, arg) 로 알려 준다. */
   T.catcher = function (onPick) {
+    if (st) st.onPick = onPick;      // ↑ 키로 들어갈 때도 같은 길로
+    if (st && !T._toldKeys) { T._toldKeys = true; UI.toast('거리 — ←→ 걷기 · Shift 뛰기 · ↑ 건물에 들어가기 (건물을 눌러도 됩니다)', 'boot', 5200); }
     var el = U.el('div', 'towncatch');
     el.style.cssText = 'position:absolute;inset:0;z-index:4;cursor:default';
     var down = null, moved = 0;
@@ -426,11 +467,42 @@
     el.addEventListener('wheel', function (e) { e.preventDefault(); T.pan(e.deltaY > 0 ? 180 : -180); }, { passive: false });
     return el;
   };
+  /* 걷기: ←→(A·D)를 누르는 동안 제독이 그쪽으로 걷고, Shift를 함께 누르면 뛴다. 카메라가 따라간다.
+     ↑(W)를 누르면 지금 서 있는 건물에 들어간다(건물을 누른 것과 같다). 마우스로 건물을 눌러도 그대로 걸어가 들어간다. */
+  function keyName(e) {
+    var k = String(e.key || '').toLowerCase();
+    if (k === 'arrowleft' || k === 'a') return 'left';
+    if (k === 'arrowright' || k === 'd') return 'right';
+    if (k === 'arrowup' || k === 'w') return 'up';
+    if (k === 'shift') return 'shift';
+    return null;
+  }
+  if (!T._keyHooked && typeof document !== 'undefined') {
+    T._keyHooked = true;
+    document.addEventListener('keyup', function (e) { var k = keyName(e); if (st && k) { st.keys[k] = false; if (k !== 'shift') st.keys.shift = !!e.shiftKey; } });
+    window.addEventListener('blur', function () { if (st) st.keys = {}; });
+  }
+  /** 제독이 서 있는 자리의 건물 (문 앞) */
+  function itemAtHero() {
+    if (!st) return null;
+    var x = st.hero.x, best = null, bd = 1e9;
+    st.items.forEach(function (it) {
+      var c = it.x + it.w / 2, d = Math.abs(x - c);
+      if (d <= it.w * 0.45 && d < bd) { bd = d; best = it; }
+    });
+    return best;
+  }
   T.onKey = function (e) {
     if (!st || st.hidden) return false;
-    if (e.key === 'ArrowLeft' || e.key === 'a') { T.pan(-260); return true; }
-    if (e.key === 'ArrowRight' || e.key === 'd') { T.pan(260); return true; }
-    return false;
+    var k = keyName(e); if (!k) return false;
+    st.keys.shift = !!e.shiftKey || (k === 'shift');
+    if (k === 'left' || k === 'right') { st.keys[k] = true; st.hero.to = null; st.hero.walkV = null; return true; }
+    if (k === 'up') {
+      var it = itemAtHero();
+      if (it && st.onPick && !e.repeat) { st.keys = {}; st.onPick(it.kind, it.arg); }
+      return true;
+    }
+    return k === 'shift';
   };
 
   // ---------------------------------------------------------------- 그리기
@@ -441,12 +513,30 @@
     var k = 1 - Math.pow(0.0009, Math.min(0.05, dt));
     var d0 = st.camTo - st.cam;
     if (Math.abs(d0) > 0.3) { st.cam += d0 * k; moved = true; } else if (st.cam !== st.camTo) { st.cam = st.camTo; moved = true; }
-    var hero = st.hero;
+    var hero = st.hero, kd = (st.keys.right ? 1 : 0) - (st.keys.left ? 1 : 0);
+    if (kd && hero.to == null && !hero.entering) {
+      // 손으로 걷기·뛰기
+      var run = !!st.keys.shift, v = run ? KEY_RUN_V : KEY_WALK_V, lo = 40, hi = st.streetW - 40;
+      var nx = U.clamp(hero.x + kd * v * dt, lo, hi);
+      hero.dist += Math.abs(nx - hero.x); hero.x = nx; hero.dir = kd;
+      hero.walking = st.heroFrames.length > 0; hero.running = run && st.runFrames.length > 0; hero.keyRun = run;
+      st.camTo = clampCam(hero.x - W / 2);
+      moved = true;
+    } else if (hero.keyRun != null && hero.to == null) {
+      hero.walking = false; hero.running = false; hero.keyRun = null; moved = true;   // 손을 떼면 선다
+    }
+    var near = itemAtHero();
+    if (near !== st.near) { st.near = near; moved = true; }
     if (hero.to != null) {
       // 멀리 갈수록 빨리 걷는다 (어느 건물이든 1초 안팎에 닿도록)
-      if (hero.walkV == null) hero.walkV = Math.max(620, Math.abs(hero.to - hero.x) * 1.6);
+      // 뛰는 그림이 있으면: 가까운 건물은 걸어서, 먼 건물은 뛰어서 간다
+      if (hero.walkV == null) {
+        var far = Math.abs(hero.to - hero.x), canRun = st.runFrames.length > 0;
+        hero.running = canRun && far > RUN_DIST;
+        hero.walkV = !canRun ? Math.max(620, far * 1.6) : hero.running ? Math.max(RUN_V, far * 1.5) : WALK_V;
+      }
       var d = hero.to - hero.x, sp = hero.walkV * dt;
-      if (Math.abs(d) <= sp) { hero.dist += Math.abs(d); hero.x = hero.to; hero.walkV = null; }
+      if (Math.abs(d) <= sp) { hero.dist += Math.abs(d); hero.x = hero.to; hero.walkV = null; hero.running = false; }
       else { hero.x += Math.sign(d) * sp; hero.dist += sp; hero.dir = d > 0 ? 1 : -1; }
       moved = true;
     }
@@ -490,7 +580,7 @@
       ctx.beginPath(); ctx.ellipse(x + it.w / 2, it.base + 8, it.w * 0.42, 15, 0, 0, 7); ctx.fill();
       ctx.restore();
       ctx.drawImage(it.cv, x, it.base - it.h);
-      if (st.hover === it || st.focus === it) {
+      if (st.hover === it || st.focus === it || st.near === it) {
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
         ctx.globalAlpha = st.hover === it ? 0.16 : 0.10;
@@ -504,9 +594,11 @@
     st.items.forEach(function (it) {
       var x = it.x - cam;
       if (x + it.w < -60 || x > W + 60) return;
-      var on = st.hover === it || st.focus === it, tag = on ? it.tagOn : it.tag;
+      var on = st.hover === it || st.focus === it || st.near === it, tag = on ? it.tagOn : it.tag;
       ctx.drawImage(tag, Math.round(x + it.w / 2 - tag.width / 2), Math.round(it.base - it.h - 16 - (it.lift || 0) - tag.height));
     });
+    // 문 앞에 서 있으면: ↑ 들어가기
+    if (st.near && !st.hero.entering && st.hero.to == null && !st.hidden) enterPrompt(ctx, st.hero.x - cam, GROUND + 34 - HERO_H - 18, st.near);
     // 하늘빛·시간대·가장자리 어둠
     var tod = G.Scenes.city.timeOfDay();
     if (tod !== st.tod) { st.tod = tod; st.overlay = overlayFor(tod); }
@@ -517,10 +609,23 @@
     st.drawnHover = st.hover; st.drawnFocus = st.focus;
   }
 
+  var promptFont = null;
+  function enterPrompt(ctx, x, y, it) {
+    var txt = '↑ ' + (it.label || it.name || '') + ' 들어가기';
+    ctx.save();
+    ctx.font = promptFont || (promptFont = '700 20px ' + getComputedStyle(document.body).fontFamily);
+    var w = ctx.measureText(txt).width + 26, h = 34;
+    ctx.translate(Math.round(x - w / 2), Math.round(y - h));
+    ctx.fillStyle = 'rgba(28,18,8,.78)'; roundRect(ctx, 0, 0, w, h, 8); ctx.fill();
+    ctx.strokeStyle = 'rgba(227,198,141,.85)'; ctx.lineWidth = 1.5; roundRect(ctx, 0, 0, w, h, 8); ctx.stroke();
+    ctx.fillStyle = '#f2e7cc'; ctx.textBaseline = 'middle'; ctx.fillText(txt, 13, h / 2 + 1);
+    ctx.restore();
+  }
   function drawHero(ctx, cam) {
-    var fr = st.heroFrames;
+    var run = st.hero.running && st.runFrames.length && !st.hero.entering;
+    var fr = run ? st.runFrames : st.heroFrames;
     if (!fr.length || st.hero.fade <= 0.01) return;
-    var i = st.hero.walking || st.hero.entering ? Math.floor(st.hero.dist / 52) % fr.length : 0;
+    var i = run ? Math.floor(st.t * RUN_FPS) % fr.length : st.hero.walking || st.hero.entering ? Math.floor(st.hero.dist / WALK_STRIDE) % fr.length : 0;
     var img = fr[i];
     var h = HERO_H, w = (img.naturalWidth || img.width) * h / (img.naturalHeight || img.height);
     var x = st.hero.x - cam, y = GROUND + 34;

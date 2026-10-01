@@ -52,7 +52,7 @@
     if (lead) { lines.push('그러고 보니 요즘 궁정에서도 화제가 된 이야기가 있네. ' + lead.text + '\n그 일을 해내겠다면 기꺼이 후원을 생각해 보지.'); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); await C.say(who, lines.join('\f')); return; }
     // occasionally drop a hint that matches the sponsor's taste
     if (rel.trust >= 25 && U.chance(0.5)) {
-      var cand = G.DISCOVERIES.filter(function (d) { return sp.taste.indexOf(d.cat) >= 0 && !s.hints[d.id] && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
+      var cand = G.DISCOVERIES.filter(function (d) { return sp.taste.indexOf(d.cat) >= 0 && !d.bookOnly && !s.hints[d.id] && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
       if (cand.length) { var d = U.pick(cand); lines.push('그러고 보니 이런 이야기를 들은 적이 있네. ' + d.hint); G.Disc.addHint(d.id, 'sponsor:' + sp.id); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
     } else if (s.player.fame < 200) lines.push('자네도 이름을 떨치고 싶다면 먼저 작은 발견부터 차근차근 쌓아 가게.');
     else lines.push(U.pick(['요즘 바다 건너에서 들려오는 소식이 참으로 흥미롭군.', '세상은 우리가 아는 것보다 훨씬 넓다네.', '돈보다 귀한 것은 새로운 지식일세.']));

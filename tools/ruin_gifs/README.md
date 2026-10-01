@@ -34,7 +34,15 @@ python tools/ruin_gifs/build.py --only stonehenge
 python tools/ruin_gifs/build_v2.py --preview --only stonehenge
 ```
 
-출력은 576×256, 공유 64색 팔레트의 반복 GIF입니다. 게임은 GIF를 `<img>`로 표시하므로 Canvas에 첫 프레임만 고정되지 않습니다.
+출력은 576×256, 공유 64색 팔레트의 반복 GIF입니다.
+
+### 칸을 576×256에 넣는 방법 (지붕이 잘리지 않게)
+
+마스터 시트의 칸은 정사각형에 가깝고 GIF는 가로로 긴 9:4라서, 예전처럼 가운데를 잘라 넣으면(ImageOps.fit) 위아래가 절반 넘게 잘려 지붕·탑 끝·첨탑이 보이지 않았습니다.
+`build_v2.py`의 `fit_whole()`은 칸의 맨 위(지붕 끝)부터 아래 93%까지 세로를 모두 살려 가운데에 두고,
+양옆은 그림 바깥 가장자리 띠(나무·하늘·물)를 흐리게 이어 그리다 종이색으로 번지듯 사라지게 합니다(스케치북 수채화처럼).
+조정값: `KEEP_TOP`·`KEEP_BOTTOM`(남길 세로 범위), `EDGE_STRIP`, `SIDE_BLUR`, `SIDE_FEATHER`, `SIDE_FADE`.
+GIF를 다시 만든 뒤에는 `end_frames.py` → `sheets.py ID…` → `tools/images.py` 순서로 마지막 장면·장면 판·목록을 맞춥니다. 게임은 GIF를 `<img>`로 표시하므로 Canvas에 첫 프레임만 고정되지 않습니다.
 
 정지 접촉면으로 단계와 조명을 검사할 때:
 

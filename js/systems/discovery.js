@@ -14,7 +14,10 @@
   /** 단서를 적는다. 아직 개척 단계가 닿지 않은 발견물은 받지 않는다 (G.Frontier) */
   D.addHint = function (id, src) {
     var s = S(); if (s.hints[id] || D.foundByMe(id)) return false;
-    if (G.Frontier && G.DISC[id] && !G.Frontier.canHint(G.DISC[id], src)) return false;
+    var d0 = G.DISC[id], sr = String(src || '');
+    if (d0 && d0.bookOnly && !/^(book|relic|chain|contract|lead|legacy)/.test(sr)) return false;   // 전설·희귀 동물·공룡: 책에서만
+    var here = d0 && d0.animal && /^(local|town):/.test(sr) && D.built(d0);                      // 그 고장에 와서 들은 동물 이야기
+    if (G.Frontier && d0 && !here && !G.Frontier.canHint(d0, src)) return false;
     s.hints[id] = { src: src, d: U.dateNum(s.date) }; return true;
   };
   /** 세워진 건물인가 (불가사의의 built 해) */
@@ -309,6 +312,7 @@
   D.checkCity = function (cityId) {
     return G.DISCOVERIES.filter(function (d) {
       if (d.how !== 'city' || d.city !== cityId || D.foundByMe(d.id)) return false;
+      if (d.needHint && !S().hints[d.id]) return false;        // 동물: 이야기를 듣고 나서야 거리에서 알아본다
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return false; }   // 신기루
       return true;
     });

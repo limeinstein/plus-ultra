@@ -278,14 +278,15 @@
   // ------------------------------------------------ discoveries
   const tDisc = tab('discoveries', '발견물', {
     chips: [['all', '전체']].concat(Object.keys(G.DISC_CATS).map(k => [k, G.DISC_CATS[k]])),
-    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 유적은 7단계 복원과 360° 상공 회전, 자연 경관은 일출부터 밤까지 이어지는 파노라마 GIF를 보여 줍니다.'
+    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 유적은 복원과 상공 회전, 자연 경관은 시간 변화 파노라마, 동물은 새끼의 등장과 성체 보호, 보물은 암흑 속 큐레이터 조명과 360° 2회전을 GIF로 보여 줍니다.'
   });
   G.DISCOVERIES.forEach(d => {
     const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : G.REGIONS[d.reg];
     const place = d.how === 'city' ? CITY[d.city].name + ' 시내' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
+    const moving = d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure') && !!(G.Reel && G.Reel.has(d)));
     add(tDisc, {
       group: d.cat, name: d.name, sub: G.DISC_CATS[d.cat] + ' · ' + where, meta: HOW[d.how] + ' · 가치 ' + num(d.val) + (d.rival ? ' · 경쟁자 ' + d.rival[2] : ''),
-      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: d.cat === 'ruin' || d.cat === 'nature' || d.natural, disc: d,
+      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: moving, disc: d,
       pic: () => I.make(I.chain.discovery(d), 720, 320, () => A.discoveryArt(d, 720, 320)),
       detail: () => ({
         text: d.desc, hint: '단서 — ' + d.hint, real: d.real,
@@ -299,9 +300,10 @@
           (G.RELICS && G.RELICS[d.id]) ? ['유물 (발견의 증거)', G.RELICS[d.id].map(r => r.name + ' — ' + G.RELIC_KIND[r.kind] + ' · 값 ' + num(r.price) + '닢').join(' / ')] : null
         ],
         files: [
-          { key: 'discoveries/' + d.id, kind: 'jpg', note: '이 발견물의 그림' },
+          { key: 'discoveries/' + d.id, kind: 'jpg', note: moving ? '이 발견물의 움직이는 그림' : '이 발견물의 그림' },
+          moving && G.Reel && G.Reel.has(d) ? { key: 'discovery-sheets/' + d.id, kind: 'webp', note: '게임에서 재생하는 장면 판' } : null,
           { key: 'discovery-cats/' + d.cat, kind: 'jpg', note: G.DISC_CATS[d.cat] + ' 분류 공통' }
-        ]
+        ].filter(Boolean)
       })
     });
   });
@@ -470,7 +472,7 @@
     add(tEtc, {
       group: 'bg', name: '거리 볼거리 — ' + k.split('/').pop(), sub: k, meta: '거리 뒤쪽에 서 있는 구조물 (누를 수 없음)', key: k, kind: 'webp', chain: [k], ar: '4 / 3', fit: 'contain',
       pic: () => I.make([k], 700, 700, () => A.canvas(700, 700)),
-      detail: () => ({ text: '도시 거리 뒤쪽에 장식으로 서 있습니다. 어느 도시에 세울지는 js/scenes/town.js 의 LANDMARKS 에서 정합니다.', files: [{ key: k, kind: 'webp', note: '거리 볼거리' }] })
+      detail: () => ({ text: '도시 건축 발견물과 같은 id의 그림은 해당 도시·건축 연도에 자동으로 서고, 그 밖의 장식은 js/scenes/town.js 의 LANDMARKS 에서 정합니다.', files: [{ key: k, kind: 'webp', note: '거리 볼거리' }] })
     });
   });
   const walkKeys = I.list('characters/walk_');

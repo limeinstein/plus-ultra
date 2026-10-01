@@ -19,39 +19,171 @@ import images as imgtool  # noqa: E402
 import pages  # noqa: E402
 
 ARTIFACT_LIMIT = 16 * 1024 * 1024      # 아티팩트 페이지 하나·텍스트 파일 하나의 한도 (16MiB)
-PACK_BUDGET = 170 * 1000 * 1000        # 그림 묶음 합계 한도. 아티팩트 한 판은 256MB까지 — 장면 판·음악·페이지(약 80MB)를 빼고 남는 만큼
-PACK_TARGET = 3 * 1024 * 1024          # 그림 묶음 파일 하나의 크기 (대략) — 작을수록 한 장면에서 덜 받는다
+PACK_BUDGET = 170 * 1000 * 1000        # (예전 값 — 지금은 아래 ARTIFACT_TOTAL로 한 판 전체를 잰다)
+ARTIFACT_TOTAL = 248 * 1000 * 1000     # 아티팩트 한 판 합계 한도(256MB) 안에서: 페이지 + 그림 묶음 + 장면 판·움직이는 그림 + 음악
+ARTIFACT_FILES = 500                   # 아티팩트 한 판 파일 수 한도(511) 안에서: 페이지 + 묶음 + 장면 판 + 음악
+PACK_TARGET = int(2 * 1024 * 1024)     # 그림 묶음 파일 하나의 크기 (대략) — 작을수록 한 장면에서 덜 받지만 파일 수가 는다 (장면 판 344장과 합쳐 한 판 511개 안에서)
 
 
-def image_packs(found, base, out_dir):
-    """아티팩트용: 그림을 data: 주소로 바꿔 몇 개의 JS 묶음 파일(img/pack-NN-해시.js)에 나눠 담는다.
+PACK_SMALL = 320 * 1024                # 이보다 작은 묶음은 같은 갈래의 이웃 묶음과 합친다 (파일 수가 너무 늘지 않게)
+
+# 지역 여급 그림 묶음 → 그 그림을 쓰는 문화권 (js/core/images.js I.MAID_POOL)
+MAID_CULTURE = {'westeurope': 'europe', 'iberia': 'europe', 'britain': 'europe', 'germany': 'europe', 'france': 'europe',
+                'lowlands': 'europe', 'greece': 'europe', 'slav': 'europe', 'russia': 'europe', 'italy': 'europe',
+                'arabia': 'islam', 'ottoman': 'islam', 'persia': 'islam', 'india': 'south', 'seasia': 'south',
+                'china': 'eastasia', 'japan': 'eastasia', 'korea': 'eastasia', 'tropic': 'native', 'africa': 'native', 'native': 'native'}
+
+
+def game_places():
+    """게임 자료(도시·후원자·여급·동료·발견물의 자리)를 node로 읽는다 (tools/pack_groups.js). node가 없으면 None"""
+    import subprocess
+    try:
+        r = subprocess.run(['node', os.path.join(pages.TOOLS, 'pack_groups.js')], capture_output=True, timeout=120, cwd=pages.ROOT)
+        if r.returncode == 0:
+            return json.loads(r.stdout.decode('utf-8'))
+        print('pack_groups.js 실패 — 그림 묶음을 갈래별로만 나눕니다: ' + r.stderr.decode('utf-8', 'replace')[:300])
+    except Exception as e:  # node 가 없음
+        print('node를 찾지 못해 그림 묶음을 갈래별로만 나눕니다 (%s)' % e)
+    return None
+
+
+def pack_order(keys, places):
+    """그림마다 (갈래, 차례)를 정한다 — 한 장면에서 같이 쓰이는 그림이 같은 묶음에 들어가도록.
+    · geo:<지역>   도시마다: 거리 배경, 그 도시 전용 건물·건물 안·마을 사람, 그 도시 후원자·여급 (가까운 도시끼리 이어지게 줄 세움)
+    · cul:<문화권> 문화권 공통 건물 안·마을 사람·거리 배경 변형
+    · ext:<묶음> 건물 겉모습 / role:<양식> 역할 공통 초상 / maid:<묶음> 지역 여급 / mates:<지역> 동료 / pool:<종류>/<나라> 얼굴 묶음
+    · dend:<지역> 발견 마지막 장면 / 나머지는 첫 폴더 이름"""
+    import re
+    cities = {int(k): v for k, v in (places or {}).get('cities', {}).items()}
+    sponsors = (places or {}).get('sponsors', {})
+    maids = (places or {}).get('maids', {})
+    mates = (places or {}).get('mates', {})
+    discs = (places or {}).get('discoveries', {})
+    # 지역 안에서 가까운 도시끼리 이어지게: 가장 서쪽 도시에서 시작해 가장 가까운 도시로 차례로 잇는다
+    rank = {}
+    regions = {}
+    for cid, c in cities.items():
+        regions.setdefault(c['region'], []).append(cid)
+    for reg, ids in regions.items():
+        left = set(ids)
+        cur = min(ids, key=lambda i: (cities[i]['lon'], i))
+        n = 0
+        while left:
+            left.discard(cur)
+            rank[cur] = n
+            n += 1
+            if not left:
+                break
+            c0 = cities[cur]
+            cur = min(left, key=lambda i: ((cities[i]['lat'] - c0['lat']) ** 2 + ((cities[i]['lon'] - c0['lon']) * 0.8) ** 2, i))
+
+    def city_slot(cid, sub):
+        c = cities.get(cid)
+        if c is None:
+            return None
+        return ('geo:%02d' % c['region'], '%04d/%s' % (rank.get(cid, 0), sub))
+
+    def near_region(lat, lon):
+        if not cities or lat is None or lon is None:
+            return 99
+        best = min(cities.values(), key=lambda c: (c['lat'] - lat) ** 2 + (c['lon'] - lon) ** 2)
+        return best['region']
+
+    out = {}
+    for k in keys:
+        parts = k.split('/')
+        top = parts[0]
+        slot = None
+        if places:
+            m = re.match(r'^(exteriors|interiors|portraits/npc)/[^@]+@(\d+)$', k)
+            if top == 'backgrounds' and parts[1].isdigit():
+                slot = city_slot(int(parts[1]), '0')
+            elif m:
+                slot = city_slot(int(m.group(2)), k)
+            elif k.startswith('portraits/sponsors/'):
+                sid = re.sub(r'_\d+$', '', parts[2])
+                if sid in sponsors:
+                    slot = city_slot(sponsors[sid], k)
+            elif k.startswith('portraits/maids/'):
+                mid = re.sub(r'_half$', '', parts[2])
+                if mid in maids:
+                    slot = city_slot(maids[mid], k)
+            elif k.startswith('exteriors/') and '@' in k:
+                sid = k.split('@', 1)[1]
+                if sid in sponsors:
+                    slot = city_slot(sponsors[sid], k)
+            elif k.startswith('portraits/mates/') and parts[2] in mates:
+                slot = ('mates:%02d' % max(-1, mates[parts[2]]), k)
+            elif top == 'discovery-ends' and parts[1] in discs:
+                d = discs[parts[1]]
+                reg = cities[d['city']]['region'] if d.get('city') in cities else near_region(d.get('lat'), d.get('lon'))
+                slot = ('dend:%02d' % reg, k)
+        if slot is None:
+            m = re.match(r'^(interiors|exteriors|portraits/npc)/[^_@]+_(europe|islam|eastasia|south|native|steppe)(?:_|$)', k)
+            if top == 'bg-styles':
+                slot = ('cul:' + {'ib': 'europe'}.get(parts[1].split('_')[0], parts[1].split('_')[0]), k)
+            elif m:
+                slot = ('cul:' + m.group(2), k)
+            elif top == 'exterior-styles' and len(parts) > 2:
+                slot = ('ext:' + parts[1], k)
+            elif k.startswith('portraits/npc-roles/') and len(parts) > 3:
+                slot = ('role:' + parts[2], k)
+            elif top == 'maid-styles' and len(parts) > 2:
+                slot = ('maid:%s/%s' % (MAID_CULTURE.get(parts[1], 'z'), parts[1]), k)
+            elif k.startswith('portraits/pools/') and len(parts) > 4:
+                slot = ('pool:%s/%s' % (parts[2], parts[3]), k)
+            elif top in ('portraits', 'duel', 'characters') and len(parts) > 2:
+                slot = ('%s/%s' % (top, parts[1]), k)
+            else:
+                slot = (top, k)
+        out[k] = slot
+    return out
+
+
+def image_packs(found, base, out_dir, places=None):
+    """아티팩트용: 그림을 data: 주소로 바꿔 JS 묶음 파일(img/pack-NN-해시.js)에 나눠 담는다.
     페이지(game.html)에는 그림이 들어가지 않으므로 페이지 한도(16MiB)와 상관없이 그림을 늘릴 수 있다.
-    돌려주는 값: [(페이지에서 부를 상대 경로, 바이트 수)]"""
+    묶음은 「한 장면에서 같이 쓰이는 그림끼리」(pack_order) — 도시에 들어갈 때 그 도시와 이웃 도시 그림만 받게.
+    돌려주는 값: [(페이지에서 부를 상대 경로, 바이트 수, 키 목록)]"""
     img_dir = os.path.join(out_dir, 'img')
     os.makedirs(img_dir, exist_ok=True)
     for f in os.listdir(img_dir):
         if f.startswith('pack-') and f.endswith('.js'):
             os.remove(os.path.join(img_dir, f))
-    packs, cur, n, cat = [], {}, 0, None
-    for k, rel in sorted(found.items()):
-        uri = pages.data_uri(os.path.join(base or os.path.join(pages.ROOT, 'images'), rel))
-        c = k.split('/')[0]
-        if cur and (n + len(uri) > PACK_TARGET or (c != cat and n > PACK_TARGET // 4)):
-            packs.append(cur)
+    order = pack_order(list(found), places)
+    groups = []          # [(갈래, {키: 주소}, 크기)]
+    cur, n, grp = {}, 0, None
+    for k in sorted(found, key=lambda x: order[x]):
+        g = order[k][0]
+        uri = pages.data_uri(os.path.join(base or os.path.join(pages.ROOT, 'images'), found[k]))
+        if cur and (g != grp or n + len(uri) > PACK_TARGET):
+            groups.append((grp, cur, n))
             cur, n = {}, 0
         cur[k] = uri
-        cat = c
+        grp = g
         n += len(uri) + len(k) + 8
     if cur:
-        packs.append(cur)
+        groups.append((grp, cur, n))
+    # 아주 작은 묶음은 같은 갈래 이름(앞부분)의 바로 앞 묶음과 합친다
+    packs = []
+    for g, pk, size in groups:
+        fam = g.split(':')[0].split('/')[0]
+        if packs and size < PACK_SMALL and packs[-1][0] == fam and packs[-1][2] + size <= PACK_TARGET:
+            packs[-1][1].update(pk)
+            packs[-1][2] += size
+        elif packs and packs[-1][2] < PACK_SMALL and packs[-1][0] == fam and packs[-1][2] + size <= PACK_TARGET:
+            packs[-1][1].update(pk)
+            packs[-1][2] += size
+        else:
+            packs.append([fam, dict(pk), size])
     out = []
-    for i, pk in enumerate(packs, 1):
+    for i, (_, pk, _) in enumerate(packs, 1):
         js = ('/* PLUS ULTRA 그림 묶음 %d/%d (tools/bundle.py가 만듦) */\nwindow.G = window.G || {};\n'
               'G.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, %s);\n') % (i, len(packs), json.dumps(pk, ensure_ascii=False))
-        rel = 'img/pack-%02d-%s.js' % (i, pages.short_hash(js))
+        rel = 'img/pack-%03d-%s.js' % (i, pages.short_hash(js))
         with open(os.path.join(out_dir, rel), 'w', encoding='utf-8', newline='\n') as f:
             f.write(js)
-        out.append((rel, len(js.encode('utf-8')), sorted(pk)))
+        out.append((rel, len(js.encode('utf-8')), list(pk)))
     return out
 
 
@@ -160,10 +292,14 @@ def main():
         sheet_ids = {k[len('discovery-sheets/'):] for k in found if k.startswith('discovery-sheets/')}
         skip = {k for k, rel in found.items() if k.startswith('discoveries/') and k[len('discoveries/'):] in sheet_ids and rel.lower().endswith('.gif')}
         slim_dir = hq_dir
+        places = game_places()
+        mdir0 = os.path.join(pages.ROOT, 'music')
+        mus = [os.path.join(mdir0, fn) for fn in sorted(os.listdir(mdir0)) if fn.lower().endswith(('.mp3', '.ogg', '.m4a'))] if os.path.isdir(mdir0) else []
+        msize = sum(os.path.getsize(m) for m in mus)
         while True:
             sfound = slim.build(found, hq_dir, scale, hq=True, skip=skip)
             pfound, afound = split_anim(sfound)
-            packs = image_packs(pfound, slim_dir, out)
+            packs = image_packs(pfound, slim_dir, out, places)
             import shutil
             if os.path.isdir(os.path.join(out, 'images')):
                 shutil.rmtree(os.path.join(out, 'images'))
@@ -178,7 +314,12 @@ def main():
             total = n1 + sum(b for _, b, _ in packs)
             for rel, b, _ in packs:
                 print('%-42s %s' % (rel, pages.human(b)))
-            ok = max([n1, n2] + [b for _, b, _ in packs]) <= ARTIFACT_LIMIT and total - n1 <= PACK_BUDGET
+            whole = total + nf + msize
+            nfiles = 1 + len(packs) + len(afound) + len(mus)
+            print('한 판 합계 %s (한도 %s) · 파일 %d개 (한도 %d)' % (pages.human(whole), pages.human(ARTIFACT_TOTAL), nfiles, ARTIFACT_FILES))
+            if nfiles > ARTIFACT_FILES:
+                print('주의: 파일 수가 한도를 넘습니다 — PACK_TARGET을 키우세요 (그림을 줄여도 파일 수는 거의 그대로)')
+            ok = max([n1, n2] + [b for _, b, _ in packs]) <= ARTIFACT_LIMIT and whole <= ARTIFACT_TOTAL
             if ok or scale < 0.5:
                 break
             scale -= 0.05
@@ -186,7 +327,7 @@ def main():
         print('아티팩트 합계 %s (페이지 %s + 그림 묶음 %d개 %s) — 페이지 한도 %s까지 %s 남음' % (
             pages.human(total), pages.human(n1), len(packs), pages.human(total - n1), pages.human(ARTIFACT_LIMIT), pages.human(ARTIFACT_LIMIT - max(n1, n2))))
         if not ok:
-            print('주의: 아티팩트 한도(파일 하나 16MiB, 그림 묶음 합계 %s)를 넘습니다. 그림 수를 줄여야 합니다.' % pages.human(PACK_BUDGET))
+            print('주의: 아티팩트 한도(파일 하나 16MiB, 한 판 합계 %s)를 넘습니다. 그림 수를 줄여야 합니다.' % pages.human(ARTIFACT_TOTAL))
         # 올릴 때 쓸 목록: 새 묶음 파일, 지난번에 '올린' 묶음 가운데 이제는 없는 것(아티팩트에서 지울 것)
         # 올린 뒤 python tools/bundle.py --mark-published 로 '올린 목록'을 새로 적는다
         new = [rel for rel, _, _ in packs]

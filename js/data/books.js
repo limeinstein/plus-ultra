@@ -25,7 +25,7 @@
     B('b_iliad', '호메로스 『일리아스』', 2, [30, 33, 29, 14], ['troy', 'mycenae', 'agamemnon']),
     B('b_odyssey', '호메로스 『오디세이아』', 2, [30, 33, 29], ['knossos', 'minotaur', 'delphi']),
     B('b_herodotus', '헤로도토스 『역사』', 2, [33, 30, 14, 38], ['giza', 'pyramid', 'ishtar', 'babel', 'ur']),
-    B('b_pliny', '플리니우스 『박물지』', 2, [33, 30, 12, 14], ['papyrus', 'hippo', 'ostrich', 'crocodile', 'startower', 'mandrill']),
+    B('b_pliny', '플리니우스 『박물지』', 2, [33, 30, 12, 14], ['papyrus', 'hippo', 'ostrich', 'flamingo', 'crocodile', 'startower', 'mandrill']),
     B('b_morte', '맬러리 『아서 왕의 죽음』', 3, [38, 14], ['grail', 'stonehenge']),
     B('b_toscanelli', '토스카넬리의 서한', 2, [30, 0], ['westroute', 'zipang']),
     B('b_prester', '『프레스터 존의 서한』', 2, [33, 29, 0, 14], ['prester', 'nestorian']),
@@ -38,7 +38,7 @@
     B('b_vinland', '『빈랜드 사가』', 3, [38, 47, 23], ['skraeling', 'moose', 'inuit', 'niagara']),
     B('b_heims', '『노르웨이 왕 연대기』', 3, [47, 38, 23], ['stave', 'polarbear', 'aurora', 'troll', 'nessie']),
     B('b_behaim', '베하임 『지구의 해설』', 3, [0, 47], ['capegood', 'spiceis', 'brendan']),
-    B('b_munster', '뮌스터 『우주지』', 3, [47, 54, 53], ['nessie', 'vampire', 'stcrown', 'amber'].filter(function (x) { return x !== 'amber'; })),
+    B('b_munster', '뮌스터 『우주지』', 3, [47, 54, 53], ['nessie', 'vampire', 'stcrown', 'holylance', 'amber'].filter(function (x) { return x !== 'amber'; })),
     B('b_brendan', '『성 브렌던의 항해』', 3, [38, 23, 47], ['brendan', 'aurora']),
     // 슬라브·그리스어 (4)
     B('b_primary', '『원초 연대기』', 4, [54, 53, 112], ['rusch', 'vampire']),
@@ -55,7 +55,7 @@
     B('b_masudi', '알 마스우디 『황금 목장』', 5, [127, 119, 79], ['sargon', 'ewer', 'ur', 'urcrown', 'babel']),
     // 페르시아어 (6)
     B('b_shahnameh', '피르다우시 『샤나메』', 6, [130, 135, 132, 145], ['persepolis', 'goldplate', 'ewer']),
-    B('b_rashid', '라시드 앗딘 『집사』', 6, [130, 132, 135], ['nestorian', 'sable', 'greatwall', 'potala']),
+    B('b_rashid', '라시드 앗딘 『집사』', 6, [130, 132, 135], ['nestorian', 'sable', 'greatwall', 'potala', 'genghis']),
     B('b_isfahan', '『이스파한 안내기』', 6, [130], ['isfahanmosque', 't_carpet']),
     B('b_babur', '『바부르나마』', 6, [145, 135], ['qutb', 'delhimosque', 'mohenjo', 'tiger', 'tajmahal']),
     // 중국어 (7)
@@ -63,7 +63,7 @@
     B('b_mahuan', '마환 『영애승람』', 7, [178, 188], ['malacca', 'spiceis', 'capegood', 't_pepper', 'coelacanth']),
     B('b_shiji', '사마천 『사기』', 7, [188, 178, 190], ['qinshi', 'greatwall', 'bronze']),
     B('b_shanhai', '『산해경』', 7, [188, 178], ['panda', 'yeti', 'roc']),
-    B('b_houhan', '『후한서』', 7, [188, 178, 190], ['seismo', 'goldseal']),
+    B('b_houhan', '『후한서』', 7, [188, 178, 190], ['seismo', 'goldseal', 'hanseal']),
     B('b_songshi', '『송사』', 7, [188, 178], ['cloisonne', 'jadesuit', 'qianling', 'yungang']),
     B('b_zhenla', '주달관 『진랍풍토기』', 7, [178, 188], ['angkor', 'goldelephant', 'ayubuddha']),
     // 힌두어 (8)
@@ -84,7 +84,7 @@
     B('b_negara', '『나가라크레타가마』', 12, [160, 162], ['borobudur', 'komodo', 'breadfruit', 'paradise']),
     B('b_pagan', '『파간 연대기』', 12, [162, 160], ['ananda', 'shwedagon', 'padaung', 'goldelephant']),
     // 동아시아토착어 (13)
-    B('b_samguk', '일연 『삼국유사』', 13, [190, 227], ['bulguksa', 'muryeong', 'munmu', 'hwangnyong', 'emille']),
+    B('b_samguk', '일연 『삼국유사』', 13, [190, 227], ['bulguksa', 'muryeong', 'munmu', 'hwangnyong', 'emille', 'sillacrown', 'cheonmado', 'baekjecenser']),
     B('b_kojiki', '『고사기』', 13, [193, 190], ['fertile', 'goldseal', 'konjiki']),
     B('b_haedong', '신숙주 『해동제국기』', 13, [190, 193], ['zipang', 't_herbs', 'glassbowl']),
     B('b_shoso', '『쇼소인 보물 목록』', 13, [193], ['glassbowl', 'konjiki']),
@@ -146,7 +146,7 @@
     b_iliad: ['호메로스|호메로스', '트로이아 성을 둘러싼 10년 전쟁 가운데 며칠을 노래한 서사시. 아킬레우스의 분노와 헥토르의 죽음, 그리고 황금이 많은 미케네의 왕 아가멤논이 나온다. 꾸며낸 이야기라 여기는 이가 많지만, 노래 속 도시가 어딘가 흙 속에 묻혀 있을지도 모른다.'],
     b_odyssey: ['호메로스|호메로스', '트로이아 전쟁이 끝난 뒤 오디세우스가 10년을 떠돌다 고향 이타카로 돌아가는 이야기. 외눈박이 거인, 바다 괴물, 마녀의 섬을 지나는 뱃길이 그려진다. 아흔 개의 도시가 있다는 크레타 섬과 미노스 왕의 이야기도 스쳐 지나간다.'],
     b_herodotus: ['헤로도토스|헤로도토스', '그리스와 페르시아의 전쟁을 쓰며, 그 사이에 지은이가 보고 들은 온 세상 이야기를 풀어놓은 책. 이집트의 피라미드를 누가 어떻게 쌓았는지, 거대한 성벽의 도시 바빌론과 그 탑 이야기가 나온다. 지은이는 들은 대로 적을 뿐 다 믿지는 않는다고 거듭 말한다.'],
-    b_pliny: ['대 플리니우스|플리니우스', '로마의 제독이자 학자가 세상의 모든 것을 37권에 담으려 한 책. 하마와 악어, 타조, 파피루스로 종이를 만드는 법, 알렉산드리아 앞바다의 등대까지 없는 것이 없다. 지은이는 베수비오 화산이 터졌을 때 사람들을 구하러 배를 몰고 갔다가 목숨을 잃었다고 한다.'],
+    b_pliny: ['대 플리니우스|플리니우스', '로마의 제독이자 학자가 세상의 모든 것을 37권에 담으려 한 책. 하마와 악어, 타조와 홍학, 파피루스로 종이를 만드는 법, 알렉산드리아 앞바다의 등대까지 없는 것이 없다. 지은이는 베수비오 화산이 터졌을 때 사람들을 구하러 배를 몰고 갔다가 목숨을 잃었다고 한다.'],
     b_morte: ['토머스 맬러리|맬러리', '캑스턴이 인쇄한 잉글랜드의 기사 이야기. 아서 왕과 원탁의 기사들, 성배를 찾아 떠난 여정, 그리고 마지막 싸움까지를 엮었다. 마지막 싸움이 벌어진 곳은 솔즈베리 곁의 언덕이라 적혀 있는데, 그 평원에는 거대한 선돌 고리가 서 있다고 한다.'],
     b_toscanelli: ['파올로 달 포초 토스카넬리|토스카넬리', '피렌체의 의사이자 천문학자가 리스본의 성당 참사회원에게 보낸 편지와 지도. 서쪽으로 곧장 항해하면 인도와 대칸의 나라, 황금의 섬 지팡구에 닿는다며 뱃길을 셈해 보였다. 세상을 실제보다 훨씬 작게 잡은 셈이지만, 그 대담함이 가슴을 뛰게 한다.'],
     b_prester: ['지은이 모름|이 편지를 쓴 이', '동방의 기독교 왕 요한이 비잔티움 황제에게 보냈다는 편지. 젖과 꿀이 흐르는 나라, 젊음을 되찾는 샘, 일흔두 왕을 거느린 사제왕의 궁전이 나온다. 사람들은 그 나라가 인도에 있다고도, 아프리카의 에티오피아에 있다고도 한다.'],

@@ -77,6 +77,11 @@ def game_data():
         naturals = read('js/data/naturals.js')
         for nid, name in re.findall(r"^\s*n\('([^']+)',\s*'([^']+)'", naturals, re.M):
             d['discoveries'].append({'id': nid, 'name': name, 'cat': 'nature'})
+    animals_path = os.path.join(ROOT, 'js/data/animals.js')
+    if os.path.exists(animals_path):
+        animals = read('js/data/animals.js')
+        for aid, name in re.findall(r"^\s*a\('([^']+)',\s*'([^']+)'", animals, re.M):
+            d['discoveries'].append({'id': aid, 'name': name, 'cat': 'creature'})
     names = []
     for x in d['discoveries']:
         if x.get('rival') and x['rival'] not in names:

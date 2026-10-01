@@ -15,7 +15,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
 (async function () {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined,
+    args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
@@ -31,18 +32,27 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => G.Game.go('create'));
     await page.waitForSelector('#nm', { timeout: 30000 });
     await page.fill('#nm', '이강희');
+    // 이 시험은 생김새만 보므로 첫 항해 안내 대화는 건너뛰고 거리 그림을 가리지 않게 한다.
+    await page.evaluate(() => { G.Scenes.city.prologue = async function () { G.Game.state.flags.prologue = true; }; });
     await page.press('#nm', 'Enter');
     await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Game.state && G.Game.state.player, null, { timeout: 90000 });
     const r1 = await page.evaluate(() => {
       const p = G.Game.state.player;
       return { look: p.look, img: p.portrait && p.portrait.img, hero: G.Img.heroLook(), half: G.Img.pick(G.Img.chain.heroHalf()),
-        duel: G.DUEL_ART.pick(G.Games.playerFighter(), {}), keys: G.Art.portraitKeys(p.portrait), st: p.st.str, gold: p.gold };
+        walk: G.Img.chain.heroWalk(), duel: G.DUEL_ART.pick(G.Games.playerFighter(), {}), keys: G.Art.portraitKeys(p.portrait), st: p.st.str, gold: p.gold };
     });
     ok(r1.look === 'ganghui' && r1.hero === 'ganghui', '이강희 → 생김새 ganghui');
     ok(String(r1.keys) === 'portraits/player/ganghui', '대화창 얼굴 = portraits/player/ganghui (초상에 못 박음)');
     ok(r1.half === 'characters/player_half_ganghui', '수첩 반신상 = characters/player_half_ganghui');
+    ok(r1.walk.length === 8 && r1.walk[0] === 'characters/ganghui/walk_1' && r1.walk[7] === 'characters/ganghui/walk_8', '거리 걷기 = ganghui 전용 8장');
     ok(r1.duel === (hasSheet ? 'ganghui' : 'main_admiral'), '일기토 시트 = ' + r1.duel);
     ok(r1.st === 99, '테스트 캐릭터 능력치 그대로 (힘 99)');
+
+    // 거리에서 실제 걷는 중인 강희 — 전용 프레임의 크기·발밑 위치를 눈으로 확인하는 장면
+    await page.evaluate(() => { if (G.Town.active()) window.__heroWalkTrip = G.Town.focusOn('gate'); });
+    await page.waitForTimeout(260);
+    await page.screenshot({ path: path.join(OUT, '0_town_walk.png') });
+    await page.waitForTimeout(1400);
 
     // 2) 수첩 제독 쪽
     await page.evaluate(() => { G.Info.open('admiral'); });

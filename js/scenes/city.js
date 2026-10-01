@@ -47,7 +47,7 @@
   /** preload the town's override pictures (view waits briefly, portraits load in the background) */
   C.preloadImages = function (c) {
     if (!G.Img.count()) return Promise.resolve();
-    G.Img.preload(G.Img.NPCS.map(function (n) { return G.Img.chain.npc(n[0], c); }));
+    // 마을 사람 얼굴·건물 안 그림은 거리를 다 띄운 뒤 차례로 미리 받는다 (C.enter → G.Img.prefetchCity) — 거리 그림과 받는 길을 다투지 않게
     return G.Img.preload([C.viewKeys(c)], 1500);
   };
 
@@ -112,6 +112,7 @@
     if (G.Town.available(c)) { try { await G.Town.open(c, C.buildings(c)); } catch (e) { console.error(e); G.Town.close(); } }
     else G.Town.close();
     if (G.Town.active()) G.Town.hidden(false); else G.Game.setScene(C.view(c));
+    if (G.Img.prefetchCity) { G.Img.prefetchCrew(); G.Img.prefetchCity(c, 'in'); }   // 건물 안·마을 사람·여급·후원자 얼굴을 뒤에서 받아 둔다
     G.Game.cityHud();
     if (G.Audio) G.Audio.music('town');
     try {
@@ -169,6 +170,7 @@
       if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(ds[i]))) await C.mate('제독, 저기를 보십시오! 소문으로만 듣던 ' + U.eul(ds[i].name).replace(ds[i].name, '「' + ds[i].name + '」') + ' 이 눈으로 보게 되다니...');
       await G.Disc.find(ds[i], 'city');
     }
+    if (G.Animals) await G.Animals.town(c);             // 마을 사람이 이 고장에 사는 동물 이야기를 꺼낸다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
     // contract reminder

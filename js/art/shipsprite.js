@@ -170,7 +170,8 @@
     var meta = G.SHIP_ART && G.SHIP_ART[spec.type], sh = ready(meta);
     if (!sh) return false;
     var a = wrap(ang), step = TAU / meta.dirs;
-    var pk = pickDir(meta, a, spec.sid), dir = pk.dir;
+    // 옆모습(spec.face: 1 오른쪽 · -1 왼쪽): 동·서 칸을 쓰고 나머지 각도(기울기)만 돌린다
+    var pk = spec.face ? { dir: spec.face > 0 ? 0 : meta.dirs / 2, from: 0, k: 1 } : pickDir(meta, a, spec.sid), dir = pk.dir;
     var ps = spec.pose || {}, hv = 1 + (ps.heave || 0), scale = len / meta.baseLen;
     var m = ctx.getTransform ? ctx.getTransform() : null, dev = m ? Math.sqrt(m.a * m.a + m.b * m.b) : 1;
     var so = sourceFor(sh, meta, scale * dev);
@@ -181,7 +182,9 @@
       var e0 = step * (0.5 - edge), ar = Math.abs(residual);
       if (ar > e0) { blend = Math.min(0.5, (ar - e0) / (step * edge) * 0.5); other = (dir + (residual >= 0 ? 1 : -1) + meta.dirs) % meta.dirs; }
     }
-    ctx.save(); ctx.translate(x, y); shadow(ctx, len, a, spec);
+    ctx.save(); ctx.translate(x, y);
+    if (spec.squash != null && spec.squash < 0.999) ctx.scale(spec.squash, 1);     // 좌우로 돌아서는 중
+    shadow(ctx, len, a, spec);
     ctx.scale(hv, hv * (1 - Math.abs(ps.roll || 0) * 0.32));
     ctx.translate(-(ps.pitch || 0) * len * 0.10, -(ps.roll || 0) * len * 0.24);
     ctx.imageSmoothingEnabled = true;

@@ -34,7 +34,7 @@
 
   // 단계별 발견물: [맛보기, 가벼움, 무거움, 가장 무거움]  (관문은 위의 gate)
   var MAP = {
-    europe: [[], ['carnac', 'stonehenge', 'poitiers', 'montstmichel', 'stave', 'parthenon', 'delphi', 'mycenae', 'knossos', 'troy', 'hagiasophia', 'alhambra', 'reliquary', 'beowulf', 'kingjohn', 't_coral'],
+    europe: [[], ['carnac', 'stonehenge', 'poitiers', 'montstmichel', 'stave', 'parthenon', 'delphi', 'mycenae', 'knossos', 'troy', 'hagiasophia', 'alhambra', 'reliquary', 'beowulf', 'kingjohn', 't_coral', 'holylance'],
       ['pamukkale', 'cappadocia', 'rusch', 'troll', 'nessie', 'agamemnon', 'stcrown'], ['minotaur', 'vampire', 'grail']],
     levant: [[], ['papyrus', 'sepulchre', 'rockdome', 't_carpet', 't_antique', 't_frank', 't_pearl'],
       ['pyramid', 'giza', 'kings', 'thebes', 'rosetta', 'edom', 'petra', 't_coffee'],
@@ -42,12 +42,12 @@
     north: [[], ['aurora', 'brendan'], ['skraeling', 'moose', 'inuit', 'polarbear'], ['niagara']],
     guinea: [[], ['djenne', 'ifehead', 't_ivory'], ['startower', 'mandrill'], ['mokele']],
     cape: [[], ['penguin', 'khoikhoi'], ['welwitschia', 'ostrich'], ['albatross']],
-    eafrica: [[], ['t_ambergris', 'hippo'], ['warthog', 'porcupine', 'zimbabwe', 't_rhino', 't_tortoise'], ['crocodile', 'roc', 'coelacanth', 'prester']],
-    india: [['t_pepper', 't_clove', 't_ginger', 't_cinnamon'], ['t_chintz', 'madurai', 'tiger', 'mangrove'], ['shiva', 'qutb', 'mohenjo', 'delhimosque'], ['tajmahal']],
-    inner: [[], ['t_musk', 't_jade'], ['sable'], ['potala', 'yeti']],
+    eafrica: [[], ['t_ambergris', 'hippo', 'flamingo'], ['warthog', 'porcupine', 'zimbabwe', 't_rhino', 't_tortoise'], ['crocodile', 'roc', 'coelacanth', 'prester']],
+    india: [['t_pepper', 't_clove', 't_ginger', 't_cinnamon'], ['t_chintz', 'madurai', 'tiger', 'mangrove'], ['shiva', 'qutb', 'mohenjo', 'delhimosque', 'kohinoor'], ['tajmahal']],
+    inner: [[], ['t_musk', 't_jade'], ['sable'], ['potala', 'yeti', 'genghis']],
     malacca: [['t_sandal', 't_rice'], ['shwedagon', 'ayubuddha', 'goldelephant', 'padaung'], ['ananda', 'cannibal', 'rafflesia', 'orangutan', 'carnivplant'], ['angkor', 'borobudur']],
     spice: [['t_nutmeg'], ['breadfruit'], ['komodo'], ['paradise']],
-    china: [['t_silkraw', 't_herbs'], ['t_tea', 'greatwall', 'cloisonne', 'jongmyo', 'emille', 'hwangnyong'], ['huangshan', 'yungang', 'qianling', 'muryeong', 'bulguksa', 'seokguram', 'munmu', 'bronze', 'nestorian', 'seismo'], ['qinshi', 'jadesuit', 'panda']],
+    china: [['t_silkraw', 't_herbs'], ['t_tea', 'greatwall', 'cloisonne', 'jongmyo', 'emille', 'hwangnyong'], ['huangshan', 'yungang', 'qianling', 'muryeong', 'bulguksa', 'seokguram', 'munmu', 'bronze', 'sillacrown', 'baekjecenser', 'guanyublade', 'libai', 'nestorian', 'seismo'], ['qinshi', 'jadesuit', 'panda', 'hanseal', 'cheonmado']],
     japan: [[], ['goldseal'], ['glassbowl', 'konjiki'], ['fertile']],
     austral: [[], ['kangaroo'], ['aborigine'], ['uluru']],
     west: [[], ['t_tobacco', 't_allspice'], ['tarantula', 'eldorado'], ['blemmyes']],
@@ -57,6 +57,24 @@
     peru: [['t_potato'], ['llama', 'nazca'], ['sacsay', 'tiwanaku'], ['machupicchu']],
     pacific: [[], ['frigatebird', 'tortoise'], ['moai', 'northstrait'], ['mu']]
   };
+  // 도자기·보석·세계 국보·예술품 보물 (2026-10-02)
+  [
+    ['china', 2, ['goryeoceladon', 'tangsancai', 'qinghua', 'moonjar', 'qingming', 'tripitaka', 'hunmin']],
+    ['china', 3, ['ruware', 'lanting']],
+    ['europe', 1, ['iznikware', 'lustreware', 'blackprince', 'ironcrown', 'wenceslas', 'laocoon', 'birthvenus', 'david', 'ghentaltar', 'durer', 'earthlydelights', 'urbinovenus', 'babeltower', 'orgaz', 'ambassadors', 'saliera', 'belemmonstrance']],
+    ['europe', 2, ['paladoro', 'venusmilo', 'nike', 'monalisa', 'creation', 'lastsupper', 'pirireis']],
+    ['japan', 2, ['aritaware', 'rakubowl', 'tsukumonasu', 'nanbanscreen']],
+    ['inner', 2, ['timurruby']],
+    ['india', 2, ['lankasapphire', 'ajanta', 'baburnama']],
+    ['india', 3, ['peacockthrone']],
+    ['malacca', 2, ['mogokruby']],
+    ['west', 2, ['muzoemerald', 'peregrina']],
+    ['levant', 2, ['shahnameh']],
+    ['levant', 3, ['nefertiti', 'hammurabi']],
+    ['guinea', 2, ['benin']],
+    ['mexico', 2, ['moctezuma', 'sunstone', 'mayacodex']],
+    ['peru', 2, ['incadisc']]
+  ].forEach(function (a) { MAP[a[0]][a[1]] = MAP[a[0]][a[1]].concat(a[2]); });
   // 건물 불가사의 (js/data/wonders.js — 1700년까지 세워진 것만)
   if (G.WONDERS) Object.keys(G.WONDERS.front).forEach(function (fk) {
     if (!MAP[fk]) MAP[fk] = [[], [], [], []];
@@ -78,7 +96,7 @@
   G.DISC_CHAIN = {
     agamemnon: ['mycenae'], minotaur: ['knossos'], rosetta: ['papyrus'], tutankh: ['kings'], babel: ['ishtar'],
     urcrown: ['ur'], goldplate: ['persepolis'], antpeople: ['antarctic'], mu: ['moai'], cibola: ['pueblo'],
-    machupicchu: ['sacsay'], uluru: ['aborigine'], jadesuit: ['qianling'], konjiki: ['goldseal']
+    machupicchu: ['sacsay'], uluru: ['aborigine'], jadesuit: ['qianling'], konjiki: ['goldseal'], cheonmado: ['sillacrown']
   };
   for (var cid in G.DISC_CHAIN) if (G.DISC && G.DISC[cid]) G.DISC[cid].need = G.DISC_CHAIN[cid];
   var CHAIN_LINE = {
@@ -95,7 +113,8 @@
     machupicchu: '돌 요새의 석공들이 더 높은 산 위에 숨은 태양의 신전을 이야기한다.',
     uluru: '남방대륙 사람들이 대륙 한가운데의 붉은 거대한 바위를 신성하게 여긴다고 한다.',
     jadesuit: '당나라 여제의 능을 지키는 이가 옥으로 지은 옷을 입은 왕의 무덤을 이야기한다.',
-    konjiki: '왜국의 금도장처럼 온통 금으로 덮인 절이 북쪽에 있다고 한다.'
+    konjiki: '왜국의 금도장처럼 온통 금으로 덮인 절이 북쪽에 있다고 한다.',
+    cheonmado: '금관이 나온 무덤 곁의 다른 무덤에서 하늘을 달리는 흰 말 그림이 나왔다고 한다.'
   };
   G.chainLine = function (id) { return CHAIN_LINE[id] || ''; };
 

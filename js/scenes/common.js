@@ -48,19 +48,30 @@
   };
 
   /** big discovery announcement card */
-  /** 발견 그림 요소. 유적·자연 경관 GIF는 움직임을 살리고, 나머지는 기존 Canvas 교체 체계를 쓴다. */
+  function discoveryMotionMs(d) {
+    var fx = (G.FX && G.FX.reveal) || {};
+    return d && d.cat === 'treasure' && !d.natural ? (fx.treasurePlayMs || 8400) : (fx.playMs || 5000);
+  }
+  function discoveryGifMs(d) {
+    var fx = (G.FX && G.FX.reveal) || {};
+    return d && d.cat === 'treasure' && !d.natural ? (fx.treasureGifMs || 8400) : (fx.gifMs || 9820);
+  }
+  /** 발견 그림 요소. 장면 판이나 GIF가 있으면 움직임을 살리고, 나머지는 기존 Canvas 교체 체계를 쓴다. */
   SC.discoveryPicture = function (d, chain) {
     chain = chain || G.Img.chain.discovery(d);
-    var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art, landscape = d.cat === 'nature' || d.natural;
-    if ((d.cat === 'ruin' || landscape) && G.Reel && G.Reel.has(d)) {
-      art = G.Reel.element(d, { cls: 'disc-build-gif', w: 1152, h: 512, ms: ((G.FX && G.FX.reveal) || {}).playMs });
+    var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art;
+    var animatedCat = d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure';
+    if (animatedCat && G.Reel && G.Reel.has(d)) {
+      art = G.Reel.element(d, { cls: 'disc-build-gif', w: 1152, h: 512, ms: discoveryMotionMs(d) });
       art.setAttribute('aria-label', d.name);
       return art;
     }
-    if ((d.cat === 'ruin' || landscape) && file && G.Img.isAnim(picked)) {
+    if (animatedCat && file && G.Img.isAnim(picked)) {
       art = document.createElement('img');
       art.className = 'disc-build-gif'; art.src = G.Img.src(picked);
-      art.alt = d.cat === 'ruin' ? d.name + ' 7단계 복원과 360도 상공 회전' : d.name + ' 일출부터 밤까지 이어지는 파노라마';
+      art.alt = d.cat === 'ruin' ? d.name + ' 7단계 복원과 360도 상공 회전' :
+        d.cat === 'creature' ? d.name + ' 새끼 등장과 성체 보호 장면' :
+          d.cat === 'treasure' && !d.natural ? d.name + ' 암흑 속 박물관 조명과 360도 2회전' : d.name + ' 일출부터 밤까지 이어지는 파노라마';
       return art;
     }
     return G.Img.make(chain, 720, 320, function () { return A.discoveryArt(d, 720, 320); });
@@ -86,7 +97,7 @@
   SC.discoveryCard = async function (d, fame, relics) {
     var chain = G.Img.chain.discovery(d);
     if (G.Img.pick(chain)) await G.Img.preload([chain], 1500);
-    // 애니메이션 GIF를 Canvas에 그리면 한 프레임만 남는다. 유적·자연 경관은 원본 <img>로 올린다.
+    // 애니메이션 GIF를 Canvas에 그리면 한 프레임만 남는다. 움직이는 발견 그림은 원본 <img>나 장면 판으로 올린다.
     var art = SC.discoveryPicture(d, chain);
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
@@ -102,15 +113,15 @@
     return win.result;
   };
 
-  // ---------------------------------------------------------------- 유적·자연 경관 발견 연출
-  /* 화면(탐험 지도·거리)이 살짝 어두워지고 발견 GIF만 빛나며 한 바퀴 돈다 → 마지막 장면에서 멈추고
+  // ---------------------------------------------------------------- 유적·자연 경관·동물·보물 발견 연출
+  /* 화면(탐험 지도·거리)이 살짝 어두워지고 발견 GIF만 빛나며 움직인다 → 마지막 장면에서 멈추고
      「○○ 발견」이 크게 빛나며 떠오른다 → 제독과 부하들이 이야기한다. 유적은 그림·세공에 밝은 사람이
      자세히 기록하면 명성이 더 오른다(D.recordParts). 자연 경관은 화가가 지형과 빛을 기록한다.
      GIF를 멈출 수 없어 마지막 장면은 images/discovery-ends/ID.jpg로 바꿔 끼운다. */
   //   장면 판(images/discovery-sheets/ID.webp)이 있으면 그것을 Canvas로 돌린다(G.Reel) — GIF보다 가볍고, 빠르기를 게임이 정하며,
   //   다시 받지 않고 처음부터 돌릴 수 있다. 없으면 예전처럼 GIF를 <img>로.
   function revealKeys(d) {
-    if (d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural) return null;
+    if (d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural && d.cat !== 'creature' && d.cat !== 'treasure') return null;
     var sheet = G.Reel ? G.Reel.key(d) : null;
     var chain = G.Img.chain.discovery(d), picked = G.Img.pick(chain), file = picked && G.Img.file(picked);
     var gif = file && G.Img.isAnim(picked) ? picked : null;
@@ -144,6 +155,16 @@
   }
   function lineFor(kind, lv, d) {
     var sent = periodSentences(d);
+    if (d.cat === 'creature') {
+      if (kind === 'sci') {
+        if (lv >= 3) return '새끼의 생김새와 움직임, 성체가 뒤를 지키는 습성까지 차례로 적겠습니다. 털과 비늘, 발자국도 견주어 보면 이 동물이 어떻게 살아가는지 밝혀낼 수 있습니다.\f' + (sent.length ? '「' + sent.join(' ') + '」' : '');
+        if (lv >= 2) return '새끼와 성체의 크기, 먹이 흔적, 사는 곳을 함께 기록하겠습니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
+        return '놀라게 하지 말고 생김새와 움직임부터 찬찬히 적어 두겠습니다.' + (sent.length ? '\f「' + sent[0] + '」' : '');
+      }
+      if (lv >= 3) return '새끼의 코와 눈빛부터 뒤에 선 성체의 위엄까지 한 장에 담겠습니다. 이 그림이면 먼 나라 사람도 살아 있는 모습을 떠올릴 겁니다.';
+      if (lv >= 2) return '털과 비늘의 빛깔, 새끼와 성체의 크기 차이가 드러나도록 그려 두겠습니다.';
+      return '움직이기 전에 얼굴과 윤곽부터 화첩에 옮겨 두겠습니다.';
+    }
     if (d.cat === 'nature' || d.natural) {
       if (lv >= 3) return '빛이 옮겨 가는 방향과 바위·물·구름의 빛깔까지 살려 채색 도판으로 남기겠습니다.\f' + (sent.length ? '「' + sent.join(' ') + '」\f' : '') + '— 이 광경을 보지 못한 학자도 지형을 헤아릴 수 있을 겁니다.';
       if (lv >= 2) return '산줄기의 높낮이와 물길의 폭을 재어, 눈앞의 넓이와 깊이가 드러나게 그려 두겠습니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
@@ -161,7 +182,8 @@
   SC.discoveryReveal = async function (d, fame) {
     var keys = revealKeys(d); if (!keys) return false;
     var FX = (G.FX && G.FX.reveal) || {}, W = Math.round(576 * (FX.scale || 1.9)), H = Math.round(256 * (FX.scale || 1.9));
-    var el = U.el('div', 'reveal');
+    var treasure = d.cat === 'treasure' && !d.natural, playMs = discoveryMotionMs(d);
+    var el = U.el('div', 'reveal' + (treasure ? ' treasure' : ''));
     el.style.setProperty('--rv-dim', FX.dim != null ? FX.dim : 0.62);
     el.style.setProperty('--rv-dim-ms', (FX.dimMs || 900) + 'ms');
     el.innerHTML = '<div class="rv-dim"></div><div class="rv-rays"></div>' +
@@ -179,7 +201,7 @@
         L = await Promise.race([G.Reel.load(keys.sheet), U.sleep(FX.loadWaitMs || 2500).then(function () { return null; })]);
       }
       setTimeout(function () { el.classList.add('on'); }, 30);
-      if (L) reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: FX.playMs || 5000 });
+      if (L) reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: playMs });
     } else {
       // 이미 한 번 불러 둔 GIF도 처음 장면부터 돌도록 새로 불러온다 (파일 주소일 때만 — 한 파일짜리 판의 data: 주소는 그대로)
       var src = G.Img.src(keys.gif); if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
@@ -188,9 +210,9 @@
       await loaded;
       setTimeout(function () { el.classList.add('on'); }, 30);
     }
-    // 한 바퀴 돌 때까지 — 누르거나 Enter·Space·Esc면 곧장 마지막 장면으로
+    // 연출이 끝날 때까지 — 누르거나 Enter·Space·Esc면 곧장 마지막 장면으로
     await new Promise(function (resolve) {
-      var wait = reel ? null : setTimeout(fin, (L === null && keys.sheet ? 600 : (FX.gifMs || 9820) + 80)), done = false;
+      var wait = reel ? null : setTimeout(fin, (L === null && keys.sheet ? 600 : discoveryGifMs(d) + 80)), done = false;
       if (reel) reel.done.then(fin);
       function fin() { if (done) return; done = true; if (wait) clearTimeout(wait); if (reel) reel.finish(); unkey(); el.removeEventListener('click', fin); resolve(); }
       var unkey = UI.pushKey(function (e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { fin(); return true; } return true; });
@@ -204,14 +226,16 @@
     // ---- 대화
     var s = S(), p = s.player, me = { name: p.name, portrait: p.portrait };
     var lead = SC.mateSpeaker('first');
-    var legend = d.real && d.real.legend;
+    var legend = d.real && d.real.legend, animal = d.cat === 'creature';
     await UI.say(U.pick(['제독, 보십시오! 저것이 바로 소문으로만 듣던 ' + d.name + '입니다!', '제독…! 이야기 속에서나 듣던 ' + d.name + U.jx(d.name, '이/가') + ' 정말 눈앞에 있습니다!', '다들 멈춰! 제독, ' + d.name + '입니다. 우리가 찾아낸 겁니다!']), lead);
     await UI.say(legend ? U.pick(['전설이 거짓이 아니었군… 모두 잘해 주었다.', '꿈을 꾸는 것만 같구나. 이 광경을 잊지 말자.']) : U.pick(['마침내 찾았구나. 먼 길을 함께 와 준 덕분이다.', '이 눈으로 직접 보게 될 줄이야… 모두 수고했다.', '세상에 이런 것이 있었다니. 빠짐없이 기록해 두자.']), me);
+    if (animal) await UI.say(U.pick(['새끼 뒤에 성체가 있습니다. 더 다가가면 위험합니다. 이 자리에서 조용히 살펴보시지요.', '새끼를 지키러 성체가 나왔습니다. 길을 막지 말고, 놀라게 하지 않도록 물러서서 기록하겠습니다.']), lead);
     var natural = d.cat === 'nature' || d.natural;
-    var art = bestHand('art'), craft = natural ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
+    var art = bestHand('art'), science = animal ? bestHand('sci') : { lv: 0 }, craft = (natural || animal) ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
+    if (science.lv) await UI.say(lineFor('sci', science.lv, d), science.speaker);
     if (art.lv) await UI.say(lineFor('art', art.lv, d), art.speaker);
     if (craft.lv) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
-    if (!art.lv && !craft.lv) await UI.say(natural ? U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 넓은 풍경을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '산줄기와 물길의 생김새를 화첩에 남기지 못해 아쉽습니다. 눈에 새겨 두어야겠습니다.']) : U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 모습을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '솜씨 좋은 화가나 장인이 함께였다면 짜임새까지 자세히 적어 갔을 텐데, 아쉽습니다.']), lead);
+    if (!art.lv && !science.lv && !craft.lv) await UI.say(animal ? U.pick(['생물에 밝은 사람이나 화가가 함께였다면 새끼와 성체의 모습을 더 자세히 남겼을 텐데요. 눈에 새겨 두겠습니다.', '가까이 갈 수는 없으니 발자국과 생김새를 잘 기억해 두어야겠습니다.']) : natural ? U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 넓은 풍경을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '산줄기와 물길의 생김새를 화첩에 남기지 못해 아쉽습니다. 눈에 새겨 두어야겠습니다.']) : U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 모습을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '솜씨 좋은 화가나 장인이 함께였다면 짜임새까지 자세히 적어 갔을 텐데, 아쉽습니다.']), lead);
     if (rec.k > 1.0001) {
       var extra = Math.round(fame - fame / rec.k);
       await UI.say('이만큼 자세한 ' + (art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록') + '이라면 유럽의 학자와 궁정도 믿지 않을 수 없겠지요. 제독의 이름이 한층 더 널리 알려질 겁니다.', lead);

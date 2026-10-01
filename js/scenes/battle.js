@@ -675,6 +675,7 @@
     var lines = [];
     if (res === 'win') {
       s.stats.wins++;
+      if (G.SeaFolk) G.SeaFolk.afterBattle(st.npc, res, lines);   // 탐험 함대를 꺾으면 그 항해가 한 해 늦어진다
       var gold = 0, caps = [];
       st.ships.forEach(function (b) {
         if (b.side !== 'en') return;

@@ -159,6 +159,7 @@ DISC = {
     'penguin':     dict(gbif='Spheniscus demersus', obis='Spheniscus demersus', wiki='African penguin'),
     'mandrill':    dict(gbif='Mandrillus sphinx', wiki='Mandrill'),
     'ostrich':     dict(gbif='Struthio camelus', wiki='Common ostrich'),
+    'flamingo':    dict(gbif='Phoenicopterus roseus', wiki='Greater flamingo'),
     'hippo':       dict(gbif='Hippopotamus amphibius', wiki='Hippopotamus'),
     'crocodile':   dict(gbif='Crocodylus niloticus', wiki='Nile crocodile', whc=801),    # 투르카나 호수
     'polarbear':   dict(gbif='Ursus maritimus', obis='Ursus maritimus', wiki='Polar bear'),

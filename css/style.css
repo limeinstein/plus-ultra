@@ -816,7 +816,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .pinnote { position: absolute; left: 50%; top: 64px; transform: translateX(-50%); z-index: 75; max-width: 980px; padding: 10px 20px; font-size: 17px; line-height: 1.5; box-shadow: 0 6px 18px rgba(0,0,0,.5); pointer-events: none; }
 .pinnote .pn-g { margin-top: 2px; }
 
-/* 유적 발견 연출 (SC.discoveryReveal) */
+/* 유적·자연 경관·동물·보물 발견 연출 (SC.discoveryReveal) */
 .reveal { position: absolute; inset: 0; z-index: 55; pointer-events: auto; cursor: pointer; }
 .reveal .rv-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 42%, rgba(10,6,2,calc(var(--rv-dim) * .8)) 0%, rgba(4,2,1,var(--rv-dim)) 65%); opacity: 0; transition: opacity var(--rv-dim-ms) ease; }
 .reveal .rv-rays { position: absolute; left: 50%; top: 40%; width: 1700px; height: 1700px; margin: -850px 0 0 -850px; opacity: 0; transition: opacity 1.6s ease .3s;
@@ -839,9 +839,25 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .reveal.talk .rv-frame { top: 27%; transform: translate(-50%, -50%) scale(.66); }
 .reveal.talk .rv-title { top: 47%; font-size: 58px; }
 .reveal.out { opacity: 0; transition: opacity .45s ease; }
+
+/* 보물: 불 꺼진 전시실에서 큐레이터 조명이 유리·금속을 훑고 프리즘 섬광이 지나간다. */
+.reveal.treasure .rv-dim { background: radial-gradient(ellipse at 50% 42%, rgba(5,7,14,calc(var(--rv-dim) * .72)) 0%, rgba(0,0,3,var(--rv-dim)) 62%, rgba(0,0,0,.96) 100%); }
+.reveal.treasure .rv-rays { background: repeating-conic-gradient(from 18deg, rgba(255,238,186,.12) 0deg 3deg, rgba(118,190,255,.055) 3deg 6deg, transparent 6deg 19deg); -webkit-mask: radial-gradient(circle, #000 0%, transparent 58%); mask: radial-gradient(circle, #000 0%, transparent 58%); }
+.reveal.treasure .rv-frame { border-color: #f5d995; background: #010207; box-shadow: 0 0 0 1px #5b431e, 0 0 34px 8px rgba(255,231,170,.72), 0 0 115px 34px rgba(92,158,255,.20); }
+.reveal.treasure .rv-frame img, .reveal.treasure .rv-frame canvas { z-index: 1; }
+.reveal.treasure .rv-frame::before, .reveal.treasure .rv-frame::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: screen; }
+.reveal.treasure .rv-frame::before { background: radial-gradient(ellipse 28% 72% at 50% -6%, rgba(255,244,214,.34), rgba(255,207,121,.10) 45%, transparent 72%); opacity: .72; animation: rvTreasureSpot 3.2s ease-in-out infinite; }
+.reveal.treasure .rv-frame::after { z-index: 3; left: -58%; right: 58%; width: 100%; background: linear-gradient(105deg, transparent 30%, rgba(104,186,255,.13) 43%, rgba(255,255,248,.72) 49.5%, rgba(255,212,125,.19) 55%, transparent 69%); filter: blur(1px); opacity: 0; }
+.reveal.treasure.on .rv-frame { animation: rvTreasureGlow 1.8s ease-in-out 1s infinite; }
+.reveal.treasure.on .rv-frame::after { animation: rvTreasureSweep 2.1s ease-in-out .55s 4; }
+.reveal.treasure .rv-title b { background: linear-gradient(180deg, #fff 0%, #fff0bd 34%, #ffd66d 66%, #a9d8ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 12px rgba(255,255,238,1)) drop-shadow(0 0 38px rgba(255,195,72,.85)) drop-shadow(0 0 70px rgba(100,180,255,.48)); }
 @keyframes rvGlow { 0%, 100% { box-shadow: 0 0 0 1px #3a2412, 0 0 38px 8px rgba(255,208,120,.55), 0 0 120px 30px rgba(255,190,90,.25); } 50% { box-shadow: 0 0 0 1px #3a2412, 0 0 54px 14px rgba(255,220,140,.8), 0 0 170px 50px rgba(255,190,90,.38); } }
 @keyframes rvTitle { 0%, 100% { text-shadow: 0 0 12px rgba(255,220,140,.95), 0 0 36px rgba(255,190,80,.8), 0 0 80px rgba(255,160,40,.55), 0 4px 0 #6a3a10; } 50% { text-shadow: 0 0 18px rgba(255,236,180,1), 0 0 52px rgba(255,200,100,.95), 0 0 120px rgba(255,170,60,.7), 0 4px 0 #6a3a10; } }
 @keyframes rvSpin { to { transform: rotate(360deg); } }
+@keyframes rvTreasureGlow { 0%, 100% { box-shadow: 0 0 0 1px #5b431e, 0 0 34px 8px rgba(255,231,170,.72), 0 0 115px 34px rgba(92,158,255,.20); } 50% { box-shadow: 0 0 0 1px #8a6c35, 0 0 58px 16px rgba(255,248,218,.95), 0 0 170px 50px rgba(78,153,255,.34); } }
+@keyframes rvTreasureSpot { 0%, 100% { transform: translateX(-9%) rotate(-2deg); opacity: .52; } 50% { transform: translateX(9%) rotate(2deg); opacity: .82; } }
+@keyframes rvTreasureSweep { 0%, 18% { transform: translateX(-55%); opacity: 0; } 42%, 58% { opacity: .76; } 82%, 100% { transform: translateX(215%); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .reveal.treasure .rv-frame::before, .reveal.treasure.on .rv-frame::after { animation: none; } }
 
 /* 실존 인물 이야기 (js/ui/bio.js) */
 .has-bio { cursor: pointer; }

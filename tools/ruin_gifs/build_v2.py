@@ -7,7 +7,7 @@ import math
 import re
 from pathlib import Path
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
 from build import H, W, paper, pencil, tint_for_time, vertical_mask, wash_mask, watercolor
 
@@ -36,8 +36,62 @@ def cells(path: Path, rows: int = 4) -> list[Image.Image]:
         for col in range(4):
             box = (col*cw, row*ch, (col+1)*cw if col < 3 else src.width,
                    (row+1)*ch if row < rows-1 else src.height)
-            result.append(ImageOps.fit(src.crop(box), (W, H), Image.Resampling.LANCZOS))
+            result.append(fit_whole(src.crop(box)))
     return result
+
+
+# 칸(정사각형에 가까움)을 576×256에 넣는 방법.
+# 예전에는 가운데를 잘라(ImageOps.fit) 위아래가 절반 넘게 잘려 지붕·탑 끝이 보이지 않았다.
+# 이제는 칸의 맨 위(지붕 끝)부터 KEEP_BOTTOM까지 세로를 모두 살려 가운데에 두고,
+# 양옆은 그림의 바깥 가장자리(나무·하늘·물)를 흐리게 늘여 이어 그리다가 종이색으로 번지듯 사라지게 한다
+# (스케치북에 그린 수채화처럼 — 건물이 겹쳐 보이지 않게 가장자리 띠만 쓴다).
+KEEP_TOP, KEEP_BOTTOM = 0.0, 0.93   # 칸 높이에서 남길 범위 (0 = 맨 위)
+EDGE_STRIP = 0.14                   # 양옆을 이어 그릴 때 쓰는 가장자리 띠 (그림 너비 비율)
+SIDE_BLUR, SIDE_FEATHER = 12, 34    # 양옆 바탕의 흐림, 가운데 그림과 섞이는 너비(px)
+PAPER = (244, 236, 216)             # build.paper()의 바탕색
+SIDE_FADE = .85                     # 바깥 끝에서 종이색으로 바래는 정도 (1 = 완전히 종이)
+
+
+def _side(fg: Image.Image, width: int, left: bool) -> Image.Image:
+    sw = max(2, int(fg.width * EDGE_STRIP))
+    strip = fg.crop((0, 0, sw, H) if left else (fg.width - sw, 0, fg.width, H))
+    strip = ImageOps.mirror(strip)            # 이음매 쪽 색이 그대로 이어지게 뒤집어 붙인다
+    side = strip.resize((width, H), Image.Resampling.BICUBIC).filter(ImageFilter.GaussianBlur(SIDE_BLUR))
+    side = ImageEnhance.Color(side).enhance(.8)
+    paper = Image.new("RGB", (width, H), PAPER)
+    fade = Image.new("L", (width, H))
+    fp = fade.load()
+    for x in range(width):
+        t = x / max(1, width - 1)            # 0 = 이음매, 1 = 바깥 끝
+        if left:
+            t = 1 - t
+        v = int(255 * min(1, SIDE_FADE * t ** 1.4))
+        for y in range(H):
+            fp[x, y] = v
+    return Image.composite(paper, side, fade)
+
+
+def fit_whole(cell: Image.Image) -> Image.Image:
+    cw, ch = cell.size
+    part = cell.crop((0, int(ch * KEEP_TOP), cw, int(ch * KEEP_BOTTOM)))
+    fw = round(part.width * H / part.height)
+    if fw >= W:
+        return ImageOps.fit(part, (W, H), Image.Resampling.LANCZOS, centering=(0.5, 0.0))
+    fg = part.resize((fw, H), Image.Resampling.LANCZOS)
+    x0 = (W - fw) // 2
+    out = Image.new("RGB", (W, H), PAPER)
+    out.paste(_side(fg, x0 + SIDE_FEATHER, True), (0, 0))
+    rw = W - x0 - fw + SIDE_FEATHER
+    out.paste(_side(fg, rw, False), (W - rw, 0))
+    mask = Image.new("L", (fw, H), 255)
+    px = mask.load()
+    for x in range(min(SIDE_FEATHER, fw // 2)):
+        v = int(255 * (x + 1) / (SIDE_FEATHER + 1))
+        for y in range(H):
+            px[x, y] = v
+            px[fw - 1 - x, y] = v
+    out.paste(fg, (x0, 0), mask)
+    return out
 
 
 def construction_frames(master: list[Image.Image], base: Image.Image, seed: int):

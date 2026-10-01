@@ -21,7 +21,7 @@
   /** re-read G.IMAGE_FILES (e.g. after the manifest changed) */
   I.reset = function () {
     for (var b in blobs) { try { URL.revokeObjectURL(blobs[b]); } catch (e) { /* 무시 */ } }
-    files = null; imgs = {}; state = {}; waiters = {}; blobs = {};
+    files = null; imgs = {}; state = {}; waiters = {}; blobs = {}; cityAsked = {};
   };
   I.count = function () { return Object.keys(man()).length; };
   /** sorted keys that start with prefix */
@@ -100,6 +100,73 @@
     var want = {};
     Object.keys(man()).forEach(function (k) { var p = packOf(k); if (p >= 0 && [].concat(prefixes || ['']).some(function (x) { return k.indexOf(x) === 0; })) want[p] = 1; });
     return Promise.all(Object.keys(want).map(function (p) { return loadPack(+p); }));
+  };
+  /* 미리 받기 줄 — 지금 화면에 필요한 그림(I.load·I.src)은 곧바로 받고, 곧 쓸 그림(I.prefetchKeys·I.prefetchCity)은
+     한 번에 PREFETCH_MAX개씩 차례로 받는다 (지금 필요한 그림과 받는 길을 다투지 않게).
+     아티팩트판은 묶음 단위, 웹판·개발판은 그림 파일 단위. */
+  var queue = [], queued = {}, running = 0, PREFETCH_MAX = 2;
+  function pump() {
+    while (running < PREFETCH_MAX && queue.length) {
+      var job = queue.shift();
+      delete queued[job];
+      var pk = /^p:(\d+)$/.exec(job), p;
+      if (pk) { if (packs[+pk[1]]) continue; p = loadPack(+pk[1]); }
+      else { var k = job.slice(2); if (state[k] === 'ok' || state[k] === 'fail' || state[k] === 'loading') continue; p = I.load(k); }
+      running++;
+      p.then(done, done);
+    }
+    function done() { running--; setTimeout(pump, 0); }
+  }
+  /** 곧 쓸 그림들을 미리 받는다 (기다리지 않음). front: 줄 맨 앞에. 돌려주는 값: 새로 줄에 넣은 수 */
+  I.prefetchKeys = function (keys, front) {
+    var jobs = [];
+    [].concat(keys || []).forEach(function (k) {
+      if (!k || !man()[k]) return;
+      var pk = packOf(k), job = pk >= 0 ? 'p:' + pk : 'k:' + k;
+      if (pk >= 0 ? packs[pk] : state[k]) return;
+      if (queued[job] || jobs.indexOf(job) >= 0) return;
+      jobs.push(job);
+    });
+    jobs.forEach(function (j) { queued[j] = 1; });
+    queue = front ? jobs.concat(queue) : queue.concat(jobs);
+    pump();
+    return jobs.length;
+  };
+  /** 한 도시에서 쓸 그림을 미리 받는다. level 'near' = 거리 배경과 건물 겉모습(항구에 다가갈 때),
+      'in'(기본) = 건물 안·마을 사람·여급·후원자·그 지역 동료 얼굴까지(도시에 들어갔을 때) */
+  var cityAsked = {};
+  I.prefetchCity = function (c, level) {
+    if (!c || !I.count()) return 0;
+    level = level || 'in';
+    var tag = c.id + ':' + level;
+    if (cityAsked[tag]) return 0;
+    cityAsked[tag] = 1;
+    var keys = [];
+    function add(chain) { var k = I.pick(chain); if (k) keys.push(k); }
+    add(K.bg(c));
+    I.INTERIORS.forEach(function (b) { add(K.exterior(b[0], c)); });
+    if (level === 'in') {
+      cityAsked[c.id + ':near'] = 1;
+      I.NPCS.forEach(function (n) { add(K.npc(n[0], c)); });
+      I.INTERIORS.forEach(function (b) { add(K.interior(b[0], c)); });
+      (G.SPONSORS || []).forEach(function (sp) { if (sp.city === c.id) I.list('portraits/sponsors/' + sp.id).forEach(function (k) { keys.push(k); }); });
+      (G.MAIDS || []).forEach(function (m) { if (m.city === c.id) { add(K.maid(m.id, c)); add(K.maidHalf(m.id, c)); } });
+      add(K.maidCity(c)); add(K.maidCityHalf(c));
+      (G.MATES || []).forEach(function (m) { if (m.reg && m.reg[0] === c.region) add(K.mate(m.id)); });
+    }
+    return I.prefetchKeys(keys);
+  };
+  /** 지금 데리고 있는 동료들의 얼굴 (바다·해전·사건 대화에 바로 나오게) */
+  I.prefetchCrew = function () {
+    var s = G.Game && G.Game.state, A = G.Art;
+    if (!s || !s.mates) return 0;
+    var keys = [];
+    s.mates.forEach(function (m) {
+      var spec = G.Scenes && G.Scenes.mateSpec ? G.Scenes.mateSpec(m.id) : null;
+      var k = I.pick((A && A.portraitKeys && spec && A.portraitKeys(spec)) || K.mate(m.id));
+      if (k) keys.push(k);
+    });
+    return I.prefetchKeys(keys, true);
   };
   I.src = function (k) {
     var f = man()[k]; if (!f) return null;
@@ -297,6 +364,11 @@
   K.heroWalk = function () {
     var id = I.heroLook(), l = id === 'admiral' ? [] : I.list('characters/' + id + '/walk_');
     return l.length ? l : I.list('characters/walk_');
+  };
+  /** 뛰는 그림 여러 장 (characters/<이름>/run_1 …, 기본 제독은 characters/run_1 …) — 없으면 거리에서 먼 길도 걷는 그림으로 간다 */
+  K.heroRun = function () {
+    var id = I.heroLook();
+    return I.list(id === 'admiral' ? 'characters/run_' : 'characters/' + id + '/run_');
   };
   /** 수첩에서 보는 반신상 (기본 characters/player_half, 다른 생김새는 characters/player_half_<이름> — 없으면 코드 초상) */
   K.heroHalf = function () { var id = I.heroLook(); return [id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id]; };

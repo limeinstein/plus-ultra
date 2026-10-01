@@ -124,6 +124,7 @@
     // 리스본·세비야: 앞선 발견이 알려지면 다음 큰 항로 이야기가 먼저 돈다
     var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(c.id, 'tavern') : null;
     if (lead) { await C.say(m, lead.text); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); return; }
+    if (G.Animals && await G.Animals.tavern(c, m)) return;        // 이 고장에 사는 동물 이야기 (js/systems/animals.js)
     var d = T.rumour(c);
     if (!d) { await C.say(m, T.quietLine()); return; }
     G.Disc.addHint(d.id, 'tavern:' + c.id);
@@ -206,7 +207,7 @@
     var s = S(), fame = s.player.fame;
     var maxD = fame < 300 ? 1 : fame < 1500 ? 2 : fame < 3500 ? 3 : 5;
     var cand = G.DISCOVERIES.filter(function (d) {
-      if (d.id === 'circum' || G.Disc.foundByMe(d.id) || s.hints[d.id]) return false;
+      if (d.id === 'circum' || d.bookOnly || G.Disc.foundByMe(d.id) || s.hints[d.id]) return false;
       if (!G.Disc.available(d)) return false;
       var hot = G.Frontier && G.Frontier.hot(d);
       if (d.how === 'trade' && !hot) return false;
@@ -475,6 +476,7 @@
     return G.DISCOVERIES.filter(function (d) {
       if (!d.rival) return false;
       var st = s.disc[d.id]; if (st && (st.rival || st.me)) return false;
+      if (G.SeaFolk && G.SeaFolk.rivalAtSea(d)) return false;   // 항해를 떠나 바다에 있다
       // 그 단계에 소문조차 돌지 않으면 (예: 향료제도도 모르는데 지팡그) 아직 나타나지 않는다
       var fr = G.Frontier && G.Frontier.of(d); if (fr && G.Frontier.state(fr.id).lv < 1) return false;
       var ry = d.rival[0] + (s.flags['delay_' + d.id] || 0);

@@ -66,7 +66,8 @@
     ff: '<path d="M4 5l8 7-8 7zM12 5l8 7-8 7z"/>',
     target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
     globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
-    cross: '<path d="M12 2v20M6 8h12"/>'
+    cross: '<path d="M12 2v20M6 8h12"/>',
+    fish: '<path d="M3 12c3-5 9-6 13-2l5-3v10l-5-3c-4 4-10 3-13-2z"/><circle cx="8" cy="11" r="1" fill="currentColor"/>'
   };
   G.icon = function (name, cls) {
     var p = P[name] || P.info;

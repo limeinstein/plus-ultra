@@ -87,6 +87,7 @@
     if (id === 'timber' && G.Ships) G.Ships.noteTimber(c, q, cg ? cg.q - q : 0);     // 목재는 산지를 적어 둔다 (조선소에서 쓴다)
     R.onBuy(c, id, q);
     s.stats.trades++;
+    if (G.Hostile) G.Hostile.trade(c, q * price);   // 그 나라와 교역하면 적대가 줄어든다
     UI.toast(g.name + ' ' + q + '통을 샀다. (금화 ' + U.num(q * price) + '닢)', 'coin');
     G.Game.refreshHud();
     var ds = G.Disc.checkTrade(id, c);
@@ -142,6 +143,7 @@
     while (left > 0) { var n = Math.min(chunk, left); total += sellP(c, id) * n; R.onSell(c, id, n); left -= n; }
     var profit = total - cg.cost * q;
     s.player.gold += total; s.stats.profit += profit; s.stats.trades++;
+    if (G.Hostile) G.Hostile.trade(c, total);
     if (profit > 0) s.player.fame += Math.floor(profit / 2500);
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
     G.Game.refreshHud();

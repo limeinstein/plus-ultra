@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""발견 GIF(유적 복원·자연 파노라마) → 한 장짜리 장면 판(스프라이트 시트) images/discovery-sheets/ID.webp
+"""발견 GIF(유적 복원·자연 파노라마·동물 등장·보물 회전) → 한 장짜리 장면 판(스프라이트 시트) images/discovery-sheets/ID.webp
 
     python tools/ruin_gifs/sheets.py            # 바뀐 GIF만 새로 만든다
     python tools/ruin_gifs/sheets.py --all      # 모두 다시

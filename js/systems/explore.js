@@ -39,6 +39,7 @@
       if (mk[d.id] || G.Disc.foundByMe(d.id)) return;
       if (d.how !== 'sea' && d.how !== 'land') return;
       if (!G.Disc.available(d)) return;          // 아직 소문조차 없는 것은 알아보지 못한다
+      if (d.bookOnly && !s.hints[d.id]) return;   // 전설·공룡은 책을 읽고 나서야 알아본다
       var hint = s.hints[d.id] ? 1.4 : 1;
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = mode === 'sea' ? (d.how === 'sea' ? rs : rc) : (d.how === 'land' ? rl : 0);
@@ -168,7 +169,7 @@
   function nearUnknown(lon, lat, maxD, filter) {
     var s = S(), best = null, bd = maxD;
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how === 'special' || d.how === 'trade' || d.how === 'city' || G.Disc.foundByMe(d.id) || s.hints[d.id] || !G.Disc.available(d)) return;
+      if (d.how === 'special' || d.how === 'trade' || d.how === 'city' || d.bookOnly || G.Disc.foundByMe(d.id) || s.hints[d.id] || !G.Disc.available(d)) return;
       if (filter && !filter(d)) return;
       var dd = G.Geo.dist(lon, lat, d.lon, d.lat);
       if (dd < bd) { bd = dd; best = d; }

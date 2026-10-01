@@ -35,7 +35,10 @@
   /** 이미 풀어 둔 판 (없으면 null) — 기다리지 않는다 */
   R.now = function (key) { return info[key] || null; };
   /** 곧 볼지도 모르는 발견물: 기다리지 않고 받기만 시작한다. 여러 번 불러도 한 번만 받는다 */
-  R.prefetch = function (d) { var k = R.key(d); if (k && !ready[k]) R.load(k); };
+  R.prefetch = function (d) {
+    var k = R.key(d); if (k && !ready[k]) R.load(k);
+    if (d && I() && I().prefetchKeys) I().prefetchKeys(['discovery-ends/' + d.id]);   // 발견 카드·신기루의 마지막 장면 그림 (아티팩트판은 묶음에 있다)
+  };
 
   /** 한 순간(p: 0~1)의 그림을 ctx에 그린다 — 장면 사이는 겹쳐서 */
   function drawAt(ctx, L, p, W, H) {

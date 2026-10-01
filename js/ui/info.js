@@ -60,6 +60,7 @@
       '<div>나이</div><div>' + R.age() + '세 (' + p.born.m + '월 ' + p.born.d + '일생 · ' + z.name + ')</div><div>명성</div><div>' + U.num(p.fame) + '</div>' +
       '<div>소지금</div><div>' + U.num(p.gold) + '닢</div><div>예금</div><div>' + U.num(p.bank) + '닢</div>' +
       '<div>악명</div><div>' + U.num(p.notoriety) + '</div><div>건강</div><div>' + Math.round(p.hp) + ' / 100</div>' +
+      (G.Hostile ? '<div>적대</div><div style="grid-column:span 3">' + G.Hostile.html() + '</div>' : '') +
       '<div>무기</div><div>' + (p.equip.weapon ? G.ITEM[p.equip.weapon].name + ' (공격 ' + G.ITEM[p.equip.weapon].atk + ')' : '없음') + '</div><div>방어구</div><div>' + (p.equip.armor ? G.ITEM[p.equip.armor].name + ' (방어 ' + G.ITEM[p.equip.armor].def + ')' : '없음') + '</div>' +
       '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') : '없음') + '</div><div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return G.Family.kidName(k) + ' <small class="muted">' + G.Family.kidAge(k) + '세</small>'; }).join(', ') : '없음') + '</div></div>' +
       '<div class="sep"></div><div class="grid2">' +
