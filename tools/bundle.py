@@ -25,7 +25,7 @@ ARTIFACT_FILES = 500                   # 아티팩트 한 판 파일 수 한도(
 PACK_TARGET = int(2 * 1024 * 1024)     # 그림 묶음 파일 하나의 크기 (대략) — 작을수록 한 장면에서 덜 받지만 파일 수가 는다 (장면 판 344장과 합쳐 한 판 511개 안에서)
 
 
-PACK_SMALL = 320 * 1024                # 이보다 작은 묶음은 같은 갈래의 이웃 묶음과 합친다 (파일 수가 너무 늘지 않게)
+PACK_SMALL = 1024 * 1024               # 이보다 작은 묶음은 같은 갈래의 이웃 묶음과 합친다 (파일 수가 너무 늘지 않게 — 한 판 511개)
 
 # 지역 여급 그림 묶음 → 그 그림을 쓰는 문화권 (js/core/images.js I.MAID_POOL)
 MAID_CULTURE = {'westeurope': 'europe', 'iberia': 'europe', 'britain': 'europe', 'germany': 'europe', 'france': 'europe',
