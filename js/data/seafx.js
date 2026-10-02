@@ -211,18 +211,16 @@
     party: true,         // 육상 탐험대를 8방향 그림 시트로 (탈것마다 천천히·빨리 두 장 — 시트가 없는 탈것은 코드 그림)
     partyScale: 0.95,    // 탐험대 그림 배율 × G.FX.party.size (시트에서 세 사람 무리의 키가 약 50px)
     partyCycle: 1,       // 걸음 주기 하나에 넘기는 시트 한 바퀴의 수
-    partyGap: 44,        // 무리 사이 간격(px, 크기 1 기준) — 대원이 많으면 무리가 둘·셋으로 늘어선다
-    partyGroupAt: 15,    // 대원이 이만큼이면 두 무리, 세 배면 세 무리
     partyFastPx: 70,     // 화면에서 초당 이만큼(px) 넘게 움직이면 뛰기·질주 장면
     partyFps: { on_foot_walk: 9, on_foot_run: 11, mounted_walk: 9, mounted_gallop: 9 },
     battle: true,        // 육상전 부대를 그림 시트로
-    unitH: 58,           // 육상전 병사 키(px, 1000×430 판 기준) — 짐승은 beastH
-    beastH: 42,
-    sheetK: { natives: 1.3, animals: 1.7 },   // 시트마다 덧붙이는 배율 (원주민은 머리 위 지팡이, 짐승은 뛰어오르는 장면 때문에 재는 키가 커서 몸이 작아 보인다)
+    unitH: 56,           // 육상전 병사 몸 키(px, 1000×430 판 기준 — 치켜든 무기는 빼고) · 짐승은 beastH
+    beastH: 40,
+    sheetK: { natives: 1.3 },   // 시트마다 덧붙이는 배율 — 원주민 주술 전사는 머리 위로 늘 지팡이가 솟아 몸이 작게 재진다
     battleFps: { idle: 5, walk: 10, attack: 12, hurt: 8, dead: 6 },
     events: true,        // 항해·육상 탐험 사건 그림 (js/art/eventfx.js)
-    eventW: 720,         // 사건 그림 창 크기(1600×900 화면 기준)
-    eventH: 300,
+    eventW: 640,         // 사건 그림 창 안쪽 크기(1600×900 화면 기준, 나무틀 10px 은 따로)
+    eventH: 280,
     eventBottom: 205     // 창 아래 끝이 화면 아래에서 이만큼 위 (대화창 바로 위)
   };
 })(window.G = window.G || {});

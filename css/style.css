@@ -697,6 +697,12 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .items-tbl td:nth-child(3) { white-space: nowrap; }
 /* 캠프파이어 */
 .campfire { display: flex; flex-direction: column; gap: 10px; }
+/* 사건 그림창 (js/art/eventfx.js) — 대화창 바로 위 */
+.eventfx { position: absolute; z-index: 59; padding: 10px; pointer-events: none !important; opacity: 0; transform: translateY(8px); transition: opacity .28s ease, transform .28s ease; }
+.eventfx.on { opacity: 1; transform: none; }
+.eventfx canvas { display: block; border: 1px solid #0c0806; box-shadow: inset 0 0 0 1px rgba(227,198,141,.2); }
+.eventfx-title { position: absolute; left: 50%; top: -14px; transform: translateX(-50%); padding: 3px 18px; font-size: 16px; letter-spacing: .08em; color: var(--cream);
+  background: linear-gradient(180deg, #3a2a1a, #23180e); border: 1px solid #0c0806; box-shadow: inset 0 0 0 1px rgba(227,198,141,.3); white-space: nowrap; }
 .campfire canvas { width: 100%; height: auto; display: block; border: 2px solid #7a5c33; }
 .campfire .cf-text { font-size: 19px; line-height: 1.7; }
 .campfire .cf-res { font-size: 16px; color: var(--ink-soft); text-align: center; }

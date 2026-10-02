@@ -196,19 +196,21 @@ def valid_keys(d):
         k['ships-nav/' + s['id']] = '항해·해전 8방향 동작 배 · ' + s['name']
     k['effects/ship_spray'] = '항해 효과 · 선수 물보라 스프라이트 시트'
     k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
-    # 육상전·육상 탐험·항해 사건 스프라이트 (tools/sprite_repack.py 가 만든다, 칸·피벗은 js/data/sprites.js)
-    for sid, label in [('officers', '육상전 · 제독대(장교)'), ('musketeers', '육상전 · 총병'), ('cannons', '육상전 · 포병'),
-                       ('swordsmen', '육상전 · 칼잡이 보병'), ('east_fighters', '육상전 · 동아시아 무사'), ('ottoman', '육상전 · 오스만 군'),
-                       ('natives', '육상전 · 원주민 전사'), ('animals', '육상전·탐험 · 들짐승'), ('whale', '항해 사건 · 고래'),
-                       ('dolphin', '항해 사건 · 돌고래'), ('mermaid', '항해 사건 · 인어'), ('storm', '항해 사건 · 폭풍'),
-                       ('raincloud', '항해 사건 · 비구름'), ('rain', '항해 사건 · 소나기'), ('sun', '항해 사건 · 뙤약볕'),
-                       ]:
-        k['sprites/' + sid] = label + ' 스프라이트 시트'
-    # 탐험대 8방향 시트는 탈것마다 둘씩(천천히·빨리) — sprite_repack.py 가 매니페스트대로 만든 party_* 를 모두 받는다
+    # 육상전·육상 탐험·항해 사건 스프라이트 — tools/sprite_repack.py 가 images/sprites/ 에 만든 시트를 모두 받는다 (칸·피벗은 js/data/sprites.js)
+    names = {'officers': '육상전 · 제독대 0~3단계', 'musketeers': '육상전 · 총병 0~3단계', 'cannons': '육상전 · 포병 0~3단계',
+             'swordsmen': '육상전 · 보병 0~3단계', 'east_fighters': '육상전 적 · 동아시아', 'ottoman': '육상전 적 · 오스만·서아시아',
+             'natives': '육상전 적 · 아프리카·아메리카 주술 전사', 'animals': '육상전·탐험 · 지역 짐승', 'west_europe': '육상전 적 · 서유럽',
+             'india_central': '육상전 적 · 인도·중앙아시아', 'southeast_asia': '육상전 적 · 동남아시아', 'africa_regions': '육상전 적 · 아프리카',
+             'meso_south': '육상전 적 · 중남미', 'north_america': '육상전 적 · 북아메리카', 'pacific': '육상전 적 · 태평양·오세아니아',
+             'whale': '항해 사건 · 고래', 'dolphin': '항해 사건 · 돌고래', 'mermaid': '항해 사건 · 인어', 'storm': '항해 사건 · 폭풍',
+             'raincloud': '항해 사건 · 비구름', 'rain': '항해 사건 · 소나기', 'sun': '항해 사건 · 뙤약볕'}
     sp = os.path.join(IMG, 'sprites')
     for f in sorted(os.listdir(sp)) if os.path.isdir(sp) else []:
-        if f.startswith('party_'):
-            k['sprites/' + os.path.splitext(f)[0]] = '육상 탐험 · 탐험대 8방향 (%s)' % os.path.splitext(f)[0][6:]
+        sid = os.path.splitext(f)[0]
+        if sid.startswith('party_'):
+            k['sprites/' + sid] = '육상 탐험 · 탐험대 8방향 (%s)' % sid[6:]
+        else:
+            k['sprites/' + sid] = names.get(sid, '스프라이트 · ' + sid) + ' 스프라이트 시트'
     return k
 
 

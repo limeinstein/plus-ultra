@@ -39,6 +39,8 @@
     st.alive = true; st.busy = 0; st.keys = {}; st.dir = null;
     buildUI();
     if (G.Audio) G.Audio.music('land');
+    if (G.EventFx) G.EventFx.preload('land');
+    if (G.Party.preloadSprites) G.Party.preloadSprites(MT().id);
   };
   function newSt(start) { return { cam: { lon: start[0], lat: start[1], zoom: 170 }, path: null, t: 0, busy: 0, paused: true, dayAcc: 0, speed: 1, trail: [], seen: {}, near: null, lastHint: -99, gph: 0, gdist: 0, gather: 1, face: 1, pfx: G.Party.newFx(), unit: {} }; }
   L.runtime = function () { return st; };

@@ -31,34 +31,9 @@
   var TERR_BG = { grass: ['#6f8a4a', '#51683a'], steppe: ['#a09a5a', '#7a7440'], desert: ['#d8b878', '#b89458'], forest: ['#46643a', '#2e4a2a'], jungle: ['#3a5a30', '#223a1e'],
     mountain: ['#8a8474', '#666050'], snow: ['#e8ecf0', '#c4ccd6'], tundra: ['#a8a888', '#84846a'], ice: ['#dfeaf2', '#b8ccdc'] };
 
-  /* 그린 스프라이트 (images/sprites/, js/art/sprites.js): 부대 생김새(look) → [시트, 줄]. 그림이 없으면 아래 fig()가 코드로 그린다.
-     적은 싸우는 곳에 따라 다르다 — 동아시아(east) · 오스만 땅(ottoman) · 그 밖(etc). 짐승은 사는 땅에 따라 */
-  var LOOK = {
-    sword: ['swordsmen', 'blade'], musket: ['musketeers', 'musketeer'], 'musket+': ['musketeers', 'musketeer2'],
-    cannon_me: ['cannons', 'gunner'], 'cannon_me+': ['cannons', 'gunner2'], adm: ['officers', 'officer3'], 'adm+': ['officers', 'admiral'],
-    spear: ['natives', 'warrior'], bow: ['natives', 'shaman'], 'chief:native': ['natives', 'shaman'],
-    'blade:etc': ['swordsmen', 'club'], 'blade:ottoman': ['swordsmen', 'club'], 'blade:east': ['east_fighters', 'brute'],
-    'musket:etc': ['musketeers', 'bandit_gun'], 'musket:ottoman': ['musketeers', 'bandit_gun'], 'musket:east': ['musketeers', 'pirate_gun'],
-    'chief:etc': ['swordsmen', 'blade3'], 'chief:ottoman': ['swordsmen', 'blade3'], 'chief:east': ['east_fighters', 'ninja'],
-    'pike:etc': ['swordsmen', 'blade2'], 'pike:ottoman': ['ottoman', 'shield'], 'pike:east': ['east_fighters', 'spearman'],
-    'gmusket:etc': ['musketeers', 'musketeer'], 'gmusket:ottoman': ['ottoman', 'janissary'], 'gmusket:east': ['musketeers', 'pirate_gun'],
-    'cannon:etc': ['cannons', 'cannon_crew'], 'cannon:ottoman': ['ottoman', 'topcu'], 'cannon:east': ['cannons', 'bandit_cannon'],
-    'gchief:etc': ['officers', 'officer2'], 'gchief:ottoman': ['ottoman', 'shield'], 'gchief:east': ['east_fighters', 'scholar']
-  };
-  function landOf(lon, lat) {
-    if (lon > 98 && lat > -12) return 'east';
-    if (lon > 18 && lon < 62 && lat > 12 && lat < 46) return 'ottoman';
-    return 'etc';
-  }
-  /** 짐승 떼: [떼, 우두머리] — 아프리카는 하이에나 떼와 사자, 인도·동남아는 호랑이, 아메리카는 재규어·곰, 북쪽은 곰, 그 밖은 멧돼지 */
-  function beastsOf(lon, lat) {
-    if (lon > -20 && lon < 52 && lat < 16) return ['hyena', 'lion'];
-    if (lon > 62 && lon < 125 && lat < 32) return ['tiger', 'tiger'];
-    if (lon < -30) return lat > 32 ? ['bear', 'bear'] : ['jaguar', 'jaguar'];
-    if (lat > 52) return ['bear', 'bear'];
-    return ['boar', 'bear'];
-  }
-  G.LANDWAR_LOOK = { landOf: landOf, beastsOf: beastsOf };
+  /* 그린 스프라이트 (images/sprites/, js/art/sprites.js): 우리 편은 솜씨 단계, 적은 싸우는 땅에 따라 — 짝은 js/data/landwarart.js.
+     그림이 없으면 아래 fig()가 코드로 그린다 */
+  function ART() { return G.LANDWAR_ART || null; }
   function S() { return G.Game.state; }
   function sk(id) { return R.skill(id); }
   function mountInfo() {
@@ -115,9 +90,14 @@
     var fx = [], shakeT = 0, t0 = performance.now(), log = [];
     var mi = mountInfo();
     mine.forEach(function (u) { if (u.type === 'cav') u.ride = mi.name; });
-    var here = S().loc || {}, land = landOf(here.lon || 0, here.lat || 0), beasts = beastsOf(here.lon || 0, here.lat || 0);
-    var SPR = G.Sprites, SFX = (G.FX && G.FX.sprites) || {}, useSpr = !!SPR && SFX.battle !== false;
-    if (useSpr) SPR.preload(['swordsmen', 'musketeers', 'cannons', 'officers', 'natives', 'east_fighters', 'ottoman', 'animals']);
+    var here = S().loc || {}, LA = ART(), reg = LA ? LA.regions[LA.regionOf(here.lon || 0, here.lat || 0)] : null;
+    var SPR = G.Sprites, SFX = (G.FX && G.FX.sprites) || {}, useSpr = !!(SPR && LA && reg) && SFX.battle !== false;
+    if (useSpr) {
+      var need = ['swordsmen', 'musketeers', 'cannons', 'officers', 'animals'];
+      ['m', 'r', 'l', 'c', 'bandit'].forEach(function (k) { if (reg[k] && need.indexOf(reg[k][0]) < 0) need.push(reg[k][0]); });
+      SPR.preload(need);
+      if (LA.cav[mi.name]) SPR.partyReady(LA.cav[mi.name]);   // 기병 그림(말 탄 탐험대)도 미리
+    }
     if (G.Audio) G.Audio.music('battle');
 
     return new Promise(function (resolve) {
@@ -182,26 +162,30 @@
         ctx.restore();
       }
       /** 이 부대의 그림: {id 시트, row 줄} · {party 말 탄 탐험대 시트} · null(코드 그림) */
+      /** 우리 편 단계 (0~3): 보병 = 검술, 총병 = 사격술, 포병 = 포술, 제독대 = 세 솜씨의 평균 (셋 다 3이면 전설) */
+      function tierOf(u) {
+        var skill = LA.mine[u.type] && LA.mine[u.type][1];
+        if (skill) return U.clamp(sk(skill), 0, 3);
+        if (u.type === 'adm') return upgraded('adm') ? 3 : U.clamp(Math.floor((sk('sword') + sk('shoot') + sk('gun')) / 3), 0, 2);
+        return 0;
+      }
       function sprOf(u) {
         if (!useSpr) return null;
-        if (u._spr !== undefined && u._sprUp === u.up && u._sprType === u.type) return u._spr;
-        var key = null, me = u.side === 'me', r = null;
-        if (me) key = u.type === 'inf' ? 'sword' : u.type === 'gun' ? 'musket' : u.type === 'art' ? 'cannon_me' : u.type === 'adm' ? 'adm' : null;
-        if (me && key && u.up && LOOK[key + '+']) key += '+';
-        if (me && u.type === 'cav') r = { party: u.ride === '낙타' ? 'camel_gallop' : u.ride === '코끼리' ? 'elephant_charge' : 'mounted_gallop' };
-        else if (!me && u.look === 'beast') r = { id: 'animals', row: SPR.row('animals', u.leader ? beasts[1] : beasts[0]), beast: 1 };
+        if (u._spr !== undefined && u._sprType === u.type) return u._spr;
+        var me = u.side === 'me', r = null, L = null;
+        if (me && u.type === 'cav') r = LA.cav[u.ride] ? { party: LA.cav[u.ride] } : null;
+        else if (me) { var mm = LA.mine[u.type]; if (mm) r = { id: mm[0], row: tierOf(u) }; }
+        else if (u.look === 'beast') r = { id: 'animals', row: SPR.row('animals', u.leader ? reg.b[1] : reg.b[0]), beast: 1 };
         else {
-          if (!me) {
-            var g = e.kind === 'garrison';
-            key = u.look === 'chief' ? (e.kind === 'native' ? 'chief:native' : (g ? 'gchief:' : 'chief:') + land)
-              : u.look === 'musket' ? (g ? 'gmusket:' : 'musket:') + land
-              : LOOK[u.look] ? u.look : u.look + ':' + land;
-          }
-          var L = key && LOOK[key];
+          L = u.leader ? reg.l
+            : u.look === 'cannon' ? (reg.c || reg.m)
+            : u.look === 'bow' || u.look === 'musket' ? reg.r
+            : u.look === 'blade' && reg.bandit ? reg.bandit
+            : reg.m;
           if (L) r = { id: L[0], row: SPR.row(L[0], L[1]) };
         }
-        if (r && r.id && r.row < 0) r = null;
-        u._spr = r; u._sprUp = u.up; u._sprType = u.type;
+        if (r && r.id && !(r.row >= 0)) r = null;
+        u._spr = r; u._sprType = u.type;
         return r;
       }
       /** 지금 보일 동작 (공격·다침은 한 바퀴, 쓰러지면 dead, 움직이면 walk) */
@@ -216,15 +200,13 @@
         if (sp.party) {
           if (!SPR.partyReady(sp.party)) return false;
           var nfp = SPR.partyFrames(sp.party), kk = (SFX.unitH || 50) * 1.2 / SPR.partyHeight(sp.party) * k0;
-          var nf2 = U.clamp(Math.ceil(u.n / 4), 1, 2), moving = act === 'walk' || act === 'attack';
-          for (var j = 0; j < nf2; j++) {
-            SPR.drawParty(ctx, sp.party, face > 0 ? 2 : 6, moving ? Math.floor(t * 9 + j) % nfp : j, x + (j - (nf2 - 1) / 2) * 44 * face, y + (j % 2) * 6, kk);
-          }
+          var moving = act === 'walk' || act === 'attack';   // 그림 한 장이 말 탄 세 사람 — 겹쳐 그리지 않는다
+          SPR.drawParty(ctx, sp.party, face > 0 ? 2 : 6, moving ? Math.floor(t * 9) % nfp : 0, x, y, kk);
           return true;
         }
         var id = sp.id, row = sp.row;
         if (!SPR.ready(id)) return false;
-        var k = ((sp.beast ? SFX.beastH : SFX.unitH) || 46) / SPR.height(id) * k0 * ((SFX.sheetK || {})[id] || 1);
+        var k = ((sp.beast ? SFX.beastH : SFX.unitH) || 46) / SPR.bodyH(id) * k0 * ((SFX.sheetK || {})[id] || 1);
         var big = id === 'cannons' || (id === 'ottoman' && row === 1);
         var nf = U.clamp(Math.ceil(u.n / 4), 1, big ? 2 : sp.beast ? 3 : 6), gap = big ? 58 : sp.beast ? 42 : 24;
         for (var i = 0; i < nf; i++) {

@@ -32,7 +32,7 @@ python tools/sprite_repack.py                   # images/_extra/sprite_src/*.png
 python tools/sprite_repack.py animals --debug   # 한 시트만, 장면 번호 점검 그림은 images/_extra/sprite_debug/
 ```
 
-numpy·Pillow 가 필요합니다. 줄마다 장면 수(`n`)를 알려 주면 세로로 자를 자리를 동적 계획법으로 고르고, 이어진 픽셀 덩어리·몸통 씨앗을 따라 겹친 망토·칼·꼬리를 제 장면에 붙입니다. 시트별 설정(장면 수·합치기/나누기·동작별 장면 번호)은 파일 맨 위 `SHEETS`에 있습니다. 다시 만든 뒤에는 `python tools/images.py`.
+`--meta` 는 시트를 다시 짜지 않고 `js/data/sprites.js` 만 다시 씁니다(몸 키 등). numpy·Pillow 가 필요합니다. 줄마다 장면 수(`n`)를 알려 주면 세로로 자를 자리를 동적 계획법으로 고르고, 이어진 픽셀 덩어리·몸통 씨앗을 따라 겹친 망토·칼·꼬리를 제 장면에 붙입니다. 시트별 설정(장면 수·합치기/나누기·동작별 장면 번호)은 파일 맨 위 `SHEETS`에 있습니다. 다시 만든 뒤에는 `python tools/images.py`.
 
 ## pages.py
 

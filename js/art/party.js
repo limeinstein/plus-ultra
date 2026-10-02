@@ -391,7 +391,7 @@
   P.draw = function (ctx, u) {
     var FP = FXP(), s = u.size || FP.size || 1, gapK = (FP.spacing || 1) * s;
     var spr = spriteMode(u);
-    if (spr) return drawSprites(ctx, u, spr, s, gapK);
+    if (spr) return drawSprites(ctx, u, spr, s);
     var key = (u.mount && u.mount.id) + ':' + (u.mount && u.mount.n) + ':' + u.party + ':' + u.draft + ':' + u.region;
     if (u.cache && u.cache.key === key) var list = u.cache.list;
     else { list = P.compose(u.mount, u.party, u.draft, u.region); list.forEach(function (m, i) { m.poff = (i * 0.37) % 1; }); list[0].leader = 1; if (u.cache) { u.cache.key = key; u.cache.list = list; } }
@@ -426,44 +426,28 @@
   };
   P.SPRITE_SHEETS = SHEETS;
   function FXS() { return (G.FX && G.FX.sprites) || {}; }
+  /** 육상 탐험에 들어갈 때 지금 탈것의 시트(천천히·빨리)를 미리 받는다 — 받는 동안 코드 그림 대원이 잠깐 보이지 않게 */
+  P.preloadSprites = function (mountId) { var pair = SHEETS[mountId || 'walk'], SPR = G.Sprites; if (pair && SPR) pair.forEach(function (m) { SPR.partyReady(m); }); };
   /** 이 탐험대를 그릴 시트 {mode, foot(뒤 무리가 걸어야 하면 걷는 시트)} 또는 null */
   function spriteMode(u) {
     var SPR = G.Sprites, id = (u.mount && u.mount.id) || 'walk', pair = SHEETS[id];
     if (!SPR || FXS().party === false || !pair) return null;
     var fast = u.fast && u.moving, mode = pair[fast ? 1 : 0];
     if (!SPR.partyReady(mode)) { if (fast && SPR.partyReady(pair[0])) mode = pair[0]; else { SPR.partyReady(pair[1]); return null; } }
-    // 짐승이 모자라면(필요한 수의 절반 밑) 뒤따르는 무리는 걸어서 간다
-    var few = id !== 'walk' && G.Mounts && (u.mount.n || 0) < G.Mounts.need(id, u.party) * 0.5;
-    var foot = few ? SHEETS.walk[fast ? 1 : 0] : null;
-    if (foot && !SPR.partyReady(foot)) foot = SPR.partyReady(SHEETS.walk[0]) ? SHEETS.walk[0] : null;
-    return { mode: mode, foot: foot, big: id !== 'walk' && id !== 'porter' };
+    return { mode: mode, big: id !== 'walk' && id !== 'porter' };
   }
-  function drawSprites(ctx, u, sm, s, gapK) {
+  /* 그림 한 장에 제독과 동료 둘(세 사람)이 다 들어 있다 — 대원 수와 상관없이 한 무리만 그린다 */
+  function drawSprites(ctx, u, sm, s) {
     var SPR = G.Sprites, C = FXS(), k = s * (C.partyScale || 0.95);
+    var n = SPR.partyFrames(sm.mode), fps = (C.partyFps || {})[sm.mode] || 9;
     // 걸음 장면은 간 거리(phase: 걸음 주기)로 넘기고, 멈추면 첫 장면에 선다
-    function frameOf(mode, i) {
-      var n = SPR.partyFrames(mode), fps = (C.partyFps || {})[mode] || 9;
-      var fr = u.moving ? Math.floor((u.phase || 0) * n * (C.partyCycle || 1)) % n : 0;
-      if (u.moving && !(u.phase > 0)) fr = Math.floor((u.t || 0) * fps) % n;
-      return (fr + i * 2) % n;
-    }
-    var groups = 1 + (u.party >= (C.partyGroupAt || 15) ? 1 : 0) + (u.party >= (C.partyGroupAt || 15) * 3 ? 1 : 0);
-    var gz = u.gather || 0, items = [], gap = (C.partyGap || 44) * (sm.big ? 1.3 : 1);
-    for (var i = 0; i < groups; i++) {
-      var d = i * gap * gapK * (1 - 0.4 * gz);
-      var q = i ? along(u.pts, d, u.head) : { x: u.pts[0][0], y: u.pts[0][1], dx: Math.cos(u.head), dy: -Math.sin(u.head) };
-      var side = i ? (i % 2 ? 1 : -1) * 10 * s * gz : 0;
-      var dir = i && u.moving ? SPR.dirOf(Math.atan2(-q.dy, q.dx)) : SPR.dirOf(u.head);
-      var mode = i && sm.foot ? sm.foot : sm.mode;
-      items.push({ x: q.x + side, y: q.y - side * 0.3, dir: dir, mode: mode, fr: frameOf(mode, i), m: { t: 'person' } });
-    }
-    if (u.ring) P.ring(ctx, items[0].x, items[0].y, u.head, u.moving, u.t || 0, s);
-    items.sort(function (a, b) { return a.y - b.y; });
-    items.forEach(function (it) {
-      shadow(ctx, it.x, it.y, (it.mode === sm.mode && sm.big ? 30 : 22) * k, 6 * k);
-      SPR.drawParty(ctx, it.mode, it.dir, it.fr, it.x, it.y, k);
-    });
-    return items;
+    var fr = u.moving ? Math.floor((u.phase || 0) * n * (C.partyCycle || 1)) % n : 0;
+    if (u.moving && !(u.phase > 0)) fr = Math.floor((u.t || 0) * fps) % n;
+    var it = { x: u.pts[0][0], y: u.pts[0][1], m: { t: 'person' } };
+    if (u.ring) P.ring(ctx, it.x, it.y, u.head, u.moving, u.t || 0, s);
+    shadow(ctx, it.x, it.y, (sm.big ? 34 : 26) * k, 6 * k);
+    SPR.drawParty(ctx, sm.mode, SPR.dirOf(u.head), fr, it.x, it.y, k);
+    return [it];
   }
 
   /** 대장 발밑의 고리 (조종하는 부대 표시 · 나아가는 쪽 갈매기표 · 멈추면 숨 쉬듯) */

@@ -41,16 +41,20 @@
     var m = meta(id), img = SP.img(id);
     if (!m || !img || row < 0) return false;
     k = k || 1;
+    // 배포판에서 그림이 줄어 있어도(아티팩트 묶음 등) 칸 좌표를 그림 크기에 맞춰 늘려 읽는다
+    var fx = img.width / (m.cols * m.cw), fy = img.height / (m.rows.length * m.ch);
     ctx.save();
     if (alpha != null) ctx.globalAlpha *= alpha;
     ctx.translate(x, y);
     if (flip) ctx.scale(-1, 1);
-    ctx.drawImage(img, frame * m.cw, row * m.ch, m.cw, m.ch, -m.px * k, -m.py * k, m.cw * k, m.ch * k);
+    ctx.drawImage(img, frame * m.cw * fx, row * m.ch * fy, m.cw * fx, m.ch * fy, -m.px * k, -m.py * k, m.cw * k, m.ch * k);
     ctx.restore();
     return true;
   };
   /** 피벗에서 머리끝까지의 높이(시트 픽셀) — 화면 키에 맞출 배율을 셀 때 쓴다 */
   SP.height = function (id) { var m = meta(id); return m ? m.h : 1; };
+  /** 몸 키: 장면들의 피벗~머리끝 높이 가운데값 (치켜든 창·뛰어오른 장면은 빼고 잰 키) — 부대 크기를 맞출 때 */
+  SP.bodyH = function (id) { var m = meta(id); return m ? (m.bh || m.h) : 1; };
 
   // ---------------------------------------------------------------- 탐험대 8방향
   var DIR_N = 8;
@@ -64,9 +68,10 @@
     if (!s || !img) return false;
     var c = frame % s.n, r = dir % DIR_N;
     var sx = s.cols[c], sy = s.rows[r], sw = s.cols[c + 1] - sx, sh = s.rows[r + 1] - sy;
+    var fx = img.width / s.cols[s.cols.length - 1], fy = img.height / s.rows[s.rows.length - 1];   // 줄어든 그림이어도 맞게
     ctx.save();
     if (alpha != null) ctx.globalAlpha *= alpha;
-    ctx.drawImage(img, sx, sy, sw, sh, x - s.px[c] * k, y - s.py[r] * k, sw * k, sh * k);
+    ctx.drawImage(img, sx * fx, sy * fy, sw * fx, sh * fy, x - s.px[c] * k, y - s.py[r] * k, sw * k, sh * k);
     ctx.restore();
     return true;
   };

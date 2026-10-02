@@ -12,6 +12,7 @@
 
   python tools/sprite_repack.py                    # 모두 다시 만들기 (원본: images/_extra/sprite_src/)
   python tools/sprite_repack.py officers --debug   # 장면마다 번호를 붙인 점검 그림 → images/_extra/sprite_debug/
+  python tools/sprite_repack.py --meta             # 시트는 그대로 두고 js/data/sprites.js 만 다시 (몸 키 bh 등)
 원본 파일은 저장소에 올리지 않는다(images/_extra/). 탐험대 8방향 시트는 ../assets/sprites/land_expedition 의 매니페스트를 따른다.
 numpy·Pillow 가 필요하다.
 """
@@ -29,24 +30,24 @@ PARTY_SRC = os.path.join(os.path.dirname(ROOT), 'assets', 'sprites', 'land_exped
 DATA_JS = os.path.join(ROOT, 'js', 'data', 'sprites.js')
 
 # ------------------------------------------------------------------ 시트 설정
-# n: 줄마다 장면 수(하나면 모든 줄), wmin/wmax: 장면 너비 범위(원본 px), mf·mx: 너무 가볍거나 무거운 장면 벌점 기준(평균 질량의 배수)
+# n: 줄마다 장면 수(하나면 모든 줄; auto=True 면 나눈 뒤 거의 빈 장면을 빼고 앞으로 당긴다), wmin/wmax: 장면 너비 범위(원본 px), mf·mx: 너무 가볍거나 무거운 장면 벌점 기준(평균 질량의 배수)
 # ops: 줄마다 [('merge', i) 장면 i와 i+1을 합침 | ('split', i) 장면 i를 가장 얇은 곳에서 나눔] — 위에서부터 차례로
 # rows: 줄 이름, acts: 동작 → 장면 번호 목록, racts: 줄마다 덮어쓸 acts (rows 순서대로)
 # scale: 내보낼 크기 배율, speck: 버릴 부스러기 크기(장면에서 가장 큰 덩어리 대비), grow: 몸통 씨앗 침식 횟수(0이면 세로로만 자름)
 SHEETS = {
     # 제독대(장교) — 오른쪽을 본다. 줄: 해군 장교 · 견장 장교 · 망토 장교 · 흰 망토 제독
     'officers': dict(n=40, wmin=34, wmax=150, scale=0.7,
-                     rows=['officer', 'officer2', 'officer3', 'admiral'],
+                     rows=['lv0', 'lv1', 'lv2', 'lv3'],   # 일반 · 숙련 · 정예 · 전설적인 제독
                      acts=dict(idle=[0, 1, 2, 3], walk=[4, 5, 6, 7, 8], run=[9, 10, 11, 12, 13, 14],
                                attack=[15, 16, 17, 18, 19, 20, 21], hurt=[22, 24], dead=[26], back=[30, 31, 32, 33, 34], cheer=[35, 36, 37, 38, 39])),
     # 총병 — 줄: 산적 총잡이 · 왜구 총잡이 · 총병 · 머스킷총병
     'musketeers': dict(n=30, wmin=34, wmax=170, scale=0.7, ops=[('merge', 14)],
-                       rows=['bandit_gun', 'pirate_gun', 'musketeer', 'musketeer2'],
+                       rows=['lv0', 'lv1', 'lv2', 'lv3'],   # 마을 사냥꾼 · 민병 명사수 · 베테랑 화승총병 · 정예 총사대
                        acts=dict(idle=[0, 1, 2, 3], ready=[4, 5, 6, 7], walk=[8, 9, 10, 11, 12], attack=[13, 14, 15, 16, 17],
                                  hurt=[18], dead=[18], back=[19, 20, 21, 22, 23], cheer=[24, 25, 26, 27], vanish=[28])),
     # 포병 — 줄: 산적 포수 · 가죽앞치마 포수 · 포병 · 캐논포병
     'cannons': dict(n=32, wmin=40, wmax=200, scale=0.7, ops=[('merge', 15)],
-                    rows=['bandit_cannon', 'cannon_crew', 'gunner', 'gunner2'],
+                    rows=['lv0', 'lv1', 'lv2', 'lv3'],   # 훈련 포병 · 정규 포병 · 베테랑 포술장 · 포병 장교
                     acts=dict(idle=[0, 1, 2], load=[3, 4, 5, 6, 7], walk=[7, 8, 9, 10, 11], attack=[12, 13, 14, 15, 16, 17], hurt=[18], dead=[19],
                               back=[21, 22, 23, 24, 25, 26], smoke=[27, 28, 29, 30])),
     # 동아시아 무사 — 줄: 닌자 · 창병 · 검객 · 갓 쓴 검객 · 몽둥이 장사 (몽둥이 장사 줄은 장면 하나가 더 있다)
@@ -57,7 +58,7 @@ SHEETS = {
                                     back=[18, 19, 20, 21], away=[22, 23, 24])),
     # 칼잡이 보병 — 줄: 몽둥이 농민 · 칼잡이 · 검은 옷 칼잡이 · 망토 칼잡이
     'swordsmen': dict(n=35, wmin=40, wmax=200, mf=0.4, scale=0.7,
-                      rows=['club', 'blade', 'blade2', 'blade3'],
+                      rows=['lv0', 'lv1', 'lv2', 'lv3'],   # 몽둥이 마을 사람 · 민병 검객 · 정예 결투가 · 소드 마스터
                       acts=dict(idle=[0, 1, 2, 3], walk=[4, 5, 6, 7], run=[8, 9, 10, 11, 12, 13], attack=[14, 15, 16, 17, 18, 19],
                                 hurt=[22], dead=[21], crouch=[22, 23, 24, 25], back=[26, 27, 28, 29, 30], cheer=[31, 32, 33, 34])),
     # 오스만 군 — 줄: 방패 보병 · 포수 · 예니체리 총병 (줄마다 장면 수가 다르다)
@@ -83,6 +84,21 @@ SHEETS = {
                            dict(idle=[0, 1, 2], walk=[3, 4, 5], run=[7, 8, 9, 10, 11], attack=[12, 14, 15], hurt=[16], back=[21, 22, 23], cheer=[25, 26, 27]),
                            dict(idle=[2, 3], walk=[5, 6, 7], run=[8, 9, 10, 11, 12], attack=[12, 13, 14], hurt=[15], back=[21, 22, 23, 24], cheer=[25, 26, 27]),
                            dict(idle=[1, 2, 3], walk=[4, 6, 7], run=[8, 9, 10, 11, 12], attack=[12, 13, 14], hurt=[15], back=[21, 22, 23, 24], cheer=[25, 26, 27])]),
+    # ---- 지역별 적 (Codex 육상전투 시트 09~15, 줄마다 한 병종). 동작 묶음 차례: 대기·전진·달리기·공격·헛손질·피격·뒤돌아 복귀·숨 고르기
+    'west_europe': dict(n=26, auto=True, autoacts=True, wmin=36, wmax=230, mf=0.4, scale=0.7, grow=3,
+                        rows=['rodelero', 'landsknecht', 'crossbow', 'stradiot', 'streltsy'], acts=dict(idle=[0, 1, 2])),
+    'india_central': dict(n=26, auto=True, autoacts=True, wmin=36, wmax=230, mf=0.4, scale=0.7, grow=3,
+                          rows=['qizilbash', 'afghan', 'rajput', 'mughal_gun', 'horse_archer'], acts=dict(idle=[0, 1, 2])),
+    'southeast_asia': dict(n=26, auto=True, autoacts=True, wmin=36, wmax=230, mf=0.4, scale=0.7, grow=3,
+                           rows=['malay', 'javanese', 'ayutthaya', 'daiviet', 'moluccan'], acts=dict(idle=[0, 1, 2])),
+    'africa_regions': dict(n=26, auto=True, autoacts=True, wmin=36, wmax=230, mf=0.4, scale=0.7, grow=3,
+                           rows=['w_archer', 'sahel_spear', 'kongo_axe', 'ethiopian', 'swahili'], acts=dict(idle=[0, 1, 2])),
+    'meso_south': dict(n=26, auto=True, autoacts=True, wmin=36, wmax=230, mf=0.4, scale=0.7, grow=3,
+                       rows=['eagle', 'maya_spear', 'inca_sling', 'amazon_bow', 'taino'], acts=dict(idle=[0, 1, 2])),
+    'north_america': dict(n=26, auto=True, autoacts=True, wmin=36, wmax=230, mf=0.4, scale=0.7, grow=3,
+                          rows=['woodland', 'algonquin', 'plains', 'pueblo', 'northwest'], acts=dict(idle=[0, 1, 2])),
+    'pacific': dict(n=26, auto=True, autoacts=True, wmin=36, wmax=230, mf=0.4, scale=0.7, grow=3,
+                    rows=['maori', 'polynesian', 'aboriginal', 'papuan', 'micronesian'], acts=dict(idle=[0, 1, 2])),
     # ---- 항해 사건 (한 장면 = 한 칸이 뚜렷한 시트). 줄을 위에서부터 이어 붙여 차례로 튼다. ms: 한 장면 시간, once: 한 번만
     'whale': dict(ms=150, once=True, n=5, wmin=200, wmax=420, mf=0.2, scale=0.55, rows=['a', 'b'],
                   acts=dict(play=[0, 1, 2, 3, 4], play2=[0, 1, 2, 3, 4])),
@@ -113,8 +129,16 @@ def runs(v):
     return r
 
 
-def row_bands(al):
-    return [r for r in runs((al > 20).sum(1) > 2) if r[1] - r[0] > 30]
+def row_bands(al, nrows=None):
+    """투명한 가로줄로 줄을 나눈다. nrows 보다 적게 나뉘면(창·활이 윗줄에 닿아 붙은 경우) 가장 높은 줄을 가장 비어 있는 가로줄에서 자른다"""
+    bands = [r for r in runs((al > 20).sum(1) > 2) if r[1] - r[0] > 30]
+    prof = (al > 90).sum(1)
+    while nrows and len(bands) < nrows:
+        i = max(range(len(bands)), key=lambda j: bands[j][1] - bands[j][0])
+        a, b = bands[i]; lo, hi = a + (b - a) // 4, b - (b - a) // 4
+        m = lo + int(np.argmin(prof[lo:hi]))
+        bands[i:i + 1] = [(a, m), (m, b)]
+    return bands
 
 
 def cut_cost(al, r0, r1):
@@ -274,9 +298,13 @@ def frames_of_band(a, r0, r1, cuts, speck=0.03, grow=0):
         if k > 1:
             area = np.bincount(sl.ravel())[1:]
             keep = np.zeros(k + 1, bool); keep[1:] = area >= speck * area.max()
+            j0 = int(np.argmax(area)) + 1
+            by = np.nonzero((sl == j0).any(1))[0]; top, bot = by.min(), by.max()
             for j in range(1, k + 1):
-                if not keep[j] and np.isin(lab[sl == j], own).all():
-                    keep[j] = True
+                if keep[j] or not np.isin(lab[sl == j], own).all():
+                    continue
+                cy = np.nonzero((sl == j).any(1))[0].mean()
+                keep[j] = top - 0.05 * (bot - top) <= cy <= bot     # 몸통 높이 안에 있는 작은 조각(던진 창·불꽃)만
             sel = keep[sl]
         ys, xs = np.nonzero(sel)
         ya, yb, xa, xb = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
@@ -298,21 +326,55 @@ def pivot_of(piece, ox, oy):
     return ox + cx, oy + float(ys.max())
 
 
+def auto_acts(row):
+    """Codex 육상전투 시트의 동작 차례(대기·전진·달리기·공격·헛손질·피격·뒤돌아 복귀·숨 고르기)를 따라 줄의 장면을 동작에 나눈다.
+    잘려 반쪽만 남은 장면(질량이나 키가 모자람)은 뺀다"""
+    st = []
+    for it in row:
+        if not it:
+            st.append(None); continue
+        pc = it[0][0]; a = pc[:, :, 3] > 140
+        ys = np.nonzero(a.any(1))[0]
+        st.append((int(a.sum()), (ys.max() - ys.min() + 1) if len(ys) else 0))
+    ms = [x[0] for x in st if x]; hs = [x[1] for x in st if x]
+    mm, mh = float(np.median(ms)), float(np.median(hs))
+    n = len(row)
+    ok = lambda i: st[i] and st[i][0] >= 0.65 * mm and st[i][1] >= 0.75 * mh
+    low = lambda i: st[i] and st[i][0] >= 0.45 * mm and st[i][1] < 0.85 * mh
+    rng = lambda a, b: range(max(0, int(round(a * n))), min(n, int(round(b * n))))
+    acts = {}
+    acts['idle'] = [i for i in range(3) if ok(i)] or [0]
+    acts['walk'] = [i for i in range(3, int(round(0.32 * n))) if ok(i)] or acts['idle']
+    acts['attack'] = [i for i in rng(0.32, 0.6) if ok(i)] or acts['walk']
+    hurt = [i for i in rng(0.48, 0.85) if low(i)]
+    acts['hurt'] = hurt[:1] or acts['idle'][:1]
+    acts['dead'] = [min(hurt, key=lambda i: st[i][1])] if hurt else acts['hurt']
+    acts['back'] = [i for i in range(n - 5, n) if ok(i)] or acts['idle']
+    return acts
+
+
 def build(sid, cfg, debug=False):
     src = os.path.join(SRC, sid + '.png')
     a = np.array(Image.open(src).convert('RGBA'))
     al = a[:, :, 3]
-    bands = row_bands(al)
-    rows = []
+    bands = row_bands(al, len(cfg['rows']) if 'rows' in cfg else None)
+    rows, ns = [], []
     for bi, (r0, r1) in enumerate(bands):
         n = cfg['n'][bi] if isinstance(cfg['n'], list) else cfg['n']
         cost, has = cut_cost(al, r0, r1)
         cuts = dp_cuts(cost, has, n, cfg.get('wmin', 34), cfg.get('wmax', 200), cfg.get('mf', 0.3), cfg.get('mx'))
+        ns.append(n)
         ops = cfg.get('ops', [])
         if ops and isinstance(ops[0], list):
             ops = ops[bi] if bi < len(ops) else []
         cuts = apply_ops(cuts, cost, ops)
         frs = frames_of_band(a, r0, r1, cuts, cfg.get('speck', 0.03), cfg.get('grow', 0))
+        if cfg.get('auto'):
+            # 몸통 씨앗을 따라 픽셀을 나눈 뒤 거의 빈 장면(칼끝·연기 부스러기만 남은 칸)은 빼고 앞으로 당긴다
+            mass = [int((f[0][:, :, 3] > 140).sum()) if f else 0 for f in frs]
+            med = float(np.median([m for m in mass if m])) if any(mass) else 0
+            frs = [f for f, m in zip(frs, mass) if m >= 0.3 * med]
+            ns[-1] = len(frs)
         piv = [pivot_of(*f) if f else None for f in frs]
         base = float(np.median([p[1] for p in piv if p]))     # 줄의 땅선: 발밑의 가운데값 (뛰어오른 장면은 떠 있게)
         rows.append([(f, (p[0], base)) if f else None for f, p in zip(frs, piv)])
@@ -348,10 +410,12 @@ def build(sid, cfg, debug=False):
                 n=[len(r) for r in rows], h=round((T) * s), acts=cfg['acts'])
     if 'racts' in cfg:
         meta['racts'] = cfg['racts']
+    elif cfg.get('autoacts'):
+        meta['racts'] = [auto_acts(r) for r in rows]
     for k in ('ms', 'once'):
         if k in cfg:
             meta[k] = cfg[k]
-    print('%-14s %d줄 × %d칸, 칸 %d×%d, 피벗 (%d,%d) → %s' % (sid, len(rows), ncol, cw, ch, pxc, pyc, sheet.size))
+    print('%-14s %d줄 × %d칸 (줄마다 %s), 칸 %d×%d, 피벗 (%d,%d) → %s' % (sid, len(rows), ncol, ns, cw, ch, pxc, pyc, sheet.size))
     return meta
 
 
@@ -411,8 +475,27 @@ def party_sheets():
     return dict(dirs=man['directionsByRow'], sheets=out)
 
 
+def body_height(sid, m):
+    """장면마다 발밑 피벗에서 머리끝까지의 높이(alpha>140)의 가운데값 — 치켜든 창·뛰어오른 장면에 휘둘리지 않는 '몸 키'.
+    게임은 이 값으로 부대 크기를 맞춘다(G.Sprites.bodyH)"""
+    path = os.path.join(OUT, sid + '.webp')
+    if not os.path.exists(path):
+        return m.get('h', 1)
+    a = np.array(Image.open(path).convert('RGBA'))[:, :, 3] > 140
+    hs = []
+    for r in range(len(m['rows'])):
+        for c in range(m['n'][r]):
+            cell = a[r * m['ch']:(r + 1) * m['ch'], c * m['cw']:(c + 1) * m['cw']]
+            ys = np.nonzero(cell.any(1))[0]
+            if len(ys):
+                hs.append(m['py'] - ys.min())
+    return int(np.median(hs)) if hs else m.get('h', 1)
+
+
 def main():
     args = [x for x in sys.argv[1:] if not x.startswith('--')]
+    if '--meta' in sys.argv and not args:
+        args = ['-']                       # 시트는 그대로 두고 js/data/sprites.js 의 값만 다시 쓴다
     debug = '--debug' in sys.argv
     old = {}
     if os.path.exists(DATA_JS):
@@ -427,6 +510,8 @@ def main():
             continue
         meta[sid] = build(sid, cfg, debug)
     meta = {k: meta[k] for k in SHEETS if k in meta}
+    for sid in meta:                       # 몸 키는 다 짠 시트에서 다시 잰다 (python tools/sprite_repack.py --meta: 다시 짜지 않고 이것만)
+        meta[sid]['bh'] = body_height(sid, meta[sid])
     party = party_sheets() if (not args or 'party' in args) or not os.path.exists(DATA_JS) else None
     if party is None:
         txt = open(DATA_JS, encoding='utf-8').read()

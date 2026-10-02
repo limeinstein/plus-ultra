@@ -18,6 +18,7 @@
     if (!G.Game.ensureRenderer()) { UI.alert('WebGL을 사용할 수 없어 바다를 그릴 수 없습니다.<br>' + (G.Game.rendererError || '')); }
     if (!st || arg.depart != null || arg.fresh) st = newRuntime();
     st.alive = true; st.busy = 0; st.keys = {};
+    if (G.EventFx) G.EventFx.preload('sea');
     if (!st.vel) st.vel = [0, 0];
     if (!st.fx && G.SeaFX) st.fx = G.SeaFX.create();
     if (!st.pose) st.pose = { roll: 0, pitch: 0, heave: 0 };
