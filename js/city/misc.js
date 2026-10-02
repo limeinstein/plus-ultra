@@ -30,11 +30,11 @@
     s.player.gold -= n * cost;
     var msgs = [];
     await UI.fade(function () { msgs = G.Game.passDays(n); });
-    s.fleet.fatigue = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
+    s.fleet.fatigue = 0; s.fleet.stress = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     var news = msgs.filter(function (m) { return m.history; }); if (news.length) await C.news(news);
     G.Game.refreshHud();
-    await UI.say('피로가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
+    await UI.say('피로와 스트레스가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
     if (G.Family && G.Family.innEvent) await G.Family.innEvent(c);
   };
   INN.work = async function (c) {
@@ -43,7 +43,7 @@
     if (!v) return;
     var pay = Math.round(v * (8 + c.size * 4) * (0.8 + R.stat('str') / 150));
     await UI.fade(function () { G.Game.passDays(v); });
-    s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
+    s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20); s.fleet.stress = Math.max(0, (s.fleet.stress || 0) - 10);
     await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!');
   };
   INN.func = async function (c) {
@@ -612,7 +612,7 @@
   HM.rest = async function (c) {
     var s = S();
     await UI.fade(function () { G.Game.passDays(3); });
-    s.player.hp = 100; s.fleet.fatigue = 0;
+    s.player.hp = 100; s.fleet.fatigue = 0; s.fleet.stress = 0;
     await UI.say(s.player.wife ? '가족과 함께 집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.' : '집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.', {});
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(true);
   };

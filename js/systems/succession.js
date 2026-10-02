@@ -133,6 +133,13 @@
       var old = holderOf(sp, prev); if (!old) return;
       var h = old.h, rel = s.sponsors[sp.id];
       var nxt = cur ? G.Sponsor.holder(sp) : null;
+      var base = function (n) { return String(n || '').replace(/\(.*?\)/g, '').replace(/\s/g, ''); };
+      if (nxt && base(h[2]) === base(nxt)) {          // 섭정·수렴청정이 끝나 몸소 다스리기 시작 (같은 사람)
+        if (/섭정|수렴청정/.test(h[2]) && (rel || ((sp.type === 'king' || sp.type === 'pope') && sp.pw >= 4)))
+          out.push({ icon: 'crown', history: true, text: sp.title + ' ' + nxt + U.jx(nxt, '이/가') + ' 섭정을 거두고 몸소 다스리기 시작했다.' });
+        if (rel && rel.know && rel.know[prev]) rel.know[cur] = rel.know[prev];
+        return;
+      }
       // 소식: 큰 나라의 군주이거나 제독이 아는 자리일 때
       if (rel || ((sp.type === 'king' || sp.type === 'pope') && sp.pw >= 4)) {
         var sameGen = h[4] === 'g' && nxt === sp.title;

@@ -141,20 +141,36 @@
   };
   H.gold = function () { return U.num(Game.state.player.gold) + '<small>닢</small>'; };
   H.date = function () { return U.fmtDate(Game.state.date); };
-  /** 도시에 있을 때: 날짜 · 도시 · 언어 · 계약 | 소지금 · 명성 · 직위 */
+  /** 보급 일수와 위기 단계. 교역품으로 대신 먹고 마실 수 있는 양도 포함한다. */
+  H.supply = function (kind) {
+    var days = kind === 'food' ? R.daysOfFood() : R.daysOfWater();
+    var state = days <= 0 ? '고갈' : days < 3 ? '위기' : days < 7 ? '부족' : '';
+    return { days: days, text: (days >= 999 ? '—' : days + '일') + (state ? ' <small class="supply-state ' + (days < 3 ? 'crisis' : 'low') + '">' + state + '</small>' : ''), warn: days < 7 };
+  };
+  H.stress = function () { return Math.round((Game.state.fleet && Game.state.fleet.stress) || 0) + '%'; };
+  /** 도시에 있을 때: 날짜 · 도시 · 위도·경도 · 식량·식수 · 피로·스트레스 · 계약 | 소지금 · 명성 · 직위 */
   Game.cityHud = function () {
-    var S = Game.state, c = G.CITY_DATA[S.loc.city], k = H.contract();
+    var S = Game.state, c = G.CITY_DATA[S.loc.city], f = S.fleet, k = H.contract(), food = H.supply('food'), water = H.supply('water');
     var own = c && R.cityOwner ? R.cityOwner(c) : '';
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
       { k: 'place', icon: 'castle', label: own ? '도시 · ' + own : '도시', text: c ? c.name : '' },
       { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: c ? '이 도시의 말과 제독 일행이 하는 수준 (동료 통역·부관 포함) — ' + G.LANG_LV[R.lang(c.lang) || 0] : '' },
+      { k: 'lat', icon: 'compass', label: '위도', text: c ? U.fmtLat(c.lat) : H.lat() },
+      { k: 'lon', label: '경도', text: c ? U.fmtLon(c.lon) : H.lon() },
+      { k: 'food', icon: 'bread', label: '식량', text: food.text },
+      { k: 'water', icon: 'drop', label: '식수', text: water.text },
+      { k: 'fat', icon: 'hourglass', label: '피로', text: Math.round(f.fatigue || 0) + '%' },
+      { k: 'stress', icon: 'heart', label: '스트레스', text: H.stress() },
       { k: 'contract', icon: 'seal', label: '계약', text: k.text, tip: k.tip },
       { grow: true },
       { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
       { k: 'fame', icon: 'laurel', label: '명성', text: U.num(S.player.fame) },
       { k: 'title', icon: 'crown', label: '직위', text: H.title() }
     ]);
+    UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
+    UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
+    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     UI.hud.set('contract', k.text, k.warn);
   };
   Game.refreshHud = function () {
@@ -163,6 +179,10 @@
     UI.hud.set('gold', H.gold());
     UI.hud.set('fame', U.num(S.player.fame));
     UI.hud.set('title', H.title());
+    var food = H.supply('food'), water = H.supply('water'), f = S.fleet || {};
+    UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
+    UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
+    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     Game.checkTitle();
   };
@@ -198,6 +218,11 @@
     out = out.concat(G.World.daily());
     if (G.Audio && G.Audio.daily) G.Audio.daily();   // 바다·뭍에서 지역이 바뀌면 음악도
     if (G.Quest) out = out.concat(G.Quest.daily());
+    // 놀람과 긴장은 천천히 가라앉고, 안전한 도시에서는 훨씬 빨리 풀린다. 옛 저장에는 stress가 없으므로 0으로 시작한다.
+    if (S.fleet) {
+      var SK = (G.BALANCE && G.BALANCE.stress) || {}, rec = S.loc && S.loc.mode === 'city' ? (SK.cityRecovery || 2) : (SK.travelRecovery || 0.15);
+      S.fleet.stress = U.clamp((S.fleet.stress || 0) - rec, 0, 100);
+    }
     Game.checkTitle();
     return out;
   };

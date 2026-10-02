@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""36종 선박의 항해·해전용 16방향 레이어 시트를 만든다.
+"""36종 선박의 항해·해전용 8방향 동작 시트를 만든다.
 
-Pillow만 사용하며 게임 실행에는 Python이 필요하지 않다. 각 시트는 선체, 다섯
-풍향의 돛, 접은 돛을 16방향(8열×2행)으로 담는다. 모든 돛은 무문양 백색이고,
-선종별 실루엣·범장·상부구조·노 배치를 데이터로 분리해 같은 계열 안에서도
-멀리서 구별되도록 한다.
+Pillow만 사용하며 게임 실행에는 Python이 필요하지 않다. 각 시트는 45도 간격
+8방향과 정박 3장·표류 5장·질주 8장을 담는다. 모든 조각은 같은 수면 피벗을
+쓰며 셀 가장자리에 투명 여백을 남겨 돛·선수·물보라가 이웃 조각을 침범하지
+않는다. 선종별 실루엣과 범장 차이는 유지하되, 짙은 월넛·황동·아이보리 돛의
+한 가지 재질과 조명 규칙으로 묶는다.
 """
 from __future__ import annotations
 
@@ -17,12 +18,16 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 CELL = 224
-SS = 2
+SS = 3
 COLS = 8
-DIRS = 16
-LAYERS = 7
+DIRS = 8
 ANCHOR = (112, 139)
-BASE_LEN = 166
+BASE_LEN = 158
+ACTIONS = {
+    "idle": {"row": 0, "col": 0, "frames": 3, "fps": 2.2},
+    "drift": {"row": 0, "col": 3, "frames": 5, "fps": 4.0},
+    "dash": {"row": DIRS, "col": 0, "frames": 8, "fps": 11.5},
+}
 OUT = ROOT / "images" / "ships-nav"
 META = ROOT / "js" / "data" / "shipart.js"
 CONTACT = ROOT / "docs" / "art" / "ships-nav-contact.png"
@@ -108,19 +113,24 @@ def shade(c, k, a=255):
 
 
 PALETTES = {
-    "west": ("#55351f", "#9b7042", "#c39a61"),
-    "galley": ("#4d2b1b", "#9c5b35", "#c49359"),
-    "dhow": ("#6a4322", "#b17b3f", "#d0a566"),
-    "jong": ("#4b2d1d", "#956038", "#bb8650"),
-    "outrigger": ("#5b3820", "#a8753e", "#d2ad6f"),
-    "junk": ("#4a281a", "#8e5431", "#bd8350"),
-    "kr": ("#5f432a", "#a47a4d", "#d1aa73"),
-    "panok": ("#4d3524", "#936b45", "#c49b69"),
-    "turtle": ("#3c352d", "#72664d", "#a68d61"),
-    "jp": ("#302822", "#66503a", "#9e7d51"),
-    "atake": ("#2c2420", "#604a39", "#957550"),
-    "raft": ("#725632", "#b18c55", "#d8bb7b"),
+    # 첫 갤리온 기준 그림의 월넛·꿀빛 목재를 공통축으로 두고 문화권마다
+    # 채도와 밝기만 조금 달리한다. 세 값은 그늘·외판·갑판 순서다.
+    "west": ("#2d180d", "#74401f", "#bd8246"),
+    "galley": ("#32160d", "#7c3d20", "#c27b3d"),
+    "dhow": ("#351d0e", "#875129", "#c9924f"),
+    "jong": ("#2f180e", "#71391f", "#b8753c"),
+    "outrigger": ("#3a2111", "#84532c", "#c79454"),
+    "junk": ("#2c160d", "#68351f", "#ad6939"),
+    "kr": ("#352313", "#77512f", "#b78651"),
+    "panok": ("#302015", "#6f4a2d", "#b17d49"),
+    "turtle": ("#29251d", "#5e573e", "#9d8655"),
+    "jp": ("#251b14", "#59412b", "#947047"),
+    "atake": ("#211710", "#503724", "#87603e"),
+    "raft": ("#463019", "#8c6334", "#c99a59"),
 }
+BRASS = rgb("#c78b35")
+BRASS_HI = rgb("#f0c069")
+IVORY = rgb("#f4e7c5")
 
 
 class Painter:
@@ -175,7 +185,7 @@ class Painter:
 def dims(s):
     h = s["hull"]
     q = P[s["id"]]
-    L = 158 * min(1.10, max(.90, s.get("len", 1))) * q.get("scale", 1)
+    L = 150 * min(1.10, max(.90, s.get("len", 1))) * q.get("scale", 1)
     ratios = {"galley": .22, "outrigger": .17, "dhow": .34, "jong": .39,
               "junk": .41, "kr": .40, "panok": .43, "turtle": .42,
               "jp": .35, "atake": .42, "raft": .45}
@@ -207,7 +217,7 @@ def outline(L, W, h, form):
     return [(L*.58,0),(L*.30,-W*.50),(-L*.30,-W*.54),(-L*.49,-W*.34),(-L*.49,W*.34),(-L*.30,W*.54),(L*.30,W*.50)]
 
 
-def draw_hull(s, ang):
+def draw_hull(s, ang, oar_phase=0.0):
     p = Painter(s, ang)
     L, W, H = dims(s); h = s["hull"]; q = P[s["id"]]
     dark, mid, deck = map(rgb, PALETTES.get(h, PALETTES["west"]))
@@ -243,16 +253,20 @@ def draw_hull(s, ang):
     for x in (-L*.25, 0, L*.25):
         p.line([(x,-W*.31,H+1.2),(x,W*.31,H+1.2)], shade(dark,.72,100), .45)
 
-    # 외판 결구와 현측 띠. 작은 화면에서도 선체 계열을 읽게 하는 중성색 디테일이다.
+    # 외판 결구와 현측 띠. 황동 가장자리와 짙은 틈을 함께 그려 작은 화면에서도
+    # 판재의 깊이와 갤리온 기준 그림의 따뜻한 재질이 읽히게 한다.
     for side in (-1, 1):
-        for zf in (.28, .56, .80):
-            p.line([(-L*.43,side*W*.42,H*zf),(L*.35,side*W*.45,H*zf)], shade(dark,.64,185), .75)
+        for zi, zf in enumerate((.18, .34, .51, .68, .84)):
+            p.line([(-L*.44,side*W*.43,H*zf),(L*.37,side*W*.46,H*zf)], shade(dark,.58,210), .82)
+            if zi in (1, 3):
+                p.line([(-L*.43,side*W*.435,H*zf+.9),(L*.35,side*W*.455,H*zf+.9)], shade(deck,.88,120), .38)
         if q.get("clinker"):
             for zf in (.18,.36,.54,.72,.90):
                 p.line([(-L*.44,side*W*.44,H*zf),(L*.31,side*W*.47,H*zf)], shade(deck,.77,155), .65)
     if q.get("rail", 1):
         for side in (-1,1):
-            p.line([(-L*.39,side*W*.40,H+4),(L*.34,side*W*.43,H+4)], shade(dark,.64), 1)
+            p.line([(-L*.39,side*W*.40,H+4),(L*.34,side*W*.43,H+4)], shade(dark,.52), 2.0)
+            p.line([(-L*.39,side*W*.40,H+4.5),(L*.34,side*W*.43,H+4.5)], shade(BRASS,.92), .62)
             for x in (-L*.34,-L*.18,0,L*.18,L*.31):
                 p.line([(x,side*W*.41,H),(x,side*W*.42,H+4)], shade(dark,.55), .7)
 
@@ -276,14 +290,18 @@ def draw_hull(s, ang):
             p.box(-L*.47,-L*.30,-W*.31,W*.31,H,H+17,mid)
             p.line([(-L*.37,-W*.51,H*.52),(-L*.10,-W*.56,H*.50),(L*.26,-W*.40,H*.48)],shade(dark,.43),2)
             p.line([(-L*.37,W*.51,H*.52),(-L*.10,W*.56,H*.50),(L*.26,W*.40,H*.48)],shade(dark,.43),2)
-        # 포구·선미 창
+        # 포구·선미 창: 검은 구멍 둘레에 황동 프레임을 둘러 축소해도 사각형으로 읽힌다.
         guns = q.get("guns", 0)
         for side in (-1,1):
             for k in range(guns):
                 x = -L*.24 + k*(L*.52/max(1,guns-1))
-                p.ellipse3(x,side*W*.50,H*.55,2.0,1.35,shade(dark,.30))
+                gp=[(x-2.8,side*W*.50,H*.46),(x+2.8,side*W*.50,H*.46),
+                    (x+2.8,side*W*.50,H*.64),(x-2.8,side*W*.50,H*.64)]
+                p.poly(gp,shade(BRASS,.76),shade(dark,.34),.7)
+                p.ellipse3(x,side*W*.505,H*.55,1.45,1.05,shade(dark,.22))
         if q.get("stern") in ("high","tower","castle","gallery"):
-            for k in (-1,0,1): p.ellipse3(-L*.485,k*W*.17,stern_h*.72,1.5,1.2,(205,177,112,220))
+            for k in (-1,0,1):
+                p.ellipse3(-L*.485,k*W*.17,stern_h*.72,2.0,1.6,shade(BRASS,.72),shade(BRASS_HI,.92))
         if s["id"] in ("barca","pinnace"):
             p.line([(-L*.43,W*.38,H*.60),(-L*.62,W*.72,2)],shade(dark,.62),2)
     elif h == "galley":
@@ -291,7 +309,7 @@ def draw_hull(s, ang):
         for k in range(5):
             x=-L*.26+k*L*.13
             p.line([(x,-W*.39,H+1),(x,W*.39,H+1)],shade(dark,.52),1)
-        p.line([(L*.5,0,H*.3),(L*.72,0,H*.1)], shade(dark,.55), 3)
+        p.line([(L*.5,0,H*.3),(L*.58,0,H*.1)], shade(dark,.55), 3)
         if s["id"] == "galleass":
             p.box(L*.20,L*.39,-W*.27,W*.27,H,H+11,mid)
             for side in (-1,1):
@@ -346,11 +364,14 @@ def draw_hull(s, ang):
 
     if q.get("oars") or h in ("galley","kr","panok","turtle","jp","atake","outrigger"):
         n = q.get("oars", 7)
+        oar_reach = 1.16 if h == "atake" else 1.35
         for k in range(n):
             x = -L*.34 + k*(L*.66/max(1,n-1))
             for side in (-1,1):
-                p.line([(x,side*W*.43,H*.62),(x-L*.04,side*W*1.35,1)], shade(dark,.75), 1.25)
-                p.ellipse3(x-L*.04,side*W*1.37,1,2.4,1.15,shade(deck,.75))
+                stroke=math.sin(oar_phase + k*.42 + (0 if side > 0 else .28))
+                tipx=x-L*(.025+.022*stroke); tipz=2.5+3.2*(.5+.5*math.cos(oar_phase+k*.42))
+                p.line([(x,side*W*.43,H*.62),(tipx,side*W*oar_reach,tipz)], shade(dark,.72), 1.35)
+                p.ellipse3(tipx,side*W*(oar_reach+.02),tipz,2.6,1.2,shade(deck,.78))
     if h == "outrigger":
         for side in (-1,1):
             p.line([(-L*.34,side*W,L*.6),(-L*.28,side*W*2.6,2)],shade(dark,.7),1.4)
@@ -380,16 +401,17 @@ def mast_heights(s, n):
     return [base*k for k in arches.get(n, [1]*n)]
 
 
-def draw_rig(s, ang, state, furled=False):
+def draw_rig(s, ang, state, furled=False, pulse=0.0):
     p = Painter(s, ang)
     L,W,H = dims(s); q=P[s["id"]]; rig=q.get("rig","")
-    wood = rgb("#352416"); rope=(72,54,36,175); sail=rgb("#f3eddd"); sail_shadow=rgb("#d8cdb5"); seam=(109,88,59,125)
+    wood = rgb("#2b180d"); rope=(69,47,26,190); sail=IVORY; sail_shadow=rgb("#d2bb8c"); seam=(113,82,43,145)
     masts = mast_positions(s,L)
     heights=mast_heights(s,len(masts))
     # 먼 밧줄
     for i,mx in enumerate(masts):
         top=H+heights[i]
-        p.line([(mx,0,H),(mx,0,top)],wood,2.4)
+        p.line([(mx,0,H),(mx,0,top)],shade(wood,.62),3.35)
+        p.line([(mx,0,H+.5),(mx,0,top)],shade(wood,1.55),1.65)
         p.line([(mx,0,top),(-L*.47,0,H+3)],rope,.65)
         p.line([(mx,0,top*.98),(L*.54,0,H+2)],rope,.65)
         for side in (-1,1):
@@ -413,10 +435,18 @@ def draw_rig(s, ang, state, furled=False):
             for ti,(ztf,zbf,sw) in enumerate(bands):
                 span=W*(1.04 if len(masts)>2 and i==0 else 1.24)*sw
                 if rig == "japanese": span*=.88
-                zt=H+mh*ztf; zb=H+mh*zbf; bill=state*W*(.07+.025*ti)
+                zt=H+mh*ztf; zb=H+mh*zbf; bill=state*W*(.07+.025*ti)+pulse*W*.035
                 pts=[(mx-ux*span,-uy*span,zt),(mx+ux*span,uy*span,zt),
                      (mx+ux*span*.88+bill,uy*span*.88,zb),(mx-ux*span*.88+bill,-uy*span*.88,zb)]
-                p.poly(pts,shade(sail,1.0 if ti==0 else .97),shade(wood,.80),.75)
+                p.poly(pts,shade(sail,1.0 if ti==0 else .97),shade(wood,.74),.9)
+                # 다섯 폭의 천을 번갈아 얹어 아이보리 돛의 굴곡과 직조감을 만든다.
+                for gi in range(5):
+                    f0=gi/5; f1=(gi+1)/5
+                    ta=tuple(pts[0][j]*(1-f0)+pts[1][j]*f0 for j in range(3))
+                    tb=tuple(pts[0][j]*(1-f1)+pts[1][j]*f1 for j in range(3))
+                    ba=tuple(pts[3][j]*(1-f0)+pts[2][j]*f0 for j in range(3))
+                    bb=tuple(pts[3][j]*(1-f1)+pts[2][j]*f1 for j in range(3))
+                    p.poly([ta,tb,bb,ba],shade(sail,.92+.035*(gi%2)))
                 p.line([pts[0],pts[1]],wood,1.65)
                 seams=(.25,.50,.75) if rig == "japanese" else (.32,.66)
                 for frac in seams:
@@ -425,7 +455,7 @@ def draw_rig(s, ang, state, furled=False):
                     p.line([a,b],seam,.55)
                 p.line([(mx,bill*.5,zb),(mx,0,zt)],shade(sail_shadow,.82,135),.5)
         elif kind == "lat":
-            off=state*W*.33
+            off=state*W*.33+pulse*W*.025
             foot=.58 if rig in ("dhow","baghlah") else .52
             peak=.34 if rig in ("dhow","baghlah") else .30
             pts=[(mx+mh*peak,off*.15,top),(mx-mh*foot,off,H+mh*.18),(mx-mh*.37,off+state*W*.10,H+mh*.58)]
@@ -434,6 +464,10 @@ def draw_rig(s, ang, state, furled=False):
             p.poly(pts,shade(sail,.98),shade(wood,.8),.8)
             p.line([(mx+mh*.32,off*.1,top),(mx-mh*.54,off,H+mh*.16)],wood,1.8)
             p.line([(mx+mh*.10,off*.12,H+mh*.77),(mx-mh*.33,off,H+mh*.34)],seam,.6)
+            for frac in (.22,.44,.66,.84):
+                a=tuple(pts[0][j]*(1-frac)+pts[-1][j]*frac for j in range(3))
+                b=tuple(pts[1][j]*(1-frac)+pts[2][j]*frac for j in range(3))
+                p.line([a,b],seam,.42)
         else: # 대나무 살 돛: 부푼 사다리꼴 종범. 둘레 순서를 지켜 면이 뒤집히지 않게 한다.
             off=state*W*.22; bill=(.16+.10*abs(state))*W
             pts=[(mx+mh*.24,off,H+mh*.98),(mx-mh*.34,off,H+mh*.80),
@@ -455,14 +489,50 @@ def draw_rig(s, ang, state, furled=False):
     return p.finish()
 
 
+def draw_water(s, ang, phase, power):
+    """수면에 붙는 잔물결·선수 포말. 셀 안에서 끝나며 바다는 칠하지 않는다."""
+    p=Painter(s,ang); L,W,_=dims(s)
+    foam=(230,244,238,round(40+95*power)); edge=(178,219,214,round(35+75*power))
+    tail=-L*(.49+.025*math.sin(phase))
+    spread=W*(.34+.18*power)
+    for side in (-1,1):
+        p.line([(tail,side*W*.18,1),(-L*(.55+.015*power),side*spread,0)],edge,1.0+power*1.1)
+        p.line([(-L*.43,side*W*.30,1),(-L*(.54+.01*power),side*spread*.82,0)],foam,.65+power*.85)
+    bow=L*.53
+    for side in (-1,1):
+        kick=(.5+.5*math.sin(phase+side*.8))*power
+        p.line([(bow,side*W*.18,2),(L*(.58+.015*kick),side*W*(.35+.08*kick),1)],foam,.75+power*1.3)
+        if power>.65:
+            p.ellipse3(L*(.56+.015*kick),side*W*(.29+.05*kick),2+kick*2,1.3+kick,0.8+kick*.5,foam)
+    return p.finish()
+
+
+def motion_frame(s, ang, action, fi):
+    frames=ACTIONS[action]["frames"]
+    phase=math.tau*fi/frames
+    power={"idle":.06,"drift":.34,"dash":1.0}[action]
+    water=draw_water(s,ang,phase,power)
+    hull=draw_hull(s,ang,phase*(.35 if action=="drift" else 1.0))
+    if action=="idle":
+        rig=draw_rig(s,ang,0,True,math.sin(phase)*.08)
+    else:
+        brace=.16+(.035 if action=="dash" else .08)*math.sin(phase)
+        rig=draw_rig(s,ang,brace,False,math.sin(phase)*(.7 if action=="dash" else .3))
+    out=Image.new("RGBA",(CELL,CELL),(0,0,0,0))
+    out.alpha_composite(water); out.alpha_composite(hull); out.alpha_composite(rig)
+    # 질주 때만 피벗을 중심으로 아주 작게 고동쳐 정지 그림과 분명히 구별한다.
+    if action=="dash":
+        out=out.rotate(math.sin(phase)*.65,Image.Resampling.BICUBIC,center=ANCHOR)
+    return out
+
+
 def atlas_for(s):
-    atlas=Image.new("RGBA",(CELL*COLS,CELL*2*LAYERS),(0,0,0,0))
-    states=(None,-1.0,-0.5,0.0,0.5,1.0,0.0)
-    for di in range(DIRS):
-        ang=di*math.tau/DIRS; col=di%COLS; band=di//COLS
-        for layer,state in enumerate(states):
-            im=draw_hull(s,ang) if layer==0 else draw_rig(s,ang,state,layer==6)
-            atlas.alpha_composite(im,(col*CELL,(layer*2+band)*CELL))
+    atlas=Image.new("RGBA",(CELL*COLS,CELL*DIRS*2),(0,0,0,0))
+    for action,spec in ACTIONS.items():
+        for di in range(DIRS):
+            ang=di*math.tau/DIRS
+            for fi in range(spec["frames"]):
+                atlas.alpha_composite(motion_frame(s,ang,action,fi),((spec["col"]+fi)*CELL,(spec["row"]+di)*CELL))
     return atlas
 
 
@@ -470,12 +540,12 @@ def write_meta(ss):
     rows=[]
     for s in ss:
         rows.append("    %s: %s" % (json.dumps(s["id"]), json.dumps({
-            "key":"ships-nav/"+s["id"],"cell":CELL,"cols":COLS,"dirs":DIRS,
+            "key":"ships-nav/"+s["id"],"layout":"motion-v2","cell":CELL,"cols":COLS,"dirs":DIRS,
             "anchor":list(ANCHOR),"baseLen":BASE_LEN,
-            "layers":{"hull":0,"sails":[1,2,3,4,5],"furl":6},
+            "actions":ACTIONS,
             "sails":s["sails"],"hullType":s["hull"]
         },ensure_ascii=False,separators=(",",":"))))
-    text="""/* tools/render_ship_sprites.py가 만든 16방향 선박 시트 메타데이터. */
+    text="""/* tools/render_ship_sprites.py가 만든 8방향 동작 선박 시트 메타데이터. */
 (function (G) {
   'use strict';
   G.SHIP_ART = {
@@ -493,12 +563,11 @@ def contact_sheet(ss, atlases):
     d=ImageDraw.Draw(out)
     try: font=ImageFont.truetype("C:/Windows/Fonts/malgun.ttf",13)
     except OSError: font=None
-    di=2; sx=(di%COLS)*CELL; band=di//COLS
+    di=1; action="dash"; fi=2
     for i,s in enumerate(ss):
         x=pad+(i%cols)*(thumb+pad); y=pad+(i//cols)*(thumb+34+pad)
-        base=atlases[s["id"]].crop((sx,band*CELL,sx+CELL,band*CELL+CELL))
-        rig=atlases[s["id"]].crop((sx,(3*2+band)*CELL,sx+CELL,(3*2+band)*CELL+CELL))
-        base.alpha_composite(rig)
+        spec=ACTIONS[action]; sy=(spec["row"]+di)*CELL; sx=(spec["col"]+fi)*CELL
+        base=atlases[s["id"]].crop((sx,sy,sx+CELL,sy+CELL))
         base.thumbnail((thumb,thumb),Image.Resampling.LANCZOS)
         out.alpha_composite(base,(x+(thumb-base.width)//2,y))
         d.text((x+4,y+thumb+5),f"{s['name']}  {s['id']}",fill=(235,225,202,255),font=font)
@@ -511,8 +580,9 @@ def main():
     for i,s in enumerate(ss,1):
         im=atlas_for(s); atlases[s["id"]]=im
         path=OUT/(s["id"]+".webp")
-        # 투명 여백이 큰 픽셀 시트는 팔레트를 정돈한 무손실 WebP가 더 작고 선명하다.
-        im.save(path,"WEBP",lossless=True,method=4)
+        # 알파는 그대로 보존하고 색만 고품질 WebP로 압축한다. 실제 표시가 38~70px라
+        # 92 품질에서 무손실과 차이가 보이지 않으면서 36종의 읽기·풀기 부담이 크게 준다.
+        im.save(path,"WEBP",quality=92,method=6)
         print(f"[{i:02d}/{len(ss)}] {path.relative_to(ROOT)} {path.stat().st_size/1024:.0f} KiB")
     write_meta(ss); contact_sheet(ss,atlases)
     total=sum(p.stat().st_size for p in OUT.glob("*.webp"))

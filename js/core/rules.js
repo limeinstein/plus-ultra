@@ -17,6 +17,7 @@
     return true;
   };
   R.cityOwner = function (c) {
+    var d = G.Dominion && G.Dominion.owner(c); if (d) return d;     // 연도별 지배 국가 (js/data/dominion.js)
     var S = R.S(); return (S && S.owners && S.owners[c.id]) || c.nation;
   };
   // 작은 항구지만 그 고장 배를 짓는 조선소가 있는 곳 (나가사키·향료 제도·잉카 해안·말라바르·요동 등)
@@ -104,8 +105,10 @@
   R.isHomeNation = function (c) {
     var S = R.S(); var own = R.cityOwner(c);
     if (S.player.nation === 'PT') return own === '포르투갈';
-    return own === '카스티야' || own === '아라곤';
+    return own === '카스티야' || own === '아라곤' || own === '에스파냐';
   };
+  /** 이베리아 두 왕실(포르투갈·에스파냐)의 땅인가 */
+  R.iberOwner = function (own) { return own === '포르투갈' || own === '카스티야' || own === '아라곤' || own === '에스파냐'; };
 
   // ---------------------------------------------------------------- items
   R.hasItem = function (id) { return R.S().player.items.some(function (it) { return it.id === id; }); };

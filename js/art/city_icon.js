@@ -227,6 +227,14 @@
       ctx.moveTo(-aw + n, -ah); ctx.lineTo(-aw, -ah); ctx.lineTo(-aw, -ah + n); ctx.moveTo(aw - n, -ah); ctx.lineTo(aw, -ah); ctx.lineTo(aw, -ah + n);
       ctx.moveTo(-aw, ah - n); ctx.lineTo(-aw, ah); ctx.lineTo(-aw + n, ah); ctx.moveTo(aw, ah - n); ctx.lineTo(aw, ah); ctx.lineTo(aw - n, ah); ctx.stroke();
     }
-    ctx.imageSmoothingEnabled = true; ctx.drawImage(a.canvas, -a.width * scale / 2, -a.height * scale / 2, a.width * scale, a.height * scale); ctx.restore(); return met;
+    ctx.imageSmoothingEnabled = true; ctx.drawImage(a.canvas, -a.width * scale / 2, -a.height * scale / 2, a.width * scale, a.height * scale);
+    // 다스리는 나라의 색 띠 (dominion.js) — opts.owner === false 면 그리지 않는다
+    var own = opts.owner !== false && G.Dominion && G.R && G.R.cityOwner(c), col = own && G.Dominion.color(own);
+    if (col) {
+      var bw = met.width * 0.62, bh = Math.max(2.5, 3.2 * scale), by = met.base - bh * 0.6;
+      ctx.fillStyle = 'rgba(20,14,8,.7)'; ctx.fillRect(-bw / 2 - 1, by - 1, bw + 2, bh + 2);
+      ctx.fillStyle = col; ctx.fillRect(-bw / 2, by, bw, bh);
+    }
+    ctx.restore(); return met;
   };
 })(window.G = window.G || {});

@@ -188,7 +188,8 @@
     var table = [
       ['bottle', 9], ['drift', 7], ['crate', 6], ['dolphins', trop ? 8 : 3], ['fish', 7], ['ghost', 3],
       ['wreck', 5], ['birds', nearLand ? 9 : 1], ['redsky', 5], ['fever', 4], ['whales', cold ? 7 : 4],
-      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', st.calm ? 8 : 2], ['map', 2], ['monster', 1], ['shoal', nearLand ? 6 : 0]
+      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', st.calm ? 8 : 2], ['map', 2], ['monster', 1], ['shoal', nearLand ? 6 : 0],
+      ['siren', trop ? 2.5 : 0.6]
     ];
     // 최근에 겪은 일은 덜 나오게 한다 (같은 사건이 되풀이되지 않도록)
     var recent = s.evtRecent || (s.evtRecent = []);
@@ -198,6 +199,7 @@
     st.lastEvt = s.day;
     var first = mate('first');
     var luck = R.fleetBonus('luck') * 2;                    // 선수상의 행운: 나쁜 일을 피할 가능성
+    var EF = G.EventFx, fxSay = function (kind, text, who) { return EF ? EF.during(kind, function () { return UI.say(text, who || {}); }) : UI.say(text, who || {}); };
     var deathCap = function (n) { var k = (G.BALANCE && G.BALANCE.eventDeath) || 1; return Math.max(0, Math.min(f.crew - 1, n, Math.max(1, Math.round(f.crew * k)))); };
     switch (pick) {
       case 'bottle': {
@@ -235,7 +237,7 @@
         break;
       }
       case 'dolphins':
-        await UI.say('돌고래 떼가 뱃머리를 따라 헤엄친다. 선원들의 얼굴이 밝아졌다.', {});
+        await fxSay('dolphin', '돌고래 떼가 뱃머리를 따라 헤엄친다. 선원들의 얼굴이 밝아졌다.');
         f.fatigue = Math.max(0, f.fatigue - 10); f.discipline = Math.min(100, f.discipline + 5);
         break;
       case 'fish': {
@@ -286,7 +288,9 @@
         break;
       }
       case 'redsky': {
+        var fxR = EF ? EF.show('raincloud') : null;
         var v3 = await UI.ask('아침 하늘이 핏빛으로 물들었다. 늙은 선원이 중얼거린다. "붉은 아침 하늘은 폭풍의 전조요."', [{ label: '돛을 줄이고 대비한다', value: 1 }, { label: '그대로 나아간다', value: 0 }], mate('nav'));
+        if (fxR) fxR.stop();
         if (v3) { st.stormGuard = 4; f.fatigue = Math.min(100, f.fatigue + 4); st.slowDays = 2; UI.toast('돛을 줄이고 밧줄을 다시 맸다. (나흘 동안 폭풍 피해 절반, 이틀간 느려짐)', 'wind', 5000); }
         else { st.stormRisk = 4; UI.toast('선원들이 불안한 얼굴로 하늘을 본다...', 'wind'); }
         break;
@@ -306,8 +310,8 @@
         if (art) {
           var fm = 4 + art * 4;
           s.player.fame += fm;
-          await UI.say('거대한 고래 떼가 물을 뿜으며 지나간다. 제독은 그 모습을 화첩에 그려 두었다. (명성 +' + fm + ')', {});
-        } else { await UI.say('거대한 고래 떼가 물을 뿜으며 지나간다. 선원들이 넋을 놓고 바라본다.', {}); f.discipline = Math.min(100, f.discipline + 4); }
+          await fxSay('whale', '거대한 고래 떼가 물을 뿜으며 지나간다. 제독은 그 모습을 화첩에 그려 두었다. (명성 +' + fm + ')');
+        } else { await fxSay('whale', '거대한 고래 떼가 물을 뿜으며 지나간다. 선원들이 넋을 놓고 바라본다.'); f.discipline = Math.min(100, f.discipline + 4); }
         break;
       }
       case 'trader': {
@@ -343,6 +347,24 @@
         if (U.chance(0.35 + R.skill('nav') * 0.15 + luck)) { await UI.say('물빛이 옅어졌다. 여울이다! 측심줄을 던지며 조심조심 빠져나왔다.' + some, mate('nav')); break; }
         var shS = U.pick(deep); shS.hp = Math.max(1, shS.hp - shS.maxHp * U.rf(0.08, 0.18)); f.fatigue = Math.min(100, f.fatigue + 5);
         await UI.say('쿵! ' + shS.name + '호가 여울에 걸렸다! 한나절을 애쓴 끝에 빠져나왔지만 배 밑이 상했다.' + some, {});
+        break;
+      }
+      case 'siren': {
+        // 인어(세이렌): 노래를 들으면 마음이 풀리기도, 넋을 잃고 키를 놓치기도 한다. 귀를 막으면 아무 일 없다
+        var fxS = EF ? EF.show('mermaid') : null;
+        await UI.say('해 질 녘, 뱃전 너머 물결 사이로 긴 머리카락의 여인이 떠올랐다. 물고기 꼬리가 반짝이고, 처음 듣는 노래가 바다 위로 번져 온다…', {});
+        var v5 = await UI.ask('선원들이 일손을 놓고 뱃전으로 몰려든다. 어떻게 할까?', [{ label: '노래를 듣는다', value: 1 }, { label: '밀랍으로 귀를 막고 지나간다', value: 0 }], first);
+        if (fxS) fxS.stop();
+        if (!v5) { f.discipline = Math.min(100, f.discipline + 2); UI.toast('선원들이 귀를 막고 노를 저었다. 노랫소리가 멀어진다.', 'wind'); break; }
+        if (U.chance(0.5 + R.skill('theo') * 0.1 + luck)) {
+          f.fatigue = Math.max(0, f.fatigue - 12); f.discipline = Math.min(100, f.discipline + 6);
+          await UI.say('노랫소리가 잦아들자 그녀는 물보라를 남기고 사라졌다. 선원들의 얼굴이 꿈에서 깬 듯 맑다.', {});
+          var md = G.DISC && G.DISC.mermaid;
+          if (md && G.Disc && !G.Disc.foundByMe('mermaid') && !G.Disc.hasHint('mermaid')) { G.Disc.addHint('mermaid', 'siren'); UI.toast('단서를 얻었다: 「' + md.name + '」', 'scroll', 4200); }
+        } else {
+          st.slowDays = 2; f.fatigue = Math.min(100, f.fatigue + 6);
+          await UI.say('넋을 잃은 키잡이가 키를 놓쳤다! 배는 한참을 엉뚱한 쪽으로 흘러간 뒤에야 제자리를 찾았다. (이틀간 느려짐)', mate('nav'));
+        }
         break;
       }
       case 'songs':

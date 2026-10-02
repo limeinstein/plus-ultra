@@ -52,7 +52,7 @@
   function buildUI() {
     var s = S();
     UI.clearScreen();
-    // 육상 탐험 중: 날짜 · 위도 · 경도 · 탐험 일수 · 대원 · 식량·물 · 피로 · 지형 · 탈것 · 계약 | 소지금 · 명성
+    // 육상 탐험 중: 날짜 · 위도 · 경도 · 탐험 일수 · 대원 · 식량 · 식수 · 피로 · 스트레스 · 지형 · 탈것 · 계약 | 소지금 · 명성
     var H = G.Game.hud;
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
@@ -60,8 +60,10 @@
       { k: 'lon', label: '경도', text: H.lon() },
       { k: 'days', icon: 'tent', label: '탐험', text: '' },
       { k: 'party', icon: 'people', label: '대원', text: '' },
-      { k: 'sup', icon: 'bread', label: '식량·물', text: '' },
+      { k: 'food', icon: 'bread', label: '식량', text: '' },
+      { k: 'water', icon: 'drop', label: '식수', text: '' },
       { k: 'fat', icon: 'hourglass', label: '피로', text: '' },
+      { k: 'stress', icon: 'heart', label: '스트레스', text: '' },
       { k: 'terr', icon: 'land', label: '지형', text: '' },
       { k: 'mount', icon: 'boot', label: '탈것', text: '' },
       { k: 'contract', icon: 'seal', label: '계약', text: '' },
@@ -141,9 +143,10 @@
     UI.hud.set('lat', H.lat()); UI.hud.set('lon', H.lon());
     UI.hud.set('days', (l.days || 0) + '일째');
     UI.hud.set('party', l.party + '명');
-    var days = Math.min(R.daysOfFood(), R.daysOfWater());
-    UI.hud.set('sup', days + '일분', days < 7);
+    var food = H.supply('food'), water = H.supply('water');
+    UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
     UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
+    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     UI.hud.set('fame', U.num(s.player.fame));
     var t = G.Geo.terrain(l.lon, l.lat), mt = MT(), M = G.Mounts;
@@ -239,6 +242,7 @@
     st.gph += Math.min(moved / stride, (FP.maxStepHz || 2.2) * dt);
     st.gdist += moved / s;
     st.movT = moved > 0.02 ? 0.3 : Math.max(0, (st.movT || 0) - dt);
+    st.pxs = (st.pxs || 0) + (moved / Math.max(dt, 1e-3) - (st.pxs || 0)) * Math.min(1, dt * 3);   // 화면에서 초당 움직인 거리 (뛰기·질주 그림을 고른다)
     var mv = st.movT > 0;
     st.gather += ((mv ? 0 : 1) - st.gather) * Math.min(1, dt * (mv ? 5 : 1.1));
     if (Math.abs(dx) > moved * 0.3 && moved > 0.02) st.face = dx > 0 ? 1 : -1;
@@ -276,7 +280,8 @@
       var use = R.dailyUse(), mt = MT(), M = G.Mounts;
       f.food = Math.max(0, f.food - use * M.use(mt, terr, l.party, 'food')); f.water = Math.max(0, f.water - use * (T.thirst || 1) * M.use(mt, terr, l.party, 'water'));
       // 피로: 걸음의 피로는 탈것이 덜어 주고, 추위는 털옷·썰매가 조금 덜어 준다
-      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) - R.skill('ops') * 0.3, 0, 100);
+      var stressK = (G.BALANCE && G.BALANCE.stress) || {};
+      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) + (f.stress || 0) * (stressK.landFatigue || 0.006) - R.skill('ops') * 0.3, 0, 100);
       // 알맞지 않은 땅에서는 짐승을 잃는다
       var rk = M.risk(mt, terr);
       if (rk > 0 && mt.n > 0 && U.chance(Math.min(0.5, rk * (1 + mt.n / 8)))) {
@@ -337,7 +342,10 @@
         else { await UI.say('원주민들이 화가 나서 달려든다!', {}); await landBattle('원주민 전사', foeSize(0.45, 0.95, 8), false, { kind: 'native' }); }
       }
     } else if (r < 0.55) {
+      var bz = G.EventFx ? G.EventFx.beastsHere() : null;   // 그 땅의 짐승 (육상전에 나오는 짐승과 같다)
+      var fxB = bz ? G.EventFx.show('beast', { animal: bz[1], pack: bz[0], bg: terr }) : null;
       await UI.say(U.pick(['사나운 짐승 떼가 습격해 왔다!', '굶주린 들짐승이 야영지를 덮쳤다!']), {});
+      if (fxB) await fxB.stop();
       await landBattle('들짐승', foeSize(0.15, 0.35, 5, 40), true);
     } else if (r < 0.72) {
       await UI.say('도적 떼가 길을 막아섰다! "가진 것을 모두 내놓아라!"', {});
@@ -391,12 +399,12 @@
     var s = S(), f = s.fleet, l = s.loc;
     spendDays(1);
     var fat0 = f.fatigue, hp0 = s.player.hp;
-    f.fatigue = 0; s.player.hp = 100;
+    f.fatigue = 0; f.stress = 0; s.player.hp = 100;
     (s.mates || []).forEach(function (m) { if (m.hurt) m.hurt = Math.max(0, m.hurt - 3); });
     var cv = A.canvas(720, 300);
     var win = UI.window({ title: '캠프파이어', icon: 'tent', width: 780, html: '<div class="campfire"><div class="cf-art"></div><div class="cf-text">' +
       U.pick(['원주민들이 모닥불 곁에 자리를 내주었다. 구운 고기와 곡물 죽이 돌고, 북소리에 맞춰 노래가 이어진다.', '밤이 되자 원주민들이 커다란 모닥불을 피웠다. 대원들은 오랜만에 배불리 먹고, 불 곁에서 깊이 잠들었다.', '모닥불 너머로 원주민의 이야기꾼이 조상들의 긴 여행 이야기를 들려준다. 말은 몰라도 대원들의 얼굴이 밝아진다.']) +
-      '</div><div class="cf-res">피로 ' + Math.round(fat0) + ' → 0 · 제독 체력 ' + Math.round(hp0) + ' → 100 · 하루가 지났다</div></div>', buttons: [{ label: '날이 밝았다', value: 1, cls: 'navy' }] });
+      '</div><div class="cf-res">피로 ' + Math.round(fat0) + ' → 0 · 스트레스 → 0 · 제독 체력 ' + Math.round(hp0) + ' → 100 · 하루가 지났다</div></div>', buttons: [{ label: '날이 밝았다', value: 1, cls: 'navy' }] });
     win.content.querySelector('.cf-art').appendChild(cv);
     var t0 = performance.now(), live = true;
     win.result.then(function () { live = false; });
@@ -467,7 +475,7 @@
     return res;
   }
   L.landBattle = landBattle;
-  L._test = { encounter: function (t) { return encounter(t); }, nativeGift: function (w) { return nativeGift(w); }, campfire: function (w) { return campfire(w); } };
+  L._test = { encounter: function (t) { return encounter(t); }, terrainEvent: function (t) { return terrainEvent(t); }, nativeGift: function (w) { return nativeGift(w); }, campfire: function (w) { return campfire(w); } };
 
   // ---------------------------------------------------------------- actions
   /** 야영지에서 며칠을 보낸다 (식량·물을 쓰고 날이 간다) */
@@ -545,8 +553,27 @@
 
   /** 지형마다 다른 사건. 일어나면 true */
   async function terrainEvent(terr) {
-    var s = S(), l = s.loc, f = s.fleet, sp = G.Scenes.mateSpeaker('first');
+    var s = S(), l = s.loc, f = s.fleet, sp = G.Scenes.mateSpeaker('first'), EF = G.EventFx;
+    // 소나기 (초원·숲·밀림): 물을 채우지만 젖은 길에 지친다
+    if ((terr === 'grass' || terr === 'forest' || terr === 'jungle') && U.chance(0.22)) {
+      var fxR = EF ? EF.show('shower', { bg: terr }) : null;
+      await UI.say('하늘이 순식간에 어두워지더니 굵은 소나기가 쏟아진다! 대원들이 가죽 부대와 통을 펼쳐 빗물을 받는다.', sp);
+      if (fxR) fxR.stop();
+      var rainW = Math.round(R.dailyUse() * U.rf(2, 4)); f.water += rainW; f.fatigue = Math.min(100, f.fatigue + 4);
+      UI.toast('빗물로 물 ' + rainW + '통을 채웠다. 젖은 길에 조금 지쳤다.', 'drop', 4000);
+      return true;
+    }
     if (terr === 'desert') {
+      // 뙤약볕: 물이 빨리 준다 (항해술이 아니라 운용술로 버틴다)
+      if (U.chance(0.3)) {
+        var fxS = EF ? EF.show('sun', { bg: 'desert' }) : null;
+        await UI.say('그늘 한 점 없는 모래 위로 해가 이글거린다. 대원들의 입술이 갈라진다...', {});
+        if (fxS) fxS.stop();
+        var heat = Math.round(R.dailyUse() * U.rf(1, 2.5) * (1 - R.skill('ops') * 0.2));
+        f.water = Math.max(0, f.water - heat); f.fatigue = Math.min(100, f.fatigue + 8);
+        UI.toast('뙤약볕에 물 ' + heat + '통을 더 마셨다.', 'drop');
+        return true;
+      }
       if (U.chance(0.5)) {
         await UI.say('지평선이 누렇게 일어서더니 모래폭풍이 덮쳐 왔다!', {});
         var loss = Math.round(R.dailyUse() * U.rf(1, 3) * (1 - R.skill('ops') * 0.2));
@@ -612,7 +639,12 @@
     if (s.known.indexOf(c.id) < 0) s.known.push(c.id);
     s.landReturn = { lon: s.loc.lon, lat: s.loc.lat, base: s.loc.base, party: s.loc.party, days: s.loc.days, mount: MT() };
     var isBaseCity = s.loc.base.type === 'city' && s.loc.base.city === c.id;
-    if (isBaseCity) delete s.landReturn;
+    // 출발한 성문으로 바로 들어와도 산 탈것은 사라지지 않고 마구간 장비로 돌아간다.
+    if (isBaseCity) {
+      var mt = MT(), mm = G.Mounts.get(mt.id);
+      if (mt.id !== 'walk' && mt.n > 0 && !mm.hire) { s.stable = s.stable || {}; s.stable[c.id] = { id: mt.id, n: mt.n, draft: mt.draft }; }
+      delete s.landReturn;
+    }
     await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true, via: isBaseCity ? 'sea' : 'land' }); });
   }
   /** called from the city gate when the player resumes the expedition */
@@ -712,7 +744,7 @@
     // 탐험대 모형: 발밑 먼지 → 고리 → 줄지어 선 대원들
     var pp = tp[0], mvg = (st.movT || 0) > 0;
     G.Party.drawFx(ctx, st.pfx, toScreen);
-    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', cache: st.unit });
+    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit });
     // 도시 이름은 탐험대 위에 (가려지지 않게)
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;

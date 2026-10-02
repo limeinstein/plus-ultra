@@ -95,14 +95,18 @@
       (relics ? '<div class="rs-note">후원자에게 보고하면 증거로 바치고, 항구에서 스스로 발표하면 제독의 것이 됩니다.</div>' : '') + '</div>';
   };
   SC.discoveryCard = async function (d, fame, relics) {
+    var s = S();
     var chain = G.Img.chain.discovery(d);
     if (G.Img.pick(chain)) await G.Img.preload([chain], 1500);
     // 애니메이션 GIF를 Canvas에 그리면 한 프레임만 남는다. 움직이는 발견 그림은 원본 <img>나 장면 판으로 올린다.
     var art = SC.discoveryPicture(d, chain);
+    var impact = s.disc[d.id] && s.disc[d.id].impact;
+    function delta(n) { return (n > 0 ? '+' : '') + n; }
+    var impactHtml = impact ? '<div class="disc-impact ' + impact.key + '"><div class="di-title">' + G.icon(impact.icon || 'star') + '<b>발견의 여파 · ' + U.esc(impact.name) + '</b></div><div class="di-line">' + U.esc(impact.line) + '</div><div class="di-stats"><span>피로 ' + delta(impact.fatigue) + '</span><span>스트레스 ' + delta(impact.stress) + '</span><span>규율 ' + delta(impact.discipline) + '</span></div></div>' : '';
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
       '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +
-      '<div class="desc">' + U.esc(d.desc) + '</div>' + SC.realInfo(d.real) +
+      '<div class="desc">' + U.esc(d.desc) + '</div>' + impactHtml + SC.realInfo(d.real) +
       (fame ? '<div class="center big" style="color:#6a3a14">명성 +' + U.num(fame) + '</div>' : '') + SC.relicStrip(d, relics) + '</div>';
     var win = UI.window({ title: fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
     win.content.querySelector('.art').appendChild(art);

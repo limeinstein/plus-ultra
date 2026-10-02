@@ -68,16 +68,18 @@
   function buildUI() {
     var s = S();
     UI.clearScreen();
-    // 항해 중: 날짜 · 위도 · 경도 · 항해 일수 · 식량·물 · 선원 · 피로 · 계약 | 소지금 · 명성
+    // 항해 중: 날짜 · 위도 · 경도 · 항해 일수 · 식량 · 식수 · 선원 · 피로 · 스트레스 · 계약 | 소지금 · 명성
     var H = G.Game.hud;
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
       { k: 'lat', icon: 'compass', label: '위도', text: H.lat() },
       { k: 'lon', label: '경도', text: H.lon() },
       { k: 'days', icon: 'sail', label: '항해', text: '' },
-      { k: 'sup', icon: 'bread', label: '식량·물', text: '' },
+      { k: 'food', icon: 'bread', label: '식량', text: '' },
+      { k: 'water', icon: 'drop', label: '식수', text: '' },
       { k: 'crew', icon: 'people', label: '선원', text: '' },
       { k: 'fat', icon: 'hourglass', label: '피로', text: '' },
+      { k: 'stress', icon: 'heart', label: '스트레스', text: '' },
       { k: 'contract', icon: 'seal', label: '계약', text: '' },
       { grow: true },
       { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
@@ -140,10 +142,11 @@
     UI.hud.set('date', H.date());
     UI.hud.set('lat', H.lat()); UI.hud.set('lon', H.lon());
     UI.hud.set('days', (f.daysOut || 0) + '일째');
-    var days = Math.min(R.daysOfFood(), R.daysOfWater());
-    UI.hud.set('sup', days + '일분', days < 7);
+    var food = H.supply('food'), water = H.supply('water');
+    UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
     UI.hud.set('crew', f.crew + '명' + (f.crew < R.crewMin() ? '<small>/' + R.crewMin() + '</small>' : ''), f.crew < R.crewMin());
     UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
+    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     UI.hud.set('gold', H.gold());
     UI.hud.set('fame', U.num(s.player.fame));
@@ -996,11 +999,13 @@
       // fatigue & discipline
       var BAL = G.BALANCE || {};
       var fb = 1.1 - R.skill('nav') * 0.22 + (st.storm > 0 ? 3 : 0) + (f.crew < R.crewMin() ? 0.8 : 0);
+      var stressK = BAL.stress || {};
+      fb += (f.stress || 0) * (stressK.seaFatigue || 0.008);
       if (BAL.spareWatch && f.crew >= Math.ceil(R.crewMin() * BAL.spareWatch)) fb -= BAL.spareRest || 0;   // 교대할 선원이 넉넉하다
       if (st.path || st.dirCrs != null || (st.manual && st.thr > 0.1)) { var row = st.manual ? (R.fleetMotion(l.heading, curWind()), R.fleetInfo && R.fleetInfo.row) : (R.fleetMotion(st.crs != null ? st.crs : l.heading, curWind()), R.rowing); if (row) { fb += 0.9; if (!st.rowWarned) { st.rowWarned = true; msgs.push({ icon: 'people', text: '돛이 바람을 못 받아 선원들이 노를 젓는다. 노를 오래 저으면 지친다.' }); } } else st.rowWarned = false; }
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
-      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + morale * 2, 0, 100);
+      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) - (f.stress || 0) * (stressK.discipline || 0.012) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + morale * 2, 0, 100);
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();
@@ -1136,7 +1141,7 @@
     var p = stormChance(l.lon, l.lat, s.date.m) * Math.max((G.BALANCE && G.BALANCE.stormFloor) || 0, (1 - R.fleetBonus('storm') * 3) * (blessed() ? 0.75 : 1)) * (s.settings.diff === 'easy' ? 0.6 : 1) * (st.stormRisk > 0 ? 2.6 : 1);
     if (U.chance(p)) {
       st.stormPending = true;
-    } else if (U.chance(0.012) && Math.abs(l.lat) < 12) { st.calm = U.ri(2, 5); msgs.push({ icon: 'wind', text: '바람이 멎었다. 무풍지대다...' }); }
+    } else if (U.chance(0.012) && Math.abs(l.lat) < 12) { st.calm = U.ri(2, 5); msgs.push({ icon: 'wind', text: '바람이 멎었다. 무풍지대다...' }); if (G.EventFx) G.EventFx.flash('sun', 3.2); }
   }
   async function crises(msgs) {
     var s = S(), f = s.fleet;
@@ -1144,6 +1149,7 @@
       st.stormPending = false;
       st.storm = 1; st.stormDays = U.ri(1, 3);
       if (G.Audio) G.Audio.sfx('storm');
+      var stormFx = G.EventFx ? G.EventFx.show('storm') : null;   // 폭풍 그림은 피해를 알리는 말까지 띄워 둔다
       await UI.say('제독! 폭풍입니다! 돛을 줄여라! 모두 밧줄을 붙잡아라!', G.Scenes.mateSpeaker('nav'));
       // 폭풍 피해는 배마다 그 배 선장의 항해술로 줄인다 (기함의 항해술은 신호로 다른 배에도 절반만큼 미친다)
       var navF = R.skill('nav');
@@ -1171,6 +1177,7 @@
       if (saved.length) txt += '\n' + saved.map(function (x) { return x.name; }).join(', ') + '호는 ' + (G.Ships.has(saved[0], 'raft') ? '뗏목이라' : '칸막이 선창 덕에') + ' 가라앉지 않고 버텼다.';
       if (sunk.length) txt += '\n' + sunk.map(function (x) { return x.name; }).join(', ') + '호가 침몰했다!';
       await UI.say(txt, {});
+      if (stormFx) stormFx.stop();
       refreshHud();
     }
     // mutiny
@@ -1314,6 +1321,8 @@
         }
         if (n.pose) nlook.pose = j ? { roll: n.pose.roll * 0.8, pitch: -n.pose.pitch * 0.6, heave: n.pose.heave * 0.5 } : n.pose;
         if (n.rig) nlook.rig = n.rig;
+        nlook.motionSpeed = Math.min(1.4, Math.max(0, n.spd || 0) / FXS().refSpeed);
+        nlook.motionRate = 0.8 + nlook.motionSpeed * 0.25;
         nlook.sid = n.id + ':' + j;
         var nsv = sideView('n' + n.id, n.heading); nlook.face = nsv.face; nlook.squash = nsv.squash;
         A.shipTop(ctx, p[0] - Math.cos(nsv.ang) * j * 18 * nk + j * 6 * nk, p[1] + Math.sin(nsv.ang) * j * 18 * nk + j * 8 * nk, nsv.ang, npcPx(), nlook, st.t + j);
@@ -1345,6 +1354,7 @@
       if (RF) lk.pose = { roll: U.clamp(RF.roll, -RDm.maxRoll, RDm.maxRoll), pitch: U.clamp(RF.pitch, -RDm.maxPitch, RDm.maxPitch), heave: U.clamp(RF.heave, -RDm.maxHeave, RDm.maxHeave) };
       else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };
       lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null; lk.sid = 'f' + si; lk.face = sv.face; lk.squash = sv.squash;
+      lk.motionSpeed = sr * (si ? 0.92 : 1); lk.motionRate = 0.78 + Math.min(1.4, sr) * 0.28;
       A.shipTop(ctx, bx, by, ha, lenS, lk, st.t + si);
       if (G.VoyageFX) G.VoyageFX.drawSpray(st, ctx, bx, by, ha, lenS, si);   // 속력을 낼 때 선수 물보라
     }
@@ -1353,7 +1363,7 @@
     // hover tooltip
     if (st.mouse && !UI.busy()) {
       var hc = cityAt(st.mouse[0], st.mouse[1]);
-      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.CityIcon.cultureName(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : ' — 클릭하면 이곳으로 향합니다')); }
+      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : ' — 클릭하면 이곳으로 향합니다')); }
       else {
         var hn = npcAt(st.mouse[0], st.mouse[1]);
         if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : hn.label || (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));

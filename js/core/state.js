@@ -22,7 +22,7 @@
         fame: 0, notoriety: 0, gold: p.gold || 3000, bank: 0, items: [], equip: { weapon: 'rapier', armor: null },
         hp: 100, home: home, wife: null, kids: [], generation: 1, jailed: 0
       },
-      fleet: { ships: [], crew: 0, food: 0, water: 0, cargo: {}, fatigue: 0, discipline: 80, daysOut: 0, sick: 0, scurvy: 0, rats: 0 },
+      fleet: { ships: [], crew: 0, food: 0, water: 0, cargo: {}, fatigue: 0, stress: 0, discipline: 80, daysOut: 0, sick: 0, scurvy: 0, rats: 0 },
       mates: [],
       loc: { mode: 'city', city: home, lon: G.CITY_DATA[home].lon, lat: G.CITY_DATA[home].lat, heading: Math.PI },
       contract: null,

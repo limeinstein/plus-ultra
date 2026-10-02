@@ -53,6 +53,42 @@
     return '가치 ' + U.num(D.value(d)) + ' <small>(' + why.join(', ') + ')</small>';
   };
 
+  // ---------------------------------------------------------------- 발견의 여파 (대항해시대 3식 감정 변화)
+  var IMPACT = {
+    awe:     { name: '감동', icon: 'star', line: '눈앞의 광경에 긴 여정의 고단함을 잠시 잊었다.' },
+    triumph: { name: '성취감', icon: 'laurel', line: '해냈다는 기쁨에 탐험대의 사기가 크게 올랐다.' },
+    delight: { name: '흥분', icon: 'chest', line: '귀한 발견을 손에 넣었다는 기쁨이 대원들에게 번졌다.' },
+    wonder:  { name: '경이', icon: 'compass', line: '처음 보는 존재를 마주한 놀라움이 마음을 환기했다.' },
+    fear:    { name: '공포', icon: 'skull', line: '기괴하고 두려운 광경이 대원들의 마음에 오래 남았다.' }
+  };
+  var FEAR_IDS = { bermuda: 1, f_giantsquid: 1, tarantula: 1, roc: 1, minotaur: 1, cannibal: 1, crystalskull: 1, antarctic: 1 };
+  /** 데이터에 impact를 따로 적으면 그것을 우선하고, 없으면 발견 갈래와 설명으로 정한다. */
+  D.impactKind = function (d) {
+    if (d.impact && IMPACT[d.impact]) return d.impact;
+    var scary = /악마|유령|식인|사람을 먹|배를 삼키|배를 바다 밑|독이 있어|괴물의 울부짖음/.test((d.name || '') + ' ' + (d.desc || ''));
+    if (FEAR_IDS[d.id] || ((d.cat === 'creature' || d.cat === 'people' || d.cat === 'nature') && scary)) return 'fear';
+    if (d.cat === 'geo') return 'triumph';
+    if (d.cat === 'treasure' || d.cat === 'trade') return 'delight';
+    if (d.cat === 'creature' || d.cat === 'people') return 'wonder';
+    return 'awe';
+  };
+  /** 발견 직후 한 번만 피로·스트레스·규율에 반영한다. 실제로 달라진 수치를 저장해 도감에서도 당시 여파를 볼 수 있다. */
+  D.applyImpact = function (d, st) {
+    st = st || (S().disc[d.id] || (S().disc[d.id] = {}));
+    if (st.impact) return st.impact;
+    var s = S(), f = s.fleet, key = D.impactKind(d), meta = IMPACT[key], tab = (G.BALANCE && G.BALANCE.discoveryImpact) || {}, v = tab[key] || {};
+    var before = { fatigue: f.fatigue || 0, stress: f.stress || 0, discipline: f.discipline == null ? 80 : f.discipline };
+    f.fatigue = U.clamp(before.fatigue + (v.fatigue || 0), 0, 100);
+    f.stress = U.clamp(before.stress + (v.stress || 0), 0, 100);
+    f.discipline = U.clamp(before.discipline + (v.discipline || 0), 0, 100);
+    st.impact = {
+      key: key, name: meta.name, icon: meta.icon, line: meta.line,
+      fatigue: Math.round(f.fatigue - before.fatigue), stress: Math.round(f.stress - before.stress), discipline: Math.round(f.discipline - before.discipline)
+    };
+    return st.impact;
+  };
+  D.impactMeta = function (key) { return IMPACT[key] || IMPACT.awe; };
+
   /** player discovers d (object). returns promise after showing the event */
   D.find = async function (d, how) {
     var s = S();
@@ -81,11 +117,13 @@
     if (G.Audio) G.Audio.sfx('discover');
     // 유적은 복원 GIF가 빛나며 돌고, 「○○ 발견」과 함께 제독·부하의 대화가 이어진다 (그림·세공 솜씨만큼 자세히)
     if (G.Scenes.discoveryReveal) { try { await G.Scenes.discoveryReveal(d, fame); } catch (e) { console.error(e); } }
+    var impact = D.applyImpact(d, st);
     // 칸이 남는 만큼 먼저 챙기고, 모자라면 카드를 본 뒤에 무엇을 버릴지 묻는다
     var wait = [];
     rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });
     st.relics = got.map(function (r) { return r.id; });
     await G.Scenes.discoveryCard(d, fame, got.concat(wait));
+    UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 스트레스 ' + (impact.stress > 0 ? '+' : '') + impact.stress + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
     for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);
     if (rel.length && !s.flags.relicTip) {

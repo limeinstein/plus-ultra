@@ -1,9 +1,9 @@
-/* 16방향 선박 스프라이트: 선체와 바람별 돛 층을 합성한다.
+/* 8방향 선박 스프라이트: 정박·표류·질주 동작 프레임을 그린다.
    그림을 아직 못 읽었거나 빠졌으면 기존 A.shipTop(코드 그림)으로 자동 복귀한다.
 
    늦게 나오거나 끊기지 않게 하는 장치
    - 시트는 읽자마자 ImageBitmap으로 미리 풀어 둔다(createImageBitmap — 풀기는 따로 도는 일꾼이 한다).
-     <img>를 그대로 그리면 처음 그릴 때 그 자리에서 1792×3136을 풀어 한 장면이 멈칫하고,
+     <img>를 그대로 그리면 처음 그릴 때 그 자리에서 1792×3584를 풀어 한 장면이 멈칫하고,
      브라우저가 메모리를 아끼려고 풀어 둔 것을 버리면 다시 멈칫한다.
    - 작게 그릴 때(다른 배·먼 배)는 반으로 줄인 사본을 쓴다 — 계단 현상이 줄고 GPU가 읽는 양도 준다.
    - 항해를 나서기 전(도시)·바다에 들어설 때·배가 화면 밖에서 나타날 때 미리 읽는다(S.want).
@@ -112,31 +112,33 @@
     var src = sh.full || sh.img;
     return { src: src, k: (sh.w || src.width) / (meta.cols * meta.cell) };
   }
-  function frame(ctx, so, meta, dir, layer, scale, residual, alpha, wobble, fill) {
+  function frame(ctx, so, meta, dir, action, index, scale, residual, alpha, wobble) {
     if (alpha <= 0.001) return;
-    var c = meta.cell, band = Math.floor(dir / meta.cols), k = so.k;
-    var sx = (dir % meta.cols) * c * k, sy = (layer * 2 + band) * c * k, sc = c * k;
+    var c = meta.cell, k = so.k, row = action.row + dir;
+    var sx = ((action.col || 0) + index) * c * k, sy = row * c * k, sc = c * k;
     var ax = meta.anchor[0], ay = meta.anchor[1];
     ctx.save();
     if (alpha < 1) ctx.globalAlpha *= alpha;
     ctx.rotate(-residual + (wobble || 0));
-    if (fill != null && layer !== meta.layers.hull) ctx.scale(1 + Math.max(-0.05, Math.min(0.07, (fill - 0.75) * 0.04)), 1);
     ctx.drawImage(so.src, sx, sy, sc, sc, -ax * scale, -ay * scale, c * scale, c * scale);
     ctx.restore();
   }
+  function motion(meta, spec) {
+    var actions = meta.actions || {}, cf = CF(), name;
+    if ((spec.furl || 0) >= 0.55) name = 'idle';
+    else if (spec.motion && actions[spec.motion]) name = spec.motion;
+    else name = (spec.motionSpeed || 0) >= (cf.dashAt == null ? 0.72 : cf.dashAt) ? 'dash' : 'drift';
+    return { name: name, data: actions[name] || actions.drift || actions.idle };
+  }
   function drawDirection(ctx, so, meta, dir, ang, scale, spec, t, alpha) {
     var step = TAU / meta.dirs, residual = angd(ang - dir * step);
-    var rig = spec.rig || {}, sails = meta.sails || [];
-    var hasSquare = sails.indexOf('sq') >= 0, hasLateen = sails.indexOf('lat') >= 0;
-    var luff = Math.max(0, Math.min(1, rig.luff || 0));
-    var state = hasSquare ? (rig.brace || 0) / 0.75 : hasLateen ? (rig.lee || 0) : (rig.brace || rig.lee || 0);
-    state = Math.max(-1, Math.min(1, state)) * (1 - luff * 0.68);
+    var rig = spec.rig || {}, luff = Math.max(0, Math.min(1, rig.luff || 0));
     var wobble = Math.sin(t * 18 + dir * 0.7) * 0.018 * luff;
-    var furl = Math.max(0, Math.min(1, spec.furl || 0));
-    var fill = rig.fill == null ? 0.85 : rig.fill;
-    frame(ctx, so, meta, dir, meta.layers.hull, scale, residual, alpha, 0, null);
-    if (furl < 0.5) frame(ctx, so, meta, dir, meta.layers.sails[Math.max(0, Math.min(4, Math.round((state + 1) * 2)))], scale, residual, alpha, wobble, fill);
-    else frame(ctx, so, meta, dir, meta.layers.furl, scale, residual, alpha, 0, 0.4);
+    var mv = motion(meta, spec), act = mv.data; if (!act) return;
+    var fps = CF().fps && CF().fps[mv.name] || act.fps || 4;
+    var rate = spec.motionRate == null ? 1 : Math.max(0.25, Math.min(2, spec.motionRate));
+    var index = Math.floor(Math.max(0, t || 0) * fps * rate) % act.frames;
+    frame(ctx, so, meta, dir, act, index, scale, residual, alpha, wobble);
   }
   /* 그림자·물살 자국: 뱃머리 쪽으로 돌린다. 내려다보는 각도(약 55°)만큼 남북 방향은 짧아 보인다 */
   var FORE = 0.82;
@@ -168,6 +170,7 @@
   S.draw = function (ctx, x, y, ang, len, spec, t) {
     spec = spec || {};
     var meta = G.SHIP_ART && G.SHIP_ART[spec.type], sh = ready(meta);
+    if (meta && meta.layout !== 'motion-v2') return false;
     if (!sh) return false;
     var a = wrap(ang), step = TAU / meta.dirs;
     // 옆모습(spec.face: 1 오른쪽 · -1 왼쪽): 동·서 칸을 쓰고 나머지 각도(기울기)만 돌린다

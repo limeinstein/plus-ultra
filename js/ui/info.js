@@ -167,9 +167,26 @@
 
   PAGES.items = function (el, win) {
     var s = S(), p = s.player;
+    function mountUnit(id) { return id === 'porter' ? '패' : (id === 'wagon' || id === 'reindeer') ? '대' : '필'; }
+    /** 탈것은 손에 드는 소지품 칸을 차지하지 않는 재사용 이동 장비다. 현재 탐험대와 도시별 마구간 보관분을 한눈에 보여 준다. */
+    function mountGear() {
+      if (!G.Mounts) return '';
+      var list = [], active = s.loc && s.loc.mode === 'land' ? s.loc.mount : s.landReturn && s.landReturn.mount;
+      if (active && active.id !== 'walk' && active.n > 0) list.push({ mt: active, at: '탐험대에서 사용 중', active: true });
+      Object.keys(s.stable || {}).forEach(function (cid) {
+        var mt = s.stable[cid], c = G.CITY_DATA[+cid];
+        if (mt && mt.id !== 'walk' && mt.n > 0) list.push({ mt: mt, at: (c ? c.name : '도시') + ' 성문 마구간' });
+      });
+      var cards = list.length ? list.map(function (o) {
+        var m = G.Mounts.get(o.mt.id), best = G.Mounts.best(o.mt.id), tn = best.terr && G.MOUNT_TERR_NAME[best.terr];
+        var reuse = m.hire ? '이번 탐험 동안 고용한 지원 인력으로, 귀환하면 품삯을 받고 돌아간다.' : '도시로 귀환하면 마구간에 보관되어 다음 탐험에 다시 쓸 수 있다.';
+        return '<div class="mount-item' + (o.active ? ' active' : '') + '"><div class="mi-icon">' + G.icon('horse') + '</div><div class="mi-body"><div><b>' + U.esc(m.name) + ' ×' + o.mt.n + mountUnit(o.mt.id) + '</b> <span class="tag">' + (m.hire ? '지원 인력' : '이동 장비') + '</span>' + (o.active ? ' <span class="tag on">장비 중</span>' : '') + '</div><div class="mi-at">' + U.esc(o.at) + '</div><small>' + (tn ? tn + '에서 걸음 ×' + best.v.toFixed(1) + ' · ' : '') + reuse + '</small></div></div>';
+      }).join('') : '<div class="muted">보유한 이동 장비가 없습니다. 도시 성문의 마구간에서 말·당나귀 같은 탈것을 사면 이곳에 표시됩니다.</div>';
+      return '<div class="mount-gear"><h4>이동 장비 <small>소지품 칸을 쓰지 않음</small></h4><div class="mount-items">' + cards + '</div><div class="mount-rule">말·당나귀 같은 탈것은 소모품이 아닙니다. 탐험 중 쓰러진 수량만 잃고, 살아 돌아온 탈것은 출발한 도시 마구간에 자동으로 맡겨져 재사용됩니다. 다른 도시에서 쓰려면 그 도시 마구간에서 따로 마련해야 합니다.</div></div>';
+    }
     function render() {
       var nRel = p.items.filter(function (it) { return G.RELIC && G.RELIC[it.id]; }).length;
-      el.innerHTML = '<div class="muted" style="margin-bottom:10px">소지품 ' + p.items.length + '/' + R.ITEM_MAX + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div><table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
+      el.innerHTML = mountGear() + '<div class="muted" style="margin:14px 0 10px">소지품 ' + p.items.length + '/' + R.ITEM_MAX + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div><table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
         p.items.map(function (it, i) {
           var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind, rl = G.RELIC && G.RELIC[it.id];
           var eq = (kind === 'weapon' && p.equip.weapon === it.id) || (kind === 'armor' && p.equip.armor === it.id);

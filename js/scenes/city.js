@@ -17,7 +17,7 @@
     return v;
   }
   var NATION_COLOR = { '포르투갈': '#1d3f7a', '카스티야': '#8a1e1e', '아라곤': '#c9a030', '잉글랜드': '#b01e28', '프랑스': '#1e3a8a', '베네치아': '#8a1e2a', '제노바': '#c8c8c8', '오스만 제국': '#a01818', '맘루크 왕조': '#c9a030', '명': '#b8281e', '한자 동맹': '#8a1e1e', '신성로마제국': '#d4a82a' };
-  C.nationColor = function (n) { return NATION_COLOR[n] || A.rgba(A.jitter('#6a4a2a', U.makeRng(U.strHash(n || 'x')), 90)); };
+  C.nationColor = function (n) { return NATION_COLOR[n] || (G.Dominion && G.Dominion.color(n)) || A.rgba(A.jitter('#6a4a2a', U.makeRng(U.strHash(n || 'x')), 90)); };
   C.timeOfDay = function () { var d = S().day % 7; return d === 5 ? 'golden' : d === 6 ? 'dusk' : 'day'; };
   C.viewKeys = function (c) { return G.Img.chain.city(c, C.timeOfDay()); };
   C.view = function (c) {
@@ -199,7 +199,8 @@
     var owner = R.cityOwner(c), m = R.market(c.id);
     var ban = U.el('div', 'city-banner wood brass-frame');
     ban.innerHTML = '<div class="nm">' + c.name + '</div>' +
-      '<div class="meta">' + U.esc(owner) + ' · ' + G.REGIONS[c.region] + ' · ' + C.relName(c) + '</div>' +
+      '<div class="meta"><span class="own-flag" style="background:' + C.nationColor(owner) + '"></span>' + U.esc(owner) + ' 영토' + (G.Dominion ? ' · ' + U.esc(G.CityInfo && G.CityInfo.leader ? G.CityInfo.leader(c) : G.Dominion.leader(owner).text) : '') + '</div>' +
+      '<div class="meta">' + G.REGIONS[c.region] + ' · ' + C.relName(c) + '</div>' +
       '<div class="meta">' + G.LANGS[c.lang] + ' ' + langPips(C.langLv(c)) + (m.ev ? ' · <span style="color:#f0c080">시세: ' + m.ev + '</span>' : '') + '</div>';
     UI.add(ban);
     var items = C.buildings(c).map(function (b) {

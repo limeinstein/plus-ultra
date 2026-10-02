@@ -13,7 +13,7 @@
   var MALABAR = [151, 152, 154], JAVA = [160, 167, 168, 169], MOLUCCA = [171, 172], NORTH_CN = [177, 189], INCA = [220, 221];
   /** ship types sold in this city (특수선은 조건이 모자라도 목록에 넣고 Y.locked로 막는다) */
   Y.types = function (c) {
-    var y = S().date.y, own = R.cityOwner(c), iber = own === '포르투갈' || own === '카스티야' || own === '아라곤';
+    var y = S().date.y, own = R.cityOwner(c), iber = R.iberOwner(own);
     var r = c.region, id = c.id, out = [];
     function add(k) { var t = G.SHIP[k]; if (t && (!t.from || y >= t.from) && out.indexOf(k) < 0) out.push(k); }
     function iberian() { add('barca'); add('caravel'); add('lcaravel'); add('carrack'); if (y >= 1540) add('galleon'); }

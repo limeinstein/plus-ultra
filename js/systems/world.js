@@ -67,6 +67,8 @@
     if (s.player.bank > 0) s.player.bank = Math.floor(s.player.bank * 1.003);
     // maid affection slowly fades
     for (var k in s.maids) { if (s.maids[k].aff > 0 && s.player.wife !== k) s.maids[k].aff = Math.max(0, s.maids[k].aff - 1); }
+    // 이 달에 주인이 바뀐 도시 (dominion.js)
+    if (G.Dominion) out = out.concat(G.Dominion.monthly());
     return out;
   };
 

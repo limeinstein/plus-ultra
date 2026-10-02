@@ -31,6 +31,34 @@
   var TERR_BG = { grass: ['#6f8a4a', '#51683a'], steppe: ['#a09a5a', '#7a7440'], desert: ['#d8b878', '#b89458'], forest: ['#46643a', '#2e4a2a'], jungle: ['#3a5a30', '#223a1e'],
     mountain: ['#8a8474', '#666050'], snow: ['#e8ecf0', '#c4ccd6'], tundra: ['#a8a888', '#84846a'], ice: ['#dfeaf2', '#b8ccdc'] };
 
+  /* 그린 스프라이트 (images/sprites/, js/art/sprites.js): 부대 생김새(look) → [시트, 줄]. 그림이 없으면 아래 fig()가 코드로 그린다.
+     적은 싸우는 곳에 따라 다르다 — 동아시아(east) · 오스만 땅(ottoman) · 그 밖(etc). 짐승은 사는 땅에 따라 */
+  var LOOK = {
+    sword: ['swordsmen', 'blade'], musket: ['musketeers', 'musketeer'], 'musket+': ['musketeers', 'musketeer2'],
+    cannon_me: ['cannons', 'gunner'], 'cannon_me+': ['cannons', 'gunner2'], adm: ['officers', 'officer3'], 'adm+': ['officers', 'admiral'],
+    spear: ['natives', 'warrior'], bow: ['natives', 'shaman'], 'chief:native': ['natives', 'shaman'],
+    'blade:etc': ['swordsmen', 'club'], 'blade:ottoman': ['swordsmen', 'club'], 'blade:east': ['east_fighters', 'brute'],
+    'musket:etc': ['musketeers', 'bandit_gun'], 'musket:ottoman': ['musketeers', 'bandit_gun'], 'musket:east': ['musketeers', 'pirate_gun'],
+    'chief:etc': ['swordsmen', 'blade3'], 'chief:ottoman': ['swordsmen', 'blade3'], 'chief:east': ['east_fighters', 'ninja'],
+    'pike:etc': ['swordsmen', 'blade2'], 'pike:ottoman': ['ottoman', 'shield'], 'pike:east': ['east_fighters', 'spearman'],
+    'gmusket:etc': ['musketeers', 'musketeer'], 'gmusket:ottoman': ['ottoman', 'janissary'], 'gmusket:east': ['musketeers', 'pirate_gun'],
+    'cannon:etc': ['cannons', 'cannon_crew'], 'cannon:ottoman': ['ottoman', 'topcu'], 'cannon:east': ['cannons', 'bandit_cannon'],
+    'gchief:etc': ['officers', 'officer2'], 'gchief:ottoman': ['ottoman', 'shield'], 'gchief:east': ['east_fighters', 'scholar']
+  };
+  function landOf(lon, lat) {
+    if (lon > 98 && lat > -12) return 'east';
+    if (lon > 18 && lon < 62 && lat > 12 && lat < 46) return 'ottoman';
+    return 'etc';
+  }
+  /** 짐승 떼: [떼, 우두머리] — 아프리카는 하이에나 떼와 사자, 인도·동남아는 호랑이, 아메리카는 재규어·곰, 북쪽은 곰, 그 밖은 멧돼지 */
+  function beastsOf(lon, lat) {
+    if (lon > -20 && lon < 52 && lat < 16) return ['hyena', 'lion'];
+    if (lon > 62 && lon < 125 && lat < 32) return ['tiger', 'tiger'];
+    if (lon < -30) return lat > 32 ? ['bear', 'bear'] : ['jaguar', 'jaguar'];
+    if (lat > 52) return ['bear', 'bear'];
+    return ['boar', 'bear'];
+  }
+  G.LANDWAR_LOOK = { landOf: landOf, beastsOf: beastsOf };
   function S() { return G.Game.state; }
   function sk(id) { return R.skill(id); }
   function mountInfo() {
@@ -87,6 +115,9 @@
     var fx = [], shakeT = 0, t0 = performance.now(), log = [];
     var mi = mountInfo();
     mine.forEach(function (u) { if (u.type === 'cav') u.ride = mi.name; });
+    var here = S().loc || {}, land = landOf(here.lon || 0, here.lat || 0), beasts = beastsOf(here.lon || 0, here.lat || 0);
+    var SPR = G.Sprites, SFX = (G.FX && G.FX.sprites) || {}, useSpr = !!SPR && SFX.battle !== false;
+    if (useSpr) SPR.preload(['swordsmen', 'musketeers', 'cannons', 'officers', 'natives', 'east_fighters', 'ottoman', 'animals']);
     if (G.Audio) G.Audio.music('battle');
 
     return new Promise(function (resolve) {
@@ -150,6 +181,62 @@
         if (look === 'hat') { ctx.fillStyle = '#2a2020'; ctx.fillRect(-5, -30 + bob, 10, 3); }
         ctx.restore();
       }
+      /** 이 부대의 그림: {id 시트, row 줄} · {party 말 탄 탐험대 시트} · null(코드 그림) */
+      function sprOf(u) {
+        if (!useSpr) return null;
+        if (u._spr !== undefined && u._sprUp === u.up && u._sprType === u.type) return u._spr;
+        var key = null, me = u.side === 'me', r = null;
+        if (me) key = u.type === 'inf' ? 'sword' : u.type === 'gun' ? 'musket' : u.type === 'art' ? 'cannon_me' : u.type === 'adm' ? 'adm' : null;
+        if (me && key && u.up && LOOK[key + '+']) key += '+';
+        if (me && u.type === 'cav') r = { party: u.ride === '낙타' ? 'camel_gallop' : u.ride === '코끼리' ? 'elephant_charge' : 'mounted_gallop' };
+        else if (!me && u.look === 'beast') r = { id: 'animals', row: SPR.row('animals', u.leader ? beasts[1] : beasts[0]), beast: 1 };
+        else {
+          if (!me) {
+            var g = e.kind === 'garrison';
+            key = u.look === 'chief' ? (e.kind === 'native' ? 'chief:native' : (g ? 'gchief:' : 'chief:') + land)
+              : u.look === 'musket' ? (g ? 'gmusket:' : 'musket:') + land
+              : LOOK[u.look] ? u.look : u.look + ':' + land;
+          }
+          var L = key && LOOK[key];
+          if (L) r = { id: L[0], row: SPR.row(L[0], L[1]) };
+        }
+        if (r && r.id && r.row < 0) r = null;
+        u._spr = r; u._sprUp = u.up; u._sprType = u.type;
+        return r;
+      }
+      /** 지금 보일 동작 (공격·다침은 한 바퀴, 쓰러지면 dead, 움직이면 walk) */
+      function actOf(u) {
+        if (u.n <= 0) return 'dead';
+        if (u.act && u.actT < (u.act === 'attack' ? 0.75 : 0.45)) return u.act;
+        return Math.abs(u.tx - u.x) + Math.abs(u.ty - u.y) > 4 ? 'walk' : 'idle';
+      }
+      /** 그림 시트로 부대를 그린다 — 그림을 아직 못 읽었으면 false (코드 그림으로) */
+      function drawSprUnit(u, sp, x, y, face, t) {
+        var act = actOf(u), fps = SFX.battleFps || {}, k0 = u.leader ? 1.22 : 1;
+        if (sp.party) {
+          if (!SPR.partyReady(sp.party)) return false;
+          var nfp = SPR.partyFrames(sp.party), kk = (SFX.unitH || 50) * 1.2 / SPR.partyHeight(sp.party) * k0;
+          var nf2 = U.clamp(Math.ceil(u.n / 4), 1, 2), moving = act === 'walk' || act === 'attack';
+          for (var j = 0; j < nf2; j++) {
+            SPR.drawParty(ctx, sp.party, face > 0 ? 2 : 6, moving ? Math.floor(t * 9 + j) % nfp : j, x + (j - (nf2 - 1) / 2) * 44 * face, y + (j % 2) * 6, kk);
+          }
+          return true;
+        }
+        var id = sp.id, row = sp.row;
+        if (!SPR.ready(id)) return false;
+        var k = ((sp.beast ? SFX.beastH : SFX.unitH) || 46) / SPR.height(id) * k0 * ((SFX.sheetK || {})[id] || 1);
+        var big = id === 'cannons' || (id === 'ottoman' && row === 1);
+        var nf = U.clamp(Math.ceil(u.n / 4), 1, big ? 2 : sp.beast ? 3 : 6), gap = big ? 58 : sp.beast ? 42 : 24;
+        for (var i = 0; i < nf; i++) {
+          var col = i % 3, back = i >= 3, inRow = back ? nf - 3 : Math.min(nf, 3);
+          var fx0 = x + (col - (inRow - 1) / 2) * gap * face - (back ? 10 * face : 0), fy0 = y - (back ? 14 : 0) + (col === 1 ? 5 : 0);
+          var fr = act === 'dead' ? SPR.at(id, row, 'dead', 99, 1, false)
+            : act === 'idle' || act === 'walk' ? SPR.at(id, row, act, t + i * 0.37, fps[act] || 6)
+            : SPR.at(id, row, act, (u.actT || 0) - i * 0.04, fps[act] || 10, false);
+          SPR.draw(ctx, id, row, fr, fx0, fy0, k, face < 0);
+        }
+        return true;
+      }
       function drawUnit(u, t) {
         if (u.n <= 0 && !(u.fade > 0)) return;
         var me = u.side === 'me', face = me ? 1 : -1, x = u.x + (u.lunge || 0) * face, y = u.y;
@@ -160,9 +247,12 @@
         // 받침 그림자
         ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.beginPath(); ctx.ellipse(x, y + 4, 52, 12, 0, 0, 7); ctx.fill();
         if (target === u) { ctx.strokeStyle = 'rgba(255,90,60,' + (0.6 + 0.3 * Math.sin(t * 6)) + ')'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(x, y + 4, 60, 16, 0, 0, 7); ctx.stroke(); }
-        for (var i = 0; i < nf; i++) {
-          var fx0 = x + ((i % 3) - 1) * (look === 'cav' ? 30 : 17) * (i >= 3 ? 1 : 1) - (i >= 3 ? 8 : 0), fy0 = y - (i >= 3 ? 14 : 0) + ((i % 3) === 1 ? 5 : 0);
-          fig(fx0, fy0, look === 'musket' && u.side === 'me' ? 'musket' : look, col, k, face, t);
+        var sp = sprOf(u);
+        if (!(sp && drawSprUnit(u, sp, x, y, face, t))) {
+          for (var i = 0; i < nf; i++) {
+            var fx0 = x + ((i % 3) - 1) * (look === 'cav' ? 30 : 17) * (i >= 3 ? 1 : 1) - (i >= 3 ? 8 : 0), fy0 = y - (i >= 3 ? 14 : 0) + ((i % 3) === 1 ? 5 : 0);
+            fig(fx0, fy0, look === 'musket' && u.side === 'me' ? 'musket' : look, col, k, face, t);
+          }
         }
         if (u.hitT > 0) { ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = 'rgba(255,160,120,' + u.hitT * 1.2 + ')'; ctx.beginPath(); ctx.ellipse(x, y - 16, 55, 28, 0, 0, 7); ctx.fill(); ctx.globalCompositeOperation = 'source-over'; }
         ctx.restore();
@@ -217,6 +307,7 @@
           u.x += (u.tx - u.x) * Math.min(1, dt * 4); u.y += (u.ty - u.y) * Math.min(1, dt * 4);
           if (u.hitT > 0) u.hitT = Math.max(0, u.hitT - dt * 2.5);
           if (u.lunge) u.lunge = Math.max(0, u.lunge - dt * 90);
+          if (u.act) u.actT = (u.actT || 0) + dt;
           if (u.n <= 0 && u.fade > 0) u.fade = Math.max(0, u.fade - dt * 1.2);
         });
         fx.forEach(function (e) { e.t += dt; }); fx = fx.filter(function (e) { return e.t < e.life; });
@@ -300,6 +391,7 @@
       function hurt(u, n, big) {
         if (n <= 0) { fx.push({ kind: 'num', text: '막음', col: '200,220,255', x: u.x, y: u.y - 50, t: 0, life: 0.9 }); return; }
         u.n -= n; u.hitT = 0.5; if (u.n <= 0) { u.n = 0; u.fade = 1; }
+        if (u.act !== 'attack' || u.actT > 0.3) { u.act = 'hurt'; u.actT = 0; }
         fx.push({ kind: 'num', text: '−' + n, col: u.side === 'me' ? '255,140,120' : '255,236,160', x: u.x + U.rf(-10, 10), y: u.y - 52, big: big, t: 0, life: 1.1 });
         shakeT = Math.min(1, shakeT + (big ? 0.5 : 0.18));
       }
@@ -318,6 +410,7 @@
         var me = u.side === 'me', reach = me ? TYPES[u.type].reach : u.reach, pow = me ? TYPES[u.type].pow * myMul(u) : u.pow;
         var ts = targetsFor(u, list, reach); if (!ts.length) return;
         var look = me ? u.type : u.look;
+        u.act = 'attack'; u.actT = 0;
         if (reach === 'one') {
           var t = ts[0]; u.lunge = 42; fx.push({ kind: 'clash', x: (u.x + t.x) / 2 + (me ? 30 : -30), y: t.y - 20, seed: U.rand() * 6, t: 0, life: 0.45 });
           if (G.Audio) G.Audio.sfx('sword');

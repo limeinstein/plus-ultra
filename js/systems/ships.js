@@ -101,7 +101,7 @@
   var MED_ISLAM = [78, 118, 121];               // 알렉산드리아·안티오키아·베이루트: 지중해 조선 전통도 있다
   /** 이 도시의 조선소가 익숙한 배의 문화권들 */
   SH.cityYards = function (c) {
-    var own = R.cityOwner(c), iber = own === '포르투갈' || own === '카스티야' || own === '아라곤';
+    var own = R.cityOwner(c), iber = R.iberOwner(own);
     var r = c.region, out = [];
     if (r <= 2) out.push('eu');
     else if (r === 3) { if (c.style === 'sw' || c.rel === 'I') out.push('is'); }

@@ -113,7 +113,9 @@
       pic: () => I.make(I.chain.city(c, 'day'), 1600, 900, () => A.cityScene(c, { time: 'day' })),
       detail: () => ({
         facts: [
-          ['지역', G.REGIONS[c.region]], ['처음 다스리는 나라', c.nation], ['말', G.LANGS[c.lang]], ['종교', REL[c.rel]],
+          ['지역', G.REGIONS[c.region]], ['처음 다스리는 나라', G.Dominion ? G.Dominion.first(c) || c.nation : c.nation],
+          G.Dominion && G.DOMINION[c.id] ? ['다스린 나라', G.Dominion.history(c).map(h => h.y + (h.m ? '.' + h.m : '') + ' ' + h.n + (G.NATION_LEADERS[h.n] ? ' (' + G.Dominion.leader(h.n, h.y).text + ')' : '')).join(' → ')] : null,
+          G.DOMINION_NOTES && G.DOMINION_NOTES[c.id] && G.DOMINION_NOTES[c.id][0] ? ['내력', G.DOMINION_NOTES[c.id][0]] : null, ['말', G.LANGS[c.lang]], ['종교', REL[c.rel]],
           ['규모', SIZE[c.size] + (c.port ? ' · 항구' : ' · 내륙')], ['건물', facilities(c).join(', ')],
           ['특산품', c.goods.map(goodName).join(', ')], ['건축 양식', STYLE[c.style] + ' (' + c.style + ')'],
           c.founded ? ['건설', c.founded + '년'] : null,

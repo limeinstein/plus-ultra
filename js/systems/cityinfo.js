@@ -32,6 +32,9 @@
   CI.leader = function (c) {
     var own = R.cityOwner(c), SP = G.Sponsor;
     var here = G.SPONSORS.filter(function (x) { return x.city === c.id && x.bld === 'palace' && SP.holder(x); })[0];
+    // 조사한 나라별 지도자 (dominion.js): 군주 자리(king·pope)는 이 도시를 다스리는 나라의 자리일 때만 그 사람, 다른 나라가 차지했으면 그 나라 지도자
+    if (G.Dominion && here && (here.type === 'king' || here.type === 'pope') && G.Dominion.SEAT[own] !== here.id) here = null;
+    if (G.Dominion && (!here || G.Dominion.SEAT[own] === here.id) && (G.NATION_LEADERS[own] || G.Dominion.SEAT[own])) return G.Dominion.leader(own).text;
     if (here) return here.title + ' ' + SP.holder(here);
     var cap = G.SPONSORS.filter(function (x) { var cc = G.CITY_DATA[x.city]; return x.bld === 'palace' && (x.type === 'king' || x.type === 'pope') && cc && R.cityOwner(cc) === own && SP.holder(x); })[0];
     if (cap) return cap.title + ' ' + SP.holder(cap) + ' (' + G.CITY_DATA[cap.city].name + ')';
@@ -68,7 +71,8 @@
     var acct = R.skill('acct'), ship = R.skill('ship'), hist = R.skill('hist'), speech = R.skill('speech');
     function row(k, v, src, hint) { rows.push({ k: k, v: v, src: src || '', hint: hint || '' }); }
     // 국가·규모
-    row('국가', U.esc(owner) + (owner !== c.nation ? ' <small class="muted">(원래 ' + U.esc(c.nation) + ')</small>' : ''));
+    var orig = (G.Dominion && G.Dominion.first(c)) || c.nation, since = G.Dominion ? G.Dominion.history(c).filter(function (h) { return h.y <= s.date.y; }).pop() : null;
+    row('국가', U.esc(owner) + (since && since.y > 1480 ? ' <small class="muted">' + since.y + '년부터' + (owner !== orig ? ' · 원래 ' + U.esc(orig) : '') + '</small>' : owner !== orig ? ' <small class="muted">(원래 ' + U.esc(orig) + ')</small>' : ''));
     row('도시 규모', (G.CityIcon ? G.CityIcon.label(c) : CI.SIZE[c.size]) + ' · ' + (c.port ? '항구' : '내륙 도시') + (R.facilities(c).shipyard ? ' · 조선소' : ''));
     if (G.CityIcon) row('도시 양식', G.CityIcon.cultureName(c));
     // 지도자
@@ -76,7 +80,7 @@
     else row('지도자', '?', '', '가 보거나 역사학을 아는 사람(또는 그 고장 말과 웅변 2)이 있으면 압니다');
     // 도시 상태
     var st = [], ev = CI.event(c), chk = G.Scenes.city.entryCheck ? G.Scenes.city.entryCheck(c) : null;
-    if (owner !== c.nation) st.push(owner + '의 손에 넘어감');
+    if (owner !== orig) st.push(owner + '의 손에 넘어감');
     if (fresh || visited) {
       if (chk) st.push({ wanted: '수배 중이라 들어갈 수 없음', holy: '이교도 입항 금지', closed: '외국인 입항 금지', treaty: '조약으로 입항 금지' }[chk.reason] + (s.flags['pass' + c.id] ? ' (통행 허가 있음)' : ''));
     }

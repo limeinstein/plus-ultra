@@ -65,7 +65,7 @@
       followSize: 53,     // 따르는 배 (0.7배, 전 76)
       npcSize: 38,        // 다른 나라 배·해적선 (0.7배, 전 54 — 조종하는 배가 먼저 눈에 들어오게)
       side: {             // 지도 위의 배를 옆모습으로 (js/scenes/sea.js sideView) — on: false 면 예전처럼 진행 방향으로 돈다
-        on: true,
+        on: false,        // 8방향 시트가 실제 진로를 보여 준다
         tilt: 20,         // 위·아래(북·남)로 갈 때 뱃머리를 드는·숙이는 가장 큰 각도 (°)
         hold: 0.2,        // 좌우가 바뀌는 경계: 진로의 동서 성분(cos)이 반대쪽으로 이만큼 넘어가야 돌아선다
         flipSec: 0.35     // 좌우로 돌아서는 데 걸리는 시간 (초)
@@ -86,11 +86,13 @@
       dust: 1.0,          // 발밑 먼지·눈보라·풀잎의 양
       maxStepHz: 2.2      // 걸음이 이보다 빨라지지 않는다 (초당 걸음 주기) — 빨리 가도 장난감처럼 종종거리지 않게
     },
-    sprite: {             // 16방향 배 그림 시트 (js/art/shipsprite.js, images/ships-nav/)
+    sprite: {             // 8방향 동작 배 그림 시트 (js/art/shipsprite.js, images/ships-nav/)
       halfBelow: 0.55,    // 화면에 그리는 배율(장치 픽셀 기준)이 이보다 작으면 반 크기 사본을 쓴다 — 0이면 늘 원본
       hold: 0.12,         // 방위 칸이 바뀌는 경계에서 먼저 쓰던 칸을 칸 폭의 이만큼 더 붙잡는다 (뱃머리가 흔들려도 깜박이지 않게)
       blend: 0.02,        // 배 이름(sid)이 없을 때 경계 바로 앞 이 폭(칸 폭 대비)만 두 칸을 겹친다
-      fade: 0.14          // 배 이름이 있을 때: 칸이 바뀌면 앞 칸 위에 새 칸을 이 초 동안 서서히 올린다 (0이면 바로 바뀜)
+      fade: 0.14,         // 배 이름이 있을 때: 칸이 바뀌면 앞 칸 위에 새 칸을 이 초 동안 서서히 올린다 (0이면 바로 바뀜)
+      dashAt: 0.72,       // 기준 속력 대비 이 값부터 질주 동작
+      fps: { idle: 2.2, drift: 4.0, dash: 11.5 }
     },
     dialogue: {           // 대화 인물 2.5D 리그 (js/art/portrait_rig.js)
       breath: 1.0,        // 호흡에 따른 상체 움직임
@@ -203,5 +205,24 @@
     gullSize: 0.62,      // 갈매기 한 마리 = 배 그림 길이 × 이 값 (가까이 올수록 커진다)
     sendoffSec: 7.5,     // 배웅이 이어지는 시간(초)
     title: true          // 「모항 ○○을 떠나다」 글귀
+  };
+  // 그린 스프라이트 시트 (js/art/sprites.js · images/sprites/ — tools/sprite_repack.py 가 만든다)
+  G.FX.sprites = {
+    party: true,         // 육상 탐험대를 8방향 그림 시트로 (탈것마다 천천히·빨리 두 장 — 시트가 없는 탈것은 코드 그림)
+    partyScale: 0.95,    // 탐험대 그림 배율 × G.FX.party.size (시트에서 세 사람 무리의 키가 약 50px)
+    partyCycle: 1,       // 걸음 주기 하나에 넘기는 시트 한 바퀴의 수
+    partyGap: 44,        // 무리 사이 간격(px, 크기 1 기준) — 대원이 많으면 무리가 둘·셋으로 늘어선다
+    partyGroupAt: 15,    // 대원이 이만큼이면 두 무리, 세 배면 세 무리
+    partyFastPx: 70,     // 화면에서 초당 이만큼(px) 넘게 움직이면 뛰기·질주 장면
+    partyFps: { on_foot_walk: 9, on_foot_run: 11, mounted_walk: 9, mounted_gallop: 9 },
+    battle: true,        // 육상전 부대를 그림 시트로
+    unitH: 58,           // 육상전 병사 키(px, 1000×430 판 기준) — 짐승은 beastH
+    beastH: 42,
+    sheetK: { natives: 1.3, animals: 1.7 },   // 시트마다 덧붙이는 배율 (원주민은 머리 위 지팡이, 짐승은 뛰어오르는 장면 때문에 재는 키가 커서 몸이 작아 보인다)
+    battleFps: { idle: 5, walk: 10, attack: 12, hurt: 8, dead: 6 },
+    events: true,        // 항해·육상 탐험 사건 그림 (js/art/eventfx.js)
+    eventW: 720,         // 사건 그림 창 크기(1600×900 화면 기준)
+    eventH: 300,
+    eventBottom: 205     // 창 아래 끝이 화면 아래에서 이만큼 위 (대화창 바로 위)
   };
 })(window.G = window.G || {});

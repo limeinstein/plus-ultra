@@ -207,6 +207,16 @@
     trustMax: 100,
     // 보급: 선원 한 사람이 하루에 먹고 마시는 양(통) — 식량·물 따로 (예전 0.04 → 0.025: 같은 짐칸으로 약 1.6배 오래)
     ration: 0.025,
+    // 발견의 여파: 발견 갈래에 따라 피로·스트레스·규율이 즉시 달라진다 (discovery.js).
+    // 스트레스는 바다·육상에서 하루 피로와 규율에 영향을 주고, 도시에서 쉬는 동안 가라앉는다 (main.js·sea.js·land.js).
+    discoveryImpact: {
+      awe:     { fatigue: -10, stress: -8, discipline: 2 },
+      triumph: { fatigue: -8,  stress: -6, discipline: 5 },
+      delight: { fatigue: -6,  stress: -4, discipline: 3 },
+      wonder:  { fatigue: -5,  stress: -3, discipline: 2 },
+      fear:    { fatigue: 4,   stress: 15, discipline: -4 }
+    },
+    stress: { cityRecovery: 2, travelRecovery: 0.15, seaFatigue: 0.008, landFatigue: 0.006, discipline: 0.012 },
     // 물은 식량보다 싸다 (보급값 × waterPrice). 자재(수리용 목재·밧줄·돛천): 한 통 값 = 보급값 × matPrice
     waterPrice: 0.5, matPrice: 3,
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작

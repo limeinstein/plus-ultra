@@ -1,0 +1,30 @@
+# changes_A (이베리아·지중해) — 2차 검증
+
+## 도시 기간
+- [빌바오] 1808 프랑스(달 없음) 한 덩어리 → 1808.8 프랑스(메를랭) / 1808.10 에스파냐(블레이크) / 1808.11 프랑스(소르노사 뒤)로 나눔 (https://es.wikipedia.org/wiki/Bilbao , https://www.historyofwar.org/articles/battles_zornoza.html)
+- [빌바오] 1795.7 점령 날짜 7.19로 확인, 1812.8 두 번 바뀜·1813.6 철수 확인 (https://en.wikipedia.org/wiki/War_of_the_Pyrenees , https://www.historyofwar.org/articles/combat_bilbao_1st.html)
+- [톨레도] 1812 프랑스 복귀 11월 → 12월(술트) (https://www.leyendasdetoledo.com/toledo-en-la-guerra-de-la-independencia-1808/)
+- [톨레도] 최종 철수 1813.5 → 1813.4(4.13) (같은 출처)
+- [톨레도] 1808.12.13 빅토르 입성, 1812.8.20 팔라레아 입성 확인. 1808.4 뒤퐁 주둔은 동맹군 명목이라 넣지 않음을 note에 적음 (https://elrincondebyron.com/2022/03/04/recorrido-por-el-toledo-napoleonico/)
+- [코르도바] 바꾸지 않음. 1810.1.23 점령·1812.9.4 철수 확인, 출처 추가 (https://cordobapedia.datta.capital/wiki/Guerra_de_la_Independencia_en_C%C3%B3rdoba)
+- [안코나] 1799.11 오스트리아 → 1802 교황령 사이에 1801 프랑스 재인수 넣음 (https://www.treccani.it/enciclopedia/ancona_(Enciclopedia-Italiana)/ , https://www.anconanostra.com/vernaculo/storia_ancona/11_napulio.htm)
+- [안코나] 1805 프랑스 점령 11월 → 10월(10.15) (https://www.treccani.it/enciclopedia/pio-vii_(Enciclopedia-dei-Papi)/)
+- [칼리아리] 1717 에스파냐 9월 → 10월(10.4 함락) (https://en.wikipedia.org/wiki/Spanish_conquest_of_Sardinia)
+- [칼리아리] 1720.8.8 사보이아 인도 확인 (https://en.wikipedia.org/wiki/Kingdom_of_Sardinia_(1700%E2%80%931720))
+- [팔레르모] 1720 오스트리아(달 없음) → 1720.5(에스파냐군 철수) (https://it.wikipedia.org/wiki/Storia_della_Sicilia_sabauda)
+- [시라쿠사] 1720 오스트리아 → 1719.5 오스트리아. 1718–19년 사보이아 수비대가 실제로 버텼고, 1719.5 오스트리아군에 넘김 (https://it.wikipedia.org/wiki/Storia_della_Sicilia_sabauda)
+- [시라쿠사] 1860.7(7.28 가리발디군에 넘어감) 확인 (https://it.wikipedia.org/wiki/Siracusa)
+- [부쿠레슈티] 1716.11 오스트리아(합스부르크 기습 점령) / 1716.12 왈라키아 추가. 달은 확신 낮음 (https://en.wikipedia.org/wiki/History_of_Bucharest , https://simple.wikipedia.org/wiki/List_of_rulers_of_Wallachia)
+- [부쿠레슈티] 1821.5 오스만 제국 / 1822.7 왈라키아 추가(봉기 뒤 오스만군 점령 → 그리고레 4세 기카) (https://en.wikipedia.org/wiki/Wallachian_uprising_of_1821)
+- [부쿠레슈티] 1848.9 오스만 제국(러시아와 공동 점령) / 1849.6 왈라키아 추가 (https://en.wikipedia.org/wiki/Wallachian_Revolution_of_1848)
+- [부쿠레슈티] 1854.8 오스만 제국(오메르 파샤)을 러시아 철수(7.31)와 오스트리아 점령(9월) 사이에 넣음 (https://en.wikipedia.org/wiki/History_of_Bucharest , https://simple.wikipedia.org/wiki/List_of_rulers_of_Wallachia)
+- [부쿠레슈티] 1769–74, 1789–91, 1806–12, 1828.5.16–1834, 1853.7.15–1854.7.31, 1857.3 확인 (https://www.onwar.com/data/auhrum1854.html)
+
+## note만 고침 (기간은 그대로)
+- [바르나] 1828.9.29는 율리우스력(그레고리력 10.11), 1830년 철수 확인(일설 1829년 말), 1878.7.27 러시아군 입성 (https://www.gradvarna.com/1828.htm , https://www.culturespace.bg/bg/news-more/zabraveno-varna-i-rusko-turskata-voina-ot-18281829-g)
+- [간디아] 이집트 1830–1840 확인. 오스만 복귀 달(12월)은 확신 낮음(일설 1841). 1898.11.6 오스만군 철수, 12.21 크레타국 (https://en.wikipedia.org/wiki/Ottoman_Crete , https://en.wikipedia.org/wiki/Mustafa_Naili_Pasha)
+- [알제] 1520 쿠쿠 점령, 1525 하이레딘 탈환 확인. 1524설은 근거를 못 찾음, 1527설은 note에 적음 (https://en.wikipedia.org/wiki/Regency_of_Algiers , https://en.wikipedia.org/wiki/Ahmed_ou_el_Kadhi)
+
+## 지도자 (leaders)
+- [왈라키아] null 6칸(1508–12, 1529–93, 1601–02, 1611–32, 1654–78, 1856–59)과 「파나리오트 군주들」 한 줄 → 1477–1859 군주를 모두 이름으로 적음(재위 1년 미만 포함, 점령 기간은 빼거나 표시). 1480년 군주 바사라브 4세 체펠루슈 추가 (https://simple.wikipedia.org/wiki/List_of_rulers_of_Wallachia , https://www.historyfiles.co.uk/KingListsEurope/EasternWallachia.htm)
+- [왈라키아] 1856–58 카이마캄 알렉산드루 2세 기카, 1858–59 3인 카이마캄(마누·벌레아누·필리페스쿠) (https://en.wikipedia.org/wiki/Emanoil_B%C4%83leanu)

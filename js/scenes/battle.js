@@ -1013,7 +1013,7 @@
       var RDb = G.FX.ride;
       if (b.ride && RDb) { spec.pose = { roll: U.clamp(b.ride.roll, -RDb.maxRoll, RDb.maxRoll), pitch: U.clamp(b.ride.pitch, -RDb.maxPitch, RDb.maxPitch), heave: U.clamp(b.ride.heave, -RDb.maxHeave, RDb.maxHeave) }; spec.rig = b.rig || null; }
       else spec.pose = { roll: U.clamp(-(b.turnRate || 0) * sr * 0.08 + Math.sin(st.t * 0.9 + ph0) * 0.02, -0.12, 0.12), pitch: Math.sin(st.t * 1.3 + ph0 * 2) * 0.012 * (1 + sr), heave: Math.sin(st.t * 0.8 + ph0) * 0.012 };
-      spec.noWake = true; spec.sid = b.side + (b.no || 0);
+      spec.noWake = true; spec.sid = b.side + (b.no || 0); spec.motionSpeed = sr; spec.motionRate = 0.82 + sr * 0.3;
       if (b.alive && b.fx) G.SeaFX.drawHull(b.fx, ctx, p[0], p[1], -b.heading, b.len, sr, slp, (b.lat || 0) <= 0 ? 1 : -1, st.t);
       A.shipTop(ctx, p[0], p[1], -b.heading + (b.sunk ? b.sink * 0.6 : 0), b.len * (b.sunk ? 1 - b.sink * 0.3 : 1), spec, st.t);
       // 맞은 배: 잠깐 하얗게 번쩍인다 (같은 그림을 밝게 한 번 더 겹친다)

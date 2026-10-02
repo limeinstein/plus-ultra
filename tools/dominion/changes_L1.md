@@ -1,0 +1,33 @@
+# changes_L1 (큰 나라 지도자 1480–1900 검증)
+
+- [포르투갈] 1580 추가: 엔히크 사후 5인 총독 평의회, 안토니우(크라투 수도원장, 1580.7.19 산타렝 추대–8.25 알칸타라 패배) (https://en.wikipedia.org/wiki/Ant%C3%B3nio,_Prior_of_Crato)
+- [포르투갈] 아폰수 6세 1656–1668 → 섭정 루이사 데 구스만 1656–1662 / 친정 1662–1668 / 섭정 페드루 왕자 1668–1683; 페드루 2세 1668– → 1683– (https://en.wikipedia.org/wiki/Afonso_VI_of_Portugal)
+- [포르투갈] 마리아 1세 1777–1816 → 페드루 3세와 공동 1777–1786 / 단독 1786–1792 / 섭정 주앙 왕자 1792–1816 (https://en.wikipedia.org/wiki/John_VI_of_Portugal)
+- [포르투갈] 1826 페드루 4세(3.10–5.2) 추가, 마리아 2세 1826–1828에 섭정 표기 (https://en.wikipedia.org/wiki/John_VI_of_Portugal)
+- [카스티야] 1504–1516 세분: 후아나 1세(통치자 페르난도 2세) 1504–1506 / 후아나 1세와 펠리페 1세 1506(6.27–9.25) / 섭정 시스네로스 1506–1507 / 섭정 페르난도 2세 1507–1516 (https://en.wikipedia.org/wiki/Philip_I_of_Castile, https://en.wikipedia.org/wiki/Francisco_Jim%C3%A9nez_de_Cisneros)
+- [에스파냐] 카를로스 1세에 「후아나 1세와 공동 국왕」 표기 (https://en.wikipedia.org/wiki/Charles_V,_Holy_Roman_Emperor)
+- [에스파냐] 카를로스 2세 섭정 마리아나 1665–1675 분리
+- [에스파냐] 1808 페르난도 7세(3.19–5.6) 추가 (https://en.wikipedia.org/wiki/Joseph_Bonaparte)
+- [에스파냐] 이사벨 2세 섭정 마리아 크리스티나 1833–1840, 에스파르테로 1840–1843 분리
+- [에스파냐] 「임시정부 1868–1870」 → 임시정부 1868–1869 + 섭정 세라노 1869.6–1871.1; 아마데오 1세 1870 → 1871 (1871.1.2 즉위) (https://en.wikipedia.org/wiki/Francisco_Serrano,_1st_Duke_of_la_Torre)
+- [에스파냐] 「제1공화국 정부」 → 행정권 수반 피게라스·피 이 마르갈·살메론·카스텔라르(1873) / 세라노(1874) (https://en.wikipedia.org/wiki/First_Spanish_Republic)
+- [에스파냐] 1885–1886 왕위 공석(섭정 마리아 크리스티나, 알폰소 13세 1886.5.17 출생), 섭정 종료 1902 분리
+- [잉글랜드] 제인 그레이 1553(7.10–7.19) 추가, 1688.12–1689.2 공위 추가 (https://en.wikipedia.org/wiki/List_of_English_monarchs)
+- [스코틀랜드] 제임스 5세·메리·제임스 6세 미성년 섭정 표기 분리; 제임스 7세 끝 1688 → 1689 (1689.4.11 폐위) (https://en.wikipedia.org/wiki/List_of_Scottish_monarchs)
+- [영국] 조지 3세 1811–1820 섭정 왕세자 시기 분리
+- [프랑스] 섭정 분리: 샤를 8세(안 드 보죄 ~1491), 샤를 9세(카트린 드 메디시스 ~1563), 루이 13세(마리 드 메디시스 ~1614), 루이 14세(안 도트리슈 ~1651), 루이 15세(오를레앙 공 ~1723) (https://en.wikipedia.org/wiki/List_of_French_monarchs)
+- [프랑스] 1848 임시정부·1870 국방정부 이름에 실제 수반 표기 (https://en.wikipedia.org/wiki/List_of_presidents_of_France)
+- [네덜란드] 1584–1585 스타트하우더 공석 추가 (https://en.wikipedia.org/wiki/Stadtholder)
+- [네덜란드] 캇스 1650–1653 → 캇스 1650–1651 + 아드리안 파우 1651–1653; 빌럼 바위스 1746 추가 (https://en.wikipedia.org/wiki/List_of_grand_pensionaries)
+- [네덜란드] 바타비아 공화국 정부 1795–1805 → 국민의회 1795–1798 / Uitvoerend Bewind 1798–1801 / Staatsbewind 1801–1805 (https://en.wikipedia.org/wiki/Batavian_Republic)
+- [네덜란드] 빌럼 1세 주권공 1813–1815 / 국왕 1815–; 빌헬미나 섭정 1890–1898 분리 (https://en.wikipedia.org/wiki/William_I_of_the_Netherlands)
+- [신성로마제국] 1657–1658 공위 추가; 페르디난트 1세 제국의회 승인 1558 표기 (https://en.wikipedia.org/wiki/Leopold_I,_Holy_Roman_Emperor, https://en.wikipedia.org/wiki/Ferdinand_I,_Holy_Roman_Emperor)
+- [교황령] 1798–1799 로마 공화국, 1809–1814 프랑스 병합, 1849 로마 공화국 분리; 교황령 소멸(1870.9.20)로 비오 9세 끝 1878 → 1870, 레오 13세 삭제 (교황 재위 연도는 모두 일치 확인) (https://www.newadvent.org/cathen/12272b.htm, https://en.wikipedia.org/wiki/List_of_popes)
+- [베네치아] 도제 49명 전원 일치 확인, 변경 없음 (https://en.wikipedia.org/wiki/List_of_doges_of_Venice)
+- [덴마크] 크리스티안 7세 1784–1808 섭정 왕세자 프레데리크 분리 (https://en.wikipedia.org/wiki/List_of_Danish_monarchs)
+- [스웨덴] 1512 섭정 에리크 트롤레(1–7월) 추가; 구스타브 바사 1521–1523 섭정 / 1523.6.6 국왕 분리 (https://en.wikipedia.org/wiki/Svante_Nilsson_(regent_of_Sweden), https://en.wikipedia.org/wiki/Sten_Sture_the_Younger, https://en.wikipedia.org/wiki/Gustav_I_of_Sweden)
+- [스웨덴] 칼 9세 → 섭정 칼 공작 1599–1604 / 국왕 1604–1611; 구스타브 4세 아돌프 섭정 1792–1796 분리 (https://en.wikipedia.org/wiki/Sigismund_III_Vasa)
+- [폴란드] 공위 추가(1574–1575, 1586–1587, 1632, 1648, 1668–1669, 1673–1674, 1696–1697, 1763–1764); 스테판 바토리 1576 → 1575 안나 야기엘론카와 공동; 스타니스와프 1세 1704–1709 대립 표기, 1733–1736 아우구스트 3세와 대립 표기 (https://en.wikipedia.org/wiki/List_of_Polish_monarchs, https://en.wikipedia.org/wiki/Stanis%C5%82aw_Leszczy%C5%84ski)
+- [폴란드] 회의 폴란드 국왕 알렉산드르 3세 1881–1894, 니콜라이 2세 1894–1917 추가 (1900까지 채움)
+- [프로이센] 기사단장 공석 1497(8.25 티펜 사망)–1498 추가, 작센의 프리드리히 1498–, 알브레히트 1510–; 알브레히트 프리드리히 섭정 3기 분리; 1688–1701 공작(선제후 프리드리히 3세) / 1701 국왕 프리드리히 1세 분리 (https://de.wikipedia.org/wiki/Johann_von_Tiefen, https://en.wikipedia.org/wiki/Duchy_of_Prussia, https://en.wikipedia.org/wiki/Albert,_Duke_of_Prussia)
+- [아라곤·오스트리아] 확인, 변경 없음

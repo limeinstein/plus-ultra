@@ -25,6 +25,15 @@ python tools/build_web.py --no-minify  # 코드를 줄이지 않고 묶기
 
 esbuild(`npm i -g esbuild`)가 있으면 자바스크립트와 CSS를 줄입니다. 파일 이름에 내용 해시를 붙이므로 다시 올려도 방문자 브라우저에 옛 파일이 남지 않습니다.
 
+## sprite_repack.py — 육상전·탐험·사건 스프라이트 다시 짜기
+
+```
+python tools/sprite_repack.py                   # images/_extra/sprite_src/*.png → images/sprites/*.webp + js/data/sprites.js
+python tools/sprite_repack.py animals --debug   # 한 시트만, 장면 번호 점검 그림은 images/_extra/sprite_debug/
+```
+
+numpy·Pillow 가 필요합니다. 줄마다 장면 수(`n`)를 알려 주면 세로로 자를 자리를 동적 계획법으로 고르고, 이어진 픽셀 덩어리·몸통 씨앗을 따라 겹친 망토·칼·꼬리를 제 장면에 붙입니다. 시트별 설정(장면 수·합치기/나누기·동작별 장면 번호)은 파일 맨 위 `SHEETS`에 있습니다. 다시 만든 뒤에는 `python tools/images.py`.
+
 ## pages.py
 
 bundle.py 와 build_web.py 가 함께 쓰는 도우미입니다. index.html · catalog.html 의 스크립트 목록을 그대로 따릅니다.

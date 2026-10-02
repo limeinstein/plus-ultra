@@ -193,9 +193,22 @@ def valid_keys(d):
         k['discovery-cats/' + c] = '발견물 분류 공통 · ' + c
     for s in d['ships']:
         k['ships/' + s['id']] = '배 · ' + s['name']
-        k['ships-nav/' + s['id']] = '항해·해전 16방향 배 · ' + s['name']
+        k['ships-nav/' + s['id']] = '항해·해전 8방향 동작 배 · ' + s['name']
     k['effects/ship_spray'] = '항해 효과 · 선수 물보라 스프라이트 시트'
     k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
+    # 육상전·육상 탐험·항해 사건 스프라이트 (tools/sprite_repack.py 가 만든다, 칸·피벗은 js/data/sprites.js)
+    for sid, label in [('officers', '육상전 · 제독대(장교)'), ('musketeers', '육상전 · 총병'), ('cannons', '육상전 · 포병'),
+                       ('swordsmen', '육상전 · 칼잡이 보병'), ('east_fighters', '육상전 · 동아시아 무사'), ('ottoman', '육상전 · 오스만 군'),
+                       ('natives', '육상전 · 원주민 전사'), ('animals', '육상전·탐험 · 들짐승'), ('whale', '항해 사건 · 고래'),
+                       ('dolphin', '항해 사건 · 돌고래'), ('mermaid', '항해 사건 · 인어'), ('storm', '항해 사건 · 폭풍'),
+                       ('raincloud', '항해 사건 · 비구름'), ('rain', '항해 사건 · 소나기'), ('sun', '항해 사건 · 뙤약볕'),
+                       ]:
+        k['sprites/' + sid] = label + ' 스프라이트 시트'
+    # 탐험대 8방향 시트는 탈것마다 둘씩(천천히·빨리) — sprite_repack.py 가 매니페스트대로 만든 party_* 를 모두 받는다
+    sp = os.path.join(IMG, 'sprites')
+    for f in sorted(os.listdir(sp)) if os.path.isdir(sp) else []:
+        if f.startswith('party_'):
+            k['sprites/' + os.path.splitext(f)[0]] = '육상 탐험 · 탐험대 8방향 (%s)' % os.path.splitext(f)[0][6:]
     return k
 
 

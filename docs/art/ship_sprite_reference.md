@@ -1,13 +1,15 @@
-# 16방향 선박 그림 제작 기준
+# 8방향 동작 선박 그림 제작 기준
 
 ## 공통 규격
 
 - 시기: 1480~1600년. 게임의 36종 ID·이름·수치는 바꾸지 않고 외형만 가장 가까운 초기형으로 표현한다.
-- 시점: 수면 위 약 55도에서 내려다보는 정사영. 선수 방향은 동쪽을 0도로 하여 22.5도 간격 16방향이다.
+- 시점: 수면 위 약 55도에서 내려다보는 정사영. 선수 방향은 동쪽을 0도로 하여 45도 간격 8방향이다.
 - 돛: 따뜻한 상아색의 무문양 흰 돛. 솔기·보강천·대나무 살만 표시하고 십자가·문장·국가 표식은 넣지 않는다.
-- 식별: 작은 단색 깃발은 게임이 아군·적군 색으로 그린다. 시트에는 깃발·바다·항적·그림자를 넣지 않는다.
-- 기준 시안: `ship-pilot-imagegen.png`, `ship-36-imagegen-reference.png`. 재질·명암·계열별 실루엣 참고용이며 배경과 개별 선형은 그대로 복제하지 않는다.
-- 출력: 선종당 224px 셀, 16방향, 선체 1층 + 돛 각도 5층 + 접은 돛 1층. 한 시트는 1792×3136 투명 WebP다.
+- 식별: 작은 단색 깃발은 게임이 아군·적군 색으로 그린다. 시트에는 바다 면이나 그림자를 넣지 않고, 동작 판독에 필요한 잔물결과 선수 포말만 반투명하게 넣는다.
+- 기준 시안: `ship-galleon-upgrade-reference.png`. 짙은 월넛 외판, 황동 프레임, 아이보리 돛, 따뜻한 윗빛을 36종의 공통 재질 규칙으로 삼는다.
+- 출력: 선종당 224px 셀, 정박 3장·표류 5장·질주 8장 × 8방향. 정박과 표류는 한 방향 행의 앞 3칸·뒤 5칸을 나눠 쓰고, 질주는 별도 방향 행을 써서 한 시트가 8열×16행(1792×3584)인 투명 WebP다.
+- 피벗: 모든 셀의 수면 중심 `(112,139)`. 회전·흔들림·방향 전환은 이 점을 기준으로 하며, 셀 사방에 적어도 2px의 투명 여백을 둔다.
+- 배치: 동작마다 8개 방향을 한 묶음으로 세로 배치하고 프레임은 가로로 놓는다. 쓰지 않는 칸은 완전 투명으로 남겨 돛·선수·노가 이웃 조각과 겹치지 않는다.
 - 구분 요소: 선종마다 선체 평면형·폭·건현·선수·선미루·포구·노 수·돛대 높이·범장 단계를 따로 지정한다.
 
 ## 고증 기준
@@ -23,28 +25,18 @@
 
 ## ImageGen 기준 프롬프트
 
-기본 제공 이미지 생성 도구로 아래 조건의 6종 기준 시안과 36종 비교 시안을 만들었다.
+기본 제공 이미지 생성 도구로 갤리온 기준 시안을 만들고, 게임 시트는 그 재질과 조명 규칙을 결정론적 렌더러로 36종에 적용했다.
 
 ```text
-Use case: historical-scene
-Asset type: production art-direction board for a 16-direction browser-game ship sprite system
-Input images: Image 1 is the current roster reference; Image 2 is a small-scale pixel-readability reference. Do not copy pixels or emblems.
-Subject: European galleon, Mediterranean galley, Indian Ocean dhow, Ming Chinese junk, Korean panokseon, Andean balsa raft
-Style/medium: refined hand-painted pixel art for 256px transparent game sprites
-Composition: equal orthographic scale, elevated three-quarter top-down view, entire hull and sails visible
-Constraints: plain warm-white sails; no crosses, heraldry, national insignia, text, flags, water, wake, UI, or watermark
+Use case: stylized-concept
+Asset type: production art-direction reference for a browser-game galleon sprite system
+Primary request: redesign a historically plausible late-16th-century galleon at premium game-asset quality
+Input images: Image 1 supplies the readable full silhouette; Image 2 supplies only polished warm wood, ivory canvas, sculpted material detail and clean rendering finish; ignore its watermark
+Style/medium: polished hand-painted 3D game render with realistic materials and a crisp small-sprite silhouette
+Composition: elevated three-quarter orthographic view, whole vessel visible, generous transparent padding, waterline pivot centered below the hull
+Materials: dark walnut planks, warm bronze fittings, ivory cloth sails with seams, rope fiber and restrained weathering
+Constraints: genuine transparent alpha; no sea, wake, flag, text, logo or watermark; no cropped mast, sail or bowsprit
+Avoid: fantasy ornament, modern fittings, duplicate masts, broken rigging and watermark residue
 ```
 
-36종 확장 비교 시안에는 다음 조건을 추가했다.
-
-```text
-Use case: historical-scene
-Asset type: production art-direction reference board for a historical browser-game ship sprite system
-Primary request: a 6-by-6 comparison board of all 36 named vessel types, with a distinct historically grounded hull, rig, oar layout and superstructure for every vessel
-Style/medium: refined hand-painted pixel art, crisp readable silhouettes at game scale
-Composition: equal cells, identical elevated orthographic angle, isolated vessels
-Constraints: plain warm-white sails, no heraldry or national symbols, no water, UI, text or watermark
-Avoid: identical hulls differentiated only by mast count; fantasy or modern ships
-```
-
-최종 게임 시트는 방향과 돛 축이 흔들리지 않도록 `tools/render_ship_sprites.py`가 결정론적으로 만든다.
+최종 게임 시트는 방향, 피벗, 프레임 수와 돛 축이 흔들리지 않도록 `tools/render_ship_sprites.py`가 결정론적으로 만든다. `tests/shipsprites_test.py`가 36종의 크기·알파·프레임 수·셀 여백을 검사한다.
