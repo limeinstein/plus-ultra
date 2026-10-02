@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "coordinateSystem": "top-left pixels",
+  "frameOrder": "left-to-right, then top-to-bottom",
+  "sliceRule": "Use adjacent xBounds/yBounds as source regions, alpha-trim inside each region at alpha > 8, then set the pivot to the trimmed frame's bottom center.",
+  "alphaThreshold": 8,
+  "pivotNormalized": [0.5, 1.0],
+  "events": {
+    "storm": {
+      "file": "storm.png",
+      "sourceSize": [1983, 793],
+      "frameCount": 10,
+      "frameDurationMs": 100,
+      "playback": "loop",
+      "xBounds": [0, 369, 775, 1179, 1574, 1983],
+      "yBounds": [0, 392, 793]
+    },
+    "rain": {
+      "file": "rain.png",
+      "sourceSize": [1536, 1024],
+      "frameCount": 6,
+      "frameDurationMs": 90,
+      "playback": "loop",
+      "xBounds": [0, 450, 948, 1536],
+      "yBounds": [0, 500, 1024]
+    },
+    "rain_cloud": {
+      "file": "rain_cloud.png",
+      "sourceSize": [1774, 887],
+      "frameCount": 8,
+      "frameDurationMs": 130,
+      "playback": "loop",
+      "xBounds": [0, 438, 883, 1319, 1774],
+      "yBounds": [0, 442, 887]
+    },
+    "sunshine": {
+      "file": "sunshine.png",
+      "sourceSize": [2185, 720],
+      "frameCount": 4,
+      "frameDurationMs": 160,
+      "playback": "loop",
+      "xBounds": [0, 468, 1048, 1670, 2185],
+      "yBounds": [0, 720]
+    },
+    "dolphin_appearance": {
+      "file": "dolphin_appearance.png",
+      "sourceSize": [1774, 887],
+      "frameCount": 8,
+      "frameDurationMs": 110,
+      "playback": "once",
+      "xBounds": [0, 369, 825, 1286, 1774],
+      "yBounds": [0, 439, 887]
+    },
+    "whale_appearance": {
+      "file": "whale_appearance.png",
+      "sourceSize": [1983, 793],
+      "frameCount": 10,
+      "frameDurationMs": 150,
+      "playback": "once",
+      "xBounds": [0, 386, 796, 1178, 1570, 1983],
+      "yBounds": [0, 401, 793]
+    },
+    "siren_appearance": {
+      "file": "siren_appearance.png",
+      "sourceSize": [1536, 1024],
+      "frameCount": 12,
+      "frameDurationMs": 120,
+      "playback": "once",
+      "xBounds": [0, 384, 768, 1152, 1536],
+      "yBounds": [0, 341, 683, 1024]
+    }
+  }
+}
