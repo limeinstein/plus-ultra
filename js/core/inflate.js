@@ -107,7 +107,5 @@
     return new Uint8Array(Buffer.from(b64, 'base64'));
   }
 
-  /** zlib stream (with 2-byte header) -> bytes */
-  G.inflateZlib = function (bytes, outSize) { return inflateRaw(bytes, 2, outSize); };
   G.unpackB64 = function (b64, outSize) { return inflateRaw(b64ToBytes(b64), 2, outSize); };
 })(typeof window !== 'undefined' ? (window.G = window.G || {}) : (global.G = global.G || {}));

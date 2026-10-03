@@ -211,7 +211,11 @@ def main():
         else:
             split_sheet(*spec, ROOT / "images" / "items", 256)
     for spec in RELICS:
-        split_sheet(*spec, ROOT / "images" / "relics", 256)
+        # 유물 무기도 긴 칼·창이 칸을 넘어 이웃 칸에 조각을 남기므로 물체별로 나눈다
+        if spec[0] == "relic-weapons.png":
+            split_single_objects(*spec, ROOT / "images" / "relics", 256)
+        else:
+            split_sheet(*spec, ROOT / "images" / "relics", 256)
     print(f"교역품 {sum(len(x[3]) for x in GOODS)}종, 일반 아이템 {sum(len(x[3]) for x in ITEMS)}종, 유물 {sum(len(x[3]) for x in RELICS)}종을 만들었습니다.")
 
 

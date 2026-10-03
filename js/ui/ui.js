@@ -42,16 +42,27 @@
       });
       hudEl.innerHTML = h;
       hudEl.classList.toggle('dense', cells.length > 9);
+      // 칸을 한 번만 찾아 두고(hud.set 이 하루에도 열 번 넘게 불린다), 값이 그대로면 DOM을 건드리지 않는다
+      hudCells = {};
+      Array.prototype.forEach.call(hudEl.querySelectorAll('[data-k]'), function (c) {
+        var k = c.getAttribute('data-k'); if (!k || hudCells[k]) return;
+        var sp = c.querySelector('span');
+        hudCells[k] = { cell: c, span: sp, em: c.querySelector('em'), text: sp ? sp.innerHTML : '', warn: false, tip: c.title || '' };
+      });
     },
     /** 칸에 마우스를 올리면 보이는 설명 */
-    tip: function (k, text) { var c = hudEl.querySelector('[data-k="' + k + '"]'); if (c) c.title = text || ''; },
+    tip: function (k, text) { var c = hudCells[k]; text = text || ''; if (c && c.tip !== text) { c.tip = text; c.cell.title = text; } },
     /** 칸의 작은 이름 */
-    label: function (k, text) { var c = hudEl.querySelector('[data-k="' + k + '"] em'); if (c) c.innerHTML = text; },
+    label: function (k, text) { var c = hudCells[k]; if (c && c.em && c.label !== text) { c.label = text; c.em.innerHTML = text; } },
     hide: function () { hudEl.classList.add('hidden'); },
     set: function (k, text, warn) {
-      var c = hudEl.querySelector('[data-k="' + k + '"] span'); if (c) { c.innerHTML = text; c.parentNode.classList.toggle('val-warn', !!warn); }
+      var c = hudCells[k]; if (!c || !c.span) return;
+      text = String(text); warn = !!warn;
+      if (c.text !== text) { c.text = text; c.span.innerHTML = text; }
+      if (c.warn !== warn) { c.warn = warn; c.span.parentNode.classList.toggle('val-warn', warn); }
     }
   };
+  var hudCells = {};
   function emblemSvg() {
     return '<defs><radialGradient id="embg" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#5a4128"/><stop offset="1" stop-color="#1c130b"/></radialGradient></defs>' +
       '<circle cx="24" cy="24" r="22" fill="url(#embg)" stroke="#b8925a" stroke-width="1.5"/>' +
@@ -63,8 +74,10 @@
   UI.emblemSvg = emblemSvg;
 
   // ---------------------------------------------------------------- toasts
+  /** icon: 아이콘 이름, 또는 {src: 그림 주소, icon: 그림이 없을 때 아이콘} — 물건을 얻었을 때 그 물건 그림 */
   UI.toast = function (text, icon, ms) {
-    var t = U.el('div', 'toast wood', G.icon(icon || 'rose') + '<div>' + text + '</div>');
+    var lead = icon && typeof icon === 'object' ? (icon.src ? '<img class="toast-pic" src="' + icon.src + '" alt="">' : G.icon(icon.icon || 'chest')) : G.icon(icon || 'rose');
+    var t = U.el('div', 'toast wood', lead + '<div>' + text + '</div>');
     toastEl.appendChild(t);
     while (toastEl.children.length > 5) toastEl.removeChild(toastEl.firstChild);
     setTimeout(function () { t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }, ms || 3200);
@@ -114,7 +127,6 @@
     } else box.classList.remove('withinterp');
     return html;
   }
-  UI.speechHtml = speech;
   /** 낯선 말을 하는 화자는 늘 얼굴을 보인다 — 초상이 없으면 지금 도시(없으면 그 말의 고장) 양식의 마을 사람 얼굴을 만든다 */
   var LI_STYLE = ['ib', 'ib', 'it', 'ne', 'ru', 'is', 'pe', 'cn', 'in', 'st', 'af', 'az', 'se', 'jp', 'kr', 'na'];
   function withFace(opts) {
@@ -169,17 +181,22 @@
       return { box: box, destroy: function () {} };
     }
 
-    var stage = U.el('div', 'dlg-stage duo' + (asking ? ' ask' : ''));
     var speakerSide = opts.side === 'left' ? 'left' : 'right';
+    var left = speakerSide === 'left' ? opts : opts.partner;
+    var right = speakerSide === 'right' ? opts : opts.partner;
+    // 두 사람 다 무릎상(머리부터 무릎까지 서 있는 그림)이 있으면 서 있는 모습으로 크게 세운다. 한쪽이라도 없으면 둘 다 흉상
+    function halfKey(who) { return who && who.half && G.Img && G.Img.pick ? G.Img.pick(who.half) : null; }
+    var tall = !!(halfKey(left) && halfKey(right));
+    var stage = U.el('div', 'dlg-stage duo' + (tall ? ' tall' : '') + (asking ? ' ask' : ''));
     var otherSide = speakerSide === 'left' ? 'right' : 'left';
     var activeSide = asking ? (opts.choiceSide || otherSide) : speakerSide;
     function addActor(who, side) {
       var active = side === activeSide;
-      var actor = U.el('div', 'dlg-actor ' + side + (active ? ' active' : ''));
+      var actor = U.el('div', 'dlg-actor ' + side + (tall ? ' tall' : '') + (active ? ' active' : ''));
       var art = U.el('div', 'actor-art'); actor.appendChild(art);
       if (G.PortraitRig) {
         rigs.push(G.PortraitRig.mount(art, {
-          portrait: who && who.portrait, chain: who && who.portraitChain, profile: 'bust', side: side,
+          portrait: tall ? null : who && who.portrait, chain: tall ? who.half : who && who.portraitChain, profile: tall ? 'half' : 'bust', side: side,
           state: active ? (asking ? 'react' : 'talk') : 'listen', emotion: active ? (opts.emotion || 'neutral') : 'neutral',
           anchors: who && who.rigAnchors, alt: who && who.name
         }));
@@ -189,8 +206,6 @@
       if (who && who.name) { var an = U.el('div', 'actor-name wood', U.esc(who.name)); actor.appendChild(an); if (G.Bio) { G.Bio.tag(an, who); G.Bio.tag(art, who); } }
       stage.appendChild(actor);
     }
-    var left = speakerSide === 'left' ? opts : opts.partner;
-    var right = speakerSide === 'right' ? opts : opts.partner;
     addActor(left, 'left'); addActor(right, 'right');
     box = U.el('div', 'dlg duo' + (asking ? ' ask' : '') + ' speaker-' + speakerSide);
     box.innerHTML = '<div class="body parch"></div>';
@@ -236,7 +251,8 @@
     });
   };
 
-  /** speech + inline choices. choices: [{label, value, dis}] | strings. returns value (null on Esc if cancel !== false) */
+  /** speech + inline choices. choices: [{label, value, dis, icon, thumb}] | strings. returns value (null on Esc if cancel !== false)
+      thumb: 단추 앞에 작은 그림(소지품·교역품 그림 주소) */
   UI.ask = function (text, choices, opts) {
     opts = withFace(opts || {});
     var list = choices.map(function (o, i) { return typeof o === 'string' ? { label: o, value: i } : o; });
@@ -250,7 +266,7 @@
       function done(v) { unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
       var pk = pickKey(text, list, opts), prev = lastPick(pk);
       list.forEach(function (o, i) {
-        var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
+        var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.thumb ? '<img class="ask-thumb" src="' + o.thumb + '" alt="">' : o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
         b.onclick = function (e) { e.stopPropagation(); rememberPick(pk, o.label); done(o.value); };
         row.appendChild(b);
       });

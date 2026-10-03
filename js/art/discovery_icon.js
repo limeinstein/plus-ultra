@@ -12,7 +12,7 @@
     ['map-discoveries/ruins-3', ['tula', 'nazca', 'tiwanaku', 'poitiers', 'montstmichel', 'stave', 'rusch', 'prester', 'cappadocia', 'edom', 'ur', 'petra', 'brendan']],
     ['map-discoveries/ruins-4', ['cibola', 'ark', 'tajmahal', 'qutb', 'madurai', 'shwedagon', 'konjiki', 'pueblo', 'machupicchu', 'sacsay', 'moai', 'mu', 'ananda']]
   ];
-  var POS = {}, ASKED = {};
+  var POS = {};
   SHEETS.forEach(function (s) { s[1].forEach(function (id, i) { POS[id] = { key: s[0], slot: i }; }); });
 
   DI.isMapLandmark = function (d) { return !!(d && d.cat === 'ruin' && d.how !== 'city' && POS[d.id]); };
@@ -23,17 +23,11 @@
   DI.count = function () { return Object.keys(POS).length; };
   DI.key = function (d) { var p = d && POS[d.id]; return p ? p.key : null; };
 
-  function request(key) {
-    if (!key || ASKED[key] || !G.Img || !G.Img.has(key)) return;
-    ASKED[key] = 1; G.Img.load(key);
-  }
+  function request(key) { if (key && G.Img && G.Img.has(key)) G.Img.want(key); }
   DI.preload = function (list) {
     var keys = {}, jobs = [];
     (list || DI.visible()).forEach(function (d) { var p = POS[d.id]; if (p) keys[p.key] = 1; });
-    Object.keys(keys).forEach(function (key) {
-      if (!G.Img || !G.Img.has(key)) return;
-      ASKED[key] = 1; jobs.push(G.Img.load(key));
-    });
+    Object.keys(keys).forEach(function (key) { if (G.Img && G.Img.has(key)) jobs.push(G.Img.load(key)); });
     return Promise.all(jobs);
   };
 

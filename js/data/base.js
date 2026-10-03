@@ -25,6 +25,8 @@
   G.SKILLS = [
     { id: 'nav', name: '항해술', desc: '항해 중 피로 누적을 줄이고 폭풍을 피한다.' },
     { id: 'ops', name: '운용술', desc: '선원의 규율을 유지하고 탐험 비용을 줄인다.' },
+    { id: 'cook', name: '요리', desc: '배와 야영지의 끼니를 맛있게 차려 피로를 덜어 준다. 교역품 발견물(향신료·작물)의 가치를 알아보고 높인다. 제독이나 부하 누구든 요리에 밝으면 된다.' },
+    { id: 'music', name: '음악', desc: '노래와 악기로 선원들을 하나로 묶어 규율을 지킨다. 민족 발견물(사람들의 노래·춤·의식)의 가치를 높이고 반란 때 잔치로 달랠 수 있다. 제독이나 부하 누구든 음악에 밝으면 된다.' },
     { id: 'sword', name: '검술', desc: '백병전과 일기토, 지상전 기병을 강하게 한다.' },
     { id: 'gun', name: '포술', desc: '해전의 포격 명중과 위력을 높인다.' },
     { id: 'shoot', name: '사격술', desc: '해전·지상전의 사격을 강하게 한다.' },
@@ -37,16 +39,14 @@
     { id: 'theo', name: '신학', desc: '교회와 성직자에게 신뢰를 얻고 선원의 사기를 붙든다.' },
     { id: 'sci', name: '과학', desc: '자연·생물 발견에 유리하며 괴혈병 예방에 도움이 된다.' },
     { id: 'art', name: '그림', desc: '발견한 것을 그려 남긴다. 제독이나 부하 누구든 그림에 밝으면 발견물의 가치가 오른다(명성·사례금·하사금).' },
-    { id: 'craft', name: '세공', desc: '보물과 공예품을 알아보고 손질한다. 제독이나 부하 누구든 세공에 밝으면 발견물(특히 보물·유적)의 가치와 유물 값이 오른다.' },
-    { id: 'cook', name: '요리', desc: '먹을거리의 맛과 쓰임을 안다. 제독이나 부하 누구든 요리에 밝으면 교역품을 발견했을 때 명성·사례금이 단계마다 8% 더 오르고, 항해·탐험 중 별미를 차려 피로를 덜어 주는 일이 생긴다.' },
-    { id: 'music', name: '음악', desc: '노래와 악기로 마음을 연다. 제독이나 부하 누구든 음악에 밝으면 민족을 발견했을 때 명성·사례금이 단계마다 8% 더 오르고, 뱃노래·모닥불 노래로 날마다 쌓이는 피로가 줄어든다.' }
+    { id: 'craft', name: '세공', desc: '보물과 공예품을 알아보고 손질한다. 제독이나 부하 누구든 세공에 밝으면 발견물(특히 보물·유적)의 가치와 유물 값이 오른다.' }
   ];
   G.SKILL_BY_ID = {}; G.SKILLS.forEach(function (s, i) { s.idx = i; G.SKILL_BY_ID[s.id] = s; });
   // which fleet role lets a companion's skill apply (DKJ3 style)
   G.ROLE_SKILLS = {
     admiral: 'all',
     first: ['sword', 'gun', 'shoot', 'med', 'ship', 'sci', 'acct', 'speech', 'theo', 'hist', 'craft'],
-    nav: ['nav', 'ops'],
+    nav: ['nav', 'ops', 'cook', 'music'],
     surveyor: ['survey', 'hist', 'art'],
     interp: [],
     purser: ['acct']          // 경리: 회계 — 교역소·시장·후원자 앞에서 값을 후려치고 셈을 따진다
@@ -61,7 +61,7 @@
     { id: 'hunter', name: '사냥꾼', desc: '운용술이 뛰어나 오랜 탐험을 견딘다. 생물 발견에 강하다.', skills: { ops: 3, sci: 1 } },
     { id: 'conq', name: '정복자', desc: '검술의 달인. 해전과 지상전에서 두각을 나타낸다.', skills: { sword: 3, gun: 1 } },
     { id: 'miss', name: '전도사', desc: '신학을 익혀 교회의 신뢰를 얻고 선원의 마음을 붙든다.', skills: { theo: 3, speech: 1 } },
-    { id: 'merchant', name: '상인', desc: '회계에 능해 교역으로 부를 쌓는다.', skills: { acct: 3, speech: 1 } },
+    { id: 'merchant', name: '상인', desc: '회계에 능해 교역으로 부를 쌓는다.', skills: { acct: 3, speech: 1 }, ship: 'tartane' },   // 코그(네모돛 하나)는 맞바람에 하루 0.12°밖에 못 가 마데이라 앞에서 굶었다 → 세모돛 타르타나
     { id: 'soldier', name: '군인', desc: '포술과 사격술을 익힌 군인. 전투에 강하다.', skills: { gun: 2, shoot: 2 } }
   ];
 
@@ -167,7 +167,7 @@
   // special regional demand multipliers (region index -> factor)
   G.GOOD_DEMAND = {
     silver: { 6: 1.6, 5: 1.25, 8: 1.3 }, gold: { 1: 1.1, 0: 1.1, 5: 1.2 }, horses: { 5: 1.7, 8: 1.3 },
-    guns: { 3: 1.5, 5: 1.4, 8: 1.4, 9: 1.8, 10: 1.6 }, cannon: { 3: 1.4, 5: 1.4, 8: 1.4, 9: 1.6, 10: 1.5 },
+    guns: { 3: 1.25, 5: 1.4, 8: 1.4, 9: 1.8, 10: 1.6 }, cannon: { 3: 1.2, 5: 1.4, 8: 1.4, 9: 1.6, 10: 1.5 },   // 아프리카(3) 총포 1.5·1.4 → 1.25·1.2: 리스본~카사블랑카 열흘에 본전의 131%가 남던 것
     woolcloth: { 3: 1.3, 5: 1.2, 10: 1.3 }, glass: { 3: 1.6, 10: 1.7, 8: 1.3 }, wine: { 10: 1.5, 3: 1.3 },
     coral: { 5: 1.5, 6: 1.3 }, ivory: { 5: 1.2, 6: 1.3 }, rhino: { 6: 1.5 }, musk: { 1: 1.2, 2: 1.2 },
     amber: { 2: 1.2, 4: 1.2 }, jade: { 6: 1.3 }, fur: { 6: 1.2, 4: 1.1 }, salt: { 3: 1.8 }, copper: { 5: 1.2, 3: 1.3 },
@@ -205,6 +205,14 @@
     pirateBase: 0.3, pirateCap: 1500, pirateCrew: [0.22, 0.66],
     // 해적선 1척 전리품 기준(금화, 짐칸 200 기준), 나포선을 그 자리에서 팔 때 값의 비율 (battle.js)
     pirateLoot: 1400, prizeSale: 0.8,
+    // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
+    pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
+    // 명성 칭호의 문턱: 신참 모험가 · 이름난 모험가 · 저명한 항해가 · 위대한 탐험가 · 대항해자 (예전 400·1600·4000·8000·15000 — 3년이면 끝 칭호였다)
+    fameTitles: [400, 1600, 5000, 12000, 25000],
+    // 식량·물이 떨어진 날 쓰러지는 선원의 비율 [최소, 최대]
+    starve: [0.03, 0.07],
+    // 모든 것을 잃고 고향에서 다시 시작할 때 받는 배 (잃은 기함이 더 싼 배였으면 그 배)
+    restartShip: 'caravel',
     // 후원자 신뢰의 상한 (sponsor.js, errand.js)
     trustMax: 100,
     // 보급: 선원 한 사람이 하루에 먹고 마시는 양(통) — 식량·물 따로 (예전 0.04 → 0.025: 같은 짐칸으로 약 1.6배 오래)
@@ -215,6 +223,11 @@
     // 바다 위 반란: 규율 < discipline 이고 피로 > fatigue 일 때 하루 chance 확률, 한 번 일어나면 cooldown일 동안 다시 안 일어난다 (sea.js)
     //   (예전: 규율 22 · 피로 70 · 하루 18%, 쉬는 날 없음)
     mutiny: { discipline: 15, fatigue: 80, chance: 0.06, cooldown: 40 },
+    // 요리·음악 (부가 기술 — 제독이나 부하 누구든 가장 잘하는 사람의 단계, R.skillRead)
+    //   바다: 하루 피로 −cookFatigue×요리, 규율 +musicDiscipline×음악 / 뭍: 하루 피로 −landCook×요리, 야영 쉬기 −restBonus×(요리+음악)
+    //   발견물 가치: 교역품 +discValue×요리, 민족 +discValue×음악 / 발견의 여파: 교역품 피로 −impact×요리, 민족 규율 +impact×음악
+    //   반란 교섭 「잔치」: 규율 +feastBase + feastPer×(요리+음악), 피로 −feastFatigue, 식량 하루치 × feastFood
+    crewCare: { cookFatigue: 0.12, musicDiscipline: 0.15, landCook: 0.15, restBonus: 3, discValue: 0.08, impact: 2, feastBase: 12, feastPer: 6, feastFatigue: 10, feastFood: 2 },
     landCost: { base: 5, perMan: 1, thirsty: 0.5, unpaidFatigue: 6, desert: 0.25, water: [4, 8] },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
     // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
@@ -230,8 +243,6 @@
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작
     matPerHp: 0.4, matStart: 10,
     // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금, 첫 함대(배 ID — 앞의 것이 기함)
-    // 음악 특기: 단계마다 날마다 쌓이는 피로를 이만큼 덜어 준다 (바다 sea.js · 뭍 land.js)
-    musicRest: 0.12, musicRestLand: 0.2,
     testChar: { stat: 99, luck: 99, gold: 999999999, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름 · gold: 소지금 최대(9억 9999만 9999닢)
     // 여관 허드렛일: 한 번에 최대 maxDays일. 하루에 명성이 famePerDay씩 내려가고(제독이 허드렛일을…), 그 고장 말을 익힌다 —
     // 말 단계(모름→기초→보통→능숙)마다 일한 날 langDays[지금 단계]일이 쌓이면 한 단계 오른다(지력이 높으면 빨리: 지력 50 기준)
@@ -243,7 +254,11 @@
     succession: { sponsorKeep: 0.5, heirKeep: 0.3, legacyTrust: 70, legacyBase: 0.35, legacyGold: 250 },
     // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야, 자녀 maxKids명까지).
     // gestation일 뒤에 태어나고(쌍둥이 twins), adult세가 되면 뒤를 이을 수 있다. 가정교사는 한 아이에게 해마다 한 번, 값 eduCost닢
-    family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, eduCost: 800 },
+    family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, eduCost: 800,
+      // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
+      // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill
+      // · 해산 한 달 앞(nearDays)이면 소식과 자택 「해산을 기다린다」 · 견습은 apprenticeAge살부터
+      bondBorn: 60, bondMissed: 40, bondVisit: 3, bondAway: 1, bondAboard: 2, apprenticeSkill: 0.22, nearDays: 30, apprenticeAge: 12 },
     // 철새(떠돌이 항해사, wanderers.js): 새 게임에 startN명, 해마다 perYear명이 새로 나타난다.
     // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).

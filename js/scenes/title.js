@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  var anim = null, bg = null, t0 = 0;
+  var bg = null;
 
   T.enter = function () {
     var Game = G.Game;

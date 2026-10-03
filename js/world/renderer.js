@@ -790,6 +790,21 @@ void main(){
     var gl = canvas.getContext('webgl2', { alpha: false, antialias: false, depth: false, stencil: false, premultipliedAlpha: false, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
     if (!gl) throw new Error('WebGL2 not available');
     this.gl = gl;
+    this.lost = false;
+    this.stats = { full: 0, strips: 0, swaps: 0, lost: 0 };
+    this._init();
+    /* GPU 메모리가 모자라거나 드라이버가 다시 시작하면 브라우저가 WebGL 컨텍스트를 거둬 간다.
+       그대로 두면 바다·지도가 검게 남으므로, 돌려받을 수 있게 알리고(preventDefault) 돌아오면 셰이더·텍스처를 다시 만든다. */
+    var self = this;
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); self.lost = true; self.stats.lost++; }, false);
+    canvas.addEventListener('webglcontextrestored', function () {
+      try { self._init(); self.lost = false; }
+      catch (err) { if (window.console) console.warn('[지도] 그리기 장치를 되살리지 못했습니다: ' + err.message); }
+    }, false);
+  }
+  /** 셰이더·꼭짓점·텍스처를 만든다 (처음 한 번, 그리고 컨텍스트를 돌려받았을 때) */
+  Renderer.prototype._init = function () {
+    var gl = this.gl;
     this.progMain = link(gl, FS_MAIN);
     this.progLand = link(gl, FS_LAND);
     var buf = gl.createBuffer();
@@ -800,15 +815,14 @@ void main(){
     gl.enableVertexAttribArray(0);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
     this.vao = vao;
-    var self = this;
     function locs(prog) { var o = {}; UNIFORMS.forEach(function (n) { o[n] = gl.getUniformLocation(prog, n); }); return o; }
     this.uM = locs(this.progMain); this.uL = locs(this.progLand);
     this.maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE);
     this.caches = [null, null];     // [앞(쓰는 중), 뒤(그리는 중)]
     this.job = null;
-    this.stats = { full: 0, strips: 0, swaps: 0 };
+    this._lastView = null;
     this._uploadTextures();
-  }
+  };
 
   Renderer.prototype._uploadTextures = function () {
     var gl = this.gl, sz = G.Geo.size();
@@ -938,6 +952,7 @@ void main(){
   /** view: {lon, lat, zoom(px/deg in CSS px), time, wind:[x,y], cloud, edge, mode, dusk, storm, quality, cssWidth} */
   Renderer.prototype.draw = function (view) {
     var gl = this.gl, c = this.canvas, u = this.uM;
+    if (this.lost || gl.isContextLost()) return;   // 컨텍스트를 돌려받을 때까지 기다린다
     var pxScale = c.width / (view.cssWidth || c.width), zoom = view.zoom * pxScale;
     var cache = null;
     if (!view.mode) cache = this._ensureCache(view, c.width, c.height, zoom);

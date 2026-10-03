@@ -23,6 +23,7 @@
   // 작은 항구지만 그 고장 배를 짓는 조선소가 있는 곳 (나가사키·향료 제도·잉카 해안·말라바르·요동 등)
   R.SMALL_YARDS = [191, 171, 172, 220, 221, 151, 125, 106, 166, 167, 189, 205, 229];
   R.facilities = function (c) {
+    if (c.outpost) return { harbor: true, trade: false, tavern: false, inn: false, gate: false, church: false, market: false, shipyard: false, palace: false, library: false, guild: false, mansion: [] };   // 무인도(독도)
     var f = { harbor: !!c.port, trade: true, tavern: true, inn: true, gate: true, church: true, market: c.size >= 2, shipyard: !!c.port && (c.size >= 2 || R.SMALL_YARDS.indexOf(c.id) >= 0), palace: false, library: false, guild: false, mansion: [] };
     if (c.flags.indexOf('P') >= 0) f.palace = true;
     if (c.flags.indexOf('L') >= 0) f.library = true;
@@ -51,7 +52,6 @@
   };
 
   // ---------------------------------------------------------------- people & skills
-  R.mateDef = function (id) { return G.MATE[id]; };
   /** effective skill level (0..3) combining admiral + companions in suitable roles */
   R.skill = function (id) {
     var S = R.S(); var best = S.player.sk[id] || 0;
@@ -101,7 +101,6 @@
   R.fullName = function () { return R.S().player.name; };
   R.nationName = function (n) { return n === 'PT' ? '포르투갈' : n === 'ES' ? '에스파냐' : n; };
   R.nativeLang = function (n) { return n === 'PT' ? 1 : 0; };
-  R.homeCity = function () { return R.S().player.home; };
   R.isHomeNation = function (c) {
     var S = R.S(); var own = R.cityOwner(c);
     if (S.player.nation === 'PT') return own === '포르투갈';
@@ -144,7 +143,6 @@
       guns: { type: 'saker', n: Math.min(4, t.ports) }, fig: null, loan: null
     };
   };
-  R.shipDef = function (s) { return G.SHIP[s.type]; };
   R.gunLoad = function (s) { return s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].load : 1); };
   R.shipCargoCap = function (s) { return Math.max(0, Math.floor(s.cap - R.gunLoad(s))); };
   R.fleetCap = function () { return U.sum(R.S().fleet.ships, R.shipCargoCap); };
@@ -171,7 +169,6 @@
   };
   R.daysOfFood = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.food + R.provisionCargo('food')) / R.dailyUse() + 1e-6) : 999; };
   R.daysOfWater = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.water + R.provisionCargo('water')) / R.dailyUse() + 1e-6) : 999; };
-  R.shipPrice = function (typeId) { return G.SHIP[typeId].price; };
   R.shipValue = function (s) {
     var t = G.SHIP[s.type]; var v = t.price * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
     v += s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].price : 0) * 0.3;
@@ -410,7 +407,7 @@
     var m = S.market[cityId];
     if (!m) { m = S.market[cityId] = { g: {}, ev: null, evEnd: 0, t: S.day }; }
     // decay saturation since last access
-    var dt = S.day - (m.t || S.day);
+    var dt = S.day - (m.t == null ? S.day : m.t);   // 첫날(0일)에 만든 시장도 회복된다 — 예전에는 0을 '없음'으로 읽어 모항 시장만 품귀·포화가 영영 풀리지 않았다
     if (dt > 0) {
       var k = Math.pow(0.5, dt / 25);
       for (var id in m.g) { m.g[id].sat *= k; m.g[id].dep *= k; if (m.g[id].sat < 0.01 && m.g[id].dep < 0.01) delete m.g[id]; }
@@ -532,8 +529,17 @@
   R.supplyCost = function (c) { return Math.max(1, Math.round((c.region <= 2 ? 2 : 3) * (1 - 0.06 * R.investLv(c.id)))); }; // per 통
   R.innCost = function (c) { return 8 + c.size * 6; };
   R.surveyRange = function () { return [0.9, 1.4, 1.9, 2.6][R.skill('survey')] + (G.Ships && G.Ships.fleetHas('scout') ? 0.4 : 0); };
+  /** 모든 것을 잃고 고향에서 다시 시작할 때의 함대 (몸값을 치르고 풀려났을 때, 선원이 전멸해 뒤를 이었을 때).
+      lost: 잃은 기함 종류 — 그보다 좋은 배를 거저 받지는 않는다 (바르카를 잃고 카라벨을 받던 것) */
+  R.restartFleet = function (lost) {
+    var B = G.BALANCE || {}, id = B.restartShip || 'caravel', L = lost && G.SHIP[lost];
+    if (L && L.price < G.SHIP[id].price) id = L.id;
+    var sh = R.newShip(id, U.pick(G.SHIP_NAMES)); sh.guns = { type: 'saker', n: 2 };
+    return { ships: [sh], crew: Math.max(sh.crewMin, Math.min(sh.crewMax, 12)), food: 10, water: 10, mat: B.matStart || 10, cargo: {}, fatigue: 0, discipline: 60, daysOut: 0, sick: 0, scurvy: 0, rats: 0 };
+  };
   R.fameTitle = function (f) {
-    if (f < 400) return '무명의 항해자'; if (f < 1600) return '신참 모험가'; if (f < 4000) return '이름난 모험가';
-    if (f < 8000) return '저명한 항해가'; if (f < 15000) return '위대한 탐험가'; return '대항해자';
+    var T = (G.BALANCE && G.BALANCE.fameTitles) || [400, 1600, 4000, 8000, 15000];
+    if (f < T[0]) return '무명의 항해자'; if (f < T[1]) return '신참 모험가'; if (f < T[2]) return '이름난 모험가';
+    if (f < T[3]) return '저명한 항해가'; if (f < T[4]) return '위대한 탐험가'; return '대항해자';
   };
 })(window.G = window.G || {});

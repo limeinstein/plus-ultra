@@ -187,3 +187,10 @@ button { font: inherit; color: inherit; }
   .facts dd { margin-bottom: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+
+/* 그림을 받는 동안 (js/core/images.js) — 코드 그림을 먼저 내보이지 않고 은은한 바탕으로 기다린다 */
+canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rgba(140,110,70,.28) 50%, rgba(60,44,28,.35) 70%); background-size: 220% 100%; animation: imgwait 1.4s linear infinite; }
+@keyframes imgwait { from { background-position: 120% 0; } to { background-position: -100% 0; } }
+.img-loading { position: fixed; right: 22px; bottom: 18px; z-index: 190; display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 8px; background: rgba(20,14,9,.78); color: #e9dcc0; font-size: 16px; letter-spacing: .04em; pointer-events: none; }
+.img-loading i { width: 16px; height: 16px; border: 2px solid rgba(217,180,95,.35); border-top-color: #d9b45f; border-radius: 50%; animation: imgspin .8s linear infinite; }
+@keyframes imgspin { to { transform: rotate(360deg); } }

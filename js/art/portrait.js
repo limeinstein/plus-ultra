@@ -245,9 +245,9 @@
     tavernkeeper: ['keeper', 'tav', null], shipwright: ['keeper', 'yard', null], priest: ['priest', '', null], librarian: ['scholar', '', null], guildmaster: ['official', 'gd', null] };
   A.townSpec = function (id, c) {
     var t = A.TOWNFOLK[id] || ['merchant', id, 'm'];
-    var sp = A.withImg(A.npcSpec('c' + c.id + ':' + t[0] + t[1], t[0], c.style, t[2]), G.Img.chain.npc(id, c));
-    if (G.Img.NPC_ROLE_PORTRAIT && !G.Img.NPC_ROLE_PORTRAIT[id]) sp.noRole = true;   // 역할 공통 그림을 붙이지 않는 건물 사람
-    return sp;
+    // 도시·문화권 전용 그림이 없더라도 npcSpec의 양식×역할 그림을 이어 쓴다.
+    // 시장 상인·술집 주인·조선소 목수도 폴리곤 대용 얼굴로 돌아가지 않는다.
+    return A.withImg(A.npcSpec('c' + c.id + ':' + t[0] + t[1], t[0], c.style, t[2]), G.Img.chain.npc(id, c));
   };
   function headPath(ctx, s, cx, cy, R) {
     // profile facing right. R = head radius

@@ -62,7 +62,7 @@
       '<div>악명</div><div>' + U.num(p.notoriety) + '</div><div>건강</div><div>' + Math.round(p.hp) + ' / 100</div>' +
       (G.Hostile ? '<div>적대</div><div style="grid-column:span 3">' + G.Hostile.html() + '</div>' : '') +
       '<div>무기</div><div>' + (p.equip.weapon ? G.ITEM[p.equip.weapon].name + ' (공격 ' + G.ITEM[p.equip.weapon].atk + ')' : '없음') + '</div><div>방어구</div><div>' + (p.equip.armor ? G.ITEM[p.equip.armor].name + ' (방어 ' + G.ITEM[p.equip.armor].def + ')' : '없음') + '</div>' +
-      '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') : '없음') + '</div><div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return G.Family.kidName(k) + ' <small class="muted">' + G.Family.kidAge(k) + '세</small>'; }).join(', ') : '없음') + '</div></div>' +
+      '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') : '없음') + '</div><div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return G.Family.kidName(k) + ' <small class="muted">' + G.Family.kidAge(k) + '세' + (k.aboard ? ' · 견습' : '') + '</small>' + (k.unnamed ? '' : ' ' + G.Family.bondHearts(k)); }).join(', ') : '없음') + '</div></div>' +
       '<div class="sep"></div><div class="grid2">' +
       '<div><h4 style="margin:0 0 8px">능력치</h4>' + G.STATS.map(function (st) { return '<div class="statrow"><span>' + st.name + '</span>' + UI.bar(p.st[st.id], 100, 'gold') + '<b>' + p.st[st.id] + '</b></div>'; }).join('') + '</div>' +
       '<div><h4 style="margin:0 0 8px">특기 <small class="muted">(동료 포함 실효 수준)</small></h4><div class="skillgrid" style="grid-template-columns:1fr 1fr">' +
@@ -380,35 +380,41 @@
     var cv = A.canvas(w, h), ctx = cv.getContext('2d');
     var img = ctx.createImageData(w, h), d = img.data;
     var fine = (lon1 - lon0) / w < 0.2;   // small area: sample the coastline directly
-    for (var y = 0; y < h; y++) {
+    // 칸마다 G.State.charted 를 두 번씩 부르던 것을, 열·줄의 격자 번호를 미리 세어 두고 탐험 비트를 바로 읽는다.
+    // 해안선도 점마다 fillRect 하지 않고 같은 픽셀 판에 바로 섞는다 (세계 해도 1440×620 기준 약 4배 빠름).
+    var S = G.Game.state, bits = S && S.chartBits, x, y, o;
+    var gxs = new Int32Array(w), lons = new Float64Array(w), cls = new Uint8Array(w * h);   // cls: 0 안 가 본 곳 · 1 가 본 바다 · 2 가 본 뭍
+    for (x = 0; x < w; x++) { lons[x] = lon0 + (x + 0.5) / w * (lon1 - lon0); gxs[x] = U.clamp(Math.floor((G.Geo.wrapLon(lons[x]) + 180) * 2), 0, 719); }
+    for (y = 0; y < h; y++) {
       var lat = lat1 - (y + 0.5) / h * (lat1 - lat0);
-      for (var x = 0; x < w; x++) {
-        var lon = lon0 + (x + 0.5) / w * (lon1 - lon0);
-        var gx = Math.floor((G.Geo.wrapLon(lon) + 180) * 2), gy = Math.floor((90 - lat) * 2);
-        gx = U.clamp(gx, 0, 719); gy = U.clamp(gy, 0, 359);
-        var land = fine ? (G.Geo.sdfRaw(lon, lat) > 0 ? 1 : 0) : landRaster[gy * 720 + gx], seen = G.State.charted(lon, lat);
-        var o = (y * w + x) * 4, r, g, b;
+      var cy = Math.floor((90 - lat) * 2), inChart = !!bits && cy >= 0 && cy < 360, gy = U.clamp(cy, 0, 359), row = gy * 720;
+      for (x = 0; x < w; x++) {
+        var gi = row + gxs[x];
+        var seen = inChart && (bits[gi >> 3] & (1 << (gi & 7)));
+        var land = fine ? (G.Geo.sdfRaw(lons[x], lat) > 0 ? 1 : 0) : landRaster[gi];
+        o = (y * w + x) * 4;
+        var r, g, b;
         if (!seen) { r = 214; g = 196; b = 156; }
-        else if (land) { r = 196; g = 168; b = 112; }
-        else { r = 150; g = 178; b = 176; }
+        else if (land) { r = 196; g = 168; b = 112; cls[y * w + x] = 2; }
+        else { r = 150; g = 178; b = 176; cls[y * w + x] = 1; }
         var n = ((x * 73856093) ^ (y * 19349663)) & 15;
         d[o] = r - n; d[o + 1] = g - n; d[o + 2] = b - n; d[o + 3] = 255;
       }
     }
-    ctx.putImageData(img, 0, 0);
-    function px(lon, lat) { return [(lon - lon0) / (lon1 - lon0) * w, (lat1 - lat) / (lat1 - lat0) * h]; }
     // coast ink on charted land edges
-    ctx.fillStyle = 'rgba(80,50,20,.55)';
-    for (var yy = 1; yy < h - 1; yy += 1) {
-      var la = lat1 - (yy + 0.5) / h * (lat1 - lat0);
-      for (var xx = 1; xx < w - 1; xx += 1) {
-        var lo = lon0 + (xx + 0.5) / w * (lon1 - lon0);
-        if (!G.State.charted(lo, la)) continue;
-        var i = (yy * w + xx) * 4;
-        var isL = d[i + 2] < 130 ? 1 : 0, rt = d[i + 6] < 130 ? 1 : 0, dn = d[i + w * 4 + 2] < 130 ? 1 : 0;
-        if (isL !== rt || isL !== dn) ctx.fillRect(xx, yy, 1.2, 1.2);
+    for (y = 1; y < h - 1; y++) {
+      for (x = 1; x < w - 1; x++) {
+        var ci = y * w + x, c0 = cls[ci];
+        if (!c0) continue;
+        var isL = c0 === 2;
+        if (isL !== (cls[ci + 1] === 2) || isL !== (cls[ci + w] === 2)) {
+          o = ci * 4;
+          d[o] = d[o] * 0.32 + 54.4; d[o + 1] = d[o + 1] * 0.32 + 34; d[o + 2] = d[o + 2] * 0.32 + 13.6;    // 갈색 먹선 rgb(80,50,20)을 0.68만큼
+        }
       }
     }
+    ctx.putImageData(img, 0, 0);
+    function px(lon, lat) { return [(lon - lon0) / (lon1 - lon0) * w, (lat1 - lat) / (lat1 - lat0) * h]; }
     // grid (확대하면 더 촘촘하게)
     var step = (lon1 - lon0) > 120 ? 30 : (lon1 - lon0) > 40 ? 10 : 5;
     ctx.strokeStyle = 'rgba(90,60,30,.18)'; ctx.lineWidth = 1;

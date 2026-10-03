@@ -136,6 +136,7 @@
         if (!id || !I) return;
         f.spriteId = id;
         var key = 'duel/fighters/' + id;
+        f.spriteKey = key;
         f.spriteImg = I.get(key);
         I.load(key).then(function (im) { if (im) f.spriteImg = im; });
       }
@@ -253,6 +254,7 @@
       /** 사람 그리기 (옆모습). face 1 = 오른쪽을 본다 */
       function drawFighter(f, bx, by, face, t) {
         if (f.spriteImg) { drawSpriteFighter(f, bx, by, face, t); return; }
+        if (f.spriteKey && I && I.pending(f.spriteKey)) return;   // 전투원 그림을 받는 중: 코드 그림을 내보이지 않고 기다린다
         var L = LOOK[f.look] || LOOK.brawler, k = f.pt, pose = f.pose, bob = pose === 'idle' ? Math.sin(t * 3 + (face > 0 ? 0 : 1.5)) * 1.8 : 0;
         ctx.save(); ctx.translate(bx + f.x * face, by); ctx.scale(1.4, 1.4);
         if (pose === 'down') { ctx.rotate(-face * Math.PI / 2 * Math.min(1, k * 2)); ctx.translate(0, -10 * Math.min(1, k * 2)); }
@@ -302,7 +304,7 @@
         ctx.strokeStyle = L.coat; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(26 * reach, 0); ctx.stroke();
         ctx.fillStyle = L.skin; ctx.beginPath(); ctx.arc(28 * reach, 0, 4.5, 0, 7); ctx.fill();
         if (pose === 'shoot') { ctx.fillStyle = '#3a2a1a'; ctx.fillRect(28, -4, 22, 6); ctx.fillStyle = '#6a4a2a'; ctx.fillRect(24, 0, 8, 10); }
-        else if (!(pose === 'down' && k > 0.6) || true) {
+        else {
           var sty = f.style, bl = sty === 'thrust' ? 64 : sty === 'bash' ? 50 : 56;
           ctx.translate(28 * reach, 0);
           ctx.fillStyle = '#c8a040'; ctx.fillRect(-2, -7, 5, 14);                                  // 코등이

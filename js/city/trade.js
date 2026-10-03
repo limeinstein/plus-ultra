@@ -14,7 +14,9 @@
 
   function keeper() { return C.npc('trader', '교역소 주인'); }
   T.enter = async function (c) {
-    var cur = C.current(); cur.haggle = null; cur.talked = false;
+    var cur = C.current(), mk0 = R.market(c.id); cur.talked = false;
+    // 같은 날 다시 들어와도 값 깎기를 새로 굴릴 수 없다 (나갔다 들어오기만 하면 되던 것)
+    cur.haggle = mk0.hag && mk0.hag.day === R.S().day ? mk0.hag.h : null;
     if (G.Ledger) G.Ledger.record(c);
     var lv = C.langLv(c);
     await C.say(keeper(), lv === 0 ? '어서 오게. 무엇을 찾나?' : U.pick(['어서 오게. 좋은 물건이 들어와 있다네.', '어서 오게! 오늘은 무엇을 사겠나?', '팔 물건이 있으면 보여 주게.']));
@@ -44,7 +46,9 @@
   function hag() { var cur = C.current(); return cur && cur.haggle && cur.haggle.ok && cur.haggle.buy ? cur.haggle : null; }   // 값 깎기에 성공했을 때만
   // 값 깎기는 사는 값을 올리거나 파는 값을 내리는 일이 없다 (예전: 실패 벌칙 ×1.03이 「후려쳤더니 값이 오른」 것처럼 보였다)
   function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(); return h ? Math.max(1, Math.round(p * Math.min(1, h.buy))) : p; }
-  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(); return h ? Math.round(p * Math.max(1, h.sell)) : p; }
+  // 파는 값 웃돈은 이 도시가 팔지 않는 물건(들여온 물건)에만 — 깎아서 산 그 자리 물건을 웃돈 받고 되팔아 남기던 것을 막는다
+  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(); return h && !R.sells(c, id) ? Math.round(p * Math.max(1, h.sell)) : p; }
+  function keepHag(c, h) { R.market(c.id).hag = { day: R.S().day, h: h }; return h; }
   T.buyP = buyP; T.sellP = sellP;
 
   // ---------------------------------------------------------------- buy
@@ -231,7 +235,7 @@
       var before = lv;
       s.player.gold -= n; iv.amt += n;
       var after = R.investLv(c.id);
-      s.player.fame += Math.max(1, Math.round(n / 4000));
+      var ifame = n / 4000; s.player.fame += Math.floor(ifame) + (U.chance(ifame % 1) ? 1 : 0);   // 잘게 나눠 넣어도 같은 명성 (예전에는 1,000닢씩 넣으면 4배)
       R.S().stats.invested = (R.S().stats.invested || 0) + n;
       G.State.log(c.name + ' 교역소에 금화 ' + U.num(n) + '닢을 출자했다.');
       if (after > before) {
@@ -324,7 +328,7 @@
   T.haggle = async function (c) {
     var cur = C.current(), k = keeper();
     if (cur.haggle) { await C.say(k, cur.haggle.ok ? '이미 충분히 깎아 주지 않았나!' : '더 이상 할 말 없네.'); return; }
-    if (C.langLv(c) === 0) { await C.mate('말이 통하지 않는 것만은 어쩔 수가 없군요.'); cur.haggle = { ok: false }; return; }
+    if (C.langLv(c) === 0) { await C.mate('말이 통하지 않는 것만은 어쩔 수가 없군요.'); cur.haggle = keepHag(c, { ok: false }); return; }
     var o = T.haggleOdds(c), pu = o.pu, puSp = pu ? G.Scenes.mateSpeaker('purser') : null;
     if (pu) await UI.say(U.pick(['주인장, 장부를 좀 봅시다. 지난달 시세가 이보다 한참 쌌소. 이 값이면 우리는 옆 가게로 가겠소.', '이 물건 값에 운임과 관세를 다 얹었구려. 우리가 통째로 사 줄 테니 거품은 빼시오.', '현금으로 한꺼번에 치르겠소. 그러니 셈을 다시 하시오 — 한 푼도 허투루 낼 생각 없소.']), puSp);
     else await C.me(U.pick(['주인장, 조금만 싸게 해 주게. 앞으로도 자주 들를 테니.', '이 값은 너무 비싸지 않은가. 옆 가게는 더 싸던데.', '많이 살 테니 값을 좀 깎아 주게.']));
@@ -335,17 +339,17 @@
       if (again) {
         await UI.say(U.pick(['그럼 이 장부를 보시오. 이 항구에서 이 값에 판 날이 한 번도 없소.', '좋소, 우리는 오늘 여기서 사지 않겠소. …정말 이 값이 마지막이오?']), puSp);
         ok = U.chance(o.p * 0.6);
-        if (!ok) { cur.haggle = { ok: false }; await C.say(k, '자네들 같은 손님은 처음 보네! 그 값에는 절대 못 주네.'); UI.toast('값 후려치기 실패 — 값은 그대로입니다.', 'scales'); return; }
+        if (!ok) { cur.haggle = keepHag(c, { ok: false }); await C.say(k, '자네들 같은 손님은 처음 보네! 그 값에는 절대 못 주네.'); UI.toast('값 후려치기 실패 — 값은 그대로입니다.', 'scales'); return; }
         o.disc += 0.02;
       }
     }
     if (ok) {
       var disc = Math.min(0.25, o.disc + U.rf(0, 0.04));
-      cur.haggle = { ok: true, buy: 1 - disc, sell: 1 + disc * (pu ? 0.7 : 0.6) };
+      cur.haggle = keepHag(c, { ok: true, buy: 1 - disc, sell: 1 + disc * (pu ? 0.7 : 0.6) });
       await C.say(k, U.pick(pu ? ['자네 경리는 무서운 사람이군… 알았네, 그 값에 주지.', '장부까지 들이밀다니! 좋아, 이번만일세.'] : ['허허, 자네한테는 못 당하겠군. 좋아, 특별히 싸게 해 주지.', '자네, 보는 눈이 있군. 득 보는 걸세.', '알았네, 알았어. 이번만일세.']));
-      UI.toast('값 깎기 성공' + (pu ? '(경리 ' + pu.name + ')' : '') + '! 사는 값 -' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * (pu ? 70 : 60)) + '%', 'scales');
+      UI.toast('값 깎기 성공' + (pu ? '(경리 ' + pu.name + ')' : '') + '! 사는 값 -' + Math.round(disc * 100) + '%, 들여온 물건 파는 값 +' + Math.round(disc * (pu ? 70 : 60)) + '%', 'scales');
     } else if (!cur.haggle) {
-      cur.haggle = { ok: false };
+      cur.haggle = keepHag(c, { ok: false });
       await C.say(k, U.pick(['어림없는 소리! 이 값도 밑지고 파는 걸세.', '싫으면 다른 데 가 보게.', '값을 깎으려거든 장사를 좀 더 배우고 오게.']));
     }
   };

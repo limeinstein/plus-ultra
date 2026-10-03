@@ -284,8 +284,8 @@
       var mt = MT(), M = G.Mounts;
       payDay(msgs, terr);
       // 피로: 걸음의 피로는 탈것이 덜어 주고, 추위는 털옷·썰매가 조금 덜어 준다
-      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) - R.skill('ops') * 0.3
-        - (R.skillRead ? R.skillRead('music') : R.skill('music')) * ((G.BALANCE && G.BALANCE.musicRestLand) || 0.2), 0, 100);   // 음악: 모닥불 노래
+      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) - R.skill('ops') * 0.3, 0, 100);
+      f.fatigue = Math.max(0, f.fatigue - R.skillRead('cook') * ((((G.BALANCE || {}).crewCare || {}).landCook) || 0.15));   // 요리: 야영지 끼니
       // 알맞지 않은 땅에서는 짐승을 잃는다
       var rk = M.risk(mt, terr);
       if (rk > 0 && mt.n > 0 && U.chance(Math.min(0.5, rk * (1 + mt.n / 8)))) {
@@ -320,7 +320,7 @@
       if (st.fastDays > 0) st.fastDays--;
       // random encounters (지형마다 다른 사건이 먼저 일어날 수 있다)
       if (U.chance(0.1)) { if (!(U.chance(0.55) && await terrainEvent(terr))) await encounter(terr); }
-      if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
+      if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy--; await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
     } catch (e) { console.error(e); }
     st.busy--;
   }
@@ -365,7 +365,6 @@
     }
     refreshHud();
   }
-  function f_food(n) { S().fleet.food += n; }
   /** 적의 수: 탐험대(선원 전원)에 맞춰 잡는다 */
   function foeSize(a, b, lo, hi) { var p = S().loc.party || 10; return U.clamp(Math.round(p * U.rf(a, b)), lo || 3, hi || 400); }
   /** 원주민에게 선물한다: 기뻐하면 식량과 물을 나누어 주고(보급), 때로는 더 얹어 주거나 모닥불 곁에 재워 준다(캠프파이어 — 여관처럼 쉰다) */
@@ -374,7 +373,7 @@
     var cost = Math.round((60 + l.party * 3) / 10) * 10;
     var trinkets = s.player.items.filter(function (it) { var d = G.ITEM[it.id]; return d && d.kind === 'gift' && !d.ring && !R.isProof(it); });
     var opts = [{ label: '자잘한 물건을 건넨다 (금화 ' + U.num(cost) + '닢어치 — 유리구슬·천·칼)', value: 'gold', dis: s.player.gold < cost }]
-      .concat(trinkets.slice(0, 4).map(function (it, i) { return { label: '장신구를 건넨다: ' + R.itemName(it), value: 'it' + i }; }))
+      .concat(trinkets.slice(0, 4).map(function (it, i) { return { label: '장신구를 건넨다: ' + R.itemName(it), value: 'it' + i, thumb: G.Img.itemSrc(it) }; }))
       .concat([{ label: '그만둔다', value: null }]);
     var v = await UI.ask('무엇을 선물할까? 장신구처럼 귀한 것을 건네면 더 반긴다.', opts, G.Scenes.mateSpeaker('first'));
     if (!v) return;
@@ -515,6 +514,7 @@
   async function camp() {
     var s = S(), l = s.loc, f = s.fleet;
     st.busy++;
+    st.camping = true;
     try {
       var terr = G.Geo.terrain(l.lon, l.lat);
       var v = await UI.ask('야영지를 차렸다. 무엇을 할까?', [
@@ -525,7 +525,7 @@
         { label: '약초를 캔다 (1일)', value: 'herb' },
         { label: '그만둔다', value: null }], G.Scenes.mateSpeaker('first'));
       if (v === 'rest') {
-        spendDays(3); f.fatigue = Math.max(0, f.fatigue - 25 - R.skill('ops') * 5);
+        spendDays(3); f.fatigue = Math.max(0, f.fatigue - 25 - R.skill('ops') * 5 - (R.skillRead('cook') + R.skillRead('music')) * ((((G.BALANCE || {}).crewCare || {}).restBonus) || 3));
         UI.toast('푹 쉬었다. 피로가 풀렸다.', 'tent');
       } else if (v === 'water') {
         spendDays(1);
@@ -571,6 +571,7 @@
       }
       refreshHud();
     } catch (e) { console.error(e); }
+    st.camping = false;
     st.busy--;
   }
 

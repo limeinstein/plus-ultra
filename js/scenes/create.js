@@ -76,9 +76,9 @@
     var box = U.el('div', 'create');
     var h = '';
     // column 1
-    h += '<div class="col" style="width:360px"><div class="sect parch ornament-corners" style="flex:1">' +
+    h += '<div class="col" style="width:330px"><div class="sect parch ornament-corners" style="flex:1">' +
       '<h4>제독</h4><div style="display:flex;justify-content:center;margin:6px 0 10px"><div class="wood" style="padding:8px" id="pv"></div></div>' +
-      '<div class="center" style="margin-bottom:12px"><button class="btn small" id="face">' + G.icon('dice') + '다른 얼굴</button></div>' +
+      '<div class="center" style="margin-bottom:12px"><button class="btn small" id="faceprev" title="앞의 얼굴">◀</button> <button class="btn small" id="face">' + G.icon('dice') + '다른 얼굴</button>' + lookLine() + '</div>' +
       '<div class="flex" style="gap:8px;align-items:flex-end"><div style="flex:1.15;min-width:0"><label>이름</label><input type="text" id="nm" maxlength="12" style="width:100%" value="' + U.esc(p.given) + '"></div>' +
       '<div style="flex:1;min-width:0"><label>성</label><input type="text" id="sn" maxlength="12" style="width:100%" value="' + U.esc(p.surname) + '"></div>' +
       '<button class="btn small" id="rn" title="다른 이름">' + G.icon('dice') + '</button></div>' +
@@ -88,7 +88,7 @@
       '<div style="margin-top:14px"><label>나이 <b style="color:var(--ink)">' + p.age + '세</b> <span class="muted" style="font-size:14px">(젊을수록 체력·무력, 나이 들수록 지력·매력과 특기 점수)</span></label><input type="range" id="age" min="18" max="40" value="' + p.age + '"></div>' +
       '</div></div>';
     // column 2
-    h += '<div class="col" style="width:520px"><div class="sect parch ornament-corners"><h4>국적</h4><div class="opt-row">' +
+    h += '<div class="col" style="width:430px"><div class="sect parch ornament-corners"><h4>국적</h4><div class="opt-row">' +
       opt('nat', 'PT', '포르투갈 (리스본)', p.nation === 'PT') + opt('nat', 'ES', '에스파냐 (세빌리아)', p.nation === 'ES') + '</div>' +
       '<div class="muted" style="margin-top:8px;font-size:16px;line-height:1.5">' + (p.nation === 'PT' ? '아프리카 항로 개척에 앞선 해양 왕국. 모국어 포르투갈어, 스페인어도 조금 한다.' : '레콩키스타를 마무리하는 카스티야와 아라곤의 연합 왕국. 모국어 스페인어, 포르투갈어도 조금 한다.') + '</div></div>' +
       '<div class="sect parch ornament-corners" style="flex:1"><h4>직업</h4><div class="opt-row">' +
@@ -105,7 +105,7 @@
       h += '<div class="statrow"><span>' + s.name + '</span>' + UI.bar(p.st[s.id], 100) + '<b style="text-align:right">' + p.st[s.id] + '</b></div>';
     });
     h += '<div class="muted" style="font-size:15px;margin-top:4px">특기 한도 ' + R.skillCap(p.st.int) + '개 · 어학 한도 ' + R.langCap(p.st.int) + '개 (지력에 따라)</div></div>';
-    h += '<div class="sect parch ornament-corners" style="flex:1;overflow:auto"><div class="flex"><h4 style="flex:1">특기 · 어학</h4><span style="font-size:18px">남은 점수 <b style="color:' + (pts - used < 0 ? '#8a2a1e' : '#1e3552') + '">' + (pts - used) + '</b> / ' + pts + '</span></div>' +
+    h += '<div class="sect parch ornament-corners cr-skills" style="flex:1"><div class="flex"><h4 style="flex:1">특기 · 어학</h4><span style="font-size:18px">남은 점수 <b style="color:' + (pts - used < 0 ? '#8a2a1e' : '#1e3552') + '">' + (pts - used) + '</b> / ' + pts + '</span></div>' +
       '<div class="skillgrid">';
     var b = baseSkills();
     G.SKILLS.forEach(function (s) {
@@ -115,7 +115,7 @@
     h += '</div><div class="sep"></div><div class="skillgrid">';
     var bl = baseLangs();
     G.LANGS.forEach(function (l, i) {
-      h += '<div class="skillrow"><span style="font-size:15px">' + l + '</span><span class="pips">' + pips(p.lg[i], bl[i]) + '</span>' +
+      h += '<div class="skillrow" title="' + l + '"><span style="font-size:14px">' + l + '</span><span class="pips">' + pips(p.lg[i], bl[i]) + '</span>' +
         '<button class="btn mini" data-lg="' + i + '" data-d="-1">−</button><button class="btn mini" data-lg="' + i + '" data-d="1">＋</button></div>';
     });
     h += '</div></div><div class="flex" style="justify-content:flex-end;gap:12px"><button class="btn" id="back">' + G.icon('back') + '타이틀로</button><button class="btn navy" id="go" style="min-width:260px">' + G.icon('ship') + '출항 준비 완료</button></div></div>';
@@ -126,6 +126,7 @@
     pv.appendChild(A.portraitCanvas(playerSpec(), 200));
     // events
     box.querySelector('#face').onclick = function () { p.face++; render(); };
+    box.querySelector('#faceprev').onclick = function () { p.face = p.face > 0 ? p.face - 1 : Math.max(0, G.Img.list('portraits/player/').length - 1); render(); };
     var fullEl = box.querySelector('#fullnm b');
     function onName() { p.given = box.querySelector('#nm').value; p.surname = box.querySelector('#sn').value; p.name = fullName(p.given, p.surname); if (fullEl) fullEl.textContent = p.name; }
     ['#nm', '#sn'].forEach(function (q) {
@@ -194,6 +195,14 @@
     return A.withImg(sp, face);
   }
   C.playerSpec = playerSpec;
+  /** 고른 얼굴의 생김새 이름 — 그 얼굴로 거리를 걷고(characters/<이름>/walk_*) 일기토도 그 모습(duel/fighters/<이름>), 40세부터 수염 난 모습 */
+  function lookLine() {
+    var faces = G.Img.list('portraits/player/');
+    if (!faces.length) return '';
+    var i = ((p.face % faces.length) + faces.length) % faces.length, id = faces[i].slice('portraits/player/'.length);
+    return '<div class="look-name"><b>' + U.esc(G.Img.heroName(id)) + '</b> <span class="muted">' + (i + 1) + '/' + faces.length + '</span>' +
+      '<small class="muted">' + (p.age >= 40 ? '40대 모습 — 수염이 난 얼굴' : '마흔이 되면 수염 난 40대 모습으로 바뀝니다') + '</small></div>';
+  }
 
   // ---------------------------------------------------------------- 테스트용 캐릭터
   var TEST_NAME = '이강희', starting = false;

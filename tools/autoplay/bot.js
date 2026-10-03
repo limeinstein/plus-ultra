@@ -213,6 +213,8 @@
     };
     // 발견 카드·세상의 소식은 기록만
     G.Scenes.discoveryCard = async function (d, fame) { tr('DISCOVERY', d.name, fame); };
+    // 발견 연출(장면 판)은 requestAnimationFrame 으로 도는데 run.js 가 그것을 막아 두므로, 건너뛰지 않으면 첫 발견에서 영영 멈춘다
+    G.Scenes.discoveryReveal = async function (d, fame) { tr('REVEAL', d.name, fame); return false; };
     C.news = async function (list) { list.forEach(function (m) { tr('news', m.icon, m.text); ev('news', { text: tx(m.text) }); }); };
     // 결투: 힘·검술을 견주어 판정 (그림 미니게임 대신)
     G.Games.duel = async function (enemy, opt) {

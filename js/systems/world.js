@@ -28,7 +28,14 @@
     }
     // birthday
     if (s.date.m === s.player.born.m && s.date.d === s.player.born.d) {
-      out.push({ icon: 'star', text: R.fullName() + '의 생일입니다. (' + R.age() + '세)', birthday: true });
+      var age = R.age(), aged = age >= 40 && !s.flags.aged40;
+      if (aged) {
+        // 마흔: 대화·수첩의 얼굴과 무릎상이 40대 모습(수염)으로 바뀐다 (G.Img.chain.heroPortrait·heroHalf가 나이를 본다)
+        s.flags.aged40 = 1;
+        var fk = G.Img && G.Img.pick(G.Img.chain.heroPortrait(s.player));
+        out.push({ icon: fk ? { src: G.Img.src(fk), icon: 'star' } : 'star', text: R.fullName() + '의 ' + age + '번째 생일 — 얼굴에 세월이 내려앉았다. 이제 40대의 모습이다.', birthday: true, aged: true });
+        G.State.log(R.fullName() + '이(가) ' + age + '세가 되었다.');
+      } else out.push({ icon: 'star', text: R.fullName() + '의 생일입니다. (' + age + '세)', birthday: true });
     }
     // 계절풍이 바뀐 날 (계절풍 바다나 그 연안 항구에 있을 때)
     if (G.Monsoon) out = out.concat(G.Monsoon.daily());
@@ -47,6 +54,8 @@
 
   W.newMonth = function () {
     var s = S(), out = [];
+    // 가족: 아이와의 사이(떨어져 지내면 서먹해진다)·견습 아이의 성장 (family.js)
+    if (G.Family && G.Family.newMonth) out = out.concat(G.Family.newMonth());
     // wages for companions
     var wage = 0;
     s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d) wage += d.wage; });

@@ -61,13 +61,21 @@
     return { name: title, portrait: A.townSpec(id, c), lang: C.langLv(c), li: c.lang };
   };
   C.say = function (who, text) { return UI.say(text, who); };
-  C.ask = function (who, text, choices, opts) { opts = opts || {}; return UI.ask(text, choices, { name: who && who.name, portrait: who && who.portrait, lang: opts.plain ? 3 : who && who.lang, li: opts.plain ? null : who && who.li, minLv: who && who.minLv, cancel: opts.cancel }); };
+  C.ask = function (who, text, choices, opts) {
+    opts = opts || {};
+    var o = { name: who && who.name, portrait: who && who.portrait, lang: opts.plain ? 3 : who && who.lang, li: opts.plain ? null : who && who.li, minLv: who && who.minLv, cancel: opts.cancel };
+    // 마주 보는 대화(후원자·항해사)는 그 구도를 이어 간다 — 고르는 동안은 제독 쪽이 앞에
+    if (who && who.layout === 'duo') ['layout', 'side', 'partner', 'half', 'emotion', 'rigId', 'portraitChain', 'rigAnchors'].forEach(function (k) { if (who[k] != null) o[k] = who[k]; });
+    if (o.layout === 'duo') o.choiceSide = who.choiceSide || 'left';
+    return UI.ask(text, choices, o);
+  };
   C.me = function (text) { var p = S().player; return UI.say(text, { name: p.name, portrait: p.portrait }); };
   C.mate = function (text, role) { return UI.say(text, G.Scenes.mateSpeaker(role || 'first')); };
   C.mateAsk = function (text, choices, role) { var sp = G.Scenes.mateSpeaker(role || 'first'); return UI.ask(text, choices, sp); };
 
   // ---------------------------------------------------------------- buildings
   C.buildings = function (c) {
+    if (c.outpost) return [{ kind: 'harbor', name: '항구', icon: 'anchor' }];   // 사람이 살지 않는 섬(독도): 배를 대는 곳만
     var f = R.facilities(c), out = [], s = S();
     if (f.harbor) out.push({ kind: 'harbor', name: '항구', icon: 'anchor' });
     out.push({ kind: 'trade', name: '교역소', icon: 'scales' });
@@ -107,7 +115,7 @@
   C.enter = async function (arg) {
     arg = arg || {};
     var s = S(), c = G.CITY_DATA[arg.cityId != null ? arg.cityId : s.loc.city];
-    s.loc = { mode: 'city', city: c.id, lon: c.lon, lat: c.lat, heading: s.loc.heading || 0, via: arg.via || (c.port ? 'sea' : 'land') };
+    s.loc = { mode: 'city', city: c.id, lon: c.lon, lat: c.lat, heading: s.loc.heading || 0, via: arg.via || (arg.load && s.loc.mode === 'city' && s.loc.city === c.id && s.loc.via) || (c.port ? 'sea' : 'land') };   // 이어하기: 뭍길로 들어와 있던 도시는 그대로 뭍길(탐험대가 성문 밖에서 기다린다)
     cur = null; token++;
     busy = true;
     G.Game.showLayers(false, false, true);
@@ -379,8 +387,6 @@
     C.main();
   };
   C.current = function () { return cur; };
-  /** close the building menu without leaving (used by sub-screens) */
-  C.hideMenu = function () { U.$$('.cmdmenu').forEach(function (e) { e.remove(); }); };
 
   // ---------------------------------------------------------------- prologue
   C.prologue = async function (c) {

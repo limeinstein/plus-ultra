@@ -2,7 +2,7 @@
    서양 배는 js/art/paint.js 의 A.shipSide / A.shipTop 이 그린다. 여기서는 그 둘을 감싸 선체 모양(hullType)에 따라 나눈다. */
 (function (G) {
   'use strict';
-  var U = G.U, A = G.Art;
+  var A = G.Art;
 
   /** 배 종류에 맞는 그림 설정 (over로 덮어쓴다) */
   A.shipLook = function (typeId, over) {

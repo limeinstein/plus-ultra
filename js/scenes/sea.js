@@ -134,12 +134,6 @@
     if (!hudEl.pause) return;
     hudEl.pause.innerHTML = G.icon(st.paused ? 'sail' : 'pause') + (st.paused ? '출발' : '정지');
   }
-  function posText() {
-    var s = S(), l = s.loc;
-    var hasLat = R.hasItem('sextant') || R.hasItem('astrolabe') || R.skill('survey') >= 2;
-    var hasLon = R.hasItem('sextant');
-    return (hasLat ? U.fmtLat(l.lat) : '위도 ?') + ' ' + (hasLon ? U.fmtLon(l.lon) : '경도 ?');
-  }
   function refreshHud() {
     var s = S(), f = s.fleet, H = G.Game.hud;
     UI.hud.set('date', H.date());
@@ -517,7 +511,7 @@
   /** 해적의 세기(0~1): 명성이 높을수록, 함대(짐칸)가 클수록 큰 해적이 노린다 */
   function pirateK() {
     var s = S(), B = G.BALANCE || {};
-    return Math.min(1, s.player.fame / 4000, (B.pirateBase != null ? B.pirateBase : 1) + R.fleetCap() / (B.pirateCap || 1));
+    return Math.min(1, s.player.fame / (B.pirateFame || 4000), (B.pirateBase != null ? B.pirateBase : 1) + R.fleetCap() / (B.pirateCap || 1));
   }
   SEA.pirateK = pirateK;
   SEA.canPlead = canPlead;
@@ -537,9 +531,9 @@
       var lon = l.lon + Math.cos(ang) * dist, lat = l.lat + Math.sin(ang) * dist;
       if (!G.Geo.isSea(lon, lat, 1)) continue;
       // 해적 떼의 크기는 명성과 우리 함대 척수를 따른다 (배 한 척에 네 척이 몰려오지는 않는다)
-      var n = kind === 'pirate' ? U.ri(1, Math.min(4, 1 + Math.floor(s.player.fame / 1200), s.fleet.ships.length + 1)) : U.ri(1, 3);
+      var n = kind === 'pirate' ? U.ri(1, Math.min(4, 1 + Math.floor(s.player.fame / ((G.BALANCE && G.BALANCE.pirateCountFame) || 1200)), s.fleet.ships.length + 1)) : U.ri(1, 3);
       var zone = G.Ships.zone(lon, lat), nation = kind === 'navy' ? G.Ships.navyNation(zone, s.date.y) : null;
-      var K = kind === 'pirate' ? pirateK() : Math.min(1, s.player.fame / 4000);
+      var K = kind === 'pirate' ? pirateK() : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));
       var ships = G.Ships.enemyTypes(kind, zone, nation, n, K, s.date.y);
       var npc = { id: Math.random().toString(36).slice(2), kind: kind, lon: lon, lat: lat, heading: U.rf(0, 6.28), n: n, K: K, spd: U.rf(0.9, 1.4), life: U.ri(6, 14), hostile: NPC_KIND[kind].hostile || (kind === 'navy' && s.player.notoriety > 40), nation: nation, zone: zone, ships: ships };
       // 위용: 기함이 거대한 보선이면 작은 해적 떼는 덤비지 않는다
@@ -1016,19 +1010,22 @@
       if (f.water < use) { var ew = R.eatCargo('water', use - f.water); if (ew) { f.water += ew; if (!st.drankCargo) { st.drankCargo = true; msgs.push({ icon: 'drop', text: '물이 떨어져 싣고 가던 맥주·포도주를 마시기 시작했다.' }); } } }
       f.food = Math.max(0, f.food - use); f.water = Math.max(0, f.water - use);
       if (f.food <= 0 || f.water <= 0) {
-        var dead = Math.max(1, Math.ceil(f.crew * U.rf(0.03, 0.07)));
+        var SV = (G.BALANCE && G.BALANCE.starve) || [0.03, 0.07];
+        var dx = f.crew * U.rf(SV[0], SV[1]), dead = Math.floor(dx) + (U.chance(dx % 1) ? 1 : 0);   // 작은 배라고 날마다 꼭 한 명씩 쓰러지지는 않는다 (괴혈병과 같은 셈)
         f.crew = Math.max(0, f.crew - dead); f.fatigue = Math.min(100, f.fatigue + 4); f.discipline = Math.max(0, f.discipline - 4);
-        msgs.push({ icon: 'skull', text: (f.food <= 0 ? '식량' : '물') + '이 떨어져 선원 ' + dead + '명이 쓰러졌다!' });
+        if (dead) msgs.push({ icon: 'skull', text: (f.food <= 0 ? '식량' : '물') + '이 떨어져 선원 ' + dead + '명이 쓰러졌다!' });
+        else if (U.chance(0.34)) msgs.push({ icon: 'skull', text: (f.food <= 0 ? '식량' : '물') + '이 떨어졌다. 선원들이 쓰러지기 직전이다!' });
       }
       // fatigue & discipline
       var BAL = G.BALANCE || {};
       var fb = 1.1 - R.skill('nav') * 0.22 + (st.storm > 0 ? 3 : 0) + (f.crew < R.crewMin() ? 0.8 : 0);
-      fb -= (R.skillRead ? R.skillRead('music') : R.skill('music')) * ((G.BALANCE && G.BALANCE.musicRest) || 0.12);   // 음악: 뱃노래가 날마다 쌓이는 피로를 덜어 준다 (배에 탄 누구든)
       if (BAL.spareWatch && f.crew >= Math.ceil(R.crewMin() * BAL.spareWatch)) fb -= BAL.spareRest || 0;   // 교대할 선원이 넉넉하다
       if (st.path || st.dirCrs != null || (st.manual && st.thr > 0.1)) { var row = st.manual ? (R.fleetMotion(l.heading, curWind()), R.fleetInfo && R.fleetInfo.row) : (R.fleetMotion(st.crs != null ? st.crs : l.heading, curWind()), R.rowing); if (row) { fb += 0.9; if (!st.rowWarned) { st.rowWarned = true; msgs.push({ icon: 'people', text: '돛이 바람을 못 받아 선원들이 노를 젓는다. 노를 오래 저으면 지친다.' }); } } else st.rowWarned = false; }
+      var CC = BAL.crewCare || {};
+      fb -= R.skillRead('cook') * (CC.cookFatigue || 0.12);       // 요리: 따뜻한 끼니가 고단함을 덜어 준다
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
-      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + morale * 2, 0, 100);
+      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2, 0, 100);
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();
@@ -1254,7 +1251,15 @@
     var t = await UI.ask('무엇을 내걸고 교섭할까?', [
       { label: '술과 돈을 나누어 준다 (금화 ' + U.num(pay) + '닢)', value: 'pay', dis: s.player.gold <= 0 },
       { label: (port ? port + '에 들러 쉬게 해 주겠다고' : '가까운 항구에서 쉬게 해 주겠다고') + ' 약속한다', value: 'promise' },
-      { label: '말로 달랜다 (말솜씨·매력)', value: 'talk' }], sp);
+      { label: '말로 달랜다 (말솜씨·매력)', value: 'talk' }].concat(R.skillRead('cook') + R.skillRead('music') > 0 ? [{ label: '잔치를 열어 달랜다 (요리·음악 — 식량 ' + Math.ceil(R.dailyUse() * (((G.BALANCE || {}).crewCare || {}).feastFood || 2)) + '통)', value: 'feast', dis: f.food < R.dailyUse() }] : []), sp);
+    if (t === 'feast') {
+      var CF = (G.BALANCE && G.BALANCE.crewCare) || {}, ck = R.skillRead('cook'), mu = R.skillRead('music');
+      f.food = Math.max(0, f.food - R.dailyUse() * (CF.feastFood || 2));
+      var gain = (CF.feastBase || 12) + (CF.feastPer || 6) * (ck + mu);
+      f.discipline = Math.min(100, f.discipline + gain); f.fatigue = Math.max(0, f.fatigue - (CF.feastFatigue || 10));
+      await UI.say((ck ? '갑판에 큰 솥이 걸리고 고기와 향신료 냄새가 퍼진다. ' : '') + (mu ? '누군가 악기를 꺼내 들자 선원들이 하나둘 따라 부른다. ' : '') + '주동자도 결국 잔을 받아 들었다. (규율 +' + gain + ', 피로 −' + (CF.feastFatigue || 10) + ')', sp);
+      return;
+    }
     if (t === 'pay') {
       var paid = Math.min(s.player.gold, pay); s.player.gold -= paid;
       f.discipline = Math.min(100, f.discipline + Math.round(30 * paid / Math.max(1, pay))); f.fatigue = Math.max(0, f.fatigue - 5);

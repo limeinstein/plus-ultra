@@ -29,9 +29,9 @@
     wrap.innerHTML = '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
       '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="세계 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
       '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
-      '<div class="cv-info" hidden></div><div class="cv-tip" hidden></div>';
+      '<div class="cv-info" hidden></div>';
     host.appendChild(wrap);
-    var cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d'), info = wrap.querySelector('.cv-info'), tipEl = wrap.querySelector('.cv-tip');
+    var cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d'), info = wrap.querySelector('.cv-info');
     cv.style.width = '100%'; cv.style.height = 'auto'; cv.style.display = 'block';
     var view = { lon: opts.center ? opts.center[0] : (here ? U.clamp(here.lon, -150, 150) : 0), lat: opts.center ? opts.center[1] : (here ? here.lat : 20), span: opts.span || 120 };
     var crisp = null, crispKey = '', idleT = null, hover = null, hoverDisc = null, sel = opts.select != null ? G.CITY_DATA[opts.select] : null, seaSel = null, dead = false;

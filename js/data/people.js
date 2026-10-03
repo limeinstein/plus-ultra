@@ -216,6 +216,14 @@
     { id: 'kisk', name: '누징가 은쿠우', g: 'm', st: [66, 55, 64, 58], sk: { ops: 2, sword: 1 }, lg: { 10: 3, 1: 1 }, fame: 300, wage: 60, y: [1480, 1580], reg: [3], desc: '콩고 왕국의 귀족. 아프리카 오지의 길을 잘 안다.' }
   ];
   G.MATE = {}; G.MATES.forEach(function (m) { G.MATE[m.id] = m; });
+  // 요리·음악 (부가 기술) — 이야기에 맞는 동료에게: 시인·극작가는 노래를, 상인·약초 의사는 향신료와 끼니를 안다
+  var CARE_SK = {
+    ariosto: { music: 3 }, camoes: { music: 2 }, shakespeare: { music: 2 }, leonardo: { music: 1 }, galileo: { music: 1 }, kepler: { music: 1 },
+    pigafetta: { music: 1 }, marina: { music: 1 }, tupac: { music: 1 }, kisk: { music: 2 },
+    rocco: { cook: 1 }, garcia: { cook: 2 }, chen: { cook: 2 }, nakoda: { cook: 2 }, cadamosto: { cook: 1 }, covilha: { cook: 1 },
+    serrao: { cook: 1 }, ahmad: { cook: 1 }, amina: { cook: 1, music: 1 }, hasan: { music: 1 }
+  };
+  Object.keys(CARE_SK).forEach(function (id) { var d = G.MATE[id]; if (!d) return; d.sk = d.sk || {}; for (var k in CARE_SK[id]) if (d.sk[k] == null) d.sk[k] = CARE_SK[id][k]; });
 
   // ------------------------------------------------------------------ barmaids
   // like: 당당한 강인한 의지가 강한 용감한 친절한 섬세한 견실한 통이 큰

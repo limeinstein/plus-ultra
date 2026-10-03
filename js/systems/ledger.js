@@ -2,7 +2,7 @@
    state.ledger[도시번호] = { t: 적은 날(state.day), s: [교역품 순번별 파는 값], b: {교역품: 사는 값} } */
 (function (G) {
   'use strict';
-  var U = G.U, R = G.R;
+  var R = G.R;
   var L = {};
   G.Ledger = L;
   function S() { return G.Game.state; }

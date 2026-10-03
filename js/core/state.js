@@ -37,7 +37,8 @@
     S.player.items.push({ id: 'rapier' });
     S.player.items.push({ id: 'compass' });
     // starting ship depends on job (p.ships가 있으면 그 배들로 시작 — 앞의 것이 기함, 테스트용 캐릭터)
-    var shipType = p.job === 'merchant' ? 'cog' : p.job === 'conq' || p.job === 'soldier' ? 'caravel' : 'caravel';
+    var job0 = (G.JOBS || []).filter(function (j) { return j.id === p.job; })[0];
+    var shipType = (job0 && job0.ship && G.SHIP[job0.ship]) ? job0.ship : 'caravel';   // 직업별 첫 배는 js/data/base.js G.JOBS 의 ship
     var types = (p.ships || []).filter(function (id) { return G.SHIP[id]; }).slice(0, G.MAX_SHIPS || 5);
     if (!types.length) types = [shipType];
     var hc = G.CITY_DATA[S.player.home], wood = hc && G.Ships ? G.Ships.localWood(hc).id : null;

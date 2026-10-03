@@ -7,6 +7,8 @@
      브라우저가 메모리를 아끼려고 풀어 둔 것을 버리면 다시 멈칫한다.
    - 작게 그릴 때(다른 배·먼 배)는 반으로 줄인 사본을 쓴다 — 계단 현상이 줄고 GPU가 읽는 양도 준다.
    - 항해를 나서기 전(도시)·바다에 들어설 때·배가 화면 밖에서 나타날 때 미리 읽는다(S.want).
+   - 받는 동안에는 각진 코드 그림을 내보이지 않고 그림자만 둔다(I.pending). 끝내 못 받았을 때에만 코드 그림.
+   - 풀어 둔 시트가 많아지면 오래 안 쓴 것부터 놓아 준다(trim) — 그림 장치 메모리가 바닥나지 않게.
    - 방위 칸이 바뀌는 경계에서 뱃머리가 조금씩 흔들려도 두 그림 사이를 오가며 깜박이지 않게,
      배마다(spec.sid) 먼저 쓰던 칸을 조금 더 붙잡는다(히스테리시스). 칸 사이의 나머지 각도는 그림을 돌려 메운다. */
 (function (G) {
@@ -34,26 +36,54 @@
   function prepare(key) {
     var sh = sheets[key];
     if (sh) return sh.p;
-    sh = sheets[key] = { st: 'loading' };
+    sh = sheets[key] = { st: 'loading', used: nowS() };
     sh.p = I.load(key).then(function (img) {
-      if (!img) { sh.st = 'fail'; return sh; }
+      if (sheets[key] !== sh) return sh;                       // 그 사이 자리에서 밀려났다
+      if (!img) { delete sheets[key]; return sh; }             // 못 받았다 — I.has 가 다시 받아 보라고 할 때 새로 준비한다
       sh.img = img;
       var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
       // 원본 크기 풀기가 먼저 끝나면 곧바로 그리기 시작한다. 반 크기 사본은 뒤따라 채운다.
       return bitmap(img).then(function (full) {
+        if (sheets[key] !== sh) { if (full && full.close) full.close(); return sh; }
         sh.full = full; sh.w = w; sh.h = h; sh.st = 'ok';
         var hk = CF().halfBelow == null ? 0.55 : CF().halfBelow;
-        if (hk > 0) bitmap(img, Math.max(1, Math.round(w / 2)), Math.max(1, Math.round(h / 2))).then(function (half) { sh.half = half; });
+        if (hk > 0) bitmap(img, Math.max(1, Math.round(w / 2)), Math.max(1, Math.round(h / 2))).then(function (half) {
+          if (sheets[key] !== sh) { if (half && half.close) half.close(); return; }
+          sh.half = half;
+        });
+        trim();
         return sh;
       });
     });
     return sh.p;
   }
+  /* 풀어 둔 시트는 한 장에 약 25MB(반 크기 사본까지 31MB)다. 36종을 다 풀어 두면 1GB를 넘겨 그림 장치 메모리가 바닥나고
+     (바다가 검게 나오거나 다른 그림이 안 나오는 원인), 그래서 가장 오래 안 쓴 것부터 놓아 준다.
+     keep: 풀어 둘 시트 수 · keepSec: 이 시간 안에 쓴 시트는 수가 넘어도 놓지 않는다 */
+  function trim() {
+    var keep = CF().keep == null ? 12 : CF().keep, hold = CF().keepSec == null ? 20 : CF().keepSec, t = nowS();
+    var ks = Object.keys(sheets).filter(function (k) { return sheets[k].st === 'ok'; });
+    if (ks.length <= keep) return;
+    ks.sort(function (a, b) { return sheets[a].used - sheets[b].used; });
+    for (var i = 0; i < ks.length - keep; i++) {
+      var sh = sheets[ks[i]];
+      if (t - sh.used < hold) break;
+      if (sh.full && sh.full.close) sh.full.close();
+      if (sh.half && sh.half.close) sh.half.close();
+      delete sheets[ks[i]];
+    }
+  }
+  S.loaded = function () { return Object.keys(sheets).filter(function (k) { return sheets[k].st === 'ok'; }).length; };
+  /** 그릴 수 있는 시트. 아직 받는 중이면 WAIT(코드 그림을 내보이지 않고 기다림), 그림이 없거나 못 받았으면 null */
+  var WAIT = {};
   function ready(meta) {
     if (!meta || !I || !I.has(meta.key)) return null;
     var sh = sheets[meta.key];
-    if (!sh) { prepare(meta.key); return null; }
-    return sh.st === 'ok' ? sh : null;
+    if (!sh) { prepare(meta.key); sh = sheets[meta.key]; }
+    if (!sh) return null;
+    sh.used = nowS();
+    if (sh.st === 'ok') return sh;
+    return I.pending && I.pending(meta.key) ? WAIT : (sh.img ? WAIT : null);
   }
   S.status = function (type) {
     var meta = G.SHIP_ART && G.SHIP_ART[type];
@@ -78,7 +108,9 @@
     if (!ids) return;
     for (var i = 0; i < ids.length; i++) {
       var meta = G.SHIP_ART && G.SHIP_ART[ids[i]];
-      if (meta && !sheets[meta.key] && I && I.has(meta.key)) prepare(meta.key);
+      if (!meta || !I) continue;
+      var sh = sheets[meta.key];
+      if (sh) sh.used = nowS(); else if (I.has(meta.key)) prepare(meta.key);
     }
   };
   /** 제독 함대의 배 종류 */
@@ -172,6 +204,10 @@
     var meta = G.SHIP_ART && G.SHIP_ART[spec.type], sh = ready(meta);
     if (meta && meta.layout !== 'motion-v2') return false;
     if (!sh) return false;
+    if (sh === WAIT) {       // 시트를 받는 중: 각진 코드 그림 대신 물 위 그림자만 두고 기다린다
+      ctx.save(); ctx.translate(x, y); shadow(ctx, len, wrap(ang), spec); ctx.restore();
+      return true;
+    }
     var a = wrap(ang), step = TAU / meta.dirs;
     // 옆모습(spec.face: 1 오른쪽 · -1 왼쪽): 동·서 칸을 쓰고 나머지 각도(기울기)만 돌린다
     var pk = spec.face ? { dir: spec.face > 0 ? 0 : meta.dirs / 2, from: 0, k: 1 } : pickDir(meta, a, spec.sid), dir = pk.dir;

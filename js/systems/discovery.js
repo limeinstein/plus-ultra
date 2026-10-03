@@ -7,9 +7,7 @@
   function S() { return G.Game.state; }
 
   D.state = function (id) { return S().disc[id] || null; };
-  D.isFound = function (id) { var d = S().disc[id]; return !!(d && d.found); };
   D.foundByMe = function (id) { var d = S().disc[id]; return !!(d && d.found && d.me); };
-  D.announcedBy = function (id) { var d = S().disc[id]; return d && d.rival ? d.rival : null; };
   D.hasHint = function (id) { return !!S().hints[id]; };
   /** 단서를 적는다. 아직 개척 단계가 닿지 않은 발견물은 받지 않는다 (G.Frontier) */
   D.addHint = function (id, src) {
@@ -30,15 +28,16 @@
   /* 요리: 교역품(trade) 발견은 단계마다 +8% (맛과 쓰임을 알아보고 팔 길을 연다), 음악: 민족(people) 발견은 단계마다 +8% (노래와 춤으로 마음을 연다) */
   D.VALUE_K = { art: 0.06, craft: 0.07, craftOther: 0.03, cook: 0.08, music: 0.08 };
   function rd(id) { return R.skillRead ? R.skillRead(id) : R.skill(id); }
-  function who(id, lv) { return lv && R.skillBest ? R.skillBest(id).who : null; }
   D.valueParts = function (d) {
     var art = rd('art'), craft = rd('craft');
     var hand = d && (d.cat === 'treasure' || d.cat === 'ruin' || d.cat === 'people');
     var ka = art * D.VALUE_K.art, kc = craft * (hand ? D.VALUE_K.craft : D.VALUE_K.craftOther);
-    var cook = d && d.cat === 'trade' ? rd('cook') : 0, music = d && d.cat === 'people' ? rd('music') : 0;
-    var kk = cook * D.VALUE_K.cook, km = music * D.VALUE_K.music;
-    return { art: art, craft: craft, cook: cook, music: music, ka: ka, kc: kc, kk: kk, km: km, k: 1 + ka + kc + kk + km,
-      artWho: R.skillBest ? R.skillBest('art').who : null, craftWho: R.skillBest ? R.skillBest('craft').who : null, cookWho: who('cook', cook), musicWho: who('music', music) };
+    // 요리는 교역품(향신료·작물), 음악은 민족(노래·춤·의식)의 값어치를 알아본다
+    var CK = ((G.BALANCE && G.BALANCE.crewCare) || {}).discValue || 0.08;
+    var care = d && d.cat === 'trade' ? 'cook' : d && d.cat === 'people' ? 'music' : null;
+    var cv = care ? (R.skillRead ? R.skillRead(care) : R.skill(care)) : 0, kk = cv * CK;
+    return { art: art, craft: craft, ka: ka, kc: kc, care: care, kk: kk, careWho: care && R.skillBest ? R.skillBest(care).who : null,
+      k: 1 + ka + kc + kk, artWho: R.skillBest ? R.skillBest('art').who : null, craftWho: R.skillBest ? R.skillBest('craft').who : null };
   };
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d)); };
@@ -55,8 +54,7 @@
   /** 발견 카드의 「가치」 칸: 올린 값과 그 까닭 */
   D.valueTag = function (d) {
     var v = D.valueParts(d); if (v.k <= 1.0001) return '가치 ' + U.num(d.val);
-    var why = []; if (v.ka) why.push('그림' + (v.artWho ? '·' + v.artWho : '') + ' +' + Math.round(v.ka * 100) + '%'); if (v.kc) why.push('세공' + (v.craftWho ? '·' + v.craftWho : '') + ' +' + Math.round(v.kc * 100) + '%');
-    if (v.kk) why.push('요리' + (v.cookWho ? '·' + v.cookWho : '') + ' +' + Math.round(v.kk * 100) + '%'); if (v.km) why.push('음악' + (v.musicWho ? '·' + v.musicWho : '') + ' +' + Math.round(v.km * 100) + '%');
+    var why = []; if (v.ka) why.push('그림' + (v.artWho ? '·' + v.artWho : '') + ' +' + Math.round(v.ka * 100) + '%'); if (v.kc) why.push('세공' + (v.craftWho ? '·' + v.craftWho : '') + ' +' + Math.round(v.kc * 100) + '%'); if (v.kk) why.push((v.care === 'cook' ? '요리' : '음악') + (v.careWho ? '·' + v.careWho : '') + ' +' + Math.round(v.kk * 100) + '%');
     return '가치 ' + U.num(D.value(d)) + ' <small>(' + why.join(', ') + ')</small>';
   };
 
@@ -85,15 +83,17 @@
     if (st.impact) return st.impact;
     var s = S(), f = s.fleet, key = D.impactKind(d), meta = IMPACT[key], tab = (G.BALANCE && G.BALANCE.discoveryImpact) || {}, v = tab[key] || {};
     var before = { fatigue: f.fatigue || 0, discipline: f.discipline == null ? 80 : f.discipline };
-    f.fatigue = U.clamp(before.fatigue + (v.fatigue || 0), 0, 100);
-    f.discipline = U.clamp(before.discipline + (v.discipline || 0), 0, 100);
+    // 교역품은 요리사가 그 맛을 나누어 피로를, 민족은 음악가가 함께 어울려 규율을 더 붙든다
+    var CI = ((G.BALANCE && G.BALANCE.crewCare) || {}).impact || 2;
+    var xf = d.cat === 'trade' ? -R.skillRead('cook') * CI : 0, xd = d.cat === 'people' ? R.skillRead('music') * CI : 0;
+    f.fatigue = U.clamp(before.fatigue + (v.fatigue || 0) + xf, 0, 100);
+    f.discipline = U.clamp(before.discipline + (v.discipline || 0) + xd, 0, 100);
     st.impact = {
       key: key, name: meta.name, icon: meta.icon, line: meta.line,
       fatigue: Math.round(f.fatigue - before.fatigue), discipline: Math.round(f.discipline - before.discipline)
     };
     return st.impact;
   };
-  D.impactMeta = function (key) { return IMPACT[key] || IMPACT.awe; };
 
   /** player discovers d (object). returns promise after showing the event */
   D.find = async function (d, how) {
@@ -171,11 +171,11 @@
   D.takeRelic = async function (d, r) {
     var s = S(), st = s.disc[d.id] || (s.disc[d.id] = {});
     for (;;) {
-      if (R.addItem(r.id, { disc: d.id })) { (st.relics = st.relics || []).push(r.id); UI.toast(r.name + U.jx(r.name, '을/를') + ' 챙겼다.', 'chest'); return true; }
+      if (R.addItem(r.id, { disc: d.id })) { (st.relics = st.relics || []).push(r.id); UI.toast(r.name + U.jx(r.name, '을/를') + ' 챙겼다.', { src: G.Img.itemSrc(r), icon: 'chest' }); return true; }
       var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { return !R.isProof(x.it); });
       var v = await UI.choose('소지품이 가득 찼습니다', list.map(function (x, k) {
         var dd = G.ITEM[x.it.id] || {};
-        return { label: '버린다: ' + U.esc(R.itemName(x.it)), right: G.ITEM_KIND[dd.kind || x.it.kind] || '', value: k, icon: 'chest' };
+        return { label: '버린다: ' + U.esc(R.itemName(x.it)), right: G.ITEM_KIND[dd.kind || x.it.kind] || '', value: k, icon: 'chest', thumb: G.Img.itemSrc(x.it) };
       }).concat([{ label: '두고 간다', right: '다시 오면 가져갈 수 있다', value: 'leave', icon: 'boot' }]),
         { width: 620, text: '「' + r.name + '」' + U.jx(r.name, '을/를') + ' 챙기려면 소지품 하나를 버려야 합니다. (' + (G.ITEM_KIND[r.kind] || '') + ' · 값 ' + U.num(r.price) + '닢)' });
       if (v == null || v === 'leave') {
@@ -248,7 +248,6 @@
     setTimeout(function () { UI.toast('발견 ' + n + '가지 달성! ' + king + '에서 포상금 금화 ' + U.num(gold) + '닢을 보내왔다. (명성 +' + fame + ')', 'crown', 6500); }, 900);
     G.State.log('발견 ' + n + '가지를 모았다. ' + king + '의 포상 (금화 ' + U.num(gold) + ', 명성 +' + fame + ')');
   };
-  D.nextCollect = function () { var n = S().stats.found; for (var i = 0; i < COLLECT.length; i++) if (COLLECT[i] > n) return COLLECT[i]; return null; };
 
   /** 늦은 발표: 먼저 찾아 두고도 알리지 않는 사이 경쟁자가 발표했으면, 이제 알려도 명성은 이만큼만 받는다 */
   D.LATE_FAME = 0.5;
@@ -258,8 +257,6 @@
     // 예전 기록: 경쟁자 발표일보다 먼저 찾았고 경쟁자가 발표했으면 늦은 발표로 본다
     return !!(st.rival && d && d.rival && st.found && st.found < d.rival[0] * 10000 + d.rival[1] * 100 + 1);
   };
-  /** 보고·발표로 받을 명성에 곱할 값 (늦은 발표면 D.LATE_FAME) */
-  D.lateK = function (id) { return D.isLate(id) ? D.LATE_FAME : 1; };
 
   /** rival timeline: called daily */
   D.rivals = function () {
@@ -285,9 +282,10 @@
         st.rival = d.rival[2];
         if (st.me) st.late = true;               // 먼저 찾았지만 알리지 않았다 → 늦은 발표
         if (!st.found) st.found = U.dateNum(s.date);
+        var at = G.SeaFolk && G.SeaFolk.rivalCity ? G.SeaFolk.rivalCity(d.rival[2]) : null, wh = at ? at.name + '에서 ' : '';   // 머무는 도시가 있는 경쟁자는 그곳에서 발표
         var nn = G.Names ? G.Names.onRival(d) : null, oldName = G.Names && G.DISC[d.id].aka ? G.DISC[d.id].aka : d.name;
-        if (st.me) out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' 「' + oldName + '」의 발견을 발표했다. 제독이 먼저 찾아 두고도 알리지 않은 사이의 일이다 — 이제 알려도 명성은 절반만 받는다.' + (nn ? ' ' + nn : '') });
-        else out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' 「' + oldName + '」의 발견을 발표했다.' + (nn ? ' ' + nn : '') });
+        if (st.me) out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다. 제독이 먼저 찾아 두고도 알리지 않은 사이의 일이다 — 이제 알려도 명성은 절반만 받는다.' + (nn ? ' ' + nn : '') });
+        else out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다.' + (nn ? ' ' + nn : '') });
         G.State.log(d.rival[2] + ': 「' + d.name + '」 발견 발표' + (st.me ? ' (먼저 찾아 두었지만 알리지 않았다 — 늦은 발표는 명성 절반)' : ''));
       }
     });

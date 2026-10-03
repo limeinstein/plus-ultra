@@ -30,17 +30,13 @@
   function S() { return G.Game.state; }
 
   // ---------------------------------------------------------------- 그림 시트
-  var SHEET = {}, CELL = 256;
+  var CELL = 256;
   function sheet(id) {
-    var o = SHEET[id]; if (o) return o.img;
-    o = SHEET[id] = { img: null };
     var I = G.Img; if (!I) return null;
-    var chain = I.chain && I.chain.effect ? I.chain.effect(id) : ['effects/' + id];
-    var k = I.pick(chain); if (!k) return null;
+    var k = I.pick(I.chain && I.chain.effect ? I.chain.effect(id) : ['effects/' + id]); if (!k) return null;
     var got = I.get(k);
-    if (got) { o.img = got; return got; }
-    I.resolve(chain).then(function (r) { if (r && r.img) o.img = r.img; });
-    return null;
+    if (!got) I.want(k);
+    return got;
   }
   /** 갈매기 그림자 (검은 실루엣) — 한 번만 만든다 */
   function silhouette(img) {

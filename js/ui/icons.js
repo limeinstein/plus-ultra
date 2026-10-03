@@ -70,6 +70,8 @@
     fish: '<path d="M3 12c3-5 9-6 13-2l5-3v10l-5-3c-4 4-10 3-13-2z"/><circle cx="8" cy="11" r="1" fill="currentColor"/>'
   };
   G.icon = function (name, cls) {
+    // {src: 그림 주소, icon: 그림이 없을 때 아이콘} — 알림·소식에 물건·얼굴 그림을 붙일 때
+    if (name && typeof name === 'object') return name.src ? '<img class="ic ic-pic ' + (cls || '') + '" src="' + name.src + '" alt="">' : G.icon(name.icon || 'info', cls);
     var p = P[name] || P.info;
     return '<svg class="ic ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
   };

@@ -11,8 +11,15 @@
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
   function maidOf(c) { return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }
   T.maidOf = maidOf;
-  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), lang: R.lang(c.lang), li: c.lang }; };
-  T.playerSpeaker = function () { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait }; };
+  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), half: G.Img.chain.maidHalf(m.id, c), lang: R.lang(c.lang), li: c.lang }; };
+  T.playerSpeaker = function () { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; };
+  /** 마주 보는 대화: 왼쪽 제독 · 오른쪽 상대. 두 사람 다 무릎상(half)이 있으면 서 있는 모습으로 크게 */
+  T.duo = function (who, emotion, asking) {
+    var o = {}, k; for (k in who) o[k] = who[k];
+    o.layout = 'duo'; o.side = 'right'; o.partner = T.playerSpeaker(); o.emotion = emotion || 'neutral';
+    if (asking) o.choiceSide = 'left';
+    return o;
+  };
   /** 이름 있는 여급이 없는 도시의 그 지역 여급 */
   T.servantSpeaker = function (c) {
     return { name: '여급', lang: R.lang(c.lang), li: c.lang,
@@ -58,11 +65,14 @@
     var cur = C.current(); cur.looked = false; cur.drinks = 0; cur.asked = 0;
     var mn = G.Monsoon ? G.Monsoon.portNote(c) : null;
     await C.say(master(), U.pick(['어서 오게! 목을 축이고 가게.', '어서 오게. 오늘도 손님이 많군.', '뱃사람이라면 언제든 환영일세.']) + (mn ? '\f' + (mn.phase === 'sw' ? '요즘은 남서 계절풍이 한창이라 ' : '요즘은 북동 계절풍이라 ') + mn.zone.tip[mn.phase] + '더군. ' + mn.next.date.m + '월 ' + mn.next.date.d + '일 무렵이면 바람이 뒤집힐 걸세.' : ''));
+    // 이 도시에 머무는 경쟁 탐험가를 처음 보면 주인이 귀띔한다 (콜론 — 리스본)
+    var rv = T.rivalsStaying(c).filter(function (r) { return !r.atSea && !S().flags['seenRival_' + r.name]; })[0];
+    if (rv) { S().flags['seenRival_' + rv.name] = 1; if (G.RIVAL_STAYS[rv.name].keeper) await C.say(master(), G.RIVAL_STAYS[rv.name].keeper); return; }
     if (U.chance(0.45)) await T.encounter(c);
   };
   T.sub = function (c) { var m = maidOf(c); return m ? '여급 ' + U.j(m.name, '이/가') + ' 일하고 있다' : '뱃사람들로 북적인다'; };
   T.menu = function (c) {
-    var cur = C.current(), m = maidOf(c), cand = T.candidates(c);
+    var cur = C.current(), m = maidOf(c), cand = T.hireList(c);   // 머무는 경쟁 탐험가(콜론)도 명부에 — 고용은 안 된다
     return [
       { label: '술을 마신다', icon: 'mug', onClick: function () { return T.drink(c); } },
       { label: '한턱 낸다', icon: 'coin', onClick: function () { return T.treat(c); } },
@@ -227,16 +237,6 @@
     if (cur) cur.asked = (cur.asked || 0) + 1;
   };
 
-  /** 들려줄 소문이 없을 때: 지금 뱃사람들이 떠드는 다음 개척 목표를 귀띔한다 */
-  T.quietLine = function () {
-    var g = G.Frontier ? G.Frontier.goals()[0] : null;
-    if (g && g.st.lv === 1) {
-      var f = G.FRONTIER[g.st.id], tease = f.tease.map(function (id) { return G.DISC[id].name; }).join('·');
-      return '미안하네, 새 소문은 없군. 요즘 뱃사람들은 〈' + f.name + '〉에서 건너온 ' + tease + ' 이야기뿐이라네. 그런 것부터 알아보게.';
-    }
-    if (g && g.st.lv === 2) { var gd = G.DISC[G.FRONTIER[g.st.id].gate]; return '미안하네, 새 소문은 없군. 다들 「' + gd.name + '」 이야기만 하는데, 제대로 아는 사람은 아직 없더군.'; }
-    return '미안하네. 요즘은 별다른 소문이 없군. 더 먼 바다의 소식이 들려오면 다시 오게.';
-  };
   /** 아직 모르는 발견물 하나를 소문으로 고른다. 개척 단계(G.Frontier)가 닿은 것만,
       가까운 지역부터 — 명성이 오르면 먼 곳 이야기도. 맛보기·관문처럼 온 세상이 떠드는 이야기는 멀어도 돈다 */
   T.rumour = function (c) {
@@ -308,7 +308,7 @@
     return best;
   }
   T.comm = comm;
-  T.mateSpeaker = function (m) { var cm = comm(m), li = cm.li; if (li < 0) for (var k in m.lg) { if (li < 0 || m.lg[k] > m.lg[li]) li = +k; } return { name: m.name, portrait: G.Scenes.mateSpec(m.id), lang: cm.lv, li: li >= 0 ? li : null }; };
+  T.mateSpeaker = function (m) { var cm = comm(m), li = cm.li; if (li < 0) for (var k in m.lg) { if (li < 0 || m.lg[k] > m.lg[li]) li = +k; } return { name: m.name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: cm.lv, li: li >= 0 ? li : null }; };
   function skillLine(m) {
     var out = [];
     for (var k in m.sk) { var d = G.SKILL_BY_ID[k]; if (d) out.push(d.name + ' ' + m.sk[k]); }
@@ -318,7 +318,7 @@
 
   /** 항해사 한 사람과 마주 앉는다 — 정보를 듣거나 고용한다 */
   T.talkMate = async function (c, m, quiet) {
-    var who = T.mateSpeaker(m);
+    var who = T.duo(T.mateSpeaker(m));
     if (!quiet) await UI.say(m.desc, {});
     for (;;) {
       var w = await UI.ask('무슨 용건인가?', [{ label: '정보를 듣는다', value: 'info' }, { label: '부하로 고용한다', value: 'hire' }, { label: '떠난다', value: null }], who);
@@ -336,7 +336,7 @@
   /** 고용 절차. 말은 일부만 통해도 되며, 덜 통할수록 처음 충성심이 낮다. 성사되면 true */
   T.hireMate = async function (c, m, who) {
     var s = S(), cm = comm(m);
-    who = who || T.mateSpeaker(m);
+    who = who || T.duo(T.mateSpeaker(m));
     if (s.mates.length >= G.MAX_MATES) { await C.mate('부하는 동시에 ' + G.MAX_MATES + '명밖에 고용할 수 없습니다.'); return false; }
     if (!cm.lv) { await C.mate('말이 한 마디도 통하지 않습니다. 통역을 구하거나 저 사람의 말을 익혀야겠습니다.'); return false; }
     if (s.player.fame < m.fame) { await UI.say('자네 밑에서 일하라고? 미안하지만 아직 자네 이름은 들어 본 적이 없군. (필요 명성 ' + U.num(m.fame) + ')', who); return false; }
@@ -358,15 +358,30 @@
   /** 술집·여관에서 손님을 뒤지지 않고 바로 항해사를 찾는다 — 능력치를 보고 고른다 */
   T.hire = async function (c, keeper) {
     var s = S();
-    var cands = T.candidates(c);
-    if (!cands.length) { await C.say(keeper || master(), '배를 타겠다는 사람 말인가? 지금 이 도시에는 눈에 띄는 자가 없군.' + T.mateHint(c)); return; }
+    var list = function () { return keeper ? T.candidates(c) : T.hireList(c); };   // 술집 명부에는 머무는 경쟁 탐험가도 (여관 안주인은 모른다)
+    var cands = list();
+    if (!cands.length) {
+      var away = keeper ? null : T.rivalsStaying(c).filter(function (r) { return r.atSea; })[0];
+      await C.say(keeper || master(), '배를 타겠다는 사람 말인가? 지금 이 도시에는 눈에 띄는 자가 없군.' + T.mateHint(c) + (away && G.RIVAL_STAYS[away.name].away ? '\f' + G.RIVAL_STAYS[away.name].away : ''));
+      return;
+    }
     for (;;) {
       var m = await pickMate(c, cands);
       if (!m) return;
-      await T.talkMate(c, m);
-      cands = T.candidates(c);
+      if (m.rival) await T.rivalTalk(c, m.rival);   // 이야기는 하지만 고용은 안 된다
+      else await T.talkMate(c, m);
+      cands = list();
       if (!cands.length) return;
     }
+  };
+  /** 「항해사를 찾는다」 명부: 고용할 수 있는 항해사 + 이 도시에 머무는 경쟁 탐험가(바다에 나가 있지 않을 때 — 고용할 수 없다) */
+  T.hireList = function (c) {
+    return T.candidates(c).concat(T.rivalsStaying(c).filter(function (r) { return !r.atSea; }).map(function (r) { return T.rivalCard(r.name); }));
+  };
+  /** 명부에 올릴 경쟁 탐험가 카드 (G.RIVAL_STAYS[이름].card) */
+  T.rivalCard = function (nm) {
+    var k = (G.RIVAL_STAYS[nm] || {}).card || {};
+    return { id: 'rival:' + nm, rival: nm, name: nm, g: k.g || 'm', y: k.y || [0, 0], st: k.st || [], sk: k.sk || {}, lg: k.lg || {}, fame: 0, wage: 0, desc: k.desc || '' };
   };
 
   /** 항해사 명부: 왼쪽에 이름, 오른쪽에 능력치·특기·말. 고르면 그 사람을 돌려준다 */
@@ -384,10 +399,10 @@
     var cardEl = win.content.querySelector('.hire-card');
     var sel = list[0];
     list.forEach(function (d) {
-      var lock = s.player.fame < d.fame, cm = comm(d);
+      var lock = !d.rival && s.player.fame < d.fame, cm = comm(d);
       var row = U.el('div', 'hire-row' + (lock ? ' lock' : ''),
         '<span class="nm">' + U.esc(d.name) + '</span>' +
-        '<span class="rt">' + (lock ? '명성 ' + U.num(d.fame) : U.num(d.wage) + '닢') + '</span>' +
+        '<span class="rt">' + (d.rival ? '고용 불가' : lock ? '명성 ' + U.num(d.fame) : U.num(d.wage) + '닢') + '</span>' +
         '<span class="sk">' + U.esc(skillLine(d)) + (cm.lv ? '' : ' · <b>말 안 통함</b>') + '</span>');
       row.onclick = function () { sel = d; render(); };
       row.ondblclick = function () { win.close(d); };
@@ -410,14 +425,14 @@
     var wrap = U.el('div', 'mcard');
     var head = U.el('div', 'mc-head');
     var pf = U.el('div', 'mc-face');
-    try { pf.appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 150)); } catch (e) { /* 그림이 없으면 비워 둔다 */ }
+    try { pf.appendChild(A.portraitCanvas(m.rival ? A.rivalSpec(m.rival) : G.Scenes.mateSpec(m.id), 150)); } catch (e) { /* 그림이 없으면 비워 둔다 */ }
     head.appendChild(pf);
     head.appendChild(U.el('div', 'mc-id',
       '<div class="nm">' + U.esc(m.name) + (G.Bio ? G.Bio.link(m.name, '📜 이야기') : '') + '</div>' +
-      '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
+      '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (m.rival ? U.esc((G.SeaFolk.rivalCity(m.rival) || {}).name || '') + '에 머묾' : G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
       ' · ' + m.y[0] + '~' + m.y[1] + '년</div>' +
-      '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +
-      ' · 월급 <b>금화 ' + U.num(m.wage) + '닢</b></div>' +
+      (m.rival ? '<div class="mt"><b class="warn">고용할 수 없다</b> — 스스로 함대를 꾸려 발견을 다투는 경쟁 탐험가</div>' : '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +
+      ' · 월급 <b>금화 ' + U.num(m.wage) + '닢</b></div>') +
       '<div class="mc-desc">' + U.esc(m.desc || '') + '</div>'));
     wrap.appendChild(head);
 
@@ -447,7 +462,8 @@
     wrap.appendChild(cols);
 
     var foot = U.el('div', 'mc-foot');
-    var msg = !cm.lv ? '말이 한 마디도 통하지 않아 이야기를 나눌 수 없다.'
+    var msg = m.rival ? '이야기는 나눌 수 있지만 부하로 들일 수는 없다.'
+      : !cm.lv ? '말이 한 마디도 통하지 않아 이야기를 나눌 수 없다.'
       : lock ? '이름이 알려지면 그때 다시 찾아오자.'
       : full ? '부하는 ' + G.MAX_MATES + '명까지만 데리고 다닐 수 있다.'
       : cm.lv < 3 ? G.LANGS[cm.li] + '로 그럭저럭 뜻이 통한다. 처음에는 마음을 다 열지 않을 것이다.'
@@ -511,6 +527,7 @@
     var s = S(), y = s.date.y;
     return G.DISCOVERIES.filter(function (d) {
       if (!d.rival) return false;
+      if (G.RIVAL_STAYS && G.RIVAL_STAYS[d.rival[2]]) return false;   // 머무는 도시가 있는 경쟁자는 그 도시 술집 「항해사를 찾는다」 명부에서 만난다 (T.rivalTalk)
       var st = s.disc[d.id]; if (st && (st.rival || st.me)) return false;
       if (G.SeaFolk && G.SeaFolk.rivalAtSea(d)) return false;   // 항해를 떠나 바다에 있다
       // 그 단계에 소문조차 돌지 않으면 (예: 향료제도도 모르는데 지팡그) 아직 나타나지 않는다
@@ -528,9 +545,16 @@
       var v = await UI.ask('무슨 용건인가?', [{ label: '정보를 듣는다', value: 'info' }, { label: '일기토를 신청한다', value: 'duel' }, { label: '떠난다', value: null }], who);
       if (!v) return;
       if (v === 'info') { await UI.say('나는 곧 큰 항해를 떠날 걸세. ' + d.hint, who); if (G.Disc.addHint(d.id, 'rival')) UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); continue; }
+      if (await T.rivalDuel(d, who)) return;
+    }
+  };
+  /** 경쟁자에게 일기토 — 이기면 그 발견을 1~2년 늦춘다. 싸웠으면 true, 그만두었으면 false */
+  T.rivalDuel = async function (d, who) {
+    var s = S(), nm = d.rival[2];
+    for (;;) {
       var px = G.Games.proxy(), pd = px && G.MATE[px.id];
       var fv = await UI.ask('일기토를 신청합니다. 누가 나섭니까?', [{ label: '내가 싸운다', value: 1 }].concat(pd ? [{ label: '부관 ' + pd.name + '에게 맡긴다', value: 2 }] : []).concat([{ label: '그만둔다', value: 0 }]), { name: s.player.name, portrait: s.player.portrait });
-      if (!fv) continue;
+      if (!fv) return false;
       var res = await G.Games.duel({ name: nm, portrait: who.portrait, look: 'rival', str: 70, atk: 12, def: 6, skill: 2, mar: 72, int: 70, cha: 65, style: 'thrust' }, fv === 2 ? { mate: px, place: 'tavern' } : { place: 'tavern' });
       var ldr = G.Games.lastDuel || {}, fmr = ldr.mate, fdr = fmr && G.MATE[fmr.id];
       if (res === 'lose' && fmr) { fmr.hurt = s.day + 30; UI.toast(fdr.name + U.jx(fdr.name, '은/는') + ' 30일 동안 다쳐 능력이 절반이 된다.', 'skull', 4000); }
@@ -542,7 +566,58 @@
         await UI.say(U.pick(['상처가 깊은 것 같군. 이러면 계획이 늦어져 버릴 텐데. 앞으로 조금인데.', '모처럼 단서를 잡았는데, 이런 일이... 운이 나쁘군.']), who);
         UI.toast(nm + '의 행동이 ' + yrs + '년 늦어졌습니다', 'hourglass', 4000);
       } else await UI.say('생각보다는 꽤 하는군. 하지만 이런 곳에서 쓰러질 수는 없지. 내게는 큰 꿈이 있다.', who);
-      return;
+      return true;
+    }
+  };
+
+  // ---------------------------------------------------------------- 머무는 경쟁 탐험가 (G.RIVAL_STAYS, seafolk.js) — 고용할 수 없다
+  /** 이 도시에 머무는 경쟁 탐험가 [{name, atSea}] */
+  T.rivalsStaying = function (c) {
+    var SF = G.SeaFolk; if (!SF || !SF.rivalCity || !G.RIVAL_STAYS) return [];
+    return Object.keys(G.RIVAL_STAYS).filter(function (nm) { var at = SF.rivalCity(nm); return at && at.id === c.id; })
+      .map(function (nm) { return { name: nm, atSea: SF.atSeaName(nm) }; });
+  };
+  function rivalWhen(d) { return (d.rival[0] + (S().flags['delay_' + d.id] || 0)) * 12 + d.rival[1]; }
+  /** 그 경쟁자가 다음에 노리는 발견물 (아직 아무도 알리지 않은 것 가운데 가장 이른 것) */
+  T.rivalTarget = function (nm) {
+    var s = S();
+    return G.DISCOVERIES.filter(function (d) {
+      if (!d.rival || d.rival[2] !== nm) return false;
+      var st = s.disc[d.id]; return !(st && (st.rival || st.reported || st.announced));
+    }).sort(function (a, b) { return rivalWhen(a) - rivalWhen(b); })[0] || null;
+  };
+  /** 그 경쟁자가 마지막으로 노렸던 발견물과 결과 {d, by: 'rival'|'me'} (없으면 null) */
+  T.rivalLast = function (nm) {
+    var s = S(), out = null;
+    G.DISCOVERIES.forEach(function (d) {
+      if (!d.rival || d.rival[2] !== nm) return;
+      var st = s.disc[d.id]; if (!st) return;
+      var by = st.rival ? 'rival' : (st.reported || st.announced) ? 'me' : null;
+      if (by && (!out || rivalWhen(d) > rivalWhen(out.d))) out = { d: d, by: by };
+    });
+    return out;
+  };
+  T.rivalTalk = async function (c, nm) {
+    var s = S(), info = G.RIVAL_STAYS[nm] || {}, who = T.duo({ name: nm, portrait: A.rivalSpec(nm), lang: 3 });
+    if (G.SeaFolk.atSeaName(nm)) { await C.say(master(), info.away || nm + '? 얼마 전에 배를 띄워 나갔네.'); return; }
+    if (!s.flags['metRival_' + nm]) { s.flags['metRival_' + nm] = 1; await UI.say(info.intro || nm + '이오.', who); }
+    for (;;) {
+      var d = T.rivalTarget(nm), soon = d && rivalWhen(d) - (s.date.y * 12 + s.date.m) <= 48 && G.Disc.available(d);
+      var v = await UI.ask('무슨 용건인가?', [
+        { label: '정보를 듣는다', value: 'plan' },
+        { label: '부하로 고용한다', value: 'hire' },
+        soon ? { label: '일기토를 신청한다', value: 'duel' } : null,
+        { label: '떠난다', value: null }].filter(Boolean), who);
+      if (!v) return;
+      if (v === 'hire') { await UI.say(info.hire || '나는 내 배를 몬다네.', who); UI.toast(nm + U.jx(nm, '은/는') + ' 고용할 수 없다 — 스스로 함대를 꾸려 발견을 다투는 경쟁자다.', 'compass', 4000); continue; }
+      if (v === 'duel') { if (await T.rivalDuel(d, who)) return; continue; }
+      var last = T.rivalLast(nm), plan = info.plan || {}, done = info.done || {};
+      if (last && last.by === 'me' && info.beaten && !s.flags['rivalBeaten_' + last.d.id]) { s.flags['rivalBeaten_' + last.d.id] = 1; await UI.say(info.beaten, who); }
+      else if (last && last.by === 'rival' && done[last.d.id] && !s.flags['rivalDone_' + last.d.id]) { s.flags['rivalDone_' + last.d.id] = 1; await UI.say(done[last.d.id], who); }
+      if (soon) {
+        await UI.say(plan[d.id] || '나는 곧 큰 항해를 떠날 걸세. ' + d.hint, who);
+        if (G.Disc.addHint(d.id, 'rival')) UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll');
+      } else await UI.say(info.dream || '언젠가 더 먼 바다로 갈 거요.', who);
     }
   };
 
@@ -584,7 +659,7 @@
         // 아직 보고·발표하지 않은 발견의 유물(증거)은 선물로 내놓지 않는다
         var gifts = s.player.items.filter(function (it) { return G.ITEM[it.id] && G.ITEM[it.id].kind === 'gift' && !G.ITEM[it.id].ring && !R.isProof(it); });
         if (!gifts.length) { UI.toast('선물할 장신구가 없습니다. 시장에서 살 수 있습니다.' + (s.player.items.some(function (it) { return G.ITEM[it.id] && G.ITEM[it.id].kind === 'gift' && R.isProof(it); }) ? ' (발견의 증거인 장신구는 보고·발표한 뒤에 선물할 수 있습니다)' : ''), 'info'); continue; }
-        var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name + (G.RELIC && G.RELIC[it.id] ? ' <span class="tag">유물</span>' : ''), right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart' }; }), { width: 460 });
+        var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name + (G.RELIC && G.RELIC[it.id] ? ' <span class="tag">유물</span>' : ''), right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart', thumb: G.Img.itemSrc(it) }; }), { width: 460 });
         if (gi == null) continue;
         var it = gifts[gi]; s.player.items.splice(s.player.items.indexOf(it), 1);
         st.aff = Math.min(100, st.aff + G.ITEM[it.id].gv + likeBonus(like) + R.skill('craft'));

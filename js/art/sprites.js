@@ -6,21 +6,21 @@
 (function (G) {
   'use strict';
   var SP = G.Sprites = {};
-  var IMG = {};
   function meta(id) { return (G.SPRITE_SHEETS || {})[id] || null; }
   SP.meta = meta;
-  /** 시트 그림 (아직 못 읽었으면 읽기 시작하고 null) */
+  /** 시트 그림 (아직 못 읽었으면 읽기 시작하고 null). 못 받은 그림은 G.Img 가 얼마 뒤 다시 받아 본다 */
   function sheet(key) {
-    var o = IMG[key]; if (o) return o.img;
-    o = IMG[key] = { img: null };
-    var I = G.Img; if (!I || !I.has(key)) return null;
+    var I = G.Img; if (!I) return null;
     var got = I.get(key);
-    if (got) { o.img = got; return got; }
-    I.resolve([key]).then(function (r) { if (r && r.img) o.img = r.img; });
-    return null;
+    if (!got && I.has(key)) I.want(key);
+    return got;
   }
+  function pend(key) { var I = G.Img; return !!(I && I.pending && I.has(key) && I.pending(key)); }
   SP.img = function (id) { return sheet('sprites/' + id); };
   SP.ready = function (id) { return !!(meta(id) && SP.img(id)); };
+  /** 시트를 받는 중인가 — 그동안은 코드 그림을 내보이지 않고 비워 둔다 */
+  SP.pending = function (id) { return !!meta(id) && pend('sprites/' + id); };
+  SP.partyPending = function (mode) { var P = G.SPRITE_PARTY; return !!(P && P.sheets[mode]) && pend('sprites/party_' + mode); };
   SP.has = function (id) { return !!(meta(id) && G.Img && G.Img.has('sprites/' + id)); };
   SP.preload = function (ids) { [].concat(ids || []).forEach(function (id) { SP.img(id); }); };
   /** 줄 번호 (이름 또는 번호) */

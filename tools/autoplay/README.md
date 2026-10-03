@@ -9,4 +9,4 @@
 - `report_gen.py` — `final.json`과 `trace.log`로 항해 기록 페이지를 만든다
 
 한 판은 보통 1~2분에 1487년 무렵까지 간다. 운이 나쁘면(태평양 횡단 끝의 굶주림, 신세계 해협~나스카 구간의 피로) 선원이 전멸해 끝난다.
-경로와 파일 위치(/tmp/claude-0/…)는 개발 컨테이너 기준이니, 다른 곳에서 쓸 때는 run.js의 DIR·URL과 report_gen.py의 경로를 고친다.
+run.js는 이 폴더의 bot.js·brain.js와 저장소의 index.html을 스스로 찾는다(`--url`, `--out`으로 바꿀 수 있다). Playwright는 `PLAYWRIGHT_DIR=…/node_modules/playwright`로 알려 주거나 `npm i playwright`. report_gen.py의 경로는 쓸 때 고친다.

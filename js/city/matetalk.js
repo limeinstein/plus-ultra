@@ -115,7 +115,7 @@
       } else if (v === 'gift') {
         var gifts = s.player.items.filter(function (it) { return G.ITEM[it.id] && G.ITEM[it.id].kind === 'gift' && !G.ITEM[it.id].ring && !R.isProof(it); });
         if (!gifts.length) { UI.toast('선물할 장신구가 없습니다. 시장에서 살 수 있습니다.', 'info'); continue; }
-        var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name, right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart' }; }), { width: 460 });
+        var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name, right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart', thumb: G.Img.itemSrc(it) }; }), { width: 460 });
         if (gi == null) continue;
         var it = gifts[gi]; s.player.items.splice(s.player.items.indexOf(it), 1);
         gainAff(G.ITEM[it.id].gv + R.skill('craft'));

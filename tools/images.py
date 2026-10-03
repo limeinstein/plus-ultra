@@ -199,6 +199,12 @@ def valid_keys(d):
     for terrain, label in (('grass', '초원'), ('steppe', '스텝'), ('desert', '사막'), ('forest', '숲'), ('jungle', '밀림'),
                            ('mountain', '산악'), ('snow', '설원'), ('tundra', '툰드라'), ('ice', '빙원')):
         k['landwar/backgrounds/' + terrain] = '육상전 지형 배경 · ' + label
+    # 거리 앞길 바닥 — tools/street_ground.py 가 Codex 기준 그림에서 만든 지역별 띠 (js/scenes/town.js GROUND_STYLE)
+    for gid, label in (('iberia', '이베리아'), ('espana', '에스파냐·식민'), ('italy', '지중해'), ('france', '서·북유럽'), ('east', '동유럽'),
+                       ('russia', '러시아'), ('arabia', '아랍·북아프리카'), ('ottoman', '오스만·레반트'), ('swahili', '동아프리카 해안'),
+                       ('africa', '아프리카 내륙'), ('india', '인도'), ('seasia', '동남아시아'), ('eastasia', '동아시아'), ('japan', '일본'),
+                       ('steppe', '초원'), ('volcanic', '메소아메리카'), ('andes', '안데스'), ('native', '북미 마을'), ('pueblo', '푸에블로')):
+        k['street-ground/' + gid] = '거리 길바닥 · ' + label
     # 육상전·육상 탐험·항해 사건 스프라이트 — tools/sprite_repack.py 가 images/sprites/ 에 만든 시트를 모두 받는다 (칸·피벗은 js/data/sprites.js)
     names = {'officers': '육상전 · 제독대 0~3단계', 'musketeers': '육상전 · 총병 0~3단계', 'cannons': '육상전 · 포병 0~3단계',
              'swordsmen': '육상전 · 보병 0~3단계', 'east_fighters': '육상전 적 · 동아시아', 'ottoman': '육상전 적 · 오스만·서아시아',
@@ -257,7 +263,7 @@ def report(found, dups, keys):
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),
-              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/')]
+              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

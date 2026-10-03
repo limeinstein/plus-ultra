@@ -108,7 +108,6 @@
   };
 
   // ---------------------------------------------------------------- discovery vignette
-  var CAT_COL = { geo: '#3d679a', nature: '#4f8a52', ruin: '#9a6a3a', treasure: '#c9a030', creature: '#7a5a2a', people: '#8a3a2a', trade: '#6a4a8a' };
   A.discoveryArt = function (d, w, h) {
     w = w || 720; h = h || 330;
     var c = A.canvas(w, h), ctx = c.getContext('2d'), rng = U.makeRng(U.strHash(d.id));

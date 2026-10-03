@@ -8,6 +8,14 @@
   var BASE = 'images/';
   var files = null;
   var imgs = {}, state = {}, waiters = {};
+  var failAt = {}, askedAt = {};        // 못 읽은 때 · 읽기 시작한 때 (ms)
+  /* 그림 읽기 조정값 (js/data/seafx.js 의 G.FX.img — 이 파일이 먼저 읽히므로 쓸 때마다 본다)
+     tries: 한 그림을 몇 번까지 다시 받나 · retryMs: 다시 받기 전 쉬는 시간 · stallMs: 이만큼 소식이 없으면 끊고 다시
+     failHold: 끝내 못 받은 그림을 이만큼 지난 뒤 다시 받아 본다(그동안만 코드 그림) · waitMs: 장면이 그림을 기다리는 가장 긴 시간
+     slowMs: 이보다 오래 걸리면 「그림을 불러오는 중」 표시 · decodeMs: 미리 풀기를 기다리는 가장 긴 시간 · graceMs: 움직이는 그림(배·부대)이 코드 그림 대신 비워 두고 기다리는 시간 */
+  var DEF = { tries: 3, retryMs: [400, 1500], stallMs: 45000, failHold: 20000, waitMs: 12000, slowMs: 500, graceMs: 8000, decodeMs: 1200, keep: 900 };
+  function CF(k) { var c = G.FX && G.FX.img; return c && c[k] != null ? c[k] : DEF[k]; }
+  function now() { return window.performance && performance.now ? performance.now() : Date.now(); }
 
   function man() {
     if (!files) {
@@ -21,13 +29,22 @@
   /** re-read G.IMAGE_FILES (e.g. after the manifest changed) */
   I.reset = function () {
     for (var b in blobs) { try { URL.revokeObjectURL(blobs[b]); } catch (e) { /* 무시 */ } }
-    files = null; imgs = {}; state = {}; waiters = {}; blobs = {}; cityAsked = {};
+    files = null; imgs = {}; state = {}; waiters = {}; blobs = {}; cityAsked = {}; failAt = {}; askedAt = {}; packs = {}; used = {}; okN = 0;
   };
   I.count = function () { return Object.keys(man()).length; };
   /** sorted keys that start with prefix */
   I.list = function (prefix) { return Object.keys(man()).filter(function (k) { return !prefix || k.indexOf(prefix) === 0; }).sort(natural); };
   function natural(a, b) { return a.localeCompare(b, undefined, { numeric: true }); }
-  I.has = function (k) { return !!(k && man()[k]) && state[k] !== 'fail'; };
+  /** 이 그림 파일이 있나. 끝내 못 받은 그림은 얼마 동안(failHold) 없는 것으로 치고(코드 그림·다음 후보), 그 뒤에는 다시 받아 본다 */
+  I.has = function (k) {
+    if (!k || !man()[k]) return false;
+    if (state[k] !== 'fail') return true;
+    if (now() - failAt[k] < CF('failHold')) return false;
+    delete state[k]; delete failAt[k]; delete askedAt[k];
+    var pk = packOf(k); if (pk >= 0 && packFail[pk]) { delete packs[pk]; delete packFail[pk]; }
+    return true;
+  };
+  function failed(k) { state[k] = 'fail'; failAt[k] = now(); }
   /** first key of the chain that has a file */
   I.pick = function (chain) { chain = [].concat(chain || []); for (var i = 0; i < chain.length; i++) if (I.has(chain[i])) return chain[i]; return null; };
   I.file = function (k) { return man()[k] || null; };
@@ -67,30 +84,38 @@
   }
   /* 아티팩트판: 그림은 묶음 파일(img/pack-NN.js)에 나뉘어 있고, 묶음 안의 그림이 처음 필요할 때 그 묶음을 읽는다.
      읽기 전에는 G.IMAGE_FILES 에 'pack:번호' 자리표만 있다. */
-  var packs = {}, PACK = /^pack:(\d+)$/;
+  var packs = {}, packFail = {}, PACK = /^pack:(\d+)$/;
   function packOf(k) { var m = PACK.exec(man()[k] || ''); return m ? +m[1] : -1; }
   function loadPack(i) {
     if (packs[i]) return packs[i];
     var url = (G.IMAGE_PACK_URLS || [])[i];
     packs[i] = new Promise(function (resolve) {
-      if (!url) return resolve(false);
-      var s = document.createElement('script');
-      s.src = url; s.async = true;
-      s.onload = function () {
-        var m = G.IMAGE_FILES || {}, tag = 'pack:' + i, done = [];
-        for (var k in files) if (files[k] === tag && m[k] && m[k] !== tag) { files[k] = m[k]; done.push(k); }
-        // 읽기 전에 I.src 로 자리표 주소를 받아 간 <img> 를 진짜 그림으로 바꾼다
-        done.forEach(function (k) {
-          var ph = holder(k);
-          Array.prototype.forEach.call(document.querySelectorAll('img'), function (im) { if (im.getAttribute('src') === ph) im.src = I.src(k); });
-        });
-        resolve(true);
-      };
-      s.onerror = function () { delete packs[i]; if (window.console) console.warn('[그림 교체] 그림 묶음을 불러오지 못했습니다: ' + url); resolve(false); };
-      document.head.appendChild(s);
+      if (!url) { packFail[i] = 1; return resolve(false); }
+      var n = 0;
+      function attempt() {
+        var s = document.createElement('script');
+        s.src = url; s.async = true;
+        s.onload = function () {
+          var m = G.IMAGE_FILES || {}, tag = 'pack:' + i, done = {}, any = false;
+          for (var k in files) if (files[k] === tag && m[k] && m[k] !== tag) { files[k] = m[k]; done[holder(k)] = k; any = true; }
+          // 읽기 전에 I.src 로 자리표 주소를 받아 간 <img> 를 진짜 그림으로 바꾼다
+          if (any) Array.prototype.forEach.call(document.querySelectorAll('img[src^="data:image/svg+xml"]'), function (im) { var k = done[im.getAttribute('src')]; if (k) im.src = I.src(k); });
+          resolve(true);
+        };
+        s.onerror = function () {
+          if (s.parentNode) s.parentNode.removeChild(s);
+          if (++n < CF('tries')) { setTimeout(attempt, retryDelay(n)); return; }
+          packFail[i] = 1;
+          if (window.console) console.warn('[그림 교체] 그림 묶음을 불러오지 못했습니다: ' + url);
+          resolve(false);
+        };
+        document.head.appendChild(s);
+      }
+      attempt();
     });
     return packs[i];
   }
+  function retryDelay(n) { var r = CF('retryMs') || []; return r[Math.min(n - 1, r.length - 1)] || 500; }
   /** 묶음을 아직 읽지 않은 그림의 자리표 주소 (투명한 빈 SVG — 그림마다 달라서 나중에 찾아 바꿀 수 있다) */
   function holder(k) { return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"><desc>' + k.replace(/[<&]/g, '') + '</desc></svg>'); }
   /** 이 그림이 바로 쓸 수 있게 준비되었나 (묶음까지 읽혔나) — 묶음을 읽는 중이면 Promise */
@@ -111,7 +136,7 @@
       delete queued[job];
       var pk = /^p:(\d+)$/.exec(job), p;
       if (pk) { if (packs[+pk[1]]) continue; p = loadPack(+pk[1]); }
-      else { var k = job.slice(2); if (state[k] === 'ok' || state[k] === 'fail' || state[k] === 'loading') continue; p = I.load(k); }
+      else { var k = job.slice(2); if (state[k] || !I.has(k)) continue; p = I.load(k); }
       running++;
       p.then(done, done);
     }
@@ -180,26 +205,68 @@
     if (/^(blob:|https?:)/.test(f)) return f;
     return BASE + f.split('/').map(encodeURIComponent).join('/');
   };
-  I.get = function (k) { return state[k] === 'ok' ? imgs[k] : null; };
+  I.get = function (k) { if (state[k] !== 'ok') return null; used[k] = ++clock; return imgs[k]; };
+  /* 읽어 둔 그림이 keep 장을 넘으면 가장 오래 안 쓴 것부터 놓아 준다 (오래 놀수록 메모리가 끝없이 불어나지 않게).
+     놓아 준 그림은 다음에 쓸 때 다시 읽는다 — 브라우저 캐시에 있어 금방이다. 그리고 있는 쪽이 쥐고 있는 그림은 그대로 남는다. */
+  var used = {}, clock = 0, okN = 0;
+  function trimCache() {
+    var keep = CF('keep'); if (okN <= keep) return;
+    var ks = Object.keys(imgs).sort(function (a, b) { return (used[a] || 0) - (used[b] || 0); }), drop = Math.min(ks.length, okN - Math.round(keep * 0.8));
+    for (var i = 0; i < drop; i++) { var k = ks[i]; if (clock - (used[k] || 0) < 40) break; delete imgs[k]; delete state[k]; delete used[k]; delete askedAt[k]; okN--; }
+  }
   I.status = function (k) { return state[k] || (man()[k] ? 'idle' : 'none'); };
+  /** 그림 하나를 읽는다 → Promise<img|null>. 못 받으면 몇 번 다시 받고(tries), 받은 뒤에는 미리 풀어 둔다(decode —
+      처음 그릴 때 멈칫하거나 덜 풀린 채 그려지지 않게). 끝내 못 받아야 null (그때에만 코드 그림으로 돌아간다) */
   I.load = function (k) {
     var pk = k ? packOf(k) : -1;
-    if (pk >= 0) return loadPack(pk).then(function (ok) {
-      if (ok && packOf(k) < 0) return I.load(k);
-      state[k] = 'fail'; return null;
-    });
+    if (pk >= 0) {
+      if (!askedAt[k]) askedAt[k] = now();
+      return loadPack(pk).then(function (ok) {
+        if (ok && packOf(k) < 0) return I.load(k);
+        failed(k); return null;
+      });
+    }
     return new Promise(function (resolve) {
-      if (!k || !man()[k] || state[k] === 'fail') return resolve(null);
-      if (state[k] === 'ok') return resolve(imgs[k]);
+      if (!I.has(k)) return resolve(null);
+      if (state[k] === 'ok') { used[k] = ++clock; return resolve(imgs[k]); }
       (waiters[k] = waiters[k] || []).push(resolve);
       if (state[k] === 'loading') return;
       state[k] = 'loading';
-      var im = new Image();
-      im.decoding = 'async';
-      im.onload = function () { state[k] = 'ok'; imgs[k] = im; flush(k, im); };
-      im.onerror = function () { state[k] = 'fail'; if (window.console) console.warn('[그림 교체] 파일을 불러오지 못했습니다: ' + (man()[k] || k)); flush(k, null); };
-      im.src = I.src(k);
+      if (!askedAt[k]) askedAt[k] = now();
+      fetchImg(k, 0);
     });
+  };
+  function fetchImg(k, n) {
+    var im = new Image(), over = false, timer = 0;
+    im.decoding = 'async';
+    function end(ok) {
+      if (over) return; over = true;
+      if (timer) clearTimeout(timer);
+      im.onload = im.onerror = null;
+      if (state[k] !== 'loading') return;                       // 그 사이 I.reset
+      if (ok) { state[k] = 'ok'; imgs[k] = im; used[k] = ++clock; okN++; flush(k, im); trimCache(); return; }
+      if (n + 1 < CF('tries')) { setTimeout(function () { if (state[k] === 'loading') fetchImg(k, n + 1); }, retryDelay(n + 1)); return; }
+      failed(k);
+      if (window.console) console.warn('[그림 교체] 파일을 불러오지 못했습니다: ' + (I.path(k) || k));
+      flush(k, null);
+    }
+    im.onload = function () {
+      var fin = function () { end(!!(im.naturalWidth || im.width)); };
+      // 미리 풀기는 화면이 그려질 때 처리된다 — 탭이 가려져 있거나 화면 갱신이 멈춰 있으면 끝나지 않으므로 오래 기다리지 않는다
+      if (im.decode && !document.hidden) { im.decode().then(fin, fin); setTimeout(fin, CF('decodeMs')); } else fin();
+    };
+    im.onerror = function () { end(false); };
+    timer = setTimeout(function () { try { im.src = ''; } catch (e) { /* 무시 */ } end(false); }, CF('stallMs'));
+    im.src = I.src(k);
+  }
+  /** 곧 그릴 그림: 기다리지 않고 읽기만 시작한다 (이미 읽는 중·읽었으면 아무 일도 하지 않는다 — 매 장면 불러도 가볍다) */
+  I.want = function (k) { if (k && !state[k] && man()[k]) I.load(k); };
+  /** 이 그림을 아직 받는 중인가 — 움직이는 그림(배·부대·사람)이 코드 그림을 잠깐 내보이는 대신 비워 두고 기다릴 때 쓴다.
+      너무 오래(graceMs) 걸리면 false 를 돌려주어 코드 그림이라도 보이게 한다. 읽기 시작하지 않았으면 시작한다 */
+  I.pending = function (k) {
+    if (!k || !man()[k] || state[k] === 'ok' || state[k] === 'fail') return false;
+    if (!state[k]) I.load(k);
+    return now() - (askedAt[k] || now()) < CF('graceMs');
   };
   function flush(k, im) { var w = waiters[k] || []; delete waiters[k]; w.forEach(function (f) { try { f(im); } catch (e) { console.error(e); } }); }
   /** walk the chain: the first file that loads wins. resolves {key, img} or null */
@@ -214,13 +281,38 @@
     }
     return next();
   };
-  /** load the pictures for several chains; resolves when done or after ms */
-  I.preload = function (chains, ms) {
+  /** 여러 자리의 그림을 읽는다. 다 읽으면(또는 끝내 못 읽으면) 풀린다. 장면은 이것을 기다렸다가 뜬다 —
+      예전에는 1.5초만 기다리고 코드 그림으로 넘어가, 느린 연결에서는 코드 그림(각진 임시 그림)이나 빈 배경이 그대로 남았다.
+      이제 waitMs(또는 더 긴 ms)까지 기다리고, slowMs 가 넘으면 「그림을 불러오는 중」을 띄운다. quiet: 표시 없이 */
+  I.preload = function (chains, ms, quiet) {
     var list = (chains || []).filter(function (c) { return I.pick(c); });
     if (!list.length) return Promise.resolve();
-    var all = Promise.all(list.map(I.resolve));
-    return ms ? Promise.race([all, new Promise(function (r) { setTimeout(r, ms); })]) : all;
+    if (list.every(function (c) { return I.get(I.pick(c)); })) return Promise.resolve();
+    var all = Promise.all(list.map(I.resolve)), cap = Math.max(ms || 0, CF('waitMs'));
+    var p = Promise.race([all, new Promise(function (r) { setTimeout(r, cap); })]);
+    if (!quiet) { busy(1); p.then(function () { busy(-1); }); }
+    return p;
   };
+  /* 「그림을 불러오는 중」 표시 — 기다림이 slowMs 를 넘을 때만 보인다 */
+  var busyN = 0, busyEl = null, busyTimer = 0;
+  function busy(d) {
+    busyN = Math.max(0, busyN + d);
+    if (busyN && !busyTimer && !(busyEl && busyEl.parentNode)) busyTimer = setTimeout(function () {
+      busyTimer = 0; if (!busyN) return;
+      if (!busyEl) { busyEl = document.createElement('div'); busyEl.className = 'img-loading'; busyEl.innerHTML = '<i></i><span>그림을 불러오는 중…</span>'; }
+      (document.getElementById('ui') || document.body).appendChild(busyEl);
+    }, CF('slowMs'));
+    if (!busyN) { if (busyTimer) { clearTimeout(busyTimer); busyTimer = 0; } if (busyEl && busyEl.parentNode) busyEl.parentNode.removeChild(busyEl); }
+  }
+  /** 그림과 관계된 일(p)을 waitMs(또는 더 긴 ms)까지 기다린다 — 그동안 「그림을 불러오는 중」 표시. 시간이 넘으면 null */
+  I.wait = function (p, ms) {
+    var cap = Math.max(ms || 0, CF('waitMs'));
+    var r = Promise.race([p, new Promise(function (res) { setTimeout(function () { res(null); }, cap); })]);
+    busy(1); r.then(function () { busy(-1); }, function () { busy(-1); });
+    return r;
+  };
+  /** 지금 장면이 그림을 기다리는 중인가 */
+  I.busy = function () { return busyN > 0; };
 
   /** draw so the picture covers the rect (cropping the overflow). fx/fy: focus 0..1 */
   I.drawCover = function (ctx, im, x, y, w, h, fx, fy) {
@@ -242,13 +334,21 @@
   };
 
   /** paint the override for chain onto canvas cv — now if loaded, otherwise as soon as the file arrives.
-      opts: {fit:'cover'|'contain', fx, fy, bg, post(ctx,w,h,key)} . returns true when an override exists */
-  I.apply = function (cv, chain, opts) {
+      opts: {fit:'cover'|'contain', fx, fy, bg, post(ctx,w,h,key)} . returns true when an override exists.
+      procedural: 그림을 끝내 못 받았을 때 대신 그릴 코드 그림 */
+  I.apply = function (cv, chain, opts, procedural) {
     opts = opts || {};
     var key = I.pick(chain); if (!key) return false;
+    function shown() {
+      if (cv.classList) cv.classList.remove('img-wait');
+      if (G.Game && G.Game._sceneSrc === cv && G.Game.setScene) G.Game.setScene(cv);
+    }
     function paint(res) {
-      if (!res) return;
       var ctx = cv.getContext('2d'), w = cv.width, h = cv.height;
+      if (!res) {            // 끝내 못 받았다 → 코드 그림
+        if (procedural) { try { var pc = procedural(); if (pc && pc !== cv) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, w, h); ctx.drawImage(pc, 0, 0, w, h); ctx.restore(); } } catch (e) { console.error(e); } }
+        shown(); return;
+      }
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       ctx.clearRect(0, 0, w, h);
@@ -258,22 +358,25 @@
       ctx.restore();
       if (opts.post) { ctx.save(); opts.post(ctx, w, h, res.key); ctx.restore(); }
       cv.setAttribute('data-img', res.key);
-      if (G.Game && G.Game._sceneSrc === cv && G.Game.setScene) G.Game.setScene(cv);
-      if (opts.onPaint) opts.onPaint(cv, res.key);
+      shown();
     }
     var ready = I.get(key);
     if (ready) paint({ key: key, img: ready });
     else I.resolve(chain).then(paint);
     return true;
   };
-  /** canvas w×h showing the override when there is one, otherwise procedural() */
+  /** canvas w×h showing the override when there is one, otherwise procedural().
+      그림이 있는데 아직 받는 중이면 코드 그림을 먼저 내보이지 않는다 — 빈 판(바탕색만)으로 기다렸다가 그림이 오면 그린다.
+      (받는 동안 각진 코드 그림이 보였다가 바뀌던 문제) 끝내 못 받으면 그때 코드 그림. */
   I.make = function (chain, w, h, procedural, opts) {
     var key = I.pick(chain);
     if (!key) return procedural();
-    var cv;
-    if (I.get(key)) { cv = document.createElement('canvas'); cv.width = w; cv.height = h; }
-    else cv = procedural();
-    I.apply(cv, chain, opts);
+    var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    if (!I.get(key)) {
+      cv.className = 'img-wait';
+      if (opts && opts.bg) { var c = cv.getContext('2d'); c.fillStyle = opts.bg; c.fillRect(0, 0, w, h); }
+    }
+    I.apply(cv, chain, opts, procedural);
     return cv;
   };
   // ---------------------------------------------------------------- key chains (파일 이름 규칙)
@@ -327,6 +430,13 @@
   K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'relic-kinds/' + r.kind]; };
   /** 교역품: 품목별 그림, 없으면 갈래 공통 그림 */
   K.good = function (g) { return ['goods/' + g.id, 'good-kinds/' + g.cat]; };
+  /** 소지품(일반 물건·유물) 그림의 주소 — 선택 창·알림·대화 단추의 작은 그림용. 그림이 없으면 null (코드로 그린 그림을 쓰는 자리는 I.make) */
+  I.itemSrc = function (it) {
+    if (!it) return null;
+    var id = it.id || it, d = (G.ITEM && G.ITEM[id]) || it, rl = G.RELIC && G.RELIC[id];
+    var k = I.pick(rl ? K.relic(rl) : d && d.kind ? K.item(d) : []);
+    return k ? I.src(k) : null;
+  };
   /** town background: per-city file, then a numbered variant for the style (port / inland), then the style */
   K.bg = function (c) {
     var out = ['backgrounds/' + c.id];
@@ -368,6 +478,14 @@
     var k = keys.filter(function (x) { return x.indexOf(FACE) === 0; })[0];
     return k ? k.slice(FACE.length) : 'admiral';
   };
+  /** 생김새 이름 (만들기 화면·수첩에 보이는 이름표) — 파일 이름 → 한글 이름. 없으면 파일 이름 그대로 */
+  I.HERO_NAMES = {
+    admiral: '기본 제독', ganghui: '이강희', navigator_white: '하얀 남방의 항해사', armored_navigator: '철갑 항해사',
+    sea_dog: '망원경을 든 뱃사람', muscle_swordsman: '근육질 검사', hat_spinner: '모자를 돌리는 항해사',
+    charismatic_admiral: '카리스마 제독', battle_vanguard: '돌격대장', noble_scholar: '귀족 학자 제독',
+    casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장'
+  };
+  I.heroName = function (id) { return I.HERO_NAMES[id] || id; };
   /** 제독이 40세 이상이면 수염 난 그림을 쓴다. 만들기 화면은 age를 직접 넘긴다. */
   I.heroOld = function (p, age) {
     if (age == null) {
@@ -520,6 +638,17 @@
     if (k) out.push(k + '_half');
     return out;
   };
+  /** 대화에서 쓰는 무릎상 (머리부터 무릎까지 서 있는 모습, 1024×1536, 투명) — 흉상 그림 이름 + _half.
+      두 사람 다 무릎상이 있으면 대화창이 서 있는 모습으로 크게 바뀐다 (js/ui/ui.js dialogShell) */
+  K.mateHalf = function (id) {
+    var out = ['portraits/mates/' + id + '_half'];
+    // 전용 얼굴이 없는 동료도 현재 얼굴과 같은 문화권·성별의 무릎상을 빌린다.
+    if (G.Art && G.Art.mateSpec && G.Art.portraitKeys) {
+      out = out.concat(K.halfOf(G.Art.portraitKeys(G.Art.mateSpec(id))));
+    }
+    return out.filter(function (k, i) { return out.indexOf(k) === i; });
+  };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(mates|sponsors|maids|rivals|npc-roles|pools)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */
   K.sponsor = function (sp, holder) {
     var out = [];
@@ -537,11 +666,7 @@
   K.kid = function (sex, order) { var b = sex === 'f' ? 'daughter' : 'son'; return ['portraits/family/' + b + '_' + order, 'portraits/family/' + b]; };
   K.discovery = function (d) { return ['discoveries/' + d.id, 'discovery-cats/' + d.cat]; };
   K.ship = function (id) { return ['ships/' + id]; };
-  K.shipNav = function (id) { return ['ships-nav/' + id]; };
   K.effect = function (id) { return ['effects/' + id]; };
   /** 육상전 지형별 초광폭 배경 */
   K.landWarBackground = function (terrain) { return ['landwar/backgrounds/' + terrain]; };
-  /** 일기토 전투원 6×4 시트와 초광폭 배경 */
-  K.duelFighter = function (id) { return ['duel/fighters/' + id]; };
-  K.duelBackground = function (id) { return ['duel/backgrounds/' + id]; };
 })(window.G = window.G || {});

@@ -432,13 +432,6 @@
     PAINTERS.inn(ctx, city, rng, pal, cul);
     ctx.fillStyle = 'rgba(255,200,140,.08)'; ctx.fillRect(0, 0, W, H);
   };
-  PAINTERS.jail = function (ctx, city, rng, pal) {
-    var p2 = { wall: '#3a3630', wall2: '#5a544a', floor: '#2a2622', beam: '#1a1612', stone: '#5a544a' };
-    room(ctx, p2, rng, { beams: false });
-    ctx.fillStyle = '#000'; ctx.fillRect(740, 220, 120, 90); ctx.fillStyle = '#6a7aa0'; ctx.fillRect(750, 230, 100, 70);
-    ctx.strokeStyle = '#1a1612'; ctx.lineWidth = 8; for (var b = 0; b < 5; b++) { ctx.beginPath(); ctx.moveTo(760 + b * 22, 220); ctx.lineTo(760 + b * 22, 310); ctx.stroke(); }
-    A.lightRays(ctx, 800, 270, 1.6, 0.2, 600, '#c8d4ff', 0.08, 5, rng);
-  };
 
   A.interior = function (kind, city, variant) {
     var c = A.canvas(W, H), ctx = c.getContext('2d');

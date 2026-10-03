@@ -39,4 +39,15 @@ Constraints: genuine transparent alpha; no sea, wake, flag, text, logo or waterm
 Avoid: fantasy ornament, modern fittings, duplicate masts, broken rigging and watermark residue
 ```
 
-최종 게임 시트는 방향, 피벗, 프레임 수와 돛 축이 흔들리지 않도록 `tools/render_ship_sprites.py`가 결정론적으로 만든다. `tests/shipsprites_test.py`가 36종의 크기·알파·프레임 수·셀 여백을 검사한다.
+최종 게임 시트는 `tools/ship3d/bake.py`가 3D 모형으로 굽는다(아래). 치수·돛대 자리·메타데이터는 `tools/render_ship_sprites.py`(Pillow 평면 그림, 예전 렌더러)의 `dims()`·`mast_positions()`·`mast_heights()`·`write_meta()`를 그대로 써서 방향·피벗·프레임 수·배 크기가 바뀌지 않는다. `tests/shipsprites_test.py`가 36종의 크기·알파·프레임 수·셀 여백을 검사한다.
+
+## 3D 렌더러 (2026-10-03)
+
+- 실행: `python3 tools/ship3d/bake.py` (몇 척만 미리 보기: `--ids galleon,junk --preview`). Node와 `three@0.147.0`·`playwright`가 필요하다 — `tools/ship3d`에서 `npm install three@0.147.0 playwright`(.gitignore에 있음) 하거나 `NODE_PATH`로 알려 준다. 소프트웨어 GL(swiftshader)로 36종 약 20분.
+- 파일: `ship3d_models.js`(선체 평면형·단면·현호, 선루·선미 회랑·포문, 문화권별 상부구조, 돛대·돛·노·물결), `ship3d_tex.js`(판재·돛천·기와·철갑 판 캔버스 재질, 씨앗 고정), `ship3d_page.js`(카메라·빛·맞춤·시트 담기), `render.js`(헤드리스 Chromium 구동), `bake.py`(사양 → PNG → WebP·메타·접촉 시트).
+- 카메라: 정사영, 수면 위 31.3°(sin 0.52)에서 내려다보고 높이는 0.92배 — 예전 렌더러의 투영과 같아 게임의 피벗·그림자·깃발 자리가 맞는다. 3배로 그린 뒤 두 단계로 줄인다.
+- 빛: 왼쪽 위 앞에서 따뜻한 해(그림자 지도), 하늘빛 반구광, 오른쪽 뒤 푸른 가장자리 빛, ACES 톤 매핑(밝은 돛이 하얗게 날아가지 않게).
+- 재질: 기준 시안대로 짙은 월넛 외판(판재 결·이음·나무못, 코그·헐크는 겹붙임), 굵은 띠와 황동 테, 황동 테 포문과 포신, 꿀빛 갑판, 아이보리 돛(천 솔기·리프 줄). 갤리온·카락은 높은 선미루·선미 창·회랑, 이물루·부리·바우스프릿과 스프릿세일.
+- 문화권: 갤리 계열은 노받이 틀·충각·고물 차양, 다우는 긴 이물·장식 선미판, 정크는 사각 이물판·높은 고물·붉은 띠·기와 지붕 집·대나무 살 러그 돛(살마다 칸이 부풂), 판옥선은 넓은 윗갑판 방패벽·장대, 거북선은 육각 철판 등딱지·쇠못·용머리, 아타케부네는 상자형 성벽과 2층 망루, 종·코라코라는 기운 사각돛(탄자, 거적 돛), 코라코라는 양쪽 아우트리거, 발사는 통나무 뗏목·두 다리 돛대·오두막.
+- 동작: 정박 = 돛을 활대에 말아 묶음(살 돛은 내려 쌓음), 표류 = 반쯤 부푼 돛·펄럭임·느린 노, 질주 = 가득 부푼 돛·바람 아래로 약 3.4° 기욺·노 젓기·선수 포말·물살 자국. 위상이 2π로 돌아 고리처럼 이어진다.
+- 맞춤: 모든 방향·동작 장면의 꼭짓점을 투영해 사방 3px 안에 들어가도록 배율을 고른다(대부분 1.0, 가장 큰 배 약 0.95).

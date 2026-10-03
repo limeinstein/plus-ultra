@@ -14,7 +14,6 @@
     var d = G.MATE[m.id];
     return { name: d.name, portrait: SC.mateSpec(m.id), lang: 3 };
   };
-  SC.hasMate = function (role) { var s = S(); return s.mates.some(function (x) { return x.role === role; }); };
 
   // ---------------------------------------------------------------- 실제 자료 (tools/heritage → G.HERITAGE)
   function link(url, text) { return url ? '<a href="' + U.esc(url) + '" target="_blank" rel="noopener">' + U.esc(text) + '</a>' : U.esc(text); }
@@ -239,14 +238,14 @@
       L = G.Reel.now(keys.sheet);
       if (!L) {
         setTimeout(function () { el.classList.add('on'); }, 30);
-        L = await Promise.race([G.Reel.load(keys.sheet), U.sleep(FX.loadWaitMs || 2500).then(function () { return null; })]);
+        L = await G.Img.wait(G.Reel.load(keys.sheet), FX.loadWaitMs || 2500);   // 느린 연결에서도 연출을 건너뛰지 않고 판을 기다린다
       }
       setTimeout(function () { el.classList.add('on'); }, 30);
       if (L) reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: playMs });
     } else {
       // 이미 한 번 불러 둔 GIF도 처음 장면부터 돌도록 새로 불러온다 (파일 주소일 때만 — 한 파일짜리 판의 data: 주소는 그대로)
       var src = G.Img.src(keys.gif); if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
-      var loaded = new Promise(function (r) { gif.onload = r; gif.onerror = r; setTimeout(r, FX.loadWaitMs || 2500); });
+      var loaded = G.Img.wait(new Promise(function (r) { gif.onload = r; gif.onerror = r; }), FX.loadWaitMs || 2500);
       gif.src = src;
       await loaded;
       setTimeout(function () { el.classList.add('on'); }, 30);

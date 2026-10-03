@@ -7,7 +7,7 @@
      이름이 정해지면 사람들(대사·지명·지역 이름)이 모두 그 이름으로 대륙을 부른다. 그 전에는 「신대륙」. */
 (function (G) {
   'use strict';
-  var U = G.U, UI = G.UI, R = G.R;
+  var U = G.U, UI = G.UI;
   var N = {};
   G.Names = N;
   function S() { return G.Game.state; }
@@ -36,7 +36,6 @@
   N.get = function (id) { return names()[id] || null; };
   /** 지금 대륙의 이름 (정해지지 않았으면 null) */
   N.continent = function () { return names().continent || null; };
-  N.contLabel = function () { return N.continent() || '신대륙'; };
 
   // ---------------------------------------------------------------- 이름을 데이터와 글에 입힌다
   var ORIG = null;

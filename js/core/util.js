@@ -81,9 +81,7 @@
     var t = String(text).replace(/[^가-힣A-Za-z0-9]+$/, '');
     return U.j(t, pair).slice(t.length);
   };
-  U.iga = function (w) { return U.j(w, '이/가'); };
   U.eul = function (w) { return U.j(w, '을/를'); };
-  U.eun = function (w) { return U.j(w, '은/는'); };
   U.wa = function (w) { return U.j(w, '과/와'); };
   U.ro = function (w) { return U.j(w, '으로/로'); };
   U.a = function (w) { return U.j(w, '아/야'); };
@@ -107,7 +105,6 @@
   };
   U.dayOfYear = function (dt) { var n = 0; for (var m = 1; m < dt.m; m++) n += U.daysInMonth(dt.y, m); return n + dt.d; };
   U.fmtDate = function (dt) { return dt.y + '년 ' + dt.m + '월 ' + dt.d + '일'; };
-  U.fmtYM = function (dt) { return dt.y + '년 ' + dt.m + '월'; };
   U.monthsBetween = function (a, b) { return (b.y - a.y) * 12 + (b.m - a.m) + (b.d - a.d) / 30; };
 
   // ---------------------------------------------------------------- coordinates
@@ -121,7 +118,6 @@
 
   // ---------------------------------------------------------------- misc
   U.clone = function (o) { return JSON.parse(JSON.stringify(o)); };
-  U.byId = function (arr) { var m = {}; for (var i = 0; i < arr.length; i++) m[arr[i].id] = arr[i]; return m; };
   U.sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
   U.el = function (tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   U.$ = function (sel, root) { return (root || document).querySelector(sel); };

@@ -22,8 +22,21 @@
   SP.rel = function (id) { var s = S(); return s.sponsors[id] || (s.sponsors[id] = { trust: 20, done: 0, fail: 0, anger: 0, met: 0 }); };
   var HONOR = { king: '폐하', pope: '성하', gov: '각하', noble: '각하', priest: '신부님', official: '각하', scholar: '박사님', merchant: '회장님' };
   SP.honor = function (sp) { return sp.honor || HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
+  /** 후원자 얼굴: 흉상(portrait) + 무릎상(half — portraits/sponsors/<그림>_half, 있을 때만) */
+  SP.face = function (sp) {
+    var spec = A.sponsorSpec(sp, SP.holderIndex(sp));
+    return { name: SP.holderName(sp), portrait: spec, half: G.Img.chain.halfOf(G.Art.portraitKeys(spec)), lang: SP.langLv(sp), li: SP.langLi(sp) };
+  };
+  function playerFace() { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; }
+  /** 후원자와 마주 보는 대화 (왼쪽 제독 · 오른쪽 후원자). 두 사람 다 무릎상이 있으면 서 있는 모습으로 크게 */
   SP.speaker = function (sp) {
-    return { name: SP.holderName(sp), portrait: A.sponsorSpec(sp, SP.holderIndex(sp)), lang: SP.langLv(sp), li: SP.langLi(sp) };
+    var o = SP.face(sp); o.layout = 'duo'; o.side = 'right'; o.partner = playerFace(); o.emotion = 'neutral';
+    return o;
+  };
+  /** 같은 자리에서 제독이 하는 말 */
+  SP.me = function (sp) {
+    var o = playerFace(); o.layout = 'duo'; o.side = 'left'; o.partner = SP.face(sp); o.emotion = 'neutral'; o.choiceSide = 'left';
+    return o;
   };
   SP.langLv = function (sp) { return Math.max(R.lang(sp.lang), R.lang(G.CITY_DATA[sp.city].lang)); };
   /** 후원자와 나누는 말: 후원자의 말과 그 도시의 말 가운데 일행이 더 잘하는 쪽 */
@@ -117,6 +130,16 @@
       else await UI.say('자네는 이미 다른 분의 후원을 받고 있다고 들었네. 그 일부터 마치고 오게.', who);
       return;
     }
+    // 계약을 그만두며 못 갚은 선금: 갚기 전에는 새 후원을 받을 수 없다 (선금으로 물건을 사 두고 빈손으로 그만두면 남던 것)
+    if (rel.debt > 0) {
+      var pw = s.player, dGold = Math.min(pw.gold, rel.debt), dBank = Math.min(pw.bank || 0, rel.debt - dGold);
+      if (dGold + dBank < rel.debt) { await UI.say('지난번에 돌려받지 못한 선금이 금화 ' + U.num(rel.debt) + '닢 남아 있네. 그것부터 갚고 오게.', who); return; }
+      var payDebt = await UI.ask('못 갚은 선금 금화 ' + U.num(rel.debt) + '닢을 갚겠습니까?', [{ label: '갚는다', value: 1 }, { label: '다음에', value: 0 }], who);
+      if (!payDebt) return;
+      pw.gold -= dGold; pw.bank = (pw.bank || 0) - dBank; rel.debt = 0; rel.anger = 0; SP.addTrust(rel, 4);
+      G.Game.refreshHud();
+      await UI.say('빚은 다 받았네. 지난 일은 잊기로 하지.', who);
+    }
     if (rel.anger > 0 && U.dateNum(s.date) < rel.anger) { await UI.say(s.player.name + ', 용건도 없으면서 무턱대고 방문하는 것은 무례한 일일세. 다음에 오게.', who); return; }
     var first = rel.done ? U.pick(['오오, ' + s.player.name + ', 잘 지냈는가. 또 모험 이야긴가?', '오래간만이군. 이번에는 어떤 모험을 할 작정인가?']) : U.pick(['모험 지원인가. 그래, 무엇을 찾으러 갈 건가?', '호오, 그렇다면 모험 목적을 말해 보게.']);
     await UI.say(first, who);
@@ -139,7 +162,7 @@
       if (pick == null) { await UI.say('뭔가, 용건이 없는가? 이쪽은 바쁘네.', who); return; }
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
-      await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : d.hint + '\n저는 그것을 찾아내고 싶습니다.'), { name: s.player.name, portrait: s.player.portrait });
+      await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : d.hint + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp));
       // too heavy?
       var need = G.POWER_FAME[d.pw] || 0;
       if (!x.found && s.player.fame < need * 0.8) {
@@ -289,7 +312,7 @@
     var asked = 0, pu = R.purser(), maxAsk = pu ? 3 : 2;    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
     for (;;) {
       await UI.say('모험하는 데 돈은 필요하겠지. 먼저 금화 ' + U.num(o.advance) + '닢을 주겠네. ' + o.years + '년 안에 성공하면 거기다 금화 ' + U.num(o.reward) + '닢의 사례를 약속하겠네. 이것으로 어떤가.', who);
-      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢', [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], { name: s.player.name, portrait: s.player.portrait });
+      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢', [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));
       if (v === 'ok') break;
       if (v === 'no' || v == null) { await UI.say('그런가. 마음이 바뀌면 다시 오게.', who); return; }
       var w = await UI.choose('무엇을 요구할까?', [{ label: '자금 증가', value: 'money', icon: 'coin' }, { label: '기간 연장', value: 'time', icon: 'hourglass' }, { label: '변경 없음', value: 'none', icon: 'check' }], { width: 420 });
@@ -349,9 +372,9 @@
     if (why !== 'late' && k.advance > 0) {
       var p = s.player, fromGold = Math.min(p.gold, k.advance), fromBank = Math.min(p.bank || 0, k.advance - fromGold), paid = fromGold + fromBank;
       p.gold -= fromGold; p.bank = (p.bank || 0) - fromBank;
-      if (paid < k.advance) SP.addTrust(rel, -10);
+      if (paid < k.advance) { SP.addTrust(rel, -10); rel.debt = (rel.debt || 0) + (k.advance - paid); }   // 못 갚은 선금은 빚으로 남는다
       lines.push(why === 'announce' ? '나와 약속한 발견을 제멋대로 세상에 발표하다니! 받아 간 선금 금화 ' + U.num(k.advance) + '닢은 돌려받겠네.' : '그만두겠다니 할 수 없지. 다만 받아 간 선금 금화 ' + U.num(k.advance) + '닢은 돌려주게.');
-      if (paid < k.advance) lines.push('...' + U.num(paid) + '닢뿐인가. 나머지는 됐네. 다시는 이런 일이 없도록 하게.');
+      if (paid < k.advance) lines.push('...' + U.num(paid) + '닢뿐인가. 나머지 ' + U.num(k.advance - paid) + '닢은 빚으로 달아 두겠네. 갚기 전에는 내 문을 두드리지 말게.');
       UI.toast('선금 ' + U.num(paid) + '닢을 돌려주었다.', 'coin', 4000);
     }
     var ret0 = SP.returnLoan(k);
@@ -365,7 +388,6 @@
   };
 
   // ---------------------------------------------------------------- report
-  SP.canReport = function (sp) { var k = S().contract; return !!(k && k.sponsor === sp.id); };
   SP.report = async function (sp) {
     var s = S(), k = s.contract, who = SP.speaker(sp), rel = SP.rel(sp.id);
     if (!k || k.sponsor !== sp.id) { await UI.say('자네와 약속한 일은 없는 것 같은데?', who); return; }

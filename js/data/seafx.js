@@ -94,7 +94,20 @@
       blend: 0.02,        // 배 이름(sid)이 없을 때 경계 바로 앞 이 폭(칸 폭 대비)만 두 칸을 겹친다
       fade: 0.14,         // 배 이름이 있을 때: 칸이 바뀌면 앞 칸 위에 새 칸을 이 초 동안 서서히 올린다 (0이면 바로 바뀜)
       dashAt: 0.72,       // 기준 속력 대비 이 값부터 질주 동작
-      fps: { idle: 2.2, drift: 4.0, dash: 11.5 }
+      fps: { idle: 2.2, drift: 4.0, dash: 11.5 },
+      keep: 12,           // 풀어 둘 배 시트 수 (한 장 약 25~31MB). 넘으면 오래 안 쓴 것부터 놓아 준다 — 그림 장치 메모리 보호
+      keepSec: 20         // 이 초 안에 쓴 시트는 수가 넘어도 놓지 않는다
+    },
+    img: {                // 그림 읽기 (js/core/images.js) — 해상도는 건드리지 않고, 못 받거나 늦게 오는 그림을 다룬다
+      tries: 3,           // 한 그림(또는 묶음)을 몇 번까지 다시 받아 보나
+      retryMs: [400, 1500], // 다시 받기 전 쉬는 시간 (ms)
+      stallMs: 45000,     // 이만큼 소식이 없으면 끊고 다시 받는다
+      failHold: 20000,    // 끝내 못 받은 그림은 이 시간(ms) 동안만 코드 그림으로 대신하고, 그 뒤 다시 받아 본다
+      waitMs: 12000,      // 장면(도시·건물 안·발견)이 그림을 기다리는 가장 긴 시간 — 넘기면 먼저 뜨고 그림은 오는 대로 채운다
+      slowMs: 500,        // 기다림이 이보다 길어지면 「그림을 불러오는 중」 표시
+      keep: 900,          // 읽어 둔 그림을 이 장수까지 쥐고 있는다 — 넘으면 오래 안 쓴 것부터 놓아 준다(다음에 쓸 때 다시 읽음)
+      decodeMs: 1200,     // 받은 그림을 미리 풀어 두기(decode)를 기다리는 가장 긴 시간
+      graceMs: 8000       // 배·부대·사람 그림을 받는 동안 코드 그림 대신 비워 두는 가장 긴 시간
     },
     dialogue: {           // 대화 인물 2.5D 리그 (js/art/portrait_rig.js)
       breath: 1.0,        // 호흡에 따른 상체 움직임
@@ -215,6 +228,11 @@
     partyCycle: 1,       // 걸음 주기 하나에 넘기는 시트 한 바퀴의 수
     partyFastPx: 70,     // 화면에서 초당 이만큼(px) 넘게 움직이면 뛰기·질주 장면
     partyFps: { on_foot_walk: 9, on_foot_run: 11, mounted_walk: 9, mounted_gallop: 9 },
+    expedition: {       // 새 탐험대 시트: 거리로 보행, 최단 방향으로 회전, 야영 중 쉬는 모습
+      enabled: true, turnRate: 4.8, turnEpsilon: 0.015, maxDelta: 0.1,
+      previewHz: 1.3, campFps: 7, campHeight: 90, height: 60,
+      heights: { walk: 52, porter: 52, horse: 68, camel: 72, donkey: 60, llama: 62, wagon: 68, elephant: 76, reindeer: 62, yak: 62 }
+    },
     battle: true,        // 육상전 부대를 그림 시트로
     unitH: 56,           // 육상전 병사 몸 키(px, 1000×430 판 기준 — 치켜든 무기는 빼고) · 짐승은 beastH
     beastH: 40,

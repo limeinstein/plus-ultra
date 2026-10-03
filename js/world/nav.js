@@ -78,8 +78,6 @@
     var x = Math.floor((G.Geo.wrapLon(lon) + 180) * RES), y = Math.floor((LAT0 - lat) * RES);
     return [((x % GW) + GW) % GW, Math.max(0, Math.min(GH - 1, y))];
   }
-  function center(x, y) { return [-180 + (x + 0.5) / RES, LAT0 - (y + 0.5) / RES]; }
-  N.passable = function (lon, lat) { N.init(); var c = cellOf(lon, lat); return !!pass[c[1] * GW + c[0]]; };
 
   /** nearest passable cell center to (lon,lat) within r cells */
   N.nearestSea = function (lon, lat, r, want) {

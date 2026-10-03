@@ -174,7 +174,6 @@
     });
     return best;
   };
-  SH.woodSources = function (wid) { return G.CITY_DATA.filter(function (c) { var lw = SH.localWood(c); return c.port && lw.id === wid && !lw.imp; }); };
   /** 배에 실린 목재를 산지별로 (통) */
   SH.cargoWoods = function () {
     var cg = S().fleet.cargo.timber, out = {};
@@ -259,10 +258,6 @@
   SH.traitChips = function (t) {
     t = SH.def(t);
     return t.traits.map(function (k) { var d = G.SHIP_TRAITS[k]; return '<span class="trait" title="' + U.esc(d.desc) + '">' + d.name + '</span>'; }).join('');
-  };
-  SH.traitText = function (t) {
-    t = SH.def(t);
-    return t.traits.map(function (k) { var d = G.SHIP_TRAITS[k]; return d.name + (k === 'armor' ? '(피해 ' + Math.round(t.armor * 100) + '%)' : k === 'oar' ? '(노 속도 ' + t.oar + ')' : ''); }).join(' · ');
   };
   SH.woodLine = function (w) {
     var p = [];

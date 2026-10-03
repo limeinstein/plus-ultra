@@ -391,6 +391,7 @@
   P.draw = function (ctx, u) {
     var FP = FXP(), s = u.size || FP.size || 1, gapK = (FP.spacing || 1) * s;
     var spr = spriteMode(u);
+    if (spr && spr.wait) { if (u.ring) P.ring(ctx, u.pts[0][0], u.pts[0][1], u.head, u.moving, u.t || 0, s); return [{ x: u.pts[0][0], y: u.pts[0][1], m: { t: 'person' } }]; }
     if (spr) return drawSprites(ctx, u, spr, s);
     var key = (u.mount && u.mount.id) + ':' + (u.mount && u.mount.n) + ':' + u.party + ':' + u.draft + ':' + u.region;
     if (u.cache && u.cache.key === key) var list = u.cache.list;
@@ -433,7 +434,10 @@
     var SPR = G.Sprites, id = (u.mount && u.mount.id) || 'walk', pair = SHEETS[id];
     if (!SPR || FXS().party === false || !pair) return null;
     var fast = u.fast && u.moving, mode = pair[fast ? 1 : 0];
-    if (!SPR.partyReady(mode)) { if (fast && SPR.partyReady(pair[0])) mode = pair[0]; else { SPR.partyReady(pair[1]); return null; } }
+    if (!SPR.partyReady(mode)) {
+      if (fast && SPR.partyReady(pair[0])) mode = pair[0];
+      else { SPR.partyReady(pair[1]); return SPR.partyPending(mode) ? { wait: true } : null; }   // 받는 중이면 코드 그림 대원을 내보이지 않고 기다린다
+    }
     return { mode: mode, big: id !== 'walk' && id !== 'porter' };
   }
   /* 그림 한 장에 제독과 동료 둘(세 사람)이 다 들어 있다 — 대원 수와 상관없이 한 무리만 그린다 */

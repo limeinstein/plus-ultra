@@ -12,7 +12,7 @@
   // ---------------------------------------------------------------- setup
   function enemyFleet(npc) {
     var s = S(), n = npc.n || 1, list = [];
-    var fameK = npc.K != null ? npc.K : Math.min(1, s.player.fame / 4000);   // 해적은 명성과 우리 함대 크기로 정한 세기 (sea.js pirateK)
+    var fameK = npc.K != null ? npc.K : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));   // 해적은 명성과 우리 함대 크기로 정한 세기 (sea.js pirateK)
     var zone = npc.zone || G.Ships.zone(s.loc.lon, s.loc.lat);
     var types = npc.ships && npc.ships.length === n ? npc.ships : G.Ships.enemyTypes(npc.kind, zone, npc.nation, n, fameK, s.date.y);
     var pname = npc.kind === 'pirate' ? (zone === 'east' ? '왜구선 ' : '해적선 ') : npc.kind === 'navy' ? (npc.nation || '') + ' 군함 ' : '상선 ';
@@ -679,11 +679,11 @@
       var gold = 0, caps = [];
       st.ships.forEach(function (b) {
         if (b.side !== 'en') return;
-        if (b.sunk || b.captured) gold += Math.round((st.npc.kind === 'merchant' ? 1400 : st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateLoot) || 900) : 700) * U.rf(0.6, 1.4) * (G.SHIP[b.type].cap / 200));
+        if (b.sunk || b.captured) gold += Math.round((st.npc.kind === 'merchant' ? 1400 : st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateLoot) || 900) : 700) * U.rf(0.6, 1.4) * (st.npc.kind === 'pirate' ? Math.max(1, G.SHIP[b.type].cap / 200) : G.SHIP[b.type].cap / 200));   // 작은 해적선도 한 척 몫은 낸다
         if (b.captured) caps.push(b);
       });
       s.player.gold += gold;
-      var fame = st.npc.kind === 'pirate' ? 25 * Math.max(1, st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length) : 10;   // 달아난 배는 치지 않는다
+      var fame = st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateFameGain) || 25) * Math.max(1, st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length) : 10;   // 달아난 배는 치지 않는다
       s.player.fame += fame; if (st.npc.kind !== 'pirate') s.player.notoriety += 5;
       s.stats.sunk += st.ships.filter(function (b) { return b.side === 'en' && b.sunk; }).length;
       // 조합의 해적 퇴치 의뢰
@@ -697,7 +697,7 @@
       if (G.Audio) G.Audio.sfx('coin');
       // 해적은 장신구·무기·도구 같은 물건을 떨어뜨리기도 한다
       var drops = st.npc.kind === 'pirate' ? pirateDrops(st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); })) : [];
-      if (drops.length) lines.push('해적선에서 ' + drops.map(function (d) { return '<b>' + d.name + '</b>' + (d.kept ? '' : ' <span class="muted">(소지품이 가득 차 버렸다)</span>'); }).join(', ') + U.jx(drops[drops.length - 1].name, '을/를') + ' 건졌다.');
+      if (drops.length) lines.push('해적선에서 ' + drops.map(function (d) { var pic = G.Img.itemSrc(d.id); return (pic ? '<img class="inline-ic" src="' + pic + '" alt="">' : '') + '<b>' + d.name + '</b>' + (d.kept ? '' : ' <span class="muted">(소지품이 가득 차 버렸다)</span>'); }).join(', ') + U.jx(drops[drops.length - 1].name, '을/를') + ' 건졌다.');
       await UI.alert(lines.join('<br>'), '해전 승리');
       if (caps.length) await prizeFleet(caps.map(prizeShip));
     } else if (res === 'flaglost') {
@@ -826,8 +826,7 @@
     var home = G.CITY_DATA[p.home];
     await UI.say('몸값을 치르고 풀려났다. 몇 달 뒤, 겨우 고향 ' + home.name + '에 돌아왔다...', {});
     G.Game.passDays(90);
-    var sh = R.newShip('caravel', U.pick(G.SHIP_NAMES)); sh.guns = { type: 'saker', n: 2 };
-    s.fleet = { ships: [sh], crew: 12, food: 10, water: 10, cargo: {}, fatigue: 0, discipline: 60, daysOut: 0, sick: 0, scurvy: 0, rats: 0 };
+    s.fleet = R.restartFleet(s.fleet.ships[0] && s.fleet.ships[0].type);
     p.fame = Math.max(0, p.fame - 100);
     UI.fade(function () { G.Game.go('city', { cityId: p.home }); });
   }

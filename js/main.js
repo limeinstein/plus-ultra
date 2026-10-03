@@ -228,6 +228,13 @@
     sceneCanvas = document.getElementById('scene');
     sceneCanvas.width = 1600; sceneCanvas.height = 900;
     UI.init();
+    // 그림 장치 메모리가 모자라면 브라우저가 2D 캔버스의 내용도 지운다 — 되살아나면 배경 그림과 거리를 다시 그린다
+    [sceneCanvas, overlayCanvas].forEach(function (cv) {
+      cv.addEventListener('contextrestored', function () {
+        if (Game._sceneSrc) Game.setScene(Game._sceneSrc);
+        if (G.Town && G.Town.redraw) G.Town.redraw();
+      });
+    });
     fit();
     window.addEventListener('resize', fit);
     Game.go('title');

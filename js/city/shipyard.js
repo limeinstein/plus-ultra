@@ -157,7 +157,6 @@
   Y.invest = async function (c) {
     var s = S(), SHp = SH(), tech = SHp.tech(c), next = SHp.techNext(c);
     var types = Y.types(c), nextShips = types.filter(function (id) { return G.SHIP[id].lv === tech + 1; }).map(function (id) { return G.SHIP[id].name; });
-    var locked = types.filter(function (id) { return G.SHIP[id].lv > tech; }).length;
     var head = '이 조선소의 기술은 ' + tech + '등급일세 (기본 ' + SHp.techBase(c) + '등급, 지금까지 들어온 투자 금화 ' + U.num(SHp.techAmt(c)) + '닢).';
     if (next == null) { await C.say(keeper(), head + ' ' + (tech >= 5 ? '이 이상은 어느 조선소도 짓지 못하는 배들뿐이지.' : '더 투자해도 이 조선소가 오를 수 있는 끝일세.')); return; }
     await C.say(keeper(), head + ' 금화 ' + U.num(next) + '닢을 더 대 주면 도크를 넓히고 장인을 불러 ' + (tech + 1) + '등급 배를 지을 수 있네.' + (nextShips.length ? ' (' + nextShips.join('·') + ')' : ' 다만 이 고장에서 짓는 배 가운데 그 등급 배는 아직 없네.'));
@@ -336,7 +335,7 @@
     var f = G.FIGUREHEAD[sh.fig];
     if (f && f.relic) {
       if (R.itemsFull()) { if (!(await UI.confirm('소지품이 가득 차서 ' + f.name + U.jx(f.name, '을/를') + ' 돌려받을 자리가 없습니다. 버리겠습니까? (다시 구할 수 없는 유물입니다)', '버린다', '그만둔다'))) return false; }
-      else { R.addItem(f.id, { disc: f.relic, done: true }); UI.toast(f.name + U.jx(f.name, '을/를') + ' 소지품으로 돌려받았다.', 'chest'); }
+      else { R.addItem(f.id, { disc: f.relic, done: true }); UI.toast(f.name + U.jx(f.name, '을/를') + ' 소지품으로 돌려받았다.', { src: G.Img.itemSrc(f.id), icon: 'chest' }); }
     }
     sh.fig = null; return true;
   }

@@ -70,10 +70,18 @@ function connect(url) {
     let game;
     for (let i = 0; i < 120; i++) {
       await sleep(100);
-      const q = await cdp.call('Runtime.evaluate', { expression: "(()=>window.G&&G.Game&&G.Game.sceneName&&G.Scenes&&G.Scenes.land?{scene:G.Game.sceneName,native:typeof G.Art.nativeSpec==='function',fleet:typeof G.Art.fleetStyle==='function',rolePick:G.Img.pick(G.Img.chain.npc('trader',{id:9999,style:'kr'}))}:null)()", returnByValue: true });
+      const q = await cdp.call('Runtime.evaluate', { expression: `(()=>{
+        if(!(window.G&&G.Game&&G.Game.sceneName&&G.Scenes&&G.Scenes.land))return null;
+        const ids=Object.keys(G.Art.TOWNFOLK),styles=G.Art.NPC_STYLES,missing=[];
+        styles.forEach((style,si)=>ids.forEach(id=>{
+          const spec=G.Art.townSpec(id,{id:9000+si,style,rel:'C'}),key=G.Img.pick(G.Art.portraitKeys(spec));
+          if(!key||!key.startsWith('portraits/'))missing.push(style+':'+id+':'+(key||'polygon'));
+        }));
+        return {scene:G.Game.sceneName,native:typeof G.Art.nativeSpec==='function',fleet:typeof G.Art.fleetStyle==='function',rolePick:G.Img.pick(G.Img.chain.npc('trader',{id:9999,style:'kr'})),townCount:styles.length*ids.length,townMissing:missing};
+      })()`, returnByValue: true });
       game = q.result.value; if (game) break;
     }
-    const ok = result && result.title === 'done' && result.count === 240 && result.actual === 240 && result.unique >= 220 && result.styleCount === 20 && result.roleCount === 12 && result.joseonWomen >= 7 && result.hats.join() === 'ikseongwan,gat,jaguar,wampum,warbonnet,roach' && result.dresses.join() === 'hanbok,hanbok,jaguar,buckskin,buckskin,buckskin' && result.pretty.join() === 'gache,1.35,daenggi' && result.trader.join() === 'merchantCap,changshan,true,true,warm' && result.rival === 'guarded' && result.styles.join() === 'na,az,an' && result.fleets.join() === 'kr,jp,in' && game && game.scene === 'title' && game.native && game.fleet && game.rolePick === 'portraits/npc-roles/kr/merchant' && !cdp.errors.length;
+    const ok = result && result.title === 'done' && result.count === 240 && result.actual === 240 && result.unique >= 220 && result.styleCount === 20 && result.roleCount === 12 && result.joseonWomen >= 7 && result.hats.join() === 'ikseongwan,gat,jaguar,wampum,warbonnet,roach' && result.dresses.join() === 'hanbok,hanbok,jaguar,buckskin,buckskin,buckskin' && result.pretty.join() === 'gache,1.35,daenggi' && result.trader.join() === 'merchantCap,changshan,true,true,warm' && result.rival === 'guarded' && result.styles.join() === 'na,az,an' && result.fleets.join() === 'kr,jp,in' && game && game.scene === 'title' && game.native && game.fleet && game.rolePick === 'portraits/npc-roles/kr/merchant' && game.townCount === 180 && game.townMissing.length === 0 && !cdp.errors.length;
     console.log(JSON.stringify({ ok, result, game, errors: cdp.errors }));
     cdp.ws.close(); if (!ok) process.exitCode = 1;
   } finally { browser.kill(); }

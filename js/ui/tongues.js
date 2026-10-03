@@ -23,7 +23,7 @@
   var DEVA_C = 'कखगघचछजटडणतथदधनपबभमयरलवशसह', DEVA_V = 'ािीुूेैोौं';
   var ETHI = range(0x1200, 0x1357).replace(/[቉቎቏቗቙቞቟኉኎኏኱኶኷኿዁዆዇዗጑጖጗]/g, '');
   var CHER = range(0x13A0, 0x13F4);
-  var THAI_C = 'กขคงจฉชซญดตถทธนบปผพฟภมยรลวสหอ', THAI_V = 'ะาิีึืุูเแโไ';
+  var THAI_C = 'กขคงจฉชซญดตถทธนบปผพฟภมยรลวสหอ';
   var HIRA = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだでどばびぶべぼぱぴぷぺぽ';
 
   /** 말 번호(G.LANGS) → 글자 */
@@ -126,6 +126,4 @@
     return { plain: own >= 3, own: own, team: team, li: li, mate: mate };
   };
 
-  /** 말 이름 (통역 창 제목에 쓰임) */
-  TG.langName = function (li) { return (G.LANGS && G.LANGS[li]) || ''; };
 })(window.G = window.G || {});

@@ -22,6 +22,36 @@
   var KEY_RUN_V = 680;       // Shift를 누르고 뛸 때 빠르기 (px/초)
   var RUN_FPS = 14;          // 뛰는 그림이 넘어가는 빠르기 (장/초) — 먼 길은 아주 빨리 지나가므로 거리 대신 시간으로 넘긴다
 
+  // 건물 묶음과 같은 분류를 쓰는 거리 바닥. 패턴은 같아도 돌·흙·나무의 빛을 달리해
+  // 어두운 남색·적갈색 제독 그림이 어느 고장에서도 바닥에 묻히지 않게 한다.
+  var GROUND_STYLE = {
+    iberia:    { name: '이베리아', kind: 'calcada',  top: '#d2bd93', mid: '#b79a70', bot: '#80664b', stone: '#cdb58a', alt: '#e0cfaa', accent: '#4f5252', joint: '#67533f', quay: 'stone' },
+    espana:    { name: '에스파냐·식민', kind: 'cobble', top: '#c79e70', mid: '#a87955', bot: '#71513e', stone: '#b98c62', alt: '#d2ac7e', accent: '#7f3f32', joint: '#624638', quay: 'stone' },
+    italy:     { name: '지중해', kind: 'fan',      top: '#d5b78f', mid: '#bc8668', bot: '#825a4d', stone: '#b96951', alt: '#d8bb91', accent: '#efe0bd', joint: '#745347', quay: 'stone' },
+    france:    { name: '서·북유럽', kind: 'cobble', top: '#9d9990', mid: '#7c7973', bot: '#54524f', stone: '#85837d', alt: '#aaa69c', accent: '#556548', joint: '#454641', moss: true, quay: 'stone' },
+    east:      { name: '동유럽', kind: 'cobble', top: '#999a99', mid: '#74787a', bot: '#4b5053', stone: '#7d8283', alt: '#a5a6a1', accent: '#58634e', joint: '#41484a', moss: true, quay: 'stone' },
+    russia:    { name: '러시아', kind: 'slab',    top: '#a6a49c', mid: '#7b7c79', bot: '#515352', stone: '#8d8d88', alt: '#b5b2a8', accent: '#59615f', joint: '#474946', quay: 'stone' },
+    arabia:    { name: '아랍·북아프리카', kind: 'mosaic', top: '#e0c593', mid: '#c39d6a', bot: '#876846', stone: '#d1b27f', alt: '#ead5aa', accent: '#8a493a', accent2: '#374e58', joint: '#7c603e', quay: 'stone' },
+    ottoman:   { name: '오스만·레반트', kind: 'mosaic', top: '#d8c096', mid: '#b7926b', bot: '#795c45', stone: '#c8a77d', alt: '#e4d0aa', accent: '#7b3c35', accent2: '#315463', joint: '#71543e', quay: 'stone' },
+    swahili:   { name: '동아프리카 해안', kind: 'coral', top: '#d8c49c', mid: '#b59b73', bot: '#77644d', stone: '#cbb58d', alt: '#e2d2ae', accent: '#87684b', joint: '#6f604d', quay: 'timber' },
+    africa:    { name: '아프리카 내륙', kind: 'earth', top: '#bd8153', mid: '#9a603e', bot: '#68432f', stone: '#9b7458', alt: '#c19a74', accent: '#5c4b37', joint: '#5a3c2c', grass: '#687344', quay: 'timber' },
+    india:     { name: '인도', kind: 'mosaic', top: '#cfaa78', mid: '#ad7957', bot: '#744e3e', stone: '#c49769', alt: '#e0c292', accent: '#8b3f3f', accent2: '#465b60', joint: '#6b4938', quay: 'stone' },
+    seasia:    { name: '동남아시아', kind: 'earth', top: '#b88255', mid: '#91603f', bot: '#5e412f', stone: '#98775d', alt: '#c5a17b', accent: '#4d4838', joint: '#533a2b', grass: '#4f7041', quay: 'timber' },
+    eastasia:  { name: '동아시아', kind: 'slab', top: '#a9a8a0', mid: '#858780', bot: '#585c58', stone: '#96978f', alt: '#b9b8ad', accent: '#4f5b59', joint: '#4e514c', moss: true, quay: 'stone' },
+    japan:     { name: '일본', kind: 'slab', top: '#aaa69b', mid: '#827e75', bot: '#55534f', stone: '#918c81', alt: '#bab4a8', accent: '#5b5149', joint: '#4e4b47', moss: true, quay: 'timber' },
+    steppe:    { name: '초원', kind: 'earth', top: '#b79a67', mid: '#96784e', bot: '#654f38', stone: '#8c8066', alt: '#baa982', accent: '#62573f', joint: '#58452f', grass: '#71804b', quay: 'timber' },
+    volcanic:  { name: '메소아메리카', kind: 'volcanic', top: '#8c8273', mid: '#665f56', bot: '#413d38', stone: '#68645e', alt: '#938b7c', accent: '#a96f43', joint: '#35332f', moss: true, quay: 'stone' },
+    andes:     { name: '안데스', kind: 'inca', top: '#b3a281', mid: '#8d7b60', bot: '#5f5142', stone: '#9f8d6d', alt: '#c2b18f', accent: '#6c5b46', joint: '#514538', quay: 'stone' },
+    native:    { name: '북미 마을', kind: 'earth', top: '#aa8059', mid: '#856044', bot: '#594231', stone: '#89745e', alt: '#b09876', accent: '#5c4b3b', joint: '#4d392c', grass: '#657348', quay: 'timber' },
+    pueblo:    { name: '푸에블로', kind: 'earth', top: '#c18e63', mid: '#9d694b', bot: '#694838', stone: '#a98267', alt: '#c7a181', accent: '#6e4f40', joint: '#5a3e31', grass: '#777045', quay: 'stone' }
+  };
+  var GROUND_BY_EXT = {
+    iberia: 'iberia', espana: 'espana', france: 'france', italy: 'italy', easteurope: 'east', russia: 'russia',
+    arabia: 'arabia', ottoman: 'ottoman', swahili: 'swahili', africa: 'africa', masai: 'africa', india: 'india',
+    seasia: 'seasia', tropic: 'seasia', china: 'eastasia', korea: 'eastasia', japan: 'japan', steppe: 'steppe',
+    aztec: 'volcanic', inca: 'andes', woodland: 'native', plains: 'steppe', pueblo: 'pueblo'
+  };
+
   // 건물마다 화면에 그릴 높이
   var SIZE = { harbor: 405, shipyard: 385, trade: 360, market: 320, tavern: 345, inn: 352, church: 425,
     library: 365, palace: 430, mansion: 372, guild: 362, home: 340, gate: 372 };
@@ -76,7 +106,23 @@
     I.chain.heroRun().forEach(function (k) { chains.push([k]); });
     buildings.forEach(function (b) { chains.push(I.chain.exterior(b.kind, c, b.arg)); });
     landmarks.forEach(function (l) { chains.push(I.chain.landmark(l[0])); });
-    return I.preload(chains, 5000).then(function () { build(c, buildings, landmarks); return st; });
+    chains.push([groundKey(groundStyle(c).id)]);             // 지역 길바닥 그림
+    function missing() { return chains.some(function (ch) { var k = I.pick(ch); return k && !I.get(k); }); }
+    return I.preload(chains, 5000).then(function () {
+      build(c, buildings, landmarks);
+      // 기다리는 시간을 넘겨 일부 그림 없이 섰다면(아주 느린 연결), 나머지가 오는 대로 거리를 다시 세운다 — 코드로 그린 임시 건물·빈 배경이 그대로 남지 않게
+      if (missing()) {
+        var mine = st;
+        Promise.all(chains.map(I.resolve)).then(function () {
+          if (st !== mine) return;                 // 그 사이 다른 도시로 갔다
+          var keep = { hidden: st.hidden, onPick: st.onPick, hx: st.hero.x / Math.max(1, st.streetW), dir: st.hero.dir };
+          build(c, buildings, landmarks);
+          st.hidden = keep.hidden; st.onPick = keep.onPick; st.hero.dir = keep.dir;
+          st.hero.x = keep.hx * st.streetW; st.cam = st.camTo = clampCam(st.hero.x - W / 2); st.dirty = true;
+        });
+      }
+      return st;
+    });
   };
   T.close = function () { st = null; };
   T.active = function () { return !!st; };
@@ -134,9 +180,10 @@
       if (!img) return null;
       return { cv: prescale(img, l[2]), x: Math.round(streetW * l[1]), y: GROUND - 54 };
     }).filter(Boolean);
+    var ground = groundStrip(c, rng);
     st = {
       city: c, items: items, marks: marks, streetW: streetW,
-      bg: bgKey ? I.get(bgKey) : cityBackdrop(c), ground: groundStrip(c, rng), hidden: false,
+      bg: bgKey ? I.get(bgKey) : cityBackdrop(c), ground: ground, groundStyle: ground._style, hidden: false,
       cam: 0, camTo: 0, hover: null, focus: null, t: 0,
       hero: { x: items.length ? items[0].x + items[0].w / 2 : W / 2, to: null, dir: 1, walking: false, dist: 0, fade: 1, entering: false },
       heroFrames: heroFrames(), keys: {}, near: null, onPick: null,
@@ -323,61 +370,196 @@
     return cv;
   }
 
-  /** 앞쪽 길 — 항구는 돌 부두, 내륙은 자갈길 */
+  /** 건물 묶음에 맞는 바닥 양식을 고른다. */
+  function groundStyle(c) {
+    var ext = I.extStyle && I.extStyle(c), id = GROUND_BY_EXT[ext];
+    if (!id) {
+      id = { ib: 'iberia', co: 'espana', ne: 'france', it: 'italy', gr: 'east', ru: 'russia',
+        is: 'arabia', pe: 'arabia', af: 'africa', sw: 'swahili', tr: 'africa', 'in': 'india',
+        se: 'seasia', cn: 'eastasia', kr: 'eastasia', jp: 'japan', st: 'steppe', az: 'volcanic',
+        an: 'andes', na: 'native' }[c.style];
+    }
+    id = id || 'iberia';
+    return { id: id, ext: ext || c.style, p: GROUND_STYLE[id] };
+  }
+
+  function poly(ctx, pts) {
+    ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+    for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+  }
+
+  /** 한 개의 돌을 위·옆면이 나뉘 다각형으로 그린다. */
+  function facetStone(ctx, x, y, w, h, p, rng, sharp) {
+    var d = Math.min(w, h) * (sharp ? 0.10 : 0.20);
+    var pts = [[x + d * (0.55 + rng() * 0.45), y + rng() * d * 0.35],
+      [x + w - d * (0.45 + rng() * 0.5), y + rng() * d * 0.45],
+      [x + w - rng() * d * 0.45, y + h - d * (0.35 + rng() * 0.45)],
+      [x + w - d * (0.5 + rng() * 0.4), y + h - rng() * d * 0.22],
+      [x + d * (0.4 + rng() * 0.5), y + h - rng() * d * 0.30],
+      [x + rng() * d * 0.4, y + d * (0.4 + rng() * 0.5)]];
+    var col = A.jitter(rng() < 0.22 ? p.alt : p.stone, rng, 13);
+    poly(ctx, pts); ctx.fillStyle = A.rgba(col, 0.98); ctx.fill();
+    ctx.strokeStyle = A.rgba(p.joint, 0.55); ctx.lineWidth = 1.1; ctx.stroke();
+    // 위쪽 받는 면과 아래쪽 그늘을 삼각면으로 나누어 폴리곤 느낌을 준다.
+    ctx.fillStyle = 'rgba(255,245,218,.13)';
+    poly(ctx, [pts[0], pts[1], [x + w * 0.52, y + h * 0.43], pts[5]]); ctx.fill();
+    ctx.fillStyle = 'rgba(44,32,24,.13)';
+    poly(ctx, [[x + w * 0.52, y + h * 0.43], pts[2], pts[3], pts[4]]); ctx.fill();
+  }
+
+  function cobbles(ctx, tw, th, p, rng, dense) {
+    var y = -10, row = 0;
+    while (y < th + 12) {
+      var scale = 0.82 + Math.max(0, y) / th * 0.45;
+      var hh = (dense ? 20 : 25) * scale, x = -(row % 2) * 28;
+      while (x < tw + 50) {
+        var ww = (dense ? 38 : 48) * scale * (0.82 + rng() * 0.38);
+        facetStone(ctx, x, y, ww, hh, p, rng, false);
+        if (p.moss && rng() < 0.13) {
+          ctx.fillStyle = A.rgba(p.accent, 0.32); ctx.fillRect(x + ww * 0.2, y + hh - 2, ww * 0.42, 2);
+        }
+        x += ww + 3;
+      }
+      y += hh + 3; row++;
+    }
+  }
+
+  function slabs(ctx, tw, th, p, rng, narrow) {
+    var y = -8, row = 0;
+    while (y < th + 12) {
+      var scale = 0.86 + Math.max(0, y) / th * 0.35, hh = (narrow ? 26 : 34) * scale;
+      var x = -(row % 2) * (narrow ? 42 : 64);
+      while (x < tw + 100) {
+        var ww = (narrow ? 82 : 122) * scale * (0.88 + rng() * 0.24);
+        facetStone(ctx, x, y, ww, hh, p, rng, true); x += ww + 3;
+      }
+      y += hh + 3; row++;
+    }
+  }
+
+  function fanPaving(ctx, tw, th, p, rng) {
+    // 테라코타 벽돌을 반원으로 돌려 깔은 지중해 광장.
+    ctx.fillStyle = A.rgba(p.stone); ctx.fillRect(0, 0, tw, th);
+    ctx.strokeStyle = A.rgba(p.joint, 0.72); ctx.lineWidth = 2;
+    for (var by = 18, r = 0; by < th + 62; by += 48, r++) {
+      for (var bx = (r % 2) * 78 - 78; bx < tw + 90; bx += 156) {
+        for (var ring = 20; ring <= 72; ring += 17) {
+          ctx.beginPath(); ctx.arc(bx, by, ring, Math.PI, Math.PI * 2); ctx.stroke();
+        }
+        for (var a = 0; a <= 8; a++) {
+          var ang = Math.PI + Math.PI * a / 8;
+          ctx.beginPath(); ctx.moveTo(bx + Math.cos(ang) * 18, by + Math.sin(ang) * 18);
+          ctx.lineTo(bx + Math.cos(ang) * 75, by + Math.sin(ang) * 75); ctx.stroke();
+        }
+      }
+    }
+    ctx.fillStyle = 'rgba(255,235,205,.10)';
+    for (var i = 0; i < 90; i++) ctx.fillRect(rng() * tw, rng() * th, 5 + rng() * 12, 2 + rng() * 4);
+  }
+
+  function packedEarth(ctx, tw, th, p, rng) {
+    // 다각형의 낮은 디딜돌을 넣은 다져진 흙길.
+    for (var i = 0; i < 120; i++) {
+      var x = rng() * tw, y = rng() * th, s = 1 + rng() * 4;
+      ctx.fillStyle = rng() < 0.5 ? 'rgba(54,35,24,.18)' : 'rgba(255,220,165,.12)';
+      ctx.fillRect(x, y, s * 1.7, s * 0.7);
+    }
+    for (var j = 0; j < 28; j++) {
+      var px = rng() * tw, py = 8 + rng() * (th - 18), ss = 0.7 + py / th * 0.65;
+      facetStone(ctx, px, py, (20 + rng() * 28) * ss, (8 + rng() * 10) * ss, p, rng, false);
+    }
+    if (p.grass) {
+      ctx.strokeStyle = A.rgba(p.grass, 0.72); ctx.lineWidth = 1.4;
+      for (var g = 0; g < 20; g++) {
+        var gx = rng() * tw, gy = 10 + rng() * (th - 16);
+        ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx - 4, gy - 8); ctx.moveTo(gx, gy); ctx.lineTo(gx + 1, gy - 10); ctx.moveTo(gx, gy); ctx.lineTo(gx + 5, gy - 6); ctx.stroke();
+      }
+    }
+  }
+
+  function calcadaAccent(ctx, tw, th, p) {
+    // 작은 현무암을 물결로 넣은 포르투갈식 악센트.
+    for (var x = -16; x < tw + 20; x += 14) {
+      var y = th * 0.53 + Math.sin(x / 58) * 13;
+      ctx.fillStyle = p.accent; poly(ctx, [[x, y], [x + 11, y - 2], [x + 13, y + 7], [x + 2, y + 9]]); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.10)'; poly(ctx, [[x, y], [x + 11, y - 2], [x + 7, y + 2], [x + 1, y + 4]]); ctx.fill();
+    }
+  }
+
+  function mosaicBand(ctx, tw, th, p) {
+    var y = Math.round(th * 0.43), s = 13;
+    ctx.fillStyle = A.rgba(p.alt, 0.82); ctx.fillRect(0, y - 8, tw, 22);
+    ctx.strokeStyle = A.rgba(p.joint, 0.45); ctx.lineWidth = 1; ctx.strokeRect(0, y - 8.5, tw, 22);
+    for (var x = -s; x < tw + s; x += s * 2) {
+      ctx.fillStyle = p.accent; poly(ctx, [[x + s, y - 6], [x + s * 2, y + 3], [x + s, y + 12], [x, y + 3]]); ctx.fill();
+      ctx.fillStyle = p.accent2 || p.joint; poly(ctx, [[x + s, y - 1], [x + s * 1.45, y + 3], [x + s, y + 7], [x + s * 0.55, y + 3]]); ctx.fill();
+    }
+  }
+
+  function quayEdge(ctx, tw, p, rng) {
+    if (p.quay === 'timber') {
+      ctx.fillStyle = '#493526'; ctx.fillRect(0, 0, tw, 15);
+      for (var x = 0; x < tw; x += 68) {
+        ctx.fillStyle = A.rgba(A.jitter('#78583a', rng, 10)); ctx.fillRect(x + 1, 1, 65, 11);
+        ctx.fillStyle = 'rgba(255,230,180,.12)'; ctx.fillRect(x + 3, 2, 60, 2);
+      }
+    } else {
+      ctx.fillStyle = A.rgba(A.shade(p.stone, 0.72)); ctx.fillRect(0, 0, tw, 16);
+      ctx.strokeStyle = A.rgba(p.joint, 0.75); ctx.lineWidth = 1;
+      for (var sx = 0; sx < tw; sx += 72) ctx.strokeRect(sx + 0.5, 0.5, 70, 14);
+    }
+  }
+
+  /** 지역 길바닥 그림 키: images/street-ground/<양식>.webp — Codex 기준 그림(docs/art/regional-street-ground-reference.png)을
+      tools/street_ground.py가 가로로 끝없이 이어지는 띠로 바꾼 것 */
+  function groundKey(id) { return 'street-ground/' + id; }
+
+  /** 앞쪽 길 — 지역 길바닥 그림이 있으면 그것을, 없으면 양식별 재료와 문양을 다각형으로 그린다. */
   function groundStrip(c, rng) {
-    var tw = 900, th = H - WALK_TOP + 6, cv = A.canvas(tw, th), ctx = cv.getContext('2d');
-    var port = !!c.port;
-    var top = port ? '#9d8c68' : '#a89268';
-    var bot = port ? '#6d5f45' : '#776547';
+    var th = H - WALK_TOP + 6, style = groundStyle(c), p = style.p;
+    var key = I.pick([groundKey(style.id)]), img = key && I.get(key);
+    if (img) return groundFromImage(img, th, style, p, c);
+    var tw = 960, cv = A.canvas(tw, th), ctx = cv.getContext('2d');
     var g = ctx.createLinearGradient(0, 0, 0, th);
-    g.addColorStop(0, top); g.addColorStop(0.4, port ? '#8a7a59' : '#937e58'); g.addColorStop(1, bot);
+    g.addColorStop(0, p.top); g.addColorStop(0.45, p.mid); g.addColorStop(1, p.bot);
     ctx.fillStyle = g; ctx.fillRect(0, 0, tw, th);
-    // 돌 무늬
-    for (var y = 6; y < th; y += 30) {
-      var row = Math.floor(y / 30);
-      for (var x = -40; x < tw; x += 62) {
-        var ox = (row % 2) * 31, ss = 1 + (y / th) * 0.5;
-        ctx.fillStyle = A.rgba(A.jitter(port ? '#a0906c' : '#a48f66', rng, 13), 0.95);
-        if (port) { ctx.fillRect(x + ox, y, 58 * ss - 3, 26 * ss - 3); }
-        else { ctx.beginPath(); ctx.ellipse(x + ox + 28, y + 13, 26 * ss, 10.5 * ss, 0, 0, 7); ctx.fill(); }
-        ctx.strokeStyle = 'rgba(48,34,18,.18)'; ctx.lineWidth = 1;
-        if (port) ctx.strokeRect(x + ox + 0.5, y + 0.5, 58 * ss - 3, 26 * ss - 3);
-      }
-    }
-    // 건물이 닿는 자리의 그늘
-    var sh = ctx.createLinearGradient(0, 0, 0, 72);
-    sh.addColorStop(0, 'rgba(34,22,10,.55)'); sh.addColorStop(1, 'rgba(34,22,10,0)');
-    ctx.fillStyle = sh; ctx.fillRect(0, 0, tw, 72);
-    ctx.fillStyle = 'rgba(60,42,20,.35)'; ctx.fillRect(0, 0, tw, 3);
-    // 소품
-    for (var i = 0; i < 4; i++) {
-      var px = 60 + i * 210 + rng() * 60, py = th * (0.52 + rng() * 0.3);
-      var kind = Math.floor(rng() * 3);
-      ctx.save();
-      ctx.fillStyle = 'rgba(30,18,8,.22)';
-      ctx.beginPath(); ctx.ellipse(px + 18, py + 34, 34, 9, 0, 0, 7); ctx.fill();
-      if (kind === 0) {           // 통
-        ctx.fillStyle = A.rgba(A.jitter('#8a6236', rng, 16));
-        ctx.beginPath(); ctx.ellipse(px + 18, py + 4, 22, 9, 0, 0, 7); ctx.fill();
-        ctx.fillRect(px - 4, py + 4, 44, 30);
-        ctx.fillStyle = 'rgba(40,26,12,.4)'; ctx.fillRect(px - 4, py + 12, 44, 4); ctx.fillRect(px - 4, py + 24, 44, 4);
-      } else if (kind === 1) {    // 궤짝
-        ctx.fillStyle = A.rgba(A.jitter('#9a7a4c', rng, 14)); ctx.fillRect(px, py + 2, 46, 32);
-        ctx.strokeStyle = 'rgba(50,32,14,.5)'; ctx.lineWidth = 3; ctx.strokeRect(px + 2, py + 4, 42, 28);
-        ctx.beginPath(); ctx.moveTo(px + 2, py + 4); ctx.lineTo(px + 44, py + 32); ctx.stroke();
-      } else if (port) {          // 계선주와 밧줄
-        ctx.fillStyle = '#6b5436'; ctx.fillRect(px + 8, py - 6, 20, 40);
-        ctx.beginPath(); ctx.ellipse(px + 18, py - 6, 13, 7, 0, 0, 7); ctx.fill();
-        ctx.strokeStyle = '#c9b48c'; ctx.lineWidth = 5;
-        ctx.beginPath(); ctx.moveTo(px + 18, py + 6); ctx.bezierCurveTo(px + 70, py + 30, px + 110, py + 12, px + 150, py + 26); ctx.stroke();
-      } else {                    // 화분
-        ctx.fillStyle = '#a9673c'; ctx.beginPath(); ctx.moveTo(px + 4, py + 8); ctx.lineTo(px + 34, py + 8); ctx.lineTo(px + 29, py + 34); ctx.lineTo(px + 9, py + 34); ctx.fill();
-        A.roundTree(ctx, px + 19, py + 2, 15, '#4a6a34', rng);
-      }
-      ctx.restore();
-    }
-    A.applyGrain(ctx, tw, th, 0.06);
+
+    if (p.kind === 'fan') fanPaving(ctx, tw, th, p, rng);
+    else if (p.kind === 'slab') slabs(ctx, tw, th, p, rng, false);
+    else if (p.kind === 'mosaic') { slabs(ctx, tw, th, p, rng, false); mosaicBand(ctx, tw, th, p); }
+    else if (p.kind === 'earth') packedEarth(ctx, tw, th, p, rng);
+    else if (p.kind === 'volcanic') cobbles(ctx, tw, th, p, rng, false);
+    else if (p.kind === 'inca') slabs(ctx, tw, th, p, rng, true);
+    else if (p.kind === 'coral') cobbles(ctx, tw, th, p, rng, true);
+    else { cobbles(ctx, tw, th, p, rng, p.kind === 'calcada'); if (p.kind === 'calcada') calcadaAccent(ctx, tw, th, p); }
+
+    if (c.port) quayEdge(ctx, tw, p, rng);
+    groundShade(ctx, tw, th);
+    A.applyGrain(ctx, tw, th, p.kind === 'earth' ? 0.075 : 0.05);
+    cv._style = { id: style.id, name: p.name, exterior: style.ext, material: p.kind, port: !!c.port };
     return cv;
+  }
+  /** 그림 띠를 앞길 높이에 맞춰 한 장 그려 둔다(가로는 그림의 이음 주기 그대로 되풀이된다). */
+  function groundFromImage(img, th, style, p, c) {
+    var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+    var tw = Math.max(16, Math.round(iw * th / ih)), cv = A.canvas(tw, th), ctx = cv.getContext('2d');
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, 0, 0, iw, ih, 0, 0, tw, th);
+    groundShade(ctx, tw, th);
+    cv._style = { id: style.id, name: p.name, exterior: style.ext, material: p.kind, port: !!c.port, image: groundKey(style.id) };
+    return cv;
+  }
+  function groundShade(ctx, tw, th) {
+    // 건물이 닿는 자리에만 엷은 그늘을 두어 투명 건물 그림이 바닥에 자연스럽게 붙어 보이게 한다.
+    var sh = ctx.createLinearGradient(0, 0, 0, 68);
+    sh.addColorStop(0, 'rgba(29,22,16,.48)'); sh.addColorStop(1, 'rgba(29,22,16,0)');
+    ctx.fillStyle = sh; ctx.fillRect(0, 0, tw, 68);
+    ctx.fillStyle = 'rgba(43,32,23,.34)'; ctx.fillRect(0, 0, tw, 3);
+    // 인물 발에 대는 무늬는 선명하게, 아래쪽은 조금 어둡게 마감한다.
+    var depth = ctx.createLinearGradient(0, th * 0.46, 0, th);
+    depth.addColorStop(0, 'rgba(255,235,205,0)'); depth.addColorStop(1, 'rgba(42,30,24,.16)');
+    ctx.fillStyle = depth; ctx.fillRect(0, th * 0.46, tw, th * 0.54);
   }
 
   // ---------------------------------------------------------------- 카메라·진행

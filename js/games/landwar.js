@@ -7,7 +7,7 @@
    G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n}, party, terr, guns, flee }) → {res: win|lose|flee, dead, back, left} */
 (function (G) {
   'use strict';
-  var U = G.U, UI = G.UI, R = G.R, A = G.Art, I = G.Img;
+  var U = G.U, UI = G.UI, R = G.R, I = G.Img;
   G.Games = G.Games || {};
   var W = 1000, H = 430;
   var TYPES = {
@@ -196,18 +196,18 @@
         if (u.act && u.actT < (u.act === 'attack' ? 0.75 : 0.45)) return u.act;
         return Math.abs(u.tx - u.x) + Math.abs(u.ty - u.y) > 4 ? 'walk' : 'idle';
       }
-      /** 그림 시트로 부대를 그린다 — 그림을 아직 못 읽었으면 false (코드 그림으로) */
+      /** 그림 시트로 부대를 그린다 — 그림이 없거나 끝내 못 받았으면 false (코드 그림으로) */
       function drawSprUnit(u, sp, x, y, face, t) {
         var act = actOf(u), fps = SFX.battleFps || {}, k0 = u.leader ? 1.22 : 1;
         if (sp.party) {
-          if (!SPR.partyReady(sp.party)) return false;
+          if (!SPR.partyReady(sp.party)) return SPR.partyPending(sp.party);   // 받는 중이면 비워 두고 기다린다
           var nfp = SPR.partyFrames(sp.party), kk = (SFX.unitH || 50) * 1.2 / SPR.partyHeight(sp.party) * k0;
           var moving = act === 'walk' || act === 'attack';   // 그림 한 장이 말 탄 세 사람 — 겹쳐 그리지 않는다
           SPR.drawParty(ctx, sp.party, face > 0 ? 2 : 6, moving ? Math.floor(t * 9) % nfp : 0, x, y, kk);
           return true;
         }
         var id = sp.id, row = sp.row;
-        if (!SPR.ready(id)) return false;
+        if (!SPR.ready(id)) return SPR.pending(id);
         var k = ((sp.beast ? SFX.beastH : SFX.unitH) || 46) / SPR.bodyH(id) * k0 * ((SFX.sheetK || {})[id] || 1);
         var big = id === 'cannons' || (id === 'ottoman' && row === 1);
         var nf = U.clamp(Math.ceil(u.n / 4), 1, big ? 2 : sp.beast ? 3 : 6), gap = big ? 58 : sp.beast ? 42 : 24;

@@ -1,14 +1,19 @@
 // 자동 플레이 실행기: node run.js [--resume ckpt.json] [--minutes 60] [--test script.js]
-const { chromium } = require('/opt/node-tools/node_modules/playwright');
+// Playwright: PLAYWRIGHT_DIR 환경 변수 → 그냥 require → 예전 개발 컨테이너 경로 순으로 찾는다
+const { chromium } = (function () {
+  const tries = [process.env.PLAYWRIGHT_DIR, 'playwright', '/opt/node-tools/node_modules/playwright'].filter(Boolean);
+  for (const t of tries) { try { return require(t); } catch (e) { /* 다음 */ } }
+  throw new Error('playwright 를 찾지 못했습니다 — npm i playwright 또는 PLAYWRIGHT_DIR=…/node_modules/playwright');
+})();
 const fs = require('fs');
 const path = require('path');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const args = process.argv.slice(2);
 const opt = k => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
-const DIR = '/tmp/claude-0/bot';
-const OUT = opt('--out') || DIR + '/out';
+const DIR = __dirname;                       // bot.js · brain.js 가 있는 곳
+const OUT = opt('--out') || path.join(require('os').tmpdir(), 'plus-ultra-bot');
 const MIN = +(opt('--minutes') || 60);
-const URL = opt('--url') || 'file:///home/claude/game/index.html';
+const URL = opt('--url') || 'file://' + path.resolve(__dirname, '../../index.html');
 fs.mkdirSync(OUT, { recursive: true });
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader'] });

@@ -35,8 +35,6 @@
     kn.n++;
     rel.who = k;
   };
-  /** 이 사람을 처음 만나는가 (자리의 주인이 바뀐 뒤 첫 알현) */
-  SC.firstMeeting = function (sp) { var rel = G.Sponsor.rel(sp.id); return !rel.who || rel.who !== SC.curKey(sp); };
 
   function ended(h) { return h[4] === 'x' ? '자리에서 물러나셨다' : '세상을 떠나셨다'; }
   function endedPlain(sp, h) {

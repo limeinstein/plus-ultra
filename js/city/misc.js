@@ -127,7 +127,8 @@
       var it = G.ITEM[v];
       if (s.player.items.length >= R.ITEM_MAX) { await C.mate('이 이상 가질 수 없습니다!'); return; }
       var pr = mkBuy(it);
-      if (!(await UI.confirm(it.name + '<br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(pr) + '닢에 사겠습니까?', '산다', '그만둔다'))) continue;
+      var pic = mkThumb(it), ask = it.name + '<br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(pr) + '닢에 사겠습니까?';
+      if (!(await UI.confirm(pic ? '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>' : ask, '산다', '그만둔다'))) continue;
       s.player.gold -= pr; R.addItem(v);
       if ((it.kind === 'weapon' && (!s.player.equip.weapon || G.ITEM[s.player.equip.weapon].atk < it.atk)) || (it.kind === 'armor' && (!s.player.equip.armor || G.ITEM[s.player.equip.armor].def < it.def))) {
         if (await UI.confirm(it.name + U.j(it.name, '을/를').slice(it.name.length) + ' 바로 장비하겠습니까?')) s.player.equip[it.kind] = v;
@@ -237,9 +238,6 @@
   function librarian(c) { return C.npc('librarian', '사서'); }
   /** 이 도시 도서관에 지금 꽂혀 있는 책 (이미 간행된 것만) */
   LB.books = function (c) { var y = S().date.y; return G.BOOKS.filter(function (b) { return b.libs.indexOf(c.id) >= 0 && (b.y || 0) <= y; }); };
-  /** 학문서를 풀어 줄 수 있는 자리 */
-  function whoKnows(sk) { var r = G.ROLE_SKILLS; return r.surveyor.indexOf(sk) >= 0 ? '측량사' : r.nav.indexOf(sk) >= 0 ? '항해사' : '부관'; }
-  LB.whoKnows = whoKnows;
   /** 이 책을 지금 읽으면: 언어 수준, 학문 조건, 단서 상태(새 것·이미 앎·아직 이해 못 함) */
   LB.status = function (b) {
     var s = S(), lv = R.langRead(b.lang), need = b.sk ? (b.lv || 1) : 0, have = b.sk ? R.skillRead(b.sk) : 0;
@@ -470,7 +468,7 @@
   GT.menu = function (c) {
     var s = S(), sb = s.stable && s.stable[c.id];
     return [
-      s.loc.via === 'land' ? { label: '탐험대로 돌아간다', icon: 'tent', sub: '탈것을 바꿀 수 있다', onClick: function () { return GT.backToParty(c); } }
+      s.loc.via === 'land' && s.landReturn ? { label: '탐험대로 돌아간다', icon: 'tent', sub: '탈것을 바꿀 수 있다', onClick: function () { return GT.backToParty(c); } }
         : { label: '탐험을 떠난다', icon: 'boot', sub: '탈것을 고른다', onClick: function () { return GT.explore(c); } },
       { label: '마구간', icon: 'horse', sub: sb ? G.Mounts.get(sb.id).name + ' ' + sb.n + unitOf(sb.id) : '둘러본다', onClick: function () { return GT.stableMenu(c); } }
     ];
@@ -480,7 +478,7 @@
   GT.partySize = function () { return S().fleet.crew; };
   GT.explore = async function (c) {
     var s = S();
-    if (s.loc.via === 'land') return GT.backToParty(c);
+    if (s.loc.via === 'land' && s.landReturn) return GT.backToParty(c);
     if (s.fleet.crew < 5) { await C.mate('제독, 저희들만으로 탐험을 하는 것은 무모한 짓입니다! 항구에서 사람을 모집한 후로 합시다.'); return; }
     var mt = await GT.outfit(c, 'depart');
     if (!mt) return;
@@ -632,7 +630,8 @@
     var s = S();
     return [
       { label: '쉰다', icon: 'bed', onClick: function () { return HM.rest(c); } },
-      s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
+      s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length + (G.Family.aboard().length ? ' (견습 ' + G.Family.aboard().length + ')' : '') : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
+      G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
       { label: '은퇴', icon: 'log', onClick: function () { return G.Family.retire(); } }
     ];
