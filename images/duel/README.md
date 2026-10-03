@@ -38,7 +38,9 @@
 
 `main_admiral`, `first_mate`, `western_brawler`, `columbus`, `cortes`, `redhair_pirate`, `blonde_pirate`, `african_warrior`, `mesoamerican_warrior`, `guan_yu`, `zhang_fei`, `joseon_swordsman`, `east_asian_attendant`, `samurai`, `barbary_corsair`, `caribbean_pirate`, `explorer`, `vietnamese_woman`, `indian_warrior`, `native_chief`, `spanish_soldier`.
 
-제독 생김새 시트(21종 밖, 얼굴 그림 이름과 같음): `ganghui` (이강희).
+제독 생김새 시트(21종 밖, 얼굴 그림 이름과 같음): `ganghui`(이강희), `navigator_white`,
+`armored_navigator`, `sea_dog`, `muscle_swordsman`, `hat_spinner`, `charismatic_admiral`,
+`battle_vanguard`, `noble_scholar`, `casanova`, `army_officer`, `sky_adventurer`, `blackcoat_captain`.
 
 ## 배경 파일
 
