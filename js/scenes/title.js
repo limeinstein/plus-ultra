@@ -20,17 +20,20 @@
     var menu = wrap.querySelector('.title-menu');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = fn; menu.appendChild(b); return b; }
     var bCont = null;
-    if (G.State.meta(0)) bCont = btn('이어하기', 'sail', async function () { await Game.ensureGeo(); var S = G.State.load(0); if (!S) { UI.alert('불러오지 못했습니다.'); return; } G.Game.state = S; G.Game.resume(); }, 'navy');
+    async function cont() { await Game.ensureGeo(); var S = await G.State.loadAsync(0); if (!S) { UI.alert('불러오지 못했습니다.'); return; } G.Game.state = S; G.Game.resume(); }
+    if (G.State.meta(0)) bCont = btn('이어하기', 'sail', cont, 'navy');
     var bNew = btn('새로운 항해', 'ship', function () { G.Game.go('create'); }, bCont ? '' : 'navy');
     var bLoad = btn('항해 일지 불러오기', 'book', function () { T.loadMenu(); });
     btn('조작 안내', 'info', function () { T.help(); });
-    if (!G.State.hasAnySave()) bLoad.classList.add('disabled');
+    bLoad.classList.add('disabled');
     bNew.classList.add('disabled'); bLoad.dataset.wait = '1'; if (bCont) bCont.classList.add('disabled');
     var ld = wrap.querySelector('.loading');
-    Game.ensureGeo().then(function () {
+    // 보조 저장소(IndexedDB)의 일지도 읽은 뒤에 이어하기·불러오기를 정한다 (localStorage가 지워졌어도 남아 있을 수 있다)
+    Promise.all([Game.ensureGeo(), G.State.ready]).then(function () {
       ld.textContent = '';
+      if (!bCont && G.State.meta(0)) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); }
       bNew.classList.remove('disabled'); if (bCont) bCont.classList.remove('disabled');
-      if (G.State.hasAnySave()) bLoad.classList.remove('disabled');
+      bLoad.classList.remove('disabled');      // 일지가 없어도 「파일에서 불러오기」는 할 수 있다
     });
   };
 
@@ -40,15 +43,33 @@
       var m = G.State.meta(i);
       opts.push({ label: (i === 0 ? '자동 저장' : '일지 ' + i) + (m ? ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place) : ' — (비어 있음)'), value: i, disabled: !m, icon: 'book' });
     }
+    opts.push({ label: '파일에서 불러오기', value: 'file', icon: 'scroll', right: '내려받아 둔 일지 파일 (.json)' });
+    if (G.State.hasAnySave()) opts.push({ label: '일지를 파일로 내려받기', value: 'export', icon: 'save', right: '다른 기기·브라우저로 옮길 때' });
+    await G.State.ready;
     var slot = await UI.choose('항해 일지 불러오기', opts, { width: 760 });
     if (slot == null) return;
-    var S = G.State.load(slot);
+    if (slot === 'export') { await T.exportMenu(); return; }
+    var S;
+    if (slot === 'file') {
+      try { var got = await G.State.importFile(); if (!got) return; S = got.state; }
+      catch (e) { UI.alert('불러오지 못했습니다: ' + U.esc(e && e.message || e)); return; }
+    } else S = await G.State.loadAsync(slot);
     if (!S) { UI.alert('불러오지 못했습니다.'); return; }
     await G.Game.ensureGeo();
     G.Game.state = S;
     G.Game.resume();
   };
 
+  /** 저장된 일지 하나를 파일로 내려받는다 */
+  T.exportMenu = async function () {
+    var opts = [];
+    for (var i = 0; i < 4; i++) { var m = G.State.meta(i); if (m) opts.push({ label: (i === 0 ? '자동 저장' : '일지 ' + i) + ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place), value: i, icon: 'save' }); }
+    if (!opts.length) { UI.alert('내려받을 일지가 없습니다.'); return; }
+    var slot = await UI.choose('일지를 파일로 내려받기', opts, { width: 760 });
+    if (slot == null) return;
+    var name = G.State.exportSlot(slot);
+    UI.toast(name ? '일지를 내려받았습니다: ' + name : '내려받지 못했습니다.', 'save', 5000);
+  };
   T.help = function () {
     UI.window({ title: '조작 안내', icon: 'info', width: 900, html:
       '<div style="font-size:17px;line-height:1.75">' +

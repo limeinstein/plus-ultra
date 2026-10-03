@@ -232,7 +232,10 @@
     // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금, 첫 함대(배 ID — 앞의 것이 기함)
     // 음악 특기: 단계마다 날마다 쌓이는 피로를 이만큼 덜어 준다 (바다 sea.js · 뭍 land.js)
     musicRest: 0.12, musicRestLand: 0.2,
-    testChar: { stat: 99, luck: 99, gold: 100000, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름
+    testChar: { stat: 99, luck: 99, gold: 999999999, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름 · gold: 소지금 최대(9억 9999만 9999닢)
+    // 여관 허드렛일: 한 번에 최대 maxDays일. 하루에 명성이 famePerDay씩 내려가고(제독이 허드렛일을…), 그 고장 말을 익힌다 —
+    // 말 단계(모름→기초→보통→능숙)마다 일한 날 langDays[지금 단계]일이 쌓이면 한 단계 오른다(지력이 높으면 빨리: 지력 50 기준)
+    innWork: { maxDays: 150, famePerDay: 1, langDays: [40, 80, 120] },
     // 시세의 출렁임: 도시·품목 갈래마다 천천히 오르내린다 (최대 ± driftAmp, 주기 driftPeriod[0]~[1]일)
     driftAmp: [0.08, 0.15], driftPeriod: [70, 200],
     // 후원자의 대가 바뀔 때 (succession.js): 그 자리의 신뢰는 sponsorKeep만 남고, 제독의 자녀가 뒤를 이으면 모든 신뢰가 heirKeep만 남는다.

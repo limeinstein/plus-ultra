@@ -516,8 +516,15 @@
     var slot = await UI.choose('항해 일지에 기록', opts, { width: 760 });
     if (slot == null) return false;
     if (G.State.meta(slot) && !(await UI.confirm('일지 ' + slot + '에 덮어쓰겠습니까?'))) return false;
-    var ok = G.State.save(slot);
-    UI.toast(ok ? '항해 일지에 기록했다.' : '기록하지 못했습니다.', 'book');
-    return ok;
+    var r = await G.State.saveAsync(slot);
+    if (r.ok && r.where === 'browser') UI.toast('항해 일지에 기록했다.', 'book');
+    else if (r.ok) UI.toast('항해 일지에 기록했다. (' + r.msg + ')', 'book', 7000);
+    else if (await UI.confirm('기록하지 못했습니다 — ' + r.msg + '<br>지금 진행을 파일로 내려받아 둘까요?', '파일로 내려받기', '그만둔다', '항해 일지')) {
+      // 브라우저에 남기지 못했어도 파일로는 남긴다
+      var nm = G.State.exportNow();
+      UI.toast(nm ? '일지를 내려받았습니다: ' + nm : '내려받지도 못했습니다. 브라우저 설정에서 이 사이트의 저장을 허용해 주십시오.', 'save', 7000);
+      return !!nm;
+    }
+    return r.ok;
   };
 })(window.G = window.G || {});

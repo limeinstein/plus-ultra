@@ -37,14 +37,37 @@
     await UI.say('피로가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
     if (G.Family && G.Family.innEvent) await G.Family.innEvent(c);
   };
+  /* 허드렛일: 한 번에 최대 다섯 달(G.BALANCE.innWork.maxDays). 일한 날만큼 명성이 내려가고(하루 1),
+     부엌·장터에서 그 고장 사람들과 지내며 그 고장 말을 익힌다 (s.player.lgWork[말] = 쌓인 날) */
+  function innCfg() { return (G.BALANCE && G.BALANCE.innWork) || { maxDays: 150, famePerDay: 1, langDays: [40, 80, 120] }; }
   INN.work = async function (c) {
-    var s = S(), w = innWife();
-    var v = await C.ask(w, '일손이 필요하긴 해요. 열흘 동안 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요.', [{ label: '일한다 (10일)', value: 10 }, { label: '한 달 일한다 (30일)', value: 30 }, { label: '그만둔다', value: 0 }]);
+    var s = S(), w = innWife(), K = innCfg(), li = c.lang, lname = li != null ? G.LANGS[li] : null;
+    var lv0 = li != null ? (s.player.lg[li] || 0) : 3;
+    var v = await C.ask(w, '일손이 필요하긴 해요. 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요.' + (lname && lv0 < 3 ? '\n(일하는 동안 ' + lname + U.jx(lname, '을/를') + ' 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)' : '\n(하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)'),
+      [{ label: '열흘 일한다 (10일)', value: 10 }, { label: '한 달 일한다 (30일)', value: 30 }, { label: '날수를 정한다 (최대 ' + Math.round(K.maxDays / 30) + '달)', value: -1 }, { label: '그만둔다', value: 0 }]);
+    if (v === -1) v = await UI.number({ title: '허드렛일', text: '며칠 일하시겠어요? (한 번에 최대 ' + K.maxDays + '일)', min: 1, max: K.maxDays, value: 60, unit: '일',
+      quick: [{ label: '석 달', value: Math.min(90, K.maxDays) }, { label: '다섯 달', value: K.maxDays }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
     if (!v) return;
+    v = Math.min(K.maxDays, v);
     var pay = Math.round(v * (8 + c.size * 4) * (0.8 + R.stat('str') / 150));
     await UI.fade(function () { G.Game.passDays(v); });
     s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
-    await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!');
+    var lost = Math.min(s.player.fame, v * K.famePerDay); s.player.fame -= lost;
+    // 말 익히기 — 지력 50이면 하루가 하루, 지력이 높을수록 빨리
+    var learned = '';
+    if (li != null && lv0 < 3) {
+      var lw = s.player.lgWork || (s.player.lgWork = {}), got = v * (0.6 + (R.stat('int') || 50) / 125);
+      lw[li] = (lw[li] || 0) + got;
+      var lv = lv0;
+      while (lv < 3 && lw[li] >= K.langDays[lv]) { lw[li] -= K.langDays[lv]; lv++; }
+      if (lv >= 3) lw[li] = 0;
+      s.player.lg[li] = lv;
+      learned = lv > lv0 ? '\f' + lname + ' 실력이 늘었다! (' + G.LANG_LV[lv0] + ' → ' + G.LANG_LV[lv] + ')'
+        : '\f' + lname + U.jx(lname, '이/가') + ' 조금 귀에 익었다. (다음 단계 「' + G.LANG_LV[lv + 1] + '」까지 약 ' + Math.ceil((K.langDays[lv] - lw[li]) / (0.6 + (R.stat('int') || 50) / 125)) + '일)';
+      if (lv > lv0) G.State.log(c.name + '의 여관에서 ' + v + '일 일하며 ' + lname + U.jx(lname, '을/를') + ' 익혔다 (' + G.LANG_LV[lv] + ').');
+    }
+    G.Game.refreshHud();
+    await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!' + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned);
   };
   INN.func = async function (c) {
     var v = await UI.choose('기능', [
