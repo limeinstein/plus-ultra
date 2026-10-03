@@ -1,0 +1,569 @@
+{
+  "tool": "built-in image_gen",
+  "records": [
+    {
+      "id": "on_foot",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-6d7a2acc-353c-4d50-b20d-f181c06ddc4a.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nON FOOT WALK: The single admiral walks carrying a small rolled map at his waist. He walks alone, not a marching group. Clearly articulated alternating legs and swinging free arm.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-e80ed6dc-cc47-43f8-a2b8-bfa2757a481e.png",
+      "revisionPrompt": "Edit target: supplied admiral sprite sheet. Fix the fundamental broken walk animation: the old sheet repeats almost the SAME foot forward in everyframe, which wiggles instead of walks.\nMake a NEW 4-COLUMN by 8-ROW sprite sheet. 32 frames total. Transparent RGBA. Same miniature painted admiral, navy coat, gold trim, black bicorne white feather, red cape, white trousers and black knee boots. Preserve body scale and camera. Leave15% transparent cell margin. No text/lines/grid. All legs remain visible below a shorter cape hem.\nMOST IMPORTANT: columns1and3 MUST have OPPOSITE legs forward. It must be physically impossible to mistake one for the other. This is NOT four copies of an idle walking stance.\nFor each of8rows:\nCOL1: LEFT LEG straight FORWARD with heel striking ahead, RIGHT LEG stretched BACK with toe onground. Legs make a wide invertedV; opposite arms. Left knee leads.\nCOL2: weight on LEFT FOOT directly underhip; RIGHT KNEE lifted FORWARD, right foot moving past left shin. Narrow silhouette, feet close together.\nCOL3: RIGHT LEG straight FORWARD with heel striking ahead, LEFT LEG stretched BACK with toe onground. Opposite invertedV fromcol1, near/far leg and arm switch. Right knee leads.\nCOL4: weight on RIGHT FOOT directly underhip; LEFT KNEE lifted FORWARD, left foot moving past right shin. Narrow silhouette, opposite support leg fromcol2.\nColumn1->2->3->4->1 is one COMPLETE alternating WALK cycle. Torso and head remain at fixed center, less than2% bob; feet swing a LARGE clearly-visible distance, heel-to-toe and knee bend. DO NOT merely wobble body/cloak.\nRows topdown: N directrear; NE rear-right; E exactRIGHTPROFILE; SE front-right; S directfront; SW front-left; W exactLEFTPROFILE; NW rear-left. 45degree headingsteps. In N/S views left-foot-forward vsright-foot-forward must visibly switch whichboot is LOWER/further towardcamera; in E/W views which LEG is infront must SWITCH and column2/4 feet must come TOGETHER. Samecamera angle25deg elevated, never fake walking by wobbling a fixed pose. Square-ish tall atlas, exactly4columns8rows.",
+      "version": 3,
+      "layout": [
+        4,
+        8
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          5,
+          false
+        ],
+        [
+          6,
+          false
+        ],
+        [
+          7,
+          false
+        ]
+      ],
+      "admiralReferenceHeight": 183.333
+    },
+    {
+      "id": "on_foot",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-4f8ab3f9-0d91-4d30-8b34-c481ceefe9c9.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: One admiral on foot in navycoat,bicorn whitefeather,redcape,whitebreeches.",
+      "admiralReferenceHeight": 293.333
+    },
+    {
+      "id": "mounted",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-e92397b8-02ed-4354-b4c3-e42d7435d5a5.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nHORSE: same single admiral RIDING a chestnut horse with dark mane, leather saddle and saddlebags. Horse four-beat walk hindleft/frontleft/hindright/frontright; rider pelvis follows saddle gently. All four legs visibly change support across8 frames, no galloping. Horse nose points exactly each row heading.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-dc8695d9-e6b7-4f3a-ac34-81872b35d4eb.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\n\nEXACTLY EIGHT ROWS on square2048x2048 canvas;4columns8rows. Eachcell512wide256high. Row1N,2NE,3E,4SE,5S,6SW,7W,8NW. EACHROWmustappear, especially7fullLEFTside and8rearLEFT. Use central75percent ofeachcell, at least20pixels empty padding aboveandbelow.\nSUBJECT:One admiral riding chestnut HORSE. Long alternating foreleg and hindleg stride, single hoof swings with knee bent in passing poses. No trotting or galloping.",
+      "version": 3,
+      "layout": [
+        4,
+        7
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          4,
+          true
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          5,
+          false
+        ],
+        [
+          6,
+          false
+        ]
+      ],
+      "admiralReferenceHeight": 120.0
+    },
+    {
+      "id": "mounted",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-43ab1950-94c6-449d-9e50-3eea92bd40a3.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: HORSE: same single admiral RIDING a chestnut horse with dark mane, leather saddle and saddlebags. Horse four-beat walk hindleft/frontleft/hindright/frontright; rider pelvis follows saddle gently. All four legs visibly change support across8 frames, no galloping. Horse nose points exactly each row heading.",
+      "admiralReferenceHeight": 196.667
+    },
+    {
+      "id": "camel",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-72926f62-307d-4e0b-869e-d82b1a47626a.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nCAMEL: same single admiral riding a sandy one-humped dromedary camel, long curved neck, leather saddle and compact panniers. Camel paces with same-side legs moving together, opposite side half cycle later; subtle lateral saddle sway. Long legs visibly articulate. Camel head follows exact row heading.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-c14f06e4-c94d-4413-b6d5-ccf3cdd56ef4.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\n\nEXACTLY EIGHT ROWS on square2048x2048 canvas;4columns8rows. Eachcell512wide256high. Row1N,2NE,3E,4SE,5S,6SW,7W,8NW. EACHROWmustappear, especially7fullLEFTside and8rearLEFT. Use central75percent ofeachcell, at least20pixels empty padding aboveandbelow.\nSUBJECT:One admiral riding one-humped sandy CAMEL. Same-side pair of legs forward in frame1, opposite pair forward in frame3. Lift and bend knee in passing frames2and4.",
+      "version": 3,
+      "layout": [
+        4,
+        8
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          5,
+          false
+        ],
+        [
+          6,
+          false
+        ],
+        [
+          7,
+          false
+        ]
+      ],
+      "admiralReferenceHeight": 110.0
+    },
+    {
+      "id": "camel",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-b7cbc90f-8721-4947-8795-26d0f40680b1.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: CAMEL: same single admiral riding a sandy one-humped dromedary camel, long curved neck, leather saddle and compact panniers. Camel paces with same-side legs moving together, opposite side half cycle later; subtle lateral saddle sway. Long legs visibly articulate. Camel head follows exact row heading.",
+      "admiralReferenceHeight": 173.333
+    },
+    {
+      "id": "porter",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-dabe5879-5124-4061-be68-1b54a3291e25.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nPORTER: single sturdy red-bandana porter in off-white rolled-sleeve shirt, tan trousers and brown boots carrying a large strapped tan backpack and rolled bedroll. No admiral in these cells. Slight forward lean under load, knees flexing, reciprocal arm motion and stable load. Distinct alternating walking legs, no marching group.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-cbeb53d2-08dc-4e6f-8074-b4506ff043a2.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\n\nEXACTLY EIGHT ROWS on square2048x2048 canvas;4columns8rows. Eachcell512wide256high. Row1N,2NE,3E,4SE,5S,6SW,7W,8NW. EACHROWmustappear, especially7fullLEFTside and8rearLEFT. Use central75percent ofeachcell, at least20pixels empty padding aboveandbelow.\nSUBJECT:One admiral walks ALONGSIDE one red-bandana porter in white shirt tan trousers with large tan backpack. Two PEOPLE equal adult anatomical size; both leftfoot-forward, passing, rightfoot-forward, passing; both face same heading. Exactly ONE admiral and ONE porter percell.",
+      "version": 3,
+      "layout": [
+        4,
+        7
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          5,
+          false
+        ],
+        [
+          2,
+          true
+        ],
+        [
+          6,
+          false
+        ]
+      ],
+      "admiralReferenceHeight": 130.0
+    },
+    {
+      "id": "porter",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-90830bb8-7337-4804-8822-2f48f9e61ee7.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: PORTER: single sturdy red-bandana porter in off-white rolled-sleeve shirt, tan trousers and brown boots carrying a large strapped tan backpack and rolled bedroll. No admiral in these cells. Slight forward lean under load, knees flexing, reciprocal arm motion and stable load. Distinct alternating walking legs, no marching group.\nOnly change yaw between cells; animals stand with feet planted, no marching. Keep exact same size.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-58b2f35f-5223-4c25-ba52-4da6361d864e.png",
+      "revisionPrompt": "Use case: stylized-concept. Transparent RGBA 4columns4rows 16frame turnaround sprite sheet. ONE admiral navygoldcoat redcape whitebreeches blackbicorne whitefeather walks beside ONE sturdyporter redbandanawhiteshirtbrownpants carryingtanbackpack, sameadmiral asreference. Sameadultanatomicalsize all16frames. TWO PEOPLE percell, standingneutralfootposition, fixedscale, completebodies,15percentemptygutters. Paintedminiature3D orthographic elevated25degrees. Clockwiseyaw22.5degree steps fromBACK NORTH. Row1:N,NNE,NE,ENE. Row2:E,ESE,SE,SSE. Row3:S,SSW,SW,WSW. Row4:W,WNW,NW,NNW. No text,borders,groundorbackground. Match newreferencecostumeexactly. Square1536x1536.",
+      "version": 3,
+      "admiralReferenceHeight": 256.667
+    },
+    {
+      "id": "pack_donkey",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-8bfd6650-6843-4154-9ff4-f1149d38684e.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nPACK DONKEY: single admiral walking at the side of one gray donkey with long ears, canvas panniers and bedroll. Do NOT ride the donkey. Admiral and donkey face same exact row direction. Person alternate stride, donkey fourbeat walk. Stable load, rope slack follows gait.\nClean alpha edges, absolutely no colored speckles, no background residue.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-d18a0c06-16ca-42fd-a23a-61bdce0701c9.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\nLAYOUT OVERRIDE: simplify to EXACTLY FIVE ROWS with4columns, 20frames. Use square1536x1536 canvas. Row1fullBACK NORTH, row2rearRIGHT NE, row3fullRIGHT profile EAST, row4frontRIGHT SE, row5fullFRONT SOUTH. Only these5views. Left-facing directions will be mirrored by engine. Eachrow MUST have two opposite foot contact poses and two passing poses, notfourcopies. Ample transparent gutters. SUBJECT:One admiral walking alongside a gray DONKEY with canvas panniers and bedroll. Never ride. Both walk with large leg swings. Admiral and donkey are similar total height.",
+      "version": 3,
+      "layout": [
+        4,
+        5
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          3,
+          true
+        ],
+        [
+          2,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "admiralReferenceHeight": 236.667
+    },
+    {
+      "id": "pack_donkey",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-5f674df5-5bbd-4ef6-bd12-ddf9ce557873.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: PACK DONKEY: single admiral walking at the side of one gray donkey with long ears, canvas panniers and bedroll. Do NOT ride the donkey. Admiral and donkey face same exact row direction. Person alternate stride, donkey fourbeat walk. Stable load, rope slack follows gait.\nOnly change yaw between cells; animals stand with feet planted, no marching. Keep exact same size.",
+      "admiralReferenceHeight": 290.0
+    },
+    {
+      "id": "pack_llama",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-ad412bca-be71-47e9-8027-7a0db5fa122a.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nPACK LLAMA: single admiral walking beside one cream-wool llama, slender long neck upright ears, small woven brown panniers. Do NOT ride the llama. Both same row direction. Llama lateral walking gait, delicate articulated knees, feet alternating support.\nClean alpha edges, absolutely no colored speckles, no background residue.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-c05a3900-95a7-45f8-bbb4-0c41452d9b21.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\nLAYOUT OVERRIDE: simplify to EXACTLY FIVE ROWS with4columns, 20frames. Use square1536x1536 canvas. Row1fullBACK NORTH, row2rearRIGHT NE, row3fullRIGHT profile EAST, row4frontRIGHT SE, row5fullFRONT SOUTH. Only these5views. Left-facing directions will be mirrored by engine. Eachrow MUST have two opposite foot contact poses and two passing poses, notfourcopies. Ample transparent gutters. SUBJECT:One admiral walking alongside a cream-colored LLAMA with colorful woven panniers. Never ride. Both walk with large alternate strides, raised knees and hooves during passing.",
+      "version": 3,
+      "layout": [
+        4,
+        5
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          3,
+          true
+        ],
+        [
+          2,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "admiralReferenceHeight": 233.333
+    },
+    {
+      "id": "pack_llama",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-41568d90-2812-4afd-af35-4243324c457f.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: PACK LLAMA: single admiral walking beside one cream-wool llama, slender long neck upright ears, small woven brown panniers. Do NOT ride the llama. Both same row direction. Llama lateral walking gait, delicate articulated knees, feet alternating support.\nOnly change yaw between cells; animals stand with feet planted, no marching. Keep exact same size.",
+      "admiralReferenceHeight": 263.333
+    },
+    {
+      "id": "wagon",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-24a7dd2d-292e-4ebd-80a2-e7c8d2e63520.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nWAGON: one chestnut horse harnessed to one compact wooden four-wheeled covered cargo wagon, beige canvas cover; single admiral seated on driver's bench. Complete horse+harness+wagon in every cell. Horse leads in exactly each row direction and wagon TRAILS BEHIND, perspective correct. Horse walks, wheels rotate evenly betweenframes, slight suspension bounce. Constant wheelcount, spokes and wheelbase.\nClean alpha edges, absolutely no colored speckles, no background residue.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-7f26731e-ad63-4df9-ad4a-f250d90c86ff.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\nLAYOUT OVERRIDE: EXACTLY FIVE ROWS,4columns,20frames, square1536x1536. Row1fullREAR N,row2rearRIGHT NE,row3fullRIGHT E,row4frontRIGHT SE,row5fullFRONT S.5directionswillbemirroredbyenginefor8. Leave15percentemptyguttersineverycell. SUBJECT:One chestnut draft HORSE pulls a small four-wheel wooden supply WAGON. One admiral sits on front driver bench. Horse LEFT FORELEG reaches very far forward in1 and pushes back in3, RIGHT FORELEG opposite. Bothpassingframes have bent lifted foreleg. Wheels spokes advance90degrees acrosscycle, rigidchassis. Fixedhumanheadsize.",
+      "version": 3,
+      "layout": [
+        4,
+        5
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          3,
+          true
+        ],
+        [
+          2,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "admiralReferenceHeight": 116.667
+    },
+    {
+      "id": "wagon",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-74752e37-6e2e-4066-a2f3-3b05b1b59396.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: WAGON: one chestnut horse harnessed to one compact wooden four-wheeled covered cargo wagon, beige canvas cover; single admiral seated on driver's bench. Complete horse+harness+wagon in every cell. Horse leads in exactly each row direction and wagon TRAILS BEHIND, perspective correct. Horse walks, wheels rotate evenly betweenframes, slight suspension bounce. Constant wheelcount, spokes and wheelbase.\nOnly change yaw between cells; animals stand with feet planted, no marching. Keep exact same size.",
+      "admiralReferenceHeight": 130.0
+    },
+    {
+      "id": "elephant",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-0c57e395-5769-4997-98ca-18d2f1eeff07.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nELEPHANT: one gray Asian elephant carrying admiral in a small brown howdah, canvas bundles, short tusks. Slow fourbeat heavy walking, each limb lifting and planting sequentially with grounded weight, ears gently fan and trunk naturally follows. Elephant nose points row heading. Complete animal and rider every cell.\nClean alpha edges, no colored speckles or background residue.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-c397b74b-3af7-4a66-beef-b1dd7e611aba.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\nSUBJECT: One admiral riding a LARGE gray ELEPHANT on brown saddlecloth. Elephant at natural scale relative to normal adult rider, rider standing equivalent height about half elephant shoulder height. Thick legs walk with emphatically alternating LEFT FRONT extended in1, RIGHT FRONT extended in3, bent lifted foot in2/4. Elephant entire asset must be large while human anatomical proportions stay normal.\nLAYOUT CHECK: EXACTLY 8 separate rows: row1north, row2northeast, row3east, row4southeast, row5south, row6southwest, row7west, row8northwest. Do not omit or merge row7WEST. Make square2048x2048 sheet, grid4x8, eachcell512wide256high; ample transparent rowgutters.",
+      "version": 3,
+      "layout": [
+        4,
+        8
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          5,
+          false
+        ],
+        [
+          6,
+          false
+        ],
+        [
+          7,
+          false
+        ]
+      ],
+      "proportionPrompt": "Use case: precise-object-edit. Keep the gray elephant exactly its current size and design in every cell. REDUCE ONLY THE HUMAN RIDER in every cell to 60% his current linear height and width, seated at the same saddle point. The elephant is truly huge compared with this normal-sized human, elephant shoulder height about two standing humans. Rider head should be one tenth of complete sprite height. Keep same navy coat/goldtrim/redcape/bicornewhitefeather, all leg poses, compass directions and 4columns8rows 32frames. All32elephants retained. Also give EACH cell10%clear top/bottom padding so head and feet of neighboring cells never touch. Transparent RGBA background, no scene/text. Do not shrink elephant together with rider. No giant rider head. Entire elephant+rider still fits full original cell.",
+      "admiralReferenceHeight": 63.333
+    },
+    {
+      "id": "elephant",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-d5ea8ce0-158e-4a6b-9db2-98587648fe39.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: ELEPHANT: one gray Asian elephant carrying admiral in a small brown howdah, canvas bundles, short tusks. Slow fourbeat heavy walking, each limb lifting and planting sequentially with grounded weight, ears gently fan and trunk naturally follows. Elephant nose points row heading. Complete animal and rider every cell.\nThe sequence is rotating in place, NOT walking. Constant scale, full subject fits each cell.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-166b5d08-3cea-4603-9a44-e1f216351849.png",
+      "proportionPrompt": "Use case: precise-object-edit. Image1 is existing16frame elephant turnaround layout/edit target. Image2 is corrected elephant+rider size reference. Repaint image1 to use EXACT SAME elephant to admiral scale ratio as image2. The human rider is SMALL, head one tenth of entire sprite height, same navy coatredcape bicornewhitefeather. Keep full elephant size and saddlebags unchanged, only rider becomes60percent currentlinear size. 4columns4rows,16sprites rotationalyaw22.5degrees each: N,NNE,NE,ENE/E,ESE,SE,SSE/S,SSW,SW,WSW/W,WNW,NW,NNW. Neutralplantedfeet. Eachwholeelephantfullyinsidecell,10percentcleartransparentmarginsall4sides. TransparentRGBA. Do not makehumangiant, do notshrinkelephantwithrider. Noletters,labels,backgroundorgrid.",
+      "version": 3,
+      "admiralReferenceHeight": 113.333
+    },
+    {
+      "id": "reindeer_sled",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-490752ac-4757-412b-bb88-14367ea221d6.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nREINDEER SLED: a single antlered brown reindeer with beige chest harness pulls a compact wooden sled with admiral sitting among supply bundles. Reindeer leads in rowheading, sled follows behind. Alternate diagonal leg pairs in a gentle trot. Keep antlers, runners and harness intact, slight cargo movement.\nClean alpha edges, no colored speckles or background residue.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-847ddaf4-8f44-4584-84e0-0c560da15cfd.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\nLAYOUT OVERRIDE: EXACTLY FIVE ROWS,4columns,20frames, square1536x1536. Row1fullREAR N,row2rearRIGHT NE,row3fullRIGHT E,row4frontRIGHT SE,row5fullFRONT S.5directionswillbemirroredbyenginefor8. Leave15percentemptyguttersineverycell. SUBJECT:One brown REINDEER with antlers pulls small wooden runner SLED, one admiral seated on it holdingreins. Reindeer leftforeleg forward/rightback in1; rightforelegforward/leftback in3; kneesflexandhoofsliftin2and4. Realextendedstride, noprancinginplace. Runnersglidelevel.",
+      "version": 3,
+      "layout": [
+        4,
+        5
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          3,
+          true
+        ],
+        [
+          2,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "admiralReferenceHeight": 143.333
+    },
+    {
+      "id": "reindeer_sled",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-d58e4b64-79cb-45f8-9802-4818a05019dc.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: REINDEER SLED: a single antlered brown reindeer with beige chest harness pulls a compact wooden sled with admiral sitting among supply bundles. Reindeer leads in rowheading, sled follows behind. Alternate diagonal leg pairs in a gentle trot. Keep antlers, runners and harness intact, slight cargo movement.\nThe sequence is rotating in place, NOT walking. Constant scale, full subject fits each cell.",
+      "admiralReferenceHeight": 206.667
+    },
+    {
+      "id": "pack_yak",
+      "action": "walk",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-3b6720a0-d7b0-473d-a2e8-7d1265d05718.png",
+      "prompt": "Use case: stylized-concept. Production game sprite animation, hand-painted 3D miniature aesthetic, crisp silhouettes, richly colored navy/red/brown. Single expedition leader, navy gold-trim coat, black bicorne white feather, red cape, white breeches, boots. Only ONE leader per cell, mounted or accompanied by transport as specified. Orthographic view elevated 25 degrees. Perfectly transparent RGBA background, no scenery, floor, labels, border, grids, text or decorative framing.\nEXACT uniform 8 columns x 8 rows, square2048x2048 canvas, 64 sprite frames, cell256x256. Sprite fully within central210x210 each cell, ample clear gutters, constant size and center ground anchor(128,224).\nEACH ROW different camera-relative travel heading, clockwise: 1 directly AWAY back view NORTH; 2 away RIGHT NE; 3 DIRECTLY RIGHT full side profile EAST; 4 towards RIGHT SE; 5 DIRECTLY TOWARDS front SOUTH; 6 towards LEFT SW; 7 DIRECTLY LEFT full side profile WEST; 8 away LEFT NW. All eight distinct, EAST and WEST MUST BE FULL SIDE PROFILES, SE/SW MUST SHOW FRONT FACES. Rotate subject spatially, fixed camera.\nEach row has eight sequential distinct gait poses: left contact, left down, passing right leg, reach right, right contact, right down, passing left leg, reach left. Anatomical limb motion, alternation of planted/lifted feet, arms counter-swing, slight weight transfer and cape follow-through, no root motion. Eight evenly spaced phases of a seamless loop; pose8 advances naturally to pose1, do not duplicate endpoint. Consistent limb count, saddle and cargo proportions, no teleporting feet or changing body size. Strong noticeable pose differences between contact and passing.\nPACK YAK: one large dark-brown shaggy yak with curved horns and compact woven panniers, admiral walking alongside with lead rope. Never ride yak. Grounded slow alternating fourbeat walk, long fur sways slightly. Both face rowheading. Feet clearly visible below fur.\nClean alpha edges, no colored speckles or background residue.",
+      "previousSource": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-3fafb179-6930-4387-9e48-663b8f0755dd.png",
+      "revisionPrompt": "Use case: precise-object-edit. Production transparent RGBA game walking animation sheet. Rebuild the reference with FOUR columns and EIGHT rows (32 frames) on a portrait 1024x1536 canvas. The reference supplies costume/species/style ONLY; its near-identical leg poses are WRONG. Paint genuinely distinct walking keyframes with visible planted versus swinging legs. All cells same scale, stationary rigid torso and fixed ground anchor. Keep 12 percent transparent gutters and every complete sprite within its cell. No text, floor, shadow blob or background. Polished painted miniature 3D orthographic 25degree elevated view. Rows exactly N back / NE back-right / E full right profile / SE front-right / S full front / SW front-left / W full left profile / NW back-left. In each row FOUR consecutive phases: 1 LEFT foot/forefoot stretched forward and RIGHT back, 2 LEFT planted under body while RIGHT knee bends and swings past, 3 RIGHT foot/forefoot stretched forward and LEFT back, 4 RIGHT planted under body while LEFT knee bends and swings past. Then repeat 1. Columns1and3 MUST physically swap support leg, columns2and4 narrow passing silhouettes. Far legs darker, near legs lighter, maintain which anatomical leg is near. Feet move front-to-back while body stays centered; no rocking of a frozen pose. The same admiral wears navy gold-trim coat, black bicorne white feather, red cape, white breeches, black boots. Stable admiral head and torso size in all frames.\nLAYOUT OVERRIDE: simplify to EXACTLY FIVE ROWS with4columns, 20frames. Use square1536x1536 canvas. Row1fullBACK NORTH, row2rearRIGHT NE, row3fullRIGHT profile EAST, row4frontRIGHT SE, row5fullFRONT SOUTH. Only these5views. Left-facing directions will be mirrored by engine. Eachrow MUST have two opposite foot contact poses and two passing poses, notfourcopies. Ample transparent gutters. SUBJECT:One admiral walking alongside dark brown shaggy YAK with woven panniers. Never ride. Yak hoofs clearly below shaggy fur, staggered large strides; person visibly alternates his lead foot.",
+      "version": 3,
+      "layout": [
+        4,
+        5
+      ],
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          2,
+          false
+        ],
+        [
+          3,
+          false
+        ],
+        [
+          4,
+          false
+        ],
+        [
+          3,
+          true
+        ],
+        [
+          2,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "admiralReferenceHeight": 236.667
+    },
+    {
+      "id": "pack_yak",
+      "action": "turn",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-1a1cd943-a0f3-4bea-9424-44bfddc2806c.png",
+      "prompt": "Use case: stylized-concept. Production game TURN-IN-PLACE sprite sheet. SAME miniature painted3D leader and mount as reference, identical proportions/costume/material colors, truly transparent background with clean alpha edges, no scenery/text/labels.\nEXACTLY FOUR COLUMNS by FOUR ROWS, square1536x1536, sixteen square384 cells. Only ONE complete subject per cell. Fit within300x300, groundpivot192,330, consistent scale. This is a SPATIAL360-DEGREE TURNTABLE using sixteen DIFFERENT views, not walking repetitions. Orthographic fixed elevated25deg camera; subject rotates around vertical world axis22.5deg clockwise eachframe, never rotate the flat image.\nREADING ORDER:\nrow1: direct REAR north; REAR-RIGHT22.5; rear-right DIAGONAL45; right-rear67.5\nrow2: EXACT RIGHT PROFILE90; right-front112.5; FRONT-RIGHT135; almost FRONT157.5\nrow3: direct FRONT south180; almost front-LEFT202.5; FRONT-LEFT225; left-front247.5\nrow4: EXACT LEFT PROFILE270; left-rear292.5; REAR-LEFT315; almost REAR337.5.\nEnsure row2col1 shows right-facing full SIDE profile and row4col1 shows left-facing full SIDE profile. Row3col1 faces directly viewer. Every frame accurately advances orientation; 16th joins1st. Stable neutral standing stance, small believable pivoting hoof/foot reposition, no gait cycle, no morphing bodies. This provides intermediate rotations between the8compass directions.\nSUBJECT: PACK YAK: one large dark-brown shaggy yak with curved horns and compact woven panniers, admiral walking alongside with lead rope. Never ride yak. Grounded slow alternating fourbeat walk, long fur sways slightly. Both face rowheading. Feet clearly visible below fur.\nThe sequence is rotating in place, NOT walking. Constant scale, full subject fits each cell.",
+      "admiralReferenceHeight": 266.667
+    },
+    {
+      "id": "common",
+      "action": "camp",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-838c1d9d-fdf3-4768-b185-c4a37411a70e.png",
+      "prompt": "Use case: stylized-concept. Production 2D CAMPING animation sprite sheet, 8 consecutive loop frames, EXACTLY4columns2rows, wide1536x768 transparent RGBA canvas, square384cells. One full small camp scene percell within330x300, large transparent gutters, no text or borders or floor tiles.\nPolished hand-painted 3D miniature game art viewed from fixed orthographic25degree elevated southeast angle. Same scene and constant size/location in ALL8frames: small beige A-frame travel tent atrear, dark navy goldtrim admiral in black bicorne whitefeather/redcape seated on a log LEFT consulting paper map, brown broad-brim hat navigator white shirt greentrousers seated RIGHT with cup, redbandana porter whiteshirt tantrousers resting by backpack atrear. Small stone-ring campfire centered infront, bedroll and cookingpot on side. Natural firelight warms figures. All stationary, do not assemble/disassemble camp.\nEach frame advances by1/8 of continuous quiet2second breathing/rest cycle. Campfire flame shape visibly flickers in each pose with smooth progression, faint small rising sparks, navigator gently lifts/lowers cup, admiral subtly looks atmap, porter breathes resting. Tent and furniture stay rigidly identical. Eighth frame joinsfirst seamlessly, no duplicateendpoint. Groundpivot cell192,335. Preserve subject identities and crisp clean alpha, no background residue.",
+      "admiralReferenceHeight": 216.667
+    }
+  ]
+}

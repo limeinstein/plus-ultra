@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>육상 탐험 · 동작 시트 점검</title>
+<style>
+  :root { color-scheme: dark; font-family: 'Malgun Gothic',sans-serif; background:#141e24; color:#ece9dc }
+  body { margin:0; padding:32px; max-width:1500px; margin-inline:auto }
+  h1 { margin:0 0 8px; font-size:30px } p { color:#b6c3bf; line-height:1.7 }
+  .bar { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#24333a; padding:18px; border-radius:12px; margin:24px 0 }
+  label { display:flex; align-items:center; gap:9px } select,button { background:#344a50; color:#fff; border:1px solid #55706e; border-radius:7px; padding:9px 12px; font:inherit }
+  button { cursor:pointer } #grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px }
+  article { background:#1e2c31; border:1px solid #3a5054; border-radius:12px; overflow:hidden }
+  h2 { margin:16px 18px 8px; font-size:18px } canvas { display:block; width:100%; height:auto; background:#8b9c76 }
+  .meta { padding:12px 18px; font-size:13px; color:#d2d9ce; min-height:20px } a { color:#bce0de; text-decoration:none; margin-right:10px }
+  footer { margin-top:24px; color:#a5b8b9; font-size:13px }
+</style>
+<h1>육상 탐험 · 걸음에서 야영까지</h1>
+<p>제독의 크기는 같게, 코끼리는 크게 표시합니다. 왼발 내딛기 → 발 교차 → 오른발 내딛기 → 발 교차를 느린 속도와 한 장면씩 보기로 확인할 수 있습니다.</p>
+<div class="bar">
+  <label>동작 <select id="action"><option value="walk">보행</option><option value="turn">연속 회전</option><option value="camp">야영</option></select></label>
+  <label>방향 <select id="direction"><option value="0">북 ↑</option><option value="1">북동 ↗</option><option value="2" selected>동 →</option><option value="3">남동 ↘</option><option value="4">남 ↓</option><option value="5">남서 ↙</option><option value="6">서 ←</option><option value="7">북서 ↖</option></select></label>
+  <button id="left">↶ 45°</button><button id="right">↷ 45°</button><button id="pause">걸음 정지</button>
+  <button id="step">한 장면씩 보기</button>
+  <label>속도 <input id="speed" type="range" min="0.25" max="2" step="0.25" value="1"><span id="speedLabel">1×</span></label>
+  <label>바탕 <select id="ground"><option value="#8b9c76">초원</option><option value="#dcc494">모래</option><option value="#e9eff1">설원</option><option value="#24333a">어두운 바탕</option></select></label>
+</div>
+<main id="grid"></main>
+<footer>8방향 · 보행: 방향마다 4가지 자세 · 회전: 22.5° 간격 16칸 · 야영: 8칸 반복. 일부 서쪽 방향은 동쪽 그림을 뒤집어 사용합니다. 모든 이동 수단에 같은 제독 크기 기준을 적용합니다.</footer>
+<script src="images/manifest.js"></script>
+<script src="js/core/images.js"></script>
+<script src="js/data/seafx.js"></script>
+<script src="js/data/expedition_motion.js"></script>
+<script src="js/art/party.js"></script>
+<script src="js/art/expedition_motion.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); }, cards = [], t = 0, phase = 0, stopped = false;
+  Object.keys(G.EXPEDITION_MOTION.mounts).forEach(function (id) {
+    var m = G.EXPEDITION_MOTION.mounts[id], card = document.createElement('article');
+    card.innerHTML = '<h2>' + m.label + '</h2><canvas width="420" height="310"></canvas><div class="meta"></div>';
+    var links = document.createElement('div'); links.className = 'meta';
+    ['walk', 'turn', 'camp'].forEach(function (a, i) { var sheet = G.EXPEDITION_MOTION.sheets[m[a]]; if (!sheet) return; var link = document.createElement('a'); link.href = 'images/' + sheet.file; link.textContent = ['보행 시트','회전 시트','야영 시트'][i]; link.target = '_blank'; links.appendChild(link); });
+    card.appendChild(links); $('grid').appendChild(card);
+    cards.push({ id:id, cv:card.querySelector('canvas'), text:card.querySelector('.meta'), cache:{} }); G.ExpeditionMotion.preload(id);
+  });
+  function turn(d) { $('direction').value = (+$('direction').value + d + 8) % 8; }
+  $('left').onclick = function () { turn(-1); }; $('right').onclick = function () { turn(1); };
+  $('pause').onclick = function () { stopped = !stopped; this.textContent = stopped ? '걸음 이어가기' : '걸음 정지'; };
+  var stepRequested = false;
+  $('step').onclick = function () { stopped = true; phase = (Math.floor(phase * 4 + 0.001) + 1) / 4; stepRequested = true; $('pause').textContent = '걸음 이어가기'; };
+  var before = performance.now();
+  function draw(now) {
+    var dt = Math.min(0.06, (now - before) / 1000), speed = +$('speed').value; before = now; t += dt;
+    if (!stopped) phase += dt * speed * 1.2;
+    $('speedLabel').textContent = speed + '×';
+    var mode = $('action').value, dir = +$('direction').value;
+    if (mode === 'turn') dir = Math.floor(t * speed / 0.7) % 8;
+    cards.forEach(function (card) {
+      var ctx = card.cv.getContext('2d'); ctx.fillStyle = $('ground').value; ctx.fillRect(0,0,420,310);
+      var u = { pts:[[210,278]], head:Math.PI/2-dir*Math.PI/4, moving:(!stopped || stepRequested) && mode==='walk', camping:mode==='camp', phase:phase,t:t,mount:{id:card.id,n:12},party:12,size:2,cache:card.cache,ring:true };
+      var ok = G.ExpeditionMotion.draw(ctx,u);
+      var selection = G.ExpeditionMotion.sample(u);
+      card.text.textContent = ok ? (selection.action==='walk' ? ['왼발 내딛기','발 교차','오른발 내딛기','발 교차'][selection.frame] : {turn:'방향 전환',camp:'야영'}[selection.action]) : '그림을 불러오는 중…';
+    });
+    stepRequested = false;
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+</html>

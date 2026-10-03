@@ -40,6 +40,12 @@ def game_data():
     d['sponsors'] = [{'id': m[0], 'title': m[1], 'type': m[2], 'city': int(m[3]),
                       'holders': re.findall(r"\[(\d+), (\d+), '([^']*)'\]", m[4])}
                      for m in re.findall(r"\{ id: '(\w+)', title: '([^']*)', type: '(\w+)', city: (\d+),.*?holders: (\[\[.*?\]\]) \}", people, re.S)]
+    # 추가 저택도 게임에서 people.js 다음에 읽으므로 그림 이름 점검에 함께 넣는다.
+    if os.path.exists(os.path.join(ROOT, 'js/data/estates.js')):
+        estates = read('js/data/estates.js')
+        for sid, title, kind, city, holders in re.findall(r"m\('([^']+)', '([^']+)', '(\w+)', (\d+),[^\n]*\n\s*(\[\[.*?\]\])\);", estates, re.S):
+            d['sponsors'].append({'id': sid, 'title': title, 'type': kind, 'city': int(city),
+                                  'holders': re.findall(r"\[(\d+), (\d+), '([^']*)'\]", holders)})
     # js/data/rulers.js: 군주의 대(代)를 역사대로 이어 붙인 목록과 초상 그림 번호 (JS의 numberPics와 같은 규칙)
     if os.path.exists(os.path.join(ROOT, 'js/data/rulers.js')):
         rul = read('js/data/rulers.js')
@@ -103,6 +109,8 @@ def game_data():
 def valid_keys(d):
     """게임이 찾는 모든 키 → 설명"""
     k = {'title': '타이틀 화면', 'characters/player': '거리를 걷는 제독'}
+    for name in ('props', 'ruins', 'sphinx', 'poker', 'fishing', 'boat'):
+        k['minigames/' + name] = '미니게임 그림 · ' + name
     cn = {c['id']: c['name'] for c in d['cities']}
     # 거리 배경 (항구/내륙, 변형은 뒤에 _a, _b … 를 붙인다)
     for c in d['cities']:
@@ -157,6 +165,7 @@ def valid_keys(d):
     for style in portrait_styles:
         for role in portrait_roles:
             k['portraits/npc-roles/%s/%s' % (style, role)] = '도시 양식·역할별 NPC · %s · %s' % (style, role)
+            k['portraits/npc-roles/%s/%s_half' % (style, role)] = '도시 양식·역할별 무릎상 · %s · %s' % (style, role)
     pool_nations = ['pt', 'es', 'fr', 'de', 'en', 'nl', 'na', 'kr', 'cn', 'jp', 'ot', 'af', 'az', 'inca', 'vn', 'eg', 'pe', 'ind', 'se']
     for kind, label in [('mates', '항해사 후보'), ('sponsors', '후원자')]:
         for nation in pool_nations:
@@ -165,6 +174,7 @@ def valid_keys(d):
                     k['portraits/pools/%s/%s/%s/%02d' % (kind, nation, gender, index)] = '%s 초상 묶음 · %s · %s · %02d' % (label, nation, gender, index)
     for m in d['mates']:
         k['portraits/mates/' + m['id']] = '동료 · ' + m['name']
+        k['portraits/mates/' + m['id'] + '_half'] = '동료 무릎상 · ' + m['name']
     for m in d['maids']:
         k['portraits/maids/' + m['id']] = '여급 · %s (%s)' % (m['name'], cn.get(m['city'], '?'))
         k['portraits/maids/' + m['id'] + '_half'] = '여급 서 있는 모습 · %s (%s)' % (m['name'], cn.get(m['city'], '?'))
@@ -176,11 +186,13 @@ def valid_keys(d):
             k['maid-styles/%s/%d_half' % (sid, n)] = '지역별 여급 서 있는 모습 · %s %d' % (label, n)
     for sp in d['sponsors']:
         k['portraits/sponsors/' + sp['id']] = '후원자 · ' + sp['title']
+        k['portraits/sponsors/' + sp['id'] + '_half'] = '후원자 무릎상 · ' + sp['title']
         for i, h in enumerate(sp['holders']):
             pic = h[3] if len(h) > 3 else str(i + 1)
             if not pic.isdigit() or pic == '0':
                 continue                                   # 다른 후원자 그림을 빌리거나 이름 없는 그 자리 사람
             k['portraits/sponsors/%s_%s' % (sp['id'], pic)] = '후원자 · %s — %s (%s~%s)' % (sp['title'], h[2], h[0], h[1])
+            k['portraits/sponsors/%s_%s_half' % (sp['id'], pic)] = '후원자 무릎상 · %s — %s' % (sp['title'], h[2])
     for r in d['rivals']:
         k['portraits/rivals/' + r] = '경쟁자 · ' + r
     for b, label in (('son', '아들'), ('daughter', '딸')):
@@ -263,7 +275,7 @@ def report(found, dups, keys):
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),
-              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/')]
+              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('미니게임', 'minigames/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

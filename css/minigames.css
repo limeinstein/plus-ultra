@@ -1,0 +1,74 @@
+/* 건물 외관과 같은 재질로 그린 미니게임. 글자와 판정 표시는 그림 위에 별도로 둔다. */
+.mg-sprite { display: inline-block; flex: none; pointer-events: none; }
+.mg-art .pz-intro, .mg-art > div:first-child:not(.poker):not(.mg-sphinx-scene) { font-size: 16px !important; }
+.mg-art .hanoi, .mg-art .grail-row, .mg-art .balance-stage, .mg-art .maze-wrap, .mg-art .cube-wrap {
+  background: #63533e var(--mg-scene) center 58% / cover no-repeat;
+  border: 2px solid #806039; border-radius: 5px; box-shadow: inset 0 0 35px #271b1266;
+}
+.mg-art .hanoi { height: 300px; gap: 18px; padding: 35px 24px 36px; }
+.mg-art .hanoi .peg { width: 220px; flex: 1; min-width: 0; height: 230px; border: 0; padding-bottom: 0; border-radius: 4px; }
+.mg-art .hanoi .peg::after { content: attr(data-label); position: absolute; bottom: -27px; padding: 2px 14px; border: 1px solid #a9834f; border-radius: 3px; color: #ffeccc; background: #322319e8; font-size: 14px; }
+.mg-art .hanoi .peg.sel { background: #edc87522; outline: 1px solid #ffe3a6; }
+.mg-art.mg-ready .hanoi .pole { background: var(--mg-props) var(--mg-pole-pos) / var(--mg-pole-size) no-repeat; width: 40px; height: 222px; margin-left: -20px; }
+.mg-art.mg-ready .hanoi .disc { background-color: transparent !important; border-radius: 0; box-shadow: none; background-image: var(--mg-props); background-size: var(--mg-disc-size); background-position: var(--mg-disc-pos); height: 32px; margin-top: -1px; filter: drop-shadow(0 3px 2px #21170d88); max-width: 96%; }
+.mg-art .disc b { display: block; text-align: center; font-size: 13px; color: #ffedb2; text-shadow: 0 1px 2px #21150a, 0 0 4px #21150a; line-height: 27px; }
+.mg-art .peg.sel .disc:last-child { transform: translateY(-9px); filter: drop-shadow(0 0 5px #ffdc85); }
+.mg-art .balance-stage { min-height: 250px; padding: 10px; }
+.mg-art .pans { position: relative; width: 420px; height: 248px; max-width: 100%; margin: 0 auto; transform-origin: 50% 30%; }
+.mg-art .scale-picture { position: absolute; width: 330px; height: 245px; left: 45px; top: 0; }
+.mg-art .pans .beam { display: none; }
+.mg-art .pans .pan { position: absolute; top: 159px; width: 94px; min-height: 24px; padding: 4px; background: #28261bea; border: 1px solid #d2ac63; color: #fff3d2; border-radius: 4px; font-size: 13px; z-index: 1; }
+.mg-art .pans .L { left: 43px; } .mg-art .pans .R { right: 43px; }
+.mg-art .gems { padding: 10px; border: 1px solid #baa078; background: #37271e; border-radius: 4px; gap: 12px; }
+.mg-art.mg-ready .gem { background: var(--mg-props) var(--mg-gem-pos) / var(--mg-gem-size) no-repeat; border-radius: 8px; box-shadow: none; width: 58px; height: 67px; text-shadow: 0 1px 3px #000, 0 0 4px #000; }
+.mg-art.mg-ready .gems.many .gem { width: 41px; height: 48px; }
+.mg-art .gem.L { outline: 2px solid #ffb791; background-color: #8c3b2044; } .mg-art .gem.R { outline: 2px solid #8cd5ef; background-color: #24537044; }
+.mg-art .gem small { background: #22160ecc; padding: 0 5px; border-radius: 2px; font-size: 11px; }
+.mg-art .grail-row { gap: 32px; padding: 20px 16px 18px; min-height: 310px; align-items: flex-end; }
+.mg-art .vessel { position: relative; width: 190px; max-width: 30%; padding: 8px 5px; gap: 6px; }
+.mg-art .vessel.sel { background: #e8bf562e; box-shadow: inset 0 0 0 2px #ffe3a0; }
+.mg-art .vessel-art { display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 190px; width: 100%; }
+.mg-art .cup-picture { width: 130px; max-width: 84%; height: 100%; filter: drop-shadow(0 4px 3px #34241199); }
+.mg-art .vessel:nth-child(2) .cup-picture { height: 84%; width: 120px; }
+.mg-art .vessel:nth-child(3) .cup-picture { height: 63%; width: 108px; }
+.mg-art .water-meter { width: 9px; height: 120px; border: 1px solid #e2bf7b; background: #19282ecc; border-radius: 6px; overflow: hidden; position: relative; margin-bottom: 12px; }
+.mg-art .water-meter i { position: absolute; bottom: 0; width: 100%; background: linear-gradient(#83f0e8,#258cbe); transition: height .35s; }
+.mg-art .vessel .amt, .mg-art .vessel .lbl { background: #302319ed; color: #ffedc5; border: 1px solid #b49359; padding: 2px 9px; border-radius: 4px; font-size: 15px; }
+.mg-art .vessel .amt { font-size: 20px; min-width: 80px; text-align: center; }
+.mg-art .maze-wrap, .mg-art .cube-wrap { padding: 18px; gap: 18px; }
+.mg-art .maze, .mg-art .cboard { flex: none; box-shadow: 0 5px 18px #18100888; border-color: #4e3823; }
+.mg-art.mg-ready .maze .rm.seen, .mg-art.mg-ready .maze .rm.near, .mg-art.mg-ready .maze .rm.trail, .mg-art.mg-ready .cboard .cl {
+  background-image: var(--mg-props); background-position: var(--mg-tile-pos); background-size: var(--mg-tile-size);
+}
+.mg-art .maze .rm.near { filter: brightness(.55); } .mg-art .maze .rm.trail { box-shadow: inset 0 0 0 2px #ba822f88; }
+.mg-art .maze .rm.wn { border-top: 4px ridge #644b31; } .mg-art .maze .rm.we { border-right: 4px ridge #644b31; }
+.mg-art .maze .rm.ws { border-bottom: 4px ridge #644b31; } .mg-art .maze .rm.ww { border-left: 4px ridge #644b31; }
+.mg-art .maze .rm.me::after { display: none; }
+.mg-art .maze-mark { position: absolute; inset: 3px; }
+.mg-art .maze-mark.mg-torch { inset: 1px 12px; filter: drop-shadow(0 0 6px #ffa33c); }
+.mg-art .maze-mark.locked { filter: brightness(.65); }
+.mg-art .maze-side, .mg-art .cube-side { align-self: stretch; background: #f2e4cbeF; border: 1px solid #ad8e57; padding: 12px; border-radius: 4px; color: #3a2a19; }
+.mg-art.mg-ready .cboard .cl.rock { background-color: #483c30; background-image: var(--mg-props); background-position: var(--mg-rock-pos); background-size: var(--mg-rock-size); }
+.mg-art .cboard .cl.goal { box-shadow: inset 0 0 0 3px #d09930; }
+.mg-art .cboard .cl.goal::before { content: ''; position: absolute; inset: 4px; background: var(--mg-props) var(--mg-door-pos) / var(--mg-door-size) no-repeat; opacity: .85; }
+.mg-art.mg-ready .cboard .cube { background: var(--mg-props) var(--mg-cube-pos) / var(--mg-cube-size) no-repeat; border-radius: 0; box-shadow: none; inset: 2px; filter: drop-shadow(0 3px 2px #27170988); }
+.mg-art .cboard .cube .pf { z-index: 1; background: #ffc833; box-shadow: 0 0 4px #663a09; }
+.mg-art .cboard .cube.ft .pf { inset: 12px 15px 21px; border: 1px solid #fff1a6; transform: rotate(-12deg); }
+.mg-art .cboard .cube.fb .pf { background: #281b14; }
+.mg-art.mg-ready .c3 .f3 { background-image: var(--mg-props); background-position: var(--mg-tile-pos); background-size: var(--mg-tile-size); border-color: #806139; }
+.mg-art.mg-ready .c3 .f3.em { background-color: #efbf45; background-blend-mode: multiply; box-shadow: inset 0 0 0 2px #f7d171; color: #6c390b; }
+.mg-art .cboard .cl .gl { background: #2c231ee6; color: #ffe8ac; padding: 3px 5px; border-radius: 3px; }
+.mg-sphinx-scene { height: 225px; border: 2px solid #826137; border-radius: 4px; background: #6c573d var(--mg-scene) center 8% / cover no-repeat; margin-bottom: 12px; }
+.mg-art .sphinx-q { background: #ead8b7; border: 1px solid #b49a6c; border-left: 4px solid #a17831; }
+.mg-art .poker { padding: 28px 22px 20px; background: #163c39 var(--mg-scene) center / 100% 100% no-repeat; border: 2px solid #84613a; border-radius: 6px; }
+.mg-art .poker .row { gap: 18px; margin: 12px 0 30px; }
+.mg-art .poker .plog { color: #ffeac1; font-size: 16px; background: #0c2624dc; border: 1px solid #a68a4d; padding: 8px; border-radius: 4px; }
+.mg-art.mg-ready .pcard { background: var(--mg-props) var(--mg-front-pos) / var(--mg-front-size) no-repeat; border: none; border-radius: 5px; box-shadow: none; filter: drop-shadow(2px 5px 3px #001b16bb); }
+.mg-art.mg-ready .pcard.back { background-position: var(--mg-back-pos); background-size: var(--mg-back-size); }
+.mg-art .pcard.held { outline: 2px solid #ffe5a1; box-shadow: 0 0 10px #ffe5a155; }
+.mg-art .pcard i { color: #ffe5a1; bottom: -23px; font-size: 13px; }
+.mg-art .pcard .r { left: 20px; top: 14px; font-size: 20px; } .mg-art .pcard .rb { right: 20px; bottom: 14px; font-size: 20px; }
+.mg-art .pcard .s { font-size: 42px; top: 42px; }
+.mg-fishing canvas { max-width: 100%; height: auto !important; box-sizing: border-box; box-shadow: 0 3px 13px #30211166; }
+.mg-fishing .fstat { gap: 8px; flex-wrap: wrap; } .mg-fishing .fbait { font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { .mg-art .pans, .mg-art .water-meter i, .mg-art .pcard { transition: none; } }

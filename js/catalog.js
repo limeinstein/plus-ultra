@@ -117,7 +117,7 @@
           G.Dominion && G.DOMINION[c.id] ? ['다스린 나라', G.Dominion.history(c).map(h => h.y + (h.m ? '.' + h.m : '') + ' ' + h.n + (G.NATION_LEADERS[h.n] ? ' (' + G.Dominion.leader(h.n, h.y).text + ')' : '')).join(' → ')] : null,
           G.DOMINION_NOTES && G.DOMINION_NOTES[c.id] && G.DOMINION_NOTES[c.id][0] ? ['내력', G.DOMINION_NOTES[c.id][0]] : null, ['말', G.LANGS[c.lang]], ['종교', REL[c.rel]],
           ['규모', SIZE[c.size] + (c.port ? ' · 항구' : ' · 내륙')], ['건물', facilities(c).join(', ')],
-          ['특산품', c.goods.map(goodName).join(', ')], ['건축 양식', STYLE[c.style] + ' (' + c.style + ')'],
+          ['특산품', c.goods.map(goodName).join(', ') || '—'], c.relay && c.relay.length ? ['중계무역', c.relay.map(x => goodName(x.id) + (x.from ? ' (' + x.from + '~)' : '')).join(', ') + ' — 먼 산지에서 들여와 판다'] : null, ['건축 양식', STYLE[c.style] + ' (' + c.style + ')'],
           c.founded ? ['건설', c.founded + '년'] : null,
           c.until ? ['사라짐', c.until + '년'] : null,
           c.flags.includes('H') ? ['입항', '성지 — 다른 종교의 함대는 들어갈 수 없음'] : null,

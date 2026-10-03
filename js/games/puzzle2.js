@@ -1,6 +1,6 @@
 /* 유적의 장치 2 — 성배의 물 나누기 · 미궁 64 · 돌 입방체 · 스핑크스의 수수께끼(2차방정식).
    G.Games.pz[종류](발견물, 난이도 1~3) → Promise<true 열림 | false 실패>. 고르는 일은 js/games/puzzle.js.
-   그림은 모두 CSS·글자로 그린다 (따로 그림 파일 없음). 스타일은 이 파일이 한 번 넣는다. */
+   그림은 images/minigames의 소품 판·배경으로 표시한다. 수치·방향·벽은 별도로 그려 읽기 쉽게 한다. */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -36,16 +36,39 @@
     /* 입방체 */
     '.cube-wrap{display:flex;gap:22px;justify-content:center;align-items:flex-start}',
     '.cboard{display:grid;gap:3px;background:#5a3e22;padding:6px;border-radius:6px;user-select:none}',
-    '.cboard .cl{width:58px;height:58px;background:#d8c49c;border-radius:3px;position:relative;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer}',
+    '.cboard .cl{width:58px;height:58px;background:#d8c49c;border-radius:3px;position:relative;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:default}',
+    '.cboard .cl.can{cursor:pointer;background:#ecdcb2;box-shadow:inset 0 0 0 2px rgba(184,134,43,.6)}.cboard .cl.can:hover{background:#f6e9c4}',
     '.cboard .cl.rock{background:#4a3a2a repeating-linear-gradient(45deg,#4a3a2a 0 6px,#3a2c1e 6px 12px);cursor:default}',
-    '.cboard .cl.goal{background:#e7d38a;box-shadow:inset 0 0 0 3px #b8862b}.cboard .cl.goal::before{content:"門";font-size:24px;color:#8a6a1a;opacity:.6}',
-    '.cboard .cl.seal::before{content:"◎";color:#7a4a9a}.cboard .cl.seal.lit::before{content:"●";color:#b8862b}',
-    '.cboard .cube{position:absolute;inset:6px;background:linear-gradient(135deg,#9a8e80,#6e6458);border-radius:5px;box-shadow:0 3px 6px rgba(0,0,0,.45)}',
-    '.cboard .cube .pf{position:absolute;background:#e0b23a}.cboard .cube.ft .pf{inset:7px;border-radius:3px;box-shadow:0 0 10px #ffd86a}',
-    '.cboard .cube.fn .pf{left:4px;right:4px;top:0;height:7px}.cboard .cube.fs .pf{left:4px;right:4px;bottom:0;height:7px}',
-    '.cboard .cube.fe .pf{top:4px;bottom:4px;right:0;width:7px}.cboard .cube.fw .pf{top:4px;bottom:4px;left:0;width:7px}',
-    '.cboard .cube.fb .pf{left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#2a1f16;box-shadow:none}',
-    '.cube-side{width:230px;font-size:16px;line-height:1.6}.cube-side .face{font-size:20px;font-weight:800;color:#8a5a10}',
+    '.cboard .cl.goal{background:#e7d38a;box-shadow:inset 0 0 0 3px #b8862b}.cboard .cl.goal::before{content:"門";position:absolute;font-size:34px;color:#8a6a1a;opacity:.22}',
+    '.cboard .cl .gl{position:relative;font-size:12px;line-height:1.15;color:#6a4a10;text-align:center;font-weight:800}',
+    '.cboard .cl.seal::before{content:"◎";position:absolute;font-size:34px;color:#7a4a9a;opacity:.45}.cboard .cl.seal.lit::before{content:"●";color:#b8862b;opacity:.6}',
+    '.cboard .pv{position:relative;font-size:24px;font-weight:900;color:#8a6a2a}.cboard .pv.pvt{color:#e0a010;text-shadow:0 0 8px #ffe08a}.cboard .pv.pvb{color:#3a2a1a}',
+    '.cboard .pv.good{animation:pzpulse 1s ease-in-out infinite}@keyframes pzpulse{50%{transform:scale(1.35)}}',
+    /* 3D 돌 입방체: 위·남·동 면이 보이게 비스듬히 내려다본다 */
+    '.c3{position:absolute;inset:0;perspective:240px;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none}',
+    '.c3 .tilt{width:36px;height:36px;position:relative;transform-style:preserve-3d;transform:rotateX(32deg) rotateY(-24deg)}',
+    '.c3 .roll{position:absolute;inset:0;transform-style:preserve-3d}',
+    '.c3 .f3{position:absolute;inset:0;box-sizing:border-box;border:1px solid #4e463d;background:linear-gradient(135deg,#aa9e8e,#776c60);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:22px;line-height:1;backface-visibility:hidden}',
+    '.c3 .f3t{transform:translateZ(18px);background:linear-gradient(135deg,#bdb2a2,#8f8376)}.c3 .f3b{transform:rotateY(180deg) translateZ(18px)}',
+    '.c3 .f3n{transform:rotateX(90deg) translateZ(18px)}.c3 .f3s{transform:rotateX(-90deg) translateZ(18px);filter:brightness(.8)}',
+    '.c3 .f3e{transform:rotateY(90deg) translateZ(18px);filter:brightness(.66)}.c3 .f3w{transform:rotateY(-90deg) translateZ(18px)}',
+    '.c3 .f3.em{background:radial-gradient(circle,#fff0a8,#e2a826 62%,#a87410);color:#7a3e00;text-shadow:0 0 4px #fff4c0}',
+    '.c3.big{position:relative;inset:auto;width:100px;height:100px;flex:none;perspective:420px}.c3.big .tilt{width:58px;height:58px}.c3.big .f3{font-size:34px}',
+    '.c3.big .f3t{transform:translateZ(29px)}.c3.big .f3b{transform:rotateY(180deg) translateZ(29px)}.c3.big .f3n{transform:rotateX(90deg) translateZ(29px)}',
+    '.c3.big .f3s{transform:rotateX(-90deg) translateZ(29px)}.c3.big .f3e{transform:rotateY(90deg) translateZ(29px)}.c3.big .f3w{transform:rotateY(-90deg) translateZ(29px)}',
+    /* 굴러가는 모습: 앞 칸에서 넘어오며 한 면 돈다 (판 위) · 제자리에서 한 면 돈다 (옆 큰 그림) */
+    '.c3 .roll.re{animation:pzre .24s ease-out}.c3 .roll.rw{animation:pzrw .24s ease-out}.c3 .roll.rn{animation:pzrn .24s ease-out}.c3 .roll.rs{animation:pzrs .24s ease-out}',
+    '@keyframes pzre{from{transform:translateX(-61px) rotateY(-90deg)}}@keyframes pzrw{from{transform:translateX(61px) rotateY(90deg)}}',
+    '@keyframes pzrn{from{transform:translateY(61px) rotateX(-90deg)}}@keyframes pzrs{from{transform:translateY(-61px) rotateX(90deg)}}',
+    '.c3.big .roll.re{animation-name:pzre2}.c3.big .roll.rw{animation-name:pzrw2}.c3.big .roll.rn{animation-name:pzrn2}.c3.big .roll.rs{animation-name:pzrs2}',
+    '@keyframes pzre2{from{transform:rotateY(-90deg)}}@keyframes pzrw2{from{transform:rotateY(90deg)}}@keyframes pzrn2{from{transform:rotateX(-90deg)}}@keyframes pzrs2{from{transform:rotateX(90deg)}}',
+    '.cube-side{width:260px;font-size:16px;line-height:1.6}.cube-side .face{font-size:20px;font-weight:800;color:#8a5a10}',
+    '.cube-side .cs-top{display:flex;gap:10px;align-items:center;margin-bottom:6px}',
+    '.c3 .gh{position:absolute;font-style:normal;font-weight:900;font-size:13px;line-height:1;color:#d99a10;text-shadow:0 0 5px #ffe08a;z-index:6}.c3.big .gh{font-size:20px}',
+    '.c3 .ghn{top:0;left:50%;transform:translateX(-50%)}.c3 .ghw{left:0;top:50%;transform:translateY(-50%)}.c3 .ghb{bottom:0;left:50%;transform:translateX(-50%);color:#3a2a1a;text-shadow:none}',
+    '.cpads{display:grid;grid-template-columns:repeat(3,1fr);grid-template-areas:". n ." "w . e" ". s .";gap:4px;margin:4px 0 8px}',
+    '.cpads .cpad{display:flex;flex-direction:column;align-items:center;padding:4px 2px;font-size:15px;line-height:1.2;min-height:46px}.cpads .cpad small{font-size:11px;opacity:.85}',
+    '.cpads .cpn{grid-area:n}.cpads .cpe{grid-area:e}.cpads .cps{grid-area:s}.cpads .cpw{grid-area:w}',
     /* 스핑크스 */
     '.sphinx-q{font-size:20px;line-height:1.7;padding:12px 16px;background:rgba(120,90,50,.1);border-left:4px solid #b8862b;margin:8px 0 12px}',
     '.sphinx-q .eq{font-size:28px;font-weight:800;font-family:Georgia,serif;letter-spacing:.04em;display:block;text-align:center;margin:6px 0}',
@@ -76,15 +99,20 @@
         buttons: [{ label: '처음부터', value: 'r', cls: 'navy', onClick: function () { reset(); return false; } }, { label: '포기한다', value: 'g', cls: 'ghost', onClick: function () { resolve(false); } }],
         onKey: function (e) { var i = { 1: 0, 2: 1, 3: 2 }[e.key]; if (i != null) { click(i); return true; } return false; } });
       var row = win.content.querySelector('.grail-row'), stat = win.content.querySelector('.pz-stat'), msg = '';
+      if (G.MinigameArt) G.MinigameArt.mount(win.content, 'grail');
       function draw() {
         row.innerHTML = P.cap.map(function (c, i) {
+          if (G.MinigameArt) return '<div class="vessel' + (i === 0 ? ' grail' : '') + (sel === i ? ' sel' : '') + '" data-i="' + i + '" role="button" tabindex="0" aria-label="' + P.names[i] + ', ' + amt[i] + '되 / ' + c + '되"><div class="amt">' + amt[i] + ' / ' + c + '되</div><div class="vessel-art">' + G.MinigameArt.sprite(['gold', 'silver', 'bronze'][i], 'cup-picture') + '<div class="water-meter" aria-hidden="true"><i style="height:' + (amt[i] / c * 100) + '%"></i></div></div><div class="lbl">' + (i + 1) + ' · ' + P.names[i] + '</div></div>';
           var h = Math.round(40 + c / P.cap[0] * 150), ticks = '';
           for (var k = 1; k < c; k++) ticks += '<div class="tick" style="bottom:' + (k / c * 100) + '%"></div>';
           return '<div class="vessel' + (i === 0 ? ' grail' : '') + (sel === i ? ' sel' : '') + '" data-i="' + i + '"><div class="amt">' + amt[i] + '</div>' +
             '<div class="jar" style="height:' + h + 'px"><div class="water" style="height:' + (amt[i] / c * 100) + '%"></div>' + ticks + '</div>' +
             (i === 0 ? '<div class="stem"></div><div class="foot"></div>' : '') + '<div class="lbl">' + P.names[i] + ' (' + c + '되)</div></div>';
         }).join('');
-        U.$$('.vessel', row).forEach(function (e) { e.onclick = function () { click(+e.dataset.i); }; });
+        U.$$('.vessel', row).forEach(function (e) {
+          e.onclick = function () { click(+e.dataset.i); };
+          e.onkeydown = function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); ev.stopPropagation(); click(+e.dataset.i); } };
+        });
         stat.innerHTML = msg || ('부은 횟수: ' + moves + ' / ' + limit + '   · 처음부터 다시: ' + resets + '번 남음');
         msg = '';
       }
@@ -170,6 +198,7 @@
           if (m != null) { move(m); return true; } return false;
         } });
       var box = win.content.querySelector('.maze'), side = win.content.querySelector('.maze-side'), stat = win.content.querySelector('.pz-stat');
+      if (G.MinigameArt) G.MinigameArt.mount(win.content, 'maze');
       function visible(k) {
         if (lv === 1 || seen[k]) return 'seen';
         if (lv === 2) {   // 지나온 방에서 문이 열린 옆방은 어렴풋이 보인다
@@ -185,10 +214,10 @@
           if (v) { cls += ' ' + v; if (!(o & 1)) cls += ' wn'; if (!(o & 2)) cls += ' we'; if (!(o & 4)) cls += ' ws'; if (!(o & 8)) cls += ' ww'; if (trail[k] && lv > 1) cls += ' trail'; }
           if (x === px && y === py) cls += ' me';
           var mark = '';
-          if (x === ex && y === ey) mark = got ? '🚪' : '🔒';
-          if (key === k && !got && (v || lv === 1)) mark = '🗝️';
+          if (x === ex && y === ey) mark = G.MinigameArt ? G.MinigameArt.sprite('door', 'maze-mark' + (got ? '' : ' locked'), got ? '출구' : '잠긴 출구') : got ? '🚪' : '🔒';
+          if (key === k && !got && (v || lv === 1)) mark = G.MinigameArt ? G.MinigameArt.sprite('key', 'maze-mark', '열쇠') : '🗝️';
           if (x === sx && y === sy && !(x === px && y === py)) mark = mark || '·';
-          h += '<div class="' + cls + '" data-k="' + k + '">' + (x === px && y === py ? '' : mark) + '</div>';
+          h += '<div class="' + cls + '" data-k="' + k + '">' + (x === px && y === py ? (G.MinigameArt ? G.MinigameArt.sprite('torch', 'maze-mark mg-torch', '현재 위치') : '') : mark) + '</div>';
         }
         box.innerHTML = h;
         U.$$('.rm', box).forEach(function (e) {
@@ -222,6 +251,7 @@
   // ================================================================ 돌 입방체 굴리기
   // 한 면에만 금빛 문장이 있는 돌 입방체를 굴려 문(門) 칸에 문장이 위로 오게 세운다.
   // ★1 4×4 · ★2 5×5 바위 · ★3 6×6 바위 + 인장 칸 둘(문장을 아래로 하여 눌러 찍어야 한다)
+  // 알기 쉽게: 3D 입방체(위·남·동 면이 보임, 굴러가는 모습), 옆 칸마다 굴리면 문장이 향할 곳(☀ 위 · ● 아래 · 화살표), 방향 단추, 한 수 무르기
   var ROLL = {   // 굴린 방향 → 문장 면이 어디로 가는가 (t 위 · b 아래 · n 북 · s 남 · e 동 · w 서)
     e: { t: 'e', e: 'b', b: 'w', w: 't', n: 'n', s: 's' },
     w: { t: 'w', w: 'b', b: 'e', e: 't', n: 'n', s: 's' },
@@ -268,51 +298,88 @@
   GM.pz.cube = function (d, lv) {
     css();
     var P = CUBE[lv] || CUBE[2], B = cubeBoard(lv), n = B.n, limit = B.best + P.slack, resets = lv === 1 ? 3 : lv === 2 ? 2 : 1;
-    var x, y, face, lit, moves, done = false;
-    function start() { x = B.sx; y = B.sy; face = B.face; lit = {}; moves = 0; }
+    var x, y, face, lit, moves, hist, last = null, done = false;
+    function start() { x = B.sx; y = B.sy; face = B.face; lit = {}; moves = 0; hist = []; last = null; }
     start();
+    // 굴리면 문장이 어디를 향하게 되는가 — 이웃 칸·방향 단추에 미리 보여 준다
+    var MARK = { t: '☀', b: '●', n: '↑', s: '↓', e: '→', w: '←' };
+    var DIRN = { n: '북', e: '동', s: '남', w: '서' };
+    function after(i) { return ROLL[DIRS[i][3]][face]; }
+    function canRoll(i) { var nx = x + DIRS[i][0], ny = y + DIRS[i][1]; return nx >= 0 && ny >= 0 && nx < n && ny < n && !B.rock[ny * n + nx]; }
+    /** 돌 입방체 (3D) — 위·남·동 면이 보이게 비스듬히 내려다본다. 문장 면은 금빛 ☀ */
+    function cube3(big, rollDir) {
+      var faces = ['t', 'b', 'n', 's', 'e', 'w'].map(function (f) { return '<i class="f3 f3' + f + (f === face ? ' em' : '') + '">' + (f === face ? '☀' : '') + '</i>'; }).join('');
+      // 보이지 않는 면(북·서·바닥)에 문장이 있으면 입방체 바깥 그쪽에 표시
+      var gh = face === 'n' || face === 'w' || face === 'b' ? '<b class="gh gh' + face + '" title="문장이 ' + FACE_NAME[face] + ' 면에 있다 (보이지 않는 면)">' + (face === 'b' ? '●' : '☀') + '</b>' : '';
+      return '<div class="c3' + (big ? ' big' : '') + '"><div class="tilt"><div class="roll' + (rollDir ? ' r' + rollDir : '') + '">' + faces + '</div></div>' + gh + '</div>';
+    }
     return new Promise(function (resolve) {
-      var win = UI.window({ title: T('돌 입방체', lv), icon: 'gear', width: 900, closable: false, html:
-        '<div class="pz-intro">돌판의 글: 「금빛 문장을 하늘로 향하게 하여 문(門) 위에 세워라.' + (B.seals.length ? ' 그 전에 보랏빛 인장(◎) 칸마다 문장을 아래로 하여 눌러 찍어라.' : '') + '」<br>' +
-        '<span class="muted">입방체는 한 칸 굴릴 때마다 한 면씩 돌아갑니다. 방향키(W·A·S·D)나 옆 칸을 눌러 굴리십시오. 위가 북쪽입니다. (' + limit + '번 이내)</span></div>' +
+      var win = UI.window({ title: T('돌 입방체', lv), icon: 'gear', width: 980, closable: false, html:
+        '<div class="pz-intro">돌판의 글: 「금빛 문장(☀)을 하늘로 향하게 하여 문(門) 위에 세워라.' + (B.seals.length ? ' 그 전에 보랏빛 인장(◎) 칸마다 문장을 아래로 하여 눌러 찍어라.' : '') + '」<br>' +
+        '<span class="muted">입방체는 굴린 쪽으로 한 면씩 넘어갑니다 — 문장이 위(☀)일 때 동쪽으로 굴리면 문장은 동쪽 면(→)으로, 한 번 더 굴리면 바닥(●)으로 갑니다. ' +
+        '옆 칸에 적힌 표시가 <b>그 칸으로 굴렸을 때 문장이 향할 곳</b>입니다. 옆 칸을 누르거나 방향키(W·A·S·D)로 굴리십시오. (' + limit + '번 이내)</span></div>' +
         '<div class="cube-wrap"><div class="cboard" style="grid-template-columns:repeat(' + n + ',58px)"></div><div class="cube-side"></div></div><div class="pz-stat"></div>',
-        buttons: [{ label: '처음부터', value: 'r', cls: 'navy', onClick: function () { reset(); return false; } }, { label: '포기한다', value: 'g', cls: 'ghost', onClick: function () { resolve(false); } }],
+        buttons: [{ label: '한 수 무르기', value: 'u', cls: 'ghost', onClick: function () { undo(); return false; } },
+          { label: '처음부터', value: 'r', cls: 'navy', onClick: function () { reset(); return false; } }, { label: '포기한다', value: 'g', cls: 'ghost', onClick: function () { resolve(false); } }],
         onKey: function (e) {
           var m = { ArrowUp: 0, w: 0, W: 0, ArrowRight: 1, d: 1, D: 1, ArrowDown: 2, s: 2, S: 2, ArrowLeft: 3, a: 3, A: 3 }[e.key];
-          if (m != null) { roll(m); return true; } return false;
+          if (m != null) { roll(m); return true; }
+          if (e.key === 'Backspace' || e.key === 'z' || e.key === 'Z') { undo(); return true; }
+          return false;
         } });
       var board = win.content.querySelector('.cboard'), side = win.content.querySelector('.cube-side'), stat = win.content.querySelector('.pz-stat'), msg = '';
+      if (G.MinigameArt) G.MinigameArt.mount(win.content, 'cube');   // 유적 배경·소품 판 (js/art/minigameart.js)
       function draw() {
-        var h = '';
+        var h = '', nb = {};
+        for (var i = 0; i < 4; i++) if (canRoll(i)) nb[(y + DIRS[i][1]) * n + x + DIRS[i][0]] = i;
         for (var yy = 0; yy < n; yy++) for (var xx = 0; xx < n; xx++) {
-          var k = yy * n + xx, cls = 'cl';
+          var k = yy * n + xx, cls = 'cl', inner = '';
           if (B.rock[k]) cls += ' rock';
-          if (xx === B.gx && yy === B.gy) cls += ' goal';
+          var goal = xx === B.gx && yy === B.gy;
+          if (goal) cls += ' goal';
           var si = B.seals.indexOf(k); if (si >= 0) cls += ' seal' + (lit[si] ? ' lit' : '');
-          h += '<div class="' + cls + '" data-k="' + k + '">' + (xx === x && yy === y ? '<div class="cube f' + face + '"><div class="pf"></div></div>' : '') + '</div>';
+          if (xx === x && yy === y) inner = cube3(false, last);
+          else if (nb[k] != null) {
+            var f = after(nb[k]), good = (goal && f === 't') || (si >= 0 && !lit[si] && f === 'b');
+            cls += ' can'; inner = '<span class="pv pv' + f + (good ? ' good' : '') + '" title="이 칸으로 굴리면 문장이 ' + FACE_NAME[f] + '을 향한다">' + MARK[f] + '</span>';
+          }
+          if (goal && !inner) inner = '<span class="gl">문장을<br>위로</span>';
+          h += '<div class="' + cls + '" data-k="' + k + '">' + inner + '</div>';
         }
         board.innerHTML = h;
         U.$$('.cl', board).forEach(function (e) {
           e.onclick = function () { var k = +e.dataset.k, cx = k % n, cy = (k / n) | 0; for (var i = 0; i < 4; i++) if (x + DIRS[i][0] === cx && y + DIRS[i][1] === cy) { roll(i); return; } };
         });
+        var pad = [0, 3, 1, 2].map(function (i) {   // 북 · 서 · 동 · 남
+          var ok = canRoll(i), f = after(i);
+          return '<button class="btn small cpad cp' + DIRS[i][3] + '"' + (ok ? '' : ' disabled') + ' data-i="' + i + '">' + ['↑', '→', '↓', '←'][i] + ' ' + DIRN[DIRS[i][3]] + '<small>' + (ok ? '문장 ' + MARK[f] + ' ' + FACE_NAME[f].replace('(바닥)', '') : '막힘') + '</small></button>';
+        }).join('');
         var sealTxt = B.seals.length ? '<div>인장: ' + B.seals.map(function (s, i) { return lit[i] ? '●' : '◎'; }).join(' ') + '</div>' : '';
-        side.innerHTML = '<div>금빛 문장이 향한 곳</div><div class="face">' + FACE_NAME[face] + '</div>' +
-          '<div class="muted" style="font-size:14px">돌 위의 금빛 띠·점이 문장의 자리입니다. 가득 빛나면 위, 검은 점이면 아래.</div>' + sealTxt +
-          '<div style="margin-top:8px">굴린 수: <b>' + moves + '</b> / ' + limit + '</div><div class="muted">가장 적게는 ' + B.best + '번 · 처음부터 ' + resets + '번 남음</div>';
+        side.innerHTML = '<div class="cs-top">' + cube3(true, last) + '<div><div>금빛 문장이 향한 곳</div><div class="face">' + MARK[face] + ' ' + FACE_NAME[face] + '</div>' +
+          (face === 'n' || face === 'w' || face === 'b' ? '<div class="muted" style="font-size:13px">(지금 보이지 않는 면)</div>' : '') + '</div></div>' +
+          '<div class="cpads">' + pad + '</div>' + sealTxt +
+          '<div style="margin-top:6px">굴린 수: <b>' + moves + '</b> / ' + limit + '</div><div class="muted">가장 적게는 ' + B.best + '번 · 처음부터 ' + resets + '번 남음</div>';
+        U.$$('.cpad', side).forEach(function (b) { b.onclick = function () { roll(+b.dataset.i); }; });
         stat.innerHTML = msg; msg = '';
+        last = null;
       }
       function reset() {
         if (done) return;
         if (resets <= 0) { msg = '<span class="warn-text">돌이 너무 무거워 더는 처음 자리로 되돌릴 수 없다.</span>'; draw(); return; }
         resets--; start(); msg = '입방체를 처음 자리로 되돌렸다.'; draw();
       }
+      function undo() {
+        if (done || !hist.length) return;
+        var h = hist.pop(); x = h.x; y = h.y; face = h.face; lit = h.lit; moves = h.moves; msg = '한 수 물렀다.'; draw();
+      }
       function roll(i) {
         if (done) return;
-        if (moves >= limit) { msg = '<span class="warn-text">돌이 바닥에 박혀 움직이지 않는다. 「처음부터」를 누르거나 포기하십시오.</span>'; draw(); return; }
+        if (moves >= limit) { msg = '<span class="warn-text">돌이 바닥에 박혀 움직이지 않는다. 「한 수 무르기」나 「처음부터」를 누르십시오.</span>'; draw(); return; }
         var D = DIRS[i], nx = x + D[0], ny = y + D[1];
         if (nx < 0 || ny < 0 || nx >= n || ny >= n) { msg = '돌판 끝이다.'; draw(); return; }
         if (B.rock[ny * n + nx]) { msg = '바위가 막고 있다.'; draw(); return; }
-        x = nx; y = ny; face = ROLL[D[3]][face]; moves++; sfx('click');
+        hist.push({ x: x, y: y, face: face, lit: Object.assign({}, lit), moves: moves });
+        x = nx; y = ny; face = ROLL[D[3]][face]; moves++; last = D[3]; sfx('click');
         var si = B.seals.indexOf(y * n + x);
         if (si >= 0 && face === 'b' && !lit[si]) { lit[si] = true; msg = '<span class="good-text">쿵! 인장이 찍혀 빛나기 시작했다.</span>'; }
         draw();
@@ -321,11 +388,10 @@
           done = true; stat.innerHTML = '<span class="good-text">금빛 문장이 하늘을 향하자 문이 갈라지며 열렸다!</span>';
           setTimeout(function () { win.close(true); resolve(true); }, 1000);
         } else if (x === B.gx && y === B.gy) {
-          stat.innerHTML = face !== 't' ? '문 위에 섰지만 문장이 ' + FACE_NAME[face] + '을 향하고 있다.' : '<span class="warn-text">아직 찍지 않은 인장이 있다.</span>';
+          stat.innerHTML = face !== 't' ? '문 위에 섰지만 문장이 ' + FACE_NAME[face] + '을 향하고 있다. 옆으로 비켜 돌려 세워 보자.' : '<span class="warn-text">아직 찍지 않은 인장이 있다.</span>';
         }
         if (!done && moves >= limit) {
-          if (resets > 0) stat.innerHTML = '<span class="warn-text">돌이 바닥에 박혔다... 「처음부터」로 다시 해 볼 수 있다.</span>';
-          else { done = true; stat.innerHTML = '<span class="warn-text">돌이 바닥에 박혀 문은 끝내 열리지 않았다...</span>'; setTimeout(function () { win.close(false); resolve(false); }, 1400); }
+          stat.innerHTML = '<span class="warn-text">돌이 바닥에 박혔다... 「한 수 무르기」' + (resets > 0 ? '나 「처음부터」로 다시 해 볼 수 있다.' : '로 되돌려 볼 수 있다.') + '</span>';
         }
       }
       draw();
@@ -398,10 +464,11 @@
     var intro = '모래 바람 속에서 사람 얼굴의 거대한 사자가 눈을 뜬다. 「길손이여, 나의 수수께끼를 풀어라. ' + NQ + '문제 가운데 ' + need + '문제를 맞히면 길을 열어 주마. 모르는 수는 x라 부른다.」';
     return new Promise(function (resolve) {
       var win = UI.window({ title: T('스핑크스의 수수께끼', lv), icon: 'eye', width: 860, closable: false, html:
-        '<div class="pz-intro">' + intro + '</div><div class="sphinx-top"><span class="qn"></span><span class="tm"></span></div><div class="sphinx-q"></div><div class="sphinx-ch"></div><div class="pz-stat"></div>',
+        '<div class="mg-sphinx-scene" role="img" aria-label="유적의 문을 지키는 스핑크스"></div><div class="pz-intro">' + intro + '</div><div class="sphinx-top"><span class="qn"></span><span class="tm"></span></div><div class="sphinx-q"></div><div class="sphinx-ch"></div><div class="pz-stat"></div>',
         buttons: [{ label: '물러난다', value: 'g', cls: 'ghost', onClick: function () { stop(); resolve(false); } }],
         onKey: function (e) { var i = { 1: 0, 2: 1, 3: 2, 4: 3 }[e.key]; if (i != null) { pick(i); return true; } return false; } });
       var c = win.content, qBox = c.querySelector('.sphinx-q'), chBox = c.querySelector('.sphinx-ch'), stat = c.querySelector('.pz-stat'), tm = c.querySelector('.tm');
+      if (G.MinigameArt) G.MinigameArt.mount(c, 'sphinx');
       function stop() { if (timer) { clearInterval(timer); timer = null; } }
       function show() {
         answered = false;

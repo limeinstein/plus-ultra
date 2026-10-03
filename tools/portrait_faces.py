@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""여급 그림에서 얼굴 자리(두 눈·입·얼굴 상자)를 찾아 js/data/portraitfaces.js 를 만든다.
+"""대화 인물 그림에서 얼굴 자리(두 눈·입·얼굴 상자)를 찾아 js/data/portraitfaces.js 를 만든다.
 
 대화창·술집의 2.5D 리그(js/art/portrait_rig.js)는 그림을 머리·몸통·하체로 나눠 움직이고 눈 깜박임·입 모양을 겹쳐 그린다.
 그림마다 얼굴 자리가 다르므로(고개를 기울이거나 한쪽에 치우친 그림), 그 자리를 여기서 미리 재어 둔다.
@@ -20,7 +20,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 IMG = os.path.join(ROOT, 'images')
 OUT = os.path.join(ROOT, 'js', 'data', 'portraitfaces.js')
-DIRS = ['portraits/maids', 'maid-styles']
+DIRS = ['portraits/maids', 'maid-styles', 'portraits/mates', 'portraits/sponsors', 'portraits/npc-roles']
 
 
 def main():
@@ -73,7 +73,7 @@ def main():
     for i, k in enumerate(keys):
         lines.append('    ' + json.dumps(k, ensure_ascii=False) + ': ' + json.dumps(out[k], separators=(',', ':')) + (',' if i < len(keys) - 1 else ''))
     lines += ['  };', '})(window.G = window.G || {});', '']
-    with open(OUT, 'w', encoding='utf-8') as fh:
+    with open(OUT, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write('\n'.join(lines))
     print('얼굴 자리 %d장 → %s' % (len(out), os.path.relpath(OUT, ROOT)))
     if miss:

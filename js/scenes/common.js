@@ -12,7 +12,7 @@
     if (s) { m = s.mates.filter(function (x) { return x.role === role; })[0] || s.mates.filter(function (x) { return x.role === 'first'; })[0] || s.mates[0]; }
     if (!m) return { name: '갑판장', portrait: A.withImg(A.npcSpec('boatswain', 'sailor', 'ib'), G.Img.chain.npc('boatswain')), lang: 3 };
     var d = G.MATE[m.id];
-    return { name: d.name, portrait: SC.mateSpec(m.id), lang: 3 };
+    return { name: d.name, portrait: SC.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 };
   };
 
   // ---------------------------------------------------------------- 실제 자료 (tools/heritage → G.HERITAGE)

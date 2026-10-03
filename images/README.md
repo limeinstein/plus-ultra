@@ -98,6 +98,15 @@
 - 게임(`js/data/duelart.js` `layout`)은 그림 너비로 두 규격을 알아봅니다 — 1536 너비 원본을 그대로 넣어도 그려지지만 넘친 칼날은 잘립니다. 점검: `node tests/duel_assets_smoke.js`, `python tools/duel_repack.py --check images/duel/fighters`.
 - 배경은 `deck`, `land_battle`, `exploration`, `city`, `tavern` 다섯 장이며 1060×380 일기토 화면에 맞춰 덮어 그립니다.
 
+## 미니게임 그림
+
+- 유적 퍼즐 6종·포카·바다 낚시는 `minigames/`의 새 그림을 쓴다. 건물 외관 `exteriors/tavern.webp`, `church.webp`의 석재·목재·금속 질감을 참고했다.
+- `props.png`는 1254×1254 투명 소품 판이다. 돌 원반·기둥·보석·천칭·잔 3개·입방체·돌판·바위·열쇠·문·횃불·카드 앞뒷면·물고기의 16종이 들어 있다. 실제 소품 경계는 `js/data/minigameart.js`에 있다.
+- `ruins.png`, `sphinx.png`, `poker.png`, `fishing.png`는 1536×1024 배경이다. `boat.png`는 같은 크기의 투명 낚싯배 그림이다. 투명 배경을 흰색이나 검은색으로 합치지 않는다.
+- 그림 주소는 `G.Img`로 읽으며, 숫자·카드 무늬·물 양·입방체 방향·낚시 줄은 게임에서 겹쳐 표시한다. 배경에 글자를 그려 넣지 않는다.
+- 낚시 수면 정렬·배 위치는 `js/data/seafx.js`의 `G.FX.minigames`, 화면 배치는 `css/minigames.css`에서 조정한다. 한 파일판에서 줄어든 소품 판도 원본 좌표 비율에 맞춰 그린다.
+- 생성 도구와 프롬프트: `docs/art/minigame-prompts.json`. 실제 게임 화면 모음: `docs/art/minigame-preview.png`. 점검: `node tests/minigame_art_smoke.js` (Playwright·Chromium 필요).
+
 ## 알아 둘 점
 
 - 거리 배경이 있는 도시는 **거리 화면**이 됩니다. 배경 위에 `exteriors/` 건물이 늘어서고, 건물을 누르거나 오른쪽 메뉴에서 골라 들어갑니다. 배경이 없으면 예전처럼 코드로 그린 도시 풍경 한 장이 나옵니다.

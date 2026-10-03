@@ -5,7 +5,7 @@
    · 어느 발견물이 어떤 장치로 잠겨 있는지는 게임을 시작할 때마다 같다(발견물 id로 정함).
      한 지역(G.REGIONS)에 같은 장치가 몰리지 않도록, 지역마다 가장 적게 쓰인 장치부터 차례로 나눠 준다.
      이름난 곳은 어울리는 장치를 먼저 받는다 (기자 → 스핑크스, 크노소스 → 미궁, 성배 → 성배, 바벨탑 → 돌 원반 …).
-   조정값: G.Games.PUZZLE_LOCK — 유적이 잠겨 있을 비율 (보물은 늘 잠겨 있다) */
+   조정값: G.Games.PUZZLE_LOCK — 유적이 잠겨 있을 비율 · PUZZLE_LOCK_TREASURE — 보물 · PUZZLE_REST — 장치를 만난 뒤 쉬는 날수 */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI;
@@ -14,7 +14,9 @@
 
   GM.PUZZLE_TYPES = ['hanoi', 'balance', 'grail', 'maze', 'cube', 'sphinx'];
   GM.PUZZLE_NAME = { hanoi: '돌 원반', balance: '천칭', grail: '성배의 물', maze: '미궁 64', cube: '돌 입방체', sphinx: '스핑크스의 수수께끼' };
-  GM.PUZZLE_LOCK = 0.5;
+  GM.PUZZLE_LOCK = 0.15;           // 유적이 장치로 잠겨 있을 비율 (예전 0.5)
+  GM.PUZZLE_LOCK_TREASURE = 0.25;  // 보물이 잠겨 있을 비율 (예전에는 늘)
+  GM.PUZZLE_REST = 30;             // 장치를 하나 만난 뒤 이 날수 안에 닿은 잠긴 곳은 장치가 부서져 있어 그냥 들어간다 (이름난 곳 PUZZLE_FIX는 빼고)
   // 이름난 곳에 어울리는 장치 (지역 나눔보다 먼저)
   GM.PUZZLE_FIX = { giza: 'sphinx', pyramid: 'sphinx', kings: 'sphinx', knossos: 'maze', minotaur: 'maze', grail: 'grail', babel: 'hanoi', ur: 'hanoi', persepolis: 'balance', qinshi: 'cube', petra: 'grail' };
   // 지역의 결에 따라 조금 더 자주 (같은 수일 때 먼저 고른다)
@@ -24,8 +26,8 @@
   function eligible(d) { return d && d.how === 'land' && (d.cat === 'treasure' || d.cat === 'ruin'); }
   function locked(d) {
     if (!eligible(d)) return false;
-    if (d.cat === 'treasure' || GM.PUZZLE_FIX[d.id]) return true;
-    return (Math.abs(U.strHash('lock:' + d.id)) % 1000) / 1000 < GM.PUZZLE_LOCK;
+    if (GM.PUZZLE_FIX[d.id]) return true;
+    return (Math.abs(U.strHash('lock:' + d.id)) % 1000) / 1000 < (d.cat === 'treasure' ? GM.PUZZLE_LOCK_TREASURE : GM.PUZZLE_LOCK);
   }
   var MAP = null;
   /** 발견물 id → 장치 종류. 지역마다 고르게 나눈다 */
@@ -54,6 +56,14 @@
     return MAP;
   };
   /** 이 발견물을 여는 장치 (잠겨 있지 않으면 null) */
+  /** 지금 닿았을 때: 장치 종류 · 'rest'(얼마 전에 장치를 만나 이곳 장치는 부서져 있다) · null(잠기지 않음) */
+  GM.puzzleDue = function (d) {
+    var k = GM.puzzleKind(d); if (!k) return null;
+    var s = G.Game && G.Game.state;
+    if (s && s.pzDay != null && !GM.PUZZLE_FIX[d.id] && s.day - s.pzDay < GM.PUZZLE_REST) return 'rest';
+    return k;
+  };
+  GM.puzzleRestLine = function () { return '제독, 안쪽 문에 장치가 있었던 자국이 있지만 세월에 부서져 있습니다. 그대로 들어갈 수 있겠습니다.'; };
   GM.puzzleKind = function (d) { return (d && GM.puzzleMap()[d.id]) || null; };
   /** 난이도 ★1~3 */
   GM.puzzleLevel = function (d) { var p = (d && d.pw) || 1; return p <= 2 ? 1 : p === 3 ? 2 : 3; };
@@ -77,6 +87,7 @@
     var k = kind || GM.puzzleKind(d) || (U.strHash(d.id) % 2 === 0 ? 'hanoi' : 'balance');
     var v = lv || GM.puzzleLevel(d);
     var fn = GM.pz[k] || GM.pz.hanoi;
+    if (G.Game && G.Game.state && !lv) G.Game.state.pzDay = G.Game.state.day;   // 쉬는 날(PUZZLE_REST)을 센다
     if (G.State && G.Game && G.Game.state) G.State.log('「' + d.name + '」의 장치: ' + GM.PUZZLE_NAME[k] + ' (난이도 ' + v + ')');
     return fn(d, v);
   };
@@ -94,12 +105,16 @@
         buttons: [{ label: '포기한다', value: 'give', cls: 'ghost', onClick: function () { resolve(false); } }],
         onKey: function (e) { var i = { 1: 0, 2: 1, 3: 2 }[e.key]; if (i != null) { click(i); return true; } return false; } });
       var box = win.content.querySelector('.hanoi'), stat = win.content.querySelector('.hstat'), done = false;
+      if (G.MinigameArt) G.MinigameArt.mount(win.content, 'hanoi');
       function draw() {
         box.innerHTML = pegs.map(function (p, i) {
-          return '<div class="peg' + (sel === i ? ' sel' : '') + '" data-i="' + i + '"><div class="pole"></div>' + p.map(function (disc) { return '<div class="disc" style="width:' + (40 + disc * 32) + 'px;background:hsl(' + (30 + disc * 12) + ',45%,' + (32 + disc * 6) + '%)"></div>'; }).join('') + '</div>';
+          return '<div class="peg' + (sel === i ? ' sel' : '') + '" data-i="' + i + '" data-label="' + (i + 1) + (i === 2 ? ' · 도착' : '') + '" role="button" tabindex="0" aria-label="' + (i + 1) + '번 기둥' + (sel === i ? ' 선택됨' : '') + '"><div class="pole"></div>' + p.map(function (disc) { return '<div class="disc" style="width:' + (40 + disc * 32) + 'px;background-color:hsl(' + (30 + disc * 12) + ',45%,' + (32 + disc * 6) + '%)"><b>' + disc + '</b></div>'; }).join('') + '</div>';
         }).join('');
         stat.textContent = '움직인 수: ' + moves + ' / ' + limit + '   (가장 적게는 ' + best + '수)';
-        U.$$('.peg', box).forEach(function (e) { e.onclick = function () { click(+e.dataset.i); }; });
+        U.$$('.peg', box).forEach(function (e) {
+          e.onclick = function () { click(+e.dataset.i); };
+          e.onkeydown = function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); ev.stopPropagation(); click(+e.dataset.i); } };
+        });
       }
       function click(i) {
         if (done) return;
@@ -127,16 +142,17 @@
     return new Promise(function (resolve) {
       var win = UI.window({ title: title('천칭', lv), icon: 'scales', width: 900, closable: false, html:
         '<div style="font-size:18px;line-height:1.6;margin-bottom:10px">제단 위의 보석 ' + NG + '개 가운데 하나만 조금 무겁다. 「천칭을 ' + numW + ' 번만 써서 진짜 보석을 가려내라. 틀리면 문은 닫힌다.」<br><span class="muted">보석을 누르면 왼쪽 → 오른쪽 → 내려놓기 순서로 바뀝니다. 「단다」로 재고, 다 쟀으면 「고른다」로 답하십시오.</span></div>' +
-        '<div class="gems' + (NG > 9 ? ' many' : '') + '"></div><div class="pans"><div class="pan L"></div><div class="beam"></div><div class="pan R"></div></div><div class="bstat center" style="font-size:18px;margin-top:10px"></div>',
+        '<div class="gems' + (NG > 9 ? ' many' : '') + '"></div><div class="balance-stage"><div class="pans">' + (G.MinigameArt ? G.MinigameArt.sprite('scales', 'scale-picture') : '') + '<div class="pan L"></div><div class="beam"></div><div class="pan R"></div></div></div><div class="bstat center" style="font-size:18px;margin-top:10px"></div>',
         buttons: [{ label: '단다', value: 'w', cls: 'navy', onClick: function () { weigh(); return false; } }, { label: '고른다', value: 'p', onClick: function () { if (!done) { phase = 'pick'; draw(); } return false; } }, { label: '포기한다', value: 'g', cls: 'ghost', onClick: function () { resolve(false); } }] });
       var c = win.content, tilt = 0, msg = '천칭을 쓸 수 있는 횟수: ' + tries;
+      if (G.MinigameArt) G.MinigameArt.mount(c, 'balance');
       function where(i) { return left.indexOf(i) >= 0 ? 'L' : right.indexOf(i) >= 0 ? 'R' : ''; }
       function draw() {
         var ids = []; for (var i = 0; i < NG; i++) ids.push(i);
         c.querySelector('.gems').innerHTML = ids.map(function (i) { var w = where(i); return '<div class="gem ' + w + '" data-i="' + i + '">' + (i + 1) + (w ? '<small>' + (w === 'L' ? '왼' : '오') + '</small>' : '') + '</div>'; }).join('');
         c.querySelector('.pans').style.transform = 'rotate(' + tilt * 6 + 'deg)';
-        c.querySelector('.pan.L').textContent = left.map(function (i) { return i + 1; }).join(' ');
-        c.querySelector('.pan.R').textContent = right.map(function (i) { return i + 1; }).join(' ');
+        c.querySelector('.pan.L').textContent = '왼쪽 ' + (left.map(function (i) { return i + 1; }).join(' ') || '—');
+        c.querySelector('.pan.R').textContent = '오른쪽 ' + (right.map(function (i) { return i + 1; }).join(' ') || '—');
         c.querySelector('.bstat').innerHTML = phase === 'pick' ? '<b>무거운 보석을 고르십시오.</b>' : msg;
         U.$$('.gem', c).forEach(function (e) { e.onclick = function () { gem(+e.dataset.i); }; });
       }

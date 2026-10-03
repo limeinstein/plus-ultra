@@ -450,17 +450,25 @@
     return v;
   }
   R.sells = function (c, goodId) { return R.cityGoods(c).indexOf(goodId) >= 0; };
+  /** 중계무역: 이 도시가 산지가 아니라 먼 곳에서 들여와 파는 물건인가 (js/data/tradegoods.js) */
+  R.isRelay = function (c, goodId) { return !!(G.TradeGoods && c && c.relay && G.TradeGoods.isRelay(c, goodId)); };
+  function RELAY() { return (G.BALANCE && G.BALANCE.relay) || { buy: 0.72, sell: 0.6, floor: 1.15, stock: 0.6 }; }
+  /** 들여온 물건의 그 도시 값 (기준가의 몇 배): 진짜 산지에서 먼 만큼 비싸다. 사는 값은 산지 값 × floor 아래로 내려가지 않는다 */
+  R.relayMult = function (c, goodId, side) {
+    var K = RELAY(), m = R.regionalMult(goodId, c.region);
+    return side === 'sell' ? Math.max(0.55 * K.floor * 0.9, m * K.sell) : Math.max(0.62 * K.floor, m * K.buy);
+  };
   /** price the city asks when you buy */
   R.buyPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
-    var p = g.p * 0.62 * (1 + st.dep * 0.9) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
+    var p = g.p * (R.isRelay(c, goodId) ? R.relayMult(c, goodId, 'buy') : 0.62) * (1 + st.dep * 0.9) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
     return Math.max(1, Math.round(p));
   };
   /** price the city pays when you sell */
   R.sellPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
-    var base = R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
+    var base = R.isRelay(c, goodId) ? g.p * R.relayMult(c, goodId, 'sell') : R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
     var p = base * Math.exp(-st.sat * 0.55) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
     return Math.max(1, Math.round(p));
   };
@@ -496,15 +504,18 @@
   R.investBuyMult = function (cityId) { return 1 - 0.03 * R.investLv(cityId); };
   R.investSellMult = function (cityId) { return 1 + 0.03 * R.investLv(cityId); };
   /** 투자한 도시는 다루는 교역품이 늘어난다 */
+  /** 이 도시 교역소에서 살 수 있는 물건: 특산물 + 들여와 파는 물건(중계무역, js/data/tradegoods.js) + 출자로 늘어난 물건 */
   R.cityGoods = function (c) {
     var lv = R.investLv(c.id);
     var extra = lv >= 4 ? 2 : lv >= 2 ? 1 : 0;
-    if (!extra) return c.goods;
+    var relay = G.TradeGoods ? G.TradeGoods.relayGoods(c) : [];
+    var base = relay.length ? c.goods.concat(relay.filter(function (id) { return c.goods.indexOf(id) < 0; })) : c.goods;
+    if (!extra) return base;
     var rng = U.makeRng(U.strHash('inv' + c.id));
     var pool = G.GOODS.filter(function (g) {
-      return c.goods.indexOf(g.id) < 0 && !g.nw && R.regionalMult(g.id, c.region) < 1.25;
+      return base.indexOf(g.id) < 0 && !g.nw && R.regionalMult(g.id, c.region) < 1.25;
     });
-    var out = c.goods.slice();
+    var out = base.slice();
     for (var i = 0; i < extra && pool.length; i++) {
       var k = Math.floor(rng() * pool.length);
       out.push(pool[k].id); pool.splice(k, 1);
@@ -513,7 +524,7 @@
   };
   R.onBuy = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId); st.dep += q / (40 + c.size * 40); };
   R.onSell = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId); st.sat += q / (60 + c.size * 50); };
-  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId); return Math.max(0, Math.round((30 + c.size * 45) * (1 - Math.min(0.95, st.dep * 0.9)))); };
+  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId); return Math.max(0, Math.round((30 + c.size * 45) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)))); };
   R.maybeMarketEvent = function (c) {
     var m = R.market(c.id), S = R.S();
     if (m.ev) return;

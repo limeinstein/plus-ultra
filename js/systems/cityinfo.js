@@ -90,7 +90,7 @@
     } else if (visited) row('도시 상태', (st.length ? st.join(' · ') + ' · ' : '') + '<span class="muted">요즘 사정은 모름</span>', '마지막으로 들른 지 ' + (last != null ? (s.day - last) + '일' : '오래'), CI.FRESH + '일 안에 들르면 지금 사정을 압니다');
     else row('도시 상태', st.length ? st.join(' · ') : '?', '', '가 보면 압니다');
     // 특산물
-    var goods = R.cityGoods(c).map(function (g) { return G.goodDot ? G.goodDot(g) + G.GOOD[g].name : G.GOOD[g].name; });
+    var goods = R.cityGoods(c).map(function (g) { return (G.goodDot ? G.goodDot(g) + G.GOOD[g].name : G.GOOD[g].name) + (R.isRelay(c, g) ? '<small class="muted">(중계)</small>' : ''); });
     if (visited) row('특산물', goods.join(' · '), '가 봄');
     else if (speak && acct >= 2) row('특산물', goods.join(' · '), CI.who('acct') + ' — 상인들에게 들음');
     else if (speak && acct >= 1) row('특산물', goods.slice(0, 2).join(' · ') + ' <span class="muted">…</span>', CI.who('acct'), '회계 2면 다 압니다');

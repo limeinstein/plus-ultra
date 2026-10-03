@@ -157,6 +157,8 @@
           return false;
         } });
       var cv = win.content.querySelector('canvas'), g = cv.getContext('2d'), msgEl = win.content.querySelector('.fmsg'), baitEl = win.content.querySelector('.fbait'), act = win.act;
+      win.content.classList.add('mg-fishing');
+      if (G.MinigameArt) G.MinigameArt.prepare(['props', 'fishing', 'boat']);
       g.scale(2, 2);
       function up(e) { if (e.key === ' ' || e.key === 'Enter') st.hold = false; }
       document.addEventListener('keyup', up);
@@ -252,10 +254,13 @@
       // ---------------------------------------------------------- 그림
       function draw() {
         var t = performance.now() / 1000;
+        var art = G.MinigameArt;
+        if (!art || !art.fishing(g, W, H, SEA_Y)) {
         var sky = g.createLinearGradient(0, 0, 0, SEA_Y); sky.addColorStop(0, '#9cc6e0'); sky.addColorStop(1, '#e8eef0');
         g.fillStyle = sky; g.fillRect(0, 0, W, SEA_Y);
         var sea = g.createLinearGradient(0, SEA_Y, 0, H); sea.addColorStop(0, '#2f7aa6'); sea.addColorStop(0.5, '#1c4f78'); sea.addColorStop(1, '#0b2440');
         g.fillStyle = sea; g.fillRect(0, SEA_Y, W, H - SEA_Y);
+        }
         // 물결
         g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 1.5; g.beginPath();
         for (var x = 0; x <= W; x += 8) { var y = SEA_Y + Math.sin(x * 0.04 + t * 2) * 2; if (x) g.lineTo(x, y); else g.moveTo(x, y); }
@@ -267,17 +272,25 @@
         // 물고기 그림자
         for (var i = 0; i < 6; i++) {
           var fx = (i * 157 + t * (14 + i * 5)) % (W + 80) - 40, fy = SEA_Y + 40 + (i * 37) % (H - SEA_Y - 60);
+          g.save(); g.globalAlpha = 0.4; g.translate(fx, fy); g.scale(-1, 1);
+          var painted = art && art.draw(g, 'fish', -25 - i * 2, -10, 50 + i * 4, 21 + i);
+          g.restore();
+          if (painted) continue;
           g.fillStyle = 'rgba(5,20,35,.35)'; g.beginPath(); g.ellipse(fx, fy, 14 + i * 2, 5 + i, 0, 0, 7); g.fill();
           g.beginPath(); g.moveTo(fx - 14 - i * 2, fy); g.lineTo(fx - 24 - i * 2, fy - 6); g.lineTo(fx - 24 - i * 2, fy + 6); g.fill();
         }
         // 배
+        var boat = art && art.get('boat'), bp = G.FX && G.FX.minigames && G.FX.minigames.boat;
+        if (boat && bp) g.drawImage(boat, bp[0], SEA_Y + bp[1], bp[2], bp[3]);
+        else {
         g.fillStyle = '#5a3a1e'; g.beginPath(); g.moveTo(10, SEA_Y - 30); g.lineTo(210, SEA_Y - 30); g.lineTo(186, SEA_Y + 8); g.lineTo(34, SEA_Y + 8); g.closePath(); g.fill();
         g.fillStyle = '#3a2412'; g.fillRect(10, SEA_Y - 36, 200, 6);
         g.fillStyle = '#7a5532'; g.fillRect(70, SEA_Y - 112, 6, 82);
         g.fillStyle = '#efe6cf'; g.beginPath(); g.moveTo(78, SEA_Y - 108); g.quadraticCurveTo(130, SEA_Y - 80, 78, SEA_Y - 44); g.closePath(); g.fill();
+        }
         // 낚싯대
         var tipX = 250, tipY = SEA_Y - 74;
-        g.strokeStyle = '#3a2412'; g.lineWidth = 3; g.beginPath(); g.moveTo(170, SEA_Y - 38); g.lineTo(tipX, tipY); g.stroke();
+        g.strokeStyle = '#59391c'; g.lineWidth = 3; g.beginPath(); g.moveTo(boat ? 195 : 170, SEA_Y - (boat ? 18 : 38)); g.lineTo(tipX, tipY); g.stroke();
         var bx = 280 + st.cast * 500, by = SEA_Y;
         if (st.ph === 'aim') {
           // 힘 막대
@@ -299,7 +312,10 @@
             g.strokeStyle = st.tension > zone()[1] ? '#ff7a5a' : '#f2f2f2'; g.lineWidth = 1.2 + st.tension; g.beginPath(); g.moveTo(tipX, tipY);
             g.quadraticCurveTo((tipX + fxp) / 2, SEA_Y + (1 - st.tension) * 50, fxp, fyp); g.stroke();
             if (st.ph === 'reel') {
+              var fw = 42 + Math.min(36, st.hook.kg / 12);
+              if (!art || !art.draw(g, 'fish', fxp - fw / 2, fyp - fw / 5, fw, fw * 0.45)) {
               g.fillStyle = st.hook.rare ? '#e0b23a' : '#c9d8e0'; g.beginPath(); g.ellipse(fxp, fyp, 16 + Math.min(20, st.hook.kg / 15), 7 + Math.min(8, st.hook.kg / 40), 0, 0, 7); g.fill();
+              }
             }
           } else {
             g.strokeStyle = '#f2f2f2'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(tipX, tipY); g.quadraticCurveTo((tipX + cx) / 2, Math.min(tipY, cy) - 20, cx, cy + dip); g.stroke();

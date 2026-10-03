@@ -20,6 +20,9 @@ except ImportError:
 
 # 키 앞부분 → (가장 긴 변, 저장 형식, 품질). 형식 'auto' = 투명하면 WEBP, 아니면 JPEG
 RULES = [
+    ('minigames/props', 1254, 'webp', 88),   # 작은 소품의 조각·금속 테두리를 남긴다
+    ('minigames/boat', 640, 'webp', 85),
+    ('minigames/', 1280, 'auto', 84),
     ('exterior-styles/', 225, 'webp', 63),
     ('maid-styles/', 384, 'webp', 68),
     ('portraits/', 384, 'webp', 70),

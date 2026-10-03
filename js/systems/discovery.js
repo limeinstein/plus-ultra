@@ -258,6 +258,63 @@
     return !!(st.rival && d && d.rival && st.found && st.found < d.rival[0] * 10000 + d.rival[1] * 100 + 1);
   };
 
+  /* 발견물끼리(그리고 도시와) 너무 붙어 있으면 조금씩 떼어 놓는다 — 해도·지도의 표식과 탐지가 겹치지 않게.
+     뭍의 것은 뭍에, 바다의 것은 바다에 둔다. 처음 자리는 d.lat0·d.lon0에 남긴다.
+     지도(G.Geo)가 준비되면 한 번 (main.js Game.ensureGeo). 늘 같은 결과(무작위 없음). */
+  D.SPREAD = {
+    min: 0.34,     // 뭍·바다 발견물끼리 이만큼(도)은 떨어져 있게
+    city: 0.2,     // 도시와도 이만큼
+    maxMove: 0.6,  // 처음 자리에서 이보다 멀리 옮기지 않는다
+    rounds: 40     // 되풀이 횟수 (겹친 무리가 풀릴 때까지)
+  };
+  D.spread = function () {
+    if (D._spread || !G.Geo || !G.Geo.ready) return D._spread || 0;
+    var P = D.SPREAD, Geo = G.Geo, wrap = Geo.wrapLon || function (v) { return v; };
+    var L = G.DISCOVERIES.filter(function (d) { return (d.how === 'land' || d.how === 'sea') && isFinite(d.lat) && isFinite(d.lon); });
+    L.forEach(function (d) { d.lat0 = d.lat; d.lon0 = d.lon; d._land = Geo.isLand(d.lon, d.lat); });
+    // 유적·자연은 이름난 자리라 덜 움직이고, 보물·동물·사람은 더 움직인다
+    function mob(d) { return d.cat === 'ruin' || d.cat === 'nature' || d.cat === 'geo' ? 0.35 : 1; }
+    function fits(d, lon, lat) {
+      if (Geo.dist(lon, lat, d.lon0, d.lat0) > P.maxMove || lat > 85 || lat < -85) return false;
+      return d._land ? Geo.isLand(lon, lat) : !Geo.isLand(lon, lat);
+    }
+    function push(d, ang, dist) {   // 막히면 조금씩 옆으로 꺾어 본다
+      for (var t = 0; t < 9; t++) {
+        var a = ang + (t % 2 ? 1 : -1) * Math.ceil(t / 2) * 0.45;
+        var lon = wrap(d.lon + Math.cos(a) * dist), lat = d.lat + Math.sin(a) * dist;
+        if (fits(d, lon, lat)) { d.lon = lon; d.lat = lat; return true; }
+      }
+      return false;
+    }
+    function angOf(a, b) {
+      var dx = wrap(b.lon - a.lon), dy = b.lat - a.lat;
+      return dx * dx + dy * dy > 1e-8 ? Math.atan2(dy, dx) : (Math.abs(U.strHash(a.id + '|' + b.id)) % 360) * Math.PI / 180;
+    }
+    var cities = (G.CITY_DATA || []).filter(function (c) { return isFinite(c.lon) && isFinite(c.lat); });
+    for (var r = 0; r < P.rounds; r++) {
+      var any = false;
+      for (var i = 0; i < L.length; i++) {
+        var a = L[i];
+        for (var j = i + 1; j < L.length; j++) {
+          var b = L[j], dd = Geo.dist(a.lon, a.lat, b.lon, b.lat);
+          if (dd >= P.min) continue;
+          any = true;
+          var ang = angOf(a, b), need = P.min - dd + 0.004, ma = mob(a), mb = mob(b);
+          if (!push(b, ang, need * mb / (ma + mb))) push(a, ang + Math.PI, need);
+          else push(a, ang + Math.PI, need * ma / (ma + mb));
+        }
+        for (var k = 0; k < cities.length; k++) {
+          var c = cities[k], dc = Geo.dist(a.lon, a.lat, c.lon, c.lat);
+          if (dc >= P.city) continue;
+          any = true; push(a, angOf(c, a), P.city - dc + 0.004);
+        }
+      }
+      if (!any) break;
+    }
+    D._spread = L.filter(function (d) { return d.lat !== d.lat0 || d.lon !== d.lon0; }).length || -1;
+    return D._spread;
+  };
+
   /** rival timeline: called daily */
   D.rivals = function () {
     var s = S(), out = [];

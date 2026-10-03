@@ -53,6 +53,7 @@
     Game._geoPromise = new Promise(function (resolve) {
       setTimeout(function () {
         G.Geo.init();
+        if (G.Disc && G.Disc.spread) G.Disc.spread();   // 붙어 있는 발견물을 조금씩 떼어 놓는다 (systems/discovery.js)
         setTimeout(function () {
           if (G.Nav) G.Nav.init();
           Game.geoReady = true;

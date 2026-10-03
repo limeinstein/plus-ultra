@@ -5,6 +5,8 @@
 (function (G) {
   'use strict';
   G.FX = {
+    // 낚시 배경의 수면 위치. 그림을 화면의 실제 찌 높이에 맞춰 나누어 그린다.
+    minigames: { fishingWaterline: 0.365, boat: [0, -118, 218, 145] },
     // 유적·자연 경관·동물·보물 발견 연출 (js/scenes/common.js SC.discoveryReveal): 화면이 어두워지고 GIF가 빛난 뒤 마지막 장면에서 멈춘다
     reveal: {
       dim: 0.7,           // 뒤쪽 탐험 지도가 어두워지는 정도 (0~1, 가운데는 이것의 80%)
@@ -230,8 +232,10 @@
     partyFps: { on_foot_walk: 9, on_foot_run: 11, mounted_walk: 9, mounted_gallop: 9 },
     expedition: {       // 새 탐험대 시트: 거리로 보행, 최단 방향으로 회전, 야영 중 쉬는 모습
       enabled: true, turnRate: 4.8, turnEpsilon: 0.015, maxDelta: 0.1,
-      previewHz: 1.3, campFps: 7, campHeight: 90, height: 60,
-      heights: { walk: 52, porter: 52, horse: 68, camel: 72, donkey: 60, llama: 62, wagon: 68, elephant: 76, reindeer: 62, yak: 62 }
+      previewHz: 1.1, campFps: 7,
+      // 제독의 기준 키. 앉은 자세는 원본별 인물 비율로 보정한다.
+      // 탈것 전체 높이를 같게 맞추지 않으므로 코끼리는 자연히 크게 보인다.
+      admiralHeight: 52
     },
     battle: true,        // 육상전 부대를 그림 시트로
     unitH: 56,           // 육상전 병사 몸 키(px, 1000×430 판 기준 — 치켜든 무기는 빼고) · 짐승은 beastH

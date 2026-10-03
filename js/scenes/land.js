@@ -302,7 +302,9 @@
       var chk = G.Disc.checkLand(l.lon, l.lat);
       for (var i = 0; i < chk.hits.length; i++) {
         var d = chk.hits[i];
-        if (G.Games.puzzleKind ? G.Games.puzzleKind(d) : (d.cat === 'treasure' || (d.cat === 'ruin' && U.chance(0.5)))) {   // 어느 장치로 잠겼는지는 js/games/puzzle.js
+        var pzd = G.Games.puzzleDue ? G.Games.puzzleDue(d) : G.Games.puzzleKind ? G.Games.puzzleKind(d) : null;   // 어느 장치로 잠겼는지는 js/games/puzzle.js
+        if (pzd === 'rest') await UI.say(G.Games.puzzleRestLine(d), G.Scenes.mateSpeaker('surveyor'));   // 얼마 전에 장치를 풀었다 — 이곳은 부서져 있다
+        else if (pzd) {
           await UI.say(G.Games.puzzleLine ? G.Games.puzzleLine(d) : '제독, 이 유적 안쪽에 무언가 있습니다. 하지만 장치로 굳게 잠겨 있군요...', G.Scenes.mateSpeaker('surveyor'));
           var ok = await G.Games.puzzle(d);
           if (!ok) { await UI.say('장치를 풀지 못했다. 다음에 다시 와 보자.', {}); continue; }
@@ -798,7 +800,7 @@
     // 탐험대 모형: 발밑 먼지 → 고리 → 줄지어 선 대원들
     var pp = tp[0], mvg = (st.movT || 0) > 0;
     G.Party.drawFx(ctx, st.pfx, toScreen);
-    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit });
+    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit });
     // 도시 이름은 탐험대 위에 (가려지지 않게)
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;

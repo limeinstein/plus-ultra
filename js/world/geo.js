@@ -98,6 +98,24 @@
     [[-76.30, 37.00], [-76.45, 37.06], [-76.62, 37.15], [-76.76, 37.20]]
   ];
   Geo.CHANNELS = CHANNELS;
+  /* 자료(Natural Earth 50m)에 없을 만큼 작은 섬을 땅으로 찍는다: [경도, 위도, 반지름(텍스처 칸 — 1칸 ≈ 0.09°)]
+     지도에 보이고 배가 그 둘레를 돌아가도록 실제보다 조금 크게 (독도는 실제 약 0.2km²) */
+  var ISLES = [
+    [131.866, 37.241, 1.6]    // 독도 (울릉도 동남쪽 87km)
+  ];
+  Geo.ISLES = ISLES;
+  function stampIsles(land) {
+    ISLES.forEach(function (s) {
+      var cx = (s[0] + 180) / 360 * W, cy = (90 - s[1]) / 180 * H, R = s[2], R2 = R * R;
+      for (var y = Math.floor(cy - R); y <= Math.ceil(cy + R); y++) {
+        if (y < 0 || y >= H) continue;
+        for (var x = Math.floor(cx - R); x <= Math.ceil(cx + R); x++) {
+          var dx = x + 0.5 - cx, dy = y + 0.5 - cy;
+          if (dx * dx + dy * dy <= R2) land[y * W + ((x % W) + W) % W] = 1;
+        }
+      }
+    });
+  }
   function carveChannels(land) {
     var R = 1.7, R2 = R * R;
     CHANNELS.forEach(function (line) {
@@ -136,6 +154,7 @@
       if (b) for (var k = 0; k < 8; k++) land[i * 8 + k] = (b >> k) & 1;
     }
     carveChannels(land);
+    stampIsles(land);
     var t1 = performance.now();
     var pad = 64, ew = W + pad * 2;
     geoTex = new Uint8Array(W * H * 4);

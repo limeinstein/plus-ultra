@@ -139,6 +139,8 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg-actor.right .portrait-rig { transform-origin: 50% 100%; }
 .dlg-actor.left .portrait-rig { transform-origin: 50% 100%; }
 .dlg-actor .actor-art { position: absolute; inset: 0 0 24px; }
+/* 교역소: 먼 산지에서 들여와 파는 물건 (중계무역) */
+.tbl .tag.relay { font-size: 12px; padding: 1px 6px; margin-left: 6px; vertical-align: 2px; background: #6a4a2a; color: #f3e2bd; border-radius: 6px; cursor: help; }
 /* 무릎상 대화: 두 사람이 머리부터 무릎까지 서서 마주 본다 (여급·항해사·후원자) */
 .dlg-actor.tall { bottom: 186px; width: 560px; height: 650px; }
 .dlg-actor.tall.left { left: 0; }

@@ -31,7 +31,7 @@
   function cardHtml(c, hidden, held) {
     if (hidden) return '<div class="pcard back"></div>';
     var red = c.s === 1 || c.s === 2;
-    return '<div class="pcard' + (red ? ' red' : '') + (held ? ' held' : '') + '"><span class="r">' + RANKS[c.r] + '</span><span class="s">' + SUITS[c.s] + '</span><span class="rb">' + RANKS[c.r] + '</span>' + (held ? '<i>HOLD</i>' : '') + '</div>';
+    return '<div class="pcard' + (red ? ' red' : '') + (held ? ' held' : '') + '"><span class="r">' + RANKS[c.r] + '</span><span class="s">' + SUITS[c.s] + '</span><span class="rb">' + RANKS[c.r] + '</span>' + (held ? '<i>유지</i>' : '') + '</div>';
   }
   /** dealer keeps pairs+ ; draws to flush/straight sometimes */
   function dealerHold(h) {
@@ -70,9 +70,10 @@
     return new Promise(function (resolve) {
       var d = deck(), me = d.splice(0, 5), en = d.splice(0, 5), hold = [false, false, false, false, false], phase = 0;
       var win = UI.window({ title: '포카 — 판돈 ' + U.num(bet) + '닢', icon: 'dice', width: 900, closable: false, html:
-        '<div class="poker"><div class="row en"></div><div class="plog center">바꾸고 싶지 않은 카드를 눌러 <b>HOLD</b> 하고 「교환」을 누르십시오.</div><div class="row me"></div></div>',
+        '<div class="poker"><div class="row en"></div><div class="plog center">바꾸고 싶지 않은 카드를 눌러 <b>유지</b>하고 「교환」을 누르십시오.</div><div class="row me"></div></div>',
         buttons: [{ label: '교환', value: 'draw', cls: 'navy', onClick: function () { step(); return false; } }] });
       var el = win.content;
+      if (G.MinigameArt) G.MinigameArt.mount(el, 'poker');
       function render(reveal) {
         el.querySelector('.en').innerHTML = en.map(function (c) { return cardHtml(c, !reveal); }).join('');
         el.querySelector('.me').innerHTML = me.map(function (c, i) { return cardHtml(c, false, phase === 0 && hold[i]); }).join('');
