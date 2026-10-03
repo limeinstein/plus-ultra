@@ -30,11 +30,11 @@
     s.player.gold -= n * cost;
     var msgs = [];
     await UI.fade(function () { msgs = G.Game.passDays(n); });
-    s.fleet.fatigue = 0; s.fleet.stress = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
+    s.fleet.fatigue = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     var news = msgs.filter(function (m) { return m.history; }); if (news.length) await C.news(news);
     G.Game.refreshHud();
-    await UI.say('피로와 스트레스가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
+    await UI.say('피로가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
     if (G.Family && G.Family.innEvent) await G.Family.innEvent(c);
   };
   INN.work = async function (c) {
@@ -43,7 +43,7 @@
     if (!v) return;
     var pay = Math.round(v * (8 + c.size * 4) * (0.8 + R.stat('str') / 150));
     await UI.fade(function () { G.Game.passDays(v); });
-    s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20); s.fleet.stress = Math.max(0, (s.fleet.stress || 0) - 10);
+    s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
     await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!');
   };
   INN.func = async function (c) {
@@ -72,6 +72,11 @@
   function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
   function mkBuy(it) { var d = mkDeal(), b = mkBase(it); return d ? Math.max(1, Math.round(b * Math.min(1, d.buy))) : b; }
   function mkSell(it) { var d = mkDeal(), v = Math.round(itemValue(it) * R.itemMult(C.city(), it)); return d ? Math.round(v * Math.max(1, d.sell)) : v; }
+  function mkThumb(it) {
+    if (!it || !G.Img) return null;
+    var rl = G.RELIC && G.RELIC[it.id], key = G.Img.pick(rl ? G.Img.chain.relic(rl) : G.Img.chain.item(it));
+    return key ? G.Img.src(key) : null;
+  }
   MK.price = mkBuy;
   /** 값이 보통보다 5% 넘게 비싸면 ▲, 싸면 ▼ */
   function mkTrend(it) { var k = R.itemMult(C.city(), it); return k > 1.05 ? ' <span class="warn-text" title="시세 ' + Math.round(k * 100) + '%">▲</span>' : k < 0.95 ? ' <span class="good-text" title="시세 ' + Math.round(k * 100) + '%">▼</span>' : ''; }
@@ -93,7 +98,7 @@
       if (!st.length) { await C.say(vendor(), '미안하네, 지금 물건이 떨어지고 없네.'); return; }
       var v = await UI.choose('구입 아이템 선택 — 소지금 ' + U.num(s.player.gold) + '닢', st.map(function (it) {
         var ex = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : G.ITEM_KIND[it.kind];
-        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, desc: it.desc, icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: mkBuy(it) > s.player.gold };
+        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, desc: it.desc, thumb: mkThumb(it), icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: mkBuy(it) > s.player.gold };
       }), { width: 700 });
       if (!v) return;
       var it = G.ITEM[v];
@@ -116,7 +121,7 @@
         var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
         var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
-        return { label: R.itemName(x.it) + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, icon: rl ? 'crown' : 'coin' };
+        return { label: R.itemName(x.it) + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
       }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
       if (v == null) return;
       var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id];
@@ -612,7 +617,7 @@
   HM.rest = async function (c) {
     var s = S();
     await UI.fade(function () { G.Game.passDays(3); });
-    s.player.hp = 100; s.fleet.fatigue = 0; s.fleet.stress = 0;
+    s.player.hp = 100; s.fleet.fatigue = 0;
     await UI.say(s.player.wife ? '가족과 함께 집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.' : '집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.', {});
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(true);
   };

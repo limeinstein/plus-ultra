@@ -234,7 +234,31 @@
     { id: 'm_nag', city: 191, name: '오하루', like: 'delicate' },
     { id: 'm_han', city: 190, name: '매향', like: 'delicate' }, { id: 'm_sdo', city: 194, name: '이사벨라', like: 'brave' },
     { id: 'm_hav', city: 196, name: '돌로레스', like: 'strong' }, { id: 'm_lim', city: 222, name: '로사', like: 'kind' },
-    { id: 'm_ant', city: 23, name: '클라라', like: 'willful' }, { id: 'm_bri', city: 40, name: '모드', like: 'generous' }
+    { id: 'm_ant', city: 23, name: '클라라', like: 'willful' }, { id: 'm_bri', city: 40, name: '모드', like: 'generous' },
+    // 유럽 크기 2~3 도시의 여급 (2026-10-03). 그림 portraits/maids/<id>는 Codex 주문서(docs/art/maids_europe_order.md) — 오기 전에는 지역 그림 묶음(images.js MAID_FACE)
+    { id: 'm_opo', city: 1, name: '베아트리스', like: 'steady' }, { id: 'm_bil', city: 3, name: '미렌', like: 'strong' },
+    { id: 'm_tol', city: 4, name: '레오노르', like: 'delicate' }, { id: 'm_zar', city: 5, name: '블랑카', like: 'willful' },
+    { id: 'm_cor', city: 6, name: '소라이다', like: 'brave' }, { id: 'm_val', city: 11, name: '비센타', like: 'generous' },
+    { id: 'm_tls', city: 19, name: '에스클라르몽드', like: 'bold' }, { id: 'm_rou', city: 15, name: '잔', like: 'brave' },
+    { id: 'm_trs', city: 16, name: '아녜스', like: 'delicate' }, { id: 'm_nan', city: 17, name: '이본', like: 'strong' },
+    { id: 'm_bdx', city: 18, name: '이자보', like: 'generous' }, { id: 'm_lyo', city: 20, name: '루이즈', like: 'willful' },
+    { id: 'm_brg', city: 22, name: '리스베트', like: 'steady' }, { id: 'm_bxl', city: 25, name: '마흐텔트', like: 'kind' },
+    { id: 'm_sou', city: 39, name: '조운', like: 'bold' }, { id: 'm_edi', city: 42, name: '이소벨', like: 'strong' },
+    { id: 'm_dub', city: 43, name: '쇼반', like: 'brave' }, { id: 'm_lub', city: 45, name: '메히틸트', like: 'steady' },
+    { id: 'm_brm', city: 46, name: '아델하이트', like: 'generous' }, { id: 'm_kol', city: 47, name: '우르줄라', like: 'kind' },
+    { id: 'm_ffm', city: 48, name: '엘스베트', like: 'willful' }, { id: 'm_sxb', city: 49, name: '오딜리아', like: 'delicate' },
+    { id: 'm_nur', city: 51, name: '바르바라', like: 'steady' }, { id: 'm_aug', city: 52, name: '레기나', like: 'generous' },
+    { id: 'm_pra', city: 53, name: '루드밀라', like: 'kind' }, { id: 'm_vie', city: 54, name: '마그달레나', like: 'bold' },
+    { id: 'm_dan', city: 56, name: '크리스티나', like: 'strong' }, { id: 'm_kgb', city: 57, name: '도로테아', like: 'willful' },
+    { id: 'm_war', city: 62, name: '야드비가', like: 'brave' }, { id: 'm_bud', city: 63, name: '일로나', like: 'bold' },
+    { id: 'm_sto', city: 64, name: '브리타', like: 'steady' }, { id: 'm_bgo', city: 68, name: '시그리드', like: 'strong' },
+    { id: 'm_mil', city: 26, name: '루크레치아', like: 'bold' }, { id: 'm_flo', city: 30, name: '시모네타', like: 'delicate' },
+    { id: 'm_rom', city: 33, name: '피아메타', like: 'generous' }, { id: 'm_pal', city: 36, name: '로살리아', like: 'brave' },
+    { id: 'm_rag', city: 71, name: '니콜레타', like: 'steady' }, { id: 'm_nov', city: 59, name: '마르파', like: 'willful' },
+    { id: 'm_mos', city: 60, name: '아브도티야', like: 'kind' }, { id: 'm_kie', city: 61, name: '옥사나', like: 'brave' },
+    { id: 'm_bel', city: 69, name: '밀리차', like: 'strong' }, { id: 'm_ath', city: 72, name: '엘레니', like: 'delicate' },
+    { id: 'm_sal', city: 73, name: '레이나', like: 'steady' }, { id: 'm_can', city: 74, name: '아레투사', like: 'kind' },
+    { id: 'm_fam', city: 75, name: '데스피나', like: 'generous' }, { id: 'm_kaf', city: 113, name: '아누시', like: 'bold' }
   ];
   G.MAID = {}; G.MAIDS.forEach(function (m) { G.MAID[m.id] = m; });
   G.LIKES = {

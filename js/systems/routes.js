@@ -1,10 +1,9 @@
 /* 항로 경험과 자동항해 (G.Routes)
-   두 항구 사이를 오간 횟수(가는 길·오는 길을 합쳐 셈)가 쌓여야 그 항로의 자동항해가 열린다.
-     · 보통 항로: 3번
-     · 장거리 항로(가장 빨리 다녀온 항해가 14일 이상): 5번
-   예) 리스본↔세우타 왕복 2번(4번), 세우타↔아테네 왕복 2번(4번, 장거리), 아테네↔알렉산드리아 왕복 2번(4번)
-       → 리스본–세우타·아테네–알렉산드리아는 열리고, 세우타–아테네는 5번째 항해를 마쳐야 열린다.
-   자동항해 = 항구를 고르면 뱃길을 알아서 찾아 입항까지 가는 것. 열리지 않은 항로는 곧장 침로만 잡는다. */
+   한 항구에서 출항해 다른 항구에 곧장(사이에 다른 항구에 들르지 않고) 입항하면 그 두 항구가 이어져 자동항해가 열린다.
+   예) 리스본에서 출항해 세우타에 입항 → 리스본–세우타 자동항해 (가는 길·오는 길 모두)
+   자동항해 = 항구를 고르면 뱃길을 알아서 찾아 입항까지 가는 것. 열리지 않은 항로는 곧장 침로만 잡는다.
+   자동항해 중 방향키·숫자판·바다 누르기로 손으로 몰면 자동항해가 풀리고(voyage.autoOff),
+   그 항해에서는 다시 쓸 수 없다 — 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓴다. */
 (function (G) {
   'use strict';
   var U = G.U;
@@ -12,8 +11,8 @@
   G.Routes = RT;
   function S() { return G.Game.state; }
 
-  RT.NEED = 3;          // 보통 항로
-  RT.NEED_LONG = 5;     // 장거리 항로
+  RT.NEED = 1;          // 보통 항로: 한 번 곧장 오가면 열린다
+  RT.NEED_LONG = 1;     // 장거리 항로도 같다 (표에 '장거리' 표시만)
   RT.LONG_DAYS = 14;    // 이만큼 걸리는 항해는 장거리
   RT.NEAR = 3;          // 바다를 누를 때 이만큼(°) 안이면 곶을 돌아가는 뱃길을 찾아 준다
 
@@ -41,7 +40,7 @@
   RT.isOpen = function (a, b) {
     if (a == null || b == null || a === b) return false;
     var n = RT.count(a, b);
-    if (n < RT.NEED) return false;               // 3번도 안 다녔으면 뱃길 길이를 잴 것도 없다 (해도는 도시마다 이것을 묻는다)
+    if (n < RT.NEED) return false;               // 다녀온 적이 없으면 뱃길 길이를 잴 것도 없다 (해도는 도시마다 이것을 묻는다)
     return n >= RT.need(a, b);
   };
 
@@ -55,17 +54,20 @@
     var open = RT.isOpen(from, to);
     return { n: r.n, need: RT.need(from, to), opened: open && !wasOpen, open: open, long: RT.isLong(from, to), best: r.best };
   };
-  /** 이 항해를 시작한 항구 (자동항해 판정의 기준) */
+  /** 이 항해를 시작한 항구 (자동항해 판정의 기준). 이번 항해에 자동항해를 풀었으면 null — 다음 항구에서 다시 */
   RT.origin = function () {
     var s = S();
+    if (s.voyage && s.voyage.autoOff && s.loc && s.loc.mode !== 'city') return null;
     if (s.voyage && s.voyage.from != null) return s.voyage.from;
     if (s.loc && s.loc.from != null) return s.loc.from;
     return null;
   };
-  /** 한 줄 설명: "리스본–세우타 · 경험 2/3" */
+  /** 이번 항해에 자동항해를 풀었는가 (다음 항구에 들어가면 다시 쓸 수 있다) */
+  RT.autoOff = function () { var s = S(); return !!(s.voyage && s.voyage.autoOff && s.loc && s.loc.mode !== 'city'); };
+  /** 한 줄 설명: "리스본–세우타 · 아직 곧장 오간 적 없음" */
   RT.label = function (a, b) {
     var A = G.CITY_DATA[a], B = G.CITY_DATA[b];
-    return A.name + '–' + B.name + ' · 경험 ' + Math.min(RT.count(a, b), RT.need(a, b)) + '/' + RT.need(a, b) + (RT.isLong(a, b) ? ' (장거리)' : '');
+    return A.name + '–' + B.name + ' · ' + (RT.isOpen(a, b) ? '이어진 항로' : '아직 곧장 오간 적 없음');
   };
   /** 수첩에 보일 목록: 다녀온 항로를 경험 순으로 */
   RT.list = function () {

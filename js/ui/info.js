@@ -201,8 +201,12 @@
         }).join('') + '</table>';
       // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
       U.$$('[data-ic]', el).forEach(function (td) {
-        var it = p.items[+td.dataset.ic], rl = G.RELIC && G.RELIC[it.id];
-        if (rl && A.relicArt) { var cv = G.Img.make(G.Img.chain.relic(rl), 96, 96, function () { return A.relicArt(rl, 96, 96); }); cv.className = 'relic-ic'; td.appendChild(cv); }
+        var it = p.items[+td.dataset.ic], d = G.ITEM[it.id], rl = G.RELIC && G.RELIC[it.id], art = rl || d;
+        if (art && A.relicArt) {
+          var chain = rl ? G.Img.chain.relic(rl) : G.Img.chain.item(d);
+          var cv = G.Img.make(chain, 96, 96, function () { return A.relicArt(art, 96, 96); }, { fit: 'contain' });
+          cv.className = 'relic-ic'; td.appendChild(cv);
+        }
       });
       U.$$('[data-eq]', el).forEach(function (b) { b.onclick = function () { var it = p.items[+b.dataset.eq], d = G.ITEM[it.id]; p.equip[d.kind === 'weapon' ? 'weapon' : 'armor'] = it.id; render(); }; });
       U.$$('[data-read]', el).forEach(function (b) { b.onclick = async function () { await G.Disc.readRelic(p.items[+b.dataset.read]); render(); }; });
@@ -349,12 +353,12 @@
   PAGES.map = function (el) {
     el.innerHTML = '<div class="flex" style="margin-bottom:8px"><span class="muted">탐험한 바다만 그려집니다. 휠·＋/－로 확대하고 끌어서 옮기며, 도시를 누르면 요약이 나옵니다.</span><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div><div class="mapbox"></div>';
     G.ChartView.mount(el.querySelector('.mapbox'), { w: 1100, h: 560 });
-    // 익숙한 항로: 두 항구 사이를 오간 횟수가 차면 자동항해가 열린다
+    // 이어진 항로: 한 항구에서 출항해 다른 항구에 곧장 입항하면 자동항해가 열린다
     var list = G.Routes ? G.Routes.list() : [];
-    var h = '<div class="sep"></div><h4 style="margin:0 0 6px">항로 경험 <small class="muted">— 두 항구 사이를 ' + G.Routes.NEED + '번(가장 빠른 항해가 ' + G.Routes.LONG_DAYS + '일 이상인 장거리는 ' + G.Routes.NEED_LONG + '번) 오가면 자동항해가 열립니다. 가는 길·오는 길을 합쳐 셉니다.</small></h4>';
+    var h = '<div class="sep"></div><h4 style="margin:0 0 6px">항로 경험 <small class="muted">— 한 항구에서 출항해 다른 항구에 곧장(다른 항구에 들르지 않고) 입항하면 두 항구 사이의 자동항해가 열립니다(오는 길도). 자동항해 중 손으로 몰면 풀리고, 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓸 수 있습니다.</small></h4>';
     if (!list.length) h += '<div class="muted">아직 항구와 항구 사이를 오간 적이 없습니다. 익숙하지 않은 항로는 목적지 쪽으로 곧장 침로만 잡으므로, 뭍에 막히면 바다를 눌러 돌아가야 합니다.</div>';
     else h += '<table class="tbl"><tr><th>항로</th><th class="num">오간 횟수</th><th class="num">가장 빠른 항해</th><th>자동항해</th></tr>' + list.map(function (r) {
-      return '<tr' + (r.open ? ' class="sel"' : '') + '><td><b>' + G.CITY_DATA[r.a].name + ' – ' + G.CITY_DATA[r.b].name + '</b>' + (r.long ? ' <small class="muted">장거리</small>' : '') + '</td><td class="num">' + r.n + ' / ' + r.need + '</td><td class="num">' + (r.best ? r.best + '일' : '—') + '</td><td>' + (r.open ? '<span class="tag">열림</span>' : '<span class="muted">' + (r.need - r.n) + '번 더</span>') + '</td></tr>';
+      return '<tr' + (r.open ? ' class="sel"' : '') + '><td><b>' + G.CITY_DATA[r.a].name + ' – ' + G.CITY_DATA[r.b].name + '</b>' + (r.long ? ' <small class="muted">장거리</small>' : '') + '</td><td class="num">' + r.n + '번</td><td class="num">' + (r.best ? r.best + '일' : '—') + '</td><td>' + (r.open ? '<span class="tag">열림</span>' : '<span class="muted">' + (r.need - r.n) + '번 더</span>') + '</td></tr>';
     }).join('') + '</table>';
     el.insertAdjacentHTML('beforeend', h);
   };

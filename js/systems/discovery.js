@@ -72,18 +72,17 @@
     if (d.cat === 'creature' || d.cat === 'people') return 'wonder';
     return 'awe';
   };
-  /** 발견 직후 한 번만 피로·스트레스·규율에 반영한다. 실제로 달라진 수치를 저장해 도감에서도 당시 여파를 볼 수 있다. */
+  /** 발견 직후 한 번만 피로·규율에 반영한다. 실제로 달라진 수치를 저장해 도감에서도 당시 여파를 볼 수 있다. */
   D.applyImpact = function (d, st) {
     st = st || (S().disc[d.id] || (S().disc[d.id] = {}));
     if (st.impact) return st.impact;
     var s = S(), f = s.fleet, key = D.impactKind(d), meta = IMPACT[key], tab = (G.BALANCE && G.BALANCE.discoveryImpact) || {}, v = tab[key] || {};
-    var before = { fatigue: f.fatigue || 0, stress: f.stress || 0, discipline: f.discipline == null ? 80 : f.discipline };
+    var before = { fatigue: f.fatigue || 0, discipline: f.discipline == null ? 80 : f.discipline };
     f.fatigue = U.clamp(before.fatigue + (v.fatigue || 0), 0, 100);
-    f.stress = U.clamp(before.stress + (v.stress || 0), 0, 100);
     f.discipline = U.clamp(before.discipline + (v.discipline || 0), 0, 100);
     st.impact = {
       key: key, name: meta.name, icon: meta.icon, line: meta.line,
-      fatigue: Math.round(f.fatigue - before.fatigue), stress: Math.round(f.stress - before.stress), discipline: Math.round(f.discipline - before.discipline)
+      fatigue: Math.round(f.fatigue - before.fatigue), discipline: Math.round(f.discipline - before.discipline)
     };
     return st.impact;
   };
@@ -123,7 +122,7 @@
     rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });
     st.relics = got.map(function (r) { return r.id; });
     await G.Scenes.discoveryCard(d, fame, got.concat(wait));
-    UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 스트레스 ' + (impact.stress > 0 ? '+' : '') + impact.stress + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
+    UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
     for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);
     if (rel.length && !s.flags.relicTip) {

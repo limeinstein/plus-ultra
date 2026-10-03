@@ -25,7 +25,9 @@
 | 제독 — 거리에서 걷는 모습 | `characters/walk_1.webp` … `walk_8.webp` (옆모습, 발끝이 아래) | 높이 430 |
 | 제독 — 수첩 반신상 | `characters/player_half.webp` | 512×512 |
 | 제독 — 대화창 얼굴 | `portraits/player/이름.webp` (가슴 위) | 512×512 |
+| 제독 — 40세 이상 얼굴 | `portraits/player-aged/이름.png` (젊은 얼굴과 같은 이름, 수염 난 모습) | 512×512 |
 | 제독 — 생김새별 그림 | 만들기 화면에서 얼굴 `portraits/player/<이름>`을 고르면 반신상 `characters/player_half_<이름>`, 걷는 그림 `characters/<이름>/walk_1…8`, 일기토 시트 `duel/fighters/<이름>`을 쓴다(없으면 기본 제독 그림). 테스트 캐릭터 이강희 = `ganghui` | 위와 같음 |
+| 제독 — 40세 이상 무릎상 | 기본 `characters/player_half_old.png`, 그 밖 `characters/player_half_<이름>_old.png`. 현재 나이가 40세가 되는 날부터 얼굴과 함께 자동 교체 | 512×512 |
 | 도시 풍경 | `cities/도시번호.jpg` (예: `cities/0.jpg` = 리스본) | 1600×900 |
 | 도시 풍경 — 해질녘·저녁 | `cities/0_golden.jpg`, `cities/0_dusk.jpg` | 1600×900 |
 | 같은 양식의 도시 모두 | `city-styles/양식.jpg` (예: `city-styles/ib.jpg` = 이베리아 양식) | 1600×900 |
@@ -46,15 +48,26 @@
 | 자녀 | `portraits/family/son.png`, `daughter.png`, 둘째는 `son_2.png` | 512×512 |
 | 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`). 유적은 `tools/ruin_gifs`, 자연 경관은 `tools/nature_gifs`, 동물은 `tools/animal_gifs`, 식물은 `tools/plant_gifs`, 보물은 `tools/treasure_gifs`로 만든 GIF를 쓰면 전용 발견 연출이 재생됨 | 1440×640 정지화상 또는 576×256 GIF |
 | 발견물 — 분류 공통 | `discovery-cats/geo.jpg` (geo·nature·ruin·treasure·creature·people·trade) | 1440×640 |
+| 일반 소지품 | `items/아이템ID.webp` (레이피어 `rapier`, 나침반 `compass`, 약속 반지 `ring` 등) · 종류 공통 `item-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
+| 발견 유물 | `relics/유물ID.webp` (예: `r_qinshi`, `r_sillacrown`) · 종류 공통 `relic-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
+| 교역품 | `goods/교역품ID.webp` (후추 `pepper`, 비단 `silk`, 대포 `cannon` 등) · 갈래 공통 `good-kinds/갈래.webp` | 투명 배경 정사각형, 권장 192×192 |
 | 지도에 남는 유적 모형 | `map-discoveries/ruins-1.png` … `ruins-4.png` — 도시 밖 유적 52곳을 4×4 셀에 13곳씩 배치 | 투명 배경 PNG, 4열×4행 |
 | 배 | `ships/배ID.png` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
 | 항해·해전 8방향 동작 배 | `ships-nav/배ID.webp` — `python tools/render_ship_sprites.py`가 만드는 정박 3장·표류 5장·질주 8장 시트 | 자동 생성 1792×3584, 셀 224×224, 수면 피벗 (112,139), 투명 배경 |
 | 항해 효과 스프라이트 시트 | `effects/ship_spray.png`, `effects/departure_gull.png` | 1024×512, 4열×2행, 셀 256×256, 투명 배경 |
 | 육상전·육상 탐험·사건 스프라이트 | `sprites/시트.webp` — 우리 편 0~3단계(swordsmen·musketeers·cannons·officers), 지역 적(east_fighters·ottoman·natives·west_europe·india_central·southeast_asia·africa_regions·meso_south·north_america·pacific), 들짐승(animals), 항해 사건(whale·dolphin·mermaid·storm·raincloud·rain·sun), 탐험대 8방향(party_*) | `python tools/sprite_repack.py`가 원본(`_extra/sprite_src/`)을 고른 칸으로 다시 짠 것. 칸·피벗은 `js/data/sprites.js` |
+| 육상전 지형 배경 | `landwar/backgrounds/지형.png` — grass·steppe·desert·forest·jungle·mountain·snow·tundra·ice | 초광폭 2.25:1 이상, 가로 1800 이상 |
 | 일기토 전투원 | `duel/fighters/이름.png` | 2592×1216, 6열×4행, 칸 432×304, 발밑 피벗 (165, 278), 투명 배경 — 1536×1024(칸 256) 원본을 `tools/duel_repack.py`로 다시 짠 것 |
 | 일기토 배경 | `duel/backgrounds/deck.png` 등 | 초광폭 2094×751 안팎 |
 
 전체 이름 목록은 `catalog.html`에서 그림과 함께 보거나, `python tools/images.py --list`로 글자로 볼 수 있습니다.
+
+신규 제독 생김새 12종은 `navigator_white`(하얀 남방), `armored_navigator`(철갑), `sea_dog`(망원경),
+`muscle_swordsman`(근육 검사), `hat_spinner`(모자를 돌리는 항해사), `charismatic_admiral`(카리스마 제독),
+`battle_vanguard`(전투 직전), `noble_scholar`(귀족 학자 제독), `casanova`, `army_officer`(정규군 장교),
+`sky_adventurer`(갈색 가죽 모험 항해사), `blackcoat_captain`(검은 코트의 냉정한 선장)입니다.
+기본 제독 `admiral`과 이강희 `ganghui`에도 40대 얼굴·무릎상이 있습니다.
+정지 인물화는 머리부터 무릎까지만 그리며 정강이·장화·발은 포함하지 않습니다. 보행·전투 동작 시트만 동작 판독을 위해 전신을 사용합니다.
 
 ## 항해 효과 시트 규격
 

@@ -213,6 +213,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .choice .r { margin-left: auto; color: var(--ink-soft); font-size: 16px; }
 .choice.dis { opacity: .45; pointer-events: none; }
 .choice svg { width: 22px; height: 22px; color: var(--brass-deep); }
+.choice-thumb { width: 48px; height: 48px; flex: 0 0 48px; object-fit: contain; border-radius: 6px; background: radial-gradient(circle, rgba(255,248,224,.92), rgba(180,143,87,.38)); box-shadow: inset 0 0 0 1px rgba(91,61,27,.3); }
 
 /* ---------------------------------------------------------------- tables */
 table.tbl { width: 100%; border-collapse: collapse; font-size: 18px; color: var(--ink); }
@@ -361,6 +362,8 @@ input[type=range] { accent-color: #2a4a70; width: 100%; }
 .tabs .tab { padding: 7px 14px; font-size: 16px; cursor: pointer; color: var(--cream-2); border: 1px solid #5a4428; background: rgba(0,0,0,.25); }
 .tabs .tab.on { color: var(--ink); background: linear-gradient(180deg, #efe3c8, #dccaa2); border-color: var(--brass); }
 .goodico { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; box-shadow: inset 0 -2px 3px rgba(0,0,0,.35), 0 0 0 1px rgba(60,40,20,.5); }
+.goodico.pic { width: 30px; height: 30px; margin-right: 8px; vertical-align: middle; border-radius: 5px; background: radial-gradient(circle, rgba(255,248,224,.9), rgba(196,166,113,.45)); box-shadow: inset 0 0 0 1px rgba(91,61,27,.32); }
+.goodico.pic img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .qty { width: 90px; text-align: right; }
 .trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .pill { display: inline-block; padding: 0 8px; border-radius: 10px; font-size: 14px; background: rgba(60,40,20,.12); color: var(--ink-2); }
@@ -693,7 +696,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .disc-card .relic-strip canvas { width: 76px; height: 76px; border: 1px solid #7a5c33; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
 .relic-strip .rs-note { font-size: 14px; color: var(--ink-soft); text-align: center; margin-top: 8px; }
 .items-tbl td.ic { width: 54px; padding: 4px 6px; }
-.items-tbl canvas.relic-ic { width: 46px; height: 46px; border-radius: 5px; border: 1px solid #7a5c33; display: block; }
+.items-tbl canvas.relic-ic { width: 52px; height: 52px; border-radius: 6px; border: 1px solid #7a5c33; background: radial-gradient(circle, #f5e7c4, #b7925d); display: block; }
 .items-tbl td:nth-child(3) { white-space: nowrap; }
 /* 캠프파이어 */
 .campfire { display: flex; flex-direction: column; gap: 10px; }
@@ -701,6 +704,12 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .eventfx { position: absolute; z-index: 59; padding: 10px; pointer-events: none !important; opacity: 0; transform: translateY(8px); transition: opacity .28s ease, transform .28s ease; }
 .eventfx.on { opacity: 1; transform: none; }
 .eventfx canvas { display: block; border: 1px solid #0c0806; box-shadow: inset 0 0 0 1px rgba(227,198,141,.2); }
+/* 틀 없이: 항해·탐험 화면 위에 그림만 (G.FX.sprites.eventFrame false) */
+.eventfx.bare { padding: 0; background: none; border: none; box-shadow: none; }
+.eventfx.bare canvas { border: none; box-shadow: none; filter: drop-shadow(0 6px 10px rgba(0,0,0,.35)); }
+.eventfx.bare .eventfx-title { top: -6px; background: none; border: none; box-shadow: none; text-shadow: 0 2px 4px #000, 0 0 10px rgba(0,0,0,.8); }
+.eventfx-flash { position: absolute; inset: 0; z-index: 58; pointer-events: none; background: rgba(230,236,255,.32); transition: opacity .32s ease; }
+.eventfx-flash.off { opacity: 0; }
 .eventfx-title { position: absolute; left: 50%; top: -14px; transform: translateX(-50%); padding: 3px 18px; font-size: 16px; letter-spacing: .08em; color: var(--cream);
   background: linear-gradient(180deg, #3a2a1a, #23180e); border: 1px solid #0c0806; box-shadow: inset 0 0 0 1px rgba(227,198,141,.3); white-space: nowrap; }
 .campfire canvas { width: 100%; height: auto; display: block; border: 2px solid #7a5c33; }
@@ -915,3 +924,20 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 @keyframes mirageWave { 0%, 100% { transform: skewX(0) scaleY(1); } 25% { transform: skewX(1.6deg) scaleY(1.02); } 50% { transform: skewX(-1.2deg) scaleY(.985); } 75% { transform: skewX(.8deg) scaleY(1.015); } }
 @keyframes mirageHeat { from { background-position: 0 0; } to { background-position: 0 -18px; } }
 @media (prefers-reduced-motion: reduce) { .mirage-pic, .mirage-pic::after { animation: none; } }
+
+/* 항해 중의 소식 (js/ui/seanews.js) — 화면 가운데를 가리지 않고 오른쪽 위에 잠깐 */
+.sea-news { position: absolute; right: 18px; top: 66px; width: 380px; z-index: 19; padding: 8px 12px 10px; cursor: pointer; opacity: .94; pointer-events: auto; animation: snIn .35s ease-out; }
+.sea-news.out { animation: snOut .45s ease-in forwards; }
+.sea-news .sn-head { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--brass-hi); letter-spacing: .06em; margin-bottom: 4px; }
+.sea-news .sn-head svg { width: 18px; height: 18px; }
+.sea-news .sn-x { margin-left: auto; color: var(--cream-dim); }
+.sea-news .sn-item { display: flex; gap: 8px; align-items: flex-start; font-size: 15px; line-height: 1.45; color: var(--cream); padding: 4px 0; border-top: 1px solid rgba(184,146,90,.25); }
+.sea-news .sn-item svg { width: 18px; height: 18px; flex: 0 0 18px; margin-top: 2px; color: var(--brass-hi); }
+.sea-news .sn-more { font-size: 13px; color: var(--cream-dim); padding-top: 4px; }
+@keyframes snIn { from { opacity: 0; transform: translateX(24px); } to { opacity: .94; transform: none; } }
+@keyframes snOut { to { opacity: 0; transform: translateX(24px); } }
+/* 항해 중에는 알림(토스트)을 작게, 세 개까지만 */
+#ui.at-sea .toasts { gap: 5px; }
+#ui.at-sea .toast { min-width: 0; max-width: 440px; padding: 6px 12px 6px 10px; font-size: 15px; gap: 8px; opacity: .92; }
+#ui.at-sea .toast svg { width: 20px; height: 20px; flex: 0 0 20px; }
+#ui.at-sea .toasts .toast:nth-last-child(n+4) { display: none; }

@@ -15,6 +15,7 @@
     arg = arg || {};
     var s = S();
     G.Game.showLayers(true, true, false);
+    if (G.SeaNews) G.SeaNews.on(true);   // 항해 중에는 소식·알림을 작게 (js/ui/seanews.js)
     if (!G.Game.ensureRenderer()) { UI.alert('WebGL을 사용할 수 없어 바다를 그릴 수 없습니다.<br>' + (G.Game.rendererError || '')); }
     if (!st || arg.depart != null || arg.fresh) st = newRuntime();
     st.alive = true; st.busy = 0; st.keys = {};
@@ -54,12 +55,14 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function () { if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
+  SEA.exit = function () { if (G.SeaNews) G.SeaNews.on(false); if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
   }
   SEA.runtime = function () { return st; };
+  /** 시험용: 반란 장면을 바로 띄운다 */
+  SEA._mutiny = function () { return mutiny(); };
   function chartR() { return 1.2 + R.skill('survey') * 0.45 + (G.Ships.fleetHas('scout') ? 0.3 : 0); }
   /** 무풍이면 돛은 거의 힘을 못 쓰지만 노는 그대로 젓는다 */
   function curWind() { return st.calm > 0 ? { dir: st.wind.dir, spd: st.wind.spd, calm: true } : st.wind; }
@@ -69,7 +72,7 @@
   function buildUI() {
     var s = S();
     UI.clearScreen();
-    // 항해 중: 날짜 · 위도 · 경도 · 항해 일수 · 식량 · 식수 · 선원 · 피로 · 스트레스 · 계약 | 소지금 · 명성
+    // 항해 중: 날짜 · 위도 · 경도 · 항해 일수 · 식량 · 식수 · 선원 · 피로 · 계약 | 소지금 · 명성
     var H = G.Game.hud;
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
@@ -80,7 +83,6 @@
       { k: 'water', icon: 'drop', label: '식수', text: '' },
       { k: 'crew', icon: 'people', label: '선원', text: '' },
       { k: 'fat', icon: 'hourglass', label: '피로', text: '' },
-      { k: 'stress', icon: 'heart', label: '스트레스', text: '' },
       { k: 'contract', icon: 'seal', label: '계약', text: '' },
       { grow: true },
       { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
@@ -147,7 +149,6 @@
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
     UI.hud.set('crew', f.crew + '명' + (f.crew < R.crewMin() ? '<small>/' + R.crewMin() + '</small>' : ''), f.crew < R.crewMin());
     UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
-    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     UI.hud.set('gold', H.gold());
     UI.hud.set('fame', U.num(s.player.fame));
@@ -225,7 +226,7 @@
       return true;
     }
     // 숫자판 1~9 = 여덟 방향 침로(5는 정지), 윗줄 1·2·3 = 속도
-    if (e.code === 'Numpad5') { st.path = null; st.target = null; st.dirCrs = null; st.manual = false; halt(); return true; }
+    if (e.code === 'Numpad5') { leaveAuto(); st.path = null; st.target = null; st.dirCrs = null; st.manual = false; halt(); return true; }
     if (NUMDIR[e.code]) {
       var d = NUMDIR[e.code];
       takeCourse(Math.atan2(d[1], d[0]));
@@ -253,6 +254,7 @@
     // (손으로 키 잡기 방식) 방향키 = 손으로 키를 잡는다: ↑ 누르는 동안 돛을 펴고 나아감(떼면 서서히 멈춤), ←→ 뱃머리, ↓ 돛을 거둬 세움
     if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'd', 'w', 's', 'A', 'D', 'W', 'S'].indexOf(k) >= 0) {
       var kk = k.toLowerCase();
+      leaveAuto();
       if (!st.manual) {
         var moving = !st.paused && (st.path || st.dirCrs != null);
         st.manual = true; st.cruise = false; st.thr = moving ? 1 : 0;     // 가던 배는 그 힘을 이어받아 서서히 늦춘다
@@ -289,16 +291,26 @@
     UI.toast(G.Scenes.mateSpeaker('nav').name + ': 제독, ' + a.text, 'wind', 9000);
   }
   SEA.monsoonWarn = monsoonWarn;
+  /** 자동항해 중 손으로 몰면(방향키·숫자판·바다 누르기·곧장 침로) 자동항해가 풀린다.
+      이번 항해에는 다시 못 쓰고, 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓴다 (G.Routes.autoOff) */
+  function leaveAuto() {
+    if (!st || !st.autoOn) return;
+    st.autoOn = false;
+    var v = S().voyage; if (v) v.autoOff = true;
+    UI.toast('자동항해를 풀고 손으로 배를 몹니다. 자동항해는 다음 항구에 들어가면 그 항구와 이어진 항로에서 다시 쓸 수 있습니다.', 'sail', 5200);
+  }
+  SEA.leaveAuto = leaveAuto;
   function setTarget(lon, lat, city) {
     var s = S(), RT = G.Routes;
     var auto = city ? RT.isOpen(RT.origin(), city.id) : G.Geo.dist(s.loc.lon, s.loc.lat, lon, lat) <= RT.NEAR;
+    if (!city || !auto) leaveAuto();
     monsoonWarn(lon, lat);
     if (!auto) { setCourse(lon, lat, city); return; }
     var path = G.Nav.path(s.loc.lon, s.loc.lat, lon, lat);
     if (!path) { UI.toast('그곳까지 가는 바닷길을 찾을 수 없습니다.', 'map'); return; }
     // make path longitudes relative to the ship
     st.path = path; st.pathI = 1; st.target = { lon: path[path.length - 1][0], lat: path[path.length - 1][1], city: city };
-    st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = false;
+    st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = false; if (city) st.autoOn = true;
     freshCourse(null);
     if (st.paused) { st.paused = false; refreshBar(); }
   }
@@ -306,6 +318,7 @@
   /** 침로: 목적지 쪽으로 곧장 간다 (뭍을 돌아가는 뱃길은 찾지 않는다) */
   function setCourse(lon, lat, city) {
     var s = S(), l = s.loc;
+    leaveAuto();
     monsoonWarn(lon, lat);
     st.path = [[l.lon, l.lat], [lon, lat]]; st.pathI = 1; st.target = { lon: lon, lat: lat, city: city };
     st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = true;
@@ -316,6 +329,7 @@
   SEA.setCourse = setCourse;
   /** 숫자판 여덟 방향: 그 방위로 계속 간다 (맞바람이면 지그재그로 거슬러 오른다) */
   function takeCourse(ang) {
+    leaveAuto();
     st.path = null; st.target = null; st.manual = false; st.direct = false; st.keys = {}; st.arrowSteer = false;
     freshCourse(ang); st.dirCrs = ang; st.stopping = false;     // 멈추던 중이어도 다시 돛을 편다
     if (st.paused) st.paused = false;
@@ -359,12 +373,12 @@
   function setCityTarget(c) {
     var d = c.dock || [c.lat, c.lon];
     if (!c.port) { UI.toast(c.name + U.j(c.name, '은/는').slice(c.name.length) + ' 내륙 도시입니다. 가까운 해안에 상륙해 육로로 가야 합니다.', 'castle'); setTarget(d[1], d[0], null); return; }
-    var RT = G.Routes, o = RT.origin();
+    var RT = G.Routes, o = RT.origin(), off = RT.autoOff();
     setTarget(d[1], d[0], c);
     if (st.direct) {
       var nm = o != null && o !== c.id ? RT.label(o, c.id) : null;
-      UI.toast(c.name + ' 쪽으로 곧장 침로를 잡습니다.' + (nm ? ' 아직 자동항해를 할 수 없는 항로입니다 — ' + nm + '.' : '') + ' 뭍에 막히면 바다를 눌러 돌아갈 길을 잡으십시오.', 'map', 5200);
-    } else UI.toast(c.name + U.jx(c.name, '으로/로') + ' 자동항해합니다. (익숙한 항로)', 'anchor');
+      UI.toast(c.name + ' 쪽으로 곧장 침로를 잡습니다.' + (off ? ' 이번 항해는 자동항해를 풀었습니다 — 다음 항구에 들어가면 다시 쓸 수 있습니다.' : nm ? ' 아직 자동항해를 할 수 없는 항로입니다 — ' + nm + '.' : '') + ' 뭍에 막히면 바다를 눌러 돌아갈 길을 잡으십시오.', 'map', 5200);
+    } else UI.toast(c.name + U.jx(c.name, '으로/로') + ' 자동항해합니다. 방향키·숫자판·바다를 누르면 손으로 몰 수 있습니다.', 'anchor');
   }
   SEA.goCity = function (id) { setCityTarget(G.CITY_DATA[id]); };
   var kcCache = null, kcKey = '';
@@ -1009,13 +1023,11 @@
       // fatigue & discipline
       var BAL = G.BALANCE || {};
       var fb = 1.1 - R.skill('nav') * 0.22 + (st.storm > 0 ? 3 : 0) + (f.crew < R.crewMin() ? 0.8 : 0);
-      var stressK = BAL.stress || {};
-      fb += (f.stress || 0) * (stressK.seaFatigue || 0.008);
       if (BAL.spareWatch && f.crew >= Math.ceil(R.crewMin() * BAL.spareWatch)) fb -= BAL.spareRest || 0;   // 교대할 선원이 넉넉하다
       if (st.path || st.dirCrs != null || (st.manual && st.thr > 0.1)) { var row = st.manual ? (R.fleetMotion(l.heading, curWind()), R.fleetInfo && R.fleetInfo.row) : (R.fleetMotion(st.crs != null ? st.crs : l.heading, curWind()), R.rowing); if (row) { fb += 0.9; if (!st.rowWarned) { st.rowWarned = true; msgs.push({ icon: 'people', text: '돛이 바람을 못 받아 선원들이 노를 젓는다. 노를 오래 저으면 지친다.' }); } } else st.rowWarned = false; }
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
-      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) - (f.stress || 0) * (stressK.discipline || 0.012) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + morale * 2, 0, 100);
+      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + morale * 2, 0, 100);
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();
@@ -1082,7 +1094,7 @@
       var news = msgs.filter(function (m) { return m.history; });
       msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
       refreshHud();
-      if (news.length) await G.Scenes.city.news(news);
+      if (news.length) { if (G.SeaNews) G.SeaNews.show(news); else await G.Scenes.city.news(news); }   // 항해를 멈추지 않고 오른쪽 위에 잠깐
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);
       if (sensed.length) await G.Explore.report(sensed, l.lon, l.lat, 'sea');
@@ -1190,13 +1202,11 @@
       if (stormFx) stormFx.stop();
       refreshHud();
     }
-    // mutiny
-    if (f.discipline < 22 && f.fatigue > 70 && U.chance(0.18)) {
-      await UI.say('선원들이 웅성거린다... "이런 항해는 더는 못 하겠다! 배를 돌려라!"', {});
-      var v = await UI.ask('선원들이 반란을 일으키려 한다! 어떻게 할까?', [{ label: '설득한다', value: 'talk' }, { label: '술과 돈을 나눠 준다', value: 'pay' }, { label: '주동자를 처벌한다', value: 'punish' }], G.Scenes.mateSpeaker('first'));
-      if (v === 'pay') { var c2 = f.crew * 5, paid = Math.min(s.player.gold, c2); s.player.gold -= paid; f.discipline += Math.round(25 * paid / Math.max(1, c2)); UI.toast(paid < c2 ? '가진 금화 ' + U.num(paid) + '닢을 모두 나누어 주었지만 모자랐다. 불만이 다 가라앉지는 않았다.' : '선원들에게 금화 ' + c2 + '닢을 나누어 주었다.', 'coin'); }
-      else if (v === 'punish') { if (U.chance(0.4 + R.skill('sword') * 0.15)) { f.discipline += 30; f.crew = Math.max(0, f.crew - U.ri(1, 3)); UI.toast('주동자를 처벌했다. 선원들이 조용해졌다.', 'sword'); } else { var gone = Math.round(f.crew * 0.25); f.crew -= gone; f.discipline += 10; UI.toast('선원 ' + gone + '명이 보트를 훔쳐 달아났다!', 'skull'); } }
-      else { if (U.chance(0.35 + R.skill('speech') * 0.15 + R.stat('cha') / 300)) { f.discipline += 20; UI.toast('선원들을 설득했다.', 'people'); } else { f.discipline += 5; f.fatigue = Math.max(0, f.fatigue - 5); UI.toast('설득에 실패했다. 불만이 남아 있다...', 'people'); } }
+    // mutiny — 지칠 대로 지치고 규율이 무너졌을 때만, 한 번 일어나면 한동안은 없다 (G.BALANCE.mutiny)
+    var MU = (G.BALANCE && G.BALANCE.mutiny) || { discipline: 15, fatigue: 80, chance: 0.06, cooldown: 40 };
+    if (f.discipline < MU.discipline && f.fatigue > MU.fatigue && s.day >= (f.mutinyAt || 0) && U.chance(MU.chance)) {
+      f.mutinyAt = s.day + (MU.cooldown || 40);
+      await mutiny();
       refreshHud();
     }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
@@ -1209,6 +1219,58 @@
     }
     // player health
     if (s.player.hp <= 0) { await UI.say('제독이 병으로 쓰러졌다...', {}); await G.Family.retire(true); }
+  }
+  /** 반란: 주동자와 교섭하거나, 일기토로 결판을 낸다 (부관에게 맡길 수도 있다) */
+  async function mutiny() {
+    var s = S(), f = s.fleet, sp = G.Scenes.mateSpeaker('first');
+    var A = G.Art, zone = G.Ships.zone(s.loc.lon, s.loc.lat), sty = A && A.fleetStyle ? A.fleetStyle(zone, s.player.nation) : null;
+    var spec = A.withImg(A.npcSpec('mutineer' + s.day, 'sailor', sty || 'ib'), G.Img.chain.npc('brawler'));
+    var lead = { name: '반란 주동자', look: 'brawler', portrait: spec, str: U.ri(55, 80), atk: U.ri(5, 11), def: U.ri(1, 4), skill: U.ri(0, 1), mar: U.ri(50, 75), int: U.ri(25, 50), cha: U.ri(35, 60) };
+    await UI.say('선원들이 갑판에 모여 웅성거린다... 덩치 큰 선원 하나가 앞으로 나선다. "이런 항해는 더는 못 하겠소! 배를 돌리시오!"', { name: lead.name, portrait: spec });
+    var px = G.Games && G.Games.proxy ? G.Games.proxy() : null, pd = px && G.MATE[px.id];
+    var opts = [{ label: '교섭한다', value: 'talk' }, { label: '주동자와 일기토로 결판을 낸다', value: 'duel' }];
+    if (pd) opts.push({ label: '부관 ' + pd.name + '에게 일기토를 맡긴다', value: 'proxy' });
+    var v = await UI.ask('선원들이 반란을 일으키려 한다! 어떻게 할까?', opts, sp);
+    if (v === 'duel' || v === 'proxy') {
+      if (v === 'proxy') await UI.say(U.pick(['제독께서 나서실 것까지 없습니다. 제가 저 녀석의 버릇을 고쳐 놓지요.', '저런 놈은 제게 맡기십시오.']), sp);
+      var res = await G.Games.duel(lead, v === 'proxy' ? { mate: px, place: 'deck' } : { place: 'deck' });
+      var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
+      if (res === 'win') {
+        f.discipline = Math.min(100, f.discipline + 35); f.fatigue = Math.max(0, f.fatigue - 10); s.player.fame += 2;
+        if (fm) fm.loyal = Math.min(100, (fm.loyal || 70) + 6);
+        await UI.say((fd ? fd.name + U.jx(fd.name, '이/가') + ' ' : '') + '주동자를 쓰러뜨렸다! 선원들이 고개를 숙이고 제자리로 돌아간다. (규율 +35, 피로 −10)', {});
+      } else {
+        var gone = Math.max(1, Math.round(f.crew * (res === 'flee' ? 0.12 : 0.2)));
+        f.crew = Math.max(0, f.crew - gone); f.discipline = Math.min(100, f.discipline + 12);
+        if (fm && res === 'lose') fm.hurt = s.day + 20;
+        await UI.say((res === 'flee' ? '결판을 내지 못했다. ' : '주동자에게 지고 말았다! ') + '주동자와 선원 ' + gone + '명이 보트를 내려 떠났다. 남은 선원들은 일단 조용해졌다.', {});
+        G.Scenes.city.B.harbor.trimCrew && G.Scenes.city.B.harbor.trimCrew();
+      }
+      return;
+    }
+    // 교섭: 돈을 나누어 주거나, 가까운 항구로 가겠다고 약속하거나, 말로 달랜다
+    var pay = f.crew * 5, port = nearestPortName();
+    var t = await UI.ask('무엇을 내걸고 교섭할까?', [
+      { label: '술과 돈을 나누어 준다 (금화 ' + U.num(pay) + '닢)', value: 'pay', dis: s.player.gold <= 0 },
+      { label: (port ? port + '에 들러 쉬게 해 주겠다고' : '가까운 항구에서 쉬게 해 주겠다고') + ' 약속한다', value: 'promise' },
+      { label: '말로 달랜다 (말솜씨·매력)', value: 'talk' }], sp);
+    if (t === 'pay') {
+      var paid = Math.min(s.player.gold, pay); s.player.gold -= paid;
+      f.discipline = Math.min(100, f.discipline + Math.round(30 * paid / Math.max(1, pay))); f.fatigue = Math.max(0, f.fatigue - 5);
+      UI.toast(paid < pay ? '가진 금화 ' + U.num(paid) + '닢을 모두 나누어 주었다. 불만이 다 가라앉지는 않았다.' : '선원들에게 금화 ' + U.num(pay) + '닢을 나누어 주었다. 갑판에 웃음이 돈다.', 'coin', 4200);
+    } else if (t === 'promise') {
+      f.discipline = Math.min(100, f.discipline + 18);
+      UI.toast('선원들이 약속을 믿고 물러났다. 오래 미루면 다시 들고일어날 것이다.', 'anchor', 4600);
+      f.mutinyAt = s.day + 15;   // 약속은 오래가지 않는다
+    } else {
+      if (U.chance(0.45 + R.skill('speech') * 0.15 + R.stat('cha') / 250)) { f.discipline = Math.min(100, f.discipline + 25); UI.toast('주동자를 설득했다. 선원들이 제자리로 돌아간다.', 'people'); }
+      else { f.discipline = Math.min(100, f.discipline + 6); f.fatigue = Math.max(0, f.fatigue - 5); UI.toast('설득에 실패했다. 불만이 남아 있다...', 'people'); }
+    }
+  }
+  function nearestPortName() {
+    var s = S(), l = s.loc, best = null, bd = 1e9;
+    (G.CITY_DATA || []).forEach(function (c) { if (!c.port || s.known.indexOf(c.id) < 0 || (R.cityExists && !R.cityExists(c))) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } });
+    return best ? best.name : '';
   }
   // ================================================================ rendering
   function weatherParams() {
@@ -1373,7 +1435,7 @@
     // hover tooltip
     if (st.mouse && !UI.busy()) {
       var hc = cityAt(st.mouse[0], st.mouse[1]);
-      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : ' — 클릭하면 이곳으로 향합니다')); }
+      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : G.Routes.autoOff() && hc.port ? ' — 클릭: 곧장 침로 (자동항해는 다음 항구에서)' : ' — 클릭하면 이곳으로 향합니다')); }
       else {
         var hd = landmarkAt(st.mouse[0], st.mouse[1]);
         if (hd) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hd.name + ' · 발견한 유적 — 클릭하면 가까이 향합니다');

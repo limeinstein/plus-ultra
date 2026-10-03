@@ -95,8 +95,11 @@
 
   C.mansionName = function (sp) {
     if (sp.place) return sp.place;   // 이름 있는 저택 (압구정·제승당 등)
-    var h = G.Sponsor.holderName(sp), parts = h.split(' ');
-    var short = /가문|학당|대학|수도원|조합|평의회|회합/.test(h) ? parts.slice(0, 2).join(' ') : parts[parts.length - 1];
+    if (sp.house) return sp.house + ' 저택';   // 가문·자리 이름으로 부르는 저택 (기즈 공작 저택 — js/data/estates.js)
+    var h = G.Sponsor.holderName(sp).replace(/\s*\([^)]*\)/g, ''), parts = h.split(' ');   // 「쉴리 공작 (재무경)」 → 「쉴리 공작」
+    // 끝말이 칭호면 앞 이름과 함께 (리슐리외 추기경 · 바이람 칸 · 알바 공작)
+    var last = parts[parts.length - 1], titled = parts.length > 1 && /^(칸|공작|추기경|파샤|대공|백작|후작|공|경|태수|대주교|대재상|총독|섭정)$/.test(last);
+    var short = /가문|학당|대학|수도원|조합|평의회|회합/.test(h) ? parts.slice(0, 2).join(' ') : titled ? parts.slice(-2).join(' ') : last;
     return short + ' 저택';
   };
 
@@ -156,20 +159,15 @@
       var nk = s.known.length - v.known0; if (nk > 0) parts.push('새 도시 ' + nk + '곳');
       var nm = Object.keys(s.marks || {}).length - (v.marks0 || 0); if (nm > 0) parts.push('망루가 본 것 ' + nm + '곳');
       var nw = s.stats.wins - v.wins0; if (nw > 0) parts.push('해전 승리 ' + nw + '번');
-      // 항로 경험: 두 항구 사이를 오간 횟수가 차면 자동항해가 열린다
+      // 항로: 한 항구에서 출항해 이 항구에 곧장 들어오면 두 항구가 이어져 자동항해가 열린다
       var rt = v.from !== c.id ? G.Routes.record(v.from, c.id, days) : null;
       if (rt) parts.push(rt.open ? '자동항해 가능' : '항로 경험 ' + rt.n + '/' + rt.need + (rt.long ? ' (장거리)' : ''));
       if (days > 0 && v.from !== c.id) UI.toast(G.CITY_DATA[v.from].name + ' → ' + c.name + ' · ' + parts.join(' · '), 'log', 5500);
-      if (rt && rt.opened) news.push({ icon: 'map', text: G.CITY_DATA[v.from].name + '–' + c.name + ' 항로가 손에 익었다 (' + rt.n + '번 오감' + (rt.long ? ', 장거리' : '') + '). 이제 두 항구 사이는 목적지만 고르면 자동항해로 갈 수 있다.' });
+      if (rt && rt.opened) news.push({ icon: 'map', text: G.CITY_DATA[v.from].name + '–' + c.name + ' 항로를 익혔다' + (rt.long ? ' (장거리)' : '') + '. 이제 두 항구 사이는 목적지만 고르면 자동항해로 갈 수 있다 (오는 길도).' });
       delete s.voyage;
     }
     if (news.length) await C.news(news);
-    // city discoveries (landmarks)
-    var ds = G.Disc.checkCity(c.id);
-    for (var i = 0; i < ds.length; i++) {
-      if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(ds[i]))) await C.mate('제독, 저기를 보십시오! 소문으로만 듣던 ' + U.eul(ds[i].name).replace(ds[i].name, '「' + ds[i].name + '」') + ' 이 눈으로 보게 되다니...');
-      await G.Disc.find(ds[i], 'city');
-    }
+    // 도시 발견물은 입항만으로는 찾지 못한다 — 건물(교역소·시장·교회·왕궁…)에 들어가 둘러봐야 눈에 띈다 (C.findInside)
     if (G.Animals) await G.Animals.town(c);             // 마을 사람이 이 고장에 사는 동물 이야기를 꺼낸다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
@@ -292,7 +290,7 @@
       // 리스본·세비야: 새로 들을 수 있는 큰 항로 이야기
       if (G.Frontier && G.Frontier.leads) {
         var ld = G.Frontier.leads(c.id);
-        if (ld.length) out.push({ kind: 'tavern', icon: 'scroll', hot: true, text: '술집·후원자에게서 「' + G.DISC[ld[0].disc].name + '」 이야기를 들을 수 있다' });
+        if (ld.length) out.push({ kind: 'tavern', icon: 'scroll', hot: true, text: '술집에서 술을 마시거나 후원자에게서 「' + G.DISC[ld[0].disc].name + '」 이야기를 들을 수 있다' });
       }
       // 새 항해사
       if (C.B.tavern && C.B.tavern.candidates) {
@@ -325,11 +323,20 @@
     }
     G.Game.setScene(C.interior(ikind, c, ivar));
     plaque(B, c, arg);
+    if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
     var ok = true;
     try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }
     busy = false;
     if (!ok) { if (cur && G.Game.scene === C) C.main(); return; }
     if (cur && G.Game.scene === C) C.menu();
+  };
+  /** 건물에 들어갔을 때: 이 도시의 발견물(예술품·건축·명물)을 찾는다. 성문은 나가는 길이라 빼고, 어느 건물이든 처음 들어간 곳에서 눈에 띈다 */
+  C.findInside = async function (c, kind) {
+    var ds = G.Disc.checkCity(c.id);
+    for (var i = 0; i < ds.length; i++) {
+      if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(ds[i]))) await C.mate(U.pick(['제독, 이것 좀 보십시오! ', '제독, 저쪽을 보십시오! ']) + '소문으로만 듣던 ' + U.eul(ds[i].name).replace(ds[i].name, '「' + ds[i].name + '」') + ' 이 눈으로 보게 되다니...');
+      await G.Disc.find(ds[i], 'city');
+    }
   };
   function plaque(B, c, arg) {
     var old = U.$('.bld-plaque'); if (old) old.remove();

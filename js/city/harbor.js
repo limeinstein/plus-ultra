@@ -90,7 +90,7 @@
   function routesFrom(c) {
     if (!G.Routes) return '';
     var mine = G.Routes.list().filter(function (r) { return r.a === c.id || r.b === c.id; });
-    if (!mine.length) return '<div class="plan-note" style="margin-bottom:8px">이 항구에서 자동항해로 갈 수 있는 곳이 아직 없습니다. 두 항구 사이를 ' + G.Routes.NEED + '번(장거리는 ' + G.Routes.NEED_LONG + '번) 오가면 열립니다.</div>';
+    if (!mine.length) return '<div class="plan-note" style="margin-bottom:8px">이 항구에서 자동항해로 갈 수 있는 곳이 아직 없습니다. 이 항구에서 출항해 다른 항구에 곧장 입항하면(또는 그 반대) 두 항구 사이의 자동항해가 열립니다.</div>';
     var other = function (r) { return G.CITY_DATA[r.a === c.id ? r.b : r.a].name; };
     var open = mine.filter(function (r) { return r.open; }).map(other), soon = mine.filter(function (r) { return !r.open; }).map(function (r) { return other(r) + ' ' + r.n + '/' + r.need; });
     return '<div class="plan-note" style="margin-bottom:8px">' + (open.length ? '자동항해: <b>' + open.join('·') + '</b>' : '자동항해로 갈 수 있는 곳 없음') + (soon.length ? ' · 익히는 중: ' + soon.join(', ') : '') + '</div>';

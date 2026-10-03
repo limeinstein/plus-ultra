@@ -2,7 +2,7 @@
    - js/data/wonders.js 가 만든 G.WONDERS 묶음(list·relics·books·meta·text·leads·front)에 덧붙인다(naturals.js·seadisc.js와 같은 방식).
      그래서 discoveries.js·books.js·frontiers.js 가 그대로 읽어 들인다. 분류는 생물(creature).
    - 단서 얻는 법 (js/systems/animals.js):
-       보통 동물  — 그 동물이 사는 고장(near°, 기본 14° 안)의 도시에 가면 술집 「정보를 듣는다」나 거리의 마을 사람에게서 듣는다.
+       보통 동물  — 그 동물이 사는 고장(near°, 기본 14° 안)의 도시에 가면 술집 「술을 마신다」나 거리의 마을 사람에게서 듣는다.
                     그 고장에 직접 와 있으므로 개척 단계와 상관없이 들을 수 있다. 다른 곳의 술집 소문에는 개척 단계를 따라 가끔 오른다.
        book       — 전설의 동물·희귀 동물·공룡: 책(도서관)·유물로만 단서가 나온다. 술집·마을·원주민 소문에는 오르지 않는다.
    - 찾는 법: land(뭍에서 그 자리에 가면) · sea(배로 그 바다에 가면) · 도시 번호(그 도시에서 — needHint: 단서를 들은 뒤에야 눈에 띈다).

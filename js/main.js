@@ -147,8 +147,7 @@
     var state = days <= 0 ? '고갈' : days < 3 ? '위기' : days < 7 ? '부족' : '';
     return { days: days, text: (days >= 999 ? '—' : days + '일') + (state ? ' <small class="supply-state ' + (days < 3 ? 'crisis' : 'low') + '">' + state + '</small>' : ''), warn: days < 7 };
   };
-  H.stress = function () { return Math.round((Game.state.fleet && Game.state.fleet.stress) || 0) + '%'; };
-  /** 도시에 있을 때: 날짜 · 도시 · 위도·경도 · 식량·식수 · 피로·스트레스 · 계약 | 소지금 · 명성 · 직위 */
+  /** 도시에 있을 때: 날짜 · 도시 · 위도·경도 · 식량·식수 · 피로 · 계약 | 소지금 · 명성 · 직위 */
   Game.cityHud = function () {
     var S = Game.state, c = G.CITY_DATA[S.loc.city], f = S.fleet, k = H.contract(), food = H.supply('food'), water = H.supply('water');
     var own = c && R.cityOwner ? R.cityOwner(c) : '';
@@ -161,7 +160,6 @@
       { k: 'food', icon: 'bread', label: '식량', text: food.text },
       { k: 'water', icon: 'drop', label: '식수', text: water.text },
       { k: 'fat', icon: 'hourglass', label: '피로', text: Math.round(f.fatigue || 0) + '%' },
-      { k: 'stress', icon: 'heart', label: '스트레스', text: H.stress() },
       { k: 'contract', icon: 'seal', label: '계약', text: k.text, tip: k.tip },
       { grow: true },
       { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
@@ -170,7 +168,6 @@
     ]);
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
     UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
-    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     UI.hud.set('contract', k.text, k.warn);
   };
   Game.refreshHud = function () {
@@ -182,7 +179,6 @@
     var food = H.supply('food'), water = H.supply('water'), f = S.fleet || {};
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
     UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
-    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     Game.checkTitle();
   };
@@ -218,11 +214,8 @@
     out = out.concat(G.World.daily());
     if (G.Audio && G.Audio.daily) G.Audio.daily();   // 바다·뭍에서 지역이 바뀌면 음악도
     if (G.Quest) out = out.concat(G.Quest.daily());
-    // 놀람과 긴장은 천천히 가라앉고, 안전한 도시에서는 훨씬 빨리 풀린다. 옛 저장에는 stress가 없으므로 0으로 시작한다.
-    if (S.fleet) {
-      var SK = (G.BALANCE && G.BALANCE.stress) || {}, rec = S.loc && S.loc.mode === 'city' ? (SK.cityRecovery || 2) : (SK.travelRecovery || 0.15);
-      S.fleet.stress = U.clamp((S.fleet.stress || 0) - rec, 0, 100);
-    }
+    // 스트레스는 피로 하나로 합쳤다: 옛 저장에 남은 스트레스는 절반을 피로에 더하고 지운다
+    if (S.fleet && S.fleet.stress) { S.fleet.fatigue = U.clamp((S.fleet.fatigue || 0) + S.fleet.stress * 0.5, 0, 100); delete S.fleet.stress; }
     Game.checkTitle();
     return out;
   };

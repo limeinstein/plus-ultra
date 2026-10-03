@@ -62,6 +62,20 @@
   SC.discoveryPicture = function (d, chain) {
     chain = chain || G.Img.chain.discovery(d);
     var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art;
+    if (d.cat === 'trade' && d.good && G.GOOD[d.good] && G.Img.chain.good) {
+      var good = G.GOOD[d.good], goodChain = G.Img.chain.good(good);
+      if (G.Img.pick(goodChain)) return G.Img.make(goodChain, 720, 320, function () { return A.discoveryArt(d, 720, 320); }, {
+        fit: 'contain',
+        post: function (ctx, w, h) {
+          ctx.globalCompositeOperation = 'destination-over';
+          var bg = ctx.createRadialGradient(w / 2, h * 0.42, 20, w / 2, h / 2, w * 0.62);
+          bg.addColorStop(0, '#7c5633'); bg.addColorStop(0.55, '#392315'); bg.addColorStop(1, '#120b08');
+          ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+          ctx.globalCompositeOperation = 'source-over';
+          A.vignette(ctx, w, h, 0.58);
+        }
+      });
+    }
     var animatedCat = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure';
     if (animatedCat && G.Reel && G.Reel.has(d)) {
       art = G.Reel.element(d, { cls: 'disc-build-gif', w: 1152, h: 512, ms: discoveryMotionMs(d) });
@@ -105,7 +119,7 @@
     var art = SC.discoveryPicture(d, chain);
     var impact = s.disc[d.id] && s.disc[d.id].impact;
     function delta(n) { return (n > 0 ? '+' : '') + n; }
-    var impactHtml = impact ? '<div class="disc-impact ' + impact.key + '"><div class="di-title">' + G.icon(impact.icon || 'star') + '<b>발견의 여파 · ' + U.esc(impact.name) + '</b></div><div class="di-line">' + U.esc(impact.line) + '</div><div class="di-stats"><span>피로 ' + delta(impact.fatigue) + '</span><span>스트레스 ' + delta(impact.stress) + '</span><span>규율 ' + delta(impact.discipline) + '</span></div></div>' : '';
+    var impactHtml = impact ? '<div class="disc-impact ' + impact.key + '"><div class="di-title">' + G.icon(impact.icon || 'star') + '<b>발견의 여파 · ' + U.esc(impact.name) + '</b></div><div class="di-line">' + U.esc(impact.line) + '</div><div class="di-stats"><span>피로 ' + delta(impact.fatigue) + '</span><span>규율 ' + delta(impact.discipline) + '</span></div></div>' : '';
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
       '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +

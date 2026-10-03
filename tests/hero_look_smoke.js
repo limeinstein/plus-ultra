@@ -48,6 +48,18 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r1.duel === (hasSheet ? 'ganghui' : 'main_admiral'), '일기토 시트 = ' + r1.duel);
     ok(r1.st === 99, '테스트 캐릭터 능력치 그대로 (힘 99)');
 
+    // 40세가 되는 순간 얼굴과 수첩 무릎상만 수염 난 그림으로 바뀐다.
+    const aged = await page.evaluate(() => {
+      const s = G.Game.state, born = Object.assign({}, s.player.born);
+      s.player.born = { y: s.date.y - 40, m: s.date.m, d: s.date.d };
+      const out = { keys: G.Art.portraitKeys(s.player.portrait), half: G.Img.pick(G.Img.chain.heroHalf()), walk: G.Img.chain.heroWalk()[0], duel: G.DUEL_ART.pick(G.Games.playerFighter(), {}) };
+      s.player.born = born;
+      return out;
+    });
+    ok(aged.keys[0] === 'portraits/player-aged/ganghui', '40세 얼굴 = portraits/player-aged/ganghui');
+    ok(aged.half === 'characters/player_half_ganghui_old', '40세 수첩 무릎상 = player_half_ganghui_old');
+    ok(aged.walk === 'characters/ganghui/walk_1' && aged.duel === 'ganghui', '40세에도 보행·일기토 동작 연결 유지');
+
     // 거리에서 실제 걷는 중인 강희 — 전용 프레임의 크기·발밑 위치를 눈으로 확인하는 장면
     await page.evaluate(() => { if (G.Town.active()) window.__heroWalkTrip = G.Town.focusOn('gate'); });
     await page.waitForTimeout(260);

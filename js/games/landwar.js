@@ -7,7 +7,7 @@
    G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n}, party, terr, guns, flee }) → {res: win|lose|flee, dead, back, left} */
 (function (G) {
   'use strict';
-  var U = G.U, UI = G.UI, R = G.R, A = G.Art;
+  var U = G.U, UI = G.UI, R = G.R, A = G.Art, I = G.Img;
   G.Games = G.Games || {};
   var W = 1000, H = 430;
   var TYPES = {
@@ -92,6 +92,8 @@
     mine.forEach(function (u) { if (u.type === 'cav') u.ride = mi.name; });
     var here = S().loc || {}, LA = ART(), reg = LA ? LA.regions[LA.regionOf(here.lon || 0, here.lat || 0)] : null;
     var SPR = G.Sprites, SFX = (G.FX && G.FX.sprites) || {}, useSpr = !!(SPR && LA && reg) && SFX.battle !== false;
+    var bgImg = null, bgChain = I && I.chain && I.chain.landWarBackground ? I.chain.landWarBackground(terr) : [];
+    if (I && bgChain.length) I.resolve(bgChain).then(function (res) { if (res) bgImg = res.img; });
     if (useSpr) {
       var need = ['swordsmen', 'musketeers', 'cannons', 'officers', 'animals'];
       ['m', 'r', 'l', 'c', 'bandit'].forEach(function (k) { if (reg[k] && need.indexOf(reg[k][0]) < 0) need.push(reg[k][0]); });
@@ -254,12 +256,19 @@
         var bg = TERR_BG[terr] || TERR_BG.grass;
         ctx.save();
         if (shakeT > 0 && S().settings.shake !== false) ctx.translate(U.rf(-1, 1) * shakeT * 14, U.rf(-1, 1) * shakeT * 10);
-        var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#9ab8d0'); g.addColorStop(0.22, '#c8d6d8'); g.addColorStop(0.23, bg[0]); g.addColorStop(1, bg[1]);
-        ctx.fillStyle = g; ctx.fillRect(-20, -20, W + 40, H + 40);
-        var rng = U.makeRng(11);
-        for (var i = 0; i < 70; i++) { ctx.fillStyle = 'rgba(0,0,0,' + rng() * 0.07 + ')'; ctx.fillRect(rng() * W, H * 0.25 + rng() * H * 0.75, 3 + rng() * 20, 2); }
-        if (terr === 'forest' || terr === 'jungle') { ctx.fillStyle = 'rgba(20,40,20,.55)'; for (var k = 0; k < 14; k++) { var tx = k * 75 + rng() * 30; ctx.beginPath(); ctx.moveTo(tx - 22, H * 0.25); ctx.lineTo(tx, H * 0.06); ctx.lineTo(tx + 22, H * 0.25); ctx.fill(); } }
-        if (terr === 'mountain') { ctx.fillStyle = 'rgba(90,86,76,.6)'; ctx.beginPath(); ctx.moveTo(0, H * 0.25); for (var m = 0; m <= 10; m++) ctx.lineTo(m * 100, H * (0.1 + rng() * 0.1)); ctx.lineTo(W, H * 0.25); ctx.fill(); }
+        if (bgImg && I) {
+          I.drawCover(ctx, bgImg, -20, -20, W + 40, H + 40, 0.5, 0.5);
+          var shade = ctx.createLinearGradient(0, 0, 0, H);
+          shade.addColorStop(0, 'rgba(10,14,20,.02)'); shade.addColorStop(0.62, 'rgba(18,12,8,.03)'); shade.addColorStop(1, 'rgba(18,10,6,.12)');
+          ctx.fillStyle = shade; ctx.fillRect(-20, -20, W + 40, H + 40);
+        } else {
+          var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#9ab8d0'); g.addColorStop(0.22, '#c8d6d8'); g.addColorStop(0.23, bg[0]); g.addColorStop(1, bg[1]);
+          ctx.fillStyle = g; ctx.fillRect(-20, -20, W + 40, H + 40);
+          var rng = U.makeRng(11);
+          for (var i = 0; i < 70; i++) { ctx.fillStyle = 'rgba(0,0,0,' + rng() * 0.07 + ')'; ctx.fillRect(rng() * W, H * 0.25 + rng() * H * 0.75, 3 + rng() * 20, 2); }
+          if (terr === 'forest' || terr === 'jungle') { ctx.fillStyle = 'rgba(20,40,20,.55)'; for (var k = 0; k < 14; k++) { var tx = k * 75 + rng() * 30; ctx.beginPath(); ctx.moveTo(tx - 22, H * 0.25); ctx.lineTo(tx, H * 0.06); ctx.lineTo(tx + 22, H * 0.25); ctx.fill(); } }
+          if (terr === 'mountain') { ctx.fillStyle = 'rgba(90,86,76,.6)'; ctx.beginPath(); ctx.moveTo(0, H * 0.25); for (var m = 0; m <= 10; m++) ctx.lineTo(m * 100, H * (0.1 + rng() * 0.1)); ctx.lineTo(W, H * 0.25); ctx.fill(); }
+        }
         // 부대 (위에서 아래 순서로)
         mine.concat(foes).slice().sort(function (a, b) { return a.y - b.y; }).forEach(function (u) { drawUnit(u, t); });
         // 효과

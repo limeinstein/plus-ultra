@@ -542,6 +542,9 @@
   /** override-image chain for a portrait spec (spec.img, or the player's face index) */
   A.portraitKeys = function (spec) {
     if (!spec || !G.Img) return null;
+    var game = G.Game && G.Game.state;
+    // 저장된 초상은 젊은 얼굴을 기준으로 생김새를 기억한다. 실제 표시만 현재 나이에 따라 바꾼다.
+    if (game && game.player && spec === game.player.portrait && G.Img.chain.heroPortrait) return G.Img.chain.heroPortrait(game.player);
     var out = spec.img ? [].concat(spec.img) : [], roleKey = spec.noRole ? null : A.rolePortraitKey(spec);
     // 역할 그림(npc-roles)은 성별이 정해져 있다 — 다른 성별의 인물에게는 쓰지 않는다 (조선 국왕에게 왕비 그림이 붙지 않게)
     if (roleKey && spec.g && A.rolePortraitGender(spec.role, spec.style) !== spec.g) roleKey = null;

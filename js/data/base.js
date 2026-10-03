@@ -207,16 +207,22 @@
     trustMax: 100,
     // 보급: 선원 한 사람이 하루에 먹고 마시는 양(통) — 식량·물 따로 (예전 0.04 → 0.025: 같은 짐칸으로 약 1.6배 오래)
     ration: 0.025,
-    // 발견의 여파: 발견 갈래에 따라 피로·스트레스·규율이 즉시 달라진다 (discovery.js).
-    // 스트레스는 바다·육상에서 하루 피로와 규율에 영향을 주고, 도시에서 쉬는 동안 가라앉는다 (main.js·sea.js·land.js).
+    // 육상 탐험: 대원은 배의 식량·물을 쓰지 않고 그 고장에서 사 먹고 길잡이·짐꾼 삯을 낸다 — 하루 경비(금화)
+    //   (base + perMan × 대원 수) × 탈것 보정(먹이·물 덜 드는 짐승은 싸다) × (1 + thirsty × 메마른 땅)
+    //   못 내면 피로 +unpaidFatigue, 대원이 desert 확률로 떠난다. 물 긷기(야영)는 water × 하루 쓰는 양 × 땅의 물 많음
+    // 바다 위 반란: 규율 < discipline 이고 피로 > fatigue 일 때 하루 chance 확률, 한 번 일어나면 cooldown일 동안 다시 안 일어난다 (sea.js)
+    //   (예전: 규율 22 · 피로 70 · 하루 18%, 쉬는 날 없음)
+    mutiny: { discipline: 15, fatigue: 80, chance: 0.06, cooldown: 40 },
+    landCost: { base: 5, perMan: 1, thirsty: 0.5, unpaidFatigue: 6, desert: 0.25, water: [4, 8] },
+    // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
+    // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
     discoveryImpact: {
-      awe:     { fatigue: -10, stress: -8, discipline: 2 },
-      triumph: { fatigue: -8,  stress: -6, discipline: 5 },
-      delight: { fatigue: -6,  stress: -4, discipline: 3 },
-      wonder:  { fatigue: -5,  stress: -3, discipline: 2 },
-      fear:    { fatigue: 4,   stress: 15, discipline: -4 }
+      awe:     { fatigue: -16, discipline: 2 },
+      triumph: { fatigue: -13, discipline: 5 },
+      delight: { fatigue: -9,  discipline: 3 },
+      wonder:  { fatigue: -7,  discipline: 2 },
+      fear:    { fatigue: 14,  discipline: -4 }
     },
-    stress: { cityRecovery: 2, travelRecovery: 0.15, seaFatigue: 0.008, landFatigue: 0.006, discipline: 0.012 },
     // 물은 식량보다 싸다 (보급값 × waterPrice). 자재(수리용 목재·밧줄·돛천): 한 통 값 = 보급값 × matPrice
     waterPrice: 0.5, matPrice: 3,
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작

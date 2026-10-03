@@ -52,7 +52,7 @@ P = {
     "tartane":     dict(scale=.76, beam=.82, free=.63, form="fine", stern="open", rig="lateen"),
     "galley":      dict(scale=1.00, beam=.90, free=.58, form="needle", stern="quarter", bow="ram", rig="galley", oars=11),
     "greatgalley": dict(scale=1.06, beam=1.03, free=.72, form="needle", stern="castle", bow="ram", rig="galley", oars=13),
-    "galleass":    dict(scale=1.10, beam=1.16, free=.91, form="needle", stern="castle", bow="ram", rig="galleass", oars=14, guns=6),
+    "galleass":    dict(scale=1.08, beam=1.16, free=.91, form="needle", stern="castle", bow="ram", rig="galleass", oars=14, guns=6),
     "fusta":       dict(scale=.91, beam=.72, free=.48, form="needle", stern="open", bow="ram", rig="galley", oars=9),
     "xebec":       dict(scale=1.02, beam=.82, free=.62, form="needle", stern="quarter", bow="beak", rig="xebec", oars=10, guns=3),
     "dhow":        dict(scale=.91, beam=.91, free=.82, form="dhow", stern="transom", bow="raked", rig="dhow"),
@@ -152,6 +152,63 @@ class Painter:
         if outline:
             self.d.line(q + [q[0]], fill=outline, width=max(1, round(width * SS)), joint="curve")
 
+    @staticmethod
+    def _mix(a, b, t):
+        return tuple(a[i] * (1 - t) + b[i] * t for i in range(len(a)))
+
+    @classmethod
+    def _quad(cls, a, b, bend=(0, 0, 0), steps=7):
+        """두 점 사이를 완만한 이차 곡선으로 잇는다."""
+        c = tuple((a[i] + b[i]) * .5 + bend[i] for i in range(3))
+        out = []
+        for n in range(steps):
+            t = n / max(1, steps - 1)
+            u = 1 - t
+            out.append(tuple(u * u * a[i] + 2 * u * t * c[i] + t * t * b[i] for i in range(3)))
+        return out
+
+    @classmethod
+    def _soft_ring(cls, pts, passes=2):
+        """닫힌 외곽선을 차이킨 곡선으로 다듬는다. 원래 피벗은 바꾸지 않는다."""
+        out = list(pts)
+        for _ in range(passes):
+            curved = []
+            for i, a in enumerate(out):
+                b = out[(i + 1) % len(out)]
+                curved.append(cls._mix(a, b, .24))
+                curved.append(cls._mix(a, b, .76))
+            out = curved
+        return out
+
+    def smooth_poly(self, pts, fill, outline=None, width=1, passes=2):
+        q = self._soft_ring(pts, passes)
+        self.poly(q, fill, outline, width)
+        return q
+
+    def curve_line(self, a, b, bend=(0, 0, 0), fill=(255, 255, 255, 255), width=1, steps=8):
+        self.line(self._quad(a, b, bend, steps), fill, width)
+
+    def sail_quad(self, pts, fill, outline, width=1, billow=3.0):
+        """팽팽한 사각형 대신 바람을 머금은 네 변의 돛을 그린다."""
+        a, b, c, d = pts
+        ring = []
+        ring += self._quad(a, b, (billow * .08, 0, -billow * .06))[:-1]
+        ring += self._quad(b, c, (billow * .34, 0, 0))[:-1]
+        ring += self._quad(c, d, (billow, 0, -billow * .24))[:-1]
+        ring += self._quad(d, a, (billow * .34, 0, 0))[:-1]
+        self.poly(ring, fill, outline, width)
+        return ring
+
+    def sail_tri(self, pts, fill, outline, width=1, billow=3.0):
+        """삼각돛의 아랫배와 뒤 가장자리를 둥글게 만든다."""
+        a, b, c = pts
+        ring = []
+        ring += self._quad(a, b, (billow * .20, 0, -billow * .04))[:-1]
+        ring += self._quad(b, c, (billow, 0, -billow * .18))[:-1]
+        ring += self._quad(c, a, (billow * .28, 0, 0))[:-1]
+        self.poly(ring, fill, outline, width)
+        return ring
+
     def line(self, pts, fill, width=1):
         self.d.line([self.p(*v) for v in pts], fill=fill, width=max(1, round(width * SS)), joint="curve")
 
@@ -161,25 +218,30 @@ class Painter:
         self.d.ellipse(box, fill=fill, outline=outline, width=max(1, SS))
 
     def box(self, x0, x1, y0, y1, z0, z1, col):
-        faces = [
-            ([(x0,y0,z0),(x1,y0,z0),(x1,y0,z1),(x0,y0,z1)], .72),
-            ([(x1,y0,z0),(x1,y1,z0),(x1,y1,z1),(x1,y0,z1)], .62),
-            ([(x1,y1,z0),(x0,y1,z0),(x0,y1,z1),(x1,y1,z1)], .82),
-            ([(x0,y1,z0),(x0,y0,z0),(x0,y0,z1),(x0,y1,z1)], .58),
-        ]
-        faces.sort(key=lambda f: sum(self.p(*v)[1] for v in f[0]) / 4)
-        for pts, k in faces:
-            self.poly(pts, shade(col, k), shade(col, .42), .7)
-        self.poly([(x0,y0,z1),(x1,y0,z1),(x1,y1,z1),(x0,y1,z1)], shade(col, 1.16), shade(col,.55), .7)
+        """선실과 성루를 모서리가 둥근 목조 구조물로 그린다."""
+        rx = min(abs(x1 - x0) * .14, 4.8)
+        ry = min(abs(y1 - y0) * .16, 3.8)
+        base = [(x0+rx,y0,z0),(x1-rx,y0,z0),(x1,y0+ry,z0),(x1,y1-ry,z0),
+                (x1-rx,y1,z0),(x0+rx,y1,z0),(x0,y1-ry,z0),(x0,y0+ry,z0)]
+        base = self._soft_ring(base, 1)
+        faces = []
+        for i, a in enumerate(base):
+            b = base[(i + 1) % len(base)]
+            pts = [a, b, (b[0], b[1], z1), (a[0], a[1], z1)]
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            k = .64 + .16 * (.5 + .5 * math.sin(math.atan2(dy, dx) - .65))
+            faces.append((sum(self.p(*v)[1] for v in pts) / 4, pts, k))
+        for _, pts, k in sorted(faces):
+            self.poly(pts, shade(col, k))
+        top = [(x, y, z1) for x, y, _ in base]
+        self.poly(top, shade(col, 1.14), shade(col, .53), .62)
+        self.line(top + [top[0]], shade(col, 1.34, 150), .38)
 
     def finish(self):
         im = self.im.resize((CELL, CELL), Image.Resampling.LANCZOS)
-        # 작은 스프라이트에서 보이지 않는 미세 색 잡음을 정리해 픽셀 밀도와
-        # 무손실 압축률을 함께 높인다. 가장자리 알파는 16단계로 남겨 회전 시 매끈하다.
-        rgb_lut = [min(255, int(round(v / 6)) * 6) for v in range(256)]
-        a_lut = [min(255, int(round(v / 17)) * 17) for v in range(256)]
-        r,g,b,a = im.split()
-        return Image.merge("RGBA", (r.point(rgb_lut),g.point(rgb_lut),b.point(rgb_lut),a.point(a_lut)))
+        # 축소한 뒤 색과 알파를 다시 계단화하지 않는다. 반투명 가장자리의 모든
+        # 단계를 보존해야 38~70px 게임 화면에서도 돛과 선체 곡선이 매끈하다.
+        return im
 
 
 def dims(s):
@@ -221,7 +283,8 @@ def draw_hull(s, ang, oar_phase=0.0):
     p = Painter(s, ang)
     L, W, H = dims(s); h = s["hull"]; q = P[s["id"]]
     dark, mid, deck = map(rgb, PALETTES.get(h, PALETTES["west"]))
-    ol = outline(L, W, h, q.get("form", "round"))
+    form = q.get("form", "round")
+    ol = outline(L, W, h, form)
     if h == "raft":
         for k in range(9):
             yy = -W*.45 + k*W*.112
@@ -233,18 +296,25 @@ def draw_hull(s, ang, oar_phase=0.0):
         p.line([(-L*.16,-W*.26,14),(L*.15,-W*.26,14)], shade(dark,.7), 2)
         return p.finish()
 
-    # 바깥 선체 옆면: 화면에서 먼 면부터 그린다.
+    # 바깥 선체 옆면: 원래 선종의 비례는 지키되 꺾인 꼭짓점을 연속 곡면으로
+    # 바꾼다. 평저선은 한 번만, 범선과 갤리는 두 번 다듬어 특징을 잃지 않는다.
+    ol = p._soft_ring(ol, 1 if form in ("box", "junk", "sand", "jong") else 2)
     faces = []
     for i, a in enumerate(ol):
         b = ol[(i+1)%len(ol)]
         pts = [(a[0],a[1],1),(b[0],b[1],1),(b[0]*.96,b[1]*.96,H),(a[0]*.96,a[1]*.96,H)]
-        faces.append((sum(p.p(*v)[1] for v in pts)/4, pts, .62 + .18*(i%2)))
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        k = .61 + .22 * (.5 + .5 * math.sin(math.atan2(dy, dx) - .68))
+        faces.append((sum(p.p(*v)[1] for v in pts)/4, pts, k))
     for _, pts, k in sorted(faces):
-        p.poly(pts, shade(mid,k), shade(dark,.55), .8)
+        p.poly(pts, shade(mid,k))
     top = [(x*.96,y*.96,H) for x,y in ol]
-    p.poly(top, shade(deck,1.03), shade(dark,.52), 1)
+    p.poly(top, shade(deck,1.03), shade(dark,.52), .75)
     inner = [(x*.82,y*.78,H+.5) for x,y in ol]
     p.poly(inner, shade(deck,1.13), shade(mid,.72), .6)
+    water_edge = [(x,y,1) for x,y in ol]
+    p.line(water_edge + [water_edge[0]], shade(dark,.48,235), .9)
+    p.line(top + [top[0]], shade(deck,1.24,155), .48)
 
     # 갑판 판재
     for k in range(-4,5):
@@ -438,50 +508,55 @@ def draw_rig(s, ang, state, furled=False, pulse=0.0):
                 zt=H+mh*ztf; zb=H+mh*zbf; bill=state*W*(.07+.025*ti)+pulse*W*.035
                 pts=[(mx-ux*span,-uy*span,zt),(mx+ux*span,uy*span,zt),
                      (mx+ux*span*.88+bill,uy*span*.88,zb),(mx-ux*span*.88+bill,-uy*span*.88,zb)]
-                p.poly(pts,shade(sail,1.0 if ti==0 else .97),shade(wood,.74),.9)
-                # 다섯 폭의 천을 번갈아 얹어 아이보리 돛의 굴곡과 직조감을 만든다.
-                for gi in range(5):
-                    f0=gi/5; f1=(gi+1)/5
-                    ta=tuple(pts[0][j]*(1-f0)+pts[1][j]*f0 for j in range(3))
-                    tb=tuple(pts[0][j]*(1-f1)+pts[1][j]*f1 for j in range(3))
-                    ba=tuple(pts[3][j]*(1-f0)+pts[2][j]*f0 for j in range(3))
-                    bb=tuple(pts[3][j]*(1-f1)+pts[2][j]*f1 for j in range(3))
-                    p.poly([ta,tb,bb,ba],shade(sail,.92+.035*(gi%2)))
+                bulge=max(2.4,W*(.12+.025*abs(pulse)))
+                p.sail_quad(pts,shade(sail,1.0 if ti==0 else .97),shade(wood,.74),.9,bulge)
+                # 면을 잘게 나눠 다시 각지게 만들지 않고, 굽은 세로 재봉선과
+                # 반투명 명암만 얹어 천의 부피를 표현한다.
+                for gi in range(1,5):
+                    frac=gi/5
+                    ta=tuple(pts[0][j]*(1-frac)+pts[1][j]*frac for j in range(3))
+                    ba=tuple(pts[3][j]*(1-frac)+pts[2][j]*frac for j in range(3))
+                    tint=shade(sail_shadow,1.02 if gi%2 else .88,70 if gi%2 else 95)
+                    p.curve_line(ta,ba,(bulge*(.70+.12*math.sin(frac*math.pi)),0,0),tint,.62)
                 p.line([pts[0],pts[1]],wood,1.65)
                 seams=(.25,.50,.75) if rig == "japanese" else (.32,.66)
                 for frac in seams:
                     a=(pts[0][0]*(1-frac)+pts[3][0]*frac,pts[0][1]*(1-frac)+pts[3][1]*frac,pts[0][2]*(1-frac)+pts[3][2]*frac)
                     b=(pts[1][0]*(1-frac)+pts[2][0]*frac,pts[1][1]*(1-frac)+pts[2][1]*frac,pts[1][2]*(1-frac)+pts[2][2]*frac)
-                    p.line([a,b],seam,.55)
-                p.line([(mx,bill*.5,zb),(mx,0,zt)],shade(sail_shadow,.82,135),.5)
+                    p.curve_line(a,b,(bulge*.46,0,-bulge*.07),seam,.55)
+                p.curve_line((mx,bill*.5,zb),(mx,0,zt),(bulge*.72,0,0),shade(sail_shadow,.82,125),.5)
         elif kind == "lat":
             off=state*W*.33+pulse*W*.025
             foot=.58 if rig in ("dhow","baghlah") else .52
             peak=.34 if rig in ("dhow","baghlah") else .30
-            pts=[(mx+mh*peak,off*.15,top),(mx-mh*foot,off,H+mh*.18),(mx-mh*.37,off+state*W*.10,H+mh*.58)]
-            # 작은 부풀림 면을 넣어 정면에서도 천이 보인다.
-            pts.insert(2,(mx-mh*.13,off+state*W*.20,H+mh*.36))
-            p.poly(pts,shade(sail,.98),shade(wood,.8),.8)
+            pts=[(mx+mh*peak,off*.15,top),(mx-mh*foot,off,H+mh*.18),
+                 (mx-mh*.37,off+state*W*.10,H+mh*.58)]
+            # 갤리 계열은 길고 낮아 돛의 앞뒤 여백이 좁다. 같은 곡률을 쓰면
+            # 셀을 넘으므로 부피감은 유지하면서 종축 돌출만 조금 줄인다.
+            curve=.095 if rig in ("galley","galleass","xebec") else .15
+            bulge=max(2.4,W*(curve+.025*abs(pulse)))
+            p.sail_tri(pts,shade(sail,.98),shade(wood,.8),.8,bulge)
             p.line([(mx+mh*.32,off*.1,top),(mx-mh*.54,off,H+mh*.16)],wood,1.8)
-            p.line([(mx+mh*.10,off*.12,H+mh*.77),(mx-mh*.33,off,H+mh*.34)],seam,.6)
-            for frac in (.22,.44,.66,.84):
-                a=tuple(pts[0][j]*(1-frac)+pts[-1][j]*frac for j in range(3))
-                b=tuple(pts[1][j]*(1-frac)+pts[2][j]*frac for j in range(3))
-                p.line([a,b],seam,.42)
+            p.curve_line((mx+mh*.10,off*.12,H+mh*.77),(mx-mh*.33,off,H+mh*.34),(bulge*.55,0,0),seam,.6)
+            for frac in (.24,.48,.72):
+                a=tuple(pts[0][j]*(1-frac)+pts[1][j]*frac for j in range(3))
+                b=tuple(pts[0][j]*(1-frac)+pts[2][j]*frac for j in range(3))
+                p.curve_line(a,b,(bulge*(.35+.25*frac),0,0),seam,.42)
         else: # 대나무 살 돛: 부푼 사다리꼴 종범. 둘레 순서를 지켜 면이 뒤집히지 않게 한다.
             off=state*W*.22; bill=(.16+.10*abs(state))*W
             pts=[(mx+mh*.24,off,H+mh*.98),(mx-mh*.34,off,H+mh*.80),
                  (mx-mh*.52,off+bill,H+mh*.20),(mx+mh*.10,off+bill,H+mh*.30)]
-            p.poly(pts,shade(sail,.96),shade(wood,.85),.8)
-            for q in (.16,.31,.46,.61,.76):
-                a=(pts[0][0]*(1-q)+pts[3][0]*q,pts[0][1]*(1-q)+pts[3][1]*q,pts[0][2]*(1-q)+pts[3][2]*q)
-                b=(pts[1][0]*(1-q)+pts[2][0]*q,pts[1][1]*(1-q)+pts[2][1]*q,pts[1][2]*(1-q)+pts[2][2]*q)
-                p.line([a,b],wood,.9)
+            bulge=max(2.1,W*(.09+.02*abs(pulse)))
+            p.sail_quad(pts,shade(sail,.96),shade(wood,.85),.8,bulge)
+            for frac in (.16,.31,.46,.61,.76):
+                a=(pts[0][0]*(1-frac)+pts[3][0]*frac,pts[0][1]*(1-frac)+pts[3][1]*frac,pts[0][2]*(1-frac)+pts[3][2]*frac)
+                b=(pts[1][0]*(1-frac)+pts[2][0]*frac,pts[1][1]*(1-frac)+pts[2][1]*frac,pts[1][2]*(1-frac)+pts[2][2]*frac)
+                p.curve_line(a,b,(bulge*.38,0,-bulge*.04),wood,.9)
     # 16세기 서양선의 선수 삼각돛. 문양 없이 작게 두어 시대와 속도감을 구분한다.
     if not furled and s["id"] in ("lcaravel","pinnace","galleon","lgalleon","fluyt","frigate","xebec"):
         mx=masts[0]; mh=heights[0]; off=state*W*.16
         jib=[(mx+mh*.03,off,H+mh*.72),(L*.56,off*.35,H+5),(mx+mh*.03,off+state*W*.07,H+mh*.28)]
-        p.poly(jib,shade(sail,.96),shade(wood,.78),.65)
+        p.sail_tri(jib,shade(sail,.96),shade(wood,.78),.65,max(1.7,W*.08))
         p.line([jib[0],jib[1]],rope,.55)
     # 돛대 마디와 선수 지브를 마지막에 또렷하게
     for i,mx in enumerate(masts):
@@ -560,17 +635,21 @@ def write_meta(ss):
 def contact_sheet(ss, atlases):
     thumb=180; pad=12; cols=6; rows=math.ceil(len(ss)/cols)
     out=Image.new("RGBA",(cols*(thumb+pad)+pad,rows*(thumb+34+pad)+pad),rgb("#20262d"))
-    d=ImageDraw.Draw(out)
     try: font=ImageFont.truetype("C:/Windows/Fonts/malgun.ttf",13)
     except OSError: font=None
     di=1; action="dash"; fi=2
+    labels=[]
     for i,s in enumerate(ss):
         x=pad+(i%cols)*(thumb+pad); y=pad+(i//cols)*(thumb+34+pad)
         spec=ACTIONS[action]; sy=(spec["row"]+di)*CELL; sx=(spec["col"]+fi)*CELL
         base=atlases[s["id"]].crop((sx,sy,sx+CELL,sy+CELL))
         base.thumbnail((thumb,thumb),Image.Resampling.LANCZOS)
         out.alpha_composite(base,(x+(thumb-base.width)//2,y))
-        d.text((x+4,y+thumb+5),f"{s['name']}  {s['id']}",fill=(235,225,202,255),font=font)
+        labels.append((x+4,y+thumb+5,f"{s['name']}  {s['id']}"))
+    # 합성 중 ImageDraw의 내부 버퍼가 낡지 않도록 그림을 모두 놓은 뒤 이름을 쓴다.
+    d=ImageDraw.Draw(out)
+    for x,y,label in labels:
+        d.text((x,y),label,fill=(235,225,202,255),font=font)
     CONTACT.parent.mkdir(parents=True,exist_ok=True)
     out.convert("RGB").save(CONTACT,quality=90,optimize=True)
 
@@ -581,8 +660,8 @@ def main():
         im=atlas_for(s); atlases[s["id"]]=im
         path=OUT/(s["id"]+".webp")
         # 알파는 그대로 보존하고 색만 고품질 WebP로 압축한다. 실제 표시가 38~70px라
-        # 92 품질에서 무손실과 차이가 보이지 않으면서 36종의 읽기·풀기 부담이 크게 준다.
-        im.save(path,"WEBP",quality=92,method=6)
+        # 90 품질에서 무손실과 차이가 보이지 않으면서 36종의 읽기·풀기 부담이 크게 준다.
+        im.save(path,"WEBP",quality=90,method=6)
         print(f"[{i:02d}/{len(ss)}] {path.relative_to(ROOT)} {path.stat().st_size/1024:.0f} KiB")
     write_meta(ss); contact_sheet(ss,atlases)
     total=sum(p.stat().st_size for p in OUT.glob("*.webp"))

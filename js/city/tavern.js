@@ -66,7 +66,7 @@
     return [
       { label: '술을 마신다', icon: 'mug', onClick: function () { return T.drink(c); } },
       { label: '한턱 낸다', icon: 'coin', onClick: function () { return T.treat(c); } },
-      { label: '정보를 듣는다', icon: 'scroll', onClick: function () { return T.info(c); } },
+      (function () { var k = S().contract; return { label: '정보를 듣는다', icon: 'scroll', sub: k ? '계약: ' + G.Errand.name(k) : '계약한 일이 없다', dim: !k, onClick: function () { return T.info(c); } }; })(),
       (function () { var tg = T.targets(c); return tg.length ? { label: '목표를 수소문한다', icon: 'map', sub: tg.length + '곳', onClick: function () { return T.askTarget(c); } } : null; })(),
       { label: '손님을 둘러본다', icon: 'eye', dim: cur && cur.looked, onClick: function () { return T.look(c); } },
       { label: '항해사를 찾는다', icon: 'people', sub: cand.length ? cand.length + '명' : '없다', dim: !cand.length, onClick: function () { return T.hire(c); } },
@@ -94,6 +94,11 @@
       return C.leave();
     }
     await UI.say(U.pick(['꽤 맛있는 술이다!', '기분 좋군!', '맛있다! 살 것 같다.', '몸이 따뜻해졌다!']) + (cur.drinks === 3 ? '\n(술을 마시되, 너무 마시지는 말게.)' : ''), {});
+    // 술잔을 나누다 보면 주인이 요즘 도는 이야기를 꺼낸다 (한 번 들르는 동안 한 번) — 큰 항로 이야기(리스본·세비야), 이 고장 동물
+    if (cur.chatted || C.langLv(c) === 0) return;
+    var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(c.id, 'tavern') : null;
+    if (lead) { cur.chatted = true; await C.say(master(), lead.text); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); return; }
+    if (G.Animals && await G.Animals.tavern(c, master())) cur.chatted = true;
   };
   T.treat = async function (c) {
     var s = S(), cost = Math.max(20, Math.round(s.fleet.crew * (1.5 + c.size * 0.5)));
@@ -112,25 +117,44 @@
   };
 
   // ---------------------------------------------------------------- information (rumours about discoveries)
+  /* 정보: 후원자와 계약을 맺었을 때만 — 그 계약(발견·해도 작성·물건 조달·세계일주)에 관한 이야기를 들려준다.
+     무엇을 맡았는지 모르면 술집 주인도 들려줄 말이 없다. (가벼운 소문은 손님·동료·후원자에게서 따로 듣는다) */
   T.info = async function (c) {
-    var s = S(), cur = C.current(), m = master();
+    var s = S(), cur = C.current(), m = master(), k = s.contract;
     if (C.langLv(c) === 0) { await C.say(m, '……?'); await C.mate('말이 통하지 않는 것만은 어쩔 수가 없군요.'); return; }
+    if (!k) { await C.say(m, '정보라... 자네가 무슨 일을 맡았는지 알아야 그에 맞는 이야기를 해 주지. 먼저 후원자와 계약을 맺고 오게.'); return; }
     if (cur.asked >= 2) { await C.say(m, '정보? 오늘은 더 이상 그런 것은 없네.'); return; }
     var price = 20 + c.size * 15;
-    var v = await C.ask(m, '정보라... 자, 우리 가게 술을 마시면 가르쳐 주지. 한 잔에 금화 ' + price + '닢이네.', [{ label: '술을 산다', value: 1 }, { label: '그만둔다', value: 0 }]);
+    var v = await C.ask(m, '「' + G.Errand.name(k) + '」 일이라고? 자, 우리 가게 술을 마시면 아는 대로 가르쳐 주지. 한 잔에 금화 ' + price + '닢이네.', [{ label: '술을 산다', value: 1 }, { label: '그만둔다', value: 0 }]);
     if (!v) return;
     if (s.player.gold < price) { await C.say(m, '돈 먼저 지불하게.'); return; }
     s.player.gold -= price; cur.asked++;
-    // 리스본·세비야: 앞선 발견이 알려지면 다음 큰 항로 이야기가 먼저 돈다
-    var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(c.id, 'tavern') : null;
-    if (lead) { await C.say(m, lead.text); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); return; }
-    if (G.Animals && await G.Animals.tavern(c, m)) return;        // 이 고장에 사는 동물 이야기 (js/systems/animals.js)
-    var d = T.rumour(c);
-    if (!d) { await C.say(m, T.quietLine()); return; }
-    G.Disc.addHint(d.id, 'tavern:' + c.id);
-    var src = U.pick(['확실히 ', '그러고 보니 ', '이건 어떤 선원한테서 들은 이야기인데, ']);
-    await C.say(m, src + d.hint);
-    UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll');
+    await C.say(m, T.contractInfo(c, k));
+  };
+  /** 계약한 일에 대해 이 도시 술집 주인이 아는 이야기 (단서·해도 표시도 함께 남긴다) */
+  T.contractInfo = function (c, k) {
+    var s = S(), t = k.task || {}, src = U.pick(['확실히 ', '그러고 보니 ', '이건 어떤 선원한테서 들은 이야기인데, ']);
+    if (k.circ) {
+      var left = ['capegood', 'malacca', 'newstrait'].filter(function (id) { return G.DISC[id] && !G.Disc.foundByMe(id); }).map(function (id) { return '「' + G.DISC[id].name + '」'; });
+      return left.length ? '세계를 한 바퀴 돈다고? 배짱 좋군. ' + left.join('·') + U.jx(left[left.length - 1], '을/를') + ' 지나야 한 바퀴가 된다더군. 남쪽 바다는 폭풍이 거세니 배를 단단히 손보고 가게.'
+        : '이제 남은 건 처음 떠난 항구로 무사히 돌아가는 것뿐이네. 여기까지 왔으면 거의 다 왔군.';
+    }
+    if (t.kind === 'survey') {
+      var dist = G.Geo.dist(c.lon, c.lat, t.lon, t.lat), dir = U.dirName(Math.atan2(t.lat - c.lat, G.Geo.wrapLon(t.lon - c.lon)));
+      return dist < 1 ? '그 바다라면 바로 이 앞바다일세. 항구를 나서서 둘러보면 되겠군.'
+        : '그 바다라면 여기서 ' + dir + '쪽으로 뱃길 ' + Math.max(1, Math.round(dist / 0.8)) + '일쯤이네. 그 언저리를 한 바퀴 돌며 물길을 적어 오면 될 걸세.';
+    }
+    if (t.kind === 'procure') {
+      var g = G.GOOD[t.good], at = G.CITY_DATA[t.at];
+      return src + (g ? g.name : '그 물건') + U.jx(g ? g.name : '물건', '은/는') + ' ' + (t.whereName || (at ? at.name : '먼 곳')) + '에서 많이 판다더군.' + (at ? ' 가까운 곳으로는 ' + at.name + U.jx(at.name, '이/가') + ' 낫겠지.' : '') + ' ' + t.qty + '통이면 배 한 척 짐칸은 비워 두게.';
+    }
+    var d = G.DISC[k.disc];
+    if (!d) return '그런 이야기는 들어 본 적이 없네.';
+    G.Disc.addHint(d.id, 'contract:' + k.sponsor);
+    if (d.how === 'city') { var cc = G.CITY_DATA[d.city]; return src + d.hint + ' ' + (cc.id === c.id ? '바로 이 도시일세. ' : cc.name + '에 가면 ') + '건물들을 하나하나 둘러보면 눈에 띌 걸세.'; }
+    if (d.how === 'trade' || d.how === 'special' || d.lon == null) return src + d.hint;
+    T.markRumour(c, d);
+    return src + d.hint + ' ' + T.whereText(c, d);
   };
   // ---------------------------------------------------------------- 현지 소문: 이미 아는 목표의 방향을 좁힌다
   // 책·소문이 '무엇이 있는가'를 알려 준다면, 그 고장 사람들은 '어느 쪽으로 며칠'을 알려 준다 (대항해시대 3의 현지 소문)
@@ -149,6 +173,35 @@
       var ka = s.contract && s.contract.disc === a.id ? 0 : 1, kb = s.contract && s.contract.disc === b.id ? 0 : 1;
       return ka - kb || G.Geo.dist(c.lon, c.lat, a.lon, a.lat) - G.Geo.dist(c.lon, c.lat, b.lon, b.lat);
     });
+  };
+  /** 이 도시에서 본 그곳의 방향·거리 (뭍길·뱃길 어림) */
+  T.whereText = function (c, d) {
+    var dist = G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
+    var dir = U.dirName(Math.atan2(d.lat - c.lat, G.Geo.wrapLon(d.lon - c.lon)));
+    var land = d.how === 'land', where;
+    if (dist < 0.8) where = '바로 이 근처라네. 성문을 나서면 금방이지.';
+    else if (!c.port && dist > 6) where = dir + '쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 ' + Math.max(1, Math.round(dist / 0.8)) + '일은 가야 할 걸세.';
+    else if (land && (dist <= 2.5 || !c.port)) where = '여기서 ' + dir + '쪽으로 뭍길로 ' + Math.max(1, Math.round(dist / 0.3)) + '일쯤 가면 있다고들 하네.';
+    else {
+      // 먼 곳은 뱃길로 가서 해안에 오르는 길을 일러 준다 (원정 계획과 같은 어림셈)
+      var dk = c.dock || [c.lat, c.lon], pl = G.Plan ? G.Plan.expedition([dk[1], dk[0]], d, null) : null;
+      var sea = pl ? pl.out : Math.max(1, Math.round(dist / 0.8));
+      where = dir + '쪽이지. 뱃길로 ' + sea + '일쯤 가서' + (land ? ' 해안에 오른 뒤 뭍길로 ' + Math.max(1, pl ? pl.walk : 2) + '일쯤 걸어 들어가면 된다더군.' : ' 그 바다에 닿으면 알아볼 수 있다더군.');
+    }
+    var extra = land ? (G.Geo.terrain(d.lon, d.lat) === 'desert' ? ' 물을 넉넉히 챙기게. 모래뿐인 길이라더군.' : G.Geo.terrain(d.lon, d.lat) === 'mountain' ? ' 산길이 험하다더군.' : G.Geo.terrain(d.lon, d.lat) === 'jungle' ? ' 밀림이라 길 잃기 십상이지.' : '') : '';
+    return where + extra;
+  };
+  /** 해도에 그 방향을 표시한다 (이미 더 좁혀 두었으면 그대로) */
+  T.markRumour = function (c, d) {
+    var s = S(), dist = G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
+    var mk = s.marks || (s.marks = {}), u = U.clamp(dist * 0.15, 0.3, 1.2);
+    if (!mk[d.id] || mk[d.id].u == null || mk[d.id].u > u) {
+      mk[d.id] = { t: s.day, mode: 'rumor', u: u };
+      if (G.Explore) G.Explore.ver++;
+      UI.toast('해도에 「' + d.name + '」 쪽을 표시해 두었다.', 'map', 4000);
+      return true;
+    }
+    return false;
   };
   T.askTarget = async function (c) {
     var s = S(), cur = C.current(), m = master();
@@ -169,25 +222,8 @@
     if (!v) return;
     if (s.player.gold < price) { await C.say(m, '돈 먼저 지불하게.'); return; }
     s.player.gold -= price;
-    var dist = G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
-    var dir = U.dirName(Math.atan2(d.lat - c.lat, G.Geo.wrapLon(d.lon - c.lon)));
-    var land = d.how === 'land', where;
-    if (dist < 0.8) where = '바로 이 근처라네. 성문을 나서면 금방이지.';
-    else if (land && (dist <= 2.5 || !c.port)) where = '여기서 ' + dir + '쪽으로 뭍길로 ' + Math.max(1, Math.round(dist / 0.3)) + '일쯤 가면 있다고들 하네.';
-    else {
-      // 먼 곳은 뱃길로 가서 해안에 오르는 길을 일러 준다 (원정 계획과 같은 어림셈)
-      var dk = c.dock || [c.lat, c.lon], pl = G.Plan ? G.Plan.expedition([dk[1], dk[0]], d, null) : null;
-      var sea = pl ? pl.out : Math.max(1, Math.round(dist / 0.8));
-      where = dir + '쪽이지. 뱃길로 ' + sea + '일쯤 가서' + (land ? ' 해안에 오른 뒤 뭍길로 ' + Math.max(1, pl ? pl.walk : 2) + '일쯤 걸어 들어가면 된다더군.' : ' 그 바다에 닿으면 알아볼 수 있다더군.');
-    }
-    var extra = land ? (G.Geo.terrain(d.lon, d.lat) === 'desert' ? ' 물을 넉넉히 챙기게. 모래뿐인 길이라더군.' : G.Geo.terrain(d.lon, d.lat) === 'mountain' ? ' 산길이 험하다더군.' : G.Geo.terrain(d.lon, d.lat) === 'jungle' ? ' 밀림이라 길 잃기 십상이지.' : '') : '';
-    await C.say(m, '「' + d.name + '」 말인가? ' + where + extra);
-    var mk = s.marks || (s.marks = {}), u = U.clamp(dist * 0.15, 0.3, 1.2);
-    if (!mk[d.id] || mk[d.id].u == null || mk[d.id].u > u) {
-      mk[d.id] = { t: s.day, mode: 'rumor', u: u };
-      if (G.Explore) G.Explore.ver++;
-      UI.toast('해도에 「' + d.name + '」 쪽을 표시해 두었다.', 'map', 4000);
-    }
+    await C.say(m, '「' + d.name + '」 말인가? ' + T.whereText(c, d));
+    T.markRumour(c, d);
     if (cur) cur.asked = (cur.asked || 0) + 1;
   };
 

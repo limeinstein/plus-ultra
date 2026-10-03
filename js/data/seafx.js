@@ -221,6 +221,7 @@
     sheetK: { natives: 1.3 },   // 시트마다 덧붙이는 배율 — 원주민 주술 전사는 머리 위로 늘 지팡이가 솟아 몸이 작게 재진다
     battleFps: { idle: 5, walk: 10, attack: 12, hurt: 8, dead: 6 },
     events: true,        // 항해·육상 탐험 사건 그림 (js/art/eventfx.js)
+    eventFrame: false,   // true 면 나무틀 안에 그린 하늘·바다 배경과 함께, false 면 틀·배경 없이 항해·탐험 화면 위에 그림만
     eventW: 640,         // 사건 그림 창 안쪽 크기(1600×900 화면 기준, 나무틀 10px 은 따로)
     eventH: 280,
     eventBottom: 205     // 창 아래 끝이 화면 아래에서 이만큼 위 (대화창 바로 위)

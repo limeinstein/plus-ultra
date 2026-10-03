@@ -321,8 +321,12 @@
   function cul(c) { return G.Art && G.Art.cultureOf ? G.Art.cultureOf(c) : 'europe'; }
   var K = I.chain = {};
   K.title = function () { return ['title']; };
-  /** 발견 유물: 그 유물 그림, 없으면 종류 공통 그림 (relic-kinds/treasure 등) */
-  K.relic = function (r) { return ['relics/' + r.id, 'relic-kinds/' + r.kind]; };
+  /** 일반 소지품: 그 물건 그림, 없으면 종류 공통 그림 */
+  K.item = function (it) { return ['items/' + it.id, 'item-kinds/' + it.kind, 'relic-kinds/' + it.kind]; };
+  /** 발견 유물: 그 유물 그림, 같은 이름의 일반 물건, 종류 공통 그림 순 */
+  K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'relic-kinds/' + r.kind]; };
+  /** 교역품: 품목별 그림, 없으면 갈래 공통 그림 */
+  K.good = function (g) { return ['goods/' + g.id, 'good-kinds/' + g.cat]; };
   /** town background: per-city file, then a numbered variant for the style (port / inland), then the style */
   K.bg = function (c) {
     var out = ['backgrounds/' + c.id];
@@ -354,9 +358,29 @@
     if (!p) { var s = G.Game && G.Game.state; p = s && s.player; }
     if (!p) return 'admiral';
     if (p.look) return p.look;
-    var keys = (G.Art && G.Art.portraitKeys && G.Art.portraitKeys(p.portrait)) || [];
+    // 옛 저장 파일은 초상에 못 박힌 젊은 얼굴이나 seed의 얼굴 번호에서 직접 알아낸다.
+    // A.portraitKeys는 현재 나이에 따라 40대 얼굴을 돌려주므로 여기서 부르면 서로 재귀한다.
+    var spec = p.portrait || {}, keys = spec.img ? [].concat(spec.img) : [];
+    if (!keys.length) {
+      var m = /^player(\d+)/.exec(String(spec.seed || ''));
+      if (m) keys = K.player(+m[1]);
+    }
     var k = keys.filter(function (x) { return x.indexOf(FACE) === 0; })[0];
     return k ? k.slice(FACE.length) : 'admiral';
+  };
+  /** 제독이 40세 이상이면 수염 난 그림을 쓴다. 만들기 화면은 age를 직접 넘긴다. */
+  I.heroOld = function (p, age) {
+    if (age == null) {
+      var s = G.Game && G.Game.state;
+      if (!p) p = s && s.player;
+      age = s && p === s.player && G.R && G.R.age ? G.R.age() : null;
+    }
+    return age != null && age >= 40;
+  };
+  /** 대화창 얼굴: 40대 그림이 있으면 먼저, 없으면 고른 젊은 얼굴. */
+  K.heroPortrait = function (p, age) {
+    var id = I.heroLook(p), young = FACE + id, old = 'portraits/player-aged/' + id;
+    return I.heroOld(p, age) ? [old, young] : [young];
   };
   /** the admiral walking along the street (drawn only when the file exists) */
   K.hero = function () { return ['characters/player']; };
@@ -370,8 +394,12 @@
     var id = I.heroLook();
     return I.list(id === 'admiral' ? 'characters/run_' : 'characters/' + id + '/run_');
   };
-  /** 수첩에서 보는 반신상 (기본 characters/player_half, 다른 생김새는 characters/player_half_<이름> — 없으면 코드 초상) */
-  K.heroHalf = function () { var id = I.heroLook(); return [id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id]; };
+  /** 수첩에서 보는 무릎상. 40세부터 수염 난 그림이 있으면 자동으로 바꾼다. */
+  K.heroHalf = function () {
+    var id = I.heroLook(), young = id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id;
+    var old = id === 'admiral' ? 'characters/player_half_old' : 'characters/player_half_' + id + '_old';
+    return I.heroOld() ? [old, young] : [young];
+  };
   /** 일기토에서 제독의 전투원 시트 (duel/fighters/<이름>, 없으면 main_admiral) */
   K.heroDuel = function () { var id = I.heroLook(); return (id === 'admiral' ? [] : ['duel/fighters/' + id]).concat(['duel/fighters/main_admiral']); };
   /** a landmark that only stands there to be looked at */
@@ -447,7 +475,14 @@
     m_gra: 'arabia', m_ale: 'arabia', m_ist: 'ottoman', m_tun: 'ottoman',
     m_par: 'france', m_mar: 'greece', m_lon: 'britain', m_bri: 'britain', m_ams: 'lowlands', m_ant: 'lowlands',
     m_ham: 'germany', m_cph: 'russia', m_rig: 'slav', m_ven: 'italy', m_gen: 'france', m_nap: 'greece',
-    m_goa: 'iberia', m_cal: 'india', m_mal: 'seasia', m_mac: 'china', m_nag: 'japan', m_han: 'korea'
+    m_goa: 'iberia', m_cal: 'india', m_mal: 'seasia', m_mac: 'china', m_nag: 'japan', m_han: 'korea',
+    // 유럽 여급 46명 — 자기 초상(portraits/maids/<id>)이 오기 전까지 쓰는 지역 묶음
+    m_opo: 'iberia', m_bil: 'westeurope', m_tol: 'iberia', m_zar: 'iberia', m_cor: 'arabia', m_val: 'italy', m_tls: 'france', m_rou: 'france',
+    m_trs: 'france', m_nan: 'westeurope', m_bdx: 'france', m_lyo: 'france', m_brg: 'lowlands', m_bxl: 'lowlands', m_sou: 'britain', m_edi: 'britain',
+    m_dub: 'britain', m_lub: 'germany', m_brm: 'germany', m_kol: 'germany', m_ffm: 'germany', m_sxb: 'westeurope', m_nur: 'germany', m_aug: 'westeurope',
+    m_pra: 'slav', m_vie: 'westeurope', m_dan: 'slav', m_kgb: 'slav', m_war: 'slav', m_bud: 'germany', m_sto: 'russia', m_bgo: 'lowlands',
+    m_mil: 'italy', m_flo: 'italy', m_rom: 'italy', m_pal: 'greece', m_rag: 'italy', m_nov: 'russia', m_mos: 'russia', m_kie: 'slav',
+    m_bel: 'slav', m_ath: 'greece', m_sal: 'iberia', m_can: 'greece', m_fam: 'greece', m_kaf: 'ottoman'
   };
   /** 이 여급이 쓸 지역 묶음 이름 (없으면 null → 코드로 그린 초상) */
   I.maidStyle = function (id, c) {
@@ -504,6 +539,8 @@
   K.ship = function (id) { return ['ships/' + id]; };
   K.shipNav = function (id) { return ['ships-nav/' + id]; };
   K.effect = function (id) { return ['effects/' + id]; };
+  /** 육상전 지형별 초광폭 배경 */
+  K.landWarBackground = function (terrain) { return ['landwar/backgrounds/' + terrain]; };
   /** 일기토 전투원 6×4 시트와 초광폭 배경 */
   K.duelFighter = function (id) { return ['duel/fighters/' + id]; };
   K.duelBackground = function (id) { return ['duel/backgrounds/' + id]; };

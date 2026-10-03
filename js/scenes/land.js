@@ -54,7 +54,7 @@
   function buildUI() {
     var s = S();
     UI.clearScreen();
-    // 육상 탐험 중: 날짜 · 위도 · 경도 · 탐험 일수 · 대원 · 식량 · 식수 · 피로 · 스트레스 · 지형 · 탈것 · 계약 | 소지금 · 명성
+    // 육상 탐험 중: 날짜 · 위도 · 경도 · 탐험 일수 · 대원 · 식량 · 식수 · 피로 · 지형 · 탈것 · 계약 | 소지금 · 명성
     var H = G.Game.hud;
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
@@ -62,10 +62,10 @@
       { k: 'lon', label: '경도', text: H.lon() },
       { k: 'days', icon: 'tent', label: '탐험', text: '' },
       { k: 'party', icon: 'people', label: '대원', text: '' },
+      { k: 'cost', icon: 'coin', label: '하루 경비', text: '', tip: '육상 탐험 중에는 배의 식량·물을 쓰지 않고, 그 고장에서 먹을 것과 물을 사고 길잡이·짐꾼 삯을 금화로 냅니다.' },
       { k: 'food', icon: 'bread', label: '식량', text: '' },
       { k: 'water', icon: 'drop', label: '식수', text: '' },
       { k: 'fat', icon: 'hourglass', label: '피로', text: '' },
-      { k: 'stress', icon: 'heart', label: '스트레스', text: '' },
       { k: 'terr', icon: 'land', label: '지형', text: '' },
       { k: 'mount', icon: 'boot', label: '탈것', text: '' },
       { k: 'contract', icon: 'seal', label: '계약', text: '' },
@@ -145,10 +145,10 @@
     UI.hud.set('lat', H.lat()); UI.hud.set('lon', H.lon());
     UI.hud.set('days', (l.days || 0) + '일째');
     UI.hud.set('party', l.party + '명');
+    var dc = dailyCost(); UI.hud.set('cost', U.num(dc) + '닢', s.player.gold < dc * 5);
     var food = H.supply('food'), water = H.supply('water');
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
     UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
-    UI.hud.set('stress', H.stress(), (f.stress || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     UI.hud.set('fame', U.num(s.player.fame));
     var t = G.Geo.terrain(l.lon, l.lat), mt = MT(), M = G.Mounts;
@@ -281,18 +281,16 @@
       var msgs = G.Game.newDay();
       l.days++;
       var terr = G.Geo.terrain(l.lon, l.lat), T = TERR[terr] || TERR.grass;
-      var use = R.dailyUse(), mt = MT(), M = G.Mounts;
-      f.food = Math.max(0, f.food - use * M.use(mt, terr, l.party, 'food')); f.water = Math.max(0, f.water - use * (T.thirst || 1) * M.use(mt, terr, l.party, 'water'));
+      var mt = MT(), M = G.Mounts;
+      payDay(msgs, terr);
       // 피로: 걸음의 피로는 탈것이 덜어 주고, 추위는 털옷·썰매가 조금 덜어 준다
-      var stressK = (G.BALANCE && G.BALANCE.stress) || {};
-      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) + (f.stress || 0) * (stressK.landFatigue || 0.006) - R.skill('ops') * 0.3, 0, 100);
+      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) - R.skill('ops') * 0.3, 0, 100);
       // 알맞지 않은 땅에서는 짐승을 잃는다
       var rk = M.risk(mt, terr);
       if (rk > 0 && mt.n > 0 && U.chance(Math.min(0.5, rk * (1 + mt.n / 8)))) {
         mt.n--; msgs.push({ icon: 'skull', text: M.lossText(mt.id, terr) + (mt.n > 0 ? ' (남은 ' + M.get(mt.id).name + ' ' + mt.n + ')' : '') });
         if (mt.n <= 0) { msgs.push({ icon: 'boot', text: '이제 모두 걸어서 간다.' }); l.mount = { id: 'walk', n: 0 }; }
       }
-      if (f.food <= 0 || f.water <= 0) { var dd = Math.max(1, Math.ceil(l.party * 0.05)); l.party = Math.max(0, l.party - dd); f.crew = Math.max(0, f.crew - dd); msgs.push({ icon: 'skull', text: '식량과 물이 떨어져 대원 ' + dd + '명이 쓰러졌다!' }); }
       if (T.sick && U.chance((0.04 - R.skill('med') * 0.01) * (st.herbs > 0 ? 0.3 : 1))) { var sk = U.ri(1, 2); l.party = Math.max(0, l.party - sk); f.crew = Math.max(0, f.crew - sk); msgs.push({ icon: 'skull', text: '열병으로 대원 ' + sk + '명을 잃었다.' }); }
       G.State.revealChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
       // discover inland cities
@@ -403,12 +401,12 @@
     var s = S(), f = s.fleet, l = s.loc;
     spendDays(1);
     var fat0 = f.fatigue, hp0 = s.player.hp;
-    f.fatigue = 0; f.stress = 0; s.player.hp = 100;
+    f.fatigue = 0; s.player.hp = 100;
     (s.mates || []).forEach(function (m) { if (m.hurt) m.hurt = Math.max(0, m.hurt - 3); });
     var cv = A.canvas(720, 300);
     var win = UI.window({ title: '캠프파이어', icon: 'tent', width: 780, html: '<div class="campfire"><div class="cf-art"></div><div class="cf-text">' +
       U.pick(['원주민들이 모닥불 곁에 자리를 내주었다. 구운 고기와 곡물 죽이 돌고, 북소리에 맞춰 노래가 이어진다.', '밤이 되자 원주민들이 커다란 모닥불을 피웠다. 대원들은 오랜만에 배불리 먹고, 불 곁에서 깊이 잠들었다.', '모닥불 너머로 원주민의 이야기꾼이 조상들의 긴 여행 이야기를 들려준다. 말은 몰라도 대원들의 얼굴이 밝아진다.']) +
-      '</div><div class="cf-res">피로 ' + Math.round(fat0) + ' → 0 · 스트레스 → 0 · 제독 체력 ' + Math.round(hp0) + ' → 100 · 하루가 지났다</div></div>', buttons: [{ label: '날이 밝았다', value: 1, cls: 'navy' }] });
+      '</div><div class="cf-res">피로 ' + Math.round(fat0) + ' → 0 · 제독 체력 ' + Math.round(hp0) + ' → 100 · 하루가 지났다</div></div>', buttons: [{ label: '날이 밝았다', value: 1, cls: 'navy' }] });
     win.content.querySelector('.cf-art').appendChild(cv);
     var t0 = performance.now(), live = true;
     win.result.then(function () { live = false; });
@@ -479,13 +477,39 @@
     return res;
   }
   L.landBattle = landBattle;
-  L._test = { encounter: function (t) { return encounter(t); }, terrainEvent: function (t) { return terrainEvent(t); }, nativeGift: function (w) { return nativeGift(w); }, campfire: function (w) { return campfire(w); } };
+  L._test = { encounter: function (t) { return encounter(t); }, terrainEvent: function (t) { return terrainEvent(t); }, nativeGift: function (w) { return nativeGift(w); }, campfire: function (w) { return campfire(w); }, runDay: function () { return runDay(); }, camp: function () { return camp(); } };
 
   // ---------------------------------------------------------------- actions
-  /** 야영지에서 며칠을 보낸다 (식량·물을 쓰고 날이 간다) */
+  /* 육상 탐험의 하루 경비: 배의 식량·물 대신 금화가 나간다 (G.BALANCE.landCost) */
+  function LC() { return (G.BALANCE && G.BALANCE.landCost) || { base: 5, perMan: 1, thirsty: 0.5, unpaidFatigue: 6, desert: 0.25, water: [4, 8] }; }
+  function dailyCost(terr) {
+    var s = S(), l = s.loc, K = LC(), mt = MT(), M = G.Mounts;
+    terr = terr || G.Geo.terrain(l.lon, l.lat); if (terr === 'sea') terr = 'grass';
+    var T = TERR[terr] || TERR.grass;
+    var mk = (M.use(mt, terr, l.party, 'food') + M.use(mt, terr, l.party, 'water')) / 2;   // 먹이·물을 덜 쓰는 짐승이면 그만큼 싸다
+    return Math.max(1, Math.round((K.base + K.perMan * (l.party || 0)) * mk * (1 + (K.thirsty || 0) * ((T.thirst || 1) - 1))));
+  }
+  L.dailyCost = function () { return dailyCost(); };
+  /** 하루 경비를 낸다. 모자라면 가진 만큼 내고, 대원들이 지치고 몇은 떠난다 */
+  function payDay(msgs, terr) {
+    var s = S(), l = s.loc, f = s.fleet, K = LC(), cost = dailyCost(terr), paid = Math.min(s.player.gold, cost);
+    s.player.gold -= paid;
+    l.spent = (l.spent || 0) + paid;
+    if (paid >= cost) return true;
+    f.fatigue = Math.min(100, f.fatigue + (K.unpaidFatigue || 6));
+    if (msgs && U.chance(K.desert == null ? 0.25 : K.desert) && l.party > 1) {
+      var dd = Math.max(1, Math.ceil(l.party * 0.05)); l.party = Math.max(1, l.party - dd); f.crew = Math.max(0, f.crew - dd);
+      msgs.push({ icon: 'skull', text: '경비를 대지 못해 대원 ' + dd + '명이 떠났다! (하루 경비 금화 ' + U.num(cost) + '닢)' });
+    } else if (msgs) msgs.push({ icon: 'coin', text: '금화가 모자라 먹을 것과 삯을 다 대지 못했다. 대원들이 지쳐 간다.' });
+    return false;
+  }
+  /** 얻은 식량·물을 배의 짐칸에 싣는다 (남는 칸만큼). 실제로 실은 양을 돌려준다 */
+  function stow(kind, n) { var f = S().fleet, room = Math.max(0, Math.floor(R.free())), q = Math.max(0, Math.min(Math.round(n), room)); f[kind] = (f[kind] || 0) + q; return q; }
+  /** 야영지에서 며칠을 보낸다 (날마다 경비를 내고 날이 간다) */
   function spendDays(n) {
-    var s = S(), l = s.loc;
-    for (var i = 0; i < n; i++) { G.Game.newDay(); l.days++; var use = R.dailyUse(); s.fleet.food = Math.max(0, s.fleet.food - use); s.fleet.water = Math.max(0, s.fleet.water - use); }
+    var s = S(), l = s.loc, msgs = [];
+    for (var i = 0; i < n; i++) { G.Game.newDay(); l.days++; payDay(msgs); }
+    msgs.forEach(function (m) { UI.toast(m.text, m.icon); });
   }
   async function camp() {
     var s = S(), l = s.loc, f = s.fleet;
@@ -495,19 +519,30 @@
       var v = await UI.ask('야영지를 차렸다. 무엇을 할까?', [
         { label: '쉰다 (3일)', value: 'rest' },
         { label: '사냥한다 (1일)', value: 'hunt' },
+        { label: '물을 긷는다 (1일) — 배의 식수로', value: 'water' },
         { label: '정찰한다 (2일)', value: 'scout' },
         { label: '약초를 캔다 (1일)', value: 'herb' },
         { label: '그만둔다', value: null }], G.Scenes.mateSpeaker('first'));
       if (v === 'rest') {
         spendDays(3); f.fatigue = Math.max(0, f.fatigue - 25 - R.skill('ops') * 5);
         UI.toast('푹 쉬었다. 피로가 풀렸다.', 'tent');
+      } else if (v === 'water') {
+        spendDays(1);
+        // 땅의 물 많음: 숲·밀림·눈 녹은 물은 넉넉하고, 사막은 거의 없다
+        var wet = { grass: 1.0, steppe: 0.6, forest: 1.2, jungle: 1.4, desert: 0.15, mountain: 1.0, snow: 0.9, tundra: 0.9, ice: 0.5 }[terr] || 0.8;
+        var K = LC(), wr = K.water || [4, 8];
+        var want = R.dailyUse() * U.rf(wr[0], wr[1]) * wet * Math.min(2, 0.5 + l.party / 20) * (1 + R.skill('survey') * 0.15);
+        if (want < R.dailyUse() * 0.5) UI.toast('땅이 말라 물길을 찾지 못했다.', 'drop');
+        else if (R.free() < 1) UI.toast('물을 길었지만 배의 짐칸이 가득해 더 실을 곳이 없다.', 'drop', 4200);
+        else { var gotW = stow('water', want); UI.toast('냇물과 샘에서 물 ' + gotW + '통을 길었다. (배의 식수 약 ' + Math.round(gotW / R.dailyUse()) + '일분)', 'drop', 4200); }
+        f.fatigue = Math.min(100, f.fatigue + 2);
       } else if (v === 'hunt') {
         spendDays(1);
         var rich = { grass: 1.3, steppe: 1.2, forest: 1.2, jungle: 1.0, desert: 0.35, mountain: 0.6, snow: 0.4, tundra: 0.7, ice: 0.2 }[terr] || 0.8;
         var sk = 1 + R.skill('shoot') * 0.3 + R.skill('sword') * 0.1;
         if (U.chance(0.12)) { await UI.say('사냥감을 쫓다가 도리어 사나운 짐승 떼와 마주쳤다!', {}); await landBattle('들짐승', foeSize(0.12, 0.3, 4, 30), true); }
         var got = Math.round(R.dailyUse() * U.rf(2, 6) * rich * sk);
-        if (got > 0) { f.food += got; UI.toast('사냥에 성공했다! 식량 ' + got + '통 (약 ' + Math.round(got / R.dailyUse()) + '일분)', 'bread', 4200); }
+        if (got > 0) { got = stow('food', got); UI.toast(got > 0 ? '사냥에 성공했다! 식량 ' + got + '통 (배의 식량 약 ' + Math.round(got / R.dailyUse()) + '일분)' : '사냥은 했지만 배의 짐칸이 가득해 실을 곳이 없다.', 'bread', 4200); }
         else UI.toast('사냥감이 보이지 않았다.', 'boot');
         f.fatigue = Math.min(100, f.fatigue + 3);
       } else if (v === 'scout') {
@@ -573,16 +608,16 @@
         var fxS = EF ? EF.show('sun', { bg: 'desert' }) : null;
         await UI.say('그늘 한 점 없는 모래 위로 해가 이글거린다. 대원들의 입술이 갈라진다...', {});
         if (fxS) fxS.stop();
-        var heat = Math.round(R.dailyUse() * U.rf(1, 2.5) * (1 - R.skill('ops') * 0.2));
-        f.water = Math.max(0, f.water - heat); f.fatigue = Math.min(100, f.fatigue + 8);
-        UI.toast('뙤약볕에 물 ' + heat + '통을 더 마셨다.', 'drop');
+        var heat = Math.round(dailyCost(terr) * U.rf(0.5, 1.2) * (1 - R.skill('ops') * 0.2)), hp = Math.min(s.player.gold, heat);
+        s.player.gold -= hp; f.fatigue = Math.min(100, f.fatigue + 8);
+        UI.toast('뙤약볕에 물을 더 사 마셨다. (금화 ' + U.num(hp) + '닢)', 'drop');
         return true;
       }
       if (U.chance(0.5)) {
         await UI.say('지평선이 누렇게 일어서더니 모래폭풍이 덮쳐 왔다!', {});
-        var loss = Math.round(R.dailyUse() * U.rf(1, 3) * (1 - R.skill('ops') * 0.2));
-        f.water = Math.max(0, f.water - loss); f.fatigue = Math.min(100, f.fatigue + 10);
-        UI.toast('모래폭풍에 물 ' + loss + '통을 잃었다.', 'wind');
+        var loss = Math.round(dailyCost(terr) * U.rf(1, 2.5) * (1 - R.skill('ops') * 0.2)), lp = Math.min(s.player.gold, loss);
+        s.player.gold -= lp; f.fatigue = Math.min(100, f.fatigue + 10);
+        UI.toast('모래폭풍에 물자를 잃어 다시 샀다. (금화 ' + U.num(lp) + '닢)', 'wind');
       } else {
         await UI.say('야자나무 그늘 아래 맑은 물이 고인 오아시스다!', sp);
         f.water += R.dailyUse() * 8; f.fatigue = Math.max(0, f.fatigue - 15);
@@ -677,7 +712,7 @@
     var found = s.stats.found - (l.found0 != null ? l.found0 : s.stats.found);
     var seen = Object.keys(s.marks || {}).length - (l.marks0 || 0);
     var lost = (l.party0 || l.party) - l.party;
-    return '탐험 ' + (l.days || 0) + '일 · 새 발견 ' + found + '건' + (seen > 0 ? ' · 본 것 ' + seen + '곳' : '') + (lost > 0 ? ' · 잃은 대원 ' + lost + '명' : ' · 모두 무사');
+    return '탐험 ' + (l.days || 0) + '일 · 새 발견 ' + found + '건' + (seen > 0 ? ' · 본 것 ' + seen + '곳' : '') + (lost > 0 ? ' · 잃은 대원 ' + lost + '명' : ' · 모두 무사') + (l.spent ? ' · 경비 금화 ' + U.num(l.spent) + '닢' : '');
   }
   async function returnToBase(wiped) {
     var s = S(), b = s.loc.base, mt = MT();

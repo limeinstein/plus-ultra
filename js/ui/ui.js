@@ -340,7 +340,7 @@
     return api;
   };
 
-  /** simple choice list. options: array of {label, value, icon, right, disabled, desc} | strings */
+  /** simple choice list. options: array of {label, value, icon, thumb, right, disabled, desc} | strings */
   UI.choose = function (title, options, opts) {
     opts = opts || {};
     var list = options.map(function (o, i) { return typeof o === 'string' ? { label: o, value: i } : o; });
@@ -348,7 +348,8 @@
     var win = UI.window({ title: title, icon: opts.icon, width: opts.width || 520, html: html, closable: opts.cancel !== false, clear: opts.clear });
     var ch = win.content.querySelector('.choices');
     list.forEach(function (o, i) {
-      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : ''), (o.icon ? G.icon(o.icon) : '') + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
+      var lead = o.thumb ? '<img class="choice-thumb" src="' + o.thumb + '" alt="">' : (o.icon ? G.icon(o.icon) : '');
+      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : ''), lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
       if (o.desc) d.title = o.desc;
       d.onclick = function () { win.close(o.value); };
       ch.appendChild(d);

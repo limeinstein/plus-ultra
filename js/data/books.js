@@ -248,5 +248,10 @@
     b_alhambra: { isaac: ['그라나다가 무너지던 해에 저희 식구도 에스파냐를 떠나야 했지요. 이 기록을 보니 마음이 무겁습니다.', '그라나다가 무너지던 해에 에스파냐를 떠났다고 했었지'] },
     b_morte: { shakespeare: ['아서 왕의 마지막 싸움이라니, 무대에 올리면 관객들이 울겠군요. 한번 써 보고 싶은 이야기입니다.', '아서 왕 이야기를 무대에 올리고 싶다고 했었지'] }
   };
+  // 도서관이 더 있었던 도시의 서가 (js/data/estates.js G.LIBRARY_MORE)
+  if (G.LIBRARY_MORE) Object.keys(G.LIBRARY_MORE).forEach(function (cid) {
+    var c = +cid;
+    G.LIBRARY_MORE[cid].forEach(function (id) { G.BOOKS.forEach(function (b) { if (b.id === id && b.libs.indexOf(c) < 0) b.libs.push(c); }); });
+  });
   G.BOOK = {}; G.BOOKS.forEach(function (b) { G.BOOK[b.id] = b; });
 })(window.G = window.G || {});

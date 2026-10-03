@@ -1,7 +1,8 @@
 /* 사건 그림 (G.EventFx) — 항해·육상 탐험 중 사건이 일어나면 대화창 바로 위에 나무틀 그림창을 띄워 그린 스프라이트를 튼다.
    · 고래·돌고래·인어(항해 사건), 폭풍·비구름·소나기·뙤약볕(날씨), 들짐승의 습격(육상 탐험)
    · 그림 시트는 images/sprites/ (tools/sprite_repack.py), 칸·피벗·장면 시간은 G.SPRITE_SHEETS. 그림이 없으면 아무것도 띄우지 않는다
-   · 창 안은 하늘·수평선·물결(또는 땅)을 코드로 그리고 그 위에 스프라이트를 올린다. 물결은 움직인다
+   · 기본(G.FX.sprites.eventFrame false)은 틀·배경 없이 지금 보이는 항해·탐험 화면 위에 스프라이트만 바로 띄운다.
+     eventFrame true 면 예전처럼 나무틀 안에 하늘·수평선·물결(또는 땅)을 코드로 그리고 그 위에 올린다 (도감 EF.render 는 늘 배경까지)
    · 쓰는 법: var fx = G.EventFx.show('whale'); await UI.say(...); fx.stop();
              또는 await G.EventFx.during('storm', function () { return UI.say(...); });
    조정값: G.FX.sprites (events · eventW · eventH · eventBottom) */
@@ -101,11 +102,11 @@
       var tu = up.length * ms / 1000, f = t < tu ? up[Math.floor(t * 1000 / ms)] : sing[Math.floor((t - tu) * 1000 / (ms * 1.6)) % sing.length];
       var k = h * 0.84 / S.height('mermaid'); S.draw(x, 'mermaid', f[0], f[1], w * 0.5, h * 0.96, k);
     } },
-    storm: { bg: 'storm', title: '폭풍', ids: ['storm', 'rain'], draw: function (x, w, h, t) {
+    storm: { bg: 'storm', title: '폭풍', ids: ['storm', 'rain'], draw: function (x, w, h, t, o) {
       var S = SPR(), f = pick(seq('storm'), t, msOf('storm')), k = h * 0.9 / S.height('storm');
       rain(x, w, h, t, 0.42, [0.16, 0.84]);
       S.draw(x, 'storm', f[0], f[1], w * 0.5, h * 0.98, k);
-      if ((t * 1.3) % 3.2 < 0.08) { x.fillStyle = 'rgba(230,236,255,.3)'; x.fillRect(0, 0, w, h); }
+      if ((t * 1.3) % 3.2 < 0.08) { if (o && o._bare) EF.flashScreen(); else { x.fillStyle = 'rgba(230,236,255,.3)'; x.fillRect(0, 0, w, h); } }
     } },
     raincloud: { bg: 'grey', title: '먹구름', ids: ['raincloud', 'rain'], draw: function (x, w, h, t) { cloud(x, w, h, t, 0.45); } },
     shower: { bg: 'grass', title: '소나기', ids: ['raincloud', 'rain'], draw: function (x, w, h, t) { rain(x, w, h, t, 0.5, [0.22, 0.78]); cloud(x, w, h, t, 0.9); } },
@@ -148,8 +149,8 @@
   EF.SCENES = SCENES;
   function bgOf(sc, o) { return o && o.bg && BG[o.bg] ? o.bg : sc.bg; }
   function paint(ctx, sc, bg, w, h, t, o) {
-    ctx.drawImage(bg, 0, 0);
-    waves(ctx, w, h, t, BG[bgOf(sc, o)] || BG.sea);
+    if (bg) { ctx.drawImage(bg, 0, 0); waves(ctx, w, h, t, BG[bgOf(sc, o)] || BG.sea); }
+    else ctx.clearRect(0, 0, w, h);        // 틀 없이: 뒤의 항해·탐험 화면이 그대로 보인다
     ctx.save();
     try { sc.draw(ctx, w, h, t, o); } finally { ctx.restore(); }
   }
@@ -174,15 +175,17 @@
     if (cur) cur.stop();
     var root = document.getElementById('ui'); if (!root) return NOOP;
     var w = cf.eventW || 640, h = cf.eventH || 280;
+    var bare = !cf.eventFrame;
+    if (bare) o = Object.assign({}, o, { _bare: true });
     var box = document.createElement('div');
-    box.className = 'eventfx wood brass-frame';
+    box.className = bare ? 'eventfx bare' : 'eventfx wood brass-frame';
     box.style.cssText = 'left:' + Math.round((1600 - w - 20) / 2) + 'px;top:' + Math.round(900 - (cf.eventBottom || 205) - h - 20) + 'px';
     var cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.style.width = w + 'px'; cv.style.height = h + 'px';
     box.appendChild(cv);
     var cap = o.title || sc.title;
     if (cap) { var tl = document.createElement('div'); tl.className = 'eventfx-title'; tl.textContent = cap; box.appendChild(tl); }
     root.appendChild(box);
-    var bg = backdrop(w, h, bgOf(sc, o)), ctx = cv.getContext('2d');
+    var bg = bare ? null : backdrop(w, h, bgOf(sc, o)), ctx = cv.getContext('2d');
     var h0 = { alive: true }, t0 = performance.now(), shown = false;
     function frame() {
       if (!h0.alive) return;
@@ -200,6 +203,14 @@
     h0.canvas = cv; h0.box = box;
     cur = h0;
     return h0;
+  };
+  /** 번개: 틀 없이 띄울 때는 화면 전체를 잠깐 밝힌다 */
+  var lastFlash = 0;
+  EF.flashScreen = function () {
+    var now = performance.now(); if (now - lastFlash < 500) return; lastFlash = now;
+    var root = document.getElementById('ui'); if (!root) return;
+    var f = document.createElement('div'); f.className = 'eventfx-flash'; root.appendChild(f);
+    setTimeout(function () { f.classList.add('off'); }, 60); setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 420);
   };
   /** fn()이 끝날 때까지 사건 그림을 띄워 둔다 (fn 은 Promise 를 돌려준다) */
   EF.during = async function (kind, fn, o) {

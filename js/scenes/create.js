@@ -165,7 +165,12 @@
   function dOpts() { var s = ''; for (var d = 1; d <= U.daysInMonth(1460, p.birth.m); d++) s += '<option value="' + d + '"' + (d === p.birth.d ? ' selected' : '') + '>' + d + '</option>'; return s; }
   function playerSpec() {
     var sp = A.portraitSpec({ seed: 'player' + p.face + p.nation, culture: 'med', g: 'm', age: p.age > 34 ? 'mid' : 'young', cloth: ['#1e3552', '#5a1e1e', '#2a3a2a', '#3a2a4a'][p.face % 4], beard: p.face % 3 });
-    return sp;
+    var face = G.Img.chain.player(p.face);
+    if (face.length && p.age >= 40) {
+      var id = face[0].slice('portraits/player/'.length), old = 'portraits/player-aged/' + id;
+      if (G.Img.has(old)) face = [old].concat(face);
+    }
+    return A.withImg(sp, face);
   }
   C.playerSpec = playerSpec;
 

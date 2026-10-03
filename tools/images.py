@@ -196,6 +196,9 @@ def valid_keys(d):
         k['ships-nav/' + s['id']] = '항해·해전 8방향 동작 배 · ' + s['name']
     k['effects/ship_spray'] = '항해 효과 · 선수 물보라 스프라이트 시트'
     k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
+    for terrain, label in (('grass', '초원'), ('steppe', '스텝'), ('desert', '사막'), ('forest', '숲'), ('jungle', '밀림'),
+                           ('mountain', '산악'), ('snow', '설원'), ('tundra', '툰드라'), ('ice', '빙원')):
+        k['landwar/backgrounds/' + terrain] = '육상전 지형 배경 · ' + label
     # 육상전·육상 탐험·항해 사건 스프라이트 — tools/sprite_repack.py 가 images/sprites/ 에 만든 시트를 모두 받는다 (칸·피벗은 js/data/sprites.js)
     names = {'officers': '육상전 · 제독대 0~3단계', 'musketeers': '육상전 · 총병 0~3단계', 'cannons': '육상전 · 포병 0~3단계',
              'swordsmen': '육상전 · 보병 0~3단계', 'east_fighters': '육상전 적 · 동아시아', 'ottoman': '육상전 적 · 오스만·서아시아',
@@ -243,16 +246,18 @@ def write_manifest(found):
 
 
 def is_valid(key, keys):
-    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'map-discoveries/', 'characters/', 'relics/', 'relic-kinds/', 'discovery-ends/', 'discovery-sheets/', 'duel/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
+    return key in keys or key.startswith(('portraits/player/', 'portraits/player-aged/', 'landmarks/', 'map-discoveries/', 'characters/',
+                                          'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'relics/', 'relic-kinds/',
+                                          'discovery-ends/', 'discovery-sheets/', 'duel/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
 
 def report(found, dups, keys):
     groups = [('타이틀', 'title'), ('거리 배경', 'backgrounds/'), ('거리 배경(공통)', 'bg-styles/'), ('건물 겉모습', 'exteriors/'), ('지역별 건물', 'exterior-styles/'),
               ('거리 볼거리', 'landmarks/'), ('지도 유적', 'map-discoveries/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
-              ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('자녀', 'portraits/family/'),
-              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),
-              ('항해 효과', 'effects/'), ('일기토 그림', 'duel/')]
+              ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
+              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),
+              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

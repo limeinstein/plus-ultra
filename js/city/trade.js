@@ -6,7 +6,11 @@
   var T = { title: '교역소', icon: 'scales', paint: 'trade' };
   C.B.trade = T;
   var GOOD_COL = { food: '#c9a860', drink: '#8a2a3a', spice: '#b5652a', lux: '#5a3a24', fiber: '#e8e0cc', cloth: '#6a4a9a', ore: '#6a6a70', metal: '#e0c050', gem: '#3a8a9a', craft: '#9a6a4a', arms: '#3a3a44', misc: '#7a8a4a' };
-  G.goodDot = function (id) { var g = G.GOOD[id]; return '<span class="goodico" style="background:' + (GOOD_COL[g.cat] || '#888') + '"></span>'; };
+  G.goodDot = function (id) {
+    var g = G.GOOD[id], key = g && G.Img && G.Img.chain.good ? G.Img.pick(G.Img.chain.good(g)) : null;
+    if (key) return '<span class="goodico pic"><img src="' + G.Img.src(key) + '" alt=""></span>';
+    return '<span class="goodico" style="background:' + (GOOD_COL[g.cat] || '#888') + '"></span>';
+  };
 
   function keeper() { return C.npc('trader', '교역소 주인'); }
   T.enter = async function (c) {

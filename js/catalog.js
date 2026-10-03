@@ -125,7 +125,7 @@
           c.flags.includes('E') ? ['지위', '제국의 수도'] : null,
           sps.length ? ['후원자', sps.map(s => s.title).join(', ')] : null,
           maid ? ['여급', maid.name] : null,
-          discs.length ? ['입항하면 발견', discs.map(d => d.name).join(', ')] : null,
+          discs.length ? ['건물에 들어가면 발견', discs.map(d => d.name).join(', ')] : null,
           ['위치', lat(c.lat) + ', ' + lon(c.lon)]
         ],
         files: [
@@ -284,7 +284,7 @@
   });
   G.DISCOVERIES.forEach(d => {
     const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : G.REGIONS[d.reg];
-    const place = d.how === 'city' ? CITY[d.city].name + ' 시내' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
+    const place = d.how === 'city' ? CITY[d.city].name + ' 시내 (건물에 들어가면)' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
     const moving = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure') && !!(G.Reel && G.Reel.has(d)));
     add(tDisc, {
       group: d.cat, name: d.name, sub: G.DISC_CATS[d.cat] + ' · ' + where, meta: HOW[d.how] + ' · 가치 ' + num(d.val) + (d.rival ? ' · 경쟁자 ' + d.rival[2] : ''),
@@ -307,6 +307,36 @@
           { key: 'discovery-cats/' + d.cat, kind: 'jpg', note: G.DISC_CATS[d.cat] + ' 분류 공통' }
         ].filter(Boolean)
       })
+    });
+  });
+
+  // ------------------------------------------------ trade goods
+  const tGoods = tab('goods', '교역품', {
+    chips: [['all', '전체']].concat(Object.keys(G.GOOD_CATS).map(k => [k, G.GOOD_CATS[k]])),
+    note: '교역소·함대 적재 목록·교역품 발견 카드에 쓰는 그림입니다. 파일: <code>images/goods/ID.webp</code> · 권장 192×192 투명 배경 · 갈래 공통 <code>good-kinds/갈래.webp</code>'
+  });
+  G.GOODS.forEach(g => add(tGoods, {
+    group: g.cat, name: g.name, sub: G.GOOD_CATS[g.cat] + ' · ' + g.id,
+    meta: '기준값 ' + num(g.p) + '닢' + (g.life ? ' · ' + g.life + '일 뒤 상함' : ''),
+    key: 'goods/' + g.id, kind: 'webp', chain: I.chain.good(g), ar: '1 / 1', extra: g.id,
+    pic: () => I.make(I.chain.good(g), 256, 256, () => A.relicArt({ id: 'good_' + g.id, name: g.name, kind: 'treasure' }, 256, 256), { fit: 'contain' }),
+    detail: () => ({ facts: [['갈래', G.GOOD_CATS[g.cat]], ['기준값', num(g.p) + '닢'], ['보관', g.life ? g.life + '일' : '상하지 않음']],
+      files: [{ key: 'goods/' + g.id, kind: 'webp', note: '이 교역품의 그림 (192×192, 투명 배경)' }, { key: 'good-kinds/' + g.cat, kind: 'webp', note: G.GOOD_CATS[g.cat] + ' 공통' }] })
+  }));
+
+  // ------------------------------------------------ ordinary items
+  const tItems = tab('items', '소지품', {
+    chips: [['all', '전체']].concat(Object.keys(G.ITEM_KIND).filter(k => k !== 'book' && k !== 'fig' && k !== 'animal').map(k => [k, G.ITEM_KIND[k]])),
+    note: '시장과 수첩 소지품에 쓰는 일반 장비·도구·장신구 그림입니다. 파일: <code>images/items/ID.webp</code> · 권장 256×256 투명 배경 · 종류 공통 <code>item-kinds/종류.webp</code>'
+  });
+  G.ITEMS.filter(it => !(G.RELIC && G.RELIC[it.id])).forEach(it => {
+    const stat = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : it.kind === 'gift' ? '호감 ' + it.gv : G.ITEM_KIND[it.kind];
+    add(tItems, {
+      group: it.kind, name: it.name, sub: (G.ITEM_KIND[it.kind] || it.kind) + ' · ' + it.id,
+      meta: stat + (it.price ? ' · ' + num(it.price) + '닢' : ''), key: 'items/' + it.id, kind: 'webp', chain: I.chain.item(it), ar: '1 / 1', extra: it.desc,
+      pic: () => I.make(I.chain.item(it), 256, 256, () => A.relicArt(it, 256, 256), { fit: 'contain' }),
+      detail: () => ({ text: it.desc, facts: [['종류', G.ITEM_KIND[it.kind] || it.kind], ['효과', stat], ['기준값', it.price ? num(it.price) + '닢' : '팔지 않음']],
+        files: [{ key: 'items/' + it.id, kind: 'webp', note: '이 소지품의 그림 (256×256, 투명 배경)' }, { key: 'item-kinds/' + it.kind, kind: 'webp', note: (G.ITEM_KIND[it.kind] || it.kind) + ' 공통' }] })
     });
   });
 
@@ -617,7 +647,7 @@
     const people = TABS.find(t => t.id === 'people').items;
     const cnt = g => people.filter(it => it.group === g).length;
     $('#summary').textContent = '도시 ' + n('cities') + ' · 인물 ' + people.length + ' (동료 ' + cnt('mate') + ', 후원자 ' + cnt('sponsor') + ', 여급 ' + cnt('maid') + ', 지역별 여급 그림 ' + cnt('maidstyle') +
-      ', 경쟁자 ' + cnt('rival') + ', 마을 사람 ' + cnt('npc') + ') · 발견물 ' + n('discoveries') + ' · 배 ' + n('ships') + ' · 교체한 그림 ' + I.count() + '장';
+      ', 경쟁자 ' + cnt('rival') + ', 마을 사람 ' + cnt('npc') + ') · 발견물 ' + n('discoveries') + ' · 교역품 ' + n('goods') + ' · 소지품 ' + n('items') + ' · 배 ' + n('ships') + ' · 교체한 그림 ' + I.count() + '장';
   }
 
   // ---------------------------------------------------------------- detail sheet
