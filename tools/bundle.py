@@ -291,6 +291,13 @@ def main():
         # 장면 판이 있는 발견물의 움직이는 그림은 아티팩트에 넣지 않으므로 줄이지도 않는다 (시간 절약)
         sheet_ids = {k[len('discovery-sheets/'):] for k in found if k.startswith('discovery-sheets/')}
         skip = {k for k, rel in found.items() if k.startswith('discoveries/') and k[len('discoveries/'):] in sheet_ids and rel.lower().endswith('.gif')}
+        # 게임이 쓰지 않는 옛 탐험대 시트(js/data/expedition_motion.js에 이름이 없는 것)는 넣지 않는다 — 한도 256MB에서 약 9MB
+        try:
+            with open(os.path.join(pages.ROOT, 'js', 'data', 'expedition_motion.js'), encoding='utf-8') as f:
+                em = f.read()
+            skip |= {k for k in found if k.startswith('sprites/expedition_') and k[len('sprites/'):] not in em}
+        except OSError:
+            pass
         slim_dir = hq_dir
         places = game_places()
         mdir0 = os.path.join(pages.ROOT, 'music')

@@ -42,6 +42,7 @@ RULES = [
     ('discovery-sheets/', 2304, 'webp', 72),   # 발견 장면 판(6칸 × n줄): 칸 384px — 화면 1094px로 늘어나도 GIF(256색)보다 곱다
     ('ships/', 640, 'webp', 78),
     ('ships-nav/', 3584, 'keep', 88),
+    ('sprites/expedition_', 4096, 'webp', 88),   # 탐험대 동작 시트(PNG 38장·54MB): 크기는 그대로 두고 WebP로만 바꾼다 — PNG 그대로면 아티팩트 한도를 넘는다
     ('sprites/', 4096, 'keep', 88),   # 육상전·탐험대·사건 스프라이트 시트: 칸 좌표(js/data/sprites.js)가 원본 크기 기준이라 줄이지 않는다
     ('duel/fighters/', 2592, 'webp', 84),   # 일기토 전투원 시트: 칸이 화면에 390px 안팎으로 커져 원본 크기를 지킨다(게임이 배율을 알아서 맞춤)
     ('duel/backgrounds/', 1400, 'auto', 72),
