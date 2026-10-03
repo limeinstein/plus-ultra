@@ -176,6 +176,16 @@
   }
   function lineFor(kind, lv, d) {
     var sent = periodSentences(d);
+    if (kind === 'cook') {      // 교역품 × 요리
+      if (lv >= 3) return '맛을 보니 알겠습니다. 이것 하나면 궁정의 식탁도 시장의 좌판도 사로잡을 수 있습니다. 어떻게 다루고 무엇과 곁들이는지까지 적어 두면, 들여올 값어치가 훨씬 높게 매겨질 겁니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
+      if (lv >= 2) return '향과 맛, 다듬는 법을 기록해 두겠습니다. 쓰임을 알면 사려는 사람도 늘어나지요.' + (sent.length ? '\f「' + sent[0] + '」' : '');
+      return '조금 맛을 보았습니다. 어디에 쓰면 좋을지 짐작이 갑니다. 적어 두지요.';
+    }
+    if (kind === 'music') {     // 민족 × 음악
+      if (lv >= 3) return '저들의 북장단에 가락을 맞추었더니 경계하던 얼굴이 풀립니다. 노래를 주고받는 사이 이야기와 풍습을 하나하나 들을 수 있었습니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
+      if (lv >= 2) return '우리 노래를 한 곡 들려주자 저들도 답가를 불러 주었습니다. 마음이 열린 덕에 더 많은 것을 알게 되었습니다.' + (sent.length ? '\f「' + sent[0] + '」' : '');
+      return '피리를 꺼내 한 소절 불었더니 아이들이 먼저 다가옵니다. 말이 통하지 않아도 노래는 통하는군요.';
+    }
     if (d.cat === 'creature') {
       if (d.plant) {
         if (kind === 'sci') {
@@ -266,7 +276,10 @@
     if (science.lv) await UI.say(lineFor('sci', science.lv, d), science.speaker);
     if (art.lv) await UI.say(lineFor('art', art.lv, d), art.speaker);
     if (craft.lv) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
-    if (!art.lv && !science.lv && !craft.lv) await UI.say(animal ? U.pick(['생물에 밝은 사람이나 화가가 함께였다면 새끼와 성체의 모습을 더 자세히 남겼을 텐데요. 눈에 새겨 두겠습니다.', '가까이 갈 수는 없으니 발자국과 생김새를 잘 기억해 두어야겠습니다.']) : natural ? U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 넓은 풍경을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '산줄기와 물길의 생김새를 화첩에 남기지 못해 아쉽습니다. 눈에 새겨 두어야겠습니다.']) : U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 모습을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '솜씨 좋은 화가나 장인이 함께였다면 짜임새까지 자세히 적어 갔을 텐데, 아쉽습니다.']), lead);
+    var cook = d.cat === 'trade' ? bestHand('cook') : { lv: 0 }, music = d.cat === 'people' ? bestHand('music') : { lv: 0 };
+    if (cook.lv) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
+    if (music.lv) await UI.say(lineFor('music', music.lv, d), music.speaker);
+    if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv) await UI.say(animal ? U.pick(['생물에 밝은 사람이나 화가가 함께였다면 새끼와 성체의 모습을 더 자세히 남겼을 텐데요. 눈에 새겨 두겠습니다.', '가까이 갈 수는 없으니 발자국과 생김새를 잘 기억해 두어야겠습니다.']) : natural ? U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 넓은 풍경을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '산줄기와 물길의 생김새를 화첩에 남기지 못해 아쉽습니다. 눈에 새겨 두어야겠습니다.']) : U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 모습을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '솜씨 좋은 화가나 장인이 함께였다면 짜임새까지 자세히 적어 갔을 텐데, 아쉽습니다.']), lead);
     if (rec.k > 1.0001) {
       var extra = Math.round(fame - fame / rec.k);
       await UI.say('이만큼 자세한 ' + (art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록') + '이라면 유럽의 학자와 궁정도 믿지 않을 수 없겠지요. 제독의 이름이 한층 더 널리 알려질 겁니다.', lead);

@@ -1023,6 +1023,7 @@
       // fatigue & discipline
       var BAL = G.BALANCE || {};
       var fb = 1.1 - R.skill('nav') * 0.22 + (st.storm > 0 ? 3 : 0) + (f.crew < R.crewMin() ? 0.8 : 0);
+      fb -= (R.skillRead ? R.skillRead('music') : R.skill('music')) * ((G.BALANCE && G.BALANCE.musicRest) || 0.12);   // 음악: 뱃노래가 날마다 쌓이는 피로를 덜어 준다 (배에 탄 누구든)
       if (BAL.spareWatch && f.crew >= Math.ceil(R.crewMin() * BAL.spareWatch)) fb -= BAL.spareRest || 0;   // 교대할 선원이 넉넉하다
       if (st.path || st.dirCrs != null || (st.manual && st.thr > 0.1)) { var row = st.manual ? (R.fleetMotion(l.heading, curWind()), R.fleetInfo && R.fleetInfo.row) : (R.fleetMotion(st.crs != null ? st.crs : l.heading, curWind()), R.rowing); if (row) { fb += 0.9; if (!st.rowWarned) { st.rowWarned = true; msgs.push({ icon: 'people', text: '돛이 바람을 못 받아 선원들이 노를 젓는다. 노를 오래 저으면 지친다.' }); } } else st.rowWarned = false; }
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);

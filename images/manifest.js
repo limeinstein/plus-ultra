@@ -3806,5 +3806,6 @@ G.IMAGE_FILES = {
   "sprites/sun": "sprites/sun.webp",
   "sprites/swordsmen": "sprites/swordsmen.webp",
   "sprites/west_europe": "sprites/west_europe.webp",
-  "sprites/whale": "sprites/whale.webp"
+  "sprites/whale": "sprites/whale.webp",
+  "title": "title.webp"
 };

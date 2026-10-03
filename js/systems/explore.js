@@ -185,10 +185,12 @@
     if (st.lastEvt != null && s.day - st.lastEvt < 4) return false;
     var nearLand = !G.Geo.isSea(l.lon, l.lat, 2.5);
     var cold = Math.abs(l.lat) > 48, trop = Math.abs(l.lat) < 24;
+    var rdk = function (id) { return R.skillRead ? R.skillRead(id) : R.skill(id); }, mus = rdk('music'), cook = rdk('cook');
+    var bestWho = function (id) { return (R.skillBest && R.skillBest(id).who) || '제독'; };
     var table = [
       ['bottle', 9], ['drift', 7], ['crate', 6], ['dolphins', trop ? 8 : 3], ['fish', 7], ['ghost', 3],
       ['wreck', 5], ['birds', nearLand ? 9 : 1], ['redsky', 5], ['fever', 4], ['whales', cold ? 7 : 4],
-      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', st.calm ? 8 : 2], ['map', 2], ['monster', 1], ['shoal', nearLand ? 6 : 0],
+      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', (st.calm ? 8 : 2) + mus * 1.5], ['feast', cook ? 2 + cook * 2 : 0], ['map', 2], ['monster', 1], ['shoal', nearLand ? 6 : 0],
       ['siren', trop ? 2.5 : 0.6]
     ];
     // 최근에 겪은 일은 덜 나오게 한다 (같은 사건이 되풀이되지 않도록)
@@ -367,10 +369,24 @@
         }
         break;
       }
-      case 'songs':
-        await UI.say('바람이 없는 밤, 누군가 고향 노래를 부르기 시작했다. 하나둘 따라 부르는 소리가 바다 위로 퍼져 나간다.', {});
-        f.fatigue = Math.max(0, f.fatigue - 8); f.discipline = Math.min(100, f.discipline + 6);
+      case 'songs': {
+        // 음악: 솜씨 좋은 사람이 가락을 이끌면 더 크게 풀린다
+        var mw = bestWho('music'), sf = 8 + mus * 4;
+        await UI.say(mus ? mw + U.jx(mw, '이/가') + ' 류트를 꺼내 고향 노래를 타기 시작했다. 하나둘 따라 부르던 소리가 어느새 갑판을 가득 메우고, 발을 구르며 춤추는 선원까지 나왔다.'
+          : '바람이 없는 밤, 누군가 고향 노래를 부르기 시작했다. 하나둘 따라 부르는 소리가 바다 위로 퍼져 나간다.', {});
+        f.fatigue = Math.max(0, f.fatigue - sf); f.discipline = Math.min(100, f.discipline + 6 + mus * 2);
+        if (mus) UI.toast('뱃노래에 피로가 풀렸다. 피로 −' + sf, 'people');
         break;
+      }
+      case 'feast': {
+        // 요리: 남은 식량으로 별미를 차려 피로를 덜어 준다 (식량을 조금 쓴다)
+        var cw = bestWho('cook'), ff = 6 + cook * 4, use = Math.min(f.food, Math.round(R.dailyUse() * 0.6));
+        await UI.say(U.pick([cw + U.jx(cw, '이/가') + ' 소금에 절인 고기와 말린 콩, 낚아 올린 생선으로 오랜만에 별미를 차렸다. 냄새를 맡은 선원들이 하나둘 모여든다.',
+          cw + U.jx(cw, '이/가') + ' 항구에서 아껴 둔 향신료를 풀어 뜨끈한 국을 끓였다. 「이 맛에 배를 탄다!」 누군가 외치자 웃음이 터졌다.']), {});
+        f.food = Math.max(0, f.food - use); f.fatigue = Math.max(0, f.fatigue - ff); f.discipline = Math.min(100, f.discipline + 3);
+        UI.toast('든든한 한 끼에 피로가 풀렸다. 피로 −' + ff + (use ? ' · 식량 −' + use : ''), 'bread');
+        break;
+      }
       case 'map': {
         var d3 = nearUnknown(l.lon, l.lat, 120, function (x) { return x.cat === 'treasure' || x.cat === 'ruin'; });
         if (!d3) return false;

@@ -37,7 +37,9 @@
     { id: 'theo', name: '신학', desc: '교회와 성직자에게 신뢰를 얻고 선원의 사기를 붙든다.' },
     { id: 'sci', name: '과학', desc: '자연·생물 발견에 유리하며 괴혈병 예방에 도움이 된다.' },
     { id: 'art', name: '그림', desc: '발견한 것을 그려 남긴다. 제독이나 부하 누구든 그림에 밝으면 발견물의 가치가 오른다(명성·사례금·하사금).' },
-    { id: 'craft', name: '세공', desc: '보물과 공예품을 알아보고 손질한다. 제독이나 부하 누구든 세공에 밝으면 발견물(특히 보물·유적)의 가치와 유물 값이 오른다.' }
+    { id: 'craft', name: '세공', desc: '보물과 공예품을 알아보고 손질한다. 제독이나 부하 누구든 세공에 밝으면 발견물(특히 보물·유적)의 가치와 유물 값이 오른다.' },
+    { id: 'cook', name: '요리', desc: '먹을거리의 맛과 쓰임을 안다. 제독이나 부하 누구든 요리에 밝으면 교역품을 발견했을 때 명성·사례금이 단계마다 8% 더 오르고, 항해·탐험 중 별미를 차려 피로를 덜어 주는 일이 생긴다.' },
+    { id: 'music', name: '음악', desc: '노래와 악기로 마음을 연다. 제독이나 부하 누구든 음악에 밝으면 민족을 발견했을 때 명성·사례금이 단계마다 8% 더 오르고, 뱃노래·모닥불 노래로 날마다 쌓이는 피로가 줄어든다.' }
   ];
   G.SKILL_BY_ID = {}; G.SKILLS.forEach(function (s, i) { s.idx = i; G.SKILL_BY_ID[s.id] = s; });
   // which fleet role lets a companion's skill apply (DKJ3 style)
@@ -228,6 +230,8 @@
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작
     matPerHp: 0.4, matStart: 10,
     // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금, 첫 함대(배 ID — 앞의 것이 기함)
+    // 음악 특기: 단계마다 날마다 쌓이는 피로를 이만큼 덜어 준다 (바다 sea.js · 뭍 land.js)
+    musicRest: 0.12, musicRestLand: 0.2,
     testChar: { stat: 99, luck: 99, gold: 100000, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름
     // 시세의 출렁임: 도시·품목 갈래마다 천천히 오르내린다 (최대 ± driftAmp, 주기 driftPeriod[0]~[1]일)
     driftAmp: [0.08, 0.15], driftPeriod: [70, 200],

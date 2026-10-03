@@ -284,7 +284,8 @@
       var mt = MT(), M = G.Mounts;
       payDay(msgs, terr);
       // 피로: 걸음의 피로는 탈것이 덜어 주고, 추위는 털옷·썰매가 조금 덜어 준다
-      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) - R.skill('ops') * 0.3, 0, 100);
+      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) - R.skill('ops') * 0.3
+        - (R.skillRead ? R.skillRead('music') : R.skill('music')) * ((G.BALANCE && G.BALANCE.musicRestLand) || 0.2), 0, 100);   // 음악: 모닥불 노래
       // 알맞지 않은 땅에서는 짐승을 잃는다
       var rk = M.risk(mt, terr);
       if (rk > 0 && mt.n > 0 && U.chance(Math.min(0.5, rk * (1 + mt.n / 8)))) {
@@ -543,6 +544,12 @@
         if (U.chance(0.12)) { await UI.say('사냥감을 쫓다가 도리어 사나운 짐승 떼와 마주쳤다!', {}); await landBattle('들짐승', foeSize(0.12, 0.3, 4, 30), true); }
         var got = Math.round(R.dailyUse() * U.rf(2, 6) * rich * sk);
         if (got > 0) { got = stow('food', got); UI.toast(got > 0 ? '사냥에 성공했다! 식량 ' + got + '통 (배의 식량 약 ' + Math.round(got / R.dailyUse()) + '일분)' : '사냥은 했지만 배의 짐칸이 가득해 실을 곳이 없다.', 'bread', 4200); }
+        var ck = R.skillRead ? R.skillRead('cook') : R.skill('cook');
+        if (got > 0 && ck) {          // 요리: 잡아 온 고기로 저녁을 차려 피로를 덜어 준다
+          var ckWho = (R.skillBest && R.skillBest('cook').who) || '제독', ckF = 3 + ck * 3;
+          f.fatigue = Math.max(0, f.fatigue - ckF);
+          UI.toast(ckWho + U.jx(ckWho, '이/가') + ' 사냥감으로 푸짐한 저녁을 차렸다. 피로 −' + ckF, 'bread', 4200);
+        }
         else UI.toast('사냥감이 보이지 않았다.', 'boot');
         f.fatigue = Math.min(100, f.fatigue + 3);
       } else if (v === 'scout') {

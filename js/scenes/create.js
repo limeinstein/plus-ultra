@@ -11,6 +11,19 @@
   };
   var p;
 
+  /* 이름과 성 — 한국식(성 한 글자이거나 남궁·제갈 같은 두 글자 성 + 한글 이름)이면 「성이름」, 그 밖은 「이름 성」으로 붙여 부른다 */
+  var KO2 = ['남궁', '황보', '제갈', '선우', '독고', '사공', '서문', '동방', '어금', '망절', '강전', '소봉', '장곡'];
+  function fullName(given, sur) {
+    given = String(given || '').trim(); sur = String(sur || '').trim();
+    if (!sur) return given; if (!given) return sur;
+    var ko = /^[가-힣]+$/;
+    return ko.test(given) && ko.test(sur) && given.length <= 3 && (sur.length === 1 || KO2.indexOf(sur) >= 0) ? sur + given : given + ' ' + sur;
+  }
+  C.fullName = fullName;
+  /** 이름 목록의 「주앙 다 시우바」 → 이름 주앙, 성 다 시우바 */
+  function splitName(full) { var i = full.indexOf(' '); return i < 0 ? { given: full, surname: '' } : { given: full.slice(0, i), surname: full.slice(i + 1) }; }
+  function setName(full) { var n = splitName(full); p.given = n.given; p.surname = n.surname; p.name = fullName(p.given, p.surname); }
+
   function rollStats() {
     var a = p.age - 18, r = U.rand;
     var jb = { explorer: { int: 3 }, digger: { int: 6, cha: 2 }, hunter: { str: 6 }, conq: { mar: 8 }, miss: { cha: 6 }, merchant: { cha: 4, int: 2 }, soldier: { mar: 6, str: 3 } }[p.job] || {};
@@ -51,7 +64,8 @@
     starting = false;
     UI.hud.hide();
     G.Game.showLayers(false, false, true);
-    p = { name: U.pick(NAMES.PT), nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1 };
+    p = { name: '', given: '', surname: '', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1 };
+    setName(U.pick(NAMES.PT));
     reset(false);
     render();
   };
@@ -65,7 +79,10 @@
     h += '<div class="col" style="width:360px"><div class="sect parch ornament-corners" style="flex:1">' +
       '<h4>제독</h4><div style="display:flex;justify-content:center;margin:6px 0 10px"><div class="wood" style="padding:8px" id="pv"></div></div>' +
       '<div class="center" style="margin-bottom:12px"><button class="btn small" id="face">' + G.icon('dice') + '다른 얼굴</button></div>' +
-      '<label>이름</label><div class="flex"><input type="text" id="nm" maxlength="14" style="flex:1" value="' + U.esc(p.name) + '"><button class="btn small" id="rn">' + G.icon('dice') + '</button></div>' +
+      '<div class="flex" style="gap:8px;align-items:flex-end"><div style="flex:1.15;min-width:0"><label>이름</label><input type="text" id="nm" maxlength="12" style="width:100%" value="' + U.esc(p.given) + '"></div>' +
+      '<div style="flex:1;min-width:0"><label>성</label><input type="text" id="sn" maxlength="12" style="width:100%" value="' + U.esc(p.surname) + '"></div>' +
+      '<button class="btn small" id="rn" title="다른 이름">' + G.icon('dice') + '</button></div>' +
+      '<div class="muted" id="fullnm" style="margin-top:4px;font-size:15px">불리는 이름: <b style="color:var(--ink)">' + U.esc(p.name) + '</b></div>' +
       '<div style="margin-top:14px"><label>생일</label><div class="flex"><select id="bm">' + mOpts() + '</select><span>월</span><select id="bd">' + dOpts() + '</select><span>일</span></div>' +
       '<div class="muted" style="margin-top:6px;font-size:16px">' + zod.name + ' — ' + { str: '체력', int: '지력', mar: '무력', cha: '매력' }[zod.stat] + '에 보너스</div></div>' +
       '<div style="margin-top:14px"><label>나이 <b style="color:var(--ink)">' + p.age + '세</b> <span class="muted" style="font-size:14px">(젊을수록 체력·무력, 나이 들수록 지력·매력과 특기 점수)</span></label><input type="range" id="age" min="18" max="40" value="' + p.age + '"></div>' +
@@ -109,13 +126,17 @@
     pv.appendChild(A.portraitCanvas(playerSpec(), 200));
     // events
     box.querySelector('#face').onclick = function () { p.face++; render(); };
-    box.querySelector('#nm').oninput = function (e) { p.name = e.target.value; };
-    box.querySelector('#nm').onkeydown = function (e) {
-      e.stopPropagation();
-      // 테스트용: 이름에 「이강희」를 치고 엔터 → 모든 능력 만렙, 소지금 10만, 거북선(기함)·갤리온으로 바로 시작
-      if (e.key === 'Enter' && e.target.value.trim() === TEST_NAME) { e.preventDefault(); startTest(); }
-    };
-    box.querySelector('#rn').onclick = function () { p.name = U.pick(NAMES[p.nation]); render(); };
+    var fullEl = box.querySelector('#fullnm b');
+    function onName() { p.given = box.querySelector('#nm').value; p.surname = box.querySelector('#sn').value; p.name = fullName(p.given, p.surname); if (fullEl) fullEl.textContent = p.name; }
+    ['#nm', '#sn'].forEach(function (q) {
+      box.querySelector(q).oninput = onName;
+      box.querySelector(q).onkeydown = function (e) {
+        e.stopPropagation();
+        // 테스트용: 이름이나 성 칸에 「이강희」(또는 성 이 + 이름 강희)를 치고 엔터 → 모든 능력 만렙, 소지금 10만, 거북선(기함)·갤리온으로 바로 시작
+        if (e.key === 'Enter') { onName(); if (isTestName()) { e.preventDefault(); startTest(); } }
+      };
+    });
+    box.querySelector('#rn').onclick = function () { setName(U.pick(NAMES[p.nation])); render(); };
     box.querySelector('#bm').onchange = function (e) { p.birth.m = +e.target.value; p.birth.d = Math.min(p.birth.d, U.daysInMonth(1460, p.birth.m)); rollStats(); render(); };
     box.querySelector('#bd').onchange = function (e) { p.birth.d = +e.target.value; rollStats(); render(); };
     box.querySelector('#age').onchange = function (e) { p.age = +e.target.value; reset(false); render(); };
@@ -124,7 +145,7 @@
     U.$$('[data-g]', box).forEach(function (el) {
       el.onclick = function () {
         var g = el.dataset.g, v = el.dataset.v;
-        if (g === 'nat') { if (p.nation !== v) { p.nation = v; p.name = U.pick(NAMES[v]); reset(true); } }
+        if (g === 'nat') { if (p.nation !== v) { p.nation = v; setName(U.pick(NAMES[v])); reset(true); } }
         else if (g === 'job') { p.job = v; reset(false); }
         else if (g === 'diff') p.diff = v;
         render();
@@ -176,10 +197,13 @@
 
   // ---------------------------------------------------------------- 테스트용 캐릭터
   var TEST_NAME = '이강희', starting = false;
+  /** 이름 칸이나 성 칸 어느 쪽에 「이강희」를 쳐도, 성 「이」 + 이름 「강희」로 쳐도 테스트용 캐릭터 */
+  function isTestName() { return [p.given, p.surname, p.name].some(function (x) { return String(x || '').replace(/\s+/g, '') === TEST_NAME; }); }
+  C.isTestName = function (given, sur) { var sv = p; p = { given: given, surname: sur, name: fullName(given, sur) }; var r = isTestName(); p = sv; return r; };
   function startTest() {
     if (starting) return;          // 한글 입력 중 엔터가 두 번 들어와도 한 번만
     var T = G.BALANCE.testChar;
-    p.name = TEST_NAME;
+    p.surname = '이'; p.given = '강희'; p.name = TEST_NAME;     // 테스트용 캐릭터는 늘 성 이 · 이름 강희
     p.st = {}; G.STATS.forEach(function (s) { p.st[s.id] = T.stat; });
     p.sk = {}; G.SKILLS.forEach(function (s) { p.sk[s.id] = 3; });
     p.lg = G.LANGS.map(function () { return 3; });
@@ -193,14 +217,16 @@
   async function start(test) {
     test = test === true;          // 버튼 클릭이면 이벤트 객체가 들어온다
     if (starting) return;
-    p.name = (p.name || '').trim();
-    if (!p.name) { UI.toast('이름을 입력하세요.', 'info'); return; }
+    p.given = String(p.given || '').trim(); p.surname = String(p.surname || '').trim();
+    p.name = fullName(p.given, p.surname);
+    if (!p.given) { UI.toast('이름을 입력하세요.', 'info'); return; }
     if (!test && spent() > points()) { UI.toast('특기 점수를 너무 많이 썼습니다.', 'info'); return; }
     starting = true;
     await G.Game.ensureGeo();
     var T = test ? G.BALANCE.testChar : null;
     var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000, ships: T ? T.ships : null });
     if (T) S.player.luck = T.luck;
+    S.player.given = p.given; S.player.surname = p.surname;      // 부를 때는 S.player.name(붙인 이름)을 그대로 쓴다
     S.player.portrait = playerSpec();
     // 고른 얼굴 그림을 초상에 못 박아 둔다(얼굴 그림이 늘어 순서가 바뀌어도 그대로) — 그 이름이 제독의 생김새
     var faceKey = G.Img.chain.player(p.face);

@@ -60,7 +60,7 @@
   function meSpk() { var p = S().player; return { name: p.name, portrait: p.portrait }; }
 
   // 발견물의 갈래 → 그 이야기에 밝은 특기
-  var CAT_SK = { geo: ['survey', 'nav'], nature: ['sci'], creature: ['sci'], ruin: ['hist'], treasure: ['craft', 'hist'], people: ['speech', 'hist'], trade: ['acct'] };
+  var CAT_SK = { geo: ['survey', 'nav'], nature: ['sci'], creature: ['sci'], ruin: ['hist'], treasure: ['craft', 'hist'], people: ['speech', 'hist', 'music'], trade: ['acct', 'cook'] };
   function topics(b) {
     var t = {};
     if (b.sk) t[b.sk] = (t[b.sk] || 0) + 3;
