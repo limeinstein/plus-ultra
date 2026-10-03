@@ -19,6 +19,7 @@
 | 타이틀 화면 | `title.jpg` | 1600×900 |
 | 거리 배경 (도시 화면) | `bg-styles/ib_port_a.jpg` 항구 · `bg-styles/ib_inland_a.jpg` 내륙 (여러 장이면 _a, _b …) | 1600×900 |
 | 거리 배경 — 한 도시만 | `backgrounds/도시번호.jpg` | 1600×900 |
+| 거리 앞길 바닥 (지역별) | `street-ground/양식.webp` — `python tools/street_ground.py`가 Codex 기준 그림 `docs/art/regional-street-ground-reference.png`(칼사다·부채꼴·모자이크·둥근 돌·판석·흙길 6칸)에서 만드는 19장(iberia·espana·italy·france·east·russia·arabia·ottoman·swahili·africa·india·seasia·eastasia·japan·steppe·volcanic·andes·native·pueblo — `js/scenes/town.js` GROUND_STYLE) | 높이 164, 가로로 끝없이 이어지는 띠(폭 218~569) |
 | 건물 겉모습 (거리에 세움) | `exteriors/건물.webp` (tavern, trade, inn …) · 도시별 `@도시번호` · 후원자 저택 `mansion@후원자ID` | 배경 지운 PNG·WEBP, 높이 660 |
 | 지역별 건물 묶음 | `exterior-styles/<묶음>/건물.webp` — 북미 원주민은 `woodland`(숲: 나무껍질 긴 집·위그웜·티피·울타리·카누), `plains`(평원 티피·가죽 천막 시장·의식용 큰 티피·목책 성문, 다코타 230·만단 243), `pueblo`(흙벽돌 계단 집·키바, 타오스 241·아코마 242). 없는 건물은 plains·pueblo → woodland → tropic 순으로 빌림. `tools/natives/make.py`가 기본 그림을 다시 만든다 | 배경 지운 WEBP, 높이 520(시장 660) |
 | 거리 볼거리 (장식) | 도시 건축 발견물은 `landmarks/발견물ID.webp`로 두면 해당 도시·건축 연도에 자동 배치. 그 밖의 장식은 `landmarks/이름.webp`와 `js/scenes/town.js`의 `LANDMARKS`로 수동 배치 | 배경 지운 PNG·WEBP, 권장 높이 520 |
@@ -53,7 +54,7 @@
 | 교역품 | `goods/교역품ID.webp` (후추 `pepper`, 비단 `silk`, 대포 `cannon` 등) · 갈래 공통 `good-kinds/갈래.webp` | 투명 배경 정사각형, 권장 192×192 |
 | 지도에 남는 유적 모형 | `map-discoveries/ruins-1.png` … `ruins-4.png` — 도시 밖 유적 52곳을 4×4 셀에 13곳씩 배치 | 투명 배경 PNG, 4열×4행 |
 | 배 | `ships/배ID.png` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
-| 항해·해전 8방향 동작 배 | `ships-nav/배ID.webp` — `python tools/render_ship_sprites.py`가 만드는 정박 3장·표류 5장·질주 8장 시트 | 자동 생성 1792×3584, 셀 224×224, 수면 피벗 (112,139), 투명 배경 |
+| 항해·해전 8방향 동작 배 | `ships-nav/배ID.webp` — `python tools/ship3d/bake.py`가 three.js 3D 모형으로 굽는 정박 3장·표류 5장·질주 8장 시트(치수·돛대 자리는 `tools/render_ship_sprites.py`와 같다) | 자동 생성 1792×3584, 셀 224×224, 수면 피벗 (112,139), 투명 배경 |
 | 항해 효과 스프라이트 시트 | `effects/ship_spray.png`, `effects/departure_gull.png` | 1024×512, 4열×2행, 셀 256×256, 투명 배경 |
 | 육상전·육상 탐험·사건 스프라이트 | `sprites/시트.webp` — 우리 편 0~3단계(swordsmen·musketeers·cannons·officers), 지역 적(east_fighters·ottoman·natives·west_europe·india_central·southeast_asia·africa_regions·meso_south·north_america·pacific), 들짐승(animals), 항해 사건(whale·dolphin·mermaid·storm·raincloud·rain·sun), 탐험대 8방향(party_*) | `python tools/sprite_repack.py`가 원본(`_extra/sprite_src/`)을 고른 칸으로 다시 짠 것. 칸·피벗은 `js/data/sprites.js` |
 | 육상전 지형 배경 | `landwar/backgrounds/지형.png` — grass·steppe·desert·forest·jungle·mountain·snow·tundra·ice | 초광폭 2.25:1 이상, 가로 1800 이상 |
@@ -61,6 +62,8 @@
 | 일기토 배경 | `duel/backgrounds/deck.png` 등 | 초광폭 2094×751 안팎 |
 
 전체 이름 목록은 `catalog.html`에서 그림과 함께 보거나, `python tools/images.py --list`로 글자로 볼 수 있습니다.
+
+소지품·유물·교역품 그림은 `images/_extra/item-src/`의 그림판을 `python tools/split_item_atlases.py`로 나눈 것입니다(무기·유물 무기 그림판은 물체별로 나눠 긴 칼날·창끝이 잘리거나 이웃 칸 조각이 붙지 않음). 게임에서 쓰는 곳: 교역소 표·시세 수첩·함대 짐·도시 정보(교역품), 시장 구입·매각 목록과 구입 확인 창, 소지품 수첩, 선물 고르기(여급·부하·원주민), 해적선에서 건진 물건, 유물·물건을 얻을 때의 알림, 발견 카드, 도감. 코드에서는 `G.Img.itemSrc(물건)`·`G.Img.goodSrc(교역품ID)`로 주소를 얻습니다. 그림이 없으면 예전처럼 코드로 그린 그림이 나옵니다.
 
 신규 제독 생김새 12종은 `navigator_white`(하얀 남방), `armored_navigator`(철갑), `sea_dog`(망원경),
 `muscle_swordsman`(근육 검사), `hat_spinner`(모자를 돌리는 항해사), `charismatic_admiral`(카리스마 제독),
