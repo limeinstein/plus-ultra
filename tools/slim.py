@@ -27,6 +27,7 @@ RULES = [
     ('characters/', 300, 'webp', 78),
     ('exteriors/', 380, 'webp', 72),
     ('landmarks/', 460, 'webp', 76),
+    ('map-discoveries/', 720, 'webp', 82),   # 4×4 지도 유적 시트: 셀마다 작은 투명 모형
     ('bg-styles/', 820, 'auto', 60),
     ('backgrounds/', 1100, 'auto', 66),
     ('cities/', 1100, 'auto', 66),
@@ -54,6 +55,7 @@ HQ = [
     ('exterior-styles/', 360, 72),
     ('exteriors/', 520, 74),
     ('landmarks/', 640, 76),
+    ('map-discoveries/', 1024, 84),
     ('characters/player_half', 520, 78),
     ('characters/', 400, 78),
     ('bg-styles/', 1440, 70),

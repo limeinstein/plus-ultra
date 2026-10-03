@@ -172,6 +172,14 @@
     // click on a city marker?
     var hit = cityAt(p[0], p[1]);
     if (hit) { setCityTarget(hit); return; }
+    var landmark = landmarkAt(p[0], p[1]);
+    if (landmark) {
+      if (landmark.how === 'land') {
+        UI.toast('「' + landmark.name + '」 가까운 해안으로 향합니다.', 'boot', 3200);
+        var shore = G.Nav.nearestSea(landmark.lon, landmark.lat, 6); if (shore) { setTarget(shore[0], shore[1], null); return; }
+      }
+      setTarget(landmark.lon, landmark.lat, null); return;
+    }
     var npc = npcAt(p[0], p[1]);
     if (npc) { approachNpc(npc); return; }
     var mk = G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
@@ -372,6 +380,7 @@
     knownCities().forEach(function (c) { var p = toScreen(c.lon, c.lat); var d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = c; } });
     return best;
   }
+  function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1) : null; }
   function npcAt(x, y) {
     var best = null, bd = Math.pow(npcPx() * 0.6, 2);
     st.npcs.forEach(function (n) { var p = toScreen(n.lon, n.lat); var d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = n; } });
@@ -1366,9 +1375,13 @@
       var hc = cityAt(st.mouse[0], st.mouse[1]);
       if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : ' — 클릭하면 이곳으로 향합니다')); }
       else {
-        var hn = npcAt(st.mouse[0], st.mouse[1]);
-        if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : hn.label || (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));
-        else { var hm = G.Explore.markerAt(st.marks || [], toScreen, st.mouse[0], st.mouse[1]); if (hm) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, '망루가 본 것 (' + G.DISC_CATS[hm.d.cat] + ') · 약 ' + hm.dist.toFixed(1) + '° — 클릭하면 향합니다'); }
+        var hd = landmarkAt(st.mouse[0], st.mouse[1]);
+        if (hd) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hd.name + ' · 발견한 유적 — 클릭하면 가까이 향합니다');
+        else {
+          var hn = npcAt(st.mouse[0], st.mouse[1]);
+          if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : hn.label || (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));
+          else { var hm = G.Explore.markerAt(st.marks || [], toScreen, st.mouse[0], st.mouse[1]); if (hm) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, '망루가 본 것 (' + G.DISC_CATS[hm.d.cat] + ') · 약 ' + hm.dist.toFixed(1) + '° — 클릭하면 향합니다'); }
+        }
       }
     }
   }
@@ -1441,6 +1454,11 @@
     var s = S();
     var refPort = G.Routes ? G.Routes.origin() : null, nearPort = portNear();
     ctx.textAlign = 'left';
+    // 도시 밖 유적은 제독이 직접 발견한 뒤부터 작은 투명 모형으로 남는다.
+    if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
+      var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
+      G.DiscoveryIcon.draw(ctx, d, p[0], p[1]);
+    });
     knownCities().forEach(function (c) {
       var p = toScreen(c.lon, c.lat);
       if (p[0] < -60 || p[0] > 1660 || p[1] < -30 || p[1] > 930) return;

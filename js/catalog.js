@@ -280,12 +280,12 @@
   // ------------------------------------------------ discoveries
   const tDisc = tab('discoveries', '발견물', {
     chips: [['all', '전체']].concat(Object.keys(G.DISC_CATS).map(k => [k, G.DISC_CATS[k]])),
-    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 유적은 복원과 상공 회전, 자연 경관은 시간 변화 파노라마, 동물은 새끼의 등장과 성체 보호, 보물은 암흑 속 큐레이터 조명과 360° 2회전을 GIF로 보여 줍니다.'
+    note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 지리는 배 위의 발견 장면과 고지도 항로, 유적은 복원과 상공 회전, 자연 경관은 시간 변화 파노라마, 동물은 새끼의 등장과 성체 보호, 식물은 빈 캔버스의 유화가 실사 풍경으로 살아나는 과정, 보물은 암흑 속 큐레이터 조명과 360° 2회전을 GIF로 보여 줍니다.'
   });
   G.DISCOVERIES.forEach(d => {
     const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : G.REGIONS[d.reg];
     const place = d.how === 'city' ? CITY[d.city].name + ' 시내' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
-    const moving = d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure') && !!(G.Reel && G.Reel.has(d)));
+    const moving = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure') && !!(G.Reel && G.Reel.has(d)));
     add(tDisc, {
       group: d.cat, name: d.name, sub: G.DISC_CATS[d.cat] + ' · ' + where, meta: HOW[d.how] + ' · 가치 ' + num(d.val) + (d.rival ? ' · 경쟁자 ' + d.rival[2] : ''),
       key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: moving, disc: d,

@@ -164,7 +164,8 @@
     if (e.button !== 0 || UI.busy() || st.busy) return;
     var p = pos(e), w = toWorld(p[0], p[1]);
     var c = cityAt(p[0], p[1]); if (c) w = [c.lon, c.lat];
-    var mk = !c && G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
+    var landmark = !c && landmarkAt(p[0], p[1]); if (landmark) w = [landmark.lon, landmark.lat];
+    var mk = !c && !landmark && G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
     if (mk) w = [mk.lon, mk.lat];
     if (!G.Geo.isLand(w[0], w[1])) { UI.toast('그곳은 물입니다. 육지를 클릭하십시오.', 'land'); return; }
     st.path = w; st.paused = false; refreshBar();
@@ -180,6 +181,7 @@
     return kiCache;
   }
   function cityAt(x, y) { var best = null, bd = Infinity; knownInland().forEach(function (c) { var p = toScreen(c.lon, c.lat), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y), hit = Math.max(24, G.CityIcon.metrics(c, 1.15).radius + 5); if (d <= hit * hit && d < bd) { bd = d; best = c; } }); return best; }
+  function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1.15) : null; }
   function cityNear() { var s = S(), l = s.loc, best = null, bd = 0.3; G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c)) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } }); return best; }
   function atBase() { var s = S(), l = s.loc, b = l.base; return G.Geo.dist(l.lon, l.lat, b.lon, b.lat) < (b.type === 'ship' ? 0.45 : 0.3); }
 
@@ -713,6 +715,13 @@
     // base marker
     var bp = toScreen(l.base.lon, l.base.lat);
     if (l.base.type === 'ship') { var bsh = S().fleet.ships[0], blk = bsh ? A.shipLook(bsh.type, { sails: bsh.sails, flag: '#1d3f7a' }) : { sails: ['sq', 'lat'], hull: '#5a3a22', cross: true }; blk.furl = 1; A.shipTop(ctx, bp[0], bp[1], 0.5, G.Scenes.sea.shipPx ? G.Scenes.sea.shipPx() * 0.85 : 80, blk, st.t); }
+    // 직접 발견한 도시 밖 유적은 소도시 정도 크기의 투명 모형으로 표시한다.
+    if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
+      var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
+      var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: 1.15 });
+      ctx.font = '600 14px ' + ff; var key = 'disc:' + d.id, tw = labelW[key] || (labelW[key] = ctx.measureText(d.name).width), lx = p[0] + mark.radius + 3;
+      ctx.fillStyle = 'rgba(20,14,8,.58)'; ctx.fillRect(lx, p[1] - 10, tw + 9, 19); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(d.name, lx + 4, p[1] + 4);
+    });
     // 내륙 도시도 항해·해도와 같은 투명 문화권 모형으로 표시한다.
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;

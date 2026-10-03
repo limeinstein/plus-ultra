@@ -112,7 +112,7 @@
     box.querySelector('#nm').oninput = function (e) { p.name = e.target.value; };
     box.querySelector('#nm').onkeydown = function (e) {
       e.stopPropagation();
-      // 테스트용: 이름에 「이강희」를 치고 엔터 → 모든 능력 만렙, 소지금 10만으로 바로 시작
+      // 테스트용: 이름에 「이강희」를 치고 엔터 → 모든 능력 만렙, 소지금 10만, 거북선(기함)·갤리온으로 바로 시작
       if (e.key === 'Enter' && e.target.value.trim() === TEST_NAME) { e.preventDefault(); startTest(); }
     };
     box.querySelector('#rn').onclick = function () { p.name = U.pick(NAMES[p.nation]); render(); };
@@ -180,7 +180,8 @@
     p.lg = G.LANGS.map(function () { return 3; });
     var fi = T.look ? G.Img.list('portraits/player/').indexOf('portraits/player/' + T.look) : -1;
     if (fi >= 0) p.face = fi;      // 이강희 얼굴 그림 → 반신상·일기토 시트도 이강희 것
-    UI.toast('테스트용 캐릭터: 모든 능력 만렙, 소지금 ' + T.gold.toLocaleString() + '닢', 'info');
+    var fleet = (T.ships || []).map(function (id) { return G.SHIP[id] ? G.SHIP[id].name : ''; }).filter(Boolean);
+    UI.toast('테스트용 캐릭터: 모든 능력 만렙, 소지금 ' + T.gold.toLocaleString() + '닢' + (fleet.length ? ', 첫 함대 ' + fleet.join('·') : ''), 'info');
     start(true);
   }
 
@@ -193,7 +194,7 @@
     starting = true;
     await G.Game.ensureGeo();
     var T = test ? G.BALANCE.testChar : null;
-    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000 });
+    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000, ships: T ? T.ships : null });
     if (T) S.player.luck = T.luck;
     S.player.portrait = playerSpec();
     // 고른 얼굴 그림을 초상에 못 박아 둔다(얼굴 그림이 늘어 순서가 바뀌어도 그대로) — 그 이름이 제독의 생김새

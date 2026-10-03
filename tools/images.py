@@ -243,12 +243,12 @@ def write_manifest(found):
 
 
 def is_valid(key, keys):
-    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'characters/', 'relics/', 'relic-kinds/', 'discovery-ends/', 'discovery-sheets/', 'duel/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
+    return key in keys or key.startswith(('portraits/player/', 'landmarks/', 'map-discoveries/', 'characters/', 'relics/', 'relic-kinds/', 'discovery-ends/', 'discovery-sheets/', 'duel/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
 
 def report(found, dups, keys):
     groups = [('타이틀', 'title'), ('거리 배경', 'backgrounds/'), ('거리 배경(공통)', 'bg-styles/'), ('건물 겉모습', 'exteriors/'), ('지역별 건물', 'exterior-styles/'),
-              ('거리 볼거리', 'landmarks/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
+              ('거리 볼거리', 'landmarks/'), ('지도 유적', 'map-discoveries/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),

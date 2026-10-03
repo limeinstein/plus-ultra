@@ -1,0 +1,36 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>유적 지도 아이콘 시험</title>
+<style>html,body{margin:0;overflow:hidden;background:#08151c}iframe{width:1600px;height:900px;border:0;display:block}</style></head>
+<body><iframe id="game" src="index.html"></iframe><script>
+document.getElementById('game').onload = async function () {
+  try {
+    var G = this.contentWindow.G, lg = G.LANGS.map(function () { return 0; }), sk = {}, i;
+    G.SKILLS.forEach(function (x) { sk[x.id] = 0; }); sk.nav = 2; sk.survey = 2; sk.hist = 2;
+    var s = G.State.newGame({ name:'유적 시험 제독', nation:'PT', job:'explorer', age:22, birth:{m:4,d:12}, st:{str:58,int:50,mar:55,cha:52}, sk:sk, lg:lg, diff:'normal', gold:3000 });
+    G.Game.state = s; s.settings.res = 0.35;
+    ['stonehenge', 'poitiers', 'parthenon'].forEach(function (id) { s.disc[id] = { found:true, me:true }; });
+    var visible = G.DiscoveryIcon.visible().map(function (d) { return d.id; }).sort();
+    if (G.DiscoveryIcon.count() !== 52 || visible.join(',') !== 'poitiers,stonehenge') throw new Error('지도 유적 포함·제외 규칙이 맞지 않습니다: ' + visible.join(','));
+    await G.DiscoveryIcon.preload(G.DiscoveryIcon.visible());
+    var keys = ['map-discoveries/ruins-1', 'map-discoveries/ruins-3'];
+    if (!keys.every(function (k) { return !!G.Img.get(k); })) throw new Error('지도 유적 시트를 읽지 못했습니다.');
+    var cv = this.contentDocument.createElement('canvas'), cx = cv.getContext('2d'); cv.width = cv.height = 64;
+    cx.drawImage(G.Img.get(keys[0]), 0, 0, 64, 64);
+    var alpha = cx.getImageData(0, 0, 64, 64).data, clear = false, solid = false;
+    for (i = 3; i < alpha.length; i += 4) { if (!alpha[i]) clear = true; if (alpha[i] > 200) solid = true; }
+    if (!clear || !solid) throw new Error('지도 유적 시트의 투명 알파가 없습니다.');
+    await G.Game.ensureGeo();
+    var southampton = G.CITY_DATA.filter(function (c) { return c.name === '사우샘프턴'; })[0] || G.CITY_DATA[0];
+    if (s.known.indexOf(southampton.id) < 0) s.known.push(southampton.id);
+    s.loc = { mode:'land', lon:-0.75, lat:48.88, heading:0, base:{ type:'city', city:southampton.id, lon:southampton.lon, lat:southampton.lat }, party:18, days:0, party0:18, found0:2, marks0:0, mount:{id:'walk',n:0} };
+    G.Game.go('land', { resume:true });
+    var rt = G.Scenes.land.runtime(); if (rt) { rt.cam.zoom = 130; rt.cam.zoomT = 130; }
+    setTimeout(function () {
+      var host = document.getElementById('game').contentDocument.createElement('div');
+      host.style.cssText = 'position:absolute;z-index:20;left:245px;top:145px;width:1110px;background:#d6c49c;box-shadow:0 10px 36px #000';
+      document.getElementById('game').contentDocument.body.appendChild(host);
+      G.ChartView.mount(host, { w:1100, h:550, center:[-0.75,48.88], span:14 });
+      setTimeout(function () { document.title = 'discovery done'; }, 900);
+    }, 500);
+  } catch (e) { document.title = 'discovery err ' + e.message; console.error(e); }
+};
+</script></body></html>

@@ -28,13 +28,13 @@
     var wrap = U.el('div', 'chartview');
     wrap.innerHTML = '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
       '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="세계 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
-      '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
+      '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
       '<div class="cv-info" hidden></div><div class="cv-tip" hidden></div>';
     host.appendChild(wrap);
     var cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d'), info = wrap.querySelector('.cv-info'), tipEl = wrap.querySelector('.cv-tip');
     cv.style.width = '100%'; cv.style.height = 'auto'; cv.style.display = 'block';
     var view = { lon: opts.center ? opts.center[0] : (here ? U.clamp(here.lon, -150, 150) : 0), lat: opts.center ? opts.center[1] : (here ? here.lat : 20), span: opts.span || 120 };
-    var crisp = null, crispKey = '', idleT = null, hover = null, sel = opts.select != null ? G.CITY_DATA[opts.select] : null, seaSel = null, dead = false;
+    var crisp = null, crispKey = '', idleT = null, hover = null, hoverDisc = null, sel = opts.select != null ? G.CITY_DATA[opts.select] : null, seaSel = null, dead = false;
     function latSpan() { return view.span * H / W; }
     function clampView() {
       view.span = U.clamp(view.span, SPAN_MIN, SPAN_MAX);
@@ -75,6 +75,13 @@
       });
       var fs = 13, font = getComputedStyle(document.body).fontFamily;
       I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {});
+      // 제독이 직접 발견한 도시 밖 유적만 지도에 남긴다.
+      var landmarkScale = cityScale * 0.95, landmarkLabels = [];
+      landmarks().forEach(function (d) {
+        var p = px(d.lon, d.lat, b); if (p[0] < -24 || p[0] > W + 24 || p[1] < -24 || p[1] > H + 24) return;
+        var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: landmarkScale, selected: d === hoverDisc });
+        if (d === hoverDisc) landmarkLabels.push([d, p, mark.radius]);
+      });
       // 도시: 지역별 건축 양식과 규모를 작은 실루엣으로 표시한다.
       var labels = [];
       cities().forEach(function (c) {
@@ -99,6 +106,11 @@
         ctx.fillStyle = L[3] ? 'rgba(242,231,204,.8)' : 'rgba(30,20,12,.82)'; ctx.fillRect(rc[0], rc[1], rc[2], rc[3]);
         ctx.fillStyle = L[3] ? '#3a2410' : '#f2e7cc'; ctx.fillText(c.name, x + 5, y + 1);
       });
+      landmarkLabels.forEach(function (L) {
+        var d = L[0], p = L[1], tw = ctx.measureText(d.name).width + 10, x = p[0] + L[2] + 5, y = p[1];
+        if (x + tw > W) x = p[0] - L[2] - 5 - tw;
+        ctx.fillStyle = 'rgba(30,20,12,.82)'; ctx.fillRect(x, y - 10, tw, 20); ctx.fillStyle = '#f2e7cc'; ctx.fillText(d.name, x + 5, y + 1);
+      });
       if (sel) { var sp2 = px(sel.lon, sel.lat, b); ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 2; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.arc(sp2[0], sp2[1], 12 * zk, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
       if (seaSel) { var q2 = px(seaSel[0], seaSel[1], b); ctx.strokeStyle = '#1e3552'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(q2[0] - 7, q2[1] - 7); ctx.lineTo(q2[0] + 7, q2[1] + 7); ctx.moveTo(q2[0] + 7, q2[1] - 7); ctx.lineTo(q2[0] - 7, q2[1] + 7); ctx.stroke(); }
       // 지금 위치
@@ -121,6 +133,7 @@
       if (!cityList) cityList = s.known.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && R.cityExists(c); });
       return cityList;
     }
+    function landmarks() { return G.DiscoveryIcon ? G.DiscoveryIcon.visible() : []; }
     function cityAt(x, y) {
       var b = box(), best = null, bd = Infinity;
       var scale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15);
@@ -130,6 +143,10 @@
         if (d <= hit * hit && d < bd) { bd = d; best = c; }
       });
       return best;
+    }
+    function landmarkAt(x, y) {
+      var b = box(), scale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15) * 0.95;
+      return G.DiscoveryIcon ? G.DiscoveryIcon.at(landmarks(), function (lon, lat) { return px(lon, lat, b); }, x, y, scale) : null;
     }
 
     // ------------------------------------------------ 도시 요약
@@ -173,18 +190,18 @@
         if (drag.moved) { view.lon = drag.lon - dx / W * view.span; view.lat = drag.lat + dy / H * latSpan(); clampView(); cv.style.cursor = 'grabbing'; draw(); }
         return;
       }
-      var hc = cityAt(p[0], p[1]);
-      if (hc !== hover) { hover = hc; cv.style.cursor = hc ? 'pointer' : 'grab'; draw(); }
+      var hc = cityAt(p[0], p[1]), hd = hc ? null : landmarkAt(p[0], p[1]);
+      if (hc !== hover || hd !== hoverDisc) { hover = hc; hoverDisc = hd; cv.style.cursor = hc || hd ? 'pointer' : 'grab'; draw(); }
     }
     function onUp(e) {
       if (!drag) return;
-      var d = drag; drag = null; cv.style.cursor = hover ? 'pointer' : 'grab';
+      var d = drag; drag = null; cv.style.cursor = hover || hoverDisc ? 'pointer' : 'grab';
       if (d.moved) return;
-      var p = evPos(e), c = cityAt(p[0], p[1]);
-      if (c) showCity(c); else { var w = toWorld(p[0], p[1]); showSea(w[0], w[1]); }
+      var p = evPos(e), c = cityAt(p[0], p[1]), dsc = c ? null : landmarkAt(p[0], p[1]);
+      if (c) showCity(c); else if (dsc && G.Scenes && G.Scenes.discoveryCard) G.Scenes.discoveryCard(dsc, 0); else { var w = toWorld(p[0], p[1]); showSea(w[0], w[1]); }
     }
     window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
-    cv.addEventListener('mouseleave', function () { if (hover && !drag) { hover = null; draw(); } });
+    cv.addEventListener('mouseleave', function () { if ((hover || hoverDisc) && !drag) { hover = null; hoverDisc = null; draw(); } });
     cv.addEventListener('dblclick', function (e) { var p = evPos(e); zoomAt(2, p[0], p[1]); });
     U.$$('.cv-zoom .btn', wrap).forEach(function (b) {
       b.onclick = function (e) {
@@ -200,6 +217,7 @@
     mo.observe(document.body, { childList: true, subtree: true });
     cv.style.cursor = 'grab';
     clampView(); draw();
+    if (G.DiscoveryIcon) G.DiscoveryIcon.preload(landmarks()).then(function () { if (!dead) draw(); });
     if (sel) showCity(sel);
     return { el: wrap, redraw: draw, view: view, select: showCity };
   };

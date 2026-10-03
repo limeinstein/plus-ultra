@@ -50,17 +50,19 @@
   /** big discovery announcement card */
   function discoveryMotionMs(d) {
     var fx = (G.FX && G.FX.reveal) || {};
+    if (d && d.plant) return fx.plantPlayMs || 8400;
     return d && d.cat === 'treasure' && !d.natural ? (fx.treasurePlayMs || 8400) : (fx.playMs || 5000);
   }
   function discoveryGifMs(d) {
     var fx = (G.FX && G.FX.reveal) || {};
+    if (d && d.plant) return fx.plantGifMs || 8400;
     return d && d.cat === 'treasure' && !d.natural ? (fx.treasureGifMs || 8400) : (fx.gifMs || 9820);
   }
   /** 발견 그림 요소. 장면 판이나 GIF가 있으면 움직임을 살리고, 나머지는 기존 Canvas 교체 체계를 쓴다. */
   SC.discoveryPicture = function (d, chain) {
     chain = chain || G.Img.chain.discovery(d);
     var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art;
-    var animatedCat = d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure';
+    var animatedCat = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure';
     if (animatedCat && G.Reel && G.Reel.has(d)) {
       art = G.Reel.element(d, { cls: 'disc-build-gif', w: 1152, h: 512, ms: discoveryMotionMs(d) });
       art.setAttribute('aria-label', d.name);
@@ -69,8 +71,9 @@
     if (animatedCat && file && G.Img.isAnim(picked)) {
       art = document.createElement('img');
       art.className = 'disc-build-gif'; art.src = G.Img.src(picked);
-      art.alt = d.cat === 'ruin' ? d.name + ' 7단계 복원과 360도 상공 회전' :
-        d.cat === 'creature' ? d.name + ' 새끼 등장과 성체 보호 장면' :
+      art.alt = d.cat === 'geo' ? d.name + ' 항해 장면과 고지도 위의 발견 항로' :
+        d.cat === 'ruin' ? d.name + ' 7단계 복원과 360도 상공 회전' :
+        d.cat === 'creature' ? (d.plant ? d.name + ' 유화가 실사 풍경으로 살아나는 장면' : d.name + ' 새끼 등장과 성체 보호 장면') :
           d.cat === 'treasure' && !d.natural ? d.name + ' 암흑 속 박물관 조명과 360도 2회전' : d.name + ' 일출부터 밤까지 이어지는 파노라마';
       return art;
     }
@@ -117,7 +120,7 @@
     return win.result;
   };
 
-  // ---------------------------------------------------------------- 유적·자연 경관·동물·보물 발견 연출
+  // ---------------------------------------------------------------- 지리·유적·자연 경관·동물·보물 발견 연출
   /* 화면(탐험 지도·거리)이 살짝 어두워지고 발견 GIF만 빛나며 움직인다 → 마지막 장면에서 멈추고
      「○○ 발견」이 크게 빛나며 떠오른다 → 제독과 부하들이 이야기한다. 유적은 그림·세공에 밝은 사람이
      자세히 기록하면 명성이 더 오른다(D.recordParts). 자연 경관은 화가가 지형과 빛을 기록한다.
@@ -125,7 +128,7 @@
   //   장면 판(images/discovery-sheets/ID.webp)이 있으면 그것을 Canvas로 돌린다(G.Reel) — GIF보다 가볍고, 빠르기를 게임이 정하며,
   //   다시 받지 않고 처음부터 돌릴 수 있다. 없으면 예전처럼 GIF를 <img>로.
   function revealKeys(d) {
-    if (d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural && d.cat !== 'creature' && d.cat !== 'treasure') return null;
+    if (d.cat !== 'geo' && d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural && d.cat !== 'creature' && d.cat !== 'treasure') return null;
     var sheet = G.Reel ? G.Reel.key(d) : null;
     var chain = G.Img.chain.discovery(d), picked = G.Img.pick(chain), file = picked && G.Img.file(picked);
     var gif = file && G.Img.isAnim(picked) ? picked : null;
@@ -160,6 +163,16 @@
   function lineFor(kind, lv, d) {
     var sent = periodSentences(d);
     if (d.cat === 'creature') {
+      if (d.plant) {
+        if (kind === 'sci') {
+          if (lv >= 3) return '줄기와 잎맥, 꽃과 열매, 뿌리가 땅과 물을 붙드는 모습까지 차례로 적겠습니다. 사는 땅의 빛과 습기도 함께 살피면 이 식물이 어떻게 살아가는지 밝힐 수 있습니다.\f' + (sent.length ? '「' + sent.join(' ') + '」' : '');
+          if (lv >= 2) return '잎과 줄기의 생김새, 뿌리 내린 땅, 빛을 받는 방향을 함께 기록하겠습니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
+          return '손대지 말고 잎과 줄기, 자라는 자리부터 찬찬히 적어 두겠습니다.' + (sent.length ? '\f「' + sent[0] + '」' : '');
+        }
+        if (lv >= 3) return '빈 화폭에 먼 풍경부터 깔고, 줄기와 잎을 한 획씩 세운 뒤 마지막 빛까지 얹겠습니다. 살아 숨 쉬는 이 모습을 그대로 전할 수 있을 겁니다.';
+        if (lv >= 2) return '잎과 꽃의 빛깔, 줄기의 결, 주위 풍경이 함께 드러나도록 그려 두겠습니다.';
+        return '시들기 전에 윤곽과 빛깔부터 화첩에 옮겨 두겠습니다.';
+      }
       if (kind === 'sci') {
         if (lv >= 3) return '새끼의 생김새와 움직임, 성체가 뒤를 지키는 습성까지 차례로 적겠습니다. 털과 비늘, 발자국도 견주어 보면 이 동물이 어떻게 살아가는지 밝혀낼 수 있습니다.\f' + (sent.length ? '「' + sent.join(' ') + '」' : '');
         if (lv >= 2) return '새끼와 성체의 크기, 먹이 흔적, 사는 곳을 함께 기록하겠습니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');

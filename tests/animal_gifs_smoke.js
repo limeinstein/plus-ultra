@@ -104,12 +104,13 @@ function socket(url) {
     const c = await cdp.call('Runtime.evaluate', { expression: `(()=>({
       cards:document.querySelectorAll('#grid .card').length,
       expected:G.DISCOVERIES.filter(d=>d.cat==='creature').length,
+      expectedAnimated:G.DISCOVERIES.filter(d=>d.cat==='creature'&&G.Reel.has(d)).length,
       animated:document.querySelectorAll('#grid .thumb canvas.reel').length,
       aria:[...document.querySelectorAll('#grid .thumb canvas.reel')].map(x=>x.getAttribute('aria-label'))
     }))()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.animals !== 117 || result.gifs !== 117 || result.sheets !== 117 || result.reveals !== 117 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== 117 || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.animals !== 117 || result.gifs !== 117 || result.sheets !== 117 || result.reveals !== 117 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== catalog.expectedAnimated || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || !catalog.aria.includes('지옥의 꽃') || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

@@ -36,13 +36,17 @@
     };
     S.player.items.push({ id: 'rapier' });
     S.player.items.push({ id: 'compass' });
-    // starting ship depends on job
+    // starting ship depends on job (p.ships가 있으면 그 배들로 시작 — 앞의 것이 기함, 테스트용 캐릭터)
     var shipType = p.job === 'merchant' ? 'cog' : p.job === 'conq' || p.job === 'soldier' ? 'caravel' : 'caravel';
-    var hc = G.CITY_DATA[S.player.home];
-    var ship = R.newShip(shipType, p.nation === 'PT' ? '산 가브리엘' : '산타 클라라', hc && G.Ships ? G.Ships.localWood(hc).id : null);
-    ship.guns = { type: 'saker', n: 4 };
-    S.fleet.ships.push(ship);
-    S.fleet.crew = Math.min(ship.crewMax, ship.crewMin + 8);
+    var types = (p.ships || []).filter(function (id) { return G.SHIP[id]; }).slice(0, G.MAX_SHIPS || 5);
+    if (!types.length) types = [shipType];
+    var hc = G.CITY_DATA[S.player.home], wood = hc && G.Ships ? G.Ships.localWood(hc).id : null;
+    types.forEach(function (id, i) {
+      var ship = R.newShip(id, i ? null : p.nation === 'PT' ? '산 가브리엘' : '산타 클라라', wood);
+      ship.guns = { type: 'saker', n: 4 };
+      S.fleet.ships.push(ship);
+    });
+    S.fleet.crew = Math.min(U.sum(S.fleet.ships, function (s) { return s.crewMax; }), U.sum(S.fleet.ships, function (s) { return s.crewMin; }) + 8);
     S.fleet.food = Math.ceil(R.dailyUse(S.fleet.crew) * 20);
     S.fleet.water = Math.ceil(R.dailyUse(S.fleet.crew) * 20);
     S.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;     // 자재(수리용 목재·밧줄·돛천) — 바다 위 수리에 쓴다

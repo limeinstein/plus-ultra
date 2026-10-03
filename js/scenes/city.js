@@ -382,7 +382,7 @@
     var sp = G.Scenes.mateSpeaker('first');
     await UI.say(U.fmtDate(s.date) + ', ' + home.name + '.\n항구에는 아침 안개가 걷히고, 갈매기 소리 사이로 뱃사람들의 외침이 들려온다.', {});
     await UI.say('제독! 드디어 오셨군요. ' + mate.name + '입니다. 오늘부터 부관으로서 제독을 모시게 되었습니다.\f' +
-      '우리 배 「' + s.fleet.ships[0].name + '」호는 항구에 정박해 있습니다. 선원 ' + s.fleet.crew + '명, 식량과 물은 ' + R.daysOfFood() + '일치를 실어 두었습니다.', sp);
+      '우리 배 ' + s.fleet.ships.map(function (sh) { return '「' + sh.name + '」호'; }).join('와 ') + U.jx(s.fleet.ships[s.fleet.ships.length - 1].name + '호', '은/는') + ' 항구에 정박해 있습니다. 선원 ' + s.fleet.crew + '명, 식량과 물은 ' + R.daysOfFood() + '일치를 실어 두었습니다.', sp);
     await C.me('수고했네, 로코. 앞으로 잘 부탁하네.');
     await UI.say('제독, 이 넓은 세상에는 아직 아무도 본 적 없는 곳과 물건이 가득하다고 합니다.\f' +
       '도서관의 책이나 술집의 소문에서 단서를 모으십시오. 그 단서를 왕궁이나 귀족 저택의 후원자에게 제안하면 모험 자금을 받을 수 있습니다.\f' +
