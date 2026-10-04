@@ -55,14 +55,17 @@
     var html = '<div class="grid2" style="grid-template-columns:260px 1fr;gap:26px"><div><div class="pc"></div>' +
       '<div class="center" style="margin-top:10px;font-size:26px;font-weight:800">' + U.esc(p.name) + '</div>' +
       '<div class="center muted">' + R.nationName(p.nation) + ' · ' + (job ? job.name : '') + (p.generation > 1 ? ' · ' + p.generation + '대' : '') + '</div>' +
-      '<div class="center" style="margin-top:10px"><span class="tag">' + R.fameTitle(p.fame) + '</span></div></div><div>' +
+      '<div class="center" style="margin-top:10px"><span class="tag">' + R.fameTitle(p.fame) + '</span></div>' +
+      (G.Court && G.Court.best() ? '<div class="center" style="margin-top:6px">' + G.Court.titlesHtml() + '</div>' : '') + '</div><div>' +
       '<div class="kv" style="grid-template-columns:110px 1fr 110px 1fr">' +
       '<div>나이</div><div>' + R.age() + '세 (' + p.born.m + '월 ' + p.born.d + '일생 · ' + z.name + ')</div><div>명성</div><div>' + U.num(p.fame) + '</div>' +
       '<div>소지금</div><div>' + U.num(p.gold) + '닢</div><div>예금</div><div>' + U.num(p.bank) + '닢</div>' +
       '<div>악명</div><div>' + U.num(p.notoriety) + '</div><div>건강</div><div>' + Math.round(p.hp) + ' / 100</div>' +
+      (G.Fame ? '<div>명성 갈래</div><div style="grid-column:span 3">' + G.Fame.html() + '</div>' : '') +
+      (G.Court ? '<div>작위</div><div style="grid-column:span 3">' + G.Court.titlesHtml() + (G.Court.perkText() ? '<div class="muted" style="font-size:14px;margin-top:2px">' + G.Court.perkText() + '</div>' : '') + (G.Court.papersHtml() ? '<div style="margin-top:3px">' + G.Court.papersHtml() + '</div>' : '') + '</div>' : '') +
       (G.Hostile ? '<div>적대</div><div style="grid-column:span 3">' + G.Hostile.html() + '</div>' : '') +
       '<div>무기</div><div>' + (p.equip.weapon ? G.ITEM[p.equip.weapon].name + ' (공격 ' + G.ITEM[p.equip.weapon].atk + ')' : '없음') + '</div><div>방어구</div><div>' + (p.equip.armor ? G.ITEM[p.equip.armor].name + ' (방어 ' + G.ITEM[p.equip.armor].def + ')' : '없음') + '</div>' +
-      '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') : '없음') + '</div><div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return G.Family.kidName(k) + ' <small class="muted">' + G.Family.kidAge(k) + '세' + (k.aboard ? ' · 견습' : '') + '</small>' + (k.unnamed ? '' : ' ' + G.Family.bondHearts(k)); }).join(', ') : '없음') + '</div></div>' +
+      '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') + (G.Wives ? G.Wives.infoWife() : '') : '없음') + '</div><div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return G.Family.kidName(k) + ' <small class="muted">' + G.Family.kidAge(k) + '세' + (k.sex === 'f' ? ' 딸' : ' 아들') + (k.aboard ? ' · 견습' : '') + (G.Wives ? G.Wives.kidTag(k) : '') + '</small>' + (k.unnamed ? '' : ' ' + G.Family.bondHearts(k)); }).join(', ') : '없음') + '</div></div>' +
       '<div class="sep"></div><div class="grid2">' +
       '<div><h4 style="margin:0 0 8px">능력치</h4>' + G.STATS.map(function (st) { return '<div class="statrow"><span>' + st.name + '</span>' + UI.bar(p.st[st.id], 100, 'gold') + '<b>' + p.st[st.id] + '</b></div>'; }).join('') + '</div>' +
       '<div><h4 style="margin:0 0 8px">특기 <small class="muted">(동료 포함 실효 수준)</small></h4><div class="skillgrid" style="grid-template-columns:1fr 1fr">' +
@@ -314,6 +317,8 @@
         (k.loan ? '<div class="muted" style="margin-top:6px;font-size:15px">빌린 배: ' + U.esc(k.loanName || '') + '호 — 정산할 때 돌려줍니다. 잃으면 배값을 물어야 합니다.</div>' : '') +
         (G.Plan && !tk && !G.Disc.foundByMe(k.disc) ? G.Plan.html(G.Plan.forContract()) : '');
     } else html += '<div class="muted">진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.</div>';
+    // 왕명 (js/systems/court.js)
+    if (G.Court) html += G.Court.taskHtml();
     // 조합 의뢰
     var qs = G.Quest ? G.Quest.list() : [];
     html += '<div class="sep"></div><h4 style="margin:0 0 8px">맡은 조합 의뢰</h4>';
@@ -347,9 +352,11 @@
     if (!G.Ledger || !G.Ledger.count()) { el.innerHTML = '<div class="muted">아직 적어 둔 시세가 없습니다. 교역소에 들를 때마다 그 도시의 사는 값·파는 값이 이 수첩에 적힙니다.</div>'; return; }
     var rows = G.Ledger.table();
     var br = G.Ledger.bestRoute();
+    var fads = G.Fad ? G.Fad.list() : [];
     function cell(b) { return b ? U.num(b.price) + ' <small class="muted">' + G.CITY_DATA[b.city].name + (b.age > 60 ? ' · ' + b.age + '일 전' : '') + '</small>' : '<span class="muted">—</span>'; }
     var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:18px">들러 본 교역소 ' + G.Ledger.count() + '곳의 기록</b>' +
       (br ? '<span class="right good-text">가장 남는 장사: ' + G.CITY_DATA[br.buy].name + '의 ' + G.GOOD[br.good].name + ' → ' + G.CITY_DATA[br.sell].name + ' (1통 +' + U.num(br.gain) + ')</span>' : '') + '</div>' +
+      (fads.length ? '<div class="good-text" style="margin:-2px 0 10px;font-size:16px">' + G.icon('star') + ' 지금 유행: ' + fads.map(function (x) { return x.where + '의 <b>' + x.name + '</b> (값 ' + ((G.BALANCE.fad || {}).mult || 3) + '배 · ' + x.left + '일 남음)'; }).join(' · ') + '</div>' : '') +
       '<table class="tbl"><tr><th>교역품</th><th class="num">가장 싸게 사는 곳</th><th class="num">가장 비싸게 파는 곳</th><th class="num">1통 차익</th></tr>' +
       rows.map(function (r) {
         return '<tr><td>' + G.goodDot(r.id) + r.name + '</td><td class="num">' + cell(r.buy) + '</td><td class="num">' + cell(r.sell) + '</td><td class="num ' + (r.gain > 0 ? 'down' : '') + '">' + (r.gain != null ? (r.gain > 0 ? '+' : '') + U.num(r.gain) : '') + '</td></tr>';

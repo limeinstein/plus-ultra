@@ -82,7 +82,7 @@
     var st = [], ev = CI.event(c), chk = G.Scenes.city.entryCheck ? G.Scenes.city.entryCheck(c) : null;
     if (owner !== orig) st.push(owner + '의 손에 넘어감');
     if (fresh || visited) {
-      if (chk) st.push({ wanted: '수배 중이라 들어갈 수 없음', holy: '이교도 입항 금지', closed: '외국인 입항 금지', treaty: '조약으로 입항 금지' }[chk.reason] + (s.flags['pass' + c.id] ? ' (통행 허가 있음)' : ''));
+      if (chk) st.push({ wanted: '수배 중이라 들어갈 수 없음', holy: '이교도 입항 금지', islam: '이교도 출입 금지 — 잠입이나 교섭', closed: '외국인 입항 금지', treaty: '조약으로 입항 금지' }[chk.reason] + (s.flags['pass' + c.id] ? ' (예전 통행 허가는 기한이 지남)' : ''));   // 잠입 G.Sneak
     }
     if (fresh) {
       st.push(ev ? '시장 사건 「' + ev + '」 (앞으로 ' + Math.max(0, R.market(c.id).evEnd - s.day) + '일쯤)' : '평온');

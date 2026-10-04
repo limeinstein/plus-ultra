@@ -63,6 +63,8 @@
       layout: 'duo', side: 'right', partner: playerSpeaker(), emotion: 'neutral', lang: C.langLv(c), li: c.lang };
   };
   C.say = function (who, text) { return UI.say(text, who); };
+  /** 건물에 들어설 때의 인사: 작위가 있으면 유럽·이슬람 도시에서는 공손하게 (G.Court.hail), 아니면 lines에서 하나 */
+  C.hail = function (c, kind, lines) { return G.Court ? G.Court.hail(c, kind, lines) : U.pick(lines); };
   C.ask = function (who, text, choices, opts) {
     opts = opts || {};
     var o = { name: who && who.name, portrait: who && who.portrait, lang: opts.plain ? 3 : who && who.lang, li: opts.plain ? null : who && who.li, minLv: who && who.minLv, cancel: opts.cancel };
@@ -180,6 +182,7 @@
     if (news.length) await C.news(news);
     // 도시 발견물은 입항만으로는 찾지 못한다 — 건물(교역소·시장·교회·왕궁…)에 들어가 둘러봐야 눈에 띈다 (C.findInside)
     if (G.Animals) await G.Animals.town(c);             // 마을 사람이 이 고장에 사는 동물 이야기를 꺼낸다
+    if (G.Court) { try { await G.Court.arrival(c); } catch (e) { console.error(e); } }   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
     // contract reminder
@@ -413,10 +416,13 @@
   C.entryCheck = function (c) {
     var s = S(), own = R.cityOwner(c);
     if (s.player.notoriety >= 60 && R.isHomeNation(c)) return { reason: 'wanted', text: '너 같은 악당을 마을에 들여보낼 수는 없다!!' };
-    if (c.flags.indexOf('H') >= 0) return { reason: 'holy', text: '이교도는 이 성스러운 도시에 들어올 수 없다.' };
-    if (c.flags.indexOf('X') >= 0 && !(s.flags.mingTrade)) return { reason: 'closed', text: '외국인은 들어올 수 없다.', bribe: 2400 + c.size * 800 };
+    // 이슬람 성지·내륙·지중해 이슬람 도시는 이슬람 왕조가 다스리는 동안 이교도를 막는다 (js/systems/sneak.js G.Sneak)
+    var SN = G.Sneak, zone = SN ? SN.islamZone(c) : (c.flags.indexOf('H') >= 0 ? 'holy' : null), pass = SN ? SN.hasPass(c) : false;
+    if (zone === 'holy' && (!SN || SN.islamRuled(c, own))) return { reason: 'holy', text: '이교도는 이 성스러운 도시에 들어올 수 없다.' };
+    if (zone && zone !== 'holy' && SN.islamRuled(c, own) && !pass) return { reason: 'islam', zone: zone, text: zone === 'med' ? '이교도의 배는 이 항구에 들어올 수 없다. 돌아가라!' : '이교도는 이 성문을 지날 수 없다. 썩 물러가라!', bribe: 1200 + c.size * 600 };
+    if (c.flags.indexOf('X') >= 0 && !(s.flags.mingTrade) && !pass) return { reason: 'closed', text: '외국인은 들어올 수 없다.', bribe: 2400 + c.size * 800 };
     var d = s.date, tord = d.y > 1494 || (d.y === 1494 && d.m >= 6);
-    if (tord) {
+    if (tord && !pass) {
       var myPT = s.player.nation === 'PT';
       if (myPT && own === '카스티야' && c.region === 10) return { reason: 'treaty', text: '여기는 카스티야령이다. 토르데시야스 조약에 따라 포르투갈의 함대를 항구에 들여보낼 수 없다!', bribe: 1500 + c.size * 600 };
       if (!myPT && own === '포르투갈' && (c.region === 3 || c.region === 5 || c.region === 8 || c.region === 10)) return { reason: 'treaty', text: '여기는 포르투갈령이다. 토르데시야스 조약에 따라 에스파냐의 함대를 항구에 들여보낼 수 없다!', bribe: 1500 + c.size * 600 };
@@ -432,7 +438,8 @@
     for (;;) {
       var opts = [];
       if (chk.bribe) opts.push({ label: '교섭한다', value: 'talk' });
-      opts.push({ label: '잠입한다', value: 'sneak' });
+      var sch = G.Sneak ? G.Sneak.chance(c, chk.reason) : null;
+      opts.push({ label: '잠입한다' + (sch ? ' (가망 ' + Math.round(sch.p * 100) + '%' + (sch.dz ? ' · ' + G.ITEM[sch.dz].name : '') + ')' : ''), value: 'sneak' });
       if (chk.reason !== 'holy') opts.push({ label: '공격한다', value: 'attack' });
       opts.push({ label: '떠난다', value: 'leave' });
       var v = await C.mateAsk('제독, 어떻게 할까요?', opts);
@@ -446,17 +453,23 @@
         s.player.gold -= cost;
         if (U.chance(0.55 + R.skill('speech') * 0.12 + C.langLv(c) * 0.05)) {
           await C.mate('교섭에 성공했습니다. ' + c.name + '에 들어갈 수 있습니다.');
-          s.flags['pass' + c.id] = U.dateNum(s.date);
+          if (G.Sneak) { G.Sneak.givePass(c); await C.mate('통행 허가는 ' + ((G.BALANCE.sneak || {}).passDays || 365) + '일 동안 쓸 수 있습니다.'); } else s.flags['pass' + c.id] = U.dateNum(s.date);
           return true;
         }
         await C.mate('교섭에 실패했습니다... 돈만 날렸군요.'); continue;
       }
       if (v === 'sneak') {
-        var disguise = chk.reason === 'holy' && R.hasItem('turban');
-        var p = disguise ? 0.8 : 0.3 + R.skill('speech') * 0.05 + (C.langLv(c) >= 2 ? 0.15 : 0);
-        if (disguise) UI.toast('터번을 사용했다', 'feather');
-        if (U.chance(p)) { await C.mate('제독, 조심하십시오. 몰래 들어가는 데 성공했습니다.'); s.flags.sneaking = c.id; return true; }
+        // 잠입: 부관이 가망과 까닭(변장·말·화술·동료·악명)을 보여 주고, 성문에서 한 번 판정한다 (js/systems/sneak.js)
+        var ch = G.Sneak ? G.Sneak.chance(c, chk.reason) : { p: 0.3 + R.skill('speech') * 0.05 + (C.langLv(c) >= 2 ? 0.15 : 0), dz: null };
+        if (G.Sneak && !(await UI.confirm(G.Sneak.html(c, ch), '잠입한다', '그만둔다', '잠입 — ' + c.name))) continue;
+        if (ch.dz) UI.toast(G.ITEM[ch.dz].name + '으로 변장했다', 'feather');
+        if (U.chance(ch.p)) {
+          await C.mate(ch.dz === 'turban' ? '터번 덕분에 아무도 우리를 의심하지 않았습니다. 제독, 이교도라는 것이 드러나지 않게 조심하십시오.' : ch.dz === 'mingrobe' ? '명나라 옷 덕분에 관리들이 우리를 그 고장 상인으로 여겼습니다. 제독, 말을 아끼십시오.' : '제독, 조심하십시오. 몰래 들어가는 데 성공했습니다.');
+          s.flags.sneaking = c.id; return true;
+        }
         await UI.say('침입자다! 잡아라!!', guard);
+        var lost = G.Sneak ? G.Sneak.caught(c, ch) : null;
+        if (lost) await UI.say('이 수상한 ' + lost + U.jx(lost, '은/는') + ' 압수한다!\n(' + lost + U.jx(lost, '을/를') + ' 빼앗겼다)', guard);
         if (U.chance(0.5)) { await C.mate('제독, 무사하셨습니까! 여기는 위험하니 포기합시다.'); return false; }
         var fine = Math.floor(s.player.gold * 0.5);
         s.player.gold -= fine; s.player.notoriety += 3;

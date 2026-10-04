@@ -154,7 +154,7 @@
   Q.give_up = function (q) {
     var s = S(), i = list().indexOf(q);
     if (i >= 0) list().splice(i, 1);
-    s.player.fame = Math.max(0, s.player.fame - Math.round(q.fame * 1.5));
+    G.Fame.add(G.Fame.questCat(q.kind), -Math.round(q.fame * 1.5));
     if (!s.questDone) s.questDone = {};
     s.questDone[q.key] = 'fail';
     G.State.log('조합 의뢰를 포기했다 — ' + q.title);
@@ -174,7 +174,7 @@
         var i = list().indexOf(q); if (i >= 0) list().splice(i, 1);
         if (!s.questDone) s.questDone = {};
         s.questDone[q.key] = 'late';
-        s.player.fame = Math.max(0, s.player.fame - q.fame);
+        G.Fame.add(G.Fame.questCat(q.kind), -q.fame);
         out.push({ icon: 'hourglass', text: '조합 의뢰의 기한이 지났다 — ' + q.title });
         G.State.log('조합 의뢰 기한을 넘겼다 — ' + q.title);
       }

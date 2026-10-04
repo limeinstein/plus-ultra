@@ -50,6 +50,8 @@ ITEMS = [
     ("item-special.png", 4, 1, [
         "rapidgun", "shells", "divebomb", "dango",
     ]),
+    # 잠입 변장 도구 (2026-10-05, 임시 그림 — docs/art/sneak_items_order.md)
+    ("item-disguise.png", 1, 1, ["mingrobe"]),
 ]
 
 RELICS = [

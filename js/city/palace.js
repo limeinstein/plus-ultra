@@ -15,7 +15,7 @@
       var sp = B.sp(c, arg);
       if (!sp) {
         var guard = { name: '위병', portrait: G.Art.withImg(G.Art.npcSpec('pg' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
-        await C.say(guard, U.pick(['이곳의 주인께서는 지금 계시지 않다. 돌아가라.', '너 같은 녀석이 들어올 장소가 아니다! 꺼지지 못할까!']));
+        await C.say(guard, G.Court ? G.Court.hail(c, 'guard', ['이곳의 주인께서는 지금 계시지 않다. 돌아가라.', '너 같은 녀석이 들어올 장소가 아니다! 꺼지지 못할까!']) : U.pick(['이곳의 주인께서는 지금 계시지 않다. 돌아가라.', '너 같은 녀석이 들어올 장소가 아니다! 꺼지지 못할까!']));
         return false;
       }
       var ok = await SP.audience(sp);
@@ -27,6 +27,8 @@
           SP.holderName(sp) + '일세. 선대와 자네 사이의 일은 들었네. 하지만 믿음은 새로 쌓아야 하는 법이지.'])
         : first ? SP.holderName(sp) + '일세. 자네가 요즘 소문난 항해자인가? 무슨 일로 왔나?' : U.pick(['오오, ' + s.player.name + ', 잘 왔네.', '무슨 일인가, ' + s.player.name + '?', '자네로군. 이번에는 무슨 이야기를 가져왔나?']);
       await C.say(who, greet);
+      // 국왕의 부름·명예 작위: 군주가 먼저 왕명 이야기를 꺼낸다 (js/systems/court.js)
+      if (G.Court) { try { await G.Court.onEnter(sp); } catch (e) { console.error(e); } }
       return true;
     };
     B.sub = function (c, arg) { var sp = B.sp(c, arg); return sp ? SP.holderName(sp) + ' · ' + sp.title + ' (세력 ' + G.POWER_NAME[sp.pw] + ')' : ''; };
@@ -38,7 +40,7 @@
         { label: '모험 제안', icon: 'scroll', dim: !!k, onClick: function () { return SP.propose(sp); } },
         { label: '보고', icon: 'seal', sub: mine ? (G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') : '계약 중') : '', dim: !mine, onClick: function () { return SP.report(sp); } },
         { label: '이야기', icon: 'people', onClick: function () { return chat(sp); } }
-      ];
+      ].concat(G.Court ? G.Court.palaceItems(sp) : []);   // 왕명·친서·특사
     };
     return B;
   }

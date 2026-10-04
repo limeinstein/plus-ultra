@@ -9,8 +9,8 @@
     homeArt: { w: 900, h: 520, top: 78 },
     // 자택 화면에 서 있는 가족 (homelife.js familyPanel): 어른 키 h, 설 자리(왼쪽·아래·너비), 옆 사람과 겹치는 비율
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
-    // 기함 선실 화면 (js/ui/cabinview.js): 그림 너비, 방 한 칸의 너비·높이·틈, 위 갑판 방의 윗자리
-    cabinView: { w: 1000, tw: 130, th: 82, gap: 6, top: 112 },
+    // 기함 선실 화면 (js/ui/cabinview.js): 무대(배 그림) 크기, 오른쪽 명단 폭, 선체 속 선실 표·갑판 얼굴표 크기, 배 그림을 자르는 여백, 카드 최대 폭, 명단 높이
+    cabinView: { stageW: 920, stageH: 314, side: 300, pin: 38, pinMin: 24, medal: 54, pad: 70, minSpan: 560, below: 40, cardMax: 180, rosterH: 280 },
     // 낚시 배경의 수면 위치. 그림을 화면의 실제 찌 높이에 맞춰 나누어 그린다.
     minigames: { fishingWaterline: 0.365, boat: [0, -118, 218, 145] },
     // 유적·자연 경관·동물·보물 발견 연출 (js/scenes/common.js SC.discoveryReveal): 화면이 어두워지고 GIF가 빛난 뒤 마지막 장면에서 멈춘다

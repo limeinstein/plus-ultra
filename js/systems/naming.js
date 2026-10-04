@@ -109,7 +109,7 @@
     if (v === '_custom') { v = await UI.prompt(d.name + '의 이름 (' + kind + ')', nm.hist, 14); }
     v = String(v || nm.hist).trim() || nm.hist;
     names()[d.id] = v; (s.nameBy || (s.nameBy = {}))[d.id] = 'me';
-    var fame = N.fameFor(d); s.player.fame += fame;
+    var fame = N.fameFor(d); G.Fame.add('ex', fame);
     var old = d.name; N.apply();
     G.State.log('「' + old + '」에 「' + v + '」' + U.jx(v, '이라는/라는') + ' 이름을 붙였다. (명성 +' + fame + ')');
     await UI.say('이제부터 이곳은 「' + v + '」' + U.jx(v, '이다/다') + '! 해도에 이 이름을 적어 넣어라!\n\n(명성 +' + fame + ' — 보고하면 왕실이 이름을 공인하고 하사금을 내립니다)', G.Scenes.mateSpeaker('first'));
@@ -131,7 +131,7 @@
     if (by === 'me' && st && !st.nameGrant) {
       st.nameGrant = true;
       var gold = N.goldFor(d), fame = 100 + d.pw * 50, king = s.player.nation === 'ES' ? '에스파냐 왕실' : '포르투갈 왕실';
-      s.player.gold += gold; s.player.fame += fame;
+      s.player.gold += gold; G.Fame.add('ex', fame);
       G.State.log(king + '이 「' + d.name + '」의 이름을 공인했다. (하사금 ' + gold + '닢, 명성 +' + fame + ')');
       await UI.alert(king + '이 제독이 붙인 이름 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 공인했습니다. 이제 온 세상의 지도에 이 이름이 적힙니다.<br><br>명명 하사금 금화 <b>' + U.num(gold) + '</b>닢 · 명성 +' + fame, '이름의 공인');
     }
@@ -154,7 +154,7 @@
     v = String(v || p + '아').trim() || p + '아';
     names().continent = v; (s.nameBy || (s.nameBy = {})).continent = 'me';
     var gold = 30000, fame = 800;
-    s.player.gold += gold; s.player.fame += fame;
+    s.player.gold += gold; G.Fame.add('ex', fame);
     N.apply();
     G.State.log('새 대륙에 「' + v + '」' + U.jx(v, '이라는/라는') + ' 이름을 붙였다. (하사금 ' + gold + '닢, 명성 +' + fame + ')');
     await UI.alert('세상 사람들이 새 대륙을 「<b>' + U.esc(v) + '</b>」' + U.jx(v, '이라고/라고') + ' 부르기 시작했습니다.<br>지도 제작자들이 앞다투어 이 이름을 새겨 넣습니다.<br><br>하사금 금화 <b>' + U.num(gold) + '</b>닢 · 명성 +' + fame, '대륙의 이름');

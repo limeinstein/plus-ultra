@@ -19,7 +19,7 @@
     cur.haggle = mk0.hag && mk0.hag.day === R.S().day ? mk0.hag.h : null;
     if (G.Ledger) G.Ledger.record(c);
     var lv = C.langLv(c);
-    await C.say(keeper(), lv === 0 ? '어서 오게. 무엇을 찾나?' : U.pick(['어서 오게. 좋은 물건이 들어와 있다네.', '어서 오게! 오늘은 무엇을 사겠나?', '팔 물건이 있으면 보여 주게.']));
+    await C.say(keeper(), lv === 0 ? '어서 오게. 무엇을 찾나?' : C.hail(c, 'trade', ['어서 오게. 좋은 물건이 들어와 있다네.', '어서 오게! 오늘은 무엇을 사겠나?', '팔 물건이 있으면 보여 주게.']));
   };
   T.sub = function (c) { var m = R.market(c.id); return m.ev ? '시세: ' + m.ev : '물건을 사고팝니다'; };
   T.menu = function (c) {
@@ -32,7 +32,7 @@
       { label: '투자', icon: 'seal', sub: lv ? '출자 ' + lv + '등급' + (div >= 1 ? ' · 배당 ' + U.num(div) + '닢' : '') : '', onClick: function () { return T.invest(c); } },
       { label: '회화', icon: 'people', onClick: function () { return T.talk(c); } },
       { label: '시세', icon: 'chart', sub: R.market(c.id).ev ? R.market(c.id).ev : '품목 갈래별 값', onClick: function () { return T.quotes(c); } },
-      { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : R.purser() ? '경리 ' + R.purser().name : '', dim: !!h, onClick: function () { return T.haggle(c); } },
+      { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : R.purser() ? '경리 ' + R.purser().name : G.Court && G.Court.haggle(c) ? '귀족의 권한' : '', dim: !!h, onClick: function () { return T.haggle(c); } },
       debts.length ? { label: '빚을 받으러 간다', icon: 'scroll', sub: debts[0].who, onClick: function () { return T.debt(c, debts[0]); } } : null
     ];
   };
@@ -45,9 +45,11 @@
   }
   function hag() { var cur = C.current(); return cur && cur.haggle && cur.haggle.ok && cur.haggle.buy ? cur.haggle : null; }   // 값 깎기에 성공했을 때만
   // 값 깎기는 사는 값을 올리거나 파는 값을 내리는 일이 없다 (예전: 실패 벌칙 ×1.03이 「후려쳤더니 값이 오른」 것처럼 보였다)
-  function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(); return h ? Math.max(1, Math.round(p * Math.min(1, h.buy))) : p; }
+  function duty(c) { return G.Court ? G.Court.duty(c) : 0; }   // 면세증: 그 나라 항구에서 관세만큼 싸게 사고 비싸게 판다 (js/systems/court.js)
+  function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(), d = duty(c); if (d) p = Math.max(1, Math.round(p * (1 - d))); return h ? Math.max(1, Math.round(p * Math.min(1, h.buy))) : p; }
   // 파는 값 웃돈은 이 도시가 팔지 않는 물건(들여온 물건)에만 — 깎아서 산 그 자리 물건을 웃돈 받고 되팔아 남기던 것을 막는다
-  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(); p = h && !R.sells(c, id) ? Math.round(p * Math.max(1, h.sell)) : p;
+  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(), d = duty(c); p = h && !R.sells(c, id) ? Math.round(p * Math.max(1, h.sell)) : p;
+    if (d && !R.sells(c, id)) p = Math.round(p * (1 + d));
     var cg = S().fleet.cargo[id]; if (G.Cargo && cg) p = Math.max(1, Math.round(p * G.Cargo.fresh(id, cg)));   // 오래 묵은 먹을거리·향신료는 값이 떨어진다
     return p; }
   function keepHag(c, h) { R.market(c.id).hag = { day: R.S().day, h: h }; return h; }
@@ -68,7 +70,8 @@
       var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, Math.floor(R.freeVol())) + '</b>통' + (G.Cargo ? ' · 무게 여유 <b>' + Math.max(0, Math.floor(G.Cargo.wfree())) + '</b>' : '') + ' · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
         '<table class="tbl"><tr><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table>' +
         '<div class="muted" style="margin-top:6px;font-size:14px">매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다.' + (R.cityGoods(c).some(function (id) { return R.isRelay(c, id); }) ? ' 「중계」는 이 항구가 먼 산지에서 들여온 물건이라 산지보다 비쌉니다.' : '') + '</div>' +
-        (hag() ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 ' + Math.round((1 - hag().buy) * 100) + '% 싸게 살 수 있습니다.</div>' : '');
+        (hag() ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 ' + Math.round((1 - hag().buy) * 100) + '% 싸게 살 수 있습니다.</div>' : '') +
+        (duty(c) ? '<div class="good-text" style="margin-top:6px">면세증 — 관세 없이 ' + Math.round(duty(c) * 100) + '% 싸게 삽니다. 들여온 물건은 ' + Math.round(duty(c) * 100) + '% 비싸게 팝니다.</div>' : '');
       var picked = null;
       var win = UI.window({ title: '구입 — ' + c.name, icon: 'coin', width: 1040, html: html, buttons: [{ label: '돌아간다', value: null }],
         onBuild: function (el, w) { U.$$('tr.click', el).forEach(function (tr) { tr.onclick = function () { picked = tr.dataset.id; w.close('pick'); }; }); } });
@@ -118,7 +121,7 @@
         if (G.Cargo) spoil = null;   // 보관은 G.Cargo.state (값이 떨어지는 날·상함)
         var bs = G.Ledger ? G.Ledger.bestSell(id, c.id) : null;
         var better = bs && bs.price > p * 1.08;
-        return '<tr class="click" data-id="' + id + '"><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + (spoil != null && spoil < 30 ? ' <span class="warn-text" style="font-size:14px">(' + spoil + '일 후 상함)</span>' : '') + (fs && fs.text ? ' <span class="' + (fs.f < 1 ? 'warn-text' : 'muted') + '" style="font-size:14px" title="산 지 ' + fs.age + '일 · 신선하게 파는 기간 ' + fs.keep + '일">(' + fs.text + ')</span>' : '') + '</td><td class="num">' + cg.q + '</td><td class="num">' + U.num(cg.cost) + '</td><td class="num"><b>' + U.num(p) + '</b></td><td class="num ' + (pr >= 0 ? 'down' : 'up') + '">' + (pr >= 0 ? '+' : '') + Math.round(pr * 100) + '%</td>' +
+        return '<tr class="click" data-id="' + id + '"><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="이 나라·지역에서 유행하는 물건 — 값이 뛰었다">유행 · ' + (G.Fad.at(c, id).until - s.day) + '일</span>' : '') + (spoil != null && spoil < 30 ? ' <span class="warn-text" style="font-size:14px">(' + spoil + '일 후 상함)</span>' : '') + (fs && fs.text ? ' <span class="' + (fs.f < 1 ? 'warn-text' : 'muted') + '" style="font-size:14px" title="산 지 ' + fs.age + '일 · 신선하게 파는 기간 ' + fs.keep + '일">(' + fs.text + ')</span>' : '') + '</td><td class="num">' + cg.q + '</td><td class="num">' + U.num(cg.cost) + '</td><td class="num"><b>' + U.num(p) + '</b></td><td class="num ' + (pr >= 0 ? 'down' : 'up') + '">' + (pr >= 0 ? '+' : '') + Math.round(pr * 100) + '%</td>' +
           '<td class="num' + (better ? ' warn-text' : '') + '">' + (bs ? where(bs) : '<span class="muted">—</span>') + '</td></tr>';
       }).join('');
       var html = '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th class="num">여기 시세</th><th class="num">이익</th><th class="num">다른 곳 최고가</th></tr>' + rows + '</table>' +
@@ -156,8 +159,11 @@
     while (left > 0) { var n = Math.min(chunk, left); total += sellP(c, id) * n; R.onSell(c, id, n); left -= n; }
     var profit = total - cg.cost * q;
     s.player.gold += total; s.stats.profit += profit; s.stats.trades++;
+    // 유행: 같은 물건을 같은 나라·지역에 거듭 팔아 큰 이익을 냈다 (js/systems/fad.js)
+    var fad = G.Fad ? G.Fad.sold(c, id, q, total, cg.cost) : null;
+    if (fad) { var fb = (G.BALANCE.fad || {}); UI.toast(G.Fad.where(fad) + '에서 ' + G.GOOD[id].name + U.jx(G.GOOD[id].name, '이/가') + ' 유행을 탔다! ' + (fb.days || 60) + '일 동안 값이 ' + (fb.mult || 3) + '배로 뛴다.', 'star', 7000); }
     if (G.Hostile) G.Hostile.trade(c, total);
-    if (profit > 0) s.player.fame += Math.floor(profit / 2500);
+    if (profit > 0) G.Fame.add('tr', Math.floor(profit / 2500));
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
     G.Game.refreshHud();
     return total;
@@ -171,6 +177,11 @@
     var m = R.market(c.id);
     var lines = [];
     if (m.ev) lines.push('요즘 이 마을은 ' + U.j(m.ev, '이라/라') + ' 물건 값이 들쭉날쭉하다네.');
+    if (G.Fad) {
+      var fads = G.Fad.list().filter(function (x) { return G.Fad.at(c, x.g) === x.f; });
+      if (fads.length) lines.push('요즘 이 고장에서는 ' + fads.map(function (x) { return x.name; }).join('·') + U.jx(fads[fads.length - 1].name, '이/가') + ' 없어서 못 판다네. 누가 자꾸 들여와 팔더니 유행이 됐지. 한 ' + fads[0].left + '일은 더 갈 걸세.');
+      else lines.push('같은 물건을 한 나라에 거듭 들여와 큰 이문을 남기면, 그 물건이 유행을 타서 값이 몇 배로 뛰는 일이 있다네. 석 달 안에 세 번쯤이면 소문이 나지.');
+    }
     // a trade tip: something sold here that fetches a good price in a known city
     var best = null;
     c.goods.forEach(function (id) {
@@ -240,7 +251,7 @@
       var before = lv;
       s.player.gold -= n; iv.amt += n;
       var after = R.investLv(c.id);
-      var ifame = n / 4000; s.player.fame += Math.floor(ifame) + (U.chance(ifame % 1) ? 1 : 0);   // 잘게 나눠 넣어도 같은 명성 (예전에는 1,000닢씩 넣으면 4배)
+      var ifame = n / 4000; G.Fame.add('tr', Math.floor(ifame) + (U.chance(ifame % 1) ? 1 : 0));   // 잘게 나눠 넣어도 같은 명성 (예전에는 1,000닢씩 넣으면 4배)
       R.S().stats.invested = (R.S().stats.invested || 0) + n;
       G.State.log(c.name + ' 교역소에 금화 ' + U.num(n) + '닢을 출자했다.');
       if (after > before) {
@@ -328,7 +339,10 @@
     var acct = R.skill('acct'), lv = C.langLv(c), cha = R.stat('cha'), pu = R.purser();
     var p = 0.25 + acct * 0.17 + (lv - 1) * 0.08 + (cha - 50) * 0.004 + (pu ? 0.12 + pu.acct * 0.05 : 0) + (G.Cabins ? G.Cabins.fx('account', 'haggle') : 0);
     var disc = 0.04 + acct * 0.03 + (pu ? 0.02 + pu.acct * 0.015 : 0);
-    return { p: U.clamp(p, 0.08, pu ? 0.95 : 0.92), disc: disc, pu: pu };
+    // 귀족의 권한: 작위가 있으면 유럽·이슬람 도시에서 더 잘, 더 많이 깎인다 (js/systems/court.js)
+    var nb = G.Court ? G.Court.haggle(c) : null;
+    if (nb) { p += nb.p; disc += nb.disc; }
+    return { p: U.clamp(p, 0.08, pu || nb ? 0.95 : 0.92), disc: disc, pu: pu, noble: nb };
   };
   T.haggle = async function (c) {
     var cur = C.current(), k = keeper();
@@ -349,10 +363,10 @@
       }
     }
     if (ok) {
-      var disc = Math.min(0.25, o.disc + U.rf(0, 0.04));
+      var disc = Math.min(0.25 + (o.noble ? o.noble.disc : 0), o.disc + U.rf(0, 0.04));
       cur.haggle = keepHag(c, { ok: true, buy: 1 - disc, sell: 1 + disc * (pu ? 0.7 : 0.6) });
-      await C.say(k, U.pick(pu ? ['자네 경리는 무서운 사람이군… 알았네, 그 값에 주지.', '장부까지 들이밀다니! 좋아, 이번만일세.'] : ['허허, 자네한테는 못 당하겠군. 좋아, 특별히 싸게 해 주지.', '자네, 보는 눈이 있군. 득 보는 걸세.', '알았네, 알았어. 이번만일세.']));
-      UI.toast('값 깎기 성공' + (pu ? '(경리 ' + pu.name + ')' : '') + '! 사는 값 -' + Math.round(disc * 100) + '%, 들여온 물건 파는 값 +' + Math.round(disc * (pu ? 70 : 60)) + '%', 'scales');
+      await C.say(k, o.noble && !pu ? U.pick([o.noble.adr + '의 청을 어찌 물리치겠습니까. 특별히 그 값에 드리지요.', o.noble.adr + '께서 찾아 주신 것만도 영광입니다. 값은 넉넉히 빼 드리겠습니다.']) : U.pick(pu ? ['자네 경리는 무서운 사람이군… 알았네, 그 값에 주지.', '장부까지 들이밀다니! 좋아, 이번만일세.'] : ['허허, 자네한테는 못 당하겠군. 좋아, 특별히 싸게 해 주지.', '자네, 보는 눈이 있군. 득 보는 걸세.', '알았네, 알았어. 이번만일세.']));
+      UI.toast('값 깎기 성공' + (pu ? '(경리 ' + pu.name + ')' : '') + (o.noble ? '(귀족의 권한 — ' + o.noble.title.ko + ')' : '') + '! 사는 값 -' + Math.round(disc * 100) + '%, 들여온 물건 파는 값 +' + Math.round(disc * (pu ? 70 : 60)) + '%', 'scales');
     } else if (!cur.haggle) {
       cur.haggle = keepHag(c, { ok: false });
       await C.say(k, U.pick(['어림없는 소리! 이 값도 밑지고 파는 걸세.', '싫으면 다른 데 가 보게.', '값을 깎으려거든 장사를 좀 더 배우고 오게.']));

@@ -405,7 +405,7 @@
           await UI.say(d.hint + '\n\n— 이 사람이 먼저 닿으면 「' + d.name + '」의 이름은 그의 것이 된다. (' + (d.rival[0] + SF.delay(ex)) + '년 ' + d.rival[1] + '월 무렵 발표)', G.Scenes.mateSpeaker('first'));
           if (G.Disc.addHint(d.id, 'rival')) UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll', 4200);
         }
-        s.player.fame += 5;
+        G.Fame.add('so', 5);
       }
       return;
     }

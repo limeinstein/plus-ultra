@@ -22,8 +22,8 @@
     return st;
   };
   /** 딸 그림 폴더: 어머니의 고장 — 여급 그림 묶음과 같은 이름(images/maid-styles/<고장>, I.maidStyle). '' = 기본 */
-  HL.region = function () {
-    var p = S().player, w = p.wife, I = G.Img;
+  HL.region = function (k) {
+    var p = S().player, w = (k && k.mother) || p.wife, I = G.Img;     // 둘째 부인의 아이는 그 어머니의 고장 (wives.js)
     try {
       if (w && G.MAID[w]) return I.maidStyle(w, G.CITY_DATA[G.MAID[w].city]) || '';
       if (w && G.MATE[w]) { var pool = I.MAID_POOL[(G.Art.mateSpec(w) || {}).style]; return (pool && pool[0]) || ''; }
@@ -31,7 +31,7 @@
     return '';
   };
   /** 아이 그림 폴더: 딸은 어머니의 고장, 아들은 아버지(제독)의 생김새 (images/portraits/family/<폴더>/) */
-  HL.folder = function (k) { return k.sex === 'f' ? HL.region() : (G.Img.heroLook ? G.Img.heroLook() : ''); };
+  HL.folder = function (k) { return k.sex === 'f' ? HL.region(k) : (G.Img.heroLook ? G.Img.heroLook() : ''); };
   function order(k) {
     var same = (S().player.kids || []).filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); });
     return Math.max(1, same.indexOf(k) + 1);
@@ -47,7 +47,7 @@
   };
   /** 집에 있는 아이들 (이름이 있고, 세 살부터, 견습으로 나가 있지 않은) */
   HL.kidsHome = function () {
-    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && F().kidAge(k) >= 3; });
+    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && F().kidAge(k) >= 3; });
   };
 
   // ---------------------------------------------------------------- 집 안에 서 있는 가족
@@ -55,7 +55,7 @@
   HL.family = function () {
     var s = S(), p = s.player, out = [], Fm = F();
     if (!p.wife) return out;
-    var ws = Fm.wifeSpeaker(), babies = (p.kids || []).filter(function (k) { return !k.aboard && Fm.kidAge(k) < 3; });
+    var ws = Fm.wifeSpeaker(), babies = (p.kids || []).filter(function (k) { return !k.aboard && k.house == null && Fm.kidAge(k) < 3; });
     var wchain = ws.half || [];
     if (!wchain.length && ws.portrait && G.Art.portraitKeys) { try { wchain = G.Img.chain.halfFor(G.Art.portraitKeys(ws.portrait)); } catch (e) { wchain = []; } }
     out.push({ who: 'wife', name: Fm.wifeName(), sub: babies.length ? babies.map(function (k, i) { var nm = Fm.kidName(k); return i === babies.length - 1 ? U.j(nm, '을/를') : nm; }).join('·') + ' 안고 있다' : (p.preg && p.preg.told ? '아기를 기다리는 중' : '아내'), chain: wchain, portrait: ws.portrait, scale: 1 });
@@ -65,8 +65,8 @@
     return out;
   };
   /** 자택 메뉴 화면의 가족 (misc.js HM.panel): 아내와 아이들이 방 안에 서 있다. 누르면 그 사람과 이야기한다 */
-  HL.familyPanel = function () {
-    var list = HL.family(); if (!list.length) return null;
+  HL.familyPanel = function (list0) {
+    var list = list0 || HL.family(); if (!list.length) return null;     // list0: 다른 집의 사람들 (둘째 부인의 집 — wives.js)
     var fx = (G.FX && G.FX.homeFamily) || { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 };
     var el = U.el('div', 'home-family');
     el.style.cssText = 'left:' + fx.left + 'px;bottom:' + fx.bottom + 'px;width:' + fx.width + 'px;height:' + fx.h + 'px';
@@ -89,7 +89,7 @@
       one.title = f.who === 'wife' ? '아내와 이야기한다' : f.name + U.jx(f.name, '과/와') + ' 시간을 보낸다';
       one.onclick = function () {
         var C = G.Scenes.city;
-        C.run(function () { return f.who === 'wife' ? F().talk() : HL.kidMenu(f.k); });
+        C.run(function () { return f.onClick ? f.onClick() : f.who === 'wife' ? F().talk() : HL.kidMenu(f.k); });
       };
       el.appendChild(one);
     });

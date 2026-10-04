@@ -78,7 +78,7 @@
   };
   function hpWith(t, wid) { return Math.round(t.hp * (G.TIMBER[wid] ? G.TIMBER[wid].hp : 1)); }
 
-  Y.enter = async function (c) { await C.say(keeper(), U.pick(['어서 오게. 배가 필요한가?', '우리 조선소의 배는 튼튼하기로 소문났지.', '수리할 배가 있으면 맡겨 주게.'])); };
+  Y.enter = async function (c) { await C.say(keeper(), C.hail(c, 'shipyard', ['어서 오게. 배가 필요한가?', '우리 조선소의 배는 튼튼하기로 소문났지.', '수리할 배가 있으면 맡겨 주게.'])); };
   Y.sub = function () { return '배를 사고팔고 고칩니다'; };
   Y.menu = function (c) {
     var dmg = S().fleet.ships.some(function (s) { return s.hp < s.maxHp; });
@@ -166,7 +166,7 @@
     if (!n) return;
     var amt = n * 1000; s.player.gold -= amt;
     var up = SHp.techInvest(c, amt);
-    s.player.fame += Math.round(amt / 2000);
+    G.Fame.add('tr', Math.round(amt / 2000));
     if (up > 0) {
       var now = SHp.tech(c), opened = Y.types(c).filter(function (id) { var lv = G.SHIP[id].lv; return lv > tech && lv <= now; }).map(function (id) { return G.SHIP[id].name; });
       G.State.log(c.name + ' 조선소에 금화 ' + U.num(amt) + '닢을 투자했다. 조선 기술 ' + now + '등급.');

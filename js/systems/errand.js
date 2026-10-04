@@ -160,7 +160,7 @@
     if (late) { reward = Math.round(reward * 0.5); fame = Math.round(fame * 0.7); }
     if (butler) await UI.say((t.kind === 'survey' ? '해도는 틀림없이 주인께 올리겠습니다.' : t.kind === 'procure' ? '물건은 틀림없이 받았습니다.' : '소문이 사실이었다니, 주인께서 기뻐하시겠군요.') + '\f주인께서 약속하신 금화 ' + U.num(reward) + '닢입니다. 당신의 이름은 주인께 말씀드려 두지요.', via);
     else await UI.say((t.kind === 'survey' ? '오오, 이 해도는 아주 쓸 만하군! 바다 사람들이 고마워할 걸세.' : t.kind === 'procure' ? '틀림없이 받았네. 이 물건이 꼭 필요했지.' : '소문이 사실이었군! 자네 덕분에 확실히 알게 되었네.') + '\f약속한 금화 ' + U.num(reward) + '닢일세. 다음에는 더 큰 일을 맡겨 봄 직하군.', via);
-    s.player.gold += reward; s.player.fame += fame;
+    s.player.gold += reward; G.Fame.add(t.kind === 'procure' ? 'tr' : 'ex', fame);
     G.Sponsor.addTrust(rel, 8); rel.done = (rel.done || 0) + 1;
     G.State.log(G.Sponsor.holderName(sp) + '에게 「' + E.name(k) + '」' + U.jx(E.name(k), '을/를') + ' 보고했다. (보수 ' + reward + '닢, 명성 +' + fame + ')');
     s.contract = null;

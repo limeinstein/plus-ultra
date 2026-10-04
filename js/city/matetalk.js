@@ -77,7 +77,8 @@
       var bio = G.Bio && G.Bio.find(d.name);
       var opts = [{ label: '요즘 어떤가', value: 'chat' }, { label: '살아온 이야기', value: 'life' }, { label: '한잔 산다', value: 'drink' }];
       if (d.witch) opts.push({ label: '점괘를 본다', value: 'fortune' });
-      if (f) opts.push({ label: '선물한다', value: 'gift' }, { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
+      var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
+      if (f) opts.push({ label: '선물한다', value: 'gift' }, w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
       var v = await ask(d.name + ' — 충성 ' + Math.round(m.loyal || 70) + (f ? ' · 호감 ' + heart(m.aff) : ''), opts);
       if (!v) return;
@@ -121,9 +122,16 @@
         gainAff(G.ITEM[it.id].gv + R.skill('craft'));
         m.loyal = Math.min(100, (m.loyal || 70) + 2);
         await say(U.pick(['어머, 이걸 저에게요? 소중히 할게요.', '배 위에서 이런 선물을 받을 줄은 몰랐어요. 고마워요.']), 'happy');
+      } else if (v === 'w2home') {
+        var wv = G.Wives.of(d.id), here = s.loc.mode === 'city' && s.loc.city === wv.city;
+        var okH = await UI.confirm(d.name + U.jx(d.name, '을/를') + ' ' + G.CITY_DATA[wv.city].name + '의 집으로 보낼까요?<br><small class="muted">' + (here ? '여기서 배에서 내려 그 집에서 삽니다.' : '혼자 먼저 가서 그 집에서 기다립니다.') + ' 그 집에서 다시 배에 태울 수 있습니다.</small>', '보낸다', '그만둔다');
+        if (!okH) continue;
+        await say(here ? '집에서 기다릴게요. 자주 들러요.' : '먼저 가 있을게요. 꼭 들러요, 당신.', 'warm');
+        G.Wives.settle(wv, !here);
+        return;
       } else if (v === 'wed') {
         if (!R.hasItem('ring')) { UI.toast('청혼하려면 약속 반지가 필요합니다.', 'ring'); continue; }
-        if (s.player.wife) { UI.toast('이미 결혼했습니다.', 'ring'); continue; }
+        if (s.player.wife) { if (G.Wives) { if (await G.Wives.proposeMate(d, m, say)) return; continue; } UI.toast('이미 결혼했습니다.', 'ring'); continue; }   // 본처가 있으면 둘째 부인으로
         var ok = await UI.confirm(d.name + '에게 청혼하겠습니까?<br><small>결혼하면 부하에서 물러나 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리게 됩니다.</small>', '청혼한다', '그만둔다');
         if (!ok) continue;
         R.removeItem('ring');

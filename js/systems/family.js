@@ -119,7 +119,8 @@
             out.push({ icon: 'star', text: '견습 ' + k.name + U.jx(k.name, '이/가') + ' 선원들 틈에서 ' + nm + U.jx(nm, '을/를') + ' 익혔다. (' + nm + ' ' + k.sk[sk] + ')' });
           }
         }
-      } else if (!home && age >= 3) F.addBond(k, -(c.bondAway || 1));    // 집을 비운 달
+      } else if (k.house === -1) { /* 본국으로 가는 배 위 — 아버지 곁 */ }
+      else if (!(k.house != null ? (s.loc.mode === 'city' && s.loc.city === k.house) : home) && age >= 3) F.addBond(k, -(c.bondAway || 1));    // 집을 비운 달 (둘째 부인의 아이는 그 집)
     });
     return out;
   };
@@ -154,7 +155,7 @@
     if (!p.wife) return;
     var w = F.wifeSpeaker();
     // 갓 태어난 아기: 해산 장면(곁에 있었으면) 또는 첫 만남
-    var fresh = p.kids.filter(function (k) { return k.unnamed && !k.met; });
+    var fresh = p.kids.filter(function (k) { return k.unnamed && !k.met && k.house == null; });   // 둘째 부인의 집 아이(k.house)는 그 집에서 (wives.js)
     if (fresh.length) {
       if (fresh.some(function (k) { return k.witness; })) await birthScene(fresh); else await firstMeet(fresh);
       fresh.forEach(function (k) { k.met = true; });
@@ -162,11 +163,11 @@
     // 집에 들르면 아이들과 가까워진다 (보름에 한 번)
     if (p.lastHomeBond == null || s.day - p.lastHomeBond >= 15) {
       p.lastHomeBond = s.day;
-      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard) F.addBond(k, c.bondVisit || 3); });
+      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard && k.house == null) F.addBond(k, c.bondVisit || 3); });
     }
     // 이름 없는 아기
     for (var i = 0; i < p.kids.length; i++) {
-      var k = p.kids[i]; if (!k.unnamed) continue;
+      var k = p.kids[i]; if (!k.unnamed || k.house != null) continue;
       await UI.say(U.pick(['당신, 우리 아기 좀 봐요. 당신을 꼭 닮았어요.', '이 아이가 당신을 기다렸어요. 이름을 지어 주세요.']), w);
       var pool = U.shuffle(F.names(k.sex).filter(function (n) { return !p.kids.some(function (o) { return o.name === n; }) && n !== p.name; })).slice(0, 4);
       var v = await UI.choose((k.sex === 'f' ? '딸' : '아들') + '의 이름', pool.map(function (n) { return { label: n, value: n, icon: 'heart' }; }).concat([{ label: '직접 짓는다', value: '_', icon: 'scroll' }]), { width: 420, cancel: false });
@@ -183,7 +184,7 @@
       G.State.log('아내가 아이를 가졌다.');
     }
     // 아이가 생긴다
-    var today = s.day, kidsN = p.kids.length + (p.preg ? 1 : 0), wm = F.wifeMate();
+    var today = s.day, kidsN = G.Wives ? G.Wives.kidTotal() : p.kids.length + (p.preg ? 1 : 0), wm = F.wifeMate();   // 아이는 둘째 부인의 아이까지 모두 합쳐 5명
     var tooOld = wm && (wm.old || (wm.bornY && s.date.y - wm.bornY > 45));   // 늙은 마녀·나이 든 아내
     if (!p.preg && !tooOld && kidsN < (c.maxKids || 5) && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
         (p.tryDay == null || today - p.tryDay >= (rest ? 3 : 20))) {
@@ -201,7 +202,7 @@
     if (low) await UI.say(low.name + U.jx(low.name, '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.', w);
     for (var i = 0; i < p.kids.length; i++) {
       var k = p.kids[i], age = F.kidAge(k), b; if (!k.st) k.st = inborn(); if (!k.edu) k.edu = {};
-      if (k.unnamed) continue;
+      if (k.unnamed || k.house != null) continue;          // 둘째 부인의 집에 사는 아이는 그 집에서 만난다
       b = F.bond(k);
       var sp = G.HomeLife ? G.HomeLife.speaker(k, true) : { name: k.name + ' (' + age + '세 · ' + F.bondWord(k) + ')', portrait: F.kidSpec(k), lang: 3 };
       if (k.aboard) {
@@ -289,7 +290,8 @@
     if (U.chance(0.3)) { var k = U.pick(kids); await UI.say(U.pick(['앗, 아버지! 지금 여관 아주머니가 과자 주셨어요.', '아버지는 이 여관에 머문 적 있어요?']), G.HomeLife ? G.HomeLife.speaker(k) : { name: k.name, portrait: F.kidSpec(k), lang: 3 }); }
   };
 
-  F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && F.kidAge(k) >= ad; }); };
+  /** 뒤를 이을 수 있는 아이: 어른이 된 아들 (딸은 뒤를 잇지 않는다) */
+  F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && k.sex !== 'f' && F.kidAge(k) >= ad; }); };
 
   F.retire = async function (forced) {
     var s = S(), p = s.player;
@@ -305,12 +307,12 @@
       if (sp0 && G.Sponsor) { var r0 = G.Sponsor.rel(sp0.id); r0.fail = (r0.fail || 0) + 1; r0.trust = Math.max(0, r0.trust - 10); if (G.Sponsor.returnLoan) G.Sponsor.returnLoan(s.contract); }
     }
     if (!forced) {
-      var ok = await UI.confirm('제독의 자리에서 물러나 은퇴하겠습니까?' + (F.heirs().length ? '<br>성인이 된 자녀에게 뒤를 잇게 할 수 있습니다.' : '<br><span class="warn-text">뒤를 이을 자녀가 없으면 모험은 여기서 끝납니다.</span>'), '은퇴한다', '그만둔다');
+      var ok = await UI.confirm('제독의 자리에서 물러나 은퇴하겠습니까?' + (F.heirs().length ? '<br>어른이 된 아들에게 뒤를 잇게 할 수 있습니다.' : '<br><span class="warn-text">뒤를 이을 아들(16세 이상)이 없으면 모험은 여기서 끝납니다.</span>'), '은퇴한다', '그만둔다');
       if (!ok) return;
     }
     var heirs = F.heirs();
     if (heirs.length) {
-      var i = heirs.length > 1 ? await UI.choose('뒤를 이을 자녀', heirs.map(function (k, j) { return { label: k.name, right: F.kidAge(k) + '세 · ' + F.bondWord(k), value: j }; }), { width: 420, cancel: false }) : 0;
+      var i = heirs.length > 1 ? await UI.choose('뒤를 이을 아들', heirs.map(function (k, j) { return { label: k.name, right: F.kidAge(k) + '세 · ' + F.bondWord(k), value: j }; }), { width: 420, cancel: false }) : 0;
       if (i == null) i = 0;
       return F.succeed(heirs[i]);
     }
@@ -337,7 +339,8 @@
     var lg = p.lg.map(function (v, i) { return Math.max(k.lg[i] || 0, i === R.nativeLang(p.nation) ? 3 : Math.floor(v / 2)); });
     s.player = {
       name: k.name, nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
-      luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), notoriety: Math.round(p.notoriety * 0.3), gold: p.gold, bank: p.bank,
+      luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), fameBy: p.fameBy ? U.clone(p.fameBy) : undefined,   // 갈래의 비율은 그대로 (G.Fame.sync가 줄어든 합에 맞춘다)
+      notoriety: Math.round(p.notoriety * 0.3), gold: p.gold, bank: p.bank,
       items: p.items, equip: p.equip, hp: 100, home: p.home, wife: null, kids: [], generation: (p.generation || 1) + 1, jailed: 0,
       portrait: F.kidSpec(k)
     };

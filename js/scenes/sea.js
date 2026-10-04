@@ -46,6 +46,11 @@
       s.loc.mode = 'sea';
       if (!st.cam) st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: 110 };
       st.paused = true;
+      // 해전을 마치고 돌아왔을 때 자동항해 중이던 항구가 있으면 그대로 이어 간다 (예전에는 멈춘 채 다시 눌러야 했다)
+      if (arg.resume && st.autoOn && st.path && st.target && st.target.city && !G.Routes.autoOff()) {
+        st.paused = false; st.vel = [0, 0]; st.stopping = false; st.prog = null;
+        UI.toast(st.target.city.name + U.jx(st.target.city.name, '으로/로') + ' 자동항해를 이어 갑니다. (Space: 정지)', 'anchor', 3600);
+      }
     }
     if (arg.resume && arg.msg) UI.toast(arg.msg, 'info');
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
@@ -216,6 +221,8 @@
       if (st.stopping) { if (portNear()) tryEnterPort(); return true; }
       if (!st.paused) { halt(); return true; }
       if (portNear()) { tryEnterPort(); return true; }
+      // 자동항해·침로를 잡아 둔 채 멈췄으면 Space로 다시 간다 (방향키를 누르면 자동항해가 풀리므로)
+      if (st.path || st.dirCrs != null) { if (!e.repeat) resume(); return true; }
       if (!e.repeat) UI.toast('멈춰 있습니다. 방향키로 가려는 쪽을 누르면 출발합니다.', 'sail', 2600);
       return true;
     }
@@ -384,7 +391,7 @@
     return kcCache;
   }
   function cityAt(x, y) {
-    var best = null, bd = 22 * 22;
+    var best = null, bd = 30 * 30;     // 항구 표식 둘레를 조금 넉넉히 (빗나가 바다를 누르면 자동항해가 풀린다)
     knownCities().forEach(function (c) { var p = toScreen(c.lon, c.lat); var d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = c; } });
     return best;
   }
@@ -423,8 +430,10 @@
   }
 
   // ================================================================ port & landing
-  async function tryEnterPort() {
-    var c = portNear();
+  async function tryEnterPort(want) {
+    var c = portNear(), s0 = S();
+    // 자동항해로 닿은 항구가 있으면 그 항구로 (곁에 더 가까운 다른 항구가 있어도)
+    if (want && want.port) { var wd = want.dock || [want.lat, want.lon]; if (G.Geo.dist(s0.loc.lon, s0.loc.lat, wd[1], wd[0]) < 0.8) c = want; }
     if (!c) { UI.toast('가까운 곳에 들를 수 있는 항구가 없습니다.', 'anchor'); return; }
     if (G.Disc.prefetchCity) G.Disc.prefetchCity(c.id);
     if (G.Img.prefetchCity) G.Img.prefetchCity(c, 'near');
@@ -519,6 +528,8 @@
     var s = S(), l = s.loc;
     // 탐험가의 함대(항로 위)·적대국의 추격 함대 (js/systems/seafolk.js)
     if (G.SeaFolk) { var sfN = G.SeaFolk.spawn(st.npcs); if (sfN) { st.npcs.push(sfN); if (G.ShipSprite) G.ShipSprite.want(sfN.ships); return; } }
+    // 왕명: 왕녀를 붙잡아 간 해적단(소굴 앞바다)·나포할 나라의 배 (js/systems/court.js)
+    if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
     var pr = pirateRate(l.lon, l.lat) * (s.settings.diff === 'easy' ? 0.6 : 1);
@@ -566,8 +577,13 @@
       if (G.Geo.dist(l.lon, l.lat, n.lon, n.lat) < 0.3) { await encounter(n, false); return; }
     }
   }
+  /** 마주침(해적·함대·신호)이 싸움 없이 끝났을 때: 그 전에 가던 길(자동항해·침로)이 있으면 다시 돛을 편다 */
+  function goOnAfter(wasSailing) {
+    if (wasSailing && st.alive && st.paused && !st.manual && (st.path || st.dirCrs != null)) { st.paused = false; st.stopping = false; st.prog = null; refreshBar(); }
+  }
   async function encounter(n, byMe) {
-    var s = S();
+    var s = S(), wasSailing = !st.paused || st.wasSailing;
+    st.wasSailing = false;
     st.busy++;
     st.paused = true; refreshBar();
     var k = NPC_KIND[n.kind];
@@ -576,10 +592,11 @@
     var kinds = n.ships ? n.ships.filter(function (id, i) { return n.ships.indexOf(id) === i; }).map(function (id) { return G.SHIP[id].name; }).join('·') : '';
     var kt = kinds ? ' (' + kinds + ')' : '';
     var text = byMe ? who + ' ' + n.n + '척이 있다' + kt + '. 어떻게 할까요?' : (n.kind === 'pirate' ? '제독! ' + pl + '입니다! ' + n.n + '척의 해적선이 다가옵니다!' + kt : n.hunt && G.Hostile ? '제독! ' + who + ' ' + n.n + '척이 우리를 잡으러 왔습니다!' + kt + ' (' + n.nation + ' 적대 ' + G.Hostile.get(n.nation) + ')' : who + ' ' + n.n + '척이 우리를 막아섭니다!' + kt);
+    if (n.court && G.Court) text = G.Court.encounterText(n) || text;   // 왕명: 왕녀를 붙잡아 간 해적단
     // 회피는 전투의 실패가 아니라 따로 고르는 운영 선택이다 — 가능성을 미리 보여 준다
     var fleeP = U.clamp(0.35 + (R.fleetSpeed(S().loc.heading, curWind()) - n.spd) * 0.5 + R.skill('nav') * 0.08, 0.1, 0.9);
     var opts = [{ label: '싸운다', value: 'fight' }, { label: '도망친다 (약 ' + Math.round(fleeP * 100) + '%)', value: 'flee' }];
-    if (!byMe && n.kind === 'pirate') {
+    if (!byMe && n.kind === 'pirate' && !n.court) {
       opts.push({ label: '통행료를 낸다 (금화 ' + U.num(tollOf()) + '닢)', value: 'pay' });
       if (canPlead()) opts.push({ label: '사정한다 (털어 갈 것이 없다)', value: 'plead' });
     }
@@ -587,28 +604,28 @@
     if (byMe) opts.push({ label: '그냥 둔다', value: null });
     var v = await UI.ask(text, opts, G.Scenes.mateSpeaker('first'));
     st.busy--;
-    if (!v) { n.cooldown = 3; return; }
+    if (!v) { n.cooldown = 3; goOnAfter(wasSailing); return; }
     if (v === 'plead') {
       var boss = { name: pl + ' 두목' };
       await UI.say(U.pick(['뭐? 가진 게 그것뿐이라고? ...배를 뒤져 봐야 쥐새끼나 나오겠군. 가라, 가!', '흥, 빈털터리 뱃놈들이로군. 쏠 화약이 아깝다. 꺼져라!', '거지 떼를 털어서 뭐 하나. 오늘은 봐주지. 다음엔 두둑이 채워 오라고!']), boss);
-      UI.toast('해적들이 비웃으며 길을 비켜 주었다.', 'sail'); n.hostile = false; n.fled = true; n.cooldown = 12; refreshHud(); return;
+      UI.toast('해적들이 비웃으며 길을 비켜 주었다.', 'sail'); n.hostile = false; n.fled = true; n.cooldown = 12; refreshHud(); goOnAfter(wasSailing); return;
     }
     if (v === 'repay') {
-      if (await G.SeaFolk.pay(n)) { n.hostile = false; n.hunt = false; n.fled = true; n.cooldown = 12; n.heading += Math.PI; refreshHud(); return; }
+      if (await G.SeaFolk.pay(n)) { n.hostile = false; n.hunt = false; n.fled = true; n.cooldown = 12; n.heading += Math.PI; refreshHud(); goOnAfter(wasSailing); return; }
       v = 'fight';
     }
     if (v === 'pay') {
       var toll = tollOf();
-      if (s.player.gold >= toll) { s.player.gold -= toll; UI.toast('해적에게 금화 ' + U.num(toll) + '닢을 주고 지나갔다.', 'coin'); n.hostile = false; n.fled = true; n.cooldown = 10; refreshHud(); return; }
+      if (s.player.gold >= toll) { s.player.gold -= toll; UI.toast('해적에게 금화 ' + U.num(toll) + '닢을 주고 지나갔다.', 'coin'); n.hostile = false; n.fled = true; n.cooldown = 10; refreshHud(); goOnAfter(wasSailing); return; }
       UI.toast('줄 돈이 없다!', 'coin'); v = 'fight';
     }
     if (v === 'flee') {
-      if (U.chance(fleeP)) { UI.toast('간신히 따돌렸다!', 'sail'); n.cooldown = 4; n.fled = true; n.heading += Math.PI; return; }
+      if (U.chance(fleeP)) { UI.toast('간신히 따돌렸다!', 'sail'); n.cooldown = 4; n.fled = true; n.heading += Math.PI; goOnAfter(wasSailing); return; }
       UI.toast('따라잡혔다! 싸울 수밖에 없다!', 'sword');
     }
     // battle
     if (!byMe && n.kind !== 'pirate') s.player.notoriety += 0;
-    if (byMe && n.kind !== 'pirate') s.player.notoriety += n.kind === 'navy' ? 12 : 8;
+    if (byMe && n.kind !== 'pirate' && !(G.Court && G.Court.lawful(n))) s.player.notoriety += n.kind === 'navy' ? 12 : 8;   // 왕명으로 치는 적국의 배는 악명이 오르지 않는다
     if (byMe && G.SeaFolk) G.SeaFolk.attacked(n);   // 먼저 공격하면 그 나라의 적대가 오른다
     st.npcs.splice(st.npcs.indexOf(n), 1);
     await UI.fade(function () { G.Game.go('battle', { npc: n }); });
@@ -621,7 +638,7 @@
   }
   /** 적의가 없는 배와 신호를 주고받는다: 소식·시세·보급, 또는 공격 */
   async function hail(n) {
-    var s = S(), f = s.fleet;
+    var s = S(), f = s.fleet, wasSailing = !st.paused;
     st.busy++; st.paused = true; refreshBar();
     var capStyle = A.fleetStyle(n.zone || G.Ships.zone(n.lon, n.lat), n.nation);
     var capSpec = A.npcSpec('hail' + n.id, 'captain', capStyle);
@@ -651,11 +668,12 @@
         else if (s.player.gold < qty * price) UI.toast('금화가 모자란다.', 'coin');
         else { s.player.gold -= qty * price; f.food += qty / 2; f.water += qty / 2; UI.toast('식량과 물 ' + qty + '통을 샀다. (금화 ' + U.num(qty * price) + '닢)', 'bread'); refreshHud(); }
       } else if (v === 'attack') {
-        st.busy--; encounter(n, true); return;
+        st.busy--; st.wasSailing = wasSailing; encounter(n, true); return;
       }
     } catch (e) { console.error(e); }
     n.cooldown = 6;
     st.busy--;
+    goOnAfter(wasSailing);
   }
 
   // ================================================================ update loop
@@ -665,6 +683,7 @@
     var s = S(), l = s.loc;
     st.t += dt;
     var frozen = st.busy > 0 || UI.busy();
+    if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) tryEnterPort(pc); }
     // 멈춘 채 ←→: 시간은 흐르지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것)
     if (!frozen && st.paused && st.manual && turnKey()) { st.turnHeld = (st.turnHeld || 0) + dt; l.heading += turnKey() * 1.4 * dt * turnAbility() * Math.min(1, 0.45 + st.turnHeld * 1.6); }
     st.handSteer = false;
@@ -748,7 +767,9 @@
       var dx = G.Geo.wrapLon(wp[0] - l.lon), dy = wp[1] - l.lat;
       var d = Math.sqrt(dx * dx + dy * dy);
       // 한 걸음보다 가까우면 들른 것으로 친다 (빠른 배속에서 길목을 맴돌지 않도록)
-      if (d < Math.max(0.07, (st.lastStep || 0) * 1.2)) {
+      var rad = Math.max(0.07, (st.lastStep || 0) * 1.2);
+      if (st.pathI === st.path.length - 1 && st.target && st.target.city) rad = Math.max(rad, 0.15);   // 항구 앞 마지막 길목은 넉넉히 (부두가 물가에 붙어 있어도 닿게)
+      if (d < rad) {
         st.pathI++; st.repath = 0; st.xt = 0;
         if (st.pathI >= st.path.length) arrived();
         return;
@@ -827,7 +848,8 @@
   function arrived() {
     var tgt = st.target;
     st.path = null; st.target = null;
-    if (tgt && tgt.city) { st.paused = true; st.vel = [0, 0]; refreshBar(); setTimeout(function () { if (st.alive && !st.busy) tryEnterPort(); }, 50); }
+    // 그날의 일(사건·대화)이 처리되는 중이면 끝난 뒤에 들어간다 (예전에는 그 순간 바쁘면 입항을 건너뛰어 항구 앞에 멈춰 섰다)
+    if (tgt && tgt.city) { st.paused = true; st.vel = [0, 0]; st.pendingPort = tgt.city; refreshBar(); }
     else { st.stopping = true; refreshBar(); UI.toast('목적지에 도착했습니다.', 'anchor'); }
   }
   /* 돛 조절(수동): ↑를 누르면 THR_UP초에 걸쳐 돛을 다 펴고, 떼면 THR_COAST초에 걸쳐 서서히 멈춘다. ↓는 THR_BRAKE초에 세운다.
@@ -863,6 +885,11 @@
         // 한 다리의 폭: 길목까지 거리의 30% (0.05°~0.35°) — 가운데 줄을 사이에 두고 좌우로 번갈아
         var lim = U.clamp((st.dW == null || st.dW === Infinity ? 1.2 : st.dW) * 0.3, 0.05, 0.35);
         if (st.tackSide * (st.xt || 0) >= lim && Math.abs(U.angDiff(h, crs + st.tackSide * m.theta)) < 0.25) { st.tackSide = -st.tackSide; st.tacks = (st.tacks || 0) + 1; }
+        else if (st.tackSide * (st.xt || 0) > 0.02 && !legRoom(crs + st.tackSide * m.theta)) {
+          // 이 다리 앞이 곧 뭍(해안·섬)이다: 닿기 전에 미리 반대쪽 다리로 (해안에 붙어 미끄러지다 만이나 해협 안으로 끌려 들어가지 않게)
+          if (st.sailT - (st.lastFlip || -9) < 0.3) st.noTack = 0.8;
+          st.lastFlip = st.sailT; st.tackSide = -st.tackSide; st.xt = 0; st.tacks = (st.tacks || 0) + 1;
+        }
         v = m.vmg / Math.cos(m.theta);               // 다리를 따라 달리는 속력 (목적 방향으로는 vmg만큼 다가간다)
       } else { st.tackTheta = 0; v = m.vmg; }
       // 길목이 코앞인데 뱃머리가 크게 틀어져 있으면 속력을 줄여 선회 반경을 좁힌다 (길목을 맴돌지 않게)
@@ -919,6 +946,8 @@
       if (!ok && st.path && thinBar(l.lon, l.lat, md, dist)) { step(nx, ny, dist); ok = true; }
       if (!ok) { vel[0] = vel[1] = 0; }
       if (!ok && (st.manual || st.stopping)) { st.thr = 0; st.cruise = false; st.stopping = false; st.paused = true; refreshBar(); UI.toast('뭍에 닿아 배를 세웠습니다. 뱃머리를 돌려 나아가십시오.', 'anchor'); return; }
+      // 목적 항구 코앞에서 물가에 닿았으면 다 온 것이다 (부두가 강·만 안쪽 뭍에 붙어 있는 항구)
+      if (!ok && st.target && st.target.city && dockDist(st.target.city) < 0.6) { arrived(); return; }
       if (!ok) {
         // 자동 항해 중이면 지금 자리에서 뱃길을 다시 찾는다
         var tg = st.target;
@@ -944,8 +973,45 @@
         return;
       }
     }
+    watch(days, m ? m.vmg * k0 : 0);
     // 물보라·항적: 실제로 지나간 길을 따라 (배속·장면 수와 상관없이 거리로 센다)
     if (st.fx && G.SeaFX) G.SeaFX.step(st.fx, { x0: x0, y0: y0, x: l.lon, y: l.lat, h: l.heading, vx: vel[0], vy: vel[1], lat: lt, fwd: fw, turn: st.turnRate || 0, days: days }, shipGeom());
+  }
+  /** 지그재그 다리 방향 a로 0.15° 앞까지 넉넉한 물인가 */
+  function legRoom(a) {
+    var l = S().loc, c = Math.cos(a), sn = Math.sin(a);
+    return G.Geo.isSea(l.lon + c * 0.08, l.lat + sn * 0.08, 0.5) && G.Geo.isSea(l.lon + c * 0.15, l.lat + sn * 0.15, 0.5);
+  }
+  function dockDist(c) { var l = S().loc, d = c.dock || [c.lat, c.lon]; return G.Geo.dist(l.lon, l.lat, d[1], d[0]); }
+  /** 남은 뱃길 길이 (°) */
+  function pathLeft() {
+    if (!st.path) return 0;
+    var l = S().loc, d = 0, x = l.lon, y = l.lat;
+    for (var i = st.pathI || 0; i < st.path.length; i++) { var q = st.path[i]; d += Math.hypot(G.Geo.wrapLon(q[0] - x), q[1] - y); x = q[0]; y = q[1]; }
+    return d;
+  }
+  /** 자동항해 진행 감시: 사흘 동안 바람이 주는 힘의 1/4만큼도 목적지에 다가가지 못했으면(곶에 걸려 미끄러지기만 하거나
+      같은 길목을 맴돎) 깊은 물로 비켜서 뱃길을 새로 찾는다. 두 번 해도 안 되면 멈추고 알린다 */
+  function watch(days, vmg) {
+    if (!st.path || st.manual || !st.target || st.direct) { st.prog = null; return; }
+    var left = pathLeft(), p = st.prog;
+    if (!p || p.path !== st.path) p = st.prog = { path: st.path, left: left, exp: 0, t: 0, n: p ? p.n : 0 };
+    p.t += days; p.exp += Math.max(0, vmg) * days;
+    if (p.t < 3) return;
+    var gain = p.left - left, stalled = p.exp > 0.4 && gain < p.exp * 0.25;
+    p.left = left; p.exp = 0; p.t = 0;
+    if (!stalled) { p.n = 0; return; }
+    p.n++;
+    var tg = st.target, l = S().loc;
+    if (tg.city && dockDist(tg.city) < 0.6) { arrived(); return; }
+    if (p.n <= 2) {
+      var deep = deepWater(l.lon, l.lat) || G.Nav.nearestSea(l.lon, l.lat, 4);
+      if (deep && G.Geo.isSea(deep[0], deep[1], 0.2)) { l.lon = G.Geo.wrapLon(deep[0]); l.lat = deep[1]; }
+      var np = G.Nav.path(l.lon, l.lat, tg.lon, tg.lat);
+      if (np && np.length > 1) { var keepN = p.n; st.path = np; st.pathI = 1; st.repath = 0; st.xt = 0; st.tackSide = -(st.tackSide || 1); st.noTack = 1; st.prog = { path: np, left: pathLeft(), exp: 0, t: 0, n: keepN }; return; }
+    }
+    st.path = null; st.dirCrs = null; st.paused = true; st.vel = [0, 0]; st.prog = null; refreshBar();
+    UI.toast('뱃길이 막혀 배를 세웠습니다. ' + (tg.city ? U.j(tg.city.name, '을/를') + ' 다시 누르면 뱃길을 새로 찾습니다.' : '목적지를 다시 잡아 주십시오.'), 'map', 6000);
   }
   /** 기함의 크기 (세상 좌표 °): 화면의 배 그림 크기 ÷ 확대 */
   function shipGeom() { var z = st.cam ? st.cam.zoom : 110, L = shipPx() / z; return { len: L, wid: L * 0.34, ref: FXS().refSpeed, zoom: z }; }
@@ -1149,7 +1215,7 @@
         s.known.push(c.id);
         G.State.log('새로운 항구 ' + c.name + U.j(c.name, '을/를').slice(c.name.length) + ' 발견했다.');
         UI.toast('새로운 항구 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'anchor', 4000);
-        s.player.fame += 3 + (G.REGION_DIST[0][c.region] || 0) * 3;
+        G.Fame.add('ex', 3 + (G.REGION_DIST[0][c.region] || 0) * 3);
       }
     });
   }
@@ -1245,7 +1311,7 @@
       var res = await G.Games.duel(lead, v === 'proxy' ? { mate: px, place: 'deck' } : { place: 'deck' });
       var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
       if (res === 'win') {
-        f.discipline = Math.min(100, f.discipline + 35); f.fatigue = Math.max(0, f.fatigue - 10); s.player.fame += 2;
+        f.discipline = Math.min(100, f.discipline + 35); f.fatigue = Math.max(0, f.fatigue - 10); G.Fame.add('bt', 2);
         if (fm) fm.loyal = Math.min(100, (fm.loyal || 70) + 6);
         await UI.say((fd ? fd.name + U.jx(fd.name, '이/가') + ' ' : '') + '주동자를 쓰러뜨렸다! 선원들이 고개를 숙이고 제자리로 돌아간다. (규율 +35, 피로 −10)', {});
       } else {
@@ -1330,8 +1396,8 @@
     if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
     var s = S(), l = s.loc;
-    var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + ' 항해 중' : '목적지로 항해 중')
-      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — 방향키를 누르면 그쪽으로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
+    var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
+      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
       : st.manual ? (st.paused ? '수동 조타 — ↑ 돛을 펴고 출발 · ←→ 제자리에서 뱃머리 · Space 순항' : st.cruise ? '수동 조타(순항) — ←→ 뱃머리 · ↓·Space 멈춤' : '수동 조타 — ↑ 누르는 동안 나아가고 떼면 서서히 멈춤 · Space 순항')
       : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : '정지 — 방향키로 그쪽으로 출발 · 항구 곁에서는 Space로 정박') : '표류 중 — 바다를 클릭하거나 방향키·숫자판으로 나아가십시오');
     if (!st.manual && st.tackTheta && !st.paused) tgt += ' · <span style="color:#ffd98a">맞바람 — 지그재그로 거슬러 오르는 중</span>';

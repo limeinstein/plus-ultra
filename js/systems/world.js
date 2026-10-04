@@ -48,8 +48,10 @@
       s.fleet.daysOut = 0; s.fleet.scurvy = Math.max(0, (s.fleet.scurvy || 0) * 0.75 - 2);   // 뭍의 신선한 먹을거리로 빨리 낫는다
     }
     // 가족: 임신 소식·출산 (family.js — 아이는 자택에 들러야 생긴다)
+    if (G.Fad) out = out.concat(G.Fad.daily());             // 끝난 유행을 거둔다
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
     if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다
+    if (G.Court) out = out.concat(G.Court.daily());         // 국왕의 부름(명성 10,000마다)·왕명의 기한
     // 후원자의 대(代) — 옛 저장이면 지금 자리에 있는 사람들을 기억해 둔다
     if (!s.spHolder && G.Succession) G.Succession.sync();
     return out;

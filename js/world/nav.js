@@ -8,6 +8,7 @@
   var pass = null;          // 0 뭍, 1 물가에 걸친 칸, 2 트인 바다
   var rep = null;           // 칸의 대표점: 3×3 부분 격자 가운데 가장 깊은 물 (4 = 칸 가운데)
   var edge = null;          // 물가 칸 사이 길목 판정 캐시: 0 모름, 1 지나감, 2 막힘 (칸×8방향)
+  var near = null;          // 트인 바다 칸이지만 뭍이 가까움(작은 섬·곶이 칸 사이에 숨을 수 있다) → 길목을 따져 본다
   var SUB = 0.3 / RES;      // 부분 격자 간격(°)
 
   function build() {
@@ -15,6 +16,7 @@
     pass = new Uint8Array(GW * GH);
     rep = new Uint8Array(GW * GH);
     edge = new Uint8Array(GW * GH * 8);
+    near = new Uint8Array(GW * GH);
     var Geo = G.Geo;
     for (var y = 0; y < GH; y++) {
       var lat = LAT0 - (y + 0.5) / RES;
@@ -22,7 +24,7 @@
         var lon = -180 + (x + 0.5) / RES, i = y * GW + x;
         var s = Geo.sdfRaw(lon, lat);
         rep[i] = 4;
-        if (s < -0.9) pass[i] = 2;          // 트인 바다
+        if (s < -0.9) { pass[i] = 2; if (s > -N.NEAR_TX) near[i] = 1; }          // 트인 바다 (뭍이 가까우면 표시)
         else if (s < 1.8) {
           // 물가: 3×3 부분 격자에서 가장 깊은 물을 찾아, 충분히 물이면 지나갈 수 있는 칸으로 (좁은 해협)
           var best = 99, bk = 4;
@@ -70,6 +72,7 @@
     }
   }
   N.COAST = 2;     // 물가 칸의 비용 배수
+  N.NEAR_TX = 4;   // 뭍에서 이만큼(텍셀, 약 0.35°) 안의 트인 바다 칸도 길목이 뭍을 가로지르는지 따진다 (칸 사이에 숨은 작은 섬·곶)
   N.HW = 1.15;     // 휴리스틱 가중치 (1이면 최단, 클수록 빠르지만 길이 굽는다)
   N.ready = function () { return !!pass; };
   N.init = function () { if (!pass) { build(); label(); } };
@@ -79,22 +82,35 @@
     return [((x % GW) + GW) % GW, Math.max(0, Math.min(GH - 1, y))];
   }
 
-  /** nearest passable cell center to (lon,lat) within r cells */
-  N.nearestSea = function (lon, lat, r, want) {
+  /** (lon,lat)에서 p까지 곧게 물로 이어지는가 (뭍을 넘지 않는가) */
+  function wetLine(lon, lat, p) {
+    var dx = G.Geo.wrapLon(p[0] - lon), dy = p[1] - lat, n = Math.max(2, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 0.02));
+    for (var j = 1; j < n; j++) if (G.Geo.sdf(lon + dx * j / n, lat + dy * j / n) > 0.15) return false;
+    return true;
+  }
+  /** nearest passable cell center to (lon,lat) within r cells.
+      wet = true면 그 자리에서 곧게 물로 이어지는 칸을 먼저 고른다 (섬·곶 너머의 칸으로 붙지 않게 — 예: 솔렌트 안의 배가 와이트 섬 남쪽 칸으로) */
+  N.nearestSea = function (lon, lat, r, want, wet) {
     N.init();
     var c = cellOf(lon, lat); r = r || 24;
     function ok(i) { return pass[i] && (!want || comp[i] === want); }
     if (ok(c[1] * GW + c[0])) return [lon, lat];
+    var first = null;
     for (var k = 1; k <= r; k++) {
-      var best = null, bd = 1e9;
+      var cand = [];
       for (var dy = -k; dy <= k; dy++) for (var dx = -k; dx <= k; dx++) {
         if (Math.max(Math.abs(dx), Math.abs(dy)) !== k) continue;
         var x = ((c[0] + dx) % GW + GW) % GW, y = c[1] + dy; if (y < 0 || y >= GH) continue;
-        if (ok(y * GW + x)) { var d = dx * dx + dy * dy; if (d < bd) { bd = d; best = repPoint(y * GW + x); } }
+        if (ok(y * GW + x)) cand.push([dx * dx + dy * dy, y * GW + x]);
       }
-      if (best) return best;
+      if (!cand.length) continue;
+      cand.sort(function (a, b) { return a[0] - b[0]; });
+      if (!wet) return repPoint(cand[0][1]);
+      if (!first) first = repPoint(cand[0][1]);
+      for (var q = 0; q < cand.length; q++) { var rp = repPoint(cand[q][1]); if (wetLine(lon, lat, rp)) return rp; }
+      if (k >= 6) return first;          // 가까이에 곧게 닿는 칸이 없으면 가장 가까운 칸
     }
-    return null;
+    return first;
   };
 
   // ---------------------------------------------------------------- binary heap
@@ -127,8 +143,9 @@
     curStamp++;
     var s = cellOf(lon0, lat0), t = cellOf(lon1, lat1);
     var si = s[1] * GW + s[0], ti = t[1] * GW + t[0];
-    if (!pass[si]) { var s0 = N.nearestSea(lon0, lat0, 8); if (!s0) return null; s = cellOf(s0[0], s0[1]); si = s[1] * GW + s[0]; }
-    if (!pass[ti] || comp[ti] !== comp[si]) { var ns = N.nearestSea(lon1, lat1, 60, comp[si]); if (!ns) return null; t = cellOf(ns[0], ns[1]); ti = t[1] * GW + t[0]; lon1 = ns[0]; lat1 = ns[1]; }
+    var s0 = null;
+    if (!pass[si]) { s0 = N.nearestSea(lon0, lat0, 8, 0, true); if (!s0) return null; s = cellOf(s0[0], s0[1]); si = s[1] * GW + s[0]; }
+    if (!pass[ti] || comp[ti] !== comp[si]) { var ns = N.nearestSea(lon1, lat1, 60, comp[si], true); if (!ns) return null; t = cellOf(ns[0], ns[1]); ti = t[1] * GW + t[0]; lon1 = ns[0]; lat1 = ns[1]; }
     var tx = t[0], ty = t[1];
     function h(x, y) { var dx = Math.abs(x - tx); if (dx > GW / 2) dx = GW - dx; var dy = Math.abs(y - ty); return (dx + dy) + (1.4142 - 2) * Math.min(dx, dy); }
     var open = new Heap();
@@ -150,7 +167,7 @@
         var ni = ny * GW + nx;
         if (!pass[ni]) continue;
         if (k >= 4 && (!pass[cy * GW + nx] || !pass[ny * GW + cx])) continue; // no corner cutting
-        if (strict && (pass[cur] === 1 || pass[ni] === 1) && !edgeOK(cur, ni, k)) continue;   // 곶·지협을 가로지르지 않는다
+        if (strict && (pass[cur] === 1 || pass[ni] === 1 || near[cur] || near[ni]) && !edgeOK(cur, ni, k)) continue;   // 곶·지협·작은 섬을 가로지르지 않는다
         // 물가 칸(1)은 조금 비싸게: 되도록 트인 바다로 간다
         var ng = g0 + DC[k] * (pass[ni] === 1 ? N.COAST : 1);
         if (closed[ni] === curStamp || (stamp[ni] === curStamp && ng >= gScore[ni])) continue;
@@ -164,6 +181,8 @@
     cells.reverse();
     var pts = cells.map(repPoint);
     pts[0] = [lon0, lat0]; pts[pts.length - 1] = [lon1, lat1];
+    // 배가 칸 밖(얕은 물가)에 있어 가까운 칸으로 붙였는데 곧게 닿지 않으면, 그 칸의 대표점을 먼저 들르게 한다
+    if (s0 && !wetLine(lon0, lat0, cells.length > 1 ? repPoint(cells[1]) : [lon1, lat1])) pts.splice(1, 0, s0);
     return N.smooth(unwrap(pts));
   }
   /** make longitudes continuous along the path (no jumps of 360) */
@@ -175,7 +194,7 @@
     return pts;
   }
   N.clear = function (a, b) {
-    var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.sqrt(dx * dx + dy * dy), n = Math.ceil(len / 0.06);
+    var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.sqrt(dx * dx + dy * dy), n = Math.ceil(len / 0.02);   // 0.02° 간격 (예전 0.06°는 작은 섬·곶 끝을 건너뛰었다)
     for (var i = 1; i < n; i++) { var t = i / n; if (!G.Geo.isSea(a[0] + dx * t, a[1] + dy * t, 0.3)) return false; }
     return true;
   };

@@ -89,8 +89,8 @@ function socket(url) {
         expression: `(()=>{
           const shipMissing=G.SHIP_TYPES.filter(x=>!G.Img.has('ships/'+x.id)).map(x=>x.id);
           const cabinMissing=G.CABINS.filter(x=>!G.Img.has('cabins/'+x.id)).map(x=>x.id);
-          const room=[...document.querySelectorAll('.cb-room-art')];
-          return {shipMissing,cabinMissing,shipReady:!!document.querySelector('.cb-ship.art-ready'),roomCount:room.length,roomReady:room.filter(x=>x.naturalWidth>100).length};
+          const room=[...document.querySelectorAll('.cb-card-art')];
+          return {shipMissing,cabinMissing,shipReady:!!document.querySelector('.cb-stage.art-ready'),roomCount:room.length,roomReady:room.filter(x=>x.naturalWidth>100).length};
         })()`,
         returnByValue: true
       });

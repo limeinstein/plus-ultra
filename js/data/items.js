@@ -37,7 +37,7 @@
     { id: 'sextant', name: '육분의', kind: 'tool', price: 2400, reg: [0, 1, 2], from: 1490, desc: '현재 위치의 위도와 경도를 알 수 있다.' },
     { id: 'astrolabe', name: '천문판', kind: 'tool', price: 1500, reg: [0, 2, 4], desc: '별로 위도를 잰다. 위도만 표시된다.' },
     { id: 'telescope', name: '망원경', kind: 'tool', price: 3800, reg: [1, 2], from: 1500, desc: '멀리 있는 함대를 먼저 발견하고, 망루와 정찰대가 수평선 너머의 발견물을 더 멀리서 알아챈다.' },
-    { id: 'turban', name: '터번', kind: 'tool', price: 400, reg: [4, 5, 7], desc: '이슬람 도시에 변장하고 들어갈 수 있다.' },
+    { id: 'turban', name: '터번', kind: 'tool', price: 400, reg: [2, 3, 4, 5, 7, 8], desc: '이슬람 상인처럼 변장한다. 이슬람 도시에 잠입할 때 크게, 중국 항구(회회 상인이 오가던 광주·천주 등)에서는 조금 도움이 된다.' },
     { id: 'lime', name: '라임 절임', kind: 'tool', price: 600, reg: [0, 2, 3, 4, 5], consumable: 1, desc: '장기 항해의 괴혈병을 한동안(60일) 막아 준다. 이베리아·지중해·동아프리카·중근동·인도의 시장에서 판다.' },
     { id: 'cat', name: '배 고양이', kind: 'tool', price: 300, reg: [0, 1, 2], desc: '배에 사는 쥐를 잡아 식량을 지킨다.' },
     { id: 'charm', name: '행운의 부적', kind: 'tool', price: 1200, reg: [4, 3], desc: '이집트의 앵크. 작은 행운을 부른다.' },
@@ -54,7 +54,8 @@
     { id: 'rapidgun', name: '속사포', kind: 'special', price: 9000, reg: [], rare: true, desc: '해전에서 포격을 두 번 할 수 있다.' },
     { id: 'shells', name: '작렬탄', kind: 'special', price: 5200, reg: [1], from: 1510, consumable: 3, desc: '해전에서 포격 위력이 크게 오른다. (3회)' },
     { id: 'divebomb', name: '잠수 폭탄', kind: 'special', price: 0, reg: [], rare: true, desc: '적의 배 밑에서 터지는 신기한 무기.' },
-    { id: 'dango', name: '수수 경단', kind: 'special', price: 60, reg: [9], consumable: 1, desc: '먹으면 기분이 좋아져 피로가 풀린다.' }
+    { id: 'dango', name: '수수 경단', kind: 'special', price: 60, reg: [9], consumable: 1, desc: '먹으면 기분이 좋아져 피로가 풀린다.' },
+    { id: 'mingrobe', name: '명나라 옷', kind: 'tool', price: 700, reg: [6, 8], desc: '명나라 상인의 단령(團領)과 망건. 쇄국한 중국 도시에 잠입할 때 크게 도움이 된다.' }
   ];
   G.ITEM = {}; G.ITEMS.forEach(function (it) { G.ITEM[it.id] = it; });
   G.ITEM_KIND = { weapon: '무기', armor: '방어구', tool: '항해도구', gift: '장신구', special: '특수', treasure: '보물', evidence: '증거품' };

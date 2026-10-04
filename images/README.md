@@ -55,7 +55,7 @@
 | 발견 유물 | `relics/유물ID.webp` (예: `r_qinshi`, `r_sillacrown`) · 종류 공통 `relic-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
 | 교역품 | `goods/교역품ID.webp` (후추 `pepper`, 비단 `silk`, 대포 `cannon` 등) · 갈래 공통 `good-kinds/갈래.webp` | 투명 배경 정사각형, 권장 192×192 |
 | 지도에 남는 유적 모형 | `map-discoveries/ruins-1.png` … `ruins-4.png` — 도시 밖 유적 52곳을 4×4 셀에 13곳씩 배치 | 투명 배경 PNG, 4열×4행 |
-| 배 | `ships/배ID.webp` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
+| 배 | `ships/배ID.webp` — 기함 선실에서 갑판·격벽·선실 칸이 보이는 측면 단면도 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`, 모음은 `docs/art/flagship-cabin-cutaway-ships-preview.jpg`) | 880×480 |
 | 항해·해전 8방향 동작 배 | `ships-nav/배ID.webp` — `python tools/ship3d/bake.py`가 three.js 3D 모형으로 굽는 정박 3장·표류 5장·질주 8장 시트(치수·돛대 자리는 `tools/render_ship_sprites.py`와 같다) | 자동 생성 1792×3584, 셀 224×224, 수면 피벗 (112,139), 투명 배경 |
 | 기함 선실 | `cabins/선실ID.webp` — 함장실 `captain`, 부관실 `adjutant`, 조타실 `helm`, 파수대 `lookout`, 갑판 `deck`, 빈 선실 `hold`, 지도 제작실 `chart`, 요리실 `galley`, 식당 `mess`, 회계실 `account`, 예배실 `chapel`, 진료실 `sick`, 오락실 `rec`, 조범실 `rig`, 선박 수리실 `repair`, 사육실 `pen`, 포격실 `gun`, 해병 대기실 `marine`, 통역실 `interp` | 정사각형, 권장 320×320 |
 | 항해 효과 스프라이트 시트 | `effects/ship_spray.png`, `effects/departure_gull.png` | 1024×512, 4열×2행, 셀 256×256, 투명 배경 |

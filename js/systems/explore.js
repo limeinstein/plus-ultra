@@ -136,7 +136,7 @@
       m['o_' + oc[0]] = s.day;
       var fame = oc[0] === 'med' || oc[0] === 'atlantic' ? 0 : 12;
       if (fame) {
-        s.player.fame += fame;
+        G.Fame.add('ex', fame);
         UI.toast('새로운 바다 — ' + oc[1] + '에 들어섰다! (명성 +' + fame + ')', 'globe', 5000);
         G.State.log(oc[1] + '에 처음 들어섰다.');
       }
@@ -147,7 +147,7 @@
       if (!m.equator) {
         m.equator = s.day;
         await UI.say('제독! 적도를 넘었습니다! 처음 넘는 녀석들은 바다의 신께 인사를 올려야지요!\f선원들이 바다의 신 분장을 하고, 처음 적도를 넘는 선원에게 바닷물을 끼얹으며 한바탕 떠들썩한 잔치를 벌였다.', mate('first'));
-        s.player.fame += 20; f.discipline = Math.min(100, f.discipline + 15); f.fatigue = Math.max(0, f.fatigue - 12);
+        G.Fame.add('ex', 20); f.discipline = Math.min(100, f.discipline + 15); f.fatigue = Math.max(0, f.fatigue - 12);
         UI.toast('적도제! 사기가 올랐다. (명성 +20)', 'sun', 5000);
         G.State.log('처음으로 적도를 넘었다. 적도제를 열었다.');
       } else UI.toast('적도를 넘었다.', 'sun');
@@ -157,7 +157,7 @@
       if ((prevLat - L[0]) * (lat - L[0]) < 0 && !m[L[1]]) {
         m[L[1]] = s.day;
         var fm = Math.abs(L[0]) > 60 ? 18 : 5;
-        s.player.fame += fm;
+        G.Fame.add('ex', fm);
         UI.toast(L[2] + '을 넘었다. (명성 +' + fm + ')', 'globe', 4200);
         G.State.log(L[2] + '을 처음 넘었다.');
       }
@@ -224,7 +224,7 @@
           // 선원으로 받는 것은 배에 자리가 있고, 가는 곳까지(모르면 30일) 먹일 수 있는 만큼 — 나머지는 물·식량을 나눠 주고 가까운 뭍을 가르쳐 준다
           var room = R.crewMax() - f.crew, eta = (G.Scenes.sea.etaDays && G.Scenes.sea.etaDays()) || 30;
           var feed = Math.floor(Math.min(f.food, f.water) / (0.04 * (eta + 5))) - f.crew;
-          var k = Math.max(0, Math.min(n, room, feed)); f.crew += k; s.player.fame += 5;
+          var k = Math.max(0, Math.min(n, room, feed)); f.crew += k; G.Fame.add('so', 5);
           if (k && G.Scenes.sea.rearmSupplyWarn) G.Scenes.sea.rearmSupplyWarn();
           var why = room <= feed ? ' 배에 자리가 모자라 나머지는' : ' 식량이 넉넉지 않아 나머지는';
           UI.toast('조난자 ' + n + '명을 구조했다.' + (k ? ' ' + k + '명이 선원이 되었다.' : '') + (k < n ? why.replace(' 나머지는', k ? ' 나머지는' : ' 선원으로 받지는 못하고,') + ' 물과 식량을 조금 나눠 주고 가까운 뭍을 가르쳐 주었다.' : ''), 'people', 5000);
@@ -255,7 +255,7 @@
         if (U.chance(p)) {
           var g2 = U.ri(600, 2200);
           await UI.say('선실 깊은 곳에서 녹슨 궤짝을 찾았다. 안에는 금화 ' + U.num(g2) + '닢과 누군가의 항해 일지가 있었다.', {});
-          s.player.gold += g2; s.player.fame += 6;
+          s.player.gold += g2; G.Fame.add('ex', 6);
           var d2 = nearUnknown(l.lon, l.lat, 40);
           if (d2) { G.Disc.addHint(d2.id, 'ghost'); UI.toast('항해 일지에서 단서를 얻었다: 「' + d2.name + '」', 'scroll', 4200); }
         } else {
@@ -282,7 +282,7 @@
           var dir = U.dirName(Math.atan2(best.lat - l.lat, G.Geo.wrapLon(best.lon - l.lon)));
           await UI.say('바닷새 떼가 ' + dir + '쪽으로 날아간다. 새들을 따라가 보니 해안에 마을이 보였다 — ' + best.name + '!', mate('surveyor'));
           UI.toast('새로운 항구 「' + best.name + '」' + U.jx(best.name, '을/를') + ' 해도에 적었다.', 'anchor', 4200);
-          s2.player.fame += 4;
+          G.Fame.add('ex', 4);
         } else {
           await UI.say('바닷새가 돛대에 앉았다. 육지가 멀지 않은 모양이다.', first);
           f.discipline = Math.min(100, f.discipline + 2);
@@ -311,7 +311,7 @@
         var art = R.skill('art');
         if (art) {
           var fm = 4 + art * 4;
-          s.player.fame += fm;
+          G.Fame.add('ex', fm);
           await fxSay('whale', '거대한 고래 떼가 물을 뿜으며 지나간다. 제독은 그 모습을 화첩에 그려 두었다. (명성 +' + fm + ')');
         } else { await fxSay('whale', '거대한 고래 떼가 물을 뿜으며 지나간다. 선원들이 넋을 놓고 바라본다.'); f.discipline = Math.min(100, f.discipline + 4); }
         break;

@@ -260,6 +260,18 @@
     // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
     // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
     landPack: { near: 1.2 },
+    // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)
+    //   − 악명 × noto(최대 notoMax) − 얼마 전(alertDays일 안) 들킨 일(alert). min~max로 자른다.
+    //   터번: 이슬람 도시 turban(성지 turbanHoly) · 중국 항구 turbanChinaPort · 중국 내륙 turbanChina. 명나라 옷: mingrobe
+    //   들키면 confiscate 확률로 변장 도구를 빼앗김. 교섭으로 받은 통행 허가는 passDays일.
+    //   med = 지중해 이슬람 항구로 치는 상자 [위도 남, 위도 북, 경도 서, 경도 동]. nonIslam = 이 나라가 다스리면 이슬람 도시라도 그냥 들어감
+    sneak: { base: { holy: 0.1, islam: 0.4, closed: 0.25, treaty: 0.35, wanted: 0.3 },
+      turban: 0.35, turbanHoly: 0.45, turbanChinaPort: 0.12, turbanChina: 0.04, mingrobe: 0.35,
+      lang0: -0.1, langLv: 0.06, speech: 0.05, native: 0.1, noto: 0.003, notoMax: 0.2, alertDays: 30, alert: -0.15,
+      min: 0.05, max: 0.95, confiscate: 0.5, passDays: 365, med: [29, 41.5, -6.5, 37],
+      nonIslam: ['카스티야', '에스파냐', '아라곤', '포르투갈', '프랑스', '영국', '잉글랜드', '네덜란드', '프로이센', '독일 제국', '이탈리아 왕국', '구호기사단',
+        '베네치아', '제노바', '러시아 제국', '러시아 차르국', '돈 코사크', '스텐카 라진 반란군', '푸가초프 반란군', '영국 동인도 회사', '네덜란드 동인도 회사',
+        '시크 미슬 연맹', '시크 제국', '마라타 동맹', '청', '준가르 칸국', '알와 왕국'] },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
     // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
     discoveryImpact: {
@@ -285,6 +297,9 @@
     succession: { sponsorKeep: 0.5, heirKeep: 0.3, legacyTrust: 70, legacyBase: 0.35, legacyGold: 250 },
     // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야, 자녀 maxKids명까지).
     // gestation일 뒤에 태어나고(쌍둥이 twins), adult세가 되면 뒤를 이을 수 있다. 가정교사는 한 아이에게 해마다 한 번, 값 eduCost닢
+    // 유행 (js/systems/fad.js): window일 안에 need번, 한 번에 profit 넘는 이익으로 같은 물건을 같은 나라·지역에 팔면 chance 확률로 유행
+    // → days일 동안 그곳에서 그 물건 값이 mult배 · 끝나면 같은 곳·같은 물건은 cooldown일 동안 쉰다
+    fad: { profit: 0.3, need: 3, window: 90, chance: 0.6, mult: 3, days: 60, cooldown: 180 },
     // 자택에서 아이와 보내는 시간 (js/systems/homelife.js): 능력 상한 statMax · 특기를 익힐 확률 skillChance · 장부를 맡기면 지력×ledgerGold닢
     // · 가족 저녁의 피로 회복 dinnerRest · 사이가 cold 아래면 서먹한 첫마디(함께하면 +coldBonus) · 집을 longAway일 넘게 비웠다 오면 키 재기
     // · 생일 앞뒤 birthdayDays일 · 집에서 일이 생기는 간격 happenGap일·확률 happenChance · 바다에서 추억의 물건: 피로 keepFatigue부터 하루 keepChance, 피로 −keepRest

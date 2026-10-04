@@ -65,7 +65,7 @@
   T.enter = async function (c) {
     var cur = C.current(); cur.looked = false; cur.drinks = 0; cur.asked = 0;
     var mn = G.Monsoon ? G.Monsoon.portNote(c) : null;
-    await C.say(master(), U.pick(['어서 오게! 목을 축이고 가게.', '어서 오게. 오늘도 손님이 많군.', '뱃사람이라면 언제든 환영일세.']) + (mn ? '\f' + (mn.phase === 'sw' ? '요즘은 남서 계절풍이 한창이라 ' : '요즘은 북동 계절풍이라 ') + mn.zone.tip[mn.phase] + '더군. ' + mn.next.date.m + '월 ' + mn.next.date.d + '일 무렵이면 바람이 뒤집힐 걸세.' : ''));
+    await C.say(master(), C.hail(c, 'tavern', ['어서 오게! 목을 축이고 가게.', '어서 오게. 오늘도 손님이 많군.', '뱃사람이라면 언제든 환영일세.']) + (mn ? '\f' + (mn.phase === 'sw' ? '요즘은 남서 계절풍이 한창이라 ' : '요즘은 북동 계절풍이라 ') + mn.zone.tip[mn.phase] + '더군. ' + mn.next.date.m + '월 ' + mn.next.date.d + '일 무렵이면 바람이 뒤집힐 걸세.' : ''));
     // 이 도시에 머무는 경쟁 탐험가를 처음 보면 주인이 귀띔한다 (콜론 — 리스본)
     var rv = T.rivalsStaying(c).filter(function (r) { return !r.atSea && !S().flags['seenRival_' + r.name]; })[0];
     if (rv) { S().flags['seenRival_' + rv.name] = 1; if (G.RIVAL_STAYS[rv.name].keeper) await C.say(master(), G.RIVAL_STAYS[rv.name].keeper); return; }
@@ -121,7 +121,7 @@
     await C.mate(U.pick(['역시 제독! 그럼 사양하지 않겠습니다.', '제독 만세! 모두 잔을 들어라!']));
     s.fleet.discipline = Math.min(100, s.fleet.discipline + 12);
     s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 15);
-    s.player.fame += 1;
+    G.Fame.add('so', 1);
     UI.toast('선원들의 사기가 올랐다. (규율 +12)', 'mug');
     C.current().looked = false;
     if (U.chance(0.6)) await T.encounter(c, true);
@@ -351,7 +351,7 @@
     }
     R.tidyCaptains();
     var role = G.ROLES.map(function (r) { return r.id; }).filter(function (rid) { return !s.mates.some(function (x) { return x.role === rid; }); })[0] || 'none';
-    var nm = { id: m.id, role: role, joined: U.dateNum(s.date), loyal: 40 + cm.lv * 10 };
+    var nm = { id: m.id, role: role, joined: U.dateNum(s.date), loyal: 40 + cm.lv * 10, from: c.id };   // from: 처음 만난 도시 (둘째 부인의 집 — wives.js)
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }   // 빈 배가 있으면 선장으로
     s.mates.push(nm); role = nm;
     G.State.log(U.j(m.name, '이/가') + ' 동료가 되었다.');
@@ -517,8 +517,8 @@
     if (res === 'win') {
       var prize = U.ri(100, 300) + c.size * 60; s.player.gold += prize;
       var line = ld.how === 'persuade' ? '...자네 말이 맞군. 내가 경솔했네. 사과의 뜻이야, 받아 두게.' : ld.how === 'capture' ? '놔, 놔라! ...알았어, 내가 졌다. 이거 가져가!' : ld.how === 'rout' ? '(허둥지둥 달아나며) 돈은 두고 간다!' : '크윽... 졌다. 자, 가져가라!';
-      if (fm) { s.player.fame += 3; fm.loyal = Math.min(100, (fm.loyal || 70) + 5); await UI.say((ld.how === 'ko' ? '크윽... 부하가 이 정도라니. 자, 가져가라!' : line) + ' (금화 ' + prize + '닢)', who); }
-      else { s.player.fame += 5; await UI.say(line + ' (금화 ' + prize + '닢)', who); }
+      if (fm) { G.Fame.add('bt', 3); fm.loyal = Math.min(100, (fm.loyal || 70) + 5); await UI.say((ld.how === 'ko' ? '크윽... 부하가 이 정도라니. 자, 가져가라!' : line) + ' (금화 ' + prize + '닢)', who); }
+      else { G.Fame.add('bt', 5); await UI.say(line + ' (금화 ' + prize + '닢)', who); }
       if (ld.secret) { s.player.notoriety += 1; UI.toast('술집에서 비밀무기를 꺼낸 일로 뒷말이 돈다. (악명 +1)', 'skull', 3500); }
     } else if (res === 'lose') {
       var loss = Math.min(Math.floor(s.player.gold * 0.1), 400 + c.size * 120); s.player.gold -= loss;   // 판돈보다 터무니없이 많이 잃지는 않는다
@@ -639,6 +639,7 @@
     function ask(text, choices) { return UI.ask(text, choices, scene('warm', true)); }
     st.met++;
     if (s.player.wife === m.id) { await say('어머, 당신! 여기서 뭐 해요? 집에서 기다릴게요.', 'happy'); return; }
+    if (G.Wives && G.Wives.of(m.id)) { await say('어머, 당신! 여기서는 일하는 중이에요. 집으로 와요, 기다릴게요.', 'happy'); return; }
     var greet = st.aff < 20 ? '어서 오세요. 처음 뵙는 분이네요.' : st.aff < 50 ? '어머, 또 오셨네요!' : st.aff < 80 ? '와 주셨군요! 기다리고 있었어요.' : '당신 얼굴을 보니 정말 기뻐요.';
     await say(greet, st.aff >= 50 ? 'happy' : 'warm');
     for (;;) {
@@ -671,7 +672,7 @@
         await say(U.pick(['어머, 이렇게 고운 걸 저에게요? 정말 고마워요!', '예뻐라! 소중히 간직할게요.']), 'happy');
       } else if (v === 'wed') {
         if (!R.hasItem('ring')) { UI.toast('청혼하려면 약속 반지가 필요합니다.', 'ring'); continue; }
-        if (s.player.wife) { UI.toast('이미 결혼했습니다.', 'ring'); continue; }
+        if (s.player.wife) { if (G.Wives) { if (await G.Wives.proposeMaid(c, m, say)) return; continue; } UI.toast('이미 결혼했습니다.', 'ring'); continue; }   // 본처가 있으면 둘째 부인으로
         var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?', '청혼한다', '그만둔다');
         if (!ok) continue;
         R.removeItem('ring');

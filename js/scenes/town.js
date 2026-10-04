@@ -54,12 +54,12 @@
 
   // 건물마다 화면에 그릴 높이
   var SIZE = { harbor: 405, shipyard: 385, trade: 360, market: 320, tavern: 345, inn: 352, church: 425,
-    library: 365, palace: 430, mansion: 372, guild: 362, home: 340, gate: 372 };
+    library: 365, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372 };
   // 거리에 늘어서는 차례 (왼쪽 = 바다 쪽, 오른쪽 = 성문 쪽)
-  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'inn', 'guild', 'library', 'church', 'mansion', 'palace', 'home', 'gate'];
+  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'inn', 'guild', 'library', 'church', 'mansion', 'palace', 'house2', 'home', 'gate'];
   // 도시마다 거리 한쪽에 서 있는 볼거리 (누를 수는 없다)
   // 아직 전용 그림이 없는 건물은 비슷한 건물 그림을 좌우로 뒤집어 쓴다
-  var SUBSTITUTE = {};   // 전용 그림이 오면 여기서 비슷한 건물로 돌려 쓸 수 있다
+  var SUBSTITUTE = { house2: 'home' };   // 둘째 부인의 집: 전용 그림이 없으면 자택 그림을 뒤집어 쓴다   // 전용 그림이 오면 여기서 비슷한 건물로 돌려 쓸 수 있다
   var LANDMARKS = { 7: [['giralda', 0.60, 430], ['columns', 0.10, 250]] };
   // 도시 발견물은 landmarks/<발견물 id> 그림이 있을 때 자동으로 거리 뒤편에 선다.
   var LANDMARK_HEIGHT = {

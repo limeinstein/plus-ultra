@@ -8,7 +8,7 @@
   var INN = { title: '여관', icon: 'bed', paint: 'inn', exitLabel: '여관을 나온다' };
   C.B.inn = INN;
   function innWife() { return C.npc('innkeeper', G.Img.npcGender('innkeeper', C.city()) === 'm' ? '여관 주인' : '여관 안주인'); }
-  INN.enter = async function (c) { await C.say(innWife(), U.pick(['어서 오세요. 쉬어 가실래요?', '어서 오세요. 방은 깨끗하게 치워 두었어요.', '먼 길 오셨네요. 푹 쉬고 가세요.'])); };
+  INN.enter = async function (c) { await C.say(innWife(), C.hail(c, 'inn', ['어서 오세요. 쉬어 가실래요?', '어서 오세요. 방은 깨끗하게 치워 두었어요.', '먼 길 오셨네요. 푹 쉬고 가세요.'])); };
   INN.sub = function (c) { return '하룻밤 금화 ' + R.innCost(c) + '닢'; };
   INN.menu = function (c) {
     return [
@@ -52,7 +52,7 @@
     var pay = Math.round(v * (8 + c.size * 4) * (0.8 + R.stat('str') / 150));
     await UI.fade(function () { G.Game.passDays(v); });
     s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
-    var lost = Math.min(s.player.fame, v * K.famePerDay); s.player.fame -= lost;
+    var lost = -G.Fame.add('so', -v * K.famePerDay);
     // 말 익히기 — 지력 50이면 하루가 하루, 지력이 높을수록 빨리
     var learned = '';
     if (li != null && lv0 < 3) {
@@ -105,7 +105,7 @@
   MK.price = mkBuy;
   /** 값이 보통보다 5% 넘게 비싸면 ▲, 싸면 ▼ */
   function mkTrend(it) { var k = R.itemMult(C.city(), it); return k > 1.05 ? ' <span class="warn-text" title="시세 ' + Math.round(k * 100) + '%">▲</span>' : k < 0.95 ? ' <span class="good-text" title="시세 ' + Math.round(k * 100) + '%">▼</span>' : ''; }
-  MK.enter = async function (c) { var cur = C.current(); if (cur) cur.mk = null; await C.say(vendor(), U.pick(['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
+  MK.enter = async function (c) { var cur = C.current(); if (cur) cur.mk = null; await C.say(vendor(), C.hail(c, 'market', ['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
   MK.sub = function () { return '무기·도구·장신구'; };
   MK.menu = function (c) {
     return [
@@ -169,8 +169,10 @@
     var sp = G.Scenes.mateSpeaker('purser');
     await UI.say(U.pick(['이 칼 한 자루에 그 값이라니, 날에 금이라도 발랐소? 절반만 받으시오.', '물건은 좋소. 다만 값이 틀렸구려 — 이 도시 시세는 내가 다 적어 두었소.', '여기서 여럿 사 갈 테니 한꺼번에 셈합시다. 덤도 좀 얹고.']), sp);
     var acct = R.skill('acct'), p = U.clamp(0.35 + acct * 0.12 + pu.acct * 0.06 + (C.langLv(c) - 1) * 0.06 + (R.stat('cha') - 50) * 0.003, 0.1, 0.92);
+    var nb = G.Court ? G.Court.haggle(c) : null;   // 귀족의 권한: 작위만큼 더 잘, 더 많이 깎인다
+    if (nb) p = Math.min(0.95, p + nb.p);
     if (U.chance(p)) {
-      var disc = Math.min(0.22, 0.08 + pu.acct * 0.03 + acct * 0.01 + U.rf(0, 0.03));
+      var disc = Math.min(0.22, 0.08 + pu.acct * 0.03 + acct * 0.01 + U.rf(0, 0.03)) + (nb ? nb.disc : 0);
       cur.mk = { ok: true, buy: 1 - disc, sell: 1 + disc * 0.7 };
       await C.say(vendor(), U.pick(['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.']));
       UI.toast('흥정 성공(경리 ' + pu.name + ')! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '%', 'scales');
@@ -195,7 +197,7 @@
   }
   CH.enter = async function (c) {
     var s = S(), christian = c.rel === 'C' || c.rel === 'O';
-    await C.say(priest(c), christian ? U.pick(['어서 오시오, 길 잃은 어린 양이여.', '신의 가호가 함께하기를.']) : c.rel === 'I' ? U.pick(['평화가 함께하기를. 이방인이여, 무슨 일이오?', '알라의 집에 오신 것을 환영하오.']) : U.pick(['먼 곳에서 온 손님이군요. 편히 쉬었다 가시오.', '모든 생명에 자비가 있기를.']));
+    await C.say(priest(c), christian ? C.hail(c, 'church', ['어서 오시오, 길 잃은 어린 양이여.', '신의 가호가 함께하기를.']) : c.rel === 'I' ? C.hail(c, 'church', ['평화가 함께하기를. 이방인이여, 무슨 일이오?', '알라의 집에 오신 것을 환영하오.']) : U.pick(['먼 곳에서 온 손님이군요. 편히 쉬었다 가시오.', '모든 생명에 자비가 있기를.']));
     C.current().prayed = false;
   };
   CH.sub = function (c) { return C.relName(c); };
@@ -213,7 +215,7 @@
     s.player.gold -= n;
     var dn = Math.floor(n / 200); s.player.notoriety = Math.max(0, s.player.notoriety - dn);
     var fame = Math.floor(n / 1000) * (R.skill('theo') + 1);
-    s.player.fame += fame;
+    G.Fame.add('so', fame);
     await C.say(priest(c), '당신의 선행은 반드시 보답받을 것이오.' + (fame ? '\n(명성 +' + fame + ')' : '') + (dn ? ' (악명 -' + dn + ')' : ''));
   };
   CH.pray = async function (c) {
@@ -252,7 +254,7 @@
     });
     return { lang: lv, need: need, have: have, skOK: have >= need, fresh: fresh, known: known, later: later };
   };
-  LB.enter = async function (c) { await C.say(librarian(c), U.pick(['책을 찾고 계십니까?', '조용히 해 주십시오. 여기는 도서관입니다.', '무슨 책을 찾고 계십니까?'])); };
+  LB.enter = async function (c) { await C.say(librarian(c), C.hail(c, 'library', ['책을 찾고 계십니까?', '조용히 해 주십시오. 여기는 도서관입니다.', '무슨 책을 찾고 계십니까?'])); };
   LB.sub = function (c) { return '장서 ' + LB.books(c).length + '권'; };
   LB.menu = function (c) {
     return [
@@ -318,7 +320,7 @@
   var GU = { title: '조합', icon: 'seal', paint: 'guild', exitLabel: '조합을 나온다' };
   C.B.guild = GU;
   function master(c) { return C.npc('guildmaster', '조합장'); }
-  GU.enter = async function (c) { await C.say(master(c), '제독, 조합에 무슨 일이십니까? 훌륭한 선원이 되고 싶다면 여기서 수행하고 가게.'); };
+  GU.enter = async function (c) { await C.say(master(c), C.hail(c, 'guild', ['제독, 조합에 무슨 일이십니까? 훌륭한 선원이 되고 싶다면 여기서 수행하고 가게.'])); };
   GU.sub = function (c) {
     var n = G.Quest.offers(c).length, r = G.Quest.readyAt(c).length;
     return r ? '끝낸 의뢰 ' + r + '건을 보고할 수 있다' : n ? '의뢰 ' + n + '건이 붙어 있다' : '특기 수행과 어학';
@@ -408,7 +410,7 @@
         if (!cg || cg.q < q.qty) { await C.say(master(c), '아직 물건이 모자라는군.'); return; }
         cg.q -= q.qty; if (cg.q <= 0) delete s.fleet.cargo[q.good];
       }
-      s.player.gold += pay; s.player.fame += fame;
+      s.player.gold += pay; G.Fame.add(G.Fame.questCat(q.kind), fame);
       var i = G.Quest.list().indexOf(q); if (i >= 0) G.Quest.list().splice(i, 1);
       if (!s.questDone) s.questDone = {};
       s.questDone[q.key] = 'done';
@@ -464,7 +466,7 @@
   GT.enter = async function (c) {
     var guard = { name: '수위', portrait: A.withImg(A.npcSpec('gate' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
     var of = G.Mounts.offers(c, S().date.y).map(function (id) { return G.Mounts.get(id).name; });
-    await C.say(guard, U.pick(['성 밖은 위험하다. 조심해서 다녀오게.', '어디로 가려는가? 성 밖에는 도적과 들짐승이 많다네.', '탐험이라도 떠나려는가?']) + (of.length ? ' 성문 옆 마구간에서 ' + of.join('·') + U.jx(of[of.length - 1], '을/를') + ' 구할 수 있지.' : ''));
+    await C.say(guard, C.hail(c, 'gate', ['성 밖은 위험하다. 조심해서 다녀오게.', '어디로 가려는가? 성 밖에는 도적과 들짐승이 많다네.', '탐험이라도 떠나려는가?']) + (of.length ? ' 성문 옆 마구간에서 ' + of.join('·') + U.jx(of[of.length - 1], '을/를') + ' 구할 수 있지.' : ''));
   };
   GT.sub = function (c) { var of = c ? G.Mounts.offers(c, S().date.y).map(function (id) { return G.Mounts.get(id).name; }) : []; return '육로 탐험' + (of.length ? ' · ' + of.join('·') : ''); };
   GT.menu = function (c) {

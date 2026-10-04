@@ -105,7 +105,7 @@
     D.collectionReward(s.stats.found);
     delete s.hints[d.id];
     var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d));
-    s.player.fame += fame;
+    G.Fame.add('ex', fame);
     // 증거품: 이름 붙은 증거(해도·지도)는 소지품으로 챙긴다 — 보고·발표할 때 건넨다 (잃으면 믿어 주지 않는다)
     if (d.evidence && !s.player.items.some(function (it) { return it.kind === 'evidence' && it.disc === d.id; })) {
       s.player.items.push({ id: 'evidence', kind: 'evidence', evidence: true, name: d.evidence, disc: d.id,
@@ -243,7 +243,7 @@
     var s = S();
     if (COLLECT.indexOf(n) < 0) return;
     var gold = n * 400, fame = n * 6;
-    s.player.gold += gold; s.player.fame += fame;
+    s.player.gold += gold; G.Fame.add('ex', fame);
     var king = s.player.nation === 'ES' ? '에스파냐 왕실' : '포르투갈 왕실';
     setTimeout(function () { UI.toast('발견 ' + n + '가지 달성! ' + king + '에서 포상금 금화 ' + U.num(gold) + '닢을 보내왔다. (명성 +' + fame + ')', 'crown', 6500); }, 900);
     G.State.log('발견 ' + n + '가지를 모았다. ' + king + '의 포상 (금화 ' + U.num(gold) + ', 명성 +' + fame + ')');
@@ -361,7 +361,7 @@
     var kept = D.keepRelics(id);
     if (D.needsProof(d) && !proof) fame = Math.round(fame * 0.8);
     D.lastAnnounce = { kept: kept, noProof: D.needsProof(d) && !proof };
-    s.player.fame += fame;
+    G.Fame.add('ex', fame);
     G.State.log('「' + d.name + '」의 발견을 발표했다. (명성 +' + fame + (D.isLate(id) ? ', 늦은 발표라 절반' : '') + (kept.length ? ', 유물 ' + kept.map(function (it) { return R.itemName(it); }).join('·') + U.jx(R.itemName(kept[kept.length - 1]), '은/는') + ' 제독의 것' : '') + ')');
     return fame;
   };

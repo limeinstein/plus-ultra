@@ -215,7 +215,7 @@
     var pr = SP.submitProof(sp, d);
     if (pr.noProof) { pay = Math.round(pay * 0.7 / 100) * 100; fame = Math.round(fame * 0.8); }
     await UI.say(SP.proofLine(pr, d, true) + (G.Disc.isLate(d.id) ? '자네가 먼저 찾았다니 놀랍군. 하지만 ' + st.rival + U.jx(st.rival, '이/가') + ' 이미 발표해 버렸으니 세상이 알아주는 공은 절반이겠지. ' : '훌륭하군! 그 공적은 내가 세상에 널리 알리겠네. ') + '약소하지만 사례로 금화 ' + U.num(pay) + '닢을 주겠네.' + cutTxt, who);
-    s.player.gold += pay; s.player.fame += fame; st.reported = sp.id; SP.addTrust(rel, 6 + pr.bonus); rel.done = (rel.done || 0) + 1;
+    s.player.gold += pay; G.Fame.add('ex', fame); st.reported = sp.id; SP.addTrust(rel, 6 + pr.bonus); rel.done = (rel.done || 0) + 1;
     SP.proofToast(pr);
     G.State.log(SP.holderName(sp) + '에게 「' + d.name + '」의 발견을 보고했다. (금화 ' + pay + ', 명성 +' + fame + ')');
     await UI.alert('금화 ' + U.num(pay) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성은 절반</span>' : ''), '보고');
@@ -368,7 +368,7 @@
     var d = G.DISC[k.disc], name = k.circ ? '세계일주' : d ? d.name : '계약';
     var lines = [];
     if (k.small) SP.addTrust(rel, -8);                     // 작은 일거리: 가볍게
-    else { SP.addTrust(rel, why === 'announce' ? -20 : -12); rel.fail = (rel.fail || 0) + 1; s.player.fame = Math.max(0, s.player.fame - Math.round(((d && d.pw) || 1) * 20)); }
+    else { SP.addTrust(rel, why === 'announce' ? -20 : -12); rel.fail = (rel.fail || 0) + 1; G.Fame.add('ex', -Math.round(((d && d.pw) || 1) * 20)); }
     if (why !== 'late' && k.advance > 0) {
       var p = s.player, fromGold = Math.min(p.gold, k.advance), fromBank = Math.min(p.bank || 0, k.advance - fromGold), paid = fromGold + fromBank;
       p.gold -= fromGold; p.bank = (p.bank || 0) - fromBank;
@@ -420,7 +420,7 @@
       '\f자, 약속한 사례금 금화 ' + U.num(reward) + '닢일세. 자네의 이름은 온 세상에 알려질 걸세.', who);
     if (ret.returned) UI.toast('빌렸던 ' + ret.returned.name + '호를 돌려주었다.', 'ship', 4000);
     SP.proofToast(pr);
-    s.player.gold += reward; s.player.fame += fame;
+    s.player.gold += reward; G.Fame.add('ex', fame);
     st.reported = sp.id; s.disc[k.disc] = st;
     SP.addTrust(rel, trustUp); rel.done = (rel.done || 0) + 1;
     if (k.circ) { s.flags.circDone = true; }

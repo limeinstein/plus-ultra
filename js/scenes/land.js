@@ -295,7 +295,7 @@
       if (T.sick && U.chance((0.04 - R.skill('med') * 0.01) * (st.herbs > 0 ? 0.3 : 1))) { var sk = U.ri(1, 2); l.party = Math.max(0, l.party - sk); f.crew = Math.max(0, f.crew - sk); msgs.push({ icon: 'skull', text: '열병으로 대원 ' + sk + '명을 잃었다.' }); }
       G.State.revealChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
       // discover inland cities
-      G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c) || s.known.indexOf(c.id) >= 0) return; if (G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.8) { s.known.push(c.id); UI.toast('새로운 도시 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'castle', 4000); s.player.fame += 5; } });
+      G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c) || s.known.indexOf(c.id) >= 0) return; if (G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.8) { s.known.push(c.id); UI.toast('새로운 도시 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'castle', 4000); G.Fame.add('ex', 5); } });
       msgs.forEach(function (m) { UI.toast(m.text, m.icon); });
       refreshHud();
       // discoveries
@@ -389,7 +389,7 @@
     var extra = roll < 0.28 + (worth - 1) * 0.2, fire = !extra && roll < 0.28 + (worth - 1) * 0.2 + 0.3 + (f.fatigue > 40 ? 0.15 : 0);
     if (extra) days = Math.round(days * 1.8);
     f.food += Math.round(use * days); f.water += Math.round(use * days);
-    s.player.fame += 1;
+    G.Fame.add('so', 1);
     if (extra) {
       await UI.say(U.pick(['(손짓으로) 먼 길을 가는 손님이니 넉넉히 가져가라고 한다.', '(웃으며) 선물이 마음에 든 모양이다. 광주리 가득 먹을 것을 내온다.']), who);
       UI.toast('추가 보급! 식량과 물을 약 ' + days + '일분씩 얻었다.', 'bread', 4800);
@@ -467,7 +467,7 @@
     var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
     var res = r.res;
     if (res === 'win') {
-      s.player.fame += kind === 'beast' ? 2 : 5 + (r.leaderDown ? 3 : 0);
+      G.Fame.add('bt', kind === 'beast' ? 2 : 5 + (r.leaderDown ? 3 : 0));
       if (kind === 'beast') { var meat = Math.round(R.dailyUse() * U.rf(1.5, 3) * Math.min(3, n / 8)); s.fleet.food += meat; UI.toast('짐승들을 물리쳤다! 고기로 식량 약 ' + Math.round(meat / R.dailyUse()) + '일분을 얻었다.', 'bread', 4200); }
       else if (kind === 'native') UI.toast('원주민 전사들을 물리쳤다.', 'sword');
       else { var loot = n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + loot + '닢)', 'sword'); }
@@ -600,7 +600,7 @@
       var tr = G.Disc.checkTrade ? G.Disc.checkTrade(good, near) : [];
       for (var i = 0; i < tr.length; i++) await G.Disc.find(tr[i], 'trade');
     } else UI.toast('식량을 얻었다.', 'bread');
-    s.player.fame += 2;
+    G.Fame.add('so', 2);
   }
 
   /** 지형마다 다른 사건. 일어나면 true */
@@ -651,7 +651,7 @@
         else { l.party = Math.max(0, l.party - 1); f.crew = Math.max(0, f.crew - 1); UI.toast('끝내 구하지 못했다...', 'skull'); }
       } else {
         await UI.say('나무 사이로 거대한 폭포가 보인다. 물보라에 무지개가 걸렸다.', sp);
-        f.fatigue = Math.max(0, f.fatigue - 6); s.player.fame += 2 + R.skill('art') * 2;
+        f.fatigue = Math.max(0, f.fatigue - 6); G.Fame.add('ex', 2 + R.skill('art') * 2);
         if (R.skill('art')) UI.toast('폭포를 화첩에 그려 두었다.', 'feather');
       }
       return true;

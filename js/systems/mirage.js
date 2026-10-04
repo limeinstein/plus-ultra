@@ -42,7 +42,7 @@
     m = s.mirage[d.id] = m || { first: U.dateNum(s.date), n: 0 };
     m.n++; m.last = s.day;
     if (first) {
-      s.player.fame += c.fame || 0;
+      G.Fame.add('ex', c.fame || 0);
       if (G.Disc && !s.hints[d.id]) s.hints[d.id] = { src: 'mirage', d: U.dateNum(s.date) };
       G.State.log('신기루를 보았다 — 「' + d.name + '」. 아직 세상에 없는 것이 잠시 떠올랐다가 사라졌다.');
     }

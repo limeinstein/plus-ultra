@@ -243,12 +243,13 @@
     return null;
   };
   R.mateSkill = function (m, id) {
+    if (R.mateHidden && R.mateHidden(m)) return 0;      // 본국 항구에서 숨어 있는 둘째 부인 (js/systems/wives.js)
     var d = G.MATE[m.id]; var lv = d ? ((m.sk && m.sk[id] != null ? m.sk[id] : d.sk[id]) || 0) : 0;
     if (lv && m.loyal != null && G.Cabins) { var ef = G.Cabins.eff(m); if (ef < 1) lv = Math.max(m.loyal > ((G.BALANCE.mates || {}).veryLow || 20) ? 1 : 0, Math.floor(lv * ef + 1e-9)); }   // 충성 40 아래면 건성으로 한다: 3→2, 2→1 (20 아래면 3→1, 1→0) (G.BALANCE.mates)
     return R.mateHurt(m) ? Math.floor(lv / 2) : lv;
   };
   /** 부하의 말 단계: 타고난 것과 한배에서 지내며 배운 것(m.lgx) 가운데 높은 쪽 */
-  R.mateLang = function (m, li) { var d = G.MATE[m.id]; return Math.max((d && d.lg && d.lg[li]) || 0, (m.lgx && m.lgx[li]) || 0); };
+  R.mateLang = function (m, li) { if (R.mateHidden && R.mateHidden(m)) return 0; var d = G.MATE[m.id]; return Math.max((d && d.lg && d.lg[li]) || 0, (m.lgx && m.lgx[li]) || 0); };
   /** 대리 결투에서 진 동료는 한동안 다쳐 있다 (남은 날, 0이면 멀쩡) */
   R.mateHurt = function (m) { var S = R.S(); return m && m.hurt && S && S.day < m.hurt ? m.hurt - S.day : 0; };
   /** 배 한 척을 맡은 사람의 특기: 기함은 제독과 기함 참모(부관·항해사·측량사), 다른 배는 그 배 선장 한 사람 */
@@ -476,6 +477,7 @@
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var p = g.p * (R.isRelay(c, goodId) ? R.relayMult(c, goodId, 'buy') : 0.62) * (1 + st.dep * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).depPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
+    if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행하는 물건은 사는 값도 뛴다 (js/systems/fad.js)
     return Math.max(1, Math.round(p));
   };
   /** price the city pays when you sell */
@@ -483,6 +485,7 @@
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var base = R.isRelay(c, goodId) ? g.p * R.relayMult(c, goodId, 'sell') : R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
     var p = base * Math.exp(-st.sat * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).satPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
+    if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행: 그 나라·지역에서 값이 몇 배 (js/systems/fad.js)
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자
