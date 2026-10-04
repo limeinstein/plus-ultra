@@ -22,7 +22,7 @@ ARTIFACT_LIMIT = 16 * 1024 * 1024      # 아티팩트 페이지 하나·텍스�
 PACK_BUDGET = 170 * 1000 * 1000        # (예전 값 — 지금은 아래 ARTIFACT_TOTAL로 한 판 전체를 잰다)
 ARTIFACT_TOTAL = 248 * 1000 * 1000     # 아티팩트 한 판 합계 한도(256MB) 안에서: 페이지 + 그림 묶음 + 장면 판·움직이는 그림 + 음악
 ARTIFACT_FILES = 500                   # 아티팩트 한 판 파일 수 한도(511) 안에서: 페이지 + 묶음 + 장면 판 + 음악
-PACK_TARGET = int(3.5 * 1024 * 1024)   # 그림 묶음 파일 하나의 크기 (대략) — 작을수록 한 장면에서 덜 받지만 파일 수가 는다 (장면 판 370장과 합쳐 한 판 511개 안에서)
+PACK_TARGET = int(5 * 1024 * 1024)   # 그림 묶음 파일 하나의 크기 (대략) — 작을수록 한 장면에서 덜 받지만 파일 수가 는다 (장면 판 370장과 합쳐 한 판 511개 안에서)
 
 
 PACK_SMALL = int(1.5 * 1024 * 1024)               # 이보다 작은 묶음은 같은 갈래의 이웃 묶음과 합친다 (파일 수가 너무 늘지 않게 — 한 판 511개)
@@ -191,6 +191,14 @@ def split_anim(found):
     """아티팩트용: 움직이는 그림(유적 GIF → .anim.webp)은 묶음에 넣지 않고 images/ 아래 파일로 따로 올린다.
     묶음은 페이지를 열 때 모두 읽히지만, 따로 올린 파일은 발견 연출·도감에서 필요할 때만 읽힌다.
     발견 장면 판(discovery-sheets/)도 따로 올린다. 장면 판이 있는 발견물의 움직이는 그림은 게임이 쓰지 않으므로 뺀다."""
+    # 아티팩트 한 판의 파일 수(511)·크기(256MB) 때문에 장면 판을 다 싣지 못할 때: tools/artifact_sheet_drop.txt 의 발견물은
+    # 장면 판·움직이는 그림을 빼고 마지막 장면(discovery-ends, 묶음 안)만 싣는다 — 웹판·개발판은 그대로 움직인다
+    drop = set()
+    dp = os.path.join(pages.TOOLS, 'artifact_sheet_drop.txt')
+    if os.path.exists(dp):
+        drop = {l.split('#')[0].strip() for l in open(dp, encoding='utf-8')} - {''}
+    if drop:
+        found = {k: rel for k, rel in found.items() if not ((k.startswith('discovery-sheets/') or k.startswith('discoveries/')) and k.split('/', 1)[1] in drop)}
     sheets = {k[len('discovery-sheets/'):] for k in found if k.startswith('discovery-sheets/')}
     anim = {k: rel for k, rel in found.items() if rel.lower().endswith(('.anim.webp', '.gif')) or k.startswith('discovery-sheets/')}
     anim = {k: rel for k, rel in anim.items() if not (k.startswith('discoveries/') and k[len('discoveries/'):] in sheets)}
@@ -271,7 +279,7 @@ def main():
     import slim
     slim_dir = os.path.join(pages.ROOT, 'dist', 'slim-images')
     sfound = slim.build(found, slim_dir, 1.0)
-    write(os.path.join(pages.ROOT, 'PLUS_ULTRA.html'), inline('index.html', sfound, False, base=slim_dir))
+    if not os.environ.get('NO_SINGLE'): write(os.path.join(pages.ROOT, 'PLUS_ULTRA.html'), inline('index.html', sfound, False, base=slim_dir))
     if '--artifact' in sys.argv:
         i = sys.argv.index('--artifact')
         out = sys.argv[i + 1] if i + 1 < len(sys.argv) else os.path.join(pages.ROOT, 'dist', 'artifact')
