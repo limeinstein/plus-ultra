@@ -7,13 +7,15 @@ from PIL import Image, ImageChops, ImageStat
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TREASURE_IDS = [
-    "beowulf", "kingjohn", "agamemnon", "tutankh", "rosetta", "sargon",
-    "urcrown", "goldplate", "ewer", "shiva", "goldelephant", "jadesuit",
-    "bronze", "cloisonne", "seismo", "glassbowl", "goldseal",
-    "crystalskull", "eldorado", "jademask", "grail", "stcrown",
-    "reliquary", "ifehead",
-]
+import importlib.util
+_spec = importlib.util.spec_from_file_location("treasure_build", ROOT / "tools" / "treasure_gifs" / "build.py")
+_mod = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_mod)
+TREASURE_IDS = list(_mod.TREASURE_IDS)
+# 그림·책·병풍·벽화처럼 납작한 보물은 360° 대신 ±30° 흔들어 찍었다 (tools/procedural_art) — 앞·뒤 차이가 작다
+FLAT = {"cheonmado", "libai", "lanting", "qingming", "hunmin", "baburnama", "shahnameh", "mayacodex", "pirireis",
+        "monalisa", "creation", "lastsupper", "birthvenus", "durer", "urbinovenus", "babeltower", "orgaz",
+        "ambassadors", "earthlydelights", "ghentaltar", "nanbanscreen", "ajanta", "paladoro", "holylance",
+        "incadisc", "sunstone", "hammurabi", "tripitaka", "moctezuma", "iznikware", "lustreware"}
 
 
 def difference(a: Image.Image, b: Image.Image) -> float:
@@ -23,6 +25,8 @@ def difference(a: Image.Image, b: Image.Image) -> float:
 
 data = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 treasures = set(re.findall(r"^\s*add\('([^']+)', '[^']+', 'treasure'", data, re.M))
+sea = (ROOT / "js" / "data" / "seadisc.js").read_text(encoding="utf-8")
+treasures |= set(re.findall(r"^\s*s\('([^']+)', '[^']+', 'treasure'", sea, re.M))
 assert set(TREASURE_IDS) == treasures, (set(TREASURE_IDS) ^ treasures)
 
 for did in TREASURE_IDS:
@@ -51,8 +55,9 @@ for did in TREASURE_IDS:
                 frames.append(im.convert("RGB"))
         assert duration == 8400, (did, duration)
         # 두 회전 모두 정면과 뒷면이 충분히 달라야 하며 피날레도 존재해야 한다.
-        assert difference(frames[0], frames[1]) > 3.5, did
-        assert difference(frames[2], frames[3]) > 3.5, did
+        turn = 0.8 if did in FLAT else 3.5
+        assert difference(frames[0], frames[1]) > turn, did
+        assert difference(frames[2], frames[3]) > turn, did
         assert difference(frames[0], frames[4]) > 1.0, did
 
     with Image.open(end) as im:

@@ -264,6 +264,8 @@
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).
     // 떠도는 고장: 제 나라 고장에 더해 farZone 확률로 먼 고장 하나를 더 다닌다. 마녀 전설(legend)은 한 세대에 legendMax명까지 소문이 돈다
     wander: { perYear: 5, startN: 12, cycle: 30, epoch: 1480, rebornMax: 30, keepNation: 0.55, keepGender: 0.7, farZone: 0.35, legendMax: 2 },
+    // 고장 사람: 어느 5년 칸에도 고장(G.MATE_ZONES)마다 사람 사는 도시 수 × ratio명쯤의 항해사 후보가 있게, every해마다 세어 모자라면 그 고장 태생으로 채운다. extraLang: 다른 말 하나를 알 확률
+    regionFolk: { ratio: 0.8, every: 1, extraLang: 0.15, maxPerFill: 400 },
     // 부하와 이야기 (matetalk.js): 하루 한 번 이야기(충성 chatLoyal·호감 chatAff), 한잔(값 drinkCost × 도시 크기, 충성 drinkLoyal·호감 drinkAff).
     // 여성 부하는 호감이 wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다. 마녀의 점괘는 fortuneDays일에 한 번
     mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30 }

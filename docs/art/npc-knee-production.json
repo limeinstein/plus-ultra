@@ -1,0 +1,4778 @@
+{
+  "note": "제작·연결·검수 완료. 머리부터 무릎까지만 보이며 발은 제외한다. 후원자는 119개 자리이고, 역대 인물 일부는 기존 연결 방식에 따라 자리 기본상이나 지역·역할 공용상을 함께 쓴다. 고유 인물 620명의 개별 그림을 만든 것은 아니다. 자동 생성 철새 항해사는 고정 총원 집계에서 제외한다.",
+  "before": { "staticMatesMissingHalf": 87, "sponsorSlotsMissingHalf": 119, "dedicatedBustsMissingHalf": 187, "usedBustSourcesMissingHalf": 201 },
+  "after": { "staticMates": 87, "sponsorSlots": 119, "sponsorTenureRows": 750, "staticMatesMissingHalf": 0, "sponsorSlotsMissingHalf": 0, "sponsorTenuresMissingHalf": 0, "dedicatedBustsMissingHalf": 0 },
+  "savedAssets": { "mates": 57, "sponsors": 203, "regionalRoles": 26, "totalImageFiles": 286, "uniqueGeneratedImages": 251, "size": [1024, 1536], "mode": "RGBA", "transparentAlphaVerified": true, "formatNote": "PNG로 생성한 뒤 같은 작업 폴더의 별도 용량 최적화가 WEBP로 변환했다. 최신 파일 경로는 images/manifest.js와 npc-knee-audit.json을 따른다." },
+  "verification": { "test": "tests/npc_knee_smoke.js", "consecutiveSuccessfulRuns": 2, "runtimeSelectedImagesDecoded": 274, "dialogCases": ["elcano", "amina", "pt_king:1492", "cn_grand:1480", "nl_regent:1507"], "consoleErrors": 0 },
+  "sourceGroups": [
+    {
+      "key": "portraits/sponsors/ch_zwingli",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ch_zwingli",
+        "portraits/sponsors/ch_zwingli_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/de_emperor",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/de_emperor",
+        "portraits/sponsors/de_emperor_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/de_emperor_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/de_emperor_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/de_emperor_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/de_emperor_3",
+        "portraits/sponsors/es_crown_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/de_emperor_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/de_emperor_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/de_luther",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/de_luther",
+        "portraits/sponsors/de_luther_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/de_melanchthon",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/de_melanchthon",
+        "portraits/sponsors/de_melanchthon_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/dk_king",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/dk_king",
+        "portraits/sponsors/dk_king_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/dk_king_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/dk_king_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/dk_king_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/dk_king_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/dk_king_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/dk_king_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/en_king",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/en_king",
+        "portraits/sponsors/en_king_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/en_king_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/en_king_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/en_king_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/en_king_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/en_king_6",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/en_king_6"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_aragon",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_aragon",
+        "portraits/sponsors/es_aragon_1",
+        "portraits/sponsors/es_crown_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch",
+        "portraits/sponsors/es_arch_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch_6",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch_6"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch_7",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch_7"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_arch_8",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_arch_8"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_casa",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_casa",
+        "portraits/sponsors/es_casa_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_casa_1",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_casa_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_casa_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_casa_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_casa_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_casa_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_casa_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_casa_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_casa_6",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_casa_6"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_crown",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_crown",
+        "portraits/sponsors/es_crown_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_crown_1",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_crown_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_medina",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_medina",
+        "portraits/sponsors/es_medina_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_medina_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_medina_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_medina_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_medina_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_medinaceli",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_medinaceli",
+        "portraits/sponsors/es_medinaceli_1",
+        "portraits/sponsors/es_medinaceli_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_medinaceli_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_medinaceli_2",
+        "portraits/sponsors/es_medinaceli_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/es_santangel",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/es_santangel",
+        "portraits/sponsors/es_santangel_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_ango",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_ango",
+        "portraits/sponsors/fr_ango_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_calvin",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_calvin",
+        "portraits/sponsors/fr_calvin_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_king",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_king",
+        "portraits/sponsors/fr_king_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_king_1",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_king_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_king_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_king_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_king_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_king_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_king_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_king_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/fr_king_6",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/fr_king_6"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_doge",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_doge"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_doge_1",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_doge_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_doge_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_doge_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_doge_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_doge_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_doge_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_doge_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_doge_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_doge_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_medici",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_medici"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_medici_1",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_medici_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_medici_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_medici_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_medici_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_medici_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_medici_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_medici_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_moro",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_moro",
+        "portraits/sponsors/it_moro_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_moro_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_moro_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_pope",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_pope",
+        "portraits/sponsors/it_pope_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_pope_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_pope_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_pope_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_pope_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_pope_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_pope_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_pope_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_pope_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/it_pope_6",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/it_pope_6"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ot_sultan",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ot_sultan"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ot_sultan_1",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ot_sultan_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ot_sultan_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ot_sultan_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ot_sultan_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ot_sultan_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ot_sultan_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ot_sultan_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ot_sultan_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ot_sultan_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pl_copernicus",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pl_copernicus",
+        "portraits/sponsors/pl_copernicus_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pl_king",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pl_king",
+        "portraits/sponsors/pl_king_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pl_king_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pl_king_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pl_king_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pl_king_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pl_king_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pl_king_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pl_king_5",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pl_king_5"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_behaim",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_behaim"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_braganza",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_braganza",
+        "portraits/sponsors/pt_braganza_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_braganza_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_braganza_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_braganza_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_braganza_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_braganza_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_braganza_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_casaindia",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_casaindia",
+        "portraits/sponsors/pt_casaindia_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_casaindia_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_casaindia_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_casaindia_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_casaindia_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_india",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_india",
+        "portraits/sponsors/pt_india_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_king",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_king",
+        "portraits/sponsors/pt_king_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_king_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_king_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_king_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_king_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_king_4",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_king_4"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_marchionni",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_marchionni",
+        "portraits/sponsors/pt_marchionni_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_queen",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_queen",
+        "portraits/sponsors/pt_queen_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_queen_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_queen_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/pt_queen_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/pt_queen_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ru_prince",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ru_prince",
+        "portraits/sponsors/ru_prince_1"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ru_prince_2",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ru_prince_2"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/ru_prince_3",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/ru_prince_3"
+      ]
+    },
+    {
+      "key": "portraits/sponsors/sc_knox",
+      "ext": "webp",
+      "aliases": [
+        "portraits/sponsors/sc_knox",
+        "portraits/sponsors/sc_knox_1"
+      ]
+    }
+  ],
+  "newSponsors": [
+    {
+      "id": "es_fonseca",
+      "title": "인디아스 문제 책임자",
+      "city": "세빌리아",
+      "holder": "후안 로드리게스 데 폰세카 부주교",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          191.43115810444579,
+          141.5858734571375,
+          107.13527816953138
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#3d5a5a",
+        "nose": 0.5896896007470787,
+        "chin": 0.6060239588841796,
+        "brow": 0.9637954325880855,
+        "hairStyle": 2,
+        "beard": 0,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          50.15145572088659,
+          51.24737433902919,
+          34.39114485587925
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_fonseca_후안 로드리게스 데 폰세카 부주교",
+        "style": "ib",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_fonseca_1",
+          "portraits/sponsors/es_fonseca"
+        ]
+      }
+    },
+    {
+      "id": "es_nebrija",
+      "title": "인문학자",
+      "city": "톨레도",
+      "holder": "안토니오 데 네브리하",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          199.42179334443063,
+          138.20687813078985,
+          117.33982706163079
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a2a3a",
+        "nose": 0.7855768189765513,
+        "chin": 0.8323936054948717,
+        "brow": 0.3934096428565681,
+        "hairStyle": 0,
+        "beard": 2,
+        "hat": "beret",
+        "age": "old",
+        "gold": false,
+        "bg": [
+          63.77567053027451,
+          51.783070837147534,
+          21.56161142233759
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_nebrija_안토니오 데 네브리하",
+        "style": "ib",
+        "role": "scholar",
+        "dress": "doublet",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_nebrija_1",
+          "portraits/sponsors/es_nebrija"
+        ]
+      }
+    },
+    {
+      "id": "it_toscanelli",
+      "title": "피렌체의 천문학자",
+      "city": "피렌체",
+      "holder": "파올로 토스카넬리",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          208.78818356106058,
+          153.68491604644805,
+          122.96353026805446
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a2a3a",
+        "nose": 0.814774970524013,
+        "chin": 0.10661708773113787,
+        "brow": 0.81288320873864,
+        "hairStyle": 2,
+        "beard": 2,
+        "hat": "beret",
+        "age": "old",
+        "gold": false,
+        "bg": [
+          60.48243289999664,
+          33.414777329191566,
+          37.670045925304294
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_toscanelli_파올로 토스카넬리",
+        "style": "it",
+        "role": "scholar",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_toscanelli_1",
+          "portraits/sponsors/it_toscanelli"
+        ]
+      }
+    },
+    {
+      "id": "it_spinola",
+      "title": "제노바 대상인",
+      "city": "제노바",
+      "holder": "미켈레 스피놀라",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          205.0998459928669,
+          150.27685286244377,
+          119.38052016450092
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#1e3552",
+        "nose": 0.8841510135680437,
+        "chin": 0.7972448549699038,
+        "brow": 0.6968851131387055,
+        "hairStyle": 0,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          52.05634653288871,
+          51.04904195573181,
+          23.909460713155568
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_spinola_미켈레 스피놀라",
+        "style": "it",
+        "role": "merchant",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_spinola_1",
+          "portraits/sponsors/it_spinola"
+        ]
+      }
+    },
+    {
+      "id": "it_leonardo",
+      "title": "만능의 천재",
+      "city": "밀라노",
+      "holder": "레오나르도 다 빈치",
+      "from": 1482,
+      "spec": {
+        "g": "m",
+        "skin": [
+          195.23593109520152,
+          139.0279298950918,
+          109.37039573164657
+        ],
+        "hair": "#8a8278",
+        "cloth": "#2a2a3a",
+        "nose": 0.5141290724277496,
+        "chin": 0.15755693311803043,
+        "brow": 0.5570766148157418,
+        "hairStyle": 1,
+        "beard": 2,
+        "hat": "beret",
+        "age": "old",
+        "gold": false,
+        "bg": [
+          62.1609839675948,
+          46.163307156413794,
+          34.912173917517066
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_leonardo_레오나르도 다 빈치",
+        "style": "it",
+        "role": "scholar",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_leonardo_1",
+          "portraits/sponsors/it_leonardo"
+        ]
+      }
+    },
+    {
+      "id": "en_bristol",
+      "title": "브리스틀 상인조합장",
+      "city": "브리스틀",
+      "holder": "브리스틀 상인조합장",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          210.15091630723327,
+          163.62052568234503,
+          128.65929413307458
+        ],
+        "hair": "#3a2616",
+        "cloth": "#4a3a2a",
+        "nose": 0.5617351704277098,
+        "chin": 0.5876431283541024,
+        "brow": 0.4278223239816725,
+        "hairStyle": 2,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          62.22083063516766,
+          42.27643176726997,
+          31.64842601120472
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_en_bristol_브리스틀 상인조합장",
+        "style": "ne",
+        "role": "merchant",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/en_bristol_1",
+          "portraits/sponsors/en_bristol"
+        ]
+      }
+    },
+    {
+      "id": "de_fugger",
+      "title": "푸거 상회 당주",
+      "city": "아우크스부르크",
+      "holder": "야코프 푸거",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          219.9101992705837,
+          169.75088300043717,
+          131.7664719922468
+        ],
+        "hair": "#3a2616",
+        "cloth": "#2a3a5a",
+        "nose": 0.6051156187895685,
+        "chin": 0.758518036454916,
+        "brow": 0.3938124617561698,
+        "hairStyle": 3,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": false,
+        "bg": [
+          49.4566083997488,
+          47.96914767753333,
+          37.914601501077414
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_de_fugger_야코프 푸거",
+        "style": "ne",
+        "role": "merchant",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/de_fugger_1",
+          "portraits/sponsors/de_fugger"
+        ]
+      }
+    },
+    {
+      "id": "de_welser",
+      "title": "벨저 상회 당주",
+      "city": "아우크스부르크",
+      "holder": "바르톨로모이스 벨저",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          225.77469463972375,
+          166.4517333987169,
+          127.42274790396914
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#2a2a2a",
+        "nose": 0.59593566483818,
+        "chin": 0.036607123678550124,
+        "brow": 0.6032742294482887,
+        "hairStyle": 3,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": false,
+        "bg": [
+          64.98132967576385,
+          32.934156817384064,
+          27.61649048142135
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_de_welser_바르톨로모이스 벨저",
+        "style": "ne",
+        "role": "merchant",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/de_welser_1",
+          "portraits/sponsors/de_welser"
+        ]
+      }
+    },
+    {
+      "id": "de_hansa",
+      "title": "한자 동맹 시장",
+      "city": "뤼베크",
+      "holder": "뤼베크 시장",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          214.27082405937836,
+          160.74799711536616,
+          139.81125381961465
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#3d5a5a",
+        "nose": 0.3209461295045912,
+        "chin": 0.6489582215435803,
+        "brow": 0.2830313022714108,
+        "hairStyle": 3,
+        "beard": 2,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          48.11257202364504,
+          45.65955815650523,
+          20.710093650966883
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_de_hansa_뤼베크 시장",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/de_hansa_1",
+          "portraits/sponsors/de_hansa"
+        ]
+      }
+    },
+    {
+      "id": "de_waldsee",
+      "title": "지리학자",
+      "city": "스트라스부르크",
+      "holder": "마르틴 발트제뮐러",
+      "from": 1500,
+      "spec": {
+        "g": "m",
+        "skin": [
+          223.0510336854495,
+          159.74927068362013,
+          130.66641964577138
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a2a3a",
+        "nose": 0.2345530882012099,
+        "chin": 0.6107977353967726,
+        "brow": 0.49105605436488986,
+        "hairStyle": 3,
+        "beard": 1,
+        "hat": "beret",
+        "age": "old",
+        "gold": false,
+        "bg": [
+          55.74238797836006,
+          41.94237463455647,
+          21.96184074692428
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_de_waldsee_마르틴 발트제뮐러",
+        "style": "ne",
+        "role": "scholar",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/de_waldsee_1",
+          "portraits/sponsors/de_waldsee"
+        ]
+      }
+    },
+    {
+      "id": "nl_erasmus",
+      "title": "인문학자",
+      "city": "앤트워프",
+      "holder": "데시데리우스 에라스뮈스",
+      "from": 1500,
+      "spec": {
+        "g": "m",
+        "skin": [
+          218.40329855168238,
+          167.54959464864805,
+          138.63310438534245
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a2a3a",
+        "nose": 0.8311546719633043,
+        "chin": 0.9944782475940883,
+        "brow": 0.3815984351094812,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "none",
+        "age": "old",
+        "gold": false,
+        "bg": [
+          54.03239929769188,
+          47.263007916510105,
+          24.711981957778335
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_nl_erasmus_데시데리우스 에라스뮈스",
+        "style": "ne",
+        "role": "scholar",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/nl_erasmus_1",
+          "portraits/sponsors/nl_erasmus"
+        ]
+      }
+    },
+    {
+      "id": "kr_king",
+      "title": "조선 국왕",
+      "city": "한양",
+      "holder": "성종",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          213.62302893865854,
+          172.02726273983717,
+          125.17950358660892
+        ],
+        "hair": "#3a2616",
+        "cloth": "#9e2524",
+        "nose": 0.6354103744961321,
+        "chin": 0.5290926923044026,
+        "brow": 0.7061366196721792,
+        "hairStyle": 2,
+        "beard": 0,
+        "hat": "ikseongwan",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          55.04760895110667,
+          43.84400955680758,
+          22.626600751653314
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_kr_king_성종",
+        "style": "kr",
+        "role": "king",
+        "dress": "hanbok",
+        "trim": "#f2eee2",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "dragon",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0.72,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/kr_king_1",
+          "portraits/sponsors/kr_king"
+        ]
+      }
+    },
+    {
+      "id": "kr_seja",
+      "title": "조선 세자",
+      "city": "한양",
+      "holder": "세자 이융",
+      "from": 1483,
+      "spec": {
+        "g": "m",
+        "skin": [
+          208.63866228656843,
+          162.9255815539509,
+          121.18355163466185
+        ],
+        "hair": "#3a2616",
+        "cloth": "#7d2428",
+        "nose": 0.20160870719701052,
+        "chin": 0.9912496744655073,
+        "brow": 0.42003883328288794,
+        "hairStyle": 3,
+        "beard": 0,
+        "hat": "samo",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          62.289252273738384,
+          46.48734416626394,
+          22.388149776495993
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_kr_seja_세자 이융",
+        "style": "kr",
+        "role": "noble",
+        "dress": "hanbok",
+        "trim": "#f2eee2",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "crane",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0.72,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/kr_seja_1",
+          "portraits/sponsors/kr_seja"
+        ]
+      }
+    },
+    {
+      "id": "kr_apgujeong",
+      "title": "훈구 대신",
+      "city": "한양",
+      "holder": "상당부원군 한명회",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          211.28929411573336,
+          162.15104668680578,
+          125.00371453724802
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#7d2428",
+        "nose": 0.04332867776975036,
+        "chin": 0.04614149103872478,
+        "brow": 0.2235235166735947,
+        "hairStyle": 3,
+        "beard": 0,
+        "hat": "samo",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          52.712585867382586,
+          32.767181515693665,
+          22.985740762203932
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_kr_apgujeong_상당부원군 한명회",
+        "style": "kr",
+        "role": "noble",
+        "dress": "hanbok",
+        "trim": "#f2eee2",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "crane",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0.72,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": true,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/kr_apgujeong_1",
+          "portraits/sponsors/kr_apgujeong"
+        ]
+      }
+    },
+    {
+      "id": "kr_gyeongju",
+      "title": "경주 출신 대신",
+      "city": "경주",
+      "holder": "경주 부윤",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          214.9250103388913,
+          166.90520830778405,
+          126.73142869165167
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#7d2428",
+        "nose": 0.4346558949910104,
+        "chin": 0.7463184562511742,
+        "brow": 0.4858754323795438,
+        "hairStyle": 1,
+        "beard": 0,
+        "hat": "samo",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          50.11522243451327,
+          50.815024234354496,
+          28.163338822312653
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_kr_gyeongju_경주 부윤",
+        "style": "kr",
+        "role": "noble",
+        "dress": "hanbok",
+        "trim": "#f2eee2",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "crane",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0.72,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/kr_gyeongju_1",
+          "portraits/sponsors/kr_gyeongju"
+        ]
+      }
+    },
+    {
+      "id": "kr_hansan",
+      "title": "삼도수군통제사",
+      "city": "한산도",
+      "holder": "통제사 이순신",
+      "from": 1593,
+      "spec": {
+        "g": "m",
+        "skin": [
+          217.9488973603584,
+          168.73981657158583,
+          136.08388661360368
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#7d2428",
+        "nose": 0.999337816843763,
+        "chin": 0.14360255771316588,
+        "brow": 0.9870638672728091,
+        "hairStyle": 1,
+        "beard": 0,
+        "hat": "samo",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          49.70782229863107,
+          50.14084477722645,
+          20.649138537235558
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_kr_hansan_통제사 이순신",
+        "style": "kr",
+        "role": "noble",
+        "dress": "hanbok",
+        "trim": "#f2eee2",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "crane",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0.72,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/kr_hansan_1",
+          "portraits/sponsors/kr_hansan"
+        ]
+      }
+    },
+    {
+      "id": "jp_sakai",
+      "title": "사카이 회합중",
+      "city": "사카이",
+      "holder": "사카이 회합중 대표",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          214.0784050100483,
+          175.9061727086082,
+          122.03926526336
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#7a2a22",
+        "nose": 0.4167616132181138,
+        "chin": 0.8182052981574088,
+        "brow": 0.10456557152792811,
+        "hairStyle": 0,
+        "beard": 2,
+        "hat": "eboshi",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          59.91161913331598,
+          34.86940997932106,
+          36.430983293801546
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_jp_sakai_사카이 회합중 대표",
+        "style": "jp",
+        "role": "merchant",
+        "dress": "kosode",
+        "trim": "#e5d8ba",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/jp_sakai_1",
+          "portraits/sponsors/jp_sakai"
+        ]
+      }
+    },
+    {
+      "id": "es_hispaniola",
+      "title": "에스파뇰라 총독",
+      "city": "산토도밍고",
+      "holder": "니콜라스 데 오반도",
+      "from": 1502,
+      "spec": {
+        "g": "m",
+        "skin": [
+          207.22237320477143,
+          141.54585202783346,
+          117.7427393971011
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#7a2a22",
+        "nose": 0.26925674197264016,
+        "chin": 0.5240134752821177,
+        "brow": 0.6825193103868514,
+        "hairStyle": 2,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          49.96637464221567,
+          50.311925595626235,
+          23.984350675716996
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_hispaniola_니콜라스 데 오반도",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_hispaniola_1",
+          "portraits/sponsors/es_hispaniola"
+        ]
+      }
+    },
+    {
+      "id": "es_cuba",
+      "title": "쿠바 총독",
+      "city": "산티아고",
+      "holder": "디에고 벨라스케스",
+      "from": 1515,
+      "spec": {
+        "g": "m",
+        "skin": [
+          207.42998917447403,
+          141.20496904058382,
+          115.26700690342113
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#3a4a2a",
+        "nose": 0.086966706905514,
+        "chin": 0.7075414096470922,
+        "brow": 0.3437256559263915,
+        "hairStyle": 0,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          57.72212718334049,
+          45.30368117894977,
+          30.170472270809114
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_cuba_디에고 벨라스케스",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_cuba_1",
+          "portraits/sponsors/es_cuba"
+        ]
+      }
+    },
+    {
+      "id": "es_newspain",
+      "title": "누에바 에스파냐 부왕",
+      "city": "멕시코",
+      "holder": "안토니오 데 멘도사",
+      "from": 1535,
+      "spec": {
+        "g": "m",
+        "skin": [
+          194.03206719318405,
+          154.52827303577214,
+          122.22384365368634
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#2a3a5a",
+        "nose": 0.5183036306407303,
+        "chin": 0.4809985214378685,
+        "brow": 0.6494096093811095,
+        "hairStyle": 0,
+        "beard": 0,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          57.959412002936006,
+          47.88185871485621,
+          19.094833272509277
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_newspain_안토니오 데 멘도사",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_newspain_1",
+          "portraits/sponsors/es_newspain"
+        ]
+      }
+    },
+    {
+      "id": "es_panama",
+      "title": "파나마 총독",
+      "city": "파나마",
+      "holder": "페드라리아스 다빌라",
+      "from": 1519,
+      "spec": {
+        "g": "m",
+        "skin": [
+          197.56837895233184,
+          153.7245429730974,
+          115.3502667574212
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#2a2a2a",
+        "nose": 0.6360294085461646,
+        "chin": 0.7819653761107475,
+        "brow": 0.8202972554136068,
+        "hairStyle": 0,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          48.796073572710156,
+          39.75330217555165,
+          23.014169667847455
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_panama_페드라리아스 다빌라",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_panama_1",
+          "portraits/sponsors/es_panama"
+        ]
+      }
+    },
+    {
+      "id": "es_peru",
+      "title": "페루 총독",
+      "city": "리마",
+      "holder": "프란시스코 피사로",
+      "from": 1535,
+      "spec": {
+        "g": "m",
+        "skin": [
+          194.39870998170227,
+          137.06437404314056,
+          122.91209937958047
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a2a2a",
+        "nose": 0.3115622156765312,
+        "chin": 0.028205794747918844,
+        "brow": 0.8356243462767452,
+        "hairStyle": 3,
+        "beard": 0,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          55.78506001923233,
+          39.04831024631858,
+          35.742358963005245
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_peru_프란시스코 피사로",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_peru_1",
+          "portraits/sponsors/es_peru"
+        ]
+      }
+    },
+    {
+      "id": "es_tendilla",
+      "title": "그라나다 총사령관",
+      "city": "그라나다",
+      "holder": "텐디야 백작 이니고 로페스 데 멘도사",
+      "from": 1492,
+      "spec": {
+        "g": "m",
+        "skin": [
+          180.51068354025483,
+          114.69756723567843,
+          87.18360312562436
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#4a3a2a",
+        "nose": 0.986145060043782,
+        "chin": 0.9047802011482418,
+        "brow": 0.87665074178949,
+        "hairStyle": 2,
+        "beard": 0,
+        "hat": "turban",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          58.88914120104164,
+          35.05475164204836,
+          18.525227221660316
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_tendilla_텐디야 백작 이니고 로페스 데 멘도사",
+        "style": "is",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d3b465",
+        "pattern": "ottoman",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_tendilla_1",
+          "portraits/sponsors/es_tendilla"
+        ]
+      }
+    },
+    {
+      "id": "es_toledo",
+      "title": "톨레도 대주교·왕국 재상",
+      "city": "톨레도",
+      "holder": "멘도사 추기경",
+      "from": 1482,
+      "spec": {
+        "g": "m",
+        "skin": [
+          205.12899907352403,
+          151.89731896901503,
+          120.37838364578784
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#4a3a2a",
+        "nose": 0.39063432649709284,
+        "chin": 0.5942033769097179,
+        "brow": 0.08098277635872364,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          49.379972361028194,
+          49.93168055359274,
+          26.16445047967136
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_toledo_멘도사 추기경",
+        "style": "ib",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_toledo_1",
+          "portraits/sponsors/es_toledo"
+        ]
+      }
+    },
+    {
+      "id": "es_capitan",
+      "title": "대장군",
+      "city": "코르도바",
+      "holder": "곤살로 페르난데스 데 코르도바",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          192.64339289581403,
+          154.2752304575406,
+          105.51636066986248
+        ],
+        "hair": "#3a2616",
+        "cloth": "#4a3a2a",
+        "nose": 0.5406121655832976,
+        "chin": 0.9684734889306128,
+        "brow": 0.6763134463690221,
+        "hairStyle": 3,
+        "beard": 2,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          64.3504714006558,
+          33.54045169707388,
+          26.428632812574506
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_capitan_곤살로 페르난데스 데 코르도바",
+        "style": "ib",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_capitan_1",
+          "portraits/sponsors/es_capitan"
+        ]
+      }
+    },
+    {
+      "id": "es_cardona",
+      "title": "카르도나 공작",
+      "city": "바르셀로나",
+      "holder": "후안 라몬 폴크 데 카르도나",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          197.1865774919279,
+          148.5780832679011,
+          120.50225268490613
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#3d5a5a",
+        "nose": 0.8736898994538933,
+        "chin": 0.3588123202789575,
+        "brow": 0.800606650300324,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          53.39330442901701,
+          36.05511375516653,
+          36.251865725032985
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_cardona_후안 라몬 폴크 데 카르도나",
+        "style": "ib",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_cardona_1",
+          "portraits/sponsors/es_cardona"
+        ]
+      }
+    },
+    {
+      "id": "fr_brittany",
+      "title": "브르타뉴 공작",
+      "city": "낭트",
+      "holder": "프랑수아 2세 공작",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          220.82250434113666,
+          171.14404442813247,
+          144.02587201073766
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#4a3a2a",
+        "nose": 0.5786667019128799,
+        "chin": 0.4144230457022786,
+        "brow": 0.0961227451916784,
+        "hairStyle": 3,
+        "beard": 0,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          58.4926482681185,
+          44.72986273281276,
+          25.069175587967038
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_fr_brittany_프랑수아 2세 공작",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/fr_brittany_1",
+          "portraits/sponsors/fr_brittany"
+        ]
+      }
+    },
+    {
+      "id": "fr_amboise",
+      "title": "루앙 대주교·국왕 재상",
+      "city": "루앙",
+      "holder": "조르주 당부아즈 추기경",
+      "from": 1494,
+      "spec": {
+        "g": "m",
+        "skin": [
+          220.49693228304386,
+          167.05337723018602,
+          130.5495275813155
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a3a5a",
+        "nose": 0.37101459852419794,
+        "chin": 0.8793542399071157,
+        "brow": 0.8307397195603698,
+        "hairStyle": 3,
+        "beard": 0,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          50.96579721849412,
+          49.022833498194814,
+          32.952733498066664
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_fr_amboise_조르주 당부아즈 추기경",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/fr_amboise_1",
+          "portraits/sponsors/fr_amboise"
+        ]
+      }
+    },
+    {
+      "id": "fr_guise",
+      "title": "기즈 공작",
+      "city": "파리",
+      "holder": "기즈 공작 클로드",
+      "from": 1528,
+      "spec": {
+        "g": "m",
+        "skin": [
+          211.43049412081018,
+          175.44440708728507,
+          136.87403664086014
+        ],
+        "hair": "#3a2616",
+        "cloth": "#4a3a2a",
+        "nose": 0.10375383449718356,
+        "chin": 0.9324609315954149,
+        "brow": 0.09685518429614604,
+        "hairStyle": 1,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          58.20467007532716,
+          33.69819470960647,
+          31.062427383847535
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_fr_guise_기즈 공작 클로드",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/fr_guise_1",
+          "portraits/sponsors/fr_guise"
+        ]
+      }
+    },
+    {
+      "id": "fr_minister",
+      "title": "국왕 재상",
+      "city": "파리",
+      "holder": "쉴리 공작 (재무경)",
+      "from": 1598,
+      "spec": {
+        "g": "m",
+        "skin": [
+          209.64743500156328,
+          159.56439402513206,
+          139.01459045987576
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a2a2a",
+        "nose": 0.8529998741578311,
+        "chin": 0.5442772251553833,
+        "brow": 0.01727375714108348,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          65.01412912923843,
+          44.82224589493126,
+          29.64384372998029
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_fr_minister_쉴리 공작 (재무경)",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/fr_minister_1",
+          "portraits/sponsors/fr_minister"
+        ]
+      }
+    },
+    {
+      "id": "fr_montaigne",
+      "title": "보르도의 귀족·시장",
+      "city": "보르도",
+      "holder": "미셸 드 몽테뉴",
+      "from": 1571,
+      "spec": {
+        "g": "m",
+        "skin": [
+          208.6445372737944,
+          171.30789392162114,
+          127.71226606471464
+        ],
+        "hair": "#8a8278",
+        "cloth": "#7a2a22",
+        "nose": 0.4716681211721152,
+        "chin": 0.7693062119651586,
+        "brow": 0.5943550399970263,
+        "hairStyle": 3,
+        "beard": 2,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          51.822253472171724,
+          45.284963835030794,
+          32.61284749209881
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_fr_montaigne_미셸 드 몽테뉴",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/fr_montaigne_1",
+          "portraits/sponsors/fr_montaigne"
+        ]
+      }
+    },
+    {
+      "id": "nl_regent",
+      "title": "네덜란드 섭정",
+      "city": "브뤼셀",
+      "holder": "파르마 공작 알레산드로 파르네세",
+      "from": 1578,
+      "spec": {
+        "g": "m",
+        "skin": [
+          215.80295615503564,
+          169.36854274291545,
+          127.08127306215465
+        ],
+        "hair": "#1e140e",
+        "cloth": "#3d5a5a",
+        "nose": 0.15139690740033984,
+        "chin": 0.7881382592022419,
+        "brow": 0.6296487904619426,
+        "hairStyle": 0,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          60.04416031483561,
+          51.51631153002381,
+          22.725558985956013
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_nl_regent_오스트리아의 마르가레테",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/nl_regent_1",
+          "portraits/sponsors/nl_regent"
+        ]
+      }
+    },
+    {
+      "id": "nl_gruuthuse",
+      "title": "그뤼트후제 영주",
+      "city": "브뤼즈",
+      "holder": "루이 드 그뤼트후제",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          209.82527280179784,
+          173.8436967744492,
+          144.9537247866392
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#5a1e1e",
+        "nose": 0.8193653651978821,
+        "chin": 0.5327233269345015,
+        "brow": 0.8597550382837653,
+        "hairStyle": 2,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          59.092664799652994,
+          46.77500144392252,
+          24.43007719423622
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_nl_gruuthuse_루이 드 그뤼트후제",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/nl_gruuthuse_1",
+          "portraits/sponsors/nl_gruuthuse"
+        ]
+      }
+    },
+    {
+      "id": "nl_amsterdam",
+      "title": "암스테르담 시장",
+      "city": "암스테르담",
+      "holder": "코르넬리스 호프트",
+      "from": 1588,
+      "spec": {
+        "g": "m",
+        "skin": [
+          215.00571557553485,
+          169.0262042968534,
+          139.27074994938448
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#3d5a5a",
+        "nose": 0.3079207669943571,
+        "chin": 0.5016660303808749,
+        "brow": 0.24043268710374832,
+        "hairStyle": 0,
+        "beard": 3,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          48.41504146531224,
+          34.4136394681409,
+          31.921353295445442
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_nl_amsterdam_코르넬리스 호프트",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/nl_amsterdam_1",
+          "portraits/sponsors/nl_amsterdam"
+        ]
+      }
+    },
+    {
+      "id": "it_trivulzio",
+      "title": "프랑스 원수",
+      "city": "밀라노",
+      "holder": "잔 자코모 트리불치오",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          206.93368076207116,
+          152.83035604003817,
+          115.87403059657663
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#5a3a5a",
+        "nose": 0.42922685388475657,
+        "chin": 0.8706423484254628,
+        "brow": 0.1610818097833544,
+        "hairStyle": 2,
+        "beard": 0,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          57.47584570385516,
+          40.72721893247217,
+          26.346624276600778
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_trivulzio_잔 자코모 트리불치오",
+        "style": "it",
+        "role": "noble",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_trivulzio_1",
+          "portraits/sponsors/it_trivulzio"
+        ]
+      }
+    },
+    {
+      "id": "it_doria",
+      "title": "제노바 제독",
+      "city": "제노바",
+      "holder": "안드레아 도리아",
+      "from": 1528,
+      "spec": {
+        "g": "m",
+        "skin": [
+          208.30685485852882,
+          139.57220873143524,
+          113.77989011630416
+        ],
+        "hair": "#8a8278",
+        "cloth": "#6a4a2a",
+        "nose": 0.2476008622907102,
+        "chin": 0.4691678776871413,
+        "brow": 0.6451469422318041,
+        "hairStyle": 2,
+        "beard": 0,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          56.423985224217176,
+          36.03620452620089,
+          21.21689776610583
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_doria_안드레아 도리아",
+        "style": "it",
+        "role": "noble",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_doria_1",
+          "portraits/sponsors/it_doria"
+        ]
+      }
+    },
+    {
+      "id": "it_contarini",
+      "title": "베네치아 대사",
+      "city": "베니스",
+      "holder": "가스파로 콘타리니",
+      "from": 1520,
+      "spec": {
+        "g": "m",
+        "skin": [
+          207.2679638681002,
+          141.71656119124964,
+          112.37814168864861
+        ],
+        "hair": "#8a8278",
+        "cloth": "#5a1e1e",
+        "nose": 0.4348515921737999,
+        "chin": 0.313590535428375,
+        "brow": 0.17799853486940265,
+        "hairStyle": 0,
+        "beard": 1,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          67.31598887778819,
+          47.2091009542346,
+          28.037928260862827
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_contarini_가스파로 콘타리니",
+        "style": "it",
+        "role": "noble",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_contarini_1",
+          "portraits/sponsors/it_contarini"
+        ]
+      }
+    },
+    {
+      "id": "it_machiavelli",
+      "title": "피렌체 공화국 서기장",
+      "city": "피렌체",
+      "holder": "니콜로 마키아벨리",
+      "from": 1498,
+      "spec": {
+        "g": "m",
+        "skin": [
+          194.8959548873827,
+          137.0297907171771,
+          106.056295002345
+        ],
+        "hair": "#1e140e",
+        "cloth": "#2a2a2a",
+        "nose": 0.8137054468970746,
+        "chin": 0.8030653912574053,
+        "brow": 0.06675031478516757,
+        "hairStyle": 2,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          60.96454145107418,
+          51.92137335240841,
+          31.20193394087255
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_machiavelli_니콜로 마키아벨리",
+        "style": "it",
+        "role": "noble",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_machiavelli_1",
+          "portraits/sponsors/it_machiavelli"
+        ]
+      }
+    },
+    {
+      "id": "it_farnese",
+      "title": "파르네세 추기경",
+      "city": "로마",
+      "holder": "알레산드로 파르네세 추기경",
+      "from": 1493,
+      "spec": {
+        "g": "m",
+        "skin": [
+          200.97281999746338,
+          139.02387246722355,
+          117.13595410622656
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#5a3a5a",
+        "nose": 0.9715809347108006,
+        "chin": 0.9731456185691059,
+        "brow": 0.8390606141183525,
+        "hairStyle": 2,
+        "beard": 2,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          65.01441067736596,
+          40.922496349550784,
+          37.69308285508305
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_farnese_알레산드로 파르네세 추기경",
+        "style": "it",
+        "role": "noble",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_farnese_1",
+          "portraits/sponsors/it_farnese"
+        ]
+      }
+    },
+    {
+      "id": "it_sanseverino",
+      "title": "살레르노 대공",
+      "city": "나폴리",
+      "holder": "안토넬로 산세베리노",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          199.99695426784456,
+          150.4094750182703,
+          120.96439601154998
+        ],
+        "hair": "#3a2616",
+        "cloth": "#3a4a2a",
+        "nose": 0.4842246319167316,
+        "chin": 0.5194182612467557,
+        "brow": 0.7752485806122422,
+        "hairStyle": 2,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          49.575745907612145,
+          51.24398658797145,
+          33.31676998361945
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_it_sanseverino_안토넬로 산세베리노",
+        "style": "it",
+        "role": "noble",
+        "dress": "giornea",
+        "trim": "#d7b85d",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/it_sanseverino_1",
+          "portraits/sponsors/it_sanseverino"
+        ]
+      }
+    },
+    {
+      "id": "en_minister",
+      "title": "국왕 수석 대신",
+      "city": "런던",
+      "holder": "토머스 울지 추기경",
+      "from": 1515,
+      "spec": {
+        "g": "m",
+        "skin": [
+          212.45603469246998,
+          164.5379393468611,
+          142.085128786508
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#2a2a2a",
+        "nose": 0.8021737467497587,
+        "chin": 0.8700995072722435,
+        "brow": 0.11410885653458536,
+        "hairStyle": 2,
+        "beard": 3,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          57.40322794485837,
+          43.409018002450466,
+          23.77940016053617
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_en_minister_토머스 울지 추기경",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/en_minister_1",
+          "portraits/sponsors/en_minister"
+        ]
+      }
+    },
+    {
+      "id": "en_north",
+      "title": "북부 평의회 의장",
+      "city": "요크",
+      "holder": "헌팅던 백작 헨리 헤이스팅스",
+      "from": 1572,
+      "spec": {
+        "g": "m",
+        "skin": [
+          215.56713127158582,
+          163.71955821616575,
+          141.64230751106516
+        ],
+        "hair": "#8a8278",
+        "cloth": "#2a2a2a",
+        "nose": 0.9847077429294586,
+        "chin": 0.8287222424987704,
+        "brow": 0.016647686483338475,
+        "hairStyle": 3,
+        "beard": 3,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          67.41196974366903,
+          45.896620981395245,
+          32.968605292961
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_en_north_헌팅던 백작 헨리 헤이스팅스",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/en_north_1",
+          "portraits/sponsors/en_north"
+        ]
+      }
+    },
+    {
+      "id": "sc_moray",
+      "title": "스코틀랜드 섭정",
+      "city": "에든버러",
+      "holder": "머리 백작 제임스 스튜어트",
+      "from": 1561,
+      "spec": {
+        "g": "m",
+        "skin": [
+          211.6844946499914,
+          170.5152722862549,
+          132.72852882137522
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#6a4a2a",
+        "nose": 0.4672875856049359,
+        "chin": 0.4202392075676471,
+        "brow": 0.8666173694655299,
+        "hairStyle": 1,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          65.97346689738333,
+          35.264364120550454,
+          25.837762194685638
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_sc_moray_머리 백작 제임스 스튜어트",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/sc_moray_1",
+          "portraits/sponsors/sc_moray"
+        ]
+      }
+    },
+    {
+      "id": "ie_kildare",
+      "title": "아일랜드 총독",
+      "city": "더블린",
+      "holder": "킬데어 백작 제럴드 피츠제럴드",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          217.92788358777761,
+          159.78866130346432,
+          135.2560678049922
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#5a3a5a",
+        "nose": 0.7287898871582001,
+        "chin": 0.3903538337908685,
+        "brow": 0.15710891177877784,
+        "hairStyle": 3,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          49.41954061575234,
+          39.42546787019819,
+          37.37478972133249
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_ie_kildare_킬데어 백작 제럴드 피츠제럴드",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/ie_kildare_1",
+          "portraits/sponsors/ie_kildare"
+        ]
+      }
+    },
+    {
+      "id": "de_cologne",
+      "title": "쾰른 선제후",
+      "city": "쾰른",
+      "holder": "헤르만 4세 폰 헤센",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          217.4806727557443,
+          173.31909847911447,
+          134.0285221473314
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#3a4a2a",
+        "nose": 0.2509482013992965,
+        "chin": 0.2405827862676233,
+        "brow": 0.6716575841419399,
+        "hairStyle": 0,
+        "beard": 3,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          64.30953113548458,
+          37.447667255066335,
+          29.51930722873658
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_de_cologne_헤르만 4세 폰 헤센",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/de_cologne_1",
+          "portraits/sponsors/de_cologne"
+        ]
+      }
+    },
+    {
+      "id": "de_pirckheimer",
+      "title": "뉘른베르크 시 참사회원",
+      "city": "뉘른베르크",
+      "holder": "빌리발트 피르크하이머",
+      "from": 1495,
+      "spec": {
+        "g": "m",
+        "skin": [
+          218.7843697303906,
+          163.2962169237435,
+          140.9472301271744
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#3a4a2a",
+        "nose": 0.05815659649670124,
+        "chin": 0.09665258205495775,
+        "brow": 0.7685900467913598,
+        "hairStyle": 2,
+        "beard": 3,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          60.12810297496617,
+          43.83626897633076,
+          20.080682050436735
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_de_pirckheimer_빌리발트 피르크하이머",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/de_pirckheimer_1",
+          "portraits/sponsors/de_pirckheimer"
+        ]
+      }
+    },
+    {
+      "id": "bo_rozmberk",
+      "title": "로젠베르크 가문",
+      "city": "프라하",
+      "holder": "로젠베르크의 빌렘",
+      "from": 1551,
+      "spec": {
+        "g": "m",
+        "skin": [
+          225.5053787305951,
+          171.12550531793386,
+          143.4533654851839
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#2a3a5a",
+        "nose": 0.7870980547741055,
+        "chin": 0.5353364699985832,
+        "brow": 0.7507897326722741,
+        "hairStyle": 0,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          49.568151880055666,
+          34.97208001371473,
+          27.389611687511206
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_bo_rozmberk_로젠베르크의 빌렘",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/bo_rozmberk_1",
+          "portraits/sponsors/bo_rozmberk"
+        ]
+      }
+    },
+    {
+      "id": "at_salm",
+      "title": "빈 수비 사령관",
+      "city": "비엔나",
+      "holder": "니클라스 잘름 백작",
+      "from": 1500,
+      "spec": {
+        "g": "m",
+        "skin": [
+          220.91188888950273,
+          168.21272825170308,
+          139.41193626867607
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#2a2a2a",
+        "nose": 0.9309072559699416,
+        "chin": 0.7628905749879777,
+        "brow": 0.03198258415795863,
+        "hairStyle": 0,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          53.170485312119126,
+          43.71125416178256,
+          31.836853834800422
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_at_salm_니클라스 잘름 백작",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/at_salm_1",
+          "portraits/sponsors/at_salm"
+        ]
+      }
+    },
+    {
+      "id": "pl_zamoyski",
+      "title": "폴란드 왕국 재상",
+      "city": "바르샤바",
+      "holder": "얀 자모이스키",
+      "from": 1578,
+      "spec": {
+        "g": "m",
+        "skin": [
+          223.1538643236272,
+          168.06685351906344,
+          130.93337733577937
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#1e3552",
+        "nose": 0.8604934287723154,
+        "chin": 0.44754371559247375,
+        "brow": 0.8996991356834769,
+        "hairStyle": 1,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          66.61548489425331,
+          51.11588795017451,
+          18.036526382900774
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_pl_zamoyski_얀 자모이스키",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/pl_zamoyski_1",
+          "portraits/sponsors/pl_zamoyski"
+        ]
+      }
+    },
+    {
+      "id": "hu_bakocz",
+      "title": "헝가리 왕국 재상",
+      "city": "부다페스트",
+      "holder": "바코츠 터마시",
+      "from": 1486,
+      "spec": {
+        "g": "m",
+        "skin": [
+          222.11456307256594,
+          176.84132190188393,
+          139.00115965027362
+        ],
+        "hair": "#1e140e",
+        "cloth": "#7a2a22",
+        "nose": 0.2904656263999641,
+        "chin": 0.3301281293388456,
+        "brow": 0.6361435160506517,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          48.36930544767529,
+          50.14154346473515,
+          34.35733982082456
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_hu_bakocz_바코츠 터마시",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/hu_bakocz_1",
+          "portraits/sponsors/hu_bakocz"
+        ]
+      }
+    },
+    {
+      "id": "se_regent",
+      "title": "스웨덴 섭정·재상",
+      "city": "스톡홀름",
+      "holder": "스텐 스투레",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          216.89369551558048,
+          176.2629064237699,
+          136.45084755122662
+        ],
+        "hair": "#1e140e",
+        "cloth": "#4a3a2a",
+        "nose": 0.5003729672171175,
+        "chin": 0.18437257152982056,
+        "brow": 0.7479942515492439,
+        "hairStyle": 2,
+        "beard": 2,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          52.142358154058456,
+          44.23690654616803,
+          19.695993784815073
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_se_regent_스텐 스투레",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/se_regent_1",
+          "portraits/sponsors/se_regent"
+        ]
+      }
+    },
+    {
+      "id": "dk_brahe",
+      "title": "천문학자 귀족",
+      "city": "코펜하겐",
+      "holder": "튀코 브라헤",
+      "from": 1576,
+      "spec": {
+        "g": "m",
+        "skin": [
+          216.2144932928495,
+          176.54007063992321,
+          135.48996725212783
+        ],
+        "hair": "#8a8278",
+        "cloth": "#3d5a5a",
+        "nose": 0.4579259075690061,
+        "chin": 0.5493619935587049,
+        "brow": 0.4717882547993213,
+        "hairStyle": 3,
+        "beard": 0,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          65.95071340166032,
+          50.725807033479214,
+          34.44206001423299
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_dk_brahe_튀코 브라헤",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/dk_brahe_1",
+          "portraits/sponsors/dk_brahe"
+        ]
+      }
+    },
+    {
+      "id": "ru_regent",
+      "title": "차르의 섭정",
+      "city": "모스크바",
+      "holder": "보리스 고두노프",
+      "from": 1584,
+      "spec": {
+        "g": "m",
+        "skin": [
+          215.9116614595987,
+          174.6986113898456,
+          128.05642743222415
+        ],
+        "hair": "#3a2616",
+        "cloth": "#3a4a2a",
+        "nose": 0.6976665232796222,
+        "chin": 0.9846798705402762,
+        "brow": 0.1217520572245121,
+        "hairStyle": 3,
+        "beard": 1,
+        "hat": "furcap",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          50.60589395649731,
+          50.957558567635715,
+          36.88690239749849
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_ru_regent_보리스 고두노프",
+        "style": "ru",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d1aa52",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/ru_regent_1",
+          "portraits/sponsors/ru_regent"
+        ]
+      }
+    },
+    {
+      "id": "ua_ostrogski",
+      "title": "키예프 총독",
+      "city": "키에프",
+      "holder": "콘스탄티 오스트로그스키 공",
+      "from": 1559,
+      "spec": {
+        "g": "m",
+        "skin": [
+          219.80189860239625,
+          164.35899250768125,
+          136.00000472320244
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#2a3a5a",
+        "nose": 0.5408549385610968,
+        "chin": 0.8666301616467535,
+        "brow": 0.8093893032055348,
+        "hairStyle": 0,
+        "beard": 1,
+        "hat": "furcap",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          66.25911067426205,
+          43.50619251653552,
+          31.963654218241572
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_ua_ostrogski_콘스탄티 오스트로그스키 공",
+        "style": "ru",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d1aa52",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/ua_ostrogski_1",
+          "portraits/sponsors/ua_ostrogski"
+        ]
+      }
+    },
+    {
+      "id": "ot_vizier",
+      "title": "오스만 대재상",
+      "city": "이스탄불",
+      "holder": "카라마니 메흐메트 파샤",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          184.08272869791836,
+          121.26715703774244,
+          79.84881480270997
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#6a4a2a",
+        "nose": 0.8341027209535241,
+        "chin": 0.4061276123393327,
+        "brow": 0.7334123328328133,
+        "hairStyle": 2,
+        "beard": 0,
+        "hat": "turban",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          52.18535022996366,
+          50.430342017672956,
+          24.657283916138113
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_ot_vizier_카라마니 메흐메트 파샤",
+        "style": "is",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d3b465",
+        "pattern": "ottoman",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/ot_vizier_1",
+          "portraits/sponsors/ot_vizier"
+        ]
+      }
+    },
+    {
+      "id": "ot_nasi",
+      "title": "낙소스 공작",
+      "city": "이스탄불",
+      "holder": "요세프 나시",
+      "from": 1554,
+      "spec": {
+        "g": "m",
+        "skin": [
+          178.3316865665838,
+          128.10107709653676,
+          94.80341791920364
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#7a2a22",
+        "nose": 0.888528814073652,
+        "chin": 0.41336115752346814,
+        "brow": 0.5513692686799914,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "turban",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          52.56951880361885,
+          42.601992080919445,
+          25.293430911377072
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_ot_nasi_요세프 나시",
+        "style": "is",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d3b465",
+        "pattern": "ottoman",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/ot_nasi_1",
+          "portraits/sponsors/ot_nasi"
+        ]
+      }
+    },
+    {
+      "id": "sy_pasha",
+      "title": "다마스쿠스 총독",
+      "city": "다마스쿠스",
+      "holder": "맘루크 다마스쿠스 태수",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          174.52422220958397,
+          121.47816048655659,
+          85.00116657512262
+        ],
+        "hair": "#8a8278",
+        "cloth": "#5a1e1e",
+        "nose": 0.5126629397273064,
+        "chin": 0.7968336213380098,
+        "brow": 0.7658573701046407,
+        "hairStyle": 0,
+        "beard": 3,
+        "hat": "turban",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          65.8264490282163,
+          49.52221311442554,
+          20.836686898954213
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_sy_pasha_맘루크 다마스쿠스 태수",
+        "style": "is",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d3b465",
+        "pattern": "ottoman",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/sy_pasha_1",
+          "portraits/sponsors/sy_pasha"
+        ]
+      }
+    },
+    {
+      "id": "pe_fars",
+      "title": "파르스 총독",
+      "city": "시라즈",
+      "holder": "알라베르디 칸",
+      "from": 1595,
+      "spec": {
+        "g": "m",
+        "skin": [
+          167.6668359064497,
+          115.14443248184398,
+          80.96289279311895
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#1e3552",
+        "nose": 0.73435158864595,
+        "chin": 0.6839590624440461,
+        "brow": 0.5795016579795629,
+        "hairStyle": 3,
+        "beard": 1,
+        "hat": "persianTurban",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          54.93586093373597,
+          35.979711323045194,
+          31.13438621815294
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_pe_fars_알라베르디 칸",
+        "style": "pe",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d3b465",
+        "pattern": "persian",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/pe_fars_1",
+          "portraits/sponsors/pe_fars"
+        ]
+      }
+    },
+    {
+      "id": "hr_navai",
+      "title": "헤라트의 대신·시인",
+      "city": "헤라트",
+      "holder": "알리셰르 나바이",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          178.67683611018583,
+          122.48383780848235,
+          81.09576769685373
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#2a3a5a",
+        "nose": 0.10716530680656433,
+        "chin": 0.02535853418521583,
+        "brow": 0.48904824163764715,
+        "hairStyle": 0,
+        "beard": 2,
+        "hat": "persianTurban",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          54.704066772945225,
+          40.75351635273546,
+          28.530103649944067
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_hr_navai_알리셰르 나바이",
+        "style": "pe",
+        "role": "noble",
+        "dress": "kaftan",
+        "trim": "#d3b465",
+        "pattern": "persian",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/hr_navai_1",
+          "portraits/sponsors/hr_navai"
+        ]
+      }
+    },
+    {
+      "id": "in_vakil",
+      "title": "무굴 대신",
+      "city": "델리",
+      "holder": "바이람 칸 (섭정)",
+      "from": 1556,
+      "spec": {
+        "g": "m",
+        "skin": [
+          155.316292649135,
+          101.959087502677,
+          74.17859150934964
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#d3b06e",
+        "nose": 0.9955933718010783,
+        "chin": 0.15651416243053973,
+        "brow": 0.9540007773321122,
+        "hairStyle": 1,
+        "beard": 3,
+        "hat": "rajputTurban",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          53.85492900107056,
+          41.00494137778878,
+          37.569833567366004
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_in_vakil_바이람 칸 (섭정)",
+        "style": "in",
+        "role": "noble",
+        "dress": "angarkha",
+        "trim": "#d8ae55",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/in_vakil_1",
+          "portraits/sponsors/in_vakil"
+        ]
+      }
+    },
+    {
+      "id": "in_timmarasu",
+      "title": "비자야나가르 재상",
+      "city": "비자야나가르",
+      "holder": "살루바 팀마루수",
+      "from": 1509,
+      "spec": {
+        "g": "m",
+        "skin": [
+          151.42174195265397,
+          114.06314869364724,
+          79.787473176606
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#d3b06e",
+        "nose": 0.5269968826323748,
+        "chin": 0.08342817332595587,
+        "brow": 0.7347910671960562,
+        "hairStyle": 2,
+        "beard": 0,
+        "hat": "rajputTurban",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          58.69761301390827,
+          47.91466422658414,
+          34.16418412420899
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_in_timmarasu_살루바 팀마루수",
+        "style": "in",
+        "role": "noble",
+        "dress": "angarkha",
+        "trim": "#d8ae55",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/in_timmarasu_1",
+          "portraits/sponsors/in_timmarasu"
+        ]
+      }
+    },
+    {
+      "id": "cn_grand",
+      "title": "내각 수보 대학사",
+      "city": "북경",
+      "holder": "만안",
+      "from": 1480,
+      "spec": {
+        "g": "m",
+        "skin": [
+          211.95172495907173,
+          176.14831562759355,
+          122.31069216737524
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#8b2d30",
+        "nose": 0.006090184208005667,
+        "chin": 0.6458962017204612,
+        "brow": 0.7871568941045552,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "mingOfficial",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          57.691263255663216,
+          33.60819653887302,
+          28.193544304929674
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_cn_grand_만안",
+        "style": "cn",
+        "role": "noble",
+        "dress": "hanfu",
+        "trim": "#d7bd68",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "crane",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/cn_grand_1",
+          "portraits/sponsors/cn_grand"
+        ]
+      }
+    },
+    {
+      "id": "cn_wang",
+      "title": "남경 병부상서",
+      "city": "남경",
+      "holder": "왕수인 (양명)",
+      "from": 1521,
+      "spec": {
+        "g": "m",
+        "skin": [
+          202.14306671032682,
+          167.4270665422082,
+          121.7275837706402
+        ],
+        "hair": "#8a8278",
+        "cloth": "#8b2d30",
+        "nose": 0.2982936059124768,
+        "chin": 0.2461988888680935,
+        "brow": 0.16164626413956285,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "mingOfficial",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          53.964838648214936,
+          32.21928898990154,
+          34.090956018306315
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_cn_wang_왕수인 (양명)",
+        "style": "cn",
+        "role": "noble",
+        "dress": "hanfu",
+        "trim": "#d7bd68",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "crane",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/cn_wang_1",
+          "portraits/sponsors/cn_wang"
+        ]
+      }
+    },
+    {
+      "id": "cn_hu",
+      "title": "절강 총독",
+      "city": "항주",
+      "holder": "호종헌",
+      "from": 1556,
+      "spec": {
+        "g": "m",
+        "skin": [
+          217.13065424188972,
+          161.10827645519748,
+          124.43138999538496
+        ],
+        "hair": "#8a8278",
+        "cloth": "#8b2d30",
+        "nose": 0.4329754614736885,
+        "chin": 0.07612207462079823,
+        "brow": 0.030604058876633644,
+        "hairStyle": 0,
+        "beard": 0,
+        "hat": "mingOfficial",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          61.54637544602156,
+          45.53575765620917,
+          29.231987876817584
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_cn_hu_호종헌",
+        "style": "cn",
+        "role": "noble",
+        "dress": "hanfu",
+        "trim": "#d7bd68",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "crane",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/cn_hu_1",
+          "portraits/sponsors/cn_hu"
+        ]
+      }
+    },
+    {
+      "id": "jp_tenka",
+      "title": "천하인",
+      "city": "쿄토",
+      "holder": "오다 노부나가",
+      "from": 1568,
+      "spec": {
+        "g": "m",
+        "skin": [
+          218.90245630173013,
+          161.61013858253136,
+          130.95786003954709
+        ],
+        "hair": "#8a8278",
+        "cloth": "#7a2a22",
+        "nose": 0.008784695761278272,
+        "chin": 0.09094018838368356,
+        "brow": 0.8246755371801555,
+        "hairStyle": 1,
+        "beard": 3,
+        "hat": "eboshi",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          51.85913045145571,
+          47.921509503386915,
+          33.67197721917182
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_jp_tenka_오다 노부나가",
+        "style": "jp",
+        "role": "noble",
+        "dress": "kosode",
+        "trim": "#e5d8ba",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "guarded",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/jp_tenka_1",
+          "portraits/sponsors/jp_tenka"
+        ]
+      }
+    },
+    {
+      "id": "jp_omura",
+      "title": "오무라 영주",
+      "city": "나가사키",
+      "holder": "오무라 스미타다",
+      "from": 1563,
+      "spec": {
+        "g": "m",
+        "skin": [
+          203.97952774353325,
+          162.07708231313154,
+          123.38852641033009
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#1e3552",
+        "nose": 0.8812441886402667,
+        "chin": 0.9108755281195045,
+        "brow": 0.8704893973190337,
+        "hairStyle": 2,
+        "beard": 1,
+        "hat": "eboshi",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          63.3544706851244,
+          36.21650162898004,
+          28.056697484105825
+        ],
+        "facing": 1,
+        "ruff": false,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_jp_omura_오무라 스미타다",
+        "style": "jp",
+        "role": "noble",
+        "dress": "kosode",
+        "trim": "#e5d8ba",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "guarded",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/jp_omura_1",
+          "portraits/sponsors/jp_omura"
+        ]
+      }
+    },
+    {
+      "id": "es_cortes",
+      "title": "오아하카 계곡 후작",
+      "city": "멕시코",
+      "holder": "에르난 코르테스",
+      "from": 1529,
+      "spec": {
+        "g": "m",
+        "skin": [
+          200.71560419118032,
+          147.19933417066932,
+          120.9076608074829
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#3d5a5a",
+        "nose": 0.9825649447739124,
+        "chin": 0.7460610021371394,
+        "brow": 0.8100872684735805,
+        "hairStyle": 2,
+        "beard": 2,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          66.1160038150847,
+          45.660949491895735,
+          29.527491118758917
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_es_cortes_에르난 코르테스",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/es_cortes_1",
+          "portraits/sponsors/es_cortes"
+        ]
+      }
+    },
+    {
+      "id": "pt_brazil",
+      "title": "브라질 총독",
+      "city": "바이앙",
+      "holder": "토메 드 소우자",
+      "from": 1549,
+      "spec": {
+        "g": "m",
+        "skin": [
+          198.33662196062505,
+          143.46987579017878,
+          120.10833015013486
+        ],
+        "hair": "#2a1a10",
+        "cloth": "#3a4a2a",
+        "nose": 0.7770845324266702,
+        "chin": 0.8170266004744917,
+        "brow": 0.8976820528041571,
+        "hairStyle": 3,
+        "beard": 2,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          50.2147522540763,
+          48.45530485548079,
+          36.64741031546146
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_pt_brazil_토메 드 소우자",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/pt_brazil_1",
+          "portraits/sponsors/pt_brazil"
+        ]
+      }
+    },
+    {
+      "id": "pt_rio",
+      "title": "리우데자네이루 총독",
+      "city": "리우데자네이루",
+      "holder": "에스타시우 드 사",
+      "from": 1565,
+      "spec": {
+        "g": "m",
+        "skin": [
+          203.6255264817737,
+          145.61853444436565,
+          112.05244870483875
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#1e3552",
+        "nose": 0.12644151272252202,
+        "chin": 0.03174423519521952,
+        "brow": 0.45137460622936487,
+        "hairStyle": 0,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          59.66394372936338,
+          42.6453473912552,
+          26.069920698180795
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_pt_rio_에스타시우 드 사",
+        "style": "co",
+        "role": "noble",
+        "dress": "colonial",
+        "trim": "#d9c28a",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/pt_rio_1",
+          "portraits/sponsors/pt_rio"
+        ]
+      }
+    },
+    {
+      "id": "nl_stuyvesant",
+      "title": "뉴네덜란드 총독",
+      "city": "뉴암스테르담",
+      "holder": "피터르 스타위베산트",
+      "from": 1647,
+      "spec": {
+        "g": "m",
+        "skin": [
+          211.05902111390606,
+          159.1717890794389,
+          141.12542657647282
+        ],
+        "hair": "#7a5a3a",
+        "cloth": "#1e3552",
+        "nose": 0.6590058356523514,
+        "chin": 0.1254754865076393,
+        "brow": 0.7946670027449727,
+        "hairStyle": 0,
+        "beard": 1,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          53.211929278448224,
+          44.96432844363153,
+          37.89866408519447
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_nl_stuyvesant_피터르 스타위베산트",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/nl_stuyvesant_1",
+          "portraits/sponsors/nl_stuyvesant"
+        ]
+      }
+    },
+    {
+      "id": "en_winthrop",
+      "title": "매사추세츠 만 총독",
+      "city": "보스턴",
+      "holder": "존 윈스럽",
+      "from": 1630,
+      "spec": {
+        "g": "m",
+        "skin": [
+          217.15623119007796,
+          174.84077845467255,
+          130.53420400386676
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#7a2a22",
+        "nose": 0.6417177109979093,
+        "chin": 0.004814028972759843,
+        "brow": 0.7187379018869251,
+        "hairStyle": 0,
+        "beard": 3,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          56.61710371915251,
+          50.17286016885191,
+          23.841507110744715
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_en_winthrop_존 윈스럽",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/en_winthrop_1",
+          "portraits/sponsors/en_winthrop"
+        ]
+      }
+    },
+    {
+      "id": "fr_champlain",
+      "title": "누벨프랑스 총독",
+      "city": "퀘벡",
+      "holder": "사뮈엘 드 샹플랭",
+      "from": 1608,
+      "spec": {
+        "g": "m",
+        "skin": [
+          208.41437971778214,
+          176.6088995053433,
+          133.0904161161743
+        ],
+        "hair": "#5a3a1e",
+        "cloth": "#3a4a2a",
+        "nose": 0.9077800482045859,
+        "chin": 0.976864731637761,
+        "brow": 0.7537764569278806,
+        "hairStyle": 1,
+        "beard": 3,
+        "hat": "beret",
+        "age": "mid",
+        "gold": true,
+        "bg": [
+          54.48602525703609,
+          49.82055811025202,
+          32.05290599446744
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_fr_champlain_사뮈엘 드 샹플랭",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/fr_champlain_1",
+          "portraits/sponsors/fr_champlain"
+        ]
+      }
+    },
+    {
+      "id": "en_penn",
+      "title": "펜실베이니아 영주",
+      "city": "필라델피아",
+      "holder": "윌리엄 펜",
+      "from": 1682,
+      "spec": {
+        "g": "m",
+        "skin": [
+          222.64040348213166,
+          164.46595535287634,
+          141.2937200628221
+        ],
+        "hair": "#c8c0b0",
+        "cloth": "#7a2a22",
+        "nose": 0.8270803256891668,
+        "chin": 0.07568292296491563,
+        "brow": 0.2677351396996528,
+        "hairStyle": 1,
+        "beard": 3,
+        "hat": "beret",
+        "age": "old",
+        "gold": true,
+        "bg": [
+          52.12536274176091,
+          45.4484843397513,
+          26.958977609872818
+        ],
+        "facing": 1,
+        "ruff": true,
+        "armor": false,
+        "veil": null,
+        "seed": "sp_en_penn_윌리엄 펜",
+        "style": "ne",
+        "role": "noble",
+        "dress": "doublet",
+        "trim": "#ddd3bd",
+        "pattern": "",
+        "jewelry": "",
+        "badge": "",
+        "facePaint": "",
+        "braids": 0,
+        "glam": 0,
+        "expression": "neutral",
+        "roundFace": false,
+        "moustache": false,
+        "lip": "#70483f",
+        "ornament": "",
+        "accessory": "",
+        "img": [
+          "portraits/sponsors/en_penn_1",
+          "portraits/sponsors/en_penn"
+        ]
+      }
+    }
+  ],
+  "reuse": {
+    "it_leonardo": "leonardo",
+    "dk_brahe": "tycho",
+    "es_casa": "cabot",
+    "es_casa_2": "cabot"
+  },
+  "roleSources": [
+    "portraits/npc-roles/af/sailor",
+    "portraits/npc-roles/an/king",
+    "portraits/npc-roles/an/sailor",
+    "portraits/npc-roles/az/king",
+    "portraits/npc-roles/az/maid",
+    "portraits/npc-roles/cn/merchant",
+    "portraits/npc-roles/gr/noble",
+    "portraits/npc-roles/ib/keeper",
+    "portraits/npc-roles/ib/noble",
+    "portraits/npc-roles/ib/priest",
+    "portraits/npc-roles/in/king",
+    "portraits/npc-roles/is/king",
+    "portraits/npc-roles/it/keeper",
+    "portraits/npc-roles/jp/king",
+    "portraits/npc-roles/jp/soldier",
+    "portraits/npc-roles/kr/sailor",
+    "portraits/npc-roles/ne/keeper",
+    "portraits/npc-roles/ne/king",
+    "portraits/npc-roles/ne/maid",
+    "portraits/npc-roles/ne/merchant",
+    "portraits/npc-roles/ne/noble",
+    "portraits/npc-roles/pe/king",
+    "portraits/npc-roles/ru/keeper",
+    "portraits/npc-roles/ru/noble",
+    "portraits/npc-roles/se/king",
+    "portraits/npc-roles/tr/maid"
+  ]
+}

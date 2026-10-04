@@ -77,3 +77,9 @@ Codex 내장 이미지 생성 도구에 아래 공통 지시와 보물별 주제
 - 보석·왕관: blackprince, ironcrown, wenceslas, paladoro, timurruby, peacockthrone, mogokruby, lankasapphire, muzoemerald, peregrina
 - 세계 국보: nefertiti, hammurabi, venusmilo, nike, laocoon, ajanta(벽화), qingming(두루마리), lanting(글씨), tripitaka(경판), hunmin(책), benin, moctezuma, sunstone, incadisc, mayacodex(책)
 - 르네상스·대항해시대(그림): monalisa, creation, lastsupper, birthvenus, ghentaltar, durer, earthlydelights, urbinovenus, babeltower, orgaz, ambassadors, nanbanscreen, baburnama, shahnameh, pirireis / (조각·공예) david, saliera, belemmonstrance
+
+## 2026-10-04 — 그림이 없던 62종을 절차적 3D로 채움
+
+이미지 생성 도구 없이 `tools/procedural_art`(three.js)로 모형을 빚어 같은 4×2 회전 원화(`sources/ID.png`)를 만들었다.
+위 표의 9종 + 53종 + `flordelamar`(바다의 꽃 호 난파선). 그림·책·병풍처럼 납작한 것은 360° 대신 ±30° 흔들어 찍었다.
+명화와 사람 조각은 단순화한 재현이므로, Codex 원화가 생기면 같은 파일 이름으로 덮어쓰고 `build.py --only ID` → `ruin_gifs/sheets.py ID` → `images.py`.

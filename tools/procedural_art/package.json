@@ -1,0 +1,6 @@
+{
+  "name": "plus-ultra-procedural-art",
+  "private": true,
+  "description": "보물·교역품 발견 원화를 three.js로 굽는 도구 (tools/procedural_art/README.md)",
+  "dependencies": { "three": "0.147.0", "playwright-core": "^1.48.0" }
+}

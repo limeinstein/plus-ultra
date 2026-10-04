@@ -16,6 +16,26 @@ const OUT = path.join(ROOT,'docs/art');
     page.on('console', m=>{if(m.type()==='error')errors.push(m.text());});
     await page.goto(pathToFileURL(path.join(ROOT,'test_expedition_sprites.html')).href);
     await page.waitForFunction(()=>Object.keys(G.EXPEDITION_MOTION.mounts).every(id=>['walk','turn','camp'].every(a=>G.ExpeditionMotion.ready(id,a))),null,{timeout:30000});
+    // 정면의 상체는 그대로이고, 가장 낮은 발은 좌우로 교대하는지 실제 픽셀로 확인한다.
+    const footData='data:image/png;base64,'+fs.readFileSync(path.join(ROOT,'images/sprites/expedition_v3_on_foot_front.png')).toString('base64');
+    const gaitPixels=await page.evaluate(async uri=>{
+      const im=new Image();im.src=uri;await im.decode();
+      const old=G.Img.get;G.Img.get=key=>key==='sprites/expedition_v3_on_foot_front'?im:old(key);
+      function pose(phase){const cv=document.createElement('canvas');cv.width=400;cv.height=320;G.ExpeditionMotion.draw(cv.getContext('2d'),{pts:[[200,290]],mount:{id:'walk'},head:-Math.PI/2,moving:true,phase,t:0,size:4,cache:{}});return cv.getContext('2d').getImageData(0,0,400,320).data;}
+      const a=pose(0),b=pose(0.5);G.Img.get=old;
+      function headX(data){let sum=0,weight=0;for(let y=70;y<145;y++)for(let x=0;x<400;x++){const alpha=data[(y*400+x)*4+3];sum+=x*alpha;weight+=alpha;}return sum/weight;}
+      function footX(data){let sum=0,weight=0;for(let y=272;y<310;y++)for(let x=0;x<400;x++){const alpha=data[(y*400+x)*4+3];sum+=x*alpha;weight+=alpha;}return sum/weight;}
+      return {headShift:Math.abs(headX(a)-headX(b)),left:footX(a),right:footX(b)};
+    },footData);
+    assert(gaitPixels.headShift<3,'발이 바뀌어도 머리 위치는 안정적으로 유지');
+    assert(Math.abs(gaitPixels.left-gaitPixels.right)>4,'정면에서 앞으로 내딛는 발이 실제로 좌우 교대');
+    await page.evaluate(()=>{
+      const cv=document.createElement('canvas');cv.id='gaitProof';cv.width=1000;cv.height=550;cv.style='position:absolute;top:0;left:0;z-index:99;width:1000px;height:550px';document.body.append(cv);
+      const ctx=cv.getContext('2d');ctx.fillStyle='#899b77';ctx.fillRect(0,0,1000,550);ctx.fillStyle='#122322';ctx.font='20px sans-serif';
+      [0,1,2,3].forEach(f=>{ctx.fillText(['왼발 내딛기','교차','오른발 내딛기','교차'][f],f*250+50,35);[0,-Math.PI/2].forEach((head,row)=>G.ExpeditionMotion.draw(ctx,{pts:[[125+f*250,265+row*260]],mount:{id:'walk'},head,moving:true,phase:f/4,t:0,size:4,cache:{}}));});
+    });
+    await page.locator('#gaitProof').screenshot({path:path.join(OUT,'expedition-gait-poses.png')});
+    await page.evaluate(()=>document.getElementById('gaitProof').remove());
     await page.screenshot({path:path.join(OUT,'expedition-motion-preview.png'),fullPage:true});
     // 모든 원본 장면이 실제로 그려지는지 확인한다.
     const coverage = await page.evaluate(()=>{
@@ -31,7 +51,7 @@ const OUT = path.join(ROOT,'docs/art');
         });
       });return {frames};
     });
-    assert.deepStrictEqual(coverage,{frames:420});
+    assert.deepStrictEqual(coverage,{frames:424});
     await page.selectOption('#action','turn');
     await page.waitForTimeout(500);
     await page.screenshot({path:path.join(OUT,'expedition-motion-turn.png'),fullPage:true});
@@ -78,6 +98,6 @@ const OUT = path.join(ROOT,'docs/art');
     await page.getByRole('button',{name:'그만둔다',exact:true}).click();
     await page.waitForFunction(()=>!G.Scenes.land.runtime().camping);
     assert.deepStrictEqual(errors,[],'실제 게임 콘솔 오류');
-    console.log('OK · file 실행 · 21개 시트 로딩 · 420장면 렌더 · 게임 야영 시작/종료 · 콘솔 오류 0');
+    console.log('OK · file 실행 · 22개 시트 로딩 · 424장면 렌더 · 게임 야영 시작/종료 · 콘솔 오류 0');
   } finally { await browser.close(); }
 })().catch(e=>{console.error(e);process.exitCode=1;});

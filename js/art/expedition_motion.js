@@ -15,9 +15,12 @@
   }
   E.preload = function (id) {
     var m = spec(id || 'walk');
-    ['walk', 'turn', 'camp'].forEach(function (action) { picture(asset(m, action)); });
+    ['walk', 'walkFront', 'turn', 'camp'].forEach(function (action) { picture(asset(m, action)); });
   };
-  E.ready = function (id, action) { return !!picture(asset(spec(id), action || 'walk')); };
+  E.ready = function (id, action) {
+    var m = spec(id); action = action || 'walk';
+    return !!picture(asset(m, action)) && (action !== 'walk' || !m.walkFront || !!picture(asset(m, 'walkFront')));
+  };
   E.sample = function (u) {
     var id = (u.mount && u.mount.id) || 'walk', m = spec(id);
     if (!m) return null;
@@ -40,10 +43,11 @@
     else if (action === 'turn') index = mod(Math.round((Math.PI / 2 - a.heading) / (TAU / 16)), 16);
     else {
       var dir = mod(Math.round((Math.PI / 2 - a.heading) / (TAU / 8)), 8);
+      if (dir === 4 && m.walkFront) sheet = asset(m, 'walkFront');
       var count = sheet.framesPerDirection || 8;
       var row = sheet.directionRows ? sheet.directionRows[dir] : [dir, false];
       frame = mod(Math.floor(a.phase * count), count);
-      index = row[0] * count + frame;
+      index = row[0] * count + (sheet.frameOrder ? sheet.frameOrder[frame] : frame);
       flip = row[1];
     }
     return { id: id, action: action, index: index, frame: frame, flip: flip, sheet: sheet, heading: a.heading, phase: a.phase };

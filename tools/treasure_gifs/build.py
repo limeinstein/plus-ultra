@@ -28,6 +28,16 @@ TREASURE_IDS = [
     # 2026-10-02에 더한 보물 — 원화(sources/ID.png)가 생기면 만들어진다 (PROMPTS.md)
     "sillacrown", "cheonmado", "baekjecenser", "hanseal", "guanyublade",
     "libai", "kohinoor", "genghis", "holylance",
+    # 2026-10-02 두 번째로 더한 53종 — 원화는 tools/procedural_art(절차적 3D)로 만들었다 (Codex 원화가 오면 바꿔 끼운다)
+    "goryeoceladon", "tangsancai", "qinghua", "ruware", "moonjar", "iznikware", "lustreware",
+    "aritaware", "rakubowl", "tsukumonasu", "blackprince", "ironcrown", "wenceslas", "paladoro",
+    "timurruby", "peacockthrone", "mogokruby", "lankasapphire", "muzoemerald", "peregrina",
+    "nefertiti", "hammurabi", "venusmilo", "nike", "laocoon", "ajanta", "qingming", "lanting",
+    "tripitaka", "hunmin", "benin", "moctezuma", "sunstone", "incadisc", "mayacodex", "monalisa",
+    "creation", "lastsupper", "birthvenus", "david", "ghentaltar", "durer", "earthlydelights",
+    "urbinovenus", "babeltower", "orgaz", "ambassadors", "saliera", "belemmonstrance",
+    "nanbanscreen", "baburnama", "shahnameh", "pirireis",
+    "flordelamar",   # 바다 발견물(seadisc.js)의 난파선 보물
 ]
 
 # 도입 2장 + (앞·45°…315°·앞) × 2 + 정면 피날레 4장.
@@ -35,7 +45,8 @@ VIEW_SEQUENCE = [0, 0] + list(range(8)) + [0] + list(range(8)) + [0] + [0, 0, 0,
 DURATIONS = [400, 400] + [300] * 18 + [300, 400, 500, 1000]
 assert len(VIEW_SEQUENCE) == 24 and sum(DURATIONS) == 8400
 
-COOL_IDS = {"crystalskull", "glassbowl", "jademask", "jadesuit", "cloisonne"}
+COOL_IDS = {"crystalskull", "glassbowl", "jademask", "jadesuit", "cloisonne",
+            "goryeoceladon", "qinghua", "ruware", "moonjar", "lankasapphire", "muzoemerald", "peregrina", "kohinoor", "hanseal"}
 
 
 def split_turntable(src: Image.Image) -> list[Image.Image]:

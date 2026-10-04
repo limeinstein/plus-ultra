@@ -26,7 +26,7 @@
   <label>바탕 <select id="ground"><option value="#8b9c76">초원</option><option value="#dcc494">모래</option><option value="#e9eff1">설원</option><option value="#24333a">어두운 바탕</option></select></label>
 </div>
 <main id="grid"></main>
-<footer>8방향 · 보행: 방향마다 4가지 자세 · 회전: 22.5° 간격 16칸 · 야영: 8칸 반복. 일부 서쪽 방향은 동쪽 그림을 뒤집어 사용합니다. 모든 이동 수단에 같은 제독 크기 기준을 적용합니다.</footer>
+<footer>8방향 · 기본 보행 4자세, 도보 정면은 좌우 발 접지 2자세 · 회전 16칸 · 야영 8칸 반복. 일부 서쪽 방향은 동쪽 그림을 뒤집어 사용합니다. 모든 이동 수단에 같은 제독 크기 기준을 적용합니다.</footer>
 <script src="images/manifest.js"></script>
 <script src="js/core/images.js"></script>
 <script src="js/data/seafx.js"></script>
@@ -62,7 +62,7 @@
       var u = { pts:[[210,278]], head:Math.PI/2-dir*Math.PI/4, moving:(!stopped || stepRequested) && mode==='walk', camping:mode==='camp', phase:phase,t:t,mount:{id:card.id,n:12},party:12,size:2,cache:card.cache,ring:true };
       var ok = G.ExpeditionMotion.draw(ctx,u);
       var selection = G.ExpeditionMotion.sample(u);
-      card.text.textContent = ok ? (selection.action==='walk' ? ['왼발 내딛기','발 교차','오른발 내딛기','발 교차'][selection.frame] : {turn:'방향 전환',camp:'야영'}[selection.action]) : '그림을 불러오는 중…';
+      card.text.textContent = ok ? (selection.action==='walk' ? (selection.sheet.framesPerDirection===2 ? ['왼발 내딛기','오른발 내딛기'] : ['왼발 내딛기','발 교차','오른발 내딛기','발 교차'])[selection.frame] : {turn:'방향 전환',camp:'야영'}[selection.action]) : '그림을 불러오는 중…';
     });
     stepRequested = false;
     requestAnimationFrame(draw);

@@ -564,6 +564,18 @@
       "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-838c1d9d-fdf3-4768-b185-c4a37411a70e.png",
       "prompt": "Use case: stylized-concept. Production 2D CAMPING animation sprite sheet, 8 consecutive loop frames, EXACTLY4columns2rows, wide1536x768 transparent RGBA canvas, square384cells. One full small camp scene percell within330x300, large transparent gutters, no text or borders or floor tiles.\nPolished hand-painted 3D miniature game art viewed from fixed orthographic25degree elevated southeast angle. Same scene and constant size/location in ALL8frames: small beige A-frame travel tent atrear, dark navy goldtrim admiral in black bicorne whitefeather/redcape seated on a log LEFT consulting paper map, brown broad-brim hat navigator white shirt greentrousers seated RIGHT with cup, redbandana porter whiteshirt tantrousers resting by backpack atrear. Small stone-ring campfire centered infront, bedroll and cookingpot on side. Natural firelight warms figures. All stationary, do not assemble/disassemble camp.\nEach frame advances by1/8 of continuous quiet2second breathing/rest cycle. Campfire flame shape visibly flickers in each pose with smooth progression, faint small rising sparks, navigator gently lifts/lowers cup, admiral subtly looks atmap, porter breathes resting. Tent and furniture stay rigidly identical. Eighth frame joinsfirst seamlessly, no duplicateendpoint. Groundpivot cell192,335. Preserve subject identities and crisp clean alpha, no background residue.",
       "admiralReferenceHeight": 216.667
+    },
+    {
+      "id": "on_foot",
+      "action": "front",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a102a4-b232-7f03-9838-1066c633f920\\exec-bf5b6c83-51d9-4594-815d-77553903029c.png",
+      "prompt": "Use case: precise-object-edit. Extract ONLY THE FOUR FRONT-FACING characters in the BOTTOM ROW of this reference into one horizontal 4frame sprite strip. Preserve their exact differing leg positions: first character SCREEN-LEFT boot lowandforward, second passing, third SCREEN-RIGHT boot lowandforward, fourth opposite passing. These are four successive left-right walking steps; do NOT change third back to leftfootforward. Clean up the pixel artifacts and clipping seams around knees and boots in third and fourth sprites, anatomically reconnect trouser knees toboots without changing which foot is forward. Keep identical existing head, face, costume navygold redcape whitebreeches blackboots and size acrossfourframes. No side-facing characters from top row. No text, no labels, no greenbackground. Transparent RGBA background, exactly4equal squarecells inonehorizontalrow, fullycontainedcompletecharacters, amplemargins. Samegroundbaseline. This is faithfulcleanup ofbottomrowposes notnewposes.",
+      "version": 3,
+      "layout": [
+        4,
+        1
+      ],
+      "admiralReferenceHeight": "bodyHeight"
     }
   ]
 }

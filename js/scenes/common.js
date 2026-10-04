@@ -50,17 +50,33 @@
   function discoveryMotionMs(d) {
     var fx = (G.FX && G.FX.reveal) || {};
     if (d && d.plant) return fx.plantPlayMs || 8400;
-    return d && d.cat === 'treasure' && !d.natural ? (fx.treasurePlayMs || 8400) : (fx.playMs || 5000);
+    return d && (d.cat === 'treasure' || d.cat === 'trade') && !d.natural ? (fx.treasurePlayMs || 8400) : (fx.playMs || 5000);
   }
   function discoveryGifMs(d) {
     var fx = (G.FX && G.FX.reveal) || {};
     if (d && d.plant) return fx.plantGifMs || 8400;
-    return d && d.cat === 'treasure' && !d.natural ? (fx.treasureGifMs || 8400) : (fx.gifMs || 9820);
+    return d && (d.cat === 'treasure' || d.cat === 'trade') && !d.natural ? (fx.treasureGifMs || 8400) : (fx.gifMs || 9820);
   }
   /** 발견 그림 요소. 장면 판이나 GIF가 있으면 움직임을 살리고, 나머지는 기존 Canvas 교체 체계를 쓴다. */
   SC.discoveryPicture = function (d, chain) {
     chain = chain || G.Img.chain.discovery(d);
     var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art;
+    var animatedCat = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade';
+    if (animatedCat && G.Reel && G.Reel.has(d)) {
+      art = G.Reel.element(d, { cls: 'disc-build-gif', w: 1152, h: 512, ms: discoveryMotionMs(d) });
+      art.setAttribute('aria-label', d.name);
+      return art;
+    }
+    if (animatedCat && file && G.Img.isAnim(picked)) {
+      art = document.createElement('img');
+      art.className = 'disc-build-gif'; art.src = G.Img.src(picked);
+      art.alt = d.cat === 'geo' ? d.name + ' 항해 장면과 고지도 위의 발견 항로' :
+        d.cat === 'ruin' ? d.name + ' 7단계 복원과 360도 상공 회전' :
+        d.cat === 'creature' ? (d.plant ? d.name + ' 유화가 실사 풍경으로 살아나는 장면' : d.name + ' 새끼 등장과 성체 보호 장면') :
+          d.cat === 'treasure' && !d.natural ? d.name + ' 암흑 속 박물관 조명과 360도 2회전' : d.cat === 'trade' ? d.name + ' — 등불 켜진 시장 좌판으로 다가가는 장면' : d.name + ' 일출부터 밤까지 이어지는 파노라마';
+      return art;
+    }
+    // 장면 그림이 없는 교역품은 교역품 그림을 시장 좌판 빛 위에 놓는다
     if (d.cat === 'trade' && d.good && G.GOOD[d.good] && G.Img.chain.good) {
       var good = G.GOOD[d.good], goodChain = G.Img.chain.good(good);
       if (G.Img.pick(goodChain)) return G.Img.make(goodChain, 720, 320, function () { return A.discoveryArt(d, 720, 320); }, {
@@ -74,21 +90,6 @@
           A.vignette(ctx, w, h, 0.58);
         }
       });
-    }
-    var animatedCat = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure';
-    if (animatedCat && G.Reel && G.Reel.has(d)) {
-      art = G.Reel.element(d, { cls: 'disc-build-gif', w: 1152, h: 512, ms: discoveryMotionMs(d) });
-      art.setAttribute('aria-label', d.name);
-      return art;
-    }
-    if (animatedCat && file && G.Img.isAnim(picked)) {
-      art = document.createElement('img');
-      art.className = 'disc-build-gif'; art.src = G.Img.src(picked);
-      art.alt = d.cat === 'geo' ? d.name + ' 항해 장면과 고지도 위의 발견 항로' :
-        d.cat === 'ruin' ? d.name + ' 7단계 복원과 360도 상공 회전' :
-        d.cat === 'creature' ? (d.plant ? d.name + ' 유화가 실사 풍경으로 살아나는 장면' : d.name + ' 새끼 등장과 성체 보호 장면') :
-          d.cat === 'treasure' && !d.natural ? d.name + ' 암흑 속 박물관 조명과 360도 2회전' : d.name + ' 일출부터 밤까지 이어지는 파노라마';
-      return art;
     }
     return G.Img.make(chain, 720, 320, function () { return A.discoveryArt(d, 720, 320); });
   };
@@ -141,7 +142,7 @@
   //   장면 판(images/discovery-sheets/ID.webp)이 있으면 그것을 Canvas로 돌린다(G.Reel) — GIF보다 가볍고, 빠르기를 게임이 정하며,
   //   다시 받지 않고 처음부터 돌릴 수 있다. 없으면 예전처럼 GIF를 <img>로.
   function revealKeys(d) {
-    if (d.cat !== 'geo' && d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural && d.cat !== 'creature' && d.cat !== 'treasure') return null;
+    if (d.cat !== 'geo' && d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural && d.cat !== 'creature' && d.cat !== 'treasure' && d.cat !== 'trade') return null;
     var sheet = G.Reel ? G.Reel.key(d) : null;
     var chain = G.Img.chain.discovery(d), picked = G.Img.pick(chain), file = picked && G.Img.file(picked);
     var gif = file && G.Img.isAnim(picked) ? picked : null;

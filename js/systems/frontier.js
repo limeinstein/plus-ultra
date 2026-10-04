@@ -160,6 +160,7 @@
       if (m.wd) return;                   // 철새는 해마다 한데 모아 알린다 (wanderers.js)
       if (!now[m.id] || was[m.id]) return;
       if (s.mates.some(function (x) { return x.id === m.id; }) || s.flags['gone_' + m.id]) return;
+      if (m.quiet && G.RegionFolk && !G.RegionFolk.heard(m)) return;   // 모르는 고장의 사람 소식은 들리지 않는다
       var at = G.MateMove && G.MateMove.where(m.id);
       var where = at ? at.name : m.reg.map(function (r) { return G.REGIONS[r].name || G.REGIONS[r]; }).join('·');
       out.push({ icon: 'people', history: true, text: '소문: 「' + m.name + '」' + jx(m.name, '이/가') + ' ' + where + '의 술집에 나타났다고 한다' + (at ? '(' + G.MateMove.zoneNames(m.id) + ' 안을 옮겨 다닌다)' : '') + '. — ' + m.desc });

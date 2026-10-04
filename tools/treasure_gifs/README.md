@@ -36,3 +36,8 @@ python tools/images.py
 
 원화는 Codex의 내장 이미지 생성 도구로 만들었습니다. 공통 프롬프트와 보물별
 주제 지정은 [`PROMPTS.md`](PROMPTS.md)에 기록되어 있습니다.
+
+## 절차적 3D 원화 (2026-10-04)
+
+그림이 없던 보물 63종(신라 금관~피리 레이스 지도, 난파선 보물)의 원화는 `tools/procedural_art`로 만들었습니다.
+자세한 방법은 그 폴더의 README를 보세요. 교역품 28종의 시장 장면은 `tools/trade_gifs`에 있습니다.

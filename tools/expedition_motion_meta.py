@@ -136,16 +136,19 @@ def main():
         if source.exists() and source.resolve() != dest.resolve():
             shutil.copy2(source, dest)
         assert dest.exists(), f'{dest}: 원본을 먼저 생성해야 함'
-        layout = record.get('layout', {'walk': (8,8), 'turn': (4,4), 'camp': (4,2)}[record['action']])
-        sheet = inspect(dest, *layout, walking=record['action'] == 'walk')
+        layout = record.get('layout', {'walk': (8,8), 'turn': (4,4), 'camp': (4,2), 'front': (4,1)}[record['action']])
+        sheet = inspect(dest, *layout, walking=record['action'] in ('walk', 'front'))
         sheet.update(file='sprites/' + name, key='sprites/' + name[:-4], action=record['action'])
-        sheet['admiralReferenceHeight'] = record['admiralReferenceHeight']
+        sheet['admiralReferenceHeight'] = sheet['bodyHeight'] if record['admiralReferenceHeight'] == 'bodyHeight' else record['admiralReferenceHeight']
         if record['action'] == 'walk':
             sheet['framesPerDirection'] = layout[0]
             sheet['directionRows'] = record.get('directionRows', [[i, False] for i in range(8)])
+        if record['action'] == 'front':
+            sheet.update(action='walk', framesPerDirection=2, directionRows=[[0, False]]*8, frameOrder=[0, 3])
         result['sheets'][sid] = sheet
     for mount, prefix, label in MOUNTS:
         result['mounts'][mount] = {'label': label, 'walk': prefix+'_walk', 'turn': prefix+'_turn', 'camp': 'common_camp'}
+    result['mounts']['walk']['walkFront'] = 'on_foot_front'
     manifest = ROOT / 'docs/art/expedition-motion-manifest.json'
     manifest.write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     text = ('/* 자동 생성: python tools/expedition_motion_meta.py · 원본 PNG는 변형하지 않는다. */\n'

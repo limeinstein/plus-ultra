@@ -10,7 +10,7 @@ vm.createContext(box);
 ['js/data/seafx.js','js/data/expedition_motion.js','js/art/expedition_motion.js'].forEach(file => vm.runInContext(fs.readFileSync(path.join(ROOT,file),'utf8'),box));
 const G = box.window.G, E = G.ExpeditionMotion, data = G.EXPEDITION_MOTION;
 assert.strictEqual(Object.keys(data.mounts).length, 10);
-assert.strictEqual(Object.keys(data.sheets).length, 21);
+assert.strictEqual(Object.keys(data.sheets).length, 22);
 let total = 0;
 for (const sheet of Object.values(data.sheets)) {
   const png = fs.readFileSync(path.join(ROOT,'images',sheet.file));
@@ -26,7 +26,7 @@ for (const sheet of Object.values(data.sheets)) {
   }
   total += sheet.cells.length;
 }
-assert.strictEqual(total,420);
+assert.strictEqual(total,424);
 for (const id of Object.keys(data.mounts)) {
   const u = { mount:{id}, head:0, phase:0.6, moving:true, t:0, cache:{} };
   const first = E.sample(u);
@@ -39,23 +39,24 @@ for (const id of Object.keys(data.mounts)) {
   assert(turn.heading > 0 && turn.heading < Math.PI/2);
   for (let i=0;i<20;i++) {u.t+=0.05;turn=E.sample(u);}
   assert.strictEqual(turn.action,'walk');
-  assert.strictEqual(turn.index,2,'회전이 끝나도 발의 주기는 유지');
+  assert.strictEqual(turn.frame,2,'회전이 끝나도 발의 주기는 유지');
   u.camping=true;u.t=3;
   const camp=E.sample(u);
   assert.strictEqual(camp.action,'camp');
   assert.strictEqual(camp.sheet,data.sheets.common_camp);
   u.camping=false;u.moving=true;u.phase=0.75;u.t=3.1;
-  assert.strictEqual(E.sample(u).index,3);
+  assert.strictEqual(E.sample(u).frame,3);
   for (let dir=0;dir<8;dir++) {
-    const s=data.sheets[data.mounts[id].walk];
+    const s=data.sheets[id==='walk'&&dir===4?'on_foot_front':data.mounts[id].walk];
+    const count=s.framesPerDirection;
     const sequence=[];
-    for(let phase=0;phase<4;phase++) {
-      const sample=E.sample({mount:{id},head:Math.PI/2-dir*Math.PI/4,t:0,phase:phase/4,moving:true,cache:{}});
+    for(let phase=0;phase<count;phase++) {
+      const sample=E.sample({mount:{id},head:Math.PI/2-dir*Math.PI/4,t:0,phase:phase/count,moving:true,cache:{}});
       assert.strictEqual(sample.frame,phase);
       assert.strictEqual(sample.flip,s.directionRows[dir][1]);
       assert(s.cells[sample.index]);sequence.push(sample.index);
     }
-    assert.strictEqual(new Set(sequence).size,4,'8방향 각각 교차 자세를 포함한 네 걸음');
+    assert.strictEqual(new Set(sequence).size,count,'8방향 각각 좌우 발 교대');
   }
 }
 for (const action of ['walk','turn']) {
@@ -71,4 +72,4 @@ for (const sign of [-1,1]) {
 }
 const missing={mount:{id:'unknown'},head:0,t:0};
 assert.strictEqual(E.sample(missing),null);
-console.log('OK · 10종 · 8방향 4단계 보행 · 420 원본 장면 · 제독 공통 크기 · 큰 코끼리 · 정지/회전/야영');
+console.log('OK · 10종 · 8방향 보행 · 424 원본 장면 · 제독 공통 크기 · 큰 코끼리 · 정지/회전/야영');

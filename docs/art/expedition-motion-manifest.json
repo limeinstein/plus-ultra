@@ -4482,6 +4482,92 @@
       "key": "sprites/expedition_v2_common_camp",
       "action": "camp",
       "admiralReferenceHeight": 216.667
+    },
+    "on_foot_front": {
+      "width": 2172,
+      "height": 724,
+      "columns": 4,
+      "rows": 1,
+      "bodyHeight": 645.0,
+      "cells": [
+        [
+          64,
+          40,
+          462,
+          648,
+          237.18,
+          646.0
+        ],
+        [
+          635,
+          37,
+          428,
+          640,
+          200.77,
+          646.0
+        ],
+        [
+          1128,
+          40,
+          461,
+          646,
+          234.15,
+          646.0
+        ],
+        [
+          1683,
+          39,
+          451,
+          648,
+          221.85,
+          646.0
+        ]
+      ],
+      "transparentFraction": 0.6074,
+      "edgeContacts": [],
+      "file": "sprites/expedition_v3_on_foot_front.png",
+      "key": "sprites/expedition_v3_on_foot_front",
+      "action": "walk",
+      "admiralReferenceHeight": 645.0,
+      "framesPerDirection": 2,
+      "directionRows": [
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          false
+        ]
+      ],
+      "frameOrder": [
+        0,
+        3
+      ]
     }
   },
   "mounts": {
@@ -4489,7 +4575,8 @@
       "label": "도보",
       "walk": "on_foot_walk",
       "turn": "on_foot_turn",
-      "camp": "common_camp"
+      "camp": "common_camp",
+      "walkFront": "on_foot_front"
     },
     "porter": {
       "label": "짐꾼",

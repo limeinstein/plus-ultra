@@ -38,6 +38,7 @@
       for (var k = 0; k < n; k++) { var d = WD.make({}); if (d) { s.wander.defs[d.id] = d; } }
     }
     for (var id in s.wander.defs) register(s.wander.defs[id]);
+    if (G.RegionFolk) G.RegionFolk.fill();   // 고장마다 도시 수의 80%쯤은 사람이 있게 (5년 칸마다)
     if (G.Bio) G.Bio.reset();
   };
   function genOf(y) { var c = cfg(); return Math.floor((y - (c.epoch || 1480)) / (c.cycle || 30)); }
@@ -164,7 +165,7 @@
     if (g > s.wander.gen) {
       s.wander.gen = g;
       var old = WD.list().filter(function (d) { return !busy(d.id) && d.gen < g; });
-      var keep = U.shuffle(old.slice()).slice(0, c.rebornMax == null ? 30 : c.rebornMax), born = [];
+      var keep = U.shuffle(old.filter(function (d) { return !d.local; })).slice(0, c.rebornMax == null ? 30 : c.rebornMax), born = [];   // 고장 사람(local)은 다음 셈 때 새로 채운다 (regionfolk.js)
       old.forEach(function (d) { unregister(d.id); });
       keep.forEach(function (p) {
         var nat = U.chance(c.keepNation == null ? 0.55 : c.keepNation) ? p.nat : null;
@@ -183,6 +184,7 @@
         return d.name + '(' + d.natName + ' ' + d.typeName + (at ? ', ' + at.name : '') + ')';
       }).join(', ') + '.' });
     }
+    if (G.RegionFolk) G.RegionFolk.fill();
     if (G.Bio) G.Bio.reset();
     return out;
   };
