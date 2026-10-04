@@ -626,6 +626,7 @@
     if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
     else await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
+    if (G.HomeLife) await G.HomeLife.happen();                                    // 가끔 아이와 얽힌 일이 생긴다 (homelife.js)
   };
   HM.sub = function () { var s = S(); return s.player.wife ? '가족이 기다리는 집' : '혼자 사는 집'; };
   HM.menu = function (c) {
@@ -633,11 +634,16 @@
     return [
       { label: '쉰다', icon: 'bed', onClick: function () { return HM.rest(c); } },
       s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length + (G.Family.aboard().length ? ' (견습 ' + G.Family.aboard().length + ')' : '') : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
+      G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,
       G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,
+      { label: '항해 일지 기록 (저장)', icon: 'save', onClick: function () { return G.Info.saveMenu(); } },
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
       { label: '은퇴', icon: 'log', onClick: function () { return G.Family.retire(); } }
     ];
   };
+  /** 집 안에 서 있는 아내와 아이들 (누르면 이야기한다 — js/systems/homelife.js) */
+  HM.panel = function (c) { return G.HomeLife && G.HomeLife.familyPanel ? G.HomeLife.familyPanel() : null; };
+  HM.preload = function (c) { return G.HomeLife && G.HomeLife.family ? G.HomeLife.family().map(function (f) { return f.chain; }).filter(function (ch) { return ch && ch.length; }) : null; };
   HM.rest = async function (c) {
     var s = S();
     await UI.fade(function () { G.Game.passDays(3); });

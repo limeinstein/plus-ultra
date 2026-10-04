@@ -174,15 +174,27 @@
     for (k in d) o[k] = f[k] == null ? d[k] : f[k];
     return o;
   }
+  /** 이 말하는 사람이 제독 자신인가 (초상·리그 이름·이름으로) */
+  function isPlayer(who) {
+    var S = G.Game && G.Game.state, p = S && S.player;
+    return !!(p && who && (who.rigId === 'player' || (who.portrait && who.portrait === p.portrait) || (who.name && who.name === p.name)));
+  }
   function halfKeyOf(who) {
     if (!who || who.noHalf || !G.Img || !G.Img.pick) return null;
     var chain = who.half;
+    if (!chain && isPlayer(who) && G.Img.chain.heroHalf) chain = G.Img.chain.heroHalf();   // 제독은 생김새·나이에 맞는 무릎상
     if (!chain && who.portrait && !(who.portrait instanceof HTMLCanvasElement) && G.Art && G.Art.portraitKeys && G.Img.chain.halfFor) {
       try { chain = G.Img.chain.halfFor(who.portraitChain || G.Art.portraitKeys(who.portrait)); } catch (e) { chain = null; }
     }
     return chain && chain.length ? { chain: chain, key: G.Img.pick(chain) } : null;
   }
   var talking = 0, untalkTimer = 0, hiddenPanels = [];
+  /* 같은 건물 안에서 마지막으로 마주 선 상대 — 제독이 혼자 고민하는 물음(「어떻게 할까?」)도 그 사람과 마주 선 구도로 보여 준다 */
+  var lastPartner = null;
+  function partnerFor(menu) {
+    var lp = lastPartner;
+    return lp && menu && lp.menu === menu && menu.isConnected && Date.now() - lp.t < 15 * 60 * 1000 ? lp.who : null;
+  }
   /* 대화가 이어질 때(한마디 → 다음 한마디) 사이에 감춘 것이 잠깐 나타났다 사라지지 않게, 끝난 뒤 조금 기다렸다 되돌린다 */
   function setTalking(d) {
     talking = Math.max(0, talking + d);
@@ -218,12 +230,15 @@
 
   /** 대화 껍데기. duo(두 사람이 마주 봄)와 혼자 말하는 사람. */
   function dialogShell(back, opts, asking) {
-    var duo = opts.layout === 'duo' && opts.partner;
+    var duo = opts.layout === 'duo' && opts.partner, partner = opts.partner, side = opts.side, choiceSide = opts.choiceSide;
     var rigs = [], box, F = standFx(), actors = [], layer = null, ro = null, stage;
     var S = G.Game && G.Game.state;
     // 아래 층에 세울 수 있나: 다른 창(교역소 표·미니게임 등)이 열려 있지 않고, 건물 메뉴·도시 이름판이 있는 화면일 때.
     // 아니면 예전처럼 대화창 층에 세운다(창 뒤에 숨지 않게). 혼자 말하는 사람은 아래 층에 세울 수 있을 때만 선다
     var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
+    var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
+    // 제독 혼자의 물음·혼잣말: 방금 마주 섰던 사람이 있으면 그 사람과 함께 선다 (제독 = 왼쪽, 고르는 쪽)
+    if (!duo && low && isPlayer(opts) && partnerFor(menuEl)) { duo = true; partner = partnerFor(menuEl); side = 'left'; choiceSide = 'left'; }
     var solo = !duo && !!opts.portrait && low && (!F.soloCity || (S && S.loc && S.loc.mode === 'city'));
     var soloHalf = solo ? halfKeyOf(opts) : null;
     if (soloHalf && !soloHalf.key) soloHalf = null;
@@ -261,18 +276,29 @@
       layer.appendChild(actor);
       var an = null;
       if (duo && who && who.name) { an = U.el('div', 'actor-name wood', U.esc(who.name)); stage.appendChild(an); if (G.Bio) G.Bio.tag(an, who); }
-      actors.push({ el: actor, name: an, side: side, tall: tall });
+      var A0 = { el: actor, name: an, side: side, tall: tall, scale: who && who.standScale > 0 ? Math.min(1, who.standScale) : 1, aspect: 0 };   // standScale: 아이처럼 키가 작은 사람 (어른 = 1)
+      actors.push(A0);
+      // 그림의 실제 가로세로 비를 따른다 — 제독 무릎상(512×512 정사각)도 1024×1536 그림과 같은 키로 서게
+      if (tall && G.Img.load) {
+        try {
+          var pr = G.Img.load(half.key);
+          if (pr && pr.then) pr.then(function (img) { if (img && img.naturalWidth && img.naturalHeight) { A0.aspect = img.naturalWidth / img.naturalHeight; layout(); } }, function () {});
+        } catch (e) { /* 그림이 없으면 기본 비율 */ }
+      }
     }
     var speakerSide = 'center';
     if (duo) {
-      speakerSide = opts.side === 'left' ? 'left' : 'right';
-      var left = speakerSide === 'left' ? opts : opts.partner;
-      var right = speakerSide === 'right' ? opts : opts.partner;
-      var activeSide = asking ? (opts.choiceSide || (speakerSide === 'left' ? 'right' : 'left')) : speakerSide;
+      speakerSide = side === 'left' ? 'left' : 'right';
+      var left = speakerSide === 'left' ? opts : partner;
+      var right = speakerSide === 'right' ? opts : partner;
+      var activeSide = asking ? (choiceSide || (speakerSide === 'left' ? 'right' : 'left')) : speakerSide;
       addActor(left, 'left', activeSide === 'left', halfKeyOf(left));
       addActor(right, 'right', activeSide === 'right', halfKeyOf(right));
+      var other = isPlayer(left) ? right : isPlayer(right) ? left : right;
+      if (low && other && !isPlayer(other)) lastPartner = { who: other, menu: menuEl, t: Date.now() };
     } else {
       addActor(opts, 'center', true, soloHalf);
+      if (low && !isPlayer(opts)) lastPartner = { who: opts, menu: menuEl, t: Date.now() };
     }
     box = U.el('div', 'dlg duo' + (duo ? '' : ' solo') + (asking ? ' ask' : '') + ' speaker-' + speakerSide);
     box.innerHTML = '<div class="body parch"></div>';
@@ -288,16 +314,19 @@
       var h = Math.max(F.minH, Math.min(F.maxH, foot - F.top)), w = Math.round(h * F.aspect);
       var cores = [];
       actors.forEach(function (a) {
-        var aw = a.tall ? w : F.bustW, ah = a.tall ? h : F.bustH, x;
+        var aw = a.tall ? Math.round(h * (a.aspect || F.aspect) * a.scale) : F.bustW, ah = a.tall ? Math.round(h * a.scale) : F.bustH, x;
         if (a.side === 'left') x = b.left;
         else if (a.side === 'right') x = b.right - aw;
         else x = b.left + (b.width - aw) / 2;
         var st = a.el.style;
         st.left = Math.round(x) + 'px'; st.width = aw + 'px'; st.height = ah + 'px';
         st.top = Math.round((a.tall ? foot : b.top) - ah) + 'px';
-        if (a.name) {   // 이름표: 그 사람 발밑, 대화창 윗변 바로 위
-          a.name.style.left = Math.round(x + aw / 2) + 'px';
-          a.name.style.top = Math.round(b.top - 40) + 'px';
+        if (a.name) {   // 이름표: 대화창 윗변에 걸친 나무패 — 왼쪽 사람은 왼쪽 끝, 오른쪽 사람은 오른쪽 끝 (대화창 이름패와 같은 자리)
+          var ns = a.name.style;
+          ns.top = Math.round(b.top - 20) + 'px';
+          if (a.side === 'right') { ns.left = Math.round(b.right - 24) + 'px'; ns.transform = 'translateX(-100%)'; }
+          else if (a.side === 'left') { ns.left = Math.round(b.left + 24) + 'px'; ns.transform = 'none'; }
+          else { ns.left = Math.round(x + aw / 2) + 'px'; ns.transform = 'translateX(-50%)'; }
         }
         var top = (a.tall ? foot : b.top) - ah;
         cores.push(a.tall ? { left: x + aw * 0.2, right: x + aw * 0.8, top: top + ah * 0.03, bottom: b.top } : { left: x, right: x + aw, top: top, bottom: b.top });

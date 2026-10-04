@@ -16,7 +16,7 @@
     var s = S(), m = G.MAID[s.player.wife];
     if (m) return G.Scenes.city.B.tavern.maidSpeaker(m);
     var md = F.wifeMate();
-    if (md) return { name: md.name, rigId: 'mate:' + md.id, portrait: G.Scenes.mateSpec(md.id), lang: 3 };
+    if (md) return { name: md.name, rigId: 'mate:' + md.id, portrait: G.Scenes.mateSpec(md.id), half: G.Img.chain.mateHalf ? G.Img.chain.mateHalf(md.id) : null, lang: 3 };
     return { name: '', portrait: null };
   };
   F.kidAge = function (k) { var s = S(); return s.date.y - k.born.y - ((s.date.m < k.born.m || (s.date.m === k.born.m && s.date.d < k.born.d)) ? 1 : 0); };
@@ -24,7 +24,7 @@
     var sp = A.portraitSpec({ seed: 'kid_' + k.name + k.born.y, culture: 'med', g: k.sex === 'f' ? 'f' : 'm', age: 'young', beard: 0 });
     var kids = (S().player.kids || []).filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); });
     var order = Math.max(1, kids.indexOf(k) + 1);
-    return A.withImg(sp, G.Img.chain.kid(k.sex, order));
+    return A.withImg(sp, G.HomeLife ? G.HomeLife.chain(k, false) : G.Img.chain.kid(k.sex, order));   // 나이·어머니 고장에 맞는 그림 (homelife.js)
   };
 
   function cfg() { return (G.BALANCE && G.BALANCE.family) || {}; }
@@ -203,7 +203,7 @@
       var k = p.kids[i], age = F.kidAge(k), b; if (!k.st) k.st = inborn(); if (!k.edu) k.edu = {};
       if (k.unnamed) continue;
       b = F.bond(k);
-      var sp = { name: k.name + ' (' + age + '세 · ' + F.bondWord(k) + ')', portrait: F.kidSpec(k), lang: 3 };
+      var sp = G.HomeLife ? G.HomeLife.speaker(k, true) : { name: k.name + ' (' + age + '세 · ' + F.bondWord(k) + ')', portrait: F.kidSpec(k), lang: 3 };
       if (k.aboard) {
         await UI.say(U.pick(['아버지, 다음 항해는 어디로 가요? 저 밧줄 매는 법 다 익혔어요!', '아버지, 바다는 정말 넓어요. 고래도 봤어요!', '선원 아저씨들이 저더러 제법이래요.']), sp);
         var ab = await UI.ask(k.name + U.jx(k.name, '은/는') + ' 견습으로 함대에 타고 있다 (' + (k.sea || 0) + '달째).', [{ label: '계속 데리고 다닌다', value: 1 }, { label: '집에 남게 한다', value: 0 }], sp);
@@ -286,7 +286,7 @@
   F.innEvent = async function (c) {
     var s = S(), kids = (s.player.kids || []).filter(function (k) { return !k.unnamed && F.kidAge(k) >= 3; });
     if (!kids.length || c.id !== s.player.home) return;
-    if (U.chance(0.3)) { var k = U.pick(kids); await UI.say(U.pick(['앗, 아버지! 지금 여관 아주머니가 과자 주셨어요.', '아버지는 이 여관에 머문 적 있어요?']), { name: k.name, portrait: F.kidSpec(k), lang: 3 }); }
+    if (U.chance(0.3)) { var k = U.pick(kids); await UI.say(U.pick(['앗, 아버지! 지금 여관 아주머니가 과자 주셨어요.', '아버지는 이 여관에 머문 적 있어요?']), G.HomeLife ? G.HomeLife.speaker(k) : { name: k.name, portrait: F.kidSpec(k), lang: 3 }); }
   };
 
   F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && F.kidAge(k) >= ad; }); };

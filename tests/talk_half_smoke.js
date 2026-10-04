@@ -48,7 +48,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForTimeout(1500);
     let a = await actors();
     ok(a.length === 2 && a.every(x => x.tall), '여급 대화: 두 사람 다 서 있는 모습 ' + JSON.stringify(a));
+    const hs = await page.evaluate(() => [...document.querySelectorAll('.dlg-actor')].map(e => Math.round(e.getBoundingClientRect().height / (document.getElementById('ui').getBoundingClientRect().height / 900))));
+    ok(hs.length === 2 && Math.abs(hs[0] / 0.97 - hs[1]) < 12, '제독과 여급이 같은 키로 선다 (제독 무릎상이 정사각이어도) ' + JSON.stringify(hs));
     await page.screenshot({ path: path.join(OUT, '1_maid.png') }); await clear();
+    // 1-2) 제독 혼자의 물음(「어떻게 할까?」)도 방금 마주 섰던 사람과 두 사람 구도로
+    await page.evaluate(() => { const p = G.Game.state.player; G.UI.ask('어떻게 할까?', [{ label: '예', value: 1 }, { label: '아니오', value: 0 }], { name: p.name, portrait: p.portrait }); });
+    await page.waitForTimeout(800);
+    a = await actors();
+    ok(a.length === 2 && a.every(x => x.tall) && await page.evaluate(() => !!document.querySelector('.dlg-actor.left.active')), '제독의 물음: 여급과 함께 두 사람 무릎상, 제독(왼쪽)이 앞에 ' + JSON.stringify(a));
+    await clear();
 
     // 2) 후원자 — 마주 보는 구도. 무릎상 유무에 따라 크기
     const spInfo = await page.evaluate(() => { const sp = G.SPONSORS.find(s => s.city === 0 && G.Sponsor.present(s)); window._sp = sp; const w = G.Sponsor.speaker(sp); return { id: sp.id, half: G.Img.pick(w.half) }; });

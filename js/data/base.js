@@ -285,6 +285,11 @@
     succession: { sponsorKeep: 0.5, heirKeep: 0.3, legacyTrust: 70, legacyBase: 0.35, legacyGold: 250 },
     // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야, 자녀 maxKids명까지).
     // gestation일 뒤에 태어나고(쌍둥이 twins), adult세가 되면 뒤를 이을 수 있다. 가정교사는 한 아이에게 해마다 한 번, 값 eduCost닢
+    // 자택에서 아이와 보내는 시간 (js/systems/homelife.js): 능력 상한 statMax · 특기를 익힐 확률 skillChance · 장부를 맡기면 지력×ledgerGold닢
+    // · 가족 저녁의 피로 회복 dinnerRest · 사이가 cold 아래면 서먹한 첫마디(함께하면 +coldBonus) · 집을 longAway일 넘게 비웠다 오면 키 재기
+    // · 생일 앞뒤 birthdayDays일 · 집에서 일이 생기는 간격 happenGap일·확률 happenChance · 바다에서 추억의 물건: 피로 keepFatigue부터 하루 keepChance, 피로 −keepRest
+    homelife: { statMax: 90, skillChance: 0.6, ledgerGold: 4, dinnerRest: 10, cold: 30, coldBonus: 2, longAway: 300, birthdayDays: 10,
+      happenGap: 20, happenChance: 0.55, keepChance: 0.03, keepRest: 4, keepFatigue: 25 },
     family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
       // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill

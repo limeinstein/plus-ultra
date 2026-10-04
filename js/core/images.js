@@ -691,7 +691,16 @@
   /** 경쟁자 전용 그림이 먼저, 없을 때 같은 인물의 동료 그림을 잇는다. */
   K.rivalHalf = function (name) { return K.halfOf(K.rival(name)); };
   K.player = function (face) { var l = I.list('portraits/player/'); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
-  K.kid = function (sex, order) { var b = sex === 'f' ? 'daughter' : 'son'; return ['portraits/family/' + b + '_' + order, 'portraits/family/' + b]; };
+  /** 아이 그림: 나이(stage 5·10·15)와 어머니 고장(region 폴더)에 맞는 것부터 — portraits/family/<고장>/daughter_age10(_half) → daughter_age10(_half) → daughter_<몇째> → daughter.
+      half = 무릎상(대화창 위에 서는 모습). 고르는 규칙은 js/systems/homelife.js (G.FAMILY_LOOK) */
+  K.kid = function (sex, order, stage, region, half) {
+    var b = sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', P = 'portraits/family/', out = [];
+    if (stage) { if (region) out.push(P + region + '/' + b + '_age' + stage + sf); out.push(P + b + '_age' + stage + sf); }
+    if (half) out.push(P + b + '_half'); else out.push(P + b + '_' + order, P + b);
+    return out;
+  };
+  /** 자택 장면 그림 (js/art/homeart.js) — images/events/home/<이름> */
+  K.homeEvent = function (name) { return ['events/home/' + name]; };
   K.discovery = function (d) { return ['discoveries/' + d.id, 'discovery-cats/' + d.cat]; };
   K.ship = function (id) { return ['ships/' + id]; };
   K.effect = function (id) { return ['effects/' + id]; };

@@ -96,6 +96,8 @@ def game_data():
     shipjs = read('js/data/ships.js')
     ships = shipjs[shipjs.index('G.SHIP_TYPES = ['):]
     d['ships'] = [{'id': m[0], 'name': m[1]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)'", ships[:ships.index('\n  ];')])]
+    cabins = read('js/data/cabins.js')
+    d['cabins'] = [{'id': m[0], 'name': m[1]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)'", cabins)]
     imgjs = read('js/core/images.js')
     d['npcs'] = pairs(imgjs, 'NPCS')
     d['interiors'] = pairs(imgjs, 'INTERIORS')
@@ -213,6 +215,8 @@ def valid_keys(d):
     for s in d['ships']:
         k['ships/' + s['id']] = '배 · ' + s['name']
         k['ships-nav/' + s['id']] = '항해·해전 8방향 동작 배 · ' + s['name']
+    for c in d['cabins']:
+        k['cabins/' + c['id']] = '기함 선실 · ' + c['name']
     k['effects/ship_spray'] = '항해 효과 · 선수 물보라 스프라이트 시트'
     k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
     for terrain, label in (('grass', '초원'), ('steppe', '스텝'), ('desert', '사막'), ('forest', '숲'), ('jungle', '밀림'),
@@ -281,7 +285,7 @@ def report(found, dups, keys):
               ('거리 볼거리', 'landmarks/'), ('지도 유적', 'map-discoveries/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
-              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'),
+              ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
               ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('미니게임', 'minigames/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:

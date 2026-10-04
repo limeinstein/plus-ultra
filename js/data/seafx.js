@@ -5,6 +5,10 @@
 (function (G) {
   'use strict';
   G.FX = {
+    // 자택 장면 그림 (js/art/homeart.js): 그림 크기와 화면 위에서의 자리 (무대 1600×900)
+    homeArt: { w: 900, h: 520, top: 78 },
+    // 자택 화면에 서 있는 가족 (homelife.js familyPanel): 어른 키 h, 설 자리(왼쪽·아래·너비), 옆 사람과 겹치는 비율
+    homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
     // 기함 선실 화면 (js/ui/cabinview.js): 그림 너비, 방 한 칸의 너비·높이·틈, 위 갑판 방의 윗자리
     cabinView: { w: 1000, tw: 130, th: 82, gap: 6, top: 112 },
     // 낚시 배경의 수면 위치. 그림을 화면의 실제 찌 높이에 맞춰 나누어 그린다.

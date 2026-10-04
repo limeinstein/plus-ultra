@@ -1,5 +1,5 @@
 /* 기함 선실 화면 (G.CabinView) — 배를 옆에서 자른 그림 위에 방을 늘어놓고, 방을 눌러 부하를 배치하거나(어디서나) 방을 고친다(조선소에서만).
-   규칙은 js/systems/cabins.js, 방의 종류는 js/data/cabins.js. 배 그림은 코드로 그린다 (칸 크기는 G.FX.cabinView). */
+   규칙은 js/systems/cabins.js, 방의 종류는 js/data/cabins.js. images/ships·images/cabins 그림이 없으면 코드 그림으로 돌아간다. */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, CV = {};
@@ -8,6 +8,16 @@
   function CB() { return G.Cabins; }
   function L() { return (G.FX && G.FX.cabinView) || { w: 1000, tw: 130, th: 82, gap: 6, top: 112 }; }
   var ROLE_OF = { adjutant: 'first', helm: 'nav', lookout: 'surveyor' };
+
+  /** manifest에 있는 그림을 DOM에 얹는다. 아티팩트판의 빈 자리표도 G.Img가 묶음을 받으면 같은 img를 바꿔 준다. */
+  function artImage(key, cls, alt) {
+    if (!G.Img || !G.Img.has(key)) return null;
+    var im = U.el('img', cls);
+    im.alt = alt || '';
+    im.decoding = 'async';
+    im.src = G.Img.src(key);
+    return im;
+  }
 
   /** 방과 칸의 자리 (왼쪽이 뱃머리, 오른쪽이 고물): 위 갑판에 갑판·조타실·부관실·함장실, 돛대 위에 파수대, 갑판 아래에 선실 */
   function layout(rooms) {
@@ -76,6 +86,84 @@
     g.fillText(sh.name + '호 · ' + G.SHIP[sh.type].name, bowX + 34, bottom - 10);
   }
 
+  /** 선체를 잘라 본 목조 단면. 방 DOM은 이 격벽 위에 놓여 실제 갑판 안에 든 것처럼 보인다. */
+  function drawCutaway(cv, lay, sh) {
+    var l = L(), W = l.w, H = lay.h, g = cv.getContext('2d');
+    cv.width = W; cv.height = H;
+    var left = lay.x0 - 18, right = lay.x1 + 18;
+    var deckTop = lay.deckY - 11, deckFloor = lay.deckY + l.th + 9;
+    var roomBottom = lay.lowY + lay.rows * (l.th + l.gap) - l.gap + 13;
+    var bow = left - (G.SHIP[sh.type].hull === 'galley' ? 138 : 88), stern = right + 35;
+    var keel = Math.min(H - 22, roomBottom + 42);
+    var timber = g.createLinearGradient(0, deckTop, 0, keel);
+    timber.addColorStop(0, 'rgba(91,52,25,.9)');
+    timber.addColorStop(.45, 'rgba(61,34,18,.9)');
+    timber.addColorStop(1, 'rgba(35,20,13,.94)');
+
+    // 방 사이의 틈으로 보이는 선체 속 목재와 바깥 선체의 곡선.
+    g.fillStyle = timber;
+    g.beginPath();
+    g.moveTo(bow, deckFloor - 5);
+    g.quadraticCurveTo(left - 28, deckTop + 22, left + 8, deckTop + 12);
+    g.lineTo(right + 8, deckTop + 4);
+    g.quadraticCurveTo(stern + 20, deckFloor + 16, stern - 8, roomBottom + 2);
+    g.quadraticCurveTo(stern - 30, keel, right - 64, keel + 4);
+    g.lineTo(left + 34, keel + 4);
+    g.quadraticCurveTo(bow + 22, keel - 12, bow, deckFloor - 5);
+    g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(30,17,10,.96)'; g.lineWidth = 6; g.stroke();
+    g.strokeStyle = 'rgba(199,139,64,.75)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(bow + 5, deckFloor - 8); g.lineTo(right + 4, deckFloor + 1); g.stroke();
+    g.beginPath(); g.moveTo(left + 30, keel - 1); g.lineTo(right - 60, keel - 1); g.stroke();
+
+    // 위 갑판과 아래 갑판 바닥. 굵은 들보 아래에 밝은 가장자리를 한 줄 둔다.
+    [deckFloor, lay.lowY - 8].forEach(function (y) {
+      g.fillStyle = 'rgba(42,24,14,.98)'; g.fillRect(left - 5, y - 5, right - left + 12, 10);
+      g.fillStyle = 'rgba(191,128,56,.7)'; g.fillRect(left - 3, y - 4, right - left + 8, 2);
+    });
+    for (var row = 1; row < lay.rows; row++) {
+      var fy = lay.lowY + row * (l.th + l.gap) - l.gap / 2;
+      g.fillStyle = 'rgba(42,24,14,.98)'; g.fillRect(left, fy - 4, right - left, 8);
+      g.fillStyle = 'rgba(181,117,49,.55)'; g.fillRect(left, fy - 3, right - left, 1.5);
+    }
+
+    // 칸 사이 세로 늑골. 방의 테두리와 맞물려 한 덩어리의 격벽처럼 읽힌다.
+    var step = l.tw + l.gap;
+    g.lineCap = 'square';
+    for (var col = 0; col <= lay.cols; col++) {
+      var x = lay.x0 - l.gap / 2 + col * step;
+      g.strokeStyle = 'rgba(42,23,12,.98)'; g.lineWidth = 9;
+      g.beginPath(); g.moveTo(x, lay.lowY - 9); g.lineTo(x, roomBottom + 4); g.stroke();
+      g.strokeStyle = 'rgba(188,122,52,.55)'; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(x - 2, lay.lowY - 7); g.lineTo(x - 2, roomBottom + 2); g.stroke();
+    }
+
+    // 갑판 난간과 기둥. 파수대는 돛대에 붙은 별도 자리로 남는다.
+    g.strokeStyle = 'rgba(42,23,12,.98)'; g.lineWidth = 7;
+    g.beginPath(); g.moveTo(bow + 10, deckTop + l.th + 4); g.lineTo(stern - 10, deckTop + l.th + 4); g.stroke();
+    g.strokeStyle = 'rgba(194,132,60,.72)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(bow + 14, deckTop + l.th + 1); g.lineTo(stern - 12, deckTop + l.th + 1); g.stroke();
+    for (var rx = left + 10; rx < right; rx += 46) {
+      g.fillStyle = 'rgba(50,28,14,.96)'; g.fillRect(rx, deckTop - 4, 5, l.th + 16);
+      g.fillStyle = 'rgba(201,139,66,.45)'; g.fillRect(rx + 1, deckTop - 3, 1, l.th + 13);
+    }
+
+    // 물에 잠긴 아랫부분은 차갑게 눌러 선실과 구분한다.
+    g.fillStyle = 'rgba(25,54,65,.2)';
+    g.beginPath(); g.moveTo(bow + 12, keel - 18); g.lineTo(stern - 24, keel - 18); g.lineTo(right - 60, keel + 4); g.lineTo(left + 34, keel + 4); g.closePath(); g.fill();
+  }
+
+  /** 36종 선박 전용 그림. 읽기 전·실패 때에는 아래 canvas 그림이 그대로 보인다. */
+  function placeShipArt(box, sh) {
+    var key = 'ships/' + sh.type, im = artImage(key, 'cb-ship-art', G.SHIP[sh.type].name);
+    if (!im) return;
+    var ready = function () { if (im.naturalWidth > 1) box.classList.add('art-ready'); };
+    im.onload = ready;
+    box.insertBefore(im, box.querySelector('.cb-cutaway'));
+    if (im.complete) ready();
+    G.Img.want(key);
+  }
+
   function skillNote(m, c) {
     var R = G.R, ks = c.skills || G.ROLE_SKILLS[c.role] || [], best = null, lv = 0;
     ks.forEach(function (k) { var v = R.mateSkill(m, k); if (v > lv) { lv = v; best = k; } });
@@ -98,6 +186,8 @@
     else if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + skillNote(m, c) + '</small></span></div>';
     else h += '<div class="cb-none">' + (c.id === 'hold' ? (opts.yard ? '눌러서 고친다' : '조선소에서 고친다') : '비어 있음') + '</div>';
     el.innerHTML = h;
+    var art = artImage('cabins/' + c.id, 'cb-room-art', '');
+    if (art) { el.classList.add('has-art'); el.insertBefore(art, el.firstChild); }
     var f = el.querySelector('.cb-face');
     if (f && m) f.appendChild(face(m.id, 44));
     else if (f && opts.admiral) { try { if (S().player.portrait) f.appendChild(G.Art.portraitCanvas(S().player.portrait, 44)); else f.innerHTML = G.icon('crown'); } catch (e) { /* 얼굴 그림이 없으면 비워 둔다 */ } }
@@ -190,12 +280,14 @@
         '<span>' + G.icon('people') + '부하 <b>' + s.mates.length + '</b>명</span>' +
         '<span' + (warn ? ' class="warn-text"' : '') + '>' + G.icon('coin') + '급료 한 달 <b>' + U.num(wage) + '</b>닢' + (warn ? ' — 가진 돈으로 ' + Math.max(0, warn.months) + '달' : '') + '</span>' +
         '<span class="muted">' + (opts.yard ? '방을 누르면 고치거나 사람을 둡니다.' : '방을 누르면 사람을 둡니다. 방을 고치는 일은 조선소에서.') + '</span></div>' +
-        '<div class="cb-ship" style="width:' + l.w + 'px;height:' + lay.h + 'px"><canvas></canvas></div>' +
+        '<div class="cb-ship" style="width:' + l.w + 'px;height:' + lay.h + 'px"><canvas class="cb-ship-base"></canvas><canvas class="cb-cutaway"></canvas><div class="cb-ship-name">' + U.esc(sh.name) + '호 <small>· ' + U.esc(G.SHIP[sh.type].name) + '</small></div></div>' +
         '<div class="cb-sub">부하 <small class="muted">— 눌러서 자리를 정한다. 맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 자리가 없는 부하는 달마다 충성이 떨어진다.</small></div>' +
         '<div class="cb-roster"></div><div class="cb-sub">지금 힘을 내는 방</div>' + effects();
       var win = UI.window({ title: '기함 선실 — ' + U.esc(sh.name) + '호', icon: 'ship', width: l.w + 56, html: html, buttons: [{ label: '닫는다', value: null }], clickAny: false });
       var box = win.content.querySelector('.cb-ship');
-      drawShip(box.querySelector('canvas'), lay, sh);
+      drawShip(box.querySelector('.cb-ship-base'), lay, sh);
+      placeShipArt(box, sh);
+      drawCutaway(box.querySelector('.cb-cutaway'), lay, sh);
       var add = function (c, pos, m, o, act) { var t = tile(c, pos, m, o); t.onclick = function () { win.close(act); }; box.appendChild(t); };
       add(G.CABIN.captain, lay.fixed.captain, null, { admiral: true }, { k: 'captain' });
       ['adjutant', 'helm', 'lookout'].forEach(function (t) { add(G.CABIN[t], lay.fixed[t], CB().roleMate(ROLE_OF[t]), { pow: CB().power(t) }, { k: 'fixed', type: t }); });

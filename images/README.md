@@ -47,15 +47,17 @@
 | 마을 사람 — 도시 양식×역할 240장 | `portraits/npc-roles/양식/역할.webp` (예: 조선 상인 `kr/merchant.webp`). 양식 20종×역할 12종이며, `portraits/npc/역할@도시번호`가 있으면 도시 전용 그림을 먼저 씁니다. | 512×512, 투명 배경 |
 | 국가별 항해사 후보·후원자 760장 | `portraits/pools/mates/국가/f/01.webp`, `portraits/pools/sponsors/국가/m/01.webp`. 국가 19종×항해사·후원자×여·남×10명 | 512×512, 투명 배경 |
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |
-| 자녀 | `portraits/family/son.png`, `daughter.png`, 둘째는 `son_2.png` | 512×512 |
+| 자녀 | `portraits/family/daughter_age5.png` · `_age10` · `_age15` (3~7살·8~12살·13살부터), `son_…` 같은 꼴. 무릎상은 끝에 `_half` (대화창 위에 서는 모습, 1024×1536 투명). 딸은 어머니의 고장 `portraits/family/<고장>/daughter_…` (여급 그림 묶음 `maid-styles/<고장>`과 같은 이름: iberia·france·britain·korea…), 아들은 제독의 생김새 `portraits/family/<생김새>/son_…` (sea_dog·muscle_swordsman… `I.heroLook`). 없으면 폴더 없는 그림 → `daughter_<몇째>.png` → `daughter.png` | 흉상 1254×1254, 무릎상 1024×1536 |
+| 자택 장면 | `events/home/<이름>.webp` — 아이와 보내는 시간·집안일의 배경(아이 무릎상이 그 앞 가운데에 선다 → **가운데는 비우고 볼거리는 왼쪽·오른쪽에**, 사람은 그리지 않는다). 이름: yard(마당의 대야와 장난감 배) · harbor(해 질 녘 부두) · drawing(그림 그리는 탁자) · shell(조개 목걸이) · night(밤의 아이 방) · swords(목검과 허수아비) · duel(진검) · chart(서재의 해도) · pier(새벽 낚시) · book(책과 깃펜) · market(장난감 좌판) · chess(난롯가 체스판) · stars(밤하늘과 사분의) · ledger(장부와 금화) · window(바다가 보이는 창) · dinner(저녁상) · easel(화가의 이젤) · cake(생일 과자) · vase(깨진 꽃병) · bed(앓아누운 침대) · barrel(부두의 식량 통) · height(문설주의 키 금). 없으면 고향의 건물 안·도시 그림에 빛깔을 입혀 쓴다 (`js/art/homeart.js` `HA.SCENES`) | 900×520 |
 | 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`). 유적은 `tools/ruin_gifs`, 자연 경관은 `tools/nature_gifs`, 동물은 `tools/animal_gifs`, 식물은 `tools/plant_gifs`, 보물은 `tools/treasure_gifs`로 만든 GIF를 쓰면 전용 발견 연출이 재생됨 | 1440×640 정지화상 또는 576×256 GIF |
 | 발견물 — 분류 공통 | `discovery-cats/geo.jpg` (geo·nature·ruin·treasure·creature·people·trade) | 1440×640 |
 | 일반 소지품 | `items/아이템ID.webp` (레이피어 `rapier`, 나침반 `compass`, 약속 반지 `ring` 등) · 종류 공통 `item-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
 | 발견 유물 | `relics/유물ID.webp` (예: `r_qinshi`, `r_sillacrown`) · 종류 공통 `relic-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
 | 교역품 | `goods/교역품ID.webp` (후추 `pepper`, 비단 `silk`, 대포 `cannon` 등) · 갈래 공통 `good-kinds/갈래.webp` | 투명 배경 정사각형, 권장 192×192 |
 | 지도에 남는 유적 모형 | `map-discoveries/ruins-1.png` … `ruins-4.png` — 도시 밖 유적 52곳을 4×4 셀에 13곳씩 배치 | 투명 배경 PNG, 4열×4행 |
-| 배 | `ships/배ID.png` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
+| 배 | `ships/배ID.webp` — 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`) | 880×480 |
 | 항해·해전 8방향 동작 배 | `ships-nav/배ID.webp` — `python tools/ship3d/bake.py`가 three.js 3D 모형으로 굽는 정박 3장·표류 5장·질주 8장 시트(치수·돛대 자리는 `tools/render_ship_sprites.py`와 같다) | 자동 생성 1792×3584, 셀 224×224, 수면 피벗 (112,139), 투명 배경 |
+| 기함 선실 | `cabins/선실ID.webp` — 함장실 `captain`, 부관실 `adjutant`, 조타실 `helm`, 파수대 `lookout`, 갑판 `deck`, 빈 선실 `hold`, 지도 제작실 `chart`, 요리실 `galley`, 식당 `mess`, 회계실 `account`, 예배실 `chapel`, 진료실 `sick`, 오락실 `rec`, 조범실 `rig`, 선박 수리실 `repair`, 사육실 `pen`, 포격실 `gun`, 해병 대기실 `marine`, 통역실 `interp` | 정사각형, 권장 320×320 |
 | 항해 효과 스프라이트 시트 | `effects/ship_spray.png`, `effects/departure_gull.png` | 1024×512, 4열×2행, 셀 256×256, 투명 배경 |
 | 육상전·육상 탐험·사건 스프라이트 | `sprites/시트.webp` — 우리 편 0~3단계(swordsmen·musketeers·cannons·officers), 지역 적(east_fighters·ottoman·natives·west_europe·india_central·southeast_asia·africa_regions·meso_south·north_america·pacific), 들짐승(animals), 항해 사건(whale·dolphin·mermaid·storm·raincloud·rain·sun), 탐험대 8방향(party_*) | `python tools/sprite_repack.py`가 원본(`_extra/sprite_src/`)을 고른 칸으로 다시 짠 것. 칸·피벗은 `js/data/sprites.js` |
 | 육상전 지형 배경 | `landwar/backgrounds/지형.png` — grass·steppe·desert·forest·jungle·mountain·snow·tundra·ice | 초광폭 2.25:1 이상, 가로 1800 이상 |

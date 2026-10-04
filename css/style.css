@@ -148,7 +148,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg-actor.tall .actor-art { inset: 0; }
 .dlg-actor.bust .actor-art { inset: 0; }
 .dlg-actor.tall .actor-art { filter: drop-shadow(0 14px 22px rgba(0,0,0,.5)); }
-.dlg-stage > .actor-name { position: absolute; transform: translateX(-50%); min-width: 104px; padding: 4px 12px; text-align: center; white-space: nowrap; color: var(--cream); font-size: 15px; z-index: 61; }
+.dlg-stage > .actor-name { position: absolute; padding: 5px 20px; text-align: center; white-space: nowrap; color: var(--cream); font-size: 17px; letter-spacing: .06em; z-index: 61; }
 .dlg-stage .dlg.duo.solo > .name { display: block; left: 24px; }
 /* 대화 중에는 건물 안에 서 있던 여급 그림을 감춘다 (대화창 위에 선 사람과 겹치지 않게) */
 .tavern-maid { transition: opacity .2s; }
@@ -950,18 +950,29 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 /* 기함 선실 화면 (js/ui/cabinview.js) */
 .cb-top { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: center; font-size: 17px; margin-bottom: 8px; }
 .cb-top .ic { width: 20px; height: 20px; vertical-align: -4px; margin-right: 5px; }
-.cb-ship { position: relative; margin: 0 auto; border: 1px solid rgba(60,40,20,.55); overflow: hidden; }
-.cb-ship canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
-.cb-room { position: absolute; box-sizing: border-box; padding: 5px 7px; cursor: pointer; color: var(--ink); background: linear-gradient(#f3e8cc, #e2d0a6); border: 2px solid #4a3220; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45), 0 2px 4px rgba(0,0,0,.35); overflow: hidden; }
-.cb-room:hover { border-color: #b8862f; background: linear-gradient(#fff6dc, #ecdbb2); }
-.cb-room.fixed { background: linear-gradient(#e9e2cf, #cfc4a4); }
-.cb-room.empty { background: linear-gradient(rgba(243,232,204,.82), rgba(214,196,154,.82)); }
-.cb-room.hold { background: repeating-linear-gradient(135deg, rgba(120,90,55,.75) 0 10px, rgba(104,76,44,.75) 10px 20px); color: #f3e6c4; border-style: dashed; }
-.cb-h { display: flex; align-items: center; gap: 5px; font-size: 15px; white-space: nowrap; }
+.cb-ship { position: relative; margin: 0 auto; border: 1px solid rgba(60,40,20,.7); overflow: hidden; background: #22170f; box-shadow: inset 0 0 28px rgba(0,0,0,.45); }
+.cb-ship-base, .cb-ship-art, .cb-cutaway { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; transition: opacity .24s ease; }
+.cb-ship-base { z-index: 0; }
+.cb-ship-art { z-index: 1; object-fit: fill; opacity: 0; filter: saturate(.82) contrast(1.04) brightness(.72); }
+.cb-cutaway { z-index: 2; pointer-events: none; }
+.cb-ship.art-ready .cb-ship-art { opacity: .82; }
+.cb-ship.art-ready .cb-ship-base { opacity: 0; }
+.cb-ship-name { position: absolute; z-index: 4; left: 18px; bottom: 12px; padding: 5px 12px 6px; color: #f4e4bd; background: rgba(24,15,9,.78); border: 1px solid rgba(211,174,96,.58); box-shadow: 0 2px 8px rgba(0,0,0,.48); font: 700 19px/1.1 serif; text-shadow: 0 1px 2px #000; pointer-events: none; }
+.cb-ship-name small { font-size: 15px; color: #d8c39a; }
+.cb-room { position: absolute; z-index: 3; box-sizing: border-box; padding: 0; cursor: pointer; color: #f2e1b9; background: #3b2415; border: 3px solid #3b2313; box-shadow: inset 0 0 0 1px rgba(205,143,69,.48), 0 1px 3px rgba(0,0,0,.62); overflow: hidden; text-shadow: 0 1px 2px #160d08; }
+.cb-room > :not(.cb-room-art) { position: relative; z-index: 1; }
+.cb-room-art { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .7; filter: saturate(.78) sepia(.08) contrast(.94) brightness(.78); transition: opacity .18s ease, filter .18s ease; pointer-events: none; }
+.cb-room:hover { border-color: #d1a24d; box-shadow: inset 0 0 0 1px rgba(255,232,177,.52), 0 0 0 2px rgba(209,162,77,.25), 0 3px 8px rgba(0,0,0,.62); }
+.cb-room:hover .cb-room-art { opacity: .92; filter: saturate(.96) contrast(.98) brightness(.9); }
+.cb-room.fixed { background: #41301e; }
+.cb-room.empty { background: #432a18; }
+.cb-room.hold { background: #2f1d12; color: #f3e6c4; border-style: dashed; }
+.cb-room.hold .cb-room-art { opacity: .62; filter: saturate(.5) brightness(.54); }
+.cb-h { display: flex; align-items: center; gap: 5px; min-height: 25px; padding: 2px 5px; font-size: 15px; white-space: nowrap; color: #f5e5bd; background: linear-gradient(90deg, rgba(31,18,10,.92), rgba(47,28,14,.72)); border-bottom: 1px solid rgba(208,148,73,.52); }
 .cb-h b { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .cb-h .ic { width: 18px; height: 18px; flex: none; }
 .cb-pow { margin-left: auto; flex: none; font-style: normal; font-size: 13px; font-weight: 700; color: #fff; background: #2f5b8c; border-radius: 9px; padding: 0 7px; line-height: 18px; }
-.cb-who { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+.cb-who { display: flex; align-items: center; gap: 6px; margin: 3px 4px 0; padding: 2px 4px; background: rgba(236,219,180,.8); color: #281a0f; text-shadow: 0 1px 1px rgba(255,255,255,.5); }
 .cb-face { width: 38px; height: 38px; flex: none; border: 1px solid rgba(60,40,20,.6); background: rgba(0,0,0,.12); overflow: hidden; }
 .cb-face canvas { position: static; width: 100%; height: 100%; display: block; }
 .cb-nm { font-size: 14px; line-height: 1.25; overflow: hidden; min-width: 0; }
@@ -970,7 +981,7 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .cb-room .cb-nm small { color: #2f5b8c; font-weight: 700; }
 .cb-face .ic { width: 100%; height: 100%; opacity: .6; }
 .cb-nm small { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
-.cb-none { margin-top: 10px; font-size: 14px; text-align: center; opacity: .75; }
+.cb-none { margin: 9px 6px 0; padding: 2px 4px; font-size: 13px; text-align: center; color: #f4e6c4; background: rgba(29,17,10,.62); opacity: .96; }
 .cb-sub { margin: 12px 0 6px; font-size: 18px; font-weight: 700; }
 .cb-sub small { font-weight: 400; font-size: 14px; }
 .cb-roster { display: flex; flex-wrap: wrap; gap: 6px; max-height: 172px; overflow-y: auto; }
@@ -983,3 +994,22 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .cb-fx { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.6; columns: 2; }
 .cb-fx .cb-pow { margin: 0 4px; }
 .shipcard .pips { display: inline-flex; vertical-align: -2px; }
+
+/* 자택 장면 그림 (js/art/homeart.js) — 대화하는 사람 뒤에 걸리는 액자 */
+.homeart { position: absolute; z-index: 12; padding: 10px; pointer-events: none !important; opacity: 0; transition: opacity .26s ease; }
+.homeart.on { opacity: 1; }
+.homeart canvas { display: block; border: 1px solid #0c0806; box-shadow: inset 0 0 0 1px rgba(227,198,141,.2); }
+#ui.homeart-on .cmdmenu, #ui.homeart-on .todo, #ui.homeart-on .city-banner, #ui.homeart-on .fleetpanel { visibility: hidden; }
+
+/* 자택에 서 있는 가족 (js/systems/homelife.js familyPanel) */
+.home-family { position: absolute; z-index: 12; display: flex; align-items: flex-end; justify-content: center; pointer-events: none !important; }
+.home-family .hf-one { position: relative; flex: none; cursor: pointer; pointer-events: auto; transform-origin: 50% 100%; animation: hfbreath 5.5s ease-in-out infinite; transition: filter .15s; }
+.home-family .hf-one canvas { width: 100%; height: 100%; display: block; filter: drop-shadow(0 8px 10px rgba(0,0,0,.35)); pointer-events: none; }
+.home-family .hf-one.bust { align-self: flex-end; width: 200px !important; height: 240px !important; }
+.home-family .hf-one.bust canvas { height: 200px; border: 3px solid #4a3220; }
+.home-family .hf-one:hover { filter: brightness(1.12); z-index: 20 !important; }
+.home-family .hf-name { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); padding: 3px 12px; white-space: nowrap; font-size: 16px; color: var(--cream); text-align: center; opacity: .92; }
+.home-family .hf-name small { display: block; font-size: 12px; opacity: .85; }
+.home-family .hf-one:hover .hf-name { opacity: 1; outline: 1px solid #b8862f; }
+@keyframes hfbreath { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.006); } }
+#ui.talking .home-family, #ui.homeart-on .home-family { visibility: hidden; }

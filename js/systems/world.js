@@ -49,6 +49,7 @@
     }
     // 가족: 임신 소식·출산 (family.js — 아이는 자택에 들러야 생긴다)
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
+    if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다
     // 후원자의 대(代) — 옛 저장이면 지금 자리에 있는 사람들을 기억해 둔다
     if (!s.spHolder && G.Succession) G.Succession.sync();
     return out;
@@ -90,6 +91,7 @@
     if (G.Succession) out = out.concat(G.Succession.year());
     // 아이들이 자란다
     if (G.Family && G.Family.newYear) out = out.concat(G.Family.newYear());
+    if (G.HomeLife) out = out.concat(G.HomeLife.newYear());
     if (G.Wander) out = out.concat(G.Wander.newYear());
     // 새로 간행된 책: 도서관을 다시 찾을 이유가 생긴다
     G.BOOKS.forEach(function (b) {
