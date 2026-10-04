@@ -113,8 +113,10 @@
       { label: '매각', icon: 'sack', onClick: function () { return MK.sell(c); } },
       { label: '시세', icon: 'chart', sub: '물건 값 ' + Math.round(U.sum(Object.keys(R.ITEM_CATS), function (k) { return R.itemMult(c, { id: '_', kind: k }); }) / 4 * 100) + '%', onClick: function () { return C.B.trade.quotes(c); } },
       R.purser() ? { label: '값 후려치기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공' : '실패') : '경리 ' + R.purser().name, dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
-      { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } }
-    ];
+      { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } },
+      // 발견물이 있을 것으로 짐작되는 고장의 시장: 그 발견물의 모조품 (js/systems/fakes.js)
+      G.Fakes && G.Fakes.forSale(c).length ? { label: '모조품 상인', icon: 'seal', sub: G.Fakes.forSale(c).length + '가지', onClick: function () { return G.Fakes.buy(c); } } : null
+    ].filter(Boolean);
   };
   MK.buy = async function (c) {
     var s = S();

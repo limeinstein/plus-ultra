@@ -204,7 +204,9 @@
     }
     function render() {
       var nRel = p.items.filter(function (it) { return G.RELIC && G.RELIC[it.id]; }).length;
-      el.innerHTML = mountGear() + '<div class="muted" style="margin:14px 0 10px">소지품 ' + p.items.length + '/' + R.ITEM_MAX + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div><table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
+      var fk = G.Fakes ? G.Fakes.list() : [];       // 모조품 (js/systems/fakes.js) — 짐 칸은 차지하지 않는다
+    var fakeHtml = fk.length ? '<div class="mount-gear"><h4>모조품 <small>보고할 때 증거로 내밀 수 있다 · 들키면 벌금이나 옥살이</small></h4><div class="muted">' + fk.map(function (d) { return '「' + U.esc(d.name) + '」' + (G.Fakes.count(d.id) > 1 ? ' ×' + G.Fakes.count(d.id) : '') + (G.Disc.foundByMe(d.id) ? ' <span class="tag">진짜도 가짐</span>' : ''); }).join(' · ') + '</div></div>' : '';
+    el.innerHTML = mountGear() + fakeHtml + '<div class="muted" style="margin:14px 0 10px">소지품 ' + p.items.length + '/' + R.ITEM_MAX + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div><table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
         p.items.map(function (it, i) {
           var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind, rl = G.RELIC && G.RELIC[it.id];
           var eq = (kind === 'weapon' && p.equip.weapon === it.id) || (kind === 'armor' && p.equip.armor === it.id);

@@ -538,6 +538,7 @@
   function spawnNpcs() {
     var s = S(), l = s.loc;
     // 탐험가의 함대(항로 위)·적대국의 추격 함대 (js/systems/seafolk.js)
+    if (G.Fakes) { var chN = G.Fakes.spawnChaser(st.npcs); if (chN) { st.npcs.push(chN); if (G.ShipSprite) G.ShipSprite.want(chN.ships); return; } }   // 이중 계약에 화난 후원자의 추격자
     if (G.SeaFolk) { var sfN = G.SeaFolk.spawn(st.npcs); if (sfN) { st.npcs.push(sfN); if (G.ShipSprite) G.ShipSprite.want(sfN.ships); return; } }
     // 왕명: 왕녀를 붙잡아 간 해적단(소굴 앞바다)·나포할 나라의 배 (js/systems/court.js)
     if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships); return; } }
@@ -572,7 +573,7 @@
       var n = st.npcs[i];
       var d = G.Geo.dist(l.lon, l.lat, n.lon, n.lat);
       if (n.exp && G.SeaFolk && G.SeaFolk.place(n, st.dayAcc)) { if (n.gone || d > 9) st.npcs.splice(i, 1); continue; }   // 탐험 함대는 날짜대로 항로를 간다
-      if (n.hostile && d < (n.hunt ? 8 : 4.5) && !n.fled) n.heading = Math.atan2(l.lat - n.lat, G.Geo.wrapLon(l.lon - n.lon));
+      if (n.hostile && d < (n.hunt || n.chaser ? 8 : 4.5) && !n.fled) n.heading = Math.atan2(l.lat - n.lat, G.Geo.wrapLon(l.lon - n.lon));
       else if ((n.kind === 'merchant' || n.awed) && d < 1.2) { n.heading = Math.atan2(n.lat - l.lat, G.Geo.wrapLon(n.lon - l.lon)); if (n.awed && !n.awedTold) { n.awedTold = true; UI.toast(G.Ships.pirateLabel(n.zone) + '의 배가 ' + s.fleet.ships[0].name + '호의 거대한 모습을 보고 달아난다.', 'ship', 3600); } }
       var sp = n.spd * days;
       var nl = n.lon + Math.cos(n.heading) * sp, nt = n.lat + Math.sin(n.heading) * sp;
@@ -600,6 +601,7 @@
     st.busy++;
     st.paused = true; refreshBar();
     var k = NPC_KIND[n.kind];
+    if (n.chaser && G.Fakes) G.Fakes.chaserMet(n);          // 추격자는 한 번뿐
     var pl = G.Ships.pirateLabel(n.zone);
     var who = n.kind === 'pirate' ? pl + ' 함대' : n.label || (n.nation || '') + ' ' + k.name;
     var kinds = n.ships ? n.ships.filter(function (id, i) { return n.ships.indexOf(id) === i; }).map(function (id) { return G.SHIP[id].name; }).join('·') : '';
