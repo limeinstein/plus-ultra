@@ -519,13 +519,16 @@
     st.camping = true;
     try {
       var terr = G.Geo.terrain(l.lon, l.lat);
+      // 사냥·물 긷기는 배의 식량·물 보급 — 배(출발한 항구)가 보이는 곳에서만 (G.BALANCE.landPack.near)
+      var far = G.Cargo ? !G.Cargo.nearShip() : false, farTag = far ? ' — 배가 보이는 곳에서만' : '';
       var v = await UI.ask('야영지를 차렸다. 무엇을 할까?', [
         { label: '쉰다 (3일)', value: 'rest' },
-        { label: '사냥한다 (1일)', value: 'hunt' },
-        { label: '물을 긷는다 (1일) — 배의 식수로', value: 'water' },
+        { label: '사냥한다 (1일)' + farTag, value: 'hunt', dis: far },
+        { label: '물을 긷는다 (1일)' + farTag, value: 'water', dis: far },
         { label: '정찰한다 (2일)', value: 'scout' },
         { label: '약초를 캔다 (1일)', value: 'herb' },
         { label: '그만둔다', value: null }], G.Scenes.mateSpeaker('first'));
+      if ((v === 'hunt' || v === 'water') && far) { UI.toast('배가 보이지 않는 곳이라 식량·물을 배로 나를 수 없다. 배 가까이(' + (((G.BALANCE || {}).landPack || {}).near || 1.2) + '° 안)로 가자.', 'anchor', 4600); v = null; }
       if (v === 'rest') {
         spendDays(3); f.fatigue = Math.max(0, f.fatigue - 25 - R.skill('ops') * 5 - (R.skillRead('cook') + R.skillRead('music')) * ((((G.BALANCE || {}).crewCare || {}).restBonus) || 3));
         UI.toast('푹 쉬었다. 피로가 풀렸다.', 'tent');
@@ -537,7 +540,7 @@
         var want = R.dailyUse() * U.rf(wr[0], wr[1]) * wet * Math.min(2, 0.5 + l.party / 20) * (1 + R.skill('survey') * 0.15);
         if (want < R.dailyUse() * 0.5) UI.toast('땅이 말라 물길을 찾지 못했다.', 'drop');
         else if (R.free() < 1) UI.toast('물을 길었지만 배의 짐칸이 가득해 더 실을 곳이 없다.', 'drop', 4200);
-        else { var gotW = stow('water', want); UI.toast('냇물과 샘에서 물 ' + gotW + '통을 길었다. (배의 식수 약 ' + Math.round(gotW / R.dailyUse()) + '일분)', 'drop', 4200); }
+        else { var gotW = stow('water', want); UI.toast('냇물과 샘에서 물 ' + gotW + '통을 길어 배로 날랐다. (배의 식수 약 ' + Math.round(gotW / R.dailyUse()) + '일분)', 'drop', 4200); }
         f.fatigue = Math.min(100, f.fatigue + 2);
       } else if (v === 'hunt') {
         spendDays(1);
@@ -545,7 +548,7 @@
         var sk = 1 + R.skill('shoot') * 0.3 + R.skill('sword') * 0.1;
         if (U.chance(0.12)) { await UI.say('사냥감을 쫓다가 도리어 사나운 짐승 떼와 마주쳤다!', {}); await landBattle('들짐승', foeSize(0.12, 0.3, 4, 30), true); }
         var got = Math.round(R.dailyUse() * U.rf(2, 6) * rich * sk);
-        if (got > 0) { got = stow('food', got); UI.toast(got > 0 ? '사냥에 성공했다! 식량 ' + got + '통 (배의 식량 약 ' + Math.round(got / R.dailyUse()) + '일분)' : '사냥은 했지만 배의 짐칸이 가득해 실을 곳이 없다.', 'bread', 4200); }
+        if (got > 0) { got = stow('food', got); UI.toast(got > 0 ? '사냥에 성공했다! 식량 ' + got + '통을 배로 날랐다. (배의 식량 약 ' + Math.round(got / R.dailyUse()) + '일분)' : '사냥은 했지만 배의 짐칸이 가득해 실을 곳이 없다.', 'bread', 4200); }
         var ck = R.skillRead ? R.skillRead('cook') : R.skill('cook');
         if (got > 0 && ck) {          // 요리: 잡아 온 고기로 저녁을 차려 피로를 덜어 준다
           var ckWho = (R.skillBest && R.skillBest('cook').who) || '제독', ckF = 3 + ck * 3;

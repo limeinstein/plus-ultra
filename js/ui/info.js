@@ -87,7 +87,7 @@
     var html = '<div class="grid3" style="margin-bottom:12px">' +
       box('선원', f.crew + '명', '최저 ' + R.crewMin() + ' · 최대 ' + R.crewMax()) +
       box('식량 / 물', Math.floor(f.food) + ' / ' + Math.floor(f.water) + '통', f.crew ? '약 ' + Math.min(R.daysOfFood(), R.daysOfWater()) + '일분' : '') +
-      box('적재', R.used() + ' / ' + R.fleetCap() + '통', '교역품 ' + R.cargoQty() + '통 · ' + Object.keys(f.cargo).length + '/' + R.maxKinds() + '종') +
+      box('적재', R.used() + ' / ' + R.fleetCap() + '통', '교역품 ' + R.cargoQty() + '통 · ' + Object.keys(f.cargo).length + '/' + R.maxKinds() + '종' + (G.Cargo ? ' · 무게 ' + G.Cargo.wtText() : '')) +
       box('피로', Math.round(f.fatigue) + '%', UI.bar(f.fatigue, 100, 'red')) +
       box('규율', Math.round(f.discipline) + '%', UI.bar(f.discipline, 100, 'green')) +
       box('항해', (f.daysOut || 0) + '일째', f.scurvy > 0 ? '<span class="warn-text">괴혈병 ' + Math.round(f.scurvy) + '</span>' : '건강') + '</div>' +
@@ -104,7 +104,16 @@
       if (ms.length) html += '<div class="sep"></div><h4 style="margin:0 0 8px">계류 중인 배</h4><div style="font-size:17px;line-height:1.7">' + ms.join('<br>') + '</div>';
     }
     el.innerHTML = html;
+    cabinButton(el, true);
   };
+  /** 「기함 선실」 단추: 선실 화면(js/ui/cabinview.js)을 열고, 닫으면 이 쪽을 다시 그린다 */
+  function cabinButton(el, top) {
+    if (!G.CabinView || !S().fleet.ships.length) return;
+    var b = U.el('button', 'btn navy', G.icon('bed') + ' 기함 선실 — 부하 배치');
+    b.style.margin = top ? '0 0 12px' : '10px 0 0';
+    b.onclick = function () { G.CabinView.open().then(function () { if (el.isConnected) (top ? PAGES.fleet : PAGES.mates)(el); }); };
+    if (top) el.insertBefore(b, el.firstChild); else el.appendChild(b);
+  }
   function box(k, v, sub) { return '<div class="parch" style="padding:10px 14px;background:rgba(255,250,236,.35);box-shadow:none;border:1px solid rgba(110,80,40,.3)"><div class="muted" style="font-size:15px">' + k + '</div><div class="big-num">' + v + '</div><div style="font-size:14px" class="muted">' + (sub || '') + '</div></div>'; }
 
   /** 함대 속력 풀이: 배마다의 평균 선속과 편대 보정 */
@@ -124,22 +133,28 @@
     } else h += '<div class="plan-note" style="margin-top:6px">배가 한 척이면 그 배의 선속이 곧 함대 속력입니다. 두 척 이상이면 가장 느린 배에 맞추되, 운용술로 예인 보조를 받고 편대 유지 부담을 줄입니다.</div>';
     return h;
   }
+  /** 부하가 하는 말: 타고난 말과 배에서 익힌 말(★) */
+  function mateLangs(m, d) {
+    var ks = {}; Object.keys(d.lg || {}).forEach(function (k) { ks[k] = 1; }); Object.keys(m.lgx || {}).forEach(function (k) { ks[k] = 1; });
+    return Object.keys(ks).map(function (k) { var lv = R.mateLang(m, +k); return lv ? G.LANGS[k] + ' ' + G.LANG_LV[lv] + (lv > ((d.lg || {})[k] || 0) ? '★' : '') : ''; }).filter(Boolean).join(' · ');
+  }
   PAGES.mates = function (el) {
     var s = S();
     if (!s.mates.length) { el.innerHTML = '<div class="muted">동료가 없습니다. 술집에서 동료를 찾아보십시오.</div>'; return; }
-    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」이나 항구의 「함대편성 → 선장 임명」에서 바꿉니다.</div><div class="mates"></div>';
+    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」이나 항구의 「함대편성 → 선장 임명」에서 바꿉니다. 그 밖의 부하는 「기함 선실」에서 방(요리실·진료실·포격실…)에 두면 그 방의 특기가 함대에 쓰입니다. 자리가 없는 부하는 달마다 충성이 떨어지고, 충성이 40 아래면 일을 건성으로 하며, 0이 되면 배에서 내리려 합니다.</div><div class="mates"></div>';
     var box2 = el.querySelector('.mates');
     R.tidyCaptains();
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
-      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(R.roleName(m)) + '</span>' + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
+      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>' + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
         '<div class="muted" style="font-size:16px;margin:4px 0">' + d.desc + '</div>' +
         '<div style="font-size:16px">' + Object.keys(d.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + pips(d.sk[k]); }).join(' &nbsp; ') + '</div>' +
-        '<div style="font-size:15px;margin-top:4px" class="muted">' + Object.keys(d.lg).map(function (k) { return G.LANGS[k] + ' ' + G.LANG_LV[d.lg[k]]; }).join(' · ') + '</div></div>');
+        '<div style="font-size:15px;margin-top:4px" class="muted">' + mateLangs(m, d) + '</div></div>');
       row.style.gridTemplateColumns = '96px 1fr';
       row.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 96));
       box2.appendChild(row);
     });
+    cabinButton(el, false);
   };
 
   /** 철새 명부: 지금 항구를 떠도는 떠돌이 항해사와 마녀 (소문으로 들은 머무는 곳) */

@@ -9,6 +9,12 @@ ROOT = Path(__file__).resolve().parents[1]
 data = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 ids = re.findall(r"^\s*trade\('([^']+)'", data, re.M)
 assert len(ids) == 28, ids
+generator = (ROOT / "tools" / "procedural_art" / "trade" / "trade.js").read_text(encoding="utf-8")
+assert "fillText(" not in generator, "교역품 발견 장면에 글자가 들어갔습니다"
+assert "PT.person(" not in generator, "교역품 발견 장면에 사람이 들어갔습니다"
+stage = ROOT / "tools" / "trade_gifs" / "assets" / "trade-showcase.webp"
+with Image.open(stage) as im:
+    assert im.size == (1152, 512), im.size
 
 
 def difference(a, b):
@@ -34,4 +40,4 @@ for tid in ids:
     with Image.open(sheet) as im:
         assert im.size == (3456, 1024), (tid, im.size)
 
-print(f"OK: {len(ids)} trade market scenes, final frames and runtime sheets")
+print(f"OK: {len(ids)} trade showcase scenes without people/text, final frames and runtime sheets")

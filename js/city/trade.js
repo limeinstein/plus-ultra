@@ -47,7 +47,9 @@
   // 값 깎기는 사는 값을 올리거나 파는 값을 내리는 일이 없다 (예전: 실패 벌칙 ×1.03이 「후려쳤더니 값이 오른」 것처럼 보였다)
   function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(); return h ? Math.max(1, Math.round(p * Math.min(1, h.buy))) : p; }
   // 파는 값 웃돈은 이 도시가 팔지 않는 물건(들여온 물건)에만 — 깎아서 산 그 자리 물건을 웃돈 받고 되팔아 남기던 것을 막는다
-  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(); return h && !R.sells(c, id) ? Math.round(p * Math.max(1, h.sell)) : p; }
+  function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(); p = h && !R.sells(c, id) ? Math.round(p * Math.max(1, h.sell)) : p;
+    var cg = S().fleet.cargo[id]; if (G.Cargo && cg) p = Math.max(1, Math.round(p * G.Cargo.fresh(id, cg)));   // 오래 묵은 먹을거리·향신료는 값이 떨어진다
+    return p; }
   function keepHag(c, h) { R.market(c.id).hag = { day: R.S().day, h: h }; return h; }
   T.buyP = buyP; T.sellP = sellP;
 
@@ -60,10 +62,10 @@
         var g = G.GOOD[id], have = s.fleet.cargo[id] ? s.fleet.cargo[id].q : 0;
         var bs = G.Ledger ? G.Ledger.bestSell(id, c.id) : null, gain = bs ? bs.price - buyP(c, id) : null;
         var relay = R.isRelay(c, id) ? ' <span class="tag relay" title="이 항구는 산지가 아니라 먼 곳(' + G.TradeGoods.originRegions(id).join('·') + ')에서 들여와 판다 — 산지보다 비싸지만 더 먼 곳에 팔면 남는다">중계</span>' : '';
-        return '<tr class="click" data-id="' + id + '"><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + relay + '</td><td class="muted">' + G.GOOD_CATS[g.cat] + '</td><td class="num">' + U.num(buyP(c, id)) + '</td><td class="num">' + R.supply(c, id) + '</td><td class="num">' + (have || '') + '</td>' +
+        return '<tr class="click" data-id="' + id + '"><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + relay + '</td><td class="muted">' + G.GOOD_CATS[g.cat] + (G.Cargo ? ' <small title="1통의 무게 — 배가 버티는 무게에 들어간다">· 무게 ' + G.Cargo.wt(id) + '</small>' : '') + '</td><td class="num">' + U.num(buyP(c, id)) + '</td><td class="num">' + R.supply(c, id) + '</td><td class="num">' + (have || '') + '</td>' +
           '<td class="num">' + where(bs) + '</td><td class="num ' + (gain > 0 ? 'down' : 'up') + '">' + (gain == null ? '' : (gain > 0 ? '+' : '') + U.num(gain)) + '</td></tr>';
       }).join('');
-      var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, R.free()) + '</b>통 · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
+      var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, Math.floor(R.freeVol())) + '</b>통' + (G.Cargo ? ' · 무게 여유 <b>' + Math.max(0, Math.floor(G.Cargo.wfree())) + '</b>' : '') + ' · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
         '<table class="tbl"><tr><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table>' +
         '<div class="muted" style="margin-top:6px;font-size:14px">매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다.' + (R.cityGoods(c).some(function (id) { return R.isRelay(c, id); }) ? ' 「중계」는 이 항구가 먼 산지에서 들여온 물건이라 산지보다 비쌉니다.' : '') + '</div>' +
         (hag() ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 ' + Math.round((1 - hag().buy) * 100) + '% 싸게 살 수 있습니다.</div>' : '');
@@ -78,15 +80,16 @@
   async function buyOne(c, id) {
     var s = S(), g = G.GOOD[id], price = buyP(c, id), f = s.fleet;
     if (!f.cargo[id] && Object.keys(f.cargo).length >= R.maxKinds()) { await C.say(keeper(), '자네 배에는 더 이상 다른 종류의 짐을 실을 곳이 없어 보이는군. (품목 ' + R.maxKinds() + '종까지)'); return; }
-    var stock = R.supply(c, id), free = Math.max(0, R.free()), byGold = Math.floor(s.player.gold / price);
+    var stock = R.supply(c, id), free = G.Cargo ? G.Cargo.room(id) : Math.max(0, R.free()), byGold = Math.floor(s.player.gold / price);
     var mx = Math.min(stock, free, byGold);
     if (mx <= 0) {
-      if (!free) await C.mate('제독, 더 이상 실을 여유가 없습니다.');
+      if (!free && G.Cargo && G.Cargo.heavyBound(id)) await C.mate('제독, 짐칸은 남았지만 배가 더 무게를 버티지 못합니다. ' + g.name + U.jx(g.name, '은/는') + ' 1통에 무게 ' + G.Cargo.wt(id) + '입니다.');
+      else if (!free) await C.mate('제독, 더 이상 실을 여유가 없습니다.');
       else if (!byGold) await C.say(keeper(), '가난한 사람에게는 볼일 없네!');
       else await C.say(keeper(), '미안하네, 지금 물건이 떨어지고 없네.');
       return;
     }
-    var q = await UI.number({ title: g.name + ' 구입', text: '1통에 금화 ' + U.num(price) + '닢. 몇 통 사겠습니까?', min: 1, max: mx, value: mx, unit: '통',
+    var q = await UI.number({ title: g.name + ' 구입', text: '1통에 금화 ' + U.num(price) + '닢. 몇 통 사겠습니까?' + (G.Cargo && G.Cargo.heavyBound(id) && free <= Math.min(stock, byGold) ? ' (무게 ' + G.Cargo.wt(id) + ' — 배가 버티는 무게까지 ' + free + '통)' : ''), min: 1, max: mx, value: mx, unit: '통',
       info: function (n) { return '합계 금화 <b>' + U.num(n * price) + '</b>닢 · 남는 돈 ' + U.num(s.player.gold - n * price) + '닢'; } });
     if (!q) return;
     s.player.gold -= q * price;
@@ -111,14 +114,15 @@
       if (!ids.length) { await C.say(keeper(), '응? 도대체 무엇을 팔겠다는 건가?'); return; }
       var rows = ids.map(function (id) {
         var cg = s.fleet.cargo[id], g = G.GOOD[id], p = sellP(c, id), pr = cg.cost ? (p - cg.cost) / cg.cost : 0;
-        var spoil = g.life ? Math.max(0, g.life - (s.day - cg.d)) : null;
+        var spoil = g.life ? Math.max(0, g.life - (s.day - cg.d)) : null, fs = G.Cargo ? G.Cargo.state(id, cg) : null;
+        if (G.Cargo) spoil = null;   // 보관은 G.Cargo.state (값이 떨어지는 날·상함)
         var bs = G.Ledger ? G.Ledger.bestSell(id, c.id) : null;
         var better = bs && bs.price > p * 1.08;
-        return '<tr class="click" data-id="' + id + '"><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + (spoil != null && spoil < 30 ? ' <span class="warn-text" style="font-size:14px">(' + spoil + '일 후 상함)</span>' : '') + '</td><td class="num">' + cg.q + '</td><td class="num">' + U.num(cg.cost) + '</td><td class="num"><b>' + U.num(p) + '</b></td><td class="num ' + (pr >= 0 ? 'down' : 'up') + '">' + (pr >= 0 ? '+' : '') + Math.round(pr * 100) + '%</td>' +
+        return '<tr class="click" data-id="' + id + '"><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + (spoil != null && spoil < 30 ? ' <span class="warn-text" style="font-size:14px">(' + spoil + '일 후 상함)</span>' : '') + (fs && fs.text ? ' <span class="' + (fs.f < 1 ? 'warn-text' : 'muted') + '" style="font-size:14px" title="산 지 ' + fs.age + '일 · 신선하게 파는 기간 ' + fs.keep + '일">(' + fs.text + ')</span>' : '') + '</td><td class="num">' + cg.q + '</td><td class="num">' + U.num(cg.cost) + '</td><td class="num"><b>' + U.num(p) + '</b></td><td class="num ' + (pr >= 0 ? 'down' : 'up') + '">' + (pr >= 0 ? '+' : '') + Math.round(pr * 100) + '%</td>' +
           '<td class="num' + (better ? ' warn-text' : '') + '">' + (bs ? where(bs) : '<span class="muted">—</span>') + '</td></tr>';
       }).join('');
       var html = '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th class="num">여기 시세</th><th class="num">이익</th><th class="num">다른 곳 최고가</th></tr>' + rows + '</table>' +
-        '<div class="muted" style="margin-top:8px;font-size:15px">같은 물건을 한꺼번에 많이 팔면 값이 떨어집니다. 산지에서 멀리 떨어진 곳일수록 비싸게 팔립니다.</div>';
+        '<div class="muted" style="margin-top:8px;font-size:15px">같은 물건을 한꺼번에 많이 팔면 값이 떨어집니다. 산지에서 멀리 떨어진 곳일수록 비싸게 팔립니다. 먹을거리·향신료·기호품은 오래 실어 두면 묵어서 값이 떨어지고, 더 오래되면 상해 줄어듭니다.</div>';
       var picked = null;
       var win = UI.window({ title: '매각 — ' + c.name, icon: 'sack', width: 980, html: html, buttons: [{ label: '모두 판다', value: 'all', cls: 'green' }, { label: '돌아간다', value: null }],
         onBuild: function (el, w) { U.$$('tr.click', el).forEach(function (tr) { tr.onclick = function () { picked = tr.dataset.id; w.close('pick'); }; }); } });
@@ -322,7 +326,7 @@
       결과는 이번 방문 동안 사는 값 ×buy, 파는 값 ×sell (cur.haggle) */
   T.haggleOdds = function (c) {
     var acct = R.skill('acct'), lv = C.langLv(c), cha = R.stat('cha'), pu = R.purser();
-    var p = 0.25 + acct * 0.17 + (lv - 1) * 0.08 + (cha - 50) * 0.004 + (pu ? 0.12 + pu.acct * 0.05 : 0);
+    var p = 0.25 + acct * 0.17 + (lv - 1) * 0.08 + (cha - 50) * 0.004 + (pu ? 0.12 + pu.acct * 0.05 : 0) + (G.Cabins ? G.Cabins.fx('account', 'haggle') : 0);
     var disc = 0.04 + acct * 0.03 + (pu ? 0.02 + pu.acct * 0.015 : 0);
     return { p: U.clamp(p, 0.08, pu ? 0.95 : 0.92), disc: disc, pu: pu };
   };

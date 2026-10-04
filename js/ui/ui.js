@@ -162,11 +162,72 @@
     return who.portrait instanceof HTMLCanvasElement ? who.portrait : G.Art.portraitCanvas(who.portrait, size);
   }
 
-  /** 대화 껍데기. partner가 있는 duo만 새 구도를 쓰고, 나머지는 예전 DOM을 그대로 만든다. */
+  // ---------------------------------------------------------------- 대화창 위에 서는 사람들
+  /* 무릎상(머리부터 무릎까지 서 있는 그림)은 대화창 윗변에 발을 딛고 선다.
+     · 두 사람(duo): 왼쪽 사람은 그림 왼쪽 끝이 대화창 왼쪽 끝에, 오른쪽 사람은 그림 오른쪽 끝이 대화창 오른쪽 끝에 맞는다.
+     · 혼자 말하는 사람(집사·상인·여관 주인…): 대화창 가운데 (도시 안에서만 — G.FX.stand.soloCity)
+     · 무릎상이 없는 사람은 그 자리에 흉상으로 선다 (한 사람이 없다고 다른 사람까지 흉상으로 바꾸지 않는다).
+     · 그림은 화면 UI(도시 이름판·건물 메뉴·HUD·아래 단추줄)보다 아래 층(.dlg-actors, z 13)에 그려 UI를 가리지 않는다.
+       이름표만 대화창 층에 두어 눌러서 인물 이야기를 볼 수 있게 한다. */
+  function standFx() {
+    var d = { top: 60, sink: 6, aspect: 0.6667, minH: 360, maxH: 640, bustW: 260, bustH: 260, soloCity: true }, f = (G.FX && G.FX.stand) || {}, o = {}, k;
+    for (k in d) o[k] = f[k] == null ? d[k] : f[k];
+    return o;
+  }
+  function halfKeyOf(who) {
+    if (!who || who.noHalf || !G.Img || !G.Img.pick) return null;
+    var chain = who.half;
+    if (!chain && who.portrait && !(who.portrait instanceof HTMLCanvasElement) && G.Art && G.Art.portraitKeys && G.Img.chain.halfFor) {
+      try { chain = G.Img.chain.halfFor(who.portraitChain || G.Art.portraitKeys(who.portrait)); } catch (e) { chain = null; }
+    }
+    return chain && chain.length ? { chain: chain, key: G.Img.pick(chain) } : null;
+  }
+  var talking = 0, untalkTimer = 0, hiddenPanels = [];
+  /* 대화가 이어질 때(한마디 → 다음 한마디) 사이에 감춘 것이 잠깐 나타났다 사라지지 않게, 끝난 뒤 조금 기다렸다 되돌린다 */
+  function setTalking(d) {
+    talking = Math.max(0, talking + d);
+    clearTimeout(untalkTimer);
+    if (talking > 0) { if (root) root.classList.add('talking'); return; }
+    untalkTimer = setTimeout(function () {
+      if (talking > 0) return;
+      if (root) root.classList.remove('talking');
+      hiddenPanels.forEach(function (p) { p.classList.remove('talk-hidden'); }); hiddenPanels = [];
+    }, 160);
+  }
+  /* 선 사람의 몸(그림 상자 가운데 60%)과 많이 겹치는 화면 패널(건물 메뉴·할 일·도시 이름판)은 대화하는 동안 감춘다 — 그림이 UI를 가리지도, UI 뒤에 사람이 묻히지도 않게 */
+  var TALK_PANELS = '.cmdmenu, .todo, .city-banner, .fleetpanel';
+  function hidePanelsUnder(rects) {
+    if (!screenEl) return;
+    [].forEach.call(screenEl.querySelectorAll(TALK_PANELS), function (p) {
+      var r = stageRect(p), area = r.width * r.height, hit = 0;
+      if (!area) return;
+      rects.forEach(function (a) {
+        var x1 = Math.max(r.left, a.left), x2 = Math.min(r.right, a.right), y1 = Math.max(r.top, a.top), y2 = Math.min(r.bottom, a.bottom);
+        if (x2 > x1 && y2 > y1) hit += (x2 - x1) * (y2 - y1);
+      });
+      var hide = hit > Math.max(1500, area * 0.03);
+      if (hide && hiddenPanels.indexOf(p) < 0) { p.classList.add('talk-hidden'); hiddenPanels.push(p); }
+    });
+  }
+  /** 무대(1600×900) 좌표로 본 요소의 상자 */
+  function stageRect(el) {
+    var r = el.getBoundingClientRect(), R = root.getBoundingClientRect(), k = root.offsetWidth ? R.width / root.offsetWidth : 1;
+    k = k || 1;
+    return { left: (r.left - R.left) / k, top: (r.top - R.top) / k, right: (r.right - R.left) / k, bottom: (r.bottom - R.top) / k, width: r.width / k, height: r.height / k };
+  }
+
+  /** 대화 껍데기. duo(두 사람이 마주 봄)와 혼자 말하는 사람. */
   function dialogShell(back, opts, asking) {
     var duo = opts.layout === 'duo' && opts.partner;
-    var rigs = [], box;
-    if (!duo) {
+    var rigs = [], box, F = standFx(), actors = [], layer = null, ro = null, stage;
+    var S = G.Game && G.Game.state;
+    // 아래 층에 세울 수 있나: 다른 창(교역소 표·미니게임 등)이 열려 있지 않고, 건물 메뉴·도시 이름판이 있는 화면일 때.
+    // 아니면 예전처럼 대화창 층에 세운다(창 뒤에 숨지 않게). 혼자 말하는 사람은 아래 층에 세울 수 있을 때만 선다
+    var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
+    var solo = !duo && !!opts.portrait && low && (!F.soloCity || (S && S.loc && S.loc.mode === 'city'));
+    var soloHalf = solo ? halfKeyOf(opts) : null;
+    if (soloHalf && !soloHalf.key) soloHalf = null;
+    if (!duo && !solo) {
       box = U.el('div', 'dlg' + (asking ? ' ask' : '') + (opts.portrait ? '' : ' noportrait'));
       box.innerHTML = (opts.portrait ? '<div class="pframe wood"></div>' : '') + '<div class="body parch"></div>';
       if (opts.name) {
@@ -178,40 +239,83 @@
       if (opts.portrait) box.querySelector('.pframe').appendChild(portraitNode(opts, 134));
       if (opts.portrait && G.Bio) G.Bio.tag(box.querySelector('.pframe'), opts);
       back.appendChild(box);
-      return { box: box, destroy: function () {} };
+      return { box: box, layout: function () {}, destroy: function () {} };
     }
 
-    var speakerSide = opts.side === 'left' ? 'left' : 'right';
-    var left = speakerSide === 'left' ? opts : opts.partner;
-    var right = speakerSide === 'right' ? opts : opts.partner;
-    // 두 사람 다 무릎상(머리부터 무릎까지 서 있는 그림)이 있으면 서 있는 모습으로 크게 세운다. 한쪽이라도 없으면 둘 다 흉상
-    function halfKey(who) { return who && who.half && G.Img && G.Img.pick ? G.Img.pick(who.half) : null; }
-    var tall = !!(halfKey(left) && halfKey(right));
-    var stage = U.el('div', 'dlg-stage duo' + (tall ? ' tall' : '') + (asking ? ' ask' : ''));
-    var otherSide = speakerSide === 'left' ? 'right' : 'left';
-    var activeSide = asking ? (opts.choiceSide || otherSide) : speakerSide;
-    function addActor(who, side) {
-      var active = side === activeSide;
-      var actor = U.el('div', 'dlg-actor ' + side + (tall ? ' tall' : '') + (active ? ' active' : ''));
+    stage = U.el('div', 'dlg-stage' + (duo ? ' duo' : ' solo') + (asking ? ' ask' : ''));
+    layer = U.el('div', 'dlg-actors');
+    if (low) root.appendChild(layer); else stage.appendChild(layer);
+    function addActor(who, side, active, half) {
+      var tall = !!(half && half.key);
+      var actor = U.el('div', 'dlg-actor ' + side + (tall ? ' tall' : ' bust') + (active ? ' active' : ''));
       var art = U.el('div', 'actor-art'); actor.appendChild(art);
       if (G.PortraitRig) {
         rigs.push(G.PortraitRig.mount(art, {
-          portrait: tall ? null : who && who.portrait, chain: tall ? who.half : who && who.portraitChain, profile: tall ? 'half' : 'bust', side: side,
+          portrait: tall ? null : who && who.portrait, chain: tall ? half.chain : who && who.portraitChain, profile: tall ? 'half' : 'bust', side: side === 'center' ? 'right' : side,
           state: active ? (asking ? 'react' : 'talk') : 'listen', emotion: active ? (opts.emotion || 'neutral') : 'neutral',
           anchors: who && who.rigAnchors, alt: who && who.name
         }));
       } else {
         var p = portraitNode(who, 280); if (p) art.appendChild(p);
       }
-      if (who && who.name) { var an = U.el('div', 'actor-name wood', U.esc(who.name)); actor.appendChild(an); if (G.Bio) { G.Bio.tag(an, who); G.Bio.tag(art, who); } }
-      stage.appendChild(actor);
+      layer.appendChild(actor);
+      var an = null;
+      if (duo && who && who.name) { an = U.el('div', 'actor-name wood', U.esc(who.name)); stage.appendChild(an); if (G.Bio) G.Bio.tag(an, who); }
+      actors.push({ el: actor, name: an, side: side, tall: tall });
     }
-    addActor(left, 'left'); addActor(right, 'right');
-    box = U.el('div', 'dlg duo' + (asking ? ' ask' : '') + ' speaker-' + speakerSide);
+    var speakerSide = 'center';
+    if (duo) {
+      speakerSide = opts.side === 'left' ? 'left' : 'right';
+      var left = speakerSide === 'left' ? opts : opts.partner;
+      var right = speakerSide === 'right' ? opts : opts.partner;
+      var activeSide = asking ? (opts.choiceSide || (speakerSide === 'left' ? 'right' : 'left')) : speakerSide;
+      addActor(left, 'left', activeSide === 'left', halfKeyOf(left));
+      addActor(right, 'right', activeSide === 'right', halfKeyOf(right));
+    } else {
+      addActor(opts, 'center', true, soloHalf);
+    }
+    box = U.el('div', 'dlg duo' + (duo ? '' : ' solo') + (asking ? ' ask' : '') + ' speaker-' + speakerSide);
     box.innerHTML = '<div class="body parch"></div>';
     if (opts.name) { var nmEl = U.el('div', 'name wood', U.esc(opts.name)); box.appendChild(nmEl); if (G.Bio) G.Bio.tag(nmEl, opts); }
     stage.appendChild(box); back.appendChild(stage);
-    return { box: box, destroy: function () { rigs.forEach(function (r) { if (r) r.destroy(); }); } };
+    setTalking(1);
+
+    /* 대화창 자리를 재어 사람들을 세운다 (쪽이 바뀌거나 선택지가 붙어 대화창 높이가 바뀌면 다시) */
+    function layout() {
+      if (!box.isConnected || !root) return;
+      var b = stageRect(box), foot = b.top + F.sink;
+      if (!low) { var L = stageRect(layer); b = { left: b.left - L.left, right: b.right - L.left, top: b.top - L.top, width: b.width }; foot = b.top + F.sink; }
+      var h = Math.max(F.minH, Math.min(F.maxH, foot - F.top)), w = Math.round(h * F.aspect);
+      var cores = [];
+      actors.forEach(function (a) {
+        var aw = a.tall ? w : F.bustW, ah = a.tall ? h : F.bustH, x;
+        if (a.side === 'left') x = b.left;
+        else if (a.side === 'right') x = b.right - aw;
+        else x = b.left + (b.width - aw) / 2;
+        var st = a.el.style;
+        st.left = Math.round(x) + 'px'; st.width = aw + 'px'; st.height = ah + 'px';
+        st.top = Math.round((a.tall ? foot : b.top) - ah) + 'px';
+        if (a.name) {   // 이름표: 그 사람 발밑, 대화창 윗변 바로 위
+          a.name.style.left = Math.round(x + aw / 2) + 'px';
+          a.name.style.top = Math.round(b.top - 40) + 'px';
+        }
+        var top = (a.tall ? foot : b.top) - ah;
+        cores.push(a.tall ? { left: x + aw * 0.2, right: x + aw * 0.8, top: top + ah * 0.03, bottom: b.top } : { left: x, right: x + aw, top: top, bottom: b.top });
+      });
+      if (low) hidePanelsUnder(cores);
+    }
+    if (window.ResizeObserver) { ro = new ResizeObserver(layout); ro.observe(box); }
+    requestAnimationFrame(layout);
+    function relayout() { layout(); requestAnimationFrame(function () { requestAnimationFrame(layout); }); }   // 통역 창이 붙으면 대화창이 한 틀 뒤에 올라간다
+    return {
+      box: box, layout: relayout,
+      destroy: function () {
+        if (ro) ro.disconnect();
+        rigs.forEach(function (r) { if (r) r.destroy(); });
+        if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
+        setTalking(-1);
+      }
+    };
   }
 
   /** 화면 위쪽에 붙여 두는 작은 쪽지 (대화가 이어지는 동안 무엇에 관한 이야기인지 보여 준다). 돌려준 함수를 부르면 사라진다 */
@@ -234,6 +338,7 @@
       var idx = 0, finished = false;
       function show() {
         body.innerHTML = speech(box, pages[idx], opts) + '<div class="more">▼</div>'; shownAt = Date.now();
+        shell.layout();
       }
       var shownAt = 0;
       function next() {
@@ -276,6 +381,7 @@
         return false;
       });
       box.style.cursor = 'default';
+      shell.layout();
     });
   };
 

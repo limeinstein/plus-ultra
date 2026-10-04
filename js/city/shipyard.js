@@ -230,9 +230,10 @@
         { label: '선수상', right: sh.fig ? G.FIGUREHEAD[sh.fig].name : '없음', value: 'fig', icon: 'feather' },
         { label: '선체 다시 짓기 (목재)', right: (SH().wood(sh) || { name: '보통 목재' }).name, value: 'wood', icon: 'hammer' },
         { label: '선명 변경', right: sh.name, value: 'name', icon: 'scroll' }
-      ], { width: 600, text: '소지금 ' + U.num(s.player.gold) + '닢' });
+      ].concat(sh === s.fleet.ships[0] && G.CabinView ? [{ label: '선실 개조', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }] : []), { width: 600, text: '소지금 ' + U.num(s.player.gold) + '닢' });
       if (v == null) return;
-      if (v === 'gun') await refitGuns(c, sh);
+      if (v === 'cabin') await G.CabinView.open({ yard: c });
+      else if (v === 'gun') await refitGuns(c, sh);
       else if (v === 'sail') await refitSails(c, sh);
       else if (v === 'port') await refitPorts(c, sh);
       else if (v === 'fig') await refitFig(c, sh);

@@ -393,12 +393,14 @@
       else log(b.name + '호가 전장을 벗어났다.');
     }
   }
+  /** 기함의 선실(포격실·해병 대기실)이 보태는 힘 — 사람을 배치한 방만 (G.BALANCE.cabins.fx) */
+  function cabinK(b, type) { return b.side === 'me' && G.Cabins && b.src === G.Cabins.flagship() ? G.Cabins.fx(type, type) : 0; }
   function gunRange(b) { var c = G.CANNON[b.guns.type] || G.CANNON.saker; return 90 + c.range * 55; }
   function gunnery(b, dt) {
     var c = G.CANNON[b.guns.type] || G.CANNON.saker;
     // 포술은 그 배 선장의 것 (기함은 제독·부관, 다른 배는 선장, 선장이 없으면 갑판장 — 재장전이 느리다)
     var gunSk = b.side === 'me' ? R.shipSkill(b.src, 'gun') : (st.npc.kind === 'navy' ? 2 : 1);
-    var reloadT = 5.5 * (1.25 - gunSk * 0.12) * (1 + c.load * 0.12) * (1.4 - 0.4 * Math.min(1, b.crew / Math.max(1, b.crew0))) * (has(b, 'gundeck') ? 0.85 : 1) * (b.side === 'me' && !R.captain(b.src) ? 1.1 : 1);
+    var reloadT = 5.5 * (1.25 - gunSk * 0.12) / (1 + cabinK(b, 'gun') * 0.5) * (1 + c.load * 0.12) * (1.4 - 0.4 * Math.min(1, b.crew / Math.max(1, b.crew0))) * (has(b, 'gundeck') ? 0.85 : 1) * (b.side === 'me' && !R.captain(b.src) ? 1.1 : 1);
     var rng = gunRange(b), bow = has(b, 'bow') && !has(b, 'dragon'), dragon = has(b, 'dragon');
     // 0·1: 왼쪽·오른쪽 현측 / 2: 뱃머리 (뱃머리 포·용머리 포구)
     for (var side = 0; side < 3; side++) {
@@ -440,7 +442,7 @@
       var fwd = part >= 1 && sAng === b.heading ? b.len * 0.45 : 0;
       var ox = b.x + Math.cos(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd), oy = b.y + Math.sin(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd);
       var tx = t.x + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
-      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1), target: t, from: b });
+      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')), target: t, from: b });
       st.fx.push({ kind: 'smoke', x: ox + Math.cos(sAng) * 14, y: oy + Math.sin(sAng) * 14, vx: Math.cos(sAng) * 18, vy: Math.sin(sAng) * 18, t: 0, life: 2.4, r: 10 + U.rf(0, 8) });
       st.fx.push({ kind: 'muzzle', x: ox + Math.cos(sAng) * 10, y: oy + Math.sin(sAng) * 10, ang: sAng, t: 0, life: 0.2, s: U.rf(1.1, 1.5) });
       for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35), v3 = U.rf(160, 280); st.fx.push({ kind: 'spark', x: ox + Math.cos(sAng) * 12, y: oy + Math.sin(sAng) * 12, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: 0, life: U.rf(0.15, 0.3) }); }
@@ -593,7 +595,7 @@
     // 높은 갑판은 공격·방어 모두 유리하고, 접현 돌격은 먼저 건 쪽의 첫 공격이 세다
     var myK = (has(me, 'highdeck') ? 1.2 : 1) * (!enemyStarted && has(me, 'grapple') ? 1.15 : 1);
     var enK = (has(en, 'highdeck') ? 1.2 : 1) * (enemyStarted && has(en, 'grapple') ? 1.15 : 1);
-    var myPow = me.crew * (1 + sword * 0.18 + atk / 60) * (0.7 + S().fleet.discipline / 300) * myK * capK;
+    var myPow = me.crew * (1 + sword * 0.18 + atk / 60) * (0.7 + S().fleet.discipline / 300) * myK * capK * (1 + cabinK(me, 'marine'));
     var enSk = (st.npc.kind === 'pirate' ? 1.25 : st.npc.kind === 'navy' ? 1.15 : 0.8) * enK;
     var enPow = en.crew * enSk;
     var rounds = 0;
@@ -602,7 +604,7 @@
       var a = Math.ceil(enPow * U.rf(0.08, 0.16)), b = Math.ceil(myPow * U.rf(0.08, 0.16));
       var lostMe = Math.min(a, me.crew), lostEn = Math.min(b, en.crew);
       me.crew = Math.max(0, me.crew - lostMe); en.crew = Math.max(0, en.crew - lostEn);
-      myPow = me.crew * (1 + sword * 0.18 + atk / 60) * (0.7 + S().fleet.discipline / 300) * myK * capK; enPow = en.crew * enSk;
+      myPow = me.crew * (1 + sword * 0.18 + atk / 60) * (0.7 + S().fleet.discipline / 300) * myK * capK * (1 + cabinK(me, 'marine')); enPow = en.crew * enSk;
       if (en.crew < en.crew0 * 0.15) { lostEn += en.crew; en.crew = 0; }
       await meleeRound(me, en, lostMe, lostEn, rounds);          // 한 판마다: 칼 부딪치는 불꽃·밀려남·쓰러진 수
       if (me.crew < me.crew0 * 0.1) break;

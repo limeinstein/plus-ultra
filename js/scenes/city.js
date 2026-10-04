@@ -55,10 +55,12 @@
   var RELNAME = { C: '가톨릭', O: '정교회', I: '이슬람교', H: '힌두교', B: '불교', K: '유교', J: '신도·불교', N: '토착 신앙' };
   C.relName = function (c) { return RELNAME[c.rel] || '—'; };
   C.langLv = function (c) { return R.lang((c || C.city()).lang); };
+  function playerSpeaker() { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; }
   /** a townsperson speaker for this city */
   C.npc = function (id, title) {
     var c = C.city();
-    return { name: title, portrait: A.townSpec(id, c), lang: C.langLv(c), li: c.lang };
+    return { name: title, rigId: 'npc:' + c.id + ':' + id, portrait: A.townSpec(id, c), half: G.Img.chain.npcHalf(id, c),
+      layout: 'duo', side: 'right', partner: playerSpeaker(), emotion: 'neutral', lang: C.langLv(c), li: c.lang };
   };
   C.say = function (who, text) { return UI.say(text, who); };
   C.ask = function (who, text, choices, opts) {
@@ -130,6 +132,7 @@
       if (arg.prologue) await C.prologue(c);
       if (arg.arrive) await C.arrival(c, arg);
       if (arg.load) { UI.toast(U.fmtDate(s.date) + ' — ' + c.name, 'book'); }
+      if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -303,7 +306,7 @@
       // 새 항해사
       if (C.B.tavern && C.B.tavern.candidates) {
         var cand = C.B.tavern.candidates(c).filter(function (m) { return s.player.fame >= m.fame; });
-        if (cand.length && s.mates.length < G.MAX_MATES) out.push({ kind: 'tavern', icon: 'people', text: '술집에 함께할 만한 항해사 ' + cand.length + '명' });
+        if (cand.length) out.push({ kind: 'tavern', icon: 'people', text: '술집에 함께할 만한 항해사 ' + cand.length + '명' });
       }
       // 조합 게시판
       if (G.Quest && f.guild) { var off = G.Quest.offers(c).length; if (off && G.Quest.list().length < G.Quest.MAX) out.push({ kind: 'guild', icon: 'scroll', text: '조합 게시판에 의뢰 ' + off + '건' }); }

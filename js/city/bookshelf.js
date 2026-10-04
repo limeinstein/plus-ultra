@@ -71,7 +71,7 @@
     var out = [], rel = G.BOOK_REL[b.id] && G.BOOK_REL[b.id][m.id];
     if (rel) out.push({ k: 'rel', sc: 100, rel: rel });
     for (var k in tp) { var lv = R.mateSkill(m, k); if (lv > 0 && POOL[k]) out.push({ k: k, sc: tp[k] * 2 + lv * 3 + (k === b.sk ? 6 : 0) }); }
-    var d = G.MATE[m.id], lg = d && d.lg ? d.lg[b.lang] || 0 : 0;
+    var d = G.MATE[m.id], lg = d ? R.mateLang(m, b.lang) : 0;
     if (lg >= 3) out.push({ k: 'lang', sc: 8 });
     return out.filter(function (r) { return r.sc >= 8; }).sort(function (a, c) { return c.sc - a.sc; });
   }

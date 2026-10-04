@@ -172,7 +172,7 @@
     I.INTERIORS.forEach(function (b) { add(K.exterior(b[0], c)); });
     if (level === 'in') {
       cityAsked[c.id + ':near'] = 1;
-      I.NPCS.forEach(function (n) { add(K.npc(n[0], c)); });
+      I.NPCS.forEach(function (n) { add(K.npc(n[0], c)); add(K.npcHalf(n[0], c)); });
       I.INTERIORS.forEach(function (b) { add(K.interior(b[0], c)); });
       (G.SPONSORS || []).forEach(function (sp) { if (sp.city === c.id) I.list('portraits/sponsors/' + sp.id).forEach(function (k) { keys.push(k); }); });
       (G.MAIDS || []).forEach(function (m) { if (m.city === c.id) { add(K.maid(m.id, c)); add(K.maidHalf(m.id, c)); } });
@@ -648,7 +648,33 @@
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
-  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(mates|sponsors|maids|rivals|npc-roles|pools)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  /* 마을 사람 흉상(portraits/npc/<이름>)의 성별 — 이름 끝 _f·_m, 아니면 대개 남자 (여관 안주인 innkeeper_europe만 여자) */
+  var NPC_FEMALE = { 'portraits/npc/innkeeper_europe': 1 };
+  function npcKeyGender(k) {
+    if (/_f(_\d+)?$/.test(k)) return 'f';
+    if (/_m(_\d+)?$/.test(k)) return 'm';
+    var r = /^portraits\/npc-roles\/([a-z]+)\/([a-z]+)$/.exec(k);
+    if (r) return G.Art && G.Art.rolePortraitGender ? G.Art.rolePortraitGender(r[2], r[1]) : null;
+    if (/^portraits\/npc\//.test(k)) return NPC_FEMALE[k.replace(/@\d+$/, '')] ? 'f' : 'm';
+    return null;
+  }
+  /** 흉상 사슬 → 그 사람의 무릎상 후보 (말하는 사람에게 half가 없을 때 js/ui/ui.js가 쓴다).
+      · 이름 있는 사람(동료·후원자·여급·경쟁자): 사슬에 든 그 사람 그림마다 <그림>_half
+      · 마을 사람(portraits/npc·npc-roles): 지금 보이는 흉상의 <그림>_half, 없으면 같은 고장·같은 성별의 역할 무릎상 */
+  K.halfFor = function (chain) {
+    chain = [].concat(chain || []);
+    var out = [], picked = I.pick(chain);
+    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|maids|rivals)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
+    if (picked && /^portraits\/(npc|npc-roles|pools)\//.test(picked)) {
+      out.push(picked + '_half');
+      var g = npcKeyGender(picked);
+      if (g) chain.forEach(function (k) { if (/^portraits\/npc-roles\//.test(k) && npcKeyGender(k) === g) out.push(k + '_half'); });
+    }
+    return out.filter(function (k, i) { return out.indexOf(k) === i; });
+  };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|maids|pools)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  /** 마을 사람 무릎상: 흉상과 같은 후보 순서를 그대로 따른다. */
+  K.npcHalf = function (id, c) { return K.halfOf(K.npc(id, c)); };
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */
   K.sponsor = function (sp, holder) {
     var out = [];
@@ -662,6 +688,8 @@
     if (m) out.push('portraits/mates/' + m.id);
     return out;
   };
+  /** 경쟁자 전용 그림이 먼저, 없을 때 같은 인물의 동료 그림을 잇는다. */
+  K.rivalHalf = function (name) { return K.halfOf(K.rival(name)); };
   K.player = function (face) { var l = I.list('portraits/player/'); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
   K.kid = function (sex, order) { var b = sex === 'f' ? 'daughter' : 'son'; return ['portraits/family/' + b + '_' + order, 'portraits/family/' + b]; };
   K.discovery = function (d) { return ['discoveries/' + d.id, 'discovery-cats/' + d.cat]; };

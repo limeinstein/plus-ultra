@@ -19,8 +19,10 @@
       } else break;
     }
     out = out.concat(G.Disc.rivals());
+    if (G.Cargo) out = out.concat(G.Cargo.daily());   // 오래 묵은 먹을거리·향신료가 상한다
     if (G.Names) out = out.concat(G.Names.daily());       // 아메리고 베스푸치의 보고와 대륙 이름
-    if (G.Frontier) out = out.concat(G.Frontier.tick());   // 새로 열린 개척 단계, 새로 나타난 항해사
+    if (G.Frontier) out = out.concat(G.Frontier.tick());
+    if (G.Cabins) out = out.concat(G.Cabins.daily());      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
     // contract deadline warnings
     if (s.contract && !s.contract.warned && U.dateNum(s.date) > s.contract.due) {
       s.contract.warned = true;
@@ -57,19 +59,20 @@
     // 가족: 아이와의 사이(떨어져 지내면 서먹해진다)·견습 아이의 성장 (family.js)
     if (G.Family && G.Family.newMonth) out = out.concat(G.Family.newMonth());
     // wages for companions
-    var wage = 0;
+    var wage = 0, paid = true;
     s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d) wage += d.wage; });
+    if (G.Cabins) wage = G.Cabins.wages();        // 회계실이 있으면 조금 덜 든다
     if (wage > 0) {
       if (s.player.gold >= wage) { s.player.gold -= wage; }
       else {
         // unpaid: loyalty drops
-        s.mates.forEach(function (m) { m.loyal = (m.loyal || 70) - 20; });
+        paid = false;
+        s.mates.forEach(function (m) { m.loyal = Math.max(0, (m.loyal == null ? 70 : m.loyal) - 20); });
         out.push({ icon: 'coin', text: '동료들의 급료(' + U.num(wage) + '닢)를 지불하지 못했다! 불만이 쌓이고 있다.' });
-        var leaving = s.mates.filter(function (m) { return m.loyal < 0 && m.id !== 'rocco'; });
-        leaving.forEach(function (m) { out.push({ icon: 'people', text: G.MATE[m.id].name + U.j(G.MATE[m.id].name, '이/가').slice(G.MATE[m.id].name.length) + ' 함대를 떠났다.' }); });
-        s.mates = s.mates.filter(function (m) { return leaving.indexOf(m) < 0; });
+        // 충성이 바닥난 사람은 곧 떠나겠다고 나선다 — 붙잡을 수 있다 (G.Cabins.monthly → farewell)
       }
     }
+    if (G.Cabins) out = out.concat(G.Cabins.monthly(paid));
     // 항해사들이 이웃 도시로 옮기거나 머문다
     if (G.MateMove) G.MateMove.month();
     // bank interest

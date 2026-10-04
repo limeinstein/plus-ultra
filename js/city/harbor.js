@@ -69,7 +69,7 @@
     var use = R.dailyUse(crewTo), price = R.supplyCost(c);
     // 자재: 배마다 3통 + 6통을 채워 둔다 (바다 위 수리용)
     var matTo = Math.max(f.mat || 0, 6 + f.ships.length * 3), needM = Math.ceil(matTo - (f.mat || 0));
-    var room = R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0) - matTo;
+    var room = R.supplyRoom() - matTo;
     var maxDays = Math.max(0, Math.floor(room / (use * 2)));
     var maxEmpty = Math.max(0, Math.floor((R.fleetCap() - (G.Quest ? G.Quest.load() : 0) - matTo) / (use * 2)));   // 짐이 없을 때
     var d = Math.min(days, maxDays);
@@ -175,7 +175,7 @@
     var s = S(), f = s.fleet;
     if (!f.ships.length) { await C.mate('배가 없으면 보급할 수 없습니다.'); return; }
     var use = R.dailyUse(), pF = R.supplyCost(c), pW = R.waterCost(c), pM = R.matCost(c);
-    var room = R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0);   // 식량·물·자재에 쓸 수 있는 칸
+    var room = R.supplyRoom();   // 식량·물·자재에 쓸 수 있는 칸
     var cur = { food: Math.floor(f.food / use), water: Math.floor(f.water / use), mat: Math.floor(f.mat || 0) };
     var want = { food: Math.max(cur.food, s.lastSupply || 30), water: Math.max(cur.water, s.lastSupply || 30), mat: Math.max(cur.mat, s.lastMat != null ? s.lastMat : 6 + f.ships.length * 3) };
     function load(w) { return Math.max(f.food, w.food * use) + Math.max(f.water, w.water * use) + Math.max(f.mat || 0, w.mat); }
@@ -233,7 +233,7 @@
       cargoEl.innerHTML = '교역품 가운데 식량 <b>' + cf + '통</b>' + (cw ? ' · 맥주·포도주 <b>' + cw + '통</b>' : '') + ' — 바다에서 식량·물이 모자라면 먹고 마십니다. <button class="btn small mv">지금 보급품으로 옮긴다</button>';
       cargoEl.querySelector('.mv').onclick = function () {
         f.food += R.eatCargo('food', cf); f.water += R.eatCargo('water', cw);
-        room = R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0);
+        room = R.supplyRoom();
         cur.food = Math.floor(f.food / use); cur.water = Math.floor(f.water / use);
         want.food = Math.max(want.food, cur.food); want.water = Math.max(want.water, cur.water);
         rows.forEach(function (r) { var tr = el.querySelector('tr[data-k="' + r[0] + '"]'); tr.children[1].textContent = cur[r[0]] + r[3]; tr.querySelector('input[type=range]').min = cur[r[0]]; tr.querySelector('input[type=number]').min = cur[r[0]]; });
@@ -277,6 +277,7 @@
           var oldFlag = s.fleet.ships[0];
           s.mates.forEach(function (m) { if (m.role === 'captain' && m.ship === sh.uid) m.ship = oldFlag.uid; });
           s.fleet.ships.unshift(sh);
+          if (G.Cabins) G.Cabins.rooms();   // 부하들이 새 기함의 같은 방으로 옮겨 간다 (맞는 방이 없으면 다시 배치해야 한다)
         } else s.fleet.ships.splice(i + 1, 0, sh);
       } else if (v === 'cap') {
         if (s.fleet.ships.length < 2) { UI.toast('기함은 제독이 지휘합니다. 선장을 둘 배가 없습니다.', 'info'); continue; }

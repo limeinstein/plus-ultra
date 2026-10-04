@@ -6,7 +6,7 @@
   function roleName(m) { return R.roleName(m); }
   var T = { title: '술집', icon: 'mug', paint: 'tavern', exitLabel: '술집을 나온다' };
   C.B.tavern = T;
-  G.MAX_MATES = 9;     // 기함 참모 다섯 자리(부관·항해사·측량사·통역·경리) + 다른 배의 선장 네 자리
+  G.MAX_MATES = Infinity;   // 부하는 몇 명이든 들일 수 있다 (급료가 버거우면 경리·부관이 말린다 — G.Cabins.wageWarning). 옛 코드가 보던 값이라 남겨 둔다
 
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
   function maidOf(c) { return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }
@@ -16,6 +16,7 @@
   /** 마주 보는 대화: 왼쪽 제독 · 오른쪽 상대. 두 사람 다 무릎상(half)이 있으면 서 있는 모습으로 크게 */
   T.duo = function (who, emotion, asking) {
     var o = {}, k; for (k in who) o[k] = who[k];
+    if (!o.half && o.portrait && A.portraitKeys) o.half = G.Img.chain.halfOf(A.portraitKeys(o.portrait));
     o.layout = 'duo'; o.side = 'right'; o.partner = T.playerSpeaker(); o.emotion = emotion || 'neutral';
     if (asking) o.choiceSide = 'left';
     return o;
@@ -83,7 +84,7 @@
       m ? { label: '여급과 이야기', icon: 'heart', sub: m.name, onClick: function () { return T.maid(c, m); } }
         : (G.Img && G.Img.pick(G.Img.chain.maidCity(c)) ? { label: '여급과 이야기', icon: 'heart', onClick: function () { return T.servant(c); } } : null),
       { label: '포카를 권한다', icon: 'dice', onClick: function () { return G.Games.poker(c); } },
-      { label: '부하편성', icon: 'people', sub: S().mates.length + '/' + G.MAX_MATES, onClick: function () { return T.organize(); } },
+      { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return T.organize(); } },
       G.MateTalk ? G.MateTalk.menuItem(c) : null
     ];
   };
@@ -337,12 +338,17 @@
   T.hireMate = async function (c, m, who) {
     var s = S(), cm = comm(m);
     who = who || T.duo(T.mateSpeaker(m));
-    if (s.mates.length >= G.MAX_MATES) { await C.mate('부하는 동시에 ' + G.MAX_MATES + '명밖에 고용할 수 없습니다.'); return false; }
     if (!cm.lv) { await C.mate('말이 한 마디도 통하지 않습니다. 통역을 구하거나 저 사람의 말을 익혀야겠습니다.'); return false; }
     if (s.player.fame < m.fame) { await UI.say('자네 밑에서 일하라고? 미안하지만 아직 자네 이름은 들어 본 적이 없군. (필요 명성 ' + U.num(m.fame) + ')', who); return false; }
     var note = cm.lv >= 3 ? '' : '\n' + G.LANGS[cm.li] + '가 ' + (cm.lv === 1 ? '조금' : '어지간히') + '밖에 통하지 않는다. 손짓을 섞으면 뜻은 전해지겠지만, 처음에는 마음을 다 열지 않을 것이다.';
     var ok = await UI.confirm(U.j(m.name, '을/를') + ' 월급 금화 ' + U.num(m.wage) + '닢에 고용하겠습니까?' + note, '고용한다', '그만둔다');
     if (!ok) return false;
+    // 급료가 버거우면 경리(없으면 부관)가 말린다 — 그래도 들일 수는 있다
+    var warn = G.Cabins && G.Cabins.wageWarning(m.wage);
+    if (warn) {
+      await UI.say(warn.text, G.Cabins.warnSpeaker());
+      if (!await UI.confirm('그래도 ' + U.j(m.name, '을/를') + ' 고용하겠습니까?', '고용한다', '그만둔다')) return false;
+    }
     R.tidyCaptains();
     var role = G.ROLES.map(function (r) { return r.id; }).filter(function (rid) { return !s.mates.some(function (x) { return x.role === rid; }); })[0] || 'none';
     var nm = { id: m.id, role: role, joined: U.dateNum(s.date), loyal: 40 + cm.lv * 10 };
@@ -421,7 +427,7 @@
   var STATN = ['힘', '지력', '무력', '매력'];
   /** 대항해시대식 인물 카드: 초상 · 능력치 · 특기 · 말 */
   function mateCard(m, c, onPick) {
-    var s = S(), cm = comm(m), lock = s.player.fame < m.fame, full = s.mates.length >= G.MAX_MATES;
+    var s = S(), cm = comm(m), lock = s.player.fame < m.fame;
     var wrap = U.el('div', 'mcard');
     var head = U.el('div', 'mc-head');
     var pf = U.el('div', 'mc-face');
@@ -465,7 +471,6 @@
     var msg = m.rival ? '이야기는 나눌 수 있지만 부하로 들일 수는 없다.'
       : !cm.lv ? '말이 한 마디도 통하지 않아 이야기를 나눌 수 없다.'
       : lock ? '이름이 알려지면 그때 다시 찾아오자.'
-      : full ? '부하는 ' + G.MAX_MATES + '명까지만 데리고 다닐 수 있다.'
       : cm.lv < 3 ? G.LANGS[cm.li] + '로 그럭저럭 뜻이 통한다. 처음에는 마음을 다 열지 않을 것이다.'
       : '말이 잘 통한다. 바로 이야기를 꺼내 볼 만하다.';
     foot.innerHTML = '<div class="mc-note">' + msg + '</div>';
@@ -539,7 +544,7 @@
   T.rival = async function (c) {
     var s = S(), d = T.rivalHere(c); if (!d) return;
     var nm = d.rival[2];
-    var who = { name: nm, portrait: A.rivalSpec(nm), lang: 3 };
+    var who = T.duo({ name: nm, portrait: A.rivalSpec(nm), half: G.Img.chain.rivalHalf(nm), lang: 3 }, 'neutral', true);
     await UI.say('항해자 같은 남자가 있다. …' + nm + '이라는 사람인 것 같다.', {});
     for (;;) {
       var v = await UI.ask('무슨 용건인가?', [{ label: '정보를 듣는다', value: 'info' }, { label: '일기토를 신청한다', value: 'duel' }, { label: '떠난다', value: null }], who);
@@ -598,7 +603,7 @@
     return out;
   };
   T.rivalTalk = async function (c, nm) {
-    var s = S(), info = G.RIVAL_STAYS[nm] || {}, who = T.duo({ name: nm, portrait: A.rivalSpec(nm), lang: 3 });
+    var s = S(), info = G.RIVAL_STAYS[nm] || {}, who = T.duo({ name: nm, portrait: A.rivalSpec(nm), half: G.Img.chain.rivalHalf(nm), lang: 3 });
     if (G.SeaFolk.atSeaName(nm)) { await C.say(master(), info.away || nm + '? 얼마 전에 배를 띄워 나갔네.'); return; }
     if (!s.flags['metRival_' + nm]) { s.flags['metRival_' + nm] = 1; await UI.say(info.intro || nm + '이오.', who); }
     for (;;) {
@@ -693,8 +698,9 @@
     for (;;) {
       R.tidyCaptains();
       if (!s.mates.length) { UI.toast('동료가 없습니다.', 'people'); return; }
-      var i = await UI.choose('부하편성', s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: roleName(m), value: k, icon: 'people', desc: skillLine(d) + ' — ' + d.desc }; }), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역·경리는 한 명씩이고(경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다), 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });
+      var i = await UI.choose('부하편성', [{ label: '기함 선실 — 방마다 부하를 배치한다', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }].concat(s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: G.Cabins.placeName(m) + (G.Cabins.eff(m) < 1 ? ' · 충성 ' + Math.round(m.loyal) : ''), value: k, icon: 'people', desc: skillLine(d) + ' — ' + d.desc }; })), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역·경리는 한 명씩이고(경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다), 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });
       if (i == null) return;
+      if (i === 'cabin') { await G.CabinView.open(); continue; }
       var m = s.mates[i], d = G.MATE[m.id];
       var opts = G.ROLES.map(function (r) {
         var holder = s.mates.filter(function (x) { return x.role === r.id && x !== m; })[0];
@@ -729,5 +735,6 @@
     }
     if (other) { other.role = oldRole || 'none'; if (oldRole === 'captain') other.ship = oldShip; else delete other.ship; }
     R.tidyCaptains();
+    if (G.Cabins) G.Cabins.tidy();   // 부관·항해사·측량사·선장이 되면 선실을 비운다
   };
 })(window.G = window.G || {});

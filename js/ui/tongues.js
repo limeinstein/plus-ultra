@@ -119,7 +119,7 @@
       S.mates.forEach(function (m) {
         if (m.role !== 'interp' && m.role !== 'first') return;
         var d = G.MATE[m.id]; if (!d) return;
-        var lv = d.lg[li] || 0, sc = lv * 2 + (m.role === 'interp' ? 1 : 0);
+        var lv = R.mateLang ? R.mateLang(m, li) : d.lg[li] || 0, sc = lv * 2 + (m.role === 'interp' ? 1 : 0);
         if (lv > own && sc > best) { best = sc; mate = { id: m.id, name: d.name, role: m.role }; }
       });
     }

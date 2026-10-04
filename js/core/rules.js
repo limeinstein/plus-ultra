@@ -57,9 +57,9 @@
     var S = R.S(); var best = S.player.sk[id] || 0;
     S.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
-      var lv = (m.sk && m.sk[id] != null ? m.sk[id] : d.sk[id]) || 0;
-      if (lv && R.mateHurt(m)) lv = Math.floor(lv / 2);      // 다친 동안은 절반
+      var lv = R.mateSkill(m, id);      // 다친 동안은 절반, 충성이 낮으면 건성 (G.Cabins.eff)
       if (!lv) return;
+      if (G.Cabins && G.Cabins.activates(m, id)) { if (lv > best) best = lv; return; }   // 그 특기를 쓰는 선실에 배치했다
       var roleOK = m.role === 'first' ? G.ROLE_SKILLS.first.indexOf(id) >= 0 : m.role === 'nav' ? G.ROLE_SKILLS.nav.indexOf(id) >= 0 : m.role === 'surveyor' ? G.ROLE_SKILLS.surveyor.indexOf(id) >= 0 : m.role === 'purser' ? G.ROLE_SKILLS.purser.indexOf(id) >= 0 : false;
       if (roleOK && lv > best) best = lv;
     });
@@ -69,7 +69,7 @@
       아랍어를 못하는 통역뿐이어도 아랍어를 아는 다른 부하가 있으면 함께 읽는다. 다친 동료는 학문이 절반 */
   R.langBest = function (li) {
     var S = R.S(), best = { lv: S.player.lg[li] || 0, who: null };
-    S.mates.forEach(function (m) { var d = G.MATE[m.id]; if (!d) return; var lv = d.lg[li] || 0; if (lv > best.lv) best = { lv: lv, who: d.name }; });
+    S.mates.forEach(function (m) { var d = G.MATE[m.id]; if (!d) return; var lv = R.mateLang(m, li); if (lv > best.lv) best = { lv: lv, who: d.name }; });
     return best;
   };
   R.langRead = function (li) { return R.langBest(li).lv; };
@@ -83,8 +83,8 @@
   R.lang = function (li) {
     var S = R.S(); var best = S.player.lg[li] || 0;
     S.mates.forEach(function (m) {
-      if (m.role !== 'interp' && m.role !== 'first') return;
-      var d = G.MATE[m.id]; if (!d) return; var lv = d.lg[li] || 0; if (lv > best) best = lv;
+      if (m.role !== 'interp' && m.role !== 'first' && !(G.Cabins && G.Cabins.interprets(m))) return;   // 통역·부관, 통역실에 있는 사람
+      var d = G.MATE[m.id]; if (!d) return; var lv = R.mateLang(m, li); if (lv > best) best = lv;
     });
     return best;
   };
@@ -148,7 +148,12 @@
   R.fleetCap = function () { return U.sum(R.S().fleet.ships, R.shipCargoCap); };
   R.cargoQty = function () { var c = R.S().fleet.cargo, n = 0; for (var k in c) n += c[k].q; return n; };
   R.used = function () { var f = R.S().fleet; return R.cargoQty() + Math.ceil(f.food) + Math.ceil(f.water) + Math.ceil(f.mat || 0) + (G.Quest ? G.Quest.load() : 0); };
-  R.free = function () { return R.fleetCap() - R.used(); };
+  /** 남는 짐칸 (부피만) */
+  R.freeVol = function () { return R.fleetCap() - R.used(); };
+  /** 남는 짐칸 — 부피와 무게(무게 1 기준) 가운데 먼저 걸리는 쪽 (js/systems/cargo.js) */
+  R.free = function () { var v = R.freeVol(); return G.Cargo ? Math.min(v, Math.floor(G.Cargo.wfree())) : v; };
+  /** 식량·물·자재에 쓸 수 있는 칸 (교역품을 뺀 부피·무게) */
+  R.supplyRoom = function () { return G.Cargo ? G.Cargo.supplyRoom() : R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0); };
   R.crewMin = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMin; }); };
   R.crewMax = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMax; }); };
   R.maxKinds = function () { return 3 + R.S().fleet.ships.length * 2; };
@@ -237,7 +242,13 @@
     for (var i = 0; i < S.mates.length; i++) { var m = S.mates[i]; if (m.role === 'captain' && m.ship === sh.uid) return m; }
     return null;
   };
-  R.mateSkill = function (m, id) { var d = G.MATE[m.id]; var lv = d ? ((m.sk && m.sk[id] != null ? m.sk[id] : d.sk[id]) || 0) : 0; return R.mateHurt(m) ? Math.floor(lv / 2) : lv; };
+  R.mateSkill = function (m, id) {
+    var d = G.MATE[m.id]; var lv = d ? ((m.sk && m.sk[id] != null ? m.sk[id] : d.sk[id]) || 0) : 0;
+    if (lv && m.loyal != null && G.Cabins) { var ef = G.Cabins.eff(m); if (ef < 1) lv = Math.max(m.loyal > ((G.BALANCE.mates || {}).veryLow || 20) ? 1 : 0, Math.floor(lv * ef + 1e-9)); }   // 충성 40 아래면 건성으로 한다: 3→2, 2→1 (20 아래면 3→1, 1→0) (G.BALANCE.mates)
+    return R.mateHurt(m) ? Math.floor(lv / 2) : lv;
+  };
+  /** 부하의 말 단계: 타고난 것과 한배에서 지내며 배운 것(m.lgx) 가운데 높은 쪽 */
+  R.mateLang = function (m, li) { var d = G.MATE[m.id]; return Math.max((d && d.lg && d.lg[li]) || 0, (m.lgx && m.lgx[li]) || 0); };
   /** 대리 결투에서 진 동료는 한동안 다쳐 있다 (남은 날, 0이면 멀쩡) */
   R.mateHurt = function (m) { var S = R.S(); return m && m.hurt && S && S.day < m.hurt ? m.hurt - S.day : 0; };
   /** 배 한 척을 맡은 사람의 특기: 기함은 제독과 기함 참모(부관·항해사·측량사), 다른 배는 그 배 선장 한 사람 */
@@ -270,7 +281,7 @@
   };
   R.captainName = function (sh) { var c = R.captain(sh); return c === 'admiral' ? '제독' : c ? G.MATE[c.id].name : '갑판장'; };
   /** 백병전 공격력: 제독은 차고 있는 무기, 동료 선장은 무력, 갑판장은 맨손 */
-  R.shipAtk = function (sh) { var c = R.captain(sh); if (c === 'admiral') return R.atk(); if (!c) return 2; var d = G.MATE[c.id]; return 3 + Math.round(((d && d.st && d.st[2]) || 50) / 10); };
+  R.shipAtk = function (sh) { var c = R.captain(sh); if (c === 'admiral') return R.atk(); if (!c) return 2; var d = G.MATE[c.id]; return 3 + Math.round(((d && d.st && d.st[2]) || 50) * (G.Cabins ? G.Cabins.eff(c) : 1) / 10); };
 
   // ---------------------------------------------------------------- 함대 속력 (편대 규칙)
   /* 1) 배마다 선속을 따로 구한다 = 돛·노 성능 × 바람 × 선체 손상 × 목재 × 조함(그 배 선장의 항해술) × 그 배의 짐
@@ -284,6 +295,7 @@
   /** 짐 배분: 빠른 배부터 채운다. 배마다 짐 비율(0~1) */
   R.loadShares = function () {
     var f = R.S().fleet, left = R.used(), out = {};
+    if (G.Cargo) left = Math.max(left, R.fleetCap() * G.Cargo.loadRatio());   // 무거운 짐(광석·금속)은 짐칸이 남아도 무게만큼 느려진다
     f.ships.slice().sort(function (a, b) { return baseSpd(b) - baseSpd(a); }).forEach(function (s) {
       var cap = Math.max(1, R.shipCargoCap(s)), q = U.clamp(left, 0, cap); out[s.uid] = q / cap; left -= q;
     });
@@ -336,6 +348,7 @@
     var cm = R.crewMin();
     var crewF = f.crew >= cm ? 1 : Math.max(0.25, f.crew / cm);
     var fat = f.fatigue > 60 ? 1 - (f.fatigue - 60) / ((G.BALANCE && G.BALANCE.fatigueDiv) || 100) : 1, k = crewF * fat;
+    if (G.Cabins) k *= 1 + Math.min(((G.BALANCE.cabins || {}).rigMax) || 0.08, G.Cabins.fx('rig', 'rig'));   // 조범실: 돛을 맡은 사람들이 있으면 조금 빨라진다
     R.fleetInfo = { slow: f.ships[r0.slow], assist: r0.assist, drag: r0.drag, vmin: r0.vmin, vs: vs0, tack: th0 > 0, row: row0, crewF: crewF, fat: fat };
     return { vmg: v * k, straight: r0.v * k, theta: th0, legP: lp * k, legM: lm * k };
   };
@@ -461,7 +474,7 @@
   /** price the city asks when you buy */
   R.buyPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
-    var p = g.p * (R.isRelay(c, goodId) ? R.relayMult(c, goodId, 'buy') : 0.62) * (1 + st.dep * 0.9) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
+    var p = g.p * (R.isRelay(c, goodId) ? R.relayMult(c, goodId, 'buy') : 0.62) * (1 + st.dep * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).depPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
     return Math.max(1, Math.round(p));
   };
@@ -469,7 +482,7 @@
   R.sellPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var base = R.isRelay(c, goodId) ? g.p * R.relayMult(c, goodId, 'sell') : R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
-    var p = base * Math.exp(-st.sat * 0.55) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
+    var p = base * Math.exp(-st.sat * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).satPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자
@@ -522,9 +535,11 @@
     }
     return out;
   };
-  R.onBuy = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId); st.dep += q / (40 + c.size * 40); };
-  R.onSell = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId); st.sat += q / (60 + c.size * 50); };
-  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId); return Math.max(0, Math.round((30 + c.size * 45) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)))); };
+  // 물량·기울기는 G.BALANCE.market (큰 배로 많이 사고팔수록 남게 — 대항해시대 2처럼)
+  function MK() { return (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }); }
+  R.onBuy = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); st.dep += q / (K.dep[0] + c.size * K.dep[1]); };
+  R.onSell = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); st.sat += q / (K.sat[0] + c.size * K.sat[1]); };
+  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)))); };
   R.maybeMarketEvent = function (c) {
     var m = R.market(c.id), S = R.S();
     if (m.ev) return;
@@ -539,7 +554,7 @@
   R.matCost = function (c) { return Math.max(2, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.matPrice) || 3) * (R.facilities(c).shipyard ? 0.85 : 1) * R.catIndex(c, 'misc'))); };
   R.supplyCost = function (c) { return Math.max(1, Math.round((c.region <= 2 ? 2 : 3) * (1 - 0.06 * R.investLv(c.id)))); }; // per 통
   R.innCost = function (c) { return 8 + c.size * 6; };
-  R.surveyRange = function () { return [0.9, 1.4, 1.9, 2.6][R.skill('survey')] + (G.Ships && G.Ships.fleetHas('scout') ? 0.4 : 0); };
+  R.surveyRange = function () { return [0.9, 1.4, 1.9, 2.6][R.skill('survey')] + (G.Ships && G.Ships.fleetHas('scout') ? 0.4 : 0) + (G.Cabins ? G.Cabins.fx('lookout', 'lookout') : 0); };   // 파수대에 사람을 올리면 더 멀리 본다
   /** 모든 것을 잃고 고향에서 다시 시작할 때의 함대 (몸값을 치르고 풀려났을 때, 선원이 전멸해 뒤를 이었을 때).
       lost: 잃은 기함 종류 — 그보다 좋은 배를 거저 받지는 않는다 (바르카를 잃고 카라벨을 받던 것) */
   R.restartFleet = function (lost) {

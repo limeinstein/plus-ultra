@@ -63,7 +63,7 @@
   SEA.runtime = function () { return st; };
   /** 시험용: 반란 장면을 바로 띄운다 */
   SEA._mutiny = function () { return mutiny(); };
-  function chartR() { return 1.2 + R.skill('survey') * 0.45 + (G.Ships.fleetHas('scout') ? 0.3 : 0); }
+  function chartR() { return 1.2 + R.skill('survey') * 0.45 + (G.Ships.fleetHas('scout') ? 0.3 : 0) + (G.Cabins ? G.Cabins.fx('chart', 'chart') : 0); }
   /** 무풍이면 돛은 거의 힘을 못 쓰지만 노는 그대로 젓는다 */
   function curWind() { return st.calm > 0 ? { dir: st.wind.dir, spd: st.wind.spd, calm: true } : st.wind; }
 
@@ -626,7 +626,8 @@
     var capStyle = A.fleetStyle(n.zone || G.Ships.zone(n.lon, n.lat), n.nation);
     var capSpec = A.npcSpec('hail' + n.id, 'captain', capStyle);
     A.withImg(capSpec, [A.rolePortraitKey(capSpec), 'portraits/npc/captain_' + A.imageCulture(capStyle)]);
-    var who = { name: (n.nation ? n.nation + ' ' : '') + NPC_KIND[n.kind].name + ' 선장', portrait: capSpec };
+    var who = { name: (n.nation ? n.nation + ' ' : '') + NPC_KIND[n.kind].name + ' 선장', portrait: capSpec,
+      half: G.Img.chain.halfOf(A.portraitKeys(capSpec)) };
     if (G.SeaFolk) who = G.SeaFolk.captain(n, who);   // 탐험가·아직 동료가 아닌 항해사
     try {
       var opts = [{ label: '소식을 묻는다', value: 'news' }];
@@ -1023,14 +1024,17 @@
       if (st.path || st.dirCrs != null || (st.manual && st.thr > 0.1)) { var row = st.manual ? (R.fleetMotion(l.heading, curWind()), R.fleetInfo && R.fleetInfo.row) : (R.fleetMotion(st.crs != null ? st.crs : l.heading, curWind()), R.rowing); if (row) { fb += 0.9; if (!st.rowWarned) { st.rowWarned = true; msgs.push({ icon: 'people', text: '돛이 바람을 못 받아 선원들이 노를 젓는다. 노를 오래 저으면 지친다.' }); } } else st.rowWarned = false; }
       var CC = BAL.crewCare || {};
       fb -= R.skillRead('cook') * (CC.cookFatigue || 0.12);       // 요리: 따뜻한 끼니가 고단함을 덜어 준다
+      var CBN = G.Cabins;                                          // 기함의 선실 (사람을 배치한 방만 힘을 낸다)
+      if (CBN) fb -= CBN.fx('galley', 'galley') + CBN.fx('mess', 'mess') + CBN.fx('helm', 'helm');
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
-      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2, 0, 100);
+      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
+        + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0), 0, 100);
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();
       if (f.daysOut > onset && !s.flags.limeActive) {
-        f.scurvy = (f.scurvy || 0) + U.clamp((0.8 + (f.daysOut - onset) * (BAL.scurvyGrow || 0.04)) * Math.max(0.35, 1 - med * 0.18 - sci * 0.08), 0.05, 4);
+        f.scurvy = (f.scurvy || 0) + U.clamp((0.8 + (f.daysOut - onset) * (BAL.scurvyGrow || 0.04)) * Math.max(0.35, 1 - med * 0.18 - sci * 0.08) * Math.max(0.4, 1 - (CBN ? CBN.fx('sick', 'sick') : 0)), 0.05, 4);
         if (f.scurvy > 18 && U.chance(0.5)) {
           var sx = f.crew * (BAL.scurvyDeath || 0.012) * f.scurvy / 18, sd = Math.floor(sx) + (U.chance(sx % 1) ? 1 : 0);   // 작은 배라고 매번 한 명씩 쓰러지지는 않는다
           f.crew = Math.max(0, f.crew - sd);
@@ -1045,7 +1049,8 @@
       // cargo spoilage
       for (var gid in f.cargo) {
         var g = G.GOOD[gid], cg = f.cargo[gid];
-        if (g.life && s.day - cg.d > g.life) { var sp = Math.max(1, Math.ceil(cg.q * 0.08)); cg.q -= sp; if (cg.q <= 0) delete f.cargo[gid]; if (U.chance(0.2)) msgs.push({ icon: 'sack', text: U.j(g.name, '이/가') + ' 상하기 시작했다.' }); }
+        if (!G.Cargo && g.life && s.day - cg.d > g.life) {   // 상함은 G.Cargo.daily (world.js)
+         var sp = Math.max(1, Math.ceil(cg.q * 0.08)); cg.q -= sp; if (cg.q <= 0) delete f.cargo[gid]; if (U.chance(0.2)) msgs.push({ icon: 'sack', text: U.j(g.name, '이/가') + ' 상하기 시작했다.' }); }
       }
       // repairs at sea
       // 바다 위 수리: 배마다 그 배 선장(기함은 제독·부관)의 조선기술
@@ -1058,6 +1063,11 @@
         if (fix <= 0) return;
         sh.hp += fix; f.mat = Math.max(0, (f.mat || 0) - fix * mph);
       });
+      // 선박 수리실: 목수들이 기함을 따로 더 고친다 (자재가 든다)
+      var fs0 = f.ships[0], rp0 = CBN ? CBN.fx('repair', 'repair') : 0;
+      if (rp0 > 0 && fs0 && fs0.hp < fs0.maxHp) { wanted = true; var fx0 = Math.min(rp0, fs0.maxHp - fs0.hp, (f.mat || 0) / mph); if (fx0 > 0) { fs0.hp += fx0; f.mat = Math.max(0, (f.mat || 0) - fx0 * mph); } }
+      // 사육실: 닭·염소가 달걀과 젖을 낸다
+      if (CBN) f.food += CBN.fx('pen', 'pen');
       if (wanted && (f.mat || 0) < 0.05 && !st.noMatWarned) { st.noMatWarned = true; msgs.push({ icon: 'sack', text: '자재가 떨어져 바다 위에서 배를 고칠 수 없다. 항구에서 자재를 실어야 한다.' }); }
       if ((f.mat || 0) >= 1) st.noMatWarned = false;
       // 연안선은 먼 바다의 큰 파도에 상한다
@@ -1093,6 +1103,7 @@
       msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
       refreshHud();
       if (news.length) { if (G.SeaNews) G.SeaNews.show(news); else await G.Scenes.city.news(news); }   // 항해를 멈추지 않고 오른쪽 위에 잠깐
+      if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);
       if (sensed.length) await G.Explore.report(sensed, l.lon, l.lat, 'sea');

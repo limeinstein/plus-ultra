@@ -132,22 +132,27 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg-stage .dlg.duo .name { left: 24px; }
 .dlg-stage .dlg.duo.speaker-right .name { left: auto; right: 24px; }
 .dlg-stage .dlg.duo .interp { left: 24px; right: 24px; }
-.dlg-actor { position: absolute; bottom: 184px; width: 310px; height: 330px; z-index: 1; opacity: .72; filter: brightness(.72) saturate(.72); transform: translateY(12px) scale(.96); transition: opacity .22s, filter .22s, transform .22s; }
-.dlg-actor.left { left: 68px; }
-.dlg-actor.right { right: 68px; }
-.dlg-actor.active { opacity: 1; filter: brightness(1.06) saturate(1.04); transform: translateY(0) scale(1.015); }
-.dlg-actor.right .portrait-rig { transform-origin: 50% 100%; }
-.dlg-actor.left .portrait-rig { transform-origin: 50% 100%; }
+/* 대화창 위에 서는 사람들 — UI(이름판·메뉴·HUD)보다 아래 층에 그린다. 자리·크기는 js/ui/ui.js dialogShell이 대화창을 재어 정한다 */
+.dlg-actors { position: absolute; inset: 0; pointer-events: none; }
+#ui > .dlg-actors { z-index: 13; pointer-events: none; }
+.dlg-stage > .dlg-actors { z-index: 0; pointer-events: none !important; }
+.dlg-actor.bust .actor-art { border: 3px solid #b48c4a; border-radius: 6px; overflow: hidden; background: #1a120c; box-shadow: 0 10px 24px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,230,180,.25); }
+.dlg-actor { position: absolute; left: 0; top: 0; width: 260px; height: 260px; filter: brightness(.7) saturate(.8); transform: translateY(8px) scale(.97); transform-origin: 50% 100%; transition: filter .22s, transform .22s; }   /* 듣는 사람은 어둡게만 (반투명하면 뒤 배경이 비쳐 유령처럼 보인다) */
+.talk-hidden { opacity: 0 !important; pointer-events: none !important; transition: opacity .18s !important; }
+.dlg-actor.active { filter: brightness(1.04) saturate(1.03); transform: translateY(0) scale(1); }
+.dlg-actor .portrait-rig { transform-origin: 50% 100%; }
 .dlg-actor .actor-art { position: absolute; inset: 0 0 24px; }
 /* 교역소: 먼 산지에서 들여와 파는 물건 (중계무역) */
 .tbl .tag.relay { font-size: 12px; padding: 1px 6px; margin-left: 6px; vertical-align: 2px; background: #6a4a2a; color: #f3e2bd; border-radius: 6px; cursor: help; }
 /* 무릎상 대화: 두 사람이 머리부터 무릎까지 서서 마주 본다 (여급·항해사·후원자) */
-.dlg-actor.tall { bottom: 186px; width: 560px; height: 650px; }
-.dlg-actor.tall.left { left: 0; }
-.dlg-actor.tall.right { right: 0; }
 .dlg-actor.tall .actor-art { inset: 0; }
-.dlg-actor.tall .actor-name { bottom: 116px; font-size: 16px; }
-.dlg-actor .actor-name { position: absolute; left: 50%; bottom: 4px; transform: translateX(-50%); min-width: 104px; padding: 4px 12px; text-align: center; white-space: nowrap; color: var(--cream); font-size: 15px; z-index: 5; }
+.dlg-actor.bust .actor-art { inset: 0; }
+.dlg-actor.tall .actor-art { filter: drop-shadow(0 14px 22px rgba(0,0,0,.5)); }
+.dlg-stage > .actor-name { position: absolute; transform: translateX(-50%); min-width: 104px; padding: 4px 12px; text-align: center; white-space: nowrap; color: var(--cream); font-size: 15px; z-index: 61; }
+.dlg-stage .dlg.duo.solo > .name { display: block; left: 24px; }
+/* 대화 중에는 건물 안에 서 있던 여급 그림을 감춘다 (대화창 위에 선 사람과 겹치지 않게) */
+.tavern-maid { transition: opacity .2s; }
+#ui.talking .tavern-maid { opacity: 0; pointer-events: none; }
 
 /* 한 장짜리 인물 그림을 머리·몸통·하체로 나눈 가벼운 2.5D 리그 */
 .portrait-rig-host { position: relative; overflow: visible; }
@@ -424,7 +429,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .tavern-maid:hover .tag { opacity: 1; color: var(--brass-hi); border-color: var(--brass); }
 @media (prefers-reduced-motion: reduce) {
   .portrait-rig .rig-layer, .portrait-rig.rig-single, .portrait-rig .rig-facefx .mouth { animation: none !important; }
-  .dlg-actor { transition: opacity .12s, filter .12s; }
+  .dlg-actor { transition: filter .12s; }
 }
 /* ---------------------------------------------------------------- duel & poker */
 .poker .row { display: flex; gap: 14px; justify-content: center; margin: 12px 0 30px; }
@@ -880,8 +885,8 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 
 /* 실존 인물 이야기 (js/ui/bio.js) */
 .has-bio { cursor: pointer; }
-.dlg .name.has-bio::after, .dlg-actor .actor-name.has-bio::after { content: ' 📜'; font-size: 13px; opacity: .85; }
-.dlg .name.has-bio:hover, .dlg-actor .actor-name.has-bio:hover { filter: brightness(1.25); }
+.dlg .name.has-bio::after, .dlg-stage .actor-name.has-bio::after { content: ' 📜'; font-size: 13px; opacity: .85; }
+.dlg .name.has-bio:hover, .dlg-stage .actor-name.has-bio:hover { filter: brightness(1.25); }
 .biolink { cursor: pointer; margin-left: 6px; font-size: 15px; opacity: .85; }
 .biolink:hover { opacity: 1; filter: drop-shadow(0 0 3px #e8c060); }
 .biobox { display: flex; gap: 22px; align-items: flex-start; padding: 6px 4px; }
@@ -941,3 +946,40 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 @keyframes imgspin { to { transform: rotate(360deg); } }
 /* 수첩: 아이와 제독의 사이 (family.js F.bondHearts) */
 .kid-bond { color: #c0392b; font-size: 13px; letter-spacing: 1px; }
+
+/* 기함 선실 화면 (js/ui/cabinview.js) */
+.cb-top { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: center; font-size: 17px; margin-bottom: 8px; }
+.cb-top .ic { width: 20px; height: 20px; vertical-align: -4px; margin-right: 5px; }
+.cb-ship { position: relative; margin: 0 auto; border: 1px solid rgba(60,40,20,.55); overflow: hidden; }
+.cb-ship canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+.cb-room { position: absolute; box-sizing: border-box; padding: 5px 7px; cursor: pointer; color: var(--ink); background: linear-gradient(#f3e8cc, #e2d0a6); border: 2px solid #4a3220; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45), 0 2px 4px rgba(0,0,0,.35); overflow: hidden; }
+.cb-room:hover { border-color: #b8862f; background: linear-gradient(#fff6dc, #ecdbb2); }
+.cb-room.fixed { background: linear-gradient(#e9e2cf, #cfc4a4); }
+.cb-room.empty { background: linear-gradient(rgba(243,232,204,.82), rgba(214,196,154,.82)); }
+.cb-room.hold { background: repeating-linear-gradient(135deg, rgba(120,90,55,.75) 0 10px, rgba(104,76,44,.75) 10px 20px); color: #f3e6c4; border-style: dashed; }
+.cb-h { display: flex; align-items: center; gap: 5px; font-size: 15px; white-space: nowrap; }
+.cb-h b { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.cb-h .ic { width: 18px; height: 18px; flex: none; }
+.cb-pow { margin-left: auto; flex: none; font-style: normal; font-size: 13px; font-weight: 700; color: #fff; background: #2f5b8c; border-radius: 9px; padding: 0 7px; line-height: 18px; }
+.cb-who { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+.cb-face { width: 38px; height: 38px; flex: none; border: 1px solid rgba(60,40,20,.6); background: rgba(0,0,0,.12); overflow: hidden; }
+.cb-face canvas { position: static; width: 100%; height: 100%; display: block; }
+.cb-nm { font-size: 14px; line-height: 1.25; overflow: hidden; min-width: 0; }
+.cb-nm { display: flex; flex-direction: column; }
+.cb-nm .n1 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cb-room .cb-nm small { color: #2f5b8c; font-weight: 700; }
+.cb-face .ic { width: 100%; height: 100%; opacity: .6; }
+.cb-nm small { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+.cb-none { margin-top: 10px; font-size: 14px; text-align: center; opacity: .75; }
+.cb-sub { margin: 12px 0 6px; font-size: 18px; font-weight: 700; }
+.cb-sub small { font-weight: 400; font-size: 14px; }
+.cb-roster { display: flex; flex-wrap: wrap; gap: 6px; max-height: 172px; overflow-y: auto; }
+.cb-mate { display: flex; align-items: center; gap: 7px; padding: 4px 9px 4px 4px; min-width: 150px; cursor: pointer; border: 1px solid rgba(110,80,40,.45); background: rgba(255,250,236,.5); }
+.cb-mate:hover { background: rgba(255,246,214,.95); border-color: #b8862f; }
+.cb-mate.idle { border-style: dashed; background: rgba(200,180,140,.35); }
+.cb-mate .cb-face { width: 40px; height: 40px; }
+.cb-loyal { font-size: 12px; color: var(--ink-soft); }
+.cb-loyal.low { color: var(--warn); font-weight: 700; }
+.cb-fx { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.6; columns: 2; }
+.cb-fx .cb-pow { margin: 0 4px; }
+.shipcard .pips { display: inline-flex; vertical-align: -2px; }

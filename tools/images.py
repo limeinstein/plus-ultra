@@ -155,11 +155,17 @@ def valid_keys(d):
     VAR = [('', ''), ('_f', ' 여자'), ('_m', ' 남자'), ('_2', ' 다른 얼굴 2'), ('_3', ' 다른 얼굴 3')]
     for nid, label in d['npcs']:
         for vs, vl in VAR:
-            k['portraits/npc/' + nid + vs] = '마을 사람 · ' + label + vl
+            npc_key = 'portraits/npc/' + nid + vs
+            k[npc_key] = '마을 사람 · ' + label + vl
+            k[npc_key + '_half'] = '마을 사람 무릎상 · ' + label + vl
             for cu, cl in d['cultures']:
-                k['portraits/npc/%s_%s%s' % (nid, cu, vs)] = '마을 사람 · %s (%s)%s' % (label, cl, vl)
+                npc_key = 'portraits/npc/%s_%s%s' % (nid, cu, vs)
+                k[npc_key] = '마을 사람 · %s (%s)%s' % (label, cl, vl)
+                k[npc_key + '_half'] = '마을 사람 무릎상 · %s (%s)%s' % (label, cl, vl)
         for c in d['cities']:
-            k['portraits/npc/%s@%d' % (nid, c['id'])] = '마을 사람 · %s (%s)' % (label, c['name'])
+            npc_key = 'portraits/npc/%s@%d' % (nid, c['id'])
+            k[npc_key] = '마을 사람 · %s (%s)' % (label, c['name'])
+            k[npc_key + '_half'] = '마을 사람 무릎상 · %s (%s)' % (label, c['name'])
     portrait_styles = ['ib', 'ne', 'it', 'gr', 'ru', 'is', 'pe', 'af', 'sw', 'in', 'se', 'cn', 'kr', 'jp', 'az', 'an', 'co', 'tr', 'st', 'na']
     portrait_roles = ['king', 'priest', 'noble', 'official', 'merchant', 'scholar', 'keeper', 'sailor', 'soldier', 'maid', 'native', 'captain']
     for style in portrait_styles:
@@ -195,6 +201,7 @@ def valid_keys(d):
             k['portraits/sponsors/%s_%s_half' % (sp['id'], pic)] = '후원자 무릎상 · %s — %s' % (sp['title'], h[2])
     for r in d['rivals']:
         k['portraits/rivals/' + r] = '경쟁자 · ' + r
+        k['portraits/rivals/' + r + '_half'] = '경쟁자 무릎상 · ' + r
     for b, label in (('son', '아들'), ('daughter', '딸')):
         k['portraits/family/' + b] = '자녀 · ' + label
         for n in range(1, 7):

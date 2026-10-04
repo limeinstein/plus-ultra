@@ -317,10 +317,10 @@
   });
   G.GOODS.forEach(g => add(tGoods, {
     group: g.cat, name: g.name, sub: G.GOOD_CATS[g.cat] + ' · ' + g.id,
-    meta: '기준값 ' + num(g.p) + '닢' + (g.life ? ' · ' + g.life + '일 뒤 상함' : ''),
+    meta: '기준값 ' + num(g.p) + '닢' + (G.Cargo ? ' · 무게 ' + G.Cargo.wt(g.id) + (G.Cargo.keep(g.id) ? ' · ' + G.Cargo.keep(g.id) + '일 신선' : '') : g.life ? ' · ' + g.life + '일 뒤 상함' : ''),
     key: 'goods/' + g.id, kind: 'webp', chain: I.chain.good(g), ar: '1 / 1', extra: g.id,
     pic: () => I.make(I.chain.good(g), 256, 256, () => A.relicArt({ id: 'good_' + g.id, name: g.name, kind: 'treasure' }, 256, 256), { fit: 'contain' }),
-    detail: () => ({ facts: [['갈래', G.GOOD_CATS[g.cat]], ['기준값', num(g.p) + '닢'], ['보관', g.life ? g.life + '일' : '상하지 않음']],
+    detail: () => ({ facts: [['갈래', G.GOOD_CATS[g.cat]], ['기준값', num(g.p) + '닢'], ['보관', G.Cargo ? (G.Cargo.keep(g.id) ? G.Cargo.keep(g.id) + '일 신선 → 넘으면 값이 떨어지고 두 배를 넘기면 상함' : '상하지 않음') : g.life ? g.life + '일' : '상하지 않음']].concat(G.Cargo ? [['무게', '1통에 ' + G.Cargo.wt(g.id)]] : []),
       files: [{ key: 'goods/' + g.id, kind: 'webp', note: '이 교역품의 그림 (192×192, 투명 배경)' }, { key: 'good-kinds/' + g.cat, kind: 'webp', note: G.GOOD_CATS[g.cat] + ' 공통' }] })
   }));
 

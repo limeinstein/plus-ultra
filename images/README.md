@@ -19,6 +19,7 @@
 | 타이틀 화면 | `title.jpg` | 1600×900 |
 | 거리 배경 (도시 화면) | `bg-styles/ib_port_a.jpg` 항구 · `bg-styles/ib_inland_a.jpg` 내륙 (여러 장이면 _a, _b …) | 1600×900 |
 | 거리 배경 — 한 도시만 | `backgrounds/도시번호.jpg` | 1600×900 |
+| 추가 도시 거리 배경 | `backgrounds/286.jpg`~`297.jpg` — 소주·하문·상해·독도·시베리아 5곳·우르가·후허호토·에도. 기존 그림을 참고해 내장 ImageGen으로 제작. 제작 지시문은 `tools/backgrounds/additional-prompts.json` | 1600×900 |
 | 거리 앞길 바닥 (지역별) | `street-ground/양식.webp` — `python tools/street_ground.py`가 Codex 기준 그림 `docs/art/regional-street-ground-reference.png`(칼사다·부채꼴·모자이크·둥근 돌·판석·흙길 6칸)에서 만드는 19장(iberia·espana·italy·france·east·russia·arabia·ottoman·swahili·africa·india·seasia·eastasia·japan·steppe·volcanic·andes·native·pueblo — `js/scenes/town.js` GROUND_STYLE) | 높이 164, 가로로 끝없이 이어지는 띠(폭 218~569) |
 | 건물 겉모습 (거리에 세움) | `exteriors/건물.webp` (tavern, trade, inn …) · 도시별 `@도시번호` · 후원자 저택 `mansion@후원자ID` | 배경 지운 PNG·WEBP, 높이 660 |
 | 지역별 건물 묶음 | `exterior-styles/<묶음>/건물.webp` — 북미 원주민은 `woodland`(숲: 나무껍질 긴 집·위그웜·티피·울타리·카누), `plains`(평원 티피·가죽 천막 시장·의식용 큰 티피·목책 성문, 다코타 230·만단 243), `pueblo`(흙벽돌 계단 집·키바, 타오스 241·아코마 242). 없는 건물은 plains·pueblo → woodland → tropic 순으로 빌림. `tools/natives/make.py`가 기본 그림을 다시 만든다 | 배경 지운 WEBP, 높이 520(시장 660) |

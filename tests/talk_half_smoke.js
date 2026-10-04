@@ -1,5 +1,5 @@
 /* 무릎상 대화 점검: 여급·항해사·후원자와 이야기할 때 두 사람이 마주 서는 구도(dlg-stage duo)인지,
-   두 사람 다 무릎상(<그림>_half)이 있을 때만 서 있는 모습(.dlg-actor.tall)으로 크게 나오는지.
+   무릎상(<그림>_half)이 있는 사람은 서 있는 모습(.dlg-actor.tall), 없는 사람은 그 자리에 흉상(.dlg-actor.bust)으로 나오는지 (사람마다 따로).
    항해사·후원자 무릎상이 아직 없으면 시험에서는 여급 무릎상을 빌린 가짜를 넣어 큰 구도까지 본다.
    주문서: docs/art/talk_half_order.md
    node tests/talk_half_smoke.js  (playwright, 스크린샷은 OUT 폴더) */
@@ -23,7 +23,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::/.test(m.text() + ' ' + ((m.location() || {}).url || ''))) errors.push('console: ' + m.text()); });
   const clear = async () => { for (let i = 0; i < 12 && await page.evaluate(() => G.UI.busy()); i++) { await page.keyboard.press('Escape'); await page.waitForTimeout(250); } };
-  const actors = () => page.evaluate(() => [...document.querySelectorAll('.dlg-stage.duo .dlg-actor')].map(a => ({ side: a.classList.contains('left') ? 'L' : 'R', tall: a.classList.contains('tall') })));
+  const actors = () => page.evaluate(() => [...document.querySelectorAll('.dlg-actor')].map(a => ({ side: a.classList.contains('left') ? 'L' : 'R', tall: a.classList.contains('tall') })));
   try {
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Sponsor && G.Img, null, { timeout: 90000 });
@@ -54,11 +54,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const spInfo = await page.evaluate(() => { const sp = G.SPONSORS.find(s => s.city === 0 && G.Sponsor.present(s)); window._sp = sp; const w = G.Sponsor.speaker(sp); return { id: sp.id, half: G.Img.pick(w.half) }; });
     await page.evaluate(() => { G.UI.say('후원자 시험', G.Sponsor.speaker(window._sp)); });
     await page.waitForTimeout(1200); a = await actors();
-    ok(a.length === 2 && a.every(x => x.tall === !!spInfo.half), '후원자 대화: 마주 보는 구도, ' + (spInfo.half ? '무릎상' : '흉상') + ' ' + JSON.stringify(a));
+    ok(a.length === 2 && a.find(x => x.side === 'L').tall && a.find(x => x.side === 'R').tall === !!spInfo.half, '후원자 대화: 마주 보는 구도, 제독 무릎상 · 후원자 ' + (spInfo.half ? '무릎상' : '흉상') + ' ' + JSON.stringify(a));
     await clear();
     await page.evaluate(() => { G.UI.ask('제독 쪽 물음', [{ label: '예', value: 1 }, { label: '아니오', value: 0 }], G.Sponsor.me(window._sp)); });
     await page.waitForTimeout(800);
-    ok(await page.evaluate(() => !!document.querySelector('.dlg-stage.duo .dlg-actor.left.active')), '제독이 묻는 동안 왼쪽(제독)이 앞에');
+    ok(await page.evaluate(() => !!document.querySelector('.dlg-stage.duo') && document.querySelector('.dlg-actor.left.active')), '제독이 묻는 동안 왼쪽(제독)이 앞에');
     await clear();
 
     // 3) 항해사 — 술집에서 마주 앉기

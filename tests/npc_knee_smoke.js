@@ -91,7 +91,7 @@ const OUT = path.join(ROOT, 'artifacts', 'npc-knee-check');
         return { name: speaker.name, image: G.Img.pick(speaker.half), gender: speaker.portrait.g };
       }, c);
       await page.waitForTimeout(1100);
-      const actors = await page.locator('.dlg-stage.duo .dlg-actor.tall').count();
+      const actors = await page.locator('.dlg-actor.tall').count();
       assert.strictEqual(actors, 2, c.id + '의 대화에서 두 사람이 크게 보여야 한다');
       assert(selected.image && /_half$/.test(selected.image), c.id + ' 실제 무릎상');
       if (c.id === 'nl_regent') assert.strictEqual(selected.gender, 'f');

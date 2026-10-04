@@ -14,7 +14,7 @@
     return [
       { label: '숙박', icon: 'bed', onClick: function () { return INN.stay(c); } },
       { label: '항해사를 찾는다', icon: 'people', sub: (function () { var n = C.B.tavern.candidates(c).length; return n ? n + '명' : '없다'; })(), onClick: function () { return C.B.tavern.hire(c, innWife()); } },
-      { label: '부하편성', icon: 'people', sub: S().mates.length + '/' + G.MAX_MATES, onClick: function () { return C.B.tavern.organize(); } },
+      { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return C.B.tavern.organize(); } },
       G.MateTalk ? G.MateTalk.menuItem(c) : null,
       { label: '허드렛일', icon: 'tools', onClick: function () { return INN.work(c); } },
       { label: '기능', icon: 'gear', sub: INN.canSave(c) ? '저장 가능' : '', onClick: function () { return INN.func(c); } }
@@ -87,7 +87,9 @@
   MK.stock = function (c) {
     var s = S(), rng = U.makeRng(c.id * 7717 + Math.floor(s.day / 45));
     // 라임 절임은 파는 고장이면 늘 있다 (긴 항해의 목숨줄)
-    return G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && it.reg.indexOf(c.region) >= 0 && (!it.from || s.date.y >= it.from); }).filter(function (it) { return rng() < 0.7 || it.id === 'lime'; });
+    // 처음 떠나는 도시(고향)에는 나침반·육분의가 늘 있다 (G.BALANCE.homeTools)
+    var always = s.player && s.player.home === c.id ? ((G.BALANCE && G.BALANCE.homeTools) || []) : [];
+    return G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && (always.indexOf(it.id) >= 0 || (it.reg.indexOf(c.region) >= 0 && (!it.from || s.date.y >= it.from))); }).filter(function (it) { return rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; });
   };
   /** 경리가 흥정해 둔 값 (이번 방문): {ok, buy, sell} */
   function mkDeal() { var cur = C.current(); return cur && cur.mk && cur.mk.buy ? cur.mk : null; }

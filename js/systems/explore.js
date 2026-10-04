@@ -190,7 +190,7 @@
     var table = [
       ['bottle', 9], ['drift', 7], ['crate', 6], ['dolphins', trop ? 8 : 3], ['fish', 7], ['ghost', 3],
       ['wreck', 5], ['birds', nearLand ? 9 : 1], ['redsky', 5], ['fever', 4], ['whales', cold ? 7 : 4],
-      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', (st.calm ? 8 : 2) + mus * 1.5], ['feast', cook ? 2 + cook * 2 : 0], ['map', 2], ['monster', 1], ['shoal', nearLand ? 6 : 0],
+      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', (st.calm ? 8 : 2) + mus * 1.5 + (G.Cabins ? G.Cabins.fx('rec', 'songs') : 0)], ['feast', (cook ? 2 + cook * 2 : 0) + (cook && G.Cabins ? G.Cabins.fx('galley', 'feast') : 0)], ['map', 2], ['monster', 1], ['shoal', nearLand ? 6 : 0],
       ['siren', trop ? 2.5 : 0.6]
     ];
     // 최근에 겪은 일은 덜 나오게 한다 (같은 사건이 되풀이되지 않도록)

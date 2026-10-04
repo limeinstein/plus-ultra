@@ -1,0 +1,80 @@
+{
+  "description": "추가 도시 12곳의 거리 배경 제작 기록. 내장 ImageGen으로 기존 도시 그림을 변형했으며, 원본은 보존하고 게임용 JPEG를 1600×900으로 저장한다.",
+  "tool": "image_gen.imagegen",
+  "common_prompt": "Edit this existing game background into a distinct location, preserving its painterly realistic historical strategy-game matte-painting style, restrained fine brush texture, warm daylight, blue atmospheric distance and broad layered panorama. Asset: one full-bleed landscape background, exactly 1600x900 if possible, 16:9. The distant settlement and landmarks sit across the middle band, roughly y=30–53%; bottom 45% is quiet landscape/water reserved behind separately overlaid game buildings. No close buildings, foreground characters, text, borders, labels, UI, collage, modern objects, or watermark. Do not simply copy the reference landmarks. ",
+  "cities": [
+    {
+      "id": 286,
+      "reference": "images/backgrounds/186.jpg",
+      "output": "images/backgrounds/286.jpg",
+      "prompt": "Destination: Suzhou (소주), Ming-era Jiangnan canal city. Replace the dry northern plain and mountains with a flat lush green water-country landscape, connected canals and ponds, stone arch bridges, willow banks, a long distant town of white plaster walls and charcoal tiled roofs, one slender pagoda. No sea, no mountains, no futuristic skyline. Open grassy canal bank foreground."
+    },
+    {
+      "id": 287,
+      "reference": "images/backgrounds/175.jpg",
+      "output": "images/backgrounds/287.jpg",
+      "prompt": "Destination: Xiamen (하문), Ming-era Fujian coastal settlement. Broad blue bay foreground, low rocky granite islands, wooded coastal hills, modest traditional southern Chinese tiled-roof harbor village on the distant coast, a small fortified headland and a few tiny distant wooden junks. Keep all architecture distant; avoid a large rock topped with the identical reference pavilion."
+    },
+    {
+      "id": 288,
+      "reference": "images/backgrounds/175.jpg",
+      "output": "images/backgrounds/288.jpg",
+      "prompt": "Destination: Shanghai (상해) before modern development, Ming-era modest river trading town on the Huangpu. Flat alluvial river country, broad calm ochre-blue river foreground, low willow banks, distant whitewashed dark-tiled houses and a small walled town, a few tiny moored traditional river junks. Absolutely no mountains, modern Bund, towers, skyscrapers or large ocean-going European ships. Soft blue horizon and warm cloud light."
+    },
+    {
+      "id": 289,
+      "reference": "images/backgrounds/175.jpg",
+      "output": "images/backgrounds/289.jpg",
+      "prompt": "Destination: Dokdo (독도), uninhabited volcanic sea islets in the age of sail. Replace ALL town buildings and Chinese temples with two rugged grey-brown volcanic rocky islets, one taller jagged peak and one lower crag with steep cliffs and a narrow strait, sparse green vegetation. Mid-distance islands, open deep blue sea in foreground, a few small sea stacks. No settlement, temples, roofs, lighthouse, harbor facilities, flags, humans, boats or modern structures. Calm warm daylight, realistic eroded basalt silhouette.",
+      "revision_prompt": "Edit this image with one precise geographical correction: remove ALL the distant mountain range and distant land behind the two rocky Dokdo islets, replacing that entire background strip with uninterrupted open blue sea meeting a straight distant horizon below the sky. These are isolated offshore islets. Preserve the two main rocky island silhouettes, sparse vegetation, little sea stacks, painterly style, warm clouds, colors and composition exactly. No land at all on the horizon, no new buildings or ships. 16:9 full bleed."
+    },
+    {
+      "id": 290,
+      "reference": "images/backgrounds/59.jpg",
+      "output": "images/backgrounds/290.jpg",
+      "prompt": "Destination: early 17th-century Tomsk (톰스크), a SMALL Siberian wooden frontier settlement above the Tom River. Replace the enormous masonry Russian city with a modest dark timber palisade fort on a grassy low bluff, wooden corner watchtowers and small log cabins, a tiny timber Orthodox chapel, birch and pine taiga, wide river bending left in middle distance. Open grassy earth foreground. All structures small and distant. No grand white cathedrals, red brick Kremlin or city-sized stone walls, no giant mountains."
+    },
+    {
+      "id": 291,
+      "reference": "images/backgrounds/59.jpg",
+      "output": "images/backgrounds/291.jpg",
+      "prompt": "Destination: late 17th-century Irkutsk (이르쿠츠크), a SMALL Siberian timber trading settlement on the Angara river. Replace monumental masonry city with a low stockade fort of dark logs, small cabins and a modest wooden chapel, distant wooded low hills. The broad river runs diagonally in middle distance with a few tiny river skiffs, open meadow near bank in foreground. Warm autumn birch foliage and cool taiga. No giant cathedrals, ornate imperial palaces or modern structures."
+    },
+    {
+      "id": 292,
+      "reference": "images/backgrounds/59.jpg",
+      "output": "images/backgrounds/292.jpg",
+      "prompt": "Destination: 17th-century Yakutsk (야쿠츠크), a very small log stockade settlement by the vast Lena River floodplain in eastern Siberia. Replace ALL monumental red brick walls and white churches with rough-hewn timber palisades, two square log watchtowers, low cabins and one very small wooden chapel. Sparse larch forest, low flat terrain, pale sandy river banks, faded tawny grass and scattered light frost or thin snow patches, subdued cold blue distance with warm late-summer/early-autumn daylight. Open quiet floodplain foreground, no mountains, no large domed cathedrals."
+    },
+    {
+      "id": 293,
+      "reference": "images/backgrounds/59.jpg",
+      "output": "images/backgrounds/293.jpg",
+      "prompt": "Destination: late 17th-century Okhotsk (오호츠크), a tiny remote timber trading post at a cold northeastern coastal river mouth. Completely replace the reference city with a handful of weathered grey-brown log houses, a short wooden stockade and one small wooden watchtower on a gravel spit. Cold pale-blue bay fills lower half, low shingle shore, sparse conifers and distant grey hills, thin sea mist, tiny wooden boats drawn up far away. No grand cathedral, stone castle, big city, modern docks or tall masts in foreground."
+    },
+    {
+      "id": 294,
+      "reference": "images/backgrounds/175.jpg",
+      "output": "images/backgrounds/294.jpg",
+      "prompt": "Destination: Petropavlovsk (페트로파블롭스크) around its 1740 founding, tiny Russian Pacific expedition harbor in Avacha Bay, Kamchatka. REMOVE every Chinese building, pagoda, stone fort and tropical tree. A few very small weathered timber cabins and wooden landing piers along the distant wooded shore; dramatic far-away snow-streaked volcanic cones rise behind the settlement, deep cold-blue sheltered bay across bottom half, a small distant 18th-century wooden sailing vessel. Pine/birch coast and rocky headlands. Restrained scale, vast nature, no later city or grand churches."
+    },
+    {
+      "id": 295,
+      "reference": "images/backgrounds/143.jpg",
+      "output": "images/backgrounds/295.jpg",
+      "prompt": "Destination: Urga (우르가), a 17th-century Mongolian mobile Buddhist monastery encampment. Replace all Islamic-looking fortifications, domes and stone city with a loose cluster of small cream-white felt gers/yurts across a green-gold steppe valley and a modest low timber Buddhist monastery pavilion with muted red pillars and dark curved roof. Soft rounded distant foothills instead of jagged desert mountains. Open grassy plain with a faint earth track in foreground. No minarets, mosque domes, stone city wall, huge temples, modern structures, foreground people."
+    },
+    {
+      "id": 296,
+      "reference": "images/backgrounds/143.jpg",
+      "output": "images/backgrounds/296.jpg",
+      "prompt": "Destination: Hohhot (후허호토), late 16th-century Mongolian trading town at the edge of the steppe. Low distant ochre rammed-earth wall and simple gate, flat town of small earth-colored houses, one modest Buddhist monastery roof with red timber accents and curved tiled eaves, a few white felt gers outside walls; blue-grey distant Daqing mountain ridges and wide tawny grassy plain foreground. Replace Islamic domes and minarets entirely. Open, sparse, earthy Mongolian-Chinese frontier atmosphere, no monumental imperial palace or contemporary city."
+    },
+    {
+      "id": 297,
+      "reference": "images/backgrounds/192.jpg",
+      "output": "images/backgrounds/297.jpg",
+      "prompt": "Destination: Edo (에도), late 15th-/early 16th-century Japanese fishing and river-mouth castle town, before the great metropolis. Replace the large reference temple/tomb-like mound with a small low hilltop timber fortified residence, wooden palisades and sloping dark tiled roofs, modest dispersed fishing village, reed-lined waterways opening to Edo Bay. Low distant blue hills, broad quiet blue bay foreground, a few tiny Japanese fishing skiffs. No large multi-storey white Edo castle keep, skyscrapers, modern bridges, concrete harbor, giant temple complex or crowds."
+    }
+  ]
+}

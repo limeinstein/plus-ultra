@@ -183,6 +183,7 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
+    homeTools: ['compass', 'sextant'],   // 처음 떠나는 도시(제독의 고향) 시장에 늘 있는 항해 도구 — 연도(from)·지역·그날 물량과 상관없이 (js/city/misc.js MK.stock)
     // 선수상: 함대에서 가장 센 덕 + 나머지 배의 덕 × figRest (R.fleetBonus). 폭풍 빈도는 stormFloor 아래로 줄지 않는다 (sea.js)
     figRest: 0.25, stormFloor: 0.35, stormDmgCut: 0.3,
     // 피로 60을 넘으면 속력 × (1 − (피로 − 60) / fatigueDiv) → 피로 100에서 75% (R.fleetMotion)
@@ -205,6 +206,17 @@
     pirateBase: 0.3, pirateCap: 1500, pirateCrew: [0.22, 0.66],
     // 해적선 1척 전리품 기준(금화, 짐칸 200 기준), 나포선을 그 자리에서 팔 때 값의 비율 (battle.js)
     pirateLoot: 1400, prizeSale: 0.8,
+    // 기함의 선실 (js/systems/cabins.js). 고칠 수 있는 선실 수 = (정원 + 내구) ÷ slotDiv, slotMin~slotMax. 방의 힘 = (1 + 특기 단계) × 충성 효율, 같은 방을 여럿 두면 더해지되 cap까지.
+    //   fx: 방의 힘 1마다의 효과 — lookout 발견 거리(°) · chart 해도 넓이(°) · galley/mess/helm 하루 피로 · messD/chapel/rec/deck 하루 규율 · sick 괴혈병 번짐 감소 비율
+    //       rig 속력 비율(최대 rigMax) · repair 하루 기함 수리(내구) · pen 하루 식량(통) · gun 포격 · marine 백병전 비율 · haggle 값 깎기 성공률 · wage 급료 감소 비율 · feast/songs 사건 가중
+    //   langDays: 한배에서 지낸 날이 이만큼이면 말 1·2·3단계 (3달·9달·2년), farRate: 방이 멀 때 하루에 쌓이는 몫, cols: 선실 한 줄의 칸 수
+    cabins: { slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, cols: 6, rigMax: 0.08, langDays: [90, 270, 730], farRate: 0.3,
+      fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.01, repair: 0.1, pen: 0.12,
+        gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1 } },
+    // 부하: 수는 제한이 없다. 재산이 급료 warnMonths달 치에 못 미치면 경리·부관이 경고한다. 충성 low 이하면 효율 lowEff, veryLow 이하면 veryLowEff.
+    //   역할도 방도 없는 부하는 달마다 충성 −idleLoyal, 부관이 있으면 급료를 치른 달에 충성이 settle 아래인 부하 +adjutantLoyal.
+    //   충성 0이면 떠나겠다고 나선다 — 붙잡을 확률 persuade + (매력−50)/200 + 웅변 × persuadeSpeech, 붙잡으면 충성 persuadeLoyal
+    mates: { warnMonths: 6, low: 40, lowEff: 0.75, veryLow: 20, veryLowEff: 0.5, idleLoyal: 2, adjutantLoyal: 1, settle: 70, persuade: 0.25, persuadeSpeech: 0.12, persuadeLoyal: 25 },
     // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
     pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
     // 명성 칭호의 문턱: 신참 모험가 · 이름난 모험가 · 저명한 항해가 · 위대한 탐험가 · 대항해자 (예전 400·1600·4000·8000·15000 — 3년이면 끝 칭호였다)
@@ -229,6 +241,25 @@
     //   반란 교섭 「잔치」: 규율 +feastBase + feastPer×(요리+음악), 피로 −feastFatigue, 식량 하루치 × feastFood
     crewCare: { cookFatigue: 0.12, musicDiscipline: 0.15, landCook: 0.15, restBonus: 3, discValue: 0.08, impact: 2, feastBase: 12, feastPer: 6, feastFatigue: 10, feastFood: 2 },
     landCost: { base: 5, perMan: 1, thirsty: 0.5, unpaidFatigue: 6, desert: 0.25, water: [4, 8] },
+    // 짐의 부피·무게 (js/systems/cargo.js). 1통 = 부피 1. wt = 1통의 무게(갈래별, wtGood가 있으면 그 값).
+    // 배가 버티는 무게 = 짐칸 × shipWt. 선원 한 사람 crewWt, 대포 한 문 = 짐칸 차지(load) × gunWt + 포탄 shotWt, 식량·물 supWt, 자재 matWt
+    // keep = 신선하게 파는 날수(갈래별, keepGood가 있으면 그 값, 0 = 상하지 않음). 넘으면 파는 값이 떨어져 두 배에서 decayMin,
+    // 두 배를 넘기면 한 달에 rotMonth만큼 상해 없어진다
+    cargo: {
+      shipWt: 1.3, crewWt: 0.1, gunWt: 1.5, shotWt: 0.25, supWt: 1, matWt: 1.2,
+      wt: { food: 1, drink: 1.2, spice: 0.5, lux: 0.6, fiber: 0.7, cloth: 0.6, ore: 3, metal: 2.5, gem: 0.3, craft: 0.9, arms: 1.8, misc: 1 },
+      wtGood: { salt: 1.6, sugar: 1.1, coal: 2.4, mercury: 3.5, timber: 1.6, horses: 2, guns: 1.5, cannon: 3, glass: 1.1, porcelain: 1.1, faience: 1.2, carpet: 0.9, dye: 0.6, herbs: 0.5, hides: 0.9, fur: 0.5, ivory: 0.8 },
+      keep: { food: 360, spice: 720, lux: 540 },
+      keepGood: { fish: 150, beef: 120, dairy: 150, potato: 240, maize: 300, wheat: 420, rice: 480, beans: 420, olive: 480, palmoil: 480, sugar: 900, honey: 0, salt: 0, beer: 240, clove: 900, nutmeg: 900, horses: 300 },
+      decayMin: 0.5, rotMonth: 0.06
+    },
+    // 교역소 물량과 값의 기울기 (대항해시대 2처럼 큰 배로 많이 실어 나를수록 남게) — rules.js R.supply·onBuy·onSell·buyPrice·sellPrice
+    // 재고 = stock[0] + stock[1] × 도시 크기 · 사면 품귀(dep)가 q / (dep[0] + dep[1] × 크기)만큼 늘고 사는 값 × (1 + depPrice × 품귀)
+    // 팔면 포화(sat)가 q / (sat[0] + sat[1] × 크기)만큼 늘고 파는 값 × e^(−satPrice × 포화). 품귀·포화는 25일마다 절반으로
+    market: { stock: [80, 140], dep: [120, 160], depPrice: 0.45, sat: [160, 140], satPrice: 0.45 },
+    // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
+    // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
+    landPack: { near: 1.2 },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
     // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
     discoveryImpact: {

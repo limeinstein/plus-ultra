@@ -182,7 +182,16 @@
   X.t_tea = function () {
     var g = T.group(), wm = woodMat([120, 80, 40], [160, 110, 60]);
     var box = T.group(T.mesh(new THREE.BoxGeometry(0.6, 0.36, 0.42), wm, 0, 0.18, 0));
-    var label = T.canvas(256, 256, function (c, w, h) { c.fillStyle = '#e8d8b0'; c.fillRect(0, 0, w, h); c.fillStyle = '#b02010'; c.font = 'bold 90px "Noto Serif CJK TC"'; c.textAlign = 'center'; c.fillText('武夷', w / 2, 110); c.fillText('茶', w / 2, 220); });
+    // 글자 대신 찻잎과 차나무 무늬만 넣은 상품 인장. 발견 장면에는 문자가 보이지 않아야 한다.
+    var label = T.canvas(256, 256, function (c, w, h) {
+      c.fillStyle = '#ead9b2'; c.fillRect(0, 0, w, h);
+      c.strokeStyle = '#9c2419'; c.lineWidth = 10; c.strokeRect(18, 18, w - 36, h - 36);
+      c.fillStyle = '#b52a1d';
+      c.beginPath(); c.ellipse(w * 0.5, h * 0.45, 25, 70, -0.5, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.ellipse(w * 0.38, h * 0.55, 20, 58, 0.65, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.ellipse(w * 0.62, h * 0.58, 18, 54, -0.8, 0, Math.PI * 2); c.fill();
+      c.strokeStyle = '#6c1510'; c.lineWidth = 7; c.beginPath(); c.moveTo(w * 0.32, h * 0.78); c.quadraticCurveTo(w * 0.5, h * 0.6, w * 0.67, h * 0.28); c.stroke();
+    });
     box.add(T.mesh(new THREE.PlaneGeometry(0.2, 0.2), M.paper({ map: T.tex(label) }), 0, 0.2, 0.211));
     g.add(box);
     var leafCv = T.pixels(128, 128, function (x, y) { var n = 0.5 + 0.5 * T.noise(x / 3, y / 3); return [30 + n * 30, 26 + n * 26, 14 + n * 10]; });
@@ -482,13 +491,20 @@
   };
   function backdrop(kind) {
     var b = BG[kind] || BG.bazaar;
+    // ImageGen으로 제작한 공통 상품 쇼케이스. run_trade.js가 렌더 전에 텍스처를 로드한다.
+    if (T.TRADE_STAGE_TEXTURE) {
+      var stageMap = T.TRADE_STAGE_TEXTURE.clone(); stageMap.needsUpdate = true;
+      var tint = kind === 'china' ? 0xffddca : kind === 'africa' ? 0xffe9d2 : kind === 'americas' ? 0xffe0b8 : 0xffead4;
+      var stageMat = new THREE.MeshBasicMaterial({ map: stageMap, color: tint, fog: false });
+      var stage = new THREE.Mesh(new THREE.PlaneGeometry(10.125, 4.5), stageMat); stage.position.set(0, 1.45, -2.8);
+      return { mesh: stage, lamp: b.lamp };
+    }
     var cv = T.canvas(1024, 512, function (c, w, h) {
       c.fillStyle = T.paint ? (function () { var gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, b.wall[0]); gr.addColorStop(0.7, b.wall[1]); gr.addColorStop(1, b.wall[0]); return gr; })() : '#000'; c.fillRect(0, 0, w, h);
       // 아치·문·좌판
       for (var i = 0; i < 6; i++) { var x = i * 180 + 40; c.fillStyle = 'rgba(20,10,4,0.55)'; c.beginPath(); c.moveTo(x, h); c.lineTo(x, h * 0.45); c.arc(x + 60, h * 0.45, 60, Math.PI, 0); c.lineTo(x + 120, h); c.fill(); }
       for (i = 0; i < 8; i++) { var ax = i * 140 - 20, ay = T.rr(h * 0.15, h * 0.3); c.fillStyle = T.pick(b.awn); c.beginPath(); c.moveTo(ax, ay); c.lineTo(ax + 150, ay); c.lineTo(ax + 170, ay + 60); c.lineTo(ax - 20, ay + 60); c.fill(); for (var k = 0; k < 8; k++) { c.fillStyle = 'rgba(255,255,255,0.15)'; c.fillRect(ax + k * 20, ay, 10, 60); } }
       for (i = 0; i < 40; i++) PT.blob(c, T.rnd() * w, T.rr(h * 0.55, h), T.rr(20, 60), T.rr(14, 40), 'rgba(' + T.pick(['200,140,60', '160,60,30', '60,90,60', '220,200,160']) + ',0.5)', 0.8);
-      for (i = 0; i < 10; i++) PT.person(c, { x: T.rnd() * w, y: h * T.rr(0.9, 1.0), h: T.rr(150, 220), robe: T.pick(['#3a2a1a', '#6a3a2a', '#2a3a4a', '#8a7a5a']), skin: '#8a5a3a', arm: false });
     });
     var blurred = T.canvas(1024, 512, function (c) { c.filter = 'blur(10px)'; c.drawImage(cv, 0, 0); });
     var m = new THREE.MeshBasicMaterial({ map: T.tex(blurred), color: new THREE.Color(0.55, 0.5, 0.45) });
@@ -506,11 +522,20 @@
       var bd = backdrop(spec.bg); scene.add(bd.mesh);
       // 좌판 탁자
       var top = T.mesh(new THREE.BoxGeometry(2.8, 0.08, 1.3), woodMat([52, 32, 18], [84, 54, 30]), 0, -0.04, 0.1); scene.add(top);
-      var cl = cloth(2.0, 0.9, '#2a120c', function (c, w, h) { c.strokeStyle = '#6a4a20'; c.lineWidth = 10; c.strokeRect(14, 14, w - 28, h - 28); for (var i = 0; i < 30; i++) { c.fillStyle = 'rgba(120,80,30,0.25)'; c.beginPath(); c.arc(T.rnd() * w, T.rnd() * h, 6, 0, 7); c.fill(); } }); cl.position.set(0, -0.014, 0.1); scene.add(cl);
-      scene.add(g);
+      var cl = cloth(2.0, 0.9, '#3a080b', function (c, w, h) { c.strokeStyle = '#b7873f'; c.lineWidth = 10; c.strokeRect(14, 14, w - 28, h - 28); for (var i = 0; i < 30; i++) { c.fillStyle = 'rgba(190,130,45,0.20)'; c.beginPath(); c.arc(T.rnd() * w, T.rnd() * h, 6, 0, 7); c.fill(); } }); cl.position.set(0, -0.014, 0.1); scene.add(cl);
+      // 홈쇼핑 진열대처럼 상품 전체가 부드럽게 돌아가는 깊은 자주색 턴테이블.
+      var hero = new THREE.Group();
+      var platter = T.mesh(new THREE.CylinderGeometry(1.08, 1.13, 0.09, 64), M.lacquer({ color: 0x33070b, roughness: 0.22 }), 0, 0.045, 0.08);
+      var goldRim = T.mesh(new THREE.TorusGeometry(1.08, 0.018, 10, 96), M.gold({ color: 0xd9aa55, roughness: 0.24 }), 0, 0.092, 0.08); goldRim.rotation.x = Math.PI / 2;
+      g.position.y = 0.105; hero.add(platter, goldRim, g); scene.add(hero);
+      // 상품 뒤에만 살짝 보이는 금빛 후광. 물건의 실루엣과 재질을 즉시 읽히게 한다.
+      var haloCv = T.canvas(256, 256, function (c, w, h) { var gr = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(255,220,145,.82)'); gr.addColorStop(.28, 'rgba(255,175,65,.34)'); gr.addColorStop(1, 'rgba(255,140,35,0)'); c.fillStyle = gr; c.fillRect(0, 0, w, h); });
+      var haloMat = new THREE.SpriteMaterial({ map: T.tex(haloCv), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.16 });
+      var halo = new THREE.Sprite(haloMat); halo.position.set(0, 0.48, -0.72); halo.scale.set(2.25, 1.35, 1); scene.add(halo);
       // 조명
       var key = new THREE.SpotLight(0xffd8a8, 60, 0, 0.55, 0.6, 2); key.position.set(-1.6, 2.6, 1.8); key.target.position.set(0, 0.15, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0005; scene.add(key, key.target);
       var rim = new THREE.SpotLight(0xffc890, 30, 0, 0.6, 0.8, 2); rim.position.set(1.8, 1.8, -1.6); rim.target.position.set(0, 0.2, 0); scene.add(rim, rim.target);
+      var sweep = new THREE.SpotLight(0xfff2cf, 0, 0, 0.22, 0.9, 2); sweep.position.set(-2.2, 2.0, 1.25); sweep.target.position.set(-0.9, 0.25, 0); scene.add(sweep, sweep.target);
       var lamp = new THREE.PointLight(bd.lamp, 4, 0, 2); lamp.position.set(0.9, 1.3, 0.6); scene.add(lamp);
       scene.add(new THREE.HemisphereLight(0x806040, 0x100804, 0.35));
       // 등불 (보이는 빛)
@@ -521,18 +546,33 @@
       var pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
       var dot = T.canvas(32, 32, function (c) { PT.blob(c, 16, 16, 15, 15, 'rgba(255,230,180,1)', 0.9); });
       var pts = new THREE.Points(pg, new THREE.PointsMaterial({ size: 0.025, map: T.tex(dot), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.7 })); scene.add(pts);
+      // 금속·보석·유약 표면에서 순차적으로 터지는 별빛. 상품 주변에만 배치한다.
+      var starCv = T.canvas(64, 64, function (c, w, h) { var gr = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(255,255,245,1)'); gr.addColorStop(.16, 'rgba(255,226,155,.95)'); gr.addColorStop(1, 'rgba(255,180,70,0)'); c.fillStyle = gr; c.fillRect(0, 0, w, h); c.fillStyle = 'rgba(255,250,220,.9)'; c.beginPath(); c.moveTo(w / 2, 1); c.lineTo(w * .57, h * .43); c.lineTo(w - 1, h / 2); c.lineTo(w * .57, h * .57); c.lineTo(w / 2, h - 1); c.lineTo(w * .43, h * .57); c.lineTo(1, h / 2); c.lineTo(w * .43, h * .43); c.closePath(); c.fill(); });
+      var starTex = T.tex(starCv), stars = [], starSeeds = [];
+      for (i = 0; i < 12; i++) {
+        var sm = new THREE.SpriteMaterial({ map: starTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+        var sp = new THREE.Sprite(sm), sd = [T.rr(-0.92, 0.92), T.rr(0.2, 0.95), T.rr(-0.18, 0.42), T.rnd(), T.rr(0.07, 0.16)];
+        sp.position.set(sd[0], sd[1], sd[2]); sp.scale.setScalar(0.01); scene.add(sp); stars.push(sp); starSeeds.push(sd);
+      }
       var cam = new THREE.PerspectiveCamera(32, W / H, 0.05, 30);
       var smoke = []; g.traverse(function (m) { if (m.userData && m.userData.smoke) smoke.push(m); });
       return {
         cam: cam, exposure: 1.0,
         frame: function (t) {
           var e = 1 - Math.pow(1 - t, 2.2);
-          var yaw = -0.4 + 0.4 * e, dist = 2.7 - 1.0 * e, hgt = 0.95 - 0.25 * e;
+          var yaw = -0.34 + 0.26 * e, dist = 2.72 - 0.80 * e, hgt = 1.0 - 0.22 * e;
           cam.position.set(Math.sin(yaw) * dist, hgt, Math.cos(yaw) * dist);
-          cam.lookAt(0, 0.2 - 0.04 * e, 0);
-          key.intensity = 30 + 34 * Math.min(1, t * 1.6);
+          cam.lookAt(0, 0.27 - 0.03 * e, 0.05);
+          hero.rotation.y = -0.17 + 0.34 * e;
+          hero.scale.setScalar(0.94 + 0.06 * e);
+          key.intensity = 24 + 54 * Math.min(1, t * 1.7);
+          var sw = Math.max(0, Math.min(1, (t - 0.14) / 0.66));
+          sweep.position.x = -2.2 + 4.4 * sw; sweep.target.position.x = -0.95 + 1.9 * sw;
+          sweep.intensity = 95 * Math.pow(Math.sin(sw * Math.PI), 2);
+          haloMat.opacity = 0.12 + 0.14 * e + 0.03 * Math.sin(t * 10);
           for (var i = 0; i < N; i++) { var s = seeds[i]; pos[i * 3] = s[0] + Math.sin(t * 3 + s[3]) * 0.08; pos[i * 3 + 1] = s[1] + t * 0.25 + Math.sin(t * 5 + s[3]) * 0.03; pos[i * 3 + 2] = s[2]; }
           pg.attributes.position.needsUpdate = true;
+          for (i = 0; i < stars.length; i++) { var ss = starSeeds[i], pulse = Math.pow(Math.max(0, Math.sin((t * 2.25 + ss[3]) * Math.PI * 2)), 10) * e; stars[i].material.opacity = pulse * 0.92; stars[i].scale.setScalar(ss[4] * (0.35 + pulse * 1.2)); }
           smoke.forEach(function (m) { m.lookAt(cam.position); m.position.y = 0.7 + t * 0.08; });
           lampMesh.scale.setScalar(1 + 0.1 * Math.sin(t * 20));
         }

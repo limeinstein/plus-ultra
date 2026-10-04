@@ -377,10 +377,10 @@
   /** 신호에 답하는 사람 (sea.js hail의 who를 바꾼다) */
   SF.captain = function (n, who) {
     var A = G.Art;
-    if (n.exp) return { name: n.exp.who, portrait: A && A.rivalSpec ? A.rivalSpec(n.exp.who) : who.portrait };
+    if (n.exp) return { name: n.exp.who, portrait: A && A.rivalSpec ? A.rivalSpec(n.exp.who) : who.portrait, half: G.Img.chain.rivalHalf(n.exp.who) };
     if (n.captain && n.captain.mate) {
       var m = G.MATE[n.captain.mate];
-      if (m) return { name: m.name, portrait: G.Scenes.mateSpec ? G.Scenes.mateSpec(m.id) : (A && A.mateSpec ? A.mateSpec(m.id) : who.portrait) };
+      if (m) return { name: m.name, portrait: G.Scenes.mateSpec ? G.Scenes.mateSpec(m.id) : (A && A.mateSpec ? A.mateSpec(m.id) : who.portrait), half: G.Img.chain.mateHalf(m.id) };
     }
     return who;
   };
