@@ -102,6 +102,9 @@ FLOOR = {
 
 
 def floor_for(key):
+    # 무릎상(대화창 위에 640px 높이로 서는 그림): 전체 배율을 낮춰도 긴 변 384px 아래로 줄이지 않는다
+    if key.startswith('portraits/') and key.endswith('_half'):
+        return 384
     for pre, side in FLOOR.items():
         if key.startswith(pre):
             return side
