@@ -612,6 +612,14 @@
     }
     return null;
   }
+  /** 그 볼거리 앞으로 카메라와 제독을 옮긴다 */
+  T.focusMark = function (id) {
+    var m = st && st.marks.filter(function (x) { return x.id === id; })[0];
+    if (!m) return Promise.resolve(null);
+    var cx = (m.x + m.cv.width / 2 - W / 2) / 0.72;
+    st.camTo = clampCam(cx);
+    return new Promise(function (res) { setTimeout(res, 650); });
+  };
 
   /* 거리 뒤편의 볼거리(발견물): 그림이 그려진 곳을 누르면 설명을 본다. 앞의 건물이 투명한 자리(하늘)일 때만 건물보다 먼저 잡힌다. */
   var MARK_PX = 0.72;        // 볼거리가 카메라를 따라 움직이는 정도 (draw 와 같다)
@@ -699,7 +707,9 @@
       down = null; el.style.cursor = 'default';
       if (wasDrag) return;
       var it = st.hidden ? null : pickAt(p[0], p[1]);
-      if (it && !it.kind) T.inspect(it);
+      // 아직 찾지 않은 도시 건물 발견물이면 눌러서 발견 (city.lookAt), 그 밖의 볼거리는 들여다보기
+      if (it && !it.kind && it.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(it.d) && !G.Disc.foundByMe(it.id) && G.Disc.built(it.d)) onPick('landmark', it.id);
+      else if (it && !it.kind) T.inspect(it);
       else if (it) onPick(it.kind, it.arg);
       else st.camTo = clampCam(st.camTo + (p[0] < 120 ? -420 : p[0] > W - 120 ? 420 : 0));
     });

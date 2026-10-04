@@ -313,6 +313,22 @@
     creation: [41.884, 12.524], saliera: [48.827, 2.333], urbinovenus: [45.487, 12.345], sistine: [41.9035, 12.456]
   };
   D.forEach(function (d) { var p = SPREAD[d.id]; if (p) { d.lat0 = d.lat; d.lon0 = d.lon; d.lat = p[0]; d.lon = p[1]; } });
+  G.DISC_SPREAD = SPREAD;
+
+  // 동물은 한 점이 아니라 사는 고장에서 만난다 — 찾을 수 있는 범위(r)를 넓히고, 도시 안(거리)이 아니라 도시 밖(뭍 탐험)에서 만난다.
+  // 한자리에서 하루에 둘 이상 나오지 않게 하는 것은 js/systems/discovery.js 의 하루 한 개 규칙.
+  var AR = { land: 1.6, sea: 3.0, outskirts: 1.0 };
+  D.forEach(function (d) {
+    if (!d.animal) return;
+    if (d.how === 'city') { d.homeCity = d.city; delete d.city; d.how = 'land'; d.needHint = false; d.outskirts = true; d.r = AR.outskirts; }
+    else if (d.how === 'land') d.r = Math.max(d.r || 0.6, AR.land);
+    else if (d.how === 'sea') d.r = Math.max(d.r || 2, AR.sea);
+  });
+  // 그 시대 사람이 남긴 개인 작품: 그 사람(G.MATES의 항해사·인물)이 살아 있는 동안에는 그 사람을 만나 이야기하면 발견한다.
+  // [사람 id, 작업을 시작한 해] — 그 해 전에는 아직 없다. 그 사람이 세상을 떠난 뒤에는 예전처럼 도시에서 찾는다.
+  var BY = { monalisa: ['leonardo', 1503], lastsupper: ['leonardo', 1495], creation: ['michelangelo', 1508], david: ['michelangelo', 1501],
+    birthvenus: ['botticelli', 1484], pirireis: ['piri', 1513], rakubowl: ['h_rikyu', 1575], tsukumonasu: ['h_juko', 0], shahnameh: ['h_bihzad', 1522] };
+  D.forEach(function (d) { var b = BY[d.id]; if (b && d.how === 'city') { d.by = b[0]; d.byFrom = b[1]; } });
 
   G.DISCOVERIES = D;
   G.DISC = {}; D.forEach(function (d, i) { d.idx = i; G.DISC[d.id] = d; });

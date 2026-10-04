@@ -426,6 +426,24 @@
 
   // ---------------------------------------------------------------- checks while moving
   /** at sea: check sea discoveries near position */
+  /* 하루 한 개: 한자리(1.5° 안)에서 하루에 발견물이 둘 이상 나오지 않는다. 여럿이 한꺼번에 닿으면 가장 가까운 하나만,
+     나머지는 이튿날부터 (그 자리에 머물거나 지나가면) 하나씩. 자리를 크게 옮기면 그날 또 찾을 수 있다. */
+  D.DAY_SPOT = 1.5;
+  function dayCapped(lon, lat) {
+    var t = S().discDay; if (!t) return false;
+    return t.k === U.dayIndex(S().date) && G.Geo.dist(lon, lat, t.lon, t.lat) < D.DAY_SPOT;
+  }
+  function oneToday(hits, lon, lat) {
+    if (!hits.length) return hits;
+    if (dayCapped(lon, lat)) return [];
+    var best = hits.slice().sort(function (a, b) {
+      var da = a.lon == null ? 99 : G.Geo.dist(lon, lat, a.lon, a.lat), db = b.lon == null ? 99 : G.Geo.dist(lon, lat, b.lon, b.lat);
+      return da - db;
+    })[0];
+    S().discDay = { k: U.dayIndex(S().date), lon: lon, lat: lat };
+    return [best];
+  }
+  D.dayCapped = dayCapped;
   D.checkSea = function (lon, lat) {
     var s = S(), hits = [];
     G.DISCOVERIES.forEach(function (d) {
@@ -445,7 +463,7 @@
     var winter = s.date.m >= 10 || s.date.m <= 3;
     if (lat > 62 && winter && U.chance(0.03)) sp('aurora');
     if (G.Geo.dist(lon, lat, -170, -5) < 2.5 && s.hints.mu) sp('mu');
-    return hits.filter(function (x, i) { return hits.indexOf(x) === i; });
+    return oneToday(hits.filter(function (x, i) { return x && hits.indexOf(x) === i; }), lon, lat);
   };
   /** on land expedition */
   D.checkLand = function (lon, lat) {
@@ -459,11 +477,28 @@
       else if (dist < nearD) { nearD = dist; near = d; }
     });
     if (near && G.Reel && nearD < Math.max(1.2, near.r * 4)) G.Reel.prefetch(near);   // 가까워지면 발견 장면 판을 미리 받아 둔다
-    return { hits: hits, near: near, nearDist: nearD };
+    return { hits: oneToday(hits, lon, lat), near: near, nearDist: nearD };
+  };
+  /** 그 작품을 남긴 사람을 지금 만날 수 있는가 (살아서 활약하는 해이고, 떠나지 않았다) */
+  D.artistAround = function (d) {
+    var m = d && d.by && G.MATE && G.MATE[d.by], s = S(); if (!m) return false;
+    var y = s.date.y; return y >= m.y[0] && y <= m.y[1] && !s.flags['gone_' + m.id];
+  };
+  /** 그 사람을 만났을 때 찾는 작품들 — 작업을 시작한 해부터 */
+  D.checkPerson = function (mateId) {
+    var y = S().date.y;
+    return G.DISCOVERIES.filter(function (d) { return d.by === mateId && !D.foundByMe(d.id) && y >= (d.byFrom || 0) && D.artistAround(d); });
+  };
+  /** 도시 안 건물 발견물(유적·건축): 들어가는 것만으로는 안 찾고, 그 건물(거리의 볼거리나 메뉴의 이름)을 눌러야 찾는다 */
+  D.isBuilding = function (d) { return d && d.how === 'city' && d.cat === 'ruin'; };
+  D.cityBuildings = function (cityId) {
+    return G.DISCOVERIES.filter(function (d) { return D.isBuilding(d) && d.city === cityId && !D.foundByMe(d.id) && D.built(d); });
   };
   D.checkCity = function (cityId) {
     return G.DISCOVERIES.filter(function (d) {
       if (d.how !== 'city' || d.city !== cityId || D.foundByMe(d.id) || !D.needMet(d)) return false;
+      if (D.isBuilding(d)) return false;                        // 건물은 눌러서 (D.cityBuildings)
+      if (d.by && D.artistAround(d)) return false;              // 작가가 살아 있으면 그 사람을 만나서 (D.checkPerson)
       if (d.needHint && !S().hints[d.id]) return false;        // 동물: 이야기를 듣고 나서야 거리에서 알아본다
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return false; }   // 신기루
       return true;

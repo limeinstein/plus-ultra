@@ -25,7 +25,7 @@ const GAME = pathToFileURL(path.join(__dirname, '..', process.env.PAGE || 'index
         const lim = h === 'land/land' ? 0.12 : h === 'sea/sea' ? 0.3 : 0.002;
         if (d < lim) bad.push(a.id + '·' + b.id + ' ' + d.toFixed(3) + '° < ' + lim + ' (' + h + ')');
       }
-      const moved = G.DISCOVERIES.filter(d => d.lat0 != null);
+      const moved = G.DISCOVERIES.filter(d => G.DISC_SPREAD && G.DISC_SPREAD[d.id]);
       const wrong = moved.filter(d => d.how === 'land' ? !G.Geo.isLand(d.lon, d.lat) : d.how === 'sea' ? G.Geo.isLand(d.lon, d.lat) : false)
         .map(d => d.id + ' (' + d.how + ' ' + d.lat + ',' + d.lon + ')');
       return { n: L.length, bad, moved: moved.length, wrong };

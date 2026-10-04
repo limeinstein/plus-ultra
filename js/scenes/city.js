@@ -206,7 +206,7 @@
     var s = S(), c = C.city();
     cur = null; token++;
     UI.clearScreen();
-    if (G.Town.active()) { G.Town.hidden(false); UI.add(G.Town.catcher(function (kind, arg) { C.visit(kind, arg); })); }
+    if (G.Town.active()) { G.Town.hidden(false); UI.add(G.Town.catcher(function (kind, arg) { if (kind === 'landmark') C.lookAt(arg); else C.visit(kind, arg); })); }
     else G.Game.setScene(C.view(c));
     G.Game.cityHud();
     var owner = R.cityOwner(c), m = R.market(c.id);
@@ -218,6 +218,10 @@
     UI.add(ban);
     var items = C.buildings(c).map(function (b) {
       return { label: b.name, icon: b.icon, onClick: function () { C.visit(b.kind, b.arg); } };
+    });
+    // 도시 안 건물 발견물: 그 건물을 눌러야 찾는다 (거리의 볼거리를 눌러도 같다)
+    if (G.Disc.cityBuildings) G.Disc.cityBuildings(c.id).forEach(function (d) {
+      items.push({ label: d.name, icon: 'star', onClick: function () { C.lookAt(d.id); } });
     });
     UI.cmdMenu(c.name, '가고 싶은 곳을 고르십시오', items, { top: 72 });
     // bottom info row
@@ -347,11 +351,29 @@
   };
   /** 건물에 들어갔을 때: 이 도시의 발견물(예술품·건축·명물)을 찾는다. 성문은 나가는 길이라 빼고, 어느 건물이든 처음 들어간 곳에서 눈에 띈다 */
   C.findInside = async function (c, kind) {
+    // 함대에 있는 그 시대 작가(항해사)의 작품: 같이 다니는 동안 보여 준다
+    var S0 = S(); var TV = C.B.tavern; if (G.Disc.checkPerson && TV && TV.artWorks) for (var k = 0; k < S0.mates.length; k++) { var md = G.MATE[S0.mates[k].id]; if (md && G.Disc.checkPerson(md.id).length) await TV.artWorks(md); }
     var ds = G.Disc.checkCity(c.id);
     for (var i = 0; i < ds.length; i++) {
       if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(ds[i]))) await C.mate(U.pick(['제독, 이것 좀 보십시오! ', '제독, 저쪽을 보십시오! ']) + '소문으로만 듣던 ' + U.eul(ds[i].name).replace(ds[i].name, '「' + ds[i].name + '」') + ' 이 눈으로 보게 되다니...');
       await G.Disc.find(ds[i], 'city');
     }
+  };
+  /** 도시 안 건물 발견물을 눌렀을 때: 그 앞으로 걸어가 바라보고 발견한다 */
+  C.lookAt = async function (id) {
+    if (busy || UI.busy()) return;
+    var d = G.DISC[id], c = C.city();
+    if (!d || !c) return;
+    if (G.Disc.foundByMe(id)) { UI.toast('「' + d.name + '」 — 이미 찾은 곳이다.', 'star'); return; }
+    if (!G.Disc.isBuilding(d) || d.city !== c.id || !G.Disc.built(d)) return;
+    busy = true;
+    try {
+      if (G.Town.active() && !G.Town.hidden() && G.Town.focusMark) await G.Town.focusMark(id);
+      if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(d))) await C.mate(U.pick(['제독, 저 건물을 보십시오! ', '제독, 가까이 와서 보니 ']) + '소문으로만 듣던 「' + d.name + '」입니다.');
+      await G.Disc.find(d, 'city');
+    } catch (e) { console.error(e); }
+    busy = false;
+    if (G.Game.scene === C && !cur) C.main();
   };
   function plaque(B, c, arg) {
     var old = U.$('.bld-plaque'); if (old) old.remove();

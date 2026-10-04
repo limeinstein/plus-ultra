@@ -162,7 +162,12 @@
     var d = G.DISC[k.disc];
     if (!d) return '그런 이야기는 들어 본 적이 없네.';
     G.Disc.addHint(d.id, 'contract:' + k.sponsor);
-    if (d.how === 'city') { var cc = G.CITY_DATA[d.city]; return src + d.hint + ' ' + (cc.id === c.id ? '바로 이 도시일세. ' : cc.name + '에 가면 ') + '건물들을 하나하나 둘러보면 눈에 띌 걸세.'; }
+    if (d.how === 'city') {
+      var cc = G.CITY_DATA[d.city], here = cc.id === c.id ? '바로 이 도시일세. ' : cc.name + '에 가면 ';
+      if (d.by && G.Disc.artistAround && G.Disc.artistAround(d)) { var am = G.MATE[d.by]; return src + d.hint + ' 그걸 만든 ' + am.name + U.jx(am.name, '을/를') + ' 만나 이야기해 보게. 요즘 어디서 지내는지는 술집마다 소문이 다르더군.'; }
+      if (G.Disc.isBuilding && G.Disc.isBuilding(d)) return src + d.hint + ' ' + here + '거리를 걷다 그 건물 앞에 가서 직접 보게.';
+      return src + d.hint + ' ' + here + '건물들을 하나하나 둘러보면 눈에 띌 걸세.';
+    }
     if (d.how === 'trade' || d.how === 'special' || d.lon == null) return src + d.hint;
     T.markRumour(c, d);
     return src + d.hint + ' ' + T.whereText(c, d);
@@ -301,7 +306,28 @@
   T.meetMate = async function (c, m) {
     var v = await UI.ask('[' + m.name + ']' + U.jx(m.name, '이/가') + ' 술을 마시고 있다.', [{ label: '말을 건다', value: 1 }, { label: '무시한다', value: 0 }], {});
     if (!v) return;
+    await T.artWorks(m);
     await T.talkMate(c, m);
+  };
+  /** 그 시대 사람의 개인 작품: 그린(만든) 사람을 만나 이야기하면 그 작품을 발견한다 (G.Disc.checkPerson) */
+  var ART_LINE = {
+    monalisa: '피렌체의 한 부인을 그리고 있습니다. 벌써 몇 해째 붓을 놓지 못하고 있지요. 저 미소를 아직 다 옮기지 못했거든요.',
+    lastsupper: '밀라노 수도원 식당 벽에 「너희 가운데 하나가 나를 팔리라」 하는 순간을 그렸습니다. 열두 사람의 얼굴이 저마다 다르게 놀라지요.',
+    creation: '교황 성하께서 시스티나 예배당 천장을 맡기셨습니다. 날마다 비계 위에 누워 창세기를 그리느라 목이 굳어 버렸소.',
+    david: '모두 버린 대리석 덩어리 속에 거인을 쓰러뜨릴 소년이 있었소. 나는 그를 꺼내 주었을 뿐이오.',
+    birthvenus: '메디치 가문을 위해 바다에서 태어나는 여신을 그렸습니다. 조개껍데기를 타고 바람에 실려 뭍에 닿는 순간이지요.',
+    pirireis: '내가 모은 지도들을 모두 겹쳐 한 장에 그렸소. 제노바 사람 콜롬보의 지도도 들어 있지. 서쪽 바다 건너 새 땅까지.',
+    rakubowl: '물레를 쓰지 않고 손으로 빚게 했소. 검고 투박하지만, 손에 쥐면 차 한 잔이 온 세상이 되지.',
+    tsukumonasu: '가지 모양의 작은 차통이오. 성 하나와 바꾸겠다는 사람도 있었지만, 다도의 마음은 값으로 매길 수 없소.',
+    shahnameh: '샤 타흐마스프의 『샤나메』에 그림을 그려 넣는 일을 이끌고 있소. 영웅 로스탐의 이야기가 이백 장이 넘는 그림이 될 것이오.'
+  };
+  T.artWorks = async function (m) {
+    if (!G.Disc || !G.Disc.checkPerson) return;
+    var ds = G.Disc.checkPerson(m.id);
+    for (var i = 0; i < ds.length; i++) {
+      await UI.say(ART_LINE[ds[i].id] || ('제가 만든 「' + ds[i].name + '」를 보여 드리지요.'), T.mateSpeaker(m));
+      await G.Disc.find(ds[i], 'city');
+    }
   };
 
   /** 서로 아는 말 가운데 가장 잘 통하는 것 — {lv:0~3, li:언어번호} */
