@@ -1,4 +1,4 @@
-/* 발견한 유적을 항해·해도·육상 탐험 지도에 표시하는 투명 미니어처.
+/* 발견한 유적·자연 경관을 항해·해도·육상 탐험 지도에 표시하는 투명 미니어처.
    도시 안에서 찾는 발견물은 거리 화면에 있으므로 지도에는 그리지 않는다. */
 (function (G) {
   'use strict';
@@ -10,12 +10,15 @@
     ['map-discoveries/ruins-1', ['carnac', 'stonehenge', 'mycenae', 'delphi', 'knossos', 'pyramid', 'giza', 'kings', 'thebes', 'abusimbel', 'troy', 'ishtar', 'babel']],
     ['map-discoveries/ruins-2', ['persepolis', 'mohenjo', 'angkor', 'yungang', 'qinshi', 'greatwall', 'qianling', 'muryeong', 'bulguksa', 'seokguram', 'munmu', 'fertile', 'borobudur']],
     ['map-discoveries/ruins-3', ['tula', 'nazca', 'tiwanaku', 'poitiers', 'montstmichel', 'stave', 'rusch', 'prester', 'cappadocia', 'edom', 'ur', 'petra', 'brendan']],
-    ['map-discoveries/ruins-4', ['cibola', 'ark', 'tajmahal', 'qutb', 'madurai', 'shwedagon', 'konjiki', 'pueblo', 'machupicchu', 'sacsay', 'moai', 'mu', 'ananda']]
+    ['map-discoveries/ruins-4', ['cibola', 'ark', 'tajmahal', 'qutb', 'madurai', 'shwedagon', 'konjiki', 'pueblo', 'machupicchu', 'sacsay', 'moai', 'mu', 'ananda']],
+    ['map-discoveries/nature-1', ['pamukkale', 'huangshan', 'uluru', 'canyon', 'monument', 'niagara', 'iguazu', 'gibraltar', 'matterhorn', 'vihren', 'gullfoss', 'eyjafjalla', 'sinai', 'kilimanjaro', 'lengai', 'solomon']],
+    ['map-discoveries/nature-2', ['adamspeak', 'flowers', 'kailash', 'machapuchare', 'everest', 'zhangjiajie', 'seongsan', 'nachi', 'fuji', 'reef', 'mapuavaea', 'bermuda', 'youth', 'bluehole', 'barringer', 'redwood']],
+    ['map-discoveries/nature-3', ['craterlake', 'devilstower', 'oldfaithful', 'joatinga', 'roraima', 'vinicunca', 'cerrorico', 'torrespaine', 'corryvreckan', 'maelstrom', 'icebergs', 'surtsey', 'sargasso', 'milkysea']]
   ];
   var POS = {};
   SHEETS.forEach(function (s) { s[1].forEach(function (id, i) { POS[id] = { key: s[0], slot: i }; }); });
 
-  DI.isMapLandmark = function (d) { return !!(d && d.cat === 'ruin' && d.how !== 'city' && POS[d.id]); };
+  DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && POS[d.id]); };
   DI.visible = function () {
     if (!G.DISCOVERIES || !G.Disc) return [];
     return G.DISCOVERIES.filter(function (d) { return DI.isMapLandmark(d) && G.Disc.foundByMe(d.id); });

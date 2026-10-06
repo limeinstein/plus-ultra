@@ -678,6 +678,7 @@
     if (res === 'win') {
       s.stats.wins++;
       if (G.SeaFolk) G.SeaFolk.afterBattle(st.npc, res, lines);   // 탐험 함대를 꺾으면 그 항해가 한 해 늦어진다
+      if (G.Captains) G.Captains.afterBattle(st.npc, res, st.ships, lines);   // 이름난 선장·해적의 기함을 나포하면 사로잡는다 (seacaptains.js)
       if (G.Court) G.Court.afterBattle(st.npc, res, st.ships, lines);   // 왕명: 나포·해적 토벌·왕녀 구출
       var gold = 0, caps = [];
       st.ships.forEach(function (b) {

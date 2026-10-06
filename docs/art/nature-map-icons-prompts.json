@@ -1,0 +1,70 @@
+{
+  "tool": "내장 ImageGen",
+  "reference": "images/map-discoveries/ruins-1.png",
+  "sheets": [
+    {
+      "file": "nature-1.png",
+      "subjects": [
+        "Pamukkale: white scalloped travertine terraces filled with turquoise pools",
+        "Huangshan: rugged gray peaks with sculptural pine trees",
+        "Uluru: massive rounded rust-red sandstone monolith",
+        "Grand Canyon: layered red cliffs flanking a narrow turquoise river",
+        "Monument Valley: three tall red sandstone buttes on desert ground",
+        "Niagara Falls: broad horseshoe waterfall with white spray",
+        "Iguazu Falls: many waterfalls across a green jungle gorge",
+        "Gibraltar: tall pale limestone promontory beside blue water",
+        "Matterhorn: a single sharp snowy triangular Alpine horn",
+        "Vihren: white marble pyramidal mountain with pine trees at its foot",
+        "Gullfoss: a double cascade dropping into a narrow rocky fissure",
+        "Eyjafjallajokull: broad glacier-capped volcanic mountain",
+        "Mount Sinai: rugged red granite desert mountain",
+        "Kilimanjaro: broad snow-capped volcanic massif over dry grassland",
+        "Ol Doinyo Lengai: steep volcanic cone with white ash coating",
+        "Solomon's Mines: rocky African hillside with small ancient dark mine openings and tiny gold ore accents"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: transparent PNG game map sprite atlas. Edit the reference atlas: replace EVERY ancient building icon with the specified natural-landmark miniature. Preserve the reference's realistic hand-painted miniature rendering, isometric elevated three-quarter perspective, crisp silhouettes, earthy colors, warm upper-left daylight, delicate dark contour and detailed rock texture. Make a SQUARE image with exactly 4 columns by 4 rows of equal square cells. Each object centered in its cell, occupies about 80% of cell width/height with at least 10% transparent margin on every side; no overlap between cells. All cells must align precisely to the regular 4x4 grid. Terrain patches have organic irregular edges, no square tiles or pedestals. Water landmarks use compact irregular water patches with soft isolated edges. TRUE TRANSPARENT ALPHA background, no colored background, no checkerboard, no grid lines, no labels, no text, no border, no people, no modern buildings. Recognizable at 42 pixels. Replace old ruins entirely; do not preserve any ruin objects. Cell order is row-major, left to right, top to bottom:\n1. Pamukkale: white scalloped travertine terraces filled with turquoise pools\n2. Huangshan: rugged gray peaks with sculptural pine trees\n3. Uluru: massive rounded rust-red sandstone monolith\n4. Grand Canyon: layered red cliffs flanking a narrow turquoise river\n5. Monument Valley: three tall red sandstone buttes on desert ground\n6. Niagara Falls: broad horseshoe waterfall with white spray\n7. Iguazu Falls: many waterfalls across a green jungle gorge\n8. Gibraltar: tall pale limestone promontory beside blue water\n9. Matterhorn: a single sharp snowy triangular Alpine horn\n10. Vihren: white marble pyramidal mountain with pine trees at its foot\n11. Gullfoss: a double cascade dropping into a narrow rocky fissure\n12. Eyjafjallajokull: broad glacier-capped volcanic mountain\n13. Mount Sinai: rugged red granite desert mountain\n14. Kilimanjaro: broad snow-capped volcanic massif over dry grassland\n15. Ol Doinyo Lengai: steep volcanic cone with white ash coating\n16. Solomon's Mines: rocky African hillside with small ancient dark mine openings and tiny gold ore accents"
+    },
+    {
+      "file": "nature-2.png",
+      "subjects": [
+        "Adam's Peak: steep emerald forest-covered cone mountain",
+        "Valley of Flowers: flower-filled green Himalayan valley below snowy peaks",
+        "Mount Kailash: distinct squared snow pyramid with dark horizontal rock bands",
+        "Machapuchare: double snowy summit shaped like a fish tail",
+        "Mount Everest: towering angular snowy massif with a ridge plume",
+        "Zhangjiajie: several thin sandstone pillars topped by green foliage",
+        "Seongsan Ilchulbong: squat green crown-shaped coastal volcanic crater",
+        "Nachi Falls: tall single white waterfall in dark green forest, tiny red pagoda alongside",
+        "Mount Fuji: elegant symmetrical volcano with a white snowcap",
+        "Great Barrier Reef: curved coral reefs in shallow turquoise water, coral pink accents",
+        "Mapu a Vaea: black coastal rock ledges with white blowhole water jets",
+        "Bermuda Triangle: isolated deep-blue swirling sea patch with a small mysterious mist cloud, no symbols",
+        "Fountain of Youth: sparkling blue natural spring among lush forest and limestone rocks",
+        "Great Blue Hole: perfectly round dark-blue sinkhole surrounded by turquoise circular reef",
+        "Barringer Crater: deep round meteor crater in rust-beige desert rock",
+        "Coast Redwood Forest: compact stand of towering reddish trunks with dense green crowns"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: transparent PNG game map sprite atlas. Edit the reference atlas: replace EVERY ancient building icon with the specified natural-landmark miniature. Preserve the reference's realistic hand-painted miniature rendering, isometric elevated three-quarter perspective, crisp silhouettes, earthy colors, warm upper-left daylight, delicate dark contour and detailed rock texture. Make a SQUARE image with exactly 4 columns by 4 rows of equal square cells. Each object centered in its cell, occupies about 80% of cell width/height with at least 10% transparent margin on every side; no overlap between cells. All cells must align precisely to the regular 4x4 grid. Terrain patches have organic irregular edges, no square tiles or pedestals. Water landmarks use compact irregular water patches with soft isolated edges. TRUE TRANSPARENT ALPHA background, no colored background, no checkerboard, no grid lines, no labels, no text, no border, no people, no modern buildings. Recognizable at 42 pixels. Replace old ruins entirely; do not preserve any ruin objects. Cell order is row-major, left to right, top to bottom:\n1. Adam's Peak: steep emerald forest-covered cone mountain\n2. Valley of Flowers: flower-filled green Himalayan valley below snowy peaks\n3. Mount Kailash: distinct squared snow pyramid with dark horizontal rock bands\n4. Machapuchare: double snowy summit shaped like a fish tail\n5. Mount Everest: towering angular snowy massif with a ridge plume\n6. Zhangjiajie: several thin sandstone pillars topped by green foliage\n7. Seongsan Ilchulbong: squat green crown-shaped coastal volcanic crater\n8. Nachi Falls: tall single white waterfall in dark green forest, tiny red pagoda alongside\n9. Mount Fuji: elegant symmetrical volcano with a white snowcap\n10. Great Barrier Reef: curved coral reefs in shallow turquoise water, coral pink accents\n11. Mapu a Vaea: black coastal rock ledges with white blowhole water jets\n12. Bermuda Triangle: isolated deep-blue swirling sea patch with a small mysterious mist cloud, no symbols\n13. Fountain of Youth: sparkling blue natural spring among lush forest and limestone rocks\n14. Great Blue Hole: perfectly round dark-blue sinkhole surrounded by turquoise circular reef\n15. Barringer Crater: deep round meteor crater in rust-beige desert rock\n16. Coast Redwood Forest: compact stand of towering reddish trunks with dense green crowns"
+    },
+    {
+      "file": "nature-3.png",
+      "subjects": [
+        "Crater Lake: round deep-blue lake in volcanic caldera, tiny central island",
+        "Devils Tower: isolated vertical fluted gray rock tower with green foothill",
+        "Old Faithful: tall white geyser jet from pale mineral ground",
+        "Joatinga Coast: lush green headland and granite rocks with a curved white beach",
+        "Mount Roraima: sheer flat-topped sandstone plateau with green crown and small waterfalls",
+        "Vinicunca: mountain ridge with diagonal bands of red ochre green gold",
+        "Cerro Rico: reddish conical mineral mountain with tiny dark old mine openings",
+        "Torres del Paine: three sharp granite spires above a turquoise lake",
+        "Corryvreckan whirlpool: powerful white-edged tidal whirlpool between two small rugged Scottish rocks",
+        "Maelstrom: dark teal circular swirling ocean with several white spiral foam arms",
+        "Icebergs: several angular white and pale blue floating ice mountains",
+        "Surtsey: small newborn black volcanic island, glowing crater and modest smoke plume",
+        "Sargasso Sea: irregular blue ocean patch filled with olive-gold floating seaweed",
+        "Milky Sea: irregular dark teal ocean patch with luminous pearly cyan ripples"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: transparent PNG game map sprite atlas. Edit the reference atlas: replace EVERY ancient building icon with the specified natural-landmark miniature. Preserve the reference's realistic hand-painted miniature rendering, isometric elevated three-quarter perspective, crisp silhouettes, earthy colors, warm upper-left daylight, delicate dark contour and detailed rock texture. Make a SQUARE image with exactly 4 columns by 4 rows of equal square cells. Each object centered in its cell, occupies about 80% of cell width/height with at least 10% transparent margin on every side; no overlap between cells. All cells must align precisely to the regular 4x4 grid. Terrain patches have organic irregular edges, no square tiles or pedestals. Water landmarks use compact irregular water patches with soft isolated edges. TRUE TRANSPARENT ALPHA background, no colored background, no checkerboard, no grid lines, no labels, no text, no border, no people, no modern buildings. Recognizable at 42 pixels. Replace old ruins entirely; do not preserve any ruin objects. Cell order is row-major, left to right, top to bottom:\n1. Crater Lake: round deep-blue lake in volcanic caldera, tiny central island\n2. Devils Tower: isolated vertical fluted gray rock tower with green foothill\n3. Old Faithful: tall white geyser jet from pale mineral ground\n4. Joatinga Coast: lush green headland and granite rocks with a curved white beach\n5. Mount Roraima: sheer flat-topped sandstone plateau with green crown and small waterfalls\n6. Vinicunca: mountain ridge with diagonal bands of red ochre green gold\n7. Cerro Rico: reddish conical mineral mountain with tiny dark old mine openings\n8. Torres del Paine: three sharp granite spires above a turquoise lake\n9. Corryvreckan whirlpool: powerful white-edged tidal whirlpool between two small rugged Scottish rocks\n10. Maelstrom: dark teal circular swirling ocean with several white spiral foam arms\n11. Icebergs: several angular white and pale blue floating ice mountains\n12. Surtsey: small newborn black volcanic island, glowing crater and modest smoke plume\n13. Sargasso Sea: irregular blue ocean patch filled with olive-gold floating seaweed\n14. Milky Sea: irregular dark teal ocean patch with luminous pearly cyan ripples\nCells 15 and 16: leave completely transparent, empty."
+    }
+  ]
+}

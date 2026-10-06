@@ -337,7 +337,11 @@
     // 후원자들은 새 제독을 처음부터 다시 믿어야 한다 — 신뢰가 30%만 남는다
     if (G.Succession) G.Succession.heir();
     var lg = p.lg.map(function (v, i) { return Math.max(k.lg[i] || 0, i === R.nativeLang(p.nation) ? 3 : Math.floor(v / 2)); });
+    // 새 제독의 모습: 아버지의 생김새(걷는 그림·일기토·스무 살 뒤의 얼굴)를 잇고, 아이 때의 그림 폴더를 기억한다 (G.Img.heirKid — 얼굴·전신상)
+    var heirLook = G.Img.heroLook ? G.Img.heroLook(p) : (p.look || 'admiral');
+    var heirArt = { sex: k.sex === 'f' ? 'f' : 'm', folder: (G.HomeLife ? G.HomeLife.folder(k) : '') || '' };
     s.player = {
+      look: heirLook, heir: heirArt,
       name: k.name, nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
       luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), fameBy: p.fameBy ? U.clone(p.fameBy) : undefined,   // 갈래의 비율은 그대로 (G.Fame.sync가 줄어든 합에 맞춘다)
       notoriety: Math.round(p.notoriety * 0.3), gold: p.gold, bank: p.bank,

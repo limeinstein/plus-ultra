@@ -24,7 +24,10 @@
     { id: 'faience', name: '유럽 도기', cat: 'craft', p: 48, life: 0, el: 0.75 },
     { id: 'cnsilk', name: '중국 비단', cat: 'cloth', p: 118, life: 0, el: 0.95 },
     { id: 'calico', name: '인도 캘리코', cat: 'cloth', p: 44, life: 0, el: 0.7 },
-    { id: 'eaart', name: '동양 서화', cat: 'craft', p: 160, life: 0, el: 0.85 }
+    { id: 'eaart', name: '동양 서화', cat: 'craft', p: 160, life: 0, el: 0.85 },
+    // 2026-10-06 교역품 발견물(바나나·고구마)과 함께 더함 — js/data/moredisc.js
+    { id: 'banana', name: '바나나', cat: 'food', p: 12, life: 30, el: 0.6 },
+    { id: 'sweetpotato', name: '고구마', cat: 'food', p: 9, life: 150, el: 0.6, nw: 1 }
   ];
   /** 이름을 지역에 맞게 */
   var RENAME = { porcelain: '중국 도자기' };
@@ -38,6 +41,9 @@
   };
   /** 산지에 더해 이 도시들도 만든다 (채색 도기: 피렌체 마욜리카) */
   var ADD = { '피렌체': ['faience'] };
+  // 바나나: 동남아시아·아프리카 / 고구마: 신대륙
+  ['말라카', '브루나이', '반탐', '테르나테', '암보이나', '아친', '잔지바르', '몸바사', '말린디', '산토메', '시에라리온', '르완다'].forEach(function (nm) { (ADD[nm] = ADD[nm] || []).push('banana'); });
+  ['산토도밍고', '아바나', '산티아고', '자메이카', '쿠마나', '카르타헤나', '리마', '파나마', '베라크루스', '캄페체'].forEach(function (nm) { (ADD[nm] = ADD[nm] || []).push('sweetpotato'); });
 
   /** 중계무역 항구: 도시 이름 → [물건 id, …] 또는 {id, from} */
   var RELAY = {

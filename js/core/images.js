@@ -468,6 +468,9 @@
     if (!p) { var s = G.Game && G.Game.state; p = s && s.player; }
     if (!p) return 'admiral';
     if (p.look) return p.look;
+    // 뒤를 이은 아들(옛 저장): 아버지의 생김새 폴더에서 온 그림이면 그 생김새를 잇는다
+    var hk = I.heirKid(p);
+    if (hk && hk.sex !== 'f' && hk.folder && I.has(FACE + hk.folder)) return hk.folder;
     // 옛 저장 파일은 초상에 못 박힌 젊은 얼굴이나 seed의 얼굴 번호에서 직접 알아낸다.
     // A.portraitKeys는 현재 나이에 따라 40대 얼굴을 돌려주므로 여기서 부르면 서로 재귀한다.
     var spec = p.portrait || {}, keys = spec.img ? [].concat(spec.img) : [];
@@ -495,9 +498,34 @@
     }
     return age != null && age >= 40;
   };
-  /** 대화창 얼굴: 40대 그림이 있으면 먼저, 없으면 고른 젊은 얼굴. */
+  /** 뒤를 이은 자녀(2대부터)의 가족 그림 정보 {sex, folder} — 저장된 player.heir, 옛 저장은 초상에 붙은 가족 그림 이름에서 알아낸다. 1대 제독은 null */
+  I.heirKid = function (p) {
+    if (!p) { var s = G.Game && G.Game.state; p = s && s.player; }
+    if (!p || !(p.generation > 1)) return null;
+    if (p.heir) return p.heir;
+    var keys = [].concat((p.portrait && p.portrait.img) || []), m = null;
+    keys.some(function (x) { m = /^portraits\/family\/(?:([a-z_]+)\/)?(son|daughter)/.exec(String(x)); return !!m; });
+    return m ? { sex: m[2] === 'daughter' ? 'f' : 'm', folder: m[1] || '' } : null;
+  };
+  /** 뒤를 이은 자녀가 제독이 되었을 때의 얼굴·무릎상(half) 후보 — portraits/family/<폴더>/son_age15(_half) → son_age15(_half).
+      아들은 heirYoung(20)살이 되기 전까지만 소년의 모습이고 그 뒤로는 아버지의 생김새(젊은 얼굴 → 40대 얼굴)를 잇는다. 딸은 늘 딸의 그림. 해당 없으면 null */
+  function heirChain(p, half, age) {
+    var hk = I.heirKid(p); if (!hk) return null;
+    if (hk.sex !== 'f') {
+      if (age == null) { var s = G.Game && G.Game.state; if (!p) p = s && s.player; age = s && p === s.player && G.R && G.R.age ? G.R.age() : null; }
+      var lim = (G.BALANCE && G.BALANCE.family && G.BALANCE.family.heirYoung) || 20;
+      if (age == null || age >= lim) return null;
+    }
+    var b = hk.sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', P = 'portraits/family/', out = [];
+    if (hk.folder) out.push(P + hk.folder + '/' + b + '_age15' + sf);
+    out.push(P + b + '_age15' + sf);
+    return out;
+  }
+  I.heirChain = heirChain;
+  /** 대화창 얼굴: 40대 그림이 있으면 먼저, 없으면 고른 젊은 얼굴. 뒤를 이은 자녀는 가족 그림(아들은 스무 살 전까지)이 먼저 */
   K.heroPortrait = function (p, age) {
     var id = I.heroLook(p), young = FACE + id, old = 'portraits/player-aged/' + id;
+    var hc = heirChain(p, false, age); if (hc) return hc.concat([young]);
     return I.heroOld(p, age) ? [old, young] : [young];
   };
   /** the admiral walking along the street (drawn only when the file exists) */
@@ -516,6 +544,7 @@
   K.heroHalf = function () {
     var id = I.heroLook(), young = id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id;
     var old = id === 'admiral' ? 'characters/player_half_old' : 'characters/player_half_' + id + '_old';
+    var hc = heirChain(null, true); if (hc) return hc.concat([young]);   // 뒤를 이은 자녀의 전신상
     return I.heroOld() ? [old, young] : [young];
   };
   /** 일기토에서 제독의 전투원 시트 (duel/fighters/<이름>, 없으면 main_admiral) */

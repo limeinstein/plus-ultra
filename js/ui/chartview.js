@@ -28,7 +28,7 @@
     var wrap = U.el('div', 'chartview');
     wrap.innerHTML = '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
       '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="세계 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
-      '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
+      '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적·자연 경관</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
       '<div class="cv-info" hidden></div>';
     host.appendChild(wrap);
     var cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d'), info = wrap.querySelector('.cv-info');
@@ -75,7 +75,7 @@
       });
       var fs = 13, font = getComputedStyle(document.body).fontFamily;
       I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {});
-      // 제독이 직접 발견한 도시 밖 유적만 지도에 남긴다.
+      // 제독이 직접 발견한 도시 밖 유적·자연 경관만 지도에 남긴다.
       var landmarkScale = cityScale * 0.95, landmarkLabels = [];
       landmarks().forEach(function (d) {
         var p = px(d.lon, d.lat, b); if (p[0] < -24 || p[0] > W + 24 || p[1] < -24 || p[1] > H + 24) return;

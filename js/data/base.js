@@ -279,7 +279,8 @@
       triumph: { fatigue: -13, discipline: 5 },
       delight: { fatigue: -9,  discipline: 3 },
       wonder:  { fatigue: -7,  discipline: 2 },
-      fear:    { fatigue: 14,  discipline: -4 }
+      fear:    { fatigue: 14,  discipline: -4 },
+      grief:   { fatigue: 4,   discipline: 3 }       // 숙연함 — 노예무역의 현장 같은 곳 (moredisc.js 고레 섬)
     },
     // 물은 식량보다 싸다 (보급값 × waterPrice). 자재(수리용 목재·밧줄·돛천): 한 통 값 = 보급값 × matPrice
     waterPrice: 0.5, matPrice: 3,
@@ -305,7 +306,7 @@
     // · 생일 앞뒤 birthdayDays일 · 집에서 일이 생기는 간격 happenGap일·확률 happenChance · 바다에서 추억의 물건: 피로 keepFatigue부터 하루 keepChance, 피로 −keepRest
     homelife: { statMax: 90, skillChance: 0.6, ledgerGold: 4, dinnerRest: 10, cold: 30, coldBonus: 2, longAway: 300, birthdayDays: 10,
       happenGap: 20, happenChance: 0.55, keepChance: 0.03, keepRest: 4, keepFatigue: 25 },
-    family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, eduCost: 800,
+    family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
       // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill
       // · 해산 한 달 앞(nearDays)이면 소식과 자택 「해산을 기다린다」 · 견습은 apprenticeAge살부터

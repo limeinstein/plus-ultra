@@ -64,7 +64,8 @@
     triumph: { name: '성취감', icon: 'laurel', line: '해냈다는 기쁨에 탐험대의 사기가 크게 올랐다.' },
     delight: { name: '흥분', icon: 'chest', line: '귀한 발견을 손에 넣었다는 기쁨이 대원들에게 번졌다.' },
     wonder:  { name: '경이', icon: 'compass', line: '처음 보는 존재를 마주한 놀라움이 마음을 환기했다.' },
-    fear:    { name: '공포', icon: 'skull', line: '기괴하고 두려운 광경이 대원들의 마음에 오래 남았다.' }
+    fear:    { name: '공포', icon: 'skull', line: '기괴하고 두려운 광경이 대원들의 마음에 오래 남았다.' },
+    grief:   { name: '숙연함', icon: 'skull', line: '사람이 사람을 사고판 자리 앞에서 대원들은 한동안 말을 잃었다. 웃고 떠드는 이가 없었다.' }
   };
   var FEAR_IDS = { bermuda: 1, f_giantsquid: 1, tarantula: 1, roc: 1, minotaur: 1, cannibal: 1, crystalskull: 1, antarctic: 1 };
   /** 데이터에 impact를 따로 적으면 그것을 우선하고, 없으면 발견 갈래와 설명으로 정한다. */

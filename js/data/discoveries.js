@@ -284,6 +284,8 @@
   trade('t_coral', '산호', 'coral', [0, 2], 1, 3000, 2, '따뜻한 바다의 얕은 곳에 자라는 붉은 보석.', '지중해의 바르셀로나나 튀니스에서 산호를 딴다고 한다.');
   trade('t_tortoise', '별갑', 'tortoise', [3, 8], 3, 5400, 5, '바다거북 등딱지로 만든 반투명의 재료. 빗과 장신구에 쓰인다.', '아프리카 동해안이나 동방의 섬에서 별갑을 판다고 한다.');
   trade('t_herbs', '약재', 'herbs', [6, 4], 3, 5000, 7, '인삼과 감초 같은 동방의 생약.', '한양이나 동방의 도시에서 귀한 약재를 판다고 한다.');
+  // 사용자 요청으로 더한 교역품 (js/data/moredisc.js)
+  (G.MORE_TRADE || []).forEach(function (a) { trade.apply(null, a); });
 
   // 건물 불가사의 96곳 (js/data/wonders.js)
   if (G.WONDERS) G.WONDERS.list.forEach(function (a) { add.apply(null, a); });

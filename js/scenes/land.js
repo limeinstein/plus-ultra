@@ -763,7 +763,7 @@
     // base marker
     var bp = toScreen(l.base.lon, l.base.lat);
     if (l.base.type === 'ship') { var bsh = S().fleet.ships[0], blk = bsh ? A.shipLook(bsh.type, { sails: bsh.sails, flag: '#1d3f7a' }) : { sails: ['sq', 'lat'], hull: '#5a3a22', cross: true }; blk.furl = 1; A.shipTop(ctx, bp[0], bp[1], 0.5, G.Scenes.sea.shipPx ? G.Scenes.sea.shipPx() * 0.85 : 80, blk, st.t); }
-    // 직접 발견한 도시 밖 유적은 소도시 정도 크기의 투명 모형으로 표시한다.
+    // 직접 발견한 도시 밖 유적·자연 경관은 소도시 정도 크기의 투명 모형으로 표시한다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
       var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
       var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: 1.15 });

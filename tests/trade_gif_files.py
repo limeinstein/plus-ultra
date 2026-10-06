@@ -8,7 +8,9 @@ from PIL import Image, ImageChops, ImageStat
 ROOT = Path(__file__).resolve().parents[1]
 data = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 ids = re.findall(r"^\s*trade\('([^']+)'", data, re.M)
-assert len(ids) == 28, ids
+more = (ROOT / "js" / "data" / "moredisc.js").read_text(encoding="utf-8")
+ids += re.findall(r"^\s*\['(t_[a-z]+)'", more, re.M)      # 사용자 요청으로 더한 교역품 (바나나·고구마)
+assert len(ids) == 30, ids
 generator = (ROOT / "tools" / "procedural_art" / "trade" / "trade.js").read_text(encoding="utf-8")
 assert "fillText(" not in generator, "교역품 발견 장면에 글자가 들어갔습니다"
 assert "PT.person(" not in generator, "교역품 발견 장면에 사람이 들어갔습니다"

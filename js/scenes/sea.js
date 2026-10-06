@@ -593,6 +593,7 @@
     var kt = kinds ? ' (' + kinds + ')' : '';
     var text = byMe ? who + ' ' + n.n + '척이 있다' + kt + '. 어떻게 할까요?' : (n.kind === 'pirate' ? '제독! ' + pl + '입니다! ' + n.n + '척의 해적선이 다가옵니다!' + kt : n.hunt && G.Hostile ? '제독! ' + who + ' ' + n.n + '척이 우리를 잡으러 왔습니다!' + kt + ' (' + n.nation + ' 적대 ' + G.Hostile.get(n.nation) + ')' : who + ' ' + n.n + '척이 우리를 막아섭니다!' + kt);
     if (n.court && G.Court) text = G.Court.encounterText(n) || text;   // 왕명: 왕녀를 붙잡아 간 해적단
+    if (n.cap && G.Captains) text = G.Captains.encounterText(n, text, byMe) || text;   // 이름난 해적의 해적단 (seacaptains.js)
     // 회피는 전투의 실패가 아니라 따로 고르는 운영 선택이다 — 가능성을 미리 보여 준다
     var fleeP = U.clamp(0.35 + (R.fleetSpeed(S().loc.heading, curWind()) - n.spd) * 0.5 + R.skill('nav') * 0.08, 0.1, 0.9);
     var opts = [{ label: '싸운다', value: 'fight' }, { label: '도망친다 (약 ' + Math.round(fleeP * 100) + '%)', value: 'flee' }];
@@ -1521,7 +1522,7 @@
       if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : G.Routes.autoOff() && hc.port ? ' — 클릭: 곧장 침로 (자동항해는 다음 항구에서)' : ' — 클릭하면 이곳으로 향합니다')); }
       else {
         var hd = landmarkAt(st.mouse[0], st.mouse[1]);
-        if (hd) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hd.name + ' · 발견한 유적 — 클릭하면 가까이 향합니다');
+        if (hd) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hd.name + ' · 발견한 ' + (hd.cat === 'ruin' ? '유적' : '자연 경관') + ' — 클릭하면 가까이 향합니다');
         else {
           var hn = npcAt(st.mouse[0], st.mouse[1]);
           if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : hn.label || (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));
@@ -1599,7 +1600,7 @@
     var s = S();
     var refPort = G.Routes ? G.Routes.origin() : null, nearPort = portNear();
     ctx.textAlign = 'left';
-    // 도시 밖 유적은 제독이 직접 발견한 뒤부터 작은 투명 모형으로 남는다.
+    // 도시 밖 유적·자연 경관은 제독이 직접 발견한 뒤부터 작은 투명 모형으로 남는다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
       var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
       G.DiscoveryIcon.draw(ctx, d, p[0], p[1]);

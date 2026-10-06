@@ -481,6 +481,54 @@
     return { g: g, bg: 'china' };
   };
 
+  /* ------------------------------------------------ 2026-10-06 바나나·고구마 */
+  /** 바나나 송이: 가운데 꼭지에서 밖으로 뻗었다가 위로 휘는 열매들 */
+  T.bananaHand = function (n, sc) {
+    sc = sc || 1;
+    var g = T.group(), segs = 30, rs = 6;
+    var m = M.matte({ vertexColors: true, roughness: 0.45, clearcoat: 0.35 });
+    for (var row = 0; row < 2; row++) for (var i = 0; i < n - row; i++) {
+      var a = ((i + row * 0.5) / (n - 1) - 0.5) * 1.3, len = (0.36 + T.rr(-0.02, 0.02)) * sc;
+      var pts = [];
+      for (var k = 0; k <= 8; k++) { var t = k / 8, x = t * len * 0.85, y = (row * 0.05 - 0.02) * sc + Math.pow(t, 1.8) * len * 0.55; pts.push([Math.sin(a) * x, y, Math.cos(a) * x]); }
+      var geo = T.taperTube(pts, function (t) { return sc * (0.012 + 0.036 * Math.pow(Math.sin(Math.PI * Math.min(1, 0.08 + t * 0.95)), 0.55)); }, segs, rs);
+      var col = [], p = geo.attributes.position;
+      for (var q = 0; q < p.count; q++) { var si = Math.floor(q / (rs + 1)) / segs, tip = si > 0.95, stem = si < 0.12;
+        col.push(tip ? 0.05 : stem ? 0.33 : 0.88, tip ? 0.03 : stem ? 0.4 : 0.56, tip ? 0.01 : stem ? 0.04 : 0.04); }
+      geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+      g.add(T.mesh(geo, m));
+    }
+    g.add(T.mesh(new THREE.CylinderGeometry(0.03 * sc, 0.045 * sc, 0.16 * sc, 10), M.matte({ color: 0x5a5a28 }), 0, 0.02 * sc, -0.05 * sc).rotateX(-0.9));
+    return g;
+  };
+  T.sweetPotato = function (s) {
+    var g = T.lathe(T.smoothProfile([[0, -0.5], [0.08, -0.42], [0.2, -0.2], [0.24, 0.0], [0.2, 0.2], [0.1, 0.38], [0.02, 0.5], [0, 0.52]], 30), 32);
+    T.warp(g, function (v) { var k = 1 + 0.05 * T.noise(v.x * 3, v.y * 3, v.z * 3); v.x *= k; v.z *= k; v.x += 0.06 * Math.sin(v.y * 3); });
+    var m = M.matte({ color: 0x6a2a34, roughness: 0.65 }); m.bumpMap = T.tex(T.noiseCanvas(128, 128, 3, 40, 220, 3), { linear: true }); m.bumpScale = 0.004;
+    var mesh = T.mesh(g, m); mesh.scale.setScalar(s || 0.3); mesh.rotation.z = Math.PI / 2;
+    return mesh;
+  };
+  X.t_banana = function () {
+    var g = T.group();
+    var h1 = T.bananaHand(7, 1.0); h1.position.set(-0.12, 0.03, 0.0); h1.rotation.y = 1.5; g.add(h1);
+    var h2 = T.bananaHand(6, 0.95); h2.position.set(0.22, 0.03, 0.08); h2.rotation.y = -1.7; g.add(h2);
+    var b = basket(0.24, 0.12, '#8a6a3a'); b.m.position.set(0.62, 0, 0.12); g.add(b.m);
+    var h3 = T.bananaHand(5, 0.8); h3.position.set(0.62, 0.12, 0.12); h3.rotation.y = 2.2; g.add(h3);
+    var j = jar(0x6a5a2a, 0.26); j.position.set(-0.68, 0, -0.05); g.add(j);
+    var h4 = T.bananaHand(4, 0.7); h4.position.set(-0.5, 0.02, 0.28); h4.rotation.y = 1.4; g.add(h4);
+    return { g: g, bg: 'bazaar' };
+  };
+  X.t_sweetpotato = function () {
+    var g = T.group(), b = basket(0.34, 0.16, '#8a6a3a'); g.add(b.m);
+    for (var i = 0; i < 8; i++) { var sp = T.sweetPotato(T.rr(0.22, 0.27)); var a = i / 8 * 6.28 + T.rr(-0.2, 0.2), r = i ? 0.17 : 0; sp.position.set(Math.cos(a) * r, b.top + 0.05 + T.rr(0, 0.05), Math.sin(a) * r); sp.rotation.y = T.rnd() * 6; g.add(sp); }
+    // 반으로 가른 고구마의 주황 속살
+    var half = T.sweetPotato(0.3); half.position.set(0.55, 0.05, 0.15); g.add(half);
+    var cut = T.mesh(new THREE.CircleGeometry(0.06, 24), M.matte({ color: 0xe8862a, roughness: 0.5 }), 0.69, 0.05, 0.15); cut.rotation.y = Math.PI / 2; g.add(cut);
+    g.add(T.mesh(new THREE.CylinderGeometry(0.12, 0.15, 0.06, 24), M.glaze({ color: 0x6a3a1a }), -0.55, 0.03, 0.1));
+    for (i = 0; i < 3; i++) { var r2 = T.sweetPotato(0.22); r2.position.set(-0.55 + (i - 1) * 0.06, 0.09, 0.1); r2.rotation.y = i; r2.material = M.matte({ color: 0x9a4a2a }); g.add(r2); }
+    return { g: g, bg: 'americas' };
+  };
+
   /* ------------------------------------------------ 배경·장면 */
   var BG = {
     bazaar: { wall: ['#6a3a1e', '#a86a3a'], awn: ['#a83a2a', '#e8c070', '#2a5a6a'], lamp: 0xffb060 },
