@@ -697,6 +697,7 @@ G.IMAGE_FILES = {
   "discoveries/hanseal": "discoveries/hanseal.gif",
   "discoveries/havana": "discoveries/havana.gif",
   "discoveries/hawaii": "discoveries/hawaii.gif",
+  "discoveries/herc_cave": "discoveries/herc_cave.jpg",
   "discoveries/hermitage": "discoveries/hermitage.gif",
   "discoveries/hermitcrab": "discoveries/hermitcrab.gif",
   "discoveries/himalwolf": "discoveries/himalwolf.gif",
