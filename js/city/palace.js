@@ -14,7 +14,7 @@
     B.enter = async function (c, arg) {
       var sp = B.sp(c, arg);
       if (!sp) {
-        var guard = { name: '위병', portrait: G.Art.withImg(G.Art.npcSpec('pg' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
+        var guard = { name: '위병', portrait: G.Art.withImg(G.Art.npcSpec('pg' + c.id, 'soldier', G.Img.folkStyle(c)), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
         await C.say(guard, G.Court ? G.Court.hail(c, 'guard', ['이곳의 주인께서는 지금 계시지 않다. 돌아가라.', '너 같은 녀석이 들어올 장소가 아니다! 꺼지지 못할까!']) : U.pick(['이곳의 주인께서는 지금 계시지 않다. 돌아가라.', '너 같은 녀석이 들어올 장소가 아니다! 꺼지지 못할까!']));
         return false;
       }

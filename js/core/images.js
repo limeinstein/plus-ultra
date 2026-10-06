@@ -579,12 +579,19 @@
     priest: 'priest', librarian: 'scholar', guard: 'soldier', brawler: 'soldier', drunk: 'sailor', gambler: 'sailor', butler: 'keeper', native: 'native', pirate: 'captain', captain: 'captain', boatswain: 'sailor' };
   /** 마을 사람 그림의 문화권 — 초원(st: 아스트라한·카잔·호브드·카라코룸)은 건물 안 모습과 달리 유럽 얼굴을 쓰지 않는다 */
   function npcCul(c) {
-    if (c.style === 'st') return c.rel === 'I' ? 'islam' : 'steppe';
-    return cul(c);
+    var st = I.folkStyle(c);
+    if (st === 'st') return c.rel === 'I' ? 'islam' : 'steppe';
+    return cul(st === c.style ? c : { id: c.id, style: st, rel: c.rel });
   }
+  /** 그 도시에 사는 사람들(건물 사람·여급·수비병)의 생김새 양식. 대개 도시 양식(c.style)과 같지만,
+      건물은 유럽식이어도 사는 사람은 그 고장 사람인 곳이 있다 — 아프리카의 포르투갈 거점(베르데 곶·산토메)은 아프리카 사람,
+      중앙아메리카·카리브 해안의 토착 도시(열대 양식 tr — 그림 묶음은 아프리카 사람)는 아메리카 토착민, 라사는 티베트(초원 양식) 사람.
+      후원자(왕·총독)는 이 표와 상관없이 제 그림을 쓴다 */
+  I.FOLK_STYLE = { 90: 'af', 99: 'af', 139: 'st', 208: 'az', 209: 'az', 211: 'an', 212: 'an', 213: 'an' };
+  I.folkStyle = function (c) { return !c ? 'ib' : I.FOLK_STYLE[c.id] || c.style; };
   K.npc = function (id, c) {
     if (!c) return ['portraits/npc/' + id];
-    var seed = 'npc' + c.id, role = NPC_ROLE_PORTRAIT[id], rolePic = role ? ['portraits/npc-roles/' + c.style + '/' + role] : [];
+    var seed = 'npc' + c.id, role = NPC_ROLE_PORTRAIT[id], rolePic = role ? ['portraits/npc-roles/' + I.folkStyle(c) + '/' + role] : [];
     var cc = npcCul(c), own = ['portraits/npc/' + id + '@' + c.id].concat(variants('portraits/npc/' + id + '_' + cc, seed));
     // 손으로 고른 건물 사람 그림(portraits/npc/<id>_<문화권>)이 먼저. 문화권 표시 없는 그림(captain·pirate·native 등)은
     // 유럽 사람 얼굴이라 유럽 밖에서는 그 고장의 역할 공통 그림(npc-roles) 뒤로 미룬다 (명나라 선장이 유럽인으로 나오지 않게)
@@ -593,7 +600,7 @@
   /** 그 도시에서 고른 그림이 여자(f)인지 남자(m)인지 — 호칭을 맞출 때 쓴다 */
   I.npcGender = function (id, c) {
     var k = I.pick(K.npc(id, c));
-    if (k && k.indexOf('portraits/npc-roles/') === 0 && G.Art && G.Art.rolePortraitGender) return G.Art.rolePortraitGender(NPC_ROLE_PORTRAIT[id], c.style);
+    if (k && k.indexOf('portraits/npc-roles/') === 0 && G.Art && G.Art.rolePortraitGender) return G.Art.rolePortraitGender(NPC_ROLE_PORTRAIT[id], I.folkStyle(c));
     return !k ? null : /_f$/.test(k) ? 'f' : /_m$/.test(k) ? 'm' : null;
   };
   K.mate = function (id) { return ['portraits/mates/' + id]; };
@@ -612,10 +619,29 @@
     ib: ['iberia', 'france', 'westeurope', 'italy'], ne: ['westeurope', 'britain', 'germany', 'lowlands', 'slav'],
     it: ['italy', 'france', 'greece'], gr: ['greece', 'italy', 'ottoman'], ru: ['russia', 'slav'],
     is: ['arabia', 'ottoman', 'persia'], pe: ['persia', 'arabia'],
-    af: ['africa', 'arabia'], sw: ['africa', 'arabia'], tr: ['tropic', 'native'],
+    // 아프리카(af 사헬·서아프리카, sw 스와힐리 해안, tr 열대 아프리카)는 아프리카·아랍 사람만. 열대(tropic) 묶음은 동남아·태평양 얼굴이라 동남아에만 쓴다
+    af: ['africa', 'arabia'], sw: ['africa', 'arabia'], tr: ['africa'],
     'in': ['india'], se: ['seasia', 'tropic'], cn: ['china'], jp: ['japan'], kr: ['korea'], st: ['persia', 'china'],
-    co: ['iberia', 'france', 'westeurope'], az: ['native', 'tropic'], an: ['native', 'tropic'], na: ['native']
+    co: ['iberia', 'france', 'westeurope'], az: ['native'], an: ['native'], na: ['native']
   };
+  /** 도시 하나만 따로: 라사(티베트)는 초원 양식이지만 여급은 중국 묶음에서 */
+  I.MAID_POOL_CITY = { 139: ['china'] };
+  /** 묶음 폴더 안에 섞여 있지만 그 고장 사람으로 보이지 않는 그림 — 1 = 어디서도 쓰지 않음, 문자열 = 그 도시 양식에서만 쓴다
+      (아프리카 묶음의 금발·붉은 머리, 아랍 묶음의 유럽 옷차림 두 장, 동남아 묶음의 깃털 머리띠(아메리카 토착민 차림), 페르시아 묶음의 동아시아 얼굴은 초원에서만) */
+  I.MAID_BAN = { 'maid-styles/africa/9': 1, 'maid-styles/africa/11': 1, 'maid-styles/arabia/2': 1, 'maid-styles/arabia/3': 1,
+    'maid-styles/seasia/5': 1, 'maid-styles/persia/3': 'st' };
+  /** 이 도시의 여급 그림 묶음 후보 */
+  I.maidPool = function (c) { return !c ? null : I.MAID_POOL_CITY[c.id] || I.MAID_POOL[I.folkStyle(c)] || null; };
+  /** 묶음 폴더의 흉상 그림들 — 그 고장에 맞지 않는 그림은 뺀다 */
+  function maidList(st, c) {
+    var fs = c ? I.folkStyle(c) : null;
+    return I.list('maid-styles/' + st + '/').filter(function (k) {
+      if (/_half$/.test(k)) return false;
+      var b = I.MAID_BAN[k];
+      return !b || (typeof b === 'string' && b === fs);
+    });
+  }
+  I.maidList = maidList;
   /** 이 여급에게는 이 묶음을 고정으로. 없으면 도시 style 후보에서 고른다 */
   I.MAID_FACE = {
     m_lis: 'iberia', m_sev: 'iberia', m_cad: 'westeurope', m_bar: 'italy',
@@ -634,14 +660,14 @@
   /** 이 여급이 쓸 지역 묶음 이름 (없으면 null → 코드로 그린 초상) */
   I.maidStyle = function (id, c) {
     if (I.MAID_FACE[id]) return I.MAID_FACE[id];
-    var pool = c && I.MAID_POOL[c.style];
+    var pool = I.maidPool(c);
     if (!pool || !pool.length) return null;
     return pool[Math.abs(G.U ? G.U.strHash('maid' + id) : 0) % pool.length];
   };
   /** 묶음 안에서 이 여급의 그림 한 장 (maid-styles/묶음/번호) */
   I.maidPic = function (id, c) {
     var st = I.maidStyle(id, c); if (!st) return null;
-    var list = I.list('maid-styles/' + st + '/').filter(function (k) { return !/_half$/.test(k); });
+    var list = maidList(st, c);
     if (!list.length) return I.has('maid-styles/' + st) ? 'maid-styles/' + st : null;
     return list[Math.abs(G.U ? G.U.strHash('maidpic' + id) : 0) % list.length];
   };
@@ -652,10 +678,10 @@
   };
   /** 이름 있는 여급이 없는 도시의 술집에 서 있는 그 지역 여급 */
   I.maidPicCity = function (c) {
-    var pool = c && I.MAID_POOL[c.style];
+    var pool = I.maidPool(c);
     if (!pool || !pool.length) return null;
     var st = pool[Math.abs(G.U ? G.U.strHash('city' + c.id) : 0) % pool.length];
-    var list = I.list('maid-styles/' + st + '/').filter(function (k) { return !/_half$/.test(k); });
+    var list = maidList(st, c);
     if (!list.length) return I.has('maid-styles/' + st) ? 'maid-styles/' + st : null;
     return list[Math.abs(G.U ? G.U.strHash('citypic' + c.id) : 0) % list.length];
   };

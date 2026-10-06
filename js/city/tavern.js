@@ -24,7 +24,7 @@
   /** 이름 있는 여급이 없는 도시의 그 지역 여급 */
   T.servantSpeaker = function (c) {
     return { name: '여급', lang: R.lang(c.lang), li: c.lang,
-      portrait: A.withImg(A.npcSpec('svc' + c.id, 'maid', c.style, 'f'), G.Img.chain.maidCity(c)) };
+      portrait: A.withImg(A.npcSpec('svc' + c.id, 'maid', G.Img.folkStyle(c), 'f'), G.Img.chain.maidCity(c)) };
   };
   T.servant = async function (c) {
     var who = T.servantSpeaker(c);
@@ -482,7 +482,7 @@
   }
 
   T.drinker = async function (c) {
-    var s = S(), who = { name: '술 취한 선원', portrait: A.withImg(A.npcSpec('drunk' + c.id + s.day, 'sailor', c.style), G.Img.chain.npc('drunk', c)), lang: C.langLv(c), li: c.lang };
+    var s = S(), who = { name: '술 취한 선원', portrait: A.withImg(A.npcSpec('drunk' + c.id + s.day, 'sailor', G.Img.folkStyle(c)), G.Img.chain.npc('drunk', c)), lang: C.langLv(c), li: c.lang };
     var v = await UI.ask('술을 마시고 있는 남자가 있다.', [{ label: '한잔 산다', value: 1 }, { label: '무시한다', value: 0 }], {});
     if (!v) return;
     var price = 6 + c.size * 3;
@@ -504,7 +504,7 @@
   };
 
   T.challenger = async function (c) {
-    var s = S(), who = { name: '거친 사내', portrait: A.withImg(A.npcSpec('brawler' + c.id + s.day, 'soldier', c.style), G.Img.chain.npc('brawler', c)), lang: C.langLv(c), li: c.lang };
+    var s = S(), who = { name: '거친 사내', portrait: A.withImg(A.npcSpec('brawler' + c.id + s.day, 'soldier', G.Img.folkStyle(c)), G.Img.chain.npc('brawler', c)), lang: C.langLv(c), li: c.lang };
     await UI.say(U.pick(['거기 자네! 마음에 안 드는군, 나랑 결투하자.', '어이, 거기 겁쟁이! 바다의 사나이라면 검을 뽑아라.', '어이, 나보다 강한 놈을 찾고 있다네. 우선 나와 결투해 주겠나?']), who);
     await C.mate(U.pick(['제독, 상대하지 않는 편이 좋습니다.', '그런 말을 듣고 가만히 있을 수 없다. 제독! 해치웁시다.']));
     var px = G.Games.proxy(), pd = px && G.MATE[px.id];

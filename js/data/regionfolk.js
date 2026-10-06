@@ -66,7 +66,7 @@
   // 이 고장(그리고 그 도시의 말)이면 이 이름 묶음 — 철새 이름 묶음(G.WANDER_NATIONS)의 열쇠이거나 위 RF.pools의 열쇠
   RF.byLang = {
     0: function (z) { return { mexico: 'MX', antilles: 'MX', namerica: 'MX', andes: 'SA', brazil: 'SA' }[z] || 'ES'; },
-    1: function (z) { return z === 'brazil' ? 'BR' : 'PT'; },
+    1: function (z) { return z === 'brazil' ? 'BR' : z === 'wafrica' ? 'AF' : z === 'eafrica' ? 'SW' : 'PT'; },   // 아프리카의 포르투갈 거점(베르데 곶·산토메)에서 나고 자란 사람은 그 고장 아프리카 사람
     2: function (z) { return z === 'italy' ? 'IT' : 'FR'; },
     3: function (z) { return { lowlands: 'NL', brazil: 'NL', germany: 'DE', nordic: 'NO' }[z] || 'EN'; },
     4: function (z) { return z === 'greece' || z === 'ottoman' ? 'GR' : 'RU'; },

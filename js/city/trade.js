@@ -267,7 +267,7 @@
 
   // ---------------------------------------------------------------- 빚 독촉
   T.debt = async function (c, q) {
-    var s = S(), who = { name: q.who, portrait: G.Art.withImg(G.Art.npcSpec('debt' + q.key, 'merchant', c.style), G.Img.chain.npc('trader', c)), lang: C.langLv(c), li: c.lang };
+    var s = S(), who = { name: q.who, portrait: G.Art.withImg(G.Art.npcSpec('debt' + q.key, 'merchant', G.Img.folkStyle(c)), G.Img.chain.npc('trader', c)), lang: C.langLv(c), li: c.lang };
     await UI.say('조합이 일러 준 집을 찾아갔다. ' + q.who + U.jx(q.who, '은/는') + ' 반갑지 않은 얼굴이다.', {});
     await UI.say(U.pick(['또 조합에서 보냈나? 지금은 돈이 없네.', '아이고, 그 이야기라면 다음 달에...', '누가 보냈는지 알겠군. 돌아가게.']), who);
     for (;;) {

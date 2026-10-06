@@ -211,7 +211,7 @@
   };
   A.maidSpec = function (m) {
     var c = G.CITY_DATA[m.city];
-    return A.withImg(A.npcSpec('maid_' + m.id, 'maid', c.style, 'f'), G.Img.chain.maid(m.id, c));
+    return A.withImg(A.npcSpec('maid_' + m.id, 'maid', G.Img.folkStyle(c), 'f'), G.Img.chain.maid(m.id, c));
   };
   /** sponsor portrait; holder = 0-based index into sp.holders (-1 → title only) */
   A.sponsorSpec = function (sp, holder) {
@@ -247,7 +247,7 @@
     var t = A.TOWNFOLK[id] || ['merchant', id, 'm'];
     // 도시·문화권 전용 그림이 없더라도 npcSpec의 양식×역할 그림을 이어 쓴다.
     // 시장 상인·술집 주인·조선소 목수도 폴리곤 대용 얼굴로 돌아가지 않는다.
-    return A.withImg(A.npcSpec('c' + c.id + ':' + t[0] + t[1], t[0], c.style, t[2]), G.Img.chain.npc(id, c));
+    return A.withImg(A.npcSpec('c' + c.id + ':' + t[0] + t[1], t[0], G.Img.folkStyle(c), t[2]), G.Img.chain.npc(id, c));
   };
   function headPath(ctx, s, cx, cy, R) {
     // profile facing right. R = head radius

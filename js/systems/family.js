@@ -127,7 +127,7 @@
 
   /** 해산 장면 — 제독이 집에 있을 때 (곁을 지킬지 고른다) */
   async function birthScene(born) {
-    var w = F.wifeSpeaker(), mid = { name: '산파', portrait: A.withImg(A.npcSpec('midwife' + S().player.home, 'keeper', G.CITY_DATA[S().player.home].style, 'f'), []), lang: 3 };
+    var w = F.wifeSpeaker(), mid = { name: '산파', portrait: A.withImg(A.npcSpec('midwife' + S().player.home, 'keeper', G.Img.folkStyle(G.CITY_DATA[S().player.home]), 'f'), []), lang: 3 };
     await UI.say('나리, 마님께서 진통을 시작하셨습니다! 물을 끓이고 깨끗한 천을 가져오십시오!', mid);
     var v = await UI.ask('아내의 해산이 시작되었다. 어떻게 할까?', [
       { label: '방에 들어가 아내의 손을 잡아 준다', value: 'hand' },

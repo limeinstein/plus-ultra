@@ -41,7 +41,7 @@
   SP.langLv = function (sp) { return Math.max(R.lang(sp.lang), R.lang(G.CITY_DATA[sp.city].lang)); };
   /** 후원자와 나누는 말: 후원자의 말과 그 도시의 말 가운데 일행이 더 잘하는 쪽 */
   SP.langLi = function (sp) { var a = sp.lang, b = G.CITY_DATA[sp.city].lang; return a == null ? b : b == null ? a : (R.lang(b) > R.lang(a) ? b : a); };
-  SP.butler = function (sp) { var c = G.CITY_DATA[sp.city]; return { name: '집사', portrait: A.withImg(A.npcSpec('butler_' + sp.id, 'keeper', c.style), G.Img.chain.npc('butler', c)), lang: SP.langLv(sp), li: SP.langLi(sp) }; };
+  SP.butler = function (sp) { var c = G.CITY_DATA[sp.city]; return { name: '집사', portrait: A.withImg(A.npcSpec('butler_' + sp.id, 'keeper', G.Img.folkStyle(c)), G.Img.chain.npc('butler', c)), lang: SP.langLv(sp), li: SP.langLi(sp) }; };
   SP.fameNeed = function (sp) { return G.POWER_FAME[sp.pw] || 0; };
   SP.isRivalNation = function (sp) {
     var n = S().player.nation;

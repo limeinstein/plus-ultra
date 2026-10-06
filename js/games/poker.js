@@ -51,7 +51,7 @@
 
   G.Games.poker = async function (city) {
     var s = G.Game.state, p = s.player;
-    var opp = { name: '술집 손님', portrait: A.withImg(A.npcSpec('poker' + city.id + (s.day % 5), 'sailor', city.style), G.Img.chain.npc('gambler', city)) };
+    var opp = { name: '술집 손님', portrait: A.withImg(A.npcSpec('poker' + city.id + (s.day % 5), 'sailor', G.Img.folkStyle(city)), G.Img.chain.npc('gambler', city)) };
     await UI.say(U.pick(['오우, 자네 꽤 운이 있을 것 같은데, 어때, 포카로 내기하지 않겠나?', '여, 포카로 나와 내기하세. 도저히 따분해서 말이지.', '거기, 이쪽으로 오게. 포카나 하세.']), opp);
     for (;;) {
       var bets = [100, 500, 1000, 5000].filter(function (b) { return b <= p.gold; });

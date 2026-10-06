@@ -433,7 +433,7 @@
   C.handleEntry = async function (c) {
     var chk = C.entryCheck(c); if (!chk) return true;
     var s = S();
-    var guard = { name: c.name + ' 수비병', portrait: A.withImg(A.npcSpec('guard' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
+    var guard = { name: c.name + ' 수비병', portrait: A.withImg(A.npcSpec('guard' + c.id, 'soldier', G.Img.folkStyle(c)), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
     await UI.say(chk.text, guard);
     for (;;) {
       var opts = [];

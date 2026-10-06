@@ -464,7 +464,7 @@
   var GT = { title: '성문', icon: 'gate', paint: 'gate', exitLabel: '마을로 돌아간다' };
   C.B.gate = GT;
   GT.enter = async function (c) {
-    var guard = { name: '수위', portrait: A.withImg(A.npcSpec('gate' + c.id, 'soldier', c.style), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
+    var guard = { name: '수위', portrait: A.withImg(A.npcSpec('gate' + c.id, 'soldier', G.Img.folkStyle(c)), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
     var of = G.Mounts.offers(c, S().date.y).map(function (id) { return G.Mounts.get(id).name; });
     await C.say(guard, C.hail(c, 'gate', ['성 밖은 위험하다. 조심해서 다녀오게.', '어디로 가려는가? 성 밖에는 도적과 들짐승이 많다네.', '탐험이라도 떠나려는가?']) + (of.length ? ' 성문 옆 마구간에서 ' + of.join('·') + U.jx(of[of.length - 1], '을/를') + ' 구할 수 있지.' : ''));
   };
