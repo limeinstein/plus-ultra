@@ -536,6 +536,8 @@
       '<div>난이도</div><div>' + diffName + ' <small class="muted">(' + (st.diff === 'original' ? '저장은 모국 도시의 여관에서만' : st.diff === 'easy' ? '어디서나 저장 가능' : '저장은 여관에서') + ')</small></div>' +
       '<div>효과음</div><div><input type="range" min="0" max="100" data-k="sound" value="' + Math.round((st.sound != null ? st.sound : 0.5) * 100) + '"></div>' +
       '<div>음악</div><div><input type="range" min="0" max="100" data-k="music" value="' + Math.round((st.music != null ? st.music : 0.35) * 100) + '"></div>' +
+      '<div>배경 음악</div><div><div class="opt-row"><div class="opt' + (st.musicSrc !== 'ost' ? ' on' : '') + '" data-ms="base">기존 음악</div><div class="opt' + (st.musicSrc === 'ost' ? ' on' : '') + '" data-ms="ost">코스타 델 솔 3 OST</div></div>' +
+        '<small class="muted">' + (st.musicSrc === 'ost' ? (G.YTM && G.YTM.failed() ? '유튜브를 읽지 못해 기존 음악으로 틀고 있습니다' : '장면마다 유튜브 영상으로 틉니다 — 재생기가 오른쪽 아래에 보이며 끌어서 옮길 수 있습니다') : '게임에 들어 있는 곡과 코드로 만든 음악') + '</small></div>' +
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
@@ -549,6 +551,7 @@
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
+    U.$$('[data-ms]', el).forEach(function (o) { o.onclick = function () { if (G.YTM) G.YTM.setSource(o.dataset.ms); else st.musicSrc = o.dataset.ms; PAGES.menu(el, win); }; });
     var sv = el.querySelector('[data-act=save]'); if (sv) sv.onclick = async function () { await I.saveMenu(); };
     el.querySelector('[data-act=title]').onclick = async function () {
       if (await UI.confirm('저장하지 않은 진행은 사라집니다. 타이틀로 돌아가겠습니까?')) { win.close(null); UI.fade(function () { G.Game.go('title'); }); }

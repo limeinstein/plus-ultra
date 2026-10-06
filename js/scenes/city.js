@@ -204,6 +204,7 @@
   // ---------------------------------------------------------------- main town view
   C.main = function () {
     var s = S(), c = C.city();
+    if (cur && cur.ost && G.Audio && G.Audio.resume) G.Audio.resume();
     cur = null; token++;
     UI.clearScreen();
     if (G.Town.active()) { G.Town.hidden(false); UI.add(G.Town.catcher(function (kind, arg) { if (kind === 'landmark') C.lookAt(arg); else C.visit(kind, arg); })); }
@@ -342,6 +343,7 @@
     }
     G.Game.setScene(C.interior(ikind, c, ivar));
     plaque(B, c, arg);
+    if (G.Audio && G.Audio.moment && (kind === 'tavern' || kind === 'palace' || kind === 'mansion')) { G.Audio.moment(kind); cur.ost = true; }   // OST: 주점·왕궁 알현·귀족 알현
     if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
     var ok = true;
     try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }

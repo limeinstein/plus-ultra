@@ -20,7 +20,7 @@
     AU.setVolume();
     return true;
   }
-  AU.setVolume = function () { setFileVolume(); if (!ctx) return; musicGain.gain.value = vol('music', 0.35) * 0.5; sfxGain.gain.value = vol('sound', 0.5); };
+  AU.setVolume = function () { if (G.YTM) G.YTM.setVolume(); setFileVolume(); if (!ctx) return; musicGain.gain.value = vol('music', 0.35) * 0.5; sfxGain.gain.value = vol('sound', 0.5); };
   AU.unlock = function () {
     if (!init()) return;
     if (ctx.state === 'suspended') ctx.resume();
@@ -165,6 +165,9 @@
   /** 장면 음악: 파일 곡이 있으면 그것, 없으면 코드 음악 */
   AU.music = function (name, force) {
     AU.want = name; hold = { track: null, n: 0 };
+    // 설정 「배경 음악」이 코스타 델 솔 3 OST면 유튜브 재생기로 (js/systems/ytmusic.js). 건물·미니 게임 같은 「잠깐」 곡 동안에는 장면만 기억해 둔다
+    var Y = G.YTM;
+    if (Y) { Y.install(); if (Y.on()) { if (Y.inMoment() && !force) return; var yt = Y.pick(name); if (yt) { genStop(); stopFile(); Y.play(yt); return; } Y.pause(); } else Y.pause(); }
     var t = AU.pick(name);
     if (t) { if (force || fileTrack !== t) playFile(t); return; }
     stopFile();
@@ -173,6 +176,7 @@
   /** 하루에 한 번(Game.newDay): 바다·뭍에서 자리가 바뀌면 곡을 바꾼다. hold일 연달아 다른 곳이어야 바꿔 경계에서 오락가락하지 않게 */
   AU.daily = function () {
     var name = AU.want; if (name !== 'sea' && name !== 'land') return;
+    if (G.YTM && G.YTM.on()) { if (!G.YTM.inMoment()) { var yt = G.YTM.pick(name); if (yt && yt !== G.YTM.current()) G.YTM.play(yt); } return; }
     var t = AU.pick(name); if (!t || t === fileTrack) { hold = { track: null, n: 0 }; return; }
     var need = (MT().scenes[name] || {}).hold || 1;
     if (hold.track === t) hold.n++; else hold = { track: t, n: 1 };
@@ -181,5 +185,8 @@
   AU.nowPlaying = function () { return fileTrack; };
   /** 시험용: 지금 곡의 재생 상태 */
   AU.fileStatus = function () { var d = decks[deckOn]; return d ? { track: fileTrack, time: +d.currentTime.toFixed(2), paused: d.paused, volume: +d.volume.toFixed(2) } : null; };
-  AU.stop = function () { AU.want = null; genStop(); stopFile(); };
+  AU.stop = function () { AU.want = null; genStop(); stopFile(); if (G.YTM) G.YTM.pause(); };
+  /** 건물·미니 게임·사건의 「잠깐」 곡 (OST일 때만) — 끝나면 AU.resume() */
+  AU.moment = function (name) { if (G.YTM) G.YTM.moment(name); };
+  AU.resume = function () { if (G.YTM) G.YTM.resume(); };
 })(window.G = window.G || {});
