@@ -297,7 +297,11 @@
           ['분류', G.DISC_CATS[d.cat]], ['지역', where], ['찾는 방법', HOW[d.how]], ['위치', place],
           ['가치', num(d.val)], ['명성 (직접 보고하면)', '+' + num(fameFor(d))], ['단서에 쓰인 말', G.LANGS[d.lang]],
           G.frontierText ? ['단서가 열리는 때', G.frontierText(d)] : null,
-          (bs => bs.length ? ['단서가 실린 책', bs.map(b => b.title + ' (' + G.LANGS[b.lang] + (b.y > 1480 ? ' · ' + b.y + '년 간행' : '') + (b.sk ? ' · ' + (G.SKILL_BY_ID[b.sk] || {}).name + ' ' + b.lv : '') + ')').join(' / ')] : null)(G.BOOKS.filter(b => b.discs.indexOf(d.id) >= 0)),
+          d.need ? ['앞 고리 (먼저 찾아야 열린다)', d.need.map(x => (G.DISC[x] || {}).name || x).join(', ')] : null,
+          (nx => nx.length ? ['다음 고리', nx.map(x => x.name).join(', ')] : null)(G.DISCOVERIES.filter(x => x.need && x.need.indexOf(d.id) >= 0)),
+          (as => as.length ? ['업적', as.map(a => a.name).join(', ')] : null)((G.ACHIEVEMENTS || []).filter(a => (a.ids && a.ids.indexOf(d.id) >= 0) || (a.cats && a.cats.some(r => r.ids && r.ids.indexOf(d.id) >= 0)))),
+          G.clueWhere ? ['단서를 얻는 곳', G.clueWhere(d) + ' (' + G.CLUE_NAME[G.CLUE[d.id]] + ' 갈래 · 계약·큰 항로 이야기·유물·원주민 등은 갈래와 상관없이)'] : null,
+          (bs => bs.length ? [G.CLUE && G.CLUE[d.id] === 'talk' ? '이야기가 나오는 책 (단서는 사람들에게서)' : '단서가 실린 책', bs.map(b => b.title + ' (' + G.LANGS[b.lang] + (b.y > 1480 ? ' · ' + b.y + '년 간행' : '') + (b.sk ? ' · ' + (G.SKILL_BY_ID[b.sk] || {}).name + ' ' + b.lv : '') + ')').join(' / ')] : null)(G.BOOKS.filter(b => b.discs.indexOf(d.id) >= 0)),
           d.rival ? ['경쟁자', d.rival[2] + ' — ' + d.rival[0] + '년 ' + d.rival[1] + '월에 발표'] : null,
           d.evidence ? ['증거품', d.evidence] : null,
           (G.RELICS && G.RELICS[d.id]) ? ['유물 (발견의 증거)', G.RELICS[d.id].map(r => r.name + ' — ' + G.RELIC_KIND[r.kind] + ' · 값 ' + num(r.price) + '닢').join(' / ')] : null

@@ -15,13 +15,18 @@ BASE_ANIMAL_IDS = [
 ]
 animal_data = (ROOT / "js" / "data" / "animals.js").read_text(encoding="utf-8")
 ADDED_ANIMAL_IDS = re.findall(r"^\s*a\('([^']+)'", animal_data, re.M)
-ANIMAL_IDS = BASE_ANIMAL_IDS + [did for did in ADDED_ANIMAL_IDS if did not in BASE_ANIMAL_IDS]
+more_data = (ROOT / "js" / "data" / "moredisc.js").read_text(encoding="utf-8")
+MORE_BEAST_IDS = re.findall(r"^\s*beast\('([^']+)'", more_data, re.M)
+ANIMAL_IDS = BASE_ANIMAL_IDS + [
+    did for did in ADDED_ANIMAL_IDS + MORE_BEAST_IDS if did not in BASE_ANIMAL_IDS
+]
 
 data = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 creatures = set(re.findall(r"^\s*add\('([^']+)', '[^']+', 'creature'", data, re.M))
 assert set(BASE_ANIMAL_IDS) <= creatures
 assert len(ADDED_ANIMAL_IDS) == 94, len(ADDED_ANIMAL_IDS)
-assert len(ANIMAL_IDS) == 117, len(ANIMAL_IDS)
+assert len(MORE_BEAST_IDS) == 21, len(MORE_BEAST_IDS)
+assert len(ANIMAL_IDS) == 138, len(ANIMAL_IDS)
 assert len(ANIMAL_IDS) == len(set(ANIMAL_IDS)), "duplicate animal discovery id"
 
 for did in ANIMAL_IDS:

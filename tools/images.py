@@ -88,6 +88,21 @@ def game_data():
         animals = read('js/data/animals.js')
         for aid, name in re.findall(r"^\s*a\('([^']+)',\s*'([^']+)'", animals, re.M):
             d['discoveries'].append({'id': aid, 'name': name, 'cat': 'creature'})
+    # moredisc.js는 유적·자연·전설 짐승과 교역품 발견물을 한 파일에서 더한다.
+    # 매니페스트 점검도 이 ID를 알아야 새 GIF를 잘못된 파일명으로 경고하지 않는다.
+    more_path = os.path.join(ROOT, 'js/data/moredisc.js')
+    if os.path.exists(more_path):
+        more = read('js/data/moredisc.js')
+        for func, cat in (('ruin', 'ruin'), ('nat', 'nature'), ('beast', 'creature')):
+            for did, name in re.findall(r"^\s*" + func + r"\('([^']+)',\s*'([^']+)'", more, re.M):
+                d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
+        for did, name in re.findall(r"^\s*\['(t_[^']+)',\s*'([^']+)',\s*'[^']+',\s*\[", more, re.M):
+            d['discoveries'].append({'id': did, 'name': name, 'cat': 'trade'})
+    chain_path = os.path.join(ROOT, 'js/data/chaindisc.js')
+    if os.path.exists(chain_path):
+        chain = read('js/data/chaindisc.js')
+        for did, name, cat in re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'([^']+)',\s*'(\w+)'", chain, re.M):
+            d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
     names = []
     for x in d['discoveries']:
         if x.get('rival') and x['rival'] not in names:

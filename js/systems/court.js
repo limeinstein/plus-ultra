@@ -157,7 +157,7 @@
       if (!c.goods || !R.cityExists(c)) return;
       var rd = (G.REGION_DIST[here.region] || [])[c.region]; if (rd == null) return;
       var d = G.Geo.dist(here.lon, here.lat, c.lon, c.lat);
-      c.goods.forEach(function (id) { if (!G.GOOD[id]) return; var b = best[id]; if (!b || rd < b.rd || (rd === b.rd && d < b.d)) best[id] = { id: id, rd: rd, d: d, city: c.id }; });
+      c.goods.forEach(function (id) { if (!G.GOOD[id] || (G.Slave && G.Slave.is(id))) return; var b = best[id]; if (!b || rd < b.rd || (rd === b.rd && d < b.d)) best[id] = { id: id, rd: rd, d: d, city: c.id }; });
     });
     var need = n < 2 ? 1 : n < 4 ? 2 : 3, list = [];
     for (; need >= 1 && !list.length; need--) list = Object.keys(best).map(function (k) { return best[k]; }).filter(function (b) { return b.rd >= need && G.GOOD[b.id].p >= 30; });
@@ -356,7 +356,7 @@
     c.task = t; delete c.offers[realm.id];
     // 발견 왕명: 실마리를 하나 쥐여 준다
     if (t.cats) {
-      var cand = discCands(t.cats).filter(function (d) { return !s.hints[d.id]; });
+      var cand = discCands(t.cats).filter(function (d) { return !s.hints[d.id] && G.Disc.clueOk(d, 'sponsor'); });   // 궁정의 이야기 — 사료 갈래는 도서관에서
       if (cand.length) { var d = cand[Math.floor(U.rand() * cand.length)]; if (G.Disc.addHint(d.id, 'sponsor:' + sp.id)) UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll', 4200); }
     }
     G.State.log(SP().holderName(sp) + '의 왕명을 받았다 — ' + t.title + ' (기한 ' + U.fmtDate(CT.dueDate(t)) + ')');

@@ -123,12 +123,13 @@
     var tn = ((d.typeName[tk] || {})[style]) || T.nm;
     var tx = G.WANDER_TEXT, tr = U.pick(tk === 'bard' ? d.text.bard : (tx.trait[tk] || tx.trait.nav));
     s.wander.seq = (s.wander.seq || 0) + 1;
-    return {
+    var def = {
       id: 'wd_' + y + '_' + s.wander.seq, name: nm, g: g, wd: true, local: z, nat: pk, natName: natName(pk), type: tk, typeName: tn, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
       y: [y, 9999], reg: [c.region], desc: c.name + ' 태생의 ' + (g === 'f' ? '여' : '') + tn + '. ' + tr,
       story: c.name + '에서 태어났다. ' + U.pick(d.text.past) + ' ' + U.pick(d.text.dream),
       style: style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'), face: face(style, g, tk, z, pk), zones: [z], home: home, gen: G.Wander.genOf(y), born: y, line: null, prevName: null
     };
+    return G.MateSkills ? G.MateSkills.wander(def) : def;   // 특기를 한두 단계 더 (js/data/renown.js)
   };
 
   /** 이 규칙이 생기기 전 저장: 지금 나와 있는 실존 고장 인물을 「이미 알린 사람」으로 적어 둔다 (불러오자마자 소문이 쏟아지지 않게) */

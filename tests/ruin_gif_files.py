@@ -11,10 +11,16 @@ src = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 legacy_ids = re.findall(r"^\s*add\('([^']+)', '[^']+', 'ruin'", src, re.M)
 wonders = (ROOT / "js" / "data" / "wonders.js").read_text(encoding="utf-8")
 wonder_ids = re.findall(r"^\s*w\('([^']+)',\s*'[^']+'", wonders, re.M)
-ids = legacy_ids + wonder_ids
+more = (ROOT / "js" / "data" / "moredisc.js").read_text(encoding="utf-8")
+more_ids = re.findall(r"^\s*ruin\('([^']+)'", more, re.M)
+chain = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
+chain_ids = re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'ruin'", chain, re.M)
+ids = legacy_ids + wonder_ids + more_ids + chain_ids
 assert len(legacy_ids) == 66, len(legacy_ids)
 assert len(wonder_ids) == 96, len(wonder_ids)
-assert len(ids) == len(set(ids)) == 162, len(ids)
+assert len(more_ids) == 10, len(more_ids)
+assert len(chain_ids) == 26, len(chain_ids)
+assert len(ids) == len(set(ids)) == 198, len(ids)
 for did in ids:
     ref = ROOT / "tools" / "heritage" / "references" / "discoveries" / f"{did}.jpg"
     turn = ROOT / "tools" / "ruin_gifs" / "reconstructions" / f"{did}.png"

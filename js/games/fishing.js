@@ -94,7 +94,7 @@
     var s = S(), sci = R.skillRead ? R.skillRead('sci') : R.skill('sci');
     var rares = F.rareHere(lon, lat);
     for (var i = 0; i < rares.length; i++) {
-      var x = rares[i], p = x.f.p * (s.hints[x.d.id] ? B().hintK : 1) * (1 + sci * B().rareSci) * (x.f.depth === depth ? 1.5 : Math.abs(x.f.depth - depth) === 1 ? 0.8 : 0.4);
+      var x = rares[i], p = x.f.p * (s.hints[x.d.id] ? B().hintK + (G.Disc.hintLv(x.d.id) - 1) * G.Disc.clueStack().fish : 1) * (1 + sci * B().rareSci) * (x.f.depth === depth ? 1.5 : Math.abs(x.f.depth - depth) === 1 ? 0.8 : 0.4);
       if (U.chance(p)) return { rare: x.d, n: x.d.name, kg: U.rf(x.f.kg[0], x.f.kg[1]), diff: x.f.diff, depth: x.f.depth };
     }
     if (U.chance(B().junk)) {

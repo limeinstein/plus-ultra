@@ -30,7 +30,7 @@
   };
 
   // ---------------------------------------------------------------- main info window with tabs
-  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['map', '해도'], ['log', '일지'], ['menu', '설정']];
+  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['achv', '업적'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['map', '해도'], ['log', '일지'], ['menu', '설정']];
   I.open = function (tab) {
     var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
     var tabs = U.el('div', 'tabs');
@@ -55,7 +55,7 @@
     var html = '<div class="grid2" style="grid-template-columns:260px 1fr;gap:26px"><div><div class="pc"></div>' +
       '<div class="center" style="margin-top:10px;font-size:26px;font-weight:800">' + U.esc(p.name) + '</div>' +
       '<div class="center muted">' + R.nationName(p.nation) + ' · ' + (job ? job.name : '') + (p.generation > 1 ? ' · ' + p.generation + '대' : '') + '</div>' +
-      '<div class="center" style="margin-top:10px"><span class="tag">' + R.fameTitle(p.fame) + '</span></div>' +
+      '<div class="center" style="margin-top:10px"><span class="tag">' + R.fameTitle(p.fame) + '</span>' + (G.Slave ? G.Slave.html() : '') + '</div>' +
       (G.Court && G.Court.best() ? '<div class="center" style="margin-top:6px">' + G.Court.titlesHtml() + '</div>' : '') + '</div><div>' +
       '<div class="kv" style="grid-template-columns:110px 1fr 110px 1fr">' +
       '<div>나이</div><div>' + R.age() + '세 (' + p.born.m + '월 ' + p.born.d + '일생 · ' + z.name + ')</div><div>명성</div><div>' + U.num(p.fame) + '</div>' +
@@ -280,13 +280,14 @@
   }
   I.frontierBoard = frontierBoard;
 
+  PAGES.achv = function (el) { if (G.Achieve) G.Achieve.page(el); };
   PAGES.hints = function (el) {
     var s = S(), ids = Object.keys(s.hints);
-    if (!ids.length) { el.innerHTML = '<div class="muted">아직 단서가 없습니다. 도서관에서 책을 읽거나 술집에서 소문을 들어 보십시오.</div>'; return; }
+    if (!ids.length) { el.innerHTML = '<div class="muted">아직 단서가 없습니다. 옛 유적·옛 보물·전설·지리는 도서관 사료에서, 자연·생물·민족은 술집의 소문에서, 교역품과 보물은 교역소 주인에게서, 그 밖에 후원자의 취향에 맞는 이야기는 후원자에게서 들을 수 있습니다. 같은 발견의 단서를 다른 곳에서 또 들으면 단서가 겹쳐(최대 4겹) 망루가 더 멀리서 알아채고 찾기가 쉬워집니다.</div>'; return; }
     el.innerHTML = ids.map(function (id) {
       var d = G.DISC[id], h = s.hints[id];
       var st = s.disc[id];
-      return '<div class="hint-item"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + '<span class="right muted" style="font-size:14px">' + srcName(h.src) + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>';
+      return '<div class="hint-item"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (G.CLUE ? '<span class="tag">' + G.CLUE_NAME[G.Disc.clue(d)] + '</span>' : '') + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + (G.Disc.hintLv(id) > 1 ? '<span class="tag good-text">단서 ' + G.Disc.hintLv(id) + '겹</span>' : '') + '<span class="right muted" style="font-size:14px">' + G.Disc.hintSrcs(id).map(srcName).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>';
     }).join('');
   };
   function srcName(src) {
@@ -299,7 +300,7 @@
     if (p[0] === 'chain' && G.DISC[p[1]]) return '「' + G.DISC[p[1]].name + '」에서 이어진 실마리';
     if (p[0] === 'relic' && G.RELIC && G.RELIC[p[1]]) return '「' + G.RELIC[p[1]].name + '」에 적힌 이야기';
     var SRC = { sponsor: '후원자의 이야기', contract: '후원자 계약', rival: '경쟁자에게서', lookout: '망루·정찰대', bottle: '병 속 편지', hail: '지나가던 배',
-      native: '원주민', nomad: '유목민', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
+      native: '원주민', nomad: '유목민', local: '고장 사람의 이야기', town: '거리의 마을 사람', lead: '큰 항로 이야기', legacy: '선대의 연구 노트', witch: '점쟁이', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
     return SRC[p[0]] || '';
   }
 
@@ -347,16 +348,30 @@
     el.innerHTML = html;
   };
 
+  /** 수첩 교역: 유럽 시장의 시대 수요 (js/systems/era.js) — 많이 찾는 것·덜 찾는 것·곧 오를 것 */
+  function eraBox() {
+    if (!G.Era) return '';
+    var L = G.Era.list(), RN = G.REGIONS;
+    var up = L.filter(function (x) { return x.hi >= 1.15; }).sort(function (a, b) { return b.hi - a.hi; }).slice(0, 8);
+    var down = L.filter(function (x) { return x.lo <= 0.87; }).sort(function (a, b) { return a.lo - b.lo; }).slice(0, 5);
+    var soon = L.filter(function (x) { return x.trend >= 0.15; }).sort(function (a, b) { return b.trend - a.trend; }).slice(0, 4);
+    function chip(x, v, r, cls) { return '<span class="era-chip ' + cls + '" title="' + U.esc(x.note) + '">' + G.goodDot(x.g) + x.name + ' <small>×' + v.toFixed(2) + (r != null && x.hi - x.lo > 0.02 ? ' ' + RN[r] : '') + '</small></span>'; }
+    return '<div class="era-box"><b>' + G.icon('scales') + ' 유럽 시장의 시대 수요 (' + S().date.y + '년)</b> <small class="muted">— 이베리아·북유럽·지중해 도시의 값에 곱한다. 이름 위에 마우스를 올리면 까닭</small>' +
+      (up.length ? '<div class="era-row"><span class="era-lbl up">많이 찾는다</span>' + up.map(function (x) { return chip(x, x.hi, x.best, 'up'); }).join('') + '</div>' : '') +
+      (down.length ? '<div class="era-row"><span class="era-lbl down">덜 찾는다</span>' + down.map(function (x) { return chip(x, x.lo, x.worst, 'down'); }).join('') + '</div>' : '') +
+      (soon.length ? '<div class="era-row"><span class="era-lbl soon">곧 오른다</span>' + soon.map(function (x) { return chip(x, x.hi + x.trend, null, 'soon'); }).join('') + '<small class="muted"> (10년 뒤)</small></div>' : '') + '</div>';
+  }
   PAGES.trade = function (el) {
     var s = S();
-    if (!G.Ledger || !G.Ledger.count()) { el.innerHTML = '<div class="muted">아직 적어 둔 시세가 없습니다. 교역소에 들를 때마다 그 도시의 사는 값·파는 값이 이 수첩에 적힙니다.</div>'; return; }
+    if (!G.Ledger || !G.Ledger.count()) { el.innerHTML = eraBox() + '<div class="muted">아직 적어 둔 시세가 없습니다. 교역소에 들를 때마다 그 도시의 사는 값·파는 값이 이 수첩에 적힙니다.</div>'; return; }
     var rows = G.Ledger.table();
     var br = G.Ledger.bestRoute();
     var fads = G.Fad ? G.Fad.list() : [];
     function cell(b) { return b ? U.num(b.price) + ' <small class="muted">' + G.CITY_DATA[b.city].name + (b.age > 60 ? ' · ' + b.age + '일 전' : '') + '</small>' : '<span class="muted">—</span>'; }
     var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:18px">들러 본 교역소 ' + G.Ledger.count() + '곳의 기록</b>' +
       (br ? '<span class="right good-text">가장 남는 장사: ' + G.CITY_DATA[br.buy].name + '의 ' + G.GOOD[br.good].name + ' → ' + G.CITY_DATA[br.sell].name + ' (1통 +' + U.num(br.gain) + ')</span>' : '') + '</div>' +
-      (fads.length ? '<div class="good-text" style="margin:-2px 0 10px;font-size:16px">' + G.icon('star') + ' 지금 유행: ' + fads.map(function (x) { return x.where + '의 <b>' + x.name + '</b> (값 ' + ((G.BALANCE.fad || {}).mult || 3) + '배 · ' + x.left + '일 남음)'; }).join(' · ') + '</div>' : '') +
+      (fads.length ? '<div class="good-text" style="margin:-2px 0 10px;font-size:16px">' + G.icon('star') + ' 지금 유행: ' + fads.map(function (x) { return x.where + '의 <b>' + x.name + '</b> (값 ' + x.m + '배 · ' + x.left + '일 남음' + (x.src === 'me' ? '' : ' · ' + U.esc(x.why || '세상의 유행')) + ')'; }).join(' · ') + '</div>' : '') +
+      eraBox() +
       '<table class="tbl"><tr><th>교역품</th><th class="num">가장 싸게 사는 곳</th><th class="num">가장 비싸게 파는 곳</th><th class="num">1통 차익</th></tr>' +
       rows.map(function (r) {
         return '<tr><td>' + G.goodDot(r.id) + r.name + '</td><td class="num">' + cell(r.buy) + '</td><td class="num">' + cell(r.sell) + '</td><td class="num ' + (r.gain > 0 ? 'down' : '') + '">' + (r.gain != null ? (r.gain > 0 ? '+' : '') + U.num(r.gain) : '') + '</td></tr>';

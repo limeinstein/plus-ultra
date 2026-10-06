@@ -11,6 +11,14 @@
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
     // 기함 선실 화면 (js/ui/cabinview.js): 무대(배 그림) 크기, 오른쪽 명단 폭, 선체 속 선실 표·갑판 얼굴표 크기, 배 그림을 자르는 여백, 카드 최대 폭, 명단 높이
     cabinView: { stageW: 920, stageH: 314, side: 300, pin: 38, pinMin: 24, medal: 54, pad: 70, minSpan: 560, below: 40, cardMax: 180, rosterH: 280 },
+    // 자동항해를 시작하면 켜지는 배속 (js/scenes/sea.js setTarget — 1·2·4 가운데). 손으로 몰면 이전 배속으로 돌아간다
+    autoSailSpeed: 4,
+    // 바람을 보여 주는 구름 (js/scenes/sea.js cloudStep·cloudTail, js/world/renderer.js clouds)
+    //   drift: 풍속 1일 때 구름이 게임 속 하루에 흐르는 거리(°) · idleRate: 멈춰 있거나 대화 중일 때 흐르는 빠르기(×1 배속의 몫)
+    //   turn: 바람이 바뀔 때 구름 흐름이 도는 가장 빠른 빠르기(rad/초) · morph: 다른 바다로 들어설 때 구름 모양이 바뀌는 시간(초)
+    //   tail: 구름이 흘러가는 쪽(±18°)으로 달릴 때 속력 보너스 (바다마다 steady를 곱한다: 무역풍·계절풍 1, 편서풍 0.7, 극지 0.5, 지중해 0.4, 무풍대 0)
+    //   regimes: 바다별 모양을 바꾸려면 { trades: { form: [늘어남, 구름길, 크기, 솟음], steady: 1, name: '…' } } 처럼 덮어쓴다
+    clouds: { drift: 1.3, idleRate: 0.35, turn: 0.12, morph: 6, tail: 0.08, regimes: {} },
     // 낚시 배경의 수면 위치. 그림을 화면의 실제 찌 높이에 맞춰 나누어 그린다.
     minigames: { fishingWaterline: 0.365, boat: [0, -118, 218, 145] },
     // 유적·자연 경관·동물·보물 발견 연출 (js/scenes/common.js SC.discoveryReveal): 화면이 어두워지고 GIF가 빛난 뒤 마지막 장면에서 멈춘다
@@ -262,4 +270,6 @@
     eventH: 280,
     eventBottom: 205     // 창 아래 끝이 화면 아래에서 이만큼 위 (대화창 바로 위)
   };
+  // 자연재해 그림창 (js/art/disasterfx.js): 크기·위치는 사건 그림과 같게, shake = 지진 때 화면이 흔들리는 초
+  G.FX.disaster = { on: true, w: 640, h: 280, bottom: 205, shake: 1.6 };
 })(window.G = window.G || {});

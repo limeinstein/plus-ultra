@@ -15,6 +15,8 @@ from build import H, W, paper, pencil, tint_for_time, vertical_mask, wash_mask, 
 ROOT = Path(__file__).resolve().parents[2]
 DISCOVERIES = ROOT / "js" / "data" / "discoveries.js"
 WONDERS = ROOT / "js" / "data" / "wonders.js"
+MORE_DISCOVERIES = ROOT / "js" / "data" / "moredisc.js"
+CHAIN_DISCOVERIES = ROOT / "js" / "data" / "chaindisc.js"
 MASTER = ROOT / "tools" / "ruin_gifs" / "v2" / "master"
 PREVIEW_OUT = ROOT / "images" / "discoveries_v2"
 
@@ -25,6 +27,12 @@ def ruin_ids() -> list[str]:
     if WONDERS.exists():
         wonders = WONDERS.read_text(encoding="utf-8")
         ids.extend(re.findall(r"^\s*w\('([^']+)',\s*'[^']+'", wonders, re.M))
+    if MORE_DISCOVERIES.exists():
+        more = MORE_DISCOVERIES.read_text(encoding="utf-8")
+        ids.extend(re.findall(r"^\s*ruin\('([^']+)'", more, re.M))
+    if CHAIN_DISCOVERIES.exists():
+        chain = CHAIN_DISCOVERIES.read_text(encoding="utf-8")
+        ids.extend(re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'ruin'", chain, re.M))
     return ids
 
 

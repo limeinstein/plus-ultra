@@ -40,7 +40,7 @@
       if (d.how !== 'sea' && d.how !== 'land') return;
       if (!G.Disc.available(d)) return;          // 아직 소문조차 없는 것은 알아보지 못한다
       if (d.bookOnly && !s.hints[d.id]) return;   // 전설·공룡은 책을 읽고 나서야 알아본다
-      var hint = s.hints[d.id] ? 1.4 : 1;
+      var hint = G.Disc.clueK(d.id, 'sense');      // 단서 1겹 1.4배 … 4겹 2.3배
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = mode === 'sea' ? (d.how === 'sea' ? rs : rc) : (d.how === 'land' ? rl : 0);
       if (dist < r * hint && dist > (d.r || 0.3) * 0.9) out.push({ d: d, dist: dist });

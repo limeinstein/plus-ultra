@@ -16,6 +16,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageOp
 ROOT = Path(__file__).resolve().parents[2]
 WORLD_DATA = ROOT / "js" / "data" / "world_data.js"
 DISCOVERIES = ROOT / "js" / "data" / "discoveries.js"
+CHAIN_DISCOVERIES = ROOT / "js" / "data" / "chaindisc.js"
 SOURCE = ROOT / "tools" / "geo_gifs" / "sources" / "ship_sighting.png"
 SHIP_SHEET = ROOT / "images" / "ships-nav" / "carrack.webp"
 OUT = ROOT / "images" / "discoveries"
@@ -98,6 +99,21 @@ ROUTES: dict[str, dict] = {
         "route": [(127.4, .8), (128.0, -5.0), (129.0, -9.0), (130.5, -13.0)],
         "tone": "tropic",
     },
+    "kupe": {
+        "name": "쿠페의 별길",
+        "route": [(174.0, -41.0), (181.0, -34.0), (188.0, -26.0), (195.0, -18.0), (200.0, -9.0)],
+        "tone": "tropic",
+    },
+    "kumari": {
+        "name": "쿠마리 칸담",
+        "route": [(80.2, 12.6), (79.5, 9.1), (78.6, 6.3), (77.5, 3.5)],
+        "tone": "tropic",
+    },
+    "lemuria": {
+        "name": "레무리아",
+        "route": [(77.5, 3.5), (73.0, 0.0), (69.0, -4.0), (66.0, -8.0)],
+        "tone": "tropic",
+    },
 }
 
 
@@ -112,7 +128,11 @@ def lerp(a: float, b: float, u: float) -> float:
 
 def geo_rows() -> list[tuple[str, str]]:
     src = DISCOVERIES.read_text(encoding="utf-8")
-    return re.findall(r"^\s*add\('([^']+)', '([^']+)', 'geo'", src, re.M)
+    rows = re.findall(r"^\s*add\('([^']+)', '([^']+)', 'geo'", src, re.M)
+    if CHAIN_DISCOVERIES.exists():
+        src = CHAIN_DISCOVERIES.read_text(encoding="utf-8")
+        rows += re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'([^']+)',\s*'geo'", src, re.M)
+    return rows
 
 
 def load_land_mask() -> Image.Image:

@@ -25,6 +25,7 @@ W, H = 576, 256
 PLANT_IDS = [
     "rubber", "sequoia", "breadfruit", "lotus", "welwitschia",
     "mangrove", "papyrus", "rafflesia", "carnivplant", "startower",
+    "bullocho",
 ]
 
 

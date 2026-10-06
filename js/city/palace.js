@@ -44,6 +44,22 @@
     };
     return B;
   }
+  /** 후원자가 도서관의 책을 일러 준다: 취향에 맞는 사료 갈래(book) 발견이 실린, 지금 나와 있는 책과 그 도서관 (단서는 주지 않는다) */
+  function libraryTip(sp) {
+    var s = S(), c0 = G.CITY_DATA[sp.city], out = [];
+    G.BOOKS.forEach(function (b) {
+      if ((b.y || 0) > s.date.y || s.flags['read_' + b.id]) return;
+      var libs = b.libs.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && R.cityExists(c); });
+      if (!libs.length) return;
+      b.discs.forEach(function (id) {
+        var d = G.DISC[id];
+        if (!d || G.Disc.clue(d) !== 'book' || sp.taste.indexOf(d.cat) < 0 || s.hints[id] || G.Disc.foundByMe(id) || !G.Disc.available(d)) return;
+        var c = libs.slice().sort(function (a, z) { return G.Geo.dist(c0.lon, c0.lat, a.lon, a.lat) - G.Geo.dist(c0.lon, c0.lat, z.lon, z.lat); })[0];
+        out.push({ book: b, disc: d, city: c, w: 1 / (1 + G.Geo.dist(c0.lon, c0.lat, c.lon, c.lat) / 20) });
+      });
+    });
+    return out.length ? U.weighted(out, function (x) { return x.w; }) : null;
+  }
   async function chat(sp) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
     var lines = [];
@@ -52,10 +68,12 @@
     // 리스본·세비야의 후원자는 다음 큰 항로 이야기를 들려준다 (앞선 발견이 알려진 뒤)
     var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(sp.city, 'sponsor') : null;
     if (lead) { lines.push('그러고 보니 요즘 궁정에서도 화제가 된 이야기가 있네. ' + lead.text + '\n그 일을 해내겠다면 기꺼이 후원을 생각해 보지.'); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); await C.say(who, lines.join('\f')); return; }
-    // occasionally drop a hint that matches the sponsor's taste
+    // occasionally drop a hint that matches the sponsor's taste — 이야기 갈래(talk)만. 옛 유적·전설은 도서관으로 보낸다
     if (rel.trust >= 25 && U.chance(0.5)) {
-      var cand = G.DISCOVERIES.filter(function (d) { return sp.taste.indexOf(d.cat) >= 0 && !d.bookOnly && !s.hints[d.id] && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
-      if (cand.length) { var d = U.pick(cand); lines.push('그러고 보니 이런 이야기를 들은 적이 있네. ' + d.hint); G.Disc.addHint(d.id, 'sponsor:' + sp.id); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
+      var cand = G.DISCOVERIES.filter(function (d) { return sp.taste.indexOf(d.cat) >= 0 && !d.bookOnly && G.Disc.clueOk(d, 'sponsor') && G.Disc.rumourW(d, 'sponsor:' + sp.id) && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
+      if (cand.length) { var d = U.weighted(cand, function (x) { return G.Disc.rumourW(x, 'sponsor:' + sp.id); }); lines.push((G.Disc.hasHint(d.id) ? '자네가 쫓는 그 이야기 말일세, 나도 들은 바가 있네. ' : '그러고 보니 이런 이야기를 들은 적이 있네. ') + d.hint); G.Disc.noteHint(d, 'sponsor:' + sp.id); }
+      var bk = cand.length && U.chance(0.6) ? null : libraryTip(sp);
+      if (bk) lines.push('옛 이야기라면 내 말보다 사료가 낫지. ' + bk.city.name + ' 도서관에 ' + bk.book.title + U.jx(bk.book.name || bk.book.title, '이/가') + ' 있으니 읽어 보게. ' + bk.disc.name + '에 관한 대목이 있을 걸세.');
     } else if (s.player.fame < 200) lines.push('자네도 이름을 떨치고 싶다면 먼저 작은 발견부터 차근차근 쌓아 가게.');
     else lines.push(U.pick(['요즘 바다 건너에서 들려오는 소식이 참으로 흥미롭군.', '세상은 우리가 아는 것보다 훨씬 넓다네.', '돈보다 귀한 것은 새로운 지식일세.']));
     await C.say(who, lines.join('\f'));

@@ -478,6 +478,7 @@
     var p = g.p * (R.isRelay(c, goodId) ? R.relayMult(c, goodId, 'buy') : 0.62) * (1 + st.dep * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).depPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행하는 물건은 사는 값도 뛴다 (js/systems/fad.js)
+    if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요: 1480~1700년 유럽 시장이 찾던 물건 (js/systems/era.js)
     return Math.max(1, Math.round(p));
   };
   /** price the city pays when you sell */
@@ -486,6 +487,7 @@
     var base = R.isRelay(c, goodId) ? g.p * R.relayMult(c, goodId, 'sell') : R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
     var p = base * Math.exp(-st.sat * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).satPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행: 그 나라·지역에서 값이 몇 배 (js/systems/fad.js)
+    if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요 (js/systems/era.js)
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자

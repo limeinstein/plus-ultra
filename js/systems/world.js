@@ -22,6 +22,7 @@
     if (G.Cargo) out = out.concat(G.Cargo.daily());   // 오래 묵은 먹을거리·향신료가 상한다
     if (G.Names) out = out.concat(G.Names.daily());       // 아메리고 베스푸치의 보고와 대륙 이름
     if (G.Frontier) out = out.concat(G.Frontier.tick());
+    if (G.Achieve) out = out.concat(G.Achieve.daily());   // 옛 저장: 이미 이룬 업적·이미 열린 사슬의 단서
     if (G.Cabins) out = out.concat(G.Cabins.daily());      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
     // contract deadline warnings
     if (s.contract && !s.contract.warned && U.dateNum(s.date) > s.contract.due) {
@@ -48,6 +49,8 @@
       s.fleet.daysOut = 0; s.fleet.scurvy = Math.max(0, (s.fleet.scurvy || 0) * 0.75 - 2);   // 뭍의 신선한 먹을거리로 빨리 낫는다
     }
     // 가족: 임신 소식·출산 (family.js — 아이는 자택에 들러야 생긴다)
+    if (G.Disaster) out = out.concat(G.Disaster.daily());   // 지진·화산·산사태·쓰나미·홍수 (js/systems/disaster.js)
+    if (G.Era) out = out.concat(G.Era.daily());   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
     if (G.Fad) out = out.concat(G.Fad.daily());             // 끝난 유행을 거둔다
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
     if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다

@@ -38,10 +38,16 @@ BASE_ANIMAL_IDS = [
     "ostrich", "flamingo", "hippo", "crocodile", "polarbear",
 ]
 ANIMALS_DATA = ROOT / "js" / "data" / "animals.js"
+MORE_DISCOVERIES = ROOT / "js" / "data" / "moredisc.js"
 ADDED_ANIMAL_IDS = re.findall(
     r"^\s*a\('([^']+)'", ANIMALS_DATA.read_text(encoding="utf-8"), re.M
 )
-ANIMAL_IDS = BASE_ANIMAL_IDS + [did for did in ADDED_ANIMAL_IDS if did not in BASE_ANIMAL_IDS]
+MORE_BEAST_IDS = re.findall(
+    r"^\s*beast\('([^']+)'", MORE_DISCOVERIES.read_text(encoding="utf-8"), re.M
+) if MORE_DISCOVERIES.exists() else []
+ANIMAL_IDS = BASE_ANIMAL_IDS + [
+    did for did in ADDED_ANIMAL_IDS + MORE_BEAST_IDS if did not in BASE_ANIMAL_IDS
+]
 
 
 def ease(u: float) -> float:

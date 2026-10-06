@@ -57,10 +57,15 @@
     library: 365, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372 };
   // 거리에 늘어서는 차례 (왼쪽 = 바다 쪽, 오른쪽 = 성문 쪽)
   var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'inn', 'guild', 'library', 'church', 'mansion', 'palace', 'house2', 'home', 'gate'];
-  // 도시마다 거리 한쪽에 서 있는 볼거리 (누를 수는 없다)
+  // 도시마다 거리 한쪽에 서 있는 볼거리 (발견물이면 눌러서 설명을 본다 — T.inspect)
   // 아직 전용 그림이 없는 건물은 비슷한 건물 그림을 좌우로 뒤집어 쓴다
   var SUBSTITUTE = { house2: 'home' };   // 둘째 부인의 집: 전용 그림이 없으면 자택 그림을 뒤집어 쓴다   // 전용 그림이 오면 여기서 비슷한 건물로 돌려 쓸 수 있다
   var LANDMARKS = { 7: [['giralda', 0.60, 430], ['columns', 0.10, 250]] };
+  // 발견물 자료(G.DISC)가 없는 볼거리의 설명
+  var MARK_INFO = {
+    giralda: { name: '히랄다 탑', desc: '세비야 대성당 곁에 우뚝 선 탑. 본디 12세기 알모하드 왕조가 세운 대모스크의 첨탑이었으나, 도시가 카스티야 왕국에 넘어간 뒤 대성당의 종탑이 되었다. 성당 안뜰에는 모스크 시절의 오렌지 나무 정원이 남아 있다.' },
+    columns: { name: '로마의 기둥', desc: '세비야가 로마의 도시 히스팔리스였던 시절의 신전 기둥. 천 년이 넘도록 거리 한쪽에 서 있어, 사람들은 도시를 세웠다는 헤라클레스와 율리우스 카이사르의 이야기를 이 기둥에 얹어 들려준다.' }
+  };
   // 도시 발견물은 landmarks/<발견물 id> 그림이 있을 때 자동으로 거리 뒤편에 선다.
   var LANDMARK_HEIGHT = {
     pharos: 500, hwangnyong: 460, hagiasophia: 400, djenne: 370, delhimosque: 370,
@@ -178,7 +183,7 @@
     var marks = landmarks.map(function (l) {
       var key = I.pick(I.chain.landmark(l[0])), img = key && I.get(key);
       if (!img) return null;
-      return { cv: prescale(img, l[2]), x: Math.round(streetW * l[1]), y: GROUND - 54 };
+      return { id: l[0], d: (G.DISC && G.DISC[l[0]]) || null, info: MARK_INFO[l[0]] || null, cv: prescale(img, l[2]), x: Math.round(streetW * l[1]), y: GROUND - 54 };
     }).filter(Boolean);
     var ground = groundStrip(c, rng);
     st = {
@@ -608,8 +613,60 @@
     return null;
   }
 
+  /* 거리 뒤편의 볼거리(발견물): 그림이 그려진 곳을 누르면 설명을 본다. 앞의 건물이 투명한 자리(하늘)일 때만 건물보다 먼저 잡힌다. */
+  var MARK_PX = 0.72;        // 볼거리가 카메라를 따라 움직이는 정도 (draw 와 같다)
+  function solid(o, px, py) {
+    if (o.alpha === undefined) { try { o.alpha = o.cv.getContext('2d').getImageData(0, 0, o.cv.width, o.cv.height).data; } catch (e) { o.alpha = null; } }
+    if (!o.alpha) return true;             // file:// 처럼 픽셀을 읽을 수 없으면 네모 전체
+    for (var dy = -6; dy <= 6; dy += 3) for (var dx = -6; dx <= 6; dx += 3) {
+      var qx = Math.round(px + dx), qy = Math.round(py + dy);
+      if (qx < 0 || qy < 0 || qx >= o.cv.width || qy >= o.cv.height) continue;
+      if (o.alpha[(qy * o.cv.width + qx) * 4 + 3] > 40) return true;
+    }
+    return false;
+  }
+  function markAt(x, y) {
+    if (!st) return null;
+    for (var i = st.marks.length - 1; i >= 0; i--) {
+      var m = st.marks[i]; if (!m.d && !m.info) continue;
+      var sx = m.x - st.cam * MARK_PX, top = m.y - m.cv.height;
+      if (x < sx || x > sx + m.cv.width || y < top || y > m.y) continue;
+      if (solid(m, x - sx, y - top)) return m;
+    }
+    return null;
+  }
+  /** 이 자리에서 누를 것: 건물(이름표 포함)이 먼저, 건물 그림의 빈 하늘 너머로 보이는 볼거리는 볼거리 */
+  function pickAt(x, y) {
+    var it = hitAt(x, y), m = markAt(x, y);
+    if (it && m) { var py = y - (it.base - it.h); if (py >= 0 && !solid(it, x - (it.x - st.cam), py)) return m; return it; }
+    return it || m;
+  }
+  /** 볼거리의 설명: 발견한 것은 발견 카드, 아직이면 그림과 설명에 「건물에 들어가 둘러보면 발견」 안내 */
+  var inspecting = false;
+  T.inspect = async function (m) {
+    if (!st || inspecting || !m || (!m.d && !m.info)) return;
+    inspecting = true; st.hover = null; st.dirty = true;
+    try {
+      var d = m.d;
+      if (d && G.Disc.foundByMe(d.id)) await G.Scenes.discoveryCard(d, 0);
+      else {
+        var nm = d ? d.name : m.info.name, desc = d ? d.desc : m.info.desc, key = I.pick(I.chain.landmark(m.id));
+        var html = '<div class="disc-card landmark-card"><div class="disc-head">' + (d ? 'LANDMARK' : 'SIGHT') + '</div><div class="lm-art"></div>' +
+          '<div class="dname">' + U.esc(nm) + '</div>' +
+          '<div class="center">' + (d ? '<span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> ' : '') + '<span class="tag">' + U.esc(st.city.name) + '</span></div>' +
+          '<div class="desc">' + U.esc(desc) + '</div>' +
+          (d ? '<div class="lm-note">' + G.icon('boot') + '<span>거리 너머로 바라보기만 했다. 이 도시의 건물(교역소·시장·교회·왕궁…)에 들어가 가까이에서 둘러보면 발견으로 기록된다.</span></div>' : '') + '</div>';
+        var win = UI.window({ title: nm, icon: 'star', width: 720, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
+        if (key) { var im = U.el('img'); im.alt = nm; im.src = I.src(key); win.content.querySelector('.lm-art').appendChild(im); }
+        await win.result;
+      }
+    } catch (e) { console.error(e); }
+    inspecting = false;
+    if (st) st.dirty = true;
+  };
+
   // ---------------------------------------------------------------- 입력
-  /** 거리 클릭을 받는 투명한 판. onPick(kind, arg) 로 알려 준다. */
+  /** 거리 클릭을 받는 투명한 판. onPick(kind, arg) 로 알려 준다. 뒤편의 볼거리를 누르면 T.inspect */
   T.catcher = function (onPick) {
     if (st) st.onPick = onPick;      // ↑ 키로 들어갈 때도 같은 길로
     if (st && !T._toldKeys) { T._toldKeys = true; UI.toast('거리 — ←→ 걷기 · Shift 뛰기 · ↑ 건물에 들어가기 (건물을 눌러도 됩니다)', 'boot', 5200); }
@@ -632,8 +689,8 @@
         el.style.cursor = 'grabbing';
         return;
       }
-      st.hover = hitAt(p[0], p[1]);
-      el.style.cursor = st.hover ? 'pointer' : 'default';
+      st.hover = st.hidden ? null : pickAt(p[0], p[1]);
+      el.style.cursor = st.hover ? (st.hover.cv && !st.hover.kind ? 'zoom-in' : 'pointer') : 'default';
     });
     el.addEventListener('mouseup', function (e) {
       if (!st) { down = null; return; }
@@ -641,8 +698,9 @@
       var wasDrag = moved > 8;
       down = null; el.style.cursor = 'default';
       if (wasDrag) return;
-      var it = hitAt(p[0], p[1]);
-      if (it) onPick(it.kind, it.arg);
+      var it = st.hidden ? null : pickAt(p[0], p[1]);
+      if (it && !it.kind) T.inspect(it);
+      else if (it) onPick(it.kind, it.arg);
       else st.camTo = clampCam(st.camTo + (p[0] < 120 ? -420 : p[0] > W - 120 ? 420 : 0));
     });
     el.addEventListener('mouseleave', function () { down = null; if (st) st.hover = null; });
@@ -752,6 +810,10 @@
       ctx.globalAlpha = 0.96;
       ctx.drawImage(m.cv, x, m.y - m.cv.height);
       ctx.globalAlpha = 1;
+      if (st.hover === m) {            // 누를 수 있는 볼거리: 살짝 밝힌다
+        ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.16;
+        ctx.drawImage(m.cv, x, m.y - m.cv.height); ctx.restore();
+      }
     });
     // 건물
     st.items.forEach(function (it) {
@@ -779,6 +841,12 @@
       var on = st.hover === it || st.focus === it || st.near === it, tag = on ? it.tagOn : it.tag;
       ctx.drawImage(tag, Math.round(x + it.w / 2 - tag.width / 2), Math.round(it.base - it.h - 16 - (it.lift || 0) - tag.height));
     });
+    // 볼거리 이름표 (마우스를 올렸을 때)
+    var hm = st.hover;
+    if (hm && !hm.kind && hm.cv) {
+      var tg = hm.tag || (hm.tag = plaqueCanvas((hm.d ? hm.d.name : hm.info.name) + ' — 살펴보기', true));
+      ctx.drawImage(tg, Math.round(hm.x - cam * MARK_PX + hm.cv.width / 2 - tg.width / 2), Math.max(8, Math.round(hm.y - hm.cv.height - 6 - tg.height)));
+    }
     // 문 앞에 서 있으면: ↑ 들어가기
     if (st.near && !st.hero.entering && st.hero.to == null && !st.hidden) enterPrompt(ctx, st.hero.x - cam, GROUND + 34 - HERO_H - 18, st.near);
     // 하늘빛·시간대·가장자리 어둠

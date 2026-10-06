@@ -36,6 +36,9 @@ uniform vec4 uW0;   // shelf, wave, whitecap, glint
 uniform vec4 uW1;   // shallow rgb, foam
 uniform vec4 uW2;   // deep rgb, cloud
 uniform vec4 uW3;   // lagoon rgb, berg
+uniform vec2 uCloudK;    // 구름 무늬의 자리 (카메라 이동·바람에 밀린 만큼 — 화면 한가운데 기준)
+uniform vec2 uCloudDir;  // 구름이 흘러가는 방향 (= 바람이 부는 쪽, 단위 벡터)
+uniform vec4 uCloudForm; // 구름 모양: 바람 방향으로 늘어남, 구름길(줄), 크기, 쌘구름(뭉게뭉게 솟은 정도)
 out vec4 outColor;
 const float TPD = 4096.0/360.0;
 const vec3 SUN = vec3(-0.55, 0.50, 0.67);
@@ -660,8 +663,23 @@ vec3 battleSea(vec2 q, float pxU){
 }
 
 // ================================================================= 구름
-float clouds(vec2 ll, float extra, out vec2 cg){ vec2 p = (ll + vec2(180.0,90.0))*0.9 - uWind*uTime*0.015;
-  vec3 c = fbmd(p, 5); cg = c.yz; float cover = 0.78 - uCloud*0.30 - extra*0.40; return smoothstep(cover, cover + 0.16, c.x); }
+/* 바람을 따라 흐르는 구름. 무늬는 바람 방향(along)·가로(across) 좌표에서 만들어
+   바람 쪽으로 길게 늘이고(uCloudForm.x), 무역풍 바다에서는 바람과 나란한 구름길(줄)을 세운다(.y).
+   좌표는 화면 한가운데(uCenter) 기준 + uCloudK — 바다 위에 붙어 있다가 바람만큼 흘러간다(js/scenes/sea.js cloudStep). */
+float clouds(vec2 ll, float extra, out vec2 cg){
+  vec2 d = uCloudDir, n = vec2(-d.y, d.x);
+  vec2 q = vec2(mod(ll.x - uCenter.x + 540.0, 360.0) - 180.0, ll.y - uCenter.y);
+  float sc = max(uCloudForm.z, 0.2), str = max(uCloudForm.x, 1.0);
+  vec2 r = vec2(dot(q, d)*sc/str, dot(q, n)*sc) + uCloudK;
+  vec3 c = fbmd((r + vec2(180.0,90.0))*0.9, 5); cg = c.yz;
+  float v = c.x;
+  if (uCloudForm.y > 0.001) {                                                     // 구름길: 바람과 나란한 줄 (줄 사이는 맑다)
+    float row = sin(r.y*5.2 + (vnoise(r*0.7) - 0.5)*3.2);
+    v += row*0.16*uCloudForm.y;
+  }
+  float cover = 0.78 - uCloud*0.30 - extra*0.40;
+  return smoothstep(cover, cover + 0.16 - 0.08*uCloudForm.w, v);
+}
 
 `;
   var MAIN_LAND = `// ================================================================= 육지 캐시 패스: 화면보다 넓은 판에 육지만 그려 둔다 (알파 = 육지 비율)
@@ -778,7 +796,7 @@ void main(){
     return prog;
   }
   var UNIFORMS = ['uGeo', 'uClim', 'uRes', 'uCenter', 'uZoom', 'uTime', 'uWind', 'uCloud', 'uEdge', 'uMode', 'uDusk', 'uStorm', 'uQuality',
-    'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize'];
+    'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
 
   /* 두 패스:
      · 육지 캐시 — 무거운 육지(높이·생태·나무·강)는 화면보다 1.45배 넓은 판에 그려 두고, 카메라가 그 판 안에 있는 동안 다시 쓴다.
@@ -970,6 +988,14 @@ void main(){
     gl.uniform1f(u.uMode, view.mode || 0);
     gl.uniform1f(u.uDusk, view.dusk || 0);
     gl.uniform1f(u.uStorm, view.storm || 0);
+    // 구름: 항해 화면은 바람 방향·모양·자리를 직접 준다(view.clouds). 다른 화면은 예전처럼 바람 쪽으로 천천히 흐르는 둥근 구름
+    var cl = view.clouds;
+    if (cl) { gl.uniform2f(u.uCloudK, cl.k[0], cl.k[1]); gl.uniform2f(u.uCloudDir, cl.dir[0], cl.dir[1]); gl.uniform4f(u.uCloudForm, cl.form[0], cl.form[1], cl.form[2], cl.form[3]); }
+    else {
+      var wl = Math.hypot(w[0], w[1]) || 1, dx = w[0] / wl, dy = w[1] / wl, tt = (view.time || 0) * 0.0167;
+      var ax = view.lon - w[0] * tt, ay = view.lat - w[1] * tt;      // 둥근 구름(늘이지 않음)을 바람 쪽으로 흘린다
+      gl.uniform2f(u.uCloudK, ax * dx + ay * dy, -ax * dy + ay * dx); gl.uniform2f(u.uCloudDir, dx, dy); gl.uniform4f(u.uCloudForm, 1, 0, 1, 0);
+    }
     gl.activeTexture(gl.TEXTURE2);
     gl.bindTexture(gl.TEXTURE_2D, cache ? cache.tex : null); gl.uniform1i(u.uCache, 2);
     if (cache) { gl.uniform2f(u.uCacheC, cache.lon, cache.lat); gl.uniform1f(u.uCacheZ, cache.zoom); gl.uniform2f(u.uCacheSize, cache.w, cache.h); }

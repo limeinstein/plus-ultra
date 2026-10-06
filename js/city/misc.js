@@ -286,11 +286,11 @@
       return;
     }
     var got = [];
-    var discs = b.discs.filter(function (id) { return G.DISC[id]; });
+    var discs = b.discs.filter(function (id) { return G.DISC[id] && G.Disc.clueOk(G.DISC[id], 'book'); });   // 사료 갈래만 (js/data/clues.js)
     var readable = lv >= 3 ? discs.length : lv === 2 ? Math.ceil(discs.length * 0.7) : Math.ceil(discs.length * 0.35);
     var rng = U.makeRng(U.strHash(b.id + s.seed));
     var order = discs.slice().sort(function () { return rng() - 0.5; }).slice(0, readable);
-    order.forEach(function (id) { if (G.Disc.addHint(id, 'book:' + b.id)) got.push(G.DISC[id]); });
+    order.forEach(function (id) { if (G.Disc.addHint(id, 'book:' + b.id)) got.push(G.DISC[id]); else if (G.Disc.lastMore === id) UI.toast('단서가 겹쳤다: 「' + G.DISC[id].name + '」 — 단서 ' + G.Disc.hintLv(id) + '겹', 'scroll'); });
     // 열람 결과를 나누어 알려 준다: 새 단서 / 이미 앎 / 아직 이해 못 함(개척 단계) / 말이 서툴러 놓침
     var later = order.filter(function (id) { return !s.hints[id] && !G.Disc.foundByMe(id) && !G.Disc.available(G.DISC[id]); }).length;
     var knownN = order.filter(function (id) { return got.indexOf(G.DISC[id]) < 0 && (s.hints[id] || G.Disc.foundByMe(id)); }).length;

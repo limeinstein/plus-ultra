@@ -44,6 +44,7 @@
   };
   function newSt(start) { return { cam: { lon: start[0], lat: start[1], zoom: 170 }, path: null, t: 0, busy: 0, paused: true, dayAcc: 0, speed: 1, trail: [], seen: {}, near: null, lastHint: -99, gph: 0, gdist: 0, gather: 1, face: 1, pfx: G.Party.newFx(), unit: {} }; }
   L.runtime = function () { return st; };
+  L.refreshBar = function () { if (st && st.alive) refreshBar(); };
   function cleanMount(m) { return m && m.id && m.id !== 'walk' && m.n > 0 ? { id: m.id, n: m.n, draft: m.draft || 'horse', style: m.style || null } : { id: 'walk', n: 0 }; }
   function MT() { var l = S().loc; return l.mount || (l.mount = { id: 'walk', n: 0 }); }
   L.mount = MT;
@@ -158,8 +159,9 @@
     UI.hud.set('gold', H.gold());
   }
   function pos(e) { var r = G.Game.canvases().overlay.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
-  function toScreen(lon, lat) { return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom, 450 - (lat - st.cam.lat) * st.cam.zoom]; }
-  function toWorld(x, y) { return [st.cam.lon + (x - 800) / st.cam.zoom, st.cam.lat - (y - 450) / st.cam.zoom]; }
+  // st.qo: 이번 장면을 그릴 때 쓴 지진 흔들림(화면 px, js/art/quakefx.js). 카메라(st.cam)에는 더하지 않고 그리기·클릭 변환에만 넣는다
+  function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
+  function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
   function onDown(e) {
     if (e.button !== 0 || UI.busy() || st.busy) return;
     var p = pos(e), w = toWorld(p[0], p[1]);
@@ -195,7 +197,7 @@
       var days = dt * st.speed / DAY_SEC;
       var terr = G.Geo.terrain(l.lon, l.lat), tv = (TERR[terr] || TERR.grass).spd;
       var mk = G.Mounts.speed(MT(), terr, l.party);
-      var v = tv * mk * (1 + R.skill('ops') * 0.1) * (s.fleet.fatigue > 70 ? 0.7 : 1) * (l.party > 20 ? 0.9 : 1) * (st.fastDays > 0 ? 1.45 : 1);
+      var v = tv * mk * (1 + R.skill('ops') * 0.1) * (s.fleet.fatigue > 70 ? 0.7 : 1) * (l.party > 20 ? 0.9 : 1) * (st.fastDays > 0 ? 1.45 : 1) * (G.Disaster ? G.Disaster.slow(l.lon, l.lat) : 1);   // 재해의 자취 안에서는 느리다
       st.mk = mk;
       var stepLen = v * days;
       if (st.dir) {
@@ -231,8 +233,9 @@
     }
     st.rframe = (st.rframe || 0) + 1;
     var idle = st.busy > 0 || UI.busy();
-    if (idle && st.rframe % 3 !== 0) return;              // 대화 중에는 20fps
-    if (st.paused && !idle && st.rframe % 2 !== 0) return; // 멈춰 있을 때는 30fps
+    var quake = G.Quake && G.Quake.active();
+    if (idle && st.rframe % 3 !== 0 && !quake) return;              // 대화 중에는 20fps (땅이 흔들리는 동안은 매 장면)
+    if (st.paused && !idle && st.rframe % 2 !== 0 && !quake) return; // 멈춰 있을 때는 30fps
     render();
   };
   /* 걸음 리듬: 간 거리(화면 px)를 걸음 폭으로 나눠 걸음 주기를 돌린다 — 빨리 가면 걸음도 빨라지지만 FX.party.maxStepHz를 넘지 않는다.
@@ -298,6 +301,8 @@
       G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c) || s.known.indexOf(c.id) >= 0) return; if (G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.8) { s.known.push(c.id); UI.toast('새로운 도시 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'castle', 4000); G.Fame.add('ex', 5); } });
       msgs.forEach(function (m) { UI.toast(m.text, m.icon); });
       refreshHud();
+      // 자연재해: 지진·화산·산사태·쓰나미·홍수가 탐험대를 덮친다 (js/systems/disaster.js)
+      if (G.Disaster) { await G.Disaster.land({ spend: spendDays, dailyCost: function () { return dailyCost(); }, mount: MT, refresh: refreshHud }); if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy--; await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); st.busy--; return; } }
       // discoveries
       var chk = G.Disc.checkLand(l.lon, l.lat);
       for (var i = 0; i < chk.hits.length; i++) {
@@ -321,7 +326,7 @@
       if (st.herbs > 0) st.herbs--;
       if (st.fastDays > 0) st.fastDays--;
       // random encounters (지형마다 다른 사건이 먼저 일어날 수 있다)
-      if (U.chance(0.1)) { if (!(U.chance(0.55) && await terrainEvent(terr))) await encounter(terr); }
+      if (U.chance(0.1) && !(G.Tutorial && G.Tutorial.quiet && G.Tutorial.quiet())) { if (!(U.chance(0.55) && await terrainEvent(terr))) await encounter(terr); }   // 튜토리얼에서는 우연한 만남을 재운다
       if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy--; await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
     } catch (e) { console.error(e); }
     st.busy--;
@@ -585,7 +590,7 @@
     var s = S(), l = s.loc, f = s.fleet;
     var near = null, bd = 25;
     G.CITY_DATA.forEach(function (c) { if (!c.goods || !c.goods.length) return; var dd = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (dd < bd) { bd = dd; near = c; } });
-    var good = near ? U.pick(near.goods) : null;
+    var good = near ? U.pick(near.goods.filter(function (id) { return !(G.Slave && G.Slave.is(id)); })) : null;
     var qty = U.ri(4, 12), cost = 60 + qty * 12;
     var v = await UI.ask('(손짓으로) 우리가 가진 것과 바꾸자고 한다. 식량과 ' + (good && G.GOOD[good] ? G.GOOD[good].name + ' ' + qty + '통' : '털가죽') + '을 내민다. 대신 금화 ' + cost + '닢어치의 물건을 원한다.', [{ label: '바꾼다', value: 1 }, { label: '그만둔다', value: 0 }], who);
     if (!v) return;
@@ -756,7 +761,11 @@
   // ---------------------------------------------------------------- render
   function render() {
     var s = S(), l = s.loc, r = G.Game.renderer;
-    if (r) r.draw({ lon: st.cam.lon, lat: st.cam.lat, zoom: st.cam.zoom, time: st.t, wind: [0.4, 0.2], cloud: 0.25, edge: 0.6, mode: 0, dusk: 0, storm: 0, quality: 1, cssWidth: 1600 });
+    // 지진 흔들림: 이번 장면에서만 카메라를 옮겨 그린다 (st.cam은 그대로 — 카메라 추적과 흔들림이 서로 보정하지 않는다).
+    // 땅 셰이더는 어느 자리든 그리므로 가장자리에 빈 곳이 드러나지 않는다 (캐시 판도 화면보다 1.45배 넓다)
+    st.qo = G.Quake ? G.Quake.camera() : null;
+    var qx = st.qo ? st.qo[0] : 0, qy = st.qo ? st.qo[1] : 0;
+    if (r) r.draw({ lon: st.cam.lon - qx / st.cam.zoom, lat: st.cam.lat + qy / st.cam.zoom, zoom: st.cam.zoom, time: st.t, wind: [0.4, 0.2], cloud: 0.25, edge: 0.6, mode: 0, dusk: 0, storm: 0, quality: 1, cssWidth: 1600 });
     var cv = G.Game.canvases().overlay, ctx = cv.getContext('2d'), k = G.Game.overlayScale || 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.setTransform(k, 0, 0, k, 0, 0);
     var ff = fontFam();
@@ -780,9 +789,11 @@
     // contract zone
     var ct = s.contract && G.DISC[s.contract.disc];
     if (ct && ct.how === 'land' && G.Disc.hasHint(ct.id) && !G.Disc.foundByMe(ct.id)) {
-      var rng = U.makeRng(U.strHash(ct.id)); var zc = toScreen(ct.lon + (rng() - 0.5) * 1.2, ct.lat + (rng() - 0.5) * 1.2);
-      ctx.strokeStyle = 'rgba(200,40,30,.6)'; ctx.setLineDash([8, 8]); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(zc[0], zc[1], 1.3 * st.cam.zoom, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      var rng = U.makeRng(U.strHash(ct.id)), zk = G.Disc.clueK(ct.id, 'zone'); var zc = toScreen(ct.lon + (rng() - 0.5) * 1.2 * zk, ct.lat + (rng() - 0.5) * 1.2 * zk);
+      ctx.strokeStyle = 'rgba(200,40,30,.6)'; ctx.setLineDash([8, 8]); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(zc[0], zc[1], 1.3 * zk * st.cam.zoom, 0, 7); ctx.stroke(); ctx.setLineDash([]);
     }
+    // 자연재해의 자취 (알려진 것만)
+    if (G.Disaster) G.Disaster.drawLand(ctx, toScreen, st.cam.zoom, st.t, ff);
     // 정찰대가 알아챈 것
     if (!st.marks || (st.f || 0) % 20 === 0 || st.marksVer !== G.Explore.ver) { st.marks = G.Explore.markers(l.lon, l.lat, 'land'); st.marksVer = G.Explore.ver; }
     st.marks.forEach(function (m) {
@@ -800,6 +811,10 @@
     G.Party.drawTracks(ctx, tp.slice(0, 140), mt.id, terrNow, psz);
     // destination
     if (st.path) { var dp = toScreen(st.path[0], st.path[1]), pp0 = toScreen(l.lon, l.lat); ctx.strokeStyle = 'rgba(255,245,220,.8)'; ctx.setLineDash([6, 7]); ctx.beginPath(); ctx.moveTo(pp0[0], pp0[1]); ctx.lineTo(dp[0], dp[1]); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.arc(dp[0], dp[1], 8, 0, 7); ctx.stroke(); }
+    // 지진: 땅에서 피어오르는 먼지 · 튀는 잔돌 · 떨리는 우듬지와 풀 (탐험대 아래)
+    if (G.Quake && st.qo) G.Quake.drawLand(ctx, toScreen, toWorld, st.cam.zoom);
+    // 흔들리는 땅 위에서 탐험대는 조금 늦게 따라가 휘청인다 (그림만 — 실제 자리·발밑 먼지 자리는 그대로)
+    if (st.qo && G.Quake) { var stg = G.Quake.stagger(st.qo); tp = tp.map(function (q) { return [q[0] + stg[0], q[1] + stg[1]]; }); }
     // 탐험대 모형: 발밑 먼지 → 고리 → 줄지어 선 대원들
     var pp = tp[0], mvg = (st.movT || 0) > 0;
     G.Party.drawFx(ctx, st.pfx, toScreen);

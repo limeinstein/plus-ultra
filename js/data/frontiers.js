@@ -98,6 +98,9 @@
     urcrown: ['ur'], goldplate: ['persepolis'], antpeople: ['antarctic'], mu: ['moai'], cibola: ['pueblo'],
     machupicchu: ['sacsay'], uluru: ['aborigine'], jadesuit: ['qianling'], konjiki: ['goldseal'], cheonmado: ['sillacrown']
   };
+  // 꼬리에 꼬리를 무는 발견(js/data/chaindisc.js): 발견에 적힌 need를 합치고, 무 제국처럼 앞 고리가 바뀐 것은 덮어쓴다
+  (G.DISCOVERIES || []).forEach(function (d) { if (d.need && !G.DISC_CHAIN[d.id]) G.DISC_CHAIN[d.id] = d.need.slice(); });
+  if (G.CHAIN_OVERRIDE) for (var oid in G.CHAIN_OVERRIDE) G.DISC_CHAIN[oid] = G.CHAIN_OVERRIDE[oid].slice();
   for (var cid in G.DISC_CHAIN) if (G.DISC && G.DISC[cid]) G.DISC[cid].need = G.DISC_CHAIN[cid];
   var CHAIN_LINE = {
     agamemnon: '무너진 무덤 구덩이 한쪽에서 황금빛이 비쳤다는 인부들의 이야기를 들었다.',
@@ -116,7 +119,8 @@
     konjiki: '왜국의 금도장처럼 온통 금으로 덮인 절이 북쪽에 있다고 한다.',
     cheonmado: '금관이 나온 무덤 곁의 다른 무덤에서 하늘을 달리는 흰 말 그림이 나왔다고 한다.'
   };
-  G.chainLine = function (id) { return CHAIN_LINE[id] || ''; };
+  if (G.CHAIN_LINE_MORE) for (var lk in G.CHAIN_LINE_MORE) CHAIN_LINE[lk] = G.CHAIN_LINE_MORE[lk];
+  G.chainLine = function (id) { return CHAIN_LINE[id] || (G.DISC && G.DISC[id] && G.DISC[id].chainLine) || ''; };
 
   // 큰 항로의 단서 (대항해시대 3처럼 앞선 발견이 알려진 뒤에야 들을 수 있다): 리스본·세비야의 술집 주인과 후원자에게서 듣는다.
   // after: 모두 알려져야(내가 찾았거나 경쟁자가 발표) 이야기가 돈다 · line: 들려주는 말 (그 뒤에 발견물의 단서 문장이 이어진다)

@@ -42,7 +42,7 @@
     return cand[Math.floor(rng() * cand.length)];
   }
   function goodsOf(c) {
-    return (c.goods || []).filter(function (id) { return G.GOOD[id]; });
+    return (c.goods || []).filter(function (id) { return G.GOOD[id] && !(G.Slave && G.Slave.is(id)); });   // 조합은 노예를 맡기지 않는다
   }
   var NAMES = ['안토니오', '미겔', '조반니', '피에르', '한스', '유수프', '알리', '디에고', '루이스', '마르코',
     '페드루', '야코프', '이반', '오마르', '라미레스', '베르나르', '토마스', '필립', '살바도르', '엔리케'];

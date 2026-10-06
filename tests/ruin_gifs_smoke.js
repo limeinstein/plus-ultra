@@ -111,7 +111,7 @@ function socket(url) {
     })()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.ruins !== 162 || result.gifs !== 162 || result.natures !== 40 || result.natureGifs !== 40 || result.naturals !== 34 || result.landscapes !== 41 || result.landscapeGifs !== 41 || result.landscapeSheets !== 41 || result.landscapeReveals !== 41 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.natureTag !== 'CANVAS' || result.natureAria !== '지구의 배꼽' || result.solomonTag !== 'CANVAS' || result.solomonAria !== '솔로몬의 광산' || !catalog || catalog.cards !== 162 || catalog.animated < 1 || catalog.tag !== 'CANVAS' || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.ruins !== 172 || result.gifs !== 172 || result.natures !== 55 || result.natureGifs !== 55 || result.naturals !== 49 || result.landscapes !== 56 || result.landscapeGifs !== 56 || result.landscapeSheets !== 56 || result.landscapeReveals !== 56 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.natureTag !== 'CANVAS' || result.natureAria !== '지구의 배꼽' || result.solomonTag !== 'CANVAS' || result.solomonAria !== '솔로몬의 광산' || !catalog || catalog.cards !== 172 || catalog.animated < 1 || catalog.tag !== 'CANVAS' || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

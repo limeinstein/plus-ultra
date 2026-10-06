@@ -49,13 +49,47 @@
     if (days < 2) { await C.mate('이것만으로는 보급 물자가 모자랍니다!'); return; }
     if (R.skill('nav') === 0) await C.mate('제독, 우리 함대에는 항해술을 아는 사람이 없습니다. 항해가 더뎌질 테니 좋은 항해사를 구하십시오.');
     var txt = days >= 40 ? '준비 만반입니다. 언제라도 출항할 수 있습니다! 출항하겠습니까?' : days + '일 정도 항해할 수 있다고 생각합니다. 출항하겠습니까?';
-    var go = await C.mateAsk(txt, [{ label: '출항한다', value: true }, { label: '그만둔다', value: false }]);
-    if (!go) return;
+    var dests = autoDests(c), autoTo = null;
+    var go = await C.mateAsk(txt, [{ label: '출항한다', value: true },
+      { label: dests.length ? '자동항해로 출항한다 (목적지를 고른다)' : '자동항해로 출항한다 — 이 항구에서 익힌 항로가 없다', value: 'auto', icon: 'anchor', dis: !dests.length },
+      { label: '그만둔다', value: false }]);
+    if (go === 'auto') {
+      if (!dests.length) return;
+      autoTo = await pickAutoDest(c, dests, days);
+      if (autoTo == null) return;
+    } else if (!go) return;
     if (s.player.wife && c.id === s.player.home) await UI.say(U.pick(['부디, 무사히 돌아 오세요.', '꼭 돌아오세요.', '엉뚱한 짓은 하지 말아요. 기다리고 있을 테니.']), G.Family ? G.Family.wifeSpeaker() : {});
     s.flags.departed = true;
     if (c.id === s.player.home) s.circ = { cum: 0, from: c.id };
-    await UI.fade(function () { G.Game.go('sea', { depart: c.id }); });
+    await UI.fade(function () { G.Game.go('sea', autoTo != null ? { depart: c.id, autoTo: autoTo } : { depart: c.id }); });
   };
+  /** 이 항구에서 자동항해로 곧장 갈 수 있는 항구 (익힌 항로 — G.Routes), 가까운 순 */
+  function autoDests(c) {
+    if (!G.Routes) return [];
+    return G.Routes.list().filter(function (r) { return r.open && (r.a === c.id || r.b === c.id); })
+      .map(function (r) { var o = G.CITY_DATA[r.a === c.id ? r.b : r.a]; return { c: o, days: G.Routes.days(c.id, o.id) }; })
+      .filter(function (x) { return x.c && x.c.port && R.cityExists(x.c); })
+      .sort(function (x, y) { return (x.days || 999) - (y.days || 999); });
+  }
+  H.autoDests = autoDests;
+  /** 출항하면서 자동항해할 항구를 고른다 → 도시 id (그만두면 null). 보급이 모자라 보이면 한 번 더 묻는다 */
+  async function pickAutoDest(c, dests, days) {
+    var opts = dests.map(function (x) {
+      var short = x.days != null && x.days > days;
+      return { label: x.c.name, value: x.c.id, icon: 'anchor',
+        right: (x.days != null ? '약 ' + x.days + '일' : '') + (short ? ' · <span class="warn-text">보급 모자람</span>' : ''),
+        desc: G.Routes.label(c.id, x.c.id) + (G.Routes.get(c.id, x.c.id) && G.Routes.get(c.id, x.c.id).best ? ' · 가장 빨랐던 항해 ' + G.Routes.get(c.id, x.c.id).best + '일' : '') };
+    });
+    var v = await UI.choose('자동항해 — 어디로 갈까요?', opts, { width: 640, icon: 'anchor',
+      text: '익힌 항로의 항구입니다. 출항하면 곧바로 그 항구까지 뱃길을 찾아 가서 입항합니다(×' + ((G.FX && G.FX.autoSailSpeed) || 4) + ' 배속). 바다에서 방향키·숫자판·바다를 누르면 손으로 몰게 됩니다. 실은 보급: 약 ' + days + '일분.' });
+    if (v == null) return null;
+    var d = dests.filter(function (x) { return x.c.id === v; })[0];
+    if (d && d.days != null && d.days > days) {
+      var ok = await C.mateAsk('제독, ' + d.c.name + '까지는 ' + d.days + '일쯤 걸리는데 식량·물은 ' + days + '일분뿐입니다. 그대로 떠나시겠습니까?', [{ label: '그대로 출항', value: true }, { label: '그만둔다', value: false }]);
+      if (!ok) return null;
+    }
+    return v;
+  }
 
   // ---------------------------------------------------------------- 출항 준비 (선원·수리·보급을 한 번에)
   function prepPlan(c, days) {

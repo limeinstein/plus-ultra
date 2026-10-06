@@ -9,9 +9,12 @@ from PIL import Image, ImageChops, ImageStat
 ROOT = Path(__file__).resolve().parents[1]
 src = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 ids = re.findall(r"^\s*add\('([^']+)', '[^']+', 'geo'", src, re.M)
+src = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
+ids += re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'geo'", src, re.M)
 assert ids == [
     "capegood", "westroute", "indiaroute", "malacca", "spiceis", "china", "zipang",
     "newstrait", "circum", "antarctic", "northstrait", "endstrait", "australia",
+    "kupe", "kumari", "lemuria",
 ], ids
 
 source = ROOT / "tools" / "geo_gifs" / "sources" / "ship_sighting.png"

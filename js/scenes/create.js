@@ -34,8 +34,21 @@
     for (var k in jb) st[k] += jb[k];
     st[z.stat] += 6;
     for (k in st) st[k] = Math.round(U.clamp(st[k], 12, 95));
-    p.st = st;
+    p.base = st; p.bon = { str: 0, int: 0, mar: 0, cha: 0 };
+    calcStats();
   }
+  /* 대항해시대 3처럼 — 나이가 많을수록 보너스 점수가 많다
+     · 능력 보너스(BAL.statPts + 나이 × statPerYear): 체력·지력·무력·매력에 직접 나눠 준다
+     · 특기 점수 = 나이 몫(3 + (나이 − 18) ÷ 4) + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax) — 지력에 보너스를 주면 특기 점수도 는다
+     조정값: G.BALANCE.create */
+  function BAL() { return (G.BALANCE && G.BALANCE.create) || { statPts: 4, statPerYear: 0.5, statMax: 99, knowFrom: 40, knowStep: 15, knowMax: 3 }; }
+  function calcStats() { var st = {}; for (var k in p.base) st[k] = Math.min(BAL().statMax, p.base[k] + (p.bon[k] || 0)); p.st = st; }
+  function statPoints() { return BAL().statPts + Math.floor((p.age - 18) * BAL().statPerYear); }
+  function statSpent() { var n = 0; for (var k in p.bon) n += p.bon[k]; return n; }
+  function agePoints() { return 3 + Math.floor((p.age - 18) / 4); }
+  /** 지식 보너스: 지력이 높으면 특기를 더 익혀 시작한다 */
+  function knowPoints(intel) { var b = BAL(); return Math.max(0, Math.min(b.knowMax, Math.floor(((intel == null ? p.st.int : intel) - b.knowFrom) / b.knowStep))); }
+  C.bonus = function (age, intel) { var sv = p; p = { age: age, st: { int: intel } }; var r = { stat: statPoints(), age: agePoints(), know: knowPoints(intel) }; p = sv; return r; };
   function baseSkills() {
     var j = G.JOBS.filter(function (x) { return x.id === p.job; })[0];
     var sk = {}; G.SKILLS.forEach(function (s) { sk[s.id] = 0; });
@@ -47,7 +60,7 @@
     lg[R.nativeLang(p.nation)] = 3; lg[p.nation === 'PT' ? 0 : 1] = 2;
     return lg;
   }
-  function points() { return 3 + Math.floor((p.age - 18) / 4); }
+  function points() { return agePoints() + knowPoints(); }
   function cost(lv) { return lv === 1 ? 1 : lv === 2 ? 2 : lv === 3 ? 3 : 0; }
   function spent() {
     var n = 0, b = baseSkills(), bl = baseLangs();
@@ -85,7 +98,8 @@
       '<div class="muted" id="fullnm" style="margin-top:4px;font-size:15px">불리는 이름: <b style="color:var(--ink)">' + U.esc(p.name) + '</b></div>' +
       '<div style="margin-top:14px"><label>생일</label><div class="flex"><select id="bm">' + mOpts() + '</select><span>월</span><select id="bd">' + dOpts() + '</select><span>일</span></div>' +
       '<div class="muted" style="margin-top:6px;font-size:16px">' + zod.name + ' — ' + { str: '체력', int: '지력', mar: '무력', cha: '매력' }[zod.stat] + '에 보너스</div></div>' +
-      '<div style="margin-top:14px"><label>나이 <b style="color:var(--ink)">' + p.age + '세</b> <span class="muted" style="font-size:14px">(젊을수록 체력·무력, 나이 들수록 지력·매력과 특기 점수)</span></label><input type="range" id="age" min="18" max="40" value="' + p.age + '"></div>' +
+      '<div style="margin-top:14px"><label>나이 <b style="color:var(--ink)">' + p.age + '세</b> <span class="muted" style="font-size:14px">(젊을수록 체력·무력, 나이 들수록 지력·매력과 보너스 점수)</span></label><input type="range" id="age" min="18" max="40" value="' + p.age + '"></div>' +
+      '<div class="cr-bonus muted">나이 보너스 — 능력 점수 <b>' + statPoints() + '</b> · 특기 점수 <b>' + agePoints() + '</b><br>지식(지력 ' + p.st.int + ') 보너스 — 특기 점수 <b>+' + knowPoints() + '</b>' + (knowPoints() < BAL().knowMax ? ' <small>(지력 ' + (BAL().knowFrom + (knowPoints() + 1) * BAL().knowStep) + '이면 +' + (knowPoints() + 1) + ')</small>' : '') + '</div>' +
       '</div></div>';
     // column 2
     h += '<div class="col" style="width:430px"><div class="sect parch ornament-corners"><h4>국적</h4><div class="opt-row">' +
@@ -100,12 +114,15 @@
       '</div></div>';
     // column 3
     var pts = points(), used = spent();
-    h += '<div class="col" style="flex:1"><div class="sect parch ornament-corners"><div class="flex"><h4 style="flex:1">능력치</h4><button class="btn small" id="roll">' + G.icon('dice') + '다시 굴리기</button></div>';
+    var sPts = statPoints(), sUsed = statSpent();
+    h += '<div class="col" style="flex:1"><div class="sect parch ornament-corners"><div class="flex"><h4 style="flex:1">능력치</h4><span style="font-size:16px;margin-right:10px">보너스 <b style="color:' + (sPts - sUsed ? '#1e3552' : '#6a5a40') + '">' + (sPts - sUsed) + '</b> / ' + sPts + '</span><button class="btn small" id="roll">' + G.icon('dice') + '다시 굴리기</button></div>';
     G.STATS.forEach(function (s) {
-      h += '<div class="statrow"><span>' + s.name + '</span>' + UI.bar(p.st[s.id], 100) + '<b style="text-align:right">' + p.st[s.id] + '</b></div>';
+      var bn = p.bon[s.id] || 0;
+      h += '<div class="statrow cr-stat"><span>' + s.name + '</span>' + UI.bar(p.st[s.id], 100) + '<b style="text-align:right">' + p.st[s.id] + (bn ? '<small class="cr-bon">+' + bn + '</small>' : '') + '</b>' +
+        '<button class="btn mini" data-st="' + s.id + '" data-d="-1">−</button><button class="btn mini" data-st="' + s.id + '" data-d="1">＋</button></div>';
     });
     h += '<div class="muted" style="font-size:15px;margin-top:4px">특기 한도 ' + R.skillCap(p.st.int) + '개 · 어학 한도 ' + R.langCap(p.st.int) + '개 (지력에 따라)</div></div>';
-    h += '<div class="sect parch ornament-corners cr-skills" style="flex:1"><div class="flex"><h4 style="flex:1">특기 · 어학</h4><span style="font-size:18px">남은 점수 <b style="color:' + (pts - used < 0 ? '#8a2a1e' : '#1e3552') + '">' + (pts - used) + '</b> / ' + pts + '</span></div>' +
+    h += '<div class="sect parch ornament-corners cr-skills" style="flex:1"><div class="flex"><h4 style="flex:1">특기 · 어학</h4><span style="font-size:18px">남은 점수 <b style="color:' + (pts - used < 0 ? '#8a2a1e' : '#1e3552') + '">' + (pts - used) + '</b> / ' + pts + ' <small class="muted">(나이 ' + agePoints() + ' + 지식 ' + knowPoints() + ')</small></span></div>' +
       '<div class="skillgrid">';
     var b = baseSkills();
     G.SKILLS.forEach(function (s) {
@@ -150,6 +167,23 @@
         else if (g === 'job') { p.job = v; reset(false); }
         else if (g === 'diff') p.diff = v;
         render();
+      };
+    });
+    U.$$('[data-st]', box).forEach(function (el) {
+      el.onclick = function () {
+        var id = el.dataset.st, d = +el.dataset.d, bn = p.bon[id] || 0;
+        if (d > 0) {
+          if (statSpent() >= statPoints()) { UI.toast('나이 보너스 점수를 다 썼습니다. 나이가 많을수록 점수가 많습니다.', 'info'); return; }
+          if (p.st[id] >= BAL().statMax) return;
+        } else {
+          if (bn <= 0) return;
+          if (id === 'int') {        // 지력을 내리면 특기 점수·특기 한도가 줄어든다 — 이미 쓴 만큼은 남겨야 한다
+            var ni = p.st.int - 1, np = agePoints() + knowPoints(ni);
+            var nsk = G.SKILLS.filter(function (s) { return p.sk[s.id] > 0; }).length, nlg = p.lg.filter(function (x) { return x > 0; }).length;
+            if (spent() > np || nsk > R.skillCap(ni) || nlg > R.langCap(ni)) { UI.toast('지력을 내리면 특기 점수나 한도가 모자랍니다. 특기·어학을 먼저 줄이십시오.', 'info'); return; }
+          }
+        }
+        p.bon[id] = bn + d; calcStats(); render();
       };
     });
     U.$$('[data-sk]', box).forEach(function (el) {

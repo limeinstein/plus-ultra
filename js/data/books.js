@@ -202,6 +202,8 @@
     b_northpass: ['험프리 길버트|길버트', '잉글랜드의 험프리 길버트가 아메리카 북쪽을 돌아 중국으로 가는 바닷길이 있다고 주장한 글. 얼음 바다와 흰 곰, 가죽 배를 탄 사람들, 밤하늘을 물들이는 빛에 관한 뱃사람들의 증언을 모았다.']
   };
   if (G.WONDERS) for (var wk in G.WONDERS.text) TEXT[wk] = G.WONDERS.text[wk];
+  // 다른 자료 파일이 이미 있는 책의 줄거리에 대목을 덧붙인다 (js/data/moredisc.js)
+  if (G.WONDERS && G.WONDERS.textAdd) for (var ta in G.WONDERS.textAdd) if (TEXT[ta]) TEXT[ta] = [TEXT[ta][0], TEXT[ta][1] + ' ' + G.WONDERS.textAdd[ta]];
   G.BOOKS.forEach(function (b) {
     var t = TEXT[b.id]; if (!t) return;
     var au = t[0].split('|');

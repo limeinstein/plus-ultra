@@ -9,16 +9,66 @@
   D.state = function (id) { return S().disc[id] || null; };
   D.foundByMe = function (id) { var d = S().disc[id]; return !!(d && d.found && d.me); };
   D.hasHint = function (id) { return !!S().hints[id]; };
-  /** 단서를 적는다. 아직 개척 단계가 닿지 않은 발견물은 받지 않는다 (G.Frontier) */
+  /** 단서의 갈래: 'talk'(주점·교역소·후원자의 이야기) · 'book'(도서관 사료) — js/data/clues.js */
+  D.clue = function (d) { return d && G.CLUE && G.CLUE[d.id] || 'talk'; };
+  var TALK_SRC = /^(tavern|trade|sponsor)(:|$)/, BOOK_SRC = /^book(:|$)/;
+  /** 이 출처(src 또는 'tavern'·'trade'·'sponsor'·'book')에서 이 발견의 단서가 나올 수 있는가.
+      그 밖의 출처(계약·큰 항로·유물·연쇄·유산·부하·원주민·항해 소식…)는 갈래와 상관없다.
+      지금 온 세상이 떠드는 이야기(맛보기·차례가 된 관문)는 어디서나 들린다. */
+  D.clueOk = function (d, src) {
+    if (!d) return true;
+    var sr = String(src || ''), want = TALK_SRC.test(sr) ? 'talk' : BOOK_SRC.test(sr) ? 'book' : null;
+    if (!want) return true;
+    if (G.Frontier && G.Frontier.hot && G.Frontier.hot(d)) return true;
+    return D.clue(d) === want;
+  };
+  /* 단서 겹치기 — 이미 단서가 있는 발견을 다른 곳(다른 도시의 술집·교역소, 다른 후원자·책, 망루·원주민…)에서 또 들으면 겹친다(최대 4겹).
+     겹칠수록 망루가 멀리서 알아채고, 찾는 반경이 넓어지고, 계약 목적지 원이 좁아진다 (G.BALANCE.clueStack). 같은 곳에서 거듭 들은 것은 겹치지 않는다. */
+  function CS() { return (G.BALANCE && G.BALANCE.clueStack) || { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 }; }
+  D.clueStack = CS;
+  function srcKey(src) { return String(src || '').split(':').slice(0, 2).join(':'); }
+  /** 단서 겹수: 0(없음) ~ 4 */
+  D.hintLv = function (id) { var h = S().hints[id]; return h ? Math.min(CS().max, 1 + (h.more ? h.more.length : 0)) : 0; };
+  D.hintSrcs = function (id) { var h = S().hints[id]; return h ? [h.src].concat((h.more || []).map(function (x) { return x.src; })) : []; };
+  /** 이 출처에서 들으면 단서가 하나 더 겹치는가 (이미 단서가 있고, 아직 찾지 않았고, 그 출처에서는 처음) */
+  D.canStack = function (id, src) {
+    var h = S().hints[id]; if (!h || D.foundByMe(id) || D.hintLv(id) >= CS().max || /^mirage/.test(String(src || ''))) return false;
+    var k = srcKey(src); return D.hintSrcs(id).every(function (x) { return srcKey(x) !== k; });
+  };
+  /** 겹수에 따른 값 (kind: sense·find·zone) */
+  D.clueK = function (id, kind) { var a = CS()[kind] || [1]; return a[Math.min(D.hintLv(id), a.length - 1)]; };
+  D.lastMore = null;
+  /** 단서를 적는다. 아직 개척 단계가 닿지 않은 발견물은 받지 않는다 (G.Frontier).
+      새 단서면 true. 이미 있던 단서가 겹쳤으면 false를 돌려주고 D.lastMore = id (D.noteHint가 알려 준다) */
   D.addHint = function (id, src) {
-    var s = S(); if (s.hints[id] || D.foundByMe(id)) return false;
+    var s = S(); D.lastMore = null; if (D.foundByMe(id)) return false;
     var d0 = G.DISC[id], sr = String(src || '');
+    if (s.hints[id] && !D.canStack(id, sr)) return false;
     if (d0 && d0.bookOnly && !/^(book|relic|chain|contract|lead|legacy)/.test(sr)) return false;   // 전설·희귀 동물·공룡: 책에서만
+    if (d0 && !D.clueOk(d0, sr)) return false;                                                    // 주점·교역소·후원자의 이야기 ↔ 도서관 사료 (js/data/clues.js)
     var here = d0 && d0.animal && /^(local|town):/.test(sr) && D.built(d0);                      // 그 고장에 와서 들은 동물 이야기
     if (G.Frontier && d0 && !here && !G.Frontier.canHint(d0, src)) return false;
+    if (s.hints[id]) {
+      (s.hints[id].more = s.hints[id].more || []).push({ src: src, d: U.dateNum(s.date) });
+      D.lastMore = id;
+      if (G.Explore) G.Explore.ver++;
+      if (d0 && G.State && G.State.log) G.State.log('「' + d0.name + '」의 단서가 겹쳤다 — 단서 ' + D.hintLv(id) + '겹');
+      return false;
+    }
     s.hints[id] = { src: src, d: U.dateNum(s.date) }; return true;
   };
+  /** 대화에서 단서를 들었을 때: 적고 알린다. 'new' · 'more'(겹침) · null */
+  D.noteHint = function (d, src) {
+    if (!d) return null;
+    if (D.addHint(d.id, src)) { UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); return 'new'; }
+    if (D.lastMore === d.id) { UI.toast('단서가 겹쳤다: 「' + d.name + '」 — 단서 ' + D.hintLv(d.id) + '겹, 찾기가 쉬워졌다', 'scroll', 4200); return 'more'; }
+    return null;
+  };
+  /** 소문 후보에 넣을 수 있는가: 아직 단서가 없거나, 이 출처에서 들으면 겹친다. 무게(겹칠 것은 가볍게) */
+  D.rumourW = function (d, src) { return !S().hints[d.id] ? 1 : D.canStack(d.id, src) ? CS().stackW : 0; };
   /** 세워진 건물인가 (불가사의의 built 해) */
+  /** 앞 고리를 모두 찾았는가 (꼬리에 꼬리를 무는 발견 — 열리기 전에는 그 자리에 가도 찾지 못한다) */
+  D.needMet = function (d) { return !d || !d.need || d.need.every(function (id) { return D.foundByMe(id); }); };
   D.built = function (d) { return !d || !d.built || S().date.y >= d.built; };
   /** 지금 단서를 들을 수 있는 발견물인가 */
   D.available = function (d) { return !G.Frontier || G.Frontier.available(d); };
@@ -86,7 +136,7 @@
     var before = { fatigue: f.fatigue || 0, discipline: f.discipline == null ? 80 : f.discipline };
     // 교역품은 요리사가 그 맛을 나누어 피로를, 민족은 음악가가 함께 어울려 규율을 더 붙든다
     var CI = ((G.BALANCE && G.BALANCE.crewCare) || {}).impact || 2;
-    var xf = d.cat === 'trade' ? -R.skillRead('cook') * CI : 0, xd = d.cat === 'people' ? R.skillRead('music') * CI : 0;
+    var xf = d.cat === 'trade' && !(G.Slave && G.Slave.is(d.good)) ? -R.skillRead('cook') * CI : 0, xd = d.cat === 'people' ? R.skillRead('music') * CI : 0;
     f.fatigue = U.clamp(before.fatigue + (v.fatigue || 0) + xf, 0, 100);
     f.discipline = U.clamp(before.discipline + (v.discipline || 0) + xd, 0, 100);
     st.impact = {
@@ -157,6 +207,8 @@
     }
     // 이 발견으로 새 단계가 열렸으면 알린다
     if (G.Frontier) { var fm = G.Frontier.tick(); if (fm.length && G.Scenes.city && G.Scenes.city.news) await G.Scenes.city.news(fm); }
+    // 발견의 주제 조합으로 이룬 업적 (js/systems/achieve.js)
+    if (G.Achieve) { try { await G.Achieve.afterFind(d); } catch (e) { console.error(e); } }
     G.Game.refreshHud && G.Game.refreshHud();
     return true;
   };
@@ -377,13 +429,13 @@
   D.checkSea = function (lon, lat) {
     var s = S(), hits = [];
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'sea' || D.foundByMe(d.id)) return;
-      if (G.Geo.dist(lon, lat, d.lon, d.lat) >= d.r) return;
+      if (d.how !== 'sea' || D.foundByMe(d.id) || !D.needMet(d)) return;
+      if (G.Geo.dist(lon, lat, d.lon, d.lat) >= d.r * D.clueK(d.id, 'find')) return;   // 단서가 겹칠수록 넓게
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return; }   // 아직 세워지지 않았다 — 1600년부터는 신기루로 보인다
       hits.push(d);
     });
     // special geography conditions
-    function sp(id) { if (!D.foundByMe(id)) hits.push(G.DISC[id]); }
+    function sp(id) { if (!D.foundByMe(id) && D.needMet(G.DISC[id])) hits.push(G.DISC[id]); }
     if (lat < -34.2 && lon > 16 && lon < 30) sp('capegood');
     if (lon > -86 && lon < -60 && lat > 10 && lat < 27 && s.flags.fromEurope) sp('westroute');
     if (lon > 72 && lon < 78 && lat > 8 && lat < 20 && s.flags.viaCape) sp('indiaroute');
@@ -399,9 +451,9 @@
   D.checkLand = function (lon, lat) {
     var hits = [], near = null, nearD = 99;
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'land' || D.foundByMe(d.id)) return;
+      if (d.how !== 'land' || D.foundByMe(d.id) || !D.needMet(d)) return;
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
-      var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1);
+      var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find');
       if (!D.built(d)) { if (dist < r && G.Mirage) G.Mirage.see(d); return; }   // 신기루
       if (dist < r) hits.push(d);
       else if (dist < nearD) { nearD = dist; near = d; }
@@ -411,7 +463,7 @@
   };
   D.checkCity = function (cityId) {
     return G.DISCOVERIES.filter(function (d) {
-      if (d.how !== 'city' || d.city !== cityId || D.foundByMe(d.id)) return false;
+      if (d.how !== 'city' || d.city !== cityId || D.foundByMe(d.id) || !D.needMet(d)) return false;
       if (d.needHint && !S().hints[d.id]) return false;        // 동물: 이야기를 듣고 나서야 거리에서 알아본다
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return false; }   // 신기루
       return true;

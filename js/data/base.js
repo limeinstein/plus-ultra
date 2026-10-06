@@ -183,6 +183,10 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
+    // 제독 만들기 (scenes/create.js) — 대항해시대 3처럼 나이가 많을수록 보너스가 많다.
+    // 능력 보너스 = statPts + (나이 − 18) × statPerYear (체력·지력·무력·매력에 나눠 줌, 한 능력 statMax까지)
+    // 특기 점수 = 3 + (나이 − 18) ÷ 4 + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax)
+    create: { statPts: 4, statPerYear: 0.5, statMax: 99, knowFrom: 40, knowStep: 15, knowMax: 3 },
     homeTools: ['compass', 'sextant'],   // 처음 떠나는 도시(제독의 고향) 시장에 늘 있는 항해 도구 — 연도(from)·지역·그날 물량과 상관없이 (js/city/misc.js MK.stock)
     // 선수상: 함대에서 가장 센 덕 + 나머지 배의 덕 × figRest (R.fleetBonus). 폭풍 빈도는 stormFloor 아래로 줄지 않는다 (sea.js)
     figRest: 0.25, stormFloor: 0.35, stormDmgCut: 0.3,
@@ -206,6 +210,10 @@
     pirateBase: 0.3, pirateCap: 1500, pirateCrew: [0.22, 0.66],
     // 해적선 1척 전리품 기준(금화, 짐칸 200 기준), 나포선을 그 자리에서 팔 때 값의 비율 (battle.js)
     pirateLoot: 1400, prizeSale: 0.8,
+    // 나포한 배의 짐 (battle.js prizeHolds): 배 짐칸(cap) × 비율. 식량·물·자재는 모든 배, 교역품은 상선이 많고 해적은 약탈품, 군함은 자재(matK배)가 많다.
+    // 선원: 남은 적 선원(없으면 정원 최소 × crewLeft) 가운데 join 비율이 따르겠다고 한다
+    prizeHold: { food: [0.05, 0.12], water: [0.05, 0.12], mat: [0.02, 0.06], goods: { merchant: [0.35, 0.7], pirate: [0.1, 0.3], navy: [0, 0.08] },
+      matK: { navy: 1.6 }, join: { merchant: 0.3, pirate: 0.5, navy: 0.2 }, crewLeft: [0.15, 0.4] },
     // 기함의 선실 (js/systems/cabins.js). 고칠 수 있는 선실 수 = (정원 + 내구) ÷ slotDiv, slotMin~slotMax. 방의 힘 = (1 + 특기 단계) × 충성 효율, 같은 방을 여럿 두면 더해지되 cap까지.
     //   fx: 방의 힘 1마다의 효과 — lookout 발견 거리(°) · chart 해도 넓이(°) · galley/mess/helm 하루 피로 · messD/chapel/rec/deck 하루 규율 · sick 괴혈병 번짐 감소 비율
     //       rig 속력 비율(최대 rigMax) · repair 하루 기함 수리(내구) · pen 하루 식량(통) · gun 포격 · marine 백병전 비율 · haggle 값 깎기 성공률 · wage 급료 감소 비율 · feast/songs 사건 가중
@@ -216,6 +224,8 @@
     // 부하: 수는 제한이 없다. 재산이 급료 warnMonths달 치에 못 미치면 경리·부관이 경고한다. 충성 low 이하면 효율 lowEff, veryLow 이하면 veryLowEff.
     //   역할도 방도 없는 부하는 달마다 충성 −idleLoyal, 부관이 있으면 급료를 치른 달에 충성이 settle 아래인 부하 +adjutantLoyal.
     //   충성 0이면 떠나겠다고 나선다 — 붙잡을 확률 persuade + (매력−50)/200 + 웅변 × persuadeSpeech, 붙잡으면 충성 persuadeLoyal
+    // 부하 후보 특기 늘리기 (js/data/renown.js): base = 모든 후보에게 얹는 단계, byTier[지명도 0~4] = 실존 인물에게 더, wander = 철새·고장 사람 [최소, 최대], wanderLucky = 한 단계 더 받을 확률, cap = 한 특기 최고 단계
+    mateSkills: { base: 1, byTier: [0, 1, 2, 3, 4], wander: [1, 2], wanderLucky: 0.2, cap: 3 },
     mates: { warnMonths: 6, low: 40, lowEff: 0.75, veryLow: 20, veryLowEff: 0.5, idleLoyal: 2, adjutantLoyal: 1, settle: 70, persuade: 0.25, persuadeSpeech: 0.12, persuadeLoyal: 25 },
     // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
     pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
@@ -272,6 +282,9 @@
       nonIslam: ['카스티야', '에스파냐', '아라곤', '포르투갈', '프랑스', '영국', '잉글랜드', '네덜란드', '프로이센', '독일 제국', '이탈리아 왕국', '구호기사단',
         '베네치아', '제노바', '러시아 제국', '러시아 차르국', '돈 코사크', '스텐카 라진 반란군', '푸가초프 반란군', '영국 동인도 회사', '네덜란드 동인도 회사',
         '시크 미슬 연맹', '시크 제국', '마라타 동맹', '청', '준가르 칸국', '알와 왕국'] },
+    // 단서 겹치기 (js/systems/discovery.js): 다른 곳(다른 도시의 술집·교역소, 다른 후원자, 다른 책, 망루·원주민…)에서 같은 발견의 단서를 또 얻으면 겹친다.
+    // 배열은 겹수(0~4)별 값. sense: 망루·정찰대가 알아채는 거리, find: 실제로 찾는 반경(바다·뭍), zone: 계약 목적지 원의 크기, fish: 낚시 희귀어 확률 덧셈
+    clueStack: { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
     // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
     discoveryImpact: {
@@ -300,6 +313,27 @@
     // gestation일 뒤에 태어나고(쌍둥이 twins), adult세가 되면 뒤를 이을 수 있다. 가정교사는 한 아이에게 해마다 한 번, 값 eduCost닢
     // 유행 (js/systems/fad.js): window일 안에 need번, 한 번에 profit 넘는 이익으로 같은 물건을 같은 나라·지역에 팔면 chance 확률로 유행
     // → days일 동안 그곳에서 그 물건 값이 mult배 · 끝나면 같은 곳·같은 물건은 cooldown일 동안 쉰다
+    // 자연재해 (js/systems/disaster.js · js/data/disasters.js)
+    //  random: 이름 없는 재해의 잦기(배수, 0 = 역사 재해만) · localK: 탐험대가 재해가 잦은 땅을 걸을 때 더 잦게 · volcanoRate/volcanoNear: 화산 한 곳이 한 해에 터질 확률(멀리/곁에 있을 때)
+    //  news: 이만큼(°) 안의 재해는 소식이 온다 · loss: 대원을 잃는 몫 [최소, 최대] × 세기 (한 번에 많아야 maxLoss) · flee: 조짐을 알아채 피하면 피해 배수 · hurt: 부하가 다칠 확률
+    //  mitig: 운용술·의학 한 단계마다 피해를 줄이는 몫 · detect: 조짐을 알아챌 확률 (갈래별 기본 + 과학·측량·역사학 단계마다, 역사 재해는 역사학 2단계 이상이면 histBonus)
+    //  tsuInland: 해안에서 이만큼(°) 넘게 들어와 있으면 해일이 닿지 않는다 · seaCoast: 바다에서 해안 이만큼 안이면 해일에 배가 상한다 · ship: 배가 상하는 몫(최대 내구 대비)
+    //  cityDays: 재해를 입은 도시의 시장 값이 뛰는 날 · relief: 구호금 기본값 · stayFatigue: 재해 자취 안을 걸을 때 하루 피로(× 세기)
+    disaster: { on: true, random: 1, localK: 4, volcanoRate: 0.012, volcanoNear: 0.5, news: 15,
+      loss: { quake: [0.02, 0.07], volcano: [0.04, 0.14], landslide: [0.05, 0.15], tsunami: [0.08, 0.22], flood: [0.04, 0.12] },
+      flee: 0.3, hurt: 0.35, maxLoss: 0.35, mitig: { ops: 0.08, med: 0.06 },
+      detect: { quake: 0.03, volcano: 0.35, landslide: 0.25, tsunami: 0.25, flood: 0.4, sci: 0.12, survey: 0.1, hist: 0.1, nav: 0.05, histBonus: 0.2 },
+      tsuInland: 0.3, seaCoast: 0.6, ship: [0.08, 0.3], cityDays: [60, 150], relief: 120, stayFatigue: 1.2 },
+    // 해전 함대 명령 (js/scenes/battle.js — 기함을 뺀 배들)
+    //  craneStep/craneMax: 학익진 날개 한 칸의 벌림(라디안)·가장 많이 벌리는 각 · craneR: 적에게서 사정거리의 몇 배 거리에 서는가
+    //  envSpread: 우리 배들이 적을 감싼 각(라디안)이 이만큼(2척 / 3척 이상)이면 포위 · envelop: 포위한 적에게 포격 피해 + [2척, 3척 이상]
+    //  focusR: 일제 공격에서 붙는 거리(사정거리 배수) · volley: 두 척 넘게 한 적을 함께 쏘면 피해 + · board: 선원이 적의 이만큼 배면 올라탄다
+    //  gunR: 포격전에서 서는 거리(사정거리 배수) · gunKeep: 적이 이만큼 다가오면 물러난다 · guardR: 호위하는 배가 기함에서 떨어진 거리 · slotR: 자리에 왔다고 보는 거리
+    fleetOrders: { craneStep: 0.62, craneMax: 1.45, craneR: 0.72, envSpread: [1.6, 2.6], envelop: [0.2, 0.35], focusR: 0.55, volley: 0.15, board: 1.5, gunR: 1.05, gunKeep: 170, guardR: 120, slotR: 70 },
+    // 시대의 유행·세상의 유행 (js/systems/era.js · js/data/eratrade.js)
+    //  strength: 시대 수요 배수의 세기(1 = 자료 그대로) · worldPerYear: 저절로 이는 유행이 한 해에 몇 번 · worldMin: 그 시대 수요가 이만큼 넘는 물건만 · worldMult/worldDays: 그 유행의 값 배수·날
+    //  discChance/discGoods/discMult/discDays: 발견이 알려졌을 때 유행이 일 확률·물건 수·배수·날 · spreadDays/spreadChance: 세상의 유행이 이웃 유럽 지역으로 번지는 때·확률
+    era: { on: true, strength: 1, worldPerYear: 2.5, worldMin: 1.05, worldMult: 1.7, worldDays: [60, 120], discChance: 0.85, discGoods: 2, discMult: 2, discDays: [90, 150], spreadDays: 30, spreadChance: 0.4 },
     fad: { profit: 0.3, need: 3, window: 90, chance: 0.6, mult: 3, days: 60, cooldown: 180 },
     // 자택에서 아이와 보내는 시간 (js/systems/homelife.js): 능력 상한 statMax · 특기를 익힐 확률 skillChance · 장부를 맡기면 지력×ledgerGold닢
     // · 가족 저녁의 피로 회복 dinnerRest · 사이가 cold 아래면 서먹한 첫마디(함께하면 +coldBonus) · 집을 longAway일 넘게 비웠다 오면 키 재기

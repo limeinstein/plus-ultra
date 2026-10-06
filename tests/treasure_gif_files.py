@@ -27,6 +27,8 @@ data = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 treasures = set(re.findall(r"^\s*add\('([^']+)', '[^']+', 'treasure'", data, re.M))
 sea = (ROOT / "js" / "data" / "seadisc.js").read_text(encoding="utf-8")
 treasures |= set(re.findall(r"^\s*s\('([^']+)', '[^']+', 'treasure'", sea, re.M))
+chain = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
+treasures |= set(re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'treasure'", chain, re.M))
 assert set(TREASURE_IDS) == treasures, (set(TREASURE_IDS) ^ treasures)
 
 for did in TREASURE_IDS:

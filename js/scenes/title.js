@@ -23,6 +23,9 @@
     async function cont() { await Game.ensureGeo(); var S = await G.State.loadAsync(0); if (!S) { UI.alert('불러오지 못했습니다.'); return; } G.Game.state = S; G.Game.resume(); }
     if (G.State.meta(0)) bCont = btn('이어하기', 'sail', cont, 'navy');
     var bNew = btn('새로운 항해', 'ship', function () { G.Game.go('create'); }, bCont ? '' : 'navy');
+    // 처음 하는 사람을 위한 튜토리얼 「첫 항해」 (js/systems/tutorial.js) — 저장이 하나도 없으면 이 단추를 강조한다
+    var bTut = G.Tutorial && G.Tutorial.begin ? btn('첫 항해 (튜토리얼)', 'compass', function () { if (!bTut.classList.contains('disabled')) G.Tutorial.begin(); }, bCont ? '' : 'navy') : null;
+    if (bTut) { bTut.classList.add('disabled'); if (!bCont) bNew.classList.remove('navy'); }
     var bLoad = btn('항해 일지 불러오기', 'book', function () { T.loadMenu(); });
     btn('조작 안내', 'info', function () { T.help(); });
     bLoad.classList.add('disabled');
@@ -31,7 +34,8 @@
     // 보조 저장소(IndexedDB)의 일지도 읽은 뒤에 이어하기·불러오기를 정한다 (localStorage가 지워졌어도 남아 있을 수 있다)
     Promise.all([Game.ensureGeo(), G.State.ready]).then(function () {
       ld.textContent = '';
-      if (!bCont && G.State.meta(0)) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); }
+      if (!bCont && G.State.meta(0)) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); if (bTut) bTut.classList.remove('navy'); }
+      if (bTut) bTut.classList.remove('disabled');
       bNew.classList.remove('disabled'); if (bCont) bCont.classList.remove('disabled');
       bLoad.classList.remove('disabled');      // 일지가 없어도 「파일에서 불러오기」는 할 수 있다
     });

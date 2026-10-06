@@ -38,6 +38,9 @@ TREASURE_IDS = [
     "urbinovenus", "babeltower", "orgaz", "ambassadors", "saliera", "belemmonstrance",
     "nanbanscreen", "baburnama", "shahnameh", "pirireis",
     "flordelamar",   # 바다 발견물(seadisc.js)의 난파선 보물
+    # 꼬리에 꼬리를 무는 발견(chaindisc.js)
+    "rongorongo", "lapita", "timaeus", "huascarchain", "kalachakra",
+    "pangboche", "excalibur", "kingittor", "boturini", "oldworldmap",
 ]
 
 # 도입 2장 + (앞·45°…315°·앞) × 2 + 정면 피날레 4장.

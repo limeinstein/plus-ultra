@@ -12,7 +12,8 @@ const CATALOG = pathToFileURL(path.join(ROOT, 'catalog.html')).href;
 const SCREEN = path.join(ROOT, 'docs', 'art', 'animal-gif-runtime.png');
 const BASE_ANIMALS = ['tarantula','llama','prairiedog','moose','frigatebird','tortoise','albatross','kangaroo','paradise','sable','tiger','panda','porcupine','coelacanth','warthog','komodo','penguin','mandrill','ostrich','flamingo','hippo','crocodile','polarbear'];
 const ADDED_ANIMALS = [...fs.readFileSync(path.join(ROOT, 'js', 'data', 'animals.js'), 'utf8').matchAll(/^\s*a\('([^']+)'/gm)].map(m => m[1]);
-const ANIMALS = BASE_ANIMALS.concat(ADDED_ANIMALS.filter(id => !BASE_ANIMALS.includes(id)));
+const MORE_BEASTS = [...fs.readFileSync(path.join(ROOT, 'js', 'data', 'moredisc.js'), 'utf8').matchAll(/^\s*beast\('([^']+)'/gm)].map(m => m[1]);
+const ANIMALS = BASE_ANIMALS.concat(ADDED_ANIMALS.concat(MORE_BEASTS).filter(id => !BASE_ANIMALS.includes(id)));
 const CHROME = [
   process.env.CHROME_PATH,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -94,7 +95,7 @@ function socket(url) {
       })()`, returnByValue: true });
       if (c.result.value && c.result.value.ready) break;
     }
-    // 도감은 화면 가까이에 온 카드만 그린다. 끝까지 훑어 117개 장면 판을 모두 만든다.
+    // 도감은 화면 가까이에 온 카드만 그린다. 끝까지 훑어 모든 동물·전승 장면 판을 만든다.
     const height = await cdp.call('Runtime.evaluate', { expression: 'document.documentElement.scrollHeight', returnByValue: true });
     for (let y = 0; y < height.result.value; y += 420) {
       await cdp.call('Runtime.evaluate', { expression: 'window.scrollTo(0,' + y + ')' });
@@ -110,7 +111,7 @@ function socket(url) {
     }))()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.animals !== 117 || result.gifs !== 117 || result.sheets !== 117 || result.reveals !== 117 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== catalog.expectedAnimated || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || !catalog.aria.includes('지옥의 꽃') || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.animals !== 138 || result.gifs !== 138 || result.sheets !== 138 || result.reveals !== 138 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== catalog.expectedAnimated || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || !catalog.aria.includes('지옥의 꽃') || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

@@ -373,6 +373,10 @@ input[type=range] { accent-color: #2a4a70; width: 100%; }
 .disc-card .disc-build-gif { aspect-ratio: 9 / 4; object-fit: cover; background: #f2e7cd; }
 .disc-card .dname { font-size: 34px; font-weight: 800; text-align: center; letter-spacing: .06em; color: var(--ink); }
 .disc-card .desc { font-size: 19px; line-height: 1.7; }
+.landmark-card .lm-art { display: flex; justify-content: center; align-items: flex-end; min-height: 160px; padding: 14px 10px 0; background: linear-gradient(180deg, #cfdde3 0%, #efe5cc 72%, #d9c7a0 100%); border: 2px solid #7a5c33; box-shadow: 0 0 0 1px #2a1f16; }
+.landmark-card .lm-art img { display: block; max-width: 100%; max-height: 300px; filter: drop-shadow(0 6px 8px rgba(40,26,12,.35)); }
+.landmark-card .lm-note { display: flex; gap: 8px; align-items: flex-start; font-size: 15px; line-height: 1.55; color: var(--ink-soft); padding: 8px 12px; background: rgba(120,90,50,.08); border-left: 3px solid #8a6a3a; }
+.landmark-card .lm-note .ic { width: 18px; height: 18px; flex: none; margin-top: 2px; }
 /* 실제 자료 (UNESCO·위키백과·GBIF·OBIS·박물관) */
 .disc-card .real-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
 .disc-card .real-tags .tag.whc { background: #1d4f7a; color: #f3ead6; border-color: #10324f; }
@@ -495,6 +499,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .mc-id .nm { font-size: 30px; font-weight: 800; letter-spacing: .04em; }
 .mc-id .mt { font-size: 15px; color: var(--ink-soft); margin-top: 3px; }
 .mc-id .mt b { color: var(--ink); }
+.mc-id .mt .renown { color: #b07a1a; white-space: nowrap; }
 .mc-id .warn { color: #8a2a1e; }
 .mc-desc { margin-top: 8px; font-size: 16px; line-height: 1.6; color: var(--ink-2); }
 .mc-cols { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 16px; align-items: start; }
@@ -937,6 +942,10 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .create .cr-skills .pips i { width: 11px; height: 11px; }
 .create .cr-skills .mini { width: 25px; height: 25px; font-size: 14px; }
 .create .statrow { margin: 3px 0; }
+.create .statrow.cr-stat { grid-template-columns: 70px 1fr 64px 30px 30px; gap: 6px; }
+.create .statrow .cr-bon { font-size: 12px; color: #2e6a3a; margin-left: 2px; }
+.create .cr-bonus { margin-top: 8px; font-size: 14px; line-height: 1.5; }
+.create .cr-bonus b { color: var(--ink); }
 .create input[type=text] { min-width: 0; }
 /* 그림을 받는 동안 (js/core/images.js) — 코드 그림을 먼저 내보이지 않고 은은한 바탕으로 기다린다 */
 canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rgba(140,110,70,.28) 50%, rgba(60,44,28,.35) 70%); background-size: 220% 100%; animation: imgwait 1.4s linear infinite; }
@@ -1056,3 +1065,49 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .famebar .fb { height: 9px; background: rgba(60,40,20,.18); border: 1px solid rgba(110,80,40,.45); }
 .famebar .fb i { display: block; height: 100%; background: linear-gradient(#d9b45a, #a8782a); }
 .famebar b { text-align: right; font-variant-numeric: tabular-nums; }
+/* 자연재해 (js/art/disasterfx.js): 지진 때 지도·바다 화면이 흔들린다 */
+/* 지진·해일 흔들림은 CSS로 화면 요소를 옮기지 않는다 — 탐험·항해 화면이 그릴 때 카메라만 옮긴다 (js/art/quakefx.js) */
+/* 해전 함대 명령판 (js/scenes/battle.js — 기함을 뺀 배들에게 학익진·일제 공격·포격전·호위…) */
+.ordpanel { position: absolute; right: 18px; top: 66px; width: 336px; padding: 10px 12px; z-index: 14; font-size: 14px; color: var(--cream); }
+.ordpanel .fp-h { display: flex; gap: 6px; align-items: center; color: var(--brass-hi); font-size: 16px; margin-bottom: 7px; flex-wrap: wrap; }
+.ordpanel .fp-h small { font-size: 12.5px; }
+.ord-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.ord-btn { justify-content: flex-start; white-space: nowrap; font-size: 13.5px; min-height: 32px; padding: 4px 8px; gap: 5px; position: relative; }
+.ord-btn.on { background: linear-gradient(#b8892e, #7d5918); color: #fff6dc; box-shadow: inset 0 0 0 1px #ffe2a0; }
+.ord-key { display: inline-block; min-width: 16px; padding: 0 3px; margin-right: 2px; border-radius: 3px; background: rgba(0,0,0,.35); color: #ffe7b0; font-size: 11px; text-align: center; }
+.ord-list { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
+.ord-row { display: flex; gap: 6px; align-items: center; padding: 3px 6px; border-radius: 4px; cursor: pointer; background: rgba(0,0,0,.18); }
+.ord-row:hover { background: rgba(255,230,170,.12); }
+.ord-row.sel { background: rgba(255,214,120,.25); box-shadow: inset 0 0 0 1px rgba(255,230,170,.7); }
+.ord-row.gone { opacity: .45; cursor: default; }
+.ord-row .right { margin-left: auto; color: #ffd98a; font-size: 13px; }
+.ord-row .shipno { width: 20px; height: 20px; line-height: 20px; font-size: 12px; }
+.ord-hint { font-size: 12.5px; margin-top: 6px; line-height: 1.45; }
+/* 시대 수요 (js/systems/era.js): 교역소 꼬리표·수첩 교역 */
+.tag.era-up { background: #2f6b3a; color: #eaf7e4; }
+.tag.era-down { background: #7a4a3a; color: #fbe9e2; }
+.era-box { margin: 0 0 12px; padding: 8px 10px; border: 1px solid rgba(90,65,35,.25); border-radius: 6px; background: rgba(255,250,235,.45); font-size: 15px; }
+.era-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+.era-lbl { font-weight: 700; min-width: 76px; }
+.era-lbl.up { color: #2f6b3a; } .era-lbl.down { color: #8a3a2a; } .era-lbl.soon { color: #6a5418; }
+.era-chip { display: inline-flex; align-items: center; gap: 3px; padding: 1px 8px; border-radius: 12px; background: rgba(90,65,35,.08); cursor: help; }
+.era-chip.up { box-shadow: inset 0 0 0 1px rgba(47,107,58,.35); } .era-chip.down { box-shadow: inset 0 0 0 1px rgba(138,58,42,.35); } .era-chip.soon { box-shadow: inset 0 0 0 1px rgba(106,84,24,.35); }
+.era-chip small { color: #6a5a40; }
+@keyframes dzshake { 0% { transform: translate(0, 0); } 25% { transform: translate(-7px, 3px); } 50% { transform: translate(5px, -4px); } 75% { transform: translate(-4px, -2px); } 100% { transform: translate(0, 0); } }
+#stage.dz-shake #world, #stage.dz-shake #overlay, #stage.dz-shake #scene { animation: dzshake .11s linear infinite; }
+
+/* 튜토리얼 「첫 항해」 — 안내 상자와 빛나는 단추 (js/systems/tutorial.js) */
+.tutbox { position: absolute; left: 50%; top: 46px; transform: translateX(-50%); width: 680px; max-width: 62%; z-index: 62; pointer-events: auto;
+  padding: 9px 16px 10px; border: 2px solid #7a5a2e; box-shadow: 0 6px 22px rgba(0,0,0,.45); font-size: 16px; line-height: 1.5; color: var(--ink, #2b2118); }
+.tutbox .tb-h { display: flex; align-items: baseline; gap: 10px; font-size: 16px; }
+.tutbox .tb-h b { font-size: 18px; }
+.tutbox .tb-n { font-size: 13px; padding: 1px 8px; background: #1e3552; color: #f3e2bd; border-radius: 10px; white-space: nowrap; }
+.tutbox .tb-btns { margin-left: auto; display: flex; gap: 12px; white-space: nowrap; }
+.tutbox .tb-btns a { font-size: 13px; color: #6a4a2a; text-decoration: underline; cursor: pointer; }
+.tutbox .tb-btns a:hover { color: #1e3552; }
+.tutbox .tb-btns a[data-act=again] { color: #1e3552; font-weight: 700; }
+.tutbox .tb-btns a.tb-helm { color: #1e3552; font-weight: 700; font-size: 14px; }
+.tutbox .tb-g { display: flex; gap: 8px; align-items: flex-start; margin-top: 5px; font-size: 18px; }
+.tutbox .tb-g svg { width: 20px; height: 20px; flex: none; margin-top: 3px; }
+.tut-glow { animation: tutglow 1.3s ease-in-out infinite; outline: 2px solid #f0c040; outline-offset: 1px; position: relative; z-index: 1; }
+@keyframes tutglow { 0%, 100% { box-shadow: 0 0 4px 1px rgba(240,192,64,.55); } 50% { box-shadow: 0 0 16px 6px rgba(255,214,96,.95); } }

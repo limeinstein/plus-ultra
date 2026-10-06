@@ -14,6 +14,8 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 ROOT = Path(__file__).resolve().parents[2]
 DISCOVERIES = ROOT / "js" / "data" / "discoveries.js"
 NATURALS = ROOT / "js" / "data" / "naturals.js"
+MORE_DISCOVERIES = ROOT / "js" / "data" / "moredisc.js"
+CHAIN_DISCOVERIES = ROOT / "js" / "data" / "chaindisc.js"
 SOURCES = ROOT / "tools" / "nature_gifs" / "sources"
 OUT = ROOT / "images" / "discoveries"
 ENDS = ROOT / "images" / "discovery-ends"
@@ -66,12 +68,18 @@ SKYLINE = {
 
 
 def nature_rows() -> list[tuple[str, str]]:
-    """기존 자연 발견과 naturals.js에 덧붙인 경관을 데이터 순서대로 읽는다."""
+    """기존 자연 발견과 추가 데이터의 경관을 데이터 순서대로 읽는다."""
     src = DISCOVERIES.read_text(encoding="utf-8")
     rows = re.findall(r"^\s*add\('([^']+)', '([^']+)', 'nature'", src, re.M)
     if NATURALS.exists():
         src = NATURALS.read_text(encoding="utf-8")
         rows += re.findall(r"^\s*n\('([^']+)', '([^']+)'", src, re.M)
+    if MORE_DISCOVERIES.exists():
+        src = MORE_DISCOVERIES.read_text(encoding="utf-8")
+        rows += re.findall(r"^\s*nat\('([^']+)', '([^']+)'", src, re.M)
+    if CHAIN_DISCOVERIES.exists():
+        src = CHAIN_DISCOVERIES.read_text(encoding="utf-8")
+        rows += re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'([^']+)',\s*'(?:nature|people)'", src, re.M)
     return rows
 
 

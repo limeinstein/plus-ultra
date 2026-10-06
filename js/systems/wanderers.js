@@ -37,7 +37,7 @@
       var n = cfg().startN == null ? 12 : cfg().startN;
       for (var k = 0; k < n; k++) { var d = WD.make({}); if (d) { s.wander.defs[d.id] = d; } }
     }
-    for (var id in s.wander.defs) register(s.wander.defs[id]);
+    for (var id in s.wander.defs) { if (G.MateSkills) G.MateSkills.wander(s.wander.defs[id]); register(s.wander.defs[id]); }   // 옛 저장의 철새도 특기를 한 번 더 받는다
     if (G.RegionFolk) G.RegionFolk.fill();   // 고장마다 도시 수의 80%쯤은 사람이 있게 (5년 칸마다)
     if (G.Bio) G.Bio.reset();
   };
@@ -143,11 +143,12 @@
     if (opts.prev) story += ' 서른 해쯤 전 이 바다를 떠돌던 ' + opts.prev.name + '(' + opts.prev.natName + ')' + U.jx(opts.prev.name, '과/와') + ' 똑 닮았다는 말을 자주 듣는다.';
     s.wander.seq = (s.wander.seq || 0) + 1;
     var id = 'wd_' + y + '_' + s.wander.seq;
-    return {
+    var def = {
       id: id, name: nm.name, g: g, wd: true, nat: nk, natName: N.name, type: tk, typeName: T.nm, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
       y: [y, 9999], after: N.after ? N.after.slice() : undefined, reg: [], desc: desc, story: story, style: N.style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'),
       face: face, zones: zones, home: home, gen: genOf(y), born: y, line: opts.prev ? opts.prev.line || opts.prev.id : id, prevName: opts.prev ? opts.prev.name : null, nameFrom: nm.from
     };
+    return G.MateSkills ? G.MateSkills.wander(def) : def;   // 특기를 한두 단계 더 (js/data/renown.js)
   };
 
   // ---------------------------------------------------------------- 해마다

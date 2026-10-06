@@ -28,11 +28,11 @@
   };
   T.servant = async function (c) {
     var who = T.servantSpeaker(c);
-    var d = U.chance(0.45) ? T.rumour(c) : null;
+    var d = U.chance(0.45) ? T.rumour(c, { stack: true }) : null;
     if (d) {
-      G.Disc.addHint(d.id, 'tavern:' + c.id);
-      await UI.say('손님들이 이런 이야기를 하더군요. ' + d.hint, who);
-      UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll');
+      var known = G.Disc.hasHint(d.id);
+      await UI.say((known ? '그 이야기라면 여기 손님들도 하더군요. ' : '손님들이 이런 이야기를 하더군요. ') + d.hint, who);
+      G.Disc.noteHint(d, 'tavern:' + c.id);
       return;
     }
     await UI.say(U.pick(['어서 오세요. 한잔 하고 가세요.', '먼 바다에서 오셨나 보네요.',
@@ -238,22 +238,24 @@
     if (cur) cur.asked = (cur.asked || 0) + 1;
   };
 
-  /** 아직 모르는 발견물 하나를 소문으로 고른다. 개척 단계(G.Frontier)가 닿은 것만,
+  /** 아직 모르는 발견물 하나를 소문으로 고른다. 이야기 갈래(talk) 가운데 자연·생물·민족·근세 건물만 (교역품·보물은 교역소, 옛 것은 도서관).
+      개척 단계(G.Frontier)가 닿은 것만,
       가까운 지역부터 — 명성이 오르면 먼 곳 이야기도. 맛보기·관문처럼 온 세상이 떠드는 이야기는 멀어도 돈다 */
-  T.rumour = function (c) {
-    var s = S(), fame = s.player.fame;
+  T.rumour = function (c, opts) {
+    var s = S(), fame = s.player.fame, src = 'tavern:' + c.id, stack = !!(opts && opts.stack);   // stack: 이미 아는 이야기도 다른 술집에서 들으면 단서가 겹친다
     var maxD = fame < 300 ? 1 : fame < 1500 ? 2 : fame < 3500 ? 3 : 5;
     var cand = G.DISCOVERIES.filter(function (d) {
-      if (d.id === 'circum' || d.bookOnly || G.Disc.foundByMe(d.id) || s.hints[d.id]) return false;
+      if (d.id === 'circum' || d.bookOnly || G.Disc.foundByMe(d.id) || (s.hints[d.id] && !(stack && G.Disc.canStack(d.id, src)))) return false;
       if (!G.Disc.available(d)) return false;
       var hot = G.Frontier && G.Frontier.hot(d);
-      if (d.how === 'trade' && !hot) return false;
+      if (!G.Disc.clueOk(d, 'tavern')) return false;                   // 옛 유적·전설·지리는 도서관 사료로 (js/data/clues.js)
+      if ((d.how === 'trade' || d.cat === 'treasure') && !hot) return false;   // 교역품·보물 이야기는 교역소 주인이 한다
       if (d.id === 'mu' || d.id === 'antpeople') return fame > 5000;
       return hot || G.REGION_DIST[c.region][d.reg] <= maxD;
     });
     if (!cand.length) return null;
     return U.weighted(cand, function (d) {
-      var w = 1 / (1 + G.REGION_DIST[c.region][d.reg]) * (d.pw <= 2 ? 2 : 1);
+      var w = 1 / (1 + G.REGION_DIST[c.region][d.reg]) * (d.pw <= 2 ? 2 : 1) * G.Disc.rumourW(d, src);
       return G.Frontier && G.Frontier.hot(d) ? w * 3 + 0.4 : w;
     });
   };
@@ -436,7 +438,7 @@
     head.appendChild(U.el('div', 'mc-id',
       '<div class="nm">' + U.esc(m.name) + (G.Bio ? G.Bio.link(m.name, '📜 이야기') : '') + '</div>' +
       '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (m.rival ? U.esc((G.SeaFolk.rivalCity(m.rival) || {}).name || '') + '에 머묾' : G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
-      ' · ' + m.y[0] + '~' + m.y[1] + '년</div>' +
+      ' · ' + m.y[0] + '~' + m.y[1] + '년' + (m.renown ? ' · <span class="renown" title="실존 인물 — 지명도가 높을수록 특기가 많다">지명도 ' + '★'.repeat(m.renown) + ' ' + G.RENOWN_NAME[m.renown] + '</span>' : '') + '</div>' +
       (m.rival ? '<div class="mt"><b class="warn">고용할 수 없다</b> — 스스로 함대를 꾸려 발견을 다투는 경쟁 탐험가</div>' : '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +
       ' · 월급 <b>금화 ' + U.num(m.wage) + '닢</b></div>') +
       '<div class="mc-desc">' + U.esc(m.desc || '') + '</div>'));
@@ -492,8 +494,8 @@
     if (who.lang === 0) { await C.mate('무슨 말을 하는 건지 전혀 모르겠습니다.'); return; }
     var roll = U.rand();
     if (roll < 0.55) {
-      var d = T.rumour(c);
-      if (d) { G.Disc.addHint(d.id, 'tavern:' + c.id); await UI.say('이건 비밀인데 말이야... ' + d.hint, who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); return; }
+      var d = T.rumour(c, { stack: true });
+      if (d) { var kn = G.Disc.hasHint(d.id); await UI.say((kn ? '자네도 들었나? 나도 들은 얘긴데... ' : '이건 비밀인데 말이야... ') + d.hint, who); G.Disc.noteHint(d, 'tavern:' + c.id); return; }
     }
     if (roll < 0.8) {
       // price tip
@@ -657,8 +659,8 @@
       } else if (v === 'talk') {
         if (st.aff < 30) await say('저는 ' + like.name + ' 남자가 좋아요. ' + (m.like === 'generous' ? '역시 남자는 통이 커야죠.' : '그런 사람이 이상형이에요.'), 'warm');
         else {
-          var d = U.chance(0.5) ? T.rumour(c) : null;
-          if (d) { G.Disc.addHint(d.id, 'tavern:' + c.id); await say('손님들이 이런 이야기를 하더라고요. ' + d.hint, 'warm'); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
+          var d = U.chance(0.5) ? T.rumour(c, { stack: true }) : null;
+          if (d) { var kn2 = G.Disc.hasHint(d.id); await say((kn2 ? '그 이야기, 여기 손님들도 똑같이 하던데요. ' : '손님들이 이런 이야기를 하더라고요. ') + d.hint, 'warm'); G.Disc.noteHint(d, 'tavern:' + c.id); }
           else await say(U.pick(['바다 너머에는 뭐가 있을까요? 언젠가 저도 가 보고 싶어요.', '항해 이야기 더 들려주세요!', '몸조심하세요. 바다는 무서운 곳이니까요.']), 'warm');
         }
       } else if (v === 'gift') {

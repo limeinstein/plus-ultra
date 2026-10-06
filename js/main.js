@@ -135,8 +135,8 @@
   H.lat = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') || R.hasItem('astrolabe') || R.skill('survey') >= 2 ? U.fmtLat(l.lat) : '? <small>(천문판)</small>'; };
   H.lon = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') ? U.fmtLon(l.lon) : '? <small>(육분의)</small>'; };
   /** 직위: 작위가 있으면 가장 높은 작위, 없으면 명성으로 부르는 이름 */
-  H.title = function () { var t = G.Court && G.Court.best(); return t ? t.ko : R.fameTitle(Game.state.player.fame); };
-  H.titleTip = function () { var t = G.Court ? G.Court.titles() : []; return (t.length ? t.map(function (x) { return G.Court.fullName(x, true); }).join(' · ') + ' — ' : '') + R.fameTitle(Game.state.player.fame); };
+  H.title = function () { var t = G.Court && G.Court.best(), sl = G.Slave ? G.Slave.title() : ''; return sl ? sl + (t ? ' · ' + t.ko : '') : t ? t.ko : R.fameTitle(Game.state.player.fame); };   // 노예 무역에 손을 대면 「노예 상인」이 먼저 붙는다
+  H.titleTip = function () { var t = G.Court ? G.Court.titles() : [], sl = G.Slave ? G.Slave.title() : ''; return (sl ? sl + ' (노예를 사고판 이름 — 남은 ' + G.Slave.remain() + '일) — ' : '') + (t.length ? t.map(function (x) { return G.Court.fullName(x, true); }).join(' · ') + ' — ' : '') + R.fameTitle(Game.state.player.fame); };
   H.fameTip = function () { return G.Fame ? '통합 명성 = ' + G.Fame.text() : ''; };
   H.lang = function (c) {
     if (!c) return '';

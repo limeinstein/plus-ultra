@@ -3,6 +3,7 @@
      (한 도시에서 같은 날 여러 번 나눠 판 것은 한 번으로 친다)
    · 유행하는 동안(days) 그 나라·지역의 모든 도시에서 그 물건의 값이 mult배 (파는 값·사는 값 모두 — 그 자리에서 사서 되파는 것을 막는다)
    · 끝나면 제값으로 돌아가고, 같은 곳·같은 물건은 cooldown일 동안 다시 유행하지 않는다
+   · 제독과 상관없이 이는 「세상의 유행」(발견 소식·시대의 바람·번짐)도 여기에 함께 올라간다 — js/systems/era.js, 배수는 저마다 f.m
    조정값: G.BALANCE.fad (js/data/base.js). 값은 R.sellPrice·R.buyPrice (js/core/rules.js)가 G.Fad.mult 를 곱한다.
 
    저장 상태 (옛 저장에는 없다 — 쓸 때 만든다)
@@ -28,13 +29,15 @@
     return null;
   };
   /** 값에 곱할 배수 (유행이 아니면 1) */
-  F.mult = function (c, goodId) { return F.at(c, goodId) ? (B().mult || 3) : 1; };
+  F.mult = function (c, goodId) { var f = F.at(c, goodId); return f ? (f.m || B().mult || 3) : 1; };   // 세상의 유행(js/systems/era.js)은 저마다 배수 m
+  /** 세상의 유행을 올린다 (js/systems/era.js — 발견의 유행·저절로 이는 유행·번짐): f = {g, k, key, since, until, m, src, why} */
+  F.start = function (f) { var fd = st(); if (fd && f) fd.on.push(f); return f; };
   /** 유행하는 곳의 이름 */
   F.where = function (f) { return f.k === 'r' ? G.REGIONS[f.key] + ' 지역' : f.key; };
   /** 지금 유행 목록 [{g, name, where, left}] */
   F.list = function () {
     var s = S(); if (!s || !s.fad) return [];
-    return s.fad.on.filter(function (f) { return s.day < f.until && G.GOOD[f.g]; }).map(function (f) { return { g: f.g, name: G.GOOD[f.g].name, where: F.where(f), left: f.until - s.day, f: f }; });
+    return s.fad.on.filter(function (f) { return s.day < f.until && G.GOOD[f.g]; }).map(function (f) { return { g: f.g, name: G.GOOD[f.g].name, where: F.where(f), left: f.until - s.day, f: f, m: f.m || B().mult || 3, src: f.src || 'me', why: f.why || '' }; });
   };
 
   /** 물건을 팔았다 (trade.js sellQty): 이익이 컸으면 적어 두고, 조건이 차면 유행이 시작된다. 시작됐으면 그 유행을 돌려준다 */
