@@ -10,6 +10,7 @@ data = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 ids = re.findall(r"^\s*trade\('([^']+)'", data, re.M)
 more = (ROOT / "js" / "data" / "moredisc.js").read_text(encoding="utf-8")
 ids += re.findall(r"^\s*\['(t_[a-z]+)'", more, re.M)      # 사용자 요청으로 더한 교역품 (바나나·고구마)
+ids = [i for i in ids if i != 't_slaves']               # 노예 무역(slavetrade.js)은 시장 좌판 장면을 만들지 않는다 — 분류 기본 그림
 assert len(ids) == 30, ids
 generator = (ROOT / "tools" / "procedural_art" / "trade" / "trade.js").read_text(encoding="utf-8")
 assert "fillText(" not in generator, "교역품 발견 장면에 글자가 들어갔습니다"

@@ -29,14 +29,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const record = (sceneExpr, sec) => page.evaluate(([expr, sec]) => new Promise(res => {
     const out = [], t0 = performance.now(), st = eval(expr), l = G.Game.state.loc;
     const ui = [...document.querySelectorAll('#ui > *, #hud, .hud, .topbar')].filter(e => !e.classList.contains('mapcatch') && e.getBoundingClientRect().width > 0).slice(0, 14);
-    const pos = e => { const r = e.getBoundingClientRect(); return r.left.toFixed(2) + ',' + r.top.toFixed(2); };   // 자리만 (알림이 사라지며 높이가 바뀌는 것은 흔들림이 아니다)
+    const pos = e => { const r = e.getBoundingClientRect(); return r.left.toFixed(2) + ',' + r.top.toFixed(2) + ' ' + r.width.toFixed(0) + 'x' + r.height.toFixed(0); };   // 자리와 크기 (크기가 그대로인데 자리만 바뀌면 흔들린 것)
+    const moved = (a, b) => { const [pa, sa] = a.split(' '), [pb, sb] = b.split(' '); return sa === sb && pa !== pb; };   // 알림이 사라지며 크기가 바뀌어 가운데 자리가 옮겨지는 것은 흔들림이 아니다
     const rect0 = ui.map(pos);
     const stage0 = document.getElementById('stage').style.transform;
     let uiMoved = 0;
     (function f() {
       const t = (performance.now() - t0) / 1000;
       out.push({ t, qo: st.qo ? [st.qo[0], st.qo[1]] : null, cam: st.cam ? [st.cam.lon, st.cam.lat] : [st.cx, st.cy], loc: [l.lon, l.lat, l.heading] });
-      ui.forEach((e, i) => { if (pos(e) !== rect0[i]) { uiMoved++; (window.__moved = window.__moved || {})[e.className] = pos(e) + ' ← ' + rect0[i]; } });
+      ui.forEach((e, i) => { if (moved(pos(e), rect0[i])) { uiMoved++; (window.__moved = window.__moved || {})[e.className] = pos(e) + ' ← ' + rect0[i]; } });
       if (document.getElementById('stage').style.transform !== stage0) uiMoved++;
       if (t < sec) requestAnimationFrame(f); else res({ out, uiMoved, nui: ui.length });
     })();
