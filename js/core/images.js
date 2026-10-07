@@ -720,6 +720,7 @@
     chain = [].concat(chain || []);
     var out = [], picked = I.pick(chain);
     chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|maids|rivals)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
+    if (picked && /^maid-styles\//.test(picked) && !/_half$/.test(picked)) out.push(picked + '_half');   // 이름 없는 그 고장 여급 (술집 여급 무릎상과 같은 그림)
     if (picked && /^portraits\/(npc|npc-roles|pools)\//.test(picked)) {
       out.push(picked + '_half');
       var g = npcKeyGender(picked);

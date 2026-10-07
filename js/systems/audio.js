@@ -185,11 +185,32 @@
     }, 50);
     deckOn = nextIdx;
   }
+  /* 잠깐 다른 곡(주점의 코드 음악 등)으로 바뀔 때는 거리 곡을 내리지 않고 멈춰만 둔다 — 건물에서 나오면 그 자리에서 이어 튼다.
+     (예전에는 나올 때마다 곡 파일을 처음부터 다시 읽어, 큰 파일·한 파일짜리 판에서 화면이 잠깐 멎었다) */
+  var parked = null;
+  function parkFile() {
+    if (deckOn < 0 || !fileTrack || !decks[deckOn]) { stopFile(); return; }
+    var idx = deckOn, el = decks[idx], v0 = el.volume, F = Math.max(0.05, MT().fade || 1.8), t0 = Date.now();
+    parked = { track: fileTrack, idx: idx };
+    fileTrack = null; pendingPlay = null; deckOn = -1;
+    if (fadeTimer) clearInterval(fadeTimer);
+    fadeTimer = setInterval(function () {
+      var k = Math.min(1, (Date.now() - t0) / (F * 1000));
+      el.volume = v0 * (1 - k);
+      if (k >= 1) { clearInterval(fadeTimer); fadeTimer = null; el.pause(); }
+    }, 50);
+  }
   function playFile(t) {
     if (fileTrack === t) return;
     genStop();
+    if (parked && parked.track === t && decks[parked.idx] && decks[parked.idx].getAttribute('src')) {   // 멈춰 둔 거리 곡을 이어서
+      var pi = parked.idx; parked = null; fileTrack = t;
+      tryPlay(decks[pi]); fadeTo(pi);
+      return;
+    }
     fileTrack = t;
     var idx = deckOn === 0 ? 1 : 0;
+    if (parked && parked.idx === idx) parked = null;   // 멈춰 둔 곡 자리를 새 곡이 쓴다
     if (!decks[idx]) { decks[idx] = new Audio(); decks[idx].loop = true; decks[idx].preload = 'auto'; }
     var el = decks[idx];
     el.onerror = function () {                      // 파일이 없거나 못 읽음 → 이 곡은 빼고 코드 음악으로
@@ -214,7 +235,7 @@
     var Y = G.YTM;
     if (Y) { Y.install(); if (Y.on()) { if (Y.inMoment() && !force) return; var yt = Y.pick(name); if (yt) { genStop(); stopFile(); Y.play(yt); return; } Y.pause(); } else Y.pause(); }
     var t = AU.pick(name);
-    if (t && t.indexOf('gen:') === 0) { stopFile(); genMusic(t.slice(4)); return; }
+    if (t && t.indexOf('gen:') === 0) { parkFile(); genMusic(t.slice(4)); return; }
     if (t) { if (force || fileTrack !== t) playFile(t); return; }
     stopFile();
     genMusic(name);

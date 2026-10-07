@@ -61,13 +61,19 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     await page.mouse.move(target.px, target.py); await page.waitForTimeout(200);
     const hov = await page.evaluate(() => { const h = G.Town.runtime().hover; return h && h.name; });
+    const tClick = Date.now();
     await page.mouse.down(); await page.mouse.up();
     await page.waitForSelector('.dlg', { timeout: 10000 });
+    const tOpen = Date.now() - tClick;
     await page.waitForTimeout(700);
     await page.screenshot({ path: path.join(OUT, 'talk.png') });
-    const dl = await page.evaluate(() => ({ text: document.querySelector('.dlg').innerText, hero: G.Town.runtime().hero.x }));
+    const dl = await page.evaluate(() => ({ text: (document.querySelector('.dlg-stage') || document.querySelector('.dlg')).innerText, hero: G.Town.runtime().hero.x, duo: !!document.querySelector('.dlg-stage.duo'), tall: document.querySelectorAll('.dlg-actor.tall').length }));   // 마주 선 대화: 이름은 대화창 위 이름패
     console.log(JSON.stringify({ target, hov, dl }));
     ok(hov === target.name, '마우스를 올리면 「' + hov + ' — 말 걸기」');
+    ok(dl.duo && dl.tall >= 1, '말을 걸면 제독과 마주 선 무릎상 대화 (무릎상 ' + dl.tall + ')');
+    ok(tOpen < 2500, '누르고 대화가 열리기까지 ' + tOpen + 'ms (예전에는 다가간 뒤에도 3.5초를 채웠다)');
+    const cache = await page.evaluate(() => { const st = G.Town.runtime(); G.Town.folks().forEach(o => { o.state = 'walk'; o.target = o.x + 400; o.v = 60; }); const k0 = st.baseKey; let n = 0; for (let i = 0; i < 20; i++) { G.Town.update(1 / 30); if (st.baseKey !== k0) n++; } return { k0: !!k0, n }; });
+    ok(cache.k0 && cache.n === 0, '거리 사람만 걸을 때는 거리 바탕을 다시 그리지 않는다 (기억해 둔 바탕을 붙임)');
     ok(dl.text.indexOf(target.name) >= 0 && Math.abs(dl.hero - target.fx) < 160, '눌렀더니 제독이 다가가(' + Math.round(target.hero0) + ' → ' + Math.round(dl.hero) + ') ' + target.name + U_short(dl.text));
     for (let i = 0; i < 4; i++) { const has = await page.evaluate(() => !!document.querySelector('.dlg')); if (!has) break; await page.mouse.click(800, 820); await page.waitForTimeout(400); }
 

@@ -170,7 +170,7 @@
      · 그림은 화면 UI(도시 이름판·건물 메뉴·HUD·아래 단추줄)보다 아래 층(.dlg-actors, z 13)에 그려 UI를 가리지 않는다.
        이름표만 대화창 층에 두어 눌러서 인물 이야기를 볼 수 있게 한다. */
   function standFx() {
-    var d = { top: 60, sink: 6, aspect: 0.6667, minH: 360, maxH: 640, bustW: 260, bustH: 260, soloCity: true }, f = (G.FX && G.FX.stand) || {}, o = {}, k;
+    var d = { top: 60, sink: 6, aspect: 0.6667, minH: 360, maxH: 640, bustW: 260, bustH: 260, soloCity: true, npcDuo: true }, f = (G.FX && G.FX.stand) || {}, o = {}, k;
     for (k in d) o[k] = f[k] == null ? d[k] : f[k];
     return o;
   }
@@ -239,6 +239,12 @@
     var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
     // 제독 혼자의 물음·혼잣말: 방금 마주 섰던 사람이 있으면 그 사람과 함께 선다 (제독 = 왼쪽, 고르는 쪽)
     if (!duo && low && isPlayer(opts) && partnerFor(menuEl)) { duo = true; partner = partnerFor(menuEl); side = 'left'; choiceSide = 'left'; }
+    // 도시 안에서 혼자 말하던 사람(여급·수위·거간꾼·거리의 마을 사람…)도 동료처럼 제독과 마주 선 무릎상 대화로 (G.FX.stand.npcDuo).
+    // 무릎상이 없는 사람만 그 자리에 흉상으로 선다. who.solo = true면 예전처럼 혼자 가운데에
+    if (!duo && low && F.npcDuo && opts.portrait && !opts.solo && !isPlayer(opts) && S && S.loc && S.loc.mode === 'city' && S.player) {
+      duo = true; side = 'right'; choiceSide = choiceSide || 'left';
+      partner = { name: S.player.name, rigId: 'player', portrait: S.player.portrait, half: G.Img && G.Img.chain.heroHalf ? G.Img.chain.heroHalf() : null };
+    }
     var solo = !duo && !!opts.portrait && low && (!F.soloCity || (S && S.loc && S.loc.mode === 'city'));
     var soloHalf = solo ? halfKeyOf(opts) : null;
     if (soloHalf && !soloHalf.key) soloHalf = null;

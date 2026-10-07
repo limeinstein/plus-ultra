@@ -31,7 +31,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     TT.sleep = sleep;
     TT.top = () => [...document.querySelectorAll('#ui .modal-back')].pop() || null;
-    TT.text = () => { const m = TT.top(); return m ? m.textContent : ''; };
+    TT.text = () => { const m = TT.top(); if (!m) return ''; const b = m.querySelector('.dlg .body'), n = m.querySelector('.dlg .name'); return b ? (n ? n.textContent : '') + b.textContent : m.textContent; };   // 마주 선 대화의 이름패(두 사람)는 빼고 말하는 사람 이름 + 대사
     TT.kind = () => { const m = TT.top(); if (!m) return ''; if (m.querySelector('.askrow')) return 'ask'; if (m.querySelector('.win')) return 'win'; return 'say'; };
     TT.find = (txt, root) => [...(root || document.getElementById('ui')).querySelectorAll('.cmd, .choice, .btn, .hire-row, tr.click, .opt')].filter(e => !e.closest('.tutbox') && e.textContent.indexOf(txt) >= 0);
     TT.click = (txt, exact) => { const m = TT.top(); let c = TT.find(txt, m || undefined); if (exact) c = c.filter(e => e.textContent.trim() === txt); const e = c[0]; if (!e) return false; e.click(); return true; };

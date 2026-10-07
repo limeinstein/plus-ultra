@@ -48,7 +48,21 @@
       }
       f.target = f.x;
     });
+    SF.warm(out);
     return out;
+  };
+  /** 말을 걸었을 때 대화창에 설 무릎상(그 사람·제독)을 미리 받아 둔다 — 누르자마자 대화가 열리게 (기다리지 않음) */
+  SF.warm = function (list) {
+    var I = G.Img; if (!I || !I.count || !I.count() || !I.prefetchKeys) return;
+    var keys = [];
+    try {
+      if (I.chain.heroHalf) keys = keys.concat(I.chain.heroHalf());
+      (list || []).forEach(function (f) {
+        var p = f.face && f.face.portrait; if (!p || !A.portraitKeys || !I.chain.halfFor) return;
+        var ch = I.chain.halfFor(A.portraitKeys(p)), k = I.pick(ch); if (k) keys.push(k);
+      });
+    } catch (e) { return; }
+    I.prefetchKeys(keys.filter(function (k, i) { return k && keys.indexOf(k) === i; }));
   };
   SF.make = function (type, c, streetW, heroX, ground, seed) {
     var k = K(), T = D().types[type], dp = k.depth || [12, 52], sc = k.scale || [0.92, 1.06];

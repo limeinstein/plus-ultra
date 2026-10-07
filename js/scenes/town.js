@@ -212,6 +212,7 @@
     st.dirty = true;
   }
   T.folks = function () { return st ? st.folks || [] : []; };   // 시험용
+  T._hero = function () { return st ? st.hero : null; };   // 시험용
   T.respawnFolk = function () { if (st) spawnFolk(); };
   /** 매 프레임 다시 계산하지 않도록 배경·덧칠·이름표를 미리 그려 둔다 */
   function prepare() {
@@ -628,9 +629,11 @@
     var mine = st;
     return new Promise(function (res) {
       var t0 = Date.now();
+      // 닿으면 바로 (예전에는 hero.to가 비워지기만 기다려 늘 3.5초를 채웠다 — 걸음은 hero.x가 to에 닿으면 끝난다)
       (function wait() {
-        if (st !== mine || st.hero.to == null || Date.now() - t0 > 3500) { if (st === mine) { st.hero.to = null; st.hero.dir = f.x > st.hero.x ? 1 : -1; st.dirty = true; } res(); return; }
-        setTimeout(wait, 60);
+        var arrived = st === mine && (st.hero.to == null || Math.abs(st.hero.x - to) < 1);
+        if (st !== mine || arrived || Date.now() - t0 > 3500) { if (st === mine) { st.hero.to = null; st.hero.walking = false; st.hero.dir = f.x > st.hero.x ? 1 : -1; st.dirty = true; } res(); return; }
+        setTimeout(wait, 30);
       })();
     });
   };
@@ -826,18 +829,35 @@
       moved = true;
     }
     if (hero.entering) { hero.fade = Math.max(0, hero.fade - dt / 0.42); hero.dist += 260 * dt; moved = true; }
-    if (st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x)) moved = true;   // 거리를 걷는 사람들
     if (st.hover !== st.drawnHover || st.focus !== st.drawnFocus) moved = true;
     if (G.Scenes.city.timeOfDay() !== st.tod) moved = true;
-    if (!moved && !st.dirty) return;      // 움직임이 없으면 다시 그리지 않는다
+    // 거리를 걷는 사람들: 그들만 움직일 때는 초당 folkFps번만 다시 그린다 (거리 전체를 매 틀 다시 그리지 않게 — 끊김 방지)
+    var folkMoved = !!(st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x));
+    st.folkAcc = (st.folkAcc || 0) + dt;
+    if (!moved && !st.dirty) {
+      if (!folkMoved || st.folkAcc < 1 / (((G.FX && G.FX.streetFolk) || {}).fps || 30)) return;      // 움직임이 없으면 다시 그리지 않는다
+    }
+    st.folkAcc = 0;
     st.dirty = false;
     draw();
   };
-  T.redraw = function () { if (st) st.dirty = true; };
+  T.redraw = function () { if (st) { st.dirty = true; st.baseKey = null; } };   // 바탕까지 다시
 
+  /* 거리의 바탕(하늘·길·볼거리·건물)은 카메라·눌린 것·시간대가 그대로면 한 장으로 기억해 두고 그대로 붙인다 —
+     거리 사람·제독·이름표·하늘빛만 매번 그린다 (거리 사람이 걸어 다녀도 무겁지 않게) */
   function draw() {
     var ctx = G.Game.sceneCtx();
     var cam = st.cam;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    var hv = st.hover && !st.hover.spec ? st.hover : null;     // 거리 사람에 마우스를 올린 것은 바탕을 바꾸지 않는다
+    var bkey = Math.round(cam * 4) + '|' + (hv ? st.items.indexOf(hv) + ':' + st.marks.indexOf(hv) : '') + '|' + (st.focus ? st.items.indexOf(st.focus) : '') + '|' + (st.near ? st.items.indexOf(st.near) : '') + '|' + (st.bgCv ? 1 : 0) + '|' + st.items.length;
+    if (!st.base) { st.base = document.createElement('canvas'); st.base.width = W; st.base.height = H; st.baseKey = null; }
+    if (st.baseKey !== bkey) { drawBase(st.base.getContext('2d'), cam, hv); st.baseKey = bkey; }
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(st.base, 0, 0);
+    drawFront(ctx, cam);
+  }
+  function drawBase(ctx, cam, hover) {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, W, H);
     // 배경 (미리 확대해 둔 그림에서 필요한 부분만 잘라 붙인다)
@@ -856,7 +876,7 @@
       ctx.globalAlpha = 0.96;
       ctx.drawImage(m.cv, x, m.y - m.cv.height);
       ctx.globalAlpha = 1;
-      if (st.hover === m) {            // 누를 수 있는 볼거리: 살짝 밝힌다
+      if (hover === m) {            // 누를 수 있는 볼거리: 살짝 밝힌다
         ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.16;
         ctx.drawImage(m.cv, x, m.y - m.cv.height); ctx.restore();
       }
@@ -870,14 +890,16 @@
       ctx.beginPath(); ctx.ellipse(x + it.w / 2, it.base + 8, it.w * 0.42, 15, 0, 0, 7); ctx.fill();
       ctx.restore();
       ctx.drawImage(it.cv, x, it.base - it.h);
-      if (st.hover === it || st.focus === it || st.near === it) {
+      if (hover === it || st.focus === it || st.near === it) {
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
-        ctx.globalAlpha = st.hover === it ? 0.16 : 0.10;
+        ctx.globalAlpha = hover === it ? 0.16 : 0.10;
         ctx.drawImage(it.cv, x, it.base - it.h);
         ctx.restore();
       }
     });
+  }
+  function drawFront(ctx, cam) {
     // 거리를 걷는 사람들 — 제독보다 뒤(위)에 선 사람, 제독, 앞에 선 사람 차례로
     var heroY = GROUND + 34, folks = (st.folks || []).slice().sort(function (a, b) { return a.y - b.y; });
     folks.forEach(function (f) { if (f.y <= heroY) G.StreetFolk.draw(ctx, f, cam, st.hover === f); });
