@@ -28,7 +28,10 @@
         : first ? SP.holderName(sp) + '일세. 자네가 요즘 소문난 항해자인가? 무슨 일로 왔나?' : U.pick(['오오, ' + s.player.name + ', 잘 왔네.', '무슨 일인가, ' + s.player.name + '?', '자네로군. 이번에는 무슨 이야기를 가져왔나?']);
       await C.say(who, greet);
       // 국왕의 부름·명예 작위: 군주가 먼저 왕명 이야기를 꺼낸다 (js/systems/court.js)
-      if (G.Court) { try { await G.Court.onEnter(sp); } catch (e) { console.error(e); } }
+      // 사라진 왕녀: 에스파냐 국왕이 먼저 꺼낸다 (js/systems/princess.js) — 그 이야기를 했으면 왕명은 메뉴에서
+      var prDone = false;
+      if (G.Princess) { try { prDone = await G.Princess.onEnter(sp); } catch (e) { console.error(e); } }
+      if (G.Court && !prDone) { try { await G.Court.onEnter(sp); } catch (e) { console.error(e); } }
       return true;
     };
     B.sub = function (c, arg) { var sp = B.sp(c, arg); return sp ? SP.holderName(sp) + ' · ' + sp.title + ' (세력 ' + G.POWER_NAME[sp.pw] + ')' : ''; };
@@ -40,7 +43,7 @@
         { label: '모험 제안', icon: 'scroll', dim: !!k, onClick: function () { return SP.propose(sp); } },
         { label: '보고', icon: 'seal', sub: mine ? (G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') : '계약 중') : '', dim: !mine, onClick: function () { return SP.report(sp); } },
         { label: '이야기', icon: 'people', onClick: function () { return chat(sp); } }
-      ].concat(G.Court ? G.Court.palaceItems(sp) : []);   // 왕명·친서·특사
+      ].concat(G.Princess ? G.Princess.palaceItems(sp) : []).concat(G.Court ? G.Court.palaceItems(sp) : []);   // 사라진 왕녀 · 왕명·친서·특사
     };
     return B;
   }

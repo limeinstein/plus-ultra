@@ -322,6 +322,7 @@
         (G.Plan && !tk && !G.Disc.foundByMe(k.disc) ? G.Plan.html(G.Plan.forContract()) : '');
     } else html += '<div class="muted">진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.</div>';
     // 왕명 (js/systems/court.js)
+    if (G.Princess) html += G.Princess.html();   // 국왕의 특명 — 사라진 왕녀
     if (G.Court) html += G.Court.taskHtml();
     if (G.Escort) html += G.Escort.html();     // 상선 호위
     // 조합 의뢰

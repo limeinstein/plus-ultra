@@ -320,6 +320,8 @@
       // 두고 온 유물을 가지러 왔다
       var lefts = G.Disc.leftHere('land', l.lon, l.lat);
       for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
+      // 사라진 왕녀: 홍해 요새에 다가가면 수비대가 막아선다 (js/systems/princess.js)
+      if (G.Princess) await G.Princess.onLand({ battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });
       // 정찰대: 가까운 발견물을 알아채고 지도에 표식을 남긴다
       var sensed = G.Explore.sense('land', l.lon, l.lat, Math.max(st.scoutBoost || 1, 1 + G.Mounts.scout(MT(), l.party)));
       st.scoutBoost = 0;

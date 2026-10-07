@@ -14,6 +14,7 @@
   };
   F.wifeSpeaker = function () {
     var s = S(), m = G.MAID[s.player.wife];
+    if (m && m.royal && G.Princess) return G.Princess.speaker();   // 에스파냐 왕녀 (js/systems/princess.js)
     if (m) return G.Scenes.city.B.tavern.maidSpeaker(m);
     var md = F.wifeMate();
     if (md) return { name: md.name, rigId: 'mate:' + md.id, portrait: G.Scenes.mateSpec(md.id), half: G.Img.chain.mateHalf ? G.Img.chain.mateHalf(md.id) : null, lang: 3 };

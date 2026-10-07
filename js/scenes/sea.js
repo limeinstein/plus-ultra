@@ -544,6 +544,8 @@
     if (G.SeaFolk) { var sfN = G.SeaFolk.spawn(st.npcs); if (sfN) { st.npcs.push(sfN); if (G.ShipSprite) G.ShipSprite.want(sfN.ships); return; } }
     // 왕명: 왕녀를 붙잡아 간 해적단(소굴 앞바다)·나포할 나라의 배 (js/systems/court.js)
     if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships); return; } }
+    // 사라진 왕녀: 레반트의 바르바리 해적 함대·홍해 요새의 함대 (js/systems/princess.js)
+    if (G.Princess) { var prN = G.Princess.spawn(st.npcs); if (prN) { st.npcs.push(prN); if (G.ShipSprite) G.ShipSprite.want(prN.ships); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
     var pr = pirateRate(l.lon, l.lat) * (s.settings.diff === 'easy' ? 0.6 : 1) * (G.Escort ? G.Escort.pirateK() : 1);   // 상선을 호위하면 해적이 더 꾄다
@@ -609,12 +611,13 @@
     var kinds = n.ships ? n.ships.filter(function (id, i) { return n.ships.indexOf(id) === i; }).map(function (id) { return G.SHIP[id].name; }).join('·') : '';
     var kt = kinds ? ' (' + kinds + ')' : '';
     var text = byMe ? who + ' ' + n.n + '척이 있다' + kt + '. 어떻게 할까요?' : (n.kind === 'pirate' ? '제독! ' + pl + '입니다! ' + n.n + '척의 해적선이 다가옵니다!' + kt : n.hunt && G.Hostile ? '제독! ' + who + ' ' + n.n + '척이 우리를 잡으러 왔습니다!' + kt + ' (' + n.nation + ' 적대 ' + G.Hostile.get(n.nation) + ')' : who + ' ' + n.n + '척이 우리를 막아섭니다!' + kt);
-    if (n.court && G.Court) text = G.Court.encounterText(n) || text;   // 왕명: 왕녀를 붙잡아 간 해적단
+    if (n.court && G.Court) text = G.Court.encounterText(n) || text;
+    if (n.princess && G.Princess) text = G.Princess.encounterText(n) || text;   // 사라진 왕녀   // 왕명: 왕녀를 붙잡아 간 해적단
     if (n.cap && G.Captains) text = G.Captains.encounterText(n, text, byMe) || text;   // 이름난 해적의 해적단 (seacaptains.js)
     // 회피는 전투의 실패가 아니라 따로 고르는 운영 선택이다 — 가능성을 미리 보여 준다
     var fleeP = U.clamp(0.35 + (R.fleetSpeed(S().loc.heading, curWind()) - n.spd) * 0.5 + R.skill('nav') * 0.08, 0.1, 0.9);
     var opts = [{ label: '싸운다', value: 'fight' }, { label: '도망친다 (약 ' + Math.round(fleeP * 100) + '%)', value: 'flee' }];
-    if (!byMe && n.kind === 'pirate' && !n.court) {
+    if (!byMe && n.kind === 'pirate' && !n.court && !n.princess) {
       opts.push({ label: '통행료를 낸다 (금화 ' + U.num(tollOf()) + '닢)', value: 'pay' });
       if (canPlead()) opts.push({ label: '사정한다 (털어 갈 것이 없다)', value: 'plead' });
     }

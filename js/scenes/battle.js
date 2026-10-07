@@ -923,6 +923,7 @@
       if (G.SeaFolk) G.SeaFolk.afterBattle(st.npc, res, lines);   // 탐험 함대를 꺾으면 그 항해가 한 해 늦어진다
       if (G.Captains) G.Captains.afterBattle(st.npc, res, st.ships, lines);   // 이름난 선장·해적의 기함을 나포하면 사로잡는다 (seacaptains.js)
       if (G.Court) G.Court.afterBattle(st.npc, res, st.ships, lines);   // 왕명: 나포·해적 토벌·왕녀 구출
+      if (G.Princess) G.Princess.afterBattle(st.npc, res, st.ships, lines);   // 사라진 왕녀: 레반트의 해적 함대·요새의 함대
       var gold = 0, caps = [];
       st.ships.forEach(function (b) {
         if (b.side !== 'en') return;
@@ -948,6 +949,7 @@
       await UI.alert(lines.join('<br>'), '해전 승리');
       if (caps.length) await prizeFleet(caps.map(prizeShip));
       if (caps.length) await prizeHolds(caps);     // 나포선의 식량·물·자재·교역품·따르겠다는 선원을 옮겨 싣는다
+      if (G.Princess) { try { await G.Princess.tell(); } catch (e) { console.error(e); } }   // 사로잡은 두목의 실토 · 왕녀와의 만남
     } else if (res === 'flaglost') {
       // 기함을 잃고 흩어져 달아났다: 쫓기며 짐 절반을 버렸다
       var lostK = 0;
@@ -969,6 +971,7 @@
         await UI.alert('패배했다... 짐을 모두 빼앗기고 금화 ' + U.num(lostG) + '닢을 약탈당했다.', '패배');
       }
     }
+    if (res !== 'win' && G.Princess) G.Princess.afterBattle(st.npc, res, st.ships, null);   // 사라진 왕녀: 놓친 함대는 며칠 뒤에 다시
     if (f.crew <= 0 && f.ships.length) f.crew = Math.max(3, Math.round(R.crewMin() * 0.3));
     G.Scenes.city.B.harbor.trimCrew && G.Scenes.city.B.harbor.trimCrew();
     if (G.Game.scene !== B) return;
