@@ -266,7 +266,17 @@
     // 교역소 물량과 값의 기울기 (대항해시대 2처럼 큰 배로 많이 실어 나를수록 남게) — rules.js R.supply·onBuy·onSell·buyPrice·sellPrice
     // 재고 = stock[0] + stock[1] × 도시 크기 · 사면 품귀(dep)가 q / (dep[0] + dep[1] × 크기)만큼 늘고 사는 값 × (1 + depPrice × 품귀)
     // 팔면 포화(sat)가 q / (sat[0] + sat[1] × 크기)만큼 늘고 파는 값 × e^(−satPrice × 포화). 품귀·포화는 25일마다 절반으로
-    market: { stock: [80, 140], dep: [120, 160], depPrice: 0.45, sat: [160, 140], satPrice: 0.45 },
+    //   살아 있는 경제(2026-10-07): 시장이 받아 줄 양(sat 분모)은 그 고장 산물이면 ×prodCap, 들여와 파는 물건이면 ×relayCap.
+    //   받아 줄 양을 넘겨(포화 1 넘게) 팔면 값이 e^(−crash × (포화 − 1))만큼 더 떨어진다(폭락).
+    //   한 번에 많이 팔면 같은 지역 spillDist도 안의 다른 항구에도 포화가 spill × (1 − 거리/spillDist)만큼 번진다(상인들이 남는 물건을 실어 돌린다)
+    market: { stock: [80, 140], dep: [120, 160], depPrice: 0.45, sat: [160, 140], satPrice: 0.45, crash: 0.8, prodCap: 0.4, relayCap: 0.7, spill: 0.2, spillDist: 7 },
+    // 세상의 시장 사건 (js/systems/economy.js, 사건 표 js/data/econ.js): 하루 perDay 확률로 새 사건(동시에 max개까지), 처음에 seed개.
+    //   전쟁(G.ECON_WARS)이 벌어지는 해에는 하루 warPerDay 확률로 그 나라 도시에 「전쟁」 사건. 사건 세기는 strength[0]~[1]배로 흔들린다.
+    //   모자람 사건: 사는 값은 오른 몫의 buyShare만, 재고는 1 / (1 + 오른 몫 × stockK). 넘침: 재고 × (1 + 내린 몫 × glutStock).
+    //   모자란 양 = (sat[0] + sat[1] × 크기) × needK × (배수 − 1) — 그만큼 팔아 채우면 값이 제자리로. 다른 상인들도 날마다 모자란 양의 npcFill씩 실어 온다.
+    //   처음 rampIn 몫 동안 차츰 세지고 마지막 rampOut 몫 동안 차츰 가라앉는다.
+    //   제독이 newsDist도 안에 있으면 사건이 일어날 때(조짐부터) 소식을 듣는다. 술집 소문은 rumorDist도 안의 사건, 한 번 들를 때 rumorAsk번(한 번에 rumorN가지)
+    econ: { perDay: 0.1, max: 14, seed: 7, warPerDay: 0.02, strength: [0.85, 1.15], buyShare: 0.75, stockK: 1.2, glutStock: 1.5, needK: 0.6, rampIn: 0.12, rampOut: 0.3, newsDist: 12, rumorDist: 40, rumorAsk: 2, rumorN: 2, npcFill: 0.005 },
     // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
     // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
     landPack: { near: 1.2 },

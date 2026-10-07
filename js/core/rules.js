@@ -480,15 +480,17 @@
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행하는 물건은 사는 값도 뛴다 (js/systems/fad.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요: 1480~1700년 유럽 시장이 찾던 물건 (js/systems/era.js)
+    if (G.Econ) p *= G.Econ.mult(c, goodId, 'buy');   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)
     return Math.max(1, Math.round(p));
   };
   /** price the city pays when you sell */
   R.sellPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var base = R.isRelay(c, goodId) ? g.p * R.relayMult(c, goodId, 'sell') : R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
-    var p = base * Math.exp(-st.sat * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).satPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
+    var p = base * R.satFactor(st.sat) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행: 그 나라·지역에서 값이 몇 배 (js/systems/fad.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요 (js/systems/era.js)
+    if (G.Econ) p *= G.Econ.mult(c, goodId, 'sell');   // 세상의 시장 사건 (js/systems/economy.js)
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자
@@ -544,8 +546,31 @@
   // 물량·기울기는 G.BALANCE.market (큰 배로 많이 사고팔수록 남게 — 대항해시대 2처럼)
   function MK() { return (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }); }
   R.onBuy = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); st.dep += q / (K.dep[0] + c.size * K.dep[1]); };
-  R.onSell = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); st.sat += q / (K.sat[0] + c.size * K.sat[1]); };
-  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)))); };
+  /** 이 시장이 이 물건을 받아 줄 양 (포화 1에 해당하는 통 수): 그 고장 산물이면 적게(prodCap), 들여와 파는 물건이면 조금 적게(relayCap) */
+  R.satCap = function (c, goodId) {
+    var K = MK(), cap = K.sat[0] + c.size * K.sat[1];
+    if (R.isRelay(c, goodId)) cap *= K.relayCap == null ? 1 : K.relayCap;
+    else if (R.sells(c, goodId)) cap *= K.prodCap == null ? 1 : K.prodCap;
+    return cap;
+  };
+  /** 포화에 따른 파는 값 배수: 받아 줄 양까지는 완만히, 넘기면 폭락 (G.BALANCE.market.satPrice·crash) */
+  R.satFactor = function (sat) { var K = MK(); return Math.exp(-sat * K.satPrice - (K.crash || 0) * Math.max(0, sat - 1)); };
+  R.onSell = function (c, goodId, q) {
+    var m = R.market(c.id), st = mg(m, goodId);
+    st.sat += q / R.satCap(c, goodId);
+    if (G.Econ) G.Econ.onSell(c, goodId, q);   // 모자람 사건: 모자란 양을 채운다 (js/systems/economy.js)
+  };
+  /** 한꺼번에 많이 판 물건은 상인들이 이웃 항구로 실어 돌린다: 같은 지역 spillDist도 안의 다른 항구에도 포화가 조금 번진다 (매각이 끝난 뒤 한 번) */
+  R.spill = function (c, goodId, q) {
+    var K = MK(), share = K.spill || 0, rad = K.spillDist || 7; if (!share || !q) return;
+    G.CITY_DATA.forEach(function (t) {
+      if (t.id === c.id || !t.port || t.region !== c.region || !R.cityExists(t)) return;
+      var dd = G.Geo.dist(c.lon, c.lat, t.lon, t.lat); if (dd >= rad) return;
+      var mt = R.market(t.id), sx = mg(mt, goodId);
+      sx.sat += q * share * (1 - dd / rad) / R.satCap(t, goodId);
+    });
+  };
+  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)) * (G.Econ ? G.Econ.mult(c, goodId, 'stock') : 1))); };
   R.maybeMarketEvent = function (c) {
     var m = R.market(c.id), S = R.S();
     if (m.ev) return;

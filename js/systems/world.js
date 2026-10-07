@@ -52,7 +52,8 @@
     }
     // 가족: 임신 소식·출산 (family.js — 아이는 자택에 들러야 생긴다)
     if (G.Disaster) out = out.concat(G.Disaster.daily());   // 지진·화산·산사태·쓰나미·홍수 (js/systems/disaster.js)
-    if (G.Era) out = out.concat(G.Era.daily());   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
+    if (G.Era) out = out.concat(G.Era.daily());
+    if (G.Econ) out = out.concat(G.Econ.daily());   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
     if (G.Fad) out = out.concat(G.Fad.daily());             // 끝난 유행을 거둔다
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
     if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다

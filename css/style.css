@@ -1101,6 +1101,14 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .era-chip { display: inline-flex; align-items: center; gap: 3px; padding: 1px 8px; border-radius: 12px; background: rgba(90,65,35,.08); cursor: help; }
 .era-chip.up { box-shadow: inset 0 0 0 1px rgba(47,107,58,.35); } .era-chip.down { box-shadow: inset 0 0 0 1px rgba(138,58,42,.35); } .era-chip.soon { box-shadow: inset 0 0 0 1px rgba(106,84,24,.35); }
 .era-chip small { color: #6a5a40; }
+/* 살아 있는 경제 (js/systems/economy.js): 세상의 시장 사건 ▲▼ · 특산 · 귀함 · 산지 */
+.tag.ev-up { background: #9a3a22; color: #fbe8dc; cursor: help; }
+.tag.ev-down { background: #2a5f7a; color: #e2f2fb; cursor: help; }
+.tag.spec { background: #5a6a2a; color: #f1f5dc; cursor: help; }
+.tag.rare { background: #7a4a8a; color: #f6e8fb; cursor: help; }
+.tag.cheap { background: #7a6a5a; color: #f3ebe0; cursor: help; }
+.econ-box { margin: 0 0 12px; padding: 8px 10px; border: 1px solid rgba(154,58,34,.3); border-radius: 6px; background: rgba(255,244,230,.5); font-size: 15px; }
+.econ-row .era-lbl { min-width: 200px; cursor: help; }
 @keyframes dzshake { 0% { transform: translate(0, 0); } 25% { transform: translate(-7px, 3px); } 50% { transform: translate(5px, -4px); } 75% { transform: translate(-4px, -2px); } 100% { transform: translate(0, 0); } }
 #stage.dz-shake #world, #stage.dz-shake #overlay, #stage.dz-shake #scene { animation: dzshake .11s linear infinite; }
 

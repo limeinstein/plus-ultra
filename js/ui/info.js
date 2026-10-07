@@ -368,7 +368,8 @@
   }
   PAGES.trade = function (el) {
     var s = S();
-    if (!G.Ledger || !G.Ledger.count()) { el.innerHTML = eraBox() + '<div class="muted">아직 적어 둔 시세가 없습니다. 교역소에 들를 때마다 그 도시의 사는 값·파는 값이 이 수첩에 적힙니다.</div>'; return; }
+    var econ = G.Econ ? G.Econ.box() : '';
+    if (!G.Ledger || !G.Ledger.count()) { el.innerHTML = econ + eraBox() + '<div class="muted">아직 적어 둔 시세가 없습니다. 교역소에 들를 때마다 그 도시의 사는 값·파는 값이 이 수첩에 적힙니다.</div>'; return; }
     var rows = G.Ledger.table();
     var br = G.Ledger.bestRoute();
     var fads = G.Fad ? G.Fad.list() : [];
@@ -376,7 +377,7 @@
     var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:18px">들러 본 교역소 ' + G.Ledger.count() + '곳의 기록</b>' +
       (br ? '<span class="right good-text">가장 남는 장사: ' + G.CITY_DATA[br.buy].name + '의 ' + G.GOOD[br.good].name + ' → ' + G.CITY_DATA[br.sell].name + ' (1통 +' + U.num(br.gain) + ')</span>' : '') + '</div>' +
       (fads.length ? '<div class="good-text" style="margin:-2px 0 10px;font-size:16px">' + G.icon('star') + ' 지금 유행: ' + fads.map(function (x) { return x.where + '의 <b>' + x.name + '</b> (값 ' + x.m + '배 · ' + x.left + '일 남음' + (x.src === 'me' ? '' : ' · ' + U.esc(x.why || '세상의 유행')) + ')'; }).join(' · ') + '</div>' : '') +
-      eraBox() +
+      econ + eraBox() +
       '<table class="tbl"><tr><th>교역품</th><th class="num">가장 싸게 사는 곳</th><th class="num">가장 비싸게 파는 곳</th><th class="num">1통 차익</th></tr>' +
       rows.map(function (r) {
         return '<tr><td>' + G.goodDot(r.id) + r.name + '</td><td class="num">' + cell(r.buy) + '</td><td class="num">' + cell(r.sell) + '</td><td class="num ' + (r.gain > 0 ? 'down' : '') + '">' + (r.gain != null ? (r.gain > 0 ? '+' : '') + U.num(r.gain) : '') + '</td></tr>';

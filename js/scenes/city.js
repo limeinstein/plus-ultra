@@ -161,6 +161,8 @@
     G.Game.refreshHud();
     // supplies spoil a little less in port; ship minor repairs are not automatic
     R.maybeMarketEvent(c);
+    // 세상의 시장 사건: 이 도시에 걸린 것을 알게 된다 (js/systems/economy.js)
+    if (G.Econ) G.Econ.visit(c).forEach(function (e) { msgs.push({ icon: 'scales', text: c.name + ' — ' + G.Econ.headline(e) }); });
     var news = msgs.filter(function (m) { return m.history; });
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     if (first && arg.arrive) UI.toast(c.name + '에 처음으로 입항했다.', 'anchor');
@@ -217,7 +219,7 @@
     ban.innerHTML = '<div class="nm">' + c.name + '</div>' +
       '<div class="meta"><span class="own-flag" style="background:' + C.nationColor(owner) + '"></span>' + U.esc(owner) + ' 영토' + (G.Dominion ? ' · ' + U.esc(G.CityInfo && G.CityInfo.leader ? G.CityInfo.leader(c) : G.Dominion.leader(owner).text) : '') + '</div>' +
       '<div class="meta">' + G.REGIONS[c.region] + ' · ' + C.relName(c) + '</div>' +
-      '<div class="meta">' + G.LANGS[c.lang] + ' ' + langPips(C.langLv(c)) + (m.ev ? ' · <span style="color:#f0c080">시세: ' + m.ev + '</span>' : '') + '</div>';
+      '<div class="meta">' + G.LANGS[c.lang] + ' ' + langPips(C.langLv(c)) + (m.ev ? ' · <span style="color:#f0c080">시세: ' + m.ev + '</span>' : '') + (G.Econ && G.Econ.cityNote(c) ? ' · <span style="color:#f0c080" title="세상의 시장 사건 — 교역소 「시세」에서 자세히">' + U.esc(G.Econ.cityNote(c)) + '</span>' : '') + '</div>';
     UI.add(ban);
     var items = C.buildings(c).map(function (b) {
       return { label: b.name, icon: b.icon, onClick: function () { C.visit(b.kind, b.arg); } };

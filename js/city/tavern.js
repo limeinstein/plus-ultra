@@ -77,6 +77,7 @@
     return [
       { label: '술을 마신다', icon: 'mug', onClick: function () { return T.drink(c); } },
       { label: '한턱 낸다', icon: 'coin', onClick: function () { return T.treat(c); } },
+      G.Econ ? { label: '장사 소문을 듣는다', icon: 'scales', sub: T.rumorSub(c), dim: T.rumorLeft(c) <= 0, onClick: function () { return T.rumor(c); } } : null,
       (function () { var k = S().contract; return { label: '정보를 듣는다', icon: 'scroll', sub: k ? '계약: ' + G.Errand.name(k) : '계약한 일이 없다', dim: !k, onClick: function () { return T.info(c); } }; })(),
       (function () { var tg = T.targets(c); return tg.length ? { label: '목표를 수소문한다', icon: 'map', sub: tg.length + '곳', onClick: function () { return T.askTarget(c); } } : null; })(),
       { label: '손님을 둘러본다', icon: 'eye', dim: cur && cur.looked, onClick: function () { return T.look(c); } },
@@ -102,6 +103,32 @@
     else await C.say(master(), lr ? U.pick(['내륙까지 걸어 들어온 탐험대라고? 길 떠날 사람이라면 이 술집에 몇 있지. 짐꾼 노릇도 마다하지 않을 걸세.', '뭍길을 따라 갈 사람을 찾나? 일거리 없는 떠돌이들이 저쪽 구석에 모여 있네.'])
       : U.pick(['배를 탈 사람을 찾나? 일거리를 기다리는 뱃사람들이 늘 여기 모여 있지.', '선원이라면 저기 모여 있는 친구들한테 말해 보게. 한 잔씩 사면 금방 모일 걸세.']));
     await C.B.harbor.crew(c);
+  };
+
+  // ---------------------------------------------------------------- 장사 소문 (살아 있는 경제 — js/systems/economy.js)
+  /* 술 한 잔 값을 내면 주인이 요즘 장사꾼들 사이에 도는 이야기를 들려준다 — 「어느 도시에서 무슨 까닭으로 무엇이 모자란다/넘친다」.
+     가까운 곳·아직 모르는 사건부터, 일어나기 전의 조짐도. 하루에 rumorAsk번 (G.BALANCE.econ) */
+  function rumorUsed(c) { var mk = R.market(c.id), r = mk.rum; return r && r.day === S().day ? r.n : 0; }
+  T.rumorLeft = function (c) { return ((G.BALANCE.econ || {}).rumorAsk || 2) - rumorUsed(c); };
+  T.rumorSub = function (c) { var k = G.Econ.knownList().length; return T.rumorLeft(c) <= 0 ? '오늘은 다 들었다' : '술 한 잔 ' + (4 + c.size * 2) + '닢' + (k ? ' · 아는 소식 ' + k : ''); };
+  T.rumor = async function (c) {
+    var s = S(), m = master(), K = G.BALANCE.econ || {}, price = 4 + c.size * 2;
+    if (C.langLv(c) === 0) { await C.say(m, '……?'); await C.mate('말이 통하지 않으니 장사 이야기는 들을 수가 없군요.'); return; }
+    if (T.rumorLeft(c) <= 0) { await C.say(m, '오늘 들은 이야기는 그게 다일세. 며칠 지나면 새 배들이 새 소식을 싣고 오겠지.'); return; }
+    if (s.player.gold < price) { await C.say(m, '술 한 잔도 못 시키는 손님한테 해 줄 이야기는 없네.'); return; }
+    s.player.gold -= price;
+    var mk = R.market(c.id); mk.rum = { day: s.day, n: rumorUsed(c) + 1 };
+    var list = G.Econ.rumors(c, K.rumorN || 2);
+    if (!list.length) {
+      // 사건이 없으면: 이 고장 특산물이 어디서 금값인지
+      var sp = c.goods.filter(function (id) { return G.GOOD[id] && !R.isRelay(c, id); }).map(function (id) { var fr = C.B.trade.farRegions(id); return { id: id, r: fr[0].r, x: fr[0].m / 0.62 }; }).sort(function (a, b) { return b.x - a.x; })[0];
+      await C.say(m, '요즘은 바다도 장터도 조용하네.' + (sp && sp.x >= 1.5 ? '\f그래도 장사꾼이라면 알아 두게. 여기서 흔한 ' + U.eul(G.GOOD[sp.id].name) + ' ' + G.REGIONS[sp.r] + '에 가져가면 여기 값의 ' + sp.x.toFixed(1) + '배는 받는다더군.' : ''));
+      G.Game.refreshHud(); return;
+    }
+    var open = U.pick(['자, 한 잔 받게. 요즘 배들이 실어 오는 이야기를 들려주지.', '장사꾼들이 이 자리에서 떠드는 걸 들었네만—', '뱃사람들 입이 가볍더군. 들어 보게.']);
+    await C.say(m, open + '\f' + list.map(function (e) { G.Econ.learn(e); return G.Econ.say(e, c); }).join('\f'));
+    UI.toast('시장 소식 ' + list.length + '가지를 수첩(교역)에 적었다.', 'scales');
+    G.Game.refreshHud();
   };
 
   // ---------------------------------------------------------------- drink / treat
