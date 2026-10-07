@@ -16,6 +16,7 @@ async function boot(page, mock) {
     window.YT = { Player: function (id, opts) { const self = this; setTimeout(() => opts.events.onReady({ target: self }), 5); this.loadVideoById = o => window.__yt.calls.push(o); this.setVolume = v => { window.__yt.vol = v; }; this.playVideo = () => {}; this.pauseVideo = () => { window.__yt.paused = true; }; } };
   });
   else await page.route(/youtube\.com/, r => r.abort());
+  await page.addInitScript(() => { window.PU_LOCAL_OST = false; });   // 내 컴퓨터의 MP3(localost.js)는 찾지 않고 유튜브 재생기만 본다
   await page.goto(GAME);
   await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
   await page.evaluate(() => G.Game.go('create'));

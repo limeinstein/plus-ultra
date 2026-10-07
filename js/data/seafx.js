@@ -7,7 +7,10 @@
   G.FX = {
     // 자택 장면 그림 (js/art/homeart.js): 그림 크기와 화면 위에서의 자리 (무대 1600×900)
     homeArt: { w: 900, h: 520, top: 78 },
-    famScene: { w: 1008, top: 74 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
+    famScene: { w: 1008, top: 74 },
+    // 내 컴퓨터의 코스타 델 솔 MP3 (js/systems/localost.js): 곡을 바꿀 때 겹쳐 바꾸는 초 fade · 곡 끝에서 처음과 겹쳐 돌리는 초 loopFade ·
+    //   이 초 안에 같은 곡으로 돌아오면 이어서 resumeSec · 곡 이름이 떠 있는 초 showSec(0 = 안 띄움) · 음악 크기에 곱하는 값 gain · 파일 찾기 기다림 probeMs
+    localOst: { fade: 2.5, loopFade: 3, resumeSec: 300, showSec: 3.2, gain: 0.9, probeMs: 6000 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
     // 자택 화면에 서 있는 가족 (homelife.js familyPanel): 어른 키 h, 설 자리(왼쪽·아래·너비), 옆 사람과 겹치는 비율
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
     // 기함 선실 화면 (js/ui/cabinview.js): 무대(배 그림) 크기, 오른쪽 명단 폭, 선체 속 선실 표·갑판 얼굴표 크기, 배 그림을 자르는 여백, 카드 최대 폭, 명단 높이

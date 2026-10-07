@@ -1,6 +1,7 @@
 /* 유튜브 OST 재생 (G.YTM) — 설정 「배경 음악」이 'ost'일 때 G.Audio.music 대신 장면 곡을 유튜브 퍼가기 재생기로 튼다.
    곡 표는 js/data/ost.js. 재생기는 화면 오른쪽 아래에 보이고(유튜브 규칙: 200×200 이상), 제목 줄을 끌어 옮길 수 있다.
-   유튜브를 읽지 못하면(아티팩트·오프라인·퍼가기 금지) 알리고 기존 음악으로 돌아간다. */
+   유튜브를 읽지 못하면(아티팩트·오프라인·퍼가기 금지) 알리고 기존 음악으로 돌아간다.
+   사용자의 컴퓨터에 「Costa Del Sol BGM 모음.mp3」가 있으면 유튜브 대신 그 파일을 창 없이 직접 튼다 (js/systems/localost.js). */
 (function (G) {
   'use strict';
   var Y = {}, U = G.U;
@@ -8,7 +9,10 @@
   var player = null, ready = false, loading = false, box = null, cur = null, queued = null, failed = false, depth = 0, momentT = null;
   function S() { return G.Game && G.Game.state; }
   function OST() { return G.OST || { tracks: {}, videos: {}, moments: {} }; }
-  Y.on = function () { var s = S(); return !!(s && s.settings && s.settings.musicSrc === 'ost' && !failed); };
+  function LO() { return G.LocalOST; }
+  Y.on = function () { var s = S(); return !!(s && s.settings && s.settings.musicSrc === 'ost' && (!failed || (LO() && LO().ready()))); };
+  /** 지금 내 컴퓨터의 MP3로 트는가 */
+  Y.local = function () { return !!(LO() && LO().ready()); };
   Y.failed = function () { return failed; };
   Y.current = function () { return cur; };
 
@@ -163,6 +167,7 @@
   function start(id, again) {
     var t = OST().tracks[id]; if (!t) return;
     cur = id;
+    if (LO() && LO().want(id)) { if (box) box.style.display = 'none'; return; }     // 내 컴퓨터의 MP3 (찾는 중이면 찾은 뒤에)
     if (box) { box.style.display = ''; var tt = box.querySelector('.ost-title'); if (tt) tt.textContent = '♪ ' + t.name; placeBox(); flash(); }
     if (!ready) { queued = id; loadApi(); return; }
     var o = { videoId: OST().videos[t.v], startSeconds: t.s };
@@ -176,8 +181,10 @@
     start(id);
     return true;
   };
-  Y.pause = function () { cur = null; try { if (player && ready) player.pauseVideo(); } catch (e) { /* 없음 */ } if (box) box.style.display = 'none'; };
-  Y.setVolume = function () { try { if (player && ready) player.setVolume(vol()); } catch (e) { /* 없음 */ } };
+  /** 내 MP3를 찾지 못했을 때 (localost.js) — 맡겨 둔 곡을 유튜브로 */
+  Y.retry = function (id) { if (Y.on() && cur === id) start(id); };
+  Y.pause = function () { cur = null; if (LO()) LO().pause(); try { if (player && ready) player.pauseVideo(); } catch (e) { /* 없음 */ } if (box) box.style.display = 'none'; };
+  Y.setVolume = function () { if (LO()) LO().setVolume(); try { if (player && ready) player.setVolume(vol()); } catch (e) { /* 없음 */ } };
 
   // ------------------------------------------------------------------ 장면 사이의 「잠깐」 곡 (건물·미니 게임·사건)
   /** 그 순간의 곡으로 바꾼다. 끝나면 Y.resume() — 그동안 G.Audio.music 의 장면 바꿈은 기억만 해 둔다.
@@ -219,6 +226,7 @@
   }
   Y.install = function () {
     if (Y._inst) return; Y._inst = true;
+    if (LO() && Y.on()) LO().find();       // 내 MP3가 있는지 미리 찾아 둔다
     wrap(G.Games, 'puzzle', 'minigame'); wrap(G.Games, 'poker', 'minigame'); wrap(G.Fishing, 'open', 'minigame');
     wrap(G.Games, 'landWar', 'landwar');
     wrap(G.Wives, 'proposeMaid', 'love'); wrap(G.Wives, 'proposeMate', 'love');

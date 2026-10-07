@@ -1049,6 +1049,10 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .shipcard .pips { display: inline-flex; vertical-align: -2px; }
 
 /* 자택 장면 그림 (js/art/homeart.js) — 대화하는 사람 뒤에 걸리는 액자 */
+/* 내 MP3로 트는 코스타 델 솔 곡 이름 (js/systems/localost.js) — 곡이 바뀔 때 왼쪽 아래에 잠깐 */
+.ost-now { position: absolute; left: 24px; bottom: 74px; z-index: 95; pointer-events: none; padding: 5px 14px; font-size: 15px; letter-spacing: .04em; color: var(--cream);
+  background: linear-gradient(90deg, rgba(20,14,8,.82), rgba(20,14,8,0)); border-left: 2px solid var(--brass); opacity: 0; transform: translateX(-10px); transition: opacity .6s ease, transform .6s ease; }
+.ost-now.on { opacity: .92; transform: none; }
 /* 가족 사건 그림 (js/systems/familyevent.js) — 대화창 위에 576×256 그림을 크게, 천천히 다가간다 */
 .famscene { position: absolute; z-index: 12; padding: 10px; pointer-events: none !important; opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease; }
 .famscene.on { opacity: 1; transform: none; }

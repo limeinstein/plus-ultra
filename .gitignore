@@ -18,3 +18,5 @@ tools/heritage/cache/
 
 # 걷는 그림 원본 시트(1776×888 PNG 280장, 약 400MB) — tools/npc_walks.py로 images/street-folk에 나눠 넣는다
 images/npc-walk/*/
+# 사용자가 가진 음악 파일 (코스타 델 솔 MP3 등 — 게임에 넣지 않고 그 컴퓨터에서만 튼다, js/systems/localost.js)
+music/_local/

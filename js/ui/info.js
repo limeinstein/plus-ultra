@@ -548,7 +548,9 @@
       '<div>효과음</div><div><input type="range" min="0" max="100" data-k="sound" value="' + Math.round((st.sound != null ? st.sound : 0.5) * 100) + '"></div>' +
       '<div>음악</div><div><input type="range" min="0" max="100" data-k="music" value="' + Math.round((st.music != null ? st.music : 0.35) * 100) + '"></div>' +
       '<div>배경 음악</div><div><div class="opt-row"><div class="opt' + (st.musicSrc !== 'ost' ? ' on' : '') + '" data-ms="base">기존 음악</div><div class="opt' + (st.musicSrc === 'ost' ? ' on' : '') + '" data-ms="ost">코스타 델 솔 3 OST</div></div>' +
-        '<small class="muted">' + (st.musicSrc === 'ost' ? (G.YTM && G.YTM.failed() ? '유튜브를 읽지 못해 기존 음악으로 틀고 있습니다' : '장면마다 유튜브 영상으로 틉니다 — 유튜브 규칙상 재생기(200×200)는 숨길 수 없어 구석에 흐리게 둡니다 · 끌어서 옮길 수 있습니다') : '게임에 들어 있는 곡과 코드로 만든 음악') + '</small></div>' +
+        '<small class="muted">' + (st.musicSrc === 'ost' ? (G.YTM && G.YTM.local && G.YTM.local() ? '내 컴퓨터의 MP3로 틉니다 (' + U.esc(G.LocalOST.source()) + ') — 곡 사이를 부드럽게 넘기고, 듣던 곡으로 돌아오면 이어서 틉니다' : G.YTM && G.YTM.failed() ? '유튜브를 읽지 못해 기존 음악으로 틀고 있습니다' : '장면마다 유튜브 영상으로 틉니다 — 유튜브 규칙상 재생기(200×200)는 숨길 수 없어 구석에 흐리게 둡니다 · 끌어서 옮길 수 있습니다') : '게임에 들어 있는 곡과 코드로 만든 음악') + '</small>' +
+        (G.LocalOST ? '<div class="flex" style="gap:8px;margin-top:4px"><button class="btn small" data-act="mp3">「Costa Del Sol BGM 모음.mp3」 고르기</button>' + (G.LocalOST.stored() ? '<button class="btn small ghost" data-act="mp3x">고른 파일 지우기</button>' : '') + '<input type="file" accept="audio/mpeg,.mp3" data-mp3 style="display:none"></div>' +
+          '<small class="muted">가진 MP3를 고르면 이 브라우저에만 보관해 유튜브 창 없이 틉니다 (게임 파일에는 넣지 않습니다). 게임 폴더 옆 Ref 폴더나 music/_local/costa_del_sol.mp3 에 두면 저절로 찾습니다.</small>' : '') + '</div>' +
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
@@ -565,6 +567,18 @@
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
     U.$$('[data-ms]', el).forEach(function (o) { o.onclick = function () { if (G.YTM) G.YTM.setSource(o.dataset.ms); else st.musicSrc = o.dataset.ms; PAGES.menu(el, win); }; });
+    var mb = el.querySelector('[data-act=mp3]'), mi = el.querySelector('[data-mp3]');
+    if (mb && mi) {
+      mb.onclick = function () { mi.click(); };
+      mi.onchange = async function () {
+        var f = mi.files && mi.files[0]; if (!f) return;
+        UI.toast('MP3를 확인하는 중…', 'info', 2000);
+        if (await G.LocalOST.useFile(f)) { if (G.YTM) G.YTM.setSource('ost'); UI.toast('「' + f.name + '」로 코스타 델 솔 음악을 틉니다.', 'info', 4000); }
+        else UI.toast('이 파일은 「Costa Del Sol BGM 모음」이 아닌 것 같습니다 (길이가 맞지 않음).', 'info', 4500);
+        PAGES.menu(el, win);
+      };
+    }
+    var mx = el.querySelector('[data-act=mp3x]'); if (mx) mx.onclick = async function () { await G.LocalOST.forget(); if (G.Audio) G.Audio.music(G.Audio.want || 'town', true); PAGES.menu(el, win); };
     var sv = el.querySelector('[data-act=save]'); if (sv) sv.onclick = async function () { await I.saveMenu(); };
     el.querySelector('[data-act=title]').onclick = async function () {
       if (await UI.confirm('저장하지 않은 진행은 사라집니다. 타이틀로 돌아가겠습니까?')) { win.close(null); UI.fade(function () { G.Game.go('title'); }); }
