@@ -384,8 +384,14 @@
   D.cityHit = function (cid) { var T = st(), h = T && T.city[cid]; return h && h.until >= today() ? h : null; };
 
   // ---------------------------------------------------------------- 지도 위 표시 (육상 탐험)
+  /** 이름표 자리: 이미 그린 이름표와 겹치면 위로 비켜 올린다 */
+  function labelY(used, x, y, w) {
+    for (var n = 0; n < 6; n++) { var hit = used.some(function (b) { return Math.abs(b[0] - x) < (b[2] + w) / 2 + 6 && Math.abs(b[1] - y) < 26; }); if (!hit) break; y -= 28; }
+    used.push([x, y, w]); return y;
+  }
   D.drawLand = function (ctx, toScreen, zoom, t, ff) {
     var T = st(); if (!T) return;
+    var used = [];
     T.act.forEach(function (e) {
       if (e.parent || !e.known) return;
       var p = toScreen(e.lon, e.lat), rr = e.r * zoom;
@@ -398,7 +404,7 @@
       if (G.DisasterFx && G.DisasterFx.sprite) G.DisasterFx.sprite(ctx, e.kind, p[0], p[1] + 10, U.clamp(rr * 0.8, 70, 150), t + (e.seqT || 0));
       var lbl = e.name + ' · ' + (today() - e.start + 1) + '일째';
       ctx.font = '700 15px ' + (ff || 'serif'); var tw = ctx.measureText(lbl).width;
-      var ly = p[1] - 38 - (G.DisasterFx && G.DisasterFx.sprite ? U.clamp(rr * 0.8, 70, 150) * 0.6 : 0);      // 도시 이름·그림과 겹치지 않게 조금 위에
+      var ly = labelY(used, p[0], p[1] - 38 - (G.DisasterFx && G.DisasterFx.sprite ? U.clamp(rr * 0.8, 70, 150) * 0.6 : 0), tw + 16);      // 도시 이름·그림과 겹치지 않게 조금 위에, 다른 재해 이름표와도 겹치지 않게
       ctx.fillStyle = 'rgba(60,16,8,.78)'; ctx.fillRect(p[0] - tw / 2 - 8, ly - 12, tw + 16, 24); ctx.strokeStyle = 'rgba(255,190,140,.6)'; ctx.lineWidth = 1; ctx.strokeRect(p[0] - tw / 2 - 8, ly - 12, tw + 16, 24);
       ctx.fillStyle = '#ffd9b0'; ctx.textAlign = 'center'; ctx.fillText(lbl, p[0], ly + 5); ctx.textAlign = 'left';
     });
@@ -406,7 +412,7 @@
   /** 바다 화면 (sea.js): 알려진 재해 가운데 바다에서 보이는 것 — 해일·화산(바닷가)·해안의 지진·홍수 — 의 움직이는 그림과 이름 */
   D.drawSea = function (ctx, toScreen, zoom, t, ff) {
     var T = st(); if (!T || !G.DisasterFx || !G.DisasterFx.sprite) return;
-    var byId = {}; T.act.forEach(function (e) { byId[e.id] = e; });
+    var byId = {}, used = []; T.act.forEach(function (e) { byId[e.id] = e; });
     T.act.forEach(function (e) {
       var root = e.parent ? byId[e.parent] : e;
       if (!root || !root.known) return;
@@ -418,10 +424,11 @@
       }
       var p = toScreen(lon, lat);
       if (p[0] < -200 || p[0] > 1800 || p[1] < -200 || p[1] > 1100) return;
-      if (!G.DisasterFx.sprite(ctx, e.kind, p[0], p[1] + 8, size, t, 0.88)) return;
+      var wet = (e.kind === 'quake' || e.kind === 'landslide') && G.Geo.isSea(lon, lat);   // 바다 밑 지진은 흙먼지 그림 없이 이름만 (해일 그림이 따로 뜬다)
+      if (!wet && !G.DisasterFx.sprite(ctx, e.kind, p[0], p[1] + 8, size, t, 0.88)) return;
       if (e.parent) return;
       var lbl = e.name + ' · ' + (today() - e.start + 1) + '일째';
-      ctx.font = '700 14px ' + (ff || 'serif'); var tw = ctx.measureText(lbl).width, ly = p[1] - size * 0.86 - 6;
+      ctx.font = '700 14px ' + (ff || 'serif'); var tw = ctx.measureText(lbl).width, ly = labelY(used, p[0], wet ? p[1] - 10 : p[1] - size * 0.86 - 6, tw + 14);
       ctx.fillStyle = 'rgba(60,16,8,.72)'; ctx.fillRect(p[0] - tw / 2 - 7, ly - 11, tw + 14, 22);
       ctx.fillStyle = '#ffd9b0'; ctx.textAlign = 'center'; ctx.fillText(lbl, p[0], ly + 5); ctx.textAlign = 'left';
     });

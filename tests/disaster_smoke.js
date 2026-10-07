@@ -77,9 +77,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(rnd > 3 && rnd < 60, '이름 없는 재해: 한 해에 ' + rnd + '건 (해일·산사태 딸림 포함)');
     await page.evaluate(() => {
       var wrap = document.createElement('div'); wrap.style.cssText = 'position:fixed;left:0;top:0;z-index:9999;background:#222;display:grid;grid-template-columns:640px 640px;gap:4px';
-      [['quake', 2.5], ['volcano', 3], ['landslide', 2.5], ['tsunami', 4.2], ['flood', 4]].forEach(function (k) { var c = document.createElement('canvas'); c.width = 640; c.height = 280; wrap.appendChild(c); G.DisasterFx.render(c.getContext('2d'), k[0], k[1], 640, 280); });
+      var SC = G.DisasterFx.SCENES, calls = {};
+      Object.keys(SC).forEach(function (k) { var d0 = SC[k].draw; SC[k].draw = function () { calls[k] = (calls[k] || 0) + 1; return d0.apply(this, arguments); }; });
+      window.__dzSprite = [['quake', 2.5], ['volcano', 3], ['landslide', 2.5], ['tsunami', 4.2], ['flood', 4]].map(function (k) { var c = document.createElement('canvas'); c.width = 640; c.height = 280; wrap.appendChild(c); return G.DisasterFx.render(c.getContext('2d'), k[0], k[1], 640, 280); });
+      window.__dzPoly = calls;
       document.body.appendChild(wrap);
     });
+    const dz = await page.evaluate(() => ({ sprite: window.__dzSprite, poly: Object.keys(window.__dzPoly).length }));
+    ok(dz.sprite.every(Boolean) && dz.poly === 0, '재해 그림창 다섯 갈래 모두 시트만 그린다 — 코드로 그린 산·집·물벽은 겹치지 않음 (' + dz.sprite.join(',') + ')');
     await page.screenshot({ path: path.join(OUT, 'disaster_fx.png') });
     ok(!errors.length, '콘솔 오류 없음' + (errors.length ? ' — ' + errors.join(' / ') : ''));
     console.log('스크린샷: ' + OUT);

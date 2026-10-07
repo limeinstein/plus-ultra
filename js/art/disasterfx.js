@@ -1,5 +1,8 @@
 /* 재해 그림 (G.DisasterFx) — 지진·화산·산사태·쓰나미·홍수가 덮칠 때 대화창 바로 위에 나무틀 그림창을 띄운다.
-   · Canvas 배경 위에 images/sprites/disaster_*.webp의 투명 4×2 애니메이션 시트를 합성한다. 지진은 화면도 흔든다 (G.DisasterFx.shake).
+   · 그림은 images/sprites/disaster_*.webp의 투명 4×2 애니메이션 시트 하나만 쓴다. 그 뒤에는 하늘·땅 빛깔(그러데이션)만 깔고,
+     앞에는 효과(재·불티·먼지·물보라·비)만 얹는다 (SC[갈래].bg · back · fx, 놓는 자리 LAY[갈래]).
+   · 시트가 아직 없거나 못 불러오면 예전처럼 코드로 그린 장면(산·집·물벽 — SC[갈래].draw)으로 대신한다. 둘을 겹쳐 그리지 않는다.
+   · 지진은 화면도 흔든다 (G.DisasterFx.shake).
    · 쓰는 법: var fx = G.DisasterFx.show('volcano'); await UI.say(...); fx.stop();
    조정값: G.FX.disaster (w · h · bottom · shake) */
 (function (G) {
@@ -14,15 +17,50 @@
     if (!img && I.has(key)) I.want(key);
     return img;
   }
-  function drawSprite(ctx, kind, w, h, t) {
+  /* 그림창 안에서 시트를 놓는 자리: size = 창 높이 × size, x = 가운데 자리(창 너비 비율), base = 시트 칸 바닥이 창 바닥보다 아래로 내려가는 몫(칸 크기 비율),
+     n·gap·lag = 옆으로 이어 놓는 개수·간격(칸 크기 비율)·옆 칸의 시간 늦춤(초) — 물결·흙탕물은 창 너비를 채우도록 이어 놓는다.
+     fade = 이어 놓을 때 칸의 좌우 가장자리를 흐리게 지우는 폭(칸 비율) — 칸의 곧은 끝이 이음매로 보이지 않게 */
+  var LAY = {
+    quake: { size: 1.12, x: 0.5, base: 0.05 },
+    volcano: { size: 1.08, x: 0.5, base: 0.05 },
+    landslide: { size: 1.05, x: 0.47, base: 0.02 },
+    tsunami: { size: 0.98, x: 0.5, base: 0.02, n: 3, gap: 0.78, lag: 0.55, fade: 0.22 },
+    flood: { size: 0.95, x: 0.5, base: 0.1, n: 3, gap: 0.78, lag: 0.4, fade: 0.22 }
+  };
+  DF.LAY = LAY;
+  function cell(img, spec, t) {
+    var frame = Math.floor(Math.max(0, t) * 1000 / spec.ms) % spec.frames;
+    return { sx: (frame % 4) * img.width / 4, sy: Math.floor(frame / 4) * img.height / 2, sw: img.width / 4, sh: img.height / 2, frame: frame };
+  }
+  /** 칸 하나를 좌우 가장자리가 흐려지게 따로 그린 캔버스 (칸마다 기억해 둔다) */
+  var fadeCache = {};
+  function faded(img, c, fade, bottom) {
+    var key = img.src.length + ':' + img.width + ':' + c.frame + ':' + fade + ':' + (bottom || 0), cv = fadeCache[key];
+    if (cv) return cv;
+    cv = document.createElement('canvas'); cv.width = c.sw; cv.height = c.sh;
+    var g = cv.getContext('2d'); g.drawImage(img, c.sx, c.sy, c.sw, c.sh, 0, 0, c.sw, c.sh);
+    var m = g.createLinearGradient(0, 0, c.sw, 0);
+    m.addColorStop(0, 'rgba(0,0,0,0)'); m.addColorStop(fade, 'rgba(0,0,0,1)'); m.addColorStop(1 - fade, 'rgba(0,0,0,1)'); m.addColorStop(1, 'rgba(0,0,0,0)');
+    g.globalCompositeOperation = 'destination-in'; g.fillStyle = m; g.fillRect(0, 0, c.sw, c.sh);
+    if (bottom) { var v = g.createLinearGradient(0, 0, 0, c.sh); v.addColorStop(0, 'rgba(0,0,0,1)'); v.addColorStop(1 - bottom, 'rgba(0,0,0,1)'); v.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = v; g.fillRect(0, 0, c.sw, c.sh); }
+    return (fadeCache[key] = cv);
+  }
+  /** 그림창에 시트를 그린다 (o.dx·o.dy: 흔들림). 그림이 없으면 false */
+  /** 이 갈래의 시트 파일이 있는가 (불러오기 전이라도) */
+  function hasSheet(kind) { var spec = G.DISASTER_SPRITES && G.DISASTER_SPRITES[kind], I = G.Img; return !!(spec && I && I.has && I.has('sprites/' + spec.id)); }
+  function drawSprite(ctx, kind, w, h, t, o) {
     var spec = G.DISASTER_SPRITES && G.DISASTER_SPRITES[kind], img = spriteImage(kind);
     if (!spec || !img) return false;
-    var frame = Math.floor(Math.max(0, t) * 1000 / spec.ms) % spec.frames;
-    var sw = img.width / 4, sh = img.height / 2, size = Math.min(w * 0.86, h * 1.7);
+    var L = LAY[kind] || { size: 1, x: 0.5, base: 0 }, size = h * L.size, n = L.n || 1, dx = (o && o.dx) || 0, dy = (o && o.dy) || 0;
+    var y = h - size * (1 - (L.base || 0)) + dy;
     ctx.save();
-    ctx.globalAlpha = 0.94;
-    ctx.drawImage(img, (frame % 4) * sw, Math.floor(frame / 4) * sh, sw, sh,
-      (w - size) / 2, h - size * 0.88, size, size);
+    for (var i = 0; i < n; i++) {
+      var k = i - (n - 1) / 2, tt = t - Math.abs(k) * (L.lag || 0), c = cell(img, spec, tt);
+      var cx = w * L.x + k * size * (L.gap || 1) + dx;
+      ctx.globalAlpha = k ? 0.92 : 1;
+      if (n > 1 && L.fade) ctx.drawImage(faded(img, c, L.fade), cx - size / 2, y, size, size);
+      else ctx.drawImage(img, c.sx, c.sy, c.sw, c.sh, cx - size / 2, y, size, size);
+    }
     ctx.restore();
     return true;
   }
@@ -30,11 +68,12 @@
   DF.sprite = function (ctx, kind, cx, cy, size, t, alpha) {
     var spec = G.DISASTER_SPRITES && G.DISASTER_SPRITES[kind], img = spriteImage(kind);
     if (!spec || !img) return false;
-    var frame = Math.floor(Math.max(0, t) * 1000 / spec.ms) % spec.frames;
-    var sw = img.width / 4, sh = img.height / 2;
+    var c = cell(img, spec, t), L = LAY[kind] || {};
     ctx.save();
     ctx.globalAlpha = alpha == null ? 0.92 : alpha;
-    ctx.drawImage(img, (frame % 4) * sw, Math.floor(frame / 4) * sh, sw, sh, cx - size / 2, cy - size * 0.86, size, size);
+    // 물결·흙탕물 칸은 곧은 끝이 네모로 보이지 않게 좌우·아래를 흐려서 그린다
+    if (L.fade) ctx.drawImage(faded(img, c, L.fade, 0.18), cx - size / 2, cy - size * 0.86, size, size);
+    else ctx.drawImage(img, c.sx, c.sy, c.sw, c.sh, cx - size / 2, cy - size * 0.86, size, size);
     ctx.restore();
     return true;
   };
@@ -194,6 +233,79 @@
     for (var k = 0; k < 120; k++) { var rx = (r() * w + t * 90) % w, ry = (r() * h + t * 600) % h; ctx.moveTo(rx, ry); ctx.lineTo(rx - 5, ry + 16); }
     ctx.stroke();
   } };
+  // ---------------------------------------------------------------- 시트와 함께 쓰는 바탕(bg)·뒤 효과(back)·앞 효과(fx) — 산·집·물벽 같은 모양은 그리지 않는다
+  function sky(ctx, w, h, a, b, ground) {
+    ctx.fillStyle = grad(ctx, h, a, b); ctx.fillRect(0, 0, w, h);
+    if (ground) { ctx.fillStyle = grad(ctx, h, 'rgba(0,0,0,0)', ground, h * 0.62, h); ctx.fillRect(0, h * 0.62, w, h * 0.38); }
+  }
+  function puffs(ctx, w, h, t, seed, n, col, x0, x1, y0, rise, r0, r1, speed) {
+    var r = rng(seed);
+    for (var p = 0; p < n; p++) {
+      var life = ((t * speed + r()) % 1), px = x0 + r() * (x1 - x0), py = y0 - life * rise - r() * 20;
+      ctx.fillStyle = 'rgba(' + col + ',' + (0.38 * (1 - life)).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(px, py, r0 + life * r1, 0, 7); ctx.fill();
+    }
+  }
+  SC.quake.bg = function (ctx, w, h) { sky(ctx, w, h, '#8a8f96', '#d8c9a8', 'rgba(94,70,48,.55)'); };
+  SC.quake.shake = function (t) { var dec = Math.max(0.25, 1 - t / 6); return { dx: Math.sin(t * 47) * 6 * dec, dy: Math.cos(t * 39) * 3 * dec }; };
+  SC.quake.fx = function (ctx, w, h, t) {
+    var sh = SC.quake.shake(t);
+    puffs(ctx, w, h, t, 21, 34, '190,170,140', 0, w, h * 0.9, 120, 8, 20, 0.5);
+    puffs(ctx, w, h, t + 0.5, 37, 14, '170,150,120', w * 0.3 + sh.dx, w * 0.7 + sh.dx, h * 0.98, 60, 14, 30, 0.7);   // 땅에서 이는 흙먼지
+  };
+  SC.volcano.bg = function (ctx, w, h) { sky(ctx, w, h, '#2a1612', '#a0442a', 'rgba(40,20,14,.6)'); };
+  SC.volcano.back = function (ctx, w, h, t) {   // 분화구 쪽이 붉게 달아오른다
+    var gl = ctx.createRadialGradient(w * 0.5, h * 0.8, 10, w * 0.5, h * 0.8, h * 0.9), k = 0.55 + 0.15 * Math.sin(t * 5);
+    gl.addColorStop(0, 'rgba(255,150,60,' + k.toFixed(2) + ')'); gl.addColorStop(1, 'rgba(255,80,20,0)');
+    ctx.fillStyle = gl; ctx.fillRect(0, 0, w, h);
+  };
+  SC.volcano.fx = function (ctx, w, h, t) {
+    var r = rng(31), cx = w * 0.5, top = h * 0.55;
+    for (var b = 0; b < 16; b++) {         // 날아가는 화산탄·불티
+      var bl = ((t * 0.6 + r()) % 1), vx = (r() - 0.5) * 420, vy = 220 + r() * 140;
+      var bx = cx + vx * bl, by = top - vy * bl + 320 * bl * bl;
+      ctx.fillStyle = 'rgba(255,' + (140 + b * 6 % 80) + ',40,' + (1 - bl * 0.6).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(bx, by, 2 + b % 3, 0, 7); ctx.fill();
+    }
+    r = rng(41); ctx.fillStyle = 'rgba(200,190,180,.55)';   // 내리는 재
+    for (var a = 0; a < 110; a++) { var ax = (r() * w + t * 18) % w, ay = (r() * h + t * (25 + r() * 25)) % h; ctx.fillRect(ax, ay, 2, 2); }
+  };
+  SC.landslide.bg = function (ctx, w, h) { sky(ctx, w, h, '#7f8c96', '#c9c2ae', 'rgba(110,90,62,.55)'); };
+  SC.landslide.fx = function (ctx, w, h, t) {
+    puffs(ctx, w, h, t, 3, 26, '160,130,95', w * 0.25, w * 0.85, h * 0.95, 110, 10, 26, 0.4);
+    var r = rng(13);
+    for (var i = 0; i < 8; i++) { var lf = ((t * 0.5 + r()) % 1), bx = w * (0.2 + r() * 0.2) + lf * w * 0.45, by = h * 0.1 + lf * h * 0.85; ctx.fillStyle = i % 2 ? 'rgba(111,102,88,.9)' : 'rgba(133,122,104,.9)'; ctx.beginPath(); ctx.arc(bx, by, 2 + r() * 3, 0, 7); ctx.fill(); }
+  };
+  SC.tsunami.bg = function (ctx, w, h) { sky(ctx, w, h, '#5c7488', '#c4ccc8', 'rgba(23,58,80,.5)'); };
+  SC.tsunami.fx = function (ctx, w, h, t) {
+    var r = rng(9);
+    for (var g = 0; g < 40; g++) {      // 물보라
+      var sp = ((t * 1.2 + r()) % 1), x0 = r() * w, y0 = h * (0.22 + r() * 0.35);
+      ctx.fillStyle = 'rgba(232,244,250,' + (0.7 * (1 - sp)).toFixed(2) + ')'; ctx.beginPath(); ctx.arc(x0 - sp * 60, y0 - sp * 60 + sp * sp * 150, 1.5 + r() * 3, 0, 7); ctx.fill();
+    }
+    var mist = ctx.createLinearGradient(0, h * 0.3, 0, h * 0.8); mist.addColorStop(0, 'rgba(220,235,245,0)'); mist.addColorStop(0.5, 'rgba(220,235,245,.2)'); mist.addColorStop(1, 'rgba(220,235,245,0)');
+    ctx.fillStyle = mist; ctx.fillRect(0, h * 0.3, w, h * 0.5);   // 물안개 (위아래로 흐려진다)
+  };
+  SC.flood.bg = function (ctx, w, h) { sky(ctx, w, h, '#4a5662', '#9aa4a8', 'rgba(90,72,46,.55)'); };
+  SC.flood.fx = function (ctx, w, h, t) {
+    var r = rng(23); ctx.strokeStyle = 'rgba(210,225,235,.45)'; ctx.lineWidth = 1.2; ctx.beginPath();   // 퍼붓는 비
+    for (var k = 0; k < 140; k++) { var rx = (r() * w + t * 90) % w, ry = (r() * h + t * 600) % h; ctx.moveTo(rx, ry); ctx.lineTo(rx - 5, ry + 16); }
+    ctx.stroke();
+    r = rng(29);
+    for (var s = 0; s < 14; s++) { var sl = ((t * 1.4 + r()) % 1), sx = r() * w, sy = h * (0.72 + r() * 0.22); ctx.strokeStyle = 'rgba(230,220,200,' + (0.5 * (1 - sl)).toFixed(2) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(sx, sy, 3 + sl * 12, 1 + sl * 3, 0, 0, 7); ctx.stroke(); }   // 빗방울 물결
+  };
+  /** 한 장면: 시트가 있으면 바탕 → 뒤 효과 → 시트 → 앞 효과, 없으면 코드로 그린 장면만. 시트를 그렸으면 true */
+  function paint(ctx, kind, w, h, t) {
+    var sc = SC[kind];
+    if (sc.bg && (spriteImage(kind) || hasSheet(kind))) {   // 시트를 불러오는 동안에도 코드 장면을 잠깐 보이지 않는다
+      sc.bg(ctx, w, h, t);
+      if (sc.back) sc.back(ctx, w, h, t);
+      drawSprite(ctx, kind, w, h, t, sc.shake ? sc.shake(t) : null);
+      if (sc.fx) sc.fx(ctx, w, h, t);
+      return true;
+    }
+    sc.draw(ctx, w, h, t);
+    return false;
+  }
+  DF.paint = paint;
   DF.SCENES = SC;
 
   var cur = null;
@@ -216,11 +328,11 @@
       if (!h0.alive) return;
       try {
         var t = (performance.now() - t0) / 1000;
-        ctx.setTransform(1, 0, 0, 1, 0, 0); sc.draw(ctx, w, h, t); drawSprite(ctx, kind, w, h, t);
+        ctx.setTransform(1, 0, 0, 1, 0, 0); paint(ctx, kind, w, h, t);
       } catch (e) { console.warn('[재해 그림]', e); h0.alive = false; return; }
       requestAnimationFrame(frame);
     }
-    try { sc.draw(ctx, w, h, 0.01); drawSprite(ctx, kind, w, h, 0.01); } catch (e) { console.warn('[재해 그림]', e); }
+    try { paint(ctx, kind, w, h, 0.01); } catch (e) { console.warn('[재해 그림]', e); }
     requestAnimationFrame(frame);
     setTimeout(function () { box.classList.add('on'); }, 16);
     if (kind === 'quake' || o.shake) DF.shake(cf.shake || 1.6);
@@ -238,11 +350,10 @@
   DF.shake = function (sec, o) {
     if (G.Quake && !G.Quake.active('quake')) G.Quake.start('quake', o || { sev: 2, close: 0.7 });
   };
-  /** 도감·시험용: 한 장면을 주어진 시각으로 그린다 */
+  /** 도감·시험용: 한 장면을 주어진 시각으로 그린다 — 시트로 그렸으면 true, 코드 장면으로 대신했으면 false */
   DF.render = function (ctx, kind, t, w, h) {
     var sc = SC[kind]; if (!sc) return false;
     w = w || 640; h = h || 280; t = t || 1;
-    sc.draw(ctx, w, h, t); drawSprite(ctx, kind, w, h, t);
-    return true;
+    return paint(ctx, kind, w, h, t);
   };
 })(window.G = window.G || {});
