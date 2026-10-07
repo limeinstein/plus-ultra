@@ -13,7 +13,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
-  page.on('pageerror', e => errors.push(e.message));
+  page.on('pageerror', e => errors.push(e.message + ' @ ' + String(e.stack).split('\n').slice(1, 3).join(' | ')));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|Failed to load|net::/.test(m.text())) errors.push(m.text()); });
   try {
     await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);

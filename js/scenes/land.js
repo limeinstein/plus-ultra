@@ -191,6 +191,7 @@
   L.update = function (dt) {
     if (!st || !st.alive) return;
     var s = S(), l = s.loc;
+    if (!l || l.mode !== 'land' || !l.base) return;   // 장면을 바꾸는 사이(도시로 들어가는 중·불러오기) 한 장면만큼 위치가 뭍이 아닐 수 있다
     st.t += dt;
     var px0 = l.lon, py0 = l.lat;
     if (!st.paused && !st.busy && !UI.busy() && (st.path || st.dir)) {
