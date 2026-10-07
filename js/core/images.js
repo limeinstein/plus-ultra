@@ -483,7 +483,7 @@
   };
   /** 생김새 이름 (만들기 화면·수첩에 보이는 이름표) — 파일 이름 → 한글 이름. 없으면 파일 이름 그대로 */
   I.HERO_NAMES = {
-    admiral: '기본 제독', ganghui: '이강희', navigator_white: '하얀 남방의 항해사', armored_navigator: '철갑 항해사',
+    admiral: '기본 제독', ganghui: '중세의 연금술사', navigator_white: '하얀 남방의 항해사', armored_navigator: '철갑 항해사',
     sea_dog: '망원경을 든 뱃사람', muscle_swordsman: '근육질 검사', hat_spinner: '모자를 돌리는 항해사',
     charismatic_admiral: '카리스마 제독', battle_vanguard: '돌격대장', noble_scholar: '귀족 학자 제독',
     casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장'
