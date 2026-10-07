@@ -150,7 +150,7 @@
     R.tidyCaptains();
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
-      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>' + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
+      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>' + (G.Banter ? '<span class="tag" title="생김새로 정해진 말투 — 동물·식물을 발견하면 이 말투로 수다를 떤다">말투 · ' + U.esc(G.Banter.toneName(m.id)) + '</span>' : '') + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
         '<div class="muted" style="font-size:16px;margin:4px 0">' + d.desc + '</div>' +
         '<div style="font-size:16px">' + Object.keys(d.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + pips(d.sk[k]); }).join(' &nbsp; ') + '</div>' +
         '<div style="font-size:15px;margin-top:4px" class="muted">' + mateLangs(m, d) + '</div></div>');
@@ -551,6 +551,7 @@
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
+      '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
       '<div>바다의 방향키</div><div><div class="opt-row"><div class="opt' + (st.keyMode !== 'helm' ? ' on' : '') + '" data-km="dir">방위로 가기</div><div class="opt' + (st.keyMode === 'helm' ? ' on' : '') + '" data-km="helm">손으로 키 잡기</div></div>' +
         '<small class="muted">' + (st.keyMode === 'helm' ? '↑ 누르는 동안 나아감 · ←→ 뱃머리 돌리기 · ↓ 멈춤 · Space 순항/정지' : '↑북 ↓남 ←서 →동(두 키를 함께 누르면 대각선) 쪽으로 계속 감 · Space 정지') + '</small></div>' +
       '</div><div class="sep"></div><div class="flex" style="gap:12px">' +
@@ -560,6 +561,7 @@
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
+    U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
     U.$$('[data-ms]', el).forEach(function (o) { o.onclick = function () { if (G.YTM) G.YTM.setSource(o.dataset.ms); else st.musicSrc = o.dataset.ms; PAGES.menu(el, win); }; });
     var sv = el.querySelector('[data-act=save]'); if (sv) sv.onclick = async function () { await I.saveMenu(); };

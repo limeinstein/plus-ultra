@@ -189,6 +189,8 @@
     UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
     for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);
+    // 동물·식물: 부하들이 한마디씩 주고받는다 (말투별 — js/systems/banter.js)
+    if (G.Banter && d.cat === 'creature') { try { await G.Banter.play(d); } catch (e) { console.error(e); } }
     if (rel.length && !s.flags.relicTip) {
       s.flags.relicTip = 1;
       await UI.say('제독, 이것은 이 발견의 틀림없는 증거입니다. 후원자에게 보고하면 증거로 바쳐야 하지만, 항구에서 제독 스스로 발표하면 제독의 것이 됩니다 — 시장에 팔아 자금을 마련할 수도 있습니다. 서적은 소지품에서 읽어 볼 수 있습니다.', G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first'));
