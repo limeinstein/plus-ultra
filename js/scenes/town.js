@@ -134,7 +134,11 @@
   T.runtime = function () { return st; };   // 시험용
   T.city = function () { return st && st.city; };
   T.hidden = function (v) {
-    if (st && v != null) { st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.entering = false; st.dirty = true; } }
+    if (st && v != null) {
+      var back = st.hidden && !v;          // 건물에서 거리로 나왔다 — 거리를 오가는 사람이 바뀐다
+      st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.entering = false; st.dirty = true; }
+      if (back) spawnFolk();
+    }
     return st ? st.hidden : true;
   };
 
@@ -198,7 +202,17 @@
     st.dirty = true;
     // 처음에는 항구(또는 첫 건물) 앞에서 시작
     st.cam = st.camTo = clampCam(st.hero.x - W / 2);
+    spawnFolk();
   }
+  /** 거리를 걷는 마을 사람 3~4명을 새로 풀어 놓는다 (js/systems/streetfolk.js) */
+  function spawnFolk() {
+    st.folks = [];
+    try { if (G.StreetFolk && G.Game.state && G.Game.state.fleet) st.folks = G.StreetFolk.spawn(st.city, st.streetW, st.hero.x, GROUND, st.city.id + ':' + (st.visits = (st.visits || 0) + 1)); }
+    catch (e) { st.folks = []; }   // 시험용 가짜 도시 등 — 거리 사람 없이도 거리는 열린다
+    st.dirty = true;
+  }
+  T.folks = function () { return st ? st.folks || [] : []; };   // 시험용
+  T.respawnFolk = function () { if (st) spawnFolk(); };
   /** 매 프레임 다시 계산하지 않도록 배경·덧칠·이름표를 미리 그려 둔다 */
   function prepare() {
     // 배경을 화면 크기에 맞춰 한 번만 확대해 둔다
@@ -603,6 +617,23 @@
     return null;
   };
   T.pan = function (dx) { if (st) st.camTo = clampCam(st.camTo + dx); };
+  /** 말을 걸 사람 앞까지 제독이 걸어간다 (js/scenes/city.js C.chatFolk) */
+  T.approach = function (f) {
+    if (!st || st.hidden) return Promise.resolve();
+    var gap = ((G.FX && G.FX.streetFolk) || {}).talkGap || 95, side = st.hero.x <= f.x ? -1 : 1;
+    var to = U.clamp(f.x + side * gap * (f.animal ? 0.8 : 1), 40, st.streetW - 40);
+    st.hover = null;
+    if (Math.abs(to - st.hero.x) < 12) { st.hero.dir = f.x > st.hero.x ? 1 : -1; st.dirty = true; return Promise.resolve(); }
+    st.hero.to = to; st.hero.walkV = null; st.camTo = clampCam(to - W / 2);
+    var mine = st;
+    return new Promise(function (res) {
+      var t0 = Date.now();
+      (function wait() {
+        if (st !== mine || st.hero.to == null || Date.now() - t0 > 3500) { if (st === mine) { st.hero.to = null; st.hero.dir = f.x > st.hero.x ? 1 : -1; st.dirty = true; } res(); return; }
+        setTimeout(wait, 60);
+      })();
+    });
+  };
 
   function hitAt(x, y) {
     if (!st) return null;
@@ -645,6 +676,8 @@
   }
   /** 이 자리에서 누를 것: 건물(이름표 포함)이 먼저, 건물 그림의 빈 하늘 너머로 보이는 볼거리는 볼거리 */
   function pickAt(x, y) {
+    var fk = G.StreetFolk && st.folks ? G.StreetFolk.hit(st.folks, x, y, st.cam) : null;   // 거리를 걷는 사람이 먼저
+    if (fk) return fk;
     var it = hitAt(x, y), m = markAt(x, y);
     if (it && m) { var py = y - (it.base - it.h); if (py >= 0 && !solid(it, x - (it.x - st.cam), py)) return m; return it; }
     return it || m;
@@ -698,7 +731,7 @@
         return;
       }
       st.hover = st.hidden ? null : pickAt(p[0], p[1]);
-      el.style.cursor = st.hover ? (st.hover.cv && !st.hover.kind ? 'zoom-in' : 'pointer') : 'default';
+      el.style.cursor = st.hover ? (st.hover.spec ? 'pointer' : st.hover.cv && !st.hover.kind ? 'zoom-in' : 'pointer') : 'default';
     });
     el.addEventListener('mouseup', function (e) {
       if (!st) { down = null; return; }
@@ -707,6 +740,8 @@
       down = null; el.style.cursor = 'default';
       if (wasDrag) return;
       var it = st.hidden ? null : pickAt(p[0], p[1]);
+      // 거리를 걷는 사람: 다가가 말을 건다 (city.chatFolk)
+      if (it && it.spec) { onPick('folk', it); return; }
       // 아직 찾지 않은 도시 건물 발견물이면 눌러서 발견 (city.lookAt), 그 밖의 볼거리는 들여다보기
       if (it && !it.kind && it.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(it.d) && !G.Disc.foundByMe(it.id) && G.Disc.built(it.d)) onPick('landmark', it.id);
       else if (it && !it.kind) T.inspect(it);
@@ -791,6 +826,7 @@
       moved = true;
     }
     if (hero.entering) { hero.fade = Math.max(0, hero.fade - dt / 0.42); hero.dist += 260 * dt; moved = true; }
+    if (st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x)) moved = true;   // 거리를 걷는 사람들
     if (st.hover !== st.drawnHover || st.focus !== st.drawnFocus) moved = true;
     if (G.Scenes.city.timeOfDay() !== st.tod) moved = true;
     if (!moved && !st.dirty) return;      // 움직임이 없으면 다시 그리지 않는다
@@ -842,8 +878,12 @@
         ctx.restore();
       }
     });
+    // 거리를 걷는 사람들 — 제독보다 뒤(위)에 선 사람, 제독, 앞에 선 사람 차례로
+    var heroY = GROUND + 34, folks = (st.folks || []).slice().sort(function (a, b) { return a.y - b.y; });
+    folks.forEach(function (f) { if (f.y <= heroY) G.StreetFolk.draw(ctx, f, cam, st.hover === f); });
     // 주인공 (그림이 있을 때만)
     drawHero(ctx, cam);
+    folks.forEach(function (f) { if (f.y > heroY) G.StreetFolk.draw(ctx, f, cam, st.hover === f); });
     // 건물 이름표
     st.items.forEach(function (it) {
       var x = it.x - cam;
@@ -851,6 +891,12 @@
       var on = st.hover === it || st.focus === it || st.near === it, tag = on ? it.tagOn : it.tag;
       ctx.drawImage(tag, Math.round(x + it.w / 2 - tag.width / 2), Math.round(it.base - it.h - 16 - (it.lift || 0) - tag.height));
     });
+    // 거리 사람 이름표 (마우스를 올렸을 때)
+    var hf = st.hover;
+    if (hf && hf.spec) {
+      var ft = hf.tag || (hf.tag = plaqueCanvas(hf.name + ' — 말 걸기', true));
+      ctx.drawImage(ft, Math.round(hf.x - cam - ft.width / 2), Math.round(hf.y - hf.spec.h * hf.sc * (hf.animal ? 1.25 : 1.12) - ft.height));
+    }
     // 볼거리 이름표 (마우스를 올렸을 때)
     var hm = st.hover;
     if (hm && !hm.kind && hm.cv) {

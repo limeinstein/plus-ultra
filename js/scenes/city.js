@@ -212,7 +212,7 @@
     if (cur && cur.ost && G.Audio && G.Audio.resume) G.Audio.resume();
     cur = null; token++;
     UI.clearScreen();
-    if (G.Town.active()) { G.Town.hidden(false); UI.add(G.Town.catcher(function (kind, arg) { if (kind === 'landmark') C.lookAt(arg); else C.visit(kind, arg); })); }
+    if (G.Town.active()) { G.Town.hidden(false); UI.add(G.Town.catcher(function (kind, arg) { if (kind === 'landmark') C.lookAt(arg); else if (kind === 'folk') C.chatFolk(arg); else C.visit(kind, arg); })); }
     else G.Game.setScene(C.view(c));
     G.Game.cityHud();
     var owner = R.cityOwner(c), m = R.market(c.id);
@@ -383,6 +383,20 @@
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene === C && !cur) C.main();
+  };
+  /** 거리를 걷는 마을 사람을 눌렀을 때: 제독이 다가가 말을 건다 (js/systems/streetfolk.js) */
+  C.chatFolk = async function (f) {
+    if (busy || UI.busy() || !f || !G.StreetFolk) return;
+    var c = C.city(); if (!c) return;
+    busy = true;
+    try {
+      f.state = 'talk';
+      if (G.Town.active() && !G.Town.hidden() && G.Town.approach) await G.Town.approach(f);
+      await G.StreetFolk.talk(f, c);
+    } catch (e) { console.error(e); }
+    f.state = 'idle'; f.timer = U.rf(1, 2.5);
+    busy = false;
+    G.Game.refreshHud();
   };
   function plaque(B, c, arg) {
     var old = U.$('.bld-plaque'); if (old) old.remove();
