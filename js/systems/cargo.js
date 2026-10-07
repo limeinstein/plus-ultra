@@ -26,7 +26,8 @@
   };
   /** 배 한 척이 버티는 무게 */
   CG.shipWtCap = function (s) { return Math.floor(s.cap * (K().shipWt || 1.3)); };
-  CG.fleetWtCap = function () { return U.sum(S().fleet.ships, CG.shipWtCap); };
+  /** 함대가 버티는 무게 — 회계 단계가 높으면 짐을 고르게 나눠 싣고 묶어 조금 더 버틴다 (G.Acct.wtBonus, G.BALANCE.acct.wt) */
+  CG.fleetWtCap = function () { var n = U.sum(S().fleet.ships, CG.shipWtCap), b = G.Acct ? G.Acct.wtBonus() : 0; return b ? Math.floor(n * (1 + b)) : n; };
   /** 늘 실려 있는 무게: 선원 · 대포 · 포탄 */
   CG.fixedWt = function () {
     var f = S().fleet, k = K();

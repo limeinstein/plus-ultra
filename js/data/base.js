@@ -34,7 +34,7 @@
     { id: 'speech', name: '웅변', desc: '후원자 설득과 입항 교섭의 성공률을 높인다.' },
     { id: 'survey', name: '측량', desc: '미발견 항구를 찾는 범위와 해도 작성 범위를 넓힌다.' },
     { id: 'hist', name: '역사학', desc: '육상의 발견물을 찾기 쉽게 하고 모조품을 가려낸다.' },
-    { id: 'acct', name: '회계', desc: '교역소에서 값을 깎는 교섭의 성공률을 높인다. 경리 자리에 두면 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 낸다.' },
+    { id: 'acct', name: '회계', desc: '단계가 오를수록 교역소 흥정이 잘 통하고 한 번 들를 때 흥정할 수 있는 횟수가 늘며(1·2·2·3번), 짐을 고르게 실어 배가 버티는 무게가 늘어난다(+4%·8%·12%). 3단계면 큰 항구의 비밀 암시장에 드나든다. 경리 자리에 두면 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 낸다.' },
     { id: 'ship', name: '조선기술', desc: '항해 중 자재로 배를 수리할 수 있다.' },
     { id: 'theo', name: '신학', desc: '교회와 성직자에게 신뢰를 얻고 선원의 사기를 붙든다.' },
     { id: 'sci', name: '과학', desc: '자연·생물 발견에 유리하며 괴혈병 예방에 도움이 된다.' },
@@ -270,6 +270,10 @@
     // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
     // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
     landPack: { near: 1.2 },
+    // 회계 단계(R.skill('acct'), 0~3)의 혜택 (js/systems/blackmarket.js G.Acct): 한 번 들를 때 흥정 횟수 tries[단계](경리가 있으면 +puTry, 거절될 때마다 성공률 ×retryK),
+    //   배가 버티는 무게 +wt[단계], blackMarket 단계부터 크기 bmSize 이상 항구의 비밀 암시장 — 물건 bmItems가지(값 ×bmMarkup)·밀수품 bmGoods가지(산지 값 ×bmGoodMarkup),
+    //   bmPeriod일마다 바뀜, 거래마다 악명 +bmNoto
+    acct: { tries: [1, 2, 2, 3], puTry: 1, retryK: 0.7, wt: [0, 0.04, 0.08, 0.12], blackMarket: 3, bmSize: 2, bmItems: 3, bmGoods: 2, bmMarkup: 1.5, bmGoodMarkup: 1.4, bmPeriod: 30, bmNoto: 1 },
     // 제독의 수명·생일 선물 (js/systems/lifespan.js): maxAge세 생일에 세상을 떠난다(아들이 있으면 뒤를 잇는다). warnFrom세부터 생일마다 귀띔.
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)

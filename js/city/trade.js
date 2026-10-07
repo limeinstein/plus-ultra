@@ -17,6 +17,7 @@
     var cur = C.current(), mk0 = R.market(c.id); cur.talked = false;
     // 같은 날 다시 들어와도 값 깎기를 새로 굴릴 수 없다 (나갔다 들어오기만 하면 되던 것)
     cur.haggle = mk0.hag && mk0.hag.day === R.S().day ? mk0.hag.h : null;
+    cur.hagN = mk0.hag && mk0.hag.day === R.S().day ? (mk0.hag.n || (mk0.hag.h ? 99 : 0)) : 0;   // 오늘 이 교역소에서 흥정한 횟수 (회계 단계만큼 할 수 있다)
     if (G.Ledger) G.Ledger.record(c);
     var lv = C.langLv(c);
     await C.say(keeper(), lv === 0 ? '어서 오게. 무엇을 찾나?' : C.hail(c, 'trade', ['어서 오게. 좋은 물건이 들어와 있다네.', '어서 오게! 오늘은 무엇을 사겠나?', '팔 물건이 있으면 보여 주게.']));
@@ -32,7 +33,8 @@
       { label: '투자', icon: 'seal', sub: lv ? '출자 ' + lv + '등급' + (div >= 1 ? ' · 배당 ' + U.num(div) + '닢' : '') : '', onClick: function () { return T.invest(c); } },
       { label: '회화', icon: 'people', onClick: function () { return T.talk(c); } },
       { label: '시세', icon: 'chart', sub: R.market(c.id).ev ? R.market(c.id).ev : '품목 갈래별 값', onClick: function () { return T.quotes(c); } },
-      { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : R.purser() ? '경리 ' + R.purser().name : G.Court && G.Court.haggle(c) ? '귀족의 권한' : '', dim: !!h, onClick: function () { return T.haggle(c); } },
+      { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : (T.hagLeft(c) < T.hagMax() ? '남은 흥정 ' + T.hagLeft(c) + '번' : R.purser() ? '경리 ' + R.purser().name : G.Court && G.Court.haggle(c) ? '귀족의 권한' : G.Acct && T.hagMax() > 1 ? '흥정 ' + T.hagMax() + '번' : ''), dim: !!h, onClick: function () { return T.haggle(c); } },
+      G.BlackMarket && G.BlackMarket.open(c) ? { label: '뒷골목 암시장', icon: 'seal', sub: '회계 ' + G.Acct.lv() + ' · 비밀 거래', onClick: function () { return G.BlackMarket.visit(c); } } : null,
       debts.length ? { label: '빚을 받으러 간다', icon: 'scroll', sub: debts[0].who, onClick: function () { return T.debt(c, debts[0]); } } : null
     ];
   };
@@ -59,7 +61,10 @@
     if (d && !R.sells(c, id)) p = Math.round(p * (1 + d));
     var cg = S().fleet.cargo[id]; if (G.Cargo && cg) p = Math.max(1, Math.round(p * G.Cargo.fresh(id, cg)));   // 오래 묵은 먹을거리·향신료는 값이 떨어진다
     return p; }
-  function keepHag(c, h) { R.market(c.id).hag = { day: R.S().day, h: h }; return h; }
+  function keepHag(c, h) { var cur = C.current(); R.market(c.id).hag = { day: R.S().day, h: h, n: cur ? cur.hagN || 0 : 0 }; return h; }
+  /** 흥정 횟수: 회계 단계에 따라 (G.Acct.tries) · 오늘 남은 횟수 */
+  T.hagMax = function () { return G.Acct ? G.Acct.tries() : 1; };
+  T.hagLeft = function (c) { var cur = C.current(); return Math.max(0, T.hagMax() - ((cur && cur.hagN) || 0)); };
   T.buyP = buyP; T.sellP = sellP;
 
   // ---------------------------------------------------------------- buy
@@ -372,17 +377,17 @@
     var o = T.haggleOdds(c), pu = o.pu, puSp = pu ? G.Scenes.mateSpeaker('purser') : null;
     if (pu) await UI.say(U.pick(['주인장, 장부를 좀 봅시다. 지난달 시세가 이보다 한참 쌌소. 이 값이면 우리는 옆 가게로 가겠소.', '이 물건 값에 운임과 관세를 다 얹었구려. 우리가 통째로 사 줄 테니 거품은 빼시오.', '현금으로 한꺼번에 치르겠소. 그러니 셈을 다시 하시오 — 한 푼도 허투루 낼 생각 없소.']), puSp);
     else await C.me(U.pick(['주인장, 조금만 싸게 해 주게. 앞으로도 자주 들를 테니.', '이 값은 너무 비싸지 않은가. 옆 가게는 더 싸던데.', '많이 살 테니 값을 좀 깎아 주게.']));
-    var ok = U.chance(o.p);
-    if (!ok && pu) {
-      await C.say(k, U.pick(['허, 그 값에는 못 주네.', '어림없는 소리 말게.']));
-      var again = await UI.ask('경리가 한 번 더 밀어붙일까요?', [{ label: '후려친다', value: 1 }, { label: '그만둔다', value: 0 }], puSp);
-      if (again) {
-        await UI.say(U.pick(['그럼 이 장부를 보시오. 이 항구에서 이 값에 판 날이 한 번도 없소.', '좋소, 우리는 오늘 여기서 사지 않겠소. …정말 이 값이 마지막이오?']), puSp);
-        ok = U.chance(o.p * 0.6);
-        if (!ok) { cur.haggle = keepHag(c, { ok: false }); await C.say(k, '자네들 같은 손님은 처음 보네! 그 값에는 절대 못 주네.'); UI.toast('값 후려치기 실패 — 값은 그대로입니다.', 'scales'); return; }
-        o.disc += 0.02;
-      }
+    // 회계 단계만큼 흥정할 수 있다 — 거절당할 때마다 주인이 굳어진다 (G.BALANCE.acct.retryK)
+    var used = cur.hagN || 0, max = T.hagMax(), K = (G.BALANCE && G.BALANCE.acct) || {};
+    var ok = U.chance(o.p * Math.pow(K.retryK == null ? 0.7 : K.retryK, used));
+    cur.hagN = used + 1;
+    if (!ok && cur.hagN < max) {
+      R.market(c.id).hag = { day: S().day, h: null, n: cur.hagN };
+      await C.say(k, U.pick(['허, 그 값에는 못 주네.', '어림없는 소리 말게.', '그 값이면 내가 밑지네.']));
+      UI.toast('흥정이 거절당했다 — 오늘 ' + (max - cur.hagN) + '번 더 흥정할 수 있다 (회계 ' + (G.Acct ? G.Acct.lv() : 0) + (pu ? ' · 경리 +1' : '') + '). 거절당할수록 주인이 굳어진다.', 'scales', 4600);
+      return;
     }
+    if (ok && used) o.disc += 0.01 * used;   // 끈질기게 흥정해 얻으면 조금 더 깎인다
     if (ok) {
       var disc = Math.min(0.25 + (o.noble ? o.noble.disc : 0), o.disc + U.rf(0, 0.04));
       cur.haggle = keepHag(c, { ok: true, buy: 1 - disc, sell: 1 + disc * (pu ? 0.7 : 0.6) });
