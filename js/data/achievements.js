@@ -44,7 +44,7 @@
 
   // ------------------------------------------------------------------ 동아시아
   a('동아시아', 'silla', '천년 왕국 신라', '서라벌의 절과 무덤, 금관을 찾았다.',
-    { ids: ['bulguksa', 'seokguram', 'hwangnyong', 'emille', 'sillacrown', 'cheonmado', 'munmu'], n: 5 }, 400, 20000, '서라벌의 손님');
+    { ids: ['bulguksa', 'seokguram', 'hwangnyong', 'emille', 'sillacrown', 'cheonmado', 'munmu', 'muyeol'], n: 5 }, 400, 20000, '서라벌의 손님');
   a('동아시아', 'joseon', '해동의 보물', '고려와 조선이 남긴 글과 그릇, 경판을 찾았다.',
     { ids: ['hunmin', 'tripitaka', 'haeinsa', 'jongmyo', 'moonjar', 'goryeoceladon', 'baekjecenser', 'mireuksa'], n: 5 }, 400, 20000);
   a('동아시아', 'foursymbols', '사신 — 하늘의 네 짐승', '동쪽의 용, 서쪽의 흰 범, 남쪽의 봉황, 북쪽의 현무를 모두 만났다.',

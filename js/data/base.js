@@ -285,6 +285,11 @@
     // 같은 곳 맴돌며 야영하기 (js/systems/castaway.js): radius도 안을 한 야영지로 친다. 야영 사이가 gapDays일보다 벌어지면 처음부터.
     //   wilsonDays일 안에 wilsonCamps번 야영하면 「윌슨」 사건(한 번), 한 야영지에서 journalDays일 넘게 journalCamps번 넘게 야영하면 「표류기」(한 번).
     //   윌슨을 데리고 있으면 야영의 쉬기에서 피로가 wilsonRest 더 풀린다. 표류기를 지니면 야영 경비가 journalCost만큼 줄고 사냥·물 긷기가 journalFind배
+    // 무덤 발견물의 일기토 (js/systems/tombduel.js · 사람과 대사는 js/data/tombguards.js):
+    //   무덤지기(guard)에게 이기면 명성 × guardFame. 지거나 물러서면 retryDays일 동안 그 무덤에 다가가지 못한다(피로 +loseFatigue).
+    //   도굴꾼(rob)을 이기면 명성 × robFame에 금화(발견 가치 × robLoot) — 지거나 물러서면 도굴꾼이 부장품(유물)을 들고 달아나 명성 × robbedFame.
+    //   싸워 이기면 전투 명성 +battleFame. 무사의 능력은 발견의 어려움(pw) 1마다 statPerPw씩 세진다(pw 3 기준).
+    tombDuel: { guardFame: 1.25, robFame: 1.1, robLoot: 0.08, robbedFame: 0.7, retryDays: 30, loseFatigue: 10, battleFame: 4, statPerPw: 0.04 },
     castaway: { radius: 0.6, gapDays: 30, wilsonDays: 30, wilsonCamps: 10, journalDays: 90, journalCamps: 15, wilsonRest: 8, journalCost: 0.15, journalFind: 1.25 },
     // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)
     //   − 악명 × noto(최대 notoMax) − 얼마 전(alertDays일 안) 들킨 일(alert). min~max로 자른다.

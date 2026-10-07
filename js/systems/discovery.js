@@ -151,11 +151,17 @@
     var s = S();
     var st = s.disc[d.id] || (s.disc[d.id] = {});
     if (st.me) return false;
+    // 무덤 발견물: 그 고장의 무사가 나와 앞을 막는다 — 무덤지기에게 지면 이번에는 찾지 못하고, 도굴꾼에게 지면 부장품을 잃는다 (js/systems/tombduel.js)
+    var tomb = { fameK: 1, stolen: false };
+    if (G.TombDuel && how !== 'special' && how !== 'trade' && G.TombDuel.pending(d)) {
+      tomb = await G.TombDuel.meet(d, how);
+      if (!tomb.go) return false;
+    }
     st.found = U.dateNum(s.date); st.me = true; st.evidence = true;
     s.stats.found++;
     D.collectionReward(s.stats.found);
     delete s.hints[d.id];
-    var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d));
+    var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d) * (tomb.fameK || 1));
     G.Fame.add('ex', fame);
     // 증거품: 이름 붙은 증거(해도·지도)는 소지품으로 챙긴다 — 보고·발표할 때 건넨다 (잃으면 믿어 주지 않는다)
     if (d.evidence && !s.player.items.some(function (it) { return it.kind === 'evidence' && it.disc === d.id; })) {
@@ -163,10 +169,10 @@
         desc: '「' + d.name + '」의 발견을 증명한다. 후원자에게 보고하거나 항구에서 발표할 때 건넨다.' });
     }
     // 발견 유물: 그 자리에서 보물·장신구·무기·서적·선수상 같은 것을 손에 넣는다 — 발견의 증거가 된다
-    var rel = D.relicsOf(d.id), got = [];
+    var rel = tomb.stolen ? [] : D.relicsOf(d.id), got = [];   // 도굴꾼이 부장품을 들고 달아났으면 손에 넣을 것이 없다
     // 유물이 없는 보물·유적 발견은 예전처럼 값나가는 것을 조금 챙긴다 (세공 솜씨만큼 더)
     var loot = 0;
-    if (!rel.length && (d.cat === 'treasure' || d.cat === 'ruin')) {
+    if (!rel.length && !tomb.stolen && (d.cat === 'treasure' || d.cat === 'ruin')) {
       loot = Math.round(D.value(d) * (0.05 + (R.skillRead ? R.skillRead('craft') : R.skill('craft')) * 0.02) * (st.rival ? 0.5 : 1));
       if (loot > 0) s.player.gold += loot;
     }
@@ -448,6 +454,7 @@
     var s = S(), hits = [];
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'sea' || D.foundByMe(d.id) || !D.needMet(d)) return;
+      if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       if (G.Geo.dist(lon, lat, d.lon, d.lat) >= d.r * D.clueK(d.id, 'find')) return;   // 단서가 겹칠수록 넓게
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return; }   // 아직 세워지지 않았다 — 1600년부터는 신기루로 보인다
       hits.push(d);
@@ -470,6 +477,7 @@
     var hits = [], near = null, nearD = 99;
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'land' || D.foundByMe(d.id) || !D.needMet(d)) return;
+      if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find');
       if (!D.built(d)) { if (dist < r && G.Mirage) G.Mirage.see(d); return; }   // 신기루

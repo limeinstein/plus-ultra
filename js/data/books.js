@@ -84,7 +84,7 @@
     B('b_negara', '『나가라크레타가마』', 12, [160, 162], ['borobudur', 'komodo', 'breadfruit', 'paradise']),
     B('b_pagan', '『파간 연대기』', 12, [162, 160], ['ananda', 'shwedagon', 'padaung', 'goldelephant']),
     // 동아시아토착어 (13)
-    B('b_samguk', '일연 『삼국유사』', 13, [190, 227], ['bulguksa', 'muryeong', 'munmu', 'hwangnyong', 'emille', 'sillacrown', 'cheonmado', 'baekjecenser']),
+    B('b_samguk', '일연 『삼국유사』', 13, [190, 227], ['bulguksa', 'muryeong', 'munmu', 'hwangnyong', 'emille', 'sillacrown', 'cheonmado', 'baekjecenser', 'muyeol']),
     B('b_kojiki', '『고사기』', 13, [193, 190], ['fertile', 'goldseal', 'konjiki']),
     B('b_haedong', '신숙주 『해동제국기』', 13, [190, 193], ['zipang', 't_herbs', 'glassbowl']),
     B('b_shoso', '『쇼소인 보물 목록』', 13, [193], ['glassbowl', 'konjiki']),

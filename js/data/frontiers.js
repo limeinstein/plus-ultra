@@ -47,7 +47,7 @@
     inner: [[], ['t_musk', 't_jade'], ['sable'], ['potala', 'yeti', 'genghis']],
     malacca: [['t_sandal', 't_rice'], ['shwedagon', 'ayubuddha', 'goldelephant', 'padaung'], ['ananda', 'cannibal', 'rafflesia', 'orangutan', 'carnivplant'], ['angkor', 'borobudur']],
     spice: [['t_nutmeg'], ['breadfruit'], ['komodo'], ['paradise']],
-    china: [['t_silkraw', 't_herbs'], ['t_tea', 'greatwall', 'cloisonne', 'jongmyo', 'emille', 'hwangnyong'], ['huangshan', 'yungang', 'qianling', 'muryeong', 'bulguksa', 'seokguram', 'munmu', 'bronze', 'sillacrown', 'baekjecenser', 'guanyublade', 'libai', 'nestorian', 'seismo'], ['qinshi', 'jadesuit', 'panda', 'hanseal', 'cheonmado']],
+    china: [['t_silkraw', 't_herbs'], ['t_tea', 'greatwall', 'cloisonne', 'jongmyo', 'emille', 'hwangnyong'], ['huangshan', 'yungang', 'qianling', 'muryeong', 'bulguksa', 'seokguram', 'munmu', 'muyeol', 'bronze', 'sillacrown', 'baekjecenser', 'guanyublade', 'libai', 'nestorian', 'seismo'], ['qinshi', 'jadesuit', 'panda', 'hanseal', 'cheonmado']],
     japan: [[], ['goldseal'], ['glassbowl', 'konjiki'], ['fertile']],
     austral: [[], ['kangaroo'], ['aborigine'], ['uluru']],
     west: [[], ['t_tobacco', 't_allspice'], ['tarantula', 'eldorado'], ['blemmyes']],
