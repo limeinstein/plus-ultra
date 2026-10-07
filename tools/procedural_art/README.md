@@ -15,6 +15,7 @@
 | `objs/60_paint.js` | 다시 그린 명화(퍼블릭 도메인 작품의 구도를 단순화): 모나리자·천지창조·최후의 만찬·비너스의 탄생·뒤러·우르비노·바벨탑·오르가스·대사들·쾌락의 정원·헨트 제단화·남만 병풍·아잔타·팔라 도로 |
 | `objs/70_castaway.js` · `run_castaway.js` | 야영지 물건 아이콘 2종(256×256 투명): 윌슨(숯으로 얼굴을 그린 가죽 공)·표류기(끈으로 묶은 가죽 일지) → `node run_castaway.js <폴더>` 뒤 webp로 `images/items/` |
 | `run_muyeol.js` | 무열왕릉 발견 그림의 4×4 원화(7단계 + 여덟 방향): `node run_muyeol.js` → `tools/ruin_gifs/v2/master/muyeol.png` → `python tools/ruin_gifs/build_v2.py --only muyeol` → `end_frames.py muyeol` → `sheets.py muyeol` → `tools/images.py` |
+| `objs/80_bmswords.js` · `run_bmswords.js` | 암시장 명검 아이콘 5종(256×256 투명, 칼끝 왼쪽 아래로 비스듬히): 클레이모어·시바신의 마검·룬 블레이드·성기사의 검·요도 무라마사 → `node run_bmswords.js <폴더>` 뒤 webp로 `images/items/` |
 | `trade/trade.js` | 교역품 28종: 등불 켜진 시장 좌판(자루·바구니·저울·차 상자…) + 지역별 흐린 시장 배경, 카메라가 다가가는 24장 |
 | `run.js` / `run_trade.js` | 헤드리스 Chromium(Playwright)으로 굽기 |
 

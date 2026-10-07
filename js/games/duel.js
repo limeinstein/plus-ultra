@@ -57,6 +57,7 @@
     if (!id) return 'slash';
     if (STYLE[id]) return STYLE[id];
     var d = G.ITEM && G.ITEM[id], n = d ? d.name : '';
+    if (d && d.style) return d.style;   // 물건에 적어 둔 공격 갈래 (암시장 명검 등)
     if (/도끼|곤봉|부메랑|라브리스/.test(n)) return 'bash';
     if (/단검|작살|창/.test(n)) return 'thrust';
     return 'slash';

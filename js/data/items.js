@@ -23,6 +23,12 @@
     { id: 'macuahuitl', name: '마카나', kind: 'weapon', atk: 9, price: 1600, reg: [10], desc: '흑요석 날을 박은 목검.' },
     { id: 'excalibur', name: '성검 엑스칼리버', kind: 'weapon', atk: 34, price: 0, reg: [], rare: true, desc: '호수의 여인이 맡겼다는 전설의 검.' },
     { id: 'longinus', name: '롱기누스의 창', kind: 'weapon', atk: 30, price: 0, reg: [], rare: true, desc: '성스러운 힘이 깃든 창.' },
+    // 대항해시대 2의 야시장 명검 — 시장에는 나오지 않고, 그 도시의 뒷골목 암시장에서만 판다 (js/systems/blackmarket.js BM.SWORDS · style = 일기토의 공격 갈래)
+    { id: 'claymore', name: '클레이모어', kind: 'weapon', atk: 18, price: 6400, reg: [], rare: true, style: 'bash', desc: '스코틀랜드 고지 사람들의 큰 양손검. 앞으로 기운 코등이 끝마다 네잎 고리가 달렸다.' },
+    { id: 'shivablade', name: '시바신의 마검', kind: 'weapon', atk: 27, price: 120000, reg: [], rare: true, style: 'slash', desc: '파괴의 신 시바에게 바쳤다는 굽은 칼. 칼등에 삼지창 무늬가 박혀 있고, 사원에서 흘러나왔다는 소문이 따라다닌다.' },
+    { id: 'runeblade', name: '룬 블레이드', kind: 'weapon', atk: 32, price: 150000, reg: [], rare: true, style: 'slash', desc: '칼날에 북방의 룬 문자가 새겨진 오래된 검. 어느 배가 어떻게 브라질 해안까지 싣고 왔는지 아무도 모른다.' },
+    { id: 'paladin', name: '성기사의 검', kind: 'weapon', atk: 33, price: 160000, reg: [], rare: true, style: 'slash', desc: '샤를마뉴의 열두 성기사가 지녔다고 전하는 십자 손잡이 검. 사하라를 건너온 대상의 짐 속에서 나왔다고 한다.' },
+    { id: 'muramasa', name: '요도 무라마사', kind: 'weapon', atk: 33, price: 160000, reg: [], rare: true, style: 'slash', made: 1501, desc: '이세의 칼장인 무라마사가 벼린 칼. 너무 잘 들어 주인에게 화를 부른다는 소문 때문에 요도(妖刀)라 불린다.' },
     // armor (def)
     { id: 'leather', name: '가죽 갑옷', kind: 'armor', def: 3, price: 700, reg: [0, 1, 2, 3, 4, 10], desc: '무두질한 가죽 갑옷.' },
     { id: 'chain', name: '체인메일', kind: 'armor', def: 6, price: 1800, reg: [0, 1, 2], desc: '쇠고리를 엮은 사슬 갑옷.' },

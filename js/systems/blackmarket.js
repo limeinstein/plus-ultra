@@ -6,6 +6,9 @@
    · 비밀 암시장: 단계 blackMarket 이상이면 크기 bmSize 이상인 항구의 교역소에 「뒷골목 암시장」이 열린다 —
      시장에 나오지 않는 물건(속사포·잠수 폭탄·아직 나오지 않은 항해 도구·변장 옷), 먼 고장의 밀수품을 웃돈(bmMarkup·bmGoodMarkup)을 얹어 판다.
      물건은 bmPeriod일마다 바뀌고, 한 번 산 물건은 그 기간에 다시 나오지 않는다. 거래할 때마다 악명 +bmNoto.
+   · 명검: 대항해시대 2의 야시장에서 팔던 칼은 그 도시의 암시장에 늘 한 자루 나온다 (BM.SWORDS — 룬 블레이드·성기사의 검·시바신의 마검·
+     요도 무라마사·클레이모어 등). 명검이 있는 도시는 내륙(통북투·카이로)이나 작은 항구(페르남부쿠)라도 암시장이 선다.
+     다른 도시의 거간꾼은 어디에 어떤 명검이 도는지 귀띔한다 (BM.rumor).
    · 저장: s.bm = {도시 번호: {per: 기간 번호, sold: {물건 id: 1}}}
    조정값: G.BALANCE.acct */
 (function (G) {
@@ -36,8 +39,12 @@
   // ---------------------------------------------------------------- 암시장
   var ITEMS = ['rapidgun', 'divebomb', 'shells', 'telescope', 'sextant', 'turban', 'mingrobe', 'lime', 'flamberge', 'katana'];
   var BASE = { divebomb: 12000 };            // 값이 0인 물건의 암시장 값
-  /** 이 도시에 암시장이 서는가 (회계 단계와 상관없이) */
-  BM.here = function (c) { return !!(c && c.port && (c.size || 1) >= (K().bmSize || 2)); };
+  /** 대항해시대 2의 야시장 명검 — 도시 번호 → 물건 (그 도시 암시장에 늘 한 자루) */
+  BM.SWORDS = { 64: 'bastard', 21: 'estoc', 45: 'flamberge', 43: 'claymore', 79: 'shamshir', 175: 'guandao', 157: 'shivablade', 214: 'runeblade', 93: 'paladin', 192: 'muramasa' };
+  /** 이 도시 암시장의 명검 (아직 벼려지지 않은 칼이면 null) */
+  BM.sword = function (c) { var id = c && BM.SWORDS[c.id], d = id && G.ITEM[id]; return d && (!d.made || S().date.y >= d.made) ? id : null; };
+  /** 이 도시에 암시장이 서는가 (회계 단계와 상관없이) — 명검이 도는 도시는 내륙·작은 항구라도 */
+  BM.here = function (c) { return !!(c && ((c.port && (c.size || 1) >= (K().bmSize || 2)) || BM.SWORDS[c.id])); };
   /** 지금 들어갈 수 있는가 */
   BM.open = function (c) { return BM.here(c) && AC.lv() >= AC.bmLv(); };
   function per() { return Math.floor(S().day / (K().bmPeriod || 30)); }
@@ -51,9 +58,10 @@
   /** 이번 기간에 나온 물건과 밀수품 */
   BM.stock = function (c) {
     var r = rng(c), x = book(c), k = K(), y = S().date.y;
-    var pool = ITEMS.filter(function (id) { return G.ITEM[id]; }), items = [];
+    var sw = BM.sword(c), pool = ITEMS.filter(function (id) { return G.ITEM[id] && id !== sw; }), items = [];
     while (items.length < (k.bmItems || 3) && pool.length) { var i = Math.floor(r() * pool.length); items.push(pool.splice(i, 1)[0]); }
     items = items.map(function (id) { var d = G.ITEM[id]; return { id: id, name: d.name, price: itemPrice(id), early: d.from && y < d.from, sold: !!x.sold[id] }; });
+    if (sw) items.unshift({ id: sw, name: G.ITEM[sw].name, price: itemPrice(sw), early: false, sold: !!x.sold[sw], named: true });   // 이 도시의 명검 (물건 수에 세지 않는다)
     // 밀수품: 먼 고장(지역 거리 3 이상)에서 나는 것 가운데, 이 도시가 팔지 않는 것
     var far = G.CITY_DATA.filter(function (o) { return R.cityExists(o) && o.goods && o.goods.length && G.REGION_DIST[c.region] && G.REGION_DIST[c.region][o.region] >= 3; });
     var goods = [], tries = 0;
@@ -67,6 +75,14 @@
     return { items: items, goods: goods };
   };
 
+  /** 거간꾼의 귀띔: 다른 도시 뒷골목에 도는 명검 하나 (기간마다 바뀜) */
+  BM.rumor = function (c) {
+    var list = Object.keys(BM.SWORDS).map(Number).filter(function (id) { var o = G.CITY_DATA[id]; return id !== c.id && o && R.cityExists(o) && BM.sword(o) && G.ITEM[BM.SWORDS[id]].price >= 100000; });
+    if (!list.length) return null;
+    var o = G.CITY_DATA[list[Math.floor(rng(c)() * 997) % list.length]], it = G.ITEM[BM.SWORDS[o.id]];
+    return { city: o.id, item: it.id, text: '명검을 찾는다면 — ' + o.name + '의 뒷골목에 「' + it.name + '」' + U.jx(it.name, '이/가') + ' 돈다더군.' };
+  };
+
   function dealer(c) {
     var A = G.Art;
     return { name: '뒷골목 거간꾼', portrait: A.withImg(A.npcSpec('bm' + c.id, 'merchant', G.Img.folkStyle(c)), G.Img.chain.npc('trader', c)), lang: G.Scenes.city.langLv(c), li: c.lang };
@@ -76,15 +92,18 @@
     if (!BM.open(c)) { await C.say(who, '무슨 소린지 모르겠군. 길을 잘못 들었나 보오.'); return; }
     var x = book(c);
     if (!x.met) { x.met = 1; await C.say(who, U.pick(['장부를 그렇게 꼼꼼히 보는 손님이라면 믿을 만하지. 이리 들어오시오 — 여긴 세관 나리들이 모르는 가게요.', '셈이 밝은 분이시군. 그런 분께만 보여 드리는 물건이 있소. 값은 비싸지만, 어디서도 못 구할 거요.'])); }
+    var sw0 = BM.sword(c);
+    if (sw0 && !x.swordTold) { x.swordTold = 1; var sn = G.ITEM[sw0].name; await C.say(who, '이 뒷골목에서만 도는 칼이 있소 — 「' + sn + '」. 이 도시를 떠나면 어디서도 구경 못 할 거요.'); }
     for (;;) {
       var st = BM.stock(c);
       var rows = st.items.map(function (it) {
-        return { label: it.name + (it.early ? ' <small class="warn-text">아직 시장에 나오지 않은 물건</small>' : ''), right: it.sold ? '팔렸다' : U.num(it.price) + '닢', value: 'i:' + it.id, desc: (G.ITEM[it.id] || {}).desc, thumb: G.Img.itemSrc ? G.Img.itemSrc({ id: it.id }) : null, icon: 'seal', disabled: it.sold || it.price > s.player.gold };
+        var d = G.ITEM[it.id] || {}, atk = d.kind === 'weapon' ? ' <small class="muted">공격 ' + d.atk + '</small>' : '';
+        return { label: (it.named ? '명검 · ' : '') + it.name + atk + (it.early ? ' <small class="warn-text">아직 시장에 나오지 않은 물건</small>' : ''), right: it.sold ? '팔렸다' : U.num(it.price) + '닢', value: 'i:' + it.id, desc: d.desc, thumb: G.Img.itemSrc ? G.Img.itemSrc({ id: it.id }) : null, icon: d.kind === 'weapon' ? 'sword' : 'seal', disabled: it.sold || it.price > s.player.gold };
       }).concat(st.goods.map(function (g) {
         return { label: '밀수품: ' + g.name + ' <small class="muted">' + G.CITY_DATA[g.from].name + '에서 · ' + g.q + '통</small>', right: U.num(g.price) + '닢/통', value: 'g:' + g.id, icon: 'sack', disabled: !g.q || g.price > s.player.gold };
       }));
       var v = await UI.choose('뒷골목 암시장 — 소지금 ' + U.num(s.player.gold) + '닢 · 악명 ' + Math.round(s.player.notoriety || 0), rows,
-        { width: 760, text: '회계 ' + AC.lv() + ' — 셈이 밝은 손님에게만 문을 여는 가게. 물건은 ' + (k.bmPeriod || 30) + '일마다 바뀐다. 거래할 때마다 소문이 나 악명이 ' + (k.bmNoto || 1) + ' 오른다.' });
+        { width: 760, text: '회계 ' + AC.lv() + ' — 셈이 밝은 손님에게만 문을 여는 가게. 물건은 ' + (k.bmPeriod || 30) + '일마다 바뀐다. 거래할 때마다 소문이 나 악명이 ' + (k.bmNoto || 1) + ' 오른다.' + (function () { var rm = BM.rumor(c); return rm ? '<br>거간꾼의 귀띔: ' + rm.text : ''; })() });
       if (!v) return;
       if (v.slice(0, 2) === 'i:') {
         var id = v.slice(2), it = st.items.filter(function (z) { return z.id === id; })[0];
@@ -94,6 +113,9 @@
         s.player.notoriety = (s.player.notoriety || 0) + (k.bmNoto || 1);
         G.State.log(c.name + '의 뒷골목 암시장에서 ' + it.name + U.jx(it.name, '을/를') + ' 샀다.');
         await C.say(who, U.pick(['좋은 거래였소. 어디서 났는지는 묻지 마시오.', '이 물건 이야기는 우리 둘만 아는 거요.']));
+        // 칼이면 지금 찬 것보다 나을 때 바로 찰지 묻는다
+        var wd = G.ITEM[id], eq = s.player.equip || (s.player.equip = {}), cur = eq.weapon && G.ITEM[eq.weapon];
+        if (wd.kind === 'weapon' && (!cur || (cur.atk || 0) < wd.atk) && await UI.confirm(wd.name + U.jx(wd.name, '을/를') + ' 바로 차겠습니까? (공격 ' + (cur ? cur.atk : 0) + ' → ' + wd.atk + ')', '찬다', '나중에')) { eq.weapon = id; UI.toast(wd.name + U.jx(wd.name, '을/를') + ' 허리에 찼다.', 'sword'); }
       } else {
         var gid = v.slice(2), g = st.goods.filter(function (z) { return z.id === gid; })[0], f = s.fleet;
         if (!f.cargo[gid] && Object.keys(f.cargo).length >= R.maxKinds()) { await C.mate('배에 더 이상 다른 종류의 짐을 실을 곳이 없습니다. (품목 ' + R.maxKinds() + '종까지)'); continue; }
