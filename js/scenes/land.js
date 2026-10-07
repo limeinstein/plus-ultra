@@ -494,7 +494,8 @@
     terr = terr || G.Geo.terrain(l.lon, l.lat); if (terr === 'sea') terr = 'grass';
     var T = TERR[terr] || TERR.grass;
     var mk = (M.use(mt, terr, l.party, 'food') + M.use(mt, terr, l.party, 'water')) / 2;   // 먹이·물을 덜 쓰는 짐승이면 그만큼 싸다
-    return Math.max(1, Math.round((K.base + K.perMan * (l.party || 0)) * mk * (1 + (K.thirsty || 0) * ((T.thirst || 1) - 1))));
+    var cw = G.Castaway ? G.Castaway.costMult() : 1;   // 표류기: 그 땅에서 살아남는 법을 알아 덜 든다
+    return Math.max(1, Math.round((K.base + K.perMan * (l.party || 0)) * mk * cw * (1 + (K.thirsty || 0) * ((T.thirst || 1) - 1))));
   }
   L.dailyCost = function () { return dailyCost(); };
   /** 하루 경비를 낸다. 모자라면 가진 만큼 내고, 대원들이 지치고 몇은 떠난다 */
@@ -526,8 +527,13 @@
       var terr = G.Geo.terrain(l.lon, l.lat);
       // 사냥·물 긷기는 배의 식량·물 보급 — 배(출발한 항구)가 보이는 곳에서만 (G.BALANCE.landPack.near)
       var far = G.Cargo ? !G.Cargo.nearShip() : false, farTag = far ? ' — 배가 보이는 곳에서만' : '';
-      var v = await UI.ask('야영지를 차렸다. 무엇을 할까?', [
+      // 배 고치기: 배가 보이는 곳에서, 상한 배가 있고 자재가 있을 때 (G.BALANCE.landRepair)
+      var LR = landRepairCfg(), hurt = f.ships.filter(function (sh) { return sh.hp < sh.maxHp - 0.5; });
+      var repTag = far ? ' — 배가 보이는 곳에서만' : !hurt.length ? ' — 상한 배가 없다' : (f.mat || 0) < 1 ? ' — 자재가 없다' : ' · 자재 ' + Math.floor(f.mat) + '통';
+      var cwNote = G.Castaway ? G.Castaway.note() : '';
+      var v = await UI.ask('야영지를 차렸다. 무엇을 할까?' + (cwNote ? '\n(' + cwNote + ')' : ''), [
         { label: '쉰다 (3일)', value: 'rest' },
+        { label: '배를 고친다 (' + LR.days + '일)' + repTag, value: 'repair', dis: far || !hurt.length || (f.mat || 0) < 1 },
         { label: '사냥한다 (1일)' + farTag, value: 'hunt', dis: far },
         { label: '물을 긷는다 (1일)' + farTag, value: 'water', dis: far },
         { label: '정찰한다 (2일)', value: 'scout' },
@@ -535,14 +541,17 @@
         { label: '그만둔다', value: null }], G.Scenes.mateSpeaker('first'));
       if ((v === 'hunt' || v === 'water') && far) { UI.toast('배가 보이지 않는 곳이라 식량·물을 배로 나를 수 없다. 배 가까이(' + (((G.BALANCE || {}).landPack || {}).near || 1.2) + '° 안)로 가자.', 'anchor', 4600); v = null; }
       if (v === 'rest') {
-        spendDays(3); f.fatigue = Math.max(0, f.fatigue - 25 - R.skill('ops') * 5 - (R.skillRead('cook') + R.skillRead('music')) * ((((G.BALANCE || {}).crewCare || {}).restBonus) || 3));
-        UI.toast('푹 쉬었다. 피로가 풀렸다.', 'tent');
+        var wb = G.Castaway ? G.Castaway.restBonus() : 0;   // 윌슨과 함께 쉬면 더 풀린다
+        spendDays(3); f.fatigue = Math.max(0, f.fatigue - 25 - wb - R.skill('ops') * 5 - (R.skillRead('cook') + R.skillRead('music')) * ((((G.BALANCE || {}).crewCare || {}).restBonus) || 3));
+        UI.toast(wb ? '푹 쉬었다. 대원들이 윌슨을 둘러싸고 수다를 떨며 피로를 풀었다.' : '푹 쉬었다. 피로가 풀렸다.', 'tent');
+      } else if (v === 'repair') {
+        await repairAtCamp(LR);
       } else if (v === 'water') {
         spendDays(1);
         // 땅의 물 많음: 숲·밀림·눈 녹은 물은 넉넉하고, 사막은 거의 없다
         var wet = { grass: 1.0, steppe: 0.6, forest: 1.2, jungle: 1.4, desert: 0.15, mountain: 1.0, snow: 0.9, tundra: 0.9, ice: 0.5 }[terr] || 0.8;
         var K = LC(), wr = K.water || [4, 8];
-        var want = R.dailyUse() * U.rf(wr[0], wr[1]) * wet * Math.min(2, 0.5 + l.party / 20) * (1 + R.skill('survey') * 0.15);
+        var want = R.dailyUse() * U.rf(wr[0], wr[1]) * wet * Math.min(2, 0.5 + l.party / 20) * (1 + R.skill('survey') * 0.15) * (G.Castaway ? G.Castaway.findMult() : 1);
         if (want < R.dailyUse() * 0.5) UI.toast('땅이 말라 물길을 찾지 못했다.', 'drop');
         else if (R.free() < 1) UI.toast('물을 길었지만 배의 짐칸이 가득해 더 실을 곳이 없다.', 'drop', 4200);
         else { var gotW = stow('water', want); UI.toast('냇물과 샘에서 물 ' + gotW + '통을 길어 배로 날랐다. (배의 식수 약 ' + Math.round(gotW / R.dailyUse()) + '일분)', 'drop', 4200); }
@@ -552,7 +561,7 @@
         var rich = { grass: 1.3, steppe: 1.2, forest: 1.2, jungle: 1.0, desert: 0.35, mountain: 0.6, snow: 0.4, tundra: 0.7, ice: 0.2 }[terr] || 0.8;
         var sk = 1 + R.skill('shoot') * 0.3 + R.skill('sword') * 0.1;
         if (U.chance(0.12)) { await UI.say('사냥감을 쫓다가 도리어 사나운 짐승 떼와 마주쳤다!', {}); await landBattle('들짐승', foeSize(0.12, 0.3, 4, 30), true); }
-        var got = Math.round(R.dailyUse() * U.rf(2, 6) * rich * sk);
+        var got = Math.round(R.dailyUse() * U.rf(2, 6) * rich * sk * (G.Castaway ? G.Castaway.findMult() : 1));
         if (got > 0) { got = stow('food', got); UI.toast(got > 0 ? '사냥에 성공했다! 식량 ' + got + '통을 배로 날랐다. (배의 식량 약 ' + Math.round(got / R.dailyUse()) + '일분)' : '사냥은 했지만 배의 짐칸이 가득해 실을 곳이 없다.', 'bread', 4200); }
         var ck = R.skillRead ? R.skillRead('cook') : R.skill('cook');
         if (got > 0 && ck) {          // 요리: 잡아 온 고기로 저녁을 차려 피로를 덜어 준다
@@ -580,9 +589,35 @@
         else UI.toast('약초를 알아볼 사람이 없어 헛걸음했다.', 'drop');
       }
       refreshHud();
+      // 같은 곳을 맴돌며 야영하면 윌슨·표류기 (js/systems/castaway.js)
+      if (v && G.Castaway && G.Game.scene === L && S().loc.mode === 'land') { await G.Castaway.afterCamp(); refreshHud(); }
     } catch (e) { console.error(e); }
     st.camping = false;
     st.busy--;
+  }
+  function landRepairCfg() { var k = (G.BALANCE && G.BALANCE.landRepair) || {}; return { days: k.days || 2, perDay: k.perDay == null ? 0.07 : k.perDay, perSkill: k.perSkill == null ? 0.04 : k.perSkill, crewFloor: k.crewFloor == null ? 0.3 : k.crewFloor, fatigue: k.fatigue == null ? 3 : k.fatigue }; }
+  /** 야영지에서 배를 고친다: 배가 보이는 물가에 대원들이 내려가 자재로 판자를 갈고 틈을 메운다.
+      날마다 배마다 최대 내구 × (perDay + perSkill × 조선 특기) × 일손(대원 ÷ 최저 승원 수, crewFloor~1). 자재는 내구 1마다 matPerHp통 */
+  async function repairAtCamp(LR) {
+    var s = S(), l = s.loc, f = s.fleet, B = G.BALANCE || {}, mph = B.matPerHp != null ? B.matPerHp : 0.4;
+    var sk = R.skill('ship'), hands = U.clamp((l.party || 0) / Math.max(1, R.crewMin()), LR.crewFloor, 1);
+    var hp0 = f.ships.map(function (sh) { return sh.hp; }), mat0 = f.mat || 0, dayN = 0;
+    for (var d = 0; d < LR.days; d++) {
+      if ((f.mat || 0) < 0.05 || !f.ships.some(function (sh) { return sh.hp < sh.maxHp - 0.5; })) break;
+      spendDays(1); dayN++;
+      f.ships.forEach(function (sh) {
+        if (sh.hp >= sh.maxHp) return;
+        var fix = Math.min(sh.maxHp * (LR.perDay + LR.perSkill * sk) * hands, sh.maxHp - sh.hp, (f.mat || 0) / mph);
+        if (fix <= 0) return;
+        sh.hp += fix; f.mat = Math.max(0, (f.mat || 0) - fix * mph);
+      });
+      f.fatigue = Math.min(100, f.fatigue + LR.fatigue);
+    }
+    var lines = f.ships.map(function (sh, i) { return sh.hp - hp0[i] >= 0.5 ? sh.name + '호 ' + Math.round(hp0[i]) + '→' + Math.round(sh.hp) : null; }).filter(Boolean);
+    var used = Math.round((mat0 - (f.mat || 0)) * 10) / 10;
+    if (!lines.length) { UI.toast('배를 손보려 했지만 고칠 자재가 모자랐다.', 'sack', 4000); return; }
+    var who = sk ? ((R.skillBest && R.skillBest('ship').who) || '제독') : null;
+    UI.toast((who ? who + U.jx(who, '이/가') + ' 앞장서 ' : '대원들이 ') + dayN + '일 동안 물가에서 배를 손봤다 — ' + lines.join(', ') + ' (자재 ' + used + '통)' + ((f.mat || 0) < 1 ? ' · 자재가 다 떨어졌다' : ''), 'hammer', 5200);
   }
 
   /** 원주민과 물건을 바꾼다: 금화·장신구를 주고 식량과 그 고장 특산품을 받는다 */

@@ -1,4 +1,4 @@
-/* 항구: 출항, 보급, 함대편성, 선원편성, 마을정보, 발표 */
+/* 항구: 출항, 보급, 함대편성, 마을정보, 발표 (선원 모집·내림은 술집 — H.crew를 술집이 부른다) */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R, C = G.Scenes.city;
@@ -25,7 +25,6 @@
       (G.Monsoon && G.Monsoon.rim(c)) ? { label: '계절풍 형편', icon: 'wind', sub: G.Monsoon.NAME[G.Monsoon.portNote(c).phase], onClick: function () { return H.monsoon(c); } } : null,
       { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : R.daysOfFood() + '·' + R.daysOfWater() + '일 · 자재 ' + Math.floor(S().fleet.mat || 0), onClick: function () { return H.supply(c); } },
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
-      { label: '선원 수 조정', icon: 'people', sub: s.fleet.crew + '명 / ' + R.crewMin() + '~' + R.crewMax(), onClick: function () { return H.crew(c); } },
       { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } },
       { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } }
     ];
@@ -373,16 +372,22 @@
   H.pickShip = pickShip;
 
   // ---------------------------------------------------------------- crew
-  /** 선원 수 조정: 목표 인원을 정하면 모자란 만큼 고용하고 남는 만큼 내린다 (한 번에) */
+  /** 선원 수 조정: 목표 인원을 정하면 모자란 만큼 고용하고 남는 만큼 내린다 (한 번에).
+      술집의 「선원을 모은다」에서 부른다 (항구 메뉴에서는 빠졌다 — 자동 플레이는 이 함수를 바로 부른다).
+      탐험대가 뭍길로 들어온 도시(s.loc.via === 'land')에서는 모은 선원이 탐험대에 합류하고, 내린 선원은 탐험대에서 빠진다.
+      배에 다시 태울 수 있어야 하므로 최대는 언제나 함대의 최대 승원 수다 */
   H.crew = async function (c) {
     var s = S(), f = s.fleet, cost = R.hireCost(c), cmin = R.crewMin(), cmax = R.crewMax();
+    var lr = s.loc && s.loc.via === 'land' ? s.landReturn : null;   // 성문 밖에서 기다리는 탐험대
     var BAL = G.BALANCE || {}, spare = Math.min(cmax, Math.ceil(cmin * (BAL.spareWatch || 1.3)));
     var byGold = f.crew + Math.floor(s.player.gold / cost), hi = Math.min(cmax, Math.max(f.crew, byGold));
+    var lo = lr ? Math.max(1, f.crew - Math.max(0, (lr.party || 0) - 1)) : 0;   // 탐험대에는 적어도 한 사람이 남는다
     var n = await UI.number({
-      title: '선원 수 조정 — 지금 ' + f.crew + '명',
-      text: '함대 전체 선원을 몇 명으로 할까요? 모자라면 모집하고(한 사람 금화 ' + cost + '닢), 남으면 이 항구에서 내립니다.<br>' +
+      title: (lr ? '선원을 모은다 — 탐험대 ' + (lr.party || 0) + '명 · 선원 ' : '선원을 모은다 — 지금 ') + f.crew + '명',
+      text: (lr ? '배는 바닷가에 두고 왔지만, 이 술집에서 모은 선원은 바로 탐험대에 합류합니다. 함대 전체 선원을 몇 명으로 할까요? 모자라면 모집하고(한 사람 금화 ' + cost + '닢), 남으면 탐험대에서 내보냅니다.<br>'
+        : '함대 전체 선원을 몇 명으로 할까요? 모자라면 모집하고(한 사람 금화 ' + cost + '닢), 남으면 이 도시에서 내립니다.<br>') +
         '<span class="muted">최저 ' + cmin + '명(모자라면 느리고 쉽게 지침) · 교대가 넉넉한 ' + spare + '명(피로가 덜 쌓임) · 최대 ' + cmax + '명(백병전·일손). 사람이 많을수록 식량·물이 빨리 줄어듭니다.</span>',
-      min: 0, max: hi, value: f.crew, unit: '명',
+      min: lo, max: hi, value: f.crew, unit: '명',
       quick: [{ label: '최저 ' + cmin, value: Math.min(hi, cmin) }, { label: '교대 넉넉 ' + spare, value: Math.min(hi, spare) }, { label: '최대', value: hi }, { label: '그대로', value: f.crew }],
       info: function (x) {
         var d = x - f.crew, use = R.dailyUse(x);
@@ -396,10 +401,13 @@
       var add = n - f.crew;
       if (add * cost > s.player.gold) { await C.mate('그렇게 고용할 수 있을 정도로 돈이 없습니다.'); return; }
       s.player.gold -= add * cost; f.crew = n; f.discipline = Math.max(30, f.discipline - add * 0.2);
-      UI.toast('선원 ' + add + '명을 모집했다. (금화 ' + U.num(add * cost) + '닢)', 'people');
+      if (lr) lr.party = (lr.party || 0) + add;
+      UI.toast('선원 ' + add + '명을 모집했다. (금화 ' + U.num(add * cost) + '닢)' + (lr ? ' 탐험대가 ' + lr.party + '명이 되었다.' : ''), 'people');
     } else {
       if (n < cmin && !(await UI.confirm('선원 수가 최저 승원 수(' + cmin + '명)를 밑돌게 됩니다. 배가 느려지고 쉽게 지칩니다. 괜찮습니까?'))) return;
-      UI.toast('선원 ' + (f.crew - n) + '명을 내렸다.', 'people');
+      var off = f.crew - n;
+      if (lr) lr.party = Math.max(1, (lr.party || 0) - off);
+      UI.toast('선원 ' + off + '명을 ' + (lr ? '탐험대에서 내보냈다.' : '내렸다.'), 'people');
       f.crew = n;
     }
     G.Game.refreshHud();

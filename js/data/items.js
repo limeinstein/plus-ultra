@@ -55,6 +55,9 @@
     { id: 'shells', name: '작렬탄', kind: 'special', price: 5200, reg: [1], from: 1510, consumable: 3, desc: '해전에서 포격 위력이 크게 오른다. (3회)' },
     { id: 'divebomb', name: '잠수 폭탄', kind: 'special', price: 0, reg: [], rare: true, desc: '적의 배 밑에서 터지는 신기한 무기.' },
     { id: 'dango', name: '수수 경단', kind: 'special', price: 60, reg: [9], consumable: 1, desc: '먹으면 기분이 좋아져 피로가 풀린다.' },
+    // 야영지에서 얻는 것 (js/systems/castaway.js)
+    { id: 'wilson', name: '윌슨', kind: 'tool', price: 30, reg: [], rare: true, desc: '같은 야영지를 맴돌던 대원이 낡은 가죽 공에 숯으로 얼굴을 그려 넣은 말 없는 친구. 함께 있으면 야영에서 쉴 때 피로가 더 풀린다.' },
+    { id: 'castawaylog', name: '표류기', kind: 'tool', price: 1600, reg: [], rare: true, desc: '한 야영지에서 석 달을 버티며 적은 나날의 기록. 물이 나는 곳·사냥감 다니는 길·날씨를 읽는 법이 담겨 육상 탐험 경비가 줄고 사냥·물 긷기가 넉넉해진다.' },
     { id: 'mingrobe', name: '명나라 옷', kind: 'tool', price: 700, reg: [6, 8], desc: '명나라 상인의 단령(團領)과 망건. 쇄국한 중국 도시에 잠입할 때 크게 도움이 된다.' }
   ];
   G.ITEM = {}; G.ITEMS.forEach(function (it) { G.ITEM[it.id] = it; });

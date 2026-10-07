@@ -80,6 +80,7 @@
       (function () { var k = S().contract; return { label: '정보를 듣는다', icon: 'scroll', sub: k ? '계약: ' + G.Errand.name(k) : '계약한 일이 없다', dim: !k, onClick: function () { return T.info(c); } }; })(),
       (function () { var tg = T.targets(c); return tg.length ? { label: '목표를 수소문한다', icon: 'map', sub: tg.length + '곳', onClick: function () { return T.askTarget(c); } } : null; })(),
       { label: '손님을 둘러본다', icon: 'eye', dim: cur && cur.looked, onClick: function () { return T.look(c); } },
+      { label: '선원을 모은다', icon: 'people', sub: T.crewSub(), onClick: function () { return T.crew(c); } },
       { label: '항해사를 찾는다', icon: 'people', sub: cand.length ? cand.length + '명' : '없다', dim: !cand.length, onClick: function () { return T.hire(c); } },
       m ? { label: '여급과 이야기', icon: 'heart', sub: m.name, onClick: function () { return T.maid(c, m); } }
         : (G.Img && G.Img.pick(G.Img.chain.maidCity(c)) ? { label: '여급과 이야기', icon: 'heart', onClick: function () { return T.servant(c); } } : null),
@@ -87,6 +88,20 @@
       { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return T.organize(); } },
       G.MateTalk ? G.MateTalk.menuItem(c) : null
     ];
+  };
+
+  // ---------------------------------------------------------------- 선원 모집 (예전 항구의 「선원 수 조정」)
+  /* 뱃사람은 술집에 모인다. 탐험대로 뭍길을 걸어 들어온 내륙 도시에서도 선원을 모아 탐험대를 채울 수 있다 (js/city/harbor.js H.crew) */
+  T.crewSub = function () {
+    var s = S(), lr = s.loc && s.loc.via === 'land' ? s.landReturn : null;
+    return (lr ? '탐험대 ' + (lr.party || 0) + '명 · ' : '') + s.fleet.crew + '명 / ' + R.crewMin() + '~' + R.crewMax();
+  };
+  T.crew = async function (c) {
+    var s = S(), lr = s.loc && s.loc.via === 'land' ? s.landReturn : null;
+    if (C.langLv(c) === 0 && !lr) await C.say(master(), '말은 잘 안 통해도 일자리 찾는 뱃사람은 어디에나 있지. 손짓으로 불러 보게.');
+    else await C.say(master(), lr ? U.pick(['내륙까지 걸어 들어온 탐험대라고? 길 떠날 사람이라면 이 술집에 몇 있지. 짐꾼 노릇도 마다하지 않을 걸세.', '뭍길을 따라 갈 사람을 찾나? 일거리 없는 떠돌이들이 저쪽 구석에 모여 있네.'])
+      : U.pick(['배를 탈 사람을 찾나? 일거리를 기다리는 뱃사람들이 늘 여기 모여 있지.', '선원이라면 저기 모여 있는 친구들한테 말해 보게. 한 잔씩 사면 금방 모일 걸세.']));
+    await C.B.harbor.crew(c);
   };
 
   // ---------------------------------------------------------------- drink / treat

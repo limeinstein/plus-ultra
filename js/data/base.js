@@ -270,6 +270,14 @@
     // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
     // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
     landPack: { near: 1.2 },
+    // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.
+    //   days일 동안 날마다 배마다 최대 내구 × (perDay + perSkill × 조선 특기). 인원이 최저 승원 수보다 적으면 그 비율만큼 덜 고친다(crewFloor 아래로는 안 줄임).
+    //   자재는 바다 위 수리와 같이 내구 1마다 matPerHp통. 하루마다 피로 +fatigue
+    landRepair: { days: 2, perDay: 0.07, perSkill: 0.04, crewFloor: 0.3, fatigue: 3 },
+    // 같은 곳 맴돌며 야영하기 (js/systems/castaway.js): radius도 안을 한 야영지로 친다. 야영 사이가 gapDays일보다 벌어지면 처음부터.
+    //   wilsonDays일 안에 wilsonCamps번 야영하면 「윌슨」 사건(한 번), 한 야영지에서 journalDays일 넘게 journalCamps번 넘게 야영하면 「표류기」(한 번).
+    //   윌슨을 데리고 있으면 야영의 쉬기에서 피로가 wilsonRest 더 풀린다. 표류기를 지니면 야영 경비가 journalCost만큼 줄고 사냥·물 긷기가 journalFind배
+    castaway: { radius: 0.6, gapDays: 30, wilsonDays: 30, wilsonCamps: 10, journalDays: 90, journalCamps: 15, wilsonRest: 8, journalCost: 0.15, journalFind: 1.25 },
     // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)
     //   − 악명 × noto(최대 notoMax) − 얼마 전(alertDays일 안) 들킨 일(alert). min~max로 자른다.
     //   터번: 이슬람 도시 turban(성지 turbanHoly) · 중국 항구 turbanChinaPort · 중국 내륙 turbanChina. 명나라 옷: mingrobe
