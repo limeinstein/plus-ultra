@@ -254,7 +254,7 @@
         all.map(function (d) {
           var st = s.disc[d.id] || {};
           var nmTag = d.aka ? '<div class="muted" style="font-size:13px">' + U.esc(d.aka) + (S().nameBy && S().nameBy[d.id] === 'me' ? ' — 제독이 이름을 붙임' : '') + '</div>' : '';
-          if (st.me) return '<div class="card" data-d="' + d.id + '"><b>' + U.esc(d.name) + '</b>' + nmTag + '<div class="muted" style="font-size:14px">' + (st.reported ? '보고 완료' : st.announced ? '발표 완료' : '미보고') + (G.RELICS && G.RELICS[d.id] ? ' · 유물 ' + G.RELICS[d.id].length : '') + (st.left && st.left.length ? ' · 두고 온 것 있음' : '') + '</div></div>';
+          if (st.me) return '<div class="card" data-d="' + d.id + '"><b>' + U.esc(d.name) + '</b>' + nmTag + '<div class="muted" style="font-size:14px">' + (st.reported ? '보고 완료' : st.announced ? '발표 완료' : '미보고') + (G.RELICS && G.RELICS[d.id] ? ' · 유물 ' + G.RELICS[d.id].length : '') + (st.left && st.left.length ? ' · 두고 온 것 있음' : '') + treatyTag(d, st) + '</div></div>';
           if (st.rival) return '<div class="card off" title="' + U.esc(st.rival) + ' 발견"><b>' + U.esc(d.name) + '</b>' + nmTag + '<div class="muted" style="font-size:14px">' + U.esc(st.rival) + ' 발견</div></div>';
           return '<div class="card off"><b>？？？</b></div>';
         }).join('') + '</div>';
@@ -353,6 +353,12 @@
     el.innerHTML = html;
   };
 
+  /** 발견물 카드: 토르데시야스 조약으로 정해진 땅의 몫 (js/systems/treaty.js) — 보고한 몫, 아니면 자리로 본 몫 */
+  function treatyTag(d, st) {
+    if (!G.Treaty) return '';
+    var cl = (st && st.claim) || G.Treaty.claimOf(d); if (!cl) return '';
+    return ' · <span class="tr-claim ' + (cl === 'ES' ? 'es' : 'pt') + '" title="토르데시야스' + (G.Treaty.zaragoza() ? '·사라고사' : '') + ' 조약으로 정해진 이 땅의 몫">' + G.Treaty.crownName(cl) + '의 땅' + (st && st.claim ? '' : ' (조약)') + '</span>';
+  }
   /** 수첩 교역: 유럽 시장의 시대 수요 (js/systems/era.js) — 많이 찾는 것·덜 찾는 것·곧 오를 것 */
   function eraBox() {
     if (!G.Era) return '';

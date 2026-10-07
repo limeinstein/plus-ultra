@@ -270,6 +270,9 @@
     //   받아 줄 양을 넘겨(포화 1 넘게) 팔면 값이 e^(−crash × (포화 − 1))만큼 더 떨어진다(폭락).
     //   한 번에 많이 팔면 같은 지역 spillDist도 안의 다른 항구에도 포화가 spill × (1 − 거리/spillDist)만큼 번진다(상인들이 남는 물건을 실어 돌린다)
     market: { stock: [80, 140], dep: [120, 160], depPrice: 0.45, sat: [160, 140], satPrice: 0.45, crash: 0.8, prodCap: 0.4, relayCap: 0.7, spill: 0.2, spillDist: 7 },
+    // 토르데시야스·사라고사 조약 (js/systems/treaty.js, 자료 js/data/treaty.js): 새로 찾은 땅을 보고할 때 후원자 왕실의 몫이면 사례금 ×ownK,
+    //   상대 왕실의 몫이면 ×otherK. 상대 왕실 반구의 상대 왕실 항구는 들어갈 수 없다 — 교섭 뇌물 bribe[0] + 크기 × bribe[1]
+    treaty: { ownK: 1.15, otherK: 0.7, bribe: [1500, 600] },
     // 세상의 시장 사건 (js/systems/economy.js, 사건 표 js/data/econ.js): 하루 perDay 확률로 새 사건(동시에 max개까지), 처음에 seed개.
     //   전쟁(G.ECON_WARS)이 벌어지는 해에는 하루 warPerDay 확률로 그 나라 도시에 「전쟁」 사건. 사건 세기는 strength[0]~[1]배로 흔들린다.
     //   모자람 사건: 사는 값은 오른 몫의 buyShare만, 재고는 1 / (1 + 오른 몫 × stockK). 넘침: 재고 × (1 + 내린 몫 × glutStock).

@@ -66,7 +66,7 @@
     var here = s.loc.mode === 'city' && s.loc.city === c.id;
     var visited = here || !!(s.visited && s.visited[c.id]), last = here ? s.day : s.lastVisit && s.lastVisit[c.id];
     var fresh = last != null && s.day - last <= CI.FRESH;
-    var speak = R.lang(c.lang) >= 1 || c.lang == null;
+    var speak = (c.lang != null && R.cityLang(c).lv >= 1) || c.lang == null;   // 포르투갈어가 통하는 항구 (js/systems/treaty.js)
     var own = R.isHomeNation(c), owner = R.cityOwner(c);
     var acct = R.skill('acct'), ship = R.skill('ship'), hist = R.skill('hist'), speech = R.skill('speech');
     function row(k, v, src, hint) { rows.push({ k: k, v: v, src: src || '', hint: hint || '' }); }

@@ -38,7 +38,7 @@
     var o = playerFace(); o.layout = 'duo'; o.side = 'left'; o.partner = SP.face(sp); o.emotion = 'neutral'; o.choiceSide = 'left';
     return o;
   };
-  SP.langLv = function (sp) { return Math.max(R.lang(sp.lang), R.lang(G.CITY_DATA[sp.city].lang)); };
+  SP.langLv = function (sp) { return Math.max(R.lang(sp.lang), R.cityLang(G.CITY_DATA[sp.city]).lv); };
   /** 후원자와 나누는 말: 후원자의 말과 그 도시의 말 가운데 일행이 더 잘하는 쪽 */
   SP.langLi = function (sp) { var a = sp.lang, b = G.CITY_DATA[sp.city].lang; return a == null ? b : b == null ? a : (R.lang(b) > R.lang(a) ? b : a); };
   SP.butler = function (sp) { var c = G.CITY_DATA[sp.city]; return { name: '집사', portrait: A.withImg(A.npcSpec('butler_' + sp.id, 'keeper', G.Img.folkStyle(c)), G.Img.chain.npc('butler', c)), lang: SP.langLv(sp), li: SP.langLi(sp) }; };
@@ -431,17 +431,20 @@
       reward = Math.round(reward * ((G.BALANCE.fakes && G.BALANCE.fakes.bothK) || 1.3) / 100) * 100; trustUp += (G.BALANCE.fakes && G.BALANCE.fakes.bothTrust) || 10;
       bothTxt = '\n게다가 진짜와 꼭 닮은 모조품까지 함께 바치다니! 하나는 보물고에, 하나는 사람들 앞에 둘 수 있겠군. 이렇게 정성스러운 보고는 처음일세. 사례를 더 얹어 주지.';
     }
+    // 토르데시야스 조약: 새로 찾은 땅이 후원자 왕실의 몫이면 사례금이 오르고, 상대 왕실의 몫이면 줄어든다 (js/systems/treaty.js)
+    var trm = !k.circ && found && ev !== 'fake' && G.Treaty ? G.Treaty.reportMod(sp, d) : null, trTxt = '';
+    if (trm) { reward = Math.round(reward * trm.k / 100) * 100; trTxt = '\n' + trm.line; }
     // 빌린 배 반환 (잃었으면 배값을 사례금에서 뗀다)
     var ret = SP.returnLoan(k), lostTxt = '';
     if (ret.lost) { var cut = Math.min(reward, ret.cost); reward -= cut; lostTxt = '\n다만 빌려 간 배를 잃었으니 배값 금화 ' + U.num(cut) + '닢은 빼겠네.'; }
     await UI.say('오오, 해냈는가! ' + (k.circ ? '지구를 한 바퀴 돌아오다니, 참으로 대단한 일일세!' : '「' + d.name + '」이라니, 참으로 대단한 발견일세!') + (late ? '\n약속한 기한은 지났지만, 약속은 약속이지.' : '') +
-      (k.circ || ev === 'fake' || !SP.proofLine(pr, d, false) ? '' : '\n' + SP.proofLine(pr, d, false)) + bothTxt + lostTxt +
+      (k.circ || ev === 'fake' || !SP.proofLine(pr, d, false) ? '' : '\n' + SP.proofLine(pr, d, false)) + bothTxt + trTxt + lostTxt +
       '\f자, 약속한 사례금 금화 ' + U.num(reward) + '닢일세. 자네의 이름은 온 세상에 알려질 걸세.', who);
     if (ret.returned) UI.toast('빌렸던 ' + ret.returned.name + '호를 돌려주었다.', 'ship', 4000);
     SP.proofToast(pr);
     s.player.gold += reward; G.Fame.add('ex', fame);
     if (!k.circ && G.Fakes) G.Fakes.after(sp, d, ev, found);
-    if (found) { st = s.disc[k.disc] || st; st.reported = sp.id; s.disc[k.disc] = st; }
+    if (found) { st = s.disc[k.disc] || st; st.reported = sp.id; if (trm) st.claim = trm.claim; s.disc[k.disc] = st; }
     SP.addTrust(rel, trustUp); rel.done = (rel.done || 0) + 1;
     if (k.circ) { s.flags.circDone = true; }
     G.State.log(SP.holderName(sp) + '에게 「' + (k.circ ? '세계일주' : d.name) + '」' + U.jx(k.circ ? '세계일주' : d.name, '을/를') + ' 보고했다. (사례금 ' + reward + '닢, 명성 +' + fame + ')');

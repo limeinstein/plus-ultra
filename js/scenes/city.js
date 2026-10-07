@@ -54,13 +54,14 @@
   // ---------------------------------------------------------------- speakers
   var RELNAME = { C: '가톨릭', O: '정교회', I: '이슬람교', H: '힌두교', B: '불교', K: '유교', J: '신도·불교', N: '토착 신앙' };
   C.relName = function (c) { return RELNAME[c.rel] || '—'; };
-  C.langLv = function (c) { return R.lang((c || C.city()).lang); };
+  C.langLv = function (c) { return R.cityLang(c || C.city()).lv; };   // 포르투갈어가 통하는 항구면 그쪽도 (R.cityLang)
+  C.langLi = function (c) { return R.cityLang(c || C.city()).li; };
   function playerSpeaker() { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; }
   /** a townsperson speaker for this city */
   C.npc = function (id, title) {
     var c = C.city();
     return { name: title, rigId: 'npc:' + c.id + ':' + id, portrait: A.townSpec(id, c), half: G.Img.chain.npcHalf(id, c),
-      layout: 'duo', side: 'right', partner: playerSpeaker(), emotion: 'neutral', lang: C.langLv(c), li: c.lang };
+      layout: 'duo', side: 'right', partner: playerSpeaker(), emotion: 'neutral', lang: C.langLv(c), li: C.langLi(c) };
   };
   C.say = function (who, text) { return UI.say(text, who); };
   /** 건물에 들어설 때의 인사: 작위가 있으면 유럽·이슬람 도시에서는 공손하게 (G.Court.hail), 아니면 lines에서 하나 */
@@ -454,12 +455,9 @@
     if (zone === 'holy' && (!SN || SN.islamRuled(c, own))) return { reason: 'holy', text: '이교도는 이 성스러운 도시에 들어올 수 없다.' };
     if (zone && zone !== 'holy' && SN.islamRuled(c, own) && !pass) return { reason: 'islam', zone: zone, text: zone === 'med' ? '이교도의 배는 이 항구에 들어올 수 없다. 돌아가라!' : '이교도는 이 성문을 지날 수 없다. 썩 물러가라!', bribe: 1200 + c.size * 600 };
     if (c.flags.indexOf('X') >= 0 && !(s.flags.mingTrade) && !pass) return { reason: 'closed', text: '외국인은 들어올 수 없다.', bribe: 2400 + c.size * 800 };
-    var d = s.date, tord = d.y > 1494 || (d.y === 1494 && d.m >= 6);
-    if (tord && !pass) {
-      var myPT = s.player.nation === 'PT';
-      if (myPT && own === '카스티야' && c.region === 10) return { reason: 'treaty', text: '여기는 카스티야령이다. 토르데시야스 조약에 따라 포르투갈의 함대를 항구에 들여보낼 수 없다!', bribe: 1500 + c.size * 600 };
-      if (!myPT && own === '포르투갈' && (c.region === 3 || c.region === 5 || c.region === 8 || c.region === 10)) return { reason: 'treaty', text: '여기는 포르투갈령이다. 토르데시야스 조약에 따라 에스파냐의 함대를 항구에 들여보낼 수 없다!', bribe: 1500 + c.size * 600 };
-    }
+    // 토르데시야스 조약(1494.6.7~): 상대 왕실 반구의 상대 왕실 항구는 함대를 들이지 않는다 (js/systems/treaty.js — 동북아시아·유럽은 조약 밖)
+    var tb = G.Treaty ? G.Treaty.entryBlock(c, own) : null;
+    if (tb && !pass) return tb;
     return null;
   };
   /** interactive handling; returns true if allowed in */

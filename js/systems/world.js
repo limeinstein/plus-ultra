@@ -11,10 +11,10 @@
     // history
     while (s.history < G.HISTORY.length) {
       var h = G.HISTORY[s.history];
-      if (s.date.y > h.y || (s.date.y === h.y && s.date.m >= h.m)) {
+      if (s.date.y > h.y || (s.date.y === h.y && (s.date.m > h.m || (s.date.m === h.m && s.date.d >= (h.d || 1))))) {   // h.d: 그달 며칠부터 (없으면 1일)
         s.history++;
         if (h.city) s.owners[h.city[0]] = h.city[1];
-        out.push({ icon: 'scroll', text: h.text, history: true });
+        if (!h.quiet) out.push({ icon: 'scroll', text: h.text, history: true });   // quiet: 따로 창을 띄우는 사건(토르데시야스 조약 — js/systems/treaty.js)
         G.State.log(h.text);
       } else break;
     }
@@ -53,7 +53,8 @@
     // 가족: 임신 소식·출산 (family.js — 아이는 자택에 들러야 생긴다)
     if (G.Disaster) out = out.concat(G.Disaster.daily());   // 지진·화산·산사태·쓰나미·홍수 (js/systems/disaster.js)
     if (G.Era) out = out.concat(G.Era.daily());
-    if (G.Econ) out = out.concat(G.Econ.daily());   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
+    if (G.Econ) out = out.concat(G.Econ.daily());
+    if (G.Treaty) out = out.concat(G.Treaty.daily());   // 토르데시야스·사라고사 조약의 날, 바다에서 경계선 넘기 (js/systems/treaty.js)   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
     if (G.Fad) out = out.concat(G.Fad.daily());             // 끝난 유행을 거둔다
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
     if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다

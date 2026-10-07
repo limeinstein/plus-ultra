@@ -88,6 +88,12 @@
     });
     return best;
   };
+  /** 이 도시에서 쓸 말: 그 도시의 말, 또는 포르투갈어가 통하는 항구(js/systems/treaty.js)라면 일행이 더 잘하는 쪽 — {li, lv, alt: 포르투갈어로 바꿨나} */
+  R.cityLang = function (c) {
+    var li = c.lang, lv = R.lang(li);
+    if (G.Treaty && li !== 1 && G.Treaty.ptLang(c)) { var pv = R.lang(1); if (pv > lv) return { li: 1, lv: pv, alt: true }; }
+    return { li: li, lv: lv, alt: false };
+  };
   /** 의술: 배에 탄 사람이면 역할과 상관없이 가장 잘 아는 사람의 것을 쓴다 (괴혈병·열병) */
   R.medSkill = function () {
     var S = R.S(), best = R.skill('med');

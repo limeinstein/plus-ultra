@@ -73,6 +73,7 @@
         ctx.strokeStyle = r.open ? 'rgba(31,122,120,.8)' : 'rgba(90,60,30,.45)'; ctx.lineWidth = r.open ? 2.2 : 1.2; ctx.setLineDash(r.open ? [] : [4, 4]);
         ctx.beginPath(); ctx.moveTo(pa[0], pa[1]); ctx.lineTo(pb[0], pb[1]); ctx.stroke(); ctx.setLineDash([]);
       });
+      if (G.Treaty) G.Treaty.drawChart(ctx, function (lon, lat) { return px(lon, lat, b); }, W, H);   // 토르데시야스·사라고사 선
       var fs = 13, font = getComputedStyle(document.body).fontFamily;
       I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {});
       // 제독이 직접 발견한 도시 밖 유적·자연 경관만 지도에 남긴다.

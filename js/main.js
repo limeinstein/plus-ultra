@@ -141,8 +141,8 @@
   H.fameTip = function () { return G.Fame ? '통합 명성 = ' + G.Fame.text() : ''; };
   H.lang = function (c) {
     if (!c) return '';
-    var lv = R.lang(c.lang) || 0;
-    return G.LANGS[c.lang] + ' <span class="dots">' + '●●●'.slice(0, lv) + '○○○'.slice(0, 3 - lv) + '</span>';
+    var cl = R.cityLang(c), lv = cl.lv || 0;   // 포르투갈어가 통하는 항구면 그 말로 (js/systems/treaty.js)
+    return G.LANGS[cl.li] + ' <span class="dots">' + '●●●'.slice(0, lv) + '○○○'.slice(0, 3 - lv) + '</span>';
   };
   H.gold = function () { return U.num(Game.state.player.gold) + '<small>닢</small>'; };
   H.date = function () { return U.fmtDate(Game.state.date); };
@@ -159,7 +159,7 @@
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
       { k: 'place', icon: 'castle', label: own ? '도시 · ' + own : '도시', text: c ? c.name : '' },
-      { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: c ? '이 도시의 말과 제독 일행이 하는 수준 (동료 통역·부관 포함) — ' + G.LANG_LV[R.lang(c.lang) || 0] : '' },
+      { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: c ? '이 도시의 말과 제독 일행이 하는 수준 (동료 통역·부관 포함) — ' + G.LANG_LV[R.cityLang(c).lv || 0] + (R.cityLang(c).alt ? ' · 이 항구는 ' + G.LANGS[c.lang] + ' 대신 포르투갈어가 통한다 (' + G.Treaty.ptLang(c) + ')' : '') : '' },
       { k: 'lat', icon: 'compass', label: '위도', text: c ? U.fmtLat(c.lat) : H.lat() },
       { k: 'lon', label: '경도', text: c ? U.fmtLon(c.lon) : H.lon() },
       { k: 'food', icon: 'bread', label: '식량', text: food.text },

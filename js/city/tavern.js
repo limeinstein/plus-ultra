@@ -11,7 +11,7 @@
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
   function maidOf(c) { return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }
   T.maidOf = maidOf;
-  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), half: G.Img.chain.maidHalf(m.id, c), lang: R.lang(c.lang), li: c.lang }; };
+  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), half: G.Img.chain.maidHalf(m.id, c), lang: R.cityLang(c).lv, li: R.cityLang(c).li }; };
   T.playerSpeaker = function () { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; };
   /** 마주 보는 대화: 왼쪽 제독 · 오른쪽 상대. 두 사람 다 무릎상(half)이 있으면 서 있는 모습으로 크게 */
   T.duo = function (who, emotion, asking) {
@@ -23,7 +23,7 @@
   };
   /** 이름 있는 여급이 없는 도시의 그 지역 여급 */
   T.servantSpeaker = function (c) {
-    return { name: '여급', lang: R.lang(c.lang), li: c.lang,
+    return { name: '여급', lang: R.cityLang(c).lv, li: R.cityLang(c).li,
       portrait: A.withImg(A.npcSpec('svc' + c.id, 'maid', G.Img.folkStyle(c), 'f'), G.Img.chain.maidCity(c)) };
   };
   T.servant = async function (c) {
