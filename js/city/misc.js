@@ -630,8 +630,10 @@
     var s = S();
     if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
     else await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
+    if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
     if (G.HomeLife) await G.HomeLife.happen();                                    // 가끔 아이와 얽힌 일이 생긴다 (homelife.js)
+    if (s.player.wife && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상 (familyevent.js)
   };
   HM.sub = function () { var s = S(); return s.player.wife ? '가족이 기다리는 집' : '혼자 사는 집'; };
   HM.menu = function (c) {

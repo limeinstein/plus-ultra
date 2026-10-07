@@ -142,6 +142,7 @@
         s.flags['wed_' + d.id] = 1;
         R.tidyCaptains();
         G.State.log(d.name + U.jx(d.name, '과/와') + ' 결혼했다.');
+        if (G.FamEv) { try { await G.FamEv.wedding({ id: d.id }); } catch (e) { console.error(e); } }   // 갑판 위의 혼례 (familyevent.js)
         await UI.alert(d.name + U.jx(d.name, '과/와') + ' 결혼했다! 배에서 내려 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.', '결혼');
         return;
       }

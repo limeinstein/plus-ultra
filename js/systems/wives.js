@@ -72,6 +72,7 @@
     W.list().push({ id: m.id, kind: 'maid', city: m.city, house: true, aboard: false, wed: S().day });
     var st = S().maids[m.id]; if (st) st.aff = 100;
     wedLog(m.name);
+    if (G.FamEv) { try { await G.FamEv.wedding({ id: m.id, second: true, city: c.id }); } catch (e) { console.error(e); } }   // 술집의 혼례 잔치
     await UI.alert(m.name + U.jx(m.name, '과/와') + ' 혼인했다! ' + c.name + '에 「' + m.name + '의 집」이 생겼다. 도시 메뉴에서 찾아갈 수 있다.', '둘째 부인');
     if (G.Game.cityHud) G.Game.cityHud();
     return true;
@@ -88,6 +89,7 @@
     S().flags['gone_' + d.id] = 1;            // 이제 술집에 나타나지 않는다
     S().flags['wed_' + d.id] = 1;
     wedLog(d.name);
+    if (G.FamEv) { try { await G.FamEv.wedding({ id: d.id, second: true }); } catch (e) { console.error(e); } }   // 갑판 위의 혼례
     if (p.wifeAboard) {
       // 본처가 배에 있으니 둘째 부인은 배에 남을 수 없다 — 혼자 고장으로 떠난다
       settle(w, true);
@@ -209,8 +211,9 @@
   W.visit = async function (w, rest) {
     var s = S(), p = s.player, fc = G.BALANCE.family || {}, sp = duo(w);
     var fresh = W.kidsOf(w).filter(function (k) { return k.unnamed && !k.met; });
+    var sawBirth = fresh.some(function (k) { return k.witness; });
     if (fresh.length) {
-      await UI.say(fresh.some(function (k) { return k.witness; }) ? '당신이 곁에 있어 줘서 든든했어요. 우리 아기예요.' : '당신이 없는 동안 이 아이가 태어났어요. 안아 봐요.', sp);
+      await UI.say(sawBirth ? '당신이 곁에 있어 줘서 든든했어요. 우리 아기예요.' : '당신이 없는 동안 이 아이가 태어났어요. 안아 봐요.', sp);
       fresh.forEach(function (k) { k.met = true; });
     }
     var kids = W.kidsOf(w);
@@ -225,9 +228,11 @@
       G.State.log(W.name(w) + '의 ' + (k.sex === 'f' ? '딸' : '아들') + '에게 「' + v + '」' + U.jx(v, '이라는/라는') + ' 이름을 지어 주었다.');
       await UI.say(v + '… 좋은 이름이에요.', sp);
     }
+    if (fresh.length && G.FamEv) { try { await G.FamEv.birth(fresh, sawBirth, w); } catch (e) { console.error(e); } }   // 갓난아기와 맞는 첫 장면 (familyevent.js)
     if (w.preg && !w.preg.told && s.day - w.preg.since >= 40) {
       w.preg.told = true;
-      await UI.say('당신… 우리에게 아기가 생겼어요.', sp);
+      var shown = false; if (G.FamEv) { try { shown = await G.FamEv.pregNews(w); } catch (e) { console.error(e); } }
+      if (!shown) await UI.say('당신… 우리에게 아기가 생겼어요.', sp);
       await UI.alert(W.name(w) + U.jx(W.name(w), '이/가') + ' 아이를 가졌다. ' + Math.max(1, Math.round((w.preg.due - s.day) / 30)) + '달쯤 뒤에 태어난다.', '기쁜 소식');
     }
     var md = G.MATE[w.id], tooOld = md && (md.old || (md.bornY && s.date.y - md.bornY > 45));
@@ -267,7 +272,9 @@
   H2.enter = async function (c, id) {
     var w = W.of(id); if (!w) return false;
     await UI.say(U.pick(['어서 와요, 당신! 오늘은 우리 집에서 쉬어요.', '당신 배가 보였어요. 기다리고 있었어요.', '오셨군요. 따뜻한 수프를 데울게요.']), duo(w, 'happy'));
+    if (G.FamEv) { try { await G.FamEv.homeReturn(w); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     await W.visit(w, false);
+    if (G.FamEv) { try { await G.FamEv.homeDay(w); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상
   };
   H2.menu = function (c, id) {
     var w = W.of(id); if (!w) return [];

@@ -7,6 +7,7 @@
   G.FX = {
     // 자택 장면 그림 (js/art/homeart.js): 그림 크기와 화면 위에서의 자리 (무대 1600×900)
     homeArt: { w: 900, h: 520, top: 78 },
+    famScene: { w: 1008, top: 74 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
     // 자택 화면에 서 있는 가족 (homelife.js familyPanel): 어른 키 h, 설 자리(왼쪽·아래·너비), 옆 사람과 겹치는 비율
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
     // 기함 선실 화면 (js/ui/cabinview.js): 무대(배 그림) 크기, 오른쪽 명단 폭, 선체 속 선실 표·갑판 얼굴표 크기, 배 그림을 자르는 여백, 카드 최대 폭, 명단 높이

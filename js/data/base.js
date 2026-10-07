@@ -302,6 +302,11 @@
     //   무덤지기(guard)에게 이기면 명성 × guardFame. 지거나 물러서면 retryDays일 동안 그 무덤에 다가가지 못한다(피로 +loseFatigue).
     //   도굴꾼(rob)을 이기면 명성 × robFame에 금화(발견 가치 × robLoot) — 지거나 물러서면 도굴꾼이 부장품(유물)을 들고 달아나 명성 × robbedFame.
     //   싸워 이기면 전투 명성 +battleFame. 무사의 능력은 발견의 어려움(pw) 1마다 statPerPw씩 세진다(pw 3 기준).
+    // 가족 사건 (js/systems/familyevent.js · 대사 js/data/familyevents.js): 바다에서 아내와 seaChance(앞 장면에서 seaGap일 넘게),
+    //   여급과의 데이트는 호감 dateAff부터 같은 사람과 dateGap일에 한 번, 고향 부두 마중은 dockDays일 넘게 떠났을 때 dockChance,
+    //   집에 돌아온 장면은 returnDays일 넘게 떠났을 때, 집의 하루는 homeGap일에 한 번까지 homeChance, 해산 cradleDays일 앞이면 요람,
+    //   배에 탄 아이와 항구의 장면은 portGap일에 한 번까지 portChance
+    famEv: { seaChance: 0.06, seaGap: 20, dateAff: 40, dateGap: 7, dockDays: 120, dockChance: 0.7, returnDays: 45, homeChance: 0.5, homeGap: 25, cradleDays: 60, portChance: 0.2, portGap: 30 },
     tombDuel: { guardFame: 1.25, robFame: 1.1, robLoot: 0.08, robbedFame: 0.7, retryDays: 30, loseFatigue: 10, battleFame: 4, statPerPw: 0.04 },
     castaway: { radius: 0.6, gapDays: 30, wilsonDays: 30, wilsonCamps: 10, journalDays: 90, journalCamps: 15, wilsonRest: 8, journalCost: 0.15, journalFind: 1.25 },
     // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)

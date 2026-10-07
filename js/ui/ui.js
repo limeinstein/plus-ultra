@@ -229,6 +229,7 @@
   }
 
   /** 대화 껍데기. duo(두 사람이 마주 봄)와 혼자 말하는 사람. */
+  /* opts.noStand: 대화창 위에 사람을 세우지 않고 대화창 안의 얼굴만 (장면 그림을 가리지 않게 — js/systems/familyevent.js) */
   function dialogShell(back, opts, asking) {
     var duo = opts.layout === 'duo' && opts.partner, partner = opts.partner, side = opts.side, choiceSide = opts.choiceSide;
     var rigs = [], box, F = standFx(), actors = [], layer = null, ro = null, stage;
@@ -238,14 +239,14 @@
     var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
     var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
     // 제독 혼자의 물음·혼잣말: 방금 마주 섰던 사람이 있으면 그 사람과 함께 선다 (제독 = 왼쪽, 고르는 쪽)
-    if (!duo && low && isPlayer(opts) && partnerFor(menuEl)) { duo = true; partner = partnerFor(menuEl); side = 'left'; choiceSide = 'left'; }
+    if (!duo && low && !opts.noStand && isPlayer(opts) && partnerFor(menuEl)) { duo = true; partner = partnerFor(menuEl); side = 'left'; choiceSide = 'left'; }
     // 도시 안에서 혼자 말하던 사람(여급·수위·거간꾼·거리의 마을 사람…)도 동료처럼 제독과 마주 선 무릎상 대화로 (G.FX.stand.npcDuo).
     // 무릎상이 없는 사람만 그 자리에 흉상으로 선다. who.solo = true면 예전처럼 혼자 가운데에
-    if (!duo && low && F.npcDuo && opts.portrait && !opts.solo && !isPlayer(opts) && S && S.loc && S.loc.mode === 'city' && S.player) {
+    if (!duo && low && !opts.noStand && F.npcDuo && opts.portrait && !opts.solo && !isPlayer(opts) && S && S.loc && S.loc.mode === 'city' && S.player) {
       duo = true; side = 'right'; choiceSide = choiceSide || 'left';
       partner = { name: S.player.name, rigId: 'player', portrait: S.player.portrait, half: G.Img && G.Img.chain.heroHalf ? G.Img.chain.heroHalf() : null };
     }
-    var solo = !duo && !!opts.portrait && low && (!F.soloCity || (S && S.loc && S.loc.mode === 'city'));
+    var solo = !duo && !opts.noStand && !!opts.portrait && low && (!F.soloCity || (S && S.loc && S.loc.mode === 'city'));
     var soloHalf = solo ? halfKeyOf(opts) : null;
     if (soloHalf && !soloHalf.key) soloHalf = null;
     if (!duo && !solo) {

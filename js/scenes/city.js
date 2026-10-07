@@ -194,6 +194,8 @@
     if (G.Disaster) { try { await G.Disaster.arrival(c); } catch (e) { console.error(e); } }   // 재해가 덮친 도시의 모습 · 구호금   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
+    // 고향 부두의 마중 · 배에 탄 아이와 항구의 한때 (js/systems/familyevent.js)
+    if (G.FamEv && arg.arrive && s.loc.via !== 'land') { try { await G.FamEv.arrive(c); } catch (e) { console.error(e); } }
     // contract reminder
     if (s.contract) {
       var sp = G.SPONSOR[s.contract.sponsor];

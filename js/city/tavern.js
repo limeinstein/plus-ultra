@@ -88,7 +88,8 @@
         : (G.Img && G.Img.pick(G.Img.chain.maidCity(c)) ? { label: '여급과 이야기', icon: 'heart', onClick: function () { return T.servant(c); } } : null),
       { label: '포카를 권한다', icon: 'dice', onClick: function () { return G.Games.poker(c); } },
       { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return T.organize(); } },
-      G.MateTalk ? G.MateTalk.menuItem(c) : null
+      G.MateTalk ? G.MateTalk.menuItem(c) : null,
+      G.FamEv && G.FamEv.aboardWife() ? { label: '아내와 한잔한다', icon: 'heart', sub: G.FamEv.aboardWife().name, dim: !G.FamEv.canWifeDate(), onClick: function () { if (!G.FamEv.canWifeDate()) { UI.toast('며칠 전에도 함께했다. 조금 뒤에 다시.', 'heart'); return; } return G.FamEv.wifeDate(c); } } : null
     ];
   };
 
@@ -716,8 +717,10 @@
     for (;;) {
       var v = await ask(m.name + ' — 호감 ' + heart(st.aff), [
         { label: '한잔 산다', value: 'drink' }, { label: '이야기한다', value: 'talk' }, { label: '선물한다', value: 'gift' },
-        { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }]);
+        (function () { var cd = G.FamEv ? G.FamEv.canDate(m.id) : null; return cd ? { label: '함께 시간을 보낸다' + (cd.ok ? '' : ' (' + cd.why + ')'), value: 'date', dis: !cd.ok } : null; })(),
+        { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }].filter(Boolean));
       if (!v) return;
+      if (v === 'date') { await G.FamEv.date(c, m); continue; }      // 데이트 — 건배·춤·쪽지·난롯가·저녁 (familyevent.js)
       if (v === 'drink') {
         var pr = 10 + c.size * 5; if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다.', 'coin'); continue; }
         s.player.gold -= pr;
@@ -750,6 +753,7 @@
         await say('...정말요? 저, 저라도 괜찮다면... 네, 기꺼이!', 'shy');
         s.player.wife = m.id; st.aff = 100;
         G.State.log(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다.');
+        if (G.FamEv) { try { await G.FamEv.wedding({ id: m.id, city: c.id }); } catch (e) { console.error(e); } }   // 술집의 혼례 잔치
         await UI.alert(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.', '결혼');
         return;
       }

@@ -1310,6 +1310,8 @@
       await mutiny();
       refreshHud();
     }
+    // 배에 탄 아내와의 한때 (js/systems/familyevent.js)
+    if (G.FamEv) { try { if (await G.FamEv.atSea()) refreshHud(); } catch (e) { console.error(e); } }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
     if (U.chance(0.07)) await G.Explore.seaEvent({ st: st, refresh: refreshHud });
     // death of all crew / ships

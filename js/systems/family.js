@@ -157,8 +157,9 @@
     var w = F.wifeSpeaker();
     // 갓 태어난 아기: 해산 장면(곁에 있었으면) 또는 첫 만남
     var fresh = p.kids.filter(function (k) { return k.unnamed && !k.met && k.house == null; });   // 둘째 부인의 집 아이(k.house)는 그 집에서 (wives.js)
+    var sawBirth = fresh.some(function (k) { return k.witness; });
     if (fresh.length) {
-      if (fresh.some(function (k) { return k.witness; })) await birthScene(fresh); else await firstMeet(fresh);
+      if (sawBirth) await birthScene(fresh); else await firstMeet(fresh);
       fresh.forEach(function (k) { k.met = true; });
     }
     // 집에 들르면 아이들과 가까워진다 (보름에 한 번)
@@ -177,10 +178,13 @@
       G.State.log((k.sex === 'f' ? '딸' : '아들') + '에게 「' + v + '」' + U.jx(v, '이라는/라는') + ' 이름을 지어 주었다.');
       await UI.say(v + '… 좋은 이름이에요. ' + (k.sex === 'f' ? '분명 당신처럼 용감한 아이로 자랄 거예요.' : '언젠가 당신처럼 먼 바다로 나가겠죠.'), w);
     }
+    // 갓난아기와 맞는 첫 장면 (이름을 지은 뒤) — 두 사람의 손에 안긴 아기 · 요람 곁의 첫 밤 (familyevent.js)
+    if (fresh.length && G.FamEv) { try { await G.FamEv.birth(fresh, sawBirth); } catch (e) { console.error(e); } }
     // 아기 소식
     if (p.preg && !p.preg.told && s.day - p.preg.since >= 40) {
       p.preg.told = true;
-      await UI.say('당신… 할 이야기가 있어요. 우리에게 아기가 생겼어요.', w);
+      var shown = false; if (G.FamEv) { try { shown = await G.FamEv.pregNews(); } catch (e) { console.error(e); } }
+      if (!shown) await UI.say('당신… 할 이야기가 있어요. 우리에게 아기가 생겼어요.', w);
       await UI.alert('아내가 아이를 가졌다. ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달쯤 뒤에 태어난다.', '기쁜 소식');
       G.State.log('아내가 아이를 가졌다.');
     }
