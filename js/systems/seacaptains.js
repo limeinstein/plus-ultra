@@ -145,7 +145,7 @@
   }
   function available(d, y) {
     var s = S();
-    if (!d || d.witch || d.id === 'rocco' || LINKED[d.id]) return false;
+    if (!d || d.witch || d.tale || d.id === 'rocco' || LINKED[d.id]) return false;   // tale: 이야기 모드 전용 동료 (js/data/story.js)
     if (s.flags['gone_' + d.id] || hired(d.id)) return false;
     return d.wd ? true : (G.Frontier && G.Frontier.mateReady ? G.Frontier.mateReady(d, y) : (y >= d.y[0] && y <= d.y[1]));
   }

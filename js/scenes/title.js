@@ -26,6 +26,9 @@
     // 처음 하는 사람을 위한 튜토리얼 「첫 항해」 (js/systems/tutorial.js) — 저장이 하나도 없으면 이 단추를 강조한다
     var bTut = G.Tutorial && G.Tutorial.begin ? btn('첫 항해 (튜토리얼)', 'compass', function () { if (!bTut.classList.contains('disabled')) G.Tutorial.begin(); }, bCont ? '' : 'navy') : null;
     if (bTut) { bTut.classList.add('disabled'); if (!bCont) bNew.classList.remove('navy'); }
+    // 이야기 모드 「아버지의 사진」 (js/systems/story.js) — 정해진 제독·동료로 시작하는 이야기
+    var bStory = G.Story && G.Story.begin ? btn('이야기 — 아버지의 사진', 'scroll', function () { if (!bStory.classList.contains('disabled')) G.Story.begin(); }) : null;
+    if (bStory) bStory.classList.add('disabled');
     var bLoad = btn('항해 일지 불러오기', 'book', function () { T.loadMenu(); });
     btn('조작 안내', 'info', function () { T.help(); });
     bLoad.classList.add('disabled');
@@ -36,6 +39,7 @@
       ld.textContent = '';
       if (!bCont && G.State.meta(0)) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); if (bTut) bTut.classList.remove('navy'); }
       if (bTut) bTut.classList.remove('disabled');
+      if (bStory) bStory.classList.remove('disabled');
       bNew.classList.remove('disabled'); if (bCont) bCont.classList.remove('disabled');
       bLoad.classList.remove('disabled');      // 일지가 없어도 「파일에서 불러오기」는 할 수 있다
     });

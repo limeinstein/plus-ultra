@@ -35,7 +35,7 @@
   I.open = function (tab) {
     var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
     var tabs = U.el('div', 'tabs');
-    TABS.forEach(function (t) {
+    TABS.concat(S().story && G.Story ? [['story', '아버지의 사진']] : []).forEach(function (t) {   // 이야기 모드 (js/systems/story.js)
       var b = U.el('div', 'tab' + (t[0] === tab ? ' on' : ''), t[1]);
       b.onclick = function () { U.$$('.tab', tabs).forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); show(t[0]); };
       tabs.appendChild(b);
@@ -46,6 +46,7 @@
     return win.result;
   };
   var PAGES = {};
+  PAGES.story = function (el) { if (G.Story) G.Story.page(el); };
 
   function pips(v, mx) { var h = '<span class="pips">'; for (var i = 1; i <= (mx || 3); i++) h += '<i class="' + (i <= v ? 'on' : '') + '"></i>'; return h + '</span>'; }
   I.pips = pips;
@@ -303,7 +304,7 @@
     if (p[0] === 'chain' && G.DISC[p[1]]) return '「' + G.DISC[p[1]].name + '」에서 이어진 실마리';
     if (p[0] === 'relic' && G.RELIC && G.RELIC[p[1]]) return '「' + G.RELIC[p[1]].name + '」에 적힌 이야기';
     var SRC = { sponsor: '후원자의 이야기', contract: '후원자 계약', rival: '경쟁자에게서', lookout: '망루·정찰대', bottle: '병 속 편지', hail: '지나가던 배',
-      native: '원주민', nomad: '유목민', local: '고장 사람의 이야기', town: '거리의 마을 사람', lead: '큰 항로 이야기', legacy: '선대의 연구 노트', witch: '점쟁이', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
+      native: '원주민', nomad: '유목민', local: '고장 사람의 이야기', town: '거리의 마을 사람', lead: '큰 항로 이야기', story: '아버지의 자취', legacy: '선대의 연구 노트', witch: '점쟁이', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
     return SRC[p[0]] || '';
   }
 

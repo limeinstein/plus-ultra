@@ -133,6 +133,7 @@
     if (G.Audio) G.Audio.music('town');
     try {
       if (arg.prologue) await C.prologue(c);
+      if (arg.story && G.Story) { try { await G.Story.prologue(c); } catch (e) { console.error(e); } }   // 이야기 모드의 프롤로그 (js/systems/story.js)
       if (arg.arrive) await C.arrival(c, arg);
       if (arg.load) { UI.toast(U.fmtDate(s.date) + ' — ' + c.name, 'book'); }
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다

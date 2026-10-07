@@ -177,7 +177,7 @@
       Object.keys(gain).forEach(function (k) {
         var li = +k, cur = get(li); if (cur >= 3) return;
         who.lgd = who.lgd || {};
-        who.lgd[li] = (who.lgd[li] || 0) + gain[k];
+        who.lgd[li] = (who.lgd[li] || 0) + gain[k] * ((who.id && G.MATE[who.id] && G.MATE[who.id].lgk) || 1);   // lgk: 말을 빨리 배우는 사람 (이야기의 자코모 ×2)
         var lv = levelFor(who.lgd[li]);
         if (lv > cur) { set(li, lv); out.push({ icon: 'scroll', text: name + U.j(name, '이/가').slice(name.length) + ' 한배에서 지내며 ' + G.LANGS[li] + '를 익혔다 (' + G.LANG_LV[lv] + ').' }); }
       });
