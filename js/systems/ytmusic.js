@@ -17,6 +17,7 @@
   var SCAN = function (c) { return c.lat > 54.6 && c.lon > 4 && c.lon < 32; };
   var LOW = function (c) { return c.lon > 2.4 && c.lon < 7.2 && c.lat > 50.6 && c.lat < 53.6; };
   /** 도시(또는 그 고장) 곡 */
+  Y.cityTrack = cityTrack;
   function cityTrack(c, land) {
     var st = c.style, rg = c.region;
     if (st === 'kr') return 'joseon';
@@ -57,6 +58,8 @@
   Y.pick = function (name) {
     var s = S(), l = s && s.loc, O = OST();
     if (O.moments[name] && name !== 'battle') return O.moments[name];
+    // 도시 안의 건물(주점·왕궁·저택)에 있으면 그 건물 곡 — 나오면 G.Audio.setPlace(null)로 거리 곡 (js/systems/audio.js)
+    if (name === 'town' && G.Audio && G.Audio.place && O.moments[G.Audio.place]) return O.moments[G.Audio.place];
     try {
       if (name === 'battle') return O.moments.battle;
       if (name === 'town' && l && l.city != null) {
@@ -140,13 +143,15 @@
   Y.setVolume = function () { try { if (player && ready) player.setVolume(vol()); } catch (e) { /* 없음 */ } };
 
   // ------------------------------------------------------------------ 장면 사이의 「잠깐」 곡 (건물·미니 게임·사건)
-  /** 그 순간의 곡으로 바꾼다. 끝나면 Y.resume() — 그동안 G.Audio.music 의 장면 바꿈은 기억만 해 둔다 */
+  /** 그 순간의 곡으로 바꾼다. 끝나면 Y.resume() — 그동안 G.Audio.music 의 장면 바꿈은 기억만 해 둔다.
+     (건물 곡은 여기가 아니라 G.Audio.setPlace — 겹쳐 쌓이지 않고, 건물을 나오면 바로 거리 곡) */
   Y.moment = function (name) {
     if (!Y.on()) return;
     var id = OST().moments[name]; if (!id) return;
     depth++; momentT = name; Y.play(id);
   };
   Y.inMoment = function () { return depth > 0; };
+  Y.depth = function () { return depth; };
   Y.resume = function () {
     if (depth <= 0) return;
     depth--; if (depth > 0) return;

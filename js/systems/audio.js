@@ -62,38 +62,71 @@
   };
 
   // ---------------------------------------------------------------- generative music
+  /* 코드로 만드는 음악. 장면 기본(town·sea·battle·title·land)과 고장 음악(G.MUSIC 표에서 'gen:이름'으로 고른다).
+     root 으뜸음(Hz) · steps 음계(반음) · tempo 한 박(초) · type 가락 소리 · drone 깔리는 으뜸음 · perc 장단 · lead 가락 크기 · chords 화음을 깔지 */
   var SCALES = {
     town: { root: 220, steps: [0, 2, 3, 5, 7, 8, 10], tempo: 0.34, type: 'triangle' },     // aeolian lute
     sea: { root: 196, steps: [0, 2, 4, 7, 9], tempo: 0.62, type: 'sine' },               // pentatonic, calm
     battle: { root: 164.8, steps: [0, 1, 4, 5, 7, 8, 10], tempo: 0.2, type: 'sawtooth' },  // phrygian dominant
     title: { root: 196, steps: [0, 2, 4, 5, 7, 9, 11], tempo: 0.45, type: 'triangle' },
-    land: { root: 174.6, steps: [0, 3, 5, 7, 10], tempo: 0.5, type: 'triangle' }
+    land: { root: 174.6, steps: [0, 3, 5, 7, 10], tempo: 0.5, type: 'triangle' },
+    // 고장 음악 (js/data/music.js 의 gen:이름)
+    tavern: { root: 261.6, steps: [0, 2, 4, 5, 7, 9, 11], tempo: 0.17, type: 'square', perc: 'jig', lead: 0.035, busy: 0.85 },   // 주점: 빠른 지그
+    east: { root: 220, steps: [0, 2, 4, 7, 9], tempo: 0.42, type: 'triangle', perc: 'wood', chords: false, lead: 0.07 },          // 중국: 5음 음계
+    korea: { root: 196, steps: [0, 2, 5, 7, 9], tempo: 0.55, type: 'sine', drone: 0.035, perc: 'janggu', chords: false, lead: 0.07 },   // 조선: 느린 장단
+    japan: { root: 220, steps: [0, 1, 5, 7, 8], tempo: 0.5, type: 'triangle', perc: 'wood', chords: false, lead: 0.07 },          // 일본: 미야코부시 음계
+    arab: { root: 196, steps: [0, 1, 4, 5, 7, 8, 11], tempo: 0.26, type: 'triangle', drone: 0.04, perc: 'darbuka', chords: false },   // 이슬람: 히자즈
+    india: { root: 185, steps: [0, 1, 4, 5, 7, 8, 11], tempo: 0.3, type: 'sawtooth', drone: 0.05, perc: 'tabla', chords: false, lead: 0.03 },   // 인도: 탐푸라 + 타블라
+    africa: { root: 196, steps: [0, 3, 5, 7, 10], tempo: 0.22, type: 'triangle', perc: 'hand', busy: 0.55 },                      // 아프리카: 손북
+    seasia: { root: 233, steps: [0, 1, 3, 7, 8], tempo: 0.3, type: 'sine', perc: 'gong', chords: false, lead: 0.08 },             // 동남아: 펠로그 가믈란
+    america: { root: 207.7, steps: [0, 3, 5, 7, 10], tempo: 0.36, type: 'sine', drone: 0.025, perc: 'hand', lead: 0.075 },       // 아메리카: 피리
+    seaind: { root: 185, steps: [0, 2, 4, 7, 9], tempo: 0.6, type: 'sine', drone: 0.03, busy: 0.45 },                            // 인도양 항해
+    seaeast: { root: 220, steps: [0, 2, 4, 7, 9], tempo: 0.66, type: 'triangle', chords: false, busy: 0.4, lead: 0.06 }        // 동아시아·동남아 항해
   };
+  AU.SCALES = SCALES;
   function freqOf(sc, deg, oct) { var n = sc.steps.length; var o = Math.floor(deg / n); var i = ((deg % n) + n) % n; return sc.root * Math.pow(2, (sc.steps[i] + 12 * (o + (oct || 0))) / 12); }
   var melody = 0;
+  function perc(sc, beat, t) {
+    switch (sc.perc) {
+      case 'jig': if (beat % 3 === 0) noise(t, 0.08, beat % 6 === 0 ? 0.22 : 0.1, 220, 1, musicGain); break;
+      case 'hand': if (beat % 2 === 0 || beat === 7 || beat === 13) noise(t, 0.1, beat % 4 === 0 ? 0.25 : 0.1, beat % 4 === 0 ? 160 : 420, 1.4, musicGain); break;
+      case 'darbuka': if (beat === 0 || beat === 8) tone(90, t, 0.25, 'sine', 0.16, musicGain); if (beat === 3 || beat === 6 || beat === 11 || beat === 14) noise(t, 0.05, 0.12, 2400, 2, musicGain, 'bandpass'); break;
+      case 'tabla': if (beat % 4 === 0) tone(beat % 8 === 0 ? 110 : 150, t, 0.3, 'sine', 0.12, musicGain); else if (beat % 2) noise(t, 0.04, 0.07, 3000, 3, musicGain, 'bandpass'); break;
+      case 'wood': if (beat % 4 === 0) noise(t, 0.04, 0.12, 1800, 6, musicGain, 'bandpass'); break;
+      case 'janggu': if (beat === 0 || beat === 6 || beat === 10) tone(beat ? 140 : 95, t, 0.3, 'sine', 0.14, musicGain); if (beat === 3 || beat === 12) noise(t, 0.05, 0.1, 2600, 3, musicGain, 'bandpass'); break;
+      case 'gong': if (beat === 0) { tone(sc.root / 2, t, 2.4, 'sine', 0.08, musicGain, 0.02); tone(sc.root / 2 * 2.76, t, 1.6, 'sine', 0.02, musicGain, 0.02); } break;
+    }
+  }
   function schedule() {
     if (!cur || !ctx) return;
     var sc = SCALES[cur];
     while (nextT < ctx.currentTime + 0.6) {
       var beat = step % 16;
-      if (beat % 8 === 0) { var chord = [0, 3, 4, 5][(step >> 4) % 4]; [0, 2, 4].forEach(function (k) { tone(freqOf(sc, chord + k, -1), nextT, sc.tempo * 7.5, 'sine', 0.05, musicGain, 0.3); }); }
+      if (sc.drone && beat === 0 && (step >> 4) % 2 === 0) { tone(sc.root / 2, nextT, sc.tempo * 32, 'sine', sc.drone, musicGain, 0.6); tone(sc.root * 0.75, nextT, sc.tempo * 32, 'sine', sc.drone * 0.5, musicGain, 0.6); }
+      if (sc.chords !== false && beat % 8 === 0) { var chord = [0, 3, 4, 5][(step >> 4) % 4]; [0, 2, 4].forEach(function (k) { tone(freqOf(sc, chord + k, -1), nextT, sc.tempo * 7.5, 'sine', 0.05, musicGain, 0.3); }); }
       if (cur === 'battle' && beat % 2 === 0) noise(nextT, 0.12, beat % 4 === 0 ? 0.35 : 0.12, 180, 1, musicGain);
-      if (Math.random() < (cur === 'sea' ? 0.45 : 0.7)) {
+      if (sc.perc) perc(sc, beat, nextT);
+      if (Math.random() < (sc.busy || (cur === 'sea' ? 0.45 : 0.7))) {
         melody += Math.round((Math.random() - 0.5) * 3.2); melody = Math.max(-2, Math.min(9, melody));
-        tone(freqOf(sc, melody, 0), nextT, sc.tempo * (Math.random() < 0.3 ? 2.4 : 1.3), sc.type === 'sawtooth' ? 'square' : sc.type, cur === 'battle' ? 0.035 : 0.06, musicGain, 0.015);
+        tone(freqOf(sc, melody, 0), nextT, sc.tempo * (Math.random() < 0.3 ? 2.4 : 1.3), sc.type === 'sawtooth' && !sc.lead ? 'square' : sc.type, sc.lead || (cur === 'battle' ? 0.035 : 0.06), musicGain, 0.015);
       }
       if (cur === 'sea' && beat === 0 && Math.random() < 0.5) noise(nextT, 3.5, 0.05, 500, 0.4, musicGain);
       nextT += sc.tempo; step++;
     }
   }
   function genMusic(name) {
-    if (!init() || ctx.state !== 'running') return;
+    if (!SCALES[name]) name = 'town';
+    if (!init() || ctx.state !== 'running') { genWant = name; return; }
+    genWant = null;
     if (cur === name) return;
     cur = name; step = 0; melody = 0; nextT = ctx.currentTime + 0.1;
     if (timer) clearInterval(timer);
     timer = setInterval(schedule, 200);
   }
-  function genStop() { cur = null; if (timer) clearInterval(timer); timer = null; }
+  var genWant = null;
+  function genStop() { cur = null; genWant = null; if (timer) clearInterval(timer); timer = null; }
+  /** 시험용: 지금 코드 음악 이름 (없으면 null) */
+  AU.genNow = function () { return cur || genWant; };
 
   // ---------------------------------------------------------------- music files (music/*.mp3, 표는 js/data/music.js)
   /* 장면 이름(town·sea·land·battle)과 지금 자리로 곡을 고른다. 파일 곡이 있으면 그것을, 없거나 못 읽으면 코드 음악.
@@ -102,22 +135,33 @@
   function MT() { return G.MUSIC || { scenes: {} }; }
   function fileVol() { return Math.min(1, vol('music', 0.35) * (MT().volume || 1)); }
   function setFileVolume() { if (deckOn >= 0 && decks[deckOn] && !fadeTimer) decks[deckOn].volume = fileVol(); }
-  /** 장면과 자리에 맞는 곡 이름 (표에 없으면 null) */
+  /** 곡 이름이 쓸 수 있는가: 'gen:이름'은 코드 음악, 그 밖은 music/ 파일 */
+  function usable(t) { if (!t) return false; if (t.indexOf('gen:') === 0) return !!SCALES[t.slice(4)]; return !!(G.MUSIC_FILES && G.MUSIC_FILES[t] && !failed[t]); }
+  function nearestCity(lon, lat) {
+    var best = null, bd = 1e9;
+    (G.CITY_DATA || []).forEach(function (c) { if (G.R && G.R.cityExists && !G.R.cityExists(c)) return; var d = G.Geo.dist(lon, lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } });
+    return best;
+  }
+  /** 도시의 고장 곡: byCity → byRegion → byStyle (아메리카·동남아·일본은 도시 양식보다 고장이 먼저) */
+  function cityPick(sc, c) { return (sc.byCity && sc.byCity[c.id]) || (sc.byRegion && sc.byRegion[c.region]) || (sc.byStyle && sc.byStyle[c.style]) || null; }
+  /** 장면과 자리에 맞는 곡 이름 (표에 없으면 null). 'gen:이름'이면 그 고장의 코드 음악 */
   AU.pick = function (name) {
     var sc = MT().scenes[name]; if (!sc) return null;
     var s = G.Game && G.Game.state, l = s && s.loc, t = null;
     try {
-      if (name === 'town' && l && l.city != null) {
+      if (name === 'town' && AU.place && sc.byPlace && sc.byPlace[AU.place]) t = sc.byPlace[AU.place];      // 주점 같은 건물 안
+      else if (name === 'town' && l && l.city != null) {
         var c = G.CITY_DATA[l.city];
-        if (c) t = (sc.byCity && sc.byCity[c.id]) || (sc.byStyle && sc.byStyle[c.style]) || (sc.byRegion && sc.byRegion[c.region]) || null;
+        if (c) t = cityPick(sc, c);
       } else if (name === 'sea' && l && l.lon != null && G.Ships && G.Ships.zone) {
         t = sc.byZone && sc.byZone[G.Ships.zone(l.lon, l.lat)] || null;
       } else if (name === 'land' && l && l.lon != null && G.Geo && G.Geo.terrain) {
         t = sc.byTerrain && sc.byTerrain[G.Geo.terrain(l.lon, l.lat)] || null;
+        if (!t && sc.byNearCity) { var nc = nearestCity(l.lon, l.lat), tc = nc && cityPick(MT().scenes.town || {}, nc); if (tc && tc.indexOf('gen:') === 0) t = tc; }   // 사막·밀림이 아니면 가까운 도시의 고장 곡
       }
     } catch (e) { t = null; }
-    t = t || sc.def || null;
-    return t && G.MUSIC_FILES && G.MUSIC_FILES[t] && !failed[t] ? t : (sc.def && !failed[sc.def] && G.MUSIC_FILES && G.MUSIC_FILES[sc.def] ? sc.def : null);
+    if (usable(t)) return t;
+    return usable(sc.def) ? sc.def : null;
   };
   function src(t) { var f = G.MUSIC_FILES[t]; return /^(data:|blob:|https?:)/.test(f) ? f : f.split('/').map(encodeURIComponent).join('/'); }
   function tryPlay(el) {
@@ -162,25 +206,42 @@
     fileTrack = null; pendingPlay = null;
     fadeTo(-1);
   }
-  /** 장면 음악: 파일 곡이 있으면 그것, 없으면 코드 음악 */
+  /** 장면 음악: 고장에 맞는 파일 곡이나 코드 음악 */
   AU.music = function (name, force) {
     AU.want = name; hold = { track: null, n: 0 };
-    // 설정 「배경 음악」이 코스타 델 솔 3 OST면 유튜브 재생기로 (js/systems/ytmusic.js). 건물·미니 게임 같은 「잠깐」 곡 동안에는 장면만 기억해 둔다
+    if (name !== 'town' && name !== 'battle') AU.place = null;     // 도시를 떠나면 건물 곡은 끝 (일기토(battle)는 건물 안에서도 벌어진다)
+    // 설정 「배경 음악」이 코스타 델 솔 3 OST면 유튜브 재생기로 (js/systems/ytmusic.js). 미니 게임 같은 「잠깐」 곡 동안에는 장면만 기억해 둔다
     var Y = G.YTM;
     if (Y) { Y.install(); if (Y.on()) { if (Y.inMoment() && !force) return; var yt = Y.pick(name); if (yt) { genStop(); stopFile(); Y.play(yt); return; } Y.pause(); } else Y.pause(); }
     var t = AU.pick(name);
+    if (t && t.indexOf('gen:') === 0) { stopFile(); genMusic(t.slice(4)); return; }
     if (t) { if (force || fileTrack !== t) playFile(t); return; }
     stopFile();
     genMusic(name);
+  };
+  /** 지금 서 있는 건물 (주점·왕궁·저택…, 거리면 null) — 건물마다 곡이 있으면 그 곡, 나오면 그 고장 거리의 곡.
+     겹쳐 쌓이지 않는다: 건물에서 건물로 옮겨도, 나가기 버튼·성문·출항 어느 길로 나와도 한 번에 바뀐다 (js/scenes/city.js) */
+  AU.place = null;
+  AU.setPlace = function (kind, quiet) {
+    kind = kind || null;
+    if (AU.place === kind) return;
+    AU.place = kind;
+    if (!quiet && AU.want === 'town') AU.music('town', true);
+  };
+  /** 지금 들리는 곡 (파일 이름 · 'gen:이름' · OST 곡 'ost:id') — 시험·도감용 */
+  AU.now = function () {
+    if (G.YTM && G.YTM.on() && G.YTM.current()) return 'ost:' + G.YTM.current();
+    return fileTrack || (AU.genNow() ? 'gen:' + AU.genNow() : null);
   };
   /** 하루에 한 번(Game.newDay): 바다·뭍에서 자리가 바뀌면 곡을 바꾼다. hold일 연달아 다른 곳이어야 바꿔 경계에서 오락가락하지 않게 */
   AU.daily = function () {
     var name = AU.want; if (name !== 'sea' && name !== 'land') return;
     if (G.YTM && G.YTM.on()) { if (!G.YTM.inMoment()) { var yt = G.YTM.pick(name); if (yt && yt !== G.YTM.current()) G.YTM.play(yt); } return; }
-    var t = AU.pick(name); if (!t || t === fileTrack) { hold = { track: null, n: 0 }; return; }
+    var t = AU.pick(name), now = fileTrack || (cur ? 'gen:' + cur : null);
+    if (!t || t === now) { hold = { track: null, n: 0 }; return; }
     var need = (MT().scenes[name] || {}).hold || 1;
     if (hold.track === t) hold.n++; else hold = { track: t, n: 1 };
-    if (hold.n >= need) { hold = { track: null, n: 0 }; playFile(t); }
+    if (hold.n >= need) { hold = { track: null, n: 0 }; if (t.indexOf('gen:') === 0) { stopFile(); genMusic(t.slice(4)); } else playFile(t); }
   };
   AU.nowPlaying = function () { return fileTrack; };
   /** 시험용: 지금 곡의 재생 상태 */

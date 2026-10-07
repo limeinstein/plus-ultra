@@ -130,7 +130,7 @@
     if (G.Town.active()) G.Town.hidden(false); else G.Game.setScene(C.view(c));
     if (G.Img.prefetchCity) { G.Img.prefetchCrew(); G.Img.prefetchCity(c, 'in'); }   // 건물 안·마을 사람·여급·후원자 얼굴을 뒤에서 받아 둔다
     G.Game.cityHud();
-    if (G.Audio) G.Audio.music('town');
+    if (G.Audio) { if (G.Audio.setPlace) G.Audio.setPlace(null, true); G.Audio.music('town'); }   // 새 도시: 거리의 곡부터
     try {
       if (arg.prologue) await C.prologue(c);
       if (arg.story && G.Story) { try { await G.Story.prologue(c); } catch (e) { console.error(e); } }   // 이야기 모드의 프롤로그 (js/systems/story.js)
@@ -142,7 +142,7 @@
     if (G.Game.scene !== C) return;
     C.main();
   };
-  C.exit = function () { cur = null; token++; G.Town.close(); };
+  C.exit = function () { cur = null; token++; G.Town.close(); if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(null, true); };
   /** the street redraws itself every frame; the painted town view is a still picture */
   C.update = function (dt) { if (G.Town.active() && !G.Town.hidden()) G.Town.update(dt); };
   C.onKey = function (e) { if (G.Town.active() && !G.Town.hidden() && !UI.busy() && !busy) return G.Town.onKey(e); return false; };
@@ -210,7 +210,7 @@
   // ---------------------------------------------------------------- main town view
   C.main = function () {
     var s = S(), c = C.city();
-    if (cur && cur.ost && G.Audio && G.Audio.resume) G.Audio.resume();
+    if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(null);     // 건물을 나왔다: 그 고장 거리의 곡으로 (나가기 버튼이든 메뉴든)
     cur = null; token++;
     UI.clearScreen();
     if (G.Town.active()) { G.Town.hidden(false); UI.add(G.Town.catcher(function (kind, arg) { if (kind === 'landmark') C.lookAt(arg); else if (kind === 'folk') C.chatFolk(arg); else C.visit(kind, arg); })); }
@@ -351,7 +351,7 @@
     }
     G.Game.setScene(C.interior(ikind, c, ivar));
     plaque(B, c, arg);
-    if (G.Audio && G.Audio.moment && (kind === 'tavern' || kind === 'palace' || kind === 'mansion')) { G.Audio.moment(kind); cur.ost = true; }   // OST: 주점·왕궁 알현·귀족 알현
+    if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(kind);     // 건물의 곡: 주점(기존 음악·OST) · 왕궁·귀족 알현(OST) — 겹쳐 쌓이지 않는다
     if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
     var ok = true;
     try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }
