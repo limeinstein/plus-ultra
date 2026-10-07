@@ -1,5 +1,6 @@
 /* 모조품(가짜 증거) — 발견물이 있을 것으로 짐작되는 고장의 시장에서 그 발견물의 모조품을 사서 보고에 쓴다.
    - 사기: 단서를 들었거나 계약한 발견물(보물·유적·생물·민족·자연)을, 그 자리에서 12° 안 도시의 시장 「모조품 상인」에게서 (값: 가치의 12%)
+     상인은 달마다 7일(BALANCE.fakes.day)에만, 중도시 이상(G.CityIcon.tier ≥ minTier — 수도 포함)의 시장에 나오고, 한 번 나올 때 2개(stock)만 판다
    - 보고할 때 고르기: 진짜만 / 모조품만 / 둘 다 (찾지 못했어도 모조품만으로 보고할 수 있다)
    - 모조품만: 후원자(군주)의 감식안에 따라 들킬 수 있다 → 벌금, 또는 붙잡혀 옥살이(날이 흐른다). 안 들키면 제값
    - 둘 다: 진짜와 똑같이 만든 모조품까지 바치면 감동해 사례금 ×1.3, 신뢰가 더 오른다
@@ -31,24 +32,52 @@
       return G.Geo.dist(c.lon, c.lat, d.lon, d.lat) <= F.NEAR;
     });
   };
+  /** 상인이 오늘 이 도시 시장에 나왔는가: 그달 7일 · 중도시 이상 */
+  F.open = function (c) {
+    var s = S(), b = B(), tier = G.CityIcon ? G.CityIcon.tier(c) : (c.size || 1);
+    return !!(c && s.date.d === (b.day || 7) && tier >= (b.minTier || 2));
+  };
+  /** 이번에 나온 상인의 장부 (도시·날짜가 바뀌면 새로 연다) */
+  function shop(c) {
+    var s = S(), key = c.id + '@' + s.date.y + '-' + s.date.m + '-' + s.date.d;
+    if (!s.fakeShop || s.fakeShop.key !== key) s.fakeShop = { key: key, sold: 0 };
+    return s.fakeShop;
+  }
+  F.left = function (c) { return Math.max(0, (B().stock || 2) - shop(c).sold); };
+  /** 오늘 상인이 내놓은 물건: 살 수 있는 것 가운데 남은 수만큼 (계약 목표가 먼저, 나머지는 도시·날짜로 정한 순서라 다시 들어와도 같다) */
+  F.stock = function (c) {
+    if (!F.open(c)) return [];
+    var s = S(), k = s.contract, sh = shop(c), n = F.left(c);
+    if (!n) return [];
+    return F.forSale(c).sort(function (a, b) {
+      var pa = k && k.disc === a.id ? 0 : 1, pb = k && k.disc === b.id ? 0 : 1;
+      return pa - pb || U.strHash(sh.key + a.id) - U.strHash(sh.key + b.id);
+    }).slice(0, n);
+  };
+  /** 시장 메뉴에 상인을 보일까: 오늘 나왔고, 팔 것이 있거나 이미 다 팔았을 때 */
+  F.shown = function (c) { return F.open(c) && (F.stock(c).length > 0 || shop(c).sold > 0); };
   F.buy = async function (c) {
     var s = S(), who = G.Scenes.city.npc ? G.Scenes.city.npc('vendor', '골목의 상인') : { name: '골목의 상인' };
-    var list = F.forSale(c);
+    if (!F.open(c)) { await UI.say('모조품 상인은 오늘 자리를 비웠다. 달마다 7일에만 나온다고 한다.', who); return; }
+    var list = F.stock(c);
+    if (!list.length && shop(c).sold) { await UI.say('오늘 내놓을 물건은 다 팔았소. 한 번에 두 개 넘게 만들면 솜씨가 들통나거든. 다음 달 7일에 다시 오시오.', who); return; }
     if (!list.length) { await UI.say('찾는 물건이 뭔지 알아야 만들어 드리지요. 이 고장 근처에서 찾는다는 물건 이야기를 듣고 오시오.', who); return; }
     await UI.say(U.pick(['쉿, 목소리를 낮추시오. 진짜와 똑같이 만들어 드리지. 어지간한 눈으로는 가려내지 못할 거요.', '이 근처에서 났다는 그 물건 말이오? 솜씨 좋은 장인이 있지요. 값만 치르시면 됩니다.']), who);
+    if (shop(c).sold === 0) await UI.say('달에 한 번, 7일에만 나오고 한 번에 두 개만 파오. 오늘 내놓은 건 이것뿐이오.', who);
     for (;;) {
       var pick = await UI.choose('모조품 상인', list.map(function (d, i) {
         var f = G.Disc.foundByMe(d.id);
         return { label: '「' + d.name + '」의 모조품' + (f ? ' <span class="tag">진짜도 가짐</span>' : ''), right: '금화 ' + U.num(F.price(d)) + '닢', value: i, icon: 'seal',
           desc: (G.DISC_CATS[d.cat] || '') + ' · ' + (f ? '진짜와 함께 바치면 더 큰 감동을 줄 수 있다' : '찾지 못했어도 이것으로 보고할 수 있다 — 다만 들키면 큰일') };
-      }), { width: 700, text: '소지금 ' + U.num(s.player.gold) + '닢' });
+      }), { width: 700, text: '소지금 ' + U.num(s.player.gold) + '닢 · 오늘 남은 물건 ' + F.left(c) + '개' });
       if (pick == null) return;
       var d = list[pick], p = F.price(d);
       if (s.player.gold < p) { UI.toast('금화가 모자랍니다.', 'coin'); continue; }
-      s.player.gold -= p; F.give(d.id, 1); G.Game.refreshHud();
+      s.player.gold -= p; F.give(d.id, 1); shop(c).sold++; G.Game.refreshHud();
       G.State.log('「' + d.name + '」의 모조품을 샀다. (금화 ' + p + ')');
       UI.toast('「' + d.name + '」의 모조품을 샀다.', 'seal', 3600);
-      list = F.forSale(c); if (!list.length) return;
+      list = F.stock(c);
+      if (!list.length) { if (!F.left(c)) await UI.say('오늘 몫은 이걸로 끝이오. 다음 달 7일에 다시 오시오.', who); return; }
     }
   };
 

@@ -1,5 +1,5 @@
 /* 거리 외관 회귀 점검:
-   - 23개 고장별 자택·교회 그림이 모두 등록되고 실제로 읽히는가
+   - 25개 고장별 자택·교회와 kraal·tent 13종 전체가 모두 등록되고 실제로 읽히는가
    - 로마 교황청 전용 외관과 도시 건축 발견물 54종이 등록되고 읽히는가
    - 도시 건축 발견물이 건립 연도에 맞춰 거리 뒤편에 나타나는가
    node tests/town_exteriors_smoke.js */
@@ -10,7 +10,8 @@ const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..');
 const GAME = pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href;
-const STYLES = ['africa', 'arabia', 'aztec', 'china', 'easteurope', 'espana', 'france', 'iberia', 'inca', 'india', 'italy', 'japan', 'korea', 'masai', 'ottoman', 'plains', 'pueblo', 'russia', 'seasia', 'steppe', 'swahili', 'tropic', 'woodland'];
+const STYLES = ['africa', 'arabia', 'aztec', 'china', 'easteurope', 'espana', 'france', 'iberia', 'inca', 'india', 'italy', 'japan', 'korea', 'kraal', 'masai', 'ottoman', 'plains', 'pueblo', 'russia', 'seasia', 'steppe', 'swahili', 'tent', 'tropic', 'woodland'];
+const KINDS = ['harbor', 'trade', 'shipyard', 'tavern', 'inn', 'market', 'church', 'library', 'palace', 'mansion', 'guild', 'gate', 'home'];
 const LANDMARKS = [
   'pharos', 'greatlib', 'colosseum', 'byrsa', 'weiyang', 'notredame', 'sankore', 'templomayor', 'kilwa',
   'apostolic', 'erdenezuu', 'wisdom', 'whitetower', 'askia', 'forbidden', 'stbasil', 'kremlin', 'belem',
@@ -36,9 +37,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
 
-    const assets = await page.evaluate(async ({ styles, landmarks }) => {
+    const assets = await page.evaluate(async ({ styles, landmarks, kinds }) => {
       const expected = [];
       styles.forEach(s => { expected.push('exterior-styles/' + s + '/home', 'exterior-styles/' + s + '/church'); });
+      ['kraal', 'tent'].forEach(s => kinds.filter(k => k !== 'home' && k !== 'church')
+        .forEach(k => expected.push('exterior-styles/' + s + '/' + k)));
       landmarks.forEach(id => expected.push('landmarks/' + id));
       expected.push('exteriors/palace@33');
       const missing = expected.filter(k => !G.Img.has(k));
@@ -49,8 +52,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { expected: expected.length, missing, failed: loaded.filter(x => !x[1]).map(x => x[0]),
         cityRuins: cityRuins.length, unillustratedCityRuins,
         papal: G.Img.pick(G.Img.chain.exterior('palace', G.CITY_DATA[33], '')) };
-    }, { styles: STYLES, landmarks: LANDMARKS });
-    ok(assets.expected === 101, '외관 101개(자택 23 + 교회 23 + 도시 발견물 54 + 교황청 1) 검사');
+    }, { styles: STYLES, landmarks: LANDMARKS, kinds: KINDS });
+    ok(assets.expected === 127, '외관 127개(자택 25 + 교회 25 + kraal·tent 나머지 22 + 도시 발견물 54 + 교황청 1) 검사');
     ok(!assets.missing.length, '필요한 외관이 모두 이미지 목록에 등록됨');
     ok(!assets.failed.length, '필요한 외관 파일이 모두 실제로 읽힘');
     const excluded = ['ayubuddha', 'broadway', 'cristo', 'emille', 'eram', 'liberty', 'panama', 'redsquare', 'stele'];

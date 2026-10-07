@@ -11,6 +11,16 @@ const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
 const GAME = pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href;
 const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'hero_look_shots');
+const NAMED_LOOKS = [
+  ['leonardo_de_valenca', '레오나르두 드 발렌사'], ['duarte_de_valenca', '두아르트 드 발렌사'],
+  ['ines_de_valcarcel', '이네스 데 발카르셀'], ['edmund_ashford', '에드먼드 애쉬퍼드'],
+  ['matteo_bellandi', '마테오 벨란디'], ['laurens_van_der_velder', '로렌스 판 데르 펠더'],
+  ['alessio_giorgi', '알레시오 조르지'], ['martim_de_sequeira', '마르팀 드 세케이라'],
+  ['hernando_de_montemayor', '에르난도 데 몬테마요르'], ['gabriel_de_avelar', '가브리엘 드 아벨라르'],
+  ['lisbeth_van_acker', '리스베트 판 아커르'], ['henrik_stensson', '헨리크 스텐손'],
+  ['vittoria_contarini', '비토리아 콘타리니'], ['konrad_von_falkenstein', '콘라트 폰 팔켄슈타인'],
+  ['adrien_de_montclair', '아드리앵 드 몽클레르'], ['katrin_de_kermor', '카트린 드 케르모르']
+];
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 
 (async function () {
@@ -25,6 +35,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   try {
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
+    const named = await page.evaluate(looks => looks.map(([id, name]) => ({ id,
+      face: G.Img.has('portraits/player/' + id), half: G.Img.has('characters/player_half_' + id),
+      linked: G.Img.heroLook({ look: id }) === id, name: G.Img.heroName(id) === name
+    })), NAMED_LOOKS);
+    ok(named.length === 16 && named.every(x => x.face && x.half && x.linked && x.name), '이름이 정해진 주인공 16명 얼굴·무릎상·이름표 연결');
     const hasSheet = await page.evaluate(() => G.Img.has('duel/fighters/ganghui'));
     console.log('이강희 일기토 시트: ' + (hasSheet ? '있음' : '아직 없음 (main_admiral로 대신)'));
 

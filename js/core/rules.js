@@ -31,10 +31,12 @@
     G.BOOKS.forEach(function (b) { if (b.libs.indexOf(c.id) >= 0) f.library = true; });
     G.SPONSORS.forEach(function (s) { if (s.city === c.id) { if (s.bld === 'palace') f.palace = true; else f.mansion.push(s.id); } });
     if (c.id === 92) { f.market = false; }
+    if (c.flags.indexOf('T') >= 0) { f.church = true; f.market = true; f.guild = true; f.palace = false; f.library = false; f.mansion = []; }   // 아프리카 부족 마을 (js/data/tribes.js): 술집·여관·성문·교역소·시장·조합 + 사당(이슬람 마을은 모스크)
     return f;
   };
   R.churchName = function (c) {
     if (c.places && c.places.church) return c.places.church;   // 이름 있는 곳 (경주 불국사 등)
+    if (c.flags && c.flags.indexOf('T') >= 0 && c.rel !== 'I') return '사당';   // 아프리카 부족 마을: 조상과 정령을 모시는 사당
     return c.rel === 'I' ? '모스크' : c.rel === 'H' || c.rel === 'B' || c.rel === 'J' ? '사원' : c.rel === 'K' ? '사당' : c.rel === 'N' ? '신전' : '교회';
   };
   R.libraryName = function (c) { return (c.places && c.places.library) || '도서관'; };

@@ -389,7 +389,8 @@
     ['swahili', '동아프리카 해안'], ['africa', '아프리카 내륙'], ['masai', '아프리카 초원'], ['india', '인도'],
     ['seasia', '동남아시아 본토'], ['tropic', '섬·열대 마을'], ['china', '중국'],
     ['korea', '조선'], ['japan', '일본'], ['steppe', '초원'], ['aztec', '메소아메리카'], ['inca', '안데스'],
-    ['woodland', '북미 숲 마을'], ['plains', '북미 평원 마을'], ['pueblo', '푸에블로']];
+    ['woodland', '북미 숲 마을'], ['plains', '북미 평원 마을'], ['pueblo', '푸에블로'],
+    ['kraal', '아프리카 벌집 오두막 마을'], ['tent', '사하라·사헬 천막 진영']];
   I.EXT_BY_STYLE = { ib: 'iberia', co: 'espana', ne: 'france', it: 'italy', gr: 'easteurope', ru: 'russia',
     is: 'arabia', pe: 'arabia', sw: 'swahili', af: 'africa', tr: 'masai', 'in': 'india', se: 'seasia',
     cn: 'china', kr: 'korea', jp: 'japan', st: 'steppe', az: 'aztec', an: 'inca', na: 'woodland' };
@@ -409,11 +410,13 @@
     170: 'tropic', 171: 'tropic', 172: 'tropic', 208: 'tropic', 209: 'tropic', 211: 'tropic',
     212: 'tropic', 213: 'tropic',
     // 북미 원주민: 평원(다코타 수우·만단)은 티피, 푸에블로(타오스·아코마)는 흙벽돌 계단 집
-    230: 'plains', 243: 'plains', 241: 'pueblo', 242: 'pueblo' };
+    230: 'plains', 243: 'plains', 241: 'pueblo', 242: 'pueblo',
+    // 아프리카 부족 마을 (js/data/tribes.js): 줄루·코사·산은 벌집 오두막, 풀라니·투아레그는 천막, 아샨티는 흙벽 마을 (마사이·오로모는 마사이 묶음, 베르베르는 아랍)
+    298: 'kraal', 300: 'kraal', 305: 'kraal', 303: 'tent', 306: 'tent', 308: 'africa' };
   /** 그 묶음에 없는 건물은 이웃 묶음에서 빌려 온다 */
   I.EXT_NEXT = { china: 'korea', tropic: 'seasia', korea: 'china', japan: 'china', steppe: 'china',
     espana: 'iberia', ottoman: 'arabia', masai: 'africa', inca: 'aztec',
-    plains: 'woodland', pueblo: 'woodland', woodland: 'tropic' };
+    plains: 'woodland', pueblo: 'woodland', woodland: 'tropic', kraal: 'masai', tent: 'africa' };
   I.extStyle = function (c) { return (c && I.EXT_BY_CITY[c.id]) || (c && I.EXT_BY_STYLE[c.style]) || null; };
   I.CULTURES = [['europe', '유럽'], ['islam', '이슬람권'], ['eastasia', '동아시아'], ['south', '인도·동남아시아'], ['native', '아프리카·아메리카 토착']];
   I.INTERIORS = [['harbor', '항구'], ['trade', '교역소'], ['shipyard', '조선소'], ['tavern', '술집'], ['inn', '여관'], ['market', '시장'], ['church', '교회·사원'], ['library', '도서관'], ['palace', '왕궁'], ['mansion', '저택'], ['guild', '조합'], ['gate', '성문'], ['home', '자택']];
@@ -486,7 +489,15 @@
     admiral: '기본 제독', ganghui: '중세의 연금술사', navigator_white: '하얀 남방의 항해사', armored_navigator: '철갑 항해사',
     sea_dog: '망원경을 든 뱃사람', muscle_swordsman: '근육질 검사', hat_spinner: '모자를 돌리는 항해사',
     charismatic_admiral: '카리스마 제독', battle_vanguard: '돌격대장', noble_scholar: '귀족 학자 제독',
-    casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장'
+    casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장',
+    leonardo_de_valenca: '레오나르두 드 발렌사', duarte_de_valenca: '두아르트 드 발렌사',
+    ines_de_valcarcel: '이네스 데 발카르셀', edmund_ashford: '에드먼드 애쉬퍼드',
+    matteo_bellandi: '마테오 벨란디', laurens_van_der_velder: '로렌스 판 데르 펠더',
+    alessio_giorgi: '알레시오 조르지', martim_de_sequeira: '마르팀 드 세케이라',
+    hernando_de_montemayor: '에르난도 데 몬테마요르', gabriel_de_avelar: '가브리엘 드 아벨라르',
+    lisbeth_van_acker: '리스베트 판 아커르', henrik_stensson: '헨리크 스텐손',
+    vittoria_contarini: '비토리아 콘타리니', konrad_von_falkenstein: '콘라트 폰 팔켄슈타인',
+    adrien_de_montclair: '아드리앵 드 몽클레르', katrin_de_kermor: '카트린 드 케르모르'
   };
   I.heroName = function (id) { return I.HERO_NAMES[id] || id; };
   /** 제독이 40세 이상이면 수염 난 그림을 쓴다. 만들기 화면은 age를 직접 넘긴다. */
@@ -719,7 +730,7 @@
   K.halfFor = function (chain) {
     chain = [].concat(chain || []);
     var out = [], picked = I.pick(chain);
-    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|maids|rivals)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
+    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
     if (picked && /^maid-styles\//.test(picked) && !/_half$/.test(picked)) out.push(picked + '_half');   // 이름 없는 그 고장 여급 (술집 여급 무릎상과 같은 그림)
     if (picked && /^portraits\/(npc|npc-roles|pools)\//.test(picked)) {
       out.push(picked + '_half');
@@ -728,7 +739,7 @@
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
-  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|maids|pools)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
   /** 마을 사람 무릎상: 흉상과 같은 후보 순서를 그대로 따른다. */
   K.npcHalf = function (id, c) { return K.halfOf(K.npc(id, c)); };
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */

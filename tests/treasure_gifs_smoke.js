@@ -1,4 +1,4 @@
-/* 설치된 Chrome으로 보물 25종(회전 유물 24 + 광산 1)의 등록·장면 판·카탈로그를 확인한다. */
+/* 설치된 Chrome으로 보물 98종(회전 유물 97 + 광산 1)의 등록·장면 판·카탈로그를 확인한다. */
 'use strict';
 const fs = require('fs');
 const os = require('os');
@@ -10,6 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const CATALOG = pathToFileURL(path.join(ROOT, 'catalog.html')).href;
 const SCREEN = path.join(ROOT, 'docs', 'art', 'treasure-gif-runtime.png');
+const EXPECTED_TREASURES = 98;
 const CHROME = [
   process.env.CHROME_PATH,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -101,7 +102,7 @@ function socket(url) {
     })()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.treasures !== 25 || result.gifs !== 25 || result.sheets !== 25 || result.reveals !== 25 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '수정 해골' || result.ankhTag !== 'CANVAS' || result.ankhAria !== '소년왕의 비보' || result.ms !== 8400 || !catalog || catalog.cards !== 25 || catalog.animated < 1 || catalog.tag !== 'CANVAS' || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.treasures !== EXPECTED_TREASURES || result.gifs !== EXPECTED_TREASURES || result.sheets !== EXPECTED_TREASURES || result.reveals !== EXPECTED_TREASURES || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '수정 해골' || result.ankhTag !== 'CANVAS' || result.ankhAria !== '소년왕의 비보' || result.ms !== 8400 || !catalog || catalog.cards !== EXPECTED_TREASURES || catalog.animated < 1 || catalog.tag !== 'CANVAS' || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

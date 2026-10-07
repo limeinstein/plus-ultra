@@ -62,6 +62,7 @@
   }
   /** same rule as the game (R.facilities) */
   function facilities(c) {
+    if (c.flags.includes('T')) return ['교역소', '술집', '여관', '시장', c.rel === 'I' ? '모스크' : '사당', '조합', '성문'];   // 아프리카 부족 마을
     const out = [];
     if (c.port) out.push('항구');
     out.push('교역소');
@@ -287,7 +288,7 @@
     const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : G.REGIONS[d.reg];
     const place = d.how === 'city' ? CITY[d.city].name + (d.cat === 'ruin' ? ' 시내 (그 건물을 누르면)' : d.by && G.MATE[d.by] ? ' — ' + G.MATE[d.by].name + '을(를) 만나면 (세상을 떠난 뒤에는 시내 건물에서)' : ' 시내 (건물에 들어가면)')
       : d.outskirts && d.homeCity != null ? CITY[d.homeCity].name + ' 근처 뭍 (도시 밖을 탐험하면)' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
-    const moving = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade') && !!(G.Reel && G.Reel.has(d)));
+    const moving = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade' || d.cat === 'people') && !!(G.Reel && G.Reel.has(d)));
     add(tDisc, {
       group: d.cat, name: d.name, sub: G.DISC_CATS[d.cat] + ' · ' + where, meta: HOW[d.how] + ' · 가치 ' + num(d.val) + (d.rival ? ' · 경쟁자 ' + d.rival[2] : ''),
       key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: moving, disc: d,

@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-DIRS = [ROOT / 'images' / 'portraits' / name for name in ('rivals', 'npc', 'npc-roles')]
+DIRS = [ROOT / 'images' / 'portraits' / name for name in ('rivals', 'npc', 'npc-roles', 'courtiers')]
 
 
 def main() -> int:
@@ -21,6 +21,11 @@ def main() -> int:
             if image.getchannel('A').getextrema()[0] >= 250:
                 raise ValueError(f'투명 알파 없음: {src}')
             image.save(temp, 'WEBP', quality=90, method=3, exact=True)
+            # 왕실 신하는 같은 생성 그림의 윗부분을 얼굴 초상으로 써서
+            # 서임 장면의 얼굴과 무릎상이 서로 다른 사람처럼 보이지 않게 한다.
+            if src.parent.name == 'courtiers':
+                bust = image.crop((0, 0, 1024, 1024)).resize((512, 512), Image.Resampling.LANCZOS)
+                bust.save(src.with_name(src.stem[:-5] + '.webp'), 'WEBP', quality=90, method=3, exact=True)
         with Image.open(temp) as checked:
             if checked.size != (1024, 1536) or checked.mode != 'RGBA' or checked.getchannel('A').getextrema()[0] >= 250:
                 raise ValueError(f'변환 검증 실패: {src}')

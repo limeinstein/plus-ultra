@@ -16,18 +16,19 @@ more_ids = re.findall(r"^\s*ruin\('([^']+)'", more, re.M)
 chain = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
 chain_ids = re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'ruin'", chain, re.M)
 ids = legacy_ids + wonder_ids + more_ids + chain_ids
-assert len(legacy_ids) == 66, len(legacy_ids)
+assert len(legacy_ids) == 67, len(legacy_ids)
 assert len(wonder_ids) == 96, len(wonder_ids)
 assert len(more_ids) == 10, len(more_ids)
 assert len(chain_ids) == 26, len(chain_ids)
-assert len(ids) == len(set(ids)) == 198, len(ids)
+assert len(ids) == len(set(ids)) == 199, len(ids)
 for did in ids:
     ref = ROOT / "tools" / "heritage" / "references" / "discoveries" / f"{did}.jpg"
     turn = ROOT / "tools" / "ruin_gifs" / "reconstructions" / f"{did}.png"
     master = ROOT / "tools" / "ruin_gifs" / "v2" / "master" / f"{did}.png"
     gif = ROOT / "images" / "discoveries" / f"{did}.gif"
     end = ROOT / "images" / "discovery-ends" / f"{did}.jpg"
-    if did in legacy_ids:
+    # 무열왕릉은 사진·복원 그림 단계를 거치지 않고 절차적 3D 원화에서 V2 판을 바로 굽는다.
+    if did in legacy_ids and did != "muyeol":
         assert ref.exists(), ref
         assert turn.exists(), turn
     assert master.exists(), master

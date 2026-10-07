@@ -4,7 +4,7 @@
 # lang: 0 스페인어 1 포르투갈어 2 로망스어 3 게르만어 4 슬라브·그리스어 5 아랍어 6 페르시아어 7 중국어 8 힌두어
 #       9 위굴어 10 아프리카토착어 11 중남미토착어 12 동남아시아토착어 13 동아시아토착어
 # religion: C 가톨릭, O 정교, I 이슬람, H 힌두, B 불교, K 유교/중국, J 일본, N 토착
-# flags: L library, P palace, G guild, H holy(forbidden), X closed(ming), E empire capital
+# flags: L library, P palace, G guild, H holy(forbidden), X closed(ming), E empire capital, T tribal village
 CITIES = [
  (0,'리스본',38.71,-9.14,1,0,1,'C',3,'ib','포르투갈',0,['wine','olive','fish','salt','timber','guns'],'LPG'),
  (1,'오포르토',41.15,-8.61,1,0,1,'C',2,'ib','포르투갈',0,['wine','fish','timber'],''),
@@ -308,4 +308,16 @@ CITIES = [
  (295,'우르가',47.92,106.92,0,7,9,'B',1,'st','몽골',1639,['horses', 'wool', 'hides', 'tea'],''),
  (296,'후허호토',40.84,111.75,0,7,9,'B',1,'st','몽골',1572,['horses', 'wool', 'tea'],''),
  (297,'에도',35.68,139.77,1,9,13,'J',2,'jp','일본',0,['fish', 'rice', 'silk'],''),
+ # 2026-10 아프리카 부족 마을 (flags T = 부족 마을: 술집·여관·성문·교역소·시장·조합만 — rules.js R.facilities)
+ (298,'콰줄루',-28.30,31.45,0,3,10,'N',1,'tr','줄루',0,['beef', 'hides', 'ivory'],'T'),
+ (299,'나망가',-2.55,36.79,0,3,10,'N',1,'tr','마사이',0,['beef', 'hides', 'dairy'],'T'),
+ (300,'그쿠와',-32.33,28.15,0,3,10,'N',1,'tr','코사',0,['beef', 'hides', 'honey'],'T'),
+ (301,'오요',8.95,4.38,0,3,10,'N',2,'af','요루바',0,['cottoncloth', 'dye', 'horses'],'T'),
+ (302,'카치나',12.99,7.60,0,3,10,'I',2,'af','하우사',0,['leathergoods', 'cotton', 'dye'],'T'),
+ (303,'푸타토로',16.30,-13.90,0,3,10,'I',1,'af','풀라니',0,['beef', 'dairy', 'hides'],'T'),
+ (304,'아이트벤하두',31.05,-7.13,0,3,5,'I',1,'is','베르베르',0,['salt', 'dye', 'olive'],'T'),
+ (305,'초딜로',-18.75,21.73,0,3,10,'N',1,'tr','산',0,['hides', 'honey', 'herbs'],'T'),
+ (306,'아가데스',16.97,7.99,0,3,5,'I',1,'af','투아레그',0,['salt', 'leathergoods', 'jewelry'],'T'),
+ (307,'보라나',4.90,38.10,0,3,10,'N',1,'tr','오로모',0,['beef', 'coffee', 'honey'],'T'),
+ (308,'쿠마시',6.69,-1.62,0,3,10,'N',2,'tr','아샨티',0,['gold', 'palmoil', 'cottoncloth'],'T'),
 ]

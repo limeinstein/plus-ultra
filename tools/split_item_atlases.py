@@ -54,6 +54,22 @@ ITEMS = [
     ("item-disguise.png", 1, 1, ["mingrobe"]),
 ]
 
+# 그림판이 아니라 절차적 모형에서 바로 굽는 새 소지품. 데이터의 실제 순서대로
+# ITEM_ORDER에 섞어 두어 그림 누락 검사가 제작 방식과 관계없이 전 항목을 확인한다.
+PROCEDURAL_ITEMS = {
+    "after_weapons": ["claymore", "shivablade", "runeblade", "paladin", "muramasa"],
+    "before_disguise": ["wilson", "castawaylog"],
+}
+ITEM_ORDER = (
+    ITEMS[0][3]
+    + PROCEDURAL_ITEMS["after_weapons"]
+    + ITEMS[1][3]
+    + ITEMS[2][3]
+    + ITEMS[3][3]
+    + PROCEDURAL_ITEMS["before_disguise"]
+    + ITEMS[4][3]
+)
+
 RELICS = [
     ("relic-weapons.png", 4, 5, [
         "r_qinshi", "r_sacsay", "r_alhambra", "r_tutankh", "r_guanyublade", "excalibur",
@@ -218,7 +234,7 @@ def main():
             split_single_objects(*spec, ROOT / "images" / "relics", 256)
         else:
             split_sheet(*spec, ROOT / "images" / "relics", 256)
-    print(f"교역품 {sum(len(x[3]) for x in GOODS)}종, 일반 아이템 {sum(len(x[3]) for x in ITEMS)}종, 유물 {sum(len(x[3]) for x in RELICS)}종을 만들었습니다.")
+    print(f"교역품 {sum(len(x[3]) for x in GOODS)}종, 일반 아이템 {len(ITEM_ORDER)}종, 유물 {sum(len(x[3]) for x in RELICS)}종을 확인했습니다.")
 
 
 if __name__ == "__main__":

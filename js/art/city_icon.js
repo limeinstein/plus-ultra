@@ -32,7 +32,7 @@
   function has(s, words) { s = s || ''; for (var i = 0; i < words.length; i++) if (s.indexOf(words[i]) >= 0) return true; return false; }
   function capital(c) { return !!(c.flags && c.flags.indexOf('P') >= 0); }
   CI.tier = function (c) { return capital(c) ? 4 : Math.max(1, Math.min(3, c.size || 1)); };
-  CI.label = function (c) { return ['', '소도시', '중도시', '대도시', '수도'][CI.tier(c)]; };
+  CI.label = function (c) { return c.flags && c.flags.indexOf('T') >= 0 ? '부족 마을' : ['', '소도시', '중도시', '대도시', '수도'][CI.tier(c)]; };
 
   /** 큰 도시 양식 안에서도 나라와 위치를 보아 지도용 문화권을 고른다. iconCulture는 시험·특수 도시용 덮어쓰기다. */
   CI.culture = function (c) {

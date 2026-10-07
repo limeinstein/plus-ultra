@@ -287,6 +287,17 @@
     282: ["1788.1 제1함대",["https://en.wikipedia.org/wiki/First_Fleet"]],
     283: ["1804.2 데이비드 콜린스",["https://en.wikipedia.org/wiki/Hobart"]],
     284: ["1824 모턴만 유형지, 1825 현 위치",["https://en.wikipedia.org/wiki/Brisbane"]],
-    285: ["1840 뉴질랜드 회사 정착, 와이탕이 조약",["https://en.wikipedia.org/wiki/Wellington"]]
+    285: ["1840 뉴질랜드 회사 정착, 와이탕이 조약",["https://en.wikipedia.org/wiki/Wellington"]],
+    298: ["1816 샤카가 줄루 왕국을 세움, 1879.9 앵글로-줄루 전쟁 뒤 영국",["https://en.wikipedia.org/wiki/Zulu_Kingdom"]],
+    299: ["1895.7 영국령 동아프리카 보호령",["https://en.wikipedia.org/wiki/Maasai_people","https://en.wikipedia.org/wiki/East_Africa_Protectorate"]],
+    300: ["1847.12 영국령 카프라리아",["https://en.wikipedia.org/wiki/British_Kaffraria"]],
+    301: ["오요-일레(옛 오요). 1835 무렵 일로린의 공격으로 버려짐",["https://en.wikipedia.org/wiki/Oyo-Ile","https://en.wikipedia.org/wiki/Oyo_Empire"]],
+    302: ["1807 소코토 지하드로 소코토 칼리파국",["https://en.wikipedia.org/wiki/Katsina_Emirate"]],
+    303: ["1776 토로베 혁명(푸타토로 이맘국), 1859 무렵 프랑스",["https://en.wikipedia.org/wiki/Imamate_of_Futa_Toro"]],
+    304: ["아틀라스산맥의 크사르. 술탄의 손이 잘 닿지 않던 산악 베르베르 땅",["https://en.wikipedia.org/wiki/A%C3%AFt_Benhaddou"]],
+    305: ["1885.3 베추아날란드 보호령",["https://en.wikipedia.org/wiki/Tsodilo","https://en.wikipedia.org/wiki/Bechuanaland_Protectorate"]],
+    306: ["15세기 아이르 술탄국이 아가데스로 옮겨 옴. 프랑스 점령(1906)은 1900년 뒤",["https://en.wikipedia.org/wiki/Sultanate_of_A%C3%AFr"]],
+    307: ["1897 무렵 메넬리크 2세의 남진으로 에티오피아",["https://en.wikipedia.org/wiki/Borana_Oromo_people"]],
+    308: ["쿠마시는 1680년 무렵 오세이 투투가 세움, 1701 아샨티 왕국, 1896.1 영국",["https://en.wikipedia.org/wiki/Kumasi","https://en.wikipedia.org/wiki/Ashanti_Empire"]]
   };
 })(window.G = window.G || {});

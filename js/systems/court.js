@@ -30,6 +30,14 @@
 
   // ================================================================ 나라·작위
   CT.realmOf = function (sp) { var k = sp && G.COURT.bySponsor[sp.id]; return k ? G.COURT.realms[k] : null; };
+  /** 작위를 선포하는 군주별 전속 신하. 얼굴과 무릎상은 반드시 같은 생성 그림을 쓴다. */
+  CT.courtier = function (sp) {
+    var row = sp && G.COURT.courtiers && G.COURT.courtiers[sp.id];
+    if (!row) return null;
+    var c = G.CITY_DATA[sp.city], style = G.Img.folkStyle(c), key = 'portraits/courtiers/' + sp.id;
+    var portrait = G.Art.withImg(G.Art.npcSpec('courtier:' + sp.id, 'official', style, 'm'), [key]);
+    return { name: row.name, title: sp.title + '의 신하', portrait: portrait, portraitChain: [key], half: [key + '_half'], lang: SP().langLv(sp), li: SP().langLi(sp) };
+  };
   CT.isHome = function (realm) { return !!realm.nation && realm.nation === S().player.nation; };
   CT.ladder = function (realm) { return CT.isHome(realm) ? realm.ranks : realm.honor; };
   /** 이 나라에서 받은 작위의 칸 (0 = 없음) */
@@ -410,6 +418,11 @@
       '무릎을 꿇게, ' + me + '.\f…이 칼이 그대의 어깨에 닿는 순간부터, 그대는 ' + (home ? '' : '이 나라의 ') + tt.ko + '일세. 일어나게, ' + (tt.call || tt.ko) + '.',
       '가까이 오게, ' + me + '.\f이 예복과 칼을 받게. 오늘부터 그대는 ' + tt.ko + '일세. 내 땅 어디서든 그 이름으로 대접받을 걸세.',
       '가까이 오게, ' + me + '.\f이 교지를 받게. 오늘부터 그대는 ' + tt.ko + '일세.'), who);
+    var courtier = CT.courtier(sp);
+    if (courtier) await UI.say(line(realm,
+      SP().holderName(sp) + '의 이름으로 선포합니다. ' + me + U.jx(me, '은/는') + ' 이제 ' + CT.fullName(tt, true) + '이며, 이 교서가 그 권리와 의무를 증명할 것입니다.',
+      SP().holderName(sp) + '의 명에 따라 선포합니다. ' + me + U.jx(me, '은/는') + ' 오늘부터 ' + CT.fullName(tt, true) + '의 지위와 예우를 받습니다.',
+      SP().holderName(sp) + '의 교지입니다. ' + me + U.jx(me, '을/를') + ' ' + CT.fullName(tt, true) + U.jx(CT.fullName(tt, true), '으로/로') + ' 삼았음을 널리 알립니다.'), courtier);
     G.State.log(SP().holderName(sp) + '에게서 ' + CT.fullName(tt, true) + '의 작위를 받았다. (' + kindOf(t).name + ' — 하사금 ' + U.num(gold) + '닢, ' + G.Fame.NAME[t.cat] + ' 명성 +' + fame + ')');
     var more = n < CT.ladder(realm).length ? '<br><span class="muted">다음 작위: ' + U.esc(CT.ladder(realm)[n][0]) + ' — 통합 명성 ' + U.num((n + 1) * B().step) + '부터</span>' : '<br><span class="muted">이 나라에서 받을 수 있는 가장 높은 작위입니다.</span>';
     await UI.alert('<div class="center"><div style="font-size:17px" class="muted">' + U.esc(realm.name) + (home ? '' : ' · 명예 작위') + '</div>' +

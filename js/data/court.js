@@ -115,6 +115,18 @@
       honor: [['수직 사정', '受職 司正', '受職 司正', 1, '나리'], ['수직 호군', '受職 護軍', '受職 護軍', 3, '영감'], ['수직 상호군', '受職 上護軍', '受職 上護軍', 5, '영감']],
       foes: [['일본', 1510, 1512], ['일본', 1555, 1556], ['일본', 1592, 1598]], dens: EAST, ladies: ['정순 옹주', '경현 공주'] }
   } };
+  /* 서임 때 교서를 읽는 전속 신하. 얼굴·무릎상은 portraits/courtiers/<군주 id>(_half).webp 이다.
+     같은 나라라도 카스티야와 아라곤처럼 군주 자리가 다르면 서로 다른 신하가 나온다. */
+  G.COURT.courtiers = {
+    pt_king: { name: '왕실 전령관' }, es_crown: { name: '카스티야 전령관' }, es_aragon: { name: '아라곤 궁정서기관' },
+    fr_king: { name: '왕실 의전관' }, en_king: { name: '국왕 전령관' }, de_emperor: { name: '제국 전령관' },
+    it_doge: { name: '수상부 서기관' }, it_pope: { name: '교황청 공증관' }, dk_king: { name: '왕실 원수' },
+    pl_king: { name: '왕실 대법관' }, ru_prince: { name: '대공의 보야르' }, hu_king: { name: '왕실 의전관' },
+    ot_sultan: { name: '디완 서기관' }, eg_sultan: { name: '다와다르' }, pe_shah: { name: '왕실 문서관' },
+    hr_baykara: { name: '궁정 문서관' }, in_delhi: { name: '디완 서기관' }, in_gujarat: { name: '궁정 대리인' },
+    my_malacca: { name: '벤타라' }, in_vijaya: { name: '왕실 서기관' }, th_king: { name: '왕실 전령관' },
+    kr_king: { name: '승정원 승지' }
+  };
   var by = {};
   Object.keys(G.COURT.realms).forEach(function (k) { var r = G.COURT.realms[k]; r.id = k; r.sponsors.forEach(function (id) { by[id] = k; }); });
   G.COURT.bySponsor = by;

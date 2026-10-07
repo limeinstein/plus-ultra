@@ -61,7 +61,7 @@
   SC.discoveryPicture = function (d, chain) {
     chain = chain || G.Img.chain.discovery(d);
     var picked = G.Img.pick(chain), file = picked && G.Img.file(picked), art;
-    var animatedCat = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade';
+    var animatedCat = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade' || d.cat === 'people';   // 민족: 그림이 들어오면 바로 움직인다
     if (animatedCat && G.Reel && G.Reel.has(d)) {
       art = G.Reel.element(d, { cls: 'disc-build-gif', w: 1152, h: 512, ms: discoveryMotionMs(d) });
       art.setAttribute('aria-label', d.name);
@@ -142,7 +142,7 @@
   //   장면 판(images/discovery-sheets/ID.webp)이 있으면 그것을 Canvas로 돌린다(G.Reel) — GIF보다 가볍고, 빠르기를 게임이 정하며,
   //   다시 받지 않고 처음부터 돌릴 수 있다. 없으면 예전처럼 GIF를 <img>로.
   function revealKeys(d) {
-    if (d.cat !== 'geo' && d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural && d.cat !== 'creature' && d.cat !== 'treasure' && d.cat !== 'trade') return null;
+    if (d.cat !== 'geo' && d.cat !== 'ruin' && d.cat !== 'nature' && !d.natural && d.cat !== 'creature' && d.cat !== 'treasure' && d.cat !== 'trade' && d.cat !== 'people') return null;
     var sheet = G.Reel ? G.Reel.key(d) : null;
     var chain = G.Img.chain.discovery(d), picked = G.Img.pick(chain), file = picked && G.Img.file(picked);
     var gif = file && G.Img.isAnim(picked) ? picked : null;

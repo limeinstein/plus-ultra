@@ -41,7 +41,7 @@ assert goods == flat(atlas.GOODS), "교역품 데이터 순서와 그림 목록�
 
 item_text = (ROOT / "js" / "data" / "items.js").read_text(encoding="utf-8")
 shown_items = [m.group(1) for m in re.finditer(r"\{ id: '([^']+)', name: '[^']+', kind: '(weapon|armor|tool|gift|special)'", item_text)]
-assert shown_items == flat(atlas.ITEMS), "상점 소지품 데이터 순서와 그림 목록이 다릅니다."
+assert shown_items == atlas.ITEM_ORDER, "소지품 데이터 순서와 그림 목록이 다릅니다."
 
 check_icons("goods", goods, 192)
 check_icons("items", shown_items, 256)

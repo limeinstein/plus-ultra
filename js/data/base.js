@@ -335,7 +335,8 @@
     matPerHp: 0.4, matStart: 10,
     // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금, 첫 함대(배 ID — 앞의 것이 기함)
     // 모조품(js/systems/fakes.js): 값 = 발견물 가치 × priceK, 둘 다 바치면 사례금 × bothK·신뢰 +bothTrust, 들키면 벌금 = 사례금 × fineK 또는 옥살이 jailBase+세력×12+0~25일
-    fakes: { priceK: 0.12, bothK: 1.3, bothTrust: 10, fineK: 0.6, arrestBase: 0.3, jailBase: 20 },
+    //   상인은 달마다 day일에만, 도시 등급(G.CityIcon.tier: 1 소도시·2 중도시·3 대도시·4 수도) minTier 이상에만 나오고, 한 번 나올 때 stock개만 판다
+    fakes: { priceK: 0.12, bothK: 1.3, bothTrust: 10, fineK: 0.6, arrestBase: 0.3, jailBase: 20, day: 7, minTier: 2, stock: 2 },
     testChar: { stat: 99, luck: 99, gold: 999999999, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름 · gold: 소지금 최대(9억 9999만 9999닢)
     // 여관 허드렛일: 한 번에 최대 maxDays일. 하루에 명성이 famePerDay씩 내려가고(제독이 허드렛일을…), 그 고장 말을 익힌다 —
     // 말 단계(모름→기초→보통→능숙)마다 일한 날 langDays[지금 단계]일이 쌓이면 한 단계 오른다(지력이 높으면 빨리: 지력 50 기준)

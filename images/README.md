@@ -20,9 +20,11 @@
 | 거리 배경 (도시 화면) | `bg-styles/ib_port_a.jpg` 항구 · `bg-styles/ib_inland_a.jpg` 내륙 (여러 장이면 _a, _b …) | 1600×900 |
 | 거리 배경 — 한 도시만 | `backgrounds/도시번호.jpg` | 1600×900 |
 | 추가 도시 거리 배경 | `backgrounds/286.jpg`~`297.jpg` — 소주·하문·상해·독도·시베리아 5곳·우르가·후허호토·에도. 기존 그림을 참고해 내장 ImageGen으로 제작. 제작 지시문은 `tools/backgrounds/additional-prompts.json` | 1600×900 |
+| 아프리카 부족 마을 거리 배경 | `backgrounds/298.jpg`~`308.jpg` — 콰줄루·나망가·그쿠와·오요·카치나·푸타토로·아이트벤하두·초딜로·아가데스·보라나·쿠마시. 합성 초안을 구도 참고로 삼아 내장 ImageGen으로 다시 그렸으며, 제작 지시문은 `tools/backgrounds/africa-tribe-imagegen-prompts.json` | 1600×900 |
 | 거리 앞길 바닥 (지역별) | `street-ground/양식.webp` — `python tools/street_ground.py`가 Codex 기준 그림 `docs/art/regional-street-ground-reference.png`(칼사다·부채꼴·모자이크·둥근 돌·판석·흙길 6칸)에서 만드는 19장(iberia·espana·italy·france·east·russia·arabia·ottoman·swahili·africa·india·seasia·eastasia·japan·steppe·volcanic·andes·native·pueblo — `js/scenes/town.js` GROUND_STYLE) | 높이 164, 가로로 끝없이 이어지는 띠(폭 218~569) |
 | 건물 겉모습 (거리에 세움) | `exteriors/건물.webp` (tavern, trade, inn …) · 도시별 `@도시번호` · 후원자 저택 `mansion@후원자ID` | 배경 지운 PNG·WEBP, 높이 660 |
 | 지역별 건물 묶음 | `exterior-styles/<묶음>/건물.webp` — 북미 원주민은 `woodland`(숲: 나무껍질 긴 집·위그웜·티피·울타리·카누), `plains`(평원 티피·가죽 천막 시장·의식용 큰 티피·목책 성문, 다코타 230·만단 243), `pueblo`(흙벽돌 계단 집·키바, 타오스 241·아코마 242). 없는 건물은 plains·pueblo → woodland → tropic 순으로 빌림. `tools/natives/make.py`가 기본 그림을 다시 만든다 | 배경 지운 WEBP, 높이 520(시장 660) |
+| 아프리카 부족 건물 묶음 | `exterior-styles/kraal`은 남부 아프리카 벌집 오두막, `exterior-styles/tent`는 사하라·사헬 천막 양식이며 각각 13종 전용 외형이 있다. 기본 6종은 `tools/natives/africa.py`, 추가 7종은 내장 ImageGen 제작물이며 지시문은 `tools/natives/africa-imagegen-prompts.json`에 있다 | 배경 지운 WEBP, 높이 520 |
 | 거리 볼거리 (장식) | 도시 건축 발견물은 `landmarks/발견물ID.webp`로 두면 해당 도시·건축 연도에 자동 배치. 그 밖의 장식은 `landmarks/이름.webp`와 `js/scenes/town.js`의 `LANDMARKS`로 수동 배치 | 배경 지운 PNG·WEBP, 권장 높이 520 |
 | 제독 — 거리에서 걷는 모습 | `characters/walk_1.webp` … `walk_8.webp` (옆모습, 발끝이 아래) | 높이 430 |
 | 제독 — 수첩 반신상 | `characters/player_half.webp` | 512×512 |
@@ -41,10 +43,12 @@
 | 술집 접대부 — 대화창 얼굴 | `portraits/maids/여급ID.webp` (예: `m_lis`) | 1024×1024, 투명 배경 |
 | 술집 접대부 — 리깅 반신 | `portraits/maids/여급ID_half.webp` (예: `m_lis_half`) | 1024×1536, 투명 배경·머리부터 무릎까지 |
 | 후원자 | `portraits/sponsors/후원자ID.png`, 시대별 인물은 `_2`, `_3` … — 번호는 `js/data/rulers.js`의 그림 번호(도감 후원자 칸에 사람마다 파일 이름이 나옴. 예: 메리 1세 `en_king_7`, 제임스 1세 `en_king_8`). 여성 군주에게는 자리 공통 그림(남성)을 쓰지 않고 그 고장 귀부인 그림으로 | 512×512 |
+| 왕실 신하 | `portraits/courtiers/군주ID.webp`, 무릎상은 `_half.webp` — 왕명을 마치고 작위를 받을 때 교서를 읽는 전속 신하. 카스티야 `es_crown`과 아라곤 `es_aragon`도 서로 다른 얼굴 | 얼굴 512×512 · 무릎상 1024×1536 투명 |
 | 경쟁자 | `portraits/rivals/이름.png` (예: `바르톨로메우 디아스.png`) | 512×512 |
 | 마을 사람 | `portraits/npc/역할.png` (예: `trader`), 문화권별 `_islam`, 도시별 `@0` | 512×512 |
 | 마을 사람 — 도시마다 다른 얼굴 | 같은 이름 뒤에 `_f`(여) `_m`(남) `_2` `_3` 을 붙이면 도시 번호에 따라 번갈아 나옵니다. 예: `portraits/npc/priest_europe_f.webp` (수녀) | 512×512 |
 | 마을 사람 — 도시 양식×역할 240장 | `portraits/npc-roles/양식/역할.webp` (예: 조선 상인 `kr/merchant.webp`). 양식 20종×역할 12종이며, `portraits/npc/역할@도시번호`가 있으면 도시 전용 그림을 먼저 씁니다. | 512×512, 투명 배경 |
+| 거리 보행 지역 NPC 14종 | `street-folk/역할_양식/walk_1.webp` … `walk_8.webp` — 마을 남녀·소년·소녀·촌장 할아버지·할머니·사서·여관 주인·동물·모험가·장사꾼·귀족 청년·병사·항해사 × 도시 양식 20종. 원본 4×2 시트는 `npc-walk/양식/역할_sheet.png`, `python tools/npc_walks.py`로 나눔. 기존 주민 경로 `man_양식`도 유지 | 한 장 380×444, 투명 배경·오른쪽 보행 전신 |
 | 국가별 항해사 후보·후원자 760장 | `portraits/pools/mates/국가/f/01.webp`, `portraits/pools/sponsors/국가/m/01.webp`. 국가 19종×항해사·후원자×여·남×10명 | 512×512, 투명 배경 |
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |
 | 자녀 | `portraits/family/daughter_age5.png` · `_age10` · `_age15` (3~7살·8~12살·13살부터), `son_…` 같은 꼴. 무릎상은 끝에 `_half` (대화창 위에 서는 모습, 1024×1536 투명). 딸은 어머니의 고장 `portraits/family/<고장>/daughter_…` (여급 그림 묶음 `maid-styles/<고장>`과 같은 이름: iberia·france·britain·korea…), 아들은 제독의 생김새 `portraits/family/<생김새>/son_…` (sea_dog·muscle_swordsman… `I.heroLook`). 없으면 폴더 없는 그림 → `daughter_<몇째>.png` → `daughter.png` | 흉상 1254×1254, 무릎상 1024×1536 |
@@ -75,6 +79,13 @@
 `sky_adventurer`(갈색 가죽 모험 항해사), `blackcoat_captain`(검은 코트의 냉정한 선장)입니다.
 기본 제독 `admiral`과 이강희 `ganghui`에도 40대 얼굴·무릎상이 있습니다.
 정지 인물화는 머리부터 무릎까지만 그리며 정강이·장화·발은 포함하지 않습니다. 보행·전투 동작 시트만 동작 판독을 위해 전신을 사용합니다.
+
+이름이 정해진 주인공 16명은 `leonardo_de_valenca`, `duarte_de_valenca`, `ines_de_valcarcel`,
+`edmund_ashford`, `matteo_bellandi`, `laurens_van_der_velder`, `alessio_giorgi`, `martim_de_sequeira`,
+`hernando_de_montemayor`, `gabriel_de_avelar`, `lisbeth_van_acker`, `henrik_stensson`,
+`vittoria_contarini`, `konrad_von_falkenstein`, `adrien_de_montclair`, `katrin_de_kermor`입니다.
+투명 원본은 `images/_extra/protagonists/`에 두고 `python tools/protagonist_portraits.py`를 실행하면
+같은 인물에서 512×512 얼굴과 무릎상, 두 점검판을 다시 만듭니다.
 
 ## 항해 효과 시트 규격
 

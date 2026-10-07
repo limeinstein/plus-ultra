@@ -75,6 +75,8 @@
     row('국가', U.esc(owner) + (since && since.y > 1480 ? ' <small class="muted">' + since.y + '년부터' + (owner !== orig ? ' · 원래 ' + U.esc(orig) : '') + '</small>' : owner !== orig ? ' <small class="muted">(원래 ' + U.esc(orig) + ')</small>' : ''));
     row('도시 규모', (G.CityIcon ? G.CityIcon.label(c) : CI.SIZE[c.size]) + ' · ' + (c.port ? '항구' : '내륙 도시') + (R.facilities(c).shipyard ? ' · 조선소' : ''));
     if (G.CityIcon) row('도시 양식', G.CityIcon.cultureName(c));
+    var tb = G.TRIBES && G.TRIBES[c.id];
+    if (tb) row('부족', U.esc(tb.tribe) + (tb.nomad ? ' <small class="muted">떠도는 사람들</small>' : '') + '<br><small class="muted">' + U.esc(tb.note) + '</small>');
     // 지도자
     if (visited || own || hist >= 1 || (speak && speech >= 2)) row('지도자', U.esc(CI.leader(c)), visited ? '가 봄' : own ? '우리나라' : hist >= 1 ? CI.who('hist') : CI.who('speech'));
     else row('지도자', '?', '', '가 보거나 역사학을 아는 사람(또는 그 고장 말과 웅변 2)이 있으면 압니다');

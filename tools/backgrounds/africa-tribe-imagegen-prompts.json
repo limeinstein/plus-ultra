@@ -1,0 +1,84 @@
+{
+  "description": "아프리카 부족 마을 11곳(298~308)의 거리 배경 제작 기록. 기존 합성 초안은 구도 참고로만 쓰고, 내장 ImageGen으로 장면 전체를 하나의 그림처럼 다시 그렸다. 생성 PNG를 1600×900 RGB JPEG로 저장했다.",
+  "tool": "image_gen.imagegen",
+  "common_prompt": "Use case: historical-scene. Asset type: full-bleed 16:9 game city background for a historical age-of-sail strategy game. Use the input image only as an edit target and broad composition guide; repaint the entire scene cohesively and remove every pasted edge, repeated cutout and repair band. Match the project's painterly realistic historical strategy-game matte-painting style, restrained fine brush texture, natural materials, warm late-afternoon daylight and blue atmospheric distance. Keep the settlement in the middle band and the bottom 40–45% as quiet landscape behind separately overlaid game buildings. No close buildings, foreground characters, text, labels, UI, border, collage, modern objects or watermark.",
+  "cities": [
+    {
+      "id": 298,
+      "name": "콰줄루",
+      "reference": "images/backgrounds/298.jpg",
+      "output": "images/backgrounds/298.jpg",
+      "prompt": "Precolonial Zulu/Nguni royal homestead in the rolling grasslands of KwaZulu-Natal, 17th–early 18th century: a circular cattle enclosure ringed by beehive-shaped grass huts and timber palisade on a distant ridge, tiny cattle, tawny-green rolling hills; no lake, river, colonial or European elements."
+    },
+    {
+      "id": 299,
+      "name": "나망가",
+      "reference": "images/backgrounds/299.jpg",
+      "output": "images/backgrounds/299.jpg",
+      "prompt": "Early Maasai manyatta near the Kenya–Tanzania border, 17th–18th century: oval thorn-fenced cattle enclosure, low rounded mud-and-dung huts with grass roofs, tiny cattle, acacias, and broad hazy Kilimanjaro with restrained summit snow; no Asian architecture or colonial objects."
+    },
+    {
+      "id": 300,
+      "name": "그쿠와",
+      "reference": "images/backgrounds/300.jpg",
+      "output": "images/backgrounds/300.jpg",
+      "prompt": "Precolonial Xhosa/Nguni homesteads in the Eastern Cape, 17th–18th century: round wattle-and-daub huts with conical thatch roofs, circular cattle kraals, small fields, aloes, thorn trees and a winding shallow stream among rolling grasslands; no palaces, city wall, church or colonial road."
+    },
+    {
+      "id": 301,
+      "name": "오요",
+      "reference": "images/backgrounds/301.jpg",
+      "output": "images/backgrounds/301.jpg",
+      "prompt": "Old Oyo, capital of the Oyo Empire in the 16th–17th century: low reddish earthen wall and wooded ditch, dense Yoruba courtyard compounds of laterite walls and steep thatch roofs, a low sprawling royal palace compound, market clearings and shade trees; no stone towers, fantasy palace or minarets."
+    },
+    {
+      "id": 302,
+      "name": "카치나",
+      "reference": "images/backgrounds/302.jpg",
+      "output": "images/backgrounds/302.jpg",
+      "prompt": "Katsina, prosperous 16th-century Hausa walled city: reddish mud-brick walls with rounded buttresses and a simple gate, low earthen compounds, thatch roofs, shade trees and exactly one tall tapering mud-brick Gobarau minaret, with dry fields and acacias outside; no Ottoman skyline or colonial buildings."
+    },
+    {
+      "id": 303,
+      "name": "푸타토로",
+      "reference": "images/backgrounds/303.jpg",
+      "output": "images/backgrounds/303.jpg",
+      "prompt": "Futa Toro settlement beside the middle Senegal River, 16th–17th century: round earthen huts with conical grass roofs, low mud compounds, reed fences, cattle pens and tiny cattle on a raised bank, with a broad river channel and green seasonal floodplain; no bright tents, domes, minarets or large city."
+    },
+    {
+      "id": 304,
+      "name": "아이트벤하두",
+      "reference": "images/backgrounds/304.jpg",
+      "output": "images/backgrounds/304.jpg",
+      "prompt": "Aït Benhaddou in Morocco's Ounila valley, 16th–17th century: compact connected ochre rammed-earth ksar climbing a rocky hill, restrained crenellated towers, defensive wall, dry stony riverbed, palms and cultivated ribbon, layered Atlas foothills; no modern road, cars, wires or tourists."
+    },
+    {
+      "id": 305,
+      "name": "초딜로",
+      "reference": "images/backgrounds/305.jpg",
+      "output": "images/backgrounds/305.jpg",
+      "prompt": "Small precolonial San camp at the Tsodilo Hills: distinctive rocky hill mass, only a handful of tiny dome-shaped brush shelters at its foot, a low windbreak and faint hearth smoke, sparse acacia scrub, pale sand and dry grass; no permanent town, livestock, palisade or monumental buildings."
+    },
+    {
+      "id": 306,
+      "name": "아가데스",
+      "reference": "images/backgrounds/306.jpg",
+      "output": "images/backgrounds/306.jpg",
+      "prompt": "Agadez, 16th-century Tuareg caravan city: low dense mud-brick town and modest earthen walls, flat roofs, the Grand Mosque's single tapering clay minaret with toron beams, sparse acacias, tiny camel caravan and distant Aïr Mountains; no stone pyramid, Ottoman domes or European buildings."
+    },
+    {
+      "id": 307,
+      "name": "보라나",
+      "reference": "images/backgrounds/307.jpg",
+      "output": "images/backgrounds/307.jpg",
+      "prompt": "Precolonial Borana Oromo pastoral settlement, 16th–18th century: dispersed low rounded pole-and-grass huts, irregular thorn enclosures and central cattle pens, tiny cattle, red earth, umbrella acacias and gentle hazy escarpments; no masonry town, palaces, towers or East Asian pavilions."
+    },
+    {
+      "id": 308,
+      "name": "쿠마시",
+      "reference": "images/backgrounds/308.jpg",
+      "output": "images/backgrounds/308.jpg",
+      "prompt": "Kumasi around the late 17th–early 18th century: broad ceremonial street, Akan timber-and-clay courtyard compounds with steep thatch roofs and restrained geometric motifs, a low sprawling royal compound, cultivated clearings, dense humid forest and one large shade tree; no stone temple, fantasy palace or colonial structures."
+    }
+  ]
+}

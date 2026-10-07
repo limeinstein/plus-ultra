@@ -114,8 +114,8 @@
       { label: '시세', icon: 'chart', sub: '물건 값 ' + Math.round(U.sum(Object.keys(R.ITEM_CATS), function (k) { return R.itemMult(c, { id: '_', kind: k }); }) / 4 * 100) + '%', onClick: function () { return C.B.trade.quotes(c); } },
       R.purser() ? { label: '값 후려치기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공' : '실패') : '경리 ' + R.purser().name, dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
       { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } },
-      // 발견물이 있을 것으로 짐작되는 고장의 시장: 그 발견물의 모조품 (js/systems/fakes.js)
-      G.Fakes && G.Fakes.forSale(c).length ? { label: '모조품 상인', icon: 'seal', sub: G.Fakes.forSale(c).length + '가지', onClick: function () { return G.Fakes.buy(c); } } : null
+      // 발견물이 있을 것으로 짐작되는 고장의 시장: 그 발견물의 모조품 (js/systems/fakes.js) — 달마다 7일, 중도시 이상, 한 번에 2개
+      G.Fakes && G.Fakes.shown(c) ? { label: '모조품 상인', icon: 'seal', sub: G.Fakes.left(c) ? G.Fakes.stock(c).length + '가지 · 오늘 ' + G.Fakes.left(c) + '개 남음' : '오늘 몫은 다 팔림', dim: !G.Fakes.left(c), onClick: function () { return G.Fakes.buy(c); } } : null
     ].filter(Boolean);
   };
   MK.buy = async function (c) {
@@ -192,14 +192,15 @@
   CH.title = function (c) { return R.churchName(c); };
   CH.exitLabel = '밖으로 나온다';
   C.B.church = CH;
+  function tribal(c) { return !!(c.flags && c.flags.indexOf('T') >= 0); }   // 아프리카 부족 마을의 사당 (js/data/tribes.js)
   function priest(c) {
     var g = G.Img.npcGender('priest', c);
-    var t = c.rel === 'I' ? '이맘' : c.rel === 'C' || c.rel === 'O' ? (g === 'f' ? '수녀' : '신부') : '승려';
+    var t = c.rel === 'I' ? '이맘' : c.rel === 'C' || c.rel === 'O' ? (g === 'f' ? '수녀' : '신부') : tribal(c) ? '제사장' : '승려';
     return C.npc('priest', t);
   }
   CH.enter = async function (c) {
     var s = S(), christian = c.rel === 'C' || c.rel === 'O';
-    await C.say(priest(c), christian ? C.hail(c, 'church', ['어서 오시오, 길 잃은 어린 양이여.', '신의 가호가 함께하기를.']) : c.rel === 'I' ? C.hail(c, 'church', ['평화가 함께하기를. 이방인이여, 무슨 일이오?', '알라의 집에 오신 것을 환영하오.']) : U.pick(['먼 곳에서 온 손님이군요. 편히 쉬었다 가시오.', '모든 생명에 자비가 있기를.']));
+    await C.say(priest(c), christian ? C.hail(c, 'church', ['어서 오시오, 길 잃은 어린 양이여.', '신의 가호가 함께하기를.']) : c.rel === 'I' ? C.hail(c, 'church', ['평화가 함께하기를. 이방인이여, 무슨 일이오?', '알라의 집에 오신 것을 환영하오.']) : tribal(c) ? U.pick(['조상들의 혼이 지켜보는 곳이오. 먼 데서 온 손님이여, 무슨 일로 왔소?', '이 사당에서는 모두 신발을 벗고 목소리를 낮추오. 정령께 무엇을 빌러 왔소?']) : U.pick(['먼 곳에서 온 손님이군요. 편히 쉬었다 가시오.', '모든 생명에 자비가 있기를.']));
     C.current().prayed = false;
   };
   CH.sub = function (c) { return C.relName(c); };

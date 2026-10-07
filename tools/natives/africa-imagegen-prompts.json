@@ -1,0 +1,22 @@
+{
+  "useCase": "stylized-concept",
+  "assetType": "transparent 2D game building exterior sprite",
+  "shared": "Match the referenced regional set: polished hand-painted game asset, tactile natural materials, slightly stylized, frontal near-orthographic street view, centered full silhouette, ground baseline at bottom, warm daylight from upper left, genuinely transparent background with clean alpha. No people, animals, signs, text, letters, UI, sky, horizon, scenery, trees, watermark, or European architecture.",
+  "normalization": "python tools/normalize_generated_exterior.py <generated.png> images/exterior-styles/<set>/<kind>.webp --height 520",
+  "assets": {
+    "kraal/home": "Two connected beehive-shaped dry-grass family huts with woven reed ribs, small dark arched doors, entrance mats and clay pots.",
+    "kraal/church": "Indigenous southern African ceremonial meeting shrine: tall central beehive-thatch hall, two small side huts, carved posts, earth-pigment bands and cattle-horn finials; no imported religious symbol.",
+    "kraal/harbor": "Precolonial river landing with short timber jetty, beehive-thatch shelter, dugout canoe, rope, baskets and a horn-topped watch post.",
+    "kraal/library": "Oral-history and records house: broad beehive hall, attached hut, carved memory posts, covered stoop, closed hide scroll cases and pottery; no readable writing.",
+    "kraal/mansion": "Prosperous clan leader's homestead: large beehive residence, two smaller huts, covered entry, reed fencing, refined pottery, earth-pigment decoration and cattle-horn status ornaments.",
+    "kraal/palace": "Monumental royal kraal audience hall with layered beehive thatch, flanking huts, carved entrance posts, woven palisade, horn finials and ceremonial shields.",
+    "kraal/shipyard": "Open-sided thatch river-canoe workshop with a dugout canoe on trestles, adzes, rope, stacked logs and baskets.",
+    "tent/home": "Modest Fulani-Tuareg dwelling: low russet leather tent, attached woven-mat round hut, forked posts, indigo-and-ochre rugs, water bags and pottery.",
+    "tent/church": "Mobile Tuareg-Fulani prayer pavilion: cream-and-russet hide canopy, mat walls, carved forked posts, central prayer mast, rolled mats and indigo accents; no readable script.",
+    "tent/harbor": "Senegal-or-Niger river landing with timber jetty, hide-and-mat shade canopy, dugout canoe, rope, water bags, salt slabs and baskets.",
+    "tent/library": "Learned marabout's mobile study pavilion with dark-russet leather, mat walls, indigo rug, manuscript chests, scroll cases, ink vessels and blank writing boards.",
+    "tent/mansion": "Wealthy clan leader's mobile residence: broad leather pavilion with side awnings, cream mat walls, elaborate posts, rugs, decorated chests and trade goods.",
+    "tent/palace": "Grand desert ruler's audience pavilion with layered cream-and-russet hide canopies, symmetrical awnings, tall forked posts, raised entry, indigo panels and plain-color banners.",
+    "tent/shipyard": "Sahel river canoe workshop under a russet hide canopy, with a long dugout on trestles, adzes, wood chips, timber, rope, water bags and baskets."
+  }
+}

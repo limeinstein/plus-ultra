@@ -4,6 +4,7 @@
    - 같은 것을 다른 후원자에게 또 팔면(이중 계약) 먼저 보고받은 후원자가 추격자를 보낸다 → 바다에 한 번 나타난다
    - 들키면 벌금 또는 옥살이(날이 흐르고 한 해 동안 못 만남)
    - 진짜와 모조품을 함께 바치면 사례금 ×1.3·신뢰 더
+   - 상인은 달마다 7일에만, 중도시 이상에만 나오고, 한 번 나올 때 2개만 판다
    node tests/fakes_smoke.js */
 'use strict';
 const path = require('path');
@@ -31,7 +32,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       UI.ask = async (t, opts) => { const a = answers.shift(); return a === undefined ? null : a; };
       SP.shareWithMates = async () => {}; if (G.Names) G.Names.onReport = async () => {};
       const city = G.Scenes.city.city();
-      s.date = { y: 1500, m: 3, d: 1 };
+      s.date = { y: 1500, m: 3, d: 7 };
       // 리스본에서 12° 안의, 아직 못 찾은 모조품감 하나
       const d = G.DISCOVERIES.filter(x => F.fakeable(x) && x.how !== 'city' && !G.Disc.foundByMe(x.id) && G.Geo.dist(city.lon, city.lat, x.lon, x.lat) < 12 && G.Disc.built(x))[0];
       out.d = d.id;
@@ -40,6 +41,24 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.price = F.price(d);
       G.Scenes.city.visit && 0;
       out.menu = G.Scenes.city.B.market.menu(city).some(it => it.label === '모조품 상인');
+      // 7일에만 · 중도시 이상 · 한 번에 2개
+      const mk = G.Scenes.city.B.market;
+      s.date = { y: 1500, m: 3, d: 8 };
+      out.day8 = F.open(city) || mk.menu(city).some(it => it.label === '모조품 상인');
+      s.date = { y: 1500, m: 3, d: 7 };
+      const small = G.CITY_DATA.filter(c => G.CityIcon.tier(c) === 1)[0], mid = G.CITY_DATA.filter(c => G.CityIcon.tier(c) === 2)[0];
+      out.small = F.open(small); out.mid = F.open(mid); out.smallName = small.name; out.midName = mid.name;
+      G.DISCOVERIES.filter(x => F.fakeable(x) && !G.Disc.foundByMe(x.id) && G.Disc.built(x) && G.Geo.dist(city.lon, city.lat, x.lon, x.lat) < 12).slice(0, 6).forEach(x => { s.hints[x.id] = s.hints[x.id] || 'test'; });
+      out.cands = F.forSale(city).length; out.stock = F.stock(city).length;
+      const uch = UI.choose, gold0 = s.player.gold; s.player.gold = 1e7;
+      UI.choose = async () => 0;
+      const have0 = F.list().length;
+      await F.buy(city);
+      out.bought = F.list().length - have0; out.left = F.left(city);
+      const it = mk.menu(city).filter(it => it.label === '모조품 상인')[0]; out.soldSub = it && it.sub;
+      s.date = { y: 1500, m: 4, d: 7 }; out.nextMonth = F.left(city);
+      UI.choose = uch; s.player.gold = gold0; F.list().forEach(x => F.give(x.id, -F.count(x.id)));
+      s.date = { y: 1500, m: 3, d: 7 };
       // 1) 계약 → 못 찾은 채 모조품만 → 안 들킴
       const king = G.SPONSOR.pt_king, merch = G.SPONSOR.pt_marchionni;
       F.give(d.id, 1);
@@ -93,6 +112,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.paidBoth = s2.player.gold - g4; out.trustBoth = SP.rel(sch.id).trust - t4; out.fakeLeft = F.count(d3.id);
       return out;
     });
+    ok(!r.day8, '8일에는 모조품 상인이 없다');
+    ok(!r.small && r.mid, '소도시(' + r.smallName + ')에는 없고 중도시(' + r.midName + ')에는 7일에 나온다');
+    ok(r.cands > 2 && r.stock === 2, '살 수 있는 모조품 ' + r.cands + '가지 가운데 오늘 내놓는 것은 2개');
+    ok(r.bought === 2 && r.left === 0 && /다 팔림/.test(r.soldSub || ''), '한 번에 2개만 판다 — 다 사면 「' + r.soldSub + '」');
+    ok(r.nextMonth === 2, '다음 달 7일에 다시 2개');
     ok(r.forSale && r.menu, '리스본 시장에 「모조품 상인」 — 「' + r.d + '」 모조품 금화 ' + r.price);
     ok(r.paid1 > 0 && !r.found1 && r.fakeTo && r.fakeTo.indexOf('pt_king') >= 0 && !r.contract1, '못 찾은 채 모조품만으로 계약 보고: 사례금 ' + r.paid1 + ', 발견물은 그대로 못 찾은 상태');
     ok(r.paid2 > 0 && r.chaser === 'pt_king', '다른 후원자에게 또 팔면(이중 계약) 사례금 ' + r.paid2 + ' — 포르투갈 국왕이 추격자를 보낸다');

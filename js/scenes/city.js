@@ -88,7 +88,7 @@
     out.push({ kind: 'tavern', name: '술집', icon: 'mug' });
     out.push({ kind: 'inn', name: '여관', icon: 'bed' });
     if (f.market) out.push({ kind: 'market', name: '시장', icon: 'sack' });
-    out.push({ kind: 'church', name: R.churchName(c), icon: c.rel === 'I' ? 'mosque' : c.rel === 'C' || c.rel === 'O' ? 'church' : 'temple' });
+    if (f.church) out.push({ kind: 'church', name: R.churchName(c), icon: c.rel === 'I' ? 'mosque' : c.rel === 'C' || c.rel === 'O' ? 'church' : 'temple' });
     if (f.library) out.push({ kind: 'library', name: R.libraryName(c), icon: 'book' });
     if (f.palace) {
       // 이름 있는 왕궁은 지금 주인이 있는 곳마다 따로 (한양: 국왕의 경복궁, 세자의 창덕궁)
@@ -168,6 +168,8 @@
     var news = msgs.filter(function (m) { return m.history; });
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     if (first && arg.arrive) UI.toast(c.name + '에 처음으로 입항했다.', 'anchor');
+    var tb = G.TRIBES && G.TRIBES[c.id];   // 아프리카 부족 마을: 처음 들르면 부관이 그 부족을 일러 준다
+    if (first && arg.arrive && tb && tb.hello) { try { await C.mate(tb.hello + (tb.after && s.date.y >= tb.after[0] ? ' ' + tb.after[1] : '')); } catch (e) { console.error(e); } }
     // 항해를 돌아본다
     if (arg.arrive && s.voyage && s.loc.via !== 'land') {
       var v = s.voyage, days = voyDays;
