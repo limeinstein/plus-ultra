@@ -274,8 +274,8 @@
   G.FX.disaster = { on: true, w: 640, h: 280, bottom: 205, shake: 1.6 };
   // 거리를 걷는 마을 사람 (js/systems/streetfolk.js · 그림 js/art/streetfolk.js): 거리에 나올 때마다 min~max명,
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
-  //   fps: 거리 사람만 움직일 때 거리를 다시 그리는 횟수(초당) — 낮출수록 가볍다
-  G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100, fps: 30 };
+  //   fps: 거리 사람만 움직일 때 거리를 다시 그리는 횟수(초당) — 낮출수록 가볍다 · imgH: 걷는 그림(380×444 한 장)을 그리는 높이 px (제독 178)
+  G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100, fps: 60, imgH: 158 };
   /** 코스타 델 솔 3 OST 유튜브 재생기 창 (js/systems/ytmusic.js) — 유튜브 규칙상 200×200보다 작게 하거나 숨길 수 없다.
      w·h 재생기 크기 · idle 마우스를 올리지 않았을 때 흐림(0~1) · flash 곡이 바뀌면 또렷하게 보이는 초 · gap 구석에서 띄우는 px */
   G.FX.ostBox = { w: 200, h: 200, idle: 0.5, flash: 2.5, gap: 8 };

@@ -65,6 +65,8 @@
     I.prefetchKeys(keys.filter(function (k, i) { return k && keys.indexOf(k) === i; }));
   };
   SF.make = function (type, c, streetW, heroX, ground, seed) {
+    // 짐승: 그 지역의 걷는 그림이 있으면 그 그림의 짐승으로 (지역마다 개 또는 고양이 한 마리)
+    if (D().types[type] && D().types[type].animal && imgFrames(type, c)) { var pk = (D().petKind || {})[G.Img.folkStyle(c)] || 'dog'; if (D().types[pk]) type = pk; }
     var k = K(), T = D().types[type], dp = k.depth || [12, 52], sc = k.scale || [0.92, 1.06];
     var depth = U.rf(dp[0], dp[1]), f0 = { type: type, name: T.name, animal: !!T.animal, seed: seed }, sp = SF.speaker(f0, c);
     // 거리의 모습은 대화창 얼굴과 같은 성별로: 그림이 있으면 그 그림의 성별, 없으면 코드 얼굴의 성별
@@ -73,14 +75,28 @@
       sc: (sc[0] + (depth - dp[0]) / Math.max(1, dp[1] - dp[0]) * (sc[1] - sc[0])), dir: U.chance(0.5) ? 1 : -1,
       state: 'idle', timer: U.rf(0, 2.5), ph: U.rf(0, 1), v: 0, target: heroX, minX: 60, maxX: streetW - 60, talked: 0, used: false, frames: imgFrames(type, c) };
   };
+  /** 걷는 그림 8장: 그 도시 양식(20곳) → 문화권 → 공통 차례로. 그림 이름은 G.STREET_FOLK.sprites (마을 남자 = town_man …) */
+  /** 걷는 그림: 한 장짜리 시트(street-folk/<그림 이름>_<양식>.webp — 4열×2줄 8단계, 칸마다 380×444) 또는 낱장(…/walk_1…8).
+      도시 양식 → 문화권 → 공통 차례로 찾는다. 그림 이름은 G.STREET_FOLK.sprites (마을 남자 = town_man …).
+      돌려주는 값: 8칸 [{k: 그림 키, c: 시트의 칸 번호(낱장이면 없음)}] */
   function imgFrames(type, c) {
-    var I = G.Img; if (!I || !I.list) return null;
-    var cul = A.folkCulture ? A.folkCulture(c).cul : 'europe', l = I.list('street-folk/' + type + '_' + cul + '/walk_');
-    if (!l.length) l = I.list('street-folk/' + type + '/walk_');
-    if (!l.length) return null;
-    l.forEach(function (key) { if (I.want) I.want(key); });
-    return l;
+    var I = G.Img; if (!I || !I.list || !I.has) return null;
+    var name = (D().sprites || {})[type] || type, style = I.folkStyle ? I.folkStyle(c) : c.style;
+    var cul = A.folkCulture ? A.folkCulture(c).cul : 'europe';
+    var cands = ['street-folk/' + name + '_' + style, 'street-folk/' + type + '_' + cul, 'street-folk/' + type];
+    for (var i = 0; i < cands.length; i++) {
+      var key = cands[i];
+      if (I.has(key)) { if (I.want) I.want(key); return [0, 1, 2, 3, 4, 5, 6, 7].map(function (n) { return { k: key, c: n }; }); }
+      var l = I.list(key + '/walk_');
+      if (l.length) {
+        l.sort(function (a, b) { return (+(/(\d+)$/.exec(a) || [0, 0])[1]) - (+(/(\d+)$/.exec(b) || [0, 0])[1]); });   // walk_1 … walk_8 차례 (walk_10 넘어도)
+        l.forEach(function (k) { if (I.want) I.want(k); });
+        return l.map(function (k) { return { k: k }; });
+      }
+    }
+    return null;
   }
+  SF.frames = imgFrames;
 
   // ---------------------------------------------------------------- 걷기
   /** 한 번 움직인다. 움직인 사람이 있으면 true */
@@ -102,7 +118,7 @@
         var d = f.target - f.x, step = f.v * dt;
         if (Math.abs(d) <= step) { f.x = f.target; f.state = 'idle'; var idl = k.idle || [1.2, 4.5]; f.timer = U.rf(idl[0], idl[1]); }
         else { f.x += Math.sign(d) * step; f.dir = d > 0 ? 1 : -1; }
-        var stride = f.spec.h * f.sc * (f.animal ? 0.9 : 0.62);
+        var stride = (f.frames ? (K().imgH || 158) * (f.animal ? 0.45 : f.spec.child ? 0.78 : 1) : f.spec.h) * f.sc * (f.animal ? 0.9 : 0.62);   // 걷는 그림이면 그림 키로
         f.ph = (f.ph + step / stride) % 1;
         moved = true;
       }
@@ -111,15 +127,21 @@
   };
 
   // ---------------------------------------------------------------- 그리기·누르기
+  function k0() { return K(); }
   SF.draw = function (ctx, f, cam, glow) {
     var x = f.x - cam; if (x < -120 || x > 1720) return;
     var moving = f.state === 'walk';
     if (f.frames) {
-      var I = G.Img, idx = moving ? Math.floor(f.ph * f.frames.length) % f.frames.length : 0, img = I.get(f.frames[idx]);
+      var I = G.Img, idx = moving ? Math.floor(f.ph * f.frames.length) % f.frames.length : 0, fr = f.frames[idx], img = I.get(fr.k);
       if (img) {
-        var h = f.spec.h * f.sc * 1.12, w = (img.naturalWidth || img.width) * h / (img.naturalHeight || img.height);
+        // 한 칸(380×444)은 어른 키에 맞춰 그렸고, 아이·짐승은 칸 안에서 이미 작다 (tools/npc_walks.py displayScale) — 칸 높이는 모두 같게
+        var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, cw = fr.c != null ? iw / 4 : iw, ch = fr.c != null ? ih / 2 : ih;
+        var h = (k0().imgH || 158) * f.sc, w = cw * h / ch;
         ctx.save(); ctx.fillStyle = 'rgba(40,26,12,.28)'; ctx.beginPath(); ctx.ellipse(x, f.y - 2, w * 0.3, 7, 0, 0, 7); ctx.fill();
-        ctx.translate(x, f.y); if (f.dir < 0) ctx.scale(-1, 1); ctx.drawImage(img, -w / 2, -h, w, h); ctx.restore();
+        ctx.translate(x, f.y); if (f.dir < 0) ctx.scale(-1, 1);
+        if (fr.c != null) ctx.drawImage(img, (fr.c % 4) * cw, Math.floor(fr.c / 4) * ch, cw, ch, -w / 2, -h, w, h);   // 시트의 한 칸
+        else ctx.drawImage(img, -w / 2, -h, w, h);
+        ctx.restore();
         if (glow) A.drawFolk(ctx, { h: f.spec.h, type: 'none' }, x, f.y, 1, 0, false, f.sc, true);
         return;
       }
@@ -150,9 +172,12 @@
         var base = A.npcSpec('street:' + c.id + ':' + f.seed, fc.role || 'sailor', G.Img.folkStyle(c), fc.g);
         if (fc.age) { base = Object.assign({}, base, { age: fc.age }); if (fc.age === 'young') { base.beard = 0; base.moustache = false; } if (fc.age === 'old') base.hair = '#c8c0b0'; }
         // 역할 그림(npc-roles)은 문화권마다 남녀가 정해져 있다(학자·귀족 그림은 여자 등) — 성별이 맞을 때만 쓰고, 아니면 코드로 그린 얼굴
-        var stl = G.Img.folkStyle(c), okImg = fc.img && (!A.rolePortraitGender || A.rolePortraitGender(fc.img, stl) === (fc.g || 'm'));
+        var stl = G.Img.folkStyle(c), rg = fc.img && A.rolePortraitGender ? A.rolePortraitGender(fc.img, stl) : null;
+        if (!fc.g && rg) base = Object.assign({}, base, { g: rg });   // 성별을 정하지 않은 사람(마을 사람·젊은 귀족)은 그 지역 역할 그림(=걷는 그림)의 성별
+        var okImg = fc.img && (!rg || rg === (fc.g || base.g));
         sp.portrait = okImg ? A.withImg(base, ['portraits/npc-roles/' + stl + '/' + fc.img]) : base;
       }
+      if (sp.portrait && A.portraitKeys && G.Img.chain.halfFor) sp.half = G.Img.chain.halfFor(A.portraitKeys(sp.portrait));   // 대화창: 걷는 그림과 같은 사람의 무릎상
     } catch (e) { /* 얼굴 없이 */ }
     return sp;
   };
@@ -240,6 +265,7 @@
   /** 말을 건다 (js/scenes/city.js C.chatFolk) */
   SF.talk = async function (f, c) {
     var sp = f.face || SF.speaker(f, c), lines = D().lines[f.type] || ['……'];
+    if (!R.facilities(c).church || (c.flags && c.flags.indexOf('T') >= 0)) { var nl = lines.filter(function (l) { return l.indexOf('{church}') < 0; }); if (nl.length) lines = nl; }   // 교회가 없거나 작은 사당뿐인 마을
     var cl = R.cityLang(c); if (!f.animal) { sp.lang = cl.lv; sp.li = cl.li; }   // 말은 지금 일행의 실력으로
     f.talked++;
     var deaf = !f.animal && sp.lang === 0;            // 말이 통하지 않으면 쓸모 있는 이야기는 아껴 둔다 (통역을 데려와 다시 말을 걸면 된다)

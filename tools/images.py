@@ -266,7 +266,7 @@ def scan():
     if not os.path.isdir(IMG):
         return found, dups
     for dirpath, dirnames, filenames in os.walk(IMG):
-        dirnames[:] = sorted(d for d in dirnames if not d.startswith('_'))  # _extra 같은 보관 폴더는 건너뛴다
+        dirnames[:] = sorted(d for d in dirnames if not d.startswith('_') and d != 'npc-walk')  # npc-walk: 걷는 그림 원본 시트(4×2) — 게임은 street-folk의 나눈 그림만 쓴다  # _extra 같은 보관 폴더는 건너뛴다
         for fn in sorted(filenames):
             ext = os.path.splitext(fn)[1]
             if ext.lower() not in EXTS:
@@ -292,7 +292,7 @@ def write_manifest(found):
 def is_valid(key, keys):
     return key in keys or key.startswith(('portraits/player/', 'portraits/player-aged/', 'landmarks/', 'map-discoveries/', 'characters/',
                                           'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'relics/', 'relic-kinds/',
-                                          'discovery-ends/', 'discovery-sheets/', 'duel/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
+                                          'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
 
 def report(found, dups, keys):
@@ -301,7 +301,7 @@ def report(found, dups, keys):
               ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
-              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('미니게임', 'minigames/')]
+              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('미니게임', 'minigames/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

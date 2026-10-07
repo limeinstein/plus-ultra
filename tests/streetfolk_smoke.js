@@ -141,6 +141,18 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       await page.evaluate(() => { const st = G.Town.runtime(); G.Town.folks().forEach((f, i) => { f.x = st.cam + 300 + i * 330; f.target = f.x; }); for (let i = 0; i < 20; i++) G.Town.update(1 / 30); });
       await page.screenshot({ path: path.join(OUT, 'street_' + n + '.png') });
     }
+    // 지역 20곳 × 14종 걷는 그림 (Codex, images/street-folk/<그림 이름>_<양식>/walk_1…8)
+    const spr = await page.evaluate(() => {
+      const D = G.STREET_FOLK, SF = G.StreetFolk, out = { miss: [], n: 0, pets: {} };
+      G.Art.NPC_STYLES.forEach(st => {
+        const c = G.CITY_DATA.find(x => G.Img.folkStyle(x) === st); if (!c) { out.miss.push('도시 없음 ' + st); return; }
+        Object.keys(D.types).forEach(t => { const fr = SF.frames(t, c); if (!fr || fr.length !== 8 || !(fr[0].c === 0 && fr[7].c === 7 && /^street-folk\/[a-z_]+$/.test(fr[0].k))) out.miss.push(t + '_' + st); else out.n++; });
+        const f = SF.make('dog', c, 3000, 1000, 760, 'x'); out.pets[st] = f.type;
+      });
+      return out;
+    });
+    ok(!spr.miss.length && spr.n === 20 * 15, '걷는 그림: 20곳 × 15종(강아지·고양이는 같은 그림) 모두 한 장짜리 4×2 시트의 8칸 ' + spr.miss.slice(0, 5).join(','));
+    ok(spr.pets.jp === 'cat' && spr.pets.kr === 'dog' && spr.pets.pe === 'cat' && spr.pets.an === 'dog', '짐승은 그 지역 그림의 짐승으로 (일본·페르시아 고양이, 조선·안데스 개)');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('스크린샷: ' + OUT);
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }

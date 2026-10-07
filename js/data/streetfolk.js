@@ -1,25 +1,26 @@
 /* 거리를 걷는 마을 사람 (js/systems/streetfolk.js · 그림 js/art/streetfolk.js)
    G.STREET_FOLK.types[종류] = { name: 이름표, w: 뽑힐 무게, need: 도시 조건('library'·'port'·'big'·'court'), face: 대화창 얼굴 }
      face: { town: 건물 사람 그림(A.townSpec 의 id) } 또는 { role: npcSpec 역할, g: 성별, img: npc-roles 그림, age }
+   G.STREET_FOLK.sprites[종류] = 걷는 그림 이름 · petKind[도시 양식] = 그 지역 짐승 그림이 cat이면 고양이
    G.STREET_FOLK.lines[종류] = 흔한 이야기 — {city} 도시 이름 · {owner} 다스리는 나라 · {season} 철 · {ruler} 다스리는 사람
    이야기 가운데 쓸모 있는 것(시장 소식·단서·책·후원자·바람…)은 js/systems/streetfolk.js 가 그때그때 만든다. 손으로 고칠 수 있다. */
 (function (G) {
   'use strict';
   G.STREET_FOLK = {
     types: {
-      man: { name: '마을 남자', w: 3, face: { role: 'sailor', g: 'm', img: 'sailor' } },
+      man: { name: '마을 사람', w: 3, face: { role: 'native', img: 'native' } },
       woman: { name: '마을 여자', w: 3, face: { role: 'maid', g: 'f', img: 'maid' } },
-      boy: { name: '마을 소년', w: 2, face: { role: 'sailor', g: 'm', age: 'young' } },
-      girl: { name: '마을 소녀', w: 2, face: { role: 'maid', g: 'f', age: 'young' } },
-      elder: { name: '마을 할아버지 (촌장)', w: 1.4, face: { role: 'scholar', g: 'm', age: 'old' } },
-      grandma: { name: '마을 할머니', w: 1.4, face: { role: 'keeper', g: 'f', age: 'old' } },
+      boy: { name: '마을 소년', w: 2, face: { role: 'sailor', g: 'm', img: 'sailor', age: 'young' } },
+      girl: { name: '마을 소녀', w: 2, face: { role: 'maid', g: 'f', img: 'maid', age: 'young' } },
+      elder: { name: '마을 할아버지 (촌장)', w: 1.4, face: { role: 'priest', g: 'm', img: 'priest', age: 'old' } },
+      grandma: { name: '마을 할머니', w: 1.4, face: { role: 'keeper', g: 'f', img: 'keeper', age: 'old' } },
       librarian: { name: '도서관 사서', w: 1, need: 'library', face: { town: 'librarian' } },
       innkeeper: { name: '여관 주인', w: 1, face: { town: 'innkeeper' } },
       dog: { name: '강아지', w: 1.3, animal: true },
       cat: { name: '고양이', w: 1.3, animal: true },
       adventurer: { name: '모험가', w: 1.2, face: { town: 'captain' } },
       merchant: { name: '장사꾼', w: 1.5, face: { town: 'trader' } },
-      noble: { name: '귀족 청년', w: 0.9, need: 'court', face: { role: 'noble', g: 'm', age: 'young' } },
+      noble: { name: '젊은 귀족', w: 0.9, need: 'court', face: { role: 'noble', img: 'noble', age: 'young' } },
       soldier: { name: '병사', w: 1.2, need: 'big', face: { town: 'guard' } },
       navigator: { name: '항해사', w: 1.2, need: 'port', face: { town: 'boatswain' } }
     },
@@ -40,6 +41,11 @@
       dog: ['멍멍! (꼬리를 힘차게 흔든다)', '킁킁… (제독의 장화 냄새를 열심히 맡는다)', '왈! 왈! (저쪽 골목을 향해 짖더니 다시 돌아본다)', '(배를 보이며 벌렁 드러눕는다. 쓰다듬어 달라는 눈치다)'],
       cat: ['야옹~ (힐끗 보더니 고개를 돌린다)', '(다리에 몸을 비비고는 휙 가 버린다)', '냐아… (햇볕 드는 곳에 앉아 꾸벅꾸벅 존다)', '(꼬리를 바짝 세우고 앞장서 걷는다. 따라오라는 듯하다)']
     },
+    // 걷는 그림 (Codex가 그린 지역 20곳 × 14종, images/street-folk/<그림 이름>_<도시 양식>/walk_1…8 — tools/npc_walks.py가 images/npc-walk의 4×2 시트에서 나눈다)
+    // 종류 → 그림 이름. 강아지·고양이는 지역마다 한 마리(pet) — 그 지역 그림이 개인지 고양이인지는 petKind (없으면 개)
+    sprites: { man: 'town_man', woman: 'town_woman', boy: 'boy', girl: 'girl', elder: 'elder', grandma: 'grandmother', librarian: 'librarian', innkeeper: 'innkeeper',
+      adventurer: 'adventurer', merchant: 'merchant', noble: 'noble_youth', soldier: 'soldier', navigator: 'navigator', dog: 'pet', cat: 'pet' },
+    petKind: { ne: 'cat', it: 'cat', is: 'cat', pe: 'cat', sw: 'cat', se: 'cat', jp: 'cat' },
     season: ['겨울', '겨울', '봄', '봄', '봄', '여름', '여름', '여름', '가을', '가을', '가을', '겨울']
   };
 })(window.G = window.G || {});

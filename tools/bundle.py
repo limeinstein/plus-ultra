@@ -25,6 +25,12 @@ ARTIFACT_FILES = 500                   # 아티팩트 한 판 파일 수 한도(
 PACK_TARGET = int(5 * 1024 * 1024)   # 그림 묶음 파일 하나의 크기 (대략) — 작을수록 한 장면에서 덜 받지만 파일 수가 는다 (장면 판 370장과 합쳐 한 판 511개 안에서)
 
 
+# 아티팩트 한 판(256MB·511개)에 넣지 않고 아티팩트의 자산 저장소(/_blob/…)에 원래 크기 그대로 올리는 그림 —
+# 거리를 걷는 마을 사람 시트(20곳 × 14종, 칸 380×444): 줄이지 않고, 한 판 한도와 따로 센다.
+# 올린 주소는 <아티팩트 폴더>/assets.json 에 적어 두고(그림이 그대로면 다시 올리지 않는다), 주소가 없는 그림은 게임이 코드 그림으로 그린다.
+ASSET_PREFIXES = ('street-folk/',)
+ASSET_MARK = '/*ASSET_URLS*/'
+
 PACK_SMALL = int(1.5 * 1024 * 1024)               # 이보다 작은 묶음은 같은 갈래의 이웃 묶음과 합친다 (파일 수가 너무 늘지 않게 — 한 판 511개)
 
 # 지역 여급 그림 묶음 → 그 그림을 쓰는 문화권 (js/core/images.js I.MAID_POOL)
@@ -206,7 +212,12 @@ def split_anim(found):
     return rest, anim
 
 
-def inline(page, found, artifact, title=None, extra_css='', base=None, packs=None, files=None):
+def asset_script(urls):
+    return ('<script>/* 자산 저장소의 그림 (tools/bundle.py --set-assets 가 고쳐 쓴다) */\nwindow.G = window.G || {};\nG.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, ' +
+            ASSET_MARK + json.dumps(urls, ensure_ascii=False, sort_keys=True) + ASSET_MARK + ');\n</script>')
+
+
+def inline(page, found, artifact, title=None, extra_css='', base=None, packs=None, files=None, assets=None):
     p = pages.parse(page)
     css = '\n'.join(pages.read(c) for c in p['css']) + extra_css
     parts = []
@@ -222,6 +233,8 @@ def inline(page, found, artifact, title=None, extra_css='', base=None, packs=Non
             lazy.update(files or {})   # 따로 올린 그림 파일(images/…)은 상대 경로로 — G.Img가 images/ 를 붙여 필요할 때 읽는다
             parts.append('<script>/* images (lazy packs) */\nwindow.G = window.G || {};\nG.IMAGE_PACK_URLS = ' + json.dumps([rel for rel, _, _ in packs]) +
                          ';\nG.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, ' + json.dumps(lazy, ensure_ascii=False) + ');\nG.IMAGE_PATHS = ' + json.dumps(paths, ensure_ascii=False) + ';\n</script>')
+            if assets is not None:
+                parts.append(asset_script(assets))
         elif s == 'images/manifest.js':
             js, _ = pages.manifest_js(found, embed=True, base=base)
             # data: 주소만으로는 움직이는 WEBP를 알 수 없어서 그 그림들의 원래 이름을 함께 넣는다 (G.Img.isAnim)
@@ -262,7 +275,73 @@ def mark_published(out):
     print('올린 묶음 %d개를 적어 두었습니다.' % len(d['published']))
 
 
+def asset_state(out):
+    p = os.path.join(out, 'assets.json')
+    try:
+        with open(p, encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def file_sha(path):
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for b in iter(lambda: f.read(1 << 20), b''):
+            h.update(b)
+    return h.hexdigest()[:16]
+
+
+def set_assets(out, map_path):
+    """자산을 올린 뒤: {"assets/street-folk/…webp": "/_blob/…"} 를 assets.json 에 적고 game.html 의 주소 표를 고쳐 쓴다"""
+    with open(map_path, encoding='utf-8') as f:
+        new = json.load(f)
+    st = asset_state(out)
+    for rel, url in new.items():
+        rel = rel[len('assets/'):] if rel.startswith('assets/') else rel
+        src = os.path.join(out, 'assets', rel)
+        st[rel] = {'url': url, 'sha': file_sha(src) if os.path.exists(src) else None}
+    with open(os.path.join(out, 'assets.json'), 'w', encoding='utf-8') as f:
+        json.dump(st, f, ensure_ascii=False, indent=1, sort_keys=True)
+    rewrite_assets(out, st)
+
+
+def rewrite_assets(out, st):
+    pub = {}
+    try:
+        with open(os.path.join(out, 'publish.json'), encoding='utf-8') as f:
+            pub = json.load(f)
+    except Exception:
+        pass
+    urls, pending = {}, []
+    for rel in pub.get('assets', []):
+        r = rel[len('assets/'):]
+        e = st.get(r)
+        if e and e.get('url') and e.get('sha') == file_sha(os.path.join(out, rel)):
+            urls[os.path.splitext(r)[0]] = e['url']
+        else:
+            pending.append(rel)
+    import re
+    page = os.path.join(out, 'game.html')
+    with open(page, encoding='utf-8') as f:
+        html = f.read()
+    m = re.escape(ASSET_MARK)
+    html2, n = re.subn(m + r'.*?' + m, lambda _: ASSET_MARK + json.dumps(urls, ensure_ascii=False, sort_keys=True) + ASSET_MARK, html, count=1, flags=re.S)
+    if n:
+        with open(page, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(html2)
+    pub['assets_pending'] = pending
+    with open(os.path.join(out, 'publish.json'), 'w', encoding='utf-8') as f:
+        json.dump(pub, f, ensure_ascii=False, indent=1)
+    print('자산 저장소 그림 %d장 주소를 game.html에 넣었습니다 · 아직 올리지 않은 그림 %d장' % (len(urls), len(pending)))
+
+
 def main():
+    if '--set-assets' in sys.argv:
+        i = sys.argv.index('--set-assets')
+        set_assets(sys.argv[i + 1], sys.argv[i + 2])
+        return
     if '--mark-published' in sys.argv:
         i = sys.argv.index('--mark-published')
         mark_published(sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith('--') else os.path.join(pages.ROOT, 'dist', 'artifact'))
@@ -306,6 +385,9 @@ def main():
             skip |= {k for k in found if k.startswith('sprites/expedition_') and k[len('sprites/'):] not in em}
         except OSError:
             pass
+        # 자산 저장소로 올릴 그림(ASSET_PREFIXES)은 줄이지도, 묶음에 넣지도 않는다
+        asset_keys = {k: rel for k, rel in found.items() if k.startswith(ASSET_PREFIXES)}
+        skip |= set(asset_keys)
         slim_dir = hq_dir
         places = game_places()
         mdir0 = os.path.join(pages.ROOT, 'music')
@@ -322,7 +404,7 @@ def main():
                 dst = os.path.join(out, 'images', rel)
                 os.makedirs(os.path.dirname(dst), exist_ok=True)
                 shutil.copy2(os.path.join(slim_dir, rel), dst)
-            n1 = write(os.path.join(out, 'game.html'), inline('index.html', sfound, True, title='Loop of Good Hope 더 먼 바다로', extra_css='\nhtml, body { height: 100%; }\n', base=slim_dir, packs=packs, files=afound))
+            n1 = write(os.path.join(out, 'game.html'), inline('index.html', sfound, True, title='Loop of Good Hope 더 먼 바다로', extra_css='\nhtml, body { height: 100%; }\n', base=slim_dir, packs=packs, files=afound, assets={}))
             n2 = write(os.path.join(out, 'catalog.html'), inline('catalog.html', sfound, True, base=slim_dir, packs=packs, files=afound))
             nf = sum(os.path.getsize(os.path.join(out, 'images', rel)) for rel in afound.values())
             print('따로 올리는 움직이는 그림 %d장: %s (필요할 때만 읽힘)' % (len(afound), pages.human(nf)))
@@ -362,9 +444,22 @@ def main():
         img_files = sorted('images/' + rel for rel in afound.values())
         old_files = old.get('published_files', [])
         removed += [rel for rel in old_files if rel not in img_files]
+        # 자산 저장소 그림: 원래 크기 그대로 <폴더>/assets/ 에 — 올린 적 있고 그대로인 그림은 주소를 game.html에 넣고, 나머지는 assets_pending
+        import shutil
+        if os.path.isdir(os.path.join(out, 'assets')):
+            shutil.rmtree(os.path.join(out, 'assets'))
+        for rel in asset_keys.values():
+            dst = os.path.join(out, 'assets', rel)
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            shutil.copy2(os.path.join(pages.ROOT, 'images', rel), dst)
+        asset_files = sorted('assets/' + rel for rel in asset_keys.values())
+        abytes = sum(os.path.getsize(os.path.join(out, r)) for r in asset_files)
+        print('자산 저장소에 원래 크기로 올리는 그림 %d장: %s (한 판 한도와 따로)' % (len(asset_files), pages.human(abytes)))
         with open(pub_path, 'w', encoding='utf-8') as f:
             json.dump({'pages': ['game.html', 'catalog.html'], 'packs': new, 'files': img_files, 'music': music, 'published': published,
-                       'published_files': old_files, 'removed': removed, 'bytes': total, 'files_bytes': nf}, f, ensure_ascii=False, indent=1)
+                       'published_files': old_files, 'removed': removed, 'bytes': total, 'files_bytes': nf,
+                       'assets': asset_files, 'assets_bytes': abytes}, f, ensure_ascii=False, indent=1)
+        rewrite_assets(out, asset_state(out))
         print('올릴 파일 목록: ' + os.path.relpath(pub_path, pages.ROOT) if pub_path.startswith(pages.ROOT) else '올릴 파일 목록: ' + pub_path)
 
 

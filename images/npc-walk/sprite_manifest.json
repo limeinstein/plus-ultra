@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "roles": {
+    "town_man": { "name": "마을 남자", "file": "town_man_sheet.png" },
+    "town_woman": { "name": "마을 여자", "file": "town_woman_sheet.png", "displayScale": 0.98 },
+    "boy": { "name": "소년", "file": "boy_sheet.png", "displayScale": 0.78 },
+    "girl": { "name": "소녀", "file": "girl_sheet.png", "displayScale": 0.78 },
+    "elder": { "name": "촌장 할아버지", "file": "elder_sheet.png", "displayScale": 0.94 },
+    "grandmother": { "name": "할머니", "file": "grandmother_sheet.png", "displayScale": 0.92 },
+    "librarian": { "name": "도서관 사서", "file": "librarian_sheet.png" },
+    "innkeeper": { "name": "여관 주인", "file": "innkeeper_sheet.png" },
+    "pet": { "name": "강아지·고양이", "file": "pet_sheet.png", "displayScale": 0.48 },
+    "adventurer": { "name": "모험가", "file": "adventurer_sheet.png" },
+    "merchant": { "name": "장사꾼", "file": "merchant_sheet.png" },
+    "noble_youth": { "name": "귀족 청년", "file": "noble_youth_sheet.png" },
+    "soldier": { "name": "병사", "file": "soldier_sheet.png" },
+    "navigator": { "name": "항해사", "file": "navigator_sheet.png" }
+  },
+  "layout": {
+    "columns": 4,
+    "rows": 2,
+    "frames": 8,
+    "cellWidth": 444,
+    "cellHeight": 444,
+    "sheetWidth": 1776,
+    "sheetHeight": 888,
+    "facing": "right",
+    "order": "row-major"
+  },
+  "styles": {
+    "ib": { "name": "이베리아" },
+    "ne": { "name": "서·북유럽" },
+    "it": { "name": "이탈리아·남프랑스" },
+    "gr": { "name": "동유럽·그리스" },
+    "ru": { "name": "러시아" },
+    "is": { "name": "오스만·레반트" },
+    "pe": { "name": "페르시아" },
+    "af": { "name": "서·중앙아프리카" },
+    "sw": { "name": "스와힐리 해안" },
+    "in": { "name": "인도" },
+    "se": { "name": "동남아시아" },
+    "cn": { "name": "중국" },
+    "kr": { "name": "조선" },
+    "jp": { "name": "일본" },
+    "az": { "name": "메소아메리카" },
+    "an": { "name": "안데스" },
+    "co": { "name": "에스파냐 식민 도시" },
+    "tr": { "name": "동아프리카 초원" },
+    "st": { "name": "중앙아시아 초원" },
+    "na": { "name": "북미 숲" }
+  }
+}
