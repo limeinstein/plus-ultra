@@ -2,8 +2,10 @@
    · 수명: 제독은 maxAge세(80)를 넘겨 살지 못한다. maxAge세 생일(옛 저장이면 그 나이를 넘긴 날)에 조용히 눈을 감고,
      어른이 된 아들이 있으면 뒤를 잇고(G.Family.retire(true) → succeed) 없으면 모험이 끝난다.
      warnFrom세부터는 생일마다 남은 날이 많지 않다고 알린다 (후계를 준비하라는 귀띔).
-   · 생일 선물: 생일에 충성이 giftLoyal(90) 이상인 항해사(부하)들이 저마다 잘하는 일에 맞는 선물을 준다 —
-     항해 도구·무기·라임·장신구·잔치·노래·금화 등. 한 창에 모아 보여 주고, 고맙다는 말에 충성이 giftLoyalUp 오른다.
+   · 생일 선물: 충성이 giftLoyal(90) 이상인 항해사(부하) 가운데 가장 충성스러운 한 사람이 잘하는 일에 맞는 선물 하나를 준다 —
+     항해 도구·무기·라임·장신구·잔치·노래·금화 등. 고맙다는 말에 충성이 giftLoyalUp 오른다.
+     배에 함께 탄 아내(본처 p.wifeAboard · 둘째 부인 G.Wives.aboard())와 견습으로 탄 아이(G.Family.aboard())도 저마다 선물을 준다
+     (아내: 손수 지은 옷·부적·생일상, 아이: 나이에 맞는 손수 만든 것 — 고맙다는 말에 아이와의 사이 +kidBond). 한 창에 모아 보여 준다.
    · 대화 창은 도시·바다·뭍에서 다른 창이 없을 때 띄운다 (main.js 의 loop가 G.Life.tick을 부른다).
    · 저장: s.life = {bday: 선물을 기다리는 생일의 해, bdayDone: 선물을 받은 해, end: 수명이 다함(나이)}
    조정값: G.BALANCE.life */
@@ -29,10 +31,23 @@
     return out;
   };
 
-  /** 생일 선물을 줄 부하: 충성 giftLoyal 이상 (숨어 있는 둘째 부인 등은 뺀다) */
+  /** 배에 함께 탄 아내들: [{id, name, main: 본처인가, speaker}] */
+  LF.wivesAboard = function () {
+    var p = S().player, out = [];
+    if (p.wife && p.wifeAboard && G.Family) out.push({ id: p.wife, name: G.Family.wifeName(), main: true, speaker: G.Family.wifeSpeaker() });
+    if (G.Wives) G.Wives.aboard().forEach(function (w) { out.push({ id: w.id, name: G.Wives.name(w), main: false, speaker: G.Wives.speaker(w) }); });
+    return out;
+  };
+  /** 선물을 줄 사람들: 가장 충성스러운 부하 한 사람(충성 giftLoyal 이상, 함께 탄 아내는 빼고) + 함께 탄 아내 + 견습으로 탄 아이 */
   LF.givers = function () {
-    var s = S(), lim = K().giftLoyal || 90;
-    return (s.mates || []).filter(function (m) { return G.MATE[m.id] && (m.loyal == null ? 70 : m.loyal) >= lim && !(R.mateHidden && R.mateHidden(m)); });
+    var s = S(), lim = K().giftLoyal || 90, wives = LF.wivesAboard(), wifeIds = wives.map(function (w) { return w.id; });
+    var mates = (s.mates || []).filter(function (m) { return G.MATE[m.id] && wifeIds.indexOf(m.id) < 0 && (m.loyal == null ? 70 : m.loyal) >= lim && !(R.mateHidden && R.mateHidden(m)); })
+      .sort(function (a, b) { return (b.loyal || 0) - (a.loyal || 0); });
+    var out = mates.length ? [{ kind: 'mate', m: mates[0] }] : [];
+    wives.forEach(function (w) { out.push({ kind: 'wife', w: w }); });
+    var kids = G.Family && G.Family.aboard ? G.Family.aboard().filter(function (k) { return !k.unnamed; }) : [];
+    kids.forEach(function (k) { out.push({ kind: 'kid', k: k }); });
+    return out;
   };
 
   // ---------------------------------------------------------------- 선물 고르기
@@ -64,6 +79,22 @@
     for (var i = 0; i < sk.length; i++) { var g = BY[sk[i].id](m); if (g) { g.sk = sk[i].id; return g; } }
     return { gold: goldGift(m), line: '변변치 않지만 받아 주십시오. 늘 감사하고 있습니다.', sk: null };
   };
+  /** 아내의 선물 (해마다 바뀐다) */
+  LF.wifeGift = function (w) {
+    var y = S().date.y, list = [
+      { fx: 'shirt', line: w.main ? '바닷바람에 해지지 말라고 밤마다 바느질했어요. 꼭 입고 다니세요.' : '배 위에서 몰래 지었어요. 소매가 조금 짧아도 웃지 마세요.' },
+      { fx: 'meal', line: '오늘 저녁은 제가 갑판 부엌을 빌렸어요. 선원들 몫까지 넉넉히 했답니다.' }
+    ];
+    if (!owned('charm')) list.push({ item: 'charm', line: '항구 시장에서 산 부적이에요. 늘 지니고 다니시면 제 마음이 놓여요.' });
+    return list[Math.abs(U.strHash(w.id + ':' + y)) % list.length];
+  };
+  /** 아이의 선물 (나이에 맞게) */
+  LF.kidGift = function (k) {
+    var age = G.Family.kidAge(k), f = k.sex === 'f';
+    if (age < 10) return { fx: 'drawing', line: '아버지 배를 그렸어요! 돛이 제일 크게 나왔어요. 선원 아저씨들도 다 그렸어요!' };
+    if (age < 16) return { fx: 'model', line: f ? '조개껍데기를 모아 목걸이를 만들었어요. 바다에 나가실 때 걸고 가세요.' : '갑판장 아저씨한테 배워서 작은 배를 깎았어요. 우리 기함이에요!' };
+    return { fx: 'watch', line: '오늘 밤 당직은 제가 서겠습니다. 아버지는 푹 쉬십시오. 생신 축하드립니다.' };
+  };
   /** 선물을 받는다 — 받은 것을 한 줄로 돌려준다 */
   function receive(g) {
     var s = S(), f = s.fleet, p = s.player;
@@ -80,6 +111,11 @@
       case 'portrait': G.Fame.add('so', 15); return '제독의 초상화 (명성 사교 +15)';
       case 'mat': f.mat = (f.mat || 0) + 15; return '자재 15통';
       case 'drill': f.discipline = Math.min(100, (f.discipline || 60) + 15); return '규율 +15';
+      case 'shirt': p.hp = 100; f.fatigue = Math.max(0, f.fatigue - 10); return '손수 지은 옷 (제독 체력 100 · 피로 −10)';
+      case 'meal': f.fatigue = Math.max(0, f.fatigue - 15); f.discipline = Math.min(100, (f.discipline || 60) + 5); return '생일상 (피로 −15 · 규율 +5)';
+      case 'drawing': f.discipline = Math.min(100, (f.discipline || 60) + 4); return '아버지 배 그림 (선원들이 웃는다 · 규율 +4)';
+      case 'model': f.fatigue = Math.max(0, f.fatigue - 6); return '손수 만든 선물 (피로 −6)';
+      case 'watch': f.fatigue = Math.max(0, f.fatigue - 12); return '대신 서는 밤 당직 (피로 −12)';
     }
     return '';
   }
@@ -114,14 +150,23 @@
     var s = S(), T = st(), k = K(), age = R.age();
     T.bdayDone = T.bday; delete T.bday;
     var list = LF.givers(); if (!list.length) return;
-    var rows = list.map(function (m) { var g = LF.giftFor(m), got = receive(g); m.loyal = Math.min(100, (m.loyal || 70) + (k.giftLoyalUp || 2)); return { m: m, g: g, got: got }; });
-    var html = '<div class="bday-head">' + R.fullName() + '의 ' + age + '번째 생일. 오랫동안 곁을 지켜 온 항해사들이 저마다 선물을 들고 찾아왔다.</div><div class="bday-list">' +
-      rows.map(function (r, i) { var d = G.MATE[r.m.id]; return '<div class="bday-row"><div class="bd-face" data-i="' + i + '"></div><div class="bd-body"><b>' + U.esc(d.name) + '</b> <small class="muted">충성 ' + Math.round(r.m.loyal) + '</small><div class="bd-line">「' + r.g.line + '」</div><div class="bd-got">' + G.icon('star') + ' ' + r.got + '</div></div></div>'; }).join('') + '</div>';
-    var w = UI.window({ title: '생일 선물', icon: 'star', width: 760, html: '<div class="bday">' + html + '</div>', buttons: [{ label: '모두에게 고맙다고 한다', value: 1, cls: 'navy' }] });
-    rows.forEach(function (r, i) { try { var el = w.content.querySelector('.bd-face[data-i="' + i + '"]'); if (el) el.appendChild(A.portraitCanvas(G.Scenes.mateSpec(r.m.id), 72)); } catch (e) { /* 그림 없음 */ } });
+    var rows = list.map(function (gv) {
+      var g = gv.kind === 'mate' ? LF.giftFor(gv.m) : gv.kind === 'wife' ? LF.wifeGift(gv.w) : LF.kidGift(gv.k), got = receive(g), r = { gv: g, got: got, kind: gv.kind };
+      if (gv.kind === 'mate') { gv.m.loyal = Math.min(100, (gv.m.loyal || 70) + (k.giftLoyalUp || 2)); r.name = G.MATE[gv.m.id].name; r.tag = '부하 · 충성 ' + Math.round(gv.m.loyal); r.spec = G.Scenes.mateSpec(gv.m.id); }
+      else if (gv.kind === 'wife') { r.name = gv.w.name; r.tag = gv.w.main ? '아내' : '둘째 부인'; r.spec = gv.w.speaker && gv.w.speaker.portrait; }
+      else { G.Family.addBond(gv.k, k.kidBond || 3); r.name = gv.k.name; r.tag = (gv.k.sex === 'f' ? '딸' : '아들') + ' · ' + G.Family.kidAge(gv.k) + '세 · 견습'; r.spec = G.Family.kidSpec(gv.k); }
+      return r;
+    });
+    var fam = rows.some(function (r) { return r.kind !== 'mate'; }), mate = rows.some(function (r) { return r.kind === 'mate'; });
+    var head = R.fullName() + '의 ' + age + '번째 생일. ' + (fam && mate ? '함께 배에 탄 가족과 오랜 항해사가 선물을 들고 찾아왔다.' : fam ? '함께 배에 탄 가족이 선물을 들고 찾아왔다.' : '오랫동안 곁을 지켜 온 항해사가 선물을 들고 찾아왔다.');
+    var html = '<div class="bday-head">' + head + '</div><div class="bday-list">' +
+      rows.map(function (r, i) { return '<div class="bday-row bd-' + r.kind + '"><div class="bd-face" data-i="' + i + '"></div><div class="bd-body"><b>' + U.esc(r.name) + '</b> <small class="muted">' + r.tag + '</small><div class="bd-line">「' + r.gv.line + '」</div><div class="bd-got">' + G.icon('star') + ' ' + r.got + '</div></div></div>'; }).join('') + '</div>';
+    var w = UI.window({ title: '생일 선물', icon: 'star', width: 760, html: '<div class="bday">' + html + '</div>', buttons: [{ label: rows.length > 1 ? '모두에게 고맙다고 한다' : '고맙다고 한다', value: 1, cls: 'navy' }] });
+    rows.forEach(function (r, i) { try { var el = w.content.querySelector('.bd-face[data-i="' + i + '"]'); if (el && r.spec) el.appendChild(A.portraitCanvas(r.spec, 72)); } catch (e) { /* 그림 없음 */ } });
     if (G.Audio) G.Audio.sfx('discover');
     await w.result;
-    G.State.log(age + '번째 생일에 ' + rows.map(function (r) { return G.MATE[r.m.id].name; }).join('·') + U.jx(G.MATE[rows[rows.length - 1].m.id].name, '이/가') + ' 선물을 주었다.');
+    var last = rows[rows.length - 1].name;
+    G.State.log(age + '번째 생일에 ' + rows.map(function (r) { return r.name; }).join('·') + U.jx(last, '이/가') + ' 선물을 주었다.');
     if (G.Game.refreshHud) G.Game.refreshHud();
     if (G.Game.sceneName === 'land' && G.Scenes.land.refreshBar) G.Scenes.land.refreshBar();
   };

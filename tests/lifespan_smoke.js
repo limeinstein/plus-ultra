@@ -33,34 +33,52 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => G.Game.ensureGeo());
     await page.waitForFunction(() => G.Game.geoReady, null, { timeout: 120000, polling: 200 });
 
-    // ① 생일 선물: 충성 90 이상만
+    // ① 생일 선물: 가장 충성스러운 부하 한 사람(충성 90 이상) + 배에 함께 탄 아내·견습 아이
     await newGame();
     const pre = await page.evaluate(() => {
       const s = G.Game.state;
       const pick = (sk) => G.MATES.find(d => d.sk && d.sk[sk] >= 2 && !s.mates.some(m => m.id === d.id) && d.id !== 'rocco').id;
       const ids = [pick('nav'), pick('cook'), pick('music'), pick('acct')];
-      ids.forEach((id, i) => s.mates.push({ id, role: 'none', joined: 0, loyal: i < 3 ? 95 : 85 }));
+      ids.forEach((id, i) => s.mates.push({ id, role: 'none', joined: 0, loyal: [96, 95, 85, 99][i] }));
       s.mates.find(m => m.id === 'rocco').loyal = 92;
+      // 둘째 부인(부하 출신, 충성 99)이 배에 함께 탔다 — 부하 몫이 아니라 아내 몫으로 준다
+      s.player.wives2 = [{ id: ids[3], kind: 'mate', city: 0, house: false, aboard: true, wed: 0 }];
+      // 견습으로 탄 아이 둘(8세 딸 · 17세 아들), 집에 있는 아이 하나
+      s.player.kids = [
+        { name: '마리아', sex: 'f', born: { y: 1474, m: 2, d: 2 }, sk: {}, lg: {}, st: {}, edu: {}, aboard: true, bond: 50 },
+        { name: '주앙', sex: 'm', born: { y: 1465, m: 3, d: 3 }, sk: {}, lg: {}, st: {}, edu: {}, aboard: true, bond: 50 },
+        { name: '루이스', sex: 'm', born: { y: 1476, m: 4, d: 4 }, sk: {}, lg: {}, st: {}, edu: {}, bond: 50 }];
       s.fleet.fatigue = 60;
       s.date = { y: 1482, m: 6, d: 9 };
-      const items0 = s.player.items.length, gold0 = s.player.gold;
+      const items0 = s.player.items.length;
       G.Game.passDays(1);
-      return { ids, life: JSON.stringify(s.life), items0, gold0, givers: G.Life.givers().map(m => m.id) };
+      return { ids, items0, givers: G.Life.givers().map(g => g.kind + ':' + (g.m ? g.m.id : g.w ? g.w.id : g.k.name)) };
     });
     console.log(JSON.stringify(pre));
-    ok(pre.givers.length === 4 && pre.givers.indexOf(pre.ids[3]) < 0, '선물할 부하 ' + pre.givers.length + '명 (충성 85는 빠짐)');
+    ok(pre.givers.join(',') === ['mate:' + pre.ids[0], 'wife:' + pre.ids[3], 'kid:마리아', 'kid:주앙'].join(','), '선물: 가장 충성스러운 부하 한 사람(충성 96) + 둘째 부인 + 견습 아이 둘 (집에 있는 아이·다른 부하는 빠짐)');
     await page.waitForSelector('.bday', { timeout: 10000 });
     await page.waitForTimeout(800);
     await page.screenshot({ path: path.join(OUT, 'birthday_gifts.png') });
     const bd = await page.evaluate(() => ({ rows: document.querySelectorAll('.bday-row').length, text: document.querySelector('.bday').innerText, faces: document.querySelectorAll('.bd-face canvas').length }));
     await clickWin();
-    const post = await page.evaluate((ids) => { const s = G.Game.state; return { items: s.player.items.map(i => i.id), fat: s.fleet.fatigue, loyal: ids.map(id => s.mates.find(m => m.id === id).loyal), life: s.life }; }, pre.ids);
-    console.log(JSON.stringify(post));
-    ok(bd.rows === 4 && bd.faces === 4, '생일 선물 창: 4명 · 얼굴 4장');
-    ok(post.items.length > pre.items0 && post.fat < 60, '선물을 받았다 (소지품 ' + pre.items0 + ' → ' + post.items.length + ', 피로 60 → ' + post.fat + ')');
-    ok(post.loyal[0] === 97 && post.loyal[3] === 85 && post.life.bdayDone === 1482 && !post.life.bday, '고맙다는 말에 충성 95 → 97, 85는 그대로, 한 해에 한 번');
+    const post = await page.evaluate((ids) => { const s = G.Game.state; return { fat: s.fleet.fatigue, loyal: ids.map(id => s.mates.find(m => m.id === id).loyal), rocco: s.mates.find(m => m.id === 'rocco').loyal, bond: s.player.kids.map(k => k.bond), life: s.life }; }, pre.ids);
+    console.log(JSON.stringify(post), bd.text.replace(/\n/g, ' / ').slice(0, 400));
+    ok(bd.rows === 4 && bd.faces === 4 && /둘째 부인/.test(bd.text) && /8세/.test(bd.text) && /17세/.test(bd.text), '생일 선물 창: 4줄 · 얼굴 4장 (부하·둘째 부인·딸 8세·아들 17세)');
+    ok(post.fat < 60, '선물 효과: 피로 60 → ' + Math.round(post.fat));
+    ok(post.loyal[0] === 98 && post.loyal[1] === 95 && post.rocco === 92 && post.loyal[3] === 99, '고맙다는 말에 선물한 부하만 충성 96 → 98 (다른 부하 그대로)');
+    ok(post.bond[0] === 53 && post.bond[1] === 53 && post.bond[2] === 50, '선물한 아이와의 사이 50 → 53 (집에 있는 아이는 그대로)');
+    ok(post.life.bdayDone === 1482 && !post.life.bday, '한 해에 한 번');
     const again = await page.evaluate(() => { const s = G.Game.state; G.Game.passDays(1); return !!(s.life.bday); });
     ok(!again, '생일 다음 날에는 다시 주지 않는다');
+    // 본처가 배에 타고 있으면 본처도 / 아무도 없으면 선물 없음
+    const wf = await page.evaluate(() => {
+      const s = G.Game.state, p = s.player; p.wives2 = []; p.kids = [];
+      const maid = Object.keys(G.MAID)[0]; p.wife = maid; p.wifeAboard = true;
+      const a = G.Life.givers().map(g => g.kind + (g.w ? (g.w.main ? ':main' : '') : ''));
+      p.wifeAboard = false; s.mates.forEach(m => { m.loyal = 80; });
+      return { a, none: G.Life.givers().length, gift: G.Life.wifeGift(G.Life.wivesAboard()[0] || { id: maid, main: true }).line };
+    });
+    ok(wf.a.indexOf('wife:main') >= 0 && wf.none === 0, '본처가 타면 본처 선물 (' + wf.a.join(',') + '), 충성 90 넘는 부하도 가족도 없으면 선물 없음');
 
     // ② 수명: 80세 생일에 세상을 떠남 — 아들이 없으면 끝
     await newGame();
