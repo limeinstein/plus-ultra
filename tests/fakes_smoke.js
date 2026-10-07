@@ -80,9 +80,17 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.disc[d3.id] = { found: true, me: true }; F.give(d3.id, 1);
       const sch = G.SPONSOR.pt_behaim; SP.rel(sch.id).trust = 30;
       s.contract = { sponsor: sch.id, disc: d3.id, reward: 10000, due: U.dateNum(U.addDays(s.date, 200)) };
-      const g4 = s.player.gold, t4 = SP.rel(sch.id).trust; answers = ['both'];
+      // 같은 판을 두 번: 진짜만(기준) → 되돌려 둘 다 — 사례금 비율만 본다(다른 보정이 붙어도 비율은 1.3)
+      const snap = JSON.stringify(G.Game.state), uc3 = U.chance; U.chance = () => false;
+      const g5 = G.Game.state.player.gold; answers = ['real'];
       await SP.report(sch);
-      out.paidBoth = s.player.gold - g4; out.trustBoth = SP.rel(sch.id).trust - t4; out.fakeLeft = F.count(d3.id);
+      out.paidReal = G.Game.state.player.gold - g5;
+      G.Game.state = JSON.parse(snap);
+      const s2 = G.Game.state;
+      const g4 = s2.player.gold, t4 = SP.rel(sch.id).trust; answers = ['both'];
+      await SP.report(sch);
+      U.chance = uc3;
+      out.paidBoth = s2.player.gold - g4; out.trustBoth = SP.rel(sch.id).trust - t4; out.fakeLeft = F.count(d3.id);
       return out;
     });
     ok(r.forSale && r.menu, '리스본 시장에 「모조품 상인」 — 「' + r.d + '」 모조품 금화 ' + r.price);
@@ -91,7 +99,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.chaserNpc === 'pt_king' && !r.chaserAfter, '바다에 「' + r.chaserLabel + '」 한 번 나타나고, 맞닥뜨리면 끝');
     ok(r.jailDays >= 20 && r.banned && r.fameCut > 0 && !r.contract3, '들켜서 옥살이 ' + r.jailDays + '일 · 명성 −' + r.fameCut + ' · 한 해 출입 금지 · 계약 끝');
     ok(r.fine >= 800, '들켜서 벌금 금화 ' + r.fine);
-    ok((r.paidBoth === 13000 || r.paidBoth === 9100) && r.trustBoth >= 16 && r.fakeLeft === 0, '진짜와 모조품을 함께: 사례금 ' + r.paidBoth + '(진짜만일 때의 ×1.3) · 신뢰 +' + r.trustBoth + '(10 더)');
+    ok(r.paidReal > 0 && Math.abs(r.paidBoth / r.paidReal - 1.3) < 0.03 && r.trustBoth >= 16 && r.fakeLeft === 0, '진짜와 모조품을 함께: 사례금 ' + r.paidBoth + ' (진짜만 ' + r.paidReal + '의 ×1.3) · 신뢰 +' + r.trustBoth + '(10 더)');
     ok(!errors.length, '페이지 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   } finally { await browser.close(); }
 })().catch(e => { console.error('실패: ' + e.message); process.exit(1); });
