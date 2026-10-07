@@ -112,6 +112,7 @@
     if (Game.scene && Game.scene.update) {
       try { Game.scene.update(dt); } catch (e) { console.error(e); }
     }
+    if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }   // 생일 선물·수명이 다한 날 (js/systems/lifespan.js)
     requestAnimationFrame(loop);
   }
 

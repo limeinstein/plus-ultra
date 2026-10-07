@@ -270,6 +270,9 @@
     // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
     // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
     landPack: { near: 1.2 },
+    // 제독의 수명·생일 선물 (js/systems/lifespan.js): maxAge세 생일에 세상을 떠난다(아들이 있으면 뒤를 잇는다). warnFrom세부터 생일마다 귀띔.
+    //   생일에 충성 giftLoyal 이상인 부하들이 특기에 맞는 선물을 주고, 고맙다는 말에 충성 +giftLoyalUp
+    life: { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2 },
     // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.
     //   days일 동안 날마다 배마다 최대 내구 × (perDay + perSkill × 조선 특기). 인원이 최저 승원 수보다 적으면 그 비율만큼 덜 고친다(crewFloor 아래로는 안 줄임).
     //   자재는 바다 위 수리와 같이 내구 1마다 matPerHp통. 하루마다 피로 +fatigue

@@ -40,6 +40,8 @@
         G.State.log(R.fullName() + '이(가) ' + age + '세가 되었다.');
       } else out.push({ icon: 'star', text: R.fullName() + '의 생일입니다. (' + age + '세)', birthday: true });
     }
+    // 수명(최대 80세)과 생일 선물 (js/systems/lifespan.js — 창은 main.js loop에서 G.Life.tick)
+    if (G.Life) out = out.concat(G.Life.daily());
     // 계절풍이 바뀐 날 (계절풍 바다나 그 연안 항구에 있을 때)
     if (G.Monsoon) out = out.concat(G.Monsoon.daily());
     // in port: slow recovery
