@@ -183,6 +183,7 @@
     // 도시 발견물은 입항만으로는 찾지 못한다 — 건물(교역소·시장·교회·왕궁…)에 들어가 둘러봐야 눈에 띈다 (C.findInside)
     if (G.Animals) await G.Animals.town(c);             // 마을 사람이 이 고장에 사는 동물 이야기를 꺼낸다
     if (G.Court) { try { await G.Court.arrival(c); } catch (e) { console.error(e); } }
+    if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
     if (G.Disaster) { try { await G.Disaster.arrival(c); } catch (e) { console.error(e); } }   // 재해가 덮친 도시의 모습 · 구호금   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
@@ -267,6 +268,7 @@
         var dt = G.Quest.debtAt(c);
         if (dt.length) out.push({ kind: 'trade', icon: 'scroll', hot: true, text: dt[0].who + '에게서 빚을 받아 낸다 (교역소)' });
       }
+      if (G.Escort && f.trade) out = out.concat(G.Escort.todo(c));   // 교역소에서 호위를 청하는 상인
       // 알리지 않은 발견과 이 도시의 후원자
       var un = G.Disc.unreported().length;
       if (un) {

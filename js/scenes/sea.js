@@ -55,7 +55,7 @@
     if (arg.resume && arg.msg) UI.toast(arg.msg, 'info');
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
     st.windVis = { dir: st.wind.dir, spd: st.wind.spd };
-    if (G.ShipSprite) G.ShipSprite.preload(s.fleet.ships.map(function (sh) { return sh.type; }), 3000);
+    if (G.ShipSprite) G.ShipSprite.preload(seaShips().map(function (sh) { return sh.type; }), 3000);
     buildUI();
     // 항구에서 자동항해할 곳을 정하고 출항했으면 바로 그 항구로 (js/city/harbor.js H.depart)
     if (arg.depart != null && arg.autoTo != null && G.CITY_DATA[arg.autoTo]) setCityTarget(G.CITY_DATA[arg.autoTo]);
@@ -533,6 +533,8 @@
     var s = S(), B = G.BALANCE || {};
     return Math.min(1, s.player.fame / (B.pirateFame || 4000), (B.pirateBase != null ? B.pirateBase : 1) + R.fleetCap() / (B.pirateCap || 1));
   }
+  /** 바다에 그리는 우리 배들: 내 함대 + 호위하는 상선 (js/systems/escort.js) */
+  function seaShips() { var fs0 = S().fleet.ships; return G.Escort ? G.Escort.seaShips(fs0) : fs0; }
   SEA.pirateK = pirateK;
   SEA.canPlead = canPlead;
   function spawnNpcs() {
@@ -544,7 +546,7 @@
     if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
-    var pr = pirateRate(l.lon, l.lat) * (s.settings.diff === 'easy' ? 0.6 : 1);
+    var pr = pirateRate(l.lon, l.lat) * (s.settings.diff === 'easy' ? 0.6 : 1) * (G.Escort ? G.Escort.pirateK() : 1);   // 상선을 호위하면 해적이 더 꾄다
     var mr = 0.05 + ports * 0.02;
     var kind = null, f0 = s.fleet.ships[0];
     if (U.chance(pr)) kind = 'pirate'; else if (U.chance(mr)) kind = U.chance(0.75) ? 'merchant' : 'navy';
@@ -828,9 +830,9 @@
         st.slams = (st.slams || 0) + 1;
       }
       // 따르는 배: 제 자리의 파도를 탄다 (자리는 기함 기준 화면 px — 세상 좌표로 바꾼다)
-      var z = st.cam ? st.cam.zoom : 110, f = S().fleet;
+      var z = st.cam ? st.cam.zoom : 110, fsR = seaShips();
       st.rideF = st.rideF || [];
-      for (var si = 1; si < f.ships.length; si++) {
+      for (var si = 1; si < fsR.length; si++) {
         var sp0 = st.slotPos && st.slotPos[si]; if (!sp0) continue;
         var wf = rideWave(l.lon + sp0[0] / z, l.lat - sp0[1] / z, l.heading, followPx()), fk = RD.follow * stK;
         var RF = st.rideF[si] = st.rideF[si] || WV.newRide();
@@ -1590,10 +1592,11 @@
     var SP = shipPx(), FP = followPx();
     var sv = sideView('flag', l.heading), ha = sv.ang;      // 그림에 쓰는 뱃머리 방향 (옆모습)
     selectionRing(ctx, pp, ha, SP);
-    var slots = followSlots(f.ships.length, ha), fc = Math.cos(ha), fs = Math.sin(ha);
+    var FS = seaShips();                                   // 내 함대 + 호위하는 상선 (맨 뒤)
+    var slots = followSlots(FS.length, ha), fc = Math.cos(ha), fs = Math.sin(ha);
     st.slotPos = st.slotPos || [];
-    for (var si = f.ships.length - 1; si >= 0; si--) {
-      var sh = f.ships[si], sl = si ? slots[si] : [0, 0];
+    for (var si = FS.length - 1; si >= 0; si--) {
+      var sh = FS[si], sl = si ? slots[si] : [0, 0];
       var tx = pp[0] + (fc * sl[0] - fs * sl[1]) * SP, ty = pp[1] - (fs * sl[0] + fc * sl[1]) * SP;
       // 자리를 바꿀 때는 미끄러지듯 옮겨 간다
       var sp0 = st.slotPos[si];
@@ -1606,7 +1609,7 @@
       var lenS = si === 0 ? SP : FP;
       // 선체에 붙은 물: 선수 파도와 선측 물줄기 (따르는 배는 조금 약하게)
       if (st.fx && G.SeaFX) G.SeaFX.drawHull(st.fx, ctx, bx, by, ha, lenS * sv.squash, sr * (si ? 0.7 : 1), slip * (si ? 0.5 : 1), sideS, st.t);
-      var lk = A.shipLook(sh.type, { sails: sh.sails, flag: '#1d3f7a' });
+      var lk = A.shipLook(sh.type, { sails: sh.sails, flag: sh.escort ? '#c9a030' : '#1d3f7a' });   // 호위하는 상선은 상선의 노란 깃발
       var ps = st.pose || {}, ph = si * 1.7, RF = si && st.rideF && st.rideF[si], RDm = G.FX.ride || {};
       if (RF) lk.pose = { roll: U.clamp(RF.roll, -RDm.maxRoll, RDm.maxRoll), pitch: U.clamp(RF.pitch, -RDm.maxPitch, RDm.maxPitch), heave: U.clamp(RF.heave, -RDm.maxHeave, RDm.maxHeave) };
       else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };

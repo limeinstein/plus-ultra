@@ -21,6 +21,7 @@
     if (G.Ledger) G.Ledger.record(c);
     var lv = C.langLv(c);
     await C.say(keeper(), lv === 0 ? '어서 오게. 무엇을 찾나?' : C.hail(c, 'trade', ['어서 오게. 좋은 물건이 들어와 있다네.', '어서 오게! 오늘은 무엇을 사겠나?', '팔 물건이 있으면 보여 주게.']));
+    if (G.Escort) { try { await G.Escort.atTrade(c); } catch (e) { console.error(e); } }   // 가끔 상인이 다가와 호위를 청한다
   };
   T.sub = function (c) { var m = R.market(c.id); return m.ev ? '시세: ' + m.ev : '물건을 사고팝니다'; };
   T.menu = function (c) {
@@ -35,7 +36,8 @@
       { label: '시세', icon: 'chart', sub: R.market(c.id).ev ? R.market(c.id).ev : '품목 갈래별 값', onClick: function () { return T.quotes(c); } },
       { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : (T.hagLeft(c) < T.hagMax() ? '남은 흥정 ' + T.hagLeft(c) + '번' : R.purser() ? '경리 ' + R.purser().name : G.Court && G.Court.haggle(c) ? '귀족의 권한' : G.Acct && T.hagMax() > 1 ? '흥정 ' + T.hagMax() + '번' : ''), dim: !!h, onClick: function () { return T.haggle(c); } },
       G.BlackMarket && G.BlackMarket.open(c) ? { label: '뒷골목 암시장', icon: 'seal', sub: '회계 ' + G.Acct.lv() + ' · 비밀 거래', onClick: function () { return G.BlackMarket.visit(c); } } : null,
-      debts.length ? { label: '빚을 받으러 간다', icon: 'scroll', sub: debts[0].who, onClick: function () { return T.debt(c, debts[0]); } } : null
+      debts.length ? { label: '빚을 받으러 간다', icon: 'scroll', sub: debts[0].who, onClick: function () { return T.debt(c, debts[0]); } } : null,
+      G.Escort ? G.Escort.menuItem(c) : null     // 호위를 청하는 상인 · 호위 중인 상인 (js/systems/escort.js)
     ];
   };
   T.panel = function () { return G.Info.fleetPanel({ compact: true }); };

@@ -16,6 +16,7 @@
       h += f.ships.map(function (sh, i) {
         return '<div class="fp-ship"><div class="flex"><b>' + (i === 0 ? '★ ' : '') + U.esc(sh.name) + '</b><span class="right cream-muted">' + G.SHIP[sh.type].name + '</span></div>' + UI.bar(sh.hp, sh.maxHp, sh.hp / sh.maxHp < 0.4 ? 'red dark' : 'green dark') + '</div>';
       }).join('') || '<div class="cream-muted">배가 없습니다</div>';
+      if (G.Escort) h += G.Escort.panelHtml();   // 호위하는 상선
     }
     var days = f.ships.length ? Math.min(R.daysOfFood(), R.daysOfWater()) : 0;
     h += '<div class="fp-kv">' +
@@ -322,6 +323,7 @@
     } else html += '<div class="muted">진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.</div>';
     // 왕명 (js/systems/court.js)
     if (G.Court) html += G.Court.taskHtml();
+    if (G.Escort) html += G.Escort.html();     // 상선 호위
     // 조합 의뢰
     var qs = G.Quest ? G.Quest.list() : [];
     html += '<div class="sep"></div><h4 style="margin:0 0 8px">맡은 조합 의뢰</h4>';

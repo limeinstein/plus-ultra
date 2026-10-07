@@ -53,6 +53,9 @@
       b.crew = b.crew0 = Math.max(1, Math.round(f.crew * sh.crewMax / Math.max(1, totMax)));
       st.ships.push(b);
     });
+    // 호위하는 상선: 우리 편이지만 내 배가 아니다 — 제 선원으로 싸우고, 기함 뒤에 숨는다 (js/systems/escort.js)
+    var escSh = G.Escort ? G.Escort.ship() : null;
+    if (escSh) { var eb = makeShip(escSh, 'me', f.ships.length, f.ships.length + 1); eb.flag = false; eb.escort = true; eb.crew = eb.crew0 = escSh.crew || G.SHIP[escSh.type].crew[0]; st.ships.push(eb); }
     var en = enemyFleet(npc);
     en.forEach(function (sh, i) { var b = makeShip(sh, 'en', i, en.length); b.crew = b.crew0 = sh.crew; st.ships.push(b); });
     if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000);
@@ -309,6 +312,13 @@
   function allyThink(b, foes, near) {
     var K = FO(), o = b.order || 'follow', fs = flagship();
     b.close = 1;
+    if (b.escort && o !== 'retreat') {
+      // 호위하는 상선은 명령과 상관없이 적의 반대쪽, 기함 뒤에 숨는다 (가까이 온 적에게는 쏜다)
+      var cx0 = 0, cy0 = 0; foes.forEach(function (q) { cx0 += q.x; cy0 += q.y; }); cx0 /= foes.length; cy0 /= foes.length;
+      var ref = fs || b, ux = ref.x - cx0, uy = ref.y - cy0, ul = Math.hypot(ux, uy) || 1, back = ((G.BALANCE || {}).escort || {}).back || 260;
+      b.moveTo = [ref.x + ux / ul * back, ref.y + uy / ul * back]; b.target = near; b.boardIntent = false;
+      return;
+    }
     if (o === 'attack') { if (b.otarget && b.otarget.alive) { b.target = b.otarget; b.moveTo = null; return; } o = b.order = 'free'; b.otarget = null; }
     if (o === 'hold') {
       if (!b.hold) { o = b.order = 'free'; }
@@ -421,6 +431,7 @@
     ORDERS.forEach(function (o) { el.cmdBtns[o.id].classList.toggle('on', cur.length > 0 && cur.every(function (b) { return b.order === o.id; })); });
     el.cmdList.innerHTML = mine.map(function (b) {
       var tx = !b.alive ? (b.sunk ? '침몰' : b.fled ? '이탈' : '상실') : (ORDER_NAME[b.order] || '') + (b.order === 'attack' && b.otarget ? ' · ' + b.otarget.name : '');
+      if (b.escort && b.alive) tx = b.order === 'retreat' ? '호위 · 퇴각' : '호위 · 기함 뒤에 숨는다';   // 호위하는 상선은 퇴각 말고는 명령을 듣지 않는다
       return '<div class="ord-row' + (st.sel === b ? ' sel' : '') + (b.alive ? '' : ' gone') + '" data-no="' + b.no + '"><span class="shipno">' + b.no + '</span><b>' + U.esc(b.name) + '</b><span class="right">' + U.esc(tx) + '</span></div>';
     }).join('');
   }
@@ -900,12 +911,13 @@
     // apply damage & crew back to state
     var survivors = [];
     st.ships.forEach(function (b) {
-      if (b.side !== 'me') return;
+      if (b.side !== 'me' || b.escort) return;          // 호위하는 상선은 내 배·내 선원이 아니다
       if (b.sunk || b.lostBoard) { var i = f.ships.indexOf(b.src); if (i >= 0) f.ships.splice(i, 1); return; }
       b.src.hp = Math.max(1, b.hp); survivors.push(b);
     });
     f.crew = U.sum(survivors, function (b) { return b.crew; });
     var lines = [];
+    if (G.Escort) { try { G.Escort.afterBattle(st.ships, res, lines); } catch (e) { console.error(e); } }   // 호위하던 상선을 잃었는가
     if (res === 'win') {
       s.stats.wins++;
       if (G.SeaFolk) G.SeaFolk.afterBattle(st.npc, res, lines);   // 탐험 함대를 꺾으면 그 항해가 한 해 늦어진다
