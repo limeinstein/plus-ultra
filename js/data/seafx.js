@@ -275,4 +275,7 @@
   // 거리를 걷는 마을 사람 (js/systems/streetfolk.js · 그림 js/art/streetfolk.js): 거리에 나올 때마다 min~max명,
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
   G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100 };
+  /** 코스타 델 솔 3 OST 유튜브 재생기 창 (js/systems/ytmusic.js) — 유튜브 규칙상 200×200보다 작게 하거나 숨길 수 없다.
+     w·h 재생기 크기 · idle 마우스를 올리지 않았을 때 흐림(0~1) · flash 곡이 바뀌면 또렷하게 보이는 초 · gap 구석에서 띄우는 px */
+  G.FX.ostBox = { w: 200, h: 200, idle: 0.5, flash: 2.5, gap: 8 };
 })(window.G = window.G || {});

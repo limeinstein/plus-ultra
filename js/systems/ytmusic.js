@@ -75,19 +75,56 @@
 
   // ------------------------------------------------------------------ 재생기
   function vol() { var s = S(), v = s && s.settings && s.settings.music != null ? s.settings.music : 0.35; return Math.round(Math.min(1, v * 1.6) * 100); }
+  /* 재생기 창: 유튜브 규칙(퍼가기 재생기는 200×200 이상, 가리거나 숨기지 않기) 안에서 덜 거슬리게 —
+     가장 작은 크기로 화면 위쪽 구석(도시에서는 왼쪽 가운데 — 오른쪽은 건물 메뉴)에 두고, 마우스를 올리지 않으면 흐리게.
+     곡이 바뀌면 잠깐 또렷하게 제목을 보여 준다. 끌어 옮긴 자리는 기억한다(이 브라우저에만). 조정값: G.FX.ostBox */
+  function FXB() { return (G.FX && G.FX.ostBox) || { w: 200, h: 200, idle: 0.5, flash: 2.5, gap: 8 }; }
+  var KEY = 'pu_ost_box_pos', flashT = null;
+  function savedPos() { try { var v = JSON.parse(localStorage.getItem(KEY) || 'null'); return v && isFinite(v.x) && isFinite(v.y) ? v : null; } catch (e) { return null; } }
+  function savePos(x, y) { try { localStorage.setItem(KEY, JSON.stringify({ x: Math.round(x), y: Math.round(y) })); } catch (e) { /* 저장 못 해도 그만 */ } }
+  /** 창 자리: 끌어 둔 자리가 있으면 그곳(화면 안으로), 없으면 장면마다 정한 구석 */
+  function placeBox() {
+    if (!box) return;
+    var K = FXB(), W = window.innerWidth, H = window.innerHeight, bw = box.offsetWidth || K.w, bh = box.offsetHeight || K.h + 24, x, y;
+    var sp = savedPos();
+    if (sp) { x = sp.x; y = sp.y; }
+    else {
+      var hud = document.querySelector('.hud'), top = (hud ? hud.getBoundingClientRect().bottom : 54) + K.gap;
+      var scene = G.Game && G.Game.sceneName;
+      if (scene === 'city') { x = K.gap + 4; y = Math.max(top, (H - bh) / 2 + 40); }     // 도시: 오른쪽은 건물 메뉴라 왼쪽 가운데
+      else { x = W - bw - K.gap; y = top; }                                            // 바다·뭍·해전: 오른쪽 위 (해도·나침반·명령 줄을 가리지 않게)
+    }
+    x = Math.max(0, Math.min(W - bw, x)); y = Math.max(0, Math.min(H - bh, y));
+    box.style.left = x + 'px'; box.style.top = y + 'px'; box.style.right = 'auto'; box.style.bottom = 'auto';
+  }
+  Y.placeBox = placeBox;
+  function idleLook() { if (box && !box.matches(':hover') && !box._drag) box.style.opacity = String(FXB().idle); }
+  /** 곡이 바뀔 때 잠깐 또렷하게 */
+  function flash() {
+    if (!box) return;
+    box.style.opacity = '1';
+    if (flashT) clearTimeout(flashT);
+    flashT = setTimeout(function () { flashT = null; idleLook(); }, FXB().flash * 1000);
+  }
   function makeBox() {
     if (box) return box;
+    var K = FXB();
     box = document.createElement('div');
     box.className = 'ost-box wood brass-frame';
-    box.style.cssText = 'position:fixed;right:14px;bottom:70px;width:240px;z-index:9000;padding:0;border-radius:8px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.55);background:#1d140b;color:#f3e6c6;font:13px/1.3 "Nanum Myeongjo",serif;user-select:none';
-    box.innerHTML = '<div class="ost-bar" style="display:flex;align-items:center;gap:6px;padding:5px 8px;cursor:move;background:rgba(0,0,0,.35)"><span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" class="ost-title">♪ ' + OST().title + '</span>' +
-      '<button class="ost-x" title="기존 음악으로" style="background:none;border:0;color:#f3e6c6;cursor:pointer;font-size:15px;padding:0 2px">✕</button></div><div style="width:240px;height:200px"><div id="ost-player"></div></div>';
+    box.style.cssText = 'position:fixed;width:' + K.w + 'px;z-index:9000;padding:0;border-radius:6px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.45);background:#1d140b;color:#f3e6c6;font:12px/1.3 "Nanum Myeongjo",serif;user-select:none;transition:opacity .35s;opacity:1';
+    box.innerHTML = '<div class="ost-bar" style="display:flex;align-items:center;gap:6px;padding:3px 6px;cursor:move;background:rgba(0,0,0,.35)"><span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" class="ost-title">♪ ' + OST().title + '</span>' +
+      '<button class="ost-x" title="기존 음악으로" style="background:none;border:0;color:#f3e6c6;cursor:pointer;font-size:13px;padding:0 2px">✕</button></div><div style="width:' + K.w + 'px;height:' + K.h + 'px"><div id="ost-player"></div></div>';
     document.body.appendChild(box);
     box.querySelector('.ost-x').onclick = function () { Y.setSource('base'); };
+    box.addEventListener('mouseenter', function () { box.style.opacity = '1'; });
+    box.addEventListener('mouseleave', function () { if (!flashT) idleLook(); });
     var bar = box.querySelector('.ost-bar'), drag = null;
-    bar.addEventListener('mousedown', function (e) { if (e.target.closest('.ost-x')) return; var r = box.getBoundingClientRect(); drag = { dx: e.clientX - r.left, dy: e.clientY - r.top }; e.preventDefault(); });
+    bar.addEventListener('mousedown', function (e) { if (e.target.closest('.ost-x')) return; var r = box.getBoundingClientRect(); drag = { dx: e.clientX - r.left, dy: e.clientY - r.top }; box._drag = true; e.preventDefault(); });
     window.addEventListener('mousemove', function (e) { if (!drag) return; box.style.left = Math.max(0, e.clientX - drag.dx) + 'px'; box.style.top = Math.max(0, e.clientY - drag.dy) + 'px'; box.style.right = 'auto'; box.style.bottom = 'auto'; });
-    window.addEventListener('mouseup', function () { drag = null; });
+    window.addEventListener('mouseup', function () { if (!drag) return; drag = null; box._drag = false; var r = box.getBoundingClientRect(); savePos(r.left, r.top); if (!box.matches(':hover')) idleLook(); });
+    bar.addEventListener('dblclick', function () { try { localStorage.removeItem(KEY); } catch (e) { /* 없음 */ } placeBox(); });   // 두 번 누르면 처음 자리로
+    window.addEventListener('resize', placeBox);
+    placeBox();
     return box;
   }
   function fail(why) {
@@ -107,7 +144,7 @@
       if (prev) try { prev(); } catch (e) { /* 다른 재생기 */ }
       try {
         player = new window.YT.Player('ost-player', {
-          width: 240, height: 200, playerVars: { autoplay: 1, controls: 1, rel: 0, modestbranding: 1, playsinline: 1 },
+          width: FXB().w, height: FXB().h, playerVars: { autoplay: 1, controls: 1, rel: 0, modestbranding: 1, playsinline: 1 },
           events: {
             onReady: function () { ready = true; loading = false; player.setVolume(vol()); if (queued) { var q = queued; queued = null; start(q); } },
             onStateChange: function (e) { if (e.data === 0 && cur) start(cur, true); },          // 끝나면 그 곡을 처음부터 다시 (돌림)
@@ -126,7 +163,7 @@
   function start(id, again) {
     var t = OST().tracks[id]; if (!t) return;
     cur = id;
-    if (box) { box.style.display = ''; var tt = box.querySelector('.ost-title'); if (tt) tt.textContent = '♪ ' + t.name; }
+    if (box) { box.style.display = ''; var tt = box.querySelector('.ost-title'); if (tt) tt.textContent = '♪ ' + t.name; placeBox(); flash(); }
     if (!ready) { queued = id; loadApi(); return; }
     var o = { videoId: OST().videos[t.v], startSeconds: t.s };
     if (t.e != null) o.endSeconds = t.e;
@@ -135,7 +172,7 @@
   /** 곡 틀기 (같은 곡이면 그대로) */
   Y.play = function (id) {
     if (!Y.on() || !id) return false;
-    if (id === cur && ready) return true;
+    if (id === cur && ready) { placeBox(); return true; }      // 장면이 바뀌면 그 장면의 구석으로
     start(id);
     return true;
   };
