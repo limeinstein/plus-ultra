@@ -453,7 +453,7 @@ Codex가 그린 가족 그림 30장(`images/family-events/`, 576×256)으로 32�
 - Codex가 지역 20곳마다 그린 앞모습 시트(4×4, 13종 — 마을 남자·여자·소년·소녀·촌장·할머니·사서·여관 주인·모험가·장사꾼·귀족 청년·병사·항해사)를 `tools/street_faces.py`가 칸마다 잘라
   배경을 지우고(rembg) `images/portraits/street-folk/<그림 이름>_<양식>.webp`(얼굴 512) · `…_half.webp`(무릎상 512×약 770)로 만든다. 520장.
 - 거리에서 말을 걸면 대화창 얼굴과 옆에 서는 무릎상이 **걷는 그림의 바로 그 사람**이다 (옷·얼굴·성별이 맞는다). 그림이 없으면 예전처럼 역할 초상(npc-roles)·코드 그림 (`js/systems/streetfolk.js` SF.speaker).
-- 아티팩트에서는 걷는 그림처럼 자산 저장소에 원래 크기로 올린다 (`tools/bundle.py` ASSET_PREFIXES). 시험 `node tests/streetfolk_portraits_smoke.js`.
+- 아티팩트에서는 걷는 그림처럼 자산 저장소에 원래 크기로 올린다(`tools/bundle.py` ASSET_PREFIXES — 그림 묶음에 넣으면 한 판 256MB를 넘는다). 시험 `node tests/streetfolk_faces_smoke.js` · `node tests/streetfolk_portraits_smoke.js`.
 
 ## 중국·인도·중동 명승지와 건축물 · 민족 발견물의 풍속 (2026-10-08)
 - `js/data/eastdisc.js`: 중국 명승지 20(청나라 전부터 이름난 곳) · 건축물 7, 인도·중동 명승지 10 · 건축물 10(1700년 전). G.WONDERS 묶음에 덧붙임(moredisc.js 다음).
@@ -465,6 +465,7 @@ Codex가 그린 가족 그림 30장(`images/family-events/`, 576×256)으로 32�
 - 오지 민족 10: 사미·아이누·마오리·축치·투바·바자우(바다)·음부티·하와이·안다만(바다)·셀크남.
 - **발견 GIF 83개**(Codex): 자연 30 · 유적 17 · 민족 36 — `images/discoveries/<id>.gif`(576×256, 9.82초) · 마지막 장면 `discovery-ends/` · 게임용 판 `discovery-sheets/`.
   만드는 법 `tools/discovery83/README.md` (원화 `tools/discovery83/masters/`는 저장소에 올리지 않는다).
+  아티팩트판은 한 판 파일 수(511) 때문에 이 83곳의 장면 판을 자산 저장소에 올린다(`tools/bundle.py` asset_extra) — 도감 아티팩트에서는 이 83곳이 장면 판 대신 그림 한 장으로 보인다.
 - 시험: `node tests/folk_smoke.js` · `python tests/discovery83_files.py` · `node tests/discovery83_runtime.js`.
 
 ## 거리를 걷는 마을 사람 (2026-10-07)
