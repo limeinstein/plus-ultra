@@ -449,7 +449,7 @@
           } else if (cmd === 'snipe') {
             var L = foes.filter(function (u) { return u.leader; })[0];
             fx.push({ kind: 'flash', x: 200, y: 180, t: 0, life: 0.2 }); fx.push({ kind: 'shot', x0: 200, y0: 180, x1: L.x, y1: L.y - 24, t: 0, life: 0.3 });
-            if (G.Audio) G.Audio.sfx('cannon');
+            if (G.Audio) G.Audio.sfx('gun');
             await sleep(320);
             if (ok) { var sn = Math.max(1, Math.round(L.n * (L.n <= 3 ? 1 : 0.5))); hurt(L, sn, true); say('저격 성공! ' + L.name + '에게 명중했다!'); }
             else { hurt(L, 0); say('저격이 빗나갔다...'); }

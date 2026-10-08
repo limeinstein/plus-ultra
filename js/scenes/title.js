@@ -13,8 +13,11 @@
     if (!bg) bg = G.Img.make(G.Img.chain.title(), 1600, 900, A.titleScene);
     Game.setScene(bg);
     var wrap = U.el('div', 'title-wrap');
+    var loadingKey = G.Img.has('effects/loading-world.anim') ? 'effects/loading-world.anim' : 'effects/loading-world', loadingSrc = G.Img.has(loadingKey) ? G.Img.src(loadingKey) : '';   // 움직이는 WEBP(1.7MB)가 있으면 GIF(6.4MB) 대신
     wrap.innerHTML = '<div class="title-logo"><div class="latin">Loop of Good Hope</div><div class="rule"></div><div class="ko">더 먼 바다로</div></div>' +
-      '<div class="title-menu"></div><div class="loading">해도를 펼치는 중...</div>' +
+      '<div class="title-menu"></div><div class="loading" role="status">' +
+      (loadingSrc ? '<img src="' + loadingSrc + '" alt="지구 둘레를 항해하는 갤리온">' : '') +
+      '<span>해도를 펼치는 중...</span></div>' +
       '<div class="title-foot">대항해의 시대, 1480 — 이베리아 반도</div>';
     UI.add(wrap);
     var menu = wrap.querySelector('.title-menu');
@@ -36,7 +39,7 @@
     var ld = wrap.querySelector('.loading');
     // 보조 저장소(IndexedDB)의 일지도 읽은 뒤에 이어하기·불러오기를 정한다 (localStorage가 지워졌어도 남아 있을 수 있다)
     Promise.all([Game.ensureGeo(), G.State.ready, document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 2500); })]) : null]).then(function () {
-      ld.textContent = '';
+      ld.classList.add('done');
       // 처음 열 때 떠 있던 불러오는 그림을 걷고, 바다 셰이더는 지금 미리 컴파일해 둔다 (첫 항해가 멈칫하지 않게)
       if (G.Loader) G.Loader.hide();
       setTimeout(function () { try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); } }, 600);

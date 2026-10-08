@@ -44,7 +44,8 @@
       style: h.style || 'ib', role: h.role || '', dress: h.dress || '', trim: h.trim || null, pattern: h.pattern || '', jewelry: h.jewelry || '',
       badge: h.badge || '', facePaint: h.facePaint || '', braids: h.braids || 0,
       glam: h.glam == null ? (g === 'f' ? 1 : 0) : h.glam, expression: h.expression || 'neutral', roundFace: !!h.roundFace,
-      moustache: !!h.moustache, lip: h.lip || (g === 'f' ? '#a94f5d' : '#70483f'), ornament: h.ornament || '', accessory: h.accessory || ''
+      moustache: !!h.moustache, lip: h.lip || (g === 'f' ? '#a94f5d' : '#70483f'), ornament: h.ornament || '', accessory: h.accessory || '',
+      culture: cul   // 그림이 없을 때 빌릴 얼굴의 고장 (A.fallbackFaces)
     };
     if (h.age === 'old') { sp.hair = rng() < 0.6 ? '#c8c0b0' : '#8a8278'; }
     return sp;
@@ -549,10 +550,53 @@
     // 역할 그림(npc-roles)은 성별이 정해져 있다 — 다른 성별의 인물에게는 쓰지 않는다 (조선 국왕에게 왕비 그림이 붙지 않게)
     if (roleKey && spec.g && A.rolePortraitGender(spec.role, spec.style) !== spec.g) roleKey = null;
     if (roleKey && out.indexOf(roleKey) < 0) out.push(roleKey);
-    if (out.length) return out;
     var m = /^player(\d+)/.exec(String(spec.seed || ''));
-    if (m) return G.Img.chain.player(+m[1]);
-    return null;
+    if (!out.length && m) return G.Img.chain.player(+m[1]);
+    // 맨 뒤에: 코드로 그린 얼굴(다각형) 대신 쓸 그 고장·성별·나이에 맞는 사람 그림
+    if (!spec.noFallback && !/^kid_/.test(String(spec.seed || ''))) A.fallbackFaces(spec).forEach(function (k) { if (out.indexOf(k) < 0) out.push(k); });
+    return out.length ? out : null;
+  };
+
+  /* ---------------------------------------------------------------- 그림이 없는 사람의 대신 얼굴
+     코드로 그린 얼굴은 다각형처럼 보여 그림들 사이에서 튄다. 전용 그림·역할 그림이 없거나(성별이 달라 못 쓰는 경우 포함)
+     파일이 빠졌을 때, 같은 고장·성별의 사람 그림을 빌린다.
+       ① 얼굴 묶음 images/portraits/pools/<mates|sponsors>/<나라>/<m|f>/01~10 — 씨앗(seed)으로 골라 사람마다 다르게.
+          왕·귀족·관리·상인처럼 차려입은 사람은 후원자 묶음, 나머지는 항해사 묶음.
+       ② 그 고장의 역할 그림(npc-roles) 가운데 성별이 맞는 것 — 비슷한 역할부터.
+       ③ 유럽 마을 사람 그림(portraits/npc). 아이(kid_…)와 noFallback:true 인 얼굴은 빌리지 않는다. */
+  var CUL_STYLE = { eu: 'ne', med: 'ib', arab: 'is', af: 'af', in: 'in', asia: 'cn', am: 'az' };
+  var STYLE_POOL = { ib: 'es', co: 'es', it: 'es', ne: 'en', ru: 'de', gr: 'ot', is: 'eg', pe: 'pe', af: 'af', sw: 'af', tr: 'af', 'in': 'ind', se: 'se', cn: 'cn', st: 'cn', kr: 'kr', jp: 'jp', az: 'az', an: 'inca', na: 'na' };
+  var DRESSED = { king: 1, noble: 1, official: 1, gov: 1, pope: 1, merchant: 1 };
+  var NEAR_ROLE = {   // 성별이 달라 못 쓰는 역할 → 비슷한 역할 (앞에서부터)
+    m: { merchant: ['captain', 'sailor'], keeper: ['sailor', 'captain'], scholar: ['priest', 'captain'], noble: ['captain', 'priest'], official: ['captain', 'priest'], gov: ['captain', 'priest'], maid: ['sailor'] },
+    f: { sailor: ['keeper', 'maid'], captain: ['merchant', 'noble'], soldier: ['keeper', 'maid'], priest: ['scholar', 'noble'], king: ['noble'], native: ['maid', 'keeper'] }
+  };
+  function hex(c) { var m = /^#?([0-9a-f]{6})$/i.exec(String(c || '')); if (!m) return null; var n = parseInt(m[1], 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  /** 얼굴빛으로 어림한 문화권 (옛 저장의 초상에는 문화권이 적혀 있지 않다) */
+  function cultureOf(spec) {
+    if (spec.culture) return spec.culture;
+    var a = hex(spec.skin), best = 'med', bd = 1e9;
+    if (!a) return best;
+    Object.keys(SKINS).forEach(function (k) { var b = hex(SKINS[k]), d = (a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]) + (a[2] - b[2]) * (a[2] - b[2]); if (d < bd) { bd = d; best = k; } });
+    return best;
+  }
+  A.fallbackFaces = function (spec) {
+    if (!spec) return [];
+    var g = spec.g === 'f' ? 'f' : 'm';
+    var style = spec.role && spec.style ? spec.style : CUL_STYLE[cultureOf(spec)] || 'ib';
+    var out = [], seed = String(spec.seed || '') + ':' + (spec.role || '') + ':' + g;
+    var pool = STYLE_POOL[style] || 'es', kind = DRESSED[spec.role] || (spec.gold && !spec.role) ? 'sponsors' : 'mates';
+    var n = U.strHash(seed) % 10;
+    out.push('portraits/pools/' + kind + '/' + pool + '/' + g + '/' + String(n + 1).padStart(2, '0'));
+    out.push('portraits/pools/' + (kind === 'mates' ? 'sponsors' : 'mates') + '/' + pool + '/' + g + '/' + String(n + 1).padStart(2, '0'));
+    var want = [];
+    if (spec.armor && g === 'm') want.push('soldier');
+    if (spec.role && A.rolePortraitGender(spec.role, style) === g) want.push(spec.role);
+    want = want.concat((NEAR_ROLE[g] || {})[spec.role] || []);
+    want = want.concat(g === 'f' ? ['keeper', 'merchant', 'maid', 'noble', 'scholar', 'official'] : spec.age === 'old' ? ['priest', 'captain', 'sailor'] : spec.age === 'young' ? ['sailor', 'captain', 'soldier'] : ['captain', 'sailor', 'priest']);
+    want.forEach(function (r) { if (NPC_ROLES.indexOf(r) >= 0 && A.rolePortraitGender(r, style) === g) { var k = 'portraits/npc-roles/' + style + '/' + r; if (out.indexOf(k) < 0) out.push(k); } });
+    out.push(g === 'f' ? 'portraits/npc/tavernkeeper_europe_f' : 'portraits/npc/captain');
+    return out;
   };
   A.portraitCanvas = function (spec, size) {
     size = size || 134;

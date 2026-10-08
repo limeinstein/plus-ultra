@@ -242,6 +242,11 @@ def build(found, out_dir, scale=1.0, quiet=False, hq=False, skip=()):
         total_out += os.path.getsize(path)
         out[key] = os.path.relpath(path, out_dir).replace('\\', '/')
         made[key] = [sig, out[key]]
+        if len(made) % 100 == 0:
+            with open(made_path, 'w', encoding='utf-8') as f:
+                json.dump(made, f)
+        if os.environ.get('SLIM_TRACE'):
+            print('  ·', key, flush=True)
     with open(made_path, 'w', encoding='utf-8') as f:
         json.dump(made, f)
     if not quiet:

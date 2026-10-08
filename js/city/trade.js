@@ -149,6 +149,7 @@
     if (G.Slave && G.Slave.is(id)) G.Slave.onBuy(c, q);   // 노예 무역: 악명·「노예 상인」
     if (G.Hostile) G.Hostile.trade(c, q * price);   // 그 나라와 교역하면 적대가 줄어든다
     UI.toast(g.name + ' ' + q + '통을 샀다. (금화 ' + U.num(q * price) + '닢)', 'coin');
+    if (G.Audio) G.Audio.sfx('coin');
     G.Game.refreshHud();
     var ds = G.Disc.checkTrade(id, c);
     for (var i = 0; i < ds.length; i++) await G.Disc.find(ds[i], 'trade');
@@ -179,6 +180,7 @@
         if (!(await UI.confirm('실은 짐을 모두 팔겠습니까?'))) continue;
         var tot = 0; ids.forEach(function (id) { tot += sellQty(c, id, s.fleet.cargo[id].q); });
         UI.toast('짐을 모두 팔아 금화 ' + U.num(tot) + '닢을 받았다.', 'coin');
+        tradePaid();
         continue;
       }
       if (v !== 'pick' || !picked) return;
@@ -188,8 +190,14 @@
       if (!q) continue;
       var got = sellQty(c, picked, q);
       UI.toast(g.name + ' ' + q + '통을 팔아 금화 ' + U.num(got) + '닢을 받았다.', 'coin');
+      tradePaid();
     }
   };
+  function tradePaid() {
+    if (!G.Audio) return;
+    G.Audio.sfx('unload');
+    setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 620);
+  }
   /** price falls as you sell: integrate in chunks */
   function estimate(c, id, q) {
     var m = R.market(c.id); var st = m.g[id] ? { sat: m.g[id].sat, dep: m.g[id].dep } : null;

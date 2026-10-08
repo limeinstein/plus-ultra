@@ -129,7 +129,7 @@
       return st;
     });
   };
-  T.close = function () { st = null; };
+  T.close = function () { if (G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); } st = null; };
   T.active = function () { return !!st; };
   T.runtime = function () { return st; };   // 시험용
   T.city = function () { return st && st.city; };
@@ -137,6 +137,7 @@
     if (st && v != null) {
       var back = st.hidden && !v;          // 건물에서 거리로 나왔다 — 거리를 오가는 사람이 바뀐다
       st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.entering = false; st.dirty = true; }
+      if (st.hidden && G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); }
       if (back) spawnFolk();
     }
     return st ? st.hidden : true;
@@ -829,6 +830,10 @@
       moved = true;
     }
     if (hero.entering) { hero.fade = Math.max(0, hero.fade - dt / 0.42); hero.dist += 260 * dt; moved = true; }
+    if (G.Audio && G.Audio.travel) {
+      var heroMoving = !!(kd || hero.to != null || hero.entering), footKind = hero.running ? 'run' : 'townstep';
+      G.Audio.travel(footKind, heroMoving ? (hero.running ? 1 : 0.55) : 0);   // 마을 돌길의 발걸음·달리기
+    }
     if (st.hover !== st.drawnHover || st.focus !== st.drawnFocus) moved = true;
     if (G.Scenes.city.timeOfDay() !== st.tod) moved = true;
     // 거리를 걷는 사람들: 그들만 움직일 때는 초당 folkFps번만 다시 그린다 (거리 전체를 매 틀 다시 그리지 않게 — 끊김 방지)

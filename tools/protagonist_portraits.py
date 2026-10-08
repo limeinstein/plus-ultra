@@ -4,9 +4,13 @@
 원본은 ``images/_extra/protagonists/<ID>.png``에 둔다. 각 파일은
 1024×1536 투명 PNG이며 머리부터 무릎까지만 담는다. 실행 결과:
 
-* ``images/portraits/player/<ID>.png`` — 만들기·대화창 얼굴 512×512
-* ``images/characters/player_half_<ID>.png`` — 수첩 무릎상 512×512
+* ``images/portraits/mates/<ID>.webp`` — 부하 후보 흉상 448×448
+* ``images/portraits/mates/<ID>_half.webp`` — 대화창 위 무릎상 1024×1536 (원본 그대로)
 * ``docs/art/protagonists-preview.jpg`` — 16명 점검판
+
+2026-10-08: 이 16명은 20대·40대 얼굴이 따로 없어 제독 만들기에서 빼고,
+항구 술집·여관의 부하 후보(js/data/storycrew.js)로 옮겼다. 제독 얼굴은
+portraits/player/ 와 portraits/player-aged/ 에 둘 다 있는 것만 고를 수 있다.
 
 얼굴은 저장소에 포함된 YuNet 얼굴 찾기 모델로 잡고, 얼굴 찾기에 실패하면
 투명 실루엣의 위쪽을 기준으로 자른다.
@@ -163,7 +167,7 @@ def build_face_preview(faces: list[tuple[str, str, Image.Image]]) -> None:
 
 
 def main() -> int:
-    face_dir = IMG / "portraits" / "player"
+    face_dir = IMG / "portraits" / "mates"
     face_dir.mkdir(parents=True, exist_ok=True)
     halves = []
     faces = []
@@ -179,8 +183,8 @@ def main() -> int:
             raise ValueError(f"투명 배경이 아닙니다: {source}")
         face = face_square(image)
         half = square_fit(image)
-        face.save(face_dir / f"{look}.png", optimize=True)
-        half.save(IMG / "characters" / f"player_half_{look}.png", optimize=True)
+        face.resize((448, 448), Image.Resampling.LANCZOS).save(face_dir / f"{look}.webp", "WEBP", quality=90, method=4)
+        image.save(face_dir / f"{look}_half.webp", "WEBP", quality=88, method=4)
         halves.append((look, name, half))
         faces.append((look, name, face))
         print(f"{name}: 얼굴·무릎상")

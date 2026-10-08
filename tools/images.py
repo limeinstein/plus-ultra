@@ -60,6 +60,9 @@ def game_data():
             if sid in byid:
                 byid[sid]['holders'] = [(h[0], h[1], h[2], h[3]) for h in hs]
     d['mates'] = [{'id': m[0], 'name': m[1], 'g': m[2]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)', g: '(\w)'", people)]
+    # 이야기 속 동료(js/data/storycrew.js)도 G.MATES 에 들어간다
+    if os.path.exists(os.path.join(ROOT, 'js/data/storycrew.js')):
+        d['mates'] += [{'id': m[0], 'name': m[1], 'g': m[2]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)', g: '(\w)'", read('js/data/storycrew.js'))]
     d['maids'] = [{'id': m[0], 'city': int(m[1]), 'name': m[2]} for m in re.findall(r"\{ id: '(m_\w+)', city: (\d+), name: '([^']*)'", people)]
     disc = read('js/data/discoveries.js')
     d['discoveries'] = []
@@ -123,6 +126,12 @@ def game_data():
     for x in d['discoveries']:
         if x.get('rival') and x['rival'] not in names:
             names.append(x['rival'])
+    # 탐험 함대(seafolk.js EXPEDITIONS의 who)와 바다의 이름난 선장(seacaptains.js)도 경쟁자 그림을 쓴다 (js/core/images.js K.rival · systems/seacaptains.js CP.speaker)
+    for rel, pat in (('js/systems/seafolk.js', r"who: '([^']+)'"), ('js/data/seacaptains.js', r"^\s*\['\w+', '([^']+)', '[A-Z]{2}', '\w'")):
+        if os.path.exists(os.path.join(ROOT, rel)):
+            for nm in re.findall(pat, read(rel), re.M):
+                if nm not in names:
+                    names.append(nm)
     d['rivals'] = names
     shipjs = read('js/data/ships.js')
     ships = shipjs[shipjs.index('G.SHIP_TYPES = ['):]

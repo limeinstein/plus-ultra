@@ -171,8 +171,10 @@
   // ---------------------------------------------------------------- 대화창 위에 서는 사람들
   /* 무릎상(머리부터 무릎까지 서 있는 그림)은 대화창 윗변에 발을 딛고 선다.
      · 두 사람(duo): 왼쪽 사람은 그림 왼쪽 끝이 대화창 왼쪽 끝에, 오른쪽 사람은 그림 오른쪽 끝이 대화창 오른쪽 끝에 맞는다.
-     · 혼자 말하는 사람(집사·상인·여관 주인…): 대화창 가운데 (도시 안에서만 — G.FX.stand.soloCity)
-     · 무릎상이 없는 사람은 그 자리에 흉상으로 선다 (한 사람이 없다고 다른 사람까지 흉상으로 바꾸지 않는다).
+     · 구도는 하나: 어디서든 말하는 사람은 제독(왼쪽)과 마주 선다(오른쪽). 제독 혼잣말은 방금 마주 선 사람과, 없으면 제독만 왼쪽에.
+     · 바다·뭍(탐험·해전)에서는 무릎상 대신 두 사람 얼굴(액자 흉상)만. 특별한 사건(가족·연인·부하끼리 썸·왕녀 — isSpecial)만 무릎상.
+     · 도서관(책 보기)·술집(이야기)만 예전 구도 — 혼자 가운데(G.FX.stand.soloCity)·대화창 안 얼굴 칸이 그 자리에 맞게 섞인다 (keepScene)
+     · 무릎상과 얼굴(흉상)을 섞지 않는다: 두 사람 다 무릎상이 있어야 무릎상, 한 사람이라도 없거나 파일을 못 읽으면 둘 다 얼굴.
      · 그림은 화면 UI(도시 이름판·건물 메뉴·HUD·아래 단추줄)보다 아래 층(.dlg-actors, z 13)에 그려 UI를 가리지 않는다.
        이름표만 대화창 층에 두어 눌러서 인물 이야기를 볼 수 있게 한다. */
   function standFx() {
@@ -197,6 +199,33 @@
   var talking = 0, untalkTimer = 0, hiddenPanels = [];
   /* 같은 건물 안에서 마지막으로 마주 선 상대 — 제독이 혼자 고민하는 물음(「어떻게 할까?」)도 그 사람과 마주 선 구도로 보여 준다 */
   var lastPartner = null;
+  /** 건물 메뉴 밖(바다·뭍·창 위)에서: 방금(1분 안) 마주 선 사람 */
+  function recentPartner() { var lp = lastPartner; return lp && Date.now() - lp.t < 60 * 1000 ? lp.who : null; }
+  /** 도서관(책 보기)·술집(이야기)은 예전 구도를 그대로 쓴다 — 혼자 선 사람·대화창 안 얼굴 칸·마주 보기가 그 자리에 맞게 섞인다 */
+  function keepScene() {
+    var S = G.Game && G.Game.state, C = G.Scenes && G.Scenes.city;
+    if (!S || !S.loc || S.loc.mode !== 'city' || !C || !C.current) return false;
+    var cur = null; try { cur = C.current(); } catch (e) { cur = null; }
+    return !!cur && (cur.kind === 'library' || cur.kind === 'tavern');
+  }
+  UI.keepScene = keepScene;
+  /** 바다·뭍(탐험·해전 포함)에서는 두 사람 다 액자 흉상(얼굴)만 — 무릎상 두 사람은 특별한 사건에만 */
+  function seaOrLand() { var S = G.Game && G.Game.state; return !!(S && S.loc && (S.loc.mode === 'sea' || S.loc.mode === 'land')); }
+  /** 특별한 사건의 사람: who.special(부하끼리 썸·왕녀 등) 또는 제독의 가족(아내·둘째 부인·아이) */
+  function isSpecial(who) {
+    if (!who) return false;
+    if (who.special) return true;
+    var S = G.Game && G.Game.state, p = S && S.player, nm = who.name;
+    if (!p || !nm || isPlayer(who)) return false;
+    try {
+      var names = [];
+      if (p.wife && G.Family && G.Family.wifeName) names.push(G.Family.wifeName());
+      if (G.Wives && G.Wives.name) (p.wives2 || []).forEach(function (w) { names.push(G.Wives.name(w)); });
+      (p.kids || []).forEach(function (k) { if (k.name) names.push(k.name); });
+      return names.some(function (n) { return n && (nm === n || nm.indexOf(n + ' (') === 0); });   // 아이 이름 뒤에 「(9세 · …)」가 붙기도 한다
+    } catch (e) { return false; }
+  }
+  UI.isSpecial = isSpecial;
   function partnerFor(menu) {
     var lp = lastPartner;
     return lp && menu && lp.menu === menu && menu.isConnected && Date.now() - lp.t < 15 * 60 * 1000 ? lp.who : null;
@@ -244,15 +273,26 @@
     // 아니면 예전처럼 대화창 층에 세운다(창 뒤에 숨지 않게). 혼자 말하는 사람은 아래 층에 세울 수 있을 때만 선다
     var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
     var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
+    var keep = keepScene();
+    if (!keep) {
+      /* 한 가지 구도: 어디서든(도시·바다·뭍·해전·창이 열려 있을 때도) 말하는 사람은 제독과 마주 선다 — 제독 왼쪽 · 상대 오른쪽.
+         혼자 가운데 서는 구도와 대화창 안 얼굴 칸은 쓰지 않는다 (사람이 없는 말·noStand 장면만 예전 대화창).
+         두 사람을 이미 정해 준 대화(부하끼리의 썸 등)는 그대로. 도서관·술집은 예전 구도 그대로 (keepScene) */
+      if (!opts.noStand && (opts.portrait || isPlayer(opts)) && S && S.player && !duo) {   // 제독은 초상이 없어도 무릎상(heroHalf)으로 선다
+        duo = true;
+        if (isPlayer(opts)) { partner = partnerFor(menuEl) || recentPartner(); side = 'left'; choiceSide = 'left'; }
+        else { side = 'right'; choiceSide = choiceSide || 'left'; partner = { name: S.player.name, rigId: 'player', portrait: S.player.portrait, half: G.Img && G.Img.chain.heroHalf ? G.Img.chain.heroHalf() : null }; }
+      }
+    }
     // 제독 혼자의 물음·혼잣말: 방금 마주 섰던 사람이 있으면 그 사람과 함께 선다 (제독 = 왼쪽, 고르는 쪽)
-    if (!duo && low && !opts.noStand && isPlayer(opts) && partnerFor(menuEl)) { duo = true; partner = partnerFor(menuEl); side = 'left'; choiceSide = 'left'; }
+    if (keep && !duo && low && !opts.noStand && isPlayer(opts) && partnerFor(menuEl)) { duo = true; partner = partnerFor(menuEl); side = 'left'; choiceSide = 'left'; }
     // 도시 안에서 혼자 말하던 사람(여급·수위·거간꾼·거리의 마을 사람…)도 동료처럼 제독과 마주 선 무릎상 대화로 (G.FX.stand.npcDuo).
     // 무릎상이 없는 사람만 그 자리에 흉상으로 선다. who.solo = true면 예전처럼 혼자 가운데에
-    if (!duo && low && !opts.noStand && F.npcDuo && opts.portrait && !opts.solo && !isPlayer(opts) && S && S.loc && S.loc.mode === 'city' && S.player) {
+    if (keep && !duo && low && !opts.noStand && F.npcDuo && opts.portrait && !opts.solo && !isPlayer(opts) && S && S.loc && S.loc.mode === 'city' && S.player) {
       duo = true; side = 'right'; choiceSide = choiceSide || 'left';
       partner = { name: S.player.name, rigId: 'player', portrait: S.player.portrait, half: G.Img && G.Img.chain.heroHalf ? G.Img.chain.heroHalf() : null };
     }
-    var solo = !duo && !opts.noStand && !!opts.portrait && low && (!F.soloCity || (S && S.loc && S.loc.mode === 'city'));
+    var solo = keep && !duo && !opts.noStand && !!opts.portrait && low && (!F.soloCity || (S && S.loc && S.loc.mode === 'city'));
     var soloHalf = solo ? halfKeyOf(opts) : null;
     if (soloHalf && !soloHalf.key) soloHalf = null;
     if (!duo && !solo) {
@@ -295,9 +335,26 @@
       if (tall && G.Img.load) {
         try {
           var pr = G.Img.load(half.key);
-          if (pr && pr.then) pr.then(function (img) { if (img && img.naturalWidth && img.naturalHeight) { A0.aspect = img.naturalWidth / img.naturalHeight; layout(); } }, function () {});
+          if (pr && pr.then) pr.then(function (img) {
+            if (img && img.naturalWidth && img.naturalHeight) { A0.aspect = img.naturalWidth / img.naturalHeight; layout(); }
+            else toFaces();   // 무릎상 파일을 읽지 못하면 두 사람 다 얼굴로 (한 사람만 얼굴이 되지 않게)
+          }, function () { toFaces(); });
         } catch (e) { /* 그림이 없으면 기본 비율 */ }
       }
+    }
+    /* 무릎상 파일을 읽지 못했을 때: 선 사람들을 모두 얼굴(흉상)로 다시 세운다 */
+    var duoCast = null, facesNow = false;
+    function toFaces() {
+      if (facesNow || !box || !box.isConnected) return;
+      facesNow = true;
+      rigs.forEach(function (r) { if (r) r.destroy(); }); rigs = [];
+      actors.forEach(function (a) { if (a.el.parentNode) a.el.parentNode.removeChild(a.el); if (a.name && a.name.parentNode) a.name.parentNode.removeChild(a.name); });
+      actors = [];
+      if (duoCast) {
+        if (duoCast.left) addActor(duoCast.left, 'left', duoCast.active === 'left', null);
+        if (duoCast.right) addActor(duoCast.right, 'right', duoCast.active === 'right', null);
+      } else addActor(opts, 'center', true, null);
+      layout();
     }
     var speakerSide = 'center';
     if (duo) {
@@ -305,10 +362,16 @@
       var left = speakerSide === 'left' ? opts : partner;
       var right = speakerSide === 'right' ? opts : partner;
       var activeSide = asking ? (choiceSide || (speakerSide === 'left' ? 'right' : 'left')) : speakerSide;
-      addActor(left, 'left', activeSide === 'left', halfKeyOf(left));
-      addActor(right, 'right', activeSide === 'right', halfKeyOf(right));
+      // 바다·뭍에서는 특별한 사건(가족·연인·부하끼리 썸·왕녀)이 아니면 두 사람 얼굴(흉상)만 — 무릎상은 과하다
+      var faces = seaOrLand() && !isSpecial(left) && !isSpecial(right);
+      // 무릎상과 얼굴을 섞지 않는다: 두 사람 다 무릎상이 있을 때만 무릎상, 한 사람이라도 없으면 둘 다 얼굴
+      var hl = left ? halfKeyOf(left) : null, hr = right ? halfKeyOf(right) : null;
+      if ((left && !(hl && hl.key)) || (right && !(hr && hr.key))) faces = true;
+      duoCast = { left: left, right: right, active: activeSide };
+      if (left) addActor(left, 'left', activeSide === 'left', faces ? null : hl);       // 제독 혼잣말에 방금 마주 선 사람이 없으면 제독만 왼쪽에
+      if (right) addActor(right, 'right', activeSide === 'right', faces ? null : hr);
       var other = isPlayer(left) ? right : isPlayer(right) ? left : right;
-      if (low && other && !isPlayer(other)) lastPartner = { who: other, menu: menuEl, t: Date.now() };
+      if ((low || !keep) && other && !isPlayer(other)) lastPartner = { who: other, menu: menuEl, t: Date.now() };
     } else {
       addActor(opts, 'center', true, soloHalf);
       if (low && !isPlayer(opts)) lastPartner = { who: opts, menu: menuEl, t: Date.now() };

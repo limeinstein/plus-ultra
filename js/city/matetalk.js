@@ -28,7 +28,7 @@
         var d = G.MATE[m.id]; if (!d) return { label: '—', value: -1, disabled: true };
         var tag = d.witch ? ' <span class="tag">마녀</span>' : d.wd ? ' <span class="tag">철새</span>' : '';
         return { label: U.esc(d.name) + tag, value: k, icon: d.g === 'f' ? 'heart' : 'people',
-          right: R.roleName(m) + ' · 충성 ' + Math.round(m.loyal || 70) + (d.g === 'f' ? ' · ' + heart(m.aff) : '') };
+          right: R.roleName(m) + ' · 충성 ' + Math.round(m.loyal || 70) + (d.g === 'f' ? ' · ' + heart(m.aff) : '') + (G.Romance && G.Romance.tag(m.id) ? ' · ' + U.esc(G.Romance.tag(m.id)) : '') };
       }), { width: 620, icon: 'people', text: '누구와 이야기할까?' });
       if (i == null || i < 0) return;
       await MT.talk(c, s.mates[i]);
@@ -130,6 +130,8 @@
         G.Wives.settle(wv, !here);
         return;
       } else if (v === 'wed') {
+        var taken = G.Romance ? G.Romance.blocksWed(d.id) : '';   // 다른 부하와 연인·부부인 사람 (js/systems/romance.js)
+        if (taken) { await say(taken, 'shy'); continue; }
         if (!R.hasItem('ring')) { UI.toast('청혼하려면 약속 반지가 필요합니다.', 'ring'); continue; }
         if (s.player.wife) { if (G.Wives) { if (await G.Wives.proposeMate(d, m, say)) return; continue; } UI.toast('이미 결혼했습니다.', 'ring'); continue; }   // 본처가 있으면 둘째 부인으로
         var ok = await UI.confirm(d.name + '에게 청혼하겠습니까?<br><small>결혼하면 부하에서 물러나 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리게 됩니다.</small>', '청혼한다', '그만둔다');

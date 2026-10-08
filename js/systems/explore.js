@@ -85,18 +85,47 @@
     }
     return out;
   };
-  /** 표식 하나 그리기 (sea/land 오버레이 공용) */
+  /** 표식 하나 그리기 (sea/land 오버레이 공용).
+      추정 범위를 선으로 두르지 않고, 발견물 갈래의 빛깔을 머금은 옅은 먼지가
+      낮게 들썩이게 한다. 범위가 아주 커도 화면을 덮지 않도록 퍼짐과 농도를 제한한다. */
   X.drawMarker = function (ctx, m, p, rpx, t, ff) {
-    var pulse = 0.5 + Math.sin(t * 2.6 + m.d.lon) * 0.5;
+    var spread = U.clamp(rpx, 24, 170), seed = U.strHash('dust:' + m.d.id), TAU = Math.PI * 2;
     ctx.save();
-    ctx.strokeStyle = m.col; ctx.globalAlpha = 0.55 + pulse * 0.35; ctx.lineWidth = 2.2;
-    ctx.setLineDash([7, 6]); ctx.lineDashOffset = -t * 18;
-    ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(14, rpx), 0, 7); ctx.stroke(); ctx.setLineDash([]);
-    ctx.globalAlpha = 0.92;
-    ctx.fillStyle = 'rgba(20,14,8,.78)'; ctx.beginPath(); ctx.arc(p[0], p[1], 13, 0, 7); ctx.fill();
-    ctx.strokeStyle = m.col; ctx.lineWidth = 2; ctx.stroke();
-    ctx.fillStyle = m.col; ctx.font = '800 17px ' + ff; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('?', p[0], p[1] + 1);
+    ctx.translate(p[0], p[1]);
+
+    // 큰 보풀 같은 구름. 각 조각의 자리와 속도는 발견물마다 고정되어 화면이 지글거리지 않는다.
+    for (var i = 0; i < 12; i++) {
+      var n = Math.sin(seed * 0.00013 + i * 91.731) * 43758.5453, q = n - Math.floor(n);
+      var n2 = Math.sin(seed * 0.00019 + i * 47.117 + 2.3) * 24634.6345, q2 = n2 - Math.floor(n2);
+      var ang = q * TAU, ring = Math.sqrt(q2) * spread * 0.78;
+      var pace = 0.32 + (i % 5) * 0.055, phase = q * TAU + t * pace;
+      var x = Math.cos(ang) * ring + Math.sin(phase * 0.73) * (2 + q2 * 4);
+      var y = Math.sin(ang) * ring * 0.48 - Math.abs(Math.sin(phase)) * (3 + q * 8);
+      var rx = U.clamp(spread * (0.17 + q * 0.12), 12, 38), ry = rx * (0.34 + q2 * 0.18);
+      var grad = ctx.createRadialGradient(x, y, 0, x, y, rx);
+      grad.addColorStop(0, m.col); grad.addColorStop(0.42, m.col); grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalAlpha = 0.03 + (1 - Math.abs(Math.sin(phase))) * 0.03;
+      ctx.fillStyle = grad; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, TAU); ctx.fill();
+    }
+
+    // 드문 먼지 알갱이가 천천히 떠올라 구름이 숨 쉬는 듯 보이게 한다.
+    for (var j = 0; j < 9; j++) {
+      var h = Math.sin(seed * 0.00017 + j * 73.513 + 1.7) * 19341.173, u = h - Math.floor(h);
+      var h2 = Math.sin(seed * 0.00023 + j * 29.417 + 5.1) * 31857.219, v = h2 - Math.floor(h2);
+      var life = (t * (0.055 + (j % 4) * 0.012) + u) % 1;
+      var dx = (v - 0.5) * spread * 1.25 + Math.sin(t * 0.38 + j) * 3;
+      var dy = spread * 0.2 - life * (18 + spread * 0.24);
+      ctx.globalAlpha = Math.sin(life * Math.PI) * 0.1;
+      ctx.fillStyle = m.col; ctx.beginPath(); ctx.arc(dx, dy, 0.8 + v * 1.8, 0, TAU); ctx.fill();
+    }
+
+    // 클릭할 자리는 잃지 않되, 표식 자체도 먼지 속에 묻히도록 작고 부드럽게 남긴다.
+    var bob = Math.sin(t * 1.35 + seed * 0.001) * 1.8;
+    var core = ctx.createRadialGradient(0, bob, 1, 0, bob, 18);
+    core.addColorStop(0, 'rgba(20,14,8,.62)'); core.addColorStop(0.58, 'rgba(20,14,8,.34)'); core.addColorStop(1, 'rgba(20,14,8,0)');
+    ctx.globalAlpha = 1; ctx.fillStyle = core; ctx.beginPath(); ctx.arc(0, bob, 18, 0, TAU); ctx.fill();
+    ctx.globalAlpha = 0.68; ctx.fillStyle = m.col; ctx.font = '800 16px ' + ff; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('?', 0, bob + 1);
     ctx.textBaseline = 'alphabetic';
     ctx.restore();
   };

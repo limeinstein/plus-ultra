@@ -42,7 +42,7 @@
   P.single = single;
   /** 왕녀의 얼굴 (그림이 있으면 images/portraits/npc/princess_es) */
   P.speaker = function () {
-    var A = G.Art, sp = { name: D.name, lang: 3 };
+    var A = G.Art, sp = { name: D.name, lang: 3, special: true };   // 특별한 사건: 바다·뭍에서도 무릎상 (js/ui/ui.js isSpecial)
     try {
       var spec = A.npcSpec('princess_es', 'noble', 'ib', 'f'), base = A.portraitKeys ? A.portraitKeys(spec) || [] : [];
       sp.portrait = A.withImg(spec, ['portraits/npc/princess_es'].concat(base));

@@ -48,7 +48,7 @@
   function cleanMount(m) { return m && m.id && m.id !== 'walk' && m.n > 0 ? { id: m.id, n: m.n, draft: m.draft || 'horse', style: m.style || null } : { id: 'walk', n: 0 }; }
   function MT() { var l = S().loc; return l.mount || (l.mount = { id: 'walk', n: 0 }); }
   L.mount = MT;
-  L.exit = function () { if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
+  L.exit = function () { if (G.Audio && G.Audio.travel) { G.Audio.travel('walk', 0); G.Audio.travel('run', 0); G.Audio.travel('horse', 0); G.Audio.travel('wagon', 0); } if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
 
   // ---------------------------------------------------------------- UI
   var el = {};
@@ -252,6 +252,10 @@
     st.movT = moved > 0.02 ? 0.3 : Math.max(0, (st.movT || 0) - dt);
     st.pxs = (st.pxs || 0) + (moved / Math.max(dt, 1e-3) - (st.pxs || 0)) * Math.min(1, dt * 3);   // 화면에서 초당 움직인 거리 (뛰기·질주 그림을 고른다)
     var mv = st.movT > 0;
+    if (G.Audio && G.Audio.travel) {
+      var travelKind = MT().id === 'wagon' ? 'wagon' : MT().id === 'horse' ? 'horse' : MT().id === 'walk' && (st.fastDays > 0 || (st.pxs || 0) > 55) ? 'run' : 'walk';
+      G.Audio.travel(travelKind, mv ? Math.min(1, 0.25 + (st.pxs || 0) / 80) : 0);   // 숨소리·말발굽·마차 바퀴
+    }
     st.gather += ((mv ? 0 : 1) - st.gather) * Math.min(1, dt * (mv ? 5 : 1.1));
     if (Math.abs(dx) > moved * 0.3 && moved > 0.02) st.face = dx > 0 ? 1 : -1;
     G.Party.age(st.pfx, dt);
@@ -357,6 +361,7 @@
     } else if (r < 0.55) {
       var bz = G.EventFx ? G.EventFx.beastsHere() : null;   // 그 땅의 짐승 (육상전에 나오는 짐승과 같다)
       var fxB = bz ? G.EventFx.show('beast', { animal: bz[1], pack: bz[0], bg: terr }) : null;
+      if (G.Audio) G.Audio.sfx('growl');
       await UI.say(U.pick(['사나운 짐승 떼가 습격해 왔다!', '굶주린 들짐승이 야영지를 덮쳤다!']), {});
       if (fxB) await fxB.stop();
       await landBattle('들짐승', foeSize(0.15, 0.35, 5, 40), true);

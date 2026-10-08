@@ -30,9 +30,10 @@
   document.addEventListener('pointerdown', function () { AU.unlock(); }, { once: false, passive: true });
   document.addEventListener('keydown', function () { AU.unlock(); }, { passive: true });
 
+  var sfxTune = 1;
   function tone(freq, t, dur, type, gain, dest, attack) {
     var o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = type || 'triangle'; o.frequency.value = freq;
+    o.type = type || 'triangle'; o.frequency.value = freq * sfxTune;
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain || 0.2, t + (attack || 0.01));
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.connect(g); g.connect(dest || sfxGain); o.start(t); o.stop(t + dur + 0.05);
@@ -40,25 +41,145 @@
   }
   function noise(t, dur, gain, freq, q, dest, type) {
     var s = ctx.createBufferSource(); s.buffer = noiseBuf; s.loop = true;
-    var f = ctx.createBiquadFilter(); f.type = type || 'lowpass'; f.frequency.value = freq || 800; f.Q.value = q || 0.7;
+    var f = ctx.createBiquadFilter(); f.type = type || 'lowpass'; f.frequency.value = (freq || 800) * sfxTune; f.Q.value = q || 0.7;
     var g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     s.connect(f); f.connect(g); g.connect(dest || sfxGain); s.start(t, Math.random()); s.stop(t + dur + 0.05);
   }
-  AU.sfx = function (name) {
-    if (!ctx || ctx.state !== 'running') return;
-    var t = ctx.currentTime;
+  function sweep(from, to, t, dur, type, gain, attack, dest) {
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type || 'sine'; o.frequency.setValueAtTime(Math.max(1, from * sfxTune), t); o.frequency.exponentialRampToValueAtTime(Math.max(1, to * sfxTune), t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain || 0.1, t + (attack || 0.01)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(dest || sfxGain); o.start(t); o.stop(t + dur + 0.05);
+  }
+  function knock(t, gain, high) {
+    noise(t, 0.08, gain || 0.16, high ? 1500 : 280, high ? 2.4 : 1.1, null, 'bandpass');
+    tone(high ? 620 : 105, t, high ? 0.1 : 0.16, 'triangle', (gain || 0.16) * 0.55);
+  }
+  /** 파일 없이 합성하는 효과음 목록 — 작은 음원을 여럿 겹쳐 물·나무·금속·목소리의 질감을 만든다. */
+  AU.SFX = ['wake', 'sail', 'depart', 'dock', 'breath', 'wagon', 'horse', 'run', 'townstep', 'door', 'gull', 'cannon', 'gun', 'sword', 'growl', 'discover', 'children', 'page', 'glasses', 'coin', 'unload', 'cheer'];
+  AU.SFX_VARIANTS = 3;
+  var lastVariant = {};
+  function pickVariant(name, want) {
+    if (want != null) return ((want % AU.SFX_VARIANTS) + AU.SFX_VARIANTS) % AU.SFX_VARIANTS;
+    var old = lastVariant[name] == null ? Math.floor(Math.random() * AU.SFX_VARIANTS) : lastVariant[name];
+    var next = (old + 1 + Math.floor(Math.random() * (AU.SFX_VARIANTS - 1))) % AU.SFX_VARIANTS;
+    lastVariant[name] = next; return next;
+  }
+  /** 두 번째 인수 0·1·2로 세 변형을 직접 고를 수 있고, 생략하면 바로 전과 다른 변형을 고른다. */
+  AU.sfx = function (name, wantVariant) {
+    if (!ctx || ctx.state !== 'running') return false;
+    var t = ctx.currentTime, oldTune = sfxTune, variant = pickVariant(name, wantVariant);
+    sfxTune = [0.91, 1, 1.09][variant];
     switch (name) {
       case 'click': tone(880, t, 0.06, 'square', 0.05); break;
-      case 'coin': tone(1320, t, 0.12, 'triangle', 0.15); tone(1760, t + 0.07, 0.2, 'triangle', 0.12); break;
-      case 'discover': [523, 659, 784, 1046, 1318].forEach(function (f, i) { tone(f, t + i * 0.12, 0.9 - i * 0.08, 'triangle', 0.16); tone(f / 2, t + i * 0.12, 0.8, 'sine', 0.08); }); break;
-      case 'cannon': noise(t, 0.9, 0.9, 380, 0.8); tone(60, t, 0.5, 'sine', 0.6); break;
+      case 'wake':
+        noise(t, 0.95, 0.11, 1150, 0.7, null, 'bandpass'); noise(t + 0.06, 0.75, 0.08, 320, 0.5);
+        [0.14, 0.34, 0.57].forEach(function (d, i) { sweep(260 + i * 35, 95, t + d, 0.18, 'sine', 0.018); });
+        break;
+      case 'sail':
+        noise(t, 0.92, 0.09, 950, 0.75, null, 'bandpass'); noise(t + 0.08, 0.46, 0.065, 3100, 0.8, null, 'highpass');
+        [0.12, 0.38, 0.66].forEach(function (d, i) { noise(t + d, 0.055 + i * 0.012, 0.08 - i * 0.012, 4300 - i * 420, 1.1, null, 'highpass'); });
+        sweep(225, 150, t + 0.24, 0.42, 'triangle', 0.018, 0.1);
+        break;
+      case 'depart':
+        sweep(92, 118, t, 1.15, 'sawtooth', 0.08, 0.08); tone(184, t + 0.03, 1.05, 'sine', 0.055, null, 0.08);
+        [0.08, 0.2].forEach(function (d) { noise(t + d, 0.22, 0.12, 480, 1.8, null, 'bandpass'); });
+        [880, 1320].forEach(function (f, i) { tone(f, t + 0.46 + i * 0.025, 1.25, 'sine', 0.07); });
+        break;
+      case 'dock':
+        knock(t, 0.28); knock(t + 0.19, 0.19); sweep(210, 82, t + 0.07, 0.65, 'sawtooth', 0.035, 0.04);
+        noise(t + 0.28, 0.72, 0.09, 900, 0.8, null, 'bandpass');
+        break;
+      case 'breath':
+        noise(t, 0.42, 0.055, 720, 1.8, null, 'bandpass'); noise(t + 0.62, 0.48, 0.045, 640, 1.6, null, 'bandpass');
+        sweep(165, 125, t + 0.03, 0.38, 'sine', 0.016, 0.12); sweep(150, 112, t + 0.65, 0.4, 'sine', 0.014, 0.12);
+        break;
+      case 'wagon':
+        noise(t, 0.85, 0.08, 170, 0.8); knock(t + 0.04, 0.15); knock(t + 0.46, 0.11);
+        sweep(410, 250, t + 0.12, 0.48, 'triangle', 0.025, 0.12); sweep(260, 390, t + 0.48, 0.31, 'triangle', 0.018, 0.08);
+        break;
+      case 'horse':
+        [0, 0.12, 0.34, 0.47].forEach(function (d, i) { noise(t + d, 0.075, i < 2 ? 0.16 : 0.13, 520 + (i % 2) * 190, 2.8, null, 'bandpass'); tone(92 + (i % 2) * 18, t + d, 0.09, 'triangle', 0.05); });
+        break;
+      case 'run':
+        [0, 0.18, 0.36, 0.53].forEach(function (d, i) { noise(t + d, 0.085, 0.13 - i * 0.008, 330 + (i % 2) * 120, 1.8, null, 'bandpass'); tone(78 + (i % 2) * 15, t + d, 0.1, 'triangle', 0.035); });
+        noise(t + 0.1, 0.52, 0.025, 1800, 1.1, null, 'highpass');
+        break;
+      case 'townstep':
+        [0, 0.3, 0.61].forEach(function (d, i) { noise(t + d, 0.065, 0.095, 820 + i * 90, 2.5, null, 'bandpass'); tone(135 + i * 8, t + d, 0.08, 'triangle', 0.026); });
+        break;
+      case 'door':
+        knock(t, 0.1, true); sweep(310, 115, t + 0.09, 0.72, 'sawtooth', 0.035, 0.12);
+        noise(t + 0.06, 0.76, 0.075, 430, 2.2, null, 'bandpass'); knock(t + 0.68, 0.18);
+        break;
+      case 'gull':
+        sweep(1450, 2350, t, 0.18, 'sine', 0.055, 0.02); sweep(2300, 1320, t + 0.16, 0.24, 'sine', 0.05, 0.02);
+        sweep(1280, 2050, t + 0.58, 0.14, 'sine', 0.04, 0.02); sweep(2050, 1200, t + 0.7, 0.2, 'sine', 0.035, 0.02);
+        break;
+      case 'coin':
+        [0, 0.045, 0.11, 0.18, 0.27, 0.39, 0.53, 0.68].forEach(function (d, i) { var f = [1318, 1760, 1480, 2093, 1568][i % 5]; tone(f, t + d, 0.18 + i * 0.012, 'triangle', 0.075); tone(f * 1.51, t + d + 0.008, 0.1, 'sine', 0.025); });
+        break;
+      case 'discover':
+        [[392, 0], [523, 0.12], [659, 0.24], [784, 0.38], [1046, 0.55], [1318, 0.55]].forEach(function (n, i) { tone(n[0], t + n[1], 0.72 - i * 0.035, 'sawtooth', 0.055, null, 0.025); tone(n[0] / 2, t + n[1], 0.82, 'sine', 0.055); });
+        noise(t + 0.52, 0.32, 0.04, 4200, 1.4, null, 'highpass');
+        break;
+      case 'cannon':
+        noise(t, 0.06, 0.35, 5200, 0.7, null, 'highpass'); noise(t + 0.015, 1.35, 0.72, 310, 0.75); tone(48, t, 0.72, 'sine', 0.48);
+        noise(t + 0.18, 1.6, 0.16, 120, 0.7); [0.2, 0.31, 0.47].forEach(function (d) { knock(t + d, 0.06); });
+        break;
+      case 'gun':
+        noise(t, 0.045, 0.42, 6500, 0.55, null, 'highpass'); noise(t + 0.01, 0.42, 0.26, 720, 0.85, null, 'bandpass');
+        tone(92, t, 0.24, 'sine', 0.16); noise(t + 0.13, 0.72, 0.055, 260, 0.8);
+        break;
+      case 'growl':
+        sweep(118, 58, t, 1.15, 'sawtooth', 0.12, 0.16); sweep(176, 82, t + 0.08, 0.92, 'square', 0.035, 0.12);
+        noise(t + 0.04, 1.08, 0.11, 260, 2.3, null, 'bandpass');
+        break;
+      case 'children':
+        [0, 0.16, 0.34, 0.62, 0.78].forEach(function (d, i) { var f = [620, 760, 680, 820, 720][i]; sweep(f, f * 1.34, t + d, 0.16, 'sine', 0.035, 0.025); tone(f * 2, t + d + 0.025, 0.12, 'sine', 0.014); });
+        noise(t + 0.08, 0.95, 0.025, 1800, 2, null, 'bandpass');
+        break;
+      case 'page':
+        noise(t, 0.16, 0.13, 4300, 0.7, null, 'highpass'); noise(t + 0.09, 0.31, 0.075, 1800, 1.1, null, 'bandpass');
+        noise(t + 0.3, 0.09, 0.08, 3600, 0.8, null, 'highpass');
+        break;
+      case 'glasses':
+        [1760, 2380, 2940].forEach(function (f, i) { tone(f, t + i * 0.014, 0.52 - i * 0.06, 'sine', 0.045); });
+        noise(t + 0.015, 0.055, 0.04, 6200, 2, null, 'highpass');
+        break;
+      case 'unload':
+        [0, 0.21, 0.43, 0.68].forEach(function (d, i) { knock(t + d, 0.18 - i * 0.018, i === 2); });
+        noise(t + 0.12, 0.85, 0.07, 210, 1.2); sweep(320, 190, t + 0.38, 0.42, 'triangle', 0.022, 0.08);
+        break;
+      case 'cheer':
+        [0, 0.05, 0.12, 0.2, 0.31, 0.43].forEach(function (d, i) { var f = 165 + (i % 3) * 38; sweep(f, f * 1.9, t + d, 0.48 + (i % 2) * 0.16, i % 2 ? 'sawtooth' : 'triangle', 0.035, 0.06); });
+        noise(t + 0.08, 1.05, 0.075, 950, 0.85, null, 'bandpass');
+        break;
       case 'hit': noise(t, 0.35, 0.5, 1400, 1.2); break;
       case 'splash': noise(t, 0.6, 0.25, 2200, 0.6, null, 'bandpass'); break;
-      case 'sword': noise(t, 0.12, 0.35, 5000, 3, null, 'highpass'); tone(2400, t, 0.15, 'sawtooth', 0.04); break;
+      case 'sword': noise(t, 0.11, 0.28, 5200, 3, null, 'highpass'); tone(1860, t, 0.34, 'triangle', 0.075); tone(2780, t + 0.012, 0.23, 'sine', 0.05); break;
       case 'storm': noise(t, 2.5, 0.5, 300, 0.5); break;
       case 'bell': [880, 1320].forEach(function (f, i) { tone(f, t + i * 0.02, 1.6, 'sine', 0.12); }); break;
       case 'fail': tone(330, t, 0.25, 'square', 0.08); tone(247, t + 0.2, 0.4, 'square', 0.08); break;
+      default: sfxTune = oldTune; return false;
     }
+    sfxTune = oldTune;
+    return true;
+  };
+
+  /* 움직이는 동안 계속 들리는 소리는 매 장면마다 부르되, 여기서 실제 시간 간격을 막아 한 덩어리씩 낸다.
+     게임 배속을 올려도 효과음이 겹치지 않는다. */
+  var travelAt = {}, travelN = {};
+  AU.travel = function (kind, intensity) {
+    if (!ctx || ctx.state !== 'running' || !intensity) { if (!intensity) delete travelAt[kind]; return false; }
+    var now = ctx.currentTime, k = Math.max(0.15, Math.min(1, intensity)), cfg = {
+      sea: ['wake', 1.2 - k * 0.45], walk: ['breath', 2.9 - k * 0.6], horse: ['horse', 0.92 - k * 0.25], wagon: ['wagon', 1.15 - k * 0.3],
+      run: ['run', 0.78 - k * 0.2], townstep: ['townstep', 0.94 - k * 0.2]
+    }[kind];
+    if (!cfg || now < (travelAt[kind] || 0)) return false;
+    travelAt[kind] = now + cfg[1];
+    if (kind === 'sea' && ((travelN[kind] = (travelN[kind] || 0) + 1) % 3 === 0)) cfg[0] = 'sail';
+    return AU.sfx(cfg[0]);
   };
 
   // ---------------------------------------------------------------- generative music

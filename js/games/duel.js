@@ -477,7 +477,7 @@
         var pr = function (base) { return U.clamp(base, 0.05, 0.95); };
         if (id === 'deathblow') {
           var p1 = pr(0.3 + (power(f) - power(o)) / 150 + (1 - o.hp / o.maxHp) * 0.35 + (f === me && stance === 'allout' ? 0.1 : 0));
-          f.move = f.style; pose(f, 'windup', 0.35); await sleep(380); pose(f, 'lunge', 0.35); f.tx = 90; if (G.Audio) G.Audio.sfx('cannon');
+          f.move = f.style; pose(f, 'windup', 0.35); await sleep(380); pose(f, 'lunge', 0.35); f.tx = 90; if (G.Audio) G.Audio.sfx('sword');
           fx.push({ kind: 'slashArc', x: W / 2, y: H * 0.86 - 120, a0: -2.2, dir: f === me ? 1 : -1, t: 0, life: 0.45 });
           await sleep(200);
           if (U.chance(p1)) { fx.push({ kind: 'spark', x: W / 2, y: H * 0.86 - 110, seed: 1, t: 0, life: 0.6 }); hurt(o, Math.max(o.hp, o.maxHp * 0.6), true); say(who + '의 일격필살! 단칼에 베어 넘겼다!'); }
@@ -497,7 +497,7 @@
         } else if (id === 'secret') {
           var gun = f === me ? f.shoot >= 1 : (en.look === 'pirate' || en.look === 'captain') && U.chance(0.6);
           pose(f, 'shoot', 0.5); await sleep(200);
-          if (gun) { fx.push({ kind: 'flashS', x: posX(f) + (f === me ? 60 : -60), y: H * 0.86 - 56, t: 0, life: 0.2 }); for (var sm = 0; sm < 3; sm++) fx.push({ kind: 'smoke', x: posX(f) + (f === me ? 66 : -66), y: H * 0.86 - 56, d: f === me ? 1 : -1, t: -sm * 0.05, life: 1.4 }); if (G.Audio) G.Audio.sfx('cannon'); }
+          if (gun) { fx.push({ kind: 'flashS', x: posX(f) + (f === me ? 60 : -60), y: H * 0.86 - 56, t: 0, life: 0.2 }); for (var sm = 0; sm < 3; sm++) fx.push({ kind: 'smoke', x: posX(f) + (f === me ? 66 : -66), y: H * 0.86 - 56, d: f === me ? 1 : -1, t: -sm * 0.05, life: 1.4 }); if (G.Audio) G.Audio.sfx('gun'); }
           await sleep(150);
           var dd = o.maxHp * U.rf(gun ? 0.22 : 0.16, gun ? 0.3 : 0.22);
           hurt(o, dd, true); result.secret = result.secret || f === me;

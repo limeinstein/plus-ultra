@@ -138,6 +138,7 @@
     var s = S(), cur = C.current(), price = 4 + c.size * 2;
     if (s.player.gold < price) { await C.say(master(), '공짜로 마시게 할 술은 없다!'); return; }
     s.player.gold -= price; cur.drinks++;
+    if (G.Audio) G.Audio.sfx('glasses');
     s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 4);
     if (cur.drinks >= 4 && U.chance(0.25 * (cur.drinks - 3) * (1 - R.stat('str') / 200))) {
       await UI.say('기분이 나쁘다......눈이 도는군~ ~우웩~', {});
@@ -162,6 +163,7 @@
     if (!ok) return;
     if (s.player.gold < cost) { await C.mate('제독, 안됐지만 빈털터리입니다!'); return; }
     s.player.gold -= cost;
+    if (G.Audio) G.Audio.sfx('glasses');
     await UI.say('여~어, 주인! 여기에 있는 자들에게 한잔씩 돌리게.', { name: s.player.name, portrait: s.player.portrait });
     await C.mate(U.pick(['역시 제독! 그럼 사양하지 않겠습니다.', '제독 만세! 모두 잔을 들어라!']));
     s.fleet.discipline = Math.min(100, s.fleet.discipline + 12);

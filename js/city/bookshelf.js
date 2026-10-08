@@ -280,6 +280,7 @@
   /** 서가에서 책 한 권을 골랐을 때 */
   LB.pick = async function (c, b) {
     var s = S(), st = LB.shelfState(b);
+    if (G.Audio) G.Audio.sfx('page');
     if (st.kind === 'lock') { await lockedBook(b, st); return; }
     if (st.kind === 'read') {
       await openBook(b, null, '다시 훑어보았다. (날은 지나지 않는다)');

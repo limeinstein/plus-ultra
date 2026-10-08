@@ -159,6 +159,7 @@
       row.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 96));
       box2.appendChild(row);
     });
+    if (G.Romance) el.insertAdjacentHTML('beforeend', G.Romance.html());   // 부하들 사이 (js/systems/romance.js)
     cabinButton(el, false);
   };
 

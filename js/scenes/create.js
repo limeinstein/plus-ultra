@@ -143,7 +143,7 @@
     pv.appendChild(A.portraitCanvas(playerSpec(), 200));
     // events
     box.querySelector('#face').onclick = function () { p.face++; render(); };
-    box.querySelector('#faceprev').onclick = function () { p.face = p.face > 0 ? p.face - 1 : Math.max(0, G.Img.list('portraits/player/').length - 1); render(); };
+    box.querySelector('#faceprev').onclick = function () { p.face = p.face > 0 ? p.face - 1 : Math.max(0, G.Img.heroFaces().length - 1); render(); };
     var fullEl = box.querySelector('#fullnm b');
     function onName() { p.given = box.querySelector('#nm').value; p.surname = box.querySelector('#sn').value; p.name = fullName(p.given, p.surname); if (fullEl) fullEl.textContent = p.name; }
     ['#nm', '#sn'].forEach(function (q) {
@@ -231,7 +231,7 @@
   C.playerSpec = playerSpec;
   /** 고른 얼굴의 생김새 이름 — 그 얼굴로 거리를 걷고(characters/<이름>/walk_*) 일기토도 그 모습(duel/fighters/<이름>), 40세부터 수염 난 모습 */
   function lookLine() {
-    var faces = G.Img.list('portraits/player/');
+    var faces = G.Img.heroFaces();
     if (!faces.length) return '';
     var i = ((p.face % faces.length) + faces.length) % faces.length, id = faces[i].slice('portraits/player/'.length);
     return '<div class="look-name"><b>' + U.esc(G.Img.heroName(id)) + '</b> <span class="muted">' + (i + 1) + '/' + faces.length + '</span>' +
@@ -250,7 +250,7 @@
     p.st = {}; G.STATS.forEach(function (s) { p.st[s.id] = T.stat; });
     p.sk = {}; G.SKILLS.forEach(function (s) { p.sk[s.id] = 3; });
     p.lg = G.LANGS.map(function () { return 3; });
-    var fi = T.look ? G.Img.list('portraits/player/').indexOf('portraits/player/' + T.look) : -1;
+    var fi = T.look ? G.Img.heroFaces().indexOf('portraits/player/' + T.look) : -1;
     if (fi >= 0) p.face = fi;      // 이강희 얼굴 그림 → 반신상·일기토 시트도 이강희 것
     var fleet = (T.ships || []).map(function (id) { return G.SHIP[id] ? G.SHIP[id].name : ''; }).filter(Boolean);
     UI.toast('테스트용 캐릭터: 모든 능력 만렙, 소지금 ' + T.gold.toLocaleString() + '닢' + (fleet.length ? ', 첫 함대 ' + fleet.join('·') : ''), 'info');

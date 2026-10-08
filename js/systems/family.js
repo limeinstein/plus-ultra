@@ -222,7 +222,7 @@
         var play = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', [{ label: '함께 놀아 준다', value: 'play' }, { label: '옛날이야기를 들려준다', value: 'tale' }, { label: '그냥 둔다', value: null }], sp);
         if (play && k.edu[s.date.y + ':' + play] == null) {
           k.edu[s.date.y + ':' + play] = 1; F.addBond(k, 6);
-          if (play === 'play') { k.st.str = Math.min(90, k.st.str + 2); k.st.cha = Math.min(90, k.st.cha + 1); await UI.say('아빠 최고! 또 놀아 줘!', sp); }
+          if (play === 'play') { k.st.str = Math.min(90, k.st.str + 2); k.st.cha = Math.min(90, k.st.cha + 1); if (G.Audio) G.Audio.sfx('children'); await UI.say('아빠 최고! 또 놀아 줘!', sp); }
           else { k.st.int = Math.min(90, k.st.int + 2); await UI.say('그래서 그 배는 어떻게 됐어? 또 들려줘!', sp); }
         } else if (play) await UI.say('올해는 벌써 많이 놀았어요. 이제 자야 해요.', w);
         continue;

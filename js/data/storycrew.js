@@ -1,4 +1,4 @@
-/* 이야기 속 동료 열 사람 — 역사책에는 없는, 이 게임만의 항해사들. 1480년부터 저마다의 고향 술집·여관에서 만날 수 있다.
+/* 이야기 속 동료 스물여섯 사람 — 역사책에는 없는, 이 게임만의 항해사들. 1480년부터 저마다의 고향 술집·여관에서 만날 수 있다.
    그림: images/portraits/mates/<id>.webp (흉상 448×448) · <id>_half.webp (무릎상 1024×1536, 투명)
    항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [힘, 지력, 무력, 매력], lg = {말 번호: 단계}, reg = 고장).
    돌아다니는 곳은 G.MATE_RANGE (js/data/materange.js 다음에 읽는다). */
@@ -34,7 +34,57 @@
       desc: '신성로마제국에서 온 키 큰 악사. 검은 긴 옷에 상아색 해골 펜던트를 걸었다. 정중하게 인사하고 익살스럽게 웃으며, 그의 노래 한 곡이면 지친 선원들이 다시 일어선다.' },
     { id: 'macleod', name: '이언 맥레오드', g: 'm', style: 'ne', st: [86, 62, 76, 62], sk: { nav: 3, ops: 2 }, lg: { 3: 3 }, fame: 500, wage: 140,
       y: [1480, 1520], reg: [1], zones: ['britain', 'nordic'], home: 42,
-      desc: '스코틀랜드의 노장 조타수. 바다색 망토를 청동 물고기 브로치로 여몄다. 거친 바다에서도 키를 놓지 않는 묵직한 사람이다.' }
+      desc: '스코틀랜드의 노장 조타수. 바다색 망토를 청동 물고기 브로치로 여몄다. 거친 바다에서도 키를 놓지 않는 묵직한 사람이다.' },
+    // ---- 2026-10-08: 제독 만들기에 잠깐 들어갔던 이름 있는 인물 16명 (20대·40대 얼굴이 따로 없어 항구의 부하 후보로 옮김)
+    //      그림: images/portraits/mates/<id>.webp · <id>_half.webp (원본 images/_extra/protagonists/<id>.png — tools/protagonist_portraits.py)
+    { id: 'leonardo_de_valenca', name: '레오나르두 드 발렌사', g: 'm', style: 'ib', st: [66, 78, 64, 80], sk: { nav: 3, survey: 2, speech: 1 }, lg: { 1: 3, 0: 2, 2: 1 }, fame: 450, wage: 140,
+      y: [1480, 1535], reg: [0], zones: ['iberia', 'wafrica'], home: 0,
+      desc: '리스본 소귀족 집안의 맏아들. 붉은 망토에 나침반 메달을 걸고, 아버지의 항해 일지를 늘 옆구리에 낀다. 기니 바닷길을 두 번 다녀왔다. 두아르트의 형.' },
+    { id: 'duarte_de_valenca', name: '두아르트 드 발렌사', g: 'm', style: 'ib', st: [62, 66, 58, 74], sk: { survey: 2, nav: 2, art: 1 }, lg: { 1: 3, 0: 1 }, fame: 100, wage: 70,
+      y: [1480, 1545], reg: [0], zones: ['iberia', 'wafrica'], home: 0,
+      desc: '레오나르두의 동생. 놋쇠 망원경과 해도 통을 메고 다니며, 본 해안은 무엇이든 그려 둔다. 형을 따라잡고 싶어 첫 원양 항해를 기다린다.' },
+    { id: 'ines_de_valcarcel', name: '이네스 데 발카르셀', g: 'f', style: 'ib', st: [74, 58, 86, 70], sk: { sword: 3, ops: 1, shoot: 1 }, lg: { 0: 3, 1: 1 }, fame: 250, wage: 110,
+      y: [1480, 1535], reg: [0], zones: ['iberia', 'maghreb'], home: 7,
+      desc: '세비야의 몰락한 소귀족 집안 딸. 붉은 긴 외투에 가는 칼을 차고, 붉은 머리를 높이 묶었다. 결투로 집안 빚을 갚았다는 소문이 따라다닌다.' },
+    { id: 'edmund_ashford', name: '에드먼드 애쉬퍼드', g: 'm', style: 'ne', st: [84, 52, 84, 58], sk: { shoot: 3, gun: 2, sword: 1 }, lg: { 3: 3, 2: 1 }, fame: 300, wage: 120,
+      y: [1480, 1530], reg: [1], zones: ['britain', 'france'], home: 38,
+      desc: '잉글랜드 국경 수비대 출신 사수. 가죽 갑옷 위에 초록 외투를 걸치고, 화승총과 기병도를 함께 멘다. 무뚝뚝하지만 맡은 자리는 끝까지 지킨다.' },
+    { id: 'matteo_bellandi', name: '마테오 벨란디', g: 'm', style: 'it', st: [80, 48, 70, 72], sk: { ops: 3, nav: 1, sword: 1 }, lg: { 2: 3, 0: 1 }, fame: 80, wage: 65,
+      y: [1480, 1540], reg: [2], zones: ['italy', 'iberia'], home: 28,
+      desc: '제노바 부두에서 자란 뱃사람. 붉은 조끼에 칼 두 자루와 낡은 망원경을 꽂고 다닌다. 돛줄 다루는 솜씨가 좋고, 선원들 사이에서 늘 웃음을 끌어낸다.' },
+    { id: 'laurens_van_der_velder', name: '로렌스 판 데르 펠더', g: 'm', style: 'ne', role: 'scholar', st: [48, 88, 40, 60], sk: { survey: 3, sci: 2, nav: 1 }, lg: { 3: 3, 2: 1, 0: 1 }, fame: 300, wage: 120,
+      y: [1485, 1545], reg: [1], zones: ['lowlands', 'britain'], home: 24,
+      desc: '안경을 쓴 플랑드르의 지도 제작자. 아스트롤라베와 해도 통을 놓지 않으며, 뱃사람들의 이야기를 하나도 흘려듣지 않고 지도에 옮긴다.' },
+    { id: 'alessio_giorgi', name: '알레시오 조르지', g: 'm', style: 'it', st: [56, 74, 44, 78], sk: { acct: 3, speech: 2 }, lg: { 2: 3, 4: 1, 5: 1 }, fame: 150, wage: 90,
+      y: [1480, 1540], reg: [2], zones: ['italy', 'greece'], home: 29,
+      desc: '베네치아 상관의 젊은 회계원. 허리에 주판과 장부를 매달고 다니며, 레반트 시장의 값을 줄줄 왼다. 흥정할 때면 눈빛이 달라진다.' },
+    { id: 'martim_de_sequeira', name: '마르팀 드 세케이라', g: 'm', style: 'ib', role: 'scholar', st: [50, 84, 42, 66], sk: { hist: 2, med: 2, theo: 1 }, lg: { 1: 3, 2: 2, 5: 1 }, fame: 200, wage: 100,
+      y: [1480, 1540], reg: [0], zones: ['iberia'], home: 1,
+      desc: '코임브라에서 공부한 포르투 출신 학자이자 의사. 검은 긴 외투에 낡은 책과 돋보기를 지니고, 배에 오르면 아픈 선원부터 살핀다.' },
+    { id: 'hernando_de_montemayor', name: '에르난도 데 몬테마요르', g: 'm', style: 'ib', st: [86, 56, 72, 60], sk: { ops: 3, survey: 1, sword: 1 }, lg: { 0: 3, 11: 1 }, fame: 150, wage: 90,
+      y: [1480, 1540], reg: [0], zones: ['iberia', 'wafrica'], home: 7,
+      desc: '에스트레마두라의 산골에서 온 탐험꾼. 밧줄과 등짐, 나침반을 늘 지고 다니며, 길 없는 뭍에서 길을 내는 데 누구보다 능하다.' },
+    { id: 'gabriel_de_avelar', name: '가브리엘 드 아벨라르', g: 'm', style: 'ne', st: [64, 68, 60, 84], sk: { speech: 2, nav: 1, art: 1 }, lg: { 2: 3, 0: 1, 1: 1 }, fame: 0, wage: 50,
+      y: [1480, 1550], reg: [1, 2], zones: ['france', 'iberia'], home: 18,
+      desc: '보르도 포도주 상인의 막내아들. 푸른 조끼에 붉은 띠를 매고 시집을 품고 다닌다. 말솜씨 하나로 어느 항구에서든 친구를 만든다.' },
+    { id: 'lisbeth_van_acker', name: '리스베트 판 아커르', g: 'f', style: 'ne', st: [56, 72, 40, 80], sk: { acct: 2, cook: 2, med: 1 }, lg: { 3: 3, 2: 1 }, fame: 50, wage: 70,
+      y: [1480, 1545], reg: [1], zones: ['lowlands', 'germany'], home: 23,
+      desc: '앤트워프 선술집 집안에서 자란 배의 살림꾼. 금발을 길게 땋고 창고 열쇠 꾸러미와 장부를 허리에 찼다. 그가 맡은 배는 식량이 모자란 적이 없다.' },
+    { id: 'henrik_stensson', name: '헨리크 스텐손', g: 'm', style: 'ne', st: [80, 66, 74, 68], sk: { nav: 2, gun: 2, ops: 1 }, lg: { 3: 3, 4: 1 }, fame: 350, wage: 130,
+      y: [1485, 1540], reg: [1], zones: ['nordic', 'germany'], home: 64,
+      desc: '스톡홀름의 해군 장교. 털 깃을 단 푸른 외투에 닻 문장을 달았다. 발트 바다의 얼음과 한자 상인들의 배를 모두 겪어 보았다.' },
+    { id: 'vittoria_contarini', name: '비토리아 콘타리니', g: 'f', style: 'it', st: [66, 76, 70, 82], sk: { gun: 2, nav: 2, speech: 1 }, lg: { 2: 3, 4: 2, 5: 1 }, fame: 400, wage: 140,
+      y: [1480, 1535], reg: [2], zones: ['italy', 'greece'], home: 29,
+      desc: '베네치아 명문 콘타리니 가문의 딸. 성 마르코의 사자를 수놓은 붉은 외투를 입고, 가문의 갤리선을 몰아 레반트 바다를 누볐다.' },
+    { id: 'konrad_von_falkenstein', name: '콘라트 폰 팔켄슈타인', g: 'm', style: 'ne', st: [90, 46, 92, 40], sk: { sword: 3, ops: 1, gun: 1 }, lg: { 3: 3 }, fame: 200, wage: 120,
+      y: [1480, 1530], reg: [1], zones: ['germany', 'italy'], home: 47,
+      desc: '란츠크네히트 용병 출신의 몰락한 기사. 해진 검은 망토 아래 큰 칼을 찼다. 말은 적어도 싸움터에서는 가장 먼저 앞으로 나선다.' },
+    { id: 'adrien_de_montclair', name: '아드리앵 드 몽클레르', g: 'm', style: 'ne', st: [52, 72, 50, 90], sk: { speech: 3, acct: 1, music: 1 }, lg: { 2: 3, 0: 1, 3: 1 }, fame: 250, wage: 110,
+      y: [1480, 1540], reg: [1], zones: ['france', 'lowlands'], home: 15,
+      desc: '루앙의 젊은 귀족이자 노름꾼. 보랏빛 외투를 입고 금화 한 닢을 손끝으로 굴린다. 궁정에서도 술집에서도 말 한마디로 판을 뒤집는다.' },
+    { id: 'katrin_de_kermor', name: '카트린 드 케르모르', g: 'f', style: 'ne', st: [70, 64, 72, 62], sk: { ops: 2, shoot: 2, survey: 1 }, lg: { 2: 3, 3: 1 }, fame: 100, wage: 80,
+      y: [1480, 1545], reg: [1], zones: ['france', 'britain'], home: 17,
+      desc: '브르타뉴 해안의 사냥꾼 집안 딸. 초록 망토를 두르고 단검과 짧은 활을 지닌다. 안개 낀 갯바위와 숲길을 누구보다 잘 안다.' }
   ];
   G.STORY_CREW = CREW.map(function (m) { return m.id; });
   CREW.forEach(function (m) {

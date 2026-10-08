@@ -11,3 +11,8 @@ python tools/trade_gifs/build.py                                      # images/d
 python tools/ruin_gifs/sheets.py t_pepper t_clove ...                 # 장면 판
 python tools/images.py
 ```
+
+`tools/trade_gifs/sources/ID.png`에 4×2 고해상도 원화가 있으면 절차적 프레임보다
+우선 사용합니다. 각 칸의 피사체를 자르지 않고 576×256 화면에 맞춘 뒤 24장으로
+부드럽게 이어 붙입니다. 현재 첨부 실물 사진을 바탕으로 만든 `t_coffee`와
+`t_pepper`가 이 경로를 사용합니다.

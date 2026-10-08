@@ -39,9 +39,10 @@
       st.paused = false; st.vel = [0, 0]; st.stopping = false;
       G.State.revealChart(s.loc.lon, s.loc.lat, chartR());
       UI.toast(c.name + '에서 출항했다.', 'sail');
-      if (G.Audio) G.Audio.sfx('bell');
+      if (G.Audio) G.Audio.sfx('depart');
       // 모항 출항 배웅 (지난번 모항 출항에서 3개월이 지났으면 갈매기 떼) — js/scenes/voyagefx.js
-      if (G.VoyageFX) G.VoyageFX.onDepart(st, c);
+      var gullSendoff = G.VoyageFX && G.VoyageFX.onDepart(st, c);
+      if (gullSendoff && G.Audio) G.Audio.sfx('gull');
     } else {
       s.loc.mode = 'sea';
       if (!st.cam) st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: 110 };
@@ -62,7 +63,7 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function () { if (G.SeaNews) G.SeaNews.on(false); if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
+  SEA.exit = function () { if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
@@ -744,6 +745,7 @@
     // 카메라: 진행 방향으로 조금 앞서 (속력에 비례, 최대 0.3°) — 흔들기·급한 확대는 쓰지 않는다
     //   배는 그대로 따라가고(속도만큼 뒤처지지 않아 배속을 올려도 배가 화면에서 떠밀리지 않는다), 어긋난 만큼만 부드럽게 좁힌다
     var P = FXS(), vsp = shipSpeed(), lead = Math.min(0.3, vsp * P.camLead);
+    if (G.Audio && G.Audio.travel) G.Audio.travel('sea', !frozen && !st.paused && vsp > 0.03 ? Math.min(1, 0.22 + vsp) : 0);   // 선체가 물을 가르는 소리
     var ld = vsp > 0.02 ? Math.atan2(st.vel[1], st.vel[0]) : l.heading;
     st.camLead = st.camLead || [0, 0];
     var kl = ease(dt, 1.2);
@@ -1314,6 +1316,8 @@
     if (G.FamEv) { try { if (await G.FamEv.atSea()) refreshHud(); } catch (e) { console.error(e); } }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
     if (U.chance(0.07)) await G.Explore.seaEvent({ st: st, refresh: refreshHud });
+    // 부하들 사이의 썸: 때가 된 짝이 있으면 가끔 작은 사건 (js/systems/romance.js)
+    if (G.Romance) { try { await G.Romance.seaDay(); } catch (e) { console.error(e); } }
     // death of all crew / ships
     if (f.crew <= 0) {
       await UI.say('마지막 선원마저 쓰러졌다... 배는 주인 없이 바다를 떠돈다.', {});

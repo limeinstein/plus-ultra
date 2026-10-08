@@ -152,6 +152,7 @@
   /** processing when the fleet arrives in port */
   C.arrival = async function (c, arg) {
     var s = S();
+    if (arg.arrive && G.Audio) G.Audio.sfx('dock');
     var first = s.known.indexOf(c.id) < 0 || !(s.visited && s.visited[c.id]);
     if (!s.visited) s.visited = {};
     if (s.known.indexOf(c.id) < 0) s.known.push(c.id);
@@ -192,6 +193,7 @@
     if (G.Folk) { try { await G.Folk.town(c, first && arg.arrive); } catch (e) { console.error(e); } }   // 부족 마을: 마을 사람이 그 부족의 노래·춤 이야기를 꺼낸다
     if (G.Animals) await G.Animals.town(c);             // 마을 사람이 이 고장에 사는 동물 이야기를 꺼낸다
     if (G.Court) { try { await G.Court.arrival(c); } catch (e) { console.error(e); } }
+    if (G.Romance) { try { await G.Romance.arrival(c); } catch (e) { console.error(e); } }   // 부하들 사이의 썸 — 혼례는 항구에서
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
     if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }   // 사라진 왕녀: 에스파냐 땅에서 전령이 부름을 전한다
     if (G.Disaster) { try { await G.Disaster.arrival(c); } catch (e) { console.error(e); } }   // 재해가 덮친 도시의 모습 · 구호금   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
@@ -350,6 +352,7 @@
     cur = { kind: kind, arg: arg, B: B, t: ++token };
     UI.clearScreen();
     if (G.Town.active() && !G.Town.hidden()) { await G.Town.focusOn(kind, arg); G.Town.hidden(true); }
+    if (G.Audio) G.Audio.sfx('door');
     var ikind = B.paint || kind, ivar = B.variant ? B.variant(c, arg) : '';
     if (G.Img.count()) {
       var pre = [C.interiorKeys(ikind, c, ivar)];

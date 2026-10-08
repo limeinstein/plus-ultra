@@ -246,6 +246,8 @@
     if (c.mate && G.MATE[c.mate]) return { name: c.name, portrait: G.Scenes.mateSpec ? G.Scenes.mateSpec(c.mate) : null, half: G.Img.chain.mateHalf ? G.Img.chain.mateHalf(c.mate) : null, lang: 3 };
     var grp = G.SEA_GROUPS[CP.groupOf(n.nation)] || {}, style = grp.st || (n.zone === 'east' ? 'cn' : n.zone === 'med' ? 'is' : 'ib');
     var role = n.kind === 'pirate' ? 'sailor' : n.kind === 'merchant' ? 'merchant' : 'captain';
+    // 이름난 탐험가·제독은 따로 그린 초상(images/portraits/rivals/<이름> — Codex 그림)이 있으면 그것을 쓴다
+    if (A && A.rivalSpec && G.Img && G.Img.has && G.Img.has('portraits/rivals/' + c.name)) return { name: c.name, portrait: A.rivalSpec(c.name), half: G.Img.chain.rivalHalf(c.name), lang: 3 };
     var spec = A && A.npcSpec ? A.npcSpec('cap_' + c.id, role, style, c.g || 'm') : null;
     return { name: c.name, portrait: spec, lang: 3 };
   };

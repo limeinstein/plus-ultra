@@ -13,10 +13,11 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parents[2]
 FRAMES = ROOT / "tools" / "trade_gifs" / "frames"
+SOURCES = ROOT / "tools" / "trade_gifs" / "sources"
 OUT = ROOT / "images" / "discoveries"
 ENDS = ROOT / "images" / "discovery-ends"
 W, H = 576, 256
@@ -39,14 +40,68 @@ def grade(im: Image.Image, k: float) -> Image.Image:
     return vignette(im)
 
 
+def fit_story_panel(panel: Image.Image) -> Image.Image:
+    """정사각형에 가까운 ImageGen 칸을 피사체를 자르지 않고 9:4 화면에 넣는다."""
+    # 전체 그림을 유지하되, 남는 양옆은 같은 장면을 어둡게 늘여서 세로 카드처럼
+    # 보이지 않게 한다. 중앙 원화와 배경 사이는 부드럽게 섞는다.
+    backdrop = ImageOps.fit(panel, (W, H), Image.Resampling.LANCZOS)
+    backdrop = backdrop.filter(ImageFilter.GaussianBlur(18))
+    backdrop = ImageEnhance.Brightness(backdrop).enhance(.58)
+    foreground = ImageOps.contain(panel, (W, H), Image.Resampling.LANCZOS)
+    x0 = (W - foreground.width) // 2
+    y0 = (H - foreground.height) // 2
+    mask = Image.new("L", foreground.size, 255)
+    fade = min(28, foreground.width // 5)
+    px = mask.load()
+    for x in range(fade):
+        value = round(255 * (x + 1) / (fade + 1))
+        for y in range(foreground.height):
+            px[x, y] = value
+            px[foreground.width - 1 - x, y] = value
+    backdrop.paste(foreground, (x0, y0), mask)
+    return backdrop
+
+
+def storyboard_frames(path: Path) -> list[Image.Image]:
+    """4x2 고해상도 원화를 24개의 부드러운 접근 장면으로 바꾼다."""
+    with Image.open(path) as image:
+        src = image.convert("RGB")
+    xs = [round(i * src.width / 4) for i in range(5)]
+    ys = [round(i * src.height / 2) for i in range(3)]
+    views = []
+    for row in range(2):
+        for col in range(4):
+            # 생성 시 생길 수 있는 1~2px짜리 칸 경계는 버린다.
+            box = (xs[col] + 2, ys[row] + 2, xs[col + 1] - 2, ys[row + 1] - 2)
+            views.append(fit_story_panel(src.crop(box)))
+    frames = []
+    for index in range(len(DURATIONS)):
+        # 장면 사이를 직접 섞으면 잔·저울·자루가 이중으로 보인다. 각 원화를 세 장씩
+        # 아주 조금 확대해 GIF 자체는 또렷하게 유지하고, 게임의 장면판 재생기가
+        # 장면 전환만 부드럽게 이어 주도록 한다.
+        view = views[min(len(views) - 1, index // 3)]
+        scale = 1.0 + (index % 3) * .009
+        size = (round(W * scale), round(H * scale))
+        enlarged = view.resize(size, Image.Resampling.LANCZOS)
+        x0 = (size[0] - W) // 2
+        y0 = (size[1] - H) // 2
+        frames.append(enlarged.crop((x0, y0, x0 + W, y0 + H)))
+    return frames
+
+
 def build_one(tid: str, src: Path) -> Path:
-    files = sorted((src / tid).glob("*.png"))
-    if len(files) < 2:
-        raise SystemExit(f"{tid}: 프레임이 없습니다 ({src / tid})")
-    raw = [Image.open(f).convert("RGB").resize((W, H), Image.Resampling.LANCZOS) for f in files]
+    source = SOURCES / f"{tid}.png"
     n = len(DURATIONS)
-    pick = [round(i * (len(raw) - 1) / (n - 1)) for i in range(n)]
-    frames = [grade(raw[p], i / (n - 1)) for i, p in enumerate(pick)]
+    if source.exists():
+        raw = storyboard_frames(source)
+    else:
+        files = sorted((src / tid).glob("*.png"))
+        if len(files) < 2:
+            raise SystemExit(f"{tid}: 프레임이 없습니다 ({src / tid})")
+        rendered = [Image.open(f).convert("RGB").resize((W, H), Image.Resampling.LANCZOS) for f in files]
+        pick = [round(i * (len(rendered) - 1) / (n - 1)) for i in range(n)]
+        raw = [rendered[p] for p in pick]
+    frames = [grade(frame, i / (n - 1)) for i, frame in enumerate(raw)]
     sample = Image.new("RGB", (W * 4, H * 2))
     for i in range(8):
         sample.paste(frames[round(i * (n - 1) / 7)], ((i % 4) * W, (i // 4) * H))
@@ -66,7 +121,11 @@ def main() -> None:
     ap.add_argument("--frames", default=str(FRAMES))
     a = ap.parse_args()
     src = Path(a.frames)
-    ids = a.only.split(",") if a.only else sorted(p.name for p in src.iterdir() if p.is_dir())
+    if a.only:
+        ids = a.only.split(",")
+    else:
+        ids = sorted({p.name for p in src.iterdir() if p.is_dir()} |
+                     {p.stem for p in SOURCES.glob("*.png")})
     for i, tid in enumerate(ids, 1):
         d = build_one(tid, src)
         print(f"[{i:02d}/{len(ids):02d}] {tid:<12} {d.stat().st_size / 1024:.0f} KB")

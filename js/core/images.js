@@ -489,15 +489,8 @@
     admiral: '기본 제독', ganghui: '중세의 연금술사', navigator_white: '하얀 남방의 항해사', armored_navigator: '철갑 항해사',
     sea_dog: '망원경을 든 뱃사람', muscle_swordsman: '근육질 검사', hat_spinner: '모자를 돌리는 항해사',
     charismatic_admiral: '카리스마 제독', battle_vanguard: '돌격대장', noble_scholar: '귀족 학자 제독',
-    casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장',
-    leonardo_de_valenca: '레오나르두 드 발렌사', duarte_de_valenca: '두아르트 드 발렌사',
-    ines_de_valcarcel: '이네스 데 발카르셀', edmund_ashford: '에드먼드 애쉬퍼드',
-    matteo_bellandi: '마테오 벨란디', laurens_van_der_velder: '로렌스 판 데르 펠더',
-    alessio_giorgi: '알레시오 조르지', martim_de_sequeira: '마르팀 드 세케이라',
-    hernando_de_montemayor: '에르난도 데 몬테마요르', gabriel_de_avelar: '가브리엘 드 아벨라르',
-    lisbeth_van_acker: '리스베트 판 아커르', henrik_stensson: '헨리크 스텐손',
-    vittoria_contarini: '비토리아 콘타리니', konrad_von_falkenstein: '콘라트 폰 팔켄슈타인',
-    adrien_de_montclair: '아드리앵 드 몽클레르', katrin_de_kermor: '카트린 드 케르모르'
+    casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장'
+    // 이름 있는 인물 16명(레오나르두 드 발렌사 …)은 20대·40대 얼굴이 없어 항구의 부하 후보로 옮겼다 (js/data/storycrew.js)
   };
   I.heroName = function (id) { return I.HERO_NAMES[id] || id; };
   /** 제독이 40세 이상이면 수염 난 그림을 쓴다. 만들기 화면은 age를 직접 넘긴다. */
@@ -757,7 +750,12 @@
   };
   /** 경쟁자 전용 그림이 먼저, 없을 때 같은 인물의 동료 그림을 잇는다. */
   K.rivalHalf = function (name) { return K.halfOf(K.rival(name)); };
-  K.player = function (face) { var l = I.list('portraits/player/'); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
+  /** 제독 만들기에서 고를 수 있는 얼굴: 20대(portraits/player/)와 40대(portraits/player-aged/) 그림이 모두 있는 것만. 40대 그림이 하나도 없으면 있는 대로 */
+  I.heroFaces = function () {
+    var all = I.list('portraits/player/'), both = all.filter(function (k) { return I.has('portraits/player-aged/' + k.slice('portraits/player/'.length)); });
+    return both.length ? both : all;
+  };
+  K.player = function (face) { var l = I.heroFaces(); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
   /** 아이 그림: 나이(stage 5·10·15)와 어머니 고장(region 폴더)에 맞는 것부터 — portraits/family/<고장>/daughter_age10(_half) → daughter_age10(_half) → daughter_<몇째> → daughter.
       half = 무릎상(대화창 위에 서는 모습). 고르는 규칙은 js/systems/homelife.js (G.FAMILY_LOOK) */
   K.kid = function (sex, order, stage, region, half) {
