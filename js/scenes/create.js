@@ -276,7 +276,7 @@
     A.withImg(S.player.portrait, faceKey);
     S.player.look = faceKey.length ? faceKey[0].slice('portraits/player/'.length) : 'admiral';
     G.Game.state = S;
-    await UI.fade(function () { G.Game.go('city', { cityId: S.player.home, prologue: true }); });
+    await G.Game.launch('첫 항해를 준비하는 중…', function () { G.Game.go('city', { cityId: S.player.home, prologue: true }); });
   }
   C.exit = function () { };
 })(window.G = window.G || {});

@@ -163,6 +163,12 @@ def is_anim(src):
 def shrink_one(src, dst_noext, side, fmt, q):
     if is_anim(src):
         return shrink_anim(src, dst_noext, side, q)
+    if src.lower().endswith('.anim.webp'):
+        # 이미 움직이는 WEBP(불러오는 그림 등)는 다시 구우면 첫 장면만 남는다 — 그대로 복사한다
+        path = dst_noext + '.webp'
+        with open(src, 'rb') as a, open(path, 'wb') as b:
+            b.write(a.read())
+        return path
     im = Image.open(src)
     im = im.convert('RGBA') if has_alpha(im) else im.convert('RGB')
     w, h = im.size

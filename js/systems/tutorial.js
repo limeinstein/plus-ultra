@@ -92,7 +92,7 @@
     name = String(name).trim() || D.name;
     await G.Game.ensureGeo();
     TU.start(name);
-    await UI.fade(function () { G.Game.go('city', { cityId: D.home }); });
+    await G.Game.launch('첫 항해를 준비하는 중…', function () { G.Game.go('city', { cityId: D.home }); });
   };
   /** 고정된 제독으로 새 상태를 만든다 (시험에서도 쓴다) */
   TU.start = function (name) {

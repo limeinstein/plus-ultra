@@ -69,8 +69,87 @@
     catch (e) { console.error(e); Game.rendererError = e.message; return false; }
   };
 
+  // ---------------------------------------------------------------- 미리 준비 (불러오는 그림이 떠 있는 동안)
+  /* 게임을 시작·이어하기·불러오기 할 때 바다·탐험이 바로 움직이도록 미리 해 둔다 (js/ui/loader.js 가 그동안 그림을 띄운다):
+     지도 → 이 저장의 화질로 캔버스 크기 맞추기 → 바다 셰이더 컴파일 → 지금 자리(항구라면 그 앞바다)의 육지 판 → 배·탐험대·사건 그림 */
+  function sleepFrame() { return new Promise(function (r) { requestAnimationFrame(function () { setTimeout(r, 0); }); }); }
+  /** 그 자리의 바다(또는 탐험) 화면 — 장면의 첫 화면과 같은 모양 */
+  Game.warmView = function (s, kind) {
+    s = s || Game.state; if (!s || !s.loc) return null;
+    var l = s.loc, lon = l.lon, lat = l.lat, land = kind === 'land' || (kind == null && l.mode === 'land');
+    if (l.mode === 'city' && G.CITY_DATA[l.city]) {
+      var c = G.CITY_DATA[l.city], dock = c.dock || [c.lat, c.lon], sea = G.Nav && G.Nav.nearestSea ? G.Nav.nearestSea(dock[1], dock[0], 12) : null;
+      lon = land || !sea ? c.lon : sea[0]; lat = land || !sea ? c.lat : sea[1];
+    }
+    if (lon == null || lat == null) return null;
+    var res = s.settings && s.settings.res;
+    return { lon: lon, lat: lat, zoom: land ? 170 : 110, time: 0, wind: [0.5, 0.3], cloud: 0.3, edge: 0.75, mode: 0, quality: land ? 1 : (res && res < 1 ? 0.5 : 1), cssWidth: 1600 };
+  };
+  /** 게임 상태가 정해진 뒤 첫 장면 전에 (Loader 가 떠 있는 동안) */
+  Game.prepare = async function (s) {
+    s = s || Game.state;
+    var LD = G.Loader;
+    await Game.ensureGeo();
+    fit();                                          // 이 저장의 화질(settings.res)로 캔버스 크기를 맞춘 뒤에 그려 둔다
+    if (LD) LD.text('바다와 땅을 그릴 준비를 하는 중…');
+    await sleepFrame();
+    if (Game.ensureRenderer()) {
+      try {
+        Game.renderer.warmShaders();
+        var v = Game.warmView(s); if (v) Game.renderer.prewarm(v);
+        Game.renderer.finish();
+      } catch (e) { console.warn('[준비] 바다 그림:', e); }
+    }
+    if (LD) LD.text('배와 탐험대를 꾸리는 중…');
+    await sleepFrame();
+    var ps = [], fl = s && s.fleet;
+    if (G.ShipSprite && fl) ps.push(G.ShipSprite.preload(fl.ships.map(function (sh) { return sh.type; }), 4000));
+    if (G.VoyageFX && G.VoyageFX.preload) G.VoyageFX.preload();
+    if (G.EventFx) { G.EventFx.preload('sea'); G.EventFx.preload('land'); }
+    if (G.Party && G.Party.preloadSprites) G.Party.preloadSprites((s.loc && s.loc.mount && s.loc.mount.id) || 'walk');
+    if (G.Img && G.Img.prefetchCrew) G.Img.prefetchCrew();
+    if (s.loc && s.loc.mode === 'city' && G.Scenes.city && G.Scenes.city.preloadImages && G.CITY_DATA[s.loc.city]) ps.push(G.Scenes.city.preloadImages(G.CITY_DATA[s.loc.city]));
+    var cap = ((G.FX && G.FX.loader) || {}).prepareMs || 5000;
+    await Promise.race([Promise.all(ps), new Promise(function (r) { setTimeout(r, cap); })]);
+  };
+  /** 첫 장면이 화면에 나왔나: 도시는 거리·메뉴·첫 대화가 뜰 때, 바다·탐험은 몇 장면을 그린 뒤 */
+  Game.sceneShown = function (ms) {
+    var t0 = performance.now(), n = 0;
+    return new Promise(function (res) {
+      (function check() {
+        n++;
+        var nm = Game.sceneName, ok = nm === 'city' ? !!((G.Town && G.Town.active && G.Town.active()) || document.querySelector('#ui .cmdmenu') || UI.busy()) : n > 3;
+        if (ok || performance.now() - t0 > (ms || 8000)) return res();
+        requestAnimationFrame(check);
+      })();
+    });
+  };
+  /** 불러오는 그림을 띄운 채 준비하고(Game.prepare) 첫 장면으로 들어간다 — goFn 이 장면을 연다 */
+  Game.launch = function (text, goFn) {
+    if (!G.Loader) { goFn(); return Promise.resolve(); }
+    return G.Loader.during(text || '항해를 준비하는 중…', async function () {
+      await Game.prepare();
+      if (G.Loader) G.Loader.text('닻을 올리는 중…');
+      goFn();
+      await Game.sceneShown();
+      await G.Loader.frames(2);
+    });
+  };
+  /** 도시에 머무는 동안 그 항구 앞바다의 육지 판을 한 줄씩 그려 둔다 (출항·성문 밖 탐험이 멈칫하지 않게) */
+  var pwTok = 0;
+  Game.prewarmCity = function (c) {
+    if (!Game.renderer || !Game.state || !c) return;
+    var tok = ++pwTok, v = Game.warmView(Game.state, 'sea');
+    (function step() {
+      if (tok !== pwTok || Game.sceneName !== 'city' || !Game.renderer) return;          // 도시를 떠났으면 그만 (바다 장면이 판을 그린다)
+      var done = false; try { done = Game.renderer.prewarm(v, true); } catch (e) { return; }
+      if (!done) (window.requestIdleCallback || function (f) { return setTimeout(f, 30); })(step, { timeout: 120 });
+    })();
+  };
+
   // ---------------------------------------------------------------- scenes
   Game.go = function (name, arg) {
+    Game.ftGrace = performance.now() + (((G.FX && G.FX.loop) || {}).sceneGrace || 1500);   // 장면을 막 바꾼 동안은 해상도 자동 조절이 재지 않는다
     if (Game.scene && Game.scene.exit) Game.scene.exit();
     UI.clearScreen();
     Game.sceneName = name;
@@ -89,7 +168,7 @@
     // 바다(WebGL) 해상도 자동 조절: 평균 장면 시간을 보고 한 단계씩.
     //   · 버벅여 내려온 단계는 한동안(resHold초) 다시 올리지 않는다 (올렸다 내렸다 하며 화면을 새로 만드는 끊김 방지)
     //   · 낮췄는데도 빨라지지 않으면(화면 주사율이 30Hz로 묶인 기기 등) 원래대로 되돌리고 그 아래로는 내리지 않는다
-    if (worldCanvas && worldCanvas.style.display !== 'none' && raw > 0 && raw < 0.25) {
+    if (worldCanvas && worldCanvas.style.display !== 'none' && raw > 0 && raw < 0.25 && !(Game.ftGrace && t < Game.ftGrace) && !(G.Loader && G.Loader.shown())) {
       Game.ftAvg = (Game.ftAvg || 0.016) * 0.96 + raw * 0.04;
       Game.ftN = (Game.ftN || 0) + 1;
       var ar = Game.autoRes || 1, now = t / 1000, tr = Game.resTry;

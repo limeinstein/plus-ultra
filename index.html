@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="css/minigames.css">
 </head>
 <body>
+<!-- 불러오는 동안 띄우는 그림 (js/ui/loader.js G.Loader) — 스크립트를 읽기 전부터 보이도록 맨 앞에 둔다 -->
+<div id="boot-loader" class="on"><div class="bl-box"><img class="bl-img" src="images/effects/loading-world.anim.webp" alt="" width="320" height="320"><div class="bl-text">해도를 펼치는 중…</div><div class="bl-dots"><i></i><i></i><i></i></div></div></div>
 <div id="stage">
   <canvas id="world"></canvas>
   <canvas id="overlay"></canvas>
@@ -86,6 +88,7 @@
 <script src="js/world/nav.js"></script>
 <script src="js/ui/icons.js"></script>
 <script src="js/ui/ui.js"></script>
+<script src="js/ui/loader.js"></script>
 <script src="js/ui/bio.js"></script>
 <script src="js/ui/tongues.js"></script>
 <script src="js/ui/seanews.js"></script>

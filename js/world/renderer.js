@@ -964,6 +964,44 @@ void main(){
     }
     return this.caches[0];
   };
+  /** 셰이더를 미리 컴파일·연결해 둔다 — 아주 작은 판에 육지·바다 패스를 한 번씩 그린다 (불러오는 동안, 첫 바다 장면이 멈칫하지 않게) */
+  Renderer.prototype.warmShaders = function () {
+    var gl = this.gl; if (this.lost || gl.isContextLost() || this._warmed) return;
+    var c = this._newCache(8, 8); c.lon = 0; c.lat = 30; c.zoom = 8; c.key = 'warm';
+    var v = { lon: 0, lat: 30, zoom: 8, time: 0, wind: [0.5, 0.3], quality: 1 };
+    this._renderStrip(c, v, 0, 8);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, c.fbo); gl.viewport(0, 0, 8, 8);
+    gl.useProgram(this.progMain); gl.bindVertexArray(this.vao); this._common(this.uM, v, 8, 8, 8);
+    gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    var px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);   // 여기서 정말로 끝날 때까지 기다린다
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.deleteTexture(c.tex); gl.deleteFramebuffer(c.fbo);
+    this._warmed = true;
+  };
+  /** 이 화면(view — draw 와 같은 모양)을 덮는 육지 판을 미리 그려 둔다. step 이면 한 번에 한 줄씩(부를 때마다) — 다 되면 true.
+      바다·탐험 장면이 그리고 있지 않을 때만 부른다 (도시·타이틀·불러오기 중) */
+  Renderer.prototype.prewarm = function (view, step) {
+    var gl = this.gl, cv = this.canvas; if (this.lost || gl.isContextLost()) return true;
+    var FX = G.FX || {}, W = cv.width, H = cv.height, zoom = view.zoom * (W / (view.cssWidth || W));
+    var key = JSON.stringify(FX.terrain || {}) + '|' + (view.quality == null ? 1 : view.quality);
+    if (this._covers(this.caches[0], view.lon, view.lat, zoom, W, H, key, 1) && this.caches[0].zoom === zoom) { this._pw = null; return true; }
+    var cw = Math.min(this.maxTex, Math.ceil(W * 1.45)), ch = Math.min(this.maxTex, Math.ceil(H * 1.45)), bk = this.caches[1];
+    if (!bk || bk.w !== cw || bk.h !== ch) { if (bk) { gl.deleteTexture(bk.tex); gl.deleteFramebuffer(bk.fbo); } bk = this.caches[1] = this._newCache(cw, ch); this._pw = null; }
+    var pw = this._pw;
+    if (!pw || pw.lon !== view.lon || pw.lat !== view.lat || pw.zoom !== zoom || pw.key !== key) {
+      this.job = null;
+      bk.lon = view.lon; bk.lat = view.lat; bk.zoom = zoom; bk.key = key; bk.ready = false;
+      pw = this._pw = { lon: view.lon, lat: view.lat, zoom: zoom, key: key, i: 0, n: step ? stripsFor(cw, ch) * 2 : 1 };
+    }
+    var until = step ? pw.i + 1 : pw.n;
+    for (; pw.i < until; pw.i++) this._renderStrip(bk, view, Math.floor(pw.i * ch / pw.n), Math.floor((pw.i + 1) * ch / pw.n));
+    if (pw.i < pw.n) return false;
+    bk.ready = true; this.caches = [bk, this.caches[0]]; this._pw = null; this._lastView = { lon: view.lon, lat: view.lat, zoom: zoom };
+    return true;
+  };
+  /** 그린 것이 정말 끝날 때까지 기다린다 (불러오는 그림이 떠 있는 동안 GPU 일을 마치게) */
+  Renderer.prototype.finish = function () { var gl = this.gl; if (this.lost || gl.isContextLost()) return; var px = new Uint8Array(4); gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); };
   /** 캐시를 버린다 (조정값을 바꾼 뒤 등) */
   Renderer.prototype.invalidate = function () { this.caches.forEach(function (c) { if (c) c.ready = false; }); this.job = null; };
 

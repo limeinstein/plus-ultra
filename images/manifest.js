@@ -2256,6 +2256,7 @@ G.IMAGE_FILES = {
   "effects/events/storm": "effects/events/storm.png",
   "effects/events/sunshine": "effects/events/sunshine.png",
   "effects/events/whale_appearance": "effects/events/whale_appearance.png",
+  "effects/loading-world.anim": "effects/loading-world.anim.webp",
   "effects/ship_spray": "effects/ship_spray.png",
   "exterior-styles/africa/church": "exterior-styles/africa/church.webp",
   "exterior-styles/africa/gate": "exterior-styles/africa/gate.webp",

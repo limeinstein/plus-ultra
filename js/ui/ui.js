@@ -83,12 +83,18 @@
     setTimeout(function () { t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }, ms || 3200);
   };
 
+  /* 검은 막을 덮고 fn 을 한 뒤 다음 장면이 그려지면 걷는다. fn 이 오래 걸리면(G.FX.loader.fadeAfter ms) 검은 막 위에 불러오는 그림을 작게 (js/ui/loader.js) */
   UI.fade = function (fn) {
     return new Promise(function (resolve) {
       fadeEl.classList.add('on');
       setTimeout(function () {
+        var LD = G.Loader, mine = false, lt = setTimeout(function () { if (LD && !LD.shown()) { mine = true; LD.show('', { dim: true }); } }, (((G.FX && G.FX.loader) || {}).fadeAfter) || 350);
         Promise.resolve(fn && fn()).then(function () {
-          setTimeout(function () { fadeEl.classList.remove('on'); resolve(); }, 60);
+          // 새 장면의 첫 화면이 검은 막 뒤에서 그려진 다음에 걷는다 (막을 걷은 뒤 멈칫하지 않게)
+          requestAnimationFrame(function () { requestAnimationFrame(function () {
+            clearTimeout(lt); if (mine && LD) LD.hide();
+            setTimeout(function () { fadeEl.classList.remove('on'); resolve(); }, 60);
+          }); });
         });
       }, 300);    // 검은 막이 다 덮을 때까지 (css .fade-black 의 transition 과 같게)
     });

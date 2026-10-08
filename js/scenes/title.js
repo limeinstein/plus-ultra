@@ -35,8 +35,11 @@
     bNew.classList.add('disabled'); bLoad.dataset.wait = '1'; if (bCont) bCont.classList.add('disabled');
     var ld = wrap.querySelector('.loading');
     // 보조 저장소(IndexedDB)의 일지도 읽은 뒤에 이어하기·불러오기를 정한다 (localStorage가 지워졌어도 남아 있을 수 있다)
-    Promise.all([Game.ensureGeo(), G.State.ready]).then(function () {
+    Promise.all([Game.ensureGeo(), G.State.ready, document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 2500); })]) : null]).then(function () {
       ld.textContent = '';
+      // 처음 열 때 떠 있던 불러오는 그림을 걷고, 바다 셰이더는 지금 미리 컴파일해 둔다 (첫 항해가 멈칫하지 않게)
+      if (G.Loader) G.Loader.hide();
+      setTimeout(function () { try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); } }, 600);
       if (!bCont && G.State.meta(0)) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); if (bTut) bTut.classList.remove('navy'); }
       if (bTut) bTut.classList.remove('disabled');
       if (bStory) bStory.classList.remove('disabled');

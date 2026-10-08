@@ -1,3 +1,19 @@
+/* ---------------------------------------------------------------- 불러오는 그림 (js/ui/loader.js) — 검은 화면 대신 도는 지구와 배 */
+#boot-loader { position: fixed; inset: 0; z-index: 100000; display: none; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .45s ease;
+  background: radial-gradient(ellipse 60% 70% at 50% 46%, #1b2433 0%, #111720 55%, #090c12 100%); }
+#boot-loader.on, #boot-loader.out { display: flex; }
+#boot-loader.on { opacity: 1; pointer-events: auto; }
+#boot-loader.dim { background: rgba(6,8,12,.72); }            /* 장면 사이: 뒤 화면이 조금 비치게 */
+#boot-loader .bl-box { display: flex; flex-direction: column; align-items: center; gap: 10px; transform: translateY(-2vh); }
+#boot-loader .bl-img { width: min(42vh, 360px); height: min(42vh, 360px); object-fit: contain; image-rendering: auto; filter: drop-shadow(0 10px 30px rgba(0,0,0,.55)); }
+#boot-loader.dim .bl-img { width: min(30vh, 260px); height: min(30vh, 260px); }
+#boot-loader .bl-text { font-family: 'Nanum Myeongjo', 'Batang', serif; font-size: clamp(14px, 2.2vh, 20px); letter-spacing: .14em; color: #e9dcbc; text-shadow: 0 2px 8px #000; min-height: 1.4em; }
+#boot-loader .bl-dots { display: flex; gap: 7px; }
+#boot-loader .bl-dots i { width: 6px; height: 6px; border-radius: 50%; background: #c9a868; opacity: .25; animation: bl-dot 1.2s infinite ease-in-out; }
+#boot-loader .bl-dots i:nth-child(2) { animation-delay: .2s; } #boot-loader .bl-dots i:nth-child(3) { animation-delay: .4s; }
+@keyframes bl-dot { 0%, 100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { #boot-loader .bl-dots i { animation: none; opacity: .7; } }
+
 /* Loop of Good Hope — theme: dark wood, brass trim, parchment, Myeongjo serif */
 :root {
   --wood-950: #120c08; --wood-900: #1a120c; --wood-800: #231810; --wood-700: #2e2016; --wood-600: #3b2a1c; --wood-500: #4d3825;

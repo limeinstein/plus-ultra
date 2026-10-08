@@ -10,6 +10,9 @@
     famScene: { w: 1008, top: 74 },
     // 내 컴퓨터의 코스타 델 솔 MP3 (js/systems/localost.js): 곡을 바꿀 때 겹쳐 바꾸는 초 fade · 곡 끝에서 처음과 겹쳐 돌리는 초 loopFade ·
     //   이 초 안에 같은 곡으로 돌아오면 이어서 resumeSec · 곡 이름이 떠 있는 초 showSec(0 = 안 띄움) · 음악 크기에 곱하는 값 gain · 파일 찾기 기다림 probeMs
+    // 불러오는 그림 (js/ui/loader.js): 적어도 minShow ms 보여 주고 fadeMs 에 걸쳐 걷는다 · 장면 사이 검은 막이 fadeAfter ms 넘게 걸리면 작게 띄운다 ·
+    //   게임을 시작할 때 그림 받기를 기다리는 가장 긴 시간 prepareMs · 도시에 들어서 앞바다를 미리 그리기 시작하는 때 cityWarmMs
+    loader: { minShow: 450, fadeMs: 450, fadeAfter: 350, prepareMs: 5000, cityWarmMs: 1500 },
     localOst: { fade: 2.5, loopFade: 3, resumeSec: 300, showSec: 3.2, gain: 0.9, probeMs: 6000 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
     // 자택 화면에 서 있는 가족 (homelife.js familyPanel): 어른 키 h, 설 자리(왼쪽·아래·너비), 옆 사람과 겹치는 비율
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
@@ -47,7 +50,8 @@
       resUp: 0.0185,      // 이보다 짧게 오래 버티면(약 54fps 위) 한 단계 올린다
       resMin: 0.45,       // 가장 낮은 해상도 배율
       resStep: 0.1,       // 한 번에 바꾸는 폭
-      resHold: 40         // 한 단계에서 버벅여 내려왔으면 이 초 동안은 다시 올리지 않는다 (올렸다 내렸다 반복 방지)
+      resHold: 40,        // 한 단계에서 버벅여 내려왔으면 이 초 동안은 다시 올리지 않는다 (올렸다 내렸다 반복 방지)
+      sceneGrace: 1500    // 장면을 막 바꾼 뒤 이 ms 동안은 장면 시간을 재지 않는다 (첫 장면들의 그림 읽기 때문에 해상도가 괜히 내려가지 않게)
     },
     terrain: {
       relief: 1.0,        // 음영(높낮이가 얼마나 도드라져 보이나)

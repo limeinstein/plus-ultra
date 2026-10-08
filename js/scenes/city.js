@@ -128,7 +128,9 @@
     if (G.Town.available(c)) { try { await G.Town.open(c, C.buildings(c)); } catch (e) { console.error(e); G.Town.close(); } }
     else G.Town.close();
     if (G.Town.active()) G.Town.hidden(false); else G.Game.setScene(C.view(c));
-    if (G.Img.prefetchCity) { G.Img.prefetchCrew(); G.Img.prefetchCity(c, 'in'); }   // 건물 안·마을 사람·여급·후원자 얼굴을 뒤에서 받아 둔다
+    if (G.Img.prefetchCity) { G.Img.prefetchCrew(); G.Img.prefetchCity(c, 'in'); }
+    // 머무는 동안 이 항구 앞바다를 한 줄씩 미리 그려 둔다 — 출항·탐험이 멈칫하지 않게 (main.js Game.prewarmCity)
+    setTimeout(function () { if (G.Game.sceneName === 'city' && S().loc.city === c.id && G.Game.ensureRenderer()) G.Game.prewarmCity(c); }, ((G.FX && G.FX.loader) || {}).cityWarmMs || 1500);   // 건물 안·마을 사람·여급·후원자 얼굴을 뒤에서 받아 둔다
     G.Game.cityHud();
     if (G.Audio) { if (G.Audio.setPlace) G.Audio.setPlace(null, true); G.Audio.music('town'); }   // 새 도시: 거리의 곡부터
     try {
