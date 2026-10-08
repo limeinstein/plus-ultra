@@ -46,6 +46,21 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       if (r.ask) await page.locator('.askrow button').first().click(); else await page.keyboard.press('Enter');
       await page.waitForTimeout(350);
     }
+    // 바다·뭍·술집에서도 이야기 대화는 얼굴(흉상)로 바뀌지 않고 무릎상 둘 (바다·뭍의 보통 대화는 얼굴 — main의 한 가지 구도)
+    const where = [];
+    for (const mode of ['sea', 'land']) {
+      await page.evaluate((mode) => { const S = G.Game.state; S.loc = Object.assign({}, S.loc, { mode }); }, mode);
+      for (const who of ['mother', 'player']) {
+        await page.evaluate((who) => { const sp = who === 'mother' ? G.Story.mother() : { name: G.Game.state.player.name, portrait: G.Game.state.player.portrait, rigId: 'player' }; G.UI.say('시험 한마디', sp); }, who);
+        await page.waitForSelector('.modal-back .dlg', { timeout: 10000 }); await page.waitForTimeout(500);
+        const r = await page.evaluate(() => ({ tall: document.querySelectorAll('.dlg-actor.tall').length, bust: document.querySelectorAll('.dlg-actor.bust').length, pframe: !!document.querySelector('.modal-back .dlg .pframe') }));
+        where.push([mode, who, r.tall, r.bust, r.pframe]);
+        await page.screenshot({ path: path.join(OUT, 'z_' + mode + '_' + who + '.png') });
+        await page.keyboard.press('Enter'); await page.waitForTimeout(400);
+      }
+    }
+    console.log('    ' + JSON.stringify(where));
+    ok(where.every(w => w[2] === 2 && !w[3] && !w[4]), '바다·뭍에서도 이야기 대화는 무릎상 둘 (제독 혼잣말도 방금 마주한 사람과)');
     seen.forEach(r => console.log('    ' + (r.stage || '내레이션') + ' 무릎상' + r.tall + (r.bust ? ' 흉상' + r.bust : '') + ' · ' + (r.name || '—') + ' · ' + r.text.replace(/\s+/g, ' ')));
     ok(seen.length >= 8, '첫 장면부터 대화 ' + seen.length + '개를 넘겼다');
     const people = seen.filter(r => r.name || r.pframe), solo = people.filter(r => r.stage === 'solo');

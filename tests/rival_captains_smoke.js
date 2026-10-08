@@ -47,7 +47,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.files >= 30, '경쟁자 초상 ' + r.files + '명');
     ok(!r.unused.length, '초상이 있는 사람은 모두 게임에 나온다 ' + r.unused.join(', '));
     ok(!r.noHalf.length, '모두 무릎상이 있다 ' + r.noHalf.join(', '));
-    ok(r.caps.length >= 16 && r.caps.every(c => c[2] && c[3] && c[4]), '바다의 이름난 선장 ' + r.caps.length + '명 — 말할 때 그 초상·무릎상, 그 해의 나라 명부에 오른다');
+    // 경쟁 탐험가(js/data/rivals.js)는 탐험 함대(G.EXPEDITIONS)로 바다에 나오므로 선장 명부에서는 빠진다 (seacaptains.js clean) — 남은 선장만 본다
+    ok(r.caps.every(c => c[2] && c[3] && c[4]), '바다의 이름난 선장 중 초상이 있는 ' + r.caps.length + '명 — 말할 때 그 초상·무릎상, 그 해의 나라 명부에 오른다');
     ok(r.other[1] && r.other[2], '그림이 없는 선장(' + r.other[0] + ')은 예전처럼 코드 얼굴');
     ok(r.behaim && r.behaim[0] === 'portraits/sponsors/pt_behaim_1' && r.behaim[1] === 'portraits/sponsors/pt_behaim', '우주지 학자 자리: 1480~1507 마르틴 베하임은 젊은 초상, 뒤의 페드루 누네스는 예전 그림 ' + JSON.stringify(r.behaim));
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
