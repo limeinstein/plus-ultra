@@ -184,7 +184,10 @@
     var F = FXL(), now, st, tm;
     try { st = player.getPlayerState(); tm = player.getCurrentTime(); } catch (e) { return; }
     var end = t.e != null ? t.e : (player.getDuration ? player.getDuration() : 0);
-    if (Date.now() - lastSeek < 1200) return;                         // 되감은 직후 위치가 아직 옛 자리로 보일 수 있다
+    if (Date.now() - lastSeek < 1200) {                               // 되감은 직후에는 위치가 아직 옛 자리로 보일 수 있다 — 소리만 올린다
+      if (fadeIn && st === 1) { var u0 = (Date.now() - fadeIn) / 1000 / F.fade; try { player.setVolume(Math.round(vol() * Math.min(1, u0))); } catch (e) { /* 없음 */ } }
+      return;
+    }
     if (st === 0 || (st === 2 && end && tm >= end - 1.5)) { loopBack(); return; }      // 유튜브가 곡 끝에서 멈췄다
     if (st !== 1) return;
     if (t.e != null && tm >= t.e - F.guard) { loopBack(); return; }  // 곡 끝 → 처음으로
