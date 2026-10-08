@@ -1,5 +1,5 @@
 /* 이야기 모드 「아버지의 사진」의 대화창: 사람이 말하면 언제나 무릎상으로 선다 —
-   다른 사람은 제독과 마주 선 둘(.dlg-stage.duo, 무릎상 2), 제독 혼자면 가운데 하나(.dlg-stage.solo, 무릎상 1).
+   다른 사람이 말해도, 제독이 말해도 그 장면에 마주한 두 사람이 무릎상으로 마주 선다(.dlg-stage.duo, 무릎상 2) — 하나 → 둘 → 얼굴로 바뀌지 않는다.
    예전 흉상 대화창(.dlg > .pframe)은 나오지 않는다 (사람 없는 내레이션만 그림 없는 대화창).
    처음 장면(리스본, 도시 메뉴가 아직 없을 때)부터 대화를 넘기며 확인한다.
    node tests/story_stand_smoke.js  (playwright, 스크린샷은 OUT 폴더) */
@@ -42,13 +42,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       seen.push(r);
       const person = r.name || r.pframe;
       if (person && (r.pframe || !r.stage || (r.stage === 'duo' && r.tall < 2) || (r.stage === 'solo' && r.tall < 1))) bad.push(r);
-      if (i < 14) await page.screenshot({ path: path.join(OUT, String(i).padStart(2, '0') + '_' + (r.stage || 'box') + '.png') });
+      if (i < 30) await page.screenshot({ path: path.join(OUT, String(i).padStart(2, '0') + '_' + (r.stage || 'box') + '.png') });
       if (r.ask) await page.locator('.askrow button').first().click(); else await page.keyboard.press('Enter');
       await page.waitForTimeout(350);
     }
     seen.forEach(r => console.log('    ' + (r.stage || '내레이션') + ' 무릎상' + r.tall + (r.bust ? ' 흉상' + r.bust : '') + ' · ' + (r.name || '—') + ' · ' + r.text.replace(/\s+/g, ' ')));
     ok(seen.length >= 8, '첫 장면부터 대화 ' + seen.length + '개를 넘겼다');
-    ok(seen.some(r => r.stage === 'duo') && seen.some(r => r.stage === 'solo'), '마주 선 둘(duo)과 가운데 하나(solo)가 모두 나온다');
+    const people = seen.filter(r => r.name || r.pframe), solo = people.filter(r => r.stage === 'solo');
+    ok(people.length && people.every(r => r.stage === 'duo' && r.tall === 2), '사람이 말하는 동안 늘 두 사람이 마주 선다 (무릎상 둘) — 혼자 서는 장면 ' + solo.length + '개');
     ok(!bad.length, '사람이 말하는 대화는 모두 무릎상 (흉상 대화창 없음) ' + JSON.stringify(bad.slice(0, 3)));
     ok(!errors.length, '콘솔 오류 0 ' + errors.join('\n'));
     console.log('OK');

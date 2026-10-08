@@ -198,7 +198,7 @@
   }
   var talking = 0, untalkTimer = 0, hiddenPanels = [];
   /* 같은 건물 안에서 마지막으로 마주 선 상대 — 제독이 혼자 고민하는 물음(「어떻게 할까?」)도 그 사람과 마주 선 구도로 보여 준다 */
-  var lastPartner = null;
+  var lastPartner = null, storyPartner = null;   // storyPartner: 이야기 모드에서 지금 장면에 마주한 사람
   /** 건물 메뉴 밖(바다·뭍·창 위)에서: 방금(1분 안) 마주 선 사람 */
   function recentPartner() { var lp = lastPartner; return lp && Date.now() - lp.t < 60 * 1000 ? lp.who : null; }
   /** 도서관(책 보기)·술집(이야기)은 예전 구도를 그대로 쓴다 — 혼자 선 사람·대화창 안 얼굴 칸·마주 보기가 그 자리에 맞게 섞인다 */
@@ -276,6 +276,9 @@
     // 이야기 모드(「아버지의 사진」)는 사건이다 — 어느 화면(술집·도서관·바다·뭍)에서든 마주 선 무릎상 둘로 (얼굴 ↔ 무릎상으로 바뀌지 않게)
     var story = !!(root && S && S.player && G.Story && G.Story.active && G.Story.active());
     var keep = !story && keepScene();
+    // 이야기 모드에서 제독 혼자의 말·물음(진행기 밖의 대사): 이 장면에서 방금 마주했던 사람과 둘이 선다. 사람 없는 내레이션이 오면 장면이 바뀐 것으로 본다
+    if (story && !opts.portrait && !opts.name) storyPartner = null;
+    if (story && !duo && !opts.noStand && isPlayer(opts) && storyPartner && Date.now() - storyPartner.t < 10 * 60 * 1000) { duo = true; partner = storyPartner.who; side = 'left'; choiceSide = 'left'; }
     if (!keep) {
       /* 한 가지 구도: 어디서든(도시·바다·뭍·해전·창이 열려 있을 때도) 말하는 사람은 제독과 마주 선다 — 제독 왼쪽 · 상대 오른쪽.
          혼자 가운데 서는 구도와 대화창 안 얼굴 칸은 쓰지 않는다 (사람이 없는 말·noStand 장면만 예전 대화창).
@@ -374,6 +377,7 @@
       if (right) addActor(right, 'right', activeSide === 'right', faces ? null : hr);
       var other = isPlayer(left) ? right : isPlayer(right) ? left : right;
       if ((low || !keep) && other && !isPlayer(other)) lastPartner = { who: other, menu: menuEl, t: Date.now() };
+      if (story && other && !isPlayer(other) && other.portrait) storyPartner = { who: other, t: Date.now() };
     } else {
       addActor(opts, 'center', true, soloHalf);
       if (low && !isPlayer(opts)) lastPartner = { who: opts, menu: menuEl, t: Date.now() };

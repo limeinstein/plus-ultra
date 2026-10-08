@@ -96,12 +96,28 @@
     var p = S().player;
     return String(t).replace(/\{name\}/g, p.name).replace(/\{kin\}/g, ST.kin()).replace(/\{kinCall\}/g, ST.kin()).replace(/\{father\}/g, D.father.alias).replace(/\{mother\}/g, D.mother.call);
   }
+  /* 대화 장면: 제독이 말할 때도 지금 마주한 사람과 둘이 선다 — 얼굴 하나 → 둘 → 하나로 바뀌지 않게.
+     마주한 사람 = 같은 장면(내레이션 N 사이)에서 바로 앞에 말한 다른 사람, 없으면 곧 말할 사람 */
+  function speakerOf(l) { return Array.isArray(l) ? l[0] : l && l.ask ? (l.by || 'P') : null; }
+  function partnerKey(lines, i) {
+    var j, k;
+    for (j = i - 1; j >= 0; j--) { k = speakerOf(lines[j]); if (!k || k === 'N') break; if (k !== 'P') return k; }
+    for (j = i + 1; j < lines.length; j++) { k = speakerOf(lines[j]); if (!k || k === 'N') break; if (k !== 'P') return k; }
+    return null;
+  }
+  function facing(k, lines, i) {
+    var sp = who(k);
+    if (k !== 'P') return sp;
+    var pk = partnerKey(lines, i), pt = pk ? who(pk) : null;
+    if (pt && pt.portrait) { sp.layout = 'duo'; sp.side = 'left'; sp.choiceSide = 'left'; sp.partner = pt; sp.emotion = 'neutral'; }
+    return sp;
+  }
   async function play(lines) {
     for (var i = 0; i < (lines || []).length; i++) {
       var ln = lines[i];
-      if (Array.isArray(ln)) await UI.say(fmt(ln[1]), who(ln[0]));
+      if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], lines, i));
       else if (ln && ln.ask) {
-        var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), ln.by ? who(ln.by) : {});
+        var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', lines, i));
         var o = ln.opts[v == null ? 0 : v];
         if (Array.isArray(o[1])) await play(o[1]);
       }
