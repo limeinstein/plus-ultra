@@ -109,6 +109,16 @@ def game_data():
         chain = read('js/data/chaindisc.js')
         for did, name, cat in re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'([^']+)',\s*'(\w+)'", chain, re.M):
             d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
+    # 중국·인도·중동 47곳과 신규 민족 36곳의 GIF도 실제 게임 이름으로 점검한다.
+    for rel, funcs in (
+        ('js/data/eastdisc.js', (('nat', 'nature'), ('ruin', 'ruin'))),
+        ('js/data/folkdisc.js', (('tribe', 'people'), ('people', 'people'))),
+    ):
+        if os.path.exists(os.path.join(ROOT, rel)):
+            extra = read(rel)
+            for func, cat in funcs:
+                for did, name in re.findall(r"^\s*" + func + r"\('([^']+)',\s*'([^']+)'", extra, re.M):
+                    d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
     names = []
     for x in d['discoveries']:
         if x.get('rival') and x['rival'] not in names:
@@ -195,6 +205,16 @@ def valid_keys(d):
         for role in portrait_roles:
             k['portraits/npc-roles/%s/%s' % (style, role)] = '도시 양식·역할별 NPC · %s · %s' % (style, role)
             k['portraits/npc-roles/%s/%s_half' % (style, role)] = '도시 양식·역할별 무릎상 · %s · %s' % (style, role)
+    street_roles = ['town_man', 'town_woman', 'boy', 'girl', 'elder', 'grandmother', 'librarian', 'innkeeper',
+                    'adventurer', 'merchant', 'noble_youth', 'soldier', 'navigator']
+    for style in portrait_styles:
+        for role in street_roles:
+            key = 'portraits/street-folk/%s_%s' % (role, style)
+            k[key] = '거리 보행 인물과 같은 얼굴 · %s · %s' % (style, role)
+            k[key + '_half'] = '거리 보행 인물과 같은 무릎상 · %s · %s' % (style, role)
+    for key, label in [('story_mother', '레오노르 다 코스타'), ('story_father', '김도현')]:
+        k['portraits/npc/' + key] = '이야기 인물 · ' + label
+        k['portraits/npc/' + key + '_half'] = '이야기 인물 무릎상 · ' + label
     pool_nations = ['pt', 'es', 'fr', 'de', 'en', 'nl', 'na', 'kr', 'cn', 'jp', 'ot', 'af', 'az', 'inca', 'vn', 'eg', 'pe', 'ind', 'se']
     for kind, label in [('mates', '항해사 후보'), ('sponsors', '후원자')]:
         for nation in pool_nations:
@@ -204,6 +224,9 @@ def valid_keys(d):
     for m in d['mates']:
         k['portraits/mates/' + m['id']] = '동료 · ' + m['name']
         k['portraits/mates/' + m['id'] + '_half'] = '동료 무릎상 · ' + m['name']
+    for key, label in [('anselmo', '안셀무 신부'), ('estevao', '에스테방 누네스')]:
+        k['portraits/mates/' + key] = '이야기 동료 · ' + label
+        k['portraits/mates/' + key + '_half'] = '이야기 동료 무릎상 · ' + label
     for m in d['maids']:
         k['portraits/maids/' + m['id']] = '여급 · %s (%s)' % (m['name'], cn.get(m['city'], '?'))
         k['portraits/maids/' + m['id'] + '_half'] = '여급 서 있는 모습 · %s (%s)' % (m['name'], cn.get(m['city'], '?'))
@@ -222,6 +245,8 @@ def valid_keys(d):
                 continue                                   # 다른 후원자 그림을 빌리거나 이름 없는 그 자리 사람
             k['portraits/sponsors/%s_%s' % (sp['id'], pic)] = '후원자 · %s — %s (%s~%s)' % (sp['title'], h[2], h[0], h[1])
             k['portraits/sponsors/%s_%s_half' % (sp['id'], pic)] = '후원자 무릎상 · %s — %s' % (sp['title'], h[2])
+    k['portraits/sponsors/pt_casanova'] = '이야기 후원자 · 카사노바 남작'
+    k['portraits/sponsors/pt_casanova_half'] = '이야기 후원자 무릎상 · 카사노바 남작'
     for r in d['rivals']:
         k['portraits/rivals/' + r] = '경쟁자 · ' + r
         k['portraits/rivals/' + r + '_half'] = '경쟁자 무릎상 · ' + r
@@ -304,7 +329,7 @@ def is_valid(key, keys):
 def report(found, dups, keys):
     groups = [('타이틀', 'title'), ('거리 배경', 'backgrounds/'), ('거리 배경(공통)', 'bg-styles/'), ('건물 겉모습', 'exteriors/'), ('지역별 건물', 'exterior-styles/'),
               ('거리 볼거리', 'landmarks/'), ('지도 유적', 'map-discoveries/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
-              ('마을 사람', 'portraits/npc/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'), ('왕실 신하', 'portraits/courtiers/'),
+              ('마을 사람', 'portraits/npc/'), ('거리 대화 NPC', 'portraits/street-folk/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'), ('왕실 신하', 'portraits/courtiers/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
               ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]

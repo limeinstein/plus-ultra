@@ -46,7 +46,7 @@
     if (s.hints[id] && !D.canStack(id, sr)) return false;
     if (d0 && d0.bookOnly && !/^(book|relic|chain|contract|lead|legacy)/.test(sr)) return false;   // 전설·희귀 동물·공룡: 책에서만
     if (d0 && !D.clueOk(d0, sr)) return false;                                                    // 주점·교역소·후원자의 이야기 ↔ 도서관 사료 (js/data/clues.js)
-    var here = d0 && d0.animal && /^(local|town):/.test(sr) && D.built(d0);                      // 그 고장에 와서 들은 동물 이야기
+    var here = d0 && (d0.animal || d0.folkLocal) && /^(local|town):/.test(sr) && D.built(d0);   // 그 고장에 와서 들은 동물·부족 이야기
     if (G.Frontier && d0 && !here && !G.Frontier.canHint(d0, src)) return false;
     if (s.hints[id]) {
       (s.hints[id].more = s.hints[id].more || []).push({ src: src, d: U.dateNum(s.date) });

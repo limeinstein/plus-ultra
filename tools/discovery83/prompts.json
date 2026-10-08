@@ -1,0 +1,1435 @@
+[
+  {
+    "id": "guilin",
+    "name": "계림 산수 — 이강의 봉우리",
+    "category": "nature",
+    "region": 6,
+    "description": "계림에서 양삭까지 이강 물줄기를 따라 석회암 봉우리 수천 개가 죽순처럼 솟아 있다. 물에 비친 봉우리와 실제 봉우리가 맞붙어 어디까지가 산이고 어디부터가 물인지 모를 지경이다. 당나라 문인 한유는 「강은 푸른 비단 띠를 두르고 산은 푸른 옥비녀를 꽂았다」고 노래했다. 어부들은 가마우지를 뗏목에 태우고 물고기를 잡는다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/guilin.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 계림 산수 — 이강의 봉우리 (guilin), region 6. Source brief: 계림에서 양삭까지 이강 물줄기를 따라 석회암 봉우리 수천 개가 죽순처럼 솟아 있다. 물에 비친 봉우리와 실제 봉우리가 맞붙어 어디까지가 산이고 어디부터가 물인지 모를 지경이다. 당나라 문인 한유는 「강은 푸른 비단 띠를 두르고 산은 푸른 옥비녀를 꽂았다」고 노래했다. 어부들은 가마우지를 뗏목에 태우고 물고기를 잡는다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "taishan",
+    "name": "태산",
+    "category": "nature",
+    "region": 6,
+    "description": "다섯 큰 산 가운데 으뜸으로 치는 동쪽의 산. 진시황과 한 무제가 꼭대기에 올라 하늘에 나라를 이룬 것을 고하는 봉선 제사를 지냈다. 산 밑에서 남천문까지 돌계단이 칠천 개 가까이 이어지고, 해 뜨는 것을 보려는 이들이 밤새 오른다. 바다 건너 조선에서도 「태산이 높다 하되 하늘 아래 뫼이로다」라고 읊었다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/taishan.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 태산 (taishan), region 6. Source brief: 다섯 큰 산 가운데 으뜸으로 치는 동쪽의 산. 진시황과 한 무제가 꼭대기에 올라 하늘에 나라를 이룬 것을 고하는 봉선 제사를 지냈다. 산 밑에서 남천문까지 돌계단이 칠천 개 가까이 이어지고, 해 뜨는 것을 보려는 이들이 밤새 오른다. 바다 건너 조선에서도 「태산이 높다 하되 하늘 아래 뫼이로다」라고 읊었다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "xihu",
+    "name": "서호",
+    "category": "nature",
+    "region": 6,
+    "description": "항주 성 서쪽, 세 면을 산이 두른 맑은 호수. 이 고을을 다스린 백거이와 소동파가 쌓은 두 둑이 물 위를 가로지르고, 버드나무와 복사꽃이 철마다 빛깔을 바꾼다. 「위에는 하늘나라, 아래에는 소주와 항주」라는 말이 여기서 나왔다. 저녁 절의 종소리와 달 비친 세 돌탑이 서호의 열 경치로 꼽힌다.",
+    "extra": {
+      "natural": true,
+      "city": 177
+    },
+    "source": "tools/nature_gifs/sources/xihu.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 서호 (xihu), region 6. Source brief: 항주 성 서쪽, 세 면을 산이 두른 맑은 호수. 이 고을을 다스린 백거이와 소동파가 쌓은 두 둑이 물 위를 가로지르고, 버드나무와 복사꽃이 철마다 빛깔을 바꾼다. 「위에는 하늘나라, 아래에는 소주와 항주」라는 말이 여기서 나왔다. 저녁 절의 종소리와 달 비친 세 돌탑이 서호의 열 경치로 꼽힌다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "emeishan",
+    "name": "아미산",
+    "category": "nature",
+    "region": 6,
+    "description": "성도 남서쪽, 눈썹처럼 길게 누운 산. 보현보살이 머문 성산이라 산길마다 절이 이어진다. 구름보다 높은 금정에 서면 발아래로 구름바다가 펼쳐지고, 해를 등지면 구름 위 둥근 무지개 속에 제 그림자가 비친다 — 사람들은 이를 「부처의 빛」이라 부르며 절한다. 산속 원숭이들은 순례객의 보따리를 노린다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/emeishan.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 아미산 (emeishan), region 6. Source brief: 성도 남서쪽, 눈썹처럼 길게 누운 산. 보현보살이 머문 성산이라 산길마다 절이 이어진다. 구름보다 높은 금정에 서면 발아래로 구름바다가 펼쳐지고, 해를 등지면 구름 위 둥근 무지개 속에 제 그림자가 비친다 — 사람들은 이를 「부처의 빛」이라 부르며 절한다. 산속 원숭이들은 순례객의 보따리를 노린다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "huashan",
+    "name": "화산 — 서쪽의 큰 산",
+    "category": "nature",
+    "region": 6,
+    "description": "서안 동쪽, 칼로 깎은 듯한 화강암 봉우리 다섯이 연꽃잎처럼 둘러선 산. 「예로부터 화산 길은 하나뿐」이라는 말처럼, 벼랑에 박은 쇠사슬을 잡고 매달리거나 절벽에 덧댄 판자 길을 기어올라야 한다. 도사들이 바위틈에 도관을 짓고 수련하던 곳이라, 꼭대기에서는 황하와 위수가 만나는 들판이 끝없이 내려다보인다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/huashan.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 화산 — 서쪽의 큰 산 (huashan), region 6. Source brief: 서안 동쪽, 칼로 깎은 듯한 화강암 봉우리 다섯이 연꽃잎처럼 둘러선 산. 「예로부터 화산 길은 하나뿐」이라는 말처럼, 벼랑에 박은 쇠사슬을 잡고 매달리거나 절벽에 덧댄 판자 길을 기어올라야 한다. 도사들이 바위틈에 도관을 짓고 수련하던 곳이라, 꼭대기에서는 황하와 위수가 만나는 들판이 끝없이 내려다보인다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "wuyishan",
+    "name": "무이산 아홉 굽이 시내",
+    "category": "nature",
+    "region": 6,
+    "description": "복건 북쪽, 붉은 사암 봉우리 사이로 아홉 굽이 시냇물이 휘돌아 흐른다. 대나무 뗏목을 타고 굽이를 내려가면 벼랑 높은 틈에 옛사람의 배 모양 관이 걸려 있다. 주자가 이곳에 정사를 짓고 「무이구곡가」를 지었고, 바위틈에서 자란 차나무 잎은 진한 바위 맛이 난다고 이름났다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/wuyishan.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 무이산 아홉 굽이 시내 (wuyishan), region 6. Source brief: 복건 북쪽, 붉은 사암 봉우리 사이로 아홉 굽이 시냇물이 휘돌아 흐른다. 대나무 뗏목을 타고 굽이를 내려가면 벼랑 높은 틈에 옛사람의 배 모양 관이 걸려 있다. 주자가 이곳에 정사를 짓고 「무이구곡가」를 지었고, 바위틈에서 자란 차나무 잎은 진한 바위 맛이 난다고 이름났다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "lushan",
+    "name": "여산 폭포",
+    "category": "nature",
+    "region": 6,
+    "description": "장강과 파양호 사이에 솟은 산. 안개가 잦아 「여산의 참모습을 모르는 것은 내가 이 산속에 있기 때문」이라는 소동파의 시가 남았다. 이백은 향로봉 폭포를 보고 「날아 떨어지는 물줄기 삼천 척, 은하수가 하늘에서 쏟아지는가」 하고 읊었다. 도연명이 살던 마을과 백록동 서원도 기슭에 있다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/lushan.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 여산 폭포 (lushan), region 6. Source brief: 장강과 파양호 사이에 솟은 산. 안개가 잦아 「여산의 참모습을 모르는 것은 내가 이 산속에 있기 때문」이라는 소동파의 시가 남았다. 이백은 향로봉 폭포를 보고 「날아 떨어지는 물줄기 삼천 척, 은하수가 하늘에서 쏟아지는가」 하고 읊었다. 도연명이 살던 마을과 백록동 서원도 기슭에 있다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "sanxia",
+    "name": "장강 삼협",
+    "category": "nature",
+    "region": 6,
+    "description": "사천에서 흘러나온 장강이 산맥을 뚫고 지나는 구당·무·서릉 세 협곡. 벼랑이 하늘을 가려 한낮에도 어둑하고, 물살이 바위에 부딪혀 뒤집히는 배가 많았다. 거슬러 오르는 배는 벼랑 길에 늘어선 뱃꾼들이 대나무 밧줄로 끌어 올린다. 무협 위에는 신녀봉이 서 있어, 옛 초나라 임금이 꿈에 만난 무산의 신녀 이야기가 전한다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/sanxia.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 장강 삼협 (sanxia), region 6. Source brief: 사천에서 흘러나온 장강이 산맥을 뚫고 지나는 구당·무·서릉 세 협곡. 벼랑이 하늘을 가려 한낮에도 어둑하고, 물살이 바위에 부딪혀 뒤집히는 배가 많았다. 거슬러 오르는 배는 벼랑 길에 늘어선 뱃꾼들이 대나무 밧줄로 끌어 올린다. 무협 위에는 신녀봉이 서 있어, 옛 초나라 임금이 꿈에 만난 무산의 신녀 이야기가 전한다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "hukou",
+    "name": "호구 폭포",
+    "category": "nature",
+    "region": 6,
+    "description": "넓게 흐르던 황하가 갑자기 좁은 바위틈으로 쏟아져 들어가는 폭포. 누런 물이 주전자 주둥이로 붓듯 떨어진다 하여 「호구」라 부른다. 물보라가 연기처럼 솟고 천둥 같은 소리가 십 리 밖까지 들린다. 배는 이곳을 지날 수 없어, 뭍으로 끌어 올려 폭포를 돌아가야 했다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/hukou.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 호구 폭포 (hukou), region 6. Source brief: 넓게 흐르던 황하가 갑자기 좁은 바위틈으로 쏟아져 들어가는 폭포. 누런 물이 주전자 주둥이로 붓듯 떨어진다 하여 「호구」라 부른다. 물보라가 연기처럼 솟고 천둥 같은 소리가 십 리 밖까지 들린다. 배는 이곳을 지날 수 없어, 뭍으로 끌어 올려 폭포를 돌아가야 했다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "qiantang",
+    "name": "전당강 해일",
+    "category": "nature",
+    "region": 6,
+    "description": "음력 팔월 보름 무렵이면 바다의 밀물이 나팔처럼 좁아지는 전당강 어귀로 거꾸로 밀려 올라온다. 은빛 물벽이 한 줄로 늘어서 천둥소리를 내며 강을 거슬러 달리니, 송나라 때부터 구경꾼이 강둑을 메웠다. 깃발을 들고 그 물살 위로 헤엄쳐 나가는 「농조아」 젊은이들의 재주가 이름났다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/qiantang.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 전당강 해일 (qiantang), region 6. Source brief: 음력 팔월 보름 무렵이면 바다의 밀물이 나팔처럼 좁아지는 전당강 어귀로 거꾸로 밀려 올라온다. 은빛 물벽이 한 줄로 늘어서 천둥소리를 내며 강을 거슬러 달리니, 송나라 때부터 구경꾼이 강둑을 메웠다. 깃발을 들고 그 물살 위로 헤엄쳐 나가는 「농조아」 젊은이들의 재주가 이름났다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "shilin",
+    "name": "석림 — 돌의 숲",
+    "category": "nature",
+    "region": 6,
+    "description": "운남 동쪽, 잿빛 석회암 기둥이 빽빽이 솟아 돌로 된 숲을 이룬다. 좁은 바위 골목이 미로처럼 얽혀 길을 잃으면 반나절을 헤맨다. 이 고장 이 사람들은 바위 하나를 혼인을 빼앗긴 처녀 아시마가 굳어진 것이라 하며, 그 이야기를 긴 노래로 전한다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/shilin.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 석림 — 돌의 숲 (shilin), region 6. Source brief: 운남 동쪽, 잿빛 석회암 기둥이 빽빽이 솟아 돌로 된 숲을 이룬다. 좁은 바위 골목이 미로처럼 얽혀 길을 잃으면 반나절을 헤맨다. 이 고장 이 사람들은 바위 하나를 혼인을 빼앗긴 처녀 아시마가 굳어진 것이라 하며, 그 이야기를 긴 노래로 전한다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "huangguoshu",
+    "name": "황과수 폭포",
+    "category": "nature",
+    "region": 6,
+    "description": "귀주 산골의 넓은 폭포. 백수하가 절벽에서 한꺼번에 떨어져 무지개가 늘 걸린다. 명나라 말 여행가 서하객이 이곳을 지나며 물보라가 구슬처럼 튀고 연기처럼 날린다고 적었다. 폭포 뒤 물발 속으로 바위 굴이 이어져, 물 커튼 뒤에서 바깥을 내다볼 수 있다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/huangguoshu.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 황과수 폭포 (huangguoshu), region 6. Source brief: 귀주 산골의 넓은 폭포. 백수하가 절벽에서 한꺼번에 떨어져 무지개가 늘 걸린다. 명나라 말 여행가 서하객이 이곳을 지나며 물보라가 구슬처럼 튀고 연기처럼 날린다고 적었다. 폭포 뒤 물발 속으로 바위 굴이 이어져, 물 커튼 뒤에서 바깥을 내다볼 수 있다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "yulong",
+    "name": "옥룡설산",
+    "category": "nature",
+    "region": 6,
+    "description": "여강 북쪽, 열세 봉우리가 일 년 내내 눈을 이고 있는 산. 흰 봉우리가 구름 사이로 누운 모습이 옥으로 된 용 같다고 한다. 기슭의 나시 사람들은 이 산을 수호신으로 섬기고, 그림처럼 생긴 동파 문자로 경전을 적는다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/yulong.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 옥룡설산 (yulong), region 6. Source brief: 여강 북쪽, 열세 봉우리가 일 년 내내 눈을 이고 있는 산. 흰 봉우리가 구름 사이로 누운 모습이 옥으로 된 용 같다고 한다. 기슭의 나시 사람들은 이 산을 수호신으로 섬기고, 그림처럼 생긴 동파 문자로 경전을 적는다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "dongting",
+    "name": "동정호와 군산",
+    "category": "nature",
+    "region": 6,
+    "description": "장강 남쪽의 넓은 호수. 여름이면 물이 불어 팔백 리에 이른다고 하였다. 호수 가운데 군산 섬에는 순임금의 두 왕비가 슬피 울어 대나무에 눈물 자국이 생겼다는 반죽이 자란다. 동쪽 기슭 악양루에 올라 범중엄은 「천하의 근심을 먼저 근심하고 천하의 즐거움은 나중에 즐긴다」고 썼다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/dongting.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 동정호와 군산 (dongting), region 6. Source brief: 장강 남쪽의 넓은 호수. 여름이면 물이 불어 팔백 리에 이른다고 하였다. 호수 가운데 군산 섬에는 순임금의 두 왕비가 슬피 울어 대나무에 눈물 자국이 생겼다는 반죽이 자란다. 동쪽 기슭 악양루에 올라 범중엄은 「천하의 근심을 먼저 근심하고 천하의 즐거움은 나중에 즐긴다」고 썼다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "putuo",
+    "name": "보타산 — 관음의 섬",
+    "category": "nature",
+    "region": 6,
+    "description": "절강 앞바다 주산 군도의 작은 섬. 관음보살이 머무는 곳이라 하여 섬 전체가 절과 암자로 덮였다. 바다 건너로 모셔 가던 관음상이 이 앞바다에서 배가 꼼짝하지 않아 섬에 두었다는 「가고 싶지 않은 관음」 이야기가 전한다. 뱃사람들은 지날 때마다 향을 피워 순풍을 빈다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/putuo.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 보타산 — 관음의 섬 (putuo), region 6. Source brief: 절강 앞바다 주산 군도의 작은 섬. 관음보살이 머무는 곳이라 하여 섬 전체가 절과 암자로 덮였다. 바다 건너로 모셔 가던 관음상이 이 앞바다에서 배가 꼼짝하지 않아 섬에 두었다는 「가고 싶지 않은 관음」 이야기가 전한다. 뱃사람들은 지날 때마다 향을 피워 순풍을 빈다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "tianchi",
+    "name": "천산 천지 — 서왕모의 연못",
+    "category": "nature",
+    "region": 7,
+    "description": "천산산맥 보그다 봉 기슭, 높은 곳에 고인 짙푸른 호수. 눈 덮인 봉우리가 물에 거꾸로 비치고 가문비나무 숲이 둘러싼다. 옛사람은 이곳을 서왕모가 주나라 목왕을 맞아 잔치를 벌인 요지라고 믿었다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/tianchi.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 천산 천지 — 서왕모의 연못 (tianchi), region 7. Source brief: 천산산맥 보그다 봉 기슭, 높은 곳에 고인 짙푸른 호수. 눈 덮인 봉우리가 물에 거꾸로 비치고 가문비나무 숲이 둘러싼다. 옛사람은 이곳을 서왕모가 주나라 목왕을 맞아 잔치를 벌인 요지라고 믿었다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "qinghaihu",
+    "name": "청해호 — 쿠쿠노르",
+    "category": "nature",
+    "region": 7,
+    "description": "티베트 고원 북쪽 끝의 짠물 호수. 하늘보다 푸른 물이 끝없이 펼쳐져 몽골 사람은 「쿠쿠노르(푸른 호수)」라 부른다. 가운데 바위섬에는 겨울에 얼음을 건너 들어간 수행자들이 산다. 여름 호숫가에는 유목민의 검은 천막이 점점이 박힌다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/qinghaihu.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 청해호 — 쿠쿠노르 (qinghaihu), region 7. Source brief: 티베트 고원 북쪽 끝의 짠물 호수. 하늘보다 푸른 물이 끝없이 펼쳐져 몽골 사람은 「쿠쿠노르(푸른 호수)」라 부른다. 가운데 바위섬에는 겨울에 얼음을 건너 들어간 수행자들이 산다. 여름 호숫가에는 유목민의 검은 천막이 점점이 박힌다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "mingsha",
+    "name": "명사산과 초승달 샘",
+    "category": "nature",
+    "region": 7,
+    "description": "돈황 남쪽의 모래산. 바람이 불면 모래가 흘러내리며 북소리 같은 울음을 낸다 하여 「우는 모래산」이다. 그 품에 초승달 모양의 샘이 고여, 사방에서 모래가 덮쳐 와도 천 년 넘게 메워지지 않았다. 비단길 대상들이 사막을 건너기 전 마지막으로 물을 채우던 곳이다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/mingsha.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 명사산과 초승달 샘 (mingsha), region 7. Source brief: 돈황 남쪽의 모래산. 바람이 불면 모래가 흘러내리며 북소리 같은 울음을 낸다 하여 「우는 모래산」이다. 그 품에 초승달 모양의 샘이 고여, 사방에서 모래가 덮쳐 와도 천 년 넘게 메워지지 않았다. 비단길 대상들이 사막을 건너기 전 마지막으로 물을 채우던 곳이다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "huoyan",
+    "name": "화염산",
+    "category": "nature",
+    "region": 7,
+    "description": "투르판 분지 북쪽의 붉은 사암 산줄기. 여름 한낮이면 산이 불꽃처럼 일렁이고 땅이 달구어져 모래에 달걀이 익는다고 한다. 당나라 승려 현장이 인도로 가며 이 앞을 지났고, 『서유기』에서는 손오공이 파초선을 빌려 불을 끄는 산이 되었다. 골짜기 사이에는 포도밭이 숨어 있다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/huoyan.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 화염산 (huoyan), region 7. Source brief: 투르판 분지 북쪽의 붉은 사암 산줄기. 여름 한낮이면 산이 불꽃처럼 일렁이고 땅이 달구어져 모래에 달걀이 익는다고 한다. 당나라 승려 현장이 인도로 가며 이 앞을 지났고, 『서유기』에서는 손오공이 파초선을 빌려 불을 끄는 산이 되었다. 골짜기 사이에는 포도밭이 숨어 있다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "yandang",
+    "name": "안탕산",
+    "category": "nature",
+    "region": 6,
+    "description": "절강 남쪽 바닷가 가까운 산. 꼭대기에 갈대가 우거진 호수가 있어 가을 기러기가 내려앉는다 하여 이름이 붙었다. 깎아지른 봉우리와 폭포가 많고, 해가 지면 바위 그림자가 마주 선 부부나 낙타처럼 보이는 「밤 경치」가 이름났다. 서하객은 꼭대기의 기러기 호수를 찾으려고 여러 번 이 산을 올랐다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/yandang.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 안탕산 (yandang), region 6. Source brief: 절강 남쪽 바닷가 가까운 산. 꼭대기에 갈대가 우거진 호수가 있어 가을 기러기가 내려앉는다 하여 이름이 붙었다. 깎아지른 봉우리와 폭포가 많고, 해가 지면 바위 그림자가 마주 선 부부나 낙타처럼 보이는 「밤 경치」가 이름났다. 서하객은 꼭대기의 기러기 호수를 찾으려고 여러 번 이 산을 올랐다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "tiantan",
+    "name": "천단",
+    "category": "ruin",
+    "region": 6,
+    "description": "북경 성 남쪽, 명나라 영락제가 자금성과 함께 세운 하늘 제사터. 둥근 세 겹 지붕을 얹은 기년전에서 황제가 해마다 풍년을 빈다. 하늘은 둥글고 땅은 네모나다는 뜻대로 담장 북쪽은 둥글고 남쪽은 네모다. 흰 돌로 세 단을 쌓은 환구단 한가운데 서서 말하면 목소리가 크게 되울린다.",
+    "extra": {
+      "wonder": true,
+      "built": 1420,
+      "city": 188
+    },
+    "source": "tools/ruin_gifs/v2/master/tiantan.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 천단 (tiantan), region 6. Source brief: 북경 성 남쪽, 명나라 영락제가 자금성과 함께 세운 하늘 제사터. 둥근 세 겹 지붕을 얹은 기년전에서 황제가 해마다 풍년을 빈다. 하늘은 둥글고 땅은 네모나다는 뜻대로 담장 북쪽은 둥글고 남쪽은 네모다. 흰 돌로 세 단을 쌓은 환구단 한가운데 서서 말하면 목소리가 크게 되울린다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "shaolin",
+    "name": "숭산 소림사",
+    "category": "ruin",
+    "region": 6,
+    "description": "숭산 소실산 기슭, 북위 때 세운 절. 인도에서 온 달마가 뒷산 굴에서 아홉 해 동안 벽을 마주하고 앉아 선을 열었다고 한다. 당 태종을 도운 열세 명의 스님 이야기 이래 소림의 주먹과 곤봉술이 천하에 이름났고, 명나라 때는 스님 군사가 바닷가까지 나가 왜구를 쳤다. 탑림에는 이름난 스님들의 돌탑 수백 기가 숲을 이룬다.",
+    "extra": {
+      "wonder": true,
+      "built": 495
+    },
+    "source": "tools/ruin_gifs/v2/master/shaolin.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 숭산 소림사 (shaolin), region 6. Source brief: 숭산 소실산 기슭, 북위 때 세운 절. 인도에서 온 달마가 뒷산 굴에서 아홉 해 동안 벽을 마주하고 앉아 선을 열었다고 한다. 당 태종을 도운 열세 명의 스님 이야기 이래 소림의 주먹과 곤봉술이 천하에 이름났고, 명나라 때는 스님 군사가 바닷가까지 나가 왜구를 쳤다. 탑림에는 이름난 스님들의 돌탑 수백 기가 숲을 이룬다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "dayanta",
+    "name": "대안탑",
+    "category": "ruin",
+    "region": 6,
+    "description": "서안 대자은사 안의 벽돌탑. 인도에서 열일곱 해 만에 돌아온 현장 법사가 가져온 경전과 불상을 지키려고 당 고종 때 세웠다. 과거에 붙은 젊은이들이 이 탑 아래에 이름을 적는 「안탑제명」이 당나라 선비들의 큰 자랑이었다.",
+    "extra": {
+      "wonder": true,
+      "built": 652,
+      "city": 184
+    },
+    "source": "tools/ruin_gifs/v2/master/dayanta.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 대안탑 (dayanta), region 6. Source brief: 서안 대자은사 안의 벽돌탑. 인도에서 열일곱 해 만에 돌아온 현장 법사가 가져온 경전과 불상을 지키려고 당 고종 때 세웠다. 과거에 붙은 젊은이들이 이 탑 아래에 이름을 적는 「안탑제명」이 당나라 선비들의 큰 자랑이었다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "anjiqiao",
+    "name": "조주 안제교",
+    "category": "ruin",
+    "region": 6,
+    "description": "하북 조주의 효하를 건너는 돌다리. 수나라 장인 이춘이 놓았다. 큰 아치 하나로 강을 건너고 양쪽 어깨에 작은 아치를 둘씩 더 뚫어, 돌 무게를 덜고 큰물이 지날 길을 냈다. 천 년 넘게 홍수와 지진을 견뎌 「조주교는 신선 노반이 하룻밤에 놓았다」는 노래가 전한다.",
+    "extra": {
+      "wonder": true,
+      "built": 605
+    },
+    "source": "tools/ruin_gifs/v2/master/anjiqiao.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 조주 안제교 (anjiqiao), region 6. Source brief: 하북 조주의 효하를 건너는 돌다리. 수나라 장인 이춘이 놓았다. 큰 아치 하나로 강을 건너고 양쪽 어깨에 작은 아치를 둘씩 더 뚫어, 돌 무게를 덜고 큰물이 지날 길을 냈다. 천 년 넘게 홍수와 지진을 견뎌 「조주교는 신선 노반이 하룻밤에 놓았다」는 노래가 전한다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "huanghelou",
+    "name": "황학루",
+    "category": "ruin",
+    "region": 6,
+    "description": "무창 뱀산 벼랑 위, 장강을 내려다보는 누각. 신선이 누런 학을 타고 날아갔다는 이야기가 깃들었다. 당나라 최호가 「옛사람은 황학을 타고 떠났고 이곳엔 빈 누각만 남았네」라 읊자, 뒤에 온 이백조차 붓을 놓았다고 한다. 여러 번 불타고 다시 세워졌다.",
+    "extra": {
+      "wonder": true,
+      "built": 223,
+      "city": 179
+    },
+    "source": "tools/ruin_gifs/v2/master/huanghelou.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 황학루 (huanghelou), region 6. Source brief: 무창 뱀산 벼랑 위, 장강을 내려다보는 누각. 신선이 누런 학을 타고 날아갔다는 이야기가 깃들었다. 당나라 최호가 「옛사람은 황학을 타고 떠났고 이곳엔 빈 누각만 남았네」라 읊자, 뒤에 온 이백조차 붓을 놓았다고 한다. 여러 번 불타고 다시 세워졌다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "qufu",
+    "name": "곡부 공묘",
+    "category": "ruin",
+    "region": 6,
+    "description": "공자가 태어난 노나라 곡부에, 그가 세상을 떠난 이듬해 옛집을 사당으로 삼은 데서 시작한 사당. 왕조마다 넓혀 지어 노란 기와 전각이 아홉 겹 뜰을 이룬다. 용이 감긴 돌기둥의 대성전 앞에는 공자가 제자를 가르쳤다는 살구나무 단이 있고, 북쪽 숲에는 공자 집안 대대의 무덤이 이어진다.",
+    "extra": {
+      "wonder": true
+    },
+    "source": "tools/ruin_gifs/v2/master/qufu.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 곡부 공묘 (qufu), region 6. Source brief: 공자가 태어난 노나라 곡부에, 그가 세상을 떠난 이듬해 옛집을 사당으로 삼은 데서 시작한 사당. 왕조마다 넓혀 지어 노란 기와 전각이 아홉 겹 뜰을 이룬다. 용이 감긴 돌기둥의 대성전 앞에는 공자가 제자를 가르쳤다는 살구나무 단이 있고, 북쪽 숲에는 공자 집안 대대의 무덤이 이어진다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "wudang",
+    "name": "무당산 금전",
+    "category": "ruin",
+    "region": 6,
+    "description": "호북 북서쪽 무당산은 도교의 북방 신 진무대제가 수련한 산이라 한다. 명나라 영락제가 군사와 장인 수십만을 보내 산 전체에 도관 서른 남짓을 지었고, 꼭대기 천주봉에는 구리를 부어 금칠한 전각 「금전」을 올렸다. 도사들이 익히는 부드러운 권법은 장삼봉이 학과 뱀의 싸움을 보고 지었다고 전한다.",
+    "extra": {
+      "wonder": true,
+      "built": 1416
+    },
+    "source": "tools/ruin_gifs/v2/master/wudang.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 무당산 금전 (wudang), region 6. Source brief: 호북 북서쪽 무당산은 도교의 북방 신 진무대제가 수련한 산이라 한다. 명나라 영락제가 군사와 장인 수십만을 보내 산 전체에 도관 서른 남짓을 지었고, 꼭대기 천주봉에는 구리를 부어 금칠한 전각 「금전」을 올렸다. 도사들이 익히는 부드러운 권법은 장삼봉이 학과 뱀의 싸움을 보고 지었다고 전한다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "manasarovar",
+    "name": "마나사로바르 호수",
+    "category": "nature",
+    "region": 7,
+    "description": "카일라스산 남쪽 기슭의 높은 호수. 힌두는 브라흐마가 마음으로 지은 호수라 하고, 불교도는 붓다의 어머니가 꿈에 몸을 씻은 아나바타프타 못이라 한다. 순례자들은 사흘 걸려 호수를 한 바퀴 돌고 그 물로 몸을 씻는다. 맑은 날에는 물빛이 하늘보다 푸르다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/manasarovar.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 마나사로바르 호수 (manasarovar), region 7. Source brief: 카일라스산 남쪽 기슭의 높은 호수. 힌두는 브라흐마가 마음으로 지은 호수라 하고, 불교도는 붓다의 어머니가 꿈에 몸을 씻은 아나바타프타 못이라 한다. 순례자들은 사흘 걸려 호수를 한 바퀴 돌고 그 물로 몸을 씻는다. 맑은 날에는 물빛이 하늘보다 푸르다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "dallake",
+    "name": "달 호수 — 카슈미르의 낙원",
+    "category": "nature",
+    "region": 5,
+    "description": "카슈미르 계곡 스리나가르 곁의 호수. 눈 덮인 산이 물에 비치고, 갈대 사이 떠다니는 밭에서 채소가 자란다. 무굴 황제 자항기르는 호숫가에 계단식 샬리마르 정원을 꾸미고 「땅 위에 낙원이 있다면 바로 여기」라 했다고 한다. 작은 배 시카라가 꽃과 과일을 싣고 오간다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/dallake.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 달 호수 — 카슈미르의 낙원 (dallake), region 5. Source brief: 카슈미르 계곡 스리나가르 곁의 호수. 눈 덮인 산이 물에 비치고, 갈대 사이 떠다니는 밭에서 채소가 자란다. 무굴 황제 자항기르는 호숫가에 계단식 샬리마르 정원을 꾸미고 「땅 위에 낙원이 있다면 바로 여기」라 했다고 한다. 작은 배 시카라가 꽃과 과일을 싣고 오간다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "gangotri",
+    "name": "강고트리 빙하 — 소의 입",
+    "category": "nature",
+    "region": 5,
+    "description": "히말라야 깊은 골짜기, 갠지스 강이 처음 시작되는 빙하의 끝. 얼음 굴 입구가 소의 입처럼 생겨 「가우무크」라 부르고, 그 입에서 차가운 잿빛 물이 쏟아진다. 힌두는 하늘의 강 강가가 시바의 머리칼을 타고 이곳으로 내려왔다고 믿는다. 순례자들은 얼음물에 몸을 담그고 그 물을 병에 담아 간다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/gangotri.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 강고트리 빙하 — 소의 입 (gangotri), region 5. Source brief: 히말라야 깊은 골짜기, 갠지스 강이 처음 시작되는 빙하의 끝. 얼음 굴 입구가 소의 입처럼 생겨 「가우무크」라 부르고, 그 입에서 차가운 잿빛 물이 쏟아진다. 힌두는 하늘의 강 강가가 시바의 머리칼을 타고 이곳으로 내려왔다고 믿는다. 순례자들은 얼음물에 몸을 담그고 그 물을 병에 담아 간다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "chilika",
+    "name": "칠리카 호수",
+    "category": "nature",
+    "region": 5,
+    "description": "벵골만 서쪽 해안, 모래톱 하나로 바다와 갈린 넓은 짠물 호수. 옛 칼링가의 배들이 이 물목에서 자바와 수마트라로 떠났다. 겨울이면 북쪽에서 날아온 물새 떼가 하늘을 덮고, 물목 근처에서는 머리가 둥근 돌고래가 물 위로 숨을 쉰다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/chilika.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 칠리카 호수 (chilika), region 5. Source brief: 벵골만 서쪽 해안, 모래톱 하나로 바다와 갈린 넓은 짠물 호수. 옛 칼링가의 배들이 이 물목에서 자바와 수마트라로 떠났다. 겨울이면 북쪽에서 날아온 물새 떼가 하늘을 덮고, 물목 근처에서는 머리가 둥근 돌고래가 물 위로 숨을 쉰다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "jogfalls",
+    "name": "게르소파 폭포",
+    "category": "nature",
+    "region": 5,
+    "description": "서고츠 산맥에서 샤라바티 강이 한 번에 떨어지는 높은 폭포. 우기가 되면 네 갈래 물줄기가 하나로 합쳐 골짜기를 물안개로 채운다. 강어귀의 게르소파는 포르투갈 사람들이 「후추의 여왕」이라 부른 여왕이 다스리던 땅으로, 그 후추를 사려고 배들이 드나들었다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/jogfalls.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 게르소파 폭포 (jogfalls), region 5. Source brief: 서고츠 산맥에서 샤라바티 강이 한 번에 떨어지는 높은 폭포. 우기가 되면 네 갈래 물줄기가 하나로 합쳐 골짜기를 물안개로 채운다. 강어귀의 게르소파는 포르투갈 사람들이 「후추의 여왕」이라 부른 여왕이 다스리던 땅으로, 그 후추를 사려고 배들이 드나들었다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "cedars",
+    "name": "레바논 삼나무 숲",
+    "category": "nature",
+    "region": 4,
+    "description": "레바논 산맥 높은 골짜기에 남은 늙은 삼나무 숲. 솔로몬은 이 나무로 예루살렘 성전을 지었고, 페니키아와 이집트 사람들은 배와 관을 만들었다. 수천 년을 베어 내어 이제 몇 백 그루만 남아, 산골 마론파 사람들은 「하나님의 삼나무」라 부르며 지킨다. 가지가 층층이 넓게 퍼져 그늘이 깊다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/cedars.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 레바논 삼나무 숲 (cedars), region 4. Source brief: 레바논 산맥 높은 골짜기에 남은 늙은 삼나무 숲. 솔로몬은 이 나무로 예루살렘 성전을 지었고, 페니키아와 이집트 사람들은 배와 관을 만들었다. 수천 년을 베어 내어 이제 몇 백 그루만 남아, 산골 마론파 사람들은 「하나님의 삼나무」라 부르며 지킨다. 가지가 층층이 넓게 퍼져 그늘이 깊다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "damavand",
+    "name": "다마반드산",
+    "category": "nature",
+    "region": 4,
+    "description": "레이 북동쪽 엘부르즈 산맥 위에 홀로 솟은 흰 화산. 꼭대기 갈라진 틈에서 유황 김이 피어오른다. 『샤나메』에서는 영웅 페리둔이 어깨에 뱀이 돋은 폭군 자하크를 이 산 굴에 쇠사슬로 묶어 두었다고 노래한다. 페르시아 사람들은 이 산을 나라의 등뼈로 여긴다.",
+    "extra": {
+      "clue": "book",
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/damavand.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 다마반드산 (damavand), region 4. Source brief: 레이 북동쪽 엘부르즈 산맥 위에 홀로 솟은 흰 화산. 꼭대기 갈라진 틈에서 유황 김이 피어오른다. 『샤나메』에서는 영웅 페리둔이 어깨에 뱀이 돋은 폭군 자하크를 이 산 굴에 쇠사슬로 묶어 두었다고 노래한다. 페르시아 사람들은 이 산을 나라의 등뼈로 여긴다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "wadirum",
+    "name": "와디 럼 — 달의 골짜기",
+    "category": "nature",
+    "region": 4,
+    "description": "아카바 만 북동쪽, 붉은 모래 바닥 위에 사암 바위산들이 성벽처럼 솟은 골짜기. 바람이 깎은 바위 다리와 바위틈 샘물이 있어, 나바테아 사람들이 바위에 신전을 깎고 벽에 낙타와 사냥꾼을 새겼다. 베두인은 지금도 검은 털 천막을 치고 이 골짜기를 지난다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/wadirum.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 와디 럼 — 달의 골짜기 (wadirum), region 4. Source brief: 아카바 만 북동쪽, 붉은 모래 바닥 위에 사암 바위산들이 성벽처럼 솟은 골짜기. 바람이 깎은 바위 다리와 바위틈 샘물이 있어, 나바테아 사람들이 바위에 신전을 깎고 벽에 낙타와 사냥꾼을 새겼다. 베두인은 지금도 검은 털 천막을 치고 이 골짜기를 지난다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "socotra",
+    "name": "소코트라 섬",
+    "category": "nature",
+    "region": 4,
+    "description": "아덴 만 어귀에 떨어진 섬. 우산을 뒤집어 펼친 듯한 나무가 고원에 서 있어, 줄기를 베면 피처럼 붉은 진이 흐른다 — 이것이 물감과 약으로 쓰는 「용의 피」다. 알로에와 유향도 나고, 옛 그리스 뱃사람들은 이 섬을 「행복의 섬」이라 불렀다. 계절풍이 거세어 한철에는 배가 닿지 못한다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/socotra.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 소코트라 섬 (socotra), region 4. Source brief: 아덴 만 어귀에 떨어진 섬. 우산을 뒤집어 펼친 듯한 나무가 고원에 서 있어, 줄기를 베면 피처럼 붉은 진이 흐른다 — 이것이 물감과 약으로 쓰는 「용의 피」다. 알로에와 유향도 나고, 옛 그리스 뱃사람들은 이 섬을 「행복의 섬」이라 불렀다. 계절풍이 거세어 한철에는 배가 닿지 못한다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "rubalkhali",
+    "name": "빈 구역 — 룹알할리",
+    "category": "nature",
+    "region": 4,
+    "description": "아라비아 반도 남쪽을 덮은 가장 큰 모래 바다. 산처럼 높은 모래 언덕이 끝없이 줄지어, 베두인조차 가장자리만 다닌다. 낮에는 모래가 타오르고 밤에는 물이 얼 듯 춥다. 모래 밑에 사라진 도시들이 묻혀 있다는 이야기가 전한다.",
+    "extra": {
+      "natural": true
+    },
+    "source": "tools/nature_gifs/sources/rubalkhali.png",
+    "prompt": "Create ONE extremely wide continuous 3:1 landscape panorama, 1536x512 or wider, for a historical exploration game. Subject: 빈 구역 — 룹알할리 (rubalkhali), region 4. Source brief: 아라비아 반도 남쪽을 덮은 가장 큰 모래 바다. 산처럼 높은 모래 언덕이 끝없이 줄지어, 베두인조차 가장자리만 다닌다. 낮에는 모래가 타오르고 밤에는 물이 얼 듯 춥다. 모래 밑에 사라진 도시들이 묻혀 있다는 이야기가 전한다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Accurately depict the distinctive landforms, plant life, water and local architecture described. Distant elevated viewpoint, landmark fully visible, ample scenery both sides for a horizontal camera pan. Neutral early daylight suitable for dawn-to-night grading. No modern buildings, tourists or modern infrastructure. One uninterrupted landscape, NOT a grid."
+  },
+  {
+    "id": "ellora",
+    "name": "엘로라의 카일라사 사원",
+    "category": "ruin",
+    "region": 5,
+    "description": "데칸 고원의 현무암 벼랑에 서른넷 굴 사원이 늘어서 있다. 불교·힌두·자이나교 사원이 나란히 있고, 그 가운데 카일라사 사원은 벼랑을 위에서부터 파 내려가 통바위 하나를 깎아 만든 거대한 사원이다. 코끼리와 신들의 조각이 실물처럼 서 있지만, 쌓아 올린 돌은 하나도 없다.",
+    "extra": {
+      "wonder": true,
+      "built": 760
+    },
+    "source": "tools/ruin_gifs/v2/master/ellora.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 엘로라의 카일라사 사원 (ellora), region 5. Source brief: 데칸 고원의 현무암 벼랑에 서른넷 굴 사원이 늘어서 있다. 불교·힌두·자이나교 사원이 나란히 있고, 그 가운데 카일라사 사원은 벼랑을 위에서부터 파 내려가 통바위 하나를 깎아 만든 거대한 사원이다. 코끼리와 신들의 조각이 실물처럼 서 있지만, 쌓아 올린 돌은 하나도 없다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "khajuraho",
+    "name": "카주라호 사원군",
+    "category": "ruin",
+    "region": 5,
+    "description": "분델칸드 숲속, 찬델라 왕들이 세운 사원 수십 채. 산봉우리처럼 겹겹이 솟은 지붕 아래 바깥벽이 춤추는 천녀와 악사, 신과 연인의 조각으로 빈틈없이 덮였다. 이븐 바투타는 이 호숫가에서 머리를 길게 기른 수행자들을 보았다고 적었다.",
+    "extra": {
+      "wonder": true,
+      "built": 950
+    },
+    "source": "tools/ruin_gifs/v2/master/khajuraho.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 카주라호 사원군 (khajuraho), region 5. Source brief: 분델칸드 숲속, 찬델라 왕들이 세운 사원 수십 채. 산봉우리처럼 겹겹이 솟은 지붕 아래 바깥벽이 춤추는 천녀와 악사, 신과 연인의 조각으로 빈틈없이 덮였다. 이븐 바투타는 이 호숫가에서 머리를 길게 기른 수행자들을 보았다고 적었다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "konark",
+    "name": "코나르크 태양 사원",
+    "category": "ruin",
+    "region": 5,
+    "description": "벵골만 바닷가, 태양신 수리야가 타고 다니는 수레를 돌로 만든 사원. 돌 바퀴 스물네 개가 기단에 새겨져 있고, 일곱 마리 말이 그 수레를 끈다. 바퀴살 그림자로 시각을 읽을 수 있다고 한다. 바다에서도 높은 탑이 보여, 뱃사람들은 「검은 탑」이라 부르며 길잡이로 삼았다.",
+    "extra": {
+      "wonder": true,
+      "built": 1250
+    },
+    "source": "tools/ruin_gifs/v2/master/konark.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 코나르크 태양 사원 (konark), region 5. Source brief: 벵골만 바닷가, 태양신 수리야가 타고 다니는 수레를 돌로 만든 사원. 돌 바퀴 스물네 개가 기단에 새겨져 있고, 일곱 마리 말이 그 수레를 끈다. 바퀴살 그림자로 시각을 읽을 수 있다고 한다. 바다에서도 높은 탑이 보여, 뱃사람들은 「검은 탑」이라 부르며 길잡이로 삼았다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "vittala",
+    "name": "비탈라 사원 — 노래하는 기둥",
+    "category": "ruin",
+    "region": 5,
+    "description": "비자야나가르 퉁가바드라 강가, 비슈누를 모신 사원. 뜰에는 가루다를 모신 돌 수레가 서 있는데, 돌 바퀴가 금방이라도 굴러갈 듯하다. 큰 회랑의 가는 돌기둥들은 손가락으로 두드리면 저마다 다른 음을 내서 「노래하는 기둥」이라 부른다. 포르투갈 사람 파이스는 이 도시가 로마만큼 크다고 적었다.",
+    "extra": {
+      "wonder": true,
+      "built": 1513,
+      "city": 153
+    },
+    "source": "tools/ruin_gifs/v2/master/vittala.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 비탈라 사원 — 노래하는 기둥 (vittala), region 5. Source brief: 비자야나가르 퉁가바드라 강가, 비슈누를 모신 사원. 뜰에는 가루다를 모신 돌 수레가 서 있는데, 돌 바퀴가 금방이라도 굴러갈 듯하다. 큰 회랑의 가는 돌기둥들은 손가락으로 두드리면 저마다 다른 음을 내서 「노래하는 기둥」이라 부른다. 포르투갈 사람 파이스는 이 도시가 로마만큼 크다고 적었다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "harmandir",
+    "name": "하르만디르 사히브 — 감로 연못의 사원",
+    "category": "ruin",
+    "region": 5,
+    "description": "라호르 동쪽 암리차르, 「불사의 감로 연못」 한가운데 세운 시크교의 사원. 다섯째 구루 아르잔이 1604년에 경전 『아디 그란트』를 처음 모셨다. 누구나 들어오라는 뜻으로 사방에 문을 내었고, 사원 부엌 「랑가르」에서는 신분을 가리지 않고 바닥에 나란히 앉아 같은 밥을 먹는다.",
+    "extra": {
+      "wonder": true,
+      "built": 1604
+    },
+    "source": "tools/ruin_gifs/v2/master/harmandir.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 하르만디르 사히브 — 감로 연못의 사원 (harmandir), region 5. Source brief: 라호르 동쪽 암리차르, 「불사의 감로 연못」 한가운데 세운 시크교의 사원. 다섯째 구루 아르잔이 1604년에 경전 『아디 그란트』를 처음 모셨다. 누구나 들어오라는 뜻으로 사방에 문을 내었고, 사원 부엌 「랑가르」에서는 신분을 가리지 않고 바닥에 나란히 앉아 같은 밥을 먹는다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "umayyad",
+    "name": "우마이야 모스크",
+    "category": "ruin",
+    "region": 4,
+    "description": "다마스쿠스 한가운데, 옛 로마 신전과 세례 요한 교회 자리에 칼리파 왈리드 1세가 지은 큰 모스크. 뜰을 두른 벽은 금빛 유리 모자이크로 강과 나무와 궁전이 가득한 낙원을 그렸다. 기도실 안에는 세례 요한의 머리를 모신 사당이 있어, 무슬림과 그리스도교도가 함께 찾는다.",
+    "extra": {
+      "wonder": true,
+      "built": 715,
+      "city": 119
+    },
+    "source": "tools/ruin_gifs/v2/master/umayyad.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 우마이야 모스크 (umayyad), region 4. Source brief: 다마스쿠스 한가운데, 옛 로마 신전과 세례 요한 교회 자리에 칼리파 왈리드 1세가 지은 큰 모스크. 뜰을 두른 벽은 금빛 유리 모자이크로 강과 나무와 궁전이 가득한 낙원을 그렸다. 기도실 안에는 세례 요한의 머리를 모신 사당이 있어, 무슬림과 그리스도교도가 함께 찾는다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "topkapi",
+    "name": "톱카프 궁전",
+    "category": "ruin",
+    "region": 4,
+    "description": "정복자 메흐메트 2세가 콘스탄티노플을 얻은 뒤 보스포루스와 금각만이 내려다보이는 곶에 지은 술탄의 궁전. 문을 하나 지날 때마다 뜰이 한 겹씩 깊어지고, 맨 안쪽 하렘과 보물 창고에는 아무나 들어갈 수 없다. 궁전 부엌의 굴뚝들이 줄지어 서서 하루에 수천 명의 밥을 짓는다.",
+    "extra": {
+      "wonder": true,
+      "built": 1478,
+      "city": 112
+    },
+    "source": "tools/ruin_gifs/v2/master/topkapi.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 톱카프 궁전 (topkapi), region 4. Source brief: 정복자 메흐메트 2세가 콘스탄티노플을 얻은 뒤 보스포루스와 금각만이 내려다보이는 곶에 지은 술탄의 궁전. 문을 하나 지날 때마다 뜰이 한 겹씩 깊어지고, 맨 안쪽 하렘과 보물 창고에는 아무나 들어갈 수 없다. 궁전 부엌의 굴뚝들이 줄지어 서서 하루에 수천 명의 밥을 짓는다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "krak",
+    "name": "크락 데 슈발리에",
+    "category": "ruin",
+    "region": 4,
+    "description": "시리아 홈스 고개를 내려다보는 언덕 위, 구호기사단이 넓히고 고쳐 쌓은 십자군의 성. 두 겹 성벽 사이에 해자와 가파른 돌 비탈을 두어 백 년 넘게 함락되지 않았다. 1271년 맘루크의 술탄 바이바르스가 거짓 편지로 기사들을 내보내 마침내 차지했다고 전한다.",
+    "extra": {
+      "wonder": true,
+      "built": 1142
+    },
+    "source": "tools/ruin_gifs/v2/master/krak.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 크락 데 슈발리에 (krak), region 4. Source brief: 시리아 홈스 고개를 내려다보는 언덕 위, 구호기사단이 넓히고 고쳐 쌓은 십자군의 성. 두 겹 성벽 사이에 해자와 가파른 돌 비탈을 두어 백 년 넘게 함락되지 않았다. 1271년 맘루크의 술탄 바이바르스가 거짓 편지로 기사들을 내보내 마침내 차지했다고 전한다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "shibam",
+    "name": "시밤 — 흙으로 쌓은 탑집 도시",
+    "category": "ruin",
+    "region": 4,
+    "description": "하드라마우트 골짜기 한가운데, 흙벽돌로 쌓은 집 오백 채가 성벽 안에 빽빽이 솟은 도시. 집마다 대여섯 층이 넘어 하늘에 닿을 듯한 탑처럼 보인다. 홍수와 약탈을 피해 위로 쌓아 올렸고, 지붕과 지붕 사이에 다리를 걸쳐 오간다. 큰물이 지나간 뒤에는 흙을 이겨 벽을 새로 바른다.",
+    "extra": {
+      "wonder": true,
+      "built": 1532
+    },
+    "source": "tools/ruin_gifs/v2/master/shibam.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 시밤 — 흙으로 쌓은 탑집 도시 (shibam), region 4. Source brief: 하드라마우트 골짜기 한가운데, 흙벽돌로 쌓은 집 오백 채가 성벽 안에 빽빽이 솟은 도시. 집마다 대여섯 층이 넘어 하늘에 닿을 듯한 탑처럼 보인다. 홍수와 약탈을 피해 위로 쌓아 올렸고, 지붕과 지붕 사이에 다리를 걸쳐 오간다. 큰물이 지나간 뒤에는 흙을 이겨 벽을 새로 바른다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "siosepol",
+    "name": "시오세 다리",
+    "category": "ruin",
+    "region": 4,
+    "description": "이스파한의 자얀데 강을 건너는 두 층 돌다리. 샤 아바스 1세의 장군 알라베르디 칸이 지었고, 아치 서른셋이 줄지어 있다. 위층 회랑은 사람이 걷고 아래층 아치 사이로 강물이 흐른다. 이스파한의 아르메니아 사람들은 해마다 이 다리 아래에서 서로 물을 뿌리는 축제를 연다.",
+    "extra": {
+      "wonder": true,
+      "built": 1602,
+      "city": 130
+    },
+    "source": "tools/ruin_gifs/v2/master/siosepol.png",
+    "prompt": "Create ONE exact 4-column by 4-row storyboard master sheet (16 equal rectangular cells), landscape canvas 2048x1536, for a historical landmark reconstruction animation. Subject: 시오세 다리 (siosepol), region 4. Source brief: 이스파한의 자얀데 강을 건너는 두 층 돌다리. 샤 아바스 1세의 장군 알라베르디 칸이 지었고, 아치 서른셋이 줄지어 있다. 위층 회랑은 사람이 걷고 아래층 아치 사이로 강물이 흐른다. 이스파한의 아르메니아 사람들은 해마다 이 다리 아래에서 서로 물을 뿌리는 축제를 연다.. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Cells touch without borders, all content safely inside its own cell. Row-major: cells 1-7 show seven genuinely different cumulative construction stages of THIS specific structure: surveyed empty terrain, foundations, rising structural frame, exterior cladding, completed roofs and interiors, landscaping, finished historical landmark. Cell 8 is a finished watercolor establishing view. Cells 9-16 show the same completed landmark from eight different elevated azimuths 0,45,90,135,180,225,270,315 degrees. Stable building identity and proportions, entire towers and roofs visible with generous headroom, NO closeups, no duplicated front view pretending to rotate. Historically plausible original materials, no modern tourists or construction machinery. Distinct architecture matching the source brief, not a generic palace. All 16 cells form a regular 4x4 grid, no text."
+  },
+  {
+    "id": "folk_zulu",
+    "name": "줄루 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "구릉의 소 우리를 둘러싼 마을에서, 젊은이 무리가 소가죽 방패를 든 채 다리를 머리 높이까지 차올렸다가 땅을 내리찍는 「인들라무」 춤을 춘다. 한 사람이 노래를 메기면 모두가 받는 소리가 언덕을 울린다. 잔치에는 수수로 빚은 걸쭉한 맥주와 구운 쇠고기가 빠지지 않는다. 소년들은 긴 막대와 짧은 막대로 치고 막는 막대 싸움으로 몸을 단련한다.",
+    "extra": {
+      "folk": {
+        "music": "한 사람이 메기고 모두가 받는 합창 — 발 구름이 장단이 된다",
+        "dance": "인들라무 — 방패를 들고 다리를 높이 차올려 땅을 내리찍는 춤",
+        "inst": "소가죽 북, 박 울림통을 단 활 「우구부」",
+        "food": "수수 맥주, 시큼하게 삭힌 우유 「아마시」, 구운 쇠고기",
+        "martial": "막대 싸움 — 한 손엔 막는 막대, 한 손엔 치는 막대"
+      },
+      "folkLocal": true,
+      "homeCity": 298,
+      "folkCities": [
+        298
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_zulu.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 줄루 사람들 (folk_zulu), region 3. Source brief: 구릉의 소 우리를 둘러싼 마을에서, 젊은이 무리가 소가죽 방패를 든 채 다리를 머리 높이까지 차올렸다가 땅을 내리찍는 「인들라무」 춤을 춘다. 한 사람이 노래를 메기면 모두가 받는 소리가 언덕을 울린다. 잔치에는 수수로 빚은 걸쭉한 맥주와 구운 쇠고기가 빠지지 않는다. 소년들은 긴 막대와 짧은 막대로 치고 막는 막대 싸움으로 몸을 단련한다.. Cultural activity brief: {\"music\":\"한 사람이 메기고 모두가 받는 합창 — 발 구름이 장단이 된다\",\"dance\":\"인들라무 — 방패를 들고 다리를 높이 차올려 땅을 내리찍는 춤\",\"inst\":\"소가죽 북, 박 울림통을 단 활 「우구부」\",\"food\":\"수수 맥주, 시큼하게 삭힌 우유 「아마시」, 구운 쇠고기\",\"martial\":\"막대 싸움 — 한 손엔 막는 막대, 한 손엔 치는 막대\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_maasai",
+    "name": "마사이 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "붉은 천을 두른 젊은 전사들이 둥글게 서서 목 깊은 데서 끊어 내는 소리로 장단을 넣고, 한 사람씩 앞으로 나와 무릎을 굽히지 않고 하늘로 곧게 뛰어오른다. 높이 뛸수록 칭찬을 받는다. 소의 젖에 소의 피를 섞어 마시고, 잔치 때만 고기를 굽는다. 사자를 창으로 잡아야 어른 전사가 되었다는 이야기가 전한다.",
+    "extra": {
+      "folk": {
+        "music": "악기 없이 목 깊은 소리로만 장단을 맞추는 합창",
+        "dance": "아두무 — 둥글게 서서 한 사람씩 곧게 뛰어오르는 춤",
+        "inst": "쿠두 뿔 나팔",
+        "food": "소젖에 소의 피를 섞은 음료, 잔치 때의 구운 쇠고기",
+        "martial": "긴 날 창과 던지는 곤봉 「오린카」"
+      },
+      "folkLocal": true,
+      "homeCity": 299,
+      "folkCities": [
+        299
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_maasai.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 마사이 사람들 (folk_maasai), region 3. Source brief: 붉은 천을 두른 젊은 전사들이 둥글게 서서 목 깊은 데서 끊어 내는 소리로 장단을 넣고, 한 사람씩 앞으로 나와 무릎을 굽히지 않고 하늘로 곧게 뛰어오른다. 높이 뛸수록 칭찬을 받는다. 소의 젖에 소의 피를 섞어 마시고, 잔치 때만 고기를 굽는다. 사자를 창으로 잡아야 어른 전사가 되었다는 이야기가 전한다.. Cultural activity brief: {\"music\":\"악기 없이 목 깊은 소리로만 장단을 맞추는 합창\",\"dance\":\"아두무 — 둥글게 서서 한 사람씩 곧게 뛰어오르는 춤\",\"inst\":\"쿠두 뿔 나팔\",\"food\":\"소젖에 소의 피를 섞은 음료, 잔치 때의 구운 쇠고기\",\"martial\":\"긴 날 창과 던지는 곤봉 「오린카」\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_xhosa",
+    "name": "코사 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "코사 여인들은 한 사람이 목에서 두 음을 한꺼번에 내는 노래를 부른다. 박 울림통을 단 활 「우하디」를 막대로 두드리며 그 소리를 겹친다. 춤꾼은 어깨와 가슴을 빠르게 떨어 장단을 탄다. 남자들은 막대 두 개로 맞서는 막대 싸움으로 겨루고, 잔치에는 수수를 빻아 콩과 끓인 죽과 수수 맥주가 나온다. 혀 차는 소리가 섞인 말 자체가 노래처럼 들린다.",
+    "extra": {
+      "folk": {
+        "music": "한 사람이 목에서 두 음을 함께 내는 노래",
+        "dance": "어깨와 가슴을 빠르게 떠는 춤",
+        "inst": "박 울림통 활 「우하디」, 입에 대고 튕기는 활",
+        "food": "수수와 콩을 끓인 죽, 수수 맥주",
+        "martial": "막대 싸움"
+      },
+      "folkLocal": true,
+      "homeCity": 300,
+      "folkCities": [
+        300
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_xhosa.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 코사 사람들 (folk_xhosa), region 3. Source brief: 코사 여인들은 한 사람이 목에서 두 음을 한꺼번에 내는 노래를 부른다. 박 울림통을 단 활 「우하디」를 막대로 두드리며 그 소리를 겹친다. 춤꾼은 어깨와 가슴을 빠르게 떨어 장단을 탄다. 남자들은 막대 두 개로 맞서는 막대 싸움으로 겨루고, 잔치에는 수수를 빻아 콩과 끓인 죽과 수수 맥주가 나온다. 혀 차는 소리가 섞인 말 자체가 노래처럼 들린다.. Cultural activity brief: {\"music\":\"한 사람이 목에서 두 음을 함께 내는 노래\",\"dance\":\"어깨와 가슴을 빠르게 떠는 춤\",\"inst\":\"박 울림통 활 「우하디」, 입에 대고 튕기는 활\",\"food\":\"수수와 콩을 끓인 죽, 수수 맥주\",\"martial\":\"막대 싸움\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_yoruba",
+    "name": "요루바 사람들 — 말하는 북",
+    "category": "people",
+    "region": 3,
+    "description": "오요 장터에서는 겨드랑이에 낀 북 「두두」가 사람 말처럼 높낮이를 바꾸며 운다. 요루바 말은 소리의 높낮이로 뜻이 갈려서, 북잡이가 장단으로 임금의 이름과 칭송을 그대로 「말한다」. 온몸을 천으로 덮은 조상 넋 「에궁군」이 천을 펄럭이며 거리를 돌고, 사람들은 얌을 찧은 떡에 진한 국을 곁들여 먹는다. 말 탄 군사들의 창 솜씨도 이름났다.",
+    "extra": {
+      "folk": {
+        "music": "말하는 북으로 사람의 칭송과 소식을 전하는 장단",
+        "dance": "에궁군 — 온몸을 천으로 덮은 조상 넋의 가면 춤",
+        "inst": "말하는 북 「두두」, 바타 북, 쇠방울 「아고고」",
+        "food": "얌을 찧은 떡 「이욘」과 진한 국",
+        "martial": "오요 기병의 말 위 창술"
+      },
+      "folkLocal": true,
+      "homeCity": 301,
+      "folkCities": [
+        301
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_yoruba.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 요루바 사람들 — 말하는 북 (folk_yoruba), region 3. Source brief: 오요 장터에서는 겨드랑이에 낀 북 「두두」가 사람 말처럼 높낮이를 바꾸며 운다. 요루바 말은 소리의 높낮이로 뜻이 갈려서, 북잡이가 장단으로 임금의 이름과 칭송을 그대로 「말한다」. 온몸을 천으로 덮은 조상 넋 「에궁군」이 천을 펄럭이며 거리를 돌고, 사람들은 얌을 찧은 떡에 진한 국을 곁들여 먹는다. 말 탄 군사들의 창 솜씨도 이름났다.. Cultural activity brief: {\"music\":\"말하는 북으로 사람의 칭송과 소식을 전하는 장단\",\"dance\":\"에궁군 — 온몸을 천으로 덮은 조상 넋의 가면 춤\",\"inst\":\"말하는 북 「두두」, 바타 북, 쇠방울 「아고고」\",\"food\":\"얌을 찧은 떡 「이욘」과 진한 국\",\"martial\":\"오요 기병의 말 위 창술\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_hausa",
+    "name": "하우사 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "카치나의 임금이 행차하면 긴 쇠 나팔 「카카키」가 울려 길을 연다. 장터에서는 칭송 노래꾼이 겨드랑이 북 「칼랑구」를 치며 사람들을 불러 모은다. 젊은이들은 한 손을 천으로 감아 주먹 삼고 다른 손을 방패 삼는 권투 「담베」를 북장단에 맞춰 겨룬다. 수수 떡 「투오」에 바오밥 잎 국을 곁들인다.",
+    "extra": {
+      "folk": {
+        "music": "칭송 노래꾼의 북 장단",
+        "dance": "장터 북장단에 맞춘 겨루기 춤",
+        "inst": "긴 쇠 나팔 「카카키」, 겨드랑이 북 「칼랑구」, 외줄 바이올린 「고제」",
+        "food": "수수 떡 「투오」와 바오밥 잎 국",
+        "martial": "담베 — 한 손을 천으로 감아 치는 하우사 권투"
+      },
+      "folkLocal": true,
+      "homeCity": 302,
+      "folkCities": [
+        302
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_hausa.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 하우사 사람들 (folk_hausa), region 3. Source brief: 카치나의 임금이 행차하면 긴 쇠 나팔 「카카키」가 울려 길을 연다. 장터에서는 칭송 노래꾼이 겨드랑이 북 「칼랑구」를 치며 사람들을 불러 모은다. 젊은이들은 한 손을 천으로 감아 주먹 삼고 다른 손을 방패 삼는 권투 「담베」를 북장단에 맞춰 겨룬다. 수수 떡 「투오」에 바오밥 잎 국을 곁들인다.. Cultural activity brief: {\"music\":\"칭송 노래꾼의 북 장단\",\"dance\":\"장터 북장단에 맞춘 겨루기 춤\",\"inst\":\"긴 쇠 나팔 「카카키」, 겨드랑이 북 「칼랑구」, 외줄 바이올린 「고제」\",\"food\":\"수수 떡 「투오」와 바오밥 잎 국\",\"martial\":\"담베 — 한 손을 천으로 감아 치는 하우사 권투\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_fulani",
+    "name": "풀라니 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "소를 몰고 사헬을 떠도는 풀라니 사람들이 철 따라 모이는 날, 어떤 무리의 젊은 남자들은 얼굴을 칠하고 눈을 크게 뜨며 이를 드러내 웃는 「게레올」 춤으로 아름다움을 겨룬다. 대나무 피리와 외줄 바이올린 소리가 울리고, 기장 경단에 삭힌 우유를 부어 먹는다. 소년들은 회초리를 맞고도 웃어 보이는 「샤로」로 사내다움을 증명한다.",
+    "extra": {
+      "folk": {
+        "music": "대나무 피리 가락, 소를 부르는 노래",
+        "dance": "게레올 — 젊은 남자들이 얼굴을 칠하고 아름다움을 겨루는 춤",
+        "inst": "대나무 피리, 외줄 바이올린",
+        "food": "기장 경단에 삭힌 우유를 부은 「푸라」",
+        "martial": "샤로 — 회초리를 맞고도 웃어 보이는 겨루기"
+      },
+      "folkLocal": true,
+      "homeCity": 303,
+      "folkCities": [
+        303
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_fulani.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 풀라니 사람들 (folk_fulani), region 3. Source brief: 소를 몰고 사헬을 떠도는 풀라니 사람들이 철 따라 모이는 날, 어떤 무리의 젊은 남자들은 얼굴을 칠하고 눈을 크게 뜨며 이를 드러내 웃는 「게레올」 춤으로 아름다움을 겨룬다. 대나무 피리와 외줄 바이올린 소리가 울리고, 기장 경단에 삭힌 우유를 부어 먹는다. 소년들은 회초리를 맞고도 웃어 보이는 「샤로」로 사내다움을 증명한다.. Cultural activity brief: {\"music\":\"대나무 피리 가락, 소를 부르는 노래\",\"dance\":\"게레올 — 젊은 남자들이 얼굴을 칠하고 아름다움을 겨루는 춤\",\"inst\":\"대나무 피리, 외줄 바이올린\",\"food\":\"기장 경단에 삭힌 우유를 부은 「푸라」\",\"martial\":\"샤로 — 회초리를 맞고도 웃어 보이는 겨루기\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_amazigh",
+    "name": "아마지그(베르베르) 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "아틀라스 산골 성채 마을의 저녁, 남녀가 어깨를 맞대고 줄지어 서서 노래를 주고받는 「아화쉬」가 벌어진다. 가운데에서 큰 틀북 「반디르」를 치면 줄 전체가 몸을 앞뒤로 흔든다. 흙솥 타진에 양고기와 말린 과일을 뭉근히 찌고, 잔치에는 쿠스쿠스를 산처럼 담는다. 말 탄 사내들이 줄지어 달리다 한꺼번에 총을 쏘는 기마 놀이도 있다.",
+    "extra": {
+      "folk": {
+        "music": "노래를 메기고 받는 「아화쉬」",
+        "dance": "어깨를 맞댄 줄춤 「아화쉬」",
+        "inst": "틀북 「반디르」, 외줄 바이올린 「리박」",
+        "food": "흙솥 「타진」, 쿠스쿠스, 아르간 기름과 꿀을 섞은 「암루」",
+        "martial": "줄지어 달리다 한꺼번에 총을 쏘는 기마 놀이"
+      },
+      "folkLocal": true,
+      "homeCity": 304,
+      "folkCities": [
+        304
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_amazigh.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 아마지그(베르베르) 사람들 (folk_amazigh), region 3. Source brief: 아틀라스 산골 성채 마을의 저녁, 남녀가 어깨를 맞대고 줄지어 서서 노래를 주고받는 「아화쉬」가 벌어진다. 가운데에서 큰 틀북 「반디르」를 치면 줄 전체가 몸을 앞뒤로 흔든다. 흙솥 타진에 양고기와 말린 과일을 뭉근히 찌고, 잔치에는 쿠스쿠스를 산처럼 담는다. 말 탄 사내들이 줄지어 달리다 한꺼번에 총을 쏘는 기마 놀이도 있다.. Cultural activity brief: {\"music\":\"노래를 메기고 받는 「아화쉬」\",\"dance\":\"어깨를 맞댄 줄춤 「아화쉬」\",\"inst\":\"틀북 「반디르」, 외줄 바이올린 「리박」\",\"food\":\"흙솥 「타진」, 쿠스쿠스, 아르간 기름과 꿀을 섞은 「암루」\",\"martial\":\"줄지어 달리다 한꺼번에 총을 쏘는 기마 놀이\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_san",
+    "name": "산 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "칼라하리의 밤, 여인들이 모닥불 둘레에 앉아 손뼉으로 복잡한 장단을 치며 노래하고, 남자들은 발목에 누에고치 방울을 차고 불 둘레를 돈다. 춤이 깊어지면 춤꾼이 넋을 잃고 쓰러지는데, 그때 병을 고치는 힘이 깃든다고 믿는다. 사냥꾼은 독화살을 쓰고, 땅속 덩이뿌리와 타조알 껍데기에 담은 물로 사막을 견딘다. 바위에는 이 춤을 추는 사람들이 그림으로 남아 있다.",
+    "extra": {
+      "folk": {
+        "music": "손뼉 장단에 실은 여러 갈래 노래",
+        "dance": "치유의 춤 — 불 둘레를 돌다 넋을 잃는 춤",
+        "inst": "누에고치 발목 방울, 사냥 활을 튕기는 소리",
+        "food": "땅속 덩이뿌리와 몽공고 열매, 타조알에 담은 물",
+        "martial": "독화살 활쏘기와 짐승 발자국 읽기"
+      },
+      "folkLocal": true,
+      "homeCity": 305,
+      "folkCities": [
+        305
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_san.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 산 사람들 (folk_san), region 3. Source brief: 칼라하리의 밤, 여인들이 모닥불 둘레에 앉아 손뼉으로 복잡한 장단을 치며 노래하고, 남자들은 발목에 누에고치 방울을 차고 불 둘레를 돈다. 춤이 깊어지면 춤꾼이 넋을 잃고 쓰러지는데, 그때 병을 고치는 힘이 깃든다고 믿는다. 사냥꾼은 독화살을 쓰고, 땅속 덩이뿌리와 타조알 껍데기에 담은 물로 사막을 견딘다. 바위에는 이 춤을 추는 사람들이 그림으로 남아 있다.. Cultural activity brief: {\"music\":\"손뼉 장단에 실은 여러 갈래 노래\",\"dance\":\"치유의 춤 — 불 둘레를 돌다 넋을 잃는 춤\",\"inst\":\"누에고치 발목 방울, 사냥 활을 튕기는 소리\",\"food\":\"땅속 덩이뿌리와 몽공고 열매, 타조알에 담은 물\",\"martial\":\"독화살 활쏘기와 짐승 발자국 읽기\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_tuareg",
+    "name": "투아레그 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "사막 천막에서 여인들이 외줄 바이올린 「임자드」를 켜며 노래를 지으면, 푸른 천으로 얼굴을 가린 남자들이 낙타를 타고 모여든다. 절구에 가죽을 씌운 북 「텐데」를 두드리면 낙타 탄 사내들이 장단에 맞춰 원을 돈다. 모래 속 숯불에 묻어 구운 빵 「타겔라」를 낙타 젖과 함께 먹는다. 남자들은 곧은 칼 「타코바」와 영양 가죽 방패를 지닌다.",
+    "extra": {
+      "folk": {
+        "music": "여인이 켜는 임자드 가락에 붙인 노래",
+        "dance": "텐데 북에 맞춰 낙타를 몰아 원을 그리는 놀이",
+        "inst": "외줄 바이올린 「임자드」, 절구 북 「텐데」",
+        "food": "모래 속 숯불에 구운 빵 「타겔라」, 낙타 젖",
+        "martial": "곧은 칼 「타코바」와 영양 가죽 방패"
+      },
+      "folkLocal": true,
+      "homeCity": 306,
+      "folkCities": [
+        306
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_tuareg.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 투아레그 사람들 (folk_tuareg), region 3. Source brief: 사막 천막에서 여인들이 외줄 바이올린 「임자드」를 켜며 노래를 지으면, 푸른 천으로 얼굴을 가린 남자들이 낙타를 타고 모여든다. 절구에 가죽을 씌운 북 「텐데」를 두드리면 낙타 탄 사내들이 장단에 맞춰 원을 돈다. 모래 속 숯불에 묻어 구운 빵 「타겔라」를 낙타 젖과 함께 먹는다. 남자들은 곧은 칼 「타코바」와 영양 가죽 방패를 지닌다.. Cultural activity brief: {\"music\":\"여인이 켜는 임자드 가락에 붙인 노래\",\"dance\":\"텐데 북에 맞춰 낙타를 몰아 원을 그리는 놀이\",\"inst\":\"외줄 바이올린 「임자드」, 절구 북 「텐데」\",\"food\":\"모래 속 숯불에 구운 빵 「타겔라」, 낙타 젖\",\"martial\":\"곧은 칼 「타코바」와 영양 가죽 방패\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_oromo",
+    "name": "오로모 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "가다 모임의 날, 큰 무화과나무 아래에 모여 법을 정하고 나면 노래와 춤이 이어진다. 남자들은 어깨와 머리를 빠르게 흔드는 춤을 추고, 여인들은 목소리를 높게 떨며 환호한다. 커피 열매를 버터에 볶아 귀한 손님에게 대접하고, 꿀술을 돌린다. 말을 달리며 막대 창을 던지고 피하는 겨루기로 젊은이들이 솜씨를 겨룬다.",
+    "extra": {
+      "folk": {
+        "music": "메기고 받는 칭송 노래, 여인들의 떨리는 환호성",
+        "dance": "어깨와 머리를 흔드는 춤",
+        "inst": "외줄 바이올린, 쇠뿔 나팔",
+        "food": "버터에 볶은 커피 열매, 꿀술",
+        "martial": "말을 달리며 막대 창을 던지고 피하는 겨루기"
+      },
+      "folkLocal": true,
+      "homeCity": 307,
+      "folkCities": [
+        307
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_oromo.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 오로모 사람들 (folk_oromo), region 3. Source brief: 가다 모임의 날, 큰 무화과나무 아래에 모여 법을 정하고 나면 노래와 춤이 이어진다. 남자들은 어깨와 머리를 빠르게 흔드는 춤을 추고, 여인들은 목소리를 높게 떨며 환호한다. 커피 열매를 버터에 볶아 귀한 손님에게 대접하고, 꿀술을 돌린다. 말을 달리며 막대 창을 던지고 피하는 겨루기로 젊은이들이 솜씨를 겨룬다.. Cultural activity brief: {\"music\":\"메기고 받는 칭송 노래, 여인들의 떨리는 환호성\",\"dance\":\"어깨와 머리를 흔드는 춤\",\"inst\":\"외줄 바이올린, 쇠뿔 나팔\",\"food\":\"버터에 볶은 커피 열매, 꿀술\",\"martial\":\"말을 달리며 막대 창을 던지고 피하는 겨루기\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_akan",
+    "name": "아칸(아샨티) 사람들",
+    "category": "people",
+    "region": 3,
+    "description": "숲속 마을에서 큰 북 「아톰팡」 한 쌍이 남녀 목소리처럼 높고 낮게 울려 조상과 임금의 이름을 부른다. 춤꾼은 손짓 발짓 하나하나로 뜻을 전하는 「아도와」를 추고, 상아 나팔이 임금의 행차를 알린다. 플랜틴과 얌을 찧은 떡에 야자 기름 국을 곁들여 먹는다. 금 무게를 다는 작은 놋쇠 추에는 속담이 그림으로 새겨져 있다.",
+    "extra": {
+      "folk": {
+        "music": "큰 북 한 쌍으로 조상의 이름을 부르는 장단",
+        "dance": "아도와 — 손짓 발짓으로 뜻을 전하는 춤",
+        "inst": "북 한 쌍 「아톰팡」, 상아 나팔",
+        "food": "플랜틴과 얌을 찧은 떡 「푸푸」, 야자 기름 국"
+      },
+      "folkLocal": true,
+      "homeCity": 308,
+      "folkCities": [
+        308
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_akan.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 아칸(아샨티) 사람들 (folk_akan), region 3. Source brief: 숲속 마을에서 큰 북 「아톰팡」 한 쌍이 남녀 목소리처럼 높고 낮게 울려 조상과 임금의 이름을 부른다. 춤꾼은 손짓 발짓 하나하나로 뜻을 전하는 「아도와」를 추고, 상아 나팔이 임금의 행차를 알린다. 플랜틴과 얌을 찧은 떡에 야자 기름 국을 곁들여 먹는다. 금 무게를 다는 작은 놋쇠 추에는 속담이 그림으로 새겨져 있다.. Cultural activity brief: {\"music\":\"큰 북 한 쌍으로 조상의 이름을 부르는 장단\",\"dance\":\"아도와 — 손짓 발짓으로 뜻을 전하는 춤\",\"inst\":\"북 한 쌍 「아톰팡」, 상아 나팔\",\"food\":\"플랜틴과 얌을 찧은 떡 「푸푸」, 야자 기름 국\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_dakota",
+    "name": "다코타 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "호숫가 마을에서 큰 북 하나를 여럿이 둘러앉아 함께 치며 높은 소리로 노래한다. 사냥을 앞두면 들소의 몸짓을 흉내 내는 춤을 추고, 넋이 깃든 담뱃대를 돌려 피운다. 젊은이는 삼나무 피리로 연인에게 마음을 전한다. 가을이면 카누를 타고 호수의 야생 벼를 막대로 털어 거둔다.",
+    "extra": {
+      "folk": {
+        "music": "큰 북 하나를 여럿이 둘러앉아 치는 노래",
+        "dance": "들소 춤 — 사냥 전에 들소 몸짓을 흉내 내는 춤",
+        "inst": "큰 북, 삼나무 연애 피리",
+        "food": "호수의 야생 벼, 말린 들소 고기",
+        "martial": "막대 공놀이, 전쟁 곤봉"
+      },
+      "folkLocal": true,
+      "homeCity": 230,
+      "folkCities": [
+        230
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_dakota.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 다코타 사람들 (folk_dakota), region 10. Source brief: 호숫가 마을에서 큰 북 하나를 여럿이 둘러앉아 함께 치며 높은 소리로 노래한다. 사냥을 앞두면 들소의 몸짓을 흉내 내는 춤을 추고, 넋이 깃든 담뱃대를 돌려 피운다. 젊은이는 삼나무 피리로 연인에게 마음을 전한다. 가을이면 카누를 타고 호수의 야생 벼를 막대로 털어 거둔다.. Cultural activity brief: {\"music\":\"큰 북 하나를 여럿이 둘러앉아 치는 노래\",\"dance\":\"들소 춤 — 사냥 전에 들소 몸짓을 흉내 내는 춤\",\"inst\":\"큰 북, 삼나무 연애 피리\",\"food\":\"호수의 야생 벼, 말린 들소 고기\",\"martial\":\"막대 공놀이, 전쟁 곤봉\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_cherokee",
+    "name": "체로키 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "키투와 마을 한가운데 일곱 모서리의 회의당이 있고, 그 앞 광장에서 밤새 「스톰프 춤」을 춘다. 여인들이 발목에 거북 등딱지 방울을 차고 발을 구르면, 남자 앞소리꾼이 노래를 메기고 줄이 받는다. 옥수수·콩·호박 세 자매를 한 밭에 기르고, 옥수수를 잿물에 불려 죽을 쑨다. 마을끼리의 다툼은 「전쟁의 작은 형제」라 부르는 막대 공놀이로 풀기도 했다.",
+    "extra": {
+      "folk": {
+        "music": "앞소리를 메기고 줄이 받는 스톰프 노래",
+        "dance": "스톰프 춤 — 불 둘레를 나선으로 도는 밤샘 춤",
+        "inst": "거북 등딱지 발목 방울, 물을 채운 북",
+        "food": "세 자매(옥수수·콩·호박), 잿물에 불린 옥수수 죽",
+        "martial": "「전쟁의 작은 형제」 막대 공놀이, 대롱 화살"
+      },
+      "folkLocal": true,
+      "homeCity": 231,
+      "folkCities": [
+        231
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_cherokee.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 체로키 사람들 (folk_cherokee), region 10. Source brief: 키투와 마을 한가운데 일곱 모서리의 회의당이 있고, 그 앞 광장에서 밤새 「스톰프 춤」을 춘다. 여인들이 발목에 거북 등딱지 방울을 차고 발을 구르면, 남자 앞소리꾼이 노래를 메기고 줄이 받는다. 옥수수·콩·호박 세 자매를 한 밭에 기르고, 옥수수를 잿물에 불려 죽을 쑨다. 마을끼리의 다툼은 「전쟁의 작은 형제」라 부르는 막대 공놀이로 풀기도 했다.. Cultural activity brief: {\"music\":\"앞소리를 메기고 줄이 받는 스톰프 노래\",\"dance\":\"스톰프 춤 — 불 둘레를 나선으로 도는 밤샘 춤\",\"inst\":\"거북 등딱지 발목 방울, 물을 채운 북\",\"food\":\"세 자매(옥수수·콩·호박), 잿물에 불린 옥수수 죽\",\"martial\":\"「전쟁의 작은 형제」 막대 공놀이, 대롱 화살\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_haudenosaunee",
+    "name": "하우데노사우니(이로쿼이) 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "다섯 부족이 「큰 평화의 법」으로 묶인 동맹의 불씨가 오논다가에 있다. 긴 나무껍질 집 안에서 물북과 거북 딸랑이로 장단을 치며 「물고기 춤」, 「곰 춤」 같은 사교 춤을 춘다. 한겨울 새해 잔치에는 나무 가면을 쓴 무리가 집집을 돌며 병을 쫓는다. 옥수수 떡과 사슴 고기 국을 먹고, 남자들은 막대 공놀이로 창조주를 기쁘게 한다.",
+    "extra": {
+      "folk": {
+        "music": "물북 장단에 실은 사교 노래",
+        "dance": "물고기 춤, 곰 춤, 깃털 춤",
+        "inst": "물북, 거북 등딱지 딸랑이, 뿔 딸랑이",
+        "food": "옥수수 떡, 사슴 고기와 콩을 넣은 국",
+        "martial": "막대 공놀이, 둥근 머리 곤봉"
+      },
+      "folkLocal": true,
+      "homeCity": 232,
+      "folkCities": [
+        232
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_haudenosaunee.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 하우데노사우니(이로쿼이) 사람들 (folk_haudenosaunee), region 10. Source brief: 다섯 부족이 「큰 평화의 법」으로 묶인 동맹의 불씨가 오논다가에 있다. 긴 나무껍질 집 안에서 물북과 거북 딸랑이로 장단을 치며 「물고기 춤」, 「곰 춤」 같은 사교 춤을 춘다. 한겨울 새해 잔치에는 나무 가면을 쓴 무리가 집집을 돌며 병을 쫓는다. 옥수수 떡과 사슴 고기 국을 먹고, 남자들은 막대 공놀이로 창조주를 기쁘게 한다.. Cultural activity brief: {\"music\":\"물북 장단에 실은 사교 노래\",\"dance\":\"물고기 춤, 곰 춤, 깃털 춤\",\"inst\":\"물북, 거북 등딱지 딸랑이, 뿔 딸랑이\",\"food\":\"옥수수 떡, 사슴 고기와 콩을 넣은 국\",\"martial\":\"막대 공놀이, 둥근 머리 곤봉\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_wendat",
+    "name": "웬다트(휴런) 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "오소사네의 긴 집 마을. 웬다트 사람들은 큰 병이 나면 꿈에서 본 춤과 잔치를 마을 사람 모두가 차려 주어야 낫는다고 믿었다. 열 해 남짓마다 죽은 이들의 뼈를 한데 모아 묻는 「넋의 잔치」에는 이웃 마을까지 모여 노래하고 선물을 나눈다. 옥수수로 죽을 쑤고, 담배와 옥수수를 이웃 부족과 바꾸는 장사꾼으로 이름났다.",
+    "extra": {
+      "folk": {
+        "music": "거북 딸랑이를 흔들며 부르는 치유의 노래",
+        "dance": "꿈에서 본 대로 차려 추는 치유의 춤",
+        "inst": "거북 등딱지 딸랑이, 북",
+        "food": "옥수수 죽 「사가미테」, 훈제 물고기",
+        "martial": "막대 공놀이, 나무 조각을 엮은 갑옷"
+      },
+      "folkLocal": true,
+      "homeCity": 233,
+      "folkCities": [
+        233
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_wendat.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 웬다트(휴런) 사람들 (folk_wendat), region 10. Source brief: 오소사네의 긴 집 마을. 웬다트 사람들은 큰 병이 나면 꿈에서 본 춤과 잔치를 마을 사람 모두가 차려 주어야 낫는다고 믿었다. 열 해 남짓마다 죽은 이들의 뼈를 한데 모아 묻는 「넋의 잔치」에는 이웃 마을까지 모여 노래하고 선물을 나눈다. 옥수수로 죽을 쑤고, 담배와 옥수수를 이웃 부족과 바꾸는 장사꾼으로 이름났다.. Cultural activity brief: {\"music\":\"거북 딸랑이를 흔들며 부르는 치유의 노래\",\"dance\":\"꿈에서 본 대로 차려 추는 치유의 춤\",\"inst\":\"거북 등딱지 딸랑이, 북\",\"food\":\"옥수수 죽 「사가미테」, 훈제 물고기\",\"martial\":\"막대 공놀이, 나무 조각을 엮은 갑옷\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_stlawrence",
+    "name": "세인트로렌스 강의 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "호셸라가와 스타다코나의 옥수수밭 마을. 1535년 카르티에가 왔을 때 사람들은 강가에서 손뼉을 치며 노래하고 둥글게 돌며 춤으로 맞았다. 겨울에는 흰 삼나무 잎을 달인 물로 괴혈병을 고쳤고, 이를 배운 프랑스 선원들이 목숨을 건졌다. 옥수수빵에 말린 콩과 훈제 장어를 곁들여 먹는다.",
+    "extra": {
+      "folk": {
+        "music": "강가에서 손뼉 치며 손님을 맞는 노래",
+        "dance": "둥글게 돌며 손님을 맞는 춤",
+        "inst": "거북 딸랑이, 북",
+        "food": "옥수수빵, 훈제 장어, 흰 삼나무 잎 달인 물",
+        "martial": "나무 방패와 활"
+      },
+      "folkLocal": true,
+      "homeCity": 234,
+      "folkCities": [
+        234,
+        235
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_stlawrence.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 세인트로렌스 강의 사람들 (folk_stlawrence), region 10. Source brief: 호셸라가와 스타다코나의 옥수수밭 마을. 1535년 카르티에가 왔을 때 사람들은 강가에서 손뼉을 치며 노래하고 둥글게 돌며 춤으로 맞았다. 겨울에는 흰 삼나무 잎을 달인 물로 괴혈병을 고쳤고, 이를 배운 프랑스 선원들이 목숨을 건졌다. 옥수수빵에 말린 콩과 훈제 장어를 곁들여 먹는다.. Cultural activity brief: {\"music\":\"강가에서 손뼉 치며 손님을 맞는 노래\",\"dance\":\"둥글게 돌며 손님을 맞는 춤\",\"inst\":\"거북 딸랑이, 북\",\"food\":\"옥수수빵, 훈제 장어, 흰 삼나무 잎 달인 물\",\"martial\":\"나무 방패와 활\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_powhatan",
+    "name": "포와탄 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "워로워코모코의 큰 추장 앞에서, 손님이 오면 몸에 칠을 한 여인들이 둥글게 돌며 소리치는 춤으로 맞았다. 1607년 존 스미스가 그 춤을 보고 적었다. 사람들은 옥수수빵과 굴, 사슴 고기를 먹고, 강에 둑을 놓아 물고기를 가둔다. 싸움에 나설 때는 따로 부르는 노래가 있었다.",
+    "extra": {
+      "folk": {
+        "music": "싸움터의 노래, 손님 맞는 소리",
+        "dance": "몸에 칠을 하고 둥글게 돌며 소리치는 맞이 춤",
+        "inst": "조롱박 딸랑이, 갈대 피리",
+        "food": "옥수수빵 「폰」, 굴, 사슴 고기, 옥수수와 콩을 끓인 죽",
+        "martial": "활과 나무 곤봉"
+      },
+      "folkLocal": true,
+      "homeCity": 236,
+      "folkCities": [
+        236
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_powhatan.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 포와탄 사람들 (folk_powhatan), region 10. Source brief: 워로워코모코의 큰 추장 앞에서, 손님이 오면 몸에 칠을 한 여인들이 둥글게 돌며 소리치는 춤으로 맞았다. 1607년 존 스미스가 그 춤을 보고 적었다. 사람들은 옥수수빵과 굴, 사슴 고기를 먹고, 강에 둑을 놓아 물고기를 가둔다. 싸움에 나설 때는 따로 부르는 노래가 있었다.. Cultural activity brief: {\"music\":\"싸움터의 노래, 손님 맞는 소리\",\"dance\":\"몸에 칠을 하고 둥글게 돌며 소리치는 맞이 춤\",\"inst\":\"조롱박 딸랑이, 갈대 피리\",\"food\":\"옥수수빵 「폰」, 굴, 사슴 고기, 옥수수와 콩을 끓인 죽\",\"martial\":\"활과 나무 곤봉\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_wampanoag",
+    "name": "왐파노아그 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "소왐스는 큰 추장 마사소이트의 마을. 옥수수가 처음 익으면 「푸른 옥수수 잔치」를 열고 북과 노래로 감사의 춤을 춘다. 바닷가 사람들이라 대합과 바닷가재를 해초에 덮어 달군 돌 위에서 쪄 먹는다. 여름 모래밭에서는 마을과 마을이 수백 명씩 나와 공차기를 겨룬다.",
+    "extra": {
+      "folk": {
+        "music": "북 장단에 실은 감사 노래",
+        "dance": "푸른 옥수수 잔치의 춤",
+        "inst": "물북, 조롱박 딸랑이",
+        "food": "해초와 달군 돌로 찐 대합, 옥수수 죽",
+        "martial": "모래밭에서 수백 명이 벌이는 공차기 겨루기"
+      },
+      "folkLocal": true,
+      "homeCity": 237,
+      "folkCities": [
+        237
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_wampanoag.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 왐파노아그 사람들 (folk_wampanoag), region 10. Source brief: 소왐스는 큰 추장 마사소이트의 마을. 옥수수가 처음 익으면 「푸른 옥수수 잔치」를 열고 북과 노래로 감사의 춤을 춘다. 바닷가 사람들이라 대합과 바닷가재를 해초에 덮어 달군 돌 위에서 쪄 먹는다. 여름 모래밭에서는 마을과 마을이 수백 명씩 나와 공차기를 겨룬다.. Cultural activity brief: {\"music\":\"북 장단에 실은 감사 노래\",\"dance\":\"푸른 옥수수 잔치의 춤\",\"inst\":\"물북, 조롱박 딸랑이\",\"food\":\"해초와 달군 돌로 찐 대합, 옥수수 죽\",\"martial\":\"모래밭에서 수백 명이 벌이는 공차기 겨루기\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_muscogee",
+    "name": "무스코기(크리크) 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "쿠사의 흙 언덕 위 광장에서, 여름 옥수수가 익으면 묵은 잘못을 씻고 새 불을 피우는 「부스크」 잔치가 열린다. 남자들은 쓴 「검은 음료」를 마시고, 거북 등딱지 방울을 찬 여인들과 함께 밤새 춤을 춘다. 사내들은 굴러가는 돌 원반에 창을 던지는 「청키」로 내기를 한다. 1540년 데 소토가 이 마을에 왔다.",
+    "extra": {
+      "folk": {
+        "music": "밤샘 춤의 노래",
+        "dance": "부스크 — 새 불을 피우고 묵은 잘못을 씻는 초록 옥수수 춤",
+        "inst": "거북 등딱지 방울, 물북",
+        "food": "옥수수 죽 「소프키」, 야우폰 잎으로 달인 쓴 검은 음료",
+        "martial": "청키 — 굴러가는 돌 원반에 창을 던지는 겨루기, 막대 공놀이"
+      },
+      "folkLocal": true,
+      "homeCity": 238,
+      "folkCities": [
+        238
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_muscogee.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 무스코기(크리크) 사람들 (folk_muscogee), region 10. Source brief: 쿠사의 흙 언덕 위 광장에서, 여름 옥수수가 익으면 묵은 잘못을 씻고 새 불을 피우는 「부스크」 잔치가 열린다. 남자들은 쓴 「검은 음료」를 마시고, 거북 등딱지 방울을 찬 여인들과 함께 밤새 춤을 춘다. 사내들은 굴러가는 돌 원반에 창을 던지는 「청키」로 내기를 한다. 1540년 데 소토가 이 마을에 왔다.. Cultural activity brief: {\"music\":\"밤샘 춤의 노래\",\"dance\":\"부스크 — 새 불을 피우고 묵은 잘못을 씻는 초록 옥수수 춤\",\"inst\":\"거북 등딱지 방울, 물북\",\"food\":\"옥수수 죽 「소프키」, 야우폰 잎으로 달인 쓴 검은 음료\",\"martial\":\"청키 — 굴러가는 돌 원반에 창을 던지는 겨루기, 막대 공놀이\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_natchez",
+    "name": "나체즈 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "「위대한 태양」이라 불리는 임금이 흙 언덕 위 집에 살고, 맞은편 언덕 신전에서는 꺼지지 않는 불을 지킨다. 임금은 땅을 밟지 않고 가마로 다닌다. 해마다 열세 달마다 잔치를 열어 그달에 거둔 것을 바치며 노래하고 춤춘다. 옥수수와 호박, 강의 메기를 먹는다.",
+    "extra": {
+      "folk": {
+        "music": "달마다 부르는 거둠의 노래",
+        "dance": "열세 달 잔치의 춤 — 그달 거둔 것을 바치며 추는 춤",
+        "inst": "조롱박 딸랑이, 사슴 가죽 북",
+        "food": "옥수수, 호박, 미시시피 메기",
+        "martial": "활과 전쟁 곤봉"
+      },
+      "folkLocal": true,
+      "homeCity": 239,
+      "folkCities": [
+        239
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_natchez.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 나체즈 사람들 (folk_natchez), region 10. Source brief: 「위대한 태양」이라 불리는 임금이 흙 언덕 위 집에 살고, 맞은편 언덕 신전에서는 꺼지지 않는 불을 지킨다. 임금은 땅을 밟지 않고 가마로 다닌다. 해마다 열세 달마다 잔치를 열어 그달에 거둔 것을 바치며 노래하고 춤춘다. 옥수수와 호박, 강의 메기를 먹는다.. Cultural activity brief: {\"music\":\"달마다 부르는 거둠의 노래\",\"dance\":\"열세 달 잔치의 춤 — 그달 거둔 것을 바치며 추는 춤\",\"inst\":\"조롱박 딸랑이, 사슴 가죽 북\",\"food\":\"옥수수, 호박, 미시시피 메기\",\"martial\":\"활과 전쟁 곤봉\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_calusa",
+    "name": "칼루사 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "플로리다 남서쪽 물길에 조개껍데기를 쌓아 섬을 만들고 사는 바다의 사람들. 농사 없이 물고기와 조개만으로 큰 나라를 이루었다. 축제 날이면 칠한 나무 가면을 쓰고 노래하며 마을 사이를 줄지어 걷는다. 통나무배 둘을 묶어 바다를 건너고, 1521년에는 폰세 데 레온이 이들의 화살에 맞아 물러났다.",
+    "extra": {
+      "folk": {
+        "music": "가면 행렬의 노래",
+        "dance": "나무 가면을 쓰고 줄지어 걷는 행렬 춤",
+        "inst": "조개 딸랑이, 뼈 피리",
+        "food": "숭어와 바다 물고기, 굴과 조개, 야자 열매",
+        "martial": "통나무배 둘을 묶은 배 싸움, 조개 날 곤봉"
+      },
+      "folkLocal": true,
+      "homeCity": 240,
+      "folkCities": [
+        240
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_calusa.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 칼루사 사람들 (folk_calusa), region 10. Source brief: 플로리다 남서쪽 물길에 조개껍데기를 쌓아 섬을 만들고 사는 바다의 사람들. 농사 없이 물고기와 조개만으로 큰 나라를 이루었다. 축제 날이면 칠한 나무 가면을 쓰고 노래하며 마을 사이를 줄지어 걷는다. 통나무배 둘을 묶어 바다를 건너고, 1521년에는 폰세 데 레온이 이들의 화살에 맞아 물러났다.. Cultural activity brief: {\"music\":\"가면 행렬의 노래\",\"dance\":\"나무 가면을 쓰고 줄지어 걷는 행렬 춤\",\"inst\":\"조개 딸랑이, 뼈 피리\",\"food\":\"숭어와 바다 물고기, 굴과 조개, 야자 열매\",\"martial\":\"통나무배 둘을 묶은 배 싸움, 조개 날 곤봉\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_taos",
+    "name": "타오스 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "눈 덮인 산 아래 흙벽돌로 다섯 층을 쌓은 큰 집에 사는 티와 사람들. 겨울에는 사슴 가죽을 쓰고 사슴 몸짓을 흉내 내는 「사슴 춤」을 추고, 속을 판 통나무 북을 여럿이 치며 낮게 노래한다. 옥수수와 고추를 처마에 걸어 말린다. 해마다 해의 길을 따라 젊은이들이 이어 달리는 경주를 한다.",
+    "extra": {
+      "folk": {
+        "music": "통나무 북을 치며 낮게 부르는 노래",
+        "dance": "사슴 춤, 들소 춤",
+        "inst": "속을 판 통나무 북, 조롱박 딸랑이",
+        "food": "푸른 옥수수, 말린 고추, 콩",
+        "martial": "해의 길을 따라 이어 달리는 경주"
+      },
+      "folkLocal": true,
+      "homeCity": 241,
+      "folkCities": [
+        241
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_taos.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 타오스 사람들 (folk_taos), region 10. Source brief: 눈 덮인 산 아래 흙벽돌로 다섯 층을 쌓은 큰 집에 사는 티와 사람들. 겨울에는 사슴 가죽을 쓰고 사슴 몸짓을 흉내 내는 「사슴 춤」을 추고, 속을 판 통나무 북을 여럿이 치며 낮게 노래한다. 옥수수와 고추를 처마에 걸어 말린다. 해마다 해의 길을 따라 젊은이들이 이어 달리는 경주를 한다.. Cultural activity brief: {\"music\":\"통나무 북을 치며 낮게 부르는 노래\",\"dance\":\"사슴 춤, 들소 춤\",\"inst\":\"속을 판 통나무 북, 조롱박 딸랑이\",\"food\":\"푸른 옥수수, 말린 고추, 콩\",\"martial\":\"해의 길을 따라 이어 달리는 경주\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_acoma",
+    "name": "아코마 사람들 — 하늘 도시",
+    "category": "people",
+    "region": 10,
+    "description": "높이 솟은 바위 언덕 꼭대기, 바위에 계단을 깎아 올라가야 하는 「하늘 도시」. 넋의 가면을 쓴 춤꾼들이 비를 부르며 광장에서 춤추고, 사람들은 지붕에 올라 구경한다. 얇은 흙그릇에 검은 선으로 번개와 새를 그리는 솜씨가 빼어나다. 옥수수를 맷돌에 가는 여인들의 노래가 아침마다 바위 위에 울린다.",
+    "extra": {
+      "folk": {
+        "music": "옥수수 맷돌질 노래",
+        "dance": "넋의 가면을 쓰고 비를 부르는 춤",
+        "inst": "통나무 북, 거북 딸랑이",
+        "food": "푸른 옥수수 죽, 얇게 구운 옥수수 빵"
+      },
+      "folkLocal": true,
+      "homeCity": 242,
+      "folkCities": [
+        242
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_acoma.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 아코마 사람들 — 하늘 도시 (folk_acoma), region 10. Source brief: 높이 솟은 바위 언덕 꼭대기, 바위에 계단을 깎아 올라가야 하는 「하늘 도시」. 넋의 가면을 쓴 춤꾼들이 비를 부르며 광장에서 춤추고, 사람들은 지붕에 올라 구경한다. 얇은 흙그릇에 검은 선으로 번개와 새를 그리는 솜씨가 빼어나다. 옥수수를 맷돌에 가는 여인들의 노래가 아침마다 바위 위에 울린다.. Cultural activity brief: {\"music\":\"옥수수 맷돌질 노래\",\"dance\":\"넋의 가면을 쓰고 비를 부르는 춤\",\"inst\":\"통나무 북, 거북 딸랑이\",\"food\":\"푸른 옥수수 죽, 얇게 구운 옥수수 빵\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_mandan",
+    "name": "만단 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "미주리 강가 흙집 마을. 여름이면 「오키파」라는 나흘 잔치가 열려 들소 가죽을 쓴 남자들이 들소 떼를 부르는 「들소 춤」을 춘다. 거북 모양 가죽 북을 치고, 젊은이들은 고행을 견뎌 어른이 된다. 여인들은 옥수수와 해바라기를 기르고, 둥근 가죽배로 강을 건넌다. 이웃 부족이 옥수수를 사러 모여드는 큰 장터였다.",
+    "extra": {
+      "folk": {
+        "music": "거북 북 장단에 실은 들소 부르는 노래",
+        "dance": "오키파의 들소 춤",
+        "inst": "거북 모양 가죽 북, 독수리 뼈 피리",
+        "food": "옥수수, 해바라기 씨 경단, 말린 들소 고기",
+        "martial": "들소 몰이, 돌 머리 곤봉"
+      },
+      "folkLocal": true,
+      "homeCity": 243,
+      "folkCities": [
+        243
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_mandan.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 만단 사람들 (folk_mandan), region 10. Source brief: 미주리 강가 흙집 마을. 여름이면 「오키파」라는 나흘 잔치가 열려 들소 가죽을 쓴 남자들이 들소 떼를 부르는 「들소 춤」을 춘다. 거북 모양 가죽 북을 치고, 젊은이들은 고행을 견뎌 어른이 된다. 여인들은 옥수수와 해바라기를 기르고, 둥근 가죽배로 강을 건넌다. 이웃 부족이 옥수수를 사러 모여드는 큰 장터였다.. Cultural activity brief: {\"music\":\"거북 북 장단에 실은 들소 부르는 노래\",\"dance\":\"오키파의 들소 춤\",\"inst\":\"거북 모양 가죽 북, 독수리 뼈 피리\",\"food\":\"옥수수, 해바라기 씨 경단, 말린 들소 고기\",\"martial\":\"들소 몰이, 돌 머리 곤봉\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_chumash",
+    "name": "추마시 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "바닷가 마을 사람들이 판자를 꿰매고 역청을 발라 만든 배 「토몰」로 먼 섬까지 오간다. 해를 부르는 겨울 잔치에는 황새치 머리뼈를 쓴 춤꾼이 바다의 넋을 기리며 돌고, 사슴 다리뼈 피리와 쪼갠 나무 딸랑이가 장단을 맞춘다. 도토리를 빻아 물에 우려 죽을 쑤고, 조개 구슬을 돈으로 쓴다. 동굴 천장에는 해와 별을 색색으로 그렸다.",
+    "extra": {
+      "folk": {
+        "music": "해를 부르는 겨울 잔치 노래",
+        "dance": "황새치 춤 — 황새치 머리뼈를 쓰고 바다의 넋을 기리는 춤",
+        "inst": "사슴 뼈 피리, 쪼갠 나무 딸랑이",
+        "food": "물에 우린 도토리죽, 전복과 물고기",
+        "martial": "활과 돌 촉 창, 판자배 몰기"
+      },
+      "folkLocal": true,
+      "homeCity": 244,
+      "folkCities": [
+        244
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_chumash.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 추마시 사람들 (folk_chumash), region 10. Source brief: 바닷가 마을 사람들이 판자를 꿰매고 역청을 발라 만든 배 「토몰」로 먼 섬까지 오간다. 해를 부르는 겨울 잔치에는 황새치 머리뼈를 쓴 춤꾼이 바다의 넋을 기리며 돌고, 사슴 다리뼈 피리와 쪼갠 나무 딸랑이가 장단을 맞춘다. 도토리를 빻아 물에 우려 죽을 쑤고, 조개 구슬을 돈으로 쓴다. 동굴 천장에는 해와 별을 색색으로 그렸다.. Cultural activity brief: {\"music\":\"해를 부르는 겨울 잔치 노래\",\"dance\":\"황새치 춤 — 황새치 머리뼈를 쓰고 바다의 넋을 기리는 춤\",\"inst\":\"사슴 뼈 피리, 쪼갠 나무 딸랑이\",\"food\":\"물에 우린 도토리죽, 전복과 물고기\",\"martial\":\"활과 돌 촉 창, 판자배 몰기\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_makah",
+    "name": "마카 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "서쪽 끝 곶의 고래잡이 마을. 삼나무 통배를 타고 나가 작살로 고래를 잡기 전에, 사냥꾼들은 몇 달 동안 몸을 씻고 노래로 넋을 맑힌다. 큰 잔치 「포틀래치」에서는 집안마다 물려받은 노래와 춤을 선보이고 손님에게 선물을 나눈다. 늑대 가면을 쓴 춤꾼, 고래 기름에 찍어 먹는 마른 연어가 잔치를 채운다.",
+    "extra": {
+      "folk": {
+        "music": "집안마다 물려받은 노래",
+        "dance": "늑대 가면 춤",
+        "inst": "나무 상자 북, 고래 뼈 딸랑이",
+        "food": "고래 기름, 마른 연어, 넙치",
+        "martial": "고래 작살과 홍합 껍데기 날"
+      },
+      "folkLocal": true,
+      "homeCity": 245,
+      "folkCities": [
+        245
+      ],
+      "outskirts": true,
+      "r": 1
+    },
+    "source": "tools/discovery83/masters/folk_makah.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 마카 사람들 (folk_makah), region 10. Source brief: 서쪽 끝 곶의 고래잡이 마을. 삼나무 통배를 타고 나가 작살로 고래를 잡기 전에, 사냥꾼들은 몇 달 동안 몸을 씻고 노래로 넋을 맑힌다. 큰 잔치 「포틀래치」에서는 집안마다 물려받은 노래와 춤을 선보이고 손님에게 선물을 나눈다. 늑대 가면을 쓴 춤꾼, 고래 기름에 찍어 먹는 마른 연어가 잔치를 채운다.. Cultural activity brief: {\"music\":\"집안마다 물려받은 노래\",\"dance\":\"늑대 가면 춤\",\"inst\":\"나무 상자 북, 고래 뼈 딸랑이\",\"food\":\"고래 기름, 마른 연어, 넙치\",\"martial\":\"고래 작살과 홍합 껍데기 날\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_sami",
+    "name": "사미 사람들",
+    "category": "people",
+    "region": 1,
+    "description": "순록 떼를 몰고 북쪽 끝 툰드라를 옮겨 다니는 사람들. 사람이나 땅, 순록을 노래하는 「요이크」는 무엇에 대한 노래가 아니라 그것 자체를 부르는 노래라 한다. 무당 「노아이디」는 그림을 그린 북을 두드려 넋을 다른 세상으로 보낸다. 순록 고기를 말리고 훈제하며, 젖을 굳혀 치즈를 만든다. 스키를 타고 순록을 쫓는 솜씨는 바이킹도 감탄했다.",
+    "extra": {
+      "folk": {
+        "music": "요이크 — 사람이나 땅 그 자체를 부르는 노래",
+        "inst": "그림을 그린 무당 북",
+        "food": "말린 순록 고기, 순록 젖 치즈, 구름딸기",
+        "martial": "스키와 올가미로 순록을 잡는 솜씨"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_sami.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 사미 사람들 (folk_sami), region 1. Source brief: 순록 떼를 몰고 북쪽 끝 툰드라를 옮겨 다니는 사람들. 사람이나 땅, 순록을 노래하는 「요이크」는 무엇에 대한 노래가 아니라 그것 자체를 부르는 노래라 한다. 무당 「노아이디」는 그림을 그린 북을 두드려 넋을 다른 세상으로 보낸다. 순록 고기를 말리고 훈제하며, 젖을 굳혀 치즈를 만든다. 스키를 타고 순록을 쫓는 솜씨는 바이킹도 감탄했다.. Cultural activity brief: {\"music\":\"요이크 — 사람이나 땅 그 자체를 부르는 노래\",\"inst\":\"그림을 그린 무당 북\",\"food\":\"말린 순록 고기, 순록 젖 치즈, 구름딸기\",\"martial\":\"스키와 올가미로 순록을 잡는 솜씨\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_ainu",
+    "name": "아이누 사람들",
+    "category": "people",
+    "region": 9,
+    "description": "에조 섬의 숲과 바닷가에 사는 사람들. 대나무 조각을 입에 대고 줄을 당겨 튕기는 「무쿠리」 소리가 바람처럼 떤다. 여인들은 둘러앉아 칠기 뚜껑을 두드리며 돌림노래 「우포포」를 부르고, 학이 날개를 펴는 몸짓으로 춤춘다. 겨울에 곰 새끼를 길러 신의 나라로 돌려보내는 큰 잔치를 연다. 연어와 사슴 고기를 넣은 국을 끓인다.",
+    "extra": {
+      "folk": {
+        "music": "우포포 — 둘러앉아 칠기 뚜껑을 두드리며 부르는 돌림노래",
+        "dance": "학의 춤, 칼을 들고 추는 칼춤",
+        "inst": "대나무 입 하프 「무쿠리」, 다섯 줄 현악기 「톤코리」",
+        "food": "연어와 사슴 고기를 넣은 국 「오하우」, 말린 연어",
+        "martial": "칼춤, 독화살 활"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_ainu.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 아이누 사람들 (folk_ainu), region 9. Source brief: 에조 섬의 숲과 바닷가에 사는 사람들. 대나무 조각을 입에 대고 줄을 당겨 튕기는 「무쿠리」 소리가 바람처럼 떤다. 여인들은 둘러앉아 칠기 뚜껑을 두드리며 돌림노래 「우포포」를 부르고, 학이 날개를 펴는 몸짓으로 춤춘다. 겨울에 곰 새끼를 길러 신의 나라로 돌려보내는 큰 잔치를 연다. 연어와 사슴 고기를 넣은 국을 끓인다.. Cultural activity brief: {\"music\":\"우포포 — 둘러앉아 칠기 뚜껑을 두드리며 부르는 돌림노래\",\"dance\":\"학의 춤, 칼을 들고 추는 칼춤\",\"inst\":\"대나무 입 하프 「무쿠리」, 다섯 줄 현악기 「톤코리」\",\"food\":\"연어와 사슴 고기를 넣은 국 「오하우」, 말린 연어\",\"martial\":\"칼춤, 독화살 활\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_maori",
+    "name": "마오리 사람들",
+    "category": "people",
+    "region": 8,
+    "description": "남방대륙 남동쪽 큰 섬들의 사람들. 손님이 오면 전사가 혀를 내밀고 눈을 부릅뜨며 땅을 구르는 「하카」로 맞아 힘을 보이고, 여인들은 줄 끝에 단 공 「포이」를 돌리며 노래한다. 땅을 파 달군 돌 위에 고기와 고구마를 쪄 먹는다. 짧은 녹옥 몽둥이와 긴 막대 창을 다루는 무술이 엄하게 전해진다. 1642년 타스만의 배가 이 사람들의 통배에 쫓겨 물러났다.",
+    "extra": {
+      "folk": {
+        "music": "여럿이 한목소리로 부르는 노래 「와이아타」",
+        "dance": "하카 — 땅을 구르고 혀를 내미는 전사의 춤, 포이 — 줄 공을 돌리는 춤",
+        "inst": "나무 피리, 소라 나팔",
+        "food": "항이 — 땅속 달군 돌에 찐 고구마와 고기",
+        "martial": "긴 막대 창 「타이아하」와 녹옥 몽둥이 「메레」를 쓰는 무술"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_maori.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 마오리 사람들 (folk_maori), region 8. Source brief: 남방대륙 남동쪽 큰 섬들의 사람들. 손님이 오면 전사가 혀를 내밀고 눈을 부릅뜨며 땅을 구르는 「하카」로 맞아 힘을 보이고, 여인들은 줄 끝에 단 공 「포이」를 돌리며 노래한다. 땅을 파 달군 돌 위에 고기와 고구마를 쪄 먹는다. 짧은 녹옥 몽둥이와 긴 막대 창을 다루는 무술이 엄하게 전해진다. 1642년 타스만의 배가 이 사람들의 통배에 쫓겨 물러났다.. Cultural activity brief: {\"music\":\"여럿이 한목소리로 부르는 노래 「와이아타」\",\"dance\":\"하카 — 땅을 구르고 혀를 내미는 전사의 춤, 포이 — 줄 공을 돌리는 춤\",\"inst\":\"나무 피리, 소라 나팔\",\"food\":\"항이 — 땅속 달군 돌에 찐 고구마와 고기\",\"martial\":\"긴 막대 창 「타이아하」와 녹옥 몽둥이 「메레」를 쓰는 무술\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_chukchi",
+    "name": "축치 사람들",
+    "category": "people",
+    "region": 7,
+    "description": "아시아 동쪽 끝 얼어붙은 반도의 사람들. 순록을 치는 무리와 바다짐승을 잡는 무리로 나뉜다. 바다코끼리 위장을 씌운 둥근 북을 가는 막대로 두드리며 노래하고, 여인들은 목구멍으로 숨을 들이쉬고 내쉬며 소리를 주고받는 놀이 노래를 한다. 사내들은 씨름과 순록 썰매 경주, 오래 달리기로 힘을 겨룬다. 순록 고기와 바다표범 기름을 먹는다.",
+    "extra": {
+      "folk": {
+        "music": "목구멍 숨으로 소리를 주고받는 놀이 노래",
+        "dance": "바다짐승 몸짓을 흉내 내는 춤",
+        "inst": "바다코끼리 위장을 씌운 둥근 북",
+        "food": "순록 고기, 바다표범 기름, 바다코끼리 고기",
+        "martial": "씨름, 순록 썰매 경주, 오래 달리기"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_chukchi.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 축치 사람들 (folk_chukchi), region 7. Source brief: 아시아 동쪽 끝 얼어붙은 반도의 사람들. 순록을 치는 무리와 바다짐승을 잡는 무리로 나뉜다. 바다코끼리 위장을 씌운 둥근 북을 가는 막대로 두드리며 노래하고, 여인들은 목구멍으로 숨을 들이쉬고 내쉬며 소리를 주고받는 놀이 노래를 한다. 사내들은 씨름과 순록 썰매 경주, 오래 달리기로 힘을 겨룬다. 순록 고기와 바다표범 기름을 먹는다.. Cultural activity brief: {\"music\":\"목구멍 숨으로 소리를 주고받는 놀이 노래\",\"dance\":\"바다짐승 몸짓을 흉내 내는 춤\",\"inst\":\"바다코끼리 위장을 씌운 둥근 북\",\"food\":\"순록 고기, 바다표범 기름, 바다코끼리 고기\",\"martial\":\"씨름, 순록 썰매 경주, 오래 달리기\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_tuva",
+    "name": "투바 사람들 — 목노래",
+    "category": "people",
+    "region": 7,
+    "description": "사얀산맥 사이 초원의 목동들. 한 사람이 목에서 낮은 소리를 내며 그 위에 휘파람 같은 높은 소리를 함께 얹는 「후메이」를 부른다. 바람과 시냇물, 말 달리는 소리를 흉내 낸다고 한다. 말머리 장식을 단 두 줄 현악기를 켜고, 무당은 북을 쳐 넋을 부른다. 양을 잡아 피 순대와 젖술을 나누고, 씨름에서 이긴 장사는 독수리처럼 두 팔을 펴고 춤춘다.",
+    "extra": {
+      "folk": {
+        "music": "후메이 — 한 목에서 두 소리를 함께 내는 목노래",
+        "dance": "씨름 장사의 독수리 춤",
+        "inst": "두 줄 현악기 「이길」, 입 하프 「호무스」, 무당 북",
+        "food": "양 피 순대, 젖술",
+        "martial": "씨름 「후레시」, 말 위 활쏘기"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_tuva.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 투바 사람들 — 목노래 (folk_tuva), region 7. Source brief: 사얀산맥 사이 초원의 목동들. 한 사람이 목에서 낮은 소리를 내며 그 위에 휘파람 같은 높은 소리를 함께 얹는 「후메이」를 부른다. 바람과 시냇물, 말 달리는 소리를 흉내 낸다고 한다. 말머리 장식을 단 두 줄 현악기를 켜고, 무당은 북을 쳐 넋을 부른다. 양을 잡아 피 순대와 젖술을 나누고, 씨름에서 이긴 장사는 독수리처럼 두 팔을 펴고 춤춘다.. Cultural activity brief: {\"music\":\"후메이 — 한 목에서 두 소리를 함께 내는 목노래\",\"dance\":\"씨름 장사의 독수리 춤\",\"inst\":\"두 줄 현악기 「이길」, 입 하프 「호무스」, 무당 북\",\"food\":\"양 피 순대, 젖술\",\"martial\":\"씨름 「후레시」, 말 위 활쏘기\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_bajau",
+    "name": "바자우 바다 사람들",
+    "category": "people",
+    "region": 8,
+    "description": "술루 바다와 셀레베스 바다를 집배 위에서 떠도는 사람들. 배에서 나고 자라, 숨 한 번에 깊은 바다 밑까지 내려가 작살로 물고기를 잡는다. 잔치 날이면 놋쇠 징 여러 개를 줄지어 놓고 치는 가락에 맞춰, 여인들이 긴 손톱 장식을 끼고 손목을 꺾는 「이갈」 춤을 춘다. 말린 물고기와 해삼, 사고 야자 떡을 먹는다.",
+    "extra": {
+      "folk": {
+        "music": "줄지은 놋쇠 징의 가락",
+        "dance": "이갈 — 긴 손톱 장식을 끼고 손목을 꺾는 춤",
+        "inst": "줄지은 징 「쿨린탕안」, 큰 징 「아궁」",
+        "food": "말린 물고기, 해삼, 사고 야자 떡",
+        "martial": "숨 참고 잠수해 작살 사냥, 단검 「크리스」"
+      }
+    },
+    "source": "tools/discovery83/masters/folk_bajau.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 바자우 바다 사람들 (folk_bajau), region 8. Source brief: 술루 바다와 셀레베스 바다를 집배 위에서 떠도는 사람들. 배에서 나고 자라, 숨 한 번에 깊은 바다 밑까지 내려가 작살로 물고기를 잡는다. 잔치 날이면 놋쇠 징 여러 개를 줄지어 놓고 치는 가락에 맞춰, 여인들이 긴 손톱 장식을 끼고 손목을 꺾는 「이갈」 춤을 춘다. 말린 물고기와 해삼, 사고 야자 떡을 먹는다.. Cultural activity brief: {\"music\":\"줄지은 놋쇠 징의 가락\",\"dance\":\"이갈 — 긴 손톱 장식을 끼고 손목을 꺾는 춤\",\"inst\":\"줄지은 징 「쿨린탕안」, 큰 징 「아궁」\",\"food\":\"말린 물고기, 해삼, 사고 야자 떡\",\"martial\":\"숨 참고 잠수해 작살 사냥, 단검 「크리스」\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_mbuti",
+    "name": "음부티 사람들 — 숲의 노래",
+    "category": "people",
+    "region": 3,
+    "description": "콩고 이투리 숲 깊은 곳의 키 작은 사냥꾼들. 목소리 여러 갈래를 엇갈려 겹치는 노래로 숲을 깨운다 — 숲은 사람을 돌보는 어머니라서, 일이 잘 안 풀리면 숲이 잠들었다고 여기고 「몰리모」 나팔을 밤새 불어 깨운다. 꿀 철이면 나무에 올라 꿀을 따며 노래한다. 그물을 둘러치고 소리쳐 몰아 영양을 잡는다. 옛 이집트 임금도 춤추는 숲사람을 데려오라 했다는 이야기가 있다.",
+    "extra": {
+      "folk": {
+        "music": "여러 목소리가 엇갈려 겹치는 노래",
+        "dance": "꿀 철의 춤, 사냥을 흉내 내는 춤",
+        "inst": "몰리모 나팔, 튕기는 활",
+        "food": "숲 꿀, 덩이뿌리, 그물로 잡은 영양 고기",
+        "martial": "그물 몰이 사냥, 작은 활과 독화살"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_mbuti.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 음부티 사람들 — 숲의 노래 (folk_mbuti), region 3. Source brief: 콩고 이투리 숲 깊은 곳의 키 작은 사냥꾼들. 목소리 여러 갈래를 엇갈려 겹치는 노래로 숲을 깨운다 — 숲은 사람을 돌보는 어머니라서, 일이 잘 안 풀리면 숲이 잠들었다고 여기고 「몰리모」 나팔을 밤새 불어 깨운다. 꿀 철이면 나무에 올라 꿀을 따며 노래한다. 그물을 둘러치고 소리쳐 몰아 영양을 잡는다. 옛 이집트 임금도 춤추는 숲사람을 데려오라 했다는 이야기가 있다.. Cultural activity brief: {\"music\":\"여러 목소리가 엇갈려 겹치는 노래\",\"dance\":\"꿀 철의 춤, 사냥을 흉내 내는 춤\",\"inst\":\"몰리모 나팔, 튕기는 활\",\"food\":\"숲 꿀, 덩이뿌리, 그물로 잡은 영양 고기\",\"martial\":\"그물 몰이 사냥, 작은 활과 독화살\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_hawaii",
+    "name": "하와이 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "바다 한가운데 화산섬들의 사람들. 이야기와 집안의 계보를 몸짓으로 풀어내는 「훌라」를 북과 박 장단에 맞춰 춘다 — 춤 하나하나가 신과 조상에게 바치는 노래다. 땅을 파 달군 돌 위에 돼지와 토란을 쪄서, 토란을 찧은 떡을 손가락으로 찍어 먹는다. 뼈를 꺾고 넘어뜨리는 맨손 무술을 익힌 전사들이 추장을 지키고, 파도 위를 판자로 타는 놀이는 추장들의 자랑이다.",
+    "extra": {
+      "folk": {
+        "music": "조상과 신을 부르는 노래 「멜레」",
+        "dance": "훌라 — 북과 박 장단에 이야기를 몸짓으로 풀어내는 춤",
+        "inst": "상어 가죽 북 「파후」, 쌍 조롱박 「이푸」",
+        "food": "찧은 토란 「포이」, 땅속 화덕에서 찐 돼지",
+        "martial": "루아 — 뼈를 꺾고 넘어뜨리는 맨손 무술, 상어 이빨 몽둥이"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_hawaii.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 하와이 사람들 (folk_hawaii), region 10. Source brief: 바다 한가운데 화산섬들의 사람들. 이야기와 집안의 계보를 몸짓으로 풀어내는 「훌라」를 북과 박 장단에 맞춰 춘다 — 춤 하나하나가 신과 조상에게 바치는 노래다. 땅을 파 달군 돌 위에 돼지와 토란을 쪄서, 토란을 찧은 떡을 손가락으로 찍어 먹는다. 뼈를 꺾고 넘어뜨리는 맨손 무술을 익힌 전사들이 추장을 지키고, 파도 위를 판자로 타는 놀이는 추장들의 자랑이다.. Cultural activity brief: {\"music\":\"조상과 신을 부르는 노래 「멜레」\",\"dance\":\"훌라 — 북과 박 장단에 이야기를 몸짓으로 풀어내는 춤\",\"inst\":\"상어 가죽 북 「파후」, 쌍 조롱박 「이푸」\",\"food\":\"찧은 토란 「포이」, 땅속 화덕에서 찐 돼지\",\"martial\":\"루아 — 뼈를 꺾고 넘어뜨리는 맨손 무술, 상어 이빨 몽둥이\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_andaman",
+    "name": "안다만 섬 사람들",
+    "category": "people",
+    "region": 5,
+    "description": "벵골만 한가운데 숲 우거진 섬들의 사람들. 바깥 사람이 다가오면 활을 겨누어 돌려보내므로, 마르코 폴로 이래 뱃사람들은 무서운 소문만 전했다. 그러나 섬 안에서는 둥근 마을 한가운데 춤판을 두고, 발로 구르는 나무 울림판을 북 삼아 밤새 노래하고 춤춘다. 바다거북과 멧돼지, 숲 꿀을 먹고, 몸에 흰 흙으로 무늬를 그린다.",
+    "extra": {
+      "folk": {
+        "music": "한 사람이 메기고 여인들이 손뼉으로 받는 노래",
+        "dance": "둥근 춤판에서 밤새 추는 춤",
+        "inst": "발로 구르는 나무 울림판",
+        "food": "바다거북, 멧돼지, 숲 꿀",
+        "martial": "긴 활과 작살 — 바깥 사람을 섬에 들이지 않는다"
+      }
+    },
+    "source": "tools/discovery83/masters/folk_andaman.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 안다만 섬 사람들 (folk_andaman), region 5. Source brief: 벵골만 한가운데 숲 우거진 섬들의 사람들. 바깥 사람이 다가오면 활을 겨누어 돌려보내므로, 마르코 폴로 이래 뱃사람들은 무서운 소문만 전했다. 그러나 섬 안에서는 둥근 마을 한가운데 춤판을 두고, 발로 구르는 나무 울림판을 북 삼아 밤새 노래하고 춤춘다. 바다거북과 멧돼지, 숲 꿀을 먹고, 몸에 흰 흙으로 무늬를 그린다.. Cultural activity brief: {\"music\":\"한 사람이 메기고 여인들이 손뼉으로 받는 노래\",\"dance\":\"둥근 춤판에서 밤새 추는 춤\",\"inst\":\"발로 구르는 나무 울림판\",\"food\":\"바다거북, 멧돼지, 숲 꿀\",\"martial\":\"긴 활과 작살 — 바깥 사람을 섬에 들이지 않는다\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  },
+  {
+    "id": "folk_selknam",
+    "name": "셀크남 사람들",
+    "category": "people",
+    "region": 10,
+    "description": "세상 끝 불의 땅의 사람들. 마젤란이 해협을 지날 때 밤마다 뭍에 그들의 모닥불이 보여 「불의 땅」이라 이름 지었다. 젊은이가 어른이 되는 「하인」 의식에서는 사내들이 온몸을 흰빛과 붉은빛으로 칠하고 넋의 탈을 써 하늘과 땅의 넋을 춤으로 보여 준다. 과나코 가죽을 걸치고 그 고기를 구워 먹으며, 활쏘기와 씨름으로 솜씨를 겨룬다.",
+    "extra": {
+      "folk": {
+        "music": "하인 의식에서 넋을 부르는 노래",
+        "dance": "하인 — 온몸을 칠하고 넋의 탈을 쓴 춤",
+        "inst": "노래와 손뼉",
+        "food": "과나코 고기, 바닷가 홍합, 바다표범 기름",
+        "martial": "활쏘기, 씨름"
+      },
+      "r": 0.6
+    },
+    "source": "tools/discovery83/masters/folk_selknam.png",
+    "prompt": "Create ONE exact 4-column by 4-row animation storyboard sheet, 16 equal landscape cells, overall 2048x1536. Subject: 셀크남 사람들 (folk_selknam), region 10. Source brief: 세상 끝 불의 땅의 사람들. 마젤란이 해협을 지날 때 밤마다 뭍에 그들의 모닥불이 보여 「불의 땅」이라 이름 지었다. 젊은이가 어른이 되는 「하인」 의식에서는 사내들이 온몸을 흰빛과 붉은빛으로 칠하고 넋의 탈을 써 하늘과 땅의 넋을 춤으로 보여 준다. 과나코 가죽을 걸치고 그 고기를 구워 먹으며, 활쏘기와 씨름으로 솜씨를 겨룬다.. Cultural activity brief: {\"music\":\"하인 의식에서 넋을 부르는 노래\",\"dance\":\"하인 — 온몸을 칠하고 넋의 탈을 쓴 춤\",\"inst\":\"노래와 손뼉\",\"food\":\"과나코 고기, 바닷가 홍합, 바다표범 기름\",\"martial\":\"활쏘기, 씨름\"}. Refined historical exploration sketchbook: richly detailed hand-painted watercolor, delicate ink contours, natural textures, believable anatomy and geography, warm paper undertone. No writing, captions, labels, borders, gutters, logos or watermark. Portray these specific people with respectful natural faces, varied individual features, culturally specific clothing, hair, instruments and landscape; never generic costume stereotypes or caricatures. Select one clearly readable main activity from the source brief: dance, musical performance, cooking, or a nonviolent martial demonstration. Give this culture a distinctive scene. Frame order is left to right, top to bottom: first row four successive hand/instrument or food-preparation gestures at medium range, second and third rows eight successive FULL-BODY phases of the main dance/music/martial action, last row four progressively wider gathering views with the appropriate food being prepared or shared. Same identifiable performers, outfits, instruments, location, light and spatial positions throughout; bodies, hands, feet and props genuinely change pose from cell to cell, not merely camera zoom. Keep full figures and instruments inside each cell with generous margins. Anatomically credible hands and limbs. Choose public/social activities from the brief without inventing secret ceremonial details. Historical travel illustration, no modern plastic or electronics, no fantasy regalia. EXACT regular 4x4 equal-cell grid with no gutters, no borders, no text."
+  }
+]

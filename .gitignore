@@ -20,3 +20,7 @@ tools/heritage/cache/
 images/npc-walk/*/
 # 사용자가 가진 음악 파일 (코스타 델 솔 MP3 등 — 게임에 넣지 않고 그 컴퓨터에서만 튼다, js/systems/localost.js)
 music/_local/
+# 신규 발견물 83개 GIF의 원화(약 130MB) — tools/discovery83/build.py 가 읽는다
+tools/discovery83/masters/
+# Codex 앞모습 시트(tools/street_faces.py 입력)
+tmp/

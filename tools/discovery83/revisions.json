@@ -1,0 +1,14 @@
+{
+  "wadirum": {
+    "prompt": "Create one uninterrupted very wide 3:1 landscape panorama, refined historical expedition sketchbook watercolor with delicate ink contours and natural muted color. Wadi Rum protected area in southern Jordan: vast bone-dry red sand valley between immense weathered sandstone massifs, natural rock bridge to one side, towering cliffs and narrow dry gorges, sparse desert shrubs, distant tiny Bedouin tents. Natural landscape only. NO Petra, NO Al-Khazneh, NO carved temple facade, NO waterfall, NO flowing river, NO lake, NO oasis gardens. Elevated distant view framing the entire geographical feature with scenery continuing left and right. Neutral soft daytime under pale clouded sky, NO visible sun or moon. No text, panels, borders or watermark. This is a correction of geographical errors; follow the exclusions rigorously.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a11ae5-8eff-78a3-bbda-d6b69cc7634e\\exec-b01fad22-8a92-4207-86b9-c9cebe2ed2ab.png"
+  },
+  "jogfalls": {
+    "prompt": "Create one uninterrupted very wide 3:1 landscape panorama, refined historical expedition sketchbook watercolor with delicate ink contours and natural muted color. Jog Falls / Gerusoppa Falls, Karnataka, India. The Sharavathi River falls over one high INLAND escarpment into a very deep forested narrow gorge in the Western Ghats. Four distinct adjacent waterfalls: Raja, Roarer, Rocket, Rani. A great vertical drop, visible rocky face with rainforest clinging to cliff edges, river at bottom disappears into wooded ravine. NO sea, NO ocean horizon, NO beach, NO sailing ships, NO town or temple, NO terraced cascades. Elevated distant view framing the entire geographical feature with scenery continuing left and right. Neutral soft daytime under pale clouded sky, NO visible sun or moon. No text, panels, borders or watermark. This is a correction of geographical errors; follow the exclusions rigorously.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a11ae5-8eff-78a3-bbda-d6b69cc7634e\\exec-69a1fc88-b7a0-4d47-9a8f-353456ccb311.png"
+  },
+  "folk_hausa": {
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a11ae5-8eff-78a3-bbda-d6b69cc7634e\\exec-2272831d-0780-482f-8362-eef14d930ff1.png",
+    "reason": "원화 모서리의 색 잡음 제거"
+  }
+}

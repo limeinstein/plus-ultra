@@ -58,6 +58,9 @@
     try {
       if (I.chain.heroHalf) keys = keys.concat(I.chain.heroHalf());
       (list || []).forEach(function (f) {
+        if (f.face && f.face.half) {
+          var own = I.pick(f.face.half); if (own) keys.push(own);
+        }
         var p = f.face && f.face.portrait; if (!p || !A.portraitKeys || !I.chain.halfFor) return;
         var ch = I.chain.halfFor(A.portraitKeys(p)), k = I.pick(ch); if (k) keys.push(k);
       });
@@ -165,19 +168,24 @@
   SF.speaker = function (f, c) {
     var T = D().types[f.type], cl = R.cityLang(c), sp = { name: f.name, lang: f.animal ? 3 : cl.lv, li: cl.li };
     if (f.animal) return sp;
-    var fc = T.face || {};
+    var fc = T.face || {}, stl = G.Img.folkStyle(c), sprite = (D().sprites || {})[f.type] || f.type;
+    var own = 'portraits/street-folk/' + sprite + '_' + stl;
     try {
-      if (fc.town) sp.portrait = A.townSpec(fc.town, c);
+      if (G.Img.has(own)) {
+        var ownBase = A.npcSpec('street:' + c.id + ':' + f.seed, fc.role || 'sailor', stl, fc.g);
+        sp.portrait = A.withImg(ownBase, [own]);
+        sp.half = [own + '_half'];
+      } else if (fc.town) sp.portrait = A.townSpec(fc.town, c);
       else {
-        var base = A.npcSpec('street:' + c.id + ':' + f.seed, fc.role || 'sailor', G.Img.folkStyle(c), fc.g);
+        var base = A.npcSpec('street:' + c.id + ':' + f.seed, fc.role || 'sailor', stl, fc.g);
         if (fc.age) { base = Object.assign({}, base, { age: fc.age }); if (fc.age === 'young') { base.beard = 0; base.moustache = false; } if (fc.age === 'old') base.hair = '#c8c0b0'; }
         // 역할 그림(npc-roles)은 문화권마다 남녀가 정해져 있다(학자·귀족 그림은 여자 등) — 성별이 맞을 때만 쓰고, 아니면 코드로 그린 얼굴
-        var stl = G.Img.folkStyle(c), rg = fc.img && A.rolePortraitGender ? A.rolePortraitGender(fc.img, stl) : null;
+        var rg = fc.img && A.rolePortraitGender ? A.rolePortraitGender(fc.img, stl) : null;
         if (!fc.g && rg) base = Object.assign({}, base, { g: rg });   // 성별을 정하지 않은 사람(마을 사람·젊은 귀족)은 그 지역 역할 그림(=걷는 그림)의 성별
         var okImg = fc.img && (!rg || rg === (fc.g || base.g));
         sp.portrait = okImg ? A.withImg(base, ['portraits/npc-roles/' + stl + '/' + fc.img]) : base;
       }
-      if (sp.portrait && A.portraitKeys && G.Img.chain.halfFor) sp.half = G.Img.chain.halfFor(A.portraitKeys(sp.portrait));   // 대화창: 걷는 그림과 같은 사람의 무릎상
+      if (!sp.half && sp.portrait && A.portraitKeys && G.Img.chain.halfFor) sp.half = G.Img.chain.halfFor(A.portraitKeys(sp.portrait));   // 대화창: 걷는 그림과 같은 사람의 무릎상
     } catch (e) { /* 얼굴 없이 */ }
     return sp;
   };

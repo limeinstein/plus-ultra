@@ -189,6 +189,7 @@
     }
     if (news.length) await C.news(news);
     // 도시 발견물은 입항만으로는 찾지 못한다 — 건물(교역소·시장·교회·왕궁…)에 들어가 둘러봐야 눈에 띈다 (C.findInside)
+    if (G.Folk) { try { await G.Folk.town(c, first && arg.arrive); } catch (e) { console.error(e); } }   // 부족 마을: 마을 사람이 그 부족의 노래·춤 이야기를 꺼낸다
     if (G.Animals) await G.Animals.town(c);             // 마을 사람이 이 고장에 사는 동물 이야기를 꺼낸다
     if (G.Court) { try { await G.Court.arrival(c); } catch (e) { console.error(e); } }
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다

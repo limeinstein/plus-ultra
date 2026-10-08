@@ -153,6 +153,7 @@
     if (cur.chatted || C.langLv(c) === 0) return;
     var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(c.id, 'tavern') : null;
     if (lead) { cur.chatted = true; await C.say(master(), lead.text); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); return; }
+    if (G.Folk && await G.Folk.tavern(c, master())) { cur.chatted = true; return; }   // 부족 마을: 이 고장 사람들의 노래·춤
     if (G.Animals && await G.Animals.tavern(c, master())) cur.chatted = true;
   };
   T.treat = async function (c) {

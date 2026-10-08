@@ -111,6 +111,14 @@
       list.map(function (r) { var ob = r.real && r.real.obj; return '<div class="rs-item" data-relic="' + r.id + '"><b>' + U.esc(r.name) + '</b><small>' + where(r) + '</small>' + (ob ? '<small class="rs-museum">' + U.esc(ob.museum) + '</small>' : '') + '</div>'; }).join('') + '</div>' +
       (relics ? '<div class="rs-note">후원자에게 보고하면 증거로 바치고, 항구에서 스스로 발표하면 제독의 것이 됩니다.</div>' : '') + '</div>';
   };
+  /** 민족 발견물의 풍속 칸 — 노래·춤·악기·음식·무예 (js/data/folkdisc.js) */
+  SC.folkInfo = function (d) {
+    var f = d && d.folk; if (!f) return '';
+    var rows = (G.FOLK_LABEL || []).filter(function (k) { return f[k[0]]; });
+    if (!rows.length) return '';
+    return '<div class="disc-folk"><div class="df-title">' + G.icon('people') + '<b>풍속</b></div><dl>' +
+      rows.map(function (k) { return '<dt>' + k[1] + '</dt><dd>' + U.esc(f[k[0]]) + '</dd>'; }).join('') + '</dl></div>';
+  };
   SC.discoveryCard = async function (d, fame, relics) {
     var s = S();
     var chain = G.Img.chain.discovery(d);
@@ -123,7 +131,7 @@
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
       '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +
-      '<div class="desc">' + U.esc(d.desc) + '</div>' + impactHtml + SC.realInfo(d.real) +
+      '<div class="desc">' + U.esc(d.desc) + '</div>' + SC.folkInfo(d) + impactHtml + SC.realInfo(d.real) +
       (fame ? '<div class="center big" style="color:#6a3a14">명성 +' + U.num(fame) + '</div>' : '') + SC.relicStrip(d, relics) + '</div>';
     var win = UI.window({ title: fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
     win.content.querySelector('.art').appendChild(art);

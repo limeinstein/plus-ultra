@@ -297,6 +297,8 @@
         text: d.desc, hint: '단서 — ' + d.hint, real: d.real,
         facts: [
           ['분류', G.DISC_CATS[d.cat]], ['지역', where], ['찾는 방법', HOW[d.how]], ['위치', place],
+          ...(d.folk ? (G.FOLK_LABEL || []).filter(k => d.folk[k[0]]).map(k => ['풍속 · ' + k[1], d.folk[k[0]]]) : []),
+          d.folkCities ? ['이야기를 듣는 곳', d.folkCities.map(i => CITY[i].name).join(', ') + ' — 들어서면 마을 사람이, 술집에서는 주인이 (개척 단계와 상관없이)'] : null,
           ['가치', num(d.val)], ['명성 (직접 보고하면)', '+' + num(fameFor(d))], ['단서에 쓰인 말', G.LANGS[d.lang]],
           G.frontierText ? ['단서가 열리는 때', G.frontierText(d)] : null,
           d.need ? ['앞 고리 (먼저 찾아야 열린다)', d.need.map(x => (G.DISC[x] || {}).name || x).join(', ')] : null,

@@ -449,6 +449,24 @@ Codex가 그린 가족 그림 30장(`images/family-events/`, 576×256)으로 32�
 - **특산물과 희소성**: 구입 창 「특산 ×N」(이 고장 산물 — 산지에서 먼 지역에서 몇 배에 팔리는지, 마우스를 올리면 지역), 매각 창 「귀함」(산지에서 먼 고장)·「산지」(그 물건이 나는 고장 — 헐값), 교역소 「시세」 창에 이 도시에 걸린 사건과 「이 고장 산물이 비싸게 팔리는 곳」. 사건이 걸린 물건은 「가뭄 ▲」·「풍작 ▼」 꼬리표(마우스를 올리면 까닭·모자란 양·남은 날), 도시 이름표에도 사건 이름.
 - 코드 `js/data/econ.js`(사건 표·전쟁 표), `js/systems/economy.js`(`G.Econ`), `R.buyPrice`·`R.sellPrice`·`R.supply`·`R.onSell`·`R.satCap`·`R.satFactor`·`R.spill`. 조정값 `G.BALANCE.econ`, `G.BALANCE.market`(crash·prodCap·relayCap·spill·spillDist). 저장 `s.econ`(옛 저장은 첫날 만들고, 세상에는 이미 몇 가지 일이 벌어지고 있다). 시험 `node tests/economy_smoke.js`.
 
+## 거리 마을 사람의 얼굴·무릎상 = 걷는 그림과 같은 사람 (2026-10-08)
+- Codex가 지역 20곳마다 그린 앞모습 시트(4×4, 13종 — 마을 남자·여자·소년·소녀·촌장·할머니·사서·여관 주인·모험가·장사꾼·귀족 청년·병사·항해사)를 `tools/street_faces.py`가 칸마다 잘라
+  배경을 지우고(rembg) `images/portraits/street-folk/<그림 이름>_<양식>.webp`(얼굴 512) · `…_half.webp`(무릎상 512×약 770)로 만든다. 520장.
+- 거리에서 말을 걸면 대화창 얼굴과 옆에 서는 무릎상이 **걷는 그림의 바로 그 사람**이다 (옷·얼굴·성별이 맞는다). 그림이 없으면 예전처럼 역할 초상(npc-roles)·코드 그림 (`js/systems/streetfolk.js` SF.speaker).
+- 아티팩트에서는 걷는 그림처럼 자산 저장소에 원래 크기로 올린다 (`tools/bundle.py` ASSET_PREFIXES). 시험 `node tests/streetfolk_portraits_smoke.js`.
+
+## 중국·인도·중동 명승지와 건축물 · 민족 발견물의 풍속 (2026-10-08)
+- `js/data/eastdisc.js`: 중국 명승지 20(청나라 전부터 이름난 곳) · 건축물 7, 인도·중동 명승지 10 · 건축물 10(1700년 전). G.WONDERS 묶음에 덧붙임(moredisc.js 다음).
+  문헌과 얽힌 자연 경관 9곳(화산·무이산·여산·삼협·황과수·옥룡설산·천지·다마반드·안탕산)은 `clue: 'book'` — 도서관 사료로 단서를 얻는다. 새 책 『당시선』(b_tangshi, 1580).
+- `js/data/folkdisc.js`: 민족 발견물은 모두 `folk = { music, dance, inst, food, martial }`(노래·춤·악기·음식·무예)을 갖고, 발견 카드(`SC.folkInfo`)·도감 상세에 「풍속」 칸으로 나온다.
+  이미 있던 17곳은 `G.FOLK_FIX`로 글을 풍속 위주로 다시 썼다(옛 글은 desc0).
+- 부족 이름 도시 둘레의 민족 발견물: 아메리카 원주민 마을 230~245, 아프리카 부족 마을 298~308 — 도시 밖 뭍.
+  `js/systems/folk.js`: 처음 들르면 마을 사람이(그 뒤엔 70%), 술집에서 술을 마시면 주인이(80%) 그 부족의 노래·춤 이야기로 단서를 준다. 출처 `town:`·`local:`이라 개척 단계와 상관없다.
+- 오지 민족 10: 사미·아이누·마오리·축치·투바·바자우(바다)·음부티·하와이·안다만(바다)·셀크남.
+- **발견 GIF 83개**(Codex): 자연 30 · 유적 17 · 민족 36 — `images/discoveries/<id>.gif`(576×256, 9.82초) · 마지막 장면 `discovery-ends/` · 게임용 판 `discovery-sheets/`.
+  만드는 법 `tools/discovery83/README.md` (원화 `tools/discovery83/masters/`는 저장소에 올리지 않는다).
+- 시험: `node tests/folk_smoke.js` · `python tests/discovery83_files.py` · `node tests/discovery83_runtime.js`.
+
 ## 거리를 걷는 마을 사람 (2026-10-07)
 
 - 거리 화면(배경·건물 그림이 있는 도시)에 **마을 남자·마을 여자·마을 소년·마을 소녀·마을 할아버지(촌장)·마을 할머니·도서관 사서·여관 주인·강아지(고양이)·모험가·장사꾼·귀족 청년·병사·항해사**가 걸어 다닌다. 거리에 처음 나올 때와 **건물에 들어갔다 나올 때마다 3~4명**을 새로 뽑고(한두 명은 나서자마자 보이는 곳에), 저마다 걷다 서다 하며 오간다. 강아지는 제독 곁으로 오기도 한다.

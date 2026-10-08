@@ -13,6 +13,9 @@
     // 실제 자료(tools/heritage)로 다시 쓴 설명이 있으면 그 글을 쓴다 — 원래 글은 desc0에 남긴다
     var H = G.HERITAGE && G.HERITAGE.disc[id];
     if (H) { o.real = H; if (H.desc) { o.desc0 = o.desc; o.desc = H.desc; } }
+    // 민족 발견물: 음악·춤·악기·음식·무예 위주로 다시 쓴 글과 풍속 칸 (js/data/folkdisc.js)
+    var FX = G.FOLK_FIX && G.FOLK_FIX[id];
+    if (FX) { if (FX.desc) { o.desc0 = o.desc0 || o.desc; o.desc = FX.desc; } if (FX.folk) o.folk = FX.folk; }
     D.push(o);
   }
   // cat: geo nature ruin treasure creature people trade
