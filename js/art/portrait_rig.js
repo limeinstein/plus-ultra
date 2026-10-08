@@ -118,7 +118,7 @@
         root.appendChild(im);
       });
       var face = document.createElement('div');
-      face.className = 'rig-facefx';
+      face.className = 'rig-facefx' + (opts.noFace ? ' off' : '');   // noFace: 옆모습 같은 그림 — 기본 자리 눈·입을 덧그리지 않는다
       face.innerHTML = '<i class="eye eye-l"></i><i class="eye eye-r"></i><i class="mouth"></i>';
       root.appendChild(face);
       // 그림마다 다른 얼굴 자리에 목·가슴 나눔선과 눈·입을 맞춘다 (없으면 기본 자리). 상자 크기가 바뀌면 다시 맞춘다

@@ -273,7 +273,9 @@
     // 아니면 예전처럼 대화창 층에 세운다(창 뒤에 숨지 않게). 혼자 말하는 사람은 아래 층에 세울 수 있을 때만 선다
     var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
     var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
-    var keep = keepScene();
+    // 이야기 모드(「아버지의 사진」)는 사건이다 — 어느 화면(술집·도서관·바다·뭍)에서든 마주 선 무릎상 둘로 (얼굴 ↔ 무릎상으로 바뀌지 않게)
+    var story = !!(root && S && S.player && G.Story && G.Story.active && G.Story.active());
+    var keep = !story && keepScene();
     if (!keep) {
       /* 한 가지 구도: 어디서든(도시·바다·뭍·해전·창이 열려 있을 때도) 말하는 사람은 제독과 마주 선다 — 제독 왼쪽 · 상대 오른쪽.
          혼자 가운데 서는 구도와 대화창 안 얼굴 칸은 쓰지 않는다 (사람이 없는 말·noStand 장면만 예전 대화창).
@@ -321,7 +323,7 @@
         rigs.push(G.PortraitRig.mount(art, {
           portrait: tall ? null : who && who.portrait, chain: tall ? half.chain : who && who.portraitChain, profile: tall ? 'half' : 'bust', side: side === 'center' ? 'right' : side,
           state: active ? (asking ? 'react' : 'talk') : 'listen', emotion: active ? (opts.emotion || 'neutral') : 'neutral',
-          anchors: who && who.rigAnchors, alt: who && who.name
+          anchors: who && who.rigAnchors, alt: who && who.name, noFace: !!(who && who.rigNoFace)
         }));
       } else {
         var p = portraitNode(who, 280); if (p) art.appendChild(p);
@@ -363,7 +365,7 @@
       var right = speakerSide === 'right' ? opts : partner;
       var activeSide = asking ? (choiceSide || (speakerSide === 'left' ? 'right' : 'left')) : speakerSide;
       // 바다·뭍에서는 특별한 사건(가족·연인·부하끼리 썸·왕녀)이 아니면 두 사람 얼굴(흉상)만 — 무릎상은 과하다
-      var faces = seaOrLand() && !isSpecial(left) && !isSpecial(right);
+      var faces = seaOrLand() && !story && !isSpecial(left) && !isSpecial(right);
       // 무릎상과 얼굴을 섞지 않는다: 두 사람 다 무릎상이 있을 때만 무릎상, 한 사람이라도 없으면 둘 다 얼굴
       var hl = left ? halfKeyOf(left) : null, hr = right ? halfKeyOf(right) : null;
       if ((left && !(hl && hl.key)) || (right && !(hr && hr.key))) faces = true;

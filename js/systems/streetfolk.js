@@ -167,7 +167,7 @@
   /** 대화창의 얼굴 (짐승은 얼굴 없이 이름만) */
   SF.speaker = function (f, c) {
     var T = D().types[f.type], cl = R.cityLang(c), sp = { name: f.name, lang: f.animal ? 3 : cl.lv, li: cl.li };
-    if (f.animal) return sp;
+    if (f.animal) { sp.noFace = true; sp.solo = true; return sp; }   // 고양이·강아지: 얼굴을 지어 붙이지 않는다 (UI.withFace도 건너뛴다)
     var fc = T.face || {}, stl = G.Img.folkStyle(c), sprite = (D().sprites || {})[f.type] || f.type;
     var own = 'portraits/street-folk/' + sprite + '_' + stl;
     try {

@@ -80,8 +80,15 @@
       if (k === 'E') return mateWho('estevao');
       if (k === 'M') return ST.mother();
       if (k === 'F') return ST.father();
-      if (k === 'B') { var sp = G.SPONSOR[D.sponsor]; return inCity() ? G.Sponsor.speaker(sp) : { name: G.Sponsor.holderName(sp) }; }
-      if (k === 'keeper') { var kp = KEEPER[curTrace] || ['vendor', '고장 사람']; return inCity() ? C().npc(kp[0], kp[1]) : { name: kp[1] }; }
+      if (k === 'B') { var sp = G.SPONSOR[D.sponsor]; return G.Sponsor.speaker(sp); }   // 도시 밖(편지·회상)에서도 얼굴과 무릎상으로 선다
+      if (k === 'keeper') {
+        var kp = KEEPER[curTrace] || ['vendor', '고장 사람'];
+        if (inCity()) return C().npc(kp[0], kp[1]);
+        // 도시 밖에서 듣는 흔적 이야기도 얼굴과 무릎상으로 선다 (그 흔적이 있는 고장의 사람 모습)
+        var tr = (D.traces || []).filter(function (t) { return t[0] === curTrace; })[0], tc = tr && G.CITY_DATA[tr[2]];
+        var role = (G.Art.TOWNFOLK && G.Art.TOWNFOLK[kp[0]] || ['merchant'])[0], o = npcFace('story_keeper_' + (curTrace || ''), role, tc && G.Img.folkStyle ? G.Img.folkStyle(tc) : 'ib', null, 'story_keeper_' + (curTrace || ''));
+        o.name = kp[1]; return o;
+      }
     } catch (e) { console.error(e); }
     return {};
   }

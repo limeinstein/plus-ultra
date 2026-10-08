@@ -180,6 +180,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .portrait-rig .rig-torso { clip-path: inset(calc(var(--rig-neck) - 4%) 0 calc(100% - var(--rig-chest) - 4%) 0); transform-origin: 50% var(--rig-chest); }
 .portrait-rig .rig-head { clip-path: inset(0 0 calc(100% - var(--rig-neck) - 4%) 0); transform-origin: var(--rig-face-x) var(--rig-neck); }
 .portrait-rig .rig-facefx { position: absolute; inset: 0; pointer-events: none; opacity: .74; }
+.portrait-rig .rig-facefx.off { display: none; }
 .portrait-rig .rig-facefx i { position: absolute; display: block; pointer-events: none; }
 .portrait-rig .rig-facefx .eye { top: var(--rig-eye-y); width: 7%; height: 1.2%; border-top: 2px solid rgba(45,24,20,.72); border-radius: 50%; opacity: 0; transform: translate(-50%, -50%) scaleY(.15); }
 .portrait-rig .rig-facefx .eye-l { left: calc(var(--rig-face-x) - var(--rig-eye-gap)); }

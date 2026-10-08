@@ -492,7 +492,7 @@ Codex가 그린 가족 그림 30장(`images/family-events/`, 576×256)으로 32�
 - 그림은 코드로 그린다(`js/art/streetfolk.js`). `images/street-folk/<종류>[_<문화권>]/walk_1…8` 그림을 넣으면 그 그림이 걷는다(`images/street-folk/README.md`).
 - 코드 `js/data/streetfolk.js`(종류·이야기), `js/systems/streetfolk.js`(`G.StreetFolk`), `js/scenes/town.js`, `C.chatFolk`. 조정값 `G.FX.streetFolk`(인원·빠르기·쉬는 시간·깊이·크기). 저장하지 않는다. 시험 `node tests/streetfolk_smoke.js`.
 - **걷는 그림 (2026-10-08, Codex)**: 도시 양식 20곳 × 14종(마을 사람·마을 여자·소년·소녀·촌장·할머니·사서·여관 주인·강아지 또는 고양이·모험가·장사꾼·젊은 귀족·병사·항해사) 걸음 8단계 — `images/street-folk/<그림 이름>_<양식>.webp` 280장(4×2 시트, 칸 380×444). 그 도시 양식 그림이 있으면 그것, 없으면 코드 그림. 짐승은 그 지역 그림의 짐승(일본·페르시아·오스만·스와힐리·동남아·서북유럽·이탈리아는 고양이). 대화창 얼굴은 같은 지역 역할 그림의 무릎상. 원본 시트는 `images/npc-walk/`(저장소에는 안내·목록만) → `python tools/npc_walks.py`. 그림 높이 `G.FX.streetFolk.imgH`. **아티팩트판은 줄이지 않고 자산 저장소에 원래 크기로** 올린다(`tools/bundle.py` ASSET_PREFIXES — 한 판 256MB 한도 밖).
-
+- **고양이·강아지는 얼굴 없이** (2026-10-08) — 말을 걸어도 사람 얼굴을 지어 붙이지 않고 이야기만 나온다 (`noFace`).
 ## 토르데시야스 조약 · 사라고사 조약 (2026-10-07)
 
 - **1494년 6월 7일** 조약 창(세계 지도에 경계선·카보베르데에서 370레구아·두 왕실의 반구·조약 밖)이 뜨고 그날부터 조건이 걸린다. 6월 6일까지는 아무 조건도 없다.
@@ -653,6 +653,7 @@ Codex가 그린 가족 그림 30장(`images/family-events/`, 576×256)으로 32�
 - 수첩 **「아버지의 사진」** 탭(이야기 모드에만): 사진의 생김새(`images/story/photo` 그림이 있으면 그것), 흔적 표, 지금 할 일, 편지. 소지품에 「아버지의 사진」·「아버지의 시계」.
 - 이야기 모드가 아니면 흔적·동료 셋·남작은 소문·술집·저택에 나오지 않는다(`G.Disc.available/addHint`·`G.Frontier.mateReady`·`G.Sponsor.present` 감쌈). 전용 그림 자리: `portraits/npc/story_mother(_half)`·`story_father(_half)`·`portraits/sponsors/pt_casanova`·`portraits/mates/anselmo·estevao(_half)`(없으면 코드 초상).
 - 파일: `js/data/story.js`(자료·대사), `js/systems/story.js`(진행기), `tests/story_smoke.js`. 자동 저장은 보통 항해와 같은 칸.
+- **대화는 늘 서서** — 이야기 모드에서는 어느 화면에서든(도시 메뉴가 뜨기 전 첫 장면·바다·뭍) 사람이 말하면 무릎상으로 선다: 다른 사람은 제독과 마주 선 둘, 제독 혼자면 가운데 하나. 전용 그림이 없는 안셀무 신부·에스테방·카사노바 남작·흔적 이야기의 고장 사람은 그 고장 신부·군인·귀족·주민의 무릎상으로. 시험 `tests/story_stand_smoke.js`
 
 ## 튜토리얼 「첫 항해 — 1480, 세비야」 (2026-10-06)
 - 타이틀의 **「첫 항해 (튜토리얼)」**. 이름만 정하면 고정된 제독(에스파냐·탐험가·세빌리아·22세·카라벨 에스페란사호·쉬움)으로 시작해, **단서 → 동료 → 후원 → 항해 → 발견 → 보고**를 한 바퀴 돈다 (`js/data/tutorial.js` 자료·대사 · `js/systems/tutorial.js` 진행기 `G.Tutorial`, 조정값 `G.TUTORIAL`).
