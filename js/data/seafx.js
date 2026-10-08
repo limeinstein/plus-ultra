@@ -287,4 +287,6 @@
   /** 코스타 델 솔 3 OST 유튜브 재생기 창 (js/systems/ytmusic.js) — 유튜브 규칙상 200×200보다 작게 하거나 숨길 수 없다.
      w·h 재생기 크기 · idle 마우스를 올리지 않았을 때 흐림(0~1) · flash 곡이 바뀌면 또렷하게 보이는 초 · gap 구석에서 띄우는 px */
   G.FX.ostBox = { w: 200, h: 200, idle: 0.5, flash: 2.5, gap: 8 };
+  // 유튜브 OST 곡 돌림 (js/systems/ytmusic.js): 곡 끝 guard초 전에 그 곡 처음으로 되감는다 · 끝에서 줄이고 되감은 뒤 올리는 fade초 · 위치를 보는 간격(ms)
+  G.FX.ostLoop = { fade: 1.5, guard: 0.35, every: 250 };
 })(window.G = window.G || {});

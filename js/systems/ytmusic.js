@@ -151,7 +151,7 @@
           width: FXB().w, height: FXB().h, playerVars: { autoplay: 1, controls: 1, rel: 0, modestbranding: 1, playsinline: 1 },
           events: {
             onReady: function () { ready = true; loading = false; player.setVolume(vol()); if (queued) { var q = queued; queued = null; start(q); } },
-            onStateChange: function (e) { if (e.data === 0 && cur) start(cur, true); },          // 끝나면 그 곡을 처음부터 다시 (돌림)
+            onStateChange: function (e) { if (e.data === 0 && cur) loopBack(); },          // 영상 끝(끝 시각이 없는 곡)에 닿으면 그 곡 처음으로 (돌림)
             onError: function (e) { fail('영상을 재생할 수 없습니다 — 오류 ' + e.data); }
           }
         });
@@ -164,15 +164,48 @@
     document.head.appendChild(sc);
     setTimeout(function () { if (!ready && !failed) fail('유튜브가 응답하지 않습니다'); }, 12000);
   }
+  /* 곡 돌림 — 한 영상 안의 곡 구간(s~e초)을 끝까지 들으면 그 곡 처음으로 돌아가 계속 튼다.
+     영상에 끝 시각(endSeconds)을 주면 유튜브가 그 자리에서 재생을 멈추거나(끝 화면) 멈춤 상태로 남아 곡이 끊기므로,
+     끝 시각은 주지 않고 0.25초마다 재생 위치를 보다가 e초에 닿기 전에 s초로 되감는다 (영상을 다시 읽지 않아 이음매가 짧다).
+     끝 loopFade초 동안 소리를 줄였다가 되감은 뒤 다시 올린다. 창을 내려 두어 타이머가 늦게 돌아도 e초를 넘겼으면 바로 되감는다.
+     멈춤·끝 상태로 곡 끝에 서 있으면(유튜브가 멈춘 경우) 처음으로 돌려 다시 튼다. 조정값: G.FX.ostLoop */
+  function FXL() { return (G.FX && G.FX.ostLoop) || { fade: 1.5, guard: 0.35, every: 250 }; }
+  var watchT = null, fadeIn = 0, lastSeek = 0;
+  function trackOf(id) { return OST().tracks[id] || null; }
+  function loopBack() {
+    var t = trackOf(cur); if (!t || !player || !ready) return;
+    lastSeek = Date.now(); fadeIn = Date.now();
+    try { player.setVolume(0); player.seekTo(t.s, true); player.playVideo(); } catch (e) { /* 재생기 없음 */ }
+  }
+  Y._loopBack = loopBack;
+  function watch() {
+    if (!player || !ready || !cur || Y.local()) return;
+    var t = trackOf(cur); if (!t) return;
+    var F = FXL(), now, st, tm;
+    try { st = player.getPlayerState(); tm = player.getCurrentTime(); } catch (e) { return; }
+    var end = t.e != null ? t.e : (player.getDuration ? player.getDuration() : 0);
+    if (Date.now() - lastSeek < 1200) return;                         // 되감은 직후 위치가 아직 옛 자리로 보일 수 있다
+    if (st === 0 || (st === 2 && end && tm >= end - 1.5)) { loopBack(); return; }      // 유튜브가 곡 끝에서 멈췄다
+    if (st !== 1) return;
+    if (t.e != null && tm >= t.e - F.guard) { loopBack(); return; }  // 곡 끝 → 처음으로
+    if (tm < t.s - 2) { lastSeek = Date.now(); try { player.seekTo(t.s, true); } catch (e) { /* 없음 */ } return; }   // 앞 곡에 들어가 있으면 이 곡 처음으로
+    now = Date.now();
+    var k = 1;
+    if (t.e != null && tm > t.e - F.fade) k = Math.max(0, (t.e - F.guard - tm) / Math.max(0.1, F.fade - F.guard));   // 끝에서 줄이기
+    if (fadeIn) { var u = (now - fadeIn) / 1000 / F.fade; if (u >= 1) fadeIn = 0; else k = Math.min(k, u); }        // 되감은 뒤 올리기
+    try { player.setVolume(Math.round(vol() * k)); } catch (e) { /* 없음 */ }
+  }
+  function ensureWatch() { if (!watchT) watchT = setInterval(watch, FXL().every || 250); }
   function start(id, again) {
     var t = OST().tracks[id]; if (!t) return;
     cur = id;
     if (LO() && LO().want(id)) { if (box) box.style.display = 'none'; return; }     // 내 컴퓨터의 MP3 (찾는 중이면 찾은 뒤에)
     if (box) { box.style.display = ''; var tt = box.querySelector('.ost-title'); if (tt) tt.textContent = '♪ ' + t.name; placeBox(); flash(); }
     if (!ready) { queued = id; loadApi(); return; }
-    var o = { videoId: OST().videos[t.v], startSeconds: t.s };
-    if (t.e != null) o.endSeconds = t.e;
+    var o = { videoId: OST().videos[t.v], startSeconds: t.s };      // 끝 시각은 주지 않는다 — watch()가 곡 끝에서 처음으로 되감는다
+    fadeIn = 0; lastSeek = Date.now();
     try { player.loadVideoById(o); player.setVolume(vol()); if (!again) player.playVideo(); } catch (e) { fail('재생 실패'); }
+    ensureWatch();
   }
   /** 곡 틀기 (같은 곡이면 그대로) */
   Y.play = function (id) {

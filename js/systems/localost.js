@@ -109,7 +109,18 @@
   function deck(i) {
     if (decks[i]) return decks[i];
     var a = new Audio(); a.preload = 'auto'; a.volume = 0; a._g = 0; a._to = 0; a._id = null;
+    // 창을 내려 두어 타이머가 느려져도 곡 끝을 놓치지 않게 재생 위치가 바뀔 때마다도 본다. 파일 끝에 닿아 멈췄으면 곡 처음으로
+    a.addEventListener('timeupdate', function () { if (Date.now() - lastTick > 400) tick(); else loopCheck(i); });   // 타이머가 늦으면 소리 바꿈도 여기서
+    a.addEventListener('ended', function () { if (i === on && a._id && a._to > 0) { var sg = L.seg(a._id); if (sg) start(a._id, sg[0], 0.6); } });
     decks[i] = a; return a;
+  }
+  /** 곡 끝에 다가가면 다른 재생기로 같은 곡 처음부터 겹쳐 돌린다 (곡이 끝나도 끊기지 않고 반복) */
+  function loopCheck(i) {
+    var a = decks[i], F = FX();
+    if (!a || i !== on || !a._id || a.paused || a._to <= 0) return;
+    var sg = L.seg(a._id); if (!sg) return;
+    if (a.currentTime >= sg[1] - (F.loopFade || 3)) start(a._id, sg[0], F.loopFade || 3);
+    else if (a.currentTime < sg[0] - 1 && a.readyState >= 1) a.currentTime = sg[0];
   }
   function tryPlay(a) {
     var p; try { p = a.play(); } catch (e) { p = null; }
@@ -121,8 +132,10 @@
     function go() { unlockWait = false; document.removeEventListener('pointerdown', go, true); document.removeEventListener('keydown', go, true); decks.forEach(function (a) { if (a && a._to > 0 && a.paused) tryPlay(a); }); }
     document.addEventListener('pointerdown', go, true); document.addEventListener('keydown', go, true);
   }
+  var lastTick = 0;
   function tick() {
-    var dt = 0.1, F = FX(), v = vol(), busy = false;
+    var nowT = Date.now(), dt = lastTick ? Math.min(1, Math.max(0.02, (nowT - lastTick) / 1000)) : 0.1, F = FX(), v = vol(), busy = false;
+    lastTick = nowT;
     decks.forEach(function (a, i) {
       if (!a) return;
       var sp = 1 / Math.max(0.05, (a._fade || F.fade || 2.5));
@@ -130,16 +143,11 @@
       a.volume = Math.max(0, Math.min(1, a._g * v));
       if (a._to === 0 && a._g <= 0 && !a.paused) { remember(a); a.pause(); }
       if (a._g > 0 || a._to > 0) busy = true;
-      // 곡 끝에 다가가면 다른 재생기로 같은 곡 처음부터 겹쳐 돌린다
-      if (i === on && a._id && !a.paused) {
-        var sg = L.seg(a._id);
-        if (sg && a.currentTime >= sg[1] - (F.loopFade || 3)) start(a._id, sg[0], F.loopFade || 3);
-        else if (sg && a.currentTime < sg[0] - 1) a.currentTime = sg[0];
-      }
     });
+    loopCheck(on);
     if (!busy && timer) { clearInterval(timer); timer = null; }
   }
-  function ensureTimer() { if (!timer) timer = setInterval(tick, 100); }
+  function ensureTimer() { if (!timer) { lastTick = Date.now(); timer = setInterval(tick, 100); } }
   function remember(a) { if (a && a._id) pos[a._id] = { t: a.currentTime, at: Date.now() }; }
   /** id 곡을 at초부터 다른 재생기로 틀고, 지금 재생기는 fade초에 걸쳐 줄인다 */
   function start(id, at, fade) {
@@ -148,7 +156,7 @@
     a._id = id; a._to = 1; a._fade = fade; a._g = 0; a.volume = 0;
     if (a.src !== new URL(url, location.href).href) a.src = url;
     var seek = function () { try { a.currentTime = at; } catch (e) { /* 아직 못 감 */ } };
-    if (a.readyState >= 1) seek(); else a.addEventListener('loadedmetadata', seek, { once: true });
+    seek(); if (a.readyState < 1) a.addEventListener('loadedmetadata', seek, { once: true });   // 아직 못 읽었어도 시작 자리를 먼저 정해 둔다 (파일 처음이 잠깐 들리지 않게)
     tryPlay(a);
     on = nxt; cur = id;
     ensureTimer();
