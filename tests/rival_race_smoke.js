@@ -185,6 +185,17 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return Object.keys(seen).length;
     });
     ok(d7 >= 34, '탐험 함대가 바다에서 보이는 경쟁자 ' + d7 + '명');
+    // 초상: 경쟁자마다 전용 얼굴·무릎상(portraits/rivals) 또는 같은 사람의 동료 그림 — 아직 그리지 않은 사람만 그린 얼굴
+    const d8 = await page.evaluate(() => {
+      const K = G.Img.chain, out = { face: [], half: [], none: [] };
+      Object.keys(G.RIVAL_STAYS).forEach(nm => {
+        const f = G.Img.pick(K.rival(nm)), h = G.Img.pick(K.rivalHalf(nm));
+        if (f) out.face.push(nm); if (h) out.half.push(nm); if (!f || !h) out.none.push(nm);
+      });
+      return out;
+    });
+    console.log('    그림이 아직 없는 경쟁자: ' + (d8.none.join(', ') || '없음'));
+    ok(d8.none.length <= 1 && d8.none.every(n => n === '페르낭 멘드스 핀투'), '경쟁자 ' + d8.face.length + '명이 얼굴·무릎상을 가진다 (남은 사람: 핀투만)');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join('\n'));
     console.log('OK');
   } catch (e) {
