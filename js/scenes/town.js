@@ -66,7 +66,14 @@
     giralda: { name: '히랄다 탑', desc: '세비야 대성당 곁에 우뚝 선 탑. 본디 12세기 알모하드 왕조가 세운 대모스크의 첨탑이었으나, 도시가 카스티야 왕국에 넘어간 뒤 대성당의 종탑이 되었다. 성당 안뜰에는 모스크 시절의 오렌지 나무 정원이 남아 있다.' },
     columns: { name: '로마의 기둥', desc: '세비야가 로마의 도시 히스팔리스였던 시절의 신전 기둥. 천 년이 넘도록 거리 한쪽에 서 있어, 사람들은 도시를 세웠다는 헤라클레스와 율리우스 카이사르의 이야기를 이 기둥에 얹어 들려준다.' }
   };
-  // 도시 발견물은 landmarks/<발견물 id> 그림이 있을 때 자동으로 거리 뒤편에 선다.
+  // 도시 발견물은 landmarks/<발견물 id> 그림이 있을 때 자동으로 거리에 선다 — 건물 줄 사이에 광장 한 칸을 비워, 그 고장 돌로 깐 단 위에 건물과 같은 깊이로.
+  var PLAZA = 46;            // 볼거리 양옆 광장 너비
+  var MARK_MAXW = 820;       // 볼거리 그림이 이보다 넓으면 높이를 줄인다
+  var MARK_SET = 10;
+  var LANDMARK_MIN_H = 380;
+  // 볼거리 그림 아래의 빈칸(옅은 그림자만 있는 곳)이 그림 높이의 몇 할인가 — 건물 발치를 바닥선에 맞춘다.
+  // 픽셀을 읽을 수 있으면(웹판·아티팩트) 그림에서 바로 재고, file://처럼 못 읽으면 이 표를 쓴다 (images/landmarks 기준으로 잰 값)
+  var LANDMARK_FOOT = {alhambra: 0.046, apostolic: 0.023, arsenal: 0.017, askia: 0.008, battersea: 0.019, bellasartes: 0.05, bigben: 0.031, biosphere: 0.073, bluemosque: 0.033, bolshoi: 0.046, byrsa: 0.015, casacontrat: 0.015, colosseum: 0.008, delhimosque: 0.025, djenne: 0.019, eiffel: 0.017, erdenezuu: 0.112, forbidden: 0.06, globe: 0.056, grandbazaar: 0.033, greatlib: 0.094, hagiasophia: 0.019, havana: 0.021, hue: 0.079, hwangnyong: 0.013, isfahanmosque: 0.046, jongmyo: 0.046, kilwa: 0.021, kremlin: 0.021, louvre: 0.048, maracana: 0.137, notredame: 0.006, orszaghaz: 0.019, parthenon: 0.031, pharos: 0.006, pisa: 0.019, porcelain: 0.033, potala: 0.075, redfort: 0.087, rockdome: 0.027, sankore: 0.015, sepulchre: 0.019, stbasil: 0.033, sydneyopera: 0.062, templomayor: 0.027, uffizi: 0.075, unhq: 0.023, versailles: 0.077, weiyang: 0.102, whitetower: 0.052, wisdom: 0.048, zimbabwe: 0.094};  // 거리에 서는 건축 발견물의 가장 낮은 높이 (넓은 그림은 MARK_MAXW에서 줄어든다)         // 볼거리 바닥선을 건물보다 조금 뒤로 (광장 안쪽)
   var LANDMARK_HEIGHT = {
     pharos: 500, hwangnyong: 460, hagiasophia: 400, djenne: 370, delhimosque: 370,
     potala: 360, isfahanmosque: 380, rockdome: 350, notredame: 410, templomayor: 390,
@@ -96,7 +103,7 @@
         if (gap > bestGap) { best = p; bestGap = gap; }
       }
       used.push(best); seen[d.id] = true;
-      out.push([d.id, best, LANDMARK_HEIGHT[d.id] || 340]);
+      out.push([d.id, best, Math.max(LANDMARK_MIN_H, LANDMARK_HEIGHT[d.id] || 400)]);   // 거리 건물(320~430)보다 작아 보이지 않게
     });
     return out;
   }
@@ -155,6 +162,47 @@
     return cv;
   }
 
+  /** 볼거리 그림: 거리 건물과 어울리게 — 위쪽은 하늘빛으로 아주 조금 흐리고(조금 뒤에 선 큰 건물), 발치는 그늘을 넣어 땅에 붙인다 */
+  function markCanvas(img, h) {
+    var cv = prescale(img, h), ctx = cv.getContext('2d'), ch = cv.height;
+    ctx.save(); ctx.globalCompositeOperation = 'source-atop';
+    var g = ctx.createLinearGradient(0, 0, 0, ch);
+    g.addColorStop(0, 'rgba(255,246,228,.16)'); g.addColorStop(0.55, 'rgba(255,246,228,.04)');
+    g.addColorStop(0.86, 'rgba(40,26,12,0)'); g.addColorStop(1, 'rgba(40,26,12,.30)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, ch);
+    ctx.restore();
+    return cv;
+  }
+  /** 그림 아래 빈칸의 높이(px): 알파가 뚜렷한 가장 아랫줄부터 그림 바닥까지 */
+  function footOf(cv, id) {
+    try {
+      var w = cv.width, h = cv.height, data = cv.getContext('2d').getImageData(0, 0, w, h).data;
+      for (var y = h - 1; y > h * 0.6; y--) for (var x = 0; x < w; x += 2) if (data[(y * w + x) * 4 + 3] > 40) return h - 1 - y;
+      return 0;
+    } catch (e) { return Math.round((LANDMARK_FOOT[id] || 0) * cv.height); }
+  }
+  /** 볼거리가 서는 광장의 단: 그 고장 길바닥 돌빛으로 깐 낮은 단 (앞면·윗면·돌 줄눈) */
+  function terraceCanvas(w, p) {
+    // 길바닥과 같은 빛의 낮은 계단 한 단 — 무대처럼 튀지 않게 양 끝은 길바닥으로 스며든다
+    w = Math.round(w); var th = 22, cv = A.canvas(w, th), ctx = cv.getContext('2d'), top = 11;
+    var g = ctx.createLinearGradient(0, 0, 0, top);
+    g.addColorStop(0, A.rgba(A.shade(p.top, 0.9), 1)); g.addColorStop(1, A.rgba(p.alt, 1));
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(8, 0); ctx.lineTo(w - 8, 0); ctx.lineTo(w, top); ctx.lineTo(0, top); ctx.closePath(); ctx.fill();
+    var f = ctx.createLinearGradient(0, top, 0, th);
+    f.addColorStop(0, A.rgba(p.mid, 1)); f.addColorStop(1, A.rgba(A.shade(p.mid, 0.78), 1));
+    ctx.fillStyle = f; ctx.fillRect(0, top, w, th - top);
+    ctx.strokeStyle = A.rgba(p.joint, 0.4); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, top + 0.5); ctx.lineTo(w, top + 0.5); ctx.stroke();
+    for (var x = 22; x < w; x += 52) { ctx.beginPath(); ctx.moveTo(x + 0.5, top + 2); ctx.lineTo(x + 0.5, th); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(255,248,232,.28)'; ctx.beginPath(); ctx.moveTo(8, 0.5); ctx.lineTo(w - 8, 0.5); ctx.stroke();
+    // 양 끝을 투명하게 흐려 길에 스며들게
+    ctx.globalCompositeOperation = 'destination-out';
+    var e = ctx.createLinearGradient(0, 0, w, 0), k = Math.min(0.12, 60 / w);
+    e.addColorStop(0, 'rgba(0,0,0,1)'); e.addColorStop(k, 'rgba(0,0,0,0)'); e.addColorStop(1 - k, 'rgba(0,0,0,0)'); e.addColorStop(1, 'rgba(0,0,0,1)');
+    ctx.fillStyle = e; ctx.fillRect(0, 0, w, th);
+    return cv;
+  }
+
   function build(c, buildings, landmarks) {
     var rng = rngOf(c);
     var bgKey = I.pick(I.chain.bg(c));
@@ -176,20 +224,37 @@
         if (!cv) return;
         items.push({ kind: b.kind, arg: b.arg, name: b.name, icon: b.icon, cv: cv, w: cv.width, h: cv.height, x: 0 });
       });
-    var x = MARGIN;
-    items.forEach(function (it, i) {
-      it.x = x;
-      it.base = GROUND + Math.round((rng() - 0.5) * 8);
-      // 서로 닿지 않을 만큼만 띄워 다닥다닥 붙여 세운다
-      it.lift = (i % 2) ? 36 : 0;           // 이름표가 이웃과 겹치지 않도록 한 칸씩 올린다
-      x += it.w + GAP + Math.round(rng() * GAP_VAR);
-    });
-    var streetW = Math.max(W, x - 56 + MARGIN);
+    // 볼거리(도시 건축 발견물): 건물 줄 사이 제자리(l[1] = 거리의 몇 할쯤)에 광장 한 칸을 비우고 선다 — 앞 건물에 가리거나 하늘에 뜨지 않게
+    var gs = groundStyle(c).p;
     var marks = landmarks.map(function (l) {
       var key = I.pick(I.chain.landmark(l[0])), img = key && I.get(key);
       if (!img) return null;
-      return { id: l[0], d: (G.DISC && G.DISC[l[0]]) || null, info: MARK_INFO[l[0]] || null, cv: prescale(img, l[2]), x: Math.round(streetW * l[1]), y: GROUND - 54 };
-    }).filter(Boolean);
+      var h = l[2], w0 = (img.naturalWidth || img.width) * h / (img.naturalHeight || img.height);
+      if (w0 > MARK_MAXW) h = Math.round(h * MARK_MAXW / w0);
+      var d = (G.DISC && G.DISC[l[0]]) || null, info = MARK_INFO[l[0]] || null;
+      var cv = markCanvas(img, h);
+      return { id: l[0], d: d, info: info, name: d ? d.name : info ? info.name : '', at: l[1], cv: cv, foot: footOf(cv, l[0]), x: 0, y: GROUND - MARK_SET };
+    }).filter(Boolean).sort(function (a, b) { return a.at - b.at; });
+    var row = items.map(function (it) { return { it: it }; });
+    marks.forEach(function (m, k) {
+      // 항구(첫 건물) 앞과 성문(끝) 뒤는 피하고, 이미 넣은 볼거리 바로 옆도 피한다
+      var at = U.clamp(Math.round(m.at * items.length), 1, Math.max(1, items.length - 1)), pos = 0, seen = 0;
+      for (pos = 0; pos < row.length && seen < at; pos++) if (row[pos].it) seen++;
+      while (pos < row.length && ((row[pos - 1] && row[pos - 1].m) || (row[pos] && row[pos].m))) pos++;
+      row.splice(pos, 0, { m: m });
+    });
+    var x = MARGIN, ni = 0;
+    row.forEach(function (r) {
+      if (r.m) { x += PLAZA; r.m.x = x; x += r.m.cv.width + PLAZA; return; }
+      var it = r.it;
+      it.x = x;
+      it.base = GROUND + Math.round((rng() - 0.5) * 8);
+      // 서로 닿지 않을 만큼만 띄워 다닥다닥 붙여 세운다
+      it.lift = (ni++ % 2) ? 36 : 0;           // 이름표가 이웃과 겹치지 않도록 한 칸씩 올린다
+      x += it.w + GAP + Math.round(rng() * GAP_VAR);
+    });
+    var streetW = Math.max(W, x - 56 + MARGIN);
+    marks.forEach(function (m) { m.terrace = terraceCanvas(m.cv.width + PLAZA * 1.4, gs); });
     var ground = groundStrip(c, rng);
     st = {
       city: c, items: items, marks: marks, streetW: streetW,
@@ -651,13 +716,14 @@
   T.focusMark = function (id) {
     var m = st && st.marks.filter(function (x) { return x.id === id; })[0];
     if (!m) return Promise.resolve(null);
-    var cx = (m.x + m.cv.width / 2 - W / 2) / 0.72;
-    st.camTo = clampCam(cx);
+    var cx = m.x + m.cv.width / 2;
+    st.camTo = clampCam(cx - W / 2);
+    if (!st.hidden && st.hero.to == null && Math.abs(st.hero.x - cx) > 40) { st.hero.to = cx; st.hero.walkV = null; }   // 그 앞까지 걸어간다
     return new Promise(function (res) { setTimeout(res, 650); });
   };
 
   /* 거리 뒤편의 볼거리(발견물): 그림이 그려진 곳을 누르면 설명을 본다. 앞의 건물이 투명한 자리(하늘)일 때만 건물보다 먼저 잡힌다. */
-  var MARK_PX = 0.72;        // 볼거리가 카메라를 따라 움직이는 정도 (draw 와 같다)
+  var MARK_PX = 1;           // 볼거리는 건물과 같은 깊이로 카메라를 따라 움직인다 (draw 와 같다)
   function solid(o, px, py) {
     if (o.alpha === undefined) { try { o.alpha = o.cv.getContext('2d').getImageData(0, 0, o.cv.width, o.cv.height).data; } catch (e) { o.alpha = null; } }
     if (!o.alpha) return true;             // file:// 처럼 픽셀을 읽을 수 없으면 네모 전체
@@ -672,8 +738,8 @@
     if (!st) return null;
     for (var i = st.marks.length - 1; i >= 0; i--) {
       var m = st.marks[i]; if (!m.d && !m.info) continue;
-      var sx = m.x - st.cam * MARK_PX, top = m.y - m.cv.height;
-      if (x < sx || x > sx + m.cv.width || y < top || y > m.y) continue;
+      var sx = m.x - st.cam * MARK_PX, top = m.y - m.cv.height + (m.foot || 0);
+      if (x < sx || x > sx + m.cv.width || y < top || y > top + m.cv.height) continue;
       if (solid(m, x - sx, y - top)) return m;
     }
     return null;
@@ -708,6 +774,13 @@
     } catch (e) { console.error(e); }
     inspecting = false;
     if (st) st.dirty = true;
+  };
+
+  /** 볼거리를 누르거나 그 앞에서 ↑: 아직 찾지 않은 도시 건물 발견물이면 발견(city.lookAt), 그 밖에는 들여다보기 */
+  T.lookMark = function (m) {
+    if (!st || !m) return;
+    if (m.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(m.d) && !G.Disc.foundByMe(m.id) && G.Disc.built(m.d) && !(G.Disc.taken && G.Disc.taken(m.id)) && st.onPick) st.onPick('landmark', m.id);
+    else T.inspect(m);
   };
 
   // ---------------------------------------------------------------- 입력
@@ -747,8 +820,7 @@
       // 거리를 걷는 사람: 다가가 말을 건다 (city.chatFolk)
       if (it && it.spec) { onPick('folk', it); return; }
       // 아직 찾지 않은 도시 건물 발견물이면 눌러서 발견 (city.lookAt), 그 밖의 볼거리는 들여다보기
-      if (it && !it.kind && it.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(it.d) && !G.Disc.foundByMe(it.id) && G.Disc.built(it.d)) onPick('landmark', it.id);
-      else if (it && !it.kind) T.inspect(it);
+      if (it && !it.kind) T.lookMark(it);
       else if (it) onPick(it.kind, it.arg);
       else st.camTo = clampCam(st.camTo + (p[0] < 120 ? -420 : p[0] > W - 120 ? 420 : 0));
     });
@@ -779,6 +851,11 @@
       var c = it.x + it.w / 2, d = Math.abs(x - c);
       if (d <= it.w * 0.45 && d < bd) { bd = d; best = it; }
     });
+    st.marks.forEach(function (m) {          // 광장의 볼거리 앞에 서 있다
+      if (!m.d && !m.info) return;
+      var c = m.x + m.cv.width / 2, d = Math.abs(x - c);
+      if (d <= m.cv.width * 0.4 && d < bd) { bd = d; best = m; }
+    });
     return best;
   }
   T.onKey = function (e) {
@@ -788,7 +865,8 @@
     if (k === 'left' || k === 'right') { st.keys[k] = true; st.hero.to = null; st.hero.walkV = null; return true; }
     if (k === 'up') {
       var it = itemAtHero();
-      if (it && st.onPick && !e.repeat) { st.keys = {}; st.onPick(it.kind, it.arg); }
+      if (it && !it.kind && !e.repeat) { st.keys = {}; T.lookMark(it); }          // 광장의 볼거리: 살펴본다 (찾지 않은 건물 발견물이면 발견)
+      else if (it && st.onPick && !e.repeat) { st.keys = {}; st.onPick(it.kind, it.arg); }
       return true;
     }
     return k === 'shift';
@@ -855,7 +933,7 @@
     var cam = st.cam;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     var hv = st.hover && !st.hover.spec ? st.hover : null;     // 거리 사람에 마우스를 올린 것은 바탕을 바꾸지 않는다
-    var bkey = Math.round(cam * 4) + '|' + (hv ? st.items.indexOf(hv) + ':' + st.marks.indexOf(hv) : '') + '|' + (st.focus ? st.items.indexOf(st.focus) : '') + '|' + (st.near ? st.items.indexOf(st.near) : '') + '|' + (st.bgCv ? 1 : 0) + '|' + st.items.length;
+    var bkey = Math.round(cam * 4) + '|' + (hv ? st.items.indexOf(hv) + ':' + st.marks.indexOf(hv) : '') + '|' + (st.focus ? st.items.indexOf(st.focus) : '') + '|' + (st.near ? st.items.indexOf(st.near) + ':' + st.marks.indexOf(st.near) : '') + '|' + (st.bgCv ? 1 : 0) + '|' + st.items.length;
     if (!st.base) { st.base = document.createElement('canvas'); st.base.width = W; st.base.height = H; st.baseKey = null; }
     if (st.baseKey !== bkey) { drawBase(st.base.getContext('2d'), cam, hv); st.baseKey = bkey; }
     ctx.clearRect(0, 0, W, H);
@@ -876,14 +954,20 @@
     for (var gx = start; gx < W; gx += tw) ctx.drawImage(st.ground, gx, gy);
     // 볼거리(뒤쪽)
     st.marks.forEach(function (m) {
-      var x = m.x - cam * 0.72;
-      if (x + m.cv.width < -40 || x > W + 40) return;
-      ctx.globalAlpha = 0.96;
-      ctx.drawImage(m.cv, x, m.y - m.cv.height);
-      ctx.globalAlpha = 1;
-      if (hover === m) {            // 누를 수 있는 볼거리: 살짝 밝힌다
-        ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.16;
-        ctx.drawImage(m.cv, x, m.y - m.cv.height); ctx.restore();
+      var x = m.x - cam * MARK_PX;
+      if (x + m.cv.width + PLAZA < -40 || x - PLAZA > W + 40) return;
+      // 광장의 단과 발치 그늘 — 건물처럼 땅 위에 선다
+      var tx = Math.round(x + m.cv.width / 2 - m.terrace.width / 2);
+      ctx.drawImage(m.terrace, tx, m.y - 11);
+      ctx.save();
+      ctx.fillStyle = 'rgba(40,26,12,.24)';
+      ctx.beginPath(); ctx.ellipse(x + m.cv.width / 2, m.y - 2, m.cv.width * 0.44, 10, 0, 0, 7); ctx.fill();
+      ctx.restore();
+      var ty = m.y - m.cv.height + (m.foot || 0);     // 그림 아래 빈칸만큼 내려 건물 발치를 바닥선에 (옅은 그림자는 길 위로)
+      ctx.drawImage(m.cv, x, ty);
+      if (hover === m || st.near === m) {            // 누를 수 있는 볼거리: 살짝 밝힌다
+        ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = hover === m ? 0.16 : 0.10;
+        ctx.drawImage(m.cv, x, ty); ctx.restore();
       }
     });
     // 건물
@@ -924,12 +1008,15 @@
       var ft = hf.tag || (hf.tag = plaqueCanvas(hf.name + ' — 말 걸기', true));
       ctx.drawImage(ft, Math.round(hf.x - cam - ft.width / 2), Math.round(hf.y - hf.spec.h * hf.sc * (hf.animal ? 1.25 : 1.12) - ft.height));
     }
-    // 볼거리 이름표 (마우스를 올렸을 때)
-    var hm = st.hover;
-    if (hm && !hm.kind && hm.cv) {
-      var tg = hm.tag || (hm.tag = plaqueCanvas((hm.d ? hm.d.name : hm.info.name) + ' — 살펴보기', true));
-      ctx.drawImage(tg, Math.round(hm.x - cam * MARK_PX + hm.cv.width / 2 - tg.width / 2), Math.max(8, Math.round(hm.y - hm.cv.height - 6 - tg.height)));
-    }
+    // 볼거리 이름표 (건물처럼 늘 — 마우스를 올리거나 앞에 서면 「살펴보기」)
+    st.marks.forEach(function (m) {
+      if (!m.name) return;
+      var x = m.x - cam * MARK_PX;
+      if (x + m.cv.width < -60 || x > W + 60) return;
+      var on = st.hover === m || st.near === m;
+      var tg = on ? (m.tagOn || (m.tagOn = plaqueCanvas(m.name + ' — 살펴보기', true))) : (m.tag || (m.tag = plaqueCanvas(m.name, false)));
+      ctx.drawImage(tg, Math.round(x + m.cv.width / 2 - tg.width / 2), Math.max(58, Math.round(m.y - m.cv.height + (m.foot || 0) - 10 - tg.height)));
+    });
     // 문 앞에 서 있으면: ↑ 들어가기
     if (st.near && !st.hero.entering && st.hero.to == null && !st.hidden) enterPrompt(ctx, st.hero.x - cam, GROUND + 34 - HERO_H - 18, st.near);
     // 하늘빛·시간대·가장자리 어둠
@@ -944,7 +1031,7 @@
 
   var promptFont = null;
   function enterPrompt(ctx, x, y, it) {
-    var txt = '↑ ' + (it.label || it.name || '') + ' 들어가기';
+    var txt = '↑ ' + (it.label || it.name || '') + (it.kind ? ' 들어가기' : ' 살펴보기');
     ctx.save();
     ctx.font = promptFont || (promptFont = '700 20px ' + getComputedStyle(document.body).fontFamily);
     var w = ctx.measureText(txt).width + 26, h = 34;
