@@ -139,7 +139,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.screenshot({ path: path.join(OUT, '6_after.png') });
     await advance(); await page.waitForTimeout(400);
     t = await bodyText();
-    ok(/토스카넬리/.test(t), '다음 꿈: 서쪽 바다 (서회항로는 아직 멀어 단서는 주지 않음)');
+    ok(/미나 요새/.test(t) && /날개를 펴고/.test(t), '다음 계획: 미나 요새로 가며 나는 물고기 (1483년 5월 발표 — 36달 안이라 털어놓는다)');
     await advance(); await page.waitForTimeout(400);
     await choose('떠난다');
 

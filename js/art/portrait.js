@@ -240,7 +240,11 @@
     var named = sp.holders.filter(function (h) { return h[4] !== 'g'; });
     return named.length > 0 && named.every(function (h) { return re.test(h[2]); });
   };
-  A.rivalSpec = function (name) { return A.withImg(A.npcSpec('rival_' + name, 'noble', 'ib'), G.Img.chain.rival(name)); };
+  /** 경쟁 탐험가: 전용 그림(portraits/rivals/이름) → 같은 사람의 동료 그림 → 사람마다 정한 역할·양식(js/data/rivals.js look)의 그린 얼굴 */
+  A.rivalSpec = function (name) {
+    var lk = (G.RIVAL_STAYS && G.RIVAL_STAYS[name] && G.RIVAL_STAYS[name].look) || ['noble', 'ib'];
+    return A.withImg(A.npcSpec('rival_' + name, lk[0], lk[1], 'm'), G.Img.chain.rival(name));
+  };
   /** townsfolk who greet you in buildings: id → [portrait role, seed variant, gender] */
   A.TOWNFOLK = { trader: ['merchant', '', null], vendor: ['merchant', 'mk', null], harbormaster: ['official', '', null], innkeeper: ['keeper', 'inn', 'f'],
     tavernkeeper: ['keeper', 'tav', null], shipwright: ['keeper', 'yard', null], priest: ['priest', '', null], librarian: ['scholar', '', null], guildmaster: ['official', 'gd', null] };

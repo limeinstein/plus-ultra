@@ -461,8 +461,8 @@
   };
   /** 명부에 올릴 경쟁 탐험가 카드 (G.RIVAL_STAYS[이름].card) */
   T.rivalCard = function (nm) {
-    var k = (G.RIVAL_STAYS[nm] || {}).card || {};
-    return { id: 'rival:' + nm, rival: nm, name: nm, g: k.g || 'm', y: k.y || [0, 0], st: k.st || [], sk: k.sk || {}, lg: k.lg || {}, fame: 0, wage: 0, desc: k.desc || '' };
+    var k = (G.RIVAL_STAYS[nm] || {}).card || {}, md = G.SeaFolk && G.SeaFolk.rivalMate ? G.SeaFolk.rivalMate(nm) || {} : {};   // 동료와 같은 사람이면 능력치·특기·말은 그 항해사의 것
+    return { id: 'rival:' + nm, rival: nm, name: nm, g: k.g || md.g || 'm', y: k.y || md.y || [0, 0], st: k.st || md.st || [], sk: k.sk || md.sk || {}, lg: k.lg || md.lg || {}, fame: 0, wage: 0, desc: k.desc || md.desc || '' };
   };
 
   /** 항해사 명부: 왼쪽에 이름, 오른쪽에 능력치·특기·말. 고르면 그 사람을 돌려준다 */
@@ -654,7 +654,12 @@
   /** 이 도시에 머무는 경쟁 탐험가 [{name, atSea}] */
   T.rivalsStaying = function (c) {
     var SF = G.SeaFolk; if (!SF || !SF.rivalCity || !G.RIVAL_STAYS) return [];
-    return Object.keys(G.RIVAL_STAYS).filter(function (nm) { var at = SF.rivalCity(nm); return at && at.id === c.id; })
+    return Object.keys(G.RIVAL_STAYS).filter(function (nm) {
+      var at = SF.rivalCity(nm); if (!at || at.id !== c.id || !R.cityExists(at)) return false;
+      if (SF.hiredRival && SF.hiredRival(nm)) return false;                                    // 옛 저장: 이미 부하로 둔 사람
+      if (SF.rivalMate && SF.rivalMate(nm) && !SF.rivalBusy(nm)) return false;                 // 다툴 발견이 끝난 항해사는 고용할 수 있는 동료로 돌아간다
+      return true;
+    })
       .map(function (nm) { return { name: nm, atSea: SF.atSeaName(nm) }; });
   };
   function rivalWhen(d) { return (d.rival[0] + (S().flags['delay_' + d.id] || 0)) * 12 + d.rival[1]; }
@@ -682,7 +687,7 @@
     if (G.SeaFolk.atSeaName(nm)) { await C.say(master(), info.away || nm + '? 얼마 전에 배를 띄워 나갔네.'); return; }
     if (!s.flags['metRival_' + nm]) { s.flags['metRival_' + nm] = 1; await UI.say(info.intro || nm + '이오.', who); }
     for (;;) {
-      var d = T.rivalTarget(nm), soon = d && rivalWhen(d) - (s.date.y * 12 + s.date.m) <= 48 && G.Disc.available(d);
+      var d = T.rivalTarget(nm), soon = d && rivalWhen(d) - (s.date.y * 12 + s.date.m) <= ((G.BALANCE.rivals && G.BALANCE.rivals.talk) || 36);   // 떠날 날이 가까우면 계획을 털어놓는다
       var v = await UI.ask('무슨 용건인가?', [
         { label: '정보를 듣는다', value: 'plan' },
         { label: '부하로 고용한다', value: 'hire' },
@@ -692,7 +697,8 @@
       if (v === 'hire') { await UI.say(info.hire || '나는 내 배를 몬다네.', who); UI.toast(nm + U.jx(nm, '은/는') + ' 고용할 수 없다 — 스스로 함대를 꾸려 발견을 다투는 경쟁자다.', 'compass', 4000); continue; }
       if (v === 'duel') { if (await T.rivalDuel(d, who)) return; continue; }
       var last = T.rivalLast(nm), plan = info.plan || {}, done = info.done || {};
-      if (last && last.by === 'me' && info.beaten && !s.flags['rivalBeaten_' + last.d.id]) { s.flags['rivalBeaten_' + last.d.id] = 1; await UI.say(info.beaten, who); }
+      var bt = info.beaten && (typeof info.beaten === 'string' ? info.beaten : last && (info.beaten[last.d.id] || info.beaten._));
+      if (last && last.by === 'me' && bt && !s.flags['rivalBeaten_' + last.d.id]) { s.flags['rivalBeaten_' + last.d.id] = 1; await UI.say(bt, who); }
       else if (last && last.by === 'rival' && done[last.d.id] && !s.flags['rivalDone_' + last.d.id]) { s.flags['rivalDone_' + last.d.id] = 1; await UI.say(done[last.d.id], who); }
       if (soon) {
         await UI.say(plan[d.id] || '나는 곧 큰 항해를 떠날 걸세. ' + d.hint, who);

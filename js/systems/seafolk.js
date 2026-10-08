@@ -134,31 +134,29 @@
   var SF = G.SeaFolk = {};
 
   // ================================================================ 술집에 머무는 경쟁 탐험가 (고용할 수 없다 — 스스로 함대를 꾸려 발견물을 찾고 발표한다)
-  // stays: [[해부터, 해 전까지, 도시 번호]] — 탐험 함대(G.EXPEDITIONS)로 바다에 나가 있는 동안은 술집에 없다.
-  // talk: 술집 대사. plan[발견물] = 떠나기 전 계획(단서를 준다), done[발견물] = 발표한 뒤, dream = 먼 꿈(아직 떠날 때가 아님)
-  G.RIVAL_STAYS = {
-    '크리스토발 콜론': {
-      short: '콜론',
-      // 「항해사를 찾는다」 명부 카드 (고용할 수 없다 — 능력치·특기·말은 보여 준다)
-      card: { g: 'm', y: [1451, 1506], st: [62, 80, 55, 76], sk: { nav: 3, survey: 2, speech: 2 }, lg: { 2: 3, 1: 3, 0: 2 },
-        desc: '제노바 태생의 뱃사람. 대서양 서쪽 끝에 인디아스가 있다고 믿으며 스스로 함대를 꾸릴 날을 기다린다. 누구의 부하도 되지 않는다.' },
-      stays: [[1480, 1485, 0], [1485, 1506, 7]],
-      keeper: '저쪽 구석에서 해도를 펼쳐 놓은 사내 보이나? 제노바에서 온 크리스토발 콜론이라는 자일세. 페레스트렐루 집안 딸과 혼인해 리스본에 눌러앉았지. 제 배를 꾸려 다니는 사람이라 남의 밑에서 일하지는 않을 걸세.',
-      away: '콜론 말인가? 배를 끌고 북쪽 바다로 나갔네. 돌아오면 또 저 구석에서 해도를 펼치고 있겠지.',
-      intro: '크리스토발 콜론이오. 제노바에서 났지만 지금은 리스본에 살고 있소. 장인 어른이 포르투 산투 섬의 선장이셨던 덕에 그 댁에 해도와 항해 기록이 산더미처럼 있더군.',
-      hire: '고맙지만 나는 남의 배에 타는 사람이 아니오. 언젠가 내 함대를 이끌고 아무도 가 보지 않은 바다로 갈 거요. 그때는 바다에서 겨루게 되겠지.',
-      plan: {
-        carnac: '며칠 뒤 북쪽으로 배를 띄울 참이오. 브르타뉴 남쪽 카르낙이라는 들판에, 옛사람들이 세운 거대한 선돌이 수천 개나 줄지어 있다더군. 다음 달 초면 이 리스본에서 그 이야기를 전할 수 있을 거요.',
-        westroute: '대서양을 곧장 서쪽으로 건너면 인디아스에 닿는다 — 이제 그 일을 할 때가 왔소. 카스티야의 여왕께서 배 세 척을 내어 주신다면 말이오.'
-      },
-      done: {
-        carnac: '카르낙에 다녀왔소! 들판 끝까지 돌기둥이 늘어서 있더군. 누가 왜 세웠는지는 끝내 알 수 없었지만, 리스본 사람들은 내 이야기에 귀를 기울였소.',
-        westroute: '서쪽 바다 너머에 섬들이 있었소. 나는 그곳이 인디아스의 끝자락이라고 믿소.'
-      },
-      beaten: '그 들판 이야기를 당신이 먼저 알렸더군. 바다는 넓으니, 다음에는 내가 먼저일 거요.',
-      dream: '토스카넬리 선생의 편지를 보았소? 지구가 둥글다면 서쪽으로 곧장 가서 카타이에 닿을 수 있소. 언젠가는 그 길을 열 거요.'
-    }
+  // 사람마다의 머무는 도시·대사·카드는 js/data/rivals.js (G.RIVAL_STAYS). 그곳의 탐험 함대(G.RIVAL_VOYAGES)도 여기 G.EXPEDITIONS에 더한다.
+  G.RIVAL_STAYS = G.RIVAL_STAYS || {};
+  if (G.RIVAL_VOYAGES) G.EXPEDITIONS = G.EXPEDITIONS.concat(G.RIVAL_VOYAGES);
+  G.EXPEDITIONS.forEach(function (ex) { if (ex.id === 'almeida') { ex.who = '로렌수 드 알메이다'; ex.goal = '아버지 프란시스쿠 부왕의 함대와 함께 인도로 가서 실론을 찾는'; } });
+  /** 그 사람이 노리는 발견물 번호들 (d.rival[2] === 이름) */
+  var rivalIds = null;
+  function idsOf(nm) {
+    if (!rivalIds) { rivalIds = {}; G.DISCOVERIES.forEach(function (d) { if (d.rival) (rivalIds[d.rival[2]] = rivalIds[d.rival[2]] || []).push(d.id); }); }
+    return rivalIds[nm] || [];
+  }
+  SF.rivalIds = idsOf;
+  /** 아직 다툴 발견이 남았는가 (경쟁자도 제독도 알리지 않은 것이 있다) — 동료가 될 수 있는 사람은 이동안 고용할 수 없다 */
+  SF.rivalBusy = function (nm) {
+    var s = S(); if (!s || !nm) return false;
+    return idsOf(nm).some(function (id) { var st = s.disc[id]; return !(st && (st.rival || st.reported || st.announced)); });
   };
+  /** 옛 저장: 경쟁자와 같은 사람을 이미 부하로 두었다 — 그 사람의 발표·항해는 없던 일로 한다 */
+  SF.hiredRival = function (nm) {
+    var s = S(); if (!s || !nm || !G.MATE) return false;
+    return s.mates.some(function (m) { var md = G.MATE[m.id]; return md && md.name === nm; });
+  };
+  /** 동료(G.MATES)와 같은 사람이면 그 항해사 자료 */
+  SF.rivalMate = function (nm) { return (G.MATES || []).filter(function (m) { return m.name === nm; })[0] || null; };
   /** 그 경쟁 탐험가가 지금 머무는 도시 (바다에 나가 있어도 돌아올 도시) — 없으면 null */
   SF.rivalCity = function (nm) {
     var s = S(), r = G.RIVAL_STAYS[nm]; if (!s || !r) return null;
@@ -246,7 +244,7 @@
   /** 지금 바다에 나가 있는 탐험 함대 */
   SF.voyages = function () {
     var t = today();
-    return G.EXPEDITIONS.filter(function (ex) { return G.DISC[ex.discs[0]] && SF.posAt(ex, t) && live(ex); });
+    return G.EXPEDITIONS.filter(function (ex) { return G.DISC[ex.discs[0]] && SF.posAt(ex, t) && live(ex) && !SF.hiredRival(ex.who); });
   };
   /** 이 경쟁자가 지금 바다에 있는가 (술집에 나타나지 않게) */
   SF.rivalAtSea = function (d) {
@@ -396,7 +394,8 @@
     if (n.exp) {
       var ex = n.exp, d = G.DISC[ex.discs[0]], st = s.disc[d.id] || {};
       var fk = 'expTalk_' + ex.id + '_' + SF.delay(ex);
-      var lines = '나는 ' + ex.who + '. ' + ex.from + U.j(ex.from, '을/를').slice(ex.from.length) + ' 떠나 ' + ex.goal + ' 길이오.';
+      var rs = G.RIVAL_STAYS[ex.who] || {}, sl = rs.sea && (rs.sea[ex.id] || rs.sea[d.id]);
+      var lines = sl || '나는 ' + ex.who + '. ' + ex.from + U.j(ex.from, '을/를').slice(ex.from.length) + ' 떠나 ' + ex.goal + ' 길이오.';
       if (st.me) lines += '\n\n…누군가 먼저 그곳에 닿았다는 소문을 들었소. 그래도 내 눈으로 보기 전에는 믿지 않겠소.';
       await UI.say(lines, who);
       if (!s.flags[fk]) {

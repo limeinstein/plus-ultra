@@ -61,10 +61,19 @@
   F.of = function (d) { var m = d && G.DISC_FRONT[d.id]; return m ? G.FRONTIER[m.f] : null; };
 
   /** 이 발견물의 단서를 지금 들을 수 있는가 */
+  /** 경쟁자가 그 발견을 발표하기까지 남은 달 (경쟁자가 없거나 이미 끝났으면 null) */
+  F.rivalLeft = function (d) {
+    var s = S(); if (!d || !d.rival) return null;
+    var st = s.disc[d.id]; if (st && (st.rival || st.reported || st.announced)) return null;
+    return (d.rival[0] + (s.flags['delay_' + d.id] || 0)) * 12 + d.rival[1] - (s.date.y * 12 + s.date.m);
+  };
+  function RB() { return (G.BALANCE && G.BALANCE.rivals) || { lead: 12, talk: 36 }; }
   F.available = function (d) {
     if (!d) return false;
     if (d.built && S().date.y < d.built && !(G.Mirage && G.Mirage.active(d))) return false;      // 아직 세워지지 않은 건물 (1600년부터는 신기루로 소문이 돈다)
     if (d.need && !d.need.every(function (id) { return G.Disc.foundByMe(id); })) return false;   // 발견의 연쇄
+    if (G.Disc.taken && G.Disc.taken(d.id)) return false;                                        // 경쟁자가 먼저 발표했다 — 이제 찾을 수 없다
+    var rl = F.rivalLeft(d); if (rl != null && rl > 0 && rl <= RB().lead) return true;           // 경쟁자가 곧 떠난다 — 단계와 상관없이 소문이 돈다
     var m = G.DISC_FRONT[d.id]; if (!m) return true;
     var o = F.state(m.f);
     if (m.t === 0) return o.lv >= 1;
@@ -84,6 +93,7 @@
     if (d && d.built && S().date.y < d.built && !(G.Mirage && G.Mirage.active(d))) return false;   // 아직 없는 건물은 책·유물로도 단서가 나오지 않는다 (신기루 때는 된다)
     if (F.available(d)) return true;
     var sr = String(src || '');
+    if (sr === 'rival') { var rl = F.rivalLeft(d); if (rl != null && rl > 0 && rl <= RB().talk) return true; }   // 경쟁자 본인이 털어놓는 계획
     if (sr.indexOf('contract') === 0 || sr.indexOf('lead') === 0 || sr.indexOf('relic') === 0) return true;
     var m = G.DISC_FRONT[d.id];
     return sr === 'rival' && !!m && F.state(m.f).lv >= 1;
@@ -113,6 +123,7 @@
   F.mateReady = function (m, year) {
     var y = year || S().date.y;
     if (y < m.y[0] || y > m.y[1]) return false;
+    if (G.SeaFolk && G.SeaFolk.rivalBusy && G.SeaFolk.rivalBusy(m.name)) return false;          // 아직 발견을 다투는 경쟁자 (js/data/rivals.js) — 다 끝나면 고용할 수 있다
     return !m.after || m.after.every(F.known);
   };
 

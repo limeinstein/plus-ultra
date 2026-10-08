@@ -149,7 +149,7 @@
     G.Disc.unreported().forEach(function (d) { list.push({ d: d, found: true }); });
     // 모조품을 증거로 보고 (못 찾았어도, 다른 후원자에게 이미 판 것이어도 — 이중 계약)
     if (G.Fakes) G.Fakes.list().forEach(function (d) { if (!list.some(function (x) { return x.found && x.d === d; })) list.push({ d: d, found: false, fake: true, dbl: G.Fakes.soldElsewhere(sp, d) }); });
-    if (s.player.fame >= 3000 && !G.Disc.foundByMe('circum') && !s.flags.circDone) list.push({ d: G.DISC.circum, found: false, circ: true });
+    if (s.player.fame >= 3000 && !G.Disc.foundByMe('circum') && !G.Disc.taken('circum') && !s.flags.circDone) list.push({ d: G.DISC.circum, found: false, circ: true });
     if (!list.length) {
       if (G.Errand) { await UI.say('흐음, 아직 가져온 이야기가 없는가? 그렇다면 작은 일부터 맡아 보겠나?', who); await G.Errand.offerDialog(sp, who); return; }
       await UI.say('흐음, 아무 이야기도 없는가? 흥미 있는 이야기를 찾아 오게. 기다리고 있겠네.', who); UI.toast('도서관이나 술집에서 단서를 모으십시오.', 'scroll'); return;
@@ -159,7 +159,7 @@
       var tasteTxt = sp.taste.map(function (t) { return G.DISC_CATS[t]; }).join('·');
       var pick = await UI.choose('제안 선택', list.map(function (x, i) {
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
-        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (sp.taste.indexOf(x.d.cat) >= 0 ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
+        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (sp.taste.indexOf(x.d.cat) >= 0 ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
       }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b>' });
       if (pick == null) { await UI.say('뭔가, 용건이 없는가? 이쪽은 바쁘네.', who); return; }
       var x = list[pick], d = x.d;
@@ -216,18 +216,19 @@
     if (cutK > 1) { pay = Math.max(100, Math.round(pay / cutK / 100) * 100); cutTxt = ' 올해는 벌써 자네에게 여러 번 사례했으니 이번에는 조금 줄이겠네.'; }
     rel.lateN++;
     var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) * 0.9 + sp.pw * 25) * G.Disc.artBonus(d) * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.4 : 0.9) + sp.pw * 25) * G.Disc.artBonus(d));
+    if (found && G.Disc.isLate(d.id)) pay = Math.max(100, Math.round(pay * G.Disc.LATE_GOLD / 100) * 100);   // 경쟁자보다 늦은 보고: 사례금도 절반
     if (ev === 'fake' && !(await G.Fakes.tryFake(sp, d, pay))) return;
     var pr = ev === 'fake' ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), bothUp = 0;
     if (pr.noProof) { pay = Math.round(pay * 0.7 / 100) * 100; fame = Math.round(fame * 0.8); }
     if (ev === 'both') { G.Fakes.give(d.id, -1); pay = Math.round(pay * ((G.BALANCE.fakes && G.BALANCE.fakes.bothK) || 1.3) / 100) * 100; bothUp = (G.BALANCE.fakes && G.BALANCE.fakes.bothTrust) || 10; }
-    await UI.say(SP.proofLine(pr, d, true) + (G.Disc.isLate(d.id) ? '자네가 먼저 찾았다니 놀랍군. 하지만 ' + st.rival + U.jx(st.rival, '이/가') + ' 이미 발표해 버렸으니 세상이 알아주는 공은 절반이겠지. ' : '훌륭하군! 그 공적은 내가 세상에 널리 알리겠네. ') + '약소하지만 사례로 금화 ' + U.num(pay) + '닢을 주겠네.' + cutTxt, who);
+    await UI.say(SP.proofLine(pr, d, true) + (G.Disc.isLate(d.id) ? '자네가 먼저 찾았다니 놀랍군. 하지만 ' + st.rival + U.jx(st.rival, '이/가') + ' 이미 발표해 버렸으니 세상이 알아주는 공도, 내 사례도 절반일세. ' : '훌륭하군! 그 공적은 내가 세상에 널리 알리겠네. ') + '약소하지만 사례로 금화 ' + U.num(pay) + '닢을 주겠네.' + cutTxt, who);
     if (ev === 'both') await UI.say('진짜와 꼭 닮은 모조품까지 함께 가져오다니, 마음에 드는군! 사례를 더 얹어 주지.', who);
     if (G.Fakes) G.Fakes.after(sp, d, ev, found);
     if (found) { st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; }
     s.player.gold += pay; G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + bothUp); rel.done = (rel.done || 0) + 1;
     SP.proofToast(pr);
     G.State.log(SP.holderName(sp) + '에게 「' + d.name + '」의 발견을 보고했다. (금화 ' + pay + ', 명성 +' + fame + ')');
-    await UI.alert('금화 ' + U.num(pay) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성은 절반</span>' : ''), '보고');
+    await UI.alert('금화 ' + U.num(pay) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성·사례금은 절반</span>' : ''), '보고');
     if (G.Names && found) await G.Names.onReport(d);
     G.Game.refreshHud();
   };
@@ -421,6 +422,7 @@
     if (!k.circ && k.valueK) { var kNow = G.Disc.valueK(d); if (Math.abs(kNow - k.valueK) > 0.001) reward = Math.round(reward * kNow / k.valueK / 100) * 100; }
     var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) + sp.pw * 40) * G.Disc.artBonus(d) * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.5 : 1) + sp.pw * 40) * G.Disc.artBonus(d));
     if (late) { reward = Math.round(reward * 0.5); fame = Math.round(fame * 0.7); }
+    if (!k.circ && G.Disc.isLate(d.id)) reward = Math.round(reward * G.Disc.LATE_GOLD);   // 경쟁자보다 늦은 보고: 사례금도 절반
     // 증거: 해도·지도와 유물을 건넨다 (서적·다음 탐험으로 이어지는 물건은 돌려받기도 한다). 하나도 없으면 반신반의
     if (ev === 'fake' && !(await G.Fakes.tryFake(sp, d, reward))) return;     // 들켰다 — 벌을 받고 계약도 끝
     var pr = k.circ || ev === 'fake' ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), noProof = pr.noProof;
@@ -449,7 +451,7 @@
     if (k.circ) { s.flags.circDone = true; }
     G.State.log(SP.holderName(sp) + '에게 「' + (k.circ ? '세계일주' : d.name) + '」' + U.jx(k.circ ? '세계일주' : d.name, '을/를') + ' 보고했다. (사례금 ' + reward + '닢, 명성 +' + fame + ')');
     s.contract = null;
-    await UI.alert('사례금 금화 ' + U.num(reward) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성은 절반</span>' : '') + '<br><span class="muted">' + R.fameTitle(s.player.fame) + '</span>', '보고 완료');
+    await UI.alert('사례금 금화 ' + U.num(reward) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성·사례금은 절반</span>' : '') + '<br><span class="muted">' + R.fameTitle(s.player.fame) + '</span>', '보고 완료');
     if (G.Names && !k.circ && found) await G.Names.onReport(d);
     G.Game.refreshHud();
     await SP.shareWithMates(reward);
