@@ -1,4 +1,4 @@
-/* 설치된 Chrome으로 보물 98종(회전 유물 97 + 광산 1)의 등록·장면 판·카탈로그를 확인한다. */
+/* 설치된 Chrome으로 보물 105종(회전·이야기 유물 104 + 광산 1)의 등록·장면 판을 확인한다. */
 'use strict';
 const fs = require('fs');
 const os = require('os');
@@ -10,7 +10,9 @@ const ROOT = path.resolve(__dirname, '..');
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const CATALOG = pathToFileURL(path.join(ROOT, 'catalog.html')).href;
 const SCREEN = path.join(ROOT, 'docs', 'art', 'treasure-gif-runtime.png');
-const EXPECTED_TREASURES = 98;
+const EXPECTED_TREASURES = 105;
+// 이야기 진행 전용 단서 7종은 일반 발견물 카탈로그에 노출하지 않는다.
+const EXPECTED_CATALOG = 98;
 const CHROME = [
   process.env.CHROME_PATH,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -102,7 +104,7 @@ function socket(url) {
     })()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.treasures !== EXPECTED_TREASURES || result.gifs !== EXPECTED_TREASURES || result.sheets !== EXPECTED_TREASURES || result.reveals !== EXPECTED_TREASURES || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '수정 해골' || result.ankhTag !== 'CANVAS' || result.ankhAria !== '소년왕의 비보' || result.ms !== 8400 || !catalog || catalog.cards !== EXPECTED_TREASURES || catalog.animated < 1 || catalog.tag !== 'CANVAS' || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.treasures !== EXPECTED_TREASURES || result.gifs !== EXPECTED_TREASURES || result.sheets !== EXPECTED_TREASURES || result.reveals !== EXPECTED_TREASURES || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '수정 해골' || result.ankhTag !== 'CANVAS' || result.ankhAria !== '소년왕의 비보' || result.ms !== 8400 || !catalog || catalog.cards !== EXPECTED_CATALOG || catalog.animated < 1 || catalog.tag !== 'CANVAS' || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

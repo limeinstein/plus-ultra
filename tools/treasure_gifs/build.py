@@ -41,6 +41,9 @@ TREASURE_IDS = [
     # 꼬리에 꼬리를 무는 발견(chaindisc.js)
     "rongorongo", "lapita", "timaeus", "huascarchain", "kalachakra",
     "pangboche", "excalibur", "kingittor", "boturini", "oldworldmap",
+    # 아버지의 흔적을 좇는 이야기에서 발견되는 일곱 단서 보물(story.js)
+    "ft_granada", "ft_cairo", "ft_delhi", "ft_cuzco", "ft_hangzhou",
+    "ft_sakai", "ft_hanyang",
 ]
 
 # 도입 2장 + (앞·45°…315°·앞) × 2 + 정면 피날레 4장.

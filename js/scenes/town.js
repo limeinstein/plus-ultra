@@ -181,6 +181,76 @@
       return 0;
     } catch (e) { return Math.round((LANDMARK_FOOT[id] || 0) * cv.height); }
   }
+  /** 볼거리 그림의 아래 테두리: 열마다 알파가 뚜렷한 가장 아랫줄 [{x, y}] (그림 픽셀).
+      조감(내려다본) 그림은 발치가 V자라 바닥선에 맞춰도 양옆이 하늘에 뜬다 — 이 테두리 밑을 길바닥으로 채운다(plazaCanvas).
+      픽셀을 못 읽으면(file://) G.LANDMARK_BASE 표(tools/landmark_base.py — 그림 너비 48칸 · 높이 비율)를 쓴다 */
+  function baseOf(cv, id) {
+    var w = cv.width, h = cv.height, out = [];
+    try {
+      var data = cv.getContext('2d').getImageData(0, 0, w, h).data, step = Math.max(2, Math.round(w / 120));
+      for (var x = 0; x < w; x += step) {
+        for (var y = h - 1; y > h * 0.15; y--) if (data[(y * w + x) * 4 + 3] > 60) { out.push({ x: x, y: y }); break; }
+      }
+    } catch (e) {
+      var t = G.LANDMARK_BASE && G.LANDMARK_BASE[id]; if (!t) return null;
+      t.forEach(function (v, i) { if (v != null) out.push({ x: Math.round((i + 0.5) / t.length * w), y: Math.round(v * h) }); });
+    }
+    if (out.length < 3) return null;
+    // 깃대·돛대처럼 가는 것이 튀지 않게 이웃 셋의 가운데 값으로 고른다
+    return out.map(function (p, i) { var a = out[Math.max(0, i - 1)].y, b = p.y, c = out[Math.min(out.length - 1, i + 1)].y; return { x: p.x, y: Math.max(Math.min(a, b), Math.min(Math.max(a, b), c)) }; });
+  }
+  var PLAZA_RAMP = 72;       // 마당이 볼거리 양옆으로 비스듬히 내려와 길에 닿는 너비
+  var MARK_PULL = 60;        // 조감 그림을 앞(아래)으로 당겨 발치 양옆이 길 위에 닿게 — 가장 많이 당기는 거리(px)
+  /** 얼마나 앞으로 당기나: 발치 양옆 모서리(아래 테두리 중 가장 높은 곳)가 길 위로 내려오도록, MARK_PULL까지 */
+  function pullOf(cv, base, foot) {
+    if (!base) return 0;
+    var gy = cv.height - (foot || 0), lift = 0; base.forEach(function (b) { lift = Math.max(lift, gy - b.y); });
+    return lift < 26 ? 0 : Math.round(Math.min(MARK_PULL, lift - (GROUND - MARK_SET - WALK_TOP) + 4));
+  }
+  /** 조감 그림 발치 아래의 마당: 아래 테두리부터 바닥선까지를 그 고장 길바닥 무늬로 채우고, 건물 발치에 그늘을 둔다.
+      돌려주는 그림은 볼거리 그림보다 양옆으로 PLAZA_RAMP씩 넓고, 위쪽 끝(oy)은 그림 좌표 */
+  function plazaCanvas(cv, base, foot, ground, p, pull) {
+    if (!base) return null;
+    // 길 윗변(WALK_TOP)보다 조금 아래까지 — 앞으로 당긴 만큼(pull) 그림 좌표에서 길 윗변이 올라온다
+    var gy = cv.height - (foot || 0) - (pull || 0) - (GROUND - MARK_SET - WALK_TOP) + 10;
+    var lift = 0; base.forEach(function (b) { lift = Math.max(lift, gy - b.y); });
+    var low = 0; base.forEach(function (b) { low = Math.max(low, b.y); });
+    if (lift < 14) return null;                               // 남는 틈이 거의 없으면 그대로 둔다
+    var R = PLAZA_RAMP, top = Math.max(0, Math.min.apply(null, base.map(function (b) { return b.y; })) - 6);
+    var w = cv.width + R * 2, hh = Math.max(4, gy - top + 2), c2 = A.canvas(w, hh), ctx = c2.getContext('2d');
+    var first = base[0], last = base[base.length - 1];
+    function path() {
+      ctx.beginPath();
+      ctx.moveTo(first.x + R - Math.min(R, (gy - first.y) * 1.1), gy - top);
+      base.forEach(function (b) { ctx.lineTo(b.x + R, b.y - top - 4); });   // 건물 뒤로 조금 파고들어 테두리 틈이 비치지 않게
+      ctx.lineTo(last.x + R + Math.min(R, (gy - last.y) * 1.1), gy - top);
+      ctx.closePath();
+    }
+    path();
+    if (ground) {
+      var pat = ctx.createPattern(ground, 'repeat');
+      if (pat && pat.setTransform && window.DOMMatrix) pat.setTransform(new DOMMatrix().scale(0.8, 0.62));   // 멀리 보이는 땅 — 돌이 조금 작게
+      ctx.fillStyle = pat || A.rgba(p.top, 1);
+    } else ctx.fillStyle = A.rgba(p.top, 1);
+    ctx.fill();
+    ctx.save(); path(); ctx.clip();
+    // 멀어질수록 하늘빛이 살짝 끼고(위쪽), 건물 발치에는 그늘
+    var g = ctx.createLinearGradient(0, 0, 0, hh);
+    g.addColorStop(0, 'rgba(255,246,228,.22)'); g.addColorStop(1, 'rgba(255,246,228,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, hh);
+    try { ctx.filter = 'blur(5px)'; } catch (e) { /* 없으면 또렷한 그늘 */ }
+    ctx.strokeStyle = 'rgba(40,26,12,.42)'; ctx.lineWidth = 12; ctx.lineJoin = 'round';
+    ctx.beginPath(); base.forEach(function (b, i) { if (i) ctx.lineTo(b.x + R, b.y - top + 4); else ctx.moveTo(b.x + R, b.y - top + 4); }); ctx.stroke();
+    ctx.filter = 'none';
+    ctx.restore();
+    // 양 끝을 길에 스며들게
+    ctx.globalCompositeOperation = 'destination-out';
+    var e = ctx.createLinearGradient(0, 0, w, 0), k = Math.min(0.2, R * 0.9 / w);
+    e.addColorStop(0, 'rgba(0,0,0,1)'); e.addColorStop(k, 'rgba(0,0,0,0)'); e.addColorStop(1 - k, 'rgba(0,0,0,0)'); e.addColorStop(1, 'rgba(0,0,0,1)');
+    ctx.fillStyle = e; ctx.fillRect(0, 0, w, hh);
+    c2.oy = top;
+    return c2;
+  }
   /** 볼거리가 서는 광장의 단: 그 고장 길바닥 돌빛으로 깐 낮은 단 (앞면·윗면·돌 줄눈) */
   function terraceCanvas(w, p) {
     // 길바닥과 같은 빛의 낮은 계단 한 단 — 무대처럼 튀지 않게 양 끝은 길바닥으로 스며든다
@@ -233,7 +303,7 @@
       if (w0 > MARK_MAXW) h = Math.round(h * MARK_MAXW / w0);
       var d = (G.DISC && G.DISC[l[0]]) || null, info = MARK_INFO[l[0]] || null;
       var cv = markCanvas(img, h);
-      return { id: l[0], d: d, info: info, name: d ? d.name : info ? info.name : '', at: l[1], cv: cv, foot: footOf(cv, l[0]), x: 0, y: GROUND - MARK_SET };
+      return { id: l[0], d: d, info: info, name: d ? d.name : info ? info.name : '', at: l[1], cv: cv, foot: footOf(cv, l[0]), base: baseOf(cv, l[0]), x: 0, y: GROUND - MARK_SET };
     }).filter(Boolean).sort(function (a, b) { return a.at - b.at; });
     var row = items.map(function (it) { return { it: it }; });
     marks.forEach(function (m, k) {
@@ -256,6 +326,7 @@
     var streetW = Math.max(W, x - 56 + MARGIN);
     marks.forEach(function (m) { m.terrace = terraceCanvas(m.cv.width + PLAZA * 1.4, gs); });
     var ground = groundStrip(c, rng);
+    marks.forEach(function (m) { m.pull = pullOf(m.cv, m.base, m.foot); m.plaza = plazaCanvas(m.cv, m.base, m.foot, ground, gs, m.pull); });   // 조감 그림 발치 아래 마당 (떠 보이지 않게)
     st = {
       city: c, items: items, marks: marks, streetW: streetW,
       bg: bgKey ? I.get(bgKey) : cityBackdrop(c), ground: ground, groundStyle: ground._style, hidden: false,
@@ -738,7 +809,7 @@
     if (!st) return null;
     for (var i = st.marks.length - 1; i >= 0; i--) {
       var m = st.marks[i]; if (!m.d && !m.info) continue;
-      var sx = m.x - st.cam * MARK_PX, top = m.y - m.cv.height + (m.foot || 0);
+      var sx = m.x - st.cam * MARK_PX, top = m.y - m.cv.height + (m.foot || 0) + (m.pull || 0);
       if (x < sx || x > sx + m.cv.width || y < top || y > top + m.cv.height) continue;
       if (solid(m, x - sx, y - top)) return m;
     }
@@ -957,13 +1028,15 @@
       var x = m.x - cam * MARK_PX;
       if (x + m.cv.width + PLAZA < -40 || x - PLAZA > W + 40) return;
       // 광장의 단과 발치 그늘 — 건물처럼 땅 위에 선다
+      var ty0 = m.y - m.cv.height + (m.foot || 0) + (m.pull || 0), fy = m.y + (m.pull || 0);   // 앞으로 당긴 만큼 아래로
+      if (m.plaza) ctx.drawImage(m.plaza, x - PLAZA_RAMP, ty0 + m.plaza.oy);   // 조감 그림 발치 아래 마당
       var tx = Math.round(x + m.cv.width / 2 - m.terrace.width / 2);
-      ctx.drawImage(m.terrace, tx, m.y - 11);
+      if (!m.pull) ctx.drawImage(m.terrace, tx, m.y - 11);       // 당겨서 길 위에 선 볼거리는 단 없이
       ctx.save();
       ctx.fillStyle = 'rgba(40,26,12,.24)';
-      ctx.beginPath(); ctx.ellipse(x + m.cv.width / 2, m.y - 2, m.cv.width * 0.44, 10, 0, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(x + m.cv.width / 2, fy - 2, m.cv.width * 0.44, 10, 0, 0, 7); ctx.fill();
       ctx.restore();
-      var ty = m.y - m.cv.height + (m.foot || 0);     // 그림 아래 빈칸만큼 내려 건물 발치를 바닥선에 (옅은 그림자는 길 위로)
+      var ty = ty0;     // 그림 아래 빈칸만큼 내려 건물 발치를 바닥선에 (옅은 그림자는 길 위로)
       ctx.drawImage(m.cv, x, ty);
       if (hover === m || st.near === m) {            // 누를 수 있는 볼거리: 살짝 밝힌다
         ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = hover === m ? 0.16 : 0.10;
@@ -1015,7 +1088,7 @@
       if (x + m.cv.width < -60 || x > W + 60) return;
       var on = st.hover === m || st.near === m;
       var tg = on ? (m.tagOn || (m.tagOn = plaqueCanvas(m.name + ' — 살펴보기', true))) : (m.tag || (m.tag = plaqueCanvas(m.name, false)));
-      ctx.drawImage(tg, Math.round(x + m.cv.width / 2 - tg.width / 2), Math.max(58, Math.round(m.y - m.cv.height + (m.foot || 0) - 10 - tg.height)));
+      ctx.drawImage(tg, Math.round(x + m.cv.width / 2 - tg.width / 2), Math.max(58, Math.round(m.y - m.cv.height + (m.foot || 0) + (m.pull || 0) - 10 - tg.height)));
     });
     // 문 앞에 서 있으면: ↑ 들어가기
     if (st.near && !st.hero.entering && st.hero.to == null && !st.hidden) enterPrompt(ctx, st.hero.x - cam, GROUND + 34 - HERO_H - 18, st.near);

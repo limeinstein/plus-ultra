@@ -36,7 +36,16 @@ LOOKS = (
     "blackcoat_captain",
 )
 SIZE = 512
-FACE_X = {"hat_spinner": 0.62, "charismatic_admiral": 0.46, "casanova": 0.47}
+FACE_X = {"charismatic_admiral": 0.46, "casanova": 0.47}
+# 손에 든 소품까지 초상에 들어가는 두 모습은 보통 얼굴 크롭보다 넓게 잡는다.
+# 원본 한쪽(768x1024)에서 얼굴만 확대하면 망원경/모자가 잘리고 얼굴도 한쪽으로
+# 밀려 보이므로, 얼굴은 화면 가운데 가까이 두되 동작을 읽을 여백을 남긴다.
+FACE_ACTION = {
+    "sea_dog": {"x": 0.51, "side": 0.72},
+    "hat_spinner": {"x": 0.51, "side": 0.72},
+}
+# 무릎상에서도 두 인물의 얼굴이 화면 오른쪽으로 몰리지 않게 약간 왼쪽으로 옮긴다.
+HALF_X_SHIFT = {"sea_dog": -20, "hat_spinner": -18}
 # 전신으로 생성된 초기 원본만 무릎선에서 자른다. 이후 원본은 애초에 무릎 아래를 그리지 않는다.
 KNEE_CROP = {"muscle_swordsman": 0.73, "hat_spinner": 0.73, "sea_dog": 0.76}
 
@@ -61,7 +70,7 @@ def keep_main_component(im, seed=None):
     return cleaned
 
 
-def square_fit(im, pad=10, crop=1.0):
+def square_fit(im, pad=10, crop=1.0, x_shift=0):
     box = alpha_bounds(im)
     if crop < 1.0:
         box = (box[0], box[1], box[2], round(box[1] + (box[3] - box[1]) * crop))
@@ -71,7 +80,7 @@ def square_fit(im, pad=10, crop=1.0):
     wh = (max(1, round(subject.width * scale)), max(1, round(subject.height * scale)))
     subject = subject.resize(wh, Image.Resampling.LANCZOS)
     out = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
-    out.alpha_composite(subject, ((SIZE - wh[0]) // 2, SIZE - pad - wh[1]))
+    out.alpha_composite(subject, ((SIZE - wh[0]) // 2 + x_shift, SIZE - pad - wh[1]))
     return out
 
 
@@ -80,8 +89,9 @@ def face_square(im, look):
     # 별도 얼굴 탐지 패키지 없이도 file:// 프로젝트를 다시 만들 수 있다.
     x0, y0, x1, y1 = alpha_bounds(im)
     sw, sh = x1 - x0, y1 - y0
-    side = min(sw * 0.84, sh * 0.58)
-    cx = x0 + sw * FACE_X.get(look, 0.5)
+    action = FACE_ACTION.get(look)
+    side = min(sw * (0.98 if action else 0.84), sh * (action["side"] if action else 0.58))
+    cx = x0 + sw * (action["x"] if action else FACE_X.get(look, 0.5))
     top = y0
     left = round(cx - side / 2)
     top = round(top)
@@ -106,8 +116,9 @@ def save_pair(look):
     face_square(young, look).save(IMG / "portraits" / "player" / f"{look}.png", optimize=True)
     face_square(old, look).save(IMG / "portraits" / "player-aged" / f"{look}.png", optimize=True)
     crop = KNEE_CROP.get(look, 1.0)
-    square_fit(young, crop=crop).save(CHARS / f"player_half_{look}.png", optimize=True)
-    square_fit(old, crop=crop).save(CHARS / f"player_half_{look}_old.png", optimize=True)
+    shift = HALF_X_SHIFT.get(look, 0)
+    square_fit(young, crop=crop, x_shift=shift).save(CHARS / f"player_half_{look}.png", optimize=True)
+    square_fit(old, crop=crop, x_shift=shift).save(CHARS / f"player_half_{look}_old.png", optimize=True)
 
 
 def save_existing_old(look):

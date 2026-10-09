@@ -167,15 +167,20 @@ def image_packs(found, base, out_dir, places=None):
     order = pack_order(list(found), places)
     groups = []          # [(갈래, {키: 주소}, 크기)]
     cur, n, grp = {}, 0, None
+    # 메모리를 아끼려고 먼저 크기만 셈해 묶음을 나누고(data: 주소 길이 = base64 길이 + 머리), 파일을 쓸 때 묶음마다 그림을 읽는다
+    def ulen(k):
+        path = os.path.join(base or os.path.join(pages.ROOT, 'images'), found[k])
+        ext = os.path.splitext(path)[1].lower()
+        return len('data:%s;base64,' % pages.MIME.get(ext, 'application/octet-stream')) + 4 * ((os.path.getsize(path) + 2) // 3)
     for k in sorted(found, key=lambda x: order[x]):
         g = order[k][0]
-        uri = pages.data_uri(os.path.join(base or os.path.join(pages.ROOT, 'images'), found[k]))
-        if cur and (g != grp or n + len(uri) > PACK_TARGET):
+        ul = ulen(k)
+        if cur and (g != grp or n + ul > PACK_TARGET):
             groups.append((grp, cur, n))
             cur, n = {}, 0
-        cur[k] = uri
+        cur[k] = True
         grp = g
-        n += len(uri) + len(k) + 8
+        n += ul + len(k) + 8
     if cur:
         groups.append((grp, cur, n))
     # 아주 작은 묶음은 같은 갈래 이름(앞부분)의 바로 앞 묶음과 합친다
@@ -191,7 +196,8 @@ def image_packs(found, base, out_dir, places=None):
         else:
             packs.append([fam, dict(pk), size])
     out = []
-    for i, (_, pk, _) in enumerate(packs, 1):
+    for i, (_, pk0, _) in enumerate(packs, 1):
+        pk = {k: pages.data_uri(os.path.join(base or os.path.join(pages.ROOT, 'images'), found[k])) for k in pk0}
         js = ('/* PLUS ULTRA 그림 묶음 %d/%d (tools/bundle.py가 만듦) */\nwindow.G = window.G || {};\n'
               'G.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, %s);\n') % (i, len(packs), json.dumps(pk, ensure_ascii=False))
         rel = 'img/pack-%03d-%s.js' % (i, pages.short_hash(js))

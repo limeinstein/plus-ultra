@@ -5,7 +5,8 @@
 (function (G) {
   'use strict';
   var CREW = [
-    { id: 'monteiro', name: '루이스 몬테이루', g: 'm', style: 'ib', st: [70, 46, 72, 82], sk: { ops: 2, nav: 1, sword: 1 }, lg: { 1: 3, 0: 2 }, fame: 0, wage: 55,
+    // 밀짚모자 선장: 특기는 사용자가 정한 그대로(운용 3·포술 3·검술 2·음악 1·항해 1, 아랍어 1) — skBoost로 지명도 특기 늘리기(renown.js)를 건너뛴다 (2026-10-09)
+    { id: 'monteiro', name: '루이스 몬테이루', g: 'm', style: 'ib', st: [70, 46, 72, 82], sk: { ops: 3, nav: 1, sword: 2, gun: 3, music: 1 }, skBoost: 1, lg: { 1: 3, 0: 2, 5: 1 }, fame: 0, wage: 55,
       y: [1480, 1545], reg: [0], zones: ['iberia', 'wafrica'], home: 0,
       desc: '붉은 띠를 두른 낡은 밀짚모자의 젊은 선장. 늘 이를 드러내고 웃으며, 한번 동료로 삼은 사람은 끝까지 지킨다. 왼쪽 눈 아래에 꿰맨 흉터가 있다.' },
     { id: 'deleon', name: '로드리고 데 레온', g: 'm', style: 'ib', st: [82, 40, 92, 36], sk: { sword: 3, ops: 1 }, lg: { 0: 3, 1: 1 }, fame: 300, wage: 110,

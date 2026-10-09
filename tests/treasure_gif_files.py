@@ -15,7 +15,8 @@ TREASURE_IDS = list(_mod.TREASURE_IDS)
 FLAT = {"cheonmado", "libai", "lanting", "qingming", "hunmin", "baburnama", "shahnameh", "mayacodex", "pirireis",
         "monalisa", "creation", "lastsupper", "birthvenus", "durer", "urbinovenus", "babeltower", "orgaz",
         "ambassadors", "earthlydelights", "ghentaltar", "nanbanscreen", "ajanta", "paladoro", "holylance",
-        "incadisc", "sunstone", "hammurabi", "tripitaka", "moctezuma", "iznikware", "lustreware"}
+        "incadisc", "sunstone", "hammurabi", "tripitaka", "moctezuma", "iznikware", "lustreware",
+        "ft_granada", "ft_cairo", "ft_delhi", "ft_cuzco", "ft_hangzhou", "ft_sakai", "ft_hanyang"}
 
 
 def difference(a: Image.Image, b: Image.Image) -> float:
@@ -29,6 +30,8 @@ sea = (ROOT / "js" / "data" / "seadisc.js").read_text(encoding="utf-8")
 treasures |= set(re.findall(r"^\s*s\('([^']+)', '[^']+', 'treasure'", sea, re.M))
 chain = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
 treasures |= set(re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'treasure'", chain, re.M))
+story = (ROOT / "js" / "data" / "story.js").read_text(encoding="utf-8")
+treasures |= set(re.findall(r"^\s*\['(ft_[^']+)',\s*'[^']+'", story, re.M))
 assert set(TREASURE_IDS) == treasures, (set(TREASURE_IDS) ^ treasures)
 
 for did in TREASURE_IDS:

@@ -1,12 +1,15 @@
 /* 부하들 사이의 썸 (G.Romance) — 자료·대사·조정값: js/data/romance.js (G.BALANCE.romance)
-   ■ 누가: 데리고 다니는 남녀 부하 한 쌍. 한 사람은 한 번에 한 사람하고만. 궁합(ROMANCE_LIKE 말투 궁합 + 같은 모국어 + 두 사람마다 정해진 끌림)이 chemMin 아래면 끌리지 않는다.
+   ■ 누가: 제독과 3년(minYears) 넘게 함께 항해한 남녀 부하 한 쌍. 한 번에 한 커플만 이어진다(엮인 짝이 있으면 새 짝은 생기지 않는다).
+     사건은 1년(cool 365일)에 한 번만. 한 커플이 혼례를 올리면(완성) 썸은 그걸로 끝 — 다음 커플로 이어지지 않는다(state.romance.done).
+   ■ (옛 규칙) 한 사람은 한 번에 한 사람하고만. 궁합(ROMANCE_LIKE 말투 궁합 + 같은 모국어 + 두 사람마다 정해진 끌림)이 chemMin 아래면 끌리지 않는다.
    ■ 끌림(heat): 날마다 궁합 × rate (방이 맞닿았으면 1, 아니면 far). 한 사람이 배에 없으면 줄어든다.
    ■ 단계: none → (간식) spark 눈길 → (달밤) some 썸 → (고백 상담·고백) lover 연인 → (혼례) wed 부부.  다툼: 연인·부부. 헤어지면 cold(서먹 — coldDays 동안 끌리지 않음).
      끌림이 그 단계의 문턱(steps)을 넘으면 사건이 터진다 — 바다에서 하루 seaChance, 입항할 때 portChance, 사건 사이는 cool일. 혼례는 항구에서만.
      사건마다 제독이 고른다(밀어 준다 · 모른 척 · 말린다 …). 제독이 호감을 쌓던 여자 부하라면 고백 상담 때 남자 쪽이 먼저 묻는다(질투).
    ■ 효과: 연인·부부가 맞닿은 방이면 날마다 충성이 조금씩 오르고, 사이좋은 짝이 있으면 규율이 조금씩 오른다. 혼례를 올리면 두 사람 충성 +15, 규율 +10, 피로 −10, 사교 명성.
      부부·연인인 여자 부하에게는 제독이 청혼할 수 없다(matetalk.js). 부부 한쪽이 배를 떠나면 남은 사람 충성 −10.
-   ■ 저장: state.romance = { pairs: {'남id|여id': {m, f, heat, stage, since, cd, apart, due}}, next } — 옛 저장에는 없으므로 처음 쓸 때 만든다. */
+   ■ 저장: state.romance = { pairs: {'남id|여id': {m, f, heat, stage, since, cd, apart, due}}, next, done('남id|여id' — 완성된 커플) } — 옛 저장에는 없으므로 처음 쓸 때 만든다.
+   ■ 그림: G.ROMANCE_PICS (images/romance-events/) — 가족 사건과 같은 액자(G.FamEv.showPic)로 대화 위에 띄운다. */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI;
@@ -21,6 +24,15 @@
   function mateRow(id) { var s = S(); return (s.mates || []).filter(function (m) { return m.id === id; })[0] || null; }
   function sexOf(id) { var d = G.MATE[id]; return d ? (d.g === 'f' ? 'f' : 'm') : null; }
   RM.key = function (m, f) { return m + '|' + f; };
+  /** 제독과 minYears(3년) 넘게 함께 항해한 부하인가 — joined(yyyymmdd)가 0이면 처음부터 함께한 부하(게임 날수로 센다) */
+  RM.veteran = function (id) {
+    var s = S(), m = mateRow(id), y = K().minYears == null ? 3 : K().minYears; if (!s || !m) return false;
+    if (!m.joined) return (s.day || 0) >= y * 365;
+    return U.dateNum(s.date) >= m.joined + y * 10000;
+  };
+  function active(p) { return p.stage !== 'none' && p.stage !== 'cold'; }
+  /** 지금 이어지고 있는 커플 (눈길·썸·연인·부부) — 한 번에 하나뿐 */
+  RM.current = function () { var ps = RM.st().pairs; for (var k in ps) if (active(ps[k])) return ps[k]; return null; };
   function short(id) { var d = G.MATE[id]; return d ? String(d.name).replace(/\s*\(.*\)\s*$/, '').split(' ')[0] : '?'; }
   function toneOf(id) { return G.Banter && G.Banter.toneOf ? G.Banter.toneOf(id) : sexOf(id) === 'f' ? 'plain' : 'rush'; }
 
@@ -53,6 +65,11 @@
     var s = S(), out = [], b = K(); if (!s || !s.mates || tut()) return out;
     var st = RM.st(), ps = st.pairs, day = s.day;
     var here = {}; s.mates.forEach(function (m) { if (G.MATE[m.id]) here[m.id] = m; });
+    // 옛 저장: 이미 부부가 된 짝이 있으면 완성된 것으로
+    if (!st.done) Object.keys(ps).forEach(function (k) { if (ps[k].stage === 'wed') st.done = k; });
+    // 한 커플이 완성되었거나 이어지고 있으면 다른 짝은 없다
+    var cur = st.done ? ps[st.done] : RM.current();
+    if (cur) Object.keys(ps).forEach(function (k) { if (ps[k] !== cur && ps[k].stage !== 'cold') delete ps[k]; });
     // 1) 이미 엮인 짝
     Object.keys(ps).forEach(function (k) {
       var p = ps[k], both = here[p.m] && here[p.f];
@@ -78,15 +95,16 @@
       if (p.stage === 'lover' || p.stage === 'wed') {
         if (nr) { var g = b.nearLoyal * (p.stage === 'wed' ? 1.5 : 1); [p.m, p.f].forEach(function (id) { here[id].loyal = Math.min(100, (here[id].loyal || 70) + g); }); }
         s.fleet.discipline = Math.min(100, (s.fleet.discipline || 0) + b.discipline);
-        if (!p.due && day >= (p.cd || 0) && U.chance(b.quarrel * (nr ? 1 : 2))) p.due = 'quarrel';
+        if (!st.done && !p.due && day >= (p.cd || 0) && U.chance(b.quarrel * (nr ? 1 : 2))) p.due = 'quarrel';
         if (p.stage === 'lover' && !p.due && p.heat >= b.steps.wed && day - (p.since || day) >= b.wedDays) p.due = 'wed';
       } else if (!p.due && NEXT[p.stage] && p.heat >= b.steps[NEXT[p.stage]]) p.due = NEXT[p.stage];
     });
-    // 2) 아직 아무와도 엮이지 않은 여자 부하: 가장 잘 맞는 남자 부하에게 끌린다
+    // 2) 아직 아무와도 엮이지 않은 여자 부하: 가장 잘 맞는 남자 부하에게 끌린다 — 완성된 커플이 있거나 이어지는 커플이 있으면 없음, 3년 넘은 부하끼리만
+    if (st.done || RM.current()) return out;
     var busy = {};
     Object.keys(ps).forEach(function (k) { var p = ps[k]; if (p.stage !== 'none') { busy[p.m] = 1; busy[p.f] = 1; } });
-    var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id]; });
-    Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && s.player.wife !== id; }).forEach(function (f) {
+    var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id] && RM.veteran(id); });
+    Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && s.player.wife !== id && RM.veteran(id); }).forEach(function (f) {
       var best = null, bc = b.chemMin;
       males.forEach(function (m) { if (busy[m]) return; var key = RM.key(m, f), old = ps[key]; if (old && old.stage === 'cold') return; var c = RM.chem(m, f); if (c >= bc) { bc = c; best = m; } });
       if (!best) return;
@@ -202,6 +220,8 @@
     s.player.gold -= cost;
     for (var i = 0; i < Ln.feast.length; i++) await narr(p, Ln.feast[i]);
     p.stage = 'wed'; p.wed = U.dateNum(s.date); p.heat = 100;
+    var stR = RM.st(); stR.done = RM.key(p.m, p.f);      // 한 커플 완성 — 썸 사건은 여기서 끝 (다음 커플로 이어지지 않는다)
+    Object.keys(stR.pairs).forEach(function (k) { if (k !== stR.done) delete stR.pairs[k]; });
     loyal(p.m, 15); loyal(p.f, 15); disc(10); s.fleet.fatigue = Math.max(0, (s.fleet.fatigue || 0) - 10);
     G.Fame.add('so', 20);
     log(names(p) + U.jx(G.MATE[p.f].name, '이/가') + ' 혼례를 올렸다. (금화 ' + U.num(cost) + '닢)');
@@ -213,9 +233,10 @@
 
   /** 지금 터질 사건 (없으면 null) */
   RM.due = function (where) {
-    var s = S(), st = RM.st(); if (!s || tut() || s.day < (st.next || 0)) return null;
+    var s = S(), st = RM.st(); if (!s || tut() || st.done || s.day < (st.next || 0)) return null;
     var list = Object.keys(st.pairs).map(function (k) { return st.pairs[k]; }).filter(function (p) {
       if (!p.due || p.apart || !mateRow(p.m) || !mateRow(p.f) || s.day < (p.cd || 0)) return false;
+      if (!RM.veteran(p.m) || !RM.veteran(p.f)) return false;
       return p.due !== 'wed' || where === 'city';
     });
     list.sort(function (a, b) { return b.heat - a.heat; });
@@ -224,8 +245,14 @@
   /** 사건을 치른다 */
   RM.play = async function (p) {
     var ev = p.due; p.due = null;
-    var st = RM.st(); st.next = S().day + K().cool;
-    if (EV[ev]) await EV[ev](p);
+    var st = RM.st(); st.next = S().day + K().cool;      // 1년에 한 번
+    var pc = (G.ROMANCE_PICS || {})[ev], pic = null;
+    if (pc && G.FamEv && G.FamEv.showPic) {
+      try { if (G.Img && G.Img.preload) await G.Img.preload([[pc[0]]], 1200); } catch (e) { /* 그림이 늦으면 글부터 */ }
+      pic = G.FamEv.showPic({ img: pc[0], title: pc[1] });
+    }
+    try { if (EV[ev]) await EV[ev](p); }
+    finally { if (pic) await pic.stop(); }
     G.Game.refreshHud();
   };
   /** sea.js runDay */
@@ -248,7 +275,7 @@
   /** 수첩 「동료」: 부하들 사이 */
   RM.html = function () {
     var st = RM.st(), rows = Object.keys(st.pairs).map(function (k) { return st.pairs[k]; }).filter(function (p) { return p.stage !== 'none' && G.MATE[p.m] && G.MATE[p.f]; });
-    if (!rows.length) return '<div class="sep"></div><h4 style="margin:0 0 6px">부하들 사이</h4><div class="muted" style="font-size:15px">아직 눈에 띄는 사이는 없다. 남녀 부하를 맞닿은 방에 두면 서로 가까워지기도 한다(수첩 「함대」 → 기함 선실).</div>';
+    if (!rows.length) return '<div class="sep"></div><h4 style="margin:0 0 6px">부하들 사이</h4><div class="muted" style="font-size:15px">아직 눈에 띄는 사이는 없다. 3년 넘게 함께 항해한 남녀 부하를 맞닿은 방에 두면 서로 가까워지기도 한다(수첩 「함대」 → 기함 선실). 이런 일은 1년에 한 번쯤, 한 커플만.</div>';
     rows.sort(function (a, b) { return b.heat - a.heat; });
     return '<div class="sep"></div><h4 style="margin:0 0 6px">부하들 사이</h4><table class="tbl"><tr><th>두 사람</th><th>사이</th><th>끌림</th><th></th></tr>' + rows.map(function (p) {
       var n = Math.round(Math.max(0, p.heat) / 20);

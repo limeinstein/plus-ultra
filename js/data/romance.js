@@ -14,7 +14,8 @@
     steps: { snack: 25, moon: 55, confess: 75, wed: 92 },   // 사건이 터지는 끌림
     wedDays: 150,         // 연인이 된 뒤 이만큼 지나야 혼례 이야기가 나온다
     wedCost: [1500, 300], // 혼례 비용: [0] + [1] × 함대 척수
-    cool: 18,             // 사건과 사건 사이 (일)
+    cool: 365,            // 사건과 사건 사이 (일) — 썸 사건은 1년에 한 번만
+    minYears: 3,          // 두 사람 모두 제독과 이만큼(년) 함께 항해한 부하여야 엮인다 (joined)
     seaChance: 0.12,      // 바다에서 하루에 사건이 터질 확률 (때가 된 짝이 있을 때)
     portChance: 0.5,      // 입항했을 때
     quarrel: 0.05,        // 연인·부부가 하루에 다툴 확률 (방이 떨어져 있으면 ×2) — 사건 때가 되면
@@ -26,6 +27,14 @@
   /** 말투 궁합: 남자 말투 → 잘 맞는 여자 말투 (궁합 +0.2) */
   G.ROMANCE_LIKE = { rush: ['tsun', 'cute'], noble: ['charm', 'polite'], merch: ['plain', 'charm'], hidden: ['grumpy', 'polite'], genius: ['tsun', 'polite'], shonen: ['cute', 'plain'] };
   G.ROMANCE_STAGE = { none: '', spark: '눈길이 간다', some: '썸', lover: '연인', wed: '부부', cold: '서먹하다' };
+  /** 사건 그림 (images/romance-events/, Codex 2026-10-08) — [그림 이름, 그림 위 이름표] */
+  G.ROMANCE_PICS = {
+    snack: ['romance-events/01_snack_share', '나눠 먹는 간식'],
+    moon: ['romance-events/02_moonlit_bow', '달 밝은 뱃머리'],
+    confess: ['romance-events/03_confession_token', '돛 그늘의 고백'],
+    quarrel: ['romance-events/04_lovers_quarrel', '등 돌린 연인'],
+    wed: ['romance-events/05_harbor_wedding', '항구의 혼례']
+  };
 
   G.ROMANCE_LINES = {
     // ---------------------------------------------------------------- ① 간식 (끌림 25 — 아무것도 아닌 사이 → 눈길)

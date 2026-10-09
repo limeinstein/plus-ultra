@@ -109,11 +109,30 @@
     var so = sourceOf(opts), src = so && so.src, layered = opts.layered !== false && !!src;
     var faceAt = opts.face || (so && so.key && G.PORTRAIT_FACES && G.PORTRAIT_FACES[so.key]) || null, ro = null, headIm = null;
     if (layered) {
+      // 같은 그림을 머리·몸통·하체로 세 번 읽는 동안 일부만 먼저 뜨면 얼굴이나 모자가
+      // 수평으로 잘린 것처럼 보인다. 완성된 한 장을 받침으로 먼저 보여 주고, 세 조각이
+      // 전부 준비된 뒤에만 2.5D 레이어로 바꾼다. 한 조각이라도 실패하면 받침을 유지한다.
+      var baseIm = new Image(), piecesLeft = 3, pieceFailed = false;
+      baseIm.className = 'rig-layer rig-base';
+      baseIm.alt = opts.alt || '';
+      baseIm.decoding = 'async'; baseIm.draggable = false; baseIm.src = src;
+      root.appendChild(baseIm);
+      function pieceReady() {
+        piecesLeft--;
+        if (!pieceFailed && piecesLeft === 0 && !dead) root.classList.add('rig-ready');
+      }
+      function pieceError() {
+        pieceFailed = true;
+        root.classList.add('rig-piece-failed');
+      }
       ['lower', 'torso', 'head'].forEach(function (part) {
         var im = new Image();
-        im.className = 'rig-layer rig-' + part;
-        im.alt = part === 'head' ? (opts.alt || '') : '';
-        im.decoding = 'async'; im.draggable = false; im.src = src;
+        im.className = 'rig-layer rig-piece rig-' + part;
+        im.alt = '';
+        im.decoding = 'async'; im.draggable = false;
+        im.addEventListener('load', pieceReady, { once: true });
+        im.addEventListener('error', pieceError, { once: true });
+        im.src = src;
         if (part === 'head') headIm = im;
         root.appendChild(im);
       });
