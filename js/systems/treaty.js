@@ -47,10 +47,11 @@
   T.reportMod = function (sp, d) {
     var cl = T.claimOf(d); if (!cl || !sp) return null;
     var k = K(), nm = T.crownName(cl);
-    if (sp.nation === 'FR' || sp.nation === 'EN') return { k: 1, claim: cl, line: U.pick(['교황이 세상을 둘로 나눴다고? 아담의 유언장 어디에 그런 말이 있는지 보여 주게. 우리는 그 조약을 모르네.', '이베리아 두 왕실끼리 나눠 가진 종잇장이 우리와 무슨 상관인가. 먼저 깃발을 꽂는 자가 임자일세.']) };
+    var side = cl === 'ES' ? '서쪽' : '동쪽', L = function (key) { return G.Sponsor.line(sp, key, { side: side, nm: nm }); };   // 후원자의 말투로 (js/data/sponsorvoice.js)
+    if (sp.nation === 'FR' || sp.nation === 'EN') return { k: 1, claim: cl, line: L('treatyIgnore') };
     if (sp.nation !== 'PT' && sp.nation !== 'ES') return null;
-    if (sp.nation === cl) return { k: k.ownK || 1.15, claim: cl, line: '토르데시야스 선 ' + (cl === 'ES' ? '서쪽' : '동쪽') + '의 땅이니 조약에 따라 우리 ' + nm + ' 왕실의 몫일세. 폐하께서도 크게 기뻐하실 걸세.' };
-    return { k: k.otherK || 0.7, claim: cl, line: '그런데 그 땅은 토르데시야스 선 ' + (cl === 'ES' ? '서쪽' : '동쪽') + '이로군. 조약에 따라 ' + nm + '의 몫이 되니 우리 왕실이 차지할 수는 없네. 알려 준 공은 있으니 사례는 하겠지만, 약속한 만큼은 어렵네.' };
+    if (sp.nation === cl) return { k: k.ownK || 1.15, claim: cl, line: L('treatyOwn') };
+    return { k: k.otherK || 0.7, claim: cl, line: L('treatyOther') };
   };
 
   // ---------------------------------------------------------------- ② 상대 왕실의 항구

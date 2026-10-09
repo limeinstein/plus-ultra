@@ -225,8 +225,9 @@
       // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
       U.$$('[data-ic]', el).forEach(function (td) {
         var it = p.items[+td.dataset.ic], d = G.ITEM[it.id], rl = G.RELIC && G.RELIC[it.id], art = rl || d;
+        if (!art && it.kind === 'evidence') art = { id: 'ev_' + it.disc, name: it.name || '해도', kind: 'book' };   // 발견 증거품(해도·지도): 말아 둔 해도 그림
         if (art && A.relicArt) {
-          var chain = rl ? G.Img.chain.relic(rl) : G.Img.chain.item(d);
+          var chain = rl ? G.Img.chain.relic(rl) : d ? G.Img.chain.item(d) : ['items/evidence_' + it.disc];
           var cv = G.Img.make(chain, 96, 96, function () { return A.relicArt(art, 96, 96); }, { fit: 'contain' });
           cv.className = 'relic-ic'; td.appendChild(cv);
         }
@@ -574,7 +575,7 @@
       mi.onchange = async function () {
         var f = mi.files && mi.files[0]; if (!f) return;
         UI.toast('MP3를 확인하는 중…', 'info', 2000);
-        if (await G.LocalOST.useFile(f)) { if (G.YTM) G.YTM.setSource('ost'); UI.toast('「' + f.name + '」로 코스타 델 솔 음악을 틉니다.', 'info', 4000); }
+        if (await G.LocalOST.useFile(f)) { if (G.YTM) G.YTM.setSource('ost'); UI.toast('「' + f.name + '」' + G.U.jx(f.name, '으로/로') + ' 코스타 델 솔 음악을 틉니다.', 'info', 4000); }
         else UI.toast('이 파일은 「Costa Del Sol BGM 모음」이 아닌 것 같습니다 (길이가 맞지 않음).', 'info', 4500);
         PAGES.menu(el, win);
       };

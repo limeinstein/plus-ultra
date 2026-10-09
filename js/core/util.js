@@ -23,6 +23,43 @@
   U.rf = function (a, b) { return a + U.rng() * (b - a); };
   U.chance = function (p) { return U.rng() < p; };
   U.pick = function (arr) { return arr[Math.floor(U.rng() * arr.length)]; };
+  /** 같은 열쇠로 고를 때 바로 앞에 나온 것은 피한다 (대사가 연달아 똑같이 나오지 않게). mem: 기억해 둘 곳(없으면 모듈 안) */
+  var lastPick = {};
+  U.pickFresh = function (key, arr) {
+    if (!arr || !arr.length) return undefined;
+    if (arr.length === 1) return arr[0];
+    var last = lastPick[key] || [], keep = Math.min(arr.length - 1, 2), cand = [];
+    for (var i = 0; i < arr.length; i++) if (last.indexOf(i) < 0) cand.push(i);
+    var k = cand.length ? cand[Math.floor(U.rng() * cand.length)] : Math.floor(U.rng() * arr.length);
+    lastPick[key] = [k].concat(last).slice(0, keep);
+    return arr[k];
+  };
+  /** 값의 배수를 말로: 1.3 → 「삼 할쯤」, 2 → 「곱절」 (사람이 하는 말·소식에 숫자 대신) */
+  U.howMuch = function (m) {
+    if (m >= 2.8) return '세 곱절';
+    if (m >= 2.3) return '곱절 반';
+    if (m >= 1.9) return '곱절';
+    if (m >= 1.6) return '곱절 가까이';
+    if (m >= 1.4) return '절반쯤 더';
+    if (m >= 1.15) return '서너 할쯤 더';
+    if (m <= 0.4) return '반의반';
+    if (m <= 0.6) return '반값';
+    if (m <= 0.85) return '삼 할쯤 덜';
+    return '조금';
+  };
+  /** 날수를 말로: 12 → 「열흘 남짓」, 100 → 「석 달 남짓」 */
+  U.howLong = function (days) {
+    if (days <= 4) return '며칠';
+    if (days <= 10) return '열흘쯤';
+    if (days <= 20) return '보름쯤';
+    if (days <= 40) return '한 달쯤';
+    if (days <= 70) return '두 달쯤';
+    if (days <= 110) return '석 달쯤';
+    if (days <= 150) return '넉 달쯤';
+    if (days <= 220) return '반년쯤';
+    if (days <= 300) return '아홉 달쯤';
+    return '한 해 남짓';
+  };
   U.shuffle = function (arr) {
     for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(U.rng() * (i + 1)); var t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
     return arr;

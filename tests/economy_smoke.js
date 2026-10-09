@@ -108,7 +108,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const ven = G.CITY_DATA.find(c => c.name === '베니스');
       const wd = E.start('wedding', ven.id, { lead: 30, dur: 60 });
       const msgs = G.Game.passDays(1);
-      o.news = msgs.filter(m => /【시장 소식】/.test(m.text)).map(m => m.text);
+      o.news = msgs.filter(m => m.icon === 'scales').map(m => m.text);
       o.fireKnown = !!f.known; o.wedKnown = !!wd.known;
       // 술집 소문: 먼 곳 사건도 (조짐 포함) 듣는다 — 하루 두 번
       const said = []; C.say = async (who, t) => { said.push(t); }; C.mate = async (t) => { said.push(t); };

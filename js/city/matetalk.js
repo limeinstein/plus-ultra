@@ -137,6 +137,7 @@
         var ok = await UI.confirm(d.name + '에게 청혼하겠습니까?<br><small>결혼하면 부하에서 물러나 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리게 됩니다.</small>', '청혼한다', '그만둔다');
         if (!ok) continue;
         R.removeItem('ring');
+        if (G.Outcome) await G.Outcome.show('propose', { sub: d.name + U.jx(d.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
         await say(d.witch ? '…마녀에게 청혼하는 사람은 처음 봐요. 좋아요, 당신의 운명은 제가 지켜 줄게요.' : '…정말요? 바다에서 만난 사람과 이렇게 될 줄은 몰랐어요. 네, 기꺼이요!', 'shy');
         s.player.wife = d.id;
         s.mates = s.mates.filter(function (x) { return x !== m; });

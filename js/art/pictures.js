@@ -46,6 +46,17 @@
         x.fillStyle = gold('#fff0b0', '#6a4410'); x.beginPath(); x.arc(0, 0.1, 0.62, Math.PI, 0); x.lineTo(0.62, 0.6); x.lineTo(0.3, 0.6); x.lineTo(0.3, 0.2); x.lineTo(-0.3, 0.2); x.lineTo(-0.3, 0.6); x.lineTo(-0.62, 0.6); x.closePath(); x.fill();
         x.fillRect(-0.05, 0.1, 0.1, 0.5); x.fillStyle = '#5a3a14'; x.beginPath(); x.ellipse(0, -0.62, 0.32, 0.12, 0, 0, 7); x.fill(); x.fillStyle = gold(); x.beginPath(); x.ellipse(0, -0.68, 0.28, 0.11, 0, 0, 7); x.fill();
       }
+    } else if (K === 'book' && (has('해도') || has('지도'))) {   // 발견 증거품: 말아 둔 해도 (해안선·나침도·뱃길)
+      x.fillStyle = '#e6d3a4'; x.fillRect(-0.78, -0.6, 1.56, 1.2);
+      x.fillStyle = 'rgba(120,80,30,.12)'; for (var mk = 0; mk < 14; mk++) { x.beginPath(); x.arc(-0.7 + rng() * 1.4, -0.5 + rng() * 1.0, 0.05 + rng() * 0.12, 0, 7); x.fill(); }
+      x.fillStyle = '#c9ad72'; x.strokeStyle = '#5a3a1e'; x.lineWidth = 0.025; x.beginPath(); x.moveTo(-0.78, -0.6);
+      var cx0 = -0.78, cy0 = -0.6; for (var ci = 0; ci < 12; ci++) { cx0 += 0.05 + rng() * 0.05; cy0 += 0.04 + (rng() - 0.3) * 0.12; x.lineTo(cx0, Math.min(0.6, cy0)); }
+      x.lineTo(-0.78, 0.6); x.closePath(); x.fill(); x.stroke();
+      x.strokeStyle = 'rgba(90,60,30,.35)'; x.lineWidth = 0.01; for (var rl0 = 0; rl0 < 12; rl0++) { var ra0 = rl0 / 12 * 6.283; x.beginPath(); x.moveTo(0.35, 0.05); x.lineTo(0.35 + Math.cos(ra0) * 0.9, 0.05 + Math.sin(ra0) * 0.9); x.stroke(); }
+      for (var rp = 0; rp < 4; rp++) { x.save(); x.translate(0.35, 0.05); x.rotate(rp * Math.PI / 2); x.fillStyle = rp % 2 ? '#7a2a1e' : '#1e3552'; x.beginPath(); x.moveTo(0, 0); x.lineTo(0.05, -0.05); x.lineTo(0, -0.26); x.lineTo(-0.05, -0.05); x.fill(); x.restore(); }
+      x.strokeStyle = 'rgba(150,40,30,.85)'; x.lineWidth = 0.022; x.setLineDash([0.05, 0.05]); x.beginPath(); x.moveTo(-0.35, 0.5); x.bezierCurveTo(-0.1, 0.45, 0.0, -0.2, 0.55, -0.4); x.stroke(); x.setLineDash([]);
+      x.fillStyle = '#8a5a2a'; x.fillRect(-0.86, -0.66, 0.1, 1.32); x.fillRect(0.76, -0.66, 0.1, 1.32);
+      x.fillStyle = '#7a1e1a'; x.beginPath(); x.arc(0.62, 0.42, 0.09, 0, 7); x.fill();   // 봉랍
     } else if (K === 'book') {
       if (has('두루마리') || has('탁본') || has('편지') || has('다라니')) {
         x.fillStyle = '#e8d8b0'; x.fillRect(-0.7, -0.55, 1.4, 1.05); x.fillStyle = '#8a5a2a'; x.fillRect(-0.82, -0.62, 0.14, 1.2); x.fillRect(0.68, -0.62, 0.14, 1.2);
@@ -84,7 +95,7 @@
         if (has('새')) { x.fillStyle = '#eee'; x.beginPath(); x.ellipse(0.05, 0.28, 0.2, 0.12, 0, 0, 7); x.fill(); }
       }
     } else { // treasure
-      var v = has('가면') || has('두상') ? 1 : has('원반') || has('기초판') || has('명판') || has('장식판') || has('인장') || has('도장') ? 2 : has('잔') || has('뿔잔') ? 0 : has('상') || has('코끼리') || has('말') || has('불') ? 4 : has('타일') || has('부조') || has('모자이크') || has('조각') || has('이콘') ? 5 : has('항아리') || has('토기') || has('주전자') || has('그릇') || has('솥') || has('등잔') || has('합') || has('함') || has('물통') ? 3 : Math.floor(rng() * 4);
+      var v = has('석판') || has('점토판') ? 5 : has('눈') && !has('눈물') ? 8 : has('가면') || has('두상') ? 1 : has('원반') || has('기초판') || has('명판') || has('장식판') || has('인장') || has('도장') ? 2 : has('잔') || has('뿔잔') ? 0 : has('상') || has('코끼리') || has('말') || has('불') ? 4 : has('타일') || has('부조') || has('모자이크') || has('조각') || has('이콘') ? 5 : has('항아리') || has('토기') || has('주전자') || has('그릇') || has('솥') || has('등잔') || has('합') || has('함') || has('물통') ? 3 : Math.floor(rng() * 4);
       var metal = has('은 ') || has('은주') || has('사산') ? function () { return steel(); } : has('비취') || has('옥') ? function () { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, '#a8e0b8'); gg.addColorStop(1, '#1e6a3a'); return gg; } : has('수정') || has('유리') || has('결정') ? function () { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, 'rgba(255,255,255,.95)'); gg.addColorStop(1, 'rgba(150,190,220,.6)'); return gg; } : has('청동') || has('칠보') ? function () { return gold('#e0c890', '#3a5a4a'); } : has('토기') || has('테라코타') || has('벽돌') || has('항아리') ? function () { return gold('#e8a070', '#7a3a1a'); } : has('돌') || has('석') || has('대리석') || has('사암') ? function () { return gold('#f0e8d8', '#8a7a60'); } : function () { return gold(); };
       if (has('결정') || (has('수정') && !has('해골'))) v = 6; else if (has('도끼')) v = 7; else if (has('공')) v = 8; else if (has('깃털')) v = 9;
       x.fillStyle = metal();

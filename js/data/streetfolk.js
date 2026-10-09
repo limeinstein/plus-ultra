@@ -15,12 +15,12 @@
       elder: { name: '마을 할아버지 (촌장)', w: 1.4, face: { role: 'priest', g: 'm', img: 'priest', age: 'old' } },
       grandma: { name: '마을 할머니', w: 1.4, face: { role: 'keeper', g: 'f', img: 'keeper', age: 'old' } },
       librarian: { name: '도서관 사서', w: 1, need: 'library', face: { town: 'librarian' } },
-      innkeeper: { name: '여관 주인', w: 1, face: { town: 'innkeeper' } },
+      innkeeper: { name: '여관 주인', nameF: '여관 안주인', w: 1, face: { town: 'innkeeper' } },
       dog: { name: '강아지', w: 1.3, animal: true },
       cat: { name: '고양이', w: 1.3, animal: true },
       adventurer: { name: '모험가', w: 1.2, face: { town: 'captain' } },
       merchant: { name: '장사꾼', w: 1.5, face: { town: 'trader' } },
-      noble: { name: '젊은 귀족', w: 0.9, need: 'court', face: { role: 'noble', img: 'noble', age: 'young' } },
+      noble: { name: '젊은 귀족', nameM: '귀족 청년', nameF: '귀족 아가씨', w: 0.9, need: 'court', face: { role: 'noble', img: 'noble', age: 'young' } },
       soldier: { name: '병사', w: 1.2, need: 'big', face: { town: 'guard' } },
       navigator: { name: '항해사', w: 1.2, need: 'port', face: { town: 'boatswain' } }
     },
@@ -45,6 +45,17 @@
     // 종류 → 그림 이름. 강아지·고양이는 지역마다 한 마리(pet) — 그 지역 그림이 개인지 고양이인지는 petKind (없으면 개)
     sprites: { man: 'town_man', woman: 'town_woman', boy: 'boy', girl: 'girl', elder: 'elder', grandma: 'grandmother', librarian: 'librarian', innkeeper: 'innkeeper',
       adventurer: 'adventurer', merchant: 'merchant', noble: 'noble_youth', soldier: 'soldier', navigator: 'navigator', dog: 'pet', cat: 'pet' },
+    // 그림이 그 종류의 흔한 성별과 다른 지역 (그림 이름 → {m|f: [양식…], def: 기본 성별}) — 이름표(귀족 청년/아가씨·여관 안주인)와 대화 얼굴의 성별을 그림에 맞춘다
+    artSex: {
+      town_man: { def: 'm' }, town_woman: { def: 'f' }, boy: { def: 'm' }, girl: { def: 'f' }, elder: { def: 'm' }, grandmother: { def: 'f' }, librarian: { def: 'f' },
+      soldier: { def: 'm' }, navigator: { def: 'm' },
+      innkeeper: { def: 'm', f: ['se', 'st', 'sw'] },
+      noble_youth: { def: 'f', m: ['cn', 'ib', 'na', 'tr'] },
+      merchant: { def: 'f', m: ['cn', 'na', 'ne', 'ru', 'st', 'tr'] },
+      adventurer: { def: 'f', m: ['ne', 'ru'] }
+    },
+    // 그 지역 그림이 종류와 맞지 않을 때 다른 그림을 빌린다 (양식 → {종류: 그림 이름}) — 조선의 「마을 사람」 그림은 여자라 머리띠를 맨 뱃사람 그림으로
+    spriteFix: { kr: { man: 'navigator' } },
     petKind: { ne: 'cat', it: 'cat', is: 'cat', pe: 'cat', sw: 'cat', se: 'cat', jp: 'cat' },
     season: ['겨울', '겨울', '봄', '봄', '봄', '여름', '여름', '여름', '가을', '가을', '가을', '겨울']
   };

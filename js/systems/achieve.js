@@ -59,7 +59,7 @@
       st[a.id] = { d: U.dateNum(s.date) };
       if (a.gold) s.player.gold += a.gold;
       if (a.fame && G.Fame) G.Fame.add('ex', a.fame);
-      G.State.log('업적 「' + a.name + '」을 이루었다' + (a.title ? ' — 칭호 「' + a.title + '」' : '') + ' (금화 ' + U.num(a.gold || 0) + ', 명성 +' + (a.fame || 0) + ')');
+      G.State.log('업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다' + (a.title ? ' — 칭호 「' + a.title + '」' : '') + ' (금화 ' + U.num(a.gold || 0) + ', 명성 +' + (a.fame || 0) + ')');
       got.push(a);
     });
     return got;
@@ -99,7 +99,7 @@
       var last = d.need[d.need.length - 1];
       if (G.Disc.addHint(id, 'chain:' + last)) out.push({ icon: 'scroll', text: '「' + name(last) + '」의 기록을 다시 살피다가 실마리를 찾았다 — ' + G.chainLine(id) + ' (새 단서: 「' + d.name + '」)' });
     }
-    AC.check().forEach(function (a) { out.push({ icon: 'crown', text: '업적 「' + a.name + '」을 이루었다 — ' + rewardText(a) }); });
+    AC.check().forEach(function (a) { out.push({ icon: 'crown', text: '업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다 — ' + rewardText(a) }); });
     return out;
   };
 

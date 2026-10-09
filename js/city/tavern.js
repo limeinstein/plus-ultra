@@ -373,7 +373,7 @@
     if (!G.Disc || !G.Disc.checkPerson) return;
     var ds = G.Disc.checkPerson(m.id);
     for (var i = 0; i < ds.length; i++) {
-      await UI.say(ART_LINE[ds[i].id] || ('제가 만든 「' + ds[i].name + '」를 보여 드리지요.'), T.mateSpeaker(m));
+      await UI.say(ART_LINE[ds[i].id] || ('제가 만든 「' + ds[i].name + '」' + U.jx(ds[i].name, '을/를') + ' 보여 드리지요.'), T.mateSpeaker(m));
       await G.Disc.find(ds[i], 'city');
     }
   };
@@ -760,6 +760,7 @@
         var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?', '청혼한다', '그만둔다');
         if (!ok) continue;
         R.removeItem('ring');
+        if (G.Outcome) await G.Outcome.show('propose', { sub: m.name + U.jx(m.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
         await say('...정말요? 저, 저라도 괜찮다면... 네, 기꺼이!', 'shy');
         s.player.wife = m.id; st.aff = 100;
         G.State.log(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다.');

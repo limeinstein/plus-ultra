@@ -130,7 +130,7 @@
     var impactHtml = impact ? '<div class="disc-impact ' + impact.key + '"><div class="di-title">' + G.icon(impact.icon || 'star') + '<b>발견의 여파 · ' + U.esc(impact.name) + '</b></div><div class="di-line">' + U.esc(impact.line) + '</div><div class="di-stats"><span>피로 ' + delta(impact.fatigue) + '</span><span>규율 ' + delta(impact.discipline) + '</span></div></div>' : '';
     var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
-      '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.REGIONS[d.reg] || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +
+      '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.Disc.regName(d) || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +
       '<div class="desc">' + U.esc(d.desc) + '</div>' + SC.folkInfo(d) + impactHtml + SC.realInfo(d.real) +
       (fame ? '<div class="center big" style="color:#6a3a14">명성 +' + U.num(fame) + '</div>' : '') + SC.relicStrip(d, relics) + '</div>';
     var win = UI.window({ title: fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
@@ -276,9 +276,20 @@
     var s = S(), p = s.player, me = { name: p.name, portrait: p.portrait };
     var lead = SC.mateSpeaker('first');
     var legend = d.real && d.real.legend, animal = d.cat === 'creature';
-    await UI.say(U.pick(['제독, 보십시오! 저것이 바로 소문으로만 듣던 ' + d.name + '입니다!', '제독…! 이야기 속에서나 듣던 ' + d.name + U.jx(d.name, '이/가') + ' 정말 눈앞에 있습니다!', '다들 멈춰! 제독, ' + d.name + '입니다. 우리가 찾아낸 겁니다!']), lead);
-    await UI.say(legend ? U.pick(['전설이 거짓이 아니었군… 모두 잘해 주었다.', '꿈을 꾸는 것만 같구나. 이 광경을 잊지 말자.']) : U.pick(['마침내 찾았구나. 먼 길을 함께 와 준 덕분이다.', '이 눈으로 직접 보게 될 줄이야… 모두 수고했다.', '세상에 이런 것이 있었다니. 빠짐없이 기록해 두자.']), me);
-    if (animal) await UI.say(U.pick(['새끼 뒤에 성체가 있습니다. 더 다가가면 위험합니다. 이 자리에서 조용히 살펴보시지요.', '새끼를 지키러 성체가 나왔습니다. 길을 막지 말고, 놀라게 하지 않도록 물러서서 기록하겠습니다.']), lead);
+    // 세계일주: 모항으로 돌아온 순간 — 발견물 앞에서 외치는 말이 아니라 귀향의 말
+    if (d.id === 'circum') {
+      var homeC = G.CITY_DATA[p.home] || {}, crew = s.fleet && s.fleet.ships ? s.fleet.ships.reduce(function (a, sh) { return a + (sh.crew || 0); }, 0) : 0;
+      await UI.say(U.pick(['제독, ' + (homeC.name || '모항') + '의 등대가 보입니다! 해가 지는 쪽으로 떠나 해가 뜨는 쪽에서 돌아왔습니다!', '저 언덕, 저 종탑… ' + (homeC.name || '모항') + '입니다, 제독. 우리는 정말로 지구를 한 바퀴 돌았습니다!']), lead);
+      await UI.say(U.pick(['출항하던 날의 바다로 돌아왔구나. 살아서 이 부두를 밟은 ' + (crew ? crew + '명 ' : '') + '모두가 이 항로의 증인이다.', '세상은 둥글었다. 이제 아무도 그 말을 비웃지 못할 것이다.']), me);
+      el.classList.add('out'); await U.sleep(450); if (el.parentNode) el.parentNode.removeChild(el);
+      return true;
+    }
+    // 외침과 대답: 발견 갈래와 그때의 사정에 따라, 바로 앞에 나온 말은 피해서 (js/data/revealtalk.js)
+    var RT = G.RevealTalk, rctx = RT ? RT.context(d) : null;
+    await UI.say(RT ? RT.shout(d, rctx) : '제독, 보십시오! 저것이 바로 소문으로만 듣던 ' + d.name + '입니다!', lead);
+    await UI.say(RT ? RT.reply(d, rctx) : '마침내 찾았구나. 먼 길을 함께 와 준 덕분이다.', me);
+    var aLine = animal && RT ? RT.animal() : null;
+    if (aLine) await UI.say(aLine, lead);
     var natural = d.cat === 'nature' || d.natural;
     var art = bestHand('art'), science = animal ? bestHand('sci') : { lv: 0 }, craft = (natural || animal) ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
     if (science.lv) await UI.say(lineFor('sci', science.lv, d), science.speaker);
@@ -287,10 +298,11 @@
     var cook = d.cat === 'trade' ? bestHand('cook') : { lv: 0 }, music = d.cat === 'people' ? bestHand('music') : { lv: 0 };
     if (cook.lv) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
     if (music.lv) await UI.say(lineFor('music', music.lv, d), music.speaker);
-    if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv) await UI.say(animal ? U.pick(['생물에 밝은 사람이나 화가가 함께였다면 새끼와 성체의 모습을 더 자세히 남겼을 텐데요. 눈에 새겨 두겠습니다.', '가까이 갈 수는 없으니 발자국과 생김새를 잘 기억해 두어야겠습니다.']) : natural ? U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 넓은 풍경을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '산줄기와 물길의 생김새를 화첩에 남기지 못해 아쉽습니다. 눈에 새겨 두어야겠습니다.']) : U.pick(['그림을 그릴 줄 아는 사람이 있었더라면 이 모습을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '솜씨 좋은 화가나 장인이 함께였다면 짜임새까지 자세히 적어 갔을 텐데, 아쉽습니다.']), lead);
+    if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv) { var ns = RT ? RT.noSkill(d) : null; if (ns) await UI.say(ns, lead); }
     if (rec.k > 1.0001) {
       var extra = Math.round(fame - fame / rec.k);
-      await UI.say('이만큼 자세한 ' + (art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록') + '이라면 유럽의 학자와 궁정도 믿지 않을 수 없겠지요. 제독의 이름이 한층 더 널리 알려질 겁니다.', lead);
+      var recW = art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록';
+      await UI.say(U.pickFresh('reveal:record', ['이만큼 자세한 ' + recW + '이라면 유럽의 학자와 궁정도 믿지 않을 수 없겠지요.', '이 ' + recW + '을 보면 의심하던 사람들도 입을 다물 겁니다.', '돌아가서 이 ' + recW + '을 펼치면 궁정이 한동안 시끄럽겠습니다.']), lead);
       if (extra > 0) UI.toast('현장 기록 — ' + (art.lv ? '그림 ' + art.lv + '단계' : '') + (art.lv && craft.lv ? ' · ' : '') + (craft.lv ? '세공 ' + craft.lv + '단계' : '') + ' · 명성 +' + U.num(extra) + ' 더', 'star', 4200);
     }
     el.classList.add('out');

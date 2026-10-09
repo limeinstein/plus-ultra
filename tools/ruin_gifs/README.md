@@ -1,5 +1,7 @@
 # 유적 복원 GIF 만들기
 
+> 제도 테이블 위 미니어처 공사에서 시작해 실물 공간·내부 답사·낮/밤 360도 외관으로 이어지는 새 시네마틱 규격은 [CINEMATIC.md](CINEMATIC.md)를 보세요. 기존 V2 제작법은 아래에 보존합니다.
+
 `js/data/discoveries.js`의 기존 `ruin` 66개와 `js/data/wonders.js`의 건물 불가사의 96개를 읽어 `images/discoveries/ID.gif`를 만듭니다. 모든 GIF는 다음 흐름을 갖습니다.
 
 1. 가설·토공사(연필 조사망과 터파기)

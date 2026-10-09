@@ -7,6 +7,19 @@
   function S() { return G.Game.state; }
 
   D.state = function (id) { return S().disc[id] || null; };
+  /** 발견물이 있는 고장 이름 (보이는 이름만). 문화권(reg)에는 태평양·오세아니아 갈래가 없어
+      폴리네시아·멜라네시아·미크로네시아·오스트레일리아의 발견물이 「아메리카」「동남아시아」로 보이던 것을 바로잡는다. 교역·거리 셈은 그대로 reg를 쓴다 */
+  D.regName = function (d) {
+    if (!d) return '';
+    var lon = d.lon, lat = d.lat;
+    if (d.how !== 'city' && d.how !== 'trade' && isFinite(lon) && isFinite(lat)) {
+      var pac = lat > -56 && lat < 30 && (lon >= 145 || lon <= -140);                     // 태평양 한가운데 섬들 (괌·폰페이·하와이·사모아·뉴질랜드…)
+      var east = lat <= -10 && lat > -56 && lon <= -100 && lon > -140;                     // 라파누이처럼 남동 태평양의 외딴 섬
+      var aus = lat <= -10 && lat > -46 && lon >= 112 && lon < 155;                         // 오스트레일리아
+      if (pac || east || aus) return '오세아니아';
+    }
+    return G.REGIONS[d.reg] || '';
+  };
   D.foundByMe = function (id) { var d = S().disc[id]; return !!(d && d.found && d.me); };
   /** 경쟁자가 먼저 발표했다 — 제독은 이제 이 발견물을 찾을 수 없다 (js/data/rivals.js) */
   D.taken = function (id) { var d = S().disc[id]; return !!(d && d.rival && !d.me); };
@@ -193,11 +206,19 @@
     UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
     for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);
+    // 증거의 등급: 그 자리에서 무엇을 남겼는가 (실물·정밀 도판·해도·스케치·구술 기록)
+    if (d.id !== 'circum') {
+      st.grade = D.drawGrade(d);
+      var gNow = D.gradeOf(d), GT = { real: '유물을 손에 넣었다 — 무엇보다 확실한 증거', plate: '그림에 밝은 이가 정밀한 도판을 남겼다', chart: '해도에 똑똑히 그려 두었다',
+        sketch: '서툰 스케치뿐 — 후원자가 미심쩍어할 수 있다', word: '그림 한 장 없이 말과 기록뿐 — 후원자가 의심할 수 있다. 그림에 밝은 부하를 두자' };
+      UI.toast('증거 등급 「' + gNow.name + '」 — ' + GT[gNow.key], gNow.key === 'word' || gNow.key === 'sketch' ? 'scroll' : 'seal', 5200);
+    }
     // 동물·식물: 부하들이 한마디씩 주고받는다 (말투별 — js/systems/banter.js)
     if (G.Banter && d.cat === 'creature') { try { await G.Banter.play(d); } catch (e) { console.error(e); } }
     if (rel.length && !s.flags.relicTip) {
       s.flags.relicTip = 1;
-      await UI.say('제독, 이것은 이 발견의 틀림없는 증거입니다. 후원자에게 보고하면 증거로 바쳐야 하지만, 항구에서 제독 스스로 발표하면 제독의 것이 됩니다 — 시장에 팔아 자금을 마련할 수도 있습니다. 서적은 소지품에서 읽어 볼 수 있습니다.', G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first'));
+      await UI.say(U.pick(['제독, 이걸 보십시오. 이만한 물건이 있으면 누구도 우리 말을 의심하지 못할 겁니다. 후원자께 바칠지, 우리가 지니고 있다가 팔지는 제독께서 정하십시오.', '이건 잘 싸 두겠습니다, 제독. 궁정에 내놓으면 더할 나위 없는 증거가 되겠지만, 시장에 내놓아도 값이 꽤 나갈 겁니다.']), G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first'));
+      UI.toast('유물은 후원자에게 보고하면 증거로 바치고, 항구에서 직접 발표하면 제독의 것이 된다. 서적은 소지품에서 읽는다.', 'chest', 6500);
     }
     // 곶·해협·항로·대륙: 처음 찾은 사람이 이름을 붙인다
     if (G.Names) await G.Names.offer(d);
@@ -212,7 +233,7 @@
         if (!nd || G.DISC_CHAIN[nid].indexOf(d.id) < 0 || D.foundByMe(nid)) continue;
         if (G.Frontier && !G.Frontier.available(nd)) continue;
         if (D.addHint(nid, 'chain:' + d.id)) {
-          await UI.say(G.chainLine(nid) + '\n\n— 새 단서: 「' + nd.name + '」', G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first'));
+          await UI.say(G.chainLine(nid), G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first'));
           UI.toast('단서를 얻었다: 「' + nd.name + '」', 'scroll', 4200);
         }
       }
@@ -223,6 +244,48 @@
     if (G.Achieve) { try { await G.Achieve.afterFind(d); } catch (e) { console.error(e); } }
     G.Game.refreshHud && G.Game.refreshHud();
     return true;
+  };
+
+  // ---------------------------------------------------------------- 증거의 등급 (G4)
+  /* 실물(유물을 손에 넣었다) · 정밀 도판(그림 2단계 이상) · 해도(해도·지도 증거품) · 스케치(그림 1단계) · 구술 기록(그림 없이 말뿐)
+     보물·유적·민족은 세공 솜씨도 반쯤 쳐 준다 (본을 뜨고 모형을 깎는다). 교역품은 견본을 실어 오므로 실물.
+     후원자 보고·늦은 보고의 사례금·명성에 곱하고, 스케치·구술이면 후원자가 미심쩍어할 수 있다 (G.Sponsor.doubt). */
+  D.GRADES = {
+    real:   { name: '실물', k: 1.05, rank: 4 },
+    plate:  { name: '정밀 도판', k: 1.05, rank: 3 },
+    chart:  { name: '해도', k: 1, rank: 2 },
+    sketch: { name: '스케치', k: 0.95, rank: 1 },
+    word:   { name: '구술 기록', k: 0.9, rank: 0 }
+  };
+  /** 지금 일행의 솜씨로 남길 수 있는 기록의 등급 (실물 제외) */
+  D.drawGrade = function (d) {
+    if (!d) return 'word';
+    if (d.how === 'trade') return 'real';
+    var art = rd('art'), craft = rd('craft'), hand = d.cat === 'treasure' || d.cat === 'ruin' || d.cat === 'people';
+    var lv = art + (hand ? craft * 0.5 : 0);
+    if (lv >= 2) return 'plate';
+    if (d.evidence) return 'chart';
+    return lv >= 1 ? 'sketch' : 'word';
+  };
+  /** 이 발견의 증거 등급 {key,name,k}. 유물(서적 아닌 것)을 지니고 있으면 실물.
+      regrade: 그동안 그림에 밝은 사람이 생겼으면 기억을 더듬어 다시 그린다 (기록을 올린다) */
+  D.gradeOf = function (d, regrade) {
+    var st = S().disc[d.id] || {};
+    var hasReal = S().player.items.some(function (it) { var r = G.RELIC && G.RELIC[it.id]; return it.disc === d.id && r && r.kind !== 'book' && !it.done; });
+    var key = hasReal ? 'real' : (st.grade && D.GRADES[st.grade] && st.grade !== 'real' ? st.grade : D.drawGrade(d));
+    if (!hasReal) {
+      var now = D.drawGrade(d);
+      if (D.GRADES[now].rank > D.GRADES[key].rank) {
+        if (regrade && st.grade && st.grade !== now) {
+          var who = R.skillBest ? R.skillBest('art').who : null;
+          UI.toast((who ? who + U.jx(who, '이/가') + ' ' : '') + '기억을 더듬어 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 다시 그렸다 — 증거 「' + D.GRADES[now].name + '」', 'book', 5200);
+        }
+        key = now;
+        if (regrade) st.grade = now;
+      }
+    }
+    var g = D.GRADES[key];
+    return { key: key, name: g.name, k: g.k };
   };
 
   // ---------------------------------------------------------------- 발견 유물·증거
@@ -298,7 +361,7 @@
     }
     var got = ids.filter(function (id) { return D.addHint(id, 'relic:' + r.id); });
     if (!got.length) { await UI.say('「' + r.name + '」' + U.jx(r.name, '을/를') + ' 꼼꼼히 읽었지만, 이미 아는 이야기뿐입니다.', who); return; }
-    await UI.say('「' + r.name + '」' + U.jx(r.name, '을/를') + ' 읽어 보니 이런 대목이 있습니다.\n\n' + got.map(function (id) { return G.DISC[id].hint; }).join('\n') + '\n\n— 새 단서: ' + got.map(function (id) { return '「' + G.DISC[id].name + '」'; }).join(', '), who);
+    await UI.say('「' + r.name + '」' + U.jx(r.name, '을/를') + ' 읽어 보니 이런 대목이 있습니다.\n\n' + got.map(function (id) { return G.DISC[id].hint; }).join('\n'), who);
     UI.toast('단서를 얻었다: ' + got.map(function (id) { return '「' + G.DISC[id].name + '」'; }).join(', '), 'scroll', 4200);
   };
 
@@ -393,22 +456,39 @@
       var ry = d.rival[0] + (s.flags['delay_' + d.id] || 0), rm = d.rival[1];
       var left = (ry * 12 + rm) - (s.date.y * 12 + s.date.m);
       var mine = D.foundByMe(d.id);
+      // 경쟁자의 항해 소식 (G8): 「엘카노 함대가 아프리카 남단을 돌았다」처럼 발표가 다가오는 것을 알린다. 지나간 단계는 건너뛰고 가장 최근 것 하나만
+      var news = G.RIVAL_NEWS && G.RIVAL_NEWS[d.id], kk = s.contract;
+      var watching = mine || s.hints[d.id] || (kk && (kk.disc === d.id || (kk.circ && d.id === 'circum')));
+      if (news && left > 0) {
+        var stage = -1;
+        for (var ni = 0; ni < news.length; ni++) if (left <= news[ni][0]) stage = ni;
+        var was = s.flags['rn_' + d.id] == null ? -1 : s.flags['rn_' + d.id];
+        if (stage > was) {
+          s.flags['rn_' + d.id] = stage;
+          // 큰 발견(세력 4 이상)은 누구나 듣고, 그 밖은 단서·계약을 가진 제독만 귀를 기울인다
+          if (d.pw >= 4 || watching) out.push({ icon: 'ship', history: true, text: news[stage][1] + (watching && !mine ? ' — 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 쫓는 제독에게는 반갑지 않은 소식이다.' : mine ? ' — 「' + d.name + '」' + U.jx(d.name, '은/는') + ' 이미 제독이 찾아 두었다. 서둘러 알려야 한다!' : '') });
+        }
+      } else if (!news && watching && !mine && left > 0 && left <= 4 && d.pw >= 2 && (d.how === 'sea' || d.how === 'land') && !s.flags['rn_' + d.id]) {
+        // 따로 적은 소식이 없는 발견: 단서를 쥔 제독에게만 한 번, 경쟁자의 배가 그 바다에서 보였다는 소문
+        s.flags['rn_' + d.id] = 1;
+        out.push({ icon: 'ship', history: true, text: '소문: ' + d.rival[2] + (d.how === 'land' ? ' 일행이 ' + D.regName(d) + ' 땅 깊숙이 들어가는 것을 보았다는 사람이 있다. ' : '의 배가 ' + D.regName(d) + ' 쪽 바다에서 보였다고 한다. ') + '「' + d.name + '」' + U.jx(d.name, '을/를') + ' 쫓는 것이 틀림없다.' });
+      }
       // 발표 lead달 전: 그 경쟁자가 떠날 채비를 한다는 소문과 함께 단서가 돈다 (제독이 먼저 찾을 수 있게)
       var lead = (G.BALANCE.rivals && G.BALANCE.rivals.lead) || 12;
       if (G.RIVAL_STAYS && G.RIVAL_STAYS[d.rival[2]] && left > 8 && left <= lead && !mine && !s.flags['prep_' + d.id]) {
         s.flags['prep_' + d.id] = 1;
         var pc = G.SeaFolk && G.SeaFolk.rivalCity ? G.SeaFolk.rivalCity(d.rival[2]) : null;
         var gotH = D.addHint(d.id, 'rival');
-        out.push({ icon: 'hourglass', history: true, text: '소문: ' + U.j(d.rival[2], '이/가') + ' 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아 떠날 채비를 한다고 한다' + (pc ? ' (' + pc.name + '에 머문다)' : '') + '. ' + d.hint + (gotH ? ' — 단서를 얻었다.' : '') + ' (앞으로 약 ' + left + '달 뒤 발표)' });
+        out.push({ icon: 'hourglass', history: true, text: U.j(d.rival[2], '이/가') + ' 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아 떠날 채비를 한다고 한다.' + (pc ? ' 지금은 ' + pc.name + '에 머물고 있다.' : '') + ' ' + d.hint + (gotH ? ' 이 이야기는 단서로 적어 두었다.' : '') + ' ' + U.howLong(left * 30) + ' 뒤면 그의 발표가 나올 거라는 말이 돈다.' });
       }
       if (left > 0 && left <= 8 && s.hints[d.id] && !mine && !s.flags['warn_' + d.id]) {
         s.flags['warn_' + d.id] = 1;
-        out.push({ icon: 'hourglass', history: true, text: '소문: ' + U.j(d.rival[2], '이/가') + ' 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아 곧 떠난다고 한다. 그가 먼저 발표하면 그 발견은 영영 그의 것이 된다! (앞으로 약 ' + left + '달)' });
+        out.push({ icon: 'hourglass', history: true, text: U.j(d.rival[2], '이/가') + ' 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아 곧 떠난다고 한다. 그가 먼저 발표하면 그 발견은 영영 그의 것이 된다. 남은 때는 ' + U.howLong(left * 30) + '이다.' });
       }
       // 찾아 두고 아직 알리지 않았다: 경쟁자가 발표하기 전에 알리라고 일러 준다
       if (left > 0 && left <= 8 && mine && !s.flags['warnf_' + d.id]) {
         s.flags['warnf_' + d.id] = 1;
-        out.push({ icon: 'hourglass', history: true, text: '소문: ' + U.j(d.rival[2], '이/가') + ' 「' + d.name + '」의 발견을 곧 발표한다고 한다. 먼저 찾아 둔 제독이 그 전에 후원자에게 보고하거나 항구에서 발표하지 않으면, 나중에 알려도 명성과 사례금을 절반밖에 받지 못한다! (앞으로 약 ' + left + '달)' });
+        out.push({ icon: 'hourglass', history: true, text: U.j(d.rival[2], '이/가') + ' 「' + d.name + '」의 발견을 곧 발표한다고 한다. 제독이 먼저 찾아 두었지만, 그보다 먼저 후원자에게 알리거나 항구에서 발표하지 않으면 공도 사례도 반쪽이 된다. 남은 때는 ' + U.howLong(left * 30) + '이다.' });
       }
       if (s.date.y > ry || (s.date.y === ry && s.date.m >= rm)) {
         st = s.disc[d.id] || (s.disc[d.id] = {});

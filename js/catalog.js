@@ -285,7 +285,7 @@
     note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 지리는 배 위의 발견 장면과 고지도 항로, 유적은 복원과 상공 회전, 자연 경관은 시간 변화 파노라마, 동물은 새끼의 등장과 성체 보호, 식물은 빈 캔버스의 유화가 실사 풍경으로 살아나는 과정, 보물은 암흑 속 큐레이터 조명과 360° 2회전, 교역품은 등불 켜진 시장 좌판으로 다가가는 장면을 GIF로 보여 줍니다.'
   });
   G.DISCOVERIES.forEach(d => {
-    const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : G.REGIONS[d.reg];
+    const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : (G.Disc && G.Disc.regName ? G.Disc.regName(d) : G.REGIONS[d.reg]);
     const place = d.how === 'city' ? CITY[d.city].name + (d.cat === 'ruin' ? ' 시내 (그 건물을 누르면)' : d.by && G.MATE[d.by] ? ' — ' + G.MATE[d.by].name + '을(를) 만나면 (세상을 떠난 뒤에는 시내 건물에서)' : ' 시내 (건물에 들어가면)')
       : d.outskirts && d.homeCity != null ? CITY[d.homeCity].name + ' 근처 뭍 (도시 밖을 탐험하면)' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
     const moving = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade' || d.cat === 'people') && !!(G.Reel && G.Reel.has(d)));

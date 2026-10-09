@@ -109,7 +109,7 @@
     var s = S(), who = G.Sponsor.speaker(sp), rel = G.Sponsor.rel(sp.id);
     F.give(d.id, -1);                                    // 들키든 안 들키든 손을 떠난다
     if (!U.chance(F.detectP(sp))) return true;
-    await UI.say(U.pick(['……잠깐. 이 칠의 결, 이 금빛은 어제오늘 입힌 것이로군. 나를 속이려 들다니!', '감정사, 이리 와서 보게. ……역시 그렇군. 이건 가짜야! 감히 나를 우롱하는가!']), who);
+    await UI.say(G.Sponsor.line(sp, 'fakeCaught'), who);
     var harsh = ['king', 'pope', 'gov', 'noble', 'official'].indexOf(sp.type) >= 0;
     var arrestP = harsh ? (B().arrestBase || 0.3) + sp.pw * 0.08 : 0.12;
     var fine = Math.max(800, Math.round(reward * (B().fineK || 0.6) / 100) * 100);
@@ -118,7 +118,7 @@
     if (s.contract && s.contract.sponsor === sp.id) s.contract = null;
     if (U.chance(arrestP) || !can) {
       var days = (B().jailBase || 20) + sp.pw * 12 + U.ri(0, 25);
-      await UI.say('저자를 끌어내 옥에 가두어라! 사기꾼에게 줄 자비는 없다.', who);
+      await UI.say(G.Sponsor.line(sp, 'jail'), who);
       rel.banned = U.dateNum(U.addDays(s.date, 365));
       s.player.jailed = (s.player.jailed || 0) + 1;
       var lost = Math.round(s.player.fame * 0.1); if (G.Fame) lost = -G.Fame.add(null, -lost); else s.player.fame -= lost;
@@ -127,7 +127,7 @@
       await UI.alert('모조품이 들통나 붙잡혔다.<br>' + days + '일 동안 옥에 갇혀 있다가 풀려났다. 명성 −' + lost + '<br><span class="muted">' + G.Sponsor.holderName(sp) + U.jx(G.Sponsor.holderName(sp), '은/는') + ' 한 해 동안 만나 주지 않는다.</span>');
     } else {
       var pay = Math.min(s.player.gold, fine); s.player.gold -= pay; s.player.bank = (s.player.bank || 0) - (fine - pay);
-      await UI.say('벌금 금화 ' + U.num(fine) + '닢을 내고 내 눈앞에서 사라지게. 다시는 이런 짓을 하지 마라.', who);
+      await UI.say(G.Sponsor.line(sp, 'fine', { fine: U.num(fine) }), who);
       G.State.log('모조품이 들통나 벌금 ' + fine + '닢을 냈다.');
       await UI.alert('모조품이 들통나 벌금 금화 ' + U.num(fine) + '닢을 냈다.<br><span class="muted">신뢰를 모두 잃었다.</span>');
     }
@@ -143,6 +143,7 @@
     var prev = before.filter(function (x) { return x && x !== sp.id && G.SPONSOR[x]; })[0];
     if (prev) {
       s.chaser = { sp: prev, disc: d.id, since: U.dayIndex(s.date) };
+      if (G.Sponsor.markDouble) G.Sponsor.markDouble(prev, sp, d);    // 다음 알현 때 따진다
       UI.toast('「' + d.name + '」' + U.jx(d.name, '을/를') + ' 두 곳에 팔았다는 소문이 ' + G.Sponsor.holderName(G.SPONSOR[prev]) + '의 귀에 들어갈지도 모른다…', 'skull', 5200);
       var pn = G.Sponsor.holderName(G.SPONSOR[prev]); G.State.log('「' + d.name + '」' + U.jx(d.name, '을/를') + ' 이중으로 보고했다 — ' + pn + U.jx(pn, '이/가') + ' 추격자를 보낸다.');
     }

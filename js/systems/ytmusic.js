@@ -68,6 +68,7 @@
       if (name === 'battle') return O.moments.battle;
       if (name === 'town' && l && l.city != null) {
         var c = G.CITY_DATA[l.city]; if (!c) return null;
+        if (G.Fest && G.Fest.active(c) && !(G.Audio && G.Audio.place)) return O.moments.festival || O.moments.home;   // 귀환 잔치 중인 거리
         if (s.player && s.player.home === c.id) return O.moments.home;          // 고향 = 집으로 귀환
         return cityTrack(c, false);
       }

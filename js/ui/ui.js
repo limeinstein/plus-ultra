@@ -79,7 +79,9 @@
     var lead = icon && typeof icon === 'object' ? (icon.src ? '<img class="toast-pic" src="' + icon.src + '" alt="">' : G.icon(icon.icon || 'chest')) : G.icon(icon || 'rose');
     var t = U.el('div', 'toast wood', lead + '<div>' + text + '</div>');
     toastEl.appendChild(t);
-    while (toastEl.children.length > 5) toastEl.removeChild(toastEl.firstChild);
+    // 알림이 쌓여 대화 중 인물·대화창을 덮지 않게: 평소 3개, 대화 중에는 2개까지만 (오래된 것부터 걷는다). 대화 중에는 오른쪽 위로 비켜 작게 (css #ui.talking .toasts)
+    var talkingNow = !!document.querySelector('.dlg-stage, .dlg'), maxT = talkingNow ? 2 : 3;
+    while (toastEl.children.length > maxT) toastEl.removeChild(toastEl.firstChild);
     setTimeout(function () { t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }, ms || 3200);
   };
 
@@ -438,9 +440,57 @@
 
   // ---------------------------------------------------------------- dialog (say)
   /** opts: 기존 화자 필드 + {layout:'duo', partner:화자, side, emotion} */
+  /* 사람이 하는 말 다듬기: 말 속에 섞인 셈·규칙 안내(괄호 안의 숫자·「명성 +」 따위, 끝에 붙은 「— 새 단서」)는 말에서 빼고 알림으로 보여 주고,
+     말 가운데의 줄표( — )는 쉼표·마침표로 바꾼다. 「」『』 안(이름·제목)은 건드리지 않는다. 돌려주는 값: {text, notes} */
+  var NOTE_RE = /\d|명성|금화|신뢰|악명|규율|피로|충성|단계|필요|닢|일 뒤|남은/;
+  UI.tidySpeech = function (text) {
+    var notes = [], t = String(text == null ? '' : text);
+    if (/<\w/.test(t) && !/<span class="muted">/.test(t)) return { text: t, notes: notes };   // 표·그림 같은 HTML은 그대로
+    // 끝에 붙은 안내: 「\n\n— 새 단서: …」, 「\n— …」
+    t = t.replace(/\n+\s*—\s*([^\n]+)\s*$/, function (m, x) { notes.push(x.trim()); return ''; });
+    // 괄호 안의 셈·규칙 (이름 괄호 「피달구 (Fidalgo)」나 「(한참 뒤)」 같은 지문은 남긴다)
+    t = t.replace(/\s*\(([^()]*)\)/g, function (m, x) {
+      if (!NOTE_RE.test(x)) return m;
+      notes.push(x.replace(/^\s+|\s+$/g, '')); return '';
+    });
+    // 말 가운데 줄표 — 「」『』 밖에서만, 이름 속 줄표(「별의 길 — 쿠페의 항로」 같은 발견·물건 이름)도 건드리지 않는다
+    t = t.split(dashSplitter()).map(function (part, i) {
+      if (i % 2) return part;
+      return part.replace(/([다요오죠네군소까]|[!?….])\s+—\s+/g, function (m, ch) { return /[!?….]/.test(ch) ? ch + ' ' : ch + '. '; })
+        .replace(/\s+—\s+/g, ', ');
+    }).join('');
+    t = t.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').replace(/\s+$/, '').replace(/ {2,}/g, ' ');
+    return { text: t, notes: notes.filter(Boolean) };
+  };
+  var dashRe = null;
+  function dashSplitter() {
+    if (dashRe) return dashRe;
+    var names = [];
+    (G.DISCOVERIES || []).forEach(function (d) { if (/ — /.test(d.name || '')) names.push(d.name); });
+    Object.keys(G.ITEM || {}).forEach(function (k) { var n = G.ITEM[k] && G.ITEM[k].name; if (n && / — /.test(n)) names.push(n); });
+    var esc = names.sort(function (a, b) { return b.length - a.length; }).map(function (n) { return n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+    dashRe = new RegExp('(「[^」]*」|『[^』]*』' + (esc.length ? '|' + esc.join('|') : '') + ')');
+    return dashRe;
+  }
+  /** 다듬다 빠진 셈·안내를 알림으로 */
+  function noteToast(notes) { (notes || []).forEach(function (n, i) { setTimeout(function () { UI.toast(n.replace(/^—\s*/, ''), 'scroll', 4600); }, 250 + i * 350); }); }
+  /** 세상의 소식 다듬기: 【…】 머리표와 줄표를 걷어 내고 이야기하듯 */
+  UI.tidyNews = function (text) {
+    var t = String(text == null ? '' : text);
+    t = t.replace(/^【[^】]*(소식|유행|시장)】\s*/, '');
+    t = t.replace(/^【([^】]+)】\s*/, '');
+    t = t.replace(/^(?:소식|소문|철새 소식|새 도시 소식):\s*/, '');
+    t = t.split(dashSplitter()).map(function (part, i) {
+      if (i % 2) return part;
+      return part.replace(/조짐\s+—\s+/g, '').replace(/([다요오])\s+—\s+/g, '$1. ').replace(/\s+—\s+/g, ', ');
+    }).join('');
+    return t.replace(/ {2,}/g, ' ').trim();
+  };
+
   UI.say = function (text, opts) {
     opts = withFace(opts || {});
     var pages = Array.isArray(text) ? text.slice() : String(text).split('\f');
+    if (!opts.raw) { var allNotes = []; pages = pages.map(function (pg) { var r = UI.tidySpeech(pg); allNotes = allNotes.concat(r.notes); return r.text; }); noteToast(allNotes); }
     return new Promise(function (resolve) {
       var back = U.el('div', 'modal-back clear catch');
       var shell = dialogShell(back, opts, false), box = shell.box;
@@ -477,7 +527,8 @@
       var shell = dialogShell(back, opts, true), box = shell.box;
       modalRoot.appendChild(back);
       var body = box.querySelector('.body');
-      body.innerHTML = '<div>' + speech(box, String(text), opts) + '</div><div class="askrow"></div>';
+      var tt = opts.raw ? { text: String(text), notes: [] } : UI.tidySpeech(text); noteToast(tt.notes);
+      body.innerHTML = '<div>' + speech(box, tt.text, opts) + '</div><div class="askrow"></div>';
       var row = body.querySelector('.askrow');
       function done(v) { unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
       var pk = pickKey(text, list, opts), prev = lastPick(pk);

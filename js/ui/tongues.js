@@ -1,6 +1,6 @@
 /* 낯선 말 (G.Tongues) — 대항해시대 3처럼, 말이 서툴면 상대의 말이 그 고장의 글자로 들리고 알아들은 낱말만 한글로 보인다.
    · 제독 자신이 아는 만큼(S.player.lg)만 대화창에서 한글로 보이고, 나머지 낱말은 그 말의 글자로 바뀐다
-     (유럽 말 = 그리스 글자, 슬라브 = 키릴, 아랍 = 아랍, 페르시아·위구르 = 아랍 글자 변형, 중국 = 한자, 인도 = 데바나가리,
+     (라틴 글자 말(에스파냐·포르투갈·로망스·게르만) = 그 말 같은 소리의 라틴 글자 낱말, 슬라브 = 키릴, 아랍 = 아랍, 페르시아·위구르 = 아랍 글자 변형, 중국 = 한자, 인도 = 데바나가리,
       아프리카 = 에티오피아 글자, 아메리카 = 체로키 글자, 동남아 = 타이 글자, 일본(동아시아) = 히라가나, 조선 = 이두 한자).
      뜻이 맞을 필요는 없다 — 알아듣지 못했다는 표시다. 낱말 길이는 한글 음절 수를 따른다.
    · 부관·통역이 제독보다 그 말을 잘하면 대화창 아래 작은 창에서 통역이 옮겨 준다. 통역이 옮긴 말 가운데
@@ -27,10 +27,22 @@
   var HIRA = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだでどばびぶべぼぱぴぷぺぽ';
 
   /** 말 번호(G.LANGS) → 글자 */
-  TG.SCRIPT = ['greek', 'greek', 'greek', 'greek', 'cyrillic', 'arabic', 'persian', 'hanzi', 'deva', 'uyghur', 'ethiopic', 'cherokee', 'thai', 'hira', 'idu', 'cherokee'];
+  TG.SCRIPT = ['lat_es', 'lat_pt', 'lat_rom', 'lat_ger', 'cyrillic', 'arabic', 'persian', 'hanzi', 'deva', 'uyghur', 'ethiopic', 'cherokee', 'thai', 'hira', 'idu', 'cherokee'];
   TG.RTL = { arabic: 1, persian: 1, uyghur: 1 };
 
   function pick(r, s) { return s.charAt(Math.floor(r() * s.length)); }
+  /* 라틴 글자를 쓰는 유럽 말: 뜻 없는 낱말이지만 그 말처럼 들리게 — 음절(닿소리+홀소리)과 낱말 끝을 말마다 다르게 */
+  var LAT = {
+    lat_es: { c: ['b', 'c', 'd', 'g', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'ch', 'll', 'rr', 'ñ', 'qu', 'j'], v: ['a', 'e', 'i', 'o', 'u', 'a', 'o', 'ue', 'ie', 'á', 'é', 'ó'], end: ['', '', 's', 'n', 'r', 'l', 'os', 'as', 'ar', 'dad', 'ción'] },
+    lat_pt: { c: ['b', 'c', 'd', 'g', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'ch', 'lh', 'nh', 'ç', 'qu', 'x'], v: ['a', 'e', 'i', 'o', 'u', 'a', 'o', 'ão', 'ei', 'ou', 'á', 'ê', 'õ'], end: ['', '', 's', 'm', 'r', 'l', 'os', 'as', 'ões', 'dade', 'ção'] },
+    lat_rom: { c: ['b', 'c', 'd', 'f', 'g', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'gli', 'cc', 'zz', 'qu', 'ch'], v: ['a', 'e', 'i', 'o', 'u', 'e', 'i', 'è', 'ò', 'ai', 'eu', 'ou'], end: ['', '', '', 'e', 'i', 'o', 'a', 'ent', 'one', 'ette', 'ais'] },
+    lat_ger: { c: ['b', 'd', 'f', 'g', 'h', 'k', 'l', 'm', 'n', 'r', 's', 't', 'w', 'sch', 'st', 'ck', 'ng', 'th'], v: ['a', 'e', 'i', 'o', 'u', 'e', 'ei', 'au', 'ie', 'oo', 'ä', 'ö', 'ü'], end: ['', '', 'en', 'er', 't', 'n', 'ch', 'ung', 'lich', 'heit', 'ke'] }
+  };
+  function lat(r, key, n) {
+    var L = LAT[key], out = '';
+    for (var i = 0; i < n; i++) { if (i || r() < 0.8) out += L.c[Math.floor(r() * L.c.length)]; out += L.v[Math.floor(r() * L.v.length)]; }
+    return out + L.end[Math.floor(r() * L.end.length)];
+  }
   function syll(w) { var n = 0; for (var i = 0; i < w.length; i++) { var c = w.charCodeAt(i); n += c >= 0xAC00 && c <= 0xD7A3 ? 1 : 0.45; } return Math.max(1, Math.round(n)); }
   /** 한 낱말을 그 말의 글자로 (같은 낱말은 늘 같은 모양) */
   TG.word = function (w, script) {
@@ -46,6 +58,7 @@
         for (i = 0; i < la; i++) out += pick(r, st);
         break;
       }
+      case 'lat_es': case 'lat_pt': case 'lat_rom': case 'lat_ger': out = lat(r, script, n); break;
       case 'hanzi': for (i = 0; i < n; i++) out += pick(r, HANZI); break;
       case 'idu': for (i = 0; i < n; i++) out += pick(r, i === n - 1 && n > 1 ? IDU : HANZI + IDU); break;
       case 'deva': for (i = 0; i < n + Math.floor(n / 2); i++) { out += pick(r, DEVA_C); if (r() < 0.65) out += pick(r, DEVA_V); } break;

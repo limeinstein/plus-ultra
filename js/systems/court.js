@@ -298,34 +298,34 @@
     var c = st(), s = S(), t = c.task, who = SP().speaker(sp), n = CT.rank(realm), lad = CT.ladder(realm), home = CT.isHome(realm), me = s.player.name;
     c.seen[realm.id] = CT.level();
     if (t && t.sp === sp.id) return CT.report(sp);
-    if (t) { await UI.say('자네는 지금 ' + G.SPONSOR[t.sp].title + '의 일을 맡고 있다고 들었네. 한 번에 두 군주를 섬길 수는 없는 법. 그 일부터 마치고 오게.', who); return; }
+    if (t) { await UI.say('그대는 지금 ' + G.SPONSOR[t.sp].title + '의 일을 맡고 있다 들었소. 한 번에 두 군주를 섬길 수는 없는 법이오. 그 일부터 마치고 오시오.', who); return; }
     if (!CT.pending(sp)) {
-      if (n >= lad.length) await UI.say(home ? me + ', 그대는 이미 이 나라에서 오를 수 있는 가장 높은 자리에 있네. 이제 그 이름에 걸맞게 살게.' : '그대에게는 이미 이 나라가 이방인에게 내릴 수 있는 가장 큰 영예를 내렸네.', who);
-      else if (c.wait[realm.id] && s.day < c.wait[realm.id]) await UI.say('지난번 일은 아직 잊지 않았네. 때가 되면 다시 부르겠네.', who);
-      else await UI.say((n ? '그대의 공은 잘 알고 있네. ' : '') + '하지만 더 큰 일을 맡기기에는 아직 이르군. 그대의 이름이 더 널리 알려지거든 다시 이야기하세.\n(통합 명성 ' + U.num((n + 1) * B().step) + '이 되면 왕명을 받을 수 있습니다 — 지금 ' + U.num(s.player.fame) + ')', who);
+      if (n >= lad.length) await UI.say(home ? me + ', 그대는 이미 이 나라에서 오를 수 있는 가장 높은 자리에 있소. 이제 그 이름에 걸맞게 살아가시오.' : '그대에게는 이미 이 나라가 이방인에게 내릴 수 있는 가장 큰 영예를 내렸소.', who);
+      else if (c.wait[realm.id] && s.day < c.wait[realm.id]) await UI.say('지난번 일은 아직 잊지 않았소. 때가 되면 다시 부르겠소.', who);
+      else await UI.say((n ? '그대의 공은 잘 알고 있소. ' : '') + '허나 더 큰 일을 맡기기에는 아직 이르구려. 그대의 이름이 더 널리 알려지거든 다시 이야기합시다.\n(통합 명성 ' + U.num((n + 1) * B().step) + '이 되면 왕명을 받을 수 있습니다 — 지금 ' + U.num(s.player.fame) + ')', who);
       return;
     }
     var next = titleObj(realm, n + 1);
     // 부름의 말
     if (home) {
       await UI.say(n === 0
-        ? me + ', 그대의 이름이 이 궁정에까지 들려오고 있네. 바다에서 세운 공이 그만하면, 나라가 그대를 귀족의 반열에 올려도 좋겠지.\f다만 작위는 그냥 내리는 것이 아닐세. 내가 맡기는 일 하나를 해내게. 그러면 그대를 ' + next.ko + '(' + next.native + ')에 봉하겠네.'
-        : me + ', 잘 왔네. 그대의 명성이 또 한 번 온 나라에 퍼졌더군. 이번 일을 해내면 그대를 ' + next.ko + '(' + next.native + ')에 올리겠네.', who);
+        ? me + ', 그대의 이름이 이 궁정에까지 들려오고 있소. 바다에서 세운 공이 그만하면, 나라가 그대를 귀족의 반열에 올려도 좋겠지.\f다만 작위는 그냥 내리는 것이 아니오. 내가 맡기는 일 하나를 해내시오. 그러면 그대를 ' + next.ko + '(' + next.native + ')에 봉하겠소.'
+        : me + ', 잘 왔소. 그대의 명성이 또 한 번 온 나라에 퍼졌더구려. 이번 일을 해내면 그대를 ' + next.ko + '(' + next.native + ')에 올리겠소.', who);
     } else {
       await UI.say(line(realm,
-        '그대가 ' + R.nationName(s.player.nation) + '의 ' + me + '인가. 그 이름은 이 궁정에서도 들었네.\f남의 나라 사람이라도 큰 공을 세우면 영예를 내리는 것이 우리의 법도일세. 내 일을 하나 해 주게. 그러면 그대를 ' + next.ko + '(' + next.native + ')로 삼겠네.',
-        '프랑크의 뱃사람 ' + me + '. 그대의 이름은 바자르의 상인들 입에도 오르내리더군.\f믿음이 달라도 공은 공일세. 내 일을 하나 해 주게. 그러면 그대에게 ' + next.ko + '(' + next.native + ')의 영예를 내리겠네.',
-        '먼 서쪽 바다에서 온 ' + me + '. 그대의 소문은 이곳까지 닿았네.\f내 일을 하나 해 주게. 그러면 그대에게 ' + next.ko + '(' + next.native + ')의 자리를 내리겠네.'), who);
+        '그대가 ' + R.nationName(s.player.nation) + '의 ' + me + '인가. 그 이름은 이 궁정에서도 들었소.\f남의 나라 사람이라도 큰 공을 세우면 영예를 내리는 것이 우리의 법도요. 내 일을 하나 해 주시오. 그러면 그대를 ' + next.ko + '(' + next.native + ')로 삼겠소.',
+        '프랑크의 뱃사람 ' + me + '. 그대의 이름은 바자르의 상인들 입에도 오르내리더구려.\f믿음이 달라도 공은 공이오. 내 일을 하나 해 주시오. 그러면 그대에게 ' + next.ko + '(' + next.native + ')의 영예를 내리겠소.',
+        '먼 서쪽 바다에서 온 ' + me + '. 그대의 소문은 이곳까지 닿았소.\f내 일을 하나 해 주시오. 그러면 그대에게 ' + next.ko + '(' + next.native + ')의 자리를 내리겠소.'), who);
     }
     for (;;) {
       var list = CT.offers(sp);
-      if (!list.length) { await UI.say('…지금은 그대에게 맡길 만한 일이 없군. 달이 바뀌거든 다시 오게.', who); return; }
+      if (!list.length) { await UI.say('…지금은 그대에게 맡길 만한 일이 없구려. 달이 바뀌거든 다시 오시오.', who); return; }
       var pickd = await UI.choose('왕명 — ' + SP().holderName(sp), list.map(function (o) {
         var K = kindOf(o);
         return { value: o, icon: K.icon, label: '<b>' + U.esc(o.title) + '</b><br><small class="muted">' + K.name + ' · ' + G.Fame.NAME[o.cat] + ' 명성 +' + o.fame + '</small>',
           right: o.gold ? U.num(o.gold) + '닢' : '—' };
       }), { width: 860, icon: 'crown', text: '하나를 골라 해내고 돌아와 아뢰면 <b>' + U.esc(CT.fullName(next, true)) + '</b>의 작위를 받습니다. 왕명은 한 번에 하나만 맡을 수 있고, 기한은 ' + B().years + '년입니다.' });
-      if (!pickd) { if (!auto) await UI.say('마음이 정해지거든 다시 오게.', who); return; }
+      if (!pickd) { if (!auto) await UI.say('마음이 정해지거든 다시 오시오.', who); return; }
       var K = kindOf(pickd);
       if (pickd.kind === 'tribute') {
         var okPay = await UI.confirm('<b>' + U.esc(pickd.title) + '</b><br><br>' + U.esc(pickd.desc) + '<br><br>지금 가진 금화 ' + U.num(s.player.gold) + '닢', '바친다', '그만둔다', '왕명 — ' + K.name);
@@ -334,7 +334,7 @@
         s.player.gold -= pickd.amount; G.Game.refreshHud();
         pickd.sp = sp.id; pickd.realm = realm.id;
         delete c.offers[realm.id];
-        await UI.say(line(realm, '나라가 어려울 때 곳간을 여는 사람이야말로 참된 귀족일세. 고맙네.', '그대의 손은 넉넉하군. 그 마음을 잊지 않겠네.', '그대의 정성을 잘 받았네.'), who);
+        await UI.say(line(realm, '나라가 어려울 때 곳간을 여는 사람이야말로 참된 귀족이오. 고맙소.', '그대의 손은 넉넉하구려. 그 마음을 잊지 않겠소.', '그대의 정성을 잘 받았소.'), who);
         await finish(sp, realm, pickd);
         return;
       }
@@ -347,15 +347,15 @@
     }
   };
   function acceptLine(t, realm) {
-    if (t.kind === 'geo') return '세상의 끝이 어디인지, 그대의 눈으로 보고 와서 내게 들려주게.';
-    if (t.kind === 'treasure') return '옛사람들이 감춘 것을 찾아내게. 그 이야기만으로도 궁정이 떠들썩해질 걸세.';
-    if (t.kind === 'zoo') return '코끼리며 기린이며, 책에서만 보던 짐승들을 내 백성에게 보여 주고 싶네. 그대가 그 길을 열어 주게.';
-    if (t.kind === 'supply') return G.GOOD[t.good].name + U.jx(G.GOOD[t.good].name, '은/는') + ' 궁정에서 늘 모자라는 물건일세. 값은 섭섭지 않게 치르겠네.';
-    if (t.kind === 'capture') return t.nation + '의 깃발을 단 배를 보거든 사정 두지 말게. 이것은 해적질이 아니라 나라의 싸움일세.';
-    if (t.kind === 'rescue') return '…' + t.who + U.jx(t.who, '은/는') + ' 내게 둘도 없는 아이일세. 부디 무사히 데려와 주게. 그대만 믿겠네.';
-    if (t.kind === 'pirates') return '해적 때문에 상인들의 원성이 높네. 그대의 대포 소리로 바다를 조용하게 해 주게.';
-    if (t.kind === 'letter') return '이 친서에는 내 인장이 찍혀 있네. 그대 손으로 직접 전하고, 답서를 받아 오게.';
-    return '그대는 이제 내 입이요 내 얼굴일세. 예를 다하되 굽히지는 말게. 좋은 소식을 기다리겠네.';
+    if (t.kind === 'geo') return '세상의 끝이 어디인지, 그대의 눈으로 보고 와서 내게 들려주시오.';
+    if (t.kind === 'treasure') return '옛사람들이 감춘 것을 찾아내시오. 그 이야기만으로도 궁정이 떠들썩해질 것이오.';
+    if (t.kind === 'zoo') return '코끼리며 기린이며, 책에서만 보던 짐승들을 내 백성에게 보여 주고 싶소. 그대가 그 길을 열어 주시오.';
+    if (t.kind === 'supply') return G.GOOD[t.good].name + U.jx(G.GOOD[t.good].name, '은/는') + ' 궁정에서 늘 모자라는 물건이오. 값은 섭섭지 않게 치르겠소.';
+    if (t.kind === 'capture') return t.nation + '의 깃발을 단 배를 보거든 사정 두지 마시오. 이것은 해적질이 아니라 나라의 싸움이오.';
+    if (t.kind === 'rescue') return '…' + t.who + U.jx(t.who, '은/는') + ' 내게 둘도 없는 아이요. 부디 무사히 데려와 주시오. 그대만 믿겠소.';
+    if (t.kind === 'pirates') return '해적 때문에 상인들의 원성이 높소. 그대의 대포 소리로 바다를 조용하게 해 주시오.';
+    if (t.kind === 'letter') return '이 친서에는 내 인장이 찍혀 있소. 그대 손으로 직접 전하고, 답서를 받아 오시오.';
+    return '그대는 이제 내 입이요 내 얼굴이오. 예를 다하되 굽히지는 마시오. 좋은 소식을 기다리겠소.';
   }
   function accept(sp, realm, o) {
     var c = st(), s = S(), t = U.clone(o);
@@ -376,26 +376,26 @@
     if (!t || t.sp !== sp.id) return;
     var p = CT.progress(t);
     if (!p.done) {
-      var v = await UI.ask('맡긴 일은 어찌 되었나?\n(' + t.title + ' — ' + p.text + ' · 남은 ' + Math.max(0, CT.remain(t)) + '일)', [
+      var v = await UI.ask('맡긴 일은 어찌 되었소?\n(' + t.title + ' — ' + p.text + ' · 남은 ' + Math.max(0, CT.remain(t)) + '일)', [
         { label: '아직 하는 중이라고 아뢴다', value: 0 },
         { label: '왕명을 내려놓는다 (신뢰 −' + B().failTrust + ' · 명성 −' + B().failFame + ')', value: 'quit' }], who);
       if (v === 'quit') {
         if (!(await UI.confirm('왕명을 내려놓겠습니까? 신뢰와 명성이 깎이고, ' + B().again + '일 동안은 다시 부르지 않습니다.', '내려놓는다', '그만둔다'))) return;
         fail(t, 'quit');
-        await UI.say('…그런가. 그대를 너무 크게 보았나 보군. 물러가게.', who);
-      } else await UI.say('서두르되 그르치지는 말게. 좋은 소식을 기다리겠네.', who);
+        await UI.say('…그렇소? 그대를 너무 크게 보았나 보구려. 물러가시오.', who);
+      } else await UI.say('서두르되 그르치지는 마시오. 좋은 소식을 기다리겠소.', who);
       return;
     }
     if (t.kind === 'supply') { var cg = s.fleet.cargo[t.good]; cg.q -= t.qty; if (cg.q <= 0) delete s.fleet.cargo[t.good]; if (G.Cargo && G.Cargo.touch) G.Cargo.touch(); }
     if (t.kind === 'zoo') { zooAnimals().slice(0, t.n).forEach(function (d) { c.zooUsed[d.id] = 1; }); c.zoo[realm.id] = s.date.y; }
-    var thanks = t.kind === 'rescue' ? '오오… ' + t.who + '! 무사했구나!\f' + s.player.name + ', 이 은혜는 평생 잊지 않겠네.'
-      : t.kind === 'zoo' ? '이 그림들 좀 보게! 이런 짐승이 정말 세상에 있단 말인가. 당장 사람을 보내 데려오게 하고, 성 밖에 동물원을 짓겠네.'
-      : t.kind === 'supply' ? '오, 정말로 구해 왔군. 창고지기가 기뻐하겠네.'
-      : t.kind === 'capture' ? t.nation + ' 놈들이 그대의 깃발만 보아도 뱃머리를 돌린다지. 통쾌한 일일세!'
-      : t.kind === 'pirates' ? '상인들이 그대 이름을 부르며 잔을 든다더군. 잘해 주었네.'
-      : t.kind === 'letter' ? '답서로군. …흠, 좋아. 그대가 길을 잘 닦아 주었네.'
-      : t.kind === 'envoy' ? (t.grade === 2 ? '이런 조건을 받아 오다니! 내 신하들 가운데도 그대만 한 사람이 없네.' : '조약을 맺고 왔군. 수고했네. 두 나라 사이가 한결 편안해지겠어.')
-      : '그대가 본 것을 들으니 내가 다스리는 땅이 얼마나 작은지 알겠네. 훌륭하네.';
+    var thanks = t.kind === 'rescue' ? '오오… ' + t.who + '! 무사했구나!\f' + s.player.name + ', 이 은혜는 평생 잊지 않겠소.'
+      : t.kind === 'zoo' ? '이 그림들 좀 보시오! 이런 짐승이 정말 세상에 있단 말이오? 당장 사람을 보내 데려오게 하고, 성 밖에 동물원을 짓겠소.'
+      : t.kind === 'supply' ? '오, 정말로 구해 왔구려. 창고지기가 기뻐하겠소.'
+      : t.kind === 'capture' ? t.nation + ' 놈들이 그대의 깃발만 보아도 뱃머리를 돌린다지. 통쾌한 일이오!'
+      : t.kind === 'pirates' ? '상인들이 그대 이름을 부르며 잔을 든다더구려. 잘해 주었소.'
+      : t.kind === 'letter' ? '답서로구려. …흠, 좋소. 그대가 길을 잘 닦아 주었소.'
+      : t.kind === 'envoy' ? (t.grade === 2 ? '이런 조건을 받아 오다니! 내 신하들 가운데도 그대만 한 사람이 없소.' : '조약을 맺고 왔구려. 수고했소. 두 나라 사이가 한결 편안해지겠소.')
+      : '그대가 본 것을 들으니 내가 다스리는 땅이 얼마나 작은지 알겠소. 훌륭하오.';
     await UI.say(thanks, who);
     c.task = null;
     await finish(sp, realm, t);
@@ -415,9 +415,9 @@
     G.Game.refreshHud();
     if (G.Audio) G.Audio.sfx('discover');
     await UI.say(line(realm,
-      '무릎을 꿇게, ' + me + '.\f…이 칼이 그대의 어깨에 닿는 순간부터, 그대는 ' + (home ? '' : '이 나라의 ') + tt.ko + '일세. 일어나게, ' + (tt.call || tt.ko) + '.',
-      '가까이 오게, ' + me + '.\f이 예복과 칼을 받게. 오늘부터 그대는 ' + tt.ko + '일세. 내 땅 어디서든 그 이름으로 대접받을 걸세.',
-      '가까이 오게, ' + me + '.\f이 교지를 받게. 오늘부터 그대는 ' + tt.ko + '일세.'), who);
+      '무릎을 꿇으시오, ' + me + '.\f…이 칼이 그대의 어깨에 닿는 순간부터, 그대는 ' + (home ? '' : '이 나라의 ') + tt.ko + '이오. 일어나시오, ' + (tt.call || tt.ko) + '.',
+      '가까이 오시오, ' + me + '.\f이 예복과 칼을 받으시오. 오늘부터 그대는 ' + tt.ko + '이오. 내 땅 어디서든 그 이름으로 대접받을 것이오.',
+      '가까이 오시오, ' + me + '.\f이 교지를 받으시오. 오늘부터 그대는 ' + tt.ko + '이오.'), who);
     var courtier = CT.courtier(sp);
     if (courtier) await UI.say(line(realm,
       SP().holderName(sp) + '의 이름으로 선포합니다. ' + me + U.jx(me, '은/는') + ' 이제 ' + CT.fullName(tt, true) + '이며, 이 교서가 그 권리와 의무를 증명할 것입니다.',
@@ -452,18 +452,18 @@
     var s = S(), who = SP().speaker(sp), from = G.SPONSOR[t.sp], fromName = SP().holderName(from), rel = SP().rel(sp.id);
     if (t.kind === 'letter') {
       await UI.say(from.title + ' ' + fromName + '의 친서를 가져왔습니다. 직접 전해 올리라는 분부였습니다.', SP().me(sp));
-      await UI.say('…' + fromName + '의 인장이 맞군. 먼 길을 왔네.\f(한참 뒤) 답서를 썼네. 이것을 그대의 군주에게 전하게. 그리고 길에서 본 것 가운데 재미있는 이야기가 있으면 다음에 들려주게.', who);
+      await UI.say('…' + fromName + '의 인장이 맞구려. 먼 길을 왔소.\f(한참 뒤) 답서를 썼소. 이것을 그대의 군주에게 전하시오. 그리고 길에서 본 것 가운데 재미있는 이야기가 있으면 다음에 들려주시오.', who);
       t.stage = 1; SP().addTrust(rel, 3);
       G.State.log(SP().holderName(sp) + '에게 ' + fromName + '의 친서를 전하고 답서를 받았다.');
       UI.toast('답서를 받았다. ' + G.CITY_DATA[from.city].name + '로 돌아가 아뢰자.', 'scroll', 5000);
       return;
     }
-    if (t.retry && s.day < t.retry) { await UI.say('그 이야기는 지난번에 끝났네. 생각이 바뀌려면 시간이 더 필요하네.\n(' + (t.retry - s.day) + '일 뒤에 다시 교섭할 수 있습니다)', who); return; }
+    if (t.retry && s.day < t.retry) { await UI.say('그 이야기는 지난번에 끝났소. 생각이 바뀌려면 시간이 더 필요하오.\n(' + (t.retry - s.day) + '일 뒤에 다시 교섭할 수 있습니다)', who); return; }
     var lang = SP().langLv(sp), sp1 = R.skill('speech'), cha = R.stat('cha'), score = 0, b = B();
     function p(base, sk, stat) { return U.clamp(base + sk * 0.15 + (stat - 50) * 0.006 + (lang - 1) * 0.06, 0.08, 0.95); }
     function pct(x) { return Math.round(x * 100) + '%'; }
     await UI.say(from.title + ' ' + fromName + '의 특사로 왔습니다. 두 나라의 우의를 글로 남기고자 합니다.', SP().me(sp));
-    await UI.say('특사라… 좋네, 들어 보지. 그대의 군주는 내게 무엇을 바라는가?', who);
+    await UI.say('특사라… 좋소, 들어 보겠소. 그대의 군주는 내게 무엇을 바라오?', who);
     // ① 첫인사
     var gift = 1500 + sp.pw * 700, p1 = p(0.4, sp1, cha);
     var a = await UI.ask('어떻게 말을 꺼낼까?', [
@@ -471,9 +471,9 @@
       { label: '격식을 갖춰 길게 인사한다 (' + pct(p1) + ')', value: 'bow' },
       { label: '곧바로 용건을 꺼낸다', value: 'go' }], SP().me(sp));
     if (a === 'gift' && s.player.gold < gift) { UI.toast('예물을 살 금화가 모자랍니다.', 'coin'); a = 'go'; }
-    if (a === 'gift') { s.player.gold -= gift; score += 2; G.Game.refreshHud(); await UI.say('호오, 이런 것을 다. 그대의 군주는 예를 아는 사람이로군.', who); }
-    else if (a === 'bow') { if (U.chance(p1)) { score += 1; await UI.say('말솜씨가 좋군. 듣기 싫지 않네.', who); } else await UI.say('…인사가 길군. 요점을 말하게.', who); }
-    else await UI.say('성미가 급하군. 뭐, 좋네.', who);
+    if (a === 'gift') { s.player.gold -= gift; score += 2; G.Game.refreshHud(); await UI.say('호오, 이런 것을 다. 그대의 군주는 예를 아는 사람이구려.', who); }
+    else if (a === 'bow') { if (U.chance(p1)) { score += 1; await UI.say('말솜씨가 좋구려. 듣기 싫지 않소.', who); } else await UI.say('…인사가 길구려. 요점을 말하시오.', who); }
+    else await UI.say('성미가 급하구려. 뭐, 좋소.', who);
     // ② 무엇을 내세울까
     var by = G.Fame.sync(), p2a = p(0.3 + Math.min(0.2, by.tr / 60000), R.skill('acct'), cha), p2b = p(0.3 + Math.min(0.2, by.bt / 60000), sp1, R.stat('mar')), p2c = p(0.35, sp1, cha);
     var v2 = await UI.ask('무엇을 내세울까?', [
@@ -481,8 +481,8 @@
       { label: '함께 맞설 적이 있음을 일깨운다 (' + pct(p2b) + ')', value: 'b' },
       { label: '두 군주의 오랜 우의를 말한다 (' + pct(p2c) + ')', value: 'c' }], SP().me(sp));
     var ok2 = U.chance(v2 === 'a' ? p2a : v2 === 'b' ? p2b : p2c);
-    if (ok2) { score += 2; await UI.say(v2 === 'a' ? '…셈이 맞군. 내 재무관도 같은 말을 하더군.' : v2 === 'b' ? '그 말은 옳네. 적의 적은 벗이지.' : '그대의 군주가 그리 생각한다니 반가운 일일세.', who); }
-    else await UI.say(v2 === 'a' ? '그 셈은 그대들에게만 좋은 셈이 아닌가?' : v2 === 'b' ? '내 적은 내가 정하네.' : '말은 듣기 좋군. 하지만 말뿐이라면 곤란하네.', who);
+    if (ok2) { score += 2; await UI.say(v2 === 'a' ? '…셈이 맞구려. 내 재무관도 같은 말을 하더이다.' : v2 === 'b' ? '그 말은 옳소. 적의 적은 벗이지.' : '그대의 군주가 그리 생각한다니 반가운 일이오.', who); }
+    else await UI.say(v2 === 'a' ? '그 셈은 그대들에게만 좋은 셈이 아니오?' : v2 === 'b' ? '내 적은 내가 정하오.' : '말은 듣기 좋구려. 허나 말뿐이라면 곤란하오.', who);
     // ③ 마무리
     var p3 = p(0.35, sp1, cha);
     var v3 = await UI.ask('조약문의 마지막 조항을 두고 맞서고 있다.', [
@@ -491,12 +491,12 @@
     if (v3 === 'yield') score += 1; else score += U.chance(p3) ? 3 : -2;
     if (score >= 2) {
       t.stage = 1; t.grade = score >= 5 ? 2 : 1; SP().addTrust(rel, 5);
-      await UI.say(t.grade === 2 ? '…졌네. 그대 같은 사람을 특사로 보낸 그대의 군주가 부럽군. 조약문에 인장을 찍겠네.' : '좋네. 이 정도면 두 나라 모두 체면이 서겠지. 인장을 찍겠네.', who);
+      await UI.say(t.grade === 2 ? '…졌소. 그대 같은 사람을 특사로 보낸 그대의 군주가 부럽구려. 조약문에 인장을 찍겠소.' : '좋소. 이 정도면 두 나라 모두 체면이 서겠지. 인장을 찍겠소.', who);
       G.State.log(SP().holderName(sp) + U.jx(SP().holderName(sp), '과/와') + ' ' + fromName + '의 우호 조약을 맺었다.' + (t.grade === 2 ? ' (크게 유리한 조건)' : ''));
       UI.toast('조약을 맺었다. ' + G.CITY_DATA[from.city].name + '로 돌아가 아뢰자.', 'handshake', 5000);
     } else {
       t.retry = s.day + b.envoyRetry;
-      await UI.say('이야기는 여기까지 하세. 오늘은 뜻이 맞지 않는군.', who);
+      await UI.say('이야기는 여기까지 하겠소. 오늘은 뜻이 맞지 않는구려.', who);
       UI.toast('교섭이 깨졌다. ' + b.envoyRetry + '일 뒤에 다시 교섭할 수 있다.', 'handshake', 5000);
     }
   };
@@ -601,8 +601,8 @@
   CT.charters = async function (sp) {
     var realm = CT.realmOf(sp); if (!realm) return;
     var s = S(), who = SP().speaker(sp), pp = PP(), pa = papers(), tt = CT.title(realm);
-    if (!tt) { await UI.say('특허장은 내 사람에게만 내리는 것일세. 먼저 내가 맡기는 일을 해내고 작위를 받게.', who); return; }
-    await UI.say(line(realm, tt.ko + ' ' + s.player.name + ', 무엇을 청하러 왔나? 내 인장이 필요한 일이라면 말해 보게.', tt.ko + ' ' + s.player.name + ', 무엇을 청하러 왔는가? 내 투그라가 필요한 일이라면 말해 보게.', tt.ko + ' ' + s.player.name + ', 무엇을 청하러 왔는가?'), who);
+    if (!tt) { await UI.say('특허장은 내 사람에게만 내리는 것이오. 먼저 내가 맡기는 일을 해내고 작위를 받으시오.', who); return; }
+    await UI.say(line(realm, tt.ko + ' ' + s.player.name + ', 무엇을 청하러 왔소? 내 인장이 필요한 일이라면 말해 보시오.', tt.ko + ' ' + s.player.name + ', 무엇을 청하러 왔소? 내 투그라가 필요한 일이라면 말해 보시오.', tt.ko + ' ' + s.player.name + ', 무엇을 청하러 왔소?'), who);
     for (;;) {
       var mq = pa.marque[realm.id], mqOn = mq && mq.until >= today(), exOn = pa.exempt[realm.id] && pa.exempt[realm.id] >= today();
       var foes = foesNow(realm), mFee = paperFee(pp.marqueFee, realm), eFee = paperFee(pp.exemptFee, realm);
@@ -612,21 +612,21 @@
       ], { width: 860, icon: 'seal', text: '작위가 높을수록 값이 쌉니다. 이미 가진 특허장을 다시 받으면 기한이 오늘부터 새로 잡힙니다. 소지금 ' + U.num(s.player.gold) + '닢' });
       if (!v) return;
       if (v.kind === 'marque') {
-        if (!foes.length) { await UI.say('지금은 칼을 겨눌 나라가 없네. 평화는 좋은 것이지.', who); continue; }
+        if (!foes.length) { await UI.say('지금은 칼을 겨눌 나라가 없소. 평화는 좋은 것이지.', who); continue; }
         var nat = await UI.choose('어느 나라의 배를 칠 것인가', foes.map(function (f) { return { value: { kind: 'nation', nation: f }, icon: 'flag', label: U.esc(f), right: G.Hostile ? '적대 ' + G.Hostile.get(f) : '' }; }),
           { width: 520, icon: 'sword', text: '사략허가장에는 한 나라만 적습니다. 그 나라의 적대는 예전대로 오릅니다(사략함대가 제독을 쫓을 수 있습니다).' });
         if (!nat) continue;
         if (s.player.gold < mFee) { UI.toast('금화가 모자랍니다. (' + U.num(mFee) + '닢)', 'coin'); continue; }
         s.player.gold -= mFee; G.Game.refreshHud();
         pa.marque[realm.id] = { nation: nat.nation, until: U.dateNum(U.addDays(s.date, Math.round(pp.marqueYears * 365))) };
-        await UI.say(nat.nation + '의 깃발을 단 배라면 상선이든 군함이든 그대의 것일세. 다만 그 밖의 배에 손을 대면 그대는 그저 해적일 뿐이야. 명심하게.', who);
+        await UI.say(nat.nation + '의 깃발을 단 배라면 상선이든 군함이든 그대의 것이오. 다만 그 밖의 배에 손을 대면 그대는 그저 해적일 뿐이오. 명심하시오.', who);
         G.State.log(SP().holderName(sp) + '에게서 ' + nat.nation + '에 대한 사략허가장을 받았다. (' + U.fmtDate(dateOfNum(pa.marque[realm.id].until)) + '까지, ' + U.num(mFee) + '닢)');
         UI.toast('사략허가장을 받았다 — ' + nat.nation + ' · ' + U.fmtDate(dateOfNum(pa.marque[realm.id].until)) + '까지', 'sword', 5500);
       } else {
         if (s.player.gold < eFee) { UI.toast('금화가 모자랍니다. (' + U.num(eFee) + '닢)', 'coin'); continue; }
         s.player.gold -= eFee; G.Game.refreshHud();
         pa.exempt[realm.id] = U.dateNum(U.addDays(s.date, Math.round(pp.exemptYears * 365)));
-        await UI.say('이 문서를 세관에 보이게. 내 항구에서는 누구도 그대의 짐에 관세를 매기지 못할 걸세.', who);
+        await UI.say('이 문서를 세관에 보이시오. 내 항구에서는 누구도 그대의 짐에 관세를 매기지 못할 것이오.', who);
         G.State.log(SP().holderName(sp) + '에게서 ' + realm.name + '의 면세증을 받았다. (' + U.fmtDate(dateOfNum(pa.exempt[realm.id])) + '까지, ' + U.num(eFee) + '닢)');
         UI.toast(realm.name + '의 면세증을 받았다 — ' + U.fmtDate(dateOfNum(pa.exempt[realm.id])) + '까지', 'seal', 5500);
       }

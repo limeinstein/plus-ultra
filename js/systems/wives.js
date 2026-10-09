@@ -68,6 +68,7 @@
     var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + m.name + U.jx(m.name, '은/는') + ' <b>둘째 부인</b>이 되어 이 도시 ' + c.name + '에 새 집을 얻어 삽니다. 그 집에서 아이를 가질 수도 있습니다.</small>', '청혼한다', '그만둔다');
     if (!ok) return false;
     R.removeItem('ring');
+    if (G.Outcome) await G.Outcome.show('propose', { sub: m.name + U.jx(m.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
     await say('…고향에 부인이 계신 건 알아요. 그래도 저는 당신이 좋아요. 이 도시에서 당신을 기다릴게요.', 'shy');
     W.list().push({ id: m.id, kind: 'maid', city: m.city, house: true, aboard: false, wed: S().day });
     var st = S().maids[m.id]; if (st) st.aff = 100;
@@ -83,6 +84,7 @@
     var ok = await UI.confirm(d.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + d.name + U.jx(d.name, '은/는') + ' <b>둘째 부인</b>이 됩니다. 처음 만난 고장 ' + hc.name + '에 집을 마련해 데려다주거나, 부하로 남아 함께 항해할 수 있습니다.</small>', '청혼한다', '그만둔다');
     if (!ok) return false;
     R.removeItem('ring');
+    if (G.Outcome) await G.Outcome.show('propose', { sub: d.name + U.jx(d.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
     await say(d.witch ? '…둘째라도 상관없어요. 마녀는 원래 남의 눈 밖에서 사니까요.' : '…고향에 부인이 계신 건 알아요. 그래도 당신 곁에 있을래요.', 'shy');
     var w = { id: d.id, kind: 'mate', city: home, house: false, aboard: true, wed: S().day };
     W.list().push(w);

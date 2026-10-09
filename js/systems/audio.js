@@ -202,7 +202,8 @@
     seasia: { root: 233, steps: [0, 1, 3, 7, 8], tempo: 0.3, type: 'sine', perc: 'gong', chords: false, lead: 0.08 },             // 동남아: 펠로그 가믈란
     america: { root: 207.7, steps: [0, 3, 5, 7, 10], tempo: 0.36, type: 'sine', drone: 0.025, perc: 'hand', lead: 0.075 },       // 아메리카: 피리
     seaind: { root: 185, steps: [0, 2, 4, 7, 9], tempo: 0.6, type: 'sine', drone: 0.03, busy: 0.45 },                            // 인도양 항해
-    seaeast: { root: 220, steps: [0, 2, 4, 7, 9], tempo: 0.66, type: 'triangle', chords: false, busy: 0.4, lead: 0.06 }        // 동아시아·동남아 항해
+    seaeast: { root: 220, steps: [0, 2, 4, 7, 9], tempo: 0.66, type: 'triangle', chords: false, busy: 0.4, lead: 0.06 },       // 동아시아·동남아 항해
+    festival: { root: 293.7, steps: [0, 2, 4, 5, 7, 9, 11], tempo: 0.15, type: 'triangle', perc: 'fest', lead: 0.06, busy: 0.9 }   // 귀환 잔치: 빠른 장조 + 큰북·방울
   };
   AU.SCALES = SCALES;
   function freqOf(sc, deg, oct) { var n = sc.steps.length; var o = Math.floor(deg / n); var i = ((deg % n) + n) % n; return sc.root * Math.pow(2, (sc.steps[i] + 12 * (o + (oct || 0))) / 12); }
@@ -215,6 +216,7 @@
       case 'tabla': if (beat % 4 === 0) tone(beat % 8 === 0 ? 110 : 150, t, 0.3, 'sine', 0.12, musicGain); else if (beat % 2) noise(t, 0.04, 0.07, 3000, 3, musicGain, 'bandpass'); break;
       case 'wood': if (beat % 4 === 0) noise(t, 0.04, 0.12, 1800, 6, musicGain, 'bandpass'); break;
       case 'janggu': if (beat === 0 || beat === 6 || beat === 10) tone(beat ? 140 : 95, t, 0.3, 'sine', 0.14, musicGain); if (beat === 3 || beat === 12) noise(t, 0.05, 0.1, 2600, 3, musicGain, 'bandpass'); break;
+      case 'fest': if (beat % 4 === 0) tone(beat % 8 === 0 ? 82 : 110, t, 0.22, 'sine', 0.2, musicGain); if (beat % 2 === 1) noise(t, 0.05, 0.08, 6000, 2, musicGain, 'highpass'); if (beat === 14) noise(t, 0.12, 0.14, 900, 1.5, musicGain, 'bandpass'); break;
       case 'gong': if (beat === 0) { tone(sc.root / 2, t, 2.4, 'sine', 0.08, musicGain, 0.02); tone(sc.root / 2 * 2.76, t, 1.6, 'sine', 0.02, musicGain, 0.02); } break;
     }
   }
@@ -271,6 +273,7 @@
     var s = G.Game && G.Game.state, l = s && s.loc, t = null;
     try {
       if (name === 'town' && AU.place && sc.byPlace && sc.byPlace[AU.place]) t = sc.byPlace[AU.place];      // 주점 같은 건물 안
+      else if (name === 'town' && !AU.place && l && l.city != null && G.Fest && G.Fest.active(G.CITY_DATA[l.city])) t = 'gen:festival';   // 귀환 잔치 중인 거리
       else if (name === 'town' && l && l.city != null) {
         var c = G.CITY_DATA[l.city];
         if (c) t = cityPick(sc, c);

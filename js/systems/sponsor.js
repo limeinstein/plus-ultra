@@ -21,7 +21,7 @@
   SP.holderName = function (sp) { return SP.holder(sp) || sp.title; };
   SP.rel = function (id) { var s = S(); return s.sponsors[id] || (s.sponsors[id] = { trust: 20, done: 0, fail: 0, anger: 0, met: 0 }); };
   var HONOR = { king: '폐하', pope: '성하', gov: '각하', noble: '각하', priest: '신부님', official: '각하', scholar: '박사님', merchant: '회장님' };
-  SP.honor = function (sp) { return sp.honor || HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
+  SP.honor = function (sp) { if (sp.honor) return sp.honor; if (/왕비|왕대비/.test(SP.holder(sp) || '')) return '전하'; return HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
   /** 후원자 얼굴: 흉상(portrait) + 무릎상(half — portraits/sponsors/<그림>_half, 있을 때만) */
   SP.face = function (sp) {
     var spec = A.sponsorSpec(sp, SP.holderIndex(sp)), half = G.Img.chain.halfOf(G.Art.portraitKeys(spec));
@@ -45,6 +45,47 @@
   SP.langLi = function (sp) { var a = sp.lang, b = G.CITY_DATA[sp.city].lang; return a == null ? b : b == null ? a : (R.lang(b) > R.lang(a) ? b : a); };
   SP.butler = function (sp) { var c = G.CITY_DATA[sp.city]; return { name: '집사', portrait: A.withImg(A.npcSpec('butler_' + sp.id, 'keeper', G.Img.folkStyle(c)), G.Img.chain.npc('butler', c)), lang: SP.langLv(sp), li: SP.langLi(sp) }; };
   SP.fameNeed = function (sp) { return G.POWER_FAME[sp.pw] || 0; };
+  // ---------------------------------------------------------------- 말투 (js/data/sponsorvoice.js) · 성품
+  function femRe() { return G.SPONSOR_FEMALE || /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/; }
+  SP.female = function (sp) { return femRe().test(SP.holder(sp) || sp.title); };
+  /** 이 후원자의 말투: king · queen · noble · merchant · scholar · priest · official (왕궁의 왕명·특허장 대사도 군주 말투(하오체)로 맞췄다 — js/systems/court.js) */
+  SP.voiceKey = function (sp) {
+    if (sp.voice) return sp.voice;
+    if (SP.female(sp)) return sp.type === 'king' ? 'king' : 'queen';    // 여왕(군주)은 군주의 말투, 왕비·귀부인은 해요체
+    return (G.SPONSOR_VOICE_OF || {})[sp.type] || 'noble';
+  };
+  /** 후원자의 한마디. ctx의 값이 {키}에 들어간다 ({x|을/를} 조사 붙임, {^x|을/를} 조사만) */
+  SP.line = function (sp, key, ctx) {
+    var VV = G.SPONSOR_VOICE || {}, v = VV[SP.voiceKey(sp)] || {}, t = v[key];
+    if (t == null) t = (VV.noble || {})[key];
+    if (t == null) return '';
+    if (Array.isArray(t)) t = U.pickFresh(SP.voiceKey(sp) + ':' + key, t);     // 바로 앞에 한 말은 되풀이하지 않는다
+    ctx = ctx || {};
+    var base = { p: S().player.name, me: SP.holderName(sp), I: (G.SPONSOR_SELF || {})[sp.id] || '짐', bro: sp.type === 'pope' ? '아들' : '형제' };
+    return t.replace(/\{(\^?)(\w+)(?:\|([^}]+))?\}/g, function (m, only, k, pair) {
+      var val = ctx[k] != null ? ctx[k] : base[k];
+      val = val == null ? '' : String(val);
+      if (!pair) return val;
+      return only ? U.jx(val, pair) : val + U.jx(val, pair);
+    });
+  };
+  /** 성품 (G.SPONSOR_TEMPERS): 자료에 정했으면 그것, 아니면 자리와 그 대(代) 사람으로 정해진다 */
+  SP.temper = function (sp) {
+    if (sp.temper) return sp.temper;
+    var keys = Object.keys(G.SPONSOR_TEMPERS || {});
+    if (!keys.length) return null;
+    return keys[Math.abs(U.strHash(sp.id + '|' + (SP.holder(sp) || ''))) % keys.length];
+  };
+  SP.temperOf = function (sp) { var t = SP.temper(sp); return t ? G.SPONSOR_TEMPERS[t] : null; };
+  SP.is = function (sp, t) { return SP.temper(sp) === t; };
+  /** 세계일주를 제안할 수 있는가: 명성 3000, 그리고 아프리카 남단·말라카 해협·신세계 해협이 세상에 알려진 뒤 */
+  SP.CIRC_NEED = ['capegood', 'malacca', 'newstrait'];
+  SP.circReady = function () {
+    var s = S();
+    if (s.player.fame < 3000 || G.Disc.foundByMe('circum') || G.Disc.taken('circum') || s.flags.circDone) return false;
+    return SP.CIRC_NEED.every(function (id) { return G.Frontier && G.Frontier.known ? G.Frontier.known(id) : G.Disc.foundByMe(id); });
+  };
+
   SP.isRivalNation = function (sp) {
     var n = S().player.nation;
     return (n === 'PT' && sp.nation === 'ES') || (n === 'ES' && sp.nation === 'PT');
@@ -109,6 +150,8 @@
     if (d.pw <= 1 && d.lon != null && home && d.how !== 'trade' && G.Geo.dist(home.lon, home.lat, d.lon, d.lat) < 30) v += 1.0;
     // 제 나라 항해자의 첫 모험은 조금 더 너그럽게 들어 준다
     if (sp.nation && sp.nation === s.player.nation && !SP.rel(sp.id).done) v += 0.4;
+    // 시샘하던 후원자에게 「다음 발견은 먼저 가져오겠다」고 약속했고, 그 약속을 지키러 왔다
+    if (SP.rel(sp.id).promise) v += 0.8;
     v += U.rf(-0.8, 0.8);
     return v;
   }
@@ -146,58 +189,64 @@
     var T = (G.BALANCE && G.BALANCE.sponsorTaste) || {}, liked = d.id !== 'circum' && G.tasteHit(sp.taste, d);
     var adv = Math.round(d.val * (0.2 + 0.055 * w) * (liked ? T.advance || 1 : 1) / 100) * 100;
     var rew = Math.round(G.Disc.value(d) * (0.62 + 0.12 * w) * art * (liked ? T.reward || 1 : 1) / 100) * 100;   // 그림·세공은 G.Disc.value에 들어 있다
+    // 성품: 조급하면 기한이 짧고 선금이 후하다 · 신중하면 선금은 적고 사례가 크다 · 욕심이 많으면 사례가 적다 · 너그러우면 선금을 조금 더
+    var tp = SP.temper(sp);
+    if (tp === 'hasty') { if (d.id !== 'circum') years = Math.max(1, years - 1); adv *= 1.15; }
+    else if (tp === 'careful') { adv *= 0.9; rew *= 1.1; }
+    else if (tp === 'greedy') rew *= 0.9;
+    else if (tp === 'generous') adv *= 1.05;
+    adv = Math.round(adv / 100) * 100; rew = Math.round(rew / 100) * 100;
     return { advance: Math.max(400, adv), reward: Math.max(1200, rew), years: years, liked: liked };
   }
 
   SP.propose = async function (sp) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
+    var L = function (k, ctx) { return SP.line(sp, k, ctx); };
     if (s.contract) {
-      if (s.contract.sponsor === sp.id) await UI.say('자네와의 약속은 아직 끝나지 않았네. 좋은 소식을 기다리고 있겠네.', who);
-      else await UI.say('자네는 이미 다른 분의 후원을 받고 있다고 들었네. 그 일부터 마치고 오게.', who);
+      await UI.say(L(s.contract.sponsor === sp.id ? 'busyMine' : 'busyOther'), who);
       return;
     }
     // 계약을 그만두며 못 갚은 선금: 갚기 전에는 새 후원을 받을 수 없다 (선금으로 물건을 사 두고 빈손으로 그만두면 남던 것)
     if (rel.debt > 0) {
       var pw = s.player, dGold = Math.min(pw.gold, rel.debt), dBank = Math.min(pw.bank || 0, rel.debt - dGold);
-      if (dGold + dBank < rel.debt) { await UI.say('지난번에 돌려받지 못한 선금이 금화 ' + U.num(rel.debt) + '닢 남아 있네. 그것부터 갚고 오게.', who); return; }
+      if (dGold + dBank < rel.debt) { await UI.say(L('debtLeft', { debt: U.num(rel.debt) }), who); return; }
       var payDebt = await UI.ask('못 갚은 선금 금화 ' + U.num(rel.debt) + '닢을 갚겠습니까?', [{ label: '갚는다', value: 1 }, { label: '다음에', value: 0 }], who);
       if (!payDebt) return;
       pw.gold -= dGold; pw.bank = (pw.bank || 0) - dBank; rel.debt = 0; rel.anger = 0; SP.addTrust(rel, 4);
       G.Game.refreshHud();
-      await UI.say('빚은 다 받았네. 지난 일은 잊기로 하지.', who);
+      await UI.say(L('debtPaid'), who);
     }
-    if (rel.anger > 0 && U.dateNum(s.date) < rel.anger) { await UI.say(s.player.name + ', 용건도 없으면서 무턱대고 방문하는 것은 무례한 일일세. 다음에 오게.', who); return; }
-    var first = rel.done ? U.pick(['오오, ' + s.player.name + ', 잘 지냈는가. 또 모험 이야긴가?', '오래간만이군. 이번에는 어떤 모험을 할 작정인가?']) : U.pick(['모험 지원인가. 그래, 무엇을 찾으러 갈 건가?', '호오, 그렇다면 모험 목적을 말해 보게.']);
-    await UI.say(first, who);
+    if (rel.anger > 0 && U.dateNum(s.date) < rel.anger) { await UI.say(L('rude'), who); return; }
+    await UI.say(L(rel.done ? 'openAgain' : 'openNew'), who);
     // candidate proposals: hinted (not yet found by me), or found-but-unreported
     var list = [];
     Object.keys(s.hints).forEach(function (id) { var d = G.DISC[id]; if (d && !G.Disc.foundByMe(id)) list.push({ d: d, found: false }); });
     G.Disc.unreported().forEach(function (d) { list.push({ d: d, found: true }); });
     // 모조품을 증거로 보고 (못 찾았어도, 다른 후원자에게 이미 판 것이어도 — 이중 계약)
     if (G.Fakes) G.Fakes.list().forEach(function (d) { if (!list.some(function (x) { return x.found && x.d === d; })) list.push({ d: d, found: false, fake: true, dbl: G.Fakes.soldElsewhere(sp, d) }); });
-    if (s.player.fame >= 3000 && !G.Disc.foundByMe('circum') && !G.Disc.taken('circum') && !s.flags.circDone) list.push({ d: G.DISC.circum, found: false, circ: true });
+    // 세계일주: 아프리카 남단·말라카 해협·신세계 해협이 알려진 뒤에야 (그 전에는 꿈같은 이야기다)
+    if (SP.circReady()) list.push({ d: G.DISC.circum, found: false, circ: true });
     if (!list.length) {
-      if (G.Errand) { await UI.say('흐음, 아직 가져온 이야기가 없는가? 그렇다면 작은 일부터 맡아 보겠나?', who); await G.Errand.offerDialog(sp, who); return; }
-      await UI.say('흐음, 아무 이야기도 없는가? 흥미 있는 이야기를 찾아 오게. 기다리고 있겠네.', who); UI.toast('도서관이나 술집에서 단서를 모으십시오.', 'scroll'); return;
+      if (G.Errand) { await UI.say(L('emptyErrand'), who); await G.Errand.offerDialog(sp, who); return; }
+      await UI.say(L('emptyNone'), who); UI.toast('도서관이나 술집에서 단서를 모으십시오.', 'scroll'); return;
     }
     if (G.Errand) list.push({ errand: true });
+    var tm = SP.temperOf(sp);
     for (var tries = 0; tries < 3; tries++) {
       var tasteTxt = sp.taste.map(G.tasteName).join('·');
       var pick = await UI.choose('제안 선택', list.map(function (x, i) {
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
-        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
-      }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> — ★ 취향에 맞으면 선금·사례를 후하게 준다. 취향 밖이면 웅변으로 설득해 볼 수 있다' });
-      if (pick == null) { await UI.say('뭔가, 용건이 없는가? 이쪽은 바쁘네.', who); return; }
+        var gr = x.found && G.Disc.gradeOf ? G.Disc.gradeOf(x.d) : null;
+        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
+      }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다</span>' + (tm ? ' · 성품: <b>' + tm.name + '</b> <span class="muted">— ' + tm.desc + '</span>' : '') });
+      if (pick == null) { await UI.say(L('pickCancel'), who); return; }
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
       await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found || x.fake ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : d.hint + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp));
       // too heavy?
       var need = G.POWER_FAME[d.pw] || 0;
-      if (!x.found && !x.fake && s.player.fame < need * 0.8) {
-        await UI.say(U.pick(['자네에게는 짐이 너무 무거우리라 생각되는데... 좀 더 분수에 맞는 이야기를 찾아 오게.', '터무니없는 이야기로군. 자네의 명성으로는 믿기 어렵네.']), who);
-        continue;
-      }
-      if (d.pw > sp.pw + 1) { await UI.say(U.pick(['원조해 주고 싶지만, 그렇게 큰 모험은 나로서는 도저히...', '가능한 한 원조해 주고 싶지만, 너무 이야기가 엄청나네.']), who); continue; }
+      if (!x.found && !x.fake && s.player.fame < need * 0.8) { await UI.say(L('heavy'), who); continue; }
+      if (d.pw > sp.pw + 1) { await UI.say(L('tooBig'), who); continue; }
       var sc = interest(sp, d) + (x.found || x.fake ? 1.5 : 0) + (x.circ ? 3 : 0);
       var react = sc >= 3.2 ? '마음이 내킴' : sc >= 2.0 ? '좋은 반응' : sc >= 1.0 ? '다른 것을 보여라' : sc >= 0 ? '시시하다' : '장난치지 말게';
       // 관심사 밖이라 시큰둥하면 웅변으로 설득해 볼 수 있다 (같은 이야기는 한 번만). 설득해 내면 보통 값으로 계약·보고
@@ -211,14 +260,15 @@
         else if (react === '다른 것을 보여라') continue;
         else { if (react === '장난치지 말게') rel.trust = Math.max(0, rel.trust - 3); await UI.say('다음 기회로 하세.', who); return; }
       }
-      if (react === '다른 것을 보여라') { await UI.say(U.pick(['흐음, 썩 내키지 않는군. 좀 더 흥미 있는 이야기는 없는가?', '그 밖에 흥미 있는 이야기는 없는가?']), who); continue; }
-      if (react === '시시하다') { await UI.say(U.pick(['흐~음, 조금도 흥미가 일어나지 않는군. 좀 더 호기심을 불러일으킬 이야기를 찾아 오게.', '그런 가치 없는 이야기에는 원조할 수 없네. 다음 기회로 하세.']), who); return; }
-      if (react === '장난치지 말게') { await UI.say('그런 쓸데없는 이야기에 버릴 돈은 없네. 장난치지 말게!', who); rel.trust = Math.max(0, rel.trust - 3); return; }
-      await UI.say(react === '마음이 내킴' ? U.pick(['흐음, 흥미 있군!', '그거 흥미 있는 이야기로군!']) : U.pick(['음음, 흥미 있을 것 같군.', '썩 흥미롭지는 않지만 자네 부탁이니 거절할 수 없군.']), who);
+      if (react === '다른 것을 보여라') { await UI.say(L('meh'), who); continue; }
+      // 설득 실패: 좌절하는 제독 (결과 연출 js/ui/outcome.js)
+      if (react === '시시하다') { if (G.Outcome) await G.Outcome.show('lose', { sub: SP.holderName(sp) + '의 마음을 움직이지 못했다' }); await UI.say(L('dull'), who); return; }
+      if (react === '장난치지 말게') { if (G.Outcome) await G.Outcome.show('lose', { sub: SP.holderName(sp) + U.jx(SP.holderName(sp), '이/가') + ' 언짢아한다' }); await UI.say(L('insult'), who); rel.trust = Math.max(0, rel.trust - 3); return; }
+      await UI.say(L(react === '마음이 내킴' ? 'like' : 'ok'), who);
       if (x.found || x.fake) return SP.lateReport(sp, d, react === '마음이 내킴' ? 1 : 0.8);
       return SP.negotiate(sp, d, react === '마음이 내킴' ? 1.1 : 1.0, x.circ);
     }
-    await UI.say('오늘은 이만 하세. 흥미 있는 이야기를 찾아 오게.', who);
+    await UI.say(L('byeToday'), who);
   };
 
   /** 정산 뒤: 동료들이 원정의 몫을 기대한다 (다음 원정을 함께할지가 달린 재계약) */
@@ -244,31 +294,112 @@
   /** already-found discovery brought to a sponsor */
   SP.lateReport = async function (sp, d, k) {
     var s = S(), who = SP.speaker(sp), found = G.Disc.foundByMe(d.id), st = s.disc[d.id] || {}, rel = SP.rel(sp.id);
+    var L = function (key, ctx) { return SP.line(sp, key, ctx); }, tp = SP.temper(sp);
     var ev = G.Fakes ? await G.Fakes.choose(sp, d, found) : 'real';
-    if (!ev) { await UI.say('흐음, 보여 줄 것이 없다면 다음에 오게.', who); return; }
-    var o = offerFor(sp, d), pay = Math.round(o.reward * 0.7 * k / 100) * 100;
+    if (!ev) { await UI.say(L('lateNone'), who); return; }
+    // 증거의 등급 (실물·정밀 도판·해도·스케치·구술): 스케치나 말뿐이면 미심쩍어할 수 있다 — 물러나면 보고하지 않은 채로 남는다
+    var gr = ev !== 'fake' && found && G.Disc.gradeOf ? G.Disc.gradeOf(d, true) : null, gk = 1;
+    if (gr) { var dv = await SP.doubt(sp, d, gr); if (dv.abort) return; gk = gr.k * dv.k; }
+    var o = offerFor(sp, d), pay = Math.round(o.reward * 0.7 * k * gk / 100) * 100;
     if (o.liked) await UI.say(U.pick(['바로 내가 알고 싶던 것일세! 사례를 넉넉히 하지.', '내 관심사에 꼭 맞는 이야기로군. 값을 후하게 쳐 주겠네.']), who);
     // 같은 해에 같은 후원자에게 여러 번 보고하면 사례금이 줄어든다 (후원자의 주머니에도 끝이 있다)
     if (rel.lateY !== s.date.y) { rel.lateY = s.date.y; rel.lateN = 0; }
     var cutK = 1 + ((G.BALANCE && G.BALANCE.lateRepCut) || 0) * rel.lateN, cutTxt = '';
-    if (cutK > 1) { pay = Math.max(100, Math.round(pay / cutK / 100) * 100); cutTxt = ' 올해는 벌써 자네에게 여러 번 사례했으니 이번에는 조금 줄이겠네.'; }
+    if (cutK > 1) { pay = Math.max(100, Math.round(pay / cutK / 100) * 100); cutTxt = L('lateCut'); }
     rel.lateN++;
     var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) * 0.9 + sp.pw * 25) * G.Disc.artBonus(d) * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.4 : 0.9) + sp.pw * 25) * G.Disc.artBonus(d));
+    fame = Math.round(fame * gk);
     if (found && G.Disc.isLate(d.id)) pay = Math.max(100, Math.round(pay * G.Disc.LATE_GOLD / 100) * 100);   // 경쟁자보다 늦은 보고: 사례금도 절반
     if (ev === 'fake' && !(await G.Fakes.tryFake(sp, d, pay))) return;
     var pr = ev === 'fake' ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), bothUp = 0;
-    if (pr.noProof) { pay = Math.round(pay * 0.7 / 100) * 100; fame = Math.round(fame * 0.8); }
+    if (pr.noProof) { pay = Math.round(pay * SP.noProofK(sp) / 100) * 100; fame = Math.round(fame * 0.8); }
     if (ev === 'both') { G.Fakes.give(d.id, -1); pay = Math.round(pay * ((G.BALANCE.fakes && G.BALANCE.fakes.bothK) || 1.3) / 100) * 100; bothUp = (G.BALANCE.fakes && G.BALANCE.fakes.bothTrust) || 10; }
-    await UI.say(SP.proofLine(pr, d, true) + (G.Disc.isLate(d.id) ? '자네가 먼저 찾았다니 놀랍군. 하지만 ' + st.rival + U.jx(st.rival, '이/가') + ' 이미 발표해 버렸으니 세상이 알아주는 공도, 내 사례도 절반일세. ' : '훌륭하군! 그 공적은 내가 세상에 널리 알리겠네. ') + '약소하지만 사례로 금화 ' + U.num(pay) + '닢을 주겠네.' + cutTxt, who);
-    if (ev === 'both') await UI.say('진짜와 꼭 닮은 모조품까지 함께 가져오다니, 마음에 드는군! 사례를 더 얹어 주지.', who);
+    await UI.say(SP.proofLine(pr, d, true, sp) + (G.Disc.isLate(d.id) ? L('lateRival', { rival: st.rival }) : L('lateGood') + (U.chance(0.55) ? L('cat_' + d.cat) + ' ' : '')) + L('latePay', { pay: U.num(pay) }) + cutTxt, who);
+    if (ev === 'both') await UI.say(L('bothLate'), who);
     if (G.Fakes) G.Fakes.after(sp, d, ev, found);
     if (found) { st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; }
-    s.player.gold += pay; G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + bothUp); rel.done = (rel.done || 0) + 1;
+    s.player.gold += pay; G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + bothUp + (tp === 'generous' ? 3 : 0)); rel.done = (rel.done || 0) + 1; rel.promise = 0;
     SP.proofToast(pr);
-    G.State.log(SP.holderName(sp) + '에게 「' + d.name + '」의 발견을 보고했다. (금화 ' + pay + ', 명성 +' + fame + ')');
-    await UI.alert('금화 ' + U.num(pay) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성·사례금은 절반</span>' : ''), '보고');
+    if (found) SP.stirJealousy(sp, d);
+    G.State.log(SP.holderName(sp) + '에게 「' + d.name + '」의 발견을 보고했다. (금화 ' + pay + ', 명성 +' + fame + (gr ? ', 증거 ' + gr.name : '') + ')');
+    await UI.alert('금화 ' + U.num(pay) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (gr && gr.k !== 1 ? '<br><span class="muted">증거 등급 「' + gr.name + '」 — 사례·명성 ×' + gr.k + '</span>' : '') + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성·사례금은 절반</span>' : ''), '보고');
     if (G.Names && found) await G.Names.onReport(d);
+    if (G.Fest && found && !G.Disc.isLate(d.id)) await G.Fest.begin(sp.city, d);
     G.Game.refreshHud();
+  };
+
+  /** 증거가 하나도 없을 때 사례금 비율 (성품: 신중하면 더 깎고, 너그러우면 덜 깎는다) */
+  SP.noProofK = function (sp) { var tp = SP.temper(sp); return tp === 'careful' ? 0.55 : tp === 'generous' ? 0.8 : 0.7; };
+
+  /** 증거가 스케치·구술뿐일 때: 후원자가 미심쩍어한다 (G4). {k: 사례·명성 비율, abort: 물러났다} */
+  SP.doubt = async function (sp, d, gr) {
+    var out = { k: 1, abort: false };
+    if (!gr || (gr.key !== 'sketch' && gr.key !== 'word')) return out;
+    var s = S(), rel = SP.rel(sp.id), tp = SP.temper(sp);
+    var p = (gr.key === 'word' ? 0.35 : 0.2) + (tp === 'careful' ? 0.15 : tp === 'generous' ? -0.15 : 0) - (rel.trust || 0) / 400;
+    if (d.pw <= 1) p *= 0.5;           // 가까운 작은 발견은 크게 따지지 않는다
+    if (!U.chance(U.clamp(p, 0.05, 0.85))) return out;
+    var who = SP.speaker(sp);
+    await UI.say(SP.line(sp, gr.key === 'word' ? 'doubtWord' : 'doubtSketch'), who);
+    UI.toast('그림에 밝은 부하를 두면 기억을 더듬어 도판을 다시 그릴 수 있다', 'book', 5000);
+    var v = await UI.ask('「' + d.name + '」의 증거는 ' + gr.name + '뿐이다. 어떻게 할까?', [
+      { label: '증인을 세운다 — 함께 본 부하·선원들이 말한다', value: 'witness' },
+      { label: '명예를 걸고 맹세한다', value: 'oath' },
+      { label: '더 나은 증거를 마련해 다시 오겠다며 물러난다', value: 'later' }], SP.me(sp));
+    if (v === 'later' || v == null) { await UI.say(SP.line(sp, 'doubtLater'), who); out.abort = true; return out; }
+    var ok;
+    if (v === 'witness') {
+      if (s.mates.length) await UI.say(U.pick(['제독 말씀 그대로입니다. 저희가 두 눈으로 똑똑히 보았습니다.', '거짓이라면 제 목을 거셔도 좋습니다. 그 자리에 저도 있었습니다.']), G.Scenes.mateSpeaker('first'));
+      ok = U.chance(U.clamp(0.4 + Math.min(4, s.mates.length) * 0.06 + R.skill('speech') * 0.08, 0.1, 0.9));
+    } else ok = U.chance(U.clamp(0.25 + (rel.trust || 0) / 100 + (s.player.fame >= 2000 ? 0.1 : 0), 0.1, 0.9));
+    if (G.Outcome) await G.Outcome.show(ok ? 'win' : 'lose', { sub: ok ? '의심을 풀었다' : '의심을 풀지 못했다 — 사례·명성이 줄어든다' });
+    if (ok) { await UI.say(SP.line(sp, 'doubtOk'), who); SP.addTrust(rel, 1); }
+    else { await UI.say(SP.line(sp, 'doubtFail'), who); out.k = 0.8; SP.addTrust(rel, -3); }
+    return out;
+  };
+
+  /** 보고를 마친 뒤: 같은 고장·같은 나라의, 이 갈래를 좋아하는 다른 후원자가 시샘한다 (G3). 다음 알현 때 꺼낸다 */
+  SP.stirJealousy = function (sp, d) {
+    var s = S(), n = 0;
+    G.SPONSORS.forEach(function (y) {
+      if (n >= 2 || y.id === sp.id || !SP.present(y)) return;
+      var ry = s.sponsors[y.id];
+      if (!ry || !(ry.done > 0) || ry.jealous) return;
+      if (!(y.city === sp.city || (y.nation && y.nation === sp.nation))) return;
+      if (!G.tasteHit(y.taste, d) && !ry.promise) return;
+      var tp = SP.temper(y), p = ry.promise ? 1 : tp === 'generous' ? 0.35 : tp === 'careful' ? 0.6 : 0.85;
+      if (!U.chance(p)) return;
+      ry.jealous = { by: sp.id, d: d.id, broke: ry.promise ? 1 : 0 }; ry.promise = 0; n++;
+    });
+  };
+  /** 이중 계약이 들통났다: 먼저 보고받은 후원자가 다음 알현 때 따진다 (js/systems/fakes.js) */
+  SP.markDouble = function (prevId, bySp, d) { var r = SP.rel(prevId); r.jealous = { by: bySp.id, d: d.id, dbl: 1 }; };
+  /** 알현 때 시샘을 꺼낸다. 알현이 이어지면 true, 쫓겨나면 false */
+  SP.jealousy = async function (sp) {
+    var rel = SP.rel(sp.id), j = rel.jealous;
+    if (!j) return true;
+    delete rel.jealous;
+    var by = G.SPONSOR[j.by], d = G.DISC[j.d];
+    if (!by || !d) return true;
+    var s = S(), who = SP.speaker(sp), ctx = { rival: SP.holderName(by), d: d.name };
+    if (j.dbl) {
+      await UI.say(SP.line(sp, 'jealousDbl', ctx), who);
+      SP.addTrust(rel, -15);
+      var cost = Math.max(800, sp.pw * 600);
+      var v = await UI.ask('어떻게 할까?', [{ label: '사죄의 뜻으로 금화 ' + U.num(cost) + '닢을 바친다', value: 'pay', dis: s.player.gold < cost }, { label: '아무 말 없이 물러난다', value: 'go' }], SP.me(sp));
+      if (v === 'pay' && s.player.gold >= cost) { s.player.gold -= cost; SP.addTrust(rel, 6); G.Game.refreshHud(); await UI.say(SP.line(sp, 'jealousSorry'), who); return true; }
+      rel.anger = U.dateNum(U.addDays(s.date, 60));
+      G.State.log(SP.holderName(sp) + U.jx(SP.holderName(sp), '이/가') + ' 「' + d.name + '」 이중 보고를 알고 크게 노했다.');
+      return false;
+    }
+    await UI.say(SP.line(sp, 'jealous', ctx), who);
+    if (j.broke) SP.addTrust(rel, -4);           // 먼저 가져오겠다던 약속까지 어겼다
+    var gift = Math.max(300, sp.pw * 200);
+    var v2 = await UI.ask('어떻게 할까?', [{ label: '다음 발견은 먼저 가져오겠다고 약속한다', value: 'promise' }, { label: '선물을 바친다 (금화 ' + U.num(gift) + '닢)', value: 'gift', dis: s.player.gold < gift }, { label: '대수롭지 않게 넘긴다', value: 'shrug' }], SP.me(sp));
+    if (v2 === 'promise') { rel.promise = 1; SP.addTrust(rel, -2); await UI.say(SP.line(sp, 'jealousPromise'), who); }
+    else if (v2 === 'gift' && s.player.gold >= gift) { s.player.gold -= gift; SP.addTrust(rel, 2); G.Game.refreshHud(); await UI.say(SP.line(sp, 'jealousGift'), who); }
+    else { SP.addTrust(rel, -5); await UI.say(SP.line(sp, 'jealousShrug'), who); }
+    return true;
   };
 
   /** 빌려줄 배의 종류 (없으면 null): 재력 3 이상, 먼 길이거나 큰 발견일 때 */
@@ -317,7 +448,8 @@
     var p = GIVE_BACK[sp.type] != null ? GIVE_BACK[sp.type] : 0.5;
     p += (SP.rel(sp.id).trust || 0) / 400;
     if (r.lead && r.lead.some(function (id) { return G.DISC[id] && !G.Disc.foundByMe(id); })) p += 0.2;
-    return U.clamp(p, 0.15, 0.95);
+    var tp = SP.temper(sp); if (tp === 'greedy') p -= 0.2; else if (tp === 'generous') p += 0.1;   // 성품
+    return U.clamp(p, 0.1, 0.95);
   };
   /** 보고할 때 증거를 건넨다: 해도·지도와 유물은 후원자가 가져가고, 서적·이어지는 물건은 돌려받기도 한다.
       {ev, given, back, noProof, bonus} */
@@ -337,15 +469,16 @@
     var bonus = Math.min(4, given.filter(function (it) { var r = G.RELIC[it.id]; return r.kind !== 'book'; }).length);
     return { ev: ev, given: given, back: back, noProof: G.Disc.needsProof(d) && !proof, bonus: bonus };
   };
-  /** 증거를 받는 후원자의 말 */
-  SP.proofLine = function (pr, d, short) {
+  /** 증거를 받는 후원자의 말 (sp: 말투) */
+  SP.proofLine = function (pr, d, short, sp) {
     var nm = function (it) { return '「' + R.itemName(it) + '」'; };
+    var L = function (k, ctx) { return sp ? SP.line(sp, k, ctx) : (G.SPONSOR_VOICE ? SP.line({ type: 'noble', holders: [], title: '', id: '' }, k, ctx) : ''); };
     var out = '';
-    if (pr.noProof) return (d.evidence ? '증거가 될 ' + d.evidence + U.jx(d.evidence, '이/가') : '증거가 될 만한 물건이 하나도') + ' 없으니 반신반의하네만... 자네 말을 믿어 보지. ';
+    if (pr.noProof) return d.evidence ? L('noProofEv', { ev: d.evidence }) : L('noProofAny');
     var shown = (pr.ev ? [pr.ev] : []).concat(pr.given);
-    if (shown.length) out += shown.map(nm).join(', ') + U.jx(R.itemName(shown[shown.length - 1]), '을/를') + ' 보니 틀림없군! ' + (short ? '' : '이것들은 내가 맡아 두겠네. ');
-    else if (pr.back.length) return out + pr.back.map(nm).join(', ') + U.jx(R.itemName(pr.back[pr.back.length - 1]), '을/를') + ' 보니 틀림없군! ' + (pr.back.length > 1 ? '이것들은' : '이것은') + ' 자네가 다음 항해에 쓰는 편이 낫겠군. 돌려주겠네. ';
-    if (pr.back.length) out += (short ? '' : '\n') + '다만 ' + pr.back.map(nm).join(', ') + U.jx(R.itemName(pr.back[pr.back.length - 1]), '은/는') + ' 자네가 다음 항해에 쓰는 편이 낫겠군. 돌려주겠네. ';
+    if (shown.length) out += L('proofSeen', { items: shown.map(nm).join(', '), last: R.itemName(shown[shown.length - 1]) }) + (short ? '' : L('keepIt'));
+    else if (pr.back.length) return out + L('backOnly', { items: pr.back.map(nm).join(', '), last: R.itemName(pr.back[pr.back.length - 1]), these: pr.back.length > 1 ? '이것들은' : '이것은' });
+    if (pr.back.length) out += (short ? '' : '\n') + L('backToo', { items: pr.back.map(nm).join(', '), last: R.itemName(pr.back[pr.back.length - 1]) });
     return out;
   };
   SP.proofToast = function (pr) {
@@ -355,30 +488,37 @@
 
   SP.negotiate = async function (sp, d, mood, circ) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
+    var L = function (k, ctx) { return SP.line(sp, k, ctx); }, tp = SP.temper(sp), tm = SP.temperOf(sp);
     var o = offerFor(sp, d);
     o.advance = Math.round(o.advance * mood / 100) * 100;
     var asked = 0, pu = R.purser(), maxAsk = pu ? 3 : 2;
     if (o.liked) await UI.say(U.pick(['내가 늘 마음에 두던 일이로군. 돈을 아끼지 않겠네.', '내 관심사에 꼭 맞는 모험일세. 넉넉히 대 주지.']), who);    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
     for (;;) {
-      await UI.say('모험하는 데 돈은 필요하겠지. 먼저 금화 ' + U.num(o.advance) + '닢을 주겠네. ' + o.years + '년 안에 성공하면 거기다 금화 ' + U.num(o.reward) + '닢의 사례를 약속하겠네. 이것으로 어떤가.', who);
-      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢', [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));
+      await UI.say(L('offer', { adv: U.num(o.advance), yrs: o.years, rew: U.num(o.reward) }), who);
+      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢' + (tm ? '\n' + SP.holderName(sp) + U.jx(SP.holderName(sp), '은/는') + ' ' + tm.like + '. ' + tm.desc : ''), [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));
       if (v === 'ok') break;
-      if (v === 'no' || v == null) { await UI.say('그런가. 마음이 바뀌면 다시 오게.', who); return; }
+      if (v === 'no' || v == null) { await UI.say(L('negoNo'), who); return; }
       var w = await UI.choose('무엇을 요구할까?', [{ label: '자금 증가', value: 'money', icon: 'coin' }, { label: '기간 연장', value: 'time', icon: 'hourglass' }, { label: '변경 없음', value: 'none', icon: 'check' }], { width: 420 });
       if (!w || w === 'none') continue;
       asked++;
-      if (pu) await UI.say(w === 'money' ? U.pick(['각하, 선원 급료와 보급을 셈해 보면 이 선금으로는 절반도 못 갑니다. 장부를 보시지요.', '배 수리와 식량 값이 올해 크게 올랐습니다. 선금을 조금만 더 얹어 주시면 기한 안에 반드시 해내겠습니다.'])
-        : U.pick(['뱃길과 계절풍을 따져 보면 이 기한은 빠듯합니다. 한 해만 더 주시면 선금은 그대로 두셔도 됩니다.', '각하의 돈이 헛되이 쓰이지 않도록, 서두르지 않을 시간을 조금만 더 주십시오.']), G.Scenes.mateSpeaker('purser'));
+      var hon = SP.honor(sp);
+      if (pu) await UI.say(w === 'money' ? U.pick([hon + ', 선원 급료와 보급을 셈해 보면 이 선금으로는 절반도 못 갑니다. 장부를 보시지요.', '배 수리와 식량 값이 올해 크게 올랐습니다. 선금을 조금만 더 얹어 주시면 기한 안에 반드시 해내겠습니다.'])
+        : U.pick(['뱃길과 계절풍을 따져 보면 이 기한은 빠듯합니다. 한 해만 더 주시면 선금은 그대로 두셔도 됩니다.', hon + '의 돈이 헛되이 쓰이지 않도록, 서두르지 않을 시간을 조금만 더 주십시오.']), G.Scenes.mateSpeaker('purser'));
       var p = 0.55 + R.skill('speech') * 0.12 + (R.stat('cha') - 50) * 0.006 + rel.trust * 0.004 - (asked - 1) * 0.25 + (pu ? 0.10 + pu.acct * 0.05 : 0);
+      // 성품: 조급한 이는 기한을, 욕심 많은 이는 돈을 더 내주기 싫어한다 · 너그러운 이는 잘 들어준다
+      if ((tp === 'hasty' && w === 'time') || (tp === 'greedy' && w === 'money')) p -= 0.15;
+      if (tp === 'generous') p += 0.12;
       if (!U.chance(U.clamp(p, 0.05, 0.95))) {
-        await UI.say(U.pick(['탐욕스러운 놈! 너 같은 녀석에게 볼일 없다. 썩 꺼져라!', '너 같이 욕심 많은 녀석에게 원조할 수 없다! 썩 꺼져라!!']), who);
-        rel.trust = Math.max(0, rel.trust - 10); rel.anger = U.dateNum(U.addDays(s.date, 90));
+        if (G.Outcome) await G.Outcome.show('lose', { title: '교섭 결렬…', sub: '욕심이 지나쳤다 — 계약이 없던 일이 되었다' });
+        await UI.say(L('greed'), who);
+        rel.trust = Math.max(0, rel.trust - 10); rel.anger = U.dateNum(U.addDays(s.date, tp === 'generous' ? 45 : tp === 'hasty' || tp === 'greedy' ? 120 : 90));
         return;
       }
-      if (w === 'money' && pu) { o.advance = Math.round(o.advance * (1.35 + pu.acct * 0.05) / 100) * 100; await UI.say('허, 셈이 빈틈없군. 좋다, 선금을 ' + U.num(o.advance) + '닢으로 올리지. 기한은 그대로 ' + o.years + '년일세.', who); }
-      else if (w === 'money') { o.advance = Math.round(o.advance * 1.4 / 100) * 100; o.years = Math.max(1, o.years - 1); await UI.say('뭐, 돈을 더 달라고? 흐~음, 좋다. 대신 기간은 ' + o.years + '년으로 줄이겠네. 이의 없겠지.', who); }
-      else if (pu) { o.years += 1; o.advance = Math.round(o.advance * (pu.acct >= 2 ? 1 : 0.92) / 100) * 100; await UI.say('자네 경리 말이 옳군. 기간을 ' + o.years + '년으로 늘리지' + (pu.acct >= 2 ? '. 선금은 그대로 두겠네.' : '. 선금은 조금만 줄여 ' + U.num(o.advance) + '닢일세.'), who); }
-      else { o.years += 1; o.advance = Math.round(o.advance * 0.8 / 100) * 100; await UI.say('그것도 그렇군. 기간을 ' + o.years + '년으로 늘리지. 대신 돈은 전부 ' + U.num(o.advance) + '닢이 되겠군.', who); }
+      if (G.Outcome) await G.Outcome.show('win', { title: '교섭 성공!', sub: w === 'money' ? '자금을 더 받아 냈다' : '기한을 늘려 받았다' });
+      if (w === 'money' && pu) { o.advance = Math.round(o.advance * (1.35 + pu.acct * 0.05) / 100) * 100; await UI.say(L('moneyPurser', { adv: U.num(o.advance), yrs: o.years }), who); }
+      else if (w === 'money') { o.advance = Math.round(o.advance * 1.4 / 100) * 100; o.years = Math.max(1, o.years - 1); await UI.say(L('moneyUp', { yrs: o.years }), who); }
+      else if (pu) { o.years += 1; o.advance = Math.round(o.advance * (pu.acct >= 2 ? 1 : 0.92) / 100) * 100; await UI.say(L(pu.acct >= 2 ? 'timePurserSame' : 'timePurserCut', { yrs: o.years, adv: U.num(o.advance) }), who); }
+      else { o.years += 1; o.advance = Math.round(o.advance * 0.8 / 100) * 100; await UI.say(L('timeUp', { yrs: o.years, adv: U.num(o.advance) }), who); }
     }
     // treaty warning
     if (SP.isRivalNation(sp)) {
@@ -389,9 +529,9 @@
     // 선박 대여: 넉넉한 후원자는 먼 원정에 쓸 배를 빌려준다 (정산 때 돌려받는다 — 대항해시대 3)
     var loanShip = null, lt = loanType(sp, d, circ, o);
     if (lt) {
-      if (s.fleet.ships.length >= G.MAX_SHIPS) await UI.say('배도 한 척 내주려 했는데, 자네 함대는 이미 꽉 찼군.', who);
+      if (s.fleet.ships.length >= G.MAX_SHIPS) await UI.say(L('loanFull'), who);
       else {
-        var lv = await UI.ask('먼 길이니 배도 한 척 필요하겠지. 원정이 끝나면 돌려준다는 조건으로 우리 ' + G.SHIP[lt].name + U.jx(G.SHIP[lt].name, '을/를') + ' 빌려주겠네. 선원은 자네가 채우게.', [{ label: '빌린다', value: 1 }, { label: '괜찮습니다', value: 0 }], who);
+        var lv = await UI.ask(L('loanOffer', { ship: G.SHIP[lt].name }), [{ label: '빌린다', value: 1 }, { label: '괜찮습니다', value: 0 }], who);
         if (lv) { loanShip = R.newShip(lt, U.pick(G.SHIP_NAMES), G.Ships.localWood(G.CITY_DATA[sp.city]).id); loanShip.loan = sp.id; s.fleet.ships.push(loanShip); if (G.ShipSprite) G.ShipSprite.want([lt]); }
       }
     }
@@ -400,9 +540,11 @@
       loan: loanShip ? loanShip.uid : null, loanType: loanShip ? lt : null, loanName: loanShip ? loanShip.name : null };
     if (!circ) G.Disc.addHint(d.id, 'contract:' + sp.id);
     s.player.gold += o.advance;
+    rel.promise = 0;
     if (loanShip) setTimeout(function () { UI.toast(loanShip.name + '호(' + G.SHIP[lt].name + ')를 빌렸다. 계약을 마치면 돌려준다. 선원을 채워야 움직일 수 있다.', 'ship', 5500); }, 600);
     G.State.log(U.j(SP.holderName(sp), '과/와') + ' 「' + (circ ? '세계일주' : d.name) + '」 탐색 계약을 맺었다. (선금 ' + o.advance + '닢, 기한 ' + U.fmtDate(due) + ')');
-    await UI.say(U.pick(['그러면, 기대하고 있겠네. 훌륭히 성공을 거두고 돌아오게.', '긴 여행이 되리라 생각되는데 조심하게. 여행의 성공을 기도하고 있겠네.']), who);
+    if (G.Outcome) await G.Outcome.show('win', { title: '계약 성립!', sub: SP.holderName(sp) + '의 후원으로 「' + (circ ? '세계일주' : d.name) + '」' + U.jx(circ ? '세계일주' : d.name, '을/를') + ' 찾아 나선다' });
+    await UI.say(L('sealed'), who);
     UI.toast('계약 성립! 선금 ' + U.num(o.advance) + '닢을 받았다.', 'seal', 4000);
     G.Game.refreshHud();
   };
@@ -422,13 +564,13 @@
       var p = s.player, fromGold = Math.min(p.gold, k.advance), fromBank = Math.min(p.bank || 0, k.advance - fromGold), paid = fromGold + fromBank;
       p.gold -= fromGold; p.bank = (p.bank || 0) - fromBank;
       if (paid < k.advance) { SP.addTrust(rel, -10); rel.debt = (rel.debt || 0) + (k.advance - paid); }   // 못 갚은 선금은 빚으로 남는다
-      lines.push(why === 'announce' ? '나와 약속한 발견을 제멋대로 세상에 발표하다니! 받아 간 선금 금화 ' + U.num(k.advance) + '닢은 돌려받겠네.' : '그만두겠다니 할 수 없지. 다만 받아 간 선금 금화 ' + U.num(k.advance) + '닢은 돌려주게.');
-      if (paid < k.advance) lines.push('...' + U.num(paid) + '닢뿐인가. 나머지 ' + U.num(k.advance - paid) + '닢은 빚으로 달아 두겠네. 갚기 전에는 내 문을 두드리지 말게.');
+      lines.push(SP.line(sp, why === 'announce' ? 'brkAnnounce' : 'brkQuit', { adv: U.num(k.advance) }));
+      if (paid < k.advance) lines.push(SP.line(sp, 'brkDebt', { paid: U.num(paid), rest: U.num(k.advance - paid) }));
       UI.toast('선금 ' + U.num(paid) + '닢을 돌려주었다.', 'coin', 4000);
     }
     var ret0 = SP.returnLoan(k);
-    if (ret0.returned) lines.push('빌려 간 ' + ret0.returned.name + '호는 돌려받겠네.');
-    else if (ret0.lost) { var pay0 = Math.min(s.player.gold, ret0.cost); s.player.gold -= pay0; SP.addTrust(rel, -8); lines.push('빌려 간 배까지 잃었다니... 배값으로 금화 ' + U.num(pay0) + '닢은 받아야겠네.'); }
+    if (ret0.returned) lines.push(SP.line(sp, 'brkLoanBack', { ship: ret0.returned.name }));
+    else if (ret0.lost) { var pay0 = Math.min(s.player.gold, ret0.cost); s.player.gold -= pay0; SP.addTrust(rel, -8); lines.push(SP.line(sp, 'brkLoanLost', { pay: U.num(pay0) })); }
     rel.anger = U.dateNum(U.addDays(s.date, k.small ? 30 : why === 'announce' ? 180 : why === 'quit' ? 90 : 60));
     if (lines.length) await UI.say(lines.join('\n'), who);
     G.State.log('「' + name + '」 계약' + (why === 'announce' ? '을 어기고 스스로 발표했다.' : why === 'quit' ? '을 기한 전에 포기했다. (선금 반환)' : '에 실패했다.'));
@@ -439,7 +581,8 @@
   // ---------------------------------------------------------------- report
   SP.report = async function (sp) {
     var s = S(), k = s.contract, who = SP.speaker(sp), rel = SP.rel(sp.id);
-    if (!k || k.sponsor !== sp.id) { await UI.say('자네와 약속한 일은 없는 것 같은데?', who); return; }
+    var L = function (key, ctx) { return SP.line(sp, key, ctx); }, tp = SP.temper(sp);
+    if (!k || k.sponsor !== sp.id) { await UI.say(L('noContract'), who); return; }
     if (k.small && G.Errand) return G.Errand.report(sp, who);
     var d = G.DISC[k.disc];
     var found = k.circ ? G.Disc.foundByMe('circum') : G.Disc.foundByMe(k.disc);
@@ -449,51 +592,66 @@
     var ev = hasFake ? await G.Fakes.choose(sp, d, found) : (found ? 'real' : null);
     if (hasFake && !ev) return;
     if (!found && ev !== 'fake') {
-      var v = await UI.ask(late ? '약속한 기한이 이미 지났네. 어떻게 된 건가?' : '아직 찾지 못했는가? 기한까지는 시간이 있네.', late ? [{ label: '실패를 인정한다', value: 'fail' }, { label: '물러난다', value: null }] : [{ label: '계속 찾겠습니다', value: null }, { label: '계약을 포기한다', value: 'fail' }], who);
+      var v = await UI.ask(L(late ? 'askLate' : 'askNotYet'), late ? [{ label: '실패를 인정한다', value: 'fail' }, { label: '물러난다', value: null }] : [{ label: '계속 찾겠습니다', value: null }, { label: '계약을 포기한다', value: 'fail' }], who);
       if (v !== 'fail') return;
-      if (late) await UI.say(U.pick(['인간이니 실패할 수도 있겠지. 이번 실패는 불문에 부쳐 두기로 하지.', '음, 실패 안 하는 사람은 없으니까. 이번은 너그러이 봐 주겠네.']), who);
+      if (late) await UI.say(L('forgive'), who);
       await SP.breakContract(sp, late ? 'late' : 'quit');
       return;
     }
     var st = s.disc[k.disc] || {};
+    // 증거의 등급: 스케치·구술뿐이면 미심쩍어할 수 있다 (물러나면 계약은 그대로, 다시 와서 보고한다)
+    var gr = !k.circ && ev !== 'fake' && found && G.Disc.gradeOf ? G.Disc.gradeOf(d, true) : null, gk = 1;
+    if (gr) { var dv = await SP.doubt(sp, d, gr); if (dv.abort) return; gk = gr.k * dv.k; }
     var reward = k.reward, bothTxt = '';
     // 계약 뒤에 그림·세공에 밝은 부하가 생겼으면(또는 떠났으면) 발견물의 값어치가 달라진 만큼 사례금도 달라진다
     if (!k.circ && k.valueK) { var kNow = G.Disc.valueK(d); if (Math.abs(kNow - k.valueK) > 0.001) reward = Math.round(reward * kNow / k.valueK / 100) * 100; }
     var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) + sp.pw * 40) * G.Disc.artBonus(d) * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.5 : 1) + sp.pw * 40) * G.Disc.artBonus(d));
-    if (late) { reward = Math.round(reward * 0.5); fame = Math.round(fame * 0.7); }
+    if (gk !== 1) { reward = Math.round(reward * gk / 100) * 100; fame = Math.round(fame * gk); }
+    // 기한을 넘겼다: 성품에 따라 깎는 정도가 다르다 (조급하면 더, 너그러우면 덜)
+    if (late) { reward = Math.round(reward * (tp === 'hasty' ? 0.35 : tp === 'generous' ? 0.7 : 0.5)); fame = Math.round(fame * 0.7); }
     if (!k.circ && G.Disc.isLate(d.id)) reward = Math.round(reward * G.Disc.LATE_GOLD);   // 경쟁자보다 늦은 보고: 사례금도 절반
     // 증거: 해도·지도와 유물을 건넨다 (서적·다음 탐험으로 이어지는 물건은 돌려받기도 한다). 하나도 없으면 반신반의
     if (ev === 'fake' && !(await G.Fakes.tryFake(sp, d, reward))) return;     // 들켰다 — 벌을 받고 계약도 끝
     var pr = k.circ || ev === 'fake' ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), noProof = pr.noProof;
-    if (noProof) { reward = Math.round(reward * 0.7); fame = Math.round(fame * 0.8); }
-    var trustUp = (noProof ? 6 : 15) + pr.bonus;
+    if (noProof) { reward = Math.round(reward * SP.noProofK(sp)); fame = Math.round(fame * 0.8); }
+    var trustUp = (noProof ? 6 : 15) + pr.bonus + (tp === 'generous' ? 3 : 0);
     if (ev === 'both') {      // 진짜와 똑같이 만든 모조품까지 바치면 감동한다
       G.Fakes.give(d.id, -1);
       reward = Math.round(reward * ((G.BALANCE.fakes && G.BALANCE.fakes.bothK) || 1.3) / 100) * 100; trustUp += (G.BALANCE.fakes && G.BALANCE.fakes.bothTrust) || 10;
-      bothTxt = '\n게다가 진짜와 꼭 닮은 모조품까지 함께 바치다니! 하나는 보물고에, 하나는 사람들 앞에 둘 수 있겠군. 이렇게 정성스러운 보고는 처음일세. 사례를 더 얹어 주지.';
+      bothTxt = '\n' + L('both');
     }
+    // 세계일주: 그려 온 「세계 일주 지도」를 후원자에게 건넨다 (증거품)
+    var circTxt = '';
+    if (k.circ) { var cmap = SP.takeEvidence('circum'); if (cmap) { circTxt = '\n' + L('circMap', { ev: cmap.name || '세계 일주 지도' }); pr.given = [cmap]; } }
     // 토르데시야스 조약: 새로 찾은 땅이 후원자 왕실의 몫이면 사례금이 오르고, 상대 왕실의 몫이면 줄어든다 (js/systems/treaty.js)
     var trm = !k.circ && found && ev !== 'fake' && G.Treaty ? G.Treaty.reportMod(sp, d) : null, trTxt = '';
     if (trm) { reward = Math.round(reward * trm.k / 100) * 100; trTxt = '\n' + trm.line; }
     // 빌린 배 반환 (잃었으면 배값을 사례금에서 뗀다)
     var ret = SP.returnLoan(k), lostTxt = '';
-    if (ret.lost) { var cut = Math.min(reward, ret.cost); reward -= cut; lostTxt = '\n다만 빌려 간 배를 잃었으니 배값 금화 ' + U.num(cut) + '닢은 빼겠네.'; }
-    await UI.say('오오, 해냈는가! ' + (k.circ ? '지구를 한 바퀴 돌아오다니, 참으로 대단한 일일세!' : '「' + d.name + '」이라니, 참으로 대단한 발견일세!') + (late ? '\n약속한 기한은 지났지만, 약속은 약속이지.' : '') +
-      (k.circ || ev === 'fake' || !SP.proofLine(pr, d, false) ? '' : '\n' + SP.proofLine(pr, d, false)) + bothTxt + trTxt + lostTxt +
-      '\f자, 약속한 사례금 금화 ' + U.num(reward) + '닢일세. 자네의 이름은 온 세상에 알려질 걸세.', who);
+    if (ret.lost) { var cut = Math.min(reward, ret.cost); reward -= cut; lostTxt = '\n' + L('loanLost', { cut: U.num(cut) }); }
+    var pl = k.circ || ev === 'fake' ? '' : SP.proofLine(pr, d, false, sp);
+    // 맞이하는 말: 늦었는지, 몇 번째 거래인지, 무엇을 찾았는지에 따라 (js/data/sponsorvoice.js)
+    var hailKey = late ? 'hailLate' : ((rel.done || 0) >= 3 && U.chance(0.5) ? 'hailFriend' : 'hail');
+    var catLine = !k.circ && d && U.chance(0.55) && L('cat_' + d.cat);       // 무엇을 찾았는지에 맞춘 한마디 (늘 하지는 않는다)
+    await UI.say((k.circ ? L('hailCirc') : L(hailKey, { d: d.name }) + (catLine ? ' ' + catLine : '')) + (late && k.circ ? '\n' + L('pastDue') : '') +
+      (pl ? '\n' + pl : '') + circTxt + bothTxt + trTxt + lostTxt +
+      '\f' + L('payout', { rew: U.num(reward) }), who);
     if (ret.returned) UI.toast('빌렸던 ' + ret.returned.name + '호를 돌려주었다.', 'ship', 4000);
     SP.proofToast(pr);
     s.player.gold += reward; G.Fame.add('ex', fame);
     if (!k.circ && G.Fakes) G.Fakes.after(sp, d, ev, found);
     if (found) { st = s.disc[k.disc] || st; st.reported = sp.id; if (trm) st.claim = trm.claim; s.disc[k.disc] = st; }
-    SP.addTrust(rel, trustUp); rel.done = (rel.done || 0) + 1;
+    SP.addTrust(rel, trustUp); rel.done = (rel.done || 0) + 1; rel.promise = 0;
     if (k.circ) { s.flags.circDone = true; }
-    G.State.log(SP.holderName(sp) + '에게 「' + (k.circ ? '세계일주' : d.name) + '」' + U.jx(k.circ ? '세계일주' : d.name, '을/를') + ' 보고했다. (사례금 ' + reward + '닢, 명성 +' + fame + ')');
+    if (found && !k.circ) SP.stirJealousy(sp, d);
+    G.State.log(SP.holderName(sp) + '에게 「' + (k.circ ? '세계일주' : d.name) + '」' + U.jx(k.circ ? '세계일주' : d.name, '을/를') + ' 보고했다. (사례금 ' + reward + '닢, 명성 +' + fame + (gr ? ', 증거 ' + gr.name : '') + ')');
     s.contract = null;
-    await UI.alert('사례금 금화 ' + U.num(reward) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성·사례금은 절반</span>' : '') + '<br><span class="muted">' + R.fameTitle(s.player.fame) + '</span>', '보고 완료');
+    await UI.alert('사례금 금화 ' + U.num(reward) + '닢과 명성 ' + fame + U.jx(String(fame), '을/를') + ' 얻었다!' + (gr && gr.k !== 1 ? '<br><span class="muted">증거 등급 「' + gr.name + '」 — 사례·명성 ×' + gr.k + '</span>' : '') + (G.Disc.isLate(d.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤의 늦은 보고라 명성·사례금은 절반</span>' : '') + '<br><span class="muted">' + R.fameTitle(s.player.fame) + '</span>', '보고 완료');
     if (G.Names && !k.circ && found) await G.Names.onReport(d);
     G.Game.refreshHud();
     await SP.shareWithMates(reward);
+    // 큰 발견이면 후원자의 도시가 귀환 잔치를 벌인다 (js/systems/festival.js)
+    if (G.Fest && found && !(d && G.Disc.isLate(d.id))) await G.Fest.begin(sp.city, k.circ ? G.DISC.circum : d);
     if (G.Ending && G.Ending.check) await G.Ending.check();
   };
 
@@ -502,5 +660,6 @@
     var s = S();
     s.circ.reported = true;
     if (!G.Disc.foundByMe('circum')) await G.Disc.find(G.DISC.circum, 'special');
+    if (G.Fest && c) await G.Fest.begin(c.id, G.DISC.circum);      // 고향 부두의 귀환 잔치
   };
 })(window.G = window.G || {});

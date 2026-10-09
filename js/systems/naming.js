@@ -112,7 +112,8 @@
     var fame = N.fameFor(d); G.Fame.add('ex', fame);
     var old = d.name; N.apply();
     G.State.log('「' + old + '」에 「' + v + '」' + U.jx(v, '이라는/라는') + ' 이름을 붙였다. (명성 +' + fame + ')');
-    await UI.say('이제부터 이곳은 「' + v + '」' + U.jx(v, '이다/다') + '! 해도에 이 이름을 적어 넣어라!\n\n(명성 +' + fame + ' — 보고하면 왕실이 이름을 공인하고 하사금을 내립니다)', G.Scenes.mateSpeaker('first'));
+    await UI.say('이제부터 이곳은 「' + v + '」' + U.jx(v, '이다/다') + '! 해도에 이 이름을 적어 넣어라!', G.Scenes.mateSpeaker('first'));
+    UI.toast('「' + v + '」 이름을 붙였다 · 명성 +' + fame + '. 후원자에게 보고하면 왕실이 이 이름을 공인하고 하사금을 내린다.', 'map', 6000);
     G.Game.refreshHud && G.Game.refreshHud();
   };
   /** 경쟁자가 먼저 발표하면 역사 속 이름이 붙는다 (discovery.js rivals) — 소식 문장을 돌려준다 */

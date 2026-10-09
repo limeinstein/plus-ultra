@@ -57,6 +57,6 @@
       alias: { africa: 't01', joseon: 't05' }
     },
     // 건물·사건 장면 → 곡
-    moments: { palace: 't20', mansion: 't19', tavern: 't21', minigame: 't22', landwar: 't27', battle: 't10', circum: 't15', legend: 't16', gameover: 't28', love: 't02', home: 't13' }
+    moments: { palace: 't20', mansion: 't19', tavern: 't21', minigame: 't22', landwar: 't27', battle: 't10', circum: 't15', legend: 't16', gameover: 't28', love: 't02', home: 't13', festival: 't13' }
   };
 })(window.G = window.G || {});

@@ -25,6 +25,19 @@
     if (T.need === 'court') return !!f.palace || (f.mansion && f.mansion.length > 0) || c.size >= 3;
     return true;
   }
+  /** 이 도시에서 그 종류가 쓰는 그림 이름 (지역 바꿈 spriteFix → 기본 sprites) */
+  SF.spriteOf = function (type, c) {
+    var stl = G.Img && G.Img.folkStyle ? G.Img.folkStyle(c) : c.style, fx = (D().spriteFix || {})[stl];
+    return (fx && fx[type]) || (D().sprites || {})[type] || type;
+  };
+  /** 그 그림 속 사람의 성별 ('m'·'f', 모르면 null) — js/data/streetfolk.js artSex */
+  SF.artSex = function (sprite, c) {
+    var a = (D().artSex || {})[sprite]; if (!a) return null;
+    var stl = G.Img && G.Img.folkStyle ? G.Img.folkStyle(c) : c.style;
+    if (a.m && a.m.indexOf(stl) >= 0) return 'm';
+    if (a.f && a.f.indexOf(stl) >= 0) return 'f';
+    return a.def || null;
+  };
   SF.types = function (c) { return Object.keys(D().types).filter(function (t) { return canHave(t, c); }); };
   /** 이번에 거리에 나올 사람들 — [{type, spec, x, y, dir, …}] */
   SF.spawn = function (c, streetW, heroX, ground, seed) {
@@ -34,6 +47,8 @@
     while (out.length < n && pool.length && tries++ < 40) {
       var t = U.weighted(pool, function (x) { var T = D().types[x]; return (T.w || 1) * (x === 'cat' ? catW : x === 'dog' ? 2 - catW * 0.6 : 1); });
       pool = pool.filter(function (x) { return x !== t; });
+      var spr = SF.spriteOf(t, c);
+      if (!D().types[t].animal && out.some(function (o) { return !o.animal && SF.spriteOf(o.type, c) === spr; })) continue;   // 빌린 그림이 겹치면 (조선: 마을 사람 = 뱃사람 그림) 한 사람만
       if (D().types[t].animal) { if (animal) continue; animal = true; pool = pool.filter(function (x) { return !D().types[x].animal; }); }
       out.push(SF.make(t, c, streetW, heroX, ground, (seed || 0) + ':' + out.length + ':' + t + ':' + Math.floor(U.rng() * 1e6)));
     }
@@ -71,10 +86,14 @@
     // 짐승: 그 지역의 걷는 그림이 있으면 그 그림의 짐승으로 (지역마다 개 또는 고양이 한 마리)
     if (D().types[type] && D().types[type].animal && imgFrames(type, c)) { var pk = (D().petKind || {})[G.Img.folkStyle(c)] || 'dog'; if (D().types[pk]) type = pk; }
     var k = K(), T = D().types[type], dp = k.depth || [12, 52], sc = k.scale || [0.92, 1.06];
-    var depth = U.rf(dp[0], dp[1]), f0 = { type: type, name: T.name, animal: !!T.animal, seed: seed }, sp = SF.speaker(f0, c);
-    // 거리의 모습은 대화창 얼굴과 같은 성별로: 그림이 있으면 그 그림의 성별, 없으면 코드 얼굴의 성별
-    var sex = T.animal ? null : (T.face && T.face.town && G.Img.npcGender ? G.Img.npcGender(T.face.town, c) : null) || (sp.portrait && sp.portrait.g) || (T.face && T.face.g) || null;
-    return { type: type, name: T.name, animal: !!T.animal, face: sp, spec: A.folkSpec(type, c, seed, { sex: sex }), seed: seed, x: heroX, y: ground + depth,
+    var hasArt = !T.animal && G.Img.has && G.Img.has('portraits/street-folk/' + SF.spriteOf(type, c) + '_' + G.Img.folkStyle(c));
+    var artSex = hasArt ? SF.artSex(SF.spriteOf(type, c), c) : null;
+    var nm = (artSex === 'f' && T.nameF) || (artSex === 'm' && T.nameM) || T.name;
+    var depth = U.rf(dp[0], dp[1]), f0 = { type: type, name: nm, animal: !!T.animal, seed: seed }, sp = SF.speaker(f0, c);
+    // 거리의 모습은 대화창 얼굴과 같은 성별로: 그 지역 그림이 있으면 그 그림의 성별, 없으면 코드 얼굴의 성별
+    var sex = T.animal ? null : artSex || (T.face && T.face.town && G.Img.npcGender ? G.Img.npcGender(T.face.town, c) : null) || (sp.portrait && sp.portrait.g) || (T.face && T.face.g) || null;
+    if (sp.portrait && sex && hasArt) sp.portrait = Object.assign({}, sp.portrait, { g: sex });
+    return { type: type, name: nm, animal: !!T.animal, face: sp, spec: A.folkSpec(type, c, seed, { sex: sex }), seed: seed, x: heroX, y: ground + depth,
       sc: (sc[0] + (depth - dp[0]) / Math.max(1, dp[1] - dp[0]) * (sc[1] - sc[0])), dir: U.chance(0.5) ? 1 : -1,
       state: 'idle', timer: U.rf(0, 2.5), ph: U.rf(0, 1), v: 0, target: heroX, minX: 60, maxX: streetW - 60, talked: 0, used: false, frames: imgFrames(type, c) };
   };
@@ -84,7 +103,7 @@
       돌려주는 값: 8칸 [{k: 그림 키, c: 시트의 칸 번호(낱장이면 없음)}] */
   function imgFrames(type, c) {
     var I = G.Img; if (!I || !I.list || !I.has) return null;
-    var name = (D().sprites || {})[type] || type, style = I.folkStyle ? I.folkStyle(c) : c.style;
+    var name = SF.spriteOf(type, c), style = I.folkStyle ? I.folkStyle(c) : c.style;
     var cul = A.folkCulture ? A.folkCulture(c).cul : 'europe';
     var cands = ['street-folk/' + name + '_' + style, 'street-folk/' + type + '_' + cul, 'street-folk/' + type];
     for (var i = 0; i < cands.length; i++) {
@@ -168,7 +187,7 @@
   SF.speaker = function (f, c) {
     var T = D().types[f.type], cl = R.cityLang(c), sp = { name: f.name, lang: f.animal ? 3 : cl.lv, li: cl.li };
     if (f.animal) { sp.noFace = true; sp.solo = true; return sp; }   // 고양이·강아지: 얼굴을 지어 붙이지 않는다 (UI.withFace도 건너뛴다)
-    var fc = T.face || {}, stl = G.Img.folkStyle(c), sprite = (D().sprites || {})[f.type] || f.type;
+    var fc = T.face || {}, stl = G.Img.folkStyle(c), sprite = SF.spriteOf(f.type, c);
     var own = 'portraits/street-folk/' + sprite + '_' + stl;
     try {
       if (G.Img.has(own)) {
@@ -279,7 +298,10 @@
     var deaf = !f.animal && sp.lang === 0;            // 말이 통하지 않으면 쓸모 있는 이야기는 아껴 둔다 (통역을 데려와 다시 말을 걸면 된다)
     var info = !f.used && !deaf && INFO[f.type] ? INFO[f.type](c) : null;
     var text, useInfo = info && (f.animal || f.talked === 1 || U.chance(0.7));
-    if (useInfo) { f.used = true; text = info.text; }
+    // 귀환 잔치 중인 도시: 잔치 이야기가 먼저 (js/systems/festival.js)
+    var fest = G.Fest && !deaf ? G.Fest.line(f.type, c) : null;
+    if (fest && (f.animal || U.chance(0.75))) { useInfo = false; text = fest; }
+    else if (useInfo) { f.used = true; text = info.text; }
     else text = fill(U.pick(lines), c);
     if (f.talked > 1 && !f.animal && !useInfo) text = U.pick(['또 만났군요. ', '아까 그 분이시군요. ', '']) + text;
     await UI.say(text, sp);

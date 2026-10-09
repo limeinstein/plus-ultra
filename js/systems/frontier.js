@@ -73,6 +73,8 @@
     if (d.built && S().date.y < d.built && !(G.Mirage && G.Mirage.active(d))) return false;      // 아직 세워지지 않은 건물 (1600년부터는 신기루로 소문이 돈다)
     if (d.need && !d.need.every(function (id) { return G.Disc.foundByMe(id); })) return false;   // 발견의 연쇄
     if (G.Disc.taken && G.Disc.taken(d.id)) return false;                                        // 경쟁자가 먼저 발표했다 — 이제 찾을 수 없다
+    // 꼬리에 꼬리를 무는 사슬(js/data/chaindisc.js): 앞 고리를 모두 직접 찾았으면 개척 단계와 상관없이 열린다 (무 제국은 쿠페의 별길을 찾으면)
+    if (d.need && d.need.length && (d.chain || (G.CHAIN_OVERRIDE && G.CHAIN_OVERRIDE[d.id]))) return true;
     var rl = F.rivalLeft(d); if (rl != null && rl > 0 && rl <= RB().lead) return true;           // 경쟁자가 곧 떠난다 — 단계와 상관없이 소문이 돈다
     var m = G.DISC_FRONT[d.id]; if (!m) return true;
     var o = F.state(m.f);
@@ -174,7 +176,7 @@
       if (m.quiet && G.RegionFolk && !G.RegionFolk.heard(m)) return;   // 모르는 고장의 사람 소식은 들리지 않는다
       var at = G.MateMove && G.MateMove.where(m.id);
       var where = at ? at.name : m.reg.map(function (r) { return G.REGIONS[r].name || G.REGIONS[r]; }).join('·');
-      out.push({ icon: 'people', history: true, text: '소문: 「' + m.name + '」' + jx(m.name, '이/가') + ' ' + where + '의 술집에 나타났다고 한다' + (at ? '(' + G.MateMove.zoneNames(m.id) + ' 안을 옮겨 다닌다)' : '') + '. — ' + m.desc });
+      out.push({ icon: 'people', history: true, text: '소문: 「' + m.name + '」' + jx(m.name, '이/가') + ' ' + where + '의 술집에 나타났다고 한다.' + (at ? ' ' + G.MateMove.zoneNames(m.id) + ' 안을 오가는 사람이라고 한다.' : '') + ' ' + m.desc });
     });
     s.front.mates = now;
     return out;

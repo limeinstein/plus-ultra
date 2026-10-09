@@ -462,5 +462,7 @@
       (la.noProof ? '<br><span class="muted">증거를 보이지 못해 사람들이 반신반의한다 (명성 8할)</span>' : '') +
       (la.kept && la.kept.length ? '<br><br>' + la.kept.map(function (it) { return '<b>' + U.esc(R.itemName(it)) + '</b>'; }).join(', ') + U.jx(R.itemName(la.kept[la.kept.length - 1]), '은/는') + ' 이제 제독의 것이다.<br><span class="muted">시장에 팔아 자금을 마련하거나, 장비하고 선물할 수 있다.</span>' : ''), '발표');
     if (G.Names) await G.Names.onReport(G.DISC[id]);
+    // 큰 발견이면 이 도시가 귀환 잔치를 벌인다 (js/systems/festival.js) — 늦은 발표는 조용히
+    if (G.Fest && !G.Disc.isLate(id)) await G.Fest.begin(c.id, G.DISC[id]);
   };
 })(window.G = window.G || {});

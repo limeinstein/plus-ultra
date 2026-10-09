@@ -276,7 +276,7 @@
     if (t === S.titleSeen) return;
     if (TITLES.indexOf(t) > TITLES.indexOf(S.titleSeen)) {
       UI.toast('명성이 드높아졌다 — 이제 세상은 제독을 「' + t + '」' + U.jx(t, '이라/라') + ' 부른다!', 'laurel', 6500);
-      G.State.log('「' + t + '」로 불리게 되었다. (명성 ' + U.num(S.player.fame) + ')');
+      G.State.log('「' + t + '」' + U.jx(t, '으로/로') + ' 불리게 되었다. (명성 ' + U.num(S.player.fame) + ')');
       if (G.Audio) G.Audio.sfx('discover');
     }
     S.titleSeen = t;
@@ -302,6 +302,8 @@
     // 스트레스는 피로 하나로 합쳤다: 옛 저장에 남은 스트레스는 절반을 피로에 더하고 지운다
     if (S.fleet && S.fleet.stress) { S.fleet.fatigue = U.clamp((S.fleet.fatigue || 0) + S.fleet.stress * 0.5, 0, 100); delete S.fleet.stress; }
     Game.checkTitle();
+    // 소식은 보고서처럼 말고 이야기하듯 (【…】 머리표·줄표를 걷어 낸다 — js/ui/ui.js UI.tidyNews)
+    if (UI.tidyNews) out.forEach(function (m) { if (m && typeof m.text === 'string') m.text = UI.tidyNews(m.text); });
     return out;
   };
 

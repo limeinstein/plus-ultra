@@ -36,9 +36,9 @@
         // 마흔: 대화·수첩의 얼굴과 무릎상이 40대 모습(수염)으로 바뀐다 (G.Img.chain.heroPortrait·heroHalf가 나이를 본다)
         s.flags.aged40 = 1;
         var fk = G.Img && G.Img.pick(G.Img.chain.heroPortrait(s.player));
-        out.push({ icon: fk ? { src: G.Img.src(fk), icon: 'star' } : 'star', text: R.fullName() + '의 ' + age + '번째 생일 — 얼굴에 세월이 내려앉았다. 이제 40대의 모습이다.', birthday: true, aged: true });
+        out.push({ icon: fk ? { src: G.Img.src(fk), icon: 'star' } : 'star', text: '오늘은 ' + R.fullName() + '의 ' + age + '번째 생일이다. 거울 속 얼굴에 어느새 세월이 내려앉았다.', birthday: true, aged: true });
         G.State.log(R.fullName() + '이(가) ' + age + '세가 되었다.');
-      } else out.push({ icon: 'star', text: R.fullName() + '의 생일입니다. (' + age + '세)', birthday: true });
+      } else out.push({ icon: 'star', text: '오늘은 ' + R.fullName() + '의 ' + age + '번째 생일이다.', birthday: true });
     }
     // 수명(최대 80세)과 생일 선물 (js/systems/lifespan.js — 창은 main.js loop에서 G.Life.tick)
     if (G.Life) out = out.concat(G.Life.daily());
@@ -109,7 +109,7 @@
     G.BOOKS.forEach(function (b) {
       if (b.y !== s.date.y || b.y <= 1480) return;
       var libs = b.libs.map(function (id) { return G.CITY_DATA[id].name; }).join('·');
-      out.push({ icon: 'book', history: true, text: '새 책: ' + b.title + U.jx(b.title, '이/가') + ' 나왔다. ' + libs + '의 도서관에서 읽을 수 있다.' });
+      out.push({ icon: 'book', history: true, text: b.title + U.jx(b.title, '이/가') + ' 새로 나왔다. ' + libs + '의 도서관에 들어왔다고 한다.' });
     });
     // 새로 세워진 도시·사라진 마을 (cities.js 의 founded / until): 개척 도시가 역사 연도에 맞춰 열린다
     var born = [], gone = [];
@@ -117,7 +117,7 @@
       if (c.founded === s.date.y && c.founded > 1480) born.push(c);
       if (c.until === s.date.y) gone.push(c);
     });
-    if (born.length) out.push({ icon: 'castle', history: true, text: '새 도시 소식: ' + born.map(function (c) { return c.nation + '의 ' + c.name; }).join(', ') +
+    if (born.length) out.push({ icon: 'castle', history: true, text: born.map(function (c) { return c.nation + '의 ' + c.name; }).join(', ') +
       U.jx(born[born.length - 1].name, '이/가') + ' 세워졌다.' });
     gone.forEach(function (c) {   // 같은 자리에 새 도시가 섰으면 이름이 바뀐 것 (뉴암스테르담 → 뉴욕)
       var nw = born.filter(function (b) { return Math.abs(b.lat - c.lat) + Math.abs(b.lon - c.lon) < 0.5; })[0];

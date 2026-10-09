@@ -23,10 +23,10 @@
       var who = SP.speaker(sp), rel = SP.rel(sp.id), s = S();
       var first = rel.met <= 1 || (G.Succession && G.Succession.firstMeetingBefore);
       var succ = G.Succession && G.Succession.newHolderBefore;
-      var greet = succ ? U.pick([SP.holderName(sp) + '일세. 선대께서 자네 이야기를 하시곤 했지. 이제는 내가 이 자리의 주인이니, 자네가 어떤 사람인지 내 눈으로 보겠네.',
-          SP.holderName(sp) + '일세. 선대와 자네 사이의 일은 들었네. 하지만 믿음은 새로 쌓아야 하는 법이지.'])
-        : first ? SP.holderName(sp) + '일세. 자네가 요즘 소문난 항해자인가? 무슨 일로 왔나?' : U.pick(['오오, ' + s.player.name + ', 잘 왔네.', '무슨 일인가, ' + s.player.name + '?', '자네로군. 이번에는 무슨 이야기를 가져왔나?']);
+      var greet = SP.line(sp, succ ? 'greetSucc' : first ? 'greetFirst' : 'greetAgain');
       await C.say(who, greet);
+      // 다른 후원자에게 먼저 보고한 일·이중 보고를 꺼낸다 (시샘 — G.Sponsor.jealousy). 쫓겨나면 알현은 여기서 끝
+      if (!(await SP.jealousy(sp))) return false;
       // 국왕의 부름·명예 작위: 군주가 먼저 왕명 이야기를 꺼낸다 (js/systems/court.js)
       // 사라진 왕녀: 에스파냐 국왕이 먼저 꺼낸다 (js/systems/princess.js) — 그 이야기를 했으면 왕명은 메뉴에서
       var prDone = false;
@@ -34,7 +34,7 @@
       if (G.Court && !prDone) { try { await G.Court.onEnter(sp); } catch (e) { console.error(e); } }
       return true;
     };
-    B.sub = function (c, arg) { var sp = B.sp(c, arg); return sp ? SP.holderName(sp) + ' · ' + sp.title + ' (세력 ' + G.POWER_NAME[sp.pw] + ')' : ''; };
+    B.sub = function (c, arg) { var sp = B.sp(c, arg); if (!sp) return ''; var tm = SP.rel(sp.id).met ? SP.temperOf(sp) : null; return SP.holderName(sp) + ' · ' + sp.title + ' (세력 ' + G.POWER_NAME[sp.pw] + (tm ? ' · 성품 ' + tm.name : '') + ')'; };
     B.menu = function (c, arg) {
       var sp = B.sp(c, arg), s = S(), k = s.contract;
       if (!sp) return [];
@@ -65,20 +65,21 @@
   }
   async function chat(sp) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
+    var L = function (k, ctx) { return SP.line(sp, k, ctx); };
     var lines = [];
     var tasteTxt = sp.taste.map(G.tasteName).join('·');
-    lines.push('나는 ' + tasteTxt + '에 관한 이야기라면 언제든 귀를 기울이지.');
+    lines.push(L('chatTaste', { taste: tasteTxt }));
     // 리스본·세비야의 후원자는 다음 큰 항로 이야기를 들려준다 (앞선 발견이 알려진 뒤)
     var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(sp.city, 'sponsor') : null;
-    if (lead) { lines.push('그러고 보니 요즘 궁정에서도 화제가 된 이야기가 있네. ' + lead.text + '\n그 일을 해내겠다면 기꺼이 후원을 생각해 보지.'); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); await C.say(who, lines.join('\f')); return; }
+    if (lead) { lines.push(L('chatLead', { lead: lead.text })); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); await C.say(who, lines.join('\f')); return; }
     // occasionally drop a hint that matches the sponsor's taste — 이야기 갈래(talk)만. 옛 유적·전설은 도서관으로 보낸다
     if (rel.trust >= 25 && U.chance(0.5)) {
       var cand = G.DISCOVERIES.filter(function (d) { return G.tasteHit(sp.taste, d) && !d.bookOnly && G.Disc.clueOk(d, 'sponsor') && G.Disc.rumourW(d, 'sponsor:' + sp.id) && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
-      if (cand.length) { var d = U.weighted(cand, function (x) { return G.Disc.rumourW(x, 'sponsor:' + sp.id); }); lines.push((G.Disc.hasHint(d.id) ? '자네가 쫓는 그 이야기 말일세, 나도 들은 바가 있네. ' : '그러고 보니 이런 이야기를 들은 적이 있네. ') + d.hint); G.Disc.noteHint(d, 'sponsor:' + sp.id); }
+      if (cand.length) { var d = U.weighted(cand, function (x) { return G.Disc.rumourW(x, 'sponsor:' + sp.id); }); lines.push(L(G.Disc.hasHint(d.id) ? 'chatHintKnown' : 'chatHintNew') + d.hint); G.Disc.noteHint(d, 'sponsor:' + sp.id); }
       var bk = cand.length && U.chance(0.6) ? null : libraryTip(sp);
-      if (bk) lines.push('옛 이야기라면 내 말보다 사료가 낫지. ' + bk.city.name + ' 도서관에 ' + bk.book.title + U.jx(bk.book.name || bk.book.title, '이/가') + ' 있으니 읽어 보게. ' + bk.disc.name + '에 관한 대목이 있을 걸세.');
-    } else if (s.player.fame < 200) lines.push('자네도 이름을 떨치고 싶다면 먼저 작은 발견부터 차근차근 쌓아 가게.');
-    else lines.push(U.pick(['요즘 바다 건너에서 들려오는 소식이 참으로 흥미롭군.', '세상은 우리가 아는 것보다 훨씬 넓다네.', '돈보다 귀한 것은 새로운 지식일세.']));
+      if (bk) lines.push(L('chatBook', { city: bk.city.name, book: bk.book.title, bookJ: bk.book.name || bk.book.title, d: bk.disc.name }));
+    } else if (s.player.fame < 200) lines.push(L('chatSmall'));
+    else lines.push(L('chatIdle'));
     await C.say(who, lines.join('\f'));
   }
   C.B.palace = make('palace');

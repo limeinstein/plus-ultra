@@ -212,7 +212,7 @@
   };
 
   C.news = async function (list) {
-    var html = '<div style="font-size:19px;line-height:1.7">' + list.map(function (m) { return '<div class="flex" style="align-items:flex-start;gap:10px;margin:6px 0">' + G.icon(m.icon || 'scroll') + '<div>' + U.esc(m.text) + '</div></div>'; }).join('') + '</div>';
+    var html = '<div style="font-size:19px;line-height:1.7">' + list.map(function (m) { return '<div class="flex" style="align-items:flex-start;gap:10px;margin:6px 0">' + G.icon(m.icon || 'scroll') + '<div>' + U.esc(UI.tidyNews ? UI.tidyNews(m.text) : m.text) + '</div></div>'; }).join('') + '</div>';
     await UI.window({ title: '세상의 소식', icon: 'scroll', width: 720, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result;
   };
 
@@ -230,7 +230,8 @@
     ban.innerHTML = '<div class="nm">' + c.name + '</div>' +
       '<div class="meta"><span class="own-flag" style="background:' + C.nationColor(owner) + '"></span>' + U.esc(owner) + ' 영토' + (G.Dominion ? ' · ' + U.esc(G.CityInfo && G.CityInfo.leader ? G.CityInfo.leader(c) : G.Dominion.leader(owner).text) : '') + '</div>' +
       '<div class="meta">' + G.REGIONS[c.region] + ' · ' + C.relName(c) + '</div>' +
-      '<div class="meta">' + G.LANGS[c.lang] + ' ' + langPips(C.langLv(c)) + (m.ev ? ' · <span style="color:#f0c080">시세: ' + m.ev + '</span>' : '') + (G.Econ && G.Econ.cityNote(c) ? ' · <span style="color:#f0c080" title="세상의 시장 사건 — 교역소 「시세」에서 자세히">' + U.esc(G.Econ.cityNote(c)) + '</span>' : '') + '</div>';
+      '<div class="meta">' + G.LANGS[c.lang] + ' ' + langPips(C.langLv(c)) + (m.ev ? ' · <span style="color:#f0c080">시세: ' + m.ev + '</span>' : '') + (G.Econ && G.Econ.cityNote(c) ? ' · <span style="color:#f0c080" title="세상의 시장 사건 — 교역소 「시세」에서 자세히">' + U.esc(G.Econ.cityNote(c)) + '</span>' : '') + '</div>' +
+      (G.Fest && G.Fest.active(c) ? '<div class="meta" style="color:#ffd27a">' + G.icon('star') + ' ' + U.esc(G.Fest.banner(c)) + '</div>' : '');
     UI.add(ban);
     var items = C.buildings(c).map(function (b) {
       return { label: b.name, icon: b.icon, onClick: function () { C.visit(b.kind, b.arg); } };
@@ -508,10 +509,12 @@
         if (s.player.gold < cost) { await C.mate('제독, 금화가 모자랍니다!'); continue; }
         s.player.gold -= cost;
         if (U.chance(0.55 + R.skill('speech') * 0.12 + C.langLv(c) * 0.05)) {
+          if (G.Outcome) await G.Outcome.show('win', { title: '교섭 성공!', sub: c.name + '의 수비대장이 금화를 받고 길을 열었다' });   // 결과 연출 (js/ui/outcome.js)
           await C.mate('교섭에 성공했습니다. ' + c.name + '에 들어갈 수 있습니다.');
           if (G.Sneak) { G.Sneak.givePass(c); await C.mate('통행 허가는 ' + ((G.BALANCE.sneak || {}).passDays || 365) + '일 동안 쓸 수 있습니다.'); } else s.flags['pass' + c.id] = U.dateNum(s.date);
           return true;
         }
+        if (G.Outcome) await G.Outcome.show('lose', { title: '교섭 실패…', sub: '수비대장은 금화만 챙기고 고개를 저었다' });
         await C.mate('교섭에 실패했습니다... 돈만 날렸군요.'); continue;
       }
       if (v === 'sneak') {
@@ -520,9 +523,11 @@
         if (G.Sneak && !(await UI.confirm(G.Sneak.html(c, ch), '잠입한다', '그만둔다', '잠입 — ' + c.name))) continue;
         if (ch.dz) UI.toast(G.ITEM[ch.dz].name + '으로 변장했다', 'feather');
         if (U.chance(ch.p)) {
+          if (G.Outcome) await G.Outcome.show('sneak_ok', { sub: c.name + '에 몰래 들어갔다' });   // 결과 연출: 발끝으로 경비 곁을 지나간다
           await C.mate(ch.dz === 'turban' ? '터번 덕분에 아무도 우리를 의심하지 않았습니다. 제독, 이교도라는 것이 드러나지 않게 조심하십시오.' : ch.dz === 'mingrobe' ? '명나라 옷 덕분에 관리들이 우리를 그 고장 상인으로 여겼습니다. 제독, 말을 아끼십시오.' : '제독, 조심하십시오. 몰래 들어가는 데 성공했습니다.');
           s.flags.sneaking = c.id; return true;
         }
+        if (G.Outcome) await G.Outcome.show('sneak_fail', { sub: c.name + '의 경비에게 들키고 말았다' });   // 결과 연출: 등불에 비쳐 두 손을 든다
         await UI.say('침입자다! 잡아라!!', guard);
         var lost = G.Sneak ? G.Sneak.caught(c, ch) : null;
         if (lost) await UI.say('이 수상한 ' + lost + U.jx(lost, '은/는') + ' 압수한다!\n(' + lost + U.jx(lost, '을/를') + ' 빼앗겼다)', guard);

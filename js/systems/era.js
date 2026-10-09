@@ -66,9 +66,14 @@
     G.Fad.start(f);
     return f;
   }
+  /** 값이 오른 만큼을 말로 (숫자 대신 — 소식은 이야기하듯) */
+  function riseText(m) {
+    var h = U.howMuch(m);
+    return /곱절$/.test(h) ? h + '로 뛰었다' : h + ' 올랐다';
+  }
   function fadText(f, place) {
-    var nm = G.GOOD[f.g].name;
-    return place + ' ' + nm + U.jx(nm, '이/가') + ' 유행이다. (' + regName(f.key) + '의 ' + nm + ' 값 ' + f.m + '배 · ' + (f.until - f.since) + '일)';
+    var nm = G.GOOD[f.g].name, rg = G.REGIONS[f.key];
+    return place + ' ' + nm + U.jx(nm, '이/가') + ' 유행이다. ' + rg + ' 상인들 말로는 ' + nm + ' 값이 ' + riseText(f.m) + '며, ' + U.howLong(f.until - f.since) + '은 이 바람이 가라앉지 않을 거라고 한다.';
   }
   /** 발견이 알려진 곳의 유럽 지역 */
   function discRegion(s, d) {
@@ -118,7 +123,7 @@
       if (!U.chance(cf.spreadChance == null ? 0.4 : cf.spreadChance)) return;
       var to = E.EUROPE.filter(function (r) { return r !== f.key && !hasFad(f.g, r); }); if (!to.length) return;
       var r3 = U.pick(to), f3 = start(f.g, r3, 'spread', regName(f.key) + '에서 번진 유행', Math.max(1.3, f.m - 0.3), Math.round((f.until - f.since) * 0.7));
-      if (f3) { out.push({ icon: 'star', text: regName(f.key) + '의 ' + G.GOOD[f.g].name + ' 유행이 ' + regName(r3) + '까지 번졌다. (값 ' + f3.m + '배 · ' + (f3.until - f3.since) + '일)' }); }
+      if (f3) { var gn3 = G.GOOD[f.g].name; out.push({ icon: 'star', text: G.REGIONS[f.key] + '에서 일던 ' + gn3 + ' 바람이 ' + G.REGIONS[r3] + '까지 번졌다. 그곳에서도 ' + gn3 + ' 값이 ' + riseText(f3.m) + '고 한다.' }); }
     });
     return out;
   };

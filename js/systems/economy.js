@@ -232,7 +232,7 @@
       if (!near(e)) return;
       if (!pre && e.known && e.known >= e.start) { e.told = 'on'; return; }   // 그 도시에 들러 이미 안다
       e.told = pre ? 'pre' : 'on'; E.learn(e);
-      out.push({ icon: 'scales', text: '【시장 소식】 ' + (pre ? '조짐 — ' + e.pre + '.' : E.headline(e)) });
+      out.push({ icon: 'scales', text: pre ? '장사꾼들 사이에 이런 말이 돈다. ' + e.pre + '.' : E.headline(e) });
       G.State.log('시장 소식: ' + E.title(e) + (pre ? ' (조짐)' : ''));
     });
     return out;
@@ -271,19 +271,20 @@
   /** 술집·교역소에서 듣는 이야기 한 토막 (이 도시 c에서) */
   E.say = function (e, c) {
     var D = def(e), d = day(), C0 = city(e.at), left = Math.max(1, e.end - d);
-    if (d < e.start) return '아직 소문일세만, ' + (e.pre || e.why) + '. 한 ' + Math.max(1, e.start - d) + '일 뒤면 값이 움직일 걸세.';
-    if (D.scope === 'imports') return e.why + '. 그쪽에 물건을 대면 부르는 게 값이라더군. 한 ' + left + '일은 갈 걸세.';
+    if (d < e.start) return '아직 소문일세만, ' + (e.pre || e.why) + '. ' + U.howLong(Math.max(1, e.start - d)) + ' 뒤면 값이 움직일 걸세.';
+    if (D.scope === 'imports') return e.why + '. 그쪽에 물건을 대면 부르는 게 값이라더군. ' + U.howLong(left) + '은 갈 걸세.';
     var gl = E.goodsOf(e);
     if (glut(e)) {
       var dn = gl.filter(function (x) { return x.d < 1; }), v = eff(e, C0, dn[0].g);
-      return e.why + '. ' + names(dn, 3) + ' 값이 ' + (Math.round(v * 10) / 10) + '배로 떨어졌다네. 싸게 사 둘 기회지. 한 ' + left + '일쯤 갈 걸세.';
+      return e.why + '. ' + names(dn, 3) + ' 값이 ' + (v <= 0.6 ? '반값으로' : v <= 0.85 ? '삼 할쯤' : '조금') + ' 떨어졌다네. 싸게 사 둘 기회지. ' + U.howLong(left) + '은 갈 걸세.';
     }
     var up = gl.filter(function (x) { return x.d > 1; }); if (!up.length) return e.why + '.';
     var top = up[0], v2 = eff(e, C0, top.g), nl = E.needLeft(e, C0, top.g), nq = needQty(e, C0, top.g);
     var what = names(up, 3) + U.jx(G.GOOD[up[Math.min(2, up.length - 1)].g].name, '을/를') + ' 찾는다더군';
     if (v2 < 1.15 || nl < nq * 0.15) return e.why + '. ' + what + '. 하지만 벌써 여러 배가 실어다 채워서 값은 거의 제자리로 돌아왔다네.';
     var tail = nl < nq * 0.4 ? ' 다른 배들이 실어다 꽤 채웠지만 아직 ' + U.num(Math.round(nl / 10) * 10) + '통쯤 모자라다네.' : ' 그곳에선 ' + G.GOOD[top.g].name + U.jx(G.GOOD[top.g].name, '이/가') + ' 아직 ' + U.num(Math.round(nl / 10) * 10) + '통쯤 모자라다네.';
-    return e.why + '. ' + what + ' — 값이 ' + (Math.round(v2 * 10) / 10) + '배쯤 뛰었고,' + tail + ' 한 ' + left + '일은 갈 걸세.';
+    var hm = U.howMuch(v2);
+    return e.why + '. ' + what + '. 값이 ' + (/곱절$/.test(hm) ? hm + '로 뛰었고,' : hm + ' 올랐고,') + tail + ' ' + U.howLong(left) + '은 갈 걸세.';
   };
   /** 술집 소문: 이 도시에서 들을 만한 사건 n가지 (모르는 것·가까운 것 먼저). 들으면 알게 된다 */
   E.rumors = function (c, n) {

@@ -193,7 +193,7 @@
         for (var oi = 0; oi < opts.length; oi++) { r0 -= opts[oi].w; if (r0 <= 0) { o = opts[oi]; break; } }
         usedT[k + o.pi] = 1; if (o.d) usedD.push(o.d);
         var p = o.p, d = o.d;
-        var v = { T: b.name, A: b.authorShort || b.author || '지은이', L: langNm(b), D: d ? d.name : null, R: d && d.reg != null ? G.REGIONS[d.reg] : null };
+        var v = { T: b.name, A: b.authorShort || b.author || '지은이', L: langNm(b), D: d ? d.name : null, R: d && d.reg != null ? G.Disc.regName(d) : null };
         line = fmt(p[0], v); gist = fmt(p[1], v);
       }
       lines.push([mateSpk(x.id), line]);

@@ -110,19 +110,20 @@
   /** 일거리를 고르고 맺는다. via = 말하는 사람(후원자 또는 집사). 맺었으면 true */
   E.offerDialog = async function (sp, via) {
     var s = S(), list = E.offers(sp);
-    if (!list.length) { await UI.say('지금은 맡길 만한 일이 없군. 다음 달에 다시 와 보게.', via); return false; }
+    var butlerV = via && via.name === '집사', L = function (k, ctx) { return G.Sponsor.line(sp, k, ctx); };
+    if (!list.length) { await UI.say(butlerV ? '지금은 맡기실 만한 일이 없다고 하십니다. 다음 달에 다시 와 주십시오.' : L('errNone'), via); return false; }
     var v = await UI.choose('작은 일거리 — ' + G.Sponsor.holderName(sp), list.map(function (t, i) {
       return { label: t.title, right: '보수 ' + U.num(t.reward) + '닢' + (t.fame ? ' · 명성 +' + t.fame : ''), value: i, icon: t.kind === 'survey' ? 'map' : t.kind === 'procure' ? 'sack' : 'scroll',
         desc: t.desc + ' — 기한 ' + t.years + '년' + (t.advance ? ', 선금 ' + U.num(t.advance) + '닢' : '') };
-    }).concat([{ label: '그만둔다', value: -1, icon: 'boot' }]), { width: 760, text: '큰 모험을 맡기기엔 아직 이르지만, 이런 일이라면 맡겨 보겠네. 해내면 이름이 알려지고 신뢰도 쌓일 걸세.' });
-    if (v == null || v < 0) { await UI.say('그런가. 마음이 바뀌면 다시 오게.', via); return false; }
+    }).concat([{ label: '그만둔다', value: -1, icon: 'boot' }]), { width: 760, text: butlerV ? '주인께서 믿을 만한 항해자에게 맡기시려는 일입니다. 해내시면 주인께 이름이 알려질 것입니다.' : L('errText') });
+    if (v == null || v < 0) { await UI.say(butlerV ? '알겠습니다. 마음이 바뀌시면 다시 오십시오.' : L('negoNo'), via); return false; }
     var t = list[v], due = U.addDays(s.date, t.years * 365);
     s.contract = { sponsor: sp.id, disc: t.kind === 'confirm' ? t.disc : null, advance: t.advance, reward: t.reward, due: U.dateNum(due), start: U.dateNum(s.date), circ: false, small: true,
       task: { kind: t.kind, title: t.title, lon: t.lon, lat: t.lat, good: t.good, qty: t.qty, at: t.at, whereName: t.whereName, fame: t.fame, desc: t.desc } };
     if (t.kind === 'confirm') G.Disc.addHint(t.disc, 'contract:' + sp.id);
     s.player.gold += t.advance;
     G.State.log(U.j(G.Sponsor.holderName(sp), '과/와') + ' 작은 일거리 「' + t.title + '」' + U.jx(t.title, '을/를') + ' 맡았다. (보수 ' + t.reward + '닢, 기한 ' + U.fmtDate(due) + ')');
-    await UI.say(t.kind === 'survey' ? '좋네. 바다를 잘 살피고 오게. 해도는 항해자의 첫 밑천이지.' : t.kind === 'procure' ? '고맙네. 물건만 가져오면 약속한 값은 치르겠네.' : '잘 부탁하네. 소문이 사실이라면 큰 공이 될 걸세.', via);
+    await UI.say(butlerV ? '주인께 그대로 전해 두겠습니다. 부디 잘 해내 주십시오.' : L(t.kind === 'survey' ? 'errSurvey' : t.kind === 'procure' ? 'errProcure' : 'errConfirm'), via);
     UI.toast('작은 계약 성립 — 「' + t.title + '」' + (t.advance ? ' (선금 ' + U.num(t.advance) + '닢)' : ''), 'seal', 4500);
     G.Game.refreshHud();
     return true;
@@ -145,9 +146,10 @@
     var s = S(), k = s.contract, t = k.task, rel = G.Sponsor.rel(sp.id), butler = via && via.name === '집사';
     var late = U.dateNum(s.date) > k.due;
     if (!E.done(k)) {
-      var v = await UI.ask(late ? '약속한 기한이 이미 지났네. 어떻게 된 건가?' : '아직 다 못 했는가? 기한까지는 시간이 있네.', late ? [{ label: '실패를 인정한다', value: 'fail' }, { label: '물러난다', value: null }] : [{ label: '계속하겠습니다', value: null }, { label: '일을 그만둔다', value: 'fail' }], via);
+      var L = function (k, ctx) { return G.Sponsor.line(sp, k, ctx); };
+      var v = await UI.ask(butler ? (late ? '주인께서 정하신 기한이 이미 지났습니다. 어찌 된 일입니까?' : '아직 끝나지 않으셨습니까? 기한까지는 시간이 있습니다.') : L(late ? 'askLate' : 'errAskNot'), late ? [{ label: '실패를 인정한다', value: 'fail' }, { label: '물러난다', value: null }] : [{ label: '계속하겠습니다', value: null }, { label: '일을 그만둔다', value: 'fail' }], via);
       if (v !== 'fail') return;
-      await UI.say('작은 일이라도 약속은 약속일세. 다음에는 끝까지 해내게.', via);
+      await UI.say(butler ? '주인께 그대로 말씀드리겠습니다. 다음에는 끝까지 해내 주십시오.' : L('errFail'), via);
       G.Sponsor.addTrust(rel, -5);            // 작은 일의 실패는 큰 계약 교섭(rel.fail)에는 치지 않는다
       if (!late && k.advance > 0) { var back = Math.min(s.player.gold, k.advance); s.player.gold -= back; if (back) UI.toast('선금 ' + U.num(back) + '닢을 돌려주었다.', 'coin'); }
       G.State.log('작은 일거리 「' + E.name(k) + '」' + U.jx(E.name(k), '을/를') + ' 끝내지 못했다.');
@@ -159,7 +161,7 @@
     if (t.kind === 'confirm') { var d = G.DISC[k.disc], st = s.disc[k.disc] || {}; fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) + sp.pw * 20) * G.Disc.LATE_FAME) : Math.round(G.Disc.fameFor(d) * (st.rival ? 0.5 : 1) + sp.pw * 20); st.reported = sp.id; s.disc[k.disc] = st; }
     if (late) { reward = Math.round(reward * 0.5); fame = Math.round(fame * 0.7); }
     if (butler) await UI.say((t.kind === 'survey' ? '해도는 틀림없이 주인께 올리겠습니다.' : t.kind === 'procure' ? '물건은 틀림없이 받았습니다.' : '소문이 사실이었다니, 주인께서 기뻐하시겠군요.') + '\f주인께서 약속하신 금화 ' + U.num(reward) + '닢입니다. 당신의 이름은 주인께 말씀드려 두지요.', via);
-    else await UI.say((t.kind === 'survey' ? '오오, 이 해도는 아주 쓸 만하군! 바다 사람들이 고마워할 걸세.' : t.kind === 'procure' ? '틀림없이 받았네. 이 물건이 꼭 필요했지.' : '소문이 사실이었군! 자네 덕분에 확실히 알게 되었네.') + '\f약속한 금화 ' + U.num(reward) + '닢일세. 다음에는 더 큰 일을 맡겨 봄 직하군.', via);
+    else await UI.say(G.Sponsor.line(sp, t.kind === 'survey' ? 'errDoneSurvey' : t.kind === 'procure' ? 'errDoneProcure' : 'errDoneConfirm') + '\f' + G.Sponsor.line(sp, 'errPay', { rew: U.num(reward) }), via);
     s.player.gold += reward; G.Fame.add(t.kind === 'procure' ? 'tr' : 'ex', fame);
     G.Sponsor.addTrust(rel, 8); rel.done = (rel.done || 0) + 1;
     G.State.log(G.Sponsor.holderName(sp) + '에게 「' + E.name(k) + '」' + U.jx(E.name(k), '을/를') + ' 보고했다. (보수 ' + reward + '닢, 명성 +' + fame + ')');
