@@ -732,7 +732,7 @@
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
-  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
   /** 마을 사람 무릎상: 흉상과 같은 후보 순서를 그대로 따른다. */
   K.npcHalf = function (id, c) { return K.halfOf(K.npc(id, c)); };
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */

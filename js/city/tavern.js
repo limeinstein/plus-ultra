@@ -163,6 +163,7 @@
     if (!ok) return;
     if (s.player.gold < cost) { await C.mate('제독, 안됐지만 빈털터리입니다!'); return; }
     s.player.gold -= cost;
+    var cu0 = C.current(); if (cu0) cu0.treats = (cu0.treats || 0) + 1;   // 한 번 들른 사이에 산 술 (js/systems/legends.js)
     if (G.Audio) G.Audio.sfx('glasses');
     await UI.say('여~어, 주인! 여기에 있는 자들에게 한잔씩 돌리게.', { name: s.player.name, portrait: s.player.portrait });
     await C.mate(U.pick(['역시 제독! 그럼 사양하지 않겠습니다.', '제독 만세! 모두 잔을 들어라!']));
