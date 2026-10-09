@@ -42,6 +42,7 @@
     var taken = {}, mateBy = {};
     (G.MATES || []).forEach(function (m) { if (!m.wd) mateBy[m.name] = m.id; });
     (G.EXPEDITIONS || []).forEach(function (e) { taken[e.who] = 1; });
+    Object.keys(G.RIVAL_STAYS || {}).forEach(function (nm) { taken[nm] = 1; });   // 경쟁 탐험가(js/data/rivals.js)는 술집·탐험 함대로 나온다 — 선장으로 겹치지 않게
     (G.SPONSORS || []).forEach(function (sp) { (sp.holders || []).forEach(function (h) { taken[h[2]] = 1; taken[String(h[2]).replace(/\s*\(.*\)$/, '')] = 1; }); });
     function ok(c) {
       if (!c.mate && mateBy[c.name]) c.mate = mateBy[c.name];    // 동료가 될 수 있는 항해사와 같은 사람 — 고용하지 않았을 때만 바다에 나온다

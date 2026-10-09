@@ -1,6 +1,7 @@
 /* Codex가 그린 탐험가 초상이 게임에 이어졌는지 (2026-10-08) — node tests/rival_captains_smoke.js   (BROWSER_EXE=크롬 경로)
    · images/portraits/rivals/<이름> 그림이 있는 사람은 모두 게임 어딘가에서 쓰인다:
-     발견 경쟁자(d.rival) · 탐험 함대(G.EXPEDITIONS) · 바다의 이름난 선장(G.SEA_CAPTAINS — 말할 때 그 초상과 무릎상)
+     경쟁 탐험가(js/data/rivals.js) · 발견 경쟁자(d.rival) · 탐험 함대(G.EXPEDITIONS) · 바다의 이름난 선장(G.SEA_CAPTAINS — 말할 때 그 초상과 무릎상)
+   · 경쟁 탐험가와 같은 사람은 바다의 선장으로 겹쳐 나오지 않는다
    · 그림이 없는 선장은 예전처럼 코드 얼굴. 콘솔 오류 0. */
 'use strict';
 const path = require('path');
@@ -27,9 +28,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.DISCOVERIES.forEach(d => { if (d.rival) used.add(d.rival[2]); });
       (G.EXPEDITIONS || []).forEach(e => used.add(e.who));
       list.forEach(c => used.add(c.name));
+      Object.keys(G.RIVAL_STAYS || {}).forEach(n => used.add(n));   // 경쟁 탐험가 (js/data/rivals.js)
       // 후원자 자리의 사람은 그 초상을 후원자 그림(portraits/sponsors/<자리>_<몇째>)으로 옮겨 쓴다 — 마르틴 베하임 → pt_behaim_1
       (G.SPONSORS || []).forEach(sp => (sp.holders || []).forEach((h, i) => { if (man['portraits/sponsors/' + sp.id + '_' + G.Art.sponsorPic(sp, i)]) used.add(h[2]); }));
-      const out = { files: files.length, unused: files.filter(n => !used.has(n)), noHalf: files.filter(n => !man['portraits/rivals/' + n + '_half']), caps: [] };
+      const dupCaps = list.filter(c => (G.RIVAL_STAYS || {})[c.name] || (G.EXPEDITIONS || []).some(e => e.who === c.name)).map(c => c.name);
+      const out = { dupCaps, files: files.length, unused: files.filter(n => !used.has(n)), noHalf: files.filter(n => !man['portraits/rivals/' + n + '_half']), caps: [] };
       const NAT = { PT: '포르투갈', ES: '카스티야', IT: '베네치아', FR: '프랑스', DK: '덴마크' };
       list.filter(c => man['portraits/rivals/' + c.name]).forEach(c => {
         const sp = CP.speaker({ cap: c, nation: NAT[c.nat] || '포르투갈', kind: 'navy' });
@@ -48,6 +51,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(!r.unused.length, '초상이 있는 사람은 모두 게임에 나온다 ' + r.unused.join(', '));
     ok(!r.noHalf.length, '모두 무릎상이 있다 ' + r.noHalf.join(', '));
     // 경쟁 탐험가(js/data/rivals.js)는 탐험 함대(G.EXPEDITIONS)로 바다에 나오므로 선장 명부에서는 빠진다 (seacaptains.js clean) — 남은 선장만 본다
+    ok(!r.dupCaps.length, '경쟁 탐험가와 같은 사람은 바다의 선장 명부에 겹치지 않는다 ' + r.dupCaps.join(', '));
     ok(r.caps.every(c => c[2] && c[3] && c[4]), '바다의 이름난 선장 중 초상이 있는 ' + r.caps.length + '명 — 말할 때 그 초상·무릎상, 그 해의 나라 명부에 오른다');
     ok(r.other[1] && r.other[2], '그림이 없는 선장(' + r.other[0] + ')은 예전처럼 코드 얼굴');
     ok(r.behaim && r.behaim[0] === 'portraits/sponsors/pt_behaim_1' && r.behaim[1] === 'portraits/sponsors/pt_behaim', '우주지 학자 자리: 1480~1507 마르틴 베하임은 젊은 초상, 뒤의 페드루 누네스는 예전 그림 ' + JSON.stringify(r.behaim));
