@@ -32,11 +32,20 @@ ASSET_PREFIXES = ('street-folk/', 'portraits/street-folk/')   # 걷는 그림 �
 # 한 판 파일 수(511)를 넘지 않게: 2026-10-08 신규 발견물 83곳의 장면 판(discovery-sheets)도 자산 저장소로 (목록 tools/discovery83/prompts.json).
 # 도감(catalog.html)은 다른 아티팩트라 이 83곳은 장면 판 대신 그림 한 장으로 보인다.
 def asset_extra():
+    here = os.path.dirname(os.path.abspath(__file__))
+    out = set()
     try:
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'discovery83', 'prompts.json'), encoding='utf-8') as f:
-            return {'discovery-sheets/' + r['id'] for r in json.load(f)}
+        with open(os.path.join(here, 'discovery83', 'prompts.json'), encoding='utf-8') as f:
+            out |= {'discovery-sheets/' + r['id'] for r in json.load(f)}
     except Exception:
-        return set()
+        pass
+    # 2026-10-09: 새 발견물 49곳의 장면 판도 자산 저장소로 — 한 판 파일 수·크기 한도 (목록 tools/artifact_sheet_assets.txt)
+    try:
+        with open(os.path.join(here, 'artifact_sheet_assets.txt'), encoding='utf-8') as f:
+            out |= {'discovery-sheets/' + l.split('#')[0].strip() for l in f if l.split('#')[0].strip()}
+    except OSError:
+        pass
+    return out
 ASSET_MARK = '/*ASSET_URLS*/'
 
 PACK_SMALL = int(1.5 * 1024 * 1024)               # 이보다 작은 묶음은 같은 갈래의 이웃 묶음과 합친다 (파일 수가 너무 늘지 않게 — 한 판 511개)
