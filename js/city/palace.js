@@ -56,7 +56,7 @@
       if (!libs.length) return;
       b.discs.forEach(function (id) {
         var d = G.DISC[id];
-        if (!d || G.Disc.clue(d) !== 'book' || sp.taste.indexOf(d.cat) < 0 || s.hints[id] || G.Disc.foundByMe(id) || !G.Disc.available(d)) return;
+        if (!d || G.Disc.clue(d) !== 'book' || !G.tasteHit(sp.taste, d) || s.hints[id] || G.Disc.foundByMe(id) || !G.Disc.available(d)) return;
         var c = libs.slice().sort(function (a, z) { return G.Geo.dist(c0.lon, c0.lat, a.lon, a.lat) - G.Geo.dist(c0.lon, c0.lat, z.lon, z.lat); })[0];
         out.push({ book: b, disc: d, city: c, w: 1 / (1 + G.Geo.dist(c0.lon, c0.lat, c.lon, c.lat) / 20) });
       });
@@ -66,14 +66,14 @@
   async function chat(sp) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
     var lines = [];
-    var tasteTxt = sp.taste.map(function (t) { return G.DISC_CATS[t]; }).join('·');
+    var tasteTxt = sp.taste.map(G.tasteName).join('·');
     lines.push('나는 ' + tasteTxt + '에 관한 이야기라면 언제든 귀를 기울이지.');
     // 리스본·세비야의 후원자는 다음 큰 항로 이야기를 들려준다 (앞선 발견이 알려진 뒤)
     var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(sp.city, 'sponsor') : null;
     if (lead) { lines.push('그러고 보니 요즘 궁정에서도 화제가 된 이야기가 있네. ' + lead.text + '\n그 일을 해내겠다면 기꺼이 후원을 생각해 보지.'); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); await C.say(who, lines.join('\f')); return; }
     // occasionally drop a hint that matches the sponsor's taste — 이야기 갈래(talk)만. 옛 유적·전설은 도서관으로 보낸다
     if (rel.trust >= 25 && U.chance(0.5)) {
-      var cand = G.DISCOVERIES.filter(function (d) { return sp.taste.indexOf(d.cat) >= 0 && !d.bookOnly && G.Disc.clueOk(d, 'sponsor') && G.Disc.rumourW(d, 'sponsor:' + sp.id) && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
+      var cand = G.DISCOVERIES.filter(function (d) { return G.tasteHit(sp.taste, d) && !d.bookOnly && G.Disc.clueOk(d, 'sponsor') && G.Disc.rumourW(d, 'sponsor:' + sp.id) && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
       if (cand.length) { var d = U.weighted(cand, function (x) { return G.Disc.rumourW(x, 'sponsor:' + sp.id); }); lines.push((G.Disc.hasHint(d.id) ? '자네가 쫓는 그 이야기 말일세, 나도 들은 바가 있네. ' : '그러고 보니 이런 이야기를 들은 적이 있네. ') + d.hint); G.Disc.noteHint(d, 'sponsor:' + sp.id); }
       var bk = cand.length && U.chance(0.6) ? null : libraryTip(sp);
       if (bk) lines.push('옛 이야기라면 내 말보다 사료가 낫지. ' + bk.city.name + ' 도서관에 ' + bk.book.title + U.jx(bk.book.name || bk.book.title, '이/가') + ' 있으니 읽어 보게. ' + bk.disc.name + '에 관한 대목이 있을 걸세.');

@@ -98,7 +98,7 @@
   function interest(sp, d) {
     var s = S(), st = s.disc[d.id] || {};
     var v = 0;
-    if (sp.taste.indexOf(d.cat) >= 0) v += 2.2;
+    if (G.tasteHit(sp.taste, d)) v += 2.2;
     v += (d.val / 10000);
     v += SP.rel(sp.id).trust / 40;
     v -= Math.min(1.5, (SP.rel(sp.id).fail || 0) * 0.4);    // 계약을 깨거나 실패한 적이 있으면 덜 믿는다
@@ -158,10 +158,10 @@
     }
     if (G.Errand) list.push({ errand: true });
     for (var tries = 0; tries < 3; tries++) {
-      var tasteTxt = sp.taste.map(function (t) { return G.DISC_CATS[t]; }).join('·');
+      var tasteTxt = sp.taste.map(G.tasteName).join('·');
       var pick = await UI.choose('제안 선택', list.map(function (x, i) {
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
-        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (sp.taste.indexOf(x.d.cat) >= 0 ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
+        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
       }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b>' });
       if (pick == null) { await UI.say('뭔가, 용건이 없는가? 이쪽은 바쁘네.', who); return; }
       var x = list[pick], d = x.d;

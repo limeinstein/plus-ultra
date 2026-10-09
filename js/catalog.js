@@ -182,7 +182,7 @@
         facts: [
           ['사는 곳', c.name + ' · ' + (sp.place || (sp.bld === 'palace' ? palaceName(c) : '저택'))], ['신분', G.SPONSOR_TYPE[sp.type]],
           ['세력', G.POWER_NAME[sp.pw] + ' (만나려면 명성 ' + num(G.POWER_FAME[sp.pw]) + ')'], ['재력', '★'.repeat(sp.wealth)],
-          ['좋아하는 발견', sp.taste.map(t => G.DISC_CATS[t]).join(', ')], ['말', G.LANGS[sp.lang]],
+          ['좋아하는 발견', sp.taste.map(G.tasteName).join(', ')], ['말', G.LANGS[sp.lang]],
           sp.nation ? ['나라', NATION[sp.nation]] : null
         ],
         strip: sp.holders.map((h, i) => ({ label: h[2] + ' (' + h[0] + '~' + (h[1] >= 9999 ? '' : h[1]) + ')', key: (p => typeof p === 'string' ? 'portraits/sponsors/' + p : p ? 'portraits/sponsors/' + sp.id + '_' + p : 'portraits/sponsors/' + sp.id)(A.sponsorPic(sp, i)), kind: 'png', pic: () => portrait(A.sponsorSpec(sp, i)) })),

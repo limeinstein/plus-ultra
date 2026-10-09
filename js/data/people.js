@@ -2,31 +2,32 @@
 (function (G) {
   'use strict';
   // ------------------------------------------------------------------ sponsors
-  // holders: [[fromYear, toYear, name], ...] ; bld: palace | mansion ; pw 1..5 ; taste: discovery categories
+  // holders: [[fromYear, toYear, name], ...] ; bld: palace | mansion ; pw 1..5 ; taste: discovery categories 또는 관심사 myth·faith·art (js/data/interests.js)
+  // 리스본(0)·세비야(7) 후원자 열 명은 관심사가 서로 겹치지 않게 하나씩: 리스본 민족·지리·자연·예술·생물 / 세비야 보물·종교·전설·유적(역사)·교역품
   G.SPONSORS = [
-    { id: 'pt_king', title: '포르투갈 국왕', type: 'king', city: 0, bld: 'palace', pw: 5, wealth: 5, lang: 1, rel: 'C', nation: 'PT', taste: ['geo', 'trade', 'people'],
+    { id: 'pt_king', title: '포르투갈 국왕', type: 'king', city: 0, bld: 'palace', pw: 5, wealth: 5, lang: 1, rel: 'C', nation: 'PT', taste: ['people'],
       holders: [[1480, 1495, '주앙 2세'], [1495, 1521, '마누엘 1세'], [1521, 1557, '주앙 3세'], [1557, 1578, '세바스티앙 1세'], [1578, 1600, '엔히크 추기경왕']] },
-    { id: 'pt_marchionni', title: '피렌체 출신 대상인', type: 'merchant', city: 0, bld: 'mansion', pw: 3, wealth: 4, lang: 2, rel: 'C', nation: 'PT', taste: ['trade', 'treasure'],
+    { id: 'pt_marchionni', title: '피렌체 출신 대상인', type: 'merchant', city: 0, bld: 'mansion', pw: 3, wealth: 4, lang: 2, rel: 'C', nation: 'PT', taste: ['art'],
       holders: [[1480, 1530, '바르톨로메우 마르키오니'], [1530, 1600, '마르키오니 가문 당주']] },
-    { id: 'pt_behaim', title: '우주지 학자', type: 'scholar', city: 0, bld: 'mansion', pw: 1, wealth: 2, lang: 3, rel: 'C', nation: 'PT', taste: ['geo', 'nature'],
+    { id: 'pt_behaim', title: '우주지 학자', type: 'scholar', city: 0, bld: 'mansion', pw: 1, wealth: 2, lang: 3, rel: 'C', nation: 'PT', taste: ['geo'],
       holders: [[1480, 1507, '마르틴 베하임'], [1507, 1600, '페드루 누네스']] },
-    { id: 'pt_queen', title: '포르투갈 왕비', type: 'noble', city: 0, bld: 'mansion', pw: 3, wealth: 4, lang: 1, rel: 'C', nation: 'PT', taste: ['people', 'nature', 'ruin'],
+    { id: 'pt_queen', title: '포르투갈 왕비', type: 'noble', city: 0, bld: 'mansion', pw: 3, wealth: 4, lang: 1, rel: 'C', nation: 'PT', taste: ['nature'],
       holders: [[1480, 1525, '레오노르 왕비'], [1525, 1578, '카타리나 왕비'], [1578, 1600, '카타리나 공작부인']] },
-    { id: 'pt_casaindia', title: '인도 상관장', type: 'official', city: 0, bld: 'mansion', pw: 3, wealth: 5, lang: 1, rel: 'C', nation: 'PT', taste: ['trade', 'geo'],
+    { id: 'pt_casaindia', title: '인도 상관장', type: 'official', city: 0, bld: 'mansion', pw: 3, wealth: 5, lang: 1, rel: 'C', nation: 'PT', taste: ['creature'],
       holders: [[1480, 1503, '기니·미나 상관장'], [1503, 1560, '인도 상관장'], [1560, 1600, '인도 상관 총관']] },
     { id: 'pt_braganza', title: '브라간사 공작', type: 'noble', city: 1, bld: 'mansion', pw: 3, wealth: 3, lang: 1, rel: 'C', nation: 'PT', taste: ['treasure', 'ruin'],
       holders: [[1480, 1483, '페르난두 2세 공작'], [1497, 1532, '자이미 1세 공작'], [1532, 1563, '테오도지우 1세 공작'], [1563, 1600, '주앙 1세 공작']] },
-    { id: 'es_crown', title: '카스티야 국왕', type: 'king', city: 7, bld: 'palace', pw: 5, wealth: 5, lang: 0, rel: 'C', nation: 'ES', taste: ['geo', 'treasure', 'people'],
+    { id: 'es_crown', title: '카스티야 국왕', type: 'king', city: 7, bld: 'palace', pw: 5, wealth: 5, lang: 0, rel: 'C', nation: 'ES', taste: ['treasure'],
       holders: [[1480, 1504, '이사벨 1세'], [1504, 1516, '페르난도 섭정왕'], [1516, 1556, '카를로스 1세'], [1556, 1600, '펠리페 2세']] },
     { id: 'es_aragon', title: '아라곤 국왕', type: 'king', city: 5, bld: 'palace', pw: 4, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['treasure', 'geo'],
       holders: [[1480, 1516, '페르난도 2세']] },
-    { id: 'es_fonseca', title: '인디아스 문제 책임자', type: 'official', city: 7, bld: 'mansion', pw: 4, wealth: 3, lang: 0, rel: 'C', nation: 'ES', taste: ['geo', 'trade'],
+    { id: 'es_fonseca', title: '인디아스 문제 책임자', type: 'official', city: 7, bld: 'mansion', pw: 4, wealth: 3, lang: 0, rel: 'C', nation: 'ES', taste: ['ruin'],
       holders: [[1480, 1493, '후안 로드리게스 데 폰세카 부주교'], [1493, 1524, '후안 로드리게스 데 폰세카'], [1524, 1600, '인디아스 평의회 의장']] },
-    { id: 'es_arch', title: '세비야 대주교', type: 'priest', city: 7, bld: 'mansion', pw: 3, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['ruin', 'people'],
+    { id: 'es_arch', title: '세비야 대주교', type: 'priest', city: 7, bld: 'mansion', pw: 3, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['faith'],
       holders: [[1480, 1485, '페드로 곤살레스 데 멘도사'], [1485, 1502, '디에고 우르타도 데 멘도사'], [1502, 1523, '디에고 데 데사'], [1523, 1538, '알론소 만리케 데 라라'], [1538, 1546, '가르시아 데 로아이사'], [1546, 1571, '페르난도 데 발데스'], [1571, 1581, '크리스토발 데 로하스'], [1581, 1600, '로드리고 데 카스트로']] },
-    { id: 'es_casa', title: '통상원 관리관', type: 'official', city: 7, bld: 'mansion', pw: 3, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['geo', 'trade'],
+    { id: 'es_casa', title: '통상원 관리관', type: 'official', city: 7, bld: 'mansion', pw: 3, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['trade'],
       holders: [[1480, 1509, '프란시스코 피넬로'], [1509, 1512, '아메리고 베스푸치'], [1512, 1518, '후안 디아스 데 솔리스'], [1518, 1548, '세바스티안 카보토'], [1548, 1586, '알론소 데 차베스'], [1586, 1600, '로드리고 사모라노']] },
-    { id: 'es_medinaceli', title: '메디나셀리 공작', type: 'noble', city: 7, bld: 'mansion', pw: 3, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['geo', 'treasure'],
+    { id: 'es_medinaceli', title: '메디나셀리 공작', type: 'noble', city: 7, bld: 'mansion', pw: 3, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['myth'],
       holders: [[1480, 1501, '루이스 데 라 세르다'], [1501, 1544, '후안 데 라 세르다'], [1544, 1575, '후안 데 라 세르다 4세'], [1575, 1600, '후안 루이스 데 라 세르다']] },
     { id: 'es_santangel', title: '왕실 재무관', type: 'official', city: 11, bld: 'mansion', pw: 3, wealth: 4, lang: 0, rel: 'C', nation: 'ES', taste: ['treasure', 'trade'],
       holders: [[1480, 1498, '루이스 데 산탄헬']] },

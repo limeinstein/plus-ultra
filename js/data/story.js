@@ -37,9 +37,9 @@
       fame: 0, wage: 90, y: [1480, 1525], reg: [0], zones: ['iberia', 'wafrica'], home: 0, tale: true, age: 'mid', beard: 2,
       desc: '남작의 배를 스무 해 몰아 온 늙은 항해사. 기니 해안까지 다녀왔고, 헤엄은 돌고래처럼, 칼과 포는 군인처럼 다룬다. 말은 적고 손은 빠르다.' }
   ];
-  // 후원자 (G.SPONSORS 꼴) — 리스본 저택의 카사노바 남작
+  // 후원자 (G.SPONSORS 꼴) — 리스본 저택의 카사노바 남작. 관심사는 리스본의 다른 후원자(민족·지리·자연·예술·생물)와 겹치지 않게 보물(아버지의 흔적)·유적
   ST.sponsorData = { id: 'pt_casanova', title: '카사노바 남작', type: 'noble', city: 0, bld: 'mansion', pw: 2, wealth: 3, lang: 1, rel: 'C', nation: 'PT',
-    taste: ['ruin', 'geo', 'treasure'], tale: true, holders: [[1480, 1530, '조반니 카사노바 남작']] };
+    taste: ['treasure', 'ruin'], tale: true, holders: [[1480, 1530, '조반니 카사노바 남작']] };
 
   // ---------------------------------------------------------------- 아버지의 흔적 (도시 발견물)
   // [id, 이름, 도시, 아버지가 다녀간 해, 설명, 소문(단서 글), 가치, 세력]

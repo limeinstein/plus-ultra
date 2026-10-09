@@ -89,7 +89,7 @@
       return G.Geo.dist(c.lon, c.lat, d.lon, d.lat) <= 35;
     });
     if (!cand.length) return null;
-    cand.sort(function (a, b) { var ta = sp.taste.indexOf(a.cat) >= 0 ? 0 : 1, tb = sp.taste.indexOf(b.cat) >= 0 ? 0 : 1; return ta - tb || G.Geo.dist(c.lon, c.lat, a.lon, a.lat) - G.Geo.dist(c.lon, c.lat, b.lon, b.lat); });
+    cand.sort(function (a, b) { var ta = G.tasteHit(sp.taste, a) ? 0 : 1, tb = G.tasteHit(sp.taste, b) ? 0 : 1; return ta - tb || G.Geo.dist(c.lon, c.lat, a.lon, a.lat) - G.Geo.dist(c.lon, c.lat, b.lon, b.lat); });
     var d = cand[Math.floor(rng() * Math.min(cand.length, 3))], dist = G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
     return { kind: 'confirm', disc: d.id, title: '「' + d.name + '」 소문 확인',
       advance: 300, reward: Math.max(1200, round100(d.val * (0.28 + 0.03 * (sp.wealth || 2)))), fame: 0, years: dist > 18 ? 2 : 1,

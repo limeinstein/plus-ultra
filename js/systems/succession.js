@@ -103,7 +103,7 @@
     // 학자는 연구 노트를 남긴다 — 아직 모르는 발견 하나의 단서
     if (sp.type === 'scholar' && G.Disc && G.DISCOVERIES) {
       var cand = G.DISCOVERIES.filter(function (d) {
-        return !s.hints[d.id] && !G.Disc.foundByMe(d.id) && sp.taste.indexOf(d.cat) >= 0 && G.Disc.available(d);
+        return !s.hints[d.id] && !G.Disc.foundByMe(d.id) && G.tasteHit(sp.taste, d) && G.Disc.available(d);
       });
       if (cand.length) {
         var d = U.pick(cand);
