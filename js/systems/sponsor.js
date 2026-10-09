@@ -113,6 +113,28 @@
     return v;
   }
   SP.interest = interest;
+  SP.offerFor = function (sp, d) { return offerFor(sp, d); };
+  /** 관심사 밖 이야기를 웅변으로 설득할 확률 (웅변이 없으면 0). sc = 반응 점수 */
+  SP.persuadeChance = function (sp, sc) {
+    var T = (G.BALANCE && G.BALANCE.sponsorTaste) || {}, sk = R.skill('speech');
+    if (!sk) return 0;
+    return U.clamp((T.persuade || 0) + sk * (T.persuadeSpeech || 0) + (R.stat('cha') - 50) * (T.persuadeCha || 0) + SP.rel(sp.id).trust * (T.persuadeTrust || 0) + sc * (T.persuadeScore || 0), 0.05, 0.9);
+  };
+  /** 관심사 밖이라 시큰둥할 때: 웅변으로 설득해 볼지 묻고 굴린다. true = 설득했다, false = 실패, null = 하지 않았다 */
+  async function persuade(sp, d, sc, who) {
+    var T = (G.BALANCE && G.BALANCE.sponsorTaste) || {}, sk = R.skill('speech'), p = SP.persuadeChance(sp, sc);
+    var tasteTxt = sp.taste.map(G.tasteName).join('·');
+    var v = await UI.ask('「' + d.name + '」' + U.jx(d.name, '은/는') + ' ' + SP.honor(sp) + '의 관심사(' + tasteTxt + ')가 아니다.', [
+      { label: sk ? '웅변으로 설득한다 (웅변 ' + sk + ' · 약 ' + Math.round(p * 100) + '%)' : '설득한다 (웅변 특기가 없다)', value: 'go', dis: !sk },
+      { label: '그만둔다', value: 'no' }], SP.me(sp));
+    if (v !== 'go') return null;
+    await UI.say(U.pick(['그 일이 왜 중요한지 들어 주십시오. 이것을 아는 나라가 다음 바다를 쥡니다.', '아무도 눈여겨보지 않는 지금이 기회입니다. 남보다 먼저 손에 넣는 사람이 이름을 남깁니다.',
+      '관심 밖의 이야기라는 것을 압니다. 하지만 이 일이 끝나면 ' + SP.honor(sp) + '께서 아끼시는 것들과도 이어질 겁니다.']), SP.me(sp));
+    if (U.chance(p)) { await UI.say(U.pick(['흐음… 듣고 보니 일리가 있군. 좋네, 한번 맡겨 보지.', '자네 말솜씨에 넘어가는군. 내 관심사는 아니지만 믿어 보겠네.']), who); return true; }
+    SP.rel(sp.id).trust = Math.max(0, SP.rel(sp.id).trust - (T.failTrust || 0));
+    await UI.say(U.pick(['말은 그럴듯하지만, 내 마음은 움직이지 않는군.', '자네 말솜씨는 알겠네. 그래도 내 돈을 쓸 일은 아닐세.']), who);
+    return false;
+  }
   function offerFor(sp, d) {
     var s = S(), c = G.CITY_DATA[sp.city];
     var dist = d.how === 'trade' ? 60 : G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
@@ -120,9 +142,11 @@
     if (d.id === 'circum') years = 5;
     var w = sp.wealth;
     var art = G.Disc.artBonus();     // 그림 솜씨가 좋으면 값을 더 쳐 준다
-    var adv = Math.round(d.val * (0.2 + 0.055 * w) / 100) * 100;
-    var rew = Math.round(G.Disc.value(d) * (0.62 + 0.12 * w) * art / 100) * 100;   // 그림·세공은 G.Disc.value에 들어 있다
-    return { advance: Math.max(400, adv), reward: Math.max(1200, rew), years: years };
+    // 관심사에 맞는 이야기는 후하게 (G.BALANCE.sponsorTaste) — 세계일주는 관심사와 상관없다
+    var T = (G.BALANCE && G.BALANCE.sponsorTaste) || {}, liked = d.id !== 'circum' && G.tasteHit(sp.taste, d);
+    var adv = Math.round(d.val * (0.2 + 0.055 * w) * (liked ? T.advance || 1 : 1) / 100) * 100;
+    var rew = Math.round(G.Disc.value(d) * (0.62 + 0.12 * w) * art * (liked ? T.reward || 1 : 1) / 100) * 100;   // 그림·세공은 G.Disc.value에 들어 있다
+    return { advance: Math.max(400, adv), reward: Math.max(1200, rew), years: years, liked: liked };
   }
 
   SP.propose = async function (sp) {
@@ -162,7 +186,7 @@
       var pick = await UI.choose('제안 선택', list.map(function (x, i) {
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
         return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
-      }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b>' });
+      }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> — ★ 취향에 맞으면 선금·사례를 후하게 준다. 취향 밖이면 웅변으로 설득해 볼 수 있다' });
       if (pick == null) { await UI.say('뭔가, 용건이 없는가? 이쪽은 바쁘네.', who); return; }
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
@@ -176,6 +200,17 @@
       if (d.pw > sp.pw + 1) { await UI.say(U.pick(['원조해 주고 싶지만, 그렇게 큰 모험은 나로서는 도저히...', '가능한 한 원조해 주고 싶지만, 너무 이야기가 엄청나네.']), who); continue; }
       var sc = interest(sp, d) + (x.found || x.fake ? 1.5 : 0) + (x.circ ? 3 : 0);
       var react = sc >= 3.2 ? '마음이 내킴' : sc >= 2.0 ? '좋은 반응' : sc >= 1.0 ? '다른 것을 보여라' : sc >= 0 ? '시시하다' : '장난치지 말게';
+      // 관심사 밖이라 시큰둥하면 웅변으로 설득해 볼 수 있다 (같은 이야기는 한 번만). 설득해 내면 보통 값으로 계약·보고
+      var cold = react === '다른 것을 보여라' || react === '시시하다' || react === '장난치지 말게';
+      if (cold && !x.circ && !G.tasteHit(sp.taste, d) && !x.persuaded) {
+        await UI.say(react === '장난치지 말게' ? '그런 쓸데없는 이야기에 버릴 돈은 없네.' : U.pick(['흐음, 내 관심사는 아니로군.', '그건 내가 마음을 쓰는 일이 아닐세.']), who);
+        x.persuaded = true;
+        var pv = await persuade(sp, d, sc, who);
+        if (pv) react = '좋은 반응';
+        else if (pv === false) { if (react === '다른 것을 보여라') continue; return; }
+        else if (react === '다른 것을 보여라') continue;
+        else { if (react === '장난치지 말게') rel.trust = Math.max(0, rel.trust - 3); await UI.say('다음 기회로 하세.', who); return; }
+      }
       if (react === '다른 것을 보여라') { await UI.say(U.pick(['흐음, 썩 내키지 않는군. 좀 더 흥미 있는 이야기는 없는가?', '그 밖에 흥미 있는 이야기는 없는가?']), who); continue; }
       if (react === '시시하다') { await UI.say(U.pick(['흐~음, 조금도 흥미가 일어나지 않는군. 좀 더 호기심을 불러일으킬 이야기를 찾아 오게.', '그런 가치 없는 이야기에는 원조할 수 없네. 다음 기회로 하세.']), who); return; }
       if (react === '장난치지 말게') { await UI.say('그런 쓸데없는 이야기에 버릴 돈은 없네. 장난치지 말게!', who); rel.trust = Math.max(0, rel.trust - 3); return; }
@@ -212,6 +247,7 @@
     var ev = G.Fakes ? await G.Fakes.choose(sp, d, found) : 'real';
     if (!ev) { await UI.say('흐음, 보여 줄 것이 없다면 다음에 오게.', who); return; }
     var o = offerFor(sp, d), pay = Math.round(o.reward * 0.7 * k / 100) * 100;
+    if (o.liked) await UI.say(U.pick(['바로 내가 알고 싶던 것일세! 사례를 넉넉히 하지.', '내 관심사에 꼭 맞는 이야기로군. 값을 후하게 쳐 주겠네.']), who);
     // 같은 해에 같은 후원자에게 여러 번 보고하면 사례금이 줄어든다 (후원자의 주머니에도 끝이 있다)
     if (rel.lateY !== s.date.y) { rel.lateY = s.date.y; rel.lateN = 0; }
     var cutK = 1 + ((G.BALANCE && G.BALANCE.lateRepCut) || 0) * rel.lateN, cutTxt = '';
@@ -321,7 +357,8 @@
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
     var o = offerFor(sp, d);
     o.advance = Math.round(o.advance * mood / 100) * 100;
-    var asked = 0, pu = R.purser(), maxAsk = pu ? 3 : 2;    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
+    var asked = 0, pu = R.purser(), maxAsk = pu ? 3 : 2;
+    if (o.liked) await UI.say(U.pick(['내가 늘 마음에 두던 일이로군. 돈을 아끼지 않겠네.', '내 관심사에 꼭 맞는 모험일세. 넉넉히 대 주지.']), who);    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
     for (;;) {
       await UI.say('모험하는 데 돈은 필요하겠지. 먼저 금화 ' + U.num(o.advance) + '닢을 주겠네. ' + o.years + '년 안에 성공하면 거기다 금화 ' + U.num(o.reward) + '닢의 사례를 약속하겠네. 이것으로 어떤가.', who);
       var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢', [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));

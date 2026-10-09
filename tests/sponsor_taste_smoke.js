@@ -2,7 +2,7 @@
    · 모두 관심사가 둘 이상 · 왕은 모두 보물·지리 · 두 도시 후원자 10명의 첫 관심사는 서로 다르다(두 왕만 보물)
    · 두 왕 말고는 어느 두 사람도 관심사가 둘 이상 겹치지 않는다
    · 관심사 목록(전설·미신·종교·예술)의 이름이 모두 실제 발견물이다 · 관심사마다 들어맞는 발견물이 넉넉하다
-   · 궁전 인사말·계약 목록·도감에 관심사 이름이 나오고, 취향에 맞는 발견물은 계약 값이 오른다 · 콘솔 오류 0
+   · 관심사에 맞는 발견물은 선금·사례가 후하고, 관심사 밖이라 시큰둥해도 웅변으로 설득해 계약할 수 있다 · 콘솔 오류 0
    node tests/sponsor_taste_smoke.js */
 'use strict';
 const path = require('path');
@@ -56,6 +56,27 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(g.archLikes && !g.archNot, '세비야 대주교는 카바 신전(종교)을 좋아하고 트로이(유적)는 취향이 아니다');
     ok(g.mythAtl && g.mythKraken, '메디나셀리 공작(전설·미신)은 아틀란티스와 인어를 좋아한다');
     ok(g.name === '종교·전설·미신·예술·유적', '관심사 이름: ' + g.name);
+    // 관심사에 맞으면 후하게 · 관심사 밖이면 웅변으로 설득
+    const v = await page.evaluate(async () => {
+      const s = G.Game.state, arch = G.SPONSOR.es_arch, kaaba = G.DISC.kaaba;
+      const o1 = G.Sponsor.offerFor(arch, kaaba), keep = arch.taste; arch.taste = ['geo']; const o2 = G.Sponsor.offerFor(arch, kaaba); arch.taste = keep;
+      s.player.sk.speech = 0; const p0 = G.Sponsor.persuadeChance(arch, 1.5);
+      s.player.sk.speech = 3; const p3 = G.Sponsor.persuadeChance(arch, 1.5);
+      // 대주교에게 관심사 밖(유적) 「트로이」를 내밀고 웅변으로 설득 → 계약 (화면 대화는 흉내)
+      const troy = G.DISC.troy; s.hints = {}; s.hints.troy = { src: 'test' }; s.player.fame = 20000; s.contract = null;
+      const UI = G.UI, U = G.U, keepUI = { say: UI.say, ask: UI.ask, choose: UI.choose, alert: UI.alert, confirm: UI.confirm, toast: UI.toast }, keepU = { rf: U.rf, chance: U.chance };
+      const said = [], asks = [];
+      UI.say = async (t) => { said.push(String(t)); }; UI.alert = async () => {}; UI.toast = () => {}; UI.confirm = async () => true;
+      UI.choose = async (title, items) => { const i = items.findIndex(x => /트로이/.test(x.label)); return i >= 0 ? items[i].value : null; };
+      UI.ask = async (title, opts) => { asks.push(title + ' :: ' + opts.map(o => o.label + (o.dis ? '(X)' : '')).join(' / ')); const f = v => opts.find(o => o.value === v && !o.dis); return (f('go') || f('ok') || opts[opts.length - 1]).value; };
+      U.rf = (a, b) => a; U.chance = () => true;
+      try { await G.Sponsor.propose(arch); } finally { Object.assign(UI, keepUI); Object.assign(U, keepU); }
+      return { r1: o1.reward, r2: o2.reward, a1: o1.advance, a2: o2.advance, liked: o1.liked, p0, p3, contract: s.contract && s.contract.disc, asks, said: said.filter(t => /설득|일리|말솜씨|관심사/.test(t)) };
+    });
+    console.log(JSON.stringify(v).slice(0, 900));
+    ok(v.liked && v.r1 > v.r2 * 1.2 && v.a1 > v.a2, '관심사에 맞으면 사례를 후하게: 성공 보수 ' + v.r2 + ' → ' + v.r1 + ', 선금 ' + v.a2 + ' → ' + v.a1);
+    ok(v.p0 === 0 && v.p3 > 0.5, '웅변이 없으면 설득할 수 없고(0%), 웅변 3이면 ' + Math.round(v.p3 * 100) + '%');
+    ok(v.contract === 'troy' && v.asks.some(t => /관심사/.test(t) && /웅변으로 설득한다/.test(t)), '관심사 밖 「트로이」도 웅변으로 설득해 대주교와 계약을 맺었다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }
 })();

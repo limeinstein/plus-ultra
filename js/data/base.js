@@ -237,6 +237,10 @@
     restartShip: 'caravel',
     // 후원자 신뢰의 상한 (sponsor.js, errand.js)
     trustMax: 100,
+    // 후원자의 관심사 (sponsor.js): 관심사에 맞는 이야기는 선금 ×advance, 성공 보수·보고 사례 ×reward 로 후하게 쳐 준다.
+    //   관심사 밖이라 시큰둥해도 웅변(특기)이 있으면 설득해 볼 수 있다 — 성공률 = persuade + 웅변 × persuadeSpeech + (매력−50) × persuadeCha
+    //   + 신뢰 × persuadeTrust + 반응 점수 × persuadeScore (5%~90%). 설득해 낸 이야기는 보통 값 (관심사 덤 없음). 실패하면 신뢰 −failTrust
+    sponsorTaste: { advance: 1.2, reward: 1.3, persuade: 0.2, persuadeSpeech: 0.18, persuadeCha: 0.006, persuadeTrust: 0.003, persuadeScore: 0.1, failTrust: 3 },
     // 보급: 선원 한 사람이 하루에 먹고 마시는 양(통) — 식량·물 따로 (예전 0.04 → 0.025: 같은 짐칸으로 약 1.6배 오래)
     ration: 0.025,
     // 육상 탐험: 대원은 배의 식량·물을 쓰지 않고 그 고장에서 사 먹고 길잡이·짐꾼 삯을 낸다 — 하루 경비(금화)
