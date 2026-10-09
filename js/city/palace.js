@@ -32,6 +32,8 @@
       var prDone = false;
       if (G.Princess) { try { prDone = await G.Princess.onEnter(sp); } catch (e) { console.error(e); } }
       if (G.Court && !prDone) { try { await G.Court.onEnter(sp); } catch (e) { console.error(e); } }
+      // 이야기 모드: 카사노바 남작 저택에서 아내와 어머니를 마주친다 (js/systems/story.js)
+      if (G.Story && G.Story.family && G.STORY && sp.id === G.STORY.sponsor) { try { await G.Story.family(c, 'mansion'); } catch (e) { console.error(e); } }
       return true;
     };
     B.sub = function (c, arg) { var sp = B.sp(c, arg); if (!sp) return ''; var tm = SP.rel(sp.id).met ? SP.temperOf(sp) : null; return SP.holderName(sp) + ' · ' + sp.title + ' (세력 ' + G.POWER_NAME[sp.pw] + (tm ? ' · 성품 ' + tm.name : '') + ')'; };

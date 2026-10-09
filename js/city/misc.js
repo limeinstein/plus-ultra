@@ -8,7 +8,10 @@
   var INN = { title: '여관', icon: 'bed', paint: 'inn', exitLabel: '여관을 나온다' };
   C.B.inn = INN;
   function innWife() { return C.npc('innkeeper', G.Img.npcGender('innkeeper', C.city()) === 'm' ? '여관 주인' : '여관 안주인'); }
-  INN.enter = async function (c) { await C.say(innWife(), C.hail(c, 'inn', ['어서 오세요. 쉬어 가실래요?', '어서 오세요. 방은 깨끗하게 치워 두었어요.', '먼 길 오셨네요. 푹 쉬고 가세요.'])); };
+  INN.enter = async function (c) {
+    await C.say(innWife(), C.hail(c, 'inn', ['어서 오세요. 쉬어 가실래요?', '어서 오세요. 방은 깨끗하게 치워 두었어요.', '먼 길 오셨네요. 푹 쉬고 가세요.']));
+    if (G.Story && G.Story.family) { try { await G.Story.family(c, 'inn'); } catch (e) { console.error(e); } }   // 이야기 모드: 고향 여관에서 아내와 어머니를 마주친다
+  };
   INN.sub = function (c) { return '하룻밤 금화 ' + R.innCost(c) + '닢'; };
   INN.menu = function (c) {
     return [
@@ -628,18 +631,22 @@
   C.B.home = HM;
   HM.enter = async function (c) {
     var s = S();
+    var story = G.Story && G.Story.atHome && G.Story.atHome(c);   // 이야기 모드: 고향 집에는 어머니가 산다 (js/systems/story.js)
     if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
-    else await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
+    if (story) { try { await G.Story.motherGreet(c); await G.Story.allowance(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금
+    else if (!s.player.wife) await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
     if (G.HomeLife) await G.HomeLife.happen();                                    // 가끔 아이와 얽힌 일이 생긴다 (homelife.js)
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상 (familyevent.js)
+    if (story) { try { await G.Story.family(c, 'home'); } catch (e) { console.error(e); } }                  // 아내와 어머니 (이야기 모드)
   };
-  HM.sub = function () { var s = S(); return s.player.wife ? '가족이 기다리는 집' : '혼자 사는 집'; };
+  HM.sub = function (c) { var s = S(), st = G.Story && G.Story.atHome && G.Story.atHome(c); return s.player.wife ? (st ? '어머니와 가족이 기다리는 집' : '가족이 기다리는 집') : st ? '어머니가 계신 집' : '혼자 사는 집'; };
   HM.menu = function (c) {
     var s = S();
     return [
       { label: '쉰다', icon: 'bed', onClick: function () { return HM.rest(c); } },
+      G.Story && G.Story.atHome && G.Story.atHome(c) ? { label: '어머니와 이야기', icon: 'heart', sub: G.STORY.mother.name, onClick: function () { return G.Story.motherTalk(); } } : null,
       s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length + (G.Family.aboard().length ? ' (견습 ' + G.Family.aboard().length + ')' : '') : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
       G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,
       G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,

@@ -80,6 +80,7 @@
       if (k === 'E') return mateWho('estevao');
       if (k === 'M') return ST.mother();
       if (k === 'F') return ST.father();
+      if (k === 'W') { var w = G.Family.wifeSpeaker(); w.name = w.name || G.Family.wifeName(); return w; }
       if (k === 'B') { var sp = G.SPONSOR[D.sponsor]; return G.Sponsor.speaker(sp); }   // 도시 밖(편지·회상)에서도 얼굴과 무릎상으로 선다
       if (k === 'keeper') {
         var kp = KEEPER[curTrace] || ['vendor', '고장 사람'];
@@ -94,7 +95,10 @@
   }
   function fmt(t) {
     var p = S().player;
-    return String(t).replace(/\{name\}/g, p.name).replace(/\{kin\}/g, ST.kin()).replace(/\{kinCall\}/g, ST.kin()).replace(/\{father\}/g, D.father.alias).replace(/\{mother\}/g, D.mother.call);
+    var wife = G.Family && p.wife ? G.Family.wifeName() : '', k0 = (p.kids || [])[0], kid = k0 && G.Family ? G.Family.kidName(k0) : '';
+    return String(t).replace(/\{name\}/g, p.name).replace(/\{kin\}/g, ST.kin()).replace(/\{kinCall\}/g, ST.kin()).replace(/\{father\}/g, D.father.alias).replace(/\{mother\}/g, D.mother.call)
+      .replace(/\{(wife|kid)([^}]+)\}/g, function (m0, w, pair) { return U.jx(w === 'wife' ? wife : kid, pair); })   // {wife이/가} → 조사만
+      .replace(/\{wife\}/g, wife).replace(/\{kid\}/g, kid).replace(/\{given\}/g, p.given || p.name);
   }
   /* 대화 장면: 제독이 말할 때도 지금 마주한 사람과 둘이 선다 — 얼굴 하나 → 둘 → 하나로 바뀌지 않게.
      마주한 사람 = 같은 장면(내레이션 N 사이)에서 바로 앞에 말한 다른 사람, 없으면 곧 말할 사람 */
@@ -112,14 +116,21 @@
     if (pt && pt.portrait) { sp.layout = 'duo'; sp.side = 'left'; sp.choiceSide = 'left'; sp.partner = pt; sp.emotion = 'neutral'; }
     return sp;
   }
-  async function play(lines) {
+  /* pair = ['W', 'M']: 아내와 어머니의 장면 — 두 사람이 말할 때는 서로 마주 선다 (아내 왼쪽 · 어머니 오른쪽) */
+  function paired(k, sp, pair) {
+    if (!pair || pair.indexOf(k) < 0) return sp;
+    var other = pair[0] === k ? pair[1] : pair[0], pt = who(other);
+    if (pt && pt.portrait) { sp.layout = 'duo'; sp.side = k === pair[0] ? 'left' : 'right'; sp.partner = pt; sp.emotion = sp.emotion || 'neutral'; }
+    return sp;
+  }
+  async function play(lines, pair) {
     for (var i = 0; i < (lines || []).length; i++) {
       var ln = lines[i];
-      if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], lines, i));
+      if (Array.isArray(ln)) await UI.say(fmt(ln[1]), paired(ln[0], facing(ln[0], lines, i), pair));
       else if (ln && ln.ask) {
         var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', lines, i));
         var o = ln.opts[v == null ? 0 : v];
-        if (Array.isArray(o[1])) await play(o[1]);
+        if (Array.isArray(o[1])) await play(o[1], pair);
       }
     }
   }
@@ -311,6 +322,73 @@
     ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(12, 12, w - 24, h * 0.1);
     ctx.fillStyle = '#6b5a3e'; ctx.font = '12px sans-serif'; ctx.fillText('(그림 없음 — images/story/photo)', 18, h - 18);
   }
+
+  // ================================================================ 자택의 어머니 · 아내와 어머니 (자료: G.STORY.homeLife)
+  function HD() { return D.homeLife || {}; }
+  /** 이야기 모드에서 이 도시가 제독의 고향(어머니가 사는 집)인가 */
+  ST.atHome = function (c) { var s = S(); return !!(T() && s && c && c.id === s.player.home); };
+  function pickLines(list, key) {
+    var t = T(); if (!list || !list.length) return null;
+    var last = t[key], i = Math.floor(Math.random() * list.length);
+    if (list.length > 1 && i === last) i = (i + 1) % list.length;
+    t[key] = i; return list[i];
+  }
+  /** 집에 들어설 때 어머니가 맞는다 (아내가 있으면 아내 다음에) */
+  ST.motherGreet = async function (c) {
+    var t = T(); if (!ST.atHome(c)) return false;
+    var L = HD().greet; if (t.end === 'done' && U.chance(0.4)) L = HD().greetEnd;
+    await play(pickLines(L, 'greetI'));
+    return true;
+  };
+  /** 「어머니와 이야기」 */
+  ST.motherTalk = async function () {
+    var t = T(); if (!t) return;
+    var L = (HD().talk || []).slice(); if (t.found && t.found.length) L = L.concat(HD().talkFound || []);
+    await play(pickLines(L, 'talkI'));
+  };
+  /** 비상금: 가진 돈(소지금+금고)이 적으면 어머니가 도와준다 (allowanceCfg.gap 일에 한 번) */
+  ST.allowance = async function (c) {
+    var s = S(), t = T(), cf = HD().allowanceCfg || {}; if (!ST.atHome(c)) return false;
+    var money = (s.player.gold || 0) + (s.player.bank || 0);
+    if (money > (cf.below || 2000)) return false;
+    var now = U.dateNum(s.date);
+    if (t.allowLast != null && now - t.allowLast < (cf.gap || 180)) {
+      if (t.allowSoonSaid !== t.allowLast) { t.allowSoonSaid = t.allowLast; await play(HD().allowanceSoon); }
+      return false;
+    }
+    await play(t.allowN ? HD().allowanceAgain : HD().allowance);
+    s.player.gold += cf.gift || 7777; t.allowLast = now; t.allowN = (t.allowN || 0) + 1;
+    G.State.log('어머니 ' + D.mother.name + U.jx(D.mother.name, '이/가') + ' 비상금으로 금화 ' + U.num(cf.gift || 7777) + '닢을 주었다.');
+    UI.toast('어머니의 비상금 — 금화 ' + U.num(cf.gift || 7777) + '닢', 'coin', 4200);
+    G.Game.refreshHud();
+    return true;
+  };
+  function famOk(e) {
+    var s = S(), p = s.player, t = T();
+    if (e.need === 'kids') return (p.kids || []).length > 0;
+    if (e.need === 'nokids') return !(p.kids || []).length;
+    if (e.need === 'preg') return !!(p.preg && p.preg.told);
+    if (e.need === 'found') return !!(t.found && t.found.length);
+    if (e.need === 'end') return t.end === 'done';
+    return true;
+  }
+  /** 아내와 어머니가 함께 있는 장면 — at: home · inn · mansion. 일어났으면 true */
+  ST.family = async function (c, at, force) {
+    var s = S(), t = T(), h = HD(); if (!ST.atHome(c) || !s.player.wife || !h.family) return false;
+    var now = U.dateNum(s.date);
+    if (!force && t.famLast != null && now - t.famLast < (h.famGap || 20)) return false;
+    var seen = t.famSeen || (t.famSeen = {});
+    var cand = h.family.filter(function (e) { return e.at === at && famOk(e); });
+    var fresh = cand.filter(function (e) { return !seen[e.id]; });
+    var pool = fresh.length ? fresh : cand;
+    if (!pool.length) return false;
+    var p = ((h.famChance || {})[at] || 0.3) * (fresh.length ? 1 : (h.famRepeat || 0.1));
+    if (!force && !U.chance(p)) return false;
+    var e = pool[Math.floor(Math.random() * pool.length)];
+    seen[e.id] = (seen[e.id] || 0) + 1; t.famLast = now;
+    await play(e.lines, ['W', 'M']);
+    return true;
+  };
 
   // ================================================================ 게임 함수 감싸기
   function wrap(obj, name, fn) { var orig = obj && obj[name]; if (typeof orig !== 'function') return; obj[name] = fn(orig); obj[name]._story = true; }
