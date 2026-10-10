@@ -29,8 +29,15 @@ def expected(root: Path):
                     yield root / kind / nation / gender / ('%02d.webp' % index)
 
 
+def expected_halves(root: Path):
+    for path in expected(root):
+        yield path.with_name(path.stem + '_half.webp')
+
+
 def check(root: Path) -> list[Path]:
-    paths = list(expected(root))
+    faces = list(expected(root))
+    halves = list(expected_halves(root))
+    paths = faces + halves
     missing = [path for path in paths if not path.is_file()]
     bad: list[Path] = []
     hashes: dict[str, list[Path]] = {}
@@ -38,14 +45,15 @@ def check(root: Path) -> list[Path]:
         if not path.is_file():
             continue
         with Image.open(path) as image:
-            if image.size != (512, 512) or image.mode != 'RGBA':
+            size = (1024, 1536) if path.stem.endswith('_half') else (512, 512)
+            if image.size != size or image.mode != 'RGBA':
                 bad.append(path)
             elif image.getchannel('A').getextrema() == (255, 255):
                 bad.append(path)
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         hashes.setdefault(digest, []).append(path)
     duplicates = [items for items in hashes.values() if len(items) > 1]
-    print('초상 %d/%d장 · 고유 파일 %d장' % (len(paths) - len(missing), len(paths), len(hashes)))
+    print('얼굴·무릎상 %d/%d장 · 고유 파일 %d장' % (len(paths) - len(missing), len(paths), len(hashes)))
     if missing:
         print('빠진 파일: ' + ', '.join(str(path.relative_to(root)) for path in missing))
     if bad:

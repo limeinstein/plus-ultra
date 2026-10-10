@@ -6,16 +6,19 @@
   // ---------------------------------------------------------------- 발견 유물 (images/relics/ID 가 없을 때 그리는 진열대 그림)
   var RELIC_BG = { treasure: ['#5a1420', '#1e0608'], gift: ['#4a1e4e', '#16061a'], weapon: ['#1e3048', '#070c16'], armor: ['#4a3218', '#140c04'],
     book: ['#1e3e2a', '#06120a'], fig: ['#12404a', '#041216'], animal: ['#34401a', '#0e1206'] };
-  A.relicArt = function (r, w, h) {
+  A.relicArt = function (r, w, h, opts) {
     w = w || 256; h = h || w;
+    opts = opts || {};
     var c = A.canvas(w, h), x = c.getContext('2d'), rng = U.makeRng(U.strHash(r.id || 'relic'));
     var bg = RELIC_BG[r.kind] || RELIC_BG.treasure, m = Math.min(w, h), nm = r.name || '';
-    var g = x.createRadialGradient(w / 2, h * 0.42, m * 0.05, w / 2, h / 2, m * 0.75);
-    g.addColorStop(0, bg[0]); g.addColorStop(1, bg[1]); x.fillStyle = g; x.fillRect(0, 0, w, h);
-    // 벨벳 결
-    for (var i = 0; i < 60; i++) { x.fillStyle = 'rgba(255,255,255,' + (rng() * 0.025) + ')'; x.fillRect(rng() * w, rng() * h, 1 + rng() * m * 0.02, 1); }
-    // 받침대
-    x.fillStyle = 'rgba(0,0,0,.45)'; x.beginPath(); x.ellipse(w / 2, h * 0.84, m * 0.34, m * 0.07, 0, 0, 7); x.fill();
+    if (!opts.transparent) {
+      var g = x.createRadialGradient(w / 2, h * 0.42, m * 0.05, w / 2, h / 2, m * 0.75);
+      g.addColorStop(0, bg[0]); g.addColorStop(1, bg[1]); x.fillStyle = g; x.fillRect(0, 0, w, h);
+      // 벨벳 결
+      for (var i = 0; i < 60; i++) { x.fillStyle = 'rgba(255,255,255,' + (rng() * 0.025) + ')'; x.fillRect(rng() * w, rng() * h, 1 + rng() * m * 0.02, 1); }
+      // 받침대
+      x.fillStyle = 'rgba(0,0,0,.45)'; x.beginPath(); x.ellipse(w / 2, h * 0.84, m * 0.34, m * 0.07, 0, 0, 7); x.fill();
+    }
     x.save(); x.translate(w / 2, h * 0.5); var S = m * 0.36; x.scale(S, S); x.lineJoin = 'round'; x.lineCap = 'round';
     function gold(a, b) { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, a || '#fbe39a'); gg.addColorStop(0.5, '#d9a93e'); gg.addColorStop(1, b || '#7a4e12'); return gg; }
     function steel() { var gg = x.createLinearGradient(-1, -1, 1, 1); gg.addColorStop(0, '#f0f4f8'); gg.addColorStop(0.5, '#a9b4bf'); gg.addColorStop(1, '#4a5560'); return gg; }
@@ -112,9 +115,11 @@
     }
     x.restore();
     // 반짝임
-    x.globalCompositeOperation = 'lighter';
-    for (var sp = 0; sp < 3; sp++) { var sx = w * (0.3 + rng() * 0.4), sy = h * (0.25 + rng() * 0.4), sz = m * (0.02 + rng() * 0.03); x.strokeStyle = 'rgba(255,245,210,.55)'; x.lineWidth = Math.max(1, m * 0.006); x.beginPath(); x.moveTo(sx - sz, sy); x.lineTo(sx + sz, sy); x.moveTo(sx, sy - sz); x.lineTo(sx, sy + sz); x.stroke(); }
-    x.globalCompositeOperation = 'source-over';
+    if (!opts.transparent) {
+      x.globalCompositeOperation = 'lighter';
+      for (var sp = 0; sp < 3; sp++) { var sx = w * (0.3 + rng() * 0.4), sy = h * (0.25 + rng() * 0.4), sz = m * (0.02 + rng() * 0.03); x.strokeStyle = 'rgba(255,245,210,.55)'; x.lineWidth = Math.max(1, m * 0.006); x.beginPath(); x.moveTo(sx - sz, sy); x.lineTo(sx + sz, sy); x.moveTo(sx, sy - sz); x.lineTo(sx, sy + sz); x.stroke(); }
+      x.globalCompositeOperation = 'source-over';
+    }
     return c;
   };
 

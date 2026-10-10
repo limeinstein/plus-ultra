@@ -10,11 +10,11 @@
     "matesMissingHalf": 0,
     "sponsorSlotsWithAnyMissingHalf": 0,
     "sponsorTenuresMissingHalf": 0,
-    "dedicatedBustFiles": 187,
+    "dedicatedBustFiles": 224,
     "dedicatedBustFilesMissingHalf": 0,
-    "uniqueUsedBustSources": 201,
+    "uniqueUsedBustSources": 264,
     "usedBustSourcesMissingHalf": 0,
-    "sponsorSlotsWithoutAnyRasterForSomeTenure": 73,
+    "sponsorSlotsWithoutAnyRasterForSomeTenure": 0,
     "note": "후원자는 관직/자리 수다. 역대 보유자 행에는 재위 반복·공위·직함이 포함되므로 고유 인원으로 세지 않는다. 철새 항해사는 저장 파일과 연도에 따라 자동 생성되어 고정 총원이 없다."
   },
   "mates": [
@@ -183,9 +183,9 @@
     {
       "id": "mate:marina",
       "name": "말린체",
-      "bust": "portraits/npc-roles/az/maid",
-      "half": "portraits/npc-roles/az/maid_half",
-      "halfFile": "portraits/npc-roles/az/maid_half.webp",
+      "bust": "portraits/mates/marina",
+      "half": "portraits/mates/marina_half",
+      "halfFile": "portraits/mates/marina_half.webp",
       "witch": false,
       "desc": "아즈텍과 마야의 말을 모두 아는 총명한 통역."
     },
@@ -201,9 +201,9 @@
     {
       "id": "mate:bokuden",
       "name": "츠카하라 보쿠덴",
-      "bust": "portraits/npc-roles/jp/soldier",
-      "half": "portraits/npc-roles/jp/soldier_half",
-      "halfFile": "portraits/npc-roles/jp/soldier_half.webp",
+      "bust": "portraits/mates/bokuden",
+      "half": "portraits/mates/bokuden_half",
+      "halfFile": "portraits/mates/bokuden_half.webp",
       "witch": false,
       "desc": "동방 최고의 검객. 백 번 싸워 한 번도 지지 않았다."
     },
@@ -552,36 +552,36 @@
     {
       "id": "mate:chen",
       "name": "진조의",
-      "bust": "portraits/npc-roles/cn/merchant",
-      "half": "portraits/npc-roles/cn/merchant_half",
-      "halfFile": "portraits/npc-roles/cn/merchant_half.webp",
+      "bust": "portraits/mates/chen",
+      "half": "portraits/mates/chen_half",
+      "halfFile": "portraits/mates/chen_half.webp",
       "witch": false,
       "desc": "명의 해금을 피해 바다를 누비는 복건 출신의 상인."
     },
     {
       "id": "mate:kim",
       "name": "김서진",
-      "bust": "portraits/npc-roles/kr/sailor",
-      "half": "portraits/npc-roles/kr/sailor_half",
-      "halfFile": "portraits/npc-roles/kr/sailor_half.webp",
+      "bust": "portraits/mates/kim",
+      "half": "portraits/mates/kim_half",
+      "halfFile": "portraits/mates/kim_half.webp",
       "witch": false,
       "desc": "조선의 역관. 한문과 동방의 여러 말에 밝다."
     },
     {
       "id": "mate:tupac",
       "name": "투팍",
-      "bust": "portraits/npc-roles/an/sailor",
-      "half": "portraits/npc-roles/an/sailor_half",
-      "halfFile": "portraits/npc-roles/an/sailor_half.webp",
+      "bust": "portraits/mates/tupac",
+      "half": "portraits/mates/tupac_half",
+      "halfFile": "portraits/mates/tupac_half.webp",
       "witch": false,
       "desc": "안데스의 길잡이. 험한 산길을 두려워하지 않는다."
     },
     {
       "id": "mate:kisk",
       "name": "누징가 은쿠우",
-      "bust": "portraits/npc-roles/af/sailor",
-      "half": "portraits/npc-roles/af/sailor_half",
-      "halfFile": "portraits/npc-roles/af/sailor_half.webp",
+      "bust": "portraits/mates/kisk",
+      "half": "portraits/mates/kisk_half",
+      "halfFile": "portraits/mates/kisk_half.webp",
       "witch": false,
       "desc": "콩고 왕국의 귀족. 아프리카 오지의 길을 잘 안다."
     },
@@ -1177,9 +1177,9 @@
         {
           "id": "sponsor:pt_behaim",
           "name": "마르틴 베하임",
-          "bust": "portraits/sponsors/pt_behaim",
-          "half": "portraits/sponsors/pt_behaim_half",
-          "halfFile": "portraits/sponsors/pt_behaim_half.webp",
+          "bust": "portraits/sponsors/pt_behaim_1",
+          "half": "portraits/sponsors/pt_behaim_1_half",
+          "halfFile": "portraits/sponsors/pt_behaim_1_half.webp",
           "from": 1480,
           "to": 1507,
           "generic": false,
@@ -1791,7 +1791,7 @@
         {
           "id": "sponsor:es_fonseca",
           "name": "후안 로드리게스 데 폰세카 부주교",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/08",
           "half": "portraits/sponsors/es_fonseca_half",
           "halfFile": "portraits/sponsors/es_fonseca_half.webp",
           "from": 1480,
@@ -1802,7 +1802,7 @@
         {
           "id": "sponsor:es_fonseca",
           "name": "후안 로드리게스 데 폰세카",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/10",
           "half": "portraits/sponsors/es_fonseca_half",
           "halfFile": "portraits/sponsors/es_fonseca_half.webp",
           "from": 1493,
@@ -1813,7 +1813,7 @@
         {
           "id": "sponsor:es_fonseca",
           "name": "인디아스 평의회 의장",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/08",
           "half": "portraits/sponsors/es_fonseca_half",
           "halfFile": "portraits/sponsors/es_fonseca_half.webp",
           "from": 1524,
@@ -2101,7 +2101,7 @@
         {
           "id": "sponsor:es_nebrija",
           "name": "안토니오 데 네브리하",
-          "bust": null,
+          "bust": "portraits/pools/mates/es/m/06",
           "half": "portraits/sponsors/es_nebrija_half",
           "halfFile": "portraits/sponsors/es_nebrija_half.webp",
           "from": 1480,
@@ -2112,7 +2112,7 @@
         {
           "id": "sponsor:es_nebrija",
           "name": "톨레도 대학 학장",
-          "bust": null,
+          "bust": "portraits/pools/mates/es/m/09",
           "half": "portraits/sponsors/es_nebrija_half",
           "halfFile": "portraits/sponsors/es_nebrija_half.webp",
           "from": 1522,
@@ -2840,7 +2840,7 @@
         {
           "id": "sponsor:it_toscanelli",
           "name": "파올로 토스카넬리",
-          "bust": null,
+          "bust": "portraits/pools/mates/es/m/08",
           "half": "portraits/sponsors/it_toscanelli_half",
           "halfFile": "portraits/sponsors/it_toscanelli_half.webp",
           "from": 1480,
@@ -2851,7 +2851,7 @@
         {
           "id": "sponsor:it_toscanelli",
           "name": "피렌체 학당장",
-          "bust": null,
+          "bust": "portraits/pools/mates/es/m/03",
           "half": "portraits/sponsors/it_toscanelli_half",
           "halfFile": "portraits/sponsors/it_toscanelli_half.webp",
           "from": 1482,
@@ -2862,7 +2862,7 @@
         {
           "id": "sponsor:it_toscanelli",
           "name": "피렌체의 천문학자",
-          "bust": null,
+          "bust": "portraits/pools/mates/es/m/09",
           "half": "portraits/sponsors/it_toscanelli_half",
           "halfFile": "portraits/sponsors/it_toscanelli_half.webp",
           "from": 1600,
@@ -3437,7 +3437,7 @@
         {
           "id": "sponsor:it_spinola",
           "name": "미켈레 스피놀라",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/04",
           "half": "portraits/sponsors/it_spinola_half",
           "halfFile": "portraits/sponsors/it_spinola_half.webp",
           "from": 1480,
@@ -3448,7 +3448,7 @@
         {
           "id": "sponsor:it_spinola",
           "name": "제노바 대상인",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/03",
           "half": "portraits/sponsors/it_spinola_half",
           "halfFile": "portraits/sponsors/it_spinola_half.webp",
           "from": 1600,
@@ -3495,7 +3495,7 @@
         {
           "id": "sponsor:it_leonardo",
           "name": "레오나르도 다 빈치",
-          "bust": null,
+          "bust": "portraits/pools/mates/es/m/08",
           "half": "portraits/sponsors/it_leonardo_half",
           "halfFile": "portraits/sponsors/it_leonardo_half.webp",
           "from": 1482,
@@ -4293,7 +4293,7 @@
         {
           "id": "sponsor:en_bristol",
           "name": "브리스틀 상인조합장",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/04",
           "half": "portraits/sponsors/en_bristol_half",
           "halfFile": "portraits/sponsors/en_bristol_half.webp",
           "from": 1480,
@@ -4311,7 +4311,7 @@
         {
           "id": "sponsor:de_fugger",
           "name": "야코프 푸거",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/04",
           "half": "portraits/sponsors/de_fugger_half",
           "halfFile": "portraits/sponsors/de_fugger_half.webp",
           "from": 1480,
@@ -4322,7 +4322,7 @@
         {
           "id": "sponsor:de_fugger",
           "name": "안톤 푸거",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/04",
           "half": "portraits/sponsors/de_fugger_half",
           "halfFile": "portraits/sponsors/de_fugger_half.webp",
           "from": 1525,
@@ -4333,7 +4333,7 @@
         {
           "id": "sponsor:de_fugger",
           "name": "푸거 상회 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/06",
           "half": "portraits/sponsors/de_fugger_half",
           "halfFile": "portraits/sponsors/de_fugger_half.webp",
           "from": 1560,
@@ -4351,7 +4351,7 @@
         {
           "id": "sponsor:de_welser",
           "name": "바르톨로모이스 벨저",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/de_welser_half",
           "halfFile": "portraits/sponsors/de_welser_half.webp",
           "from": 1480,
@@ -4362,7 +4362,7 @@
         {
           "id": "sponsor:de_welser",
           "name": "벨저 상회 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/de_welser_half",
           "halfFile": "portraits/sponsors/de_welser_half.webp",
           "from": 1600,
@@ -4640,7 +4640,7 @@
         {
           "id": "sponsor:de_hansa",
           "name": "뤼베크 시장",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/de_hansa_half",
           "halfFile": "portraits/sponsors/de_hansa_half.webp",
           "from": 1480,
@@ -4658,7 +4658,7 @@
         {
           "id": "sponsor:de_waldsee",
           "name": "마르틴 발트제뮐러",
-          "bust": null,
+          "bust": "portraits/pools/mates/en/m/05",
           "half": "portraits/sponsors/de_waldsee_half",
           "halfFile": "portraits/sponsors/de_waldsee_half.webp",
           "from": 1500,
@@ -4669,7 +4669,7 @@
         {
           "id": "sponsor:de_waldsee",
           "name": "스트라스부르크의 지리학자",
-          "bust": null,
+          "bust": "portraits/pools/mates/en/m/04",
           "half": "portraits/sponsors/de_waldsee_half",
           "halfFile": "portraits/sponsors/de_waldsee_half.webp",
           "from": 1520,
@@ -4705,7 +4705,7 @@
         {
           "id": "sponsor:nl_erasmus",
           "name": "데시데리우스 에라스뮈스",
-          "bust": null,
+          "bust": "portraits/pools/mates/en/m/09",
           "half": "portraits/sponsors/nl_erasmus_half",
           "halfFile": "portraits/sponsors/nl_erasmus_half.webp",
           "from": 1500,
@@ -7063,7 +7063,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "성종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1480,
@@ -7074,7 +7074,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "연산군",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1494,
@@ -7085,7 +7085,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "중종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1506,
@@ -7096,7 +7096,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "인종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1544,
@@ -7107,7 +7107,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "명종 (수렴청정 문정왕후)",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1545,
@@ -7118,7 +7118,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "명종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1553,
@@ -7129,7 +7129,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "선조",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1567,
@@ -7140,7 +7140,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "광해군",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1608,
@@ -7151,7 +7151,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "인조",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1623,
@@ -7162,7 +7162,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "효종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1649,
@@ -7173,7 +7173,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "현종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1659,
@@ -7184,7 +7184,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "숙종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1674,
@@ -7195,7 +7195,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "경종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1720,
@@ -7206,7 +7206,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "영조",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1724,
@@ -7217,7 +7217,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "정조",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1776,
@@ -7228,7 +7228,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "순조 (수렴청정 정순왕후)",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1800,
@@ -7239,7 +7239,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "순조",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1804,
@@ -7250,7 +7250,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "헌종 (수렴청정 순원왕후)",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1834,
@@ -7261,7 +7261,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "헌종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1840,
@@ -7272,7 +7272,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "철종 (수렴청정 순원왕후)",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1849,
@@ -7283,7 +7283,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "철종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1851,
@@ -7294,7 +7294,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "고종 (수렴청정 신정왕후)",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1863,
@@ -7305,7 +7305,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "고종",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1866,
@@ -7316,7 +7316,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "고종(광무제)",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1897,
@@ -7327,7 +7327,7 @@
         {
           "id": "sponsor:kr_king",
           "name": "조선 국왕",
-          "bust": null,
+          "bust": "portraits/sponsors/kr_king",
           "half": "portraits/sponsors/kr_king_half",
           "halfFile": "portraits/sponsors/kr_king_half.webp",
           "from": 1907,
@@ -7345,7 +7345,7 @@
         {
           "id": "sponsor:kr_seja",
           "name": "세자 이융",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/10",
           "half": "portraits/sponsors/kr_seja_half",
           "halfFile": "portraits/sponsors/kr_seja_half.webp",
           "from": 1483,
@@ -7356,7 +7356,7 @@
         {
           "id": "sponsor:kr_seja",
           "name": "세자 이황",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/02",
           "half": "portraits/sponsors/kr_seja_half",
           "halfFile": "portraits/sponsors/kr_seja_half.webp",
           "from": 1502,
@@ -7367,7 +7367,7 @@
         {
           "id": "sponsor:kr_seja",
           "name": "세자 이호",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/01",
           "half": "portraits/sponsors/kr_seja_half",
           "halfFile": "portraits/sponsors/kr_seja_half.webp",
           "from": 1520,
@@ -7378,7 +7378,7 @@
         {
           "id": "sponsor:kr_seja",
           "name": "순회세자",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/09",
           "half": "portraits/sponsors/kr_seja_half",
           "halfFile": "portraits/sponsors/kr_seja_half.webp",
           "from": 1557,
@@ -7389,7 +7389,7 @@
         {
           "id": "sponsor:kr_seja",
           "name": "세자 광해군",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/10",
           "half": "portraits/sponsors/kr_seja_half",
           "halfFile": "portraits/sponsors/kr_seja_half.webp",
           "from": 1592,
@@ -7400,7 +7400,7 @@
         {
           "id": "sponsor:kr_seja",
           "name": "조선 세자",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/07",
           "half": "portraits/sponsors/kr_seja_half",
           "halfFile": "portraits/sponsors/kr_seja_half.webp",
           "from": 1600,
@@ -7418,7 +7418,7 @@
         {
           "id": "sponsor:kr_apgujeong",
           "name": "상당부원군 한명회",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/07",
           "half": "portraits/sponsors/kr_apgujeong_half",
           "halfFile": "portraits/sponsors/kr_apgujeong_half.webp",
           "from": 1480,
@@ -7429,7 +7429,7 @@
         {
           "id": "sponsor:kr_apgujeong",
           "name": "청주 한씨 가문 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/10",
           "half": "portraits/sponsors/kr_apgujeong_half",
           "halfFile": "portraits/sponsors/kr_apgujeong_half.webp",
           "from": 1487,
@@ -7447,7 +7447,7 @@
         {
           "id": "sponsor:kr_gyeongju",
           "name": "경주 부윤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/05",
           "half": "portraits/sponsors/kr_gyeongju_half",
           "halfFile": "portraits/sponsors/kr_gyeongju_half.webp",
           "from": 1480,
@@ -7458,7 +7458,7 @@
         {
           "id": "sponsor:kr_gyeongju",
           "name": "우재 손중돈",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/01",
           "half": "portraits/sponsors/kr_gyeongju_half",
           "halfFile": "portraits/sponsors/kr_gyeongju_half.webp",
           "from": 1489,
@@ -7469,7 +7469,7 @@
         {
           "id": "sponsor:kr_gyeongju",
           "name": "회재 이언적",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/01",
           "half": "portraits/sponsors/kr_gyeongju_half",
           "halfFile": "portraits/sponsors/kr_gyeongju_half.webp",
           "from": 1529,
@@ -7480,7 +7480,7 @@
         {
           "id": "sponsor:kr_gyeongju",
           "name": "경주 부윤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/05",
           "half": "portraits/sponsors/kr_gyeongju_half",
           "halfFile": "portraits/sponsors/kr_gyeongju_half.webp",
           "from": 1547,
@@ -7498,7 +7498,7 @@
         {
           "id": "sponsor:kr_hansan",
           "name": "통제사 이순신",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/kr/m/10",
           "half": "portraits/sponsors/kr_hansan_half",
           "halfFile": "portraits/sponsors/kr_hansan_half.webp",
           "from": 1593,
@@ -7864,7 +7864,7 @@
         {
           "id": "sponsor:jp_sakai",
           "name": "사카이 회합중 대표",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/jp/m/08",
           "half": "portraits/sponsors/jp_sakai_half",
           "halfFile": "portraits/sponsors/jp_sakai_half.webp",
           "from": 1480,
@@ -7962,7 +7962,7 @@
         {
           "id": "sponsor:es_hispaniola",
           "name": "니콜라스 데 오반도",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/07",
           "half": "portraits/sponsors/es_hispaniola_half",
           "halfFile": "portraits/sponsors/es_hispaniola_half.webp",
           "from": 1502,
@@ -7973,7 +7973,7 @@
         {
           "id": "sponsor:es_hispaniola",
           "name": "디에고 콜론",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/07",
           "half": "portraits/sponsors/es_hispaniola_half",
           "halfFile": "portraits/sponsors/es_hispaniola_half.webp",
           "from": 1509,
@@ -7984,7 +7984,7 @@
         {
           "id": "sponsor:es_hispaniola",
           "name": "에스파뇰라 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/01",
           "half": "portraits/sponsors/es_hispaniola_half",
           "halfFile": "portraits/sponsors/es_hispaniola_half.webp",
           "from": 1526,
@@ -8002,7 +8002,7 @@
         {
           "id": "sponsor:es_cuba",
           "name": "디에고 벨라스케스",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/06",
           "half": "portraits/sponsors/es_cuba_half",
           "halfFile": "portraits/sponsors/es_cuba_half.webp",
           "from": 1515,
@@ -8013,7 +8013,7 @@
         {
           "id": "sponsor:es_cuba",
           "name": "쿠바 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/04",
           "half": "portraits/sponsors/es_cuba_half",
           "halfFile": "portraits/sponsors/es_cuba_half.webp",
           "from": 1524,
@@ -8031,7 +8031,7 @@
         {
           "id": "sponsor:es_newspain",
           "name": "안토니오 데 멘도사",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/08",
           "half": "portraits/sponsors/es_newspain_half",
           "halfFile": "portraits/sponsors/es_newspain_half.webp",
           "from": 1535,
@@ -8042,7 +8042,7 @@
         {
           "id": "sponsor:es_newspain",
           "name": "누에바 에스파냐 부왕",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/es_newspain_half",
           "halfFile": "portraits/sponsors/es_newspain_half.webp",
           "from": 1550,
@@ -8060,7 +8060,7 @@
         {
           "id": "sponsor:es_panama",
           "name": "페드라리아스 다빌라",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/03",
           "half": "portraits/sponsors/es_panama_half",
           "halfFile": "portraits/sponsors/es_panama_half.webp",
           "from": 1519,
@@ -8071,7 +8071,7 @@
         {
           "id": "sponsor:es_panama",
           "name": "파나마 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/03",
           "half": "portraits/sponsors/es_panama_half",
           "halfFile": "portraits/sponsors/es_panama_half.webp",
           "from": 1526,
@@ -8089,7 +8089,7 @@
         {
           "id": "sponsor:es_peru",
           "name": "프란시스코 피사로",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/01",
           "half": "portraits/sponsors/es_peru_half",
           "halfFile": "portraits/sponsors/es_peru_half.webp",
           "from": 1535,
@@ -8100,7 +8100,7 @@
         {
           "id": "sponsor:es_peru",
           "name": "페루 부왕",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/08",
           "half": "portraits/sponsors/es_peru_half",
           "halfFile": "portraits/sponsors/es_peru_half.webp",
           "from": 1541,
@@ -8118,7 +8118,7 @@
         {
           "id": "sponsor:es_tendilla",
           "name": "텐디야 백작 이니고 로페스 데 멘도사",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/02",
           "half": "portraits/sponsors/es_tendilla_half",
           "halfFile": "portraits/sponsors/es_tendilla_half.webp",
           "from": 1492,
@@ -8129,7 +8129,7 @@
         {
           "id": "sponsor:es_tendilla",
           "name": "몬데하르 후작 루이스 우르타도 데 멘도사",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/05",
           "half": "portraits/sponsors/es_tendilla_half",
           "halfFile": "portraits/sponsors/es_tendilla_half.webp",
           "from": 1515,
@@ -8140,7 +8140,7 @@
         {
           "id": "sponsor:es_tendilla",
           "name": "몬데하르 후작 가문 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/02",
           "half": "portraits/sponsors/es_tendilla_half",
           "halfFile": "portraits/sponsors/es_tendilla_half.webp",
           "from": 1566,
@@ -8158,7 +8158,7 @@
         {
           "id": "sponsor:es_toledo",
           "name": "멘도사 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/es_toledo_half",
           "halfFile": "portraits/sponsors/es_toledo_half.webp",
           "from": 1482,
@@ -8169,7 +8169,7 @@
         {
           "id": "sponsor:es_toledo",
           "name": "시스네로스 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/03",
           "half": "portraits/sponsors/es_toledo_half",
           "halfFile": "portraits/sponsors/es_toledo_half.webp",
           "from": 1495,
@@ -8180,7 +8180,7 @@
         {
           "id": "sponsor:es_toledo",
           "name": "톨레도 대주교",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/06",
           "half": "portraits/sponsors/es_toledo_half",
           "halfFile": "portraits/sponsors/es_toledo_half.webp",
           "from": 1517,
@@ -8191,7 +8191,7 @@
         {
           "id": "sponsor:es_toledo",
           "name": "톨레도 대주교·왕국 재상",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/06",
           "half": "portraits/sponsors/es_toledo_half",
           "halfFile": "portraits/sponsors/es_toledo_half.webp",
           "from": 1650,
@@ -8209,7 +8209,7 @@
         {
           "id": "sponsor:es_capitan",
           "name": "곤살로 페르난데스 데 코르도바",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/01",
           "half": "portraits/sponsors/es_capitan_half",
           "halfFile": "portraits/sponsors/es_capitan_half.webp",
           "from": 1480,
@@ -8220,7 +8220,7 @@
         {
           "id": "sponsor:es_capitan",
           "name": "세사 공작 가문 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/04",
           "half": "portraits/sponsors/es_capitan_half",
           "halfFile": "portraits/sponsors/es_capitan_half.webp",
           "from": 1515,
@@ -8238,7 +8238,7 @@
         {
           "id": "sponsor:es_cardona",
           "name": "후안 라몬 폴크 데 카르도나",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/es_cardona_half",
           "halfFile": "portraits/sponsors/es_cardona_half.webp",
           "from": 1480,
@@ -8249,7 +8249,7 @@
         {
           "id": "sponsor:es_cardona",
           "name": "카르도나 공작 가문 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/02",
           "half": "portraits/sponsors/es_cardona_half",
           "halfFile": "portraits/sponsors/es_cardona_half.webp",
           "from": 1513,
@@ -8267,7 +8267,7 @@
         {
           "id": "sponsor:fr_brittany",
           "name": "프랑수아 2세 공작",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/01",
           "half": "portraits/sponsors/fr_brittany_half",
           "halfFile": "portraits/sponsors/fr_brittany_half.webp",
           "from": 1480,
@@ -8296,7 +8296,7 @@
         {
           "id": "sponsor:fr_amboise",
           "name": "조르주 당부아즈 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/07",
           "half": "portraits/sponsors/fr_amboise_half",
           "halfFile": "portraits/sponsors/fr_amboise_half.webp",
           "from": 1494,
@@ -8307,7 +8307,7 @@
         {
           "id": "sponsor:fr_amboise",
           "name": "루앙 대주교",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/fr_amboise_half",
           "halfFile": "portraits/sponsors/fr_amboise_half.webp",
           "from": 1510,
@@ -8318,7 +8318,7 @@
         {
           "id": "sponsor:fr_amboise",
           "name": "루앙 대주교·국왕 재상",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/fr_amboise_half",
           "halfFile": "portraits/sponsors/fr_amboise_half.webp",
           "from": 1650,
@@ -8336,7 +8336,7 @@
         {
           "id": "sponsor:fr_guise",
           "name": "기즈 공작 클로드",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/fr_guise_half",
           "halfFile": "portraits/sponsors/fr_guise_half.webp",
           "from": 1528,
@@ -8347,7 +8347,7 @@
         {
           "id": "sponsor:fr_guise",
           "name": "기즈 공작 프랑수아",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/07",
           "half": "portraits/sponsors/fr_guise_half",
           "halfFile": "portraits/sponsors/fr_guise_half.webp",
           "from": 1550,
@@ -8358,7 +8358,7 @@
         {
           "id": "sponsor:fr_guise",
           "name": "기즈 공작 앙리",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/01",
           "half": "portraits/sponsors/fr_guise_half",
           "halfFile": "portraits/sponsors/fr_guise_half.webp",
           "from": 1563,
@@ -8369,7 +8369,7 @@
         {
           "id": "sponsor:fr_guise",
           "name": "기즈 공작 샤를",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/fr_guise_half",
           "halfFile": "portraits/sponsors/fr_guise_half.webp",
           "from": 1588,
@@ -8380,7 +8380,7 @@
         {
           "id": "sponsor:fr_guise",
           "name": "기즈 공작",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/06",
           "half": "portraits/sponsors/fr_guise_half",
           "halfFile": "portraits/sponsors/fr_guise_half.webp",
           "from": 1640,
@@ -8398,7 +8398,7 @@
         {
           "id": "sponsor:fr_minister",
           "name": "쉴리 공작 (재무경)",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/04",
           "half": "portraits/sponsors/fr_minister_half",
           "halfFile": "portraits/sponsors/fr_minister_half.webp",
           "from": 1598,
@@ -8409,7 +8409,7 @@
         {
           "id": "sponsor:fr_minister",
           "name": "리슐리외 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/01",
           "half": "portraits/sponsors/fr_minister_half",
           "halfFile": "portraits/sponsors/fr_minister_half.webp",
           "from": 1624,
@@ -8420,7 +8420,7 @@
         {
           "id": "sponsor:fr_minister",
           "name": "마자랭 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/fr_minister_half",
           "halfFile": "portraits/sponsors/fr_minister_half.webp",
           "from": 1642,
@@ -8431,7 +8431,7 @@
         {
           "id": "sponsor:fr_minister",
           "name": "장바티스트 콜베르",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/03",
           "half": "portraits/sponsors/fr_minister_half",
           "halfFile": "portraits/sponsors/fr_minister_half.webp",
           "from": 1661,
@@ -8442,7 +8442,7 @@
         {
           "id": "sponsor:fr_minister",
           "name": "국왕 재상",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/07",
           "half": "portraits/sponsors/fr_minister_half",
           "halfFile": "portraits/sponsors/fr_minister_half.webp",
           "from": 1683,
@@ -8460,7 +8460,7 @@
         {
           "id": "sponsor:fr_montaigne",
           "name": "미셸 드 몽테뉴",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/fr_montaigne_half",
           "halfFile": "portraits/sponsors/fr_montaigne_half.webp",
           "from": 1571,
@@ -8511,7 +8511,7 @@
         {
           "id": "sponsor:nl_regent",
           "name": "알바 공작",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/nl_regent_half",
           "halfFile": "portraits/sponsors/nl_regent_half.webp",
           "from": 1567,
@@ -8522,7 +8522,7 @@
         {
           "id": "sponsor:nl_regent",
           "name": "파르마 공작 알레산드로 파르네세",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/06",
           "half": "portraits/sponsors/nl_regent_half",
           "halfFile": "portraits/sponsors/nl_regent_half.webp",
           "from": 1578,
@@ -8533,7 +8533,7 @@
         {
           "id": "sponsor:nl_regent",
           "name": "알브레히트 대공",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/05",
           "half": "portraits/sponsors/nl_regent_half",
           "halfFile": "portraits/sponsors/nl_regent_half.webp",
           "from": 1598,
@@ -8551,7 +8551,7 @@
         {
           "id": "sponsor:nl_gruuthuse",
           "name": "루이 드 그뤼트후제",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/05",
           "half": "portraits/sponsors/nl_gruuthuse_half",
           "halfFile": "portraits/sponsors/nl_gruuthuse_half.webp",
           "from": 1480,
@@ -8562,7 +8562,7 @@
         {
           "id": "sponsor:nl_gruuthuse",
           "name": "장 드 그뤼트후제",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/nl_gruuthuse_half",
           "halfFile": "portraits/sponsors/nl_gruuthuse_half.webp",
           "from": 1492,
@@ -8580,7 +8580,7 @@
         {
           "id": "sponsor:nl_amsterdam",
           "name": "코르넬리스 호프트",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/03",
           "half": "portraits/sponsors/nl_amsterdam_half",
           "halfFile": "portraits/sponsors/nl_amsterdam_half.webp",
           "from": 1588,
@@ -8591,7 +8591,7 @@
         {
           "id": "sponsor:nl_amsterdam",
           "name": "안드리스 비커르",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/07",
           "half": "portraits/sponsors/nl_amsterdam_half",
           "halfFile": "portraits/sponsors/nl_amsterdam_half.webp",
           "from": 1627,
@@ -8602,7 +8602,7 @@
         {
           "id": "sponsor:nl_amsterdam",
           "name": "암스테르담 시장",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/nl_amsterdam_half",
           "halfFile": "portraits/sponsors/nl_amsterdam_half.webp",
           "from": 1652,
@@ -8620,7 +8620,7 @@
         {
           "id": "sponsor:it_trivulzio",
           "name": "잔 자코모 트리불치오",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/04",
           "half": "portraits/sponsors/it_trivulzio_half",
           "halfFile": "portraits/sponsors/it_trivulzio_half.webp",
           "from": 1480,
@@ -8638,7 +8638,7 @@
         {
           "id": "sponsor:it_doria",
           "name": "안드레아 도리아",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/09",
           "half": "portraits/sponsors/it_doria_half",
           "halfFile": "portraits/sponsors/it_doria_half.webp",
           "from": 1528,
@@ -8649,7 +8649,7 @@
         {
           "id": "sponsor:it_doria",
           "name": "잔안드레아 도리아",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/03",
           "half": "portraits/sponsors/it_doria_half",
           "halfFile": "portraits/sponsors/it_doria_half.webp",
           "from": 1560,
@@ -8660,7 +8660,7 @@
         {
           "id": "sponsor:it_doria",
           "name": "도리아 가문 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/10",
           "half": "portraits/sponsors/it_doria_half",
           "halfFile": "portraits/sponsors/it_doria_half.webp",
           "from": 1606,
@@ -8678,7 +8678,7 @@
         {
           "id": "sponsor:it_contarini",
           "name": "가스파로 콘타리니",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/it_contarini_half",
           "halfFile": "portraits/sponsors/it_contarini_half.webp",
           "from": 1520,
@@ -8696,7 +8696,7 @@
         {
           "id": "sponsor:it_machiavelli",
           "name": "니콜로 마키아벨리",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/03",
           "half": "portraits/sponsors/it_machiavelli_half",
           "halfFile": "portraits/sponsors/it_machiavelli_half.webp",
           "from": 1498,
@@ -8714,7 +8714,7 @@
         {
           "id": "sponsor:it_farnese",
           "name": "알레산드로 파르네세 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/it_farnese_half",
           "halfFile": "portraits/sponsors/it_farnese_half.webp",
           "from": 1493,
@@ -8725,7 +8725,7 @@
         {
           "id": "sponsor:it_farnese",
           "name": "알레산드로 파르네세 (조카) 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/08",
           "half": "portraits/sponsors/it_farnese_half",
           "halfFile": "portraits/sponsors/it_farnese_half.webp",
           "from": 1534,
@@ -8736,7 +8736,7 @@
         {
           "id": "sponsor:it_farnese",
           "name": "오도아르도 파르네세 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/it_farnese_half",
           "halfFile": "portraits/sponsors/it_farnese_half.webp",
           "from": 1591,
@@ -8747,7 +8747,7 @@
         {
           "id": "sponsor:it_farnese",
           "name": "파르네세 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/01",
           "half": "portraits/sponsors/it_farnese_half",
           "halfFile": "portraits/sponsors/it_farnese_half.webp",
           "from": 1626,
@@ -8765,7 +8765,7 @@
         {
           "id": "sponsor:it_sanseverino",
           "name": "안토넬로 산세베리노",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/09",
           "half": "portraits/sponsors/it_sanseverino_half",
           "halfFile": "portraits/sponsors/it_sanseverino_half.webp",
           "from": 1480,
@@ -8776,7 +8776,7 @@
         {
           "id": "sponsor:it_sanseverino",
           "name": "페란테 산세베리노",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/09",
           "half": "portraits/sponsors/it_sanseverino_half",
           "halfFile": "portraits/sponsors/it_sanseverino_half.webp",
           "from": 1507,
@@ -8794,7 +8794,7 @@
         {
           "id": "sponsor:en_minister",
           "name": "토머스 울지 추기경",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/en_minister_half",
           "halfFile": "portraits/sponsors/en_minister_half.webp",
           "from": 1515,
@@ -8805,7 +8805,7 @@
         {
           "id": "sponsor:en_minister",
           "name": "토머스 크롬웰",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/03",
           "half": "portraits/sponsors/en_minister_half",
           "halfFile": "portraits/sponsors/en_minister_half.webp",
           "from": 1532,
@@ -8816,7 +8816,7 @@
         {
           "id": "sponsor:en_minister",
           "name": "벌리 경 윌리엄 세실",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/06",
           "half": "portraits/sponsors/en_minister_half",
           "halfFile": "portraits/sponsors/en_minister_half.webp",
           "from": 1558,
@@ -8827,7 +8827,7 @@
         {
           "id": "sponsor:en_minister",
           "name": "로버트 세실",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/03",
           "half": "portraits/sponsors/en_minister_half",
           "halfFile": "portraits/sponsors/en_minister_half.webp",
           "from": 1598,
@@ -8838,7 +8838,7 @@
         {
           "id": "sponsor:en_minister",
           "name": "국왕 수석 대신",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/06",
           "half": "portraits/sponsors/en_minister_half",
           "halfFile": "portraits/sponsors/en_minister_half.webp",
           "from": 1612,
@@ -8856,7 +8856,7 @@
         {
           "id": "sponsor:en_north",
           "name": "헌팅던 백작 헨리 헤이스팅스",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/01",
           "half": "portraits/sponsors/en_north_half",
           "halfFile": "portraits/sponsors/en_north_half.webp",
           "from": 1572,
@@ -8867,7 +8867,7 @@
         {
           "id": "sponsor:en_north",
           "name": "북부 평의회 의장",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/06",
           "half": "portraits/sponsors/en_north_half",
           "halfFile": "portraits/sponsors/en_north_half.webp",
           "from": 1595,
@@ -8885,7 +8885,7 @@
         {
           "id": "sponsor:sc_moray",
           "name": "머리 백작 제임스 스튜어트",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/07",
           "half": "portraits/sponsors/sc_moray_half",
           "halfFile": "portraits/sponsors/sc_moray_half.webp",
           "from": 1561,
@@ -8903,7 +8903,7 @@
         {
           "id": "sponsor:ie_kildare",
           "name": "킬데어 백작 제럴드 피츠제럴드",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/09",
           "half": "portraits/sponsors/ie_kildare_half",
           "halfFile": "portraits/sponsors/ie_kildare_half.webp",
           "from": 1480,
@@ -8914,7 +8914,7 @@
         {
           "id": "sponsor:ie_kildare",
           "name": "킬데어 백작 제럴드 오그",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/05",
           "half": "portraits/sponsors/ie_kildare_half",
           "halfFile": "portraits/sponsors/ie_kildare_half.webp",
           "from": 1513,
@@ -8925,7 +8925,7 @@
         {
           "id": "sponsor:ie_kildare",
           "name": "아일랜드 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/01",
           "half": "portraits/sponsors/ie_kildare_half",
           "halfFile": "portraits/sponsors/ie_kildare_half.webp",
           "from": 1534,
@@ -8943,7 +8943,7 @@
         {
           "id": "sponsor:de_cologne",
           "name": "헤르만 4세 폰 헤센",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/05",
           "half": "portraits/sponsors/de_cologne_half",
           "halfFile": "portraits/sponsors/de_cologne_half.webp",
           "from": 1480,
@@ -8954,7 +8954,7 @@
         {
           "id": "sponsor:de_cologne",
           "name": "필리프 2세 폰 다운",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/09",
           "half": "portraits/sponsors/de_cologne_half",
           "halfFile": "portraits/sponsors/de_cologne_half.webp",
           "from": 1508,
@@ -8965,7 +8965,7 @@
         {
           "id": "sponsor:de_cologne",
           "name": "헤르만 5세 폰 비트",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/de_cologne_half",
           "halfFile": "portraits/sponsors/de_cologne_half.webp",
           "from": 1515,
@@ -8976,7 +8976,7 @@
         {
           "id": "sponsor:de_cologne",
           "name": "쾰른 선제후",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/09",
           "half": "portraits/sponsors/de_cologne_half",
           "halfFile": "portraits/sponsors/de_cologne_half.webp",
           "from": 1547,
@@ -8994,7 +8994,7 @@
         {
           "id": "sponsor:de_pirckheimer",
           "name": "빌리발트 피르크하이머",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/09",
           "half": "portraits/sponsors/de_pirckheimer_half",
           "halfFile": "portraits/sponsors/de_pirckheimer_half.webp",
           "from": 1495,
@@ -9012,7 +9012,7 @@
         {
           "id": "sponsor:bo_rozmberk",
           "name": "로젠베르크의 빌렘",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/04",
           "half": "portraits/sponsors/bo_rozmberk_half",
           "halfFile": "portraits/sponsors/bo_rozmberk_half.webp",
           "from": 1551,
@@ -9023,7 +9023,7 @@
         {
           "id": "sponsor:bo_rozmberk",
           "name": "로젠베르크의 페테르 보크",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/bo_rozmberk_half",
           "halfFile": "portraits/sponsors/bo_rozmberk_half.webp",
           "from": 1592,
@@ -9034,7 +9034,7 @@
         {
           "id": "sponsor:bo_rozmberk",
           "name": "로젠베르크 가문",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/bo_rozmberk_half",
           "halfFile": "portraits/sponsors/bo_rozmberk_half.webp",
           "from": 1611,
@@ -9052,7 +9052,7 @@
         {
           "id": "sponsor:at_salm",
           "name": "니클라스 잘름 백작",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/07",
           "half": "portraits/sponsors/at_salm_half",
           "halfFile": "portraits/sponsors/at_salm_half.webp",
           "from": 1500,
@@ -9070,7 +9070,7 @@
         {
           "id": "sponsor:pl_zamoyski",
           "name": "얀 자모이스키",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/pl_zamoyski_half",
           "halfFile": "portraits/sponsors/pl_zamoyski_half.webp",
           "from": 1578,
@@ -9081,7 +9081,7 @@
         {
           "id": "sponsor:pl_zamoyski",
           "name": "폴란드 왕국 재상",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/01",
           "half": "portraits/sponsors/pl_zamoyski_half",
           "halfFile": "portraits/sponsors/pl_zamoyski_half.webp",
           "from": 1605,
@@ -9099,7 +9099,7 @@
         {
           "id": "sponsor:hu_bakocz",
           "name": "바코츠 터마시",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/hu_bakocz_half",
           "halfFile": "portraits/sponsors/hu_bakocz_half.webp",
           "from": 1486,
@@ -9117,7 +9117,7 @@
         {
           "id": "sponsor:se_regent",
           "name": "스텐 스투레",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/se_regent_half",
           "halfFile": "portraits/sponsors/se_regent_half.webp",
           "from": 1480,
@@ -9128,7 +9128,7 @@
         {
           "id": "sponsor:se_regent",
           "name": "스텐 스투레 2세",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/se_regent_half",
           "halfFile": "portraits/sponsors/se_regent_half.webp",
           "from": 1512,
@@ -9139,7 +9139,7 @@
         {
           "id": "sponsor:se_regent",
           "name": "악셀 옥센셰르나",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/06",
           "half": "portraits/sponsors/se_regent_half",
           "halfFile": "portraits/sponsors/se_regent_half.webp",
           "from": 1612,
@@ -9150,7 +9150,7 @@
         {
           "id": "sponsor:se_regent",
           "name": "스웨덴 섭정·재상",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/02",
           "half": "portraits/sponsors/se_regent_half",
           "halfFile": "portraits/sponsors/se_regent_half.webp",
           "from": 1654,
@@ -9168,7 +9168,7 @@
         {
           "id": "sponsor:dk_brahe",
           "name": "튀코 브라헤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/dk_brahe_half",
           "halfFile": "portraits/sponsors/dk_brahe_half.webp",
           "from": 1576,
@@ -9186,7 +9186,7 @@
         {
           "id": "sponsor:ru_regent",
           "name": "보리스 고두노프",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/de/m/05",
           "half": "portraits/sponsors/ru_regent_half",
           "halfFile": "portraits/sponsors/ru_regent_half.webp",
           "from": 1584,
@@ -9197,7 +9197,7 @@
         {
           "id": "sponsor:ru_regent",
           "name": "필라레트 총대주교",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/de/m/06",
           "half": "portraits/sponsors/ru_regent_half",
           "halfFile": "portraits/sponsors/ru_regent_half.webp",
           "from": 1619,
@@ -9208,7 +9208,7 @@
         {
           "id": "sponsor:ru_regent",
           "name": "차르의 섭정",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/de/m/07",
           "half": "portraits/sponsors/ru_regent_half",
           "halfFile": "portraits/sponsors/ru_regent_half.webp",
           "from": 1633,
@@ -9226,7 +9226,7 @@
         {
           "id": "sponsor:ua_ostrogski",
           "name": "콘스탄티 오스트로그스키 공",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/de/m/03",
           "half": "portraits/sponsors/ua_ostrogski_half",
           "halfFile": "portraits/sponsors/ua_ostrogski_half.webp",
           "from": 1559,
@@ -9237,7 +9237,7 @@
         {
           "id": "sponsor:ua_ostrogski",
           "name": "키예프 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/de/m/06",
           "half": "portraits/sponsors/ua_ostrogski_half",
           "halfFile": "portraits/sponsors/ua_ostrogski_half.webp",
           "from": 1608,
@@ -9255,7 +9255,7 @@
         {
           "id": "sponsor:ot_vizier",
           "name": "카라마니 메흐메트 파샤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/01",
           "half": "portraits/sponsors/ot_vizier_half",
           "halfFile": "portraits/sponsors/ot_vizier_half.webp",
           "from": 1480,
@@ -9266,7 +9266,7 @@
         {
           "id": "sponsor:ot_vizier",
           "name": "헤르세크자데 아흐메트 파샤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/01",
           "half": "portraits/sponsors/ot_vizier_half",
           "halfFile": "portraits/sponsors/ot_vizier_half.webp",
           "from": 1497,
@@ -9277,7 +9277,7 @@
         {
           "id": "sponsor:ot_vizier",
           "name": "파르가르 이브라힘 파샤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/09",
           "half": "portraits/sponsors/ot_vizier_half",
           "halfFile": "portraits/sponsors/ot_vizier_half.webp",
           "from": 1523,
@@ -9288,7 +9288,7 @@
         {
           "id": "sponsor:ot_vizier",
           "name": "소콜루 메흐메트 파샤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/03",
           "half": "portraits/sponsors/ot_vizier_half",
           "halfFile": "portraits/sponsors/ot_vizier_half.webp",
           "from": 1565,
@@ -9299,7 +9299,7 @@
         {
           "id": "sponsor:ot_vizier",
           "name": "오스만 대재상",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/08",
           "half": "portraits/sponsors/ot_vizier_half",
           "halfFile": "portraits/sponsors/ot_vizier_half.webp",
           "from": 1579,
@@ -9317,7 +9317,7 @@
         {
           "id": "sponsor:ot_nasi",
           "name": "요세프 나시",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/03",
           "half": "portraits/sponsors/ot_nasi_half",
           "halfFile": "portraits/sponsors/ot_nasi_half.webp",
           "from": 1554,
@@ -9335,7 +9335,7 @@
         {
           "id": "sponsor:sy_pasha",
           "name": "맘루크 다마스쿠스 태수",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/08",
           "half": "portraits/sponsors/sy_pasha_half",
           "halfFile": "portraits/sponsors/sy_pasha_half.webp",
           "from": 1480,
@@ -9346,7 +9346,7 @@
         {
           "id": "sponsor:sy_pasha",
           "name": "자나비르디 알 가잘리",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/02",
           "half": "portraits/sponsors/sy_pasha_half",
           "halfFile": "portraits/sponsors/sy_pasha_half.webp",
           "from": 1516,
@@ -9357,7 +9357,7 @@
         {
           "id": "sponsor:sy_pasha",
           "name": "다마스쿠스 파샤",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/eg/m/04",
           "half": "portraits/sponsors/sy_pasha_half",
           "halfFile": "portraits/sponsors/sy_pasha_half.webp",
           "from": 1520,
@@ -9375,7 +9375,7 @@
         {
           "id": "sponsor:pe_fars",
           "name": "알라베르디 칸",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/pe/m/10",
           "half": "portraits/sponsors/pe_fars_half",
           "halfFile": "portraits/sponsors/pe_fars_half.webp",
           "from": 1595,
@@ -9386,7 +9386,7 @@
         {
           "id": "sponsor:pe_fars",
           "name": "이맘쿨리 칸",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/pe/m/04",
           "half": "portraits/sponsors/pe_fars_half",
           "halfFile": "portraits/sponsors/pe_fars_half.webp",
           "from": 1613,
@@ -9397,7 +9397,7 @@
         {
           "id": "sponsor:pe_fars",
           "name": "파르스 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/pe/m/08",
           "half": "portraits/sponsors/pe_fars_half",
           "halfFile": "portraits/sponsors/pe_fars_half.webp",
           "from": 1632,
@@ -9415,7 +9415,7 @@
         {
           "id": "sponsor:hr_navai",
           "name": "알리셰르 나바이",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/pe/m/08",
           "half": "portraits/sponsors/hr_navai_half",
           "halfFile": "portraits/sponsors/hr_navai_half.webp",
           "from": 1480,
@@ -9433,7 +9433,7 @@
         {
           "id": "sponsor:in_vakil",
           "name": "바이람 칸 (섭정)",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/ind/m/04",
           "half": "portraits/sponsors/in_vakil_half",
           "halfFile": "portraits/sponsors/in_vakil_half.webp",
           "from": 1556,
@@ -9444,7 +9444,7 @@
         {
           "id": "sponsor:in_vakil",
           "name": "아불 파즐",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/ind/m/05",
           "half": "portraits/sponsors/in_vakil_half",
           "halfFile": "portraits/sponsors/in_vakil_half.webp",
           "from": 1579,
@@ -9455,7 +9455,7 @@
         {
           "id": "sponsor:in_vakil",
           "name": "무굴 대신",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/ind/m/07",
           "half": "portraits/sponsors/in_vakil_half",
           "halfFile": "portraits/sponsors/in_vakil_half.webp",
           "from": 1602,
@@ -9473,7 +9473,7 @@
         {
           "id": "sponsor:in_timmarasu",
           "name": "살루바 팀마루수",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/ind/m/05",
           "half": "portraits/sponsors/in_timmarasu_half",
           "halfFile": "portraits/sponsors/in_timmarasu_half.webp",
           "from": 1509,
@@ -9491,7 +9491,7 @@
         {
           "id": "sponsor:cn_grand",
           "name": "만안",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/04",
           "half": "portraits/sponsors/cn_grand_half",
           "halfFile": "portraits/sponsors/cn_grand_half.webp",
           "from": 1480,
@@ -9502,7 +9502,7 @@
         {
           "id": "sponsor:cn_grand",
           "name": "양정화",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/06",
           "half": "portraits/sponsors/cn_grand_half",
           "halfFile": "portraits/sponsors/cn_grand_half.webp",
           "from": 1513,
@@ -9513,7 +9513,7 @@
         {
           "id": "sponsor:cn_grand",
           "name": "장거정",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/10",
           "half": "portraits/sponsors/cn_grand_half",
           "halfFile": "portraits/sponsors/cn_grand_half.webp",
           "from": 1572,
@@ -9524,7 +9524,7 @@
         {
           "id": "sponsor:cn_grand",
           "name": "내각 수보",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/07",
           "half": "portraits/sponsors/cn_grand_half",
           "halfFile": "portraits/sponsors/cn_grand_half.webp",
           "from": 1582,
@@ -9535,7 +9535,7 @@
         {
           "id": "sponsor:cn_grand",
           "name": "내각 수보 대학사",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/10",
           "half": "portraits/sponsors/cn_grand_half",
           "halfFile": "portraits/sponsors/cn_grand_half.webp",
           "from": 1644,
@@ -9553,7 +9553,7 @@
         {
           "id": "sponsor:cn_wang",
           "name": "왕수인 (양명)",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/03",
           "half": "portraits/sponsors/cn_wang_half",
           "halfFile": "portraits/sponsors/cn_wang_half.webp",
           "from": 1521,
@@ -9564,7 +9564,7 @@
         {
           "id": "sponsor:cn_wang",
           "name": "남경 병부상서",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/02",
           "half": "portraits/sponsors/cn_wang_half",
           "halfFile": "portraits/sponsors/cn_wang_half.webp",
           "from": 1528,
@@ -9582,7 +9582,7 @@
         {
           "id": "sponsor:cn_hu",
           "name": "호종헌",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/cn/m/02",
           "half": "portraits/sponsors/cn_hu_half",
           "halfFile": "portraits/sponsors/cn_hu_half.webp",
           "from": 1556,
@@ -9600,7 +9600,7 @@
         {
           "id": "sponsor:jp_tenka",
           "name": "오다 노부나가",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/jp/m/02",
           "half": "portraits/sponsors/jp_tenka_half",
           "halfFile": "portraits/sponsors/jp_tenka_half.webp",
           "from": 1568,
@@ -9611,7 +9611,7 @@
         {
           "id": "sponsor:jp_tenka",
           "name": "도요토미 히데요시",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/jp/m/06",
           "half": "portraits/sponsors/jp_tenka_half",
           "halfFile": "portraits/sponsors/jp_tenka_half.webp",
           "from": 1582,
@@ -9622,7 +9622,7 @@
         {
           "id": "sponsor:jp_tenka",
           "name": "도쿠가와 이에야스",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/jp/m/10",
           "half": "portraits/sponsors/jp_tenka_half",
           "halfFile": "portraits/sponsors/jp_tenka_half.webp",
           "from": 1600,
@@ -9633,7 +9633,7 @@
         {
           "id": "sponsor:jp_tenka",
           "name": "천하인",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/jp/m/10",
           "half": "portraits/sponsors/jp_tenka_half",
           "halfFile": "portraits/sponsors/jp_tenka_half.webp",
           "from": 1616,
@@ -9651,7 +9651,7 @@
         {
           "id": "sponsor:jp_omura",
           "name": "오무라 스미타다",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/jp/m/07",
           "half": "portraits/sponsors/jp_omura_half",
           "halfFile": "portraits/sponsors/jp_omura_half.webp",
           "from": 1563,
@@ -9669,7 +9669,7 @@
         {
           "id": "sponsor:es_cortes",
           "name": "에르난 코르테스",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/01",
           "half": "portraits/sponsors/es_cortes_half",
           "halfFile": "portraits/sponsors/es_cortes_half.webp",
           "from": 1529,
@@ -9680,7 +9680,7 @@
         {
           "id": "sponsor:es_cortes",
           "name": "오아하카 계곡 후작 가문 당주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/02",
           "half": "portraits/sponsors/es_cortes_half",
           "halfFile": "portraits/sponsors/es_cortes_half.webp",
           "from": 1547,
@@ -9698,7 +9698,7 @@
         {
           "id": "sponsor:pt_brazil",
           "name": "토메 드 소우자",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/09",
           "half": "portraits/sponsors/pt_brazil_half",
           "halfFile": "portraits/sponsors/pt_brazil_half.webp",
           "from": 1549,
@@ -9709,7 +9709,7 @@
         {
           "id": "sponsor:pt_brazil",
           "name": "두아르트 다 코스타",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/pt_brazil_half",
           "halfFile": "portraits/sponsors/pt_brazil_half.webp",
           "from": 1553,
@@ -9720,7 +9720,7 @@
         {
           "id": "sponsor:pt_brazil",
           "name": "멩 드 사",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/04",
           "half": "portraits/sponsors/pt_brazil_half",
           "halfFile": "portraits/sponsors/pt_brazil_half.webp",
           "from": 1558,
@@ -9731,7 +9731,7 @@
         {
           "id": "sponsor:pt_brazil",
           "name": "브라질 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/09",
           "half": "portraits/sponsors/pt_brazil_half",
           "halfFile": "portraits/sponsors/pt_brazil_half.webp",
           "from": 1572,
@@ -9749,7 +9749,7 @@
         {
           "id": "sponsor:pt_rio",
           "name": "에스타시우 드 사",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/05",
           "half": "portraits/sponsors/pt_rio_half",
           "halfFile": "portraits/sponsors/pt_rio_half.webp",
           "from": 1565,
@@ -9760,7 +9760,7 @@
         {
           "id": "sponsor:pt_rio",
           "name": "살바도르 코헤이아 드 사",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/es/m/07",
           "half": "portraits/sponsors/pt_rio_half",
           "halfFile": "portraits/sponsors/pt_rio_half.webp",
           "from": 1568,
@@ -9778,7 +9778,7 @@
         {
           "id": "sponsor:nl_stuyvesant",
           "name": "피터르 스타위베산트",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/01",
           "half": "portraits/sponsors/nl_stuyvesant_half",
           "halfFile": "portraits/sponsors/nl_stuyvesant_half.webp",
           "from": 1647,
@@ -9789,7 +9789,7 @@
         {
           "id": "sponsor:nl_stuyvesant",
           "name": "뉴네덜란드 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/03",
           "half": "portraits/sponsors/nl_stuyvesant_half",
           "halfFile": "portraits/sponsors/nl_stuyvesant_half.webp",
           "from": 1664,
@@ -9807,7 +9807,7 @@
         {
           "id": "sponsor:en_winthrop",
           "name": "존 윈스럽",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/04",
           "half": "portraits/sponsors/en_winthrop_half",
           "halfFile": "portraits/sponsors/en_winthrop_half.webp",
           "from": 1630,
@@ -9818,7 +9818,7 @@
         {
           "id": "sponsor:en_winthrop",
           "name": "매사추세츠 만 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/09",
           "half": "portraits/sponsors/en_winthrop_half",
           "halfFile": "portraits/sponsors/en_winthrop_half.webp",
           "from": 1649,
@@ -9836,7 +9836,7 @@
         {
           "id": "sponsor:fr_champlain",
           "name": "사뮈엘 드 샹플랭",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/10",
           "half": "portraits/sponsors/fr_champlain_half",
           "halfFile": "portraits/sponsors/fr_champlain_half.webp",
           "from": 1608,
@@ -9847,7 +9847,7 @@
         {
           "id": "sponsor:fr_champlain",
           "name": "누벨프랑스 총독",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/05",
           "half": "portraits/sponsors/fr_champlain_half",
           "halfFile": "portraits/sponsors/fr_champlain_half.webp",
           "from": 1635,
@@ -9865,7 +9865,7 @@
         {
           "id": "sponsor:en_penn",
           "name": "윌리엄 펜",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/09",
           "half": "portraits/sponsors/en_penn_half",
           "halfFile": "portraits/sponsors/en_penn_half.webp",
           "from": 1682,
@@ -9876,7 +9876,7 @@
         {
           "id": "sponsor:en_penn",
           "name": "펜실베이니아 영주",
-          "bust": null,
+          "bust": "portraits/pools/sponsors/en/m/08",
           "half": "portraits/sponsors/en_penn_half",
           "halfFile": "portraits/sponsors/en_penn_half.webp",
           "from": 1718,
@@ -9894,11 +9894,13 @@
     "portraits/mates/arana",
     "portraits/mates/ariosto",
     "portraits/mates/barbarossa",
+    "portraits/mates/bokuden",
     "portraits/mates/botticelli",
     "portraits/mates/cabot",
     "portraits/mates/cadamosto",
     "portraits/mates/camoes",
     "portraits/mates/cervantes",
+    "portraits/mates/chen",
     "portraits/mates/coronado",
     "portraits/mates/correia",
     "portraits/mates/covilha",
@@ -9915,11 +9917,14 @@
     "portraits/mates/ibnmajid",
     "portraits/mates/isaac",
     "portraits/mates/kepler",
+    "portraits/mates/kim",
+    "portraits/mates/kisk",
     "portraits/mates/lacosa",
     "portraits/mates/leoafricanus",
     "portraits/mates/leonardo",
     "portraits/mates/manuel",
     "portraits/mates/manutius",
+    "portraits/mates/marina",
     "portraits/mates/mercator",
     "portraits/mates/michelangelo",
     "portraits/mates/nakoda",
@@ -9937,6 +9942,7 @@
     "portraits/mates/shylock",
     "portraits/mates/torres",
     "portraits/mates/triana",
+    "portraits/mates/tupac",
     "portraits/mates/tycho",
     "portraits/mates/urdaneta",
     "portraits/mates/verrazzano",
@@ -9945,12 +9951,8 @@
     "portraits/mates/xavier",
     "portraits/mates/zacuto",
     "portraits/mates/zara",
-    "portraits/npc-roles/af/sailor",
     "portraits/npc-roles/an/king",
-    "portraits/npc-roles/an/sailor",
     "portraits/npc-roles/az/king",
-    "portraits/npc-roles/az/maid",
-    "portraits/npc-roles/cn/merchant",
     "portraits/npc-roles/gr/noble",
     "portraits/npc-roles/ib/keeper",
     "portraits/npc-roles/ib/noble",
@@ -9959,8 +9961,6 @@
     "portraits/npc-roles/is/king",
     "portraits/npc-roles/it/keeper",
     "portraits/npc-roles/jp/king",
-    "portraits/npc-roles/jp/soldier",
-    "portraits/npc-roles/kr/sailor",
     "portraits/npc-roles/ne/keeper",
     "portraits/npc-roles/ne/king",
     "portraits/npc-roles/ne/maid",
@@ -9971,6 +9971,67 @@
     "portraits/npc-roles/ru/noble",
     "portraits/npc-roles/se/king",
     "portraits/npc-roles/tr/maid",
+    "portraits/pools/mates/en/m/04",
+    "portraits/pools/mates/en/m/05",
+    "portraits/pools/mates/en/m/09",
+    "portraits/pools/mates/es/m/03",
+    "portraits/pools/mates/es/m/06",
+    "portraits/pools/mates/es/m/08",
+    "portraits/pools/mates/es/m/09",
+    "portraits/pools/sponsors/cn/m/02",
+    "portraits/pools/sponsors/cn/m/03",
+    "portraits/pools/sponsors/cn/m/04",
+    "portraits/pools/sponsors/cn/m/06",
+    "portraits/pools/sponsors/cn/m/07",
+    "portraits/pools/sponsors/cn/m/10",
+    "portraits/pools/sponsors/de/m/03",
+    "portraits/pools/sponsors/de/m/05",
+    "portraits/pools/sponsors/de/m/06",
+    "portraits/pools/sponsors/de/m/07",
+    "portraits/pools/sponsors/eg/m/01",
+    "portraits/pools/sponsors/eg/m/02",
+    "portraits/pools/sponsors/eg/m/03",
+    "portraits/pools/sponsors/eg/m/04",
+    "portraits/pools/sponsors/eg/m/05",
+    "portraits/pools/sponsors/eg/m/08",
+    "portraits/pools/sponsors/eg/m/09",
+    "portraits/pools/sponsors/en/m/01",
+    "portraits/pools/sponsors/en/m/02",
+    "portraits/pools/sponsors/en/m/03",
+    "portraits/pools/sponsors/en/m/04",
+    "portraits/pools/sponsors/en/m/05",
+    "portraits/pools/sponsors/en/m/06",
+    "portraits/pools/sponsors/en/m/07",
+    "portraits/pools/sponsors/en/m/08",
+    "portraits/pools/sponsors/en/m/09",
+    "portraits/pools/sponsors/en/m/10",
+    "portraits/pools/sponsors/es/m/01",
+    "portraits/pools/sponsors/es/m/02",
+    "portraits/pools/sponsors/es/m/03",
+    "portraits/pools/sponsors/es/m/04",
+    "portraits/pools/sponsors/es/m/05",
+    "portraits/pools/sponsors/es/m/06",
+    "portraits/pools/sponsors/es/m/07",
+    "portraits/pools/sponsors/es/m/08",
+    "portraits/pools/sponsors/es/m/09",
+    "portraits/pools/sponsors/es/m/10",
+    "portraits/pools/sponsors/ind/m/04",
+    "portraits/pools/sponsors/ind/m/05",
+    "portraits/pools/sponsors/ind/m/07",
+    "portraits/pools/sponsors/jp/m/02",
+    "portraits/pools/sponsors/jp/m/06",
+    "portraits/pools/sponsors/jp/m/07",
+    "portraits/pools/sponsors/jp/m/08",
+    "portraits/pools/sponsors/jp/m/10",
+    "portraits/pools/sponsors/kr/m/01",
+    "portraits/pools/sponsors/kr/m/02",
+    "portraits/pools/sponsors/kr/m/05",
+    "portraits/pools/sponsors/kr/m/07",
+    "portraits/pools/sponsors/kr/m/09",
+    "portraits/pools/sponsors/kr/m/10",
+    "portraits/pools/sponsors/pe/m/04",
+    "portraits/pools/sponsors/pe/m/08",
+    "portraits/pools/sponsors/pe/m/10",
     "portraits/sponsors/ch_zwingli_1",
     "portraits/sponsors/de_emperor",
     "portraits/sponsors/de_emperor_1",
@@ -10049,6 +10110,7 @@
     "portraits/sponsors/it_pope_4",
     "portraits/sponsors/it_pope_5",
     "portraits/sponsors/it_pope_6",
+    "portraits/sponsors/kr_king",
     "portraits/sponsors/ot_sultan",
     "portraits/sponsors/ot_sultan_1",
     "portraits/sponsors/ot_sultan_2",
@@ -10063,6 +10125,7 @@
     "portraits/sponsors/pl_king_4",
     "portraits/sponsors/pl_king_5",
     "portraits/sponsors/pt_behaim",
+    "portraits/sponsors/pt_behaim_1",
     "portraits/sponsors/pt_braganza",
     "portraits/sponsors/pt_braganza_1",
     "portraits/sponsors/pt_braganza_2",
@@ -10091,40 +10154,68 @@
     "portraits/sponsors/sc_knox_1"
   ],
   "dedicatedBusts": [
+    "portraits/mates/adrien_de_montclair",
     "portraits/mates/aguilar",
     "portraits/mates/ahmad",
+    "portraits/mates/alessio_giorgi",
     "portraits/mates/amina",
+    "portraits/mates/anselmo",
     "portraits/mates/arana",
     "portraits/mates/ariosto",
     "portraits/mates/barbarossa",
+    "portraits/mates/beaumont",
+    "portraits/mates/bokuden",
     "portraits/mates/botticelli",
     "portraits/mates/cabot",
     "portraits/mates/cadamosto",
     "portraits/mates/camoes",
     "portraits/mates/cervantes",
+    "portraits/mates/chen",
     "portraits/mates/coronado",
     "portraits/mates/correia",
     "portraits/mates/covilha",
+    "portraits/mates/deleon",
     "portraits/mates/dias",
     "portraits/mates/donatello",
     "portraits/mates/drake",
     "portraits/mates/duarte",
+    "portraits/mates/duarte_de_valenca",
+    "portraits/mates/edmund_ashford",
     "portraits/mates/elcano",
+    "portraits/mates/estevao",
+    "portraits/mates/ferraro",
+    "portraits/mates/gabriel_de_avelar",
     "portraits/mates/galileo",
     "portraits/mates/garcia",
     "portraits/mates/giorgio",
     "portraits/mates/gutenberg",
     "portraits/mates/hasan",
+    "portraits/mates/henrik_stensson",
+    "portraits/mates/hernando_de_montemayor",
     "portraits/mates/ibnmajid",
+    "portraits/mates/ines_de_valcarcel",
     "portraits/mates/isaac",
+    "portraits/mates/katrin_de_kermor",
     "portraits/mates/kepler",
+    "portraits/mates/kim",
+    "portraits/mates/kisk",
+    "portraits/mates/konrad_von_falkenstein",
     "portraits/mates/lacosa",
+    "portraits/mates/laskaris",
+    "portraits/mates/laurens_van_der_velder",
     "portraits/mates/leoafricanus",
     "portraits/mates/leonardo",
+    "portraits/mates/leonardo_de_valenca",
+    "portraits/mates/lisbeth_van_acker",
+    "portraits/mates/macleod",
     "portraits/mates/manuel",
     "portraits/mates/manutius",
+    "portraits/mates/marina",
+    "portraits/mates/martim_de_sequeira",
+    "portraits/mates/matteo_bellandi",
     "portraits/mates/mercator",
     "portraits/mates/michelangelo",
+    "portraits/mates/monteiro",
     "portraits/mates/nakoda",
     "portraits/mates/orellana",
     "portraits/mates/paracelsus",
@@ -10135,16 +10226,22 @@
     "portraits/mates/raffaello",
     "portraits/mates/regiomontanus",
     "portraits/mates/rocco",
+    "portraits/mates/rosenthal",
+    "portraits/mates/samios",
     "portraits/mates/serrao",
     "portraits/mates/shakespeare",
     "portraits/mates/shylock",
     "portraits/mates/torres",
     "portraits/mates/triana",
+    "portraits/mates/tupac",
     "portraits/mates/tycho",
     "portraits/mates/urdaneta",
+    "portraits/mates/vandermeer",
     "portraits/mates/verrazzano",
     "portraits/mates/verrocchio",
     "portraits/mates/vespucci",
+    "portraits/mates/vittoria_contarini",
+    "portraits/mates/weiss",
     "portraits/mates/xavier",
     "portraits/mates/zacuto",
     "portraits/mates/zara",
@@ -10235,6 +10332,7 @@
     "portraits/sponsors/it_pope_4",
     "portraits/sponsors/it_pope_5",
     "portraits/sponsors/it_pope_6",
+    "portraits/sponsors/kr_king",
     "portraits/sponsors/ot_sultan",
     "portraits/sponsors/ot_sultan_1",
     "portraits/sponsors/ot_sultan_2",
@@ -10250,6 +10348,7 @@
     "portraits/sponsors/pl_king_4",
     "portraits/sponsors/pl_king_5",
     "portraits/sponsors/pt_behaim",
+    "portraits/sponsors/pt_behaim_1",
     "portraits/sponsors/pt_braganza",
     "portraits/sponsors/pt_braganza_1",
     "portraits/sponsors/pt_braganza_2",
@@ -10259,6 +10358,7 @@
     "portraits/sponsors/pt_casaindia_1",
     "portraits/sponsors/pt_casaindia_2",
     "portraits/sponsors/pt_casaindia_3",
+    "portraits/sponsors/pt_casanova",
     "portraits/sponsors/pt_india",
     "portraits/sponsors/pt_india_1",
     "portraits/sponsors/pt_king",

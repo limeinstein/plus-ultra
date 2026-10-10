@@ -51,7 +51,45 @@ def check_compositor() -> None:
         assert all(cell.size == (cinematic.W, cinematic.H) for cell in cells)
 
 
+def check_built_assets() -> None:
+    """준비된 V3 원화는 게임용 세 파일까지 빠짐없이 같은 규격이어야 한다."""
+    prompt_rows = json.loads(
+        (ROOT / "tools" / "ruin_gifs" / "cinematic-prompts.json").read_text(encoding="utf-8")
+    )
+    prompt_ids = {row["id"] for row in prompt_rows}
+    master_dir = ROOT / "tools" / "ruin_gifs" / "v3" / "master"
+    ready = sorted(path.stem for path in master_dir.glob("*.png") if path.stem in prompt_ids)
+    assert ready, "V3 원화가 하나도 없음"
+
+    for did in ready:
+        master = master_dir / f"{did}.png"
+        gif_path = ROOT / "images" / "discoveries" / f"{did}.gif"
+        end_path = ROOT / "images" / "discovery-ends" / f"{did}.jpg"
+        sheet_path = ROOT / "images" / "discovery-sheets" / f"{did}.webp"
+        assert gif_path.exists(), f"GIF 없음: {did}"
+        assert end_path.exists(), f"마지막 장면 없음: {did}"
+        assert sheet_path.exists(), f"재생 시트 없음: {did}"
+
+        with Image.open(master) as image:
+            assert image.width >= 1024 and image.height >= 768, (did, image.size)
+        with Image.open(gif_path) as image:
+            assert image.size == (cinematic.W, cinematic.H), (did, image.size)
+            assert image.n_frames == 16, (did, image.n_frames)
+            durations = []
+            for frame in range(image.n_frames):
+                image.seek(frame)
+                durations.append(image.info.get("duration", 0))
+            assert sum(durations) == sum(cinematic.DURATIONS), (did, durations)
+        with Image.open(end_path) as image:
+            assert image.size == (cinematic.W, cinematic.H), (did, image.size)
+        with Image.open(sheet_path) as image:
+            assert image.size == (cinematic.W * 6, cinematic.H * 3), (did, image.size)
+
+    print(f"OK: 준비된 V3 {len(ready)}개 · GIF/마지막 장면/재생 시트")
+
+
 if __name__ == "__main__":
     check_prompts()
     check_compositor()
+    check_built_assets()
     print("OK: 유적 216개 프롬프트 · 16칸 · 9820ms")

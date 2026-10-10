@@ -73,6 +73,8 @@
 
 소지품·유물·교역품 그림은 `images/_extra/item-src/`의 그림판을 `python tools/split_item_atlases.py`로 나눈 것입니다(무기·유물 무기 그림판은 물체별로 나눠 긴 칼날·창끝이 잘리거나 이웃 칸 조각이 붙지 않음). 게임에서 쓰는 곳: 교역소 표·시세 수첩·함대 짐·도시 정보(교역품), 시장 구입·매각 목록과 구입 확인 창, 소지품 수첩, 선물 고르기(여급·부하·원주민), 해적선에서 건진 물건, 유물·물건을 얻을 때의 알림, 발견 카드, 도감. 코드에서는 `G.Img.itemSrc(물건)`·`G.Img.goodSrc(교역품ID)`로 주소를 얻습니다. 그림이 없으면 예전처럼 코드로 그린 그림이 나옵니다.
 
+유물은 그림판에서 만든 전용 원화 33종을 보존하고, 나머지는 `node tools/bake_relic_icons.js`로 `G.Art.relicArt`의 ID별 그림을 256×256 투명 WEBP로 굽습니다. 현재 런타임 유물 387종이 모두 `images/relics/`에 있으며 제작 목록은 `docs/art/relic-icons-generation.json`, 전체 점검판은 `docs/art/relic-icons-preview.jpg`입니다. 교역품 77종도 모두 전용 파일이 있고, `slaves.webp`는 사람을 상품처럼 그리지 않은 끊어진 족쇄 상징 그림입니다.
+
 신규 제독 생김새 12종은 `navigator_white`(하얀 남방), `armored_navigator`(철갑), `sea_dog`(망원경),
 `muscle_swordsman`(근육 검사), `hat_spinner`(모자를 돌리는 항해사), `charismatic_admiral`(카리스마 제독),
 `battle_vanguard`(전투 직전), `noble_scholar`(귀족 학자 제독), `casanova`, `army_officer`(정규군 장교),

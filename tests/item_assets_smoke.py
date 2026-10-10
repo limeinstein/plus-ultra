@@ -1,6 +1,8 @@
 """교역품·소지품·유물 아이콘의 연결과 투명 배경을 점검한다."""
 from pathlib import Path
+import json
 import re
+import subprocess
 import sys
 
 from PIL import Image
@@ -36,6 +38,21 @@ def check_icons(folder, names, size):
             assert max(corners) == 0, f"모서리 배경이 투명하지 않습니다: {path.name}"
 
 
+def runtime_icon_ids():
+    """index.html의 실제 데이터 순서로 교역품·유물 ID를 읽는다."""
+    script = r"""
+const fs=require('fs'),vm=require('vm');
+global.window=global; global.document={}; global.G={};
+const html=fs.readFileSync('index.html','utf8');
+const scripts=[...html.matchAll(/<script src="([^"]+)"/g)].map(x=>x[1]);
+for(const file of scripts) if(file==='js/core/util.js'||file.startsWith('js/data/'))
+  vm.runInThisContext(fs.readFileSync(file,'utf8'),{filename:file});
+console.log(JSON.stringify({goods:Object.keys(G.GOOD||{}),relics:Object.keys(G.RELIC||{})}));
+"""
+    raw = subprocess.check_output(['node', '-e', script], cwd=ROOT, text=True, encoding='utf-8')
+    return json.loads(raw)
+
+
 goods = data_ids(ROOT / "js" / "data" / "base.js", "G.GOODS = [", "G.GOOD = {}")
 assert goods == flat(atlas.GOODS), "교역품 데이터 순서와 그림 목록이 다릅니다."
 
@@ -47,4 +64,10 @@ check_icons("goods", goods, 192)
 check_icons("items", shown_items, 256)
 check_icons("relics", flat(atlas.RELICS), 256)
 
-print(f"교역품 {len(goods)}종 · 일반 소지품 {len(shown_items)}종 · 무기/장신구 유물 {len(flat(atlas.RELICS))}종 정상")
+runtime = runtime_icon_ids()
+assert len(runtime['goods']) == 77, f"교역품 데이터 수가 달라졌습니다: {len(runtime['goods'])}"
+assert len(runtime['relics']) == 387, f"유물 데이터 수가 달라졌습니다: {len(runtime['relics'])}"
+check_icons("goods", runtime['goods'], 192)
+check_icons("relics", runtime['relics'], 256)
+
+print(f"교역품 {len(runtime['goods'])}종 · 일반 소지품 {len(shown_items)}종 · 유물 {len(runtime['relics'])}종 정상")

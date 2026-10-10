@@ -92,6 +92,12 @@ def game_data():
         naturals = read('js/data/naturals.js')
         for nid, name in re.findall(r"^\s*n\('([^']+)',\s*'([^']+)'", naturals, re.M):
             d['discoveries'].append({'id': nid, 'name': name, 'cat': 'nature'})
+    # 바다에서 만나거나 낚시로 찾는 발견물도 W.list를 거쳐 본편 발견물이 된다.
+    sea_path = os.path.join(ROOT, 'js/data/seadisc.js')
+    if os.path.exists(sea_path):
+        sea = read('js/data/seadisc.js')
+        for did, name, cat in re.findall(r"^\s*s\('([^']+)',\s*'([^']+)',\s*'(\w+)'", sea, re.M):
+            d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
     animals_path = os.path.join(ROOT, 'js/data/animals.js')
     if os.path.exists(animals_path):
         animals = read('js/data/animals.js')
@@ -122,6 +128,15 @@ def game_data():
             for func, cat in funcs:
                 for did, name in re.findall(r"^\s*" + func + r"\('([^']+)',\s*'([^']+)'", extra, re.M):
                     d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
+    # 이야기 모드의 아버지 흔적은 story.js에 자료가 있고 systems/story.js가
+    # G.DISCOVERIES에 넣는다. 본편에서는 숨겨지지만 그림 이름은 함께 점검한다.
+    story_path = os.path.join(ROOT, 'js/data/story.js')
+    if os.path.exists(story_path):
+        story = read('js/data/story.js')
+        traces = re.search(r"ST\.traces\s*=\s*\[(.*?)\n\s*\];", story, re.S)
+        if traces:
+            for did, name in re.findall(r"^\s*\['(ft_[^']+)',\s*'([^']+)',\s*\d+", traces.group(1), re.M):
+                d['discoveries'].append({'id': did, 'name': name, 'cat': 'treasure'})
     names = []
     for x in d['discoveries']:
         if x.get('rival') and x['rival'] not in names:
@@ -229,7 +244,9 @@ def valid_keys(d):
         for nation in pool_nations:
             for gender in ['f', 'm']:
                 for index in range(1, 11):
-                    k['portraits/pools/%s/%s/%s/%02d' % (kind, nation, gender, index)] = '%s 초상 묶음 · %s · %s · %02d' % (label, nation, gender, index)
+                    key = 'portraits/pools/%s/%s/%s/%02d' % (kind, nation, gender, index)
+                    k[key] = '%s 초상 묶음 · %s · %s · %02d' % (label, nation, gender, index)
+                    k[key + '_half'] = '%s 무릎상 묶음 · %s · %s · %02d' % (label, nation, gender, index)
     for m in d['mates']:
         k['portraits/mates/' + m['id']] = '동료 · ' + m['name']
         k['portraits/mates/' + m['id'] + '_half'] = '동료 무릎상 · ' + m['name']

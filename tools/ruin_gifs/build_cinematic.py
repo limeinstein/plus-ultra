@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 
 from PIL import Image
@@ -36,8 +37,20 @@ def storyboard_cells(path: Path) -> list[Image.Image]:
     return cells
 
 
+def master_path(did: str) -> Path:
+    """같은 ID의 수정본(-v2, -v3…)이 있으면 가장 높은 판을 쓴다."""
+    versions = []
+    for path in MASTER.glob(f"{did}-v*.png"):
+        match = re.fullmatch(rf"{re.escape(did)}-v(\d+)", path.stem)
+        if match:
+            versions.append((int(match.group(1)), path))
+    if versions:
+        return max(versions)[1]
+    return MASTER / f"{did}.png"
+
+
 def build_one(did: str, out_dir: Path, ends_dir: Path) -> Path:
-    source = MASTER / f"{did}.png"
+    source = master_path(did)
     if not source.exists():
         raise FileNotFoundError(f"시네마틱 원화 없음: {source}")
     frames = storyboard_cells(source)
@@ -61,7 +74,7 @@ def requested_ids(raw: str | None) -> list[str]:
         return [part.strip() for part in raw.split(",") if part.strip()]
     if not MASTER.exists():
         return []
-    return sorted(path.stem for path in MASTER.glob("*.png"))
+    return sorted({re.sub(r"-v\d+$", "", path.stem) for path in MASTER.glob("*.png")})
 
 
 def main() -> None:

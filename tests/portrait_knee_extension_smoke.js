@@ -14,9 +14,9 @@ const OUT = path.join(ROOT, 'artifacts', 'portrait-knee-extension');
     args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
   const errors = [];
-  page.on('requestfailed', r => errors.push(r.url() + ': ' + r.failure().errorText));
+  page.on('requestfailed', r => { if (!/fonts\.(googleapis|gstatic)/.test(r.url())) errors.push(r.url() + ': ' + r.failure().errorText); });
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load resource/.test(m.text() + ' ' + ((m.location() || {}).url || ''))) errors.push(m.text()); });
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Img && G.Scenes && G.Scenes.city, null, { timeout: 90000 });
@@ -43,7 +43,7 @@ const OUT = path.join(ROOT, 'artifacts', 'portrait-knee-extension');
       return { counts: Object.fromEntries(groups.map(g => [g, all[g].length])), missing, mismatch,
         paths: groups.flatMap(g => all[g].map(k => k + '_half')) };
     });
-    assert.deepStrictEqual(coverage.counts, { rivals: 6, npc: 32, 'npc-roles': 240, mates: 57 });
+    assert.deepStrictEqual(coverage.counts, { rivals: 31, npc: 35, 'npc-roles': 240, mates: 91 });
     assert.deepStrictEqual(coverage.missing, []);
     assert.deepStrictEqual(coverage.mismatch, []);
     const failedLoads = await page.evaluate(async paths => {

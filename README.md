@@ -5,6 +5,25 @@
 참고 이미지 파일은 게임에 쓰지 않았습니다. 도시 풍경, 건물 내부, 인물 초상, 배, 세계 지도는 모두 코드(Canvas 2D · WebGL)로 그립니다.
 원작의 대사와 설명은 옮겨 쓰지 않고 새로 썼습니다.
 
+## Codex 그림 연결 (2026-10-10)
+- **유물 387종 모두 전용 그림.**
+  - 그림판 원화 33종에 더해, 나머지 354종을 `node tools/bake_relic_icons.js`로 256×256 투명 WebP로 구웠다.
+  - 원본은 `G.Art.relicArt(…, {transparent: true})`.
+  - 이제 소지품·보고·도감의 유물이 모두 그림으로 나온다.
+- **교역품 77종 모두 전용 그림.** 노예(`goods/slaves`)는 사람을 상품처럼 그리지 않은 끊어진 족쇄.
+- **새 항해사 얼굴 6명**(쓰카하라 보쿠덴·첸·김·키스크·말린체·투팍): 흉상·무릎상.
+- **얼굴 묶음 760장에 무릎상(`portraits/pools/<mates|sponsors>/<나라>/<m|f>/NN_half`).**
+  - 전용 그림 없는 항해사 281명 가운데 245명, 후원자·고장 사람·무덤지기처럼 묶음 얼굴을 빌린 사람이 대화에서 제독과 마주 서서 말한다.
+  - 점검: `python tools/people_portrait_pools.py check images/portraits/pools` (1520/1520).
+- **발견물 31곳을 V3 시네마틱으로 다시 만들었다**(크렘린·에펠탑·자금성·히메지성 …, GIF·끝 장면·시트). 만드는 법은 `tools/ruin_gifs/CINEMATIC.md`.
+- 얼굴 자리 다시 재기(`js/data/portraitfaces.js`, 2074장).
+- 시험:
+  - `node tests/codex_assets_link_smoke.js`
+  - `python tests/item_assets_smoke.py`
+  - `python tests/discovery_assets_smoke.py`
+  - `node tests/portrait_knee_extension_smoke.js`
+- 저장소에 넣지 않은 원본(폴더에만): `images/npc-walk`(거리 사람 걷기 시트 — 이미 `images/street-folk`로 나눔), `images/discoveries_cinematic`(미리보기), `tools/ruin_gifs/v3/master`·`tools/discovery83/masters`·`tools/trade_gifs/sources`·`tools/heritage/cache`.
+
 ## 지역 여급 60명을 도시에 고루 (2026-10-10)
 - Codex가 그림판에서 나눈 여급 60명(`tools/import_maid_sheets.py`): 새 자리 30명(아프리카 13~18 · 아랍 8~13 · 인도 13~18 · 아메리카 토착 7~12 · 서유럽 2~7)과 다시 그린 30명(아랍 1~6 · 오스만 1~6 · 페르시아 1~6 · 동남아 1~6 · 열대 1~6). 흉상·무릎상·얼굴 자리(`js/data/portraitfaces.js`)까지 넣었다.
 - 이름 있는 여급이 없는 도시 234곳의 술집 여급을 **고루 뿌린다**(`G.Img.maidPicCity` · `spreadCityMaids`). 도시 번호 순으로, 그 고장 묶음 후보 가운데 가장 적게 쓰인 그림을 고른다. 같으면 그 그림을 쓰는 가장 가까운 도시가 먼 것, 그다음 새 그림(번호가 큰 것)을 고른다.
