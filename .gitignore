@@ -24,3 +24,11 @@ music/_local/
 tools/discovery83/masters/
 # Codex 앞모습 시트(tools/street_faces.py 입력)
 tmp/
+# 설치형 게임: tools/build_desktop.py·electron-builder가 다시 만드는 것
+desktop/app/
+desktop/dist/
+desktop/node_modules/
+desktop/.imgcache/
+desktop/.fontcache/
+desktop/app-info.json
+desktop/smoke.txt

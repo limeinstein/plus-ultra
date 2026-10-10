@@ -1,0 +1,83 @@
+# 설치형 게임(Windows 설치 파일)을 만들어 GitHub 릴리스로 올린다. 「배포」 때 gh workflow run desktop.yml 로 돌린다.
+#   tools/build_desktop.py → desktop/app (게임이 쓰는 파일만) → electron-builder NSIS 설치 파일
+#   → 설치 전 판(win-unpacked)으로 타이틀 화면까지 점검(--smoke) → 릴리스 v1.0.<실행 번호> (설치 파일·blockmap·latest.yml)
+#   설치된 게임은 켤 때 이 릴리스를 보고 스스로 업데이트한다(바뀐 조각만 받음). 옛 릴리스는 최근 3개만 남긴다.
+name: 설치형 게임 (Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['desktop-*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: desktop
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 150
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+      VERSION: 1.0.${{ github.run_number }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 도구 (Pillow·esbuild)
+        run: |
+          python -m pip install --quiet pillow
+          npm install -g esbuild
+      - name: 무릎상 캐시
+        uses: actions/cache@v4
+        with:
+          path: desktop/.imgcache
+          key: desktop-imgcache-${{ github.run_id }}
+          restore-keys: desktop-imgcache-
+      - name: 게임 파일 만들기 (desktop/app)
+        run: python tools/build_desktop.py
+      - name: Electron 꾸러미
+        working-directory: desktop
+        run: |
+          npm ci --no-audit --no-fund
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+      - name: 설치 파일 만들기
+        working-directory: desktop
+        run: npx electron-builder --win nsis --publish never
+      - name: 점검 — 타이틀 화면까지 열어 보기
+        working-directory: desktop
+        run: |
+          ./dist/win-unpacked/PLUS\ ULTRA.exe --smoke --smoke-out=smoke.txt || true
+          cat smoke.txt
+          grep -q '"ok":true' smoke.txt
+      - name: 릴리스 올리기
+        working-directory: desktop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ls -la dist
+          SIZE=$(du -m "dist/PLUS-ULTRA-Setup-$VERSION.exe" | cut -f1)
+          MSG=$(git log -1 --format='%s')
+          printf '설치형 게임 %s (%sMB)\n\n- 커밋 %s: %s\n- 설치: PLUS-ULTRA-Setup-%s.exe 를 받아 실행합니다. 이미 깔려 있으면 게임을 켤 때 스스로 업데이트합니다(바뀐 조각만 받음).\n- 저장한 항해는 업데이트·재설치에도 그대로 남습니다.\n' "$VERSION" "$SIZE" "${GITHUB_SHA:0:7}" "$MSG" "$VERSION" > notes.md
+          gh release create "v$VERSION" "dist/PLUS-ULTRA-Setup-$VERSION.exe" "dist/PLUS-ULTRA-Setup-$VERSION.exe.blockmap" dist/latest.yml \
+            --repo "$GITHUB_REPOSITORY" --title "PLUS ULTRA $VERSION (Windows 설치형)" --notes-file notes.md --target "$GITHUB_SHA" --latest
+      - name: 옛 릴리스 정리 (최근 3개만)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | startswith("v1.0."))] | sort_by(.createdAt) | reverse | .[3:] | .[].tagName' |
+          while read -r tag; do gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag; done

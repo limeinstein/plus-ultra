@@ -5,6 +5,25 @@
 참고 이미지 파일은 게임에 쓰지 않았습니다. 도시 풍경, 건물 내부, 인물 초상, 배, 세계 지도는 모두 코드(Canvas 2D · WebGL)로 그립니다.
 원작의 대사와 설명은 옮겨 쓰지 않고 새로 썼습니다.
 
+## 설치형 게임 (Windows) (2026-10-10)
+- **받기:** https://github.com/limeinstein/plus-ultra/releases/latest 에서 `PLUS-ULTRA-Setup-<판>.exe` (약 1.5GB).
+  - 설치 폴더를 고를 수 있고, 바탕화면·시작 메뉴에 「PLUS ULTRA」가 생긴다.
+- **업데이트:** 깔린 게임은 켤 때 새 릴리스를 찾아 **바뀐 조각만** 받고, 「지금 다시 시작 / 나중에」를 묻는다(`electron-updater`).
+  - 저장(localStorage)은 `%APPDATA%\PLUS ULTRA`에 남아 업데이트·재설치에도 그대로다.
+- **조작:** 창은 화면을 채워 시작한다. F11 전체 화면, F12 개발자 도구.
+- **용량 걱정 없이 원본 그림 그대로 싣고, 쓰지 않는 것만 뺀다**(`python tools/build_desktop.py` → `desktop/app`, 약 1.5GB):
+  - 게임이 찾는 그림만 싣는다. 원화·미리보기·도구·시험·문서·도감은 넣지 않는다.
+  - 장면 판이 있는 발견물의 GIF 693개(약 1GB)는 뺀다. 정지 그림 자리는 마지막 장면이 대신한다.
+  - 무릎상 2030장은 긴 변 1280px로 줄인다(QHD 전체 화면에서도 또렷, 약 270MB 줄임). 캐시: `desktop/.imgcache`.
+  - 글꼴(Google Fonts)은 내려받아 넣으므로 인터넷 없이도 같은 글꼴로 나온다.
+  - 2GB(설치 파일·릴리스 한도)에 가까워지면 빌드가 멈추고 알린다.
+- **만드는 곳:** GitHub Actions `.github/workflows/desktop.yml`(windows-latest). 「배포」 때 `gh workflow run desktop.yml`로 돌린다.
+  - 판은 `1.0.<실행 번호>`.
+  - 설치 전 판으로 타이틀까지 열어 보는 점검(`--smoke`)을 통과해야 릴리스로 올린다.
+  - 옛 릴리스는 최근 3개만 남긴다.
+- **Electron 껍데기:** `desktop/main.js`·`desktop/package.json`. Electron 44.7.0 · electron-builder 26.15.3 · electron-updater 6.8.9.
+- 시험: `node tests/desktop_app_smoke.js`. 기존 시험도 `PAGE=desktop/app/index.html`로 설치형 파일에서 돌릴 수 있다.
+
 ## Codex 그림 연결 (2026-10-10)
 - **유물 387종 모두 전용 그림.**
   - 그림판 원화 33종에 더해, 나머지 354종을 `node tools/bake_relic_icons.js`로 256×256 투명 WebP로 구웠다.

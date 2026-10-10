@@ -1,0 +1,47 @@
+{
+  "name": "plus-ultra",
+  "productName": "PLUS ULTRA",
+  "version": "1.0.0",
+  "description": "PLUS ULTRA — Loop of Good Hope: 대항해 시대를 무대로 한 모험·교역·해전 게임",
+  "author": "limeinstein",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "smoke": "electron . --smoke",
+    "dist": "electron-builder --win nsis --publish never"
+  },
+  "dependencies": {
+    "electron-updater": "6.8.9"
+  },
+  "devDependencies": {
+    "electron": "44.7.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "io.github.limeinstein.plusultra",
+    "productName": "PLUS ULTRA",
+    "copyright": "limeinstein",
+    "asar": false,
+    "files": ["main.js", "icon.png", "package.json", "app/**/*"],
+    "directories": { "output": "dist" },
+    "compression": "normal",
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "icon.png",
+      "artifactName": "PLUS-ULTRA-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PLUS ULTRA",
+      "deleteAppDataOnUninstall": false,
+      "differentialPackage": true
+    },
+    "publish": [{ "provider": "github", "owner": "limeinstein", "repo": "plus-ultra", "releaseType": "release" }]
+  }
+}
