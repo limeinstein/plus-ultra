@@ -630,19 +630,23 @@
   };
   /** 도시 하나만 따로: 라사(티베트)는 초원 양식이지만 여급은 중국 묶음에서 */
   I.MAID_POOL_CITY = { 139: ['china'] };
-  /** 묶음 폴더 안에 섞여 있지만 그 고장 사람으로 보이지 않는 그림 — 1 = 어디서도 쓰지 않음, 문자열 = 그 도시 양식에서만 쓴다
-      (아프리카 묶음의 금발·붉은 머리, 아랍 묶음의 유럽 옷차림 두 장, 동남아 묶음의 깃털 머리띠(아메리카 토착민 차림), 페르시아 묶음의 동아시아 얼굴은 초원에서만) */
-  I.MAID_BAN = { 'maid-styles/africa/9': 1, 'maid-styles/africa/11': 1, 'maid-styles/arabia/2': 1, 'maid-styles/arabia/3': 1,
+  /** 묶음 폴더 안에 섞여 있지만 그 고장 사람으로 보이지 않는 그림 — 1 = 어디서도 쓰지 않음, 문자열·목록 = 그 도시 양식에서만 쓴다
+      (아프리카 묶음의 금발·붉은 머리는 쓰지 않는다. 아랍 묶음의 유럽 옷차림·금발은 지중해 이슬람 도시(is)에서만, 붉은 머리는 is·페르시아(pe)에서만,
+       페르시아 묶음의 동아시아 얼굴은 초원(st)에서만) */
+  I.MAID_BAN = { 'maid-styles/africa/9': 1, 'maid-styles/africa/11': 1,
+    'maid-styles/arabia/2': 'is', 'maid-styles/arabia/3': 'is', 'maid-styles/arabia/10': 'is', 'maid-styles/arabia/12': ['is', 'pe'],
     'maid-styles/seasia/5': 1, 'maid-styles/persia/3': 'st' };
+  /** 다른 묶음 폴더에 있지만 이 묶음 사람으로 쓰는 그림 (동남아 묶음의 깃털 머리띠 여급 → 아메리카 토착) */
+  I.MAID_EXTRA = { native: ['maid-styles/seasia/5'] };
   /** 이 도시의 여급 그림 묶음 후보 */
   I.maidPool = function (c) { return !c ? null : I.MAID_POOL_CITY[c.id] || I.MAID_POOL[I.folkStyle(c)] || null; };
   /** 묶음 폴더의 흉상 그림들 — 그 고장에 맞지 않는 그림은 뺀다 */
   function maidList(st, c) {
     var fs = c ? I.folkStyle(c) : null;
-    return I.list('maid-styles/' + st + '/').filter(function (k) {
+    return I.list('maid-styles/' + st + '/').concat((I.MAID_EXTRA[st] || []).filter(function (k) { return I.has(k); })).filter(function (k) {
       if (/_half$/.test(k)) return false;
-      var b = I.MAID_BAN[k];
-      return !b || (typeof b === 'string' && b === fs);
+      var b = I.MAID_EXTRA[st] && I.MAID_EXTRA[st].indexOf(k) >= 0 ? null : I.MAID_BAN[k];
+      return !b || (typeof b === 'string' ? b === fs : b !== 1 && b.indexOf(fs) >= 0);
     });
   }
   I.maidList = maidList;
@@ -680,8 +684,51 @@
     if (k) out.push(k);
     return out;
   };
-  /** 이름 있는 여급이 없는 도시의 술집에 서 있는 그 지역 여급 */
+  /** 이름 있는 여급이 없는 도시의 술집에 서 있는 그 지역 여급.
+      도시들에 고루 뿌린다: 도시 번호 순으로, 그 도시 묶음 후보(I.maidPool)의 그림 가운데 가장 적게 쓰인 것을 고르고,
+      같으면 그 그림을 쓰는 가장 가까운 도시가 가장 먼 것을 고른다 → 그림이 모두 한 번씩 쓰인 다음에야 겹치고, 이웃 도시끼리 같은 얼굴이 덜 난다.
+      이름 있는 여급이 있는 도시는 건너뛴다. 그림 목록이 바뀌면(그림 묶음을 늦게 읽음) 다시 나눈다 */
+  var cityPicMap = null, cityPicSig = '';
+  function spreadCityMaids() {
+    var cities = G.CITY_DATA || [], named = {};
+    (G.MAIDS || []).forEach(function (m) { named[m.city] = 1; });
+    var sig = cities.length + ':' + I.list('maid-styles/').length;
+    if (cityPicMap && sig === cityPicSig) return cityPicMap;
+    var map = {}, used = {}, where = {};
+    function far(k, c) {   // 이 그림을 이미 쓰는 도시 가운데 가장 가까운 곳까지의 거리 (도)
+      var best = 1e9, w = where[k] || [];
+      for (var i = 0; i < w.length; i++) {
+        var dx = (w[i].lon - c.lon) * Math.cos((c.lat || 0) * Math.PI / 180), dy = w[i].lat - c.lat, d = dx * dx + dy * dy;
+        if (d < best) best = d;
+      }
+      return best;
+    }
+    cities.forEach(function (c) {
+      if (!c || named[c.id]) return;
+      var pool = I.maidPool(c); if (!pool || !pool.length) return;
+      var cand = [];
+      pool.forEach(function (st) { maidList(st, c).forEach(function (k) { if (cand.indexOf(k) < 0) cand.push(k); }); });
+      if (!cand.length) {
+        var st0 = pool[Math.abs(G.U ? G.U.strHash('city' + c.id) : 0) % pool.length];
+        if (I.has('maid-styles/' + st0)) map[c.id] = 'maid-styles/' + st0;
+        return;
+      }
+      // 같은 횟수·거리면 새로 들어온 그림(번호가 큰 것)부터 — 그림이 도시보다 많은 묶음(인도·일본)에서 새 그림이 먼저 나온다
+      var pick = null, pu = 0, pf = 0, pn = 0, ph = 0;
+      cand.forEach(function (k) {
+        var u = used[k] || 0, f = far(k, c), n = parseInt(k.slice(k.lastIndexOf('/') + 1), 10) || 0, h = G.U ? G.U.strHash('citypic' + c.id + k) : 0;
+        if (pick === null || u < pu || (u === pu && (f > pf || (f === pf && (n > pn || (n === pn && h < ph)))))) { pick = k; pu = u; pf = f; pn = n; ph = h; }
+      });
+      map[c.id] = pick; used[pick] = (used[pick] || 0) + 1; (where[pick] = where[pick] || []).push(c);
+    });
+    cityPicMap = map; cityPicSig = sig;
+    return map;
+  }
   I.maidPicCity = function (c) {
+    if (!c) return null;
+    var k = spreadCityMaids()[c.id];
+    if (k !== undefined) return k;
+    // 이름 있는 여급이 있는 도시 등: 예전처럼 도시 번호로 한 장
     var pool = I.maidPool(c);
     if (!pool || !pool.length) return null;
     var st = pool[Math.abs(G.U ? G.U.strHash('city' + c.id) : 0) % pool.length];
@@ -689,6 +736,7 @@
     if (!list.length) return I.has('maid-styles/' + st) ? 'maid-styles/' + st : null;
     return list[Math.abs(G.U ? G.U.strHash('citypic' + c.id) : 0) % list.length];
   };
+  I.spreadCityMaids = spreadCityMaids;
   K.maidCity = function (c) { var k = I.maidPicCity(c); return k ? [k] : []; };
   K.maidCityHalf = function (c) { var k = I.maidPicCity(c); return k ? [k + '_half'] : []; };
   /** 술집에 서 있는 여급의 전신(무릎까지) 그림 */
