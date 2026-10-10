@@ -66,14 +66,19 @@ jobs:
         working-directory: desktop
         run: |
           set -o pipefail
-          python ../tools/build_gifpack.py "$VERSION" 2>&1 | tee gp.log || { echo "::error title=build_gifpack::$(tail -25 gp.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"; exit 1; }
+          exec > >(tee gifpack-step.log) 2>&1
+          trap 'echo "::error title=GIF 팩 (줄 $LINENO)::$(tail -30 gifpack-step.log | sed ":a;N;\$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g")"' ERR
+          python ../tools/build_gifpack.py "$VERSION"
           MAKENSIS=$(command -v makensis || true)
-          [ -z "$MAKENSIS" ] && [ -x "/c/Program Files (x86)/NSIS/makensis.exe" ] && MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"
-          [ -z "$MAKENSIS" ] && MAKENSIS=$(find "$LOCALAPPDATA/electron-builder/Cache/nsis" -name makensis.exe 2>/dev/null | head -1)
-          if [ -z "$MAKENSIS" ]; then choco install nsis -y --no-progress >/dev/null && MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"; fi
+          if [ -z "$MAKENSIS" ] && [ -x "/c/Program Files (x86)/NSIS/makensis.exe" ]; then MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"; fi
+          if [ -z "$MAKENSIS" ]; then MAKENSIS=$(find "$(cygpath -u "$LOCALAPPDATA")/electron-builder/Cache/nsis" -iname makensis.exe 2>/dev/null | head -1 || true); fi
+          if [ -z "$MAKENSIS" ]; then choco install nsis -y --no-progress; MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"; fi
           echo "makensis: $MAKENSIS"
-          "$MAKENSIS" -V2 "-DVERSION=$VERSION" gifpack.nsi 2>&1 | tee nsis.log || { echo "::error title=gifpack.nsi::$(tail -25 nsis.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"; exit 1; }
-          ls -la dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe
+          "$MAKENSIS" -V3 -DVERSION=$VERSION gifpack.nsi
+          ls -la dist
+          OUTF=$(ls -t dist/PLUS-ULTRA-GIF-Pack-*.exe | head -1)
+          [ "$OUTF" = "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe" ] || mv "$OUTF" "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe"
+          ls -la "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe"
       - name: 점검 — 타이틀 화면까지 열어 보기
         working-directory: desktop
         run: |
