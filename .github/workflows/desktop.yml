@@ -75,7 +75,8 @@ jobs:
           ls -la dist
           SIZE=$(du -m "dist/PLUS-ULTRA-Setup-$VERSION.exe" | cut -f1)
           MSG=$(git log -1 --format='%s')
-          printf '설치형 게임 %s (%sMB)\n\n- 커밋 %s: %s\n- 설치: PLUS-ULTRA-Setup-%s.exe 를 받아 실행합니다. 이미 깔려 있으면 게임을 켤 때 스스로 업데이트합니다(바뀐 조각만 받음).\n- 저장한 항해는 업데이트·재설치에도 그대로 남습니다.\n' "$VERSION" "$SIZE" "${GITHUB_SHA:0:7}" "$MSG" "$VERSION" > notes.md
+          INFO=$(python -c "import json;d=json.load(open('app-info.json'));print('게임 파일 %d개 %dMB · 뺀 그림 %d장 %dMB · 가볍게 한 무릎상 %d장 · 글꼴 %s' % (d['files'], d['bytes']//1000000, d['dropped'], d['saved']//1000000, d['halves'], ('%d개 내장' % d['fonts']) if d['fonts'] is not None else '온라인'))")
+          printf '설치형 게임 %s (%sMB)\n\n- 커밋 %s: %s\n- %s\n- 설치: PLUS-ULTRA-Setup-%s.exe 를 받아 실행합니다. 이미 깔려 있으면 게임을 켤 때 스스로 업데이트합니다(바뀐 조각만 받음).\n- 저장한 항해는 업데이트·재설치에도 그대로 남습니다.\n' "$VERSION" "$SIZE" "${GITHUB_SHA:0:7}" "$MSG" "$INFO" "$VERSION" > notes.md
           gh release create "v$VERSION" "dist/PLUS-ULTRA-Setup-$VERSION.exe" "dist/PLUS-ULTRA-Setup-$VERSION.exe.blockmap" dist/latest.yml \
             --repo "$GITHUB_REPOSITORY" --title "PLUS ULTRA $VERSION (Windows 설치형)" --notes-file notes.md --target "$GITHUB_SHA" --latest
       - name: 옛 릴리스 정리 (최근 3개만)
