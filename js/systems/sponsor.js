@@ -167,15 +167,19 @@
   async function persuade(sp, d, sc, who) {
     var T = (G.BALANCE && G.BALANCE.sponsorTaste) || {}, sk = R.skill('speech'), p = SP.persuadeChance(sp, sc);
     var tasteTxt = sp.taste.map(G.tasteName).join('·');
+    // 웅변 특기가 없으면 누를 수 없는 창을 띄우지 않는다 — 처음 한 번만 귀띔 (QA 2026-10-10)
+    if (!sk) { var fl = S().flags; if (!fl.persuadeTip) { fl.persuadeTip = 1; UI.toast('웅변 특기가 있으면 관심사 밖의 이야기도 설득해 볼 수 있다', 'scroll', 5000); } return null; }
     var v = await UI.ask('「' + d.name + '」' + U.jx(d.name, '은/는') + ' ' + SP.honor(sp) + '의 관심사(' + tasteTxt + ')가 아니다.', [
       { label: sk ? '웅변으로 설득한다 (웅변 ' + sk + ' · 약 ' + Math.round(p * 100) + '%)' : '설득한다 (웅변 특기가 없다)', value: 'go', dis: !sk },
       { label: '그만둔다', value: 'no' }], SP.me(sp));
     if (v !== 'go') return null;
     await UI.say(U.pick(['그 일이 왜 중요한지 들어 주십시오. 이것을 아는 나라가 다음 바다를 쥡니다.', '아무도 눈여겨보지 않는 지금이 기회입니다. 남보다 먼저 손에 넣는 사람이 이름을 남깁니다.',
       '관심 밖의 이야기라는 것을 압니다. 하지만 이 일이 끝나면 ' + SP.honor(sp) + '께서 아끼시는 것들과도 이어질 겁니다.']), SP.me(sp));
-    if (U.chance(p)) { await UI.say(U.pick(['흐음… 듣고 보니 일리가 있군. 좋네, 한번 맡겨 보지.', '자네 말솜씨에 넘어가는군. 내 관심사는 아니지만 믿어 보겠네.']), who); return true; }
+    // 결과 연출 (js/ui/outcome.js): 설득해 냈으면 승리, 못 했으면 좌절하는 제독
+    if (U.chance(p)) { if (G.Outcome) await G.Outcome.show('win', { sub: SP.holderName(sp) + U.jx(SP.holderName(sp), '을/를') + ' 설득했다' }); await UI.say(SP.line(sp, 'persOk'), who); return true; }
     SP.rel(sp.id).trust = Math.max(0, SP.rel(sp.id).trust - (T.failTrust || 0));
-    await UI.say(U.pick(['말은 그럴듯하지만, 내 마음은 움직이지 않는군.', '자네 말솜씨는 알겠네. 그래도 내 돈을 쓸 일은 아닐세.']), who);
+    if (G.Outcome) await G.Outcome.show('lose', { sub: SP.holderName(sp) + '의 마음을 움직이지 못했다' });
+    await UI.say(SP.line(sp, 'persFail'), who);
     return false;
   }
   function offerFor(sp, d) {
@@ -252,13 +256,13 @@
       // 관심사 밖이라 시큰둥하면 웅변으로 설득해 볼 수 있다 (같은 이야기는 한 번만). 설득해 내면 보통 값으로 계약·보고
       var cold = react === '다른 것을 보여라' || react === '시시하다' || react === '장난치지 말게';
       if (cold && !x.circ && !G.tasteHit(sp.taste, d) && !x.persuaded) {
-        await UI.say(react === '장난치지 말게' ? '그런 쓸데없는 이야기에 버릴 돈은 없네.' : U.pick(['흐음, 내 관심사는 아니로군.', '그건 내가 마음을 쓰는 일이 아닐세.']), who);
+        await UI.say(SP.line(sp, react === '장난치지 말게' ? 'coldInsult' : 'coldTaste'), who);
         x.persuaded = true;
         var pv = await persuade(sp, d, sc, who);
         if (pv) react = '좋은 반응';
         else if (pv === false) { if (react === '다른 것을 보여라') continue; return; }
         else if (react === '다른 것을 보여라') continue;
-        else { if (react === '장난치지 말게') rel.trust = Math.max(0, rel.trust - 3); await UI.say('다음 기회로 하세.', who); return; }
+        else { if (react === '장난치지 말게') rel.trust = Math.max(0, rel.trust - 3); await UI.say(SP.line(sp, 'nextTime'), who); return; }
       }
       if (react === '다른 것을 보여라') { await UI.say(L('meh'), who); continue; }
       // 설득 실패: 좌절하는 제독 (결과 연출 js/ui/outcome.js)
@@ -301,7 +305,7 @@
     var gr = ev !== 'fake' && found && G.Disc.gradeOf ? G.Disc.gradeOf(d, true) : null, gk = 1;
     if (gr) { var dv = await SP.doubt(sp, d, gr); if (dv.abort) return; gk = gr.k * dv.k; }
     var o = offerFor(sp, d), pay = Math.round(o.reward * 0.7 * k * gk / 100) * 100;
-    if (o.liked) await UI.say(U.pick(['바로 내가 알고 싶던 것일세! 사례를 넉넉히 하지.', '내 관심사에 꼭 맞는 이야기로군. 값을 후하게 쳐 주겠네.']), who);
+    if (o.liked) await UI.say(L('likedReport'), who);
     // 같은 해에 같은 후원자에게 여러 번 보고하면 사례금이 줄어든다 (후원자의 주머니에도 끝이 있다)
     if (rel.lateY !== s.date.y) { rel.lateY = s.date.y; rel.lateN = 0; }
     var cutK = 1 + ((G.BALANCE && G.BALANCE.lateRepCut) || 0) * rel.lateN, cutTxt = '';
@@ -338,7 +342,11 @@
     var s = S(), rel = SP.rel(sp.id), tp = SP.temper(sp);
     var p = (gr.key === 'word' ? 0.35 : 0.2) + (tp === 'careful' ? 0.15 : tp === 'generous' ? -0.15 : 0) - (rel.trust || 0) / 400;
     if (d.pw <= 1) p *= 0.5;           // 가까운 작은 발견은 크게 따지지 않는다
-    if (!U.chance(U.clamp(p, 0.05, 0.85))) return out;
+    // 한 번 물러났던 보고: 같은 증거(또는 그보다 못한 것)를 들고 다시 오면 다시 굴리지 않고 그대로 의심한다 —
+    // 물러났다 오기를 되풀이해 의심을 피할 수 없게 (더 나은 증거를 마련해 오면 처음처럼 따진다) (QA 2026-10-10)
+    var doubted = rel.doubted && rel.doubted[d.id], GR = G.Disc.GRADES || {};
+    var again = doubted && GR[doubted] && GR[gr.key] && GR[gr.key].rank <= GR[doubted].rank;
+    if (!again && !U.chance(U.clamp(p, 0.05, 0.85))) return out;
     var who = SP.speaker(sp);
     await UI.say(SP.line(sp, gr.key === 'word' ? 'doubtWord' : 'doubtSketch'), who);
     UI.toast('그림에 밝은 부하를 두면 기억을 더듬어 도판을 다시 그릴 수 있다', 'book', 5000);
@@ -346,7 +354,8 @@
       { label: '증인을 세운다 — 함께 본 부하·선원들이 말한다', value: 'witness' },
       { label: '명예를 걸고 맹세한다', value: 'oath' },
       { label: '더 나은 증거를 마련해 다시 오겠다며 물러난다', value: 'later' }], SP.me(sp));
-    if (v === 'later' || v == null) { await UI.say(SP.line(sp, 'doubtLater'), who); out.abort = true; return out; }
+    if (v === 'later' || v == null) { (rel.doubted = rel.doubted || {})[d.id] = gr.key; await UI.say(SP.line(sp, 'doubtLater'), who); out.abort = true; return out; }
+    if (rel.doubted) delete rel.doubted[d.id];
     var ok;
     if (v === 'witness') {
       if (s.mates.length) await UI.say(U.pick(['제독 말씀 그대로입니다. 저희가 두 눈으로 똑똑히 보았습니다.', '거짓이라면 제 목을 거셔도 좋습니다. 그 자리에 저도 있었습니다.']), G.Scenes.mateSpeaker('first'));
@@ -492,7 +501,7 @@
     var o = offerFor(sp, d);
     o.advance = Math.round(o.advance * mood / 100) * 100;
     var asked = 0, pu = R.purser(), maxAsk = pu ? 3 : 2;
-    if (o.liked) await UI.say(U.pick(['내가 늘 마음에 두던 일이로군. 돈을 아끼지 않겠네.', '내 관심사에 꼭 맞는 모험일세. 넉넉히 대 주지.']), who);    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
+    if (o.liked) await UI.say(L('likedFund'), who);    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
     for (;;) {
       await UI.say(L('offer', { adv: U.num(o.advance), yrs: o.years, rew: U.num(o.reward) }), who);
       var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢' + (tm ? '\n' + SP.holderName(sp) + U.jx(SP.holderName(sp), '은/는') + ' ' + tm.like + '. ' + tm.desc : ''), [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));

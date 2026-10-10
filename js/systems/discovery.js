@@ -272,7 +272,10 @@
   D.gradeOf = function (d, regrade) {
     var st = S().disc[d.id] || {};
     var hasReal = S().player.items.some(function (it) { var r = G.RELIC && G.RELIC[it.id]; return it.disc === d.id && r && r.kind !== 'book' && !it.done; });
-    var key = hasReal ? 'real' : (st.grade && D.GRADES[st.grade] && st.grade !== 'real' ? st.grade : D.drawGrade(d));
+    // 증거 등급이 생기기 전에 찾은 발견(옛 저장 — st.grade 없음): 그때 일행이 남긴 기록을 알 수 없으니 「해도」로 본다.
+    // 지금 일행의 솜씨로 매기면 그때 화가가 있었어도 「구술」로 깎이고 의심을 받는다 (QA 2026-10-10). 더 나은 솜씨가 있으면 아래에서 올린다
+    var legacy = !st.grade && st.me && d.id !== 'circum';
+    var key = hasReal ? 'real' : (st.grade && D.GRADES[st.grade] && st.grade !== 'real' ? st.grade : legacy ? 'chart' : D.drawGrade(d));
     if (!hasReal) {
       var now = D.drawGrade(d);
       if (D.GRADES[now].rank > D.GRADES[key].rank) {

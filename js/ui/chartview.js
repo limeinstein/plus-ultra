@@ -20,6 +20,18 @@
 
   /** host 안에 해도를 만든다.
       opts: {w, h, center:[lon,lat], span, ref: 기준 항구(자동항해 표식), actions(c) → [{label, icon, fn}], seaAction(lon,lat) → {label, fn}, select: 도시 id} */
+  /** 항로 선의 바닷길 (두 항구 부두 사이 G.Nav.path) — 한 번 찾으면 기억한다. null = 길 없음(곧은 줄) */
+  var ROUTE_PATH = {};
+  function routePath(a, b) {
+    var k = a < b ? a + '-' + b : b + '-' + a;
+    if (ROUTE_PATH[k] !== undefined) return ROUTE_PATH[k];
+    if (!G.Nav || !G.Nav.path) return (ROUTE_PATH[k] = null);
+    var A = G.CITY_DATA[Math.min(a, b)], B = G.CITY_DATA[Math.max(a, b)], da = A.dock || [A.lat, A.lon], db = B.dock || [B.lat, B.lon], p = null;
+    try { var s0 = G.Nav.nearestSea(da[1], da[0], 12) || [da[1], da[0]]; p = G.Nav.path(s0[0], s0[1], db[1], db[0]); } catch (e) { p = null; }
+    if (p) p = [[da[1], da[0]]].concat(p);
+    return (ROUTE_PATH[k] = p);
+  }
+  CV.routePath = routePath;
   CV.mount = function (host, opts) {
     opts = opts || {};
     var s = S(), W = opts.w || 1100, H = opts.h || 560;
@@ -67,12 +79,24 @@
       var cityScale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15);
       ctx.save(); terrain();
       // 항로 경험 (열린 항로 진한 선, 익히는 중 점선)
+      // 바닷길은 한 그리기에 몇 개씩만 찾고(한 개에 수십 ms), 남으면 곧 다시 그린다
+      var budget = 3, more = false;
       if (G.Routes) G.Routes.list().forEach(function (r) {
-        var A = G.CITY_DATA[r.a], B = G.CITY_DATA[r.b]; if (Math.abs(A.lon - B.lon) > 180) return;
-        var pa = px(A.lon, A.lat, b), pb = px(B.lon, B.lat, b);
+        var A = G.CITY_DATA[r.a], B = G.CITY_DATA[r.b];
+        var k = r.a < r.b ? r.a + '-' + r.b : r.b + '-' + r.a, path;
+        if (ROUTE_PATH[k] === undefined) { if (budget-- > 0) path = routePath(r.a, r.b); else { more = true; return; } } else path = ROUTE_PATH[k];
         ctx.strokeStyle = r.open ? 'rgba(31,122,120,.8)' : 'rgba(90,60,30,.45)'; ctx.lineWidth = r.open ? 2.2 : 1.2; ctx.setLineDash(r.open ? [] : [4, 4]);
-        ctx.beginPath(); ctx.moveTo(pa[0], pa[1]); ctx.lineTo(pb[0], pb[1]); ctx.stroke(); ctx.setLineDash([]);
+        ctx.beginPath();
+        if (path && path.length > 1) {
+          var last = null;
+          path.forEach(function (q, i) { var pq = px(q[0], q[1], b); if (!i || (last && Math.abs(pq[0] - last[0]) > W / 2)) ctx.moveTo(pq[0], pq[1]); else ctx.lineTo(pq[0], pq[1]); last = pq; });
+        } else {
+          if (Math.abs(A.lon - B.lon) > 180) return;
+          var pa = px(A.lon, A.lat, b), pb = px(B.lon, B.lat, b); ctx.moveTo(pa[0], pa[1]); ctx.lineTo(pb[0], pb[1]);
+        }
+        ctx.stroke(); ctx.setLineDash([]);
       });
+      if (more) setTimeout(function () { if (!dead) draw(); }, 40);
       if (G.Treaty) G.Treaty.drawChart(ctx, function (lon, lat) { return px(lon, lat, b); }, W, H);   // 토르데시야스·사라고사 선
       var fs = 13, font = getComputedStyle(document.body).fontFamily;
       I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {});

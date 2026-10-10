@@ -20,6 +20,8 @@
     cabinView: { stageW: 920, stageH: 314, side: 300, pin: 38, pinMin: 24, medal: 54, pad: 70, minSpan: 560, below: 40, cardMax: 180, rosterH: 280 },
     // 자동항해를 시작하면 켜지는 배속 (js/scenes/sea.js setTarget — 1·2·4 가운데). 손으로 몰면 이전 배속으로 돌아간다
     autoSailSpeed: 4,
+    // 바다에서 멈춰 있을 때(Space·정지) 시간이 흐르는 배속 — 날이 가고 다른 배들이 움직인다. 0이면 예전처럼 멈추면 시간도 멈춘다
+    waitSpeed: 1,
     // 바람을 보여 주는 구름 (js/scenes/sea.js cloudStep·cloudTail, js/world/renderer.js clouds)
     //   drift: 풍속 1일 때 구름이 게임 속 하루에 흐르는 거리(°) · idleRate: 멈춰 있거나 대화 중일 때 흐르는 빠르기(×1 배속의 몫)
     //   turn: 바람이 바뀔 때 구름 흐름이 도는 가장 빠른 빠르기(rad/초) · morph: 다른 바다로 들어설 때 구름 모양이 바뀌는 시간(초)

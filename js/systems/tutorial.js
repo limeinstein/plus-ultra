@@ -209,7 +209,7 @@
     if (t && st) {
       if (st.id === 'hire') D.mates.forEach(function (id) { if (!mate(id)) want.push(G.MATE[id].name); });
       if (st.id === 'cabin') want.push('수첩');
-      if (st.id === 'sail' || st.id === 'auto') want.push('세우타 쪽으로 곧장 침로', '세빌리아로 자동항해');
+      if (st.id === 'sail' || st.id === 'auto') want.push('세우타 쪽으로 바닷길 따라', '세우타 쪽으로 곧장 침로', '세빌리아로 자동항해');
       if (st.id === 'depart' && t.f.prep) want = ['항구', '출항', '출항한다'];
     }
     var els = root.querySelectorAll(GLOW_SEL);

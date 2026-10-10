@@ -112,7 +112,7 @@
     // 항로
     if (c.port && ref != null && ref !== c.id && G.Routes) {
       var open = G.Routes.isOpen(ref, c.id);
-      row('항로', open ? '<b>자동항해 가능</b> (' + G.CITY_DATA[ref].name + '에서)' : G.Routes.label(ref, c.id) + ' — 곧장 침로만');
+      row('항로', open ? '<b>자동항해 가능</b> (' + G.CITY_DATA[ref].name + '에서)' : G.Routes.label(ref, c.id) + ' — 바닷길 따라 (자동항해 아님)');
     }
     // 후원자·계약
     var sps = G.SPONSORS.filter(function (x) { return x.city === c.id && G.Sponsor.holder(x); });

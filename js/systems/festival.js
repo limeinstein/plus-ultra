@@ -24,11 +24,25 @@
     var nm = f ? f.name : '';
     return t.replace(/\{(\^?)d(?:\|([^}]+))?\}/g, function (m, only, pair) { return pair ? (only ? U.jx(nm, pair) : nm + U.jx(nm, pair)) : nm; });
   }
+  /** 이 도시에 어울리는 말만 (QA 2026-10-10): 내륙 도시에는 부두·항구 이야기를 빼고,
+      제독의 나라가 아닌 도시에서는 「우리 고장 배」라고 하지 않는다. 남는 말이 없으면 원래 목록 그대로 */
+  function fits(list, c) {
+    if (!c || !list) return list;
+    var p = S().player, own = G.R && G.R.cityOwner ? G.R.cityOwner(c) : c.nation;
+    var home = own === p.nation || (G.R && G.R.nationName && own === G.R.nationName(p.nation));
+    var out = list.filter(function (t) {
+      if (!c.port && /부두|항구|배를 보러/.test(t)) return false;
+      if (!home && /우리 고장/.test(t)) return false;
+      return true;
+    });
+    return out.length ? out : list;
+  }
+  F.fits = fits;
   /** 거리 사람의 잔치 이야기 (없으면 null) */
   F.line = function (type, c) {
     var f = F.now(); if (!f || !c || f.city !== c.id) return null;
-    var L = D().lines[type]; if (!L || !L.length) return null;
-    return fill(U.pickFresh('fest:' + type, L), c, f);
+    var L = fits(D().lines[type], c); if (!L || !L.length) return null;
+    return fill(U.pickFresh('fest:' + type + (c.port ? '' : ':in'), L), c, f);
   };
   /** 잔치를 연다. 같은 도시에서 이미 열려 있으면 날만 늘린다 */
   F.begin = async function (cityId, d) {
@@ -36,11 +50,15 @@
     if (!c || !F.big(d)) return false;
     var days = F.grand(d) ? (D().bigDays || 10) : (D().days || 7);
     if (F.active(c)) { s.fest.until = Math.max(s.fest.until, s.day + days); if (s.fest.disc !== d.id) { s.fest.disc = d.id; s.fest.name = d.name; } return false; }
+    // 같은 발견으로는 잔치를 한 번만 (세계일주: 모항 귀환과 후원자 보고가 다른 도시여도 보너스는 한 번) (QA 2026-10-10)
+    var done = s.festDone || (s.festDone = {});
+    if (done[d.id] != null) return false;
+    done[d.id] = s.day;
     s.fest = { city: c.id, disc: d.id, name: d.name, since: s.day, until: s.day + days };
     var fl = s.fleet; if (fl) fl.fatigue = U.clamp((fl.fatigue || 0) - (D().fatigue || 15), 0, 100);
     (s.mates || []).forEach(function (m) { m.loyal = Math.min(100, (m.loyal || 70) + (D().loyal || 3)); });
     if (G.Audio) { G.Audio.sfx('bell'); setTimeout(function () { G.Audio.sfx('cheer'); }, 500); }
-    await UI.say(fill(U.pickFresh('fest:open', F.grand(d) ? D().openBig : D().open), c, s.fest), {});
+    await UI.say(fill(U.pickFresh('fest:open' + (c.port ? '' : ':in'), fits(F.grand(d) ? D().openBig : D().open, c)), c, s.fest), {});
     if (s.mates && s.mates.length && G.Scenes.mateSpeaker) await UI.say(U.pickFresh('fest:mate', D().mate), G.Scenes.mateSpeaker('first'));
     UI.toast('「' + d.name + '」 귀환 잔치 · 선원들 피로가 풀리고 부하들 사기가 올랐다', 'star', 5000);
     G.State.log(c.name + '에서 「' + d.name + '」 귀환 잔치가 열렸다.');

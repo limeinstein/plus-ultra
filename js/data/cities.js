@@ -117,7 +117,7 @@
 {"id":114,"name":"타나","lat":47.065,"lon":39.419,"port":1,"region":2,"lang":4,"rel":"I","size":1,"style":"gr","nation":"오스만 제국","founded":0,"goods":["fur","fish","hides"],"flags":"","dock":[47.153,39.155]},
 {"id":115,"name":"시높","lat":42.056,"lon":35.112,"port":1,"region":2,"lang":5,"rel":"I","size":1,"style":"is","nation":"오스만 제국","founded":0,"goods":["timber","fish"],"flags":"","dock":[42.231,35.112]},
 {"id":116,"name":"트레비존드","lat":41.001,"lon":39.683,"port":1,"region":2,"lang":4,"rel":"I","size":2,"style":"gr","nation":"오스만 제국","founded":0,"goods":["silkraw","copper","silver"],"flags":"","dock":[41.177,39.683]},
-{"id":117,"name":"앙골라","lat":39.946,"lon":32.827,"port":0,"region":2,"lang":5,"rel":"I","size":1,"style":"is","nation":"오스만 제국","founded":0,"goods":["wool","woolcloth"],"flags":""},
+{"id":117,"name":"앙카라","lat":39.946,"lon":32.827,"port":0,"region":2,"lang":5,"rel":"I","size":1,"style":"is","nation":"오스만 제국","founded":0,"goods":["wool","woolcloth"],"flags":""},
 {"id":118,"name":"안티오키아","lat":36.167,"lon":36.167,"port":1,"region":4,"lang":5,"rel":"I","size":1,"style":"is","nation":"맘루크 왕조","founded":0,"goods":["silkraw","silk","olive"],"flags":"","dock":[36.079,35.815]},
 {"id":119,"name":"다마스쿠스","lat":33.53,"lon":36.255,"port":0,"region":4,"lang":5,"rel":"I","size":3,"style":"is","nation":"맘루크 왕조","founded":0,"goods":["silk","jewelry","guns"],"flags":"L"},
 {"id":120,"name":"예루살렘","lat":31.772,"lon":35.2,"port":0,"region":4,"lang":5,"rel":"I","size":2,"style":"is","nation":"맘루크 왕조","founded":0,"goods":["antique","olive"],"flags":""},

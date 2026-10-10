@@ -10,7 +10,8 @@
   function set(list) { var o = {}; list.forEach(function (id) { o[id] = 1; }); return o; }
   var MYTH = set(['unicorn', 'dragon', 'phoenix', 'roc', 'minotaur', 'yeti', 'mermaid', 'elf', 'troll', 'nessie', 'mokele', 'reddragon', 'whitetiger',
     'eldorado', 'cibola', 'prester', 'brendan', 'mu', 'grail', 'excalibur', 'tintagel', 'arthurtomb', 'tor', 'atlantis', 'pangboche', 'bullocho',
-    'langya', 'seobul', 'shingu', 'yonggung', 'startower', 'timaeus', 'zipang', 'ultimathule']);
+    'langya', 'seobul', 'shingu', 'yonggung', 'startower', 'timaeus', 'zipang', 'ultimathule',
+    'herc_cave']);   // 헤라클레스의 동굴 — 튜토리얼에서 메디나셀리 공작(전설·보물)에게 내미는 발견
   var FAITH = set([
     // 그리스도교
     'poitiers', 'montstmichel', 'stave', 'rusch', 'hagiasophia', 'sepulchre', 'notredame', 'apostolic', 'rila', 'stbasil', 'sistine', 'escorial',

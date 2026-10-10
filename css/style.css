@@ -133,6 +133,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg .more { position: absolute; right: 18px; bottom: 10px; font-size: 16px; color: var(--ink-soft); animation: blink 1.2s infinite; }
 @keyframes blink { 50% { opacity: .2; } }
 .dlg.noportrait .body { padding-left: 38px; }
+.dlg .ask-note { margin-top: 6px; font-size: 16px; color: #8a6a3e; }   /* 질문의 셈 (금화·남은 날) — js/ui/ui.js UI.ask */
 .dlg .askrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .dlg .askrow .btn { font-size: 18px; min-height: 40px; }
 /* 지난번에 고른 선택지 */

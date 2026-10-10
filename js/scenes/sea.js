@@ -48,9 +48,9 @@
       if (!st.cam) st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: 110 };
       st.paused = true;
       // 해전을 마치고 돌아왔을 때 자동항해 중이던 항구가 있으면 그대로 이어 간다 (예전에는 멈춘 채 다시 눌러야 했다)
-      if (arg.resume && st.autoOn && st.path && st.target && st.target.city && !G.Routes.autoOff()) {
+      if (arg.resume && st.path && st.target && st.target.city && ((st.autoOn && !G.Routes.autoOff()) || st.pilot)) {
         st.paused = false; st.vel = [0, 0]; st.stopping = false; st.prog = null;
-        UI.toast(st.target.city.name + U.jx(st.target.city.name, '으로/로') + ' 자동항해를 이어 갑니다. (Space: 정지)', 'anchor', 3600);
+        UI.toast(st.target.city.name + U.jx(st.target.city.name, '으로/로') + (st.autoOn ? ' 자동항해를' : ' 바닷길을 따라 가던 항해를') + ' 이어 갑니다. (Space: 정지)', 'anchor', 3600);
       }
     }
     if (arg.resume && arg.msg) UI.toast(arg.msg, 'info');
@@ -276,8 +276,10 @@
   function buildSpeed() { U.$$('.speedctl .opt').forEach(function (o, i) { o.classList.toggle('on', [1, 2, 4][i] === st.speed); }); }
 
   // ================================================================ targets & path
-  /** 목적지를 잡는다. 자동항해(뱃길을 알아서 찾아 감)는 익숙한 항로에서만 — 항구는 그 항로의 경험이 차야 하고,
-      바다는 가까운 곳(3° 안)만 곶을 돌아가는 뱃길을 찾아 준다. 나머지는 곧장 침로만 잡는다 (G.Routes) */
+  /** 목적지를 잡는다. 항구든 바다든 늘 바닷길(G.Nav.seaPath — 뭍·섬을 돌아가는 길)을 따라간다.
+      · 자동항해: 익숙한 항로(G.Routes — 한 번 곧장 오간 두 항구)의 항구를 고르면 ×4로 입항까지 (손으로 몰면 그 항해에서는 풀림)
+      · 바닷길 따라: 처음 가는 항구·바다·자동항해를 푼 항해 — 같은 길을 따라가되 배속은 그대로
+      · 길을 못 찾을 때만(다른 바다로 이어지지 않음) 예전처럼 곧장 침로 */
   /** 계절풍 바다를 지나는 뱃길이 맞바람이면 부관이 한 번 일러 준다 (목적지마다 한 번) */
   /** 상태 줄: 계절풍 바다라면 지금 계절풍과, 가는 방향이 맞바람인지 */
   function monsoonTag() {
@@ -308,16 +310,18 @@
   SEA.leaveAuto = leaveAuto;
   function setTarget(lon, lat, city) {
     var s = S(), RT = G.Routes;
-    var auto = city ? RT.isOpen(RT.origin(), city.id) : G.Geo.dist(s.loc.lon, s.loc.lat, lon, lat) <= RT.NEAR;
-    if (!city || !auto) leaveAuto();
+    var auto = !!(city && RT.isOpen(RT.origin(), city.id));      // 자동항해(×4)는 익숙한 항로의 항구만
+    if (!auto) leaveAuto();
     monsoonWarn(lon, lat);
-    if (!auto) { setCourse(lon, lat, city); return; }
     var path = (G.Nav.seaPath || G.Nav.path)(s.loc.lon, s.loc.lat, lon, lat);
-    if (!path) { UI.toast('그곳까지 가는 바닷길을 찾을 수 없습니다.', 'map'); return; }
+    if (!path) {
+      if (auto) { UI.toast('그곳까지 가는 바닷길을 찾을 수 없습니다.', 'map'); return; }
+      setCourse(lon, lat, city); return;                        // 이어진 바닷길이 없을 때만 곧장 침로
+    }
     // make path longitudes relative to the ship
     st.path = path; st.pathI = 1; st.target = { lon: path[path.length - 1][0], lat: path[path.length - 1][1], city: city };
-    st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = false;
-    if (city) {
+    st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = false; st.pilot = !auto;
+    if (auto) {
       // 자동항해를 시작하면 ×4로 빨리 간다 (G.FX.autoSailSpeed). 손으로 몰면 leaveAuto가 이전 배속으로 돌린다
       var fast = (G.FX && G.FX.autoSailSpeed) || 4;
       if (!st.autoOn && st.speed !== fast) { st.speedBeforeAuto = st.speed; st.speed = fast; buildSpeed(); }
@@ -334,7 +338,7 @@
     leaveAuto();
     monsoonWarn(lon, lat);
     st.path = [[l.lon, l.lat], [lon, lat]]; st.pathI = 1; st.target = { lon: lon, lat: lat, city: city };
-    st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = true;
+    st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = true; st.pilot = false;
     l.heading = Math.atan2(lat - l.lat, G.Geo.wrapLon(lon - l.lon));
     freshCourse(l.heading); st.stopping = false;
     if (st.paused) { st.paused = false; refreshBar(); }
@@ -388,9 +392,11 @@
     if (!c.port) { UI.toast(c.name + U.j(c.name, '은/는').slice(c.name.length) + ' 내륙 도시입니다. 가까운 해안에 상륙해 육로로 가야 합니다.', 'castle'); setTarget(d[1], d[0], null); return; }
     var RT = G.Routes, o = RT.origin(), off = RT.autoOff();
     setTarget(d[1], d[0], c);
+    var nm = o != null && o !== c.id ? RT.label(o, c.id) : null;   // 아래 두 갈래가 함께 쓴다 (예전엔 direct 갈래에서만 정해져 pilot 안내가 빠졌다)
     if (st.direct) {
-      var nm = o != null && o !== c.id ? RT.label(o, c.id) : null;
-      UI.toast(c.name + ' 쪽으로 곧장 침로를 잡습니다.' + (off ? ' 이번 항해는 자동항해를 풀었습니다 — 다음 항구에 들어가면 다시 쓸 수 있습니다.' : nm ? ' 아직 자동항해를 할 수 없는 항로입니다 — ' + nm + '.' : '') + ' 뭍에 막히면 바다를 눌러 돌아갈 길을 잡으십시오.', 'map', 5200);
+      UI.toast(c.name + ' 쪽으로 곧장 침로를 잡습니다. 이어진 바닷길을 찾지 못했습니다 — 뭍에 막히면 바다를 눌러 돌아갈 길을 잡으십시오.', 'map', 5200);
+    } else if (st.pilot) {
+      UI.toast(c.name + ' 쪽으로 바닷길을 따라 갑니다 (뭍·섬을 돌아감).' + (off ? ' 이번 항해는 자동항해를 풀어 배속은 그대로입니다 — 다음 항구부터 다시 자동항해.' : nm ? ' 처음 가는 항로라 자동항해(×4)는 아닙니다 — 한 번 다녀오면 열립니다.' : ''), 'map', 5200);
     } else UI.toast(c.name + U.jx(c.name, '으로/로') + ' 자동항해합니다. 방향키·숫자판·바다를 누르면 손으로 몰 수 있습니다.', 'anchor');
   }
   SEA.goCity = function (id) { setCityTarget(G.CITY_DATA[id]); };
@@ -493,12 +499,11 @@
       actions: function (c) {
         if (!c.port) return [];
         var o = RT.origin(), open = RT.isOpen(o, c.id);
-        return [{ label: open ? c.name + U.jx(c.name, '으로/로') + ' 자동항해' : c.name + ' 쪽으로 곧장 침로', icon: open ? 'anchor' : 'map', fn: function () { win.close('go'); setTimeout(function () { setCityTarget(c); }, 30); } }];
+        return [{ label: open ? c.name + U.jx(c.name, '으로/로') + ' 자동항해' : c.name + ' 쪽으로 바닷길 따라', icon: open ? 'anchor' : 'map', fn: function () { win.close('go'); setTimeout(function () { setCityTarget(c); }, 30); } }];
       },
       seaAction: function (lon, lat) {
         if (!G.Geo.isSea(lon, lat, 0.2)) return null;
-        var near = G.Geo.dist(s.loc.lon, s.loc.lat, lon, lat) <= RT.NEAR;
-        return { label: '이곳으로 간다', note: near ? '가까운 바다라 곶을 돌아가는 뱃길을 찾아 갑니다.' : '곧장 침로를 잡습니다 (뭍에 막히면 멈춥니다).', fn: function () { win.close('go'); setTimeout(function () { setTarget(lon, lat, null); }, 30); } };
+        return { label: '이곳으로 간다', note: '바닷길을 찾아 곶·섬을 돌아갑니다.', fn: function () { win.close('go'); setTimeout(function () { setTarget(lon, lat, null); }, 30); } };
       }
     });
     await win.result;
@@ -706,7 +711,7 @@
     st.t += dt;
     var frozen = st.busy > 0 || UI.busy();
     if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) tryEnterPort(pc); }
-    // 멈춘 채 ←→: 시간은 흐르지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것)
+    // 멈춘 채 ←→: 배는 나아가지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것) — 시간은 아래에서 ×waitSpeed로 흐른다
     if (!frozen && st.paused && st.manual && turnKey()) { st.turnHeld = (st.turnHeld || 0) + dt; l.heading += turnKey() * 1.4 * dt * turnAbility() * Math.min(1, 0.45 + st.turnHeld * 1.6); }
     st.handSteer = false;
     if (!frozen) arrowTurn(dt);
@@ -729,6 +734,21 @@
       }
       if (dayDue) runDay();
       if (!st.busy && (st.frame = (st.frame || 0) + 1) % 10 === 0) checkEncounters();
+    } else if (!frozen && st.paused && !st.pendingPort) {
+      // 멈춰 있어도 바다의 시간은 흐른다 (닻을 내리고 기다리는 것): 날이 가고 식량·물이 줄고, 다른 배들은 제 갈 길을 가며 다가오기도 한다.
+      // 배속 단추와 상관없이 G.FX.waitSpeed(기본 ×1)로 천천히 흐른다 (멈춰서 생각하는 동안 식량이 빨리 줄지 않게). 0이면 예전처럼 시간이 멈춘다
+      var wsp = G.FX && G.FX.waitSpeed != null ? G.FX.waitSpeed : 1;
+      var wDays = dt * wsp / DAY_SEC;
+      if (wDays > 0) {
+        var wn = Math.max(1, Math.ceil(wDays / 0.08)), wD = wDays / wn, wDue = false;
+        for (var wk = 0; wk < wn && !st.busy && st.paused; wk++) {
+          updateNpcs(wD);
+          st.dayAcc += wD;
+          if (st.dayAcc >= 1 && !wDue) { st.dayAcc -= 1; wDue = true; }
+        }
+        if (wDue) runDay();
+        if (!st.busy && (st.frame = (st.frame || 0) + 1) % 10 === 0) checkEncounters();
+      }
     }
     // 물보라·항적의 시간: 항해 중에는 게임 속 시간으로, 멈추거나 대화 중에는 천천히 사라진다
     if (st.fx && G.SeaFX && !st.fxAged) G.SeaFX.age(st.fx, dt / DAY_SEC * 0.45);     // 멈춰 있거나 대화 중: 실제 시간으로 천천히
@@ -979,7 +999,7 @@
         var tg = st.target;
         if (st.direct) {
           st.path = null; st.target = null; st.manual = false; st.paused = true; refreshBar();
-          UI.toast('뭍에 막혔습니다. 익숙하지 않은 항로라 스스로 돌아갈 길을 찾지 못합니다 — 바다를 눌러 새 침로를 잡으십시오.', 'map', 5000);
+          UI.toast('뭍에 막혔습니다. 이어진 바닷길이 없는 곧장 침로라 스스로 돌아갈 길을 찾지 못합니다 — 바다를 눌러 새 침로를 잡으십시오.', 'map', 5000);
           return;
         }
         if (tg && st.path && (st.repath || 0) < 4) {
@@ -1430,8 +1450,8 @@
     if (c.cam) { var m = A(G.Geo.wrapLon(cam.lon - c.cam[0]), cam.lat - c.cam[1]); c.k[0] += m[0]; c.k[1] += m[1]; }
     c.cam = [cam.lon, cam.lat];
     // 바람에 밀려 흐른다: 게임 속 하루에 (drift × 풍속)° — 배속을 올리면 그만큼 빨리, 멈춰 있거나 대화 중이면 천천히
-    var spd = st.windVis ? st.windVis.spd : 0.4, idle = st.paused || st.busy > 0 || UI.busy();
-    var days = dt * (idle ? (X.idleRate || 0.35) : (st.speed || 1)) / DAY_SEC;
+    var spd = st.windVis ? st.windVis.spd : 0.4, idle = st.busy > 0 || UI.busy();
+    var days = dt * (idle ? (X.idleRate || 0.35) : st.paused ? (G.FX && G.FX.waitSpeed != null ? G.FX.waitSpeed : 1) : (st.speed || 1)) / DAY_SEC;
     var go = (X.drift || 1.3) * spd * days * (rg.id === 'calm' || rg.id === 'doldrums' ? 0.25 : 1);
     var w = A(dx * go, dy * go); c.k[0] -= w[0]; c.k[1] -= w[1];
     // 처음 바람이 고른 바다에 나서면 항해사가 한 번 일러 준다
@@ -1498,7 +1518,7 @@
     if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
     var s = S(), l = s.loc;
-    var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
+    var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : st.pilot ? ' 바닷길 따라 항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
       : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
       : st.manual ? (st.paused ? '수동 조타 — ↑ 돛을 펴고 출발 · ←→ 제자리에서 뱃머리 · Space 순항' : st.cruise ? '수동 조타(순항) — ←→ 뱃머리 · ↓·Space 멈춤' : '수동 조타 — ↑ 누르는 동안 나아가고 떼면 서서히 멈춤 · Space 순항')
       : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : '정지 — 방향키로 그쪽으로 출발 · 항구 곁에서는 Space로 정박') : '표류 중 — 바다를 클릭하거나 방향키·숫자판으로 나아가십시오');
@@ -1511,7 +1531,7 @@
     var eta = etaDays(), have = Math.min(R.daysOfFood(), R.daysOfWater());
     var etaTxt = eta != null ? ' · <span style="color:' + (have < eta + 2 ? '#ff9f7a' : '#cfe8b0') + '">도착까지 약 ' + eta + '일 / 보급 ' + have + '일분</span>' : '';
     var oc = G.Explore.oceanOf(l.lon, l.lat);
-    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⏸ 정지</b> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
+    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⚓ 멈춤</b> <span style="opacity:.8">(시간은 흐른다)</span> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
   }
   /** 글이 바뀌었을 때만 고친다 (같은 글을 다시 넣으면 브라우저가 매번 새로 배치한다) */
   function setHtml(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }
@@ -1634,7 +1654,7 @@
     // hover tooltip
     if (st.mouse && !UI.busy()) {
       var hc = cityAt(st.mouse[0], st.mouse[1]);
-      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 곧장 침로 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : G.Routes.autoOff() && hc.port ? ' — 클릭: 곧장 침로 (자동항해는 다음 항구에서)' : ' — 클릭하면 이곳으로 향합니다')); }
+      if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 바닷길 따라 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : G.Routes.autoOff() && hc.port ? ' — 클릭: 바닷길 따라 (자동항해는 다음 항구에서)' : ' — 클릭하면 바닷길을 따라 이곳으로 향합니다')); }
       else {
         var hd = landmarkAt(st.mouse[0], st.mouse[1]);
         if (hd) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hd.name + ' · 발견한 ' + (hd.cat === 'ruin' ? '유적' : '자연 경관') + ' — 클릭하면 가까이 향합니다');

@@ -175,7 +175,8 @@
       if (s.mates.some(function (x) { return x.id === m.id; }) || s.flags['gone_' + m.id]) return;
       if (m.quiet && G.RegionFolk && !G.RegionFolk.heard(m)) return;   // 모르는 고장의 사람 소식은 들리지 않는다
       var at = G.MateMove && G.MateMove.where(m.id);
-      var where = at ? at.name : m.reg.map(function (r) { return G.REGIONS[r].name || G.REGIONS[r]; }).join('·');
+      var where = at ? at.name : (m.reg || []).map(function (r) { return G.REGIONS[r].name || G.REGIONS[r]; }).join('·');
+      if (!where) return;                 // 머무는 곳이 없는 사람(전설 동료 등 — 자기 사연으로만 나타난다): 장소 빈 소문을 내지 않는다 (QA 2026-10-10)
       out.push({ icon: 'people', history: true, text: '소문: 「' + m.name + '」' + jx(m.name, '이/가') + ' ' + where + '의 술집에 나타났다고 한다.' + (at ? ' ' + G.MateMove.zoneNames(m.id) + ' 안을 오가는 사람이라고 한다.' : '') + ' ' + m.desc });
     });
     s.front.mates = now;

@@ -32,7 +32,10 @@
       D.traces.forEach(function (t) {
         if (G.DISC[t[0]]) { prev = t[0]; return; }
         var c = G.CITY_DATA[t[2]];
-        var o = { id: t[0], name: t[1], cat: 'treasure', lat: c.lat, lon: c.lon, how: 'city', pw: t[7], val: Math.round(t[6] * 1.75 / 50) * 50, lang: c.lang, reg: c.region,
+        // 그 도시의 다른 발견물과 한 점에 포개지지 않게 조금 비켜 둔다 (지도 표식이 겹치지 않게 — QA 2026-10-10)
+        var la = c.lat - 0.012, lo = c.lon + 0.012;
+        for (var tries = 0; tries < 8 && G.DISCOVERIES.some(function (x) { return x.lon != null && G.Geo.dist(lo, la, x.lon, x.lat) < 0.004; }); tries++) la -= 0.006;
+        var o = { id: t[0], name: t[1], cat: 'treasure', lat: la, lon: lo, how: 'city', pw: t[7], val: Math.round(t[6] * 1.75 / 50) * 50, lang: c.lang, reg: c.region,
           desc: t[4], hint: t[5], r: 0.5, city: t[2], needHint: true, tale: true, year: t[3], need: prev ? [prev] : undefined };
         if (!o.need) delete o.need;
         o.idx = G.DISCOVERIES.length; G.DISCOVERIES.push(o); G.DISC[o.id] = o;
@@ -95,7 +98,7 @@
   }
   function fmt(t) {
     var p = S().player;
-    var wife = G.Family && p.wife ? G.Family.wifeName() : '', k0 = (p.kids || [])[0], kid = k0 && G.Family ? G.Family.kidName(k0) : '';
+    var wife = G.Family && p.wife ? G.Family.wifeName() : '', k0 = homeKid() || (p.kids || [])[0], kid = k0 && G.Family ? G.Family.kidName(k0) : '';
     return String(t).replace(/\{name\}/g, p.name).replace(/\{kin\}/g, ST.kin()).replace(/\{kinCall\}/g, ST.kin()).replace(/\{father\}/g, D.father.alias).replace(/\{mother\}/g, D.mother.call)
       .replace(/\{(wife|kid)([^}]+)\}/g, function (m0, w, pair) { return U.jx(w === 'wife' ? wife : kid, pair); })   // {wife이/가} → 조사만
       .replace(/\{wife\}/g, wife).replace(/\{kid\}/g, kid).replace(/\{given\}/g, p.given || p.name);
@@ -363,9 +366,14 @@
     G.Game.refreshHud();
     return true;
   };
+  /** 집에서 할머니 치맛자락을 붙들고 뛰어다닐 만한 아이: 이름이 있고, 두 살~열두 살, 배에 타지 않은 아이 (QA 2026-10-10) */
+  function homeKid() {
+    var p = S().player, F = G.Family; if (!F) return null;
+    return (p.kids || []).filter(function (k) { var a = F.kidAge(k); return !k.unnamed && !k.aboard && a >= 2 && a <= 12; })[0] || null;
+  }
   function famOk(e) {
     var s = S(), p = s.player, t = T();
-    if (e.need === 'kids') return (p.kids || []).length > 0;
+    if (e.need === 'kids') return !!homeKid();
     if (e.need === 'nokids') return !(p.kids || []).length;
     if (e.need === 'preg') return !!(p.preg && p.preg.told);
     if (e.need === 'found') return !!(t.found && t.found.length);

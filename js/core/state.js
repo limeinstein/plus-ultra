@@ -361,8 +361,16 @@
   };
   /** 파일 고르기 창 → {state, meta} (취소하면 null) */
   ST.importFile = function () {
-    return new Promise(function (res, rej) {
+    return new Promise(function (res0, rej0) {
+      // 파일 창을 그냥 닫아도 끝나야 한다 — 끝나지 않으면 이 일을 부른 건물 메뉴가 계속 바쁜 채로 잠긴다 (QA 2026-10-10)
+      var settled = false;
+      function res(v) { if (!settled) { settled = true; window.removeEventListener('focus', onFocus); res0(v); } }
+      function rej(e) { if (!settled) { settled = true; window.removeEventListener('focus', onFocus); rej0(e); } }
       var inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json,application/json';
+      inp.addEventListener('cancel', function () { res(null); });          // 요즘 브라우저: 취소하면 cancel
+      // cancel을 모르는 브라우저: 파일 창이 닫혀 페이지에 다시 초점이 오고 잠시 뒤에도 고른 파일이 없으면 취소로 본다
+      function onFocus() { setTimeout(function () { if (!(inp.files && inp.files.length)) res(null); }, 1500); }
+      setTimeout(function () { if (!settled) window.addEventListener('focus', onFocus); }, 300);
       inp.onchange = function () {
         var f = inp.files && inp.files[0]; if (!f) return res(null);
         var rd = new FileReader();

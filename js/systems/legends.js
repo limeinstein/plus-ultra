@@ -86,8 +86,16 @@
      ['guan_yu', '이 관우, 청룡도를 노 대신 쥐더라도 제독의 배를 지키겠소. 의리를 저버리는 일은 없을 것이오.'],
      ['zhang_fei', '나는 술만 끊이지 않으면 되오! 하하하! ……아니, 진심이오. 바다의 적은 이 장팔사모로 모조리 쓸어 버리겠소!']]
   ];
+  // 탁군 들판(제사상 앞)에서 만날 때는 술집에서 술을 산 이야기 대신 들판에 맞는 말로 (QA 2026-10-10)
+  var TAO_FIELD = {
+    '어이, 거기 바다 냄새 나는 양반! 술을 이리 시원하게 사는 걸 보니 사내 중의 사내로군. 내 잔도 하나 받아 주게!': '어이, 거기 바다 냄새 나는 양반! 우리 제사 술 냄새를 맡고 왔소? 이리 와서 잔 하나 받으시오!',
+    '바다 건너 먼 나라에서 왔소. 세 분 같은 장부들이 어찌 술집을 떠돌고 있소?': '바다 건너 먼 나라에서 왔소. 세 분 같은 장부들이 어찌 들판에서 제를 올리고 있소?',
+    '하하! 또 만나세, 바다 양반! 다음엔 내가 사지. ……아니, 형님이 사실 거요!': '하하! 또 만나세, 바다 양반! 다음엔 술집에서 내가 사지. ……아니, 형님이 사실 거요!',
+    '형님, 이 양반이 또 술을 샀소! 이 정도면 우리 넷째 아우로 삼아도 되지 않겠소?': '형님, 이 양반이 이 들판까지 우리를 찾아왔소! 이 정도면 우리 넷째 아우로 삼아도 되지 않겠소?'
+  };
   async function taoScene(c, where) {
     var T = st().tao, n = T.met.length, lines = TAO_LINES[Math.min(2, n)];
+    if (where === 'zhuo') lines = lines.map(function (x) { return TAO_FIELD[x[1]] ? [x[0], TAO_FIELD[x[1]]] : x; });
     T.met.push(where);
     for (var i = 0; i < lines.length; i++) { if (lines[i][0] === 'P') await UI.say(lines[i][1], me()); else await say(lines[i][0], lines[i][1]); }
     if (T.met.length < (K().meets || 3)) {
@@ -97,10 +105,10 @@
     if (await offer(BRO, c, '세 형제가 함께 부하가 되기를 청한다.')) {
       T.done = 1;
       await say('liu_bei', '고맙소, 제독. 오늘부터 우리 셋의 목숨은 제독의 배와 함께하오.');
-      await say('zhang_fei', '좋다! 오늘은 내가 산다! 주인장, 여기 술 한 동이!');
+      await say('zhang_fei', where === 'zhuo' ? '좋다! 오늘은 이 복숭아밭이 잔칫상이다! 남은 제사 술을 다 내오시오!' : '좋다! 오늘은 내가 산다! 주인장, 여기 술 한 동이!');
     } else {
       T.met.pop();   // 다음에 또 청한다 (같은 곳이라도)
-      await say('liu_bei', '아직 때가 아니라면 기다리겠소. 우리는 이 땅 어딘가의 술집에 있을 것이오.');
+      await say('liu_bei', '아직 때가 아니라면 기다리겠소. 우리는 이 땅 어딘가의 ' + (where === 'zhuo' ? '들판이나 ' : '') + '술집에 있을 것이오.');
     }
   }
   /** 중국 도시 술집에서 술을 샀다 */
@@ -182,14 +190,18 @@
     await say(next, D.open);
     await say('d_artagnan', next === 'athos' ? '아토스! 제독, 저 사람은 삼총사의 맏형입니다. 피할 수 없겠군요……. 제가 나설까요?' : next === 'porthos' ? '포르토스! 힘으로는 당할 사람이 없습니다. 제독, 제게 맡겨 주십시오!' : '아라미스! 기도서를 든 손이 칼을 쥐면 누구보다 빠릅니다. 조심하십시오!');
     var hurt = R.mateHurt && R.mateHurt(dr);
-    var v = await UI.ask('결투를 피할 수 없다. 누가 나설까?', [{ label: '제독이 직접 맞선다', value: 1 }, { label: '달타냥에게 맡긴다', value: 2, dis: !!hurt }], Object.assign(me(), { cancel: false }));
+    var v = await UI.ask('총사가 칼을 뽑았다. 누가 나설까?', [{ label: '제독이 직접 맞선다', value: 1 }, { label: '달타냥에게 맡긴다', value: 2, dis: !!hurt }, { label: '정중히 사과하고 자리를 피한다', value: 0 }], Object.assign(me(), { cancel: false }));
+    if (!v) {   // 피했다: 이 도시에서는 다시 덤비지 않는다 (다른 도시 술집에서 또 만난다) (QA 2026-10-10)
+      await say(next, next === 'porthos' ? '흥, 꽁무니를 빼는군! 다음엔 그렇게 안 될 거다!' : next === 'aramis' ? '현명한 선택입니다. 하느님도 다툼을 바라지 않으시지요. 다음에 다시 뵙지요.' : '……칼을 거두지. 다음에 만나면 그때는 피하지 마시오.');
+      return;
+    }
     if (v === 2) await say('d_artagnan', '맡겨 주십시오! ' + m.name + ', 오늘은 내가 이긴다!');
     var res = await G.Games.duel({ name: m.name, portrait: G.Art.mateSpec(next), look: 'rival', str: m.st[0], atk: D.atk, def: D.def, skill: m.sk.sword || 2, mar: m.st[2], int: m.st[1], cha: m.st[3], style: D.style },
       v === 2 ? { mate: dr, place: 'tavern' } : { place: 'tavern' });
     if (res === 'win') {
       await say(next, D.win);
-      LG.join(next, c);
       G.Fame.add('bt', 3);
+      if (!(await offer([next], c, m.name + U.jx(m.name, '이/가') + ' 함께 가겠다고 한다.'))) { await say('d_artagnan', '아쉽군요. 저 친구는 또 만날 수 있을 겁니다.'); return; }
       if (MUSK.every(function (id) { return row(id); })) {
         await say('d_artagnan', '아토스, 포르토스, 아라미스, 그리고 나! 제독, 이제 우리는 넷입니다. 모두는 하나를 위하여—');
         await UI.say('하나는 모두를 위하여!', who('porthos'));
@@ -252,6 +264,7 @@
     var g = async function () {
       var ctx = { gold: S().player.gold, items: S().player.items.length, args: arguments };
       var r = await f.apply(this, arguments);
+      ctx.r = r;                          // 원래 함수가 돌려준 값 (술집 enter가 false = 들어가지 못했다)
       try { await after.apply(this, [ctx].concat([].slice.call(arguments))); } catch (e) { console.error(e); }
       return r;
     };
@@ -275,7 +288,7 @@
     }
     sold('drink', 'drinks'); sold('treat', 'treats');
     wrapAfter(B.tavern, 'enter', async function (x, c) {
-      if (cur() && cur().kind !== 'tavern') return;
+      if (x.r === false || (cur() && cur().kind !== 'tavern')) return;
       if (LG.isChina(c) && broReady()) await hint('tao', CC.npc('tavernkeeper', '술집 주인'), '요즘 이 고장 술집마다 세 사내가 돌아다닌다더군. 귀 큰 사내, 수염 긴 사내, 고리눈 사내. 탁군 복숭아밭에서 형제를 맺었다나.\f술을 시원하게 몇 잔 사는 손님한테는 저쪽에서 먼저 말을 건다지. 탁군은 북경에서 남서쪽으로 뭍길 하루 남짓일세.');
       if (LG.isFrance(c) && !row('d_artagnan') && !st().dart.done) await hint('dart', CC.npc('tavernkeeper', '술집 주인'), '가스코뉴에서 올라온 촌뜨기 하나가 노란 말을 끌고 시장을 기웃거리더군. 물건을 잔뜩 사는 손님만 보면 눈을 반짝인다지 뭔가.');
       await muskDuel(c);

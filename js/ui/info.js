@@ -408,7 +408,7 @@
     // 이어진 항로: 한 항구에서 출항해 다른 항구에 곧장 입항하면 자동항해가 열린다
     var list = G.Routes ? G.Routes.list() : [];
     var h = '<div class="sep"></div><h4 style="margin:0 0 6px">항로 경험 <small class="muted">— 한 항구에서 출항해 다른 항구에 곧장(다른 항구에 들르지 않고) 입항하면 두 항구 사이의 자동항해가 열립니다(오는 길도). 자동항해 중 손으로 몰면 풀리고, 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓸 수 있습니다.</small></h4>';
-    if (!list.length) h += '<div class="muted">아직 항구와 항구 사이를 오간 적이 없습니다. 익숙하지 않은 항로는 목적지 쪽으로 곧장 침로만 잡으므로, 뭍에 막히면 바다를 눌러 돌아가야 합니다.</div>';
+    if (!list.length) h += '<div class="muted">아직 항구와 항구 사이를 오간 적이 없습니다. 익숙하지 않은 항로도 바닷길을 따라가지만(배속은 그대로) — 한 번 다녀오면 자동항해가 열립니다. 뭍에 막히면 바다를 눌러 돌아가야 합니다.</div>';
     else h += '<table class="tbl"><tr><th>항로</th><th class="num">오간 횟수</th><th class="num">가장 빠른 항해</th><th>자동항해</th></tr>' + list.map(function (r) {
       return '<tr' + (r.open ? ' class="sel"' : '') + '><td><b>' + G.CITY_DATA[r.a].name + ' – ' + G.CITY_DATA[r.b].name + '</b>' + (r.long ? ' <small class="muted">장거리</small>' : '') + '</td><td class="num">' + r.n + '번</td><td class="num">' + (r.best ? r.best + '일' : '—') + '</td><td>' + (r.open ? '<span class="tag">열림</span>' : '<span class="muted">' + (r.need - r.n) + '번 더</span>') + '</td></tr>';
     }).join('') + '</table>';

@@ -33,6 +33,8 @@
     s.player.gold -= n * cost;
     var msgs = [];
     await UI.fade(function () { msgs = G.Game.passDays(n); });
+    // 묵는 동안 수명이 다했다: 그 이야기(js/systems/lifespan.js)가 이어지니 「피로가 풀렸다」는 하지 않는다 (QA 2026-10-10)
+    if (s.life && s.life.end) { var nw = msgs.filter(function (m) { return m.history; }); if (nw.length) await C.news(nw); return; }
     s.fleet.fatigue = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     var news = msgs.filter(function (m) { return m.history; }); if (news.length) await C.news(news);

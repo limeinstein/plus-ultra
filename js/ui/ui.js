@@ -527,8 +527,10 @@
       var shell = dialogShell(back, opts, true), box = shell.box;
       modalRoot.appendChild(back);
       var body = box.querySelector('.body');
-      var tt = opts.raw ? { text: String(text), notes: [] } : UI.tidySpeech(text); noteToast(tt.notes);
-      body.innerHTML = '<div>' + speech(box, tt.text, opts) + '</div><div class="askrow"></div>';
+      // 고를 때 알아야 할 셈(금화·남은 날 …)은 알림으로 흘려보내지 않고 질문 아래 작은 글씨로 남긴다 (QA 2026-10-10)
+      var tt = opts.raw ? { text: String(text), notes: [] } : UI.tidySpeech(text);
+      var note = tt.notes.length ? '<div class="ask-note">' + tt.notes.map(function (n) { return U.esc(n.replace(/<[^>]+>/g, '').replace(/^—\s*/, '')); }).join(' · ') + '</div>' : '';
+      body.innerHTML = '<div>' + speech(box, tt.text, opts) + '</div>' + note + '<div class="askrow"></div>';
       var row = body.querySelector('.askrow');
       function done(v) { unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
       var pk = pickKey(text, list, opts), prev = lastPick(pk);

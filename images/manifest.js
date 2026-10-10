@@ -1203,6 +1203,8 @@ G.IMAGE_FILES = {
   "discoveries/zhangjiajie": "discoveries/zhangjiajie.gif",
   "discoveries/zimbabwe": "discoveries/zimbabwe.gif",
   "discoveries/zipang": "discoveries/zipang.gif",
+  "discoveries_cinematic/kremlin": "discoveries_cinematic/kremlin.gif",
+  "discovery-ends-cinematic/kremlin": "discovery-ends-cinematic/kremlin.jpg",
   "discovery-ends/aborigine": "discovery-ends/aborigine.jpg",
   "discovery-ends/abusimbel": "discovery-ends/abusimbel.jpg",
   "discovery-ends/adamspeak": "discovery-ends/adamspeak.jpg",
