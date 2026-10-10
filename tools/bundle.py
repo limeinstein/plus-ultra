@@ -412,6 +412,8 @@ def main():
         extra = asset_extra()
         asset_keys = {k: rel for k, rel in found.items() if k.startswith(ASSET_PREFIXES) or k in extra}
         skip |= set(asset_keys)
+        # 2026-10-10: 얼굴 묶음 무릎상(portraits/pools/*_half) 760장은 한 판 256MB에 들어가지 않아 아티팩트에서 뺀다 — 아티팩트에서는 흉상으로 선다
+        skip |= {k for k in found if k.startswith('portraits/pools/') and k.endswith('_half')}
         slim_dir = hq_dir
         places = game_places()
         mdir0 = os.path.join(pages.ROOT, 'music')
