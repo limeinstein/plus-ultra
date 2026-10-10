@@ -69,8 +69,18 @@ def _shrink(job):
     s = min(1.0, HALF_SIDE / max(im.size))
     if s < 1.0:
         im = im.resize((max(1, round(im.width * s)), max(1, round(im.height * s))), Image.LANCZOS)
-    im.save(dst + '.part', 'WEBP', quality=HALF_Q, method=4)
-    os.replace(dst + '.part', dst)
+    part = '%s.%d.part' % (dst, os.getpid())
+    im.save(part, 'WEBP', quality=HALF_Q, method=4)
+    import time
+    for i in range(20):   # Windows: 백신 검사 등으로 잠깐 잠겨 있으면 조금 기다렸다 다시
+        try:
+            os.replace(part, dst)
+            break
+        except PermissionError:
+            if os.path.exists(dst):
+                os.remove(part)
+                break
+            time.sleep(0.25 * (i + 1))
     return dst
 
 
@@ -82,7 +92,7 @@ def shrink_halves(use):
         print('Pillow가 없어 무릎상을 원본 그대로 싣습니다 (pip install pillow)')
         return {}
     os.makedirs(IMG_CACHE, exist_ok=True)
-    plan, jobs = {}, []
+    plan, jobs, queued = {}, [], set()
     taken = set(use.values())
     for k, rel in use.items():
         if not is_half(k) or rel.lower().endswith('.gif'):
@@ -95,7 +105,8 @@ def shrink_halves(use):
         if new_rel != rel and new_rel in taken:
             continue
         plan[k] = (src, cached, new_rel)
-        if not os.path.exists(cached):
+        if not os.path.exists(cached) and cached not in queued:   # 같은 그림(같은 해시)은 한 번만 굽는다
+            queued.add(cached)
             jobs.append((src, cached))
     if jobs:
         from multiprocessing import Pool
