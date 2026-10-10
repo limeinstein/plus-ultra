@@ -3,10 +3,14 @@
    · 창: 1600×900에서 시작해 화면을 채운다(최대화) · F11 전체 화면 · F12 개발자 도구
    · 저장: 게임이 쓰는 localStorage는 사용자 폴더(%APPDATA%\PLUS ULTRA)에 남아 업데이트·재설치에도 그대로
    · 업데이트: 켤 때 GitHub 릴리스(limeinstein/plus-ultra)에서 새 판을 찾아 뒤에서 받고(바뀐 조각만), 받으면 다시 시작할지 묻는다
+   · GIF 팩: 「PLUS ULTRA GIF 팩」(desktop/gifpack.nsi)이 %APPDATA%\PLUS ULTRA\gifpack 에 깔려 있으면 preload.js로 위치를 알려 주고,
+     게임(app/images/gifpack.js)이 그 목록을 읽어 발견물 원본 GIF를 쓴다. --gifpack=<폴더>로 다른 곳을 줄 수도 있다(점검용)
    · --smoke: 창을 띄우지 않고 타이틀 화면까지 열어 본 뒤 결과(JSON)를 찍고 끝난다 (GitHub Actions 점검용) */
 'use strict';
 const { app, BrowserWindow, Menu, dialog, shell } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const { pathToFileURL } = require('url');
 
 const SMOKE = process.argv.includes('--smoke');
 let updater = null;
@@ -16,12 +20,24 @@ if (!SMOKE && !app.requestSingleInstanceLock()) app.quit();
 
 let win = null;
 
+/** 깔린 GIF 팩 폴더 (없으면 null) */
+function gifPackDir() {
+  const arg = (process.argv.find(a => a.startsWith('--gifpack=')) || '').slice('--gifpack='.length);
+  const cands = [arg && path.resolve(arg), path.join(app.getPath('appData'), 'PLUS ULTRA', 'gifpack'), path.join(app.getPath('userData'), 'gifpack')];
+  return cands.find(d => d && fs.existsSync(path.join(d, 'images', 'gifpack-list.js'))) || null;
+}
+
 function createWindow() {
+  const pack = gifPackDir();
   win = new BrowserWindow({
     width: 1600, height: 900, minWidth: 960, minHeight: 540,
     backgroundColor: '#07050a', title: 'PLUS ULTRA — Loop of Good Hope',
     icon: path.join(__dirname, 'icon.png'), show: false, autoHideMenuBar: true,
-    webPreferences: { contextIsolation: true, sandbox: true, backgroundThrottling: false, spellcheck: false }
+    webPreferences: {
+      contextIsolation: true, sandbox: true, backgroundThrottling: false, spellcheck: false,
+      preload: path.join(__dirname, 'preload.js'),
+      additionalArguments: ['--pu-version=' + app.getVersion()].concat(pack ? ['--pu-gifpack=' + pathToFileURL(pack).href.replace(/\/$/, '')] : [])
+    }
   });
   Menu.setApplicationMenu(null);
   win.loadFile(path.join(__dirname, 'app', 'index.html'));
@@ -54,11 +70,15 @@ function smoke() {
   const timer = setInterval(async () => {
     let r = null;
     try {
-      r = await win.webContents.executeJavaScript('({ scene: window.G && G.Game && G.Game.sceneName, img: window.G && G.Img && G.Img.count ? G.Img.count() : 0, cities: window.G && G.CITY_DATA ? G.CITY_DATA.length : 0 })');
+      r = await win.webContents.executeJavaScript('({ scene: window.G && G.Game && G.Game.sceneName, img: window.G && G.Img && G.Img.count ? G.Img.count() : 0, cities: window.G && G.CITY_DATA ? G.CITY_DATA.length : 0, gifpack: !!(window.G && G.GIF_PACK), gifs: window.G && G.GIF_PACK ? G.GIF_PACK.count : 0 })');
+      if (r && r.scene === 'title' && r.gifpack && r.gifLoaded === undefined) {
+        // GIF 팩이 있으면 원본 GIF 한 장을 실제로 읽어 본다
+        r.gifLoaded = await win.webContents.executeJavaScript("new Promise(function (ok) { var k = Object.keys(G.IMAGE_FILES).filter(function (x) { return /^discoveries\\//.test(x) && G.Img.isAnim(x); })[0]; if (!k) return ok(false); var im = new Image(); im.onload = function () { ok(im.naturalWidth > 0 && !G.Reel.has(G.DISC[k.slice(12)])); }; im.onerror = function () { ok(false); }; im.src = G.Img.src(k); })");
+      }
     } catch (e) { errors.push(String(e)); }
     if ((r && r.scene === 'title') || Date.now() - t0 > 120000) {
       clearInterval(timer);
-      const ok = !!(r && r.scene === 'title' && r.img > 1000 && !errors.length);
+      const ok = !!(r && r.scene === 'title' && r.img > 1000 && !errors.length && (!r.gifpack || r.gifLoaded));
       const line = 'SMOKE ' + JSON.stringify({ ok, result: r, errors, ms: Date.now() - t0, version: app.getVersion() });
       console.log(line);
       const out = (process.argv.find(a => a.startsWith('--smoke-out=')) || '').slice('--smoke-out='.length);

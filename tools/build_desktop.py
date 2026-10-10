@@ -57,6 +57,10 @@ def pick_images(found):
     return out, dropped, saved
 
 
+GIFPACK_DOOR = ('/* 설치형 게임: GIF 팩이 깔려 있으면 그 목록을 읽는다 (desktop/preload.js가 PU_DESKTOP.gifpack에 위치를 알려 준다). 없으면 아무것도 하지 않는다 */\n'
+                '(function () { var d = window.PU_DESKTOP; if (d && d.gifpack) document.write(\'<script src="\' + d.gifpack + \'/images/gifpack-list.js"><\\/script>\'); })();\n')
+
+
 def is_half(k):
     return k.endswith('_half') and k.startswith(('portraits/', 'maid-styles/', 'characters/'))
 
@@ -197,6 +201,18 @@ def main():
                 keep.add(os.path.normpath(dst))
                 W.copy_if_changed(src, dst)
     js_rel, css_rel = W.build_page('index.html', 'game', 'index.html', 'PLUS ULTRA — Loop of Good Hope', DESC, esbuild, manifest_rel)
+    # GIF 팩 문: 설치형 게임에 「GIF 팩」(tools/build_gifpack.py)을 깔았으면 desktop/preload.js가 위치(PU_DESKTOP.gifpack)를 알려 주고,
+    # 이 작은 파일이 그 목록(gifpack-list.js)을 읽어 발견물 GIF를 원본으로 쓰게 한다. 팩이 없으면 아무것도 하지 않는다.
+    W.emit('images/gifpack.js', GIFPACK_DOOR)
+    keep.add(os.path.normpath(os.path.join(APP, 'images', 'gifpack.js')))
+    path = os.path.join(APP, 'index.html')
+    with open(path, encoding='utf-8') as f:
+        html = f.read()
+    tag = '<script src="' + manifest_rel + '"></script>\n'
+    assert tag in html, 'index.html 에 그림 목록 script 가 없습니다'
+    html = html.replace(tag, tag + '<script src="images/gifpack.js"></script>\n', 1)
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(html)
     for rel in (js_rel, css_rel, 'index.html'):
         keep.add(os.path.normpath(os.path.join(APP, rel)))
     # 글꼴: 온라인 링크 → 내려받은 fonts/fonts.css

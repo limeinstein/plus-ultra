@@ -2,6 +2,7 @@
 #   tools/build_desktop.py → desktop/app (게임이 쓰는 파일만) → electron-builder NSIS 설치 파일
 #   → 설치 전 판(win-unpacked)으로 타이틀 화면까지 점검(--smoke) → 릴리스 v1.0.<실행 번호> (설치 파일·blockmap·latest.yml)
 #   설치된 게임은 켤 때 이 릴리스를 보고 스스로 업데이트한다(바뀐 조각만 받음). 옛 릴리스는 최근 3개만 남긴다.
+#   「GIF 팩」(선택): 본 설치 파일에서 뺀 발견물 원본 GIF(약 1GB)를 tools/build_gifpack.py + desktop/gifpack.nsi 로 따로 묶어 함께 올린다.
 name: 설치형 게임 (Windows)
 
 on:
@@ -61,12 +62,28 @@ jobs:
         run: |
           set -o pipefail
           npx electron-builder --win nsis --publish never 2>&1 | tee eb.log || { echo "::error title=electron-builder::$(tail -25 eb.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"; exit 1; }
+      - name: GIF 팩 만들기
+        working-directory: desktop
+        run: |
+          set -o pipefail
+          python ../tools/build_gifpack.py "$VERSION" 2>&1 | tee gp.log || { echo "::error title=build_gifpack::$(tail -25 gp.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"; exit 1; }
+          MAKENSIS=$(command -v makensis || true)
+          [ -z "$MAKENSIS" ] && [ -x "/c/Program Files (x86)/NSIS/makensis.exe" ] && MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"
+          [ -z "$MAKENSIS" ] && MAKENSIS=$(find "$LOCALAPPDATA/electron-builder/Cache/nsis" -name makensis.exe 2>/dev/null | head -1)
+          if [ -z "$MAKENSIS" ]; then choco install nsis -y --no-progress >/dev/null && MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"; fi
+          echo "makensis: $MAKENSIS"
+          "$MAKENSIS" -V2 "-DVERSION=$VERSION" gifpack.nsi 2>&1 | tee nsis.log || { echo "::error title=gifpack.nsi::$(tail -25 nsis.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"; exit 1; }
+          ls -la dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe
       - name: 점검 — 타이틀 화면까지 열어 보기
         working-directory: desktop
         run: |
           ./dist/win-unpacked/PLUS\ ULTRA.exe --smoke --smoke-out=smoke.txt || true
           cat smoke.txt || true
           grep -q '"ok":true' smoke.txt || { echo "::error title=smoke::$(cat smoke.txt 2>/dev/null || echo 'smoke.txt 없음')"; exit 1; }
+          # GIF 팩을 얹었을 때: 원본 GIF를 실제로 읽는지
+          ./dist/win-unpacked/PLUS\ ULTRA.exe --smoke --gifpack=gifpack --smoke-out=smoke-gif.txt || true
+          cat smoke-gif.txt || true
+          grep -q '"gifLoaded":true' smoke-gif.txt || { echo "::error title=smoke-gifpack::$(cat smoke-gif.txt 2>/dev/null || echo 'smoke-gif.txt 없음')"; exit 1; }
       - name: 릴리스 올리기
         working-directory: desktop
         env:
@@ -74,10 +91,12 @@ jobs:
         run: |
           ls -la dist
           SIZE=$(du -m "dist/PLUS-ULTRA-Setup-$VERSION.exe" | cut -f1)
+          GSIZE=$(du -m "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe" | cut -f1)
+          GN=$(python -c "import json;print(json.load(open('gifpack/pack.json'))['count'])")
           MSG=$(git log -1 --format='%s')
           INFO=$(python -c "import json;d=json.load(open('app-info.json'));print('게임 파일 %d개 %dMB · 뺀 그림 %d장 %dMB · 가볍게 한 무릎상 %d장 · 글꼴 %s' % (d['files'], d['bytes']//1000000, d['dropped'], d['saved']//1000000, d['halves'], ('%d개 내장' % d['fonts']) if d['fonts'] is not None else '온라인'))")
-          printf '설치형 게임 %s (%sMB)\n\n- 커밋 %s: %s\n- %s\n- 설치: PLUS-ULTRA-Setup-%s.exe 를 받아 실행합니다. 이미 깔려 있으면 게임을 켤 때 스스로 업데이트합니다(바뀐 조각만 받음).\n- 저장한 항해는 업데이트·재설치에도 그대로 남습니다.\n' "$VERSION" "$SIZE" "${GITHUB_SHA:0:7}" "$MSG" "$INFO" "$VERSION" > notes.md
-          gh release create "v$VERSION" "dist/PLUS-ULTRA-Setup-$VERSION.exe" "dist/PLUS-ULTRA-Setup-$VERSION.exe.blockmap" dist/latest.yml \
+          printf '설치형 게임 %s (%sMB)\n\n- 커밋 %s: %s\n- %s\n- 설치: PLUS-ULTRA-Setup-%s.exe 를 받아 실행합니다. 이미 깔려 있으면 게임을 켤 때 스스로 업데이트합니다(바뀐 조각만 받음).\n- 저장한 항해는 업데이트·재설치에도 그대로 남습니다.\n\n**GIF 팩 (선택)** PLUS-ULTRA-GIF-Pack-%s.exe (%sMB) — 본 설치 파일에서 뺀 발견물 원본 GIF %s개. 본 게임을 깐 뒤 실행하면 발견 장면을 원본 GIF로 보여 줍니다. 게임을 업데이트해도 팩은 남고, 새 발견물 GIF가 생기면 새 팩을 다시 깔면 됩니다.\n' "$VERSION" "$SIZE" "${GITHUB_SHA:0:7}" "$MSG" "$INFO" "$VERSION" "$VERSION" "$GSIZE" "$GN" > notes.md
+          gh release create "v$VERSION" "dist/PLUS-ULTRA-Setup-$VERSION.exe" "dist/PLUS-ULTRA-Setup-$VERSION.exe.blockmap" dist/latest.yml "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe" \
             --repo "$GITHUB_REPOSITORY" --title "PLUS ULTRA $VERSION (Windows 설치형)" --notes-file notes.md --target "$GITHUB_SHA" --latest
       - name: 옛 릴리스 정리 (최근 3개만)
         env:

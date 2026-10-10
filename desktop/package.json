@@ -24,11 +24,26 @@
     "productName": "PLUS ULTRA",
     "copyright": "limeinstein",
     "asar": false,
-    "files": ["main.js", "icon.png", "package.json", "app/**/*"],
-    "directories": { "output": "dist" },
+    "files": [
+      "main.js",
+      "preload.js",
+      "icon.png",
+      "package.json",
+      "app/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
     "compression": "normal",
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "icon.png",
       "artifactName": "PLUS-ULTRA-Setup-${version}.${ext}"
     },
@@ -42,6 +57,13 @@
       "deleteAppDataOnUninstall": false,
       "differentialPackage": true
     },
-    "publish": [{ "provider": "github", "owner": "limeinstein", "repo": "plus-ultra", "releaseType": "release" }]
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "limeinstein",
+        "repo": "plus-ultra",
+        "releaseType": "release"
+      }
+    ]
   }
 }

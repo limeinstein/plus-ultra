@@ -22,7 +22,12 @@
   - 설치 전 판으로 타이틀까지 열어 보는 점검(`--smoke`)을 통과해야 릴리스로 올린다.
   - 옛 릴리스는 최근 3개만 남긴다.
 - **Electron 껍데기:** `desktop/main.js`·`desktop/package.json`. Electron 44.7.0 · electron-builder 26.15.3 · electron-updater 6.8.9.
-- 시험: `node tests/desktop_app_smoke.js`. 기존 시험도 `PAGE=desktop/app/index.html`로 설치형 파일에서 돌릴 수 있다.
+- **GIF 팩 (선택):** 같은 릴리스의 `PLUS-ULTRA-GIF-Pack-<판>.exe`(약 1GB) — 본 설치 파일에서 뺀 발견물 원본 GIF 693개를 `%APPDATA%\PLUS ULTRA\gifpack`에 깐다.
+  - 깔면 게임이 발견 장면을 장면 판 대신 원본 GIF로 보여 준다(`G.PREFER_GIF`).
+  - 게임을 업데이트해도 팩은 남는다. 「앱 및 기능」에서 지우면 예전처럼 장면 판으로 돌아간다.
+  - 만드는 법: `python tools/build_gifpack.py <판>` → `desktop/gifpack`, 그다음 desktop 폴더에서 `makensis -DVERSION=<판> gifpack.nsi`.
+  - 연결: `desktop/main.js`가 팩을 찾아 `desktop/preload.js`로 `PU_DESKTOP.gifpack`을 넘긴다. `app/images/gifpack.js`가 팩의 `images/gifpack-list.js`를 읽는다.
+- 시험: `node tests/desktop_app_smoke.js` · `node tests/desktop_gifpack_smoke.js`. 기존 시험도 `PAGE=desktop/app/index.html`로 설치형 파일에서 돌릴 수 있다.
 
 ## Codex 그림 연결 (2026-10-10)
 - **유물 387종 모두 전용 그림.**

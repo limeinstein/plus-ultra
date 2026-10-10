@@ -202,7 +202,7 @@
       if (window.URL && URL.createObjectURL && f.indexOf(';base64,') > 0) return blobUrl(k, f);
       return f;
     }
-    if (/^(blob:|https?:|\/_blob\/)/.test(f)) return f;   // 아티팩트의 자산 저장소(/_blob/…)에 올린 그림은 그 주소 그대로
+    if (/^(blob:|https?:|file:|\/_blob\/)/.test(f)) return f;   // 아티팩트의 자산 저장소(/_blob/…)·설치형 게임의 GIF 팩(file:)에 있는 그림은 그 주소 그대로
     return BASE + f.split('/').map(encodeURIComponent).join('/');
   };
   I.get = function (k) { if (state[k] !== 'ok') return null; used[k] = ++clock; return imgs[k]; };

@@ -12,7 +12,13 @@
   function FX() { return (G.FX && G.FX.reveal) || {}; }
   function I() { return G.Img; }
   /** 이 발견물의 장면 판 키 (없으면 null) */
-  R.key = function (d) { var k = d && ('discovery-sheets/' + d.id); return k && I() && I().has(k) ? k : null; };
+  R.key = function (d) {
+    var k = d && ('discovery-sheets/' + d.id);
+    if (!k || !I() || !I().has(k)) return null;
+    // 설치형 게임에 GIF 팩을 깔았으면(G.PREFER_GIF — desktop/gifpack) 장면 판 대신 원본 GIF로 돌린다
+    if (G.PREFER_GIF && I().isAnim(I().pick(['discoveries/' + d.id]))) return null;
+    return k;
+  };
   R.has = function (d) { return !!R.key(d); };
 
   /* 판 준비: 키 → Promise<{img, cols, rows, n, cw, ch}> — 받은 뒤 decode()로 미리 풀어 둔다 (처음 그릴 때 멈칫하지 않게) */

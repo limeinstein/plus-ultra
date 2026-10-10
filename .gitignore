@@ -32,3 +32,5 @@ desktop/.imgcache/
 desktop/.fontcache/
 desktop/app-info.json
 desktop/smoke.txt
+desktop/gifpack/
+desktop/build/
