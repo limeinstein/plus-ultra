@@ -368,6 +368,7 @@
         (i.kind === 'buy' ? '\n물건값은 제독이 냅니다. 사서 이 조합으로 가져오십시오.' : '') +
         (i.kind === 'debt' ? '\n' + G.CITY_DATA[i.at].name + '에서 돈을 받아 이 조합으로 돌아오십시오.' : '') +
         (no ? '\n\n※ ' + no : '');
+      if (i.kind === 'treasure' && G.TreasureHunt) { await G.TreasureHunt.show(i); detail += '\n지도값 금화 ' + U.num(i.fee) + '닢을 먼저 냅니다. 어디인지는 조합도 모릅니다 — 항구 술집에서 지도의 증거를 모아 부하들과 자리를 좁히십시오. 보물을 파내면 사례가 그 자리에서 손에 들어옵니다.'; }   // 보물 지도를 먼저 펼쳐 보인다
       var ok = await UI.confirm('<b>' + U.esc(i.title) + '</b><br><br>' + U.esc(detail).replace(/\n/g, '<br>'), no ? null : '맡는다', '그만둔다', '의뢰');
       if (!ok || no) { if (no) UI.toast(no, 'info'); continue; }
       var q = G.Quest.accept(i);
@@ -375,6 +376,7 @@
       else if (q.kind === 'passenger') await C.say(master(c), q.who + '님이 배에 오르셨네. 부디 무사히 모셔다 드리게.');
       else if (q.kind === 'buy') await C.say(master(c), '물건이 들어오는 대로 이리로 가져오게. 값은 후하게 쳐 주지.');
       else if (q.kind === 'pirate') await C.say(master(c), '요즘 그 바다가 험하다네. 해적을 보면 사정 두지 말게.');
+      else if (q.kind === 'treasure') await C.say(master(c), '이 지도는 죽은 해적의 궤짝에서 나왔다네. 어디를 그린 건지는 우리도 모르네.\f항구 술집에서 이 지도 이야기를 물어보게. 증거가 모이면 부하들과 지도를 살펴 자리를 좁힐 수 있을 걸세. 측량에 밝은 사람이 있으면 더 좋고.\f수첩의 「계약·의뢰」에서 언제든 지도를 펼쳐 볼 수 있네.');
       else await C.say(master(c), '그 사람, 말은 잘하지만 돈은 잘 안 내놓는다네. 잘 부탁하네.');
       UI.toast('의뢰를 맡았다. 기한 ' + q.limit + '일', 'scroll', 4200);
       return;
@@ -396,6 +398,7 @@
           right: (left < 0 ? '기한 지남' : '남은 ' + left + '일') };
       }), { width: 760, icon: 'book', text: '기한을 넘기면 명성이 깎입니다. 포기하면 명성이 더 깎입니다.' });
       if (!v) return;
+      if (v.kind === 'treasure' && G.TreasureHunt) { var tw = await UI.choose(v.title, [{ label: '지도를 펼친다', value: 'map', icon: 'chest' }, { label: '포기한다', value: 'drop', icon: 'boot' }], { width: 420 }); if (tw === 'map') { await G.TreasureHunt.show(v); continue; } if (tw !== 'drop') continue; }
       var ok = await UI.confirm('<b>' + U.esc(v.title) + '</b><br><br>이 의뢰를 포기하겠습니까? 명성이 ' + Math.round(v.fame * 1.5) + ' 깎입니다.', '포기한다', '그만둔다');
       if (ok) { G.Quest.give_up(v); UI.toast('의뢰를 포기했다.', 'boot'); }
     }
@@ -629,7 +632,7 @@
   };
 
   // ================================================================ 자택 (home)
-  var HM = { title: '자택', icon: 'house', paint: 'home', exitLabel: '집을 나온다' };
+  var HM = { title: function (c) { return c && c.colony != null ? '총독 관저' : '자택'; }, icon: 'house', paint: 'home', exitLabel: '집을 나온다' };   // 개척 도시의 총독 관저도 자택처럼 (js/systems/colony.js)
   C.B.home = HM;
   HM.enter = async function (c) {
     var s = S();

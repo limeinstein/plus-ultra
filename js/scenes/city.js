@@ -81,6 +81,7 @@
   // ---------------------------------------------------------------- buildings
   C.buildings = function (c) {
     if (c.outpost) return [{ kind: 'harbor', name: '항구', icon: 'anchor' }];   // 사람이 살지 않는 섬(독도): 배를 대는 곳만
+    if (c.colony != null && G.Colony) return G.Colony.buildings(c);   // 제독이 세운 개척 도시: 단계마다 건물이 는다
     var f = R.facilities(c), out = [], s = S();
     if (f.harbor) out.push({ kind: 'harbor', name: '항구', icon: 'anchor' });
     out.push({ kind: 'trade', name: '교역소', icon: 'scales' });
@@ -102,7 +103,7 @@
     });
     if (f.guild) out.push({ kind: 'guild', name: '조합', icon: 'seal' });
     out.push({ kind: 'gate', name: '성문', icon: 'gate' });
-    if (c.id === s.player.home) out.push({ kind: 'home', name: '자택', icon: 'house' });
+    if (c.id === (R.seat ? R.seat() : s.player.home)) out.push({ kind: 'home', name: '자택', icon: 'house' });   // 가족이 개척 도시의 총독 관저로 옮겼으면 고향 집은 비어 있다
     return out;
   };
 
@@ -195,7 +196,8 @@
     if (G.Court) { try { await G.Court.arrival(c); } catch (e) { console.error(e); } }
     if (G.Romance) { try { await G.Romance.arrival(c); } catch (e) { console.error(e); } }   // 부하들 사이의 썸 — 혼례는 항구에서
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
-    if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }   // 사라진 왕녀: 에스파냐 땅에서 전령이 부름을 전한다
+    if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }
+    if (G.Colony && c.colony != null) { try { await G.Colony.arrival(c); } catch (e) { console.error(e); } }   // 개척지에 닻을 내리면 도시를 세운다 · 개척 물자   // 사라진 왕녀: 에스파냐 땅에서 전령이 부름을 전한다
     if (G.Disaster) { try { await G.Disaster.arrival(c); } catch (e) { console.error(e); } }   // 재해가 덮친 도시의 모습 · 구호금   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
@@ -284,7 +286,8 @@
         if (dt.length) out.push({ kind: 'trade', icon: 'scroll', hot: true, text: dt[0].who + '에게서 빚을 받아 낸다 (교역소)' });
       }
       if (G.Escort && f.trade) out = out.concat(G.Escort.todo(c));   // 교역소에서 호위를 청하는 상인
-      if (G.Princess && f.palace) out = out.concat(G.Princess.todo(c));   // 사라진 왕녀: 부르심 · 모셔 간다
+      if (G.Princess && f.palace) out = out.concat(G.Princess.todo(c));
+      if (G.Colony) out = out.concat(G.Colony.todo(c));   // 개척 도시: 물자 · 국왕의 부름   // 사라진 왕녀: 부르심 · 모셔 간다
       // 알리지 않은 발견과 이 도시의 후원자
       var un = G.Disc.unreported().length;
       if (un) {

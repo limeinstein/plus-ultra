@@ -7,6 +7,9 @@
    조정값: G.FX.disaster (w · h · bottom · shake) */
 (function (G) {
   'use strict';
+  // UI 층 크기 (글씨·창 크기를 키우면 1600×900보다 작다 — js/main.js Game.uiW)
+  function UIW() { return G.Game && G.Game.uiW ? G.Game.uiW() : 1600; }
+  function UIH() { return G.Game && G.Game.uiH ? G.Game.uiH() : 900; }
   var DF = G.DisasterFx = {};
   var NOOP = { stop: function () { return Promise.resolve(); }, alive: false };
   function C() { return (G.FX && G.FX.disaster) || {}; }
@@ -318,7 +321,7 @@
     var w = cf.w || 640, h = cf.h || 280;
     var box = document.createElement('div');
     box.className = 'eventfx wood brass-frame dzfx';
-    box.style.cssText = 'left:' + Math.round((1600 - w - 20) / 2) + 'px;top:' + Math.round(900 - (cf.bottom || 205) - h - 20) + 'px';
+    box.style.cssText = 'left:' + Math.round((UIW() - w - 20) / 2) + 'px;top:' + Math.round(UIH() - (cf.bottom || 205) - h - 20) + 'px';
     var cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.style.width = w + 'px'; cv.style.height = h + 'px';
     box.appendChild(cv);
     var tl = document.createElement('div'); tl.className = 'eventfx-title'; tl.textContent = o.title || sc.title; box.appendChild(tl);

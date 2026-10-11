@@ -61,7 +61,8 @@
     if (G.Escort) out = out.concat(G.Escort.daily());       // 상선 호위의 기한
     if (G.Court) out = out.concat(G.Court.daily());         // 국왕의 부름(명성 10,000마다)·왕명의 기한
     if (G.Romance) out = out.concat(G.Romance.daily());   // 부하들 사이의 썸 (js/systems/romance.js)
-    if (G.Princess) out = out.concat(G.Princess.daily());   // 사라진 에스파냐 왕녀 (명성 50,000 · 총각)
+    if (G.Princess) out = out.concat(G.Princess.daily());
+    if (G.Colony) out = out.concat(G.Colony.daily());       // 새 도시 개척 (명성 200,000 · 400,000) · 개척민의 청   // 사라진 에스파냐 왕녀 (명성 50,000 · 총각)
     // 후원자의 대(代) — 옛 저장이면 지금 자리에 있는 사람들을 기억해 둔다
     if (!s.spHolder && G.Succession) G.Succession.sync();
     return out;

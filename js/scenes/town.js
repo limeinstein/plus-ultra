@@ -54,12 +54,12 @@
 
   // 건물마다 화면에 그릴 높이
   var SIZE = { harbor: 405, shipyard: 385, trade: 360, market: 320, tavern: 345, inn: 352, church: 425,
-    library: 365, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372 };
+    library: 365, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372, inspector: 372, govhall: 445 };
   // 거리에 늘어서는 차례 (왼쪽 = 바다 쪽, 오른쪽 = 성문 쪽)
-  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'inn', 'guild', 'library', 'church', 'mansion', 'palace', 'house2', 'home', 'gate'];
+  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'inn', 'guild', 'library', 'church', 'mansion', 'inspector', 'palace', 'govhall', 'house2', 'home', 'gate'];
   // 도시마다 거리 한쪽에 서 있는 볼거리 (발견물이면 눌러서 설명을 본다 — T.inspect)
   // 아직 전용 그림이 없는 건물은 비슷한 건물 그림을 좌우로 뒤집어 쓴다
-  var SUBSTITUTE = { house2: 'home' };   // 둘째 부인의 집: 전용 그림이 없으면 자택 그림을 뒤집어 쓴다   // 전용 그림이 오면 여기서 비슷한 건물로 돌려 쓸 수 있다
+  var SUBSTITUTE = { house2: 'home', inspector: 'mansion', govhall: 'palace' };   // 개척 도시의 감찰관 저택·총독부 (js/city/colonyhall.js): 저택·왕궁 그림 (총독부는 뒤집지 않는다)   // 둘째 부인의 집: 전용 그림이 없으면 자택 그림을 뒤집어 쓴다   // 전용 그림이 오면 여기서 비슷한 건물로 돌려 쓸 수 있다
   var LANDMARKS = { 7: [['giralda', 0.60, 430], ['columns', 0.10, 250]] };
   // 발견물 자료(G.DISC)가 없는 볼거리의 설명
   var MARK_INFO = {
@@ -288,7 +288,7 @@
         if (key && es && key.indexOf('exterior-styles/') !== 0 && key.indexOf('@') < 0 &&
             A.cultureOf && A.cultureOf(c) !== 'europe') key = null;
         var flip = false;
-        if (!key && SUBSTITUTE[b.kind]) { key = I.pick(I.chain.exterior(SUBSTITUTE[b.kind], c, '')); flip = !!key; }
+        if (!key && SUBSTITUTE[b.kind]) { key = I.pick(I.chain.exterior(SUBSTITUTE[b.kind], c, '')); flip = !!key && b.kind !== 'govhall'; }
         var img = key && I.get(key);
         var cv = img ? prescale(img, h, flip) : fallback(b.kind, c, h, rng);
         if (!cv) return;
@@ -746,6 +746,10 @@
       })();
     });
   };
+  /** 카메라만 그 건물로 돌린다 (제독은 걷지 않는다) — 개척 도시에 새 건물이 섰을 때 (js/systems/colony.js) */
+  T.lookAt = function (kind, arg) { var it = T.item(kind, arg); if (!it) return null; st.camTo = clampCam(it.x + it.w / 2 - W / 2); st.dirty = true; return it; };
+  /** 새로 선 건물을 금빛으로 반짝인다 (ms 동안) */
+  T.highlight = function (kinds, ms) { if (!st) return; st.fresh = { kinds: kinds || [], until: performance.now() + (ms || 6000), t0: performance.now() }; st.dirty = true; };
   T.item = function (kind, arg) {
     if (!st) return null;
     for (var i = 0; i < st.items.length; i++) {
@@ -1075,6 +1079,28 @@
       var on = st.hover === it || st.focus === it || st.near === it, tag = on ? it.tagOn : it.tag;
       ctx.drawImage(tag, Math.round(x + it.w / 2 - tag.width / 2), Math.round(it.base - it.h - 16 - (it.lift || 0) - tag.height));
     });
+    // 새로 선 건물: 금빛 테두리 빛과 반짝이 (T.highlight)
+    if (st.fresh && performance.now() < st.fresh.until) {
+      var ft0 = (performance.now() - st.fresh.t0) / 1000;
+      st.items.forEach(function (it) {
+        if (st.fresh.kinds.indexOf(it.kind) < 0) return;
+        var x = it.x - cam; if (x + it.w < -60 || x > W + 60) return;
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalAlpha = 0.18 + 0.12 * Math.sin(ft0 * 4);
+        ctx.drawImage(it.cv, x, it.base - it.h);
+        for (var k = 0; k < 9; k++) {
+          var a = ft0 * 0.9 + k * 0.7, px = x + it.w * (0.12 + 0.76 * ((Math.sin(a * 1.7 + k) + 1) / 2)), py = it.base - it.h * (0.15 + 0.8 * ((Math.cos(a * 1.3 + k * 2) + 1) / 2));
+          var r = 3 + 3 * ((Math.sin(a * 5 + k) + 1) / 2);
+          ctx.globalAlpha = 0.55 + 0.45 * Math.sin(a * 6 + k);
+          ctx.fillStyle = '#ffe9a8';
+          ctx.beginPath(); ctx.moveTo(px, py - r * 2.2); ctx.lineTo(px + r * 0.5, py - r * 0.5); ctx.lineTo(px + r * 2.2, py); ctx.lineTo(px + r * 0.5, py + r * 0.5);
+          ctx.lineTo(px, py + r * 2.2); ctx.lineTo(px - r * 0.5, py + r * 0.5); ctx.lineTo(px - r * 2.2, py); ctx.lineTo(px - r * 0.5, py - r * 0.5); ctx.closePath(); ctx.fill();
+        }
+        ctx.restore();
+      });
+      st.dirty = true;
+    }
     // 거리 사람 이름표 (마우스를 올렸을 때)
     var hf = st.hover;
     if (hf && hf.spec) {

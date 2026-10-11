@@ -79,7 +79,7 @@
       { label: '술을 마신다', icon: 'mug', onClick: function () { return T.drink(c); } },
       { label: '한턱 낸다', icon: 'coin', onClick: function () { return T.treat(c); } },
       G.Econ ? { label: '장사 소문을 듣는다', icon: 'scales', sub: T.rumorSub(c), dim: T.rumorLeft(c) <= 0, onClick: function () { return T.rumor(c); } } : null,
-      (function () { var k = S().contract; return { label: '정보를 듣는다', icon: 'scroll', sub: k ? '계약: ' + G.Errand.name(k) : '계약한 일이 없다', dim: !k, onClick: function () { return T.info(c); } }; })(),
+      (function () { var k = S().contract, tm = G.TreasureHunt ? G.TreasureHunt.list().length : 0; return { label: '정보를 듣는다', icon: 'scroll', sub: k ? '계약: ' + G.Errand.name(k) + (tm ? ' · 보물 지도' : '') : tm ? '보물 지도 이야기' : '계약한 일이 없다', dim: !k && !tm, onClick: function () { return T.info(c); } }; })(),
       (function () { var tg = T.targets(c); return tg.length ? { label: '목표를 수소문한다', icon: 'map', sub: tg.length + '곳', onClick: function () { return T.askTarget(c); } } : null; })(),
       { label: '손님을 둘러본다', icon: 'eye', dim: cur && cur.looked, onClick: function () { return T.look(c); } },
       { label: '선원을 모은다', icon: 'people', sub: T.crewSub(), onClick: function () { return T.crew(c); } },

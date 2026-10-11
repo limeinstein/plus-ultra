@@ -8,6 +8,9 @@
    조정값: G.FX.sprites (events · eventW · eventH · eventBottom) */
 (function (G) {
   'use strict';
+  // UI 층 크기 (글씨·창 크기를 키우면 1600×900보다 작다 — js/main.js Game.uiW)
+  function UIW() { return G.Game && G.Game.uiW ? G.Game.uiW() : 1600; }
+  function UIH() { return G.Game && G.Game.uiH ? G.Game.uiH() : 900; }
   var EF = G.EventFx = {};
   var SPR = function () { return G.Sprites; };
   function C() { return (G.FX && G.FX.sprites) || {}; }
@@ -179,7 +182,7 @@
     if (bare) o = Object.assign({}, o, { _bare: true });
     var box = document.createElement('div');
     box.className = bare ? 'eventfx bare' : 'eventfx wood brass-frame';
-    box.style.cssText = 'left:' + Math.round((1600 - w - 20) / 2) + 'px;top:' + Math.round(900 - (cf.eventBottom || 205) - h - 20) + 'px';
+    box.style.cssText = 'left:' + Math.round((UIW() - w - 20) / 2) + 'px;top:' + Math.round(UIH() - (cf.eventBottom || 205) - h - 20) + 'px';
     var cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.style.width = w + 'px'; cv.style.height = h + 'px';
     box.appendChild(cv);
     var cap = o.title || sc.title;

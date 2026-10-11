@@ -5,6 +5,9 @@
    조정값: G.FX.homeArt (w·h·top) */
 (function (G) {
   'use strict';
+  // UI 층 크기 (글씨·창 크기를 키우면 1600×900보다 작다 — js/main.js Game.uiW)
+  function UIW() { return G.Game && G.Game.uiW ? G.Game.uiW() : 1600; }
+  function UIH() { return G.Game && G.Game.uiH ? G.Game.uiH() : 900; }
   var HA = G.HomeArt = {};
   function C() { return (G.FX && G.FX.homeArt) || { w: 900, h: 520, top: 78 }; }
   var INK = '#3a2616';
@@ -311,7 +314,7 @@
     g.restore();
     finish(g, W, H, t === 'night');
   }
-  function homeCity() { var s = G.Game && G.Game.state; return s && s.player && G.CITY_DATA ? G.CITY_DATA[s.player.home] : null; }
+  function homeCity() { var s = G.Game && G.Game.state; return s && s.player && G.CITY_DATA ? G.CITY_DATA[G.R && G.R.seat ? G.R.seat() : s.player.home] : null; }   // 가족이 사는 집 (총독 관저면 그 도시)
   /** ②에 쓸 그림 후보 */
   HA.baseChain = function (name) {
     var sc = HA.SCENES[name], c = homeCity(), K = G.Img && G.Img.chain;
@@ -359,7 +362,7 @@
     if (cur) cur.stop();
     var box = document.createElement('div');
     box.className = 'homeart wood brass-frame';
-    box.style.cssText = 'left:' + Math.round((1600 - c.w - 20) / 2) + 'px;top:' + c.top + 'px';
+    box.style.cssText = 'left:' + Math.round((UIW() - c.w - 20) / 2) + 'px;top:' + c.top + 'px';
     var cv = HA.canvas(name); cv.style.width = c.w + 'px'; cv.style.height = c.h + 'px';
     box.appendChild(cv);
     if (o.title) { var t = document.createElement('div'); t.className = 'eventfx-title'; t.textContent = o.title; box.appendChild(t); }

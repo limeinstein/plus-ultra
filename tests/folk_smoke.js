@@ -72,7 +72,7 @@ const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed 
     // ③ 발견 카드의 풍속 칸 · 새 자연·유적 발견
     const card = await page.evaluate(async () => {
       const p = G.Scenes.discoveryCard(G.DISC.folk_zulu);
-      await new Promise(r => setTimeout(r, 900));
+      for (let i = 0; i < 20 && !document.querySelector('.disc-folk'); i++) await new Promise(r => setTimeout(r, 300));   // 그림이 있으면 미리 읽느라 늦게 뜬다
       const box = document.querySelector('.disc-folk');
       const rows = box ? Array.from(box.querySelectorAll('dt')).map(e => e.textContent) : [];
       document.querySelectorAll('.modal-back').forEach(e => e.remove());

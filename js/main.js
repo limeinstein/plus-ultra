@@ -16,8 +16,48 @@
     stage.style.transform = 'scale(' + s + ')';
     stage.style.left = Math.round((window.innerWidth - 1600 * s) / 2) + 'px';
     stage.style.top = Math.round((window.innerHeight - 900 * s) / 2) + 'px';
+    fitUi(s);
     resizeCanvases();
   }
+
+  // ---------------------------------------------------------------- 글씨·창 크기 (UI QA 2026-10-11 #1)
+  /* 무대(1600×900)를 화면에 맞춰 통째로 줄이면 작은 화면(1280×720 노트북·휴대폰)에서 글씨가 너무 작아진다.
+     그래서 UI 층(#ui)만 따로 키운다: UI 층을 (1600/z)×(900/z) 크기로 짜고 CSS zoom z배로 키워 무대를 그대로 채운다.
+     그림 캔버스(바다·거리·해전)는 그대로 · 창·메뉴·글씨만 커진다. 고른 크기는 이 브라우저(기기)에만 남긴다 (저장 파일과 무관) */
+  var UI_SIZES = { auto: 0, normal: 1, large: 1.15, xlarge: 1.3, max: 1.45 };
+  Game.UI_SIZES = UI_SIZES;
+  Game.uiSizePref = function () {
+    try { var v = window.localStorage.getItem('pu.uiSize'); if (v && UI_SIZES[v] != null) return v; } catch (e) { /* 저장소를 못 쓰면 자동 */ }
+    return 'auto';
+  };
+  Game.setUiSize = function (v) {
+    try { window.localStorage.setItem('pu.uiSize', v); } catch (e) { /* 이번 판에만 */ Game._uiSizeMem = v; }
+    fit();
+  };
+  function uiZoomFor(s) {
+    var p = Game._uiSizeMem || Game.uiSizePref(), z = UI_SIZES[p];
+    // 자동: 글씨가 1600×900에서 보던 크기의 92% 이상으로 보이게 키운다 (1280×720 → 1.15배 · 1024×768 → 1.3배까지)
+    if (!z) z = Math.max(1, Math.min(1.3, 0.92 / Math.max(0.05, s)));
+    return Math.round(z * 100) / 100;
+  }
+  function fitUi(s) {
+    var z = uiZoomFor(s), ui = document.getElementById('ui');
+    Game.uiZoom = z;
+    if (!ui) return;
+    ui.style.setProperty('--unz', (1 / z).toFixed(4));   // 1600×900에 맞춰 짠 온 화면 판(캐릭터 만들기)은 원래 크기로 되돌린다
+    if (z > 1.001) {
+      ui.style.zoom = z;
+      ui.style.width = (1600 / z).toFixed(2) + 'px'; ui.style.height = (900 / z).toFixed(2) + 'px';
+      ui.style.right = 'auto'; ui.style.bottom = 'auto';
+    } else {
+      ui.style.zoom = ''; ui.style.width = ''; ui.style.height = ''; ui.style.right = ''; ui.style.bottom = '';
+    }
+    document.documentElement.classList.toggle('ui-zoomed', z > 1.001);
+    if (UI.fitHud) UI.fitHud();
+  }
+  /** UI 층의 너비·높이 (UI 좌표) — 창·그림 상자를 가운데에 놓을 때 1600·900 대신 쓴다 */
+  Game.uiW = function () { return 1600 / (Game.uiZoom || 1); };
+  Game.uiH = function () { return 900 / (Game.uiZoom || 1); };
   function resizeCanvases() {
     var s = Game.scale || 1, dpr = window.devicePixelRatio || 1;
     var q = (Game.state && Game.state.settings ? (Game.state.settings.res || 1) : 1) * (Game.autoRes || 1);
@@ -215,7 +255,7 @@
   H.lat = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') || R.hasItem('astrolabe') || R.skill('survey') >= 2 ? U.fmtLat(l.lat) : '? <small>(천문판)</small>'; };
   H.lon = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') ? U.fmtLon(l.lon) : '? <small>(육분의)</small>'; };
   /** 직위: 작위가 있으면 가장 높은 작위, 없으면 명성으로 부르는 이름 */
-  H.title = function () { var t = G.Court && G.Court.best(), sl = G.Slave ? G.Slave.title() : '', fm = G.Princess ? G.Princess.title() : ''; var head = [sl, fm].filter(Boolean).join(' · '); return head ? head + (t ? ' · ' + t.ko : '') : t ? t.ko : R.fameTitle(Game.state.player.fame); };   // 노예 무역에 손을 대면 「노예 상인」, 에스파냐 왕녀와 혼인하면 「부마」가 먼저 붙는다   // 노예 무역에 손을 대면 「노예 상인」이 먼저 붙는다
+  H.title = function () { var t = G.Court && G.Court.best(), sl = G.Slave ? G.Slave.title() : '', fm = G.Princess ? G.Princess.title() : '', gv = G.Colony ? G.Colony.title() : ''; var head = [gv, sl, fm].filter(Boolean).join(' · '); return head ? head + (t ? ' · ' + t.ko : '') : t ? t.ko : R.fameTitle(Game.state.player.fame); };   // 노예 무역에 손을 대면 「노예 상인」, 에스파냐 왕녀와 혼인하면 「부마」가 먼저 붙는다   // 노예 무역에 손을 대면 「노예 상인」이 먼저 붙는다
   H.titleTip = function () { var t = G.Court ? G.Court.titles() : [], sl = G.Slave ? G.Slave.title() : ''; return (sl ? sl + ' (노예를 사고판 이름 — 남은 ' + G.Slave.remain() + '일) — ' : '') + (G.Princess && G.Princess.title() ? '부마 (에스파냐 국왕의 사위) — ' : '') + (t.length ? t.map(function (x) { return G.Court.fullName(x, true); }).join(' · ') + ' — ' : '') + R.fameTitle(Game.state.player.fame); };
   H.fameTip = function () { return G.Fame ? '통합 명성 = ' + G.Fame.text() : ''; };
   H.lang = function (c) {
@@ -322,6 +362,13 @@
         if (G.Town && G.Town.redraw) G.Town.redraw();
       });
     });
+    // 휴대폰을 세로로 들면 가로로 돌리라고 알린다 (css #rotate-hint · 누르면 닫힌다)
+    if (!document.getElementById('rotate-hint')) {
+      var rh = document.createElement('div'); rh.id = 'rotate-hint';
+      rh.innerHTML = '<div class="rh-ic">⟲</div><div>화면을 가로로 돌려 주십시오</div><small>이 게임은 가로 화면(16:9)에 맞춰져 있습니다 · 누르면 그대로 계속합니다</small>';
+      rh.addEventListener('click', function () { rh.classList.add('off'); });
+      document.body.appendChild(rh);
+    }
     fit();
     window.addEventListener('resize', fit);
     Game.go('title');

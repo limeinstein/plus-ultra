@@ -443,6 +443,7 @@
   /** town background: per-city file, then a numbered variant for the style (port / inland), then the style */
   K.bg = function (c) {
     var out = ['backgrounds/' + c.id];
+    if (c.bgRef != null) out.push('backgrounds/' + c.bgRef);   // 개척 도시: 이웃 식민 도시의 바닷가 풍경을 빌린다 (js/systems/colony.js)
     var base = 'bg-styles/' + c.style + (c.port ? '_port' : '_inland');
     var list = I.list(base + '_');
     if (list.length) out.push(list[Math.abs(G.U ? G.U.strHash('bg' + c.id) : c.id) % list.length]);

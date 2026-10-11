@@ -31,6 +31,7 @@
       // 사라진 왕녀: 에스파냐 국왕이 먼저 꺼낸다 (js/systems/princess.js) — 그 이야기를 했으면 왕명은 메뉴에서
       var prDone = false;
       if (G.Princess) { try { prDone = await G.Princess.onEnter(sp); } catch (e) { console.error(e); } }
+      if (G.Colony && !prDone) { try { prDone = await G.Colony.onEnter(sp); } catch (e) { console.error(e); } }   // 새 도시 개척 (명성 200,000 · 400,000)
       if (G.Court && !prDone) { try { await G.Court.onEnter(sp); } catch (e) { console.error(e); } }
       // 이야기 모드: 카사노바 남작 저택에서 아내와 어머니를 마주친다 (js/systems/story.js)
       if (G.Story && G.Story.family && G.STORY && sp.id === G.STORY.sponsor) { try { await G.Story.family(c, 'mansion'); } catch (e) { console.error(e); } }
@@ -45,7 +46,7 @@
         { label: '모험 제안', icon: 'scroll', dim: !!k, onClick: function () { return SP.propose(sp); } },
         { label: '보고', icon: 'seal', sub: mine ? (G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') : '계약 중') : '', dim: !mine, onClick: function () { return SP.report(sp); } },
         { label: '이야기', icon: 'people', onClick: function () { return chat(sp); } }
-      ].concat(G.Princess ? G.Princess.palaceItems(sp) : []).concat(G.Court ? G.Court.palaceItems(sp) : []);   // 사라진 왕녀 · 왕명·친서·특사
+      ].concat(G.Princess ? G.Princess.palaceItems(sp) : []).concat(G.Colony ? G.Colony.palaceItems(sp) : []).concat(G.Court ? G.Court.palaceItems(sp) : []);   // 사라진 왕녀 · 왕명·친서·특사
     };
     return B;
   }

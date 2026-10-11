@@ -43,7 +43,7 @@
   F.addBond = function (k, n) { k.bond = Math.max(0, Math.min(100, F.bond(k) + n)); return k.bond; };
   F.bondWord = function (k) { var b = F.bond(k); return b >= 85 ? '아버지를 존경함' : b >= 65 ? '아버지를 따름' : b >= 40 ? '보통' : b >= 20 ? '서먹함' : '마음을 닫음'; };
   F.bondHearts = function (k) { var b = F.bond(k), n = Math.round(b / 20); return '<span class="kid-bond" title="' + F.bondWord(k) + ' (' + b + ')">' + '♥'.repeat(n) + '<span class="muted">' + '♡'.repeat(5 - n) + '</span></span>'; };
-  function atHome() { var s = S(); return s.loc && s.loc.mode === 'city' && s.loc.city === s.player.home; }
+  function atHome() { var s = S(); return s.loc && s.loc.mode === 'city' && s.loc.city === (G.R.seat ? G.R.seat() : s.player.home); }   // 가족이 사는 도시 (총독 관저로 옮겼으면 그 개척 도시 — js/systems/colony.js)
   F.atHome = atHome;
   /** 지금 견습으로 배에 타고 있는 아이들 */
   F.aboard = function () { return (S().player.kids || []).filter(function (k) { return k.aboard; }); };
@@ -128,7 +128,7 @@
 
   /** 해산 장면 — 제독이 집에 있을 때 (곁을 지킬지 고른다) */
   async function birthScene(born) {
-    var w = F.wifeSpeaker(), mid = { name: '산파', portrait: A.withImg(A.npcSpec('midwife' + S().player.home, 'keeper', G.Img.folkStyle(G.CITY_DATA[S().player.home]), 'f'), []), lang: 3 };
+    var w = F.wifeSpeaker(), seatC = G.CITY_DATA[G.R.seat ? G.R.seat() : S().player.home], mid = { name: '산파', portrait: A.withImg(A.npcSpec('midwife' + seatC.id, 'keeper', G.Img.folkStyle(seatC), 'f'), []), lang: 3 };
     await UI.say('나리, 마님께서 진통을 시작하셨습니다! 물을 끓이고 깨끗한 천을 가져오십시오!', mid);
     var v = await UI.ask('아내의 해산이 시작되었다. 어떻게 할까?', [
       { label: '방에 들어가 아내의 손을 잡아 준다', value: 'hand' },
@@ -291,7 +291,7 @@
 
   F.innEvent = async function (c) {
     var s = S(), kids = (s.player.kids || []).filter(function (k) { return !k.unnamed && F.kidAge(k) >= 3; });
-    if (!kids.length || c.id !== s.player.home) return;
+    if (!kids.length || c.id !== (G.R.seat ? G.R.seat() : s.player.home)) return;
     if (U.chance(0.3)) { var k = U.pick(kids); await UI.say(U.pick(['앗, 아버지! 지금 여관 아주머니가 과자 주셨어요.', '아버지는 이 여관에 머문 적 있어요?']), G.HomeLife ? G.HomeLife.speaker(k) : { name: k.name, portrait: F.kidSpec(k), lang: 3 }); }
   };
 

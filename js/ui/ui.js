@@ -42,6 +42,7 @@
       });
       hudEl.innerHTML = h;
       hudEl.classList.toggle('dense', cells.length > 9);
+      fitHud();
       // 칸을 한 번만 찾아 두고(hud.set 이 하루에도 열 번 넘게 불린다), 값이 그대로면 DOM을 건드리지 않는다
       hudCells = {};
       Array.prototype.forEach.call(hudEl.querySelectorAll('[data-k]'), function (c) {
@@ -58,11 +59,22 @@
     set: function (k, text, warn) {
       var c = hudCells[k]; if (!c || !c.span) return;
       text = String(text); warn = !!warn;
-      if (c.text !== text) { c.text = text; c.span.innerHTML = text; }
+      if (c.text !== text) { var grew = text.length !== c.text.length; c.text = text; c.span.innerHTML = text; if (grew) fitHudSoon(); }
       if (c.warn !== warn) { c.warn = warn; c.span.parentNode.classList.toggle('val-warn', warn); }
     }
   };
   var hudCells = {};
+  /* 윗줄 상태 표시가 화면 너비를 넘으면 (글씨·창 크기를 키웠을 때) 윗줄만 알맞게 줄여 다 보이게 한다 — 소지금·직위가 잘리지 않게 (UI QA 2026-10-11 #1) */
+  function fitHud() {
+    if (!hudEl || hudEl.classList.contains('hidden')) return;
+    hudEl.style.zoom = '';
+    var need = hudEl.scrollWidth, have = hudEl.clientWidth;
+    if (have > 0 && need > have + 1) hudEl.style.zoom = Math.max(0.6, have / need * 0.985).toFixed(3);   // 글꼴이 늦게 읽혀 폭이 조금 바뀌어도 넘치지 않게 1.5% 여유
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitHud(); });
+  var hudFitPending = false;
+  function fitHudSoon() { if (hudFitPending) return; hudFitPending = true; requestAnimationFrame(function () { hudFitPending = false; fitHud(); }); }
+  UI.fitHud = fitHud;
   function emblemSvg() {
     return '<defs><radialGradient id="embg" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#5a4128"/><stop offset="1" stop-color="#1c130b"/></radialGradient></defs>' +
       '<circle cx="24" cy="24" r="22" fill="url(#embg)" stroke="#b8925a" stroke-width="1.5"/>' +
@@ -335,7 +347,7 @@
       }
       layer.appendChild(actor);
       var an = null;
-      if (duo && who && who.name) { an = U.el('div', 'actor-name wood', U.esc(who.name)); stage.appendChild(an); if (G.Bio) G.Bio.tag(an, who); }
+      if (duo && who && who.name) { an = U.el('div', 'actor-name wood ' + (side === speakerSide ? 'speaking' : 'quiet'), U.esc(who.name)); stage.appendChild(an); if (G.Bio) G.Bio.tag(an, who); }   // 지금 말하는 사람의 이름표만 밝게 (UI QA 2026-10-11 #4)
       var A0 = { el: actor, name: an, side: side, tall: tall, scale: who && who.standScale > 0 ? Math.min(1, who.standScale) : 1, aspect: 0 };   // standScale: 아이처럼 키가 작은 사람 (어른 = 1)
       actors.push(A0);
       // 그림의 실제 가로세로 비를 따른다 — 제독 무릎상(512×512 정사각)도 1024×1536 그림과 같은 키로 서게
@@ -395,7 +407,8 @@
       if (!box.isConnected || !root) return;
       var b = stageRect(box), foot = b.top + F.sink;
       if (!low) { var L = stageRect(layer); b = { left: b.left - L.left, right: b.right - L.left, top: b.top - L.top, width: b.width }; foot = b.top + F.sink; }
-      var h = Math.max(F.minH, Math.min(F.maxH, foot - F.top)), w = Math.round(h * F.aspect);
+      // 자리가 모자라면(글씨·창 크기를 키워 UI 층이 낮을 때) 키를 줄여 머리가 화면 위로 나가지 않게 — 그래도 240 아래로는 줄이지 않는다
+      var room = foot - F.top, h = Math.max(Math.min(F.minH, Math.max(240, room)), Math.min(F.maxH, room)), w = Math.round(h * F.aspect);
       var cores = [];
       actors.forEach(function (a) {
         var aw = a.tall ? Math.round(h * (a.aspect || F.aspect) * a.scale) : F.bustW, ah = a.tall ? Math.round(h * a.scale) : F.bustH, x;
@@ -623,8 +636,25 @@
       });
     }
     if (opts.onBuild) opts.onBuild(content, api);
+    if (G.Game && G.Game.uiZoom > 1.001) { requestAnimationFrame(function () { fitWin(w, back); }); setTimeout(function () { fitWin(w, back); }, 350); }
     return api;
   };
+  /* 글씨·창 크기를 키워 UI 층이 좁아졌을 때(UI QA 2026-10-11 #1): 창이 화면보다 조금 크면(22% 안쪽) 창만 알맞게 줄여 한눈에 보이게 한다.
+     그보다 크면(긴 목록) 너비만 맞추고 위아래는 스크롤 — 글씨가 너무 작아지지 않게 */
+  function fitWin(w, back) {
+    if (!w.isConnected || !(G.Game && G.Game.uiZoom > 1.001)) return;
+    w.style.zoom = '';
+    var mw = w.style.maxWidth, mh = w.style.maxHeight;
+    w.style.maxWidth = 'none'; w.style.maxHeight = 'none';
+    var nw = w.offsetWidth, nh = w.offsetHeight;
+    w.style.maxWidth = mw; w.style.maxHeight = mh;
+    var aw = back.clientWidth - 20, ah = back.clientHeight - 16;
+    if (!nw || !nh || aw <= 0 || ah <= 0) return;
+    var kw = Math.min(1, aw / nw), k = Math.min(kw, ah / nh);
+    if (k < 0.78) k = kw;
+    if (k < 0.999) w.style.zoom = Math.max(0.7, k).toFixed(3);
+  }
+  UI.fitWin = fitWin;
 
   /** simple choice list. options: array of {label, value, icon, thumb, right, disabled, desc} | strings */
   UI.choose = function (title, options, opts) {

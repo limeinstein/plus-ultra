@@ -63,6 +63,7 @@
     // reveal home waters on chart
     G.Game.state = S;
     if (G.Names) G.Names.apply();       // 이름(대륙·곶·해협)은 이 게임의 것으로 다시 입힌다
+    if (G.Colony) G.Colony.apply();     // 지난 게임의 개척 도시를 걷어 낸다
     if (G.Wander) G.Wander.apply();     // 철새(떠돌이 항해사)를 이 게임의 것으로
     ST.revealChart(-12, 38, 9);
     ST.revealChart(0, 40, 9);

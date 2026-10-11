@@ -33,7 +33,8 @@ svg.ic { width: 1.1em; height: 1.1em; flex: 0 0 auto; vertical-align: -0.15em; }
 .win .title svg.ic { width: 24px; height: 24px; color: var(--brass-hi); }
 html, body { margin: 0; height: 100%; background: #07050a; overflow: hidden; }
 body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: antialiased; user-select: none; }
-#stage { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; overflow: hidden; background: #0b0806; }
+#stage { position: fixed; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; overflow: hidden; background: #0b0806; }
+/* ↑ fixed: 휴대폰 브라우저가 1600px 무대를 보고 화면(레이아웃 뷰포트)을 넓혀 일부만 보여 주던 것을 막는다 (UI QA 2026-10-11 #1) */
 #stage > canvas { position: absolute; left: 0; top: 0; }
 #world { width: 1600px; height: 900px; }
 #overlay { width: 1600px; height: 900px; pointer-events: none; }
@@ -1256,3 +1257,93 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .oc-sub { font-size: 19px; color: var(--cream, #f2e6cc); text-shadow: 0 2px 4px #000; max-width: 720px; text-align: center; }
 @keyframes oc-in { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
 @keyframes oc-pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+/* 조합의 보물 지도 (js/systems/treasurehunt.js) */
+.tmap-wrap { display: flex; justify-content: center; }
+.tmap-cv { width: 720px; max-width: 100%; height: auto; display: block; box-shadow: 0 6px 18px rgba(40,22,8,.45); border-radius: 3px; }
+.tmap-note { margin-top: 12px; font-size: 16px; line-height: 1.65; }
+
+/* ---------------------------------------------------------------- UI QA 2026-10-11 (1~4) */
+/* 1 글씨·창 크기: 작은 화면에서는 UI 층(#ui)을 CSS zoom으로 키운다 (js/main.js fitUi) — 그만큼 UI 층이 좁아지므로 창이 넘치지 않게 */
+.win { max-width: min(1400px, calc(100% - 20px)); max-height: min(820px, calc(100% - 16px)); }
+.win .content { min-height: 0; }
+.ui-zoomed .hud { overflow: hidden; }
+.ui-zoomed .hud .cell { padding: 0 10px; }
+.ui-zoomed .hud .cell.two { padding: 0 8px; }
+/* 휴대폰을 세로로 들면: 가로로 돌리라고 알린다 (누르면 닫힘) */
+#rotate-hint { position: fixed; inset: 0; z-index: 100000; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: rgba(7,5,10,.94); color: var(--cream); font-family: var(--serif); font-size: 20px; text-align: center; padding: 24px; line-height: 1.6; }
+#rotate-hint .rh-ic { font-size: 54px; line-height: 1; }
+#rotate-hint small { color: var(--cream-dim); font-size: 15px; }
+@media (orientation: portrait) and (pointer: coarse) { #rotate-hint:not(.off) { display: flex; } }
+/* 한국어는 낱말 중간에서 줄을 바꾸지 않는다 (「정보를 듣/는다」 같은 꺾임 — 3번). 아주 긴 낱말만 어디서든 꺾는다 */
+#ui { word-break: keep-all; overflow-wrap: anywhere; }
+
+/* 2 알림이 창(수첩·교역표…) 위를 덮지 않게: 창이 열려 있는 동안 알림은 왼쪽 아래 구석에 작게 */
+#ui:has(.modal-back > .win) > .toasts { top: auto !important; bottom: 16px; left: 16px; transform: none; align-items: flex-start; }
+#ui:has(.modal-back > .win) > .toasts .toast { min-width: 0; max-width: 400px; font-size: 16px; padding: 8px 14px 8px 10px; }
+#ui:has(.modal-back > .win) > .toasts .toast svg { width: 24px; height: 24px; flex-basis: 24px; }
+
+/* 3 두 칸 명령 메뉴: 오른쪽 작은 글(값·조건)을 이름 아래 줄로 — 이름이 한 줄에 다 들어가게 */
+.cmdmenu.many .cmd { display: grid; grid-template-columns: 24px 1fr; column-gap: 9px; row-gap: 1px; align-items: center; }
+.cmdmenu.many .cmd svg { grid-row: 1 / span 2; }
+.cmdmenu.many .cmd .sub { grid-column: 2; margin-left: 0; font-size: 13px; line-height: 1.25; }
+.cmd .sub { white-space: nowrap; }
+.cmdmenu.many .cmd .sub { white-space: normal; }
+/* 한 칸 메뉴: 이름은 한 줄로 두고, 오른쪽 작은 글이 길면 그쪽을 줄바꿈 (「아이와 함께」가 세로로 쪼개지던 것) */
+.cmdmenu:not(.many) .cmd > span:not(.sub) { flex: 0 1 auto; min-width: min(7.5em, 62%); }
+.cmdmenu:not(.many) .cmd > .sub { flex: 0 1 auto; min-width: 0; white-space: normal; text-align: right; line-height: 1.25; }
+
+/* 4 두 사람 대화: 지금 말하는 사람의 이름표를 밝게, 듣는 사람은 흐리게 */
+.dlg-stage > .actor-name { transition: opacity .15s, filter .15s; }
+.dlg-stage > .actor-name.quiet { opacity: .55; filter: saturate(.5) brightness(.85); font-size: 15px; }
+.dlg-stage > .actor-name.speaking { color: #fff3d0; box-shadow: inset 0 0 0 1px rgba(227,198,141,.75), 0 0 0 1px #0c0806, 0 0 14px rgba(227,198,141,.45), var(--shadow); }
+.dlg-stage > .actor-name.speaking::before { content: '▸ '; color: var(--gold); }
+/* 1600×900에 맞춰 짠 온 화면 판(캐릭터 만들기)은 UI 층을 키워도 원래 크기로 (넘치지 않게) */
+.ui-zoomed .create { zoom: var(--unz, 1); }
+/* 글씨·창 크기를 키우면 UI 층이 좁아진다: 바다의 아래 단추줄과 작은 해도·바람 판이 겹치지 않게 해도·바람 판을 단추줄 위로,
+   항해 중 알림은 상태줄과 겹치지 않게 상태줄 아래 왼쪽으로 */
+.ui-zoomed .minimap, .ui-zoomed .windbox { bottom: 94px; }
+.ui-zoomed #ui.at-sea .toasts { left: 18px; top: 168px; transform: none; align-items: flex-start; }
+
+/* ---------------------------------------------------------------- 개척 도시 (js/systems/colony.js · js/city/colonyhall.js) */
+/* 새 건물이 선 거리 위의 금빛 글귀 (그림이 있으면 그림과 함께) */
+.colony-banner { position: absolute; left: 50%; top: 78px; transform: translateX(-50%); z-index: 58; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; animation: cb-in .5s ease-out both; pointer-events: auto; }
+.colony-banner.out { animation: cb-out .45s ease-in forwards; }
+.colony-banner .cb-box { min-width: 560px; max-width: 900px; padding: 16px 40px 14px; text-align: center; background: linear-gradient(180deg, rgba(20,14,8,.86), rgba(12,8,4,.8)); border: 1px solid rgba(217,180,95,.7); box-shadow: 0 0 0 1px #0c0806, 0 10px 30px rgba(0,0,0,.55), inset 0 0 30px rgba(217,180,95,.12); }
+.colony-banner .cb-kicker { font-size: 15px; letter-spacing: .3em; color: var(--brass-hi); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.colony-banner .cb-title { font-size: 40px; font-weight: 800; letter-spacing: .08em; color: #ffe08a; text-shadow: 0 3px 0 #3a2410, 0 0 22px rgba(255,200,90,.55); margin: 4px 0 2px; animation: oc-pop .6s .15s both cubic-bezier(.2,1.6,.4,1); }
+.colony-banner .cb-sub { font-size: 20px; color: var(--cream); }
+.colony-banner .cb-now { margin-top: 6px; min-height: 26px; font-size: 18px; color: #ffe9a8; letter-spacing: .12em; }
+.colony-banner .cb-now:not(:empty)::before { content: '✦ '; } .colony-banner .cb-now:not(:empty)::after { content: ' ✦'; }
+.colony-banner .cb-now:empty { display: none; }
+.colony-banner .cb-more { margin-top: 4px; font-size: 13px; color: var(--cream-dim); }
+.colony-banner .cb-pic { width: 760px; max-width: 92vw; aspect-ratio: 16 / 9; border: 3px solid #b8925a; box-shadow: 0 12px 34px rgba(0,0,0,.6); background: #1a120a; overflow: hidden; }
+.colony-banner .cb-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.colony-banner.with-pic { top: 64px; }
+#ui.colony-show .todo, #ui.colony-show .cmdmenu, #ui.colony-show .infobar, #ui.colony-show .caption, #ui.colony-show .city-banner { opacity: 0; pointer-events: none; transition: opacity .35s; }
+#ui.colony-show > .toasts { top: auto !important; bottom: 16px; left: 16px; transform: none; align-items: flex-start; }   /* 글귀를 가리지 않게 알림은 왼쪽 아래로 */
+#ui.colony-show > .toasts .toast { min-width: 0; max-width: 400px; font-size: 16px; padding: 8px 14px 8px 10px; }
+@keyframes cb-in { from { opacity: 0; transform: translate(-50%, -16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes cb-out { to { opacity: 0; transform: translate(-50%, -16px); } }
+/* 세울 곳 고르기 */
+.col-pick { display: flex; gap: 16px; align-items: stretch; }
+.col-pick .cp-map { flex: 0 0 auto; }
+.col-pick .cp-cv { width: 680px; height: 470px; display: block; border: 2px solid #7a5c33; box-shadow: 0 4px 14px rgba(40,24,8,.35); cursor: pointer; }
+.col-pick .cp-side { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.col-pick .cp-list { display: flex; flex-direction: column; gap: 5px; }
+.col-pick .cp-item { padding: 7px 10px; font-size: 16px; }
+.col-pick .cp-item.on { border-color: #8a2a1e; background: rgba(176,30,30,.12); box-shadow: inset 0 0 0 1px rgba(176,30,30,.35); }
+.col-pick .cp-item .r { font-size: 13px; }
+.col-pick .cp-desc { font-size: 16px; line-height: 1.6; padding: 10px 12px; border: 1px solid rgba(110,80,40,.35); background: rgba(255,250,236,.4); }
+/* 개척 현황 */
+.colony-status .cs-head { font-size: 16px; color: var(--ink-soft); margin-bottom: 10px; }
+.colony-status .cs-steps { display: flex; flex-direction: column; gap: 6px; }
+.colony-status .cs-row { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; padding: 6px 10px; border: 1px solid rgba(110,80,40,.3); opacity: .55; font-size: 17px; }
+.colony-status .cs-row small { font-size: 14px; color: var(--ink-soft); }
+.colony-status .cs-row.done { opacity: 1; background: rgba(59,106,62,.08); }
+.colony-status .cs-row.now { border-color: #3b6a3e; box-shadow: inset 0 0 0 1px rgba(59,106,62,.4); }
+.colony-status .cs-step { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #7a5c33; color: #f2e7cc; font-weight: 700; }
+.colony-status .cs-row.done .cs-step { background: #3b6a3e; }
+.colony-status .cs-need { margin-top: 12px; font-size: 17px; }
+.colony-status .cs-gov { margin-top: 8px; font-size: 17px; color: #6a1e1e; font-weight: 700; }
+.colony-kv { grid-template-columns: 160px 1fr !important; margin-bottom: 8px; }

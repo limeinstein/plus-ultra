@@ -23,6 +23,7 @@
   // 작은 항구지만 그 고장 배를 짓는 조선소가 있는 곳 (나가사키·향료 제도·잉카 해안·말라바르·요동 등)
   R.SMALL_YARDS = [191, 171, 172, 220, 221, 151, 125, 106, 166, 167, 189, 205, 229];
   R.facilities = function (c) {
+    if (c.colony != null && G.Colony) return G.Colony.facilities(c);   // 제독이 세운 개척 도시 (js/systems/colony.js)
     if (c.outpost) return { harbor: true, trade: false, tavern: false, inn: false, gate: false, church: false, market: false, shipyard: false, palace: false, library: false, guild: false, mansion: [] };   // 무인도(독도)
     var f = { harbor: !!c.port, trade: true, tavern: true, inn: true, gate: true, church: true, market: c.size >= 2, shipyard: !!c.port && (c.size >= 2 || R.SMALL_YARDS.indexOf(c.id) >= 0), palace: false, library: false, guild: false, mansion: [] };
     if (c.flags.indexOf('P') >= 0) f.palace = true;
@@ -34,6 +35,8 @@
     if (c.flags.indexOf('T') >= 0) { f.church = true; f.market = true; f.guild = true; f.palace = false; f.library = false; f.mansion = []; }   // 아프리카 부족 마을 (js/data/tribes.js): 술집·여관·성문·교역소·시장·조합 + 사당(이슬람 마을은 모스크)
     return f;
   };
+  /** 가족이 사는 도시 — 총독 관저로 모셨으면 그 개척 도시, 아니면 고향 (js/systems/colony.js) */
+  R.seat = function () { var S = R.S(); return G.Colony ? G.Colony.seat() : S.player.home; };
   R.churchName = function (c) {
     if (c.places && c.places.church) return c.places.church;   // 이름 있는 곳 (경주 불국사 등)
     if (c.flags && c.flags.indexOf('T') >= 0 && c.rel !== 'I') return '사당';   // 아프리카 부족 마을: 조상과 정령을 모시는 사당

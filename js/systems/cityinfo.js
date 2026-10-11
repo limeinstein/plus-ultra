@@ -30,6 +30,7 @@
 
   /** 지도자: 이 도시에 궁전을 둔 후원자 → 같은 나라 수도의 군주 → 족장·통치자 */
   CI.leader = function (c) {
+    if (c.colony != null && G.Colony) { var col = G.Colony.of(c), pn = G.Game.state.player.name; return col && col.gov ? c.name + ' 총독 ' + pn : col && col.stage ? '개척민 대표 (총독 자리 비어 있음)' : '개척민의 천막'; }   // 제독이 세운 개척 도시
     var own = R.cityOwner(c), SP = G.Sponsor;
     var here = G.SPONSORS.filter(function (x) { return x.city === c.id && x.bld === 'palace' && SP.holder(x); })[0];
     // 조사한 나라별 지도자 (dominion.js): 군주 자리(king·pope)는 이 도시를 다스리는 나라의 자리일 때만 그 사람, 다른 나라가 차지했으면 그 나라 지도자
@@ -119,7 +120,9 @@
     if (sps.length) row('후원자', sps.map(function (x) { return x.title + (visited || own ? ' ' + G.Sponsor.holder(x) : ''); }).join(' · '));
     var k = s.contract;
     if (k && G.SPONSOR[k.sponsor] && G.SPONSOR[k.sponsor].city === c.id) row(k.small ? '작은 계약' : '탐험 계약', '「' + G.Errand.name(k) + '」 — 여기서 ' + G.Sponsor.holderName(G.SPONSOR[k.sponsor]) + '에게 보고');
-    if (s.player.home === c.id) row('고향', '제독의 모항');
+    if (s.player.home === c.id) row('고향', '제독의 모항' + (R.seat && R.seat() !== c.id ? ' (가족은 ' + G.CITY_DATA[R.seat()].name + '의 총독 관저에)' : ''));
+    var col = G.Colony && G.Colony.of(c);
+    if (col) row('개척 도시', '제독이 세운 도시 · ' + ((G.COLONY_STAGES[col.stage] || {}).name || '') + (col.gov ? ' · 총독 ' + s.player.name : '') + (R.seat && R.seat() === c.id ? ' · 가족이 총독 관저에 산다' : ''));
     return rows;
   };
 

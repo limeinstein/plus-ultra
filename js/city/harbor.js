@@ -27,7 +27,7 @@
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
       { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } },
       { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } }
-    ];
+    ].concat(G.Colony ? G.Colony.harborItems(c) : []);   // 개척 도시: 개척 물자를 넘긴다
   };
   H.panel = function () { return G.Info.fleetPanel(); };
 
@@ -57,7 +57,7 @@
       autoTo = await pickAutoDest(c, dests, days);
       if (autoTo == null) return;
     } else if (!go) return;
-    if (s.player.wife && c.id === s.player.home) await UI.say(U.pick(['부디, 무사히 돌아 오세요.', '꼭 돌아오세요.', '엉뚱한 짓은 하지 말아요. 기다리고 있을 테니.']), G.Family ? G.Family.wifeSpeaker() : {});
+    if (s.player.wife && c.id === (R.seat ? R.seat() : s.player.home)) await UI.say(U.pick(['부디, 무사히 돌아 오세요.', '꼭 돌아오세요.', '엉뚱한 짓은 하지 말아요. 기다리고 있을 테니.']), G.Family ? G.Family.wifeSpeaker() : {});
     s.flags.departed = true;
     if (c.id === s.player.home) s.circ = { cum: 0, from: c.id };
     await UI.fade(function () { G.Game.go('sea', autoTo != null ? { depart: c.id, autoTo: autoTo } : { depart: c.id }); });

@@ -18,6 +18,9 @@
    저장: p.famEv = {seen: {id: 횟수}, last, sea, home, port, ret, dates: {여급 id: 날}} · 아내와의 정: p.wifeLove · 둘째 부인 w.love (옛 저장엔 없다 — 쓸 때 만든다) */
 (function (G) {
   'use strict';
+  // UI 층 크기 (글씨·창 크기를 키우면 1600×900보다 작다 — js/main.js Game.uiW)
+  function UIW() { return G.Game && G.Game.uiW ? G.Game.uiW() : 1600; }
+  function UIH() { return G.Game && G.Game.uiH ? G.Game.uiH() : 900; }
   var U = G.U, UI = G.UI;
   var FE = G.FamEv = {};
   function S() { return G.Game.state; }
@@ -179,7 +182,7 @@
     var fx = (G.FX && G.FX.famScene) || { w: 1008, top: 74 }, w = fx.w || 1008, h = Math.round(w * 256 / 576);
     var box = document.createElement('div');
     box.className = 'famscene wood brass-frame';
-    box.style.cssText = 'left:' + Math.round((1600 - w - 20) / 2) + 'px;top:' + (fx.top || 74) + 'px';
+    box.style.cssText = 'left:' + Math.round((UIW() - w - 20) / 2) + 'px;top:' + (fx.top || 74) + 'px';
     var img = document.createElement('img'); img.src = I.src(ev.img); img.alt = ev.title || ''; img.style.width = w + 'px'; img.style.height = h + 'px';
     var clip = document.createElement('div'); clip.className = 'fs-clip'; clip.style.width = w + 'px'; clip.style.height = h + 'px'; clip.appendChild(img);
     box.appendChild(clip);

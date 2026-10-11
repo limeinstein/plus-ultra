@@ -326,8 +326,10 @@
     } else html += '<div class="muted">진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.</div>';
     // 왕명 (js/systems/court.js)
     if (G.Princess) html += G.Princess.html();   // 국왕의 특명 — 사라진 왕녀
+    if (G.Colony) html += G.Colony.html();       // 개척 도시
     if (G.Court) html += G.Court.taskHtml();
     if (G.Escort) html += G.Escort.html();     // 상선 호위
+    if (G.TreasureHunt) html += G.TreasureHunt.html();   // 조합의 보물 지도 — 「지도를 펼친다」
     // 조합 의뢰
     var qs = G.Quest ? G.Quest.list() : [];
     html += '<div class="sep"></div><h4 style="margin:0 0 8px">맡은 조합 의뢰</h4>';
@@ -446,7 +448,10 @@
         var land = fine ? (G.Geo.sdfRaw(lons[x], lat) > 0 ? 1 : 0) : landRaster[gi];
         o = (y * w + x) * 4;
         var r, g, b;
-        if (!seen) { r = 214; g = 196; b = 156; }
+        if (!seen && box.reveal) {   // 소문으로 아는 바다 (개척지 고르기 등): 안 가 본 곳도 뭍·바다를 옅게
+          if (land) { r = 206; g = 184; b = 136; cls[y * w + x] = 4; } else { r = 192; g = 196; b = 172; cls[y * w + x] = 3; }
+        }
+        else if (!seen) { r = 214; g = 196; b = 156; }
         else if (land) { r = 196; g = 168; b = 112; cls[y * w + x] = 2; }
         else { r = 150; g = 178; b = 176; cls[y * w + x] = 1; }
         var n = ((x * 73856093) ^ (y * 19349663)) & 15;
@@ -458,10 +463,11 @@
       for (x = 1; x < w - 1; x++) {
         var ci = y * w + x, c0 = cls[ci];
         if (!c0) continue;
-        var isL = c0 === 2;
-        if (isL !== (cls[ci + 1] === 2) || isL !== (cls[ci + w] === 2)) {
+        var isL = c0 === 2 || c0 === 4, rL = cls[ci + 1] === 2 || cls[ci + 1] === 4, dL = cls[ci + w] === 2 || cls[ci + w] === 4;
+        if (isL !== rL || isL !== dL) {
           o = ci * 4;
-          d[o] = d[o] * 0.32 + 54.4; d[o + 1] = d[o + 1] * 0.32 + 34; d[o + 2] = d[o + 2] * 0.32 + 13.6;    // 갈색 먹선 rgb(80,50,20)을 0.68만큼
+          if (c0 >= 3) { d[o] = d[o] * 0.6 + 32; d[o + 1] = d[o + 1] * 0.6 + 20; d[o + 2] = d[o + 2] * 0.6 + 8; }   // 안 가 본 곳의 해안선은 옅게
+          else { d[o] = d[o] * 0.32 + 54.4; d[o + 1] = d[o + 1] * 0.32 + 34; d[o + 2] = d[o + 2] * 0.32 + 13.6; }    // 갈색 먹선 rgb(80,50,20)을 0.68만큼
         }
       }
     }
@@ -478,7 +484,7 @@
   /** draws the explored chart. opts: {lon0, lat0, lon1, lat1, marks:[{lon,lat,color,label}], ship:{lon,lat,heading}, labels:true 이면 도시 이름} */
   I.chartCanvas = function (w, h, opts) {
     opts = opts || {};
-    var box = { lon0: opts.lon0 != null ? opts.lon0 : -180, lon1: opts.lon1 != null ? opts.lon1 : 180, lat0: opts.lat0 != null ? opts.lat0 : -75, lat1: opts.lat1 != null ? opts.lat1 : 80 };
+    var box = { lon0: opts.lon0 != null ? opts.lon0 : -180, lon1: opts.lon1 != null ? opts.lon1 : 180, lat0: opts.lat0 != null ? opts.lat0 : -75, lat1: opts.lat1 != null ? opts.lat1 : 80, reveal: !!opts.reveal };
     var cv = I.chartTerrain(w, h, box), ctx = cv.getContext('2d');
     I.chartOverlay(ctx, w, h, box, opts);
     // vignette border
@@ -554,6 +560,8 @@
         (G.LocalOST ? '<div class="flex" style="gap:8px;margin-top:4px"><button class="btn small" data-act="mp3">「Costa Del Sol BGM 모음.mp3」 고르기</button>' + (G.LocalOST.stored() ? '<button class="btn small ghost" data-act="mp3x">고른 파일 지우기</button>' : '') + '<input type="file" accept="audio/mpeg,.mp3" data-mp3 style="display:none"></div>' +
           '<small class="muted">가진 MP3를 고르면 이 브라우저에만 보관해 유튜브 창 없이 틉니다 (게임 파일에는 넣지 않습니다). 게임 폴더 옆 Ref 폴더나 music/_local/costa_del_sol.mp3 에 두면 저절로 찾습니다.</small>' : '') + '</div>' +
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
+      (G.Game.UI_SIZES ? '<div>글씨·창 크기</div><div><div class="opt-row">' + [['auto', '자동'], ['normal', '보통'], ['large', '크게'], ['xlarge', '아주 크게'], ['max', '최대']].map(function (o) { return '<div class="opt' + (G.Game.uiSizePref() === o[0] ? ' on' : '') + '" data-uisz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
+        '<small class="muted">지금 ' + Math.round((G.Game.uiZoom || 1) * 100) + '% — 자동은 화면이 작을수록 글씨·창을 키웁니다 (이 기기에만 기억)</small></div>' : '') +
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
@@ -564,6 +572,7 @@
       '<button class="btn" data-act="title">타이틀로 돌아가기</button></div>';
     U.$$('input[type=range]', el).forEach(function (r) { r.oninput = function () { st[r.dataset.k] = r.value / 100; if (G.Audio) G.Audio.setVolume(); }; });
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
+    U.$$('[data-uisz]', el).forEach(function (o) { o.onclick = function () { G.Game.setUiSize(o.dataset.uisz); PAGES.menu(el, win); }; });   // UI QA 2026-10-11 #1
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
