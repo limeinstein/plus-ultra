@@ -408,14 +408,46 @@
     for (;;) {
       var w = await UI.ask('무슨 용건인가?', [{ label: '정보를 듣는다', value: 'info' }, { label: '부하로 고용한다', value: 'hire' }, { label: '떠난다', value: null }], who);
       if (!w) return;
-      if (w === 'info') {
-        var d = T.rumour(c);
-        if (d) { G.Disc.addHint(d.id, 'mate:' + m.id); await UI.say('내가 아는 이야기라면... ' + d.hint, who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
-        else await UI.say('글쎄, 딱히 해 줄 이야기가 없군.', who);
-        continue;
-      }
+      if (w === 'info') { await T.mateInfo(c, m, who); continue; }
       if (await T.hireMate(c, m, who)) return;
     }
+  };
+
+  /* 항해사에게 듣는 이야기 (2026-10-11 사용자 규칙)
+     · 그 사람이 아는 것만: 뱃사람이면 누구나 바다·땅 모양(지리·자연), 과학=생물·자연, 역사학=유적, 세공=보물, 회계·요리=교역품, 신학·음악·웅변=민족, 그리고 그 사람과 얽힌 발견(d.by)
+     · 그 사람이 지금 머무는 지역(이 도시의 지역)의 이야기만
+     · 한턱을 내야 입을 연다 · 한 번에 하나만 · 항해를 다녀와 다시 만나면 또 들을 수 있다 (s.sailNo — js/scenes/sea.js 출항 때 늘어난다) */
+  var MATE_KNOWS = { sci: ['creature', 'nature'], hist: ['ruin'], craft: ['treasure'], acct: ['trade'], cook: ['trade'], theo: ['people'], music: ['people'], speech: ['people'] };
+  T.mateKnows = function (m, c) {
+    var s = S(), cats = { geo: 1, nature: 1 }, src = 'mate:' + m.id;
+    for (var k in m.sk) if (m.sk[k] > 0 && MATE_KNOWS[k]) MATE_KNOWS[k].forEach(function (x) { cats[x] = 1; });
+    return G.DISCOVERIES.filter(function (d) {
+      if (d.id === 'circum' || d.bookOnly || G.Disc.foundByMe(d.id) || G.Disc.taken(d.id)) return false;
+      if (d.reg !== c.region) return false;                                            // 지금 머무는 지역의 이야기만
+      if (!(cats[d.cat] || d.by === m.id)) return false;                                // 그 사람이 아는 갈래만
+      if (s.hints[d.id] && !G.Disc.canStack(d.id, src)) return false;                   // 이 사람에게 이미 들은 것
+      if (!G.Disc.available(d)) return false;
+      if (G.Frontier && !G.Frontier.canHint(d, src)) return false;
+      if (d.id === 'mu' || d.id === 'antpeople') return s.player.fame > 5000;
+      return true;
+    });
+  };
+  T.mateInfo = async function (c, m, who) {
+    var s = S(), told = s.mateTold || (s.mateTold = {}), no = s.sailNo || 0;
+    if (!comm(m).lv) { await C.mate('말이 한 마디도 통하지 않습니다. 통역을 구하거나 저 사람의 말을 익혀야겠습니다.'); return; }
+    if (told[m.id] === no) { await UI.say(U.pick(['오늘은 이만하면 됐네. 바다에 한 번 다녀와서 다시 들르게. 그때 또 한잔하세.', '아는 건 다 털어놓았네. 다음에 항구에 들르면 그때 또 이야기하지.']), who); return; }
+    var cand = T.mateKnows(m, c);
+    if (!cand.length) { await UI.say(U.pick(['이 바다라면 내가 해 줄 만한 이야기가 없군. 내가 아는 건 다른 데 이야기라서 말이야.', '글쎄, 이 근방 일이라면 나도 들은 게 없네.']), who); return; }
+    var price = 15 + (c.size || 1) * 10;
+    var v = await UI.ask('내 이야기가 듣고 싶나? 목이 칼칼한데, 한잔 사 주면 아는 걸 하나 말해 주지. (금화 ' + price + '닢)', [{ label: '한턱낸다', value: 1 }, { label: '그만둔다', value: 0 }], who);
+    if (!v) return;
+    if (s.player.gold < price) { UI.toast('소지금이 모자랍니다.', 'coin'); return; }
+    s.player.gold -= price; told[m.id] = no;
+    if (G.Game.refreshHud) G.Game.refreshHud();
+    var src = 'mate:' + m.id;
+    var d = U.weighted(cand, function (x) { return (x.by === m.id ? 3 : 1) * (x.pw <= 2 ? 2 : 1) * G.Disc.rumourW(x, src); });
+    await UI.say(U.pick(['캬, 이 맛이지. 좋아, 내가 직접 보고 들은 이야기를 하나 해 주지. ', '고맙네. 이 바다에서 내가 아는 이야기라면... ']) + d.hint, who);
+    G.Disc.noteHint(d, src);
   };
 
   /** 고용 절차. 말은 일부만 통해도 되며, 덜 통할수록 처음 충성심이 낮다. 성사되면 true */

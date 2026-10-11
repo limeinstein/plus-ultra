@@ -31,6 +31,7 @@
       s.loc = { mode: 'sea', lon: start[0], lat: start[1], heading: s.loc.heading || Math.PI, from: c.id };
       s.fleet.daysOut = 0;
       s.fleet.scurvy = Math.min(s.fleet.scurvy || 0, 10);     // 항구에서 신선한 먹을거리를 싣고 나간다
+      s.sailNo = (s.sailNo || 0) + 1;                       // 출항 횟수 — 항해사에게 들을 이야기가 다시 생긴다 (js/city/tavern.js T.mateInfo)
       s.voyage = { from: c.id, found0: s.stats.found, known0: s.known.length, marks0: Object.keys(s.marks || {}).length, wins0: s.stats.wins, gold0: s.player.gold };
       s.flags.fromEurope = c.region <= 3 && c.lon < 20;
       if (c.region === 10) s.flags.fromEurope = false;
