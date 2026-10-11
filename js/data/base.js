@@ -286,6 +286,8 @@
     econ: { perDay: 0.1, max: 14, seed: 7, warPerDay: 0.02, strength: [0.85, 1.15], buyShare: 0.75, stockK: 1.2, glutStock: 1.5, needK: 0.6, rampIn: 0.12, rampOut: 0.3, newsDist: 12, rumorDist: 40, rumorAsk: 2, rumorN: 2, npcFill: 0.005 },
     // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
     // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
+    // 주점 소문 (js/systems/tavernrumor.js): 한 주점이 품는 소문 n건, days일마다 새로, 가까움 무게의 실제 거리 눈금 geo(도), 온 세상이 떠드는 이야기 무게 hotK, 증거품 값 배율 evK
+    tavernRumor: { n: 3, days: 30, geo: 15, hotK: 3, evK: 1 },
     landPack: { near: 1.2 },
     // 회계 단계(R.skill('acct'), 0~3)의 혜택 (js/systems/blackmarket.js G.Acct): 한 번 들를 때 흥정 횟수 tries[단계](경리가 있으면 +puTry, 거절될 때마다 성공률 ×retryK),
     //   배가 버티는 무게 +wt[단계], blackMarket 단계부터 크기 bmSize 이상 항구의 비밀 암시장 — 물건 bmItems가지(값 ×bmMarkup)·밀수품 bmGoods가지(산지 값 ×bmGoodMarkup),

@@ -225,9 +225,9 @@
       // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
       U.$$('[data-ic]', el).forEach(function (td) {
         var it = p.items[+td.dataset.ic], d = G.ITEM[it.id], rl = G.RELIC && G.RELIC[it.id], art = rl || d;
-        if (!art && it.kind === 'evidence') art = { id: 'ev_' + it.disc, name: it.name || '해도', kind: 'book' };   // 발견 증거품(해도·지도): 말아 둔 해도 그림
+        if (!art && (it.kind === 'evidence' || it.kind === 'clue')) art = { id: 'ev_' + (it.disc || it.sp), name: it.name || '해도', kind: 'book' };   // clue = 주점에서 산 증거품 (G.TavernRumor)   // 발견 증거품(해도·지도): 말아 둔 해도 그림
         if (art && A.relicArt) {
-          var chain = rl ? G.Img.chain.relic(rl) : d ? G.Img.chain.item(d) : ['items/evidence_' + it.disc];
+          var chain = rl ? G.Img.chain.relic(rl) : d ? G.Img.chain.item(d) : ['items/evidence_' + (it.disc || it.sp)];
           var cv = G.Img.make(chain, 96, 96, function () { return A.relicArt(art, 96, 96); }, { fit: 'contain' });
           cv.className = 'relic-ic'; td.appendChild(cv);
         }

@@ -154,6 +154,7 @@
     if (cur.chatted || C.langLv(c) === 0) return;
     var lead = G.Frontier && G.Frontier.takeLead ? G.Frontier.takeLead(c.id, 'tavern') : null;
     if (lead) { cur.chatted = true; await C.say(master(), lead.text); UI.toast('단서를 얻었다: 「' + lead.disc.name + '」', 'scroll'); return; }
+    if (G.TavernRumor && await G.TavernRumor.tellSpecial(c, master())) { cur.chatted = true; return; }   // 이 대륙·도시 주점에서만 듣는 특별 소문과 증거품
     if (G.Folk && await G.Folk.tavern(c, master())) { cur.chatted = true; return; }   // 부족 마을: 이 고장 사람들의 노래·춤
     if (G.Animals && await G.Animals.tavern(c, master())) cur.chatted = true;
   };
@@ -294,11 +295,18 @@
   /** 아직 모르는 발견물 하나를 소문으로 고른다. 이야기 갈래(talk) 가운데 자연·생물·민족·근세 건물만 (교역품·보물은 교역소, 옛 것은 도서관).
       개척 단계(G.Frontier)가 닿은 것만,
       가까운 지역부터 — 명성이 오르면 먼 곳 이야기도. 맛보기·관문처럼 온 세상이 떠드는 이야기는 멀어도 돈다 */
+  /** 주점 손님(술꾼·여급·이름난 여급)의 소문은 이 주점에 도는 3건 안에서만 (js/systems/tavernrumor.js G.TavernRumor) — 난이도 낮은 순·가까울수록·찾으면 새로·30일마다 새로.
+      opts.stack이 없는 부르기(항해사 정보 등)는 예전처럼 T.rumourFree */
   T.rumour = function (c, opts) {
+    if (opts && opts.stack && G.TavernRumor) return G.TavernRumor.next(c);
+    return T.rumourFree(c, opts);
+  };
+  T.rumourFree = function (c, opts) {
     var s = S(), fame = s.player.fame, src = 'tavern:' + c.id, stack = !!(opts && opts.stack);   // stack: 이미 아는 이야기도 다른 술집에서 들으면 단서가 겹친다
     var maxD = fame < 300 ? 1 : fame < 1500 ? 2 : fame < 3500 ? 3 : 5;
     var cand = G.DISCOVERIES.filter(function (d) {
       if (d.id === 'circum' || d.bookOnly || G.Disc.foundByMe(d.id) || (s.hints[d.id] && !(stack && G.Disc.canStack(d.id, src)))) return false;
+      if (G.TavernRumor && G.TavernRumor.isSpecial(d.id)) return false;   // 그 대륙·도시 주점에서만 듣는 특별 소문
       if (!G.Disc.available(d)) return false;
       var hot = G.Frontier && G.Frontier.hot(d);
       if (!G.Disc.clueOk(d, 'tavern')) return false;                   // 옛 유적·전설·지리는 도서관 사료로 (js/data/clues.js)
