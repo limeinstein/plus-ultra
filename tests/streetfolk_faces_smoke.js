@@ -34,9 +34,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.CITY_DATA.forEach(c => {
         const st = G.Img.folkStyle(c); if (seen[st]) return; seen[st] = 1;
         Object.keys(D.types).filter(t => !D.types[t].animal).forEach(t => {
-          const f = { type: t, name: D.types[t].name, seed: 7 }, sp = G.StreetFolk.speaker(f, c), k = 'portraits/street-folk/' + (D.sprites[t] || t) + '_' + st;
+          const fix = G.StreetFolk.faceFix(t, c);   // 걷는 그림과 얼굴 그림의 성별이 다르면 같은 지역 역할 그림(npc-roles)으로 바꾼다 (tests/streetfolk_sex_smoke.js)
+          const f = { type: t, name: D.types[t].name, seed: 7 }, sp = G.StreetFolk.speaker(f, c), k = fix ? fix.key : 'portraits/street-folk/' + G.StreetFolk.spriteOf(t, c) + '_' + st;
           const keys = G.Art.portraitKeys(sp.portrait) || [];
-          if (G.Img.pick(keys) !== k || [].concat(sp.half || [])[0] !== k + '_half' || !G.Img.has(k + '_half') || !G.PORTRAIT_FACES[k]) bad.push(c.name + ':' + t);
+          if (G.Img.pick(keys) !== k || [].concat(sp.half || [])[0] !== k + '_half' || !G.Img.has(k + '_half') || (!fix && !G.PORTRAIT_FACES[k])) bad.push(c.name + ':' + t);
         });
       });
       return { styles: Object.keys(seen).length, bad };

@@ -45,7 +45,7 @@
     // 종류 → 그림 이름. 강아지·고양이는 지역마다 한 마리(pet) — 그 지역 그림이 개인지 고양이인지는 petKind (없으면 개)
     sprites: { man: 'town_man', woman: 'town_woman', boy: 'boy', girl: 'girl', elder: 'elder', grandma: 'grandmother', librarian: 'librarian', innkeeper: 'innkeeper',
       adventurer: 'adventurer', merchant: 'merchant', noble: 'noble_youth', soldier: 'soldier', navigator: 'navigator', dog: 'pet', cat: 'pet' },
-    // 그림이 그 종류의 흔한 성별과 다른 지역 (그림 이름 → {m|f: [양식…], def: 기본 성별}) — 이름표(귀족 청년/아가씨·여관 안주인)와 대화 얼굴의 성별을 그림에 맞춘다
+    // 대화창 얼굴 그림(portraits/street-folk/<그림 이름>_<양식>)의 성별 (그림 이름 → {m|f: [양식…], def: 기본 성별}) — 걷는 그림의 성별은 아래 walkSex
     artSex: {
       town_man: { def: 'm' }, town_woman: { def: 'f' }, boy: { def: 'm' }, girl: { def: 'f' }, elder: { def: 'm' }, grandmother: { def: 'f' }, librarian: { def: 'f' },
       soldier: { def: 'm' }, navigator: { def: 'm' },
@@ -53,6 +53,21 @@
       noble_youth: { def: 'f', m: ['cn', 'ib', 'na', 'tr'] },
       merchant: { def: 'f', m: ['cn', 'na', 'ne', 'ru', 'st', 'tr'] },
       adventurer: { def: 'f', m: ['ne', 'ru'] }
+    },
+    // 걷는 그림 속 사람의 성별 (2026-10-12 눈으로 확인) — 대화창 얼굴(portraits/street-folk, 위 artSex)과 다를 때가 있다.
+    // 여관 주인 걷는 그림은 20곳 모두 여자, 귀족 청년·모험가는 모두 남자, 장사꾼은 명(cn)만 남자, 마을 사람은 명·조선이 여자.
+    // 거리의 이름표(여관 안주인 …)와 대화창 무릎상은 이 성별을 따른다 (artSex와 어긋나면 faceFix로 다른 얼굴).
+    walkSex: {
+      town_man: { def: 'm', f: ['cn', 'kr'] }, town_woman: { def: 'f' }, boy: { def: 'm' }, girl: { def: 'f' }, elder: { def: 'm' }, grandmother: { def: 'f' },
+      librarian: { def: 'f' }, soldier: { def: 'm' }, navigator: { def: 'm' },
+      innkeeper: { def: 'f' }, noble_youth: { def: 'm' }, adventurer: { def: 'm' }, merchant: { def: 'f', m: ['cn'] }
+    },
+    // 걷는 그림과 얼굴 그림의 성별이 다를 때 빌려 올 얼굴 (종류 → 역할 차례): 같은 지역 역할 그림(portraits/npc-roles/<양식>/<역할>) 가운데 성별이 맞는 첫 번째
+    // (역할 그림의 성별: G.Art.rolePortraitGender — keeper·maid·merchant·noble 등은 여자, captain·sailor·native 등은 남자, 명·조선은 native도 여자)
+    faceFix: {
+      innkeeper: ['keeper', 'maid'], merchant: ['merchant', 'keeper', 'captain'], noble: ['native', 'captain', 'sailor'],
+      adventurer: ['sailor', 'captain'], man: ['native', 'maid', 'sailor'],
+      _f: ['keeper', 'maid', 'merchant'], _m: ['sailor', 'captain', 'native']
     },
     // 그 지역 그림이 종류와 맞지 않을 때 다른 그림을 빌린다 (양식 → {종류: 그림 이름}) — 조선의 「마을 사람」 그림은 여자라 머리띠를 맨 뱃사람 그림으로
     spriteFix: { kr: { man: 'navigator' } },

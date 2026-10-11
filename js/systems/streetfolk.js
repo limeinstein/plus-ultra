@@ -38,6 +38,27 @@
     if (a.f && a.f.indexOf(stl) >= 0) return 'f';
     return a.def || null;
   };
+  /** 걷는 그림 속 사람의 성별 — js/data/streetfolk.js walkSex (없으면 얼굴 그림의 성별 artSex) */
+  SF.walkSex = function (sprite, c) {
+    var a = (D().walkSex || {})[sprite]; if (!a) return SF.artSex(sprite, c);
+    var stl = G.Img && G.Img.folkStyle ? G.Img.folkStyle(c) : c.style;
+    if (a.m && a.m.indexOf(stl) >= 0) return 'm';
+    if (a.f && a.f.indexOf(stl) >= 0) return 'f';
+    return a.def || null;
+  };
+  /** 걷는 그림과 성별이 맞는 얼굴 — 얼굴 그림이 맞으면 null(그대로), 아니면 같은 지역 역할 그림 가운데 성별이 맞는 것 {role, key} */
+  SF.faceFix = function (type, c) {
+    var sprite = SF.spriteOf(type, c), ws = SF.walkSex(sprite, c), as = SF.artSex(sprite, c);
+    if (!ws || !as || ws === as) return null;
+    var stl = G.Img.folkStyle(c), ff = D().faceFix || {}, list = (ff[type] || []).concat(ff['_' + ws] || []);
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i], k = 'portraits/npc-roles/' + stl + '/' + r;
+      if (A.rolePortraitGender && A.rolePortraitGender(r, stl) !== ws) continue;
+      if (G.Img.has && !G.Img.has(k)) continue;
+      return { role: r, key: k, g: ws };
+    }
+    return null;
+  };
   SF.types = function (c) { return Object.keys(D().types).filter(function (t) { return canHave(t, c); }); };
   /** 이번에 거리에 나올 사람들 — [{type, spec, x, y, dir, …}] */
   SF.spawn = function (c, streetW, heroX, ground, seed) {
@@ -87,7 +108,7 @@
     if (D().types[type] && D().types[type].animal && imgFrames(type, c)) { var pk = (D().petKind || {})[G.Img.folkStyle(c)] || 'dog'; if (D().types[pk]) type = pk; }
     var k = K(), T = D().types[type], dp = k.depth || [12, 52], sc = k.scale || [0.92, 1.06];
     var hasArt = !T.animal && G.Img.has && G.Img.has('portraits/street-folk/' + SF.spriteOf(type, c) + '_' + G.Img.folkStyle(c));
-    var artSex = hasArt ? SF.artSex(SF.spriteOf(type, c), c) : null;
+    var artSex = hasArt ? SF.walkSex(SF.spriteOf(type, c), c) : null;   // 이름표·모습은 걷는 그림의 성별 (얼굴이 다르면 SF.speaker가 맞는 얼굴로 바꾼다)
     var nm = (artSex === 'f' && T.nameF) || (artSex === 'm' && T.nameM) || T.name;
     var depth = U.rf(dp[0], dp[1]), f0 = { type: type, name: nm, animal: !!T.animal, seed: seed }, sp = SF.speaker(f0, c);
     // 거리의 모습은 대화창 얼굴과 같은 성별로: 그 지역 그림이 있으면 그 그림의 성별, 없으면 코드 얼굴의 성별
@@ -190,7 +211,12 @@
     var fc = T.face || {}, stl = G.Img.folkStyle(c), sprite = SF.spriteOf(f.type, c);
     var own = 'portraits/street-folk/' + sprite + '_' + stl;
     try {
-      if (G.Img.has(own)) {
+      var fix = G.Img.has(own) ? SF.faceFix(f.type, c) : null;
+      if (fix) {   // 걷는 그림과 얼굴 그림의 성별이 다르다 (여관 주인: 걷는 사람은 여자, 얼굴은 남자 …) → 걷는 그림의 성별에 맞는 같은 지역 역할 그림
+        var fixBase = A.npcSpec('street:' + c.id + ':' + f.seed, fix.role, stl, fix.g);
+        sp.portrait = A.withImg(Object.assign({}, fixBase, { g: fix.g }), [fix.key]);
+        sp.half = [fix.key + '_half'];
+      } else if (G.Img.has(own)) {
         var ownBase = A.npcSpec('street:' + c.id + ':' + f.seed, fc.role || 'sailor', stl, fc.g);
         sp.portrait = A.withImg(ownBase, [own]);
         sp.half = [own + '_half'];
