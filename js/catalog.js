@@ -83,6 +83,20 @@
     out.push('성문');
     return out;
   }
+  /** 그 도시 거리에 서는 건물 [kind, 이름, 그림 체인] — 그림이 있는 것만 */
+  function streetBuildings(c) {
+    const fac = facilities(c), out = [];
+    const want = { harbor: fac.includes('항구'), trade: true, shipyard: fac.includes('조선소'), tavern: true, inn: true, market: fac.some(f => f === '시장'),
+      church: true, library: fac.some(f => /도서관|서고|학당|문고/.test(f)) || fac.includes((c.places && c.places.library) || '도서관'),
+      palace: G.SPONSORS.some(s => s.city === c.id && s.bld === 'palace') || c.flags.includes('P'), mansion: G.SPONSORS.some(s => s.city === c.id && s.bld !== 'palace'),
+      guild: c.flags.includes('G') || c.size >= 3, gate: true };
+    I.INTERIORS.forEach(([kind, label]) => {
+      if (!want[kind]) return;
+      const ch = I.chain.exterior(kind, c, '');
+      if (I.pick(ch)) out.push([kind, label === '교회·사원' ? churchName(c) : label, ch]);
+    });
+    return out;
+  }
   const fameFor = d => Math.round(d.val / 26 + d.pw * 30);   // 게임과 같은 식 (G.Disc.fameFor)
   /** escaped path with break opportunities after each slash */
   const pathHtml = p => esc(p).replace(/\//g, '/<wbr>');
@@ -92,6 +106,16 @@
   function tab(id, label, opts) { const t = Object.assign({ id, label, items: [], chips: null, chip: 'all', note: '' }, opts || {}); TABS.push(t); return t; }
   function add(t, it) {
     it.uid = t.id + ':' + t.items.length;
+    // 대화창은 무릎상(_half)이 있으면 서 있는 모습으로 크게 보여 준다 — 도감도 게임과 같은 그림을 먼저 (2026-10-11)
+    if (it.half) {
+      const hk = I.pick(it.half);
+      if (hk) {
+        const bust = it.pic, bustChain = it.chain;
+        it.halfKey = hk; it.bustPic = bust; it.bustChain = bustChain;
+        it.chain = [hk].concat(bustChain || []); it.ar = '2 / 3';
+        it.pic = () => I.make([hk], 1024, 1536, bust);
+      }
+    }
     it.text = [it.name, it.sub, it.meta, it.key, (it.chain || []).join(' '), it.extra || ''].join(' ').toLowerCase();
     t.items.push(it); ITEM[it.uid] = it;
     return it;
@@ -100,7 +124,7 @@
   // ------------------------------------------------ cities
   const tCity = tab('cities', '도시', {
     chips: [['all', '전체']].concat(G.REGIONS.map((r, i) => [String(i), r])),
-    note: '파일: <code>images/cities/도시번호.jpg</code> · 권장 1600×900 · 해질녘 <code>_golden</code>, 저녁 <code>_dusk</code>를 붙인 파일도 쓸 수 있습니다.'
+    note: '게임의 거리 화면 그림입니다. 파일: <code>images/backgrounds/도시번호.jpg</code>(이 도시만의 거리 배경) · 없으면 양식 공통 <code>bg-styles/양식_port_a</code>… · 권장 1600×900. 자세히 보기에서 그 도시에 서는 건물 그림도 보여 줍니다.'
   });
   CITY.forEach(c => {
     const sps = G.SPONSORS.filter(s => s.city === c.id);
@@ -109,9 +133,9 @@
     add(tCity, {
       group: String(c.region), name: c.name, sub: '#' + c.id + ' · ' + G.REGIONS[c.region] + ' · ' + c.nation,
       meta: G.LANGS[c.lang] + ' · ' + (REL[c.rel] || '') + ' · ' + (c.port ? '항구' : '내륙') + ' · ' + SIZE[c.size],
-      key: 'cities/' + c.id, kind: 'jpg', chain: I.chain.city(c, 'day'), ar: '16 / 9',
+      key: I.pick(I.chain.bg(c)) || 'backgrounds/' + c.id, kind: 'jpg', chain: I.chain.bg(c).concat(I.chain.city(c, 'day')), ar: '16 / 9',
       extra: c.goods.map(goodName).join(' ') + ' ' + STYLE[c.style],
-      pic: () => I.make(I.chain.city(c, 'day'), 1600, 900, () => A.cityScene(c, { time: 'day' })),
+      pic: () => I.make(I.chain.bg(c), 1600, 900, () => I.make(I.chain.city(c, 'day'), 1600, 900, () => A.cityScene(c, { time: 'day' }))),
       detail: () => ({
         facts: [
           ['지역', G.REGIONS[c.region]], ['처음 다스리는 나라', G.Dominion ? G.Dominion.first(c) || c.nation : c.nation],
@@ -130,6 +154,8 @@
           discs.length ? ['건물에 들어가면 발견', discs.map(d => d.name).join(', ')] : null,
           ['위치', lat(c.lat) + ', ' + lon(c.lon)]
         ],
+        strip: streetBuildings(c).map(([kind, label, ch]) => ({ label: label, key: I.pick(ch), kind: 'webp',
+          pic: () => I.make(ch, 900, 700, () => A.canvas(900, 700), { fit: 'contain' }) })),
         files: [
           { key: 'backgrounds/' + c.id, kind: 'jpg', note: '거리 화면의 배경 (이 도시만)' },
           { key: 'bg-styles/' + c.style + (c.port ? '_port' : '_inland') + '_a', kind: 'jpg', note: '거리 배경 · 같은 양식의 ' + (c.port ? '항구' : '내륙') + ' 도시 공통 (여러 장이면 _a, _b …)' },
@@ -144,8 +170,8 @@
 
   // ------------------------------------------------ people
   const tPeople = tab('people', '인물', {
-    chips: [['all', '전체'], ['mate', '동료'], ['sponsor', '후원자'], ['maid', '여급'], ['maidstyle', '지역별 여급'], ['rival', '경쟁자'], ['npc', '마을 사람']],
-    note: '파일: 동료 <code>portraits/mates/ID.png</code> · 후원자 <code>portraits/sponsors/ID.png</code> · 여급 <code>portraits/maids/ID.png</code> · 지역별 여급 <code>maid-styles/묶음/1.png</code>(흉상) <code>maid-styles/묶음/1_half.png</code>(서 있는 모습, 여러 장 가능) · 경쟁자 <code>portraits/rivals/이름.png</code> · 마을 사람 <code>portraits/npc/역할.png</code> · 권장 512×512, 얼굴은 위쪽에'
+    chips: [['all', '전체'], ['mate', '동료'], ['sponsor', '후원자'], ['maid', '여급'], ['maidstyle', '지역별 여급'], ['rival', '경쟁자'], ['npc', '마을 사람'], ['court', '궁정 사람'], ['street', '거리 사람']],
+    note: '파일: 동료 <code>portraits/mates/ID.png</code> · 후원자 <code>portraits/sponsors/ID.png</code> · 여급 <code>portraits/maids/ID.png</code> · 지역별 여급 <code>maid-styles/묶음/1.png</code>(흉상) <code>maid-styles/묶음/1_half.png</code>(서 있는 모습, 여러 장 가능) · 경쟁자 <code>portraits/rivals/이름.png</code> · 마을 사람 <code>portraits/npc/역할.png</code> · 궁정 사람 <code>portraits/courtiers/후원자ID</code> · 거리 사람 <code>portraits/street-folk/종류_양식</code> · 얼굴(흉상) 512×512 · 대화창에 서는 무릎상은 같은 이름에 <code>_half</code>(1024×1536 투명) — 무릎상이 있으면 목록에도 그 모습을 보여 줍니다'
   });
   const skillTxt = sk => Object.keys(sk || {}).map(k => (G.SKILL_BY_ID[k] || {}).name + ' ' + sk[k]).join(' · ');
   const langTxt = lg => Object.keys(lg || {}).sort((a, b) => lg[b] - lg[a]).map(k => G.LANGS[k] + ' ' + G.LANG_LV[lg[k]]).join(', ');
@@ -153,7 +179,7 @@
     const spec = A.mateSpec(m.id);
     add(tPeople, {
       group: 'mate', portrait: true, name: m.name, sub: (m.witch ? (m.legend ? '전설의 마녀' : '마녀로 몰렸던 여인') : '동료') + ' · 명성 ' + num(m.fame) + ' 이상 · ' + m.y[0] + '~' + m.y[1] + '년',
-      meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: spec.img, ar: '1 / 1', extra: m.desc,
+      meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: m.desc, half: I.chain.mateHalf(m.id),
       pic: () => portrait(spec),
       detail: () => ({
         text: m.desc + (G.BIOS && G.BIOS[m.name] ? ' 〔인물 이야기〕 ' + G.BIOS[m.name] : ''),
@@ -172,7 +198,7 @@
     const spec0 = A.sponsorSpec(sp, 0);
     add(tPeople, {
       group: 'sponsor', portrait: true, name: sp.title, sub: '후원자 · ' + c.name + ' · ' + G.SPONSOR_TYPE[sp.type],
-      meta: (hs => hs.slice(0, 6).map(h => h[2]).join(' → ') + (hs.length > 6 ? ' → … (' + hs.length + '대)' : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: spec0.img, ar: '1 / 1',
+      meta: (hs => hs.slice(0, 6).map(h => h[2]).join(' → ') + (hs.length > 6 ? ' → … (' + hs.length + '대)' : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: A.portraitKeys(spec0), ar: '1 / 1', half: I.chain.halfFor(A.portraitKeys(spec0)),
       pic: () => portrait(spec0),
       detail: () => ({
         text: (bs => bs.length ? '인물 이야기 — ' + bs.join(' / ') : '')(sp.holders.filter(h => h[4] !== 'g').map(h => {
@@ -198,7 +224,7 @@
     add(tPeople, {
       group: 'maid', portrait: true, name: m.name, sub: '여급 · ' + c.name + ' 술집',
       meta: '좋아하는 사람: ' + G.LIKES[m.like].name + (reg ? ' · 그림: ' + (MAIDST[reg] || reg) : ''),
-      key: 'portraits/maids/' + m.id, kind: 'png', chain: spec.img, ar: '1 / 1',
+      key: 'portraits/maids/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', half: I.chain.maidHalf(m.id, c).concat(I.chain.halfFor(A.portraitKeys(spec))),
       pic: () => portrait(spec),
       detail: () => ({
         facts: [['일하는 곳', c.name + ' 술집'], ['좋아하는 사람', G.LIKES[m.like].name],
@@ -218,7 +244,7 @@
     add(tPeople, {
       group: 'maidstyle', portrait: true, name: label, sub: '지역별 여급 그림 ' + (pics.length || 0) + '장',
       meta: users.length ? users.map(m => m.name + '(' + CITY[m.city].name + ')').join(', ') : '아직 쓰는 여급이 없음',
-      key: first, kind: 'png', chain: [first], ar: '1 / 1',
+      key: first, kind: 'png', chain: [first], ar: '1 / 1', half: [first + '_half'],
       pic: () => I.make([first], 512, 512, () => A.canvas(512, 512)),
       detail: () => ({
         text: '한 묶음에 여러 장을 넣으면 도시마다 다른 얼굴이 나옵니다. 여급 번호로 한 장이 정해져 늘 같은 얼굴을 씁니다.',
@@ -239,7 +265,7 @@
     const mate = G.MATES.find(m => m.name === nm);
     add(tPeople, {
       group: 'rival', portrait: true, name: nm, sub: '경쟁자' + (mate ? ' · 동료로도 등장' : ''),
-      meta: ds.map(d => d.name + ' ' + d.rival[0] + '년').join(', '), key: 'portraits/rivals/' + nm, kind: 'png', chain: spec.img, ar: '1 / 1',
+      meta: ds.map(d => d.name + ' ' + d.rival[0] + '년').join(', '), key: 'portraits/rivals/' + nm, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', half: I.chain.rivalHalf(nm).concat(I.chain.halfFor(A.portraitKeys(spec))),
       pic: () => portrait(spec),
       detail: () => ({
         text: (G.BIOS && G.BIOS[nm] ? G.BIOS[nm] + ' 〔게임에서〕 ' : '') + '정해진 때가 되면 아래 발견을 먼저 발표합니다. 술집에서 만나 일기토로 이기면 발표를 1~2년 늦출 수 있습니다.',
@@ -264,7 +290,7 @@
     const spec = npcSpec(id, CITY[0]);
     add(tPeople, {
       group: 'npc', portrait: true, name: label, sub: '마을 사람 · ' + NPC_WHERE[id], meta: local ? '문화권·도시마다 다른 그림 가능' : '모든 곳에서 같은 그림',
-      key: 'portraits/npc/' + id, kind: 'png', chain: spec.img, ar: '1 / 1', extra: id,
+      key: 'portraits/npc/' + id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: id, half: I.chain.halfFor(A.portraitKeys(spec)),
       pic: () => portrait(spec),
       detail: () => ({
         text: local ? '같은 역할이라도 도시 양식마다 얼굴이 달라집니다. 도시 번호가 붙은 전용 그림, 그다음 문화권별 건물 사람 그림(portraits/npc/)을 먼저 쓰고, 둘 다 없는 고장에서 portraits/npc-roles/양식/역할.webp를 씁니다.' : '',
@@ -275,6 +301,37 @@
           { key: 'portraits/npc/' + id + '_europe', kind: 'png', note: '문화권별 — europe, islam, eastasia, south, native' },
           { key: 'portraits/npc/' + id, kind: 'png', note: '모든 도시 공통' }
         ] : [{ key: 'portraits/npc/' + id, kind: 'png', note: '모든 곳 공통' }]
+      })
+    });
+  });
+
+  // 궁정 사람 (js/systems/court.js — 왕궁·저택에서 후원자 곁에 선 사람)
+  I.list('portraits/courtiers/').filter(k => !/_half$/.test(k)).forEach(k => {
+    const id = k.split('/').pop(), sp = G.SPONSOR[id], c = sp && CITY[sp.city];
+    add(tPeople, {
+      group: 'court', portrait: true, name: (sp ? sp.title : id) + ' 궁정', sub: '궁정 사람 · ' + (c ? c.name : id), meta: '왕궁·저택에서 후원자 곁에서 말을 건네는 사람',
+      key: k, kind: 'webp', chain: [k], ar: '1 / 1', half: [k + '_half'],
+      pic: () => I.make([k], 512, 512, () => A.canvas(512, 512)),
+      detail: () => ({ facts: [['나오는 곳', (c ? c.name + ' ' : '') + (sp && sp.bld === 'palace' ? '왕궁' : '저택')]], files: [{ key: k, kind: 'webp', note: '얼굴 (흉상)' }] })
+    });
+  });
+  // 거리 사람 (js/systems/streetfolk.js — 거리를 걷다 말을 거는 사람, 고장 그림 묶음마다 얼굴·무릎상)
+  const FOLK = [['town_man', '마을 사람'], ['town_woman', '마을 여자'], ['boy', '마을 소년'], ['girl', '마을 소녀'], ['elder', '마을 할아버지'], ['grandmother', '마을 할머니'],
+    ['librarian', '도서관 사서'], ['innkeeper', '여관 주인'], ['adventurer', '모험가'], ['merchant', '장사꾼'], ['noble_youth', '젊은 귀족'], ['soldier', '병사'], ['navigator', '항해사']];
+  const FOLKST = map(I.STYLES);
+  FOLK.forEach(([sid, label]) => {
+    const keys = I.list('portraits/street-folk/' + sid + '_').filter(k => !/_half$/.test(k));
+    if (!keys.length) return;
+    const k0 = keys.find(k => /_ib$/.test(k)) || keys[0];
+    add(tPeople, {
+      group: 'street', portrait: true, name: label, sub: '거리 사람 · 고장 그림 ' + keys.length + '가지', meta: '거리에서 말을 걸면 대화창에 서는 사람 — 고장마다 옷·얼굴이 다름',
+      key: k0, kind: 'webp', chain: [k0], ar: '1 / 1', half: [k0 + '_half'],
+      pic: () => I.make([k0], 512, 512, () => A.canvas(512, 512)),
+      detail: () => ({
+        text: '도시의 그림 양식(거리 사람 묶음)에 따라 아래 그림 가운데 하나가 나옵니다. 걷는 모습은 images/street-folk/' + sid + '_양식.webp 시트입니다.',
+        strip: keys.filter(k => k !== k0).map(k => { const st = k.split('_').pop(); const h = I.has(k + '_half') ? k + '_half' : k;
+          return { label: (FOLKST[st] || st) + ' (' + st + ')', key: h, kind: 'webp', pic: () => I.make([h], h === k ? 512 : 1024, h === k ? 512 : 1536, () => A.canvas(512, 512)) }; }),
+        files: [{ key: k0, kind: 'webp', note: '얼굴 (흉상, 512×512)' }, { key: 'street-folk/' + sid + '_ib', kind: 'webp', note: '거리를 걷는 그림 시트 (이베리아)' }]
       })
     });
   });
@@ -471,14 +528,20 @@
   I.STYLES.forEach(([st, label]) => {
     const cities = CITY.filter(c => c.style === st), ex = cities[0];
     if (!ex) return;
+    // 지금 게임은 도시마다 거리 화면(backgrounds/도시번호)을 쓴다 — 양식 공통 거리 배경, 없으면 이 양식 첫 도시의 거리 배경을 보여 준다
+    const styleBg = I.list('bg-styles/' + st + '_port_').concat(I.list('bg-styles/' + st + '_inland_'), ['bg-styles/' + st + '_port', 'bg-styles/' + st + '_inland', 'bg-styles/' + st]);
+    const stChain = styleBg.concat(['backgrounds/' + ex.id, 'city-styles/' + st]);
+    const own = cities.filter(c => I.has('backgrounds/' + c.id)).length;
     add(tEtc, {
-      group: 'style', name: label, sub: 'city-styles/' + st, meta: cities.length + '곳 — ' + cities.slice(0, 4).map(c => c.name).join(', ') + (cities.length > 4 ? ' …' : ''),
-      key: 'city-styles/' + st, kind: 'jpg', chain: ['city-styles/' + st], ar: '16 / 9', extra: cities.map(c => c.name).join(' '),
-      pic: () => I.make(['city-styles/' + st], 1600, 900, () => A.cityScene(ex, { time: 'day' })),
+      group: 'style', name: label, sub: 'bg-styles/' + st + '_…', meta: cities.length + '곳 — ' + cities.slice(0, 4).map(c => c.name).join(', ') + (cities.length > 4 ? ' …' : '') + ' · 거리 배경 ' + own + '곳',
+      key: I.pick(stChain) || 'bg-styles/' + st + '_port_a', kind: 'jpg', chain: stChain, ar: '16 / 9', extra: cities.map(c => c.name).join(' '),
+      pic: () => I.make(stChain, 1600, 900, () => A.cityScene(ex, { time: 'day' })),
       detail: () => ({
-        text: '이 양식의 도시 가운데 cities/번호 파일이 없는 곳은 모두 이 그림을 씁니다.',
-        facts: [['쓰는 도시', cities.map(c => c.name + ' (' + c.id + ')').join(', ')]],
+        text: '도시마다 거리 화면 배경(backgrounds/도시번호)을 씁니다. 이 양식의 도시 가운데 ' + own + '곳은 제 배경이 있고, 없는 곳은 양식 공통 거리 배경(bg-styles/' + st + '_port_a …), 그것도 없으면 도시 풍경(cities/ · city-styles/)을 씁니다. 그림은 ' + (I.pick(styleBg) ? '양식 공통 거리 배경' : ex.name + '의 거리 배경') + '입니다.',
+        facts: [['쓰는 도시', cities.map(c => c.name + ' (' + c.id + ')' + (I.has('backgrounds/' + c.id) ? '' : ' — 배경 없음')).join(', ')]],
         files: [
+          { key: 'bg-styles/' + st + '_port_a', kind: 'jpg', note: '항구 도시 공통 거리 배경 (여러 장이면 _a, _b …)' },
+          { key: 'bg-styles/' + st + '_inland_a', kind: 'jpg', note: '내륙 도시 공통 거리 배경' },
           { key: 'city-styles/' + st, kind: 'jpg', note: '낮' },
           { key: 'city-styles/' + st + '_golden', kind: 'jpg', note: '해질녘' },
           { key: 'city-styles/' + st + '_dusk', kind: 'jpg', note: '저녁' }
@@ -488,11 +551,14 @@
   });
   Object.keys(G.DISC_CATS).forEach(cat => {
     const ds = G.DISCOVERIES.filter(d => d.cat === cat), ex = ds[0];
+    const bare = ds.filter(d => !I.pick(['discoveries/' + d.id]));   // 제 그림이 없어 분류 공통 그림을 쓰는 발견물
+    const exChain = ['discovery-cats/' + cat].concat(ex ? I.chain.discovery(ex) : []);
     add(tEtc, {
-      group: 'cat', name: G.DISC_CATS[cat] + ' 발견물', sub: 'discovery-cats/' + cat, meta: ds.length + '종에 공통으로 쓰임', key: 'discovery-cats/' + cat, kind: 'jpg',
-      chain: ['discovery-cats/' + cat], ar: '9 / 4',
-      pic: () => I.make(['discovery-cats/' + cat], 720, 320, () => A.discoveryArt(ex, 720, 320)),
-      detail: () => ({ text: '이 분류의 발견물 가운데 discoveries/ID 파일이 없는 것은 모두 이 그림을 씁니다.', facts: [['발견물', ds.map(d => d.name).join(', ')]], files: [{ key: 'discovery-cats/' + cat, kind: 'jpg', note: '분류 공통' }] })
+      group: 'cat', name: G.DISC_CATS[cat] + ' 발견물', sub: 'discovery-cats/' + cat,
+      meta: bare.length ? bare.length + '종이 이 공통 그림을 씀' : ds.length + '종 모두 제 그림이 있어 지금은 쓰이지 않음 (그림은 ' + (ex ? ex.name : '') + ')',
+      key: 'discovery-cats/' + cat, kind: 'jpg', chain: exChain, ar: '9 / 4',
+      pic: () => I.make(exChain, 720, 320, () => A.discoveryArt(ex, 720, 320)),
+      detail: () => ({ text: '이 분류의 발견물 가운데 discoveries/ID 파일이 없는 것만 이 그림을 씁니다.' + (bare.length ? '' : ' 지금은 모든 발견물에 제 그림이 있습니다.'), facts: [['발견물', ds.map(d => d.name).join(', ')], bare.length ? ['공통 그림을 쓰는 것', bare.map(d => d.name).join(', ')] : null], files: [{ key: 'discovery-cats/' + cat, kind: 'jpg', note: '분류 공통' }] })
     });
   });
   [['ib_port', '항구 도시 거리 배경'], ['ib_inland', '내륙 도시 거리 배경']].forEach(([base, label]) => {
@@ -605,7 +671,7 @@
     if (it.fit === 'contain') {
       tctx.fillStyle = '#e3d5b6'; tctx.fillRect(0, 0, w, h);
       I.drawContain(tctx, src, w * 0.04, h * 0.04, w * 0.92, h * 0.92);
-    } else I.drawCover(tctx, src, 0, 0, w, h, 0.5, it.portrait ? 0.25 : 0.5);
+    } else I.drawCover(tctx, src, 0, 0, w, h, 0.5, it.halfKey ? 0 : it.portrait ? 0.25 : 0.5);
     el.appendChild(cv);
   }
 
@@ -687,6 +753,11 @@
   }
   async function openDetail(it) {
     const d = it.detail ? it.detail() : {};
+    if (it.halfKey) {
+      d.strip = [{ label: '대화창에 서는 모습 (무릎상)', key: it.halfKey, kind: 'webp', pic: () => I.make([it.halfKey], 1024, 1536, it.bustPic) },
+        { label: '얼굴 (흉상) — 수첩·명부·작은 대화 칸', key: (it.bustChain && I.pick(it.bustChain)) || it.key, kind: 'png', pic: it.bustPic }].concat(d.strip || []);
+      d.files = (d.files || []).concat([{ key: it.halfKey, kind: 'webp', note: '대화창에 서는 무릎상 (머리부터 무릎까지, 1024×1536 투명 배경)' }]);
+    }
     const body = $('#dBody');
     const facts = (d.facts || []).filter(Boolean);
     body.innerHTML =
@@ -703,6 +774,7 @@
     if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
     dlg.scrollTop = 0;
     if (it.chain && I.pick(it.chain)) await I.preload([it.chain], 4000);
+    if (it.halfKey) await I.preload([[it.halfKey]], 4000);
     const moving = animatedImage(it), src = moving ? null : it.pic();
     $('#dHero').appendChild(moving || copyCanvas(src));
     if (d.strip) {
@@ -712,6 +784,7 @@
         fig.innerHTML = '<figcaption>' + esc(s.label) + '<span class="path">' + pathHtml(pathOf(s.key, s.kind)) + '</span></figcaption>';
         box.appendChild(fig);
         await new Promise(r => requestAnimationFrame(() => r()));
+        if (s.key && I.has(s.key)) await I.preload([[s.key]], 4000);
         const pic = s.pic();
         const cv = s.wide ? copyCanvas(pic, 480, 270) : copyCanvas(pic);
         fig.insertBefore(cv, fig.firstChild);
@@ -720,9 +793,17 @@
   }
 
   // ---------------------------------------------------------------- help: manifest check
+  // 게임이 통째로 읽는 그림 폴더 (발견 장면 판·끝 장면, 유물, 거리 사람·건물 묶음, 일기토, 안내서 그림 등)
+  const GAME_DIRS = /^(discovery-ends|discovery-sheets|discoveries_cinematic|discovery-ends-cinematic|relics|relic-kinds|exterior-styles|street-folk|street-ground|sprites|goods|good-kinds|items|item-kinds|duel|guide|ships-nav|family-events|romance-events|cabins|effects|outcomes|landwar|map-discoveries|minigames)\//;
+  const GAME_PORTRAITS = /^portraits\/(legendary|courtiers|street-folk|npc-roles|pools|family|player|player-aged)\//;
+  // 게임이 이름으로 부르는 그 밖의 그림: 건물 사람 변형(_2·_f·_m), 이야기 인물(story_·princess_), 이야기·전설 동료, 개척 단계 보물(ft_), 다른 후원자 자리 그림
+  const GAME_NAMED = /^(portraits\/npc\/(story_|princess_)[a-z_]+|portraits\/npc\/[a-z]+(_[a-z]+)?_(\d|f|m)|discoveries\/ft_[a-z_]+|portraits\/mates\/[a-z_]+|portraits\/sponsors\/[a-z_]+)$/;
   function knownKey(k) {
     let m;
     if (k === 'title') return true;
+    if (GAME_DIRS.test(k) || GAME_PORTRAITS.test(k)) return true;
+    if (/_half$/.test(k)) k = k.replace(/_half$/, '');   // 대화창 무릎상 — 흉상과 같은 이름 + _half
+    if (GAME_NAMED.test(k)) return true;
     if ((m = /^cities\/(\d+)(_(golden|dusk))?$/.exec(k))) return +m[1] < CITY.length;
     if ((m = /^backgrounds\/(\d+)$/.exec(k))) return +m[1] < CITY.length;
     if ((m = /^bg-styles\/([a-z]+)(_(port|inland))?(_[a-z0-9]+)?$/.exec(k))) return !!STYLE[m[1]];
