@@ -2,7 +2,7 @@
    · 유물 387종이 모두 전용 그림(images/relics)으로 · 교역품 77종이 모두 전용 그림(images/goods, 노예는 끊어진 족쇄)
    · 새 항해사 얼굴 6명(보쿠덴·첸·김·키스크·말린체·투팍) 흉상·무릎상
    · 얼굴 묶음(images/portraits/pools) 760장마다 무릎상 _half — 묶음 얼굴을 빌린 사람(전용 그림 없는 항해사·후원자, 고장 사람)이 대화에서 서서 말한다
-   · 다시 만든 발견물 31곳(GIF·끝 장면·시트) · 대화창에 묶음 얼굴 무릎상이 실제로 선다 · 콘솔 오류 0
+   · 역사·종교 발견물 216곳(GIF·끝 장면·시트) · 대화창에 묶음 얼굴 무릎상이 실제로 선다 · 콘솔 오류 0
    node tests/codex_assets_link_smoke.js   (스크린샷: OUT 또는 임시 폴더/codex_link) */
 'use strict';
 const path = require('path');
@@ -10,12 +10,9 @@ const fs = require('fs');
 const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
+const CINEMATIC_IDS = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'ruin_gifs', 'cinematic-prompts.json'), 'utf8')).map(d => d.id);
 const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'codex_link');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
-const REDONE = ['arsenal', 'belem', 'bigben', 'bluemosque', 'bolshoi', 'boudhanath', 'brandenburg', 'casacontrat', 'doisuthep', 'eiffel', 'escorial', 'forbidden',
-  'globe', 'grandbazaar', 'havana', 'hermitage', 'himeji', 'kremlin', 'liberty', 'louvre', 'neuschwanstein', 'orszaghaz', 'pisa', 'porcelain', 'redfort',
-  'redsquare', 'ruhr', 'sistine', 'stbasil', 'uffizi', 'versailles'];
-
 (async function () {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
@@ -26,7 +23,7 @@ const REDONE = ['arsenal', 'belem', 'bigben', 'bluemosque', 'bolshoi', 'boudhana
   try {
     await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Img && G.RELIC && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
-    const r = await page.evaluate((REDONE) => {
+    const r = await page.evaluate((cinematicIds) => {
       const I = G.Img, K = I.chain;
       const relics = Object.keys(G.RELIC).map(id => G.RELIC[id]);
       const relicMiss = relics.filter(rl => !/^relics\//.test(I.pick(K.relic(rl)) || '')).map(rl => rl.id);
@@ -39,17 +36,18 @@ const REDONE = ['arsenal', 'belem', 'bigben', 'bluemosque', 'bolshoi', 'boudhana
       // 전용 그림 없는 항해사: 대화 무릎상이 묶음 얼굴의 _half 로
       const borrowers = G.MATES.filter(m => !I.has('portraits/mates/' + m.id));
       const poolHalf = borrowers.filter(m => /^portraits\/pools\/.*_half$/.test(I.pick(K.mateHalf(m.id)) || ''));
-      const discMiss = REDONE.filter(id => !I.has('discoveries/' + id) || !I.has('discovery-ends/' + id) || !I.has('discovery-sheets/' + id));
+      const ruins = cinematicIds;
+      const discMiss = ruins.filter(id => !I.has('discoveries/' + id) || !I.has('discovery-ends/' + id) || !I.has('discovery-sheets/' + id));
       return { relicN: relics.length, relicMiss, goodN: goods.length, goodMiss, mateMiss, poolN: poolFaces.length, poolNoHalf,
-        borrowN: borrowers.length, poolHalfN: poolHalf.length, poolHalfId: poolHalf.length ? poolHalf[0].id : null, discMiss,
+        borrowN: borrowers.length, poolHalfN: poolHalf.length, poolHalfId: poolHalf.length ? poolHalf[0].id : null, ruinN: ruins.length, discMiss,
         slaves: I.pick(K.good(G.GOOD.slaves)) };
-    }, REDONE);
+    }, CINEMATIC_IDS);
     ok(r.relicN === 387 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.slice(0, 8).join(','));
     ok(r.goodN === 77 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
     ok(!r.mateMiss.length, '새 항해사 얼굴 6명 흉상·무릎상 ' + r.mateMiss.join(','));
     ok(r.poolN === 760 && !r.poolNoHalf.length, '얼굴 묶음 ' + r.poolN + '장 모두 무릎상이 있다 ' + r.poolNoHalf.slice(0, 5).join(','));
     ok(r.poolHalfN > 0, '전용 그림 없는 항해사 ' + r.borrowN + '명 가운데 ' + r.poolHalfN + '명이 묶음 얼굴 무릎상으로 선다');
-    ok(!r.discMiss.length, '다시 만든 발견물 31곳 GIF·끝 장면·시트 ' + r.discMiss.join(','));
+    ok(r.ruinN === 216 && !r.discMiss.length, '역사·종교 발견물 ' + r.ruinN + '곳 GIF·끝 장면·시트 ' + r.discMiss.join(','));
 
     // 대화창: 묶음 얼굴을 빌린 항해사가 서서 말한다
     await page.evaluate(() => {

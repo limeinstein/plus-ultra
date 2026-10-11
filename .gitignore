@@ -22,6 +22,8 @@ images/npc-walk/*/
 music/_local/
 # 신규 발견물 83개 GIF의 원화(약 130MB) — tools/discovery83/build.py 가 읽는다
 tools/discovery83/masters/
+# 역사·종교 발견물 V3 시네마틱 원화 — tools/ruin_gifs/build_cinematic.py 가 읽는다
+tools/ruin_gifs/v3/master/
 # Codex 앞모습 시트(tools/street_faces.py 입력)
 tmp/
 # 설치형 게임: tools/build_desktop.py·electron-builder가 다시 만드는 것

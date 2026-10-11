@@ -107,6 +107,10 @@
     host.appendChild(root);
 
     var so = sourceOf(opts), src = so && so.src, layered = opts.layered !== false && !!src;
+    // 몸이 그림 끝에 닿아 잘린 무릎상(팔꿈치·소매·망토): 그 쪽 끝을 부드럽게 흐려 칼로 자른 선이 보이지 않게 (tools/half_edge.py → G.HALF_EDGE)
+    var cut = profile === 'half' && so && so.key && G.HALF_EDGE ? G.HALF_EDGE[so.key] : '';
+    if (cut && cut.indexOf('l') >= 0) root.classList.add('cut-l');
+    if (cut && cut.indexOf('r') >= 0) root.classList.add('cut-r');
     var faceAt = opts.face || (so && so.key && G.PORTRAIT_FACES && G.PORTRAIT_FACES[so.key]) || null, ro = null, headIm = null;
     if (layered) {
       // 같은 그림을 머리·몸통·하체로 세 번 읽는 동안 일부만 먼저 뜨면 얼굴이나 모자가

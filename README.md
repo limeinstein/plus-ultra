@@ -39,7 +39,7 @@
 - **얼굴 묶음 760장에 무릎상(`portraits/pools/<mates|sponsors>/<나라>/<m|f>/NN_half`).**
   - 전용 그림 없는 항해사 281명 가운데 245명, 후원자·고장 사람·무덤지기처럼 묶음 얼굴을 빌린 사람이 대화에서 제독과 마주 서서 말한다.
   - 점검: `python tools/people_portrait_pools.py check images/portraits/pools` (1520/1520).
-- **발견물 31곳을 V3 시네마틱으로 다시 만들었다**(크렘린·에펠탑·자금성·히메지성 …, GIF·끝 장면·시트). 만드는 법은 `tools/ruin_gifs/CINEMATIC.md`.
+- **역사·종교 발견물 216곳을 모두 V3 시네마틱으로 다시 만들었다**(GIF·끝 장면·시트). 만드는 법은 `tools/ruin_gifs/CINEMATIC.md`.
 - 얼굴 자리 다시 재기(`js/data/portraitfaces.js`, 2074장).
 - 시험:
   - `node tests/codex_assets_link_smoke.js`
