@@ -442,6 +442,7 @@
     await UI.say(U.pick(['좋소, 당신과 함께 가지. 실망시키지 마시오.', '재미있겠군. 잘 부탁하오, 제독.', '당신의 배에 오르겠소. 세상 끝까지라도.']), who);
     UI.toast(m.name + ' 동료가 되었다. (' + roleName(role) + ')', 'people');
     if (cm.lv < 3) UI.toast('말이 다 통하지 않아 처음 충성심이 낮습니다.', 'info', 4200);
+    if (G.Achieve && G.Achieve.afterHire) { try { await G.Achieve.afterHire(m.id); } catch (e) { console.error(e); } }   // 동료 업적 (일당 수집 완료 등)
     return true;
   };
 

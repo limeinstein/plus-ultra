@@ -5,11 +5,12 @@
      chains: n    : 꼬리에 꼬리를 무는 사슬(G.CHAINS)을 n갈래 끝까지 (js/data/chaindisc.js)
      everyReg: n  : 열한 지역마다 n가지씩
      oneReg       : { cats: [분류…], n } — 한 지역에서 분류마다 n가지씩
+     crew + n     : 이 항해사들 가운데 n명(없으면 모두)을 한 번이라도 동료로 들였다 (state.crewEver — 떠나거나 죽어도 센다)
    보상: fame(탐험 명성) · gold(금화) · title(칭호 — 수첩 「업적」에 모인다). 금액은 대항해시대 3의 수집 보상처럼 크게 잡았다. */
 (function (G) {
   'use strict';
   var A = G.ACHIEVEMENTS = [];
-  G.ACHV_GROUPS = ['고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '전설과 사슬', '조합'];
+  G.ACHV_GROUPS = ['고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '전설과 사슬', '조합', '동료'];
   function a(group, id, name, desc, rule, fame, gold, title) {
     var o = { group: group, id: id, name: name, desc: desc, fame: fame, gold: gold, title: title || null };
     for (var k in rule) o[k] = rule[k];
@@ -148,4 +149,9 @@
     { ids: ['eiffel', 'liberty', 'bigben', 'panama', 'sydneyopera', 'goldengate', 'cristo', 'brandenburg', 'cntower'], n: 5 }, 400, 30000);
   a('조합', 'stars', '별을 향해', '하늘 너머를 겨누는 사람들의 일을 보았다.',
     { ids: ['hubble', 'iss', 'amundsen', 'kupe'], n: 3 }, 500, 40000, '별을 보는 제독');
+
+  // ------------------------------------------------------------------ 동료
+  // 루이스 몬테이루와 함께 만든 이야기 속 동료 열 사람 (js/data/storycrew.js 맨 앞 열 명)
+  a('동료', 'montcrew', '일당 수집 완료', '밀짚모자의 젊은 선장 루이스 몬테이루와 그와 함께 바다에 나설 아홉 사람을 모두 동료로 들였다.',
+    { crew: ['monteiro', 'deleon', 'vandermeer', 'samios', 'beaumont', 'weiss', 'laskaris', 'ferraro', 'rosenthal', 'macleod'] }, 500, 30000, '일당의 선장');
 })(window.G = window.G || {});

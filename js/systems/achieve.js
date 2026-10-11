@@ -2,6 +2,7 @@
    - 발견할 때마다(D.find 끝) 살펴 새로 이룬 업적을 알리고 보상(탐험 명성·금화·칭호)을 준다.
      한 가지만 더 찾으면 이루는 업적은 「한 가지 남았다」고 귀띔한다.
    - 하루가 지날 때(G.World.daily) 옛 저장에서 이미 이룬 업적과, 앞 고리를 이미 찾아 둔 사슬의 단서를 챙긴다.
+   - 동료 업적(crew): 동료로 들인 적이 있는 사람은 state.crewEver[id] = 날짜. 술집에서 고용하면(T.hireMate) AC.afterHire가 곧바로 살피고, 그 밖의 길은 하루가 지날 때 챙긴다.
    - 수첩 「업적」 쪽: 얻은 칭호, 갈래별 진행, 사슬 지도(찾음·단서·잠김). 저장: state.achv[id] = { d: 날짜 } */
 (function (G) {
   'use strict';
@@ -14,6 +15,13 @@
   function name(id) { var d = G.DISC[id]; return d ? d.name : id; }
   function mine() { var s = S(), out = []; for (var id in s.disc) { var st = s.disc[id]; if (st && st.me && st.found && G.DISC[id]) out.push(G.DISC[id]); } return out; }
   function regName(r) { return (G.REGIONS || [])[r] || ''; }
+  /** 동료로 들인 적이 있는 사람 { id: 날짜 } — 지금 배에 탄 동료도 적어 둔다 (옛 저장) */
+  function crewEver() {
+    var s = S(), ev = s.crewEver || (s.crewEver = {});
+    (s.mates || []).forEach(function (m) { if (m && m.id && !ev[m.id]) ev[m.id] = U.dateNum(s.date); });
+    return ev;
+  }
+  function mateName(id) { var m = G.MATE && G.MATE[id]; return m ? m.name : id; }
 
   AC.list = function () { return G.ACHIEVEMENTS || []; };
   AC.get = function (id) { return AC.list().filter(function (a) { return a.id === id; })[0] || null; };
@@ -33,6 +41,7 @@
       var c = my.filter(function (d) { return cs.indexOf(d.cat) >= 0 && (r.reg == null || d.reg === r.reg); }).length;
       rows.push({ label: cs.map(function (x) { return G.DISC_CATS[x]; }).join('·') + (r.reg != null ? ' (' + regName(r.reg) + ')' : ''), count: c, n: r.n });
     });
+    if (a.crew) { var ev = crewEver(), had = a.crew.filter(function (id) { return !!ev[id]; }); rows.push({ crew: true, ids: a.crew, got: had, count: had.length, n: a.n || a.crew.length }); }
     if (a.chains) rows.push({ label: '끝까지 푼 사슬', count: AC.chainsDone().length, n: a.chains });
     if (a.everyReg) (G.REGIONS || []).forEach(function (rn, r) {
       rows.push({ label: rn, count: my.filter(function (d) { return d.reg === r; }).length, n: a.everyReg, small: true });
@@ -67,8 +76,7 @@
   function rewardText(a) { return '금화 ' + U.num(a.gold || 0) + '닢 · 명성 +' + U.num(a.fame || 0) + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
 
   /** 발견한 뒤: 새 업적을 알리고, 한 가지 남은 업적을 귀띔한다 */
-  AC.afterFind = async function (d) {
-    var got = AC.check();
+  async function announce(got) {
     for (var i = 0; i < got.length; i++) {
       var a = got[i];
       if (G.Audio) G.Audio.sfx('bell');
@@ -77,6 +85,10 @@
           '<div class="achv-r">' + rewardText(a) + '</div></div>',
         buttons: [{ label: '좋다', value: 1, cls: 'navy' }] }).result;
     }
+  }
+  AC.afterFind = async function (d) {
+    var got = AC.check();
+    await announce(got);
     if (!d) return got;
     var my = mine();
     AC.list().forEach(function (a) {
@@ -85,6 +97,23 @@
       if (!inIt) return;
       var p = AC.progress(a, my);
       if (p.need - p.have === 1) UI.toast('업적 「' + a.name + '」까지 한 가지 남았다', 'crown', 5200);
+    });
+    return got;
+  };
+
+  /** 동료를 들인 뒤(술집 고용 T.hireMate): 동료 업적을 살펴 알리고, 한 사람 남았으면 귀띔한다 */
+  AC.afterHire = async function (id) {
+    var ev = crewEver();
+    if (id && !ev[id]) ev[id] = U.dateNum(S().date);
+    var got = AC.check();
+    await announce(got);
+    AC.list().forEach(function (a) {
+      if (!a.crew || AC.done(a.id) || a.crew.indexOf(id) < 0) return;
+      var p = AC.progress(a);
+      if (p.need - p.have === 1) {
+        var left = a.crew.filter(function (x) { return !ev[x]; }).map(mateName);
+        UI.toast('업적 「' + a.name + '」까지 한 사람 남았다' + (left.length === 1 ? ' — ' + left[0] : ''), 'crown', 5200);
+      }
     });
     return got;
   };
@@ -125,7 +154,7 @@
     var titles = AC.titles(), chains = G.CHAINS || [];
     var h = '<div class="achv-page">' +
       '<div class="achv-top"><b>업적 ' + doneN + ' / ' + list.length + '</b> · 사슬 ' + AC.chainsDone().length + ' / ' + chains.length +
-      (titles.length ? '<div class="achv-titles">' + titles.map(function (t) { return '<span class="tag good-text">' + U.esc(t) + '</span>'; }).join(' ') + '</div>' : '<div class="muted">발견의 주제를 맞춰 모으면 업적을 이루고 칭호를 얻는다.</div>') + '</div>';
+      (titles.length ? '<div class="achv-titles">' + titles.map(function (t) { return '<span class="tag good-text">' + U.esc(t) + '</span>'; }).join(' ') + '</div>' : '<div class="muted">발견의 주제를 맞춰 모으거나 이름난 동료들을 모으면 업적을 이루고 칭호를 얻는다.</div>') + '</div>';
     // 사슬 지도
     h += '<h4 class="achv-h">꼬리에 꼬리를 무는 사슬</h4><div class="muted" style="font-size:14px;margin:-4px 0 6px">앞 고리를 찾으면 다음 고리의 단서가 풀린다. 열리기 전에는 그 자리에 가도 찾을 수 없다.</div>';
     chains.forEach(function (ch) {
@@ -146,6 +175,7 @@
           '<div class="tx">' + U.esc(a.desc) + ' <span class="muted">— ' + rewardText(a) + '</span></div>' +
           '<div class="achv-bar"><i style="width:' + pct + '%"></i></div>' +
           '<div class="achv-items">' + p.rows.map(function (r) {
+            if (r.crew) return r.ids.map(function (id) { return '<span class="ach-i' + (r.got.indexOf(id) >= 0 ? ' ok' : '') + '">' + U.esc(mateName(id)) + '</span>'; }).join(' ');
             if (r.ids) return (r.n < r.ids.length ? '<span class="muted">' + r.n + '가지:</span> ' : '') + r.ids.map(itemHtml).join(' ');
             return '<span class="ach-i' + (r.count >= r.n ? ' ok' : '') + '">' + U.esc(r.label) + ' ' + Math.min(r.count, r.n) + '/' + r.n + '</span>';
           }).join(' <span class="muted">+</span> ') + '</div></div>';
