@@ -185,7 +185,7 @@
   function C() { return G.Scenes.city; }
   /** 대화창의 얼굴 (짐승은 얼굴 없이 이름만) */
   SF.speaker = function (f, c) {
-    var T = D().types[f.type], cl = R.cityLang(c), sp = { name: f.name, lang: f.animal ? 3 : cl.lv, li: cl.li };
+    var T = D().types[f.type], cl = R.cityLang(c), sp = { name: f.name, lang: f.animal ? 3 : cl.lv, li: f.animal ? null : cl.li };   // 짐승의 몸짓은 통역할 말이 아니다 (QA 2026-10-11)
     if (f.animal) { sp.noFace = true; sp.solo = true; return sp; }   // 고양이·강아지: 얼굴을 지어 붙이지 않는다 (UI.withFace도 건너뛴다)
     var fc = T.face || {}, stl = G.Img.folkStyle(c), sprite = SF.spriteOf(f.type, c);
     var own = 'portraits/street-folk/' + sprite + '_' + stl;
@@ -293,7 +293,7 @@
   SF.talk = async function (f, c) {
     var sp = f.face || SF.speaker(f, c), lines = D().lines[f.type] || ['……'];
     if (!R.facilities(c).church || (c.flags && c.flags.indexOf('T') >= 0)) { var nl = lines.filter(function (l) { return l.indexOf('{church}') < 0; }); if (nl.length) lines = nl; }   // 교회가 없거나 작은 사당뿐인 마을
-    var cl = R.cityLang(c); if (!f.animal) { sp.lang = cl.lv; sp.li = cl.li; }   // 말은 지금 일행의 실력으로
+    var cl = R.cityLang(c); if (!f.animal) { sp.lang = cl.lv; sp.li = cl.li; } else { sp.lang = 3; sp.li = null; }   // 말은 지금 일행의 실력으로
     f.talked++;
     var deaf = !f.animal && sp.lang === 0;            // 말이 통하지 않으면 쓸모 있는 이야기는 아껴 둔다 (통역을 데려와 다시 말을 걸면 된다)
     var info = !f.used && !deaf && INFO[f.type] ? INFO[f.type](c) : null;

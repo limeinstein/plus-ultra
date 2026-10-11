@@ -59,9 +59,20 @@
     else t = ['바다는 늘 한 걸음 앞을 보는 사람 편이지.', '바다는 늘 한 걸음 앞을 보는 사람 편이에요.'];
     return t[f ? 1 : 0];
   }
+  /** 마주 앉았을 때 부하가 먼저 건네는 말 — 충성·호감 수치는 고르는 목록에 이미 있으니 말로만 (QA 2026-10-11) */
+  function greet(d, m, f) {
+    var lo = m.loyal || 70, a = m.aff || 0, L;
+    if (f && a >= 70) L = ['오셨어요, 제독? 마침 이야기 상대가 필요했어요.', '제독이 먼저 불러 주시니 기분이 좋네요.', '무슨 일이세요? 얼굴 보니 좋은 일인가 봐요.'];
+    else if (lo < 45) L = f ? ['…무슨 일이세요?', '부르셨어요? 할 말이 있으면 빨리 해 주세요.'] : ['…무슨 일이오?', '부르셨소? 용건부터 들읍시다.'];
+    else if (lo >= 85) L = f ? ['부르셨어요, 제독? 언제든 말씀하세요.', '제독, 한숨 돌리시는 거예요? 저도 같이 쉴게요.'] : ['부르셨습니까, 제독? 언제든 말씀하십시오.', '제독, 잠깐 쉬어 가시는 겁니까? 저도 한숨 돌리지요.'];
+    else L = f ? ['부르셨어요, 제독?', '무슨 일이세요, 제독?', '네, 제독. 듣고 있어요.'] : ['부르셨소, 제독?', '무슨 일이오, 제독?', '예, 제독. 말씀하시오.'];
+    return U.pickFresh ? U.pickFresh('mt:greet:' + d.id, L) : U.pick(L);
+  }
   function speaker(d, emotion, asking) {
     var who = T().mateSpeaker(d), o = {}, k; for (k in who) o[k] = who[k];
     o.layout = 'duo'; o.side = 'right'; o.partner = T().playerSpeaker(); o.emotion = emotion || 'warm';
+    // 데리고 다니는 부하는 이미 제독과 말이 통한다 — 낯선 말 흉내·통역 없이 그대로 (QA 2026-10-11)
+    o.lang = 3; o.li = null;
     if (asking) o.choiceSide = 'left';
     return o;
   }
@@ -72,6 +83,7 @@
     var f = d.g === 'f', today = U.dateNum(s.date);
     function say(t, e) { return UI.say(t, speaker(d, e, false)); }
     function ask(t, ch) { return UI.ask(t, ch, speaker(d, 'warm', true)); }
+    var turn = 0;
     function gainAff(n) { if (f) m.aff = Math.min(100, (m.aff || 0) + n); }
     for (;;) {
       var bio = G.Bio && G.Bio.find(d.name);
@@ -80,7 +92,7 @@
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
       if (f) opts.push({ label: '선물한다', value: 'gift' }, w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
-      var v = await ask(d.name + ' — 충성 ' + Math.round(m.loyal || 70) + (f ? ' · 호감 ' + heart(m.aff) : ''), opts);
+      var v = await ask(turn++ ? U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?']) : greet(d, m, f), opts);
       if (!v) return;
       if (v === 'chat') {
         await say(U.pick(lines(d, m)), f && (m.aff || 0) >= 50 ? 'happy' : 'warm');
