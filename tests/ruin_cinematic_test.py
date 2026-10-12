@@ -28,11 +28,30 @@ def check_prompts() -> None:
         prompt = row["prompt"]
         assert "나무 제도 테이블" in prompt
         assert "실제 역사 공간으로 전환" in prompt
-        assert "내부" in prompt
+        assert "내부" in prompt or "야외 현장 답사" in prompt
         assert "360도" in prompt
         assert "깊은 밤" in prompt
         assert "다시 밝은 낮" in prompt
-        assert "허구의 방을 만들지 않는다" in prompt
+        assert "허구의 방" in prompt
+
+    by_id = {row["id"]: row["prompt"] for row in rows}
+    open_air = {
+        "colossus": "거상 발치",
+        "haamonga": "거석문 사이",
+        "nanmadol": "하늘이 열린다",
+        "tula": "전사상 사이",
+        "zimbabwe": "하늘이 보인다",
+    }
+    for did, route in open_air.items():
+        prompt = by_id[did]
+        assert route in prompt, did
+        assert "야외 현장 답사" in prompt, did
+        assert "실내나 출입문을 만들지 않는다" in prompt or "지붕 덮인 실내나 허구의 문을 만들지 않는다" in prompt
+        assert "내부의 대표 공간을 넓게" not in prompt, did
+
+    assert "실제 구조인 석조 관중 통로" in by_id["colosseum"]
+    assert "역사적으로 실제 존재하는 나선 계단" in by_id["qutb"]
+    assert "피라미드 몸체 속에 허구의 큰 방은 만들지 않는다" in by_id["templomayor"]
 
 
 def check_compositor() -> None:

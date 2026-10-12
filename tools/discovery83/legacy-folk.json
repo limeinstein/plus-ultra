@@ -1,0 +1,114 @@
+[
+  {
+    "id": "khoikhoi",
+    "name": "코이코이 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/khoikhoi.png",
+    "brief": "코이코이 갈대 피리 합주, 고라 활 악기, 원무, 소젖과 들뿌리, 소와 양이 있는 케이프 초원"
+  },
+  {
+    "id": "padaung",
+    "name": "카얀 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/padaung.png",
+    "brief": "카얀의 대나무 줄악기와 징·북, 봄의 기둥 원무, 대나무통 밥과 공동 잔치"
+  },
+  {
+    "id": "cannibal",
+    "name": "토바 바탁 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/cannibal.png",
+    "brief": "식인 소문 대신 토바 바탁의 타가딩·하사피 곤당 합주, 울로스를 두른 토르토르, 아르식 생선 요리"
+  },
+  {
+    "id": "orangutan",
+    "name": "숲사람과 긴집 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/orangutan.png",
+    "brief": "보르네오 다야크 긴집의 삽에와 징, 코뿔새 춤, 대나무통 밥, 숲 가장자리의 야생 오랑우탄"
+  },
+  {
+    "id": "aborigine",
+    "name": "아넘랜드의 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/aborigine.png",
+    "brief": "아넘랜드의 이다키와 장단 막대, 공개 코로보리 춤, 덩이뿌리와 물고기, 불로 가꾼 들판"
+  },
+  {
+    "id": "blemmyes",
+    "name": "와라오 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/blemmyes.png",
+    "brief": "머리 없는 괴물 대신 오리노코 와라오의 조롱박 딸랑이·뼈 피리, 느린 원무, 모리체 빵과 수상 마을"
+  },
+  {
+    "id": "inuit",
+    "name": "이누이트 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/inuit.png",
+    "brief": "이누이트의 테북 춤과 두 여인의 목노래 놀이, 겨울 놀이, 얼린 생선과 공동 식사"
+  },
+  {
+    "id": "skraeling",
+    "name": "빈랜드의 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/skraeling.png",
+    "brief": "스크렐링이라는 외부 이름 대신 빈랜드 해안 공동체의 노래·원무, 붉은 흙, 자작나무 껍질배, 훈제 연어"
+  },
+  {
+    "id": "patagon",
+    "name": "테우엘체 사람들",
+    "category": "people",
+    "source": "tools/discovery83/masters/patagon.png",
+    "brief": "거인 전설 대신 보통 체격의 테우엘체, 과나코 망토와 레아 걸음 춤, 입활·딸랑이, 볼라스 솜씨"
+  },
+  {
+    "id": "antpeople",
+    "name": "남극의 사람들?",
+    "category": "people",
+    "source": "tools/discovery83/masters/antpeople.png",
+    "brief": "눈보라 속 사람 행렬처럼 보이던 형상이 황제펭귄의 걷기·인사·알 교대·허들·새끼 돌봄으로 드러남"
+  },
+  {
+    "id": "nestorian",
+    "name": "동방의 경교 공동체",
+    "category": "people",
+    "source": "tools/discovery83/masters/nestorian.png",
+    "brief": "장안 경교 공동체의 나무 기도판, 시리아어 시편, 비석 곁 행렬 성가, 묵은 반죽을 이은 빵"
+  },
+  {
+    "id": "vampire",
+    "name": "트란실바니아의 밤 풍속",
+    "category": "people",
+    "source": "tools/discovery83/masters/vampire.png",
+    "brief": "흡혈귀 괴물 대신 바이올린·코브자·나이, 호라와 칼루샤리 막대춤, 마말리가와 문간의 마늘"
+  },
+  {
+    "id": "aztec",
+    "name": "태양의 왕국",
+    "category": "people",
+    "source": "tools/discovery83/masters/aztec.png",
+    "brief": "테노치티틀란의 테포나스틀리·우에우에틀·소라 합주, 씨앗 방울을 찬 해의 원무, 타말리와 카카오"
+  },
+  {
+    "id": "inca",
+    "name": "황금 제국",
+    "category": "people",
+    "source": "tools/discovery83/masters/inca.png",
+    "brief": "쿠스코의 케나·안타라·큰북, 인티 라이미 타키 행렬과 원무, 추뇨와 치차, 절제된 태양 금판"
+  },
+  {
+    "id": "aurora",
+    "name": "천상의 커튼",
+    "category": "people",
+    "source": "tools/discovery83/masters/aurora.png",
+    "brief": "사미 겨울 야영지에서 조용한 노래가 이어지는 동안 실제로 굽이치고 접히는 오로라, 순록과 라부"
+  },
+  {
+    "id": "punt",
+    "name": "푼트 — 신의 땅",
+    "category": "people",
+    "source": "tools/discovery83/masters/punt.png",
+    "brief": "푼트 해안의 유향 채취·분류·교역, 손북·손뼉·발구름 춤, 낙타 젖과 대추야자 공동 식사"
+  }
+]

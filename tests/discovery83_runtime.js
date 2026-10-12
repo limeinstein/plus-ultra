@@ -19,7 +19,8 @@ const executablePath=[process.env.CHROME_PATH,'C:/Program Files/Google/Chrome/Ap
   const status=await page.evaluate(async(ids)=>{
    const missing=ids.filter(id=>!G.DISC[id]||!G.Scenes.hasReveal(G.DISC[id])||!G.Reel.key(G.DISC[id])||!['discoveries/','discovery-ends/','discovery-sheets/'].every(prefix=>G.Img.has(prefix+id)));
    document.body.innerHTML='<main style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;background:#232b2d;color:#eee"></main>';
-   const selected=['guilin','tiantan','folk_zulu','folk_ainu','folk_tuva','folk_hawaii'];
+   // 신규 83개뿐 아니라 정지/낮밤 그림에서 문화 동작으로 바꾼 대표 옛 발견물도 실제 재생한다.
+   const selected=['guilin','tiantan','folk_zulu','folk_ainu','folk_tuva','folk_hawaii','punt','aurora','aztec','inca'];
    const samples=[];
    for(const id of selected){
     const d=G.DISC[id],L=await G.Reel.load(G.Reel.key(d));

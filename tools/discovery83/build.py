@@ -24,6 +24,12 @@ ruin = module('ruin83', 'tools/ruin_gifs/build_v2.py')
 ruin.KEEP_BOTTOM = 1.0
 sheets = module('sheets83', 'tools/ruin_gifs/sheets.py')
 ROWS = json.loads((HERE / 'prompts.json').read_text(encoding='utf-8'))
+# 본래 발견물 목록에 있던 민족 16종도 새 민족 발견물과 같은 문화 활동
+# 스토리보드로 굽는다. 예전 자연 파노라마 빌더가 만든 정지/낮밤 반복 GIF를
+# 다시 만들지 않도록 별도 명세에 두되, 제작 경로는 하나로 합친다.
+LEGACY = HERE / 'legacy-folk.json'
+if LEGACY.exists():
+    ROWS += json.loads(LEGACY.read_text(encoding='utf-8'))
 
 def source_cells(source):
     # 수채화 원화의 투명 가장자리를 종이 위에 얹는다. 알파를 버리면 색 잡음이 드러난다.
@@ -85,10 +91,13 @@ def preview():
             x,y=(i%4)*288,(i//4)*158
             contact.paste(frame,(x,y))
             draw.text((x+5,y+132),row['name'][:21],font=font,fill='#302818')
-            cards.append(f'<article><h2>{html.escape(row["name"])}</h2><img loading="lazy" width="576" height="256" src="../../images/discoveries/{row["id"]}.gif"><p>{html.escape(row["description"])}</p><a href="../../images/discoveries/{row["id"]}.gif">GIF 열기 · {row["id"]}</a></article>')
+            desc = row.get('description') or row.get('brief', '')
+            cards.append(f'<article><h2>{html.escape(row["name"])}</h2><img loading="lazy" width="576" height="256" src="../../images/discoveries/{row["id"]}.gif"><p>{html.escape(desc)}</p><a href="../../images/discoveries/{row["id"]}.gif">GIF 열기 · {row["id"]}</a></article>')
         if chosen:
             contact.save(art/f'discovery83-{cat}-preview.jpg',quality=92)
-    (art/'discovery83-gallery.html').write_text('<!doctype html><html lang="ko"><meta charset="utf-8"><title>새 발견물 83개 GIF</title><style>body{margin:32px;background:#171e21;color:#f1eadb;font-family:system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:24px}article{background:#293236;padding:20px;border-radius:12px}h1{font-size:28px}h2{font-size:20px}img{width:100%;height:auto}p{line-height:1.7}a{color:#ecd298}</style><h1>새 발견물 83개 · 자연 30 / 유적 17 / 민족 36</h1><main>'+''.join(cards)+'</main></html>',encoding='utf-8')
+    counts = {cat: sum(1 for row in ROWS if row['category'] == cat) for cat in ('nature', 'ruin', 'people')}
+    title = f'문화·명승 발견물 {len(ROWS)}개 · 자연 {counts["nature"]} / 유적 {counts["ruin"]} / 민족 {counts["people"]}'
+    (art/'discovery83-gallery.html').write_text('<!doctype html><html lang="ko"><meta charset="utf-8"><title>'+title+' GIF</title><style>body{margin:32px;background:#171e21;color:#f1eadb;font-family:system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:24px}article{background:#293236;padding:20px;border-radius:12px}h1{font-size:28px}h2{font-size:20px}img{width:100%;height:auto}p{line-height:1.7}a{color:#ecd298}</style><h1>'+title+'</h1><main>'+''.join(cards)+'</main></html>',encoding='utf-8')
 
 if __name__ == '__main__':
     ap=argparse.ArgumentParser()

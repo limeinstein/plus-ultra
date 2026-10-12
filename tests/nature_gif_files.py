@@ -14,7 +14,8 @@ ids += re.findall(r"^\s*n\('([^']+)', '[^']+'", src, re.M)
 src = (ROOT / "js" / "data" / "moredisc.js").read_text(encoding="utf-8")
 ids += re.findall(r"^\s*nat\('([^']+)', '[^']+'", src, re.M)
 src = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
-chain_ids = re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'(?:nature|people)'", src, re.M)
+# 푼트는 같은 사슬 자료에 있지만 이제 민족 문화 스토리보드로 제작한다.
+chain_ids = [did for did in re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'(?:nature|people)'", src, re.M) if did != "punt"]
 ids += chain_ids
 assert ids == [
     "pamukkale", "huangshan", "uluru", "canyon", "monument", "niagara", "iguazu",
@@ -25,7 +26,7 @@ assert ids == [
     "joatinga", "roraima", "vinicunca", "cerrorico", "torrespaine",
     "trangan", "halong", "pinklake", "sahara", "gobi", "deadsea", "blacksea",
     "serengeti", "amazon", "uyuni", "angelfalls", "hawaii", "waikiki", "mojave",
-    "moraine", "azoresridge", "guatavita", "penglai", "punt", "tor", "avalon",
+    "moraine", "azoresridge", "guatavita", "penglai", "tor", "avalon",
     "ultimathule", "hyperborea", "ramsetu", "aztlan",
 ], ids
 

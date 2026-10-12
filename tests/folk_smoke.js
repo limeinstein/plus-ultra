@@ -7,7 +7,8 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let pw; try { pw = require('playwright'); } catch (e) { pw = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = pw;
 const ROOT = path.resolve(__dirname, '..');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed to load|net::/;
@@ -39,6 +40,7 @@ const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed 
       const want = []; for (let i = 230; i <= 245; i++) want.push(i); for (let i = 298; i <= 308; i++) want.push(i);
       r.tribeCities = want.filter(c => !(G.FOLK_CITY[c] || []).length);
       r.rewritten = ['khoikhoi', 'aztec', 'inca', 'vampire', 'punt'].filter(id => G.DISC[id].desc0 && G.DISC[id].folk).length;
+      r.renamed = ['khoikhoi', 'padaung', 'cannibal', 'aborigine', 'blemmyes', 'inuit', 'skraeling', 'patagon', 'nestorian', 'vampire'].filter(id => G.DISC[id].name0 && G.DISC[id].name !== G.DISC[id].name0).length;
       return r;
     });
     console.log('   ' + JSON.stringify(d));
@@ -47,6 +49,7 @@ const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed 
     ok(!d.front.length && !d.relic.length, '모두 개척 단계와 유물이 있다 ' + d.front.concat(d.relic).join(','));
     ok(d.people === 52 && !d.noFolk.length, '민족 발견물 52곳 모두 풍속(노래·춤…)을 갖는다 ' + d.noFolk.join(','));
     ok(d.rewritten === 5, '이미 있던 민족 발견물은 풍속 위주 글로 바뀌고 옛 글은 desc0에 남는다');
+    ok(d.renamed === 10, '외부인이 붙인 옛 이름 10곳은 실제 공동체를 드러내는 이름으로 바뀌고 옛 이름은 name0에 남는다');
     ok(!d.tribeCities.length, '부족 이름 도시 27곳 둘레마다 민족 발견물 ' + d.tribeCities.join(','));
 
     // ② 부족 마을에 처음 들르면 마을 사람이, 술집에서는 주인이 (1490년 — 아직 개척 단계가 닿지 않았어도)

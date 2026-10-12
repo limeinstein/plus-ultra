@@ -348,12 +348,12 @@
     const moving = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade' || d.cat === 'people') && !!(G.Reel && G.Reel.has(d)));
     add(tDisc, {
       group: d.cat, name: d.name, sub: G.DISC_CATS[d.cat] + ' · ' + where, meta: HOW[d.how] + ' · 가치 ' + num(d.val) + (d.rival ? ' · 경쟁자 ' + d.rival[2] : ''),
-      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc, animated: moving, disc: d,
+      key: 'discoveries/' + d.id, kind: 'jpg', chain: I.chain.discovery(d), ar: '9 / 4', extra: d.desc + ' ' + (d.name0 || ''), animated: moving, disc: d,
       pic: () => I.make(I.chain.discovery(d), 720, 320, () => A.discoveryArt(d, 720, 320)),
       detail: () => ({
         text: d.desc, hint: '단서 — ' + d.hint, real: d.real,
         facts: [
-          ['분류', G.DISC_CATS[d.cat]], ['지역', where], ['찾는 방법', HOW[d.how]], ['위치', place],
+          ['분류', G.DISC_CATS[d.cat]], d.name0 ? ['옛 기록의 이름', d.name0] : null, ['지역', where], ['찾는 방법', HOW[d.how]], ['위치', place],
           ...(d.folk ? (G.FOLK_LABEL || []).filter(k => d.folk[k[0]]).map(k => ['풍속 · ' + k[1], d.folk[k[0]]]) : []),
           d.folkCities ? ['이야기를 듣는 곳', d.folkCities.map(i => CITY[i].name).join(', ') + ' — 들어서면 마을 사람이, 술집에서는 주인이 (개척 단계와 상관없이)'] : null,
           ['가치', num(d.val)], ['명성 (직접 보고하면)', '+' + num(fameFor(d))], ['단서에 쓰인 말', G.LANGS[d.lang]],

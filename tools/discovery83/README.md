@@ -1,7 +1,9 @@
-# 2026-10-08 신규 발견물 83개 GIF
+# 문화·명승 발견물 GIF
 
 대상: `eastdisc.js` 자연 경관 30개·유적 17개, `folkdisc.js` 신규 민족 36개.
-기존 민족 발견물은 이번 83개 묶음에 포함하지 않는다.
+기존 민족 발견물 16개는 `legacy-folk.json`과 `LEGACY_FOLK_PROMPTS.md`에 따로 명세하되,
+같은 `build.py`로 문화 활동 스토리보드를 굽는다. 이 16개는 예전의 정지 화면이나
+낮→밤 파노라마를 대체하며, 기본 83개 배포 묶음에는 포함하지 않는다.
 
 `export.js`가 게임의 원문과 풍속(음악·춤·악기·음식·무예)을 읽어 `prompts.json`에
 발견물별 원화 제작 지시와 저장 경로를 남긴다. 원화는 내장 ImageGen으로 항목별 생성한다.
@@ -17,7 +19,7 @@ python tests/discovery83_files.py
 node tests/discovery83_runtime.js
 ```
 
-`--only folk_zulu,tiantan`은 지정 항목을 다시 만들고, `--ready`는 도착한 원화 중
+`--only folk_zulu,tiantan,punt`는 신규·기존 구분 없이 지정 항목을 다시 만들고, `--ready`는 도착한 원화 중
 아직 변환하지 않은 것만 만든다. `--preview`는 모음판과 HTML 갤러리만 갱신한다.
 
 - GIF: `images/discoveries/<id>.gif`, 576×256, 9.82초, 반복.
@@ -27,6 +29,8 @@ node tests/discovery83_runtime.js
 - 종류별 미리보기: `docs/art/discovery83-{nature,ruin,people}-preview.jpg`.
 
 사람은 서로 다른 16개 동작 장면으로 만들며 전신과 악기가 잘리지 않게 칸 전체를 맞춘다.
+기존 민족 16개도 같은 규격을 쓰며 `python tests/legacy_folk_gif_files.py`로 정지 반복이
+아닌지 검사한다. 푼트는 자연 파노라마 목록에서 이 문화 장면 목록으로 옮겼다.
 자연은 기존 파노라마 합성기를 사용하되, 원화 속 해와 겹치지 않도록 추가 천체 효과를 끈다.
 유적은 기존 복원 GIF 합성기를 그대로 사용한다. 재생 속도와 마지막 장면 처리는 기존 게임 규칙을 따른다.
 
