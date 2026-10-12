@@ -348,7 +348,8 @@
       layer.appendChild(actor);
       var an = null;
       if (duo && who && who.name) { an = U.el('div', 'actor-name wood ' + (side === speakerSide ? 'speaking' : 'quiet'), U.esc(who.name)); stage.appendChild(an); if (G.Bio) G.Bio.tag(an, who); }   // 지금 말하는 사람의 이름표만 밝게 (UI QA 2026-10-11 #4)
-      var A0 = { el: actor, name: an, side: side, tall: tall, scale: who && who.standScale > 0 ? Math.min(1, who.standScale) : 1, aspect: 0 };   // standScale: 아이처럼 키가 작은 사람 (어른 = 1)
+      var A0 = { el: actor, name: an, side: side, tall: tall, scale: who && who.standScale > 0 ? Math.min(1, who.standScale) : 1, aspect: 0,
+        fbox: tall && G.PORTRAIT_FACES && G.PORTRAIT_FACES[half.key] ? G.PORTRAIT_FACES[half.key].box : null };   // 얼굴 자리 (그림 안 비율) — 발표 그림이 얼굴을 가리지 않게 (UI.stageInfo)   // standScale: 아이처럼 키가 작은 사람 (어른 = 1)
       actors.push(A0);
       // 그림의 실제 가로세로 비를 따른다 — 제독 무릎상(512×512 정사각)도 1024×1536 그림과 같은 키로 서게
       if (tall && G.Img.load) {
@@ -429,6 +430,24 @@
         cores.push(a.tall ? { left: x + aw * 0.2, right: x + aw * 0.8, top: top + ah * 0.03, bottom: b.top } : { left: x, right: x + aw, top: top, bottom: b.top });
       });
       if (low) hidePanelsUnder(cores);
+      publishStage();
+    }
+    /* 지금 선 사람들의 얼굴 자리와 이름표 윗변 (#ui 좌표) — 보고·발표 자리의 발견물 그림(G.Scenes.discoveryShow)이 이것을 보고 자리를 잡는다 */
+    function publishStage() {
+      try {
+        var faces = [], nameTop = stageRect(box).top;
+        actors.forEach(function (a) {
+          if (!a.el.isConnected) return;
+          var r = stageRect(a.el), fb = a.fbox;
+          if (fb) faces.push({ left: r.left + fb[0] * r.width, top: r.top + fb[1] * r.height, right: r.left + (fb[0] + fb[2]) * r.width, bottom: r.top + (fb[1] + fb[3]) * r.height });
+          else if (a.tall) faces.push({ left: r.left + r.width * 0.3, top: r.top, right: r.left + r.width * 0.7, bottom: r.top + r.height * 0.24 });   // 얼굴 자리 자료가 없으면 머리 쪽 어림
+          else faces.push({ left: r.left + r.width * 0.2, top: r.top, right: r.left + r.width * 0.8, bottom: r.top + r.height * 0.7 });
+          if (a.name && a.name.isConnected) nameTop = Math.min(nameTop, stageRect(a.name).top);
+        });
+        var nm = box.querySelector('.name'); if (nm && nm.offsetParent) nameTop = Math.min(nameTop, stageRect(nm).top);
+        UI.stageInfo = { faces: faces, nameTop: nameTop, actorsOnTop: !low, t: Date.now() };
+        document.dispatchEvent(new CustomEvent('pu-dlg-layout', { detail: UI.stageInfo }));
+      } catch (e) { /* 자리를 못 재면 그대로 */ }
     }
     if (window.ResizeObserver) { ro = new ResizeObserver(layout); ro.observe(box); }
     requestAnimationFrame(layout);
@@ -439,6 +458,7 @@
         if (ro) ro.disconnect();
         rigs.forEach(function (r) { if (r) r.destroy(); });
         if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
+        UI.stageInfo = null;
         setTalking(-1);
       }
     };

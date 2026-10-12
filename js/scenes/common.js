@@ -250,7 +250,7 @@
         L = await G.Img.wait(G.Reel.load(keys.sheet), FX.loadWaitMs || 2500);   // 느린 연결에서도 연출을 건너뛰지 않고 판을 기다린다
       }
       setTimeout(function () { el.classList.add('on'); }, 30);
-      if (L) reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: playMs });
+      if (L) reel = G.Reel.play(top.querySelector('.rv-reel'), L, { ms: playMs });
     } else {
       // 이미 한 번 불러 둔 GIF도 처음 장면부터 돌도록 새로 불러온다 (파일 주소일 때만 — 한 파일짜리 판의 data: 주소는 그대로)
       var src = G.Img.src(keys.gif); if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
@@ -322,31 +322,63 @@
     var el = U.el('div', 'reveal report talk' + (treasure ? ' treasure' : ''));
     el.style.setProperty('--rv-dim', FX.reportDim != null ? FX.reportDim : 0.5);
     el.style.setProperty('--rv-dim-ms', '500ms');
-    el.innerHTML = '<div class="rv-dim"></div>' +
-      '<div class="rv-frame" style="width:' + W + 'px;height:' + H + 'px">' + (keys.sheet ? '<canvas class="rv-reel" width="1152" height="512"></canvas>' : '<img class="rv-gif" alt="">') + '<img class="rv-end" alt=""></div>' +
+    /* 어둡게 까는 막(el)은 대화하는 사람들 뒤에, 그림·제목(top)은 사람들 위에 — 얼굴은 가리지 않고 아래 끝이 이름표 10px 위 (place) */
+    var top = U.el('div', 'reveal report talk rv-top unplaced' + (treasure ? ' treasure' : ''));
+    el.innerHTML = '<div class="rv-dim"></div>';
+    top.innerHTML = '<div class="rv-frame" style="width:' + W + 'px;height:' + H + 'px">' + (keys.sheet ? '<canvas class="rv-reel" width="1152" height="512"></canvas>' : '<img class="rv-gif" alt="">') + '<img class="rv-end" alt=""></div>' +
       '<div class="rv-title"><b>' + U.esc(d.name) + '</b> ' + U.esc(opts.title || '보고') + '</div>';
-    var uiRoot = document.getElementById('ui'); if (uiRoot) uiRoot.appendChild(el); else UI.add(el);
-    var end = el.querySelector('.rv-end'), reel = null, dead = false, timer = 0;
+    var uiRoot = document.getElementById('ui'); if (uiRoot) { uiRoot.appendChild(el); uiRoot.appendChild(top); } else { UI.add(el); UI.add(top); }
+    var end = top.querySelector('.rv-end'), reel = null, dead = false, timer = 0;
     if (keys.end) end.src = G.Img.src(keys.end);
-    function ended() { if (!dead && keys.end) el.classList.add('ended'); }
+    function ended() { if (!dead && keys.end) top.classList.add('ended'); }
+    function place() {
+      var info = UI.stageInfo; if (dead || !info) return;
+      var root = top.parentNode, Wui = (root && root.offsetWidth) || 1600, faces = info.faces || [];
+      var AR = 576 / 256, M = FX.reportFaceGap != null ? FX.reportFaceGap : 8, gap = FX.reportNameGap != null ? FX.reportNameGap : 10;
+      var bottom = info.nameTop - gap, topMin = FX.reportTopMin || 64, maxW = Math.min(FX.reportMaxW || 900, Wui - 40), minW = FX.reportMinW || 280;
+      var cx = Wui / 2;
+      if (faces.length >= 2) { var fs = faces.slice().sort(function (a, b) { return a.left - b.left; }); cx = (fs[0].right + fs[fs.length - 1].left) / 2; }
+      function fits(x, y, w, h) { return y >= topMin && faces.every(function (f) { return x + w <= f.left - M || x >= f.right + M || y + h <= f.top - M || y >= f.bottom + M; }); }
+      var best = null;
+      [cx, Wui / 2].some(function (c) {
+        for (var w = maxW; w >= minW; w -= 10) {
+          var h = w / AR, x = U.clamp(c - w / 2, 10, Wui - w - 10), y = bottom - h;
+          if (fits(x, y, w, h)) { best = { x: x, y: y, w: w, h: h }; return true; }
+        }
+        return false;
+      });
+      if (!best) { var w0 = minW, h0 = w0 / AR; best = { x: U.clamp(cx - w0 / 2, 10, Wui - w0 - 10), y: Math.max(topMin, bottom - h0), w: w0, h: h0 }; }   // 자리가 아주 좁으면 가장 작게
+      var fr = top.querySelector('.rv-frame'), ti = top.querySelector('.rv-title'), fst = fr.style;
+      fst.left = Math.round(best.x) + 'px'; fst.top = Math.round(best.y) + 'px'; fst.width = Math.round(best.w) + 'px'; fst.height = Math.round(best.h) + 'px'; fst.transform = 'none';
+      var tst = ti.style; tst.left = Math.round(best.x + best.w / 2) + 'px'; tst.right = 'auto'; tst.transform = 'translateX(-50%)'; tst.margin = '0';
+      tst.top = Math.round(best.y + best.h - (ti.offsetHeight || 46) - 10) + 'px';   // 제목 띠는 그림 아래쪽 안에
+      top.style.zIndex = info.actorsOnTop ? 61 : 14;   // 사람들이 대화창 층에 서 있으면 그 위로
+      top.classList.remove('unplaced');
+      top._placed = best;
+    }
+    document.addEventListener('pu-dlg-layout', place);
+    var showTimer = setTimeout(function () { top.classList.remove('unplaced'); }, 1500);   // 대화가 늦게 열려도 그림은 보인다
+    place();
     if (keys.sheet) {
-      var go = function (L) { if (dead || !L) { if (!L) ended(); return; } reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: discoveryMotionMs(d) }); };
+      var go = function (L) { if (dead || !L) { if (!L) ended(); return; } reel = G.Reel.play(top.querySelector('.rv-reel'), L, { ms: discoveryMotionMs(d) }); };
       var L0 = G.Reel.now(keys.sheet);
       if (L0) go(L0); else G.Img.wait(G.Reel.load(keys.sheet), FX.loadWaitMs || 2500).then(go, function () { ended(); });
     } else {
-      var gif = el.querySelector('.rv-gif'), src = G.Img.src(keys.gif);
+      var gif = top.querySelector('.rv-gif'), src = G.Img.src(keys.gif);
       if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
       gif.src = src;
       timer = setTimeout(ended, discoveryGifMs(d) + 80);
     }
-    setTimeout(function () { if (!dead) el.classList.add('on', 'titled'); }, 30);
+    setTimeout(function () { if (!dead) { el.classList.add('on', 'titled'); top.classList.add('on', 'titled'); } }, 30);
     return {
-      el: el,
+      el: el, top: top, place: place,
       close: async function () {
-        if (dead) return; dead = true; clearTimeout(timer);
+        if (dead) return; dead = true; clearTimeout(timer); clearTimeout(showTimer);
+        document.removeEventListener('pu-dlg-layout', place);
         if (reel && reel.stop) reel.stop();
-        el.classList.add('out'); await U.sleep(380);
+        el.classList.add('out'); top.classList.add('out'); await U.sleep(380);
         if (el.parentNode) el.parentNode.removeChild(el);
+        if (top.parentNode) top.parentNode.removeChild(top);
       }
     };
   };

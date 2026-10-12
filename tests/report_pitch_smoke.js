@@ -114,8 +114,24 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     await page.waitForTimeout(2500);
     await page.screenshot({ path: path.join(OUT, '1_open.png') });
+    const geo = async () => page.evaluate(() => {
+      const info = G.UI.stageInfo, top = document.querySelector('.reveal.rv-top'), fr = top && top.querySelector('.rv-frame');
+      if (!info || !fr) return { none: true };
+      const ui = document.getElementById('ui'), R = ui.getBoundingClientRect(), k = R.width / ui.offsetWidth, b = fr.getBoundingClientRect();
+      const r = { left: (b.left - R.left) / k, top: (b.top - R.top) / k, right: (b.right - R.left) / k, bottom: (b.bottom - R.top) / k };
+      const over = info.faces.filter(f => !(r.right <= f.left || r.left >= f.right || r.bottom <= f.top || r.top >= f.bottom)).length;
+      const actorsZ = (document.querySelector('#ui > .dlg-actors') ? 13 : 60);
+      return { frame: r, nameTop: info.nameTop, faces: info.faces.length, over, z: +getComputedStyle(top).zIndex, actorsZ, w: Math.round(r.right - r.left) };
+    });
+    const g1 = await geo();
+    console.log('   발견물 그림 자리 ' + JSON.stringify(g1));
+    ok(!g1.none && Math.abs(g1.frame.bottom - (g1.nameTop - 10)) <= 2, '발견물 그림 아래 끝이 이름표 10px 위 (' + Math.round(g1.frame.bottom) + ' / 이름표 ' + Math.round(g1.nameTop) + ')');
+    ok(g1.faces >= 2 && g1.over === 0, '두 사람 얼굴을 가리지 않는다 (그림 폭 ' + g1.w + 'px)');
+    ok(g1.z > g1.actorsZ, '그림이 사람들 위 층 (z ' + g1.z + ' > ' + g1.actorsZ + ')');
     for (let i = 0; i < 2; i++) { await page.mouse.click(800, 800); await page.waitForTimeout(900); }
     await page.screenshot({ path: path.join(OUT, '2_mate.png') });
+    const g2 = await geo();
+    ok(g2.none || (g2.over === 0 && Math.abs(g2.frame.bottom - (g2.nameTop - 10)) <= 2), '말하는 사람이 바뀌어도 얼굴을 피하고 이름표 10px 위');
     for (let i = 0; i < 4; i++) { await page.mouse.click(800, 800); await page.waitForTimeout(700); }
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('\n통과 — 화면: ' + OUT);

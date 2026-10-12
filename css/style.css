@@ -922,6 +922,10 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .reveal.report .rv-frame { animation: none !important; }
 .reveal.report.talk .rv-frame { top: 25%; transform: translate(-50%, -50%) scale(.6); }
 .reveal.report.talk .rv-title, .reveal.report.titled .rv-title { top: 38%; left: 0; right: 0; width: fit-content; margin: 0 auto; padding: 2px 20px 4px; font-size: 30px; letter-spacing: .06em; transform: none; filter: none; animation: none; background: rgba(18,11,6,.72); border: 1px solid rgba(217,181,106,.55); border-radius: 4px; }   /* 그림 아래 띠 — 두 사람 머리 사이 */
+/* 보고·발표 자리: 그림·제목은 대화하는 사람들 위 층(.rv-top) — 자리는 js/scenes/common.js discoveryShow의 place가 얼굴을 피해 이름표 10px 위에 잡는다 */
+.reveal.rv-top { pointer-events: none; z-index: 14; }
+.reveal.rv-top .rv-frame { box-shadow: 0 10px 28px rgba(0,0,0,.6), 0 0 0 1px #2a1f16; }
+.reveal.rv-top.unplaced .rv-frame, .reveal.rv-top.unplaced .rv-title { opacity: 0 !important; }
 
 /* 보물: 불 꺼진 전시실에서 큐레이터 조명이 유리·금속을 훑고 프리즘 섬광이 지나간다. */
 .reveal.treasure .rv-dim { background: radial-gradient(ellipse at 50% 42%, rgba(5,7,14,calc(var(--rv-dim) * .72)) 0%, rgba(0,0,3,var(--rv-dim)) 62%, rgba(0,0,0,.96) 100%); }
