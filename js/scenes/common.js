@@ -311,6 +311,46 @@
     return true;
   };
 
+  /** 보고·발표 자리에서 발견물 그림을 다시 띄운다 (js/systems/pitch.js) — 발견 때의 장면 판·GIF를 처음부터 다시 돌리며
+      그 앞에서 후원자·부하의 대화가 이어진다 (기다리지 않는다: 그림이 도는 동안 대화창이 뜬다). 그림이 없으면 null.
+      opts.title: 제목 꼬리말('보고'·'발표'). 돌려주는 값의 close()로 걷는다. */
+  SC.discoveryShow = function (d, opts) {
+    opts = opts || {};
+    var keys = d ? revealKeys(d) : null; if (!keys) return null;
+    var FX = (G.FX && G.FX.reveal) || {}, W = Math.round(576 * (FX.scale || 1.9)), H = Math.round(256 * (FX.scale || 1.9));
+    var treasure = d.cat === 'treasure' && !d.natural;
+    var el = U.el('div', 'reveal report talk' + (treasure ? ' treasure' : ''));
+    el.style.setProperty('--rv-dim', FX.reportDim != null ? FX.reportDim : 0.5);
+    el.style.setProperty('--rv-dim-ms', '500ms');
+    el.innerHTML = '<div class="rv-dim"></div>' +
+      '<div class="rv-frame" style="width:' + W + 'px;height:' + H + 'px">' + (keys.sheet ? '<canvas class="rv-reel" width="1152" height="512"></canvas>' : '<img class="rv-gif" alt="">') + '<img class="rv-end" alt=""></div>' +
+      '<div class="rv-title"><b>' + U.esc(d.name) + '</b> ' + U.esc(opts.title || '보고') + '</div>';
+    var uiRoot = document.getElementById('ui'); if (uiRoot) uiRoot.appendChild(el); else UI.add(el);
+    var end = el.querySelector('.rv-end'), reel = null, dead = false, timer = 0;
+    if (keys.end) end.src = G.Img.src(keys.end);
+    function ended() { if (!dead && keys.end) el.classList.add('ended'); }
+    if (keys.sheet) {
+      var go = function (L) { if (dead || !L) { if (!L) ended(); return; } reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: discoveryMotionMs(d) }); };
+      var L0 = G.Reel.now(keys.sheet);
+      if (L0) go(L0); else G.Img.wait(G.Reel.load(keys.sheet), FX.loadWaitMs || 2500).then(go, function () { ended(); });
+    } else {
+      var gif = el.querySelector('.rv-gif'), src = G.Img.src(keys.gif);
+      if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
+      gif.src = src;
+      timer = setTimeout(ended, discoveryGifMs(d) + 80);
+    }
+    setTimeout(function () { if (!dead) el.classList.add('on', 'titled'); }, 30);
+    return {
+      el: el,
+      close: async function () {
+        if (dead) return; dead = true; clearTimeout(timer);
+        if (reel && reel.stop) reel.stop();
+        el.classList.add('out'); await U.sleep(380);
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }
+    };
+  };
+
   // ---------------------------------------------------------------- resume from a loaded save
   G.Game.resume = function () {
     if (G.Colony) G.Colony.apply();      // 이 일지의 개척 도시를 도시 자료에 넣는다 (다른 것보다 먼저 — 개척 도시에 머물던 일지)

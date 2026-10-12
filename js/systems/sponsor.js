@@ -318,11 +318,19 @@
     var pr = ev === 'fake' ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), bothUp = 0;
     if (pr.noProof) { pay = Math.round(pay * SP.noProofK(sp) / 100) * 100; fame = Math.round(fame * 0.8); }
     if (ev === 'both') { G.Fakes.give(d.id, -1); pay = Math.round(pay * ((G.BALANCE.fakes && G.BALANCE.fakes.bothK) || 1.3) / 100) * 100; bothUp = (G.BALANCE.fakes && G.BALANCE.fakes.bothTrust) || 10; }
-    await UI.say(SP.proofLine(pr, d, true, sp) + (G.Disc.isLate(d.id) ? L('lateRival', { rival: st.rival }) : L('lateGood') + (U.chance(0.55) ? L('cat_' + d.cat) + ' ' : '')) + L('latePay', { pay: U.num(pay) }) + cutTxt, who);
+    var lateHead = SP.proofLine(pr, d, true, sp) + (G.Disc.isLate(d.id) ? L('lateRival', { rival: st.rival }) : L('lateGood') + (U.chance(0.55) ? L('cat_' + d.cat) + ' ' : ''));
+    var pitch = ev !== 'fake' && found && G.Pitch && G.Pitch.on() ? true : null;
+    if (pitch) {   // 맞이한 뒤 그림을 다시 띄우고 부하들이 거든다 (js/systems/pitch.js)
+      await UI.say(lateHead, who);
+      pitch = await G.Pitch.run({ d: d, sp: sp, mode: 'late' });
+      pay = Math.max(0, Math.round(pay * pitch.k / 100) * 100); fame = Math.round(fame * pitch.fk);
+      await UI.say(L('latePay', { pay: U.num(pay) }) + cutTxt, who);
+    } else await UI.say(lateHead + L('latePay', { pay: U.num(pay) }) + cutTxt, who);
     if (ev === 'both') await UI.say(L('bothLate'), who);
+    if (pitch) await pitch.close();
     if (G.Fakes) G.Fakes.after(sp, d, ev, found);
     if (found) { st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; }
-    s.player.gold += pay; G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + bothUp + (tp === 'generous' ? 3 : 0)); rel.done = (rel.done || 0) + 1; rel.promise = 0;
+    s.player.gold += pay; G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + bothUp + (tp === 'generous' ? 3 : 0) + (pitch && pitch.trust ? pitch.trust : 0)); rel.done = (rel.done || 0) + 1; rel.promise = 0;
     SP.proofToast(pr);
     if (found) SP.stirJealousy(sp, d);
     G.State.log(SP.holderName(sp) + '에게 「' + d.name + '」의 발견을 보고했다. (금화 ' + pay + ', 명성 +' + fame + (gr ? ', 증거 ' + gr.name : '') + ')');
@@ -642,9 +650,17 @@
     // 맞이하는 말: 늦었는지, 몇 번째 거래인지, 무엇을 찾았는지에 따라 (js/data/sponsorvoice.js)
     var hailKey = late ? 'hailLate' : ((rel.done || 0) >= 3 && U.chance(0.5) ? 'hailFriend' : 'hail');
     var catLine = !k.circ && d && U.chance(0.55) && L('cat_' + d.cat);       // 무엇을 찾았는지에 맞춘 한마디 (늘 하지는 않는다)
-    await UI.say((k.circ ? L('hailCirc') : L(hailKey, { d: d.name }) + (catLine ? ' ' + catLine : '')) + (late && k.circ ? '\n' + L('pastDue') : '') +
-      (pl ? '\n' + pl : '') + circTxt + bothTxt + trTxt + lostTxt +
-      '\f' + L('payout', { rew: U.num(reward) }), who);
+    var headTxt = (k.circ ? L('hailCirc') : L(hailKey, { d: d.name }) + (catLine ? ' ' + catLine : '')) + (late && k.circ ? '\n' + L('pastDue') : '') +
+      (pl ? '\n' + pl : '') + circTxt + bothTxt + trTxt + lostTxt;
+    // 맞이한 뒤: 발견물 그림을 다시 띄우고 제독이 내놓는다 — 후원자의 관심사에 따른 반응, 부하들이 값어치를 띄우는 말 (js/systems/pitch.js)
+    var pitch = !k.circ && ev !== 'fake' && found && G.Pitch && G.Pitch.on() ? true : null;
+    if (pitch) {
+      await UI.say(headTxt, who);
+      pitch = await G.Pitch.run({ d: d, sp: sp, mode: 'contract' });
+      reward = Math.max(0, Math.round(reward * pitch.k / 100) * 100); fame = Math.round(fame * pitch.fk); trustUp += pitch.trust;
+      await UI.say(L('payout', { rew: U.num(reward) }), who);
+      await pitch.close();
+    } else await UI.say(headTxt + '\f' + L('payout', { rew: U.num(reward) }), who);
     if (ret.returned) UI.toast('빌렸던 ' + ret.returned.name + '호를 돌려주었다.', 'ship', 4000);
     SP.proofToast(pr);
     s.player.gold += reward; G.Fame.add('ex', fame);

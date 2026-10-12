@@ -517,7 +517,7 @@
   };
 
   /** announce (발표) at a harbor/palace without a sponsor: fame only */
-  D.announce = function (id) {
+  D.announce = function (id, mul) {
     var s = S(), d = G.DISC[id], st = s.disc[id];
     if (!st || !st.me || st.reported || st.announced) return 0;
     st.announced = true;
@@ -527,6 +527,7 @@
     if (d.evidence && G.Sponsor && G.Sponsor.takeEvidence) G.Sponsor.takeEvidence(id);
     var kept = D.keepRelics(id);
     if (D.needsProof(d) && !proof) fame = Math.round(fame * 0.8);
+    if (mul > 0 && mul !== 1) fame = Math.round(fame * mul);       // 부하들이 값어치를 띄웠다 (js/systems/pitch.js)
     D.lastAnnounce = { kept: kept, noProof: D.needsProof(d) && !proof };
     G.Fame.add('ex', fame);
     G.State.log('「' + d.name + '」의 발견을 발표했다. (명성 +' + fame + (D.isLate(id) ? ', 늦은 발표라 절반' : '') + (kept.length ? ', 유물 ' + kept.map(function (it) { return R.itemName(it); }).join('·') + U.jx(R.itemName(kept[kept.length - 1]), '은/는') + ' 제독의 것' : '') + ')');

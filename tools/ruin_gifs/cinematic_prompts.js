@@ -113,6 +113,14 @@ const DEFAULT_EXPLORATION = [
 
 const OPEN_AIR_IDS = new Set(['colossus', 'haamonga', 'nanmadol', 'tula', 'zimbabwe']);
 
+/* 이름만으로 다른 지역 양식이나 통속적 복원이 나오기 쉬운 항목은 정체성을
+   명시한다. 이 문장은 이후 원화를 다시 만들 때도 같은 고증을 보존한다. */
+const SUBJECT_GUIDANCE = {
+  konjiki: 'Subject identity: 일본 히라이즈미 주손지 금색당. 헤이안 후기의 작고 정방형인 단층 아미타불당이며, 낮은 보물지붕형 기와지붕과 금박 목조 외벽, 짧은 정면 계단을 갖춘다. 동남아식 첨탑·겹지붕·거대한 황금 궁전으로 바꾸지 않는다.',
+  colossus: 'Subject identity: 헬레니즘 시대 태양신 헬리오스의 고전 그리스식 청동 거상. 광선관을 쓰고 두 발을 모아 항구 옆 하나의 거대한 석조 받침에 선다. 횃불·서판을 든 자유의 여신상 모습이나 항구를 양다리로 가로지르는 통속적 자세로 만들지 않는다.',
+  nanmadol: 'Subject identity: 폰페이 앞바다의 낮은 인공섬·조수 수로·난다우와스형 현무암 성벽군. 각기둥 모양의 현무암을 통나무처럼 가로세로 엇갈려 쌓고 산호 자갈로 채운다. 계단식 피라미드·지구라트·높은 중앙 신전은 만들지 않는다.'
+};
+
 function loadRuins() {
   const context = { window: { G: {} } };
   vm.createContext(context);
@@ -137,6 +145,7 @@ function promptFor(discovery) {
   const explorationLight = openAir
     ? '열린 야외 유적의 자연광과 그늘'
     : '내부의 자연스러운 어둠과 채광';
+  const subjectGuidance = SUBJECT_GUIDANCE[discovery.id];
   return [
     'Use case: historical-scene',
     'Asset type: 브라우저 탐험 게임의 역사·종교 건축 발견 GIF용 4×4 시네마틱 스토리보드 원화',
@@ -147,6 +156,7 @@ function promptFor(discovery) {
     '가까운 창문에서 들어오는 따뜻한 자연광의 부드러운 영화적 조명, 얕은 피사계 심도, 초사실적 질감, 수공예 박물관 품질의 스케일 모델 미학, 정교한 미니어처 디테일, 사진처럼 사실적인 재질, 분위기 있는 리얼리즘, 에디토리얼 건축 사진 스타일, 깔끔한 구성, 몰입감 있는 세계관 구축. 각 칸 안에서는 건물의 높이와 전체 실루엣을 살리는 세로 중심 구도, 극도로 높은 디테일, 사실적인 그림자, 진정성 있는 역사적 분위기.',
     '',
     `Historical subject: ${historicalContext}`,
+    ...(subjectGuidance ? [subjectGuidance] : []),
     `Historical accuracy: ${uncertain}`,
     '',
     'Storyboard: 정확히 같은 건물과 장소가 이어지는 4열×4행, 총 16칸. 읽는 순서는 왼쪽에서 오른쪽, 위에서 아래.',
@@ -208,4 +218,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { loadRuins, promptFor, EXPLORATION_BEATS, OPEN_AIR_IDS };
+module.exports = { loadRuins, promptFor, EXPLORATION_BEATS, OPEN_AIR_IDS, SUBJECT_GUIDANCE };

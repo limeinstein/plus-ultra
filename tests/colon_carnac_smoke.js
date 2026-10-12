@@ -1,6 +1,6 @@
 /* 콜론의 카르낙 항해 점검 (경쟁 탐험가가 발견물을 찾아 발표하는 첫 사례):
-   1480년 5월 1일 시작 → 리스본 술집 「항해사를 찾는다」 명부에 콜론(고용 불가 — 이야기만, 주인 귀띔·단서) → 5월 6일 리스본을 떠나
-   브르타뉴로 가는 탐험 함대(바다에 있는 동안 술집에 없음) → 6월 1일 리스본에서 「카르낙 거석군」 발표 → 다시 술집에.
+   1480년 5월 1일 시작 → 리스본 술집 「항해사를 찾는다」 명부에 콜론(고용 불가 — 이야기만, 주인 귀띔·단서) → 7월 6일 리스본을 떠나
+   브르타뉴로 가는 탐험 함대(바다에 있는 동안 술집에 없음) → 8월 1일 리스본에서 「카르낙 거석군」 발표 (2026-10-12: 두 달 늦춤) → 다시 술집에.
    node tests/colon_carnac_smoke.js  (playwright, 스크린샷은 OUT 폴더) */
 'use strict';
 const path = require('path');
@@ -48,7 +48,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     }, NM);
     console.log('  항로 점 ' + r0.n + '개, 뭍에 걸린 점 ' + r0.land);
     ok(r0.date.y === 1480 && r0.date.m === 5 && r0.city === 0, '1480년 5월 1일 리스본에서 시작');
-    ok(r0.rival && r0.rival[0] === 1480 && r0.rival[1] === 6 && r0.rival[2] === NM, '카르낙 거석군 — 콜론이 1480년 6월 발표');
+    ok(r0.rival && r0.rival[0] === 1480 && r0.rival[1] === 8 && r0.rival[2] === NM, '카르낙 거석군 — 콜론이 1480년 8월 발표');
     ok(r0.home === '리스본' && !r0.atSea, '콜론은 리스본에 머문다 (아직 항구에)');
 
     // 2) 리스본 술집 — 주인 귀띔, 메뉴, 대화(고용 불가·계획·단서)
@@ -93,7 +93,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const hadHint = await page.evaluate(() => !!G.Game.state.hints.carnac);
     await choose('정보를 듣는다');
     t = await bodyText();
-    ok(/카르낙/.test(t) && /다음 달 초/.test(t), '정보: 북쪽 카르낙으로 — 다음 달 초 리스본에서 알린다');
+    ok(/카르낙/.test(t) && /7월 초/.test(t) && /8월 초/.test(t), '정보: 7월 초 북쪽 카르낙으로 — 8월 초 리스본에서 알린다');
     await advance();
     await page.waitForTimeout(500);
     ok(await page.evaluate(() => !!G.Game.state.hints.carnac), '카르낙 단서 ' + (hadHint ? '(이미 있었음)' : '얻음'));
@@ -104,25 +104,28 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.keyboard.press('Escape'); await page.waitForTimeout(300);
     await page.evaluate(() => { document.querySelectorAll('.modal-back').forEach(w => w.remove()); });
 
-    // 3) 5월 10일 — 바다에 나가 있다
+    // 3) 7월 10일 — 바다에 나가 있다 (6월까지는 리스본 술집에)
     const r1 = await page.evaluate((NM) => {
+      const s0 = G.Game.state, pre = [], inPort = []; while (!(s0.date.m === 7 && s0.date.d === 1)) { pre.push(...G.Game.passDays(1)); if (s0.date.d === 15) inPort.push(!G.SeaFolk.atSeaName(NM)); }
       const msgs = G.Game.passDays(9), s = G.Game.state, ex = G.EXPEDITIONS.find(e => e.id === 'colon0');
       const p = G.SeaFolk.posAt(ex, G.U.dayIndex(s.date));
-      return { date: s.date, atSea: G.SeaFolk.atSeaName(NM), p, voy: G.SeaFolk.voyages().map(e => e.id), msgs: msgs.map(m => m.text) };
+      return { date: s.date, atSea: G.SeaFolk.atSeaName(NM), p, voy: G.SeaFolk.voyages().map(e => e.id), msgs: msgs.map(m => m.text), inPort, rivalYet: !!(s.disc.carnac && s.disc.carnac.rival) };
     }, NM);
-    ok(r1.atSea && r1.p && r1.voy.includes('colon0'), '5월 10일: 콜론의 탐험 함대가 바다에 (북위 ' + r1.p.lat.toFixed(1) + ' 서경 ' + (-r1.p.lon).toFixed(1) + ')');
+    ok(r1.atSea && r1.p && r1.voy.includes('colon0'), '7월 10일: 콜론의 탐험 함대가 바다에 (북위 ' + r1.p.lat.toFixed(1) + ' 서경 ' + (-r1.p.lon).toFixed(1) + ')');
+    ok(r1.inPort.length >= 2 && r1.inPort.every(Boolean), '5·6월에는 리스본 술집에 머문다 (' + r1.inPort.length + '번 확인)');
+    ok(!r1.rivalYet, '7월 10일까지 카르낙은 아직 아무의 발견도 아니다');
     ok(!(await listNames()).includes(NM), '그동안 명부에 없다 (바다에 나가 있다)');
     const r15 = await page.evaluate(() => { G.Game.passDays(8); const s = G.Game.state, ex = G.EXPEDITIONS.find(e => e.id === 'colon0'); const p = G.SeaFolk.posAt(ex, G.U.dayIndex(s.date)); return { p, d: G.Geo.dist(p.lon, p.lat, G.DISC.carnac.lon, G.DISC.carnac.lat) }; });
-    ok(r15.d < 1, '5월 18일: 카르낙 앞바다(키브롱만)에 머문다 (' + r15.d.toFixed(2) + '°)');
+    ok(r15.d < 1, '7월 18일: 카르낙 앞바다(키브롱만)에 머문다 (' + r15.d.toFixed(2) + '°)');
 
-    // 4) 6월 1일 — 리스본에서 발표
+    // 4) 8월 1일 — 리스본에서 발표
     const r2 = await page.evaluate((NM) => {
       const s = G.Game.state, msgs = [];
-      while (!(s.date.m === 6 && s.date.d === 1)) msgs.push(...G.Game.passDays(1));
+      while (!(s.date.m === 8 && s.date.d === 1)) msgs.push(...G.Game.passDays(1));
       return { date: s.date, st: s.disc.carnac, atSea: G.SeaFolk.atSeaName(NM), msgs: msgs.map(m => m.text), log: JSON.stringify(s.log || '').indexOf('카르낙') >= 0 };
     }, NM);
     console.log('  소식: ' + r2.msgs.filter(x => /카르낙|콜론/.test(x)).join(' / '));
-    ok(r2.st && r2.st.rival === NM, '6월 1일: 카르낙 거석군은 콜론의 발견으로 (s.disc.carnac.rival)');
+    ok(r2.st && r2.st.rival === NM, '8월 1일: 카르낙 거석군은 콜론의 발견으로 (s.disc.carnac.rival)');
     ok(r2.msgs.some(x => x.indexOf(NM + '이 리스본에서 「카르낙 거석군」의 발견을 발표했다') >= 0), '소식: 「크리스토발 콜론이 리스본에서 「카르낙 거석군」의 발견을 발표했다.」');
     ok(!r2.atSea, '돌아와서 다시 리스본 술집에');
     // 세상의 소식 창이 실제로 뜨는 모습 (도시에서 날이 지날 때 쓰는 함수가 있으면)
@@ -148,8 +151,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = G.Game.state;
       s.date = { y: 1480, m: 5, d: 1 }; delete s.disc.carnac; s.flags = Object.assign({}, s.flags);
       s.disc.carnac = { me: true, found: 14800502, reported: 'pt_king' };
-      const atSea = (G.Game.passDays(9), G.SeaFolk.atSeaName(NM));
-      const msgs = []; while (!(s.date.m === 6 && s.date.d === 2)) msgs.push(...G.Game.passDays(1));
+      while (!(s.date.m === 7 && s.date.d === 10)) G.Game.passDays(1);
+      const atSea = G.SeaFolk.atSeaName(NM);
+      const msgs = []; while (!(s.date.m === 8 && s.date.d === 2)) msgs.push(...G.Game.passDays(1));
       return { atSea, rival: s.disc.carnac.rival, msg: msgs.some(m => /카르낙/.test(m.text)) };
     }, NM);
     ok(!r3.atSea && !r3.rival && !r3.msg, '제독이 먼저 보고하면 콜론은 떠나지 않고 발표도 없다');

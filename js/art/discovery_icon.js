@@ -11,9 +11,19 @@
     ['map-discoveries/ruins-2', ['persepolis', 'mohenjo', 'angkor', 'yungang', 'qinshi', 'greatwall', 'qianling', 'muryeong', 'bulguksa', 'seokguram', 'munmu', 'fertile', 'borobudur']],
     ['map-discoveries/ruins-3', ['tula', 'nazca', 'tiwanaku', 'poitiers', 'montstmichel', 'stave', 'rusch', 'prester', 'cappadocia', 'edom', 'ur', 'petra', 'brendan']],
     ['map-discoveries/ruins-4', ['cibola', 'ark', 'tajmahal', 'qutb', 'madurai', 'shwedagon', 'konjiki', 'pueblo', 'machupicchu', 'sacsay', 'moai', 'mu', 'ananda']],
+    ['map-discoveries/ruins-5', ['muyeol', 'hanging', 'artemis', 'colossus', 'mausoleum', 'zeus', 'barkal', 'mahabodhi', 'nalanda', 'sanchi', 'teotihuacan', 'tikal', 'cahokia', 'dursharrukin', 'theodoric', 'haamonga']],
+    ['map-discoveries/ruins-6', ['chichen', 'kamakura', 'samarra', 'brihadeeswarar', 'nanmadol', 'serpentmound', 'haleokeawe', 'rila', 'reykholt', 'xiengthong', 'oxford', 'boudhanath', 'doisuthep', 'himeji', 'escorial', 'neuschwanstein']],
+    ['map-discoveries/ruins-7', ['brandenburg', 'hermitage', 'ruhr', 'goldengate', 'amundsen', 'pentagon', 'rushmore', 'threegorges', 'prora', 'cntower', 'hubble', 'iss', 'chengde', 'dogo', 'kasubi', 'ubudiah']],
+    ['map-discoveries/ruins-8', ['santamaria', 'haeinsa', 'mireuksa', 'baidinh', 'yonaguni', 'yonggung', 'sarnath', 'goree', 'shaolin', 'anjiqiao', 'qufu', 'wudang', 'ellora', 'khajuraho', 'konark', 'harmandir']],
+    ['map-discoveries/ruins-9', ['krak', 'shibam', 'lelu', 'akrotiri', 'gadir', 'atlantis', 'qeswachaka', 'vilcabamba', 'paititi', 'guge', 'skycaves', 'shambhala', 'langya', 'seobul', 'shingu', 'marib']],
+    ['map-discoveries/ruins-10', ['shabwa', 'ubar', 'tintagel', 'arthurtomb', 'hvalsey', 'lanseaux', 'mahabali', 'poompuhar', 'dwarka', 'chicomoztoc', 'paquime', 'mesaverde']],
     ['map-discoveries/nature-1', ['pamukkale', 'huangshan', 'uluru', 'canyon', 'monument', 'niagara', 'iguazu', 'gibraltar', 'matterhorn', 'vihren', 'gullfoss', 'eyjafjalla', 'sinai', 'kilimanjaro', 'lengai', 'solomon']],
     ['map-discoveries/nature-2', ['adamspeak', 'flowers', 'kailash', 'machapuchare', 'everest', 'zhangjiajie', 'seongsan', 'nachi', 'fuji', 'reef', 'mapuavaea', 'bermuda', 'youth', 'bluehole', 'barringer', 'redwood']],
-    ['map-discoveries/nature-3', ['craterlake', 'devilstower', 'oldfaithful', 'joatinga', 'roraima', 'vinicunca', 'cerrorico', 'torrespaine', 'corryvreckan', 'maelstrom', 'icebergs', 'surtsey', 'sargasso', 'milkysea']]
+    ['map-discoveries/nature-3', ['craterlake', 'devilstower', 'oldfaithful', 'joatinga', 'roraima', 'vinicunca', 'cerrorico', 'torrespaine', 'corryvreckan', 'maelstrom', 'icebergs', 'surtsey', 'sargasso', 'milkysea']],
+    ['map-discoveries/nature-4', ['trangan', 'halong', 'pinklake', 'sahara', 'gobi', 'deadsea', 'blacksea', 'serengeti', 'amazon', 'uyuni', 'angelfalls', 'hawaii', 'waikiki', 'mojave', 'moraine', 'guilin']],
+    ['map-discoveries/nature-5', ['taishan', 'emeishan', 'huashan', 'wuyishan', 'lushan', 'sanxia', 'hukou', 'qiantang', 'shilin', 'huangguoshu', 'yulong', 'dongting', 'putuo', 'tianchi', 'qinghaihu', 'mingsha']],
+    ['map-discoveries/nature-6', ['huoyan', 'yandang', 'manasarovar', 'dallake', 'gangotri', 'chilika', 'jogfalls', 'cedars', 'damavand', 'wadirum', 'socotra', 'rubalkhali', 'azoresridge', 'guatavita', 'penglai', 'tor']],
+    ['map-discoveries/nature-7', ['avalon', 'ultimathule', 'hyperborea', 'ramsetu', 'aztlan']]
   ];
   var POS = {};
   SHEETS.forEach(function (s) { s[1].forEach(function (id, i) { POS[id] = { key: s[0], slot: i }; }); });

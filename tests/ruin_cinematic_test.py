@@ -52,6 +52,9 @@ def check_prompts() -> None:
     assert "실제 구조인 석조 관중 통로" in by_id["colosseum"]
     assert "역사적으로 실제 존재하는 나선 계단" in by_id["qutb"]
     assert "피라미드 몸체 속에 허구의 큰 방은 만들지 않는다" in by_id["templomayor"]
+    assert "히라이즈미 주손지 금색당" in by_id["konjiki"]
+    assert "자유의 여신상 모습" in by_id["colossus"]
+    assert "계단식 피라미드" in by_id["nanmadol"]
 
 
 def check_compositor() -> None:

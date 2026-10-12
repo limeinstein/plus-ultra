@@ -7,26 +7,30 @@ document.getElementById('game').onload = async function () {
     G.SKILLS.forEach(function (x) { sk[x.id] = 0; }); sk.nav = 2; sk.survey = 2; sk.hist = 2;
     var s = G.State.newGame({ name:'유적 시험 제독', nation:'PT', job:'explorer', age:22, birth:{m:4,d:12}, st:{str:58,int:50,mar:55,cha:52}, sk:sk, lg:lg, diff:'normal', gold:3000 });
     G.Game.state = s; s.settings.res = 0.35;
-    ['stonehenge', 'poitiers', 'troy', 'parthenon', 'pamukkale', 'gibraltar', 'seongsan', 'reef', 'solomon', 'icebergs', 'milkysea', 'vesuvius'].forEach(function (id) { s.disc[id] = { found:true, me:true }; });
+    ['stonehenge', 'poitiers', 'troy', 'parthenon', 'artemis', 'colossus', 'mausoleum', 'pamukkale', 'gibraltar', 'seongsan', 'reef', 'solomon', 'icebergs', 'milkysea', 'vesuvius'].forEach(function (id) { s.disc[id] = { found:true, me:true }; });
     s.disc.huangshan = { found:true, me:false, rival:true };
     s.hints.uluru = { source:'소문' };
     var visible = G.DiscoveryIcon.visible().map(function (d) { return d.id; }).sort();
-    if (G.DiscoveryIcon.count() !== 98 || visible.join(',') !== 'gibraltar,icebergs,milkysea,pamukkale,poitiers,reef,seongsan,solomon,stonehenge,troy') throw new Error('지도 발견물 포함·제외 규칙이 맞지 않습니다: ' + visible.join(','));
+    if (G.DiscoveryIcon.count() !== 243 || visible.join(',') !== 'artemis,colossus,gibraltar,icebergs,mausoleum,milkysea,pamukkale,poitiers,reef,seongsan,solomon,stonehenge,troy') throw new Error('지도 발견물 포함·제외 규칙이 맞지 않습니다: ' + visible.join(','));
     var naturals = G.DISCOVERIES.filter(function (d) { return (d.cat === 'nature' || d.natural) && (d.how === 'land' || d.how === 'sea'); });
-    if (naturals.length !== 46 || !naturals.every(G.DiscoveryIcon.isMapLandmark)) throw new Error('자연 경관 지도 아이콘이 빠졌습니다.');
-    await G.DiscoveryIcon.preload(G.DiscoveryIcon.visible().concat(naturals));
-    var keys = ['map-discoveries/ruins-1', 'map-discoveries/ruins-3', 'map-discoveries/nature-1', 'map-discoveries/nature-2', 'map-discoveries/nature-3'];
+    var landmarks = G.DISCOVERIES.filter(function (d) { return (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city'; });
+    if (naturals.length !== 99 || !naturals.every(G.DiscoveryIcon.isMapLandmark)) throw new Error('자연 경관 지도 아이콘이 빠졌습니다.');
+    if (landmarks.length !== 243 || !landmarks.every(G.DiscoveryIcon.isMapLandmark)) throw new Error('역사·종교 유적 지도 아이콘이 빠졌습니다.');
+    await G.DiscoveryIcon.preload(G.DiscoveryIcon.visible().concat(landmarks));
+    var keys = ['map-discoveries/ruins-1', 'map-discoveries/ruins-2', 'map-discoveries/ruins-3', 'map-discoveries/ruins-4', 'map-discoveries/ruins-5', 'map-discoveries/ruins-6', 'map-discoveries/ruins-7', 'map-discoveries/ruins-8', 'map-discoveries/ruins-9', 'map-discoveries/ruins-10', 'map-discoveries/nature-1', 'map-discoveries/nature-2', 'map-discoveries/nature-3', 'map-discoveries/nature-4', 'map-discoveries/nature-5', 'map-discoveries/nature-6', 'map-discoveries/nature-7'];
     if (!keys.every(function (k) { return !!G.Img.get(k); })) throw new Error('지도 발견물 시트를 읽지 못했습니다.');
     var cv = this.contentDocument.createElement('canvas'), cx = cv.getContext('2d'); cv.width = cv.height = 64;
-    cx.drawImage(G.Img.get(keys[0]), 0, 0, 64, 64);
-    var alpha = cx.getImageData(0, 0, 64, 64).data, clear = false, solid = false;
-    for (i = 3; i < alpha.length; i += 4) { if (!alpha[i]) clear = true; if (alpha[i] > 200) solid = true; }
-    if (!clear || !solid) throw new Error('지도 유적 시트의 투명 알파가 없습니다.');
-    naturals.forEach(function (d) {
+    keys.forEach(function (key) {
+      cx.clearRect(0, 0, 64, 64); cx.drawImage(G.Img.get(key), 0, 0, 64, 64);
+      var alpha = cx.getImageData(0, 0, 64, 64).data, clear = false, solid = false;
+      for (i = 3; i < alpha.length; i += 4) { if (!alpha[i]) clear = true; if (alpha[i] > 200) solid = true; }
+      if (!clear || !solid) throw new Error('지도 발견물 시트의 투명 알파가 없습니다: ' + key);
+    });
+    landmarks.forEach(function (d) {
       cx.clearRect(0, 0, 64, 64); G.DiscoveryIcon.draw(cx, d, 32, 32);
       var pixels = cx.getImageData(0, 0, 64, 64).data, opaque = 0;
       for (var j = 3; j < pixels.length; j += 4) if (pixels[j] > 200) opaque++;
-      if (opaque < 40 || pixels[3]) throw new Error('자연 경관 아이콘이 비어 있거나 투명하지 않습니다: ' + d.id);
+      if (opaque < 40 || pixels[3]) throw new Error('발견물 아이콘이 비어 있거나 투명하지 않습니다: ' + d.id);
     });
     var hit = G.DiscoveryIcon.at([G.DISC.gibraltar], function () { return [100, 100]; }, 100, 100, 1);
     if (!hit || hit.id !== 'gibraltar') throw new Error('자연 경관 클릭 위치가 맞지 않습니다.');

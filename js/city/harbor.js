@@ -453,7 +453,10 @@
     if (id == null) return;
     if (s.contract && s.contract.disc === id && !(await UI.confirm('이것은 후원자와 계약한 발견입니다. 그래도 발표하겠습니까? 계약은 실패로 처리됩니다.'))) return;
     var broke = s.contract && s.contract.disc === id ? G.SPONSOR[s.contract.sponsor] : null;
-    var fame = G.Disc.announce(id);
+    // 발견물 그림을 다시 띄우고 모인 사람들 앞에서 내놓는다 — 부하들이 값어치를 띄우면 명성이 더 오른다 (js/systems/pitch.js)
+    var pitch = G.Pitch ? await G.Pitch.run({ d: G.DISC[id], sp: null, mode: 'announce', city: c }) : null;
+    var fame = G.Disc.announce(id, pitch ? pitch.fk : 1);
+    if (pitch) await pitch.close();
     // 계약한 발견을 스스로 발표하면 계약은 깨진다 — 선금을 돌려주고, 후원자에게 보고해 사례금을 또 받을 수는 없다
     if (broke) await G.Sponsor.breakContract(broke, 'announce');
     else if (s.contract && s.contract.disc === id) s.contract = null;
