@@ -327,6 +327,7 @@
       // 사라진 왕녀: 홍해 요새에 다가가면 수비대가 막아선다 (js/systems/princess.js)
       // 탁군 땅: 도원의 세 형제 (js/systems/legends.js)
       if (G.Legend) await G.Legend.onLand(l.lon, l.lat);
+      if (G.Tale) await G.Tale.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 옛이야기의 아가씨들: 프랑스 숲의 신데렐라·백설공주 (js/systems/fairytales.js)
       if (G.TreasureHunt) await G.TreasureHunt.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 조합의 보물 지도: X 자리에 서면 판다 (js/systems/treasurehunt.js)
       if (G.Princess) await G.Princess.onLand({ battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });
       // 정찰대: 가까운 발견물을 알아채고 지도에 표식을 남긴다
@@ -600,6 +601,8 @@
         else UI.toast('약초를 알아볼 사람이 없어 헛걸음했다.', 'drop');
       }
       refreshHud();
+      // 야영을 마친 뒤: 독일 숲의 잠자는 숲속의 공주 · 덴마크 섬에서 사냥하다 만나는 인어공주 (js/systems/fairytales.js)
+      if (v && G.Tale && G.Game.scene === L && S().loc.mode === 'land') { await G.Tale.onCamp(v, l.lon, l.lat); refreshHud(); }
       // 같은 곳을 맴돌며 야영하면 윌슨·표류기 (js/systems/castaway.js)
       if (v && G.Castaway && G.Game.scene === L && S().loc.mode === 'land') { await G.Castaway.afterCamp(); refreshHud(); }
     } catch (e) { console.error(e); }

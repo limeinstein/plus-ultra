@@ -6,6 +6,7 @@
      everyReg: n  : 열한 지역마다 n가지씩
      oneReg       : { cats: [분류…], n } — 한 지역에서 분류마다 n가지씩
      crew + n     : 이 항해사들 가운데 n명(없으면 모두)을 한 번이라도 동료로 들였다 (state.crewEver — 떠나거나 죽어도 센다)
+     wed + n      : 이 사람들 가운데 n명(없으면 모두)과 혼인했다 (본처·둘째 부인 — state.wedEver, 사별·이혼해도 센다)
    보상: fame(탐험 명성) · gold(금화) · title(칭호 — 수첩 「업적」에 모인다). 금액은 대항해시대 3의 수집 보상처럼 크게 잡았다. */
 (function (G) {
   'use strict';
@@ -154,4 +155,9 @@
   // 루이스 몬테이루와 함께 만든 이야기 속 동료 열 사람 (js/data/storycrew.js 맨 앞 열 명)
   a('동료', 'montcrew', '일당 수집 완료', '밀짚모자의 젊은 선장 루이스 몬테이루와 그와 함께 바다에 나설 아홉 사람을 모두 동료로 들였다.',
     { crew: ['monteiro', 'deleon', 'vandermeer', 'samios', 'beaumont', 'weiss', 'laskaris', 'ferraro', 'rosenthal', 'macleod'] }, 500, 30000, '일당의 선장');
+  // 옛이야기의 아가씨들 네 사람 (js/data/fairytales.js)
+  a('동료', 'onceupon', 'Once Upon a Time', '신데렐라·백설공주·잠자는 숲속의 공주·인어공주 — 옛이야기의 네 아가씨를 모두 배에 태웠다.',
+    { crew: ['cinderella', 'snow_white', 'sleeping_beauty', 'little_mermaid'] }, 600, 30000, '옛이야기의 제독');
+  a('동료', 'happily', 'Happily Ever After', '옛이야기의 네 아가씨와 모두 혼인했다. 그리고 오래오래 행복하게 살았답니다.',
+    { wed: ['cinderella', 'snow_white', 'sleeping_beauty', 'little_mermaid'] }, 800, 50000, '동화의 끝');
 })(window.G = window.G || {});

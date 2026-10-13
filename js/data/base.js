@@ -317,6 +317,7 @@
     // 전설 속 인물 (js/systems/legends.js): 세 형제를 만나는 횟수 · 중국 술집에서 한 번 들른 사이 술을 사는 횟수 · 탁군 좌표·반지름(도)
     //   제갈량: 유비가 부관일 때 여관 들르는 횟수 · 달타냥: 프랑스 시장에서 사는 물건 수·빌려줄 돈 · 셰헤라자드: 이슬람 도서관에서 읽는 책 수
     //   알라딘·알리바바: 오스만 교역소 출자 등급 · 부하가 된 뒤 처음 충성심
+    fairy: { chance: 0.3, coolDays: 45, nearR: 2.5 },   // 옛이야기의 아가씨들 (js/systems/fairytales.js): 숲에서 하루마다 만날 확률 · 거절한 뒤 쉬는 날 · 도시에서 몇 도 안이 「도시 근처」
     legends: { meets: 3, drinks: 3, zhuoLon: 115.97, zhuoLat: 39.49, zhuoR: 0.45, innVisits: 3, dartBuys: 3, dartLoan: 2000, books: 5, investLv: 5, loyal: 80 },
     castaway: { radius: 0.6, gapDays: 30, wilsonDays: 30, wilsonCamps: 10, journalDays: 90, journalCamps: 15, wilsonRest: 8, journalCost: 0.15, journalFind: 1.25 },
     // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)

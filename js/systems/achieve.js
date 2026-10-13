@@ -22,6 +22,14 @@
     return ev;
   }
   function mateName(id) { var m = G.MATE && G.MATE[id]; return m ? m.name : id; }
+  /** 혼인한 적이 있는 사람 { id: 날짜 } — 지금의 본처(player.wife)와 둘째 부인들(player.wives2)을 적어 둔다 */
+  function wedEver() {
+    var s = S(), ev = s.wedEver || (s.wedEver = {}), p = s.player || {};
+    if (p.wife && !ev[p.wife]) ev[p.wife] = U.dateNum(s.date);
+    (p.wives2 || []).forEach(function (w) { if (w && w.id && !ev[w.id]) ev[w.id] = U.dateNum(s.date); });
+    return ev;
+  }
+  AC.wedEver = wedEver;
 
   AC.list = function () { return G.ACHIEVEMENTS || []; };
   AC.get = function (id) { return AC.list().filter(function (a) { return a.id === id; })[0] || null; };
@@ -42,6 +50,7 @@
       rows.push({ label: cs.map(function (x) { return G.DISC_CATS[x]; }).join('·') + (r.reg != null ? ' (' + regName(r.reg) + ')' : ''), count: c, n: r.n });
     });
     if (a.crew) { var ev = crewEver(), had = a.crew.filter(function (id) { return !!ev[id]; }); rows.push({ crew: true, ids: a.crew, got: had, count: had.length, n: a.n || a.crew.length }); }
+    if (a.wed) { var we = wedEver(), wd = a.wed.filter(function (id) { return !!we[id]; }); rows.push({ crew: true, wed: true, ids: a.wed, got: wd, count: wd.length, n: a.n || a.wed.length }); }
     if (a.chains) rows.push({ label: '끝까지 푼 사슬', count: AC.chainsDone().length, n: a.chains });
     if (a.everyReg) (G.REGIONS || []).forEach(function (rn, r) {
       rows.push({ label: rn, count: my.filter(function (d) { return d.reg === r; }).length, n: a.everyReg, small: true });
