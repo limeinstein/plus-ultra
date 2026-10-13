@@ -100,7 +100,7 @@
       SPR.preload(need);
       if (LA.cav[mi.name]) SPR.partyReady(LA.cav[mi.name]);   // 기병 그림(말 탄 탐험대)도 미리
     }
-    if (G.Audio) G.Audio.music('battle');
+    if (G.Audio) G.Audio.music('landwar');   // 육상 전투 곡
 
     return new Promise(function (resolve) {
       var html = '<div class="lwar"><canvas width="' + W + '" height="' + H + '"></canvas>' +

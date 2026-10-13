@@ -10,6 +10,7 @@
     var Game = G.Game;
     UI.hud.hide();
     Game.showLayers(false, false, true);
+    if (G.Audio) G.Audio.music('title');     // 첫 화면: 항해(태평양) — 브라우저가 첫 클릭 전에는 소리를 막으므로 그때부터 (js/data/music.js)
     if (!bg) bg = G.Img.make(G.Img.chain.title(), 1600, 900, A.titleScene);
     Game.setScene(bg);
     var wrap = U.el('div', 'title-wrap');

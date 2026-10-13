@@ -260,28 +260,31 @@
   function setFileVolume() { if (deckOn >= 0 && decks[deckOn] && !fadeTimer) decks[deckOn].volume = fileVol(); }
   /** 곡 이름이 쓸 수 있는가: 'gen:이름'은 코드 음악, 그 밖은 music/ 파일 */
   function usable(t) { if (!t) return false; if (t.indexOf('gen:') === 0) return !!SCALES[t.slice(4)]; return !!(G.MUSIC_FILES && G.MUSIC_FILES[t] && !failed[t]); }
-  function nearestCity(lon, lat) {
-    var best = null, bd = 1e9;
-    (G.CITY_DATA || []).forEach(function (c) { if (G.R && G.R.cityExists && !G.R.cityExists(c)) return; var d = G.Geo.dist(lon, lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } });
-    return best;
-  }
-  /** 도시의 고장 곡: byCity → byRegion → byStyle (아메리카·동남아·일본은 도시 양식보다 고장이 먼저) */
-  function cityPick(sc, c) { return (sc.byCity && sc.byCity[c.id]) || (sc.byRegion && sc.byRegion[c.region]) || (sc.byStyle && sc.byStyle[c.style]) || null; }
+  /** 곡 이름이 표의 함수에서 나오면 그대로, 못 쓰면 null */
+  function ok(t) { return usable(t) ? t : null; }
+  function S0() { return G.Game && G.Game.state; }
+  /** 혼인한 사람 수 (첫 부인 + 둘째부터) — 늘면 다음 출항이 「결혼 후 첫 항해」 */
+  function wedCount(p) { return p ? (p.wife ? 1 : 0) + ((p.wives2 || []).length) : 0; }
+  function mem(s) { return s.bgm || (s.bgm = { wed: wedCount(s.player), wedSail: 0 }); }
+  /** 고향(모항·가족이 사는 도시)인가 */
+  function isHome(s, id) { var p = s.player || {}; return id != null && (p.home === id || (G.R && G.R.seat && G.R.seat() === id)); }
+  AU.homecoming = false;
   /** 장면과 자리에 맞는 곡 이름 (표에 없으면 null). 'gen:이름'이면 그 고장의 코드 음악 */
   AU.pick = function (name) {
     var sc = MT().scenes[name]; if (!sc) return null;
-    var s = G.Game && G.Game.state, l = s && s.loc, t = null;
+    var s = S0(), l = s && s.loc, t = null;
     try {
-      if (name === 'town' && AU.place && sc.byPlace && sc.byPlace[AU.place]) t = sc.byPlace[AU.place];      // 주점 같은 건물 안
-      else if (name === 'town' && !AU.place && l && l.city != null && G.Fest && G.Fest.active(G.CITY_DATA[l.city])) t = 'gen:festival';   // 귀환 잔치 중인 거리
+      if (name === 'town' && AU.place && sc.byPlace && sc.byPlace[AU.place]) t = ok(sc.byPlace[AU.place]);      // 주점·왕궁 안
       else if (name === 'town' && l && l.city != null) {
         var c = G.CITY_DATA[l.city];
-        if (c) t = cityPick(sc, c);
-      } else if (name === 'sea' && l && l.lon != null && G.Ships && G.Ships.zone) {
-        t = sc.byZone && sc.byZone[G.Ships.zone(l.lon, l.lat)] || null;
-      } else if (name === 'land' && l && l.lon != null && G.Geo && G.Geo.terrain) {
-        t = sc.byTerrain && sc.byTerrain[G.Geo.terrain(l.lon, l.lat)] || null;
-        if (!t && sc.byNearCity) { var nc = nearestCity(l.lon, l.lat), tc = nc && cityPick(MT().scenes.town || {}, nc); if (tc && tc.indexOf('gen:') === 0) t = tc; }   // 사막·밀림이 아니면 가까운 도시의 고장 곡
+        if (!AU.place && G.Fest && G.Fest.active(c)) t = ok(sc.festival) || 'gen:festival';                   // 귀환 잔치 중인 거리
+        else if (!AU.place && AU.homecoming && isHome(s, l.city)) t = ok(sc.home);                             // 바다에서 고향으로 돌아왔다
+        if (!t && c && sc.fn) t = ok(sc.fn(c));
+      } else if (name === 'sea' && l && l.lon != null) {
+        if (s.bgm && s.bgm.wedSail) t = ok(sc.wed);
+        if (!t && sc.fn) t = ok(sc.fn(l.lon, l.lat));
+      } else if (name === 'land' && l && l.lon != null && sc.fn) {
+        t = ok(sc.fn(l.lon, l.lat));
       }
     } catch (e) { t = null; }
     if (usable(t)) return t;
@@ -352,17 +355,47 @@
     fadeTo(-1);
   }
   /** 장면 음악: 고장에 맞는 파일 곡이나 코드 음악 */
+  /** 장면이 바뀔 때 기억해 둘 것: 바다에서 고향으로 돌아왔는가(「귀환」) · 혼인한 뒤 첫 출항인가(「결혼 후 첫 항해」) */
+  function sceneMemo(name, prev) {
+    var s = S0(); if (!s || !s.player) return;
+    if (name === 'town') { if (prev === 'sea') AU.homecoming = true; else if (prev !== 'town' && prev !== 'duel' && prev !== 'battle') AU.homecoming = false; }
+    else if (name !== 'duel' && name !== 'battle') AU.homecoming = false;
+    var m = mem(s), n = wedCount(s.player);
+    if (n > m.wed) m.wedSail = 1;            // 새로 혼인했다 — 다음 항해는 그 곡
+    m.wed = n;
+    if (name === 'sea' && m.wedSail === 1) m.wedSail = 2;
+    else if (name === 'town' && m.wedSail === 2) m.wedSail = 0;     // 첫 항해를 마치고 항구에 닿았다
+  }
   AU.music = function (name, force) {
+    var prev = AU.want;
     AU.want = name; hold = { track: null, n: 0 };
-    if (name !== 'town' && name !== 'battle') AU.place = null;     // 도시를 떠나면 건물 곡은 끝 (일기토(battle)는 건물 안에서도 벌어진다)
+    if (name !== prev) sceneMemo(name, prev);
+    if (name !== 'town' && name !== 'battle' && name !== 'duel') AU.place = null;     // 도시를 떠나면 건물 곡은 끝 (일기토는 건물 안에서도 벌어진다)
     // 설정 「배경 음악」이 코스타 델 솔 3 OST면 유튜브 재생기로 (js/systems/ytmusic.js). 미니 게임 같은 「잠깐」 곡 동안에는 장면만 기억해 둔다
     var Y = G.YTM;
-    if (Y) { Y.install(); if (Y.on()) { if (Y.inMoment() && !force) return; var yt = Y.pick(name); if (yt) { genStop(); stopFile(); Y.play(yt); return; } Y.pause(); } else Y.pause(); }
+    if (Y) { Y.install(); if (Y.on()) { if (Y.inMoment() && !force) return; var yt = Y.pick(name === 'duel' ? 'battle' : name); if (yt) { genStop(); stopFile(); Y.play(yt); return; } Y.pause(); } else Y.pause(); }
+    if (moments.length && !force) { var mt = momentTrack(); if (mt) return; }      // 「잠깐」 곡 동안에는 장면만 기억
     var t = AU.pick(name);
     if (t && t.indexOf('gen:') === 0) { parkFile(); genMusic(t.slice(4)); return; }
     if (t) { if (force || fileTrack !== t) playFile(t); return; }
     stopFile();
-    genMusic(name);
+    var sc = MT().scenes[name];
+    genMusic(sc && sc.gen || name);
+  };
+  /* 파일 음악의 「잠깐」 곡 — 전설의 대륙을 찾는 순간 · 육상전 · 세계 일주 귀환 (G.MUSIC.moments).
+     js/systems/ytmusic.js 가 감싸 둔 순간에 OST가 꺼져 있으면 여기로 온다. 끝나면 AU.fileResume() */
+  var moments = [];
+  function momentTrack() { for (var i = moments.length - 1; i >= 0; i--) { var t = (MT().moments || {})[moments[i]]; if (usable(t)) return t; } return null; }
+  AU.fileMoment = function (name) {
+    moments.push(name);
+    var t = momentTrack(); if (t && fileTrack !== t) playFile(t);
+  };
+  AU.fileResume = function () {
+    if (!moments.length) return;
+    moments.pop();
+    var t = momentTrack();
+    if (t) { if (fileTrack !== t) playFile(t); return; }
+    if (AU.want) AU.music(AU.want, true);
   };
   /** 지금 서 있는 건물 (주점·왕궁·저택…, 거리면 null) — 건물마다 곡이 있으면 그 곡, 나오면 그 고장 거리의 곡.
      겹쳐 쌓이지 않는다: 건물에서 건물로 옮겨도, 나가기 버튼·성문·출항 어느 길로 나와도 한 번에 바뀐다 (js/scenes/city.js) */
@@ -382,6 +415,7 @@
   AU.daily = function () {
     var name = AU.want; if (name !== 'sea' && name !== 'land') return;
     if (G.YTM && G.YTM.on()) { if (!G.YTM.inMoment()) { var yt = G.YTM.pick(name); if (yt && yt !== G.YTM.current()) G.YTM.play(yt); } return; }
+    if (momentTrack()) return;
     var t = AU.pick(name), now = fileTrack || (cur ? 'gen:' + cur : null);
     if (!t || t === now) { hold = { track: null, n: 0 }; return; }
     var need = (MT().scenes[name] || {}).hold || 1;

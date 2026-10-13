@@ -227,14 +227,14 @@
   /** 그 순간의 곡으로 바꾼다. 끝나면 Y.resume() — 그동안 G.Audio.music 의 장면 바꿈은 기억만 해 둔다.
      (건물 곡은 여기가 아니라 G.Audio.setPlace — 겹쳐 쌓이지 않고, 건물을 나오면 바로 거리 곡) */
   Y.moment = function (name) {
-    if (!Y.on()) return;
+    if (!Y.on()) { if (G.Audio && G.Audio.fileMoment) G.Audio.fileMoment(name); return; }   // 파일 음악에도 그 순간의 곡이 있으면 (js/data/music.js moments)
     var id = OST().moments[name]; if (!id) return;
     depth++; momentT = name; Y.play(id);
   };
   Y.inMoment = function () { return depth > 0; };
   Y.depth = function () { return depth; };
   Y.resume = function () {
-    if (depth <= 0) return;
+    if (depth <= 0) { if (G.Audio && G.Audio.fileResume) G.Audio.fileResume(); return; }
     depth--; if (depth > 0) return;
     momentT = null;
     if (G.Audio) G.Audio.music(G.Audio.want || 'town', true);

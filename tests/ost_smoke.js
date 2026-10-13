@@ -36,7 +36,7 @@ async function boot(page, mock) {
       const Y = G.YTM, AU = G.Audio, s = G.Game.state, out = {};
       const wait = ms => new Promise(r => setTimeout(r, ms));
       const city = nm => G.CITY_DATA.filter(c => c.name === nm)[0];
-      Y.setSource('ost'); await wait(60);
+      Y.setSource('ost'); await wait(60); for (let i = 0; i < 60 && window.__yt.vol == null; i++) await wait(50);   // 내 MP3 찾기(없음)가 끝나고 유튜브 재생기가 준비될 때까지
       out.on = Y.on();
       const town = nm => { const c = city(nm); s.loc.city = c.id; s.loc.lon = c.lon; s.loc.lat = c.lat; AU.music('town'); return Y.current(); };
       out.towns = { 리스본: town('리스본'), 세빌리아: town('세빌리아'), 파리: town('파리'), 런던: town('런던'), 베니스: town('베니스'), 이스탄불: town('이스탄불'), 통북투: town('통북투'),

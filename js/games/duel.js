@@ -118,7 +118,7 @@
     var stance = null, myNext = 'auto', enIntent = null, intentSeen = false, round = 0, over = false, busy = false, paused = false, fast = false;
     var flags = { first: false, feintMe: false, feintEn: false, bluffEn: 0, lureEn: false };
     var fx = [], shakeT = 0, screenFlash = 0, screenFlashRgb = '255,244,220', logs = [], swapped = false;
-    if (G.Audio) G.Audio.music('battle');
+    if (G.Audio) G.Audio.music('duel');   // 일기토 곡 (없으면 해전 곡의 코드 음악)
 
     return new Promise(function (resolve) {
       var html = '<div class="rduel">' +
