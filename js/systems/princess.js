@@ -40,13 +40,14 @@
   function realm() { return G.COURT && G.COURT.realms.ES; }
   function single() { var p = S().player; return !p.wife && p.g !== 'f'; }
   P.single = single;
-  /** 왕녀의 얼굴 (그림이 있으면 images/portraits/npc/princess_es) */
+  /** 왕녀의 얼굴·무릎상: 얼굴 확장본이 아닌 이베리아 지역의 완성된 기존 그림 짝 */
   P.speaker = function () {
     var A = G.Art, sp = { name: D.name, lang: 3, special: true };   // 특별한 사건: 바다·뭍에서도 무릎상 (js/ui/ui.js isSpecial)
     try {
-      var spec = A.npcSpec('princess_es', 'noble', 'ib', 'f'), base = A.portraitKeys ? A.portraitKeys(spec) || [] : [];
-      sp.portrait = A.withImg(spec, ['portraits/npc/princess_es'].concat(base));
-      sp.half = ['portraits/npc/princess_es_half'].concat(G.Img.chain.halfOf ? G.Img.chain.halfOf(base) : []);   // 무릎상: 전용 그림 → 이베리아 귀부인 그림
+      var key = 'portraits/street-folk/town_woman_ib';
+      var spec = A.npcSpec('princess_es', 'noble', 'ib', 'f');
+      sp.portrait = A.withImg(spec, [key]);
+      sp.half = [key + '_half'];
       sp.rigId = 'npc:princess_es';
       // 마주 보는 대화: 왼쪽 제독 · 오른쪽 왕녀 (서 있는 모습)
       if (G.Scenes.city && G.Scenes.city.B && G.Scenes.city.B.tavern && G.Scenes.city.B.tavern.playerSpeaker) { sp.layout = 'duo'; sp.side = 'right'; sp.partner = G.Scenes.city.B.tavern.playerSpeaker(); sp.emotion = 'neutral'; }

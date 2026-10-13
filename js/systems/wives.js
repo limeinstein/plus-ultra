@@ -11,6 +11,7 @@
          s.player.wifeAboard — 본처가 배에 타고 있다
          아이 k.mother = 어머니 id, k.house = 사는 둘째 부인 집의 도시(없으면 본국 자택, -1 = 본국으로 가는 배 위)
          부하 m.hidden = 숨어 있는 항구 번호 (그 항구에 있는 동안만 — R.mateHidden)
+   · 배우자는 본처를 합쳐 12명까지. 옛 저장에 더 많으면 그대로 두되 새 혼인은 막는다.
    조정값: G.BALANCE.wives */
 (function (G) {
   'use strict';
@@ -23,11 +24,15 @@
   function C() { return G.Scenes.city; }
   function T() { return C().B.tavern; }
   G.BALANCE = G.BALANCE || {};
-  G.BALANCE.wives = G.BALANCE.wives || { hideHome: 0.7, conceive: 0.3, maxKids: 5 };
+  G.BALANCE.wives = G.BALANCE.wives || { hideHome: 0.7, conceive: 0.3, maxKids: 5, maxSpouses: 12 };
   function cfg() { return G.BALANCE.wives; }
 
   // ---------------------------------------------------------------- 누구인가
   W.list = function () { var p = P(); return p.wives2 || (p.wives2 = []); };
+  W.count = function () { var p = P(); return (p.wife ? 1 : 0) + W.list().length; };
+  W.maxSpouses = function () { return cfg().maxSpouses || 12; };
+  W.canMarry = function () { return W.count() < W.maxSpouses(); };
+  function full() { UI.toast('배우자는 본처를 포함해 ' + W.maxSpouses() + '명까지 맞을 수 있습니다.', 'ring', 4500); }
   W.of = function (id) { var p = P(); return (p.wives2 || []).filter(function (w) { return w.id === id; })[0] || null; };
   W.name = function (w) { var id = typeof w === 'string' ? w : w.id; return G.MAID[id] ? G.MAID[id].name : G.MATE[id] ? G.MATE[id].name : '부인'; };
   W.speaker = function (w) {
@@ -65,6 +70,7 @@
   W.proposeMaid = async function (c, m, say) {
     var p = P();
     if (W.of(m.id)) { UI.toast('이미 부인입니다.', 'ring'); return false; }
+    if (!W.canMarry()) { full(); return false; }
     var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + m.name + U.jx(m.name, '은/는') + ' <b>둘째 부인</b>이 되어 이 도시 ' + c.name + '에 새 집을 얻어 삽니다. 그 집에서 아이를 가질 수도 있습니다.</small>', '청혼한다', '그만둔다');
     if (!ok) return false;
     R.removeItem('ring');
@@ -81,6 +87,8 @@
   /** 부하에게 청혼 (본처가 있을 때): 고향으로 데려다주거나 함께 항해한다. true = 결혼함 */
   W.proposeMate = async function (d, m, say) {
     var p = P(), home = metCity(m), hc = G.CITY_DATA[home];
+    if (W.of(d.id)) { UI.toast('이미 부인입니다.', 'ring'); return false; }
+    if (!W.canMarry()) { full(); return false; }
     var ok = await UI.confirm(d.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + d.name + U.jx(d.name, '은/는') + ' <b>둘째 부인</b>이 됩니다. 처음 만난 고장 ' + hc.name + '에 집을 마련해 데려다주거나, 부하로 남아 함께 항해할 수 있습니다.</small>', '청혼한다', '그만둔다');
     if (!ok) return false;
     R.removeItem('ring');

@@ -3,6 +3,7 @@
    · 부하에게 청혼 → 함께 항해 / 본국 항구에서 숨으면 특기 0 / 다른 항구에서는 그대로
    · 본처를 배에 태우면 배의 둘째 부인은 제 집으로, 본처가 있는 동안 다시 태울 수 없음
    · 둘째 부인의 집에서 임신·출산·이름 짓기, 아이는 모두 합쳐 5명까지, 아이를 본국 자택으로
+   · 배우자는 본처 포함 12명까지, 12명인 상태에서는 여급·부하 청혼 모두 막힘
    · 뒤를 잇는 것은 아들뿐
    대화창은 시험용으로 저절로 넘긴다(UI.say·ask·confirm·choose를 바꿔 끼움). 마지막에 둘째 부인의 집 화면을 찍는다.
    node tests/wives_smoke.js  (playwright, 스크린샷은 OUT 폴더) */
@@ -103,6 +104,19 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 5) 후계자: 아들만
       out.heirs = G.Family.heirs().map(k => k.sex);
       out.info = G.Wives.infoWife();
+      // 6) 배우자 수 제한: 본처 1 + 둘째 부인 11 = 12명
+      const capMaids = G.MAIDS.filter(x => x.id !== p.wife).slice(0, 11);
+      p.wives2 = capMaids.map(x => ({ id: x.id, kind: 'maid', city: x.city, house: true, aboard: false, wed: s.day }));
+      const nextMaid = G.MAIDS.find(x => x.id !== p.wife && !W.of(x.id));
+      const nextMate = G.MATES.find(x => (x.g === 'f' || x.female) && !W.of(x.id));
+      const rings0 = p.items.filter(x => x.id === 'ring').length;
+      p.items.push({ id: 'ring' }, { id: 'ring' });
+      out.cap = {
+        count: W.count(), max: W.maxSpouses(),
+        maid: await W.proposeMaid(G.CITY_DATA[nextMaid.city], nextMaid, async () => {}),
+        mate: await W.proposeMate(nextMate, { id: nextMate.id, from: p.home }, async () => {}),
+        after: W.count(), rings: p.items.filter(x => x.id === 'ring').length - rings0
+      };
       window.RESTORE();
       out.maidId = maid.id;
       return out;
@@ -120,6 +134,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.total === 5 && r.noMore, '아이는 모두 합쳐 5명까지 (더 생기지 않음)');
     ok(r.sentHouse === -1 && r.atHome && r.homeNews.length, '아이를 본국 자택으로 — ' + r.homeNews[0]);
     ok(r.heirs.length && r.heirs.every(x => x === 'm'), '후계자는 아들만 (' + r.heirs.join(',') + ')');
+    ok(r.cap.count === 12 && r.cap.max === 12 && !r.cap.maid && !r.cap.mate && r.cap.after === 12 && r.cap.rings === 2,
+      '배우자는 본처 포함 12명까지 — 여급·부하 청혼을 막고 반지는 쓰지 않음');
 
     // 둘째 부인의 집 화면
     await page.evaluate((id) => { const m = G.MAID_BY ? null : G.MAIDS.find(x => x.id === id); G.Game.go('city', { cityId: m.city }); }, r.maidId);

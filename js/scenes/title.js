@@ -24,8 +24,8 @@
     var menu = wrap.querySelector('.title-menu');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = fn; menu.appendChild(b); return b; }
     var bCont = null;
-    async function cont() { await Game.ensureGeo(); var S = await G.State.loadAsync(0); if (!S) { UI.alert('불러오지 못했습니다.'); return; } G.Game.state = S; G.Game.resume(); }
-    if (G.State.meta(0)) bCont = btn('이어하기', 'sail', cont, 'navy');
+    async function cont() { await Game.ensureGeo(); var slot = G.State.latestAutoSlot(); var S = slot && await G.State.loadAsync(slot); if (!S) { UI.alert('불러오지 못했습니다.'); return; } G.Game.state = S; G.Game.resume(); }
+    if (G.State.latestAutoSlot()) bCont = btn('이어하기', 'sail', cont, 'navy');
     var bNew = btn('새로운 항해', 'ship', function () { G.Game.go('create'); }, bCont ? '' : 'navy');
     // 처음 하는 사람을 위한 튜토리얼 「첫 항해」 (js/systems/tutorial.js) — 저장이 하나도 없으면 이 단추를 강조한다
     var bTut = G.Tutorial && G.Tutorial.begin ? btn('첫 항해 (튜토리얼)', 'compass', function () { if (!bTut.classList.contains('disabled')) G.Tutorial.begin(); }, bCont ? '' : 'navy') : null;
@@ -44,7 +44,7 @@
       // 처음 열 때 떠 있던 불러오는 그림을 걷고, 바다 셰이더는 지금 미리 컴파일해 둔다 (첫 항해가 멈칫하지 않게)
       if (G.Loader) G.Loader.hide();
       setTimeout(function () { try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); } }, 600);
-      if (!bCont && G.State.meta(0)) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); if (bTut) bTut.classList.remove('navy'); }
+      if (!bCont && G.State.latestAutoSlot()) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); if (bTut) bTut.classList.remove('navy'); }
       if (bTut) bTut.classList.remove('disabled');
       if (bStory) bStory.classList.remove('disabled');
       bNew.classList.remove('disabled'); if (bCont) bCont.classList.remove('disabled');
@@ -53,14 +53,18 @@
   };
 
   T.loadMenu = async function () {
+    await G.State.ready;
     var opts = [];
-    for (var i = 0; i < 4; i++) {
-      var m = G.State.meta(i);
-      opts.push({ label: (i === 0 ? '자동 저장' : '일지 ' + i) + (m ? ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place) : ' — (비어 있음)'), value: i, disabled: !m, icon: 'book' });
-    }
+    G.State.AUTO_SLOTS.forEach(function (slot, i) {
+      var m = G.State.meta(slot);
+      opts.push({ label: '자동 저장 ' + (i + 1) + (m ? ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place) : ' — (비어 있음)'), value: slot, disabled: !m, icon: 'save' });
+    });
+    G.State.JOURNAL_SLOTS.forEach(function (slot, i) {
+      var m = G.State.meta(slot);
+      opts.push({ label: '여관 일지 ' + (i + 1) + (m ? ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place) : ' — (비어 있음)'), value: slot, disabled: !m, icon: 'book' });
+    });
     opts.push({ label: '파일에서 불러오기', value: 'file', icon: 'scroll', right: '내려받아 둔 일지 파일 (.json)' });
     if (G.State.hasAnySave()) opts.push({ label: '일지를 파일로 내려받기', value: 'export', icon: 'save', right: '다른 기기·브라우저로 옮길 때' });
-    await G.State.ready;
     var slot = await UI.choose('항해 일지 불러오기', opts, { width: 760 });
     if (slot == null) return;
     if (slot === 'export') { await T.exportMenu(); return; }
@@ -77,8 +81,10 @@
 
   /** 저장된 일지 하나를 파일로 내려받는다 */
   T.exportMenu = async function () {
+    await G.State.ready;
     var opts = [];
-    for (var i = 0; i < 4; i++) { var m = G.State.meta(i); if (m) opts.push({ label: (i === 0 ? '자동 저장' : '일지 ' + i) + ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place), value: i, icon: 'save' }); }
+    G.State.AUTO_SLOTS.forEach(function (slot, i) { var m = G.State.meta(slot); if (m) opts.push({ label: '자동 저장 ' + (i + 1) + ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place), value: slot, icon: 'save' }); });
+    G.State.JOURNAL_SLOTS.forEach(function (slot, i) { var m = G.State.meta(slot); if (m) opts.push({ label: '여관 일지 ' + (i + 1) + ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place), value: slot, icon: 'book' }); });
     if (!opts.length) { UI.alert('내려받을 일지가 없습니다.'); return; }
     var slot = await UI.choose('일지를 파일로 내려받기', opts, { width: 760 });
     if (slot == null) return;
@@ -103,7 +109,7 @@
       '<b>육상전</b> — 탐험대를 제독대와 부대(보병·기병·총병·포병)로 나누어 싸웁니다. 1 공격 · 2 방어 · 3~6 특수 작전(기습·함정·저격·작렬탄). 적 부대를 누르면 목표 — 기병은 뒷줄의 우두머리까지 칩니다. <b>우두머리</b>를 쓰러뜨리면 이기고 제독대가 무너지면 집니다.<br>' +
       '<b>해전</b> — 방향키(WASD)로 기함을 그 방위로 몰고 Space로 세웁니다. 바다를 클릭해 그곳으로 움직이고, 적함을 클릭하면 따라붙어 공격합니다. 옆구리를 적에게 향해야 포격합니다(현측에 든 적에게는 알아서 쏩니다). 가까이 붙어 B 키로 백병전을 겁니다. P는 일시정지. 배마다 번호가 붙고 <b>1번이 기함</b> — 적 기함을 가라앉히거나 나포하면 이기고, 우리 기함을 잃으면 집니다.<br>' +
       '<b>일기토</b> — 갑판(술집) 위에서 두 사람이 겨룹니다. 먼저 <b>방침</b>(1 결사돌진 · 2 강력공격 · 3 절대생포 · 4 호신중시)을 고르면 무력·검술에 따라 합이 저절로 오갑니다. 합마다 <b>다음 수</b>(0 자동 · 1 베기 · 2 찌르기 · 3 치기)를 고를 수 있고, 찌르기 → 베기 → 치기 → 찌르기로 화살표 쪽을 이깁니다(상대가 노리는 수는 검술이 높을수록 잘 읽힘). 기세가 차면 <b>기술</b>(일격필살·선제공격·측면공격·생포·거짓퇴각·비밀무기·유인·교체·설득·허보·호통·필살기)을 씁니다. Space 멈춤 · Esc 물러서기.<br>' +
-      '<b>저장</b> — 입항할 때마다 자동 저장되며, 여관의 「기능」에서 항해 일지에 기록할 수 있습니다.' +
+      '<b>저장</b> — 플레이 중 1분마다 자동 저장되며, 5칸이 차면 가장 오래된 기록부터 갱신됩니다. 여관의 「기능」에는 자동 저장과 별개인 항해 일지 5칸이 있습니다.' +
       '</div>', buttons: (gb ? [{ label: '플레이 가이드북', icon: 'book', cls: 'navy', onClick: function () { G.Guidebook.open(); return false; } }] : []).concat([{ label: '닫기', value: 1 }]),
       onBuild: function (el) {
         var card = el.querySelector('.help-guide'); if (!card) return;

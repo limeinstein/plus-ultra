@@ -198,14 +198,15 @@
     if (mateSpecCache[id]) return mateSpecCache[id];
     var d = G.MATE[id]; if (!d) return null;
     var sk = d.sk || {}, role = 'sailor';
-    if (sk.theo >= 2) role = 'priest';
+    if (d.role) role = d.role;
+    else if (sk.theo >= 2) role = 'priest';
     else if (sk.sci >= 2 || sk.med >= 2 || sk.hist >= 2 || (sk.survey >= 3 && d.st[1] > 70)) role = 'scholar';
     else if (sk.sword >= 3 || sk.gun >= 2) role = 'soldier';
     else if (sk.acct >= 2) role = 'merchant';
     var style = d.style || REGION_STYLE[(d.reg || [])[0]] || 'ib';
     if (id === 'rocco') style = 'it';
-    if (d.g === 'f') role = d.role || 'maid';
     var sp = A.npcSpec('mate_' + id, role, style, d.g);
+    if (d.native) sp.facePool = d.facePool;
     if (id === 'rocco') { sp.beard = 2; sp.hat = 'cap'; sp.age = 'mid'; }
     A.withImg(sp, G.Img.chain.mate(id).concat(d.face ? [d.face] : []));   // 철새·마녀는 이미 있는 얼굴을 빌린다
     return (mateSpecCache[id] = sp);
@@ -589,7 +590,7 @@
     var g = spec.g === 'f' ? 'f' : 'm';
     var style = spec.role && spec.style ? spec.style : CUL_STYLE[cultureOf(spec)] || 'ib';
     var out = [], seed = String(spec.seed || '') + ':' + (spec.role || '') + ':' + g;
-    var pool = STYLE_POOL[style] || 'es', kind = DRESSED[spec.role] || (spec.gold && !spec.role) ? 'sponsors' : 'mates';
+    var pool = spec.facePool || STYLE_POOL[style] || 'es', kind = DRESSED[spec.role] || (spec.gold && !spec.role) ? 'sponsors' : 'mates';
     var n = U.strHash(seed) % 10;
     out.push('portraits/pools/' + kind + '/' + pool + '/' + g + '/' + String(n + 1).padStart(2, '0'));
     out.push('portraits/pools/' + (kind === 'mates' ? 'sponsors' : 'mates') + '/' + pool + '/' + g + '/' + String(n + 1).padStart(2, '0'));

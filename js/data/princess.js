@@ -4,7 +4,7 @@
    ② 홍해의 요새로 간다 — 배로(아프리카를 돌아 아덴에서 홍해로) 가면 요새의 함대와 해전, 뭍으로(알렉산드리아·카이로 성문에서 사막을 건너) 가면 요새 수비대와 육상전
    ③ 왕녀를 모시고 국왕에게 돌아간다 — 그때도 결혼하지 않았다면 왕녀와 혼인할 수 있다(한 계급 특진 · 칭호 「부마」). 결혼한 몸이면 하사금과 명성만.
    왕녀는 이 게임에서 지어낸 사람이다(역사 속 왕녀가 아니다). 대사는 이 게임을 위해 새로 썼다.
-   그림을 넣으려면: images/portraits/npc/princess_es.webp (흉상) · princess_es_half.webp (무릎상) — 없으면 코드로 그린 초상. */
+   그림: 이베리아 마을의 완성된 짝 portraits/street-folk/town_woman_ib.webp · town_woman_ib_half.webp. */
 (function (G) {
   'use strict';
   G.BALANCE = G.BALANCE || {};

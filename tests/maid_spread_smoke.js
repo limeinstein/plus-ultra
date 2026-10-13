@@ -1,5 +1,5 @@
 /* 지역 여급 그림을 도시에 고루 뿌리기 (js/core/images.js I.maidPicCity · spreadCityMaids)
-   · Codex가 새로 넣은 여급 60명(images/maid-styles — 새 자리 30명 + 다시 그린 30명)이 모두 어느 도시 술집엔가 선다
+   · 검수된 고해상도 여급 그림이 모두 어느 도시 술집엔가 서고, 작은 원본을 확대한 구판 30명은 쓰지 않는다
    · 그림이 모두 한 번씩 쓰이기 전에는 겹치지 않는다(묶음 후보 안에서) · 한 그림이 너무 많은 도시에 서지 않는다
    · 묶음에 맞지 않는 그림은 정해진 곳에서만 (아프리카 금발·붉은 머리 안 씀, 아랍 금발·유럽 옷차림은 지중해 이슬람 도시만, 깃털 머리띠는 아메리카 토착 도시만)
    · 새 그림마다 무릎상(_half)과 얼굴 자리(G.PORTRAIT_FACES)가 있다 · 술집에 서고 대화창이 열린다 · 콘솔 오류 0
@@ -13,8 +13,9 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'maid_spread');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 const range = (st, a, b) => Array.from({ length: b - a + 1 }, (_, i) => 'maid-styles/' + st + '/' + (a + i));
-const CODEX = [].concat(range('africa', 13, 18), range('arabia', 8, 13), range('india', 13, 18), range('native', 7, 12), range('westeurope', 2, 7),
-  range('arabia', 1, 6), range('ottoman', 1, 6), range('persia', 1, 6), range('seasia', 1, 6), range('tropic', 1, 6));
+const ACTIVE = [].concat(range('africa', 13, 18), range('arabia', 8, 13), range('india', 13, 18), range('native', 7, 12), range('westeurope', 2, 7),
+  ['portraits/street-folk/town_woman_pe', 'portraits/street-folk/town_woman_se', 'portraits/street-folk/innkeeper_se']);
+const LOW_RES = [].concat(range('arabia', 1, 6), range('ottoman', 1, 6), range('persia', 1, 6), range('seasia', 1, 6), range('tropic', 1, 6));
 
 (async function () {
   fs.mkdirSync(OUT, { recursive: true });
@@ -26,13 +27,14 @@ const CODEX = [].concat(range('africa', 13, 18), range('arabia', 8, 13), range('
   try {
     await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Img && G.Img.spreadCityMaids && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
-    const r = await page.evaluate((CODEX) => {
+    const r = await page.evaluate(({ ACTIVE, LOW_RES }) => {
       const I = G.Img, map = I.spreadCityMaids(), used = {}, where = {};
       Object.keys(map).forEach(cid => { const k = map[cid]; used[k] = (used[k] || 0) + 1; (where[k] = where[k] || []).push(G.CITY_DATA[cid]); });
       const named = {}; G.MAIDS.forEach(m => { named[m.city] = 1; });
-      const missing = CODEX.filter(k => !I.has(k) || !I.has(k + '_half'));
-      const noFace = CODEX.filter(k => !(G.PORTRAIT_FACES || {})[k] || !(G.PORTRAIT_FACES || {})[k + '_half']);
-      const unused = CODEX.filter(k => !used[k]);
+      const missing = ACTIVE.filter(k => !I.has(k) || !I.has(k + '_half'));
+      const noFace = ACTIVE.filter(k => !(G.PORTRAIT_FACES || {})[k] || !(G.PORTRAIT_FACES || {})[k + '_half']);
+      const unused = ACTIVE.filter(k => !used[k]);
+      const lowResUsed = LOW_RES.filter(k => used[k] || (I.MAIDSTYLES || []).some(st => I.maidList(st[0]).includes(k)));
       // 묶음 후보 안에서: 어떤 그림이 두 번 쓰일 때 같은 후보의 다른 그림이 한 번도 안 쓰였으면 고르게 뿌리지 못한 것
       const uneven = [];
       Object.keys(map).forEach(cid => {
@@ -52,17 +54,18 @@ const CODEX = [].concat(range('africa', 13, 18), range('arabia', 8, 13), range('
       // 이름 있는 여급이 없는 도시는 모두 그림이 있다 (묶음이 있는 고장)
       const noPic = G.CITY_DATA.filter(c => !named[c.id] && I.maidPool(c) && !map[c.id]).map(c => c.name);
       const maxUse = Math.max(...Object.values(used));
-      const sample = CODEX.slice(0, 60).filter((k, i) => i % 6 === 0).map(k => k.slice(12) + '→' + (where[k] || []).map(c => c.name).join('·'));
+      const sample = ACTIVE.filter((k, i) => i % 6 === 0).map(k => k.replace(/^maid-styles\//, '') + '→' + (where[k] || []).map(c => c.name).join('·'));
       // 다시 불러도 같은 배치 (도시 번호 순 결정)
       const again = JSON.stringify(I.spreadCityMaids()) === JSON.stringify(map);
       const cityOf = k => (where[k] || [])[0];
-      return { n: CODEX.length, missing, noFace, unused, uneven, ruleBad, noPic, maxUse, sample, again,
+      return { n: ACTIVE.length, missing, noFace, unused, lowResUsed, uneven, ruleBad, noPic, maxUse, sample, again,
         shot: [cityOf('maid-styles/westeurope/3'), cityOf('maid-styles/india/18'), cityOf('maid-styles/arabia/8')].map(c => c && c.id) };
-    }, CODEX);
+    }, { ACTIVE, LOW_RES });
     console.log('  ' + r.sample.join(' / '));
-    ok(r.n === 60 && !r.missing.length, 'Codex 여급 60명: 흉상·무릎상 모두 있다 ' + r.missing.join(','));
-    ok(!r.noFace.length, '60명 모두 얼굴 자리(눈·입)가 재어져 있다 ' + r.noFace.join(','));
-    ok(!r.unused.length, '60명 모두 어느 도시 술집엔가 선다 ' + r.unused.join(','));
+    ok(r.n === 33 && !r.missing.length, '검수된 여급 33명: 흉상·무릎상 모두 있다 ' + r.missing.join(','));
+    ok(!r.noFace.length, '33명 모두 얼굴 자리(눈·입)가 재어져 있다 ' + r.noFace.join(','));
+    ok(!r.unused.length, '33명 모두 어느 도시 술집엔가 선다 ' + r.unused.join(','));
+    ok(!r.lowResUsed.length, '작은 원본을 확대한 구판 30명은 게임·도감 후보에서 제외된다 ' + r.lowResUsed.join(','));
     ok(!r.uneven.length, '묶음 후보의 그림이 모두 한 번씩 쓰이기 전에는 겹치지 않는다 ' + r.uneven.slice(0, 8).join(','));
     ok(!r.ruleBad.length, '고장에 맞지 않는 그림은 정해진 도시에서만 ' + r.ruleBad.join(','));
     ok(!r.noPic.length, '이름 있는 여급이 없는 도시는 모두 지역 여급 그림이 있다 ' + r.noPic.slice(0, 8).join(','));

@@ -684,7 +684,7 @@
       return function (slot) {
         var t = T();
         if (t && slot === 0) slot = D.slot;
-        var mine = t && slot >= 1 && slot <= 3 && at('inn') && !t.f.saved;
+        var mine = t && (/^journal[1-5]$/.test(String(slot)) || (slot >= 1 && slot <= 3)) && at('inn') && !t.f.saved;
         if (mine) t.f.saved = 1;            // 적어 넣는 일지에도 「일지를 썼다」가 남게 미리 적는다
         var p = orig.call(this, slot);
         if (mine) p.then(function (r) { if (!r || !r.ok) t.f.saved = 0; });

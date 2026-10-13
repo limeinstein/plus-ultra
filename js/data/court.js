@@ -48,72 +48,71 @@
     ['백작', 'Conde', 'Condesa', 5, '각하'], ['후작', 'Marqués', 'Marquesa', 6, '각하'], ['공작', 'Duque', 'Duquesa', 7, '각하']
   ];
   var BARBARY = [83, 82, 81, 85], ARABIA = [124, 109, 125], MALAY = [166, 170, 167], EAST = [191];
-  var EU_LADY = ['마르가레테 왕녀', '엘리자베트 왕녀', '안나 왕녀', '카타리나 왕녀'], IS_LADY = ['아이셰 공주', '파티마 공주', '셀마 공주', '굴바하르 공주'];
   var TURK = [['오스만 제국', 0, 9999], ['하프스 왕조', 0, 1574], ['틀렘센 왕국', 0, 1554], ['맘루크 왕조', 0, 1517]];
 
   G.COURT = { realms: {
     PT: { name: '포르투갈', sponsors: ['pt_king'], nation: 'PT', kind: 'eu', lands: ['포르투갈'], ranks: PT,
       honor: [['그리스도 기사단 기사', 'Cavaleiro da Ordem de Cristo', 'Dama da Ordem de Cristo', 1, '나리'], ['명예 피달구', 'Fidalgo honorário', 'Fidalga honorária', 2, '나리'], ['왕실 고문 남작', 'Barão do Conselho', 'Baronesa do Conselho', 3, '각하']],
-      foes: TURK.concat([['모로코', 0, 9999], ['구자라트 술탄국', 1500, 1573], ['캘리컷 왕국', 1500, 9999]]), dens: BARBARY, ladies: ['이자벨 왕녀', '베아트리스 왕녀', '마리아 왕녀', '주아나 왕녀'] },
+      foes: TURK.concat([['모로코', 0, 9999], ['구자라트 술탄국', 1500, 1573], ['캘리컷 왕국', 1500, 9999]]), dens: BARBARY, ladies: ['아비스의 이자벨 왕녀', '아비스의 베아트리스 왕녀', '아비스의 레오노르 왕녀', '아비스의 카타리나 왕녀'] },
     ES: { name: '에스파냐', sponsors: ['es_crown', 'es_aragon'], nation: 'ES', kind: 'eu', lands: ['카스티야', '아라곤', '에스파냐', '시칠리아'], ranks: ES,
       honor: [['산티아고 기사단 기사', 'Caballero de Santiago', 'Dama de Santiago', 1, '나리'], ['명예 이달고', 'Hidalgo de privilegio', 'Hidalga de privilegio', 2, '나리'], ['카스티야 명예 남작', 'Barón honorario', 'Baronesa honoraria', 3, '각하']],
-      foes: TURK.concat([['그라나다 왕국', 0, 1492], ['프랑스', 1494, 1559], ['잉글랜드', 1585, 1604]]), dens: BARBARY, ladies: ['후아나 왕녀', '카탈리나 왕녀', '마리아 왕녀', '이사벨 왕녀'] },
+      foes: TURK.concat([['그라나다 왕국', 0, 1492], ['프랑스', 1494, 1559], ['잉글랜드', 1585, 1604]]), dens: BARBARY, ladies: ['카스티야의 후아나 왕녀', '아라곤의 카탈리나 왕녀', '카스티야의 마리아 왕녀', '아라곤의 이사벨 왕녀'] },
     FR: { name: '프랑스', sponsors: ['fr_king'], kind: 'eu', lands: ['프랑스'],
       honor: [['생미셸 기사단 기사', "Chevalier de l'Ordre de Saint-Michel", "Dame de l'Ordre de Saint-Michel", 1, '나리'], ['남작', 'Baron', 'Baronne', 3, '각하'], ['백작', 'Comte', 'Comtesse', 5, '각하']],
-      foes: [['카스티야', 1494, 1559], ['잉글랜드', 0, 1560], ['오스만 제국', 0, 1525]], dens: BARBARY, ladies: ['클로드 왕녀', '마르그리트 왕녀', '르네 왕녀'] },
+      foes: [['카스티야', 1494, 1559], ['잉글랜드', 0, 1560], ['오스만 제국', 0, 1525]], dens: BARBARY, ladies: ['발루아의 클로드 왕녀', '앙굴렘의 마르그리트 왕녀', '발루아의 르네 왕녀'] },
     EN: { name: '잉글랜드', sponsors: ['en_king'], kind: 'eu', lands: ['잉글랜드', '영국'],
       honor: [['기사', 'Knight Bachelor', 'Dame', 1, '경'], ['남작', 'Baron', 'Baroness', 3, '각하'], ['가터 기사', 'Knight of the Garter', 'Lady of the Garter', 5, '경']],
-      foes: [['프랑스', 0, 1560], ['카스티야', 1585, 1604], ['스코틀랜드', 0, 1560]], dens: BARBARY, ladies: ['메리 왕녀', '마거릿 왕녀', '엘리자베스 왕녀'] },
+      foes: [['프랑스', 0, 1560], ['카스티야', 1585, 1604], ['스코틀랜드', 0, 1560]], dens: BARBARY, ladies: ['요크의 엘리자베스 왕녀', '튜더의 메리 왕녀', '튜더의 마거릿 왕녀'] },
     HRE: { name: '신성로마제국', sponsors: ['de_emperor'], kind: 'eu', lands: ['오스트리아', '신성로마제국', '부르고뉴'],
       honor: [['제국 기사', 'Reichsritter', 'Reichsritterin', 1, '나리'], ['제국 남작', 'Reichsfreiherr', 'Reichsfreifrau', 3, '각하'], ['제국 백작', 'Reichsgraf · Imperial Count', 'Reichsgräfin · Imperial Countess', 5, '각하']],
-      foes: [['오스만 제국', 0, 9999], ['프랑스', 1494, 1559], ['베네치아', 1508, 1516]], dens: BARBARY, ladies: EU_LADY },
+      foes: [['오스만 제국', 0, 9999], ['프랑스', 1494, 1559], ['베네치아', 1508, 1516]], dens: BARBARY, ladies: ['합스부르크의 마르가레테 대공녀', '합스부르크의 엘레오노레 대공녀', '합스부르크의 이사벨 대공녀', '합스부르크의 마리아 대공녀'] },
     VE: { name: '베네치아', sponsors: ['it_doge'], kind: 'eu', lands: ['베네치아'],
       honor: [['산마르코 기사', 'Cavaliere di San Marco', 'Dama di San Marco', 1, '나리'], ['황금의 책에 오른 명예 귀족', 'Patrizio veneto', 'Patrizia veneta', 4, '각하']],
-      foes: [['오스만 제국', 0, 9999], ['제노바', 0, 1500]], dens: BARBARY, ladies: ['도제의 조카딸 카테리나', '도제의 손녀 엘레나'] },
+      foes: [['오스만 제국', 0, 9999], ['제노바', 0, 1500]], dens: BARBARY, ladies: ['콘타리니 가문의 카테리나', '모로시니 가문의 엘레나'] },
     PAPAL: { name: '교황청', sponsors: ['it_pope'], kind: 'eu', lands: ['교황령'],
       honor: [['황금 박차 기사', "Cavaliere dello Speron d'Oro", "Dama dello Speron d'Oro", 2, '나리'], ['라테라노 궁정백', 'Comes Palatinus Lateranus', 'Comitissa Palatina', 4, '각하']],
-      foes: [['오스만 제국', 0, 9999], ['하프스 왕조', 0, 1574], ['틀렘센 왕국', 0, 1554]], dens: BARBARY, ladies: ['교황의 조카딸 루크레치아', '로마 귀족의 딸 줄리아'] },
+      foes: [['오스만 제국', 0, 9999], ['하프스 왕조', 0, 1574], ['틀렘센 왕국', 0, 1554]], dens: BARBARY, ladies: ['파르네세 가문의 루크레치아', '오르시니 가문의 줄리아'] },
     DK: { name: '덴마크', sponsors: ['dk_king'], kind: 'eu', lands: ['덴마크'],
       honor: [['기사', 'Ridder', 'Dame', 1, '나리'], ['코끼리 기사단 기사', 'Ridder af Elefantordenen', 'Dame af Elefantordenen', 4, '각하']],
-      foes: [['스웨덴', 0, 9999], ['한자 동맹', 0, 1536]], dens: BARBARY, ladies: ['엘리사베트 왕녀', '도로테아 왕녀'] },
+      foes: [['스웨덴', 0, 9999], ['한자 동맹', 0, 1536]], dens: BARBARY, ladies: ['올덴부르크의 엘리사베트 왕녀', '올덴부르크의 도로테아 왕녀'] },
     PL: { name: '폴란드', sponsors: ['pl_king'], kind: 'eu', lands: ['폴란드'],
       honor: [['황금 박차 기사', 'Eques Auratus', 'Domina Aurata', 1, '나리'], ['폴란드 명예 귀족', 'Indygenat', 'Indygenat', 3, '각하']],
-      foes: [['오스만 제국', 0, 9999], ['튜턴 기사단', 0, 1525]], dens: BARBARY, ladies: ['야드비가 왕녀', '안나 왕녀', '조피아 왕녀'] },
+      foes: [['오스만 제국', 0, 9999], ['튜턴 기사단', 0, 1525]], dens: BARBARY, ladies: ['야기에우워의 야드비가 왕녀', '야기에우워의 바르바라 왕녀', '야기에우워의 조피아 왕녀'] },
     RU: { name: '모스크바', sponsors: ['ru_prince'], kind: 'eu', lands: ['모스크바 대공국', '러시아 차르국', '러시아 제국'],
       honor: [['궁정 귀족', 'Dvoryanin', 'Dvoryanka', 1, '나리'], ['오콜니치', 'Okolnichy', 'Okolnichy', 3, '각하'], ['보야르', 'Boyar', 'Boyarynya', 5, '각하']],
-      foes: [['리보니아', 0, 1561], ['스웨덴', 0, 9999], ['오스만 제국', 0, 9999]], dens: BARBARY, ladies: ['옐레나 공녀', '페오도시야 공녀'] },
+      foes: [['리보니아', 0, 1561], ['스웨덴', 0, 9999], ['오스만 제국', 0, 9999]], dens: BARBARY, ladies: ['류리크가의 옐레나 공녀', '류리크가의 페오도시야 공녀'] },
     HU: { name: '헝가리', sponsors: ['hu_king'], kind: 'eu', lands: ['헝가리'],
       honor: [['용 기사단 기사', 'Societas Draconistarum', 'Societas Draconistarum', 1, '나리'], ['남작', 'Báró', 'Báróné', 3, '각하']],
-      foes: [['오스만 제국', 0, 9999]], dens: BARBARY, ladies: EU_LADY },
+      foes: [['오스만 제국', 0, 9999]], dens: BARBARY, ladies: ['후녀디의 에르제베트 왕녀', '야기에우워의 언너 왕녀', '자포여의 보르벌러 왕녀', '바토리의 크리스티나 공녀'] },
     OT: { name: '오스만 제국', sponsors: ['ot_sultan'], kind: 'is', lands: ['오스만 제국'],
       honor: [['아아', 'Ağa', 'Hatun', 1, '나리'], ['베이', 'Bey', 'Hanım', 3, '나리'], ['파샤', 'Paşa', 'Sultan Hanım', 6, '각하']],
-      foes: [['베네치아', 0, 9999], ['카스티야', 0, 9999], ['맘루크 왕조', 0, 1517], ['포르투갈', 1500, 9999]], dens: BARBARY, ladies: IS_LADY },
+      foes: [['베네치아', 0, 9999], ['카스티야', 0, 9999], ['맘루크 왕조', 0, 1517], ['포르투갈', 1500, 9999]], dens: BARBARY, ladies: ['아이셰 술탄', '파트마 술탄', '미흐리마 술탄', '게브헤르한 술탄'] },
     EG: { name: '맘루크 왕조', sponsors: ['eg_sultan'], kind: 'is', lands: ['맘루크 왕조'],
       honor: [['십인장 아미르', 'Amīr ʿAshara', 'Khātūn', 1, '나리'], ['군악대 아미르', 'Amīr Ṭablkhāna', 'Khātūn', 3, '나리'], ['백인장 아미르', "Amīr Mi'a", 'Khātūn', 5, '각하']],
-      foes: [['오스만 제국', 0, 9999], ['포르투갈', 1500, 9999]], dens: ARABIA, ladies: IS_LADY },
+      foes: [['오스만 제국', 0, 9999], ['포르투갈', 1500, 9999]], dens: ARABIA, ladies: ['카디자 카툰', '자이나브 카툰', '사피야 카툰', '누르 카툰'] },
     PE: { name: '페르시아', sponsors: ['pe_shah'], kind: 'is', lands: ['아크코윤루', '사파비 왕조', '페르시아'],
       honor: [['베그', 'Beg', 'Begum', 2, '나리'], ['칸', 'Khān', 'Khānum', 5, '각하']],
-      foes: [['오스만 제국', 0, 9999], ['호르무즈 왕국', 0, 1515]], dens: ARABIA, ladies: IS_LADY },
+      foes: [['오스만 제국', 0, 9999], ['호르무즈 왕국', 0, 1515]], dens: ARABIA, ladies: ['파리한 하눔', '마힌바누 하눔', '제이네프 베굼', '파흐리자한 베굼'] },
     HR: { name: '헤라트', sponsors: ['hr_baykara'], kind: 'is', lands: ['티무르 왕조'],
       honor: [['베그', 'Beg', 'Begum', 2, '나리'], ['아미르', 'Amīr', 'Khānum', 4, '각하']],
-      foes: [], dens: ARABIA, ladies: IS_LADY },
+      foes: [], dens: ARABIA, ladies: ['바디알자말 베굼', '한자다 베굼', '로비야 술탄 베굼', '아카 베기 베굼'] },
     DL: { name: '델리', sponsors: ['in_delhi'], kind: 'is', lands: ['델리 술탄국', '무굴 제국'],
       honor: [['아미르', 'Amīr', 'Begum', 2, '나리'], ['말리크', 'Malik', 'Malika', 4, '각하'], ['칸', 'Khān', 'Khānum', 6, '각하']],
-      foes: [['구자라트 술탄국', 0, 1573], ['포르투갈', 1500, 9999]], dens: ARABIA, ladies: IS_LADY },
+      foes: [['구자라트 술탄국', 0, 1573], ['포르투갈', 1500, 9999]], dens: ARABIA, ladies: ['로디의 다울라트 베굼', '티무르가의 굴룩 베굼', '무굴의 살리마 술탄 베굼', '무굴의 박시 바누 베굼'] },
     GJ: { name: '구자라트', sponsors: ['in_gujarat'], kind: 'is', lands: ['구자라트 술탄국'],
       honor: [['말리크', 'Malik', 'Malika', 2, '나리'], ['칸', 'Khān', 'Khānum', 4, '각하']],
-      foes: [['포르투갈', 1500, 9999], ['캘리컷 왕국', 0, 9999]], dens: ARABIA, ladies: IS_LADY },
+      foes: [['포르투갈', 1500, 9999], ['캘리컷 왕국', 0, 9999]], dens: ARABIA, ladies: ['아마다바드의 라일라 베굼', '참파네르의 마리암 베굼', '구자라트의 수라야 하눔', '카티아와르의 나지마 베굼'] },
     MY: { name: '말라카', sponsors: ['my_malacca'], kind: 'is', lands: ['말라카 술탄국'],
       honor: [['오랑 카야', 'Orang Kaya', 'Orang Kaya', 2, '나리'], ['다툭', 'Datuk', 'Datin', 4, '각하']],
-      foes: [['아유타야 왕국', 0, 9999], ['포르투갈', 1509, 9999], ['아체 술탄국', 0, 9999]], dens: MALAY, ladies: ['라덴 갈루 공주', '푸트리 하미다 공주'] },
+      foes: [['아유타야 왕국', 0, 9999], ['포르투갈', 1509, 9999], ['아체 술탄국', 0, 9999]], dens: MALAY, ladies: ['멜라카의 라덴 갈루 공주', '멜라카의 푸트리 하미다 공주'] },
     VJ: { name: '비자야나가르', sponsors: ['in_vijaya'], kind: 'as', lands: ['비자야나가르 제국'],
-      honor: [['나야카', 'Nāyaka', 'Nāyakī', 3, '나리']], foes: [['바흐마니 술탄국', 0, 9999]], dens: ARABIA, ladies: ['티루말라 공주', '친나 공주'] },
+      honor: [['나야카', 'Nāyaka', 'Nāyakī', 3, '나리']], foes: [['바흐마니 술탄국', 0, 9999]], dens: ARABIA, ladies: ['툴루바의 티루말라 공주', '툴루바의 친나 공주'] },
     TH: { name: '아유타야', sponsors: ['th_king'], kind: 'as', lands: ['아유타야 왕국'],
       honor: [['쿤', 'Khun', 'Khun', 1, '나리'], ['루앙', 'Luang', 'Luang', 3, '나리'], ['프라', 'Phra', 'Phra', 5, '각하']],
-      foes: [['한타와디 왕국', 0, 9999], ['말라카 술탄국', 0, 1511]], dens: MALAY, ladies: ['수리요타이 공주', '사왓 공주'] },
+      foes: [['한타와디 왕국', 0, 9999], ['말라카 술탄국', 0, 1511]], dens: MALAY, ladies: ['아유타야의 수리요타이 공주', '수판부리의 사왓 공주'] },
     KR: { name: '조선', sponsors: ['kr_king'], kind: 'as', lands: ['조선'],
       honor: [['수직 사정', '受職 司正', '受職 司正', 1, '나리'], ['수직 호군', '受職 護軍', '受職 護軍', 3, '영감'], ['수직 상호군', '受職 上護軍', '受職 上護軍', 5, '영감']],
-      foes: [['일본', 1510, 1512], ['일본', 1555, 1556], ['일본', 1592, 1598]], dens: EAST, ladies: ['정순 옹주', '경현 공주'] }
+      foes: [['일본', 1510, 1512], ['일본', 1555, 1556], ['일본', 1592, 1598]], dens: EAST, ladies: ['전주 이씨 정순옹주', '전주 이씨 경현공주'] }
   } };
   /* 서임 때 교서를 읽는 전속 신하. 얼굴·무릎상은 portraits/courtiers/<군주 id>(_half).webp 이다.
      같은 나라라도 카스티야와 아라곤처럼 군주 자리가 다르면 서로 다른 신하가 나온다. */
@@ -127,8 +126,33 @@
     my_malacca: { name: '벤타라' }, in_vijaya: { name: '왕실 서기관' }, th_king: { name: '왕실 전령관' },
     kr_king: { name: '승정원 승지' }
   };
-  var by = {};
-  Object.keys(G.COURT.realms).forEach(function (k) { var r = G.COURT.realms[k]; r.id = k; r.sponsors.forEach(function (id) { by[id] = k; }); });
+  // 왕녀 구출 왕명에 나오는 사람들. 얼굴을 잘라 붙여 늘린 pool 무릎상 대신, 실제 마을에 쓰는
+  // 지역별 거리 인물의 완성된 흉상·무릎상 짝을 쓴다. 이 그림들은 옷단이 무릎 부근에서 잘리고
+  // 무릎·종아리가 드러나지 않는지 눈으로 확인했다. 조선은 서로 다른 한복 자세 두 장을 쓴다.
+  var LADY_STYLE = {
+    PT: 'ib', ES: 'ib', FR: 'ne', EN: 'ne', HRE: 'ne', VE: 'it', PAPAL: 'it', DK: 'ne',
+    PL: 'ru', RU: 'ru', HU: 'ru', OT: 'is', EG: 'is', PE: 'pe', HR: 'pe',
+    DL: 'in', GJ: 'in', MY: 'se', VJ: 'in', TH: 'se', KR: 'kr'
+  };
+  var LADY_ART = {
+    ib: ['town_woman', 'girl'],
+    ne: ['town_woman', 'librarian', 'girl'], it: ['town_woman', 'librarian', 'girl'],
+    ru: ['town_woman', 'librarian', 'girl'], is: ['town_woman', 'librarian', 'girl'],
+    pe: ['town_woman', 'librarian', 'girl'], 'in': ['town_woman', 'librarian', 'girl'],
+    se: ['town_woman', 'librarian', 'girl'], kr: ['town_woman', 'librarian']
+  };
+  var by = {}, ladyN = {};
+  G.COURT.princesses = [];
+  Object.keys(G.COURT.realms).forEach(function (k) {
+    var r = G.COURT.realms[k], style = LADY_STYLE[k] || 'ib', art = LADY_ART[style] || ['town_woman']; r.id = k;
+    r.sponsors.forEach(function (id) { by[id] = k; });
+    (r.ladies || []).forEach(function (name, i) {
+      ladyN[style] = (ladyN[style] || 0) + 1;
+      var base = 'portraits/street-folk/' + art[(ladyN[style] - 1) % art.length] + '_' + style;
+      G.COURT.princesses.push({ id: 'court_princess_' + k.toLowerCase() + '_' + (i + 1), name: name, realm: k, style: style,
+        face: base, half: base + '_half' });
+    });
+  });
   G.COURT.bySponsor = by;
 
   // 왕명의 종류. cat = 그 일을 마치면 오르는 명성의 갈래

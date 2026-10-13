@@ -631,14 +631,22 @@
   };
   /** 도시 하나만 따로: 라사(티베트)는 초원 양식이지만 여급은 중국 묶음에서 */
   I.MAID_POOL_CITY = { 139: ['china'] };
-  /** 묶음 폴더 안에 섞여 있지만 그 고장 사람으로 보이지 않는 그림 — 1 = 어디서도 쓰지 않음, 문자열·목록 = 그 도시 양식에서만 쓴다
+  /** 묶음 폴더 안에 섞여 있지만 그 고장 사람으로 보이지 않거나 원본 해상도가 낮은 그림 — 1 = 어디서도 쓰지 않음, 문자열·목록 = 그 도시 양식에서만 쓴다
       (아프리카 묶음의 금발·붉은 머리는 쓰지 않는다. 아랍 묶음의 유럽 옷차림·금발은 지중해 이슬람 도시(is)에서만, 붉은 머리는 is·페르시아(pe)에서만,
        페르시아 묶음의 동아시아 얼굴은 초원(st)에서만) */
   I.MAID_BAN = { 'maid-styles/africa/9': 1, 'maid-styles/africa/11': 1,
     'maid-styles/arabia/2': 'is', 'maid-styles/arabia/3': 'is', 'maid-styles/arabia/10': 'is', 'maid-styles/arabia/12': ['is', 'pe'],
     'maid-styles/seasia/5': 1, 'maid-styles/persia/3': 'st' };
-  /** 다른 묶음 폴더에 있지만 이 묶음 사람으로 쓰는 그림 (동남아 묶음의 깃털 머리띠 여급 → 아메리카 토착) */
-  I.MAID_EXTRA = { native: ['maid-styles/seasia/5'] };
+  // 아래 다섯 묶음의 1~6번은 작은 원본을 확대해 윤곽이 깨진 구판이므로 게임과 도감에서 제외한다.
+  ['arabia', 'ottoman', 'persia', 'seasia', 'tropic'].forEach(function (st) {
+    for (var n = 1; n <= 6; n++) I.MAID_BAN['maid-styles/' + st + '/' + n] = 1;
+  });
+  /** 폴더의 구판 대신 쓰는 고해상도·투명 배경 지역 인물 */
+  I.MAID_EXTRA = {
+    persia: ['portraits/street-folk/town_woman_pe'],
+    seasia: ['portraits/street-folk/town_woman_se'],
+    tropic: ['portraits/street-folk/innkeeper_se']
+  };
   /** 이 도시의 여급 그림 묶음 후보 */
   I.maidPool = function (c) { return !c ? null : I.MAID_POOL_CITY[c.id] || I.MAID_POOL[I.folkStyle(c)] || null; };
   /** 묶음 폴더의 흉상 그림들 — 그 고장에 맞지 않는 그림은 뺀다 */
@@ -766,6 +774,20 @@
     if (/^portraits\/npc\//.test(k)) return NPC_FEMALE[k.replace(/@\d+$/, '')] ? 'f' : 'm';
     return null;
   }
+  // 얼굴 확장본보다 이미 따로 그려 둔 지역 거리 인물 무릎상을 먼저 쓴다. 여자 그림은 치맛단,
+  // 남자 그림은 겉옷·바지단이 무릎 부근에서 끝나므로 얼굴만 붙인 듯한 이음새와 맨무릎이 없다.
+  // 조선의 town_man 그림은 실제 걷는 인물이 여자라 남자는 navigator 그림을 쓴다.
+  var NPC_HALF_ROLE = { vendor: 'merchant', tavernkeeper: 'keeper', shipwright: 'sailor' };
+  function regionalNpcHalf(style, gender) {
+    if (!style || !gender) return [];
+    var sprite = gender === 'f' ? 'town_woman' : style === 'kr' ? 'navigator' : 'town_man';
+    return ['portraits/street-folk/' + sprite + '_' + style + '_half'];
+  }
+  function npcHalfGender(id, c, picked) {
+    var role = NPC_ROLE_PORTRAIT[id] || NPC_HALF_ROLE[id], style = c && I.folkStyle(c);
+    if (role && style && G.Art && G.Art.rolePortraitGender) return G.Art.rolePortraitGender(role, style);
+    return npcKeyGender(picked);
+  }
   /** 흉상 사슬 → 그 사람의 무릎상 후보 (말하는 사람에게 half가 없을 때 js/ui/ui.js가 쓴다).
       · 이름 있는 사람(동료·후원자·여급·경쟁자): 사슬에 든 그 사람 그림마다 <그림>_half
       · 마을 사람(portraits/npc·npc-roles): 지금 보이는 흉상의 <그림>_half, 없으면 같은 고장·같은 성별의 역할 무릎상 */
@@ -774,7 +796,11 @@
     var out = [], picked = I.pick(chain);
     chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
     if (picked && /^maid-styles\//.test(picked) && !/_half$/.test(picked)) out.push(picked + '_half');   // 이름 없는 그 고장 여급 (술집 여급 무릎상과 같은 그림)
-    if (picked && /^portraits\/(npc|npc-roles|pools)\//.test(picked)) {
+    if (picked && /^portraits\/(npc|npc-roles)\//.test(picked)) {
+      var rk = chain.filter(function (k) { return /^portraits\/npc-roles\/[a-z]+\/[a-z]+$/.test(k); })[0];
+      var rm = rk && /^portraits\/npc-roles\/([a-z]+)\/([a-z]+)$/.exec(rk);
+      var g0 = rm && G.Art && G.Art.rolePortraitGender ? G.Art.rolePortraitGender(rm[2], rm[1]) : npcKeyGender(picked);
+      if (rm) out = regionalNpcHalf(rm[1], g0).concat(out);
       out.push(picked + '_half');
       var g = npcKeyGender(picked);
       if (g) chain.forEach(function (k) { if (/^portraits\/npc-roles\//.test(k) && npcKeyGender(k) === g) out.push(k + '_half'); });
@@ -782,8 +808,11 @@
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
   K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
-  /** 마을 사람 무릎상: 흉상과 같은 후보 순서를 그대로 따른다. */
-  K.npcHalf = function (id, c) { return K.halfOf(K.npc(id, c)); };
+  /** 마을 사람 무릎상: 같은 지역·성별의 완성된 거리 인물 그림을 먼저, 기존 얼굴 확장본은 마지막 예비로. */
+  K.npcHalf = function (id, c) {
+    var chain = K.npc(id, c), picked = I.pick(chain), style = c && I.folkStyle(c);
+    return regionalNpcHalf(style, npcHalfGender(id, c, picked)).concat(K.halfOf(chain)).filter(function (k, i, a) { return a.indexOf(k) === i; });
+  };
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */
   K.sponsor = function (sp, holder) {
     var out = [];

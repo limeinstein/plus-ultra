@@ -116,6 +116,10 @@
      · 브라우저에 「지우지 말아 달라」고 부탁한다(navigator.storage.persist — 아이폰 사파리는 7일 넘게 안 열면 지우기도 한다).
      · 일지를 파일로 내려받고 파일에서 불러올 수 있다 (기기를 옮기거나 웹판↔파일판을 오갈 때). */
   var KEY = 'plusultra_save_', PACK = '\u0001LZ1:';
+  var AUTO_SLOTS = ['auto1', 'auto2', 'auto3', 'auto4', 'auto5'], lastSaveSlot = null;
+  var JOURNAL_SLOTS = ['journal1', 'journal2', 'journal3', 'journal4', 'journal5'];
+  ST.AUTO_SLOTS = AUTO_SLOTS.slice();
+  ST.JOURNAL_SLOTS = JOURNAL_SLOTS.slice();
   function b64(u8) { var s = ''; for (var i = 0; i < u8.length; i += 8192) s += String.fromCharCode.apply(null, u8.subarray(i, i + 8192)); return btoa(s); }
   function unb64(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
   function lzPack(input) {
@@ -289,8 +293,40 @@
     for (var i = 0; i < 4; i++) { var v = lsGet(KEY + i); if (v && v.indexOf(PACK) !== 0) lsSet(KEY + i, packed(v)); }
   }
 
+  // 2026-10-13 이전 일지(자동 0, 수동 1~3)는 새 슬롯 이름으로도 그대로 보인다.
+  function legacySlot(slot) {
+    var a = /^auto([1-5])$/.exec(String(slot));
+    if (a && Number(a[1]) === 1) return 0;
+    var j = /^journal([1-5])$/.exec(String(slot));
+    if (j && Number(j[1]) <= 3) return Number(j[1]);
+    return null;
+  }
+  function metaDirect(slot) {
+    var a = ST.metaLocal(slot), b = mem[slot] && mem[slot].meta;
+    if (a && lsGet(KEY + slot)) return b && b.t > a.t + 1000 ? b : a;
+    return b || null;
+  }
+  function rawDirect(slot) {
+    var v = lsGet(KEY + slot), m = mem[slot], lm = ST.metaLocal(slot);
+    // 두 곳 가운데 더 새것 (한쪽만 지워졌거나 한쪽 쓰기가 실패했을 때)
+    if (v && m && m.meta && lm && m.meta.t > lm.t + 1000) return m.data;
+    return v || (m && m.data) || null;
+  }
+  function nextAutoSlot() {
+    var oldest = AUTO_SLOTS[0], oldestTime = Infinity;
+    for (var i = 0; i < AUTO_SLOTS.length; i++) {
+      var m = metaDirect(AUTO_SLOTS[i]);
+      if (!m) return AUTO_SLOTS[i];
+      if ((m.t || 0) < oldestTime) { oldestTime = m.t || 0; oldest = AUTO_SLOTS[i]; }
+    }
+    return oldest;
+  }
+  ST.nextAutoSlot = nextAutoSlot;
+
   /** 저장: 결과 {ok, where:'browser'|'backup'|null, msg} — 브라우저 저장소가 막혀도 IndexedDB에 남으면 ok */
   ST.saveAsync = function (slot) {
+    if (slot === 0) slot = nextAutoSlot();
+    lastSaveSlot = slot;
     persist();
     var data, meta;
     try { data = packed(ST.serialize()); meta = metaNow(); }
@@ -311,18 +347,13 @@
   };
   /** 예전처럼 바로 돌려받는 저장 (자동 저장) — 브라우저 저장소에 넣었으면 true. 보조 저장소 기록은 뒤에서 이어진다 */
   ST.save = function (slot) {
-    var p = ST.saveAsync(slot), ok = false;
-    // localStorage 쓰기는 saveAsync 안에서 이미 끝났다 — 그 결과로 판단
-    ok = !!lsGet(KEY + slot + '_meta') && (lsGet(KEY + slot) || '').indexOf(PACK) === 0;
+    var p = ST.saveAsync(slot), actual = lastSaveSlot;
     p.then(function (r) { if (!r.ok && G.UI && G.UI.toast) G.UI.toast('자동 저장 실패 — ' + r.msg, 'book', 6000); });
-    return ok || !!mem[slot];
+    return !!lsGet(KEY + actual + '_meta') || !!mem[actual];
   };
   function rawOf(slot) {
-    var v = lsGet(KEY + slot), m = mem[slot];
-    var lm = ST.metaLocal(slot);
-    // 두 곳 가운데 더 새것 (한쪽만 지워졌거나 한쪽 쓰기가 실패했을 때)
-    if (v && m && m.meta && lm && m.meta.t > lm.t + 1000) return m.data;
-    return v || (m && m.data) || null;
+    var v = rawDirect(slot), old = legacySlot(slot);
+    return v || (old == null ? null : rawDirect(old));
   }
   ST.load = function (slot) {
     try {
@@ -334,11 +365,32 @@
   ST.loadAsync = function (slot) { return ST.ready.then(function () { return ST.load(slot); }); };
   ST.metaLocal = function (slot) { try { var m = lsGet(KEY + slot + '_meta'); return m ? JSON.parse(m) : null; } catch (e) { return null; } };
   ST.meta = function (slot) {
-    var a = ST.metaLocal(slot), b = mem[slot] && mem[slot].meta;
-    if (a && lsGet(KEY + slot)) return b && b.t > a.t + 1000 ? b : a;
-    return b || null;
+    var m = metaDirect(slot), old = legacySlot(slot);
+    return m || (old == null ? null : metaDirect(old));
   };
-  ST.hasAnySave = function () { for (var i = 0; i < 4; i++) if (ST.meta(i)) return true; return false; };
+  ST.latestAutoSlot = function () {
+    var newest = null, newestTime = -Infinity;
+    for (var i = 0; i < AUTO_SLOTS.length; i++) {
+      var m = ST.meta(AUTO_SLOTS[i]);
+      if (m && (m.t || 0) > newestTime) { newestTime = m.t || 0; newest = AUTO_SLOTS[i]; }
+    }
+    return newest;
+  };
+  ST.hasAnySave = function () {
+    var slots = AUTO_SLOTS.concat(JOURNAL_SLOTS);
+    for (var i = 0; i < slots.length; i++) if (ST.meta(slots[i])) return true;
+    return false;
+  };
+
+  // 플레이 중 1분마다 자동 저장한다. 5칸이 찬 뒤에는 가장 오래된 칸부터 덮어쓴다.
+  ST.AUTO_INTERVAL_MS = 60000;
+  ST.autoSaveNow = function () {
+    var game = G.Game, S = game && game.state, scene = game && game.sceneName;
+    if (!S || !S.player || scene === 'title' || scene === 'create' || (S.settings && S.settings.autosave === false)) return false;
+    ST.save(0);
+    return true;
+  };
+  setInterval(function () { ST.autoSaveNow(); }, ST.AUTO_INTERVAL_MS);
 
   // ---- 파일로 내려받기 / 파일에서 불러오기
   ST.exportSlot = function (slot) {
@@ -352,7 +404,8 @@
     var body = JSON.stringify({ format: 'plusultra-save', v: 1, slot: slot, meta: meta, data: data });
     var d = new Date(meta.t || Date.now()), pad = function (n) { return (n < 10 ? '0' : '') + n; };
     // 파일 이름은 영문·숫자만 (한글 이름은 브라우저에 따라 「download」로 바뀌어 버린다): 게임 날짜 + 저장한 날
-    var name = 'PLUS_ULTRA_' + (slot == null ? 'now' : slot === 0 ? 'auto' : 'slot' + slot) + '_' + String(meta.date || '').replace(/[^0-9]+/g, '-').replace(/^-|-$/g, '') + '_' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json';
+    var slotName = slot == null ? 'now' : /^auto[1-5]$/.test(String(slot)) ? String(slot).replace('auto', 'auto-') : /^journal[1-5]$/.test(String(slot)) ? String(slot).replace('journal', 'journal-') : slot === 0 ? 'auto' : 'slot' + slot;
+    var name = 'PLUS_ULTRA_' + slotName + '_' + String(meta.date || '').replace(/[^0-9]+/g, '-').replace(/^-|-$/g, '') + '_' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json';
     try {
       var url = URL.createObjectURL(new Blob([body], { type: 'application/json' }));
       var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click();

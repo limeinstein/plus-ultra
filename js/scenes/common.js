@@ -240,7 +240,9 @@
       '<div class="rv-title"><b>' + U.esc(d.name) + '</b> 발견</div><div class="rv-skip">누르면 건너뜁니다</div>';
     // 화면 층(#screen) 위, 대화창 층 아래 — 윗줄 HUD와 지도 이름표까지 함께 어두워진다
     var uiRoot = document.getElementById('ui'); if (uiRoot) uiRoot.appendChild(el); else UI.add(el);
-    var gif = el.querySelector('.rv-gif'), end = el.querySelector('.rv-end'), reel = null, L = null;
+    var reel = null;
+    try {
+    var gif = el.querySelector('.rv-gif'), end = el.querySelector('.rv-end'), L = null;
     if (keys.end) end.src = G.Img.src(keys.end);
     if (keys.sheet) {
       // 미리 받아 두었으면(G.Reel.prefetch) 곧바로, 아니면 받는 동안 화면부터 어두워진다
@@ -250,7 +252,7 @@
         L = await G.Img.wait(G.Reel.load(keys.sheet), FX.loadWaitMs || 2500);   // 느린 연결에서도 연출을 건너뛰지 않고 판을 기다린다
       }
       setTimeout(function () { el.classList.add('on'); }, 30);
-      if (L) reel = G.Reel.play(top.querySelector('.rv-reel'), L, { ms: playMs });
+      if (L) reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: playMs });
     } else {
       // 이미 한 번 불러 둔 GIF도 처음 장면부터 돌도록 새로 불러온다 (파일 주소일 때만 — 한 파일짜리 판의 data: 주소는 그대로)
       var src = G.Img.src(keys.gif); if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
@@ -309,6 +311,10 @@
     await U.sleep(450);
     if (el.parentNode) el.parentNode.removeChild(el);
     return true;
+    } finally {
+      if (reel && reel.stop) reel.stop();
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }
   };
 
   /** 보고·발표 자리에서 발견물 그림을 다시 띄운다 (js/systems/pitch.js) — 발견 때의 장면 판·GIF를 처음부터 다시 돌리며

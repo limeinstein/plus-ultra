@@ -598,10 +598,11 @@
 
   I.saveMenu = async function () {
     var opts = [];
-    for (var i = 1; i < 4; i++) { var m = G.State.meta(i); opts.push({ label: '일지 ' + i + (m ? ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place) : ' — (비어 있음)'), value: i, icon: 'book' }); }
+    G.State.JOURNAL_SLOTS.forEach(function (slot, i) { var m = G.State.meta(slot); opts.push({ label: '여관 일지 ' + (i + 1) + (m ? ' — ' + U.esc(m.name) + ' · ' + m.date + ' · ' + U.esc(m.place) : ' — (비어 있음)'), value: slot, icon: 'book' }); });
     var slot = await UI.choose('항해 일지에 기록', opts, { width: 760 });
     if (slot == null) return false;
-    if (G.State.meta(slot) && !(await UI.confirm('일지 ' + slot + '에 덮어쓰겠습니까?'))) return false;
+    var no = G.State.JOURNAL_SLOTS.indexOf(slot) + 1;
+    if (G.State.meta(slot) && !(await UI.confirm('여관 일지 ' + no + '에 덮어쓰겠습니까?'))) return false;
     var r = await G.State.saveAsync(slot);
     if (r.ok && r.where === 'browser') UI.toast('항해 일지에 기록했다.', 'book');
     else if (r.ok) UI.toast('항해 일지에 기록했다. (' + r.msg + ')', 'book', 7000);

@@ -550,12 +550,18 @@
   }
   function oneToday(hits, lon, lat) {
     if (!hits.length) return hits;
-    if (dayCapped(lon, lat)) return [];
+    var prev = S().discDay;
+    // 한 섬에서 바로 이어지는 발견은 자료에 sameDayAfter를 적은 경우에만 같은 날 한 번 더 찾는다.
+    // 라파누이의 모아이를 살핀 뒤 그 자리에서 롱고롱고 목판을 찾는 흐름이 이에 해당한다.
+    if (dayCapped(lon, lat)) {
+      hits = hits.filter(function (d) { return d.sameDayAfter && D.foundByMe(d.sameDayAfter) && (!prev.id || prev.id === d.sameDayAfter); });
+      if (!hits.length) return [];
+    }
     var best = hits.slice().sort(function (a, b) {
       var da = a.lon == null ? 99 : G.Geo.dist(lon, lat, a.lon, a.lat), db = b.lon == null ? 99 : G.Geo.dist(lon, lat, b.lon, b.lat);
       return da - db;
     })[0];
-    S().discDay = { k: U.dayIndex(S().date), lon: lon, lat: lat };
+    S().discDay = { k: U.dayIndex(S().date), lon: lon, lat: lat, id: best.id };
     return [best];
   }
   D.dayCapped = dayCapped;

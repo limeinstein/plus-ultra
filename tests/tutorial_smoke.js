@@ -404,16 +404,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       o.report = !s.contract + ':' + !!s.disc.herc_cave.reported + ':' + (s.player.gold - gold0) + ':' + (s.player.fame - fame0);
       document.querySelector('.cmd.exit').click(); await TT.sleep(80);
       await TT.visit('inn');
-      o.teach = TT.log.some(x => /일지는 세 권이고/.test(x));
+      o.teach = TT.log.some(x => /일지는 다섯 권이고/.test(x));
       await TT.menu('기능');
-      await TT.until(() => !s.tut, { what: '일지 기록 → 에필로그 → 이어 가기', ms: 60000, win: [[/첫 항해를 마치다/, '이 항해를 이어 간다'], [/항해 일지에 기록/, '일지 1'], [/기능/, '항해 일지 기록']] });
+      await TT.until(() => !s.tut, { what: '일지 기록 → 에필로그 → 이어 가기', ms: 60000, win: [[/첫 항해를 마치다/, '이 항해를 이어 간다'], [/항해 일지에 기록/, '여관 일지 1'], [/기능/, '항해 일지 기록']] });
       await TT.until(() => !G.UI.busy(), {});
       await TT.sleep(600);
       o.epi = TT.log.some(x => /이제 진짜 바다가 시작됩니다/.test(x));
       o.after = !s.tut + ':' + G.Game.sceneName + ':' + !document.querySelector('.tutbox') + ':' + G.MATE.lacosa.fame + ':' + G.SEA_RISK.pirate;
-      const m1 = G.State.meta(1), m0 = G.State.meta(0), m4 = G.State.meta(4);
-      o.saves = (m1 ? m1.name : '-') + '|' + (m0 ? 'auto0' : '-') + '|' + (m4 ? 'tut4' : '-');
-      const st1 = await G.State.loadAsync(1); o.saved = !!(st1 && st1.tut && st1.tut.f.saved);
+      const m1 = G.State.meta('journal1'), ma = G.State.latestAutoSlot(), m4 = G.State.meta(4);
+      o.saves = (m1 ? m1.name : '-') + '|' + (ma ? ma : '-') + '|' + (m4 ? 'tut4' : '-');
+      const st1 = await G.State.loadAsync('journal1'); o.saved = !!(st1 && st1.tut && st1.tut.f.saved);
       // 끝난 뒤에는 아무것도 막지 않는다
       const n9 = TT.log.length; C.visit('tavern'); await TT.sleep(900);
       o.free = (C.current() || G.UI.busy() || C.isBusy()) && !TT.log.slice(n9).some(x => /로코 알베르티/.test(x)) ? 'tavern' : '';

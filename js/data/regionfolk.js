@@ -4,7 +4,8 @@
    · 여기 실존 인물은 그 고장 말만 하는 경우가 대부분이다. 조선 사람 가운데 사신·역관을 지낸 이는 중국어를 하고,
      유럽 말을 하는 사람은 표류·포로·통역처럼 그럴 만한 내력이 있는 몇 사람뿐이다.
    · 실존 인물은 그 고장 사람이라 개척 단계(after)를 기다리지 않는다 — 대신 그 고장 도시를 하나도 모르면 「소문」도 돌지 않는다(quiet).
-   · 얼굴: 국가별 항해사 얼굴 묶음(images/portraits/pools/mates/<나라>/<m|f>/01~10)을 차례로 빌린다.
+   · 얼굴: 전용 초상이 있으면 그것을 쓰고, 없으면 솜씨에 맞춰 후원자형(학자·종교인·상인) 또는 항해사형(군인·선원) 국가별 얼굴을 빌린다.
+     선호 유형 10장을 먼저 쓰고도 사람이 남으면 다른 유형 10장을 빌려, 같은 국가·성별에서 가능한 20장을 반복 전에 모두 쓴다.
    · 이름·글은 모두 새로 쓴 요약이다. 이미 후원자(저택·왕궁의 주인)로 나오는 사람은 그 자리에 앉기 전까지만 술집에 나온다. */
 (function (G) {
   'use strict';
@@ -100,12 +101,12 @@
   };
 
   // ---------------------------------------------------------------- 실존 인물
-  // H(id, 이름, 성별, [나오는 해, 마지막 해], '고장[,고장]', 처음 머무는 도시, [체력, 지력, 무력, 매력], '솜씨', '말', 한 줄 소개, 이야기, {fame, pool, style})
+  // H(id, 이름, 성별, [나오는 해, 마지막 해], '고장[,고장]', 처음 머무는 도시, [체력, 지력, 무력, 매력], '솜씨', '말', 한 줄 소개, 이야기, {fame, pool, style, role})
   var P = RF.people = [];
   function parse(str, sep) { var o = {}; (str || '').split(' ').forEach(function (t) { if (!t) return; var m = sep ? t.split(sep) : /^([a-z]+)(\d)$/.exec(t).slice(1); o[m[0]] = +m[1]; }); return o; }
   function H(id, name, g, y, zones, home, st, sk, lg, desc, bio, o) {
     o = o || {};
-    P.push({ id: 'h_' + id, name: name, g: g, y: y, zones: zones.split(','), home: home, st: st, sk: parse(sk), lg: parse(lg, ':'), desc: desc, bio: bio || '', fame: o.fame, pool: o.pool, style: o.style });
+    P.push({ id: 'h_' + id, name: name, g: g, y: y, zones: zones.split(','), home: home, st: st, sk: parse(sk), lg: parse(lg, ':'), desc: desc, bio: bio || '', fame: o.fame, pool: o.pool, style: o.style, role: o.role });
   }
 
   // ---- 조선 (한양 190 · 동래 226 · 경주 227 · 평양 228 · 한산도 229)
@@ -124,8 +125,8 @@
   H('jogwangjo', '조광조', 'm', [1500, 1519], 'korea', 190, [46, 84, 32, 82], 'speech3 hist2', '14:3', '도학 정치를 꿈꾸는 젊은 개혁가. 말 한마디에 조정이 들썩인다.', '중종 때 개혁을 이끈 사림의 지도자. 향약을 퍼뜨리고 현량과를 열었으나, 반대파의 모함으로 1519년 기묘사화 때 사약을 받았다.');
   H('jeonggwangpil', '정광필', 'm', [1505, 1538], 'korea', 190, [44, 78, 28, 66], 'acct2 hist1 speech1', '14:3 7:1', '바른말을 하다 귀양도 가 본 노련한 재상.', '중종 때 영의정을 지낸 문신. 연산군에게 바른말을 하다 유배되었고, 기묘사화 때 조광조를 감싸려 애썼다. 1538년 세상을 떠났다.');
   H('kimanguk', '김안국', 'm', [1505, 1543], 'korea', 227, [44, 82, 28, 64], 'hist2 med1', '14:3 7:2', '어려운 한문 책을 쉬운 말로 풀어 퍼뜨리는 관리.', '중종 때의 문신. 경상도 관찰사 시절 농서·의서·윤리서를 한글로 풀어 펴내 백성에게 나누었다. 사신으로 명에도 다녀왔다. 1543년 세상을 떠났다.');
-  H('hwangjini', '황진이', 'f', [1522, 1560], 'korea', 228, [42, 82, 26, 94], 'music3 speech3 art1', '14:3', '송도의 이름난 기녀. 시조 한 수로 벼슬아치의 콧대를 꺾는다.', '조선 중기 개성의 기녀이자 시인. 뛰어난 시조와 한시를 남겼고, 서경덕·박연폭포와 함께 「송도삼절」로 불렸다.');
-  H('sinsaimdang', '신사임당', 'f', [1522, 1551], 'korea', 190, [40, 84, 24, 78], 'art3 craft2', '14:3', '풀벌레와 꽃을 살아 있는 듯 그리는 여인. 바느질 솜씨도 그림 같다.', '조선 중기의 화가이자 문인. 풀과 벌레를 그린 「초충도」로 이름났고 글씨와 수에도 뛰어났다. 학자 이이의 어머니다. 1551년 세상을 떠났다.');
+  H('hwangjini', '황진이', 'f', [1522, 1560], 'korea', 228, [42, 82, 26, 94], 'music3 speech3 art1', '14:3', '송도의 이름난 기녀. 시조 한 수로 벼슬아치의 콧대를 꺾는다.', '조선 중기 개성의 기녀이자 시인. 뛰어난 시조와 한시를 남겼고, 서경덕·박연폭포와 함께 「송도삼절」로 불렸다.', { role: 'maid' });
+  H('sinsaimdang', '신사임당', 'f', [1522, 1551], 'korea', 190, [40, 84, 24, 78], 'art3 craft2', '14:3', '풀벌레와 꽃을 살아 있는 듯 그리는 여인. 바느질 솜씨도 그림 같다.', '조선 중기의 화가이자 문인. 풀과 벌레를 그린 「초충도」로 이름났고 글씨와 수에도 뛰어났다. 학자 이이의 어머니다. 1551년 세상을 떠났다.', { role: 'scholar' });
   H('josik', '조식', 'm', [1525, 1572], 'korea', 226, [56, 84, 52, 60], 'hist2 sword1', '14:3', '허리에 방울과 칼을 차고 다니는 지리산 아래 처사. 벼슬은 끝내 받지 않는다.', '경상우도의 학자. 늘 방울과 칼을 차고 스스로를 다잡았다. 벼슬을 사양하고 제자를 길렀는데, 임진왜란 때 그 제자들이 의병장으로 많이 나섰다. 1572년 세상을 떠났다.');
   H('yihwang', '이황', 'm', [1520, 1570], 'korea', 227, [40, 92, 24, 70], 'hist3 theo1', '14:3', '안동 도산에 서당을 연 대학자. 조용하지만 한 번 한 말은 흔들리지 않는다.', '조선 성리학을 크게 이룬 학자. 벼슬에서 물러나 도산서당을 열고 제자를 길렀다. 『성학십도』를 지어 선조에게 바쳤다. 1570년 세상을 떠났다.', { fame: 1200 });
   H('imkkeokjeong', '임꺽정', 'm', [1555, 1562], 'korea', 228, [80, 50, 84, 58], 'sword3 ops2', '14:3', '황해도 산골의 백정 출신 도적 두목. 관군이 몇 번을 쫓아도 잡히지 않는다.', '명종 때 황해도를 중심으로 활동한 도적 두목. 백정 출신으로 관아와 부자를 털었고 3년 넘게 관군을 피했으나 1562년 붙잡혔다.');
@@ -373,18 +374,45 @@
   var STYLE = { korea: 'kr', china: 'cn', japan: 'jp', india: 'in', seasia: 'se', ottoman: 'is', greece: 'is', egypt: 'is', maghreb: 'is', arabia: 'pe', casia: 'pe', mexico: 'az', antilles: 'tr', andes: 'an', brazil: 'tr', firstnations: 'na', namerica: 'na', eafrica: 'sw', wafrica: 'af' };
   var VN = { h_nguyenbinhkhiem: 1, h_phungkhackhoan: 1, h_daoduytu: 1, h_nguyendu: 1 };
   var ARAB = { h_almahri: 1, h_suyuti: 1, h_ibniyas: 1, h_ibntulun: 1, h_shaarani: 1, h_haytami: 1, h_fakhraldin: 1, h_maqqari: 1 };
+  // 같은 인물의 전용 초상이 이미 전설 인물 묶음에 있으면 파일명의 로마자 표기 차이를 이어 준다.
+  var LEGEND_FACE = {
+    h_hongildong: 'hong_gildong', h_jangnoksu: 'jang_noksu', h_jogwangjo: 'jo_gwangjo',
+    h_sinsaimdang: 'shin_saimdang', h_yihwang: 'yi_hwang', h_imkkeokjeong: 'im_kkeokjeong',
+    h_yiyi: 'yi_i', h_nangseolheon: 'heo_nanseolheon', h_samyeong: 'samyeong_daesa',
+    h_gwakjaeu: 'gwak_jaeu', h_nongae: 'nongae'
+  };
   var faceN = {};
+  function portraitRole(p) {
+    var sk = p.sk || {};
+    if (p.role) return p.role;
+    if (sk.theo >= 2) return 'priest';
+    if (sk.sci >= 2 || sk.med >= 2 || sk.hist >= 2 || (sk.survey >= 3 && p.st[1] > 70)) return 'scholar';
+    if (sk.sword >= 3 || sk.gun >= 2) return 'soldier';
+    if (sk.acct >= 2) return 'merchant';
+    return p.g === 'f' ? 'maid' : 'sailor';
+  }
   function famed(st, sk) {
     var s = st[0] + st[1] + st[2] + st[3], k = 0; for (var x in sk) k += sk[x];
     return { fame: Math.max(0, Math.round(((s - 205) * 9 + k * 90 - 250) / 50) * 50), wage: Math.max(25, Math.round((28 + k * 12 + (s - 200) / 3) / 5) * 5) };
   }
   P.forEach(function (p) {
-    var z = p.zones[0], pool = p.pool || (VN[p.id] ? 'vn' : ARAB[p.id] ? 'eg' : POOL[z]) || 'es', key = pool + '/' + p.g;
-    faceN[key] = (faceN[key] || 0) + 1;
+    var z = p.zones[0], role = portraitRole(p), pool = p.pool || (VN[p.id] ? 'vn' : ARAB[p.id] ? 'eg' : POOL[z]) || 'es';
+    var kind = role === 'scholar' || role === 'priest' || role === 'merchant' ? 'sponsors' : 'mates';
+    var borrowed = null, faceKey;
+    // 전용 얼굴이 있는 인물은 공용 풀의 번호를 소비하지 않는다.
+    if (!LEGEND_FACE[p.id]) {
+      var otherKind = kind === 'sponsors' ? 'mates' : 'sponsors';
+      faceKey = kind + '/' + pool + '/' + p.g;
+      // 선호 복식 10장을 다 쓴 뒤에는 곧바로 얼굴을 반복하지 말고 반대 복식의 남은 얼굴을 쓴다.
+      var otherKey = otherKind + '/' + pool + '/' + p.g;
+      if ((faceN[faceKey] || 0) >= 10 && (faceN[otherKey] || 0) < 10) { kind = otherKind; faceKey = otherKey; }
+      faceN[faceKey] = (faceN[faceKey] || 0) + 1;
+      borrowed = 'portraits/pools/' + kind + '/' + pool + '/' + p.g + '/' + String((faceN[faceKey] - 1) % 10 + 1).padStart(2, '0');
+    }
     var f = famed(p.st, p.sk), c = G.CITY_DATA && G.CITY_DATA[p.home];
     var m = { id: p.id, name: p.name, g: p.g, st: p.st, sk: p.sk, lg: p.lg, fame: p.fame != null ? p.fame : f.fame, wage: p.fame != null ? Math.max(f.wage, Math.round(p.fame / 12 / 5) * 5) : f.wage,
-      y: p.y, reg: c ? [c.region] : [], desc: p.desc, style: p.style || (VN[p.id] ? 'cn' : STYLE[z]) || 'ib', native: true, quiet: true,
-      face: 'portraits/pools/mates/' + pool + '/' + p.g + '/' + String((faceN[key] - 1) % 10 + 1).padStart(2, '0') };
+      y: p.y, reg: c ? [c.region] : [], desc: p.desc, style: p.style || (VN[p.id] ? 'cn' : STYLE[z]) || 'ib', role: role, facePool: pool,
+      face: LEGEND_FACE[p.id] ? 'portraits/legendary/' + LEGEND_FACE[p.id] : borrowed, native: true, quiet: true };
     if (G.MATES && !G.MATE[m.id]) { G.MATES.push(m); G.MATE[m.id] = m; }
     if (G.MATE_RANGE) G.MATE_RANGE[m.id] = { zones: p.zones, home: p.home };
     if (G.BIOS && p.bio && !G.BIOS[p.name]) G.BIOS[p.name] = p.bio;

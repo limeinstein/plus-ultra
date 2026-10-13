@@ -170,8 +170,8 @@
 
   // ------------------------------------------------ people
   const tPeople = tab('people', '인물', {
-    chips: [['all', '전체'], ['mate', '동료'], ['sponsor', '후원자'], ['maid', '여급'], ['maidstyle', '지역별 여급'], ['rival', '경쟁자'], ['npc', '마을 사람'], ['court', '궁정 사람'], ['street', '거리 사람']],
-    note: '파일: 동료 <code>portraits/mates/ID.png</code> · 후원자 <code>portraits/sponsors/ID.png</code> · 여급 <code>portraits/maids/ID.png</code> · 지역별 여급 <code>maid-styles/묶음/1.png</code>(흉상) <code>maid-styles/묶음/1_half.png</code>(서 있는 모습, 여러 장 가능) · 경쟁자 <code>portraits/rivals/이름.png</code> · 마을 사람 <code>portraits/npc/역할.png</code> · 궁정 사람 <code>portraits/courtiers/후원자ID</code> · 거리 사람 <code>portraits/street-folk/종류_양식</code> · 얼굴(흉상) 512×512 · 대화창에 서는 무릎상은 같은 이름에 <code>_half</code>(1024×1536 투명) — 무릎상이 있으면 목록에도 그 모습을 보여 줍니다'
+    chips: [['all', '전체'], ['mate', '동료'], ['sponsor', '후원자'], ['maid', '여급'], ['maidstyle', '지역별 여급'], ['rival', '경쟁자'], ['npc', '마을 사람'], ['princess', '왕명 왕녀'], ['court', '궁정 사람'], ['street', '거리 사람']],
+    note: '파일: 동료 <code>portraits/mates/ID.png</code> · 후원자 <code>portraits/sponsors/ID.png</code> · 여급 <code>portraits/maids/ID.png</code> · 지역별 여급 <code>maid-styles/묶음/1.png</code>(흉상) <code>maid-styles/묶음/1_half.png</code>(서 있는 모습, 여러 장 가능) · 경쟁자 <code>portraits/rivals/이름.png</code> · 마을 사람 <code>portraits/npc/역할.png</code> · 왕명 왕녀·거리 사람 <code>portraits/street-folk/종류_양식</code> · 궁정 사람 <code>portraits/courtiers/후원자ID</code> · 얼굴(흉상) 512×512 · 대화창에 서는 무릎상은 같은 이름에 <code>_half</code>(1024×1536 투명) — 지역별 완성 무릎상이 있으면 얼굴 확장본보다 먼저 보여 줍니다'
   });
   const skillTxt = sk => Object.keys(sk || {}).map(k => (G.SKILL_BY_ID[k] || {}).name + ' ' + sk[k]).join(' · ');
   const langTxt = lg => Object.keys(lg || {}).sort((a, b) => lg[b] - lg[a]).map(k => G.LANGS[k] + ' ' + G.LANG_LV[lg[k]]).join(', ');
@@ -237,14 +237,15 @@
   });
   // 지역별 여급 그림: 전용 초상이 없는 여급이 쓴다
   (I.MAIDSTYLES || []).forEach(([sid, label]) => {
-    const pics = I.list('maid-styles/' + sid + '/').filter(k => !/_half$/.test(k));
+    // 실제 게임과 같은 필터를 써서 금지된 저해상도·지역 부적합 그림이 대표 카드에도 나오지 않게 한다.
+    const pics = I.maidList ? I.maidList(sid) : I.list('maid-styles/' + sid + '/').filter(k => !/_half$/.test(k));
     const users = G.MAIDS.filter(m => I.maidStyle && I.maidStyle(m.id, CITY[m.city]) === sid && !I.has('portraits/maids/' + m.id));
     const styles = Object.keys(I.MAID_POOL || {}).filter(k => (I.MAID_POOL[k] || []).includes(sid)).map(k => STYLE[k] || k);
     const first = pics[0] || 'maid-styles/' + sid;
     add(tPeople, {
       group: 'maidstyle', portrait: true, name: label, sub: '지역별 여급 그림 ' + (pics.length || 0) + '장',
       meta: users.length ? users.map(m => m.name + '(' + CITY[m.city].name + ')').join(', ') : '아직 쓰는 여급이 없음',
-      key: first, kind: 'png', chain: [first], ar: '1 / 1', half: [first + '_half'],
+      key: first, kind: 'webp', chain: [first], ar: '1 / 1', half: [first + '_half'],
       pic: () => I.make([first], 512, 512, () => A.canvas(512, 512)),
       detail: () => ({
         text: '한 묶음에 여러 장을 넣으면 도시마다 다른 얼굴이 나옵니다. 여급 번호로 한 장이 정해져 늘 같은 얼굴을 씁니다.',
@@ -253,8 +254,8 @@
           ['적용되는 도시 양식', styles.join(', ') || '고정 배정만']],
         strip: pics.slice(0, 24).map(k => ({ label: k.split('/').pop(), key: k, kind: 'webp',
           pic: () => I.make([k], 320, 320, () => A.canvas(320, 320)) })),
-        files: [{ key: 'maid-styles/' + sid + '/1', kind: 'png', note: '대화창 흉상 (512×512) — 2, 3 … 을 더 넣을 수 있습니다' },
-          { key: 'maid-styles/' + sid + '/1_half', kind: 'png', note: '술집에 서 있는 모습 (세로로 긴 그림, 배경 투명)' }]
+        files: [{ key: first, kind: 'webp', note: '현재 대표로 쓰는 대화창 흉상' },
+          { key: first + '_half', kind: 'webp', note: '현재 대표로 쓰는 술집 무릎상 (배경 투명)' }]
       })
     });
   });
@@ -290,17 +291,50 @@
     const spec = npcSpec(id, CITY[0]);
     add(tPeople, {
       group: 'npc', portrait: true, name: label, sub: '마을 사람 · ' + NPC_WHERE[id], meta: local ? '문화권·도시마다 다른 그림 가능' : '모든 곳에서 같은 그림',
-      key: 'portraits/npc/' + id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: id, half: I.chain.halfFor(A.portraitKeys(spec)),
+      key: 'portraits/npc/' + id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: id, half: local ? I.chain.npcHalf(id, CITY[0]) : I.chain.halfFor(A.portraitKeys(spec)),
       pic: () => portrait(spec),
       detail: () => ({
         text: local ? '같은 역할이라도 도시 양식마다 얼굴이 달라집니다. 도시 번호가 붙은 전용 그림, 그다음 문화권별 건물 사람 그림(portraits/npc/)을 먼저 쓰고, 둘 다 없는 고장에서 portraits/npc-roles/양식/역할.webp를 씁니다.' : '',
         facts: [['나오는 곳', NPC_WHERE[id]]],
-        strip: local ? Object.keys(CUL_CITY).map(cu => ({ label: CUL[cu] + ' (예: ' + CUL_CITY[cu].name + ')', key: 'portraits/npc/' + id + '_' + cu, kind: 'png', pic: () => portrait(npcSpec(id, CUL_CITY[cu])) })) : null,
+        strip: local ? Object.keys(CUL_CITY).map(cu => { const c0 = CUL_CITY[cu], hk = I.pick(I.chain.npcHalf(id, c0)); return {
+          label: CUL[cu] + ' (예: ' + c0.name + ')', key: hk || 'portraits/npc/' + id + '_' + cu, kind: hk ? 'webp' : 'png',
+          pic: hk ? () => I.make([hk], 1024, 1536, () => portrait(npcSpec(id, c0))) : () => portrait(npcSpec(id, c0)) }; }) : null,
         files: local ? [
           { key: 'portraits/npc/' + id + '@0', kind: 'png', note: '한 도시에서만 (예: 리스본 = 0번)' },
           { key: 'portraits/npc/' + id + '_europe', kind: 'png', note: '문화권별 — europe, islam, eastasia, south, native' },
           { key: 'portraits/npc/' + id, kind: 'png', note: '모든 도시 공통' }
         ] : [{ key: 'portraits/npc/' + id, kind: 'png', note: '모든 곳 공통' }]
+      })
+    });
+  });
+
+  // 사라진 에스파냐 왕녀 특별 이벤트
+  if (G.PRINCESS) {
+    const p = G.PRINCESS, k = 'portraits/street-folk/town_woman_ib', hk = k + '_half';
+    const spec = A.withImg(A.npcSpec('princess_es', 'noble', 'ib', 'f'), [k]);
+    add(tPeople, {
+      group: 'princess', portrait: true, name: p.name, sub: '특별 이벤트 · 에스파냐',
+      meta: '「사라진 왕녀」에서 레반트와 홍해까지 찾아가 구하는 국왕의 막내딸', key: k, kind: 'webp', chain: A.portraitKeys(spec), ar: '1 / 1', half: [hk],
+      pic: () => portrait(spec),
+      detail: () => ({
+        text: '통합 명성이 높은 총각 제독에게 에스파냐 국왕이 비밀리에 구출을 부탁하는, 이 게임에서 지어낸 왕녀입니다.',
+        facts: [['이름', p.name], ['애칭', p.short], ['등장하는 이야기', '사라진 에스파냐 왕녀'], ['고향', (CITY[p.city] || {}).name || '에스파냐']],
+        files: [{ key: k, kind: 'webp', note: '이베리아 지역의 완성된 얼굴 그림' }, { key: hk, kind: 'webp', note: '같은 인물의 기존 지역 무릎상 — 옷단까지, 무릎 노출 없음' }]
+      })
+    });
+  }
+
+  // 왕명 이벤트의 왕녀·귀족 여성 — js/data/court.js의 실제 이름과 같은 고장 얼굴을 쓴다.
+  ((G.COURT && G.COURT.princesses) || []).forEach(p => {
+    const realm = G.COURT.realms[p.realm], k = p.face, hk = p.half || k + '_half';
+    add(tPeople, {
+      group: 'princess', portrait: true, name: p.name, sub: '왕명 왕녀 · ' + realm.name,
+      meta: '「왕녀 구출」 왕명에서 해적에게 붙잡혀 간 인물', key: k, kind: 'webp', chain: [k], ar: '1 / 1', half: [hk],
+      pic: () => I.make([k], 512, 512, () => portrait(A.npcSpec(p.id, 'noble', p.style, 'f'))),
+      detail: () => ({
+        text: realm.name + ' 궁정의 왕명에서 이름이 정해지는 인물입니다. 구출 대상의 이름은 게임과 도감에서 똑같이 표시됩니다.',
+        facts: [['궁정', realm.name], ['등장하는 왕명', '해적에게 붙잡혀 간 왕녀를 구해 온다'], ['해적 소굴 후보', (realm.dens || []).map(id => CITY[id] && CITY[id].name).filter(Boolean).join(', ')]],
+        files: [{ key: k, kind: 'webp', note: '같은 고장의 완성된 얼굴 그림' }, { key: hk, kind: 'webp', note: '같은 인물의 기존 지역 무릎상 — 옷단까지, 무릎 노출 없음' }]
       })
     });
   });
