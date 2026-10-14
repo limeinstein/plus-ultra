@@ -97,7 +97,7 @@
     refreshBar(); refreshHud();
     if (st.unkey) st.unkey();
     st.unkey = UI.pushKey(onKey);
-    document.onkeyup = function (e) { if (st) { st.keys[String(e.key).toLowerCase()] = false; st.keys[e.code] = false; } };
+    document.onkeyup = function (e) { if (st) ['left', 'right', 'up', 'down'].forEach(function (a) { if (G.Keys.is(e, a)) st.keys[a] = false; }); };
   }
   // ---------------------------------------------------------------- 키보드 조작
   // 숫자판 1~9 = 여덟 방향(5는 정지), 화살표·WASD = 그 방위로 계속 걷기, 스페이스 = 정지
@@ -107,36 +107,36 @@
   function norm(d) { var m = Math.hypot(d[0], d[1]) || 1; return [d[0] / m, d[1] / m]; }
   function keyDir() {
     var k = st.keys, x = 0, y = 0;
-    if (k.arrowleft || k.a) x -= 1;
-    if (k.arrowright || k.d) x += 1;
-    if (k.arrowup || k.w) y += 1;
-    if (k.arrowdown || k.s) y -= 1;
+    if (k.left) x -= 1;
+    if (k.right) x += 1;
+    if (k.up) y += 1;
+    if (k.down) y -= 1;
     return (x || y) ? norm([x, y]) : null;
   }
   function onKey(e) {
     if (G.Game.scene !== L || !st || !st.alive || UI.busy() || st.busy) return false;
     var k = e.key;
     // 스페이스 = 정지 (바다와 같다). 멈춘 뒤에는 방향키나 땅을 눌러 다시 걷는다
-    if (k === ' ') {
+    if (G.Keys.is(e, 'confirmAlt')) {
       if (!st.paused) { st.paused = true; st.dir = null; st.pointerWalk = false; refreshBar(); }
       else if (!e.repeat) UI.toast('멈춰 있습니다. 방향키로 가려는 쪽을 누르거나 땅을 누르면 걷습니다.', 'boot', 2600);
       return true;
     }
-    if (k === 'Enter') { if (cityNear()) enterCity(); else if (atBase()) goBack(); else UI.toast('들어갈 도시도, 돌아갈 곳도 가깝지 않습니다.', 'castle'); return true; }
-    if (k === 'm' || k === 'M') { chart(); return true; }
-    if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; st.pointerWalk = false; st.paused = true; refreshBar(); return true; }
-    if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; st.pointerWalk = false; st.paused = false; refreshBar(); return true; }
-    if (k === '+' || k === '=') { zoomBy(1.2); return true; }
-    if (k === '-') { zoomBy(1 / 1.2); return true; }
-    // 방향키·WASD = 그 방위로 계속 걷는다 (두 키를 함께 누르면 대각선, Space로 정지)
-    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'd', 'w', 's', 'A', 'D', 'W', 'S'].indexOf(k) >= 0) {
-      st.keys[k.toLowerCase()] = true;
+    if (G.Keys.is(e, 'confirm')) { if (cityNear()) enterCity(); else if (atBase()) goBack(); else UI.toast('들어갈 도시도, 돌아갈 곳도 가깝지 않습니다.', 'castle'); return true; }
+    var da = ['left', 'right', 'up', 'down'].filter(function (a) { return G.Keys.is(e, a); })[0];
+    if (da) {
+      st.keys[da] = true;
       if (e.repeat) return true;
       var kd = keyDir(); if (!kd) return true;
       st.dir = kd; st.path = null; st.pointerWalk = false;
       if (st.paused) { st.paused = false; refreshBar(); }
       return true;
     }
+    if (k === 'm' || k === 'M') { chart(); return true; }
+    if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; st.pointerWalk = false; st.paused = true; refreshBar(); return true; }
+    if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; st.pointerWalk = false; st.paused = false; refreshBar(); return true; }
+    if (k === '+' || k === '=') { zoomBy(1.2); return true; }
+    if (k === '-') { zoomBy(1 / 1.2); return true; }
     return false;
   }
   function refreshBar() { if (el.pause) el.pause.innerHTML = G.icon(st.paused ? 'boot' : 'pause') + (st.paused ? '출발' : '정지'); }

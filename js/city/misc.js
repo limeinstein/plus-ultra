@@ -577,7 +577,7 @@
     }
     var raf = 0, t0 = performance.now();
     var win = UI.window({ title: c.name + ' 성문 — 마구간', icon: 'horse', width: 1220, html: html, buttons: btns, onClose: function () { cancelAnimationFrame(raf); },
-      onKey: function (e) { var k = ids.indexOf(sel); if (e.key === 'ArrowRight') { pick(ids[Math.min(ids.length - 1, k + 1)]); return true; } if (e.key === 'ArrowLeft') { pick(ids[Math.max(0, k - 1)]); return true; } if (e.key === 'Enter') { if (win.go && !win.go.disabled) win.go.click(); return true; } return false; } });
+      onKey: function (e) { var k = ids.indexOf(sel); if (G.Keys.is(e, 'right')) { pick(ids[Math.min(ids.length - 1, k + 1)]); return true; } if (G.Keys.is(e, 'left')) { pick(ids[Math.max(0, k - 1)]); return true; } if (G.Keys.is(e, 'confirm') || G.Keys.is(e, 'confirmAlt')) { if (win.go && !win.go.disabled) win.go.click(); return true; } return false; } });
     win.el.classList.add('outfitwin');
     var cards = [].slice.call(win.content.querySelectorAll('.of-card'));
     function pick(id) {

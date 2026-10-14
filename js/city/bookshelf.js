@@ -397,11 +397,11 @@
     // reals는 줄 순서(위 칸 왼쪽부터)로 쌓였고 data-i도 같은 순서다 — 방향키 ←→는 이 순서를 따른다
     api = UI.window({ title: c.name + ' 도서관 — 서가', icon: 'book', width: 1240, parch: false, html: '', onKey: function (e) {
       if (busy) return false;
-      if (e.key === 'ArrowLeft') { move(-1, 0); return true; }
-      if (e.key === 'ArrowRight') { move(1, 0); return true; }
-      if (e.key === 'ArrowUp') { move(0, -1); return true; }
-      if (e.key === 'ArrowDown') { move(0, 1); return true; }
-      if ((e.key === 'Enter' || e.key === ' ') && focus >= 0) { choose(focus); return true; }
+      if (G.Keys.is(e, 'left')) { move(-1, 0); return true; }
+      if (G.Keys.is(e, 'right')) { move(1, 0); return true; }
+      if (G.Keys.is(e, 'up')) { move(0, -1); return true; }
+      if (G.Keys.is(e, 'down')) { move(0, 1); return true; }
+      if ((G.Keys.is(e, 'confirm') || G.Keys.is(e, 'confirmAlt')) && focus >= 0) { choose(focus); return true; }
       return false;
     } });
     api.el.classList.add('shelfwin');

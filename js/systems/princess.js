@@ -40,11 +40,11 @@
   function realm() { return G.COURT && G.COURT.realms.ES; }
   function single() { var p = S().player; return !p.wife && p.g !== 'f'; }
   P.single = single;
-  /** 왕녀의 얼굴·무릎상: 얼굴 확장본이 아닌 이베리아 지역의 완성된 기존 그림 짝 */
+  /** 왕녀의 고유 얼굴·무릎상 */
   P.speaker = function () {
     var A = G.Art, sp = { name: D.name, lang: 3, special: true };   // 특별한 사건: 바다·뭍에서도 무릎상 (js/ui/ui.js isSpecial)
     try {
-      var key = 'portraits/street-folk/town_woman_ib';
+      var key = 'portraits/princesses/' + D.id;
       var spec = A.npcSpec('princess_es', 'noble', 'ib', 'f');
       sp.portrait = A.withImg(spec, [key]);
       sp.half = [key + '_half'];

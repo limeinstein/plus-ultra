@@ -8,6 +8,63 @@
   function S() { return G.Game.state; }
   var SCALE = 1;           // px per battle unit
   var ARENA = 1300;        // retreat radius from arena centre
+  // 전장 900px를 세계 지도 1도에 대응시킨다. 섬·해안은 실제 위치를 쓰되 전술 화면에서 읽히도록 조금 압축해 보인다.
+  var GEO_SCALE = 900;
+
+  function geoAt(x, y) {
+    if (!st || !st.center) return [0, 0];
+    return [G.Geo.wrapLon(st.center.lon + x / GEO_SCALE), st.center.lat - y / GEO_SCALE];
+  }
+  function shorePad(b) {
+    var px = b ? Math.max(12, b.len * 0.18) : 12;
+    return Math.max(0.35, px / GEO_SCALE * (G.Geo.TEX_PER_DEG || 11.38));
+  }
+  /** 선체 폭만큼 여유를 둔 뭍·섬·빙산 충돌. true면 그 자리로 갈 수 없다. */
+  function terrainBlocked(x, y, b) {
+    if (!st || !G.Geo || !G.Geo.sdf || !G.Geo.ready) return false;
+    var ll = geoAt(x, y);
+    return G.Geo.sdf(ll[0], ll[1]) > -shorePad(b) || (G.Geo.berg && G.Geo.berg(ll[0], ll[1]));
+  }
+  function terrainInfo() {
+    var out = { hasLand: false, samples: 0, blocked: 0, scale: GEO_SCALE };
+    if (!G.Geo || !G.Geo.ready) return out;
+    for (var y = -ARENA; y <= ARENA; y += 130) for (var x = -ARENA; x <= ARENA; x += 130) {
+      if (x * x + y * y > ARENA * ARENA * 1.08) continue;
+      out.samples++;
+      if (terrainBlocked(x, y, null)) { out.blocked++; out.hasLand = true; }
+    }
+    return out;
+  }
+  function clearStart(x, y, b, placed) {
+    function ok(px, py) {
+      if (terrainBlocked(px, py, b)) return false;
+      return !(placed || []).some(function (o) { return Math.hypot(o.x - px, o.y - py) < 55; });
+    }
+    if (ok(x, y)) return [x, y];
+    for (var r = 45; r <= 900; r += 45) for (var i = 0; i < 20; i++) {
+      var a = i / 20 * Math.PI * 2, px = x + Math.cos(a) * r, py = y + Math.sin(a) * r;
+      if (ok(px, py)) return [px, py];
+    }
+    return [0, 0];
+  }
+  function settleStartingShips() {
+    var placed = [];
+    st.ships.forEach(function (b) { var p = clearStart(b.x, b.y, b, placed); b.x = p[0]; b.y = p[1]; placed.push(b); });
+  }
+  /** 육지로 들어간 이동을 되돌리고, 한 축이 열려 있으면 해안을 따라 미끄러지게 한다. */
+  function resolveTerrain(b, ox, oy) {
+    if (!terrainBlocked(b.x, b.y, b)) return false;
+    var nx = b.x, ny = b.y, xOK = !terrainBlocked(nx, oy, b), yOK = !terrainBlocked(ox, ny, b);
+    if (xOK && (!yOK || Math.abs(nx - ox) >= Math.abs(ny - oy))) { b.y = oy; b.vel[1] *= -0.08; b.vel[0] *= 0.62; }
+    else if (yOK) { b.x = ox; b.vel[0] *= -0.08; b.vel[1] *= 0.62; }
+    else { b.x = ox; b.y = oy; b.vel[0] *= -0.12; b.vel[1] *= -0.12; }
+    b.spd *= 0.18;
+    if (b.side === 'me' && b.flag && (!st.shoreWarn || st.t - st.shoreWarn > 2.5)) {
+      st.shoreWarn = st.t;
+      UI.toast(st.retreat ? '퇴각로가 육지에 막혔습니다! 해안을 돌아 열린 바다로 빠져나가십시오.' : '해안·섬에 진로가 막혔습니다.', 'anchor', 3000);
+    }
+    return true;
+  }
 
   // ---------------------------------------------------------------- setup
   function enemyFleet(npc) {
@@ -45,7 +102,7 @@
     var s = S(), npc = arg.npc || { kind: 'pirate', n: 1 };
     G.Game.showLayers(true, true, false);
     G.Game.ensureRenderer();
-    st = { cx: 0, cy: 0, npc: npc, t: 0, ships: [], fx: [], balls: [], paused: false, over: false, mode: 'follow', sel: null, busy: 0, log: [], fled: 0, center: { lon: s.loc.lon, lat: s.loc.lat } };
+    st = { cx: 0, cy: 0, npc: npc, t: 0, ships: [], fx: [], balls: [], paused: false, over: false, mode: 'follow', sel: null, busy: 0, log: [], fled: 0, center: { lon: s.loc.lon, lat: s.loc.lat }, seaArt: null };
     // player ships & crew distribution
     var f = s.fleet, totMax = R.crewMax();
     f.ships.forEach(function (sh, i) {
@@ -58,6 +115,12 @@
     if (escSh) { var eb = makeShip(escSh, 'me', f.ships.length, f.ships.length + 1); eb.flag = false; eb.escort = true; eb.crew = eb.crew0 = escSh.crew || G.SHIP[escSh.type].crew[0]; st.ships.push(eb); }
     var en = enemyFleet(npc);
     en.forEach(function (sh, i) { var b = makeShip(sh, 'en', i, en.length); b.crew = b.crew0 = sh.crew; st.ships.push(b); });
+    settleStartingShips();
+    st.terrain = terrainInfo();
+    if (G.Img && G.Img.has('battle/rough-sea')) {
+      var here = st;
+      G.Img.load('battle/rough-sea').then(function (im) { if (st === here) st.seaArt = im; });
+    }
     if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000);
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
     s.stats.battles++;
@@ -69,7 +132,7 @@
     if (st.enFlag && st.ships.filter(function (b) { return b.side === 'en'; }).length > 1) setTimeout(function () { if (st && !st.over) UI.toast('적 기함(1번 · ' + st.enFlag.name + ')을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.', 'flag', 5200); }, 600);
     if (G.Audio) G.Audio.music('battle');
     var foe = npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
-    UI.toast(foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! 방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5000);
+    UI.toast(foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
   };
   B.exit = function () { if (st && st.unkey) st.unkey(); st = null; };
   B.debug = function () { return st; };
@@ -97,28 +160,30 @@
     st.unkey = UI.pushKey(function (e) {
       if (G.Game.scene !== B || UI.busy()) return false;
       var k = String(e.key).toLowerCase();
-      if (k === ' ') { if (!e.repeat) haltFlag(); return true; }
-      if (k === 'p') { el.pause.click(); return true; }
-      if (k === 'b') { boardNearest(); return true; }
-      if (/^[1-7]$/.test(k)) { var od = ORDERS[+k - 1]; if (od) giveOrder(od.id); return true; }
-      if (k === 'tab' && allies().length) { cycleSel(e.shiftKey ? -1 : 1); return true; }
-      if (k === 'escape' && st.sel) { selectShip(null); return true; }
-      if (ARROWDIR[k]) {
-        st.arrows[k] = true;
+      if (G.Keys.is(e, 'confirmAlt')) { if (!e.repeat) haltFlag(); return true; }
+      if (G.Keys.is(e, 'cancel') && st.sel) { selectShip(null); return true; }
+      var da = directionAction(e);
+      if (da) {
+        st.arrows[da] = true;
         if (e.repeat) return true;                     // 누른 채 되풀이되는 신호는 무시 (대각선에서 한 키를 먼저 떼도 그대로)
         var a = arrowAngle(); if (a != null) steerFlag(a);
         return true;
       }
+      if (k === 'p') { el.pause.click(); return true; }
+      if (k === 'b') { boardNearest(); return true; }
+      if (/^[1-7]$/.test(k)) { var od = ORDERS[+k - 1]; if (od) giveOrder(od.id); return true; }
+      if (k === 'tab' && allies().length) { cycleSel(e.shiftKey ? -1 : 1); return true; }
       return false;
     });
     if (!B._keyHooked) {
       B._keyHooked = true;
-      window.addEventListener('keyup', function (e) { if (st && st.arrows) st.arrows[String(e.key).toLowerCase()] = false; });
+      window.addEventListener('keyup', function (e) { if (st && st.arrows) ['left', 'right', 'up', 'down'].forEach(function (a) { if (G.Keys.is(e, a)) st.arrows[a] = false; }); });
       window.addEventListener('blur', function () { if (st) st.arrows = {}; });
     }
   }
   // 해전 화면은 y가 아래로 커진다: ↑ = 화면 위(북)
-  var ARROWDIR = { arrowup: [0, -1], w: [0, -1], arrowdown: [0, 1], s: [0, 1], arrowleft: [-1, 0], a: [-1, 0], arrowright: [1, 0], d: [1, 0] };
+  var ARROWDIR = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+  function directionAction(e) { return ['left', 'right', 'up', 'down'].filter(function (a) { return G.Keys.is(e, a); })[0] || null; }
   function arrowAngle() {
     var x = 0, y = 0, a = st.arrows || {};
     for (var k in a) if (a[k] && ARROWDIR[k]) { x += ARROWDIR[k][0]; y += ARROWDIR[k][1]; }
@@ -185,12 +250,14 @@
     var sel = st.sel && st.sel.alive ? st.sel : null;
     if (sel) {
       if (hit) { setShipOrder(sel, 'attack', { target: hit }); UI.toast(sel.no + '번 ' + shipLabel(sel) + ' — ' + hit.name + U.jx(hit.name, '을/를') + ' 노립니다.', 'target', 2000); }
+      else if (terrainBlocked(w[0], w[1], sel)) UI.toast('그곳은 육지라 배가 갈 수 없습니다.', 'anchor', 2200);
       else { setShipOrder(sel, 'hold', { at: w }); UI.toast(sel.no + '번 ' + shipLabel(sel) + ' — 그 자리로 가서 지킵니다.', 'anchor', 2000); }
       return;
     }
     dropTactic(fs);
     fs.steer = null; fs.halt = false;
     if (hit) { fs.target = hit; fs.moveTo = null; UI.toast(hit.name + U.j(hit.name, '을/를').slice(hit.name.length) + ' 공격합니다.', 'target', 1800); }
+    else if (terrainBlocked(w[0], w[1], fs)) UI.toast('그곳은 육지라 배가 갈 수 없습니다.', 'anchor', 2200);
     else { fs.moveTo = w; fs.target = null; }
   }
 
@@ -252,7 +319,7 @@
   /** 연기가 바람에 밀려가는 방향 (px/초, 화면 좌표) */
   function windDrift() { return [Math.cos(st.wind.dir) * (8 + 18 * st.wind.spd), -Math.sin(st.wind.dir) * (8 + 18 * st.wind.spd)]; }
   B.runtime = function () { return st; };
-  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen }; };   // 시험용
+  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen, geoAt: geoAt, terrainBlocked: terrainBlocked, terrainInfo: terrainInfo, resolveTerrain: resolveTerrain, geoScale: GEO_SCALE, arena: ARENA }; };   // 시험용
   B.feel = function () { return st ? { shake: st.shake || 0, flash: st.flash ? st.flash.a : 0, hitstop: st.hitstop || 0 } : null; };
 
   // ---------------------------------------------------------------- 함대 명령 (기함을 뺀 배들 — 전체 또는 고른 한 척)
@@ -642,7 +709,8 @@
     b.vel = [hx * along - hy * latv, hy * along + hx * latv];
     var ox = b.x, oy = b.y;
     b.x += b.vel[0] * dt; b.y += b.vel[1] * dt;
-    b.spd = along; b.lat = latv; b.turnRate = U.angDiff(h0, b.heading) / Math.max(1e-4, dt); b.prevH = b.heading;
+    var shoreHit = resolveTerrain(b, ox, oy);
+    b.spd = shoreHit ? along * 0.18 : along; b.lat = latv; b.turnRate = U.angDiff(h0, b.heading) / Math.max(1e-4, dt); b.prevH = b.heading;
     if (b.fx) G.SeaFX.step(b.fx, { x0: ox, y0: -oy, x: b.x, y: -b.y, h: -b.heading, vx: b.vel[0] * BFX.day, vy: -b.vel[1] * BFX.day, lat: -latv * BFX.day, fwd: along * BFX.day, turn: -b.turnRate * BFX.day, days: dt / BFX.day }, { len: b.len, wid: b.len * 0.3, ref: BFX.ref });
     if (b.side === 'me' && b.boardIntent && b.target && b.target.alive && Math.hypot(b.target.x - b.x, b.target.y - b.y) < boardRange(b) + 5 && !st.busy) { b.boardIntent = false; boarding(b.target, b, false); }
     // enemy boarding attempt
@@ -666,12 +734,19 @@
       }
       if (d < 40 && d > 0.1) { b.x += dx / d * (40 - d) * 0.5; b.y += dy / d * (40 - d) * 0.5; }
     });
+    if (resolveTerrain(b, ox, oy)) b.spd *= 0.18;       // 다른 배와 밀려난 뒤에도 섬 안으로 들어가지 않는다
     // fleeing off the arena
     var dist = Math.hypot(b.x, b.y);
     if (dist > ARENA) {
-      b.alive = false; b.fled = true; b.sink = 1;
-      if (b.side === 'en') log(b.name + U.j(b.name, '이/가').slice(b.name.length) + ' 달아났다.');
-      else log(b.name + '호가 전장을 벗어났다.');
+      var ux = b.x / dist, uy = b.y / dist;
+      if (terrainBlocked(b.x + ux * 120, b.y + uy * 120, b)) {
+        b.x = ux * (ARENA - 4); b.y = uy * (ARENA - 4); b.vel[0] *= 0.1; b.vel[1] *= 0.1;
+        if (b.side === 'me' && b.flag && (!st.escapeWarn || st.t - st.escapeWarn > 3)) { st.escapeWarn = st.t; UI.toast('이쪽 퇴각로는 육지로 막혀 있습니다!', 'anchor', 3000); }
+      } else {
+        b.alive = false; b.fled = true; b.sink = 1;
+        if (b.side === 'en') log(b.name + U.j(b.name, '이/가').slice(b.name.length) + ' 달아났다.');
+        else log(b.name + '호가 전장을 벗어났다.');
+      }
     }
   }
   /** 기함의 선실(포격실·해병 대기실)이 보태는 힘 — 사람을 배치한 방만 (G.BALANCE.cabins.fx) */
@@ -1394,12 +1469,24 @@
       ctx.restore();
     }
   }
+  /** 먼바다에서는 생성한 격랑 질감을 아주 옅게 얹는다. 연안에서는 실제 지형을 가리지 않도록 셰이더 물결만 쓴다. */
+  function roughSeaArt(ctx) {
+    var im = st.seaArt;
+    if (!im || !im.complete || !im.naturalWidth || (st.terrain && st.terrain.hasLand)) return;
+    var driftX = Math.sin(st.t * 0.035) * 28 - (st.cx % 55) * 0.16;
+    var driftY = Math.cos(st.t * 0.028) * 18 - (st.cy % 45) * 0.12;
+    ctx.save();
+    ctx.globalAlpha = 0.13;
+    ctx.drawImage(im, -64 + driftX, -44 + driftY, 1728, 972);
+    ctx.restore();
+  }
   function renderScene() {
     var s = S(), r = G.Game.renderer;
     var zk = 1 + (st.zoomK || 0);             // 큰 명중·침몰 때 화면이 살짝 다가온다 (바다와 배를 같은 배율로)
-    if (r) r.draw({ lon: st.center.lon + st.cx / 3000, lat: st.center.lat - st.cy / 3000, zoom: 3000 * zk, time: st.t, wind: [Math.cos(st.wind.dir) * st.wind.spd, Math.sin(st.wind.dir) * st.wind.spd], cloud: 0.0, edge: 0.0, mode: 1, dusk: 0, storm: 0, quality: 1, cssWidth: 1600, origin: [st.center.lon, st.center.lat] });
+    if (r) r.draw({ lon: st.center.lon + st.cx / GEO_SCALE, lat: st.center.lat - st.cy / GEO_SCALE, zoom: GEO_SCALE * zk, battleZoom: GEO_SCALE, time: st.t, wind: [Math.cos(st.wind.dir) * st.wind.spd, Math.sin(st.wind.dir) * st.wind.spd], cloud: 0.12, edge: 0.0, mode: 1, dusk: 0, storm: 0.32, quality: 1, cssWidth: 1600, origin: [st.center.lon, st.center.lat] });
     var cv = G.Game.canvases().overlay, ctx = cv.getContext('2d'), k = G.Game.overlayScale || 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.setTransform(k * zk, 0, 0, k * zk, k * 800 * (1 - zk), k * 450 * (1 - zk));
+    roughSeaArt(ctx);
     // arena boundary hint
     var c0 = toScreen(0, 0);
     ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.setLineDash([10, 14]); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(c0[0], c0[1], ARENA * SCALE, 0, 7); ctx.stroke(); ctx.setLineDash([]);
@@ -1478,14 +1565,14 @@
     var me = st.ships.filter(function (b) { return b.side === 'me' && b.alive; }), en = st.ships.filter(function (b) { return b.side === 'en' && b.alive; });
     UI.hud.set('me', '아군 ' + me.length + '척 · 선원 ' + U.sum(me, function (b) { return b.crew; }));
     UI.hud.set('en', '적 ' + en.length + '척 · 선원 ' + U.sum(en, function (b) { return b.crew; }));
-    UI.hud.set('wind', U.dirName(st.wind.dir + Math.PI) + '풍');
+    UI.hud.set('wind', U.dirName(st.wind.dir + Math.PI) + '풍' + (st.terrain && st.terrain.hasLand ? ' · 연안 전장' : ' · 격랑 해역'));
     if (st.pf % 6 === 0) refreshOrders();
     if ((st.pf = (st.pf || 0) + 1) % 15 === 0 && el.panel) {
       el.panel.innerHTML = '<div class="fp-h">' + G.icon('ship') + '아군 함대</div>' + st.ships.filter(function (b) { return b.side === 'me'; }).map(function (b) {
         return '<div class="fp-ship"><div class="flex"><span class="shipno' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag">기함</span>' : '') + '<small class="cream-muted" style="margin-left:6px">' + U.esc(R.captainName(b.src)) + '</small><span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.fled ? '이탈' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'green dark') + '</div>';
       }).join('') + '<div class="fp-h" style="margin-top:8px">' + G.icon('flag') + '적 함대 <small class="cream-muted">— 1번 기함을 무찌르면 승리</small></div>' + st.ships.filter(function (b) { return b.side === 'en'; }).map(function (b) {
         return '<div class="fp-ship en"><div class="flex"><span class="shipno en' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag en">기함</span>' : '') + '<span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.captured ? '나포' : b.fled ? '달아남' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '</div>';
-      }).join('') + '<div class="cream-muted" style="font-size:14px;margin-top:6px">방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · P: 일시정지 · 1~7: 함대 명령 · Tab: 배 고르기</div>';
+      }).join('') + '<div class="cream-muted" style="font-size:14px;margin-top:6px">방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · P: 일시정지 · 1~7: 함대 명령 · Tab: 배 고르기' + (st.terrain && st.terrain.hasLand ? '<br><b>섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.</b>' : '') + '</div>';
     }
   }
 })(window.G = window.G || {});

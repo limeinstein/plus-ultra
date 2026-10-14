@@ -32,7 +32,7 @@
       flags: {}, log: [], history: 0,
       stats: { trades: 0, profit: 0, battles: 0, wins: 0, sunk: 0, captured: 0, distance: 0, found: 0 },
       circ: null,
-      settings: { diff: p.diff || 'normal', speed: 1, sound: 0.5, music: 0.35 }
+      settings: { diff: p.diff || 'normal', speed: 1, sound: 0.5, music: 0.35, keys: G.Keys ? G.Keys.defaults() : { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3' } }
     };
     S.player.items.push({ id: 'rapier' });
     S.player.items.push({ id: 'compass' });

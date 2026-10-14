@@ -136,7 +136,7 @@
     refreshBar(); refreshHud();
     if (st.unkey) st.unkey();
     st.unkey = UI.pushKey(onKey);
-    document.onkeyup = function (e) { if (st) { var ku = String(e.key).toLowerCase(); st.keys[ku] = false; if (st.arrows) st.arrows[ku] = false; } };
+    document.onkeyup = function (e) { if (st) { ['left', 'right', 'up', 'down'].forEach(function (a) { if (G.Keys.is(e, a)) { st.keys[a] = false; if (st.arrows) st.arrows[a] = false; } }); } };
     // 창을 벗어나면 누르고 있던 키를 잊는다 (떼는 신호를 못 받아 대각선이 남지 않게)
     if (!SEA._blurHooked) { SEA._blurHooked = true; window.addEventListener('blur', function () { if (st) { st.keys = {}; st.arrows = {}; } }); }
   }
@@ -224,7 +224,8 @@
   var NUMDIR = { Numpad1: [-1, -1], Numpad2: [0, -1], Numpad3: [1, -1], Numpad4: [-1, 0],
     Numpad6: [1, 0], Numpad7: [-1, 1], Numpad8: [0, 1], Numpad9: [1, 1] };
   // 방향키·WASD = 그 방위로 간다 (↑ 북 · ↓ 남 · ← 서 · → 동, 두 키를 함께 누르면 대각선)
-  var ARROWDIR = { arrowup: [0, 1], w: [0, 1], arrowdown: [0, -1], s: [0, -1], arrowleft: [-1, 0], a: [-1, 0], arrowright: [1, 0], d: [1, 0] };
+  var ARROWDIR = { up: [0, 1], down: [0, -1], left: [-1, 0], right: [1, 0] };
+  function directionAction(e) { return ['left', 'right', 'up', 'down'].filter(function (a) { return G.Keys.is(e, a); })[0] || null; }
   /** 방향키 방식: 'dir' = 누른 방위로 계속 간다(기본) · 'helm' = 손으로 키를 잡는다(예전 방식) */
   function helmMode() { var s = S(); return !!(s && s.settings && s.settings.keyMode === 'helm'); }
   SEA.helmMode = helmMode;
@@ -241,7 +242,7 @@
     if (UI.busy()) return false;
     // 스페이스: 정지 (돛을 거두고 미끄러지다 선다). 멈춘 채 항구가 가까우면 정박.
     // 손으로 키 잡는 방식에서는 예전처럼 정지·순항을 오간다
-    if (k === ' ') {
+    if (G.Keys.is(e, 'confirmAlt')) {
       if (helmMode()) {
         if (st.stopping) { if (portNear()) { tryEnterPort(); return true; } resume(); return true; }
         if (!st.paused) { halt(); return true; }
@@ -256,24 +257,16 @@
       if (!e.repeat) UI.toast('멈춰 있습니다. 방향키로 가려는 쪽을 누르면 출발합니다.', 'sail', 2600);
       return true;
     }
-    // 숫자판 1~9 = 여덟 방향 침로(5는 정지), 윗줄 1·2·3 = 속도
-    if (e.code === 'Numpad5') { leaveAuto(); st.path = null; st.target = null; st.dirCrs = null; st.manual = false; halt(); return true; }
-    if (NUMDIR[e.code]) {
-      var d = NUMDIR[e.code];
-      takeCourse(Math.atan2(d[1], d[0]));
-      return true;
-    }
-    if (e.code === 'Digit1' || k === '1') { st.speed = 1; buildSpeed(); return true; }
-    if (e.code === 'Digit2' || k === '2') { st.speed = 2; buildSpeed(); return true; }
-    if (e.code === 'Digit3' || k === '3') { st.speed = 4; buildSpeed(); return true; }
-    if (k === 'm' || k === 'M') { SEA.chart(); return true; }
-    if (k === 'Enter') { tryEnterPort(); return true; }
-    if (k === 'l' || k === 'L') { tryLand(); return true; }
-    if ((k === 'f' || k === 'F') && G.Fishing) { goFish(); return true; }
+    // 바꾼 키가 M·숫자판 같은 보조 단축키와 겹쳐도 설정한 동작이 먼저다.
+    if (G.Keys.is(e, 'speed1')) { st.speed = 1; buildSpeed(); return true; }
+    if (G.Keys.is(e, 'speed2')) { st.speed = 2; buildSpeed(); return true; }
+    if (G.Keys.is(e, 'speed3')) { st.speed = 4; buildSpeed(); return true; }
+    if (G.Keys.is(e, 'confirm')) { tryEnterPort(); return true; }
     // 방향키 = 대항해시대 3처럼: 누르고 있는 동안 뱃머리가 그 방위(← 서 · → 동 · ↑ 북 · ↓ 남, 두 키 = 북서·남동 …) 쪽으로
     // 차츰 돌아가고, 떼면 그때 향한 쪽으로 곧게 나아간다. 지그재그 없이 뱃머리 쪽으로 가며(맞바람이면 느림), Space로 정지
-    if (!helmMode() && ARROWDIR[String(k).toLowerCase()]) {
-      st.arrows = st.arrows || {}; st.arrows[String(k).toLowerCase()] = true;
+    var dirAction = directionAction(e);
+    if (!helmMode() && dirAction) {
+      st.arrows = st.arrows || {}; st.arrows[dirAction] = true;
       if (e.repeat) return true;          // 누르고 있는 동안 되풀이되는 신호는 무시
       var ang = arrowAngle(); if (ang == null) return true;
       var l0 = S().loc;
@@ -283,18 +276,28 @@
       return true;
     }
     // (손으로 키 잡기 방식) 방향키 = 손으로 키를 잡는다: ↑ 누르는 동안 돛을 펴고 나아감(떼면 서서히 멈춤), ←→ 뱃머리, ↓ 돛을 거둬 세움
-    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'd', 'w', 's', 'A', 'D', 'W', 'S'].indexOf(k) >= 0) {
-      var kk = k.toLowerCase();
+    if (dirAction) {
+      var kk = dirAction;
       leaveAuto();
       if (!st.manual) {
         var moving = !st.paused && (st.path || st.dirCrs != null);
         st.manual = true; st.cruise = false; st.thr = moving ? 1 : 0;     // 가던 배는 그 힘을 이어받아 서서히 늦춘다
       }
       st.keys[kk] = true; st.path = null; st.target = null; st.dirCrs = null; st.tackTheta = 0; st.tackSide = 0;
-      if (kk === 'arrowdown' || kk === 's') { st.cruise = false; st.braking = true; }          // 한 번 눌러도 돛을 거둬 멈출 때까지 세운다
-      else if (kk === 'arrowup' || kk === 'w') { st.braking = false; st.stopping = false; if (st.paused) { st.paused = false; refreshBar(); } }
+      if (kk === 'down') { st.cruise = false; st.braking = true; }          // 한 번 눌러도 돛을 거둬 멈출 때까지 세운다
+      else if (kk === 'up') { st.braking = false; st.stopping = false; if (st.paused) { st.paused = false; refreshBar(); } }
       return true;
     }
+    // 숫자판 1~9 = 여덟 방향 침로(5는 정지)
+    if (e.code === 'Numpad5') { leaveAuto(); st.path = null; st.target = null; st.dirCrs = null; st.manual = false; halt(); return true; }
+    if (NUMDIR[e.code]) {
+      var d = NUMDIR[e.code];
+      takeCourse(Math.atan2(d[1], d[0]));
+      return true;
+    }
+    if (k === 'm' || k === 'M') { SEA.chart(); return true; }
+    if (k === 'l' || k === 'L') { tryLand(); return true; }
+    if ((k === 'f' || k === 'F') && G.Fishing) { goFish(); return true; }
     if (k === '+' || k === '=') { zoomBy(1.2); return true; }
     if (k === '-') { zoomBy(1 / 1.2); return true; }
     return false;
@@ -412,7 +415,7 @@
     st.dirCrs += U.clamp(diff, -rate, rate); st.crs = st.dirCrs;
   }
   SEA.arrowTurn = arrowTurn;
-  function turnKey() { var k = st.keys; return ((k.arrowleft || k.a) ? 1 : 0) - ((k.arrowright || k.d) ? 1 : 0); }
+  function turnKey() { var k = st.keys; return (k.left ? 1 : 0) - (k.right ? 1 : 0); }
   function setCityTarget(c) {
     var d = c.dock || [c.lat, c.lon];
     if (!c.port) { UI.toast(c.name + U.j(c.name, '은/는').slice(c.name.length) + ' 내륙 도시입니다. 가까운 해안에 상륙해 육로로 가야 합니다.', 'castle'); setTarget(d[1], d[0], null); return; }
@@ -936,7 +939,7 @@
     if (st.stopping) {
       v = 0;
     } else if (st.manual) {
-      var kk = st.keys, brake = kk.arrowdown || kk.s || st.braking, goal = brake ? 0 : ((kk.arrowup || kk.w || st.cruise) ? 1 : 0);
+      var kk = st.keys, brake = kk.down || st.braking, goal = brake ? 0 : ((kk.up || st.cruise) ? 1 : 0);
       var thr = st.thr || 0, dtr = dtR || days * DAY_SEC;
       if (thr < goal) thr = Math.min(goal, thr + dtr / THR_UP);
       else if (thr > goal) thr = Math.max(goal, thr - dtr / (brake ? THR_BRAKE : THR_COAST));

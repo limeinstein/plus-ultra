@@ -326,7 +326,9 @@
     if (fadeTimer) clearInterval(fadeTimer);
     decks.forEach(function (d, i) { if (d && i !== from && i !== nextIdx && !d.paused) d.pause(); });   // 겹쳐 넘어가던 중에 또 바뀌면 앞의 곡은 멈춘다
     fadeTimer = setInterval(function () {
-      var k = Math.min(1, (Date.now() - t0) / (F * 1000)), tv = fileVol();
+      // 저장/시험이나 시스템 시각 보정으로 Date.now()가 뒤로 가도 HTMLAudioElement에는
+      // 반드시 0~1 사이의 음량만 넘긴다.
+      var k = Math.max(0, Math.min(1, (Date.now() - t0) / (F * 1000))), tv = fileVol();
       if (nextIdx >= 0 && decks[nextIdx]) decks[nextIdx].volume = tv * k;
       if (from >= 0 && from !== nextIdx && decks[from]) decks[from].volume = tv * (1 - k);
       if (k >= 1) {
@@ -346,7 +348,7 @@
     fileTrack = null; pendingPlay = null; deckOn = -1;
     if (fadeTimer) clearInterval(fadeTimer);
     fadeTimer = setInterval(function () {
-      var k = Math.min(1, (Date.now() - t0) / (F * 1000));
+      var k = Math.max(0, Math.min(1, (Date.now() - t0) / (F * 1000)));
       el.volume = v0 * (1 - k);
       if (k >= 1) { clearInterval(fadeTimer); fadeTimer = null; el.pause(); }
     }, 50);

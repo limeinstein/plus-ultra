@@ -151,7 +151,7 @@
   C.onKey = function (e) {
     if (UI.busy() || busy) return false;
     // 건물의 기본 메뉴에서는 Esc(그리고 UI가 Esc로 바꿔 보내는 우클릭)가 「나온다」와 같다.
-    if (cur && e.key === 'Escape') { C.run(function () { return C.leave(); }); return true; }
+    if (cur && G.Keys.is(e, 'cancel')) { C.run(function () { return C.leave(); }); return true; }
     if (G.Town.active() && !G.Town.hidden()) return G.Town.onKey(e);
     return false;
   };
@@ -364,6 +364,10 @@
     UI.clearScreen();
     if (G.Town.active() && !G.Town.hidden()) { await G.Town.focusOn(kind, arg); G.Town.hidden(true); }
     if (G.Audio) G.Audio.sfx('door');
+    // 거리에서 실제 건물 문을 열 때마다 하루가 흐른다. 입장 연출 뒤, 그 건물의 사건/메뉴보다 먼저 날짜를 갱신한다.
+    var dayMsgs = G.Game.passDays(1);
+    G.Game.refreshHud();
+    dayMsgs.forEach(function (m) { if (m && m.text) UI.toast(m.text, m.icon || 'calendar', m.history ? 5200 : 3400); });
     var ikind = B.paint || kind, ivar = B.variant ? B.variant(c, arg) : '';
     if (G.Img.count()) {
       var pre = [C.interiorKeys(ikind, c, ivar)];

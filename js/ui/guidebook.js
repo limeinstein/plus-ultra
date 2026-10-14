@@ -27,7 +27,7 @@
   function zoom(src, cap) {
     var back = U.el('div', 'gb-zoom', '<img src="' + src + '" alt=""><div class="gb-zcap">' + U.esc(cap || '') + '</div>');
     document.getElementById('ui').appendChild(back);
-    var unkey = UI.pushKey(function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { close(); return true; } return true; });
+    var unkey = UI.pushKey(function (e) { if (G.Keys.is(e, 'cancel') || G.Keys.is(e, 'confirm') || G.Keys.is(e, 'confirmAlt')) { close(); return true; } return true; });
     function close() { unkey(); if (back.parentNode) back.parentNode.removeChild(back); }
     back.onclick = close;
   }
@@ -46,8 +46,8 @@
         { label: '다음 장 ▶', value: 'next', id: 'next', cls: 'navy', onClick: function () { show(cur + 1); return false; } },
         { label: '닫기', value: 1 }],
       onKey: function (e) {
-        if (e.key === 'ArrowRight' || e.key === 'PageDown') { show(cur + 1); return true; }
-        if (e.key === 'ArrowLeft' || e.key === 'PageUp') { show(cur - 1); return true; }
+        if (G.Keys.is(e, 'right') || e.key === 'PageDown') { show(cur + 1); return true; }
+        if (G.Keys.is(e, 'left') || e.key === 'PageUp') { show(cur - 1); return true; }
         return false;
       } });
     w.el.classList.add('gb-win');

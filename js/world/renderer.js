@@ -30,6 +30,8 @@ uniform float uMode;
 uniform float uDusk;
 uniform float uStorm;
 uniform float uQuality;
+uniform vec2 uBattleOrigin; // 해전 한가운데의 세계 좌표
+uniform float uBattleZoom;  // 해전 좌표와 세계 좌표를 잇는 CSS px/degree
 uniform vec4 uT0;   // relief, mountain, forest, treeSize
 uniform vec4 uT1;   // snowline, river, beach, detail
 uniform vec4 uW0;   // shelf, wave, whitecap, glint
@@ -618,7 +620,7 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
 vec3 battleSea(vec2 q, float pxU){
   float t = uTime;
   float wstr = clamp(length(uWind), 0.0, 1.0); vec2 wd = normalize(uWind + vec2(1e-4, 0.0)); vec2 wp = vec2(-wd.y, wd.x);
-  vec3 deep = uW2.rgb;
+  vec3 deep = mix(uW2.rgb, uW4.rgb, 0.34);
   float big = fbm(q*0.035 + vec2(t*0.004, -t*0.003), 3);
   vec3 col = mix(deep*vec3(0.78,0.85,0.92), deep*vec3(1.12,1.22,1.14) + vec3(0.0,0.018,0.02), smoothstep(0.28, 0.74, big));
   vec2 grad = vec2(0.0); float hs = 0.0, crest = 0.0;
@@ -643,10 +645,10 @@ vec3 battleSea(vec2 q, float pxU){
   vec3 rn = fbmd(q*9.0 - wd*t*0.55, 2); grad += rn.yz*9.0*0.0045*(0.5 + wstr)*smoothstep(3.0, 9.0, pxU/9.0);
   vec3 n = normalize(vec3(-grad*0.62, 1.0));
   float dif = dot(n, SUN);
-  col *= 0.80 + 0.30*dif;
-  col += vec3(0.13,0.19,0.26) * pow(1.0 - n.z, 1.4) * 2.6 * (1.0 - 0.6*uStorm);
-  col += vec3(0.012,0.085,0.075) * clamp(hs*5.0, 0.0, 1.0) * (0.6 + 0.4*max(dot(normalize(grad + 1e-5), SUNXY), 0.0));   // 물마루를 비쳐 나오는 청록빛
-  col *= 1.0 - 0.10*clamp(-hs*4.0, 0.0, 1.0);                                                                          // 골은 조금 어둡게
+  col *= 0.72 + 0.38*dif;
+  float slope = clamp(length(grad)*1.9, 0.0, 1.0);
+  col += vec3(0.10,0.24,0.28) * clamp(hs*6.5 + slope*0.25, 0.0, 1.0) * (0.62 + 0.38*max(dot(normalize(grad + 1e-5), SUNXY), 0.0)); // 솟는 파도 면의 청록빛
+  col *= 1.0 - 0.20*clamp(-hs*5.5, 0.0, 1.0);                                                                            // 깊은 골은 짙게
   vec3 hv = normalize(SUN + vec3(0.0,0.0,1.0));
   float sp = pow(max(dot(n, hv), 0.0), 320.0);
   col += vec3(1.0,0.95,0.82) * min(sp*1.6*uW0.w, 0.32) * (1.0 - 0.8*uStorm);
@@ -662,8 +664,10 @@ vec3 battleSea(vec2 q, float pxU){
     float brk = on * smoothstep(sz, sz*0.3, cv.x + (vnoise(qw*5.0) - 0.5)*0.12) * smoothstep(0.25, 0.6, vnoise(qw*2.1 + 7.0)) * (0.55 + 0.45*clamp(hs*6.0 + 0.5, 0.0, 1.0));
     vec2 qs = vec2(dot(q, wd)*0.6, dot(q, wp)*5.0);
     float streak = smoothstep(0.66, 0.84, fbm(qs - vec2(t*0.06, 0.0), 3)) * smoothstep(0.50, 0.90, wstr) * 0.22 * smoothstep(0.45, 0.70, gate);   // 바람에 끌리는 거품 줄
-    float foam = brk*(0.50 + 0.40*vnoise(q*14.0)) + streak;
-    col = mix(col, vec3(0.90,0.94,0.95), clamp(foam*uW0.z, 0.0, 0.85));
+    float crossCrest = smoothstep(0.72, 0.94, fbm(vec2(dot(q,wp)*0.55, dot(q,wd)*2.8) + vec2(t*0.03,-t*0.18), 3));
+    float tear = smoothstep(0.48, 0.76, vnoise(vec2(dot(q,wp)*3.2, dot(q,wd)*0.7) + t*0.08));
+    float foam = brk*(0.62 + 0.48*vnoise(q*14.0)) + streak + crossCrest*tear*(0.08 + 0.26*wstr);
+    col = mix(col, vec3(0.90,0.95,0.96), clamp(foam*uW0.z*1.28, 0.0, 0.92));
   }
   return col;
 }
@@ -737,8 +741,23 @@ void main(){
   vec3 col;
   float battle = step(0.5, uMode);
   if (battle > 0.5) {
-    vec2 q = vec2(mod(ll.x - uCacheC.x + 540.0, 360.0) - 180.0, ll.y - uCacheC.y) * uCacheZ / 100.0;
+    vec2 q = vec2(mod(ll.x - uBattleOrigin.x + 540.0, 360.0) - 180.0, ll.y - uBattleOrigin.y) * uBattleZoom / 100.0;
     col = battleSea(q, uZoom / uCacheZ * 100.0);
+    // 해전이 벌어진 실제 세계 좌표의 섬·대륙을 같은 확대율로 올린다.
+    vec4 g0 = texture(uGeo, uv);
+    float s = sdfTex(g0), sn = s + coastNoise(ll), aa = 0.75 / max(pxT, 0.5);
+    vec4 land = vec4(0.0);
+    if (sn > -aa) {
+      float dx = mod(ll.x - uCacheC.x + 540.0, 360.0) - 180.0;
+      vec2 cp = vec2(uCacheSize.x*0.5 + dx*uCacheZ, uCacheSize.y*0.5 + (ll.y - uCacheC.y)*uCacheZ);
+      land = texture(uCache, cp / uCacheSize);
+    }
+    // 얕은 물빛과 해안으로 밀려드는 불규칙한 쇄파. 먼바다 격랑은 그대로 남긴다.
+    float shall = smoothstep(-8.0, -1.0, sn) * (1.0 - land.a);
+    col = mix(col, uW1.rgb*vec3(0.72,0.90,0.92), shall*0.58);
+    float surf = band(sn, -3.4, -1.8, -0.18, 0.55) * (0.45 + 0.55*smoothstep(0.35,0.75,fbm(q*0.8 - vec2(uTime*0.15,0.0),3)));
+    col = mix(col, vec3(0.88,0.94,0.91), clamp(surf*uW1.a,0.0,0.82));
+    col = mix(col, land.rgb, land.a);
   } else {
     vec4 g0 = texture(uGeo, uv);
     float s = sdfTex(g0);
@@ -801,7 +820,7 @@ void main(){
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error('link failed: ' + gl.getProgramInfoLog(prog));
     return prog;
   }
-  var UNIFORMS = ['uGeo', 'uClim', 'uRes', 'uCenter', 'uZoom', 'uTime', 'uWind', 'uCloud', 'uEdge', 'uMode', 'uDusk', 'uStorm', 'uQuality',
+  var UNIFORMS = ['uGeo', 'uClim', 'uRes', 'uCenter', 'uZoom', 'uTime', 'uWind', 'uCloud', 'uEdge', 'uMode', 'uDusk', 'uStorm', 'uQuality', 'uBattleOrigin', 'uBattleZoom',
     'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
 
   /* 두 패스:
@@ -1017,8 +1036,8 @@ void main(){
     var gl = this.gl, c = this.canvas, u = this.uM;
     if (this.lost || gl.isContextLost()) return;   // 컨텍스트를 돌려받을 때까지 기다린다
     var pxScale = c.width / (view.cssWidth || c.width), zoom = view.zoom * pxScale;
-    var cache = null;
-    if (!view.mode) cache = this._ensureCache(view, c.width, c.height, zoom);
+    // 해전도 실제 세계의 해안선을 보여 주므로 육지 캐시를 쓴다.
+    var cache = this._ensureCache(view, c.width, c.height, zoom);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, c.width, c.height);
     gl.useProgram(this.progMain);
@@ -1033,6 +1052,9 @@ void main(){
     gl.uniform1f(u.uMode, view.mode || 0);
     gl.uniform1f(u.uDusk, view.dusk || 0);
     gl.uniform1f(u.uStorm, view.storm || 0);
+    var bo = view.origin || [view.lon, view.lat];
+    if (u.uBattleOrigin) gl.uniform2f(u.uBattleOrigin, bo[0], bo[1]);
+    if (u.uBattleZoom) gl.uniform1f(u.uBattleZoom, view.battleZoom || view.zoom);
     // 구름: 항해 화면은 바람 방향·모양·자리를 직접 준다(view.clouds). 다른 화면은 예전처럼 바람 쪽으로 천천히 흐르는 둥근 구름
     var cl = view.clouds;
     if (cl) { gl.uniform2f(u.uCloudK, cl.k[0], cl.k[1]); gl.uniform2f(u.uCloudDir, cl.dir[0], cl.dir[1]); gl.uniform4f(u.uCloudForm, cl.form[0], cl.form[1], cl.form[2], cl.form[3]); }
@@ -1044,7 +1066,6 @@ void main(){
     gl.activeTexture(gl.TEXTURE2);
     gl.bindTexture(gl.TEXTURE_2D, cache ? cache.tex : null); gl.uniform1i(u.uCache, 2);
     if (cache) { gl.uniform2f(u.uCacheC, cache.lon, cache.lat); gl.uniform1f(u.uCacheZ, cache.zoom); gl.uniform2f(u.uCacheSize, cache.w, cache.h); }
-    else if (view.mode) { var og = view.origin || [view.lon, view.lat]; gl.uniform2f(u.uCacheC, og[0], og[1]); gl.uniform1f(u.uCacheZ, view.zoom); }   // 해전: 바다 무늬의 원점(전장 한가운데)과 CSS 배율
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   };
 

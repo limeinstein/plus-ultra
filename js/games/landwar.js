@@ -522,7 +522,7 @@
       var unkey = UI.pushKey(function (ev) {
         if (over) return false;
         var k = ev.key;
-        if (phase === 'form' && (k === 'Enter' || k === ' ')) { start(); return true; }
+        if (phase === 'form' && (G.Keys.is(e, 'confirm') || G.Keys.is(e, 'confirmAlt'))) { start(); return true; }
         if (phase !== 'fight' || busy) return false;
         if (k === '1') { turn('attack'); return true; } if (k === '2') { turn('guard'); return true; }
         var n = parseInt(k, 10); if (n >= 3 && n <= 6) { var x = specials()[n - 3]; if (x && x.ok) turn(x.id); return true; }

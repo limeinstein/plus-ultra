@@ -56,9 +56,10 @@ ok(G.Img.NPCS.every(([id]) => {
 const court = fs.readFileSync(path.join(ROOT, 'js/data/court.js'), 'utf8');
 const catalog = fs.readFileSync(path.join(ROOT, 'js/catalog.js'), 'utf8');
 const special = fs.readFileSync(path.join(ROOT, 'js/systems/princess.js'), 'utf8');
-ok(/face:\s*base,\s*half:\s*base \+ '_half'/.test(court), '왕명 왕녀의 흉상과 무릎상이 같은 기존 지역 인물 짝이다');
-ok(/half:\s*\[hk\]/.test(catalog), '도감도 왕녀 데이터에 지정된 지역 무릎상을 그대로 쓴다');
+ok(/face:\s*base,\s*half:\s*base \+ '_half'/.test(court), '왕명 왕녀의 흉상과 무릎상이 같은 고유 인물 짝이다');
+ok(/portraits\/princesses\/['"]?\s*\+\s*id/.test(court), '왕명 왕녀는 공용 거리 인물 대신 각자의 고유 경로를 쓴다');
+ok(/half:\s*\[hk\]/.test(catalog), '도감도 왕녀 데이터에 지정된 고유 무릎상을 그대로 쓴다');
 ok(!/half:\s*\[k \+ '_half'\][\s\S]{0,180}왕명 왕녀/.test(catalog), '도감 왕녀가 얼굴 키로 무릎상을 다시 합성하지 않는다');
-ok(/portraits\/street-folk\/town_woman_ib/.test(special) && !/portraits\/npc\/princess_es_half/.test(special), '블랑카 왕녀도 얼굴 확장본 대신 기존 이베리아 무릎상을 쓴다');
+ok(/portraits\/princesses\/['"]?\s*\+\s*D\.id/.test(special) && !/portraits\/street-folk\/town_woman_ib/.test(special), '블랑카 왕녀도 자신의 고유 얼굴상·무릎상을 쓴다');
 
 console.log('\n통과 — 건물 NPC ' + checked + '개 고유 연결(그림 없는 절차식 얼굴 ' + withoutRaster + '개 제외)과 왕명 왕녀 도감 연결을 확인했습니다.');

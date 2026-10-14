@@ -126,30 +126,21 @@
     my_malacca: { name: '벤타라' }, in_vijaya: { name: '왕실 서기관' }, th_king: { name: '왕실 전령관' },
     kr_king: { name: '승정원 승지' }
   };
-  // 왕녀 구출 왕명에 나오는 사람들. 얼굴을 잘라 붙여 늘린 pool 무릎상 대신, 실제 마을에 쓰는
-  // 지역별 거리 인물의 완성된 흉상·무릎상 짝을 쓴다. 이 그림들은 옷단이 무릎 부근에서 잘리고
-  // 무릎·종아리가 드러나지 않는지 눈으로 확인했다. 조선은 서로 다른 한복 자세 두 장을 쓴다.
+  // 왕녀 구출 왕명에 나오는 사람들. 각 인물은 문화권·시대 복식을 반영한 고유 흉상·무릎상 짝을 쓴다.
   var LADY_STYLE = {
     PT: 'ib', ES: 'ib', FR: 'ne', EN: 'ne', HRE: 'ne', VE: 'it', PAPAL: 'it', DK: 'ne',
     PL: 'ru', RU: 'ru', HU: 'ru', OT: 'is', EG: 'is', PE: 'pe', HR: 'pe',
     DL: 'in', GJ: 'in', MY: 'se', VJ: 'in', TH: 'se', KR: 'kr'
   };
-  var LADY_ART = {
-    ib: ['town_woman', 'girl'],
-    ne: ['town_woman', 'librarian', 'girl'], it: ['town_woman', 'librarian', 'girl'],
-    ru: ['town_woman', 'librarian', 'girl'], is: ['town_woman', 'librarian', 'girl'],
-    pe: ['town_woman', 'librarian', 'girl'], 'in': ['town_woman', 'librarian', 'girl'],
-    se: ['town_woman', 'librarian', 'girl'], kr: ['town_woman', 'librarian']
-  };
-  var by = {}, ladyN = {};
+  var by = {};
   G.COURT.princesses = [];
   Object.keys(G.COURT.realms).forEach(function (k) {
-    var r = G.COURT.realms[k], style = LADY_STYLE[k] || 'ib', art = LADY_ART[style] || ['town_woman']; r.id = k;
+    var r = G.COURT.realms[k], style = LADY_STYLE[k] || 'ib'; r.id = k;
     r.sponsors.forEach(function (id) { by[id] = k; });
     (r.ladies || []).forEach(function (name, i) {
-      ladyN[style] = (ladyN[style] || 0) + 1;
-      var base = 'portraits/street-folk/' + art[(ladyN[style] - 1) % art.length] + '_' + style;
-      G.COURT.princesses.push({ id: 'court_princess_' + k.toLowerCase() + '_' + (i + 1), name: name, realm: k, style: style,
+      var id = 'court_princess_' + k.toLowerCase() + '_' + (i + 1);
+      var base = 'portraits/princesses/' + id;
+      G.COURT.princesses.push({ id: id, name: name, realm: k, style: style,
         face: base, half: base + '_half' });
     });
   });

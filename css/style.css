@@ -120,6 +120,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
   box-shadow: inset 0 0 0 1px rgba(227,198,141,.14);
 }
 .cmd:hover { border-color: var(--brass); box-shadow: inset 0 0 0 1px rgba(227,198,141,.4), 0 0 12px rgba(227,198,141,.18); color: #fff6de; }
+.cmd.kbd-focus { border-color: #f0cf7b; box-shadow: inset 0 0 0 2px rgba(240,207,123,.55), 0 0 16px rgba(240,207,123,.32); color: #fff8df; }
 .cmd svg { width: 24px; height: 24px; flex: 0 0 24px; color: var(--brass-hi); }
 .cmd .sub { margin-left: auto; font-size: 14px; color: var(--cream-dim); }
 .cmd.dim { opacity: .45; }
@@ -252,6 +253,7 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
   background: linear-gradient(180deg, rgba(255,250,236,.55), rgba(230,214,180,.55)); display: flex; align-items: center; gap: 12px;
 }
 .choice:hover { background: linear-gradient(180deg, #fff6e0, #efdfbc); border-color: var(--brass-dk); }
+.choice.kbd-focus, .btn.kbd-focus, .opt.kbd-focus, .tab.kbd-focus { outline: 3px solid #c99a3c; outline-offset: 2px; box-shadow: 0 0 0 2px rgba(255,244,205,.75); }
 .choice .r { margin-left: auto; color: var(--ink-soft); font-size: 16px; }
 .choice.dis { opacity: .45; pointer-events: none; }
 .choice svg { width: 22px; height: 22px; color: var(--brass-deep); }
@@ -269,6 +271,12 @@ img.inline-ic { width: 34px; height: 34px; object-fit: contain; vertical-align: 
 .item-show { display: flex; gap: 16px; align-items: center; }
 .item-show img { width: 128px; height: 128px; flex: 0 0 128px; object-fit: contain; border-radius: 8px; background: radial-gradient(circle, #f6ead0, #b99560); box-shadow: inset 0 0 0 1px rgba(91,61,27,.35); }
 .choice-thumb { width: 48px; height: 48px; flex: 0 0 48px; object-fit: contain; border-radius: 6px; background: radial-gradient(circle, rgba(255,248,224,.92), rgba(180,143,87,.38)); box-shadow: inset 0 0 0 1px rgba(91,61,27,.3); }
+.keybind-grid { display: grid; grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 7px 12px; }
+.keybind-row { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 5px 7px; border: 1px solid rgba(96,68,32,.2); background: rgba(255,248,225,.28); }
+.keybind-row > span { min-width: 0; flex: 1; }
+.keybind-row b { display: block; font-size: 16px; }
+.keybind-row small { display: block; margin-top: 2px; font-size: 12px; line-height: 1.25; color: var(--ink-soft); }
+.keybind-btn { min-width: 106px; white-space: nowrap; }
 
 /* ---------------------------------------------------------------- tables */
 table.tbl { width: 100%; border-collapse: collapse; font-size: 18px; color: var(--ink); }

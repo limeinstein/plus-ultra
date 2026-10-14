@@ -152,15 +152,15 @@
           '<div class="fstat" style="display:flex;justify-content:space-between;font-size:17px;margin-top:8px"><span class="fmsg"></span><span class="fbait"></span></div>' + rumor(),
         buttons: [{ label: '던진다', value: 'act', cls: 'navy', id: 'act', onClick: function () { return false; } }, { label: '그만한다', value: 'q', cls: 'ghost', onClick: function () { quit(); return false; } }],
         onKey: function (e) {
-          if (e.key === ' ' || e.key === 'Enter') { if (!e.repeat) press(); return true; }
-          if (e.key === 'Escape') { quit(); return true; }
+          if (G.Keys.is(e, 'confirmAlt') || G.Keys.is(e, 'confirm')) { if (!e.repeat) press(); return true; }
+          if (G.Keys.is(e, 'cancel')) { quit(); return true; }
           return false;
         } });
       var cv = win.content.querySelector('canvas'), g = cv.getContext('2d'), msgEl = win.content.querySelector('.fmsg'), baitEl = win.content.querySelector('.fbait'), act = win.act;
       win.content.classList.add('mg-fishing');
       if (G.MinigameArt) G.MinigameArt.prepare(['props', 'fishing', 'boat']);
       g.scale(2, 2);
-      function up(e) { if (e.key === ' ' || e.key === 'Enter') st.hold = false; }
+      function up(e) { if (G.Keys.is(e, 'confirmAlt') || G.Keys.is(e, 'confirm')) st.hold = false; }
       document.addEventListener('keyup', up);
       function down(e) { e.preventDefault(); press(); }
       function release() { st.hold = false; }

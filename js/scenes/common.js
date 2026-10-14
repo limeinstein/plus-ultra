@@ -266,7 +266,7 @@
       var wait = reel ? null : setTimeout(fin, (L === null && keys.sheet ? 600 : discoveryGifMs(d) + 80)), done = false;
       if (reel) reel.done.then(fin);
       function fin() { if (done) return; done = true; if (wait) clearTimeout(wait); if (reel) reel.finish(); unkey(); el.removeEventListener('click', fin); resolve(); }
-      var unkey = UI.pushKey(function (e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { fin(); return true; } return true; });
+      var unkey = UI.pushKey(function (e) { if (G.Keys.is(e, 'confirm') || G.Keys.is(e, 'confirmAlt') || G.Keys.is(e, 'cancel')) { fin(); return true; } return true; });
       el.addEventListener('click', fin);
     });
     if (keys.end && !reel) el.classList.add('ended');      // 마지막 장면에서 멈춤 (장면 판은 스스로 마지막 장면에서 멈춰 있다)

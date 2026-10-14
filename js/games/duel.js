@@ -673,10 +673,10 @@
       var unkey = UI.pushKey(function (e) {
         if (over) return false;
         var n = parseInt(e.key, 10);
-        if (!stance) { if (n >= 1 && n <= 4) { chooseStance(Object.keys(STANCE)[n - 1]); return true; } if (e.key === 'Escape') { end('flee'); return true; } return false; }
+        if (!stance) { if (n >= 1 && n <= 4) { chooseStance(Object.keys(STANCE)[n - 1]); return true; } if (G.Keys.is(e, 'cancel')) { end('flee'); return true; } return false; }
         if (n >= 0 && n <= 3) { myNext = ['auto', 'slash', 'thrust', 'bash'][n]; moveBtns(); return true; }
         if (e.key === ' ') { el.querySelector('.rd-sys .btn').click(); return true; }
-        if (e.key === 'Escape') { el.querySelectorAll('.rd-sys .btn')[2].click(); return true; }
+        if (G.Keys.is(e, 'cancel')) { el.querySelectorAll('.rd-sys .btn')[2].click(); return true; }
         return false;
       });
       win.result.then(function () { live = false; unkey(); clearTimeout(timer); });

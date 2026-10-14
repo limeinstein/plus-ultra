@@ -310,7 +310,7 @@
 
   // 사라진 에스파냐 왕녀 특별 이벤트
   if (G.PRINCESS) {
-    const p = G.PRINCESS, k = 'portraits/street-folk/town_woman_ib', hk = k + '_half';
+    const p = G.PRINCESS, k = 'portraits/princesses/' + p.id, hk = k + '_half';
     const spec = A.withImg(A.npcSpec('princess_es', 'noble', 'ib', 'f'), [k]);
     add(tPeople, {
       group: 'princess', portrait: true, name: p.name, sub: '특별 이벤트 · 에스파냐',
@@ -319,12 +319,12 @@
       detail: () => ({
         text: '통합 명성이 높은 총각 제독에게 에스파냐 국왕이 비밀리에 구출을 부탁하는, 이 게임에서 지어낸 왕녀입니다.',
         facts: [['이름', p.name], ['애칭', p.short], ['등장하는 이야기', '사라진 에스파냐 왕녀'], ['고향', (CITY[p.city] || {}).name || '에스파냐']],
-        files: [{ key: k, kind: 'webp', note: '이베리아 지역의 완성된 얼굴 그림' }, { key: hk, kind: 'webp', note: '같은 인물의 기존 지역 무릎상 — 옷단까지, 무릎 노출 없음' }]
+        files: [{ key: k, kind: 'webp', note: '블랑카 왕녀의 고유 얼굴상' }, { key: hk, kind: 'webp', note: '같은 인물의 고유 무릎상 — 옷단까지, 무릎 노출 없음' }]
       })
     });
   }
 
-  // 왕명 이벤트의 왕녀·귀족 여성 — js/data/court.js의 실제 이름과 같은 고장 얼굴을 쓴다.
+  // 왕명 이벤트의 왕녀·귀족 여성 — js/data/court.js의 실제 이름과 고유 그림을 쓴다.
   ((G.COURT && G.COURT.princesses) || []).forEach(p => {
     const realm = G.COURT.realms[p.realm], k = p.face, hk = p.half || k + '_half';
     add(tPeople, {
@@ -334,7 +334,7 @@
       detail: () => ({
         text: realm.name + ' 궁정의 왕명에서 이름이 정해지는 인물입니다. 구출 대상의 이름은 게임과 도감에서 똑같이 표시됩니다.',
         facts: [['궁정', realm.name], ['등장하는 왕명', '해적에게 붙잡혀 간 왕녀를 구해 온다'], ['해적 소굴 후보', (realm.dens || []).map(id => CITY[id] && CITY[id].name).filter(Boolean).join(', ')]],
-        files: [{ key: k, kind: 'webp', note: '같은 고장의 완성된 얼굴 그림' }, { key: hk, kind: 'webp', note: '같은 인물의 기존 지역 무릎상 — 옷단까지, 무릎 노출 없음' }]
+        files: [{ key: k, kind: 'webp', note: '이 왕녀만의 고유 얼굴상' }, { key: hk, kind: 'webp', note: '같은 인물의 고유 무릎상 — 옷단까지, 무릎 노출 없음' }]
       })
     });
   });

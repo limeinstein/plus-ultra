@@ -563,6 +563,8 @@
   // ---------------------------------------------------------------- settings / system
   PAGES.menu = function (el, win) {
     var s = S(), st = s.settings;
+    G.Keys.ensure(st);
+    var kl = function (a) { return G.Keys.label(a, st); };
     var diffName = { easy: '쉬움', normal: '보통', original: '원작 규칙' }[st.diff] || st.diff;
     el.innerHTML = '<div class="kv" style="grid-template-columns:160px 1fr;align-items:center">' +
       '<div>난이도</div><div>' + diffName + ' <small class="muted">(' + (st.diff === 'original' ? '저장은 모국 도시의 여관에서만' : st.diff === 'easy' ? '어디서나 저장 가능' : '저장은 여관에서') + ')</small></div>' +
@@ -579,7 +581,10 @@
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
       '<div>바다의 방향키</div><div><div class="opt-row"><div class="opt' + (st.keyMode !== 'helm' ? ' on' : '') + '" data-km="dir">방위로 가기</div><div class="opt' + (st.keyMode === 'helm' ? ' on' : '') + '" data-km="helm">손으로 키 잡기</div></div>' +
-        '<small class="muted">' + (st.keyMode === 'helm' ? '↑ 누르는 동안 나아감 · ←→ 뱃머리 돌리기 · ↓ 멈춤 · Space 순항/정지' : '↑북 ↓남 ←서 →동(두 키를 함께 누르면 대각선) 쪽으로 계속 감 · Space 정지') + '</small></div>' +
+        '<small class="muted">' + (st.keyMode === 'helm' ? kl('up') + ' 누르는 동안 나아감 · ' + kl('left') + '/' + kl('right') + ' 뱃머리 돌리기 · ' + kl('down') + ' 멈춤 · ' + kl('confirmAlt') + ' 순항/정지' : kl('up') + ' 북 · ' + kl('down') + ' 남 · ' + kl('left') + ' 서 · ' + kl('right') + ' 동 (두 키 동시 입력은 대각선) · ' + kl('confirmAlt') + ' 정지') + '</small></div>' +
+      '<div>키보드 설정</div><div><div class="keybind-grid">' + G.Keys.actions.map(function (a) {
+        return '<div class="keybind-row"><span><b>' + U.esc(a.label) + '</b><small>' + U.esc(a.desc) + '</small></span><button class="btn small keybind-btn" data-keyact="' + a.id + '">' + U.esc(G.Keys.label(a.id, st)) + '</button></div>';
+      }).join('') + '</div><div class="flex" style="gap:8px;margin-top:8px"><button class="btn small ghost" data-act="keyreset">기본 키로 되돌리기</button><small class="muted">바꿀 항목을 누른 뒤 새 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다.</small></div></div>' +
       '</div><div class="sep"></div><div class="flex" style="gap:12px">' +
       (st.diff === 'easy' ? '<button class="btn navy" data-act="save">항해 일지 기록</button>' : '') +
       '<button class="btn" data-act="title">타이틀로 돌아가기</button></div>';
@@ -590,6 +595,17 @@
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
+    U.$$('[data-keyact]', el).forEach(function (o) { o.onclick = function () {
+      var action = o.dataset.keyact, old = o.textContent;
+      o.textContent = '새 키를 누르세요…'; o.classList.add('navy');
+      var off = UI.pushKey(function (e) {
+        if (e.repeat) return true;
+        var code = G.Keys.code(e); if (!code) return true;
+        G.Keys.bind(st, action, code); off(); PAGES.menu(el, win); return true;
+      });
+      o.onblur = function () { if (o.isConnected && o.textContent === '새 키를 누르세요…') { off(); o.textContent = old; o.classList.remove('navy'); } };
+    }; });
+    var kr = el.querySelector('[data-act=keyreset]'); if (kr) kr.onclick = function () { G.Keys.reset(st); PAGES.menu(el, win); };
     U.$$('[data-ms]', el).forEach(function (o) { o.onclick = function () { if (G.YTM) G.YTM.setSource(o.dataset.ms); else st.musicSrc = o.dataset.ms; PAGES.menu(el, win); }; });
     var mb = el.querySelector('[data-act=mp3]'), mi = el.querySelector('[data-mp3]');
     if (mb && mi) {

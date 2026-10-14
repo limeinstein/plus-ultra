@@ -7,6 +7,61 @@
   var root, screenEl, modalRoot, toastEl, hudEl, fadeEl;
   var keyHandlers = [];
 
+  // ---------------------------------------------------------------- keyboard bindings
+  // 저장 파일마다 바꿀 수 있는 공통 키. code를 저장해 한글/영문 입력 상태와 무관하게 같은 물리 키를 쓴다.
+  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3' };
+  var KEY_ACTIONS = [
+    { id: 'up', label: '위', desc: '메뉴 위 · 거리 건물 입장 · 바다/육상/해전 북쪽' },
+    { id: 'down', label: '아래', desc: '메뉴 아래 · 바다/육상/해전 남쪽' },
+    { id: 'left', label: '왼쪽', desc: '메뉴/거리 왼쪽 · 바다/육상/해전 서쪽' },
+    { id: 'right', label: '오른쪽', desc: '메뉴/거리 오른쪽 · 바다/육상/해전 동쪽' },
+    { id: 'confirm', label: '확정', desc: '선택 · 입항/도시 입장' },
+    { id: 'confirmAlt', label: '확정 보조/정지', desc: '메뉴 선택 · 이동 중 정지' },
+    { id: 'cancel', label: '취소', desc: '창 닫기 · 건물 나오기' },
+    { id: 'speed1', label: '해상 속도 ×1', desc: '해상 배속 1' },
+    { id: 'speed2', label: '해상 속도 ×2', desc: '해상 배속 2' },
+    { id: 'speed3', label: '해상 속도 ×4', desc: '해상 배속 4' }
+  ];
+  function keySettings(s) {
+    s = s || (G.Game && G.Game.state && G.Game.state.settings);
+    if (!s) return KEY_DEFAULTS;
+    var k = s.keys || (s.keys = {});
+    Object.keys(KEY_DEFAULTS).forEach(function (id) { if (!k[id]) k[id] = KEY_DEFAULTS[id]; });
+    return k;
+  }
+  function eventCode(e) {
+    if (e && e.code) return e.code;
+    var k = e && e.key;
+    if (k === ' ') return 'Space';
+    if (k === 'Esc') return 'Escape';
+    if (/^[0-9]$/.test(k || '')) return 'Digit' + k;
+    return k || '';
+  }
+  function keyIs(e, action) { return eventCode(e) === keySettings()[action]; }
+  function keyLabel(code) {
+    var names = { ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', Enter: 'ENTER', Space: 'SPACE', Escape: 'ESC', ShiftLeft: '왼쪽 SHIFT', ShiftRight: '오른쪽 SHIFT' };
+    if (names[code]) return names[code];
+    if (/^Digit[0-9]$/.test(code)) return code.slice(5);
+    if (/^Key[A-Z]$/.test(code)) return code.slice(3);
+    if (/^Numpad/.test(code)) return 'NUM ' + code.slice(6);
+    return String(code || '').replace(/Left$/, ' (왼쪽)').replace(/Right$/, ' (오른쪽)');
+  }
+  G.Keys = {
+    actions: KEY_ACTIONS,
+    defaults: function () { var o = {}; Object.keys(KEY_DEFAULTS).forEach(function (k) { o[k] = KEY_DEFAULTS[k]; }); return o; },
+    ensure: keySettings,
+    code: eventCode,
+    is: keyIs,
+    label: function (action, settings) { return keyLabel(keySettings(settings)[action]); },
+    bind: function (settings, action, code) {
+      var keys = keySettings(settings), old = keys[action], other = null;
+      Object.keys(keys).some(function (id) { if (id !== action && keys[id] === code) { other = id; return true; } return false; });
+      keys[action] = code;
+      if (other) keys[other] = old;
+    },
+    reset: function (settings) { settings.keys = this.defaults(); return settings.keys; }
+  };
+
   UI.init = function () {
     root = document.getElementById('ui');
     screenEl = U.el('div', 'layer'); screenEl.id = 'screen'; screenEl.style.pointerEvents = 'none';
@@ -19,12 +74,14 @@
     // 우클릭은 Esc와 같은 "돌아간다" 입력이다. 선택 대화에서는 떠나고, 창은 닫고,
     // 건물 기본 메뉴에서는 그 건물을 나온다. 아무도 받지 않은 우클릭은 브라우저 메뉴를 그대로 둔다.
     document.addEventListener('contextmenu', function (e) {
-      var cancel = { key: 'Escape', code: 'Escape', target: e.target, repeat: false, originalEvent: e };
+      var cancelCode = keySettings().cancel;
+      var cancel = { key: cancelCode === 'Space' ? ' ' : cancelCode, code: cancelCode, target: e.target, repeat: false, originalEvent: e };
       if (routeKey(cancel) || UI.busy()) e.preventDefault();
     });
   };
   function routeKey(e) {
     for (var i = keyHandlers.length - 1; i >= 0; i--) if (keyHandlers[i](e) === true) return true;
+    if (screenMenuKey(e)) return true;
     return !!(G.Game && G.Game.onKey && G.Game.onKey(e) === true);
   }
   function pushKey(fn) { keyHandlers.push(fn); return function () { var i = keyHandlers.indexOf(fn); if (i >= 0) keyHandlers.splice(i, 1); }; }
@@ -35,6 +92,28 @@
   UI.clearScreen = function () { screenEl.innerHTML = ''; };
   UI.add = function (el) { el.style.pointerEvents = 'auto'; screenEl.appendChild(el); return el; };
   UI.busy = function () { return modalRoot.children.length > 0; };
+
+  function usable(el) { return !!(el && el.isConnected && !el.classList.contains('dis') && !el.classList.contains('disabled') && !el.disabled && el.offsetParent !== null); }
+  function selectKeyItem(items, current, step) {
+    items = items.filter(usable); if (!items.length) return null;
+    var i = items.indexOf(current); if (i < 0) i = step < 0 ? 0 : -1;
+    i = (i + step + items.length) % items.length;
+    items.forEach(function (x) { x.classList.remove('kbd-focus'); });
+    var el = items[i]; el.classList.add('kbd-focus');
+    if (el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+    return el;
+  }
+  /** 화면 오른쪽 명령 메뉴: ↑↓로 고르고 Enter/Space로 실행. 장면의 이동키보다 먼저 받는다. */
+  function screenMenuKey(e) {
+    if (!screenEl || UI.busy()) return false;
+    var menu = screenEl.querySelector('.cmdmenu'); if (!menu || menu.classList.contains('talk-hidden')) return false;
+    var items = Array.prototype.slice.call(menu.querySelectorAll('.cmd'));
+    var cur = menu.querySelector('.cmd.kbd-focus');
+    if (keyIs(e, 'up')) { selectKeyItem(items, cur, -1); return true; }
+    if (keyIs(e, 'down')) { selectKeyItem(items, cur, 1); return true; }
+    if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) { cur = cur || selectKeyItem(items, null, 1); if (cur) cur.click(); return true; }
+    return false;
+  }
 
   // ---------------------------------------------------------------- HUD
   UI.hud = {
@@ -549,7 +628,7 @@
       }
       function done() { if (finished) return; finished = true; unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
       var unkey = pushKey(function (e) {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { next(); return true; }
+        if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt') || keyIs(e, 'cancel')) { next(); return true; }
         return false;
       });
       back.addEventListener('click', next);       // 대화창이든 바깥이든 누르면 Enter처럼 넘어간다 (대화창 클릭은 여기로 올라온다)
@@ -572,6 +651,8 @@
       var note = tt.notes.length ? '<div class="ask-note">' + tt.notes.map(function (n) { return U.esc(n.replace(/<[^>]+>/g, '').replace(/^—\s*/, '')); }).join(' · ') + '</div>' : '';
       body.innerHTML = '<div>' + speech(box, tt.text, opts) + '</div>' + note + '<div class="askrow"></div>';
       var row = body.querySelector('.askrow');
+      var selected = null;
+      function pick(step) { selected = selectKeyItem(Array.prototype.slice.call(row.querySelectorAll('button')), selected, step); return selected; }
       function done(v) { unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
       var pk = pickKey(text, list, opts), prev = lastPick(pk);
       list.forEach(function (o, i) {
@@ -579,8 +660,12 @@
         b.onclick = function (e) { e.stopPropagation(); rememberPick(pk, o.label); done(o.value); };
         row.appendChild(b);
       });
+      selected = row.querySelector('button:not(.disabled)'); if (selected) selected.classList.add('kbd-focus');
       var unkey = pushKey(function (e) {
-        if (e.key === 'Escape' && opts.cancel !== false) { done(opts.cancelValue != null ? opts.cancelValue : null); return true; }
+        if (keyIs(e, 'cancel') && opts.cancel !== false) { done(opts.cancelValue != null ? opts.cancelValue : null); return true; }
+        if (keyIs(e, 'up') || keyIs(e, 'left')) { pick(-1); return true; }
+        if (keyIs(e, 'down') || keyIs(e, 'right')) { pick(1); return true; }
+        if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) { selected = selected || pick(1); if (selected) selected.click(); return true; }
         var n = parseInt(e.key, 10); if (n >= 1 && n <= list.length && !list[n - 1].dis) { rememberPick(pk, list[n - 1].label); done(list[n - 1].value); return true; }
         return false;
       });
@@ -636,11 +721,18 @@
     //   · 창 바깥(어두운 바탕)을 누르거나 Enter → 그 단추. 창 안을 눌러도 되는 것은 내용이 글·그림뿐인 창(opts.clickAny: 알림·소식·발견·열람 결과…)
     var solo = opts.buttons && opts.buttons.length === 1 && !opts.onKey && opts.clickAny !== false ? opts.buttons[0] : null;
     var openedAt = Date.now();     // 막 연 창은 잠깐(0.4초) 누름을 받지 않는다 — 앞 창을 두 번 눌러(더블클릭) 새 창까지 넘겨 버리지 않게
+    var selected = null;
+    function candidates() { return Array.prototype.slice.call(w.querySelectorAll('.choice:not(.dis), button:not([disabled]):not(.disabled), .opt[data-res], .opt[data-uisz], .opt[data-as], .opt[data-sh], .opt[data-bt], .opt[data-km], .opt[data-ms], .tab')); }
+    function moveSelection(step) { selected = selectKeyItem(candidates(), selected && selected.isConnected ? selected : w.querySelector('.kbd-focus'), step); return selected; }
     function pressSolo() { if (closed || Date.now() - openedAt < 400) return; if (solo.onClick) { var r = solo.onClick(api); if (r === false) return; } api.close(solo.value); }
     var unkey = pushKey(function (e) {
-      if (e.key === 'Escape' && opts.closable !== false) { api.close(null); return true; }
-      if (solo && e.key === 'Enter' && !(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))) { pressSolo(); return true; }
-      if (opts.onKey) return opts.onKey(e);
+      var typing = e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+      if (keyIs(e, 'cancel') && opts.closable !== false && !typing) { api.close(null); return true; }
+      if (solo && (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) && !typing) { pressSolo(); return true; }
+      if (opts.onKey && opts.onKey(e) === true) return true;
+      if (!typing && (keyIs(e, 'up') || keyIs(e, 'left'))) { moveSelection(-1); return true; }
+      if (!typing && (keyIs(e, 'down') || keyIs(e, 'right'))) { moveSelection(1); return true; }
+      if (!typing && (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt'))) { selected = (selected && selected.isConnected ? selected : w.querySelector('.kbd-focus')) || moveSelection(1); if (selected) selected.click(); return true; }
       return false;
     });
     if (solo) {
@@ -697,6 +789,7 @@
       d.onclick = function () { win.close(o.value); };
       ch.appendChild(d);
     });
+    var first = ch.querySelector('.choice:not(.dis)'); if (first) first.classList.add('kbd-focus');
     return win.result;
   };
 
@@ -740,7 +833,7 @@
     var win = UI.window({ title: title, width: 520, html: '<input class="nfield" type="text" maxlength="' + (max || 16) + '" style="width:100%" value="' + U.esc(value || '') + '">',
       buttons: [{ label: '취소', value: null }, { label: '결정', value: 'ok', cls: 'navy' }] });
     var f = win.content.querySelector('input'); setTimeout(function () { f.focus(); f.select(); }, 30);
-    f.onkeydown = function (e) { if (e.key === 'Enter') win.close('ok'); e.stopPropagation(); };
+    f.onkeydown = function (e) { if (keyIs(e, 'confirm')) win.close('ok'); e.stopPropagation(); };
     return win.result.then(function (r) { return r === 'ok' ? f.value.trim() : null; });
   };
 
@@ -758,6 +851,7 @@
       d.onclick = function () { if (UI.busy()) return; it.onClick && it.onClick(); };
       box.appendChild(d);
     });
+    var first = box.querySelector('.cmd'); if (first) first.classList.add('kbd-focus');
     UI.add(m);
     return m;
   };

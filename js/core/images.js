@@ -545,6 +545,11 @@
     var id = I.heroLook();
     return I.list(id === 'admiral' ? 'characters/run_' : 'characters/' + id + '/run_');
   };
+  /** 20대 제독의 7×7 동작 아틀라스. kind: walk · run · back */
+  K.heroMotion = function (kind) {
+    var id = I.heroLook();
+    return ['characters/' + id + '/motion/' + kind];
+  };
   /** 수첩에서 보는 무릎상. 40세부터 수염 난 그림이 있으면 자동으로 바꾼다. */
   K.heroHalf = function () {
     var id = I.heroLook(), young = id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id;

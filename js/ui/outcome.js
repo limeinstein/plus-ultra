@@ -129,7 +129,7 @@
           // 막 뜬 창은 0.5초 동안 누름을 받지 않는다 (앞 대화를 넘기던 누름에 바로 닫히지 않게)
           function skip(e) { if (Date.now() - t0 < 500) return; if (e) e.stopPropagation(); close(); }
           w.back.addEventListener('click', skip);
-          if (UI.pushKey) unkey = UI.pushKey(function (e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { skip(); return true; } return false; });
+          if (UI.pushKey) unkey = UI.pushKey(function (e) { if (G.Keys.is(e, 'confirm') || G.Keys.is(e, 'confirmAlt') || G.Keys.is(e, 'cancel')) { skip(); return true; } return false; });
           w.result.then(function () { if (w) close(); });
           if (!fs && !leadFs) start();
         });
