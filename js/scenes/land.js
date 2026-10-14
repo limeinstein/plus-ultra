@@ -76,14 +76,15 @@
     ]);
     var catcher = U.el('div', 'mapcatch'); catcher.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:crosshair';
     catcher.addEventListener('mousedown', onDown);
-    catcher.addEventListener('mousemove', function (e) { st.mouse = pos(e); });
+    catcher.addEventListener('mousemove', onMove);
+    catcher.addEventListener('mouseleave', stopPointerWalk);
     catcher.addEventListener('wheel', function (e) { e.preventDefault(); zoomBy(e.deltaY > 0 ? 1 / 1.15 : 1.15); }, { passive: false });
     UI.pinch(catcher, zoomBy);
     UI.add(catcher);
     el.status = UI.add(U.el('div', 'status-strip wood', ''));
     var bar = U.el('div', 'sailbar wood brass-frame');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = function (e) { e.stopPropagation(); b.blur(); if (!UI.busy() && !st.busy) fn(); }; bar.appendChild(b); return b; }
-    el.pause = btn('정지', 'pause', function () { st.paused = !st.paused; refreshBar(); });
+    el.pause = btn('정지', 'pause', function () { st.paused = !st.paused; if (st.paused) st.pointerWalk = false; refreshBar(); });
     el.back = btn('돌아간다', 'anchor', function () { goBack(); }, 'navy');
     el.city = btn('도시에 들어간다', 'castle', function () { enterCity(); });
     btn('야영', 'tent', function () { camp(); });
@@ -117,14 +118,14 @@
     var k = e.key;
     // 스페이스 = 정지 (바다와 같다). 멈춘 뒤에는 방향키나 땅을 눌러 다시 걷는다
     if (k === ' ') {
-      if (!st.paused) { st.paused = true; st.dir = null; refreshBar(); }
+      if (!st.paused) { st.paused = true; st.dir = null; st.pointerWalk = false; refreshBar(); }
       else if (!e.repeat) UI.toast('멈춰 있습니다. 방향키로 가려는 쪽을 누르거나 땅을 누르면 걷습니다.', 'boot', 2600);
       return true;
     }
     if (k === 'Enter') { if (cityNear()) enterCity(); else if (atBase()) goBack(); else UI.toast('들어갈 도시도, 돌아갈 곳도 가깝지 않습니다.', 'castle'); return true; }
     if (k === 'm' || k === 'M') { chart(); return true; }
-    if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; st.paused = true; refreshBar(); return true; }
-    if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; st.paused = false; refreshBar(); return true; }
+    if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; st.pointerWalk = false; st.paused = true; refreshBar(); return true; }
+    if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; st.pointerWalk = false; st.paused = false; refreshBar(); return true; }
     if (k === '+' || k === '=') { zoomBy(1.2); return true; }
     if (k === '-') { zoomBy(1 / 1.2); return true; }
     // 방향키·WASD = 그 방위로 계속 걷는다 (두 키를 함께 누르면 대각선, Space로 정지)
@@ -132,7 +133,7 @@
       st.keys[k.toLowerCase()] = true;
       if (e.repeat) return true;
       var kd = keyDir(); if (!kd) return true;
-      st.dir = kd; st.path = null;
+      st.dir = kd; st.path = null; st.pointerWalk = false;
       if (st.paused) { st.paused = false; refreshBar(); }
       return true;
     }
@@ -162,6 +163,19 @@
   // st.qo: 이번 장면을 그릴 때 쓴 지진 흔들림(화면 px, js/art/quakefx.js). 카메라(st.cam)에는 더하지 않고 그리기·클릭 변환에만 넣는다
   function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
+  function onMove(e) {
+    st.mouse = pos(e);
+    if (UI.busy() || st.busy || st.path || e.buttons) return;
+    var l = S().loc, q = toScreen(l.lon, l.lat), dx = st.mouse[0] - q[0], dy = q[1] - st.mouse[1];
+    var dead = (((G.BALANCE || {}).pointerControl || {}).landDeadPx) || 30;
+    if (Math.hypot(dx, dy) < dead) { stopPointerWalk(); return; }
+    st.dir = norm([dx, dy]); st.pointerWalk = true;
+    if (st.paused) { st.paused = false; refreshBar(); }
+  }
+  function stopPointerWalk() {
+    if (!st || !st.pointerWalk || st.path) return;
+    st.pointerWalk = false; st.dir = null; st.paused = true; refreshBar();
+  }
   function onDown(e) {
     if (e.button !== 0 || UI.busy() || st.busy) return;
     var p = pos(e), w = toWorld(p[0], p[1]);
@@ -170,7 +184,7 @@
     var mk = !c && !landmark && G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
     if (mk) w = [mk.lon, mk.lat];
     if (!G.Geo.isLand(w[0], w[1])) { UI.toast('그곳은 물입니다. 육지를 클릭하십시오.', 'land'); return; }
-    st.path = w; st.paused = false; refreshBar();
+    st.dir = null; st.pointerWalk = false; st.path = w; st.paused = false; refreshBar();
   }
   var kiCache = null, kiKey = '', FF = null, labelW = {};
   function fontFam() { return FF || (FF = getComputedStyle(document.body).fontFamily); }
@@ -880,7 +894,7 @@
       var tN = G.Geo.terrain(l.lon, l.lat), tK = tN === 'sea' ? 'grass' : tN, M = G.Mounts, mt2 = MT();
       var su2 = M.suit(mt2.id, tK), how = mt2.id === 'walk' ? '도보' : M.get(mt2.id).name + ' ' + mt2.n + (mt2.id === 'porter' ? '패' : mt2.id === 'wagon' || mt2.id === 'reindeer' ? '대' : '필');
       var effTxt = mt2.id === 'walk' ? '' : ' — 걸음 ×' + M.speed(mt2, tK, l.party).toFixed(1) + ' · 피로 ×' + M.fatigue(mt2, tK, l.party).toFixed(2) + (M.cover(mt2, l.party) < 1 ? ' (짐승이 모자라 효과가 ' + Math.round(M.cover(mt2, l.party) * 100) + '%)' : '') + ' · 이 땅 <span class="suit ' + su2.cls + '">' + su2.mark + '</span>';
-      el.status.innerHTML = (st.paused ? '<b>⏸ 정지</b> · ' : '') + (st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중 · Space 정지' : st.path ? '이동 중' : '땅을 클릭하거나 방향키·숫자판으로 움직이십시오') + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
+      el.status.innerHTML = (st.paused ? '<b>⏸ 정지</b> · ' : '') + (st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스 조작)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : '마우스 방향으로 걷거나 땅을 클릭해 그곳까지 가십시오') + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
       el.city.classList.toggle('disabled', !near);
       el.back.innerHTML = G.icon('anchor') + (atBase() ? (l.base.type === 'ship' ? '배에 오른다' : '도시로 돌아간다') : '출발지로 돌아간다');
     }

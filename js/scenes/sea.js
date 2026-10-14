@@ -102,7 +102,7 @@
     catcher.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:crosshair';
     catcher.addEventListener('mousedown', onDown);
     catcher.addEventListener('mousemove', onMove);
-    catcher.addEventListener('mouseleave', function () { st.mouse = null; });
+    catcher.addEventListener('mouseleave', function () { st.mouse = null; stopPointerCourse(); });
     catcher.addEventListener('wheel', onWheel, { passive: false });
     UI.pinch(catcher, zoomBy);
     catcher.addEventListener('contextmenu', function (e) { e.preventDefault(); st.path = null; st.target = null; st.dirCrs = null; st.tackTheta = 0; });
@@ -120,6 +120,7 @@
     var bar = U.el('div', 'sailbar wood brass-frame');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = function (e) { e.stopPropagation(); b.blur(); if (!UI.busy() && !st.busy) fn(); }; bar.appendChild(b); return b; }
     hudEl.pause = btn('정지', 'pause', function () { if (st.paused) resume(); else halt(); });
+    hudEl.search = btn('탐색', 'compass', function () { searchSea(); });
     var sp = U.el('div', 'speedctl');
     [1, 2, 4].forEach(function (k) { var o = U.el('div', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.onclick = function (e) { e.stopPropagation(); st.speed = k; U.$$('.opt', sp).forEach(function (x) { x.classList.remove('on'); }); o.classList.add('on'); }; sp.appendChild(o); });
     bar.appendChild(sp);
@@ -164,7 +165,31 @@
   function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
   function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   SEA.toScreen = function (lon, lat) { return toScreen(lon, lat); };
-  function onMove(e) { st.mouse = stagePos(e); }
+  function onMove(e) {
+    st.mouse = stagePos(e);
+    if (UI.busy() || st.busy || st.path || e.buttons) return;
+    pointerCourse(st.mouse);
+  }
+  /** 커서를 둔 방향으로 계속 간다. 클릭 목적지가 있는 동안에는 그 경로를 덮어쓰지 않는다. */
+  function pointerCourse(p) {
+    var l = S().loc, q = toScreen(l.lon, l.lat), dx = p[0] - q[0], dy = q[1] - p[1];
+    var dead = (((G.BALANCE || {}).pointerControl || {}).seaDeadPx) || 38;
+    if (Math.hypot(dx, dy) < dead) { stopPointerCourse(); return false; }
+    var ang = Math.atan2(dy, dx);
+    if (!st.pointerSteer) {
+      takeCourse(ang);
+      st.pointerSteer = true;
+    } else {
+      st.dirCrs = ang; st.crs = ang; st.stopping = false;
+      if (st.paused) { st.paused = false; refreshBar(); }
+    }
+    return true;
+  }
+  function stopPointerCourse() {
+    if (!st || !st.pointerSteer || st.path) return;
+    st.pointerSteer = false; st.dirCrs = null; st.crs = null; st.target = null;
+    halt();
+  }
   function onWheel(e) {
     e.preventDefault();
     var k = e.deltaY > 0 ? 1 / 1.15 : 1.15;
@@ -320,7 +345,7 @@
       setCourse(lon, lat, city); return;                        // 이어진 바닷길이 없을 때만 곧장 침로
     }
     // make path longitudes relative to the ship
-    st.path = path; st.pathI = 1; st.target = { lon: path[path.length - 1][0], lat: path[path.length - 1][1], city: city };
+    st.path = path; st.pathI = 1; st.target = { lon: path[path.length - 1][0], lat: path[path.length - 1][1], city: city }; st.pointerSteer = false;
     st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = false; st.pilot = !auto;
     if (auto) {
       // 자동항해를 시작하면 ×4로 빨리 간다 (G.FX.autoSailSpeed). 손으로 몰면 leaveAuto가 이전 배속으로 돌린다
@@ -338,7 +363,7 @@
     var s = S(), l = s.loc;
     leaveAuto();
     monsoonWarn(lon, lat);
-    st.path = [[l.lon, l.lat], [lon, lat]]; st.pathI = 1; st.target = { lon: lon, lat: lat, city: city };
+    st.path = [[l.lon, l.lat], [lon, lat]]; st.pathI = 1; st.target = { lon: lon, lat: lat, city: city }; st.pointerSteer = false;
     st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = true; st.pilot = false;
     l.heading = Math.atan2(lat - l.lat, G.Geo.wrapLon(lon - l.lon));
     freshCourse(l.heading); st.stopping = false;
@@ -348,7 +373,7 @@
   /** 숫자판 여덟 방향: 그 방위로 계속 간다 (맞바람이면 지그재그로 거슬러 오른다) */
   function takeCourse(ang) {
     leaveAuto();
-    st.path = null; st.target = null; st.manual = false; st.direct = false; st.keys = {}; st.arrowSteer = false;
+    st.path = null; st.target = null; st.manual = false; st.direct = false; st.keys = {}; st.arrowSteer = false; st.pointerSteer = false;
     freshCourse(ang); st.dirCrs = ang; st.stopping = false;     // 멈추던 중이어도 다시 돛을 편다
     if (st.paused) st.paused = false;
     refreshBar(); refreshButtons();
@@ -922,7 +947,7 @@
     } else if (st.path || st.dirCrs != null) {
       var crs = st.crs != null ? st.crs : h;
       m = R.fleetMotion(crs, wind);
-      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer;   // 방향키로 몰 때는 지그재그 없이 뱃머리 쪽으로 (맞바람이면 그만큼 느리게)
+      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer && !st.pointerSteer;   // 방향키·마우스로 몰 때는 지그재그 없이 가리킨 쪽으로
       if (tack) {
         if (!st.tackTheta || !st.tackSide) st.tackSide = st.tackSide || (m.legP >= m.legM ? 1 : -1);
         st.tackTheta = m.theta;
@@ -1245,6 +1270,31 @@
     st.busy--;
   }
   SEA.runDay = runDay;
+  /** 멈춘 배에서 망루와 갑판 인원을 풀어 주변을 꼼꼼히 살핀다. 다른 배와 세계 시간은 그대로 흐른다. */
+  async function searchSea() {
+    if (!st || !st.alive || st.busy || UI.busy()) return false;
+    if (!st.paused || st.stopping || shipSpeed() >= FXS().stopSpeed) {
+      UI.toast('배를 완전히 세운 뒤 주변을 탐색할 수 있습니다.', 'anchor', 3200);
+      return false;
+    }
+    var s = S(), l = s.loc, K = (G.BALANCE && G.BALANCE.seaSearch) || { days: 1, senseBoost: 1.8, chartBonus: 1.2 };
+    var found0 = s.stats.found, marks0 = Object.keys(s.marks || {}).length, days = Math.max(1, K.days || 1);
+    for (var d = 0; d < days && st.alive && G.Game.scene === SEA; d++) await runDay();
+    if (!st.alive || G.Game.scene !== SEA) return true;
+    G.State.revealChart(l.lon, l.lat, chartR() + (K.chartBonus || 0));
+    var sensed = G.Explore.sense('sea', l.lon, l.lat, K.senseBoost || 1.8);
+    if (sensed.length) await G.Explore.report(sensed, l.lon, l.lat, 'sea');
+    var ds = G.Disc.checkSea(l.lon, l.lat);
+    for (var i = 0; i < ds.length; i++) {
+      await UI.say(seaLine(ds[i]), G.Scenes.mateSpeaker(R.skill('survey') ? 'surveyor' : 'first'));
+      await G.Disc.find(ds[i], 'sea');
+    }
+    if (s.stats.found === found0 && Object.keys(s.marks || {}).length === marks0) UI.toast('하루 동안 바다와 수평선을 살폈지만 새로운 것은 찾지 못했습니다.', 'compass', 4200);
+    else UI.toast('배를 세우고 주변 탐색을 마쳤습니다.', 'compass', 3200);
+    refreshHud(); refreshButtons();
+    return true;
+  }
+  SEA.search = searchSea;
   /** 괴혈병이 번지기 시작하는 날 (출항 뒤): 의술·과학이 늦춘다 */
   function scurvyOnset() { var B = G.BALANCE || {}; return (B.scurvyOnset || 40) + R.medSkill() * (B.scurvyMed || 0) + R.skill('sci') * (B.scurvySci || 0); }
   SEA.scurvyOnset = scurvyOnset;
@@ -1518,11 +1568,16 @@
     var pn = portNear();
     if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
+    if (hudEl.search) {
+      var canSearch = st.paused && !st.stopping && shipSpeed() < FXS().stopSpeed && !st.busy;
+      hudEl.search.classList.toggle('disabled', !canSearch);
+      hudEl.search.title = canSearch ? '하루 동안 배를 세우고 주변 바다와 수평선을 살핍니다.' : '배를 완전히 세운 뒤 탐색할 수 있습니다.';
+    }
     var s = S(), l = s.loc;
     var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : st.pilot ? ' 바닷길 따라 항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
-      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
+      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.pointerSteer ? '마우스 방향으로 조타 중' : st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
       : st.manual ? (st.paused ? '수동 조타 — ↑ 돛을 펴고 출발 · ←→ 제자리에서 뱃머리 · Space 순항' : st.cruise ? '수동 조타(순항) — ←→ 뱃머리 · ↓·Space 멈춤' : '수동 조타 — ↑ 누르는 동안 나아가고 떼면 서서히 멈춤 · Space 순항')
-      : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : '정지 — 방향키로 그쪽으로 출발 · 항구 곁에서는 Space로 정박') : '표류 중 — 바다를 클릭하거나 방향키·숫자판으로 나아가십시오');
+      : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : '정지 — 마우스를 움직이거나 방향키로 출발 · 탐색 가능') : '표류 중 — 마우스 방향으로 조타하거나 바다를 클릭해 그곳까지 가십시오');
     if (!st.manual && st.tackTheta && !st.paused) tgt += ' · <span style="color:#ffd98a">맞바람 — 지그재그로 거슬러 오르는 중</span>';
     if (st.handSteer) tgt += ' · 키를 잡는 동안 ×1';
     var v, vTxt;
