@@ -53,7 +53,8 @@
   function partnerOf(id) {
     var ps = RM.st().pairs;
     for (var k in ps) { var p = ps[k]; if (p.stage !== 'none' && p.stage !== 'cold' && (p.m === id || p.f === id)) return p; }
-    return null;
+    // 견우와 직녀 — 사건으로 맺어진 부부는 한 커플 규칙과 따로 (js/systems/gyeonwoo.js)
+    return G.Gyeonwoo && G.Gyeonwoo.pairOf ? G.Gyeonwoo.pairOf(id) : null;
   }
   RM.pairOf = partnerOf;
   RM.stageName = function (p) { return (G.ROMANCE_STAGE || {})[p.stage] || ''; };
@@ -103,6 +104,7 @@
     if (st.done || RM.current()) return out;
     var busy = {};
     Object.keys(ps).forEach(function (k) { var p = ps[k]; if (p.stage !== 'none') { busy[p.m] = 1; busy[p.f] = 1; } });
+    if (G.Gyeonwoo && G.Gyeonwoo.pairOf && G.Gyeonwoo.pairOf('gyeonwoo')) { busy.gyeonwoo = 1; busy.jiknyeo = 1; }
     var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id] && RM.veteran(id); });
     Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && s.player.wife !== id && RM.veteran(id); }).forEach(function (f) {
       var best = null, bc = b.chemMin;
@@ -275,6 +277,7 @@
   /** 수첩 「동료」: 부하들 사이 */
   RM.html = function () {
     var st = RM.st(), rows = Object.keys(st.pairs).map(function (k) { return st.pairs[k]; }).filter(function (p) { return p.stage !== 'none' && G.MATE[p.m] && G.MATE[p.f]; });
+    var gw = G.Gyeonwoo && G.Gyeonwoo.pairOf ? G.Gyeonwoo.pairOf('gyeonwoo') : null; if (gw) rows.push(gw);
     if (!rows.length) return '<div class="sep"></div><h4 style="margin:0 0 6px">부하들 사이</h4><div class="muted" style="font-size:15px">아직 눈에 띄는 사이는 없다. 3년 넘게 함께 항해한 남녀 부하를 맞닿은 방에 두면 서로 가까워지기도 한다(수첩 「함대」 → 기함 선실). 이런 일은 1년에 한 번쯤, 한 커플만.</div>';
     rows.sort(function (a, b) { return b.heat - a.heat; });
     return '<div class="sep"></div><h4 style="margin:0 0 6px">부하들 사이</h4><table class="tbl"><tr><th>두 사람</th><th>사이</th><th>끌림</th><th></th></tr>' + rows.map(function (p) {

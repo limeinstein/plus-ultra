@@ -3,6 +3,7 @@
 
    저장 상태 (옛 저장에는 없다 — 쓸 때 만든다)
    · 아이: k.edu['해:h:할 일'] = 올해 했다, k.playDay = 마지막으로 함께한 날, k.aim = 꿈(str·int·mar·cha), k.once = {한 번뿐인 일}
+           k.touch = 아버지와 함께한 횟수(할 일·집에서 생긴 일마다 1 — 옛 저장은 지금까지 한 일 수로 시작). 딸은 50번을 넘으면 왕실이 탐내는 신부감 (js/systems/kidwed.js)
    · 제독: p.keeps = [{id, kid, y}] 추억의 물건, p.homeEvt = 집에서 일이 생긴 마지막 날, p.homeSeen = 집에 마지막으로 들른 날,
            p.homeGap = {dinner: 날, portrait: 해} */
 (function (G) {
@@ -47,7 +48,7 @@
   };
   /** 집에 있는 아이들 (이름이 있고, 세 살부터, 견습으로 나가 있지 않은) */
   HL.kidsHome = function () {
-    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && F().kidAge(k) >= 3; });
+    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && F().kidAge(k) >= 3; });   // 시집간 딸은 집에 없다 (kidwed.js)
   };
 
   // ---------------------------------------------------------------- 집 안에 서 있는 가족
@@ -111,8 +112,27 @@
   }
   async function lines(list, k) { for (var i = 0; i < (list || []).length; i++) await line(list[i], k); }
 
+  // ---------------------------------------------------------------- 아버지와 함께한 횟수
+  HL.touch = function (k) {
+    if (!k) return 0;
+    if (k.touch == null) k.touch = Object.keys(k.edu || {}).filter(function (x) { return /:h:/.test(x); }).length;   // 옛 저장: 지금까지 함께한 일
+    return k.touch;
+  };
+  HL.addTouch = function (k, n) { if (!k) return 0; k.touch = HL.touch(k) + (n == null ? 1 : n); return k.touch; };
+
   // ---------------------------------------------------------------- 결과
   var STAT = { str: '힘', 'int': '지력', mar: '무력', cha: '매력' };
+  /** 제독도 아이와 함께하며 조금씩 다시 배운다 — pst: {능력치: n}, 저마다 절반 확률 (G.BALANCE.homelife.adultChance) */
+  function adult(pst) {
+    var p = S().player, out = [], ch = B().adultChance == null ? 0.5 : B().adultChance;
+    Object.keys(pst || {}).forEach(function (x) {
+      if (!p.st || p.st[x] == null || !U.chance(ch)) return;
+      var before = p.st[x]; p.st[x] = Math.min(B().adultMax || 99, p.st[x] + pst[x]);
+      if (p.st[x] > before) out.push('제독 ' + STAT[x] + ' +' + (p.st[x] - before));
+    });
+    return out;
+  }
+  HL.adult = adult;
   /** fx를 아이에게 적용하고, 바뀐 것을 한 줄로 돌려준다 */
   function apply(fx, k, all) {
     var s = S(), p = s.player, out = [], b = B();
@@ -134,6 +154,7 @@
       }
       if (fx.gold) { var g = Math.round((k.st['int'] || 50) * (b.ledgerGold || 4)); p.gold += g; out.push('금화 +' + U.num(g)); }
     }
+    if (fx.pst) out = out.concat(adult(fx.pst));
     if (fx.rest) { s.fleet.fatigue = Math.max(0, (s.fleet.fatigue || 0) - (b.dinnerRest || 10)); }
     if (fx.keep) { if (HL.addKeep(fx.keep, all ? null : k)) out.push(fill(G.HOME_KEEPS[fx.keep].name, k) + U.jx(fill(G.HOME_KEEPS[fx.keep].name, k), '을/를') + ' 얻었다'); }
     return out.join(' · ');
@@ -168,6 +189,7 @@
     }
     if (age < a.min || age > a.max) return { ok: false, hide: true };
     if (a.need === 'lang' && HL.teachLang(k) == null) return { ok: false, hide: true };
+    if (a.need === 'sneak' && !p.wife) return { ok: false, hide: true };
     if (k.edu && k.edu[yearKey(a)]) return { ok: false, why: '올해는 했다' };
     return { ok: true };
   };
@@ -200,6 +222,56 @@
     return apply({ bond: good ? 3 : -4 }, k);
   }
 
+  /** 아버지가 들려줄 수 있는 명언 — 제독이 3단계 이상 익힌 특기(말은 특기가 아니다)마다 하나. 없으면 공자 */
+  HL.quotes = function () {
+    var p = S().player, Q = G.HOME_QUOTES || {}, out = [];
+    G.SKILLS.forEach(function (sk) { if ((p.sk && p.sk[sk.id] || 0) >= 3 && Q[sk.id]) out.push({ sk: sk.id, q: Q[sk.id] }); });
+    if (!out.length && Q.nil) out.push({ sk: null, q: Q.nil });
+    return out;
+  };
+  /** 가르침: 무엇을 가르칠지 고르고, 명언 하나를 들려준다 */
+  async function lesson(k) {
+    var UI = G.UI, sp = HL.speaker(k), L = G.HOME_LESSONS;
+    var v = await UI.ask(fill('{name}에게 무엇을 가르칠까?', k), L.map(function (o, i) { return { label: o.label, value: i }; }), sp);
+    var o = L[v] || L[0], res = [apply(o.fx, k)].concat(adult(o.pst));
+    await line(o.say, k);
+    var qs = HL.quotes();
+    var qi = await UI.ask('끝으로 어떤 말을 들려줄까?', qs.map(function (x, i) {
+      return { label: x.q.who + (x.sk ? ' <small class="muted">(' + G.SKILL_BY_ID[x.sk].name + ')</small>' : ''), value: i };
+    }), sp);
+    var pick = qs[qi] || qs[0], q = pick.q;
+    await UI.say('「' + q.ko + '」\n— ' + q.who + ', ' + q.src + '\n' + q.orig, playerSpeaker(k));
+    await UI.say(q.why, playerSpeaker(k));
+    await line(['k:…' + q.who + '. 그 이름, 잊지 않을게요.', 'k:그 말, 마음에 새겨 둘게요. 아버지 목소리로요.', 'k:어려운데… 조금은 알 것 같아요.'], k);
+    k.quotes = k.quotes || []; if (k.quotes.indexOf(q.who + ':' + (pick.sk || 'nil')) < 0) k.quotes.push(q.who + ':' + (pick.sk || 'nil'));   // 들은 명언 (수첩·뒤를 이을 때)
+    var fx = { bond: 2 }; if (pick.sk) { fx.sk = {}; fx.sk[pick.sk] = 1; }
+    res.push(apply(fx, k));
+    return res.filter(Boolean).join(' · ');
+  }
+  /** 대화창에서 제독이 말한다 (아이와 마주 선다) */
+  function playerSpeaker(k) {
+    var p = S().player, me = { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf ? G.Img.chain.heroHalf() : null, lang: 3 };
+    if (!k) return me;
+    var kid = HL.speaker(k);
+    me.layout = 'duo'; me.side = 'left'; me.partner = kid;
+    return me;
+  }
+  /** 엄마 몰래: 어디로 갈지 고르고, 돌아올 때 들키기도 한다 */
+  async function sneak(k) {
+    var UI = G.UI, p = S().player, L = G.HOME_SNEAK, sp = HL.speaker(k);
+    var v = await UI.ask(fill('{name:과/와} 어디로 몰래 다녀올까?', k), L.map(function (o, i) { return { label: o.label + (o.cost ? ' (금화 ' + U.num(o.cost) + '닢)' : ''), value: i }; }), sp);
+    var o = L[v] || L[0];
+    if (o.cost && p.gold < o.cost) { UI.toast('주머니가 비어 장터 대신 바닷가로 갔다.', 'coin'); o = L[0]; }
+    if (o.cost) p.gold -= o.cost;
+    await line(o.say, k);
+    var res = [apply(o.fx, k)].concat(adult(o.pst));
+    S().fleet.fatigue = Math.max(0, (S().fleet.fatigue || 0) - (B().sneakRest || 5));      // 제독도 바람을 쐬었다
+    var C = G.HOME_SNEAK_CAUGHT;
+    if (U.chance(B().sneakCaught == null ? 0.4 : B().sneakCaught)) { await lines(C.lines, k); F().addBond(k, 2); res.push('들켰다 — 그래도 사이 +2'); }
+    else await lines(C.safe, k);
+    return res.filter(Boolean).join(' · ');
+  }
+
   /** 할 일 하나를 한다 */
   HL.run = async function (a, k) {
     var s = S(), p = s.player, UI = G.UI, b = B();
@@ -213,6 +285,7 @@
         var ks = HL.kidsHome(), kk = U.pick(ks);
         await lines(a.intro, kk);
         res = apply(a.fx, null, true);
+        ks.forEach(function (x) { HL.addTouch(x); });
         await lines(a.done, kk);
         p.homeGap = p.homeGap || {}; p.homeGap[a.id] = a.gapYears ? s.date.y : s.day;
       } else {
@@ -220,6 +293,8 @@
         if (cold) await lines(a.cold, k); else await lines(a.intro.slice(1), k);
         if (a.need === 'chess') res = await chess(k);
         else if (a.need === 'dream') res = await dream(k);
+        else if (a.need === 'lesson') res = await lesson(k);
+        else if (a.need === 'sneak') res = await sneak(k);
         else if (a.pick) {
           var opts = a.pick.opts.map(function (o, i) { return { label: o.label + (o.cost ? ' (금화 ' + U.num(o.cost) + '닢)' : ''), value: i }; });
           var v = await UI.ask(fill(a.pick.text, k), opts, HL.speaker(k)), o = a.pick.opts[v] || a.pick.opts[0];
@@ -232,7 +307,7 @@
           await lines(a.done, k);
         }
         if (cold) F().addBond(k, b.coldBonus || 2);          // 서먹한 아이일수록 함께한 시간이 크다
-        k.edu = k.edu || {}; k.edu[yearKey(a)] = 1; k.playDay = s.day;
+        k.edu = k.edu || {}; HL.touch(k); k.edu[yearKey(a)] = 1; k.playDay = s.day; HL.addTouch(k);
       }
     } catch (e) { console.error(e); }
     if (art) await art.stop();
@@ -274,7 +349,7 @@
       });
       var st = k.st || {};
       var v = await UI.choose(k.name + ' (' + F().kidAge(k) + '세)', opts, { width: 600, icon: 'heart',
-        text: F().bondHearts(k) + ' ' + F().bondWord(k) + ' — 힘 ' + (st.str || 0) + ' · 지력 ' + (st['int'] || 0) + ' · 무력 ' + (st.mar || 0) + ' · 매력 ' + (st.cha || 0) +
+        text: F().bondHearts(k) + ' ' + F().bondWord(k) + ' · 함께한 시간 ' + HL.touch(k) + '번 — 힘 ' + (st.str || 0) + ' · 지력 ' + (st['int'] || 0) + ' · 무력 ' + (st.mar || 0) + ' · 매력 ' + (st.cha || 0) +
           (Object.keys(k.sk || {}).length ? '<br><small class="muted">' + Object.keys(k.sk).map(function (id) { return (G.SKILL_BY_ID[id] || { name: id }).name + ' ' + k.sk[id]; }).join(' · ') + '</small>' : '') });
       if (v == null) return;
       var a = list.filter(function (x) { return x.id === v; })[0];
@@ -310,6 +385,7 @@
   /** 자택에 들어섰을 때 (misc.js HM.enter): 가끔 아이와 얽힌 일이 생긴다 */
   HL.happen = async function () {
     var s = S(), p = s.player, b = B(), UI = G.UI;
+    if (G.KidWed) { try { if (await G.KidWed.check()) { p.homeSeen = s.day; return; } } catch (e) { console.error(e); } }   // 열여덟 살이 된 딸의 혼례 (js/systems/kidwed.js)
     var kids = HL.kidsHome(), seen = p.homeSeen;
     if (!p.wife || !kids.length) { p.homeSeen = s.day; return; }
     var gap = b.happenGap == null ? 20 : b.happenGap;
@@ -324,6 +400,7 @@
     var h = pickd[0], k = pickd[1];
     p.homeEvt = s.day; p.homeLast = h.id; void seen;
     if (h.when === 'birthday') k.bday = s.date.y;
+    HL.addTouch(k);
     var art = G.HomeArt ? G.HomeArt.show(h.pic, {}) : null, res = '';
     try {
       await lines(h.lines, k);

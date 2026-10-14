@@ -203,6 +203,7 @@
     if (G.Romance) { try { await G.Romance.arrival(c); } catch (e) { console.error(e); } }   // 부하들 사이의 썸 — 혼례는 항구에서
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
     if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }
+    if (G.Gyeonwoo) { try { await G.Gyeonwoo.arrival(c); } catch (e) { console.error(e); } }   // 견우와 직녀: 거북선으로 조선 도시 → 항주 → 사카이 → 한산도
     if (G.Colony && c.colony != null) { try { await G.Colony.arrival(c); } catch (e) { console.error(e); } }   // 개척지에 닻을 내리면 도시를 세운다 · 개척 물자   // 사라진 왕녀: 에스파냐 땅에서 전령이 부름을 전한다
     if (G.Disaster) { try { await G.Disaster.arrival(c); } catch (e) { console.error(e); } }   // 재해가 덮친 도시의 모습 · 구호금   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
@@ -489,7 +490,7 @@
     var SN = G.Sneak, zone = SN ? SN.islamZone(c) : (c.flags.indexOf('H') >= 0 ? 'holy' : null), pass = SN ? SN.hasPass(c) : false;
     if (zone === 'holy' && (!SN || SN.islamRuled(c, own))) return { reason: 'holy', text: '이교도는 이 성스러운 도시에 들어올 수 없다.' };
     if (zone && zone !== 'holy' && SN.islamRuled(c, own) && !pass) return { reason: 'islam', zone: zone, text: zone === 'med' ? '이교도의 배는 이 항구에 들어올 수 없다. 돌아가라!' : '이교도는 이 성문을 지날 수 없다. 썩 물러가라!', bribe: 1200 + c.size * 600 };
-    if (c.flags.indexOf('X') >= 0 && !(s.flags.mingTrade) && !pass) return { reason: 'closed', text: '외국인은 들어올 수 없다.', bribe: 2400 + c.size * 800 };
+    if (c.flags.indexOf('X') >= 0 && !(s.flags.mingTrade) && !pass && !(G.Gyeonwoo && G.Gyeonwoo.letIn(c))) return { reason: 'closed', text: '외국인은 들어올 수 없다.', bribe: 2400 + c.size * 800 };
     // 토르데시야스 조약(1494.6.7~): 상대 왕실 반구의 상대 왕실 항구는 함대를 들이지 않는다 (js/systems/treaty.js — 동북아시아·유럽은 조약 밖)
     var tb = G.Treaty ? G.Treaty.entryBlock(c, own) : null;
     if (tb && !pass) return tb;
