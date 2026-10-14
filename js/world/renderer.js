@@ -752,11 +752,21 @@ void main(){
       vec2 cp = vec2(uCacheSize.x*0.5 + dx*uCacheZ, uCacheSize.y*0.5 + (ll.y - uCacheC.y)*uCacheZ);
       land = texture(uCache, cp / uCacheSize);
     }
-    // 얕은 물빛과 해안으로 밀려드는 불규칙한 쇄파. 먼바다 격랑은 그대로 남긴다.
-    float shall = smoothstep(-8.0, -1.0, sn) * (1.0 - land.a);
-    col = mix(col, uW1.rgb*vec3(0.72,0.90,0.92), shall*0.58);
-    float surf = band(sn, -3.4, -1.8, -0.18, 0.55) * (0.45 + 0.55*smoothstep(0.35,0.75,fbm(q*0.8 - vec2(uTime*0.15,0.0),3)));
-    col = mix(col, vec3(0.88,0.94,0.91), clamp(surf*uW1.a,0.0,0.82));
+    // 연안: 해안에서 떨어진 거리(화면 CSS px)로 띠를 정한다 — 바다 무늬(격랑)는 그대로 두고 물빛만 청록으로 물들이고,
+    // 하얀 쇄파는 해안선에 붙은 얇은 띠와 밀려드는 물결 줄 몇 가닥뿐 (넓게 하얗게 칠하면 안개처럼 보인다 — QA 2026-10-15)
+    float dc = max(-sn, 0.0) * uBattleZoom / TPD;
+    float wet = 1.0 - land.a;
+    float shall = (1.0 - smoothstep(0.0, 230.0, dc)) * wet;
+    vec3 teal = uW1.rgb*vec3(0.70,0.98,0.98);
+    col = mix(col, col*0.62 + teal*0.62, shall*0.62);
+    float lag = (1.0 - smoothstep(0.0, 70.0, dc)) * wet;
+    col = mix(col, col*0.55 + uW1.rgb*vec3(0.95,1.15,1.10)*0.66, lag*0.38);
+    float brokenN = smoothstep(0.30, 0.72, fbm(q*0.9 + vec2(uTime*0.05, -uTime*0.03), 3));
+    float roll = fract(dc/30.0 + uTime*0.30);
+    float rollers = smoothstep(0.84, 0.94, roll) * (1.0 - smoothstep(0.94, 1.0, roll)) * smoothstep(10.0, 22.0, dc) * (1.0 - smoothstep(26.0, 64.0, dc)) * brokenN * brokenN;
+    float edge = (1.0 - smoothstep(4.0, 22.0, dc)) * (0.55 + 0.45*brokenN);
+    float surf = max(edge, rollers*0.8) * wet;
+    col = mix(col, vec3(0.90,0.95,0.94), clamp(surf*uW1.a*0.72, 0.0, 0.72));
     col = mix(col, land.rgb, land.a);
   } else {
     vec4 g0 = texture(uGeo, uv);

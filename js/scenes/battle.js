@@ -16,7 +16,8 @@
     return [G.Geo.wrapLon(st.center.lon + x / GEO_SCALE), st.center.lat - y / GEO_SCALE];
   }
   function shorePad(b) {
-    var px = b ? Math.max(12, b.len * 0.18) : 12;
+    // 배 그림은 선체 길이(len)보다 조금 크게 그려진다 — 뱃머리·고물이 해안에 얹혀 보이지 않게 반 길이 가까이 띄운다
+    var px = b ? Math.max(24, b.len * 0.42) : 12;
     return Math.max(0.35, px / GEO_SCALE * (G.Geo.TEX_PER_DEG || 11.38));
   }
   /** 선체 폭만큼 여유를 둔 뭍·섬·빙산 충돌. true면 그 자리로 갈 수 없다. */
@@ -35,21 +36,56 @@
     }
     return out;
   }
-  function clearStart(x, y, b, placed) {
-    function ok(px, py) {
-      if (terrainBlocked(px, py, b)) return false;
-      return !(placed || []).some(function (o) { return Math.hypot(o.x - px, o.y - py) < 55; });
-    }
-    if (ok(x, y)) return [x, y];
-    for (var r = 45; r <= 900; r += 45) for (var i = 0; i < 20; i++) {
-      var a = i / 20 * Math.PI * 2, px = x + Math.cos(a) * r, py = y + Math.sin(a) * r;
-      if (ok(px, py)) return [px, py];
-    }
-    return [0, 0];
+  /** 시작 자리를 고를 때는 해안에서 조금 더 떨어뜨린다 (첫 화면에서 배가 해안에 얹혀 보이지 않게) */
+  function startBlocked(x, y, b) {
+    if (terrainBlocked(x, y, b)) return true;
+    var r = b ? b.len * 0.35 : 0;
+    for (var i = 0; i < 6 && r; i++) { var a = i / 6 * Math.PI * 2; if (terrainBlocked(x + Math.cos(a) * r, y + Math.sin(a) * r, b)) return true; }
+    return false;
   }
+  function sepOK(px, py, b, placed) {
+    return !(placed || []).some(function (o) { return Math.hypot(o.x - px, o.y - py) < Math.max(55, (o.len + b.len) * 0.42); });
+  }
+  function clearStart(x, y, b, placed) {
+    function ok(px, py) { return !startBlocked(px, py, b) && sepOK(px, py, b, placed); }
+    if (ok(x, y)) return [x, y];
+    for (var r = 45; r <= 1000; r += 45) for (var i = 0; i < 24; i++) {
+      var a = i / 24 * Math.PI * 2, px = x + Math.cos(a) * r, py = y + Math.sin(a) * r;
+      if (Math.hypot(px, py) < ARENA - 120 && ok(px, py)) return [px, py];
+    }
+    return [x, y];
+  }
+  /** 진형째 옮긴다: 한쪽 함대가 해안에 걸리면 그 함대 전체를 가장 가까운 열린 바다로 밀어 진형을 지킨다. 안 되면 한 척씩. */
   function settleStartingShips() {
     var placed = [];
-    st.ships.forEach(function (b) { var p = clearStart(b.x, b.y, b, placed); b.x = p[0]; b.y = p[1]; placed.push(b); });
+    ['me', 'en'].forEach(function (side) {
+      var grp = st.ships.filter(function (b) { return b.side === side; }), best = null;
+      function fits(tx, ty) {
+        var got = [];
+        for (var i = 0; i < grp.length; i++) {
+          var b = grp[i], px = b.x + tx, py = b.y + ty;
+          if (Math.hypot(px, py) > ARENA - 120 || startBlocked(px, py, b) || !sepOK(px, py, b, placed)) return false;
+        }
+        return true;
+      }
+      if (fits(0, 0)) best = [0, 0];
+      for (var r = 45; !best && r <= 900; r += 45) for (var i = 0; i < 24 && !best; i++) {
+        var a = i / 24 * Math.PI * 2; if (fits(Math.cos(a) * r, Math.sin(a) * r)) best = [Math.cos(a) * r, Math.sin(a) * r];
+      }
+      grp.forEach(function (b) {
+        if (best) { b.x += best[0]; b.y += best[1]; }
+        else { var p = clearStart(b.x, b.y, b, placed); b.x = p[0]; b.y = p[1]; }
+        placed.push(b);
+      });
+    });
+    // 진형을 옮겼으면 서로 마주 보게 뱃머리를 다시 맞춘다
+    var me = st.ships.filter(function (b) { return b.side === 'me'; }), en = st.ships.filter(function (b) { return b.side === 'en'; });
+    function mid(l) { return [U.sum(l, function (b) { return b.x; }) / Math.max(1, l.length), U.sum(l, function (b) { return b.y; }) / Math.max(1, l.length)]; }
+    if (me.length && en.length) {
+      var a = mid(me), e = mid(en);
+      me.forEach(function (b) { b.heading = Math.atan2(e[1] - a[1], e[0] - a[0]); });
+      en.forEach(function (b) { b.heading = Math.atan2(a[1] - e[1], a[0] - e[0]); });
+    }
   }
   /** 육지로 들어간 이동을 되돌리고, 한 축이 열려 있으면 해안을 따라 미끄러지게 한다. */
   function resolveTerrain(b, ox, oy) {
@@ -119,7 +155,7 @@
     st.terrain = terrainInfo();
     if (G.Img && G.Img.has('battle/rough-sea')) {
       var here = st;
-      G.Img.load('battle/rough-sea').then(function (im) { if (st === here) st.seaArt = im; });
+      G.Img.load('battle/rough-sea').then(function (im) { if (st === here) { st.seaArt = im; st.seaArtRect = artRect(im); } });
     }
     if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000);
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
@@ -1469,6 +1505,19 @@
       ctx.restore();
     }
   }
+  /** 격랑 그림의 실제 바다 부분 (양옆 검은 띠는 뺀다 — 그대로 얹으면 화면 가장자리에 세로 줄이 생긴다) */
+  function artRect(im) {
+    var w = im.naturalWidth, h = im.naturalHeight, r = [0, 0, w, h];
+    try {
+      var cw = 200, chh = Math.max(1, Math.round(cw * h / w)), c = document.createElement('canvas'); c.width = cw; c.height = chh;
+      var x = c.getContext('2d'); x.drawImage(im, 0, 0, cw, chh);
+      var d = x.getImageData(0, 0, cw, chh).data, col = function (i) { var t = 0; for (var y = 0; y < chh; y++) { var o = (y * cw + i) * 4; t += d[o] + d[o + 1] + d[o + 2]; } return t / chh / 3; };
+      var l = 0, rr = cw - 1; while (l < cw / 3 && col(l) < 10) l++; while (rr > cw * 2 / 3 && col(rr) < 10) rr--;
+      var sx = Math.ceil((l + 1) * w / cw), ex = Math.floor(rr * w / cw);
+      if (l > 0 || rr < cw - 1) r = [sx, 0, Math.max(1, ex - sx), h];
+    } catch (e) { /* 그림을 못 읽으면 통째로 */ }
+    return r;
+  }
   /** 먼바다에서는 생성한 격랑 질감을 아주 옅게 얹는다. 연안에서는 실제 지형을 가리지 않도록 셰이더 물결만 쓴다. */
   function roughSeaArt(ctx) {
     var im = st.seaArt;
@@ -1477,7 +1526,8 @@
     var driftY = Math.cos(st.t * 0.028) * 18 - (st.cy % 45) * 0.12;
     ctx.save();
     ctx.globalAlpha = 0.13;
-    ctx.drawImage(im, -64 + driftX, -44 + driftY, 1728, 972);
+    var sr = st.seaArtRect || [0, 0, im.naturalWidth, im.naturalHeight];
+    ctx.drawImage(im, sr[0], sr[1], sr[2], sr[3], -64 + driftX, -44 + driftY, 1728, 972);
     ctx.restore();
   }
   function renderScene() {
