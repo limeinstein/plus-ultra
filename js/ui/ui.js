@@ -15,11 +15,18 @@
     modalRoot = U.el('div', 'layer'); modalRoot.style.pointerEvents = 'none'; modalRoot.style.zIndex = 60; root.appendChild(modalRoot);
     toastEl = U.el('div', 'toasts'); root.appendChild(toastEl);
     fadeEl = U.el('div', 'fade-black'); root.appendChild(fadeEl);
-    document.addEventListener('keydown', function (e) {
-      for (var i = keyHandlers.length - 1; i >= 0; i--) { if (keyHandlers[i](e) === true) { e.preventDefault(); return; } }
-      if (G.Game && G.Game.onKey) G.Game.onKey(e);
+    document.addEventListener('keydown', function (e) { if (routeKey(e)) e.preventDefault(); });
+    // 우클릭은 Esc와 같은 "돌아간다" 입력이다. 선택 대화에서는 떠나고, 창은 닫고,
+    // 건물 기본 메뉴에서는 그 건물을 나온다. 아무도 받지 않은 우클릭은 브라우저 메뉴를 그대로 둔다.
+    document.addEventListener('contextmenu', function (e) {
+      var cancel = { key: 'Escape', code: 'Escape', target: e.target, repeat: false, originalEvent: e };
+      if (routeKey(cancel) || UI.busy()) e.preventDefault();
     });
   };
+  function routeKey(e) {
+    for (var i = keyHandlers.length - 1; i >= 0; i--) if (keyHandlers[i](e) === true) return true;
+    return !!(G.Game && G.Game.onKey && G.Game.onKey(e) === true);
+  }
   function pushKey(fn) { keyHandlers.push(fn); return function () { var i = keyHandlers.indexOf(fn); if (i >= 0) keyHandlers.splice(i, 1); }; }
   UI.pushKey = pushKey;
 

@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-10",
-  "tool": "G.Art.relicArt + headless Chromium",
+  "date": "2026-10-13",
+  "tool": "OpenAI ImageGen + tools/prepare_relic_icon.py (기존 원화 33종 보존)",
   "size": [
     256,
     256

@@ -23,14 +23,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // ---- 그림 고르기
     const keys = await page.evaluate(() => {
       const O = G.Outcome, p = G.Game.state.player, out = {};
-      ['sneak_ok', 'sneak_fail', 'win', 'lose', 'propose'].forEach(k => { out[k] = O.key(k); });
+      ['sneak_open', 'sneak_ok', 'sneak_fail', 'negotiate_open', 'win', 'lose', 'propose_open', 'propose', 'propose_fail'].forEach(k => { out[k] = O.key(k); });
       p.generation = 2; p.heir = { sex: 'f', folder: '' };
-      out.f = O.key('win'); out.fp = O.key('propose');
+      out.f = O.key('win'); out.fn = O.key('negotiate_open'); out.fs = O.key('sneak_open'); out.fo = O.key('propose_open'); out.fp = O.key('propose'); out.ff = O.key('propose_fail');
       delete p.heir; p.generation = 1;
       return out;
     });
-    ok(['sneak_ok', 'sneak_fail', 'win', 'lose', 'propose'].every(k => keys[k] === 'outcomes/' + k), '다섯 가지 그림이 모두 있다 ' + JSON.stringify(keys));
-    ok(keys.f === 'outcomes/win_f' && keys.fp === 'outcomes/propose_f', '뒤를 이은 딸(여자 제독)은 _f 그림');
+    ok(['sneak_open', 'sneak_ok', 'sneak_fail', 'negotiate_open', 'win', 'lose', 'propose_open', 'propose', 'propose_fail'].every(k => keys[k] === 'outcomes/' + k), '세 종류 공통 도입부와 결과 그림이 모두 있다 ' + JSON.stringify(keys));
+    ok(keys.f === 'outcomes/win_f' && keys.fn === 'outcomes/negotiate_open_f' && keys.fs === 'outcomes/sneak_open_f' && keys.fo === 'outcomes/propose_open_f' && keys.fp === 'outcomes/propose_f' && keys.ff === 'outcomes/propose_fail_f', '뒤를 이은 딸(여자 제독)은 모든 도입부부터 _f 그림');
 
     // ---- 창이 뜨고, 그림이 처음부터 돌고, 저절로 닫힌다
     const shot = async (kind, opts, name, at) => {
@@ -42,7 +42,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return info;
     };
     const a = await shot('win', { sub: '후원자의 마음을 얻었다' }, 'win', 2900);
-    ok(a.w === 480 && a.h === 300 && a.title === '설득 성공!' && a.sub === '후원자의 마음을 얻었다', '설득 성공 창: 480×300 그림 · 「설득 성공!」');
+    const aEnd = await page.evaluate(() => ({ title: document.querySelector('.oc-title').textContent, sub: document.querySelector('.oc-sub').textContent }));
+    ok(a.w === 720 && a.h === 450 && a.title === '교섭' && a.sub === '' && aEnd.title === '설득 성공!' && aEnd.sub.indexOf('마음을 얻었다') >= 0, '교섭 중립 도입부 → 설득 성공');
     await page.waitForFunction(() => window.DONE === true, null, { timeout: 6000 });
     ok(!(await page.$('.oc-pic')), '그림이 다 돌면 저절로 닫힌다');
     const b = await shot('win', {}, 'win2', 200);
@@ -55,9 +56,17 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForFunction(() => window.DONE === true, null, { timeout: 6000 });
     await shot('sneak_ok', { sub: '알렉산드리아에 몰래 들어갔다' }, 'sneak_ok', 2600);
     await page.waitForFunction(() => window.DONE === true, null, { timeout: 6000 });
-    await shot('sneak_fail', { sub: '알렉산드리아의 경비에게 들키고 말았다' }, 'sneak_fail', 3800);
+    const sf = await shot('sneak_fail', { sub: '알렉산드리아의 경비에게 들키고 말았다' }, 'sneak_fail', 3800);
+    const sfEnd = await page.evaluate(() => ({ title: document.querySelector('.oc-title').textContent, sub: document.querySelector('.oc-sub').textContent }));
+    ok(sf.title === '잠입' && sf.sub === '' && sfEnd.title === '들켰다!' && sfEnd.sub.indexOf('경비에게 들키고') >= 0, '잠입 중립 도입부 → 발각 결과');
     await page.waitForFunction(() => window.DONE === true, null, { timeout: 6000 });
-    await shot('propose', { sub: '이사벨이 반지를 받아 주었다' }, 'propose', 4200);
+    const ps = await shot('propose', { sub: '이사벨이 반지를 받아 주었다' }, 'propose', 4200);
+    const psEnd = await page.evaluate(() => ({ title: document.querySelector('.oc-title').textContent, sub: document.querySelector('.oc-sub').textContent }));
+    ok(ps.title === '청혼' && ps.sub === '' && psEnd.title === '청혼 성공!' && psEnd.sub.indexOf('받아 주었다') >= 0, '청혼 중립 도입부 → 성공 결과');
+    await page.waitForFunction(() => window.DONE === true, null, { timeout: 7000 });
+    const pf = await shot('propose_fail', { sub: '이사벨이 정중히 고개를 저었다' }, 'propose_fail', 4200);
+    const pfEnd = await page.evaluate(() => ({ title: document.querySelector('.oc-title').textContent, sub: document.querySelector('.oc-sub').textContent }));
+    ok(pf.title === '청혼' && pf.sub === '' && pfEnd.title === '청혼 실패…' && pfEnd.sub.indexOf('고개를 저었다') >= 0, '청혼 중립 도입부 → 실패 결과');
     await page.waitForFunction(() => window.DONE === true, null, { timeout: 7000 });
 
     // ---- 게임 흐름에 이어져 있는가 (연출은 짧게)

@@ -178,9 +178,9 @@
       var v = await win.result;
       if (v === 'all') {
         if (!(await UI.confirm('실은 짐을 모두 팔겠습니까?'))) continue;
-        var tot = 0; ids.forEach(function (id) { tot += sellQty(c, id, s.fleet.cargo[id].q); });
+        var tot = 0, profit = 0; ids.forEach(function (id) { var sold = sellQty(c, id, s.fleet.cargo[id].q); tot += sold.total; profit += sold.profit; });
         UI.toast('짐을 모두 팔아 금화 ' + U.num(tot) + '닢을 받았다.', 'coin');
-        tradePaid();
+        tradePaid(profit);
         continue;
       }
       if (v !== 'pick' || !picked) return;
@@ -188,15 +188,15 @@
       var q = await UI.number({ title: g.name + ' 매각', text: '몇 통 팔겠습니까? (지금 시세 1통 ' + U.num(sellP(c, picked)) + '닢)', min: 1, max: cg.q, value: cg.q, unit: '통',
         info: function (n) { var es = estimate(c, picked, n); return '받을 돈 약 금화 <b>' + U.num(es.total) + '</b>닢 · 1통 평균 ' + U.num(es.total / n) + '닢' + (n > 1 ? ' <small class="' + (es.last < es.first * 0.75 ? 'warn-text' : 'muted') + '">(첫 통 ' + U.num(es.first) + ' → 마지막 통 ' + U.num(es.last) + ')</small>' : ''); } });
       if (!q) continue;
-      var got = sellQty(c, picked, q);
-      UI.toast(g.name + ' ' + q + '통을 팔아 금화 ' + U.num(got) + '닢을 받았다.', 'coin');
-      tradePaid();
+      var sold = sellQty(c, picked, q);
+      UI.toast(g.name + ' ' + q + '통을 팔아 금화 ' + U.num(sold.total) + '닢을 받았다.', 'coin');
+      tradePaid(sold.profit);
     }
   };
-  function tradePaid() {
-    if (!G.Audio) return;
-    G.Audio.sfx('unload');
-    setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 620);
+  function tradePaid(profit) {
+    if (G.Audio) G.Audio.sfx('unload');
+    if (profit > 0 && G.TradeFX) setTimeout(function () { if (G.TradeFX) G.TradeFX.profit(profit); }, 260);
+    else setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 620);
   }
   /** price falls as you sell: integrate in chunks */
   function estimate(c, id, q) {
@@ -224,7 +224,7 @@
     if (profit > 0) G.Fame.add('tr', Math.floor(profit / 2500));
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
     G.Game.refreshHud();
-    return total;
+    return { total: total, profit: profit };
   }
 
   // ---------------------------------------------------------------- talk

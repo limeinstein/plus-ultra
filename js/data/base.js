@@ -348,6 +348,8 @@
       fear:    { fatigue: 14,  discipline: -4 },
       grief:   { fatigue: 4,   discipline: 3 }       // 숙연함 — 노예무역의 현장 같은 곳 (moredisc.js 고레 섬)
     },
+    // 발견의 여파로 규율·피로가 0에 닿으면 그 수치가 10으로 돌아올 때까지 야외 발견 반경이 줄어든다.
+    discoveryStrain: { recover: 10, findK: 0.35 },
     // 물은 식량보다 싸다 (보급값 × waterPrice). 자재(수리용 목재·밧줄·돛천): 한 통 값 = 보급값 × matPrice
     waterPrice: 0.5, matPrice: 3,
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작

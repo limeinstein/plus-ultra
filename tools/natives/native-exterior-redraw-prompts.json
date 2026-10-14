@@ -1,0 +1,29 @@
+{
+  "tool": "image_gen.imagegen",
+  "useCase": "style-transfer",
+  "assetType": "transparent 2D historical strategy-game building exterior sprite",
+  "shared": "Use each existing file as the edit target and building-function guide. Repaint it as a premium hand-painted realistic game asset matching the polished Iberia and Arabia exterior sprites: tactile natural materials, restrained fine painterly texture, warm upper-left daylight, near-frontal view, full centered silhouette and one level baseline. Preserve the function and broad silhouette while removing the dated procedural/3D look. Use a genuinely transparent background and transparent openings with clean alpha. No people, animals, scenery, sky, ground oval, grass strip, text, UI, watermark, fantasy ornament or cropped edge.",
+  "sets": {
+    "woodland": {
+      "materials": "Eastern Woodlands bark panels, bent sapling frames, woven cordage, hides, baskets and pottery; ceremonial building is a low elongated council longhouse, never a Plains tipi.",
+      "assets": ["church", "gate", "harbor", "home", "inn", "market", "shipyard", "tavern", "trade"]
+    },
+    "plains": {
+      "materials": "Great Plains hide tipis and communal lodges, timber poles, stitched smoke flaps, restrained red/ochre/navy geometric decoration, hide racks, baskets and pottery.",
+      "assets": ["church", "gate", "home", "inn", "market", "tavern", "trade"]
+    },
+    "pueblo": {
+      "materials": "Ancestral Pueblo warm ochre adobe masonry, timber vigas, wooden ladders, dark doorways, restrained black-red-white pottery patterns and a culturally appropriate kiva/spiritual house without a Christian cross.",
+      "assets": ["church", "gate", "home", "inn", "tavern", "trade"]
+    },
+    "kraal": {
+      "materials": "Precolonial southern African Nguni/Zulu golden beehive thatch, reed weaving, carved timber, earth pigments, pottery, baskets and sparing cattle-horn or shield motifs.",
+      "assets": ["gate", "guild", "inn", "market", "tavern", "trade"]
+    },
+    "tent": {
+      "materials": "15th–17th century Sahara-Sahel Tuareg/Fulani russet and cream leather canopies, woven mat walls, carved forked poles, indigo/ochre textiles, water bags, salt slabs, baskets and pottery.",
+      "assets": ["gate", "guild", "inn", "market", "tavern", "trade"]
+    }
+  },
+  "normalization": "python tools/normalize_generated_exterior.py <generated.png> <target.webp> --height 520 --trim --force; markets use height 660. Multi-asset sheets use tools/split_generated_exterior_sheet.py."
+}

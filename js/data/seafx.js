@@ -18,6 +18,9 @@
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
     // 기함 선실 화면 (js/ui/cabinview.js): 무대(배 그림) 크기, 오른쪽 명단 폭, 선체 속 선실 표·갑판 얼굴표 크기, 배 그림을 자르는 여백, 카드 최대 폭, 명단 높이
     cabinView: { stageW: 920, stageH: 314, side: 300, pin: 38, pinMin: 24, medal: 54, pad: 70, minSpan: 560, below: 40, cardMax: 180, rosterH: 280 },
+    // 교역 이익 금화비 (js/ui/tradefx.js): 순이익 perCoin마다 금화 한 닢. 큰 이익은 화면 개수만 제한하고 비·소리의 밀도로 크기를 보인다.
+  tradeProfit: { perCoin: 100, maxCoins: 120, showerAt: 18, heroH: 470, minMs: 1450, maxMs: 4800,
+    gravity: 1480, bounce: 0.34, floorFriction: 2.6, airDrag: 0.08, scatter: 340 },
     // 자동항해를 시작하면 켜지는 배속 (js/scenes/sea.js setTarget — 1·2·4 가운데). 손으로 몰면 이전 배속으로 돌아간다
     autoSailSpeed: 4,
     // 바다에서 멈춰 있을 때(Space·정지) 시간이 흐르는 배속 — 날이 가고 다른 배들이 움직인다. 0이면 예전처럼 멈추면 시간도 멈춘다

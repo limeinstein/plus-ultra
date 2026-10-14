@@ -270,6 +270,35 @@
   };
 
   // ================================================================ 수첩 「아버지의 사진」
+  /** 크게 보는 사진. 소지품의 팬던트와 수첩의 사진이 함께 쓴다. */
+  ST.showPhoto = function () {
+    var ph = D.photo;
+    var win = UI.window({ title: ph.name, icon: 'book', width: 1030, height: 820, clickAny: false,
+      html: '<div class="story-photo-view" role="img" aria-label="' + U.esc(ph.desc) + '"><div class="story-photo-locket"></div></div>' +
+        '<div class="story-photo-caption"><b>' + U.esc(ph.name) + '</b><span>' + U.esc(ph.desc) + '</span></div>',
+      buttons: [{ label: '사진을 넣는다', value: true, cls: 'navy' }] });
+    var cv = G.Img.make(['story/photo'], 600, 750, function () {
+      var c = document.createElement('canvas'); c.width = 600; c.height = 750;
+      drawPhotoFallback(c.getContext('2d'), 600, 750); return c;
+    }, { fit: 'cover', fx: 0.48, fy: 0.48 });
+    cv.className = 'story-photo-large';
+    win.content.querySelector('.story-photo-locket').appendChild(cv);
+    return win.result;
+  };
+
+  /** 소지품에 달 작은 팬던트 — 안에는 큰 사진과 같은 그림을 접어 넣는다. */
+  ST.photoPendant = function (host) {
+    var b = U.el('button', 'story-photo-pendant');
+    b.type = 'button'; b.title = '아버지의 사진을 크게 본다'; b.setAttribute('aria-label', b.title);
+    var cv = G.Img.make(['story/photo'], 72, 82, function () {
+      var c = document.createElement('canvas'); c.width = 72; c.height = 82;
+      drawPhotoFallback(c.getContext('2d'), 72, 82); return c;
+    }, { fit: 'cover', fx: 0.42, fy: 0.42 });
+    cv.className = 'story-photo-pendant-picture'; b.appendChild(cv);
+    b.onclick = function () { ST.showPhoto(); };
+    host.appendChild(b); return b;
+  };
+
   ST.page = function (el) {
     var s = S(), t = T(); if (!t) { el.innerHTML = '<div class="muted">이야기 모드가 아니다.</div>'; return; }
     var ph = D.photo, kin = ST.kin();
@@ -289,7 +318,7 @@
     el.innerHTML = '<div class="grid2" style="grid-template-columns:320px 1fr;gap:26px"><div>' +
       '<div class="story-photo"></div>' +
       '<h4 style="margin:12px 0 6px">' + U.esc(ph.name) + '</h4><div class="muted" style="font-size:15px;line-height:1.6">' + U.esc(ph.desc) + '</div>' +
-      '<div class="sep"></div><div style="font-size:15px;line-height:1.6"><b>사람</b> — ' + U.esc(ph.look) + '<br><b>뒤편</b> — ' + U.esc(ph.back) + '<br><b>뜰</b> — ' + U.esc(ph.people) + '</div>' +
+      '<div class="sep"></div><div style="font-size:15px;line-height:1.6"><b>사람</b> — ' + U.esc(ph.look) + '<br><b>뒤편</b> — ' + U.esc(ph.back) + '<br><b>틈새</b> — ' + U.esc(ph.people) + '</div>' +
       '</div><div>' +
       '<h4 style="margin:0 0 8px">' + kin + '의 흔적 <small class="muted">두 해마다 한 번, 머물렀던 자리로 다시 떨어진다</small></h4>' +
       '<table class="tbl"><tr><th></th><th>흔적</th><th>곳</th><th>때</th><th></th></tr>' + rows + '</table>' +
@@ -301,7 +330,9 @@
       var box = el.querySelector('.story-photo'), chain = ['story/photo'];
       var cv = G.Img.make(chain, 320, 240, function () { var c = document.createElement('canvas'); c.width = 320; c.height = 240; drawPhotoFallback(c.getContext('2d'), 320, 240); return c; }, { fit: 'contain' });
       cv.style.width = '320px'; cv.style.height = '240px'; cv.style.borderRadius = '6px'; cv.style.boxShadow = '0 2px 10px rgba(0,0,0,.35)';
-      box.appendChild(cv);
+      box.title = '사진을 크게 본다'; box.setAttribute('role', 'button'); box.setAttribute('tabindex', '0');
+      box.appendChild(cv); box.onclick = function () { ST.showPhoto(); };
+      box.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ST.showPhoto(); } };
     } catch (e) { console.error(e); }
   };
   function letterText() {

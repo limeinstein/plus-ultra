@@ -56,7 +56,7 @@
     tone(high ? 620 : 105, t, high ? 0.1 : 0.16, 'triangle', (gain || 0.16) * 0.55);
   }
   /** 파일 없이 합성하는 효과음 목록 — 작은 음원을 여럿 겹쳐 물·나무·금속·목소리의 질감을 만든다. */
-  AU.SFX = ['wake', 'sail', 'depart', 'dock', 'breath', 'wagon', 'horse', 'run', 'townstep', 'door', 'gull', 'cannon', 'gun', 'sword', 'growl', 'discover', 'children', 'page', 'glasses', 'coin', 'unload', 'cheer'];
+  AU.SFX = ['wake', 'sail', 'depart', 'dock', 'breath', 'wagon', 'horse', 'run', 'townstep', 'door', 'gull', 'cannon', 'gun', 'sword', 'growl', 'discover', 'children', 'page', 'glasses', 'coin', 'coinland', 'unload', 'cheer'];
   AU.SFX_VARIANTS = 3;
   var lastVariant = {};
   function pickVariant(name, want) {
@@ -119,6 +119,9 @@
       case 'coin':
         [0, 0.045, 0.11, 0.18, 0.27, 0.39, 0.53, 0.68].forEach(function (d, i) { var f = [1318, 1760, 1480, 2093, 1568][i % 5]; tone(f, t + d, 0.18 + i * 0.012, 'triangle', 0.075); tone(f * 1.51, t + d + 0.008, 0.1, 'sine', 0.025); });
         break;
+      case 'coinland':
+        coinClink(t, 0.09, variant);
+        break;
       case 'discover':
         [[392, 0], [523, 0.12], [659, 0.24], [784, 0.38], [1046, 0.55], [1318, 0.55]].forEach(function (n, i) { tone(n[0], t + n[1], 0.72 - i * 0.035, 'sawtooth', 0.055, null, 0.025); tone(n[0] / 2, t + n[1], 0.82, 'sine', 0.055); });
         noise(t + 0.52, 0.32, 0.04, 4200, 1.4, null, 'highpass');
@@ -164,6 +167,27 @@
       default: sfxTune = oldTune; return false;
     }
     sfxTune = oldTune;
+    return true;
+  };
+
+  /** 바닥에 닿아 튀는 금속 한 닢. 이익이 클 때에는 서로 다른 높이의 울림을 촘촘히 겹친다. */
+  function coinClink(t, gain, variant) {
+    var f = [1175, 1397, 1568, 1760][variant % 4] * (0.96 + Math.random() * 0.08);
+    noise(t, 0.035, gain * 0.34, 5200 + variant * 420, 4.5, null, 'highpass');
+    tone(f, t, 0.28, 'triangle', gain);
+    tone(f * 1.49, t + 0.009, 0.17, 'sine', gain * 0.38);
+  }
+  /** 교역 이익의 동전 수에 맞춘 착지음. 적으면 또렷한 땡그랑, 많으면 짧고 빽빽한 금속성 소나기다. */
+  AU.coinRain = function (count) {
+    if (!ctx || ctx.state !== 'running') return false;
+    count = Math.max(1, Math.round(count || 1));
+    var n = Math.min(count, 54), heavy = count >= 18, start = ctx.currentTime + (heavy ? 0.48 : 0.58);
+    for (var i = 0; i < n; i++) {
+      var gap = heavy ? 0.035 : count <= 3 ? 0.24 : 0.105;
+      var at = start + i * gap + Math.random() * (heavy ? 0.16 : 0.045);
+      coinClink(at, heavy ? 0.032 + Math.random() * 0.025 : 0.075 - Math.min(i, 4) * 0.006, i + count);
+    }
+    if (heavy) noise(start + 0.08, Math.min(2.2, 0.65 + n * 0.025), 0.035, 3600, 0.8, null, 'highpass');
     return true;
   };
 

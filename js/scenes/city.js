@@ -148,7 +148,13 @@
   C.exit = function () { cur = null; token++; G.Town.close(); if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(null, true); };
   /** the street redraws itself every frame; the painted town view is a still picture */
   C.update = function (dt) { if (G.Town.active() && !G.Town.hidden()) G.Town.update(dt); };
-  C.onKey = function (e) { if (G.Town.active() && !G.Town.hidden() && !UI.busy() && !busy) return G.Town.onKey(e); return false; };
+  C.onKey = function (e) {
+    if (UI.busy() || busy) return false;
+    // 건물의 기본 메뉴에서는 Esc(그리고 UI가 Esc로 바꿔 보내는 우클릭)가 「나온다」와 같다.
+    if (cur && e.key === 'Escape') { C.run(function () { return C.leave(); }); return true; }
+    if (G.Town.active() && !G.Town.hidden()) return G.Town.onKey(e);
+    return false;
+  };
 
   /** processing when the fleet arrives in port */
   C.arrival = async function (c, arg) {

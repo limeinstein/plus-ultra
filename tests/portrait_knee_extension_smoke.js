@@ -38,7 +38,7 @@ const OUT = path.join(ROOT, 'artifacts', 'portrait-knee-extension');
       G.CITY_DATA.forEach(c => G.Img.NPCS.forEach(n => {
         const bust = G.Img.pick(G.Img.chain.npc(n[0], c));
         const half = G.Img.pick(G.Img.chain.npcHalf(n[0], c));
-        if (bust && (!half || half.indexOf('portraits/street-folk/') !== 0)) mismatch.push('마을:' + c.id + ':' + n[0] + ':' + bust + ':' + half);
+        if (bust && half !== bust + '_half') mismatch.push('마을:' + c.id + ':' + n[0] + ':' + bust + ':' + half);
       }));
       return { counts: Object.fromEntries(groups.map(g => [g, all[g].length])), missing, mismatch,
         paths: groups.flatMap(g => all[g].map(k => k + '_half')) };

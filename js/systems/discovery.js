@@ -134,6 +134,22 @@
     grief:   { name: '숙연함', icon: 'skull', line: '사람이 사람을 사고판 자리 앞에서 대원들은 한동안 말을 잃었다. 웃고 떠드는 이가 없었다.' }
   };
   var FEAR_IDS = { bermuda: 1, f_giantsquid: 1, tarantula: 1, roc: 1, minotaur: 1, cannibal: 1, crystalskull: 1, antarctic: 1 };
+  function strainCfg() { return (G.BALANCE && G.BALANCE.discoveryStrain) || { recover: 10, findK: 0.35 }; }
+  /** 발견의 여파로 0에 닿은 수치만 기억한다. 그 수치가 10 이상이 되면 다시 평소 발견 반경으로 돌아간다. */
+  D.strainState = function (quiet) {
+    var s = S(), q = s.flags && s.flags.discoveryStrain;
+    if (!q) return null;
+    var f = s.fleet, need = strainCfg().recover || 10;
+    if (q.discipline && f.discipline >= need) q.discipline = false;
+    if (q.fatigue && f.fatigue >= need) q.fatigue = false;
+    if (!q.discipline && !q.fatigue) {
+      delete s.flags.discoveryStrain;
+      if (!quiet) UI.toast('탐험대가 마음을 추슬렀다 — 발견물을 다시 평소처럼 찾을 수 있다.', 'compass', 4200);
+      return null;
+    }
+    return { discipline: !!q.discipline, fatigue: !!q.fatigue, recover: need, findK: strainCfg().findK || 0.35 };
+  };
+  D.findK = function (quiet) { var q = D.strainState(quiet); return q ? q.findK : 1; };
   /** 데이터에 impact를 따로 적으면 그것을 우선하고, 없으면 발견 갈래와 설명으로 정한다. */
   D.impactKind = function (d) {
     if (d.impact && IMPACT[d.impact]) return d.impact;
@@ -159,6 +175,16 @@
       key: key, name: meta.name, icon: meta.icon, line: meta.line,
       fatigue: Math.round(f.fatigue - before.fatigue), discipline: Math.round(f.discipline - before.discipline)
     };
+    // 여관·휴식으로 이미 0이던 것은 제외하고, 이번 발견의 여파가 실제로 0을 만든 경우만 잠근다.
+    var zeroDiscipline = before.discipline > 0 && f.discipline <= 0;
+    var zeroFatigue = before.fatigue > 0 && f.fatigue <= 0;
+    if (zeroDiscipline || zeroFatigue) {
+      var flags = s.flags || (s.flags = {});
+      var strain = flags.discoveryStrain || (flags.discoveryStrain = { discipline: false, fatigue: false, d: U.dateNum(s.date) });
+      strain.discipline = strain.discipline || zeroDiscipline;
+      strain.fatigue = strain.fatigue || zeroFatigue;
+      st.impact.strain = { discipline: zeroDiscipline, fatigue: zeroFatigue };
+    }
     return st.impact;
   };
 
@@ -204,6 +230,11 @@
     st.relics = got.map(function (r) { return r.id; });
     await G.Scenes.discoveryCard(d, fame, got.concat(wait));
     UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
+    if (impact.strain) {
+      var low = []; if (impact.strain.discipline) low.push('규율'); if (impact.strain.fatigue) low.push('피로');
+      var sc = strainCfg();
+      UI.toast(low.join('·') + '가 0에 닿았다 — ' + (sc.recover || 10) + ' 이상으로 돌아올 때까지 발견물을 찾기 어렵다.', 'compass', 6200);
+    }
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
     for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);
     // 증거의 등급: 그 자리에서 무엇을 남겼는가 (실물·정밀 도판·해도·스케치·구술 기록)
@@ -566,16 +597,16 @@
   }
   D.dayCapped = dayCapped;
   D.checkSea = function (lon, lat) {
-    var s = S(), hits = [];
+    var s = S(), hits = [], findK = D.findK();
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'sea' || D.foundByMe(d.id) || D.taken(d.id) || !D.needMet(d)) return;
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
-      if (G.Geo.dist(lon, lat, d.lon, d.lat) >= d.r * D.clueK(d.id, 'find')) return;   // 단서가 겹칠수록 넓게
+      if (G.Geo.dist(lon, lat, d.lon, d.lat) >= d.r * D.clueK(d.id, 'find') * findK) return;   // 단서가 겹칠수록 넓게, 여파로 수치가 바닥나면 좁게
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return; }   // 아직 세워지지 않았다 — 1600년부터는 신기루로 보인다
       hits.push(d);
     });
     // special geography conditions
-    function sp(id) { if (!D.foundByMe(id) && !D.taken(id) && D.needMet(G.DISC[id])) hits.push(G.DISC[id]); }
+    function sp(id) { if (!D.foundByMe(id) && !D.taken(id) && D.needMet(G.DISC[id]) && (findK >= 1 || U.chance(findK))) hits.push(G.DISC[id]); }
     if (lat < -34.2 && lon > 16 && lon < 30) sp('capegood');
     if (lon > -86 && lon < -60 && lat > 10 && lat < 27 && s.flags.fromEurope) sp('westroute');
     if (lon > 72 && lon < 78 && lat > 8 && lat < 20 && s.flags.viaCape) sp('indiaroute');
@@ -589,12 +620,12 @@
   };
   /** on land expedition */
   D.checkLand = function (lon, lat) {
-    var hits = [], near = null, nearD = 99;
+    var hits = [], near = null, nearD = 99, findK = D.findK();
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'land' || D.foundByMe(d.id) || D.taken(d.id) || !D.needMet(d)) return;
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
-      var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find');
+      var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find') * findK;
       if (!D.built(d)) { if (dist < r && G.Mirage) G.Mirage.see(d); return; }   // 신기루
       if (dist < r) hits.push(d);
       else if (dist < nearD) { nearD = dist; near = d; }

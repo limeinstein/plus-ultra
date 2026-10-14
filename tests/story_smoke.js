@@ -80,8 +80,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     ok(b.end === 'done' && b.endSaid.some(x => /김도현/.test(x)) && /다시 돌기/.test(b.watchDesc), '아틀란티스 → 아버지와의 만남 · 끝 (' + b.endSaid.length + '줄)');
 
     // 수첩 쪽
-    const pg = await page.evaluate(() => { const el = document.createElement('div'); G.Story.page(el); return el.textContent; });
-    ok(/아버지의 흔적/.test(pg) && /찾음/.test(pg) && /편지/.test(pg), '수첩 「아버지의 사진」 쪽이 그려진다');
+    const pg = await page.evaluate(() => {
+      const el = document.createElement('div'); G.Story.page(el);
+      const td = document.createElement('td'); G.Story.photoPendant(td);
+      return { text: el.textContent, photo: G.Img.has('story/photo'), zoom: !!el.querySelector('.story-photo[role="button"]'), pendant: !!td.querySelector('.story-photo-pendant canvas') };
+    });
+    ok(/아버지의 흔적/.test(pg.text) && /찾음/.test(pg.text) && /편지/.test(pg.text), '수첩 「아버지의 사진」 쪽이 그려진다');
+    ok(pg.photo && pg.zoom && pg.pendant, '아버지 사진 자산 · 클릭 확대 · 팬던트 아이콘');
 
     // 보통 항해에서는 나오지 않는다
     const c = await page.evaluate(() => {

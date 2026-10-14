@@ -89,13 +89,21 @@
 
   PAGES.fleet = function (el) {
     var s = S(), f = s.fleet;
+    var strain = G.Disc && G.Disc.strainState ? G.Disc.strainState(true) : null;
+    var strainHtml = '';
+    if (strain) {
+      var need = [];
+      if (strain.discipline) need.push('규율 ' + Math.round(f.discipline) + '/' + strain.recover);
+      if (strain.fatigue) need.push('피로 ' + Math.round(f.fatigue) + '/' + strain.recover);
+      strainHtml = '<div class="card" style="margin-bottom:12px"><b class="warn-text">발견 난조</b> — 발견의 여파가 가라앉지 않았다. ' + need.join(' · ') + '이 될 때까지 야외 발견 반경 <b>' + Math.round(strain.findK * 100) + '%</b></div>';
+    }
     var html = '<div class="grid3" style="margin-bottom:12px">' +
       box('선원', f.crew + '명', '최저 ' + R.crewMin() + ' · 최대 ' + R.crewMax()) +
       box('식량 / 물', Math.floor(f.food) + ' / ' + Math.floor(f.water) + '통', f.crew ? '약 ' + Math.min(R.daysOfFood(), R.daysOfWater()) + '일분' : '') +
       box('적재', R.used() + ' / ' + R.fleetCap() + '통', '교역품 ' + R.cargoQty() + '통 · ' + Object.keys(f.cargo).length + '/' + R.maxKinds() + '종' + (G.Cargo ? ' · 무게 ' + G.Cargo.wtText() : '')) +
       box('피로', Math.round(f.fatigue) + '%', UI.bar(f.fatigue, 100, 'red')) +
       box('규율', Math.round(f.discipline) + '%', UI.bar(f.discipline, 100, 'green')) +
-      box('항해', (f.daysOut || 0) + '일째', f.scurvy > 0 ? '<span class="warn-text">괴혈병 ' + Math.round(f.scurvy) + '</span>' : '건강') + '</div>' +
+      box('항해', (f.daysOut || 0) + '일째', f.scurvy > 0 ? '<span class="warn-text">괴혈병 ' + Math.round(f.scurvy) + '</span>' : '건강') + '</div>' + strainHtml +
       '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>선장</th><th>목재</th><th class="num">내구력</th><th class="num">적재량</th><th>대포</th><th>돛</th><th>선수상</th></tr>' +
       f.ships.map(function (sh, i) {
         var w = G.Ships.wood(sh);
@@ -214,17 +222,20 @@
           var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind, rl = G.RELIC && G.RELIC[it.id];
           var eq = (kind === 'weapon' && p.equip.weapon === it.id) || (kind === 'armor' && p.equip.armor === it.id);
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
+          if (it.id === 'photo' && G.Story && G.Story.showPhoto) act += ' <button class="btn small" data-story-photo="' + i + '">사진을 본다</button>';
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
           var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : '';
           var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '');
           var ob = rl && rl.real && rl.real.obj;
           var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '');
           var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
-          return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (it.n > 1 ? ' ×' + it.n : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || '') + '</td><td style="font-size:16px">' + U.esc(it.desc || d.desc || '') + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
+          var itemDesc = it.id === 'photo' && G.STORY && G.STORY.photo ? G.STORY.photo.desc : (it.desc || d.desc || '');
+          return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (it.n > 1 ? ' ×' + it.n : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
         }).join('') + '</table>';
       // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
       U.$$('[data-ic]', el).forEach(function (td) {
         var it = p.items[+td.dataset.ic], d = G.ITEM[it.id], rl = G.RELIC && G.RELIC[it.id], art = rl || d;
+        if (it.id === 'photo' && G.Story && G.Story.photoPendant) { G.Story.photoPendant(td); return; }
         if (!art && (it.kind === 'evidence' || it.kind === 'clue')) art = { id: 'ev_' + (it.disc || it.sp), name: it.name || '해도', kind: 'book' };   // clue = 주점에서 산 증거품 (G.TavernRumor)   // 발견 증거품(해도·지도): 말아 둔 해도 그림
         if (art && A.relicArt) {
           var chain = rl ? G.Img.chain.relic(rl) : d ? G.Img.chain.item(d) : ['items/evidence_' + (it.disc || it.sp)];
@@ -233,6 +244,7 @@
         }
       });
       U.$$('[data-eq]', el).forEach(function (b) { b.onclick = function () { var it = p.items[+b.dataset.eq], d = G.ITEM[it.id]; p.equip[d.kind === 'weapon' ? 'weapon' : 'armor'] = it.id; render(); }; });
+      U.$$('[data-story-photo]', el).forEach(function (b) { b.onclick = function () { G.Story.showPhoto(); }; });
       U.$$('[data-read]', el).forEach(function (b) { b.onclick = async function () { await G.Disc.readRelic(p.items[+b.dataset.read]); render(); }; });
       U.$$('[data-del]', el).forEach(function (b) { b.onclick = async function () {
         var it = p.items[+b.dataset.del], nm = R.itemName(it);

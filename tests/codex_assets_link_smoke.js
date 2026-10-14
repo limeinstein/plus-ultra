@@ -8,7 +8,12 @@
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try {
+  ({ chromium } = require('playwright'));
+} catch (e) {
+  ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core'));
+}
 const ROOT = path.resolve(__dirname, '..');
 const CINEMATIC_IDS = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'ruin_gifs', 'cinematic-prompts.json'), 'utf8')).map(d => d.id);
 const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'codex_link');

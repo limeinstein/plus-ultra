@@ -197,7 +197,7 @@
     Game.scene = Game.scenes[name];
     if (Game.scene && Game.scene.enter) Game.scene.enter(arg);
   };
-  Game.onKey = function (e) { if (Game.scene && Game.scene.onKey) Game.scene.onKey(e); };
+  Game.onKey = function (e) { return Game.scene && Game.scene.onKey ? Game.scene.onKey(e) === true : false; };
 
   var last = 0;
   function LP() { return (G.FX && G.FX.loop) || { maxDt: 0.1, resDown: 0.028, resUp: 0.0185, resMin: 0.45, resStep: 0.1, resHold: 40 }; }

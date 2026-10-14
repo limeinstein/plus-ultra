@@ -166,6 +166,12 @@ def game_data():
 def valid_keys(d):
     """게임이 찾는 모든 키 → 설명"""
     k = {'title': '타이틀 화면', 'characters/player': '거리를 걷는 제독'}
+    for name, label in (('sneak_open', '잠입 시작'), ('sneak_ok', '잠입 성공'), ('sneak_fail', '잠입 실패'),
+                        ('negotiate_open', '교섭 시작'), ('win', '교섭 성공'), ('lose', '교섭 실패'),
+                        ('propose_open', '청혼 시작'), ('propose', '청혼 성공'),
+                        ('propose_fail', '청혼 실패')):
+        k['outcomes/' + name] = '결과 연출 · ' + label
+        k['outcomes/' + name + '_f'] = '결과 연출 · ' + label + ' (여자 제독)'
     for name in ('props', 'ruins', 'sphinx', 'poker', 'fishing', 'boat'):
         k['minigames/' + name] = '미니게임 그림 · ' + name
     cn = {c['id']: c['name'] for c in d['cities']}
@@ -291,6 +297,8 @@ def valid_keys(d):
         k['cabins/' + c['id']] = '기함 선실 · ' + c['name']
     k['effects/ship_spray'] = '항해 효과 · 선수 물보라 스프라이트 시트'
     k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
+    k['effects/trade_coin'] = '교역 이익 효과 · 제독에게 쏟아지는 금화'
+    k['story/photo'] = '이야기 모드 · 아버지의 사진'
     for terrain, label in (('grass', '초원'), ('steppe', '스텝'), ('desert', '사막'), ('forest', '숲'), ('jungle', '밀림'),
                            ('mountain', '산악'), ('snow', '설원'), ('tundra', '툰드라'), ('ice', '빙원')):
         k['landwar/backgrounds/' + terrain] = '육상전 지형 배경 · ' + label
@@ -358,7 +366,7 @@ def report(found, dups, keys):
               ('마을 사람', 'portraits/npc/'), ('거리 대화 NPC', 'portraits/street-folk/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'), ('왕실 신하', 'portraits/courtiers/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
-              ('항해 효과', 'effects/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]
+              ('항해 효과', 'effects/'), ('결과 연출', 'outcomes/'), ('이야기 사진', 'story/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

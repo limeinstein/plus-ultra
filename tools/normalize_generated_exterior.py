@@ -17,11 +17,18 @@ def main() -> None:
     parser.add_argument("source", type=Path)
     parser.add_argument("target", type=Path)
     parser.add_argument("--height", type=int, default=520)
+    parser.add_argument("--trim", action="store_true", help="투명 여백을 자른 뒤 크기를 맞춥니다")
+    parser.add_argument("--force", action="store_true", help="기존 대상 파일을 교체합니다")
     args = parser.parse_args()
 
-    if args.target.exists():
+    if args.target.exists() and not args.force:
         raise SystemExit(f"이미 있는 파일은 덮어쓰지 않습니다: {args.target}")
     image = Image.open(args.source).convert("RGBA")
+    if args.trim:
+        box = image.getchannel("A").getbbox()
+        if not box:
+            raise SystemExit(f"불투명 픽셀이 없습니다: {args.source}")
+        image = image.crop(box)
     width = max(1, round(image.width * args.height / image.height))
     image = image.resize((width, args.height), Image.Resampling.LANCZOS)
     args.target.parent.mkdir(parents=True, exist_ok=True)

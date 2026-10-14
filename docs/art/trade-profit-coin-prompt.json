@@ -1,0 +1,8 @@
+{
+  "useCase": "stylized-concept",
+  "assetType": "transparent game VFX coin sprite / game UI icon",
+  "references": "사용자가 첨부한 역사 금화·은화 네 장은 오래된 주조 질감, 불규칙한 가장자리, 돋을새김과 금속 색감만 참고한다.",
+  "prompt": "Create one original late-15th-to-16th-century maritime gold trade coin for a browser exploration and trading game. Use authentic aged hammered-metal craftsmanship, a simple raised sailing carrack emblem, a subtle laurel border, a thick readable rim, crisp embossed highlights and dark recessed grooves. Show exactly one centered coin at a slight three-quarter tilt so the rim thickness is visible. Keep it legible while spinning at 32–48 px. Use warm upper-left light, bright gold glints and rich amber shadows. Use tiny decorative pseudo-marks instead of real writing. Output a genuinely transparent background with generous padding. No square plate, no text, no currency symbols, no watermark, no extra coins, no hands, no scenery, and do not copy any specific historical coin.",
+  "runtimeAsset": "images/effects/trade_coin.webp",
+  "runtimeRule": "교역 순이익 약 100닢마다 금화 한 개. 큰 이익은 동시 표시 수를 제한하고 낙하 밀도와 지속시간으로 돈벼락을 표현한다."
+}
