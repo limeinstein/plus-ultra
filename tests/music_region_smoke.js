@@ -57,7 +57,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const seas = { med: sea(15, 37), black: sea(33, 43), ind: sea(70, 5), red: sea(38, 20), cape: sea(25, -37), atl: sea(-30, 30), north: sea(3, 56), carib: sea(-75, 15), gulf: sea(-90, 25),
         eastchina: sea(124, 30), javasea: sea(110, -5), pacN: sea(-150, 20), pacS: sea(-140, -20), peru: sea(-80, -12), panamaP: sea(-79, 7), chileP: sea(-75, -40), argA: sea(-60, -40), arctic: sea(20, 75), horn: sea(-65, -58), waus: sea(112, -25) };
       const land = (lon, lat) => { s.loc = { mode: 'land', lon, lat }; return G.Geo.terrain(lon, lat) + ':' + A.pick('land'); };
-      const lands = { sahara: land(5, 25), amazon: land(-60, -3), siberia: land(100, 65), china: land(112, 33), spain: land(-3.7, 40.4), tibet: land(88, 32), india: land(78, 22), mongol: land(103, 47), savanna: land(25, -15), kenya: land(37, 0), plains: land(-100, 40), germany: land(10, 50), france: land(2, 47), russia: land(40, 52), ukraine: land(33, 48) };
+      const lands = { sahara: land(5, 25), mojave: land(-115, 35), gobi: land(103, 42), amazon: land(-60, -3), siberia: land(100, 55), scandinavia: land(15, 60), china: land(112, 33), spain: land(-3.7, 40.4), tibet: land(88, 32), india: land(78, 22), middleEast: land(35, 38), seAsia: land(105, 12), seForest: land(99, 12), seNorth: land(103, 18), mongol: land(103, 47), savanna: land(25, -15), kenya: land(37, 0), plains: land(-100, 40), germany: land(10, 50), france: land(2, 47), russia: land(40, 52), ukraine: land(33, 48) };
       return { T, fnNull, used, seas, lands };
     });
     console.log(JSON.stringify({ used: r.used, seas: r.seas, lands: r.lands }));
@@ -84,6 +84,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const all = Object.values(L).join(' · ');
     ok(/forest:탐험 \(숲 탐험\)/.test(all) && /(grass|steppe):탐험\(평지 초원 탐험\)/.test(all), '뭍: 숲 → 숲 탐험, 평지·초원 → 평지 초원 탐험 (' + [L.germany, L.france, L.russia, L.ukraine, L.spain, L.mongol].join(' · ') + ')');
     ok(/mountain:티베트/.test(L.tibet), '뭍: 산지는 그 고장 곡 ' + L.tibet + ' · 그 밖 ' + [L.india, L.savanna, L.kenya, L.plains].join(' · '));
+
+    ok([L.sahara, L.mojave, L.gobi].every(x => /:탐험 \(사막 탐험\)$/.test(x)), '사하라·모하비·고비 대형 사막 → 사막 탐험 ' + [L.sahara, L.mojave, L.gobi].join(' · '));
+    ok([L.amazon, L.savanna, L.kenya, L.seAsia].every(x => /:탐험\(정글 탐험\)$/.test(x)), '아프리카·아마존·동남아시아 → 정글 탐험');
+    ok([L.siberia, L.scandinavia].every(x => /:탐험\(북부 탐험\)$/.test(x)), '시베리아·북유럽 → 북부 탐험');
+    ok([L.india, L.middleEast, L.seForest, L.seNorth].every(x => /:탐험 \(숲 탐험\)$/.test(x)), '인도·중동·동남아시아 숲 지형 → 숲 탐험 ' + [L.india, L.middleEast, L.seForest, L.seNorth].join(' · '));
+    ok([L.spain, L.germany, L.france, L.russia, L.ukraine].every(x => /:탐험\(평지 초원 탐험\)$/.test(x)), '유럽 → 평지 초원 탐험');
+    ok(!/:탐험 \(사막 탐험\)$/.test(L.plains), '대형 사막 권역 밖의 사막 지형에서는 사막 곡을 쓰지 않는다: ' + L.plains);
+    if (process.env.LAND_ONLY === '1') { ok(!errors.length, '지역별 탐험 음악 콘솔 오류 0'); console.log('\n지역별 탐험 음악 점검 통과'); return; }
 
     // ② 실제 도시: 거리 → 주점 → 나오기 → 왕궁, 고향 귀환, 결혼 뒤 첫 항해, 일기토·육상전, 전설의 대륙
     async function city(i, from) {

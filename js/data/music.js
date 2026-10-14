@@ -6,7 +6,7 @@
      title(첫 화면·제독 만들기)   : 항해(태평양)
      town(도시)  : 건물 안이면 byPlace(주점·왕궁) → 귀환 잔치·고향 귀항이면 「귀환」 → 도시의 고장(cityRegion) → def
      sea(항해)   : 결혼 뒤 첫 항해 → 전설의 대륙 둘레(단서를 얻었거나 찾은 곳) → 바다(ocean) → def
-     land(육상 탐험): 전설의 대륙 둘레 → 사막 · 정글 · 북쪽(눈·얼음·툰드라·북위 56° 위) → 동아시아 → 숲 → 평지·초원 → 산지는 그 고장 곡 → def
+     land(육상 탐험): 전설의 대륙 둘레 → 세계의 대형 사막 → 북유럽·시베리아 → 동아시아 → 지역별 탐험 곡 → def
      battle(해전) · duel(일기토) · landwar(육상전) · 잠깐 곡(moments: 미니 게임 · 전설의 대륙 발견 · 세계 일주 귀환)
    'gen:이름'은 파일 대신 코드가 만드는 음악 (js/systems/audio.js SCALES). */
 (function (G) {
@@ -118,24 +118,44 @@
       return known && G.Geo.dist(lon, lat, d.lon, d.lat) < R;
     });
   }
+  /** 사막 곡을 쓰는 세계의 넓은 사막 권역. 이 안에서도 실제 지형이 desert일 때만 사막 곡이 나온다. */
+  function majorDesert(lon, lat) {
+    return box(lon, lat, -18, 36, 14, 34) ||       // 사하라
+      box(lon, lat, 34, 67, 12, 36) ||             // 아라비아·이란
+      box(lon, lat, 54, 116, 30, 50) ||            // 중앙아시아·타클라마칸·고비
+      box(lon, lat, 67, 80, 20, 31) ||             // 타르
+      box(lon, lat, 9, 31, -36, -14) ||            // 나미브·칼라하리
+      box(lon, lat, 35, 51, -3, 16) ||             // 다나킬·소말리
+      box(lon, lat, -121, -101, 22, 43) ||         // 모하비·소노라·치와와·대분지
+      box(lon, lat, -77, -64, -53, -14) ||         // 아타카마·파타고니아
+      box(lon, lat, 113, 146, -36, -17);            // 오스트레일리아 내륙
+  }
+  function amazon(lon, lat) { return box(lon, lat, -74, -44, -19, 8); }
+  function africa(lon, lat) { return box(lon, lat, -26, 35, -36, 37) || box(lon, lat, 35, 52, -36, 12); }
+  function northLand(reg, lon, lat, ter) {
+    return ter === 'ice' || ter === 'snow' || ter === 'tundra' || reg === '북유럽' || (lon >= 45 && lat >= 50);   // 스칸디나비아·시베리아
+  }
+  var EUROPE_LAND = { '이베리아': 1, '영국': 1, '이탈리아 그리스': 1, '프랑스 오스트리아': 1, '독일 네덜란드': 1, '동유럽': 1, '러시아': 1 };
   /** 뭍 탐험 */
   function landTrack(lon, lat) {
     if (nearLegend(lon, lat)) return '무대륙 아틀란티스';
-    var ter = G.Geo && G.Geo.terrain ? G.Geo.terrain(lon, lat) : null;
-    if (ter === 'desert') return '탐험 (사막 탐험)';
-    if (ter === 'jungle') return '탐험(정글 탐험)';
-    if (ter === 'ice' || ter === 'snow' || ter === 'tundra' || lat >= 56 || lat <= -48) return '탐험(북부 탐험)';   // 눈·얼음·툰드라 · 북쪽 숲(타이가)
+    var ter = G.Geo && G.Geo.terrain ? G.Geo.terrain(lon, lat) : null, reg = geoRegion(lon, lat);
+    if (ter === 'desert' && majorDesert(lon, lat)) return '탐험 (사막 탐험)';
+    if (northLand(reg, lon, lat, ter)) return '탐험(북부 탐험)';
+    if (reg === '동남아시아') return ter === 'forest' ? '탐험 (숲 탐험)' : '탐험(정글 탐험)';
     if (box(lon, lat, 100, 146, 18, 42) || box(lon, lat, 118, 146, 42, 55)) return '탐험 (동아시아)';   // 중국·만주·조선·일본
-    if (ter === 'forest') return '탐험 (숲 탐험)';
+    if (africa(lon, lat) || amazon(lon, lat)) return '탐험(정글 탐험)';
+    if (reg === '이집트 중동' || reg === '오스만 제국' || reg === '인도') return '탐험 (숲 탐험)';
+    if (EUROPE_LAND[reg]) return '탐험(평지 초원 탐험)';
     if (ter === 'grass' || ter === 'steppe') return '탐험(평지 초원 탐험)';
-    return geoRegion(lon, lat) || '탐험(북부 탐험)';                              // 산지(티베트·안데스·알프스…)는 그 고장 곡
+    return reg || '탐험(평지 초원 탐험)';                              // 나머지 산지는 그 고장 곡
   }
 
   G.MUSIC = {
     volume: 1.6,   // 설정의 음악 크기(0~1)에 곱한다 (코드 음악보다 파일 음악이 작게 들려서). 1을 넘으면 1
     fade: 1.8,     // 곡이 바뀔 때 겹쳐 넘어가는 시간 (초)
     legendR: 4,    // 전설의 대륙에서 이만큼(°) 안이면 「무대륙 아틀란티스」
-    geoRegion: geoRegion, cityRegion: cityRegion, ocean: ocean, landTrack: landTrack, nearLegend: nearLegend,
+    geoRegion: geoRegion, cityRegion: cityRegion, ocean: ocean, landTrack: landTrack, nearLegend: nearLegend, majorDesert: majorDesert,
     scenes: {
       title:   { def: '항해(태평양)' },
       town:    { def: '이베리아', byPlace: { tavern: '주점', palace: '왕궁' }, festival: '귀환', home: '귀환', fn: function (c) { return cityRegion(c); } },
