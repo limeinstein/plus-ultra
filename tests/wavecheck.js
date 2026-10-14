@@ -47,7 +47,7 @@ void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/
     const out = [];
     [[-25.3, 37.1, 110, 1234.5, [0.5, 0.2]], [120.2, 12.4, 300, 51.25, [-0.3, 0.7]], [-40, -20, 60, 98765.4, [0.9, -0.1]]].forEach(([lon, lat, zoom, t, wind]) => {
       gl.uniform2f(u('uRes'), W, H); gl.uniform2f(u('uCenter'), lon, lat); gl.uniform1f(u('uZoom'), zoom); gl.uniform1f(u('uTime'), t); gl.uniform2f(u('uWind'), wind[0], wind[1]);
-      gl.uniform4f(u('uW0'), 1, 1, 1, 1);
+      gl.uniform4f(u('uW0'), 1, 1, 1, 1); gl.uniform4f(u('uW4'), 0, 0, 0, 1);   // rough 1 · d=100 → 먼바다 (JS는 cst=null → 먼바다)
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       const px = new Float32Array(W * H * 4); gl.readPixels(0, 0, W, H, gl.RGBA, gl.FLOAT, px);
       let eA = 0, mA = 0, eB = 0, mB = 0;

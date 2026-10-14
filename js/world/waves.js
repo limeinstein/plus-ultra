@@ -25,19 +25,21 @@
   WV.vnoise = vnoise;
   function smooth(e0, e1, x) { var t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); }
   function waveK() { var w = G.FX && G.FX.water; return w && w.wave != null ? w.wave : 1; }
+  function roughK() { var w = G.FX && G.FX.water; return w && w.rough != null ? w.rough : 1; }
 
-  /** 해안 쪽 정보: 먼바다면 null. 셰이더의 d(해안까지 텍셀)·gS(뭍 쪽 기울기)와 같은 뜻 */
+  /** 해안 쪽 정보: 셰이더의 d(해안까지 텍셀)·gS(뭍 쪽 기울기)와 같은 뜻. 지형이 아직 없으면 null(먼바다로 친다).
+      abyss = 먼바다 정도 0..1 (셰이더 waterCol의 smoothstep(6, 56, d)) */
   function coast(lon, lat) {
     var Geo = G.Geo; if (!Geo || !Geo.sdfRaw || !Geo.TEX_PER_DEG) return null;
-    var s = Geo.sdf(lon, lat), d = Math.max(-s, 0);
-    if (d > 30) return null;                                  // exp(−30/5) ≈ 0 — 먼바다
+    var s = Geo.sdf(lon, lat), d = Math.max(-s, 0), ab = smooth(6, 56, d);
+    if (d > 30) return { near: 0, gx: 0, gy: 0, abyss: ab };  // exp(−30/5) ≈ 0 — 먼바다: 뭍 쪽으로 휘는 물결은 없다
     var e = 1 / Geo.TEX_PER_DEG;
-    return { near: Math.exp(-d / 5), gx: (Geo.sdfRaw(lon + e, lat) - Geo.sdfRaw(lon - e, lat)) * 0.5, gy: (Geo.sdfRaw(lon, lat + e) - Geo.sdfRaw(lon, lat - e)) * 0.5 };
+    return { abyss: ab, near: Math.exp(-d / 5), gx: (Geo.sdfRaw(lon + e, lat) - Geo.sdfRaw(lon - e, lat)) * 0.5, gy: (Geo.sdfRaw(lon, lat + e) - Geo.sdfRaw(lon, lat - e)) * 0.5 };
   }
 
   WV.coast = coast;
 
-  /** 항해 지도의 물 높이. wind = [x, y] (셰이더 uWind와 같은 값), pxD = 1°의 화면 px(장치 기준). cst = coast() 결과(없으면 먼바다) */
+  /** 항해 지도의 물 높이. wind = [x, y] (셰이더 uWind와 같은 값), pxD = 1°의 화면 px(장치 기준). cst = coast() 결과(null이면 먼바다) */
   WV.sea = function (lon, lat, t, wind, pxD, cst) {
     var px = lon + 180, py = lat + 90;
     var wx = wind[0], wy = wind[1], wl = Math.sqrt(wx * wx + wy * wy), wstr = Math.min(1, wl);
@@ -46,6 +48,7 @@
     if (cst) { nearC = cst.near; var gl = Math.sqrt((cst.gx + 1e-5) * (cst.gx + 1e-5) + cst.gy * cst.gy); tlx = (cst.gx + 1e-5) / gl; tly = cst.gy / gl; }
     var nW1 = vnoise(px * 1.3 + 5, py * 1.3 + 5), nW2 = vnoise(px * 0.9 + 3.1, py * 0.9 + 3.1);
     var wk = waveK(), h = 0, gx = 0, gy = 0;
+    var rough = roughK() * (cst && cst.abyss != null ? cst.abyss : 1);   // 먼바다일수록 물결이 높다
     for (var i = 0; i < 7; i++) {
       var lam = (i < 2 ? (0.62 - i * 0.22) : (0.17 / (1 + (i - 2) * 0.42))) * wk;
       var spr = i < 2 ? (i * 0.45 - 0.25) : ((i - 4) * 0.45 + 0.1);
@@ -56,7 +59,7 @@
       var lf = smooth(3, 10, lam * pxD);
       if (lf <= 0) continue;
       var k = 6.2832 / lam, omega = 0.020 * Math.sqrt(lam / 0.5) * k * (i < 2 ? 1 : 1.3);
-      var amp = lam * (i < 2 ? (0.07 + 0.05 * wstr) : (0.05 + 0.10 * wstr)) * (i < 2 ? (1 - 0.5 * nearC) : 1);
+      var amp = lam * (i < 2 ? (0.07 + 0.05 * wstr) : (0.05 + 0.10 * wstr)) * (i < 2 ? (1 - 0.5 * nearC) : 1) * (1 + rough * (i < 2 ? 0.35 : 0.55));
       var xp = (px * dx + py * dy) * k;
       var env = 0.55 + 0.45 * Math.sin(xp / 6.5 - omega / 6.5 * t + i * 2.1 + nW1 * (4 + i));
       var ph = xp - omega * t + i * 1.7 + nW2 * (2.5 - i * 0.2) + nW1 * i * 0.3;
