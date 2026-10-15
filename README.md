@@ -220,6 +220,12 @@ python tools/build_web.py
 `dist/web` 폴더에 웹 배포판이 생기고, 같은 내용을 압축한 `dist/PLUS_ULTRA_web.zip`도 만들어집니다.
 esbuild(`npm i -g esbuild`)가 있으면 코드를 줄여서 더 작게 만듭니다.
 
+공개 베타판은 아래처럼 따로 만듭니다.
+
+```
+python tools/build_web.py --channel beta --out dist/web-beta --zip dist/PLUS_ULTRA_web_beta.zip
+```
+
 - **GitHub Pages**: 저장소에 `dist/web` 안의 파일을 올리고, 저장소 설정 → Pages에서 그 브랜치·폴더를 고릅니다.
 - **Netlify**: app.netlify.com/drop 에 `dist/web` 폴더를 끌어다 놓습니다.
 - **itch.io**: 새 프로젝트를 HTML 게임으로 만들고 `PLUS_ULTRA_web.zip`을 올린 뒤 "브라우저에서 실행"을 켭니다. 화면 크기는 1600×900을 권합니다.
@@ -865,10 +871,16 @@ dist/               만들어진 배포판
 
 1. **내 컴퓨터 폴더** `D:\Git\대항해2 CLAUDE\WebGame`에 최신 소스를 반영합니다.
 2. **GitHub 저장소** [limeinstein/plus-ultra](https://github.com/limeinstein/plus-ultra)에 커밋하고 올립니다(`main`).
-3. **웹 배포판 게시** — `main`에 올라가면 GitHub Actions(`.github/workflows/pages.yml`)가 `python tools/build_web.py`로 `dist/web`을 만들어 **GitHub Pages**에 게시합니다: https://limeinstein.github.io/plus-ultra/ (도감: `catalog.html`)
+3. **웹 배포판 게시** — GitHub Actions(`.github/workflows/pages.yml`)가 `main`의 정식판과 `beta` 브랜치의 공개 시험판을 함께 만들어 **GitHub Pages**에 게시합니다.
+   - 정식판: https://limeinstein.github.io/plus-ultra/ (도감: `catalog.html`)
+   - 베타판: https://limeinstein.github.io/plus-ultra/beta/ (도감: `beta/catalog.html`)
 4. **Claude 아티팩트** 게임·도감을 다시 게시합니다(아래 「Claude 아티팩트로 올리기」).
 
 `dist/`와 `PLUS_ULTRA.html`은 만들어지는 파일이라 저장소에 넣지 않습니다(`.gitignore`). 한 파일 판이 필요하면 `python tools/bundle.py`로 만듭니다.
+
+### 웹 배포 버전
+
+웹 배포를 준비할 때는 `python tools/web_release.py --bump --channel both`를 실행합니다. 제목 화면의 버전을 이전 배포보다 **0.001** 올리고 정식·베타 묶음을 만듭니다. 이번 기준 버전은 `0.255`입니다. 베타만 갱신할 때는 `--channel beta`, 정식판만 갱신할 때는 `--channel stable`을 쓰며, 한 번의 배포 준비 명령에서 버전은 한 번만 올라갑니다.
 
 ## Claude 아티팩트로 올리기
 

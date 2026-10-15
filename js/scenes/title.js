@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.999';   // 정식 1.000 이전 개발판 — 화면에는 항상 소수점 셋째 자리까지 표시한다
+  T.version = '0.255';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
 
   T.enter = function () {
@@ -21,7 +21,7 @@
       (loadingSrc ? '<img src="' + loadingSrc + '" alt="지구 둘레를 항해하는 갤리온">' : '') +
       '<span>해도를 펼치는 중...</span></div>' +
       '<div class="title-bottom"><div class="title-foot">대항해의 시대, 1480 — 이베리아 반도</div>' +
-      '<div class="title-version" aria-label="게임 버전">VERSION ' + T.version + '</div></div>';
+      '<div class="title-version" aria-label="게임 버전">VERSION ' + T.version + (window.PU_WEB_CHANNEL === 'beta' ? ' · BETA' : '') + '</div></div>';
     UI.add(wrap);
     var menu = wrap.querySelector('.title-menu');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = fn; menu.appendChild(b); return b; }

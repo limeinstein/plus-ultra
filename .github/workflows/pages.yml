@@ -1,9 +1,9 @@
-# main 에 올릴 때마다 웹 배포판(tools/build_web.py → dist/web)을 만들어 GitHub Pages 에 게시한다.
-name: 웹 배포판 게시 (GitHub Pages)
+# main은 정식판, beta는 공개 시험판으로 함께 만들어 GitHub Pages에 게시한다.
+name: 정식·베타 웹 배포판 게시 (GitHub Pages)
 
 on:
   push:
-    branches: [main]
+    branches: [main, beta]
   workflow_dispatch:
 
 permissions:
@@ -19,7 +19,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 정식판 소스 받기
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: stable
+      - name: 베타판 소스 받기
+        uses: actions/checkout@v4
+        with:
+          ref: beta
+          path: beta
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -28,11 +37,15 @@ jobs:
           node-version: '20'
       - name: esbuild (코드 줄이기)
         run: npm install -g esbuild
-      - name: 웹 배포판 만들기
-        run: python tools/build_web.py
+      - name: 정식 웹 배포판 만들기
+        working-directory: stable
+        run: python tools/build_web.py --out "$GITHUB_WORKSPACE/site" --no-zip
+      - name: 베타 웹 배포판 만들기
+        working-directory: beta
+        run: python tools/build_web.py --channel beta --out "$GITHUB_WORKSPACE/site/beta" --no-zip
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/web
+          path: site
 
   deploy:
     needs: build

@@ -112,6 +112,10 @@ def facing(f):
 
 
 CELL_H, FOOT, T = 300, 294, 268
+CANONICAL_KEYFRAME_SIZES = {
+    'walk': (2632, 4928),
+    'run': (4032, 6916),
+}
 LOOKS = 'admiral armored_navigator army_officer battle_vanguard blackcoat_captain casanova charismatic_admiral ganghui hat_spinner muscle_swordsman navigator_white noble_scholar sea_dog sky_adventurer'.split()
 def anchor(f):
     a = np.asarray(f)[:, :, 3] > 64; h = a.shape[0]; top = a[: int(h * 0.4)]
@@ -145,6 +149,11 @@ def drift_scale(fr):
     if len(h) < 4: return [1.0] * len(h)
     k, c = np.polyfit(x, h, 1); trend = k * x + c
     return list(h.mean() / trend)
+def keyframe_scale(fr):
+    """검증된 키포즈의 동작은 보존하되 ImageGen의 프레임별 인물 크기 차이만 완만하게 제한한다."""
+    h = np.array([f.height for f in fr], float); med = float(np.median(h))
+    target = np.clip(h, 0.9 * med, 1.1 * med)
+    return list(target / h)
 def pick_back(fr):
     """옆모습에서 시작해 뒷모습으로 끝나는 가장 그럴듯한 구간을 고른다 (raw 시트마다 돌아서는 순서가 제각각이다)"""
     n = len(fr); s = np.array([face_score(f) for f in fr]); v = np.array([facing(f) for f in fr])
@@ -177,23 +186,40 @@ def pick_back(fr):
         seq.append(f)
     return seq, (a, e + 1)
 def build(R, out, look):
-    rep = {}; seqs = {}
+    rep = {}; seqs = {}; canonical = {}
     for mo in ['walk', 'run', 'back']:
-        fr, rows = figures(Image.open(f'{R}/{look}/{mo}.raw.png'))
-        med = np.median([f.height for f in fr]); keep = [f for f in fr if not (f.info.get('edge') and f.height < 0.93 * med) and f.height >= 0.88 * med]
+        raw = Image.open(f'{R}/{look}/{mo}.raw.png')
+        canonical[mo] = raw.size == CANONICAL_KEYFRAME_SIZES.get(mo)
+        fr, rows = figures(raw)
+        med = np.median([f.height for f in fr])
+        keep = fr if canonical[mo] else [f for f in fr if not (f.info.get('edge') and f.height < 0.93 * med) and f.height >= 0.88 * med]
         info = {'raw_frames': len(fr), 'rows': rows, 'dropped_short': len(fr) - len(keep)}
+        if canonical[mo]: info['canonical_keyframes'] = True
         if mo == 'back': keep, n = pick_back(keep); info['back_range'] = n
         else:
             keep, nf = face_right(keep); info['flipped'] = nf
-            keep, cut = trim_still(keep); info['trimmed_still'] = cut
+            if canonical[mo]:
+                cut = (0, 0)
+            else:
+                keep, cut = trim_still(keep)
+            info['trimmed_still'] = cut
         seqs[mo] = keep; rep[mo] = info
     tgt = {'walk': T, 'run': T * 0.94, 'back': T}
     sc = {mo: tgt[mo] / np.median([f.height for f in seqs[mo]]) for mo in seqs}
     lim = min(min((FOOT - 4) / (max(f.height for f in seqs[mo]) * sc[mo]), 1.0) for mo in seqs)
     for mo, fr in seqs.items():
-        s = sc[mo] * lim
+        if mo == 'back':
+            ds = [1.0] * len(fr)
+        elif canonical[mo]:
+            ds = keyframe_scale(fr)
+        else:
+            ds = drift_scale(fr)
+        if canonical[mo]:
+            safe = min((FOOT - 4) / (f.height * d) for f, d in zip(fr, ds))
+            s = min(sc[mo], safe)
+        else:
+            s = sc[mo] * lim
         sprites = []
-        ds = drift_scale(fr) if mo != 'back' else [1.0] * len(fr)
         for f, d in zip(fr, ds):
             g = f.resize((max(1, round(f.width * s * d)), max(1, round(f.height * s * d))), Image.Resampling.LANCZOS)
             sprites.append((g, anchor(g)))

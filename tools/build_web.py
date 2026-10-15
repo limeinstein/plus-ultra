@@ -4,6 +4,7 @@
 사용법 (WebGame 폴더에서):
     python tools/build_web.py              # dist/web + dist/PLUS_ULTRA_web.zip
     python tools/build_web.py --no-minify  # 코드를 줄이지 않고 그대로 묶기
+    python tools/build_web.py --channel beta --out dist/web-beta --zip dist/PLUS_ULTRA_web_beta.zip
 
 esbuild가 설치되어 있으면(npm i -g esbuild) 자바스크립트와 CSS를 줄여서 더 작게 만듭니다.
 """
@@ -14,8 +15,19 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import images as imgtool  # noqa: E402
 import pages  # noqa: E402
 
-OUT = os.path.join(pages.ROOT, 'dist', 'web')
-ZIP = os.path.join(pages.ROOT, 'dist', 'PLUS_ULTRA_web.zip')
+
+def option(name, default):
+    return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else default
+
+
+def output_path(value):
+    return value if os.path.isabs(value) else os.path.join(pages.ROOT, value)
+
+
+OUT = output_path(option('--out', os.path.join('dist', 'web')))
+ZIP = output_path(option('--zip', os.path.join('dist', 'PLUS_ULTRA_web.zip')))
+CHANNEL = option('--channel', 'stable')
+NO_ZIP = '--no-zip' in sys.argv
 DESC = '대항해 시대를 무대로 한 모험·교역·해전 브라우저 게임. 후원자의 의뢰를 받아 세계의 발견물을 찾아 떠나세요.'
 
 
@@ -79,7 +91,9 @@ def build_page(page, name, out_html, title, desc, esbuild, manifest_rel):
     css_rel = asset(name, 'css', minify(css, 'css', esbuild))
     js = ';\n'.join('/* %s */\n%s' % (s, pages.read(s)) for s in p['scripts'] if s != 'images/manifest.js')
     js_rel = asset(name, 'js', minify(js, 'js', esbuild))
-    html = (head(title, desc, css_rel, p['fonts']) + '<body>\n<noscript><p style="padding:24px;color:#efe5cf;background:#1f150e">이 페이지는 자바스크립트가 필요합니다.</p></noscript>\n' +
+    channel = ('<meta name="pu-channel" content="beta">\n'
+               '<script>window.PU_WEB_CHANNEL="beta";</script>\n') if CHANNEL == 'beta' else ''
+    html = (head(title, desc, css_rel, p['fonts'], channel) + '<body>\n<noscript><p style="padding:24px;color:#efe5cf;background:#1f150e">이 페이지는 자바스크립트가 필요합니다.</p></noscript>\n' +
             p['markup'] + '\n<script src="' + manifest_rel + '"></script>\n<script src="' + js_rel + '"></script>\n</body>\n</html>\n')
     emit(out_html, html)
     return js_rel, css_rel
@@ -111,6 +125,8 @@ def main():
         sys.stdout.reconfigure(errors='replace')  # 콘솔 인코딩에 없는 글자는 ? 로
     except Exception:
         pass
+    if CHANNEL not in ('stable', 'beta'):
+        raise SystemExit('--channel은 stable 또는 beta여야 합니다.')
     # --budget 초: 그 시간이 지나면 하던 데까지 남기고 멈춘다(종료 코드 3). 다시 실행하면 이어서 한다.
     #   (한 번에 오래 못 도는 셸에서 쓰려고. GitHub Actions처럼 그냥 실행하면 끝까지 한다)
     budget = float(sys.argv[sys.argv.index('--budget') + 1]) if '--budget' in sys.argv else None
@@ -162,48 +178,50 @@ def main():
                 full = os.path.normpath(os.path.join(dirpath, fn))
                 if full not in keep:
                     os.remove(full)
-        # zip for itch.io / Netlify drop — 그림·음악은 이미 압축된 형식이라 그대로 담고(빠름), 글자 파일만 줄인다.
-        # 만드는 동안은 .part 에 쓰고, 끝나면 바꿔 단다. 멈췄다 다시 실행하면 .part 에 없는 것만 더 담는다.
-        part = ZIP + '.part'
-        want = []
-        for dirpath, _, files in os.walk(OUT):
-            for fn in sorted(files):
-                full = os.path.join(dirpath, fn)
-                want.append((full, os.path.relpath(full, OUT).replace(os.sep, '/')))
-        have = {}
-        if os.path.exists(part):
-            try:
-                with zipfile.ZipFile(part) as z:
-                    have = {i.filename: i for i in z.infolist()}
-            except Exception:
-                have = None
-        wmap = {arc: full for full, arc in want}
-        if have is None or any(arc not in wmap or info.file_size != os.path.getsize(wmap[arc]) for arc, info in have.items()):
-            if os.path.exists(part):
-                os.remove(part)    # 그 사이 바뀐 파일이 있으면 처음부터
+        if not NO_ZIP:
+            # zip for itch.io / Netlify drop — 그림·음악은 이미 압축된 형식이라 그대로 담고(빠름), 글자 파일만 줄인다.
+            # 만드는 동안은 .part 에 쓰고, 끝나면 바꿔 단다. 멈췄다 다시 실행하면 .part 에 없는 것만 더 담는다.
+            part = ZIP + '.part'
+            want = []
+            for dirpath, _, files in os.walk(OUT):
+                for fn in sorted(files):
+                    full = os.path.join(dirpath, fn)
+                    want.append((full, os.path.relpath(full, OUT).replace(os.sep, '/')))
             have = {}
-        stored = ('.webp', '.jpg', '.jpeg', '.png', '.gif', '.mp3', '.ogg', '.m4a', '.zip')
-        with zipfile.ZipFile(part, 'a' if have else 'w') as z:
-            for i, (full, arc) in enumerate(want):
-                if arc in have:
-                    continue
-                if arc.lower().endswith(stored):
-                    z.write(full, arc, compress_type=zipfile.ZIP_STORED)
-                else:
-                    z.write(full, arc, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
-                if i % 20 == 0:
-                    tick()
-        os.replace(part, ZIP)
+            if os.path.exists(part):
+                try:
+                    with zipfile.ZipFile(part) as z:
+                        have = {i.filename: i for i in z.infolist()}
+                except Exception:
+                    have = None
+            wmap = {arc: full for full, arc in want}
+            if have is None or any(arc not in wmap or info.file_size != os.path.getsize(wmap[arc]) for arc, info in have.items()):
+                if os.path.exists(part):
+                    os.remove(part)    # 그 사이 바뀐 파일이 있으면 처음부터
+                have = {}
+            stored = ('.webp', '.jpg', '.jpeg', '.png', '.gif', '.mp3', '.ogg', '.m4a', '.zip')
+            with zipfile.ZipFile(part, 'a' if have else 'w') as z:
+                for i, (full, arc) in enumerate(want):
+                    if arc in have:
+                        continue
+                    if arc.lower().endswith(stored):
+                        z.write(full, arc, compress_type=zipfile.ZIP_STORED)
+                    else:
+                        z.write(full, arc, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+                    if i % 20 == 0:
+                        tick()
+            os.replace(part, ZIP)
     except OutOfTime:
         print('시간이 다 되어 멈췄습니다 (%.0f초). 다시 실행하면 이어서 합니다.' % (time.time() - t0))
         sys.exit(3)
     total = sum(os.path.getsize(os.path.join(d, f)) for d, _, fs in os.walk(OUT) for f in fs)
     how = ', 코드 압축' if esbuild else ', 압축 안 함' if '--no-minify' in sys.argv else ', 압축 안 함 — esbuild가 없음'
-    print('웹 배포판: dist/web (%s%s)' % (pages.human(total), how))
+    print('웹 배포판: %s [%s] (%s%s)' % (os.path.relpath(OUT, pages.ROOT), CHANNEL, pages.human(total), how))
     for rel in game + cat:
         print('  ' + rel, pages.human(os.path.getsize(os.path.join(OUT, rel))))
     print('  images/ 교체 그림 %d장' % len(found))
-    print('업로드용 압축 파일: dist/PLUS_ULTRA_web.zip (%s)' % pages.human(os.path.getsize(ZIP)))
+    if not NO_ZIP:
+        print('업로드용 압축 파일: %s (%s)' % (os.path.relpath(ZIP, pages.ROOT), pages.human(os.path.getsize(ZIP))))
 
 
 if __name__ == '__main__':

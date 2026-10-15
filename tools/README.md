@@ -21,9 +21,12 @@ python tools/bundle.py --artifact 폴더      # Claude 아티팩트용 game.html
 ```
 python tools/build_web.py              # dist/web 폴더 + dist/PLUS_ULTRA_web.zip
 python tools/build_web.py --no-minify  # 코드를 줄이지 않고 묶기
+python tools/build_web.py --channel beta --out dist/web-beta --zip dist/PLUS_ULTRA_web_beta.zip
 ```
 
 esbuild(`npm i -g esbuild`)가 있으면 자바스크립트와 CSS를 줄입니다. 파일 이름에 내용 해시를 붙이므로 다시 올려도 방문자 브라우저에 옛 파일이 남지 않습니다.
+
+배포할 때는 `python tools/web_release.py --bump --channel both`를 씁니다. 제목 화면 버전을 0.001 올린 뒤 정식판과 베타판을 함께 만듭니다. 한 채널만 만들 때는 `stable` 또는 `beta`를 지정합니다.
 
 ## sprite_repack.py — 육상전·탐험·사건 스프라이트 다시 짜기
 
