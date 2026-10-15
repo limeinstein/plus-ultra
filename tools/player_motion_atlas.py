@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Normalize the 20s admiral motion sheets and export game atlases.
+"""Normalize the 20s admiral motion sheets (archival previews only).
+
+Game atlases are built by tools/player_motion_runtime.py, which finds each figure
+by connected components instead of slicing a fixed 7 x 7 grid.
 
 The ImageGen output is always a 7 x 7 transparent sheet, but its canvas size is
 fixed by the generator.  This tool repacks every cell without stretching the
@@ -41,7 +44,6 @@ SPECS = {
     "back": (2646, 7350),
     "run": (4032, 6916),
 }
-GAME_CELL_HEIGHT = 300
 
 
 def cell_box(width: int, height: int, col: int, row: int) -> tuple[int, int, int, int]:
@@ -217,15 +219,10 @@ def main() -> int:
             else:
                 info = normalize(raw, normalized, size)
             check = validate_sheet(normalized, size)
-            # Runtime atlases keep the exact 7 x 7 layout and cell aspect ratio,
-            # but use a 300 px cell height.  Loading the archival 4K-7K sheets
-            # directly would decode more than 240 MB for one selected look.
-            game_cell_width = round((size[0] // COLS) * GAME_CELL_HEIGHT / (size[1] // ROWS))
-            game_size = (game_cell_width * COLS, GAME_CELL_HEIGHT * ROWS)
-            game_path.parent.mkdir(parents=True, exist_ok=True)
-            if args.force or image_size(game_path) != game_size:
-                runtime = Image.open(normalized).convert("RGBA").resize(game_size, Image.Resampling.LANCZOS)
-                runtime.save(game_path, "WEBP", lossless=True, method=3)
+            # 게임용 아틀라스(images/characters/<look>/motion/*.webp)는 tools/player_motion_runtime.py가 만든다.
+            # 이 정규화 시트는 raw를 7×7 격자로 자른 것이라, raw의 줄 수가 7이 아니면 머리·다리가 잘린 칸이 생긴다
+            # (2026-10-15 QA) — 게임에 그대로 쓰지 않는다.
+            game_path = image_root / look / "motion" / f"{motion}.webp"
             look_report[motion] = {**info, "validation": check, "game": str(game_path)}
             report["totals"]["sheets"] += 1
             report["totals"]["frames"] += COLS * ROWS
