@@ -131,6 +131,7 @@
   - **새 흉상 그림을 넣을 때는 배경이 투명한 그림(webp·png)** 으로 넣는다.
 - **무릎상과 얼굴을 섞지 않는다 (2026-10-08)**
   - 마주 보는 대화에서 한 사람은 무릎상, 한 사람은 얼굴(액자 흉상)로 서던 것을 없앴다. **두 사람 다 무릎상이 있으면 둘 다 무릎상, 한 사람이라도 없으면 둘 다 얼굴**. 무릎상 파일을 읽지 못한 경우에도 그 자리에서 두 사람 다 얼굴로 다시 선다 (js/ui/ui.js dialogShell `toFaces`). 시험: `node tests/dialog_layout_smoke.js`
+  - **무릎상은 한 장 그대로 움직인다 (2026-10-16)**: 머리수건·긴 머리·목걸이·망토처럼 목선을 지나는 부분을 머리·몸통으로 잘라 따로 흔들면 얼굴을 몸에 붙인 듯 어긋났다. 모든 `_half` 그림은 조각내지 않고 완성본 전체에만 작은 움직임을 준다. 흉상의 2.5D 조각은 유지한다 (`js/art/portrait_rig.js`). 시험: `node tests/streetfolk_dialog_portrait_smoke.js`
 - **다각형 얼굴 없애기 (2026-10-08)**
   - 그림이 없어 코드로 그리던 얼굴(다각형처럼 보이는 초상)을 모두 **그 고장·성별에 맞는 사람 그림**으로 바꾼다 (`G.Art.fallbackFaces`, js/art/portrait.js `portraitKeys` 맨 뒤).
   - 고르는 차례: ① 얼굴 묶음 `images/portraits/pools/<mates|sponsors>/<나라>/<m|f>/01~10` — 씨앗으로 골라 사람마다 다른 얼굴, 왕·귀족·관리·상인은 후원자 묶음 ② 그 고장 역할 그림(npc-roles) 가운데 성별이 맞는 것(남자 상인 → 선장·선원처럼 비슷한 역할부터) ③ 유럽 마을 사람 그림.
@@ -874,6 +875,7 @@ dist/               만들어진 배포판
 3. **웹 배포판 게시** — GitHub Actions(`.github/workflows/pages.yml`)가 `main`의 정식판과 `beta` 브랜치의 공개 시험판을 함께 만들어 **GitHub Pages**에 게시합니다.
    - 정식판: https://limeinstein.github.io/plus-ultra/ (도감: `catalog.html`)
    - 베타판: https://limeinstein.github.io/plus-ultra/beta/ (도감: `beta/catalog.html`)
+   - 공개 베타 센터·피드백 게시판: https://limeinstein.github.io/plus-ultra/beta/center/
 4. **Claude 아티팩트** 게임·도감을 다시 게시합니다(아래 「Claude 아티팩트로 올리기」).
 
 `dist/`와 `PLUS_ULTRA.html`은 만들어지는 파일이라 저장소에 넣지 않습니다(`.gitignore`). 한 파일 판이 필요하면 `python tools/bundle.py`로 만듭니다.

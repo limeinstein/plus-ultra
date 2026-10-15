@@ -1,4 +1,4 @@
-/* 마을 사람 무릎상은 로딩 중에도 머리·몸통·하체 일부만 보이지 않아야 한다. */
+/* 마을 사람 무릎상은 머리·몸통을 자르지 않고 완성된 한 장으로 보여야 한다. */
 'use strict';
 const fs = require('fs');
 const os = require('os');
@@ -44,17 +44,16 @@ fs.mkdirSync(OUT, { recursive: true });
       await page.waitForSelector('.dlg-actor.tall .portrait-rig');
       await page.waitForTimeout(500);
       const state = await page.evaluate(() => [...document.querySelectorAll('.dlg-actor.tall .portrait-rig')].map(root => {
-        const base = root.querySelector('.rig-base');
-        const pieces = [...root.querySelectorAll('.rig-piece')];
+        const whole = root.querySelector('.rig-fallback');
         return {
-          ready: root.classList.contains('rig-ready'),
-          baseVisible: !!base && Number(getComputedStyle(base).opacity) > .5,
-          pieces: pieces.length,
-          piecesVisible: pieces.filter(e => Number(getComputedStyle(e).opacity) > .5).length
+          single: root.classList.contains('rig-single'),
+          whole: !!whole,
+          visible: !!whole && Number(getComputedStyle(whole).opacity) > .5,
+          pieces: root.querySelectorAll('.rig-piece').length
         };
       }));
-      if (!state.length || state.some(s => s.pieces !== 3 || (s.ready ? s.baseVisible || s.piecesVisible !== 3 : !s.baseVisible || s.piecesVisible !== 0))) {
-        throw new Error(type + ' 부분 레이어 노출: ' + JSON.stringify(state));
+      if (!state.length || state.some(s => !s.single || !s.whole || !s.visible || s.pieces !== 0)) {
+        throw new Error(type + ' 무릎상 분할 노출: ' + JSON.stringify(state));
       }
       await page.screenshot({ path: path.join(OUT, type + '.png') });
       await page.click('.dlg');
@@ -71,8 +70,9 @@ fs.mkdirSync(OUT, { recursive: true });
         const state = await new Promise(resolve => {
           const started = performance.now();
           (function poll() {
-            if (rig.root.classList.contains('rig-ready')) return resolve('ready');
-            if (rig.root.classList.contains('rig-piece-failed')) return resolve('failed');
+            const whole = rig.root.querySelector('.rig-fallback');
+            if (rig.root.classList.contains('rig-single') && whole && whole.complete && whole.naturalWidth) return resolve('ready');
+            if (whole && whole.complete && !whole.naturalWidth) return resolve('failed');
             if (performance.now() - started > 5000) return resolve('timeout');
             setTimeout(poll, 16);
           })();
@@ -84,7 +84,7 @@ fs.mkdirSync(OUT, { recursive: true });
     });
     if (coverage.count !== 260 || coverage.failed.length) throw new Error('전체 무릎상 리그 검사 실패: ' + JSON.stringify(coverage));
     if (errors.length) throw new Error('콘솔 오류: ' + errors.join('\n'));
-    console.log(JSON.stringify({ portraits: coverage.count, partialLayers: coverage.failed.length, screenshots: OUT, errors }, null, 2));
+    console.log(JSON.stringify({ portraits: coverage.count, splitHalves: coverage.failed.length, screenshots: OUT, errors }, null, 2));
   } finally {
     await browser.close();
   }

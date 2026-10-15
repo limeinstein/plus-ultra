@@ -43,6 +43,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         const sides = [...document.querySelectorAll('.dlg-actor')].map(a => ['left', 'right', 'center'].find(k => a.classList.contains(k)) + (a.classList.contains('active') ? '*' : '')).join(',');
         const tall = document.querySelectorAll('.dlg-actor.tall').length, bust = document.querySelectorAll('.dlg-actor.bust').length;
         const rigSafe = [...document.querySelectorAll('.dlg-actor.tall .portrait-rig')].every(root => {
+          if (root.classList.contains('rig-single')) {
+            const whole = root.querySelector('.rig-fallback');
+            return !!whole && root.querySelectorAll('.rig-piece').length === 0;
+          }
           const base = root.querySelector('.rig-base'), pieces = [...root.querySelectorAll('.rig-piece')];
           if (!base || pieces.length !== 3) return false;
           const baseVisible = Number(getComputedStyle(base).opacity) > .5;
@@ -86,7 +90,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return out;
     });
     ok(r.both.tall === 2 && r.both.bust === 0, '두 사람 다 무릎상이 있으면 둘 다 무릎상 (' + r.both.tall + ')');
-    ok(r.both.rigSafe, '무릎상은 완성본 한 장 또는 준비된 3개 레이어만 보여 부분 절단이 없다');
+    ok(r.both.rigSafe, '무릎상은 머리·몸통을 자르지 않은 완성본 한 장으로 보여 얼굴이 분리되지 않는다');
     ok(r.mixed.tall === 0 && r.mixed.bust === 2, '한 사람이라도 무릎상이 없으면 둘 다 얼굴 — 무릎상 ' + r.mixed.tall + ' · 얼굴 ' + r.mixed.bust);
     // 얼굴(흉상)은 테두리·배경 없이 투명 배경 그림만
     const look = await ev(async () => {

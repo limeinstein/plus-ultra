@@ -8,7 +8,7 @@
 
 esbuild가 설치되어 있으면(npm i -g esbuild) 자바스크립트와 CSS를 줄여서 더 작게 만듭니다.
 """
-import os, time, shutil, subprocess, sys, zipfile
+import os, re, time, shutil, subprocess, sys, zipfile
 
 sys.dont_write_bytecode = True  # tools 폴더에 __pycache__ 를 만들지 않음
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -99,6 +99,27 @@ def build_page(page, name, out_html, title, desc, esbuild, manifest_rel):
     return js_rel, css_rel
 
 
+def build_beta_center():
+    """공개 시험판 안내와 GitHub Issues 피드백 게시판을 /beta/center/에 넣는다."""
+    html = pages.read(os.path.join('web', 'beta-center', 'index.html'))
+    css = pages.read(os.path.join('web', 'beta-center', 'styles.css'))
+    js = pages.read(os.path.join('web', 'beta-center', 'feedback.js'))
+    title_js = pages.read(os.path.join('js', 'scenes', 'title.js'))
+    match = re.search(r"T\.version\s*=\s*'([0-9]+\.[0-9]{3})'", title_js)
+    if not match:
+        raise SystemExit('베타 센터에 쓸 게임 버전을 찾지 못했습니다.')
+    stamp = pages.short_hash(css + '\n' + js)
+    html = html.replace('{{VERSION}}', match.group(1)).replace('{{ASSET_HASH}}', stamp)
+    files = {
+        'center/index.html': html,
+        'center/styles.css': css,
+        'center/feedback.js': js,
+    }
+    for rel, content in files.items():
+        emit(rel, content)
+    return list(files)
+
+
 def same(src, dst):
     """이미 같은 파일이 있으면 다시 복사하지 않는다 (크기·수정 시각이 같으면 같다고 본다)"""
     try:
@@ -169,8 +190,9 @@ def main():
         tick()
         game = build_page('index.html', 'game', 'index.html', 'Loop of Good Hope — 더 먼 바다로', DESC, esbuild, manifest_rel)
         cat = build_page('catalog.html', 'catalog', 'catalog.html', 'Loop of Good Hope 도감', '게임에 나오는 도시·인물·발견물을 그림과 함께 보여 주고, 그림을 바꿀 때 쓸 파일 이름을 알려 주는 도감.', esbuild, manifest_rel)
+        center = build_beta_center() if CHANNEL == 'beta' else []
         emit('.nojekyll', '')
-        for rel in list(game) + list(cat) + ['index.html', 'catalog.html', '.nojekyll']:
+        for rel in list(game) + list(cat) + center + ['index.html', 'catalog.html', '.nojekyll']:
             keep.add(os.path.normpath(os.path.join(OUT, rel)))
         # 이번 판에 없는 옛 파일(옛 해시 assets, 빠진 그림)은 지운다
         for dirpath, _, files in os.walk(OUT):

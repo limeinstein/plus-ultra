@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111b20">
+  <meta name="description" content="PLUS ULTRA 공개 베타판을 시험하고 오류와 의견을 나누는 공간입니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PLUS ULTRA 공개 항해 시험">
+  <meta property="og:description" content="베타판을 먼저 플레이하고 제보와 개선 의견을 남겨 주세요.">
+  <title>PLUS ULTRA 공개 항해 시험</title>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nanum+Myeongjo:wght@400;700;800&family=Song+Myung&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v={{ASSET_HASH}}">
+</head>
+<body>
+  <a class="skip" href="#feedback">피드백 게시판으로 건너뛰기</a>
+  <div class="sea-haze" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="PLUS ULTRA 베타판 실행">
+      <span class="brand-mark"><i>P</i></span>
+      <span><b>PLUS ULTRA</b><small>PUBLIC VOYAGE TEST</small></span>
+    </a>
+    <nav aria-label="주요 메뉴">
+      <a href="#guide">참여 안내</a>
+      <a href="#feedback">피드백</a>
+      <a class="nav-play" href="../">베타판 실행</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> 공개 베타 · VERSION {{VERSION}}</p>
+        <h1 id="hero-title">먼 바다로 나서기 전,<br><em>함께 항로를 다듬습니다.</em></h1>
+        <p class="hero-lead">정식판에 한꺼번에 반영하기 전 새 기능과 그림, 항해 감각을 먼저 시험하는 공개 항구입니다. 플레이하다 만난 오류와 어색한 점, 더 나아질 아이디어를 남겨 주세요.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="../"><span>베타판 항해 시작</span><b aria-hidden="true">→</b></a>
+          <a class="button secondary" href="https://github.com/limeinstein/plus-ultra/issues/new?template=beta-feedback.yml" target="_blank" rel="noopener">피드백 쓰기</a>
+        </div>
+        <p class="signin-note">글 작성과 답변에는 무료 GitHub 로그인이 필요합니다. 게시글과 답변은 이 페이지에서 누구나 읽을 수 있습니다.</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="chart-lines"></div>
+        <img src="../images/effects/loading-world.anim.webp" alt="">
+        <div class="version-seal"><small>BUILD</small><strong>{{VERSION}}</strong><span>BETA</span></div>
+      </div>
+    </section>
+
+    <section class="guide" id="guide" aria-labelledby="guide-title">
+      <div class="section-heading">
+        <p class="kicker">TESTER'S LOG</p>
+        <h2 id="guide-title">세 가지만 살펴봐 주세요</h2>
+      </div>
+      <ol class="guide-grid">
+        <li><span>01</span><div><h3>직접 항해하기</h3><p>이동과 대화, 교역과 전투를 평소처럼 즐겨 보세요. 저장 자료는 정식판과 섞이지 않도록 중요한 항해는 따로 보관해 주세요.</p></div></li>
+        <li><span>02</span><div><h3>상황을 기록하기</h3><p>문제가 생긴 화면과 행동 순서, 사용 기기와 브라우저를 적으면 같은 상황을 재현하는 데 큰 도움이 됩니다.</p></div></li>
+        <li><span>03</span><div><h3>답변 확인하기</h3><p>등록된 글 아래로 처리 상황과 답변이 이어집니다. 고친 내용은 다음 베타판에 모아 반영한 뒤 정식판으로 옮깁니다.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="feedback" id="feedback" aria-labelledby="feedback-title">
+      <div class="feedback-head">
+        <div class="section-heading">
+          <p class="kicker">CAPTAIN'S BOARD</p>
+          <h2 id="feedback-title">베타 피드백 게시판</h2>
+          <p>제보와 제안, 개발 답변이 한곳에 모입니다. 제목을 누르면 내용과 답변을 펼칠 수 있습니다.</p>
+        </div>
+        <a class="button primary compact" href="https://github.com/limeinstein/plus-ultra/issues/new?template=beta-feedback.yml" target="_blank" rel="noopener">새 글 작성</a>
+      </div>
+
+      <div class="board-tools" aria-label="게시글 필터">
+        <div class="filters" role="group" aria-label="게시글 보기">
+          <button class="active" type="button" data-filter="all">전체</button>
+          <button type="button" data-filter="open">진행 중</button>
+          <button type="button" data-filter="closed">반영·완료</button>
+          <button type="button" data-filter="answered">답변 있음</button>
+        </div>
+        <button class="refresh" id="refresh" type="button" aria-label="게시글 새로고침">↻ 새로고침</button>
+      </div>
+
+      <p class="board-status" id="board-status" role="status">게시판을 불러오는 중입니다…</p>
+      <div class="board" id="board" aria-live="polite"></div>
+      <noscript><p class="board-empty">게시판을 보려면 자바스크립트를 켜 주세요. <a href="https://github.com/limeinstein/plus-ultra/issues?q=is%3Aissue+label%3Abeta-feedback">GitHub에서 바로 보기</a></p></noscript>
+    </section>
+  </main>
+
+  <footer>
+    <p><b>PLUS ULTRA</b> · 공개 항해 시험</p>
+    <div><a href="../">베타판</a><a href="../../">정식판</a><a href="https://github.com/limeinstein/plus-ultra/issues?q=is%3Aissue+label%3Abeta-feedback" target="_blank" rel="noopener">GitHub 게시판</a></div>
+  </footer>
+
+  <script src="feedback.js?v={{ASSET_HASH}}"></script>
+</body>
+</html>

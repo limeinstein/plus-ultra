@@ -67,9 +67,14 @@
     return true;
   }
 
-  function fallback(host, opts) {
+  function fallback(host, opts, src) {
     var el;
-    if (opts.portrait instanceof HTMLCanvasElement) el = opts.portrait;
+    if (src) {
+      el = new Image();
+      el.alt = opts.alt || '';
+      el.decoding = 'async'; el.draggable = false; el.src = src;
+    }
+    else if (opts.portrait instanceof HTMLCanvasElement) el = opts.portrait;
     else if (opts.portrait && G.Art && G.Art.portraitCanvas) el = G.Art.portraitCanvas(opts.portrait, opts.size || 248);
     else return null;
     el.classList.add('rig-fallback');
@@ -106,7 +111,11 @@
     host.classList.add('portrait-rig-host');
     host.appendChild(root);
 
-    var so = sourceOf(opts), src = so && so.src, layered = opts.layered !== false && !!src;
+    var so = sourceOf(opts), src = so && so.src;
+    /* 무릎상은 머리수건·긴 머리·목걸이·망토가 목선을 가로지르는 그림이 많다.
+       한 장을 머리·몸통·하체로 잘라 따로 흔들면 그 장식까지 잘려 얼굴을 몸에 붙인 듯
+       보이므로, 무릎상은 언제나 완성된 한 장으로 움직인다. 흉상만 2.5D 조각을 쓴다. */
+    var layered = opts.layered !== false && profile !== 'half' && !!src;
     // 몸이 그림 끝에 닿아 잘린 무릎상(팔꿈치·소매·망토): 그 쪽 끝을 부드럽게 흐려 칼로 자른 선이 보이지 않게 (tools/half_edge.py → G.HALF_EDGE)
     var cut = profile === 'half' && so && so.key && G.HALF_EDGE ? G.HALF_EDGE[so.key] : '';
     if (cut && cut.indexOf('l') >= 0) root.classList.add('cut-l');
@@ -157,7 +166,7 @@
       }
     } else {
       root.classList.add('rig-single');
-      fallback(root, opts);
+      fallback(root, opts, src);
     }
 
     var dead = false, blinkTimer = 0;
