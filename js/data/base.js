@@ -256,7 +256,8 @@
     crewCare: { cookFatigue: 0.12, musicDiscipline: 0.15, landCook: 0.15, restBonus: 3, discValue: 0.08, impact: 2, feastBase: 12, feastPer: 6, feastFatigue: 10, feastFood: 2 },
     landCost: { base: 5, perMan: 1, thirsty: 0.5, unpaidFatigue: 6, desert: 0.25, water: [4, 8] },
     // 지도 조작: 커서를 캐릭터 둘레에 둔 때는 방향이 없는 것으로 친다. 멈춘 배의 탐색은 하루를 쓰고 망루 탐지 범위를 넓힌다.
-    pointerControl: { seaDeadPx: 38, landDeadPx: 30 },
+    //   cityPickPx = 바다 지도에서 도시 표식을 누른 것으로 치는 반지름(그림·이름표도 함께), portLandPx = 항구 둘레 뭍을 누르면 그 항구로 가는 반지름(px)
+    pointerControl: { seaDeadPx: 38, landDeadPx: 30, cityPickPx: 30, portLandPx: 70 },
     seaSearch: { days: 1, senseBoost: 1.8, chartBonus: 1.2 },
     // 짐의 부피·무게 (js/systems/cargo.js). 1통 = 부피 1. wt = 1통의 무게(갈래별, wtGood가 있으면 그 값).
     // 배가 버티는 무게 = 짐칸 × shipWt. 선원 한 사람 crewWt, 대포 한 문 = 짐칸 차지(load) × gunWt + 포탄 shotWt, 식량·물 supWt, 자재 matWt

@@ -217,6 +217,8 @@
       if (mk.d.how === 'land') { UI.toast('해안 가까이 가서 상륙하면 조사할 수 있습니다.', 'boot', 3200); var sea = G.Nav.nearestSea(mk.lon, mk.lat, 6); if (sea) { setTarget(sea[0], sea[1], null); return; } }
       setTarget(mk.lon, mk.lat, null); return;
     }
+    var sp = shorePortAt(p[0], p[1]);
+    if (sp) { setCityTarget(sp); return; }
     var w = toWorld(p[0], p[1]);
     setTarget(w[0], w[1], null);
   }
@@ -437,9 +439,28 @@
     kcCache = s.known.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && R.cityExists(c); });
     return kcCache;
   }
+  function pickCfg() { return (G.BALANCE || {}).pointerControl || {}; }
+  /** 누른 자리의 도시: 표식 둘레(cityPickPx) · 성과 건물 그림 전체 · 곁의 항구·가는 곳에 붙은 이름표까지 (빗나가 바다를 누르면 자동항해가 풀린다) */
   function cityAt(x, y) {
-    var best = null, bd = 30 * 30;     // 항구 표식 둘레를 조금 넉넉히 (빗나가 바다를 누르면 자동항해가 풀린다)
-    knownCities().forEach(function (c) { var p = toScreen(c.lon, c.lat); var d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = c; } });
+    var pick = pickCfg().cityPickPx || 30, np = portNear(), best = null, bd = Infinity;
+    knownCities().forEach(function (c) {
+      var p = toScreen(c.lon, c.lat), dx = x - p[0], dy = y - p[1], d = dx * dx + dy * dy, hit = d < pick * pick;
+      var met = G.CityIcon && G.CityIcon.metrics ? G.CityIcon.metrics(c) : null;
+      if (!hit && met) hit = Math.abs(dx) <= met.width / 2 + 4 && dy >= met.top - 6 && dy <= met.base + 4;
+      if (!hit && met && labelW[c.id] && ((st.target && st.target.city === c) || c === np)) hit = dx >= met.radius && dx <= met.radius + 13 + labelW[c.id] && Math.abs(dy) <= 12;
+      if (hit && d < bd) { bd = d; best = c; }
+    });
+    return best;
+  }
+  /** 항구 둘레의 뭍(해안·시가지)을 눌렀다: 그 항구로 간 것으로 친다 — 예전에는 뭍 한가운데를 목적지로 잡아 해안에 걸려 멈췄다 (portLandPx 안의 가장 가까운 항구) */
+  function shorePortAt(x, y) {
+    var w = toWorld(x, y); if (!G.Geo.isLand(w[0], w[1])) return null;
+    var r = pickCfg().portLandPx || 70, best = null, bd = r * r;
+    knownCities().forEach(function (c) {
+      if (!c.port) return;
+      var d0 = c.dock || [c.lat, c.lon];
+      [toScreen(c.lon, c.lat), toScreen(d0[1], d0[0])].forEach(function (p) { var d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = c; } });
+    });
     return best;
   }
   function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1) : null; }
@@ -928,6 +949,12 @@
      (실제 시간 기준 — 손맛이 배속에 따라 달라지지 않게) */
   var THR_UP = 0.7, THR_COAST = 1.8, THR_BRAKE = 0.4;
   var TACK_MIN = 0.25;   // 목적지·길목이 이보다 가까우면 지그재그를 그만두고 곧장 붙는다
+  /** 항구를 눌러 가는 길에 그 항구가 G.FX.ship.portApproach(°) 안이면 지그재그 없이 길을 따라 곧장 붙는다.
+      맞바람이어도 다가가는 빠르기는 지그재그와 같다(vmg) — 도착 시간은 그대로, 뱃머리만 흔들리지 않는다 */
+  function portApproach() {
+    var t = st.target, r = FXS().portApproach; if (!r || !t || !t.city || !st.path) return false;
+    var l = S().loc; return G.Geo.dist(l.lon, l.lat, t.lon, t.lat) < r;
+  }
   function move(days, dtR) {
     var s = S(), l = s.loc, P = FXS();
     if (!st.path && !st.manual && st.dirCrs == null && !st.stopping && shipSpeed() < P.stopSpeed) return;
@@ -950,7 +977,7 @@
     } else if (st.path || st.dirCrs != null) {
       var crs = st.crs != null ? st.crs : h;
       m = R.fleetMotion(crs, wind);
-      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer && !st.pointerSteer;   // 방향키·마우스로 몰 때는 지그재그 없이 가리킨 쪽으로
+      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer && !st.pointerSteer && !portApproach();   // 방향키·마우스로 몰 때는 지그재그 없이 가리킨 쪽으로
       if (tack) {
         if (!st.tackTheta || !st.tackSide) st.tackSide = st.tackSide || (m.legP >= m.legM ? 1 : -1);
         st.tackTheta = m.theta;
@@ -1712,7 +1739,7 @@
     if (G.VoyageFX) G.VoyageFX.drawSky(st, ctx, pp, l.heading, SP, toScreen);      // 모항 배웅 갈매기
     // hover tooltip
     if (st.mouse && !UI.busy()) {
-      var hc = cityAt(st.mouse[0], st.mouse[1]);
+      var hc = cityAt(st.mouse[0], st.mouse[1]) || shorePortAt(st.mouse[0], st.mouse[1]);
       if (hc) { var og = G.Routes.origin(); tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, hc.name + ' · ' + G.R.cityOwner(hc) + ' · ' + G.CityIcon.label(hc) + (!hc.port ? ' (내륙 도시)' : og != null && og !== hc.id ? (G.Routes.isOpen(og, hc.id) ? ' — 클릭: 자동항해' : ' — 클릭: 바닷길 따라 (' + G.Routes.label(og, hc.id).split(' · ')[1] + ')') : G.Routes.autoOff() && hc.port ? ' — 클릭: 바닷길 따라 (자동항해는 다음 항구에서)' : ' — 클릭하면 바닷길을 따라 이곳으로 향합니다')); }
       else {
         var hd = landmarkAt(st.mouse[0], st.mouse[1]);
