@@ -6,6 +6,7 @@ raw 동작 시트 → 게임용 7×7 아틀라스 (images/characters/<look>/moti
 - back: 돌아서는 동작 — 뒷모습이 된 뒤 다시 앞을 보는 칸은 뺀다 (머리 부분 살빛으로 판정)
 - 모두 오른쪽을 보게 맞춘다 (raw는 대부분 왼쪽을 보고, 중간에 반대로 그려진 칸도 있다)
 - 세 동작의 키를 맞춘다 (걷기·뒤돌기 = T, 달리기 = 0.94T) · 머리·몸통 가운데를 칸 가운데에 둔다
+- 걷기·달리기: 앞뒤의 서 있는 칸(출발·멈춤)을 빼고, 칸이 지날수록 커지거나 작아지는 흔들림을 편다 (되풀이할 때 멈칫·크기 튐 없게)
 - 칸 수가 49가 아니면 고르게 되풀이해 49칸을 채운다
 
 raw 시트(artifacts/player-motion-sheets/<look>/<motion>.raw.png)는 ImageGen이 그린 것이라 줄 수(5~7)·칸 수(35~49)·보는 쪽이 제각각이다.
@@ -123,6 +124,27 @@ def face_right(fr):
         left = x < -0.06 or (abs(x) <= 0.06 and major < 0)
         out.append(f.transpose(Image.Transpose.FLIP_LEFT_RIGHT) if left else f)
     return out, sum(1 for f, o in zip(fr, out) if f is not o)
+def feet_gap(f):
+    """두 발 사이 (키의 몇 할) — 발이 한 덩어리면 0"""
+    a = (np.asarray(f)[:, :, 3] > 100).astype(np.uint8); h = a.shape[0]; band = a[int(h * 0.93):]
+    n, lab, st, cen = cv2.connectedComponentsWithStats(band, 8)
+    cs = sorted([(st[i, cv2.CC_STAT_AREA], cen[i][0]) for i in range(1, n) if st[i, cv2.CC_STAT_AREA] > band.size * 0.004], reverse=True)
+    return abs(cs[0][1] - cs[1][1]) / h if len(cs) >= 2 else 0.0
+def trim_still(fr):
+    """되풀이 동작의 앞뒤에 붙은 '서 있는' 칸(발을 모은 채 두 칸 넘게 이어지는 칸)을 뺀다 — 돌 때마다 멈칫하지 않게.
+    raw 달리기는 대개 서 있다가 출발해 다시 서는 순서로 그려져 있다"""
+    g = [feet_gap(f) < 0.1 for f in fr]; a, b = 0, len(fr)
+    while a < b and g[a]: a += 1
+    while b > a and g[b - 1]: b -= 1
+    a = max(0, a - 1) if a >= 2 else 0          # 발을 모은 칸은 한 칸만 남긴다 (지나가는 자세)
+    b = min(len(fr), b + 1) if len(fr) - b >= 2 else len(fr)
+    return fr[a:b], (a, len(fr) - b)
+def drift_scale(fr):
+    """칸이 지날수록 그림이 조금씩 커지거나 작아진 것(ImageGen의 줌 흔들림)을 펴서, 되풀이할 때 크기가 튀지 않게 할 배율"""
+    h = np.array([f.height for f in fr], float); x = np.arange(len(h))
+    if len(h) < 4: return [1.0] * len(h)
+    k, c = np.polyfit(x, h, 1); trend = k * x + c
+    return list(h.mean() / trend)
 def pick_back(fr):
     """옆모습에서 시작해 뒷모습으로 끝나는 가장 그럴듯한 구간을 고른다 (raw 시트마다 돌아서는 순서가 제각각이다)"""
     n = len(fr); s = np.array([face_score(f) for f in fr]); v = np.array([facing(f) for f in fr])
@@ -161,7 +183,9 @@ def build(R, out, look):
         med = np.median([f.height for f in fr]); keep = [f for f in fr if not (f.info.get('edge') and f.height < 0.93 * med) and f.height >= 0.88 * med]
         info = {'raw_frames': len(fr), 'rows': rows, 'dropped_short': len(fr) - len(keep)}
         if mo == 'back': keep, n = pick_back(keep); info['back_range'] = n
-        else: keep, nf = face_right(keep); info['flipped'] = nf
+        else:
+            keep, nf = face_right(keep); info['flipped'] = nf
+            keep, cut = trim_still(keep); info['trimmed_still'] = cut
         seqs[mo] = keep; rep[mo] = info
     tgt = {'walk': T, 'run': T * 0.94, 'back': T}
     sc = {mo: tgt[mo] / np.median([f.height for f in seqs[mo]]) for mo in seqs}
@@ -169,8 +193,9 @@ def build(R, out, look):
     for mo, fr in seqs.items():
         s = sc[mo] * lim
         sprites = []
-        for f in fr:
-            g = f.resize((max(1, round(f.width * s)), max(1, round(f.height * s))), Image.Resampling.LANCZOS)
+        ds = drift_scale(fr) if mo != 'back' else [1.0] * len(fr)
+        for f, d in zip(fr, ds):
+            g = f.resize((max(1, round(f.width * s * d)), max(1, round(f.height * s * d))), Image.Resampling.LANCZOS)
             sprites.append((g, anchor(g)))
         half = max(max(ax, g.width - ax) for g, ax in sprites)
         cw = int(np.ceil(half * 2)) + 8
