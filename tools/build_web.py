@@ -29,6 +29,7 @@ ZIP = output_path(option('--zip', os.path.join('dist', 'PLUS_ULTRA_web.zip')))
 CHANNEL = option('--channel', 'stable')
 NO_ZIP = '--no-zip' in sys.argv
 DESC = '대항해 시대를 무대로 한 모험·교역·해전 브라우저 게임. 후원자의 의뢰를 받아 세계의 발견물을 찾아 떠나세요.'
+TELEMETRY_ENDPOINT = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event'
 
 
 def find_esbuild():
@@ -92,7 +93,7 @@ def build_page(page, name, out_html, title, desc, esbuild, manifest_rel):
     js = ';\n'.join('/* %s */\n%s' % (s, pages.read(s)) for s in p['scripts'] if s != 'images/manifest.js')
     js_rel = asset(name, 'js', minify(js, 'js', esbuild))
     channel = ('<meta name="pu-channel" content="beta">\n'
-               '<script>window.PU_WEB_CHANNEL="beta";</script>\n') if CHANNEL == 'beta' else ''
+               '<script>window.PU_WEB_CHANNEL="beta";window.PU_TELEMETRY_ENDPOINT="' + TELEMETRY_ENDPOINT + '";</script>\n') if CHANNEL == 'beta' else ''
     html = (head(title, desc, css_rel, p['fonts'], channel) + '<body>\n<noscript><p style="padding:24px;color:#efe5cf;background:#1f150e">이 페이지는 자바스크립트가 필요합니다.</p></noscript>\n' +
             p['markup'] + '\n<script src="' + manifest_rel + '"></script>\n<script src="' + js_rel + '"></script>\n</body>\n</html>\n')
     emit(out_html, html)
@@ -104,16 +105,19 @@ def build_beta_center():
     html = pages.read(os.path.join('web', 'beta-center', 'index.html'))
     css = pages.read(os.path.join('web', 'beta-center', 'styles.css'))
     js = pages.read(os.path.join('web', 'beta-center', 'feedback.js'))
+    telemetry = pages.read(os.path.join('web', 'beta-center', 'telemetry.js'))
     title_js = pages.read(os.path.join('js', 'scenes', 'title.js'))
     match = re.search(r"T\.version\s*=\s*'([0-9]+\.[0-9]{3})'", title_js)
     if not match:
         raise SystemExit('베타 센터에 쓸 게임 버전을 찾지 못했습니다.')
-    stamp = pages.short_hash(css + '\n' + js)
+    stamp = pages.short_hash(css + '\n' + js + '\n' + telemetry)
     html = html.replace('{{VERSION}}', match.group(1)).replace('{{ASSET_HASH}}', stamp)
+    telemetry = telemetry.replace('{{VERSION}}', match.group(1))
     files = {
         'center/index.html': html,
         'center/styles.css': css,
         'center/feedback.js': js,
+        'center/telemetry.js': telemetry,
     }
     for rel, content in files.items():
         emit(rel, content)

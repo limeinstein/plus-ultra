@@ -26,6 +26,7 @@
     </a>
     <nav aria-label="주요 메뉴">
       <a href="#guide">참여 안내</a>
+      <a href="#privacy">익명 통계</a>
       <a href="#feedback">피드백</a>
       <a class="nav-play" href="../">베타판 실행</a>
     </nav>
@@ -60,6 +61,16 @@
         <li><span>02</span><div><h3>상황을 기록하기</h3><p>문제가 생긴 화면과 행동 순서, 사용 기기와 브라우저를 적으면 같은 상황을 재현하는 데 큰 도움이 됩니다.</p></div></li>
         <li><span>03</span><div><h3>답변 확인하기</h3><p>등록된 글 아래로 처리 상황과 답변이 이어집니다. 고친 내용은 다음 베타판에 모아 반영한 뒤 정식판으로 옮깁니다.</p></div></li>
       </ol>
+    </section>
+
+    <section class="privacy-panel" id="privacy" aria-labelledby="privacy-title">
+      <div class="privacy-icon" aria-hidden="true">◎</div>
+      <div>
+        <p class="kicker">ANONYMOUS VOYAGE LOG</p>
+        <h2 id="privacy-title">누구인지가 아니라, 얼마나 항해했는지만 봅니다</h2>
+        <p>센터 방문 횟수, 베타판 실행 횟수, 실제 조작이 있었던 플레이 시간을 날짜별 합계로 기록합니다. 이름·IP·계정·쿠키·기기 식별자·방문 경로는 저장하지 않으므로 고유 방문자나 재방문자는 식별하지 않습니다.</p>
+      </div>
+      <a class="stats-link" href="https://plus-ultra-telemetry.luminary121284.chatgpt.site/" target="_blank" rel="noopener">공개 통계 보기 →</a>
     </section>
 
     <section class="feedback" id="feedback" aria-labelledby="feedback-title">
@@ -108,5 +119,6 @@
   </footer>
 
   <script src="feedback.js?v={{ASSET_HASH}}"></script>
+  <script src="telemetry.js?v={{ASSET_HASH}}"></script>
 </body>
 </html>

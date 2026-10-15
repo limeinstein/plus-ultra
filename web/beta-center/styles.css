@@ -93,6 +93,13 @@ h1 em { color: var(--gold-bright); font-style: normal; }
 .guide-grid h3 { margin: 0 0 .7rem; font: 400 1.45rem "Song Myung", serif; }
 .guide-grid p { color: var(--muted); font-size: .9rem; margin: 0; }
 
+.privacy-panel { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 1.4rem; margin: 0 0 70px; padding: 1.5rem 1.7rem; border: 1px solid #34535b; background: linear-gradient(120deg, rgba(20,45,52,.95), rgba(12,29,34,.95)); }
+.privacy-icon { display: grid; place-items: center; width: 54px; height: 54px; border: 1px solid #6aa6a4; border-radius: 50%; color: #89c7c2; font-size: 1.8rem; }
+.privacy-panel h2 { margin: .15rem 0 .45rem; font: 400 clamp(1.45rem,3vw,2.1rem) "Song Myung",serif; }
+.privacy-panel p:last-child { margin: 0; max-width: 780px; color: var(--muted); font-size: .86rem; line-height: 1.7; }
+.stats-link { white-space: nowrap; padding: .75rem 1rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-weight: 800; font-size: .78rem; }
+.stats-link:hover,.stats-link:focus-visible { color: #0d1d22; background: var(--gold); }
+
 .feedback { margin: 0 -20px 70px; padding: 58px 20px 70px; color: var(--paper-ink); background: var(--paper); box-shadow: 0 24px 80px rgba(0,0,0,.22); }
 .feedback .kicker { color: #896529; }
 .feedback-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; }
@@ -152,6 +159,8 @@ footer a:hover { color: var(--ink); }
   .hero-art img { width: 280px; }
   .guide-grid { grid-template-columns: 1fr; }
   .guide-grid li { min-height: 0; }
+  .privacy-panel { grid-template-columns: auto 1fr; }
+  .stats-link { grid-column: 2; justify-self: start; }
   .feedback-head { align-items: start; flex-direction: column; }
   .post summary { grid-template-columns: 75px minmax(0,1fr); }
   .post-meta { grid-column: 2; }
@@ -168,6 +177,9 @@ footer a:hover { color: var(--ink); }
   .version-seal { width: 90px; height: 90px; right: 3%; }
   .button { width: 100%; }
   .guide { padding: 65px 0; }
+  .privacy-panel { grid-template-columns: 1fr; padding: 1.2rem; }
+  .privacy-icon { width: 44px; height: 44px; }
+  .stats-link { grid-column: 1; }
   .feedback { margin-inline: 0; margin-bottom: 50px; }
   .feedback-head .button { width: auto; }
   .board-tools { align-items: flex-start; flex-direction: column; }
