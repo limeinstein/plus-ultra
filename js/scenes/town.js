@@ -885,7 +885,7 @@
   /** 거리 클릭을 받는 투명한 판. onPick(kind, arg) 로 알려 준다. 뒤편의 볼거리를 누르면 T.inspect */
   T.catcher = function (onPick) {
     if (st) st.onPick = onPick;      // ↑ 키로 들어갈 때도 같은 길로
-    if (st && !T._toldKeys) { T._toldKeys = true; UI.toast('거리 — ←→ 걷기 · Shift 뛰기 · ↑ 건물에 들어가기 (건물을 눌러도 됩니다)', 'boot', 5200); }
+    if (st && !T._toldKeys) { T._toldKeys = true; UI.toast('거리 — ←→ 걷기 · Shift 뛰기 · ↑ 건물에 들어가기 · 마우스: 가고 싶은 곳이나 건물을 누른다', 'boot', 5600); }
     var el = U.el('div', 'towncatch');
     el.style.cssText = 'position:absolute;inset:0;z-index:4;cursor:default';
     var down = null, moved = 0;
@@ -920,18 +920,25 @@
       // 아직 찾지 않은 도시 건물 발견물이면 눌러서 발견 (city.lookAt), 그 밖의 볼거리는 들여다보기
       if (it && !it.kind) T.lookMark(it);
       else if (it) onPick(it.kind, it.arg);
-      else st.camTo = clampCam(st.camTo + (p[0] < 120 ? -420 : p[0] > W - 120 ? 420 : 0));
+      else T.walkTo(st.cam + p[0]);          // 빈 거리: 그 자리로 걸어간다 (멀면 뛴다) — 카메라가 따라간다
     });
     el.addEventListener('mouseleave', function () { down = null; if (st) st.hover = null; });
     el.addEventListener('wheel', function (e) { e.preventDefault(); T.pan(e.deltaY > 0 ? 180 : -180); }, { passive: false });
     return el;
+  };
+  /** 거리의 한 자리로 걸어간다 (마우스로 빈 거리를 눌렀을 때). 건물에 들어가지는 않는다 — 들어가려면 건물을 누르거나 ↑ */
+  T.walkTo = function (x) {
+    if (!st || st.hidden || st.hero.entering) return;
+    var h = st.hero; h.to = U.clamp(x, 40, st.streetW - 40); h.walkV = null; h.free = true; h.keyRun = null;
+    h.walking = st.heroFrames.length > 0 || !!st.heroMotion.walk;
+    st.focus = null; st.dirty = true;
   };
   /* 걷기: ←→(A·D)를 누르는 동안 제독이 그쪽으로 걷고, Shift를 함께 누르면 뛴다. 카메라가 따라간다.
      ↑(W)를 누르면 지금 서 있는 건물에 들어간다(건물을 누른 것과 같다). 마우스로 건물을 눌러도 그대로 걸어가 들어간다. */
   function keyName(e) {
     if (G.Keys.is(e, 'left')) return 'left';
     if (G.Keys.is(e, 'right')) return 'right';
-    if (G.Keys.is(e, 'up')) return 'up';
+    if (G.Keys.is(e, 'up') || G.Keys.is(e, 'confirm')) return 'up';      // ↑ 또는 Enter: 앞의 건물에 들어간다
     if (e.key === 'Shift') return 'shift';
     return null;
   }
@@ -959,7 +966,7 @@
     if (!st || st.hidden) return false;
     var k = keyName(e); if (!k) return false;
     st.keys.shift = !!e.shiftKey || (k === 'shift');
-    if (k === 'left' || k === 'right') { st.keys[k] = true; st.hero.to = null; st.hero.walkV = null; return true; }
+    if (k === 'left' || k === 'right') { st.keys[k] = true; st.hero.to = null; st.hero.walkV = null; st.hero.free = false; return true; }
     if (k === 'up') {
       var it = itemAtHero();
       if (it && !it.kind && !e.repeat) { st.keys = {}; T.lookMark(it); }          // 광장의 볼거리: 살펴본다 (찾지 않은 건물 발견물이면 발견)
@@ -1001,8 +1008,12 @@
         hero.walkV = !canRun ? Math.max(620, far * 1.6) : hero.running ? Math.max(RUN_V, far * 1.5) : WALK_V;
       }
       var d = hero.to - hero.x, sp = hero.walkV * dt;
-      if (Math.abs(d) <= sp) { hero.dist += Math.abs(d); hero.x = hero.to; hero.walkV = null; hero.running = false; }
+      if (Math.abs(d) <= sp) {
+        hero.dist += Math.abs(d); hero.x = hero.to; hero.walkV = null; hero.running = false;
+        if (hero.free) { hero.to = null; hero.free = false; hero.walking = false; }   // 빈 거리로 걸어간 것은 거기서 멈춘다
+      }
       else { hero.x += Math.sign(d) * sp; hero.dist += sp; hero.dir = d > 0 ? 1 : -1; }
+      if (hero.free) st.camTo = clampCam(hero.x - W / 2);
       moved = true;
     }
     if (hero.entering) {
@@ -1178,8 +1189,8 @@
     if (atlas) {
       var count = MOTION_FRAMES, ai;
       if (kind === 'back') ai = Math.min(count - 1, Math.floor(st.hero.enterT * count));
-      else if (kind === 'run') ai = Math.floor(st.t * RUN_FPS * count / LEGACY_MOTION_FRAMES) % count;
-      else ai = st.hero.walking ? Math.floor(st.hero.dist / (WALK_STRIDE * LEGACY_MOTION_FRAMES / count)) % count : 0;
+      else if (kind === 'run') ai = Math.floor(st.t * heroRunFps()) % count;   // 49칸에 약 4걸음 — 한 걸음 0.2초 안팎
+      else ai = st.hero.walking ? Math.floor(st.hero.dist / (WALK_STRIDE * LEGACY_MOTION_FRAMES / count)) % count : heroIdleFrame();
       var aw = (atlas.naturalWidth || atlas.width) / MOTION_COLS, ah = (atlas.naturalHeight || atlas.height) / MOTION_ROWS;
       var enterFx = townHeroEnterFx(), enterEase = smooth01(st.hero.enterT);
       var h = HERO_H * (kind === 'back' ? 1 - (1 - enterFx.scale) * enterEase : 1), w = aw * h / ah;
@@ -1213,6 +1224,10 @@
     x = U.clamp(x, 0, 1);
     return x * x * (3 - 2 * x);
   }
+  /** 달리기 아틀라스를 넘기는 빠르기 (칸/초, G.FX.heroRun.fps) — 예전엔 초당 86칸이라 한 걸음이 0.14초(초당 7걸음)로 다리가 헛돌았다 */
+  function heroRunFps() { return (G.FX && G.FX.heroRun && G.FX.heroRun.fps) || 62; }
+  /** 서 있을 때 보여 줄 걷기 칸 — 두 발을 모은 칸 (js/data/heromotion.js · tools/player_motion_cycles.py). 예전엔 첫 칸이라 다리를 벌린 채 섰다 */
+  function heroIdleFrame() { var m = G.HERO_MOTION && G.HERO_MOTION[I.heroLook ? I.heroLook() : '']; return (m && m.idle) || 0; }
   function townHeroEnterFx() {
     return (G.FX && G.FX.townHeroEnter) || { sec: 0.58, rise: 96, scale: 0.62, fadeAt: 0.56 };
   }

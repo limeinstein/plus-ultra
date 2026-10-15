@@ -26,12 +26,24 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.UI.fade = async fn => { await fn(); };
       G.Game.go('city', { cityId: 0 });
     });
-    await page.waitForFunction(() => G.Game.sceneName === 'city' && document.querySelector('#ui .cmdmenu .cmd.kbd-focus'), null, { timeout: 30000 });
+    await page.waitForFunction(() => G.Game.sceneName === 'city' && document.querySelector('#ui .cmdmenu'), null, { timeout: 30000 });
 
-    const first = await page.locator('#ui .cmdmenu .cmd.kbd-focus').innerText();
-    await page.keyboard.press('ArrowDown');
-    const second = await page.locator('#ui .cmdmenu .cmd.kbd-focus').innerText();
-    ok(first !== second, '도시/건물 메뉴에서 ↑↓ 포커스 이동');
+    // 거리(마을 풍경)에서는 방향키가 제독 몫 — 오른쪽 메뉴는 움직이지 않는다
+    if (await page.evaluate(() => G.Town.active() && !G.Town.hidden())) {
+      ok(await page.evaluate(() => !document.querySelector('#ui .cmdmenu .cmd.kbd-focus')), '거리: 오른쪽 메뉴에 키 표시 없음 (마우스로 누른다)');
+      const x0 = await page.evaluate(() => G.Town.runtime().hero.x);
+      await page.keyboard.down('ArrowRight'); await page.waitForTimeout(400); await page.keyboard.up('ArrowRight');
+      await page.keyboard.press('ArrowDown');
+      ok(await page.evaluate((x0) => G.Town.runtime().hero.x > x0 + 20 && !document.querySelector('#ui .cmdmenu .cmd.kbd-focus'), x0), '거리: → 로 제독만 걷고, ↓ 로 메뉴가 움직이지 않는다');
+      await page.evaluate(() => { const st = G.Town.runtime(), it = G.Town.item('trade'); st.hero.x = it.x + it.w / 2; st.hero.to = null; window.__picked = null; st.onPick = (k) => { window.__picked = k; }; });
+      await page.waitForTimeout(150);
+      await page.keyboard.press('ArrowUp');
+      ok(await page.evaluate(() => window.__picked === 'trade'), '거리: 건물 앞에서 ↑ 로 들어간다');
+      await page.evaluate(() => { G.Town.walkTo(G.Town.runtime().hero.x + 300); });
+      await page.waitForFunction(() => { const h = G.Town.runtime().hero; return h.to == null && !h.walking; }, null, { timeout: 15000 });
+      ok(true, '거리: 마우스로 누른 빈 거리까지 걸어가 멈춘다');
+      await page.evaluate(() => { G.Scenes.city.main(); });
+    }
 
     await page.evaluate(() => { window.__pick = 'waiting'; G.UI.choose('키보드 선택', [{ label: '첫째', value: 1 }, { label: '둘째', value: 2 }]).then(v => { window.__pick = v; }); });
     await page.waitForSelector('#ui .choices');
@@ -61,6 +73,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForFunction(b => G.Game.state.day === b + 1, before, { timeout: 10000 });
     ok(await page.evaluate(b => G.Game.state.day === b + 1, before), '건물 문을 열 때 게임 날짜가 정확히 1일 경과');
     await page.waitForFunction(() => !G.UI.busy() && G.Scenes.city.current() && document.querySelector('#ui .cmdmenu'), null, { timeout: 15000 });
+    {
+      const a = await page.evaluate(() => (document.querySelector('#ui .cmdmenu .cmd.kbd-focus') || {}).innerText || '');
+      await page.keyboard.press('ArrowDown');
+      const b = await page.evaluate(() => (document.querySelector('#ui .cmdmenu .cmd.kbd-focus') || {}).innerText || '');
+      ok(a && b && a !== b, '건물 안 메뉴에서는 ↑↓ 포커스 이동');
+    }
     await page.evaluate(() => { G.Scenes.city.findInside = window.__findInside; G.Scenes.city.B.trade.enter = window.__tradeEnter; G.Town.focusOn = window.__focusOn; G.Img.count = window.__imgCount; });
 
     await page.evaluate(() => { G.Info.open('menu'); });

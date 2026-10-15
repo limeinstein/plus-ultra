@@ -294,6 +294,8 @@
   // 제독이 거리의 건물 문으로 들어가는 연출 (js/scenes/town.js): sec 전체 시간,
   // rise 문턱까지 올라가는 높이의 상한 px (실제로는 그 건물 문턱 높이만큼 — js/data/exteriordoors.js), scale 마지막 크기 비율, fadeAt 이 진행도부터 사라진다.
   G.FX.townHeroEnter = { sec: 0.62, rise: 70, scale: 0.66, fadeAt: 0.5 };
+  // 제독 달리기 아틀라스(49칸에 약 4걸음)를 넘기는 빠르기 칸/초 — 62면 한 걸음이 0.19초쯤 (js/scenes/town.js)
+  G.FX.heroRun = { fps: 62 };
   /** 코스타 델 솔 3 OST 유튜브 재생기 창 (js/systems/ytmusic.js) — 유튜브 규칙상 200×200보다 작게 하거나 숨길 수 없다.
      w·h 재생기 크기 · idle 마우스를 올리지 않았을 때 흐림(0~1) · flash 곡이 바뀌면 또렷하게 보이는 초 · gap 구석에서 띄우는 px */
   G.FX.ostBox = { w: 200, h: 200, idle: 0.5, flash: 2.5, gap: 8 };

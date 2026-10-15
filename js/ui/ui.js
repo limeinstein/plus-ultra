@@ -103,9 +103,13 @@
     if (el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
     return el;
   }
-  /** 화면 오른쪽 명령 메뉴: ↑↓로 고르고 Enter/Space로 실행. 장면의 이동키보다 먼저 받는다. */
+  /** 거리(마을 풍경)가 보이는 동안: 방향키·Enter는 제독이 쓴다 (←→ 걷기 · ↑/Enter 건물에 들어가기 — js/scenes/town.js).
+      오른쪽 건물 메뉴는 마우스로 누른다 — 예전엔 ↑↓가 메뉴와 제독을 함께 움직여 ↑로 건물에 들어갈 수 없었다 */
+  function townKeys() { return !!(G.Town && G.Town.active && G.Town.active() && !G.Town.hidden()); }
+  UI.townKeys = townKeys;
+  /** 화면 오른쪽 명령 메뉴: ↑↓로 고르고 Enter/Space로 실행. 장면의 이동키보다 먼저 받는다 (거리에서는 제외). */
   function screenMenuKey(e) {
-    if (!screenEl || UI.busy()) return false;
+    if (!screenEl || UI.busy() || townKeys()) return false;
     var menu = screenEl.querySelector('.cmdmenu'); if (!menu || menu.classList.contains('talk-hidden')) return false;
     var items = Array.prototype.slice.call(menu.querySelectorAll('.cmd'));
     var cur = menu.querySelector('.cmd.kbd-focus');
@@ -851,7 +855,7 @@
       d.onclick = function () { if (UI.busy()) return; it.onClick && it.onClick(); };
       box.appendChild(d);
     });
-    var first = box.querySelector('.cmd'); if (first) first.classList.add('kbd-focus');
+    var first = box.querySelector('.cmd'); if (first && !townKeys()) first.classList.add('kbd-focus');   // 거리에서는 메뉴에 키 표시를 두지 않는다
     UI.add(m);
     return m;
   };
