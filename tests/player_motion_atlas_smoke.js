@@ -31,7 +31,7 @@ for (const look of LOOKS) {
 const town = fs.readFileSync(path.join(ROOT, 'js/scenes/town.js'), 'utf8');
 const sfx = fs.readFileSync(path.join(ROOT, 'js/data/seafx.js'), 'utf8');
 ok(/st\.hero\.enterT \* count/.test(town), '건물 진입 시 후면 49프레임을 진행도에 맞춰 재생');
-ok(/enterFx\.rise \* enterEase/.test(town) && /enterFx\.scale/.test(town), '문 안쪽 이동·원근 축소 연결');
+ok(/rise \* enterEase/.test(town) && /enterFx\.scale/.test(town) && /doorRise\(it\)/.test(town) && /doorX\(it\)/.test(town), '문 앞에 서서 문턱까지만 이동(건물마다 문 자리)·원근 축소 연결');
 ok(/hero\.fade = 1 - smooth01/.test(town), '문 안쪽 마지막 구간에서 사라짐');
 ok(/st\.runFrames\.length > 0 \|\| !!st\.heroMotion\.run/.test(town), '49프레임 달리기 아틀라스로 자동·키보드 달리기 허용');
 ok(/G\.FX\.townHeroEnter = \{ sec:/.test(sfx), '건물 진입 연출 조정값 중앙 등록');

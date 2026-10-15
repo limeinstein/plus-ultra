@@ -295,7 +295,9 @@
         var img = key && I.get(key);
         var cv = img ? prescale(img, h, flip) : fallback(b.kind, c, h, rng);
         if (!cv) return;
-        items.push({ kind: b.kind, arg: b.arg, name: b.name, icon: b.icon, cv: cv, w: cv.width, h: cv.height, x: 0 });
+        // 문 자리 (js/data/exteriordoors.js — tools/exterior_doors.py): 제독은 문 앞에 서서 문턱까지만 걸어 들어간다
+        var dr = key && G.EXT_DOORS && G.EXT_DOORS[key], door = dr ? { cx: flip ? 1 - dr[0] : dr[0], foot: dr[1] } : { cx: 0.5, foot: 0.97 };
+        items.push({ kind: b.kind, arg: b.arg, name: b.name, icon: b.icon, cv: cv, w: cv.width, h: cv.height, x: 0, door: door });
       });
     // 볼거리(도시 건축 발견물): 건물 줄 사이 제자리(l[1] = 거리의 몇 할쯤)에 광장 한 칸을 비우고 선다 — 앞 건물에 가리거나 하늘에 뜨지 않게
     var gs = groundStyle(c).p;
@@ -737,7 +739,7 @@
     if (!it) return Promise.resolve(null);
     st.focus = it;
     st.camTo = clampCam(it.x + it.w / 2 - W / 2);
-    st.hero.to = it.x + it.w * 0.5; st.hero.walkV = null;
+    st.hero.to = doorX(it); st.hero.walkV = null;
     st.hero.walking = st.heroFrames.length > 0 || !!st.heroMotion.walk;
     st.dirty = true;
     return new Promise(function (res) {
@@ -751,6 +753,7 @@
           if (st.heroFrames.length || st.heroMotion.back) {           // 문 안으로 들어간다
             var enterFx = townHeroEnterFx();
             st.hero.enterT = 0; st.hero.fade = 1; st.hero.entering = true;
+            st.hero.enterRise = doorRise(it);
             setTimeout(function () { if (st) { st.hero.entering = false; st.hero.enterT = 0; st.hero.fade = 1; } res(it); }, enterFx.sec * 1000);
           } else res(it);
           return;
@@ -759,6 +762,13 @@
       })();
     });
   };
+  /** 문 가운데 (거리 좌표) */
+  function doorX(it) { return it.x + it.w * ((it.door && it.door.cx) || 0.5); }
+  /** 제독 발(GROUND+34)에서 문턱까지 — 이만큼만 올라가며 작아진다 (벽 위로 떠오르지 않게, 최대 G.FX.townHeroEnter.rise) */
+  function doorRise(it) {
+    var sill = it.base - it.h + it.h * ((it.door && it.door.foot) || 0.97);
+    return U.clamp(GROUND + 34 - sill + 4, 0, townHeroEnterFx().rise);
+  }
   /** 카메라만 그 건물로 돌린다 (제독은 걷지 않는다) — 개척 도시에 새 건물이 섰을 때 (js/systems/colony.js) */
   T.lookAt = function (kind, arg) { var it = T.item(kind, arg); if (!it) return null; st.camTo = clampCam(it.x + it.w / 2 - W / 2); st.dirty = true; return it; };
   /** 새로 선 건물을 금빛으로 반짝인다 (ms 동안) */
@@ -1173,7 +1183,8 @@
       var aw = (atlas.naturalWidth || atlas.width) / MOTION_COLS, ah = (atlas.naturalHeight || atlas.height) / MOTION_ROWS;
       var enterFx = townHeroEnterFx(), enterEase = smooth01(st.hero.enterT);
       var h = HERO_H * (kind === 'back' ? 1 - (1 - enterFx.scale) * enterEase : 1), w = aw * h / ah;
-      var x = st.hero.x - cam, y = GROUND + 34 - (kind === 'back' ? enterFx.rise * enterEase : 0);
+      var rise = st.hero.enterRise != null ? st.hero.enterRise : enterFx.rise;
+      var x = st.hero.x - cam, y = GROUND + 34 - (kind === 'back' ? rise * enterEase : 0);
       ctx.save();
       ctx.globalAlpha = st.hero.fade;
       ctx.fillStyle = 'rgba(40,26,12,.28)';
