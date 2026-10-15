@@ -82,6 +82,20 @@
         <button class="refresh" id="refresh" type="button" aria-label="게시글 새로고침">↻ 새로고침</button>
       </div>
 
+      <details class="attachment-help">
+        <summary><span aria-hidden="true">▧</span> 화면 그림을 함께 첨부하는 방법</summary>
+        <div>
+          <p>새 글 작성 화면의 <b>「덧붙일 자료」</b> 칸에 이미지를 바로 넣을 수 있습니다.</p>
+          <ul>
+            <li><b>끌어다 놓기</b> — 화면 갈무리 파일을 입력 칸 위로 드래그</li>
+            <li><b>파일 첨부</b> — 입력 칸 아래의 파일 선택 단추 사용</li>
+            <li><b>붙여넣기</b> — 화면을 복사한 뒤 <kbd>Ctrl</kbd>+<kbd>V</kbd></li>
+          </ul>
+          <p class="attachment-note">이미지는 GitHub에 안전하게 첨부되고, 업로드가 끝나면 미리보기 주소가 글에 자동으로 들어갑니다.</p>
+          <a class="attachment-button" href="https://github.com/limeinstein/plus-ultra/issues/new?template=beta-feedback.yml" target="_blank" rel="noopener">이미지와 함께 피드백 쓰기 →</a>
+        </div>
+      </details>
+
       <p class="board-status" id="board-status" role="status">게시판을 불러오는 중입니다…</p>
       <div class="board" id="board" aria-live="polite"></div>
       <noscript><p class="board-empty">게시판을 보려면 자바스크립트를 켜 주세요. <a href="https://github.com/limeinstein/plus-ultra/issues?q=is%3Aissue+label%3Abeta-feedback">GitHub에서 바로 보기</a></p></noscript>
