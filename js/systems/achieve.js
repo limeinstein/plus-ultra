@@ -89,10 +89,19 @@
     for (var i = 0; i < got.length; i++) {
       var a = got[i];
       if (G.Audio) G.Audio.sfx('bell');
-      await UI.window({ title: '업적 달성', icon: 'crown', width: 640, parch: true,
-        html: '<div class="achv-pop"><div class="achv-g">' + U.esc(a.group) + '</div><div class="achv-n">' + U.esc(a.name) + '</div><div class="achv-d">' + U.esc(a.desc) + '</div>' +
-          '<div class="achv-r">' + rewardText(a) + '</div></div>',
-        buttons: [{ label: '좋다', value: 1, cls: 'navy' }] }).result;
+      var pc = a.id === 'montcrew' && G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/montcrew_oath', title: '열 사람이 한 배에' }) : null;
+      try {
+        if (a.id === 'montcrew') {
+          await UI.say('마침내 루이스 몬테이루에서 이언 맥레오드까지, 서로 다른 바다에서 살아온 열 사람이 한 갑판에 모였다.', {});
+          var lead = G.Legend && G.Legend.speaker ? G.Legend.speaker('monteiro', 'happy') : { name: mateName('monteiro'), portrait: G.Art.mateSpec('monteiro') };
+          await UI.say('좋아, 이제 진짜 한 일당이다! 다들 오른팔 소매를 걷어 올려— 우리가 갈 바다를 향해 쭉 뻗어!', lead);
+          await UI.say('열 개의 오른팔이 동시에 하늘을 향했다. 돛을 부풀린 바람이 함성과 함께 갑판을 훑고 지나갔다.', {});
+        }
+        await UI.window({ title: '업적 달성', icon: 'crown', width: 640, parch: true,
+          html: '<div class="achv-pop"><div class="achv-g">' + U.esc(a.group) + '</div><div class="achv-n">' + U.esc(a.name) + '</div><div class="achv-d">' + U.esc(a.desc) + '</div>' +
+            '<div class="achv-r">' + rewardText(a) + '</div></div>',
+          buttons: [{ label: '좋다', value: 1, cls: 'navy' }] }).result;
+      } finally { if (pc) await pc.stop(); }
     }
   }
   AC.afterFind = async function (d) {

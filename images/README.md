@@ -53,6 +53,10 @@
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |
 | 자녀 | `portraits/family/daughter_age5.png` · `_age10` · `_age15` (3~7살·8~12살·13살부터), `son_…` 같은 꼴. 무릎상은 끝에 `_half` (대화창 위에 서는 모습, 1024×1536 투명). 딸은 어머니의 고장 `portraits/family/<고장>/daughter_…` (여급 그림 묶음 `maid-styles/<고장>`과 같은 이름: iberia·france·britain·korea…), 아들은 제독의 생김새 `portraits/family/<생김새>/son_…` (sea_dog·muscle_swordsman… `I.heroLook`). 없으면 폴더 없는 그림 → `daughter_<몇째>.png` → `daughter.png` | 흉상 1254×1254, 무릎상 1024×1536 |
 | 자택 장면 | `events/home/<이름>.webp` — 아이와 보내는 시간·집안일의 배경(아이 무릎상이 그 앞 가운데에 선다 → **가운데는 비우고 볼거리는 왼쪽·오른쪽에**, 사람은 그리지 않는다). 이름: yard(마당의 대야와 장난감 배) · harbor(해 질 녘 부두) · drawing(그림 그리는 탁자) · shell(조개 목걸이) · night(밤의 아이 방) · swords(목검과 허수아비) · duel(진검) · chart(서재의 해도) · pier(새벽 낚시) · book(책과 깃펜) · market(장난감 좌판) · chess(난롯가 체스판) · stars(밤하늘과 사분의) · ledger(장부와 금화) · window(바다가 보이는 창) · dinner(저녁상) · easel(화가의 이젤) · cake(생일 과자) · vase(깨진 꽃병) · bed(앓아누운 침대) · barrel(부두의 식량 통) · height(문설주의 키 금). 없으면 고향의 건물 안·도시 그림에 빛깔을 입혀 쓴다 (`js/art/homeart.js` `HA.SCENES`) | 900×520 |
+
+얼굴상은 어깨·옷이 그림 아래 가장자리까지 이어져야 합니다. 아래 투명 여백이 16px 이상 남는 옛 얼굴상은
+`python tools/repair_floating_portraits.py --check`로 찾고, 같은 인물의 `_half` 원화에서 다시 만들려면
+`python tools/repair_floating_portraits.py`를 실행합니다. 바꾼 뒤에는 `python tools/portrait_faces.py`로 얼굴 자리도 다시 잽니다.
 | 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`). 유적은 `tools/ruin_gifs`, 자연 경관은 `tools/nature_gifs`, 동물은 `tools/animal_gifs`, 식물은 `tools/plant_gifs`, 보물은 `tools/treasure_gifs`로 만든 GIF를 쓰면 전용 발견 연출이 재생됨 | 1440×640 정지화상 또는 576×256 GIF |
 | 발견물 — 분류 공통 | `discovery-cats/geo.jpg` (geo·nature·ruin·treasure·creature·people·trade) | 1440×640 |
 | 일반 소지품 | `items/아이템ID.webp` (레이피어 `rapier`, 나침반 `compass`, 약속 반지 `ring` 등) · 종류 공통 `item-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |

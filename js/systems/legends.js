@@ -95,6 +95,8 @@
   };
   async function taoScene(c, where) {
     var T = st().tao, n = T.met.length, lines = TAO_LINES[Math.min(2, n)];
+    var pc = n >= 2 && G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/peach_garden_brothers', title: '도원의 세 형제' }) : null;
+    try {
     if (where === 'zhuo') lines = lines.map(function (x) { return TAO_FIELD[x[1]] ? [x[0], TAO_FIELD[x[1]]] : x; });
     T.met.push(where);
     for (var i = 0; i < lines.length; i++) { if (lines[i][0] === 'P') await UI.say(lines[i][1], me()); else await say(lines[i][0], lines[i][1]); }
@@ -110,6 +112,7 @@
       T.met.pop();   // 다음에 또 청한다 (같은 곳이라도)
       await say('liu_bei', '아직 때가 아니라면 기다리겠소. 우리는 이 땅 어딘가의 ' + (where === 'zhuo' ? '들판이나 ' : '') + '술집에 있을 것이오.');
     }
+    } finally { if (pc) await pc.stop(); }
   }
   /** 중국 도시 술집에서 술을 샀다 */
   async function tavernBuy(c) {
@@ -203,8 +206,11 @@
       G.Fame.add('bt', 3);
       if (!(await offer([next], c, m.name + U.jx(m.name, '이/가') + ' 함께 가겠다고 한다.'))) { await say('d_artagnan', '아쉽군요. 저 친구는 또 만날 수 있을 겁니다.'); return; }
       if (MUSK.every(function (id) { return row(id); })) {
-        await say('d_artagnan', '아토스, 포르토스, 아라미스, 그리고 나! 제독, 이제 우리는 넷입니다. 모두는 하나를 위하여—');
-        await UI.say('하나는 모두를 위하여!', who('porthos'));
+        var pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/musketeers_united', title: '모두는 하나를 위하여' }) : null;
+        try {
+          await say('d_artagnan', '아토스, 포르토스, 아라미스, 그리고 나! 제독, 이제 우리는 넷입니다. 모두는 하나를 위하여—');
+          await UI.say('하나는 모두를 위하여!', who('porthos'));
+        } finally { if (pc) await pc.stop(); }
       }
     } else {
       M.lost[next] = (M.lost[next] || 0) + 1;
@@ -219,12 +225,15 @@
     cu.lgBooks = (cu.lgBooks || 0) + 1;
     if (!LG.isIslam(c) || row('scheherazade') || gone('scheherazade') || H.done || cu.lgSche || cu.lgBooks < (K().books || 5)) return;
     cu.lgSche = 1;
-    await UI.say('다섯 번째 책을 덮자, 맞은편 서가 그늘에서 비단 너울을 쓴 여인이 웃음을 머금고 다가온다.', {});
-    await say('scheherazade', '하루에 한 권씩, 다섯 권을 쉬지 않고 읽는 분은 오랜만에 보는군요. 저는 셰헤라자드. 천 하루 밤 동안 이야기를 하며 살아남은 사람이랍니다.');
-    await say('scheherazade', '책 속의 이야기는 다 읽으셨지요? 그럼 아직 아무 책에도 쓰이지 않은 이야기는 어떠세요.\f저는 프랑크 사람들의 말도, 아랍과 페르시아의 말도, 바다 건너 아프리카의 말도 압니다. 당신의 배가 가는 곳마다 제가 말을 옮겨 드리지요.');
-    await UI.say('……그 대신, 당신의 항해를 끝까지 이야기로 엮게 해 주세요. 끝나지 않는 이야기가 제일 좋거든요.', who('scheherazade'));
-    if (await offer(['scheherazade'], c, '셰헤라자드가 부하가 되겠다고 한다.')) { H.done = 1; await say('scheherazade', '그럼 첫날 밤의 이야기를 시작할까요. 옛날 옛적, 바다를 건너온 한 제독이 있었는데……'); }
-    else await say('scheherazade', '이야기는 기다림에서 더 맛있어지는 법이지요. 또 이 서가에서 뵈어요.');
+    var pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/scheherazade_library', title: '끝나지 않는 이야기' }) : null;
+    try {
+      await UI.say('다섯 번째 책을 덮자, 맞은편 서가 그늘에서 비단 너울을 쓴 여인이 웃음을 머금고 다가온다.', {});
+      await say('scheherazade', '하루에 한 권씩, 다섯 권을 쉬지 않고 읽는 분은 오랜만에 보는군요. 저는 셰헤라자드. 천 하루 밤 동안 이야기를 하며 살아남은 사람이랍니다.');
+      await say('scheherazade', '책 속의 이야기는 다 읽으셨지요? 그럼 아직 아무 책에도 쓰이지 않은 이야기는 어떠세요.\f저는 프랑크 사람들의 말도, 아랍과 페르시아의 말도, 바다 건너 아프리카의 말도 압니다. 당신의 배가 가는 곳마다 제가 말을 옮겨 드리지요.');
+      await UI.say('……그 대신, 당신의 항해를 끝까지 이야기로 엮게 해 주세요. 끝나지 않는 이야기가 제일 좋거든요.', who('scheherazade'));
+      if (await offer(['scheherazade'], c, '셰헤라자드가 부하가 되겠다고 한다.')) { H.done = 1; await say('scheherazade', '그럼 첫날 밤의 이야기를 시작할까요. 옛날 옛적, 바다를 건너온 한 제독이 있었는데……'); }
+      else await say('scheherazade', '이야기는 기다림에서 더 맛있어지는 법이지요. 또 이 서가에서 뵈어요.');
+    } finally { if (pc) await pc.stop(); }
   }
 
   // ================================================================ 알라딘·알리바바
@@ -262,7 +271,7 @@
   function wrapAfter(obj, key, after) {
     var f = obj && obj[key]; if (typeof f !== 'function' || f._lg) return;
     var g = async function () {
-      var ctx = { gold: S().player.gold, items: S().player.items.length, args: arguments };
+      var ctx = { gold: S().player.gold, items: S().player.items.length, marketBought: obj && obj.boughtTotal ? obj.boughtTotal : 0, args: arguments };
       var r = await f.apply(this, arguments);
       ctx.r = r;                          // 원래 함수가 돌려준 값 (술집 enter가 false = 들어가지 못했다)
       try { await after.apply(this, [ctx].concat([].slice.call(arguments))); } catch (e) { console.error(e); }
@@ -296,7 +305,7 @@
     // 여관: 들를 때마다 (제갈량)
     wrapAfter(B.inn, 'enter', function (x, c) { return innVisit(c); });
     // 시장: 물건을 산 만큼 (달타냥)
-    wrapAfter(B.market, 'buy', function (x, c) { var n = Math.max(0, S().player.items.length - x.items); if (n > 0) return marketBuy(c, n); });
+    wrapAfter(B.market, 'buy', function (x, c) { var n = Math.max(0, (B.market.boughtTotal || 0) - x.marketBought); if (n > 0) return marketBuy(c, n); });
     // 도서관: 새로 읽은 책 (셰헤라자드)
     if (B.library) {
       var pick0 = B.library.pick;

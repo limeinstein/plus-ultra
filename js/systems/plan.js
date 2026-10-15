@@ -62,7 +62,7 @@
     return P.expedition(from, d, home);
   };
   /** 가진 라임 절임 수 */
-  P.limes = function () { return S().player.items.filter(function (it) { return it.id === 'lime'; }).reduce(function (n, it) { return n + (it.n || 1); }, 0); };
+  P.limes = function () { return S().player.items.filter(function (it) { return it.id === 'lime'; }).reduce(function (n, it) { return n + R.itemQty(it); }, 0); };
   /** 화면에 넣을 요약 (HTML) */
   P.html = function (pl, maxLoad) {
     if (!pl) return '';

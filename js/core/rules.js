@@ -122,6 +122,8 @@
 
   // ---------------------------------------------------------------- items
   R.hasItem = function (id) { return R.S().player.items.some(function (it) { return it.id === id; }); };
+  R.itemQty = function (it) { return it && it.qty > 1 ? it.qty : 1; };
+  R.itemCount = function (id) { return R.S().player.items.reduce(function (n, it) { return n + (it.id === id ? R.itemQty(it) : 0); }, 0); };
   /** 소지품 칸 수 */
   R.ITEM_MAX = 40;
   R.itemsFull = function (n) { return R.S().player.items.length + (n || 1) > R.ITEM_MAX; };
@@ -133,9 +135,23 @@
     var def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
     S.player.items.push(o); return true;
   };
-  R.removeItem = function (id) { var S = R.S(); for (var i = 0; i < S.player.items.length; i++) if (S.player.items[i].id === id) { S.player.items.splice(i, 1); return true; } return false; };
+  /** 시장의 같은 일반 아이템은 한 칸에 묶는다. 발견 증거·유물처럼 개별 상태가 있는 물건에는 쓰지 않는다. */
+  R.addMarketItems = function (id, qty) {
+    var S = R.S(), n = Math.max(1, Math.floor(qty || 1));
+    var it = S.player.items.filter(function (x) { return x.id === id && !x.disc && !x.evidence && !x.name && !x.kind; })[0];
+    if (it) { it.qty = R.itemQty(it) + n; return true; }
+    if (S.player.items.length >= R.ITEM_MAX) return false;
+    var o = { id: id, qty: n }, def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
+    S.player.items.push(o); return true;
+  };
+  R.removeItemObject = function (it) {
+    var S = R.S(), i = S.player.items.indexOf(it); if (i < 0) return false;
+    if (R.itemQty(it) > 1) it.qty = R.itemQty(it) - 1; else S.player.items.splice(i, 1);
+    return true;
+  };
+  R.removeItem = function (id) { var S = R.S(); for (var i = 0; i < S.player.items.length; i++) if (S.player.items[i].id === id) return R.removeItemObject(S.player.items[i]); return false; };
   R.useCharge = function (id) {
-    var S = R.S(); for (var i = 0; i < S.player.items.length; i++) { var it = S.player.items[i]; if (it.id === id) { it.n = (it.n || 1) - 1; if (it.n <= 0) S.player.items.splice(i, 1); return true; } }
+    var S = R.S(); for (var i = 0; i < S.player.items.length; i++) { var it = S.player.items[i]; if (it.id === id) { it.n = (it.n || 1) - 1; if (it.n <= 0) { if (R.itemQty(it) > 1) { it.qty = R.itemQty(it) - 1; it.n = (G.ITEM[id] && G.ITEM[id].consumable) || 1; } else S.player.items.splice(i, 1); } return true; } }
     return false;
   };
   R.itemName = function (it) { if (it.name) return it.name; var d = G.ITEM[it.id]; return d ? d.name : it.id; };

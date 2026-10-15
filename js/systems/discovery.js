@@ -348,7 +348,7 @@
       var x = list[v], nm = R.itemName(x.it);
       if (s.player.equip.weapon === x.it.id) s.player.equip.weapon = null;
       if (s.player.equip.armor === x.it.id) s.player.equip.armor = null;
-      s.player.items.splice(x.i, 1);
+      R.removeItemObject(x.it);
       UI.toast(nm + U.jx(nm, '을/를') + ' 버렸다.', 'chest');
     }
   };

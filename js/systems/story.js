@@ -103,6 +103,32 @@
       .replace(/\{(wife|kid)([^}]+)\}/g, function (m0, w, pair) { return U.jx(w === 'wife' ? wife : kid, pair); })   // {wife이/가} → 조사만
       .replace(/\{wife\}/g, wife).replace(/\{kid\}/g, kid).replace(/\{given\}/g, p.given || p.name);
   }
+
+  // ================================================================ 사건 컷
+  // 그림은 images/story/cuts/<이름>에 둔다. 파일이 없는 판에서는 대사만 이어 간다.
+  var CUTS = {
+    prologue: ['story/cuts/prologue', '리스본, 1480년', '어머니는 사진을 기름종이에 싸서 아들의 품에 넣어 주었다.'],
+    ft_granada: ['story/cuts/granada', '그라나다 — 사자의 뜰', '아버지가 남긴 낯선 글자와 작은 아이 얼굴.'],
+    ft_cairo: ['story/cuts/cairo', '카이로 — 얼음 장수의 기억', '먹을 찍지 않아도 글이 써지던 쇠막대 같은 붓.'],
+    ft_delhi: ['story/cuts/delhi', '델리 — 녹슬지 않는 쇠기둥', '천 년 묵은 글자들 사이에 새겨진 아버지의 이름.'],
+    ft_cuzco: ['story/cuts/cuzco', '쿠스코 — 돌 다섯 개의 놀이', '세상 반대편 아이들이 아버지에게 배운 놀이를 하고 있었다.'],
+    ft_hangzhou: ['story/cuts/hangzhou', '항주 — 스물아홉 점의 판', '찻집 탁자에 새겨진 윷판이 조선을 가리켰다.'],
+    ft_sakai: ['story/cuts/sakai', '사카이 — 제비와 박씨 이야기', '아버지가 마지막 밤에 들려준 이야기가 바다를 건너와 있었다.'],
+    ft_hanyang: ['story/cuts/hanyang', '한양 — 사진 속의 자리', '사진 속 유적은 먼 옛날이 아니라 먼 미래의 경복궁이었다.'],
+    atlantis: ['story/cuts/atlantis', '아틀란티스 — 바다 끝의 사람', '스물네 해가 지나도 아버지는 사진 속 모습 그대로였다.']
+  };
+  ST.cut = function (id) {
+    var c = CUTS[id], key = c && c[0];
+    if (!c || !G.Img || !G.Img.has(key)) return Promise.resolve(false);
+    var src = G.Img.src(key);
+    var html = '<div class="story-cut-stage"><img class="story-cut-image" src="' + U.esc(src) + '" alt="' + U.esc(c[1]) + '">' +
+      '<div class="story-cut-caption">' + U.esc(c[2]) + '</div></div>';
+    var win = UI.window({ title: c[1], icon: 'scroll', width: 1180, parch: false, html: html, clickAny: true,
+      buttons: [{ label: '이야기를 잇는다', value: true, cls: 'navy' }] });
+    if (win.el && win.el.classList) win.el.classList.add('story-cut-win');
+    return win.result;
+  };
+  ST.cutKeys = function () { return Object.keys(CUTS).map(function (id) { return CUTS[id][0]; }); };
   /* 대화 장면: 제독이 말할 때도 지금 마주한 사람과 둘이 선다 — 얼굴 하나 → 둘 → 하나로 바뀌지 않게.
      마주한 사람 = 같은 장면(내레이션 N 사이)에서 바로 앞에 말한 다른 사람, 없으면 곧 말할 사람 */
   function speakerOf(l) { return Array.isArray(l) ? l[0] : l && l.ask ? (l.by || 'P') : null; }
@@ -183,6 +209,7 @@
   ST.prologue = async function (c) {
     var s = S(), t = T(); if (!t || t.prologue) return;
     var P = D.prologue;
+    await ST.cut('prologue');
     await play(P.intro);
     await play(P.harbor);
     await play(P.baron);
@@ -223,6 +250,7 @@
       var sc = D.scenes[d.id] || {};
       curTrace = d.id;
       try {
+        await ST.cut(d.id);
         await play(sc.scene);
         if (sc.memory && sc.memory.length) await play(sc.memory);
       } catch (e) { console.error(e); }
@@ -248,6 +276,7 @@
       return;
     }
     t.end = 'done'; t.endDate = U.dateNum(s.date);
+    await ST.cut('atlantis');
     await play(D.ending.meet);
     s.player.items.forEach(function (it) { if (it.id === 'watch') { it.desc = '다시 돌기 시작한 작은 시계. 두 해마다 한 번, 아틀란티스에서 아버지를 만날 수 있다.'; } });
     G.Fame.add('ex', 1200);

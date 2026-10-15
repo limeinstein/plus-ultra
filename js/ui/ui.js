@@ -370,6 +370,8 @@
   /** 대화 껍데기. duo(두 사람이 마주 봄)와 혼자 말하는 사람. */
   /* opts.noStand: 대화창 위에 사람을 세우지 않고 대화창 안의 얼굴만 (장면 그림을 가리지 않게 — js/systems/familyevent.js) */
   function dialogShell(back, opts, asking) {
+    // 장면 그림(옛이야기·전설 — js/systems/familyevent.js scenepic-on)이 떠 있는 동안: 사람을 그림 앞에 세우지 않는다
+    if (root && root.classList.contains('scenepic-on') && !opts.noStand) opts = Object.assign({}, opts, { noStand: true, layout: null, partner: null });
     var duo = opts.layout === 'duo' && opts.partner, partner = opts.partner, side = opts.side, choiceSide = opts.choiceSide;
     var rigs = [], box, F = standFx(), actors = [], layer = null, ro = null, stage;
     var S = G.Game && G.Game.state;

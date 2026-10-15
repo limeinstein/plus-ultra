@@ -98,6 +98,7 @@
   };
   /** 경리가 흥정해 둔 값 (이번 방문): {ok, buy, sell} */
   function mkDeal() { var cur = C.current(); return cur && cur.mk && cur.mk.buy ? cur.mk : null; }
+  function acctLv() { return G.Acct ? G.Acct.lv() : Math.max(0, Math.min(3, R.skill('acct') || 0)); }
   /** 시장 값: 기본값 × 이 도시 시세(무기는 무기 갈래, 선물은 사치품·기호품·공예품 …) × 경리가 흥정한 값 */
   function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
   function mkBuy(it) { var d = mkDeal(), b = mkBase(it); return d ? Math.max(1, Math.round(b * Math.min(1, d.buy))) : b; }
@@ -110,18 +111,51 @@
   MK.price = mkBuy;
   /** 값이 보통보다 5% 넘게 비싸면 ▲, 싸면 ▼ */
   function mkTrend(it) { var k = R.itemMult(C.city(), it); return k > 1.05 ? ' <span class="warn-text" title="시세 ' + Math.round(k * 100) + '%">▲</span>' : k < 0.95 ? ' <span class="good-text" title="시세 ' + Math.round(k * 100) + '%">▼</span>' : ''; }
-  MK.enter = async function (c) { var cur = C.current(); if (cur) cur.mk = null; await C.say(vendor(), C.hail(c, 'market', ['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
+  MK.enter = async function (c) { var cur = C.current(); if (cur) { cur.mk = null; cur.mkBuyDeals = 0; } await C.say(vendor(), C.hail(c, 'market', ['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
   MK.sub = function () { return '무기·도구·장신구'; };
   MK.menu = function (c) {
     return [
       { label: '구입', icon: 'coin', onClick: function () { return MK.buy(c); } },
       { label: '매각', icon: 'sack', onClick: function () { return MK.sell(c); } },
       { label: '시세', icon: 'chart', sub: '물건 값 ' + Math.round(U.sum(Object.keys(R.ITEM_CATS), function (k) { return R.itemMult(c, { id: '_', kind: k }); }) / 4 * 100) + '%', onClick: function () { return C.B.trade.quotes(c); } },
-      R.purser() ? { label: '값 후려치기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공' : '실패') : '경리 ' + R.purser().name, dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
+      acctLv() ? { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공 · 결제 협상 ' + Math.max(0, (G.Acct ? G.Acct.marketDeals() : acctLv()) - ((C.current() && C.current().mkBuyDeals) || 0)) + '번' : '실패') : R.purser() ? '경리 ' + R.purser().name : '회계 ' + acctLv(), dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
       { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } },
       // 발견물이 있을 것으로 짐작되는 고장의 시장: 그 발견물의 모조품 (js/systems/fakes.js) — 달마다 7일, 중도시 이상, 한 번에 2개
       G.Fakes && G.Fakes.shown(c) ? { label: '모조품 상인', icon: 'seal', sub: G.Fakes.left(c) ? G.Fakes.stock(c).length + '가지 · 오늘 ' + G.Fakes.left(c) + '개 남음' : '오늘 몫은 다 팔림', dim: !G.Fakes.left(c), onClick: function () { return G.Fakes.buy(c); } } : null
     ].filter(Boolean);
+  };
+  /** 시장에서 한 번에 살 수 있는 수량. 거래 상한은 99개이고 금화·소지품 칸이 실제 상한을 더 줄인다. */
+  MK.buyMax = function (it, price) {
+    var s = S(), pr = price == null ? mkBuy(it) : price;
+    var own = R.itemCount(it.id), hasStack = own > 0;
+    if (!hasStack && s.player.items.length >= R.ITEM_MAX) return 0;
+    return Math.max(0, Math.min(99 - own, pr > 0 ? Math.floor(s.player.gold / pr) : 99));
+  };
+  /** 후려치기 성공 뒤 결제 직전의 추가 협상. 회계 단계마다 한 번씩 시도하고, 실패해도 먼저 정한 가격은 지킨다. */
+  MK.checkoutDeal = async function (c, it, qty, unit) {
+    var cur = C.current(), lv = acctLv(), max = G.Acct ? G.Acct.marketDeals() : lv, used = cur ? (cur.mkBuyDeals || 0) : 0;
+    var total = unit * qty;
+    if (!mkDeal() || !lv || used >= max) return { total: total, dealt: false };
+    var left = max - used;
+    var v = await UI.ask('이미 깎은 값은 <b>' + U.num(total) + '</b>닢입니다. 회계 ' + lv + '의 셈으로 결제 전에 한 번 더 값을 깎아 보겠습니까?<br><span class="muted">추가 협상 ' + left + '번 남음 · 거절당해도 먼저 정한 가격은 그대로입니다.</span>', [
+      { label: '한 번 더 흥정한다', value: 'deal', icon: 'scales' },
+      { label: '정한 값에 산다', value: 'buy', icon: 'coin' },
+      { label: '그만둔다', value: 'cancel' }
+    ], R.purser() ? G.Scenes.mateSpeaker('purser') : {});
+    if (v === 'cancel' || v == null) return { cancel: true, total: total };
+    if (v !== 'deal') return { total: total, dealt: false };
+    if (cur) cur.mkBuyDeals = used + 1;
+    var chance = G.Acct ? G.Acct.marketDealChance() : 0.45 + lv * 0.1;
+    var disc = G.Acct ? G.Acct.marketDealDisc() : lv * 0.02;
+    if (U.chance(chance)) {
+      total = Math.max(qty, Math.round(total * (1 - disc)));
+      await C.say(vendor(), '장부까지 다시 맞춰 보니 빈틈이 없군. 좋아, 금화 ' + U.num(total) + '닢에 넘기겠네.');
+      UI.toast('결제 협상 성공(회계 ' + lv + ') · 추가 ' + Math.round(disc * 100) + '% 할인', 'scales');
+      return { total: total, dealt: true, ok: true, disc: disc };
+    }
+    await C.say(vendor(), '이미 많이 깎아 주었네. 더는 안 되지만, 먼저 정한 값은 지키지.');
+    UI.toast('추가 협상은 거절당했다 · 먼저 깎은 가격은 유지', 'scales');
+    return { total: total, dealt: true, ok: false };
   };
   MK.buy = async function (c) {
     var s = S();
@@ -134,15 +168,24 @@
       }), { width: 700 });
       if (!v) return;
       var it = G.ITEM[v];
-      if (s.player.items.length >= R.ITEM_MAX) { await C.mate('이 이상 가질 수 없습니다!'); return; }
       var pr = mkBuy(it);
-      var pic = mkThumb(it), ask = it.name + '<br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(pr) + '닢에 사겠습니까?';
+      var mx = MK.buyMax(it, pr);
+      if (mx <= 0) { await C.mate(s.player.items.length >= R.ITEM_MAX ? '이 이상 가질 수 없습니다!' : '소지금이 모자랍니다.'); return; }
+      var own = R.itemCount(it.id);
+      var q = await UI.number({ title: it.name + ' 구입', text: '한 개에 금화 ' + U.num(pr) + '닢. 몇 개 사겠습니까?<br><span class="muted">같은 아이템은 한 칸에 묶이며, 한 종류를 최대 99개까지 가질 수 있습니다.</span>', min: 1, max: mx, value: 1, unit: '개',
+        quick: [{ label: '1개', value: 1 }, { label: '10개', value: Math.min(10, mx) }, { label: '최대 ' + mx + '개', value: mx }],
+        info: function (n) { return '<b>' + U.num(n * pr) + '</b>닢 · 구입 뒤 ' + it.name + ' ' + (own + n) + '/99개'; } });
+      if (q == null) continue;
+      var deal = await MK.checkoutDeal(c, it, q, pr);
+      if (deal.cancel) continue;
+      var pic = mkThumb(it), ask = it.name + ' <b>' + q + '개</b><br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(deal.total) + '닢에 사겠습니까?' + (deal.ok ? '<br><span class="good-text">회계 추가 협상 할인 적용</span>' : '');
       if (!(await UI.confirm(pic ? '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>' : ask, '산다', '그만둔다'))) continue;
-      s.player.gold -= pr; R.addItem(v);
+      s.player.gold -= deal.total;
+      R.addMarketItems(v, q); MK.boughtTotal = (MK.boughtTotal || 0) + q;
       if ((it.kind === 'weapon' && (!s.player.equip.weapon || G.ITEM[s.player.equip.weapon].atk < it.atk)) || (it.kind === 'armor' && (!s.player.equip.armor || G.ITEM[s.player.equip.armor].def < it.def))) {
         if (await UI.confirm(it.name + U.j(it.name, '을/를').slice(it.name.length) + ' 바로 장비하겠습니까?')) s.player.equip[it.kind] = v;
       }
-      await C.say(vendor(), '고맙네!');
+      await C.say(vendor(), q > 1 ? it.name + ' ' + q + '개, 잘 챙겨 가게. 고맙네!' : '고맙네!');
     }
   };
   MK.sell = async function (c) {
@@ -154,7 +197,7 @@
         var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
         var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
-        return { label: R.itemName(x.it) + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
+        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
       }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
       if (v == null) return;
       var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id];
@@ -162,7 +205,7 @@
       var warn = R.isProof(x.it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[x.it.disc].name) + '」 발견의 증거입니다. 아직 보고·발표하지 않았으니, 팔면 증거가 모자라 사례금과 명성이 줄 수 있습니다.</span>' : '';
       if (!(await UI.confirm(R.itemName(x.it) + U.j(R.itemName(x.it), '을/를').slice(R.itemName(x.it).length) + ' 금화 ' + U.num(val) + '닢에 팔겠습니까?' + warn, '판다', '그만둔다'))) continue;
       var id = x.it.id;
-      s.player.items.splice(x.i, 1); s.player.gold += val;
+      R.removeItemObject(x.it); s.player.gold += val;
       if (s.player.equip.weapon === id && !R.hasItem(id)) s.player.equip.weapon = null;
       if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
     }
@@ -170,19 +213,20 @@
   /** 경리의 흥정: 성공하면 이번 방문 동안 사는 값 −(8~22)%, 파는 값 +(6~15)% — 실패해도 값은 그대로 */
   MK.haggle = async function (c) {
     var cur = C.current(), pu = R.purser();
-    if (!pu) return;
+    if (!acctLv()) return;
     if (cur.mk) { await C.say(vendor(), cur.mk.ok ? '이미 밑지고 판다니까!' : '흥, 자네들하고는 더 할 말 없네.'); return; }
     if (C.langLv(c) === 0) { await C.mate('말이 통하지 않아 흥정이 안 됩니다.'); cur.mk = { ok: false }; return; }
-    var sp = G.Scenes.mateSpeaker('purser');
-    await UI.say(U.pick(['이 칼 한 자루에 그 값이라니, 날에 금이라도 발랐소? 절반만 받으시오.', '물건은 좋소. 다만 값이 틀렸구려 — 이 도시 시세는 내가 다 적어 두었소.', '여기서 여럿 사 갈 테니 한꺼번에 셈합시다. 덤도 좀 얹고.']), sp);
-    var acct = R.skill('acct'), p = U.clamp(0.35 + acct * 0.12 + pu.acct * 0.06 + (C.langLv(c) - 1) * 0.06 + (R.stat('cha') - 50) * 0.003, 0.1, 0.92);
+    var sp = pu ? G.Scenes.mateSpeaker('purser') : null;
+    if (pu) await UI.say(U.pick(['이 칼 한 자루에 그 값이라니, 날에 금이라도 발랐소? 절반만 받으시오.', '물건은 좋소. 다만 값이 틀렸구려 — 이 도시 시세는 내가 다 적어 두었소.', '여기서 여럿 사 갈 테니 한꺼번에 셈합시다. 덤도 좀 얹고.']), sp);
+    else await C.me(U.pick(['장부를 맞춰 보니 이 값은 너무 비싸군. 조금 깎아 주게.', '여럿 사 갈 테니 셈을 다시 해 주게.']));
+    var acct = R.skill('acct'), p = U.clamp(0.35 + acct * 0.12 + (pu ? pu.acct * 0.06 : 0) + (C.langLv(c) - 1) * 0.06 + (R.stat('cha') - 50) * 0.003, 0.1, 0.92);
     var nb = G.Court ? G.Court.haggle(c) : null;   // 귀족의 권한: 작위만큼 더 잘, 더 많이 깎인다
     if (nb) p = Math.min(0.95, p + nb.p);
     if (U.chance(p)) {
-      var disc = Math.min(0.22, 0.08 + pu.acct * 0.03 + acct * 0.01 + U.rf(0, 0.03)) + (nb ? nb.disc : 0);
+      var disc = Math.min(0.22, 0.08 + (pu ? pu.acct * 0.03 : 0) + acct * 0.01 + U.rf(0, 0.03)) + (nb ? nb.disc : 0);
       cur.mk = { ok: true, buy: 1 - disc, sell: 1 + disc * 0.7 };
-      await C.say(vendor(), U.pick(['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.']));
-      UI.toast('흥정 성공(경리 ' + pu.name + ')! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '%', 'scales');
+      await C.say(vendor(), U.pick(pu ? ['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.'] : ['셈이 밝은 사람이군. 좋아, 그렇게 하지.', '장부까지 맞춰 왔다니 어쩔 수 없군. 그 값에 주겠네.']));
+      UI.toast('흥정 성공' + (pu ? '(경리 ' + pu.name + ')' : '(회계 ' + acctLv() + ')') + '! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '% · 결제 때 추가 협상 ' + (G.Acct ? G.Acct.marketDeals() : acctLv()) + '번', 'scales');
     } else {
       cur.mk = { ok: false };      // 실패하면 값은 그대로 (올라가지 않는다)
       await C.say(vendor(), U.pick(['흥! 그 값에 팔 바에야 바다에 던지겠네.', '장사를 모르는구먼. 싫으면 관두게!']));

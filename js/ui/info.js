@@ -230,7 +230,7 @@
           var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '');
           var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
           var itemDesc = it.id === 'photo' && G.STORY && G.STORY.photo ? G.STORY.photo.desc : (it.desc || d.desc || '');
-          return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (it.n > 1 ? ' ×' + it.n : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
+          return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + (it.n > 1 ? ' <small class="muted">(남은 사용 ' + it.n + '회)</small>' : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
         }).join('') + '</table>';
       // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
       U.$$('[data-ic]', el).forEach(function (td) {
@@ -251,7 +251,7 @@
         var warn = it.kind === 'evidence' ? '<br><span class="warn-text">발견을 보고할 때 건넬 증거품입니다. 버리면 후원자가 반만 믿어 사례금이 줄어듭니다.</span>'
           : R.isProof(it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[it.disc].name) + '」 발견의 증거인 유물입니다. 버리면 증거가 모자라 사례금과 명성이 줄 수 있고, 다시 구할 수 없습니다.</span>'
           : G.RELIC && G.RELIC[it.id] ? '<br><span class="warn-text">다시 구할 수 없는 유물입니다. 시장에 팔면 금화 ' + U.num(G.Disc.relicValue(it)) + '닢을 받을 수 있습니다.</span>' : '';
-        if (await UI.confirm(nm + U.jx(nm, '을/를') + ' 버리겠습니까?' + warn)) { p.items.splice(+b.dataset.del, 1); render(); }
+        if (await UI.confirm(nm + (R.itemQty(it) > 1 ? ' 한 개를' : U.jx(nm, '을/를')) + ' 버리겠습니까?' + warn)) { R.removeItemObject(it); render(); }
       }; });
     }
     render();

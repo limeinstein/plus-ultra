@@ -82,6 +82,8 @@
   // ================================================================ 신데렐라
   T.cinderella = async function () {
     var id = 'cinderella', cr = bestName('craft');
+    var pc = null;
+    try {
     await narrate('숲길 옆 그루터기에 푸른 비단 무도회 옷을 입은 아가씨가 맨발로 앉아 울고 있다. 한 손에는 유리 구두 한 짝, 무릎 위에는 산산이 깨진 다른 한 짝의 조각이 한 줌.');
     await say(id, '아… 놀라셨죠. 죄송해요, 길을 막고 있었네요.\f오늘 밤 성에서 무도회가 있어요. 대모님이 마련해 주신 유리 구두를 신고 가야 하는데… 서두르다 한 짝을 바위에 떨어뜨려 깨뜨렸어요. 한 짝만 신고 춤을 출 수는 없잖아요.');
     await say(id, '저기… 혹시 배에 유리를 싣고 다니시나요? 그리고 유리를 다룰 줄 아는 분이 계시다면— 깨진 한 짝만, 이 구두와 똑같이 지어 주실 수 없을까요?\f드릴 수 있는 건 아무것도 없지만… 무도회가 끝나면 무엇이든 하겠어요.');
@@ -91,6 +93,7 @@
       cool(id); return false;
     }
     await narrate((cr.me ? '제독이' : cr.name + U.jx(cr.name, '이/가')) + ' 모닥불에 유리를 녹여 남은 한 짝을 본떠 얇게 부풀린다. ' + (cr.lv >= 3 ? '해가 기울 무렵, 빛을 받으면 무지갯빛이 도는 구두가 완성되었다. 처음 것과 어느 쪽이 어느 쪽인지 가릴 수가 없다.' : cr.lv >= 2 ? '몇 번을 다시 불어 마침내 남은 짝과 꼭 같은 구두가 나왔다.' : '처음 것보다 조금 투박하지만, 발에는 꼭 맞는 구두가 되었다.'));
+    pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/cinderella_glass_slippers', title: '두 짝이 된 유리 구두' }) : null;
     await say(id, '어머… 꼭 맞아요! 두 짝이 다시 한 켤레가 됐어요.', 'happy');
     await narrate('그녀는 구두를 신고 몇 걸음 춤을 춰 보더니, 문득 멈춰 서서 성 쪽을 바라본다.');
     await say(id, '이상하죠. 이렇게 고운 구두를 신고 나니… 무도회보다 저 바다가 더 보고 싶어요. 열두 시가 되면 마법이 풀려도, 바다는 그대로 있을 테니까요.\f저를 배에 태워 주세요. 품삯은 필요 없어요. 부엌이든 갑판이든, 쓸고 닦는 일이라면 누구보다 잘해요.');
@@ -100,11 +103,14 @@
     await T.join(id);
     await say(id, '고맙습니다, 제독님. 이 구두는… 잃어버리지 않을게요.', 'happy');
     return true;
+    } finally { if (pc) await pc.stop(); }
   };
 
   // ================================================================ 백설공주
   T.snowWhite = async function (api) {
     var id = 'snow_white';
+    var pc = null;
+    try {
     await narrate('나뭇가지가 우지끈 부러지는 소리. 흰 살결에 흑단 같은 머리, 붉은 벨벳 옷자락이 가시에 찢긴 아가씨가 숲에서 뛰쳐나와 일행 뒤로 숨는다. 손에는 빨간 사과 하나를 꼭 쥐고 있다. 그 뒤를 단검을 든 사냥꾼이 쫓아온다.');
     await say(id, '살려 주세요! 저 사람이… 왕비님이 저를 죽이라고 보냈어요!');
     var hunter = { name: '왕비의 사냥꾼', portrait: G.Art.withImg(G.Art.npcSpec('tale_hunter', 'soldier', 'ne', 'm'), ['portraits/npc-roles/ne/soldier']), look: 'brawler',
@@ -124,6 +130,7 @@
       await narrate('사냥꾼의 칼끝을 겨우 피하는 사이, 아가씨는 이미 숲 깊이 달아나 보이지 않는다. 사냥꾼도 그녀를 쫓아 사라졌다.');
       cool(id); return false;
     }
+    pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/snow_white_rescue', title: '왕비의 사냥꾼' }) : null;
     await UI.say('…칼솜씨가 대단하군. 왕비 마마께는 멧돼지 심장을 가져가겠소. 그 아이는 다시는 이 숲에 들어오지 않게 하시오.', { name: hunter.name, portrait: hunter.portrait });
     G.Fame.add('bt', 2);
     await say(id, '고맙습니다… 정말로요.', 'happy');
@@ -136,11 +143,14 @@
     await T.join(id);
     await say(id, '그럼 오늘부터 이 배가 제 오두막이에요! 다들 손부터 씻고 오세요. 저녁은 제가 할게요.', 'happy');
     return true;
+    } finally { if (pc) await pc.stop(); }
   };
 
   // ================================================================ 잠자는 숲속의 공주
   T.sleepingBeauty = async function () {
     var id = 'sleeping_beauty', md = bestName('med');
+    var pc = null;
+    try {
     var dg = DRAGONS.filter(function (x) { return G.Disc.foundByMe(x); }).map(function (x) { return G.DISC[x].name; })[0] || '용';
     await narrate('야영지 뒤편, 찔레 가시덤불이 성벽처럼 둘러친 낡은 탑이 있다. 「' + dg + '」' + U.jx('「' + dg + '」', '을/를') + ' 보고 온 이들이라는 걸 알기라도 하는 듯, 가시덤불이 스스로 갈라져 길을 연다.');
     await narrate('먼지 쌓인 계단 끝, 꽃이 시들지 않은 방의 침상에 장밋빛 비단 옷의 처녀가 잠들어 있다. 숨결은 고르지만, 어깨를 흔들어도 깨지 않는다. 손에는 금빛 물레 가락을 쥔 채다.');
@@ -151,6 +161,7 @@
     var v = await ask((md.me ? '제독이' : md.name + U.jx(md.name, '이/가')) + ' 상처를 살핀다. 치료할까? (의학 ' + md.lv + ')', '상처를 치료한다', '그냥 둔다');
     if (!v) { await say(id, '괜찮아요… 조금 따끔할 뿐이에요.'); cool(id); return false; }
     await narrate((md.me ? '제독이' : md.name + U.jx(md.name, '이/가')) + ' ' + (md.lv >= 3 ? '곪은 자리를 깨끗이 째어 고름을 빼내고, 약초를 찧어 싸매고, 열을 내리는 탕약까지 달여 먹인다.' : md.lv >= 2 ? '상처를 씻어 내고 약초를 붙여 단단히 싸맨다.' : '서툰 손으로나마 상처를 씻고 깨끗한 천으로 감싼다.') + ' 이윽고 그녀의 볼에 핏기가 돈다.');
+    pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/sleeping_beauty_awaken', title: '백 년 만의 아침' }) : null;
     await say(id, '백 년 동안 꿈을 꿨어요. 가시덤불을 헤치고 누군가 바다 냄새를 풍기며 찾아오는 꿈을. 그리고 그 사람이 제 상처를 낫게 해 주는 꿈을…\f이건 운명이에요. 분명히요.', 'happy');
     await say(id, '성도 사람들도 다 사라졌다면, 저는 이제 어디에도 매인 몸이 아니에요. 품삯은 필요 없어요— 백 년 늦은 세상을, 당신 배에서 보고 싶어요.');
     if (!(await ask('잠자는 숲속의 공주가 무급 항해사로 함께 가겠다고 한다.', '배에 태운다', '마을까지만 데려다준다'))) {
@@ -159,23 +170,27 @@
     await T.join(id);
     await say(id, '이제 다시는 잠들지 않을게요. 백 년이나 잤으니까요!', 'happy');
     return true;
+    } finally { if (pc) await pc.stop(); }
   };
 
   // ================================================================ 인어공주
   T.littleMermaid = async function () {
     var id = 'little_mermaid';
-    await narrate('사냥감을 쫓다 물가에 이르자, 바닷물에 젖은 청록빛 옷자락을 끌며 붉은 머리의 아가씨가 젖은 바위를 짚고 일어서려다 비틀거린다. 걸음마를 처음 배우는 아이처럼, 한 발짝 한 발짝이 아슬아슬하다. 목에는 산호 목걸이가 걸려 있다.');
-    await say(id, '(입술을 달싹이지만 소리가 나오지 않는다. 그녀는 제 목을 가리키고 고개를 젓는다.)');
-    await narrate('그녀는 모래 위에 손가락으로 무언가를 그린다 — 이 섬의 해안선, 그 앞바다의 얕은 여울과 깊은 골, 그리고 물살이 도는 방향까지. 어느 뱃사람의 해도보다 정확하다.');
-    await say(id, '(바다를 가리키고, 일행이 타고 온 배를 가리키고, 두 손을 모아 고개를 숙인다.)', 'happy');
-    if (!(await ask('말을 못 하는 이 아가씨를 어떻게 할까?', '돌보기로 한다 — 배에 태운다', '가까운 마을 사람들에게 맡긴다'))) {
-      await narrate('마을 사람들에게 그녀를 맡기고 돌아서는데, 뒤에서 아무 소리도 들리지 않는다. 돌아보니 그녀는 바다만 바라보고 서 있었다.');
-      cool(id); return false;
-    }
-    await T.join(id);
-    await narrate('배에 오르자 그녀의 걸음이 거짓말처럼 가벼워진다. 출렁이는 갑판 위가 뭍보다 편한 모양이다. 그날 저녁, 그녀가 말없이 차린 생선 요리에 선원들이 혀를 내둘렀다.');
-    await say(id, '(활짝 웃으며 키를 가리킨다. 바람이 바뀌는 쪽을 먼저 알아채는 눈치다.)', 'happy');
-    return true;
+    var pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/little_mermaid_shore', title: '파도에서 걸어 나온 아가씨' }) : null;
+    try {
+      await narrate('사냥감을 쫓다 물가에 이르자, 젖은 흰 비단옷을 입은 붉은 머리의 아가씨가 바위를 짚고 일어서려다 비틀거린다. 파도 위에서는 익숙하지만 뭍은 처음인 사람처럼, 한 발짝 한 발짝이 아슬아슬하다. 목에는 조개 목걸이가 걸려 있다.');
+      await say(id, '(입술을 달싹이지만 소리가 나오지 않는다. 그녀는 제 목을 가리키고 고개를 젓는다.)');
+      await narrate('그녀는 모래 위에 손가락으로 무언가를 그린다 — 이 섬의 해안선, 그 앞바다의 얕은 여울과 깊은 골, 그리고 물살이 도는 방향까지. 어느 뱃사람의 해도보다 정확하다.');
+      await say(id, '(바다를 가리키고, 일행이 타고 온 배를 가리키고, 두 손을 모아 고개를 숙인다.)', 'happy');
+      if (!(await ask('말을 못 하는 이 아가씨를 어떻게 할까?', '돌보기로 한다 — 배에 태운다', '가까운 마을 사람들에게 맡긴다'))) {
+        await narrate('마을 사람들에게 그녀를 맡기고 돌아서는데, 뒤에서 아무 소리도 들리지 않는다. 돌아보니 그녀는 바다만 바라보고 서 있었다.');
+        cool(id); return false;
+      }
+      await T.join(id);
+      await narrate('배에 오르자 그녀의 걸음이 거짓말처럼 가벼워진다. 출렁이는 갑판 위가 뭍보다 편한 모양이다. 그날 저녁, 그녀가 말없이 차린 생선 요리에 선원들이 혀를 내둘렀다.');
+      await say(id, '(활짝 웃으며 키를 가리킨다. 바람이 바뀌는 쪽을 먼저 알아채는 눈치다.)', 'happy');
+      return true;
+    } finally { if (pc) await pc.stop(); }
   };
 
   // ---------------------------------------------------------------- 뭍에서 하루가 지날 때 (js/scenes/land.js)

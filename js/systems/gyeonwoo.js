@@ -79,20 +79,26 @@
   }
   async function hangzhou(c) {
     var D = L(), g = GW.st();
-    await lines(D.hz);
-    var v = await G.UI.ask(D.hzAsk, [{ label: D.hzTalk, value: 'talk' }, { label: D.hzNight, value: 'night' }], who('b'));
-    await lines(v === 'talk' ? D.hzTalkSay : D.hzNightSay);
-    g.how = v; g.aboard = ['gyeonwoo']; g.stage = 2;
-    G.State.log('항주에서 견우를 배에 태웠다.');
-    G.UI.toast(D.hzBoard, 'sail', 5000);
+    var pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/gyeonwoo_hangzhou', title: '은하수 건너편의 사내' }) : null;
+    try {
+      await lines(D.hz);
+      var v = await G.UI.ask(D.hzAsk, [{ label: D.hzTalk, value: 'talk' }, { label: D.hzNight, value: 'night' }], who('b'));
+      await lines(v === 'talk' ? D.hzTalkSay : D.hzNightSay);
+      g.how = v; g.aboard = ['gyeonwoo']; g.stage = 2;
+      G.State.log('항주에서 견우를 배에 태웠다.');
+      G.UI.toast(D.hzBoard, 'sail', 5000);
+    } finally { if (pc) await pc.stop(); }
   }
   async function sakai(c) {
     var D = L(), g = GW.st(), y = S().date.y;
-    await lines(D.sk);
-    await lines(y <= (K().nobunagaUntil || 1582) ? D.nobu : D.nobuGone);
-    g.aboard = ['gyeonwoo', 'jiknyeo']; g.stage = 3;
-    G.State.log('사카이에서 직녀를 배에 태웠다.');
-    G.UI.toast(D.skBoard, 'sail', 5000);
+    var pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/jiknyeo_sakai', title: '몇 해 만의 상봉' }) : null;
+    try {
+      await lines(D.sk);
+      await lines(y <= (K().nobunagaUntil || 1582) ? D.nobu : D.nobuGone);
+      g.aboard = ['gyeonwoo', 'jiknyeo']; g.stage = 3;
+      G.State.log('사카이에서 직녀를 배에 태웠다.');
+      G.UI.toast(D.skBoard, 'sail', 5000);
+    } finally { if (pc) await pc.stop(); }
   }
   async function hansan(c) {
     var D = L(), g = GW.st(), s = S(), b = K(), UI = G.UI;

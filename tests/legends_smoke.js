@@ -72,6 +72,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       if (fn === 'treat3') { for (let i = 0; i < 3; i++) await B.treat(c); }
       if (fn === 'buy3') {
         let n = 0; G.UI.choose = async (t, list) => { n++; const it = list.filter(x => !x.disabled)[0]; return n <= 3 && it ? it.value : null; };
+        G.UI.number = async () => 1;
         await B.buy(c);
       }
       if (C.current()) await C.leave();

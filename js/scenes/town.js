@@ -401,8 +401,10 @@
     return im ? [im] : [];
   }
   function heroMotionAtlases() {
-    var out = {};
+    var out = {}, hm = G.HERO_MOTION && G.HERO_MOTION[I.heroLook()], skip = (hm && hm.skip) || [];
     ['walk', 'run', 'back'].forEach(function (kind) {
+      // 얼굴과 다른 사람(모자·옷이 다른 그림)으로 그려진 동작은 쓰지 않는다 — 그 생김새의 예전 걷는 그림으로 (js/data/heromotion.js skip)
+      if (skip.indexOf(kind) >= 0) { out[kind] = null; return; }
       var k = I.pick(I.chain.heroMotion(kind));
       out[kind] = k && I.get(k);
     });

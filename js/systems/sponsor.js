@@ -503,6 +503,39 @@
     if (pr.back.length) setTimeout(function () { UI.toast('돌려받았다: ' + pr.back.map(function (it) { return R.itemName(it); }).join(', ') + ' — 이제 제독의 것', 'book', 4200); }, 600);
   };
 
+  /** 계약 조건 교섭 성공률: 웅변·매력·신뢰·경리 회계가 함께 돕는다. */
+  SP.negotiationChance = function (sp, what, asked, purser) {
+    var K = (G.BALANCE && G.BALANCE.sponsorNego) || {}, rel = SP.rel(sp.id), tp = SP.temper(sp);
+    var p = (K.base == null ? 0.55 : K.base) + R.skill('speech') * (K.speech == null ? 0.12 : K.speech) +
+      (R.stat('cha') - 50) * (K.cha == null ? 0.006 : K.cha) + rel.trust * (K.trust == null ? 0.004 : K.trust) -
+      Math.max(0, (asked || 1) - 1) * (K.retry == null ? 0.25 : K.retry) +
+      (purser ? (K.purser == null ? 0.10 : K.purser) + purser.acct * (K.purserAcct == null ? 0.05 : K.purserAcct) : 0);
+    if ((tp === 'hasty' && what === 'time') || (tp === 'greedy' && what === 'money')) p -= 0.15;
+    if (tp === 'generous') p += 0.12;
+    return U.clamp(p, 0.05, 0.95);
+  };
+
+  /** 성공한 조건 교섭의 결과. 원본은 건드리지 않고 개선된 조건과 적용 수치를 돌려준다. */
+  SP.improveTerms = function (offer, what, purser, speech) {
+    var K = (G.BALANCE && G.BALANCE.sponsorNego) || {}, o = { advance: offer.advance, reward: offer.reward, years: offer.years };
+    speech = speech == null ? R.skill('speech') : Math.max(0, speech);
+    if (what === 'money') {
+      var moneyK = purser ? 1.35 + purser.acct * 0.05 : 1.4;
+      moneyK += speech * (K.moneySpeech == null ? 0.04 : K.moneySpeech);
+      o.advance = Math.round(o.advance * moneyK / 100) * 100;
+      // 말솜씨가 2단계 이상이면 선금을 더 받고도 기한 단축을 막아 낸다.
+      if (!purser && speech < (K.noCutSpeech == null ? 2 : K.noCutSpeech)) o.years = Math.max(1, o.years - 1);
+      o.moneyK = moneyK;
+    } else if (what === 'time') {
+      var extraAt = K.extraYearSpeech == null ? 3 : K.extraYearSpeech;
+      o.addYears = 1 + (speech >= extraAt ? 1 : 0); o.years += o.addYears;
+      var keep = purser ? (purser.acct >= 2 ? 1 : 0.92 + speech * (K.purserTimeKeepSpeech == null ? 0.03 : K.purserTimeKeepSpeech))
+        : 0.8 + speech * (K.timeKeepSpeech == null ? 0.07 : K.timeKeepSpeech);
+      o.keep = Math.min(1, keep); o.advance = Math.round(o.advance * o.keep / 100) * 100;
+    }
+    return o;
+  };
+
   SP.negotiate = async function (sp, d, mood, circ) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
     var L = function (k, ctx) { return SP.line(sp, k, ctx); }, tp = SP.temper(sp), tm = SP.temperOf(sp);
@@ -512,7 +545,8 @@
     if (o.liked) await UI.say(L('likedFund'), who);    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
     for (;;) {
       await UI.say(L('offer', { adv: U.num(o.advance), yrs: o.years, rew: U.num(o.reward) }), who);
-      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢' + (tm ? '\n' + SP.holderName(sp) + U.jx(SP.holderName(sp), '은/는') + ' ' + tm.like + '. ' + tm.desc : ''), [{ label: '승낙한다', value: 'ok' }, { label: pu ? '교섭한다 (경리 ' + pu.name + ')' : '교섭한다', value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));
+      var speech = R.skill('speech');
+      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢' + (tm ? '\n' + SP.holderName(sp) + U.jx(SP.holderName(sp), '은/는') + ' ' + tm.like + '. ' + tm.desc : ''), [{ label: '승낙한다', value: 'ok' }, { label: '교섭한다' + (pu ? ' (경리 ' + pu.name + (speech ? ' · 웅변 ' + speech : '') + ')' : speech ? ' (웅변 ' + speech + ')' : ''), value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));
       if (v === 'ok') break;
       if (v === 'no' || v == null) { await UI.say(L('negoNo'), who); return; }
       var w = await UI.choose('무엇을 요구할까?', [{ label: '자금 증가', value: 'money', icon: 'coin' }, { label: '기간 연장', value: 'time', icon: 'hourglass' }, { label: '변경 없음', value: 'none', icon: 'check' }], { width: 420 });
@@ -521,21 +555,23 @@
       var hon = SP.honor(sp);
       if (pu) await UI.say(w === 'money' ? U.pick([hon + ', 선원 급료와 보급을 셈해 보면 이 선금으로는 절반도 못 갑니다. 장부를 보시지요.', '배 수리와 식량 값이 올해 크게 올랐습니다. 선금을 조금만 더 얹어 주시면 기한 안에 반드시 해내겠습니다.'])
         : U.pick(['뱃길과 계절풍을 따져 보면 이 기한은 빠듯합니다. 한 해만 더 주시면 선금은 그대로 두셔도 됩니다.', hon + '의 돈이 헛되이 쓰이지 않도록, 서두르지 않을 시간을 조금만 더 주십시오.']), G.Scenes.mateSpeaker('purser'));
-      var p = 0.55 + R.skill('speech') * 0.12 + (R.stat('cha') - 50) * 0.006 + rel.trust * 0.004 - (asked - 1) * 0.25 + (pu ? 0.10 + pu.acct * 0.05 : 0);
-      // 성품: 조급한 이는 기한을, 욕심 많은 이는 돈을 더 내주기 싫어한다 · 너그러운 이는 잘 들어준다
-      if ((tp === 'hasty' && w === 'time') || (tp === 'greedy' && w === 'money')) p -= 0.15;
-      if (tp === 'generous') p += 0.12;
-      if (!U.chance(U.clamp(p, 0.05, 0.95))) {
+      else if (speech) await UI.say(w === 'money' ? '이 모험이 성공하면 ' + hon + '의 이름도 세상에 남습니다. 그 값에 걸맞은 선금을 약속해 주십시오.' : '서두르다 원정을 그르치는 것보다 확실한 성공이 낫습니다. 시간을 주시면 반드시 성과로 갚겠습니다.', SP.me(sp));
+      var p = SP.negotiationChance(sp, w, asked, pu);
+      if (!U.chance(p)) {
         if (G.Outcome) await G.Outcome.show('lose', { title: '교섭 결렬…', sub: '욕심이 지나쳤다 — 계약이 없던 일이 되었다' });
         await UI.say(L('greed'), who);
         rel.trust = Math.max(0, rel.trust - 10); rel.anger = U.dateNum(U.addDays(s.date, tp === 'generous' ? 45 : tp === 'hasty' || tp === 'greedy' ? 120 : 90));
         return;
       }
       if (G.Outcome) await G.Outcome.show('win', { title: '교섭 성공!', sub: w === 'money' ? '자금을 더 받아 냈다' : '기한을 늘려 받았다' });
-      if (w === 'money' && pu) { o.advance = Math.round(o.advance * (1.35 + pu.acct * 0.05) / 100) * 100; await UI.say(L('moneyPurser', { adv: U.num(o.advance), yrs: o.years }), who); }
-      else if (w === 'money') { o.advance = Math.round(o.advance * 1.4 / 100) * 100; o.years = Math.max(1, o.years - 1); await UI.say(L('moneyUp', { yrs: o.years }), who); }
-      else if (pu) { o.years += 1; o.advance = Math.round(o.advance * (pu.acct >= 2 ? 1 : 0.92) / 100) * 100; await UI.say(L(pu.acct >= 2 ? 'timePurserSame' : 'timePurserCut', { yrs: o.years, adv: U.num(o.advance) }), who); }
-      else { o.years += 1; o.advance = Math.round(o.advance * 0.8 / 100) * 100; await UI.say(L('timeUp', { yrs: o.years, adv: U.num(o.advance) }), who); }
+      var better = SP.improveTerms(o, w, pu, speech); o.advance = better.advance; o.years = better.years;
+      if (w === 'money' && pu) await UI.say(L('moneyPurser', { adv: U.num(o.advance), yrs: o.years }), who);
+      else if (w === 'money' && speech >= 2) await UI.say('자네 말에 일리가 있군. 선금을 ' + U.num(o.advance) + '닢으로 올리고, 기한도 ' + o.years + '년 그대로 두겠네.', who);
+      else if (w === 'money') await UI.say(L('moneyUp', { yrs: o.years }), who);
+      else if (better.keep >= 1) await UI.say((speech >= 3 && better.addYears > 1 ? '말솜씨가 대단하군. 기간을 ' + o.years + '년으로 넉넉히 늘리고, 선금도 그대로 두겠네.' : L('timePurserSame', { yrs: o.years, adv: U.num(o.advance) })), who);
+      else if (pu) await UI.say(L('timePurserCut', { yrs: o.years, adv: U.num(o.advance) }), who);
+      else await UI.say(L('timeUp', { yrs: o.years, adv: U.num(o.advance) }), who);
+      if (speech) UI.toast('웅변 ' + speech + ' · ' + (w === 'money' ? '선금 증액 폭이 커지고 기한 손해를 줄였다' : '선금 삭감을 줄이고 기한을 더 확보했다'), 'scroll', 4200);
     }
     // treaty warning
     if (SP.isRivalNation(sp)) {

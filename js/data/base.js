@@ -31,7 +31,7 @@
     { id: 'gun', name: '포술', desc: '해전의 포격 명중과 위력을 높인다.' },
     { id: 'shoot', name: '사격술', desc: '해전·지상전의 사격을 강하게 한다.' },
     { id: 'med', name: '의학', desc: '괴혈병과 전염병을 막고 부상자를 치료한다.' },
-    { id: 'speech', name: '웅변', desc: '후원자 설득과 입항 교섭의 성공률을 높인다.' },
+    { id: 'speech', name: '웅변', desc: '후원자 설득과 입항 교섭의 성공률을 높이고, 선금·기한 교섭에서 더 유리한 조건을 받아 낸다.' },
     { id: 'survey', name: '측량', desc: '미발견 항구를 찾는 범위와 해도 작성 범위를 넓힌다.' },
     { id: 'hist', name: '역사학', desc: '육상의 발견물을 찾기 쉽게 하고 모조품을 가려낸다.' },
     { id: 'acct', name: '회계', desc: '단계가 오를수록 교역소 흥정이 잘 통하고 한 번 들를 때 흥정할 수 있는 횟수가 늘며(1·2·2·3번), 짐을 고르게 실어 배가 버티는 무게가 늘어난다(+4%·8%·12%). 3단계면 큰 항구의 비밀 암시장에 드나든다. 경리 자리에 두면 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 낸다.' },
@@ -222,11 +222,11 @@
       fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.01, repair: 0.1, pen: 0.12,
         gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1 } },
     // 부하: 수는 제한이 없다. 재산이 급료 warnMonths달 치에 못 미치면 경리·부관이 경고한다. 충성 low 이하면 효율 lowEff, veryLow 이하면 veryLowEff.
-    //   역할도 방도 없는 부하는 달마다 충성 −idleLoyal, 부관이 있으면 급료를 치른 달에 충성이 settle 아래인 부하 +adjutantLoyal.
+    //   역할도 방도 없는 부하는 달마다 충성 −idleLoyal, 부관이 있으면 급료를 치른 달에 충성이 settle 아래인 부하 +adjutantLoyal. 술집에서 한턱 내면 모든 부하 충성 +treatLoyal.
     //   충성 0이면 떠나겠다고 나선다 — 붙잡을 확률 persuade + (매력−50)/200 + 웅변 × persuadeSpeech, 붙잡으면 충성 persuadeLoyal
     // 부하 후보 특기 늘리기 (js/data/renown.js): base = 모든 후보에게 얹는 단계, byTier[지명도 0~4] = 실존 인물에게 더, wander = 철새·고장 사람 [최소, 최대], wanderLucky = 한 단계 더 받을 확률, cap = 한 특기 최고 단계
     mateSkills: { base: 1, byTier: [0, 1, 2, 3, 4], wander: [1, 2], wanderLucky: 0.2, cap: 3 },
-    mates: { warnMonths: 6, low: 40, lowEff: 0.75, veryLow: 20, veryLowEff: 0.5, idleLoyal: 2, adjutantLoyal: 1, settle: 70, persuade: 0.25, persuadeSpeech: 0.12, persuadeLoyal: 25 },
+    mates: { warnMonths: 6, low: 40, lowEff: 0.75, veryLow: 20, veryLowEff: 0.5, idleLoyal: 2, adjutantLoyal: 1, settle: 70, treatLoyal: 3, persuade: 0.25, persuadeSpeech: 0.12, persuadeLoyal: 25 },
     // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
     pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
     // 명성 칭호의 문턱: 신참 모험가 · 이름난 모험가 · 저명한 항해가 · 위대한 탐험가 · 대항해자 (예전 400·1600·4000·8000·15000 — 3년이면 끝 칭호였다)
@@ -241,6 +241,9 @@
     //   관심사 밖이라 시큰둥해도 웅변(특기)이 있으면 설득해 볼 수 있다 — 성공률 = persuade + 웅변 × persuadeSpeech + (매력−50) × persuadeCha
     //   + 신뢰 × persuadeTrust + 반응 점수 × persuadeScore (5%~90%). 설득해 낸 이야기는 보통 값 (관심사 덤 없음). 실패하면 신뢰 −failTrust
     sponsorTaste: { advance: 1.2, reward: 1.3, persuade: 0.2, persuadeSpeech: 0.18, persuadeCha: 0.006, persuadeTrust: 0.003, persuadeScore: 0.1, failTrust: 3 },
+    // 후원자 계약 조건 교섭: 웅변은 성공률뿐 아니라 선금 증액 폭·기간 연장 때 남는 선금·연장 기간도 개선한다.
+    sponsorNego: { base: 0.55, speech: 0.12, cha: 0.006, trust: 0.004, retry: 0.25, purser: 0.1, purserAcct: 0.05,
+      moneySpeech: 0.04, timeKeepSpeech: 0.07, purserTimeKeepSpeech: 0.03, noCutSpeech: 2, extraYearSpeech: 3 },
     // 보급: 선원 한 사람이 하루에 먹고 마시는 양(통) — 식량·물 따로 (예전 0.04 → 0.025: 같은 짐칸으로 약 1.6배 오래)
     ration: 0.025,
     // 육상 탐험: 대원은 배의 식량·물을 쓰지 않고 그 고장에서 사 먹고 길잡이·짐꾼 삯을 낸다 — 하루 경비(금화)
@@ -258,6 +261,8 @@
     // 지도 조작: 커서를 캐릭터 둘레에 둔 때는 방향이 없는 것으로 친다. 멈춘 배의 탐색은 하루를 쓰고 망루 탐지 범위를 넓힌다.
     //   cityPickPx = 바다 지도에서 도시 표식을 누른 것으로 치는 반지름(그림·이름표도 함께), portLandPx = 항구 둘레 뭍을 누르면 그 항구로 가는 반지름(px)
     pointerControl: { seaDeadPx: 38, landDeadPx: 30, cityPickPx: 30, portLandPx: 70 },
+    // 항해·육상 탐험 중 가까운 도시에 들어갈지 물었을 때 거절하면, 같은 도시의 물음을 실제 시간으로 이만큼 쉬었다가 다시 띄운다.
+    cityEntryPrompt: { cooldownMs: 5000 },
     seaSearch: { days: 1, senseBoost: 1.8, chartBonus: 1.2 },
     // 짐의 부피·무게 (js/systems/cargo.js). 1통 = 부피 1. wt = 1통의 무게(갈래별, wtGood가 있으면 그 값).
     // 배가 버티는 무게 = 짐칸 × shipWt. 선원 한 사람 crewWt, 대포 한 문 = 짐칸 차지(load) × gunWt + 포탄 shotWt, 식량·물 supWt, 자재 matWt
@@ -294,9 +299,10 @@
     tavernRumor: { n: 3, days: 30, geo: 15, hotK: 3, evK: 1 },
     landPack: { near: 1.2 },
     // 회계 단계(R.skill('acct'), 0~3)의 혜택 (js/systems/blackmarket.js G.Acct): 한 번 들를 때 흥정 횟수 tries[단계](경리가 있으면 +puTry, 거절될 때마다 성공률 ×retryK),
+    //   시장에서 후려치기 성공 뒤 결제 추가 협상 marketDeals회(성공률 marketDealChance, 추가 할인 marketDealDisc),
     //   배가 버티는 무게 +wt[단계], blackMarket 단계부터 크기 bmSize 이상 항구의 비밀 암시장 — 물건 bmItems가지(값 ×bmMarkup)·밀수품 bmGoods가지(산지 값 ×bmGoodMarkup),
     //   bmPeriod일마다 바뀜, 거래마다 악명 +bmNoto
-    acct: { tries: [1, 2, 2, 3], puTry: 1, retryK: 0.7, wt: [0, 0.04, 0.08, 0.12], blackMarket: 3, bmSize: 2, bmItems: 3, bmGoods: 2, bmMarkup: 1.5, bmGoodMarkup: 1.4, bmPeriod: 30, bmNoto: 1 },
+    acct: { tries: [1, 2, 2, 3], puTry: 1, retryK: 0.7, wt: [0, 0.04, 0.08, 0.12], marketDeals: [0, 1, 2, 3], marketDealChance: [0, 0.55, 0.7, 0.85], marketDealDisc: [0, 0.03, 0.05, 0.07], blackMarket: 3, bmSize: 2, bmItems: 3, bmGoods: 2, bmMarkup: 1.5, bmGoodMarkup: 1.4, bmPeriod: 30, bmNoto: 1 },
     // 제독의 수명·생일 선물 (js/systems/lifespan.js): maxAge세 생일에 세상을 떠난다(아들이 있으면 뒤를 잇는다). warnFrom세부터 생일마다 귀띔.
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)

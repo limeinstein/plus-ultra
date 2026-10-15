@@ -188,10 +188,13 @@
     box.appendChild(clip);
     if (ev.title) { var t = document.createElement('div'); t.className = 'eventfx-title'; t.textContent = ev.title; box.appendChild(t); }
     root.appendChild(box); root.classList.add('homeart-on');
+    // 옛이야기·전설 장면 그림(legend-events)은 그림 속 사람이 주인공이다 — 대화하는 사람은 그림 앞에 세우지 않고 대화창 얼굴로 (UI dialogShell)
+    var cover = ev.noStand != null ? !!ev.noStand : String(ev.img).indexOf('legend-events/') === 0;
+    if (cover) root.classList.add('scenepic-on');
     requestAnimationFrame(function () { box.classList.add('on'); });
     var hd = { box: box };
     hd.stop = function () {
-      if (curPic === hd) { curPic = null; root.classList.remove('homeart-on'); }
+      if (curPic === hd) { curPic = null; root.classList.remove('homeart-on'); root.classList.remove('scenepic-on'); }
       box.classList.remove('on');
       return new Promise(function (res) { setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); res(); }, 260); });
     };

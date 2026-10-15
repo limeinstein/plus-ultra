@@ -2,6 +2,7 @@
    - 타이틀에 「이야기 — 아버지의 사진」 단추
    - 시작: 마테우스(포르투갈·하얀 남방의 항해사)·동료 셋과 자리·사진·남작과의 알함브라 계약·단서(알함브라·첫 흔적)
    - 프롤로그 대사가 오류 없이 흐른다 (대화창은 저절로 넘김)
+   - 프롤로그·흔적 일곱·아틀란티스 사건 컷 9장이 연결되어 있다
    - 흔적 일곱을 차례로 찾으면 장면·기억·다음 단서, 한양 편지 → 아틀란티스 사슬 단서·멈춘 시계, 아틀란티스 → 끝
    - 순서: 앞의 흔적을 찾기 전에는 다음 흔적이 도시에서 보이지 않는다
    - 보통 항해(이야기 아님)에서는 흔적·동료 셋·남작이 나오지 않는다
@@ -49,6 +50,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     ok(a.ship === '도나 레오노르' && a.photo, '배 「' + a.ship + '」 · 사진을 지님');
     ok(a.contract === 'alhambra@pt_casanova' && a.hints.includes('alhambra') && a.hints.includes('ft_granada'), '남작과 알함브라 계약 · 단서 ' + a.hints.join(','));
     ok(a.said > 25 && a.who.includes('레오노르 다 코스타') && a.who.includes('자코모 카사노바') && a.who.includes('조반니 카사노바 남작'), '프롤로그 대사 ' + a.said + '줄 — ' + a.who.join('·'));
+    const cuts = await page.evaluate(() => ({ keys: G.Story.cutKeys(), have: G.Story.cutKeys().filter(k => G.Img.has(k)) }));
+    ok(cuts.keys.length === 9 && cuts.have.length === 9, '사건 컷 9장: ' + cuts.have.join(' · '));
 
     // 흔적을 차례로
     const b = await page.evaluate(async () => {

@@ -28,11 +28,13 @@
       var mt = cleanMount(arg.mount);
       s.loc = { mode: 'land', lon: start[0], lat: start[1], heading: 0, base: base, party: party, days: 0, party0: party, found0: s.stats.found, marks0: Object.keys(s.marks || {}).length, mount: mt };
       st = newSt(start);
+      if (arg.from != null) st.cityPromptBlock = arg.from; // 성문을 막 나선 때에는 같은 도시 출입을 곧바로 다시 묻지 않는다
       UI.toast('탐험대 ' + party + '명이 ' + (mt.id === 'walk' ? '걸어서' : G.Mounts.get(mt.id).name + U.jx(G.Mounts.get(mt.id).name, '과/와') + ' 함께') + ' 출발했다.', 'boot');
     } else {
       if (arg.resumeFrom != null) L.resumeFromCity(G.CITY_DATA[arg.resumeFrom], arg.mount);
       if (!st) st = newSt([s.loc.lon, s.loc.lat]);
       st.cam.lon = s.loc.lon; st.cam.lat = s.loc.lat; st.paused = true; st.path = null;
+      if (arg.resumeFrom != null) st.cityPromptBlock = arg.resumeFrom;
       var lt = st.trail[st.trail.length - 1]; if (lt && G.Geo.dist(lt[0], lt[1], s.loc.lon, s.loc.lat) > 0.3) st.trail = [];
       if (!st.pfx) { st.pfx = G.Party.newFx(); st.unit = {}; st.gph = 0; st.gdist = 0; st.gather = 1; st.face = 1; }
     }
@@ -200,6 +202,37 @@
   function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1.15) : null; }
   function cityNear() { var s = S(), l = s.loc, best = null, bd = 0.3; G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c)) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } }); return best; }
   function atBase() { var s = S(), l = s.loc, b = l.base; return G.Geo.dist(l.lon, l.lat, b.lon, b.lat) < (b.type === 'ship' ? 0.45 : 0.3); }
+  function promptWait() { return ((((G.BALANCE || {}).cityEntryPrompt || {}).cooldownMs) || 5000); }
+  function promptClock() { return Date.now(); }
+  function cityPromptCooling(c) { return !!(c && st.cityPromptUntil && promptClock() < (st.cityPromptUntil[c.id] || 0)); }
+  function coolCityPrompt(c) {
+    st.cityPromptUntil = st.cityPromptUntil || {};
+    st.cityPromptUntil[c.id] = promptClock() + promptWait();
+  }
+  /** 탐험대가 도시 곁에 닿으면 성 안으로 들어갈지 묻는다. */
+  async function offerEnterCity(c) {
+    if (!c || st.busy || UI.busy() || cityPromptCooling(c)) return false;
+    st.busy++;
+    var v = null;
+    try {
+      v = await UI.ask(c.name + ' 성문에 도착했습니다. 도시로 들어가시겠습니까?', [
+        { label: '들어간다', value: 1 }, { label: '지나간다', value: 0 }
+      ], G.Scenes.mateSpeaker('first'));
+    } catch (e) { console.error(e); }
+    st.busy--;
+    if (!st.alive || G.Game.scene !== L) return false;
+    if (!v) { coolCityPrompt(c); return false; }
+    return enterCity(c);
+  }
+  function checkCityPrompt() {
+    var c = cityNear();
+    if (!c) { st.cityPromptBlock = null; return; }
+    if (st.cityPromptBlock != null) {
+      if (st.cityPromptBlock === c.id) return;
+      st.cityPromptBlock = null;
+    }
+    if (!cityPromptCooling(c)) offerEnterCity(c);
+  }
 
   // ---------------------------------------------------------------- loop
   L.update = function (dt) {
@@ -246,6 +279,7 @@
       if (Math.abs(zr - 1) < 0.004) { st.cam.zoom = st.cam.zoomT; st.cam.zoomT = 0; }
       else st.cam.zoom *= Math.pow(zr, 1 - Math.exp(-dt * ((G.FX.ship && G.FX.ship.zoomEase) || 12)));
     }
+    if (!st.busy && !UI.busy()) checkCityPrompt();
     st.rframe = (st.rframe || 0) + 1;
     var idle = st.busy > 0 || UI.busy();
     var quake = G.Quake && G.Quake.active();
@@ -292,8 +326,7 @@
   }
   function arrive() {
     var c = cityNear();
-    if (c) UI.toast(c.name + ' 근처에 도착했다. 「도시에 들어간다」를 누르십시오.', 'castle');
-    else if (atBase()) UI.toast(S().loc.base.type === 'ship' ? '배가 기다리는 곳에 돌아왔다.' : '출발한 도시에 돌아왔다.', 'anchor');
+    if (!c && atBase()) UI.toast(S().loc.base.type === 'ship' ? '배가 기다리는 곳에 돌아왔다.' : '출발한 도시에 돌아왔다.', 'anchor');
   }
 
   async function runDay() {
@@ -412,7 +445,7 @@
     if (!v) return;
     var worth;
     if (v === 'gold') { s.player.gold -= cost; worth = 1; }
-    else { var it = trinkets[+v.slice(2)]; s.player.items.splice(s.player.items.indexOf(it), 1); worth = 1.4 + (G.ITEM[it.id].gv || 5) / 25; }
+    else { var it = trinkets[+v.slice(2)]; R.removeItemObject(it); worth = 1.4 + (G.ITEM[it.id].gv || 5) / 25; }
     var pOk = U.clamp(0.72 + R.skill('speech') * 0.06 + (worth - 1) * 0.3, 0, 0.97);
     if (!U.chance(pOk)) { UI.toast('원주민들은 선물만 받고 숲으로 사라졌다.', 'people', 4000); return; }
     // 보급: 탐험대 전원이 며칠 먹고 마실 만큼
@@ -748,14 +781,14 @@
     }
     return false;
   }
-  async function enterCity() {
-    var c = cityNear();
+  async function enterCity(want) {
+    var c = want || cityNear();
     if (!c) { UI.toast('가까운 곳에 도시가 없습니다.', 'castle'); return; }
     var s = S();
     st.busy++;
     var ok = await G.Scenes.city.handleEntry(c);
     st.busy--;
-    if (!ok) return;
+    if (!ok) { coolCityPrompt(c); return false; }
     if (s.known.indexOf(c.id) < 0) s.known.push(c.id);
     s.landReturn = { lon: s.loc.lon, lat: s.loc.lat, base: s.loc.base, party: s.loc.party, days: s.loc.days, mount: MT() };
     var isBaseCity = s.loc.base.type === 'city' && s.loc.base.city === c.id;
@@ -766,6 +799,7 @@
       delete s.landReturn;
     }
     await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true, via: isBaseCity ? 'sea' : 'land' }); });
+    return true;
   }
   /** called from the city gate when the player resumes the expedition */
   L.resumeFromCity = function (c, mount) {

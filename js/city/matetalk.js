@@ -130,7 +130,7 @@
         if (!gifts.length) { UI.toast('선물할 장신구가 없습니다. 시장에서 살 수 있습니다.', 'info'); continue; }
         var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name, right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart', thumb: G.Img.itemSrc(it) }; }), { width: 460 });
         if (gi == null) continue;
-        var it = gifts[gi]; s.player.items.splice(s.player.items.indexOf(it), 1);
+        var it = gifts[gi]; R.removeItemObject(it);
         gainAff(G.ITEM[it.id].gv + R.skill('craft'));
         m.loyal = Math.min(100, (m.loyal || 70) + 2);
         await say(U.pick(['어머, 이걸 저에게요? 소중히 할게요.', '배 위에서 이런 선물을 받을 줄은 몰랐어요. 고마워요.']), 'happy');

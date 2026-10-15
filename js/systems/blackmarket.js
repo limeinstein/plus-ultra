@@ -2,6 +2,7 @@
    회계 단계 = R.skill('acct') — 제독, 부관·경리 자리의 부하, 회계실에 앉은 사람 가운데 가장 높은 것 (0~3)
    · 흥정 성공률: 단계마다 오른다 (js/city/trade.js T.haggleOdds — 바탕 0.25 + 단계 × 0.17)
    · 흥정 횟수: 한 번 들를 때(같은 날) 값을 깎아 볼 수 있는 횟수 tries[단계] (경리가 있으면 +puTry). 거절당할수록 주인이 굳어진다(retryK배씩)
+   · 시장 추가 협상: 값 후려치기에 성공한 뒤 결제할 때 단계만큼 한 번 더 값을 깎아 볼 수 있다 (marketDeals·marketDealChance·marketDealDisc)
    · 무게 제한 완화: 짐을 고르게 나눠 싣고 묶는 요령 — 배가 버티는 무게 × (1 + wt[단계]) (js/systems/cargo.js CG.fleetWtCap)
    · 비밀 암시장: 단계 blackMarket 이상이면 크기 bmSize 이상인 항구의 교역소에 「뒷골목 암시장」이 열린다 —
      시장에 나오지 않는 물건(속사포·잠수 폭탄·아직 나오지 않은 항해 도구·변장 옷), 먼 고장의 밀수품을 웃돈(bmMarkup·bmGoodMarkup)을 얹어 판다.
@@ -23,6 +24,10 @@
   function at(arr, lv, d) { return arr && arr.length ? arr[Math.min(arr.length - 1, lv)] : d; }
   /** 한 번 들를 때 흥정할 수 있는 횟수 */
   AC.tries = function () { return at(K().tries, AC.lv(), 1) + (R.purser() ? (K().puTry == null ? 1 : K().puTry) : 0); };
+  /** 시장에서 값 후려치기 성공 뒤 결제 직전에 할 수 있는 추가 협상 */
+  AC.marketDeals = function () { return at(K().marketDeals, AC.lv(), AC.lv()); };
+  AC.marketDealChance = function () { return at(K().marketDealChance, AC.lv(), AC.lv() ? 0.45 + AC.lv() * 0.1 : 0); };
+  AC.marketDealDisc = function () { return at(K().marketDealDisc, AC.lv(), AC.lv() * 0.02); };
   /** 배가 버티는 무게의 덤 (비율) */
   AC.wtBonus = function () { return at(K().wt, AC.lv(), 0); };
   /** 암시장이 열리는 회계 단계 */
@@ -31,6 +36,7 @@
   AC.perks = function (lv) {
     if (lv == null) lv = AC.lv();
     var out = ['흥정 ' + at(K().tries, lv, 1) + '번'];
+    var md = at(K().marketDeals, lv, lv); if (md) out.push('시장 결제 협상 ' + md + '번');
     var w = at(K().wt, lv, 0); if (w) out.push('버티는 무게 +' + Math.round(w * 100) + '%');
     if (lv >= AC.bmLv()) out.push('비밀 암시장');
     return out.join(' · ');

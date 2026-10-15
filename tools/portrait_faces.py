@@ -14,13 +14,13 @@
     https://github.com/opencv/opencv_zoo/tree/main/models/face_detection_yunet  (face_detection_yunet_2023mar.onnx)
 그림을 새로 넣거나 바꾸면 이 도구를 다시 돌린다. 못 찾은 그림은 목록에서 빠지고, 게임은 리그의 기본 자리를 쓴다.
 """
-import glob, json, os, sys
+import glob, json, os, shutil, sys, tempfile
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 IMG = os.path.join(ROOT, 'images')
 OUT = os.path.join(ROOT, 'js', 'data', 'portraitfaces.js')
-DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/mates', 'portraits/sponsors', 'portraits/street-folk']
+DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/street-folk']
 
 
 def main():
@@ -38,6 +38,11 @@ def main():
         print('얼굴 찾기 모델이 없습니다: ' + model)
         print('https://github.com/opencv/opencv_zoo/tree/main/models/face_detection_yunet 에서 받아 두세요.')
         return 1
+    # OpenCV의 Windows ONNX 읽기는 경로에 한글이 있으면 실패할 수 있다.
+    # 그때도 안정적으로 읽도록 모델을 임시 영문 경로에 복사한다.
+    runtime_model = os.path.join(tempfile.gettempdir(), 'plus_ultra_yunet_2023mar.onnx')
+    if not os.path.exists(runtime_model) or os.path.getsize(runtime_model) != os.path.getsize(model):
+        shutil.copyfile(model, runtime_model)
     R = lambda v: round(float(v), 4)
     out, miss = {}, []
     files = []
@@ -53,7 +58,7 @@ def main():
         img = cv2.cvtColor(np.array(bg.convert('RGB')), cv2.COLOR_RGB2BGR)
         s = 640 / max(W, H)
         sm = cv2.resize(img, (max(1, int(W * s)), max(1, int(H * s))))
-        det = cv2.FaceDetectorYN.create(model, '', (sm.shape[1], sm.shape[0]), 0.5, 0.3, 50)
+        det = cv2.FaceDetectorYN.create(runtime_model, '', (sm.shape[1], sm.shape[0]), 0.5, 0.3, 50)
         _, faces = det.detect(sm)
         if faces is None:
             miss.append(key)

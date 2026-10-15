@@ -38,6 +38,7 @@
       st.lastPort = c.id;
       st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: st.cam ? st.cam.zoom : 110 };
       st.paused = false; st.vel = [0, 0]; st.stopping = false;
+      st.portPromptBlock = c.id;                         // 막 나온 항구를 곧바로 다시 들어갈지 묻지 않는다
       G.State.revealChart(s.loc.lon, s.loc.lat, chartR());
       UI.toast(c.name + '에서 출항했다.', 'sail');
       if (G.Audio) G.Audio.sfx('depart');
@@ -481,6 +482,37 @@
     return best;
   }
   SEA.portNear = portNear;
+  function promptWait() { return ((((G.BALANCE || {}).cityEntryPrompt || {}).cooldownMs) || 5000); }
+  function promptClock() { return Date.now(); }
+  function portPromptCooling(c) { return !!(c && st.portPromptUntil && promptClock() < (st.portPromptUntil[c.id] || 0)); }
+  function coolPortPrompt(c) {
+    st.portPromptUntil = st.portPromptUntil || {};
+    st.portPromptUntil[c.id] = promptClock() + promptWait();
+  }
+  /** 가까운 항구를 새로 만났거나 거절 뒤 5초가 지나면 입항할지 묻는다. */
+  async function offerEnterPort(c) {
+    if (!c || st.busy || UI.busy() || portPromptCooling(c)) return false;
+    st.busy++;
+    var v = null;
+    try {
+      v = await UI.ask(c.name + ' 항구가 가까이 보입니다. 입항하시겠습니까?', [
+        { label: '입항한다', value: 1 }, { label: '지나간다', value: 0 }
+      ], G.Scenes.mateSpeaker('first'));
+    } catch (e) { console.error(e); }
+    st.busy--;
+    if (!st.alive || G.Game.scene !== SEA) return false;
+    if (!v) { coolPortPrompt(c); return false; }
+    return tryEnterPort(c);
+  }
+  function checkPortPrompt() {
+    var c = portNear();
+    if (!c) { st.portPromptBlock = null; return; }
+    if (st.portPromptBlock != null) {
+      if (st.portPromptBlock === c.id) return;
+      st.portPromptBlock = null;
+    }
+    if (!portPromptCooling(c)) offerEnterPort(c);
+  }
   /** 곧 들를 항구의 거리 그림을 미리 받는다 (아티팩트판은 그림 묶음을 처음 쓸 때 받으므로) — 하루에 한 번.
       목적지 항구는 3° 안에서, 지나가는 항구는 1.5° 안에서 */
   function prefetchAhead() {
@@ -502,18 +534,19 @@
     var c = portNear(), s0 = S();
     // 자동항해로 닿은 항구가 있으면 그 항구로 (곁에 더 가까운 다른 항구가 있어도)
     if (want && want.port) { var wd = want.dock || [want.lat, want.lon]; if (G.Geo.dist(s0.loc.lon, s0.loc.lat, wd[1], wd[0]) < 0.8) c = want; }
-    if (!c) { UI.toast('가까운 곳에 들를 수 있는 항구가 없습니다.', 'anchor'); return; }
+    if (!c) { UI.toast('가까운 곳에 들를 수 있는 항구가 없습니다.', 'anchor'); return false; }
     if (G.Disc.prefetchCity) G.Disc.prefetchCity(c.id);
     if (G.Img.prefetchCity) G.Img.prefetchCity(c, 'near');
     st.busy++;
     try {
       var ok = await G.Scenes.city.handleEntry(c);
-      if (!ok) { st.busy--; st.paused = true; refreshBar(); return; }
+      if (!ok) { st.busy--; st.paused = true; coolPortPrompt(c); refreshBar(); return false; }
       if (c.region === 10) s_flags().fromEurope = false;
       st.busy--;
       st.paused = true; st.path = null; st.target = null;
       await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true }); });
-    } catch (e) { console.error(e); st.busy = 0; }
+      return true;
+    } catch (e) { console.error(e); st.busy = 0; return false; }
   }
   SEA.enterPort = tryEnterPort;
   function s_flags() { return S().flags; }
@@ -760,7 +793,7 @@
     var s = S(), l = s.loc;
     st.t += dt;
     var frozen = st.busy > 0 || UI.busy();
-    if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) tryEnterPort(pc); }
+    if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) offerEnterPort(pc); }
     // 멈춘 채 ←→: 배는 나아가지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것) — 시간은 아래에서 ×waitSpeed로 흐른다
     if (!frozen && st.paused && st.manual && turnKey()) { st.turnHeld = (st.turnHeld || 0) + dt; l.heading += turnKey() * 1.4 * dt * turnAbility() * Math.min(1, 0.45 + st.turnHeld * 1.6); }
     st.handSteer = false;
@@ -807,6 +840,7 @@
     updatePose(dt);
     if (G.VoyageFX) G.VoyageFX.step(st, dt, { speed: shipSpeed(), frozen: frozen });   // 가속 물보라·배웅
     if (G.Errand) G.Errand.onSea(l.lon, l.lat);
+    if (!st.busy && !UI.busy()) checkPortPrompt();
     // 돛: 멈추면 활대에 말아 올리고, 나아가면 편다 (약 1초)
     var furlT = (st.paused || st.stopping || shipSpeed() < 0.05) ? 1 : 0;
     st.furl = (st.furl || 0) + (furlT - (st.furl || 0)) * ease(dt, 1.6);

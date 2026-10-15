@@ -93,7 +93,7 @@
     (s.flags.sneakFail = s.flags.sneakFail || {})[c.id] = s.day;
     if (ch.dz && U().chance(num(b.confiscate, 0.5))) {
       var i = -1; s.player.items.forEach(function (it, k) { if (i < 0 && it.id === ch.dz) i = k; });
-      if (i >= 0) { s.player.items.splice(i, 1); return G.ITEM[ch.dz].name; }
+      if (i >= 0) { R.removeItem(ch.dz); return G.ITEM[ch.dz].name; }
     }
     return null;
   };

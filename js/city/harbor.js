@@ -440,32 +440,80 @@
   };
 
   // ---------------------------------------------------------------- announce
+  /** 발표할 발견을 체크해서 고른다. 「전부 발표」는 현재 목록 전체를 바로 돌려준다. */
+  H.pickAnnouncements = function (list) {
+    var rows = list.map(function (d) {
+      var pf = G.Disc.proofItems(d.id).filter(function (it) { return !it.evidence; });
+      return '<label class="choice" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">' +
+        '<input type="checkbox" data-disc="' + U.esc(d.id) + '" style="margin-top:6px;transform:scale(1.2)">' +
+        '<span style="flex:1"><b>' + U.esc(d.name) + '</b>' +
+        (G.Disc.isLate(d.id) ? ' <span class="tag">늦은 발표 · 명성 절반</span>' : '') +
+        (G.Disc.needsProof(d) && !G.Disc.hasProof(d.id) ? ' <span class="tag">증거 없음</span>' : '') +
+        (S().contract && S().contract.disc === d.id ? ' <span class="tag">후원자 계약</span>' : '') +
+        '<small class="muted" style="display:block">' + U.esc(G.DISC_CATS[d.cat] + ' · ' + d.desc) +
+        (pf.length ? ' · 유물: ' + pf.map(function (it) { return R.itemName(it); }).join(', ') : '') + '</small></span></label>';
+    }).join('');
+    var picked = [];
+    var win = UI.window({ title: '발표할 발견물 — 복수 선택', icon: 'flag', width: 760,
+      html: '<div class="muted" style="margin-bottom:10px">여러 발견을 골라 한꺼번에 발표할 수 있습니다. 후원자 계약이 든 발견은 계약이 깨집니다.</div>' +
+        '<div style="margin-bottom:10px"><button class="btn small all-toggle">모두 선택 / 해제</button> <span class="pick-count muted">0건 선택</span></div>' +
+        '<div style="max-height:52vh;overflow:auto">' + rows + '</div>',
+      buttons: [{ label: '취소', value: null }, { label: '선택한 발견 발표', value: 'selected', cls: 'navy', onClick: function () {
+        picked = Array.prototype.slice.call(win.content.querySelectorAll('input[data-disc]:checked')).map(function (x) { return x.getAttribute('data-disc'); });
+        if (!picked.length) { UI.toast('발표할 발견을 하나 이상 고르십시오.', 'flag'); return false; }
+      } }, { label: '전부 발표', value: 'all', icon: 'flag' }]
+    });
+    function update() { var n = win.content.querySelectorAll('input[data-disc]:checked').length; win.content.querySelector('.pick-count').textContent = n + '건 선택'; }
+    Array.prototype.forEach.call(win.content.querySelectorAll('input[data-disc]'), function (x) { x.onchange = update; });
+    win.content.querySelector('.all-toggle').onclick = function () {
+      var xs = Array.prototype.slice.call(win.content.querySelectorAll('input[data-disc]')), all = xs.every(function (x) { return x.checked; });
+      xs.forEach(function (x) { x.checked = !all; }); update();
+    };
+    return win.result.then(function (v) { return v === 'all' ? list.map(function (d) { return d.id; }) : v === 'selected' ? picked : null; });
+  };
+
+  /** 선택한 발견들을 발표한다. 단건은 기존 발표 연출을, 복수는 한 장의 결과 요약을 쓴다. */
+  H.announceSelected = async function (c, ids) {
+    var s = S(), many = ids.length > 1;
+    if (!ids.length) return { count: 0, fame: 0 };
+    var contracted = s.contract && ids.indexOf(s.contract.disc) >= 0;
+    if (contracted && !(await UI.confirm('고른 발견 가운데 후원자와 계약한 발견이 있습니다. 함께 발표하면 그 계약은 실패로 처리됩니다. 그래도 발표하겠습니까?'))) return { count: 0, fame: 0, canceled: true };
+    var broke = contracted ? G.SPONSOR[s.contract.sponsor] : null, total = 0, kept = [], noProof = [], late = [], big = null;
+    for (var i = 0; i < ids.length; i++) {
+      var id = ids[i], d = G.DISC[id];
+      if (!d || G.Disc.unreported().indexOf(d) < 0) continue;
+      var pitch = !many && G.Pitch ? await G.Pitch.run({ d: d, sp: null, mode: 'announce', city: c }) : null;
+      var fame = G.Disc.announce(id, pitch ? pitch.fk : 1), la = G.Disc.lastAnnounce || {};
+      if (pitch) await pitch.close();
+      total += fame;
+      if (G.Disc.isLate(id)) late.push(d.name);
+      if (la.noProof) noProof.push(d.name);
+      if (la.kept && la.kept.length) kept = kept.concat(la.kept);
+      if (!big && G.Fest && G.Fest.big(d) && !G.Disc.isLate(id)) big = d;
+      if (G.Names) await G.Names.onReport(d);
+    }
+    if (broke) await G.Sponsor.breakContract(broke, 'announce');
+    else if (contracted && s.contract) s.contract = null;
+    if (many) {
+      await UI.alert('<b>' + ids.length + '건</b>의 발견을 한꺼번에 발표했다!<br>명성 +<b>' + total + '</b>' +
+        (late.length ? '<br><span class="muted">늦은 발표: ' + late.map(U.esc).join(', ') + '</span>' : '') +
+        (noProof.length ? '<br><span class="muted">증거가 없어 명성이 줄어든 발견: ' + noProof.map(U.esc).join(', ') + '</span>' : '') +
+        (kept.length ? '<br><br>발표한 유물 ' + kept.map(function (it) { return '<b>' + U.esc(R.itemName(it)) + '</b>'; }).join(', ') + U.jx(R.itemName(kept[kept.length - 1]), '은/는') + ' 이제 제독의 것이다.' : ''), '일괄 발표');
+    } else {
+      var only = G.DISC[ids[0]], last = G.Disc.lastAnnounce || {};
+      await UI.alert('「' + only.name + '」의 발견을 발표했다!<br>명성 +' + total + (G.Disc.isLate(only.id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤라 명성은 절반</span>' : '') +
+        (last.noProof ? '<br><span class="muted">증거를 보이지 못해 사람들이 반신반의한다 (명성 8할)</span>' : '') +
+        (last.kept && last.kept.length ? '<br><br>' + last.kept.map(function (it) { return '<b>' + U.esc(R.itemName(it)) + '</b>'; }).join(', ') + U.jx(R.itemName(last.kept[last.kept.length - 1]), '은/는') + ' 이제 제독의 것이다.<br><span class="muted">시장에 팔아 자금을 마련하거나, 장비하고 선물할 수 있다.</span>' : ''), '발표');
+    }
+    if (big) await G.Fest.begin(c.id, big);
+    return { count: ids.length, fame: total, kept: kept.length };
+  };
+
   H.announce = async function (c) {
     var list = G.Disc.unreported();
     if (!list.length) { await C.mate('발표할 발견이 없습니다. 후원자와 계약한 발견은 후원자에게 보고하십시오.'); return; }
-    var s = S();
-    var opts = list.map(function (d) {
-      var pf = G.Disc.proofItems(d.id).filter(function (it) { return !it.evidence; });
-      return { label: d.name + (G.Disc.isLate(d.id) ? ' <span class="tag">늦은 발표 · 명성 절반</span>' : '') + (G.Disc.needsProof(d) && !G.Disc.hasProof(d.id) ? ' <span class="tag">증거 없음</span>' : ''),
-        right: G.DISC_CATS[d.cat], value: d.id, desc: d.desc + (pf.length ? ' — 유물: ' + pf.map(function (it) { return R.itemName(it); }).join(', ') + ' (발표하면 제독의 것)' : '') };
-    });
-    var id = await UI.choose('발표할 발견물', opts, { width: 660, text: '후원자 없이 발견을 세상에 발표하면 명성을 얻고, 그 자리에서 가져온 유물은 제독의 것이 됩니다(시장에 팔 수 있다). 후원자에게 보고하면 사례금을 받는 대신 유물을 바칩니다.' });
-    if (id == null) return;
-    if (s.contract && s.contract.disc === id && !(await UI.confirm('이것은 후원자와 계약한 발견입니다. 그래도 발표하겠습니까? 계약은 실패로 처리됩니다.'))) return;
-    var broke = s.contract && s.contract.disc === id ? G.SPONSOR[s.contract.sponsor] : null;
-    // 발견물 그림을 다시 띄우고 모인 사람들 앞에서 내놓는다 — 부하들이 값어치를 띄우면 명성이 더 오른다 (js/systems/pitch.js)
-    var pitch = G.Pitch ? await G.Pitch.run({ d: G.DISC[id], sp: null, mode: 'announce', city: c }) : null;
-    var fame = G.Disc.announce(id, pitch ? pitch.fk : 1);
-    if (pitch) await pitch.close();
-    // 계약한 발견을 스스로 발표하면 계약은 깨진다 — 선금을 돌려주고, 후원자에게 보고해 사례금을 또 받을 수는 없다
-    if (broke) await G.Sponsor.breakContract(broke, 'announce');
-    else if (s.contract && s.contract.disc === id) s.contract = null;
-    var la = G.Disc.lastAnnounce || {};
-    await UI.alert('「' + G.DISC[id].name + '」의 발견을 발표했다!<br>명성 +' + fame + (G.Disc.isLate(id) ? '<br><span class="muted">경쟁자가 먼저 발표한 뒤라 명성은 절반</span>' : '') +
-      (la.noProof ? '<br><span class="muted">증거를 보이지 못해 사람들이 반신반의한다 (명성 8할)</span>' : '') +
-      (la.kept && la.kept.length ? '<br><br>' + la.kept.map(function (it) { return '<b>' + U.esc(R.itemName(it)) + '</b>'; }).join(', ') + U.jx(R.itemName(la.kept[la.kept.length - 1]), '은/는') + ' 이제 제독의 것이다.<br><span class="muted">시장에 팔아 자금을 마련하거나, 장비하고 선물할 수 있다.</span>' : ''), '발표');
-    if (G.Names) await G.Names.onReport(G.DISC[id]);
-    // 큰 발견이면 이 도시가 귀환 잔치를 벌인다 (js/systems/festival.js) — 늦은 발표는 조용히
-    if (G.Fest && !G.Disc.isLate(id)) await G.Fest.begin(c.id, G.DISC[id]);
+    var ids = list.length === 1 ? [list[0].id] : await H.pickAnnouncements(list);
+    if (!ids || !ids.length) return;
+    await H.announceSelected(c, ids);
   };
 })(window.G = window.G || {});

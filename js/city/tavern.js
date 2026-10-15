@@ -158,6 +158,16 @@
     if (G.Folk && await G.Folk.tavern(c, master())) { cur.chatted = true; return; }   // 부족 마을: 이 고장 사람들의 노래·춤
     if (G.Animals && await G.Animals.tavern(c, master())) cur.chatted = true;
   };
+  /** 한턱을 받은 고용 부하들은 모두 제독에게 고마움을 느낀다. */
+  T.treatLoyalty = function () {
+    var s = S(), k = (G.BALANCE && G.BALANCE.mates) || {}, gain = k.treatLoyal == null ? 3 : k.treatLoyal, raised = 0;
+    (s.mates || []).forEach(function (m) {
+      var before = m.loyal == null ? 70 : m.loyal;
+      m.loyal = Math.min(100, before + gain);
+      if (m.loyal > before) raised++;
+    });
+    return { gain: gain, raised: raised };
+  };
   T.treat = async function (c) {
     var s = S(), cost = Math.max(20, Math.round(s.fleet.crew * (1.5 + c.size * 0.5)));
     var ok = await UI.confirm('선원과 손님들에게 한턱 내면 금화 ' + U.num(cost) + '닢이 듭니다. 한턱 내겠습니까?', '한턱 낸다', '그만둔다');
@@ -170,8 +180,9 @@
     await C.mate(U.pick(['역시 제독! 그럼 사양하지 않겠습니다.', '제독 만세! 모두 잔을 들어라!']));
     s.fleet.discipline = Math.min(100, s.fleet.discipline + 12);
     s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 15);
+    var loyal = T.treatLoyalty();
     G.Fame.add('so', 1);
-    UI.toast('선원들의 사기가 올랐다. (규율 +12)', 'mug');
+    UI.toast('선원들의 사기가 올랐다. (규율 +12' + (loyal.raised ? ' · 부하 충성 +' + loyal.gain : '') + ')', 'mug');
     C.current().looked = false;
     if (U.chance(0.6)) await T.encounter(c, true);
   };
@@ -792,7 +803,7 @@
         if (!gifts.length) { UI.toast('선물할 장신구가 없습니다. 시장에서 살 수 있습니다.' + (s.player.items.some(function (it) { return G.ITEM[it.id] && G.ITEM[it.id].kind === 'gift' && R.isProof(it); }) ? ' (발견의 증거인 장신구는 보고·발표한 뒤에 선물할 수 있습니다)' : ''), 'info'); continue; }
         var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name + (G.RELIC && G.RELIC[it.id] ? ' <span class="tag">유물</span>' : ''), right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart', thumb: G.Img.itemSrc(it) }; }), { width: 460 });
         if (gi == null) continue;
-        var it = gifts[gi]; s.player.items.splice(s.player.items.indexOf(it), 1);
+        var it = gifts[gi]; R.removeItemObject(it);
         st.aff = Math.min(100, st.aff + G.ITEM[it.id].gv + likeBonus(like) + R.skill('craft'));
         await say(U.pick(['어머, 이렇게 고운 걸 저에게요? 정말 고마워요!', '예뻐라! 소중히 간직할게요.']), 'happy');
       } else if (v === 'wed') {
