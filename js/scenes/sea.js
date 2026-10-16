@@ -1325,6 +1325,7 @@
       await G.Explore.milestones(l.lon, l.lat, st.prevLat);
       st.prevLat = l.lat;
       // 보급 경고 (목적지까지 모자라면 한 번 알린다)
+      trackProgress();
       supplyWarn();
       prefetchAhead();
       // discoveries at sea
@@ -1622,22 +1623,55 @@
     if ((st.frame2 = (st.frame2 || 0) + 1) % 6 === 0) { drawWind(); refreshButtons(); }
     if (st.lastMini < 0) drawMini();
   }
-  /** 경로가 있으면 남은 거리(°)와 지금 속력으로 걸릴 날 */
-  function etaDays() {
+  /** 경로가 남은 거리(°) */
+  function pathLeft() {
     if (!st.path || !st.path.length) return null;
     var s = S(), l = s.loc, d = 0, x = l.lon, y = l.lat;
     for (var i = st.pathI || 0; i < st.path.length; i++) { var q = st.path[i]; d += Math.hypot(G.Geo.wrapLon(q[0] - x), q[1] - y); x = q[0]; y = q[1]; }
-    var v = Math.max(0.15, R.fleetSpeed(st.crs != null && !st.manual ? st.crs : l.heading, curWind()));
-    return Math.max(1, Math.ceil(d / v));
+    return d;
+  }
+  /* 걸릴 날 어림 (QA 2026-10-17): 예전에는 「지금 이 바람」의 속력만 보았다 — 아르킨→리스본처럼 무역풍을 거슬러 오르는 날에는
+     맞바람 속력으로 남은 길 전체를 나눠 실제(30~40일)의 두세 배(80일 남짓)로 어림해, 100일치를 싣고도 「식량이 떨어집니다」가 거듭 떴다.
+     이제는 ① 지금 바람 ② 바람이 고르게 바뀔 때의 보통 속력(8방향 평균, 하루에 한 번 셈) ③ 이 길에서 실제로 하루에 나아간 거리 를 함께 본다. */
+  function typicalSpeed(ang) {
+    var s = S(), key = s.day + ':' + Math.round(ang * 8 / Math.PI);
+    if (st.typV && st.typV.key === key) return st.typV.v;
+    var spd = Math.max(0.35, (st.wind && st.wind.spd) || 0.55), sum = 0;
+    for (var i = 0; i < 8; i++) sum += R.fleetSpeed(ang, { dir: i / 8 * Math.PI * 2, spd: spd });
+    st.typV = { key: key, v: sum / 8 };
+    return st.typV.v;
+  }
+  /** 날마다: 이 뱃길에서 하루에 실제로 줄어든 거리 (최근 날들의 평균) */
+  function trackProgress() {
+    var d = pathLeft(), o = st.etaObs;
+    if (d == null) { st.etaObs = null; return; }
+    if (!o || o.path !== st.path) { st.etaObs = { path: st.path, last: d, v: null, n: 0 }; return; }
+    var got = o.last - d; o.last = d;
+    if (st.paused || got < 0) return;                                  // 멈춰 선 날·되돌아간 날은 치지 않는다
+    o.v = o.v == null ? got : o.v * 0.7 + got * 0.3; o.n++;
+  }
+  function etaDays() {
+    var d = pathLeft(); if (d == null) return null;
+    var l = S().loc, ang = st.crs != null && !st.manual ? st.crs : l.heading;
+    var vt = typicalSpeed(ang) * 0.85, v = Math.max(R.fleetSpeed(ang, curWind()), vt);   // 지금 바람으로 마지막에 셈해 R.fleetInfo(맞바람 표시 등)를 그대로 둔다
+    var o = st.etaObs;
+    if (o && o.path === st.path && o.n >= 2 && o.v > 0) v = (v + o.v) / 2;   // 실제로 나아간 만큼도 반영
+    return Math.max(1, Math.ceil(d / Math.max(0.15, v)));
   }
   SEA.eta = etaDays;
+  /* 보급 경고: 한 번 알린 뒤에는 열흘이 지나 모자라는 날이 더 벌어졌거나, 갑자기 크게(15일) 벌어졌을 때만 다시
+     (같은 곳을 다시 눌러 길을 새로 잡아도, 쥐가 조금 먹어도 거듭 뜨지 않게) */
   function supplyWarn() {
     var eta = etaDays(); if (eta == null) return;
-    var have = Math.min(R.daysOfFood(), R.daysOfWater());
-    if (have < Math.ceil(eta * 1.1) + 2 && !st.warnedFor) {      // 가는 동안 지쳐 느려질 것까지 넉넉히 본다
-      st.warnedFor = st.target ? (st.target.city ? st.target.city.id : 'pt') : 'pt';
-      UI.say('제독, 이대로라면 목적지에 닿기 전에 식량과 물이 떨어집니다! (남은 ' + have + '일분 · 가는 데 약 ' + eta + '일)\n가까운 항구에 들러 보급하는 게 좋겠습니다.', G.Scenes.mateSpeaker('first'));
-    }
+    var food = R.daysOfFood(), water = R.daysOfWater(), have = Math.min(food, water);
+    var gap = Math.ceil(eta * 1.1) + 2 - have;                         // 가는 동안 지쳐 느려질 것까지 넉넉히 본다
+    if (gap <= 0) return;
+    var key = st.target ? (st.target.city ? 'c' + st.target.city.id : Math.round(st.target.lon) + ',' + Math.round(st.target.lat)) : 'pt', w = st.warned;
+    var day = S().day;
+    if (w && w.key === key && !((day - w.day >= 10 && gap >= w.gap + 3) || gap >= w.gap + 15)) return;
+    st.warned = { key: key, gap: gap, day: day };
+    var what = food < water - 2 ? '식량이' : water < food - 2 ? '물이' : '식량과 물이';
+    UI.say('제독, 이대로라면 목적지에 닿기 전에 ' + what + ' 떨어질 수 있습니다! (식량 ' + food + '일분 · 물 ' + water + '일분 · 가는 데 약 ' + eta + '일)\n가까운 항구에 들러 보급하는 게 좋겠습니다.', G.Scenes.mateSpeaker('first'));
   }
   function refreshButtons() {
     var pn = portNear();
