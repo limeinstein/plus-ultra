@@ -419,7 +419,7 @@
     plains: 'woodland', pueblo: 'woodland', woodland: 'tropic', kraal: 'masai', tent: 'africa' };
   I.extStyle = function (c) { return (c && I.EXT_BY_CITY[c.id]) || (c && I.EXT_BY_STYLE[c.style]) || null; };
   I.CULTURES = [['europe', '유럽'], ['islam', '이슬람권'], ['eastasia', '동아시아'], ['south', '인도·동남아시아'], ['native', '아프리카·아메리카 토착']];
-  I.INTERIORS = [['harbor', '항구'], ['trade', '교역소'], ['shipyard', '조선소'], ['tavern', '술집'], ['inn', '여관'], ['market', '시장'], ['church', '교회·사원'], ['library', '도서관'], ['palace', '왕궁'], ['mansion', '저택'], ['guild', '조합'], ['gate', '성문'], ['home', '자택']];
+  I.INTERIORS = [['harbor', '항구'], ['trade', '교역소'], ['shipyard', '조선소'], ['tavern', '술집'], ['restaurant', '식당'], ['inn', '여관'], ['market', '시장'], ['church', '교회·사원'], ['library', '도서관'], ['museum', '박물관'], ['gallery', '미술관'], ['zoo', '동물원'], ['palace', '왕궁'], ['mansion', '저택'], ['guild', '조합'], ['gate', '성문'], ['home', '자택']];
   I.NPCS = [['trader', '교역소 주인'], ['vendor', '시장 상인'], ['harbormaster', '항구 관리인'], ['innkeeper', '여관 안주인'], ['tavernkeeper', '술집 주인'],
     ['shipwright', '조선소 목수'], ['priest', '성직자(신부·이맘·승려)'], ['librarian', '도서관 사서'], ['guildmaster', '조합장'], ['guard', '위병·수위·수비병'],
     ['butler', '저택 집사'], ['drunk', '술 취한 선원'], ['brawler', '거친 사내'], ['gambler', '포카 상대'], ['native', '원주민'], ['pirate', '해적 두목'],

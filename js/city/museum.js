@@ -1,4 +1,4 @@
-/* 왕립 박물관·왕립 동물원 — 왕명 「박물관 건립」·「동물원 건설」을 마치면 그 군주의 도시에 선다 (규칙: js/systems/court.js).
+/* 왕립 박물관·왕립 미술관·왕립 동물원 — 해당 건립 왕명을 마치면 유럽 군주의 도시에 선다 (규칙: js/systems/court.js).
    들어가면 제독이 바친 발견 유물·명작(박물관)이나 신기한 동물(동물원)을 그림과 함께 볼 수 있다.
    건물 그림: exteriors/museum·zoo, interiors/museum·zoo가 있으면 그것, 없으면 도서관·저택 그림을 빌린다. */
 (function (G) {
@@ -39,6 +39,27 @@
         meta: x.mw ? (x.wk === 'sculpt' ? '조각' : '그림') + ' · ' + who + (x.y ? ' · ' + x.y + '년' : '') : '발견 유물' + (d ? ' · ' + d.name : ''), desc: x.desc };
     });
     return gallery(MU.title(c, arg), rec.y + '년, ' + U.esc(S().player.name) + ' 제독이 바친 ' + rec.items.length + '점으로 문을 열었다.', cards);
+  };
+
+  // ================================================================ 왕립 미술관
+  var GA = { title: function (c, arg) { return realmName(arg) ? realmName(arg) + ' 왕립 미술관' : '왕립 미술관'; }, icon: 'palette',
+    paint: function () { return G.Img && G.Img.has('interiors/gallery') ? 'gallery' : 'library'; } };
+  C.B.gallery = GA;
+  GA.enter = async function (c, arg) {
+    var rec = recOf('gallery', c, arg), p = S().player;
+    await C.say(curator(c, 'gallery'), rec ? '어서 오십시오, ' + p.name + ' 제독. 제독께서 바치신 명작들이 이 미술관의 첫 전시가 되었습니다.' : '어서 오십시오.');
+  };
+  GA.menu = function (c, arg) {
+    return [{ label: '작품 전시실을 둘러본다', icon: 'palette', onClick: function () { return GA.show(c, arg); } }];
+  };
+  GA.show = function (c, arg) {
+    var rec = recOf('gallery', c, arg); if (!rec) return Promise.resolve();
+    var cards = rec.items.map(function (x) {
+      var who = G.MATE[x.by] ? G.MATE[x.by].name : '';
+      return { src: G.Court.exhibitSrc(x), frame: x.wk !== 'sculpt', icon: x.wk === 'sculpt' ? 'bust' : 'palette', name: x.name,
+        meta: (x.wk === 'sculpt' ? '조각' : '그림') + ' · ' + who + (x.y ? ' · ' + x.y + '년' : ''), desc: x.desc };
+    });
+    return gallery(GA.title(c, arg), rec.y + '년, ' + U.esc(S().player.name) + ' 제독이 바친 명작 ' + rec.items.length + '점으로 문을 열었다.', cards);
   };
 
   // ================================================================ 왕립 동물원

@@ -410,7 +410,10 @@
         u.act = 'attack'; u.actT = 0;
         if (reach === 'one') {
           var t = ts[0]; u.lunge = 42; fx.push({ kind: 'clash', x: (u.x + t.x) / 2 + (me ? 30 : -30), y: t.y - 20, seed: U.rand() * 6, t: 0, life: 0.45 });
-          if (G.Audio) G.Audio.sfx('sword');
+          if (G.Audio) {
+            if (look === 'cav') { G.Audio.sfx('horse'); setTimeout(function () { if (G.Audio) G.Audio.sfx('sword'); }, 95); }
+            else G.Audio.sfx('sword');
+          }
           await sleep(140);
           var n = kills(u, pow, 1, t);
           if (trapOn && !me) { trapOn = false; fx.push({ kind: 'spike', x: u.x, y: u.y, t: 0, life: 1.2 }); var tk = Math.max(1, Math.round(u.n * Math.min(0.9, U.rf(0.25, 0.4) * STAFF_DMG))); hurt(u, tk, true); say(u.name + U.jx(u.name, '이/가') + ' 함정에 걸렸다! (' + tk + ' 쓰러짐)'); return; }
@@ -424,7 +427,10 @@
             else { for (var m = 0; m < 3; m++) { fx.push({ kind: 'flash', x: u.x + (me ? 22 : -22) + (m - 1) * 16, y: u.y - 22, t: 0, life: 0.18 }); fx.push({ kind: 'smoke', x: u.x + (me ? 26 : -26) + (m - 1) * 16, y: u.y - 22, d: me ? 1 : -1, t: 0, life: 1.4 }); } fx.push({ kind: 'shot', x0: u.x, y0: u.y - 22, x1: t.x, y1: t.y - 18, t: 0, life: 0.25 }); }
             t._k = kk;
           });
-          if (G.Audio) G.Audio.sfx(look === 'art' || look === 'cannon' ? 'cannon' : 'cannon');
+          if (G.Audio) {
+            if (look === 'art' || look === 'cannon') G.Audio.sfx('cannon');
+            else if (look === 'gun' || look === 'musket') G.Audio.sfx('gun');
+          }
           await sleep(look === 'art' || look === 'cannon' ? 620 : look === 'bow' ? 520 : 200);
           ts.forEach(function (t) { if (look === 'art' || look === 'cannon') fx.push({ kind: 'boom', x: t.x, y: t.y - 10, t: 0, life: 0.7 }); hurt(t, kills(u, pow, k * t._k, t), look === 'art' || look === 'cannon'); });
         }

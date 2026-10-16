@@ -87,6 +87,7 @@
     out.push({ kind: 'trade', name: '교역소', icon: 'scales' });
     if (f.shipyard) out.push({ kind: 'shipyard', name: '조선소', icon: 'hammer' });
     out.push({ kind: 'tavern', name: '술집', icon: 'mug' });
+    if (!G.CUISINE || !G.CUISINE.hasRestaurant || G.CUISINE.hasRestaurant(c)) out.push({ kind: 'restaurant', name: '식당', icon: 'bread' });   // 식당은 중도시 이상·이름난 음식이 있는 도시에만 (js/data/cuisine_place.js)
     out.push({ kind: 'inn', name: '여관', icon: 'bed' });
     if (f.market) out.push({ kind: 'market', name: '시장', icon: 'sack' });
     if (f.church) out.push({ kind: 'church', name: R.churchName(c), icon: c.rel === 'I' ? 'mosque' : c.rel === 'C' || c.rel === 'O' ? 'church' : 'temple' });
@@ -102,7 +103,10 @@
       out.push({ kind: 'mansion', arg: sid, name: C.mansionName(sp), icon: 'mansion' });
     });
     if (f.guild) out.push({ kind: 'guild', name: '조합', icon: 'seal' });
-    if (G.Court && G.Court.buildingsAt) G.Court.buildingsAt(c.id).forEach(function (x) { out.push({ kind: x.kind, arg: x.realm, name: x.kind === 'museum' ? '왕립 박물관' : '왕립 동물원', icon: x.kind === 'museum' ? 'bust' : 'horse' }); });   // 왕명으로 세운 박물관·동물원 (js/city/museum.js)
+    if (G.Court && G.Court.buildingsAt) G.Court.buildingsAt(c.id).forEach(function (x) {
+      var info = x.kind === 'museum' ? ['왕립 박물관', 'bust'] : x.kind === 'gallery' ? ['왕립 미술관', 'palette'] : ['왕립 동물원', 'horse'];
+      out.push({ kind: x.kind, arg: x.realm, name: info[0], icon: info[1] });
+    });   // 유럽 궁정의 왕명으로 세운 박물관·미술관·동물원 (js/city/museum.js)
     out.push({ kind: 'gate', name: '성문', icon: 'gate' });
     if (c.id === (R.seat ? R.seat() : s.player.home)) out.push({ kind: 'home', name: '자택', icon: 'house' });   // 가족이 개척 도시의 총독 관저로 옮겼으면 고향 집은 비어 있다
     return out;
@@ -420,6 +424,8 @@
     var c = C.city(); if (!c) return;
     busy = true;
     try {
+      // 고양이·개는 누른 순간 작게 운다. 다가간 뒤 대화창이 열릴 때까지 기다리지 않는다.
+      if (f.animal && G.Audio && (f.type === 'cat' || f.type === 'dog')) G.Audio.sfx(f.type);
       f.state = 'talk';
       if (G.Town.active() && !G.Town.hidden() && G.Town.approach) await G.Town.approach(f);
       await G.StreetFolk.talk(f, c);

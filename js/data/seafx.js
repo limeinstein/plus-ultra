@@ -5,6 +5,8 @@
 (function (G) {
   'use strict';
   G.FX = {
+    // 합성 효과음 크기 (js/systems/audio.js). 거리의 짐승 소리는 다른 효과음보다 작게 들린다.
+    audio: { pet: { cat: 0.042, dog: 0.05 } },
     // 자택 장면 그림 (js/art/homeart.js): 그림 크기와 화면 위에서의 자리 (무대 1600×900)
     homeArt: { w: 900, h: 520, top: 78 },
     famScene: { w: 1008, top: 74 },

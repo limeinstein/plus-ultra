@@ -160,6 +160,11 @@ def game_data():
     d['styles'] = pairs(imgjs, 'STYLES')
     d['maidstyles'] = pairs(imgjs, 'MAIDSTYLES')
     d['extstyles'] = pairs(imgjs, 'EXTSTYLES')
+    cuisine_path = os.path.join(ROOT, 'js/data/cuisine.js')
+    d['foods'] = []
+    if os.path.exists(cuisine_path):
+        cuisine = read('js/data/cuisine.js')
+        d['foods'] = [{'id': x[0], 'name': x[1]} for x in re.findall(r"\['([^']+)', '([^']+)', '[^']+', \d\]", cuisine)]
     return d
 
 
@@ -177,6 +182,21 @@ def valid_keys(d):
     for suit in ('spades', 'hearts', 'diamonds', 'clubs'):
         for rank in ('j', 'q', 'k'):
             k['minigames/cards/%s-%s' % (rank, suit)] = '포카 역사 인물 카드 · %s-%s' % (rank.upper(), suit)
+    for food in d.get('foods', []):
+        k['foods/' + food['id']] = '식당 음식 · ' + food['name']
+    # 실존 예술가별 가상 명작. masterworks.js의 paint/sculpt 갈래마다 3점씩 둔다.
+    masterworks = read('js/data/masterworks.js')
+    masterworks = masterworks.split('G.MASTERWORKS = {', 1)[1].split('G.MASTERWORKS_GENERIC', 1)[0]
+    artist = None
+    for line in masterworks.splitlines():
+        found = re.match(r'^    ([a-zA-Z0-9_]+):\s*\{', line)
+        if found:
+            artist = found.group(1)
+        if artist:
+            for kind in re.findall(r'\b(paint|sculpt)\s*:', line):
+                for n in range(3):
+                    key = 'masterworks/%s_%s%d' % (artist, kind, n)
+                    k[key] = '가상 명작 · %s %s %d' % (artist, kind, n + 1)
     cn = {c['id']: c['name'] for c in d['cities']}
     # 거리 배경 (항구/내륙, 변형은 뒤에 _a, _b … 를 붙인다)
     for c in d['cities']:

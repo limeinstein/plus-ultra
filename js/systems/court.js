@@ -10,7 +10,7 @@
      작위는 가문의 것이라 제독의 뒤를 이은 자녀에게 그대로 이어진다.
    ■ 2026-10-16 왕명은 모든 종류 가운데 무작위로 셋(choices)이 나오고, 그 가운데 하나를 맡는다. 새 왕명 「박물관 건립」 — 발견 유물이나 명작(화실·조각실)을 셋 바친다.
      동물원·박물관 왕명을 마치면 그 군주의 도시에 왕립 동물원·왕립 박물관이 서고, 거기 들어가면 제독이 바친 동물·유물·명작을 볼 수 있다 (js/city/museum.js).
-   ■ 저장: s.court = {titles:{나라:칸}, task, offers, called, herald, seen, wait, zoo, zooUsed, zooAt:{나라:{city, y, ids}}, museum:{나라:{city, y, items}}, done} — 없으면 빈 것으로 본다(옛 저장 그대로 열림) */
+   ■ 저장: s.court = {titles:{나라:칸}, task, offers, called, herald, seen, wait, zoo, zooUsed, zooAt:{나라:{city, y, ids}}, museum:{나라:{city, y, items}}, gallery:{나라:{city, y, items}}, done} — 없으면 빈 것으로 본다(옛 저장 그대로 열림) */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -22,7 +22,7 @@
   function st() {
     var s = S(); if (!s.court) s.court = {};
     var c = s.court;
-    ['titles', 'offers', 'called', 'herald', 'seen', 'wait', 'zoo', 'zooUsed', 'zooAt', 'museum'].forEach(function (k) { if (!c[k]) c[k] = {}; });
+    ['titles', 'offers', 'called', 'herald', 'seen', 'wait', 'zoo', 'zooUsed', 'zooAt', 'museum', 'gallery'].forEach(function (k) { if (!c[k]) c[k] = {}; });
     return c;
   }
   CT.state = st;
@@ -169,6 +169,9 @@
     });
   }
   CT.museumItems = museumItems;
+  /** 미술관에는 화실·조각실에서 나온 명작만 바친다. */
+  function galleryItems() { return museumItems().filter(function (it) { return !!it.mw; }); }
+  CT.galleryItems = galleryItems;
   function supplyGoods(sp, n) {
     var here = G.CITY_DATA[sp.city], best = {};
     G.CITY_DATA.forEach(function (c) {
@@ -188,6 +191,8 @@
     var b = B(), K = G.COURT.kinds[kind], home = CT.isHome(realm), s = S();
     var t = { kind: kind, cat: K.cat, fame: b.fame[0] + b.fame[1] * (n + 1), gold: b.gold[0] + b.gold[1] * (n + 1) };
     function pick(a) { return a[Math.floor(rng() * a.length)]; }
+    // 왕립 박물관·동물원·미술관 건립은 유럽 궁정에서만 내리는 왕명이다.
+    if ((kind === 'zoo' || kind === 'museum' || kind === 'gallery') && realm.kind !== 'eu') return null;
     if (kind === 'geo') {
       t.cats = ['geo', 'nature']; t.n = lin(b.geoN, n);
       if (discCands(t.cats).length < t.n + 1) return null;
@@ -210,6 +215,12 @@
       t.n = b.museumN || 3;
       t.title = '왕립 박물관에 둘 발견 유물이나 명작 ' + t.n + '점을 바친다';
       t.desc = '소지품의 발견 유물(발견한 자리에서 손에 넣은 보물·장신구·서적 등 — 증거품은 빼고)이나, 함께 탄 화가·조각가가 바친 명작을 ' + t.n + '점 골라 바친다. 다 바치면 ' + G.CITY_DATA[sp.city].name + '에 왕립 박물관이 서고, 바친 것들을 그곳에서 볼 수 있다.';
+      t.fame += 150;
+    } else if (kind === 'gallery') {
+      if (st().gallery[realm.id]) return null;
+      t.n = b.galleryN || 3;
+      t.title = '왕립 미술관에 걸 명작 ' + t.n + '점을 바친다';
+      t.desc = '함께 탄 화가·조각가가 화실·조각실에서 완성해 바친 명작을 ' + t.n + '점 골라 바친다. 다 바치면 ' + G.CITY_DATA[sp.city].name + '에 왕립 미술관이 서고 작품들을 전시한다.';
       t.fame += 150;
     } else if (kind === 'supply') {
       var gl = supplyGoods(sp, n); if (!gl.length) return null;
@@ -288,6 +299,7 @@
     if (t.kind === 'geo' || t.kind === 'treasure') { var n = Math.min(t.n, foundSince(t)); return { done: n >= t.n, text: '발견 ' + n + '/' + t.n }; }
     if (t.kind === 'zoo') { var z = Math.min(t.n, zooAnimals().length); return { done: z >= t.n, text: '신기한 동물 ' + z + '/' + t.n + '종' }; }
     if (t.kind === 'museum') { var mu = Math.min(t.n, museumItems().length); return { done: mu >= t.n, text: '바칠 유물·명작 ' + mu + '/' + t.n + '점' }; }
+    if (t.kind === 'gallery') { var ga = Math.min(t.n, galleryItems().length); return { done: ga >= t.n, text: '바칠 명작 ' + ga + '/' + t.n + '점' }; }
     if (t.kind === 'supply') { var cg = s.fleet.cargo[t.good], q = cg ? cg.q : 0; return { done: q >= t.qty, text: G.GOOD[t.good].name + ' ' + Math.min(q, t.qty) + '/' + t.qty + '통' }; }
     if (t.kind === 'capture' || t.kind === 'pirates') return { done: t.got >= t.n, text: (t.kind === 'capture' ? t.nation + ' 배 ' : '해적선 ') + Math.min(t.got, t.n) + '/' + t.n + '척' };
     if (t.kind === 'rescue') return { done: t.stage >= 1, text: t.stage >= 1 ? t.who + U.jx(t.who, '을/를') + ' 배에 모셨다' : G.CITY_DATA[t.den].name + ' 앞바다의 해적단을 찾는다' };
@@ -360,6 +372,7 @@
     if (t.kind === 'treasure') return '옛사람들이 감춘 것을 찾아내시오. 그 이야기만으로도 궁정이 떠들썩해질 것이오.';
     if (t.kind === 'zoo') return '코끼리며 기린이며, 책에서만 보던 짐승들을 내 백성에게 보여 주고 싶소. 그대가 그 길을 열어 주시오.';
     if (t.kind === 'museum') return '먼 나라의 보물과 이름난 화가의 그림을 백성들도 볼 수 있게 하고 싶소. 그대가 모은 것 가운데 귀한 것을 나누어 주시오.';
+    if (t.kind === 'gallery') return '이름난 화가와 조각가의 솜씨를 한자리에 모아 백성에게 보여 주고 싶소. 그대의 명작을 나누어 주시오.';
     if (t.kind === 'supply') return G.GOOD[t.good].name + U.jx(G.GOOD[t.good].name, '은/는') + ' 궁정에서 늘 모자라는 물건이오. 값은 섭섭지 않게 치르겠소.';
     if (t.kind === 'capture') return t.nation + '의 깃발을 단 배를 보거든 사정 두지 마시오. 이것은 해적질이 아니라 나라의 싸움이오.';
     if (t.kind === 'rescue') return '…' + t.who + U.jx(t.who, '은/는') + ' 내게 둘도 없는 아이요. 부디 무사히 데려와 주시오. 그대만 믿겠소.';
@@ -398,13 +411,18 @@
     }
     if (t.kind === 'supply') { var cg = s.fleet.cargo[t.good]; cg.q -= t.qty; if (cg.q <= 0) delete s.fleet.cargo[t.good]; if (G.Cargo && G.Cargo.touch) G.Cargo.touch(); }
     if (t.kind === 'museum') {
-      var gave = await pickMuseum(t, who); if (!gave) return;
+      var gave = await pickMuseum(t, who, false); if (!gave) return;
       c.museum[realm.id] = { city: sp.city, y: s.date.y, sp: sp.id, items: gave };
+    }
+    if (t.kind === 'gallery') {
+      var art = await pickMuseum(t, who, true); if (!art) return;
+      c.gallery[realm.id] = { city: sp.city, y: s.date.y, sp: sp.id, items: art };
     }
     if (t.kind === 'zoo') { var zl = zooAnimals().slice(0, t.n); zl.forEach(function (d) { c.zooUsed[d.id] = 1; }); c.zoo[realm.id] = s.date.y; c.zooAt[realm.id] = { city: sp.city, y: s.date.y, sp: sp.id, ids: zl.map(function (d) { return d.id; }) }; }
     var thanks = t.kind === 'rescue' ? '오오… ' + t.who + '! 무사했구나!\f' + s.player.name + ', 이 은혜는 평생 잊지 않겠소.'
       : t.kind === 'zoo' ? '이 그림들 좀 보시오! 이런 짐승이 정말 세상에 있단 말이오? 당장 사람을 보내 데려오게 하고, 성 밖에 동물원을 짓겠소.'
       : t.kind === 'museum' ? '이토록 귀한 것들을…! 왕궁 곁에 박물관을 짓고, 그대의 이름을 문 위에 새기겠소.'
+      : t.kind === 'gallery' ? '훌륭하오! 이 명작들을 오래도록 보여 줄 미술관을 왕궁 곁에 세우겠소.'
       : t.kind === 'supply' ? '오, 정말로 구해 왔구려. 창고지기가 기뻐하겠소.'
       : t.kind === 'capture' ? t.nation + ' 놈들이 그대의 깃발만 보아도 뱃머리를 돌린다지. 통쾌한 일이오!'
       : t.kind === 'pirates' ? '상인들이 그대 이름을 부르며 잔을 든다더구려. 잘해 주었소.'
@@ -416,17 +434,17 @@
     await finish(sp, realm, t);
   };
   /** 박물관 왕명: 바칠 것을 하나씩 고른다 (그만두면 null). 고른 것은 소지품에서 빠지고, 박물관에 걸 기록을 돌려준다 */
-  async function pickMuseum(t, who) {
+  async function pickMuseum(t, who, artOnly) {
     var chosen = [];
     while (chosen.length < t.n) {
-      var left = museumItems().filter(function (it) { return chosen.indexOf(it) < 0; });
+      var left = (artOnly ? galleryItems() : museumItems()).filter(function (it) { return chosen.indexOf(it) < 0; });
       if (!left.length) return null;
-      var v = await UI.choose('박물관에 바칠 것 (' + (chosen.length + 1) + '/' + t.n + ')', left.map(function (it) {
+      var v = await UI.choose((artOnly ? '미술관에 바칠 명작' : '박물관에 바칠 것') + ' (' + (chosen.length + 1) + '/' + t.n + ')', left.map(function (it) {
         var src = itemSrc(it);
         return { value: it, icon: src ? { src: src, icon: 'chest' } : (it.mw ? (it.wk === 'sculpt' ? 'bust' : 'palette') : 'chest'),
           label: '<b>' + U.esc(R.itemName(it)) + '</b><br><small class="muted">' + (it.mw ? '명작 · ' + U.esc(G.MATE[it.by] ? G.MATE[it.by].name : '') : '발견 유물 · ' + U.esc((G.RELIC_KIND || {})[(G.RELIC[it.id] || {}).kind] || '보물')) + '</small>',
           right: U.num(itemValueOf(it)) + '닢' };
-      }), { width: 760, icon: 'bust', text: '바친 것은 소지품에서 빠지고, 박물관에 걸려 누구나 볼 수 있게 됩니다.' });
+      }), { width: 760, icon: artOnly ? 'palette' : 'bust', text: '바친 것은 소지품에서 빠지고, ' + (artOnly ? '미술관' : '박물관') + '에 걸려 누구나 볼 수 있게 됩니다.' });
       if (!v) { await UI.say('서두를 것 없소. 마음이 정해지거든 다시 오시오.', who); return null; }
       chosen.push(v);
     }
@@ -453,10 +471,11 @@
     return x;
   }
   CT.exhibitSrc = function (x) { return x.mw ? (G.Studio && G.Studio.picture ? G.Studio.picture(x) : null) : (G.Img && G.Img.itemSrc ? G.Img.itemSrc({ id: x.id }) : null); };
-  /** 이 도시에 제독이 세운 왕립 박물관·동물원 [{kind: 'museum'|'zoo', realm, rec}] */
+  /** 이 도시에 제독이 세운 왕립 박물관·동물원·미술관 */
   CT.buildingsAt = function (cityId) {
     var c = st(), out = [];
     Object.keys(c.museum).forEach(function (k) { var m = c.museum[k]; if (m && m.city === cityId) out.push({ kind: 'museum', realm: k, rec: m }); });
+    Object.keys(c.gallery).forEach(function (k) { var g = c.gallery[k]; if (g && g.city === cityId) out.push({ kind: 'gallery', realm: k, rec: g }); });
     Object.keys(c.zoo).forEach(function (k) {
       var z = c.zooAt[k], city = z ? z.city : (G.COURT.realms[k] ? G.SPONSOR[G.COURT.realms[k].sponsors[0]].city : null);   // 옛 저장: 동물원이 선 해만 있다 — 그 나라 첫 군주의 도시
       if (city === cityId) out.push({ kind: 'zoo', realm: k, rec: z || { city: city, y: c.zoo[k], ids: null } });
@@ -498,7 +517,8 @@
       (gold ? '하사금 금화 <b>' + U.num(gold) + '</b>닢 · ' : '') + G.Fame.NAME[t.cat] + ' 명성 <b>+' + fame + '</b> · 신뢰 +' + B().trust + (late ? '<br><span class="muted">기한을 넘겨 보상이 줄었다</span>' : '') +
       '<br>이제 유럽과 이슬람의 도시에서는 사람들이 제독을 「' + U.esc(adr(tt)) + '」' + U.jx(adr(tt), '이라/라') + ' 부르며 예를 갖춥니다.' +
       (t.kind === 'zoo' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 동물원이 섰습니다. 도시에 들르면 바친 동물을 볼 수 있습니다.' : '') +
-      (t.kind === 'museum' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 박물관이 섰습니다. 도시에 들르면 바친 유물·명작을 볼 수 있습니다.' : '') + more, '서임');
+      (t.kind === 'museum' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 박물관이 섰습니다. 도시에 들르면 바친 유물·명작을 볼 수 있습니다.' : '') +
+      (t.kind === 'gallery' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 미술관이 섰습니다. 도시에 들르면 바친 명작을 볼 수 있습니다.' : '') + more, '서임');
     UI.toast(CT.fullName(tt, true) + '의 작위를 받았다!', 'crown', 6500);
     G.Game.refreshHud();
     if (s.settings.autosave !== false && G.State.save) G.State.save(0);
@@ -831,6 +851,8 @@
     if (ph) html += '<div style="margin-top:8px"><span class="muted">특허장</span> ' + ph + '</div>';
     var ms = Object.keys(c.museum);
     if (ms.length) html += '<div class="muted" style="margin-top:6px;font-size:15px">제독이 세운 왕립 박물관: ' + ms.map(function (k) { var m = c.museum[k]; return G.CITY_DATA[m.city].name + ' (' + m.y + '년 · ' + m.items.length + '점)'; }).join(' · ') + '</div>';
+    var gs = Object.keys(c.gallery);
+    if (gs.length) html += '<div class="muted" style="margin-top:6px;font-size:15px">제독이 세운 왕립 미술관: ' + gs.map(function (k) { var g = c.gallery[k]; return G.CITY_DATA[g.city].name + ' (' + g.y + '년 · ' + g.items.length + '점)'; }).join(' · ') + '</div>';
     var zs = Object.keys(c.zoo);
     if (zs.length) html += '<div class="muted" style="margin-top:6px;font-size:15px">제독이 세운 왕립 동물원: ' + zs.map(function (k) { var r = G.COURT.realms[k]; return G.CITY_DATA[G.SPONSOR[r.sponsors[0]].city].name + ' (' + c.zoo[k] + '년)'; }).join(' · ') + '</div>';
     return html;

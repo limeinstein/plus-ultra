@@ -102,28 +102,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     await page.waitForTimeout(1200);
     await page.screenshot({ path: path.join(OUT, '1_street.png') });
-    await page.evaluate(() => { G.Scenes.city.visit('museum', 'PT'); });
-    for (let i = 0; i < 8 && !(await page.$('.mu-card')); i++) {
-      await page.waitForTimeout(900);
-      const hit = await page.evaluate(() => { const b = [...document.querySelectorAll('.cmdmenu .cmd')].filter(x => /전시실/.test(x.textContent))[0]; if (b) b.click(); return !!b; });
-      if (hit) { await page.waitForTimeout(1200); continue; }
-      await page.mouse.click(800, 860);
-    }
+    // 전시 카드 자체를 검증한다. 건물 입장 시 도시 발견 연출이 먼저 뜰 수 있으므로 전시실은 직접 연다.
+    await page.evaluate(() => { void G.Scenes.city.B.museum.show(G.CITY_DATA[0], 'PT'); });
     await page.waitForSelector('.mu-card', { timeout: 15000, state: 'attached' }); await page.waitForTimeout(800);
     const mu = await page.evaluate(() => [...document.querySelectorAll('.mu-card')].map(c => (c.querySelector('img') ? 'img:' : 'icon:') + c.querySelector('.mu-name').textContent));
     await page.screenshot({ path: path.join(OUT, '2_museum.png') });
     ok(mu.length === 3 && mu.every(x => /^img:/.test(x)), '왕립 박물관 전시실: ' + mu.join(' · '));
     await page.evaluate(() => { const b = [...document.querySelectorAll('.modal-back .btn')].pop(); if (b) b.click(); });
     await page.waitForTimeout(600);
-    await page.evaluate(() => { G.Scenes.city.leave(); });
-    await page.waitForTimeout(1500);
-    await page.evaluate(() => { G.Scenes.city.visit('zoo', 'PT'); });
-    for (let i = 0; i < 8 && !(await page.$('.mu-card')); i++) {
-      await page.waitForTimeout(900);
-      const hit = await page.evaluate(() => { const b = [...document.querySelectorAll('.cmdmenu .cmd')].filter(x => /동물들을/.test(x.textContent))[0]; if (b) b.click(); return !!b; });
-      if (hit) { await page.waitForTimeout(1200); continue; }
-      await page.mouse.click(800, 860);
-    }
+    await page.waitForTimeout(600);
+    await page.evaluate(() => { void G.Scenes.city.B.zoo.show(G.CITY_DATA[0], 'PT'); });
     await page.waitForSelector('.mu-card', { timeout: 15000, state: 'attached' }); await page.waitForTimeout(800);
     const zo = await page.evaluate(() => [...document.querySelectorAll('.mu-card')].map(c => (c.querySelector('img') ? 'img:' : 'icon:') + c.querySelector('.mu-name').textContent));
     await page.screenshot({ path: path.join(OUT, '3_zoo.png') });

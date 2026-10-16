@@ -15,21 +15,28 @@
     var rs = h.map(function (c) { return c.r; }).sort(function (a, b) { return b - a; });
     var flush = h.every(function (c) { return c.s === h[0].s; });
     var uniq = rs.filter(function (r, i) { return rs.indexOf(r) === i; });
-    var straight = uniq.length === 5 && (rs[0] - rs[4] === 4 || (rs[0] === 12 && rs[1] === 3));
-    var top = straight && rs[0] === 12 && rs[1] === 3 ? 3 : rs[0];
+    // 스트레이트: 다섯 장의 숫자가 둥글게 이어지면 된다 — 이 술집에서는 K-A-2-3-4처럼 에이스를 사이에 두고 돌아가는 연결도 친다 (2026-10-17 사용자 요청)
+    //   top = 연결의 끝 카드: 10-J-Q-K-A는 A(12, 가장 높다), A-2-3-4-5는 5(3), 돌아가는 연결은 K-A-2-3-4 → 4(2), Q-K-A-2-3 → 3(1), J-Q-K-A-2 → 2(0)이라 가장 낮다
+    var straight = false, top = rs[0], wrap = false;
+    if (uniq.length === 5) for (var st0 = 0; st0 < 13 && !straight; st0++) {
+      var run = true; for (var k = 0; k < 5 && run; k++) run = uniq.indexOf((st0 + k) % 13) >= 0;
+      if (run) { straight = true; top = (st0 + 4) % 13; wrap = st0 + 4 > 12 && st0 !== 12; }
+    }
     var cnt = {}; rs.forEach(function (r) { cnt[r] = (cnt[r] || 0) + 1; });
     var groups = Object.keys(cnt).map(Number).sort(function (a, b) { return cnt[b] - cnt[a] || b - a; });
     var shape = groups.map(function (g) { return cnt[g]; }).join('');
-    if (straight && flush) return [top === 12 ? 9 : 8, top];
+    if (straight && flush) return tag([top === 12 ? 9 : 8, top], wrap);
     if (shape === '41') return [7].concat(groups);
     if (shape === '32') return [6].concat(groups);
     if (flush) return [5].concat(rs);
-    if (straight) return [4, top];
+    if (straight) return tag([4, top], wrap);
     if (shape === '311') return [3].concat(groups);
     if (shape === '221') return [2].concat(groups);
     if (shape === '2111') return [1].concat(groups);
     return [0].concat(rs);
   }
+  function tag(e, wrap) { if (wrap) e.wrap = true; return e; }
+  function handName(e) { return HANDS[e[0]] + (e.wrap ? ' (돌아가는)' : ''); }
   function cmp(a, b) { for (var i = 0; i < Math.max(a.length, b.length); i++) { var d = (a[i] || 0) - (b[i] || 0); if (d) return d; } return 0; }
   function faceKey(c) {
     if (!c || c.r < 9 || c.r > 11) return null;
@@ -77,7 +84,7 @@
     for (;;) {
       var bets = [100, 500, 1000, 5000].filter(function (b) { return b <= p.gold; });
       if (!bets.length) { await UI.say('돈이 없으면 앉을 자리도 없네.', opp); return; }
-      var bet = await UI.choose('판돈을 정하십시오 — 소지금 ' + U.num(p.gold) + '닢', bets.map(function (b) { return { label: '금화 ' + U.num(b) + '닢', value: b, icon: 'coin' }; }).concat([{ label: '그만둔다', value: 0, icon: 'boot' }]), { width: 460 });
+      var bet = await UI.choose('판돈을 정하십시오 — 소지금 ' + U.num(p.gold) + '닢', bets.map(function (b) { return { label: '금화 ' + U.num(b) + '닢', value: b, icon: 'coin' }; }).concat([{ label: '그만둔다', value: 0, icon: 'boot' }]), { width: 460, text: '<span class="muted">이 술집의 규칙: K-A-2-3-4처럼 에이스를 사이에 두고 돌아가는 연결도 스트레이트로 친다 (스트레이트 가운데 가장 낮다).</span>' });
       if (!bet) { await UI.say('쳇, 재미없군.', opp); return; }
       var res = await round(bet, opp);
       if (res > 0) { p.gold += bet; if (G.Audio) G.Audio.sfx('coin'); }
@@ -155,7 +162,7 @@
         phase = 2; render(true);
         el.querySelector('.poker-deck').classList.remove('active');
         var a = evalHand(me), b = evalHand(en), r = cmp(a, b);
-        setLog('나: <b>' + HANDS[a[0]] + '</b> &nbsp; 상대: <b>' + HANDS[b[0]] + '</b> — ' + (r > 0 ? '<span class="good-text">나의 승리!</span>' : r < 0 ? '<span class="warn-text">상대의 승리...</span>' : '무승부'));
+        setLog('나: <b>' + handName(a) + '</b> &nbsp; 상대: <b>' + handName(b) + '</b> — ' + (r > 0 ? '<span class="good-text">나의 승리!</span>' : r < 0 ? '<span class="warn-text">상대의 승리...</span>' : '무승부'));
         setButton('확인', true);
         btn.onclick = function () { win.close(r); resolve(r > 0 ? 1 : r < 0 ? -1 : 0); };
       }
@@ -164,4 +171,5 @@
   }
   G.Games.evalHand = evalHand;
   G.Games.pokerFaceKey = faceKey;
+  G.Games.poker._eval = evalHand; G.Games.poker._cmp = cmp; G.Games.poker._name = function (e) { return handName(e); };   // 시험용
 })(window.G = window.G || {});

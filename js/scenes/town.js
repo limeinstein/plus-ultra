@@ -56,12 +56,12 @@
 
   // 건물마다 화면에 그릴 높이
   var SIZE = { harbor: 405, shipyard: 385, trade: 360, market: 320, tavern: 345, inn: 352, church: 425,
-    library: 365, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372, inspector: 372, govhall: 445, museum: 380, zoo: 360 };
+    library: 365, restaurant: 350, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372, inspector: 372, govhall: 445, museum: 380, gallery: 390, zoo: 360 };
   // 거리에 늘어서는 차례 (왼쪽 = 바다 쪽, 오른쪽 = 성문 쪽)
-  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'inn', 'guild', 'library', 'museum', 'church', 'mansion', 'inspector', 'palace', 'zoo', 'govhall', 'house2', 'home', 'gate'];
+  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'restaurant', 'inn', 'guild', 'library', 'museum', 'gallery', 'church', 'mansion', 'inspector', 'palace', 'zoo', 'govhall', 'house2', 'home', 'gate'];
   // 도시마다 거리 한쪽에 서 있는 볼거리 (발견물이면 눌러서 설명을 본다 — T.inspect)
   // 아직 전용 그림이 없는 건물은 비슷한 건물 그림을 좌우로 뒤집어 쓴다
-  var SUBSTITUTE = { house2: 'home', inspector: 'mansion', govhall: 'palace', museum: 'library', zoo: 'mansion' };   // 왕립 박물관·동물원(js/city/museum.js): 전용 그림 exteriors/museum·zoo가 없으면 도서관·저택 그림을 뒤집어   // 개척 도시의 감찰관 저택·총독부 (js/city/colonyhall.js): 저택·왕궁 그림 (총독부는 뒤집지 않는다)   // 둘째 부인의 집: 전용 그림이 없으면 자택 그림을 뒤집어 쓴다   // 전용 그림이 오면 여기서 비슷한 건물로 돌려 쓸 수 있다
+  var SUBSTITUTE = { house2: 'home', inspector: 'mansion', govhall: 'palace', restaurant: 'inn', museum: 'library', gallery: 'library', zoo: 'mansion' };   // 전용 그림이 없으면 닮은 건물을 뒤집어 쓴다
   var LANDMARKS = { 7: [['giralda', 0.60, 430], ['columns', 0.10, 250]] };
   // 발견물 자료(G.DISC)가 없는 볼거리의 설명
   var MARK_INFO = {
@@ -288,7 +288,8 @@
         var h = SIZE[b.kind] || 430;
         var key = I.pick(I.chain.exterior(b.kind, c, b.arg));
         // 그 고장 건물 그림을 쓰는 도시에서는, 유럽식 기본 그림 대신 그 고장 양식으로 그린다
-        if (key && es && key.indexOf('exterior-styles/') !== 0 && key.indexOf('@') < 0 &&
+        var cultureKey = A.cultureOf ? 'exteriors/' + b.kind + '_' + A.cultureOf(c) : '';
+        if (key && es && key.indexOf('exterior-styles/') !== 0 && key.indexOf('@') < 0 && key !== cultureKey &&
             A.cultureOf && A.cultureOf(c) !== 'europe') key = null;
         var flip = false;
         if (!key && SUBSTITUTE[b.kind]) { key = I.pick(I.chain.exterior(SUBSTITUTE[b.kind], c, '')); flip = !!key && b.kind !== 'govhall'; }

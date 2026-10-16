@@ -27,6 +27,7 @@
     geoN: [1, 0.34, 3],             // 지리·자연 발견 건수
     zooN: 5,                        // 동물원에 들일 신기한 동물 수
     museumN: 3,                     // 박물관에 바칠 발견 유물·명작 수 (js/systems/court.js — 다 바치면 그 도시에 왕립 박물관)
+    galleryN: 3,                    // 미술관에 바칠 명작 수 (유럽 궁정 한정)
     warSpawn: 0.22, warNear: 14,    // 나포 왕명 중: 그 나라 항구가 warNear° 안이면 하루에 warSpawn 확률로 그 나라 배가 나타난다
     denNear: 2.6,                   // 소굴 앞바다: 이 거리(°) 안에 들면 납치한 해적단이 나타난다
     envoyRetry: 30,                 // 교섭이 깨진 뒤 다시 교섭하기까지(일)
@@ -153,6 +154,7 @@
     treasure: { name: '보물 발견', cat: 'ex', icon: 'chest' },
     zoo:      { name: '동물원 건설', cat: 'ex', icon: 'star' },
     museum:   { name: '박물관 건립', cat: 'so', icon: 'bust' },
+    gallery:  { name: '미술관 건립', cat: 'so', icon: 'palette' },
     supply:   { name: '교역품 납품', cat: 'tr', icon: 'sack' },
     tribute:  { name: '비용 지불', cat: 'tr', icon: 'coin' },
     capture:  { name: '적국 선박 나포', cat: 'bt', icon: 'sword' },
@@ -162,5 +164,5 @@
     envoy:    { name: '외교 특사', cat: 'so', icon: 'handshake' }
   };
   // 갈래마다 내놓을 수 있는 왕명
-  G.COURT.byCat = { ex: ['geo', 'treasure', 'zoo'], tr: ['supply', 'tribute'], bt: ['capture', 'rescue', 'pirates'], so: ['letter', 'envoy', 'museum'] };
+  G.COURT.byCat = { ex: ['geo', 'treasure', 'zoo'], tr: ['supply', 'tribute'], bt: ['capture', 'rescue', 'pirates'], so: ['letter', 'envoy', 'museum', 'gallery'] };
 })(window.G = window.G || {});

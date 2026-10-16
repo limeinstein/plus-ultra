@@ -56,7 +56,7 @@
     tone(high ? 620 : 105, t, high ? 0.1 : 0.16, 'triangle', (gain || 0.16) * 0.55);
   }
   /** 파일 없이 합성하는 효과음 목록 — 작은 음원을 여럿 겹쳐 물·나무·금속·목소리의 질감을 만든다. */
-  AU.SFX = ['wake', 'sail', 'depart', 'dock', 'breath', 'wagon', 'horse', 'run', 'townstep', 'door', 'gull', 'cannon', 'gun', 'sword', 'growl', 'discover', 'children', 'page', 'glasses', 'coin', 'coinland', 'unload', 'cheer'];
+  AU.SFX = ['wake', 'sail', 'depart', 'dock', 'breath', 'wagon', 'horse', 'run', 'townstep', 'door', 'gull', 'cat', 'dog', 'cannon', 'gun', 'sword', 'growl', 'discover', 'children', 'page', 'glasses', 'coin', 'coinland', 'unload', 'cheer'];
   AU.SFX_VARIANTS = 3;
   var lastVariant = {};
   function pickVariant(name, want) {
@@ -116,6 +116,20 @@
         sweep(1450, 2350, t, 0.18, 'sine', 0.055, 0.02); sweep(2300, 1320, t + 0.16, 0.24, 'sine', 0.05, 0.02);
         sweep(1280, 2050, t + 0.58, 0.14, 'sine', 0.04, 0.02); sweep(2050, 1200, t + 0.7, 0.2, 'sine', 0.035, 0.02);
         break;
+      case 'cat': {
+        var catGain = (((G.FX || {}).audio || {}).pet || {}).cat || 0.042;
+        sweep(510, 920, t, 0.2, 'sine', catGain, 0.035); sweep(920, 430, t + 0.17, 0.34, 'sine', catGain * 0.82, 0.018);
+        tone(1020, t + 0.08, 0.2, 'triangle', catGain * 0.22); noise(t + 0.03, 0.38, catGain * 0.3, 1850, 2.2, null, 'bandpass');
+        break;
+      }
+      case 'dog': {
+        var dogGain = (((G.FX || {}).audio || {}).pet || {}).dog || 0.05;
+        [0, 0.21].forEach(function (d, i) {
+          sweep(245 - i * 18, 112 - i * 8, t + d, 0.14, 'square', dogGain, 0.018);
+          noise(t + d, 0.16, dogGain * 0.9, 680 - i * 70, 2.5, null, 'bandpass');
+        });
+        break;
+      }
       case 'coin':
         [0, 0.045, 0.11, 0.18, 0.27, 0.39, 0.53, 0.68].forEach(function (d, i) { var f = [1318, 1760, 1480, 2093, 1568][i % 5]; tone(f, t + d, 0.18 + i * 0.012, 'triangle', 0.075); tone(f * 1.51, t + d + 0.008, 0.1, 'sine', 0.025); });
         break;

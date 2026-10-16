@@ -60,6 +60,8 @@
 | 발견물 | `discoveries/발견물ID.jpg` (예: `capegood`). 유적은 `tools/ruin_gifs`, 자연 경관은 `tools/nature_gifs`, 동물은 `tools/animal_gifs`, 식물은 `tools/plant_gifs`, 보물은 `tools/treasure_gifs`로 만든 GIF를 쓰면 전용 발견 연출이 재생됨 | 1440×640 정지화상 또는 576×256 GIF |
 | 발견물 — 분류 공통 | `discovery-cats/geo.jpg` (geo·nature·ruin·treasure·creature·people·trade) | 1440×640 |
 | 일반 소지품 | `items/아이템ID.webp` (레이피어 `rapier`, 나침반 `compass`, 약속 반지 `ring` 등) · 종류 공통 `item-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
+| 식당 음식 | `foods/음식ID.webp` (피시 앤 칩스 `fish_chips`, 베이징덕 `peking_duck` 등). 120종 이름과 지역 배정은 `js/data/cuisine.js` | 투명 배경 정사각형, 권장 256×256 |
+| 실존 예술가의 가상 명작 | `masterworks/부하ID_paint0.webp` … `_paint2.webp`, 조각가는 `_sculpt0.webp` … `_sculpt2.webp`. 제목·설명은 `js/data/masterworks.js`, 생성 근거와 프롬프트는 `docs/art/masterworks-generation.md` | 1400×1000 WebP (7:5), 액자·글자·서명 없이 작품만 |
 | 발견 유물 | `relics/유물ID.webp` (예: `r_qinshi`, `r_sillacrown`) · 종류 공통 `relic-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
 | 교역품 | `goods/교역품ID.webp` (후추 `pepper`, 비단 `silk`, 대포 `cannon` 등) · 갈래 공통 `good-kinds/갈래.webp` | 투명 배경 정사각형, 권장 192×192 |
 | 지도에 남는 역사·종교 유적 모형 | `map-discoveries/ruins-1.png` … `ruins-10.png` — 도시 밖 유적 144곳을 4×4 셀에 배치. 직접 발견한 뒤 항해·육상·해도에 표시 | 투명 배경 PNG, 4열×4행 |

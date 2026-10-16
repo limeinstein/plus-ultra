@@ -85,7 +85,7 @@
   /** 개척 도시의 거리·메뉴의 건물 (city.js C.buildings) */
   CO.buildings = function (c) {
     var e = CO.of(c), st = e ? e.stage : 0, s = S(), out = [{ kind: 'harbor', name: '항구', icon: 'anchor' }];
-    if (st >= 1) out.push({ kind: 'trade', name: '교역소', icon: 'scales' }, { kind: 'tavern', name: '술집', icon: 'mug' }, { kind: 'inn', name: '여관', icon: 'bed' });
+    if (st >= 1) out.push({ kind: 'trade', name: '교역소', icon: 'scales' }, { kind: 'tavern', name: '술집', icon: 'mug' }, { kind: 'restaurant', name: '식당', icon: 'bread' }, { kind: 'inn', name: '여관', icon: 'bed' });
     if (st >= 2) out.push({ kind: 'market', name: '시장', icon: 'sack' }, { kind: 'church', name: '교회', icon: 'church' });
     if (st >= 3) out.push({ kind: 'guild', name: '조합', icon: 'seal' }, { kind: 'inspector', name: '감찰관 저택', icon: 'mansion' });
     if (st >= 4) out.push({ kind: 'govhall', name: '총독부', icon: 'crown' });
