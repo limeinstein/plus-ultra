@@ -512,6 +512,8 @@
       if (st.portPromptBlock === c.id) return;
       st.portPromptBlock = null;
     }
+    if (st.path && st.target && st.target.city) return;                                   // 항구를 골라 가는 길이면 묻지 않는다 (그 항구면 닿아서 곧장 입항, 다른 항구면 지나친다)
+    if (G.Tutorial && G.Tutorial.portPromptOk && !G.Tutorial.portPromptOk(c)) return;   // 튜토리얼: 지금 가야 할 항구만 묻는다
     if (!portPromptCooling(c)) offerEnterPort(c);
   }
   /** 곧 들를 항구의 거리 그림을 미리 받는다 (아티팩트판은 그림 묶음을 처음 쓸 때 받으므로) — 하루에 한 번.

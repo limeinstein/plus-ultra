@@ -269,7 +269,7 @@
       tp.style.top = (ban.offsetTop + ban.offsetHeight + 10) + 'px';
       todo.slice(0, 6).forEach(function (t) {
         var row = U.el('div', 'tr' + (t.hot ? ' hot' : ''), G.icon(t.icon) + '<span>' + t.text + '</span>');
-        row.onclick = function () { if (UI.busy() || busy) return; C.visit(t.kind, t.arg); };
+        row.onclick = function () { if (UI.busy() || busy) return; if (t.onClick) t.onClick(); else C.visit(t.kind, t.arg); };
         tp.appendChild(row);
       });
       UI.add(tp);
@@ -295,6 +295,7 @@
       }
       if (G.Escort && f.trade) out = out.concat(G.Escort.todo(c));   // 교역소에서 호위를 청하는 상인
       if (G.Princess && f.palace) out = out.concat(G.Princess.todo(c));
+      if (G.Story && G.Story.todo) out = G.Story.todo(c).concat(out);   // 이야기 모드: 아버지의 흔적 — 다음 갈 곳 (맨 위에)
       if (G.Colony) out = out.concat(G.Colony.todo(c));   // 개척 도시: 물자 · 국왕의 부름   // 사라진 왕녀: 부르심 · 모셔 간다
       // 알리지 않은 발견과 이 도시의 후원자
       var un = G.Disc.unreported().length;

@@ -1225,10 +1225,10 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .tutbox .tb-h { display: flex; align-items: baseline; gap: 10px; font-size: 16px; }
 /* 대화 중(무릎상이 서 있을 때)에는 얼굴을 가리지 않게 왼쪽 위 도시 이름판 자리로 비켜 작게(그동안 이름판은 숨김) — 대화가 끝나면 다시 가운데 위로 */
 #ui.talking.tut-on .city-banner, #ui.talking.tut-on .status-strip { visibility: hidden; }
-#ui.talking .tutbox { left: 22px; top: 72px; transform: none; width: 340px; max-width: 340px; padding: 7px 12px 8px; font-size: 14px; line-height: 1.45; opacity: .95; transition: opacity .2s; }
+#ui.talking .tutbox { left: 22px; top: 96px; transform: none; width: 340px; max-width: 340px; padding: 7px 12px 8px; font-size: 14px; line-height: 1.45; opacity: .95; transition: opacity .2s; }
 #ui.talking .tutbox .tb-h { flex-wrap: wrap; gap: 4px 8px; font-size: 14px; }
 #ui.talking .tutbox .tb-h b { font-size: 15px; }
-#ui.talking .tutbox .tb-btns { margin-left: 0; width: 100%; gap: 10px; }
+#ui.talking .tutbox .tb-btns { margin-left: 0; width: 100%; gap: 2px 10px; flex-wrap: wrap; }   /* 「로코에게 키를 맡긴다」까지 넷이면 340px 상자 밖으로 삐져나갔다 */
 #ui.talking .tutbox .tb-g { font-size: 14px; }
 #ui.talking .tutbox .tb-g svg { width: 16px; height: 16px; margin-top: 2px; }
 #ui.talking.tut-on .toasts { top: 62px !important; }

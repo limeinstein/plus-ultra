@@ -28,9 +28,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(async () => { await G.Game.ensureGeo(); G.Story.start(); G.Game.go('city', { cityId: 0, story: true }); });
     const seen = [], bad = [];
     for (let i = 0; i < 40; i++) {
-      // 다음 대화창이나 고를 것이 뜰 때까지
-      const ready = await page.waitForFunction(() => document.querySelector('.modal-back .dlg') || null, null, { timeout: 20000 }).then(() => true, () => false);
+      // 다음 대화창이나 고를 것이 뜰 때까지 (사건 컷 창은 「이야기를 잇는다」로 넘긴다)
+      const ready = await page.waitForFunction(() => document.querySelector('.modal-back .dlg') || document.querySelector('.modal-back .story-cut-win') || null, null, { timeout: 20000 }).then(() => true, () => false);
       if (!ready) break;
+      if (await page.evaluate(() => { const w = document.querySelector('.modal-back .story-cut-win'); if (!w) return false; const b = w.querySelector('.btn.navy'); if (b) b.click(); return true; })) { await page.waitForTimeout(500); i--; continue; }
       await page.waitForTimeout(700);
       const r = await page.evaluate(() => {
         const box = document.querySelector('.modal-back .dlg'), stage = document.querySelector('.dlg-stage');

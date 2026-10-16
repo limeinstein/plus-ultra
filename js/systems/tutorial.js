@@ -34,6 +34,12 @@
   TU.step = function () { var st = step(); return st ? st.id : null; };
   /** 튜토리얼 중에는 뭍의 우연한 만남을 재운다 (land.js) */
   TU.quiet = function () { return !!T(); };
+  /** 바다에서 가까운 항구에 「입항하시겠습니까?」를 물어도 되는가 (sea.js) — 튜토리얼에서는 지금 가야 할 항구만.
+      선실·해전 단계에 지나치는 카디스 같은 항구는 묻지 않는다 (QA 2026-10-16) */
+  TU.portPromptOk = function (c) {
+    if (!T() || !c) return true;
+    return (at('port') && c.id === D.port) || (at('auto') && c.id === D.home);
+  };
 
   // ================================================================ 말하는 사람·대사
   function mateWho(id) { var d = G.MATE[id]; return { name: d.name, portrait: G.Scenes.mateSpec(id), half: G.Img.chain.mateHalf(id), lang: 3 }; }

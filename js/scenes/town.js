@@ -1030,6 +1030,7 @@
     }
     if (st.hover !== st.drawnHover || st.focus !== st.drawnFocus) moved = true;
     if (G.Scenes.city.timeOfDay() !== st.tod) moved = true;
+    var busyNow = !!(G.UI.busy && G.UI.busy()); if (busyNow !== st.drawnBusy) { st.drawnBusy = busyNow; moved = true; }   // 대화가 뜨고 닫힐 때 「↑ 들어가기」를 감추고 되살린다
     // 거리를 걷는 사람들: 그들만 움직일 때는 초당 folkFps번만 다시 그린다 (거리 전체를 매 틀 다시 그리지 않게 — 끊김 방지)
     var folkMoved = !!(st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x));
     st.folkAcc = (st.folkAcc || 0) + dt;
@@ -1158,7 +1159,8 @@
       ctx.drawImage(tg, Math.round(x + m.cv.width / 2 - tg.width / 2), Math.max(58, Math.round(m.y - m.cv.height + (m.foot || 0) + (m.pull || 0) - 10 - tg.height)));
     });
     // 문 앞에 서 있으면: ↑ 들어가기
-    if (st.near && !st.hero.entering && st.hero.to == null && !st.hidden) enterPrompt(ctx, st.hero.x - cam, GROUND + 34 - HERO_H - 18, st.near);
+    // 대화·창이 떠 있는 동안에는 감춘다 (이야기 프롤로그에서 「↑ 항구 들어가기」가 선 사람 발치에 걸려 있었다)
+    if (st.near && !st.hero.entering && st.hero.to == null && !st.hidden && !(G.UI.busy && G.UI.busy())) enterPrompt(ctx, st.hero.x - cam, GROUND + 34 - HERO_H - 18, st.near);
     // 하늘빛·시간대·가장자리 어둠
     var tod = G.Scenes.city.timeOfDay();
     if (tod !== st.tod) { st.tod = tod; st.overlay = overlayFor(tod); }

@@ -63,8 +63,9 @@
     var A = G.Art, sp = { lang: 3, rigId: 'npc:' + seed };
     try {
       var spec = A.npcSpec(seed, role, style, g), base = A.portraitKeys ? A.portraitKeys(spec) || [] : [];
-      sp.portrait = A.withImg(spec, ['portraits/npc/' + file].concat(base));
-      sp.half = ['portraits/npc/' + file + '_half'].concat(G.Img.chain.halfOf ? G.Img.chain.halfOf(base) : []);
+      var face = file.indexOf('/') >= 0 ? 'portraits/' + file : 'portraits/npc/' + file;    // 'street-folk/elder_is' 처럼 다른 그림 묶음도
+      sp.portrait = A.withImg(spec, [face].concat(base));
+      sp.half = [face + '_half'].concat(G.Img.chain.halfOf ? G.Img.chain.halfOf(base) : []);
       if (inCity() && C().B && C().B.tavern && C().B.tavern.playerSpeaker) { sp.layout = 'duo'; sp.side = 'right'; sp.partner = C().B.tavern.playerSpeaker(); sp.emotion = 'neutral'; }
     } catch (e) { /* 그림이 없어도 말은 한다 */ }
     return sp;
@@ -72,8 +73,9 @@
   ST.mother = function () { var o = npcFace('story_mother', 'noble', 'ib', 'f', 'story_mother'); o.name = D.mother.name; return o; };
   ST.father = function () { var o = npcFace('story_father', 'scholar', 'kr', 'm', 'story_father'); o.name = D.father.name + ' (' + D.father.alias + ')'; return o; };
   // 흔적마다 이야기해 주는 고장 사람 [마을 사람 id, 부르는 말]
-  var KEEPER = { ft_granada: ['vendor', '궁전의 늙은 안내인'], ft_cairo: ['tavernkeeper', '커피집 주인'], ft_delhi: ['librarian', '탑지기'], ft_cuzco: ['vendor', '쿠스코의 노인'],
-    ft_hangzhou: ['tavernkeeper', '찻집 주인'], ft_sakai: ['priest', '절의 스님'], ft_hanyang: ['priest', '노승'] };
+  // [역할, 부르는 말, 얼굴(portraits/street-folk)] — 이름에 맞는 사람으로 선다 (예전에는 그 도시 시장 상인 그림이라 「늙은 안내인」이 젊은 여인으로 나왔다)
+  var KEEPER = { ft_granada: ['priest', '궁전의 늙은 안내인', 'elder_is'], ft_cairo: ['keeper', '커피집 주인', 'innkeeper_is'], ft_delhi: ['soldier', '탑지기', 'soldier_in'],
+    ft_cuzco: ['native', '쿠스코의 노인', 'elder_an'], ft_hangzhou: ['keeper', '찻집 주인', 'innkeeper_cn'], ft_sakai: ['priest', '절의 스님', 'elder_jp'], ft_hanyang: ['priest', '노승', 'elder_kr'] };
   var curTrace = null;
   function who(k) {
     try {
@@ -86,11 +88,11 @@
       if (k === 'W') { var w = G.Family.wifeSpeaker(); w.name = w.name || G.Family.wifeName(); return w; }
       if (k === 'B') { var sp = G.SPONSOR[D.sponsor]; return G.Sponsor.speaker(sp); }   // 도시 밖(편지·회상)에서도 얼굴과 무릎상으로 선다
       if (k === 'keeper') {
-        var kp = KEEPER[curTrace] || ['vendor', '고장 사람'];
-        if (inCity()) return C().npc(kp[0], kp[1]);
-        // 도시 밖에서 듣는 흔적 이야기도 얼굴과 무릎상으로 선다 (그 흔적이 있는 고장의 사람 모습)
+        var kp = KEEPER[curTrace] || ['merchant', '고장 사람', null];
+        // 도시 안팎 모두 그 흔적이 있는 고장의 사람으로 얼굴과 무릎상이 선다 (도시 안이면 제독과 마주 본다 — npcFace).
+        // 이야기의 실마리는 늘 알아듣게 (lang 3) — 그 고장 말을 몰라도 동료가 옮겨 준다 (예전에는 아랍어 따위로 뒤섞여 다음 단서를 읽을 수 없었다)
         var tr = (D.traces || []).filter(function (t) { return t[0] === curTrace; })[0], tc = tr && G.CITY_DATA[tr[2]];
-        var role = (G.Art.TOWNFOLK && G.Art.TOWNFOLK[kp[0]] || ['merchant'])[0], o = npcFace('story_keeper_' + (curTrace || ''), role, tc && G.Img.folkStyle ? G.Img.folkStyle(tc) : 'ib', null, 'story_keeper_' + (curTrace || ''));
+        var o = npcFace('story_keeper_' + (curTrace || ''), kp[0], tc && G.Img.folkStyle ? G.Img.folkStyle(tc) : 'ib', 'm', kp[2] ? 'street-folk/' + kp[2] : 'story_keeper_' + (curTrace || ''));
         o.name = kp[1]; return o;
       }
     } catch (e) { console.error(e); }
@@ -328,6 +330,16 @@
     host.appendChild(b); return b;
   };
 
+  /** 「이 도시에서 할 일」 판: 아버지의 흔적 — 이 도시에 있으면 건물로, 아니면 다음 갈 곳을 (누르면 수첩 「아버지의 사진」) */
+  ST.todo = function (c) {
+    var s = S(), t = T(); if (!t || t.end === 'done' || !t.prologue) return [];
+    var next = D.traces.filter(function (tr) { return !G.Disc.foundByMe(tr[0]); })[0], open = function () { G.Info.open('story'); };
+    if (!next) return t.letter ? [{ icon: 'scroll', hot: false, text: ST.kin() + '의 편지 — 아틀란티스의 실마리를 따라간다 (크노소스·지브롤터·『티마이오스』)', onClick: open }] : [];
+    if (!s.hints[next[0]]) return [];
+    var tc = G.CITY_DATA[next[2]];
+    if (tc.id === c.id) { var f = R.facilities(c), k = f.tavern ? 'tavern' : f.market ? 'market' : null; return [{ kind: k, icon: 'star', hot: true, text: ST.kin() + '의 흔적 — 이 도시의 건물에 들어서면 알아볼 수 있다', onClick: k ? null : open }]; }
+    return [{ icon: 'scroll', text: ST.kin() + '의 흔적 — 다음은 <b>' + U.esc(tc.name) + '</b> (수첩 「아버지의 사진」)', onClick: open }];
+  };
   ST.page = function (el) {
     var s = S(), t = T(); if (!t) { el.innerHTML = '<div class="muted">이야기 모드가 아니다.</div>'; return; }
     var ph = D.photo, kin = ST.kin();

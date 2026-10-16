@@ -221,7 +221,7 @@
     if (fad) { var fb = (G.BALANCE.fad || {}); UI.toast(G.Fad.where(fad) + '에서 ' + G.GOOD[id].name + U.jx(G.GOOD[id].name, '이/가') + ' 유행을 탔다! ' + (fb.days || 60) + '일 동안 값이 ' + (fb.mult || 3) + '배로 뛴다.', 'star', 7000); }
     if (G.Hostile) G.Hostile.trade(c, total);
     if (G.Slave && G.Slave.is(id)) G.Slave.onSell(c, q);   // 노예 무역: 악명·「노예 상인」
-    if (profit > 0) G.Fame.add('tr', Math.floor(profit / 2500));
+    if (profit > 0) { var tfame = profit / 2500; G.Fame.add('tr', Math.floor(tfame) + (U.chance(tfame % 1) ? 1 : 0)); }   // 2,500닢에 못 미치는 몫도 그만큼의 확률로 (첫 장사 이익 2천 닢이 교역 명성 0이 되지 않게)
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
     G.Game.refreshHud();
     return { total: total, profit: profit };
