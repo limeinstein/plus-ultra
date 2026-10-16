@@ -275,7 +275,7 @@
       var vil = nearHitCity(l.lon, l.lat);
       if (vil && (mainKind === 'quake' || mainKind === 'flood' || mainKind === 'tsunami' || mainKind === 'landslide') && l.party > 2) {
         var h = await UI.ask(vil.name + '도 무너졌다. 사람들이 맨손으로 잔해를 헤집고 있다... 손을 보탤까?', [{ label: '이틀 머물며 돕는다', value: 1 }, { label: '갈 길을 간다', value: 0 }], G.Scenes.mateSpeaker('first'));
-        if (h) { ctx.spend(2); f.fatigue = Math.min(100, f.fatigue + 6); G.Fame.add('so', 6 * ev.sev); var cc = st().city[vil.id]; if (cc) cc.helped = true; UI.toast(vil.name + ' 사람들이 고마워한다. (사교 명성 +' + 6 * ev.sev + ')', 'people', 4200); G.State.log(ev.name + ' 때 ' + vil.name + ' 사람들을 도왔다.'); }
+        if (h) { ctx.spend(2); f.fatigue = Math.min(100, f.fatigue + 6); var helpFm = G.Fame.add('so', 6 * ev.sev); var cc = st().city[vil.id]; if (cc) cc.helped = true; UI.toast(vil.name + ' 사람들이 고마워한다. (사교 명성 +' + helpFm + ')', 'people', 4200); G.State.log(ev.name + ' 때 ' + vil.name + ' 사람들을 도왔다.'); }
       }
     } catch (e) { console.error(e); }
     if (fx) fx.stop();
@@ -374,7 +374,7 @@
     var v = await UI.ask('구호금을 내어 도울까? (금화 ' + U.num(cost) + '닢)', [{ label: '구호금을 낸다', value: 1, dis: s.player.gold < cost }, { label: '그만둔다', value: 0 }], {});
     if (v && s.player.gold >= cost) {
       s.player.gold -= cost; h.helped = true;
-      var fm = Math.round(4 + h.sev * 6 + (c.size || 1) * 2); G.Fame.add('so', fm);
+      var fm = Math.round(4 + h.sev * 6 + (c.size || 1) * 2); fm = G.Fame.add('so', fm);
       UI.toast(c.name + ' 사람들이 이름을 기억할 것이다. (사교 명성 +' + fm + ')', 'people', 4200);
       G.State.log(h.name + ' 뒤 ' + c.name + '에 구호금 금화 ' + U.num(cost) + '닢을 냈다.');
       G.Game.refreshHud();

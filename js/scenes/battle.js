@@ -968,9 +968,9 @@
         var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
         if (res === 'win') {
           var how = ld.how, lead = fd ? fd.name + U.jx(fd.name, '이/가') + ' ' : '';
-          if (fm) { fm.loyal = Math.min(100, (fm.loyal || 70) + 8); G.Fame.add('bt', 5); UI.toast(fd.name + '의 충성이 올랐다. (명성 +5)', 'sword', 3500); }
-          if (how === 'capture') { var ransomG = U.ri(600, 1400); S().player.gold += ransomG; G.Fame.add('bt', 8); await UI.say(lead + '두목을 사로잡자 적의 전의가 꺾였다! 적 함대가 항복했다! (두목의 몸값 금화 ' + U.num(ransomG) + '닢, 명성 +8)', {}); }
-          else if (how === 'persuade') { G.Fame.add('bt', 6); await UI.say(lead + '두목을 설득하자 두목이 칼을 거두었다. 적 함대가 피를 더 흘리지 않고 항복했다! (명성 +6)', {}); }
+          if (fm) { fm.loyal = Math.min(100, (fm.loyal || 70) + 8); UI.toast(fd.name + '의 충성이 올랐다. (명성 +' + G.Fame.add('bt', 5) + ')', 'sword', 3500); }
+          if (how === 'capture') { var ransomG = U.ri(600, 1400); S().player.gold += ransomG; var fmC = G.Fame.add('bt', 8); await UI.say(lead + '두목을 사로잡자 적의 전의가 꺾였다! 적 함대가 항복했다! (두목의 몸값 금화 ' + U.num(ransomG) + '닢, 명성 +' + fmC + ')', {}); }
+          else if (how === 'persuade') { var fmP = G.Fame.add('bt', 6); await UI.say(lead + '두목을 설득하자 두목이 칼을 거두었다. 적 함대가 피를 더 흘리지 않고 항복했다! (명성 +' + fmP + ')', {}); }
           else if (how === 'rout') await UI.say(lead + '호통에 두목이 달아나자 적이 우왕좌왕하다 항복했다!', {});
           else await UI.say(lead + '두목을 쓰러뜨리자 적의 전의가 꺾였다! 적 함대가 항복했다!', {});
           if (ld.secret) { S().player.notoriety += 2; UI.toast('비밀무기를 쓴 일로 뒷말이 돈다. (악명 +2)', 'skull', 3500); }
@@ -1086,14 +1086,14 @@
       });
       s.player.gold += gold;
       var fame = st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateFameGain) || 25) * Math.max(1, st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length) : 10;   // 달아난 배는 치지 않는다
-      G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !(G.Court && G.Court.lawful(st.npc))) s.player.notoriety += 5;
+      fame = G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !(G.Court && G.Court.lawful(st.npc))) s.player.notoriety += 5;
       s.stats.sunk += st.ships.filter(function (b) { return b.side === 'en' && b.sunk; }).length;
       // 조합의 해적 퇴치 의뢰
       if (st.npc.kind === 'pirate' && G.Quest) {
         var beaten = st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length;
         if (beaten) G.Quest.onPirateBeaten(beaten);
       }
-      if (st.flagWin) { G.Fame.add('bt', 10); fame += 10; }
+      if (st.flagWin) { fame += G.Fame.add('bt', 10); }
       lines.push((st.flagWin ? '적 기함을 무찔러 이겼다! ' : '승리했다! ') + '전리품으로 금화 ' + U.num(gold) + '닢을 얻었다. (명성 +' + fame + ')' + (st.flagWin ? '<br><span class="muted">남은 적 배는 흩어져 달아났다.</span>' : ''));
       G.State.log((st.npc.kind === 'pirate' ? '해적' : st.npc.kind === 'navy' ? '함대' : '상선단') + '과의 해전에서 승리했다.');
       if (G.Audio) { G.Audio.sfx('cheer'); setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 720); }

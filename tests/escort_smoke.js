@@ -129,7 +129,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg +
     ok(r.pirate === 1.3 && r.pirate2 === 1.9, '해적이 더 꾄다: 빈 상선 ×' + r.pirate + ' → 짐을 실으면 ×' + r.pirate2);
     ok(r.save, '저장·불러오기에 호위가 남는다');
     ok(/^back:\d+:\d+:true:true$/.test(r.load) && r.q > 0 && r.cost > 0 && r.other, '목적지: 상인이 제 돈으로 싣는다 (' + r.load + ') — ' + r.loadSaid + ' · ' + r.status);
-    ok(/:true:false:\d+:4:true:25:1$/.test(r.home) && r.payNum > 0 && r.cool, '귀환: 몫 ' + r.payNum + '닢 (품삯 이상 · 교역·사교 명성) → 호위 끝, 25일 동안은 새 요청 없음 — ' + r.homeSaid);
+    ok(/:true:false:\d+:12:true:25:1$/.test(r.home) && r.payNum > 0 && r.cool, '귀환: 몫 ' + r.payNum + '닢 (품삯 이상 · 교역·사교 명성) → 호위 끝, 25일 동안은 새 요청 없음 — ' + r.homeSaid);
     ok(/^1:0:/.test(r.warn) && r.late.split(':')[0] === r.late.split(':')[1] && r.late.split(':')[2] === '0', '기한을 넘기면 한 번 알리고 몫은 절반, 명성 없음 (' + r.late + ')');
     ok(/^true:-6:/.test(r.gone) && /^true:true:-10$/.test(r.quit), '너무 늦으면 상인이 떠난다(명성 −6) · 그만두면 명성 −10');
     ok(r.batKeep && /^true:-20:1:true$/.test(r.batLost) && /^true:-10$/.test(r.batScatter), '해전: 살아남으면 내구만 옮기고, 잃으면 실패(명성 −20), 져서 흩어지면 실패(−10)');

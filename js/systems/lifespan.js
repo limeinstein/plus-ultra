@@ -108,7 +108,7 @@
       case 'feast': f.fatigue = 0; f.discipline = Math.min(100, (f.discipline || 60) + 8); return '생일 잔치 (피로 0 · 규율 +8)';
       case 'song': f.fatigue = Math.max(0, f.fatigue - 20); f.discipline = Math.min(100, (f.discipline || 60) + 10); return '생일 노래 (피로 −20 · 규율 +10)';
       case 'bless': p.hp = 100; return '축복 기도 (제독 체력 100)';
-      case 'portrait': G.Fame.add('so', 15); return '제독의 초상화 (명성 사교 +15)';
+      case 'portrait': return '제독의 초상화 (명성 사교 +' + G.Fame.add('so', 15) + ')';
       case 'mat': f.mat = (f.mat || 0) + 15; return '자재 15통';
       case 'drill': f.discipline = Math.min(100, (f.discipline || 60) + 15); return '규율 +15';
       case 'shirt': p.hp = 100; f.fatigue = Math.max(0, f.fatigue - 10); return '손수 지은 옷 (제독 체력 100 · 피로 −10)';

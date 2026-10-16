@@ -244,7 +244,7 @@
     await UI.say(L.reward, who);
     s.player.gold += b.gold;
     G.State.log(SP().holderName(sp) + '에게 ' + D.name + '를 모셔 왔다 — 하사금 금화 ' + U.num(b.gold) + '닢.');
-    await UI.alert('<div class="center" style="font-size:22px;font-weight:700">사라진 왕녀를 찾았다</div><br>하사금 금화 <b>' + U.num(b.gold) + '</b>닢 · 전투 명성 +' + b.fameBt + ' · 사교 명성 +' + b.fameSo, '국왕의 특명');
+    await UI.alert('<div class="center" style="font-size:22px;font-weight:700">사라진 왕녀를 찾았다</div><br>하사금 금화 <b>' + U.num(b.gold) + '</b>닢 · 전투 명성 +' + G.Fame.mul('bt', b.fameBt) + ' · 사교 명성 +' + G.Fame.mul('so', b.fameSo), '국왕의 특명');
     G.Game.refreshHud();
     if (s.settings.autosave !== false && G.State.save) G.State.save(0);
   }
@@ -269,7 +269,7 @@
     await UI.alert('<div class="center"><div style="font-size:17px" class="muted">에스파냐 국왕의 사위</div><div style="font-size:36px;font-weight:800;margin:6px 0">부마</div>' +
       (up ? '<div style="font-size:20px">' + U.esc(CT.fullName(up, true)) + '<span class="muted"> — 한 계급 특진</span></div>' : '<div class="muted">이미 가장 높은 작위라 특진 대신 금화 ' + U.num(extra) + '닢을 더 받았다</div>') + '</div><br>' +
       D.name + U.jx(D.name, '과/와') + ' 혼인했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.<br>' +
-      '지참금 금화 <b>' + U.num(b.dowry) + '</b>닢 · 사교 명성 +' + (b.fameSo + b.fameWed) + ' · 전투 명성 +' + b.fameBt, '혼인');
+      '지참금 금화 <b>' + U.num(b.dowry) + '</b>닢 · 사교 명성 +' + G.Fame.mul('so', b.fameSo + b.fameWed) + ' · 전투 명성 +' + G.Fame.mul('bt', b.fameBt), '혼인');
     UI.toast('부마가 되었다!' + (up ? ' — ' + up.ko : ''), 'crown', 6500);
     G.Game.refreshHud();
     if (s.settings.autosave !== false && G.State.save) G.State.save(0);

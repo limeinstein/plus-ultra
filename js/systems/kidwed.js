@@ -95,11 +95,11 @@
     await UI.say(fill(d.father, k), { name: p.name, portrait: p.portrait, half: G.Img.chain.heroHalf ? G.Img.chain.heroHalf() : null, lang: 3 });
     k.married = { kind: 'prince', y: s.date.y, title: d.title }; k.aboard = false;
     p.gold += b.royalGift || 0;
-    if (G.Fame) G.Fame.add('so', b.royalFame || 0);
+    var royalFame = G.Fame ? G.Fame.add('so', b.royalFame || 0) : 0;
     p.royalKin = { name: k.name, y: s.date.y, sp: sp ? sp.id : null };
     F().addBond(k, 10);
     G.State.log(k.name + U.jx(k.name, '이/가') + ' ' + (sp ? G.Sponsor.holderName(sp) + '의 ' : '') + '왕세자비가 되었다. (왕실 예물 금화 ' + U.num(b.royalGift || 0) + '닢)');
-    UI.toast(k.name + ' — 왕세자비 · 왕실 예물 금화 ' + U.num(b.royalGift || 0) + '닢 · 사교 명성 +' + (b.royalFame || 0), 'crown', 6000);
+    UI.toast(k.name + ' — 왕세자비 · 왕실 예물 금화 ' + U.num(b.royalGift || 0) + '닢 · 사교 명성 +' + royalFame, 'crown', 6000);
     if (G.Audio) G.Audio.sfx('cheer');
   }
 

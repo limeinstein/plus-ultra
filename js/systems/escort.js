@@ -211,7 +211,7 @@
       await UI.say(line(key, n, { profit: U.num(profit), pay: U.num(pay) }), who);
       s.player.gold += pay;
       var fTr = late ? 0 : Math.min(B.tradeFameMax, Math.floor(pay / B.tradeFame)), fSo = late ? 0 : B.fameOk;
-      if (fTr) G.Fame.add('tr', fTr); if (fSo) G.Fame.add('so', fSo);
+      if (fTr) fTr = G.Fame.add('tr', fTr); if (fSo) fSo = G.Fame.add('so', fSo);
       s.stats.escorts = (s.stats.escorts || 0) + 1;
       G.State.log('상인 ' + n.name + '의 호위를 마쳤다 — 몫 금화 ' + U.num(pay) + '닢' + (late ? ' (기한을 넘겨 절반)' : '') + '.');
       UI.toast('호위를 마쳤다 — 금화 ' + U.num(pay) + '닢' + (fTr + fSo ? ' · 명성 +' + (fTr + fSo) : ''), 'coin', 5200);

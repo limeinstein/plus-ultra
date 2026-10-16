@@ -15,6 +15,10 @@
     { id: 'so', name: '사교', icon: 'people', desc: '기부·사절·사람을 돕는 일·궁정의 일' }
   ];
   F.NAME = { ex: '탐험', tr: '교역', bt: '전투', so: '사교' };
+  /** 갈래마다 오르는 명성의 배수 — 전투(해적)·교역·사교는 3배 (깎일 때는 그대로) */
+  F.MUL = { ex: 1, tr: 3, bt: 3, so: 3 };
+  /** 이 갈래로 n만큼 줄 때 실제로 오르는 값 (안내 글에 미리 보여 줄 때) */
+  F.mul = function (cat, n) { n = Math.round(n || 0); return n > 0 ? Math.round(n * (F.MUL[F.NAME[cat] ? cat : 'ex'] || 1)) : n; };
   var IDS = ['ex', 'tr', 'bt', 'so'];
   function P() { var s = G.Game && G.Game.state; return s && s.player; }
   function sum(b) { return (b.ex || 0) + (b.tr || 0) + (b.bt || 0) + (b.so || 0); }
@@ -42,12 +46,12 @@
     else if (d < 0) p.fameBy = b = split(p.fame, b);
     return b;
   };
-  /** 명성을 더한다(빼려면 음수). cat이 없으면 오르는 몫은 탐험, 깎이는 몫은 네 갈래에서 고르게. 실제로 바뀐 값을 돌려준다 */
+  /** 명성을 더한다(빼려면 음수). 오를 때는 갈래의 배수(F.MUL)를 곱한다. cat이 없으면 오르는 몫은 탐험, 깎이는 몫은 네 갈래에서 고르게. 실제로 바뀐 값을 돌려준다 */
   F.add = function (cat, n) {
     var p = P(); if (!p) return 0;
     n = Math.round(n || 0);
     var b = F.sync(); if (!n) return 0;
-    if (n > 0) { cat = F.NAME[cat] ? cat : 'ex'; b[cat] = (b[cat] || 0) + n; p.fame += n; return n; }
+    if (n > 0) { cat = F.NAME[cat] ? cat : 'ex'; n = F.mul(cat, n); b[cat] = (b[cat] || 0) + n; p.fame += n; return n; }
     var lose = Math.min(p.fame, -n);
     if (F.NAME[cat]) {
       var own = Math.min(b[cat] || 0, lose); b[cat] -= own; p.fame -= own;

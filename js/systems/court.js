@@ -322,7 +322,7 @@
       if (!list.length) { await UI.say('…지금은 그대에게 맡길 만한 일이 없구려. 달이 바뀌거든 다시 오시오.', who); return; }
       var pickd = await UI.choose('왕명 — ' + SP().holderName(sp), list.map(function (o) {
         var K = kindOf(o);
-        return { value: o, icon: K.icon, label: '<b>' + U.esc(o.title) + '</b><br><small class="muted">' + K.name + ' · ' + G.Fame.NAME[o.cat] + ' 명성 +' + o.fame + '</small>',
+        return { value: o, icon: K.icon, label: '<b>' + U.esc(o.title) + '</b><br><small class="muted">' + K.name + ' · ' + G.Fame.NAME[o.cat] + ' 명성 +' + G.Fame.mul(o.cat, o.fame) + '</small>',
           right: o.gold ? U.num(o.gold) + '닢' : '—' };
       }), { width: 860, icon: 'crown', text: '하나를 골라 해내고 돌아와 아뢰면 <b>' + U.esc(CT.fullName(next, true)) + '</b>의 작위를 받습니다. 왕명은 한 번에 하나만 맡을 수 있고, 기한은 ' + B().years + '년입니다.' });
       if (!pickd) { if (!auto) await UI.say('마음이 정해지거든 다시 오시오.', who); return; }
@@ -338,7 +338,7 @@
         await finish(sp, realm, pickd);
         return;
       }
-      var ok = await UI.confirm('<b>' + U.esc(pickd.title) + '</b><br><br>' + U.esc(pickd.desc) + '<br><br>하사금 금화 ' + U.num(pickd.gold) + '닢 · ' + G.Fame.NAME[pickd.cat] + ' 명성 +' + pickd.fame + ' · 기한 ' + B().years + '년<br>해내면 <b>' + U.esc(CT.fullName(next, true)) + '</b>', '맡는다', '다른 왕명을 본다', '왕명 — ' + K.name);
+      var ok = await UI.confirm('<b>' + U.esc(pickd.title) + '</b><br><br>' + U.esc(pickd.desc) + '<br><br>하사금 금화 ' + U.num(pickd.gold) + '닢 · ' + G.Fame.NAME[pickd.cat] + ' 명성 +' + G.Fame.mul(pickd.cat, pickd.fame) + ' · 기한 ' + B().years + '년<br>해내면 <b>' + U.esc(CT.fullName(next, true)) + '</b>', '맡는다', '다른 왕명을 본다', '왕명 — ' + K.name);
       if (!ok) continue;
       accept(sp, realm, pickd);
       await UI.say(acceptLine(pickd, realm), who);
@@ -406,7 +406,7 @@
     var late = t.due && today() > t.due, fame = t.fame, gold = t.gold || 0;
     if (t.kind === 'envoy' && t.grade === 2) { fame = Math.round(fame * 1.3); gold = Math.round(gold * 1.3); }
     if (late) { fame = Math.round(fame * 0.7); gold = Math.round(gold * 0.5); }
-    s.player.gold += gold; G.Fame.add(t.cat, fame);
+    s.player.gold += gold; fame = G.Fame.add(t.cat, fame);
     SP().addTrust(rel, B().trust); rel.done = (rel.done || 0) + 1;
     c.done = (c.done || 0) + 1;
     var n = CT.rank(realm) + 1, tt = titleObj(realm, n), home = CT.isHome(realm), me = s.player.name;
@@ -607,7 +607,7 @@
       var mq = pa.marque[realm.id], mqOn = mq && mq.until >= today(), exOn = pa.exempt[realm.id] && pa.exempt[realm.id] >= today();
       var foes = foesNow(realm), mFee = paperFee(pp.marqueFee, realm), eFee = paperFee(pp.exemptFee, realm);
       var v = await UI.choose('특허장 — ' + SP().holderName(sp), [
-        { value: { kind: 'marque' }, icon: 'sword', label: '<b>사략허가장</b><br><small class="muted">' + (foes.length ? '적국 하나를 정해 ' + pp.marqueYears + '년 — 그 나라 배를 쳐도 악명이 오르지 않고, 한 척마다 포상금 ' + U.num(pp.bounty) + '닢·전투 명성 +' + pp.bountyFame : '지금은 이 나라가 싸우는 나라가 없다') + (mqOn ? ' · 지금: ' + U.esc(mq.nation) + ' (' + U.fmtDate(dateOfNum(mq.until)) + '까지)' : '') + '</small>', right: U.num(mFee) + '닢' },
+        { value: { kind: 'marque' }, icon: 'sword', label: '<b>사략허가장</b><br><small class="muted">' + (foes.length ? '적국 하나를 정해 ' + pp.marqueYears + '년 — 그 나라 배를 쳐도 악명이 오르지 않고, 한 척마다 포상금 ' + U.num(pp.bounty) + '닢·전투 명성 +' + G.Fame.mul('bt', pp.bountyFame) : '지금은 이 나라가 싸우는 나라가 없다') + (mqOn ? ' · 지금: ' + U.esc(mq.nation) + ' (' + U.fmtDate(dateOfNum(mq.until)) + '까지)' : '') + '</small>', right: U.num(mFee) + '닢' },
         { value: { kind: 'exempt' }, icon: 'seal', label: '<b>면세증</b><br><small class="muted">' + pp.exemptYears + '년 — ' + U.esc(realm.name) + '의 항구 교역소에서 사는 값 −' + Math.round(pp.duty * 100) + '%, 들여온 물건 파는 값 +' + Math.round(pp.duty * 100) + '%' + (exOn ? ' · 지금: ' + U.fmtDate(dateOfNum(pa.exempt[realm.id])) + '까지' : '') + '</small>', right: U.num(eFee) + '닢' }
       ], { width: 860, icon: 'seal', text: '작위가 높을수록 값이 쌉니다. 이미 가진 특허장을 다시 받으면 기한이 오늘부터 새로 잡힙니다. 소지금 ' + U.num(s.player.gold) + '닢' });
       if (!v) return;
@@ -716,7 +716,7 @@
     var mq = npc.kind !== 'pirate' && CT.marqueFor(npc.nation);
     if (mq && beaten) {
       var pp = PP(), bg = beaten * pp.bounty, bf = beaten * pp.bountyFame;
-      S().player.gold += bg; G.Fame.add('bt', bf);
+      S().player.gold += bg; bf = G.Fame.add('bt', bf);
       if (lines) lines.push('사략 포상금 금화 ' + U.num(bg) + '닢 · 전투 명성 +' + bf + ' <span class="muted">(' + U.esc(mq.realm.name) + '의 사략허가장 — ' + U.esc(npc.nation) + ' 배 ' + beaten + '척)</span>');
     }
     var t = st().task; if (!t) return;
@@ -750,7 +750,7 @@
         '<div>왕명</div><div><b>' + U.esc(t.title) + '</b> <span class="tag">' + kindOf(t).name + '</span></div>' +
         '<div>상태</div><div>' + (p.done ? '<span class="good-text">' + U.esc(p.text) + ' — 돌아가 아뢰십시오</span>' : U.esc(p.text)) + '</div>' +
         '<div>기한</div><div>' + U.fmtDate(CT.dueDate(t)) + (left < 0 ? ' <span class="warn-text">(지남)</span>' : ' (남은 ' + left + '일)') + '</div>' +
-        '<div>보상</div><div>' + (next ? '<b>' + U.esc(CT.fullName(next, true)) + '</b> · ' : '') + (t.gold ? '금화 ' + U.num(t.gold) + '닢 · ' : '') + G.Fame.NAME[t.cat] + ' 명성 +' + t.fame + '</div></div>' +
+        '<div>보상</div><div>' + (next ? '<b>' + U.esc(CT.fullName(next, true)) + '</b> · ' : '') + (t.gold ? '금화 ' + U.num(t.gold) + '닢 · ' : '') + G.Fame.NAME[t.cat] + ' 명성 +' + G.Fame.mul(t.cat, t.fame) + '</div></div>' +
         '<div class="hint-item" style="margin-top:10px"><div class="tx">' + U.esc(t.desc) + '</div></div>';
     } else {
       var hs = homeSponsor(), msg = '맡은 왕명이 없습니다. ';

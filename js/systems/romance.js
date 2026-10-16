@@ -225,10 +225,10 @@
     var stR = RM.st(); stR.done = RM.key(p.m, p.f);      // 한 커플 완성 — 썸 사건은 여기서 끝 (다음 커플로 이어지지 않는다)
     Object.keys(stR.pairs).forEach(function (k) { if (k !== stR.done) delete stR.pairs[k]; });
     loyal(p.m, 15); loyal(p.f, 15); disc(10); s.fleet.fatigue = Math.max(0, (s.fleet.fatigue || 0) - 10);
-    G.Fame.add('so', 20);
+    var wedFame = G.Fame.add('so', 20);
     log(names(p) + U.jx(G.MATE[p.f].name, '이/가') + ' 혼례를 올렸다. (금화 ' + U.num(cost) + '닢)');
     if (G.Audio) G.Audio.sfx('discover');
-    await UI.alert('<div class="center" style="font-size:24px;font-weight:700">' + U.esc(G.MATE[p.m].name) + ' ♥ ' + U.esc(G.MATE[p.f].name) + '</div><br>두 사람이 부부가 되었다. 함께 배에 남아 항해를 계속한다.<br>두 사람 충성 +15 · 규율 +10 · 피로 −10 · 사교 명성 +20', '혼례');
+    await UI.alert('<div class="center" style="font-size:24px;font-weight:700">' + U.esc(G.MATE[p.m].name) + ' ♥ ' + U.esc(G.MATE[p.f].name) + '</div><br>두 사람이 부부가 되었다. 함께 배에 남아 항해를 계속한다.<br>두 사람 충성 +15 · 규율 +10 · 피로 −10 · 사교 명성 +' + wedFame, '혼례');
     G.Game.refreshHud();
   };
   RM.EV = EV;

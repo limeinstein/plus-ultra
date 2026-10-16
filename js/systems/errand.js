@@ -113,7 +113,7 @@
     var butlerV = via && via.name === '집사', L = function (k, ctx) { return G.Sponsor.line(sp, k, ctx); };
     if (!list.length) { await UI.say(butlerV ? '지금은 맡기실 만한 일이 없다고 하십니다. 다음 달에 다시 와 주십시오.' : L('errNone'), via); return false; }
     var v = await UI.choose('작은 일거리 — ' + G.Sponsor.holderName(sp), list.map(function (t, i) {
-      return { label: t.title, right: '보수 ' + U.num(t.reward) + '닢' + (t.fame ? ' · 명성 +' + t.fame : ''), value: i, icon: t.kind === 'survey' ? 'map' : t.kind === 'procure' ? 'sack' : 'scroll',
+      return { label: t.title, right: '보수 ' + U.num(t.reward) + '닢' + (t.fame ? ' · 명성 +' + G.Fame.mul(t.kind === 'procure' ? 'tr' : 'ex', t.fame) : ''), value: i, icon: t.kind === 'survey' ? 'map' : t.kind === 'procure' ? 'sack' : 'scroll',
         desc: t.desc + ' — 기한 ' + t.years + '년' + (t.advance ? ', 선금 ' + U.num(t.advance) + '닢' : '') };
     }).concat([{ label: '그만둔다', value: -1, icon: 'boot' }]), { width: 760, text: butlerV ? '주인께서 믿을 만한 항해자에게 맡기시려는 일입니다. 해내시면 주인께 이름이 알려질 것입니다.' : L('errText') });
     if (v == null || v < 0) { await UI.say(butlerV ? '알겠습니다. 마음이 바뀌시면 다시 오십시오.' : L('negoNo'), via); return false; }
@@ -162,7 +162,7 @@
     if (late) { reward = Math.round(reward * 0.5); fame = Math.round(fame * 0.7); }
     if (butler) await UI.say((t.kind === 'survey' ? '해도는 틀림없이 주인께 올리겠습니다.' : t.kind === 'procure' ? '물건은 틀림없이 받았습니다.' : '소문이 사실이었다니, 주인께서 기뻐하시겠군요.') + '\f주인께서 약속하신 금화 ' + U.num(reward) + '닢입니다. 당신의 이름은 주인께 말씀드려 두지요.', via);
     else await UI.say(G.Sponsor.line(sp, t.kind === 'survey' ? 'errDoneSurvey' : t.kind === 'procure' ? 'errDoneProcure' : 'errDoneConfirm') + '\f' + G.Sponsor.line(sp, 'errPay', { rew: U.num(reward) }), via);
-    s.player.gold += reward; G.Fame.add(t.kind === 'procure' ? 'tr' : 'ex', fame);
+    s.player.gold += reward; fame = G.Fame.add(t.kind === 'procure' ? 'tr' : 'ex', fame);
     G.Sponsor.addTrust(rel, 8); rel.done = (rel.done || 0) + 1;
     G.State.log(G.Sponsor.holderName(sp) + '에게 「' + E.name(k) + '」' + U.jx(E.name(k), '을/를') + ' 보고했다. (보수 ' + reward + '닢, 명성 +' + fame + ')');
     s.contract = null;

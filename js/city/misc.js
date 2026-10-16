@@ -267,7 +267,7 @@
     s.player.gold -= n;
     var dn = Math.floor(n / 200); s.player.notoriety = Math.max(0, s.player.notoriety - dn);
     var fame = Math.floor(n / 1000) * (R.skill('theo') + 1);
-    G.Fame.add('so', fame);
+    fame = G.Fame.add('so', fame);
     await C.say(priest(c), '당신의 선행은 반드시 보답받을 것이오.' + (fame ? '\n(명성 +' + fame + ')' : '') + (dn ? ' (악명 -' + dn + ')' : ''));
   };
   CH.pray = async function (c) {
@@ -406,7 +406,7 @@
       if (!i) return;
       var no = G.Quest.canAccept(i);
       var K = G.Quest.KINDS[i.kind];
-      var detail = K.desc + '\n\n사례금 금화 ' + U.num(i.pay) + '닢 · 명성 +' + i.fame + ' · 기한 ' + i.limit + '일' +
+      var detail = K.desc + '\n\n사례금 금화 ' + U.num(i.pay) + '닢 · 명성 +' + G.Fame.mul(G.Fame.questCat(i.kind), i.fame) + ' · 기한 ' + i.limit + '일' +
         (i.load ? '\n짐칸 ' + i.load + '통을 씁니다.' : '') +
         (i.hint ? '\n' + i.hint : '') +
         (i.kind === 'buy' ? '\n물건값은 제독이 냅니다. 사서 이 조합으로 가져오십시오.' : '') +
@@ -465,7 +465,7 @@
         if (!cg || cg.q < q.qty) { await C.say(master(c), '아직 물건이 모자라는군.'); return; }
         cg.q -= q.qty; if (cg.q <= 0) delete s.fleet.cargo[q.good];
       }
-      s.player.gold += pay; G.Fame.add(G.Fame.questCat(q.kind), fame);
+      s.player.gold += pay; fame = G.Fame.add(G.Fame.questCat(q.kind), fame);
       var i = G.Quest.list().indexOf(q); if (i >= 0) G.Quest.list().splice(i, 1);
       if (!s.questDone) s.questDone = {};
       s.questDone[q.key] = 'done';

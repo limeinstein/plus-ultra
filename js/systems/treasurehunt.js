@@ -324,7 +324,7 @@
     var mine = G.Quest.list().indexOf(q) >= 0, left = mine ? G.Quest.remain(q) : null;
     var win = UI.window({ title: '보물 지도 — ' + U.esc(q.city) + ' 조합', icon: 'chest', width: 780, clickAny: true,
       html: '<div class="tmap-wrap"></div><div class="tmap-note">' + clueHtml(q) +
-        '사례: 보물을 파내면 금화 약 <b>' + U.num(q.pay) + '</b>닢 · 명성 +' + q.fame + (left != null ? ' · 남은 기한 ' + (left < 0 ? '지남' : left + '일') : ' · 기한 ' + q.limit + '일') +
+        '사례: 보물을 파내면 금화 약 <b>' + U.num(q.pay) + '</b>닢 · 명성 +' + G.Fame.mul(G.Fame.questCat('treasure'), q.fame) + (left != null ? ' · 남은 기한 ' + (left < 0 ? '지남' : left + '일') : ' · 기한 ' + q.limit + '일') +
         '<br><span class="muted">어디인지는 조합도 모른다. 항구 술집에서 정보를 물으면 가끔 이 지도의 증거를 듣는다 — 모인 증거를 부하들과 살펴 측량 실력만큼 자리를 좁힌다(대륙 → 나라 → 항구 근처 → 위도·경도). 가까이 가면 항해사가 해안선을 알아보고, 상륙해 X 자리에 서면 땅을 판다.</span></div>',
       buttons: mine ? [{ label: '부하들과 지도를 살핀다', value: 'deduce' }, { label: '지도를 접는다', value: 1, cls: 'navy' }] : [{ label: '지도를 접는다', value: 1, cls: 'navy' }] });
     var cv = TH.mapCanvas(q, 720, 480); cv.className = 'tmap-cv';
@@ -384,14 +384,14 @@
     var rng = U.makeRng(q.seed + 7), finds = ['녹슨 쇠 상자', '밀랍으로 봉한 궤짝', '썩은 돛천에 싸인 항아리', '쇠사슬로 묶인 함'];
     var box = finds[Math.floor(rng() * finds.length)];
     s.player.gold += gold;
-    G.Fame.add(G.Fame.questCat ? G.Fame.questCat('treasure') : 'ad', q.fame);
+    var gotFame = G.Fame.add(G.Fame.questCat ? G.Fame.questCat('treasure') : 'ad', q.fame);
     var i = G.Quest.list().indexOf(q); if (i >= 0) G.Quest.list().splice(i, 1);
     if (!s.questDone) s.questDone = {};
     s.questDone[q.key] = 'done';
     s.stats.quests = (s.stats.quests || 0) + 1;
     s.stats.treasures = (s.stats.treasures || 0) + 1;
     if (G.Audio) G.Audio.sfx('coin');
-    await UI.alert('<div style="font-size:19px;line-height:1.7">땅속 깊이에서 ' + box + U.jx(box, '이/가') + ' 나왔다!<br>안에는 금화와 은괴, 보석이 가득하다.<br><br><b>금화 ' + U.num(gold) + '닢</b>을 손에 넣었다. (명성 +' + q.fame + ')</div>', '보물 발견');
+    await UI.alert('<div style="font-size:19px;line-height:1.7">땅속 깊이에서 ' + box + U.jx(box, '이/가') + ' 나왔다!<br>안에는 금화와 은괴, 보석이 가득하다.<br><br><b>금화 ' + U.num(gold) + '닢</b>을 손에 넣었다. (명성 +' + gotFame + ')</div>', '보물 발견');
     G.State.log(q.city + ' 조합의 보물 지도대로 보물을 찾았다 — 금화 ' + U.num(gold) + '닢.');
     if (G.Game.refreshHud) G.Game.refreshHud();
   }

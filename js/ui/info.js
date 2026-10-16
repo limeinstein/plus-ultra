@@ -352,7 +352,7 @@
       var due = { y: Math.floor(k.due / 10000), m: Math.floor(k.due / 100) % 100, d: k.due % 100 };
       html += '<h4 style="margin:0 0 8px">진행 중인 계약</h4><div class="kv"><div>후원자</div><div>' + G.Sponsor.holderName(sp) + ' (' + sp.title + ', ' + G.CITY_DATA[sp.city].name + ')</div>' +
         '<div>목적</div><div><b>' + U.esc(G.Errand.name(k)) + '</b>' + (k.small ? ' <span class="tag">작은 계약</span>' : '') + '</div><div>기한</div><div>' + U.fmtDate(due) + (U.dateNum(s.date) > k.due ? ' <span class="warn-text">(기한 초과)</span>' : '') + '</div>' +
-        '<div>선금</div><div>' + U.num(k.advance) + '닢</div><div>성공 보수</div><div>' + U.num(k.reward) + '닢' + (tk && tk.fame ? ' · 명성 +' + tk.fame : '') + '</div>' +
+        '<div>선금</div><div>' + U.num(k.advance) + '닢</div><div>성공 보수</div><div>' + U.num(k.reward) + '닢' + (tk && tk.fame ? ' · 명성 +' + G.Fame.mul(tk.kind === 'procure' ? 'tr' : 'ex', tk.fame) : '') + '</div>' +
         '<div>상태</div><div>' + (G.Errand.done(k) ? '<span class="good-text">' + G.Errand.status(k) + '</span>' : G.Errand.status(k)) + '</div></div>' +
         (tk && tk.kind !== 'confirm' ? '<div class="hint-item" style="margin-top:10px"><div class="tx">' + U.esc(tk.desc || '') + (sp && G.Sponsor.fameNeed(sp) > s.player.fame ? ' (후원자를 만날 명성이 모자라면 집사에게 보고합니다)' : '') + '</div></div>' : d && !k.circ ? '<div class="hint-item" style="margin-top:10px"><div class="tx">' + U.esc(d.hint) + '</div></div>' : '') +
         (k.loan ? '<div class="muted" style="margin-top:6px;font-size:15px">빌린 배: ' + U.esc(k.loanName || '') + '호 — 정산할 때 돌려줍니다. 잃으면 배값을 물어야 합니다.</div>' : '') +
