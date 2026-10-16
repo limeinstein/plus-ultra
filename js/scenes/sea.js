@@ -643,7 +643,7 @@
     var pr = pirateRate(l.lon, l.lat) * (s.settings.diff === 'easy' ? 0.6 : 1) * (G.Escort ? G.Escort.pirateK() : 1);   // 상선을 호위하면 해적이 더 꾄다
     var mr = 0.05 + ports * 0.02;
     var kind = null, f0 = s.fleet.ships[0];
-    if (U.chance(pr)) kind = 'pirate'; else if (U.chance(mr)) kind = U.chance(0.75) ? 'merchant' : 'navy';
+    if (U.chance(pr) && (!G.Pace || G.Pace.ok('ship:pirate', { noGap: true }))) kind = 'pirate'; else if (U.chance(mr)) kind = U.chance(0.75) ? 'merchant' : 'navy';
     if (!kind) return;
     for (var tries = 0; tries < 8; tries++) {
       var ang = U.rf(0, Math.PI * 2), dist = U.rf(2.5, 5);
@@ -682,7 +682,12 @@
     for (var i = 0; i < st.npcs.length; i++) {
       var n = st.npcs[i];
       if (!n.hostile || n.cooldown > 0) continue;
-      if (G.Geo.dist(l.lon, l.lat, n.lon, n.lat) < 0.3) { await encounter(n, false); return; }
+      if (G.Geo.dist(l.lon, l.lat, n.lon, n.lat) < 0.3) {
+        var pk = (n.kind === 'pirate' || n.kind === 'navy') ? 'ship:' + n.kind : null;   // 이야기의 배(추격자·왕녀 등)는 막지 않는다
+        if (pk && G.Pace && !G.Pace.ok(pk, { noGap: true })) { n.cooldown = 3; continue; }
+        if (pk && G.Pace) G.Pace.mark(pk);
+        await encounter(n, false); return;
+      }
     }
   }
   /** 정해 둔 배와 바로 마주친다 — 우리 배가 서 있어도 (튜토리얼의 해적, js/systems/tutorial.js) */
@@ -1329,6 +1334,7 @@
         await UI.say(seaLine(ds[i]), G.Scenes.mateSpeaker(R.skill('survey') ? 'surveyor' : 'first'));
         await G.Disc.find(ds[i], 'sea');
       }
+      if (ds.length && G.Pace) G.Pace.mark();   // 발견도 큰 사건 — 뒤의 우연한 사건을 늦춘다
       var lefts = G.Disc.leftHere('sea', l.lon, l.lat);
       for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
       if (G.Disc.foundByMe('circum') === false && s.circ && s.circ.done && !s.circ.told) { s.circ.told = true; UI.toast('지구를 한 바퀴 돌았다! 모항에 돌아가면 세계일주가 완성된다.', 'globe', 5000); }
@@ -1404,9 +1410,9 @@
     var s = S(), l = s.loc, f = s.fleet;
     if (st.stormDays > 0) return;
     var p = stormChance(l.lon, l.lat, s.date.m) * Math.max((G.BALANCE && G.BALANCE.stormFloor) || 0, (1 - R.fleetBonus('storm') * 3) * (blessed() ? 0.75 : 1)) * (s.settings.diff === 'easy' ? 0.6 : 1) * (st.stormRisk > 0 ? 2.6 : 1);
-    if (U.chance(p)) {
-      st.stormPending = true;
-    } else if (U.chance(0.012) && Math.abs(l.lat) < 12) { st.calm = U.ri(2, 5); msgs.push({ icon: 'wind', text: '바람이 멎었다. 무풍지대다...' }); if (G.EventFx) G.EventFx.flash('sun', 3.2); }
+    if (U.chance(p) && (!G.Pace || G.Pace.ok('storm', { noGap: true }))) {
+      st.stormPending = true; if (G.Pace) G.Pace.mark('storm');
+    } else if (U.chance(0.012) && Math.abs(l.lat) < 12 && (!G.Pace || G.Pace.ok('calm', { noGap: true }))) { if (G.Pace) G.Pace.mark('calm', { quiet: true }); st.calm = U.ri(2, 5); msgs.push({ icon: 'wind', text: '바람이 멎었다. 무풍지대다...' }); if (G.EventFx) G.EventFx.flash('sun', 3.2); }
   }
   async function crises(msgs) {
     var s = S(), f = s.fleet;
@@ -1453,11 +1459,11 @@
       refreshHud();
     }
     // 배에 탄 아내와의 한때 (js/systems/familyevent.js)
-    if (G.FamEv) { try { if (await G.FamEv.atSea()) refreshHud(); } catch (e) { console.error(e); } }
+    if (G.FamEv && (!G.Pace || G.Pace.ok('family'))) { try { if (await G.FamEv.atSea()) { if (G.Pace) G.Pace.mark('family'); refreshHud(); } } catch (e) { console.error(e); } }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
-    if (U.chance(0.07)) await G.Explore.seaEvent({ st: st, refresh: refreshHud });
+    if (U.chance(0.07) && (!G.Pace || G.Pace.ok())) await G.Explore.seaEvent({ st: st, refresh: refreshHud });   // 앞 사건과 실제 시간 간격(G.Pace)
     // 부하들 사이의 썸: 때가 된 짝이 있으면 가끔 작은 사건 (js/systems/romance.js)
-    if (G.Romance) { try { await G.Romance.seaDay(); } catch (e) { console.error(e); } }
+    if (G.Romance && (!G.Pace || G.Pace.ok('romance'))) { try { if (await G.Romance.seaDay() && G.Pace) G.Pace.mark('romance'); } catch (e) { console.error(e); } }
     // death of all crew / ships
     if (f.crew <= 0) {
       await UI.say('마지막 선원마저 쓰러졌다... 배는 주인 없이 바다를 떠돈다.', {});

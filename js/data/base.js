@@ -269,6 +269,9 @@
     // 항해·육상 탐험 중 가까운 도시에 들어갈지 물었을 때 거절하면, 같은 도시의 물음을 실제 시간으로 이만큼 쉬었다가 다시 띄운다.
     cityEntryPrompt: { cooldownMs: 30000 },   // 「지나간다」를 고른 뒤 같은 항구·성문을 다시 묻기까지 (실제 시간 ms) — 그 사이에도 도시를 직접 누르면 바로 들어간다
     seaSearch: { days: 1, senseBoost: 1.8, chartBonus: 1.2 },
+    // 사건의 간격 (js/systems/pace.js): 항해·육상 탐험의 우연한 사건 사이 실제 시간 gapMs(ms), 같은 사건은 실제 시간 sameMs와 게임 날수 sameDays가 지나야 다시
+    //   (하루가 실제로 1초 남짓이라 날수만으로는 화면에서 사건이 연달아 터진다). 폭풍·해적은 간격을 건너뛰되 같은 일은 sameMs 안에 되풀이되지 않는다
+    eventPace: { gapMs: 40000, sameMs: 90000, sameDays: 30 },
     // 짐의 부피·무게 (js/systems/cargo.js). 1통 = 부피 1. wt = 1통의 무게(갈래별, wtGood가 있으면 그 값).
     // 배가 버티는 무게 = 짐칸 × shipWt. 선원 한 사람 crewWt, 대포 한 문 = 짐칸 차지(load) × gunWt + 포탄 shotWt, 식량·물 supWt, 자재 matWt
     // keep = 신선하게 파는 날수(갈래별, keepGood가 있으면 그 값, 0 = 상하지 않음). 넘으면 파는 값이 떨어져 두 배에서 decayMin,

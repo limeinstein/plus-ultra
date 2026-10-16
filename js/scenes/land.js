@@ -371,6 +371,7 @@
         } else await UI.say(landLine(d), G.Scenes.mateSpeaker('surveyor'));
         await G.Disc.find(d, 'land');
       }
+      if (chk.hits.length && G.Pace) G.Pace.mark();   // 발견도 큰 사건 — 뒤의 우연한 사건을 늦춘다
       // 두고 온 유물을 가지러 왔다
       var lefts = G.Disc.leftHere('land', l.lon, l.lat);
       for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
@@ -387,11 +388,15 @@
       if (st.herbs > 0) st.herbs--;
       if (st.fastDays > 0) st.fastDays--;
       // random encounters (지형마다 다른 사건이 먼저 일어날 수 있다)
-      if (U.chance(0.1) && !(G.Tutorial && G.Tutorial.quiet && G.Tutorial.quiet())) { if (!(U.chance(0.55) && await terrainEvent(terr))) await encounter(terr); }   // 튜토리얼에서는 우연한 만남을 재운다
+      if (U.chance(0.1) && (!G.Pace || G.Pace.ok()) && !(G.Tutorial && G.Tutorial.quiet && G.Tutorial.quiet())) {   // 앞 사건과 실제 시간 간격(G.Pace)
+        var tk = 'terr:' + terr, te = U.chance(0.55) && (!G.Pace || G.Pace.ok(tk, { noGap: true })) && await terrainEvent(terr);
+        if (te) { if (G.Pace) G.Pace.mark(tk); } else await encounter(terr);
+      }   // 튜토리얼에서는 우연한 만남을 재운다
       if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy--; await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
     } catch (e) { console.error(e); }
     st.busy--;
   }
+  L.runDay = runDay;   // 시험에서 하루를 바로 돌린다
   function landLine(d) {
     if (d.cat === 'nature') return '제독, 저 경치를 보십시오! 이런 곳이 있었다니...';
     if (d.cat === 'creature') return '제독, 저기 이상한 생물이 있습니다! 조심하십시오!';
@@ -400,6 +405,9 @@
   }
   async function encounter(terr) {
     var s = S(), l = s.loc, r = U.rand();
+    // 같은 만남(원주민·짐승·도적·샘·야영지)은 실제 시간·날수가 지나야 다시 (G.Pace)
+    var ek = 'land:' + (r < 0.35 ? 'native' : r < 0.55 ? 'beast' : r < 0.72 ? 'bandit' : r < 0.85 ? 'spring' : 'camp');
+    if (G.Pace) { if (!G.Pace.ok(ek, { noGap: true })) return; G.Pace.mark(ek); }
     if (r < 0.35) {
       var nativeSeed = 'native' + Math.floor(l.lon) + ':' + Math.floor(l.lat), nativeSpec = A.nativeSpec(nativeSeed, l.lon, l.lat);
       // 문화권 전용 그림이 있으면 쓰되, 모든 대륙을 같은 모습으로 만드는 옛 공통 그림은 쓰지 않는다.

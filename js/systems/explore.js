@@ -225,7 +225,10 @@
     // 최근에 겪은 일은 덜 나오게 한다 (같은 사건이 되풀이되지 않도록)
     var recent = s.evtRecent || (s.evtRecent = []);
     table.forEach(function (e) { if (recent.indexOf(e[0]) >= 0) e[1] *= 0.2; });
+    if (G.Pace) table = table.filter(function (e) { return e[1] > 0 && G.Pace.ok('sea:' + e[0], { noGap: true }); });   // 같은 사건은 실제 시간·날수가 지나야 다시
+    if (!table.length) return false;
     var pick = U.weighted(table, function (e) { return e[1]; })[0];
+    if (G.Pace) G.Pace.mark('sea:' + pick);
     recent.push(pick); if (recent.length > 6) recent.shift();
     st.lastEvt = s.day;
     var first = mate('first');

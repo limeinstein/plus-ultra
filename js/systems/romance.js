@@ -258,7 +258,7 @@
     G.Game.refreshHud();
   };
   /** sea.js runDay */
-  RM.seaDay = async function () { var p = RM.due('sea'); if (p && U.chance(K().seaChance)) await RM.play(p); };
+  RM.seaDay = async function () { var p = RM.due('sea'); if (p && U.chance(K().seaChance)) { await RM.play(p); return true; } return false; };
   /** city.js 입항 */
   RM.arrival = async function () { var p = RM.due('city'); if (p && U.chance(K().portChance)) await RM.play(p); };
 
