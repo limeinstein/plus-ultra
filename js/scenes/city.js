@@ -102,6 +102,7 @@
       out.push({ kind: 'mansion', arg: sid, name: C.mansionName(sp), icon: 'mansion' });
     });
     if (f.guild) out.push({ kind: 'guild', name: '조합', icon: 'seal' });
+    if (G.Court && G.Court.buildingsAt) G.Court.buildingsAt(c.id).forEach(function (x) { out.push({ kind: x.kind, arg: x.realm, name: x.kind === 'museum' ? '왕립 박물관' : '왕립 동물원', icon: x.kind === 'museum' ? 'bust' : 'horse' }); });   // 왕명으로 세운 박물관·동물원 (js/city/museum.js)
     out.push({ kind: 'gate', name: '성문', icon: 'gate' });
     if (c.id === (R.seat ? R.seat() : s.player.home)) out.push({ kind: 'home', name: '자택', icon: 'house' });   // 가족이 개척 도시의 총독 관저로 옮겼으면 고향 집은 비어 있다
     return out;
@@ -140,6 +141,7 @@
       if (arg.arrive) await C.arrival(c, arg);
       if (arg.load) { UI.toast(U.fmtDate(s.date) + ' — ' + c.name, 'book'); }
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
+      if (G.Studio && G.Studio.pending()) await G.Studio.present();   // 화실·조각실에서 완성한 명작을 바친다
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -370,7 +372,7 @@
     var dayMsgs = G.Game.passDays(1);
     G.Game.refreshHud();
     dayMsgs.forEach(function (m) { if (m && m.text) UI.toast(m.text, m.icon || 'calendar', m.history ? 5200 : 3400); });
-    var ikind = B.paint || kind, ivar = B.variant ? B.variant(c, arg) : '';
+    var ikind = (typeof B.paint === 'function' ? B.paint(c, arg) : B.paint) || kind, ivar = B.variant ? B.variant(c, arg) : '';
     if (G.Img.count()) {
       var pre = [C.interiorKeys(ikind, c, ivar)];
       if (B.preload) { var ex = B.preload(c, arg); if (ex) pre = pre.concat(ex); }

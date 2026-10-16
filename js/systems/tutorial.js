@@ -209,19 +209,29 @@
     if (el.tagName === 'TR') { var b = el.querySelector('b'); return b ? b.textContent.trim() : el.textContent.trim(); }
     return el.textContent.trim();
   }
+  /** 이 단계에서 빛나게 할 단추 글 — 이미 한 일은 빼고, 지금 누를 것만 (QA 2026-10-16) */
+  function wants(t, st) {
+    var want = (st.glow || []).slice();
+    function drop(x) { var i = want.indexOf(x); if (i >= 0) want.splice(i, 1); }
+    if (st.id === 'tavern') { if (t.f.drink) drop('술을 마신다'); if (t.f.maid) drop('여급과 이야기'); }
+    if (st.id === 'hire') D.mates.forEach(function (id) { if (!mate(id)) want.push(G.MATE[id].name); });
+    if (st.id === 'roles') { var lc = mate('lacosa'); if (lc && lc.role === 'surveyor') want = []; }
+    if (st.id === 'cabin') want.push('수첩');
+    if (st.id === 'sponsor') want.push('승낙한다');
+    if (st.id === 'sail' || st.id === 'auto') want.push('세우타 쪽으로 바닷길 따라', '세우타 쪽으로 곧장 침로', '세빌리아로 자동항해');
+    if (st.id === 'depart') want = t.f.prep_depart ? ['항구', '출항', '출항한다'] : ['항구', '출항 준비', '결정', '출항한다'];
+    if (st.id === 'auto' && t.f.prep_auto) drop('출항 준비');
+    return want;
+  }
   function glow() {
     var root = ui(); if (!root) return;
-    var t = T(), st = step(), want = t && st ? (st.glow || []).slice() : [];
-    if (t && st) {
-      if (st.id === 'hire') D.mates.forEach(function (id) { if (!mate(id)) want.push(G.MATE[id].name); });
-      if (st.id === 'cabin') want.push('수첩');
-      if (st.id === 'sail' || st.id === 'auto') want.push('세우타 쪽으로 바닷길 따라', '세우타 쪽으로 곧장 침로', '세빌리아로 자동항해');
-      if (st.id === 'depart' && t.f.prep) want = ['항구', '출항', '출항한다'];
-    }
+    var t = T(), st = step(), want = t && st ? wants(t, st) : [];
+    // 창·물음이 떠 있으면 그 창 안의 단추만 (밑에 깔린 메뉴까지 함께 빛나 헷갈리지 않게)
+    var backs = root.querySelectorAll('.modal-back:not(.catch)'), top = backs.length ? backs[backs.length - 1] : null;   // 말만 하는 대화창(.catch)은 고를 것이 없으니 밑의 메뉴를 그대로
     var els = root.querySelectorAll(GLOW_SEL);
     for (var i = 0; i < els.length; i++) {
       var el = els[i], on = false;
-      if (want.length && !el.classList.contains('exit') && !el.closest('.tutbox')) {
+      if (want.length && !el.classList.contains('exit') && !el.closest('.tutbox') && (!top || top.contains(el))) {
         var lb = labelOf(el), loose = el.classList.contains('choice') || el.tagName === 'TR' || el.classList.contains('tr');
         var head = el.classList.contains('btn') && !el.classList.contains('ghost');
         for (var k = 0; k < want.length && !on; k++) on = loose ? lb.indexOf(want[k]) >= 0 : head ? lb.indexOf(want[k]) === 0 : lb === want[k];
@@ -437,6 +447,7 @@
       await play(m.role === 'surveyor' ? st.surveyor : st.otherRole);
     },
     depart: async function (t, s) { if (inCity(D.home) && C().current() && C().current().kind === 'harbor') t.f.prep = 1; },
+    sponsor: async function (t, s) { var r = G.Sponsor.rel(D.sponsor); if (r && r.anger) r.anger = 0; },   // 공작은 튜토리얼에서 언제든 다시 만나 준다 (옛 저장 — 교섭에 실패해 막혀 있던 것도 풀린다)
     battle: async function (t, s, st) {
       var ss = seaSt(); if (!ss) return;
       if (t.f.straitDue) { t.f.straitDue = 0; await play(st.strait); goOn(); return; }
@@ -661,6 +672,8 @@
     wrap(TV, 'assign', function (orig) {
       return function (m, v) { var r = orig.apply(this, arguments), t = T(); if (t && m && m.id === 'lacosa') t.f.role = m.role; return r; };
     });
+    // 출항 준비를 마쳤는가 (빛나는 단추를 「출항 준비」에서 「출항」으로)
+    wrap(Cy.B.harbor, 'prep', function (orig) { return async function () { var r = await orig.apply(this, arguments); if (T() && step()) T().f['prep_' + step().id] = 1; return r; }; });
     // 후원자: 공작은 명성을 따지지 않고 만나 준다
     wrap(SP, 'fameNeed', function (orig) { return function (sp) { return T() && sp && sp.id === D.sponsor ? 0 : orig.apply(this, arguments); }; });
     wrap(Cy.B.mansion, 'enter', function (orig) {

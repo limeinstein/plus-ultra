@@ -169,8 +169,10 @@
     var d = o.d, sp = o.sp || null, s = S(), out = { k: 1, fk: 1, trust: 0, speakers: [], results: [], close: async function () {} };
     if (!d || !G.PITCH) return out;
     if (!P.on()) return out;
-    var SC = G.Scenes, show = SC.discoveryShow ? SC.discoveryShow(d, { title: o.mode === 'announce' ? '발표' : '보고' }) : null;
-    if (show) { out.close = show.close; out.shown = true; }
+    // ① 발견물 그림을 먼저 혼자 다시 돌린다 — 그림이 걷힌 뒤에 사람들이 나와 이야기한다 (QA 2026-10-16)
+    var SC = G.Scenes, ttl = o.mode === 'announce' ? '발표' : '보고';
+    if (SC.discoveryReplay) { try { out.shown = await SC.discoveryReplay(d, { title: ttl }); } catch (e) { console.error(e); } }
+    else { var show = SC.discoveryShow ? SC.discoveryShow(d, { title: ttl }) : null; if (show) { out.close = show.close; out.shown = true; } }
     var SP = G.Sponsor, kd = P.kind(sp), liked = sp ? G.tasteHit(sp.taste, d) : d.pw >= 3;
     var ctx = { d: d.name, h: sp ? SP.honor(sp) : '여러분', who: sp ? SP.holderName(sp) : '', me: s.player.name, reg: G.Disc.regName ? G.Disc.regName(d) : '', cat: (G.DISC_CATS || {})[d.cat] || '' };
     var me = sp ? SP.me(sp) : { name: s.player.name, portrait: s.player.portrait };

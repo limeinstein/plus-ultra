@@ -13,7 +13,7 @@
   G.BALANCE = G.BALANCE || {};
   G.BALANCE.court = G.BALANCE.court || {
     step: 10000,         // 통합 명성이 이만큼 오를 때마다 군주가 한 번 부른다 (작위 한 칸 = 왕명 하나)
-    choices: 4,          // 한 번의 알현에서 내놓는 왕명 수 (탐험·교역·전투·사교에서 하나씩)
+    choices: 3,          // 한 번의 알현에서 내놓는 왕명 수 — 모든 왕명 가운데 무작위로 (2026-10-16 예전에는 탐험·교역·전투·사교에서 하나씩 넷)
     years: 2,            // 왕명의 기한(해)
     again: 180,          // 왕명을 내려놓거나 기한을 넘긴 뒤 다시 부르기까지(일)
     fame: [450, 160],    // 왕명을 마쳤을 때 명성 = [0] + [1] × 받을 작위의 칸
@@ -26,6 +26,7 @@
     shipsN: [2, 0.5, 5],            // 나포·해적 토벌 척수: [0] + [1] × 칸 (최대 [2])
     geoN: [1, 0.34, 3],             // 지리·자연 발견 건수
     zooN: 5,                        // 동물원에 들일 신기한 동물 수
+    museumN: 3,                     // 박물관에 바칠 발견 유물·명작 수 (js/systems/court.js — 다 바치면 그 도시에 왕립 박물관)
     warSpawn: 0.22, warNear: 14,    // 나포 왕명 중: 그 나라 항구가 warNear° 안이면 하루에 warSpawn 확률로 그 나라 배가 나타난다
     denNear: 2.6,                   // 소굴 앞바다: 이 거리(°) 안에 들면 납치한 해적단이 나타난다
     envoyRetry: 30,                 // 교섭이 깨진 뒤 다시 교섭하기까지(일)
@@ -151,6 +152,7 @@
     geo:      { name: '지리상의 발견', cat: 'ex', icon: 'compass' },
     treasure: { name: '보물 발견', cat: 'ex', icon: 'chest' },
     zoo:      { name: '동물원 건설', cat: 'ex', icon: 'star' },
+    museum:   { name: '박물관 건립', cat: 'so', icon: 'bust' },
     supply:   { name: '교역품 납품', cat: 'tr', icon: 'sack' },
     tribute:  { name: '비용 지불', cat: 'tr', icon: 'coin' },
     capture:  { name: '적국 선박 나포', cat: 'bt', icon: 'sword' },
@@ -160,5 +162,5 @@
     envoy:    { name: '외교 특사', cat: 'so', icon: 'handshake' }
   };
   // 갈래마다 내놓을 수 있는 왕명
-  G.COURT.byCat = { ex: ['geo', 'treasure', 'zoo'], tr: ['supply', 'tribute'], bt: ['capture', 'rescue', 'pirates'], so: ['letter', 'envoy'] };
+  G.COURT.byCat = { ex: ['geo', 'treasure', 'zoo'], tr: ['supply', 'tribute'], bt: ['capture', 'rescue', 'pirates'], so: ['letter', 'envoy', 'museum'] };
 })(window.G = window.G || {});

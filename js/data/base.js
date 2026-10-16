@@ -215,12 +215,17 @@
     prizeHold: { food: [0.05, 0.12], water: [0.05, 0.12], mat: [0.02, 0.06], goods: { merchant: [0.35, 0.7], pirate: [0.1, 0.3], navy: [0, 0.08] },
       matK: { navy: 1.6 }, join: { merchant: 0.3, pirate: 0.5, navy: 0.2 }, crewLeft: [0.15, 0.4] },
     // 기함의 선실 (js/systems/cabins.js). 고칠 수 있는 선실 수 = (정원 + 내구) ÷ slotDiv, slotMin~slotMax. 방의 힘 = (1 + 특기 단계) × 충성 효율, 같은 방을 여럿 두면 더해지되 cap까지.
-    //   fx: 방의 힘 1마다의 효과 — lookout 발견 거리(°) · chart 해도 넓이(°) · galley/mess/helm 하루 피로 · messD/chapel/rec/deck 하루 규율 · sick 괴혈병 번짐 감소 비율
+    //   fx: 방의 힘 1마다의 효과 — musicroom 하루 피로 · staff 계략 성공률 · staffDmg 계략 피해 · lookout 발견 거리(°) · chart 해도 넓이(°) · galley/mess/helm 하루 피로 · messD/chapel/rec/deck 하루 규율 · sick 괴혈병 번짐 감소 비율
     //       rig 속력 비율(최대 rigMax) · repair 하루 기함 수리(내구) · pen 하루 식량(통) · gun 포격 · marine 백병전 비율 · haggle 값 깎기 성공률 · wage 급료 감소 비율 · feast/songs 사건 가중
     //   langDays: 한배에서 지낸 날이 이만큼이면 말 1·2·3단계 (3달·9달·2년), farRate: 방이 멀 때 하루에 쌓이는 몫, cols: 선실 한 줄의 칸 수
     cabins: { slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, cols: 6, rigMax: 0.08, langDays: [90, 270, 730], farRate: 0.3,
       fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.01, repair: 0.1, pen: 0.12,
-        gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1 } },
+        gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1,
+        musicroom: 0.07, staff: 0.03, staffDmg: 0.06 } },   // 2026-10-16 음악실: 하루 피로 · 참모실: 육상전 계략(기습·함정·저격·작렬탄) 성공률 · 계략 피해 비율
+    // 화실·조각실 (js/systems/studio.js, 명작 표 js/data/masterworks.js). 방의 힘(1 + 그림·세공 단계)만큼 날마다 일이 쌓여 need가 차면 미술품·조각품 qty[단계]통을 짐칸에 싣는다.
+    //   실존 화가·조각가는 따로 mwNeed만큼 쌓이면(힘 4면 90일) 명작 하나 — 값 = value[0] + 그 사람의 지명도 × value[1] (조각은 × sculptK), 사교 명성 = fame[0] + 지명도 × fame[1]
+    //   예술가마다 그림·조각을 세 점씩 (js/data/masterworks.js). generic: 표에 없는 실존 화가가 남기는 명작 수
+    studio: { need: 60, qty: [1, 1, 2, 3], mwNeed: 360, value: [3000, 5], sculptK: 1.2, fame: [40, 0.06], generic: 3 },
     // 부하: 수는 제한이 없다. 재산이 급료 warnMonths달 치에 못 미치면 경리·부관이 경고한다. 충성 low 이하면 효율 lowEff, veryLow 이하면 veryLowEff.
     //   역할도 방도 없는 부하는 달마다 충성 −idleLoyal, 부관이 있으면 급료를 치른 달에 충성이 settle 아래인 부하 +adjutantLoyal. 술집에서 한턱 내면 모든 부하 충성 +treatLoyal.
     //   충성 0이면 떠나겠다고 나선다 — 붙잡을 확률 persuade + (매력−50)/200 + 웅변 × persuadeSpeech, 붙잡으면 충성 persuadeLoyal
@@ -262,7 +267,7 @@
     //   cityPickPx = 바다 지도에서 도시 표식을 누른 것으로 치는 반지름(그림·이름표도 함께), portLandPx = 항구 둘레 뭍을 누르면 그 항구로 가는 반지름(px)
     pointerControl: { seaDeadPx: 38, landDeadPx: 30, cityPickPx: 30, portLandPx: 70 },
     // 항해·육상 탐험 중 가까운 도시에 들어갈지 물었을 때 거절하면, 같은 도시의 물음을 실제 시간으로 이만큼 쉬었다가 다시 띄운다.
-    cityEntryPrompt: { cooldownMs: 5000 },
+    cityEntryPrompt: { cooldownMs: 30000 },   // 「지나간다」를 고른 뒤 같은 항구·성문을 다시 묻기까지 (실제 시간 ms) — 그 사이에도 도시를 직접 누르면 바로 들어간다
     seaSearch: { days: 1, senseBoost: 1.8, chartBonus: 1.2 },
     // 짐의 부피·무게 (js/systems/cargo.js). 1통 = 부피 1. wt = 1통의 무게(갈래별, wtGood가 있으면 그 값).
     // 배가 버티는 무게 = 짐칸 × shipWt. 선원 한 사람 crewWt, 대포 한 문 = 짐칸 차지(load) × gunWt + 포탄 shotWt, 식량·물 supWt, 자재 matWt

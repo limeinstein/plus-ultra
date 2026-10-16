@@ -203,6 +203,10 @@
     return { advance: Math.max(400, adv), reward: Math.max(1200, rew), years: years, liked: liked };
   }
 
+  /** 튜토리얼의 메디나셀리 공작인가 — 튜토리얼에서는 제안을 늘 받아 주고, 교섭은 늘 성공하며, 교섭 뒤에는 「승낙한다」만 남는다 (QA 2026-10-16:
+      증액을 청했다가 결렬되면 공작이 90일 동안 문전박대해 튜토리얼이 막혔다) */
+  function tutDuke(sp) { return !!(sp && G.TUTORIAL && sp.id === G.TUTORIAL.sponsor && G.Tutorial && G.Tutorial.active && G.Tutorial.active()); }
+  SP.tutDuke = tutDuke;
   SP.propose = async function (sp) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
     var L = function (k, ctx) { return SP.line(sp, k, ctx); };
@@ -220,6 +224,7 @@
       G.Game.refreshHud();
       await UI.say(L('debtPaid'), who);
     }
+    if (tutDuke(sp)) rel.anger = 0;
     if (rel.anger > 0 && U.dateNum(s.date) < rel.anger) { await UI.say(L('rude'), who); return; }
     await UI.say(L(rel.done ? 'openAgain' : 'openNew'), who);
     // candidate proposals: hinted (not yet found by me), or found-but-unreported
@@ -234,7 +239,7 @@
       if (G.Errand) { await UI.say(L('emptyErrand'), who); await G.Errand.offerDialog(sp, who); return; }
       await UI.say(L('emptyNone'), who); UI.toast('도서관이나 술집에서 단서를 모으십시오.', 'scroll'); return;
     }
-    if (G.Errand) list.push({ errand: true });
+    if (G.Errand && !tutDuke(sp)) list.push({ errand: true });
     var tm = SP.temperOf(sp);
     for (var tries = 0; tries < 3; tries++) {
       var tasteTxt = sp.taste.map(G.tasteName).join('·');
@@ -247,6 +252,7 @@
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
       await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found || x.fake ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : d.hint + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp));
+      if (tutDuke(sp) && d.id === G.TUTORIAL.disc && !x.found && !x.fake) { await UI.say(L('like'), who); return SP.negotiate(sp, d, 1.1, false); }   // 튜토리얼: 공작은 늘 응한다
       // too heavy?
       var need = G.POWER_FAME[d.pw] || 0;
       if (!x.found && !x.fake && s.player.fame < need * 0.8) { await UI.say(L('heavy'), who); continue; }
@@ -546,7 +552,10 @@
     for (;;) {
       await UI.say(L('offer', { adv: U.num(o.advance), yrs: o.years, rew: U.num(o.reward) }), who);
       var speech = R.skill('speech');
-      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢' + (tm ? '\n' + SP.holderName(sp) + U.jx(SP.holderName(sp), '은/는') + ' ' + tm.like + '. ' + tm.desc : ''), [{ label: '승낙한다', value: 'ok' }, { label: '교섭한다' + (pu ? ' (경리 ' + pu.name + (speech ? ' · 웅변 ' + speech : '') + ')' : speech ? ' (웅변 ' + speech + ')' : ''), value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }], SP.me(sp));
+      var opts = [{ label: '승낙한다', value: 'ok' }, { label: '교섭한다' + (pu ? ' (경리 ' + pu.name + (speech ? ' · 웅변 ' + speech : '') + ')' : speech ? ' (웅변 ' + speech + ')' : ''), value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }];
+      if (tutDuke(sp) && asked >= 1) opts = [opts[0]];      // 튜토리얼: 한 번 교섭했으면 승낙만 남는다
+      var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢' + (tm ? '\n' + SP.holderName(sp) + U.jx(SP.holderName(sp), '은/는') + ' ' + tm.like + '. ' + tm.desc : ''), opts, Object.assign(SP.me(sp), tutDuke(sp) && asked >= 1 ? { cancel: false } : {}));
+      if (v == null && tutDuke(sp) && asked >= 1) v = 'ok';
       if (v === 'ok') break;
       if (v === 'no' || v == null) { await UI.say(L('negoNo'), who); return; }
       var w = await UI.choose('무엇을 요구할까?', [{ label: '자금 증가', value: 'money', icon: 'coin' }, { label: '기간 연장', value: 'time', icon: 'hourglass' }, { label: '변경 없음', value: 'none', icon: 'check' }], { width: 420 });
@@ -556,7 +565,7 @@
       if (pu) await UI.say(w === 'money' ? U.pick([hon + ', 선원 급료와 보급을 셈해 보면 이 선금으로는 절반도 못 갑니다. 장부를 보시지요.', '배 수리와 식량 값이 올해 크게 올랐습니다. 선금을 조금만 더 얹어 주시면 기한 안에 반드시 해내겠습니다.'])
         : U.pick(['뱃길과 계절풍을 따져 보면 이 기한은 빠듯합니다. 한 해만 더 주시면 선금은 그대로 두셔도 됩니다.', hon + '의 돈이 헛되이 쓰이지 않도록, 서두르지 않을 시간을 조금만 더 주십시오.']), G.Scenes.mateSpeaker('purser'));
       else if (speech) await UI.say(w === 'money' ? '이 모험이 성공하면 ' + hon + '의 이름도 세상에 남습니다. 그 값에 걸맞은 선금을 약속해 주십시오.' : '서두르다 원정을 그르치는 것보다 확실한 성공이 낫습니다. 시간을 주시면 반드시 성과로 갚겠습니다.', SP.me(sp));
-      var p = SP.negotiationChance(sp, w, asked, pu);
+      var p = tutDuke(sp) ? 1 : SP.negotiationChance(sp, w, asked, pu);     // 튜토리얼: 공작은 교섭에 늘 응한다
       if (!U.chance(p)) {
         if (G.Outcome) await G.Outcome.show('lose', { title: '교섭 결렬…', sub: '욕심이 지나쳤다 — 계약이 없던 일이 되었다' });
         await UI.say(L('greed'), who);

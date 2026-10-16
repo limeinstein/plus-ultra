@@ -496,16 +496,36 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
   .dlg-actor { transition: filter .12s; }
 }
 /* ---------------------------------------------------------------- duel & poker */
-.poker .row { display: flex; gap: 14px; justify-content: center; margin: 12px 0 30px; }
-.pcard { width: 96px; height: 136px; border-radius: 8px; background: linear-gradient(180deg, #fffdf6, #efe6d2); border: 1px solid #6b5230; box-shadow: 0 3px 8px rgba(0,0,0,.35); position: relative; color: #222; cursor: pointer; font-family: var(--latin); transition: transform .12s; }
+.poker-table { position: relative; overflow: hidden; }
+.poker .row { display: flex; gap: 14px; justify-content: center; margin: 12px 0 18px; min-height: 134px; }
+.poker-mid { height: 96px; position: relative; display: flex; align-items: flex-end; justify-content: center; }
+.poker-deck { position: absolute; z-index: 4; width: 42px; height: 59px; left: calc(50% - 21px); top: -3px; opacity: 0; transform: translateY(-4px) scale(.92); transition: opacity .12s, transform .12s; pointer-events: none; filter: drop-shadow(0 4px 4px rgba(0,0,0,.45)); }
+.poker-deck.active { opacity: 1; transform: translateY(0) scale(1); }
+.poker-deck b { position: absolute; inset: 0; display: block; border: 1px solid #c6a66a; border-radius: 4px; background: repeating-linear-gradient(45deg, #1e3552 0 5px, #2a4a70 5px 10px); }
+.poker-deck b:nth-child(1) { transform: translate(-4px, -2px) rotate(-3deg); }
+.poker-deck b:nth-child(2) { transform: translate(3px, -1px) rotate(2deg); }
+.poker-deck b:nth-child(3) { transform: translate(0, -5px); }
+.poker-deck.shuffling b:nth-child(1) { animation: poker-riffle-left .72s ease-in-out; }
+.poker-deck.shuffling b:nth-child(2) { animation: poker-riffle-right .72s ease-in-out; }
+.pcard { width: 96px; height: 134px; flex: 0 0 96px; border-radius: 7px; background: linear-gradient(180deg, #fffdf6, #efe6d2); border: 1px solid #6b5230; box-shadow: 0 3px 8px rgba(0,0,0,.35); position: relative; color: #222; cursor: pointer; font-family: var(--latin); transition: transform .12s; transform-origin: center; }
 .pcard.red { color: #a3261c; }
 .pcard .r { position: absolute; left: 8px; top: 6px; font-size: 22px; font-weight: 700; }
 .pcard .rb { position: absolute; right: 8px; bottom: 6px; font-size: 22px; font-weight: 700; transform: rotate(180deg); }
 .pcard .s { position: absolute; left: 0; right: 0; top: 40px; text-align: center; font-size: 46px; }
+.pcard .pcard-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: fill; border-radius: inherit; pointer-events: none; }
 .pcard.back { background: repeating-linear-gradient(45deg, #1e3552 0 6px, #2a4a70 6px 12px); border-color: #b8925a; cursor: default; }
+.pcard.slot { visibility: hidden; pointer-events: none; }
 .pcard.held { transform: translateY(-10px); box-shadow: 0 0 0 3px #d9b45f, 0 6px 12px rgba(0,0,0,.4); }
+.pcard.deal-in { pointer-events: none; animation: poker-deal-in .17s cubic-bezier(.2,.72,.24,1) both; }
+.en .pcard.leaving { pointer-events: none; animation: poker-leave-en .26s ease-in both; }
+.me .pcard.leaving { pointer-events: none; animation: poker-leave-me .26s ease-in both; }
 .pcard i { position: absolute; left: 0; right: 0; bottom: -26px; text-align: center; font-style: normal; font-size: 14px; color: #7a5c33; font-weight: 700; }
 .plog { font-size: 19px; margin: 8px 0; }
+@keyframes poker-riffle-left { 0%,100% { transform: translate(-4px,-2px) rotate(-3deg); } 35% { transform: translate(-42px,-8px) rotate(-12deg); } 68% { transform: translate(-8px,-12px) rotate(4deg); } }
+@keyframes poker-riffle-right { 0%,100% { transform: translate(3px,-1px) rotate(2deg); } 35% { transform: translate(42px,-7px) rotate(12deg); } 68% { transform: translate(8px,-10px) rotate(-4deg); } }
+@keyframes poker-deal-in { from { opacity: .28; transform: translate(var(--deal-x), var(--deal-y)) rotate(var(--deal-turn)) scale(.78); } to { opacity: 1; transform: translate(0,0) rotate(0) scale(1); } }
+@keyframes poker-leave-en { to { opacity: 0; transform: translateY(54px) rotate(7deg) scale(.84); } }
+@keyframes poker-leave-me { to { opacity: 0; transform: translateY(-54px) rotate(-7deg) scale(.84); } }
 #ui > .fade-black, #ui > .toasts { pointer-events: none; }
 
 .cmdmenu.many { width: 480px; }
@@ -1241,8 +1261,16 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .tutbox .tb-btns a.tb-helm { color: #1e3552; font-weight: 700; font-size: 14px; }
 .tutbox .tb-g { display: flex; gap: 8px; align-items: flex-start; margin-top: 5px; font-size: 18px; }
 .tutbox .tb-g svg { width: 20px; height: 20px; flex: none; margin-top: 3px; }
-.tut-glow { animation: tutglow 1.3s ease-in-out infinite; outline: 2px solid #f0c040; outline-offset: 1px; position: relative; z-index: 1; }
-@keyframes tutglow { 0%, 100% { box-shadow: 0 0 4px 1px rgba(240,192,64,.55); } 50% { box-shadow: 0 0 16px 6px rgba(255,214,96,.95); } }
+/* 튜토리얼에서 눌러야 할 곳 — 키보드 커서(.kbd-focus, 노란빛)와 헷갈리지 않게 하늘빛 테두리와 「여기」 표 (QA 2026-10-16)
+   테두리는 안쪽에도 그려 목록이 잘라도 보이고, 키보드 커서가 같은 단추에 오면 안쪽에 노란 줄이 함께 보인다 */
+.tut-glow { animation: tutglow 1.2s ease-in-out infinite; outline: 3px solid #2fc6ff !important; outline-offset: 1px; position: relative; z-index: 2; }
+@keyframes tutglow { 0%, 100% { box-shadow: inset 0 0 0 2px #2fc6ff, 0 0 5px 2px rgba(47,198,255,.55); } 50% { box-shadow: inset 0 0 0 2px #8fe4ff, 0 0 18px 7px rgba(47,198,255,.95); } }
+.tut-glow.kbd-focus { animation-name: tutglowk; }
+@keyframes tutglowk { 0%, 100% { box-shadow: inset 0 0 0 2px #2fc6ff, inset 0 0 0 5px #f0cf7b, 0 0 5px 2px rgba(47,198,255,.55); } 50% { box-shadow: inset 0 0 0 2px #8fe4ff, inset 0 0 0 5px #f0cf7b, 0 0 18px 7px rgba(47,198,255,.95); } }
+.cmd.tut-glow::after, .choice.tut-glow::after, .btn.tut-glow::after, .hire-row.tut-glow::after, .todo .tr.tut-glow::after {
+  content: '여기'; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); padding: 0 7px; font: 700 13px/20px var(--serif, serif); letter-spacing: 0;
+  color: #04202e; background: #2fc6ff; border: 1px solid #0b3b52; border-radius: 10px; pointer-events: none; z-index: 3; box-shadow: 0 1px 3px rgba(0,0,0,.45); }
+.btn.tut-glow::after { top: -10px; right: -8px; transform: none; }
 
 /* 생일 선물 (js/systems/lifespan.js) */
 .bday .bday-head { font-size: 18px; line-height: 1.6; margin-bottom: 10px; }
@@ -1413,3 +1441,25 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .colony-status .cs-need { margin-top: 12px; font-size: 17px; }
 .colony-status .cs-gov { margin-top: 8px; font-size: 17px; color: #6a1e1e; font-weight: 700; }
 .colony-kv { grid-template-columns: 160px 1fr !important; margin-bottom: 8px; }
+
+/* 명작 카드 (js/systems/studio.js) — 화실·조각실의 화가·조각가가 바치는 작품 */
+.mw-card { text-align: center; font-size: 16px; line-height: 1.55; }
+.mw-frame { display: inline-block; padding: 12px; background: linear-gradient(135deg, #b8862e, #f0d27a 30%, #8a5a1a 55%, #e8c262 80%, #9a6a22); border-radius: 4px; box-shadow: 0 6px 18px rgba(0,0,0,.45), inset 0 0 0 2px rgba(60,36,10,.6); }
+.mw-frame.sculpt { background: linear-gradient(180deg, #3a2a1c, #1a120c); }
+.mw-img { display: block; width: 420px; max-width: 100%; height: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.4); }
+.mw-name { margin-top: 12px; font-size: 22px; font-weight: 700; }
+.mw-by { color: var(--muted, #8a7a60); font-size: 14px; }
+.mw-desc { margin: 8px auto 6px; max-width: 470px; text-align: left; font-size: 15px; }
+.mw-gain { font-size: 15px; }
+
+/* 왕립 박물관·동물원 전시실 (js/city/museum.js) */
+.mu-sub { margin: 0 0 12px; font-size: 15px; }
+.mu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; max-height: 62vh; overflow-y: auto; padding-right: 4px; }
+.mu-card { background: rgba(255,248,232,.55); border: 1px solid rgba(120,90,50,.35); border-radius: 6px; padding: 10px; text-align: center; }
+.mu-pic { height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+.mu-pic img { max-width: 100%; max-height: 150px; object-fit: contain; }
+.mu-pic.frame img { padding: 6px; background: linear-gradient(135deg, #b8862e, #f0d27a 30%, #8a5a1a 55%, #e8c262 80%, #9a6a22); border-radius: 3px; }
+.mu-pic .ic { width: 64px; height: 64px; opacity: .6; }
+.mu-name { font-weight: 700; font-size: 16px; }
+.mu-meta { font-size: 13px; color: var(--muted, #8a7a60); margin: 2px 0 6px; }
+.mu-desc { font-size: 13px; text-align: left; line-height: 1.45; }

@@ -23,7 +23,8 @@
     if (G.Names) out = out.concat(G.Names.daily());       // 아메리고 베스푸치의 보고와 대륙 이름
     if (G.Frontier) out = out.concat(G.Frontier.tick());
     if (G.Achieve) out = out.concat(G.Achieve.daily());   // 옛 저장: 이미 이룬 업적·이미 열린 사슬의 단서
-    if (G.Cabins) out = out.concat(G.Cabins.daily());      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
+    if (G.Cabins) out = out.concat(G.Cabins.daily());
+    if (G.Studio) out = out.concat(G.Studio.daily());      // 화실·조각실: 미술품·조각품을 싣고, 실존 화가·조각가는 명작을 완성한다 (js/systems/studio.js)      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
     // contract deadline warnings
     if (s.contract && !s.contract.warned && U.dateNum(s.date) > s.contract.due) {
       s.contract.warned = true;

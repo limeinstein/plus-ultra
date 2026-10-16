@@ -174,6 +174,9 @@ def valid_keys(d):
         k['outcomes/' + name + '_f'] = '결과 연출 · ' + label + ' (여자 제독)'
     for name in ('props', 'ruins', 'sphinx', 'poker', 'fishing', 'boat'):
         k['minigames/' + name] = '미니게임 그림 · ' + name
+    for suit in ('spades', 'hearts', 'diamonds', 'clubs'):
+        for rank in ('j', 'q', 'k'):
+            k['minigames/cards/%s-%s' % (rank, suit)] = '포카 역사 인물 카드 · %s-%s' % (rank.upper(), suit)
     cn = {c['id']: c['name'] for c in d['cities']}
     # 거리 배경 (항구/내륙, 변형은 뒤에 _a, _b … 를 붙인다)
     for c in d['cities']:
@@ -357,7 +360,7 @@ def write_manifest(found):
 def is_valid(key, keys):
     return key in keys or key.startswith(('portraits/player/', 'portraits/player-aged/', 'portraits/courtiers/', 'landmarks/', 'map-discoveries/', 'characters/',
                                           'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'relics/', 'relic-kinds/',
-                                          'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/', 'npc-walk/', 'guide/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
+                                          'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/', 'npc-walk/', 'guide/', 'masterworks/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
 
 def report(found, dups, keys):
@@ -366,7 +369,7 @@ def report(found, dups, keys):
               ('마을 사람', 'portraits/npc/'), ('거리 대화 NPC', 'portraits/street-folk/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'), ('왕실 신하', 'portraits/courtiers/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
-              ('항해 효과', 'effects/'), ('결과 연출', 'outcomes/'), ('이야기 사진', 'story/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]
+              ('항해 효과', 'effects/'), ('결과 연출', 'outcomes/'), ('이야기 사진', 'story/'), ('명작', 'masterworks/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

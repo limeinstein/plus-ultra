@@ -216,7 +216,7 @@
     if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + skillNote(m, c) + '</small></span></div>';
     else h += '<div class="cb-none">' + (c.id === 'hold' ? (o.yard ? '눌러서 쓰임을 정한다' : '조선소에서 고친다') : '비어 있음') + '</div>';
     el.innerHTML = h;
-    var art = artImage('cabins/' + c.id, 'cb-card-art', '');
+    var art = artImage('cabins/' + c.id, 'cb-card-art', '') || (c.art ? artImage('cabins/' + c.art, 'cb-card-art', '') : null);   // 전용 그림이 없는 새 방은 비슷한 방 그림을 빌린다
     if (art) { el.classList.add('has-art'); el.insertBefore(art, el.firstChild); }
     if (m) el.querySelector('.cb-face').appendChild(face(m.id, 36));
     return el;

@@ -32,7 +32,11 @@
     //   regimes: 바다별 모양을 바꾸려면 { trades: { form: [늘어남, 구름길, 크기, 솟음], steady: 1, name: '…' } } 처럼 덮어쓴다
     clouds: { drift: 1.3, idleRate: 0.35, turn: 0.12, morph: 6, tail: 0.08, regimes: {} },
     // 낚시 배경의 수면 위치. 그림을 화면의 실제 찌 높이에 맞춰 나누어 그린다.
-    minigames: { fishingWaterline: 0.365, boat: [0, -118, 218, 145] },
+    minigames: {
+      fishingWaterline: 0.365, boat: [0, -118, 218, 145],
+      // 포카: 덱을 섞고 한 장씩 나누며, 교환 때는 홀드하지 않은 패만 거두어 빈자리에 보충한다.
+      poker: { shuffleMs: 720, dealMs: 170, discardMs: 260 }
+    },
     // 유적·자연 경관·동물·보물 발견 연출 (js/scenes/common.js SC.discoveryReveal): 화면이 어두워지고 GIF가 빛난 뒤 마지막 장면에서 멈춘다
     reveal: {
       dim: 0.7,           // 뒤쪽 탐험 지도가 어두워지는 정도 (0~1, 가운데는 이것의 80%)

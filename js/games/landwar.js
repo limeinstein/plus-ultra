@@ -3,6 +3,7 @@
      기병은 적 한 부대를, 총병은 앞줄 세 부대를, 포병은 적 전체를 친다
    - 특기가 3단계면 부대가 강해진다: 검술 → 중장기병, 사격술 → 머스킷총병, 포술 → 캐논포병, 셋 다 → 무적 제독대
    - 특수 작전(한 번씩): 기습 · 함정 · 저격 · 작렬탄 (작렬탄은 소지품의 작렬탄과 포병이 있어야). 지형에 따라 성공률이 다르다
+     기함의 참모실에 참모(운용·역사·측량)를 두면 계략이 더 잘 통하고(성공률 +) 피해도 커진다 (G.BALANCE.cabins.fx.staff·staffDmg)
    - 적 우두머리를 쓰러뜨리면 남은 적이 흩어져 이긴다. 제독대가 무너지면 진다 · 쓰러진 대원 일부는 의학 솜씨만큼 살아 돌아온다
    G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n}, party, terr, guns, flee }) → {res: win|lose|flee, dead, back, left} */
 (function (G) {
@@ -90,6 +91,7 @@
     var fx = [], shakeT = 0, t0 = performance.now(), log = [];
     var mi = mountInfo();
     mine.forEach(function (u) { if (u.type === 'cav') u.ride = mi.name; });
+    var CBN = G.Cabins, STAFF = CBN ? CBN.fx('staff', 'staff') : 0, STAFF_DMG = 1 + (CBN ? CBN.fx('staff', 'staffDmg') : 0);   // 참모실의 힘 (G.BALANCE.cabins.fx.staff·staffDmg)
     var here = S().loc || {}, LA = ART(), reg = LA ? LA.regions[LA.regionOf(here.lon || 0, here.lat || 0)] : null;
     var SPR = G.Sprites, SFX = (G.FX && G.FX.sprites) || {}, useSpr = !!(SPR && LA && reg) && SFX.battle !== false;
     var bgImg = null, bgChain = I && I.chain && I.chain.landWarBackground ? I.chain.landWarBackground(terr) : [];
@@ -346,12 +348,16 @@
       }
       function specials() {
         var art = alive(mine).some(function (u) { return u.type === 'art'; }), shells = R.hasItem('shells');
-        return [
+        var tip2 = STAFF > 0 ? ' · 참모실 +' + Math.round(STAFF * 100) + '%, 피해 ×' + (Math.round(STAFF_DMG * 100) / 100) : '';
+        var out = [
           { id: 'ambush', name: '기습', p: U.clamp((TERR_AMBUSH[terr] || 0.45) + sk('survey') * 0.04, 0.1, 0.95), ok: !used.ambush, tip: '숨어서 덮친다 — 적 모두를 치고 한 차례 발을 묶는다 (숲·밀림·산에서 잘 된다)' },
           { id: 'trap', name: '함정', p: U.clamp((TERR_TRAP[terr] || 0.5) + sk('survey') * 0.05, 0.1, 0.95), ok: !used.trap, tip: '함정을 판다 — 다음에 달려드는 적이 걸려 크게 다친다' },
           { id: 'snipe', name: '저격', p: U.clamp(0.18 + sk('shoot') * 0.12, 0.05, 0.8), ok: !used.snipe, tip: '솜씨 좋은 사수가 적 우두머리를 노린다' },
           { id: 'shells', name: '작렬탄', p: null, ok: !used.shells && art && shells, tip: '포병이 작렬탄을 쏜다 — 적 전체에 큰 피해 (소지품의 작렬탄 1회를 쓴다)' }
         ];
+        // 참모실 (js/data/cabins.js staff): 계략이 더 잘 통한다 — 성공률 +STAFF (상한 0.95), 피해 ×STAFF_DMG
+        out.forEach(function (x) { if (STAFF > 0) { if (x.p != null) x.p = Math.min(0.95, x.p + STAFF); x.tip += tip2; } });
+        return out;
       }
       var busy = false;
       function start() {
@@ -407,7 +413,7 @@
           if (G.Audio) G.Audio.sfx('sword');
           await sleep(140);
           var n = kills(u, pow, 1, t);
-          if (trapOn && !me) { trapOn = false; fx.push({ kind: 'spike', x: u.x, y: u.y, t: 0, life: 1.2 }); var tk = Math.max(1, Math.round(u.n * U.rf(0.25, 0.4))); hurt(u, tk, true); say(u.name + U.jx(u.name, '이/가') + ' 함정에 걸렸다! (' + tk + ' 쓰러짐)'); return; }
+          if (trapOn && !me) { trapOn = false; fx.push({ kind: 'spike', x: u.x, y: u.y, t: 0, life: 1.2 }); var tk = Math.max(1, Math.round(u.n * Math.min(0.9, U.rf(0.25, 0.4) * STAFF_DMG))); hurt(u, tk, true); say(u.name + U.jx(u.name, '이/가') + ' 함정에 걸렸다! (' + tk + ' 쓰러짐)'); return; }
           hurt(t, n, look === 'cav' || u.leader);
         } else {
           var k = reach === 'all' ? 0.36 : 0.62;
@@ -441,7 +447,7 @@
           var sp = specials().filter(function (x) { return x.id === cmd; })[0];
           var ok = sp.p == null || U.chance(sp.p);
           if (cmd === 'ambush') {
-            if (ok) { banner('기습!', 1.2); say('기습이 먹혔다! 적이 우왕좌왕한다.'); await sleep(300); alive(foes).forEach(function (t) { for (var a = 0; a < 3; a++) fx.push({ kind: 'arrow', x0: t.x - 260, y0: t.y - 120, x1: t.x + U.rf(-20, 20), y1: t.y - 14, t: -a * 0.06, life: 0.55 }); }); await sleep(560); alive(foes).forEach(function (t) { hurt(t, Math.max(1, Math.round(t.n * U.rf(0.15, 0.25))), false); }); stunEn = true; }
+            if (ok) { banner('기습!', 1.2); say('기습이 먹혔다! 적이 우왕좌왕한다.'); await sleep(300); alive(foes).forEach(function (t) { for (var a = 0; a < 3; a++) fx.push({ kind: 'arrow', x0: t.x - 260, y0: t.y - 120, x1: t.x + U.rf(-20, 20), y1: t.y - 14, t: -a * 0.06, life: 0.55 }); }); await sleep(560); alive(foes).forEach(function (t) { hurt(t, Math.max(1, Math.round(t.n * U.rf(0.15, 0.25) * STAFF_DMG)), false); }); stunEn = true; }
             else { say('기습을 들켰다! 적이 먼저 달려든다.'); }
           } else if (cmd === 'trap') {
             if (ok) { trapOn = true; say('앞길에 함정을 팠다. 다음에 달려드는 적이 걸려들 것이다.'); banner('함정', 1); }
@@ -451,7 +457,7 @@
             fx.push({ kind: 'flash', x: 200, y: 180, t: 0, life: 0.2 }); fx.push({ kind: 'shot', x0: 200, y0: 180, x1: L.x, y1: L.y - 24, t: 0, life: 0.3 });
             if (G.Audio) G.Audio.sfx('gun');
             await sleep(320);
-            if (ok) { var sn = Math.max(1, Math.round(L.n * (L.n <= 3 ? 1 : 0.5))); hurt(L, sn, true); say('저격 성공! ' + L.name + '에게 명중했다!'); }
+            if (ok) { var sn = Math.max(1, Math.round(L.n * (L.n <= 3 ? 1 : Math.min(1, 0.5 * STAFF_DMG)))); hurt(L, sn, true); say('저격 성공! ' + L.name + '에게 명중했다!'); }
             else { hurt(L, 0); say('저격이 빗나갔다...'); }
           } else if (cmd === 'shells') {
             R.useCharge('shells');
@@ -460,7 +466,7 @@
             alive(foes).forEach(function (t, i) { fx.push({ kind: 'ball', x0: art.x, y0: art.y - 20, x1: t.x, y1: t.y - 10, t: -i * 0.06, life: 0.7 }); });
             if (G.Audio) G.Audio.sfx('cannon');
             await sleep(700);
-            alive(foes).forEach(function (t) { fx.push({ kind: 'boom', x: t.x, y: t.y - 10, t: 0, life: 0.9 }); hurt(t, Math.max(1, Math.round(t.n * U.rf(0.35, 0.5))), true); });
+            alive(foes).forEach(function (t) { fx.push({ kind: 'boom', x: t.x, y: t.y - 10, t: 0, life: 0.9 }); hurt(t, Math.max(1, Math.round(t.n * Math.min(0.95, U.rf(0.35, 0.5) * STAFF_DMG))), true); });
             say('작렬탄이 적진 한가운데서 터졌다!');
           }
           if (!ok && cmd !== 'shells') await sleep(300);

@@ -389,6 +389,65 @@
     };
   };
 
+  /** 보고·발표 자리 (js/systems/pitch.js): 발견물 그림을 사람들 없이 혼자 처음부터 다시 돌린다 — 끝나거나 누르면 걷히고,
+      그 뒤에 후원자·부하들이 나와 이야기한다. (QA 2026-10-16 — 그림이 도는 동안 뒤에서 사람들이 번갈아 들고 나며 그림 자리가 흔들려 정신 사나웠다)
+      opts.title: 제목 꼬리말('보고'·'발표'). 그림이 없으면 false */
+  SC.discoveryReplay = async function (d, opts) {
+    opts = opts || {};
+    var keys = d ? revealKeys(d) : null; if (!keys) return false;
+    var FX = (G.FX && G.FX.reveal) || {}, W = Math.round(576 * (FX.scale || 1.9)), H = Math.round(256 * (FX.scale || 1.9));
+    var treasure = d.cat === 'treasure' && !d.natural, playMs = discoveryMotionMs(d);
+    var el = U.el('div', 'reveal replay' + (treasure ? ' treasure' : ''));
+    el.style.setProperty('--rv-dim', FX.dim != null ? FX.dim : 0.62);
+    el.style.setProperty('--rv-dim-ms', '500ms');
+    el.innerHTML = '<div class="rv-dim"></div>' +
+      '<div class="rv-frame" style="width:' + W + 'px;height:' + H + 'px">' + (keys.sheet ? '<canvas class="rv-reel" width="1152" height="512"></canvas>' : '<img class="rv-gif" alt="">') + '<img class="rv-end" alt=""></div>' +
+      '<div class="rv-title"><b>' + U.esc(d.name) + '</b> ' + U.esc(opts.title || '보고') + '</div><div class="rv-skip">누르면 넘어갑니다</div>';
+    var uiRoot = document.getElementById('ui'); if (uiRoot) uiRoot.appendChild(el); else UI.add(el);
+    var reel = null;
+    /** 누르거나 키를 누르거나 ms가 지나면 끝나는 기다림 → {done: Promise, fin()} */
+    function waitTap(ms, onFin) {
+      var w = {}, done = false, wait = null, unkey = null;
+      w.done = new Promise(function (resolve) {
+        w.fin = function () { if (done) return; done = true; if (wait) clearTimeout(wait); if (unkey) unkey(); el.removeEventListener('click', w.fin); if (onFin) onFin(); resolve(); };
+      });
+      if (ms != null) wait = setTimeout(w.fin, ms);
+      unkey = UI.pushKey(function (e) { if (G.Keys.is(e, 'confirm') || G.Keys.is(e, 'confirmAlt') || G.Keys.is(e, 'cancel')) w.fin(); return true; });
+      el.addEventListener('click', w.fin);
+      return w;
+    }
+    try {
+      var gif = el.querySelector('.rv-gif'), end = el.querySelector('.rv-end'), L = null;
+      if (keys.end) end.src = G.Img.src(keys.end);
+      if (keys.sheet) {
+        L = G.Reel.now(keys.sheet);
+        if (!L) { setTimeout(function () { el.classList.add('on'); }, 30); L = await G.Img.wait(G.Reel.load(keys.sheet), FX.loadWaitMs || 2500); }
+        setTimeout(function () { el.classList.add('on'); }, 30);
+        if (L) reel = G.Reel.play(el.querySelector('.rv-reel'), L, { ms: playMs });
+      } else {
+        var src = G.Img.src(keys.gif); if (!/^(data|blob):/.test(src)) src += (src.indexOf('?') < 0 ? '?' : '&') + 'rv=' + Date.now();
+        var loaded = G.Img.wait(new Promise(function (r) { gif.onload = r; gif.onerror = r; }), FX.loadWaitMs || 2500);
+        gif.src = src;
+        await loaded;
+        setTimeout(function () { el.classList.add('on'); }, 30);
+      }
+      // 연출이 끝날 때까지 (누르거나 Enter·Space·Esc면 곧장 마지막 장면으로)
+      var tap = waitTap(reel ? null : (L === null && keys.sheet ? 600 : discoveryGifMs(d) + 80), function () { if (reel) reel.finish(); });
+      if (reel) reel.done.then(tap.fin);
+      await tap.done;
+      if (keys.end && !reel) el.classList.add('ended');
+      el.classList.add('titled');
+      await waitTap(FX.replayTitleMs || 1400).done;       // 제목을 잠깐 보여 주고 걷는다 (눌러서 넘길 수 있다)
+      el.classList.add('out');
+      await U.sleep(420);
+    } catch (e) { console.error(e); }
+    finally {
+      if (reel && reel.stop) reel.stop();
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }
+    return true;
+  };
+
   // ---------------------------------------------------------------- resume from a loaded save
   G.Game.resume = function () {
     if (G.Colony) G.Colony.apply();      // 이 일지의 개척 도시를 도시 자료에 넣는다 (다른 것보다 먼저 — 개척 도시에 머물던 일지)

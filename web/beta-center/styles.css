@@ -145,6 +145,22 @@ h1 em { color: var(--gold-bright); font-style: normal; }
 .board-empty { padding: 2.4rem 1rem; text-align: center; color: #6d6658; border-bottom: 1px solid rgba(40,37,30,.18); }
 .board-error { color: #8c3f32; }
 
+.releases { padding: 20px 0 95px; border-top: 1px solid var(--line); }
+.release-list { margin-top: 2.2rem; border-top: 1px solid var(--line); }
+.release-list details { border-bottom: 1px solid var(--line); }
+.release-list summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.3rem .2rem; }
+.release-list summary::-webkit-details-marker { display: none; }
+.release-list summary::after { content: "+"; color: var(--gold-bright); font: 400 1.5rem "Cinzel", serif; }
+.release-list details[open] summary::after { content: "−"; }
+.release-list summary > span { display: flex; flex-wrap: wrap; align-items: baseline; gap: .6rem 1rem; }
+.release-list summary b { color: var(--gold-bright); font: 700 1rem "Cinzel", serif; letter-spacing: .1em; }
+.release-list summary small { color: var(--muted); }
+.release-list summary i { margin-left: auto; color: var(--teal); font-style: normal; font-size: .73rem; }
+.release-body { padding: .2rem 2.7rem 1.5rem 1rem; color: var(--muted); }
+.release-body h3 { margin: 1rem 0 .25rem; color: var(--ink); font: 400 1.25rem "Song Myung", serif; }
+.release-body ul { margin: .4rem 0 0; padding-left: 1.2rem; }
+.release-body li + li { margin-top: .35rem; }
+
 footer { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 0 0 45px; display: flex; justify-content: space-between; color: #888e8b; font-size: .75rem; }
 footer b { color: var(--gold); font-family: "Cinzel", serif; letter-spacing: .1em; }
 footer div { display: flex; gap: 1.3rem; }
@@ -186,6 +202,9 @@ footer a:hover { color: var(--ink); }
   .post summary { padding-inline: 0; gap: .65rem; }
   .post-body { margin-inline: 0; padding-inline: 1rem; }
   .attachment-help > div { padding-left: 1rem; }
+  .release-list summary { align-items: flex-start; }
+  .release-list summary i { display: none; }
+  .release-body { padding-left: .2rem; padding-right: 1.8rem; }
   footer { flex-direction: column; gap: .4rem; }
 }
 

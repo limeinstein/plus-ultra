@@ -187,6 +187,7 @@
     var mk = !c && !landmark && G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
     if (mk) w = [mk.lon, mk.lat];
     if (!G.Geo.isLand(w[0], w[1])) { UI.toast('그곳은 물입니다. 육지를 클릭하십시오.', 'land'); return; }
+    st.goCity = c || null;                                // 도시를 직접 눌렀으면 닿자마자 묻지 않고 들어간다
     st.dir = null; st.pointerWalk = false; st.path = w; st.paused = false; refreshBar();
   }
   var kiCache = null, kiKey = '', FF = null, labelW = {};
@@ -326,7 +327,8 @@
     return false;
   }
   function arrive() {
-    var c = cityNear();
+    var c = cityNear(), go = st.goCity; st.goCity = null;
+    if (go && c === go) { enterCity(c); return; }
     if (!c && atBase()) UI.toast(S().loc.base.type === 'ship' ? '배가 기다리는 곳에 돌아왔다.' : '출발한 도시에 돌아왔다.', 'anchor');
   }
 
@@ -799,7 +801,8 @@
       if (mt.id !== 'walk' && mt.n > 0 && !mm.hire) { s.stable = s.stable || {}; s.stable[c.id] = { id: mt.id, n: mt.n, draft: mt.draft }; }
       delete s.landReturn;
     }
-    await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true, via: isBaseCity ? 'sea' : 'land' }); });
+    st.busy++;                                    // 성 안으로 넘어가는 사이에 「도시로 들어가시겠습니까?」가 다시 뜨지 않게 (QA 2026-10-16)
+    try { await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true, via: isBaseCity ? 'sea' : 'land' }); }); } finally { st.busy = Math.max(0, st.busy - 1); }
     return true;
   }
   /** called from the city gate when the player resumes the expedition */

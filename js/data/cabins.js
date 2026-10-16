@@ -23,6 +23,11 @@
     { id: 'pen', name: '사육실', icon: 'horse', skills: ['sci'], cost: 1100, days: 2, desc: '닭·염소를 길러 달걀과 젖을 얻는다.', fx: '날마다 식량이 조금 생긴다' },
     { id: 'gun', name: '포격실', icon: 'cannon', skills: ['gun'], cost: 1800, days: 3, desc: '포수들이 화약과 포탄을 다룬다.', fx: '기함의 포격이 세진다' },
     { id: 'marine', name: '해병 대기실', icon: 'sword', skills: ['sword', 'shoot'], cost: 1600, days: 3, desc: '백병전에 나설 사람들이 기다린다.', fx: '기함의 백병전이 세진다' },
+    // 2026-10-16 화실·음악실·참모실·조각실 (art: 전용 그림이 없을 때 빌려 쓰는 방 그림 — images/cabins/<id>.webp를 넣으면 바뀐다)
+    { id: 'studio', name: '화실', icon: 'palette', skills: ['art'], cost: 1300, days: 2, art: 'chart', desc: '이젤과 물감을 둔 밝은 방. 그림에 밝은 사람이 바다를 그린다.', fx: '미술품을 그려 짐칸에 싣는다 · 이름난 화가는 명작을 남긴다(사교 명성)' },
+    { id: 'sculpt', name: '조각실', icon: 'bust', skills: ['craft'], cost: 1500, days: 3, art: 'repair', desc: '돌과 나무, 정과 끌을 둔 방. 세공에 밝은 사람이 깎고 빚는다.', fx: '조각품을 깎아 짐칸에 싣는다 · 이름난 조각가는 명작을 남긴다(사교 명성)' },
+    { id: 'musicroom', name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '류트와 북을 둔 방. 음악에 밝은 사람이 날마다 가락을 들려준다.', fx: '날마다 쌓이는 피로가 준다' },
+    { id: 'staff', name: '참모실', icon: 'strategy', skills: ['ops', 'hist', 'survey'], cost: 1400, days: 2, art: 'captain', desc: '지도와 병법서를 펼친 작전 회의실. 운용·역사·측량에 밝은 참모가 앉는다.', fx: '육상전의 계략(기습·함정·저격·작렬탄)이 잘 통하고 더 세진다' },
     { id: 'interp', name: '통역실', icon: 'scroll', skills: [], lang: true, cost: 700, days: 1, desc: '여러 나라 말을 아는 사람의 방. 이 방에 있는 사람의 말도 통역으로 쓰인다.', fx: '이 방 사람의 말이 통역에 쓰인다' }
   ];
   G.CABIN = {};

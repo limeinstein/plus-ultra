@@ -52,7 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const news = CT.daily(); out.news = news.length && news[0].text; out.news2 = CT.daily().length;
       const offers = CT.offers(king);
       out.offers = offers.map(o => o.kind + ':' + o.cat).join(',');
-      out.cats = ['ex', 'tr', 'bt', 'so'].every(c => offers.some(o => o.cat === c));
+      out.cats = offers.length === 3 && new Set(offers.map(o => o.kind)).size === 3;   // 2026-10-16: 모든 왕명 가운데 무작위로 셋
 
       // ---- 왕명 열 가지를 하나씩: 받기 → 해내기 → 아뢰기 → 작위
       const kinds = ['tribute', 'supply', 'pirates', 'capture', 'rescue', 'letter', 'envoy', 'geo', 'treasure', 'zoo'];
@@ -63,7 +63,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         s.player.gold = 500000;
         // 그 종류가 나올 때까지 제안을 새로 굴린다
         let o = null;
-        for (let i = 0; i < 60 && !o; i++) { s.court.offers = {}; s.seed = 1000 + i; o = CT.offers(king).filter(x => x.kind === kind)[0]; }
+        for (let i = 0; i < 200 && !o; i++) { s.court.offers = {}; s.seed = 1000 + i; o = CT.offers(king).filter(x => x.kind === kind)[0]; }
         if (!o) { out.kinds[kind] = 'no-offer'; continue; }
         want = kind; askPick = null;
         await CT.audience(king);
@@ -105,14 +105,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // ---- 사다리 끝까지: 피달구 → 공작
       s = fresh('PT'); s.player.gold = 5000000; want = 'tribute';
       const ladder = [];
-      for (let i = 0; i < 9; i++) { F.add('ex', 10000); await CT.audience(king); const tt = CT.title(realm); ladder.push(tt ? tt.ko + '(' + tt.native + ')' : '-'); }
+      // 왕명은 무작위 셋 — 비용 지불이 나올 때까지 새로 굴린다
+      const rollFor = (sp, kind) => { for (let k = 0; k < 300; k++) { s.court && (s.court.offers = {}); s.seed = 3000 + k; if (CT.offers(sp).some(x => x.kind === kind)) return true; } return false; };
+      for (let i = 0; i < 9; i++) { F.add('ex', 10000); rollFor(king, 'tribute'); await CT.audience(king); const tt = CT.title(realm); ladder.push(tt ? tt.ko + '(' + tt.native + ')' : '-'); }
       out.ladder = ladder.join(' → '); out.top = CT.pending(king);
       out.hudTitle = CT.best().ko;
 
       // ---- 다른 나라: 신성로마제국의 명예 작위, 에스파냐 사다리
       const emp = G.SPONSOR.de_emperor, hre = CT.realmOf(emp);
       out.hrePending = CT.pending(emp);
-      const hl = []; for (let i = 0; i < 4; i++) { await CT.audience(emp); const tt = CT.title(hre); hl.push(tt ? tt.ko : '-'); }
+      const hl = []; for (let i = 0; i < 4; i++) { rollFor(emp, 'tribute'); await CT.audience(emp); const tt = CT.title(hre); hl.push(tt ? tt.ko : '-'); }
       out.hre = hl.join(' → ');
       out.titles = CT.titles().map(t => CT.fullName(t, true)).join(' / ');
       // 공손한 인사: 리스본(제 나라)·이스탄불(이슬람)·비엔나(제국)·한양(유교 — 그대로)
@@ -143,7 +145,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.taskHtml = CT.taskHtml().length; out.titlesHtml = CT.titlesHtml().length; out.fameHtml = F.html().length;
       // 뒤를 이은 자녀도 작위를 물려받는다 (작위는 s.court에 있다)
       const es = fresh('ES'); G.Fame.add('ex', 20000); es.player.gold = 900000; want = 'tribute';
-      const esKing = G.SPONSOR.es_crown; await CT.audience(esKing); await CT.audience(esKing);
+      const esKing = G.SPONSOR.es_crown; s = es; rollFor(esKing, 'tribute'); await CT.audience(esKing); rollFor(esKing, 'tribute'); await CT.audience(esKing);
       out.es = CT.titles().map(t => CT.fullName(t, true)).join(' / ');
       // 내려놓기
       const q = fresh('PT'); F.add('ex', 10500); want = 'pirates';
@@ -163,7 +165,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.lose === '1240:150', '감점은 3배 없이 그 갈래부터 (' + r.lose + ')');
     ok(r.oldSum === 5000, '옛 저장: 기록으로 어림해 나눈 합이 그대로');
     ok(!r.before && r.pending && /부르신다/.test(r.news) && r.news2 === 0, '명성 10,000에서 국왕이 한 번 부른다');
-    ok(r.cats, '왕명은 탐험·교역·전투·사교에서 하나씩 (' + r.offers + ')');
+    ok(r.cats, '왕명은 모든 왕명 가운데 무작위로 셋 (' + r.offers + ')');
     Object.keys(r.kinds).forEach(k => ok(r.kinds[k] === 'ok', '왕명 「' + k + '」 받기 → 해내기 → 작위 (' + r.kinds[k] + ')'));
     ok(r.lawful && r.captureOther === 0, '나포: 그 나라 배만 세고, 악명은 오르지 않는다');
     ok(/^pirate:\d:\d:true$/.test(r.rescueNpc || ''), '구출: 소굴 앞바다에 해적단이 나타난다 (' + r.rescueNpc + ')');

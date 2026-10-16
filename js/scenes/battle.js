@@ -155,7 +155,7 @@
     st.terrain = terrainInfo();
     if (G.Img && G.Img.has('battle/rough-sea')) {
       var here = st;
-      G.Img.load('battle/rough-sea').then(function (im) { if (st === here) { st.seaArt = im; st.seaArtRect = artRect(im); } });
+      G.Img.load('battle/rough-sea').then(function (im) { if (im && st === here) { st.seaArt = im; st.seaArtRect = artRect(im); } });
     }
     if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000);
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);

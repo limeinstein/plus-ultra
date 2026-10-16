@@ -27,7 +27,9 @@
     { id: 'eaart', name: '동양 서화', cat: 'craft', p: 160, life: 0, el: 0.85 },
     // 2026-10-06 교역품 발견물(바나나·고구마)과 함께 더함 — js/data/moredisc.js
     { id: 'banana', name: '바나나', cat: 'food', p: 12, life: 30, el: 0.6 },
-    { id: 'sweetpotato', name: '고구마', cat: 'food', p: 9, life: 150, el: 0.6, nw: 1 }
+    { id: 'sweetpotato', name: '고구마', cat: 'food', p: 9, life: 150, el: 0.6, nw: 1 },
+    // 2026-10-16 조각실에서 깎아 싣는 조각품 (js/systems/studio.js) — 피렌체·로마의 공방에서도 판다
+    { id: 'sculpture', name: '조각품', cat: 'craft', p: 150, life: 0, el: 0.8 }
   ];
   /** 이름을 지역에 맞게 */
   var RENAME = { porcelain: '중국 도자기' };
@@ -40,7 +42,7 @@
     art: function (c) { return c.region === 6 || c.region === 9 ? 'eaart' : 'art'; }
   };
   /** 산지에 더해 이 도시들도 만든다 (채색 도기: 피렌체 마욜리카) */
-  var ADD = { '피렌체': ['faience'] };
+  var ADD = { '피렌체': ['faience', 'sculpture'], '로마': ['sculpture'] };
   // 바나나: 동남아시아·아프리카 / 고구마: 신대륙
   ['말라카', '브루나이', '반탐', '테르나테', '암보이나', '아친', '잔지바르', '몸바사', '말린디', '산토메', '시에라리온', '르완다'].forEach(function (nm) { (ADD[nm] = ADD[nm] || []).push('banana'); });
   ['산토도밍고', '아바나', '산티아고', '자메이카', '쿠마나', '카르타헤나', '리마', '파나마', '베라크루스', '캄페체'].forEach(function (nm) { (ADD[nm] = ADD[nm] || []).push('sweetpotato'); });
@@ -73,7 +75,8 @@
     cnsilk: { 0: 0.8, 1: 0.8, 2: 0.75, 4: 0.9, 9: 1.5 },
     porcelain: { 0: 0.9, 1: 0.9, 2: 0.9, 9: 1.3, 4: 1.1 },
     eaart: { 0: 0.6, 1: 0.6, 2: 0.6, 3: 0.6, 10: 0.6, 4: 0.7, 5: 0.8, 7: 0.8 },
-    art: { 6: 0.6, 8: 0.7, 9: 0.6, 5: 0.7 }
+    art: { 6: 0.6, 8: 0.7, 9: 0.6, 5: 0.7 },
+    sculpture: { 6: 0.6, 8: 0.7, 9: 0.6, 5: 0.7, 7: 0.8 }
   };
 
   G.BALANCE = G.BALANCE || {};

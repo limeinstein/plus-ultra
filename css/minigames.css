@@ -61,7 +61,7 @@
 .mg-sphinx-scene { height: 225px; border: 2px solid #826137; border-radius: 4px; background: #6c573d var(--mg-scene) center 8% / cover no-repeat; margin-bottom: 12px; }
 .mg-art .sphinx-q { background: #ead8b7; border: 1px solid #b49a6c; border-left: 4px solid #a17831; }
 .mg-art .poker { padding: 28px 22px 20px; background: #163c39 var(--mg-scene) center / 100% 100% no-repeat; border: 2px solid #84613a; border-radius: 6px; }
-.mg-art .poker .row { gap: 18px; margin: 12px 0 30px; }
+.mg-art .poker .row { gap: 18px; margin: 10px 0 18px; }
 .mg-art .poker .plog { color: #ffeac1; font-size: 16px; background: #0c2624dc; border: 1px solid #a68a4d; padding: 8px; border-radius: 4px; }
 .mg-art.mg-ready .pcard { background: var(--mg-props) var(--mg-front-pos) / var(--mg-front-size) no-repeat; border: none; border-radius: 5px; box-shadow: none; filter: drop-shadow(2px 5px 3px #001b16bb); }
 .mg-art.mg-ready .pcard.back { background-position: var(--mg-back-pos); background-size: var(--mg-back-size); }
@@ -71,4 +71,4 @@
 .mg-art .pcard .s { font-size: 42px; top: 42px; }
 .mg-fishing canvas { max-width: 100%; height: auto !important; box-sizing: border-box; box-shadow: 0 3px 13px #30211166; }
 .mg-fishing .fstat { gap: 8px; flex-wrap: wrap; } .mg-fishing .fbait { font-size: 14px; }
-@media (prefers-reduced-motion: reduce) { .mg-art .pans, .mg-art .water-meter i, .mg-art .pcard { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .mg-art .pans, .mg-art .water-meter i, .mg-art .pcard, .poker-deck b { transition: none; animation: none !important; } }

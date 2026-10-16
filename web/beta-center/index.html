@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#111b20">
-  <meta name="description" content="PLUS ULTRA 공개 베타판을 시험하고 오류와 의견을 나누는 공간입니다.">
+  <meta name="description" content="Loop of Good Hope 공개 베타판을 시험하고 오류와 의견을 나누는 공간입니다.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PLUS ULTRA 공개 항해 시험">
+  <meta property="og:title" content="Loop of Good Hope 공개 항해 시험">
   <meta property="og:description" content="베타판을 먼저 플레이하고 제보와 개선 의견을 남겨 주세요.">
-  <title>PLUS ULTRA 공개 항해 시험</title>
+  <title>Loop of Good Hope 공개 항해 시험</title>
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,14 +20,15 @@
   <div class="sea-haze" aria-hidden="true"></div>
 
   <header class="topbar">
-    <a class="brand" href="../" aria-label="PLUS ULTRA 베타판 실행">
-      <span class="brand-mark"><i>P</i></span>
-      <span><b>PLUS ULTRA</b><small>PUBLIC VOYAGE TEST</small></span>
+    <a class="brand" href="../" aria-label="Loop of Good Hope 베타판 실행">
+      <span class="brand-mark"><i>L</i></span>
+      <span><b>LOOP OF GOOD HOPE</b><small>PUBLIC VOYAGE TEST</small></span>
     </a>
     <nav aria-label="주요 메뉴">
       <a href="#guide">참여 안내</a>
       <a href="#privacy">익명 통계</a>
       <a href="#feedback">피드백</a>
+      <a href="#releases">배포 이력</a>
       <a class="nav-play" href="../">베타판 실행</a>
     </nav>
   </header>
@@ -111,10 +112,53 @@
       <div class="board" id="board" aria-live="polite"></div>
       <noscript><p class="board-empty">게시판을 보려면 자바스크립트를 켜 주세요. <a href="https://github.com/limeinstein/plus-ultra/issues?q=is%3Aissue+label%3Abeta-feedback">GitHub에서 바로 보기</a></p></noscript>
     </section>
+
+    <section class="releases" id="releases" aria-labelledby="releases-title">
+      <div class="section-heading">
+        <p class="kicker">VOYAGE RELEASE LOG</p>
+        <h2 id="releases-title">배포 이력</h2>
+        <p>Claude와 Codex가 함께 다듬어 공개한 항해 기록입니다. 가장 최근 변경부터 확인할 수 있습니다.</p>
+      </div>
+      <div class="release-list">
+        <details open>
+          <summary><span><b>VERSION 0.258</b><small>2026-10-17 · 정식·베타</small></span><i>최신 배포</i></summary>
+          <div class="release-body">
+            <h3>새로운 항해 생활</h3>
+            <ul>
+              <li>기함에 화실·조각실·음악실·참모실을 꾸미고, 부하의 재능으로 미술품·조각품과 고유 명작을 만들 수 있습니다.</li>
+              <li>레오나르도 다 빈치의 그림·조각 명작 여섯 점을 전용 작품 그림으로 감상할 수 있습니다.</li>
+              <li>왕명은 전체 임무 중 무작위 세 가지를 제시하며, 박물관 건립과 동물원 건설을 마치면 수도에 실제 전시 공간이 생깁니다.</li>
+            </ul>
+            <h3>카드 게임과 화면</h3>
+            <ul>
+              <li>포카의 J·Q·K를 네 나라 역사 인물 카드로 바꾸고, 섞기·배분·교환 동작을 더했습니다.</li>
+              <li>하단 메뉴의 단서를 수첩에 합치고 설정을 따로 꺼냈으며, 튜토리얼의 다음 행동을 하늘빛 「여기」 표로 또렷하게 안내합니다.</li>
+            </ul>
+            <h3>밸런스와 고침</h3>
+            <ul>
+              <li>해적 전투·교역·사교 명성 보상을 세 배로 높였습니다.</li>
+              <li>선택한 항구·도시에 곧바로 들어가고, 지나친 항구가 거듭 묻는 간격을 늘렸습니다. 튜토리얼 교섭·입항·보고 장면과 해전 그림 오류도 함께 고쳤습니다.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary><span><b>VERSION 0.257</b><small>2026-10-16 · 베타</small></span><i>통계</i></summary>
+          <div class="release-body"><ul><li>개인을 식별하지 않는 익명 항해 통계를 추가하고, 베타 센터에서 날짜별 이용 합계를 공개했습니다.</li></ul></div>
+        </details>
+        <details>
+          <summary><span><b>VERSION 0.256</b><small>2026-10-16 · 베타</small></span><i>베타 센터</i></summary>
+          <div class="release-body"><ul><li>정식판과 분리된 공개 베타 센터를 열어 베타 실행, 피드백 작성, 공개 의견 확인을 한곳에 모았습니다.</li><li>화면 이미지를 첨부해 문제를 알리는 방법을 안내했습니다.</li></ul></div>
+        </details>
+        <details>
+          <summary><span><b>VERSION 0.255</b><small>2026-10-15 · 정식·베타</small></span><i>첫 분리 배포</i></summary>
+          <div class="release-body"><ul><li>정식판과 베타판을 한 번에 만들고 서로 다른 주소에 게시하는 흐름을 마련했습니다.</li><li>제독의 걷기·달리기 동작과 인물 그림을 정리하고, 항구를 누르면 항구 앞까지 부드럽게 이동하도록 항해 조작을 개선했습니다.</li></ul></div>
+        </details>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p><b>PLUS ULTRA</b> · 공개 항해 시험</p>
+    <p><b>LOOP OF GOOD HOPE</b> · 공개 항해 시험</p>
     <div><a href="../">베타판</a><a href="../../">정식판</a><a href="https://github.com/limeinstein/plus-ultra/issues?q=is%3Aissue+label%3Abeta-feedback" target="_blank" rel="noopener">GitHub 게시판</a></div>
   </footer>
 

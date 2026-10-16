@@ -123,6 +123,7 @@
 
 - 유적 퍼즐 6종·포카·바다 낚시는 `minigames/`의 새 그림을 쓴다. 건물 외관 `exteriors/tavern.webp`, `church.webp`의 석재·목재·금속 질감을 참고했다.
 - `props.png`는 1254×1254 투명 소품 판이다. 돌 원반·기둥·보석·천칭·잔 3개·입방체·돌판·바위·열쇠·문·횃불·카드 앞뒷면·물고기의 16종이 들어 있다. 실제 소품 경계는 `js/data/minigameart.js`에 있다.
+- 포카의 J·Q·K 역사 인물 카드는 `minigames/cards/랭크-무늬.webp`에 둔다(예: `k-hearts.webp`). 12장 모두 280×392이며, `python tools/poker_cards.py`로 `docs/art/historical-poker-face-cards-master.png`를 같은 5:7 규격으로 나눈다.
 - `ruins.png`, `sphinx.png`, `poker.png`, `fishing.png`는 1536×1024 배경이다. `boat.png`는 같은 크기의 투명 낚싯배 그림이다. 투명 배경을 흰색이나 검은색으로 합치지 않는다.
 - 그림 주소는 `G.Img`로 읽으며, 숫자·카드 무늬·물 양·입방체 방향·낚시 줄은 게임에서 겹쳐 표시한다. 배경에 글자를 그려 넣지 않는다.
 - 낚시 수면 정렬·배 위치는 `js/data/seafx.js`의 `G.FX.minigames`, 화면 배치는 `css/minigames.css`에서 조정한다. 한 파일판에서 줄어든 소품 판도 원본 좌표 비율에 맞춰 그린다.

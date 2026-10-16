@@ -490,7 +490,7 @@
     st.portPromptUntil = st.portPromptUntil || {};
     st.portPromptUntil[c.id] = promptClock() + promptWait();
   }
-  /** 가까운 항구를 새로 만났거나 거절 뒤 5초가 지나면 입항할지 묻는다. */
+  /** 가까운 항구를 새로 만났거나 거절 뒤 30초(G.BALANCE.cityEntryPrompt.cooldownMs, 실제 시간)가 지나면 입항할지 묻는다. */
   async function offerEnterPort(c) {
     if (!c || st.busy || UI.busy() || portPromptCooling(c)) return false;
     st.busy++;
@@ -545,9 +545,9 @@
       var ok = await G.Scenes.city.handleEntry(c);
       if (!ok) { st.busy--; st.paused = true; coolPortPrompt(c); refreshBar(); return false; }
       if (c.region === 10) s_flags().fromEurope = false;
-      st.busy--;
-      st.paused = true; st.path = null; st.target = null;
-      await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true }); });
+      st.paused = true; st.path = null; st.target = null; st.pendingPort = null;
+      // 도시로 넘어가는 동안(화면이 어두워지는 사이)에도 바다는 바쁜 채로 둔다 — 예전에는 그 틈에 「입항하시겠습니까?」가 떠서 도시 안까지 따라왔다 (QA 2026-10-16)
+      try { await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true }); }); } finally { st.busy = Math.max(0, st.busy - 1); }
       return true;
     } catch (e) { console.error(e); st.busy = 0; return false; }
   }
@@ -796,7 +796,8 @@
     var s = S(), l = s.loc;
     st.t += dt;
     var frozen = st.busy > 0 || UI.busy();
-    if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) offerEnterPort(pc); }
+    // 도시를 직접 골라(누르기·해도·자동항해) 닿았으면 묻지 않고 곧장 입항한다 (QA 2026-10-16 — 예전에는 닿은 뒤 「입항하시겠습니까?」를 또 물었다)
+    if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) tryEnterPort(pc); }
     // 멈춘 채 ←→: 배는 나아가지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것) — 시간은 아래에서 ×waitSpeed로 흐른다
     if (!frozen && st.paused && st.manual && turnKey()) { st.turnHeld = (st.turnHeld || 0) + dt; l.heading += turnKey() * 1.4 * dt * turnAbility() * Math.min(1, 0.45 + st.turnHeld * 1.6); }
     st.handSteer = false;
@@ -1231,7 +1232,7 @@
       var CC = BAL.crewCare || {};
       fb -= R.skillRead('cook') * (CC.cookFatigue || 0.12);       // 요리: 따뜻한 끼니가 고단함을 덜어 준다
       var CBN = G.Cabins;                                          // 기함의 선실 (사람을 배치한 방만 힘을 낸다)
-      if (CBN) fb -= CBN.fx('galley', 'galley') + CBN.fx('mess', 'mess') + CBN.fx('helm', 'helm');
+      if (CBN) fb -= CBN.fx('galley', 'galley') + CBN.fx('mess', 'mess') + CBN.fx('helm', 'helm') + CBN.fx('musicroom', 'musicroom');   // 음악실: 날마다 가락을 들려준다
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
       f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
@@ -1310,6 +1311,7 @@
       refreshHud();
       if (news.length) { if (G.SeaNews) G.SeaNews.show(news); else await G.Scenes.city.news(news); }   // 항해를 멈추지 않고 오른쪽 위에 잠깐
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
+      if (G.Studio && G.Studio.pending()) await G.Studio.present();   // 화실·조각실에서 완성한 명작을 바친다
       if (G.Disaster) await G.Disaster.sea();   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

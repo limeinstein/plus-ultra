@@ -37,6 +37,12 @@ jobs:
           node-version: '20'
       - name: esbuild (코드 줄이기)
         run: npm install -g esbuild
+      - name: 정식판 배포 노트 확인
+        working-directory: stable
+        run: python tools/web_release.py --check
+      - name: 베타판 배포 노트 확인
+        working-directory: beta
+        run: python tools/web_release.py --check
       - name: 정식 웹 배포판 만들기
         working-directory: stable
         run: python tools/build_web.py --out "$GITHUB_WORKSPACE/site" --no-zip
