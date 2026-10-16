@@ -91,10 +91,11 @@
     el.city = btn('도시에 들어간다', 'castle', function () { enterCity(); });
     btn('야영', 'tent', function () { camp(); });
     btn('해도', 'map', function () { chart(); });
-    btn('수첩', 'book', function () { st.busy++; G.Info.open('admiral').then(function () { st.busy--; }); });
+    btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy--; }); });
     var zb = U.el('div', 'zoomctl');
     [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
+    bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy--; }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
     refreshBar(); refreshHud();
     if (st.unkey) st.unkey();

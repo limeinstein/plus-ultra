@@ -31,8 +31,12 @@
   };
 
   // ---------------------------------------------------------------- main info window with tabs
-  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['achv', '업적'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['map', '해도'], ['log', '일지'], ['menu', '설정']];
+  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['achv', '업적'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['map', '해도'], ['log', '일지']];
+  // 「설정」은 수첩 밖의 따로 된 창 (하단 메뉴 맨 오른쪽 단추 — I.settings). 옛 호출 I.open('menu')도 설정 창을 연다
+  var lastTab = null;   // 탭을 정하지 않고 열면(하단 메뉴 「수첩」) 지난번에 보던 탭 — 바다·뭍·도시 어디서 열어도 같다
   I.open = function (tab) {
+    if (tab === 'menu') return I.settings();
+    tab = tab || lastTab || 'admiral';
     var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
     var tabs = U.el('div', 'tabs');
     TABS.concat(S().story && G.Story ? [['story', '아버지의 사진']] : []).forEach(function (t) {   // 이야기 모드 (js/systems/story.js)
@@ -41,9 +45,27 @@
       tabs.appendChild(b);
     });
     win.el.insertBefore(tabs, win.content);
-    function show(k) { win.content.innerHTML = ''; win.content.scrollTop = 0; (PAGES[k] || PAGES.admiral)(win.content, win); }
-    show(tab || 'admiral');
+    function show(k) { lastTab = PAGES[k] ? k : 'admiral'; win.content.innerHTML = ''; win.content.scrollTop = 0; (PAGES[k] || PAGES.admiral)(win.content, win); }
+    show(tab);
     return win.result;
+  };
+  /** 설정 창 (난이도·소리·화질·글씨 크기·자동 저장·키보드·타이틀로) */
+  I.settings = function () {
+    var win = UI.window({ title: '설정', icon: 'gear', width: 1000, height: 780, html: '' });
+    PAGES.menu(win.content, win);
+    return win.result;
+  };
+  /** 하단 메뉴 맨 오른쪽의 「설정」 단추 (바다·뭍·도시가 함께 쓴다). guard() 가 false면 누르지 않은 것으로 친다 */
+  I.settingsButton = function (cls, guard, before, after) {
+    var b = U.el('button', 'btn bar-settings ' + (cls || ''), G.icon('gear') + '설정');
+    b.title = '설정 — 소리·화질·글씨 크기·키보드·타이틀로';
+    b.onclick = function (e) {
+      e.stopPropagation(); b.blur();
+      if (UI.busy() || (guard && !guard())) return;
+      if (before) before();
+      I.settings().then(function () { if (after) after(); });
+    };
+    return b;
   };
   var PAGES = {};
   PAGES.story = function (el) { if (G.Story) G.Story.page(el); };

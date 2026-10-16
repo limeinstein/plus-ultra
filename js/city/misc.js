@@ -78,11 +78,11 @@
     var v = await UI.choose('기능', [
       { label: '항해 일지 기록 (저장)', value: 'save', icon: 'save', disabled: !INN.canSave(c), right: INN.canSave(c) ? '' : '모국의 여관에서만' },
       { label: '항해 일지 불러오기', value: 'load', icon: 'book' },
-      { label: '항해 수첩 · 설정', value: 'menu', icon: 'gear' }
+      { label: '설정', value: 'menu', icon: 'gear' }
     ], { width: 520 });
     if (v === 'save') await G.Info.saveMenu();
     else if (v === 'load') await G.Scenes.title.loadMenu();
-    else if (v === 'menu') await G.Info.open('menu');
+    else if (v === 'menu') await G.Info.settings();
   };
 
   // ================================================================ 시장 (item market)
