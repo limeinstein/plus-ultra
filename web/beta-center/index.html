@@ -69,7 +69,7 @@
       <div>
         <p class="kicker">ANONYMOUS VOYAGE LOG</p>
         <h2 id="privacy-title">누구인지가 아니라, 얼마나 항해했는지만 봅니다</h2>
-        <p>센터 방문 횟수, 베타판 실행 횟수, 실제 조작이 있었던 플레이 시간을 날짜별 합계로 기록합니다. 이름·IP·계정·쿠키·기기 식별자·방문 경로는 저장하지 않으므로 고유 방문자나 재방문자는 식별하지 않습니다.</p>
+        <p>센터 방문 횟수, 베타판 실행 횟수, 실제 조작이 있었던 플레이 시간과 현재 접속자 수를 기록합니다. 이름·IP·계정·쿠키·기기 식별자·방문 경로는 저장하지 않습니다. 실시간 집계에는 탭을 닫으면 사라지는 무작위 임시 키만 쓰며 90초 뒤 집계에서 빠지고 10분이 지난 기록은 다음 집계 때 삭제됩니다.</p>
       </div>
       <a class="stats-link" href="https://plus-ultra-telemetry.luminary121284.chatgpt.site/" target="_blank" rel="noopener">공개 통계 보기 →</a>
     </section>
@@ -141,7 +141,18 @@
       </div>
       <div class="release-list">
         <details open>
-          <summary><span><b>VERSION 0.261</b><small>2026-10-17 · 정식·베타</small></span><i>최신 배포</i></summary>
+          <summary><span><b>VERSION 0.262</b><small>2026-10-18 · 정식·베타</small></span><i>최신 배포</i></summary>
+          <div class="release-body">
+            <h3>관리자 답변과 실시간 접속자</h3>
+            <ul>
+              <li>관리자가 익명 피드백에 답변하고 진행 상태를 바꿀 수 있으며, 답변은 게시판에 공개됩니다.</li>
+              <li>익명 항해 통계에서 현재 접속자와 게임·베타 센터별 접속 수를 30초마다 확인할 수 있습니다.</li>
+              <li>실시간 집계의 무작위 임시 키는 90초 뒤 집계에서 빠지고 10분이 지난 기록은 다음 집계 때 삭제됩니다.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary><span><b>VERSION 0.261</b><small>2026-10-17 · 정식·베타</small></span><i>익명 피드백</i></summary>
           <div class="release-body">
             <h3>로그인 없는 베타 피드백</h3>
             <ul>

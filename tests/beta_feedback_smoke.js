@@ -9,6 +9,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
 (async function () {
   const errors = [];
   let submitted = null;
+  let presence = null;
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: 960, height: 900 } });
   page.on('pageerror', error => errors.push(String(error)));
@@ -21,11 +22,16 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
     }
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ posts: [{
       id: 7, category: 'suggestion', title: '익명 글 보기 시험', detail: '게시판에 익명 글 내용이 표시됩니다.',
-      steps: '', environment: 'Chrome', status: 'open', createdAt: '2026-10-17 12:00:00'
+      steps: '', environment: 'Chrome', status: 'closed', reply: '개발팀 답변 표시 시험입니다.',
+      repliedAt: '2026-10-18 00:00:00', createdAt: '2026-10-17 12:00:00'
     }] }) });
   });
   await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event', route =>
     route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true}' }));
+  await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/presence', route => {
+    if (route.request().method() === 'POST') presence = route.request().postDataJSON();
+    return route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true,"online":1}' });
+  });
   await page.route('https://api.github.com/repos/limeinstein/plus-ultra/issues**', route =>
     route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
 
@@ -33,6 +39,8 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
   await page.waitForSelector('.post');
   ok(await page.locator('#feedback-form').isVisible(), '로그인 없는 피드백 양식 표시');
   ok((await page.locator('.post-title').first().innerText()).includes('익명 글 보기 시험'), '익명 글을 공개 게시판에 합쳐 표시');
+  await page.locator('.post').first().click();
+  ok((await page.locator('.comment').first().innerText()).includes('개발팀 답변 표시 시험입니다.'), '익명 글 아래 관리자 답변 표시');
 
   await page.locator('[name=title]').fill('로그인 없는 등록 시험');
   await page.locator('[name=detail]').fill('계정 없이도 의견을 보낼 수 있는지 확인합니다.');
@@ -41,6 +49,8 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
   await page.waitForFunction(() => document.querySelector('#feedback-form-status').textContent.includes('등록되었습니다'));
   ok(submitted && submitted.title === '로그인 없는 등록 시험', '익명 피드백 POST 전송');
   ok(!('name' in submitted) && !('account' in submitted) && !('ip' in submitted), '이름·계정·IP를 보내지 않음');
+  ok(presence && presence.surface === 'center' && presence.version === '0.262', '베타 센터 실시간 접속 신호 전송');
+  ok(typeof presence.sessionKey === 'string' && presence.sessionKey.length >= 20, '탭 한정 무작위 접속 키 전송');
   if (process.env.SCREENSHOT) await page.screenshot({ path: process.env.SCREENSHOT, fullPage: true });
   if (errors.length) console.error(errors.join('\n'));
   ok(errors.length === 0, '콘솔 오류 0');

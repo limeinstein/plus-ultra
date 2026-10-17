@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.261';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.262';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
 
   T.enter = function () {

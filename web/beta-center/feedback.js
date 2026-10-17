@@ -44,8 +44,21 @@
   }
 
   function loadComments(post, container) {
-    if (post.source !== 'github' || container.dataset.loaded === 'true') return;
+    if (container.dataset.loaded === 'true') return;
     container.dataset.loaded = 'true';
+    if (post.source === 'anonymous') {
+      if (!post.reply) {
+        container.appendChild(node('p', 'post-meta', '아직 등록된 답변이 없습니다.'));
+        return;
+      }
+      var reply = node('article', 'comment');
+      var replyHead = node('header');
+      var replyTime = node('time', '', date(post.replied_at)); replyTime.dateTime = post.replied_at;
+      replyHead.append(node('b', '', '개발팀 · 관리자 답변'), replyTime);
+      reply.append(replyHead, node('p', '', post.reply));
+      container.appendChild(reply);
+      return;
+    }
     var waiting = node('p', 'post-meta', '답변을 불러오는 중입니다…');
     container.appendChild(waiting);
     request(post.comments_url, { headers: { Accept: 'application/vnd.github+json' }, cache: 'no-store' }).then(function (comments) {
@@ -132,8 +145,9 @@
       return {
         source: 'anonymous', id: item.id, category: item.category, title: item.title,
         detail: item.detail, steps: item.steps, environment: item.environment,
-        state: item.status === 'closed' ? 'closed' : 'open', comments: 0,
-        created_at: item.createdAt, updated_at: item.createdAt
+        state: item.status === 'closed' ? 'closed' : 'open', comments: item.reply ? 1 : 0,
+        reply: item.reply || '', replied_at: item.repliedAt || item.createdAt,
+        created_at: item.createdAt, updated_at: item.repliedAt || item.createdAt
       };
     });
   }
