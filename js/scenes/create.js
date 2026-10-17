@@ -91,7 +91,7 @@
     // column 1
     h += '<div class="col" style="width:330px"><div class="sect parch ornament-corners" style="flex:1">' +
       '<h4>제독</h4><div style="display:flex;justify-content:center;margin:6px 0 10px"><div class="wood" style="padding:8px" id="pv"></div></div>' +
-      '<div class="center" style="margin-bottom:12px"><button class="btn small" id="faceprev" title="앞의 얼굴">◀</button> <button class="btn small" id="face">' + G.icon('dice') + '다른 얼굴</button>' + lookLine() + '</div>' +
+      '<div class="center" style="margin-bottom:12px"><button class="btn small" id="faceprev" title="앞의 얼굴">◀ 앞 얼굴</button> <button class="btn small" id="face" title="다음 얼굴">다음 얼굴 ▶</button>' + lookLine() + '</div>' +
       '<div class="flex" style="gap:8px;align-items:flex-end"><div style="flex:1.15;min-width:0"><label>이름</label><input type="text" id="nm" maxlength="12" style="width:100%" value="' + U.esc(p.given) + '"></div>' +
       '<div style="flex:1;min-width:0"><label>성</label><input type="text" id="sn" maxlength="12" style="width:100%" value="' + U.esc(p.surname) + '"></div>' +
       '<button class="btn small" id="rn" title="다른 이름">' + G.icon('dice') + '</button></div>' +
@@ -142,8 +142,10 @@
     var pv = box.querySelector('#pv');
     pv.appendChild(A.portraitCanvas(playerSpec(), 200));
     // events
-    box.querySelector('#face').onclick = function () { p.face++; render(); };
-    box.querySelector('#faceprev').onclick = function () { p.face = p.face > 0 ? p.face - 1 : Math.max(0, G.Img.heroFaces().length - 1); render(); };
+    // 얼굴 고르기: ◀·▶ 모두 끝에 닿으면 반대쪽 끝으로 돌아간다 (마지막 다음은 처음, 처음 앞은 마지막) — 2026-10-17
+    function stepFace(d) { var n = Math.max(1, G.Img.heroFaces().length); p.face = (((p.face || 0) + d) % n + n) % n; render(); }
+    box.querySelector('#face').onclick = function () { stepFace(1); };
+    box.querySelector('#faceprev').onclick = function () { stepFace(-1); };
     var fullEl = box.querySelector('#fullnm b');
     function onName() { p.given = box.querySelector('#nm').value; p.surname = box.querySelector('#sn').value; p.name = fullName(p.given, p.surname); if (fullEl) fullEl.textContent = p.name; }
     ['#nm', '#sn'].forEach(function (q) {

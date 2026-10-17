@@ -107,6 +107,44 @@
     }
   };
 
+  /* 전체 화면 (UI.fs, 2026-10-17)
+     브라우저의 F11 전체 화면은 마우스를 맨 위로 올리면 브라우저의 탭·주소창이 내려온다 — 브라우저 기능이라 게임이 막을 수 없다.
+     게임이 직접 켜는 웹 전체 화면(requestFullscreen)에서는 내려오지 않는다. 그래서 F11을 누르면 이쪽으로 켜고 끈다(설정 창에도 단추).
+     크롬·엣지에서는 Esc를 게임이 그대로 쓰도록 키보드를 잡아 둔다(navigator.keyboard.lock) — 전체 화면을 끄려면 F11이나 Esc를 길게.
+     게임이 다른 페이지 안에 들어 있어 전체 화면을 허락받지 못했으면(아티팩트 등) F11은 브라우저에 그대로 맡긴다. */
+  var FS = UI.fs = {};
+  FS.on = function () { return !!(document.fullscreenElement || document.webkitFullscreenElement); };
+  FS.can = function () { var d = document.documentElement; return !!(d.requestFullscreen || d.webkitRequestFullscreen) && document.fullscreenEnabled !== false && document.webkitFullscreenEnabled !== false; };
+  FS.locked = false;
+  function fsLock() {
+    FS.locked = false;
+    try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(['Escape', 'F11']).then(function () { FS.locked = true; }, function () {}); } catch (e) { /* 키보드를 잡지 못하는 브라우저 */ }
+  }
+  FS.enter = function () {
+    var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen;
+    if (!f || !FS.can()) return Promise.resolve(false);
+    try { return Promise.resolve(f.call(d, { navigationUI: 'hide' })).then(function () { fsLock(); return true; }, function () { return false; }); }
+    catch (e) { return Promise.resolve(false); }
+  };
+  FS.exit = function () {
+    try { if (navigator.keyboard && navigator.keyboard.unlock) navigator.keyboard.unlock(); } catch (e) { /* */ }
+    FS.locked = false;
+    var f = document.exitFullscreen || document.webkitExitFullscreen;
+    return f && FS.on() ? Promise.resolve(f.call(document)).catch(function () {}) : Promise.resolve();
+  };
+  FS.toggle = function () { return FS.on() ? FS.exit() : FS.enter(); };
+  // F11: 브라우저 전체 화면 대신 게임 전체 화면 (다른 키 처리보다 먼저)
+  window.addEventListener('keydown', function (e) {
+    if ((e.key === 'F11' || e.code === 'F11') && !e.repeat && FS.can()) { e.preventDefault(); e.stopPropagation(); FS.toggle(); }
+  }, true);
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) {
+    document.addEventListener(ev, function () {
+      if (FS.on()) setTimeout(function () { if (FS.on() && UI.toast) UI.toast('전체 화면 — 끄려면 F11' + (FS.locked ? ' 또는 Esc를 길게' : ' 또는 Esc'), 'info', 3200); }, 250);
+      else { try { if (navigator.keyboard && navigator.keyboard.unlock) navigator.keyboard.unlock(); } catch (e) { /* */ } FS.locked = false; }
+      document.dispatchEvent(new CustomEvent('pu-fullscreen', { detail: { on: FS.on() } }));
+    });
+  });
+
   UI.init = function () {
     root = document.getElementById('ui');
     screenEl = U.el('div', 'layer'); screenEl.id = 'screen'; screenEl.style.pointerEvents = 'none';

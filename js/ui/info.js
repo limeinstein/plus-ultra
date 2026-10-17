@@ -597,6 +597,8 @@
         '<small class="muted">' + (st.musicSrc === 'ost' ? (G.YTM && G.YTM.local && G.YTM.local() ? '내 컴퓨터의 MP3로 틉니다 (' + U.esc(G.LocalOST.source()) + ') — 곡 사이를 부드럽게 넘기고, 듣던 곡으로 돌아오면 이어서 틉니다' : G.YTM && G.YTM.failed() ? '유튜브를 읽지 못해 기존 음악으로 틀고 있습니다' : '장면마다 유튜브 영상으로 틉니다 — 유튜브 규칙상 재생기(200×200)는 숨길 수 없어 구석에 흐리게 둡니다 · 끌어서 옮길 수 있습니다') : '게임에 들어 있는 곡과 코드로 만든 음악') + '</small>' +
         (G.LocalOST ? '<div class="flex" style="gap:8px;margin-top:4px"><button class="btn small" data-act="mp3">「Costa Del Sol BGM 모음.mp3」 고르기</button>' + (G.LocalOST.stored() ? '<button class="btn small ghost" data-act="mp3x">고른 파일 지우기</button>' : '') + '<input type="file" accept="audio/mpeg,.mp3" data-mp3 style="display:none"></div>' +
           '<small class="muted">가진 MP3를 고르면 이 브라우저에만 보관해 유튜브 창 없이 틉니다 (게임 파일에는 넣지 않습니다). 게임 폴더 옆 Ref 폴더나 music/_local/costa_del_sol.mp3 에 두면 저절로 찾습니다.</small>' : '') + '</div>' +
+      (UI.fs && UI.fs.can() ? '<div>전체 화면</div><div><div class="opt-row"><div class="opt' + (UI.fs.on() ? ' on' : '') + '" data-fs="1">켬</div><div class="opt' + (UI.fs.on() ? '' : ' on') + '" data-fs="0">끔</div></div>' +
+        '<small class="muted">F11로도 켜고 끕니다. 게임이 켠 전체 화면에서는 마우스를 맨 위로 올려도 브라우저 메뉴가 내려오지 않습니다.</small></div>' : '') +
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
       (G.Game.UI_SIZES ? '<div>글씨·창 크기</div><div><div class="opt-row">' + [['auto', '자동'], ['normal', '보통'], ['large', '크게'], ['xlarge', '아주 크게'], ['max', '최대']].map(function (o) { return '<div class="opt' + (G.Game.uiSizePref() === o[0] ? ' on' : '') + '" data-uisz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
         '<small class="muted">지금 ' + Math.round((G.Game.uiZoom || 1) * 100) + '% — 자동은 화면이 작을수록 글씨·창을 키웁니다 (이 기기에만 기억)</small></div>' : '') +
@@ -618,6 +620,7 @@
       (st.diff === 'easy' ? '<button class="btn navy" data-act="save">항해 일지 기록</button>' : '') +
       '<button class="btn" data-act="title">타이틀로 돌아가기</button></div>';
     U.$$('input[type=range]', el).forEach(function (r) { r.oninput = function () { st[r.dataset.k] = r.value / 100; if (G.Audio) G.Audio.setVolume(); }; });
+    U.$$('[data-fs]', el).forEach(function (o) { o.onclick = function () { var want = o.dataset.fs === '1'; (want === UI.fs.on() ? Promise.resolve() : want ? UI.fs.enter() : UI.fs.exit()).then(function () { setTimeout(function () { PAGES.menu(el, win); }, 120); }); }; });
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
     U.$$('[data-uisz]', el).forEach(function (o) { o.onclick = function () { G.Game.setUiSize(o.dataset.uisz); PAGES.menu(el, win); }; });   // UI QA 2026-10-11 #1
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
