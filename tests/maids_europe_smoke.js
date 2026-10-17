@@ -44,7 +44,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { n: G.MAIDS.length, dup, bad, faces, missing };
     }, NEW);
     console.log(Object.values(r.faces).join('\n'));
-    ok(r.n === 75, '여급 모두 ' + r.n + '명 (예전 29 + 새 46)');
+    ok(r.n === 175, '여급 모두 ' + r.n + '명 (기존 125 + 추가 50)');
     ok(!r.dup.length, '한 도시에 여급 한 명 ' + (r.dup.join(',') || ''));
     ok(!r.bad.length, '새 여급 46명 모두 얼굴·서 있는 그림이 있음 ' + r.bad.join(' | '));
     console.log('  여급이 없는 유럽 크기 2~3 도시: ' + (r.missing.join(', ') || '없음'));
@@ -78,7 +78,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => { document.querySelector('#tab-people').click(); const ch = document.querySelector('[data-chip="maid"]'); if (ch) ch.click(); });
     await page.waitForTimeout(1500);
     const cat = await page.evaluate(() => { const t = document.querySelector('#grid').innerText; return t.indexOf('아누시') >= 0 && t.indexOf('에스클라르몽드') >= 0 && document.querySelectorAll('#grid .card').length; });
-    ok(cat === 75, '도감 인물 › 여급 ' + cat + '명 (아누시·에스클라르몽드 포함)');
+    ok(cat === 175, '도감 인물 › 여급 ' + cat + '명 (아누시·에스클라르몽드 포함)');
     await page.screenshot({ path: path.join(OUT, 'catalog_maids.png') });
     ok(!errors.length, '콘솔 오류 0 ' + errors.join('\n'));
   } catch (e) {

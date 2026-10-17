@@ -636,16 +636,12 @@
   };
   /** 도시 하나만 따로: 라사(티베트)는 초원 양식이지만 여급은 중국 묶음에서 */
   I.MAID_POOL_CITY = { 139: ['china'] };
-  /** 묶음 폴더 안에 섞여 있지만 그 고장 사람으로 보이지 않거나 원본 해상도가 낮은 그림 — 1 = 어디서도 쓰지 않음, 문자열·목록 = 그 도시 양식에서만 쓴다
+  /** 묶음 폴더 안에 섞여 있지만 그 고장 사람으로 보이지 않는 그림 — 1 = 임의 배치하지 않음, 문자열·목록 = 그 도시 양식에서만 쓴다
       (아프리카 묶음의 금발·붉은 머리는 쓰지 않는다. 아랍 묶음의 유럽 옷차림·금발은 지중해 이슬람 도시(is)에서만, 붉은 머리는 is·페르시아(pe)에서만,
        페르시아 묶음의 동아시아 얼굴은 초원(st)에서만) */
   I.MAID_BAN = { 'maid-styles/africa/9': 1, 'maid-styles/africa/11': 1,
     'maid-styles/arabia/2': 'is', 'maid-styles/arabia/3': 'is', 'maid-styles/arabia/10': 'is', 'maid-styles/arabia/12': ['is', 'pe'],
     'maid-styles/seasia/5': 1, 'maid-styles/persia/3': 'st' };
-  // 아래 다섯 묶음의 1~6번은 작은 원본을 확대해 윤곽이 깨진 구판이므로 게임과 도감에서 제외한다.
-  ['arabia', 'ottoman', 'persia', 'seasia', 'tropic'].forEach(function (st) {
-    for (var n = 1; n <= 6; n++) I.MAID_BAN['maid-styles/' + st + '/' + n] = 1;
-  });
   /** 폴더의 구판 대신 쓰는 고해상도·투명 배경 지역 인물 */
   I.MAID_EXTRA = {
     persia: ['portraits/street-folk/town_woman_pe'],
@@ -681,6 +677,8 @@
   };
   /** 이 여급이 쓸 지역 묶음 이름 (없으면 null → 코드로 그린 초상) */
   I.maidStyle = function (id, c) {
+    var exact = G.MAID && G.MAID[id] && G.MAID[id].pic, match = exact && exact.match(/^maid-styles\/([^/]+)\//);
+    if (match) return match[1];
     if (I.MAID_FACE[id]) return I.MAID_FACE[id];
     var pool = I.maidPool(c);
     if (!pool || !pool.length) return null;
@@ -688,6 +686,9 @@
   };
   /** 묶음 안에서 이 여급의 그림 한 장 (maid-styles/묶음/번호) */
   I.maidPic = function (id, c) {
+    var exact = G.MAID && G.MAID[id] && G.MAID[id].pic;
+    // 특정 인물에게 직접 고른 그림은 지역 임의 배치 금지(MAID_BAN)와 무관하게 쓴다.
+    if (exact && I.has(exact)) return exact;
     var st = I.maidStyle(id, c); if (!st) return null;
     var list = maidList(st, c);
     if (!list.length) return I.has('maid-styles/' + st) ? 'maid-styles/' + st : null;

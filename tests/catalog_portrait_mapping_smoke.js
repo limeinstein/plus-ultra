@@ -74,15 +74,21 @@ Object.keys(exact).forEach(id => {
   ok(found && found.face === 'portraits/legendary/' + exact[id], found ? found.name + '이(가) 전용 얼굴을 쓴다' : id + '을 찾는다');
 });
 
-const low = [];
+const restored = [];
 ['arabia', 'ottoman', 'persia', 'seasia', 'tropic'].forEach(style => {
-  const list = I.maidList(style);
-  for (let n = 1; n <= 6; n++) if (list.indexOf('maid-styles/' + style + '/' + n) >= 0) low.push(style + '/' + n);
+  for (let n = 1; n <= 6; n++) restored.push('maid-styles/' + style + '/' + n);
 });
-ok(low.length === 0, '도감 여급 후보에서 저해상도 구판 30장을 제외한다');
-ok(I.maidList('persia')[0] === 'portraits/street-folk/town_woman_pe', '페르시아 도감 대표가 고해상도 지역 인물이다');
-ok(I.maidList('seasia')[0] === 'portraits/street-folk/town_woman_se', '동남아 도감 대표가 고해상도 지역 인물이다');
-ok(I.maidList('tropic')[0] === 'portraits/street-folk/innkeeper_se', '열대 도감 대표가 고해상도 지역 인물이다');
+ok(restored.every(k => I.has(k) && I.has(k + '_half')), '복원한 초창기 여급 30장의 얼굴상·무릎상이 모두 있다');
+ok(restored.every(k => G.PORTRAIT_FACES[k] && G.PORTRAIT_FACES[k + '_half']), '복원한 30명 모두 얼굴 자리(눈·입)를 다시 쟀다');
+const archive = [];
+[['arabia',14,19],['india',19,30],['china',19,36],['ottoman',8,13],['japan',11,20],['native',13,18],['africa',19,24],['tropic',7,12],['westeurope',8,35]].forEach(([style,a,b]) => {
+  for (let n = a; n <= b; n++) archive.push('maid-styles/' + style + '/' + n);
+});
+ok(archive.length === 98 && archive.every(k => I.has(k) && I.has(k + '_half')), 'ZIP에서 되살린 초창기 여급 98명의 얼굴상·무릎상이 모두 있다');
+ok(archive.every(k => G.PORTRAIT_FACES[k] && G.PORTRAIT_FACES[k + '_half']), '초창기 여급 98명 모두 얼굴 자리(눈·입)를 쟀다');
+ok(I.maidList('persia').includes('portraits/street-folk/town_woman_pe'), '페르시아 보조 고해상도 지역 인물도 유지한다');
+ok(I.maidList('seasia').includes('portraits/street-folk/town_woman_se'), '동남아 보조 고해상도 지역 인물도 유지한다');
+ok(I.maidList('tropic').includes('portraits/street-folk/innkeeper_se'), '열대 보조 고해상도 지역 인물도 유지한다');
 
 const catalog = fs.readFileSync(path.join(ROOT, 'js/catalog.js'), 'utf8');
 ok(/chain:\s*A\.portraitKeys\(spec\)/.test(catalog), '도감 동료 카드가 게임과 같은 얼굴 선택 사슬을 쓴다');

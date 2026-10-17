@@ -43,11 +43,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.n === 120 && r.unique === 120 && !r.shortMenus.length, '지역 음식 120종이 겹치지 않고 식당이 있는 모든 도시에 6종씩 배정됨' + (r.shortMenus.length ? ' — ' + r.shortMenus.join(', ') : ''));
     ok(r.restaurant, '런던 거리에 식당이 선다');
     ok(r.specials.london[0] === 'fish_chips' && r.specials.hamburg[0] === 'hamburg_steak' && r.specials.beijing[0] === 'peking_duck' && r.specials.dongnae[0] === 'dwaeji_gukbap', '런던·함부르크·북경·동래 대표 음식 우선 배정');
-    ok(r.specials.seoul[0] === 'galbi' && r.specials.seoul.includes('samgyeopsal') && r.specials.delhi[0] === 'delhi_curry' && r.specials.chengdu[0] === 'sichuan_hotpot' && r.specials.osaka[0] === 'okonomiyaki', '한양·델리·성도·사카이(오사카 권역) 대표 음식 우선 배정');
+    ok(r.specials.seoul[0] === 'galbi' && r.specials.seoul[1] === 'samgyeopsal' && r.specials.delhi[0] === 'delhi_curry' && r.specials.chengdu[0] === 'jiaozi' && r.specials.osaka[0] === 'sushi', '한양·델리·성도·사카이(오사카 권역) 대표 음식 우선 배정');
     ok(r.once.fatigue < 50 && r.once.gold < 99999 && r.once.fatigue === r.twice.fatigue && r.once.gold === r.twice.gold, '식사는 값을 내고 피로를 회복하며 도시마다 하루 한 번');
     ok(!r.forbidden.length, '박물관·미술관·동물원 건립 왕명은 비유럽 궁정에 나오지 않음');
     ok(r.gallery && r.gallery.name === '왕립 미술관', '명작을 바친 유럽 수도에 왕립 미술관이 선다');
-    ok(r.foodIcons >= 21, '준비된 전용 음식 그림 ' + r.foodIcons + '개가 매니페스트에 등록됨');
+    ok(r.foodIcons === 120, '전용 음식 그림 120개가 매니페스트에 등록됨');
+    await page.evaluate(() => { void G.Scenes.city.B.gallery.show(G.CITY_DATA[0], 'PT'); });
+    await page.waitForSelector('.mu-card', { timeout: 15000, state: 'attached' });
+    const art = await page.evaluate(() => [...document.querySelectorAll('.mu-card .mu-name')].map(x => x.textContent));
+    ok(art.length === 1 && art[0] === '시험 그림', '왕립 미술관 전시실에 바친 명작이 걸린다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
   } catch (e) { console.error('✗', e.message); if (errors.length) console.error(errors.slice(0, 5).join(' | ')); process.exitCode = 1; }
   finally { await browser.close(); }

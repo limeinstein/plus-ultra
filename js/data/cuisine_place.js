@@ -40,11 +40,11 @@
     145: ['delhi_curry', 'chole_bhature', 'butter_chicken'], 146: ['tandoori_chicken', 'biryani'], 156: ['biryani'], 152: ['dosa'], 154: ['dosa'], 153: ['dosa'],
     162: ['pad_thai'], 163: ['amok'], 164: ['pho'], 165: ['pho'], 160: ['laksa'], 167: ['rendang'], 168: ['nasi_goreng'], 169: ['nasi_goreng'],
     // 중국
-    188: ['peking_duck', 'zhajiangmian', 'jiaozi'], 182: ['sichuan_hotpot', 'mapo_tofu', 'kungpao_chicken'], 174: ['dim_sum', 'char_siu', 'wonton_noodle'],
+    188: ['peking_duck', 'zhajiangmian', 'jiaozi'], 182: ['jiaozi', 'sichuan_hotpot', 'mapo_tofu', 'kungpao_chicken'], 174: ['dim_sum', 'char_siu', 'wonton_noodle'],
     177: ['beggars_chicken'], 286: ['xiaolongbao'], 288: ['xiaolongbao'],
     // 조선·일본
-    190: ['galbi', 'bulgogi'], 226: ['dwaeji_gukbap'], 227: ['bibimbap'], 228: ['naengmyeon'],
-    192: ['okonomiyaki', 'takoyaki'], 193: ['soba', 'udon'], 297: ['sushi', 'tempura'], 191: ['tempura'],
+    190: ['galbi', 'samgyeopsal', 'bulgogi'], 226: ['dwaeji_gukbap'], 227: ['bibimbap'], 228: ['naengmyeon'],
+    192: ['sushi', 'okonomiyaki', 'takoyaki'], 193: ['soba', 'udon'], 297: ['sushi', 'tempura'], 191: ['tempura'],
     // 아메리카·오세아니아
     255: ['clam_chowder'], 256: ['clam_chowder'], 259: ['clam_chowder'], 266: ['gumbo'], 197: ['jerk_chicken'],
     200: ['tamales', 'mole_poblano'], 201: ['mole_poblano', 'tamales'], 202: ['mole_poblano'], 199: ['tamales'],

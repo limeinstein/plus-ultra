@@ -22,7 +22,6 @@ IMG = os.path.join(ROOT, 'images')
 OUT = os.path.join(ROOT, 'js', 'data', 'portraitfaces.js')
 DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/street-folk']
 
-
 def main():
     try:
         import cv2
