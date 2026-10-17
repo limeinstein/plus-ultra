@@ -39,6 +39,7 @@ uniform vec4 uW1;   // shallow rgb, foam
 uniform vec4 uW2;   // deep rgb, cloud
 uniform vec4 uW3;   // lagoon rgb, berg
 uniform vec4 uW4;   // abyss rgb (가장 깊은 바다 색), rough (먼바다일수록 거칠어지는 정도)
+uniform vec4 uW5;   // 바람 물결 줄: 세기, 파장(°), 빠르기(°/시간), 부서짐
 uniform vec2 uCloudK;    // 구름 무늬의 자리 (카메라 이동·바람에 밀린 만큼 — 화면 한가운데 기준)
 uniform vec2 uCloudDir;  // 구름이 흘러가는 방향 (= 바람이 부는 쪽, 단위 벡터)
 uniform vec4 uCloudForm; // 구름 모양: 바람 방향으로 늘어남, 구름길(줄), 크기, 쌘구름(뭉게뭉게 솟은 정도)
@@ -559,6 +560,57 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
     col = mix(col, vec3(0.92,0.95,0.96), clamp(caps*br, 0.0, 0.8));
   }
 
+  // ---------------- 바람 물결(풍랑의 물마루): 먼바다에 바람에 직각으로 짧게 솟은 물마루들이 흩어져 있고, 바람이 부는 쪽으로 밀려간다.
+  //   물마루 하나하나는 솟아올랐다(뒷면은 완만히 밝게, 앞면은 가파르게 그늘) → 바람이 세면 마루가 부서져 하얀 거품이 앞으로 넘어가고
+  //   → 거품이 뒤에 성기게 남으며 가라앉는다. 칸마다 하나씩, 이웃 칸까지 살펴 겹쳐 그린다.
+  //   식은 js/world/waves.js WV.train 과 같다 (배가 이 물결도 탄다)
+  float trK = uW5.x * smoothstep(1.5, 18.0, d) * (1.0 - battle) * smoothstep(0.08, 0.45, wstr) * (1.0 + 0.35*rough);
+  float lamT = uW5.y * (0.75 + 0.5*wstr) * uW0.y;
+  float lfT = smoothstep(8.0, 20.0, lamT*pxD);
+  if (trK*lfT > 0.003) {
+    float spdT = uW5.z*(0.5 + 0.8*wstr);
+    vec2 q = vec2(dot(p, wd) - t*spdT, dot(p, wp));                 // 바람 쪽(밀려가는 물결과 함께 움직이는 좌표), 가로
+    vec2 cs = vec2(lamT*1.15, lamT*2.6);                              // 칸: 바람 쪽 한 파장 남짓, 가로 두세 파장
+    vec2 ci = floor(q/cs);
+    float shade = 0.0, lit = 0.0, crestS = 0.0, foamT = 0.0;
+    float dens = 0.35 + 0.35*wstr;                                    // 칸에 물마루가 있을 확률
+    float brkK = uW5.w * smoothstep(0.30, 0.85, wstr) * (1.0 + 0.6*uStorm);
+    for (int jx = -1; jx <= 1; jx++) for (int jy = -1; jy <= 1; jy++) {
+      vec2 cc = ci + vec2(float(jx), float(jy));
+      ivec2 ic = ivec2(cc);
+      float h0 = hash(ic), h1 = hash(ic + ivec2(71, 13)), h2 = hash(ic + ivec2(29, 97));
+      if (h0 > dens) continue;
+      vec2 ctr = (cc + vec2(0.25 + 0.5*h1, 0.2 + 0.6*h2))*cs;
+      float len = lamT*(1.0 + 1.4*h1)*(0.85 + 0.3*wstr);               // 물마루 길이 (가로 반쪽)
+      float life = fract(t*(0.05 + 0.03*h2) + h0*13.7);                // 한 물마루의 일생
+      float env = sin(3.14159*life);
+      float y = (q.y - ctr.y)/len;
+      if (abs(y) >= 1.0) continue;
+      float x = (q.x - ctr.x)/lamT + 0.35*y*y*(0.6 + h2) + (vnoise(vec2(q.y/lamT*1.7, cc.x*3.1)) - 0.5)*0.25;   // 마루가 바람 쪽으로 조금 휘었다
+      float ey = (1.0 - y*y); ey *= ey;                               // 양 끝으로 갈수록 낮다
+      float a = trK*lfT*env*ey;
+      // 높이 모양: 뒷면(x<0) 완만히 오른다, 마루(x=0), 앞면(x>0) 가파르게 내려간다
+      float back = smoothstep(-0.75, 0.0, x) * step(x, 0.0);
+      float front = smoothstep(0.0, 0.03, x) * smoothstep(0.24, 0.06, x);
+      lit += a*back*back;
+      shade += a*front;
+      crestS += a*smoothstep(-0.10, 0.0, x)*smoothstep(0.035, 0.0, x);
+      if (brkK > 0.0) {
+        float bl = smoothstep(0.38, 0.55, life) * smoothstep(1.0, 0.72, life) * step(h1, 0.12 + 0.36*wstr);   // 부서지는 때 · 부서지는 마루
+        float spill = 0.04 + 0.30*smoothstep(0.40, 0.80, life);                                   // 거품이 앞면으로 넘어간 거리
+        float nz = vnoise(q/lamT*vec2(2.2, 6.0) + vec2(h0*40.0, t*0.4));
+        float fb = smoothstep(-0.10, -0.02, x) * smoothstep(spill + 0.06, spill*0.4, x + (nz - 0.5)*0.12);
+        float rem = smoothstep(-0.95, -0.35, x) * smoothstep(0.0, -0.18, x) * smoothstep(0.55, 0.85, vnoise(q/lamT*vec2(3.5, 2.2) + h1*30.0)) * smoothstep(0.6, 0.95, life);   // 지나간 자리에 남은 거품
+        foamT += (fb*bl*(0.55 + 0.35*nz) + rem*0.35) * trK*lfT*ey*brkK;
+      }
+    }
+    float sunW = dot(SUNXY, wd);
+    col *= 1.0 - clamp(shade, 0.0, 1.0)*(0.20 - 0.06*sunW);                      // 앞면 그늘
+    col += vec3(0.020, 0.075, 0.090) * clamp(lit, 0.0, 1.0) * (0.85 + 0.15*sunW);   // 마루로 오르는 뒷면에 비치는 청록빛
+    col = mix(col, col*1.15 + vec3(0.03,0.06,0.07), clamp(crestS*0.5, 0.0, 0.6));   // 물마루 선
+    col = mix(col, vec3(0.92,0.96,0.97), clamp(foamT, 0.0, 0.85));
+  }
+
   // ---------------- 해안 포말: 밀려와 부서지는 물결 (늘 켜진 외곽선이 아니다)
   if (battle < 0.5 && d < 3.0) {
     float lineOK = smoothstep(1.2, 3.5, pxT);
@@ -831,7 +883,7 @@ void main(){
     return prog;
   }
   var UNIFORMS = ['uGeo', 'uClim', 'uRes', 'uCenter', 'uZoom', 'uTime', 'uWind', 'uCloud', 'uEdge', 'uMode', 'uDusk', 'uStorm', 'uQuality', 'uBattleOrigin', 'uBattleZoom',
-    'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
+    'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uW5', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
 
   /* 두 패스:
      · 육지 캐시 — 무거운 육지(높이·생태·나무·강)는 화면보다 1.45배 넓은 판에 그려 두고, 카메라가 그 판 안에 있는 동안 다시 쓴다.
@@ -915,6 +967,7 @@ void main(){
     gl.uniform4f(u.uW2, dp[0], dp[1], dp[2], fxv(Wt, 'cloud', 0.8));
     gl.uniform4f(u.uW3, lg[0], lg[1], lg[2], fxv(Wt, 'berg', 1));
     if (u.uW4) gl.uniform4f(u.uW4, ab[0], ab[1], ab[2], fxv(Wt, 'rough', 1));
+    if (u.uW5) gl.uniform4f(u.uW5, fxv(Wt, 'trains', 1), fxv(Wt, 'trainLam', 0.22), fxv(Wt, 'trainSpeed', 0.03), fxv(Wt, 'breaking', 1));
   };
   function wrap(d) { d = (d + 180) % 360; if (d < 0) d += 360; return d - 180; }
   /** 캐시 판 하나 (텍스처 + 프레임버퍼) */

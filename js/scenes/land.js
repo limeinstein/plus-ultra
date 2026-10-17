@@ -28,6 +28,7 @@
       var mt = cleanMount(arg.mount);
       s.loc = { mode: 'land', lon: start[0], lat: start[1], heading: 0, base: base, party: party, days: 0, party0: party, found0: s.stats.found, marks0: Object.keys(s.marks || {}).length, mount: mt };
       st = newSt(start);
+      if (G.LandSea) G.LandSea.reset();   // 새 탐험: 바다의 배를 새로 띄운다
       if (arg.from != null) st.cityPromptBlock = arg.from; // 성문을 막 나선 때에는 같은 도시 출입을 곧바로 다시 묻지 않는다
       UI.toast('탐험대 ' + party + '명이 ' + (mt.id === 'walk' ? '걸어서' : G.Mounts.get(mt.id).name + U.jx(G.Mounts.get(mt.id).name, '과/와') + ' 함께') + ' 출발했다.', 'boot');
     } else {
@@ -282,10 +283,10 @@
     var s = S(), l = s.loc;
     if (!l || l.mode !== 'land' || !l.base) return;   // 장면을 바꾸는 사이(도시로 들어가는 중·불러오기) 한 장면만큼 위치가 뭍이 아닐 수 있다
     st.t += dt;
-    var px0 = l.lon, py0 = l.lat;
+    var px0 = l.lon, py0 = l.lat, daysMoved = 0;
     if (!st.paused && !st.busy && !UI.busy()) pointerTurn(dt);
     if (!st.paused && !st.busy && !UI.busy() && (st.path || st.dir)) {
-      var days = dt * st.speed / DAY_SEC;
+      var days = dt * st.speed / DAY_SEC; daysMoved = days;
       var terr = G.Geo.terrain(l.lon, l.lat), tv = (TERR[terr] || TERR.grass).spd;
       var mk = G.Mounts.speed(MT(), terr, l.party);
       var v = tv * mk * (1 + R.skill('ops') * 0.1) * (s.fleet.fatigue > 70 ? 0.7 : 1) * (l.party > 20 ? 0.9 : 1) * (st.fastDays > 0 ? 1.45 : 1) * (G.Disaster ? G.Disaster.slow(l.lon, l.lat) : 1);   // 재해의 자취 안에서는 느리다
@@ -323,6 +324,8 @@
       else st.cam.zoom *= Math.pow(zr, 1 - Math.exp(-dt * ((G.FX.ship && G.FX.ship.zoomEase) || 12)));
     }
     if (!st.busy && !UI.busy()) checkCityPrompt();
+    // 화면 속 바다의 배들 (경쟁자의 탐험 함대·상선·함대·해적 — 그림만, js/systems/landsea.js)
+    if (G.LandSea) { try { G.LandSea.step({ lon: st.cam.lon, lat: st.cam.lat, zoom: st.cam.zoom }, daysMoved, dt, st.dayAcc, [l.lon, l.lat]); } catch (e) { console.error(e); } }
     st.rframe = (st.rframe || 0) + 1;
     var idle = st.busy > 0 || UI.busy();
     var quake = G.Quake && G.Quake.active();
@@ -921,6 +924,7 @@
     var ff = fontFam();
     // base marker
     var bp = toScreen(l.base.lon, l.base.lat);
+    if (G.LandSea) G.LandSea.draw(ctx, toScreen, st.cam.zoom, st.t, ff);   // 바다를 오가는 배들 (내 배보다 아래)
     if (l.base.type === 'ship') { var bsh = S().fleet.ships[0], blk = bsh ? A.shipLook(bsh.type, { sails: bsh.sails, flag: '#1d3f7a' }) : { sails: ['sq', 'lat'], hull: '#5a3a22', cross: true }; blk.furl = 1; A.shipTop(ctx, bp[0], bp[1], 0.5, G.Scenes.sea.shipPx ? G.Scenes.sea.shipPx() * 0.85 : 80, blk, st.t); }
     // 직접 발견한 도시 밖 유적·자연 경관은 소도시 정도 크기의 투명 모형으로 표시한다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {

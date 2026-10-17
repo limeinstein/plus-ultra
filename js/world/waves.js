@@ -32,9 +32,9 @@
   function coast(lon, lat) {
     var Geo = G.Geo; if (!Geo || !Geo.sdfRaw || !Geo.TEX_PER_DEG) return null;
     var s = Geo.sdf(lon, lat), d = Math.max(-s, 0), ab = smooth(6, 56, d);
-    if (d > 30) return { near: 0, gx: 0, gy: 0, abyss: ab };  // exp(−30/5) ≈ 0 — 먼바다: 뭍 쪽으로 휘는 물결은 없다
+    if (d > 30) return { near: 0, gx: 0, gy: 0, abyss: ab, d: d };  // exp(−30/5) ≈ 0 — 먼바다: 뭍 쪽으로 휘는 물결은 없다
     var e = 1 / Geo.TEX_PER_DEG;
-    return { abyss: ab, near: Math.exp(-d / 5), gx: (Geo.sdfRaw(lon + e, lat) - Geo.sdfRaw(lon - e, lat)) * 0.5, gy: (Geo.sdfRaw(lon, lat + e) - Geo.sdfRaw(lon, lat - e)) * 0.5 };
+    return { abyss: ab, d: d, near: Math.exp(-d / 5), gx: (Geo.sdfRaw(lon + e, lat) - Geo.sdfRaw(lon - e, lat)) * 0.5, gy: (Geo.sdfRaw(lon, lat + e) - Geo.sdfRaw(lon, lat - e)) * 0.5 };
   }
 
   WV.coast = coast;
@@ -66,7 +66,41 @@
       var a = amp * env * lf, c = Math.cos(ph);
       h += a * Math.sin(ph); gx += a * k * dx * c; gy += a * k * dy * c;
     }
+    var tr = WV.train(lon, lat, t, wind, pxD, cst);
+    if (tr) { h += tr.h; gx += tr.gx; gy += tr.gy; }
     return { h: h, gx: gx, gy: gy };
+  };
+  function fxw(k, d) { var w = G.FX && G.FX.water; return w && w[k] != null ? w[k] : d; }
+  /** 먼바다의 바람 물결(셰이더 waterCol의 「바람 물결」과 같은 칸·물마루): 흩어진 짧은 물마루가 바람 쪽으로 밀려간다.
+      뒷면은 완만히 오르고 앞면은 가파르게 떨어진다 — 배가 마루를 넘으며 뱃머리가 들렸다 떨어진다. null이면 없음 */
+  WV.train = function (lon, lat, t, wind, pxD, cst) {
+    var K = fxw('trains', 1); if (!(K > 0)) return null;
+    var wx = wind[0], wy = wind[1], wstr = Math.min(1, Math.sqrt(wx * wx + wy * wy));
+    var d = cst && cst.d != null ? cst.d : 30;
+    var trK = K * smooth(1.5, 18, d) * smooth(0.08, 0.45, wstr) * (1 + 0.35 * roughK() * (cst && cst.abyss != null ? cst.abyss : 1));
+    var lam = fxw('trainLam', 0.22) * (0.75 + 0.5 * wstr) * waveK(), lf = smooth(8, 20, lam * pxD);
+    if (trK * lf <= 0.003) return null;
+    var nx = wx + 1e-4, nl = Math.sqrt(nx * nx + wy * wy), wdx = nx / nl, wdy = wy / nl, wpx = -wdy, wpy = wdx;
+    var px = lon + 180, py = lat + 90, spd = fxw('trainSpeed', 0.03) * (0.5 + 0.8 * wstr);
+    var qx = px * wdx + py * wdy - t * spd, qy = px * wpx + py * wpy;
+    var csx = lam * 1.15, csy = lam * 2.6, cix = Math.floor(qx / csx), ciy = Math.floor(qy / csy);
+    var dens = 0.35 + 0.35 * wstr, h = 0, dq = 0;
+    for (var jx = -1; jx <= 1; jx++) for (var jy = -1; jy <= 1; jy++) {
+      var ccx = cix + jx, ccy = ciy + jy;
+      var h0 = hash(ccx, ccy), h1 = hash(ccx + 71, ccy + 13), h2 = hash(ccx + 29, ccy + 97);
+      if (h0 > dens) continue;
+      var cx = (ccx + 0.25 + 0.5 * h1) * csx, cy = (ccy + 0.2 + 0.6 * h2) * csy;
+      var len = lam * (1.0 + 1.4 * h1) * (0.85 + 0.3 * wstr);
+      var life = t * (0.05 + 0.03 * h2) + h0 * 13.7; life -= Math.floor(life);
+      var y = (qy - cy) / len; if (Math.abs(y) >= 1) continue;
+      var x = (qx - cx) / lam + 0.35 * y * y * (0.6 + h2) + (vnoise(qy / lam * 1.7, ccx * 3.1) - 0.5) * 0.25;
+      var ey = (1 - y * y) * (1 - y * y), a = trK * lf * Math.sin(3.14159 * life) * ey * lam * 0.12;
+      var hp, dp;
+      if (x <= 0) { var u = Math.max(0, Math.min(1, (x + 0.75) / 0.75)); hp = u * u * (3 - 2 * u); dp = x > -0.75 ? 6 * u * (1 - u) / 0.75 : 0; }
+      else { var v = Math.max(0, Math.min(1, x / 0.24)); hp = 1 - v * v * (3 - 2 * v); dp = x < 0.24 ? -6 * v * (1 - v) / 0.24 : 0; }
+      h += a * hp; dq += a * dp / lam;
+    }
+    return { h: h, gx: dq * wdx, gy: dq * wdy };
   };
   /** 항해 지도에서 가장 긴 너울의 파장(°) — 배가 이것보다 길면 기울기를 잴 간격을 줄인다 */
   WV.seaSwell = function () { return 0.62 * waveK(); };
