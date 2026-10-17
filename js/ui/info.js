@@ -608,6 +608,8 @@
         '<small class="muted">바다·육상 탐험 — 켜면 가려는 쪽을 한 번 누른 뒤로는 마우스를 옮기는 대로 방향을 틉니다 · 끄면 누른 곳까지 갑니다 · 수첩 옆 단추나 ' + kl('mouseFollow').replace(/^(왼쪽|오른쪽) /, '') + '로도 바꿉니다</small></div>' +
       '<div>조작 감도</div><div><div class="opt-row">' + [['slow', '느리게'], ['normal', '보통'], ['fast', '빠르게']].map(function (o) { return '<div class="opt' + (G.Ctrl.sensId() === o[0] ? ' on' : '') + '" data-cs="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
         '<small class="muted">' + ({ slow: '마우스를 옮겨도 뱃머리·발걸음이 천천히 따라 돌고, 커서 떨림과 작은 움직임은 무시합니다 · 방향키로 도는 것도 느리게', normal: '마우스를 옮기면 침로가 부드럽게 따라 돕니다', fast: '마우스를 옮기면 곧바로 그쪽으로 · 방향키로 도는 것도 빠르게 (예전 손맛)' })[G.Ctrl.sensId()] + '</small></div>' +
+      '<div>입항·성문 물음</div><div><div class="opt-row">' + [['notify', '알림만'], ['stop', '멈췄을 때만 묻기'], ['ask', '항상 묻기']].map(function (o) { return '<div class="opt' + (G.Ctrl.portAsk() === o[0] ? ' on' : '') + '" data-pa="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
+        '<small class="muted">' + ({ notify: '항구·성문 곁을 지나면 창 없이 알리기만 합니다 — 들어가려면 ' + kl('confirm') + '나 「입항」·「도시에 들어간다」 단추', stop: '지나갈 때는 알리기만 하고, 그 곁에 멈춰 서면 들어갈지 묻습니다', ask: '항구·성문 곁에 닿을 때마다 들어갈지 묻습니다 (예전 방식)' })[G.Ctrl.portAsk()] + '</small></div>' +
       '<div>키보드 설정</div><div><div class="keybind-grid">' + G.Keys.actions.map(function (a) {
         return '<div class="keybind-row"><span><b>' + U.esc(a.label) + '</b><small>' + U.esc(a.desc) + '</small></span><button class="btn small keybind-btn" data-keyact="' + a.id + '">' + U.esc(G.Keys.label(a.id, st)) + '</button></div>';
       }).join('') + '</div><div class="flex" style="gap:8px;margin-top:8px"><button class="btn small ghost" data-act="keyreset">기본 키로 되돌리기</button><small class="muted">바꿀 항목을 누른 뒤 새 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다.</small></div></div>' +
@@ -623,6 +625,7 @@
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
     U.$$('[data-mf]', el).forEach(function (o) { o.onclick = function () { st.mouseFollow = o.dataset.mf === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-cs]', el).forEach(function (o) { o.onclick = function () { st.ctrlSens = o.dataset.cs; PAGES.menu(el, win); }; });
+    U.$$('[data-pa]', el).forEach(function (o) { o.onclick = function () { st.portAsk = o.dataset.pa; PAGES.menu(el, win); }; });
     U.$$('[data-keyact]', el).forEach(function (o) { o.onclick = function () {
       var action = o.dataset.keyact, old = o.textContent;
       o.textContent = '새 키를 누르세요…'; o.classList.add('navy');

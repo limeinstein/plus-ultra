@@ -238,7 +238,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     // ==== ③ 본 게임: 거절하면 30초 동안 다시 묻지 않고, 도시를 직접 누르면 닿자마자 묻지 않고 들어간다
     r = await ev(async () => {
       const s = G.Game.state, SEA = G.Scenes.sea, o = {};
-      G.Tutorial.end();
+      G.Tutorial.end(); s.settings.portAsk = 'ask';   // 예전 방식(항상 묻기)으로 곁 항구 물음을 본다 — 기본은 알림만
       const st = SEA.runtime(); st.portPromptBlock = null; st.portPromptUntil = {};
       const asked = [], times = []; const ask0 = G.UI.ask;
       G.UI.ask = function (t, ch) { asked.push(String(t).slice(0, 30)); if (/입항/.test(t)) { times.push(Date.now()); setTimeout(() => { o.cool = Math.round(((st.portPromptUntil[G.CITY_DATA.find(c => c.name === '카디스').id] || 0) - Date.now()) / 1000); }, 0); return Promise.resolve(0); } return ask0.apply(this, arguments); };

@@ -535,19 +535,30 @@
     } catch (e) { console.error(e); }
     st.busy--;
     if (!st.alive || G.Game.scene !== SEA) return false;
-    if (!v) { coolPortPrompt(c); return false; }
+    if (!v) { coolPortPrompt(c); if (portAskMode() === 'stop') st.portPromptBlock = c.id; return false; }   // 멈췄을 때만 묻기: 거절하면 그 항구 곁을 떠날 때까지 다시 묻지 않는다
     return tryEnterPort(c);
+  }
+  function portAskMode() { return G.Ctrl ? G.Ctrl.portAsk() : 'ask'; }
+  /** 알림만: 항구 곁에 들어설 때 한 번, 창 없이 알린다 (가던 길은 그대로 — Enter·「입항」 단추로 들어간다) */
+  function notePort(c) {
+    var nu = st.portNoteUntil || (st.portNoteUntil = {});
+    if (st.portNoted === c.id || promptClock() < (nu[c.id] || 0)) return;          // 곁을 떠났다 금방 돌아와도 같은 알림을 되풀이하지 않는다 (cityEntryPrompt.cooldownMs)
+    st.portNoted = c.id; nu[c.id] = promptClock() + promptWait();
+    UI.toast(c.name + ' 항구 곁입니다 — ' + G.Keys.label('confirm') + '나 「' + c.name + ' 입항」 단추로 들어갑니다', 'anchor', 3600);
   }
   function checkPortPrompt() {
     var c = portNear();
-    if (!c) { st.portPromptBlock = null; return; }
+    if (!c) { st.portPromptBlock = null; st.portNoted = null; return; }
     if (st.portPromptBlock != null) {
       if (st.portPromptBlock === c.id) return;
       st.portPromptBlock = null;
     }
     if (st.path && st.target && st.target.city) return;                                   // 항구를 골라 가는 길이면 묻지 않는다 (그 항구면 닿아서 곧장 입항, 다른 항구면 지나친다)
     if (G.Tutorial && G.Tutorial.portPromptOk && !G.Tutorial.portPromptOk(c)) return;   // 튜토리얼: 지금 가야 할 항구만 묻는다
-    if (!portPromptCooling(c)) offerEnterPort(c);
+    // 설정 「입항·성문 물음」: 알림만(기본)이면 창 없이 알리고, 멈췄을 때만이면 배가 완전히 섰을 때만 묻는다 (QA 2026-10-17 — 세비야 가는 길에 카디스·세우타마다 물어 성가셨다)
+    var mode = portAskMode(), still = st.paused && !st.stopping;
+    if (mode === 'ask' || (mode === 'stop' && still)) { if (!portPromptCooling(c)) offerEnterPort(c); return; }
+    if (st.portNoted !== c.id) notePort(c);
   }
   /** 곧 들를 항구의 거리 그림을 미리 받는다 (아티팩트판은 그림 묶음을 처음 쓸 때 받으므로) — 하루에 한 번.
       목적지 항구는 3° 안에서, 지나가는 항구는 1.5° 안에서 */

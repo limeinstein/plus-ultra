@@ -87,6 +87,8 @@
       return c === b || (b === 'ShiftLeft' && c === 'ShiftRight');
     },
     sensId: function () { var st = gameSettings(), v = st && st.ctrlSens; return v === 'slow' || v === 'fast' ? v : 'normal'; },
+    /** 항구·성문 곁을 지날 때: 'notify' 알림만(기본 — 창을 띄우지 않고 Enter·단추로 들어간다) · 'stop' 멈춰 섰을 때만 묻기 · 'ask' 언제나 묻기(예전) */
+    portAsk: function () { var st = gameSettings(), v = st && st.portAsk; return v === 'stop' || v === 'ask' ? v : 'notify'; },
     sens: function () { var B = (G.BALANCE || {}).ctrlSens || {}; return B[this.sensId()] || B.normal || SENS_DEF; },
     /** 단추의 모양 (켬이면 빛난다) */
     paintButton: function (b) {

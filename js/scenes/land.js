@@ -252,17 +252,28 @@
     } catch (e) { console.error(e); }
     st.busy--;
     if (!st.alive || G.Game.scene !== L) return false;
-    if (!v) { coolCityPrompt(c); return false; }
+    if (!v) { coolCityPrompt(c); if (cityAskMode() === 'stop') st.cityPromptBlock = c.id; return false; }   // 멈췄을 때만 묻기: 거절하면 그 성문 곁을 떠날 때까지 다시 묻지 않는다
     return enterCity(c);
+  }
+  function cityAskMode() { return G.Ctrl ? G.Ctrl.portAsk() : 'ask'; }
+  /** 알림만: 성문 곁에 들어설 때 한 번, 창 없이 알린다 (Enter·「도시에 들어간다」로 들어간다) */
+  function noteCity(c) {
+    var nu = st.cityNoteUntil || (st.cityNoteUntil = {});
+    if (st.cityNoted === c.id || promptClock() < (nu[c.id] || 0)) return;
+    st.cityNoted = c.id; nu[c.id] = promptClock() + promptWait();
+    UI.toast(c.name + ' 성문 곁입니다 — ' + G.Keys.label('confirm') + '나 「도시에 들어간다」 단추로 들어갑니다', 'castle', 3600);
   }
   function checkCityPrompt() {
     var c = cityNear();
-    if (!c) { st.cityPromptBlock = null; return; }
+    if (!c) { st.cityPromptBlock = null; st.cityNoted = null; return; }
     if (st.cityPromptBlock != null) {
       if (st.cityPromptBlock === c.id) return;
       st.cityPromptBlock = null;
     }
-    if (!cityPromptCooling(c)) offerEnterCity(c);
+    // 설정 「입항·성문 물음」: 알림만(기본)이면 창 없이 알리고, 멈췄을 때만이면 탐험대가 섰을 때만 묻는다
+    var mode = cityAskMode();
+    if (mode === 'ask' || (mode === 'stop' && st.paused)) { if (!cityPromptCooling(c)) offerEnterCity(c); return; }
+    if (st.cityNoted !== c.id) noteCity(c);
   }
 
   // ---------------------------------------------------------------- loop
