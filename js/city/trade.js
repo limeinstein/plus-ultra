@@ -123,12 +123,26 @@
       await buyOne(c, picked);
     }
   };
+  /** 짐칸이 꽉 찼을 때: 식량·물·자재를 덜어 자리를 만들지 묻고, 그러면 보급 창을 연다. 덜어 냈으면 true */
+  async function offerUnload(c, want) {
+    var f = S().fleet, prov = Math.floor(f.food + f.water + (f.mat || 0)), H = G.Scenes.city.B.harbor;
+    if (!c.port || !H || !H.supply || prov < 1) return false;
+    var r = G.BALANCE && G.BALANCE.supplyRefund != null ? G.BALANCE.supplyRefund : 0.5;
+    var go = await C.mateAsk('제독, 짐칸이 꽉 찼습니다. 실어 둔 식량·물·자재(' + U.num(prov) + '통)를 조금 내려 자리를 만들까요? 내린 것은 이 항구 보급값의 ' + Math.round(r * 100) + '%에 되팝니다.',
+      [{ label: '식량·물을 줄인다', value: true }, { label: '그만둔다', value: false }]);
+    if (!go) return false;
+    var res = await H.supply(c, { need: want });
+    return !!(res && res.down && res.down.length && R.free() > 0);
+  }
+  T.offerUnload = offerUnload;
   async function buyOne(c, id) {
     var s = S(), g = G.GOOD[id], price = buyP(c, id), f = s.fleet;
     if (!f.cargo[id] && Object.keys(f.cargo).length >= R.maxKinds()) { await C.say(keeper(), '자네 배에는 더 이상 다른 종류의 짐을 실을 곳이 없어 보이는군. (품목 ' + R.maxKinds() + '종까지)'); return; }
     var stock = R.supply(c, id), free = G.Cargo ? G.Cargo.room(id) : Math.max(0, R.free()), byGold = Math.floor(s.player.gold / price);
     var mx = Math.min(stock, free, byGold);
     if (mx <= 0) {
+      // 짐칸(또는 무게)이 꽉 찼으면: 식량·물·자재를 덜어 자리를 만들 수 있게 보급 창을 바로 연다 (js/city/harbor.js H.supply)
+      if (!free && stock > 0 && byGold > 0 && await offerUnload(c, Math.min(stock, byGold))) return buyOne(c, id);
       if (!free && G.Cargo && G.Cargo.heavyBound(id)) await C.mate('제독, 짐칸은 남았지만 배가 더 무게를 버티지 못합니다. ' + g.name + U.jx(g.name, '은/는') + ' 1통에 무게 ' + G.Cargo.wt(id) + '입니다.');
       else if (!free) await C.mate('제독, 더 이상 실을 여유가 없습니다.');
       else if (!byGold) await C.say(keeper(), '가난한 사람에게는 볼일 없네!');

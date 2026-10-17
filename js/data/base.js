@@ -378,6 +378,8 @@
     waterPrice: 0.5, matPrice: 3,
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작
     matPerHp: 0.4, matStart: 10,
+    // 보급에서 식량·물·자재를 줄이면(교역품 자리를 내려고) 이 항구 보급값 × supplyRefund 로 되판다
+    supplyRefund: 0.5,
     // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금, 첫 함대(배 ID — 앞의 것이 기함)
     // 모조품(js/systems/fakes.js): 값 = 발견물 가치 × priceK, 둘 다 바치면 사례금 × bothK·신뢰 +bothTrust, 들키면 벌금 = 사례금 × fineK 또는 옥살이 jailBase+세력×12+0~25일
     //   상인은 달마다 day일에만, 도시 등급(G.CityIcon.tier: 1 소도시·2 중도시·3 대도시·4 수도) minTier 이상에만 나오고, 한 번 나올 때 stock개만 판다
