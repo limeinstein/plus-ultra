@@ -157,10 +157,14 @@
 
   // ---------------------------------------------------------------- sell
   T.sell = async function (c) {
-    var s = S();
+    var s = S(), soldAny = false;
     for (;;) {
       var ids = Object.keys(s.fleet.cargo);
-      if (!ids.length) { await C.say(keeper(), '응? 도대체 무엇을 팔겠다는 건가?'); return; }
+      if (!ids.length) {
+        // 방금 짐을 다 판 뒤라면 「무엇을 팔겠다는 건가?」가 아니라 거래를 마무리하는 말 (처음부터 빈 짐칸일 때만 그 말)
+        if (soldAny) { await C.me(U.pick(['실어 온 짐은 이것으로 다 넘겼소. 셈이 깔끔해서 좋군.', '짐칸이 텅 비었군. 좋은 값에 잘 넘겼소.', '이것으로 짐은 다 팔았소. 다음에도 좋은 물건을 실어 오지.'])); return; }
+        await C.say(keeper(), '응? 도대체 무엇을 팔겠다는 건가?'); return;
+      }
       var rows = ids.map(function (id) {
         var cg = s.fleet.cargo[id], g = G.GOOD[id], p = sellP(c, id), pr = cg.cost ? (p - cg.cost) / cg.cost : 0;
         var spoil = g.life ? Math.max(0, g.life - (s.day - cg.d)) : null, fs = G.Cargo ? G.Cargo.state(id, cg) : null;
@@ -180,7 +184,7 @@
         if (!(await UI.confirm('실은 짐을 모두 팔겠습니까?'))) continue;
         var tot = 0, profit = 0; ids.forEach(function (id) { var sold = sellQty(c, id, s.fleet.cargo[id].q); tot += sold.total; profit += sold.profit; });
         UI.toast('짐을 모두 팔아 금화 ' + U.num(tot) + '닢을 받았다.', 'coin');
-        tradePaid(profit);
+        tradePaid(profit); soldAny = true;
         continue;
       }
       if (v !== 'pick' || !picked) return;
@@ -190,7 +194,7 @@
       if (!q) continue;
       var sold = sellQty(c, picked, q);
       UI.toast(g.name + ' ' + q + '통을 팔아 금화 ' + U.num(sold.total) + '닢을 받았다.', 'coin');
-      tradePaid(sold.profit);
+      tradePaid(sold.profit); soldAny = true;
     }
   };
   function tradePaid(profit) {

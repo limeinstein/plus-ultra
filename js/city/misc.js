@@ -189,10 +189,13 @@
     }
   };
   MK.sell = async function (c) {
-    var s = S();
+    var s = S(), soldAny = false;
     for (;;) {
       var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { var d = G.ITEM[x.it.id]; return !(x.it.evidence); });
-      if (!list.length) { await C.say(vendor(), '응? 도대체 무엇을 팔겠다는 건가?'); return; }
+      if (!list.length) {
+        if (soldAny) { await C.say(vendor(), '이것으로 가져온 물건은 다 받았네. 좋은 거래였어!'); return; }   // 방금 마지막 물건을 판 뒤
+        await C.say(vendor(), '응? 도대체 무엇을 팔겠다는 건가?'); return;
+      }
       var v = await UI.choose('매각', list.map(function (x, k) {
         var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
@@ -205,7 +208,7 @@
       var warn = R.isProof(x.it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[x.it.disc].name) + '」 발견의 증거입니다. 아직 보고·발표하지 않았으니, 팔면 증거가 모자라 사례금과 명성이 줄 수 있습니다.</span>' : '';
       if (!(await UI.confirm(R.itemName(x.it) + U.j(R.itemName(x.it), '을/를').slice(R.itemName(x.it).length) + ' 금화 ' + U.num(val) + '닢에 팔겠습니까?' + warn, '판다', '그만둔다'))) continue;
       var id = x.it.id;
-      R.removeItemObject(x.it); s.player.gold += val;
+      R.removeItemObject(x.it); s.player.gold += val; soldAny = true;
       if (s.player.equip.weapon === id && !R.hasItem(id)) s.player.equip.weapon = null;
       if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
     }
