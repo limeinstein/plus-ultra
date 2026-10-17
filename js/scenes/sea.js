@@ -123,7 +123,7 @@
     hudEl.pause = btn('정지', 'pause', function () { if (st.paused) resume(); else halt(); });
     hudEl.search = btn('탐색', 'compass', function () { searchSea(); });
     var sp = U.el('div', 'speedctl');
-    [1, 2, 4].forEach(function (k) { var o = U.el('div', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.onclick = function (e) { e.stopPropagation(); st.speed = k; U.$$('.opt', sp).forEach(function (x) { x.classList.remove('on'); }); o.classList.add('on'); }; sp.appendChild(o); });
+    SPEEDS.forEach(function (k) { var o = U.el('div', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.onclick = function (e) { e.stopPropagation(); st.speed = k; U.$$('.opt', sp).forEach(function (x) { x.classList.remove('on'); }); o.classList.add('on'); }; sp.appendChild(o); });
     bar.appendChild(sp);
     hudEl.port = btn('입항', 'anchor', function () { tryEnterPort(); }, 'navy');
     hudEl.land = btn('상륙', 'boot', function () { tryLand(); });
@@ -262,6 +262,7 @@
       return true;
     }
     // 바꾼 키가 M·숫자판 같은 보조 단축키와 겹쳐도 설정한 동작이 먼저다.
+    if (G.Keys.is(e, 'speedHalf')) { st.speed = 0.5; buildSpeed(); return true; }
     if (G.Keys.is(e, 'speed1')) { st.speed = 1; buildSpeed(); return true; }
     if (G.Keys.is(e, 'speed2')) { st.speed = 2; buildSpeed(); return true; }
     if (G.Keys.is(e, 'speed3')) { st.speed = 4; buildSpeed(); return true; }
@@ -306,7 +307,9 @@
     if (k === '-') { zoomBy(1 / 1.2); return true; }
     return false;
   }
-  function buildSpeed() { U.$$('.speedctl .opt').forEach(function (o, i) { o.classList.toggle('on', [1, 2, 4][i] === st.speed); }); }
+  // 항해 배속: ×0.5(천천히 — 해안·해협을 손으로 몰 때) · ×1 · ×2 · ×4
+  var SPEEDS = [0.5, 1, 2, 4];
+  function buildSpeed() { U.$$('.speedctl .opt').forEach(function (o, i) { o.classList.toggle('on', SPEEDS[i] === st.speed); }); }
 
   // ================================================================ targets & path
   /** 목적지를 잡는다. 항구든 바다든 늘 바닷길(G.Nav.seaPath — 뭍·섬을 돌아가는 길)을 따라간다.

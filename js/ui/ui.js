@@ -9,7 +9,7 @@
 
   // ---------------------------------------------------------------- keyboard bindings
   // 저장 파일마다 바꿀 수 있는 공통 키. code를 저장해 한글/영문 입력 상태와 무관하게 같은 물리 키를 쓴다.
-  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3' };
+  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speedHalf: 'Backquote', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3' };
   var KEY_ACTIONS = [
     { id: 'up', label: '위', desc: '메뉴 위 · 거리 건물 입장 · 바다/육상/해전 북쪽' },
     { id: 'down', label: '아래', desc: '메뉴 아래 · 바다/육상/해전 남쪽' },
@@ -18,6 +18,7 @@
     { id: 'confirm', label: '확정', desc: '선택 · 입항/도시 입장' },
     { id: 'confirmAlt', label: '확정 보조/정지', desc: '메뉴 선택 · 이동 중 정지' },
     { id: 'cancel', label: '취소', desc: '창 닫기 · 건물 나오기' },
+    { id: 'speedHalf', label: '해상 속도 ×0.5', desc: '해상 배속 0.5 (천천히)' },
     { id: 'speed1', label: '해상 속도 ×1', desc: '해상 배속 1' },
     { id: 'speed2', label: '해상 속도 ×2', desc: '해상 배속 2' },
     { id: 'speed3', label: '해상 속도 ×4', desc: '해상 배속 4' }
@@ -39,7 +40,7 @@
   }
   function keyIs(e, action) { return eventCode(e) === keySettings()[action]; }
   function keyLabel(code) {
-    var names = { ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', Enter: 'ENTER', Space: 'SPACE', Escape: 'ESC', ShiftLeft: '왼쪽 SHIFT', ShiftRight: '오른쪽 SHIFT' };
+    var names = { ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', Enter: 'ENTER', Space: 'SPACE', Escape: 'ESC', ShiftLeft: '왼쪽 SHIFT', ShiftRight: '오른쪽 SHIFT', Backquote: '`' };
     if (names[code]) return names[code];
     if (/^Digit[0-9]$/.test(code)) return code.slice(5);
     if (/^Key[A-Z]$/.test(code)) return code.slice(3);
