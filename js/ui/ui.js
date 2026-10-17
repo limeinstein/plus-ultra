@@ -269,7 +269,7 @@
     var html = TG.heard(raw, sit.own, sit.li);
     if (sit.team > sit.own && sit.mate) {
       var sub = U.el('div', 'interp parch');
-      var who = (sit.mate.role === 'interp' ? '통역' : '부관') + ' ' + sit.mate.name;
+      var who = (sit.mate.role === 'interp' ? '통역' : sit.mate.role === 'room' ? '통역실' : '부관') + ' ' + sit.mate.name;
       var how = sit.team >= 3 ? '' : sit.team === 2 ? ' <small>(대강 알아들음)</small>' : ' <small>(띄엄띄엄 알아들음)</small>';
       sub.innerHTML = '<div class="ipf"></div><div class="itext"><div class="iname">' + U.esc(who) + how + '</div>' + TG.relay(raw, sit.own, sit.team) + '</div>';
       try { var pc = G.Art.portraitCanvas(G.Scenes.mateSpec(sit.mate.id), 56); sub.querySelector('.ipf').appendChild(pc); } catch (e) { sub.querySelector('.ipf').style.display = 'none'; }

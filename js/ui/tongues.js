@@ -130,10 +130,12 @@
     if (team > own) {
       var best = -1;
       S.mates.forEach(function (m) {
-        if (m.role !== 'interp' && m.role !== 'first') return;
+        // 통역·부관, 그리고 통역실에 있는 사람 (R.lang과 같은 사람들 — 예전에는 통역실 사람을 빼먹어, 말 실력은 오르는데 옮겨 주는 창이 뜨지 않았다)
+        var room = !!(G.Cabins && G.Cabins.interprets && G.Cabins.interprets(m));
+        if (m.role !== 'interp' && m.role !== 'first' && !room) return;
         var d = G.MATE[m.id]; if (!d) return;
-        var lv = R.mateLang ? R.mateLang(m, li) : d.lg[li] || 0, sc = lv * 2 + (m.role === 'interp' ? 1 : 0);
-        if (lv > own && sc > best) { best = sc; mate = { id: m.id, name: d.name, role: m.role }; }
+        var lv = R.mateLang ? R.mateLang(m, li) : d.lg[li] || 0, sc = lv * 2 + (m.role === 'interp' || room ? 1 : 0);
+        if (lv > own && sc > best) { best = sc; mate = { id: m.id, name: d.name, role: m.role === 'interp' || m.role === 'first' ? m.role : 'room' }; }
       });
     }
     return { plain: own >= 3, own: own, team: team, li: li, mate: mate };
