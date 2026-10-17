@@ -183,6 +183,19 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
+    // 맞바람 (js/core/rules.js sailEff·shipSpeed·fleetMotion)
+    // sq: 사각돛 효율 꺾은선 [바람과 이루는 각(0 = 뒤바람, 180 = 정면 맞바람), 효율] — 예전에는 110°에서 0.29, 135° 넘으면 0.07이라
+    //     비싼 사각돛 대형선(프리깃·대형 갤리온)이 맞바람에서 카라벨의 40%밖에 못 갔다. 순풍 쪽(0~60°)은 그대로.
+    // tack: 지그재그로 거슬러 오를 때 다리 속력 가운데 목적 방향으로 남는 몫 = base + 항해술(0~3) × perNav (최대 max)
+    upwind: { sq: [[0, 1], [60, 0.9], [110, 0.62], [140, 0.11], [180, 0.11]], tack: { base: 0.92, perNav: 0.02, max: 0.98 } },
+    // 삭구 개량 (조선소 「개조」 — js/city/shipyard.js): 차례로 한 단씩. 값 = 배 기본값 × cost, 그 조선소의 조선 기술 lv 이상
+    //   up: 맞바람 쪽(바람과 80°→115°에 걸쳐 차오름) 돛 힘 +비율 · beam: 옆바람(45°~150°) +비율 · cap: 적재량 비율 변화
+    //   삼각돛·살돛뿐인 배는 맞바람이 원래 강하므로 up·beam의 절반만 (사각돛 비율만큼 온전히)
+    rigging: [
+      { id: 'jib', name: '앞삼각돛 달기', up: 0.12, beam: 0, cap: 0, cost: 0.08, lv: 1, desc: '뱃머리 사장에 세로돛(지브)을 단다. 바람을 거슬러 오를 때 뱃머리를 바람 쪽으로 붙들어 준다.' },
+      { id: 'cut', name: '돛 재단·밧줄 개량', up: 0.08, beam: 0.04, cap: 0, cost: 0.12, lv: 3, desc: '돛을 평평하게 새로 마름질하고 활대를 더 돌릴 수 있게 밧줄을 고친다. 옆바람에도 조금 빨라진다.' },
+      { id: 'keel', name: '용골 보강', up: 0.08, beam: 0, cap: -0.04, cost: 0.16, lv: 4, desc: '용골을 깊게 덧대어 배가 바람에 옆으로 밀리지 않게 한다. 바닥짐이 늘어 적재량이 조금 준다.' }
+    ],
     // 제독 만들기 (scenes/create.js) — 대항해시대 3처럼 나이가 많을수록 보너스가 많다.
     // 능력 보너스 = statPts + (나이 − 18) × statPerYear (체력·지력·무력·매력에 나눠 줌, 한 능력 statMax까지)
     // 특기 점수 = 3 + (나이 − 18) ÷ 4 + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax)
@@ -225,7 +238,7 @@
     // 화실·조각실 (js/systems/studio.js, 명작 표 js/data/masterworks.js). 방의 힘(1 + 그림·세공 단계)만큼 날마다 일이 쌓여 need가 차면 미술품·조각품 qty[단계]통을 짐칸에 싣는다.
     //   실존 화가·조각가는 따로 mwNeed만큼 쌓이면(힘 4면 90일) 명작 하나 — 값 = value[0] + 그 사람의 지명도 × value[1] (조각은 × sculptK), 사교 명성 = fame[0] + 지명도 × fame[1]
     //   예술가마다 그림·조각을 세 점씩 (js/data/masterworks.js). generic: 표에 없는 실존 화가가 남기는 명작 수
-    studio: { need: 60, qty: [1, 1, 2, 3], mwNeed: 360, value: [3000, 5], sculptK: 1.2, fame: [40, 0.06], generic: 3 },
+    studio: { need: 60, qty: [1, 1, 2, 3], mwNeed: 360, value: [3000, 5], sculptK: 1.2, fame: [40, 0.06], generic: 3, goodsSo: 2 },
     // 부하: 수는 제한이 없다. 재산이 급료 warnMonths달 치에 못 미치면 경리·부관이 경고한다. 충성 low 이하면 효율 lowEff, veryLow 이하면 veryLowEff.
     //   역할도 방도 없는 부하는 달마다 충성 −idleLoyal, 부관이 있으면 급료를 치른 달에 충성이 settle 아래인 부하 +adjutantLoyal. 술집에서 한턱 내면 모든 부하 충성 +treatLoyal.
     //   충성 0이면 떠나겠다고 나선다 — 붙잡을 확률 persuade + (매력−50)/200 + 웅변 × persuadeSpeech, 붙잡으면 충성 persuadeLoyal
@@ -390,7 +403,7 @@
     innWork: { maxDays: 150, famePerDay: 1, langDays: [40, 80, 120] },
     // 식당 한 끼: 값 = base + 도시 등급×size + 음식 등급×tier, 하루 한 번 피로·체력을 회복 (js/city/restaurant.js)
     //   minSize = 식당이 서는 가장 작은 도시 등급 (그보다 작아도 이름난 음식이 있으면 선다 — js/data/cuisine_place.js)
-    restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2 },
+    restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2, disc: [0, 2, 3, 4], so: [0, 1, 1, 2] },   // disc: 규율이 오르는 만큼 · so: 사교 명성이 살짝(사교 배수 ×3 전) (음식 등급별, 2026-10-17)
     // 시세의 출렁임: 도시·품목 갈래마다 천천히 오르내린다 (최대 ± driftAmp, 주기 driftPeriod[0]~[1]일)
     driftAmp: [0.08, 0.15], driftPeriod: [70, 200],
     // 후원자의 대가 바뀔 때 (succession.js): 그 자리의 신뢰는 sponsorKeep만 남고, 제독의 자녀가 뒤를 이으면 모든 신뢰가 heirKeep만 남는다.

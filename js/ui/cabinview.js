@@ -172,6 +172,62 @@
   }
   function face(id, size) { try { return G.Art.portraitCanvas(G.Scenes.mateSpec(id), size); } catch (e) { return U.el('span'); } }
 
+  /* 2026-10-17 추천 인물 · 특기와 능력치 ------------------------------------------------ */
+  var ST_NAME = ['체력', '지력', '무력', '매력'], ST_SHORT = ['체', '지', '무', '매'];
+  /** 부하의 특기 (배에서 늘린 것·다친 동안 줄어든 것까지 — G.R.mateSkill) */
+  function skillsOf(m) {
+    var out = [];
+    (G.SKILLS || []).forEach(function (sk) { var v = G.R.mateSkill(m, sk.id); if (v > 0) out.push(sk.name + ' ' + v); });
+    return out.length ? out.join(' · ') : '특기 없음';
+  }
+  /** 능력치 네 가지 (short: 「체62 지71 …」) */
+  function statsOf(m, short) {
+    var st = (G.MATE[m.id] && G.MATE[m.id].st) || [];
+    return (short ? ST_SHORT : ST_NAME).map(function (n, k) { return n + (short ? '' : ' ') + (st[k] == null ? '—' : st[k]); }).join(short ? ' ' : ' · ');
+  }
+  function langCount() { var L = G.LANGS || []; return L.length || Object.keys(L).length; }
+  /** 통역실: 제독보다 잘하는 말 */
+  function langNote(m) {
+    var p = S().player, n = 0;
+    for (var li = 0; li < langCount(); li++) if (CB().mateLang(m, li) > ((p.lg && p.lg[li]) || 0)) n++;
+    return n ? '제독이 모르는 말 ' + n + '가지' : '더할 말 없음';
+  }
+  /** 이 방에 얼마나 맞는가: 방의 특기 가운데 가장 높은 단계(+ 나머지 조금) × 충성 효율. 통역실은 제독보다 잘하는 말의 단계 차 */
+  function fitScore(m, c) {
+    if (!G.MATE[m.id]) return 0;
+    if (c.lang) {
+      var p = S().player, n = 0;
+      for (var li = 0; li < langCount(); li++) { var a = CB().mateLang(m, li), b = (p.lg && p.lg[li]) || 0; if (a > b) n += a - b; }
+      return n * CB().eff(m);
+    }
+    var ks = c.skills || G.ROLE_SKILLS[c.role] || [], best = 0, sum = 0;
+    ks.forEach(function (k) { var v = G.R.mateSkill(m, k); best = Math.max(best, v); sum += v; });
+    return best ? (best + (sum - best) * 0.1) * CB().eff(m) : 0;
+  }
+  /** 이 방에 맞는 순서로 늘어선 부하들. 같으면 자리 없는 사람 먼저, 다른 배 선장은 나중 */
+  function recommend(c) {
+    return S().mates.filter(function (m) { return G.MATE[m.id]; }).map(function (m, k) {
+      var idle = (!m.role || m.role === 'none') && m.room == null;
+      return { m: m, k: k, score: fitScore(m, c), pref: (idle ? 1 : 0) - (m.role === 'captain' ? 1 : 0) };
+    }).sort(function (a, b) { return (b.score - a.score) || (b.pref - a.pref) || (a.k - b.k); });
+  }
+  /** 추천 순위 (맞는 특기가 있는 사람 가운데 세 명까지) {부하 id: 1~3} */
+  function recRanks(c) { var r = {}; recommend(c).filter(function (o) { return o.score > 0; }).slice(0, 3).forEach(function (o, k) { r[o.m.id] = k + 1; }); return r; }
+  function recTag(rank) { return rank === 1 ? ' <span class="tag cb-rec">★ 추천</span>' : rank ? ' <span class="tag">추천 ' + rank + '</span>' : ''; }
+  function fitNote(m, c) { return c.lang ? langNote(m) : skillNote(m, c); }
+  /** 방을 눌렀을 때 보여 줄 추천 한 줄 */
+  function recLine(c) {
+    var top = recommend(c).filter(function (o) { return o.score > 0; }).slice(0, 3);
+    if (!top.length) return '<br><span class="muted">추천: 이 방에 맞는 ' + (c.lang ? '말(제독이 모르는 말)' : '특기') + '을 가진 부하가 없습니다.</span>';
+    return '<br>★ <b>추천</b> ' + top.map(function (o, k) {
+      var nm = U.esc(G.MATE[o.m.id].name);
+      return (k ? nm : '<b>' + nm + '</b>') + ' <span class="muted">(' + fitNote(o.m, c) + ' · ' + U.esc(CB().placeName(o.m)) + ')</span>';
+    }).join(' · ');
+  }
+  function recShort(c) { var t = recommend(c)[0]; return t && t.score > 0 ? '★ 추천 ' + G.MATE[t.m.id].name + ' (' + fitNote(t.m, c) + ')' : ''; }
+  /** 이 부하가 이 방에 가장 잘 맞는 사람인가 (부하의 자리 고르기 목록) */
+  function fitTag(m, c) { var t = recommend(c)[0]; return t && t.m === m && t.score > 0 ? ' <span class="tag cb-rec">★ 잘 맞음</span>' : ''; }
+
   function powTag(pow) { return pow > 0 ? '<i class="cb-pow" title="방의 힘 (1 + 특기 단계, 충성이 낮으면 줄어든다)">' + (Math.round(pow * 10) / 10) + '</i>' : ''; }
   function adminFace(size) {
     try { if (S().player.portrait) return G.Art.portraitCanvas(S().player.portrait, size); } catch (e) { /* 얼굴 그림이 없으면 왕관 */ }
@@ -223,10 +279,12 @@
   }
 
   function mateOptions(c, cur) {
-    var s = S();
-    var opts = s.mates.filter(function (m) { return G.MATE[m.id]; }).map(function (m) {
-      return { label: G.MATE[m.id].name + (m === cur ? ' (지금 이 자리)' : ''), right: skillNote(m, c) + ' · ' + CB().placeName(m), value: m.id, icon: 'people', disabled: m === cur,
-        desc: Object.keys(G.MATE[m.id].sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + G.MATE[m.id].sk[k]; }).join(' · ') };
+    var ranks = recRanks(c);
+    var opts = recommend(c).map(function (o) {
+      var m = o.m, d = G.MATE[m.id];
+      return { label: d.name + recTag(ranks[m.id]) + (m === cur ? ' (지금 이 자리)' : '') +
+          '<small class="muted cb-opt-sub" style="display:block;font-size:14px;line-height:1.35;margin-top:2px">특기 ' + U.esc(skillsOf(m)) + '<br>' + statsOf(m) + ' · 충성 ' + Math.round(m.loyal == null ? 70 : m.loyal) + '</small>', right: fitNote(m, c) + ' · ' + CB().placeName(m), value: m.id, icon: 'people', disabled: m === cur,
+        desc: '특기 ' + skillsOf(m) + ' — ' + statsOf(m) + ' · 충성 ' + Math.round(m.loyal == null ? 70 : m.loyal) };
     });
     if (cur) opts.push({ label: '자리를 비운다', value: '-', icon: 'boot' });
     return opts;
@@ -239,7 +297,7 @@
     var c = G.CABIN[type], role = ROLE_OF[type];
     var cur = role ? CB().roleMate(role) : CB().occupant(i);
     if (!S().mates.length) { UI.toast('배치할 부하가 없습니다. 술집에서 부하를 찾아보십시오.', 'people'); return; }
-    var v = await UI.choose(c.name + '에 둘 사람', mateOptions(c, cur), { width: 640, icon: c.icon, text: c.desc + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') });
+    var v = await UI.choose(c.name + '에 둘 사람', mateOptions(c, cur), { width: 720, icon: c.icon, text: c.desc + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') + recLine(c) });
     if (v == null) return;
     if (v === '-') { if (role) { cur.role = 'none'; } else CB().place(cur, null); return; }
     var m = mateById(v); if (!m) return;
@@ -250,15 +308,15 @@
     var rooms = CB().rooms(), d = G.MATE[m.id], opts = [];
     ['adjutant', 'helm', 'lookout'].forEach(function (t) {
       var c = G.CABIN[t], o = CB().roleMate(ROLE_OF[t]);
-      opts.push({ label: c.name, right: skillNote(m, c) + (o && o !== m ? ' · ' + G.MATE[o.id].name + '와 교대' : o === m ? ' · 지금 이 자리' : ''), value: 'r:' + t, icon: c.icon, desc: c.desc, disabled: o === m });
+      opts.push({ label: c.name + fitTag(m, c), right: fitNote(m, c) + (o && o !== m ? ' · ' + G.MATE[o.id].name + '와 교대' : o === m ? ' · 지금 이 자리' : ''), value: 'r:' + t, icon: c.icon, desc: c.desc, disabled: o === m });
     });
     rooms.forEach(function (t, i) {
       if (t === 'hold') return;
       var c = G.CABIN[t], o = CB().occupant(i);
-      opts.push({ label: c.name, right: skillNote(m, c) + (o && o !== m ? ' · ' + G.MATE[o.id].name + ' 대신' : o === m ? ' · 지금 이 자리' : ''), value: 'c:' + i, icon: c.icon, desc: c.desc + (c.fx ? ' — ' + c.fx : ''), disabled: o === m });
+      opts.push({ label: c.name + fitTag(m, c), right: fitNote(m, c) + (o && o !== m ? ' · ' + G.MATE[o.id].name + ' 대신' : o === m ? ' · 지금 이 자리' : ''), value: 'c:' + i, icon: c.icon, desc: c.desc + (c.fx ? ' — ' + c.fx : ''), disabled: o === m });
     });
     if (m.room != null || ROLE_OF_INV(m.role)) opts.push({ label: '자리에서 뺀다 (대기)', value: '-', icon: 'boot' });
-    var v = await UI.choose(d.name + '의 자리', opts, { width: 620, text: Object.keys(d.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + d.sk[k]; }).join(' · ') + ' — ' + loyalTag(m) });
+    var v = await UI.choose(d.name + '의 자리', opts, { width: 660, text: '<b>특기</b> ' + skillsOf(m) + '<br><b>능력</b> ' + statsOf(m) + ' — ' + loyalTag(m) });
     if (v == null) return;
     if (v === '-') { if (m.room != null) CB().place(m, null); if (ROLE_OF_INV(m.role)) m.role = 'none'; return; }
     if (v.indexOf('r:') === 0) setRole(m, ROLE_OF[v.slice(2)]); else CB().place(m, +v.slice(2));
@@ -304,6 +362,8 @@
     if (to.k === 'fixed') setRole(m, ROLE_OF[to.type]);
     else if (to.k === 'room') CB().place(m, to.i);
   }
+
+  CV._pickFor = pickFor;   // 시험용 (tests/cabin_recommend_smoke.js)
 
   /** 선실 화면을 연다. opts.yard = 조선소가 있는 도시(방을 고칠 수 있다) */
   CV.open = async function (opts) {
@@ -384,9 +444,9 @@
         return { m: m, k: k, idle: (!m.role || m.role === 'none') && m.room == null };
       }).sort(function (a, b) { return (b.idle - a.idle) || (a.k - b.k); }).forEach(function (o) {
         var m = o.m, d = G.MATE[m.id];
-        var chip = U.el('div', 'cb-mate' + (o.idle ? ' idle' : ''), '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + '</span><small>' + U.esc(CB().placeName(m)) + '</small>' + loyalTag(m) + '</span>');
+        var chip = U.el('div', 'cb-mate' + (o.idle ? ' idle' : ''), '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + '</span><small>' + U.esc(CB().placeName(m)) + '</small><small class="cb-sk">' + U.esc(skillsOf(m)) + '</small><small class="cb-st">' + statsOf(m, true) + '</small>' + loyalTag(m) + '</span>');
         chip.querySelector('.cb-face').appendChild(face(m.id, 40));
-        chip.title = Object.keys(d.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + d.sk[k]; }).join(' · ');
+        chip.title = '특기 ' + skillsOf(m) + '\n능력 ' + statsOf(m);
         chip.onclick = function () { win.close({ k: 'mate', id: m.id }); };
         dragFrom(chip, m);
         ros.appendChild(chip);
@@ -405,7 +465,7 @@
         else if (!opts.yard) { if (type === 'hold') UI.toast('빈 선실입니다. 조선소의 「선실 개조」에서 쓰임을 정할 수 있습니다.', 'hammer'); else await pickFor(type, a.i); }
         else if (type === 'hold') await remodel(a.i, opts.yard);
         else {
-          var w = await UI.choose(G.CABIN[type].name, [{ label: '부하를 배치한다', value: 'p', icon: 'people' }, { label: '다른 방으로 고친다', value: 'r', icon: 'hammer' }], { width: 420 });
+          var w = await UI.choose(G.CABIN[type].name, [{ label: '부하를 배치한다', right: recShort(G.CABIN[type]), value: 'p', icon: 'people' }, { label: '다른 방으로 고친다', value: 'r', icon: 'hammer' }], { width: 420 });
           if (w === 'p') await pickFor(type, a.i); else if (w === 'r') await remodel(a.i, opts.yard);
         }
       }

@@ -24,7 +24,10 @@
     if (G.Frontier) out = out.concat(G.Frontier.tick());
     if (G.Achieve) out = out.concat(G.Achieve.daily());   // 옛 저장: 이미 이룬 업적·이미 열린 사슬의 단서
     if (G.Cabins) out = out.concat(G.Cabins.daily());
-    if (G.Studio) out = out.concat(G.Studio.daily());      // 화실·조각실: 미술품·조각품을 싣고, 실존 화가·조각가는 명작을 완성한다 (js/systems/studio.js)      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
+    if (G.Studio) out = out.concat(G.Studio.daily());
+    if (G.Rel) out = out.concat(G.Rel.daily());          // 유럽 나라들 사이의 관계와 역사 사건 (js/systems/relations.js)
+    if (G.Leo) out = out.concat(G.Leo.daily());          // 레오나르도의 발명품 (js/systems/leonardo.js)
+    if (G.Tudor) out = out.concat(G.Tudor.daily());      // 튜더 왕실의 일 (js/systems/tudor.js)      // 화실·조각실: 미술품·조각품을 싣고, 실존 화가·조각가는 명작을 완성한다 (js/systems/studio.js)      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
     // contract deadline warnings
     if (s.contract && !s.contract.warned && U.dateNum(s.date) > s.contract.due) {
       s.contract.warned = true;

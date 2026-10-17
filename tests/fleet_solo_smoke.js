@@ -41,6 +41,20 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     console.log('   ' + JSON.stringify(ui));
     ok(ui && ui.solo && ui.n === 7, '기함 혼자여도 명령판이 뜬다 — ' + ui.head);
     ok(ui.off.length === 2 && /학익진/.test(ui.off.join()) && /호위/.test(ui.off.join()) && /직접 조종/.test(ui.on.join()), '학익진·기함 호위는 흐리게, 처음은 직접 조종');
+    await page.evaluate(() => {
+      window.__soloOrderToasts = [];
+      window.__soloOrderToast = G.UI.toast;
+      G.UI.toast = function (t) { window.__soloOrderToasts.push(String(t)); return window.__soloOrderToast.apply(this, arguments); };
+    });
+    await page.keyboard.press('2');
+    const craneSolo = await page.evaluate(() => {
+      const seen = window.__soloOrderToasts.some(t => /학익진은 함께 싸울 배/.test(t));
+      G.UI.toast = window.__soloOrderToast;
+      delete window.__soloOrderToast;
+      delete window.__soloOrderToasts;
+      return { tac: G.Scenes.battle.debug().myFlag.tactic || null, seen };
+    });
+    ok(craneSolo.tac === null && craneSolo.seen, '2: 학익진은 「함께 싸울 배가 있어야」 알림만');
     const fsx = () => page.evaluate(() => { var st = G.Scenes.battle.debug(), f = st.myFlag, en = st.ships.filter(b => b.side === 'en' && b.alive); return { tac: f.tactic || null, near: Math.min.apply(null, en.map(e => Math.hypot(e.x - f.x, e.y - f.y))), tgt: f.target ? f.target.no : null, shots: st.ships.filter(b => b.side === 'en').reduce((a, b) => a + (b.maxHp - b.hp), 0), on: [...document.querySelectorAll('.ordpanel .ord-btn.on')].map(b => b.textContent.trim()).join() }; });
     await page.keyboard.press('4');
     const ds = []; for (let i = 0; i < 10; i++) { await step(2); ds.push(Math.round((await fsx()).near)); }
@@ -51,8 +65,6 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.keyboard.press('3'); await step(14);
     const f3 = await fsx();
     ok(f3.tac === 'focus' && f3.tgt === 1 && f3.near < g.avg, '3: 돌격 — 적 기함(1번)을 노리고 붙는다 (거리 ' + Math.round(f3.near) + ')');
-    await page.keyboard.press('2'); await step(0.5);
-    ok((await fsx()).tac === 'focus' && await page.evaluate(() => [...document.querySelectorAll('.toast')].some(t => /학익진은 함께 싸울 배/.test(t.textContent))), '2: 학익진은 「함께 싸울 배가 있어야」 알림만');
     await page.keyboard.press('6'); await step(1);
     ok((await fsx()).tac === 'free', '6: 자동 교전');
     await page.screenshot({ path: path.join(OUT, 'fleet_solo.png') });

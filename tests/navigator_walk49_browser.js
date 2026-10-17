@@ -52,6 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     await page.evaluate(() => {
       window.__navigatorFrames = [];
+      window.__navigatorIdleSamples = [];
       const old = CanvasRenderingContext2D.prototype.drawImage;
       CanvasRenderingContext2D.prototype.drawImage = function (img) {
         const a = Array.prototype.slice.call(arguments, 1);
@@ -61,6 +62,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
           const st = G.Town && G.Town.runtime();
           const expected = st ? Math.floor(st.hero.dist / (52 * 8 / 49)) % 49 : -1;
           if (!q.length || q[q.length - 1].frame !== frame) q.push({ frame, expected, moving: !!(st && st.hero.walking) });
+          if (st && !st.hero.walking && !st.hero.running && !st.hero.entering) {
+            const t = this.getTransform();
+            window.__navigatorIdleSamples.push({ frame, scaleY: Math.abs(t.d), footY: t.f });
+          }
         }
         return old.apply(this, arguments);
       };
@@ -86,6 +91,30 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     if (!run.matched) console.log('  불일치 ' + run.frames.filter(x => x.moving && x.frame !== x.expected).slice(0, 8).map(x => x.frame + '/' + x.expected).join(','));
     ok(run.frames.length >= 12 && run.unique >= 12, '거리 이동 중 49프레임 아틀라스의 여러 칸을 실제로 그림 (' + run.unique + '개)');
     ok(run.matched, '매 렌더링에서 이동 거리 순서에 맞는 0~48번 칸이 선택됨');
+
+    await page.waitForFunction(() => { const h = G.Town.runtime().hero; return h.to == null && !h.walking && !h.running; });
+    await page.evaluate(() => { window.__navigatorIdleSamples = []; });
+    await page.waitForTimeout(650);
+    const idle = await page.evaluate(() => {
+      const s = window.__navigatorIdleSamples || [], h = G.Town.runtime().hero;
+      return { samples: s, frame: (G.HERO_MOTION.navigator_white || {}).idle, walking: h.walking, running: h.running, to: h.to,
+        scaleRange: s.length ? Math.max(...s.map(x => x.scaleY)) - Math.min(...s.map(x => x.scaleY)) : 0,
+        footRange: s.length ? Math.max(...s.map(x => x.footY)) - Math.min(...s.map(x => x.footY)) : 999 };
+    });
+    ok(!idle.walking && !idle.running && idle.to == null, '목적지에 닿으면 걷기 상태와 목적지를 즉시 비움');
+    ok(idle.samples.length >= 3 && idle.samples.every(x => x.frame === idle.frame), '정지 중에는 지정된 양발 정렬 자세 한 칸만 그림');
+    ok(idle.scaleRange > 0.0001 && idle.scaleRange < 0.01 && idle.footRange < 0.01, '발밑 피벗은 고정하고 1픽셀 안팎의 호흡만 재생');
+
+    const keyStop = await page.evaluate(() => ({ x0: G.Town.runtime().hero.x }));
+    await page.keyboard.down('ArrowRight');
+    await page.waitForTimeout(260);
+    await page.keyboard.up('ArrowRight');
+    await page.waitForFunction(() => !G.Town.runtime().hero.walking && !G.Town.runtime().hero.running);
+    const released = await page.evaluate(() => ({ x: G.Town.runtime().hero.x }));
+    await page.waitForTimeout(350);
+    const settled = await page.evaluate(() => ({ x: G.Town.runtime().hero.x, walking: G.Town.runtime().hero.walking }));
+    ok(released.x > keyStop.x0 + 10, '오른쪽 화살표를 누르는 동안 걸음');
+    ok(!settled.walking && Math.abs(settled.x - released.x) < 0.01, '화살표를 놓으면 그 자리에서 멈춤');
     ok(fs.existsSync(SHOT) && fs.statSync(SHOT).size > 10000, '거리 걷기 화면 캡처 저장');
     ok(!errors.length, '콘솔 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));
     console.log('스크린샷: ' + SHOT);

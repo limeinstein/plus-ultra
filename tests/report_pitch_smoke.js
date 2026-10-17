@@ -1,5 +1,5 @@
 /* 보고·발표의 자리 (js/systems/pitch.js) 점검 — node tests/report_pitch_smoke.js   (BROWSER_EXE=크롬 경로)
-   · 후원자에게 보고할 때 발견물 그림을 다시 띄운다 (.reveal.report) — 보고가 끝나면 걷힌다
+   · 후원자에게 보고할 때 발견물 그림을 사람 없이 먼저 재생하고, 완전히 걷힌 뒤 대화를 시작한다
    · 지식이 있는 부하가 값어치를 띄운다: 넘어가면 사례금·명성이 오른다 / 부풀린 말이 들키면 깎인다
    · 쪽(학문·아름다움·돈·신앙·영광·부풀리기)은 부하의 지식과 후원자에 따라 다르다 — 성직자 앞 신학자 → 신앙, 상인 앞 회계 → 돈
    · 나이·성별의 궁합: 젊은 부하와 나이 든 후원자 → 확률이 오른다
@@ -32,9 +32,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const best = (sk, pred) => G.MATES.filter(m => (m.sk[sk] || 0) >= 2 && (!pred || pred(m))).sort((a, b) => (b.sk[sk] || 0) - (a.sk[sk] || 0))[0];
       const hist = best('hist') || best('survey'), theo = best('theo'), acct = best('acct');
       out.mates = [hist, theo, acct].map(m => m && m.name);
-      const said = [], who = []; let shownDuring = 0;
+      const said = [], who = []; let replayActive = false, replayDuringSpeech = 0, replayCalls = 0;
       const realSay = UI.say;
-      UI.say = async (t, w) => { said.push(t); who.push(w && w.name); if (document.querySelector('.reveal.report')) shownDuring++; };
+      const realReplay = G.Scenes.discoveryReplay;
+      G.Scenes.discoveryReplay = async () => { replayCalls++; replayActive = true; await Promise.resolve(); replayActive = false; return true; };
+      UI.say = async (t, w) => { said.push(t); who.push(w && w.name); if (replayActive) replayDuringSpeech++; };
       UI.alert = async () => true; UI.ask = async () => null; UI.fade = async (fn) => { fn && fn(); };
       SP.shareWithMates = async () => {}; G.Disc.gradeOf = () => null; if (G.Names) G.Names.onReport = async () => {}; if (G.Fest) G.Fest.begin = async () => {};
       const d = G.DISC.carnac;
@@ -57,9 +59,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         return { gold: s2.player.gold - g0, fame: s2.player.fame - f0 };
       };
       out.base = await run(false, () => false);
-      said.length = 0; shownDuring = 0;
+      said.length = 0; replayDuringSpeech = 0;
       out.win = await run(true, (p) => p < 0.999 ? true : true);
-      out.winSaid = said.slice(0, 6); out.shown = shownDuring; out.leftOver = !!document.querySelector('.reveal.report');
+      out.winSaid = said.slice(0, 6); out.replays = replayCalls; out.replayDuringSpeech = replayDuringSpeech;
       out.lose = await run(true, () => false);
       // 2) 쪽: 성직자 앞 신학자 → 신앙, 상인 앞 회계 → 돈
       G.Game.state = JSON.parse(snap); const s3 = G.Game.state;
@@ -85,24 +87,24 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       }
       // 5) 항구 발표
       G.Game.state = JSON.parse(snap); const s6 = G.Game.state; s6.contract = null; s6.settings.pitch = true;
-      const f0 = s6.player.fame, uch = UI.choose, uc = U.chance; UI.choose = async () => 'carnac'; U.chance = () => true; shownDuring = 0;
+      const f0 = s6.player.fame, uch = UI.choose, uc = U.chance; UI.choose = async () => 'carnac'; U.chance = () => true; const beforeAnnounceReplays = replayCalls;
       await G.Scenes.city.B.harbor.announce(G.CITY_DATA[0]);
-      out.annFame = s6.player.fame - f0; out.annShown = shownDuring;
+      out.annFame = s6.player.fame - f0; out.annReplay = replayCalls - beforeAnnounceReplays;
       G.Game.state = JSON.parse(snap); const s7 = G.Game.state; s7.contract = null; s7.settings.pitch = false; const f7 = s7.player.fame;
       await G.Scenes.city.B.harbor.announce(G.CITY_DATA[0]); out.annBase = s7.player.fame - f7;
-      UI.choose = uch; U.chance = uc; UI.say = realSay;
+      UI.choose = uch; U.chance = uc; UI.say = realSay; G.Scenes.discoveryReplay = realReplay;
       return out;
     });
     console.log(JSON.stringify(r, null, 1));
     ok(r.win.gold > r.base.gold && r.win.fame > r.base.fame, '부하가 넘어가게 했으면 사례금 ' + r.base.gold + ' → ' + r.win.gold + ', 명성 ' + r.base.fame + ' → ' + r.win.fame);
     ok(r.lose.gold === r.base.gold, '시큰둥하면 그대로 (' + r.lose.gold + ')');
-    ok(r.shown >= 3 && !r.leftOver, '보고하는 동안 발견물 그림을 띄우고(대화 ' + r.shown + '마디) 끝나면 걷는다');
+    ok(r.replays === 1 && r.replayDuringSpeech === 0, '발견물 재생을 먼저 끝내고 대화를 시작한다 (재생 ' + r.replays + '회, 겹친 대화 ' + r.replayDuringSpeech + '회)');
     ok(r.winSaid.slice(1, 3).some(t => /「카르낙 거석군」/.test(t)), '제독이 「카르낙 거석군」을 내놓는다: ' + r.winSaid.join(' / ').slice(0, 300));
     if (r.theoAngle) ok(r.theoAngle === 'faith', '성직자 앞의 신학자 → 신앙 쪽');
     if (r.acctAngle) ok(r.acctAngle === 'profit', '상인 앞의 회계 → 돈 쪽');
     if (r.demo) ok(r.demo.k > 0 && r.demo.tag === 'youngToOld', '젊은 부하 + 나이 든 후원자 → 확률 +' + r.demo.k);
     if (r.talker) ok(r.talkerAngle === 'legend' && r.caughtP > 0.5 && r.talkCaught < r.talkBase, '입담만 좋은 ' + r.talker + ' → 부풀리기, 학자에게 들키면(' + Math.round(r.caughtP * 100) + '%) 사례금 ' + r.talkBase + ' → ' + r.talkCaught);
-    ok(r.annShown >= 2 && r.annFame > r.annBase, '항구 발표: 그림을 띄우고 명성 ' + r.annBase + ' → ' + r.annFame);
+    ok(r.annReplay === 1 && r.annFame > r.annBase, '항구 발표: 발견물 재생 뒤 명성 ' + r.annBase + ' → ' + r.annFame);
 
     // 화면: 실제 대화창으로 한 장면
     await page.evaluate(() => {
@@ -112,27 +114,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.settings.pitch = true;
       G.Pitch.run({ d: G.DISC.carnac, sp: king, mode: 'contract' }).then(p => p.close());
     });
-    await page.waitForTimeout(2500);
+    await page.waitForSelector('.reveal.replay', { timeout: 10000 });
+    const replayScene = await page.evaluate(() => ({ replay: !!document.querySelector('.reveal.replay'), actors: !!document.querySelector('#ui > .dlg-actors') }));
     await page.screenshot({ path: path.join(OUT, '1_open.png') });
-    const geo = async () => page.evaluate(() => {
-      const info = G.UI.stageInfo, top = document.querySelector('.reveal.rv-top'), fr = top && top.querySelector('.rv-frame');
-      if (!info || !fr) return { none: true };
-      const ui = document.getElementById('ui'), R = ui.getBoundingClientRect(), k = R.width / ui.offsetWidth, b = fr.getBoundingClientRect();
-      const r = { left: (b.left - R.left) / k, top: (b.top - R.top) / k, right: (b.right - R.left) / k, bottom: (b.bottom - R.top) / k };
-      const over = info.faces.filter(f => !(r.right <= f.left || r.left >= f.right || r.bottom <= f.top || r.top >= f.bottom)).length;
-      const actorsZ = (document.querySelector('#ui > .dlg-actors') ? 13 : 60);
-      return { frame: r, nameTop: info.nameTop, faces: info.faces.length, over, z: +getComputedStyle(top).zIndex, actorsZ, w: Math.round(r.right - r.left) };
-    });
-    const g1 = await geo();
-    console.log('   발견물 그림 자리 ' + JSON.stringify(g1));
-    ok(!g1.none && Math.abs(g1.frame.bottom - (g1.nameTop - 10)) <= 2, '발견물 그림 아래 끝이 이름표 10px 위 (' + Math.round(g1.frame.bottom) + ' / 이름표 ' + Math.round(g1.nameTop) + ')');
-    ok(g1.faces >= 2 && g1.over === 0, '두 사람 얼굴을 가리지 않는다 (그림 폭 ' + g1.w + 'px)');
-    ok(g1.z > g1.actorsZ, '그림이 사람들 위 층 (z ' + g1.z + ' > ' + g1.actorsZ + ')');
-    for (let i = 0; i < 2; i++) { await page.mouse.click(800, 800); await page.waitForTimeout(900); }
+    ok(replayScene.replay && !replayScene.actors, '발견물 그림은 사람 없이 단독 재생된다');
+    await page.mouse.click(800, 700); await page.waitForTimeout(500);
+    if (await page.$('.reveal.replay')) { await page.mouse.click(800, 700); await page.waitForTimeout(900); }
+    await page.waitForFunction(() => !document.querySelector('.reveal.replay') && !!G.UI.stageInfo, null, { timeout: 10000 });
+    ok(await page.evaluate(() => !document.querySelector('.reveal.replay') && !!G.UI.stageInfo), '발견물 창이 사라진 뒤 대화 인물이 나온다');
     await page.screenshot({ path: path.join(OUT, '2_mate.png') });
-    const g2 = await geo();
-    ok(g2.none || (g2.over === 0 && Math.abs(g2.frame.bottom - (g2.nameTop - 10)) <= 2), '말하는 사람이 바뀌어도 얼굴을 피하고 이름표 10px 위');
-    for (let i = 0; i < 4; i++) { await page.mouse.click(800, 800); await page.waitForTimeout(700); }
+    for (let i = 0; i < 7; i++) { await page.mouse.click(800, 800); await page.waitForTimeout(500); }
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('\n통과 — 화면: ' + OUT);
   } catch (e) {

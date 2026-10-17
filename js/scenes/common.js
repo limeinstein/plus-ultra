@@ -240,7 +240,7 @@
       '<div class="rv-title"><b>' + U.esc(d.name) + '</b> 발견</div><div class="rv-skip">누르면 건너뜁니다</div>';
     // 화면 층(#screen) 위, 대화창 층 아래 — 윗줄 HUD와 지도 이름표까지 함께 어두워진다
     var uiRoot = document.getElementById('ui'); if (uiRoot) uiRoot.appendChild(el); else UI.add(el);
-    var reel = null;
+    var reel = null, faceTalk = false;
     try {
     var gif = el.querySelector('.rv-gif'), end = el.querySelector('.rv-end'), L = null;
     if (keys.end) end.src = G.Img.src(keys.end);
@@ -274,6 +274,8 @@
     if (G.Audio) G.Audio.sfx('discover');
     await U.sleep(FX.titleMs || 1600);
     el.classList.add('talk');
+    // 발견물 그림이 떠 있는 동안에는 사람을 무릎상으로 세우지 않는다 — 그림이 사람을 가리므로, 대화창 안의 얼굴(흉상)로 말한다 (js/ui/ui.js dialogShell scenepic-on)
+    if (uiRoot && !uiRoot.classList.contains('scenepic-on')) { uiRoot.classList.add('scenepic-on'); faceTalk = true; }
     // ---- 대화
     var s = S(), p = s.player, me = { name: p.name, portrait: p.portrait };
     var lead = SC.mateSpeaker('first');
@@ -313,6 +315,7 @@
     return true;
     } finally {
       if (reel && reel.stop) reel.stop();
+      if (faceTalk && uiRoot) uiRoot.classList.remove('scenepic-on');
       if (el.parentNode) el.parentNode.removeChild(el);
     }
   };

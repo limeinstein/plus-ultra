@@ -86,10 +86,12 @@
     var lbl = sat >= 1 ? '<span class="up" title="이미 받아 줄 양을 넘었다 — 팔수록 값이 무너진다">넘침</span>' : sat >= 0.5 ? '<span class="muted" title="최근 이 물건이 많이 들어왔다">많음 · 약 ' + U.num(room) + '통</span>' : '<span title="이만큼까지는 값이 완만하게 떨어지고, 넘기면 폭락한다">약 ' + U.num(room) + '통</span>';
     return lbl;
   }
-  function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(), d = duty(c); if (d) p = Math.max(1, Math.round(p * (1 - d))); return h ? Math.max(1, Math.round(p * Math.min(1, h.buy))) : p; }
+  function relK(c, k) { return G.Rel ? G.Rel.priceK(c, k) : 1; }   // 나라 사이의 관계: 동맹·우호면 이득, 냉랭하면 손해 (js/systems/relations.js)
+  function buyP(c, id) { var p = R.buyPrice(c, id); var h = hag(), d = duty(c); if (d) p = Math.max(1, Math.round(p * (1 - d))); var rk = relK(c, 'buy'); if (rk !== 1) p = Math.max(1, Math.round(p * rk)); return h ? Math.max(1, Math.round(p * Math.min(1, h.buy))) : p; }
   // 파는 값 웃돈은 이 도시가 팔지 않는 물건(들여온 물건)에만 — 깎아서 산 그 자리 물건을 웃돈 받고 되팔아 남기던 것을 막는다
   function sellP(c, id) { var p = R.sellPrice(c, id); var h = hag(), d = duty(c); p = h && !R.sells(c, id) ? Math.round(p * Math.max(1, h.sell)) : p;
     if (d && !R.sells(c, id)) p = Math.round(p * (1 + d));
+    var rk = relK(c, 'sell'); if (rk !== 1) p = Math.max(1, Math.round(p * rk));
     var cg = S().fleet.cargo[id]; if (G.Cargo && cg) p = Math.max(1, Math.round(p * G.Cargo.fresh(id, cg)));   // 오래 묵은 먹을거리·향신료는 값이 떨어진다
     return p; }
   function keepHag(c, h) { var cur = C.current(); R.market(c.id).hag = { day: R.S().day, h: h, n: cur ? cur.hagN || 0 : 0 }; return h; }
@@ -114,7 +116,7 @@
         '<table class="tbl"><tr><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table>' +
         '<div class="muted" style="margin-top:6px;font-size:14px">매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다.' + (R.cityGoods(c).some(function (id) { return R.isRelay(c, id); }) ? ' 「중계」는 이 항구가 먼 산지에서 들여온 물건이라 산지보다 비쌉니다.' : '') + ' 「특산 ×N」은 이 고장 산물 — 산지에서 먼 곳에서는 약 N배에 팔립니다. ▲▼는 세상의 시장 사건(가뭄·전쟁·풍작…)으로 모자라거나 넘치는 물건입니다.</div>' +
         (hag() ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 ' + Math.round((1 - hag().buy) * 100) + '% 싸게 살 수 있습니다.</div>' : '') +
-        (duty(c) ? '<div class="good-text" style="margin-top:6px">면세증 — 관세 없이 ' + Math.round(duty(c) * 100) + '% 싸게 삽니다. 들여온 물건은 ' + Math.round(duty(c) * 100) + '% 비싸게 팝니다.</div>' : '');
+        (duty(c) ? '<div class="good-text" style="margin-top:6px">면세증 — 관세 없이 ' + Math.round(duty(c) * 100) + '% 싸게 삽니다. 들여온 물건은 ' + Math.round(duty(c) * 100) + '% 비싸게 팝니다.</div>' : '') + (G.Rel ? G.Rel.tradeNote(c) : '');
       var picked = null;
       var win = UI.window({ title: '구입 — ' + c.name, icon: 'coin', width: 1040, html: html, buttons: [{ label: '돌아간다', value: null }],
         onBuild: function (el, w) { U.$$('tr.click', el).forEach(function (tr) { tr.onclick = function () { picked = tr.dataset.id; w.close('pick'); }; }); } });

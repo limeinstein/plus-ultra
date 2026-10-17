@@ -419,6 +419,9 @@
       c.gallery[realm.id] = { city: sp.city, y: s.date.y, sp: sp.id, items: art };
     }
     if (t.kind === 'zoo') { var zl = zooAnimals().slice(0, t.n); zl.forEach(function (d) { c.zooUsed[d.id] = 1; }); c.zoo[realm.id] = s.date.y; c.zooAt[realm.id] = { city: sp.city, y: s.date.y, sp: sp.id, ids: zl.map(function (d) { return d.id; }) }; }
+    // 제독이 바친 것이 박물관·미술관·동물원에 걸리면 사교 명성이 오른다 — 한 점(한 종)마다 B().exhibitSo (2026-10-17)
+    var exN = t.kind === 'museum' ? gave.length : t.kind === 'gallery' ? art.length : t.kind === 'zoo' ? zl.length : 0;
+    t.exSo = exN ? G.Fame.add('so', exN * (B().exhibitSo == null ? 25 : B().exhibitSo)) : 0; t.exN = exN;
     var thanks = t.kind === 'rescue' ? '오오… ' + t.who + '! 무사했구나!\f' + s.player.name + ', 이 은혜는 평생 잊지 않겠소.'
       : t.kind === 'zoo' ? '이 그림들 좀 보시오! 이런 짐승이 정말 세상에 있단 말이오? 당장 사람을 보내 데려오게 하고, 성 밖에 동물원을 짓겠소.'
       : t.kind === 'museum' ? '이토록 귀한 것들을…! 왕궁 곁에 박물관을 짓고, 그대의 이름을 문 위에 새기겠소.'
@@ -518,7 +521,8 @@
       '<br>이제 유럽과 이슬람의 도시에서는 사람들이 제독을 「' + U.esc(adr(tt)) + '」' + U.jx(adr(tt), '이라/라') + ' 부르며 예를 갖춥니다.' +
       (t.kind === 'zoo' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 동물원이 섰습니다. 도시에 들르면 바친 동물을 볼 수 있습니다.' : '') +
       (t.kind === 'museum' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 박물관이 섰습니다. 도시에 들르면 바친 유물·명작을 볼 수 있습니다.' : '') +
-      (t.kind === 'gallery' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 미술관이 섰습니다. 도시에 들르면 바친 명작을 볼 수 있습니다.' : '') + more, '서임');
+      (t.kind === 'gallery' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 미술관이 섰습니다. 도시에 들르면 바친 명작을 볼 수 있습니다.' : '') +
+      (t.exSo ? '<br>제독이 바친 ' + t.exN + (t.kind === 'zoo' ? '종' : '점') + U.jx(t.exN + (t.kind === 'zoo' ? '종' : '점'), '이/가') + ' 전시되어 사교 명성 <b>+' + t.exSo + '</b>' : '') + more, '서임');
     UI.toast(CT.fullName(tt, true) + '의 작위를 받았다!', 'crown', 6500);
     G.Game.refreshHud();
     if (s.settings.autosave !== false && G.State.save) G.State.save(0);

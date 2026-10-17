@@ -44,6 +44,7 @@ function png(file, decode) {
 
 const sandbox = { window: { G: {} } };
 sandbox.G = sandbox.window.G;
+vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/data/seafx.js'), 'utf8'), sandbox);
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/data/duelart.js'), 'utf8'), sandbox);
 const art = sandbox.G.DUEL_ART;
 ok(art && art.fighters.length === 21, '전투원 메타데이터는 21종이어야 함');
@@ -52,6 +53,9 @@ ok(S.columns === 6 && S.rows === 4 && S.width === CW * 6 && S.height === CH * 4,
 ok(S.pivot[0] > S.safeMargin && S.pivot[0] < CW && S.pivot[1] > S.safeMargin && S.pivot[1] < CH, '발밑 피벗은 칸 안');
 ok(S.source && S.source.width === 1536 && S.source.height === 1024 && S.source.cell[0] === 256 && S.source.pivot[1] === 246, 'Codex 원본 규격 기록');
 ok(art.sheet.animations.attack.frames === 6 && art.sheet.animations.defense.frames === 4 && art.sheet.animations.hit.frames === 3 && art.sheet.animations.action.frames === 6, '동작별 프레임 수');
+const duelFx = sandbox.G.FX.duel, duelCode = fs.readFileSync(path.join(ROOT, 'js/games/duel.js'), 'utf8');
+ok(duelFx.idleFrame === 0 && duelFx.breathRate <= 1.5 && duelFx.breathScale <= 0.002, '대기 자세는 고정하고 호흡만 느리고 작게');
+ok(/return \[3, D\.idleFrame == null \? 0 : D\.idleFrame\]/.test(duelCode) && !/Math\.floor\(t \* 5\.5\) % 4/.test(duelCode), '대기 중 행동 프레임을 빠르게 순환하지 않음');
 
 const fighterDir = path.join(ROOT, 'images/duel/fighters');
 // 제독 생김새 시트(이강희 = ganghui 등): 21종 밖의 파일이 있으면 같은 규격으로 점검 — 없으면 main_admiral로 대신 나온다
@@ -60,6 +64,7 @@ for (const f of art.fighters.concat(heroes.map(id => ({ id })))) {
   const file = path.join(fighterDir, f.id + '.png'), im = png(file, true);
   ok(im.width === S.width && im.height === S.height, f.id + ': ' + S.width + '×' + S.height + ' (tools/duel_repack.py로 다시 짠 시트)');
   ok(im.alpha(0, 0) === 0, f.id + ': 바깥 여백 투명');
+  ok(im.maxAlpha(0, 3 * CH, CW, CH) > DUST, f.id + ': 고정 대기 자세 프레임이 있음');
   for (const cell of [[4, 1], [5, 1], [3, 2], [4, 2], [5, 2]])
     ok(im.maxAlpha(cell[0] * CW, cell[1] * CH, CW, CH) <= DUST, f.id + ': 비사용 셀 전체 투명 ' + cell.join(','));
   // 쓰는 칸의 테두리 1px이 비어 있으면 그림이 옆 칸으로 넘어가지 않은 것
@@ -102,4 +107,4 @@ ok(!unused.length, '쓰이지 않는 전투원: ' + unused.join(', '));
 const L1 = art.layout({ naturalWidth: 1536, naturalHeight: 1024 }), L2 = art.layout({ naturalWidth: S.width, naturalHeight: S.height }), L3 = art.layout({ naturalWidth: S.width / 2, naturalHeight: S.height / 2 });
 ok(L1.cw === 256 && L1.py === 246 && L2.cw === CW && L2.py === S.pivot[1] && L3.cw === CW / 2 && L3.f === 0.5, '그림 크기로 칸·배율 고르기');
 
-console.log('일기토 전투원 21종' + (heroes.length ? ' + 제독 생김새 ' + heroes.join('·') : '') + '(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');
+console.log('일기토 전투원 21종' + (heroes.length ? ' + 제독 생김새 ' + heroes.join('·') : '') + '(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·전 캐릭터 고정 대기 자세·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');

@@ -410,6 +410,27 @@
     if (st.paused) { st.paused = false; refreshBar(); }
   }
   SEA.setCourse = setCourse;
+  /** 맞바람을 정면으로 안고 손으로 몰 때: 부관이 「지그재그로 거슬러 오를까요?」 — 예면 지금 뱃머리 방위로 침로를 잡는다(자동 지그재그) */
+  async function askTack() {
+    st.busy++;
+    var v = null;
+    try {
+      v = await UI.ask('제독, 바람을 정면으로 안고 있어 배가 거의 나아가지 못합니다. 이 방위로 지그재그를 하며 거슬러 오를까요?', [
+        { label: '지그재그로 거슬러 오른다', value: 'tack' }, { label: '이대로 손으로 몬다', value: null }], G.Scenes.mateSpeaker('first'));
+    } catch (e) { console.error(e); }
+    st.busy--;
+    if (v === 'tack') { takeCourse(S().loc.heading); UI.toast('지그재그로 거슬러 오릅니다. 방향키를 누르면 다시 손으로 몹니다.', 'sail', 4200); }
+  }
+  /** 사각돛 배가 맞바람에 굼뜰 때 부관이 일러 준다: 조선소 「개조」의 삭구 개량·돛 바꾸기 (석 달에 한 번) */
+  function upwindTip() {
+    var s = S(), fi = R.fleetInfo, sh = fi && fi.slow; if (!sh || fi.row) return;
+    var sq = sh.sails.filter(function (k) { return k === 'sq'; }).length;
+    if (sq * 2 < sh.sails.length || (sh.rig || 0) >= 3) return;
+    if (s.flags.upTipDay != null && s.day - s.flags.upTipDay < 90) return;
+    s.flags.upTipDay = s.day; st.tackDays = 0;
+    var nm = (G.Scenes.mateSpeaker('first') || {}).name;
+    UI.toast((nm ? nm + ': ' : '') + '맞바람에 ' + sh.name + '호(사각돛)가 굼뜹니다. 조선소 「개조」에서 삭구 개량이나 돛 바꾸기를 하면 거슬러 오르기가 한결 나아집니다. 항해술이 높을수록 지그재그 손실도 줄어듭니다.', 'sail', 9000);
+  }
   /** 숫자판 여덟 방향: 그 방위로 계속 간다 (맞바람이면 지그재그로 거슬러 오른다) */
   function takeCourse(ang) {
     leaveAuto();
@@ -753,6 +774,7 @@
     var kt = kinds ? ' (' + kinds + ')' : '';
     var text = byMe ? who + ' ' + n.n + '척이 있다' + kt + '. 어떻게 할까요?' : (n.kind === 'pirate' ? '제독! ' + pl + '입니다! ' + n.n + '척의 해적선이 다가옵니다!' + kt : n.hunt && G.Hostile ? '제독! ' + who + ' ' + n.n + '척이 우리를 잡으러 왔습니다!' + kt + ' (' + n.nation + ' 적대 ' + G.Hostile.get(n.nation) + ')' : who + ' ' + n.n + '척이 우리를 막아섭니다!' + kt);
     if (n.court && G.Court) text = G.Court.encounterText(n) || text;
+    if (n.war && G.Rel) text = G.Rel.encounterText(n) || text;   // 제독의 나라와 전쟁 중인 나라의 군함 (js/systems/relations.js)
     if (n.princess && G.Princess) text = G.Princess.encounterText(n) || text;   // 사라진 왕녀   // 왕명: 왕녀를 붙잡아 간 해적단
     if (n.cap && G.Captains) text = G.Captains.encounterText(n, text, byMe) || text;   // 이름난 해적의 해적단 (seacaptains.js)
     // 회피는 전투의 실패가 아니라 따로 고르는 운영 선택이다 — 가능성을 미리 보여 준다
@@ -1061,6 +1083,9 @@
       m = R.fleetMotion(h, wind);
       v = m.straight * thr;                          // 손으로 모는 배는 뱃머리 방향 그대로 (맞바람이면 스스로 지그재그를 해야 한다)
       if (brake) v = 0;
+      // 바람을 정면으로 안고 손으로 몰며 거의 못 나아가면, 부관이 지그재그로 거슬러 오를지 한 번 묻는다 (한 항해에 한 번)
+      if (!brake && thr > 0.5 && m.theta > 0.05 && m.straight < m.vmg * 0.6) st.headT = (st.headT || 0) + days; else st.headT = 0;
+      if (st.headT > 1 && !st.askedTack && !st.busy) { st.askedTack = true; st.headT = 0; askTack(); }
     } else if (st.path || st.dirCrs != null) {
       var crs = st.crs != null ? st.crs : h;
       m = R.fleetMotion(crs, wind);
@@ -1077,6 +1102,8 @@
           st.lastFlip = st.sailT; st.tackSide = -st.tackSide; st.xt = 0; st.tacks = (st.tacks || 0) + 1;
         }
         v = m.vmg / Math.cos(m.theta);               // 다리를 따라 달리는 속력 (목적 방향으로는 vmg만큼 다가간다)
+        st.tackDays = (st.tackDays || 0) + days;   // 맞바람 안내 (upwindTip)
+        if (st.tackDays > 2) upwindTip();
       } else { st.tackTheta = 0; v = m.vmg; }
       // 길목이 코앞인데 뱃머리가 크게 틀어져 있으면 속력을 줄여 선회 반경을 좁힌다 (길목을 맴돌지 않게)
       var off = Math.abs(U.angDiff(h, crs + (st.tackTheta ? st.tackSide * st.tackTheta : 0)));
@@ -1361,6 +1388,9 @@
       if (news.length) { if (G.SeaNews) G.SeaNews.show(news); else await G.Scenes.city.news(news); }   // 항해를 멈추지 않고 오른쪽 위에 잠깐
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
       if (G.Studio && G.Studio.pending()) await G.Studio.present();   // 화실·조각실에서 완성한 명작을 바친다
+      if (G.Rel && G.Rel.pending()) await G.Rel.present();       // 궁정의 소식·교황의 사절·큰 해전 (js/systems/relations.js)
+      if (G.Leo && G.Leo.pending()) await G.Leo.present();       // 레오나르도의 발명품
+      if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
       if (G.Disaster) await G.Disaster.sea();   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

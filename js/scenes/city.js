@@ -103,6 +103,7 @@
       out.push({ kind: 'mansion', arg: sid, name: C.mansionName(sp), icon: 'mansion' });
     });
     if (f.guild) out.push({ kind: 'guild', name: '조합', icon: 'seal' });
+    if (G.Tudor && G.Tudor.buildings) G.Tudor.buildings(c).forEach(function (x) { out.push(x); });   // 런던 탑 (메리 1세 시절 — js/systems/tudor.js)
     if (G.Court && G.Court.buildingsAt) G.Court.buildingsAt(c.id).forEach(function (x) {
       var info = x.kind === 'museum' ? ['왕립 박물관', 'bust'] : x.kind === 'gallery' ? ['왕립 미술관', 'palette'] : ['왕립 동물원', 'horse'];
       out.push({ kind: x.kind, arg: x.realm, name: info[0], icon: info[1] });
@@ -146,6 +147,9 @@
       if (arg.load) { UI.toast(U.fmtDate(s.date) + ' — ' + c.name, 'book'); }
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
       if (G.Studio && G.Studio.pending()) await G.Studio.present();   // 화실·조각실에서 완성한 명작을 바친다
+      if (G.Rel && G.Rel.pending()) await G.Rel.present();       // 궁정의 소식·교황의 사절·큰 해전 (js/systems/relations.js)
+      if (G.Leo && G.Leo.pending()) await G.Leo.present();       // 레오나르도의 발명품
+      if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;

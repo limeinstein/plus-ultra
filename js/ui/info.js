@@ -31,7 +31,7 @@
   };
 
   // ---------------------------------------------------------------- main info window with tabs
-  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['achv', '업적'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['map', '해도'], ['log', '일지']];
+  var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['achv', '업적'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['politics', '유럽 정세'], ['map', '해도'], ['log', '일지']];
   // 「설정」은 수첩 밖의 따로 된 창 (하단 메뉴 맨 오른쪽 단추 — I.settings). 옛 호출 I.open('menu')도 설정 창을 연다
   var lastTab = null;   // 탭을 정하지 않고 열면(하단 메뉴 「수첩」) 지난번에 보던 탭 — 바다·뭍·도시 어디서 열어도 같다
   I.open = function (tab) {
@@ -412,6 +412,7 @@
       (down.length ? '<div class="era-row"><span class="era-lbl down">덜 찾는다</span>' + down.map(function (x) { return chip(x, x.lo, x.worst, 'down'); }).join('') + '</div>' : '') +
       (soon.length ? '<div class="era-row"><span class="era-lbl soon">곧 오른다</span>' + soon.map(function (x) { return chip(x, x.hi + x.trend, null, 'soon'); }).join('') + '<small class="muted"> (10년 뒤)</small></div>' : '') + '</div>';
   }
+  PAGES.politics = function (el) { if (G.Rel) G.Rel.page(el); };   // 유럽 나라들 사이의 관계 (js/systems/relations.js)
   PAGES.trade = function (el) {
     var s = S();
     var econ = G.Econ ? G.Econ.box() : '';

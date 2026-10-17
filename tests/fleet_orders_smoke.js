@@ -52,7 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // 한 척 고르기 → 적함 클릭 = 노림
     await page.click('.ord-row[data-no="3"]');
     ok(await page.evaluate(() => G.Scenes.battle.debug().sel && G.Scenes.battle.debug().sel.no === 3), '명령판 줄을 눌러 3번 배를 골랐다');
-    const pt = await page.evaluate(() => { var st = G.Scenes.battle.debug(), e = st.ships.filter(function (b) { return b.side === 'en' && b.alive; })[0], r = G.Game.canvases().overlay.getBoundingClientRect(); return { x: r.left + (800 + (e.x - st.cx)) / 1600 * r.width, y: r.top + (450 + (e.y - st.cy)) / 900 * r.height, no: e.no }; });
+    const pt = await page.evaluate(() => { var st = G.Scenes.battle.debug(), e = st.ships.filter(function (b) { return b.side === 'en' && b.alive; })[0], r = G.Game.canvases().overlay.getBoundingClientRect(), zk = st.zkShown || st.vz || 1; return { x: r.left + (800 + (e.x - st.cx) * zk) / 1600 * r.width, y: r.top + (450 + (e.y - st.cy) * zk) / 900 * r.height, no: e.no }; });
     await page.mouse.click(pt.x, pt.y);
     const att = await page.evaluate(() => { var b = G.Scenes.battle.debug().ships.filter(function (x) { return x.side === 'me' && x.no === 3; })[0]; return b.order + ':' + (b.otarget ? b.otarget.no : '-'); });
     ok(att === 'attack:' + pt.no, '고른 배만 그 적을 노린다 (' + att + ')');

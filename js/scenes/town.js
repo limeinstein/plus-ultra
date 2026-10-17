@@ -56,12 +56,12 @@
 
   // 건물마다 화면에 그릴 높이
   var SIZE = { harbor: 405, shipyard: 385, trade: 360, market: 320, tavern: 345, inn: 352, church: 425,
-    library: 365, restaurant: 350, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372, inspector: 372, govhall: 445, museum: 380, gallery: 390, zoo: 360 };
+    library: 365, restaurant: 350, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372, inspector: 372, govhall: 445, museum: 380, gallery: 390, zoo: 360, tower: 400 };
   // 거리에 늘어서는 차례 (왼쪽 = 바다 쪽, 오른쪽 = 성문 쪽)
-  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'restaurant', 'inn', 'guild', 'library', 'museum', 'gallery', 'church', 'mansion', 'inspector', 'palace', 'zoo', 'govhall', 'house2', 'home', 'gate'];
+  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'restaurant', 'inn', 'guild', 'library', 'museum', 'gallery', 'church', 'mansion', 'inspector', 'palace', 'zoo', 'tower', 'govhall', 'house2', 'home', 'gate'];
   // 도시마다 거리 한쪽에 서 있는 볼거리 (발견물이면 눌러서 설명을 본다 — T.inspect)
   // 아직 전용 그림이 없는 건물은 비슷한 건물 그림을 좌우로 뒤집어 쓴다
-  var SUBSTITUTE = { house2: 'home', inspector: 'mansion', govhall: 'palace', restaurant: 'inn', museum: 'library', gallery: 'library', zoo: 'mansion' };   // 전용 그림이 없으면 닮은 건물을 뒤집어 쓴다
+  var SUBSTITUTE = { house2: 'home', inspector: 'mansion', govhall: 'palace', restaurant: 'inn', museum: 'library', gallery: 'library', zoo: 'mansion', tower: 'gate' };   // 런던 탑(js/systems/tudor.js)은 성문 그림   // 전용 그림이 없으면 닮은 건물을 뒤집어 쓴다
   var LANDMARKS = { 7: [['giralda', 0.60, 430], ['columns', 0.10, 250]] };
   // 발견물 자료(G.DISC)가 없는 볼거리의 설명
   var MARK_INFO = {
@@ -337,7 +337,7 @@
       city: c, items: items, marks: marks, streetW: streetW,
       bg: bgKey ? I.get(bgKey) : cityBackdrop(c), ground: ground, groundStyle: ground._style, hidden: false,
       cam: 0, camTo: 0, hover: null, focus: null, t: 0,
-      hero: { x: items.length ? items[0].x + items[0].w / 2 : W / 2, to: null, dir: 1, walking: false, dist: 0, fade: 1, enterT: 0, entering: false },
+      hero: { x: items.length ? items[0].x + items[0].w / 2 : W / 2, to: null, dir: 1, walking: false, dist: 0, idleT: 0, fade: 1, enterT: 0, entering: false },
       heroFrames: heroFrames(), keys: {}, near: null, onPick: null,
       runFrames: I.chain.heroRun().map(function (k) { return I.get(k); }).filter(Boolean),
       heroMotion: heroMotionAtlases()
@@ -1012,10 +1012,16 @@
       }
       var d = hero.to - hero.x, sp = hero.walkV * dt;
       if (Math.abs(d) <= sp) {
-        hero.dist += Math.abs(d); hero.x = hero.to; hero.walkV = null; hero.running = false;
-        if (hero.free) { hero.to = null; hero.free = false; hero.walking = false; }   // 빈 거리로 걸어간 것은 거기서 멈춘다
+        var followed = hero.free;
+        hero.dist += Math.abs(d); hero.x = hero.to;
+        hero.to = null; hero.walkV = null; hero.free = false;
+        hero.walking = false; hero.running = false; hero.keyRun = null;              // 어느 목적지든 닿는 순간 바로 선다
+        if (followed) st.camTo = clampCam(hero.x - W / 2);
       }
-      else { hero.x += Math.sign(d) * sp; hero.dist += sp; hero.dir = d > 0 ? 1 : -1; }
+      else {
+        hero.walking = st.heroFrames.length > 0 || !!st.heroMotion.walk;             // 말 걸기·볼거리 이동도 실제 움직이는 동안만 걷는다
+        hero.x += Math.sign(d) * sp; hero.dist += sp; hero.dir = d > 0 ? 1 : -1;
+      }
       if (hero.free) st.camTo = clampCam(hero.x - W / 2);
       moved = true;
     }
@@ -1026,12 +1032,17 @@
       moved = true;
     }
     if (G.Audio && G.Audio.travel) {
-      var heroMoving = !!(kd || hero.to != null || hero.entering), footKind = hero.running ? 'run' : 'townstep';
+      var heroMoving = !!(hero.walking || hero.running || hero.entering), footKind = hero.running ? 'run' : 'townstep';
       G.Audio.travel(footKind, heroMoving ? (hero.running ? 1 : 0.55) : 0);   // 마을 돌길의 발걸음·달리기
     }
     if (st.hover !== st.drawnHover || st.focus !== st.drawnFocus) moved = true;
     if (G.Scenes.city.timeOfDay() !== st.tod) moved = true;
     var busyNow = !!(G.UI.busy && G.UI.busy()); if (busyNow !== st.drawnBusy) { st.drawnBusy = busyNow; moved = true; }   // 대화가 뜨고 닫힐 때 「↑ 들어가기」를 감추고 되살린다
+    // 아무 입력이 없을 때에는 걷기 칸을 넘기지 않고, 발밑을 고정한 호흡만 낮은 빈도로 다시 그린다.
+    var idleFx = townHeroIdleFx(), idle = !hero.walking && !hero.running && !hero.entering && hero.to == null;
+    hero.idleT = idle ? (hero.idleT || 0) + dt : 0;                         // 멈추는 순간 원래 크기에서 호흡을 시작한다
+    st.idleAcc = idle ? (st.idleAcc || 0) + dt : 0;
+    if (idle && st.idleAcc >= 1 / idleFx.fps) { st.idleAcc %= 1 / idleFx.fps; moved = true; }
     // 거리를 걷는 사람들: 그들만 움직일 때는 초당 folkFps번만 다시 그린다 (거리 전체를 매 틀 다시 그리지 않게 — 끊김 방지)
     var folkMoved = !!(st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x));
     st.folkAcc = (st.folkAcc || 0) + dt;
@@ -1206,7 +1217,7 @@
       ctx.fillStyle = 'rgba(40,26,12,.28)';
       ctx.beginPath(); ctx.ellipse(x, y - 2, w * 0.3, 8, 0, 0, 7); ctx.fill();
       ctx.translate(x, y);
-      if (st.hero.dir < 0) ctx.scale(-1, 1);
+      ctx.scale(st.hero.dir < 0 ? -1 : 1, heroIdleBreath());
       ctx.drawImage(atlas, (ai % MOTION_COLS) * aw, Math.floor(ai / MOTION_COLS) * ah, aw, ah, -w / 2, -h, w, h);
       ctx.restore();
       return;
@@ -1221,7 +1232,7 @@
     ctx.fillStyle = 'rgba(40,26,12,.28)';
     ctx.beginPath(); ctx.ellipse(x, y - 2, w * 0.3, 8, 0, 0, 7); ctx.fill();
     ctx.translate(x, y);
-    if (st.hero.dir < 0) ctx.scale(-1, 1);
+    ctx.scale(st.hero.dir < 0 ? -1 : 1, heroIdleBreath());
     ctx.drawImage(img, -w / 2, -h, w, h);
     ctx.restore();
   }
@@ -1233,6 +1244,13 @@
   function heroRunFps() { return (G.FX && G.FX.heroRun && G.FX.heroRun.fps) || 62; }
   /** 서 있을 때 보여 줄 걷기 칸 — 두 발을 모은 칸 (js/data/heromotion.js · tools/player_motion_cycles.py). 예전엔 첫 칸이라 다리를 벌린 채 섰다 */
   function heroIdleFrame() { var m = G.HERO_MOTION && G.HERO_MOTION[I.heroLook ? I.heroLook() : '']; return (m && m.idle) || 0; }
+  function townHeroIdleFx() { return (G.FX && G.FX.townHeroIdle) || { fps: 12, sec: 2.4, scaleY: 0.004 }; }
+  /** 발밑 피벗은 그대로 두고 머리만 1픽셀 안팎으로 오르내리는 숨결. 걷기·달리기·입장 중에는 적용하지 않는다. */
+  function heroIdleBreath() {
+    if (st.hero.walking || st.hero.running || st.hero.entering || st.hero.to != null) return 1;
+    var fx = townHeroIdleFx();
+    return 1 + Math.sin((st.hero.idleT || 0) * Math.PI * 2 / fx.sec) * fx.scaleY;
+  }
   function townHeroEnterFx() {
     return (G.FX && G.FX.townHeroEnter) || { sec: 0.58, rise: 96, scale: 0.62, fadeAt: 0.56 };
   }

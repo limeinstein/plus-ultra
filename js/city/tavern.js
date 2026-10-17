@@ -863,7 +863,7 @@
   };
   /** 역할을 맡긴다. 그 자리를 맡던 사람은 m이 하던 일을 넘겨받는다 */
   T.assign = function (m, v) {
-    var s = S(), oldRole = m.role, oldShip = m.ship, other;
+    var s = S(), oldRole = m.role, oldShip = m.ship, oldRoom = m.room, other;
     if (v.indexOf('cap:') === 0) {
       var uid = v.slice(4);
       other = s.mates.filter(function (x) { return x !== m && x.role === 'captain' && x.ship === uid; })[0];
@@ -875,5 +875,10 @@
     if (other) { other.role = oldRole || 'none'; if (oldRole === 'captain') other.ship = oldShip; else delete other.ship; }
     R.tidyCaptains();
     if (G.Cabins) G.Cabins.tidy();   // 부관·항해사·측량사·선장이 되면 선실을 비운다
+    // m이 앉아 있던 선실은 자리를 바꾼 사람(밀려난 선장·부관 등)이 넘겨받는다 — 대기로 남지 않게 (2026-10-17)
+    if (G.Cabins && other && oldRoom != null && m.room == null && other.room == null && (!other.role || other.role === 'none' || other.role === 'purser' || other.role === 'interp')) {
+      var rt = G.Cabins.rooms()[oldRoom];
+      if (rt && rt !== 'hold' && !G.Cabins.occupant(oldRoom)) G.Cabins.place(other, oldRoom);
+    }
   };
 })(window.G = window.G || {});

@@ -204,6 +204,7 @@
   R.shipValue = function (s) {
     var t = G.SHIP[s.type]; var v = t.price * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
     v += s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].price : 0) * 0.3;
+    v += (s.rigPaid || 0) * 0.4;                         // 삭구 개량에 들인 돈의 일부
     return Math.floor(v);
   };
   R.figure = function (s) { return s.fig ? G.FIGUREHEAD[s.fig] : null; };
@@ -218,11 +219,10 @@
   /** sail efficiency for relative wind angle a (0 = wind from astern, PI = head wind) */
   function sailEff(kind, a) {
     var d = a * 180 / Math.PI;
-    if (kind === 'sq') {
-      if (d < 60) return 1.0 - d / 600;
-      if (d < 100) return 0.9 - (d - 60) * 0.0125;
-      if (d < 135) return 0.4 - (d - 100) * 0.0094;
-      return 0.07;
+    if (kind === 'sq') {                        // 사각돛: 꺾은선 G.BALANCE.upwind.sq
+      var pts = (G.BALANCE && G.BALANCE.upwind && G.BALANCE.upwind.sq) || [[0, 1], [60, 0.9], [110, 0.62], [140, 0.11], [180, 0.11]];
+      for (var i = 1; i < pts.length; i++) if (d <= pts[i][0]) { var p0 = pts[i - 1], p1 = pts[i]; return p0[1] + (p1[1] - p0[1]) * (d - p0[0]) / Math.max(1e-6, p1[0] - p0[0]); }
+      return pts[pts.length - 1][1];
     }
     if (kind === 'bat') {                       // 대나무 살 돛: 순풍에도 무난하고 맞바람에도 버틴다
       if (d < 45) return 0.84 + d * 0.0015;
@@ -238,6 +238,36 @@
     return 0.1;
   }
   R.sailEff = sailEff;
+  /** 돛 구성의 평균 효율 (rel: 바람과 이루는 각, rad) */
+  function sailThrust(sails, rel) { var th = 0; sails.forEach(function (k) { th += sailEff(k, rel); }); return th / Math.max(1, sails.length); }
+  R.sailThrust = sailThrust;
+  /** 삭구 개량 단계(0~3)가 이 각에서 돛 힘에 곱하는 값 — 사각돛이 많을수록 온전히 (G.BALANCE.rigging) */
+  R.rigK = function (sails, lvl, rel) {
+    if (!lvl) return 1;
+    var T = (G.BALANCE && G.BALANCE.rigging) || [], d = rel * 180 / Math.PI, up = 0, beam = 0;
+    for (var i = 0; i < Math.min(lvl, T.length); i++) { up += T[i].up || 0; beam += T[i].beam || 0; }
+    var sqf = sails.length ? sails.filter(function (k) { return k === 'sq'; }).length / sails.length : 0, f = 0.5 + 0.5 * sqf;
+    return 1 + f * (up * U.smooth(80, 115, d) + (d >= 45 && d <= 150 ? beam : 0));
+  };
+  /** 지그재그로 거슬러 오를 때 다리 속력 가운데 목적 방향으로 남는 몫: 항해술이 높을수록 손실이 적다 (G.BALANCE.upwind.tack) */
+  R.tackK = function () {
+    var T = (G.BALANCE && G.BALANCE.upwind && G.BALANCE.upwind.tack) || { base: 0.92, perNav: 0.02, max: 0.98 };
+    return Math.min(T.max, T.base + R.skill('nav') * T.perNav);
+  };
+  /** 배 종류(와 삭구 단계)의 맞바람 성능: 정면 맞바람을 지그재그로 거슬러 오르는 속력(바람 세기 1, 손실 0.92 기준)과 가장 잘 나갈 때의 속력. 노는 바람과 상관없이 */
+  R.typeUpwind = function (id, lvl) {
+    var t = G.SHIP[id]; if (!t) return null;
+    var best = 0, up = 0, beam = 0;
+    for (var a = 0; a <= 90; a += 15) { var r0 = a * Math.PI / 180; best = Math.max(best, t.spd * sailThrust(t.sails, r0) * R.rigK(t.sails, lvl, r0)); }
+    for (var th = 25; th <= 75; th += 10) {
+      var rad = th * Math.PI / 180, rel = Math.PI - rad;
+      up = Math.max(up, t.spd * sailThrust(t.sails, rel) * R.rigK(t.sails, lvl, rel) * Math.cos(rad) * 0.92);
+    }
+    var row = t.oar || 0;
+    return { up: Math.max(up, row), best: Math.max(best, row), row: row > up };
+  };
+  /** 맞바람 성능 한 낱말: 강함 · 보통 · 약함 */
+  R.upwindWord = function (u) { return !u ? '' : u.up >= 0.45 ? '강함' : u.up >= 0.32 ? '보통' : '약함'; };
   /** ship speed in degrees/day for heading ang (radians, 0=east ccw) and wind {dir (toward, radians), spd 0..1, calm}
       env: {off: 해안에서 떨어진 거리(°), mon: 계절풍 바다} — 없으면 지금 함대가 있는 바다 */
   R.shipSpeed = function (s, ang, wind, env) {
@@ -246,6 +276,7 @@
     var thrust = 0;
     s.sails.forEach(function (k) { thrust += sailEff(k, rel); });
     thrust /= Math.max(1, t.sails.length);
+    if (s.rig) thrust *= R.rigK(s.sails, s.rig, rel);   // 삭구 개량 (조선소)
     var base = t.spd * (1 + s.spdMod) * (1 + (R.figure(s) && R.figure(s).spd || 0));
     var w = 0.35 + 0.8 * wind.spd;
     var hpF = 0.6 + 0.4 * s.hp / s.maxHp;
@@ -296,7 +327,10 @@
     var role = typeof m === 'string' ? m : m && m.role;
     if (role === 'captain') { var sh = m && R.S().fleet.ships.filter(function (x) { return x.uid === m.ship; })[0]; return sh ? '선장 · ' + sh.name + '호' : '선장'; }
     var r = G.ROLES.filter(function (x) { return x.id === role; })[0];
-    return r ? r.name : '대기';
+    if (r) return r.name;
+    // 역할이 없어도 기함 선실(갑판·요리실 …)에 있으면 대기가 아니다 — 그 방 이름 (선장 임명·부하와 이야기 목록 등)
+    if (m && typeof m === 'object' && m.room != null && G.Cabins && G.Cabins.placeName) { var pn = G.Cabins.placeName(m); if (pn && pn !== '대기') return pn; }
+    return '대기';
   };
   /** 함대를 떠난 배나 기함이 된 배의 선장은 대기로 돌린다 */
   R.tidyCaptains = function () {
@@ -365,12 +399,12 @@
     var S = R.S(), f = S.fleet;
     if (!f.ships.length) return { vmg: 0, straight: 0, theta: 0, legP: 0, legM: 0 };
     if (env === undefined) env = G.Ships ? G.Ships.env() : null;
-    var pre = R.fleetPre();
+    var pre = R.fleetPre(), tk = R.tackK();
     var vs0 = R.shipLegSpeeds(ang, wind, env, pre), r0 = formation(vs0, pre.ops), row0 = !!f.ships[r0.slow]._row, v = r0.v, th0 = 0, lp = 0, lm = 0;
     for (var th = 25; th <= 75; th += 10) {
-      var rad = th * Math.PI / 180, c = Math.cos(rad) * 0.92;
+      var rad = th * Math.PI / 180, c = Math.cos(rad) * tk;        // tk: 지그재그 손실 (항해술이 높을수록 적다)
       var a = R.rawFleetSpeed(ang + rad, wind, env, pre), b = R.rawFleetSpeed(ang - rad, wind, env, pre);
-      if (Math.max(a, b) * c > v) { v = Math.max(a, b) * c; th0 = rad; lp = a * 0.92; lm = b * 0.92; }
+      if (Math.max(a, b) * c > v) { v = Math.max(a, b) * c; th0 = rad; lp = a * tk; lm = b * tk; }
     }
     R.rowing = row0 && th0 === 0;
     var cm = R.crewMin();
@@ -385,11 +419,11 @@
   /** 바람을 고르게 받을 때(8방향 평균)의 함대 속력 풀이 — 수첩·조선소에서 보여 준다 */
   R.fleetReport = function () {
     var f = R.S().fleet; if (!f.ships.length) return null;
-    var pre = R.fleetPre(), n = 8, sum = f.ships.map(function () { return 0; });
+    var pre = R.fleetPre(), n = 8, sum = f.ships.map(function () { return 0; }), tk = R.tackK();
     for (var i = 0; i < n; i++) {
       var w = { dir: i / n * Math.PI * 2, spd: 0.55 }, best = R.shipLegSpeeds(0, w, null, pre);
       for (var th = 25; th <= 75; th += 10) {        // 맞바람이면 배마다 지그재그로 가장 잘 나아가는 값
-        var rad = th * Math.PI / 180, c = Math.cos(rad) * 0.92, a1 = R.shipLegSpeeds(rad, w, null, pre), a2 = R.shipLegSpeeds(-rad, w, null, pre);
+        var rad = th * Math.PI / 180, c = Math.cos(rad) * tk, a1 = R.shipLegSpeeds(rad, w, null, pre), a2 = R.shipLegSpeeds(-rad, w, null, pre);
         best = best.map(function (v, k) { return Math.max(v, a1[k] * c, a2[k] * c); });
       }
       best.forEach(function (v, k) { sum[k] += v / n; });

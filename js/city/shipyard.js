@@ -109,7 +109,7 @@
       '<div class="traits"><span class="trait lvchip">' + t.lv + '등급</span>' + SH().traitChips(t) + '<span class="cult">' + G.SHIP_CULT[t.cult] + '의 배' + (foreign ? ' · 이 고장 배가 아님(값 +20%)' : '') + '</span></div>' +
       '<div class="muted" style="margin:4px 0 8px;font-size:16px">' + t.desc + '</div>' +
       '<div class="kv" style="font-size:16px;grid-template-columns:auto 1fr auto 1fr auto 1fr"><div>적재량</div><div>' + t.cap + '통</div><div>내구력</div><div>' + hpWith(t, lw) + (hpWith(t, lw) !== t.hp ? ' <small class="muted">(기본 ' + t.hp + ')</small>' : '') + '</div><div>선원</div><div>' + t.crew[0] + '~' + t.crew[1] + '명</div>' +
-      '<div>포문</div><div>' + t.ports + '문</div><div>돛</div><div>' + t.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k]; }).join('·') + '</div><div>속도</div><div>' + stars(t.spd) + '</div>' + (t.oar ? '<div>노</div><div>' + stars(t.oar + 0.35) + '</div>' : '') + '</div>' +
+      '<div>포문</div><div>' + t.ports + '문</div><div>돛</div><div>' + t.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k]; }).join('·') + '</div><div>속도</div><div>' + stars(t.spd) + '</div>' + upwindCell(t) + (t.oar ? '<div>노</div><div>' + stars(t.oar + 0.35) + '</div>' : '') + '</div>' +
       (lock ? '<div class="warn-text" style="margin-top:6px">' + G.icon('seal') + lock + '</div>' : '') +
       '</div></div>';
   }
@@ -151,6 +151,13 @@
     G.State.log(c.name + '에서 ' + wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + ' ' + name + '호를 샀다.');
     await C.say(keeper(), opt.how === 'local' ? '고맙네! 좋은 배일세. 아껴 주게나.' : '먼 곳의 ' + wood.name + U.jx(wood.name, '으로/로') + ' 지었네. 좋은 나무는 배를 오래 살게 하지.');
   };
+  /** 구입 카드의 맞바람 칸: 강함·보통·약함 (사각돛 배는 「개조」로 보강할 수 있다고 알려 준다) */
+  function upwindCell(t) {
+    if (!R.typeUpwind) return '';
+    var u = R.typeUpwind(t.type || t.id, 0), w = R.upwindWord(u), col = w === '강함' ? '#2e6a36' : w === '약함' ? '#8a2a1e' : 'inherit';
+    var tip = u.row ? '노를 저어 바람과 상관없이' : w === '약함' ? '사각돛이 많아 맞바람에 느리다 — 「개조」에서 삭구 개량·돛 바꾸기로 보강' : w === '보통' ? '맞바람에 그럭저럭 — 삭구 개량으로 보강' : '삼각돛·살돛으로 맞바람에 강하다';
+    return '<div>맞바람</div><div title="' + tip + '" style="color:' + col + '">' + w + (u.row ? ' (노)' : '') + '</div>';
+  }
   function stars(v) { var n = Math.round((v - 0.9) / 0.14); n = U.clamp(n, 1, 5); return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n); }
 
   // ---------------------------------------------------------------- 기술 투자 (대항해시대 2의 공업 투자)
@@ -225,7 +232,8 @@
       var t = G.SHIP[sh.type];
       var v = await UI.choose(sh.name + '호 개조', [
         { label: '대포', right: (G.CANNON[sh.guns.type] || {}).name + ' ' + sh.guns.n + '/' + sh.ports + '문', value: 'gun', icon: 'cannon' },
-        { label: '돛', right: sh.sails.map(function (k) { return k === 'sq' ? '사각' : '삼각'; }).join('·'), value: 'sail', icon: 'sail' },
+        { label: '돛', right: sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join('·'), value: 'sail', icon: 'sail' },
+        { label: '삭구 개량 (맞바람)', right: rigLabel(sh), value: 'rig', icon: 'gear' },
         { label: '포문 증설', right: sh.ports + '/' + t.ports + '문', value: 'port', icon: 'plus', disabled: sh.ports >= t.ports },
         { label: '선수상', right: sh.fig ? G.FIGUREHEAD[sh.fig].name : '없음', value: 'fig', icon: 'feather' },
         { label: '선체 다시 짓기 (목재)', right: (SH().wood(sh) || { name: '보통 목재' }).name, value: 'wood', icon: 'hammer' },
@@ -235,6 +243,7 @@
       if (v === 'cabin') await G.CabinView.open({ yard: c });
       else if (v === 'gun') await refitGuns(c, sh);
       else if (v === 'sail') await refitSails(c, sh);
+      else if (v === 'rig') await refitRig(c, sh);
       else if (v === 'port') await refitPorts(c, sh);
       else if (v === 'fig') await refitFig(c, sh);
       else if (v === 'wood') await refitWood(c, sh);
@@ -274,6 +283,42 @@
       var cur = kinds.indexOf(sh.sails[i]);
       s.player.gold -= price; sh.sails[i] = kinds[(cur + 1) % kinds.length] || 'sq';
       UI.toast((i + 1) + '번 돛대를 ' + G.SAIL_NAME[sh.sails[i]] + U.jx(G.SAIL_NAME[sh.sails[i]], '으로/로') + ' 바꾸었다.', 'sail');
+    }
+  }
+  /** 삭구 개량 단계 이름 */
+  function rigTiers() { return (G.BALANCE && G.BALANCE.rigging) || []; }
+  function rigLabel(sh) { var n = sh.rig || 0, T = rigTiers(); return n ? n + '단 · ' + T[n - 1].name : '안 함'; }
+  /** 맞바람 속력 비교 글: 지금 → 개량 뒤 (돛·삭구가 같은 배 종류 기준) */
+  function upTxt(sh, lvl) {
+    var t = G.SHIP[sh.type], sails = sh.sails, tk = R.tackK ? R.tackK() : 0.92, up = 0;
+    for (var th = 25; th <= 75; th += 10) { var rad = th * Math.PI / 180, rel = Math.PI - rad; up = Math.max(up, t.spd * (1 + (sh.spdMod || 0)) * R.sailThrust(sails, rel) * R.rigK(sails, lvl, rel) * Math.cos(rad) * tk); }
+    return (up * 0.846).toFixed(2);
+  }
+  /** 삭구 개량 (G.BALANCE.rigging): 한 단씩 차례로 — 앞삼각돛 → 돛 재단·밧줄 → 용골 */
+  async function refitRig(c, sh) {
+    var s = S(), t = G.SHIP[sh.type], T = rigTiers(), tech = SH().tech(c);
+    for (;;) {
+      var n = sh.rig || 0;
+      var opts = T.map(function (r, i) {
+        var price = Math.round(t.price * r.cost / 10) * 10, done = i < n, next = i === n, lock = next && tech < r.lv;
+        return { label: (i + 1) + '단 · ' + r.name, right: done ? '해 둠' : next ? (lock ? '조선 기술 ' + r.lv + '등급 필요' : '금화 ' + U.num(price) + '닢') : '앞 단계를 먼저',
+          value: i, icon: done ? 'check' : 'gear', disabled: !next || lock,
+          desc: r.desc + (r.cap ? ' (적재량 ' + Math.round(r.cap * 100) + '%)' : '') + (next ? ' — 맞바람 속력 ' + upTxt(sh, n) + ' → ' + upTxt(sh, n + 1) + '°/일 (무역풍 세기)' : '') };
+      });
+      var i = await UI.choose(sh.name + '호 삭구 개량', opts, { width: 720,
+        text: '바람을 거슬러 오르는 힘을 키웁니다. 사각돛이 많은 배일수록 효과가 크고(삼각돛·살돛뿐인 배는 절반), 순풍 속력은 그대로입니다. 이 조선소의 조선 기술은 ' + tech + '등급입니다. 소지금 ' + U.num(s.player.gold) + '닢.' });
+      if (i == null) return;
+      var r = T[i], price = Math.round(t.price * r.cost / 10) * 10;
+      if (i !== (sh.rig || 0)) return;
+      if (s.player.gold < price) { await C.say(keeper(), '금화 ' + U.num(price) + '닢 필요하네. 돈이 모자라는군.'); return; }
+      if (r.cap) {
+        var capAfter = Math.round(sh.cap * (1 + r.cap));
+        if (S().fleet.ships.indexOf(sh) >= 0 && R.used() > R.fleetCap() - R.shipCargoCap(sh) + Math.max(0, capAfter - R.gunLoad(sh))) { await C.mate('제독, 짐이 너무 많아 용골에 바닥짐을 더 실을 수 없습니다. 짐을 조금 내린 뒤에 하십시오.'); return; }
+        sh.cap = capAfter;
+      }
+      s.player.gold -= price; sh.rig = i + 1; sh.rigPaid = (sh.rigPaid || 0) + price;
+      UI.toast(sh.name + '호: ' + r.name + ' — 삭구 ' + sh.rig + '단', 'gear');
+      await C.say(keeper(), U.pick(['다 됐네. 이제 바람을 안고도 제법 버틸 걸세.', '단단히 손봤네. 맞바람에서 차이를 느낄 게야.', '좋은 배가 더 좋아졌군. 바람이 앞에서 불어도 겁낼 것 없네.']));
     }
   }
   /** 선체 다시 짓기: 다른 목재로 판자를 갈아 내구력을 바꾼다 */

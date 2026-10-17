@@ -78,7 +78,8 @@
           var f = s.fleet, cg = f.cargo[gid];
           if (cg) { cg.cost = Math.round(cg.cost * cg.q / (cg.q + q)); cg.q += q; } else f.cargo[gid] = { q: q, cost: 0, from: null, d: s.day, made: m.id };
           m.stP -= b.need; m.stFull = false;
-          out.push({ icon: kind === 'paint' ? 'palette' : 'bust', text: d.name + U.jx(d.name, '이/가') + ' ' + G.CABIN[type].name + '에서 ' + G.GOOD[gid].name + ' ' + q + '통을 ' + (kind === 'paint' ? '그려' : '깎아') + ' 짐칸에 실었다.' });
+          var gso = b.goodsSo ? (G.Fame ? G.Fame.add('so', b.goodsSo * q) : 0) : 0;   // 화가·조각가에게서 작품을 받으면 사교 명성도 조금 (2026-10-17)
+          out.push({ icon: kind === 'paint' ? 'palette' : 'bust', text: d.name + U.jx(d.name, '이/가') + ' ' + G.CABIN[type].name + '에서 ' + G.GOOD[gid].name + ' ' + q + '통을 ' + (kind === 'paint' ? '그려' : '깎아') + ' 짐칸에 실었다.' + (gso > 0 ? ' (사교 명성 +' + gso + ')' : '') });
         } else {
           m.stP = b.need;                                   // 짐칸이 비면 그때 싣는다
           if (!m.stFull) { m.stFull = true; out.push({ icon: 'sack', text: d.name + U.jx(d.name, '이/가') + ' 만든 ' + G.GOOD[gid].name + U.jx(G.GOOD[gid].name, '을/를') + ' 실을 짐칸이 없다.' }); }

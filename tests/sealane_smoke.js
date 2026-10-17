@@ -9,7 +9,7 @@ const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
 (async () => {
-  const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding'] });
+  const b = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding'] });
   const page = await b.newPage({ viewport: { width: 640, height: 360 } });
   const errs = []; page.on('pageerror', e => errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error' && !/Failed to load|net::|fonts|ERR_FILE/.test(m.text())) errs.push('CONSOLE ' + m.text()); });
   await page.addInitScript(() => { window.requestAnimationFrame = () => 0; window.createImageBitmap = undefined; document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = '*{animation:none!important;transition:none!important} body > *{visibility:hidden!important} canvas{display:none!important}'; document.head.appendChild(st); }); });
@@ -21,7 +21,7 @@ const ROOT = path.resolve(__dirname, '..');
     G.State.newGame({ name: '주앙', nation: 'PT', job: 'explorer', age: 20, birth: { m: 1, d: 1 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
     G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; G.Disc.find = async () => {}; G.Explore.report = async () => {}; G.Explore.milestones = async () => {};
     const f = n => G.CITY_DATA.find(c => c && c.name === n).id; const A = f('리스본'), B = f('제노바'), L = f('런던');
-    const s = G.Game.state; s.routes = {}; [B, L].forEach(id => { if (s.known.indexOf(id) < 0) s.known.push(id); }); s.player.gold = 50000;
+    const s = G.Game.state; s.routes = {}; [B, L].forEach(id => { if (s.known.indexOf(id) < 0) s.known.push(id); }); s.player.gold = 50000; s.fleet.food = 5000; s.fleet.water = 5000;   // 긴 시험 항해에 식량이 떨어져 사건 창이 뜨지 않게
     window.__arr = null; G.Scenes.city.handleEntry = async c => { window.__arr = c.id; return false; };
     const toasts = []; const t0 = G.UI.toast; G.UI.toast = function (m) { toasts.push(String(m)); return t0.apply(this, arguments); };
     // 뭍을 가로지르는 칸 수 (마지막 부두 토막 0.3°는 뺀다)
@@ -42,7 +42,7 @@ const ROOT = path.resolve(__dirname, '..');
     // 3) 끝까지: 제노바
     SEA.goCity(B);
     const tick = async (n) => { for (let i = 0; i < n; i++) { st.npcs = st.keepNpc ? st.npcs : []; SEA.update(0.1); for (let w = 0; w < 20 && st.busy && !G.UI.busy(); w++) await new Promise(r => setTimeout(r, 0)); if (G.UI.busy()) return 'ui'; } return 'ok'; };
-    const pick = async () => { const mb = [...document.querySelectorAll('.modal-back')].pop(); if (!mb) return; (mb.querySelector('.dlg') || mb).click(); await new Promise(r => setTimeout(r, 30)); };
+    const pick = async () => { const mb = [...document.querySelectorAll('.modal-back')].pop(); if (!mb) return; const bt = mb.querySelector('.askrow .btn, .choice:not(.dis)'); (bt || mb.querySelector('.dlg') || mb).click(); await new Promise(r => setTimeout(r, 30)); };
     await tick(60); for (let k = 0; k < 10 && G.UI.busy(); k++) await pick();
     // 해전에서 돌아온 것처럼
     G.Game.go('sea', { resume: true }); st = SEA.runtime();

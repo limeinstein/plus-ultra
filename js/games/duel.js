@@ -14,7 +14,7 @@
   var W = 1060, H = 380;
 
   function duelFx() {
-    return (G.FX && G.FX.duel) || { spriteSize: 230, shakeX: 10, shakeY: 6, shakeHit: 0.25, shakeBig: 0.6, shakeDecay: 2.5,
+    return (G.FX && G.FX.duel) || { spriteSize: 230, idleFrame: 0, breathRate: 1.35, breathScale: 0.0018, shakeX: 10, shakeY: 6, shakeHit: 0.25, shakeBig: 0.6, shakeDecay: 2.5,
       flashHit: 0.10, flashTaken: 0.16, flashBig: 0.25, flashDecay: 6, knockback: 26, knockReturnMs: 260, hitParticles: 10, particleLife: 0.42 };
   }
 
@@ -233,14 +233,16 @@
         if (pose === 'kneel') return [2, 1];                      // 비틀거리며 주저앉음(항복·생포)
         if (pose === 'shout' || pose === 'shoot') return [3, 4];
         if (pose === 'run') return [3, Math.floor(t * 8) % 4];    // 물러설 때는 대기 동작을 빨리
-        return [3, Math.floor(t * 5.5) % 4];                      // 대기: 180ms 안팎
+        return [3, D.idleFrame == null ? 0 : D.idleFrame];       // 대기: 고개가 까닥이지 않도록 안정된 자세 한 장
       }
       function drawSpriteFighter(f, bx, by, face, t) {
         var fr = spriteFrame(f, t), L = art.layout ? art.layout(f.spriteImg) : { cw: 256, ch: 256, px: 128, py: 246, f: 1 };
         // spriteSize = 원본 256px이 화면에서 차지하는 크기 (줄인 사본이면 그만큼 키운다)
         var k = (D.spriteSize || 230) / 256 / (L.f || 1), w = L.cw * k, h = L.ch * k, sx = fr[1] * L.cw, sy = fr[0] * L.ch;
-        var bob = f.pose === 'idle' ? Math.sin(t * 3 + (face > 0 ? 0 : 1.5)) * 1.2 : 0;
-        ctx.save(); ctx.translate(bx + f.x * face, by + bob); ctx.scale(face, 1);
+        // 발밑은 고정하고 몸만 천천히 0.2% 안팎 늘여, 고개 흔들림 대신 거의 정적인 호흡만 보인다.
+        var breathing = f.pose === 'idle' ? (Math.sin(t * (D.breathRate || 1.35) + (face > 0 ? 0 : 1.5)) + 1) * 0.5 : 0;
+        var breathScale = 1 + breathing * (D.breathScale == null ? 0.0018 : D.breathScale);
+        ctx.save(); ctx.translate(bx + f.x * face, by); ctx.scale(face * (1 + (breathScale - 1) * 0.35), breathScale);
         // 쓰러짐: 발을 축으로 뒤로 넘어감(0.45초), 항복·생포: 조금 주저앉음
         var q = Math.min(1, (f.pt || 0) * (f.poseDur || 0.35) / 0.45);
         if (f.pose === 'down') { ctx.rotate(-q * 0.95); ctx.translate(0, q * 6); }   // 피격 첫 장면이 이미 30° 남짓 젖혀져 있어 합쳐 눕는다
@@ -256,7 +258,8 @@
       function drawFighter(f, bx, by, face, t) {
         if (f.spriteImg) { drawSpriteFighter(f, bx, by, face, t); return; }
         if (f.spriteKey && I && I.pending(f.spriteKey)) return;   // 전투원 그림을 받는 중: 코드 그림을 내보이지 않고 기다린다
-        var L = LOOK[f.look] || LOOK.brawler, k = f.pt, pose = f.pose, bob = pose === 'idle' ? Math.sin(t * 3 + (face > 0 ? 0 : 1.5)) * 1.8 : 0;
+        var L = LOOK[f.look] || LOOK.brawler, k = f.pt, pose = f.pose;
+        var bob = pose === 'idle' ? Math.sin(t * (D.breathRate || 1.35) + (face > 0 ? 0 : 1.5)) * 0.45 : 0;
         ctx.save(); ctx.translate(bx + f.x * face, by); ctx.scale(1.4, 1.4);
         if (pose === 'down') { ctx.rotate(-face * Math.PI / 2 * Math.min(1, k * 2)); ctx.translate(0, -10 * Math.min(1, k * 2)); }
         if (pose === 'kneel') ctx.translate(0, 22);

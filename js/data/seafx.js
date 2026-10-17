@@ -207,6 +207,9 @@
     },
     duel: {               // 일기토 스프라이트와 타격감 (js/games/duel.js)
       spriteSize: 230,    // 256px 셀을 화면에 그리는 크기
+      idleFrame: 0,       // 대기할 때 행동 줄의 안정된 전투 자세 한 장을 쓴다(프레임 순환은 고개가 까닥여 보임)
+      breathRate: 1.35,   // 대기 호흡 속도(rad/초, 한 번 약 4.7초)
+      breathScale: 0.0018,// 발을 고정한 채 몸이 숨에 따라 아주 조금 늘어나는 정도
       shakeX: 10,         // 흔들림 가로 최대 거리(px, shakeT=1)
       shakeY: 6,          // 흔들림 세로 최대 거리
       shakeHit: 0.25,     // 보통 명중 때 더하는 흔들림
@@ -301,6 +304,8 @@
   // 제독이 거리의 건물 문으로 들어가는 연출 (js/scenes/town.js): sec 전체 시간,
   // rise 문턱까지 올라가는 높이의 상한 px (실제로는 그 건물 문턱 높이만큼 — js/data/exteriordoors.js), scale 마지막 크기 비율, fadeAt 이 진행도부터 사라진다.
   G.FX.townHeroEnter = { sec: 0.62, rise: 70, scale: 0.66, fadeAt: 0.5 };
+  // 거리에서 멈춘 제독의 아주 약한 호흡. 발밑은 고정하고 세로 길이만 1픽셀 안팎으로 바꾼다.
+  G.FX.townHeroIdle = { fps: 12, sec: 2.4, scaleY: 0.004 };
   // 제독 달리기 아틀라스(49칸에 약 4걸음)를 넘기는 빠르기 칸/초 — 62면 한 걸음이 0.19초쯤 (js/scenes/town.js)
   G.FX.heroRun = { fps: 62 };
   /** 코스타 델 솔 3 OST 유튜브 재생기 창 (js/systems/ytmusic.js) — 유튜브 규칙상 200×200보다 작게 하거나 숨길 수 없다.
