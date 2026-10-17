@@ -604,6 +604,10 @@
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
       '<div>바다의 방향키</div><div><div class="opt-row"><div class="opt' + (st.keyMode !== 'helm' ? ' on' : '') + '" data-km="dir">방위로 가기</div><div class="opt' + (st.keyMode === 'helm' ? ' on' : '') + '" data-km="helm">손으로 키 잡기</div></div>' +
         '<small class="muted">' + (st.keyMode === 'helm' ? kl('up') + ' 누르는 동안 나아감 · ' + kl('left') + '/' + kl('right') + ' 뱃머리 돌리기 · ' + kl('down') + ' 멈춤 · ' + kl('confirmAlt') + ' 순항/정지' : kl('up') + ' 북 · ' + kl('down') + ' 남 · ' + kl('left') + ' 서 · ' + kl('right') + ' 동 (두 키 동시 입력은 대각선) · ' + kl('confirmAlt') + ' 정지') + '</small></div>' +
+      '<div>마우스 따라가기</div><div><div class="opt-row"><div class="opt' + (st.mouseFollow ? ' on' : '') + '" data-mf="1">켬</div><div class="opt' + (!st.mouseFollow ? ' on' : '') + '" data-mf="0">끔</div></div>' +
+        '<small class="muted">바다·육상 탐험 — 켜면 가려는 쪽을 한 번 누른 뒤로는 마우스를 옮기는 대로 방향을 틉니다 · 끄면 누른 곳까지 갑니다 · 수첩 옆 단추나 ' + kl('mouseFollow').replace(/^(왼쪽|오른쪽) /, '') + '로도 바꿉니다</small></div>' +
+      '<div>조작 감도</div><div><div class="opt-row">' + [['slow', '느리게'], ['normal', '보통'], ['fast', '빠르게']].map(function (o) { return '<div class="opt' + (G.Ctrl.sensId() === o[0] ? ' on' : '') + '" data-cs="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
+        '<small class="muted">' + ({ slow: '마우스를 옮겨도 뱃머리·발걸음이 천천히 따라 돌고, 커서 떨림과 작은 움직임은 무시합니다 · 방향키로 도는 것도 느리게', normal: '마우스를 옮기면 침로가 부드럽게 따라 돕니다', fast: '마우스를 옮기면 곧바로 그쪽으로 · 방향키로 도는 것도 빠르게 (예전 손맛)' })[G.Ctrl.sensId()] + '</small></div>' +
       '<div>키보드 설정</div><div><div class="keybind-grid">' + G.Keys.actions.map(function (a) {
         return '<div class="keybind-row"><span><b>' + U.esc(a.label) + '</b><small>' + U.esc(a.desc) + '</small></span><button class="btn small keybind-btn" data-keyact="' + a.id + '">' + U.esc(G.Keys.label(a.id, st)) + '</button></div>';
       }).join('') + '</div><div class="flex" style="gap:8px;margin-top:8px"><button class="btn small ghost" data-act="keyreset">기본 키로 되돌리기</button><small class="muted">바꿀 항목을 누른 뒤 새 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다.</small></div></div>' +
@@ -617,6 +621,8 @@
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
+    U.$$('[data-mf]', el).forEach(function (o) { o.onclick = function () { st.mouseFollow = o.dataset.mf === '1'; PAGES.menu(el, win); }; });
+    U.$$('[data-cs]', el).forEach(function (o) { o.onclick = function () { st.ctrlSens = o.dataset.cs; PAGES.menu(el, win); }; });
     U.$$('[data-keyact]', el).forEach(function (o) { o.onclick = function () {
       var action = o.dataset.keyact, old = o.textContent;
       o.textContent = '새 키를 누르세요…'; o.classList.add('navy');

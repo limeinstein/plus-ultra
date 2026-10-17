@@ -83,7 +83,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     await page.evaluate(() => { G.Info.open('menu'); });
     await page.waitForSelector('[data-keyact="confirm"]');
-    ok(await page.locator('[data-keyact]').count() === 11, '설정에 방향·확정·취소·해상 배속(×0.5·×1·×2·×4) 키 11개 표시');
+    ok(await page.locator('[data-keyact]').count() === 12, '설정에 방향·확정·취소·해상 배속(×0.5·×1·×2·×4)·마우스 따라가기 키 12개 표시');
     await page.locator('[data-keyact="confirm"]').click();
     await page.keyboard.press('k');
     await page.waitForFunction(() => G.Game.state.settings.keys.confirm === 'KeyK');

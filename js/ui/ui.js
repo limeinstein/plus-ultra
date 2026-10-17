@@ -9,7 +9,7 @@
 
   // ---------------------------------------------------------------- keyboard bindings
   // 저장 파일마다 바꿀 수 있는 공통 키. code를 저장해 한글/영문 입력 상태와 무관하게 같은 물리 키를 쓴다.
-  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speedHalf: 'Backquote', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3' };
+  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speedHalf: 'Backquote', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3', mouseFollow: 'ShiftLeft' };
   var KEY_ACTIONS = [
     { id: 'up', label: '위', desc: '메뉴 위 · 거리 건물 입장 · 바다/육상/해전 북쪽' },
     { id: 'down', label: '아래', desc: '메뉴 아래 · 바다/육상/해전 남쪽' },
@@ -21,7 +21,8 @@
     { id: 'speedHalf', label: '해상 속도 ×0.5', desc: '해상 배속 0.5 (천천히)' },
     { id: 'speed1', label: '해상 속도 ×1', desc: '해상 배속 1' },
     { id: 'speed2', label: '해상 속도 ×2', desc: '해상 배속 2' },
-    { id: 'speed3', label: '해상 속도 ×4', desc: '해상 배속 4' }
+    { id: 'speed3', label: '해상 속도 ×4', desc: '해상 배속 4' },
+    { id: 'mouseFollow', label: '마우스 따라가기', desc: '바다·육상 탐험에서 켬/끔 (기본 SHIFT — 왼쪽·오른쪽 모두)' }
   ];
   function keySettings(s) {
     s = s || (G.Game && G.Game.state && G.Game.state.settings);
@@ -61,6 +62,47 @@
       if (other) keys[other] = old;
     },
     reset: function (settings) { settings.keys = this.defaults(); return settings.keys; }
+  };
+
+  // ---------------------------------------------------------------- 마우스 따라가기 · 조작 감도 (바다·육상 탐험)
+  // 마우스 따라가기는 기본 끔(s.settings.mouseFollow — 옛 저장에는 없으니 끔). 켜면 가려는 쪽을 한 번 눌러야 따라가기 시작하고,
+  // 그 뒤로는 마우스를 옮기는 대로 뱃머리·발걸음이 돈다. 끄면 누른 곳까지 간다(예전처럼).
+  var SENS_DEF = { seaDeadPx: 50, landDeadPx: 40, seaTurn: 1.5, landTurn: 3.5, deadDeg: 6, arrowK: 1, leadK: 1 };
+  function gameSettings() { var g = G.Game && G.Game.state; return g && g.settings; }
+  G.Ctrl = {
+    follow: function () { var st = gameSettings(); return !!(st && st.mouseFollow); },
+    setFollow: function (v) { var st = gameSettings(); if (st) st.mouseFollow = !!v; },
+    /** 켬/끔을 바꾸고 알린다. 바뀐 값을 돌려준다 */
+    toggle: function () {
+      var v = !this.follow(); this.setFollow(v);
+      var k = keyLabel(keySettings().mouseFollow).replace(/^(왼쪽|오른쪽) /, '');
+      UI.toast(v ? '마우스 따라가기 켬 — 가려는 쪽을 한 번 누르면, 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다 (' + k + '로 끔)'
+                 : '마우스 따라가기 끔 — 누른 곳까지 갑니다 (' + k + '로 켬)', 'target', 4200);
+      return v;
+    },
+    /** 마우스 따라가기 단축키인가 (기본 왼쪽 SHIFT면 오른쪽 SHIFT도 받는다 · 누르고 있는 동안 되풀이되는 신호는 무시) */
+    isToggleKey: function (e) {
+      if (!e || e.repeat) return false;
+      var c = eventCode(e), b = keySettings().mouseFollow;
+      return c === b || (b === 'ShiftLeft' && c === 'ShiftRight');
+    },
+    sensId: function () { var st = gameSettings(), v = st && st.ctrlSens; return v === 'slow' || v === 'fast' ? v : 'normal'; },
+    sens: function () { var B = (G.BALANCE || {}).ctrlSens || {}; return B[this.sensId()] || B.normal || SENS_DEF; },
+    /** 단추의 모양 (켬이면 빛난다) */
+    paintButton: function (b) {
+      if (!b) return; var on = this.follow(); if (b._on === on) return;
+      b._on = on; b.classList.toggle('on', on);
+      b.innerHTML = G.icon('target') + '마우스 따라가기<small class="tog">' + (on ? '켬' : '끔') + '</small>';
+      b.title = (on ? '켜짐: 가려는 쪽을 한 번 누르면 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다' : '꺼짐: 누른 곳까지 갑니다') + ' — 단축키 ' + keyLabel(keySettings().mouseFollow);
+    },
+    /** 하단 메뉴가 화면보다 넓으면(작은 화면 · 큰 글씨 · 긴 항구 이름) 통째로 줄여 넣는다 */
+    fitBar: function (bar) {
+      if (!bar || !bar.parentNode) return;
+      var pw = bar.parentNode.clientWidth, w = bar.offsetWidth; if (!pw || !w) return;
+      var k = w > pw - 16 ? Math.round((pw - 16) / w * 1000) / 1000 : 1;
+      if (bar._k === k) return; bar._k = k;
+      bar.style.transformOrigin = '50% 100%'; bar.style.transform = k < 1 ? 'translateX(-50%) scale(' + k + ')' : '';
+    }
   };
 
   UI.init = function () {

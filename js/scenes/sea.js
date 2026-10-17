@@ -103,10 +103,10 @@
     catcher.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:crosshair';
     catcher.addEventListener('mousedown', onDown);
     catcher.addEventListener('mousemove', onMove);
-    catcher.addEventListener('mouseleave', function () { st.mouse = null; stopPointerCourse(); });
+    catcher.addEventListener('mouseleave', function () { st.mouse = null; });   // 하단 단추를 누르러 가도 배는 가던 쪽으로 (따라가기는 켠 그대로)
     catcher.addEventListener('wheel', onWheel, { passive: false });
     UI.pinch(catcher, zoomBy);
-    catcher.addEventListener('contextmenu', function (e) { e.preventDefault(); st.path = null; st.target = null; st.dirCrs = null; st.tackTheta = 0; });
+    catcher.addEventListener('contextmenu', function (e) { e.preventDefault(); disarmFollow(); st.path = null; st.target = null; st.dirCrs = null; st.tackTheta = 0; });
     UI.add(catcher);
     // status strip
     hudEl.status = UI.add(U.el('div', 'status-strip wood', ''));
@@ -130,11 +130,13 @@
     if (G.Fishing) btn('낚시', 'fish', function () { goFish(); });
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy--; }); });
+    hudEl.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
     var zb = U.el('div', 'zoomctl');
     [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
     bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy--; }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
+    hudEl.bar = bar; st.followArmed = false; refreshFollow();
     refreshBar(); refreshHud();
     if (st.unkey) st.unkey();
     st.unkey = UI.pushKey(onKey);
@@ -167,30 +169,55 @@
   function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
   function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   SEA.toScreen = function (lon, lat) { return toScreen(lon, lat); };
+  /* 마우스 따라가기 (기본 끔 · 수첩 옆 단추나 Shift로 켬/끔, G.Ctrl)
+     · 끔: 마우스를 옮겨도 배는 그대로 — 바다를 누르면 그곳까지 간다
+     · 켬: 가려는 쪽 바다를 한 번 누르면 그쪽으로 뱃머리를 돌려 따라가기 시작(st.followArmed), 그 뒤로는 마우스를 옮기는 것만으로 방향을 튼다.
+       도시·표식·배를 누르면 예전처럼 그리로 간다. 방향키·숫자판·Space·우클릭을 쓰면 따라가기를 멈추고, 다시 누르면 이어 간다
+     · 조작 감도(G.Ctrl.sens): 배 둘레의 무시 반지름, 침로가 따라 도는 빠르기, 무시하는 작은 각도 */
+  function followOn() { return !!(G.Ctrl && G.Ctrl.follow()); }
+  function sens() { return G.Ctrl ? G.Ctrl.sens() : { seaDeadPx: 38, seaTurn: 0, deadDeg: 0, arrowK: 1, leadK: 1 }; }
+  function disarmFollow() { if (!st) return; st.followArmed = false; st.pointerSteer = false; st.pointerWant = null; st.pointerTurning = false; }
+  function toggleFollow() { if (!G.Ctrl) return; if (!G.Ctrl.toggle()) disarmFollow(); refreshFollow(); }
+  SEA.toggleFollow = toggleFollow;
+  /** 단추 모양을 맞추고, 설정 창에서 껐으면 따라가기를 멈춘다 */
+  function refreshFollow() { if (!st) return; if (!followOn() && st.followArmed) disarmFollow(); if (G.Ctrl) { G.Ctrl.paintButton(hudEl.follow); G.Ctrl.fitBar(hudEl.bar); } }
   function onMove(e) {
     st.mouse = stagePos(e);
     if (UI.busy() || st.busy || st.path || e.buttons) return;
+    if (!followOn() || !st.followArmed) return;            // 따라가기를 켜고 한 번 눌러야 마우스를 따라간다
     pointerCourse(st.mouse);
   }
-  /** 커서를 둔 방향으로 계속 간다. 클릭 목적지가 있는 동안에는 그 경로를 덮어쓰지 않는다. */
+  /** 커서를 둔 방향으로 계속 간다. 처음(누른 때)은 곧바로 그쪽으로, 그 뒤로는 침로가 조작 감도만큼 천천히 따라 돈다(pointerTurn). */
   function pointerCourse(p) {
     var l = S().loc, q = toScreen(l.lon, l.lat), dx = p[0] - q[0], dy = q[1] - p[1];
-    var dead = (((G.BALANCE || {}).pointerControl || {}).seaDeadPx) || 38;
+    var dead = sens().seaDeadPx || (((G.BALANCE || {}).pointerControl || {}).seaDeadPx) || 38;
     if (Math.hypot(dx, dy) < dead) { stopPointerCourse(); return false; }
     var ang = Math.atan2(dy, dx);
-    if (!st.pointerSteer) {
+    if (!st.pointerSteer || st.dirCrs == null) {
       takeCourse(ang);
-      st.pointerSteer = true;
+      st.pointerSteer = true; st.followArmed = true; st.pointerWant = ang; st.pointerTurning = false;
     } else {
-      st.dirCrs = ang; st.crs = ang; st.stopping = false;
+      st.pointerWant = ang; st.stopping = false;
+      if (!(sens().seaTurn > 0)) { st.dirCrs = ang; st.crs = ang; st.pointerTurning = false; }   // 빠르게: 곧바로
       if (st.paused) { st.paused = false; refreshBar(); }
     }
     return true;
   }
+  /** 마우스 따라가기: 침로를 커서 쪽으로 차츰 돌린다 (실제 시간 기준). 커서가 deadDeg보다 덜 비켜났으면 그대로 두고, 한번 돌기 시작하면 다 맞출 때까지 돈다 */
+  function pointerTurn(dt) {
+    if (!st.pointerSteer || st.pointerWant == null || st.dirCrs == null || st.path) return;
+    var K = sens(); if (!(K.seaTurn > 0)) return;
+    var diff = U.angDiff(st.dirCrs, st.pointerWant), ad = Math.abs(diff);
+    if (!st.pointerTurning) { if (ad <= (K.deadDeg || 0) * Math.PI / 180) return; st.pointerTurning = true; }
+    var rate = K.seaTurn * dt * Math.max(1, ad / 1.2);       // 크게 비켜나면 조금 더 빨리
+    st.dirCrs += U.clamp(diff, -rate, rate); st.crs = st.dirCrs;
+    if (ad <= rate + 0.004) st.pointerTurning = false;
+  }
+  SEA.pointerTurn = pointerTurn;
   function stopPointerCourse() {
     if (!st || !st.pointerSteer || st.path) return;
-    st.pointerSteer = false; st.dirCrs = null; st.crs = null; st.target = null;
-    halt();
+    st.pointerSteer = false; st.pointerWant = null; st.pointerTurning = false; st.dirCrs = null; st.crs = null; st.target = null;
+    halt();          // 배 위에 커서를 두면 선다 (따라가기는 켠 그대로 — 커서를 다시 옮기면 간다)
   }
   function onWheel(e) {
     e.preventDefault();
@@ -221,6 +248,7 @@
     }
     var sp = shorePortAt(p[0], p[1]);
     if (sp) { setCityTarget(sp); return; }
+    if (followOn()) { st.followArmed = true; st.pointerSteer = false; pointerCourse(p); return; }   // 마우스 따라가기: 누른 쪽으로 돌아 따라가기 시작
     var w = toWorld(p[0], p[1]);
     setTarget(w[0], w[1], null);
   }
@@ -244,6 +272,8 @@
     if (!st || !st.alive || G.Game.scene !== SEA) return false;
     var k = e.key;
     if (UI.busy()) return false;
+    if (G.Ctrl && G.Ctrl.isToggleKey(e)) { toggleFollow(); return true; }   // Shift: 마우스 따라가기 켬/끔
+    if (G.Keys.is(e, 'confirmAlt') || directionAction(e) || e.code === 'Numpad5' || NUMDIR[e.code]) { if (st.followArmed) disarmFollow(); }   // 손으로 몰면 따라가기를 멈춘다(다시 누르면 이어 간다)
     // 스페이스: 정지 (돛을 거두고 미끄러지다 선다). 멈춘 채 항구가 가까우면 정박.
     // 손으로 키 잡는 방식에서는 예전처럼 정지·순항을 오간다
     if (G.Keys.is(e, 'confirmAlt')) {
@@ -355,7 +385,7 @@
       setCourse(lon, lat, city); return;                        // 이어진 바닷길이 없을 때만 곧장 침로
     }
     // make path longitudes relative to the ship
-    st.path = path; st.pathI = 1; st.target = { lon: path[path.length - 1][0], lat: path[path.length - 1][1], city: city }; st.pointerSteer = false;
+    st.path = path; st.pathI = 1; st.target = { lon: path[path.length - 1][0], lat: path[path.length - 1][1], city: city }; st.pointerSteer = false; st.followArmed = false; st.pointerWant = null;
     st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = false; st.pilot = !auto;
     if (auto) {
       // 자동항해를 시작하면 ×4로 빨리 간다 (G.FX.autoSailSpeed). 손으로 몰면 leaveAuto가 이전 배속으로 돌린다
@@ -373,7 +403,7 @@
     var s = S(), l = s.loc;
     leaveAuto();
     monsoonWarn(lon, lat);
-    st.path = [[l.lon, l.lat], [lon, lat]]; st.pathI = 1; st.target = { lon: lon, lat: lat, city: city }; st.pointerSteer = false;
+    st.path = [[l.lon, l.lat], [lon, lat]]; st.pathI = 1; st.target = { lon: lon, lat: lat, city: city }; st.pointerSteer = false; st.followArmed = false; st.pointerWant = null;
     st.manual = false; st.warnedFor = null; st.repath = 0; st.direct = true; st.pilot = false;
     l.heading = Math.atan2(lat - l.lat, G.Geo.wrapLon(lon - l.lon));
     freshCourse(l.heading); st.stopping = false;
@@ -418,7 +448,7 @@
     st.arrowHeld = (st.arrowHeld || 0) + dt;
     var diff = U.angDiff(st.dirCrs, want);
     if (Math.abs(diff) > 3.1) diff = Math.abs(diff);          // 정반대면 왼쪽(반시계)으로 돈다
-    var rate = ARROW_TURN * turnAbility() * Math.min(1, 0.5 + st.arrowHeld * 1.5) * dt;
+    var rate = ARROW_TURN * (sens().arrowK || 1) * turnAbility() * Math.min(1, 0.5 + st.arrowHeld * 1.5) * dt;   // 조작 감도
     st.dirCrs += U.clamp(diff, -rate, rate); st.crs = st.dirCrs;
   }
   SEA.arrowTurn = arrowTurn;
@@ -807,9 +837,9 @@
     // 도시를 직접 골라(누르기·해도·자동항해) 닿았으면 묻지 않고 곧장 입항한다 (QA 2026-10-16 — 예전에는 닿은 뒤 「입항하시겠습니까?」를 또 물었다)
     if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) tryEnterPort(pc); }
     // 멈춘 채 ←→: 배는 나아가지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것) — 시간은 아래에서 ×waitSpeed로 흐른다
-    if (!frozen && st.paused && st.manual && turnKey()) { st.turnHeld = (st.turnHeld || 0) + dt; l.heading += turnKey() * 1.4 * dt * turnAbility() * Math.min(1, 0.45 + st.turnHeld * 1.6); }
+    if (!frozen && st.paused && st.manual && turnKey()) { st.turnHeld = (st.turnHeld || 0) + dt; l.heading += turnKey() * 1.4 * (sens().arrowK || 1) * dt * turnAbility() * Math.min(1, 0.45 + st.turnHeld * 1.6); }
     st.handSteer = false;
-    if (!frozen) arrowTurn(dt);
+    if (!frozen) { arrowTurn(dt); pointerTurn(dt); }
     if (!frozen && !st.paused) {
       // 손으로 키를 돌리는 동안은 ×1로 흐른다: 배속을 올려도 도는 반경과 손맛이 같다
       var spd = st.speed;
@@ -860,7 +890,7 @@
     if (!st.manual && !st.path && st.dirCrs == null && shipSpeed() < 0.05 && !UI.busy()) alongCoast(dt);
     // 카메라: 진행 방향으로 조금 앞서 (속력에 비례, 최대 0.3°) — 흔들기·급한 확대는 쓰지 않는다
     //   배는 그대로 따라가고(속도만큼 뒤처지지 않아 배속을 올려도 배가 화면에서 떠밀리지 않는다), 어긋난 만큼만 부드럽게 좁힌다
-    var P = FXS(), vsp = shipSpeed(), lead = Math.min(0.3, vsp * P.camLead);
+    var P = FXS(), vsp = shipSpeed(), lead = Math.min(0.3, vsp * P.camLead * (sens().leadK || 1));   // 조작 감도: 느리게면 화면이 덜 내다본다
     if (G.Audio && G.Audio.travel) G.Audio.travel('sea', !frozen && !st.paused && vsp > 0.03 ? Math.min(1, 0.22 + vsp) : 0);   // 선체가 물을 가르는 소리
     var ld = vsp > 0.02 ? Math.atan2(st.vel[1], st.vel[0]) : l.heading;
     st.camLead = st.camLead || [0, 0];
@@ -895,7 +925,7 @@
       if (dir) {
         st.turnHeld = (st.turnHeld || 0) + dt;
         var ramp = Math.min(1, 0.45 + st.turnHeld * 1.6);
-        l.heading += dir * 2.1 * dt * turnAbility() * ramp * (0.5 + 0.5 * (st.thr || 0));
+        l.heading += dir * 2.1 * (sens().arrowK || 1) * dt * turnAbility() * ramp * (0.5 + 0.5 * (st.thr || 0));
       } else st.turnHeld = 0;
       return;
     }
@@ -1677,6 +1707,7 @@
     UI.say('제독, 이대로라면 목적지에 닿기 전에 ' + what + ' 떨어질 수 있습니다! (식량 ' + food + '일분 · 물 ' + water + '일분 · 가는 데 약 ' + eta + '일)\n가까운 항구에 들러 보급하는 게 좋겠습니다.', G.Scenes.mateSpeaker('first'));
   }
   function refreshButtons() {
+    refreshFollow();
     var pn = portNear();
     if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
@@ -1687,9 +1718,9 @@
     }
     var s = S(), l = s.loc;
     var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : st.pilot ? ' 바닷길 따라 항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
-      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.pointerSteer ? '마우스 방향으로 조타 중' : st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
+      : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.pointerSteer ? '마우스를 따라 조타 중 (' + G.Keys.label('mouseFollow').replace(/^(왼쪽|오른쪽) /, '') + ' 끔)' : st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
       : st.manual ? (st.paused ? '수동 조타 — ↑ 돛을 펴고 출발 · ←→ 제자리에서 뱃머리 · Space 순항' : st.cruise ? '수동 조타(순항) — ←→ 뱃머리 · ↓·Space 멈춤' : '수동 조타 — ↑ 누르는 동안 나아가고 떼면 서서히 멈춤 · Space 순항')
-      : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : '정지 — 마우스를 움직이거나 방향키로 출발 · 탐색 가능') : '표류 중 — 마우스 방향으로 조타하거나 바다를 클릭해 그곳까지 가십시오');
+      : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : followOn() ? '정지 — 마우스 따라가기 켬: 가려는 쪽 바다를 누르면 따라갑니다 · 방향키로도 출발 · 탐색 가능' : '정지 — 바다를 누르거나 방향키로 출발 · 탐색 가능') : followOn() ? '표류 중 — 가려는 쪽 바다를 누르면 마우스를 따라갑니다' : '표류 중 — 바다를 누르면 그곳까지 갑니다 · 마우스 따라가기는 ' + G.Keys.label('mouseFollow').replace(/^(왼쪽|오른쪽) /, ''));
     if (!st.manual && st.tackTheta && !st.paused) tgt += ' · <span style="color:#ffd98a">맞바람 — 지그재그로 거슬러 오르는 중</span>';
     if (st.handSteer) tgt += ' · 키를 잡는 동안 ×1';
     var v, vTxt;

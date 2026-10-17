@@ -79,24 +79,26 @@
     var catcher = U.el('div', 'mapcatch'); catcher.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:crosshair';
     catcher.addEventListener('mousedown', onDown);
     catcher.addEventListener('mousemove', onMove);
-    catcher.addEventListener('mouseleave', stopPointerWalk);
+    catcher.addEventListener('mouseleave', function () { st.mouse = null; });   // 하단 단추를 누르러 가도 가던 쪽으로 (따라가기는 켠 그대로)
     catcher.addEventListener('wheel', function (e) { e.preventDefault(); zoomBy(e.deltaY > 0 ? 1 / 1.15 : 1.15); }, { passive: false });
     UI.pinch(catcher, zoomBy);
     UI.add(catcher);
     el.status = UI.add(U.el('div', 'status-strip wood', ''));
     var bar = U.el('div', 'sailbar wood brass-frame');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = function (e) { e.stopPropagation(); b.blur(); if (!UI.busy() && !st.busy) fn(); }; bar.appendChild(b); return b; }
-    el.pause = btn('정지', 'pause', function () { st.paused = !st.paused; if (st.paused) st.pointerWalk = false; refreshBar(); });
+    el.pause = btn('정지', 'pause', function () { st.paused = !st.paused; if (st.paused) disarmFollow(); refreshBar(); });
     el.back = btn('돌아간다', 'anchor', function () { goBack(); }, 'navy');
     el.city = btn('도시에 들어간다', 'castle', function () { enterCity(); });
     btn('야영', 'tent', function () { camp(); });
     btn('해도', 'map', function () { chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy--; }); });
+    el.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
     var zb = U.el('div', 'zoomctl');
     [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
     bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy--; }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
+    el.bar = bar; st.followArmed = false; refreshFollow();
     refreshBar(); refreshHud();
     if (st.unkey) st.unkey();
     st.unkey = UI.pushKey(onKey);
@@ -119,9 +121,10 @@
   function onKey(e) {
     if (G.Game.scene !== L || !st || !st.alive || UI.busy() || st.busy) return false;
     var k = e.key;
+    if (G.Ctrl && G.Ctrl.isToggleKey(e)) { toggleFollow(); return true; }   // Shift: 마우스 따라가기 켬/끔
     // 스페이스 = 정지 (바다와 같다). 멈춘 뒤에는 방향키나 땅을 눌러 다시 걷는다
     if (G.Keys.is(e, 'confirmAlt')) {
-      if (!st.paused) { st.paused = true; st.dir = null; st.pointerWalk = false; refreshBar(); }
+      if (!st.paused) { st.paused = true; st.dir = null; disarmFollow(); refreshBar(); }
       else if (!e.repeat) UI.toast('멈춰 있습니다. 방향키로 가려는 쪽을 누르거나 땅을 누르면 걷습니다.', 'boot', 2600);
       return true;
     }
@@ -131,13 +134,13 @@
       st.keys[da] = true;
       if (e.repeat) return true;
       var kd = keyDir(); if (!kd) return true;
-      st.dir = kd; st.path = null; st.pointerWalk = false;
+      st.dir = kd; st.path = null; disarmFollow();
       if (st.paused) { st.paused = false; refreshBar(); }
       return true;
     }
     if (k === 'm' || k === 'M') { chart(); return true; }
-    if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; st.pointerWalk = false; st.paused = true; refreshBar(); return true; }
-    if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; st.pointerWalk = false; st.paused = false; refreshBar(); return true; }
+    if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; disarmFollow(); st.paused = true; refreshBar(); return true; }
+    if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; disarmFollow(); st.paused = false; refreshBar(); return true; }
     if (k === '+' || k === '=') { zoomBy(1.2); return true; }
     if (k === '-') { zoomBy(1 / 1.2); return true; }
     return false;
@@ -166,18 +169,43 @@
   // st.qo: 이번 장면을 그릴 때 쓴 지진 흔들림(화면 px, js/art/quakefx.js). 카메라(st.cam)에는 더하지 않고 그리기·클릭 변환에만 넣는다
   function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
+  /* 마우스 따라가기 (기본 끔 · 수첩 옆 단추나 Shift, G.Ctrl): 끔이면 누른 곳까지 걷고, 켬이면 가려는 쪽을 한 번 누른 뒤로는
+     마우스를 옮기는 대로 발걸음이 돈다(조작 감도만큼 차츰). 도시·표식을 누르면 예전처럼 그리로 간다 */
+  function followOn() { return !!(G.Ctrl && G.Ctrl.follow()); }
+  function sens() { return G.Ctrl ? G.Ctrl.sens() : { landDeadPx: 30, landTurn: 0, deadDeg: 0 }; }
+  function disarmFollow() { if (!st) return; st.followArmed = false; st.pointerWalk = false; st.pointerWant = null; st.pointerTurning = false; }
+  function toggleFollow() { if (!G.Ctrl) return; if (!G.Ctrl.toggle()) disarmFollow(); refreshFollow(); }
+  L.toggleFollow = toggleFollow;
+  function refreshFollow() { if (!st) return; if (!followOn() && st.followArmed) disarmFollow(); if (G.Ctrl) { G.Ctrl.paintButton(el.follow); G.Ctrl.fitBar(el.bar); } }
   function onMove(e) {
     st.mouse = pos(e);
     if (UI.busy() || st.busy || st.path || e.buttons) return;
-    var l = S().loc, q = toScreen(l.lon, l.lat), dx = st.mouse[0] - q[0], dy = q[1] - st.mouse[1];
-    var dead = (((G.BALANCE || {}).pointerControl || {}).landDeadPx) || 30;
+    if (!followOn() || !st.followArmed) return;            // 따라가기를 켜고 한 번 눌러야 마우스를 따라간다
+    pointerWalk(st.mouse);
+  }
+  function pointerWalk(p) {
+    var l = S().loc, q = toScreen(l.lon, l.lat), dx = p[0] - q[0], dy = q[1] - p[1];
+    var dead = sens().landDeadPx || (((G.BALANCE || {}).pointerControl || {}).landDeadPx) || 30;
     if (Math.hypot(dx, dy) < dead) { stopPointerWalk(); return; }
-    st.dir = norm([dx, dy]); st.pointerWalk = true;
+    var want = norm([dx, dy]);
+    if (!st.pointerWalk || !st.dir || !(sens().landTurn > 0)) { st.dir = want; st.pointerTurning = false; }   // 처음(누른 때)·빠르게는 곧바로
+    st.pointerWalk = true; st.followArmed = true; st.pointerWant = want;
     if (st.paused) { st.paused = false; refreshBar(); }
   }
+  /** 걷는 방향을 커서 쪽으로 차츰 돌린다 (실제 시간 기준, 조작 감도) */
+  function pointerTurn(dt) {
+    if (!st.pointerWalk || !st.pointerWant || !st.dir || st.path) return;
+    var K = sens(); if (!(K.landTurn > 0)) return;
+    var a = Math.atan2(st.dir[1], st.dir[0]), diff = U.angDiff(a, Math.atan2(st.pointerWant[1], st.pointerWant[0])), ad = Math.abs(diff);
+    if (!st.pointerTurning) { if (ad <= (K.deadDeg || 0) * Math.PI / 180) return; st.pointerTurning = true; }
+    var rate = K.landTurn * dt * Math.max(1, ad / 1.2);
+    a += U.clamp(diff, -rate, rate); st.dir = [Math.cos(a), Math.sin(a)];
+    if (ad <= rate + 0.004) st.pointerTurning = false;
+  }
+  L.pointerTurn = pointerTurn;
   function stopPointerWalk() {
     if (!st || !st.pointerWalk || st.path) return;
-    st.pointerWalk = false; st.dir = null; st.paused = true; refreshBar();
+    st.pointerWalk = false; st.pointerWant = null; st.dir = null; st.paused = true; refreshBar();   // 탐험대 위에 커서를 두면 선다 (따라가기는 켠 그대로)
   }
   function onDown(e) {
     if (e.button !== 0 || UI.busy() || st.busy) return;
@@ -186,9 +214,10 @@
     var landmark = !c && landmarkAt(p[0], p[1]); if (landmark) w = [landmark.lon, landmark.lat];
     var mk = !c && !landmark && G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
     if (mk) w = [mk.lon, mk.lat];
+    if (!c && !landmark && !mk && followOn()) { st.path = null; st.goCity = null; st.followArmed = true; st.pointerWalk = false; pointerWalk(p); return; }   // 마우스 따라가기: 누른 쪽으로 걷기 시작
     if (!G.Geo.isLand(w[0], w[1])) { UI.toast('그곳은 물입니다. 육지를 클릭하십시오.', 'land'); return; }
     st.goCity = c || null;                                // 도시를 직접 눌렀으면 닿자마자 묻지 않고 들어간다
-    st.dir = null; st.pointerWalk = false; st.path = w; st.paused = false; refreshBar();
+    st.dir = null; disarmFollow(); st.path = w; st.paused = false; refreshBar();
   }
   var kiCache = null, kiKey = '', FF = null, labelW = {};
   function fontFam() { return FF || (FF = getComputedStyle(document.body).fontFamily); }
@@ -243,6 +272,7 @@
     if (!l || l.mode !== 'land' || !l.base) return;   // 장면을 바꾸는 사이(도시로 들어가는 중·불러오기) 한 장면만큼 위치가 뭍이 아닐 수 있다
     st.t += dt;
     var px0 = l.lon, py0 = l.lat;
+    if (!st.paused && !st.busy && !UI.busy()) pointerTurn(dt);
     if (!st.paused && !st.busy && !UI.busy() && (st.path || st.dir)) {
       var days = dt * st.speed / DAY_SEC;
       var terr = G.Geo.terrain(l.lon, l.lat), tv = (TERR[terr] || TERR.grass).spd;
@@ -936,11 +966,12 @@
     });
     // status
     if ((st.f = (st.f || 0) + 1) % 8 === 0 && el.status) {
+      refreshFollow();
       var near = cityNear();
       var tN = G.Geo.terrain(l.lon, l.lat), tK = tN === 'sea' ? 'grass' : tN, M = G.Mounts, mt2 = MT();
       var su2 = M.suit(mt2.id, tK), how = mt2.id === 'walk' ? '도보' : M.get(mt2.id).name + ' ' + mt2.n + (mt2.id === 'porter' ? '패' : mt2.id === 'wagon' || mt2.id === 'reindeer' ? '대' : '필');
       var effTxt = mt2.id === 'walk' ? '' : ' — 걸음 ×' + M.speed(mt2, tK, l.party).toFixed(1) + ' · 피로 ×' + M.fatigue(mt2, tK, l.party).toFixed(2) + (M.cover(mt2, l.party) < 1 ? ' (짐승이 모자라 효과가 ' + Math.round(M.cover(mt2, l.party) * 100) + '%)' : '') + ' · 이 땅 <span class="suit ' + su2.cls + '">' + su2.mark + '</span>';
-      el.status.innerHTML = (st.paused ? '<b>⏸ 정지</b> · ' : '') + (st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스 조작)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : '마우스 방향으로 걷거나 땅을 클릭해 그곳까지 가십시오') + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
+      el.status.innerHTML = (st.paused ? '<b>⏸ 정지</b> · ' : '') + (st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스를 따라감)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : followOn() ? '마우스 따라가기 켬 — 가려는 쪽 땅을 누르면 따라 걷습니다' : '땅을 누르면 그곳까지 걷습니다 · 방향키로도 걷습니다') + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
       el.city.classList.toggle('disabled', !near);
       el.back.innerHTML = G.icon('anchor') + (atBase() ? (l.base.type === 'ship' ? '배에 오른다' : '도시로 돌아간다') : '출발지로 돌아간다');
     }

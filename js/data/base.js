@@ -266,6 +266,15 @@
     // 지도 조작: 커서를 캐릭터 둘레에 둔 때는 방향이 없는 것으로 친다. 멈춘 배의 탐색은 하루를 쓰고 망루 탐지 범위를 넓힌다.
     //   cityPickPx = 바다 지도에서 도시 표식을 누른 것으로 치는 반지름(그림·이름표도 함께), portLandPx = 항구 둘레 뭍을 누르면 그 항구로 가는 반지름(px)
     pointerControl: { seaDeadPx: 38, landDeadPx: 30, cityPickPx: 30, portLandPx: 70 },
+    // 조작 감도 (설정 「조작 감도」, s.settings.ctrlSens — 없으면 보통). 마우스 따라가기와 방향키의 손맛
+    //   seaDeadPx·landDeadPx = 배·탐험대 둘레에서 방향이 없는 것으로 치는 반지름(px) — 크면 커서 떨림에 덜 흔들린다
+    //   seaTurn·landTurn = 마우스를 옮겼을 때 침로가 따라 도는 빠르기(라디안/실제 초, 0이면 곧바로)
+    //   deadDeg = 커서가 이 각도(°)보다 덜 움직였으면 침로를 그대로 둔다 · arrowK = 방향키·손 조타로 뱃머리를 돌리는 빠르기 배수 · leadK = 화면이 뱃머리 앞을 내다보는 정도 배수
+    ctrlSens: {
+      slow: { seaDeadPx: 70, landDeadPx: 55, seaTurn: 0.7, landTurn: 1.6, deadDeg: 12, arrowK: 0.7, leadK: 0.6 },
+      normal: { seaDeadPx: 50, landDeadPx: 40, seaTurn: 1.5, landTurn: 3.5, deadDeg: 6, arrowK: 1, leadK: 1 },
+      fast: { seaDeadPx: 38, landDeadPx: 30, seaTurn: 0, landTurn: 0, deadDeg: 0, arrowK: 1.3, leadK: 1 }
+    },
     // 항해·육상 탐험 중 가까운 도시에 들어갈지 물었을 때 거절하면, 같은 도시의 물음을 실제 시간으로 이만큼 쉬었다가 다시 띄운다.
     cityEntryPrompt: { cooldownMs: 30000 },   // 「지나간다」를 고른 뒤 같은 항구·성문을 다시 묻기까지 (실제 시간 ms) — 그 사이에도 도시를 직접 누르면 바로 들어간다
     seaSearch: { days: 1, senseBoost: 1.8, chartBonus: 1.2 },
