@@ -75,13 +75,21 @@
   var LANDMARK_MIN_H = 380;
   // 볼거리 그림 아래의 빈칸(옅은 그림자만 있는 곳)이 그림 높이의 몇 할인가 — 건물 발치를 바닥선에 맞춘다.
   // 픽셀을 읽을 수 있으면(웹판·아티팩트) 그림에서 바로 재고, file://처럼 못 읽으면 이 표를 쓴다 (images/landmarks 기준으로 잰 값)
-  var LANDMARK_FOOT = {alhambra: 0.046, apostolic: 0.023, arsenal: 0.017, askia: 0.008, battersea: 0.019, bellasartes: 0.05, bigben: 0.031, biosphere: 0.073, bluemosque: 0.033, bolshoi: 0.046, byrsa: 0.015, casacontrat: 0.015, colosseum: 0.008, delhimosque: 0.025, djenne: 0.019, eiffel: 0.017, erdenezuu: 0.112, forbidden: 0.06, globe: 0.056, grandbazaar: 0.033, greatlib: 0.094, hagiasophia: 0.019, havana: 0.021, hue: 0.079, hwangnyong: 0.013, isfahanmosque: 0.046, jongmyo: 0.046, kilwa: 0.021, kremlin: 0.021, louvre: 0.048, maracana: 0.137, notredame: 0.006, orszaghaz: 0.019, parthenon: 0.031, pharos: 0.006, pisa: 0.019, porcelain: 0.033, potala: 0.075, redfort: 0.087, rockdome: 0.027, sankore: 0.015, sepulchre: 0.019, stbasil: 0.033, sydneyopera: 0.062, templomayor: 0.027, uffizi: 0.075, unhq: 0.023, versailles: 0.077, weiyang: 0.102, whitetower: 0.052, wisdom: 0.048, zimbabwe: 0.094};  // 거리에 서는 건축 발견물의 가장 낮은 높이 (넓은 그림은 MARK_MAXW에서 줄어든다)         // 볼거리 바닥선을 건물보다 조금 뒤로 (광장 안쪽)
+  var LANDMARK_FOOT = {alhambra: 0.046, apostolic: 0.023, arsenal: 0.017, askia: 0.008, battersea: 0.019, bellasartes: 0.05, bigben: 0.031, biosphere: 0.073, bluemosque: 0.033, bolshoi: 0.046, byrsa: 0.015, casacontrat: 0.015, colosseum: 0.008, delhimosque: 0.025, djenne: 0.019, eiffel: 0.017, erdenezuu: 0.112, forbidden: 0.06, globe: 0.056, grandbazaar: 0.033, greatlib: 0.094, hagiasophia: 0.019, havana: 0.021, hue: 0.079, hwangnyong: 0.013, isfahanmosque: 0.046, jongmyo: 0.046, kilwa: 0.021, kremlin: 0.021, louvre: 0.048, maracana: 0.137, notredame: 0.006, orszaghaz: 0.019, parthenon: 0.031, pharos: 0.006, pisa: 0.019, porcelain: 0.033, potala: 0.075, redfort: 0.087, rockdome: 0.027, sankore: 0.015, sepulchre: 0.019, stbasil: 0.033, sydneyopera: 0.062, templomayor: 0.027, uffizi: 0.075, unhq: 0.023, versailles: 0.077, weiyang: 0.102, whitetower: 0.052, wisdom: 0.048, zimbabwe: 0.094,
+    emille: 0.008, ayubuddha: 0.008, stele: 0.008, redsquare: 0.008, liberty: 0.008,
+    panama: 0.008, cristo: 0.008, broadway: 0.008, eram: 0.008, sagrada: 0.008,
+    nabawi: 0.008, kaaba: 0.008, tiantan: 0.008, dayanta: 0.008, huanghelou: 0.008,
+    vittala: 0.008, umayyad: 0.008, topkapi: 0.008, siosepol: 0.008};
   var LANDMARK_HEIGHT = {
     pharos: 500, hwangnyong: 460, hagiasophia: 400, djenne: 370, delhimosque: 370,
     potala: 360, isfahanmosque: 380, rockdome: 350, notredame: 410, templomayor: 390,
     apostolic: 400, whitetower: 370, askia: 390, stbasil: 430, belem: 400,
     pisa: 450, porcelain: 470, eiffel: 500, bigben: 460, biosphere: 360,
     unhq: 390, sydneyopera: 320, hue: 330,
+    emille: 390, ayubuddha: 380, stele: 500, redsquare: 380, liberty: 500,
+    panama: 380, cristo: 500, broadway: 380, eram: 380, sagrada: 480,
+    nabawi: 390, kaaba: 380, tiantan: 400, dayanta: 480, huanghelou: 430,
+    vittala: 380, umayyad: 390, topkapi: 380, siosepol: 380,
     jongmyo: 250, colosseum: 300, uffizi: 250, versailles: 250, orszaghaz: 250,
     maracana: 270, battersea: 290
   };

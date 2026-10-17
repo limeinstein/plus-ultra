@@ -104,6 +104,24 @@ h1 em { color: var(--gold-bright); font-style: normal; }
 .feedback .kicker { color: #896529; }
 .feedback-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; }
 .feedback .section-heading > p:last-child { color: #645f54; }
+.feedback-form { margin-top: 2.4rem; padding: 1.35rem; border: 1px solid rgba(40,37,30,.24); background: rgba(255,255,255,.3); }
+.form-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.1rem; }
+.form-heading h3 { margin: .15rem 0 0; font: 400 1.5rem "Song Myung",serif; }
+.form-heading > p { margin: 0; color: #746c5d; font-size: .78rem; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; }
+.form-grid label { display: grid; gap: .38rem; color: #5d5547; font-size: .78rem; font-weight: 800; }
+.form-grid label:first-child { grid-column: span 2; max-width: 240px; }
+.form-grid label.wide { grid-column: span 2; max-width: none; }
+.form-grid label small { color: #877f70; font-weight: 400; }
+.form-grid input,.form-grid select,.form-grid textarea { width: 100%; border: 1px solid rgba(40,37,30,.28); border-radius: 0; background: rgba(255,255,255,.62); color: var(--paper-ink); padding: .72rem .78rem; font: 400 .86rem/1.55 "Nanum Myeongjo",serif; }
+.form-grid textarea { resize: vertical; min-height: 6.5rem; }
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus { outline: 2px solid #9d793f; outline-offset: 1px; }
+.form-trap { position: absolute!important; width: 1px!important; height: 1px!important; overflow: hidden!important; clip-path: inset(50%)!important; }
+.form-actions { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; margin-top: 1rem; }
+.form-actions p { margin: 0; color: #746c5d; font-size: .75rem; line-height: 1.55; }
+.form-actions .button { flex: none; }
+.form-status { min-height: 1.2rem; margin: .7rem 0 0; color: #287069; font-size: .8rem; font-weight: 800; }
+.form-status.error { color: #8c3f32; }
 .board-tools { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 2.4rem; padding: .8rem 0; border-top: 1px solid rgba(40,37,30,.18); border-bottom: 1px solid rgba(40,37,30,.18); }
 .filters { display: flex; flex-wrap: wrap; gap: .35rem; }
 .filters button, .refresh { cursor: pointer; border: 0; background: transparent; color: #6f685a; padding: .5rem .7rem; font: 700 .8rem "Nanum Myeongjo", serif; }
@@ -178,6 +196,7 @@ footer a:hover { color: var(--ink); }
   .privacy-panel { grid-template-columns: auto 1fr; }
   .stats-link { grid-column: 2; justify-self: start; }
   .feedback-head { align-items: start; flex-direction: column; }
+  .form-heading { align-items: start; flex-direction: column; gap: .4rem; }
   .post summary { grid-template-columns: 75px minmax(0,1fr); }
   .post-meta { grid-column: 2; }
   .post-body { margin-left: .5rem; }
@@ -198,6 +217,10 @@ footer a:hover { color: var(--ink); }
   .stats-link { grid-column: 1; }
   .feedback { margin-inline: 0; margin-bottom: 50px; }
   .feedback-head .button { width: auto; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid label:first-child,.form-grid label.wide { grid-column: 1; }
+  .form-actions { align-items: stretch; flex-direction: column; }
+  .form-actions .button { width: 100%; }
   .board-tools { align-items: flex-start; flex-direction: column; }
   .post summary { padding-inline: 0; gap: .65rem; }
   .post-body { margin-inline: 0; padding-inline: 1rem; }

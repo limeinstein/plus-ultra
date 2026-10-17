@@ -301,11 +301,21 @@
 
   // ---------------------------------------------------------------- 낯선 말과 통역 (G.Tongues)
   /** 대화 본문 HTML과, 통역이 있으면 대화창 아래 작은 통역 창을 붙인다. box = .dlg, raw = 원문 한 쪽 */
+  /* 대화 글에 섞어 쓰는 꾸밈 태그(b·i·em·strong·u·small·sub·sup·br, class만 단 span)는 살리고 나머지는 글자 그대로 보인다 —
+     예전엔 모두 글자로 나와 흥정 물음 같은 데서 <b>·<br>·<span class="muted">가 그대로 보였다 (2026-10-17). 이름 속 < > 는 안전하게 글자로. */
+  var SAFE_TAG = /&lt;(\/?)(b|i|em|strong|u|small|sub|sup|br|span)((?:\s+class=&quot;[\w\- ]*&quot;)?)\s*\/?&gt;/g;
+  function richEsc(t) {
+    return U.esc(t).replace(SAFE_TAG, function (m, sl, tag, cls) { return '<' + sl + tag + (cls && !sl ? cls.replace(/&quot;/g, '"') : '') + '>'; }).replace(/\n/g, '<br>');
+  }
+  UI.richEsc = richEsc;
+  /** 태그를 걷어 낸 맨글 (낯선 말로 흐리게 들리는 글에는 꾸밈을 싣지 않는다) */
+  function bareText(t) { return String(t == null ? '' : t).replace(/<br\s*\/?>/gi, '\n').replace(/<\/?(b|i|em|strong|u|small|sub|sup|span)(\s[^>]*)?>/gi, ''); }
   function speech(box, raw, opts) {
     var TG = G.Tongues, sit = TG ? TG.situation(opts) : { plain: true };
     var old = box.querySelector('.interp'); if (old) old.parentNode.removeChild(old);
     box.style.bottom = '';
-    if (sit.plain) return U.esc(raw).replace(/\n/g, '<br>');
+    if (sit.plain) return richEsc(raw);
+    raw = bareText(raw);
     var html = TG.heard(raw, sit.own, sit.li);
     if (sit.team > sit.own && sit.mate) {
       var sub = U.el('div', 'interp parch');

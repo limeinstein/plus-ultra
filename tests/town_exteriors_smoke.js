@@ -1,6 +1,6 @@
 /* 거리 외관 회귀 점검:
    - 25개 고장별 자택·교회와 kraal·tent 13종 전체가 모두 등록되고 실제로 읽히는가
-   - 로마 교황청 전용 외관과 도시 건축 발견물 54종이 등록되고 읽히는가
+   - 로마 교황청 전용 외관과 도시 건축 발견물 73종이 등록되고 읽히는가
    - 도시 건축 발견물이 건립 연도에 맞춰 거리 뒤편에 나타나는가
    node tests/town_exteriors_smoke.js */
 'use strict';
@@ -19,7 +19,13 @@ const LANDMARKS = [
   'louvre', 'parthenon', 'hwangnyong', 'jongmyo', 'hagiasophia', 'sepulchre', 'djenne', 'zimbabwe',
   'delhimosque', 'potala', 'isfahanmosque', 'alhambra', 'rockdome', 'redfort', 'bluemosque', 'versailles',
   'eiffel', 'bigben', 'bolshoi', 'orszaghaz', 'maracana', 'sydneyopera', 'unhq', 'biosphere', 'battersea',
-  'bellasartes', 'hue'
+  'bellasartes', 'hue', 'emille', 'ayubuddha', 'stele', 'redsquare', 'liberty', 'panama', 'cristo',
+  'broadway', 'eram', 'sagrada', 'nabawi', 'kaaba', 'tiantan', 'dayanta', 'huanghelou', 'vittala',
+  'umayyad', 'topkapi', 'siosepol'
+];
+const NEW_LANDMARKS = [
+  'emille', 'ayubuddha', 'stele', 'redsquare', 'liberty', 'panama', 'cristo', 'broadway', 'eram',
+  'sagrada', 'nabawi', 'kaaba', 'tiantan', 'dayanta', 'huanghelou', 'vittala', 'umayyad', 'topkapi', 'siosepol'
 ];
 
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
@@ -53,14 +59,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         cityRuins: cityRuins.length, unillustratedCityRuins,
         papal: G.Img.pick(G.Img.chain.exterior('palace', G.CITY_DATA[33], '')) };
     }, { styles: STYLES, landmarks: LANDMARKS, kinds: KINDS });
-    ok(assets.expected === 127, '외관 127개(자택 25 + 교회 25 + kraal·tent 나머지 22 + 도시 발견물 54 + 교황청 1) 검사');
+    ok(assets.expected === 146, '외관 146개(자택 25 + 교회 25 + kraal·tent 나머지 22 + 도시 발견물 73 + 교황청 1) 검사');
     ok(!assets.missing.length, '필요한 외관이 모두 이미지 목록에 등록됨');
     ok(!assets.failed.length, '필요한 외관 파일이 모두 실제로 읽힘');
-    const excluded = ['ayubuddha', 'broadway', 'cristo', 'emille', 'eram', 'liberty', 'panama', 'redsquare', 'stele'];
-    const excludedActual = assets.unillustratedCityRuins.map(x => x.split(':')[0]).sort();
-    ok(assets.cityRuins === 63 && excludedActual.join(',') === excluded.sort().join(','),
-      '도시 유적 63종 중 건물 54종을 빠짐없이 포함 (실제 ' + assets.cityRuins + ', 미제작 ' + excludedActual.join(',') + ')');
-    console.log('  · 외관 대상이 아닌 도시 유적 9종: ' + assets.unillustratedCityRuins.join(', '));
+    ok(assets.cityRuins === 73 && !assets.unillustratedCityRuins.length,
+      '도시 유적 73종 모두 전용 외관을 포함 (실제 ' + assets.cityRuins + ')');
     ok(assets.papal === 'exteriors/palace@33', '로마 왕궁 자리에 교황청 전용 외관을 우선 사용');
 
     // 거리 모듈은 날짜와 제독 생김새만 참조한다. 항해 지도 준비와 무관하게 메모리 상태만 둔다.
@@ -82,6 +85,26 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(years.alex1480 === 2, '1480년 알렉산드리아에 파로스 등대·대도서관 외관 표시');
     ok(years.paris1480 === 1 && years.paris1600 === 2 && years.paris1900 === 4,
       '파리 외관이 건립 연도에 맞춰 1개 → 2개 → 4개로 늘어남');
+
+    const placed = await page.evaluate(async ids => {
+      G.Game.state.date.y = 2100;
+      const buildings = [{ kind: 'church', name: '교회', icon: 'church' }, { kind: 'home', name: '자택', icon: 'house' }];
+      const out = {};
+      for (const id of ids) {
+        const d = G.DISCOVERIES.find(x => x.id === id);
+        await G.Town.open(G.CITY_DATA[d.city], buildings);
+        const m = G.Town.runtime().marks.find(x => x.id === id);
+        out[id] = m ? { w: m.cv.width, h: m.cv.height, y: m.y } : null;
+      }
+      return out;
+    }, NEW_LANDMARKS);
+    const missingPlaced = NEW_LANDMARKS.filter(id => !placed[id]);
+    const badScale = NEW_LANDMARKS.filter(id => placed[id] &&
+      (placed[id].w < 150 || placed[id].w > 820 || placed[id].h < 250 || placed[id].h > 520));
+    const badFloor = NEW_LANDMARKS.filter(id => placed[id] && Math.abs(placed[id].y - 768) > 20);
+    ok(!missingPlaced.length, '새 전용 외관 19종이 해당 도시 거리에 모두 배치됨');
+    ok(!badScale.length, '새 전용 외관 19종의 거리 크기가 정상 범위');
+    ok(!badFloor.length, '새 전용 외관 19종의 바닥선이 길에 맞음');
     ok(!errors.length, '콘솔 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   } finally {
     await browser.close();

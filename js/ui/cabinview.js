@@ -365,6 +365,98 @@
 
   CV._pickFor = pickFor;   // 시험용 (tests/cabin_recommend_smoke.js)
 
+  /* 2026-10-17 선실 화면 위의 작은 팝업 — 선실이 보이는 채로 고른다.
+     방(표·카드·갑판 위 얼굴표)을 누르면 둘 사람(추천 순 · 작은 얼굴 · 특기 · 능력치), 부하를 누르면 둘 방(잘 맞는 순).
+     고르면 창을 닫고 { k: 'set' | 'clear' | 'remodel' | 'drop' }을 돌려준다 — CV.open 이 처리하고 다시 그린다. */
+  function closePop(win) {
+    var p = win.content.querySelector('.cb-pop'); if (p) p.remove();
+    win.content.querySelectorAll('.cb-sel').forEach(function (x) { x.classList.remove('cb-sel'); });
+  }
+  /** 팝업을 누른 것 옆에 놓는다 (오른쪽 → 왼쪽 → 아래). 화면 배율(transform)과 창 스크롤을 셈한다 */
+  function placePop(win, pop, anchor) {
+    var host = win.content;
+    if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+    host.appendChild(pop);
+    anchor.classList.add('cb-sel');
+    var hr = host.getBoundingClientRect(), ar = anchor.getBoundingClientRect(), k = (hr.width / (host.offsetWidth || hr.width)) || 1;
+    var ax = (ar.left - hr.left) / k + host.scrollLeft, ay = (ar.top - hr.top) / k + host.scrollTop, aw = ar.width / k, ah = ar.height / k;
+    var pw = pop.offsetWidth, ph = pop.offsetHeight, W = host.clientWidth, H = Math.max(host.clientHeight, host.scrollHeight), gap = 10;
+    var x = ax + aw + gap, y = ay + ah / 2 - ph / 2;
+    if (x + pw > W - 6) x = ax - pw - gap;
+    if (x < 6) { x = U.clamp(ax + aw / 2 - pw / 2, 6, Math.max(6, W - pw - 6)); y = ay + ah + gap; if (y + ph > H - 6) y = ay - ph - gap; }
+    pop.style.left = Math.round(x) + 'px';
+    pop.style.top = Math.round(U.clamp(y, host.scrollTop + 6, Math.max(host.scrollTop + 6, H - ph - 6))) + 'px';
+  }
+  function popButton(f, label, icon, fn, cls) { var b = U.el('button', 'btn small' + (cls ? ' ' + cls : ''), (icon ? G.icon(icon) : '') + label); b.onclick = fn; f.appendChild(b); }
+  /** 방을 눌렀을 때: 이 방에 둘 사람. type = 방 종류, i = 선실 번호(고정 자리는 null), o.yard = 조선소에서 */
+  function popRoom(win, anchor, type, i, o) {
+    closePop(win);
+    var c = G.CABIN[type], role = ROLE_OF[type], cur = role ? CB().roleMate(role) : CB().occupant(i), ranks = recRanks(c), rec = recommend(c);
+    var pw = role ? CB().power(type) : CB().powerAt(i);
+    var pop = U.el('div', 'cb-pop');
+    pop.innerHTML = '<div class="cb-pop-h">' + G.icon(c.icon) + '<b>' + (i ? i + '. ' : '') + c.name + '</b>' + powTag(pw) + '<button class="cb-pop-x" title="닫기 (Esc)">×</button></div>' +
+      '<div class="cb-pop-d">' + c.desc + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') +
+      (rec.some(function (x) { return x.score > 0; }) ? '' : '<br><span class="warn-text">이 방에 맞는 ' + (c.lang ? '말(제독이 모르는 말)' : '특기') + '을 가진 부하가 없습니다.</span>') + '</div>' +
+      '<div class="cb-pop-list"></div><div class="cb-pop-f"></div>';
+    var list = pop.querySelector('.cb-pop-list');
+    if (!rec.length) list.innerHTML = '<div class="muted">부하가 없습니다. 술집에서 부하를 찾아보십시오.</div>';
+    rec.forEach(function (x) {
+      var m = x.m, d = G.MATE[m.id], rk = ranks[m.id];
+      var row = U.el('div', 'cb-pop-row' + (rk === 1 ? ' best' : rk ? ' rec' : '') + (m === cur ? ' cur' : ''),
+        '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + recTag(rk) + (m === cur ? ' <span class="tag">지금 이 자리</span>' : '') + '</span>' +
+        '<small class="cb-fit">' + fitNote(m, c) + ' · ' + U.esc(CB().placeName(m)) + '</small>' +
+        '<small>특기 ' + U.esc(skillsOf(m)) + '</small><small>' + statsOf(m, true) + ' · ' + loyalTag(m) + '</small></span>');
+      row.dataset.mate = m.id;
+      row.querySelector('.cb-face').appendChild(face(m.id, 36));
+      if (m !== cur) row.onclick = function () { win.close({ k: 'set', type: type, i: i, id: m.id }); };
+      list.appendChild(row);
+    });
+    var f = pop.querySelector('.cb-pop-f');
+    if (cur) popButton(f, '자리를 비운다', 'boot', function () { win.close({ k: 'clear', type: type, i: i }); });
+    if (o && o.yard && i > 0) popButton(f, '다른 방으로 고친다', 'hammer', function () { win.close({ k: 'remodel', i: i }); });
+    if (!f.childNodes.length) f.remove();
+    pop.querySelector('.cb-pop-x').onclick = function () { closePop(win); };
+    placePop(win, pop, anchor);
+  }
+  /** 부하를 눌렀을 때: 이 사람을 둘 방 (잘 맞는 방 먼저) */
+  function popMate(win, anchor, m) {
+    closePop(win);
+    var d = G.MATE[m.id], rooms = CB().rooms(), ent = [];
+    ['adjutant', 'helm', 'lookout'].forEach(function (t) { ent.push({ type: t, i: null, c: G.CABIN[t], o: CB().roleMate(ROLE_OF[t]) }); });
+    rooms.forEach(function (t, i) { if (t !== 'hold') ent.push({ type: t, i: i, c: G.CABIN[t], o: CB().occupant(i) }); });
+    ent.forEach(function (e, k) { e.k = k; e.score = fitScore(m, e.c); });
+    ent.sort(function (a, b) { return (b.score - a.score) || (a.k - b.k); });
+    var pop = U.el('div', 'cb-pop cb-pop-mate');
+    pop.innerHTML = '<div class="cb-pop-h"><span class="cb-face big"></span><span class="cb-nm"><b class="n1">' + U.esc(d.name) + '</b><small>' + U.esc(CB().placeName(m)) + '</small></span><button class="cb-pop-x" title="닫기 (Esc)">×</button></div>' +
+      '<div class="cb-pop-d"><b>특기</b> ' + U.esc(skillsOf(m)) + '<br><b>능력</b> ' + statsOf(m) + ' · ' + loyalTag(m) + '</div>' +
+      '<div class="cb-pop-list"></div><div class="cb-pop-f"></div>';
+    pop.querySelector('.cb-face').appendChild(face(m.id, 44));
+    var list = pop.querySelector('.cb-pop-list');
+    ent.forEach(function (e) {
+      var here = e.o === m, best = fitTag(m, e.c);
+      var row = U.el('div', 'cb-pop-row room' + (best ? ' best' : '') + (here ? ' cur' : ''),
+        G.icon(e.c.icon) + '<span class="cb-nm"><span class="n1">' + (e.i ? e.i + '. ' : '') + e.c.name + best + (here ? ' <span class="tag">지금 이 자리</span>' : '') + '</span>' +
+        '<small class="cb-fit">' + fitNote(m, e.c) + '</small></span>' +
+        '<span class="cb-occ">' + (e.o && !here ? '<span class="cb-face"></span>' + U.esc(G.MATE[e.o.id].name) + (e.i == null ? '와 교대' : ' 대신') : e.o ? '' : '비어 있음') + '</span>');
+      if (e.o && !here) row.querySelector('.cb-occ .cb-face').appendChild(face(e.o.id, 24));
+      if (!here) row.onclick = function () { win.close({ k: 'set', type: e.type, i: e.i, id: m.id }); };
+      list.appendChild(row);
+    });
+    var f = pop.querySelector('.cb-pop-f');
+    if (m.room != null || ROLE_OF_INV(m.role)) popButton(f, '자리에서 뺀다 (대기)', 'boot', function () { win.close({ k: 'drop', id: m.id, to: { k: 'none' } }); });
+    if (!f.childNodes.length) f.remove();
+    pop.querySelector('.cb-pop-x').onclick = function () { closePop(win); };
+    placePop(win, pop, anchor);
+  }
+  /** 팝업에서 고른 사람을 그 자리에 앉힌다 (다른 배 선장이면 묻는다) */
+  async function setFromPop(a) {
+    var m = mateById(a.id); if (!m) return;
+    if (m.role === 'captain' && !await UI.confirm(G.MATE[m.id].name + '은(는) 지금 다른 배의 선장입니다. 기함으로 데려오겠습니까?', '데려온다', '그만둔다')) return;
+    var role = ROLE_OF[a.type];
+    if (role) setRole(m, role); else CB().place(m, a.i);
+  }
+  CV._pop = { room: popRoom, mate: popMate, close: closePop };   // 시험용
+
   /** 선실 화면을 연다. opts.yard = 조선소가 있는 도시(방을 고칠 수 있다) */
   CV.open = async function (opts) {
     opts = opts || {};
@@ -417,7 +509,9 @@
       var ms = medalSpots(v, sp);
       var put = function (c, m, o, act) {
         var el = medal(c, ms[c.id], m, o);
-        el.onclick = function () { win.close(act); };
+        el.onclick = function () {   // 갑판 위 자리: 함장실은 제독의 방, 나머지는 팝업
+          if (act.k === 'captain') win.close(act); else popRoom(win, el, act.k === 'fixed' ? act.type : 'deck', act.k === 'fixed' ? null : 0, opts);
+        };
         dragFrom(el, m); dropOn(el, act.k === 'captain' ? { k: 'captain' } : act.k === 'fixed' ? { k: 'fixed', type: act.type } : { k: 'room', i: 0 });
         stage.appendChild(el);
       };
@@ -433,7 +527,10 @@
         if (i === 0) return;
         var c = G.CABIN[t], m = CB().occupant(i), act = { k: 'room', i: i };
         var p = pin(c, i, spots[i - 1], m), cd = card(c, i, m, { pow: CB().powerAt(i), yard: opts.yard });
-        [p, cd].forEach(function (el) { el.onclick = function () { win.close(act); }; dragFrom(el, m); dropOn(el, act); hover(el, i); });
+        [p, cd].forEach(function (el) {
+          el.onclick = function () { if (t === 'hold') win.close(act); else popRoom(win, el, t, i, opts); };   // 빈 선실은 고치기(조선소)·알림
+          dragFrom(el, m); dropOn(el, act); hover(el, i);
+        });
         stage.appendChild(p); cards.appendChild(cd);
       });
 
@@ -447,15 +544,24 @@
         var chip = U.el('div', 'cb-mate' + (o.idle ? ' idle' : ''), '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + '</span><small>' + U.esc(CB().placeName(m)) + '</small><small class="cb-sk">' + U.esc(skillsOf(m)) + '</small><small class="cb-st">' + statsOf(m, true) + '</small>' + loyalTag(m) + '</span>');
         chip.querySelector('.cb-face').appendChild(face(m.id, 40));
         chip.title = '특기 ' + skillsOf(m) + '\n능력 ' + statsOf(m);
-        chip.onclick = function () { win.close({ k: 'mate', id: m.id }); };
+        chip.onclick = function () { popMate(win, chip, m); };
         dragFrom(chip, m);
         ros.appendChild(chip);
       });
       if (!s.mates.length) ros.innerHTML = '<div class="muted">부하가 없습니다. 술집에서 부하를 찾아보십시오.</div>';
 
-      var a = await win.result;
+      // 팝업 밖을 누르거나 Esc면 팝업만 닫는다 (Esc가 선실 창까지 닫지 않게)
+      var outside = function (e) { if (win.content.querySelector('.cb-pop') && !(e.target.closest && e.target.closest('.cb-pop, .cb-medal, .cb-pin, .cb-card, .cb-mate'))) closePop(win); };
+      var esc = function (e) { if (e.key === 'Escape' && win.content.querySelector('.cb-pop')) { e.preventDefault(); e.stopImmediatePropagation(); closePop(win); } };
+      document.addEventListener('mousedown', outside, true);
+      window.addEventListener('keydown', esc, true);
+      var a;
+      try { a = await win.result; } finally { window.removeEventListener('keydown', esc, true); document.removeEventListener('mousedown', outside, true); }
       if (!a) return;
-      if (a.k === 'drop') await dropMate(a.id, a.to);
+      if (a.k === 'set') await setFromPop(a);
+      else if (a.k === 'clear') { if (ROLE_OF[a.type]) { var rm = CB().roleMate(ROLE_OF[a.type]); if (rm) rm.role = 'none'; } else { var oc = CB().occupant(a.i); if (oc) CB().place(oc, null); } }
+      else if (a.k === 'remodel') await remodel(a.i, opts.yard);
+      else if (a.k === 'drop') await dropMate(a.id, a.to);
       else if (a.k === 'captain') await UI.say('함장실은 제독의 방입니다. 맞닿은 부관실 사람과는 말을 빨리 익힙니다.', G.Scenes.mateSpeaker ? G.Scenes.mateSpeaker('first') : {});
       else if (a.k === 'fixed') await pickFor(a.type);
       else if (a.k === 'mate') { var mm = mateById(a.id); if (mm) await pickRoom(mm); }

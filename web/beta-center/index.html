@@ -41,9 +41,9 @@
         <p class="hero-lead">정식판에 한꺼번에 반영하기 전 새 기능과 그림, 항해 감각을 먼저 시험하는 공개 항구입니다. 플레이하다 만난 오류와 어색한 점, 더 나아질 아이디어를 남겨 주세요.</p>
         <div class="hero-actions">
           <a class="button primary" href="../"><span>베타판 항해 시작</span><b aria-hidden="true">→</b></a>
-          <a class="button secondary" href="https://github.com/limeinstein/plus-ultra/issues/new?template=beta-feedback.yml" target="_blank" rel="noopener">피드백 쓰기</a>
+          <a class="button secondary" href="#feedback-form">피드백 쓰기</a>
         </div>
-        <p class="signin-note">글 작성과 답변에는 무료 GitHub 로그인이 필요합니다. 게시글과 답변은 이 페이지에서 누구나 읽을 수 있습니다.</p>
+        <p class="signin-note">로그인 없이 바로 등록할 수 있습니다. 이름·계정·쿠키·IP는 저장하지 않습니다.</p>
       </div>
       <div class="hero-art" aria-hidden="true">
         <div class="chart-lines"></div>
@@ -81,8 +81,28 @@
           <h2 id="feedback-title">베타 피드백 게시판</h2>
           <p>제보와 제안, 개발 답변이 한곳에 모입니다. 제목을 누르면 내용과 답변을 펼칠 수 있습니다.</p>
         </div>
-        <a class="button primary compact" href="https://github.com/limeinstein/plus-ultra/issues/new?template=beta-feedback.yml" target="_blank" rel="noopener">새 글 작성</a>
+        <a class="button primary compact" href="#feedback-form">새 글 작성</a>
       </div>
+
+      <form class="feedback-form" id="feedback-form">
+        <div class="form-heading">
+          <div><p class="kicker">ANONYMOUS REPORT</p><h3>로그인 없이 의견 남기기</h3></div>
+          <p>필수 항목은 제목과 내용뿐입니다.</p>
+        </div>
+        <div class="form-grid">
+          <label><span>종류</span><select name="category" required><option value="bug">오류 제보</option><option value="suggestion">개선 제안</option><option value="balance">밸런스</option><option value="question">질문</option><option value="other">기타</option></select></label>
+          <label class="wide"><span>제목</span><input name="title" type="text" minlength="4" maxlength="100" required placeholder="어떤 문제나 의견인지 짧게 적어 주세요"></label>
+          <label class="wide"><span>내용</span><textarea name="detail" minlength="10" maxlength="4000" required rows="6" placeholder="무슨 일이 있었는지, 또는 어떻게 바뀌면 좋을지 적어 주세요"></textarea></label>
+          <label><span>재현 순서 <small>선택</small></span><textarea name="steps" maxlength="2000" rows="4" placeholder="1. 항구에서 출항&#10;2. …"></textarea></label>
+          <label><span>실행 환경 <small>선택</small></span><textarea name="environment" maxlength="300" rows="4" placeholder="예: Windows 11 · Chrome"></textarea></label>
+          <label class="form-trap" aria-hidden="true"><span>웹사이트</span><input name="website" type="text" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <div class="form-actions">
+          <p>등록한 글은 이 공개 게시판에 익명으로 표시됩니다. 개인정보는 적지 마세요.</p>
+          <button class="button primary compact" id="feedback-submit" type="submit">익명으로 등록</button>
+        </div>
+        <p class="form-status" id="feedback-form-status" role="status" aria-live="polite"></p>
+      </form>
 
       <div class="board-tools" aria-label="게시글 필터">
         <div class="filters" role="group" aria-label="게시글 보기">
@@ -97,13 +117,13 @@
       <details class="attachment-help">
         <summary><span aria-hidden="true">▧</span> 화면 그림을 함께 첨부하는 방법</summary>
         <div>
-          <p>새 글 작성 화면의 <b>「덧붙일 자료」</b> 칸에 이미지를 바로 넣을 수 있습니다.</p>
+          <p>화면 그림을 함께 보내려면 GitHub의 <b>「덧붙일 자료」</b> 칸을 이용해 주세요. 이미지 첨부에는 무료 GitHub 로그인이 필요합니다.</p>
           <ul>
             <li><b>끌어다 놓기</b> — 화면 갈무리 파일을 입력 칸 위로 드래그</li>
             <li><b>파일 첨부</b> — 입력 칸 아래의 파일 선택 단추 사용</li>
             <li><b>붙여넣기</b> — 화면을 복사한 뒤 <kbd>Ctrl</kbd>+<kbd>V</kbd></li>
           </ul>
-          <p class="attachment-note">이미지는 GitHub에 안전하게 첨부되고, 업로드가 끝나면 미리보기 주소가 글에 자동으로 들어갑니다.</p>
+          <p class="attachment-note">글자 피드백은 위 양식에서 로그인 없이 등록할 수 있습니다. 이미지는 GitHub에 첨부되며 업로드 뒤 미리보기 주소가 글에 들어갑니다.</p>
           <a class="attachment-button" href="https://github.com/limeinstein/plus-ultra/issues/new?template=beta-feedback.yml" target="_blank" rel="noopener">이미지와 함께 피드백 쓰기 →</a>
         </div>
       </details>
@@ -121,7 +141,18 @@
       </div>
       <div class="release-list">
         <details open>
-          <summary><span><b>VERSION 0.260</b><small>2026-10-17 · 정식·베타</small></span><i>최신 배포</i></summary>
+          <summary><span><b>VERSION 0.261</b><small>2026-10-17 · 정식·베타</small></span><i>최신 배포</i></summary>
+          <div class="release-body">
+            <h3>로그인 없는 베타 피드백</h3>
+            <ul>
+              <li>베타 센터에서 계정이나 로그인 없이 오류와 개선 의견을 바로 등록할 수 있습니다.</li>
+              <li>익명 글은 기존 GitHub 피드백과 함께 공개 게시판에 표시되며 이름·계정·쿠키·IP를 저장하지 않습니다.</li>
+              <li>화면 그림을 첨부하는 기존 GitHub 제보 경로도 그대로 이용할 수 있습니다.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary><span><b>VERSION 0.260</b><small>2026-10-17 · 정식·베타</small></span><i>세계와 항해</i></summary>
           <div class="release-body">
             <h3>움직이는 유럽과 왕실 이야기</h3>
             <ul>
@@ -140,7 +171,7 @@
               <li>발견 보고·발표의 그림은 단독 재생 뒤 완전히 닫히고 대화가 시작되며, 해전 자동 배율에서도 클릭과 이름표가 정확하게 동작합니다.</li>
               <li>F11 게임 전체 화면과 설정 단추를 추가하고, 캐릭터 생성의 얼굴 선택을 앞·다음 단추와 순환 방식으로 다듬었습니다.</li>
               <li>자동 저장 5칸과 별도 여관 일지 5칸, 배우자 12명 제한, 모아이와 롱고롱고의 당일 연속 발견을 다시 검증했습니다.</li>
-              <li>고해상도 그림은 재인코딩하지 않고 원본 그대로 배포 묶음에 넣었습니다. 전용 외관이 없는 도시 유적 19종은 현재 공용 대체 외관을 사용합니다.</li>
+              <li>고해상도 그림은 재인코딩하지 않고 원본 그대로 배포 묶음에 넣었습니다. 도시 유적 73종은 모두 전용 외관을 사용합니다.</li>
             </ul>
           </div>
         </details>
