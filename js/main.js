@@ -12,6 +12,7 @@
   // ---------------------------------------------------------------- stage scaling
   function fit() {
     var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    if (!(s > 0.02)) s = 0.02;   // 창이 아직 0 크기(숨은 탭·막 열린 창)일 때 — zoom 0·나누기 0을 막는다. 크기가 생기면 resize로 다시 맞춘다
     Game.scale = s;
     var left = Math.round((window.innerWidth - 1600 * s) / 2), top = Math.round((window.innerHeight - 900 * s) / 2);
     // 선명한 렌더링 (2026-10-18): transform: scale은 글씨를 1600×900 크기로 그린 뒤 늘려 27인치 FHD·QHD에서 획이 뭉개진다.
