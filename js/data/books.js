@@ -25,7 +25,7 @@
     B('b_iliad', '호메로스 『일리아스』', 2, [30, 33, 29, 14], ['troy', 'mycenae', 'agamemnon']),
     B('b_odyssey', '호메로스 『오디세이아』', 2, [30, 33, 29], ['knossos', 'minotaur', 'delphi']),
     B('b_herodotus', '헤로도토스 『역사』', 2, [33, 30, 14, 38], ['giza', 'pyramid', 'ishtar', 'babel', 'ur']),
-    B('b_pliny', '플리니우스 『박물지』', 2, [33, 30, 12, 14], ['papyrus', 'hippo', 'ostrich', 'flamingo', 'crocodile', 'startower', 'mandrill']),
+    B('b_pliny', '플리니우스 『박물지』', 2, [33, 30, 12, 14], ['papyrus', 'hippo', 'ostrich', 'flamingo', 'crocodile', 'mandrill']),
     B('b_morte', '맬러리 『아서 왕의 죽음』', 3, [38, 14], ['grail', 'stonehenge']),
     B('b_toscanelli', '토스카넬리의 서한', 2, [30, 0], ['westroute', 'zipang']),
     B('b_prester', '『프레스터 존의 서한』', 2, [33, 29, 0, 14], ['prester', 'nestorian']),
@@ -46,7 +46,7 @@
     B('b_hungary', '『헝가리 연대기』', 4, [54, 53], ['stcrown', 'vampire']),
     // 아랍어 (5)
     B('b_battuta', '이븐 바투타 『여행기』', 5, [79, 112, 119, 93, 10], ['djenne', 'zimbabwe', 't_coffee', 't_ambergris', 'qutb', 'china']),
-    B('b_idrisi', '알 이드리시 『지리서』', 5, [79, 10, 36, 112], ['capegood', 'malacca', 'startower', 'polarbear']),
+    B('b_idrisi', '알 이드리시 『지리서』', 5, [79, 10, 36, 112], ['capegood', 'malacca', 'polarbear']),
     B('b_nights', '『천일야화』', 5, [79, 127, 119, 112], ['roc', 'ark', 't_frank', 'petra']),
     B('b_majid', '이븐 마지드 『항해 원리 안내서』', 5, [79, 127, 112], ['indiaroute', 'malacca', 't_pepper', 'coelacanth', 't_rhino']),
     B('b_leo', '레오 아프리카누스 『아프리카지』', 5, [79, 93, 33], ['djenne', 'porcupine', 'warthog', 'mandrill', 'welwitschia', 'mokele']),

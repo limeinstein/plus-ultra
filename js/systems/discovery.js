@@ -85,7 +85,17 @@
   /** 세워진 건물인가 (불가사의의 built 해) */
   /** 앞 고리를 모두 찾았는가 (꼬리에 꼬리를 무는 발견 — 열리기 전에는 그 자리에 가도 찾지 못한다) */
   D.needMet = function (d) { return !d || !d.need || d.need.every(function (id) { return D.foundByMe(id); }); };
-  D.built = function (d) { return !d || !d.built || S().date.y >= d.built; };
+  /* 미래의 건물 (2026-10-18): 1800년 이후에 세워질 건물(유적)은 그 자리·그 도시에 가면 언제든 「신기루로 본 발견」으로 끝난다.
+     아직 없는 것을 잠깐 본 것이라 유물·노획은 없고, 발견 명성·가치는 거리·위치에 비해 적다 (G.BALANCE.mirage.futureK).
+     도시 안 건물은 발견하기 전까지 거리에 일렁이며 서 있다가, 발견하는 순간 흩어져 사라진다 (js/scenes/town.js T.vanish). */
+  function MC() { return (G.BALANCE && G.BALANCE.mirage) || {}; }
+  D.isFuture = function (d) { return !!(d && d.cat === 'ruin' && d.built && d.built >= (MC().future || 1800)); };
+  /** 지금은 아직 세워지지 않은 미래의 건물인가 (그 해가 지나면 여느 발견물) */
+  D.mirageNow = function (d) { return D.isFuture(d) && S().date.y < d.built; };
+  /** 신기루로 본 발견인가 (이미 찾았으면 찾을 때의 기록, 아니면 지금 해) */
+  D.isMirageFind = function (d) { var st = d && S().disc[d.id]; return st && st.me ? !!st.mirage : D.mirageNow(d); };
+  D.mirageK = function (d) { return D.isMirageFind(d) ? (MC().futureK || 0.2) : 1; };
+  D.built = function (d) { return !d || !d.built || S().date.y >= d.built || D.isFuture(d); };
   /** 지금 단서를 들을 수 있는 발견물인가 */
   D.available = function (d) { return !G.Frontier || G.Frontier.available(d); };
   /** 그림·세공이 발견물의 값어치를 올린다 — 제독이든 부하든(역할·배 상관없이) 가장 잘하는 사람의 솜씨.
@@ -106,8 +116,8 @@
       k: 1 + ka + kc + kk, artWho: R.skillBest ? R.skillBest('art').who : null, craftWho: R.skillBest ? R.skillBest('craft').who : null };
   };
   D.valueK = function (d) { return D.valueParts(d).k; };
-  D.value = function (d) { return Math.round(d.val * D.valueK(d)); };
-  D.fameFor = function (d) { return Math.round(D.value(d) / 26 + d.pw * 30); };
+  D.value = function (d) { return Math.round(d.val * D.valueK(d) * D.mirageK(d)); };
+  D.fameFor = function (d) { return Math.round(D.value(d) / 26 + d.pw * 30 * D.mirageK(d)); };
   /** 현장 기록 보너스 — 유적은 그림(정밀한 도판)·세공(짜임·재료 기록)에 밝은 사람이 있으면 명성이 더 오른다.
       값어치(D.value)와 따로, 명성에만 곱한다. 발견 순간·후원자 보고·늦은 보고에 모두 쓴다. d 없이 부르면 1(옛 호출과 호환). */
   D.RECORD_K = { art: 0.05, craft: 0.04 };
@@ -212,7 +222,9 @@
       tomb = await G.TombDuel.meet(d, how);
       if (!tomb.go) return false;
     }
+    var mir = D.mirageNow(d);                                  // 미래의 건물: 신기루로 본 발견
     st.found = U.dateNum(s.date); st.me = true; st.evidence = true;
+    if (mir) st.mirage = 1;
     s.stats.found++;
     D.collectionReward(s.stats.found);
     delete s.hints[d.id];
@@ -224,14 +236,14 @@
         desc: '「' + d.name + '」의 발견을 증명한다. 후원자에게 보고하거나 항구에서 발표할 때 건넨다.' });
     }
     // 발견 유물: 그 자리에서 보물·장신구·무기·서적·선수상 같은 것을 손에 넣는다 — 발견의 증거가 된다
-    var rel = tomb.stolen ? [] : D.relicsOf(d.id), got = [];   // 도굴꾼이 부장품을 들고 달아났으면 손에 넣을 것이 없다
+    var rel = tomb.stolen || mir ? [] : D.relicsOf(d.id), got = [];   // 신기루에서는 손에 넣을 것이 없다   // 도굴꾼이 부장품을 들고 달아났으면 손에 넣을 것이 없다
     // 유물이 없는 보물·유적 발견은 예전처럼 값나가는 것을 조금 챙긴다 (세공 솜씨만큼 더)
     var loot = 0;
-    if (!rel.length && !tomb.stolen && (d.cat === 'treasure' || d.cat === 'ruin')) {
+    if (!rel.length && !tomb.stolen && !mir && (d.cat === 'treasure' || d.cat === 'ruin')) {
       loot = Math.round(D.value(d) * (0.05 + (R.skillRead ? R.skillRead('craft') : R.skill('craft')) * 0.02) * (st.rival ? 0.5 : 1));
       if (loot > 0) s.player.gold += loot;
     }
-    G.State.log(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 발견했다.');
+    G.State.log(d.name + U.j(d.name, '을/를').slice(d.name.length) + (mir ? ' 신기루로 보았다. 아직 세상에 없는 것이 잠시 떠올랐다가 흩어졌다. (발견으로 기록)' : ' 발견했다.'));
     if (G.Audio) G.Audio.sfx('discover');
     // 유적은 복원 GIF가 빛나며 돌고, 「○○ 발견」과 함께 제독·부하의 대화가 이어진다 (그림·세공 솜씨만큼 자세히)
     if (G.Scenes.discoveryReveal) { try { await G.Scenes.discoveryReveal(d, fame); } catch (e) { console.error(e); } }
@@ -241,6 +253,9 @@
     rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });
     st.relics = got.map(function (r) { return r.id; });
     await G.Scenes.discoveryCard(d, fame, got.concat(wait));
+    // 보는 사이 흩어져 사라진다 — 거리에서 본 도시 건물은 거리의 그림이 흩어지므로(city.lookAt → Town.vanish) 따로 띄우지 않는다
+    var inTown = how === 'city' && G.Town && G.Town.active && G.Town.active() && !G.Town.hidden();
+    if (mir && !inTown && G.Mirage && G.Mirage.vanish) await G.Mirage.vanish(d);
     UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
     if (impact.strain) {
       var low = []; if (impact.strain.discipline) low.push('규율'); if (impact.strain.fatigue) low.push('피로');
@@ -254,7 +269,7 @@
       st.grade = D.drawGrade(d);
       var gNow = D.gradeOf(d), GT = { real: '유물을 손에 넣었다 — 무엇보다 확실한 증거', plate: '그림에 밝은 이가 정밀한 도판을 남겼다', chart: '해도에 똑똑히 그려 두었다',
         sketch: '서툰 스케치뿐 — 후원자가 미심쩍어할 수 있다', word: '그림 한 장 없이 말과 기록뿐 — 후원자가 의심할 수 있다. 그림에 밝은 부하를 두자' };
-      UI.toast('증거 등급 「' + gNow.name + '」 — ' + GT[gNow.key], gNow.key === 'word' || gNow.key === 'sketch' ? 'scroll' : 'seal', 5200);
+      if (!mir) UI.toast('증거 등급 「' + gNow.name + '」 — ' + GT[gNow.key], gNow.key === 'word' || gNow.key === 'sketch' ? 'scroll' : 'seal', 5200);   // 신기루는 등급을 알리지 않는다
     }
     // 동물·식물: 부하들이 한마디씩 주고받는다 (말투별 — js/systems/banter.js)
     if (G.Banter && d.cat === 'creature') { try { await G.Banter.play(d); } catch (e) { console.error(e); } }

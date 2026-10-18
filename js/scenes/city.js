@@ -418,7 +418,9 @@
     try {
       if (G.Town.active() && !G.Town.hidden() && G.Town.focusMark) await G.Town.focusMark(id);
       if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(d))) await C.mate(U.pick(['제독, 저 건물을 보십시오! ', '제독, 가까이 와서 보니 ']) + '소문으로만 듣던 「' + d.name + '」입니다.');
-      await G.Disc.find(d, 'city');
+      var mir = G.Disc.mirageNow && G.Disc.mirageNow(d);
+      var got = await G.Disc.find(d, 'city');
+      if (got && mir && G.Town.active() && !G.Town.hidden() && G.Town.vanish) await G.Town.vanish(id);   // 신기루였던 미래의 건물이 거리에서 흩어져 사라진다
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene === C && !cur) C.main();

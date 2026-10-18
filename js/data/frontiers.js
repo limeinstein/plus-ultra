@@ -40,8 +40,8 @@
       ['pyramid', 'giza', 'kings', 'thebes', 'rosetta', 'edom', 'petra', 't_coffee'],
       ['abusimbel', 'ishtar', 'babel', 'ur', 'persepolis', 'ark', 'tutankh', 'sargon', 'urcrown', 'goldplate', 'ewer', 'isfahanmosque']],
     north: [[], ['aurora', 'brendan'], ['skraeling', 'moose', 'inuit', 'polarbear'], ['niagara']],
-    guinea: [[], ['djenne', 'ifehead', 't_ivory'], ['startower', 'mandrill'], ['mokele']],
-    cape: [[], ['penguin', 'khoikhoi'], ['welwitschia', 'ostrich'], ['albatross']],
+    guinea: [[], ['djenne', 'ifehead', 't_ivory'], ['mandrill'], ['mokele']],
+    cape: [[], ['penguin', 'khoikhoi'], ['welwitschia', 'ostrich', 'startower'], ['albatross']],
     eafrica: [[], ['t_ambergris', 'hippo', 'flamingo'], ['warthog', 'porcupine', 'zimbabwe', 't_rhino', 't_tortoise'], ['crocodile', 'roc', 'coelacanth', 'prester']],
     india: [['t_pepper', 't_clove', 't_ginger', 't_cinnamon'], ['t_chintz', 'madurai', 'tiger', 'mangrove'], ['shiva', 'qutb', 'mohenjo', 'delhimosque', 'kohinoor'], ['tajmahal']],
     inner: [[], ['t_musk', 't_jade'], ['sable'], ['potala', 'yeti', 'genghis']],
@@ -112,11 +112,11 @@
     goldplate: '페르세폴리스의 보물고에서 흘러나온 금은 접시가 있다고 한다.',
     antpeople: '얼음 대륙 가장자리에서 사람의 발자국을 보았다는 선원이 있다.',
     mu: '거인상의 받침에 새겨진 기호가 트로아노 고사본의 글자와 닮았다. 가라앉은 대륙의 기록일까?',
-    cibola: '석조촌 사람들이 북쪽 황야에 황금 도시 일곱이 있다고 말한다.',
-    machupicchu: '돌 요새의 석공들이 더 높은 산 위에 숨은 태양의 신전을 이야기한다.',
+    cibola: '푸에블로 보니토 사람들이 북쪽 황야에 황금 도시 일곱이 있다고 말한다.',
+    machupicchu: '삭사이와만의 석공들이 더 높은 산 위에 숨은 태양의 신전을 이야기한다.',
     uluru: '남방대륙 사람들이 대륙 한가운데의 붉은 거대한 바위를 신성하게 여긴다고 한다.',
     jadesuit: '당나라 여제의 능을 지키는 이가 옥으로 지은 옷을 입은 왕의 무덤을 이야기한다.',
-    konjiki: '왜국의 금도장처럼 온통 금으로 덮인 절이 북쪽에 있다고 한다.',
+    konjiki: '한위노국왕 금인처럼 온통 금으로 덮인 절이 북쪽에 있다고 한다.',
     cheonmado: '금관이 나온 무덤 곁의 다른 무덤에서 하늘을 달리는 흰 말 그림이 나왔다고 한다.'
   };
   if (G.CHAIN_LINE_MORE) for (var lk in G.CHAIN_LINE_MORE) CHAIN_LINE[lk] = G.CHAIN_LINE_MORE[lk];

@@ -146,6 +146,8 @@
     ['red', '홍해', function (lon, lat) { return lon > 32 && lon < 44 && lat > 12 && lat < 30; }],
     ['gulf', '페르시아만', function (lon, lat) { return lon > 47 && lon < 57 && lat > 23 && lat < 31; }],
     ['scs', '남중국해', function (lon, lat) { return lon > 100 && lon < 122 && lat > 0 && lat < 24; }],
+    // 한반도와 일본 열도 사이 (2026-10-18 — 용이 사는 바다)
+    ['eastsea', '동해', function (lon, lat) { return lat > 34.3 && lat < 52 && lon > 128.4 && lon < (lat < 38 ? 132 + (lat - 34.3) * 1.6 : 141.5); }],
     ['ecs', '동중국해', function (lon, lat) { return lon > 118 && lon < 142 && lat > 24 && lat < 42; }],
     ['south', '남빙양', function (lon, lat) { return lat < -55; }],
     ['arctic', '북극해', function (lon, lat) { return lat > 70; }],

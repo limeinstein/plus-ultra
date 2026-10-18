@@ -1516,3 +1516,13 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .cb-pop-f .btn .ic { width: 16px; height: 16px; vertical-align: -3px; margin-right: 3px; }
 .cb-rec { color: #fff; background: #b8862f; border-color: #8a6230; }
 .cb-sel.cb-card, .cb-sel.cb-pin, .cb-sel.cb-mate, .cb-sel .cb-ring { box-shadow: 0 0 0 3px #f0c766, 0 0 14px rgba(255,214,130,.9) !important; }
+/* 미래의 건물을 신기루로 본 발견 (2026-10-18) — 카드 그림이 아지랑이처럼 일렁이고, 사라지는 장면은 .mirage.vanish */
+.disc-card.mirage-find .art { animation: mirageWave 2.4s ease-in-out infinite; filter: sepia(.32) saturate(.8) brightness(1.12) contrast(.9); }
+.disc-card.mirage-find .disc-head { letter-spacing: .5em; color: #b27a2a; }
+.tag.mirage-tag { background: #f3e2bd; color: #8a5a1a; border-color: #d6b47a; }
+.desc.mirage-note { font-style: italic; color: #7a5a2a; }
+.mirage.vanish { animation: mirageVanish var(--mirage-ms, 3200ms) ease-in forwards; }
+.mirage.vanish .mirage-pic img, .mirage.vanish .mirage-pic canvas { animation: mirageDissolve var(--mirage-ms, 3200ms) ease-in forwards; }
+@keyframes mirageVanish { 0% { opacity: 1; } 55% { opacity: .85; } 100% { opacity: 0; transform: translate(-50%, -52%) scale(1.04); } }
+@keyframes mirageDissolve { 0% { filter: sepia(.35) saturate(.75) brightness(1.18) contrast(.85) blur(1.2px); } 100% { filter: sepia(.6) saturate(.4) brightness(1.6) contrast(.6) blur(9px); } }
+@media (prefers-reduced-motion: reduce) { .mirage.vanish, .mirage.vanish .mirage-pic img, .disc-card.mirage-find .art { animation: none; } }
