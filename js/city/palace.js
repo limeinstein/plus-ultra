@@ -55,10 +55,12 @@
     var s = S(), c0 = G.CITY_DATA[sp.city], out = [];
     G.BOOKS.forEach(function (b) {
       if ((b.y || 0) > s.date.y || s.flags['read_' + b.id]) return;
+      if (G.BookSeq && !G.BookSeq.open(b)) return;   // 연작의 앞 책을 아직 다 풀지 않았다
       var libs = b.libs.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && R.cityExists(c); });
       if (!libs.length) return;
       b.discs.forEach(function (id) {
         var d = G.DISC[id];
+        if (G.BookSeq && G.BookSeq.visible(b).indexOf(id) < 0) return;   // 앞 대목의 곳을 아직 찾지 않았다
         if (!d || G.Disc.clue(d) !== 'book' || !G.tasteHit(sp.taste, d) || s.hints[id] || G.Disc.foundByMe(id) || !G.Disc.available(d)) return;
         var c = libs.slice().sort(function (a, z) { return G.Geo.dist(c0.lon, c0.lat, a.lon, a.lat) - G.Geo.dist(c0.lon, c0.lat, z.lon, z.lat); })[0];
         out.push({ book: b, disc: d, city: c, w: 1 / (1 + G.Geo.dist(c0.lon, c0.lat, c.lon, c.lat) / 20) });

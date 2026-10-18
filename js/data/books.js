@@ -120,6 +120,8 @@
     G.WONDERS.books.forEach(function (b) { G.BOOKS.push(b); META[b.id] = G.WONDERS.meta[b.id]; });
     G.BOOKS.forEach(function (b) { (G.WONDERS.leads[b.id] || []).forEach(function (id) { if (b.discs.indexOf(id) < 0) b.discs.push(id); }); });
   }
+  // 단서가 많아야 max곳인 책(js/data/cluebooks.js) — 덧붙인 단서(leads)로 넘치지 않게
+  G.BOOKS.forEach(function (b) { if (b.max && b.discs.length > b.max) { console.warn('책 ' + b.id + '의 단서가 ' + b.max + '곳을 넘어 잘랐다'); b.discs = b.discs.slice(0, b.max); } });
   G.BOOKS.forEach(function (b) {
     var m = META[b.id] || {};
     b.y = m.y || 1480;

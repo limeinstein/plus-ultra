@@ -343,7 +343,8 @@
       return;
     }
     var got = [];
-    var discs = b.discs.filter(function (id) { return G.DISC[id] && G.Disc.clueOk(G.DISC[id], 'book'); });   // 사료 갈래만 (js/data/clues.js)
+    var vis = G.BookSeq ? (G.BookSeq.open(b) ? G.BookSeq.visible(b) : []) : b.discs;   // 차례 책: 연작의 앞 책·앞 대목부터 (js/data/cluebooks.js)
+    var discs = vis.filter(function (id) { return G.DISC[id] && G.Disc.clueOk(G.DISC[id], 'book'); });   // 사료 갈래만 (js/data/clues.js)
     var readable = lv >= 3 ? discs.length : lv === 2 ? Math.ceil(discs.length * 0.7) : Math.ceil(discs.length * 0.35);
     var rng = U.makeRng(U.strHash(b.id + s.seed));
     var order = discs.slice().sort(function () { return rng() - 0.5; }).slice(0, readable);
