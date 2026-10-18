@@ -380,11 +380,11 @@
     await UI.say('제독, 지도에 X로 그려진 바로 그 자리입니다! 저 바위와 나무가 지도 그대로군요.\f선원들에게 삽을 들려 파 보겠습니다.', sv);
     var cv = TH.mapCanvas(q, 720, 480);
     void cv;
-    var gold = q.pay;
+    var gold = q.late ? Math.round(q.pay * 0.5) : q.pay;   // 기한을 넘겨 유예 기간에 찾았다: 조합 몫을 떼고 절반 (js/systems/quest.js)
     var rng = U.makeRng(q.seed + 7), finds = ['녹슨 쇠 상자', '밀랍으로 봉한 궤짝', '썩은 돛천에 싸인 항아리', '쇠사슬로 묶인 함'];
     var box = finds[Math.floor(rng() * finds.length)];
     s.player.gold += gold;
-    var gotFame = G.Fame.add(G.Fame.questCat ? G.Fame.questCat('treasure') : 'ad', q.fame);
+    var gotFame = G.Fame.add(G.Fame.questCat ? G.Fame.questCat('treasure') : 'ad', q.late ? Math.round(q.fame * 0.5) : q.fame);
     var i = G.Quest.list().indexOf(q); if (i >= 0) G.Quest.list().splice(i, 1);
     if (!s.questDone) s.questDone = {};
     s.questDone[q.key] = 'done';

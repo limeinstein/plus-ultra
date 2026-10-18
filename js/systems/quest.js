@@ -166,20 +166,46 @@
   };
 
   // ---------------------------------------------------------------- 날짜·전투
-  /** 하루가 지날 때마다 기한을 살핀다. 넘긴 의뢰는 알려 주고 지운다 */
+  /* 기한을 넘긴 의뢰 (2026-10-19 고침 — 예전에는 기한 다음 날 말없이 지웠다. 여관·수행·독서처럼 날이 한꺼번에 흐르는 곳에서는
+     알림조차 버려져 「의뢰가 갑자기 사라진」 것처럼 보였다):
+     · 기한이 지나면 곧바로 지우지 않고 「기한 지남」으로 남긴다. 유예 기간 안에 마치면 사례금·명성이 절반 (GU.report · 보물은 dig)
+     · 유예 기간도 지나면 조합이 의뢰를 거둬들이고 명성이 깎인다
+     · 두 일 모두 s.questNotes에 쌓아 두었다가 도시에 들어오거나 바다·뭍에서 하루가 갈 때 창으로 꼭 알린다 (Q.showNotes) */
+  function grace(q) { var K = (G.BALANCE && G.BALANCE.questLate) || { k: 0.5, min: 20, max: 60 }; return U.clamp(Math.round((q.limit || 30) * K.k), K.min, K.max); }
+  Q.grace = grace;
+  function note(icon, text, q) { var s = S(); (s.questNotes = s.questNotes || []).push({ icon: icon, text: text, key: q && q.key }); }
+  /** 하루가 지날 때마다 기한을 살핀다 */
   Q.daily = function () {
-    var s = S(), out = [], now = U.dateNum(s.date);
+    var s = S(), now = U.dateNum(s.date);
     list().slice().forEach(function (q) {
-      if (now > q.due) {
+      if (!(now > q.due)) return;
+      if (!q.late) {
+        q.late = true;
+        q.lateUntil = U.dateNum(U.addDays(dateOf(q.due), grace(q)));
+        var back = q.kind === 'treasure' ? '보물을 파내면' : G.CITY_DATA[q.to] ? G.CITY_DATA[q.to].name + ' 조합에 보고하면' : '마치면';
+        note('hourglass', '조합 의뢰의 기한이 지났다 — ' + q.title + '. 앞으로 ' + grace(q) + '일 안에 ' + back + ' 사례금과 명성을 절반 받는다. 그때까지 못 하면 조합이 의뢰를 거둬들인다.', q);
+        G.State.log('조합 의뢰 기한을 넘겼다 — ' + q.title + ' (유예 ' + grace(q) + '일)');
+        return;
+      }
+      if (now > q.lateUntil) {
         var i = list().indexOf(q); if (i >= 0) list().splice(i, 1);
         if (!s.questDone) s.questDone = {};
         s.questDone[q.key] = 'late';
         G.Fame.add(G.Fame.questCat(q.kind), -q.fame);
-        out.push({ icon: 'hourglass', text: '조합 의뢰의 기한이 지났다 — ' + q.title });
-        G.State.log('조합 의뢰 기한을 넘겼다 — ' + q.title);
+        note('scroll', q.city + ' 조합이 의뢰를 거둬들였다 — ' + q.title + ' (기한을 넘긴 지 ' + grace(q) + '일, 명성 −' + q.fame + ')', q);
+        G.State.log(q.city + ' 조합이 기한을 넘긴 의뢰를 거둬들였다 — ' + q.title);
       }
     });
-    return out;
+    return [];
+  };
+  /** 쌓인 의뢰 소식을 창으로 알린다 (도시에 들어올 때 · 바다·뭍의 하루 · 조합 메뉴) */
+  Q.showNotes = async function () {
+    var s = S(); if (!s || !s.questNotes || !s.questNotes.length) return false;
+    var ns = s.questNotes.splice(0);
+    var html = '<div style="font-size:19px;line-height:1.7">' + ns.map(function (m) { return '<div class="flex" style="align-items:flex-start;gap:10px;margin:6px 0">' + G.icon(m.icon || 'scroll') + '<div>' + U.esc(m.text) + '</div></div>'; }).join('') + '</div>';
+    try { await UI.window({ title: '조합 의뢰', icon: 'scroll', width: 720, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result; }
+    catch (e) { console.error(e); }
+    return true;
   };
   /** 해적을 쳐부술 때마다 부른다 */
   Q.onPirateBeaten = function (n) {
@@ -213,6 +239,8 @@
     return list().filter(function (q) { return q.kind === 'debt' && !q.collected && q.at === c.id; });
   };
 
+  /** 기한을 넘긴 의뢰의 남은 유예 날 */
+  Q.graceLeft = function (q) { return q && q.lateUntil ? U.dayIndex(dateOf(q.lateUntil)) - U.dayIndex(S().date) : 0; };
   Q.remain = function (q) {
     var s = S();
     return U.dayIndex(dateOf(q.due)) - U.dayIndex(s.date);

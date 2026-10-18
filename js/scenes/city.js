@@ -207,6 +207,7 @@
       delete s.voyage;
     }
     if (news.length) await C.news(news);
+    if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     // 도시 발견물은 입항만으로는 찾지 못한다 — 건물(교역소·시장·교회·왕궁…)에 들어가 둘러봐야 눈에 띈다 (C.findInside)
     if (G.Folk) { try { await G.Folk.town(c, first && arg.arrive); } catch (e) { console.error(e); } }   // 부족 마을: 마을 사람이 그 부족의 노래·춤 이야기를 꺼낸다
     if (G.Animals) await G.Animals.town(c);             // 마을 사람이 이 고장에 사는 동물 이야기를 꺼낸다
@@ -381,6 +382,7 @@
     var dayMsgs = G.Game.passDays(1);
     G.Game.refreshHud();
     dayMsgs.forEach(function (m) { if (m && m.text) UI.toast(m.text, m.icon || 'calendar', m.history ? 5200 : 3400); });
+    if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     var ikind = (typeof B.paint === 'function' ? B.paint(c, arg) : B.paint) || kind, ivar = B.variant ? B.variant(c, arg) : '';
     if (G.Img.count()) {
       var pre = [C.interiorKeys(ikind, c, ivar)];

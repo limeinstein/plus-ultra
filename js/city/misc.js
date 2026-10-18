@@ -38,6 +38,7 @@
     s.fleet.fatigue = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     var news = msgs.filter(function (m) { return m.history; }); if (news.length) await C.news(news);
+    if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     G.Game.refreshHud();
     await UI.say('피로가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
     if (G.Family && G.Family.innEvent) await G.Family.innEvent(c);
@@ -435,6 +436,7 @@
   };
 
   GU.mine = async function (c) {
+    if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     var qs = G.Quest.list();
     if (!qs.length) { UI.toast('맡은 의뢰가 없습니다.', 'book'); return; }
     for (;;) {
@@ -446,8 +448,8 @@
           : q.kind === 'debt' ? (q.collected ? ' (돈을 받아 왔다)' : ' (' + G.CITY_DATA[q.at].name + '으로)') : '';
         return { value: q, icon: G.Quest.KINDS[q.kind].icon,
           label: U.esc(q.title) + prog + ' <small class="muted">' + G.CITY_DATA[q.to].name + ' 조합</small>',
-          right: (left < 0 ? '기한 지남' : '남은 ' + left + '일') };
-      }), { width: 760, icon: 'book', text: '기한을 넘기면 명성이 깎입니다. 포기하면 명성이 더 깎입니다.' });
+          right: (q.late ? '<span class="neg">기한 지남 · 유예 ' + Math.max(0, G.Quest.graceLeft(q)) + '일</span>' : left < 0 ? '기한 지남' : '남은 ' + left + '일') };
+      }), { width: 760, icon: 'book', text: '기한을 넘겨도 유예 기간 안에 마치면 사례금·명성을 절반 받습니다. 유예 기간마저 넘기면 조합이 의뢰를 거둬들이고 명성이 깎입니다. 포기하면 명성이 더 깎입니다.' });
       if (!v) return;
       if (v.kind === 'treasure' && G.TreasureHunt) { var tw = await UI.choose(v.title, [{ label: '지도를 펼친다', value: 'map', icon: 'chest' }, { label: '포기한다', value: 'drop', icon: 'boot' }], { width: 420 }); if (tw === 'map') { await G.TreasureHunt.show(v); continue; } if (tw !== 'drop') continue; }
       var ok = await UI.confirm('<b>' + U.esc(v.title) + '</b><br><br>이 의뢰를 포기하겠습니까? 명성이 ' + Math.round(v.fame * 1.5) + ' 깎입니다.', '포기한다', '그만둔다');
@@ -501,6 +503,7 @@
     if (!(await UI.confirm(G.SKILL_BY_ID[v].name + ' 수행에 ' + days + '일, 금화 ' + U.num(cost) + '닢이 듭니다. 수행하겠습니까?', '수행한다', '그만둔다'))) return;
     p.gold -= cost;
     await UI.fade(function () { G.Game.passDays(days); });
+    if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     var ch = 0.45 + p.st.int / 200 - lv * 0.08;
     if (U.chance(ch)) { p.sk[v] = lv + 1; await C.say(master(c), '훌륭하네! ' + U.j(G.SKILL_BY_ID[v].name, '이/가') + ' 한 단계 올랐네.'); G.State.log(G.SKILL_BY_ID[v].name + ' 수행을 마쳤다. (' + (lv + 1) + '단계)'); }
     else await C.say(master(c), '아직 멀었군. 다음에 다시 도전하게.');
@@ -518,6 +521,7 @@
     if (!(await UI.confirm(G.LANGS[v] + ' 공부에 ' + days + '일, 금화 ' + U.num(cost) + '닢이 듭니다. 공부하겠습니까?', '공부한다', '그만둔다'))) return;
     p.gold -= cost;
     await UI.fade(function () { G.Game.passDays(days); });
+    if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     if (U.chance(0.55 + p.st.int / 250 - lv * 0.08)) { p.lg[v] = lv + 1; await C.say(master(c), G.LANGS[v] + '를 제법 하게 되었군! (' + G.LANG_LV[lv + 1] + ')'); }
     else await C.say(master(c), '말이란 하루아침에 느는 것이 아니지. 다음에 또 오게.');
   };

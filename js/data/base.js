@@ -406,6 +406,8 @@
     // 배열은 겹수(0~4)별 값. sense: 망루·정찰대가 알아채는 거리, find: 실제로 찾는 반경(바다·뭍), zone: 계약 목적지 원의 크기, fish: 낚시 희귀어 확률 덧셈
     // 단서 없이 찾기 (js/systems/discovery.js D.noClueChance): 단서가 없는 발견물은 찾는 반경 안에 든 날마다 이 확률로만 찾는다.
     // sea·land 기본 + 기술 1레벨마다 skill(바다 측량 / 뭍 역사학, 짐승·자연은 과학 절반) + 망루 표식 mark + 가운데 가까울수록 center + 배를 세우고 탐색 search, 최대 max
+    // 조합 의뢰의 유예 (js/systems/quest.js): 기한이 지나면 의뢰 기한 × k일(최소 min·최대 max) 동안 「기한 지남」으로 남아 마치면 사례·명성 절반. 그 뒤 조합이 거둬들인다
+    questLate: { k: 0.5, min: 20, max: 60 },
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
     clueStack: { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
