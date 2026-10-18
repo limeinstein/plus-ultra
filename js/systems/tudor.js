@@ -12,7 +12,11 @@
      우리 함대 + 드레이크의 배 세 척 대 무적함대 열두 척 (G.Rel.greatBattle). 우리 편은 모두 캘버린포(멀리), 에스파냐는 카논포(짧고 셈) —
      우리 배의 대포는 그 싸움에서만 바뀐다. 습격을 셋 다 이기면 무적함대의 병사가 줄어든다. 무적함대를 이기면 명성·포상금·작위 한 칸.
      레판토(1571, js/data/relevents.js cr_league1571)는 역사대로 그 해에 따로 벌어진다.
-   ■ 저장: state.tudor = {div: {stage, due}, eliz: {stage, dest, due}, knight: {day, y},
+   ■ 칼레 해전 (1588): 엘리자베스 1세에게 발견을 한 번이라도 보고했으면(TD.onReport), 1588년 런던 왕궁에서 여왕이 부른다 —
+     「무적함대가 잉글랜드로 온다. 하워드 경과 드레이크가 칼레 앞바다에서 화선을 띄운다」 → 7월 20일~8월 15일 사이 칼레 앞바다(도버 해협 동쪽)에 가면
+     화선을 띄우는 밤(제독이 화약·타르를 대면 무적함대가 더 크게 흩어진다) → 이튿날 그라블린 앞바다에서 하워드·드레이크·호킨스의 배와 함께 큰 해전.
+     이기면 잉글랜드 작위 한 칸(기사가 아니면 기사)·명성·포상금. 칼레 해전을 겪으면 드레이크의 습격 끝의 「무적함대」는 따로 열리지 않는다(같은 1588년의 싸움).
+   ■ 저장: state.tudor = {calais: {rep: 엘리자베스에게 한 발견 보고 수, stage: 'call'|'declined'|'met'|'won'|'lost'|'missed', fire}, div: {stage, due}, eliz: {stage, dest, due}, knight: {day, y},
      drake: {done 0~3, call 0|1~3, next, until, res[], won}, armada: 'call'|'met'|'won'|'lost'|'missed'} */
 (function (G) {
   'use strict';
@@ -241,13 +245,17 @@
         }
       }
     }
+    // 칼레 해전: 무적함대가 칼레 앞바다에 닿았다 · 놓쳤다
+    var ca = t.calais;
+    if (ca && ca.stage === 'call' && today >= CAL.from && !ca.told) { ca.told = 1; out.push({ icon: 'cannon', history: true, text: '【무적함대】 에스파냐의 무적함대가 영국 해협을 거슬러 올라 칼레 앞바다에 닻을 내렸다! 하워드 경이 화선을 준비하고 있다 — 8월 15일까지 칼레 앞바다로.' }); }
+    if (ca && ca.stage === 'call' && today > CAL.until) { ca.stage = 'missed'; t.armada = t.armada || 'calais'; out.push({ icon: 'cannon', text: '칼레 해전은 제독 없이 벌어졌다. 하워드 경의 화선에 흩어진 무적함대가 그라블린 앞바다에서 무너졌다고 한다.' }); }
     if (t.armada === 'call' && s.day > t.armadaUntil) { t.armada = 'missed'; out.push({ icon: 'cannon', text: '무적함대와의 싸움은 제독 없이 끝났다. 드레이크와 하워드 경의 함대가 해협을 지켜 냈다고 한다.' }); }
     return out;
   };
   TD.pending = function () {
     var t = S() && S().tudor; if (!t) return false;
     var rd = raidOf(t.drake);
-    return !!((t.armada === 'call' && inChannel()) || (rd && inBox(rd.box)) || (t.eliz && t.eliz.stage === 1 && S().loc && S().loc.mode === 'city' && S().loc.city === t.eliz.dest));
+    return !!((t.calais && calaisOpen() && inCalais()) || (t.armada === 'call' && inChannel()) || (rd && inBox(rd.box)) || (t.eliz && t.eliz.stage === 1 && S().loc && S().loc.mode === 'city' && S().loc.city === t.eliz.dest));
   };
   /** 바다의 하루 끝·도시에 들어설 때 */
   TD.check = async function () {
@@ -256,7 +264,8 @@
     try {
       if (t.eliz.stage === 1 && s.loc.mode === 'city' && s.loc.city === t.eliz.dest) await elizSafe(G.CITY_DATA[s.loc.city]);
       var rd = raidOf(t.drake);
-      if (rd && inBox(rd.box) && G.Rel) {
+      if (t.calais && calaisOpen() && inCalais()) await calaisNight();
+      else if (rd && inBox(rd.box) && G.Rel) {
         rd.allies = drakeShips(); G.Rel.register(rd);
         var go = await G.Rel.greatBattle(rd);
         if (!go) { t.drake.res[t.drake.call - 1] = 'declined'; raidDone(); }   // 물러나면 이번 습격은 지나가고, 두 해 뒤 다음 부름
@@ -270,6 +279,97 @@
     return true;
   };
 
+
+  // ================================================================ 칼레 해전 (1588) — 엘리자베스 1세에게 발견을 보고한 제독
+  var CALAIS = [0.9, 2.7, 50.55, 51.45];        // 칼레·그라블린 앞바다 (도버 해협 동쪽 어귀) [경도 서, 동, 위도 남, 북]
+  var CAL = { callFrom: 15880101, callTo: 15880731, from: 15880720, until: 15880815 };
+  function calais() { var t = st(); if (!t.calais) t.calais = { rep: 0 }; return t.calais; }
+  /** 발견 보고 (js/systems/sponsor.js): 그때 잉글랜드 왕궁의 주인이 엘리자베스 1세면 센다 */
+  TD.onReport = function (sp) { if (sp && sp.id === 'en_king' && elizQueen()) calais().rep++; };
+  function hist(id) { return G.Hist ? G.Hist.speaker(id) : { name: id, lang: 3 }; }   // 칼레 해전의 인물들 (js/data/histfigures.js)
+  /** 런던 왕궁에서 여왕이 부를 차례인가 */
+  TD.calaisDue = function (sp) {
+    var t = st(), c = calais(), today = dn(S().date);
+    return !!(sp && sp.id === 'en_king' && elizQueen() && c.rep > 0 && !c.stage && !t.armada && today >= CAL.callFrom && today <= CAL.callTo);
+  };
+  function inCalais() { return inBox(CALAIS); }
+  function calaisOpen() { var c = calais(), today = dn(S().date); return c.stage === 'call' && today >= CAL.from && today <= CAL.until; }
+  async function calaisCall() {
+    var c = calais(), w = who(), s = S();
+    await UI.say((c.rep > 1 ? '그대가 내게 가져온 먼 바다의 이야기들, 잊지 않았소. ' : '그대가 내게 가져온 먼 바다의 발견, 잊지 않았소. ') + '오늘은 내가 그대에게 청할 일이 있어 불렀어요.\f' +
+      '펠리페가 마침내 무적함대를 띄웠어요. 백삼십 척, 병사 이만. 파르마 공의 군대를 플랑드르에서 태워 이 섬에 올리려는 거예요.\f' +
+      '저들의 총사령관은 메디나 시도니아 공작. 바다를 모르는 귀족이라지만, 레칼데와 오켄도 같은 늙은 바다 사자들이 곁에 있어요.\f' +
+      '하워드 경과 드레이크는 저들이 칼레 앞바다에 닻을 내리는 날을 기다리고 있어요. 유스티누스 반 나사우의 네덜란드 배들이 플랑드르 해안을 막아 파르마 공의 바지선이 나오지 못하게 할 거예요.\f그 밤에 불붙인 배를 띄워 저들의 진을 흩뜨리고, 이튿날 그라블린 앞바다에서 끝장을 볼 거예요.', w);
+    var v = await UI.ask('엘리자베스 1세가 칼레 앞바다의 싸움에 함께해 달라고 청한다 (1588년 7월 20일 ~ 8월 15일, 도버 해협의 칼레 앞바다)', [
+      { label: '폐하의 바다를 함께 지키겠습니다', value: 'yes' }, { label: '제 나라 배로 에스파냐와 싸울 수는 없습니다 — 사양한다', value: 'no' }], w);
+    if (v !== 'yes') { c.stage = 'declined'; await UI.say('…그대의 처지도 알아요. 그래도 이 섬의 바다에서 그대를 다시 보고 싶었는데.', w); return; }
+    c.stage = 'call';
+    SP().addTrust(SP().rel('en_king'), 5);
+    await UI.say('고마워요, 제독. 7월 하순에서 8월 중순 사이, 칼레 앞바다로 가세요. 하워드 경의 아크 로열호가 그대를 기다릴 거예요.\f…신께서 바람을 우리 편으로 불게 하시기를.', w);
+    G.State.log('엘리자베스 1세의 청으로 칼레 앞바다에서 무적함대와 싸우기로 했다. (1588년 7월 20일 ~ 8월 15일)');
+    UI.toast('칼레 앞바다 — 1588년 7월 20일부터 8월 15일 사이 (도버 해협 동쪽)', 'cannon', 6500);
+  }
+  var CALAIS_BATTLE = {
+    id: 'calais', foe: '에스파냐', foeLabel: '무적함대 (메디나 시도니아 공작)',
+    allies: [{ type: 'lgalleon', name: '아크 로열호 (하워드 경)', gun: GUN.me }, { type: 'galleon', name: '리벤지호 (드레이크)', gun: GUN.me },
+      { type: 'galleon', name: '빅토리호 (호킨스)', gun: GUN.me }, { type: 'galleon', name: '뱅가드호 (윈터)', gun: GUN.me }],
+    who: { hist: 'drake' }, ask: '칼레 해전 — 그라블린 앞바다에서 하워드 경·드레이크·호킨스·윈터의 배와 함께 흩어진 무적함대에 맞서겠습니까?',
+    gun: GUN.foe, myGun: GUN.me, gunNote: '하워드 경의 캘버린포를 실었다 — 사정거리 끝에서 두들기세요. 흩어진 에스파냐 배는 서로 돕지 못합니다!', gunK: 0.9, crewK: 0.9,
+    boss: { hist: 'medina', str: 52, mar: 58, int: 70, cha: 66, line: '내 배에 오른 이상, 펠리페 폐하의 이름으로 그대를 상대하겠소!' },
+    win: { fame: 1000, gold: 20000, so: 250, text: '칼레 해전에서 이겼다! 화선에 흩어진 무적함대가 그라블린 앞바다에서 무너졌다. 메디나 시도니아 공작은 북쪽으로 물러나라 명했고, 파르마 공의 군대는 끝내 바다를 건너지 못했다.' },
+    lose: '그라블린 앞바다에서 물러났다. 그래도 바람은 잉글랜드 편이었다 — 무적함대는 북해로 밀려났다고 한다.',
+    decline: '…알겠소. 그대는 여기까지 와 준 것만으로도 충분하오. 우리끼리 끝장을 보겠소.',
+    onWin: function () {
+      var t = st(), s = S(), c = calais(), tt = setTitle(t.knight ? 2 : 1);
+      if (!t.knight) t.knight = { day: s.day, y: s.date.y, date: U.dateNum(s.date), calais: 1 };
+      c.stage = 'won'; t.armada = 'calais';
+      if (G.Rel) G.Rel.set('EN', 'ES', -100, s.date.y + 4, '칼레 해전');
+      SP().addTrust(SP().rel('en_king'), 15);
+      if (tt) UI.toast('엘리자베스 1세가 칼레의 공을 기려 잉글랜드 ' + tt.ko + U.jx(tt.ko, '으로/로') + ' 올렸다!', 'crown', 6500);
+    },
+    onLose: function () { calais().stage = 'lost'; st().armada = 'calais'; }
+  };
+  // 무적함대의 배 (기함부터): 화선에 크게 흩어졌으면 앞의 여섯 척만 남는다
+  var ARMADA_SHIPS = [['lgalleon', '산 마르틴호 (메디나 시도니아 공작)'], ['galleon', '산 후안호 (레칼데)'], ['galleass', '산 로렌소호 (나폴리 갤리어스)'], ['galleon', '산타 아나호 (오켄도)'],
+    ['hcarrack', '라 레가소나호'], ['galleon', '산 펠리페호'], ['galleass', '히로나호 (갤리어스)'], ['galleon', '산 마테오호']];
+  function calaisSpec() {
+    var c = calais(), spec = Object.assign({}, CALAIS_BATTLE), n = c.fire === 'big' ? 6 : 8;
+    spec.ships = ARMADA_SHIPS.slice(0, n).map(function (x) { return x[0]; });
+    spec.names = ARMADA_SHIPS.slice(0, n).map(function (x) { return x[1]; });
+    spec.council = [
+      ['howard', '모두 모였구려. 간밤의 불이 저들의 진을 깨뜨렸소. 오늘은 그라블린 앞바다, 저들이 다시 초승달을 짜기 전에 친다.'],
+      ['hawkins', '저들의 배는 높고 무겁소, 각하. 바람 위에 서서 흘수선 아래를 노리면 저 큰 배들도 버티지 못합니다.'],
+      ['winter', '화선을 띄우자고 한 늙은이로서 한마디만 하지 — 반 마일 안쪽으로 들어가지 마시오. 저들의 카논포는 짧지만, 붙으면 우리 배가 장작이 되오.']
+    ];
+    spec.intro = '그대가 소문의 그 제독이구려! 여왕 폐하께서 그대 이야기를 하셨소. 며칠 전엔 내가 페드로 데 발데스의 로사리오호를 통째로 붙잡았지 — 발데스는 지금 내 선실에서 포도주를 마시고 있다오.\f' +
+      '어젯밤 화선 여덟 척이 썰물을 타고 저들의 진으로 흘러 들어갔소. 놀란 에스파냐 배들이 닻줄을 끊고 사방으로 흩어졌지' +
+      (c.fire === 'big' ? ' — 그대가 댄 화약과 타르 덕에 불길이 더 거셌소. 저들 앞줄에 남은 배는 여섯 척뿐이오!' : '. 저들 앞줄에 남은 배는 여덟 척이오.') +
+      '\f이제 끝장을 봅시다. 바람을 등지고, 멀리서, 캘버린포로!';
+    spec.foeScene = [
+      [null, '— 그 무렵, 무적함대의 기함 산 마르틴호.'],
+      ['medina', '닻줄을 끊고 흩어진 배들을 다시 모으시오! 파르마 공에게서는 아직 소식이 없소?'],
+      ['recalde', '공작 각하, 파르마 공의 바지선은 됭케르크에서 한 척도 나오지 못했습니다. 네덜란드 놈들의 얕은 배가 해안을 막고 있습니다.'],
+      ['oquendo', '메드라노의 갤리선들은 비스케이만 폭풍에 흩어져 프랑스 해안에 숨었고, 발데스는 드레이크에게 잡혔소. 이제 우리끼리 싸울 수밖에 없소!'],
+      ['medina', '…좋소. 산 마르틴호가 앞장서겠소. 주님과 펠리페 폐하를 위하여!']
+    ];
+    return spec;
+  }
+  /** 칼레 앞바다에 닿았을 때: 화선의 밤 → 그라블린 앞바다의 해전 */
+  async function calaisNight() {
+    var c = calais(), h = hist('howard'), s = S();
+    c.stage = 'met';
+    await UI.say('제독, 와 주었구려! 저기 보이시오? 칼레 앞바다에 닻을 내린 초승달 — 저것이 무적함대요. 저들은 파르마 공의 군대를 기다리고 있소.\f허나 유스티누스 반 나사우의 네덜란드 배들이 플랑드르 해안을 막고 있으니, 파르마 공은 나오지 못하오. 저들은 이 앞바다에 갇힌 셈이지.', h);
+    if (G.Hist) await G.Hist.play([['winter', '각하, 오늘 밤이 그날입니다. 썰물에 바람까지 저들 쪽으로 붑니다. 낡은 배 여덟 척에 타르와 화약을 채워 불을 붙여 흘려보내면, 저들은 닻을 끊고 흩어질 겁니다.'],
+      ['howard', '윈터 경의 말대로 하지. 화약과 타르를 더 실을수록 불길이 거세질 것이오.']]);
+    var opts = [{ label: '하워드 경의 화선에 맡긴다', value: 'small' }];
+    if (s.player.gold >= 5000) opts.unshift({ label: '화약·타르를 댄다 (금화 5,000닢 — 무적함대가 더 크게 흩어진다)', value: 'big' });
+    var v = await UI.ask('화선에 실을 화약·타르를 대겠는가? — 소지금 ' + U.num(s.player.gold) + '닢', opts, h);
+    if (v === 'big' && s.player.gold >= 5000) { s.player.gold -= 5000; c.fire = 'big'; } else c.fire = 'small';
+    await UI.say('…자정이 지나자 여덟 척의 배가 불덩이가 되어 바람과 썰물을 타고 흘러갔다. 에스파냐 배들의 진이 비명과 함께 무너진다. 닻줄을 끊고 달아나는 배들이 어둠 속에서 서로 부딪쳤다.' + (c.fire === 'big' ? '\f제독이 댄 화약이 터질 때마다 불기둥이 돛대보다 높이 솟았다.' : ''), {});
+    G.State.log('칼레 앞바다에서 화선을 띄워 무적함대의 진을 흩뜨렸다.' + (c.fire === 'big' ? ' (화약·타르 5,000닢)' : ''));
+    var spec = calaisSpec(); if (G.Rel) { G.Rel.register(spec); await G.Rel.greatBattle(spec); }
+    if (G.Game.state && G.Game.state.rel && G.Game.state.rel.battle && G.Game.state.rel.battle.calais === 'declined') { c.stage = 'declined'; st().armada = 'calais'; }
+  }
   // ================================================================ 왕궁: 런던 · 로마
   function hookCourt() {
     var CT = G.Court; if (!CT || CT._tudor) return; CT._tudor = true;
@@ -281,7 +381,8 @@
           var h = holder() || '';
           if (/헨리 8세/.test(h) && t.div.stage === 0 && s.date.y >= K.divY[0] && s.date.y <= K.divY[1] && TD.friend()) await henryAsk();
           else if (/헨리 8세/.test(h) && t.div.stage === 2) await henryBreak();
-          else if (elizQueen() && t.eliz.stage === 2 && !t.knight) { await knight(); return; }   // 서임 뒤에 「그대가 포르투갈의 ○○인가」 왕명 인사가 이어지지 않게 — 왕명은 메뉴에서
+          else if (elizQueen() && t.eliz.stage === 2 && !t.knight) { await knight(); return; }
+          else if (TD.calaisDue(sp)) { await calaisCall(); return; }   // 칼레 해전의 부름 (1588)   // 서임 뒤에 「그대가 포르투갈의 ○○인가」 왕명 인사가 이어지지 않게 — 왕명은 메뉴에서
         } catch (e) { console.error(e); }
       }
       return onEnter.apply(this, arguments);
@@ -305,6 +406,7 @@
     if (t.eliz && t.eliz.stage === 2 && !t.knight) out.push('엘리자베스가 여왕이 되면 런던 왕궁으로 찾아간다');
     var rd = raidOf(t.drake);
     if (rd) out.push('드레이크의 습격 ' + t.drake.call + '/3 — ' + rd.where + '에서 드레이크와 만나 ' + rd.foeLabel + U.jx(rd.foeLabel, '을/를') + ' 친다');
+    if (t.calais && t.calais.stage === 'call') out.push('1588년 7월 20일 ~ 8월 15일, 칼레 앞바다(도버 해협 동쪽)에서 하워드 경과 함께 무적함대에 맞선다');
     if (t.armada === 'call') out.push('도버 해협·영국 해협에서 드레이크와 만나 무적함대 열두 척에 맞선다');
     return out.length ? '<div class="sep"></div><h4 style="margin:0 0 8px">튜더 왕실의 일</h4><ul>' + out.map(function (x) { return '<li>' + U.esc(x) + '</li>'; }).join('') + '</ul>' : '';
   };

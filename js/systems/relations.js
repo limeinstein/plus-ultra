@@ -221,6 +221,7 @@
   /** 말하는 사람: 왕녀·후원자(그 해의 주인)·교황의 사절 */
   RL.speaker = function (who) {
     if (!who) return {};
+    if (who.hist && G.Hist) return G.Hist.speaker(who.hist);   // 큰 해전의 실제 인물 (js/data/histfigures.js)
     if (who.princess) {
       var pr = ((G.COURT && G.COURT.princesses) || []).filter(function (x) { return x.id === who.princess; })[0];
       if (pr) return { name: pr.name, portrait: G.Art.withImg(G.Art.npcSpec('pr:' + pr.id, 'noble', pr.style, 'f'), [pr.face]), half: [pr.half], lang: 3 };
@@ -262,14 +263,17 @@
     var s = S(), r = st(), id = spec.id || (e && e.id);
     if (r.battle[id]) return false;
     var who = spec.who ? RL.speaker(spec.who) : G.Scenes.mateSpeaker('first');
-    await UI.say(spec.intro, who);
+    if (spec.council && G.Hist) await G.Hist.play(spec.council);   // 싸움 앞의 작전 회의 (우리 편 장수들)
+    if (spec.intro) await UI.say(spec.intro, who);
+    if (spec.foeScene && G.Hist) await G.Hist.play(spec.foeScene);   // 그 무렵 적의 기함에서
     var v = await UI.ask(spec.ask || '함께 싸우겠습니까?', [{ label: '함께 싸운다', value: 'fight' }, { label: '물러난다', value: 'no' }], who);
     if (v !== 'fight') { r.battle[id] = 'declined'; await UI.say(spec.decline || '…그대의 사정도 있겠지. 우리끼리 싸우겠소.', who); return false; }
     r.battle[id] = 'fighting';
     var zone = G.Ships.zone(s.loc.lon, s.loc.lat);
     var npc = { id: 'great_' + id, kind: 'navy', nation: spec.foe, n: spec.ships.length, ships: spec.ships.slice(), K: 1, zone: zone, hostile: true, great: id,
       allies: (spec.allies || []).map(function (a) { return { type: a.type, name: a.name, gun: a.gun }; }), label: spec.foeLabel || spec.foe + ' 함대',
-      gun: spec.gun, myGun: spec.myGun, crewK: spec.crewK, gunK: spec.gunK, gunNote: spec.gunNote };   // 대포: gun 적 함대 · myGun 우리 함대(이 싸움에서만) · allies[].gun 우리 편
+      gun: spec.gun, myGun: spec.myGun, crewK: spec.crewK, gunK: spec.gunK, gunNote: spec.gunNote,
+      names: spec.names, boss: spec.boss };   // names: 적 배 이름(기함부터) · boss: 일기토에 나서는 적장 {hist: 인물 id, str, mar…}   // 대포: gun 적 함대 · myGun 우리 함대(이 싸움에서만) · allies[].gun 우리 편
     await UI.fade(function () { G.Game.go('battle', { npc: npc }); });
     return true;
   };

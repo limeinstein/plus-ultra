@@ -122,7 +122,7 @@
       var pc = (G.BALANCE && G.BALANCE.pirateCrew) || [0.38, 0.5];
       var crew = Math.round(t.crew[1] * (npc.crewK ? npc.crewK * U.rf(0.9, 1.05) : npc.kind === 'pirate' ? (pc[0] + pc[1] * fameK) * U.rf(0.85, 1.15) : U.rf(0.45, 0.8)));
       var gunK = npc.gunK || (npc.kind === 'merchant' ? 0.3 : npc.kind === 'pirate' ? Math.min(0.9, U.rf(0.4, 0.6) + 0.3 * fameK) : U.rf(0.5, 0.9));   // npc.crewK·gunK: 큰 해전의 선원·포문 비율
-      list.push({ type: t.id, name: pname + (i + 1) + '호', hp: t.hp, maxHp: t.hp, crew: crew, crewMax: t.crew[1], guns: { type: gun, n: Math.max(1, Math.round(t.ports * gunK)) }, sails: t.sails.slice() });
+      list.push({ type: t.id, name: (npc.names && npc.names[i]) || pname + (i + 1) + '호', hp: t.hp, maxHp: t.hp, crew: crew, crewMax: t.crew[1], guns: { type: gun, n: Math.max(1, Math.round(t.ports * gunK)) }, sails: t.sails.slice() });
     }
     return list;
   }
@@ -978,7 +978,8 @@
     // captain duel between flagships
     if (me.flag && en.flag && st.npc.kind !== 'merchant' && !st.dueled) {
       var px = G.Games.proxy(), pd = px && G.MATE[px.id];
-      var v = await UI.ask('적의 두목이 나섰다. "제독끼리 승부를 내자!"', [{ label: '일기토를 받는다', value: 1 }].concat(pd ? [{ label: '부관 ' + pd.name + '에게 맡긴다', value: 2 }] : []).concat([{ label: '병사끼리 싸운다', value: 0 }]), {});
+      var nbN = st.npc.boss && st.npc.boss.hist && G.HIST_FIG && G.HIST_FIG[st.npc.boss.hist];
+      var v = await UI.ask(nbN ? nbN.name + U.jx(nbN.name.replace(/\s*\(.*\)$/, ''), '이/가') + ' 칼을 뽑고 나섰다. "' + (st.npc.boss.line || '제독끼리 승부를 내자!') + '"' : '적의 두목이 나섰다. "제독끼리 승부를 내자!"', [{ label: '일기토를 받는다', value: 1 }].concat(pd ? [{ label: '부관 ' + pd.name + '에게 맡긴다', value: 2 }] : []).concat([{ label: '병사끼리 싸운다', value: 0 }]), {});
       if (v) {
         st.dueled = true;
         if (v === 2) await UI.say(U.pick(['제독께서 나서실 것까지 없습니다. 제가 상대하겠습니다!', '저런 녀석은 제게 맡기십시오.', '제독의 칼을 더럽힐 것 없습니다. 제가 나가지요.']), G.Scenes.mateSpeaker('first'));
@@ -986,6 +987,8 @@
         var bossLook = st.npc.kind === 'pirate' ? 'pirate' : 'captain', bossSpec = A.npcSpec('boss' + st.t, 'captain', bossStyle);
         A.withImg(bossSpec, [A.rolePortraitKey(bossSpec), 'portraits/npc/' + bossLook + '_' + A.imageCulture(bossStyle)]);
         var boss = { name: st.npc.kind === 'pirate' ? '해적 두목' : '적 함장', look: bossLook, portrait: bossSpec, str: U.ri(55, 80), atk: U.ri(6, 12), def: U.ri(2, 6), skill: U.ri(0, 1), mar: U.ri(55, 78), int: U.ri(30, 60), cha: U.ri(30, 55) };
+        var nb = st.npc.boss;   // 큰 해전: 이름난 적장이 나선다 (js/data/histfigures.js)
+        if (nb && nb.hist && G.Hist) { var hs = G.Hist.speaker(nb.hist); boss.name = hs.name; boss.portrait = hs.portrait || boss.portrait; ['str', 'atk', 'def', 'skill', 'mar', 'int', 'cha', 'look'].forEach(function (k) { if (nb[k] != null) boss[k] = nb[k]; }); }
         var res = await G.Games.duel(boss, v === 2 ? { mate: px, place: 'deck' } : { place: 'deck' });
         var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
         if (res === 'win') {

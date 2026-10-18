@@ -150,6 +150,7 @@
       if (G.Rel && G.Rel.pending()) await G.Rel.present();       // 궁정의 소식·교황의 사절·큰 해전 (js/systems/relations.js)
       if (G.Leo && G.Leo.pending()) await G.Leo.present();       // 레오나르도의 발명품
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
+      if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 제노바의 협상 · 바르바로사의 무덤
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;

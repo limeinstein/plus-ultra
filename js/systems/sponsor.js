@@ -336,7 +336,7 @@
     if (ev === 'both') await UI.say(L('bothLate'), who);
     if (pitch) await pitch.close();
     if (G.Fakes) G.Fakes.after(sp, d, ev, found);
-    if (found) { st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; }
+    if (found) { st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; if (G.Tudor && G.Tudor.onReport) G.Tudor.onReport(sp, d); }   // 엘리자베스 1세에게 한 발견 보고 (칼레 해전의 조건 — js/systems/tudor.js)
     s.player.gold += pay; G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + bothUp + (tp === 'generous' ? 3 : 0) + (pitch && pitch.trust ? pitch.trust : 0)); rel.done = (rel.done || 0) + 1; rel.promise = 0;
     SP.proofToast(pr);
     if (found) SP.stirJealousy(sp, d);
@@ -711,7 +711,7 @@
     SP.proofToast(pr);
     s.player.gold += reward; G.Fame.add('ex', fame);
     if (!k.circ && G.Fakes) G.Fakes.after(sp, d, ev, found);
-    if (found) { st = s.disc[k.disc] || st; st.reported = sp.id; if (trm) st.claim = trm.claim; s.disc[k.disc] = st; }
+    if (found) { st = s.disc[k.disc] || st; st.reported = sp.id; if (trm) st.claim = trm.claim; s.disc[k.disc] = st; if (!k.circ && G.Tudor && G.Tudor.onReport) G.Tudor.onReport(sp, d); }
     SP.addTrust(rel, trustUp); rel.done = (rel.done || 0) + 1; rel.promise = 0;
     if (k.circ) { s.flags.circDone = true; }
     if (found && !k.circ) SP.stirJealousy(sp, d);

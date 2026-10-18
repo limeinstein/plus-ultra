@@ -107,7 +107,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.navy[0] && r.navy[1] && r.navy[2], '전쟁 중인 프랑스 군함은 덤비고, 쳐도 악명이 오르지 않는다');
     ok(r.pend97.includes('ib_wed1497') && /이사벨/.test(r.wed.said) && r.wed.gold === 1500 && r.wed.so > 0 && r.wed.ptes === 55, '이사벨 공주가 혼례 소식을 직접 전하고, 예물을 보내면 사교 명성 +' + r.wed.so + ' (포르투갈·에스파냐 ' + r.wed.ptes + ')');
     ok(/교황의 사절/.test(r.legate || '') && r.popeTrust > 20, '오트란토 함락 — 교황의 사절이 십자군 기부를 청한다 (교황 신뢰 ' + r.popeTrust + ')');
-    ok(r.lepPending && r.lepanto && r.lepanto.allies === 3 && r.lepanto.n === 7 && r.lepWin[0] === 'won' && r.lepWin[1] > 0, '레판토: 그 바다에 가면 신성 동맹 함대 3척과 함께 오스만 7척에 맞선다 → 이기면 전투 명성 +' + r.lepWin[1]);
+    ok(r.lepPending && r.lepanto && r.lepanto.allies === 6 && r.lepanto.n === 9 && r.lepWin[0] === 'won' && r.lepWin[1] > 0, '레판토: 그 바다에 가면 신성 동맹 함대 6척(돈 후안·콜론나·베니에르·바르바리고·도리아·산타 크루스)과 함께 오스만 9척(알리 파샤의 술타나호 …)에 맞선다 → 이기면 전투 명성 +' + r.lepWin[1]);
     ok(r.leoBlocked === false && !r.leoTavern, '레오나르도: 밀라노 공작을 만나기 전에는 저택에 들 수 없고, 술집에도 없다');
     ok(r.leoJoined && r.leoBday.length === 1, '밤샘 이야기 뒤 배에 태우면 저택이 비고, 생일에 발명품 「' + r.leoBday[0] + '」');
     ok(!r.leoTrust[0] && r.leoTrust[1] === 1 && r.leoTrust[2] === 2 && r.leoTrust[3], '태우지 않으면 신뢰 100에 하나, 두 해 뒤에 또 하나 — 저택에서 다시 청할 수 있다');
