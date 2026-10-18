@@ -877,6 +877,13 @@ Codex가 그린 가족 그림 30장(`images/family-events/`, 576×256)으로 32�
   - 조정값 `G.FX.landSea`: `max`(함께 보이는 배) · `every` · `near`(탐험 함대가 보이는 거리) · `life` · `idle` · `size` · `pirate` · `navy`.
 - 점검: `node tests/landsea_smoke.js`
 
+## 단서 없이는 발견물을 놓치기 쉽다 (2026-10-18)
+- 단서(술집 소문·책·후원자·원주민 이야기 등)가 없는 발견물은 찾는 반경 안에 들어도 **그날 찾을 확률**만큼만 찾습니다 (`js/systems/discovery.js` `D.noClueChance`). 반경 안에 머무는 날마다 한 번 굴립니다.
+  - 기본 바다 15% · 뭍 18%. 기술 1레벨마다 +4%(바다 측량, 뭍 역사학 — 짐승·자연은 과학 절반도), 망루가 먼저 알아챈 것(지도 표식) +12%, 반경 한가운데일수록 최대 +15%, 배를 세우고 「탐색」하면 +25%. 최대 60%.
+  - 단서가 한 겹이라도 있으면 예전처럼 반경에 들면 바로 찾습니다. 희망봉·서쪽 항로 같은 지리 이정표는 그대로입니다.
+  - 조정값 `G.BALANCE.noClueFind` (`on`·`sea`·`land`·`skill`·`mark`·`center`·`search`·`max`).
+- 점검: `node tests/noclue_find_smoke.js`
+
 ## 탐험과 도시를 더 재미있게 (재미 설계)
 
 | 목표 | 장치 |

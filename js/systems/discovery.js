@@ -150,6 +150,18 @@
     return { discipline: !!q.discipline, fatigue: !!q.fatigue, recover: need, findK: strainCfg().findK || 0.35 };
   };
   D.findK = function (quiet) { var q = D.strainState(quiet); return q ? q.findK : 1; };
+  /* 단서 없이 찾기: 단서(술집·책·후원자·원주민… s.hints)가 없는 발견물은 그 자리를 지나가도 늘 찾지는 못한다.
+     찾는 반경 안에 든 날마다 한 번 굴린다 — 가운데에 가까울수록, 망루가 먼저 알아챈 것(표식)일수록, 측량·역사학(뭍의 짐승·자연은 과학도)이 높을수록,
+     배를 세우고 주변을 탐색할수록 잘 찾는다. 단서가 한 겹이라도 있으면 예전처럼 반경에 들면 찾는다. 조정값 G.BALANCE.noClueFind */
+  function NCF() { return (G.BALANCE && G.BALANCE.noClueFind) || { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 }; }
+  D.noClueChance = function (d, mode, dist, r, search) {
+    var K = NCF(); if (K.on === false || !d || S().hints[d.id]) return 1;
+    var lv = mode === 'sea' ? R.skill('survey') : R.skill('hist') + (d.cat === 'creature' || d.cat === 'nature' ? R.skill('sci') * 0.5 : 0);
+    var p = (mode === 'sea' ? K.sea : K.land) + lv * K.skill + (S().marks && S().marks[d.id] ? K.mark : 0)
+      + (r > 0 ? K.center * Math.max(0, 1 - dist / r) : 0) + (search ? K.search : 0);
+    return Math.max(0.05, Math.min(K.max, p));
+  };
+  D.noClueRoll = function (d, mode, dist, r, search) { var p = D.noClueChance(d, mode, dist, r, search); return p >= 1 || U.chance(p); };
   /** 데이터에 impact를 따로 적으면 그것을 우선하고, 없으면 발견 갈래와 설명으로 정한다. */
   D.impactKind = function (d) {
     if (d.impact && IMPACT[d.impact]) return d.impact;
@@ -596,13 +608,15 @@
     return [best];
   }
   D.dayCapped = dayCapped;
-  D.checkSea = function (lon, lat) {
-    var s = S(), hits = [], findK = D.findK();
+  D.checkSea = function (lon, lat, opt) {
+    var s = S(), hits = [], findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'sea' || D.foundByMe(d.id) || D.taken(d.id) || !D.needMet(d)) return;
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
-      if (G.Geo.dist(lon, lat, d.lon, d.lat) >= d.r * D.clueK(d.id, 'find') * findK) return;   // 단서가 겹칠수록 넓게, 여파로 수치가 바닥나면 좁게
+      var dist = G.Geo.dist(lon, lat, d.lon, d.lat), r = d.r * D.clueK(d.id, 'find') * findK;
+      if (dist >= r) return;   // 단서가 겹칠수록 넓게, 여파로 수치가 바닥나면 좁게
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return; }   // 아직 세워지지 않았다 — 1600년부터는 신기루로 보인다
+      if (!D.noClueRoll(d, 'sea', dist, r, search)) return;     // 단서가 없으면 그날 못 보고 지나칠 수 있다
       hits.push(d);
     });
     // special geography conditions
@@ -619,15 +633,15 @@
     return oneToday(hits.filter(function (x, i) { return x && hits.indexOf(x) === i; }), lon, lat);
   };
   /** on land expedition */
-  D.checkLand = function (lon, lat) {
-    var hits = [], near = null, nearD = 99, findK = D.findK();
+  D.checkLand = function (lon, lat, opt) {
+    var hits = [], near = null, nearD = 99, findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'land' || D.foundByMe(d.id) || D.taken(d.id) || !D.needMet(d)) return;
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find') * findK;
       if (!D.built(d)) { if (dist < r && G.Mirage) G.Mirage.see(d); return; }   // 신기루
-      if (dist < r) hits.push(d);
+      if (dist < r && D.noClueRoll(d, 'land', dist, r, search)) hits.push(d);   // 단서가 없으면 그날 못 찾고 지나칠 수 있다
       else if (dist < nearD) { nearD = dist; near = d; }
     });
     if (near && G.Reel && nearD < Math.max(1.2, near.r * 4)) G.Reel.prefetch(near);   // 가까워지면 발견 장면 판을 미리 받아 둔다

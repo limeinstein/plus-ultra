@@ -19,10 +19,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   try {
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.evaluate(() => G.Game.go('create'));
     await page.waitForSelector('#nm');
     await page.fill('#nm', '이강희'); await page.press('#nm', 'Enter');
     await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Game.state, null, { timeout: 90000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     const r = await page.evaluate(() => {
       const D = G.Disc, s = G.Game.state, out = {};
       const an = G.ANIMALS.map(id => G.DISC[id]);

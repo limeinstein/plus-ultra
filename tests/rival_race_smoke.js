@@ -30,12 +30,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   try {
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.evaluate(() => G.Game.go('create'));
     await page.waitForSelector('#nm', { timeout: 30000 });
     await page.fill('#nm', '이강희');   // 시험 캐릭터 — 엔터로 바로 시작
     await page.evaluate(() => { G.Scenes.city.prologue = async function () { G.Game.state.flags.prologue = true; }; });
     await page.press('#nm', 'Enter');
     await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Game.state && G.Game.state.player, null, { timeout: 90000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.waitForTimeout(1200);
     await page.evaluate(() => G.Game.ensureGeo && G.Game.ensureGeo());
 

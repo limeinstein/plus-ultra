@@ -18,8 +18,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   try {
     await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.evaluate(() => G.Game.ensureGeo());
     await page.waitForFunction(() => G.Game.geoReady, null, { timeout: 120000, polling: 200 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.evaluate(() => {
       window.__fresh = function () {
         const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 0; });
@@ -32,6 +34,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = G.Game.state; s.loc = { mode: 'city', city: 0, lon: 0, lat: 0 }; G.Game.go('city', { cityId: 0 });
     });
     await page.waitForFunction(() => G.Game.sceneName === 'city', null, { timeout: 30000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.waitForTimeout(1200);
     await page.evaluate(() => { document.querySelectorAll('.modal-back').forEach(e => e.remove()); });
 

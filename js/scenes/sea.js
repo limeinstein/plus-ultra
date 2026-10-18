@@ -1435,7 +1435,7 @@
     G.State.revealChart(l.lon, l.lat, chartR() + (K.chartBonus || 0));
     var sensed = G.Explore.sense('sea', l.lon, l.lat, K.senseBoost || 1.8);
     if (sensed.length) await G.Explore.report(sensed, l.lon, l.lat, 'sea');
-    var ds = G.Disc.checkSea(l.lon, l.lat);
+    var ds = G.Disc.checkSea(l.lon, l.lat, { search: true });   // 배를 세우고 살피면 단서 없는 것도 더 잘 찾는다
     for (var i = 0; i < ds.length; i++) {
       await UI.say(seaLine(ds[i]), G.Scenes.mateSpeaker(R.skill('survey') ? 'surveyor' : 'first'));
       await G.Disc.find(ds[i], 'sea');
