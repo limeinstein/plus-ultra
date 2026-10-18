@@ -13,18 +13,29 @@
   function fit() {
     var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
     Game.scale = s;
-    stage.style.transform = 'scale(' + s + ')';
-    stage.style.left = Math.round((window.innerWidth - 1600 * s) / 2) + 'px';
-    stage.style.top = Math.round((window.innerHeight - 900 * s) / 2) + 'px';
+    var left = Math.round((window.innerWidth - 1600 * s) / 2), top = Math.round((window.innerHeight - 900 * s) / 2);
+    // 선명한 렌더링 (2026-10-18): transform: scale은 글씨를 1600×900 크기로 그린 뒤 늘려 27인치 FHD·QHD에서 획이 뭉개진다.
+    // CSS zoom은 글씨를 화면의 실제 크기로 다시 짜서 그린다. zoom을 쓰면 left/top도 zoom배가 되므로 나눠 둔다. (js/ui/display.js)
+    var sharp = G.Display && G.Display.render() === 'sharp';
+    Game.renderMode = sharp ? 'sharp' : 'classic';
+    if (sharp) {
+      stage.style.transform = ''; stage.style.zoom = s;
+      stage.style.left = (left / s).toFixed(3) + 'px'; stage.style.top = (top / s).toFixed(3) + 'px';
+    } else {
+      stage.style.zoom = ''; stage.style.transform = 'scale(' + s + ')';
+      stage.style.left = left + 'px'; stage.style.top = top + 'px';
+    }
+    document.documentElement.classList.toggle('stage-sharp', !!sharp);
     fitUi(s);
     resizeCanvases();
+    if (G.Display) G.Display.applyFont();
   }
 
   // ---------------------------------------------------------------- 글씨·창 크기 (UI QA 2026-10-11 #1)
   /* 무대(1600×900)를 화면에 맞춰 통째로 줄이면 작은 화면(1280×720 노트북·휴대폰)에서 글씨가 너무 작아진다.
      그래서 UI 층(#ui)만 따로 키운다: UI 층을 (1600/z)×(900/z) 크기로 짜고 CSS zoom z배로 키워 무대를 그대로 채운다.
      그림 캔버스(바다·거리·해전)는 그대로 · 창·메뉴·글씨만 커진다. 고른 크기는 이 브라우저(기기)에만 남긴다 (저장 파일과 무관) */
-  var UI_SIZES = { auto: 0, normal: 1, large: 1.15, xlarge: 1.3, max: 1.45 };
+  var UI_SIZES = { auto: 0, small: 0.9, normal: 1, large: 1.15, xlarge: 1.3, max: 1.45 };   // 이름표는 js/ui/display.js D.SIZES
   Game.UI_SIZES = UI_SIZES;
   Game.uiSizePref = function () {
     try { var v = window.localStorage.getItem('pu.uiSize'); if (v && UI_SIZES[v] != null) return v; } catch (e) { /* 저장소를 못 쓰면 자동 */ }
@@ -36,8 +47,12 @@
   };
   function uiZoomFor(s) {
     var p = Game._uiSizeMem || Game.uiSizePref(), z = UI_SIZES[p];
-    // 자동: 글씨가 1600×900에서 보던 크기의 92% 이상으로 보이게 키운다 (1280×720 → 1.15배 · 1024×768 → 1.3배까지)
-    if (!z) z = Math.max(1, Math.min(1.3, 0.92 / Math.max(0.05, s)));
+    // 자동(DEFAULT): 글씨가 1600×900에서 보던 크기의 92% 이상으로 보이게 키운다 (1280×720 → 1.15배 · 1024×768 → 1.3배까지)
+    // 모니터의 화소 밀도도 본다 (2026-10-18): 본문(19px)이 실제 화면에서 24점 이상으로 그려지게 — 27인치 FHD(배율 100~125%)는 조금 키우고, 4K는 그대로
+    if (!z) {
+      var dpr = window.devicePixelRatio || 1;
+      z = Math.max(1, Math.min(1.3, Math.max(0.92 / Math.max(0.05, s), Math.min(1.2, 24 / (19 * Math.max(0.05, s) * dpr)))));
+    }
     return Math.round(z * 100) / 100;
   }
   function fitUi(s) {
@@ -45,14 +60,14 @@
     Game.uiZoom = z;
     if (!ui) return;
     ui.style.setProperty('--unz', (1 / z).toFixed(4));   // 1600×900에 맞춰 짠 온 화면 판(캐릭터 만들기)은 원래 크기로 되돌린다
-    if (z > 1.001) {
+    if (z > 1.001 || z < 0.999) {
       ui.style.zoom = z;
       ui.style.width = (1600 / z).toFixed(2) + 'px'; ui.style.height = (900 / z).toFixed(2) + 'px';
       ui.style.right = 'auto'; ui.style.bottom = 'auto';
     } else {
       ui.style.zoom = ''; ui.style.width = ''; ui.style.height = ''; ui.style.right = ''; ui.style.bottom = '';
     }
-    document.documentElement.classList.toggle('ui-zoomed', z > 1.001);
+    document.documentElement.classList.toggle('ui-zoomed', z > 1.001 || z < 0.999);
     if (UI.fitHud) UI.fitHud();
   }
   /** UI 층의 너비·높이 (UI 좌표) — 창·그림 상자를 가운데에 놓을 때 1600·900 대신 쓴다 */
@@ -350,6 +365,7 @@
   // ---------------------------------------------------------------- boot
   Game.boot = function () {
     stage = document.getElementById('stage');
+    if (G.Display) G.Display.init();
     worldCanvas = document.getElementById('world');
     overlayCanvas = document.getElementById('overlay');
     sceneCanvas = document.getElementById('scene');

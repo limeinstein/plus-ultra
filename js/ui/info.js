@@ -600,8 +600,7 @@
       (UI.fs && UI.fs.can() ? '<div>전체 화면</div><div><div class="opt-row"><div class="opt' + (UI.fs.on() ? ' on' : '') + '" data-fs="1">켬</div><div class="opt' + (UI.fs.on() ? '' : ' on') + '" data-fs="0">끔</div></div>' +
         '<small class="muted">F11로도 켜고 끕니다. 게임이 켠 전체 화면에서는 마우스를 맨 위로 올려도 브라우저 메뉴가 내려오지 않습니다.</small></div>' : '') +
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
-      (G.Game.UI_SIZES ? '<div>글씨·창 크기</div><div><div class="opt-row">' + [['auto', '자동'], ['normal', '보통'], ['large', '크게'], ['xlarge', '아주 크게'], ['max', '최대']].map(function (o) { return '<div class="opt' + (G.Game.uiSizePref() === o[0] ? ' on' : '') + '" data-uisz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
-        '<small class="muted">지금 ' + Math.round((G.Game.uiZoom || 1) * 100) + '% — 자동은 화면이 작을수록 글씨·창을 키웁니다 (이 기기에만 기억)</small></div>' : '') +
+      (G.Display ? G.Display.panelHtml() : '') +   // 글자 크기(DEFAULT·제안값)·글꼴·렌더링 (js/ui/display.js, 2026-10-18)
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
@@ -622,7 +621,7 @@
     U.$$('input[type=range]', el).forEach(function (r) { r.oninput = function () { st[r.dataset.k] = r.value / 100; if (G.Audio) G.Audio.setVolume(); }; });
     U.$$('[data-fs]', el).forEach(function (o) { o.onclick = function () { var want = o.dataset.fs === '1'; (want === UI.fs.on() ? Promise.resolve() : want ? UI.fs.enter() : UI.fs.exit()).then(function () { setTimeout(function () { PAGES.menu(el, win); }, 120); }); }; });
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
-    U.$$('[data-uisz]', el).forEach(function (o) { o.onclick = function () { G.Game.setUiSize(o.dataset.uisz); PAGES.menu(el, win); }; });   // UI QA 2026-10-11 #1
+    if (G.Display) G.Display.bind(el, function () { PAGES.menu(el, win); });
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });

@@ -37,7 +37,11 @@
     var bStory = G.Story && G.Story.begin ? btn('이야기 — 아버지의 사진', 'scroll', function () { if (!bStory.classList.contains('disabled')) G.Story.begin(); }) : null;
     if (bStory) bStory.classList.add('disabled');
     var bLoad = btn('항해 일지 불러오기', 'book', function () { T.loadMenu(); });
-    btn('조작 안내', 'info', function () { T.help(); });
+    var bHelp = btn('조작 안내', 'info', function () { T.help(); });
+    if (G.Display) {   // 글자 크기·글꼴 (js/ui/display.js) — 조작 안내와 한 줄에 나란히 (단추가 늘어 화면 밑으로 밀리지 않게)
+      var row = U.el('div', 'title-row'); menu.insertBefore(row, bHelp); row.appendChild(bHelp);
+      var bDisp = btn('화면 · 글꼴', 'gear', function () { G.Display.open(); }); row.appendChild(bDisp);
+    }
     bLoad.classList.add('disabled');
     bNew.classList.add('disabled'); bLoad.dataset.wait = '1'; if (bCont) bCont.classList.add('disabled');
     var ld = wrap.querySelector('.loading');
