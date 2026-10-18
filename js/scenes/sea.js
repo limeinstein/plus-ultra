@@ -65,7 +65,7 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function () { if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
+  SEA.exit = function (next) { if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
@@ -128,6 +128,7 @@
     hudEl.port = btn('입항', 'anchor', function () { tryEnterPort(); }, 'navy');
     hudEl.land = btn('상륙', 'boot', function () { tryLand(); });
     if (G.Fishing) btn('낚시', 'fish', function () { goFish(); });
+    if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { st.busy++; G.Rain.ask(false).then(function () { st.busy--; refreshButtons(); }, function () { st.busy--; }); }); hudEl.rain.style.display = G.Rain.raining() ? '' : 'none'; }   // 비가 오는 동안만 보인다
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy--; }); });
     hudEl.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
@@ -693,6 +694,13 @@
   /** 바다에 그리는 우리 배들: 내 함대 + 호위하는 상선 (js/systems/escort.js) */
   function seaShips() { var fs0 = S().fleet.ships; return G.Escort ? G.Escort.seaShips(fs0) : fs0; }
   SEA.pirateK = pirateK;
+  /** 하루에 해적 떼가 나타날 확률: 바다의 해적 빈도 × 난이도 × 상선 호위(해적이 더 꾄다) × 사략선장(같은 패로 여겨 덜 덤빈다 — js/systems/court.js) */
+  function pirateChance(lon, lat) {
+    var s = S();
+    return pirateRate(lon, lat) * (s.settings.diff === 'easy' ? 0.6 : 1) * (G.Escort ? G.Escort.pirateK() : 1) * (G.Court && G.Court.pirateK ? G.Court.pirateK() : 1);
+  }
+  SEA.pirateChance = pirateChance;
+  SEA.spawnNpcsForTest = function () { spawnNpcs(); };   // 시험용 (tests/privateer_smoke.js)
   SEA.canPlead = canPlead;
   function spawnNpcs() {
     var s = S(), l = s.loc;
@@ -705,7 +713,7 @@
     if (G.Princess) { var prN = G.Princess.spawn(st.npcs); if (prN) { st.npcs.push(prN); if (G.ShipSprite) G.ShipSprite.want(prN.ships); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
-    var pr = pirateRate(l.lon, l.lat) * (s.settings.diff === 'easy' ? 0.6 : 1) * (G.Escort ? G.Escort.pirateK() : 1);   // 상선을 호위하면 해적이 더 꾄다
+    var pr = pirateChance(l.lon, l.lat);
     var mr = 0.05 + ports * 0.02;
     var kind = null, f0 = s.fleet.ships[0];
     if (U.chance(pr) && (!G.Pace || G.Pace.ok('ship:pirate', { noGap: true }))) kind = 'pirate'; else if (U.chance(mr)) kind = U.chance(0.75) ? 'merchant' : 'navy';
@@ -1069,7 +1077,7 @@
     if (!st.path && !st.manual && st.dirCrs == null && !st.stopping && shipSpeed() < P.stopSpeed) return;
     st.sailT = (st.sailT || 0) + days;
     if (st.noTack > 0) st.noTack -= days;
-    var wind = curWind(), k0 = (st.storm > 0 ? 0.6 : 1) * (st.slowDays > 0 ? 0.7 : 1), v = 0, m = null;
+    var wind = curWind(), k0 = (st.storm > 0 ? 0.6 : 1) * (st.slowDays > 0 ? 0.7 : 1) * (G.Rain ? G.Rain.speedK() : 1), v = 0, m = null;   // 비: 대책에 따라 조금 느려진다 (js/systems/searain.js)
     var h = l.heading;
     // ---------------- 목표 속력 (돛·바람이 주는 힘) — 실제 속력은 선체의 관성으로 이것을 뒤따른다
     if (st.stopping) {
@@ -1309,10 +1317,11 @@
       fb -= R.skillRead('cook') * (CC.cookFatigue || 0.12);       // 요리: 따뜻한 끼니가 고단함을 덜어 준다
       var CBN = G.Cabins;                                          // 기함의 선실 (사람을 배치한 방만 힘을 낸다)
       if (CBN) fb -= CBN.fx('galley', 'galley') + CBN.fx('mess', 'mess') + CBN.fx('helm', 'helm') + CBN.fx('musicroom', 'musicroom');   // 음악실: 날마다 가락을 들려준다
+      if (G.Rain) fb += G.Rain.fatigue(st.storm > 0);              // 비: 기온대·소나기/폭우·비 대책에 따라 (js/systems/searain.js)
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
       f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
-        + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0), 0, 100);
+        + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0) + (G.Rain ? G.Rain.discipline() : 0), 0, 100);
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();
@@ -1377,6 +1386,7 @@
       if (l.lat > 10 && l.lat < 30 && l.lon > -20 && l.lon < 0) {} // African Atlantic coast: nothing
       // weather
       weatherDay(msgs);
+      if (G.Rain && G.Rain.daily(msgs, { storm: st.storm > 0 || st.stormPending }) && !S().rain.asked) st.rainAsk = true;   // 처음 비가 오면 부관이 대책을 묻는다
       if (st.stormDays > 0) { st.stormDays--; if (st.stormDays === 0) st.storm = 0; }
       // npcs
       spawnNpcs();
@@ -1391,6 +1401,7 @@
       if (G.Rel && G.Rel.pending()) await G.Rel.present();       // 궁정의 소식·교황의 사절·큰 해전 (js/systems/relations.js)
       if (G.Leo && G.Leo.pending()) await G.Leo.present();       // 레오나르도의 발명품
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
+      if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 툴롱의 겨울 (하이레딘 파샤)
       if (G.Disaster) await G.Disaster.sea();   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);
@@ -1434,7 +1445,7 @@
     G.State.revealChart(l.lon, l.lat, chartR() + (K.chartBonus || 0));
     var sensed = G.Explore.sense('sea', l.lon, l.lat, K.senseBoost || 1.8);
     if (sensed.length) await G.Explore.report(sensed, l.lon, l.lat, 'sea');
-    var ds = G.Disc.checkSea(l.lon, l.lat);
+    var ds = G.Disc.checkSea(l.lon, l.lat, { search: true });   // 배를 세우고 살피면 단서 없는 것도 더 잘 찾는다
     for (var i = 0; i < ds.length; i++) {
       await UI.say(seaLine(ds[i]), G.Scenes.mateSpeaker(R.skill('survey') ? 'surveyor' : 'first'));
       await G.Disc.find(ds[i], 'sea');
@@ -1491,6 +1502,7 @@
   }
   async function crises(msgs) {
     var s = S(), f = s.fleet;
+    if (st.rainAsk && G.Rain) { st.rainAsk = false; try { await G.Rain.ask(true); } catch (e) { console.error(e); } }
     if (st.stormPending) {
       st.stormPending = false;
       st.storm = 1; st.stormDays = U.ri(1, 3);
@@ -1599,7 +1611,8 @@
       UI.toast('선원들이 약속을 믿고 물러났다. 오래 미루면 다시 들고일어날 것이다.', 'anchor', 4600);
       f.mutinyAt = s.day + 15;   // 약속은 오래가지 않는다
     } else {
-      if (U.chance(0.45 + R.skill('speech') * 0.15 + R.stat('cha') / 250)) { f.discipline = Math.min(100, f.discipline + 25); UI.toast('주동자를 설득했다. 선원들이 제자리로 돌아간다.', 'people'); }
+      var mOk = U.chance(0.45 + R.skill('speech') * 0.15 + R.stat('cha') / 250); if (G.Growth) G.Growth.persuade(mOk, mOk ? '설득 경험 — 반란 주동자를 달랬다' : null);
+      if (mOk) { f.discipline = Math.min(100, f.discipline + 25); UI.toast('주동자를 설득했다. 선원들이 제자리로 돌아간다.', 'people'); }
       else { f.discipline = Math.min(100, f.discipline + 6); f.fatigue = Math.max(0, f.fatigue - 5); UI.toast('설득에 실패했다. 불만이 남아 있다...', 'people'); }
     }
   }
@@ -1678,7 +1691,8 @@
     var s = S(), l = s.loc;
     var cl = G.Geo.climate(l.lon, l.lat);
     var cloud = U.clamp(0.18 + cl.m * 0.35 + (Math.abs(l.lat) > 45 ? 0.12 : 0), 0.1, 0.7);
-    return { cloud: Math.max(cloud, st.storm ? 0.8 : 0), storm: st.storm ? 0.85 : 0 };
+    var wp = { cloud: Math.max(cloud, st.storm ? 0.8 : 0), storm: st.storm ? 0.85 : 0 };
+    return G.Rain ? G.Rain.weather(wp) : wp;   // 비구름이 몰려오면 하늘·바다가 어두워진다
   }
   function render(dt) {
     var s = S(), l = s.loc, r = G.Game.renderer;
@@ -1752,6 +1766,7 @@
     var pn = portNear();
     if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
+    if (hudEl.rain) { var rv = G.Rain.raining() ? '' : 'none'; if (hudEl.rain.style.display !== rv) hudEl.rain.style.display = rv; }
     if (hudEl.search) {
       var canSearch = st.paused && !st.stopping && shipSpeed() < FXS().stopSpeed && !st.busy;
       hudEl.search.classList.toggle('disabled', !canSearch);
@@ -1771,7 +1786,7 @@
     var eta = etaDays(), have = Math.min(R.daysOfFood(), R.daysOfWater());
     var etaTxt = eta != null ? ' · <span style="color:' + (have < eta + 2 ? '#ff9f7a' : '#cfe8b0') + '">도착까지 약 ' + eta + '일 / 보급 ' + have + '일분</span>' : '';
     var oc = G.Explore.oceanOf(l.lon, l.lat);
-    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⚓ 멈춤</b> <span style="opacity:.8">(시간은 흐른다)</span> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
+    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⚓ 멈춤</b> <span style="opacity:.8">(시간은 흐른다)</span> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (G.Rain ? G.Rain.tag() : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
   }
   /** 글이 바뀌었을 때만 고친다 (같은 글을 다시 넣으면 브라우저가 매번 새로 배치한다) */
   function setHtml(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }
@@ -1891,6 +1906,7 @@
     drawCities(ctx);
     if (G.Disaster && G.Disaster.drawSea) G.Disaster.drawSea(ctx, toScreen, st.cam.zoom, st.t, fontFam());   // 알려진 재해의 움직이는 그림 (해일·화산 …)
     if (G.VoyageFX) G.VoyageFX.drawSky(st, ctx, pp, l.heading, SP, toScreen);      // 모항 배웅 갈매기
+    if (G.Rain) G.Rain.draw(ctx, st.t, st.windVis ? st.windVis.dir : 0, st.storm > 0, function (x, y) { var w = toWorld(x, y); return !G.Geo.isLand(w[0], w[1]); });   // 비: 빗줄기·수면에만 생기는 빗방울 고리·번개
     // hover tooltip
     if (st.mouse && !UI.busy()) {
       var hc = cityAt(st.mouse[0], st.mouse[1]) || shorePortAt(st.mouse[0], st.mouse[1]);

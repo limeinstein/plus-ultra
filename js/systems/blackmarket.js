@@ -115,7 +115,7 @@
         var id = v.slice(2), it = st.items.filter(function (z) { return z.id === id; })[0];
         if (R.itemsFull()) { await C.mate('이 이상 가질 수 없습니다!'); continue; }
         if (!(await UI.confirm(it.name + '<br><span class="muted">' + (G.ITEM[id].desc || '') + '</span><br>금화 ' + U.num(it.price) + '닢에 사겠습니까?', '산다', '그만둔다'))) continue;
-        s.player.gold -= it.price; R.addItem(id); x.sold[id] = 1;
+        s.player.gold -= it.price; R.addItem(id, { from: c.id, paid: it.price }); x.sold[id] = 1;   // 산 곳 (같은 도시 시장에는 치른 값까지만)
         s.player.notoriety = (s.player.notoriety || 0) + (k.bmNoto || 1);
         G.State.log(c.name + '의 뒷골목 암시장에서 ' + it.name + U.jx(it.name, '을/를') + ' 샀다.');
         await C.say(who, U.pick(['좋은 거래였소. 어디서 났는지는 묻지 마시오.', '이 물건 이야기는 우리 둘만 아는 거요.']));
@@ -131,8 +131,8 @@
         if (!q) continue;
         s.player.gold -= q * g.price;
         var cg = f.cargo[gid];
-        if (cg) { cg.cost = Math.round((cg.cost * cg.q + g.price * q) / (cg.q + q)); cg.d = Math.round((cg.d * cg.q + s.day * q) / (cg.q + q)); cg.q += q; }
-        else f.cargo[gid] = { q: q, cost: g.price, from: g.from, d: s.day };
+        if (cg) { R.addCargoLot(cg, c.id, q, g.price); cg.cost = Math.round((cg.cost * cg.q + g.price * q) / (cg.q + q)); cg.d = Math.round((cg.d * cg.q + s.day * q) / (cg.q + q)); cg.q += q; }
+        else { f.cargo[gid] = { q: q, cost: g.price, from: g.from, d: s.day, lots: {} }; f.cargo[gid].lots[c.id] = { q: q, cost: g.price }; }   // 산 곳은 이 암시장 도시
         x.sold['g:' + gid] = (x.sold['g:' + gid] || 0) + q;
         s.player.notoriety = (s.player.notoriety || 0) + (k.bmNoto || 1);
         s.stats.trades++;

@@ -315,8 +315,37 @@
     w = w * w * (3 - 2 * w);
     return sf + (sc - sf) * w;
   };
+  /* 뱃길 수로 (2026-10-18): 지도 자료가 거칠어 실제로는 배가 드나드는 좁은 해협이 「물가의 얕은 물」(sdf −0.2보다 얕음)로만 이어져
+     배가 빠져나가지 못하는 곳에 배가 다닐 만큼 깊은 물길을 판다. 그림(렌더러)은 그대로 — 이미 물로 그려지는 얕은 물 위로만 낸다.
+     pts: 물길의 꺾은선 [경도, 위도] · w: 물길 반폭(°) · d: 물길 한가운데의 깊이(텍셀, sdf −d) */
+  Geo.CHANNELS = [
+    // 트리니다드 섬 — 파리아 만(포트오브스페인·개척지 부두)에서 나가는 두 길목. 서쪽 용의 입(보카 그란데)은 지도 자료에서 뭍으로 막혀 있어 내지 않는다
+    { name: '원숭이 입 (보카 데 모노스)', pts: [[-61.76, 10.86], [-61.76, 10.75], [-61.745, 10.715], [-61.76, 10.69], [-61.78, 10.66], [-61.78, 10.60]], w: 0.02, d: 0.7 },
+    { name: '뱀의 입 (보카 데 라 시에르페)', pts: [[-62.06, 10.12], [-62.03, 10.06], [-62.0, 10.025], [-61.95, 10.012], [-61.88, 10.005], [-61.78, 10.0]], w: 0.016, d: 0.7 }
+  ];
+  (function () { Geo.CHANNELS.forEach(function (c) { var b = [999, -999, 999, -999]; c.pts.forEach(function (p) { b[0] = Math.min(b[0], p[0]); b[1] = Math.max(b[1], p[0]); b[2] = Math.min(b[2], p[1]); b[3] = Math.max(b[3], p[1]); }); c.box = [b[0] - c.w, b[1] + c.w, b[2] - c.w, b[3] + c.w]; }); })();
+  /** 이 자리가 뱃길 수로 안이면 그 깊이(sdf, 음수), 아니면 null */
+  function channelSdf(lon, lat) {
+    var CH = Geo.CHANNELS, best = null;
+    for (var i = 0; i < CH.length; i++) {
+      var c = CH[i], bx = c.box;
+      if (lon < bx[0] || lon > bx[1] || lat < bx[2] || lat > bx[3]) continue;
+      var kx = Math.cos(lat * Math.PI / 180), dmin = 99;
+      for (var j = 1; j < c.pts.length; j++) {
+        var ax = c.pts[j - 1][0] * kx, ay = c.pts[j - 1][1], bx2 = c.pts[j][0] * kx, by = c.pts[j][1], px = lon * kx;
+        var vx = bx2 - ax, vy = by - ay, L2 = vx * vx + vy * vy, t = L2 ? Math.max(0, Math.min(1, ((px - ax) * vx + (lat - ay) * vy) / L2)) : 0;
+        var dx = px - (ax + vx * t), dy = lat - (ay + vy * t), dd = Math.sqrt(dx * dx + dy * dy);
+        if (dd < dmin) dmin = dd;
+      }
+      if (dmin < c.w) { var q = dmin / c.w, v = -c.d * (1 - q * q); if (best == null || v < best) best = v; }
+    }
+    return best;
+  }
+  Geo.channelSdf = channelSdf;
+  var sdfTex = Geo.sdfRaw;
+  Geo.sdfRaw = function (lon, lat) { var v = sdfTex(lon, lat); if (v > -1.5) { var c = channelSdf(wrapLon(lon), lat); if (c != null && c < v) v = c; } return v; };
   /** signed distance including the coast perturbation — matches rendered coastline */
-  Geo.sdf = function (lon, lat) { return Geo.sdfRaw(lon, lat) + coastNoise(wrapLon(lon), lat); };
+  Geo.sdf = function (lon, lat) { var v = sdfTex(lon, lat) + coastNoise(wrapLon(lon), lat); if (v > -1.5) { var c = channelSdf(wrapLon(lon), lat); if (c != null && c < v) v = c; } return v; };
   Geo.isLand = function (lon, lat) { return Geo.sdf(lon, lat) > 0; };
   /** navigable water with a safety margin (texels) */
   Geo.isSea = function (lon, lat, margin) { return Geo.sdf(lon, lat) < -(margin || 0.25) && !Geo.berg(lon, lat); };

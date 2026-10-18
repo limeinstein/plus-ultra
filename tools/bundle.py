@@ -29,8 +29,8 @@ PACK_TARGET = int(float(os.environ.get('PACK_MB', '7')) * 1024 * 1024)   # 그�
 # 거리를 걷는 마을 사람 시트(20곳 × 14종, 칸 380×444): 줄이지 않고, 한 판 한도와 따로 센다.
 # 올린 주소는 <아티팩트 폴더>/assets.json 에 적어 두고(그림이 그대로면 다시 올리지 않는다), 주소가 없는 그림은 게임이 코드 그림으로 그린다.
 ASSET_PREFIXES = ('street-folk/', 'portraits/street-folk/')   # 걷는 그림 시트 · 같은 사람의 얼굴·무릎상(tools/street_faces.py, 520장 — 묶음에 넣으면 한 판 256MB를 넘는다)
-# 한 판 파일 수(511)를 넘지 않게: 2026-10-08 신규 발견물 83곳의 장면 판(discovery-sheets)도 자산 저장소로 (목록 tools/discovery83/prompts.json).
-# 도감(catalog.html)은 다른 아티팩트라 이 83곳은 장면 판 대신 그림 한 장으로 보인다.
+# 한 판 파일 수(511)를 넘지 않게: 대량 추가 발견물의 장면 판(discovery-sheets)도 자산 저장소로 보낸다.
+# 도감(catalog.html)은 다른 아티팩트라 이 발견물은 장면 판 대신 그림 한 장으로 보인다.
 def asset_extra():
     here = os.path.dirname(os.path.abspath(__file__))
     out = set()
@@ -44,6 +44,12 @@ def asset_extra():
         with open(os.path.join(here, 'artifact_sheet_assets.txt'), encoding='utf-8') as f:
             out |= {'discovery-sheets/' + l.split('#')[0].strip() for l in f if l.split('#')[0].strip()}
     except OSError:
+        pass
+    # 2026-10-18 지역별 신규 발견물 151곳.
+    try:
+        with open(os.path.join(here, 'new_discovery_assets', 'prompts.json'), encoding='utf-8') as f:
+            out |= {'discovery-sheets/' + r['id'] for r in json.load(f)['source']}
+    except Exception:
         pass
     return out
 ASSET_MARK = '/*ASSET_URLS*/'

@@ -16,6 +16,11 @@ DISCOVERIES = ROOT / "js" / "data" / "discoveries.js"
 NATURALS = ROOT / "js" / "data" / "naturals.js"
 MORE_DISCOVERIES = ROOT / "js" / "data" / "moredisc.js"
 CHAIN_DISCOVERIES = ROOT / "js" / "data" / "chaindisc.js"
+REGIONAL_DISCOVERIES = [
+    ROOT / "js" / "data" / "seasiadisc.js",
+    ROOT / "js" / "data" / "northasiadisc.js",
+    ROOT / "js" / "data" / "arabiadisc.js",
+]
 SOURCES = ROOT / "tools" / "nature_gifs" / "sources"
 OUT = ROOT / "images" / "discoveries"
 ENDS = ROOT / "images" / "discovery-ends"
@@ -80,6 +85,9 @@ def nature_rows() -> list[tuple[str, str]]:
     if CHAIN_DISCOVERIES.exists():
         src = CHAIN_DISCOVERIES.read_text(encoding="utf-8")
         rows += re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'([^']+)',\s*'(?:nature|people)'", src, re.M)
+    for path in REGIONAL_DISCOVERIES:
+        if path.exists():
+            rows += re.findall(r"^\s*A\.nat\('([^']+)',\s*'([^']+)'", path.read_text(encoding="utf-8"), re.M)
     return rows
 
 

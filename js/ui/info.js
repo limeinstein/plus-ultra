@@ -25,7 +25,7 @@
       '<div>적재</div><div>' + R.used() + ' / ' + R.fleetCap() + '통</div>' +
       '<div>소지금</div><div>' + U.num(s.player.gold) + '닢</div></div>';
     var ids = Object.keys(f.cargo);
-    if (ids.length) h += '<div class="fp-cargo">' + ids.map(function (id) { return '<span>' + G.goodDot(id) + G.GOOD[id].name + ' ' + f.cargo[id].q + '</span>'; }).join('') + '</div>';
+    if (ids.length) h += '<div class="fp-cargo">' + ids.map(function (id) { return '<span title="' + U.esc('산 곳: ' + R.cargoFromText(f.cargo[id])) + '">' + G.goodDot(id) + G.GOOD[id].name + ' ' + f.cargo[id].q + '</span>'; }).join('') + '</div>';
     el.innerHTML = h;
     return el;
   };
@@ -96,6 +96,7 @@
       G.SKILLS.map(function (sk) { var own = p.sk[sk.id] || 0, eff = R.skill(sk.id); return '<div class="flex" style="font-size:16px;gap:6px" title="' + sk.desc + '"><span style="width:70px">' + sk.name + '</span>' + pips(eff) + (eff > own ? '<small class="muted">동료</small>' : '') + '</div>'; }).join('') + '</div></div></div>' +
       '<div class="sep"></div><h4 style="margin:0 0 8px">언어</h4><div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:16px">' +
       G.LANGS.map(function (l, i) { var own = p.lg[i] || 0, eff = R.lang(i); if (!eff) return ''; return '<span>' + l + ' ' + pips(eff) + (eff > own ? '<small class="muted"> 통역</small>' : '') + '</span>'; }).join('') + '</div></div></div>';
+    if (G.Growth) html += G.Growth.html();   // 경험과 성장 (js/systems/growth.js)
     el.innerHTML = html;
     var pc = el.querySelector('.pc');
     if (pc) {
@@ -133,7 +134,7 @@
           '<tr class="sub"><td></td><td colspan="9"><div class="traits">' + G.Ships.traitChips(sh) + '<span class="cult">' + G.SHIP[sh.type].feat + '</span></div></td></tr>';
       }).join('') + '</table>' + speedReport();
     var ids = Object.keys(f.cargo);
-    html += '<div class="sep"></div><h4 style="margin:0 0 8px">적재 교역품</h4>' + (ids.length ? '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th>산 곳</th></tr>' + ids.map(function (id) { var c = f.cargo[id]; return '<tr><td>' + G.goodDot(id) + G.GOOD[id].name + '</td><td class="num">' + c.q + '</td><td class="num">' + U.num(c.cost) + '</td><td>' + (G.CITY_DATA[c.from] ? G.CITY_DATA[c.from].name : '') + '</td></tr>'; }).join('') + '</table>' : '<div class="muted">없음</div>');
+    html += '<div class="sep"></div><h4 style="margin:0 0 8px">적재 교역품</h4>' + (ids.length ? '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th>산 곳</th></tr>' + ids.map(function (id) { var c = f.cargo[id]; return '<tr><td>' + G.goodDot(id) + G.GOOD[id].name + '</td><td class="num">' + c.q + '</td><td class="num">' + U.num(c.cost) + '</td><td>' + U.esc(R.cargoFromText(c)) + '</td></tr>'; }).join('') + '</table>' : '<div class="muted">없음</div>');
     if (s.moored) {
       var ms = []; for (var cid in s.moored) s.moored[cid].forEach(function (sh) { ms.push(U.esc(sh.name) + '호 (' + G.SHIP[sh.type].name + ') — ' + G.CITY_DATA[cid].name); });
       if (ms.length) html += '<div class="sep"></div><h4 style="margin:0 0 8px">계류 중인 배</h4><div style="font-size:17px;line-height:1.7">' + ms.join('<br>') + '</div>';
@@ -246,8 +247,8 @@
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
           if (it.id === 'photo' && G.Story && G.Story.showPhoto) act += ' <button class="btn small" data-story-photo="' + i + '">사진을 본다</button>';
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
-          var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : '';
-          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '');
+          var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : kind === 'mgift' && d.gv ? '남자 선물 ' + d.gv : '';
+          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '') + (it.from != null && G.CITY_DATA[it.from] ? ' <small class="muted">' + G.CITY_DATA[it.from].name + '에서 삼' + (it.paid != null ? ' · ' + U.num(it.paid) + '닢' : '') + '</small>' : '');
           var ob = rl && rl.real && rl.real.obj;
           var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '');
           var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
@@ -600,8 +601,7 @@
       (UI.fs && UI.fs.can() ? '<div>전체 화면</div><div><div class="opt-row"><div class="opt' + (UI.fs.on() ? ' on' : '') + '" data-fs="1">켬</div><div class="opt' + (UI.fs.on() ? '' : ' on') + '" data-fs="0">끔</div></div>' +
         '<small class="muted">F11로도 켜고 끕니다. 게임이 켠 전체 화면에서는 마우스를 맨 위로 올려도 브라우저 메뉴가 내려오지 않습니다.</small></div>' : '') +
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
-      (G.Game.UI_SIZES ? '<div>글씨·창 크기</div><div><div class="opt-row">' + [['auto', '자동'], ['normal', '보통'], ['large', '크게'], ['xlarge', '아주 크게'], ['max', '최대']].map(function (o) { return '<div class="opt' + (G.Game.uiSizePref() === o[0] ? ' on' : '') + '" data-uisz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
-        '<small class="muted">지금 ' + Math.round((G.Game.uiZoom || 1) * 100) + '% — 자동은 화면이 작을수록 글씨·창을 키웁니다 (이 기기에만 기억)</small></div>' : '') +
+      (G.Display ? G.Display.panelHtml() : '') +   // 글자 크기(DEFAULT·제안값)·글꼴·렌더링 (js/ui/display.js, 2026-10-18)
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
@@ -622,7 +622,7 @@
     U.$$('input[type=range]', el).forEach(function (r) { r.oninput = function () { st[r.dataset.k] = r.value / 100; if (G.Audio) G.Audio.setVolume(); }; });
     U.$$('[data-fs]', el).forEach(function (o) { o.onclick = function () { var want = o.dataset.fs === '1'; (want === UI.fs.on() ? Promise.resolve() : want ? UI.fs.enter() : UI.fs.exit()).then(function () { setTimeout(function () { PAGES.menu(el, win); }, 120); }); }; });
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
-    U.$$('[data-uisz]', el).forEach(function (o) { o.onclick = function () { G.Game.setUiSize(o.dataset.uisz); PAGES.menu(el, win); }; });   // UI QA 2026-10-11 #1
+    if (G.Display) G.Display.bind(el, function () { PAGES.menu(el, win); });
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });

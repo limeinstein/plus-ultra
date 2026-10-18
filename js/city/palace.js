@@ -24,7 +24,7 @@
       var first = rel.met <= 1 || (G.Succession && G.Succession.firstMeetingBefore);
       var succ = G.Succession && G.Succession.newHolderBefore;
       var greet = SP.line(sp, succ ? 'greetSucc' : first ? 'greetFirst' : 'greetAgain');
-      await C.say(who, greet);
+      if (!(G.Tudor && ((G.Tudor.knightDue && G.Tudor.knightDue(sp)) || (G.Tudor.calaisDue && G.Tudor.calaisDue(sp)))) && !(G.Barb && G.Barb.callDue(sp))) await C.say(who, greet);   // 엘리자베스 1세의 서임·칼레 해전의 부름: 여왕이 먼저 말을 꺼낸다   // 엘리자베스 1세의 서임: 여왕이 먼저 「…그 얼굴, 잊을 리가」로 말을 꺼낸다
       // 다른 후원자에게 먼저 보고한 일·이중 보고를 꺼낸다 (시샘 — G.Sponsor.jealousy). 쫓겨나면 알현은 여기서 끝
       if (!(await SP.jealousy(sp))) return false;
       // 국왕의 부름·명예 작위: 군주가 먼저 왕명 이야기를 꺼낸다 (js/systems/court.js)
@@ -55,10 +55,12 @@
     var s = S(), c0 = G.CITY_DATA[sp.city], out = [];
     G.BOOKS.forEach(function (b) {
       if ((b.y || 0) > s.date.y || s.flags['read_' + b.id]) return;
+      if (G.BookSeq && !G.BookSeq.open(b)) return;   // 연작의 앞 책을 아직 다 풀지 않았다
       var libs = b.libs.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && R.cityExists(c); });
       if (!libs.length) return;
       b.discs.forEach(function (id) {
         var d = G.DISC[id];
+        if (G.BookSeq && G.BookSeq.visible(b).indexOf(id) < 0) return;   // 앞 대목의 곳을 아직 찾지 않았다
         if (!d || G.Disc.clue(d) !== 'book' || !G.tasteHit(sp.taste, d) || s.hints[id] || G.Disc.foundByMe(id) || !G.Disc.available(d)) return;
         var c = libs.slice().sort(function (a, z) { return G.Geo.dist(c0.lon, c0.lat, a.lon, a.lat) - G.Geo.dist(c0.lon, c0.lat, z.lon, z.lat); })[0];
         out.push({ book: b, disc: d, city: c, w: 1 / (1 + G.Geo.dist(c0.lon, c0.lat, c.lon, c.lat) / 20) });

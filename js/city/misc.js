@@ -102,7 +102,9 @@
   /** 시장 값: 기본값 × 이 도시 시세(무기는 무기 갈래, 선물은 사치품·기호품·공예품 …) × 경리가 흥정한 값 */
   function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
   function mkBuy(it) { var d = mkDeal(), b = mkBase(it); return d ? Math.max(1, Math.round(b * Math.min(1, d.buy))) : b; }
-  function mkSell(it) { var d = mkDeal(), v = Math.round(itemValue(it) * R.itemMult(C.city(), it)); return d ? Math.round(v * Math.max(1, d.sell)) : v; }
+  // 이 도시에서 산 물건(it.from)은 치른 값(it.paid)보다 비싸게 되팔 수 없다 — 깎아 사서 그 자리에서 되팔아 남기던 것을 막는다
+  function mkSell(it) { var d = mkDeal(), c0 = C.city(), v = Math.round(itemValue(it) * R.itemMult(c0, it)); v = d ? Math.round(v * Math.max(1, d.sell)) : v; if (c0 && it.from === c0.id && it.paid != null) v = Math.min(v, it.paid); return v; }
+  MK.sellValue = mkSell;
   function mkThumb(it) {
     if (!it || !G.Img) return null;
     var rl = G.RELIC && G.RELIC[it.id], key = G.Img.pick(rl ? G.Img.chain.relic(rl) : G.Img.chain.item(it));
@@ -181,7 +183,7 @@
       var pic = mkThumb(it), ask = it.name + ' <b>' + q + '개</b><br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(deal.total) + '닢에 사겠습니까?' + (deal.ok ? '<br><span class="good-text">회계 추가 협상 할인 적용</span>' : '');
       if (!(await UI.confirm(pic ? '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>' : ask, '산다', '그만둔다'))) continue;
       s.player.gold -= deal.total;
-      R.addMarketItems(v, q); MK.boughtTotal = (MK.boughtTotal || 0) + q;
+      R.addMarketItems(v, q, c.id, Math.round(deal.total / q)); MK.boughtTotal = (MK.boughtTotal || 0) + q;
       if ((it.kind === 'weapon' && (!s.player.equip.weapon || G.ITEM[s.player.equip.weapon].atk < it.atk)) || (it.kind === 'armor' && (!s.player.equip.armor || G.ITEM[s.player.equip.armor].def < it.def))) {
         if (await UI.confirm(it.name + U.j(it.name, '을/를').slice(it.name.length) + ' 바로 장비하겠습니까?')) s.player.equip[it.kind] = v;
       }
@@ -200,7 +202,7 @@
         var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
         var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
-        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
+        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (x.it.from === c.id ? ' <span class="tag warn-text" title="이 시장에서 산 물건은 치른 값보다 비싸게 되팔 수 없습니다">여기서 삼 · 치른 값까지만</span>' : x.it.from != null && G.CITY_DATA[x.it.from] ? ' <small class="muted">' + G.CITY_DATA[x.it.from].name + '에서 삼</small>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
       }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
       if (v == null) return;
       var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id];
@@ -228,6 +230,7 @@
     if (U.chance(p)) {
       var disc = Math.min(0.22, 0.08 + (pu ? pu.acct * 0.03 : 0) + acct * 0.01 + U.rf(0, 0.03)) + (nb ? nb.disc : 0);
       cur.mk = { ok: true, buy: 1 - disc, sell: 1 + disc * 0.7 };
+      if (G.Growth) G.Growth.haggle();
       await C.say(vendor(), U.pick(pu ? ['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.'] : ['셈이 밝은 사람이군. 좋아, 그렇게 하지.', '장부까지 맞춰 왔다니 어쩔 수 없군. 그 값에 주겠네.']));
       UI.toast('흥정 성공' + (pu ? '(경리 ' + pu.name + ')' : '(회계 ' + acctLv() + ')') + '! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '% · 결제 때 추가 협상 ' + (G.Acct ? G.Acct.marketDeals() : acctLv()) + '번', 'scales');
     } else {
@@ -341,7 +344,8 @@
       return;
     }
     var got = [];
-    var discs = b.discs.filter(function (id) { return G.DISC[id] && G.Disc.clueOk(G.DISC[id], 'book'); });   // 사료 갈래만 (js/data/clues.js)
+    var vis = G.BookSeq ? (G.BookSeq.open(b) ? G.BookSeq.visible(b) : []) : b.discs;   // 차례 책: 연작의 앞 책·앞 대목부터 (js/data/cluebooks.js)
+    var discs = vis.filter(function (id) { return G.DISC[id] && G.Disc.clueOk(G.DISC[id], 'book'); });   // 사료 갈래만 (js/data/clues.js)
     var readable = lv >= 3 ? discs.length : lv === 2 ? Math.ceil(discs.length * 0.7) : Math.ceil(discs.length * 0.35);
     var rng = U.makeRng(U.strHash(b.id + s.seed));
     var order = discs.slice().sort(function () { return rng() - 0.5; }).slice(0, readable);

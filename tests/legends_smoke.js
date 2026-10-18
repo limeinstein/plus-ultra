@@ -139,7 +139,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         const C = G.Scenes.city, s = G.Game.state; await window._enter(cid, 'library');
         const c = G.CITY_DATA[cid], LB = C.B.library, books = LB.shelfBooks(c).filter(b => LB.shelfState(b).kind !== 'lock').slice(0, 5);
         G.UI.talk = async () => {};
-        for (const b of books) await LB.pick(c, b);
+        const win0 = G.UI.window;
+        G.UI.window = () => ({ result: Promise.resolve(1), content: document.createElement('div'), close: () => {} });
+        try { for (const b of books) await LB.pick(c, b); } finally { G.UI.window = win0; }
         await C.leave();
         return { mates: s.mates.map(m => m.id + ':' + m.role) };
       }, lc.id);
@@ -148,7 +150,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     }
     ok(r.mates.some(m => m.indexOf('scheherazade') === 0), '이슬람 도서관에서 책 다섯 권을 읽으니 셰헤라자드가 부하가 되었다' + (lc ? ' (' + lc.name + ' — 서가에서 실제로 읽음)' : ' (읽을 책이 모자라 셈만)'));
     const lgs = await page.evaluate(() => G.MATE.scheherazade.lg);
-    ok([0, 1, 2, 3, 4, 5, 6, 10].every(k => lgs[k] === 3), '셰헤라자드는 유럽 말·아랍어·페르시아어·아프리카 말에 능숙');
+    ok([0, 1, 2, 3, 4, 7, 8, 9, 12, 13, 14].every(k => lgs[k] >= 2 && lgs[k] <= 3) && [5, 6, 10].every(k => lgs[k] === 3), '셰헤라자드는 유럽·아시아의 말을 모두 2~3단계, 아랍어·페르시아어·아프리카 말은 능숙');
 
     // ---------------------------------------------------------------- 알라딘·알리바바
     console.log('알라딘 · 알리바바');

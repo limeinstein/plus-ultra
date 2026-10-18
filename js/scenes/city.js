@@ -150,6 +150,7 @@
       if (G.Rel && G.Rel.pending()) await G.Rel.present();       // 궁정의 소식·교황의 사절·큰 해전 (js/systems/relations.js)
       if (G.Leo && G.Leo.pending()) await G.Leo.present();       // 레오나르도의 발명품
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
+      if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 제노바의 협상 · 바르바로사의 무덤
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -417,7 +418,9 @@
     try {
       if (G.Town.active() && !G.Town.hidden() && G.Town.focusMark) await G.Town.focusMark(id);
       if (!(G.Scenes.hasReveal && G.Scenes.hasReveal(d))) await C.mate(U.pick(['제독, 저 건물을 보십시오! ', '제독, 가까이 와서 보니 ']) + '소문으로만 듣던 「' + d.name + '」입니다.');
-      await G.Disc.find(d, 'city');
+      var mir = G.Disc.mirageNow && G.Disc.mirageNow(d);
+      var got = await G.Disc.find(d, 'city');
+      if (got && mir && G.Town.active() && !G.Town.hidden() && G.Town.vanish) await G.Town.vanish(id);   // 신기루였던 미래의 건물이 거리에서 흩어져 사라진다
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene === C && !cur) C.main();
@@ -536,7 +539,8 @@
         if (!ok) continue;
         if (s.player.gold < cost) { await C.mate('제독, 금화가 모자랍니다!'); continue; }
         s.player.gold -= cost;
-        if (U.chance(0.55 + R.skill('speech') * 0.12 + C.langLv(c) * 0.05)) {
+        var gOk = U.chance(0.55 + R.skill('speech') * 0.12 + C.langLv(c) * 0.05); if (G.Growth) G.Growth.persuade(gOk, gOk ? '설득 경험 — 수비대장과의 교섭' : null);
+        if (gOk) {
           if (G.Outcome) await G.Outcome.show('win', { title: '교섭 성공!', sub: c.name + '의 수비대장이 금화를 받고 길을 열었다' });   // 결과 연출 (js/ui/outcome.js)
           await C.mate('교섭에 성공했습니다. ' + c.name + '에 들어갈 수 있습니다.');
           if (G.Sneak) { G.Sneak.givePass(c); await C.mate('통행 허가는 ' + ((G.BALANCE.sneak || {}).passDays || 365) + '일 동안 쓸 수 있습니다.'); } else s.flags['pass' + c.id] = U.dateNum(s.date);

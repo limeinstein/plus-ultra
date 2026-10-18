@@ -13,13 +13,17 @@
   LB.shelfBooks = function (c) { return G.BOOKS.filter(function (b) { return b.libs.indexOf(c.id) >= 0; }); };
   /** 지금 언어 실력으로 읽어 낼 수 있는 대목(발견물 id) — 늘 같은 순서라 실력이 늘면 대목이 늘어난다 */
   LB.readable = function (b) {
-    var s = S(), lv = R.langRead(b.lang);
+    var s = S(), lv = R.langRead(b.lang), SQ = G.BookSeq;
+    // 차례 책(js/data/cluebooks.js): 연작의 앞 책을 다 풀지 않았으면 읽히는 대목이 없고, 책 안에서도 앞 대목의 곳을 찾아야 다음 대목이 보인다
+    var vis = SQ ? (SQ.open(b) ? SQ.visible(b) : []) : b.discs;
     // 사료 갈래(book)만 단서가 된다 — 이야기 갈래(talk)는 책에 나와도 주점·교역소·후원자에게 물어야 한다 (js/data/clues.js)
-    var discs = b.discs.filter(function (id) { return G.DISC[id] && G.Disc.clueOk(G.DISC[id], 'book'); });
+    var discs = vis.filter(function (id) { return G.DISC[id] && G.Disc.clueOk(G.DISC[id], 'book'); });
     var n = lv >= 3 ? discs.length : lv === 2 ? Math.ceil(discs.length * 0.7) : lv === 1 ? Math.ceil(discs.length * 0.35) : 0;
     var rng = U.makeRng(U.strHash(b.id + s.seed));
-    var talk = b.discs.filter(function (id) { return G.DISC[id] && discs.indexOf(id) < 0 && !s.hints[id] && !G.Disc.foundByMe(id) && G.Disc.available(G.DISC[id]); });
-    return { all: discs, part: discs.slice().sort(function () { return rng() - 0.5; }).slice(0, n), talk: talk };
+    var talk = vis.filter(function (id) { return G.DISC[id] && discs.indexOf(id) < 0 && !s.hints[id] && !G.Disc.foundByMe(id) && G.Disc.available(G.DISC[id]); });
+    // 차례 책은 앞 대목부터 읽힌다 (뒤섞지 않는다)
+    var part = b.seq ? discs.slice(0, n) : discs.slice().sort(function () { return rng() - 0.5; }).slice(0, n);
+    return { all: discs, part: part, talk: talk, hidden: SQ && SQ.open(b) ? SQ.hidden(b) : 0 };
   };
   function tally(ids, b) {
     var s = S(), o = { fresh: 0, known: 0, later: 0, laterIds: [], confirm: 0 };
@@ -41,6 +45,9 @@
   LB.shelfState = function (b) {
     var s = S(), y = s.date.y, read = !!s.flags['read_' + b.id];
     if ((b.y || 0) > y) return { kind: 'lock', why: 'era', read: read, text: '아직 쓰이지 않은 책 — ' + b.y + '년 무렵에야 나온다' };
+    // 연작의 차례: 앞 책에 적힌 곳을 다 찾아야 이 책의 뜻이 이어진다 (js/data/cluebooks.js)
+    var SQ = G.BookSeq, pv = SQ && SQ.prev(b);
+    if (pv && !SQ.open(b)) return { kind: 'lock', why: 'seq', read: read, text: '「' + SQ.seriesName(b) + '」 연작 — 앞선 책 ' + pv.title + '에 적힌 곳을 먼저 찾아야 이 책의 뜻이 이어진다' };
     var lv = R.langRead(b.lang), L = langNm(b);
     if (!lv) return { kind: 'lock', why: 'lang', read: read, text: L + U.jx(L, '을/를') + ' 읽을 사람이 없다 — 제독이 배우거나, 그 말을 아는 부하를 데려오자' };
     if (b.sk && R.skillRead(b.sk) < (b.lv || 1)) {
@@ -50,7 +57,7 @@
     var r = LB.readable(b), t = tally(r.part, b), rd = R.langBest(b.lang).who, by = rd ? ' · ' + L + U.jx(L, '은/는') + ' ' + rd + U.jx(rd, '이/가') + ' 읽어 준다' : '';
     if (t.fresh > 0) return { kind: read ? 'again' : 'open', read: read, t: t, text: (read ? '전에 읽은 책 — 이제는 새로 알아들을 대목이 있다' : '읽을 수 있다 — 새 단서가 있을지도 모른다') + (t.confirm ? ' · 들은 이야기 ' + t.confirm + '곳을 맞춰 볼 수 있다' : '') + by };
     if (t.confirm > 0) return { kind: read ? 'again' : 'open', read: read, t: t, text: '들은 이야기를 이 책으로 맞춰 볼 수 있다 — 단서가 겹친다' + by };
-    if (read) return { kind: 'read', read: true, t: t, text: '읽은 책 — ' + recallShort(b) };
+    if (read) return { kind: 'read', read: true, t: t, text: '읽은 책 — ' + recallShort(b) + (r.hidden ? ' · 앞 대목의 곳을 찾으면 다음 대목이 읽힌다' : '') };
     if (t.later > 0 && t.known === 0) {
       var d = G.DISC[t.laterIds[0]], f = G.Frontier && G.Frontier.of(d);
       return { kind: 'lock', why: 'later', read: false, t: t, text: '아직 알려지지 않은 땅의 이야기뿐이다 — ' + (f ? '〈' + f.name + '〉에 관한 소문이 돌기 시작하면' : '세상을 더 알게 되면') + ' 뜻이 통한다' };
@@ -238,8 +245,9 @@
     r.part.forEach(function (id) { if (G.Disc.addHint(id, 'book:' + b.id)) got.push(G.DISC[id]); else if (G.Disc.lastMore === id) more.push(G.DISC[id]); });
     var later = r.part.filter(function (id) { return !s.hints[id] && !G.Disc.foundByMe(id) && !G.Disc.available(G.DISC[id]); }).length;
     var known = r.part.filter(function (id) { return got.indexOf(G.DISC[id]) < 0 && more.indexOf(G.DISC[id]) < 0 && (s.hints[id] || G.Disc.foundByMe(id)); }).length;
+    if (!s.flags['read_' + b.id] && G.Growth) G.Growth.add('int', 12, '독서 — 「' + b.title + '」');   // 처음 읽는 책: 지력 경험
     s.flags['read_' + b.id] = 1;
-    return { got: got, more: more, later: later, known: known, missed: r.all.length - r.part.length, talk: lv0(b) ? r.talk : [] };
+    return { got: got, more: more, later: later, known: known, missed: r.all.length - r.part.length, talk: lv0(b) ? r.talk : [], hidden: r.hidden || 0 };
   }
   function metaLine(b) {
     var lb = R.langBest(b.lang), bits = [langNm(b) + ' ' + C.langPips(lb.lv) + (lb.who ? ' (' + lb.who + ')' : '')];
@@ -255,6 +263,7 @@
       if (res.known) notes.push('이미 아는 이야기 ' + res.known + '곳');
       if (res.missed) notes.push(langNm(b) + '가 서툴러 놓친 대목 ' + res.missed + '곳');
       if (res.later) notes.push('먼 나라 이야기라 아직 알아듣기 어려운 대목 ' + res.later + '곳');
+      if (res.hidden) notes.push('앞 대목의 곳을 찾아야 읽히는 대목 ' + res.hidden + '곳');
       if (res.talk && res.talk.length) notes.push('사람들 입으로 전하는 이야기 ' + res.talk.length + '곳(' + res.talk.slice(0, 3).map(function (id) { return G.DISC[id].name; }).join('·') + (res.talk.length > 3 ? ' …' : '') + ') — ' + talkWhere(res.talk) + '에게 물어보자');
       var mo = res.more || [];
       gain = '<div class="bgain parch">' + (res.got.length ?

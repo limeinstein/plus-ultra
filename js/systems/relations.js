@@ -221,6 +221,7 @@
   /** 말하는 사람: 왕녀·후원자(그 해의 주인)·교황의 사절 */
   RL.speaker = function (who) {
     if (!who) return {};
+    if (who.hist && G.Hist) return G.Hist.speaker(who.hist);   // 큰 해전의 실제 인물 (js/data/histfigures.js)
     if (who.princess) {
       var pr = ((G.COURT && G.COURT.princesses) || []).filter(function (x) { return x.id === who.princess; })[0];
       if (pr) return { name: pr.name, portrait: G.Art.withImg(G.Art.npcSpec('pr:' + pr.id, 'noble', pr.style, 'f'), [pr.face]), half: [pr.half], lang: 3 };
@@ -234,10 +235,17 @@
   /** 궁정의 소식: 그 사람이 직접 전하고, 청(축하 예물·십자군 기부)이 있으면 묻는다 */
   async function court(e) {
     var s = S(), p = s.player, who = RL.speaker(e.who || L0), a = e.ask;
-    await UI.say('【' + e.title + '】\f' + e.text, who);
+    var tt = String(e.title).replace(/\s*\(\d{3,4}\)\s*$/, '');   // 「신성 동맹 (1571)」 → 「신성 동맹」 (대화창은 괄호 속 숫자를 알림으로 떼어 낸다)
+    // 왕녀가 직접 전하는 혼인 소식: 이벤트 샷 (js/art/eventshot.js)
+    var pr = e.who && e.who.princess && G.EventShot ? ((G.COURT && G.COURT.princesses) || []).filter(function (x) { return x.id === e.who.princess; })[0] : null;
+    var pc = pr ? await G.EventShot.princess('royal_wedding', { realm: pr.realm, name: pr.name, title: tt, city: (function () { var r = G.COURT.realms[pr.realm], sp = r && r.sponsors && G.SPONSOR[r.sponsors[0]]; return sp ? G.CITY_DATA[sp.city] : null; })() }) : null;
+    try { await courtIn(e, s, p, who, a, tt); } finally { if (pc) await pc.stop(); }
+  }
+  async function courtIn(e, s, p, who, a, tt) {
+    await UI.say('【' + tt + '】\f' + e.text, who);
     if (!a) return;
     await UI.say(a.text, who);
-    var v = await UI.ask(e.title + ' — 소지금 ' + U.num(p.gold) + '닢', [
+    var v = await UI.ask(tt + ' — 소지금 ' + U.num(p.gold) + '닢', [
       { label: (a.label || '예물을 바친다') + ' (금화 ' + U.num(a.gold) + '닢 · 사교 명성 +' + (G.Fame ? G.Fame.mul('so', a.so) : a.so) + (a.trust ? ' · 신뢰 +' + a.trust[1] : '') + ')', value: 'give' },
       { label: '정중히 사양한다', value: 'no' }], who);
     if (v === 'give' && p.gold >= a.gold) {
@@ -261,14 +269,17 @@
     var s = S(), r = st(), id = spec.id || (e && e.id);
     if (r.battle[id]) return false;
     var who = spec.who ? RL.speaker(spec.who) : G.Scenes.mateSpeaker('first');
-    await UI.say(spec.intro, who);
+    if (spec.council && G.Hist) await G.Hist.play(spec.council);   // 싸움 앞의 작전 회의 (우리 편 장수들)
+    if (spec.intro) await UI.say(spec.intro, who);
+    if (spec.foeScene && G.Hist) await G.Hist.play(spec.foeScene);   // 그 무렵 적의 기함에서
     var v = await UI.ask(spec.ask || '함께 싸우겠습니까?', [{ label: '함께 싸운다', value: 'fight' }, { label: '물러난다', value: 'no' }], who);
     if (v !== 'fight') { r.battle[id] = 'declined'; await UI.say(spec.decline || '…그대의 사정도 있겠지. 우리끼리 싸우겠소.', who); return false; }
     r.battle[id] = 'fighting';
     var zone = G.Ships.zone(s.loc.lon, s.loc.lat);
     var npc = { id: 'great_' + id, kind: 'navy', nation: spec.foe, n: spec.ships.length, ships: spec.ships.slice(), K: 1, zone: zone, hostile: true, great: id,
       allies: (spec.allies || []).map(function (a) { return { type: a.type, name: a.name, gun: a.gun }; }), label: spec.foeLabel || spec.foe + ' 함대',
-      gun: spec.gun, myGun: spec.myGun, crewK: spec.crewK, gunK: spec.gunK, gunNote: spec.gunNote };   // 대포: gun 적 함대 · myGun 우리 함대(이 싸움에서만) · allies[].gun 우리 편
+      gun: spec.gun, myGun: spec.myGun, crewK: spec.crewK, gunK: spec.gunK, gunNote: spec.gunNote,
+      names: spec.names, boss: spec.boss };   // names: 적 배 이름(기함부터) · boss: 일기토에 나서는 적장 {hist: 인물 id, str, mar…}   // 대포: gun 적 함대 · myGun 우리 함대(이 싸움에서만) · allies[].gun 우리 편
     await UI.fade(function () { G.Game.go('battle', { npc: npc }); });
     return true;
   };
@@ -278,6 +289,7 @@
     var s = S(), r = st(), id = npc.great, spec = RL.spec(id); if (!spec) return;
     r.battle[id] = res === 'win' ? 'won' : 'lost';
     if (res === 'win') {
+      if (G.Growth) G.Growth.once('great_' + id, 'mar', 1, '큰 해전에서 이겼다');
       var w = spec.win || {}, fame = w.fame ? G.Fame.add('bt', w.fame) : 0, so = w.so ? G.Fame.add('so', w.so) : 0;
       s.player.gold += w.gold || 0;
       if (spec.onWin) spec.onWin();

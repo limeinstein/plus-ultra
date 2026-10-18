@@ -46,6 +46,7 @@ const selected = people.map(p => {
 
 ok(selected.every(x => x.face && I.has(x.face)), '지역 인물 전원의 도감 얼굴 파일이 존재한다 — ' + selected.length + '명');
 ok(selected.every(x => x.half === x.face + '_half' && I.has(x.half)), '도감 반신 그림이 선택된 얼굴과 모두 일치한다');
+ok(selected.every(x => !/^portraits\/pools\//.test(x.face) && !/^portraits\/pools\//.test(x.half)), '얼굴과 다른 몸을 포갠 옛 묶음은 지역 인물 표시에서 쓰지 않는다');
 
 // 같은 나라·복식·성별 묶음에서는 10장을 다 쓰기 전 얼굴이 반복되지 않아야 한다.
 const borrowed = selected.filter(x => /^portraits\/pools\/(mates|sponsors)\//.test(x.face));

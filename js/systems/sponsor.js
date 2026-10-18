@@ -96,6 +96,7 @@
   SP.audience = async function (sp) {
     var s = S(), rel = SP.rel(sp.id), bt = SP.butler(sp);
     if (rel.banned && U.dateNum(s.date) < rel.banned) { await UI.say('만날 수 없는 사람은 만날 수 없습니다. 돌아가 주십시오.', bt); return false; }
+    if (G.Tudor && G.Tudor.knightDue && G.Tudor.knightDue(sp)) return true;   // 런던 탑의 은혜를 갚으려는 엘리자베스 1세는 말이 서툴러도·명성이 모자라도 만나 준다 (QA 2026-10-18)
     if (SP.langLv(sp) === 0) { await UI.say('……', bt); await G.Scenes.city.mate('말이 통하지 않아서 상대해 주지 않았습니다.'); return false; }
     var need = SP.fameNeed(sp);
     if (s.player.fame < need) {
@@ -176,7 +177,8 @@
     await UI.say(U.pick(['그 일이 왜 중요한지 들어 주십시오. 이것을 아는 나라가 다음 바다를 쥡니다.', '아무도 눈여겨보지 않는 지금이 기회입니다. 남보다 먼저 손에 넣는 사람이 이름을 남깁니다.',
       '관심 밖의 이야기라는 것을 압니다. 하지만 이 일이 끝나면 ' + SP.honor(sp) + '께서 아끼시는 것들과도 이어질 겁니다.']), SP.me(sp));
     // 결과 연출 (js/ui/outcome.js): 설득해 냈으면 승리, 못 했으면 좌절하는 제독
-    if (U.chance(p)) { if (G.Outcome) await G.Outcome.show('win', { sub: SP.holderName(sp) + U.jx(SP.holderName(sp), '을/를') + ' 설득했다' }); await UI.say(SP.line(sp, 'persOk'), who); return true; }
+    var won = U.chance(p); if (G.Growth) G.Growth.persuade(won, won ? '설득 경험 — ' + SP.holderName(sp) : null);
+    if (won) { if (G.Outcome) await G.Outcome.show('win', { sub: SP.holderName(sp) + U.jx(SP.holderName(sp), '을/를') + ' 설득했다' }); await UI.say(SP.line(sp, 'persOk'), who); return true; }
     SP.rel(sp.id).trust = Math.max(0, SP.rel(sp.id).trust - (T.failTrust || 0));
     if (G.Outcome) await G.Outcome.show('lose', { sub: SP.holderName(sp) + '의 마음을 움직이지 못했다' });
     await UI.say(SP.line(sp, 'persFail'), who);
@@ -240,17 +242,21 @@
       await UI.say(L('emptyNone'), who); UI.toast('도서관이나 술집에서 단서를 모으십시오.', 'scroll'); return;
     }
     if (G.Errand && !tutDuke(sp)) list.push({ errand: true });
+    var nFound = list.filter(function (x) { return x.found; }).length;
+    if (nFound >= 2) list.unshift({ batch: true, n: nFound });   // 찾아 둔 발견이 둘 이상이면 한꺼번에 보고할 수 있다
     var tm = SP.temperOf(sp);
     for (var tries = 0; tries < 3; tries++) {
       var tasteTxt = sp.taste.map(G.tasteName).join('·');
       var pick = await UI.choose('제안 선택', list.map(function (x, i) {
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
+        if (x.batch) return { label: '찾아 둔 발견을 한꺼번에 보고한다 <span class="tag">' + x.n + '건</span>', right: '일괄 보고', value: i, icon: 'scroll', desc: '값진 것부터 차례로 보고 — 올해 이 후원자에게 두 번째부터는 사례금이 줄어든다 (한 건씩 보고할 때와 같은 셈)' };
         var gr = x.found && G.Disc.gradeOf ? G.Disc.gradeOf(x.d) : null;
         return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
       }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다</span>' + (tm ? ' · 성품: <b>' + tm.name + '</b> <span class="muted">— ' + tm.desc + '</span>' : '') });
       if (pick == null) { await UI.say(L('pickCancel'), who); return; }
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
+      if (x.batch) { var bd = await SP.batchReport(sp); if (bd) return; continue; }
       await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found || x.fake ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : d.hint + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp));
       if (tutDuke(sp) && d.id === G.TUTORIAL.disc && !x.found && !x.fake) { await UI.say(L('like'), who); return SP.negotiate(sp, d, 1.1, false); }   // 튜토리얼: 공작은 늘 응한다
       // too heavy?
@@ -302,29 +308,46 @@
   };
 
   /** already-found discovery brought to a sponsor */
-  SP.lateReport = async function (sp, d, k) {
-    var s = S(), who = SP.speaker(sp), found = G.Disc.foundByMe(d.id), st = s.disc[d.id] || {}, rel = SP.rel(sp.id);
-    var L = function (key, ctx) { return SP.line(sp, key, ctx); }, tp = SP.temper(sp);
-    var ev = G.Fakes ? await G.Fakes.choose(sp, d, found) : 'real';
-    if (!ev) { await UI.say(L('lateNone'), who); return; }
-    // 증거의 등급 (실물·정밀 도판·해도·스케치·구술): 스케치나 말뿐이면 미심쩍어할 수 있다 — 물러나면 보고하지 않은 채로 남는다
-    var gr = ev !== 'fake' && found && G.Disc.gradeOf ? G.Disc.gradeOf(d, true) : null, gk = 1;
-    if (gr) { var dv = await SP.doubt(sp, d, gr); if (dv.abort) return; gk = gr.k * dv.k; }
-    var o = offerFor(sp, d), pay = Math.round(o.reward * 0.7 * k * gk / 100) * 100;
-    if (o.liked) await UI.say(L('likedReport'), who);
+  /** 계약 없이 찾은 발견을 보고할 때의 사례금·명성 (증거 제출·모조품·부하들의 거듦 전) — lateN: 올해 이 후원자에게 몇 번째 보고인가(0부터) */
+  function lateCalc(sp, d, k, gk, lateN) {
+    var s = S(), st = s.disc[d.id] || {}, found = G.Disc.foundByMe(d.id), o = offerFor(sp, d), pay = Math.round(o.reward * 0.7 * k * gk / 100) * 100;
     // 같은 해에 같은 후원자에게 여러 번 보고하면 사례금이 줄어든다 (후원자의 주머니에도 끝이 있다)
-    if (rel.lateY !== s.date.y) { rel.lateY = s.date.y; rel.lateN = 0; }
-    var cutK = 1 + ((G.BALANCE && G.BALANCE.lateRepCut) || 0) * rel.lateN, cutTxt = '';
-    if (cutK > 1) { pay = Math.max(100, Math.round(pay / cutK / 100) * 100); cutTxt = L('lateCut'); }
-    rel.lateN++;
+    var cutK = 1 + ((G.BALANCE && G.BALANCE.lateRepCut) || 0) * lateN;
+    if (cutK > 1) pay = Math.max(100, Math.round(pay / cutK / 100) * 100);
     var fame = G.Disc.isLate(d.id) ? Math.round((G.Disc.fameFor(d) * 0.9 + sp.pw * 25) * G.Disc.artBonus(d) * G.Disc.LATE_FAME) : Math.round((G.Disc.fameFor(d) * (st.rival ? 0.4 : 0.9) + sp.pw * 25) * G.Disc.artBonus(d));
     fame = Math.round(fame * gk);
     if (found && G.Disc.isLate(d.id)) pay = Math.max(100, Math.round(pay * G.Disc.LATE_GOLD / 100) * 100);   // 경쟁자보다 늦은 보고: 사례금도 절반
+    return { pay: pay, fame: fame, cut: cutK > 1, liked: o.liked };
+  }
+  SP.lateCalc = lateCalc;
+  /** 올해 이 후원자에게 한 보고 수 (해가 바뀌면 0) */
+  function lateNOf(rel) { var s = S(); if (rel.lateY !== s.date.y) { rel.lateY = s.date.y; rel.lateN = 0; } return rel.lateN || 0; }
+  /** opt.batch: 일괄 보고 — 묻는 창·부하들의 거듦·축제 없이 셈만 하고 {pay, fame, …}를 돌려준다 (SP.batchReport) */
+  SP.lateReport = async function (sp, d, k, opt) {
+    opt = opt || {};
+    var s = S(), who = SP.speaker(sp), found = G.Disc.foundByMe(d.id), st = s.disc[d.id] || {}, rel = SP.rel(sp.id), batch = !!opt.batch;
+    var L = function (key, ctx) { return SP.line(sp, key, ctx); }, tp = SP.temper(sp);
+    var ev = batch ? 'real' : G.Fakes ? await G.Fakes.choose(sp, d, found) : 'real';
+    if (!ev) { await UI.say(L('lateNone'), who); return; }
+    // 증거의 등급 (실물·정밀 도판·해도·스케치·구술): 스케치나 말뿐이면 미심쩍어할 수 있다 — 물러나면 보고하지 않은 채로 남는다
+    // (일괄 보고는 따져 묻지 않고 등급 배수만 적용한다)
+    var gr = ev !== 'fake' && found && G.Disc.gradeOf ? G.Disc.gradeOf(d, !batch) : null, gk = 1;
+    if (gr) { if (batch) gk = gr.k; else { var dv = await SP.doubt(sp, d, gr); if (dv.abort) return; gk = gr.k * dv.k; } }
+    var lc = lateCalc(sp, d, k, gk, lateNOf(rel)), pay = lc.pay, fame = lc.fame, cutTxt = lc.cut ? L('lateCut') : '';
+    if (lc.liked && !batch) await UI.say(L('likedReport'), who);
+    rel.lateN = (rel.lateN || 0) + 1;
     if (ev === 'fake' && !(await G.Fakes.tryFake(sp, d, pay))) return;
     var pr = ev === 'fake' ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), bothUp = 0;
     if (pr.noProof) { pay = Math.round(pay * SP.noProofK(sp) / 100) * 100; fame = Math.round(fame * 0.8); }
     if (ev === 'both') { G.Fakes.give(d.id, -1); pay = Math.round(pay * ((G.BALANCE.fakes && G.BALANCE.fakes.bothK) || 1.3) / 100) * 100; bothUp = (G.BALANCE.fakes && G.BALANCE.fakes.bothTrust) || 10; }
     var lateHead = SP.proofLine(pr, d, true, sp) + (G.Disc.isLate(d.id) ? L('lateRival', { rival: st.rival }) : L('lateGood') + (U.chance(0.55) ? L('cat_' + d.cat) + ' ' : ''));
+    if (batch) {   // 일괄 보고: 말·창 없이 기록만
+      st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; if (G.Tudor && G.Tudor.onReport) G.Tudor.onReport(sp, d);
+      s.player.gold += pay; var fGot = G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + (tp === 'generous' ? 3 : 0)); rel.done = (rel.done || 0) + 1; rel.promise = 0;
+      SP.stirJealousy(sp, d);
+      G.State.log(SP.holderName(sp) + '에게 「' + d.name + '」의 발견을 보고했다 (일괄 보고). (금화 ' + pay + ', 명성 +' + fame + (gr ? ', 증거 ' + gr.name : '') + ')');
+      return { d: d, pay: pay, fame: fame, fameGot: typeof fGot === 'number' ? fGot : fame, cut: lc.cut, late: G.Disc.isLate(d.id), grade: gr ? gr.name : '', gk: gk, noProof: pr.noProof, proof: pr };
+    }
     var pitch = ev !== 'fake' && found && G.Pitch && G.Pitch.on() ? true : null;
     if (pitch) {   // 맞이한 뒤 그림을 다시 띄우고 부하들이 거든다 (js/systems/pitch.js)
       await UI.say(lateHead, who);
@@ -335,7 +358,7 @@
     if (ev === 'both') await UI.say(L('bothLate'), who);
     if (pitch) await pitch.close();
     if (G.Fakes) G.Fakes.after(sp, d, ev, found);
-    if (found) { st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; }
+    if (found) { st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; if (G.Tudor && G.Tudor.onReport) G.Tudor.onReport(sp, d); }   // 엘리자베스 1세에게 한 발견 보고 (칼레 해전의 조건 — js/systems/tudor.js)
     s.player.gold += pay; G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + bothUp + (tp === 'generous' ? 3 : 0) + (pitch && pitch.trust ? pitch.trust : 0)); rel.done = (rel.done || 0) + 1; rel.promise = 0;
     SP.proofToast(pr);
     if (found) SP.stirJealousy(sp, d);
@@ -344,6 +367,68 @@
     if (G.Names && found) await G.Names.onReport(d);
     if (G.Fest && found && !G.Disc.isLate(d.id)) await G.Fest.begin(sp.city, d);
     G.Game.refreshHud();
+  };
+
+  /* 일괄 보고 (2026-10-18): 찾아 두고 보고하지 않은 발견을 이 후원자에게 한꺼번에 보고한다.
+     · 셈은 한 건씩 보고할 때(SP.lateReport)와 같다 — 올해 이 후원자에게 두 번째부터는 사례금이 ÷(1 + lateRepCut × n)으로 줄고(G.BALANCE.lateRepCut),
+       경쟁자보다 늦은 발견은 명성·사례금이 줄고, 증거 등급·증거 없음 배수도 그대로. 그래서 값진 것부터 차례로 보고한다
+     · 후원자의 관심(SP.interest)이 모자라 한 건씩이면 「다른 것을 보여라」라고 할 발견은 빼 둔다 (따로 설득해 보고할 수 있다)
+     · 일괄 보고는 증거를 따져 묻는 말·부하들의 거듦·축제를 건너뛴다 — 이름 공인(G.Names)은 그대로 받는다 */
+  SP.batchCandidates = function (sp) {
+    var rel = SP.rel(sp.id), n0 = lateNOf(rel), list = G.Disc.unreported().map(function (d) {
+      var sc = SP.interest(sp, d) + 1.5, k = sc >= 3.2 ? 1 : 0.8, gr = G.Disc.gradeOf ? G.Disc.gradeOf(d) : null, gk = gr ? gr.k : 1;
+      return { d: d, sc: sc, k: k, ok: sc >= 2.0 && !(d.pw > sp.pw + 1), gr: gr, gk: gk, base: lateCalc(sp, d, k, gk, 0) };
+    });
+    list.sort(function (a, b) { return (b.ok - a.ok) || (b.base.pay - a.base.pay) || (b.base.fame - a.base.fame); });
+    var n = n0;
+    list.forEach(function (x) { if (x.ok) { x.est = lateCalc(sp, x.d, x.k, x.gk, n); if (G.Disc.needsProof(x.d) && !G.Disc.hasProof(x.d.id)) x.est.pay = Math.round(x.est.pay * SP.noProofK(sp) / 100) * 100; n++; } });
+    return list;
+  };
+  SP.batchReport = async function (sp, opt) {
+    opt = opt || {};
+    var s = S(), who = SP.speaker(sp), list = SP.batchCandidates(sp), ok = list.filter(function (x) { return x.ok; });
+    if (!ok.length) { await UI.say(SP.line(sp, 'meh'), who); return false; }
+    var rows = list.map(function (x, i) {
+      var e = x.est;
+      return '<tr' + (x.ok ? '' : ' class="muted"') + '><td>' + (x.ok ? '<input type="checkbox" data-i="' + i + '" checked>' : '') + '</td><td><b>' + U.esc(x.d.name) + '</b>' +
+        (G.Disc.isLate(x.d.id) ? ' <span class="tag">경쟁자가 먼저</span>' : '') + (x.gr ? ' <span class="tag">증거 · ' + U.esc(x.gr.name) + '</span>' : '') + '</td>' +
+        (x.ok ? '<td class="num">' + U.num(e.pay) + '닢' + (e.cut ? ' <small class="muted">(깎임)</small>' : '') + '</td><td class="num">+' + U.num(e.fame) + '</td>' : '<td colspan="2" class="muted">관심 밖 — 따로 설득해 보고</td>') + '</tr>';
+    }).join('');
+    var tot = function (sel) { var p = 0, f = 0; ok.forEach(function (x) { if (sel.indexOf(x) >= 0) { p += x.est.pay; f += x.est.fame; } }); return [p, f]; };
+    var picked = ok.slice();
+    if (!opt.all) {
+      var t0 = tot(picked);
+      var win = UI.window({ title: SP.holderName(sp) + '에게 일괄 보고', icon: 'scroll', width: 860,
+        html: '<div class="muted" style="margin-bottom:8px">값진 것부터 차례로 보고합니다. 올해 이 후원자에게 한 보고가 늘수록 다음 보고의 사례금은 줄어듭니다 — 한 건씩 보고할 때와 같은 셈입니다. (어림값 — 증거를 내면 달라질 수 있습니다)</div>' +
+          '<table class="tbl"><tr><th></th><th>발견</th><th class="num">사례금(어림)</th><th class="num">명성</th></tr>' + rows + '</table>' +
+          '<div class="bt-sum" style="margin-top:10px;font-size:18px">합계: 금화 <b>' + U.num(t0[0]) + '</b>닢 · 명성 <b>+' + U.num(t0[1]) + '</b></div>',
+        buttons: [{ label: '보고한다', value: 'go', cls: 'navy' }, { label: '그만둔다', value: null }],
+        onBuild: function (el) {
+          var sum = el.querySelector('.bt-sum');
+          U.$$('input[type=checkbox]', el).forEach(function (cb) { cb.onchange = function () {
+            picked = U.$$('input[type=checkbox]', el).filter(function (c) { return c.checked; }).map(function (c) { return list[+c.dataset.i]; });
+            var t = tot(picked); sum.innerHTML = '합계: 금화 <b>' + U.num(t[0]) + '</b>닢 · 명성 <b>+' + U.num(t[1]) + '</b> <small class="muted">(빼면 뒤의 것이 덜 깎인다)</small>';
+          }; });
+        } });
+      var v = await win.result;
+      if (v !== 'go' || !picked.length) return false;
+    }
+    await UI.say('제가 찾아낸 것들을 한꺼번에 아뢰겠습니다. 여기 그 증거들이 있습니다.', SP.me(sp));
+    var res = [], gold = 0, fame = 0;
+    picked.sort(function (a, b) { return b.base.pay - a.base.pay; });
+    for (var i = 0; i < picked.length; i++) {
+      var r = await SP.lateReport(sp, picked[i].d, picked[i].k, { batch: true });
+      if (r) { res.push(r); gold += r.pay; fame += r.fame; }
+    }
+    if (!res.length) return false;
+    await UI.say(SP.line(sp, 'lateGood') + ' ' + res.length + '건이나 되는군요. 사례로 금화 ' + U.num(gold) + '닢을 드리지요.', who);
+    var tbl = res.map(function (r) { return '<tr><td>' + U.esc(r.d.name) + (r.late ? ' <span class="tag">늦은 보고</span>' : '') + (r.noProof ? ' <span class="tag">증거 없음</span>' : '') + '</td><td class="num">' + U.num(r.pay) + '닢' + (r.cut ? ' <small class="muted">(깎임)</small>' : '') + '</td><td class="num">+' + U.num(r.fame) + '</td></tr>'; }).join('');
+    var proofs = res.map(function (r) { return r.proof; }).filter(Boolean);
+    proofs.forEach(function (pr) { SP.proofToast(pr); });
+    await UI.window({ title: '일괄 보고 — ' + res.length + '건', icon: 'scroll', width: 760, html: '<table class="tbl"><tr><th>발견</th><th class="num">사례금</th><th class="num">명성</th></tr>' + tbl + '</table><div style="margin-top:10px;font-size:18px">금화 <b>' + U.num(gold) + '</b>닢과 명성 <b>+' + U.num(fame) + '</b>' + U.jx(String(fame), '을/를') + ' 얻었다!</div>', buttons: [{ label: '확인', value: 1 }] }).result;
+    if (G.Names) for (var j = 0; j < res.length; j++) await G.Names.onReport(res[j].d);
+    G.Game.refreshHud();
+    return { n: res.length, gold: gold, fame: fame, res: res };
   };
 
   /** 증거가 하나도 없을 때 사례금 비율 (성품: 신중하면 더 깎고, 너그러우면 덜 깎는다) */
@@ -375,6 +460,7 @@
       if (s.mates.length) await UI.say(U.pick(['제독 말씀 그대로입니다. 저희가 두 눈으로 똑똑히 보았습니다.', '거짓이라면 제 목을 거셔도 좋습니다. 그 자리에 저도 있었습니다.']), G.Scenes.mateSpeaker('first'));
       ok = U.chance(U.clamp(0.4 + Math.min(4, s.mates.length) * 0.06 + R.skill('speech') * 0.08, 0.1, 0.9));
     } else ok = U.chance(U.clamp(0.25 + (rel.trust || 0) / 100 + (s.player.fame >= 2000 ? 0.1 : 0), 0.1, 0.9));
+    if (G.Growth) G.Growth.persuade(ok, ok ? '설득 경험 — 의심을 풀었다' : null);
     if (G.Outcome) await G.Outcome.show(ok ? 'win' : 'lose', { sub: ok ? '의심을 풀었다' : '의심을 풀지 못했다 — 사례·명성이 줄어든다' });
     if (ok) { await UI.say(SP.line(sp, 'doubtOk'), who); SP.addTrust(rel, 1); }
     else { await UI.say(SP.line(sp, 'doubtFail'), who); out.k = 0.8; SP.addTrust(rel, -3); }
@@ -566,7 +652,8 @@
         : U.pick(['뱃길과 계절풍을 따져 보면 이 기한은 빠듯합니다. 한 해만 더 주시면 선금은 그대로 두셔도 됩니다.', hon + '의 돈이 헛되이 쓰이지 않도록, 서두르지 않을 시간을 조금만 더 주십시오.']), G.Scenes.mateSpeaker('purser'));
       else if (speech) await UI.say(w === 'money' ? '이 모험이 성공하면 ' + hon + '의 이름도 세상에 남습니다. 그 값에 걸맞은 선금을 약속해 주십시오.' : '서두르다 원정을 그르치는 것보다 확실한 성공이 낫습니다. 시간을 주시면 반드시 성과로 갚겠습니다.', SP.me(sp));
       var p = tutDuke(sp) ? 1 : SP.negotiationChance(sp, w, asked, pu);     // 튜토리얼: 공작은 교섭에 늘 응한다
-      if (!U.chance(p)) {
+      var nOk = U.chance(p); if (G.Growth) G.Growth.persuade(nOk, nOk ? '설득 경험 — 계약 교섭' : null);
+      if (!nOk) {
         if (G.Outcome) await G.Outcome.show('lose', { title: '교섭 결렬…', sub: '욕심이 지나쳤다 — 계약이 없던 일이 되었다' });
         await UI.say(L('greed'), who);
         rel.trust = Math.max(0, rel.trust - 10); rel.anger = U.dateNum(U.addDays(s.date, tp === 'generous' ? 45 : tp === 'hasty' || tp === 'greedy' ? 120 : 90));
@@ -710,7 +797,7 @@
     SP.proofToast(pr);
     s.player.gold += reward; G.Fame.add('ex', fame);
     if (!k.circ && G.Fakes) G.Fakes.after(sp, d, ev, found);
-    if (found) { st = s.disc[k.disc] || st; st.reported = sp.id; if (trm) st.claim = trm.claim; s.disc[k.disc] = st; }
+    if (found) { st = s.disc[k.disc] || st; st.reported = sp.id; if (trm) st.claim = trm.claim; s.disc[k.disc] = st; if (!k.circ && G.Tudor && G.Tudor.onReport) G.Tudor.onReport(sp, d); }
     SP.addTrust(rel, trustUp); rel.done = (rel.done || 0) + 1; rel.promise = 0;
     if (k.circ) { s.flags.circDone = true; }
     if (found && !k.circ) SP.stirJealousy(sp, d);

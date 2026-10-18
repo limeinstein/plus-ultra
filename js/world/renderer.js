@@ -39,6 +39,7 @@ uniform vec4 uW1;   // shallow rgb, foam
 uniform vec4 uW2;   // deep rgb, cloud
 uniform vec4 uW3;   // lagoon rgb, berg
 uniform vec4 uW4;   // abyss rgb (가장 깊은 바다 색), rough (먼바다일수록 거칠어지는 정도)
+uniform vec4 uW5;   // 큰 너울 청록 명암, 잔물결, 배경 물마루 선, 여분
 uniform vec2 uCloudK;    // 구름 무늬의 자리 (카메라 이동·바람에 밀린 만큼 — 화면 한가운데 기준)
 uniform vec2 uCloudDir;  // 구름이 흘러가는 방향 (= 바람이 부는 쪽, 단위 벡터)
 uniform vec4 uCloudForm; // 구름 모양: 바람 방향으로 늘어남, 구름길(줄), 크기, 쌘구름(뭉게뭉게 솟은 정도)
@@ -74,6 +75,16 @@ vec3 voro(vec2 x){ vec2 n = floor(x); vec2 f = x - n; float f1 = 8.0, f2 = 8.0, 
   return vec3(sqrt(f1), sqrt(f2), id); }
 float dsmooth(float a, float b, float x){ float t = clamp((x-a)/(b-a), 0.0, 1.0); return 6.0*t*(1.0-t)/(b-a); }
 float band(float x, float a, float b, float c, float d){ return smoothstep(a, b, x) * (1.0 - smoothstep(c, d, x)); }
+// 느리게 흐르는 높이장과 그 등고선. 셀·입자를 흩뿌리는 대신 같은 수면에 붙은 굽은 선을 만든다.
+// x = 높이(색 덩어리), y = 안티앨리어싱한 등고선(닫히거나 서로 이어지는 곡선)
+vec2 seaContour(vec2 p, float levels){
+  vec2 warp = vec2(fbm(p*0.72 + vec2(17.3,4.1), 3), fbm(p*0.72 + vec2(-8.7,31.6), 3)) - 0.5;
+  float h = fbm(p + warp*1.18, 4);
+  float x = h*levels;
+  float d = abs(fract(x + 0.5) - 0.5);
+  float aa = max(fwidth(x)*1.35, 0.012);
+  return vec2(h, 1.0 - smoothstep(0.025, 0.025 + aa, d));
+}
 
 float coastNoise(vec2 ll){ vec2 p = ll + vec2(180.0, 90.0);
   return (vnoise(p*3.0)-0.5)*1.1 + (vnoise(p*9.0+17.3)-0.5)*0.56 + (vnoise(p*27.0+41.7)-0.5)*0.26; }
@@ -486,7 +497,7 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
   // 심해: 뭍에서 멀어질수록(해안까지 6→56텍셀, 약 0.5°→5°) 점점 더 어둡고 짙은 남색으로. 큰 너울 그늘이 얼룩진다
   float abyss = smoothstep(6.0, 56.0, d) * (1.0 - battle);
   col = mix(col, uW4.rgb, abyss);
-  col *= 1.0 - 0.12*abyss*smoothstep(0.35, 0.75, fbm(p*0.21 + vec2(40.0 - t*0.003, 7.0), 2));
+  col *= 1.0 - 0.07*abyss*smoothstep(0.35, 0.75, fbm(p*0.21 + vec2(40.0 - t*0.003, 7.0), 2));
   float Tw = cl.r;
   col = mix(col, col*vec3(0.84,0.95,0.98) + vec3(0.0,0.015,0.02), smoothstep(0.32, 0.12, Tw));
   col = mix(col, col*vec3(0.90,1.07,1.05), smoothstep(0.70, 0.86, Tw)*exp(-z*1.2));
@@ -513,7 +524,7 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
   vec2 toLand = normalize(gS + vec2(1e-5, 0.0));
   float nearC = exp(-d/5.0) * (1.0 - battle);
   float rough = uW4.w * smoothstep(6.0, 56.0, d) * (1.0 - battle);   // 먼바다일수록 물결이 높다 (G.Waves.sea와 같은 식)
-  vec2 grad = vec2(0.0); float hs = 0.0; float crest = 0.0;
+  vec2 grad = vec2(0.0); float hs = 0.0; float swellH = 0.0; float crest = 0.0;
   float nW1 = vnoise(p*1.3 + 5.0), nW2 = vnoise(p*0.9 + 3.1);
   for (int i=0;i<7;i++){
     float fi = float(i);
@@ -530,33 +541,59 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
     float xp = dot(p, dir)*k;
     float env = 0.55 + 0.45*sin(xp/6.5 - omega/6.5*t + fi*2.1 + nW1*(4.0 + fi));
     float ph = xp - omega*t + fi*1.7 + nW2*(2.5 - fi*0.2) + nW1*fi*0.3;
-    hs += amp*env*sin(ph)*lf;
+    float hsi = amp*env*sin(ph)*lf;
+    hs += hsi;
+    if (i < 2) swellH += hsi;
     grad += amp*env*k*dir*cos(ph)*lf;
     if (i >= 2) crest = max(crest, env*smoothstep(0.80, 1.0, sin(ph))*lf);
   }
-  float rf = smoothstep(120.0, 300.0, pxD);
-  if (rf > 0.0) { vec3 rn = fbmd(p*85.0 - wd*t*0.30, 2); grad += rn.yz*85.0*0.0022*rf*(0.5 + wstr); }
-  vec3 n = normalize(vec3(-grad*(0.16 + 0.08*rough), 1.0));   // 먼바다는 물결 면이 더 가파르게 보인다
+  // 연안은 예전의 부드러운 에메랄드 너울, 심해에서만 불규칙한 등고선 높이장으로 바뀐다.
+  // 해안 거리 28→58 텍셀 사이를 넓게 섞어, 에메랄드 연안과 대륙붕까지는 예전 모습을 온전히 유지한다.
+  vec2 contourP = vec2(dot(p, wd)*0.34 - t*0.0018, dot(p, wp)*0.52 + t*0.0011) + 23.0;
+  vec2 contourV = seaContour(contourP, 3.75);
+  float coastPatch = fbm(contourP, 3);
+  float coastFace = clamp(0.5 + swellH/max(0.025, 0.115*uW0.y) + (coastPatch - 0.5)*0.44, 0.0, 1.0);
+  float deepFace = clamp(0.5 + swellH/max(0.025, 0.115*uW0.y)*0.38 + (contourV.x - 0.5)*1.34, 0.0, 1.0);
+  float deepContour = smoothstep(28.0, 58.0, d);
+  float swellPatch = mix(coastPatch, contourV.x, deepContour);
+  float swellFace = mix(coastFace, deepFace, deepContour);
+  float broad = smoothstep(0.10, 0.90, swellFace);
+  vec3 swellLow = col*vec3(0.86, 0.93, 1.00);
+  vec3 swellHigh = col*vec3(1.10, 1.34, 1.22) + vec3(0.0, 0.016, 0.022);
+  col = mix(col, mix(swellLow, swellHigh, broad), uW5.x*(0.46 + 0.16*rough));
+  // 너울 꼭대기 바로 아래에 넓고 부드러운 청록빛 어깨를 얹어, 줄무늬보다 둥근 물의 부피가 먼저 보이게 한다.
+  float shoulder = smoothstep(0.54, 0.76, swellFace) * (1.0 - smoothstep(0.80, 0.98, swellFace));
+  float shoulderBreak = smoothstep(0.43, 0.67, swellPatch);
+  col += vec3(0.004, 0.023, 0.028) * shoulder * shoulderBreak * uW5.x;
+  // 해전과 같은 불규칙한 등고선 결은 심해에만. 연안의 밝은 에메랄드 수면은 건드리지 않는다.
+  float contourGate = mix(0.30, 1.0, smoothstep(0.34, 0.68, fbm(contourP*0.46 + 51.0, 2)));
+  float contourLine = contourV.y * contourGate * deepContour * smoothstep(42.0, 105.0, pxD);
+  vec3 contourCol = col*vec3(0.92, 1.42, 1.32) + vec3(0.0, 0.018, 0.024);
+  col = mix(col, contourCol, contourLine*uW5.x*(0.31 + 0.08*rough));
+
+  // 잔물결은 확대했을 때만 약하게 법선에 얹는다. 화면 전체에 흰 조각으로 따로 그리지 않는다.
+  float rf = smoothstep(135.0, 310.0, pxD);
+  if (rf > 0.0) { vec3 rn = fbmd(p*72.0 - wd*t*0.20, 2); grad += rn.yz*72.0*0.00145*rf*(0.45 + 0.55*wstr)*uW5.y; }
+  vec3 n = normalize(vec3(-grad*(0.12 + 0.045*rough), 1.0));
   float dif = dot(n, SUN);
-  col *= 0.84 + 0.24*dif;
-  col += vec3(0.16,0.22,0.28) * pow(1.0 - n.z, 1.5) * 2.2 * (1.0 - 0.6*uStorm);
-  col *= 1.0 + 0.06*(1.0 + 0.9*rough)*hs/max(0.02, 0.1*uW0.y);   // 물마루는 밝고 골은 어둡게 (먼바다일수록 진하게)
+  col *= 0.88 + 0.18*dif;
+  col += vec3(0.10,0.22,0.24) * pow(1.0 - n.z, 1.6) * 1.35 * (1.0 - 0.6*uStorm);
+  col *= 1.0 + 0.035*(1.0 + 0.6*rough)*hs/max(0.02, 0.1*uW0.y);
   vec3 hv = normalize(SUN + vec3(0.0,0.0,1.0));
   float sp = pow(max(dot(n, hv), 0.0), 260.0);
   col += vec3(1.0,0.95,0.82) * min(sp*1.4*uW0.w, 0.28) * (1.0 - 0.8*uStorm);
 
-  // 흰 물마루: 바람이 셀수록, 바람에 직각으로 길쭉한 물마루가 드문드문 생겼다 사라진다
-  float wcT = 0.3 - 0.18*rough;                       // 먼바다는 약한 바람에도 흰 물마루가 인다
-  if (wstr > wcT && pxD > 40.0) {
-    vec2 qw = vec2(dot(p, wp)*4.5, dot(p, wd)*8.0 - t*0.12);
-    vec3 cv = voro(qw);
-    float life = fract(t*0.11 + cv.z*9.0);
-    float on = step(cv.z, (wstr - wcT)*0.05*uW0.z*(1.0 + 1.2*rough)) * smoothstep(0.0, 0.25, life) * smoothstep(1.0, 0.55, life);
-    float sz = 0.08 + 0.14*fract(cv.z*17.3);            // 물마루마다 크기가 다르다
-    float br = 0.40 + 0.45*fract(cv.z*31.7);            // 진하기도 다르다
-    float caps = on * smoothstep(sz, sz*0.25, cv.x + (vnoise(qw*6.0) - 0.5)*0.08) * smoothstep(0.5, 1.8, d);
-    caps *= smoothstep(0.25, 0.6, vnoise(qw*2.3 + 7.0)); // 끝이 흩어진다
-    col = mix(col, vec3(0.92,0.95,0.96), clamp(caps*br, 0.0, 0.8));
+  // 배경 흰 물마루: 높이 파형의 능선에만 가늘게 붙고, 긴 구간이 드문드문 끊어진다.
+  // 셀마다 생기는 반달·점 입자를 쓰지 않아 비처럼 같은 모양이 흘러내리지 않는다.
+  float wcT = 0.68 - 0.04*rough;
+  if (wstr > wcT && pxD > 48.0) {
+    vec2 cq = vec2(dot(p, wp), dot(p, wd));
+    float seg = smoothstep(0.53, 0.70, fbm(vec2(cq.x*1.35, cq.y*0.32) + vec2(t*0.006, -t*0.004), 3));
+    float fine = smoothstep(0.47, 0.63, vnoise(vec2(cq.x*5.2, cq.y*1.1) + 19.0));
+    float ridge = smoothstep(0.74, 0.94, crest);
+    float amount = smoothstep(wcT, 0.95, wstr) * uW0.z * uW5.z * (0.38 + 0.34*rough);
+    float caps = ridge * seg * (0.58 + 0.42*fine) * amount * smoothstep(0.7, 2.2, d);
+    col = mix(col, vec3(0.58,0.84,0.84), clamp(caps, 0.0, 0.30));
   }
 
   // ---------------- 해안 포말: 밀려와 부서지는 물결 (늘 켜진 외곽선이 아니다)
@@ -621,7 +658,9 @@ vec3 battleSea(vec2 q, float pxU){
   float t = uTime;
   float wstr = clamp(length(uWind), 0.0, 1.0); vec2 wd = normalize(uWind + vec2(1e-4, 0.0)); vec2 wp = vec2(-wd.y, wd.x);
   vec3 deep = mix(uW2.rgb, uW4.rgb, 0.34);
-  float big = fbm(q*0.035 + vec2(t*0.004, -t*0.003), 3);
+  vec2 contourP = vec2(dot(q, wd)*0.19 - t*0.0026, dot(q, wp)*0.25 + t*0.0017) + 7.0;
+  vec2 contourV = seaContour(contourP, 4.6);
+  float big = contourV.x;
   vec3 col = mix(deep*vec3(0.78,0.85,0.92), deep*vec3(1.12,1.22,1.14) + vec3(0.0,0.018,0.02), smoothstep(0.28, 0.74, big));
   vec2 grad = vec2(0.0); float hs = 0.0, crest = 0.0;
   float n1 = vnoise(q*0.11 + 3.0), n2 = vnoise(q*0.07 + 11.0);
@@ -650,25 +689,17 @@ vec3 battleSea(vec2 q, float pxU){
   col += vec3(0.10,0.24,0.28) * clamp(hs*6.5 + slope*0.25, 0.0, 1.0) * (0.62 + 0.38*max(dot(normalize(grad + 1e-5), SUNXY), 0.0)); // 솟는 파도 면의 청록빛
   col *= 1.0 - 0.20*clamp(-hs*5.5, 0.0, 1.0);                                                                            // 깊은 골은 짙게
   vec3 hv = normalize(SUN + vec3(0.0,0.0,1.0));
-  float sp = pow(max(dot(n, hv), 0.0), 320.0);
-  col += vec3(1.0,0.95,0.82) * min(sp*1.6*uW0.w, 0.32) * (1.0 - 0.8*uStorm);
-  // 부서지는 물마루: 높은 마루에서 잠깐 희어졌다 사라진다 (바람이 셀수록 많다)
-  if (wstr > 0.22) {
-    float gate = fbm(q*0.45 + vec2(t*0.04, -t*0.03), 2) + (wstr - 0.6)*0.35;
-    // 바람에 직각으로 짧게 늘어진 물마루 조각들 — 하나하나 생겼다 사라진다 (줄무늬가 되지 않게 칸마다 따로)
-    vec2 qw = vec2(dot(q, wp)*0.9, dot(q, wd)*2.2 - t*0.25);
-    vec3 cv = voro(qw);
-    float life = fract(t*0.16 + cv.z*9.0);
-    float on = step(cv.z, (wstr - 0.25)*0.32*uW0.z) * smoothstep(0.0, 0.15, life) * smoothstep(1.0, 0.45, life);
-    float sz = 0.15 + 0.16*fract(cv.z*17.3);
-    float brk = on * smoothstep(sz, sz*0.3, cv.x + (vnoise(qw*5.0) - 0.5)*0.12) * smoothstep(0.25, 0.6, vnoise(qw*2.1 + 7.0)) * (0.55 + 0.45*clamp(hs*6.0 + 0.5, 0.0, 1.0));
-    vec2 qs = vec2(dot(q, wd)*0.6, dot(q, wp)*5.0);
-    float streak = smoothstep(0.66, 0.84, fbm(qs - vec2(t*0.06, 0.0), 3)) * smoothstep(0.50, 0.90, wstr) * 0.22 * smoothstep(0.45, 0.70, gate);   // 바람에 끌리는 거품 줄
-    float crossCrest = smoothstep(0.72, 0.94, fbm(vec2(dot(q,wp)*0.55, dot(q,wd)*2.8) + vec2(t*0.03,-t*0.18), 3));
-    float tear = smoothstep(0.48, 0.76, vnoise(vec2(dot(q,wp)*3.2, dot(q,wd)*0.7) + t*0.08));
-    float foam = brk*(0.62 + 0.48*vnoise(q*14.0)) + streak + crossCrest*tear*(0.08 + 0.26*wstr);
-    col = mix(col, vec3(0.90,0.95,0.96), clamp(foam*uW0.z*1.28, 0.0, 0.92));
-  }
+  float sp = pow(max(dot(n, hv), 0.0), 180.0);
+  col += vec3(0.48,0.78,0.80) * min(sp*0.62*uW0.w, 0.11) * (1.0 - 0.8*uStorm);
+  // 해전의 물결은 화면을 가로지르는 흰 조각 대신, 넓은 높이장에 붙은 불규칙한 곡선으로 읽힌다.
+  float contourGate = mix(0.34, 1.0, smoothstep(0.35, 0.70, fbm(contourP*0.48 + 39.0, 2)));
+  float contourLine = contourV.y * contourGate;
+  vec3 contourCol = col*vec3(1.025,1.20,1.18) + vec3(0.006,0.014,0.021);
+  col = mix(col, contourCol, contourLine*(0.16 + 0.08*wstr));
+  // 강풍에서만 곡선 능선 일부가 옅게 부서진다. 선의 자리를 벗어난 독립 입자는 만들지 않는다.
+  float breakGate = smoothstep(0.62, 0.80, fbm(contourP*1.65 + 71.0, 3));
+  float curvedFoam = contourLine * breakGate * smoothstep(0.66, 1.0, wstr) * uW0.z * uW5.z;
+  col = mix(col, vec3(0.62,0.84,0.84), clamp(curvedFoam*0.20, 0.0, 0.14));
   return col;
 }
 
@@ -831,7 +862,7 @@ void main(){
     return prog;
   }
   var UNIFORMS = ['uGeo', 'uClim', 'uRes', 'uCenter', 'uZoom', 'uTime', 'uWind', 'uCloud', 'uEdge', 'uMode', 'uDusk', 'uStorm', 'uQuality', 'uBattleOrigin', 'uBattleZoom',
-    'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
+    'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uW5', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
 
   /* 두 패스:
      · 육지 캐시 — 무거운 육지(높이·생태·나무·강)는 화면보다 1.45배 넓은 판에 그려 두고, 카메라가 그 판 안에 있는 동안 다시 쓴다.
@@ -915,6 +946,7 @@ void main(){
     gl.uniform4f(u.uW2, dp[0], dp[1], dp[2], fxv(Wt, 'cloud', 0.8));
     gl.uniform4f(u.uW3, lg[0], lg[1], lg[2], fxv(Wt, 'berg', 1));
     if (u.uW4) gl.uniform4f(u.uW4, ab[0], ab[1], ab[2], fxv(Wt, 'rough', 1));
+    if (u.uW5) gl.uniform4f(u.uW5, fxv(Wt, 'flow', 0.74), fxv(Wt, 'ripple', 0.52), fxv(Wt, 'crest', 0.56), 0);
   };
   function wrap(d) { d = (d + 180) % 360; if (d < 0) d += 360; return d - 180; }
   /** 캐시 판 하나 (텍스처 + 프레임버퍼) */

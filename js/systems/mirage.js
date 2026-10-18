@@ -4,14 +4,17 @@
      처음 보면 일지에 적고 명성이 조금 오르며(fame), 그 뒤로는 again일마다 한 번씩만 다시 나타난다.
    · 세운 해가 되면 여느 발견물처럼 찾을 수 있다.
    조정값 G.BALANCE.mirage — from: 이 해부터 신기루가 보인다, after: 이 해보다 뒤에 세워지는 것만, again: 다시 보이는 간격(일),
-   fame: 처음 볼 때 명성, show: 떠 있는 시간(초) */
+   fame: 처음 볼 때 명성, show: 떠 있는 시간(초)
+   · 미래의 건물 (2026-10-18): 세운 해가 future(1800)년 이후인 건물은 그 자리·그 도시에 가면 언제든 「신기루로 본 발견」으로 끝난다
+     (js/systems/discovery.js D.isFuture·D.mirageNow). 명성·가치는 futureK만 (거리·위치에 비해 적게), 유물은 없다.
+     발견 카드를 닫으면 그 신기루가 흩어져 사라지는 장면(M.vanish, vanish초)이 이어진다. */
 (function (G) {
   'use strict';
   var U = G.U;
   var M = {};
   G.Mirage = M;
   G.BALANCE = G.BALANCE || {};
-  G.BALANCE.mirage = G.BALANCE.mirage || { from: 1600, after: 1600, again: 45, fame: 12, show: 7 };
+  G.BALANCE.mirage = G.BALANCE.mirage || { from: 1600, after: 1600, again: 45, fame: 12, show: 7, future: 1800, futureK: 0.2, vanish: 3.2 };
   function cfg() { return G.BALANCE.mirage; }
   function S() { return G.Game.state; }
 
@@ -20,6 +23,7 @@
     var s = S(), c = cfg();
     if (!d || !d.built || !s) return false;
     var y = s.date.y;
+    if (G.Disc && G.Disc.isFuture && G.Disc.isFuture(d)) return y < d.built && y >= (c.from || 1600);   // 미래의 건물: 1600년부터 소문이 돈다 (찾는 것은 언제든)
     return d.built > (c.after || 1600) && y >= (c.from || 1600) && y < d.built;
   };
   /** 아직 세워지지 않아 아무것도 없는가 (신기루 때도 아닌) — 단서·발견 모두 막힌다 */
@@ -72,6 +76,23 @@
       var nx = queue.shift(); if (nx) M.see(nx);
     }, ms + 200);
     if (UI()) UI().toast('신기루 — 「' + d.name + '」' + (first ? ' (명성 +' + (c.fame || 0) + ')' : ''), 'eye', 4200);
+  };
+  /** 신기루로 본 미래의 건물이 흩어져 사라진다 (발견 카드를 닫은 뒤) — 끝나면 풀린다 */
+  M.vanish = function (d) {
+    var root = document.getElementById('ui'); if (!root || !d) return Promise.resolve();
+    var c = cfg(), ms = Math.round((c.vanish || 3.2) * 1000);
+    var el = U.el('div', 'mirage vanish');
+    el.style.setProperty('--mirage-ms', ms + 'ms');
+    var pic = U.el('div', 'mirage-pic');
+    var key = G.Img && (G.Img.file('discovery-ends/' + d.id) ? 'discovery-ends/' + d.id : G.Img.pick(G.Img.chain.discovery(d)));
+    var src = key && G.Img.src(key);
+    if (src) { var im = new Image(); im.src = src; im.alt = d.name; pic.appendChild(im); }
+    else if (G.Art && G.Art.discoveryArt) { try { pic.appendChild(G.Art.discoveryArt(d, 720, 320)); } catch (e) { /* 그림이 없으면 글만 */ } }
+    el.appendChild(pic);
+    el.appendChild(U.el('div', 'mirage-cap', '<b>신기루</b> — ' + U.esc(d.name) + '<small>손을 뻗자 아지랑이처럼 흩어져 사라졌다. ' + (d.built ? d.built + '년에야 세워질 것이다.' : '') + '</small>'));
+    root.appendChild(el);
+    if (G.Audio && G.Audio.sfx) { try { G.Audio.sfx('wake'); } catch (e) { /* 소리가 없어도 된다 */ } }
+    return new Promise(function (res) { setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); res(); }, ms + 150); });
   };
   function UI() { return G.UI; }
 })(window.G = window.G || {});

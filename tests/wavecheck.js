@@ -27,7 +27,7 @@ void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/
   vec2 q = (frag - uRes*0.5)/uZoom * 30.0; float b = hsBat(q, 100.0);
   outColor = vec4(a, b, 0.0, 1.0); }`;
 (async () => {
-  const br = await chromium.launch({ args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader'] });
+  const br = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader'] });
   const pg = await br.newPage();
   pg.on('pageerror', e => console.log('ERR', e.message));
   await pg.setContent('<html><body></body></html>');

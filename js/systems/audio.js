@@ -220,6 +220,36 @@
     return AU.sfx(cfg[0]);
   };
 
+  /* 빗소리 (js/systems/searain.js): 걸러 낸 잡음을 계속 흘린다. v 0이면 서서히 끈다. 매 장면 불러도 크기가 바뀔 때만 손댄다 */
+  var rainNode = null;
+  AU.rain = function (v) {
+    if (!ctx || ctx.state !== 'running') return false;
+    if (!v) {
+      if (rainNode) { var rn = rainNode; rainNode = null; rn.g.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.6); setTimeout(function () { try { rn.s.stop(); } catch (e) { /* 이미 멈춤 */ } }, 3000); }
+      return false;
+    }
+    if (!rainNode) {
+      var src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+      var hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 700;
+      var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 6500;
+      var g = ctx.createGain(); g.gain.value = 0.0001;
+      src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(sfxGain); src.start();
+      rainNode = { s: src, g: g, lp: lp, v: 0 };
+    }
+    var target = 0.025 + 0.085 * Math.min(1, v);
+    if (Math.abs(target - rainNode.v) > 0.004) { rainNode.v = target; rainNode.g.gain.setTargetAtTime(target, ctx.currentTime, 0.8); rainNode.lp.frequency.setTargetAtTime(4500 + 3500 * Math.min(1, v), ctx.currentTime, 0.8); }
+    return true;
+  };
+  /** 먼 천둥 (폭풍 속 번개 뒤) */
+  AU.thunder = function () {
+    if (!ctx || ctx.state !== 'running') return false;
+    var t = ctx.currentTime;
+    noise(t, 0.35, 0.22, 900, 0.7);
+    noise(t + 0.08, 2.8, 0.32, 130, 0.9);
+    tone(48, t + 0.05, 2.2, 'sine', 0.12);
+    return true;
+  };
+
   // ---------------------------------------------------------------- generative music
   /* 코드로 만드는 음악. 장면 기본(town·sea·battle·title·land)과 고장 음악(G.MUSIC 표에서 'gen:이름'으로 고른다).
      root 으뜸음(Hz) · steps 음계(반음) · tempo 한 박(초) · type 가락 소리 · drone 깔리는 으뜸음 · perc 장단 · lead 가락 크기 · chords 화음을 깔지 */

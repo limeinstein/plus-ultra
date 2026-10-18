@@ -37,7 +37,12 @@
       var n = cfg().startN == null ? 12 : cfg().startN;
       for (var k = 0; k < n; k++) { var d = WD.make({}); if (d) { s.wander.defs[d.id] = d; } }
     }
-    for (var id in s.wander.defs) { if (G.MateSkills) G.MateSkills.wander(s.wander.defs[id]); register(s.wander.defs[id]); }   // 옛 저장의 철새도 특기를 한 번 더 받는다
+    for (var id in s.wander.defs) {
+      var d = s.wander.defs[id];
+      WD.fixPortrait(d);   // 옛 저장의 합성 묶음·잘못된 무릎상도 완성된 한 쌍으로 바꾼다
+      if (G.MateSkills) G.MateSkills.wander(d);
+      register(d);
+    }   // 옛 저장의 철새도 특기를 한 번 더 받는다
     if (G.RegionFolk) G.RegionFolk.fill();   // 고장마다 도시 수의 80%쯤은 사람이 있게 (5년 칸마다)
     if (G.Bio) G.Bio.reset();
   };
@@ -90,20 +95,36 @@
   var MALE_ROLES = ['sailor', 'captain', 'soldier', 'priest'], FEMALE_ROLES = ['maid', 'keeper', 'merchant', 'scholar', 'noble', 'official'];
   var REGION_STYLE = ['ib', 'ne', 'it', 'af', 'is', 'in', 'cn', 'is', 'se', 'jp', 'az'];
   function faceOk(k) { return !G.Img || !G.Img.has || G.Img.has(k); }
+  function facePairOk(k) { return faceOk(k) && faceOk(k + '_half'); }
+  // 새 그림으로 바뀐 사건 인물의 예전 그림. 이름·이야기는 잇지 않고 북유럽권 여성 철새의 생김새로만 다시 쓴다.
+  var RETIRED_EVENT_FACES = ['portraits/fairy-tales/snow_white', 'portraits/fairy-tales/little_mermaid'];
   /** 그 양식·성별의 얼굴 후보 (역할 그림 + 같은 문화권 항해사의 초상) */
   WD.facePool = function (style, g, type) {
     var A = G.Art, T = G.WANDER_TYPES[type] || {}, out = [];
     var roles = (g === 'f' ? FEMALE_ROLES : MALE_ROLES).filter(function (r) { return !A || !A.rolePortraitGender || A.rolePortraitGender(r, style) === g; });
     var pref = (T.role || []).filter(function (r) { return roles.indexOf(r) >= 0; });
-    (pref.length ? pref.concat(pref) : []).concat(roles).forEach(function (r) { var k = 'portraits/npc-roles/' + style + '/' + r; if (faceOk(k)) out.push(k); });
+    (pref.length ? pref.concat(pref) : []).concat(roles).forEach(function (r) { var k = 'portraits/npc-roles/' + style + '/' + r; if (facePairOk(k)) out.push(k); });
+    if (g === 'f' && style === 'ne') RETIRED_EVENT_FACES.forEach(function (k) { if (facePairOk(k)) out.push(k); });
     var cult = A && A.imageCulture ? A.imageCulture(style) : null;
     G.MATES.forEach(function (m) {
       if (m.wd || m.witch || m.g !== g || ICONIC[m.id]) return;
       var ms = m.style || REGION_STYLE[(m.reg || [])[0]] || 'ib';
       if (ms !== style && (!cult || !A.imageCulture || A.imageCulture(ms) !== cult)) return;
-      var k = 'portraits/mates/' + m.id; if (faceOk(k)) out.push(k);
+      var k = 'portraits/mates/' + m.id; if (facePairOk(k)) out.push(k);
     });
     return out;
+  };
+  /** 옛 저장의 얼굴 묶음 합성본을 버리고, id로 고른 안정적인 완성 초상 한 쌍으로 옮긴다. */
+  WD.fixPortrait = function (d) {
+    if (!d) return d;
+    if (/^portraits\/pools\//.test(d.face || '')) {
+      var pool = WD.facePool(d.style || 'ib', d.g, d.type);
+      if (d.local) pool = pool.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 고장 사람은 다른 문화권 항해사의 옷을 빌리지 않는다
+      if (pool.length) d.face = pool[Math.abs(U.strHash('wander-pair:' + d.id)) % pool.length];
+    }
+    if (d.face && facePairOk(d.face)) d.halfKey = d.face + '_half';
+    else if (d.wd) d.halfKey = null;
+    return d;
   };
 
   // ---------------------------------------------------------------- 한 사람 짓기
@@ -146,7 +167,8 @@
     var def = {
       id: id, name: nm.name, g: g, wd: true, nat: nk, natName: N.name, type: tk, typeName: T.nm, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
       y: [y, 9999], after: N.after ? N.after.slice() : undefined, reg: [], desc: desc, story: story, style: N.style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'),
-      face: face, zones: zones, home: home, gen: genOf(y), born: y, line: opts.prev ? opts.prev.line || opts.prev.id : id, prevName: opts.prev ? opts.prev.name : null, nameFrom: nm.from
+      face: face, halfKey: face && facePairOk(face) ? face + '_half' : null,
+      zones: zones, home: home, gen: genOf(y), born: y, line: opts.prev ? opts.prev.line || opts.prev.id : id, prevName: opts.prev ? opts.prev.name : null, nameFrom: nm.from
     };
     return G.MateSkills ? G.MateSkills.wander(def) : def;   // 특기를 한두 단계 더 (js/data/renown.js)
   };

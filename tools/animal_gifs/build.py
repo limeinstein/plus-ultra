@@ -39,14 +39,26 @@ BASE_ANIMAL_IDS = [
 ]
 ANIMALS_DATA = ROOT / "js" / "data" / "animals.js"
 MORE_DISCOVERIES = ROOT / "js" / "data" / "moredisc.js"
+REGIONAL_DISCOVERIES = [
+    ROOT / "js" / "data" / "seasiadisc.js",
+    ROOT / "js" / "data" / "northasiadisc.js",
+    ROOT / "js" / "data" / "arabiadisc.js",
+    ROOT / "js" / "data" / "zoodisc.js",
+]
 ADDED_ANIMAL_IDS = re.findall(
     r"^\s*a\('([^']+)'", ANIMALS_DATA.read_text(encoding="utf-8"), re.M
 )
 MORE_BEAST_IDS = re.findall(
     r"^\s*beast\('([^']+)'", MORE_DISCOVERIES.read_text(encoding="utf-8"), re.M
 ) if MORE_DISCOVERIES.exists() else []
+REGIONAL_ANIMAL_IDS = []
+for path in REGIONAL_DISCOVERIES:
+    if path.exists():
+        REGIONAL_ANIMAL_IDS += re.findall(
+            r"^\s*A\.ani\('([^']+)'", path.read_text(encoding="utf-8"), re.M
+        )
 ANIMAL_IDS = BASE_ANIMAL_IDS + [
-    did for did in ADDED_ANIMAL_IDS + MORE_BEAST_IDS if did not in BASE_ANIMAL_IDS
+    did for did in ADDED_ANIMAL_IDS + MORE_BEAST_IDS + REGIONAL_ANIMAL_IDS if did not in BASE_ANIMAL_IDS
 ]
 
 

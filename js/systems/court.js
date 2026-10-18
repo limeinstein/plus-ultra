@@ -432,7 +432,11 @@
       : t.kind === 'letter' ? '답서로구려. …흠, 좋소. 그대가 길을 잘 닦아 주었소.'
       : t.kind === 'envoy' ? (t.grade === 2 ? '이런 조건을 받아 오다니! 내 신하들 가운데도 그대만 한 사람이 없소.' : '조약을 맺고 왔구려. 수고했소. 두 나라 사이가 한결 편안해지겠소.')
       : '그대가 본 것을 들으니 내가 다스리는 땅이 얼마나 작은지 알겠소. 훌륭하오.';
-    await UI.say(thanks, who);
+    var pcR = t.kind === 'rescue' && G.EventShot ? await G.EventShot.princess('court_rescue', { realm: realm, name: t.who, city: G.CITY_DATA[sp.city] }) : null;   // 이벤트 샷: 돌아온 왕녀
+    try {
+      await UI.say(thanks, who);
+      if (pcR) await UI.say(U.pick(['…해적선 선창에서 저를 꺼내 주신 분이 바로 이 제독이에요. 그 밤의 일은 평생 잊지 않을게요.', '제독, 다시 이 궁정의 바닥을 밟게 될 줄은 몰랐어요. 고마워요 — 정말로.']), G.EventShot.princessSpeaker(realm, t.who));
+    } finally { if (pcR) await pcR.stop(); }
     c.task = null;
     await finish(sp, realm, t);
   };
@@ -501,6 +505,7 @@
     c.done = (c.done || 0) + 1;
     var n = CT.rank(realm) + 1, tt = titleObj(realm, n), home = CT.isHome(realm), me = s.player.name;
     c.titles[realm.id] = n;
+    if (G.Growth) G.Growth.event('cha', 1, (tt ? tt.ko : '작위') + ' 서임 — 궁정의 예법을 몸에 익혔다');   // 작위가 오를 때마다 매력 +1 (85부터는 경험으로)
     delete c.called[realm.id]; delete c.herald[realm.id];
     G.Game.refreshHud();
     if (G.Audio) G.Audio.sfx('discover');
@@ -582,6 +587,7 @@
       { label: '한 걸음 물러나 조약을 맺는다', value: 'yield' },
       { label: '끝까지 버틴다 (' + pct(p3) + ' — 깨질 수도 있다)', value: 'hold' }], SP().me(sp));
     if (v3 === 'yield') score += 1; else score += U.chance(p3) ? 3 : -2;
+    if (G.Growth) G.Growth.persuade(score >= 2, score >= 2 ? '설득 경험 — ' + SP().holderName(sp) + U.jx(SP().holderName(sp), '과/와') + '의 조약' : null);
     if (score >= 2) {
       t.stage = 1; t.grade = score >= 5 ? 2 : 1; SP().addTrust(rel, 5);
       await UI.say(t.grade === 2 ? '…졌소. 그대 같은 사람을 특사로 보낸 그대의 군주가 부럽구려. 조약문에 인장을 찍겠소.' : '좋소. 이 정도면 두 나라 모두 체면이 서겠지. 인장을 찍겠소.', who);
@@ -667,7 +673,7 @@
   };
 
   // ================================================================ 특허장: 사략허가장·면세증
-  function PP() { return B().papers || { marqueFee: 6000, marqueYears: 2, bounty: 500, bountyFame: 10, marqueSpawn: 0.12, exemptFee: 12000, exemptYears: 1, duty: 0.08, rankCut: 0.05 }; }
+  function PP() { return B().papers || { marqueFee: 6000, marqueYears: 2, bounty: 500, bountyFame: 10, marqueSpawn: 0.12, pirateCut: 0.8, exemptFee: 12000, exemptYears: 1, duty: 0.08, rankCut: 0.05 }; }
   function papers() { var c = st(); if (!c.papers) c.papers = {}; if (!c.papers.marque) c.papers.marque = {}; if (!c.papers.exempt) c.papers.exempt = {}; return c.papers; }
   function dateOfNum(n) { return { y: Math.floor(n / 10000), m: Math.floor(n / 100) % 100, d: n % 100 }; }
   /** 지금 쓸 수 있는 사략허가장: [{realm, nation, until}] */
@@ -676,6 +682,12 @@
     var mq = papers().marque, now = today();
     return Object.keys(mq).filter(function (k) { return G.COURT.realms[k] && mq[k].until >= now; }).map(function (k) { return { realm: G.COURT.realms[k], nation: mq[k].nation, until: mq[k].until }; });
   };
+  /** 사략선장인가: 기한이 남은 사략허가장을 하나라도 지녔다 — 나라가 허락한 해적 */
+  CT.privateer = function () { return CT.marques().length > 0; };
+  function pirateCut() { var v = PP().pirateCut; return U.clamp(v != null ? v : 0.8, 0, 1); }
+  /** 해적이 나타나 덤비는 빈도에 곱하는 값 (js/scenes/sea.js spawnNpcs) — 사략선장이면 1 − pirateCut (기본 0.2 = 80% 줄어듦) */
+  CT.pirateK = function () { return CT.privateer() ? 1 - pirateCut() : 1; };
+  CT.pirateCutPct = function () { return Math.round(pirateCut() * 100); };
   CT.marqueFor = function (nation) { return nation ? CT.marques().filter(function (m) { return m.nation === nation; })[0] || null : null; };
   /** 지금 쓸 수 있는 면세증: [{realm, until}] */
   CT.exempts = function () {
@@ -700,7 +712,7 @@
       var mq = pa.marque[realm.id], mqOn = mq && mq.until >= today(), exOn = pa.exempt[realm.id] && pa.exempt[realm.id] >= today();
       var foes = foesNow(realm), mFee = paperFee(pp.marqueFee, realm), eFee = paperFee(pp.exemptFee, realm);
       var v = await UI.choose('특허장 — ' + SP().holderName(sp), [
-        { value: { kind: 'marque' }, icon: 'sword', label: '<b>사략허가장</b><br><small class="muted">' + (foes.length ? '적국 하나를 정해 ' + pp.marqueYears + '년 — 그 나라 배를 쳐도 악명이 오르지 않고, 한 척마다 포상금 ' + U.num(pp.bounty) + '닢·전투 명성 +' + G.Fame.mul('bt', pp.bountyFame) : '지금은 이 나라가 싸우는 나라가 없다') + (mqOn ? ' · 지금: ' + U.esc(mq.nation) + ' (' + U.fmtDate(dateOfNum(mq.until)) + '까지)' : '') + '</small>', right: U.num(mFee) + '닢' },
+        { value: { kind: 'marque' }, icon: 'sword', label: '<b>사략허가장</b><br><small class="muted">' + (foes.length ? '적국 하나를 정해 ' + pp.marqueYears + '년 — 그 나라 배를 쳐도 악명이 오르지 않고, 한 척마다 포상금 ' + U.num(pp.bounty) + '닢·전투 명성 +' + G.Fame.mul('bt', pp.bountyFame) + ' · 사략선장이 되어 해적의 습격 −' + CT.pirateCutPct() + '%' : '지금은 이 나라가 싸우는 나라가 없다') + (mqOn ? ' · 지금: ' + U.esc(mq.nation) + ' (' + U.fmtDate(dateOfNum(mq.until)) + '까지)' : '') + '</small>', right: U.num(mFee) + '닢' },
         { value: { kind: 'exempt' }, icon: 'seal', label: '<b>면세증</b><br><small class="muted">' + pp.exemptYears + '년 — ' + U.esc(realm.name) + '의 항구 교역소에서 사는 값 −' + Math.round(pp.duty * 100) + '%, 들여온 물건 파는 값 +' + Math.round(pp.duty * 100) + '%' + (exOn ? ' · 지금: ' + U.fmtDate(dateOfNum(pa.exempt[realm.id])) + '까지' : '') + '</small>', right: U.num(eFee) + '닢' }
       ], { width: 860, icon: 'seal', text: '작위가 높을수록 값이 쌉니다. 이미 가진 특허장을 다시 받으면 기한이 오늘부터 새로 잡힙니다. 소지금 ' + U.num(s.player.gold) + '닢' });
       if (!v) return;
@@ -710,11 +722,18 @@
           { width: 520, icon: 'sword', text: '사략허가장에는 한 나라만 적습니다. 그 나라의 적대는 예전대로 오릅니다(사략함대가 제독을 쫓을 수 있습니다).' });
         if (!nat) continue;
         if (s.player.gold < mFee) { UI.toast('금화가 모자랍니다. (' + U.num(mFee) + '닢)', 'coin'); continue; }
-        s.player.gold -= mFee; G.Game.refreshHud();
+        var wasPriv = CT.privateer();
+        s.player.gold -= mFee;
         pa.marque[realm.id] = { nation: nat.nation, until: U.dateNum(U.addDays(s.date, Math.round(pp.marqueYears * 365))) };
         await UI.say(nat.nation + '의 깃발을 단 배라면 상선이든 군함이든 그대의 것이오. 다만 그 밖의 배에 손을 대면 그대는 그저 해적일 뿐이오. 명심하시오.', who);
         G.State.log(SP().holderName(sp) + '에게서 ' + nat.nation + '에 대한 사략허가장을 받았다. (' + U.fmtDate(dateOfNum(pa.marque[realm.id].until)) + '까지, ' + U.num(mFee) + '닢)');
         UI.toast('사략허가장을 받았다 — ' + nat.nation + ' · ' + U.fmtDate(dateOfNum(pa.marque[realm.id].until)) + '까지', 'sword', 5500);
+        if (G.Game.refreshHud) G.Game.refreshHud();   // 윗줄 직위에 「사략선장」
+        if (!wasPriv) {
+          G.State.log('사략선장이 되었다 — 바다의 해적들이 같은 패로 여겨 덤비는 일이 ' + CT.pirateCutPct() + '% 줄어든다.');
+          UI.toast('사략선장이 되었다 — 해적들이 같은 패로 여긴다 · 해적의 습격 −' + CT.pirateCutPct() + '%', 'skull', 6500);
+          await UI.say(U.pick(['제독, 이제 우리도 깃발 아래 칼을 찬 사람들입니다. 바다의 해적 놈들도 같은 패라며 웬만해선 건드리지 않겠지요.', '사략선장이라… 소문은 빨리 돕니다, 제독. 해적들도 허가장 든 배는 피해 갑니다. 저들 사이에서도 체면이란 게 있거든요.']), G.Scenes.mateSpeaker('first'));
+        }
       } else {
         if (s.player.gold < eFee) { UI.toast('금화가 모자랍니다. (' + U.num(eFee) + '닢)', 'coin'); continue; }
         s.player.gold -= eFee; G.Game.refreshHud();
@@ -729,12 +748,17 @@
   function papersDaily(out) {
     var c = S().court; if (!c || !c.papers) return;
     var now = today(), pa = papers();
+    var wasPriv = Object.keys(pa.marque).length > 0;   // 오늘 아침까지 지니고 있던 허가장 (기한이 막 지난 것 포함)
     Object.keys(pa.marque).forEach(function (k) { if (pa.marque[k].until < now) { out.push({ icon: 'sword', text: (G.COURT.realms[k] ? G.COURT.realms[k].name : k) + '의 사략허가장(' + pa.marque[k].nation + ') 기한이 끝났다.' }); delete pa.marque[k]; } });
+    if (wasPriv && !CT.privateer()) {   // 마지막 허가장이 끝났다 — 다시 여느 배
+      out.push({ icon: 'skull', text: '이제 사략선장이 아니다 — 해적들이 다시 예전처럼 노린다.', history: true });
+      if (G.Game.refreshHud) G.Game.refreshHud();
+    }
     Object.keys(pa.exempt).forEach(function (k) { if (pa.exempt[k] < now) { out.push({ icon: 'seal', text: (G.COURT.realms[k] ? G.COURT.realms[k].name : k) + '의 면세증 기한이 끝났다.' }); delete pa.exempt[k]; } });
   }
   /** 수첩: 가진 특허장 */
   CT.papersHtml = function () {
-    var a = CT.marques().map(function (m) { return '<span class="tag" title="그 나라 배를 쳐도 악명이 오르지 않고 한 척마다 포상금">사략허가장 — ' + U.esc(m.realm.name) + ' → ' + U.esc(m.nation) + ' (' + U.fmtDate(dateOfNum(m.until)) + '까지)</span>'; })
+    var a = CT.marques().map(function (m) { return '<span class="tag" title="그 나라 배를 쳐도 악명이 오르지 않고 한 척마다 포상금 · 사략선장 — 해적의 습격 −' + CT.pirateCutPct() + '%">사략허가장 — ' + U.esc(m.realm.name) + ' → ' + U.esc(m.nation) + ' (' + U.fmtDate(dateOfNum(m.until)) + '까지)</span>'; })
       .concat(CT.exempts().map(function (e) { return '<span class="tag" title="그 나라 항구 교역소에서 사는 값 −' + Math.round(PP().duty * 100) + '%, 들여온 물건 파는 값 +' + Math.round(PP().duty * 100) + '%">면세증 — ' + U.esc(e.realm.name) + ' (' + U.fmtDate(dateOfNum(e.until)) + '까지)</span>'; }));
     return a.join(' ');
   };

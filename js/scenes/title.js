@@ -4,8 +4,9 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.262';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.263';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
+  var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
   T.enter = function () {
     var Game = G.Game;
@@ -37,21 +38,39 @@
     var bStory = G.Story && G.Story.begin ? btn('이야기 — 아버지의 사진', 'scroll', function () { if (!bStory.classList.contains('disabled')) G.Story.begin(); }) : null;
     if (bStory) bStory.classList.add('disabled');
     var bLoad = btn('항해 일지 불러오기', 'book', function () { T.loadMenu(); });
-    btn('조작 안내', 'info', function () { T.help(); });
+    var bHelp = btn('조작 안내', 'info', function () { T.help(); });
+    if (G.Display) {   // 글자 크기·글꼴 (js/ui/display.js) — 조작 안내와 한 줄에 나란히 (단추가 늘어 화면 밑으로 밀리지 않게)
+      var row = U.el('div', 'title-row'); menu.insertBefore(row, bHelp); row.appendChild(bHelp);
+      var bDisp = btn('화면 · 글꼴', 'gear', function () { G.Display.open(); }); row.appendChild(bDisp);
+    }
     bLoad.classList.add('disabled');
     bNew.classList.add('disabled'); bLoad.dataset.wait = '1'; if (bCont) bCont.classList.add('disabled');
     var ld = wrap.querySelector('.loading');
     // 보조 저장소(IndexedDB)의 일지도 읽은 뒤에 이어하기·불러오기를 정한다 (localStorage가 지워졌어도 남아 있을 수 있다)
-    Promise.all([Game.ensureGeo(), G.State.ready, document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 2500); })]) : null]).then(function () {
+    /* 처음 열 때(불러오는 그림이 떠 있을 때): 게임을 할 수 있을 때까지 그림을 걷지 않는다 (2026-10-18)
+       예전에는 지도·저장·글꼴만 기다리고 그림을 걷은 뒤 바다 셰이더를 컴파일해, 첫 화면(오프닝)이 뜬 채 몇 초씩 멈춰 있었다 —
+       이제 ① 지도(해도) ② 바다 셰이더 ③ 타이틀 그림까지 그림이 떠 있는 동안 마치고, 그다음 단추를 켜고 그림을 걷는다. 단계마다 글이 바뀐다. */
+    var LD = G.Loader, boot = !!(LD && LD.shown()), stepMs = (G.FX && G.FX.loader && G.FX.loader.titleWaitMs) || 20000;
+    function step(t) { if (bootPending && LD) LD.text(t); return LD && LD.frames ? LD.frames(2) : Promise.resolve(); }
+    function cap(p, ms) { return Promise.race([p, new Promise(function (r) { setTimeout(r, ms); })]); }
+    if (boot) { bootPending = true; window.PU_BOOT_DONE = true; var bc = document.querySelector('#boot-loader .bl-count'); if (bc) bc.textContent = ''; step('해도를 펼치는 중…'); }   // 받은 파일 수(index.html)는 여기서 그친다
+    Promise.all([Game.ensureGeo(), G.State.ready, document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 2500); })]) : null]).then(async function () {
+      if (boot && bootPending) {
+        await step('바다를 그리는 중…');
+        try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); }   // 첫 항해가 멈칫하지 않게 — 그림이 떠 있는 동안
+        await step('첫 화면을 꾸미는 중…');
+        try { if (G.Img && G.Img.resolve && G.Img.has(G.Img.pick(G.Img.chain.title()))) await cap(G.Img.resolve(G.Img.chain.title()), stepMs); } catch (e) { console.warn(e); }
+        if (Game.sceneName === 'title' && bg) Game.setScene(bg);   // 받은 타이틀 그림으로 다시 그린다
+      }
       ld.classList.add('done');
-      // 처음 열 때 떠 있던 불러오는 그림을 걷고, 바다 셰이더는 지금 미리 컴파일해 둔다 (첫 항해가 멈칫하지 않게)
-      if (G.Loader) G.Loader.hide();
-      setTimeout(function () { try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); } }, 600);
+      if (!boot) setTimeout(function () { try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); } }, 600);
       if (!bCont && G.State.latestAutoSlot()) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); if (bTut) bTut.classList.remove('navy'); }
       if (bTut) bTut.classList.remove('disabled');
       if (bStory) bStory.classList.remove('disabled');
       bNew.classList.remove('disabled'); if (bCont) bCont.classList.remove('disabled');
       bLoad.classList.remove('disabled');      // 일지가 없어도 「파일에서 불러오기」는 할 수 있다
+      if (LD && (!boot || bootPending)) LD.hide();   // 모든 준비가 끝난 뒤에 오프닝을 보인다 (그새 타이틀을 떠났으면 이미 걷었다)
+      bootPending = false;
     });
   };
 
@@ -124,5 +143,6 @@
       } });
   };
 
-  T.exit = function () { };
+  /** 준비가 끝나기 전에 타이틀을 떠나면(시험·바로 가기) 불러오는 그림을 걷는다 — 다음 장면을 가리지 않게 */
+  T.exit = function () { if (bootPending) { bootPending = false; if (G.Loader) G.Loader.hide(); } };
 })(window.G = window.G || {});

@@ -20,6 +20,19 @@
       if (FX.desc) { o.desc0 = o.desc0 || o.desc; o.desc = FX.desc; }
       if (FX.folk) o.folk = FX.folk;
     }
+    // 대항해시대 3식 옛 이름 → 실제 이름, 설명 끝에 옛 이름의 유래 (js/data/realnames.js)
+    var RN = G.REAL_NAME && G.REAL_NAME[id];
+    if (RN) {
+      if (Array.isArray(RN)) RN = { name: RN[0], old: RN[1] };
+      o.oldName = o.name; if (!o.name0) o.name0 = o.name;
+      o.name = RN.name;
+      if (RN.lat != null) { o.lat = RN.lat; o.lon = RN.lon; }
+      if (RN.hint) o.hint = RN.hint;
+      if (RN.lang != null) o.lang = RN.lang;
+      if (RN.cat) o.cat = RN.cat;
+      if (RN.desc) { o.desc0 = o.desc0 || o.desc; o.desc = RN.desc; }
+      o.desc = o.desc + ' ' + RN.old;
+    }
     D.push(o);
   }
   // cat: geo nature ruin treasure creature people trade

@@ -37,8 +37,9 @@
     // 특허장 (왕궁 메뉴 「특허장」 — 그 나라의 작위가 있어야 받는다). 값은 작위 무게 한 칸마다 rankCut만큼 싸진다
     //  사략허가장: 한 나라를 정해 marqueYears년 — 그 나라 배를 쳐도 악명이 오르지 않고, 한 척마다 포상금 bounty닢·전투 명성 bountyFame.
     //             그 나라 항구 warNear° 안에서 하루 marqueSpawn 확률로 그 나라 배가 나타난다.
+    //             사략허가장을 지닌 동안 제독은 사략선장(나라가 허락한 해적)이 된다 — 바다의 해적들이 같은 패로 여겨 덤비는 일이 pirateCut만큼 준다 (0.8 = 80% 줄어듦)
     //  면세증: exemptYears년 — 그 나라가 다스리는 항구의 교역소에서 사는 값 −duty, 들여온 물건 파는 값 +duty
-    papers: { marqueFee: 6000, marqueYears: 2, bounty: 500, bountyFame: 10, marqueSpawn: 0.12, exemptFee: 12000, exemptYears: 1, duty: 0.08, rankCut: 0.05 }
+    papers: { marqueFee: 6000, marqueYears: 2, bounty: 500, bountyFame: 10, marqueSpawn: 0.12, pirateCut: 0.8, exemptFee: 12000, exemptYears: 1, duty: 0.08, rankCut: 0.05 }
   };
 
   // 제 나라 귀족 사다리 (아래 → 위) — 사용자 지정: 피달구/이달고 → 영주 → 남작 → 자작 → 백작 → 후작 → 공작

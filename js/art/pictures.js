@@ -41,7 +41,7 @@
     } else if (K === 'armor') {
       if (has('방패')) { x.fillStyle = '#2e7a4a'; x.beginPath(); x.arc(0, 0, 0.85, 0, 7); x.fill(); for (var f = 0; f < 18; f++) { x.fillStyle = ['#2fa86a', '#e8c040', '#c83a2a'][f % 3]; x.beginPath(); x.ellipse(Math.cos(f / 18 * 6.283) * 0.62, Math.sin(f / 18 * 6.283) * 0.62, 0.16, 0.06, f / 18 * 6.283, 0, 7); x.fill(); } line('#e8c040', 3); x.beginPath(); x.arc(0, 0, 0.85, 0, 7); x.stroke(); }
       else if (has('망토') || has('외투') || has('갑옷')) {
-        var fur = has('호랑이') ? '#d8902a' : has('흰곰') ? '#eeeae0' : has('악어') || has('괴수') ? '#5a6a3a' : '#a07a4a';
+        var fur = has('호랑이') ? '#d8902a' : has('흰곰') || has('북극곰') ? '#eeeae0' : has('악어') || has('괴수') ? '#5a6a3a' : '#a07a4a';
         x.fillStyle = fur; x.beginPath(); x.moveTo(-0.35, -0.85); x.lineTo(0.35, -0.85); x.quadraticCurveTo(0.6, 0, 0.85, 0.85); x.lineTo(-0.85, 0.85); x.quadraticCurveTo(-0.6, 0, -0.35, -0.85); x.fill();
         x.fillStyle = 'rgba(0,0,0,.25)'; for (var st = 0; st < 7; st++) { if (has('호랑이')) { x.fillRect(-0.6 + st * 0.18, -0.3 + (st % 2) * 0.2, 0.06, 0.6); } else if (has('악어') || has('괴수')) { x.fillRect(-0.55 + st * 0.16, -0.1, 0.12, 0.12); x.fillRect(-0.5 + st * 0.16, 0.2, 0.12, 0.12); } }
         line('rgba(0,0,0,.35)', 2); x.beginPath(); x.moveTo(0, -0.85); x.lineTo(0, 0.85); x.stroke();
@@ -83,7 +83,7 @@
       x.fillStyle = wood; x.beginPath(); x.moveTo(-0.7, 0.9); x.quadraticCurveTo(-0.55, -0.2, 0.05, -0.55); x.quadraticCurveTo(0.35, -0.85, 0.7, -0.6); x.quadraticCurveTo(0.8, -0.45, 0.55, -0.35); x.quadraticCurveTo(0.2, -0.25, 0.05, 0.1); x.quadraticCurveTo(-0.1, 0.5, 0.1, 0.9); x.closePath(); x.fill();
       x.fillStyle = '#1a0e06'; x.beginPath(); x.arc(0.42, -0.6, 0.05, 0, 7); x.fill();
       line('rgba(0,0,0,.3)', 2); for (var sc = 0; sc < 5; sc++) { x.beginPath(); x.arc(-0.35 + sc * 0.08, 0.5 - sc * 0.22, 0.12, 0.2, 2.2); x.stroke(); }
-      if (has('봉황') || has('신천옹') || has('군함조')) { x.fillStyle = wood; x.beginPath(); x.moveTo(-0.2, -0.05); x.quadraticCurveTo(-0.9, -0.6, -0.95, 0.15); x.quadraticCurveTo(-0.55, -0.05, -0.2, 0.25); x.fill(); }
+      if (has('봉황') || has('신천옹') || has('알바트로스') || has('군함조')) { x.fillStyle = wood; x.beginPath(); x.moveTo(-0.2, -0.05); x.quadraticCurveTo(-0.9, -0.6, -0.95, 0.15); x.quadraticCurveTo(-0.55, -0.05, -0.2, 0.25); x.fill(); }
     } else if (K === 'animal') {
       if (has('씨앗') || has('묘목') || has('솔방울')) { x.fillStyle = '#6a4a2a'; x.beginPath(); x.moveTo(-0.45, 0.35); x.lineTo(0.45, 0.35); x.lineTo(0.35, 0.85); x.lineTo(-0.35, 0.85); x.fill(); line('#3a7a2a', 5); x.beginPath(); x.moveTo(0, 0.35); x.quadraticCurveTo(-0.05, -0.2, 0.05, -0.6); x.stroke(); x.fillStyle = '#5aa83a'; [[-0.35, -0.15, -0.5], [0.35, -0.4, 0.5], [-0.25, -0.65, -0.3]].forEach(function (lf) { x.beginPath(); x.ellipse(lf[0], lf[1], 0.3, 0.12, lf[2], 0, 7); x.fill(); }); }
       else if (has('깃털') || has('털')) { x.rotate(0.5); x.fillStyle = has('붉은') ? '#b0502a' : '#e8e0d0'; x.beginPath(); x.moveTo(0, -1); x.quadraticCurveTo(0.35, -0.2, 0, 0.8); x.quadraticCurveTo(-0.35, -0.2, 0, -1); x.fill(); line('#6a5a4a', 2); x.beginPath(); x.moveTo(0, -0.95); x.lineTo(0, 0.95); x.stroke(); }

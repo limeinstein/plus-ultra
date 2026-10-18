@@ -79,7 +79,12 @@
     emille: 0.008, ayubuddha: 0.008, stele: 0.008, redsquare: 0.008, liberty: 0.008,
     panama: 0.008, cristo: 0.008, broadway: 0.008, eram: 0.008, sagrada: 0.008,
     nabawi: 0.008, kaaba: 0.008, tiantan: 0.008, dayanta: 0.008, huanghelou: 0.008,
-    vittala: 0.008, umayyad: 0.008, topkapi: 0.008, siosepol: 0.008};
+    vittala: 0.008, umayyad: 0.008, topkapi: 0.008, siosepol: 0.008,
+    jeronimos: 0.008, giralda: 0.008, stmartintours: 0.008, milanduomo: 0.008,
+    sanmarco: 0.008, smmaggiore: 0.008, florenceduomo: 0.008, saintsernin: 0.008,
+    edinburgh: 0.008, kyivsophia: 0.008, ironpagoda: 0.008, kinkakuji: 0.008,
+    phrasisanphet: 0.008, vanmieu: 0.008, stpaulhill: 0.008, jokhang: 0.008,
+    dazhao: 0.008, suleymaniye: 0.008, ibntulun: 0.008};
   var LANDMARK_HEIGHT = {
     pharos: 500, hwangnyong: 460, hagiasophia: 400, djenne: 370, delhimosque: 370,
     potala: 360, isfahanmosque: 380, rockdome: 350, notredame: 410, templomayor: 390,
@@ -90,6 +95,11 @@
     panama: 380, cristo: 500, broadway: 380, eram: 380, sagrada: 480,
     nabawi: 390, kaaba: 380, tiantan: 400, dayanta: 480, huanghelou: 430,
     vittala: 380, umayyad: 390, topkapi: 380, siosepol: 380,
+    jeronimos: 330, giralda: 460, stmartintours: 390, milanduomo: 400,
+    sanmarco: 390, smmaggiore: 380, florenceduomo: 420, saintsernin: 380,
+    edinburgh: 380, kyivsophia: 390, ironpagoda: 480, kinkakuji: 380,
+    phrasisanphet: 390, vanmieu: 380, stpaulhill: 380, jokhang: 380,
+    dazhao: 380, suleymaniye: 410, ibntulun: 380,
     jongmyo: 250, colosseum: 300, uffizi: 250, versailles: 250, orszaghaz: 250,
     maracana: 270, battersea: 290
   };
@@ -99,13 +109,24 @@
   function S() { return G.Game.state; }
   function rngOf(c) { return U.makeRng(U.strHash('town' + c.id)); }
 
+  /* 미래의 건물(1800년 이후): 발견하기 전까지는 거리에 신기루로 일렁이며 서 있고, 발견하면 흩어져 사라진다 (T.vanish) */
+  function mirageNow(d) { return !!(d && G.Disc && G.Disc.mirageNow && G.Disc.mirageNow(d)); }
+  function mirageGone(d) { return mirageNow(d) && G.Disc.foundByMe(d.id); }
+  var VANISH_MS = 2600;
+  /** 신기루 건물이 흩어진다: 거리에서 천천히 옅어지며 위로 일렁이다 사라진다. 끝나면 풀린다 */
+  T.vanish = function (id) {
+    var m = st && st.marks.filter(function (x) { return x.id === id; })[0];
+    if (!m) return Promise.resolve();
+    m.vanish = performance.now(); st.dirty = true; st.baseKey = null;
+    return new Promise(function (res) { setTimeout(res, VANISH_MS + 120); });
+  };
   /** 전용 그림이 있는 도시 건축 발견물을, 이미 놓인 수동 볼거리와 덜 겹치는 자리에 더한다. */
   function landmarksFor(c) {
     var out = (LANDMARKS[c.id] || []).slice(), seen = {}, used = [0, 1];
     out.forEach(function (l) { seen[l[0]] = true; used.push(l[1]); });
     (G.DISCOVERIES || []).filter(function (d) {
       return d.cat === 'ruin' && d.how === 'city' && d.city === c.id && !seen[d.id] &&
-        (!G.Disc || !G.Disc.built || G.Disc.built(d)) && I.pick(I.chain.landmark(d.id));
+        (!G.Disc || !G.Disc.built || G.Disc.built(d)) && !mirageGone(d) && I.pick(I.chain.landmark(d.id));
     }).forEach(function (d) {
       var best = 0.5, bestGap = -1;
       for (var i = 1; i < 20; i++) {
@@ -317,7 +338,7 @@
       if (w0 > MARK_MAXW) h = Math.round(h * MARK_MAXW / w0);
       var d = (G.DISC && G.DISC[l[0]]) || null, info = MARK_INFO[l[0]] || null;
       var cv = markCanvas(img, h);
-      return { id: l[0], d: d, info: info, name: d ? d.name : info ? info.name : '', at: l[1], cv: cv, foot: footOf(cv, l[0]), base: baseOf(cv, l[0]), x: 0, y: GROUND - MARK_SET };
+      return { id: l[0], d: d, info: info, name: d ? d.name + (mirageNow(d) ? ' (신기루)' : '') : info ? info.name : '', at: l[1], cv: cv, foot: footOf(cv, l[0]), base: baseOf(cv, l[0]), x: 0, y: GROUND - MARK_SET, mirage: mirageNow(d) };
     }).filter(Boolean).sort(function (a, b) { return a.at - b.at; });
     var row = items.map(function (it) { return { it: it }; });
     marks.forEach(function (m, k) {
@@ -1054,6 +1075,16 @@
     // 거리를 걷는 사람들: 그들만 움직일 때는 초당 folkFps번만 다시 그린다 (거리 전체를 매 틀 다시 그리지 않게 — 끊김 방지)
     var folkMoved = !!(st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x));
     st.folkAcc = (st.folkAcc || 0) + dt;
+    // 신기루 건물: 일렁임은 초당 몇 번만, 흩어지는 동안은 매 틀 바탕을 다시 그린다 — 다 흩어지면 거리에서 뺀다
+    if (st.marks.some(function (m) { return m.vanish; })) {
+      st.baseKey = null; moved = true;
+      st.marks = st.marks.filter(function (m) { return !(m.vanish && performance.now() - m.vanish > VANISH_MS); });
+      if (st.near && st.near.cv && st.marks.indexOf(st.near) < 0 && st.items.indexOf(st.near) < 0) st.near = null;
+      if (st.hover && st.hover.cv && st.marks.indexOf(st.hover) < 0 && st.items.indexOf(st.hover) < 0) st.hover = null;
+    } else if (st.marks.some(function (m) { return m.mirage; })) {
+      st.mirAcc = (st.mirAcc || 0) + dt;
+      if (st.mirAcc > 0.12) { st.mirAcc = 0; st.baseKey = null; moved = true; }
+    }
     if (!moved && !st.dirty) {
       if (!folkMoved || st.folkAcc < 1 / (((G.FX && G.FX.streetFolk) || {}).fps || 30)) return;      // 움직임이 없으면 다시 그리지 않는다
     }
@@ -1103,6 +1134,17 @@
       ctx.beginPath(); ctx.ellipse(x + m.cv.width / 2, fy - 2, m.cv.width * 0.44, 10, 0, 0, 7); ctx.fill();
       ctx.restore();
       var ty = ty0;     // 그림 아래 빈칸만큼 내려 건물 발치를 바닥선에 (옅은 그림자는 길 위로)
+      if (m.mirage || m.vanish) {                      // 신기루 건물: 옅게 일렁이고, 발견하면 흩어진다
+        var vt = m.vanish ? Math.min(1, (performance.now() - m.vanish) / VANISH_MS) : 0;
+        ctx.save();
+        ctx.globalAlpha = (0.72 + 0.06 * Math.sin(st.t * 2.2)) * (1 - vt);
+        var sk = Math.sin(st.t * 3.1) * 0.012 + vt * 0.05;
+        ctx.setTransform(1, 0, sk, 1 + vt * 0.06, -sk * (ty + m.cv.height), -vt * 40 - vt * 0.06 * ty);
+        if ('filter' in ctx) ctx.filter = 'sepia(.35) brightness(' + (1.08 + vt * 0.5).toFixed(2) + ') blur(' + (0.6 + vt * 6).toFixed(1) + 'px)';
+        ctx.drawImage(m.cv, x, ty);
+        ctx.restore();
+        return;
+      }
       ctx.drawImage(m.cv, x, ty);
       if (hover === m || st.near === m) {            // 누를 수 있는 볼거리: 살짝 밝힌다
         ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = hover === m ? 0.16 : 0.10;

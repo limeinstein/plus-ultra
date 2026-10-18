@@ -56,6 +56,19 @@
     { id: 'rose', name: '야음의 장미', kind: 'gift', price: 2400, gv: 17, reg: [2], desc: '밤에만 피는 검붉은 장미 브로치.' },
     { id: 'tears', name: '여신의 눈물', kind: 'gift', price: 6400, gv: 30, reg: [5, 8], desc: '눈물 모양의 푸른 보석.' },
     { id: 'ring', name: '약속 반지', kind: 'gift', price: 5000, gv: 25, ring: 1, reg: [0, 1, 2], desc: '청혼할 때 건네는 반지.' },
+    // gifts for men (부하와 이야기 「선물한다」 — 남자 부하에게: 술·카드·장난감. 검·방어구도 줄 수 있다). gv = 선물의 값어치(충성이 오르는 만큼의 바탕)
+    //   mg: 'drink' 술 · 'game' 카드·주사위·체스 · 'toy' 장난감 — 받는 사람의 말이 갈래마다 다르다
+    { id: 'cards', name: '놀이 카드 한 벌', kind: 'mgift', mg: 'game', price: 150, gv: 3, reg: [0, 1, 2], desc: '목판으로 찍어 낸 카드 한 벌. 뱃사람들이 밤새 내기를 한다.' },
+    { id: 'dice', name: '상아 주사위', kind: 'mgift', mg: 'game', price: 250, gv: 4, reg: [3, 4, 5, 6], desc: '상아를 깎아 만든 주사위 한 벌. 어느 항구 술집에서나 통한다.' },
+    { id: 'sack', name: '헤레스 셰리 한 통', kind: 'mgift', mg: 'drink', price: 500, gv: 6, reg: [0], desc: '안달루시아 헤레스의 독한 포도주(색). 북쪽 뱃사람들이 가장 탐내는 술.' },
+    { id: 'arak', name: '아락주', kind: 'mgift', mg: 'drink', price: 700, gv: 8, reg: [4, 5, 8], desc: '야자 수액과 쌀로 빚어 내린 동방의 독주. 한 모금에 눈물이 핑 돈다.' },
+    { id: 'huangjiu', name: '소흥 황주', kind: 'mgift', mg: 'drink', price: 800, gv: 8, reg: [6], desc: '소흥에서 빚어 항아리째 묵힌 누런 술. 데워 마시면 속이 녹는다.' },
+    { id: 'sake', name: '청주 한 통', kind: 'mgift', mg: 'drink', price: 800, gv: 8, reg: [9], desc: '쌀로 빚은 맑은 술. 삼나무 통 냄새가 은은하다.' },
+    { id: 'brandy', name: '브랜디 한 통', kind: 'mgift', mg: 'drink', price: 900, gv: 9, reg: [1, 2], desc: '포도주를 끓여 거른 「불탄 포도주」. 추운 바다에서 뱃속을 데운다.' },
+    { id: 'tarocchi', name: '타로키 카드', kind: 'mgift', mg: 'game', price: 900, gv: 9, reg: [2], desc: '밀라노 공방에서 금박을 입혀 그린 귀족의 카드. 놀이에도 점에도 쓴다.' },
+    { id: 'shipmodel', name: '범선 모형', kind: 'mgift', mg: 'toy', price: 1600, gv: 13, reg: [0, 1, 2], desc: '돛과 밧줄까지 깎아 맞춘 카락선 모형. 뱃사람이면 누구나 눈을 떼지 못한다.' },
+    { id: 'chess', name: '상아 체스판', kind: 'mgift', mg: 'game', price: 2200, gv: 16, reg: [2, 4], desc: '흑단과 상아로 짠 체스판과 말. 한 판 두자는 사람이 줄을 선다.' },
+    { id: 'automaton', name: '태엽 장난감 기사', kind: 'mgift', mg: 'toy', price: 3600, gv: 22, reg: [1], from: 1500, desc: '뉘른베르크 장인의 태엽 인형. 감으면 칼을 휘두르며 걷는다.' },
     // special battle items
     { id: 'rapidgun', name: '속사포', kind: 'special', price: 9000, reg: [], rare: true, desc: '해전에서 포격을 두 번 할 수 있다.' },
     { id: 'shells', name: '작렬탄', kind: 'special', price: 5200, reg: [1], from: 1510, consumable: 3, desc: '해전에서 포격 위력이 크게 오른다. (3회)' },
@@ -67,5 +80,5 @@
     { id: 'mingrobe', name: '명나라 옷', kind: 'tool', price: 700, reg: [6, 8], desc: '명나라 상인의 단령(團領)과 망건. 쇄국한 중국 도시에 잠입할 때 크게 도움이 된다.' }
   ];
   G.ITEM = {}; G.ITEMS.forEach(function (it) { G.ITEM[it.id] = it; });
-  G.ITEM_KIND = { weapon: '무기', armor: '방어구', tool: '항해도구', gift: '장신구', special: '특수', treasure: '보물', evidence: '증거품' };
+  G.ITEM_KIND = { weapon: '무기', armor: '방어구', tool: '항해도구', gift: '장신구', mgift: '남자 선물', special: '특수', treasure: '보물', evidence: '증거품' };
 })(window.G = window.G || {});

@@ -16,6 +16,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && G.Game.geoReady, null, { timeout: 90000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     const r = await page.evaluate(() => {
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 0; });
       G.Game.state = G.State.newGame({ name: '시험', nation: 'PT', job: 'merchant', age: 22, birth: { m: 4, d: 12 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk, lg: G.LANGS.map(() => 0), diff: 'normal' });
@@ -56,6 +57,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // 육상: 식량·물은 쓰지 않고 금화 경비만 · 야영의 사냥·물 긷기는 배(출발한 항구)가 보이는 곳에서만
     await page.evaluate(() => { const s = G.Game.state; s.fleet.ships = [G.R.newShip('caravel')]; s.fleet.crew = 40; s.fleet.food = 60; s.fleet.water = 60; s.fleet.cargo = {}; s.player.gold = 5000; G.Game.go('land', { from: 0 }); });
     await page.waitForFunction(() => G.Game.sceneName === 'land', null, { timeout: 30000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.waitForTimeout(1500);
     const L1 = await page.evaluate(() => {
       const s = G.Game.state, l = s.loc, f = s.fleet, L = G.Scenes.land, out = {};
@@ -90,6 +92,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // 교역소 창: 무게 표시
     await page.evaluate(() => { const s = G.Game.state; s.loc = { mode: 'city', city: 0, lon: 0, lat: 0 }; G.Game.go('city', { cityId: 0 }); });
     await page.waitForFunction(() => G.Game.sceneName === 'city', null, { timeout: 30000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     await page.waitForTimeout(1200);
     await page.evaluate(() => { document.querySelectorAll('.modal-back').forEach(e => e.remove()); G.Scenes.city.B.trade.buy(G.CITY_DATA[0]).catch(e => console.error(e)); });
     await page.waitForTimeout(1200);

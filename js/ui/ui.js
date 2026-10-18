@@ -314,6 +314,8 @@
     var TG = G.Tongues, sit = TG ? TG.situation(opts) : { plain: true };
     var old = box.querySelector('.interp'); if (old) old.parentNode.removeChild(old);
     box.style.bottom = '';
+    var mime = G.Tale && G.Tale.mime ? G.Tale.mime(raw, opts) : null;    // 아직 말을 모르는 인어공주: 몸짓으로 (js/systems/fairytales.js)
+    if (mime) { box.classList.remove('withinterp'); return mime; }
     if (sit.plain) return richEsc(raw);
     raw = bareText(raw);
     var html = TG.heard(raw, sit.own, sit.li);

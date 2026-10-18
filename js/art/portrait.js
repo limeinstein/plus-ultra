@@ -194,6 +194,33 @@
   // ---------------------------------------------------------------- named people
   var REGION_STYLE = ['ib', 'ne', 'it', 'af', 'is', 'in', 'cn', 'is', 'se', 'jp', 'az'];
   var mateSpecCache = {};
+  /** 예전 얼굴 묶음의 _half는 흉상을 다른 몸에 포갠 합성본이라 어깨·옷이 끊긴다.
+      묶음 얼굴을 빌린 부하는 같은 양식·성별의 완성된 얼굴상/무릎상 한 쌍으로 바꿔 그린다. */
+  A.pairedMateFace = function (d, role, style) {
+    var own = d && d.face;
+    if (!/^portraits\/pools\//.test(own || '')) return own;
+    var g = d.g === 'f' ? 'f' : 'm';
+    var female = ['maid', 'keeper', 'merchant', 'scholar', 'noble', 'official'];
+    var male = ['sailor', 'captain', 'soldier', 'priest'];
+    var roles = g === 'f' ? female : male, order = [];
+    if (roles.indexOf(role) >= 0) order.push(role);
+    roles.forEach(function (r) { if (order.indexOf(r) < 0) order.push(r); });
+    var out = [];
+    order.forEach(function (r) {
+      var k = 'portraits/npc-roles/' + style + '/' + r;
+      if ((!G.Img || !G.Img.has || (G.Img.has(k) && G.Img.has(k + '_half'))) && A.rolePortraitGender(r, style) === g) out.push(k);
+    });
+    // 새 그림으로 바뀐 사건 인물의 예전 그림은 북유럽권 여성 부하에게 다시 쓴다.
+    if (g === 'f' && style === 'ne') ['portraits/fairy-tales/snow_white', 'portraits/fairy-tales/little_mermaid'].forEach(function (k) {
+      if (!G.Img || !G.Img.has || (G.Img.has(k) && G.Img.has(k + '_half'))) out.push(k);
+    });
+    if (!out.length) {
+      var generic = g === 'f' ? 'portraits/npc/tavernkeeper_europe_f' : 'portraits/npc/captain';
+      if (!G.Img || !G.Img.has || (G.Img.has(generic) && G.Img.has(generic + '_half'))) return generic;
+      return null;
+    }
+    return out[Math.abs(U.strHash('paired-mate:' + (d.id || d.name || own))) % out.length];
+  };
   A.mateSpec = function (id) {
     if (mateSpecCache[id]) return mateSpecCache[id];
     var d = G.MATE[id]; if (!d) return null;
@@ -208,7 +235,8 @@
     var sp = A.npcSpec('mate_' + id, role, style, d.g);
     if (d.native) sp.facePool = d.facePool;
     if (id === 'rocco') { sp.beard = 2; sp.hat = 'cap'; sp.age = 'mid'; }
-    A.withImg(sp, G.Img.chain.mate(id).concat(d.face ? [d.face] : []));   // 철새·마녀는 이미 있는 얼굴을 빌린다
+    var face = A.pairedMateFace(d, role, style);
+    A.withImg(sp, G.Img.chain.mate(id).concat(face ? [face] : []));   // 철새·마녀는 이미 있는 얼굴을 빌린다
     return (mateSpecCache[id] = sp);
   };
   A.maidSpec = function (m) {

@@ -136,12 +136,14 @@
     S.player.items.push(o); return true;
   };
   /** 시장의 같은 일반 아이템은 한 칸에 묶는다. 발견 증거·유물처럼 개별 상태가 있는 물건에는 쓰지 않는다. */
-  R.addMarketItems = function (id, qty) {
-    var S = R.S(), n = Math.max(1, Math.floor(qty || 1));
-    var it = S.player.items.filter(function (x) { return x.id === id && !x.disc && !x.evidence && !x.name && !x.kind; })[0];
-    if (it) { it.qty = R.itemQty(it) + n; return true; }
+  //   from·paid: 산 도시와 1개에 치른 값 — 산 도시가 다르면 따로 묶는다(같은 도시 시장에는 치른 값보다 비싸게 되팔 수 없다, js/city/misc.js)
+  R.addMarketItems = function (id, qty, from, paid) {
+    var S = R.S(), n = Math.max(1, Math.floor(qty || 1)), fk = from == null ? null : from;
+    var it = S.player.items.filter(function (x) { return x.id === id && !x.disc && !x.evidence && !x.name && !x.kind && (x.from == null ? null : x.from) === fk; })[0];
+    if (it) { if (paid != null) it.paid = Math.round(((it.paid != null ? it.paid : paid) * R.itemQty(it) + paid * n) / (R.itemQty(it) + n)); it.qty = R.itemQty(it) + n; return true; }
     if (S.player.items.length >= R.ITEM_MAX) return false;
     var o = { id: id, qty: n }, def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
+    if (fk != null) o.from = fk; if (paid != null) o.paid = paid;
     S.player.items.push(o); return true;
   };
   R.removeItemObject = function (it) {
@@ -173,6 +175,45 @@
   R.gunLoad = function (s) { return s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].load : 1); };
   R.shipCargoCap = function (s) { return Math.max(0, Math.floor(s.cap - R.gunLoad(s))); };
   R.fleetCap = function () { return U.sum(R.S().fleet.ships, R.shipCargoCap); };
+  /* 교역품의 산 곳: cg.lots = { 도시ID: { q, cost } } — 'x'는 산 곳 모름(나포·노획·만든 것·옛 저장)
+     짐은 여러 곳에서 줄어들므로(폭풍·해적·보급·의뢰·상함…) 볼 때마다 cg.q에 맞춘다: 모자라면 'x'에 더하고, 남으면 고르게 덜어 낸다.
+     같은 도시에서 산 몫은 그 도시에서 산 값보다 비싸게 팔 수 없다 (js/city/trade.js — 깎아 사서 그 자리에서 되팔아 남기던 것을 막는다) */
+  R.cargoLots = function (cg) {
+    if (!cg) return {};
+    if (!cg.lots) { cg.lots = {}; if (cg.q > 0) cg.lots[cg.from != null ? cg.from : 'x'] = { q: cg.q, cost: cg.cost || 0 }; return cg.lots; }
+    var L = cg.lots, ks = Object.keys(L), sum = 0, k;
+    ks.forEach(function (k) { sum += L[k].q; });
+    if (sum < cg.q) { var x = L.x || (L.x = { q: 0, cost: cg.cost || 0 }); x.q += cg.q - sum; }
+    else if (sum > cg.q) {
+      var over = sum - cg.q;
+      ks.forEach(function (k) { var t = Math.min(L[k].q, Math.floor(L[k].q * over / sum)); L[k].q -= t; over -= t; });
+      while (over > 0) { var big = null; for (k in L) if (L[k].q > 0 && (!big || L[k].q > L[big].q)) big = k; if (!big) break; L[big].q--; over--; }
+    }
+    for (k in L) if (!(L[k].q > 0)) delete L[k];
+    return L;
+  };
+  /** 새로 산 몫을 얹는다 — cg.q를 늘리기 전에 부른다 */
+  R.addCargoLot = function (cg, cityId, q, cost) {
+    var L = R.cargoLots(cg), o = L[cityId];
+    if (o) { o.cost = Math.round((o.cost * o.q + cost * q) / (o.q + q)); o.q += q; } else L[cityId] = { q: q, cost: cost };
+  };
+  /** 판 몫을 덜어 낸다 (cg.q를 줄이기 전에): 다른 곳에서 산 몫 qOther(큰 몫부터) + 이 도시에서 산 몫 qOwn — 덜어 낸 몫의 산 값 합을 돌려준다 */
+  R.takeCargoLots = function (cg, ownKey, qOther, qOwn) {
+    var L = R.cargoLots(cg), cost = 0, k;
+    while (qOther > 0) { var big = null; for (k in L) if (String(k) !== String(ownKey) && L[k].q > 0 && (!big || L[k].q > L[big].q)) big = k; if (!big) break; var t = Math.min(qOther, L[big].q); L[big].q -= t; qOther -= t; cost += t * L[big].cost; }
+    var own = L[ownKey]; if (own && qOwn > 0) { var t2 = Math.min(qOwn, own.q); own.q -= t2; cost += t2 * own.cost; qOwn -= t2; }
+    if (qOwn > 0 || qOther > 0) cost += (qOwn + qOther) * (cg.cost || 0);
+    for (k in L) if (!(L[k].q > 0)) delete L[k];
+    var n = 0, c2 = 0; for (k in L) { n += L[k].q; c2 += L[k].q * L[k].cost; } if (n) cg.cost = Math.round(c2 / n);   // 남은 짐의 산 값(평균)
+    return cost;
+  };
+  /** 산 곳 글: 「리스본 20 · 세비야 10 · 산 곳 모름 5」 (한 곳뿐이면 「리스본」) */
+  R.cargoFromText = function (cg) {
+    var L = R.cargoLots(cg), ks = Object.keys(L).sort(function (a, b) { return L[b].q - L[a].q; });
+    function nm(k) { return k === 'x' ? (cg.prize ? '나포·노획' : cg.made ? '만든 것' : '산 곳 모름') : G.CITY_DATA[k] ? G.CITY_DATA[k].name : '?'; }
+    if (ks.length === 1) return nm(ks[0]);
+    return ks.map(function (k) { return nm(k) + ' ' + L[k].q; }).join(' · ');
+  };
   R.cargoQty = function () { var c = R.S().fleet.cargo, n = 0; for (var k in c) n += c[k].q; return n; };
   R.used = function () { var f = R.S().fleet; return R.cargoQty() + Math.ceil(f.food) + Math.ceil(f.water) + Math.ceil(f.mat || 0) + (G.Quest ? G.Quest.load() : 0); };
   /** 남는 짐칸 (부피만) */
@@ -512,7 +553,7 @@
   /** 이 도시의 품목 갈래 시세 (1 = 보통): 출렁임 × 시장 사건 */
   R.catIndex = function (c, cat, day) { return R.drift(c.id, cat, day) * (day == null ? eventCat(R.market(c.id), cat) : 1); };
   /** 시장 물건(무기·방어구·도구·선물)이 따르는 교역품 갈래 */
-  R.ITEM_CATS = { weapon: ['arms'], armor: ['arms', 'metal'], tool: ['misc', 'craft'], gift: ['gem', 'lux', 'craft'] };
+  R.ITEM_CATS = { weapon: ['arms'], armor: ['arms', 'metal'], tool: ['misc', 'craft'], gift: ['gem', 'lux', 'craft'], mgift: ['drink', 'lux', 'craft'] };
   R.itemMult = function (c, item) {
     var d = G.ITEM[item.id] || item, cats = R.ITEM_CATS[d.kind];
     if (!c || !cats || d.rare || (G.RELIC && G.RELIC[item.id])) return 1;

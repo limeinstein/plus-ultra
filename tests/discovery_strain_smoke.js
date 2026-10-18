@@ -18,6 +18,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Disc && G.State, null, { timeout: 90000 });
+    await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
     const r = await page.evaluate(() => {
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 0; });
       const s = G.Game.state = G.State.newGame({ name: '발견시험', nation: 'PT', job: 'adventurer', age: 22, birth: { m: 4, d: 12 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 3), diff: 'normal' });

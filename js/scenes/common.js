@@ -128,12 +128,13 @@
     var impact = s.disc[d.id] && s.disc[d.id].impact;
     function delta(n) { return (n > 0 ? '+' : '') + n; }
     var impactHtml = impact ? '<div class="disc-impact ' + impact.key + '"><div class="di-title">' + G.icon(impact.icon || 'star') + '<b>발견의 여파 · ' + U.esc(impact.name) + '</b></div><div class="di-line">' + U.esc(impact.line) + '</div><div class="di-stats"><span>피로 ' + delta(impact.fatigue) + '</span><span>규율 ' + delta(impact.discipline) + '</span></div></div>' : '';
-    var html = '<div class="disc-card"><div class="disc-head">DISCOVERY</div><div class="art"></div>' +
+    var mir = G.Disc.isMirageFind && G.Disc.isMirageFind(d);   // 미래의 건물을 신기루로 본 발견
+    var html = '<div class="disc-card' + (mir ? ' mirage-find' : '') + '"><div class="disc-head">' + (mir ? 'MIRAGE' : 'DISCOVERY') + '</div><div class="art"></div>' +
       '<div class="dname">' + U.esc(d.name) + '</div>' +
-      '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.Disc.regName(d) || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span></div>' +
-      '<div class="desc">' + U.esc(d.desc) + '</div>' + SC.folkInfo(d) + impactHtml + SC.realInfo(d.real) +
+      '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.Disc.regName(d) || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span>' + (mir ? ' <span class="tag mirage-tag">신기루 · ' + d.built + '년에 세워진다</span>' : '') + '</div>' +
+      '<div class="desc">' + U.esc(d.desc) + '</div>' + (mir ? '<div class="desc mirage-note">눈앞에 떠오른 것은 아직 세상에 없는 건물이다. 아지랑이처럼 일렁이다 이내 흩어질 것이다. 손에 넣을 것은 없고, 신기루를 본 기록만 남는다.</div>' : '') + SC.folkInfo(d) + impactHtml + SC.realInfo(d.real) +
       (fame ? '<div class="center big" style="color:#6a3a14">명성 +' + U.num(fame) + '</div>' : '') + SC.relicStrip(d, relics) + '</div>';
-    var win = UI.window({ title: fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
+    var win = UI.window({ title: mir ? '신기루 — 미래의 발견' : fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
     win.content.querySelector('.art').appendChild(art);
     U.$$('[data-relic]', win.content).forEach(function (el) {
       var r = G.RELIC[el.dataset.relic]; if (!r || !A.relicArt) return;

@@ -1,6 +1,6 @@
 /* 거리 외관 회귀 점검:
    - 25개 고장별 자택·교회와 kraal·tent 13종 전체가 모두 등록되고 실제로 읽히는가
-   - 로마 교황청 전용 외관과 도시 건축 발견물 73종이 등록되고 읽히는가
+   - 로마 교황청 전용 외관과 도시 건축 발견물 92종이 등록되고 읽히는가
    - 도시 건축 발견물이 건립 연도에 맞춰 거리 뒤편에 나타나는가
    node tests/town_exteriors_smoke.js */
 'use strict';
@@ -21,11 +21,17 @@ const LANDMARKS = [
   'eiffel', 'bigben', 'bolshoi', 'orszaghaz', 'maracana', 'sydneyopera', 'unhq', 'biosphere', 'battersea',
   'bellasartes', 'hue', 'emille', 'ayubuddha', 'stele', 'redsquare', 'liberty', 'panama', 'cristo',
   'broadway', 'eram', 'sagrada', 'nabawi', 'kaaba', 'tiantan', 'dayanta', 'huanghelou', 'vittala',
-  'umayyad', 'topkapi', 'siosepol'
+  'umayyad', 'topkapi', 'siosepol',
+  'jeronimos', 'giralda', 'stmartintours', 'milanduomo', 'sanmarco', 'smmaggiore', 'florenceduomo',
+  'saintsernin', 'edinburgh', 'kyivsophia', 'ironpagoda', 'kinkakuji', 'phrasisanphet', 'vanmieu',
+  'stpaulhill', 'jokhang', 'dazhao', 'suleymaniye', 'ibntulun'
 ];
 const NEW_LANDMARKS = [
   'emille', 'ayubuddha', 'stele', 'redsquare', 'liberty', 'panama', 'cristo', 'broadway', 'eram',
-  'sagrada', 'nabawi', 'kaaba', 'tiantan', 'dayanta', 'huanghelou', 'vittala', 'umayyad', 'topkapi', 'siosepol'
+  'sagrada', 'nabawi', 'kaaba', 'tiantan', 'dayanta', 'huanghelou', 'vittala', 'umayyad', 'topkapi', 'siosepol',
+  'jeronimos', 'giralda', 'stmartintours', 'milanduomo', 'sanmarco', 'smmaggiore', 'florenceduomo',
+  'saintsernin', 'edinburgh', 'kyivsophia', 'ironpagoda', 'kinkakuji', 'phrasisanphet', 'vanmieu',
+  'stpaulhill', 'jokhang', 'dazhao', 'suleymaniye', 'ibntulun'
 ];
 
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
@@ -59,16 +65,19 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         cityRuins: cityRuins.length, unillustratedCityRuins,
         papal: G.Img.pick(G.Img.chain.exterior('palace', G.CITY_DATA[33], '')) };
     }, { styles: STYLES, landmarks: LANDMARKS, kinds: KINDS });
-    ok(assets.expected === 146, '외관 146개(자택 25 + 교회 25 + kraal·tent 나머지 22 + 도시 발견물 73 + 교황청 1) 검사');
+    ok(assets.expected === 165, '외관 165개(자택 25 + 교회 25 + kraal·tent 나머지 22 + 도시 발견물 92 + 교황청 1) 검사');
     ok(!assets.missing.length, '필요한 외관이 모두 이미지 목록에 등록됨');
     ok(!assets.failed.length, '필요한 외관 파일이 모두 실제로 읽힘');
-    ok(assets.cityRuins === 73 && !assets.unillustratedCityRuins.length,
-      '도시 유적 73종 모두 전용 외관을 포함 (실제 ' + assets.cityRuins + ')');
+    ok(assets.cityRuins === 92 && !assets.unillustratedCityRuins.length,
+      '도시 유적 92종 모두 전용 외관을 포함 (실제 ' + assets.cityRuins + ')');
     ok(assets.papal === 'exteriors/palace@33', '로마 왕궁 자리에 교황청 전용 외관을 우선 사용');
 
     // 거리 모듈은 날짜와 제독 생김새만 참조한다. 항해 지도 준비와 무관하게 메모리 상태만 둔다.
     const years = await page.evaluate(async () => {
-      G.Game.state = { date: { y: 1480, m: 5, d: 1 }, player: { look: 'admiral' }, settings: {} };
+      G.Game.state = {
+        date: { y: 1480, m: 5, d: 1 }, player: { look: 'admiral' }, settings: {},
+        disc: {}, hints: {}
+      };
       const buildings = [{ kind: 'church', name: '교회', icon: 'church' }, { kind: 'home', name: '자택', icon: 'house' }];
       async function open(cityId, year) {
         G.Game.state.date.y = year;
@@ -83,8 +92,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       };
     });
     ok(years.alex1480 === 2, '1480년 알렉산드리아에 파로스 등대·대도서관 외관 표시');
-    ok(years.paris1480 === 1 && years.paris1600 === 2 && years.paris1900 === 4,
-      '파리 외관이 건립 연도에 맞춰 1개 → 2개 → 4개로 늘어남');
+    ok(years.paris1480 === 2 && years.paris1600 === 3 && years.paris1900 === 4,
+      '파리 외관이 건립 연도에 맞춰 2개 → 3개 → 4개로 늘어남 (실제 ' +
+      years.paris1480 + ' → ' + years.paris1600 + ' → ' + years.paris1900 + ')');
 
     const placed = await page.evaluate(async ids => {
       G.Game.state.date.y = 2100;
@@ -102,9 +112,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const badScale = NEW_LANDMARKS.filter(id => placed[id] &&
       (placed[id].w < 150 || placed[id].w > 820 || placed[id].h < 250 || placed[id].h > 520));
     const badFloor = NEW_LANDMARKS.filter(id => placed[id] && Math.abs(placed[id].y - 768) > 20);
-    ok(!missingPlaced.length, '새 전용 외관 19종이 해당 도시 거리에 모두 배치됨');
-    ok(!badScale.length, '새 전용 외관 19종의 거리 크기가 정상 범위');
-    ok(!badFloor.length, '새 전용 외관 19종의 바닥선이 길에 맞음');
+    ok(!missingPlaced.length, '새 전용 외관 38종이 해당 도시 거리에 모두 배치됨');
+    ok(!badScale.length, '새 전용 외관 38종의 거리 크기가 정상 범위');
+    ok(!badFloor.length, '새 전용 외관 38종의 바닥선이 길에 맞음');
     ok(!errors.length, '콘솔 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   } finally {
     await browser.close();

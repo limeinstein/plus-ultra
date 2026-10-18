@@ -13,6 +13,7 @@ const ROOT = path.resolve(__dirname, '..');
   await page.addInitScript(() => { window.requestAnimationFrame = () => 0; window.createImageBitmap = undefined; });
   await page.goto(process.env.PAGE_URL || pathToFileURL(path.join(ROOT, 'index.html')).href);
   await page.waitForFunction(() => window.G && G.Game && G.Scenes && G.Scenes.sea && G.Scenes.land, null, { timeout: 90000 });
+  await page.evaluate(() => { if (G.BALANCE && G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false; });   // 단서 없이 찾는 확률은 tests/noclue_find_smoke.js — 여기서는 반경 규칙만
 
   const out = await page.evaluate(async () => {
     const rows = []; const ok = (v, s) => rows.push((v ? '✓ ' : '✗ ') + s);

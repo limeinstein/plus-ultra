@@ -1,8 +1,8 @@
 /* Codex 그림 연결 점검 (2026-10-10)
-   · 유물 387종이 모두 전용 그림(images/relics)으로 · 교역품 77종이 모두 전용 그림(images/goods, 노예는 끊어진 족쇄)
+   · 유물 487종이 모두 전용 그림으로 · 교역품 79종이 모두 전용 그림(images/goods, 노예는 끊어진 족쇄)
    · 새 항해사 얼굴 6명(보쿠덴·첸·김·키스크·말린체·투팍) 흉상·무릎상
-   · 얼굴 묶음(images/portraits/pools) 760장마다 무릎상 _half — 묶음 얼굴을 빌린 사람(전용 그림 없는 항해사·후원자, 고장 사람)이 대화에서 서서 말한다
-   · 역사·종교 발견물 216곳(GIF·끝 장면·시트) · 대화창에 묶음 얼굴 무릎상이 실제로 선다 · 콘솔 오류 0
+   · 얼굴 묶음(images/portraits/pools) 760장마다 무릎상 _half는 보존하되, 얼굴과 다른 몸을 포갠 옛 합성본은 부하 표시에 쓰지 않는다
+   · 역사·종교 발견물 216곳(GIF·끝 장면·시트) · 대화창에 완성된 얼굴상·무릎상 한 쌍이 실제로 선다 · 콘솔 오류 0
    node tests/codex_assets_link_smoke.js   (스크린샷: OUT 또는 임시 폴더/codex_link) */
 'use strict';
 const path = require('path');
@@ -31,30 +31,35 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const r = await page.evaluate((cinematicIds) => {
       const I = G.Img, K = I.chain;
       const relics = Object.keys(G.RELIC).map(id => G.RELIC[id]);
-      const relicMiss = relics.filter(rl => !/^relics\//.test(I.pick(K.relic(rl)) || '')).map(rl => rl.id);
+      const relicMiss = relics.filter(rl => !/^(relics|items|discovery-ends|discoveries)\//.test(I.pick(K.relic(rl)) || '')).map(rl => rl.id);
       const goods = Object.keys(G.GOOD).map(id => G.GOOD[id]);
       const goodMiss = goods.filter(g => !/^goods\//.test(I.pick(K.good(g)) || '')).map(g => g.id);
       const mates = ['bokuden', 'chen', 'kim', 'kisk', 'marina', 'tupac'];
       const mateMiss = mates.filter(id => !G.MATE[id] || I.pick(K.mate(id)) !== 'portraits/mates/' + id || I.pick(K.mateHalf(id)) !== 'portraits/mates/' + id + '_half');
       const poolFaces = I.list('portraits/pools/').filter(k => !/_half$/.test(k));
       const poolNoHalf = poolFaces.filter(k => !I.has(k + '_half'));
-      // 전용 그림 없는 항해사: 대화 무릎상이 묶음 얼굴의 _half 로
-      const borrowers = G.MATES.filter(m => !I.has('portraits/mates/' + m.id));
-      const poolHalf = borrowers.filter(m => /^portraits\/pools\/.*_half$/.test(I.pick(K.mateHalf(m.id)) || ''));
+      // 전용 그림 없는 항해사: 얼굴-몸 합성 묶음을 피하고 완성된 얼굴상·무릎상 한 쌍으로
+      const borrowers = G.MATES.filter(m => (m.native || m.wd) && !I.has('portraits/mates/' + m.id));
+      const borrowedPairs = borrowers.map(m => {
+        const face = I.pick(G.Art.portraitKeys(G.Art.mateSpec(m.id)));
+        const half = I.pick(K.mateHalf(m.id));
+        return { id: m.id, face, half };
+      });
+      const badBorrowedPair = borrowedPairs.filter(x => !x.face || !x.half || /^portraits\/pools\//.test(x.face) || /^portraits\/pools\//.test(x.half) || x.half !== x.face + '_half');
       const ruins = cinematicIds;
       const discMiss = ruins.filter(id => !I.has('discoveries/' + id) || !I.has('discovery-ends/' + id) || !I.has('discovery-sheets/' + id));
       return { relicN: relics.length, relicMiss, goodN: goods.length, goodMiss, mateMiss, poolN: poolFaces.length, poolNoHalf,
-        borrowN: borrowers.length, poolHalfN: poolHalf.length, poolHalfId: poolHalf.length ? poolHalf[0].id : null, ruinN: ruins.length, discMiss,
+        borrowN: borrowers.length, badBorrowedPair, pairedId: borrowedPairs.length ? borrowedPairs[0].id : null, ruinN: ruins.length, discMiss,
         slaves: I.pick(K.good(G.GOOD.slaves)) };
     }, CINEMATIC_IDS);
-    ok(r.relicN === 387 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.slice(0, 8).join(','));
-    ok(r.goodN === 77 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
+    ok(r.relicN === 487 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.join(','));
+    ok(r.goodN === 79 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
     ok(!r.mateMiss.length, '새 항해사 얼굴 6명 흉상·무릎상 ' + r.mateMiss.join(','));
     ok(r.poolN === 760 && !r.poolNoHalf.length, '얼굴 묶음 ' + r.poolN + '장 모두 무릎상이 있다 ' + r.poolNoHalf.slice(0, 5).join(','));
-    ok(r.poolHalfN > 0, '전용 그림 없는 항해사 ' + r.borrowN + '명 가운데 ' + r.poolHalfN + '명이 묶음 얼굴 무릎상으로 선다');
+    ok(!r.badBorrowedPair.length, '전용 그림 없는 항해사 ' + r.borrowN + '명도 합성 묶음 없이 완성된 얼굴상·무릎상 한 쌍으로 선다');
     ok(r.ruinN === 216 && !r.discMiss.length, '역사·종교 발견물 ' + r.ruinN + '곳 GIF·끝 장면·시트 ' + r.discMiss.join(','));
 
-    // 대화창: 묶음 얼굴을 빌린 항해사가 서서 말한다
+    // 대화창: 전용 그림 없는 항해사도 완성된 짝 무릎상으로 서서 말한다
     await page.evaluate(() => {
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 0; });
       G.Game.state = G.State.newGame({ name: '시험', nation: 'PT', job: 'explorer', age: 22, birth: { m: 6, d: 10 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk, lg: G.LANGS.map(() => 3), diff: 'normal' });
@@ -68,12 +73,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const who = T.duo({ name: m.name, rigId: 'mate:' + id, portrait: G.Art.mateSpec(id), half: G.Img.chain.mateHalf(id) });
       G.UI.say('바다라면 어디든 따라가겠습니다, 제독.', who);
       return m.name + ' ' + G.Img.pick(G.Img.chain.mateHalf(id));
-    }, r.poolHalfId);
+    }, r.pairedId);
     await page.waitForFunction(() => document.querySelector('.dlg'), null, { timeout: 10000 });
     await page.waitForTimeout(2200);
     await page.screenshot({ path: path.join(OUT, 'pool_half_dialog.png') });
     const stand = await page.evaluate(() => [...document.querySelectorAll('.dlg-actor')].map(a => a.className + ' ' + ((a.querySelector('img') || {}).src || '').split('/').slice(-3).join('/')));
-    ok(stand.some(t => /tall/.test(t)), '대화창에 묶음 얼굴 무릎상으로 선다: ' + shown);
+    ok(stand.some(t => /tall/.test(t)), '대화창에 완성된 짝 무릎상으로 선다: ' + shown);
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('스크린샷: ' + OUT);
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }

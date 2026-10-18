@@ -14,6 +14,7 @@
   var inBook = {};
   (G.BOOKS || []).forEach(function (b) { (b.discs || []).forEach(function (id) { inBook[id] = 1; }); });
   function rule(d) {
+    if (G.CLUE_FORCE && G.CLUE_FORCE[d.id]) return 'book';   // 새 발견물의 사료 책(js/data/cluebooks.js)에 실린 것 — 도서관에서
     if (d.bookOnly) return 'book';
     if (d.cat === 'trade') return 'talk';
     if (!inBook[d.id]) return 'talk';

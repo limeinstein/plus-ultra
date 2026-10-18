@@ -198,8 +198,38 @@
     ],
     // 제독 만들기 (scenes/create.js) — 대항해시대 3처럼 나이가 많을수록 보너스가 많다.
     // 능력 보너스 = statPts + (나이 − 18) × statPerYear (체력·지력·무력·매력에 나눠 줌, 한 능력 statMax까지)
-    // 특기 점수 = 3 + (나이 − 18) ÷ 4 + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax)
-    create: { statPts: 4, statPerYear: 0.5, statMax: 99, knowFrom: 40, knowStep: 15, knowMax: 3 },
+    // 특기 점수 = 3 + (나이 − 18) ÷ 4 + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax · 지력 knowTop 이상이면 knowTopPts)
+    create: { statPts: 4, statPerYear: 0.5, statMax: 99, knowFrom: 40, knowStep: 15, knowMax: 3, knowTop: 99, knowTopPts: 4 },
+    // 능력치 성장 (js/systems/growth.js) — 설득·거래·전투·일기토·미식·사교 경험이 능력치(체력·지력·무력·매력)에 쌓인다. 2026-10-18
+    //  · 능력 1이 오르는 데 드는 경험 = base × (능력이 knee 아래면 1, 위면 e^((능력−knee)/curve)) × (top 이상이면 topK) × (99→100은 lastK)
+    //    예) base 120: 50→51 120 · 60→61 120 · 70→71 326 · 80→81 887 · 90→91 2,410 · 95→96 7,948 · 99→100 47,426
+    //  · 한 능력에 하루 dayCap · 한 해 yearCap까지만 쌓인다 (같은 일을 되풀이해 몰아서 키우지 못하게) — 한 해 900이면
+    //    60→70 약 2년 · 70→80 약 6년 · 80→90 약 16년 · 90→95 약 16년 · 95→99 약 41년 · 99→100 약 53년 (해마다 한도를 꽉 채워도)
+    //    — 18세부터 62년을 날마다 한도까지 채워도 97~99에서 멈춘다: 80세 전에 경험만으로 100이 되는 일은 없다 (tests/growth_smoke.js)
+    //  · kinds: 경험 갈래 → 능력에 나눠 주는 몫 · pts: 일마다 얻는 경험
+    //  · 사건(event): 능력이 eventCap 아래면 곧바로 +1, 그 위면 eventPts만큼의 경험으로
+    growth: {
+      base: 120, knee: 60, curve: 10, top: 95, topK: 2, lastK: 4, dayCap: 45, yearCap: 900, eventCap: 85, eventPts: 160,
+      kinds: {
+        persuade: { name: '설득', icon: 'scroll', to: { cha: 0.7, int: 0.3 } },
+        trade:    { name: '거래', icon: 'coin',   to: { int: 0.6, cha: 0.4 } },
+        battle:   { name: '전투', icon: 'cannon', to: { mar: 0.5, str: 0.3, int: 0.2 } },
+        duel:     { name: '일기토', icon: 'sword', to: { mar: 0.6, str: 0.4 } },
+        food:     { name: '미식', icon: 'bread',  to: { str: 0.6, cha: 0.2, int: 0.2 } },
+        social:   { name: '사교', icon: 'heart',  to: { cha: 0.8, int: 0.2 } }
+      },
+      pts: {
+        persuadeOk: 14, persuadeFail: 4,          // 후원자 설득·교섭·반란 설득·수비대 교섭·빚 독촉(말로)·궁정 교섭·일기토 설득
+        buy: [1, 6, 4000],                        // 사기: 최소·최대, 금화 4,000닢마다 +1
+        sell: [2, 18, 1500], sellLoss: 1,         // 팔기: 이익 1,500닢마다 +1 (밑지고 팔면 1)
+        haggle: 6,                                // 값 깎기 성공
+        battleWin: 30, battleLose: 10, battleFlee: 3, battlePerShip: 6,   // 해전: 이기면 30 + 적 배 한 척마다 6
+        landWin: 18, landLose: 6,                 // 육상전
+        duelWin: 26, duelLose: 9, duelFlee: 2,    // 제독이 직접 나선 일기토
+        meal: [6, 10, 16, 22], mealNew: 2,        // 식당: 음식 등급(0~3)마다, 처음 먹는 음식은 ×2
+        social: [1, 24]                           // 사교 명성을 얻을 때: √(명성)×2 (최소·최대)
+      }
+    },
     homeTools: ['compass', 'sextant'],   // 처음 떠나는 도시(제독의 고향) 시장에 늘 있는 항해 도구 — 연도(from)·지역·그날 물량과 상관없이 (js/city/misc.js MK.stock)
     // 선수상: 함대에서 가장 센 덕 + 나머지 배의 덕 × figRest (R.fleetBonus). 폭풍 빈도는 stormFloor 아래로 줄지 않는다 (sea.js)
     figRest: 0.25, stormFloor: 0.35, stormDmgCut: 0.3,
@@ -374,6 +404,9 @@
         '시크 미슬 연맹', '시크 제국', '마라타 동맹', '청', '준가르 칸국', '알와 왕국'] },
     // 단서 겹치기 (js/systems/discovery.js): 다른 곳(다른 도시의 술집·교역소, 다른 후원자, 다른 책, 망루·원주민…)에서 같은 발견의 단서를 또 얻으면 겹친다.
     // 배열은 겹수(0~4)별 값. sense: 망루·정찰대가 알아채는 거리, find: 실제로 찾는 반경(바다·뭍), zone: 계약 목적지 원의 크기, fish: 낚시 희귀어 확률 덧셈
+    // 단서 없이 찾기 (js/systems/discovery.js D.noClueChance): 단서가 없는 발견물은 찾는 반경 안에 든 날마다 이 확률로만 찾는다.
+    // sea·land 기본 + 기술 1레벨마다 skill(바다 측량 / 뭍 역사학, 짐승·자연은 과학 절반) + 망루 표식 mark + 가운데 가까울수록 center + 배를 세우고 탐색 search, 최대 max
+    noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
     clueStack: { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
     // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
@@ -456,7 +489,8 @@
     regionFolk: { ratio: 0.8, every: 1, extraLang: 0.15, maxPerFill: 400 },
     // 부하와 이야기 (matetalk.js): 하루 한 번 이야기(충성 chatLoyal·호감 chatAff), 한잔(값 drinkCost × 도시 크기, 충성 drinkLoyal·호감 drinkAff).
     // 여성 부하는 호감이 wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다. 마녀의 점괘는 fortuneDays일에 한 번
-    mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30 }
+    //   이성 부하에게 선물: 충성 + max(giftLoyalMin, 선물 값(♥) × giftLoyal) — 같은 성이면 +2
+    mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30, giftLoyal: 0.6, giftLoyalMin: 3 }
   };
 
   // 계절풍 바다 (바람 모델 R.wind와 안내 G.Monsoon이 함께 쓴다)

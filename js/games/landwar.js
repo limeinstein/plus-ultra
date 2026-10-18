@@ -516,6 +516,7 @@
         var left = U.sum(mine, function (u) { return u.n; }), dead = P0 - left;
         var back = res === 'flee' && dead === 0 ? 0 : Math.min(dead, Math.round(dead * U.clamp(0.25 + sk('med') * 0.15 + (S().player.st.int > 70 ? 0.05 : 0), 0, 1)));
         var adm = mine.filter(function (u) { return u.leader; })[0];
+        if (G.Growth) G.Growth.land(res);   // 전투 경험 (육상전)
         if (!opt.noHurt) S().player.hp = Math.max(10, Math.round(S().player.hp - 40 * (1 - adm.n / adm.n0)));
         btns.innerHTML = '';
         say((res === 'win' ? (lead.n <= 0 ? '<b>' + lead.name + U.jx(lead.name, '이/가') + ' 쓰러지자 남은 적이 흩어져 달아났다!</b>' : '<b>적을 모두 물리쳤다!</b>') : res === 'lose' ? (adm.n <= 0 ? '<b class="warn-text">제독대가 무너졌다...</b>' : '<b class="warn-text">탐험대가 무너졌다...</b>') : '싸움을 피했다.') +

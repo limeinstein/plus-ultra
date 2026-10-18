@@ -86,16 +86,10 @@
     return W ? W.name : (D().pools[pk] || {}).name || '';
   }
 
-  // ---------------------------------------------------------------- 얼굴: 나라별 항해사 얼굴 묶음 → 없으면 철새 얼굴 후보
-  var POOL_OF = { VN: 'vn', PT: 'pt', BR: 'pt', FR: 'fr', DE: 'de', NL: 'nl', EN: 'en', ES: 'es', MX: 'es', SA: 'es', KR: 'kr', CN: 'cn', JP: 'jp', IN: 'ind', SE: 'se',
-    TR: 'ot', AR: 'eg', PE: 'pe', CA: 'pe', AF: 'af', SW: 'af', AZT: 'az', TA: 'az', QU: 'inca', NA: 'na' };   // 이탈리아·그리스·루스·북유럽·몽골은 묶음이 없어 철새 얼굴 후보로
+  // ---------------------------------------------------------------- 얼굴: 얼굴과 몸을 합성한 옛 묶음은 쓰지 않고 완성된 철새 초상 한 쌍만 쓴다
   function face(style, g, type, z, pk) {
-    var pool = POOL_OF[pk];
-    if (pool) {
-      var ks = []; for (var i = 1; i <= 10; i++) { var k = 'portraits/pools/mates/' + pool + '/' + g + '/' + String(i).padStart(2, '0'); if (!G.Img || !G.Img.has || G.Img.has(k)) ks.push(k); }
-      if (ks.length) return U.pick(ks);
-    }
     var fp = G.Wander && G.Wander.facePool ? G.Wander.facePool(style, g, type) : [];
+    fp = fp.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 그 고장 복식만 쓴다
     return fp.length ? U.pick(fp) : null;
   }
 
@@ -122,12 +116,14 @@
     var style = c.style || 'ib', nm = nameFrom(pk, g, home);
     var tn = ((d.typeName[tk] || {})[style]) || T.nm;
     var tx = G.WANDER_TEXT, tr = U.pick(tk === 'bard' ? d.text.bard : (tx.trait[tk] || tx.trait.nav));
+    var portrait = face(style, g, tk, z, pk);
     s.wander.seq = (s.wander.seq || 0) + 1;
     var def = {
       id: 'wd_' + y + '_' + s.wander.seq, name: nm, g: g, wd: true, local: z, nat: pk, natName: natName(pk), type: tk, typeName: tn, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
       y: [y, 9999], reg: [c.region], desc: c.name + ' 태생의 ' + (g === 'f' ? '여' : '') + tn + '. ' + tr,
       story: c.name + '에서 태어났다. ' + U.pick(d.text.past) + ' ' + U.pick(d.text.dream),
-      style: style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'), face: face(style, g, tk, z, pk), zones: [z], home: home, gen: G.Wander.genOf(y), born: y, line: null, prevName: null
+      style: style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'), face: portrait, halfKey: portrait ? portrait + '_half' : null,
+      zones: [z], home: home, gen: G.Wander.genOf(y), born: y, line: null, prevName: null
     };
     return G.MateSkills ? G.MateSkills.wander(def) : def;   // 특기를 한두 단계 더 (js/data/renown.js)
   };

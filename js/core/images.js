@@ -429,8 +429,8 @@
   K.title = function () { return ['title']; };
   /** 일반 소지품: 그 물건 그림, 없으면 종류 공통 그림 */
   K.item = function (it) { return ['items/' + it.id, 'item-kinds/' + it.kind, 'relic-kinds/' + it.kind]; };
-  /** 발견 유물: 그 유물 그림, 같은 이름의 일반 물건, 종류 공통 그림 순 */
-  K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'relic-kinds/' + r.kind]; };
+  /** 발견 유물: 전용 유물 그림, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */
+  K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'discovery-ends/' + r.relic, 'discoveries/' + r.relic, 'relic-kinds/' + r.kind]; };
   /** 교역품: 품목별 그림, 없으면 갈래 공통 그림 */
   K.good = function (g) { return ['goods/' + g.id, 'good-kinds/' + g.cat]; };
   /** 소지품(일반 물건·유물) 그림의 주소 — 선택 창·알림·대화 단추의 작은 그림용. 그림이 없으면 null (코드로 그린 그림을 쓰는 자리는 I.make) */
@@ -764,6 +764,10 @@
       두 사람 다 무릎상이 있으면 대화창이 서 있는 모습으로 크게 바뀐다 (js/ui/ui.js dialogShell) */
   K.mateHalf = function (id) {
     var out = ['portraits/mates/' + id + '_half'];
+    var d = G.MATE && G.MATE[id];
+    // 철새처럼 빌린 얼굴은 저장된 짝을 먼저 쓴다. 단, 옛 묶음 합성 무릎상과
+    // 얼굴과 다른 잘못된 저장값은 건너뛰고 아래의 실제 얼굴 사슬에서 다시 고른다.
+    if (d && d.halfKey && !/^portraits\/pools\//.test(d.halfKey) && (!(d.wd || d.native) || !d.face || d.halfKey === d.face + '_half')) out.push(d.halfKey);
     // 전용 얼굴이 없는 동료도 현재 얼굴과 같은 문화권·성별의 무릎상을 빌린다.
     if (G.Art && G.Art.mateSpec && G.Art.portraitKeys) {
       out = out.concat(K.halfOf(G.Art.portraitKeys(G.Art.mateSpec(id))));
@@ -786,7 +790,7 @@
   K.halfFor = function (chain) {
     chain = [].concat(chain || []);
     var out = [], picked = I.pick(chain);
-    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
+    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals|fairy-tales)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
     if (picked && /^maid-styles\//.test(picked) && !/_half$/.test(picked)) out.push(picked + '_half');   // 이름 없는 그 고장 여급 (술집 여급 무릎상과 같은 그림)
     if (picked && /^portraits\/(npc|npc-roles)\//.test(picked)) {
       out.push(picked + '_half');
@@ -795,7 +799,7 @@
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
-  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary|fairy-tales)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
   /** 마을 사람 무릎상: 지금 보이는 얼굴과 같은 기존 무릎상을 먼저 쓴다. */
   K.npcHalf = function (id, c) {
     var own = K.halfOf(K.npc(id, c));

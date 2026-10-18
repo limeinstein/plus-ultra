@@ -17,14 +17,19 @@ STORY = {
     "images/portraits/mates/estevao": (1024, 1024),
     "images/portraits/sponsors/pt_casanova": (1024, 1024),
 }
+RETIRED_EVENT = {
+    "images/portraits/fairy-tales/snow_white",
+    "images/portraits/fairy-tales/little_mermaid",
+}
 
 
-def check(path: Path, size: tuple[int, int]) -> None:
+def check(path: Path, size: tuple[int, int], min_opaque: int = 255) -> None:
     with Image.open(path) as raw:
         image = raw.convert("RGBA")
     assert image.size == size, (path, image.size, size)
     alpha = image.getchannel("A")
-    assert alpha.getextrema() == (0, 255), (path, alpha.getextrema())
+    lo, hi = alpha.getextrema()
+    assert lo == 0 and hi >= min_opaque, (path, (lo, hi), min_opaque)
     transparent = sum(alpha.histogram()[:6])
     assert transparent >= alpha.width * alpha.height * .05, (path, transparent)
 
@@ -40,4 +45,14 @@ for stem, face_size in STORY.items():
     check(base.with_suffix(".webp"), face_size)
     check(base.with_name(base.name + "_half").with_suffix(".webp"), (1024, 1536))
 
-print("거리 NPC 520장 + 이야기 인물 10장: RGBA 투명 배경·크기 통과")
+for stem in RETIRED_EVENT:
+    base = ROOT / stem
+    check(base.with_suffix(".webp"), (448, 448))  # 업그레이드 전 사건 얼굴 원본 규격
+    knee = base.with_name(base.name + "_half").with_suffix(".webp")
+    check(knee, (1024, 1536), min_opaque=254)  # 옛 WebP 원본의 최대 알파값은 254
+    with Image.open(knee) as raw:
+        alpha = raw.convert("RGBA").getchannel("A")
+    box = alpha.getbbox()
+    assert box and box[3] == alpha.height, (knee, box)  # 인물이 무릎단인 그림 아래까지 이어진다
+
+print("거리 NPC 520장 + 이야기 인물 10장 + 철새용 옛 사건 인물 4장: RGBA 투명 배경·크기·무릎단 통과")
