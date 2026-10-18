@@ -43,7 +43,7 @@ const ROOT = path.resolve(__dirname, '..');
     ok(!/mime/.test(r5.html) && /고마워요, 제독/.test(r5.text), '말을 익힌 뒤에는 말로');
     // 선물: 이성 부하는 충성이 선물 값만큼
     const gift = async (mate, itemId) => {
-      s.player.items.push({ id: itemId });
+      if (G.ITEM[itemId]) s.player.items.push({ id: itemId });
       const seq = ['gift', null]; const ask0 = G.UI.ask, ch0 = G.UI.choose, say0 = G.UI.say;
       let shown = null;
       G.UI.ask = async (t, opts) => { if (shown == null) shown = opts.map(o => o && o.label).filter(Boolean); const v = seq.length ? seq.shift() : null; return v === 'gift' && shown.indexOf('선물한다') < 0 ? null : v; };
@@ -57,9 +57,20 @@ const ROOT = path.resolve(__dirname, '..');
     const mm = G.Legend.join(male.id, null); mm.loyal = 60;
     const g2 = await gift(mm, 'pearlnk');
     ok(g2.d === 0 && g2.shown.indexOf('선물한다') < 0, '남자 제독 → 남자 부하: 선물 고르는 줄 없음');
-    s.player.g = 'f'; s.player.items = s.player.items.filter(it => it.id !== 'pearlnk');
-    const g3 = await gift(mm, 'pearlnk');
-    ok(g3.d === 12 && g3.shown.indexOf('선물한다') >= 0, '여자 제독 → 남자 부하(' + male.name + ')에게 진주 목걸이: 충성 +' + g3.d);
+    s.player.g = 'f';
+    // 남자 선물과 여자 선물을 가른다
+    s.player.items = [{ id: 'pearlnk' }, { id: 'brandy' }, { id: 'cards' }, { id: 'rapier' }, { id: 'rapier' }, { id: 'plate' }, { id: 'ring' }].filter(x => G.ITEM[x.id]);
+    s.player.equip = { weapon: 'rapier', armor: 'plate' };
+    const forMan = G.MateTalk.giftsFor(G.MATE[male.id]).map(x => x.id), forWoman = G.MateTalk.giftsFor(MM).map(x => x.id);
+    ok(JSON.stringify(forMan) === JSON.stringify(['brandy', 'cards', 'rapier']), '남자 부하에게 줄 것: 술·카드·검(차고 있는 한 벌은 남김) — ' + forMan.join('·'));
+    ok(JSON.stringify(forWoman) === JSON.stringify(['pearlnk']), '여자 부하에게 줄 것: 장신구만(반지 빼고) — ' + forWoman.join('·'));
+    ok(['cards', 'dice', 'sack', 'arak', 'huangjiu', 'sake', 'brandy', 'tarocchi', 'shipmodel', 'chess', 'automaton'].every(id => G.ITEM[id] && G.ITEM[id].kind === 'mgift' && G.ITEM[id].reg.length), '남자 선물 11가지(술·카드·장난감)를 시장에서 판다');
+    s.player.items = [{ id: 'brandy' }];
+    const g3 = await gift(mm, 'nothing_extra');
+    ok(g3.d === 5 && g3.shown.indexOf('선물한다') >= 0, '여자 제독 → 남자 부하(' + male.name + ')에게 브랜디: 충성 +' + g3.d);
+    s.player.items = [{ id: 'rapier' }, { id: 'rapier' }]; s.player.equip = { weapon: 'rapier' };
+    const lo1 = mm.loyal; const g5 = await gift(mm, 'nothing_extra');
+    ok(g5.d >= 3 && s.player.items.length === 1 && s.player.equip.weapon === 'rapier', '남는 검을 주면 충성 +' + g5.d + ', 차고 있던 검은 그대로');
     m.loyal = 60; const g4 = await gift(m, 'ribbon');
     ok(g4.d === 2, '여자 제독 → 여성 부하(같은 성): 예전처럼 +2');
     return rows;

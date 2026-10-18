@@ -430,7 +430,7 @@
     note: '시장과 수첩 소지품에 쓰는 일반 장비·도구·장신구 그림입니다. 파일: <code>images/items/ID.webp</code> · 권장 256×256 투명 배경 · 종류 공통 <code>item-kinds/종류.webp</code>'
   });
   G.ITEMS.filter(it => !(G.RELIC && G.RELIC[it.id])).forEach(it => {
-    const stat = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : it.kind === 'gift' ? '호감 ' + it.gv : G.ITEM_KIND[it.kind];
+    const stat = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : it.kind === 'gift' ? '호감 ' + it.gv : it.kind === 'mgift' ? '남자 선물 ' + it.gv : G.ITEM_KIND[it.kind];
     add(tItems, {
       group: it.kind, name: it.name, sub: (G.ITEM_KIND[it.kind] || it.kind) + ' · ' + it.id,
       meta: stat + (it.price ? ' · ' + num(it.price) + '닢' : ''), key: 'items/' + it.id, kind: 'webp', chain: I.chain.item(it), ar: '1 / 1', extra: it.desc,

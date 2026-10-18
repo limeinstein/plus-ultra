@@ -512,7 +512,7 @@
   /** 이 도시의 품목 갈래 시세 (1 = 보통): 출렁임 × 시장 사건 */
   R.catIndex = function (c, cat, day) { return R.drift(c.id, cat, day) * (day == null ? eventCat(R.market(c.id), cat) : 1); };
   /** 시장 물건(무기·방어구·도구·선물)이 따르는 교역품 갈래 */
-  R.ITEM_CATS = { weapon: ['arms'], armor: ['arms', 'metal'], tool: ['misc', 'craft'], gift: ['gem', 'lux', 'craft'] };
+  R.ITEM_CATS = { weapon: ['arms'], armor: ['arms', 'metal'], tool: ['misc', 'craft'], gift: ['gem', 'lux', 'craft'], mgift: ['drink', 'lux', 'craft'] };
   R.itemMult = function (c, item) {
     var d = G.ITEM[item.id] || item, cats = R.ITEM_CATS[d.kind];
     if (!c || !cats || d.rare || (G.RELIC && G.RELIC[item.id])) return 1;

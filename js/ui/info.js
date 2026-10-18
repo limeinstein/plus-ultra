@@ -246,7 +246,7 @@
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
           if (it.id === 'photo' && G.Story && G.Story.showPhoto) act += ' <button class="btn small" data-story-photo="' + i + '">사진을 본다</button>';
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
-          var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : '';
+          var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : kind === 'mgift' && d.gv ? '남자 선물 ' + d.gv : '';
           var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '');
           var ob = rl && rl.real && rl.real.obj;
           var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '');
