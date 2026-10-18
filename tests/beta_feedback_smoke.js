@@ -41,6 +41,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
   ok((await page.locator('.post-title').first().innerText()).includes('익명 글 보기 시험'), '익명 글을 공개 게시판에 합쳐 표시');
   await page.locator('.post').first().click();
   ok((await page.locator('.comment').first().innerText()).includes('개발팀 답변 표시 시험입니다.'), '익명 글 아래 관리자 답변 표시');
+  ok((await page.locator('.post-links a').first().getAttribute('href')).endsWith('/admin#feedback-7'), '익명 글에서 해당 관리자 답변 화면으로 연결');
 
   await page.locator('[name=title]').fill('로그인 없는 등록 시험');
   await page.locator('[name=detail]').fill('계정 없이도 의견을 보낼 수 있는지 확인합니다.');
