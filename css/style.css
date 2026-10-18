@@ -131,6 +131,9 @@ body { font-family: var(--serif); color: var(--cream); -webkit-font-smoothing: a
 .dlg .pframe { width: 150px; flex: 0 0 150px; padding: 8px; }
 .dlg .pframe canvas { position: static; display: block; width: 134px; height: 134px; }
 .dlg .body { flex: 1; padding: 24px 34px 22px 30px; position: relative; font-size: 22px; line-height: 1.62; }
+/* 말을 모르는 인어공주의 몸짓 (G.Tale.mime) */
+.dlg .body .mime { display: block; font-style: italic; }
+.dlg .body .mime-gist { display: block; margin-top: 6px; font-size: .78em; opacity: .62; }
 .dlg .name { position: absolute; left: 150px; top: -20px; padding: 5px 20px; font-size: 17px; color: var(--cream); letter-spacing: .06em; z-index: 2; }
 .dlg .more { position: absolute; right: 18px; bottom: 10px; font-size: 16px; color: var(--ink-soft); animation: blink 1.2s infinite; }
 @keyframes blink { 50% { opacity: .2; } }

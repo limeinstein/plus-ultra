@@ -456,7 +456,8 @@
     regionFolk: { ratio: 0.8, every: 1, extraLang: 0.15, maxPerFill: 400 },
     // 부하와 이야기 (matetalk.js): 하루 한 번 이야기(충성 chatLoyal·호감 chatAff), 한잔(값 drinkCost × 도시 크기, 충성 drinkLoyal·호감 drinkAff).
     // 여성 부하는 호감이 wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다. 마녀의 점괘는 fortuneDays일에 한 번
-    mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30 }
+    //   이성 부하에게 선물: 충성 + max(giftLoyalMin, 선물 값(♥) × giftLoyal) — 같은 성이면 +2
+    mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30, giftLoyal: 0.6, giftLoyalMin: 3 }
   };
 
   // 계절풍 바다 (바람 모델 R.wind와 안내 G.Monsoon이 함께 쓴다)

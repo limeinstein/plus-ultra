@@ -1,6 +1,6 @@
 /* 부하와 이야기 — 술집·여관의 「부하와 이야기」 (G.MateTalk)
    · 데리고 다니는 부하 한 사람과 마주 앉는다: 요즘 이야기(하루 한 번 충성↑), 살아온 이야기(실존 인물은 인물 이야기, 철새는 제 이야기),
-     한잔 사기(하루 한 번), 여성 부하에게는 선물과 청혼, 마녀에게는 점괘.
+     한잔 사기(하루 한 번), 이성 부하에게는 선물(충성이 선물 값만큼 오른다 — BALANCE.mateTalk.giftLoyal), 여성 부하에게는 청혼, 마녀에게는 점괘.
    · 여성 부하의 호감: s.mates[i].aff (0~100). 호감이 BALANCE.mateTalk.wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다.
      결혼하면 부하에서 물러나 고향 자택에서 기다린다 (s.player.wife = 그 항해사 ID — family.js가 여급과 똑같이 다룬다). */
 (function (G) {
@@ -90,7 +90,9 @@
       var opts = [{ label: '요즘 어떤가', value: 'chat' }, { label: '살아온 이야기', value: 'life' }, { label: '한잔 산다', value: 'drink' }];
       if (d.witch) opts.push({ label: '점괘를 본다', value: 'fortune' });
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
-      if (f) opts.push({ label: '선물한다', value: 'gift' }, w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
+      var opp = (d.g === 'f') !== (s.player.g === 'f');      // 제독과 다른 성(이성)
+      if (f || opp) opts.push({ label: '선물한다', value: 'gift' });
+      if (f) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
       var v = await ask(turn++ ? U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?']) : greet(d, m, f), opts);
       if (!v) return;
@@ -130,10 +132,14 @@
         if (!gifts.length) { UI.toast('선물할 장신구가 없습니다. 시장에서 살 수 있습니다.', 'info'); continue; }
         var gi = await UI.choose('선물', gifts.map(function (it, i) { return { label: G.ITEM[it.id].name, right: '♥' + G.ITEM[it.id].gv, value: i, icon: 'heart', thumb: G.Img.itemSrc(it) }; }), { width: 460 });
         if (gi == null) continue;
-        var it = gifts[gi]; R.removeItemObject(it);
-        gainAff(G.ITEM[it.id].gv + R.skill('craft'));
-        m.loyal = Math.min(100, (m.loyal || 70) + 2);
-        await say(U.pick(['어머, 이걸 저에게요? 소중히 할게요.', '배 위에서 이런 선물을 받을 줄은 몰랐어요. 고마워요.']), 'happy');
+        var it = gifts[gi], gv = G.ITEM[it.id].gv; R.removeItemObject(it);
+        var af0 = m.aff || 0, lo0 = m.loyal || 70;
+        gainAff(gv + R.skill('craft'));
+        // 이성 부하: 선물 값만큼 충성도 오른다 (리본 +3 · 향수 +5 · 머리장식 +7 · 케이프 +8 · 진주 목걸이 +12), 같은 성이면 예전처럼 +2
+        var gl = opp ? Math.max(cf.giftLoyalMin || 3, Math.round(gv * (cf.giftLoyal == null ? 0.6 : cf.giftLoyal))) : 2;
+        m.loyal = Math.min(100, lo0 + gl);
+        UI.toast(d.name + ' — 충성 +' + (m.loyal - lo0) + (f ? ' · 호감 +' + ((m.aff || 0) - af0) : ''), 'heart', 3200);
+        await say(U.pick(f ? ['어머, 이걸 저에게요? 소중히 할게요.', '배 위에서 이런 선물을 받을 줄은 몰랐어요. 고마워요.'] : ['이걸 내게? …고맙소, 제독. 이 은혜는 잊지 않겠소.', '선물이라니, 제독도 참. …소중히 간직하겠소.']), 'happy');
       } else if (v === 'w2home') {
         var wv = G.Wives.of(d.id), here = s.loc.mode === 'city' && s.loc.city === wv.city;
         var okH = await UI.confirm(d.name + U.jx(d.name, '을/를') + ' ' + G.CITY_DATA[wv.city].name + '의 집으로 보낼까요?<br><small class="muted">' + (here ? '여기서 배에서 내려 그 집에서 삽니다.' : '혼자 먼저 가서 그 집에서 기다립니다.') + ' 그 집에서 다시 배에 태울 수 있습니다.</small>', '보낸다', '그만둔다');

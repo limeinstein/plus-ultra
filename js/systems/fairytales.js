@@ -31,6 +31,50 @@
   function cool(id) { st().cool[id] = S().day + (K().coolDays || 45); }
   function who(id, emo) { return G.Legend && G.Legend.speaker ? G.Legend.speaker(id, emo) : { name: G.MATE[id].name, portrait: G.Art.mateSpec(id), half: G.Img.chain.mateHalf(id), lang: 3, special: true }; }
   T.speaker = who;
+
+  // ---------------------------------------------------------------- 인어공주의 몸짓 말
+  // 사람의 말을 하나도 모르고 배에 오른다(lg 없음). 한배 사람들에게서 어느 말이든 「기초」를 익히기 전까지(js/systems/cabins.js — 제독의 말은 90일)
+  // 그녀가 하는 말은 대화창에서 모두 몸짓으로 바뀐다 (ui.js speech → T.mime). 괄호로 쓴 줄은 이미 몸짓이라 그대로 둔다.
+  var MERMAID = 'little_mermaid';
+  /** 인어공주가 아직 말을 못 하는가 */
+  T.mute = function () {
+    var d = G.MATE[MERMAID], s = S(); if (!d || !s) return false;
+    if (st().spoke && st().spoke[MERMAID]) return false;         // 처음 말을 한 뒤로는 (혼인해 집에 있어도) 말을 한다
+    var m = row(MERMAID); if (!m) return true;
+    for (var li = 0; li < G.LANGS.length; li++) if (R.mateLang(m, li) >= 1) return false;
+    return true;
+  };
+  var GESTURE = [
+    [/고마|감사/, '두 손을 모아 가슴에 얹고, 당신을 향해 고개를 깊이 숙인다.'],
+    [/미안|죄송|잘못/, '어깨를 움츠리고 눈을 내리깐 채, 두 손을 모아 싹싹 비는 시늉을 한다.'],
+    [/사랑|좋아해|좋아요|곁에|함께/, '볼을 붉히며 당신의 손을 살며시 잡아 제 가슴께로 가져간다.'],
+    [/슬프|울|그리워|보고 싶|외로/, '눈시울이 붉어진 채 먼바다 쪽을 오래 바라보다가, 제 가슴을 가만히 누른다.'],
+    [/싫|안 돼|안돼|아니|그만/, '입술을 꼭 다물고 고개를 세차게 젓는다. 두 팔로 X 자를 그려 보인다.'],
+    [/먹|배고|요리|맛|술|잔/, '배를 문지르고, 무언가를 입에 넣는 시늉을 하며 눈을 동그랗게 뜬다.'],
+    [/노래|음악|춤|하프|악기/, '입술을 달싹이다 소리가 나지 않자, 대신 손끝으로 박자를 짚으며 빙그르르 돈다.'],
+    [/바다|파도|바람|배|돛|물살|키|항구|섬/, '바다 쪽을 가리키고, 손바닥을 물결처럼 너울너울 흔들어 보인다.'],
+    [/\?/, '고개를 갸웃하며 당신 얼굴을 빤히 들여다본다.'],
+    [/!/, '눈을 반짝이며 손뼉을 치고 발끝으로 콩콩 뛴다.']
+  ];
+  var GESTURE_ANY = ['당신을 바라보며 말없이 고개를 끄덕인다.', '입술을 달싹이다 소리가 나지 않자, 손짓 발짓으로 무언가를 열심히 그려 보인다.',
+    '당신의 소매를 살짝 잡아당기고는 방긋 웃는다.', '손가락으로 허공에 무언가를 그리며 몇 번이고 고개를 끄덕인다.', '제 목을 가리키고 미안한 듯 웃더니, 두 손으로 뜻을 그려 보인다.'];
+  /** 대화창에 그녀의 말이 나오려 할 때: 아직 말을 못 하면 몸짓(과 손짓으로 짐작한 뜻)을 HTML로 돌려준다. 다른 사람이면 null */
+  T.mime = function (raw, opts) {
+    var d = G.MATE[MERMAID]; if (!d || !opts || !(opts.name === d.name || opts.mateId === MERMAID)) return null;
+    var t = String(raw == null ? '' : raw).replace(/<[^>]+>/g, '').trim();
+    if (!t || /^[(（]/.test(t) || !T.mute()) return null;
+    var g = null; for (var i = 0; i < GESTURE.length && !g; i++) if (GESTURE[i][0].test(t)) g = GESTURE[i][1];
+    if (!g) g = GESTURE_ANY[Math.abs(U.strHash(t)) % GESTURE_ANY.length];
+    var gist = (t.match(/^[^.!?…。]*[.!?…。]?/) || [t])[0].trim(); if (gist.length > 40) gist = gist.slice(0, 38) + '…';
+    return '<span class="mime">(' + U.esc(g) + ')</span><span class="mime-gist">손짓으로 미루어 보면 — 「' + U.esc(gist) + '」</span>';
+  };
+  /** 한배 사람들에게서 처음으로 말을 익힌 날 (cabins.js가 그 말을 익히기 직전에 부른다) — 알림 하나, 다른 때는 null */
+  T.firstWords = function (m, li) {
+    if (!m || m.id !== MERMAID || !T.mute()) return null;
+    var F = st(); F.spoke = F.spoke || {}; F.spoke[MERMAID] = U.dateNum(S().date);
+    var nm = G.MATE[MERMAID].name;
+    return { icon: 'heart', text: nm + U.j(nm, '이/가').slice(nm.length) + ' 한배 사람들에게서 ' + G.LANGS[li] + '를 익혀 처음으로 말을 했다 — 「제…독…님.」 이제 손짓 대신 말로 이야기를 나눌 수 있다.' };
+  };
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
   function say(id, text, emo) { return UI.say(text, who(id, emo)); }
   function narrate(text) { return UI.say(text, {}); }
@@ -187,7 +231,7 @@
         cool(id); return false;
       }
       await T.join(id);
-      await narrate('배에 오르자 그녀의 걸음이 거짓말처럼 가벼워진다. 출렁이는 갑판 위가 뭍보다 편한 모양이다. 그날 저녁, 그녀가 말없이 차린 생선 요리에 선원들이 혀를 내둘렀다.');
+      await narrate('배에 오르자 그녀의 걸음이 거짓말처럼 가벼워진다. 출렁이는 갑판 위가 뭍보다 편한 모양이다. 그날 저녁, 그녀가 말없이 조개 하프를 뜯으며 갑판 위에서 춤을 추자 선원들이 숨을 죽였다. 사람의 말은 한마디도 모르는 모양이라, 무엇이든 손짓과 몸짓으로 전한다.');
       await say(id, '(활짝 웃으며 키를 가리킨다. 바람이 바뀌는 쪽을 먼저 알아채는 눈치다.)', 'happy');
       return true;
     } finally { if (pc) await pc.stop(); }
@@ -229,7 +273,7 @@
     if (o === '프랑스' && T.ready('cinderella')) await hint('cin', '요즘 이 근처 숲에 재투성이 아가씨가 깨진 유리 구두를 들고 앉아 운다더군. 유리를 다룰 줄 아는 사람을 찾는다나. 유리야 시장에서 팔지만, 그걸 구두로 만드는 솜씨가 문제지.');
     else if (o === '프랑스' && T.ready('snow_white')) await hint('snow', '숲에 들어갈 거면 조심하게. 왕비의 사냥꾼이 웬 아가씨를 쫓아다닌다더군. 그 아가씨는 일곱 사내가 사는 오두막을 찾는다던데… 사내 일곱이 함께 다니는 무리라면 반가워할지도.');
     if (GERMAN[o] && T.ready('sleeping_beauty')) await hint('beauty', '이 고장 숲 깊은 곳에 가시덤불로 뒤덮인 탑이 있다네. 용을 본 사람 앞에서만 덤불이 길을 연다는 옛말이 있지. 그 안에 잠든 공주가 다쳐 있다는데, 의원 없이 가 봐야 소용없다더군.');
-    if (o === '덴마크' && T.ready('little_mermaid')) await hint('mermaid', '섬에서 사냥하다 보면 물가에서 걸음마 하듯 걷는 아가씨를 본다는 사람들이 있어. 말은 한마디도 못 하는데, 바다 일은 늙은 뱃사람보다 잘 안다더군.');
+    if (o === '덴마크' && T.ready('little_mermaid')) await hint('mermaid', '섬에서 사냥하다 보면 물가에서 걸음마 하듯 걷는 아가씨를 본다는 사람들이 있어. 말은 한마디도 못 해서 손짓 발짓으로만 뜻을 전하는데, 바다 일은 늙은 뱃사람보다 잘 안다더군.');
   };
   T.install = function () {
     var CC = G.Scenes && G.Scenes.city, B = CC && CC.B; if (!B || !B.tavern || T._inst) return;

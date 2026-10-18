@@ -97,7 +97,7 @@
   function people() {
     var s = S(), out = [];
     (s.mates || []).forEach(function (m) {
-      var d = G.MATE[m.id]; if (!d || d.mute) return;     // 말을 못 하는 사람(인어공주)은 수다에 끼지 않는다
+      var d = G.MATE[m.id]; if (!d || (d.mute && (!G.Tale || !G.Tale.mute || G.Tale.mute()))) return;     // 말을 못 하는 사람(인어공주)은 말을 익히기 전까지 수다에 끼지 않는다
       out.push({ id: m.id, name: d.name, short: d.short || String(d.name).split(' ')[0], tone: BT.toneOf(m.id), sp: function () { return speakerOf(m.id); } });
     });
     B().fill.forEach(function (f) {
