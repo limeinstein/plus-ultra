@@ -102,7 +102,9 @@
   /** 시장 값: 기본값 × 이 도시 시세(무기는 무기 갈래, 선물은 사치품·기호품·공예품 …) × 경리가 흥정한 값 */
   function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
   function mkBuy(it) { var d = mkDeal(), b = mkBase(it); return d ? Math.max(1, Math.round(b * Math.min(1, d.buy))) : b; }
-  function mkSell(it) { var d = mkDeal(), v = Math.round(itemValue(it) * R.itemMult(C.city(), it)); return d ? Math.round(v * Math.max(1, d.sell)) : v; }
+  // 이 도시에서 산 물건(it.from)은 치른 값(it.paid)보다 비싸게 되팔 수 없다 — 깎아 사서 그 자리에서 되팔아 남기던 것을 막는다
+  function mkSell(it) { var d = mkDeal(), c0 = C.city(), v = Math.round(itemValue(it) * R.itemMult(c0, it)); v = d ? Math.round(v * Math.max(1, d.sell)) : v; if (c0 && it.from === c0.id && it.paid != null) v = Math.min(v, it.paid); return v; }
+  MK.sellValue = mkSell;
   function mkThumb(it) {
     if (!it || !G.Img) return null;
     var rl = G.RELIC && G.RELIC[it.id], key = G.Img.pick(rl ? G.Img.chain.relic(rl) : G.Img.chain.item(it));
@@ -181,7 +183,7 @@
       var pic = mkThumb(it), ask = it.name + ' <b>' + q + '개</b><br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(deal.total) + '닢에 사겠습니까?' + (deal.ok ? '<br><span class="good-text">회계 추가 협상 할인 적용</span>' : '');
       if (!(await UI.confirm(pic ? '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>' : ask, '산다', '그만둔다'))) continue;
       s.player.gold -= deal.total;
-      R.addMarketItems(v, q); MK.boughtTotal = (MK.boughtTotal || 0) + q;
+      R.addMarketItems(v, q, c.id, Math.round(deal.total / q)); MK.boughtTotal = (MK.boughtTotal || 0) + q;
       if ((it.kind === 'weapon' && (!s.player.equip.weapon || G.ITEM[s.player.equip.weapon].atk < it.atk)) || (it.kind === 'armor' && (!s.player.equip.armor || G.ITEM[s.player.equip.armor].def < it.def))) {
         if (await UI.confirm(it.name + U.j(it.name, '을/를').slice(it.name.length) + ' 바로 장비하겠습니까?')) s.player.equip[it.kind] = v;
       }
@@ -200,7 +202,7 @@
         var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
         var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
-        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
+        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (x.it.from === c.id ? ' <span class="tag warn-text" title="이 시장에서 산 물건은 치른 값보다 비싸게 되팔 수 없습니다">여기서 삼 · 치른 값까지만</span>' : x.it.from != null && G.CITY_DATA[x.it.from] ? ' <small class="muted">' + G.CITY_DATA[x.it.from].name + '에서 삼</small>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
       }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
       if (v == null) return;
       var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id];

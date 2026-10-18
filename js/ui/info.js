@@ -25,7 +25,7 @@
       '<div>적재</div><div>' + R.used() + ' / ' + R.fleetCap() + '통</div>' +
       '<div>소지금</div><div>' + U.num(s.player.gold) + '닢</div></div>';
     var ids = Object.keys(f.cargo);
-    if (ids.length) h += '<div class="fp-cargo">' + ids.map(function (id) { return '<span>' + G.goodDot(id) + G.GOOD[id].name + ' ' + f.cargo[id].q + '</span>'; }).join('') + '</div>';
+    if (ids.length) h += '<div class="fp-cargo">' + ids.map(function (id) { return '<span title="' + U.esc('산 곳: ' + R.cargoFromText(f.cargo[id])) + '">' + G.goodDot(id) + G.GOOD[id].name + ' ' + f.cargo[id].q + '</span>'; }).join('') + '</div>';
     el.innerHTML = h;
     return el;
   };
@@ -133,7 +133,7 @@
           '<tr class="sub"><td></td><td colspan="9"><div class="traits">' + G.Ships.traitChips(sh) + '<span class="cult">' + G.SHIP[sh.type].feat + '</span></div></td></tr>';
       }).join('') + '</table>' + speedReport();
     var ids = Object.keys(f.cargo);
-    html += '<div class="sep"></div><h4 style="margin:0 0 8px">적재 교역품</h4>' + (ids.length ? '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th>산 곳</th></tr>' + ids.map(function (id) { var c = f.cargo[id]; return '<tr><td>' + G.goodDot(id) + G.GOOD[id].name + '</td><td class="num">' + c.q + '</td><td class="num">' + U.num(c.cost) + '</td><td>' + (G.CITY_DATA[c.from] ? G.CITY_DATA[c.from].name : '') + '</td></tr>'; }).join('') + '</table>' : '<div class="muted">없음</div>');
+    html += '<div class="sep"></div><h4 style="margin:0 0 8px">적재 교역품</h4>' + (ids.length ? '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th>산 곳</th></tr>' + ids.map(function (id) { var c = f.cargo[id]; return '<tr><td>' + G.goodDot(id) + G.GOOD[id].name + '</td><td class="num">' + c.q + '</td><td class="num">' + U.num(c.cost) + '</td><td>' + U.esc(R.cargoFromText(c)) + '</td></tr>'; }).join('') + '</table>' : '<div class="muted">없음</div>');
     if (s.moored) {
       var ms = []; for (var cid in s.moored) s.moored[cid].forEach(function (sh) { ms.push(U.esc(sh.name) + '호 (' + G.SHIP[sh.type].name + ') — ' + G.CITY_DATA[cid].name); });
       if (ms.length) html += '<div class="sep"></div><h4 style="margin:0 0 8px">계류 중인 배</h4><div style="font-size:17px;line-height:1.7">' + ms.join('<br>') + '</div>';
@@ -247,7 +247,7 @@
           if (it.id === 'photo' && G.Story && G.Story.showPhoto) act += ' <button class="btn small" data-story-photo="' + i + '">사진을 본다</button>';
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
           var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : kind === 'mgift' && d.gv ? '남자 선물 ' + d.gv : '';
-          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '');
+          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '') + (it.from != null && G.CITY_DATA[it.from] ? ' <small class="muted">' + G.CITY_DATA[it.from].name + '에서 삼' + (it.paid != null ? ' · ' + U.num(it.paid) + '닢' : '') + '</small>' : '');
           var ob = rl && rl.real && rl.real.obj;
           var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '');
           var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
