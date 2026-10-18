@@ -234,10 +234,11 @@
   /** 궁정의 소식: 그 사람이 직접 전하고, 청(축하 예물·십자군 기부)이 있으면 묻는다 */
   async function court(e) {
     var s = S(), p = s.player, who = RL.speaker(e.who || L0), a = e.ask;
-    await UI.say('【' + e.title + '】\f' + e.text, who);
+    var tt = String(e.title).replace(/\s*\(\d{3,4}\)\s*$/, '');   // 「신성 동맹 (1571)」 → 「신성 동맹」 (대화창은 괄호 속 숫자를 알림으로 떼어 낸다)
+    await UI.say('【' + tt + '】\f' + e.text, who);
     if (!a) return;
     await UI.say(a.text, who);
-    var v = await UI.ask(e.title + ' — 소지금 ' + U.num(p.gold) + '닢', [
+    var v = await UI.ask(tt + ' — 소지금 ' + U.num(p.gold) + '닢', [
       { label: (a.label || '예물을 바친다') + ' (금화 ' + U.num(a.gold) + '닢 · 사교 명성 +' + (G.Fame ? G.Fame.mul('so', a.so) : a.so) + (a.trust ? ' · 신뢰 +' + a.trust[1] : '') + ')', value: 'give' },
       { label: '정중히 사양한다', value: 'no' }], who);
     if (v === 'give' && p.gold >= a.gold) {

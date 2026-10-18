@@ -24,7 +24,7 @@
       var first = rel.met <= 1 || (G.Succession && G.Succession.firstMeetingBefore);
       var succ = G.Succession && G.Succession.newHolderBefore;
       var greet = SP.line(sp, succ ? 'greetSucc' : first ? 'greetFirst' : 'greetAgain');
-      await C.say(who, greet);
+      if (!(G.Tudor && G.Tudor.knightDue && G.Tudor.knightDue(sp))) await C.say(who, greet);   // 엘리자베스 1세의 서임: 여왕이 먼저 「…그 얼굴, 잊을 리가」로 말을 꺼낸다
       // 다른 후원자에게 먼저 보고한 일·이중 보고를 꺼낸다 (시샘 — G.Sponsor.jealousy). 쫓겨나면 알현은 여기서 끝
       if (!(await SP.jealousy(sp))) return false;
       // 국왕의 부름·명예 작위: 군주가 먼저 왕명 이야기를 꺼낸다 (js/systems/court.js)

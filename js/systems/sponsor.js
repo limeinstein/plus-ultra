@@ -96,6 +96,7 @@
   SP.audience = async function (sp) {
     var s = S(), rel = SP.rel(sp.id), bt = SP.butler(sp);
     if (rel.banned && U.dateNum(s.date) < rel.banned) { await UI.say('만날 수 없는 사람은 만날 수 없습니다. 돌아가 주십시오.', bt); return false; }
+    if (G.Tudor && G.Tudor.knightDue && G.Tudor.knightDue(sp)) return true;   // 런던 탑의 은혜를 갚으려는 엘리자베스 1세는 말이 서툴러도·명성이 모자라도 만나 준다 (QA 2026-10-18)
     if (SP.langLv(sp) === 0) { await UI.say('……', bt); await G.Scenes.city.mate('말이 통하지 않아서 상대해 주지 않았습니다.'); return false; }
     var need = SP.fameNeed(sp);
     if (s.player.fame < need) {

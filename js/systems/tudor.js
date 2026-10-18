@@ -28,11 +28,13 @@
   function holder() { return SP() && king() ? SP().holder(king()) : null; }
   /** 잉글랜드 왕궁의 주인과 친분이 있는가 (만난 적이 있고 신뢰 40 이상) */
   TD.friend = function () { var r = S().sponsors && S().sponsors.en_king; return !!(r && r.met && (r.trust || 0) >= K.friend); };
-  function who() { return SP().speaker(king()); }
+  /** 왕(헨리 8세·엘리자베스 1세)의 이 사건 대사는 늘 알아듣게 — 탑의 공주 때는 읽히다가 여왕이 되자 게르만어로 뒤섞이던 것 (QA 2026-10-18) */
+  function who() { var o = SP().speaker(king()); o.lang = 3; o.li = null; return o; }
   function envoy() { return { name: '스티븐 가디너 (국왕의 특사)', portrait: G.Art.withImg(G.Art.npcSpec('gardiner', 'priest', 'ne', 'm'), G.Img.chain.npc('priest')), lang: 3 }; }
   function eliz() {
-    var key = 'portraits/sponsors/en_king_6';
-    return { name: '엘리자베스 공주', portrait: G.Art.withImg(G.Art.npcSpec('elizabeth', 'noble', 'ne', 'f'), [key]), half: [key + '_half'], lang: 3 };
+    // 갇힌 공주는 왕관·예복의 여왕 그림(en_king_6)이 아니라 튜더 왕녀 그림으로 (QA 2026-10-18)
+    var key = 'portraits/princesses/court_princess_en_1';
+    return { name: '엘리자베스 공주', portrait: G.Art.withImg(G.Art.npcSpec('elizabeth', 'noble', 'ne', 'f'), [key, 'portraits/sponsors/en_king_6']), half: [key + '_half', 'portraits/sponsors/en_king_6_half'], lang: 3 };
   }
   function drake() { return G.MATE.drake ? { name: '프랜시스 드레이크', portrait: G.Scenes.mateSpec('drake'), half: G.Img.chain.mateHalf('drake'), lang: 3 } : { name: '프랜시스 드레이크' }; }
   function englishRefuges() { return ['요크', '브리스틀', '사우샘프턴', '플리머스'].map(function (n) { return G.CITY_DATA.filter(function (c) { return c.name === n; })[0]; }).filter(function (c) { return c && R.cityExists(c); }); }
@@ -85,6 +87,8 @@
   // ================================================================ 런던 탑의 엘리자베스
   function maryReign() { var s = S(), t = dn(s.date); return t >= 15530719 && t < 15581117 && /메리/.test(holder() || ''); }
   function elizQueen() { return /엘리자베스/.test(holder() || ''); }
+  /** 런던 왕궁에 들면 여왕이 서임할 차례인가 — 그때는 왕궁의 첫 인사(「그대가 근래 바다에서 이름을 떨친다는 항해자인가」)를 건너뛴다 (js/city/palace.js) */
+  TD.knightDue = function (sp) { var t = st(); return !!(sp && sp.id === 'en_king' && t && elizQueen() && t.eliz.stage === 2 && !t.knight); };
   TD.towerOpen = function () { var t = st(); return !!(t && t.eliz.stage === 0 && maryReign() && TD.friend()); };
   /** 도시의 덧붙는 건물 (런던: 런던 탑) */
   TD.buildings = function (c) { return c && c.name === '런던' && TD.towerOpen() ? [{ kind: 'tower', name: '런던 탑', icon: 'castle' }] : []; };
@@ -277,7 +281,7 @@
           var h = holder() || '';
           if (/헨리 8세/.test(h) && t.div.stage === 0 && s.date.y >= K.divY[0] && s.date.y <= K.divY[1] && TD.friend()) await henryAsk();
           else if (/헨리 8세/.test(h) && t.div.stage === 2) await henryBreak();
-          else if (elizQueen() && t.eliz.stage === 2 && !t.knight) await knight();
+          else if (elizQueen() && t.eliz.stage === 2 && !t.knight) { await knight(); return; }   // 서임 뒤에 「그대가 포르투갈의 ○○인가」 왕명 인사가 이어지지 않게 — 왕명은 메뉴에서
         } catch (e) { console.error(e); }
       }
       return onEnter.apply(this, arguments);
