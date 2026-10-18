@@ -21,6 +21,8 @@ const ROOT = path.resolve(__dirname, '..');
     rows.push('  능력 ' + ['MM','SW','SH'].map(k => JSON.stringify({MM,SW,SH}[k].sk)).join(' / '));
     ok(MM.sk.music === 3 && MM.sk.nav === 3 && MM.sk.survey === 3 && MM.sk.ops === 3 && MM.sk.craft === 1 && !(MM.sk.cook > 0) && !Object.keys(MM.lg).some(k => MM.lg[k] > 0), '인어공주: 음악·항해·측량·운용 3, 세공 1, 말 없음');
     ok(['cook', 'craft', 'music', 'speech', 'acct'].every(k => SW.sk[k] === 3), '백설공주: 요리·세공·음악·웅변·회계 3');
+    const CI = G.MATE.cinderella;
+    ok(JSON.stringify(CI.sk) === JSON.stringify({ cook: 3, craft: 3, sword: 3, music: 3, ops: 3 }), '신데렐라: 요리·세공·검술·음악·운용술 3 ' + JSON.stringify(CI.sk));
     const eu = [0, 1, 2, 3, 4], as = [5, 6, 7, 8, 9, 12, 13, 14];
     ok(eu.concat(as).every(i => SH.lg[i] >= 2 && SH.lg[i] <= 3) && ['speech', 'acct', 'sci'].every(k => SH.sk[k] === 3), '셰헤라자드: 유럽·아시아 말 모두 2~3, 웅변·회계·과학 3');
     // 몸짓 말
