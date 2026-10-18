@@ -16,7 +16,7 @@
     var y = S().date.y, own = R.cityOwner(c), iber = R.iberOwner(own);
     var r = c.region, id = c.id, out = [];
     function add(k) { var t = G.SHIP[k]; if (t && (!t.from || y >= t.from) && out.indexOf(k) < 0) out.push(k); }
-    function iberian() { add('barca'); add('caravel'); add('lcaravel'); add('carrack'); if (y >= 1540) add('galleon'); }
+    function iberian() { add('barca'); add('caravel'); add('lcaravel'); add('carrack'); if (y >= 1530) add('galleon'); }   // 1520년 이후의 배는 10년 당김 (예전 1540)
     if (r === 0) {
       if (c.rel === 'I') { add('tartane'); add('fusta'); add('galley'); }
       else {
@@ -27,7 +27,7 @@
     } else if (r === 1) {
       if (HANSA.indexOf(id) >= 0) { add('cog'); add('hulk'); add('carrack'); add('lcarrack'); add('fluyt'); }
       else {
-        add('cog'); add('pinnace'); add('carrack'); add('lcarrack'); if (y >= 1510) add('hcarrack'); if (y >= 1540) add('galleon');
+        add('cog'); add('pinnace'); add('carrack'); add('lcarrack'); if (y >= 1510) add('hcarrack'); if (y >= 1530) add('galleon');   // 북유럽 갤리온: 예전 1540 → 10년 당김
         if (DUTCH.indexOf(id) >= 0) add('fluyt');
         if (DUTCH.indexOf(id) >= 0 || ENGLAND.indexOf(id) >= 0 || c.nation === '프랑스') add('frigate');
       }
@@ -35,7 +35,7 @@
       if (BARBARY.indexOf(id) >= 0) { add('fusta'); add('tartane'); add('galley'); add('xebec'); }
       else if (c.rel === 'I' || own === '오스만 제국') { add('fusta'); add('tartane'); add('galley'); add('carrack'); if (id === 112) add('galleass'); }
       else {
-        add('tartane'); add('galley'); add('caravel'); add('carrack'); add('lcarrack'); if (y >= 1535) add('galleon');
+        add('tartane'); add('galley'); add('caravel'); add('carrack'); add('lcarrack'); if (y >= 1525) add('galleon');   // 지중해 갤리온: 예전 1535 → 10년 당김
         if (id === 28 || id === 29) add('greatgalley'); if (id === 29) add('galleass');
       }
     } else if (r === 3) {

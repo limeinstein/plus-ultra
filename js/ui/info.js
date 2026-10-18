@@ -96,6 +96,7 @@
       G.SKILLS.map(function (sk) { var own = p.sk[sk.id] || 0, eff = R.skill(sk.id); return '<div class="flex" style="font-size:16px;gap:6px" title="' + sk.desc + '"><span style="width:70px">' + sk.name + '</span>' + pips(eff) + (eff > own ? '<small class="muted">동료</small>' : '') + '</div>'; }).join('') + '</div></div></div>' +
       '<div class="sep"></div><h4 style="margin:0 0 8px">언어</h4><div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:16px">' +
       G.LANGS.map(function (l, i) { var own = p.lg[i] || 0, eff = R.lang(i); if (!eff) return ''; return '<span>' + l + ' ' + pips(eff) + (eff > own ? '<small class="muted"> 통역</small>' : '') + '</span>'; }).join('') + '</div></div></div>';
+    if (G.Growth) html += G.Growth.html();   // 경험과 성장 (js/systems/growth.js)
     el.innerHTML = html;
     var pc = el.querySelector('.pc');
     if (pc) {

@@ -46,7 +46,7 @@
     try {
       var key = 'portraits/princesses/' + D.id;
       var spec = A.npcSpec('princess_es', 'noble', 'ib', 'f');
-      sp.portrait = A.withImg(spec, [key]);
+      sp.portrait = A.withImg(spec, [key, 'portraits/npc/princess_es']);   // 얼굴 그림이 따로 없으면 에스파냐 왕녀 얼굴로 (이벤트 샷 동안 대화창 얼굴)
       sp.half = [key + '_half'];
       sp.rigId = 'npc:princess_es';
       // 마주 보는 대화: 왼쪽 제독 · 오른쪽 왕녀 (서 있는 모습)
@@ -200,12 +200,16 @@
     var p = P.st(); p.stage = 3; p.how = how; p.tell = 'rescued';
     G.Fame.add('bt', Math.round(K().fameBt / 3));
     G.State.log('홍해 수에즈 만의 해적 요새에서 ' + D.name + '를 구해 냈다.');
+    if (G.Growth) G.Growth.once('princess_rescue', 'mar', 1, '해적 요새를 깨뜨리고 왕녀를 구했다');
   }
   async function meet() {
-    var w = P.speaker();
-    await UI.say(L.rescued[0], w);
-    await UI.say(L.rescued[1], me());
-    await UI.say(L.rescued[2], w);
+    var w = P.speaker(), p = P.st();
+    var pc = G.EventShot ? await G.EventShot.princess('es_rescued', { how: p && p.how }) : null;   // 이벤트 샷 (js/art/eventshot.js)
+    try {
+      await UI.say(L.rescued[0], w);
+      await UI.say(L.rescued[1], me());
+      await UI.say(L.rescued[2], w);
+    } finally { if (pc) await pc.stop(); }
     UI.toast(fill(L.aboard), 'crown', 6000);
   }
 
@@ -228,6 +232,11 @@
   // ================================================================ 귀환 · 혼인
   async function report(sp) {
     var p = P.st(), s = S(), b = K(), who = SP().speaker(sp), w = P.speaker();
+    var face = SP().face ? SP().face(sp) : null;
+    var pc = G.EventShot ? await G.EventShot.princess('es_return', { city: G.CITY_DATA[sp.city], kingHalf: face && face.half }) : null;   // 이벤트 샷: 왕궁에 돌아온 왕녀
+    try { return await reportIn(sp, p, s, b, who, w); } finally { if (pc) await pc.stop(); }
+  }
+  async function reportIn(sp, p, s, b, who, w) {
     await UI.say(fill(L.reunion[0]), who);
     await UI.say(fill(L.reunion[1]), who);
     p.end = 'done';
@@ -238,7 +247,11 @@
       await UI.say(L.proposeKing, who);
       await UI.say(L.proposePrincess, w);
       var v = await UI.ask(L.proposeAsk, [{ label: '왕녀와 혼인한다', value: 'yes' }, { label: '정중히 사양한다', value: 'no' }], me());
-      if (v === 'yes') return wed(sp, who, w);
+      if (v === 'yes') {
+        if (G.FamEv && G.FamEv.stopPic) await G.FamEv.stopPic();
+        var pw = G.EventShot ? await G.EventShot.princess('es_wedding', { city: G.CITY_DATA[sp.city] }) : null;   // 이벤트 샷: 부마의 혼례
+        try { return await wed(sp, who, w); } finally { if (pw) await pw.stop(); }
+      }
       await UI.say(L.wedNo, w);
     } else await UI.say(L.marriedKing, who);
     await UI.say(L.reward, who);
@@ -252,6 +265,7 @@
     var p = P.st(), s = S(), b = K(), CT = G.Court, rl = realm();
     await say(L.wedYes, who);
     s.player.wife = D.id;
+    if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');   // 첫 혼인: 매력 +1 (js/systems/growth.js)
     s.maids = s.maids || {}; s.maids[D.id] = { aff: 100 };
     p.wed = U.dateNum(s.date);
     s.player.gold += b.dowry; G.Fame.add('so', b.fameWed);

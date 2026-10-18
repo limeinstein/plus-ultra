@@ -236,6 +236,12 @@
   async function court(e) {
     var s = S(), p = s.player, who = RL.speaker(e.who || L0), a = e.ask;
     var tt = String(e.title).replace(/\s*\(\d{3,4}\)\s*$/, '');   // 「신성 동맹 (1571)」 → 「신성 동맹」 (대화창은 괄호 속 숫자를 알림으로 떼어 낸다)
+    // 왕녀가 직접 전하는 혼인 소식: 이벤트 샷 (js/art/eventshot.js)
+    var pr = e.who && e.who.princess && G.EventShot ? ((G.COURT && G.COURT.princesses) || []).filter(function (x) { return x.id === e.who.princess; })[0] : null;
+    var pc = pr ? await G.EventShot.princess('royal_wedding', { realm: pr.realm, name: pr.name, title: tt, city: (function () { var r = G.COURT.realms[pr.realm], sp = r && r.sponsors && G.SPONSOR[r.sponsors[0]]; return sp ? G.CITY_DATA[sp.city] : null; })() }) : null;
+    try { await courtIn(e, s, p, who, a, tt); } finally { if (pc) await pc.stop(); }
+  }
+  async function courtIn(e, s, p, who, a, tt) {
     await UI.say('【' + tt + '】\f' + e.text, who);
     if (!a) return;
     await UI.say(a.text, who);
@@ -283,6 +289,7 @@
     var s = S(), r = st(), id = npc.great, spec = RL.spec(id); if (!spec) return;
     r.battle[id] = res === 'win' ? 'won' : 'lost';
     if (res === 'win') {
+      if (G.Growth) G.Growth.once('great_' + id, 'mar', 1, '큰 해전에서 이겼다');
       var w = spec.win || {}, fame = w.fame ? G.Fame.add('bt', w.fame) : 0, so = w.so ? G.Fame.add('so', w.so) : 0;
       s.player.gold += w.gold || 0;
       if (spec.onWin) spec.onWin();

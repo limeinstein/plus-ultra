@@ -109,7 +109,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     // ③ 화면: 실제 대화와 일기토 창 (무열왕릉)
     await page.evaluate(() => { window.__fresh(); G.TombDuel.meet(G.DISC.muyeol, 'land').then(r => { window.__res = r; }); });
-    for (let i = 0; i < 3; i++) { await page.waitForTimeout(500); if (i === 1) await page.screenshot({ path: path.join(OUT, 'tomb_muyeol_talk.png') }); await page.keyboard.press('Enter'); }
+    for (let i = 0; i < 8; i++) {
+      await page.waitForTimeout(500);
+      if (i === 1) await page.screenshot({ path: path.join(OUT, 'tomb_muyeol_talk.png') });
+      if (await page.locator('.askrow .btn').first().isVisible().catch(() => false)) break;
+      await page.keyboard.press('Enter');
+    }
     await page.waitForSelector('.askrow .btn', { timeout: 10000 });
     await page.screenshot({ path: path.join(OUT, 'tomb_muyeol_ask.png') });
     await page.click('.askrow .btn');

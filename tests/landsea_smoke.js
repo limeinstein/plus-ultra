@@ -1,7 +1,7 @@
-/* 먼바다의 바람 물결 · 육상 탐험 중 바다를 오가는 배
-   A. 바람 물결 (js/world/renderer.js waterCol 「바람 물결」 · js/world/waves.js WV.train)
-      · 먼바다·바람이 있을 때만 물마루가 있다 (뭍 가까이·바람 없음 → 없음), 물마루는 바람 쪽으로 밀려간다
-      · 배가 이 물결도 탄다 (WV.sea 높이에 더해진다) · 바다 장면이 셰이더 오류 없이 그려진다
+/* 먼바다의 스타일화된 너울 · 육상 탐험 중 바다를 오가는 배
+   A. 바다 물결 (js/world/renderer.js waterCol · js/world/waves.js WV.sea)
+      · 선체가 타는 큰 너울은 유지하고, 화면을 어지럽히던 셀 단위 반달 물마루는 없다
+      · 시간 변화가 연속적이고 바다 장면이 셰이더 오류 없이 그려진다
    B. 육상 탐험 (js/systems/landsea.js · js/scenes/land.js)
       · 리스본에서 뭍에 오르면 화면 속 바다에 배가 몇 척 보인다 — 모두 바다 위
       · 1480년 7월: 콜론의 탐험 함대가 날짜대로 항로 위에 보이고 이름표가 붙는다
@@ -26,32 +26,24 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     await page.evaluate(() => G.Game.ensureGeo());
     await page.waitForFunction(() => G.Game.geoReady, null, { timeout: 120000 });
-    // ---------------- A. 바람 물결
+    // ---------------- A. 스타일화된 너울
     const a = await page.evaluate(() => {
       const WV = G.Waves, out = {};
-      const deep = WV.coast(-38, 30), near = WV.coast(-9.4, 38.6);
-      let maxDeep = 0, maxNear = 0, maxCalm = 0, cnt = 0;
+      const deep = WV.coast(-38, 30);
+      let maxDeep = 0, maxStep = 0, meanStep = 0, cnt = 0;
       for (let i = 0; i < 60; i++) {
         const lo = -38 + (i % 10) * 0.07, la = 30 + Math.floor(i / 10) * 0.05;
-        const tr = WV.train(lo, la, 12.3, [0.6, 0.35], 170, deep); if (tr) { maxDeep = Math.max(maxDeep, Math.abs(tr.h)); cnt++; }
-        const tc = WV.train(lo, la, 12.3, [0.03, 0.01], 170, deep); if (tc) maxCalm = Math.max(maxCalm, Math.abs(tc.h));
-        const tn = WV.train(-9.4 + i * 0.001, 38.6, 12.3, [0.6, 0.35], 170, near); if (tn) maxNear = Math.max(maxNear, Math.abs(tn.h));
+        const h0 = WV.sea(lo, la, 12.3, [0.6, 0.35], 170, deep).h;
+        const h1 = WV.sea(lo, la, 12.35, [0.6, 0.35], 170, deep).h;
+        maxDeep = Math.max(maxDeep, Math.abs(h0)); maxStep = Math.max(maxStep, Math.abs(h1 - h0)); meanStep += Math.abs(h1 - h0); cnt++;
       }
-      out.maxDeep = maxDeep; out.maxNear = maxNear; out.maxCalm = maxCalm; out.cnt = cnt;
-      // 물마루가 바람 쪽으로 간다: 바람 방향 좌표에서 높이 무늬가 시간이 흐르면 바람 쪽으로 옮겨 간다
-      const w = [0.7, 0], pts = 200, L = 3.0;
-      const prof = tt => { const a = []; for (let k = 0; k < pts; k++) { const r = WV.train(-38 + k * L / pts, 30.02, tt, w, 170, deep); a.push(r ? r.h : 0); } return a; };
-      const p0 = prof(20), p1 = prof(21);
-      let best = 0, bs = 0;
-      for (let sh = -40; sh <= 40; sh++) { let c = 0; for (let k = 40; k < pts - 40; k++) c += p0[k] * p1[k + sh]; if (c > best) { best = c; bs = sh; } }
-      out.shift = bs * L / pts;   // ° (양수 = 동쪽 = 바람 쪽)
-      out.seaH = WV.sea(-38, 30, 12.3, [0.6, 0.35], 170, deep).h;
+      out.maxDeep = maxDeep; out.maxStep = maxStep; out.meanStep = meanStep / cnt; out.hasTrain = typeof WV.train === 'function'; out.cnt = cnt;
       return out;
     });
     console.log('   ' + JSON.stringify(a));
-    ok(a.maxDeep > 0.002 && a.cnt > 10, '먼바다·바람: 물마루가 있다 (높이 최대 ' + a.maxDeep.toFixed(4) + ')');
-    ok(a.maxNear === 0 && a.maxCalm === 0, '뭍 가까이·바람이 없으면 바람 물결이 없다');
-    ok(a.shift > 0, '물마루가 바람이 부는 쪽으로 밀려간다 (1초에 ' + a.shift.toFixed(3) + '°)');
+    ok(a.maxDeep > 0.008 && a.cnt > 10, '먼바다의 큰 너울 높이가 유지된다 (최대 ' + a.maxDeep.toFixed(4) + ')');
+    ok(!a.hasTrain, '셀 단위 반달 물마루 레이어를 제거했다');
+    ok(a.maxStep < a.maxDeep * 0.8 && a.meanStep > 0, '너울이 순간이동하지 않고 연속해서 흐른다');
     await page.evaluate(() => {
       const s = G.State.newGame({ name: '시험', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk: {}, lg: [], diff: 'normal' });
       s.flags.prologue = true; s.settings.res = 0.5; G.Game.state = s; G.Game.go('sea', { depart: 0, fresh: true });
@@ -62,6 +54,24 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.screenshot({ path: path.join(OUT, 'landsea_ocean.png') });
     const glOk = await page.evaluate(() => { const r = G.Game.renderer; const gl = r && r.gl; return !!(gl && gl.getError() === 0 || gl); });
     ok(glOk, '바다 장면이 그려진다 (그림: ' + path.join(OUT, 'landsea_ocean.png') + ')');
+    await page.evaluate(() => {
+      if (G.SEA_RISK) { G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; }
+      const st = G.Scenes.sea.runtime(); st.speed = 1; G.Game.state.loc.heading = 0.25; G.Scenes.sea.takeCourse(0.25);
+    });
+    await page.waitForTimeout(4200);
+    await page.screenshot({ path: path.join(OUT, 'landsea_ocean_sailing.png') });
+    const wakeN = await page.evaluate(() => { const f = G.Scenes.sea.runtime().fx; return f ? f.trail.length + f.parts.length : 0; });
+    ok(wakeN > 3, '항해 중에는 배 주변 포말과 항적이 남는다 (효과 ' + wakeN + '개)');
+    const turnWake = await page.evaluate(() => {
+      const f = G.Scenes.sea.runtime().fx, q = f && f.trail[f.trail.length - 1];
+      window.__wakeAnchor = q ? [q.x, q.y] : null; G.Scenes.sea.takeCourse(1.0); return window.__wakeAnchor;
+    });
+    await page.waitForTimeout(2200);
+    await page.screenshot({ path: path.join(OUT, 'landsea_ocean_turning.png') });
+    const wakeHeld = await page.evaluate(() => {
+      const a = window.__wakeAnchor, f = G.Scenes.sea.runtime().fx; return !!(a && f && f.trail.some(q => Math.abs(q.x - a[0]) < 1e-9 && Math.abs(q.y - a[1]) < 1e-9));
+    });
+    ok(!!turnWake && wakeHeld, '선회해도 앞서 생긴 항적은 지나간 세계 좌표에 남는다');
 
     // ---------------- B. 육상 탐험
     await page.evaluate(() => {

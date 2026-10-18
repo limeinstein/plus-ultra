@@ -539,7 +539,8 @@
         if (!ok) continue;
         if (s.player.gold < cost) { await C.mate('제독, 금화가 모자랍니다!'); continue; }
         s.player.gold -= cost;
-        if (U.chance(0.55 + R.skill('speech') * 0.12 + C.langLv(c) * 0.05)) {
+        var gOk = U.chance(0.55 + R.skill('speech') * 0.12 + C.langLv(c) * 0.05); if (G.Growth) G.Growth.persuade(gOk, gOk ? '설득 경험 — 수비대장과의 교섭' : null);
+        if (gOk) {
           if (G.Outcome) await G.Outcome.show('win', { title: '교섭 성공!', sub: c.name + '의 수비대장이 금화를 받고 길을 열었다' });   // 결과 연출 (js/ui/outcome.js)
           await C.mate('교섭에 성공했습니다. ' + c.name + '에 들어갈 수 있습니다.');
           if (G.Sneak) { G.Sneak.givePass(c); await C.mate('통행 허가는 ' + ((G.BALANCE.sneak || {}).passDays || 365) + '일 동안 쓸 수 있습니다.'); } else s.flags['pass' + c.id] = U.dateNum(s.date);

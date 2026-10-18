@@ -23,6 +23,7 @@
       if (arg.from != null) { var c = G.CITY_DATA[arg.from]; base = { type: 'city', city: c.id, lon: c.lon, lat: c.lat }; }
       else base = { type: 'ship', lon: arg.landing.shipLon, lat: arg.landing.shipLat };
       var start = arg.from != null ? [base.lon, base.lat] : [arg.landing.lon, arg.landing.lat];
+      start = landPoint(start[0], start[1]);   // 도시 자리가 강·만의 물 위인 곳(브레멘·말라카)은 가장 가까운 뭍에서 출발한다 — 물 위에서 나서면 한 걸음도 못 뗀다
       // 대항해시대 3처럼 선원 모두가 탐험대로 나선다 (배는 닻을 내리고 기다린다)
       var party = s.fleet.crew;
       var mt = cleanMount(arg.mount);
@@ -33,6 +34,7 @@
       UI.toast('탐험대 ' + party + '명이 ' + (mt.id === 'walk' ? '걸어서' : G.Mounts.get(mt.id).name + U.jx(G.Mounts.get(mt.id).name, '과/와') + ' 함께') + ' 출발했다.', 'boot');
     } else {
       if (arg.resumeFrom != null) L.resumeFromCity(G.CITY_DATA[arg.resumeFrom], arg.mount);
+      var lp0 = landPoint(s.loc.lon, s.loc.lat); s.loc.lon = lp0[0]; s.loc.lat = lp0[1];   // 성문으로 다시 나설 때·옛 저장 파일: 물 위면 가까운 뭍으로
       if (!st) st = newSt([s.loc.lon, s.loc.lat]);
       st.cam.lon = s.loc.lon; st.cam.lat = s.loc.lat; st.paused = true; st.path = null;
       if (arg.resumeFrom != null) st.cityPromptBlock = arg.resumeFrom;
@@ -286,6 +288,7 @@
     var px0 = l.lon, py0 = l.lat, daysMoved = 0;
     if (!st.paused && !st.busy && !UI.busy()) pointerTurn(dt);
     if (!st.paused && !st.busy && !UI.busy() && (st.path || st.dir)) {
+      if (!G.Geo.isLand(l.lon, l.lat)) { var lp1 = landPoint(l.lon, l.lat); l.lon = lp1[0]; l.lat = lp1[1]; }   // 물 위에 서 있으면(옛 저장·지도 경계) 먼저 뭍으로 — 끼여서 못 움직이지 않게
       var days = dt * st.speed / DAY_SEC; daysMoved = days;
       var terr = G.Geo.terrain(l.lon, l.lat), tv = (TERR[terr] || TERR.grass).spd;
       var mk = G.Mounts.speed(MT(), terr, l.party);
@@ -587,7 +590,13 @@
     var res = r.res;
     if (res === 'win') {
       G.Fame.add('bt', kind === 'beast' ? 2 : 5 + (r.leaderDown ? 3 : 0));
-      if (kind === 'beast') { var meat = Math.round(R.dailyUse() * U.rf(1.5, 3) * Math.min(3, n / 8)); s.fleet.food += meat; UI.toast('짐승들을 물리쳤다! 고기로 식량 약 ' + Math.round(meat / R.dailyUse()) + '일분을 얻었다.', 'bread', 4200); }
+      if (kind === 'beast') {
+        var meat = Math.round(R.dailyUse() * U.rf(1.5, 3) * Math.min(3, n / 8)); s.fleet.food += meat;
+        // 사냥 전리품: 호랑이 → 호피 · 곰·사자·재규어 → 모피 · 멧돼지·하이에나 → 피혁 — 짐칸에 실어 교역소에서 판다 (js/systems/hunt.js)
+        var hide = G.Hunt ? G.Hunt.give(G.Hunt.loot(n, l.lon, l.lat)) : null, ht = G.Hunt ? G.Hunt.text(hide) : '';
+        UI.toast((G.Hunt ? G.Hunt.label(l.lon, l.lat) + ' 떼를' : '짐승들을') + ' 물리쳤다! 고기로 식량 약 ' + Math.round(meat / R.dailyUse()) + '일분을 얻었다.' + (ht ? ' ' + ht + '.' : ''), hide && hide.got.length ? 'sack' : 'bread', ht ? 6000 : 4200);
+        if (hide && hide.got.length) G.State.log('뭍에서 ' + G.Hunt.label(l.lon, l.lat) + ' 떼를 물리치고 ' + hide.got.map(function (x) { return G.GOOD[x.id].name + ' ' + x.q + '통'; }).join(' · ') + U.jx(hide.got.map(function (x) { return G.GOOD[x.id].name + ' ' + x.q + '통'; }).join(' · '), '을/를') + ' 얻었다.');
+      }
       else if (kind === 'native') UI.toast('원주민 전사들을 물리쳤다.', 'sword');
       else { var loot = n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + loot + '닢)', 'sword'); }
     }
@@ -873,6 +882,24 @@
     }
     await returnToBase(false);
   }
+  /** 뭍이면 그 자리, 물 위면 가장 가까운 뭍 (한 걸음이라도 걸을 수 있게 물가에서 조금 더 안쪽) — 못 찾으면 그 자리 */
+  function landPoint(lon, lat) {
+    if (G.Geo.isLand(lon, lat)) return [lon, lat];
+    for (var r = 0.01; r <= 1.2; r += 0.01) {
+      var best = null;
+      for (var a = 0; a < 32; a++) {
+        var h = a / 32 * 6.283, x = lon + Math.cos(h) * r, y = lat + Math.sin(h) * r;
+        if (!G.Geo.isLand(x, y)) continue;
+        var x2 = lon + Math.cos(h) * (r + 0.03), y2 = lat + Math.sin(h) * (r + 0.03);   // 물가 한 줄 안쪽까지 뭍인 쪽을 먼저
+        var deep = G.Geo.isLand(x2, y2);
+        if (!best || (deep && !best.deep)) best = { p: deep ? [x2, y2] : [x, y], deep: deep };
+        if (deep) break;
+      }
+      if (best) return [G.Geo.wrapLon(best.p[0]), best.p[1]];
+    }
+    return [lon, lat];
+  }
+  L.landPoint = landPoint;
   function nearestLand(lon, lat) {
     for (var r = 0.05; r < 0.6; r += 0.05) for (var a = 0; a < 16; a++) { var x = lon + Math.cos(a / 16 * 6.283) * r, y = lat + Math.sin(a / 16 * 6.283) * r; if (G.Geo.isLand(x, y)) return [x, y]; }
     return null;

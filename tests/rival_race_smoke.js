@@ -163,7 +163,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await advance(); await page.waitForTimeout(500);
     ok(await page.evaluate(() => !!G.Game.state.hints.maelstrom), '모스켄 소용돌이 단서를 얻었다 (발표 17달 전 — 36달 안)');
     await advance(); await page.waitForTimeout(400);
-    await choose('떠난다');
+    const leave = page.locator('.askrow button', { hasText: '떠난다' }).first();
+    if (await leave.isVisible().catch(() => false)) { await leave.click(); await page.waitForTimeout(350); }
 
     // 바다: 1482년 7월 피닝의 함대 — 신호를 보내면 그 사람의 말
     const d6 = await page.evaluate(async () => {

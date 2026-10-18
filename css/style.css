@@ -13,6 +13,7 @@
 #boot-loader .bl-dots i:nth-child(2) { animation-delay: .2s; } #boot-loader .bl-dots i:nth-child(3) { animation-delay: .4s; }
 @keyframes bl-dot { 0%, 100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
 @media (prefers-reduced-motion: reduce) { #boot-loader .bl-dots i { animation: none; opacity: .7; } }
+#boot-loader .bl-count { font-size: clamp(11px, 1.6vh, 14px); letter-spacing: .08em; color: rgba(233,220,188,.55); min-height: 1.3em; }   /* 처음 열 때 받은 파일 수 */
 
 /* Loop of Good Hope — theme: dark wood, brass trim, parchment, Myeongjo serif */
 :root {
@@ -1526,6 +1527,18 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 @keyframes mirageVanish { 0% { opacity: 1; } 55% { opacity: .85; } 100% { opacity: 0; transform: translate(-50%, -52%) scale(1.04); } }
 @keyframes mirageDissolve { 0% { filter: sepia(.35) saturate(.75) brightness(1.18) contrast(.85) blur(1.2px); } 100% { filter: sepia(.6) saturate(.4) brightness(1.6) contrast(.6) blur(9px); } }
 @media (prefers-reduced-motion: reduce) { .mirage.vanish, .mirage.vanish .mirage-pic img, .disc-card.mirage-find .art { animation: none; } }
+
+/* 경험과 성장 (js/systems/growth.js) — 수첩 「제독」 */
+.gr-kinds { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 10px; }
+.gr-kind { display: grid; grid-template-columns: 22px 1fr; column-gap: 6px; align-items: center; padding: 6px 8px; border: 1px solid rgba(110,80,40,.3); background: rgba(255,250,236,.35); font-size: 15px; }
+.gr-kind svg { width: 20px; height: 20px; grid-row: 1 / span 3; color: #7a5c33; }
+.gr-kind span { font-size: 17px; font-weight: 700; }
+.gr-kind small { font-size: 12px; color: var(--ink-soft); }
+.gr-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; }
+.gr-bar { display: grid; grid-template-columns: 90px 1fr; column-gap: 8px; align-items: center; font-size: 15px; }
+.gr-bar small { grid-column: 2; font-size: 12px; color: var(--ink-soft); }
+.gr-track { height: 8px; background: rgba(90,60,30,.18); border-radius: 4px; overflow: hidden; }
+.gr-track i { display: block; height: 100%; background: linear-gradient(90deg, #b8925a, #e6c27a); }
 /* 화면·글꼴 설정 (js/ui/display.js) — 2026-10-18 */
 .dlg-sample { padding: 14px 18px; background: rgba(255,250,236,.55); border: 1px solid rgba(110,80,40,.35); color: var(--ink); font-size: 21px; line-height: 1.7; }
 .disp-panel .opt-row .opt { min-width: 64px; text-align: center; }

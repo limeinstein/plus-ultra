@@ -265,6 +265,7 @@
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
     for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);
     // 증거의 등급: 그 자리에서 무엇을 남겼는가 (실물·정밀 도판·해도·스케치·구술 기록)
+    if (d.id === 'circum' && G.Growth) { G.Growth.once('circum_str', 'str', 1, '세계를 한 바퀴 돌았다'); G.Growth.once('circum_int', 'int', 1, '세계를 한 바퀴 돌았다'); }
     if (d.id !== 'circum') {
       st.grade = D.drawGrade(d);
       var gNow = D.gradeOf(d), GT = { real: '유물을 손에 넣었다 — 무엇보다 확실한 증거', plate: '그림에 밝은 이가 정밀한 도판을 남겼다', chart: '해도에 똑똑히 그려 두었다',

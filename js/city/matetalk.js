@@ -188,6 +188,7 @@
         if (G.Outcome) await G.Outcome.show('propose', { sub: d.name + U.jx(d.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
         await say(d.witch ? '…마녀에게 청혼하는 사람은 처음 봐요. 좋아요, 당신의 운명은 제가 지켜 줄게요.' : '…정말요? 바다에서 만난 사람과 이렇게 될 줄은 몰랐어요. 네, 기꺼이요!', 'shy');
         s.player.wife = d.id;
+        if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');   // 첫 혼인: 매력 +1 (js/systems/growth.js)
         s.mates = s.mates.filter(function (x) { return x !== m; });
         s.flags['gone_' + d.id] = 1;       // 이제 술집에 나타나지 않는다
         s.flags['wed_' + d.id] = 1;

@@ -230,6 +230,7 @@
     if (U.chance(p)) {
       var disc = Math.min(0.22, 0.08 + (pu ? pu.acct * 0.03 : 0) + acct * 0.01 + U.rf(0, 0.03)) + (nb ? nb.disc : 0);
       cur.mk = { ok: true, buy: 1 - disc, sell: 1 + disc * 0.7 };
+      if (G.Growth) G.Growth.haggle();
       await C.say(vendor(), U.pick(pu ? ['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.'] : ['셈이 밝은 사람이군. 좋아, 그렇게 하지.', '장부까지 맞춰 왔다니 어쩔 수 없군. 그 값에 주겠네.']));
       UI.toast('흥정 성공' + (pu ? '(경리 ' + pu.name + ')' : '(회계 ' + acctLv() + ')') + '! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '% · 결제 때 추가 협상 ' + (G.Acct ? G.Acct.marketDeals() : acctLv()) + '번', 'scales');
     } else {

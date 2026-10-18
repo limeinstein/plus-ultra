@@ -108,6 +108,10 @@
     C.B.tower = TW;
   }
   TD.meetEliz = async function () {
+    var pc = G.EventShot ? await G.EventShot.princess('eliz_tower') : null;   // 이벤트 샷: 종탑 방의 공주 (js/art/eventshot.js)
+    try { return await meetElizIn(); } finally { if (pc) await pc.stop(); }
+  };
+  async function meetElizIn() {
     var t = st(), s = S(), e = eliz();
     await UI.say('…당신이 그 이름난 제독이군요. 위병이 문 밖에 있으니 작게 말할게요.\f언니 — 메리 여왕은 제가 와이엇의 반란에 끼었다고 믿어요. 저는 아무것도 하지 않았어요! 하지만 이 탑에서 나간 사람 가운데 목이 붙어 있는 사람은 드물지요. 어머니처럼요.\f부탁이에요. 저를 이 탑에서 빼내 런던에서 먼 잉글랜드의 다른 도시로 데려가 주세요. 그곳에는 저를 숨겨 줄 사람들이 있어요.', e);
     var refs = englishRefuges();
@@ -117,19 +121,29 @@
     await UI.say('고마워요! 하녀 옷으로 갈아입고 물 쪽 문(반역자의 문)으로 나갈게요. ' + G.CITY_DATA[v].name + '에 닿을 때까지 당신 배의 선실에 숨어 있을게요.', e);
     G.State.log('런던 탑에서 엘리자베스 공주를 빼내 ' + G.CITY_DATA[v].name + U.jx(G.CITY_DATA[v].name, '으로/로') + ' 피신시킨다 (기한 ' + U.fmtDate(U.addDays(s.date, K.elizDays)) + ')');
     UI.toast('엘리자베스 공주를 몰래 태웠다 — ' + G.CITY_DATA[v].name + U.jx(G.CITY_DATA[v].name, '으로/로'), 'crown', 5500);
-  };
+  }
   async function elizSafe(c) {
     var t = st(), e = eliz();
+    var pc = G.EventShot ? await G.EventShot.princess('eliz_safe', { city: c }) : null;   // 이벤트 샷: 피신한 항구
+    try { await elizSafeIn(c, t, e); } finally { if (pc) await pc.stop(); }
+  }
+  async function elizSafeIn(c, t, e) {
     await UI.say('…' + c.name + '. 이제 숨을 쉴 수 있겠어요. 여기라면 언니의 병사들도 쉽게 찾지 못할 거예요.\f제독, 이 은혜를 잊지 않겠어요. 주님께서 저에게 왕관을 허락하신다면 — 그날 런던의 궁전으로 저를 찾아오세요.', e);
     t.eliz.stage = 2;
+    if (G.Growth) G.Growth.once('eliz_safe', 'int', 1, '여왕의 병사들을 따돌리고 공주를 피신시켰다');
     var so = G.Fame ? G.Fame.add('so', 120) : 120;
     G.State.log('엘리자베스 공주를 ' + c.name + U.jx(c.name, '으로/로') + ' 무사히 피신시켰다. (사교 명성 +' + so + ')');
     UI.toast('엘리자베스 공주를 무사히 피신시켰다 — 사교 명성 +' + so, 'crown', 6000);
   }
   async function knight() {
+    var pc = G.EventShot ? await G.EventShot.princess('eliz_knight') : null;   // 이벤트 샷: 여왕의 기사 서임
+    try { await knightIn(); } finally { if (pc) await pc.stop(); }
+  }
+  async function knightIn() {
     var t = st(), s = S(), w = who();
     await UI.say('…그 얼굴, 잊을 리가 있겠어요? 런던 탑의 그 밤, 하녀 옷을 입은 저를 배에 숨겨 준 제독.\f이제 나는 잉글랜드의 여왕이에요. 무릎을 꿇으세요, ' + s.player.name + '.', w);
     var tt = setTitle(1);
+    if (G.Growth) G.Growth.once('en_knight', 'cha', 1, '잉글랜드 기사 서임');
     t.knight = { day: s.day, y: s.date.y, date: U.dateNum(s.date) };
     var so = G.Fame ? G.Fame.add('so', 300) : 300;
     SP().addTrust(SP().rel('en_king'), 15);

@@ -30,6 +30,13 @@
   };
   function B() { return G.BALANCE.captains; }
   var FEMALE = { mk_malahayati: 1, pr_omalley: 1, pr_chingshih: 1 };
+  // 사료·게임 데이터의 한글 표기가 달라도 같은 인물의 전용 초상을 찾는다.
+  var PORTRAIT_ALIAS = {
+    '후안 데 아우스트리아': '돈 후안 데 아우스트리아',
+    '잔안드레아 도리아': '조반니 안드레아 도리아',
+    '알바로 데 바산': '알바로 데 바산 이 구즈만',
+    '클르츠 알리 파샤': '울루츠 알리 레이스'
+  };
 
   // ---------------------------------------------------------------- 나라 갈래
   var ALIAS = {};
@@ -248,7 +255,8 @@
     var grp = G.SEA_GROUPS[CP.groupOf(n.nation)] || {}, style = grp.st || (n.zone === 'east' ? 'cn' : n.zone === 'med' ? 'is' : 'ib');
     var role = n.kind === 'pirate' ? 'sailor' : n.kind === 'merchant' ? 'merchant' : 'captain';
     // 이름난 탐험가·제독은 따로 그린 초상(images/portraits/rivals/<이름> — Codex 그림)이 있으면 그것을 쓴다
-    if (A && A.rivalSpec && G.Img && G.Img.has && G.Img.has('portraits/rivals/' + c.name)) return { name: c.name, portrait: A.rivalSpec(c.name), half: G.Img.chain.rivalHalf(c.name), lang: 3 };
+    var portraitName = PORTRAIT_ALIAS[c.name] || c.name;
+    if (A && A.rivalSpec && G.Img && G.Img.has && G.Img.has('portraits/rivals/' + portraitName)) return { name: c.name, portrait: A.rivalSpec(portraitName), half: G.Img.chain.rivalHalf(portraitName), lang: 3 };
     var spec = A && A.npcSpec ? A.npcSpec('cap_' + c.id, role, style, c.g || 'm') : null;
     return { name: c.name, portrait: spec, lang: 3 };
   };

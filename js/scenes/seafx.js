@@ -10,8 +10,8 @@
   'use strict';
   var FXS = {};
   G.SeaFX = FXS;
-  function W() { return (G.FX && G.FX.wake) || { spacing: 0.012, life: 1.5, spread: 0.34, foamWidth: 0.55, foamGrow: 1.4, alpha: 0.85, maxPoints: 420 }; }
-  function SP() { return (G.FX && G.FX.spray) || { bow: 1, side: 1, stern: 1, turn: 1, maxParticles: 700, size: 1 }; }
+  function W() { return (G.FX && G.FX.wake) || { spacing: 0.012, life: 3, spread: 0.31, foamWidth: 0.34, foamGrow: 0.82, alpha: 0.72, bubbles: 0.7, maxPoints: 420 }; }
+  function SP() { return (G.FX && G.FX.spray) || { bow: 1.08, side: 0.72, stern: 0.72, turn: 0.94, maxParticles: 700, size: 0.84 }; }
   function wrap(d) { d = (d + 180) % 360; if (d < 0) d += 360; return d - 180; }
   var seedN = 1;
   function rnd() { seedN = (seedN * 16807) % 2147483647; return (seedN - 1) / 2147483646; }
@@ -147,8 +147,8 @@
           for (var j = c0 + 1; j <= c1; j++) if (Math.abs(pts[j].c[0] - pts[j - 1].c[0]) > 200) wrapJump = true;
           if (wrapJump) continue;
           for (var pass = 0; pass < 2; pass++) {
-            ctx.strokeStyle = pass ? 'rgba(236,246,250,' + al.toFixed(3) + ')' : 'rgba(6,26,48,' + (al * 0.30).toFixed(3) + ')';
-            ctx.lineWidth = (pass ? 1.1 + qa.s * 0.9 : 3.0) * lk;
+            ctx.strokeStyle = pass ? 'rgba(206,237,239,' + (al * 0.78).toFixed(3) + ')' : 'rgba(32,107,128,' + (al * 0.16).toFixed(3) + ')';
+            ctx.lineWidth = (pass ? 0.9 + qa.s * 0.7 : 2.2) * lk;
             ctx.beginPath();
             var e0 = side < 0 ? pts[c0].l : pts[c0].r, sh = pass ? 0 : side * 1.3;
             ctx.moveTo(e0[0] + sh, e0[1]);
@@ -176,33 +176,39 @@
           ctx.beginPath(); ctx.moveTo(E[0], E[1]); ctx.lineTo(E[0] + (ix * 0.8 - dxv * 0.6) * len4, E[1] + (iy * 0.8 - dyv * 0.6) * len4); ctx.stroke();
         }
       }
-      // 2) 가운데 거품 물길: 한 줄 리본이 아니라 거품 덩어리들 — 선미 가까이는 촘촘하고 밝게, 멀어질수록 넓게 흩어지며 사라진다
+      // 2) 가운데 거품 물길: 겹친 원 대신 가늘고 끊어진 두 겹의 선으로 이어진다.
+      //    선미 가까이는 청백색 중심이 또렷하고, 멀어질수록 청록빛 가장자리와 작은 거품만 남는다.
       for (var i3 = 1; i3 < n; i3++) {
-        var P1 = pts[i3], q1 = P1.q, ag1 = P1.ag;
-        var fa = Math.pow(1 - Math.min(1, P1.a / 0.62), 1.5);
+        var P0 = pts[i3 - 1], P1 = pts[i3], q1 = P1.q, ag1 = P1.ag;
+        if (Math.abs(P1.c[0] - P0.c[0]) > 200 || ((q1.seed * 19.7) % 1) < 0.04 + P1.a * 0.08) continue;
+        var fa = Math.pow(1 - Math.min(1, P1.a / 0.78), 1.65);
         if (fa <= 0.02) continue;
         var nx = P1.l[0] - P1.r[0], ny = P1.l[1] - P1.r[1], nl = Math.hypot(nx, ny) || 1; nx /= nl; ny /= nl;
-        var wpx = halfW * zoom * (Wk.foamWidth + Wk.foamGrow * ag1 * kz) * (0.6 + 0.5 * q1.s) * (1 + q1.slip * 0.9);
+        var wpx = halfW * zoom * (Wk.foamWidth + Wk.foamGrow * ag1 * kz) * (0.6 + 0.5 * q1.s) * (1 + q1.slip * 0.45);
         var strong = Math.min(1, q1.s * 1.4 + 0.1);
-        // 옅은 바탕 (끊겨 보이도록 점마다 세기가 다르다)
-        var baseA = 0.10 * fa * strong * (0.5 + q1.seed);
-        if (baseA > 0.015) { ctx.fillStyle = 'rgba(214,232,240,' + baseA.toFixed(3) + ')'; ctx.beginPath(); ctx.ellipse(P1.c[0], P1.c[1], Math.max(1, wpx * 1.1), Math.max(1, wpx * 0.8), Math.atan2(ny, nx), 0, 6.2832); ctx.fill(); }
-        var nb = Math.floor(q1.seed * 3 * strong + (ag1 < 0.2 ? 1.5 : 0.3));
+        var pulse = 0.82 + 0.18 * ((q1.seed * 7.13) % 1), baseA = Wk.alpha * fa * strong * pulse;
+        ctx.strokeStyle = 'rgba(92,176,192,' + (baseA * 0.18).toFixed(3) + ')';
+        ctx.lineWidth = Math.max(0.9, wpx * 0.76); ctx.beginPath(); ctx.moveTo(P0.c[0], P0.c[1]); ctx.lineTo(P1.c[0], P1.c[1]); ctx.stroke();
+        ctx.strokeStyle = 'rgba(226,243,244,' + (baseA * 0.44).toFixed(3) + ')';
+        ctx.lineWidth = Math.max(0.7, wpx * (0.20 + 0.08 * strong)); ctx.beginPath(); ctx.moveTo(P0.c[0], P0.c[1]); ctx.lineTo(P1.c[0], P1.c[1]); ctx.stroke();
+
+        // 중심선 가장자리에서 떨어져 나오는 작은 거품. 나이가 들수록 수가 줄고 폭은 조금 퍼진다.
+        var nb = Math.floor((Wk.bubbles == null ? 0.7 : Wk.bubbles) * (q1.seed * 2.2 * strong + (ag1 < 0.18 ? 1.2 : 0.15)));
         for (var b = 0; b < nb; b++) {
           var ss = (q1.seed * (b + 1) * 7.31 + b * 0.37) % 1, ss2 = (q1.seed * (b + 3) * 3.17) % 1;
-          if (ss2 < 0.25 * Math.min(1, ag1 * 2)) continue;                // 나이 들수록 구멍이 난다
-          var ofs = (ss - 0.5) * wpx * 1.8;
+          if (ss2 < 0.30 * Math.min(1, ag1 * 2)) continue;
+          var ofs = (ss - 0.5) * wpx * 1.5;
           var bx = P1.c[0] + nx * ofs, by = P1.c[1] + ny * ofs;
-          var rad = Math.max(0.7, (0.7 + ss2 * 1.5) * lk * (1 + ag1 * 1.4 * kz) * Math.min(1.3, 0.45 + q1.s));
-          ctx.fillStyle = 'rgba(242,248,250,' + (0.42 * fa * strong * (0.35 + 0.65 * ss2)).toFixed(3) + ')';
+          var rad = Math.max(0.55, (0.45 + ss2 * 0.75) * lk * (1 + ag1 * 0.55 * kz) * Math.min(1.2, 0.45 + q1.s));
+          ctx.fillStyle = 'rgba(235,247,247,' + (baseA * 0.44 * (0.35 + 0.65 * ss2)).toFixed(3) + ')';
           ctx.beginPath(); ctx.arc(bx, by, rad, 0, 6.2832); ctx.fill();
         }
         // 선회 때 바깥쪽의 두꺼운 포말
         var tk = Math.min(1, Math.max(q1.slip, q1.turn));
         if (tk > 0.12) {
           var sd = q1.side, ex = P1.c[0] + nx * sd * wpx * 0.9, ey = P1.c[1] + ny * sd * wpx * 0.9;
-          ctx.fillStyle = 'rgba(242,248,250,' + (0.30 * tk * fa).toFixed(3) + ')';
-          ctx.beginPath(); ctx.arc(ex, ey, Math.max(1, wpx * (0.30 + 0.38 * tk) * (0.7 + 0.6 * q1.seed)), 0, 6.2832); ctx.fill();
+          ctx.strokeStyle = 'rgba(226,244,245,' + (0.28 * tk * fa).toFixed(3) + ')'; ctx.lineWidth = Math.max(0.8, wpx * (0.18 + 0.25 * tk));
+          ctx.beginPath(); ctx.moveTo(P1.c[0], P1.c[1]); ctx.lineTo(ex, ey); ctx.stroke();
         }
       }
     }
@@ -227,13 +233,15 @@
     var L = lenPx, Wd = lenPx * 0.34, k = Math.min(1, sr), lk = Math.sqrt(lenPx / 38);
     ctx.save(); ctx.translate(x, y); ctx.rotate(-ang);
     ctx.lineCap = 'round';
-    // 선수 파도: 뱃머리에서 좌우로 갈라져 뒤로 퍼지는 두 줄 (속력이 높을수록 벌어지고 길다)
+    // 선수 파도: 두꺼운 청록 물벽 위에 가는 흰 포말을 얹어 크게 갈라지되 연기처럼 뭉치지 않는다
     for (var s = -1; s <= 1; s += 2) {
-      var spread = Wd * (0.55 + 0.55 * k) + (s === side ? slip * Wd * 0.6 : 0);
-      ctx.strokeStyle = 'rgba(10,35,60,' + (0.18 * k).toFixed(3) + ')'; ctx.lineWidth = 2.4 * lk;
-      ctx.beginPath(); ctx.moveTo(L * 0.56, 0); ctx.quadraticCurveTo(L * 0.30, s * Wd * 0.62, L * (0.02 - 0.18 * k), s * (spread + 1.5)); ctx.stroke();
-      ctx.strokeStyle = 'rgba(240,248,250,' + (0.55 * k).toFixed(3) + ')'; ctx.lineWidth = (1.2 + 1.3 * k) * lk;
-      ctx.beginPath(); ctx.moveTo(L * 0.58, 0); ctx.quadraticCurveTo(L * 0.32, s * Wd * 0.58, L * (0.04 - 0.18 * k), s * spread); ctx.stroke();
+      var spread = Wd * (0.62 + 0.78 * k) + (s === side ? slip * Wd * 0.65 : 0);
+      ctx.strokeStyle = 'rgba(24,104,132,' + (0.45 * k).toFixed(3) + ')'; ctx.lineWidth = (3.0 + 1.8 * k) * lk;
+      ctx.beginPath(); ctx.moveTo(L * 0.57, 0); ctx.quadraticCurveTo(L * 0.28, s * Wd * 0.72, -L * (0.08 + 0.24 * k), s * (spread + 2.0)); ctx.stroke();
+      ctx.strokeStyle = 'rgba(127,219,224,' + (0.55 * k).toFixed(3) + ')'; ctx.lineWidth = (2.0 + 1.35 * k) * lk;
+      ctx.beginPath(); ctx.moveTo(L * 0.59, 0); ctx.quadraticCurveTo(L * 0.31, s * Wd * 0.66, -L * (0.04 + 0.21 * k), s * (spread + 0.8)); ctx.stroke();
+      ctx.strokeStyle = 'rgba(244,250,249,' + (0.86 * k).toFixed(3) + ')'; ctx.lineWidth = (1.15 + 1.65 * k) * lk;
+      ctx.beginPath(); ctx.moveTo(L * 0.60, 0); ctx.quadraticCurveTo(L * 0.34, s * Wd * 0.60, -L * (0.02 + 0.18 * k), s * spread); ctx.stroke();
     }
     // 선측 물줄기: 선체 옆을 따라 뒤로 흐르는 끊긴 흰 줄 (흐르는 빠르기 = 배 속력)
     ctx.setLineDash([(3 + 4 * k) * lk, (5 + 3 * k) * lk]);

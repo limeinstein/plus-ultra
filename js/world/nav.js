@@ -218,8 +218,45 @@
     pts[0] = [lon0, lat0]; pts[pts.length - 1] = [lon1, lat1];
     // 배가 칸 밖(얕은 물가)에 있어 가까운 칸으로 붙였는데 곧게 닿지 않으면, 그 칸의 대표점을 먼저 들르게 한다
     if (s0 && (tight || !wetLine(lon0, lat0, cells.length > 1 ? repPoint(cells[1]) : [lon1, lat1]))) pts.splice(1, 0, s0);
-    return N.smooth(unwrap(pts));
+    return viaChannels(N.smooth(unwrap(pts)));
   }
+  /** 칸(0.25°)보다 좁은 뱃길 수로(G.Geo.CHANNELS — 트리니다드의 원숭이 입·뱀의 입 같은 해협)를 지나는 토막은 수로의 꺾은선을 따라가게 고친다.
+      뭍을 가로지르는 토막이 수로 가까이를 지나면, 앞 점 → 수로 (가까운 끝부터) → 뒤 점으로 바꿔 보고 모든 토막이 트였으면 그 길로 */
+  function viaChannels(pts) {
+    var CH = G.Geo.CHANNELS; if (!CH || !CH.length || !pts || pts.length < 2) return pts;
+    var out = [pts[0]];
+    for (var i = 1; i < pts.length; i++) {
+      var a = out[out.length - 1], b = pts[i];
+      if (!N.clear(a, b)) {
+        var best = null, bl = 1e9;
+        for (var k = 0; k < CH.length; k++) {
+          var c = CH[k], p0 = c.pts[0], p1 = c.pts[c.pts.length - 1];
+          var cx = (p0[0] + p1[0]) / 2, cy = (p0[1] + p1[1]) / 2, off = a[0] + G.Geo.wrapLon(cx - a[0]) - cx;   // 뱃길 경도 틀(±360)에 맞춘다
+          if (segDist(a, b, [cx + off, cy]) > 0.8) continue;
+          var seq = c.pts.map(function (q) { return [q[0] + off, q[1]]; });
+          var dA0 = Math.hypot(seq[0][0] - a[0], seq[0][1] - a[1]), dA1 = Math.hypot(seq[seq.length - 1][0] - a[0], seq[seq.length - 1][1] - a[1]);
+          if (dA1 < dA0) seq.reverse();
+          var cand = [a].concat(seq, [b]), ok = true, len = 0;
+          for (var j = 1; j < cand.length && ok; j++) { if (!clearM(cand[j - 1], cand[j], 0.2)) ok = false; len += Math.hypot(cand[j][0] - cand[j - 1][0], cand[j][1] - cand[j - 1][1]); }
+          if (ok && len < bl) { bl = len; best = seq; }
+        }
+        if (best) for (var q = 0; q < best.length; q++) out.push(best[q]);
+      }
+      out.push(b);
+    }
+    return out;
+  }
+  /** 배가 나아가는 물(sdf < −m)로 곧게 이어지는가 — 양 끝 0.03°는 너그럽게 (뱃길 점이 얕은 물가에 붙어 있을 수 있다) */
+  function clearM(a, b, m) {
+    var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.sqrt(dx * dx + dy * dy), n = Math.max(2, Math.ceil(len / 0.01));
+    for (var i = 1; i < n; i++) { var t = i / n, d = t * len; if (d < 0.03 || len - d < 0.03) continue; if (!G.Geo.isSea(a[0] + dx * t, a[1] + dy * t, m)) return false; }
+    return true;
+  }
+  function segDist(a, b, p) {
+    var vx = b[0] - a[0], vy = b[1] - a[1], L2 = vx * vx + vy * vy, t = L2 ? Math.max(0, Math.min(1, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2)) : 0;
+    return Math.hypot(p[0] - (a[0] + vx * t), p[1] - (a[1] + vy * t));
+  }
+  N.viaChannels = viaChannels;
   /** make longitudes continuous along the path (no jumps of 360) */
   function unwrap(pts) {
     for (var i = 1; i < pts.length; i++) {

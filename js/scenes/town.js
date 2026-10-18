@@ -79,7 +79,12 @@
     emille: 0.008, ayubuddha: 0.008, stele: 0.008, redsquare: 0.008, liberty: 0.008,
     panama: 0.008, cristo: 0.008, broadway: 0.008, eram: 0.008, sagrada: 0.008,
     nabawi: 0.008, kaaba: 0.008, tiantan: 0.008, dayanta: 0.008, huanghelou: 0.008,
-    vittala: 0.008, umayyad: 0.008, topkapi: 0.008, siosepol: 0.008};
+    vittala: 0.008, umayyad: 0.008, topkapi: 0.008, siosepol: 0.008,
+    jeronimos: 0.008, giralda: 0.008, stmartintours: 0.008, milanduomo: 0.008,
+    sanmarco: 0.008, smmaggiore: 0.008, florenceduomo: 0.008, saintsernin: 0.008,
+    edinburgh: 0.008, kyivsophia: 0.008, ironpagoda: 0.008, kinkakuji: 0.008,
+    phrasisanphet: 0.008, vanmieu: 0.008, stpaulhill: 0.008, jokhang: 0.008,
+    dazhao: 0.008, suleymaniye: 0.008, ibntulun: 0.008};
   var LANDMARK_HEIGHT = {
     pharos: 500, hwangnyong: 460, hagiasophia: 400, djenne: 370, delhimosque: 370,
     potala: 360, isfahanmosque: 380, rockdome: 350, notredame: 410, templomayor: 390,
@@ -90,6 +95,11 @@
     panama: 380, cristo: 500, broadway: 380, eram: 380, sagrada: 480,
     nabawi: 390, kaaba: 380, tiantan: 400, dayanta: 480, huanghelou: 430,
     vittala: 380, umayyad: 390, topkapi: 380, siosepol: 380,
+    jeronimos: 330, giralda: 460, stmartintours: 390, milanduomo: 400,
+    sanmarco: 390, smmaggiore: 380, florenceduomo: 420, saintsernin: 380,
+    edinburgh: 380, kyivsophia: 390, ironpagoda: 480, kinkakuji: 380,
+    phrasisanphet: 390, vanmieu: 380, stpaulhill: 380, jokhang: 380,
+    dazhao: 380, suleymaniye: 410, ibntulun: 380,
     jongmyo: 250, colosseum: 300, uffizi: 250, versailles: 250, orszaghaz: 250,
     maracana: 270, battersea: 290
   };

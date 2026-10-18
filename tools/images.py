@@ -113,6 +113,18 @@ def game_data():
                 d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
         for did, name in re.findall(r"^\s*\['(t_[^']+)',\s*'([^']+)',\s*'[^']+',\s*\[", more, re.M):
             d['discoveries'].append({'id': did, 'name': name, 'cat': 'trade'})
+    # 2026-10-18 지역별 신규 발견물은 G.DiscAdd를 통해 W.list에 들어간다.
+    # 브라우저 없이 검사하는 이 도구도 같은 파일들을 읽어야 누락 그림을 잡을 수 있다.
+    for rel in ('js/data/dh3disc.js', 'js/data/seasiadisc.js', 'js/data/northasiadisc.js',
+                'js/data/arabiadisc.js', 'js/data/zoodisc.js'):
+        extra_path = os.path.join(ROOT, rel)
+        if not os.path.exists(extra_path):
+            continue
+        extra = read(rel)
+        for func, cat in (('ruin', 'ruin'), ('nat', 'nature'), ('ani', 'creature'),
+                          ('treasure', 'treasure')):
+            for did, name in re.findall(r"^\s*A\." + func + r"\('([^']+)',\s*'([^']+)'", extra, re.M):
+                d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
     chain_path = os.path.join(ROOT, 'js/data/chaindisc.js')
     if os.path.exists(chain_path):
         chain = read('js/data/chaindisc.js')

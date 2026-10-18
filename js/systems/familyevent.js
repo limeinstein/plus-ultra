@@ -177,13 +177,13 @@
   var curPic = null;
   FE.showPic = function (ev) {
     var root = document.getElementById('ui'), I = G.Img;
-    if (!root || !ev.img || !I || !I.file(ev.img)) return { stop: function () { return Promise.resolve(); } };
+    if (!root || (!ev.canvas && (!ev.img || !I || !I.file(ev.img)))) return { stop: function () { return Promise.resolve(); } };   // ev.canvas: 꾸린 장면 (js/art/eventshot.js)
     if (curPic) curPic.stop();
     var fx = (G.FX && G.FX.famScene) || { w: 1008, top: 74 }, w = fx.w || 1008, h = Math.round(w * 256 / 576);
     var box = document.createElement('div');
     box.className = 'famscene wood brass-frame';
     box.style.cssText = 'left:' + Math.round((UIW() - w - 20) / 2) + 'px;top:' + (fx.top || 74) + 'px';
-    var img = document.createElement('img'); img.src = I.src(ev.img); img.alt = ev.title || ''; img.style.width = w + 'px'; img.style.height = h + 'px';
+    var img = ev.canvas || document.createElement('img'); if (!ev.canvas) { img.src = I.src(ev.img); img.alt = ev.title || ''; } img.style.width = w + 'px'; img.style.height = h + 'px'; img.style.display = 'block';
     var clip = document.createElement('div'); clip.className = 'fs-clip'; clip.style.width = w + 'px'; clip.style.height = h + 'px'; clip.appendChild(img);
     box.appendChild(clip);
     if (ev.title) { var t = document.createElement('div'); t.className = 'eventfx-title'; t.textContent = ev.title; box.appendChild(t); }
@@ -201,6 +201,9 @@
     curPic = hd;
     return hd;
   };
+
+  /** 떠 있는 장면 그림을 걷는다 */
+  FE.stopPic = function () { return curPic ? curPic.stop() : Promise.resolve(); };
 
   // ---------------------------------------------------------------- 효과
   function addLove(L, n) {

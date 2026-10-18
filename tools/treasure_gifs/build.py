@@ -20,6 +20,7 @@ OUT = ROOT / "images" / "discoveries"
 ENDS = ROOT / "images" / "discovery-ends"
 W, H = 576, 256
 TREASURE_IDS = [
+    "ankh",
     "beowulf", "kingjohn", "agamemnon", "tutankh", "rosetta", "sargon",
     "urcrown", "goldplate", "ewer", "shiva", "goldelephant", "jadesuit",
     "bronze", "cloisonne", "seismo", "glassbowl", "goldseal",

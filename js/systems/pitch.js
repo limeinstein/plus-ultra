@@ -195,6 +195,7 @@
         var said = c.angle === 'legend' ? pick('legend', A.any) : pick(c.angle + c.lv, A[Math.min(3, c.lv)] || A[1]);
         await UI.say(P.fmt(said, Object.assign({ mate: c.name }, ctx)), mateSpk(c, sp));
         var p = P.chance(c, sp, d, liked), win = U.chance(p), dm = P.demo(c, sp), r = { id: c.id, angle: c.angle, lv: c.lv, p: p, win: win };
+        if (G.Growth) G.Growth.gain('persuade', win ? 8 : 3, win ? '설득 경험 — 곁에서 거들었다' : null);   // 부하의 말을 제독이 곁에서 거든다
         if (win) {
           var b = P.bonus(c, sp, d); r.bonus = b; k += b; trust += 1;
           var okLine = pick('ok' + c.angle, L().ok[c.angle]);

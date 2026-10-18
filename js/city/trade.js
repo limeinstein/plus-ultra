@@ -165,6 +165,7 @@
     if (id === 'timber' && G.Ships) G.Ships.noteTimber(c, q, cg ? cg.q - q : 0);     // 목재는 산지를 적어 둔다 (조선소에서 쓴다)
     R.onBuy(c, id, q);
     s.stats.trades++;
+    if (G.Growth) G.Growth.buy(q * price);   // 거래 경험 (js/systems/growth.js)
     if (G.Slave && G.Slave.is(id)) G.Slave.onBuy(c, q);   // 노예 무역: 악명·「노예 상인」
     if (G.Hostile) G.Hostile.trade(c, q * price);   // 그 나라와 교역하면 적대가 줄어든다
     UI.toast(g.name + ' ' + q + '통을 샀다. (금화 ' + U.num(q * price) + '닢)', 'coin');
@@ -247,6 +248,7 @@
     var cost0 = cg.cost, paid = R.takeCargoLots(cg, c.id, oSold, q - oSold);
     var profit = total - paid;
     s.player.gold += total; s.stats.profit += profit; s.stats.trades++;
+    if (G.Growth) G.Growth.sell(profit);   // 거래 경험 — 이익이 클수록 (js/systems/growth.js)
     // 유행: 같은 물건을 같은 나라·지역에 거듭 팔아 큰 이익을 냈다 (js/systems/fad.js)
     var fad = G.Fad ? G.Fad.sold(c, id, q, total, cost0) : null;
     if (fad) { var fb = (G.BALANCE.fad || {}); UI.toast(G.Fad.where(fad) + '에서 ' + G.GOOD[id].name + U.jx(G.GOOD[id].name, '이/가') + ' 유행을 탔다! ' + (fb.days || 60) + '일 동안 값이 ' + (fb.mult || 3) + '배로 뛴다.', 'star', 7000); }
@@ -386,7 +388,9 @@
       var p = v === 'talk'
         ? 0.24 + R.skill('speech') * 0.16 + R.skill('acct') * 0.07 + (R.stat('cha') - 50) * 0.005 + (lv - 1) * 0.07
         : 0.22 + R.skill('sword') * 0.12 + (R.stat('mar') - 50) * 0.006 + (s.player.notoriety / 260);
-      if (U.chance(U.clamp(p, 0.1, 0.9))) {
+      var dOk = U.chance(U.clamp(p, 0.1, 0.9));
+      if (G.Growth) { if (v === 'talk') G.Growth.persuade(dOk, dOk ? '설득 경험 — 빚을 받아 냈다' : null); else G.Growth.gain('duel', dOk ? 6 : 2, '일기토 경험 — 윽박질렀다'); }
+      if (dOk) {
         q.collected = true;
         await UI.say(v === 'talk'
           ? '...알았네, 알았어. 조합에는 잘 말해 주게. 여기 있네.'
@@ -480,6 +484,7 @@
     if (ok) {
       var disc = Math.min(0.25 + (o.noble ? o.noble.disc : 0), o.disc + U.rf(0, 0.04));
       cur.haggle = keepHag(c, { ok: true, buy: 1 - disc, sell: 1 + disc * (pu ? 0.7 : 0.6) });
+      if (G.Growth) G.Growth.haggle();
       await C.say(k, o.noble && !pu ? U.pick([o.noble.adr + '의 청을 어찌 물리치겠습니까. 특별히 그 값에 드리지요.', o.noble.adr + '께서 찾아 주신 것만도 영광입니다. 값은 넉넉히 빼 드리겠습니다.']) : U.pick(pu ? ['자네 경리는 무서운 사람이군… 알았네, 그 값에 주지.', '장부까지 들이밀다니! 좋아, 이번만일세.'] : ['허허, 자네한테는 못 당하겠군. 좋아, 특별히 싸게 해 주지.', '자네, 보는 눈이 있군. 득 보는 걸세.', '알았네, 알았어. 이번만일세.']));
       UI.toast('값 깎기 성공' + (pu ? '(경리 ' + pu.name + ')' : '') + (o.noble ? '(귀족의 권한 — ' + o.noble.title.ko + ')' : '') + '! 사는 값 -' + Math.round(disc * 100) + '%, 들여온 물건 파는 값 +' + Math.round(disc * (pu ? 70 : 60)) + '%', 'scales');
     } else if (!cur.haggle) {

@@ -19,16 +19,22 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed to load|net::/.test(m.text())) errors.push(m.text()); });
   try {
+    await page.addInitScript(() => {   // 그림이 처음 걷히는 순간의 모습을 적어 둔다
+      window.__atHide = null;
+      const iv = setInterval(() => { if (!(window.G && G.Loader && G.Loader.hide) || G.Loader._spy) return; clearInterval(iv); const h = G.Loader.hide; G.Loader._spy = true;
+        G.Loader.hide = function () { if (!window.__atHide && G.Loader.shown()) window.__atHide = { warmed: !!(G.Game.renderer && G.Game.renderer._warmed), btn: [...document.querySelectorAll('.title-menu button')].filter(b => !b.classList.contains('disabled')).length, steps: (document.querySelector('#boot-loader .bl-text') || {}).textContent }; return h.apply(this, arguments); }; }, 5);
+    });
     await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href, { waitUntil: 'domcontentloaded' });
     const boot = await page.evaluate(() => { const e = document.getElementById('boot-loader'), i = e && e.querySelector('img'); return e ? { on: e.classList.contains('on'), z: +getComputedStyle(e).zIndex, src: i.getAttribute('src') } : null; });
     await page.waitForFunction(() => { const i = document.querySelector('#boot-loader img'); return i && i.complete && i.naturalWidth > 0; }, null, { timeout: 20000 });
     await page.screenshot({ path: path.join(OUT, 'boot.png') });
     ok(boot && boot.on && boot.z >= 10000 && /loading-world\.anim\.webp$/.test(boot.src), '처음 열 때 스크립트보다 먼저 불러오는 그림(도는 지구)이 화면 맨 위에 뜬다');
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && G.Game.geoReady, null, { timeout: 120000 });
-    await page.waitForFunction(() => !G.Loader.shown(), null, { timeout: 20000 });
-    await page.waitForFunction(() => getComputedStyle(document.getElementById('boot-loader')).display === 'none' && G.Game.renderer && G.Game.renderer._warmed, null, { timeout: 20000 }).catch(() => {});
-    const title = await page.evaluate(() => ({ disp: getComputedStyle(document.getElementById('boot-loader')).display, warmed: !!(G.Game.renderer && G.Game.renderer._warmed) }));
-    ok(title.disp === 'none' && title.warmed, '타이틀이 준비되면 그림이 걷히고, 바다 셰이더는 그 뒤에 미리 컴파일된다');
+    // 그림이 걷히는 순간: 그때 이미 바다 셰이더·타이틀 단추가 다 준비되어 있어야 한다 (오프닝이 뜬 채 멈추지 않게 — 2026-10-18)
+    await page.waitForFunction(() => !G.Loader.shown(), null, { timeout: 40000 });
+    await page.waitForFunction(() => getComputedStyle(document.getElementById('boot-loader')).display === 'none', null, { timeout: 20000 }).catch(() => {});
+    const title = await page.evaluate(() => ({ disp: getComputedStyle(document.getElementById('boot-loader')).display, at: window.__atHide }));
+    ok(title.disp === 'none' && title.at && title.at.warmed && title.at.btn >= 3, '그림이 걷히기 전에 바다 셰이더·타이틀 그림·단추가 모두 준비된다 (걷힐 때 단추 ' + (title.at && title.at.btn) + '개 · 마지막 단계 「' + (title.at && title.at.steps) + '」)');
 
     // ② 이어하기: 바다 위 저장 — 그림이 뜬 채 준비하고, 첫 바다 장면은 판을 새로 그리지 않는다
     const res = await page.evaluate(async () => {

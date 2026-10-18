@@ -815,6 +815,7 @@
         if (G.Outcome) await G.Outcome.show('propose', { sub: m.name + U.jx(m.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
         await say('...정말요? 저, 저라도 괜찮다면... 네, 기꺼이!', 'shy');
         s.player.wife = m.id; st.aff = 100;
+        if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');   // 첫 혼인: 매력 +1 (js/systems/growth.js)
         G.State.log(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다.');
         if (G.FamEv) { try { await G.FamEv.wedding({ id: m.id, city: c.id }); } catch (e) { console.error(e); } }   // 술집의 혼례 잔치
         await UI.alert(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.', '결혼');
@@ -879,6 +880,15 @@
     if (G.Cabins && other && oldRoom != null && m.room == null && other.room == null && (!other.role || other.role === 'none' || other.role === 'purser' || other.role === 'interp')) {
       var rt = G.Cabins.rooms()[oldRoom];
       if (rt && rt !== 'hold' && !G.Cabins.occupant(oldRoom)) G.Cabins.place(other, oldRoom);
+    }
+    // 경리는 기함에 회계실이 있으면 그 방에 앉는다 — 「기함 경리」로 맡겨도 회계실 덤(값 깎기·급료)이 끊기지 않게 (2026-10-18)
+    if (G.Cabins) {
+      var rms = G.Cabins.rooms(), ai = rms.indexOf('account'), pu = s.mates.filter(function (x) { return x.role === 'purser'; })[0];
+      if (ai > 0 && pu && pu.room !== ai) {
+        var occ = G.Cabins.occupant(ai), from = pu.room;
+        G.Cabins.place(pu, ai);
+        if (occ && occ !== pu && occ.room == null && from != null && from !== ai && rms[from] && rms[from] !== 'hold' && rms[from] !== 'account' && !G.Cabins.occupant(from)) G.Cabins.place(occ, from);
+      }
     }
   };
 })(window.G = window.G || {});

@@ -82,6 +82,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const easy = b => !b.sk || (b.lv || 1) <= 1;
       const allSp = Object.values(G.SPONSOR), noSrc = [], thinBO = [];
       D.forEach(d => {
+        // 동화 사건 발견물은 일반 술집·책 단서가 아니라 이야기 진행에서 직접 열린다.
+        if (d.tale) return;
         const bs = G.BOOKS.filter(b => b.discs.includes(d.id) && okBook(b, d));
         let src = bs.length;
         if (CL[d.id] === 'talk') {
@@ -92,7 +94,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         if (!src) noSrc.push(d.id);
         if (d.bookOnly && !(bs.length >= 2 || bs.some(b => easy(b) && b.libs.length >= 2))) thinBO.push(d.id);
       });
-      out.reach = { noSrc, thinBO, needHint: D.filter(d => d.needHint && CL[d.id] !== 'talk').map(d => d.id),
+      out.reach = { noSrc, thinBO, needHint: D.filter(d => !d.tale && d.needHint && CL[d.id] !== 'talk').map(d => d.id),
         noEasy: D.filter(d => CL[d.id] === 'book' && !G.BOOKS.some(b => b.discs.includes(d.id) && easy(b))).map(d => d.id) };
 
       // ---- 단서 겹치기
@@ -113,9 +115,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.stack = { id: sea.id, lv, st0, st4: { sense: G.Disc.clueK(sea.id, 'sense'), find: G.Disc.clueK(sea.id, 'find'), zone: G.Disc.clueK(sea.id, 'zone') }, hitBefore, hitAfter,
         srcs: G.Disc.hintSrcs(sea.id) };
       // 술집 소문에서 겹치기: 이 근처 이야기를 모두 한 번씩 들은 뒤 다른 도시 술집에서
-      const sev = G.CITY_DATA[14];   // 파리
+      const sev = G.CITY_DATA[14], other = G.CITY_DATA[15];   // 파리에서 듣고 루앙에서 다시 듣는다
       let more = 0, nw = 0;
-      for (let i = 0; i < 80; i++) { const d = T.rumour(sev, { stack: true }); if (!d) break; const k = G.Disc.hasHint(d.id); const t = G.Disc.noteHint(d, 'tavern:' + sev.id); if (t === 'more') more++; if (t === 'new') nw++; }
+      for (let i = 0; i < 80; i++) { const d = T.rumourFree(sev, { stack: true }); if (!d) break; if (G.Disc.noteHint(d, 'tavern:' + sev.id) === 'new') nw++; }
+      for (let i = 0; i < 80; i++) { const d = T.rumourFree(other, { stack: true }); if (!d) break; const t = G.Disc.noteHint(d, 'tavern:' + other.id); if (t === 'more') more++; if (t === 'new') nw++; }
       out.tavernStack = { more, nw };
       // 도서관에서 겹치기: 계약으로 단서를 받은 사료 갈래 발견이 실린 책은 「맞춰 볼 수 있다」
       const bk = G.BOOKS.find(b => !b.sk && b.discs.some(id => CL[id] === 'book' && !s.hints[id] && G.Disc.available(G.DISC[id])));

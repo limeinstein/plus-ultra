@@ -6,6 +6,7 @@
    sails 돛 구성 (sq 사각돛 · lat 삼각돛 · bat 대나무 살 돛) · turn 선회 · price 값 · from/to 지어지는 해
    cult 문화권 (eu 유럽 · is 이슬람·인도양 · sa 동남아시아 · ea 동아시아 · am 아메리카) — 다른 문화권 조선소에서는 수리비가 비싸다
    hull 그림 모양 · traits 특성 (G.SHIP_TRAITS) · armor 장갑 배수 · len 해전 선체 길이 배수 · feat 한 줄 특징 · where 파는 곳
+   ※ 2026-10-18: 1520년 이후에 나오는 배는 지어지는 해(from)를 10년씩 당겼다 (갤리온 1525→1515 …). 조선소의 지역별 해 제한(js/city/shipyard.js)도 함께.
    lv 조선 기술 등급 (1~5) — 대항해시대 2처럼 도시 조선소의 기술(공업) 수준이 이 등급 이상이어야 짓는다. 기술 투자로 올린다. */
 (function (G) {
   'use strict';
@@ -53,8 +54,8 @@
     { id: 'lcaravel', name: '대형카라벨', lv: 3, cult: 'eu', cap: 260, hp: 52, crew: [16, 80], ports: 12, spd: 1.40, sails: ['sq', 'lat', 'lat'], maxMast: 4, price: 13800, turn: 1.1, hull: 'west',
       traits: ['scout'], feat: '원양 탐험의 주력', where: '이베리아·유럽 식민지',
       desc: '사각돛을 더한 카라벨(카라벨라 레돈다). 순풍에서도 역풍에서도 고르게 달려 대양 탐험에 알맞다.' },
-    { id: 'pinnace', name: '피너스', lv: 2, cult: 'eu', cap: 120, hp: 30, crew: [8, 40], ports: 8, spd: 1.55, oar: 0.5, sails: ['sq', 'lat'], maxMast: 2, price: 7200, turn: 1.4, from: 1540, hull: 'west',
-      traits: ['scout', 'oar'], feat: '노도 젓는 날랜 정찰선', where: '잉글랜드·네덜란드·이베리아 (1540년~)',
+    { id: 'pinnace', name: '피너스', lv: 2, cult: 'eu', cap: 120, hp: 30, crew: [8, 40], ports: 8, spd: 1.55, oar: 0.5, sails: ['sq', 'lat'], maxMast: 2, price: 7200, turn: 1.4, from: 1530, hull: 'west',
+      traits: ['scout', 'oar'], feat: '노도 젓는 날랜 정찰선', where: '잉글랜드·네덜란드·이베리아 (1530년~)',
       desc: '큰 배를 따라다니며 앞길을 살피던 날랜 소형선. 바람이 멎으면 노를 젓는다.' },
     { id: 'carrack', name: '카락', lv: 3, cult: 'eu', cap: 380, hp: 68, crew: [24, 120], ports: 18, spd: 1.28, sails: ['sq', 'sq', 'lat'], maxMast: 4, price: 20500, turn: 0.95, hull: 'west',
       traits: ['highdeck'], feat: '높은 선루의 원양 무역선', where: '유럽 각지',
@@ -65,17 +66,17 @@
     { id: 'hcarrack', name: '중카락', lv: 5, cult: 'eu', cap: 720, hp: 112, crew: [52, 230], ports: 32, spd: 1.12, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 44000, turn: 0.75, from: 1500, hull: 'west',
       traits: ['highdeck', 'sturdy'], feat: '떠다니는 성채', where: '큰 항구 (1500년~)',
       desc: '무장과 적재량이 모두 뛰어난 중(重)카락. 느리지만 폭풍에도 적의 칼에도 끄떡없다.' },
-    { id: 'galleon', name: '갤리온', lv: 4, cult: 'eu', cap: 620, hp: 104, crew: [46, 210], ports: 42, spd: 1.36, sails: ['sq', 'sq', 'lat', 'lat'], maxMast: 4, price: 52000, turn: 1.0, from: 1525, hull: 'west',
-      traits: ['gundeck'], feat: '빠르고 포가 많은 신형 군함 겸 상선', where: '큰 항구 (1525년~)',
+    { id: 'galleon', name: '갤리온', lv: 4, cult: 'eu', cap: 620, hp: 104, crew: [46, 210], ports: 42, spd: 1.36, sails: ['sq', 'sq', 'lat', 'lat'], maxMast: 4, price: 52000, turn: 1.0, from: 1515, hull: 'west',
+      traits: ['gundeck'], feat: '빠르고 포가 많은 신형 군함 겸 상선', where: '큰 항구 (1515년~)',
       desc: '선루를 낮추고 선체를 길게 뽑은 신형 배. 포열 갑판에 대포를 늘어놓아 빠르게 쏜다.' },
-    { id: 'lgalleon', name: '대형 갤리온', lv: 5, cult: 'eu', cap: 900, hp: 140, crew: [70, 300], ports: 54, spd: 1.2, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 82000, turn: 0.8, from: 1565, hull: 'west',
-      traits: ['gundeck', 'highdeck'], feat: '태평양을 건너는 은 수송선', where: '세비야·리스본·아바나·아카풀코 (1565년~)',
+    { id: 'lgalleon', name: '대형 갤리온', lv: 5, cult: 'eu', cap: 900, hp: 140, crew: [70, 300], ports: 54, spd: 1.2, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 82000, turn: 0.8, from: 1555, hull: 'west',
+      traits: ['gundeck', 'highdeck'], feat: '태평양을 건너는 은 수송선', where: '세비야·리스본·아바나·아카풀코 (1555년~)',
       desc: '마닐라와 아카풀코를 잇던 거대한 갤리온. 은과 비단을 산더미처럼 싣고 포도 많다.' },
-    { id: 'fluyt', name: '플류트', lv: 3, cult: 'eu', cap: 540, hp: 58, crew: [18, 70], ports: 10, spd: 1.32, sails: ['sq', 'sq', 'lat'], maxMast: 3, price: 26000, turn: 0.9, from: 1595, hull: 'west',
-      traits: ['thrift'], feat: '싸게 많이 나르는 네덜란드의 짐배', where: '네덜란드·한자 동맹 (1595년~)',
+    { id: 'fluyt', name: '플류트', lv: 3, cult: 'eu', cap: 540, hp: 58, crew: [18, 70], ports: 10, spd: 1.32, sails: ['sq', 'sq', 'lat'], maxMast: 3, price: 26000, turn: 0.9, from: 1585, hull: 'west',
+      traits: ['thrift'], feat: '싸게 많이 나르는 네덜란드의 짐배', where: '네덜란드·한자 동맹 (1585년~)',
       desc: '배 밑이 넓고 갑판이 좁은 네덜란드의 짐배. 적은 선원으로 많은 짐을 싸게 나른다.' },
-    { id: 'frigate', name: '프리깃', lv: 4, cult: 'eu', cap: 360, hp: 84, crew: [40, 180], ports: 34, spd: 1.58, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 60000, turn: 1.25, from: 1590, hull: 'west',
-      traits: ['gundeck'], feat: '가장 빠른 군함', where: '잉글랜드·네덜란드·프랑스 (1590년~)',
+    { id: 'frigate', name: '프리깃', lv: 4, cult: 'eu', cap: 360, hp: 84, crew: [40, 180], ports: 34, spd: 1.58, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 60000, turn: 1.25, from: 1580, hull: 'west',
+      traits: ['gundeck'], feat: '가장 빠른 군함', where: '잉글랜드·네덜란드·프랑스 (1580년~)',
       desc: '됭케르크 사략선에서 비롯된 날렵한 군함. 빠르고 잘 돌며 포열 갑판을 갖췄다.' },
 
     // ------------------------------------------------ 지중해
@@ -88,14 +89,14 @@
     { id: 'greatgalley', name: '대형 갤리', lv: 3, cult: 'eu', cap: 300, hp: 64, crew: [100, 230], ports: 8, spd: 1.12, oar: 0.7, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 26000, turn: 1.15, len: 1.35, hull: 'galley',
       traits: ['oar', 'bow', 'highdeck'], feat: '노 달린 큰 상선 — 비싼 짐을 안전하게', where: '베네치아·제노바',
       desc: '베네치아가 플랑드르와 알렉산드리아로 보내던 갤레아 그로사. 노와 돛을 함께 써 비싼 짐을 안전하게 나른다.' },
-    { id: 'galleass', name: '갤리어스', lv: 5, cult: 'eu', cap: 340, hp: 100, crew: [140, 320], ports: 32, spd: 1.0, oar: 0.6, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 58000, turn: 0.8, from: 1565, len: 1.45, hull: 'galley',
-      traits: ['oar', 'dragon', 'highdeck', 'coast'], feat: '노 달린 떠다니는 포대', where: '베네치아 (1565년~)',
+    { id: 'galleass', name: '갤리어스', lv: 5, cult: 'eu', cap: 340, hp: 100, crew: [140, 320], ports: 32, spd: 1.0, oar: 0.6, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 58000, turn: 0.8, from: 1555, len: 1.45, hull: 'galley',
+      traits: ['oar', 'dragon', 'highdeck', 'coast'], feat: '노 달린 떠다니는 포대', where: '베네치아 (1555년~)',
       desc: '대형 갤리에 포를 가득 실은 베네치아의 군선. 옆으로도 앞으로도 쏜다. 레판토에서 이름을 떨쳤다.' },
     { id: 'fusta', name: '푸스타', lv: 1, cult: 'eu', cap: 70, hp: 26, crew: [26, 70], ports: 3, spd: 1.18, oar: 0.95, sails: ['lat'], maxMast: 1, price: 5400, turn: 1.8, len: 1.25, hull: 'galley',
       traits: ['oar', 'bow', 'grapple', 'coast'], feat: '해적이 즐겨 타는 작은 갤리', where: '바르바리 해안·고아',
       desc: '바르바리 해적과 인도의 포르투갈 사람이 즐겨 탄 작은 갤리. 빠르게 붙어 뛰어든다.' },
-    { id: 'xebec', name: '지벡', lv: 3, cult: 'eu', cap: 190, hp: 46, crew: [34, 130], ports: 16, spd: 1.55, oar: 0.65, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 19500, turn: 1.5, from: 1550, len: 1.2, hull: 'galley',
-      traits: ['oar', 'grapple'], feat: '돛과 노를 다 쓰는 해적선', where: '바르바리 해안 (1550년~)',
+    { id: 'xebec', name: '지벡', lv: 3, cult: 'eu', cap: 190, hp: 46, crew: [34, 130], ports: 16, spd: 1.55, oar: 0.65, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 19500, turn: 1.5, from: 1540, len: 1.2, hull: 'galley',
+      traits: ['oar', 'grapple'], feat: '돛과 노를 다 쓰는 해적선', where: '바르바리 해안 (1540년~)',
       desc: '날렵한 선체에 삼각돛 셋과 노를 갖춘 바르바리 해적의 배. 빠르고 잘 붙는다.' },
 
     // ------------------------------------------------ 인도양
@@ -138,8 +139,8 @@
     { id: 'maengseon', name: '맹선', lv: 2, cult: 'ea', cap: 240, hp: 58, crew: [30, 80], ports: 8, spd: 1.06, oar: 0.55, sails: ['bat', 'bat'], maxMast: 2, price: 9000, turn: 0.95, hull: 'kr',
       traits: ['oar', 'sturdy', 'shallow'], feat: '조선 수군의 평저 군선', where: '한양·동래·한산도',
       desc: '경국대전에 실린 조선 전기의 군선. 소나무로 두껍게 지은 평저선으로, 노와 돛을 함께 쓴다.' },
-    { id: 'panokseon', name: '판옥선', lv: 4, cult: 'ea', cap: 300, hp: 112, crew: [100, 180], ports: 24, spd: 1.0, oar: 0.75, sails: ['bat', 'bat'], maxMast: 2, price: 38000, turn: 1.2, from: 1555, hull: 'panok',
-      traits: ['oar', 'highdeck', 'heavygun', 'coast'], feat: '큰 총통을 싣는 2층 군선', where: '한양·동래·한산도 (1555년~)',
+    { id: 'panokseon', name: '판옥선', lv: 4, cult: 'ea', cap: 300, hp: 112, crew: [100, 180], ports: 24, spd: 1.0, oar: 0.75, sails: ['bat', 'bat'], maxMast: 2, price: 38000, turn: 1.2, from: 1545, hull: 'panok',
+      traits: ['oar', 'highdeck', 'heavygun', 'coast'], feat: '큰 총통을 싣는 2층 군선', where: '한양·동래·한산도 (1545년~)',
       desc: '을묘왜변 뒤 지은 조선의 주력 군선. 노꾼은 아래층, 군사는 위층에 두어 높은 곳에서 큰 총통을 쏜다. 평저선이라 제자리에서 잘 돈다.' },
     { id: 'geobukseon', name: '거북선', lv: 5, cult: 'ea', cap: 150, hp: 130, crew: [80, 150], ports: 20, spd: 1.0, oar: 0.9, sails: ['bat', 'bat'], maxMast: 2, price: 62000, turn: 1.25, armor: 0.5, hull: 'turtle',
       traits: ['oar', 'armor', 'spikes', 'ram', 'dragon', 'coast'], feat: '적진을 헤집는 돌격선', where: '한양·동래·한산도 (조선 기술 5등급)',
@@ -152,8 +153,8 @@
     { id: 'sekibune', name: '관선', lv: 2, cult: 'ea', cap: 130, hp: 42, crew: [50, 110], ports: 6, spd: 1.2, oar: 1.0, sails: ['sq'], maxMast: 1, price: 12500, turn: 1.55, from: 1500, hull: 'jp',
       traits: ['oar', 'grapple', 'coast'], feat: '재빨리 붙어 뛰어드는 무사의 배', where: '일본 (1500년~)',
       desc: '세토 내해의 수군이 즐겨 탄 중형 군선(関船). 날렵하게 붙어 무사들이 뛰어든다.' },
-    { id: 'atakebune', name: '안택선', lv: 4, cult: 'ea', cap: 260, hp: 124, crew: [110, 220], ports: 20, spd: 0.9, oar: 0.65, sails: ['sq'], maxMast: 1, price: 50000, turn: 0.7, from: 1550, armor: 0.7, hull: 'atake',
-      traits: ['oar', 'armor', 'highdeck', 'coast'], feat: '물 위의 성', where: '사카이 (1550년~)',
+    { id: 'atakebune', name: '안택선', lv: 4, cult: 'ea', cap: 260, hp: 124, crew: [110, 220], ports: 20, spd: 0.9, oar: 0.65, sails: ['sq'], maxMast: 1, price: 50000, turn: 0.7, from: 1540, armor: 0.7, hull: 'atake',
+      traits: ['oar', 'armor', 'highdeck', 'coast'], feat: '물 위의 성', where: '사카이 (1540년~)',
       desc: '두꺼운 판자 벽과 망루를 올린 일본 수군의 대형 군선(安宅船). 느리지만 떠다니는 성과 같다.' },
 
     // ------------------------------------------------ 아메리카

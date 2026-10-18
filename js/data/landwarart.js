@@ -20,7 +20,7 @@
     afghan: { name: '중앙아시아', m: ['india_central', 'afghan'], r: ['india_central', 'horse_archer'], l: ['india_central', 'afghan'], c: CANNON, b: ['hyena', 'bear'] },
     india: { name: '인도', m: ['india_central', 'rajput'], r: ['india_central', 'mughal_gun'], l: ['india_central', 'rajput'], c: CANNON, b: ['tiger', 'tiger'] },
     china: { name: '중국', m: ['east_fighters', 'spearman'], r: GUN_ASIA, l: ['east_fighters', 'swordsman'], c: CANNON_E, bandit: ['east_fighters', 'brute'], b: ['tiger', 'tiger'] },
-    korea: { name: '조선', m: ['east_fighters', 'spearman'], r: GUN_ASIA, l: ['east_fighters', 'scholar'], c: CANNON_E, bandit: ['east_fighters', 'brute'], b: ['bear', 'bear'] },
+    korea: { name: '조선', m: ['east_fighters', 'spearman'], r: GUN_ASIA, l: ['east_fighters', 'scholar'], c: CANNON_E, bandit: ['east_fighters', 'brute'], b: ['bear', 'tiger'] },   // 조선: 곰 떼를 거느린 범 (호피)
     japan: { name: '일본', m: ['east_fighters', 'ninja'], r: GUN_ASIA, l: ['east_fighters', 'swordsman'], c: CANNON_E, bandit: ['east_fighters', 'ninja'], b: ['boar', 'boar'] },
     thai: { name: '아유타야', m: ['southeast_asia', 'ayutthaya'], r: GUN_ASIA, l: ['southeast_asia', 'ayutthaya'], c: CANNON_E, b: ['tiger', 'tiger'] },
     vietnam: { name: '대월', m: ['southeast_asia', 'daiviet'], r: GUN_ASIA, l: ['southeast_asia', 'daiviet'], c: CANNON_E, b: ['tiger', 'tiger'] },

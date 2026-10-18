@@ -39,15 +39,26 @@
   }
   /* 대항해시대 3처럼 — 나이가 많을수록 보너스 점수가 많다
      · 능력 보너스(BAL.statPts + 나이 × statPerYear): 체력·지력·무력·매력에 직접 나눠 준다
-     · 특기 점수 = 나이 몫(3 + (나이 − 18) ÷ 4) + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax) — 지력에 보너스를 주면 특기 점수도 는다
+     · 특기 점수 = 나이 몫(3 + (나이 − 18) ÷ 4) + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax · 지력 knowTop(99) 이상이면 knowTopPts(+4)) — 지력에 보너스를 주면 특기 점수도 는다
      조정값: G.BALANCE.create */
-  function BAL() { return (G.BALANCE && G.BALANCE.create) || { statPts: 4, statPerYear: 0.5, statMax: 99, knowFrom: 40, knowStep: 15, knowMax: 3 }; }
+  function BAL() { return (G.BALANCE && G.BALANCE.create) || { statPts: 4, statPerYear: 0.5, statMax: 99, knowFrom: 40, knowStep: 15, knowMax: 3, knowTop: 99, knowTopPts: 4 }; }
   function calcStats() { var st = {}; for (var k in p.base) st[k] = Math.min(BAL().statMax, p.base[k] + (p.bon[k] || 0)); p.st = st; }
   function statPoints() { return BAL().statPts + Math.floor((p.age - 18) * BAL().statPerYear); }
   function statSpent() { var n = 0; for (var k in p.bon) n += p.bon[k]; return n; }
   function agePoints() { return 3 + Math.floor((p.age - 18) / 4); }
   /** 지식 보너스: 지력이 높으면 특기를 더 익혀 시작한다 */
-  function knowPoints(intel) { var b = BAL(); return Math.max(0, Math.min(b.knowMax, Math.floor(((intel == null ? p.st.int : intel) - b.knowFrom) / b.knowStep))); }
+  function knowPoints(intel) {
+    var b = BAL(), v = intel == null ? p.st.int : intel;
+    if (b.knowTop != null && v >= b.knowTop) return b.knowTopPts != null ? b.knowTopPts : b.knowMax + 1;   // 지력 99~100: +4 (가장 높은 지력의 덤)
+    return Math.max(0, Math.min(b.knowMax, Math.floor((v - b.knowFrom) / b.knowStep)));
+  }
+  /** 다음 지식 보너스 단계: {at: 그 지력, pts: 보너스} — 더 없으면 null */
+  function knowNext() {
+    var b = BAL(), kp = knowPoints();
+    if (kp < b.knowMax) return { at: b.knowFrom + (kp + 1) * b.knowStep, pts: kp + 1 };
+    if (b.knowTop != null && p.st.int < b.knowTop) return { at: b.knowTop, pts: b.knowTopPts != null ? b.knowTopPts : b.knowMax + 1 };
+    return null;
+  }
   C.bonus = function (age, intel) { var sv = p; p = { age: age, st: { int: intel } }; var r = { stat: statPoints(), age: agePoints(), know: knowPoints(intel) }; p = sv; return r; };
   function baseSkills() {
     var j = G.JOBS.filter(function (x) { return x.id === p.job; })[0];
@@ -99,7 +110,7 @@
       '<div style="margin-top:14px"><label>생일</label><div class="flex"><select id="bm">' + mOpts() + '</select><span>월</span><select id="bd">' + dOpts() + '</select><span>일</span></div>' +
       '<div class="muted" style="margin-top:6px;font-size:16px">' + zod.name + ' — ' + { str: '체력', int: '지력', mar: '무력', cha: '매력' }[zod.stat] + '에 보너스</div></div>' +
       '<div style="margin-top:14px"><label>나이 <b style="color:var(--ink)">' + p.age + '세</b> <span class="muted" style="font-size:14px">(젊을수록 체력·무력, 나이 들수록 지력·매력과 보너스 점수)</span></label><input type="range" id="age" min="18" max="40" value="' + p.age + '"></div>' +
-      '<div class="cr-bonus muted">나이 보너스 — 능력 점수 <b>' + statPoints() + '</b> · 특기 점수 <b>' + agePoints() + '</b><br>지식(지력 ' + p.st.int + ') 보너스 — 특기 점수 <b>+' + knowPoints() + '</b>' + (knowPoints() < BAL().knowMax ? ' <small>(지력 ' + (BAL().knowFrom + (knowPoints() + 1) * BAL().knowStep) + '이면 +' + (knowPoints() + 1) + ')</small>' : '') + '</div>' +
+      '<div class="cr-bonus muted">나이 보너스 — 능력 점수 <b>' + statPoints() + '</b> · 특기 점수 <b>' + agePoints() + '</b><br>지식(지력 ' + p.st.int + ') 보너스 — 특기 점수 <b>+' + knowPoints() + '</b>' + (knowNext() ? ' <small>(지력 ' + knowNext().at + '이면 +' + knowNext().pts + ')</small>' : '') + '</div>' +
       '</div></div>';
     // column 2
     h += '<div class="col" style="width:430px"><div class="sect parch ornament-corners"><h4>국적</h4><div class="opt-row">' +

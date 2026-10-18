@@ -46,6 +46,7 @@
     var d0 = s.fleet.discipline == null ? 60 : s.fleet.discipline, dUp = (k.disc && k.disc[d.tier]) || 0;
     s.fleet.discipline = Math.min(100, d0 + dUp); dUp = Math.round(s.fleet.discipline - d0);
     var so = (k.so && k.so[d.tier]) ? (G.Fame ? G.Fame.add('so', k.so[d.tier]) : 0) : 0;
+    if (G.Growth) G.Growth.meal(d.tier, d.id || d.name);   // 미식 경험 — 처음 맛본 음식은 두 배 (js/systems/growth.js)
     var gain = '피로 −' + (before - s.fleet.fatigue) + (dUp > 0 ? ' · 규율 +' + dUp : '') + (so > 0 ? ' · 사교 명성 +' + so : '');
     if (G.Game.refreshHud) G.Game.refreshHud();
     if (G.State && G.State.log) G.State.log(c.name + ' 식당에서 ' + d.name + U.jx(d.name, '을/를') + ' 먹었다. (금화 ' + p + '닢 · ' + gain + ')');

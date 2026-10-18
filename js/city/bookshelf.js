@@ -245,6 +245,7 @@
     r.part.forEach(function (id) { if (G.Disc.addHint(id, 'book:' + b.id)) got.push(G.DISC[id]); else if (G.Disc.lastMore === id) more.push(G.DISC[id]); });
     var later = r.part.filter(function (id) { return !s.hints[id] && !G.Disc.foundByMe(id) && !G.Disc.available(G.DISC[id]); }).length;
     var known = r.part.filter(function (id) { return got.indexOf(G.DISC[id]) < 0 && more.indexOf(G.DISC[id]) < 0 && (s.hints[id] || G.Disc.foundByMe(id)); }).length;
+    if (!s.flags['read_' + b.id] && G.Growth) G.Growth.add('int', 12, '독서 — 「' + b.title + '」');   // 처음 읽는 책: 지력 경험
     s.flags['read_' + b.id] = 1;
     return { got: got, more: more, later: later, known: known, missed: r.all.length - r.part.length, talk: lv0(b) ? r.talk : [], hidden: r.hidden || 0 };
   }

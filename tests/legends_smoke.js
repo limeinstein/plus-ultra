@@ -139,7 +139,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         const C = G.Scenes.city, s = G.Game.state; await window._enter(cid, 'library');
         const c = G.CITY_DATA[cid], LB = C.B.library, books = LB.shelfBooks(c).filter(b => LB.shelfState(b).kind !== 'lock').slice(0, 5);
         G.UI.talk = async () => {};
-        for (const b of books) await LB.pick(c, b);
+        const win0 = G.UI.window;
+        G.UI.window = () => ({ result: Promise.resolve(1), content: document.createElement('div'), close: () => {} });
+        try { for (const b of books) await LB.pick(c, b); } finally { G.UI.window = win0; }
         await C.leave();
         return { mates: s.mates.map(m => m.id + ':' + m.role) };
       }, lc.id);

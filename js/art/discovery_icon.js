@@ -23,7 +23,13 @@
     ['map-discoveries/nature-4', ['trangan', 'halong', 'pinklake', 'sahara', 'gobi', 'deadsea', 'blacksea', 'serengeti', 'amazon', 'uyuni', 'angelfalls', 'hawaii', 'waikiki', 'mojave', 'moraine', 'guilin']],
     ['map-discoveries/nature-5', ['taishan', 'emeishan', 'huashan', 'wuyishan', 'lushan', 'sanxia', 'hukou', 'qiantang', 'shilin', 'huangguoshu', 'yulong', 'dongting', 'putuo', 'tianchi', 'qinghaihu', 'mingsha']],
     ['map-discoveries/nature-6', ['huoyan', 'yandang', 'manasarovar', 'dallake', 'gangotri', 'chilika', 'jogfalls', 'cedars', 'damavand', 'wadirum', 'socotra', 'rubalkhali', 'azoresridge', 'guatavita', 'penglai', 'tor']],
-    ['map-discoveries/nature-7', ['avalon', 'ultimathule', 'hyperborea', 'ramsetu', 'aztlan']]
+    ['map-discoveries/nature-7', ['avalon', 'ultimathule', 'hyperborea', 'ramsetu', 'aztlan']],
+    ['map-discoveries/new-ruins-1', ['sphinx', 'luxor', 'angkorthom', 'santiago', 'monreale', 'chartres', 'durham', 'utrecht', 'hwaseong', 'sagres', 'burjkhalifa', 'palenque', 'uxmal', 'prambanan', 'taprohm', 'banteaysrei']],
+    ['map-discoveries/new-ruins-2', ['preahvihear', 'shwezigon', 'kyaiktiyo', 'sukhothai', 'myson', 'ponagar', 'watphou', 'plainofjars', 'ifugao', 'sanagustin', 'besakih', 'tanahlot', 'trowulan', 'sukuh', 'samye', 'tashilhunpo']],
+    ['map-discoveries/new-ruins-3', ['ganden', 'sera', 'drepung', 'sakya', 'kumbum', 'gyantsekumbum', 'karakorumturtle', 'orkhon', 'xanadu', 'deerstone', 'pazyryk', 'arzhan', 'isker', 'sikachi', 'karabalgasun', 'shamanrock']],
+    ['map-discoveries/new-ruins-4', ['hegra', 'stcatherine', 'selimiye', 'sumela', 'nemrut', 'hattusa', 'ani', 'philae']],
+    ['map-discoveries/new-nature-1', ['kinabalu', 'phongnha', 'toba', 'bromo', 'krakatau', 'mayon', 'chocolatehills', 'phangnga', 'kuangsi', 'tubbataha', 'baikal', 'lenapillars', 'kamgeysers', 'klyuchevskaya', 'yarlung', 'namtso']],
+    ['map-discoveries/new-nature-2', ['khovsgol', 'bayanzag', 'belukha', 'oymyakon', 'whitedesert', 'siwa', 'lakevan', 'rasmohammed', 'jebelshams']]
   ];
   var POS = {};
   SHEETS.forEach(function (s) { s[1].forEach(function (id, i) { POS[id] = { key: s[0], slot: i }; }); });

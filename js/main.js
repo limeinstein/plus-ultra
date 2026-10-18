@@ -206,7 +206,7 @@
   // ---------------------------------------------------------------- scenes
   Game.go = function (name, arg) {
     Game.ftGrace = performance.now() + (((G.FX && G.FX.loop) || {}).sceneGrace || 1500);   // 장면을 막 바꾼 동안은 해상도 자동 조절이 재지 않는다
-    if (Game.scene && Game.scene.exit) Game.scene.exit();
+    if (Game.scene && Game.scene.exit) Game.scene.exit(name);   // 바다↔해전처럼 장면 사이에 이어져야 하는 날씨·소리를 위해 다음 장면을 알려 준다
     UI.clearScreen();
     Game.sceneName = name;
     if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes());   // 함대 배 그림을 미리 풀어 둔다 (바다에 나가기 전에)
@@ -271,8 +271,8 @@
   H.lat = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') || R.hasItem('astrolabe') || R.skill('survey') >= 2 ? U.fmtLat(l.lat) : '? <small>(천문판)</small>'; };
   H.lon = function () { var S = Game.state, l = S.loc; return R.hasItem('sextant') ? U.fmtLon(l.lon) : '? <small>(육분의)</small>'; };
   /** 직위: 작위가 있으면 가장 높은 작위, 없으면 명성으로 부르는 이름 */
-  H.title = function () { var t = G.Court && G.Court.best(), sl = G.Slave ? G.Slave.title() : '', fm = G.Princess ? G.Princess.title() : '', gv = G.Colony ? G.Colony.title() : ''; var head = [gv, sl, fm].filter(Boolean).join(' · '); return head ? head + (t ? ' · ' + t.ko : '') : t ? t.ko : R.fameTitle(Game.state.player.fame); };   // 노예 무역에 손을 대면 「노예 상인」, 에스파냐 왕녀와 혼인하면 「부마」가 먼저 붙는다   // 노예 무역에 손을 대면 「노예 상인」이 먼저 붙는다
-  H.titleTip = function () { var t = G.Court ? G.Court.titles() : [], sl = G.Slave ? G.Slave.title() : ''; return (sl ? sl + ' (노예를 사고판 이름 — 남은 ' + G.Slave.remain() + '일) — ' : '') + (G.Princess && G.Princess.title() ? '부마 (에스파냐 국왕의 사위) — ' : '') + (t.length ? t.map(function (x) { return G.Court.fullName(x, true); }).join(' · ') + ' — ' : '') + R.fameTitle(Game.state.player.fame); };
+  H.title = function () { var t = G.Court && G.Court.best(), sl = G.Slave ? G.Slave.title() : '', fm = G.Princess ? G.Princess.title() : '', gv = G.Colony ? G.Colony.title() : '', pv = G.Court && G.Court.privateer && G.Court.privateer() ? '사략선장' : ''; var head = [gv, pv, sl, fm].filter(Boolean).join(' · '); return head ? head + (t ? ' · ' + t.ko : '') : t ? t.ko : R.fameTitle(Game.state.player.fame); };   // 노예 무역에 손을 대면 「노예 상인」, 에스파냐 왕녀와 혼인하면 「부마」가 먼저 붙는다   // 노예 무역에 손을 대면 「노예 상인」이 먼저 붙는다
+  H.titleTip = function () { var t = G.Court ? G.Court.titles() : [], sl = G.Slave ? G.Slave.title() : ''; return (G.Court && G.Court.privateer && G.Court.privateer() ? '사략선장 (사략허가장을 지닌 동안 — 해적의 습격 −' + G.Court.pirateCutPct() + '%) — ' : '') + (sl ? sl + ' (노예를 사고판 이름 — 남은 ' + G.Slave.remain() + '일) — ' : '') + (G.Princess && G.Princess.title() ? '부마 (에스파냐 국왕의 사위) — ' : '') + (t.length ? t.map(function (x) { return G.Court.fullName(x, true); }).join(' · ') + ' — ' : '') + R.fameTitle(Game.state.player.fame); };
   H.fameTip = function () { return G.Fame ? '통합 명성 = ' + G.Fame.text() : ''; };
   H.lang = function (c) {
     if (!c) return '';

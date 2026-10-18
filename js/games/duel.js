@@ -532,7 +532,8 @@
           var p5 = pr(0.2 + (f.cha - 50) / 150 + (f.speech || 0) * 0.1 + (1 - o.hp / o.maxHp) * 0.3 - (o.look === 'rival' ? 0.15 : 0));
           pose(f, 'shout', 0.6); bubble(f, U.pick(['칼을 거두시오! 더 피를 볼 것 없소.', '이만하면 됐소. 항복하시오.', '당신 같은 사람을 잃기는 아깝소.']));
           await sleep(900);
-          if (U.chance(p5)) { pose(o, 'kneel', 5); bubble(o, '...알았다. 내가 졌소.'); say(U.esc(o.name) + U.jx(o.name, '이/가') + ' 칼을 내려놓았다!'); end(f === me ? 'persuade' : 'persuaded'); return 'end'; }
+          var p5ok = U.chance(p5); if (f === me && !me.m && G.Growth) G.Growth.persuade(p5ok, p5ok ? '설득 경험 — 칼을 거두게 했다' : null);
+          if (p5ok) { pose(o, 'kneel', 5); bubble(o, '...알았다. 내가 졌소.'); say(U.esc(o.name) + U.jx(o.name, '이/가') + ' 칼을 내려놓았다!'); end(f === me ? 'persuade' : 'persuaded'); return 'end'; }
           o.spirit = Math.min(100, o.spirit + 25); bubble(o, '웃기지 마라!'); say('설득이 먹히지 않았다. ' + U.esc(o.name) + U.jx(o.name, '이/가') + ' 더욱 격앙했다! (상대 기세 +25)');
         } else if (id === 'bluff') {
           var p6 = pr(0.45 + (f.int - o.int) / 120);
@@ -607,6 +608,7 @@
         else if (res === 'lose') { pose(me, how === 'captured' || how === 'persuaded' ? 'kneel' : 'down', 5); cheer[1] = 3; banner('패배...'); }
         else banner('물러섰다');
         if (!me.m && me.admiral) p.hp = U.clamp(Math.round(100 * me.hp / me.maxHp), 5, 100);
+        if (!me.m && me.admiral && G.Growth) G.Growth.duel(res);   // 제독이 직접 칼을 맞댄 일기토만 경험이 된다 (js/systems/growth.js)
         say(res === 'win' ? '<span class="good-text">' + ({ ko: U.esc(en.name) + U.jx(en.name, '이/가') + ' 쓰러졌다!', capture: U.esc(en.name) + U.jx(en.name, '을/를') + ' 사로잡았다!', persuade: U.esc(en.name) + U.jx(en.name, '이/가') + ' 칼을 거두었다!', rout: U.esc(en.name) + U.jx(en.name, '이/가') + ' 달아났다!' }[how]) + '</span>'
           : res === 'lose' ? '<span class="warn-text">' + (me.m ? U.esc(me.name) + U.jx(me.name, '이/가') : '제독이') + ' 쓰러지고 말았다...</span>' : '싸움을 피해 물러섰다.');
         el.querySelector('.rd-ctrl').classList.add('done');
