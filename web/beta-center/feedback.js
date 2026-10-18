@@ -3,6 +3,7 @@
 
   var API = 'https://api.github.com/repos/limeinstein/plus-ultra';
   var FEEDBACK_API = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/feedback';
+  var FEEDBACK_ADMIN = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/admin';
   var BOARD_URL = 'https://github.com/limeinstein/plus-ultra/issues?q=is%3Aissue+label%3Abeta-feedback';
   var board = document.getElementById('board');
   var status = document.getElementById('board-status');
@@ -122,6 +123,9 @@
         body.appendChild(links);
       } else {
         body.appendChild(node('p', 'post-meta', '로그인 없이 등록된 공개 피드백입니다.'));
+        var adminLinks = node('div', 'post-links');
+        adminLinks.appendChild(link('관리자 답변하기', FEEDBACK_ADMIN + '#feedback-' + post.id));
+        body.appendChild(adminLinks);
       }
       var comments = node('div', 'comments');
       body.appendChild(comments);
