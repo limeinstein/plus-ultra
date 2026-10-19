@@ -135,6 +135,50 @@
   /** 효과 값: G.BALANCE.cabins.fx[key] × 그 방의 힘 */
   CB.fx = function (type, key) { var v = ((B().fx || {})[key]) || 0; return v ? v * CB.power(type) : 0; };
 
+  // ---------------------------------------------------------------- 요리실의 차림 (2026-10-19)
+  // 요리실에 요리 특기자를 두면 그 사람의 말(모국어)에 맞는 고장의 음식(js/data/cuisine.js)을 차린다 — 바다에서 날마다 피로를 덜고 규율을 돋운다.
+  // 차림은 그 고장 음식 가운데 요리사의 요리 단계까지의 것(음식 등급 1~3)으로, 7일마다 바뀐다. 기함에 식당이 있으면 효과가 오르고 식당에 사람이 있으면 더 오른다.
+  // 제독 고향의 음식이면 「고향의 맛」 — 규율이 더 오른다. 조정값 G.BALANCE.cabins.galleyMeal
+  var LANG_ZONES = { 0: ['iberia'], 1: ['iberia'], 2: ['french', 'italian'], 3: ['german', 'british'], 4: ['east_europe', 'russia_steppe'], 5: ['ottoman_levant', 'north_africa'],
+    6: ['ottoman_levant'], 7: ['china_south', 'china_north'], 8: ['india'], 9: ['russia_steppe'], 10: ['africa', 'south_africa'], 11: ['latin'], 12: ['seasia'], 13: ['japan'], 14: ['korea'], 15: ['north_america', 'native_oceania'] };
+  var STYLE_ZONE = { ib: 'iberia', co: 'iberia', it: 'italian', ne: 'german', gr: 'east_europe', ru: 'russia_steppe', st: 'russia_steppe', is: 'ottoman_levant', pe: 'ottoman_levant',
+    cn: 'china_south', in: 'india', se: 'seasia', jp: 'japan', kr: 'korea', af: 'africa', sw: 'africa', tr: 'africa', az: 'latin', an: 'latin', na: 'north_america' };
+  var ZONE_NAME = { british: '브리튼', german: '독일·저지대', french: '프랑스', iberia: '이베리아', italian: '이탈리아', east_europe: '동유럽·그리스', russia_steppe: '러시아·초원',
+    ottoman_levant: '오스만·레반트', north_africa: '북아프리카', africa: '아프리카', south_africa: '남아프리카', india: '인도', seasia: '동남아시아', china_north: '중국 북방',
+    china_south: '중국 남방', korea: '조선', japan: '일본', north_america: '북아메리카', latin: '중남미', native_oceania: '원주민·오세아니아' };
+  CB.ZONE_NAME = ZONE_NAME;
+  /** 요리실에서 솥을 잡은 사람: 요리 단계가 가장 높은 사람 {m, lv} (없으면 null) */
+  CB.galleyCook = function () {
+    var rooms = CB.rooms(), best = null;
+    for (var i = 0; i < rooms.length; i++) if (rooms[i] === 'galley') {
+      var m = CB.occupant(i); if (!m || !G.MATE[m.id]) continue;
+      var lv = R().mateSkill(m, 'cook'); if (lv >= 1 && (!best || lv > best.lv)) best = { m: m, lv: lv };
+    }
+    return best;
+  };
+  /** 요리사가 차리는 고장 음식: 모국어의 음식권 (말 하나에 음식권이 여럿이면 그 사람 양식에 맞는 쪽) */
+  CB.cookZone = function (m) {
+    var d = G.MATE[m.id], li = CB.nativeLang(m), zs = (li != null && LANG_ZONES[li]) || [], sz = d && STYLE_ZONE[d.style];
+    if (sz && zs.indexOf(sz) >= 0) return sz;
+    return zs[0] || sz || null;
+  };
+  /** 이번 주 차림과 하루 효과 {cook, lv, zone, zoneName, dish, mess, mult, home, fat, disc} — 요리사가 없으면 null */
+  CB.galleyMeal = function () {
+    var ck = CB.galleyCook(); if (!ck || !G.CUISINE) return null;
+    var zone = CB.cookZone(ck.m); if (!zone) return null;
+    var lv = Math.min(3, ck.lv), all = G.CUISINE.list.filter(function (d) { return d.zone === zone; });
+    var pool = all.filter(function (d) { return (d.tier || 1) <= lv; }); if (!pool.length) pool = all.slice().sort(function (a, b) { return (a.tier || 1) - (b.tier || 1); }).slice(0, 1);
+    if (!pool.length) return null;
+    var s = S(), wk = Math.floor((s.day || 0) / 7), dish = pool[Math.abs(wk + U.strHash(ck.m.id)) % pool.length];
+    var K = B().galleyMeal || {}, rooms = CB.rooms(), mess = rooms.indexOf('mess') >= 0;
+    var mult = 1 + (mess ? (K.messHas == null ? 0.3 : K.messHas) : 0) + CB.power('mess') * (K.messPow == null ? 0.1 : K.messPow);
+    var homeC = s.player && G.CITY_DATA[s.player.home], home = !!(homeC && G.CUISINE.zone && G.CUISINE.zone(homeC) === zone);
+    var tier = dish.tier || 1, eff = CB.eff(ck.m);
+    return { cook: ck.m, name: G.MATE[ck.m.id].name, lv: ck.lv, zone: zone, zoneName: ZONE_NAME[zone] || zone, dish: dish, mess: mess, mult: mult, home: home,
+      fat: ((K.fat0 == null ? 0.1 : K.fat0) + (K.fatTier == null ? 0.08 : K.fatTier) * tier) * mult * eff,
+      disc: ((K.disc0 == null ? 0.04 : K.disc0) + (K.discTier == null ? 0.04 : K.discTier) * tier) * mult * eff * (home ? (K.home || 1.25) : 1) };
+  };
+
   // ---------------------------------------------------------------- 말 배우기
   /** 부하의 모국어 (가장 잘하는 말) */
   CB.nativeLang = function (m) {
