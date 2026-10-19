@@ -89,7 +89,7 @@
       { label: '포카를 권한다', icon: 'dice', onClick: function () { return G.Games.poker(c); } },
       { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return T.organize(); } },
       G.MateTalk ? G.MateTalk.menuItem(c) : null,
-      G.FamEv && G.FamEv.aboardWife() ? { label: '아내와 한잔한다', icon: 'heart', sub: G.FamEv.aboardWife().name, dim: !G.FamEv.canWifeDate(), onClick: function () { if (!G.FamEv.canWifeDate()) { UI.toast('며칠 전에도 함께했다. 조금 뒤에 다시.', 'heart'); return; } return G.FamEv.wifeDate(c); } } : null
+      G.FamEv && G.FamEv.aboardWife('tavern') ? { label: '아내와 한잔한다', icon: 'heart', sub: G.FamEv.aboardWife('tavern').name + (G.Wives && G.Wives.aboard().length > 1 ? ' 차례' : ''), dim: !G.FamEv.canWifeDate(), onClick: function () { if (!G.FamEv.canWifeDate()) { UI.toast(G.FamEv.aboardWife('tavern').name + U.jx(G.FamEv.aboardWife('tavern').name, '와/과') + '는 며칠 전에도 함께했다. ' + (G.FamEv.wifeDateWait ? G.FamEv.wifeDateWait() + '일 뒤에 다시.' : '조금 뒤에 다시.'), 'heart'); return; } return G.FamEv.wifeDate(c); } } : null
     ];
   };
 

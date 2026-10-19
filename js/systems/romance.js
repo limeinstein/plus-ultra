@@ -106,15 +106,21 @@
     Object.keys(ps).forEach(function (k) { var p = ps[k]; if (p.stage !== 'none') { busy[p.m] = 1; busy[p.f] = 1; } });
     if (G.Gyeonwoo && G.Gyeonwoo.pairOf && G.Gyeonwoo.pairOf('gyeonwoo')) { busy.gyeonwoo = 1; busy.jiknyeo = 1; }
     var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id] && RM.veteran(id); });
-    Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && s.player.wife !== id && RM.veteran(id); }).forEach(function (f) {
-      var best = null, bc = b.chemMin;
-      males.forEach(function (m) { if (busy[m]) return; var key = RM.key(m, f), old = ps[key]; if (old && old.stage === 'cold') return; var c = RM.chem(m, f); if (c >= bc) { bc = c; best = m; } });
-      if (!best) return;
+    // 등용 순(배에 오른 순서)대로 먼저 맺어지지 않게: 날마다 여자 부하의 차례를 섞고, 끌리는 남자도 궁합만큼의 확률로 고른다
+    //   (이미 끌림이 쌓인 짝이 있으면 그 짝을 이어 간다 — 날마다 상대가 바뀌지 않게)
+    var fems = U.shuffle(Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && s.player.wife !== id && RM.veteran(id); }));
+    U.shuffle(males);
+    fems.forEach(function (f) {
+      var best = null, cand = [], keep = null;
+      males.forEach(function (m) { if (busy[m]) return; var key = RM.key(m, f), old = ps[key]; if (old && old.stage === 'cold') return; var c = RM.chem(m, f); if (c < b.chemMin) return;
+        cand.push({ m: m, c: c }); if (old && old.heat > 0 && (!keep || old.heat > ps[RM.key(keep, f)].heat)) keep = m; });
+      if (!cand.length) return;
+      best = keep || U.weighted(cand, function (x) { return x.c * x.c; }).m;
       busy[best] = 1;
       var key = RM.key(best, f), p = ps[key] || (ps[key] = { m: best, f: f, heat: 0, stage: 'none', since: 0, cd: 0 });
       // 다른 남자와 쌓던 끌림은 천천히 식는다
       Object.keys(ps).forEach(function (k2) { var q = ps[k2]; if (q !== p && q.f === f && q.stage === 'none') { q.heat = Math.max(0, q.heat - b.fade); if (q.heat <= 0) delete ps[k2]; } });
-      p.heat = Math.min(capOf(p), p.heat + RM.chem(best, f) * b.rate * (near(best, f) ? 1 : b.far));
+      p.heat = Math.min(capOf(p), p.heat + RM.chem(best, f) * b.rate * (near(best, f) ? 1 : b.far) * U.rf(0.5, 1.5));   // 끌림이 쌓이는 날도 있고 덜한 날도 있다 — 궁합 좋은 짝이 늘 먼저는 아니게
       if (!p.due && p.heat >= b.steps.snack) p.due = 'snack';
     });
     return out;
