@@ -341,15 +341,74 @@
     if (G.Game.cityHud && c0) G.Game.cityHud(); else if (G.Game.refreshHud) G.Game.refreshHud();
   }
 
-  /** 지금 힘을 내는 방들의 효과 풀이 */
-  function effects() {
-    var rooms = CB().rooms(), seen = {}, out = [];
-    ['adjutant', 'helm', 'lookout'].concat(rooms).forEach(function (t) {
-      if (seen[t]) return; seen[t] = 1;
-      var c = G.CABIN[t], p = CB().power(t);
-      if (c && c.fx && p > 0) out.push('<li><b>' + c.name + '</b> <i class="cb-pow">' + (Math.round(p * 10) / 10) + '</i> ' + c.fx + '</li>');
+  // ---------------------------------------------------------------- 함대에 적용되는 능력 합계 (2026-10-19)
+  /* 오른쪽 아래 판: 지금 배치로 함대가 실제로 쓰는 특기 단계(R.skill — 제독·부관·항해사·측량사·경리·특기를 쓰는 방)와
+     선실이 내는 효과의 수치(G.Cabins.fx — 쓰는 곳의 계산 그대로). 배치를 바꾸면 바로 전과 달라진 줄에 ▲▼를 붙인다. */
+  var ROLE_OK = { first: 'first', nav: 'nav', surveyor: 'surveyor', purser: 'purser' };
+  /** 이 특기를 함대에 쓰는 사람과 단계 (R.skill과 같은 규칙) */
+  function skillSource(id) {
+    var s = S(), best = { lv: s.player.sk[id] || 0, who: '제독' };
+    s.mates.forEach(function (m) {
+      var d = G.MATE[m.id]; if (!d) return;
+      var lv = G.R.mateSkill(m, id); if (!lv || lv <= best.lv) return;
+      var ok = CB().activates(m, id) || (ROLE_OK[m.role] && (G.ROLE_SKILLS[ROLE_OK[m.role]] || []).indexOf(id) >= 0);
+      if (ok) best = { lv: lv, who: d.name };
     });
-    return out.length ? '<ul class="cb-fx">' + out.join('') + '</ul>' : '<div class="muted">아직 힘을 내는 방이 없습니다. 방에 맞는 특기를 가진 부하를 배치하십시오.</div>';
+    best.lv = G.R.skill(id);   // 다침·충성까지 셈한 실제 값
+    if (!best.lv) best.who = '';
+    return best;
+  }
+  function pct(v) { return Math.round(v * 1000) / 10; }
+  function num(v) { return Math.round(v * 100) / 100; }
+  /** 함대에 적용되는 값 모두 */
+  function fleetTotals() {
+    var cb = CB(), F = function (t, k) { return cb.fx(t, k); }, B = (G.BALANCE && G.BALANCE.cabins) || {};
+    var sk = (G.SKILLS || []).map(function (k) { var o = skillSource(k.id); return { id: k.id, name: k.name, lv: o.lv, who: o.who }; });
+    var fat = F('galley', 'galley') + F('mess', 'mess') + F('helm', 'helm') + F('musicroom', 'musicroom');
+    var dis = F('chapel', 'chapel') + F('rec', 'rec') + F('deck', 'deck') + F('mess', 'messD');
+    var fx = [
+      { k: 'fat', ic: 'bed', label: '하루 피로', v: fat, text: fat ? '−' + num(fat) : '', rooms: '요리실·식당·조타실·음악실' },
+      { k: 'dis', ic: 'flag', label: '하루 규율', v: dis, text: dis ? '+' + num(dis) : '', rooms: '예배실·오락실·갑판·식당' },
+      { k: 'spd', ic: 'sail', label: '함대 속도', v: Math.min(B.rigMax || 0.08, F('rig', 'rig')), rooms: '조범실', fmt: function (v) { return '+' + pct(v) + '%'; } },
+      { k: 'gun', ic: 'cannon', label: '기함 포 장전', v: F('gun', 'gun') * 0.5, rooms: '포격실', fmt: function (v) { return '+' + pct(v) + '% 빠르게'; } },
+      { k: 'mar', ic: 'sword', label: '기함 백병전', v: F('marine', 'marine'), rooms: '해병 대기실', fmt: function (v) { return '+' + pct(v) + '%'; } },
+      { k: 'hag', ic: 'coin', label: '값 깎기 성공', v: F('account', 'haggle'), rooms: '회계실', fmt: function (v) { return '+' + pct(v) + '%p'; } },
+      { k: 'wage', ic: 'coin', label: '급료', v: Math.min(0.5, F('account', 'wage')), rooms: '회계실', fmt: function (v) { return '−' + pct(v) + '%'; } },
+      { k: 'look', ic: 'telescope', label: '발견물 알아보는 거리', v: F('lookout', 'lookout'), rooms: '파수대', fmt: function (v) { return '+' + num(v) + '°'; } },
+      { k: 'chart', ic: 'chart', label: '해도에 밝히는 넓이', v: F('chart', 'chart'), rooms: '지도 제작실', fmt: function (v) { return '+' + num(v) + '°'; } },
+      { k: 'sick', ic: 'cross', label: '괴혈병 번짐', v: Math.min(0.6, F('sick', 'sick')), rooms: '진료실', fmt: function (v) { return '−' + pct(v) + '%'; } },
+      { k: 'rep', ic: 'hammer', label: '바다 위 기함 수리', v: F('repair', 'repair'), rooms: '선박 수리실', fmt: function (v) { return '내구 +' + num(v) + '/일'; } },
+      { k: 'pen', ic: 'bread', label: '식량', v: F('pen', 'pen'), rooms: '사육실', fmt: function (v) { return '+' + num(v) + '/일'; } },
+      { k: 'stf', ic: 'strategy', label: '육상전 계략', v: F('staff', 'staff'), rooms: '참모실', fmt: function (v) { return '성공 +' + pct(v) + '%p · 피해 +' + pct(F('staff', 'staffDmg')) + '%'; } },
+      { k: 'adj', ic: 'people', label: '부관 (달마다 부하 충성)', v: cb.power('adjutant'), rooms: '부관실', fmt: function () { return '돌봄'; } },
+      { k: 'art', ic: 'palette', label: '화실·조각실의 힘', v: cb.power('studio') + cb.power('sculpt'), rooms: '화실·조각실', fmt: function (v) { return '힘 ' + num(v); } }
+    ];
+    fx.forEach(function (o) { if (!o.text) o.text = o.v > 0 ? o.fmt(o.v) : ''; });
+    return { sk: sk, fx: fx };
+  }
+  CV._totals = fleetTotals;   // 시험용
+  var lastTotals = null;
+  function totalsHtml() {
+    var t = fleetTotals(), prev = lastTotals; lastTotals = t;
+    function delta(a, b) { if (!prev || a === b) return ''; return a > b ? '<i class="cb-up">▲</i>' : '<i class="cb-dn">▼</i>'; }
+    var psk = {}, pfx = {}; if (prev) { prev.sk.forEach(function (x) { psk[x.id] = x.lv; }); prev.fx.forEach(function (x) { pfx[x.k] = x.v; }); }
+    // 쓰는 특기는 점(●●●)으로, 아무도 쓰지 않는 특기는 한 줄로 (자리를 아끼려고)
+    var used = t.sk.filter(function (x) { return x.lv; }), none = t.sk.filter(function (x) { return !x.lv; });
+    var skHtml = used.map(function (x) {
+      var dots = ''; for (var i = 1; i <= 3; i++) dots += '<i class="cb-dot' + (x.lv >= i ? ' on' : '') + '"></i>';
+      return '<div class="cb-tsk" title="' + U.esc(x.name + ' ' + x.lv + '단계 — ' + x.who) + '"><span>' + U.esc(x.name) + '</span><span class="cb-dots">' + dots + '</span>' + delta(x.lv, psk[x.id]) + '</div>';
+    }).join('') + none.filter(function (x) { return psk[x.id]; }).map(function (x) {   // 방금 잃은 특기
+      return '<div class="cb-tsk zero" title="' + U.esc(x.name + ' — 이제 함대에 쓰는 사람이 없다') + '"><span>' + U.esc(x.name) + '</span><span class="cb-dots"><i class="cb-dot"></i><i class="cb-dot"></i><i class="cb-dot"></i></span><i class="cb-dn">▼</i></div>';
+    }).join('');
+    var noneHtml = none.length ? '<div class="cb-tnone-sk muted" title="이 특기를 가진 부하를 그 특기를 쓰는 방이나 역할에 두면 함대에 쓰인다">쓰지 않음 · ' + none.map(function (x) { return U.esc(x.name); }).join(' · ') + '</div>' : '';
+    var on = t.fx.filter(function (o) { return o.v > 0; });
+    var fxHtml = on.length ? on.map(function (o) {
+      return '<div class="cb-tfx" title="' + U.esc(o.rooms) + '">' + G.icon(o.ic) + '<span>' + U.esc(o.label) + '</span><b>' + U.esc(o.text) + '</b>' + delta(o.v, pfx[o.k]) + '</div>';
+    }).join('') : '<div class="muted cb-tnone">아직 효과를 내는 방이 없습니다. 방에 맞는 특기를 가진 부하를 배치하십시오.</div>';
+    var n = t.sk.filter(function (x) { return x.lv; }).length;
+    return '<div class="cb-totals"><div class="cb-sub">함대에 적용되는 능력 <small class="muted">— 지금 배치</small></div>' +
+      '<div class="cb-tsub">특기 <small class="muted">' + n + '/' + t.sk.length + ' · 함대가 쓰는 단계</small></div><div class="cb-tsks">' + skHtml + '</div>' + noneHtml +
+      '<div class="cb-tsub">선실 효과</div><div class="cb-tfxs">' + fxHtml + '</div></div>';
   }
 
   /** 끌어다 놓기: 부하를 방(또는 명단)에 놓았을 때 */
@@ -461,6 +520,7 @@
   CV.open = async function (opts) {
     opts = opts || {};
     var s = S();
+    lastTotals = null;   // 창을 새로 열 때는 ▲▼ 없이
     for (;;) {
       var sh = CB().flagship();
       if (!sh) { UI.toast('기함이 없습니다.', 'ship'); return; }
@@ -479,10 +539,9 @@
         '<div class="cb-ship-name">' + U.esc(sh.name) + '호 <small>· ' + U.esc(G.SHIP[sh.type].name) + '</small></div></div>' +
         '<div class="cb-cards" style="width:' + l.stageW + 'px;grid-template-columns:repeat(' + Math.min(CB().cols(), Math.max(1, n)) + ',minmax(0,' + (l.cardMax || 180) + 'px))"></div>' +
         '</div><div class="cb-side">' +
-        '<div class="cb-sub">부하 <small class="muted">— 눌러서 자리를 정한다</small></div>' +
-        '<div class="cb-roster" style="max-height:' + (l.rosterH || 360) + 'px"></div>' +
-        '<div class="cb-note muted">맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 자리가 없는 부하는 달마다 충성이 떨어진다.</div>' +
-        '<div class="cb-sub">지금 힘을 내는 방</div>' + effects() + '</div></div>';
+        '<div class="cb-sub" title="맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 자리가 없는 부하는 달마다 충성이 떨어진다.">부하 <small class="muted">— 눌러서 자리를 정한다</small></div>' +
+        '<div class="cb-roster" style="max-height:' + Math.min(l.rosterH || 360, 200) + 'px"></div>' +
+        totalsHtml() + '</div></div>';   // 오른쪽 아래: 함대에 적용되는 능력 합계 (지금 힘을 내는 방·말 배우기 풀이는 제목에 마우스를 올리면)
       var win = UI.window({ title: '기함 선실 — ' + U.esc(sh.name) + '호', icon: 'ship', width: l.stageW + (l.side || 300) + 66, html: html, buttons: [{ label: '닫는다', value: null }], clickAny: false });
       var stage = win.content.querySelector('.cb-stage'), cards = win.content.querySelector('.cb-cards');
       drawFallback(stage.querySelector('.cb-stage-base'), v, sp);
