@@ -13,7 +13,7 @@
      ⑤ 마지막 잉카 (1572년 9~12월, 쿠스코 — 잉카의 벗만): 투팍 아마루의 처형.
      소식: 아타우알파의 처형(1533.7.26) · 잉카의 황금이 세비야에 — 금값이 떨어진다(1534.1, 시장 사건 incagold) · 빌카밤바(1537) · 피사로의 죽음(1541.6.26) ·
            포토시 은광(1545, 가격혁명) · 투팍 아마루(1572.9.24)
-   ■ 장면 그림 (Codex, 없으면 건너뜀): images/legend-events/inca_*.webp — images/legend-events/INCA_PROMPT.md
+   ■ 장면 그림 (없으면 건너뜀): images/legend-events/inca_*.webp — images/legend-events/INCA_PROMPT.md
    ■ 저장: s.incaFall = { side: 'partner'|'declined', met, friend, tumbes, caja: 'ambush'|'warn'|'watch'|'late', ransom: 'take'|'plead'|'missed',
                           cusco: 'loot'|'manco'|'leave', siege: 'spain'|'manco'|'leave', siegeRes, tupac, told: {} } */
 (function (G) {

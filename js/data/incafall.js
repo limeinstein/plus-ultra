@@ -1,5 +1,5 @@
 /* 잉카 제국의 멸망 (1524~1572)에 나오는 실제 인물들 — G.HIST_FIG 에 덧붙인다. 사건은 js/systems/incafall.js. 2026-10-19 사용자 요청
-   얼굴 그림(Codex): images/portraits/history/<id>.webp (384×384) · <id>_half.webp (1024×1536 투명 무릎상) — images/portraits/history/PROMPT.md 「잉카 제국의 멸망」
+   얼굴 그림: images/portraits/history/<id>.webp (384×384) · <id>_half.webp (1024×1536 투명 무릎상) — images/portraits/history/PROMPT.md 「잉카 제국의 멸망」
    피사로·데 소토는 경쟁 탐험가 그림(portraits/rivals/<이름>)을 그대로 쓴다. 그림이 없으면 역할(role)·양식(st: ib 이베리아, an 안데스)으로 그린 얼굴. */
 (function (G) {
   'use strict';
