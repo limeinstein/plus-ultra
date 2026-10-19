@@ -355,6 +355,32 @@
   function rememberPick(k, label) { var m = pickStore(); if (!m) return; m[k] = label; var ks = Object.keys(m); if (ks.length > 300) delete m[ks[0]]; }
   UI.pickKey = pickKey;
 
+  /* 항해 중 사건의 저절로 넘기기 (2026-10-20): 폭풍·바다의 사건·해일·맞바람처럼 항해 중에 생기는 일은 처음에는 답을 기다리고,
+     같은 말·같은 물음이 두 번째부터는 ms(5초) 동안 아무 입력이 없으면 지난번처럼 저절로 넘어간다 (물음은 지난번에 고른 것).
+     UI.autoRun(fn) 안에서 열린 UI.say·UI.ask만 해당한다. 단추를 누르거나 키를 누르면 기다리던 셈을 멈추고 그 입력을 따른다.
+     저장: s.autoSeen (본 말), 고른 것은 s.lastPick (pickKey). 조정값 G.BALANCE.seaAuto {on, ms} */
+  var autoDepth = 0;
+  function autoCfg() { var b = (G.BALANCE && G.BALANCE.seaAuto) || {}; return { on: b.on !== false, ms: b.ms || 5000 }; }
+  function autoOn() { return autoDepth > 0 && autoCfg().on && !!(G.Game && G.Game.state); }
+  UI.autoRun = async function (fn) { autoDepth++; try { return await fn(); } finally { autoDepth--; } };
+  UI.autoActive = autoOn;
+  function sayKey(text, opts) { if (opts && opts.autoKey) return 'k:' + opts.autoKey; return U.strHash(((opts && opts.name) || '') + '|' + String(text || '').replace(/<[^>]+>/g, '').replace(/[0-9,.]+/g, '#').slice(0, 60)); }
+  function seenStore() { var S = G.Game && G.Game.state; if (!S) return null; return S.autoSeen || (S.autoSeen = {}); }
+  function normLabel(l) { return String(l == null ? '' : l).replace(/<[^>]+>/g, '').replace(/[0-9,.]+/g, '#'); }
+  /** 셈하는 띠: n초 뒤 cb. 돌려준 함수를 부르면 멈춘다 */
+  function autoTimer(box, label, cb, hint) {
+    var ms = autoCfg().ms, t0 = Date.now(), bar = U.el('div', 'auto-left', '');
+    box.appendChild(bar);
+    function tick() {
+      var left = Math.max(0, Math.ceil((ms - (Date.now() - t0)) / 1000));
+      bar.innerHTML = '⏳ ' + left + '초 뒤 ' + label + ' <span class="muted">(' + (hint || '누르면 직접 고른다') + ')</span>';
+      if (Date.now() - t0 >= ms) { stop(); cb(); }
+    }
+    var iv = setInterval(tick, 200); tick();
+    function stop() { clearInterval(iv); if (bar.parentNode) bar.parentNode.removeChild(bar); }
+    return stop;
+  }
+
   function copyOpts(a, extra) {
     var o = {}, k;
     for (k in (a || {})) o[k] = a[k];
@@ -748,13 +774,22 @@
         idx++;
         if (idx >= pages.length) { done(); } else show();
       }
-      function done() { if (finished) return; finished = true; unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
+      var auto = autoOn(), seen = auto ? seenStore() : null, sk = auto ? sayKey(pages.join('\f'), opts) : null, stopAuto = null;
+      function done() { if (finished) return; finished = true; if (stopAuto) stopAuto(); unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
       var unkey = pushKey(function (e) {
         if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt') || keyIs(e, 'cancel')) { next(); return true; }
         return false;
       });
       back.addEventListener('click', next);       // 대화창이든 바깥이든 누르면 Enter처럼 넘어간다 (대화창 클릭은 여기로 올라온다)
       show();
+      // 항해 중 사건: 전에 본 말이면 5초 뒤 저절로 넘어간다 (쪽마다)
+      if (auto && seen) {
+        if (seen[sk]) {
+          var arm = function () { if (stopAuto) stopAuto(); stopAuto = autoTimer(box, '저절로 넘어갑니다', function () { stopAuto = null; shownAt = 0; next(); if (!finished) arm(); }, '누르면 바로 넘어간다'); };
+          arm();
+        }
+        seen[sk] = 1; var ks = Object.keys(seen); if (ks.length > 400) delete seen[ks[0]];
+      }
     });
   };
 
@@ -776,14 +811,25 @@
       var selected = null;
       function pick(step) { selected = selectKeyItem(Array.prototype.slice.call(row.querySelectorAll('button')), selected, step); return selected; }
       function done(v) { unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
-      var pk = pickKey(text, list, opts), prev = lastPick(pk);
+      var pk = pickKey(text, list, opts), prev = lastPick(pk), stopAuto = null;
+      var done0 = done; done = function (v) { if (stopAuto) { stopAuto(); stopAuto = null; } done0(v); };
       list.forEach(function (o, i) {
         var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.thumb ? '<img class="ask-thumb" src="' + o.thumb + '" alt="">' : o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
         b.onclick = function (e) { e.stopPropagation(); rememberPick(pk, o.label); done(o.value); };
         row.appendChild(b);
       });
       selected = row.querySelector('button:not(.disabled)'); if (selected) selected.classList.add('kbd-focus');
+      // 항해 중 사건: 지난번에 고른 것이 있으면 5초 뒤 그대로 고른다 (누르거나 키를 누르면 멈춘다)
+      if (autoOn() && prev != null) {
+        var pv = list.filter(function (o) { return !o.dis && normLabel(o.label) === normLabel(prev); })[0];
+        if (pv) {
+          stopAuto = autoTimer(box, '지난번처럼 「' + U.esc(normLabel(pv.label).replace(/#/g, '').replace(/\s+/g, ' ').trim()) + '」', function () { stopAuto = null; rememberPick(pk, pv.label); done(pv.value); });
+          var halt = function () { if (stopAuto) { stopAuto(); stopAuto = null; } };
+          box.addEventListener('pointerdown', halt, true);
+        }
+      }
       var unkey = pushKey(function (e) {
+        if (stopAuto) { stopAuto(); stopAuto = null; }
         if (keyIs(e, 'cancel') && opts.cancel !== false) { done(opts.cancelValue != null ? opts.cancelValue : null); return true; }
         if (keyIs(e, 'up') || keyIs(e, 'left')) { pick(-1); return true; }
         if (keyIs(e, 'down') || keyIs(e, 'right')) { pick(1); return true; }

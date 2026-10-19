@@ -415,6 +415,8 @@
     // 교역소 일괄 거래 (js/city/trade.js T.batch): 여러 품목을 골라 한꺼번에 사고팔 때, 결제 전에 회계 단계만큼(흥정 횟수 acct.tries) 「한꺼번에니 더 깎아/쳐 달라」.
     //   한 번에 깎이는 몫 = base + 회계 단계 × perAcct + 경리 purser(+경리 회계 × 0.005) + 물량(통 수 / bulkPer × bulkMax, 최대 bulkMax). 2차부터 ×0.7, 모두 합쳐 cap까지.
     //   성공 확률은 값 깎기와 같은 T.haggleOdds — 차수마다 ×fade, 거절당할 때마다 ×acct.retryK. 파는 쪽 웃돈은 깎는 몫 × sellK (들여온 물건·다른 곳에서 산 몫에만)
+    // 항해 중 사건의 저절로 넘기기 (js/ui/ui.js UI.autoRun): 폭풍·바다의 사건·해일·맞바람 — 처음에는 기다리고, 같은 말·물음이 두 번째부터는 ms 동안 입력이 없으면 지난번처럼
+    seaAuto: { on: true, ms: 5000 },
     batchDeal: { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8 },
     questLate: { k: 0.5, min: 20, max: 60 },
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },

@@ -140,6 +140,7 @@ body { font-family: var(--serif); font-weight: var(--body-weight, 400); color: v
 @keyframes blink { 50% { opacity: .2; } }
 .dlg.noportrait .body { padding-left: 38px; }
 .dlg .ask-note { margin-top: 6px; font-size: 16px; color: #8a6a3e; }   /* 질문의 셈 (금화·남은 날) — js/ui/ui.js UI.ask */
+.dlg .auto-left { position: absolute; right: 18px; bottom: 8px; font-size: 14px; color: #7a5a2e; background: rgba(250,240,215,.85); padding: 1px 8px; border-radius: 4px; pointer-events: none; }   /* 항해 중 사건: n초 뒤 저절로 — js/ui/ui.js autoTimer */
 .dlg .askrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .dlg .askrow .btn { font-size: 18px; min-height: 40px; }
 /* 지난번에 고른 선택지 */
