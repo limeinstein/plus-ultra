@@ -377,10 +377,27 @@
      · 그림은 화면 UI(도시 이름판·건물 메뉴·HUD·아래 단추줄)보다 아래 층(.dlg-actors, z 13)에 그려 UI를 가리지 않는다.
        이름표만 대화창 층에 두어 눌러서 인물 이야기를 볼 수 있게 한다. */
   function standFx() {
-    var d = { top: 60, sink: 6, aspect: 0.6667, minH: 360, maxH: 640, bustW: 260, bustH: 260, soloCity: true, npcDuo: true }, f = (G.FX && G.FX.stand) || {}, o = {}, k;
+    var d = { top: 60, sink: 6, aspect: 0.6667, minH: 360, maxH: 640, fitMax: 1.2, bustW: 260, bustH: 260, soloCity: true, npcDuo: true }, f = (G.FX && G.FX.stand) || {}, o = {}, k;
     for (k in d) o[k] = f[k] == null ? d[k] : f[k];
     return o;
   }
+  /* 무릎상의 머리끝 자리 (그림 높이에 대한 비율, 0 = 맨 위): 그림마다 머리 위 빈칸이 달라 같은 키로 세우면 제독이 작아 보였다
+     (기본 제독 512×512는 13%, 다른 제독 그림 4%, 사람들 1024×1536은 1% 안팎). 그림의 투명한 윗부분을 재고,
+     픽셀을 못 읽으면(file://) 아래 표 · 없으면 1%로 본다. 두 사람이 마주 서면 머리끝을 맞춰 키를 고른다 (dialogShell layout) */
+  var STAND_TOP = { 'characters/player_half': 0.133, 'characters/player_half_ganghui': 0.008, 'characters/player_half_sea_dog': 0.008, 'characters/player_half_sea_dog_old': 0.008, 'characters/player_half_hat_spinner': 0, 'characters/player_half_hat_spinner_old': 0 }, topMemo = {};
+  function figureTop(img, key) {
+    if (topMemo[key] != null) return topMemo[key];
+    var t = null;
+    try {
+      var w = 48, h = Math.max(8, Math.round(48 * img.naturalHeight / img.naturalWidth)), cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      var g = cv.getContext('2d'); g.drawImage(img, 0, 0, w, h);
+      var d = g.getImageData(0, 0, w, h).data;
+      for (var y = 0; y < h && t == null; y++) for (var x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 40) { t = y / h; break; }
+    } catch (e) { t = null; }
+    if (t == null) t = STAND_TOP[key] != null ? STAND_TOP[key] : /^characters\/player_half/.test(key) ? 0.039 : 0.01;
+    return (topMemo[key] = t);
+  }
+  UI.figureTop = figureTop;   // 시험용
   /** 이 말하는 사람이 제독 자신인가 (초상·리그 이름·이름으로) */
   function isPlayer(who) {
     var S = G.Game && G.Game.state, p = S && S.player;
@@ -543,7 +560,7 @@
         try {
           var pr = G.Img.load(half.key);
           if (pr && pr.then) pr.then(function (img) {
-            if (img && img.naturalWidth && img.naturalHeight) { A0.aspect = img.naturalWidth / img.naturalHeight; layout(); }
+            if (img && img.naturalWidth && img.naturalHeight) { A0.aspect = img.naturalWidth / img.naturalHeight; A0.top0 = figureTop(img, half.key); layout(); }
             else toFaces();   // 무릎상 파일을 읽지 못하면 두 사람 다 얼굴로 (한 사람만 얼굴이 되지 않게)
           }, function () { toFaces(); });
         } catch (e) { /* 그림이 없으면 기본 비율 */ }
@@ -598,8 +615,12 @@
       // 자리가 모자라면(글씨·창 크기를 키워 UI 층이 낮을 때) 키를 줄여 머리가 화면 위로 나가지 않게 — 그래도 240 아래로는 줄이지 않는다
       var room = foot - F.top, h = Math.max(Math.min(F.minH, Math.max(240, room)), Math.min(F.maxH, room)), w = Math.round(h * F.aspect);
       var cores = [];
+      // 마주 선 두 사람의 머리끝을 맞춘다: 머리 위 빈칸이 큰 그림(기본 제독 13%)을 그만큼 키운다 — 아랫단(무릎)은 대화창 윗변 그대로, 최대 fitMax배
+      var talls = actors.filter(function (a) { return a.tall; }), refTop = talls.length > 1 ? Math.min.apply(null, talls.map(function (a) { return a.top0 == null ? 0.01 : a.top0; })) : null;
       actors.forEach(function (a) {
-        var aw = a.tall ? Math.round(h * (a.aspect || F.aspect) * a.scale) : F.bustW, ah = a.tall ? Math.round(h * a.scale) : F.bustH, x;
+        var fit = a.tall && refTop != null ? U.clamp((1 - refTop) / (1 - (a.top0 == null ? refTop : a.top0)), 1, F.fitMax || 1.2) : 1;
+        a.el.dataset.fit = fit.toFixed(3); a.el.dataset.top0 = a.top0 == null ? '' : a.top0.toFixed(3);
+        var aw = a.tall ? Math.round(h * (a.aspect || F.aspect) * a.scale * fit) : F.bustW, ah = a.tall ? Math.round(h * a.scale * fit) : F.bustH, x;
         if (a.side === 'left') x = b.left;
         else if (a.side === 'right') x = b.right - aw;
         else x = b.left + (b.width - aw) / 2;
