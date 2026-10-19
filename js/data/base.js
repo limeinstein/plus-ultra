@@ -261,7 +261,12 @@
     //   fx: 방의 힘 1마다의 효과 — musicroom 하루 피로 · staff 계략 성공률 · staffDmg 계략 피해 · lookout 발견 거리(°) · chart 해도 넓이(°) · galley/mess/helm 하루 피로 · messD/chapel/rec/deck 하루 규율 · sick 괴혈병 번짐 감소 비율
     //       rig 속력 비율(최대 rigMax) · repair 하루 기함 수리(내구) · pen 하루 식량(통) · gun 포격 · marine 백병전 비율 · haggle 값 깎기 성공률 · wage 급료 감소 비율 · feast/songs 사건 가중
     //   langDays: 한배에서 지낸 날이 이만큼이면 말 1·2·3단계 (3달·9달·2년), farRate: 방이 멀 때 하루에 쌓이는 몫, cols: 선실 한 줄의 칸 수
-    cabins: { slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, cols: 6, rigMax: 0.08, langDays: [90, 270, 730], farRate: 0.3,
+    // 요리실의 차림 (js/systems/cabins.js CB.galleyMeal): 바다에서 날마다 피로 −(fat0 + fatTier×음식 등급), 규율 +(disc0 + discTier×음식 등급) × 식당 배수 × 요리사의 충성 효율
+    //   식당 배수 = 1 + (기함에 식당이 있으면 messHas) + 식당의 힘 × messPow · 제독 고향의 음식이면 규율 × home
+    //   요리 단계가 높을수록 값비싼(등급 높은) 음식을 차린다 — 솜씨 배수 = 1 + (요리 단계 − 1) × skill
+    //   풍미: 짐칸에 향신료(후추 등)가 있으면 + spice, 식자재(밀·어육·올리브유 등)가 있으면 + food — 차림이 바뀔 때 1통씩 쓴다
+    cabins: { galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
+      slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, cols: 6, rigMax: 0.08, langDays: [90, 270, 730], farRate: 0.3,
       fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.01, repair: 0.1, pen: 0.12,
         gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1,
         musicroom: 0.07, staff: 0.03, staffDmg: 0.06 } },   // 2026-10-16 음악실: 하루 피로 · 참모실: 육상전 계략(기습·함정·저격·작렬탄) 성공률 · 계략 피해 비율

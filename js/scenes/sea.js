@@ -1317,11 +1317,18 @@
       fb -= R.skillRead('cook') * (CC.cookFatigue || 0.12);       // 요리: 따뜻한 끼니가 고단함을 덜어 준다
       var CBN = G.Cabins;                                          // 기함의 선실 (사람을 배치한 방만 힘을 낸다)
       if (CBN) fb -= CBN.fx('galley', 'galley') + CBN.fx('mess', 'mess') + CBN.fx('helm', 'helm') + CBN.fx('musicroom', 'musicroom');   // 음악실: 날마다 가락을 들려준다
+      // 요리실의 차림: 요리사 고장의 음식으로 피로를 덜고 규율을 돋운다 (식당이 있으면 더) — 차림이 바뀌면 알린다
+      var GM = CBN && CBN.galleyMeal ? CBN.galleyMeal() : null;
+      if (GM) {
+        fb -= GM.fat;
+        if (st.galleyDish !== GM.dish.id) { st.galleyDish = GM.dish.id; if (CBN.galleyUse) CBN.galleyUse(GM);   // 풍미에 쓴 향신료·식자재 1통씩
+          msgs.push({ icon: 'bread', text: '요리실의 ' + GM.name + U.jx(GM.name, '이/가') + ' ' + GM.zoneName + ' 음식 「' + GM.dish.name + '」' + U.jx(GM.dish.name, '을/를') + ' 차렸다' + (GM.flavorText ? ' — 싣고 가던 ' + GM.flavorText + U.jx(GM.flavorText, '으로/로') + ' 풍미를 더했다' : '') + (GM.home ? ' — 고향의 맛에 선원들이 들떴다' : '') + (GM.mess ? ' (식당에서 둘러앉아 먹는다)' : '') + '.' }); }
+      }
       if (G.Rain) fb += G.Rain.fatigue(st.storm > 0);              // 비: 기온대·소나기/폭우·비 대책에 따라 (js/systems/searain.js)
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
       f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
-        + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0) + (G.Rain ? G.Rain.discipline() : 0), 0, 100);
+        + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0) + (GM ? GM.disc : 0) + (G.Rain ? G.Rain.discipline() : 0), 0, 100);
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();

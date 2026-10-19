@@ -47,13 +47,20 @@
     if (!m) return null;
     return { kind: 'lover', id: m.id, m: m, name: m.name, speaker: T() ? T().maidSpeaker(m) : { name: m.name }, mate: false, maid: true, preg: false };
   };
-  /** 배에 탄 아내 (본처가 먼저) */
-  FE.aboardWife = function () {
+  /** 배에 탄 아내 (본처가 먼저). 둘째 부인이 여럿 타고 있으면 돌아가며 — kind('tavern'·'sea'·'port')마다 가장 오래 함께하지 못한 사람.
+      한 번도 함께하지 않은 사람이 먼저, 같으면 먼저 맞은 사람부터. 기록: p.famEv.turn = {'tavern:id': 날} */
+  FE.aboardWife = function (kind) {
     var p = P();
     if (p.wife && p.wifeAboard) return FE.mainWife();
-    var ab = G.Wives ? G.Wives.aboard() : [];
-    return ab.length ? FE.wife2(ab[0]) : null;
+    var ab = G.Wives ? G.Wives.aboard() : []; if (!ab.length) return null;
+    if (ab.length === 1) return FE.wife2(ab[0]);
+    var t = mem().turn || {}, k = (kind || 'tavern') + ':';
+    function last(w) { var v = t[k + w.id]; return v == null ? -1 : v; }
+    return FE.wife2(ab.slice().sort(function (a, b) { return last(a) - last(b); })[0]);
   };
+  /** 그 아내와 함께한 날을 적는다 (다음에는 다른 둘째 부인 차례) */
+  function markTurn(kind, L) { if (!L) return; var m = mem(); m.turn = m.turn || {}; m.turn[kind + ':' + L.id] = S().day; }
+  FE.markTurn = markTurn;
   function named(k) { return !k.unnamed && Fm().kidAge(k) >= 3; }
   function byAge(a, b) { return Fm().kidAge(b) - Fm().kidAge(a); }
   /** 집에 있는 아이들 [이름 있는 3살 넘은 아이, 갓난아기] — w 가 있으면 그 둘째 부인의 집 */
@@ -262,11 +269,11 @@
   // ================================================================ 언제
   /** 바다 위 하루 (js/scenes/sea.js) — 배에 아내가 있으면 가끔 */
   FE.atSea = async function () {
-    var s = S(), k = K(), m = mem(), L = FE.aboardWife();
+    var s = S(), k = K(), m = mem(), L = FE.aboardWife('sea');
     if (!L || (G.Tutorial && G.Tutorial.active && G.Tutorial.active())) return false;
     if (m.sea != null && s.day - m.sea < (k.seaGap == null ? 20 : k.seaGap)) return false;
     if (!U.chance(k.seaChance == null ? 0.06 : k.seaChance)) return false;
-    m.sea = s.day;
+    m.sea = s.day; markTurn('sea', L);
     return FE.run('sea', FE.cast({ love: L, kids: FE.aboardKids(), aboard: true, mate: hasMate() }));
   };
   /** 술집: 여급과 함께 시간을 보낸다 (js/city/tavern.js 여급 메뉴) — 할 수 있나 */
@@ -281,11 +288,14 @@
     mem().dates[maid.id] = s.day;
     return FE.run('tavern', FE.cast({ city: c.id, love: FE.lover(maid), kids: [], mate: false }));
   };
-  /** 술집: 배에 탄 아내와 한잔 */
-  FE.canWifeDate = function () { var L = FE.aboardWife(), d = mem().dates._wife, s = S(); return !!L && (d == null || s.day - d >= (K().dateGap || 7)); };
+  /** 술집: 배에 탄 아내와 한잔 — 둘째 부인이 여럿이면 돌아가며, 저마다 dateGap일에 한 번 (본처·한 사람뿐이면 예전처럼) */
+  function wifeLast(L) { var m = mem(), t = m.turn || {}, v = t['tavern:' + L.id]; return v != null ? v : (G.Wives && G.Wives.aboard().length > 1 ? null : m.dates._wife); }
+  FE.canWifeDate = function () { var L = FE.aboardWife('tavern'), s = S(); if (!L) return false; var d = wifeLast(L); return d == null || s.day - d >= (K().dateGap || 7); };
+  /** 다음에 함께할 수 있기까지 남은 날 (0 = 지금) */
+  FE.wifeDateWait = function () { var L = FE.aboardWife('tavern'); if (!L) return 0; var d = wifeLast(L); return d == null ? 0 : Math.max(0, (K().dateGap || 7) - (S().day - d)); };
   FE.wifeDate = async function (c) {
-    var L = FE.aboardWife(); if (!L) return false;
-    mem().dates._wife = S().day;
+    var L = FE.aboardWife('tavern'); if (!L) return false;
+    mem().dates._wife = S().day; markTurn('tavern', L);
     return FE.run('tavern', FE.cast({ city: c.id, love: L, kids: FE.aboardKids(), aboard: true, mate: hasMate() }));
   };
   function awayDays() { var p = P(), m = mem(); var last = Math.max(p.homeSeen == null ? -1 : p.homeSeen, m.home == null ? -1 : m.home); return last < 0 ? 0 : S().day - last; }
@@ -305,7 +315,8 @@
     var ak = FE.aboardKids();
     if (ak.length && c.port && (m.port == null || s.day - m.port >= (k.portGap == null ? 30 : k.portGap)) && U.chance(k.portChance == null ? 0.2 : k.portChance)) {
       m.port = s.day;
-      return FE.run('port', FE.cast({ city: c.id, love: FE.aboardWife(), kids: ak, aboard: true, mate: hasMate() }));
+      var LP = FE.aboardWife('port'); markTurn('port', LP);
+      return FE.run('port', FE.cast({ city: c.id, love: LP, kids: ak, aboard: true, mate: hasMate() }));
     }
     return false;
   };

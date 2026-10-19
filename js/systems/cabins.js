@@ -135,6 +135,66 @@
   /** 효과 값: G.BALANCE.cabins.fx[key] × 그 방의 힘 */
   CB.fx = function (type, key) { var v = ((B().fx || {})[key]) || 0; return v ? v * CB.power(type) : 0; };
 
+  // ---------------------------------------------------------------- 요리실의 차림 (2026-10-19)
+  // 요리실에 요리 특기자를 두면 그 사람의 말(모국어)에 맞는 고장의 음식(js/data/cuisine.js)을 차린다 — 바다에서 날마다 피로를 덜고 규율을 돋운다.
+  // 차림은 그 고장 음식 가운데 요리사의 요리 단계까지의 것(음식 등급 1~3)으로, 7일마다 바뀐다. 기함에 식당이 있으면 효과가 오르고 식당에 사람이 있으면 더 오른다.
+  // 제독 고향의 음식이면 「고향의 맛」 — 규율이 더 오른다. 조정값 G.BALANCE.cabins.galleyMeal
+  var LANG_ZONES = { 0: ['iberia'], 1: ['iberia'], 2: ['french', 'italian'], 3: ['german', 'british'], 4: ['east_europe', 'russia_steppe'], 5: ['ottoman_levant', 'north_africa'],
+    6: ['ottoman_levant'], 7: ['china_south', 'china_north'], 8: ['india'], 9: ['russia_steppe'], 10: ['africa', 'south_africa'], 11: ['latin'], 12: ['seasia'], 13: ['japan'], 14: ['korea'], 15: ['north_america', 'native_oceania'] };
+  var STYLE_ZONE = { ib: 'iberia', co: 'iberia', it: 'italian', ne: 'german', gr: 'east_europe', ru: 'russia_steppe', st: 'russia_steppe', is: 'ottoman_levant', pe: 'ottoman_levant',
+    cn: 'china_south', in: 'india', se: 'seasia', jp: 'japan', kr: 'korea', af: 'africa', sw: 'africa', tr: 'africa', az: 'latin', an: 'latin', na: 'north_america' };
+  var ZONE_NAME = { british: '브리튼', german: '독일·저지대', french: '프랑스', iberia: '이베리아', italian: '이탈리아', east_europe: '동유럽·그리스', russia_steppe: '러시아·초원',
+    ottoman_levant: '오스만·레반트', north_africa: '북아프리카', africa: '아프리카', south_africa: '남아프리카', india: '인도', seasia: '동남아시아', china_north: '중국 북방',
+    china_south: '중국 남방', korea: '조선', japan: '일본', north_america: '북아메리카', latin: '중남미', native_oceania: '원주민·오세아니아' };
+  CB.ZONE_NAME = ZONE_NAME;
+  /** 요리실에서 솥을 잡은 사람: 요리 단계가 가장 높은 사람 {m, lv} (없으면 null) */
+  CB.galleyCook = function () {
+    var rooms = CB.rooms(), best = null;
+    for (var i = 0; i < rooms.length; i++) if (rooms[i] === 'galley') {
+      var m = CB.occupant(i); if (!m || !G.MATE[m.id]) continue;
+      var lv = R().mateSkill(m, 'cook'); if (lv >= 1 && (!best || lv > best.lv)) best = { m: m, lv: lv };
+    }
+    return best;
+  };
+  /** 요리사가 차리는 고장 음식: 모국어의 음식권 (말 하나에 음식권이 여럿이면 그 사람 양식에 맞는 쪽) */
+  CB.cookZone = function (m) {
+    var d = G.MATE[m.id], li = CB.nativeLang(m), zs = (li != null && LANG_ZONES[li]) || [], sz = d && STYLE_ZONE[d.style];
+    if (sz && zs.indexOf(sz) >= 0) return sz;
+    return zs[0] || sz || null;
+  };
+  /** 이번 주 차림과 하루 효과 {cook, lv, zone, zoneName, dish, mess, mult, home, fat, disc} — 요리사가 없으면 null */
+  CB.galleyMeal = function () {
+    var ck = CB.galleyCook(); if (!ck || !G.CUISINE) return null;
+    var zone = CB.cookZone(ck.m); if (!zone) return null;
+    var lv = Math.min(3, ck.lv), all = G.CUISINE.list.filter(function (d) { return d.zone === zone; });
+    // 요리 단계가 높을수록 값비싼 음식: 만들 수 있는 가장 높은 등급의 음식을 차린다 (그런 음식이 하나뿐이면 한 등급 아래 것과 번갈아)
+    var can = all.filter(function (d) { return (d.tier || 1) <= lv; }), top = 0;
+    can.forEach(function (d) { top = Math.max(top, d.tier || 1); });
+    var pool = can.filter(function (d) { return (d.tier || 1) === top; });
+    if (pool.length < 2) pool = pool.concat(can.filter(function (d) { return (d.tier || 1) === top - 1; }));
+    if (!pool.length) pool = all.slice().sort(function (a, b) { return (a.tier || 1) - (b.tier || 1); }).slice(0, 1);
+    if (!pool.length) return null;
+    var s = S(), wk = Math.floor((s.day || 0) / 7), dish = pool[Math.abs(wk + U.strHash(ck.m.id)) % pool.length];
+    var K = B().galleyMeal || {}, rooms = CB.rooms(), mess = rooms.indexOf('mess') >= 0;
+    var mult = 1 + (mess ? (K.messHas == null ? 0.3 : K.messHas) : 0) + CB.power('mess') * (K.messPow == null ? 0.1 : K.messPow);
+    var homeC = s.player && G.CITY_DATA[s.player.home], home = !!(homeC && G.CUISINE.zone && G.CUISINE.zone(homeC) === zone);
+    var tier = dish.tier || 1, eff = CB.eff(ck.m) * (1 + Math.max(0, lv - 1) * (K.skill == null ? 0.1 : K.skill));   // 충성 효율 × 솜씨
+    // 풍미: 짐칸의 향신료·식자재 (가장 많이 실은 것을 쓴다)
+    var cargo = (s.fleet && s.fleet.cargo) || {}, spice = null, food = null;
+    Object.keys(cargo).forEach(function (id) { var g = G.GOOD[id], q = cargo[id] && cargo[id].q; if (!g || !(q > 0)) return;
+      if (g.cat === 'spice' && (!spice || q > cargo[spice].q)) spice = id; else if (g.cat === 'food' && (!food || q > cargo[food].q)) food = id; });
+    var flavor = 1 + (spice ? (K.spice == null ? 0.25 : K.spice) : 0) + (food ? (K.food == null ? 0.1 : K.food) : 0);
+    return { cook: ck.m, name: G.MATE[ck.m.id].name, lv: ck.lv, zone: zone, zoneName: ZONE_NAME[zone] || zone, dish: dish, mess: mess, mult: mult, home: home,
+      spice: spice, food: food, flavor: flavor, flavorText: [spice, food].filter(Boolean).map(function (id) { return G.GOOD[id].name; }).join('·'),
+      fat: ((K.fat0 == null ? 0.1 : K.fat0) + (K.fatTier == null ? 0.08 : K.fatTier) * tier) * mult * eff * flavor,
+      disc: ((K.disc0 == null ? 0.04 : K.disc0) + (K.discTier == null ? 0.04 : K.discTier) * tier) * mult * eff * flavor * (home ? (K.home || 1.25) : 1) };
+  };
+  /** 차림이 바뀔 때 풍미에 쓴 향신료·식자재를 1통씩 덜어 낸다 */
+  CB.galleyUse = function (gm) {
+    var c = S().fleet.cargo;
+    [gm && gm.spice, gm && gm.food].forEach(function (id) { if (!id || !c[id]) return; c[id].q -= 1; if (c[id].q <= 0) delete c[id]; });
+  };
+
   // ---------------------------------------------------------------- 말 배우기
   /** 부하의 모국어 (가장 잘하는 말) */
   CB.nativeLang = function (m) {

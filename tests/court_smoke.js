@@ -1,4 +1,4 @@
-/* 궁정: 명성의 네 갈래, 국왕의 부름(명성 10,000마다), 왕명 열 가지, 작위(제 나라 7칸·다른 나라 명예 작위), 공손한 인사.
+/* 궁정: 명성의 네 갈래, 국왕의 부름(명성 10,000마다), 왕명 열 가지, 작위(제 나라 8칸 — 대공까지·다른 나라 명예 작위), 공손한 인사.
    대화창은 시험에서 대신 답한다(UI.say·ask·choose·confirm·alert를 바꿔 끼움).
    node tests/court_smoke.js   (BROWSER_EXE=크롬 경로) */
 'use strict';
@@ -169,15 +169,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     Object.keys(r.kinds).forEach(k => ok(r.kinds[k] === 'ok', '왕명 「' + k + '」 받기 → 해내기 → 작위 (' + r.kinds[k] + ')'));
     ok(r.lawful && r.captureOther === 0, '나포: 그 나라 배만 세고, 악명은 오르지 않는다');
     ok(/^pirate:\d:\d:true$/.test(r.rescueNpc || ''), '구출: 소굴 앞바다에 해적단이 나타난다 (' + r.rescueNpc + ')');
-    ok(/피달구\(Fidalgo\) → 영주\(Senhor\) → 남작\(Barão\) → 자작\(Visconde\) → 백작\(Conde\) → 후작\(Marquês\) → 공작\(Duque\) → 공작/.test(r.ladder) && !r.top, '포르투갈 사다리: ' + r.ladder);
+    ok(/피달구\(Fidalgo\) → 영주\(Senhor\) → 남작\(Barão\) → 자작\(Visconde\) → 백작\(Conde\) → 후작\(Marquês\) → 공작\(Duque\) → 대공\(Grão-Duque\) → 대공/.test(r.ladder) && !r.top, '포르투갈 사다리: ' + r.ladder);
     ok(r.hrePending && /제국 기사 → 제국 남작 → 제국 백작 → 제국 백작/.test(r.hre), '신성로마제국 명예 작위: ' + r.hre);
-    ok(/리스본=공작 각하/.test(r.adr) && /이스탄불=공작 각하/.test(r.adr) && /비엔나=백작 각하/.test(r.adr) && /한양=$/.test(r.adr), '부르는 말: ' + r.adr);
-    ok(r.paid === 11700 && !r.lawful0 && r.lawful1 && !r.lawfulOther && !r.lawfulPirate, '특허장: 공작은 35% 싸게(3,900 + 7,800닢), 사략허가장은 정한 나라의 배만 (' + r.paid + ')');
+    ok(/리스본=대공 전하/.test(r.adr) && /이스탄불=대공 전하/.test(r.adr) && /비엔나=백작 각하/.test(r.adr) && /한양=$/.test(r.adr), '부르는 말: ' + r.adr);
+    ok(r.paid === 10800 && !r.lawful0 && r.lawful1 && !r.lawfulOther && !r.lawfulPirate, '특허장: 대공은 40% 싸게(3,600 + 7,200닢), 사략허가장은 정한 나라의 배만 (' + r.paid + ')');
     ok(r.bounty === '1000:60:true', '사략 포상금: 꺾은 배 2척 → 1,000닢·전투 명성 +60 (3배) (' + r.bounty + ')');
     ok(r.duty === '0.08:0:true:true', '면세증: 그 나라 항구에서만 사는 값 −8%·들여온 물건 파는 값 +8% (' + r.duty + ')');
     ok(r.expired === '2:false:0' && r.noTitle, '기한이 끝나면 알리고 사라진다 · 작위가 없으면 받지 못한다 (' + r.papers + ')');
-    ok(r.hag === '42/5.3 28/3.5 -' && r.hagOdds === '3.5:true:false', '귀족의 권한 — 값 깎기: 리스본 +42%·+5.3%p, 이스탄불 +28%·+3.5%p, 한양 없음 (' + r.hag + ' · ' + r.hagOdds + ')');
-    ok(/공작 각하/.test(r.hail) && r.hailPlain === '어서 오게!', '유럽·이슬람은 공손하게, 그 밖은 예전대로');
+    ok(r.hag === '48/6 32/4 -' && r.hagOdds === '4:true:false', '귀족의 권한 — 값 깎기: 리스본 +48%·+6%p, 이스탄불 +32%·+4%p (대공), 한양 없음 (' + r.hag + ' · ' + r.hagOdds + ')');
+    ok(/대공 전하/.test(r.hail) && r.hailPlain === '어서 오게!', '유럽·이슬람은 공손하게, 그 밖은 예전대로');
     ok(/이달고 \(Hidalgo\)/.test(r.es) || /영주 \(Señor\)/.test(r.es), '에스파냐 사다리: ' + r.es);
     ok(r.quit && r.late, '왕명을 내려놓거나 기한을 넘기면 신뢰·명성이 깎이고 한동안 부르지 않는다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));

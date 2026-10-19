@@ -42,14 +42,16 @@
     papers: { marqueFee: 6000, marqueYears: 2, bounty: 500, bountyFame: 10, marqueSpawn: 0.12, pirateCut: 0.8, exemptFee: 12000, exemptYears: 1, duty: 0.08, rankCut: 0.05 }
   };
 
-  // 제 나라 귀족 사다리 (아래 → 위) — 사용자 지정: 피달구/이달고 → 영주 → 남작 → 자작 → 백작 → 후작 → 공작
+  // 제 나라 귀족 사다리 (아래 → 위) — 사용자 지정: 피달구/이달고 → 영주 → 남작 → 자작 → 백작 → 후작 → 공작 → 대공 (2026-10-19, 명성 80,000)
   var PT = [
     ['피달구', 'Fidalgo', 'Fidalga', 1, '나리'], ['영주', 'Senhor', 'Senhora', 2, '나리'], ['남작', 'Barão', 'Baronesa', 3, '각하'], ['자작', 'Visconde', 'Viscondessa', 4, '각하'],
-    ['백작', 'Conde', 'Condessa', 5, '각하'], ['후작', 'Marquês', 'Marquesa', 6, '각하'], ['공작', 'Duque', 'Duquesa', 7, '각하']
+    ['백작', 'Conde', 'Condessa', 5, '각하'], ['후작', 'Marquês', 'Marquesa', 6, '각하'], ['공작', 'Duque', 'Duquesa', 7, '각하'],
+    ['대공', 'Grão-Duque', 'Grã-Duquesa', 8, '전하']
   ];
   var ES = [
     ['이달고', 'Hidalgo', 'Hidalga', 1, '나리'], ['영주', 'Señor', 'Señora', 2, '나리'], ['남작', 'Barón', 'Baronesa', 3, '각하'], ['자작', 'Vizconde', 'Vizcondesa', 4, '각하'],
-    ['백작', 'Conde', 'Condesa', 5, '각하'], ['후작', 'Marqués', 'Marquesa', 6, '각하'], ['공작', 'Duque', 'Duquesa', 7, '각하']
+    ['백작', 'Conde', 'Condesa', 5, '각하'], ['후작', 'Marqués', 'Marquesa', 6, '각하'], ['공작', 'Duque', 'Duquesa', 7, '각하'],
+    ['대공', 'Gran Duque', 'Gran Duquesa', 8, '전하']
   ];
   var BARBARY = [83, 82, 81, 85], ARABIA = [124, 109, 125], MALAY = [166, 170, 167], EAST = [191];
   var TURK = [['오스만 제국', 0, 9999], ['하프스 왕조', 0, 1574], ['틀렘센 왕국', 0, 1554], ['맘루크 왕조', 0, 1517]];
