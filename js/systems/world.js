@@ -29,6 +29,7 @@
     if (G.Leo) out = out.concat(G.Leo.daily());          // 레오나르도의 발명품 (js/systems/leonardo.js)
     if (G.Tudor) out = out.concat(G.Tudor.daily());
     if (G.Barb) out = out.concat(G.Barb.daily());        // 하이레딘 바르바로사의 습격 (js/systems/barbarossa.js)
+    if (G.IncaFall) out = out.concat(G.IncaFall.daily()); // 잉카 제국의 멸망 — 소식·잉카의 황금 (js/systems/incafall.js)
       // 튜더 왕실의 일 (js/systems/tudor.js)      // 화실·조각실: 미술품·조각품을 싣고, 실존 화가·조각가는 명작을 완성한다 (js/systems/studio.js)      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
     // contract deadline warnings
     if (s.contract && !s.contract.warned && U.dateNum(s.date) > s.contract.due) {
