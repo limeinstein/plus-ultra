@@ -78,7 +78,10 @@
 
   G.Games.poker = async function (city) {
     var s = G.Game.state, p = s.player;
-    var opp = { name: '술집 손님', portrait: A.withImg(A.npcSpec('poker' + city.id + (s.day % 5), 'sailor', G.Img.folkStyle(city)), G.Img.chain.npc('gambler', city)) };
+    var CS = G.Scenes.city;
+    // 상대는 그 도시의 말로 말한다 — 제독(과 통역·부관)의 어학이 모자라면 알아들은 낱말만 보인다 (ui.js speech · G.Tongues). 카드는 말이 없어도 친다
+    var opp = { name: '술집 손님', portrait: A.withImg(A.npcSpec('poker' + city.id + (s.day % 5), 'sailor', G.Img.folkStyle(city)), G.Img.chain.npc('gambler', city)),
+      lang: CS && CS.langLv ? CS.langLv(city) : 3, li: CS && CS.langLi ? CS.langLi(city) : null };
     if (G.Img) await G.Img.preload(FACE_KEYS.map(function (k) { return [k]; }), 0, true);
     await UI.say(U.pick(['오우, 자네 꽤 운이 있을 것 같은데, 어때, 포카로 내기하지 않겠나?', '여, 포카로 나와 내기하세. 도저히 따분해서 말이지.', '거기, 이쪽으로 오게. 포카나 하세.']), opp);
     for (;;) {
