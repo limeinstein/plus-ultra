@@ -586,7 +586,7 @@
     var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');
     var terr = l.lon != null ? G.Geo.terrain(l.lon, l.lat) : 'grass';
     if (terr === 'sea') terr = 'grass';
-    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns() });
+    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), halt: o.halt });
     var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
     var res = r.res;
     if (res === 'win') {
@@ -602,6 +602,7 @@
       else { var loot = n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + loot + '닢)', 'sword'); }
     }
     else if (res === 'lose') { UI.toast('패배했다... 대원 ' + (r.dead) + '명을 잃었다.', 'skull'); s.fleet.fatigue = Math.min(100, s.fleet.fatigue + 20); }
+    else if (res === 'truce') UI.toast((o.halt && o.halt.toast) || '싸움이 멈추었다.', 'people', 4200);
     else UI.toast('싸움을 피해 물러났다.', 'boot');
     if (r.back) setTimeout(function () { UI.toast('쓰러졌던 대원 ' + r.back + '명이 치료를 받고 다시 일어섰다.', 'drop', 3800); }, 700);
     if (G.Game.scene === L) refreshHud();

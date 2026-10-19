@@ -5,7 +5,8 @@
    - 특수 작전(한 번씩): 기습 · 함정 · 저격 · 작렬탄 (작렬탄은 소지품의 작렬탄과 포병이 있어야). 지형에 따라 성공률이 다르다
      기함의 참모실에 참모(운용·역사·측량)를 두면 계략이 더 잘 통하고(성공률 +) 피해도 커진다 (G.BALANCE.cabins.fx.staff·staffDmg)
    - 적 우두머리를 쓰러뜨리면 남은 적이 흩어져 이긴다. 제독대가 무너지면 진다 · 쓰러진 대원 일부는 의학 솜씨만큼 살아 돌아온다
-   G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n}, party, terr, guns, flee }) → {res: win|lose|flee, dead, back, left} */
+   G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n}, party, terr, guns, flee, halt }) → {res: win|lose|flee|truce, dead, back, left}
+   · halt: {turn, banner, text} — 그 차례(우리 편 명령 수)가 끝났을 때 아직 승부가 나지 않았으면 누군가 끼어들어 싸움이 멈춘다 (res 'truce') — 포카혼타스의 중재 (js/systems/pocahontas.js) */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R, I = G.Img;
@@ -444,6 +445,7 @@
         if (tot < P0 * 0.2) return 'lose';
         return null;
       }
+      var turnsDone = 0;
       async function turn(cmd) {
         if (busy || over || phase !== 'fight') return; busy = true;
         guardMe = cmd === 'guard';
@@ -493,6 +495,8 @@
         place();
         if (target && target.n <= 0) target = null;
         if (r) return end(r);
+        turnsDone++;
+        if (opt.halt && turnsDone >= (opt.halt.turn || 2)) { auto = false; if (opt.halt.text) say(opt.halt.text); await sleep(600); return end('truce'); }
         var tot = U.sum(mine, function (u) { return u.n; }), et = U.sum(foes, function (u) { return u.n; });
         if (cmd === 'attack' || cmd === 'guard') say('아군 ' + tot + '명 · 적 ' + et + (e.kind === 'beast' ? '마리' : '명') + (target ? ' · 목표: ' + target.name : ''));
         busy = false; cmdBar();
@@ -512,14 +516,15 @@
         over = true; auto = false;
         var lead = foes.filter(function (u) { return u.leader; })[0];
         if (res === 'win' && alive(foes).length) { foes.forEach(function (u) { if (u.n > 0) { u.tx = u.x + 400; u.fade = 1; } }); }
-        banner(res === 'win' ? (lead.n <= 0 ? lead.name + U.jx(lead.name, '을/를') + ' 쓰러뜨렸다!' : '승리!') : res === 'lose' ? '패배...' : '후퇴', 2.2);
+        banner(res === 'win' ? (lead.n <= 0 ? lead.name + U.jx(lead.name, '을/를') + ' 쓰러뜨렸다!' : '승리!') : res === 'lose' ? '패배...' : res === 'truce' ? ((opt.halt && opt.halt.banner) || '싸움이 멈추었다') : '후퇴', 2.2);
         var left = U.sum(mine, function (u) { return u.n; }), dead = P0 - left;
         var back = res === 'flee' && dead === 0 ? 0 : Math.min(dead, Math.round(dead * U.clamp(0.25 + sk('med') * 0.15 + (S().player.st.int > 70 ? 0.05 : 0), 0, 1)));
         var adm = mine.filter(function (u) { return u.leader; })[0];
         if (G.Growth) G.Growth.land(res);   // 전투 경험 (육상전)
         if (!opt.noHurt) S().player.hp = Math.max(10, Math.round(S().player.hp - 40 * (1 - adm.n / adm.n0)));
         btns.innerHTML = '';
-        say((res === 'win' ? (lead.n <= 0 ? '<b>' + lead.name + U.jx(lead.name, '이/가') + ' 쓰러지자 남은 적이 흩어져 달아났다!</b>' : '<b>적을 모두 물리쳤다!</b>') : res === 'lose' ? (adm.n <= 0 ? '<b class="warn-text">제독대가 무너졌다...</b>' : '<b class="warn-text">탐험대가 무너졌다...</b>') : '싸움을 피했다.') +
+        if (res === 'truce') say('<b>' + ((opt.halt && opt.halt.after) || '양쪽 모두 무기를 내렸다.') + '</b>' + (dead ? ' 쓰러진 대원 ' + dead + '명 가운데 ' + back + '명이 치료받고 일어섰다.' : ''));
+        else say((res === 'win' ? (lead.n <= 0 ? '<b>' + lead.name + U.jx(lead.name, '이/가') + ' 쓰러지자 남은 적이 흩어져 달아났다!</b>' : '<b>적을 모두 물리쳤다!</b>') : res === 'lose' ? (adm.n <= 0 ? '<b class="warn-text">제독대가 무너졌다...</b>' : '<b class="warn-text">탐험대가 무너졌다...</b>') : '싸움을 피했다.') +
           (dead ? ' 쓰러진 대원 ' + dead + '명 가운데 ' + back + '명이 치료받고 일어섰다.' : ''));
         var ok = U.el('button', 'btn navy', '확인'); btns.appendChild(ok);
         var done = function () { live = false; win.close(res); if (G.Audio) G.Audio.music('land'); resolve({ res: res, dead: dead - back, back: back, left: left + back, leaderDown: lead.n <= 0 }); };
