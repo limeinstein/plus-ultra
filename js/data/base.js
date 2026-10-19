@@ -407,6 +407,10 @@
     // 단서 없이 찾기 (js/systems/discovery.js D.noClueChance): 단서가 없는 발견물은 찾는 반경 안에 든 날마다 이 확률로만 찾는다.
     // sea·land 기본 + 기술 1레벨마다 skill(바다 측량 / 뭍 역사학, 짐승·자연은 과학 절반) + 망루 표식 mark + 가운데 가까울수록 center + 배를 세우고 탐색 search, 최대 max
     // 조합 의뢰의 유예 (js/systems/quest.js): 기한이 지나면 의뢰 기한 × k일(최소 min·최대 max) 동안 「기한 지남」으로 남아 마치면 사례·명성 절반. 그 뒤 조합이 거둬들인다
+    // 교역소 일괄 거래 (js/city/trade.js T.batch): 여러 품목을 골라 한꺼번에 사고팔 때, 결제 전에 회계 단계만큼(흥정 횟수 acct.tries) 「한꺼번에니 더 깎아/쳐 달라」.
+    //   한 번에 깎이는 몫 = base + 회계 단계 × perAcct + 경리 purser(+경리 회계 × 0.005) + 물량(통 수 / bulkPer × bulkMax, 최대 bulkMax). 2차부터 ×0.7, 모두 합쳐 cap까지.
+    //   성공 확률은 값 깎기와 같은 T.haggleOdds — 차수마다 ×fade, 거절당할 때마다 ×acct.retryK. 파는 쪽 웃돈은 깎는 몫 × sellK (들여온 물건·다른 곳에서 산 몫에만)
+    batchDeal: { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8 },
     questLate: { k: 0.5, min: 20, max: 60 },
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
     clueStack: { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 },
