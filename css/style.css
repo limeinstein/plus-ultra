@@ -912,11 +912,13 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .rduel .rd-side .info { flex: 1; max-width: 360px; }
 .rduel .rd-side .nm { font-weight: 800; font-size: 19px; }
 .rduel .rd-side .nm small { font-weight: 400; color: var(--ink-soft); }
-.rduel .bar { position: relative; height: 16px; background: rgba(40,24,10,.25); border: 1px solid rgba(90,65,35,.5); margin-top: 3px; }
+.rduel .bar { position: relative; height: 18px; line-height: 18px; font-size: 12px; background: rgba(40,24,10,.25); border: 1px solid rgba(90,65,35,.5); margin-top: 3px; }
 .rduel .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(180deg, #c0503a, #7a2a1e); transition: width .25s; }
 .rduel .rd-side.en .bar i { left: auto; right: 0; }
 .rduel .bar.sp i { background: linear-gradient(180deg, #e8c060, #a87a20); }
-.rduel .bar b { position: relative; font-size: 12px; padding: 0 6px; color: #fff; text-shadow: 0 1px 2px #000; line-height: 16px; }
+/* 글자는 막대 안에 따로 띄운다 — 글꼴(본명조·고딕 등)마다 줄 높이가 달라 막대 밖으로 밀려 잘리던 것 (2026-10-19) */
+.rduel .bar b { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; align-items: center; font-size: 12px; font-weight: 700; padding: 0 6px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; line-height: 1; white-space: nowrap; }
+.rduel .rd-side.en .bar b { justify-content: flex-end; }
 .rduel .rd-side .sub { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
 .rduel .rd-mid { text-align: center; }
 .rduel .rd-round { font-family: var(--latin); font-size: 22px; color: #7a2a1e; letter-spacing: .08em; }
