@@ -403,6 +403,7 @@
       G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c) || s.known.indexOf(c.id) >= 0) return; if (G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.8) { s.known.push(c.id); UI.toast('새로운 도시 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'castle', 4000); G.Fame.add('ex', 5); } });
       msgs.forEach(function (m) { UI.toast(m.text, m.icon); });
       refreshHud();
+      if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
       // 자연재해: 지진·화산·산사태·쓰나미·홍수가 탐험대를 덮친다 (js/systems/disaster.js)
       if (G.Disaster) { await G.Disaster.land({ spend: spendDays, dailyCost: function () { return dailyCost(); }, mount: MT, refresh: refreshHud }); if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy--; await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); st.busy--; return; } }
       // discoveries

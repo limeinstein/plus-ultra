@@ -1396,6 +1396,7 @@
       msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
       refreshHud();
       if (news.length) { if (G.SeaNews) G.SeaNews.show(news); else await G.Scenes.city.news(news); }   // 항해를 멈추지 않고 오른쪽 위에 잠깐
+      if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
       if (G.Studio && G.Studio.pending()) await G.Studio.present();   // 화실·조각실에서 완성한 명작을 바친다
       if (G.Rel && G.Rel.pending()) await G.Rel.present();       // 궁정의 소식·교황의 사절·큰 해전 (js/systems/relations.js)

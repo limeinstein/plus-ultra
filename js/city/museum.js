@@ -8,6 +8,13 @@
   function recOf(kind, c, realmId) { return (G.Court.buildingsAt(c.id).filter(function (x) { return x.kind === kind && x.realm === realmId; })[0] || {}).rec || null; }
   function realmName(id) { var r = G.COURT.realms[id]; return r ? r.name : ''; }
   function curator(c, kind) { return C.npc(kind === 'zoo' ? 'zookeeper' : 'curator', kind === 'zoo' ? '사육사' : '관장'); }
+  /** 「기증한다」 메뉴 — 지금 기증할 수 있는 수를 함께 보인다 (규칙: G.Court.donate, js/systems/court.js) */
+  function donateItem(kind, c, arg) {
+    var n = G.Court.donatable ? G.Court.donatable(kind).length : 0;
+    return { label: kind === 'zoo' ? '새로 찾은 동물을 기증한다' : kind === 'gallery' ? '명작을 기증한다' : '유물·명작을 기증한다', icon: kind === 'zoo' ? 'horse' : kind === 'gallery' ? 'palette' : 'chest',
+      sub: n ? '기증할 수 있는 것 ' + n + (kind === 'zoo' ? '종' : '점') : '지금 기증할 것이 없다', dim: !n,
+      onClick: function () { return G.Court.donate(kind, arg, curator(c, kind)); } };
+  }
 
   /** 전시실: 카드 여러 장 (그림 · 이름 · 풀이) */
   function gallery(title, sub, cards) {
@@ -28,7 +35,7 @@
     await C.say(curator(c, 'museum'), rec ? '어서 오십시오, ' + p.name + ' 제독. 이 박물관은 제독께서 바치신 보물로 문을 열었습니다. 오늘도 구경하러 온 사람들로 붐빕니다.' : '어서 오십시오.');
   };
   MU.menu = function (c, arg) {
-    return [{ label: '전시실을 둘러본다', icon: 'bust', onClick: function () { return MU.show(c, arg); } }];
+    return [{ label: '전시실을 둘러본다', icon: 'bust', onClick: function () { return MU.show(c, arg); } }, donateItem('museum', c, arg)];
   };
   MU.show = function (c, arg) {
     var rec = recOf('museum', c, arg); if (!rec) return Promise.resolve();
@@ -38,7 +45,7 @@
       return { src: G.Court.exhibitSrc(x), frame: !!x.mw, icon: x.mw ? (x.wk === 'sculpt' ? 'bust' : 'palette') : 'chest', name: x.name,
         meta: x.mw ? (x.wk === 'sculpt' ? '조각' : '그림') + ' · ' + who + (x.y ? ' · ' + x.y + '년' : '') : '발견 유물' + (d ? ' · ' + d.name : ''), desc: x.desc };
     });
-    return gallery(MU.title(c, arg), rec.y + '년, ' + U.esc(S().player.name) + ' 제독이 바친 ' + rec.items.length + '점으로 문을 열었다.', cards);
+    return gallery(MU.title(c, arg), rec.y + '년, ' + U.esc(S().player.name) + ' 제독이 바친 ' + G.Court.recNote(rec, rec.items.length, '점') + '.', cards);
   };
 
   // ================================================================ 왕립 미술관
@@ -50,7 +57,7 @@
     await C.say(curator(c, 'gallery'), rec ? '어서 오십시오, ' + p.name + ' 제독. 제독께서 바치신 명작들이 이 미술관의 첫 전시가 되었습니다.' : '어서 오십시오.');
   };
   GA.menu = function (c, arg) {
-    return [{ label: '작품 전시실을 둘러본다', icon: 'palette', onClick: function () { return GA.show(c, arg); } }];
+    return [{ label: '작품 전시실을 둘러본다', icon: 'palette', onClick: function () { return GA.show(c, arg); } }, donateItem('gallery', c, arg)];
   };
   GA.show = function (c, arg) {
     var rec = recOf('gallery', c, arg); if (!rec) return Promise.resolve();
@@ -59,7 +66,7 @@
       return { src: G.Court.exhibitSrc(x), frame: x.wk !== 'sculpt', icon: x.wk === 'sculpt' ? 'bust' : 'palette', name: x.name,
         meta: (x.wk === 'sculpt' ? '조각' : '그림') + ' · ' + who + (x.y ? ' · ' + x.y + '년' : ''), desc: x.desc };
     });
-    return gallery(GA.title(c, arg), rec.y + '년, ' + U.esc(S().player.name) + ' 제독이 바친 명작 ' + rec.items.length + '점으로 문을 열었다.', cards);
+    return gallery(GA.title(c, arg), rec.y + '년, ' + U.esc(S().player.name) + ' 제독이 바친 명작 ' + G.Court.recNote(rec, rec.items.length, '점') + '.', cards);
   };
 
   // ================================================================ 왕립 동물원
@@ -71,7 +78,7 @@
     await C.say(curator(c, 'zoo'), '어서 오십시오, ' + p.name + ' 제독! 제독께서 알려 주신 짐승들이 잘 지내고 있습니다. 아이들이 매일 구경하러 옵니다.');
   };
   ZO.menu = function (c, arg) {
-    return [{ label: '동물들을 둘러본다', icon: 'horse', onClick: function () { return ZO.show(c, arg); } }];
+    return [{ label: '동물들을 둘러본다', icon: 'horse', onClick: function () { return ZO.show(c, arg); } }, donateItem('zoo', c, arg)];
   };
   ZO.show = function (c, arg) {
     var rec = recOf('zoo', c, arg); if (!rec) return Promise.resolve();
@@ -80,6 +87,6 @@
       var k = G.Img && G.Img.pick ? G.Img.pick(G.Img.chain.discovery(d)) : null;
       return { src: k ? G.Img.src(k) : null, icon: 'horse', name: d.name, meta: '신기한 동물 · ' + (d.reg != null && G.REGIONS[d.reg] ? G.REGIONS[d.reg] : '먼 땅'), desc: d.desc || '' };
     });
-    return gallery(ZO.title(c, arg), (rec.y || '') + '년, ' + U.esc(S().player.name) + ' 제독이 찾아낸 ' + cards.length + '종의 짐승으로 문을 열었다.', cards);
+    return gallery(ZO.title(c, arg), (rec.y || '') + '년, ' + U.esc(S().player.name) + ' 제독이 찾아낸 짐승 ' + G.Court.recNote(rec, cards.length, '종') + '.', cards);
   };
 })(window.G = window.G || {});

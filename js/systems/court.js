@@ -494,6 +494,78 @@
     var ids = rec && rec.ids ? rec.ids : Object.keys(st().zooUsed);
     return ids.map(function (id) { return G.DISC[id]; }).filter(Boolean);
   };
+
+  // ================================================================ 기증 (2026-10-19)
+  /* 왕립 박물관·미술관·동물원이 선 뒤에도 제독이 새로 얻은 것을 그 자리에서 기증할 수 있다.
+     · 박물관: 발견 유물·명작 · 미술관: 화실·조각실의 명작 · 동물원: 새로 찾은 신기한 동물(아직 어느 동물원에도 없는 것)
+     · 한 점(한 종)마다 사교 명성 B().donateSo(기본 = exhibitSo) · 그 나라 군주의 신뢰 B().donateTrust(기본 1)
+     · 기록: rec.items(박물관·미술관) · rec.ids(동물원)에 더하고, 처음 문을 열 때의 수는 rec.open에 남긴다 */
+  CT.zooAnimals = zooAnimals;
+  CT.donatable = function (kind) { return kind === 'zoo' ? zooAnimals() : kind === 'gallery' ? galleryItems() : museumItems(); };
+  function donateReward(rec, n) {
+    var so = G.Fame.add('so', n * (B().donateSo != null ? B().donateSo : B().exhibitSo == null ? 25 : B().exhibitSo));
+    var sp = rec && rec.sp && G.SPONSOR[rec.sp], tr = B().donateTrust == null ? 1 : B().donateTrust;
+    if (sp && tr) SP().addTrust(SP().rel(sp.id), n * tr);
+    return so;
+  }
+  /** 한 점(한 종)씩 골라 기증한다 → {n, so} (그만두면 n 0) */
+  CT.donate = async function (kind, realmId, curator) {
+    var c = st(), s = S(), rec = kind === 'museum' ? c.museum[realmId] : kind === 'gallery' ? c.gallery[realmId] : null;
+    if (kind === 'zoo') {
+      rec = c.zooAt[realmId];
+      if (!rec && c.zoo[realmId] != null) {   // 옛 저장: 동물원이 선 해만 있다 — 지금까지 쓴 동물을 이 동물원의 것으로
+        var rm = G.COURT.realms[realmId], sp0 = rm && G.SPONSOR[rm.sponsors[0]];
+        rec = c.zooAt[realmId] = { city: sp0 ? sp0.city : null, y: c.zoo[realmId], sp: sp0 ? sp0.id : null, ids: Object.keys(c.zooUsed) };
+      }
+      if (rec && !rec.ids) rec.ids = Object.keys(c.zooUsed);
+    }
+    if (!rec) return { n: 0, so: 0 };
+    var place = kind === 'zoo' ? '동물원' : kind === 'gallery' ? '미술관' : '박물관', n = 0, so = 0;
+    for (;;) {
+      var left = CT.donatable(kind);
+      if (!left.length) {
+        if (!n) await UI.say(kind === 'zoo' ? '지금 이 동물원에 없는 짐승을 찾아내시면 그때 알려 주십시오. 그림과 기록을 보고 사람을 보내 데려오겠습니다.'
+          : kind === 'gallery' ? '기증하실 명작이 없으시군요. 배의 화실·조각실에서 그림이나 조각이 나오면 가져와 주십시오.'
+          : '기증하실 만한 것이 없으시군요. 발견한 유물이나 배의 화실·조각실에서 나온 명작을 가져와 주십시오.', curator);
+        break;
+      }
+      var opts = left.map(function (x) {
+        if (kind === 'zoo') {
+          var k = G.Img && G.Img.pick ? G.Img.pick(G.Img.chain.discovery(x)) : null;
+          return { value: x, icon: k ? { src: G.Img.src(k), icon: 'horse' } : 'horse',
+            label: '<b>' + U.esc(x.name) + '</b><br><small class="muted">신기한 동물 · ' + U.esc(x.reg != null && G.REGIONS[x.reg] ? G.REGIONS[x.reg] : '먼 땅') + '</small>' };
+        }
+        var src = itemSrc(x);
+        return { value: x, icon: src ? { src: src, icon: 'chest' } : (x.mw ? (x.wk === 'sculpt' ? 'bust' : 'palette') : 'chest'),
+          label: '<b>' + U.esc(R.itemName(x)) + '</b><br><small class="muted">' + (x.mw ? '명작 · ' + U.esc(G.MATE[x.by] ? G.MATE[x.by].name : '') : '발견 유물 · ' + U.esc((G.RELIC_KIND || {})[(G.RELIC[x.id] || {}).kind] || '보물')) + '</small>',
+          right: U.num(itemValueOf(x)) + '닢' };
+      });
+      var v = await UI.choose(place + '에 기증한다' + (n ? ' (' + n + '점 기증함)' : ''), opts, { width: 760, icon: kind === 'zoo' ? 'horse' : kind === 'gallery' ? 'palette' : 'bust',
+        text: kind === 'zoo' ? '찾아낸 짐승의 그림과 기록을 넘기면 동물원이 사람을 보내 데려옵니다. 한 종마다 사교 명성이 오르고 군주의 신뢰가 쌓입니다.'
+          : '기증한 것은 소지품에서 빠지고 ' + place + '에 걸려 누구나 볼 수 있게 됩니다. 돈은 받지 않지만 한 점마다 사교 명성이 오르고 군주의 신뢰가 쌓입니다.' });
+      if (!v) break;
+      if (kind === 'zoo') {
+        if (rec.open == null) rec.open = rec.ids.length;
+        c.zooUsed[v.id] = 1; rec.ids.push(v.id);
+      } else {
+        if (rec.open == null) rec.open = rec.items.length;
+        R.removeItemObject(v); var ex = exhibitOf(v); ex.dy = s.date.y; rec.items.push(ex);
+      }
+      n++; var got = donateReward(rec, 1); so += got;
+      rec.don = (rec.don || 0) + 1;
+      var nm = kind === 'zoo' ? v.name : R.itemName(v);
+      G.State.log(place + '에 「' + nm + '」' + (kind === 'zoo' ? '을(를) 알려 데려오게 했다' : '을(를) 기증했다') + (got ? ' (사교 명성 +' + got + ')' : ''));
+      await UI.say(kind === 'zoo' ? U.pick(['「' + nm + '」이라니! 당장 사람을 보내겠습니다. 우리 동물원의 새 식구가 되겠군요.', '이런 짐승이 있었다니… 아이들이 얼마나 좋아할지요. 고맙습니다, 제독.'])
+        : U.pick(['「' + nm + '」… 이토록 귀한 것을 내어 주시다니요. 가장 좋은 자리에 걸겠습니다.', '제독의 이름과 함께 「' + nm + '」을(를) 오래도록 보여 드리겠습니다. 고맙습니다.']) + (got ? '\n(사교 명성 +' + got + ')' : ''), curator);
+    }
+    if (n && G.Game.refreshHud) G.Game.refreshHud();
+    return { n: n, so: so };
+  };
+  /** 전시실 머리말: 문을 연 때의 수와 그 뒤 기증한 수 */
+  CT.recNote = function (rec, count, unit) {
+    var open = rec.open != null ? rec.open : count, more = count - open;
+    return open + unit + '으로 문을 열었다' + (more > 0 ? ' · 그 뒤 기증 ' + more + unit : '');
+  };
   /** 보상과 서임 */
   async function finish(sp, realm, t) {
     var c = st(), s = S(), who = SP().speaker(sp), rel = SP().rel(sp.id);

@@ -190,10 +190,16 @@
   /** 저장할 수 없는 것(화면 요소·함수·서로 가리키는 고리)이 섞여 있어도 일지가 깨지지 않게 건너뛴다 (어디서 걸렸는지 알린다) */
   function safeStringify(obj) {
     try { return JSON.stringify(obj); } catch (e) { /* 아래에서 다시 */ }
-    var seen = typeof WeakSet === 'function' ? new WeakSet() : null, bad = [];
+    // 고리(자기를 다시 가리키는 것)만 끊는다 — 같은 물건을 두 곳에서 가리키는 것은 고리가 아니니 두 번 다 적는다
+    // (예전에는 두 번째로 나온 것을 모두 버려, 한 번 이 길로 들어오면 의뢰·부하 같은 것이 저장에서 빠질 수 있었다)
+    var stack = [], bad = [];
     var out = JSON.stringify(obj, function (k, v) {
       if (typeof v === 'function' || (typeof Node !== 'undefined' && v instanceof Node)) { bad.push(k); return undefined; }
-      if (v && typeof v === 'object' && seen) { if (seen.has(v)) { bad.push(k); return undefined; } seen.add(v); }
+      if (v && typeof v === 'object') {
+        var at = stack.indexOf(this);
+        if (at >= 0) stack.length = at + 1; else stack.push(this);
+        if (stack.indexOf(v) >= 0) { bad.push(k); return undefined; }
+      }
       return v;
     });
     if (bad.length && window.console) console.warn('[저장] 저장할 수 없는 값을 건너뛰었습니다: ' + bad.slice(0, 8).join(', '));

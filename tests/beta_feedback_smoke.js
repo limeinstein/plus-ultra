@@ -37,6 +37,8 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
 
   await page.goto(PAGE, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.post');
+  const shownVersion = ((await page.locator('.eyebrow').innerText()).match(/VERSION\s+(\d+\.\d{3})/) || [])[1];
+  ok(!!shownVersion, '베타 센터에 배포 버전 표시');
   ok(await page.locator('#feedback-form').isVisible(), '로그인 없는 피드백 양식 표시');
   ok((await page.locator('.post-title').first().innerText()).includes('익명 글 보기 시험'), '익명 글을 공개 게시판에 합쳐 표시');
   await page.locator('.post').first().click();
@@ -50,7 +52,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
   await page.waitForFunction(() => document.querySelector('#feedback-form-status').textContent.includes('등록되었습니다'));
   ok(submitted && submitted.title === '로그인 없는 등록 시험', '익명 피드백 POST 전송');
   ok(!('name' in submitted) && !('account' in submitted) && !('ip' in submitted), '이름·계정·IP를 보내지 않음');
-  ok(presence && presence.surface === 'center' && presence.version === '0.263', '베타 센터 실시간 접속 신호 전송');
+  ok(presence && presence.surface === 'center' && presence.version === shownVersion, '베타 센터 실시간 접속 신호 전송 (' + shownVersion + ')');
   ok(typeof presence.sessionKey === 'string' && presence.sessionKey.length >= 20, '탭 한정 무작위 접속 키 전송');
   if (process.env.SCREENSHOT) await page.screenshot({ path: process.env.SCREENSHOT, fullPage: true });
   if (errors.length) console.error(errors.join('\n'));
