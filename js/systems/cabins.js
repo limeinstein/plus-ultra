@@ -167,16 +167,32 @@
     var ck = CB.galleyCook(); if (!ck || !G.CUISINE) return null;
     var zone = CB.cookZone(ck.m); if (!zone) return null;
     var lv = Math.min(3, ck.lv), all = G.CUISINE.list.filter(function (d) { return d.zone === zone; });
-    var pool = all.filter(function (d) { return (d.tier || 1) <= lv; }); if (!pool.length) pool = all.slice().sort(function (a, b) { return (a.tier || 1) - (b.tier || 1); }).slice(0, 1);
+    // 요리 단계가 높을수록 값비싼 음식: 만들 수 있는 가장 높은 등급의 음식을 차린다 (그런 음식이 하나뿐이면 한 등급 아래 것과 번갈아)
+    var can = all.filter(function (d) { return (d.tier || 1) <= lv; }), top = 0;
+    can.forEach(function (d) { top = Math.max(top, d.tier || 1); });
+    var pool = can.filter(function (d) { return (d.tier || 1) === top; });
+    if (pool.length < 2) pool = pool.concat(can.filter(function (d) { return (d.tier || 1) === top - 1; }));
+    if (!pool.length) pool = all.slice().sort(function (a, b) { return (a.tier || 1) - (b.tier || 1); }).slice(0, 1);
     if (!pool.length) return null;
     var s = S(), wk = Math.floor((s.day || 0) / 7), dish = pool[Math.abs(wk + U.strHash(ck.m.id)) % pool.length];
     var K = B().galleyMeal || {}, rooms = CB.rooms(), mess = rooms.indexOf('mess') >= 0;
     var mult = 1 + (mess ? (K.messHas == null ? 0.3 : K.messHas) : 0) + CB.power('mess') * (K.messPow == null ? 0.1 : K.messPow);
     var homeC = s.player && G.CITY_DATA[s.player.home], home = !!(homeC && G.CUISINE.zone && G.CUISINE.zone(homeC) === zone);
-    var tier = dish.tier || 1, eff = CB.eff(ck.m);
+    var tier = dish.tier || 1, eff = CB.eff(ck.m) * (1 + Math.max(0, lv - 1) * (K.skill == null ? 0.1 : K.skill));   // 충성 효율 × 솜씨
+    // 풍미: 짐칸의 향신료·식자재 (가장 많이 실은 것을 쓴다)
+    var cargo = (s.fleet && s.fleet.cargo) || {}, spice = null, food = null;
+    Object.keys(cargo).forEach(function (id) { var g = G.GOOD[id], q = cargo[id] && cargo[id].q; if (!g || !(q > 0)) return;
+      if (g.cat === 'spice' && (!spice || q > cargo[spice].q)) spice = id; else if (g.cat === 'food' && (!food || q > cargo[food].q)) food = id; });
+    var flavor = 1 + (spice ? (K.spice == null ? 0.25 : K.spice) : 0) + (food ? (K.food == null ? 0.1 : K.food) : 0);
     return { cook: ck.m, name: G.MATE[ck.m.id].name, lv: ck.lv, zone: zone, zoneName: ZONE_NAME[zone] || zone, dish: dish, mess: mess, mult: mult, home: home,
-      fat: ((K.fat0 == null ? 0.1 : K.fat0) + (K.fatTier == null ? 0.08 : K.fatTier) * tier) * mult * eff,
-      disc: ((K.disc0 == null ? 0.04 : K.disc0) + (K.discTier == null ? 0.04 : K.discTier) * tier) * mult * eff * (home ? (K.home || 1.25) : 1) };
+      spice: spice, food: food, flavor: flavor, flavorText: [spice, food].filter(Boolean).map(function (id) { return G.GOOD[id].name; }).join('·'),
+      fat: ((K.fat0 == null ? 0.1 : K.fat0) + (K.fatTier == null ? 0.08 : K.fatTier) * tier) * mult * eff * flavor,
+      disc: ((K.disc0 == null ? 0.04 : K.disc0) + (K.discTier == null ? 0.04 : K.discTier) * tier) * mult * eff * flavor * (home ? (K.home || 1.25) : 1) };
+  };
+  /** 차림이 바뀔 때 풍미에 쓴 향신료·식자재를 1통씩 덜어 낸다 */
+  CB.galleyUse = function (gm) {
+    var c = S().fleet.cargo;
+    [gm && gm.spice, gm && gm.food].forEach(function (id) { if (!id || !c[id]) return; c[id].q -= 1; if (c[id].q <= 0) delete c[id]; });
   };
 
   // ---------------------------------------------------------------- 말 배우기

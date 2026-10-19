@@ -12,7 +12,7 @@
     { id: 'deck', name: '갑판', icon: 'ship', fixed: true, skills: ['ops', 'sword'], desc: '갑판을 맡은 사람이 선원들을 부린다.', fx: '규율이 덜 떨어진다' },
     { id: 'hold', name: '빈 선실', icon: 'sack', cost: 0, days: 0, desc: '아직 쓰임을 정하지 않은 방. 조선소에서 고칠 수 있다.' },
     { id: 'chart', name: '지도 제작실', icon: 'chart', skills: ['survey', 'art'], cost: 1400, days: 3, desc: '측량한 것을 해도로 옮긴다.', fx: '해도에 밝혀지는 넓이가 는다' },
-    { id: 'galley', name: '요리실', icon: 'bread', skills: ['cook'], cost: 900, days: 2, desc: '따뜻한 끼니를 짓는 부엌.', fx: '피로가 덜 쌓이고, 별미를 차리는 일이 잦아진다 · 요리에 밝은 사람이면 그 사람 고장(모국어)의 음식을 차려 날마다 피로를 덜고 규율을 돋운다 (식당이 있으면 더)' },
+    { id: 'galley', name: '요리실', icon: 'bread', skills: ['cook'], cost: 900, days: 2, desc: '따뜻한 끼니를 짓는 부엌.', fx: '피로가 덜 쌓이고, 별미를 차리는 일이 잦아진다 · 요리에 밝은 사람이면 그 사람 고장(모국어)의 음식을 차려 날마다 피로를 덜고 규율을 돋운다 — 요리 단계가 높을수록 값비싼 음식, 식당·향신료·식자재가 있으면 더' },
     { id: 'mess', name: '식당', icon: 'mug', skills: ['cook', 'speech'], cost: 800, days: 2, desc: '선원들이 둘러앉아 먹고 쉬는 곳.', fx: '피로와 규율을 조금씩 돌본다 · 요리실의 차림이 더 효과를 낸다' },
     { id: 'account', name: '회계실', icon: 'coin', skills: ['acct'], role: 'purser', cost: 1200, days: 2, desc: '경리가 장부를 맞춘다. 이 방에 앉은 사람이 경리다.', fx: '값 깎기가 잘 통하고 급료가 덜 든다' },
     { id: 'chapel', name: '예배실', icon: 'pray', skills: ['theo'], cost: 1000, days: 2, desc: '기도하고 마음을 다잡는 방.', fx: '규율이 덜 떨어진다' },

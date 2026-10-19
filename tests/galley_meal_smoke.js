@@ -39,6 +39,17 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const speaker = G.MATES.find(d => d.sk && d.sk.speech >= 2 && !s.mates.some(m => m.id === d.id)); put(speaker.id, 2); const g2 = CB.galleyMeal();
       if (G.CabinView && G.CabinView._totals) { const t = G.CabinView._totals(); const row = t.fx.find(x => x.k === 'meal'); out.panel = row && [row.text, row.rooms]; }
       out.fx = [g0, g1, g2].map(g => ({ fat: +g.fat.toFixed(3), disc: +g.disc.toFixed(3), mult: +g.mult.toFixed(2), mess: g.mess, home: g.home }));
+      // 요리 단계가 높을수록 값비싼(등급 높은) 음식
+      const cm = s.mates.find(m => m.id === one.id); s.fleet.cargo = {};
+      cm.sk = Object.assign({}, cm.sk || {}, { cook: 1 }); const lv1 = CB.galleyMeal();
+      cm.sk.cook = 3; const lv3 = CB.galleyMeal();
+      out.level = [[lv1.dish.name, lv1.dish.tier, +lv1.fat.toFixed(3)], [lv3.dish.name, lv3.dish.tier, +lv3.fat.toFixed(3)]];
+      // 풍미: 후추·밀이 짐칸에 있으면
+      s.fleet.cargo.pepper = { q: 5, cost: 100, d: s.day }; const fp = CB.galleyMeal();
+      s.fleet.cargo.wheat = { q: 5, cost: 10, d: s.day }; const fpw = CB.galleyMeal();
+      CB.galleyUse(fpw);
+      out.flavor = { base: +lv3.fat.toFixed(3), pepper: [+fp.flavor.toFixed(2), +fp.fat.toFixed(3), fp.flavorText], both: [+fpw.flavor.toFixed(2), +fpw.fat.toFixed(3), fpw.flavorText], left: [s.fleet.cargo.pepper.q, s.fleet.cargo.wheat.q] };
+      delete cm.sk.cook; s.fleet.cargo = { pepper: { q: 5, cost: 100, d: s.day } };
       // 차림은 7일마다 바뀐다
       const seen = new Set(); const d0 = s.day; for (let k = 0; k < 8; k++) { s.day = d0 + k * 7; seen.add(CB.galleyMeal().dish.id); } s.day = d0; out.rotate = seen.size;
       // 바다의 하루: 알림 · 피로가 덜 쌓인다
@@ -63,9 +74,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.zones.every(z => z[3] <= Math.max(1, Math.min(3, z[4]))), '요리 단계까지의 음식만 차린다');
     ok(r.fx[1].fat > r.fx[0].fat && r.fx[2].fat > r.fx[1].fat && r.fx[1].mess && r.fx[2].mult > r.fx[1].mult, '식당이 있으면 효과가 오르고 식당에 사람이 있으면 더 (×' + r.fx.map(x => x.mult).join(' → ×') + ', 피로 −' + r.fx.map(x => x.fat).join(' / −') + ')');
     ok(r.panel && /「/.test(r.panel[0]) && /식당 ×/.test(r.panel[1]), '선실 화면 「함대에 적용되는 능력」에 차림 줄: ' + (r.panel || []).join(' — '));
+    ok(r.level[1][1] > r.level[0][1] && r.level[1][2] > r.level[0][2], '요리 단계가 높을수록 값비싼 음식: 요리 1 「' + r.level[0][0] + '」(' + r.level[0][1] + '등급, 피로 −' + r.level[0][2] + ') → 요리 3 「' + r.level[1][0] + '」(' + r.level[1][1] + '등급, 피로 −' + r.level[1][2] + ')');
+    ok(r.flavor.pepper[0] === 1.25 && r.flavor.both[0] === 1.35 && r.flavor.both[1] > r.flavor.pepper[1] && r.flavor.pepper[1] > r.flavor.base && r.flavor.left.join() === '4,4', '풍미: 후추 ×1.25, 후추·밀 ×1.35 (피로 −' + r.flavor.base + ' → −' + r.flavor.pepper[1] + ' → −' + r.flavor.both[1] + ') · 차림이 바뀔 때 1통씩 씀');
     ok(r.rotate >= 2, '차림이 7일마다 바뀐다 (8주에 ' + r.rotate + '가지)');
     ok(!r.err && r.on[0] < r.off[0] && r.on[1] > r.off[1], '바다의 하루: 요리사가 있으면 피로가 덜 쌓이고(' + r.on[0].toFixed(2) + ' < ' + r.off[0].toFixed(2) + ') 규율이 더 오른다(' + r.on[1].toFixed(2) + ' > ' + r.off[1].toFixed(2) + ')');
-    ok(r.news && r.news.length >= 1, '차림이 바뀌면 알린다: ' + (r.news || [])[0]);
+    ok(r.news && r.news.length >= 1 && /후추/.test(r.news[0]), '차림이 바뀌면 알린다: ' + (r.news || [])[0]);
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('\n통과');
   } catch (e) { console.error('✗', e.message); process.exitCode = 1; } finally { await browser.close(); }

@@ -1321,7 +1321,8 @@
       var GM = CBN && CBN.galleyMeal ? CBN.galleyMeal() : null;
       if (GM) {
         fb -= GM.fat;
-        if (st.galleyDish !== GM.dish.id) { st.galleyDish = GM.dish.id; msgs.push({ icon: 'bread', text: '요리실의 ' + GM.name + U.jx(GM.name, '이/가') + ' ' + GM.zoneName + ' 음식 「' + GM.dish.name + '」' + U.jx(GM.dish.name, '을/를') + ' 차렸다' + (GM.home ? ' — 고향의 맛에 선원들이 들떴다' : '') + (GM.mess ? ' (식당에서 둘러앉아 먹는다)' : '') + '.' }); }
+        if (st.galleyDish !== GM.dish.id) { st.galleyDish = GM.dish.id; if (CBN.galleyUse) CBN.galleyUse(GM);   // 풍미에 쓴 향신료·식자재 1통씩
+          msgs.push({ icon: 'bread', text: '요리실의 ' + GM.name + U.jx(GM.name, '이/가') + ' ' + GM.zoneName + ' 음식 「' + GM.dish.name + '」' + U.jx(GM.dish.name, '을/를') + ' 차렸다' + (GM.flavorText ? ' — 싣고 가던 ' + GM.flavorText + U.jx(GM.flavorText, '으로/로') + ' 풍미를 더했다' : '') + (GM.home ? ' — 고향의 맛에 선원들이 들떴다' : '') + (GM.mess ? ' (식당에서 둘러앉아 먹는다)' : '') + '.' }); }
       }
       if (G.Rain) fb += G.Rain.fatigue(st.storm > 0);              // 비: 기온대·소나기/폭우·비 대책에 따라 (js/systems/searain.js)
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);

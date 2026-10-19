@@ -372,7 +372,7 @@
       { k: 'fat', ic: 'bed', label: '하루 피로', v: fat, text: fat ? '−' + num(fat) : '', rooms: '요리실·식당·조타실·음악실' },
       { k: 'dis', ic: 'flag', label: '하루 규율', v: dis, text: dis ? '+' + num(dis) : '', rooms: '예배실·오락실·갑판·식당' },
       { k: 'meal', ic: 'bread', label: '요리실의 차림', v: gm ? gm.fat + gm.disc : 0, text: gm ? '「' + gm.dish.name + '」' : '',
-        rooms: gm ? gm.zoneName + ' 음식 · 요리사 ' + gm.name + ' (요리 ' + gm.lv + ') · 7일마다 바뀜 · 하루 피로 −' + num(gm.fat) + ' · 규율 +' + num(gm.disc) + (gm.mess ? ' · 식당 ×' + num(gm.mult) : ' · 식당이 있으면 더 좋아진다') + (gm.home ? ' · 고향의 맛' : '') : '요리실' },
+        rooms: gm ? gm.zoneName + ' 음식 · 요리사 ' + gm.name + ' (요리 ' + gm.lv + ') · 7일마다 바뀜 · 하루 피로 −' + num(gm.fat) + ' · 규율 +' + num(gm.disc) + (gm.mess ? ' · 식당 ×' + num(gm.mult) : ' · 식당이 있으면 더 좋아진다') + (gm.home ? ' · 고향의 맛' : '') + (gm.flavorText ? ' · 풍미 ×' + num(gm.flavor) + ' (' + gm.flavorText + ' — 차림이 바뀔 때 1통씩)' : ' · 짐칸에 후추 같은 향신료나 식자재가 있으면 풍미가 더해진다') + ' · 요리 단계가 높을수록 값비싼 음식' : '요리실' },
       { k: 'spd', ic: 'sail', label: '함대 속도', v: Math.min(B.rigMax || 0.08, F('rig', 'rig')), rooms: '조범실', fmt: function (v) { return '+' + pct(v) + '%'; } },
       { k: 'gun', ic: 'cannon', label: '기함 포 장전', v: F('gun', 'gun') * 0.5, rooms: '포격실', fmt: function (v) { return '+' + pct(v) + '% 빠르게'; } },
       { k: 'mar', ic: 'sword', label: '기함 백병전', v: F('marine', 'marine'), rooms: '해병 대기실', fmt: function (v) { return '+' + pct(v) + '%'; } },
