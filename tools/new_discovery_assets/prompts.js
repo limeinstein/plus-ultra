@@ -21,7 +21,26 @@ const rows = G.WONDERS.list.filter(row => added.has(row[0])).map(row => ({
 
 function clean(text) { return String(text || '').replace(/\s+/g, ' ').trim(); }
 
+const SAGRES_RUIN_PROMPT = `Use case: historical-scene
+Asset type: exact 4-column by 4-row cinematic discovery storyboard source for a historical exploration game's ruin GIF pipeline
+Primary request: Recreate Sagres as the historically plausible 15th-century Vila do Infante and Fortaleza de Sagres on Portugal's windswept southwestern headland. This discovery is called "Sagres Navigation School", but do NOT invent a grand academy building: portray a modest fortified settlement where Prince Henry gathered navigators, chartmakers, astronomers, pilots, and shipwrights.
+Scene/backdrop: A broad, mostly flat, treeless limestone promontory exposed to Atlantic wind and ocean on three sides. A low fortified entrance wall with a central arched gate and stout earth-and-stone bastions cuts across the landward neck. Beyond it lies a very large open grass-and-stone parade ground, the simple low whitewashed Igreja de Nossa Senhora da Graça with a plain nave and small bell gable, a low row of practical dwellings/workrooms, a cistern, a windbreak wall, and the huge 43-metre circular stone compass/wind-rose pattern laid flat on the ground. Small groups of 15th-century Portuguese cartographers and mariners may study parchment charts, astrolabes and portolan maps in the open yard and plain workroom.
+Storyboard: exact 4 columns by 4 rows, 16 equal panels, read left-to-right then top-to-bottom, thin clean gutters. Panels 1-5 show a miniature construction progression on a wooden drafting table. Panel 6 becomes the real place outside the low landward gate. Panels 7-9 pass through the gate into the enormous open yard and show navigators, the ground compass rose, modest church and workrooms. Panels 10-16 orbit the same complete site through midday, late afternoon, sunset, night, pre-dawn, sunrise, and clear morning. Final panel: the large ground compass rose in the foreground, low church and practical buildings beyond, Atlantic horizon behind.
+Style/medium: polished photorealistic historical reconstruction, cinematic natural Atlantic light, high detail, coherent production storyboard, Portuguese 15th-century limestone and limewash.
+Constraints: exact 4x4 grid; 16 distinct sequential panels; same low architecture, gate, open plateau, ground compass circle, coastline, materials and proportions; no captions, letters, numbers, UI, logo, or watermark.
+Avoid: any tall tower, monastery, cloister, cathedral, palace, castle wrapping around a cliff edge, fantasy academy, dense city, modern visitor centre, modern tourists, roads, cars, giant freestanding compass sculpture, ornate star mosaic, invented enclosed quadrangle, inconsistent buildings, collage overlap.`;
+
+const SAGRES_ICON_PROMPT = `Use case: stylized-concept
+Asset type: one transparent world-map discovery icon for a historical exploration game
+Primary request: Create one compact hand-painted isometric 3D miniature of the historically plausible Sagres fortress and Vila do Infante in Portugal, representing the "Sagres Navigation School" without inventing an academy.
+Subject: A broad, flat, windswept limestone headland above the Atlantic. A low fortified entrance wall with a central arched gate crosses the landward edge. Behind it is a large open plateau with a clearly visible circular stone compass/wind-rose laid flat on the ground, a small plain whitewashed church with a tiny bell gable, and a short row of low practical white buildings.
+Style/medium: polished hand-painted isometric 3D game miniature, realistic stone and limewash, crisp silhouette, warm natural daylight.
+Composition/framing: slightly elevated three-quarter view, complete site centered in a square, generous transparent padding, readable at 256x256.
+Constraints: genuinely transparent background; exactly one isolated miniature; no people, text, letters, numbers, label, logo, border, or watermark.
+Avoid: tall tower, monastery, cloister, cathedral, palace, giant school building, fantasy architecture, ornate compass mosaic, modern visitor center, opaque background.`;
+
 function ruinPrompt(r) {
+  if (r.id === 'sagres') return SAGRES_RUIN_PROMPT;
   return `Use case: historical-scene
 Asset type: 4x4 cinematic discovery storyboard source for the PLUS ULTRA browser game's ruin GIF pipeline
 Primary request: Create one exact 4-column by 4-row storyboard sheet (16 equal panels, read left-to-right then top-to-bottom) for ${r.name}. It must be the same site and consistent architecture in every panel.
@@ -79,7 +98,7 @@ Avoid: side view, three-quarter view, fisheye, aerial view, cropped roof, croppe
 }
 
 const source = rows.map(r => ({
-  id: r.id, name: r.name, cat: r.cat, target: r.cat === 'ruin' ? `tools/ruin_gifs/v3/master/${r.id}.png` :
+  id: r.id, name: r.name, cat: r.cat, target: r.cat === 'ruin' ? `tools/ruin_gifs/v3/master/${r.id}${r.id === 'sagres' ? '-v2' : ''}.png` :
     r.cat === 'nature' ? `tools/nature_gifs/sources/${r.id}.png` :
     r.cat === 'creature' ? `tools/animal_gifs/sources/${r.id}.png` :
     `tools/treasure_gifs/sources/${r.id}.png`,
@@ -109,7 +128,10 @@ for (const cat of ['ruin', 'nature']) {
   }
 }
 
-const payload = { generated: '2026-10-18', source, landmarks, iconSheets };
+const payload = { generated: '2026-10-18', repaired: { sagres: {
+  reason: '가상의 고탑 수도원 형태를 실제 사그레스의 낮은 요새·성당·바람장미로 교정',
+  sourcePrompt: SAGRES_RUIN_PROMPT, mapIconPrompt: SAGRES_ICON_PROMPT
+} }, source, landmarks, iconSheets };
 const out = process.argv[2];
 if (out) {
   fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true });

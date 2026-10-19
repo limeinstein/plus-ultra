@@ -192,7 +192,11 @@
       var cands = P.candidates(d, sp), k = 1, trust = 0;
       for (var i = 0; i < cands.length; i++) {
         var c = cands[i], A = L().angle[c.angle];
-        var said = c.angle === 'legend' ? pick('legend', A.any) : pick(c.angle + c.lv, A[Math.min(3, c.lv)] || A[1]);
+        var pool = c.angle === 'legend' ? A.any : (A[Math.min(3, c.lv)] || A[1]);
+        // 「맛을 보시면 …」 같은 말은 맛을 볼 수 있는 교역품에만 (유적·상아 앞에서 맛 이야기가 나오지 않게, 2026-10-19)
+        var tasty = G.RevealTalk && G.RevealTalk.edible ? G.RevealTalk.edible(d) : d.cat === 'trade';
+        if (!tasty) { var pf = pool.filter(function (t) { return !/맛을|맛보/.test(t); }); if (pf.length) pool = pf; }
+        var said = pick(c.angle === 'legend' ? 'legend' : c.angle + c.lv, pool);
         await UI.say(P.fmt(said, Object.assign({ mate: c.name }, ctx)), mateSpk(c, sp));
         var p = P.chance(c, sp, d, liked), win = U.chance(p), dm = P.demo(c, sp), r = { id: c.id, angle: c.angle, lv: c.lv, p: p, win: win };
         if (G.Growth) G.Growth.gain('persuade', win ? 8 : 3, win ? '설득 경험 — 곁에서 거들었다' : null);   // 부하의 말을 제독이 곁에서 거든다

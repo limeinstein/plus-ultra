@@ -160,6 +160,7 @@
     return { sheet: sheet, gif: gif, end: end };
   }
   SC.hasReveal = function (d) { return !!revealKeys(d); };
+  SC._lineFor = function (kind, lv, d) { return lineFor(kind, lv, d); };   // 시험용 (tests/reveal_talk_smoke.js)
   /** 그 기술을 가장 잘하는 사람: {lv, speaker, me} (제독 자신일 수도 있다) */
   function bestHand(id) {
     var s = S(), p = s.player, best = { lv: p.sk[id] || 0, speaker: { name: p.name, portrait: p.portrait }, me: true };
@@ -194,6 +195,58 @@
       if (lv >= 3) return '저들의 북장단에 가락을 맞추었더니 경계하던 얼굴이 풀립니다. 노래를 주고받는 사이 이야기와 풍습을 하나하나 들을 수 있었습니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
       if (lv >= 2) return '우리 노래를 한 곡 들려주자 저들도 답가를 불러 주었습니다. 마음이 열린 덕에 더 많은 것을 알게 되었습니다.' + (sent.length ? '\f「' + sent[0] + '」' : '');
       return '피리를 꺼내 한 소절 불었더니 아이들이 먼저 다가옵니다. 말이 통하지 않아도 노래는 통하는군요.';
+    }
+    /* 교역품·보물·민족·바다(지리)는 그림·세공에 밝은 사람의 말도 그 갈래에 맞게 — 예전엔 유적의 말(「기둥 사이 간격과 지붕선」·「어떻게 지었는지」)이 나왔다 (2026-10-19) */
+    var q1 = sent.length ? '\f「' + sent[0] + '」' : '', q2 = sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '';
+    if (d.cat === 'trade') {
+      var tk = G.RevealTalk && G.RevealTalk.tradeKind ? G.RevealTalk.tradeKind(d) : 'hand';
+      if (tk === 'grave') {
+        if (kind === 'art') return lv >= 2 ? '이 광경을 있는 그대로 그려 두겠습니다. 잊혀서는 안 될 일입니다.' : '차마 붓이 나가지 않습니다만… 윤곽만이라도 남겨 두겠습니다.';
+        return lv >= 2 ? '사슬과 낙인의 생김새, 몇 사람이 어디로 실려 가는지 적어 두겠습니다. 언젠가 누군가는 이 일을 따져 물을 겁니다.' : '보고 들은 것만이라도 적어 두겠습니다.';
+      }
+      if (kind === 'art') {
+        if (lv >= 3) return '생김새와 빛깔, 갈무리해 둔 모습까지 채색 도판으로 남기겠습니다. 처음 보는 사람도 한눈에 알아볼 수 있게요.' + q2;
+        if (lv >= 2) return '생김새와 빛깔이 드러나게 그려 두겠습니다. 장사꾼들에게 보여 주기 좋을 겁니다.' + q1;
+        return '눈에 띄는 생김새만이라도 화첩에 옮겨 두겠습니다.';
+      }
+      if (tk === 'scent') {
+        if (lv >= 3) return '향의 짙기와 오래가는 정도, 섞인 것이 있는지까지 가려 보았습니다. 진짜와 가짜를 가르는 법을 적어 두겠습니다.' + q2;
+        if (lv >= 2) return '향이 맑고 오래가는 것이 상품입니다. 가려내는 법을 적어 두겠습니다.' + q1;
+        return '섞인 것이 없는지 가려내는 법만이라도 적어 두지요.';
+      }
+      if (tk === 'spice' || tk === 'taste') {
+        if (lv >= 3) return '빛깔과 마른 정도로 상품을 가려내는 법을 적어 두겠습니다. 오래 실어 가도 상하지 않게 갈무리하는 법까지요.' + q2;
+        if (lv >= 2) return '잘 마른 것과 덜 마른 것을 가려내는 법을 적어 두겠습니다.' + q1;
+        return '상한 것을 가려내는 법만이라도 적어 두지요.';
+      }
+      if (lv >= 3) return '결과 무게, 빛을 받을 때의 윤기까지 따져 보았습니다. 어떤 장인의 손을 거치면 값이 얼마로 뛸지 짐작이 갑니다. 상품과 하품을 가르는 법도 적어 두지요.' + q2;
+      if (lv >= 2) return '상품과 하품을 가르는 법을 적어 두겠습니다. 속아서 사는 일은 없을 겁니다.' + q1;
+      return '좋은 것과 나쁜 것을 가리는 법만이라도 적어 두지요.';
+    }
+    if (d.cat === 'treasure') {
+      if (kind === 'art') {
+        if (lv >= 3) return '빛이 떨어지는 결과 새김의 깊이까지 살려 채색 도판으로 남기겠습니다.' + (sent.length ? '\f「' + sent.join(' ') + '」' : '') + '\f이만한 그림이면 실물을 보지 못한 사람도 믿을 겁니다.';
+        if (lv >= 2) return '생김새와 새김무늬, 크기를 재어 그려 두겠습니다.' + q2;
+        return '생김새만이라도 화첩에 옮겨 두겠습니다.' + q1;
+      }
+      if (lv >= 3) return '쓰인 재료와 세공 솜씨를 하나하나 적어 두겠습니다. 새김의 깊이, 금을 입힌 두께, 장인이 쓴 연장까지 살피면 어느 고장 장인의 솜씨인지 짐작이 갑니다.';
+      if (lv >= 2) return '새김과 마감에 빈틈이 없군요. 장인의 연장 자국까지 고스란히 남아 있습니다. 재어서 적어 두겠습니다.';
+      return '다듬은 솜씨가 예사롭지 않습니다. 눈에 띄는 장식만이라도 적어 두지요.';
+    }
+    if (d.cat === 'people') {
+      if (kind === 'art') {
+        if (lv >= 3) return '옷차림과 몸에 새긴 무늬, 사는 집과 연장까지 한 장에 담겠습니다. 이 그림이면 먼 나라 사람도 이들의 삶을 떠올릴 겁니다.' + q2;
+        if (lv >= 2) return '옷차림과 장신구, 사는 집의 생김새를 그려 두겠습니다.' + q1;
+        return '얼굴과 옷차림만이라도 화첩에 옮겨 두겠습니다.';
+      }
+      if (lv >= 3) return '저들이 쓰는 연장과 장신구를 살펴보았습니다. 무엇으로 어떻게 만드는지 하나하나 적어 두겠습니다. 우리 장인들도 배울 것이 있습니다.' + q1;
+      if (lv >= 2) return '장신구와 연장의 짜임을 적어 두겠습니다. 솜씨가 예사롭지 않습니다.';
+      return '눈에 띄는 장신구만이라도 적어 두지요.';
+    }
+    if (d.cat === 'geo') {
+      if (lv >= 3) return '물가의 생김새와 곶의 방향, 물빛이 바뀌는 자리까지 해도에 옮기겠습니다. 다음에 오는 배는 헤매지 않을 겁니다.' + q2;
+      if (lv >= 2) return '해안선과 눈에 띄는 산봉우리를 그려 두겠습니다. 뱃길을 찾는 표지가 될 겁니다.' + q1;
+      return '해안의 윤곽만이라도 화첩에 옮겨 두겠습니다.';
     }
     if (d.cat === 'creature') {
       if (d.plant) {
@@ -296,11 +349,11 @@
     var aLine = animal && RT ? RT.animal() : null;
     if (aLine) await UI.say(aLine, lead);
     var natural = d.cat === 'nature' || d.natural;
-    var art = bestHand('art'), science = animal ? bestHand('sci') : { lv: 0 }, craft = (natural || animal) ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
+    var art = bestHand('art'), science = animal ? bestHand('sci') : { lv: 0 }, craft = (natural || animal || d.cat === 'geo') ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
     if (science.lv) await UI.say(lineFor('sci', science.lv, d), science.speaker);
     if (art.lv) await UI.say(lineFor('art', art.lv, d), art.speaker);
     if (craft.lv) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
-    var cook = d.cat === 'trade' ? bestHand('cook') : { lv: 0 }, music = d.cat === 'people' ? bestHand('music') : { lv: 0 };
+    var cook = d.cat === 'trade' && (!RT || !RT.edible || RT.edible(d)) ? bestHand('cook') : { lv: 0 }, music = d.cat === 'people' ? bestHand('music') : { lv: 0 };
     if (cook.lv) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
     if (music.lv) await UI.say(lineFor('music', music.lv, d), music.speaker);
     if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv) { var ns = RT ? RT.noSkill(d) : null; if (ns) await UI.say(ns, lead); }

@@ -28,6 +28,7 @@
 - 새 게임: `G.State.newGame({name, nation, job, age, birth:{m,d}, st, sk, lg, diff})` → `G.Game.ensureGeo()` 기다림 → `G.Game.go('sea', {depart: 도시번호})`
 - 바다: `G.Scenes.sea.runtime()`(상태), `takeCourse(rad)`, `goCity(번호)`. 해전: `G.Game.go('battle', {npc:{kind:'pirate', n:2}})`, `G.Scenes.battle.runtime()`.
 - 예시 시험: `tests/`.
+- **시험이 끝나면 띄운 게임은 반드시 끈다** (사용자 요청 2026-10-19): 헤드리스 Chromium은 `finally { await browser.close(); }`, 내장 브라우저·Chrome으로 연 게임 탭(웹판·`index.html`·아티팩트)은 확인이 끝나면 탭을 닫고, 띄운 로컬 서버(`python -m http.server` 등)·설치형 게임(Electron)·`node` 과정도 멈춘다. 실패하거나 도중에 그만둘 때도 마찬가지 — 끝낸 뒤 남은 것이 없는지 한 번 더 본다.
 
 ## 작업 단위
 

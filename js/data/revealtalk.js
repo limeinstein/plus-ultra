@@ -22,8 +22,15 @@
       '아이들이 배를 보고 뛰어옵니다. 이 사람들이 {d}입니다.', '어른으로 보이는 노인이 앞으로 나섭니다. 예를 갖추시지요, 제독.'],
     nature: ['제독, 저 너머를 보십시오. 말이 나오지 않습니다.', '이런 경치를 두고 돌아가면 아무도 우리 말을 믿지 않을 겁니다.',
       '땅이 울리는 것 같습니다. {d}, 소문보다 훨씬 큽니다.', '선원들이 모두 일손을 놓고 넋을 잃었습니다.'],
-    trade: ['제독, 이 냄새 맡아 보십시오! 이게 {d}입니다.', '이 고장 사람들은 이걸 흔한 것처럼 씁니다. 유럽에 가져가면 금값일 텐데요.',
-      '한 자루만 실어 가도 배값이 나오겠습니다, 제독.', '맛을 보니 혀가 얼얼합니다. 장사꾼들 눈이 뒤집히겠군요.'],
+    // 교역품: 어느 물건에나 맞는 말 + 물건의 갈래(G.RevealTalk.tradeKind)에 맞는 말 — 상아·비취에 「맛을 보니」가 나오지 않게 (2026-10-19)
+    trade: ['이 고장 사람들은 이걸 흔한 것처럼 씁니다. 유럽에 가져가면 금값일 텐데요.', '저기 쌓인 게 모두 {d}입니다, 제독! 소문이 참말이었습니다.',
+      '한 짐만 실어 가도 배값이 나오겠습니다, 제독.'],
+    trade_spice: ['제독, 이 냄새 맡아 보십시오! 이게 {d}입니다.', '맛을 보니 혀가 얼얼합니다. 장사꾼들 눈이 뒤집히겠군요.', '한 자루만 실어 가도 배값이 나오겠습니다, 제독.'],
+    trade_taste: ['제독, 한번 맛을 보십시오. 이게 {d}입니다.', '처음 먹어 보는 맛입니다. 유럽 사람들 입에도 맞겠는데요.', '한 자루만 실어 가도 배값이 나오겠습니다, 제독.'],
+    trade_scent: ['제독, 이 향 좀 맡아 보십시오! 이게 {d}입니다.', '한 줌만으로도 이렇게 짙은 향이 나다니요. 궁정과 교회에서 앞다투어 찾겠군요.'],
+    // 노예 무역(t_slaves): 물건 자랑·돈 이야기를 하지 않는다 — 이 말만
+    trade_grave: ['제독… 사슬에 묶인 사람들이 배에 실리고 있습니다. 이것이 {d}입니다.', '저 사람들의 눈을 차마 마주 볼 수가 없습니다, 제독.', '금과 상아 옆에 사람이 쌓여 있습니다. 이런 장사가 있다는 말은 들었지만….'],
+    trade_hand: ['제독, 이 빛깔 좀 보십시오! 이게 {d}입니다.', '손끝에 닿는 결부터 다릅니다. 장인들 손을 거치면 값이 몇 곱절로 뛰겠군요.', '유럽의 귀족들이 앞다투어 찾을 물건입니다, 제독.'],
     any: ['제독, 보십시오! 저것이 바로 소문으로만 듣던 {d}입니다!', '우리가 찾아냈습니다, 제독. {d}입니다!'],
     legend: ['이야기 속에서나 듣던 {d}{^d|이/가} 정말 눈앞에 있습니다!', '할머니가 들려주시던 옛이야기가 참말이었군요, 제독.', '다들 꿈인 줄 압니다. 서로 꼬집어 보고 있습니다, 제독.'],
     contract: ['제독, 이것입니다! {sponsor}께서 찾으시던 바로 그것입니다.', '이걸 가지고 돌아가면 {sponsor}께서 뭐라 하실지 벌써 궁금합니다.'],
@@ -39,7 +46,8 @@
     rival: ['한발 늦었으면 남의 이름으로 남을 뻔했구나.', '이번만큼은 우리가 빨랐구나. 서둘러 돌아가 알리자.'],
     creature: ['겁주지 마라. 우리가 손님이다.', '조용히, 멀리서 보자. 저 녀석들 땅이다.'],
     people: ['무기를 내려라. 우리는 장사하러 온 것이지 싸우러 온 게 아니다.', '선물을 꺼내라. 첫인사가 앞날을 정한다.'],
-    treasure: ['함부로 손대지 마라. 하나하나 적어 두고 옮긴다.', '이건 우리 것이 아니라 이 땅의 이야기다. 조심히 다뤄라.']
+    treasure: ['함부로 손대지 마라. 하나하나 적어 두고 옮긴다.', '이건 우리 것이 아니라 이 땅의 이야기다. 조심히 다뤄라.'],
+    grave: ['…이것도 이 바다의 한 모습이구나. 보고 들은 그대로 적어 두어라.', '마음이 무겁구나. 이 일을 잊지 말자.', '돈이 사람 위에 서는 곳이구나. 우리가 무엇을 할지는 우리가 정한다.']
   };
   // 그림·세공·학문에 밝은 사람이 없을 때 (가끔만)
   T.NOSKILL = {
@@ -52,6 +60,19 @@
   // 짐승 앞에서 덧붙이는 말 (늘 하지는 않는다)
   T.ANIMAL = ['새끼 뒤에 성체가 있습니다. 더 다가가면 위험합니다. 이 자리에서 조용히 살펴보시지요.', '새끼를 지키러 성체가 나왔습니다. 놀라게 하지 않도록 물러서서 기록하겠습니다.',
     '바람이 저쪽으로 붑니다. 냄새를 맡기 전에 한 걸음 물러서시지요.'];
+
+  // 교역품의 갈래: spice(향신료 — 맵다) · taste(먹고 마시는 것) · scent(향을 맡는 것) · hand(보고 만지는 것 — 상아·비취·융단 …)
+  var SCENT = { frankincense: 1, ambergris: 1, musk: 1, sandalwood: 1, tobacco: 1 };
+  T.tradeKind = function (d) {
+    var g = d && d.good && G.GOOD && G.GOOD[d.good]; if (!g) return 'hand';
+    if (G.Slave && G.Slave.is && G.Slave.is(g.id)) return 'grave';
+    if (SCENT[g.id]) return 'scent';
+    if (g.cat === 'spice') return 'spice';
+    if (g.cat === 'food' || g.cat === 'drink' || g.cat === 'lux' || g.id === 'herbs') return 'taste';
+    return 'hand';
+  };
+  /** 맛을 볼 수 있는 교역품인가 (요리에 밝은 사람이 맛을 보고 값어치를 알아본다) */
+  T.edible = function (d) { return !!(d && d.cat === 'trade') && /^(spice|taste)$/.test(T.tradeKind(d)); };
 
   function S() { return G.Game.state; }
   function fill(t, ctx) {
@@ -80,12 +101,14 @@
     if (ctx.close && G.U.chance(0.7)) return pick('rival', T.SHOUT.rival, ctx);
     if (ctx.contract && G.U.chance(0.6)) return pick('contract', T.SHOUT.contract, ctx);
     if (ctx.legend && G.U.chance(0.6)) return pick('legend', T.SHOUT.legend, ctx);
-    var L = (T.SHOUT[d.cat] || []).concat(G.U.chance(0.25) ? T.SHOUT.any : []);
-    return pick(d.cat || 'any', L.length ? L : T.SHOUT.any, ctx);
+    if (d.cat === 'trade' && T.tradeKind(d) === 'grave') return pick('trade_grave', T.SHOUT.trade_grave, ctx);
+    var L = (T.SHOUT[d.cat] || []).concat(d.cat === 'trade' ? T.SHOUT['trade_' + T.tradeKind(d)] || [] : []).concat(G.U.chance(0.25) ? T.SHOUT.any : []);
+    return pick(d.cat === 'trade' ? 'trade_' + T.tradeKind(d) : d.cat || 'any', L.length ? L : T.SHOUT.any, ctx);
   };
   /** 제독의 대답 */
   T.reply = function (d, ctx) {
     ctx = ctx || T.context(d);
+    if (d.cat === 'trade' && T.tradeKind(d) === 'grave') return pick('r-grave', T.REPLY.grave, ctx);
     if (ctx.tired && G.U.chance(0.6)) return pick('r-tired', T.REPLY.tired, ctx);
     if (ctx.close && G.U.chance(0.6)) return pick('r-rival', T.REPLY.rival, ctx);
     if (ctx.contract && G.U.chance(0.5)) return pick('r-contract', T.REPLY.contract, ctx);

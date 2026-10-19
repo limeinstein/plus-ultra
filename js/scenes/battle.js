@@ -1288,7 +1288,7 @@
       var w = pool.map(function (it) { return (it.kind === 'gift' ? 3 : it.kind === 'weapon' ? 1.6 : 1) * 1000 / Math.max(200, it.price); });
       var tot = U.sum(w), r = U.rand() * tot, it = pool[0];
       for (var i = 0; i < pool.length; i++) { r -= w[i]; if (r <= 0) { it = pool[i]; break; } }
-      var kept = s.player.items.length < R.ITEM_MAX;
+      var kept = !R.itemsFull();
       if (kept) R.addItem(it.id);
       out.push({ id: it.id, name: it.name, kept: kept });
     });

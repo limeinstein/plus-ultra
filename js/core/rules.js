@@ -126,12 +126,17 @@
   R.itemCount = function (id) { return R.S().player.items.reduce(function (n, it) { return n + (it.id === id ? R.itemQty(it) : 0); }, 0); };
   /** 소지품 칸 수 */
   R.ITEM_MAX = 40;
-  R.itemsFull = function (n) { return R.S().player.items.length + (n || 1) > R.ITEM_MAX; };
   /** 아직 보고·발표하지 않은 발견의 증거로 쓰이는 물건인가 (해도·지도 증거품, 발견 유물) */
   R.isProof = function (it) { return !!(it && it.disc && !it.done && (it.evidence || (G.RELIC && G.RELIC[it.id]))); };
+  /* 소지품 칸 (2026-10-19): 발견의 증거(발견 유물·해도·지도)는 칸을 차지하지 않는다 — 보고·발표하면(it.done, 그때 「활성화」) 여느 물건처럼 칸을 차지한다.
+     칸이 넘치면 새 물건을 받지 못한다 → 자택 「보관함」(s.player.storage, 무제한)에 맡긴다 (js/city/misc.js HM.storage) */
+  R.slotsUsed = function () { return R.S().player.items.filter(function (it) { return !R.isProof(it); }).length; };
+  R.itemsFull = function (n) { return R.slotsUsed() + (n || 1) > R.ITEM_MAX; };
+  R.storage = function () { var p = R.S().player; return p.storage || (p.storage = []); };
   R.addItem = function (id, extra) {
-    var S = R.S(); if (S.player.items.length >= R.ITEM_MAX) return false;
+    var S = R.S();
     var o = { id: id }; if (extra) for (var k in extra) o[k] = extra[k];
+    if (!R.isProof(o) && R.slotsUsed() >= R.ITEM_MAX) return false;   // 발견 증거는 칸이 차도 챙긴다
     var def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
     S.player.items.push(o); return true;
   };
@@ -141,7 +146,7 @@
     var S = R.S(), n = Math.max(1, Math.floor(qty || 1)), fk = from == null ? null : from;
     var it = S.player.items.filter(function (x) { return x.id === id && !x.disc && !x.evidence && !x.name && !x.kind && (x.from == null ? null : x.from) === fk; })[0];
     if (it) { if (paid != null) it.paid = Math.round(((it.paid != null ? it.paid : paid) * R.itemQty(it) + paid * n) / (R.itemQty(it) + n)); it.qty = R.itemQty(it) + n; return true; }
-    if (S.player.items.length >= R.ITEM_MAX) return false;
+    if (R.slotsUsed() >= R.ITEM_MAX) return false;
     var o = { id: id, qty: n }, def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
     if (fk != null) o.from = fk; if (paid != null) o.paid = paid;
     S.player.items.push(o); return true;

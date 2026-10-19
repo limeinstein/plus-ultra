@@ -850,7 +850,8 @@
       var foot = w.querySelector('.foot');
       opts.buttons.forEach(function (b) {
         var btn = U.el('button', 'btn ' + (b.cls || ''), (b.icon ? G.icon(b.icon) : '') + b.label);
-        btn.onclick = function () { if (b.onClick) { var r = b.onClick(api); if (r === false) return; } api.close(b.value); };
+        btn.onclick = function () { if (b.disabled) return; if (b.onClick) { var r = b.onClick(api); if (r === false) return; } api.close(b.value); };
+        if (b.disabled) { btn.disabled = true; btn.classList.add('disabled'); if (b.title) btn.title = b.title; }
         foot.appendChild(btn);
         if (b.id) api[b.id] = btn;
       });

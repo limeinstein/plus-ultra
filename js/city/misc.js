@@ -122,7 +122,7 @@
       { label: '매각', icon: 'sack', onClick: function () { return MK.sell(c); } },
       { label: '시세', icon: 'chart', sub: '물건 값 ' + Math.round(U.sum(Object.keys(R.ITEM_CATS), function (k) { return R.itemMult(c, { id: '_', kind: k }); }) / 4 * 100) + '%', onClick: function () { return C.B.trade.quotes(c); } },
       acctLv() ? { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공 · 결제 협상 ' + Math.max(0, (G.Acct ? G.Acct.marketDeals() : acctLv()) - ((C.current() && C.current().mkBuyDeals) || 0)) + '번' : '실패') : R.purser() ? '경리 ' + R.purser().name : '회계 ' + acctLv(), dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
-      { label: '소지품', icon: 'chest', sub: S().player.items.length + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } },
+      { label: '소지품', icon: 'chest', sub: R.slotsUsed() + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } },
       // 발견물이 있을 것으로 짐작되는 고장의 시장: 그 발견물의 모조품 (js/systems/fakes.js) — 달마다 7일, 중도시 이상, 한 번에 2개
       G.Fakes && G.Fakes.shown(c) ? { label: '모조품 상인', icon: 'seal', sub: G.Fakes.left(c) ? G.Fakes.stock(c).length + '가지 · 오늘 ' + G.Fakes.left(c) + '개 남음' : '오늘 몫은 다 팔림', dim: !G.Fakes.left(c), onClick: function () { return G.Fakes.buy(c); } } : null
     ].filter(Boolean);
@@ -131,7 +131,7 @@
   MK.buyMax = function (it, price) {
     var s = S(), pr = price == null ? mkBuy(it) : price;
     var own = R.itemCount(it.id), hasStack = own > 0;
-    if (!hasStack && s.player.items.length >= R.ITEM_MAX) return 0;
+    if (!hasStack && R.slotsUsed() >= R.ITEM_MAX) return 0;
     return Math.max(0, Math.min(99 - own, pr > 0 ? Math.floor(s.player.gold / pr) : 99));
   };
   /** 후려치기 성공 뒤 결제 직전의 추가 협상. 회계 단계마다 한 번씩 시도하고, 실패해도 먼저 정한 가격은 지킨다. */
@@ -173,7 +173,7 @@
       var it = G.ITEM[v];
       var pr = mkBuy(it);
       var mx = MK.buyMax(it, pr);
-      if (mx <= 0) { await C.mate(s.player.items.length >= R.ITEM_MAX ? '이 이상 가질 수 없습니다!' : '소지금이 모자랍니다.'); return; }
+      if (mx <= 0) { await C.mate(R.slotsUsed() >= R.ITEM_MAX ? '이 이상 가질 수 없습니다! (자택 보관함에 맡길 수 있습니다)' : '소지금이 모자랍니다.'); return; }
       var own = R.itemCount(it.id);
       var q = await UI.number({ title: it.name + ' 구입', text: '한 개에 금화 ' + U.num(pr) + '닢. 몇 개 사겠습니까?<br><span class="muted">같은 아이템은 한 칸에 묶이며, 한 종류를 최대 99개까지 가질 수 있습니다.</span>', min: 1, max: mx, value: 1, unit: '개',
         quick: [{ label: '1개', value: 1 }, { label: '10개', value: Math.min(10, mx) }, { label: '최대 ' + mx + '개', value: mx }],
@@ -712,6 +712,7 @@
       G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,
       { label: '항해 일지 기록 (저장)', icon: 'save', onClick: function () { return G.Info.saveMenu(); } },
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
+      { label: '보관함', icon: 'chest', sub: '맡긴 물건 ' + R.storage().length + '점 · 소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX, onClick: function () { return HM.storage(c); } },
       { label: '은퇴', icon: 'log', onClick: function () { return G.Family.retire(); } }
     ];
   };
@@ -724,6 +725,57 @@
     s.player.hp = 100; s.fleet.fatigue = 0;
     await UI.say(s.player.wife ? '가족과 함께 집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.' : '집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.', {});
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(true);
+  };
+  /* 자택 보관함 (2026-10-19): 물건을 몇 개든 맡겨 둔다 (s.player.storage). 맡긴 물건은 소지품 칸을 차지하지 않고, 쓰지도(장비·선물·증거) 못한다.
+     · 장비 중인 무기·갑옷을 맡기면 장비를 푼다 · 아직 보고·발표하지 않은 발견의 증거는 칸을 차지하지 않으니 맡기지 않는다(보고할 때 내밀어야 하니)
+     · 꺼낼 때는 소지품 칸이 남아야 한다 */
+  HM.storeOne = function (it) {
+    var s = S(), p = s.player, i = p.items.indexOf(it); if (i < 0 || R.isProof(it)) return false;
+    p.items.splice(i, 1); R.storage().push(it);
+    ['weapon', 'armor'].forEach(function (k) { if (p.equip[k] === it.id && !p.items.some(function (x) { return x.id === it.id; })) p.equip[k] = null; });
+    return true;
+  };
+  HM.takeOne = function (it) {
+    var st = R.storage(), i = st.indexOf(it); if (i < 0 || R.slotsUsed() >= R.ITEM_MAX) return false;
+    st.splice(i, 1); S().player.items.push(it); return true;
+  };
+  HM.storage = async function (c) {
+    var s = S(), p = s.player;
+    function row(it, i, side) {
+      var d = G.ITEM[it.id] || {}, rl = G.RELIC && G.RELIC[it.id], kind = d.kind || it.kind || (rl ? 'relic' : '');
+      var src = G.Img && G.Img.itemSrc ? G.Img.itemSrc(it) : null, eq = side === 'p' && ((p.equip.weapon === it.id) || (p.equip.armor === it.id));
+      var proof = side === 'p' && R.isProof(it);
+      var btn = side === 'p' ? (proof ? '<span class="tag warn-text" title="아직 보고·발표하지 않은 발견의 증거 — 칸을 차지하지 않는다">증거</span>' : '<button class="btn small" data-st="' + i + '">맡긴다</button>')
+        : '<button class="btn small' + (R.slotsUsed() >= R.ITEM_MAX ? ' disabled' : '') + '" data-tk="' + i + '">꺼낸다</button>';
+      return '<tr><td style="width:40px">' + (src ? '<img src="' + src + '" alt="" style="width:34px;height:34px;object-fit:contain">' : '') + '</td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') +
+        (eq ? ' <span class="tag">장비 중</span>' : '') + (rl && !proof ? ' <span class="tag">유물</span>' : '') + '<div class="muted" style="font-size:13px">' + U.esc(G.ITEM_KIND[kind] || (rl ? '발견 유물' : '')) + '</div></td><td style="text-align:right">' + btn + '</td></tr>';
+    }
+    function html() {
+      var st = R.storage(), used = R.slotsUsed(), over = used > R.ITEM_MAX;
+      return '<div class="muted" style="margin-bottom:8px">맡긴 물건은 몇 개든 둘 수 있고 소지품 칸을 차지하지 않습니다. 아직 보고·발표하지 않은 발견의 <b>증거</b>는 칸을 차지하지 않으니 들고 다니십시오 — 보고·발표하면 그때부터 칸을 차지합니다.</div>' +
+        '<div style="display:flex;gap:18px;align-items:flex-start">' +
+        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">소지품 <span class="' + (over ? 'warn-text' : 'muted') + '">' + used + '/' + R.ITEM_MAX + '</span>' + (over ? ' <small class="warn-text">넘침 — 맡겨 주십시오</small>' : '') + '</h4><div style="max-height:52vh;overflow:auto"><table class="tbl">' +
+        (p.items.length ? p.items.map(function (it, i) { return row(it, i, 'p'); }).join('') : '<tr><td class="muted">비어 있다</td></tr>') + '</table></div>' +
+        '<div style="margin-top:8px"><button class="btn small" data-all="1">장비 중인 것·증거 말고 모두 맡긴다</button></div></div>' +
+        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">보관함 <span class="muted">' + st.length + '점</span></h4><div style="max-height:52vh;overflow:auto"><table class="tbl">' +
+        (st.length ? st.map(function (it, i) { return row(it, i, 's'); }).join('') : '<tr><td class="muted">맡긴 물건이 없다</td></tr>') + '</table></div></div></div>';
+    }
+    var win = UI.window({ title: (HM.title(c)) + ' — 보관함', icon: 'chest', width: 1020, html: html(), buttons: [{ label: '닫기', value: 1 }],
+      onBuild: function (el, w) {
+        function wire() {
+          var box = w.content || el.querySelector('.content');
+          U.$$('[data-st]', box).forEach(function (b) { b.onclick = function () { HM.storeOne(p.items[+b.dataset.st]); redraw(); }; });
+          U.$$('[data-tk]', box).forEach(function (b) { b.onclick = function () { if (!HM.takeOne(R.storage()[+b.dataset.tk])) UI.toast('소지품 칸이 모자랍니다.', 'chest'); redraw(); }; });
+          U.$$('[data-all]', box).forEach(function (b) { b.onclick = function () {
+            p.items.slice().forEach(function (it) { var eq = p.equip.weapon === it.id || p.equip.armor === it.id; if (!eq && !R.isProof(it)) HM.storeOne(it); });
+            redraw();
+          }; });
+        }
+        function redraw() { var box = w.content || el.querySelector('.content'); box.innerHTML = html(); wire(); if (G.Game.refreshHud) G.Game.refreshHud(); }
+        wire();
+      } });
+    await win.result;
+    G.State.log('자택 보관함 — 맡긴 물건 ' + R.storage().length + '점 · 소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX);
   };
   HM.bank = async function (c) {
     var s = S(), p = s.player;

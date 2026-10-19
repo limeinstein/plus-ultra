@@ -56,6 +56,7 @@ G.HALF_EDGE = {
 "portraits/legendary/cao_cao_half": "r",
 "portraits/legendary/chunhyang_half": "r",
 "portraits/legendary/date_masamune_half": "l",
+"portraits/legendary/don_quixote_half": "r",
 "portraits/legendary/dragon_king_half": "lr",
 "portraits/legendary/guan_yu_half": "lr",
 "portraits/legendary/gwak_jaeu_half": "lr",

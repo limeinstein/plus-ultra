@@ -110,7 +110,9 @@
     var ka = art * D.VALUE_K.art, kc = craft * (hand ? D.VALUE_K.craft : D.VALUE_K.craftOther);
     // 요리는 교역품(향신료·작물), 음악은 민족(노래·춤·의식)의 값어치를 알아본다
     var CK = ((G.BALANCE && G.BALANCE.crewCare) || {}).discValue || 0.08;
-    var care = d && d.cat === 'trade' ? 'cook' : d && d.cat === 'people' ? 'music' : null;
+    // 요리는 맛을 볼 수 있는 교역품(향신료·먹고 마시는 것)만 — 상아·비취·융단·향료는 세공(kc)이 알아본다 (2026-10-19)
+    var edible = d && d.cat === 'trade' && (!G.RevealTalk || !G.RevealTalk.edible || G.RevealTalk.edible(d));
+    var care = edible ? 'cook' : d && d.cat === 'people' ? 'music' : null;
     var cv = care ? (R.skillRead ? R.skillRead(care) : R.skill(care)) : 0, kk = cv * CK;
     return { art: art, craft: craft, ka: ka, kc: kc, care: care, kk: kk, careWho: care && R.skillBest ? R.skillBest(care).who : null,
       k: 1 + ka + kc + kk, artWho: R.skillBest ? R.skillBest('art').who : null, craftWho: R.skillBest ? R.skillBest('craft').who : null };
@@ -190,7 +192,7 @@
     var before = { fatigue: f.fatigue || 0, discipline: f.discipline == null ? 80 : f.discipline };
     // 교역품은 요리사가 그 맛을 나누어 피로를, 민족은 음악가가 함께 어울려 규율을 더 붙든다
     var CI = ((G.BALANCE && G.BALANCE.crewCare) || {}).impact || 2;
-    var xf = d.cat === 'trade' && !(G.Slave && G.Slave.is(d.good)) ? -R.skillRead('cook') * CI : 0, xd = d.cat === 'people' ? R.skillRead('music') * CI : 0;
+    var xf = d.cat === 'trade' && !(G.Slave && G.Slave.is(d.good)) && (!G.RevealTalk || !G.RevealTalk.edible || G.RevealTalk.edible(d)) ? -R.skillRead('cook') * CI : 0, xd = d.cat === 'people' ? R.skillRead('music') * CI : 0;
     f.fatigue = U.clamp(before.fatigue + (v.fatigue || 0) + xf, 0, 100);
     f.discipline = U.clamp(before.discipline + (v.discipline || 0) + xd, 0, 100);
     st.impact = {
