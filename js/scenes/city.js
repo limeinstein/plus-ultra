@@ -153,8 +153,8 @@
       if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 제노바의 협상 · 바르바로사의 무덤
       if (G.Quix && G.Quix.pending()) await G.Quix.check();      // 돈키호테와 산초의 산티아고 순례 (js/systems/quixote.js)
       if (G.Sim && G.Sim.pending()) await G.Sim.check();         // 공양미 삼백 석 — 심청 (js/systems/simcheong.js)
-      if (G.IncaFall && G.IncaFall.pending()) await G.IncaFall.check();
-      if (G.Aztec && G.Aztec.pending()) await G.Aztec.check();   // 아즈텍 제국의 멸망 — 쿠바·베라크루스·투라스칼라·테노치티틀란 (js/systems/aztec.js)   // 잉카 제국의 멸망 — 파나마·카하마르카·쿠스코 (js/systems/incafall.js)
+      if (G.IncaFall && G.IncaFall.pending()) await G.IncaFall.check();   // 잉카 제국의 멸망 — 파나마·카하마르카·쿠스코 (js/systems/incafall.js)
+      if (G.Aztec && G.Aztec.pending()) await G.Aztec.check();   // 아즈텍 제국의 멸망 — 쿠바·베라크루스·투라스칼라·테노치티틀란 (js/systems/aztec.js)
       if (G.Pocahontas && G.Pocahontas.pending()) await G.Pocahontas.check();   // 포카혼타스의 중재 — 북·중앙아메리카 항구 (js/systems/pocahontas.js)
     } catch (e) { console.error(e); }
     busy = false;
