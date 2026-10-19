@@ -152,6 +152,7 @@
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
       if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 제노바의 협상 · 바르바로사의 무덤
       if (G.Quix && G.Quix.pending()) await G.Quix.check();      // 돈키호테와 산초의 산티아고 순례 (js/systems/quixote.js)
+      if (G.Sim && G.Sim.pending()) await G.Sim.check();         // 공양미 삼백 석 — 심청 (js/systems/simcheong.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
