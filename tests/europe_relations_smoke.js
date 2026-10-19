@@ -7,7 +7,10 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); }
+catch (e) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'europe_relations');
 require('fs').mkdirSync(OUT, { recursive: true });
@@ -20,14 +23,17 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo();
       const out = {}, UI = G.UI, RL = G.Rel, SP = G.Sponsor;
       const fresh = (nation, y, m, d) => { const s = G.State.newGame({ name: '시험', nation, job: 'explorer', age: 24, birth: { m: 3, d: 2 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk: {}, lg: [], diff: 'normal' }); G.Game.state = s; s.date = { y, m, d }; s.player.gold = 100000; return s; };
-      const said = []; let answer = null;
-      UI.say = async (t, w) => { said.push((w && w.name ? w.name + ': ' : '') + String(t)); }; UI.alert = async (t) => { said.push(String(t)); return true; }; UI.toast = () => {}; UI.confirm = async () => true;
+      const said = [], elizPics = []; let answer = null;
+      UI.say = async (t, w) => {
+        said.push((w && w.name ? w.name + ': ' : '') + String(t));
+        if (w && /엘리자베스/.test(w.name || '')) elizPics.push([G.Img.pick(G.Art.portraitKeys(w.portrait)), G.Img.pick(w.half)]);
+      }; UI.alert = async (t) => { said.push(String(t)); return true; }; UI.toast = () => {}; UI.confirm = async () => true;
       UI.ask = async (t, opts) => { const v = answer ? answer(t, opts) : opts[0].value; return v; };
       UI.fade = async (fn) => { fn && fn(); };
       G.Game.refreshHud = () => {}; G.State.save = () => {};
@@ -82,6 +88,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const york = city('요크').id; answer = (t, o) => (o.filter(x => x.value === york)[0] || o[0]).value; await G.Tudor.meetEliz(); answer = null;
       out.eliz1 = s.tudor.eliz.stage; s.loc = { mode: 'city', city: york, lon: 0, lat: 0 }; out.elizPend = G.Tudor.pending(); await G.Tudor.check(); out.eliz2 = s.tudor.eliz.stage;
       s.date = { y: 1559, m: 2, d: 1 }; await G.Court.onEnter(king); out.knight = [!!s.tudor.knight, G.Court.title(G.COURT.realms.EN).ko];
+      out.elizPics = elizPics.slice();
       // 드레이크의 습격 세 번 (두 해마다) — ① 이기고 ② 지고 ③ 물러난다
       let ar = null; G.Game.go = (sc, arg) => { ar = arg.npc; };
       out.raids = [];
@@ -114,6 +121,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.div1 === 1 && r.popeItem && r.div2 === 2 && r.div3 === 3 && r.enpa.tier === 'war' && r.enpa.event && r.enes === -100, '헨리 8세의 이혼: 특사 → 교황의 거절 → 이혼 선언 — 잉글랜드·교황청 ' + r.enpa.v + ' · 잉글랜드·에스파냐 ' + r.enes);
     ok(r.towerBld && r.eliz1 === 1 && r.elizPend && r.eliz2 === 2, '메리 1세 시절 런던 탑 → 엘리자베스 공주를 요크로 피신');
     ok(r.knight[0] && r.knight[1] === '기사', '여왕이 된 엘리자베스가 기사로 임명');
+    ok(r.elizPics.length >= 3 && r.elizPics.every(p => p[0] === 'portraits/history/elizabeth_player' && p[1] === 'portraits/history/elizabeth_player_half'), '런던 탑의 공주부터 즉위한 여왕까지 새 엘리자베스 얼굴상·무릎상 연결');
     ok(r.raids.length === 3 && r.raids.every((x, i) => x.call === i + 1 && x.news === 1 && !x.pendFar && x.pend && x.done === i + 1 && !x.armada) &&
       r.raids[0].n === 5 && r.raids[0].allies === 3 && r.raids[0].gun === 'cannon' && r.raids[0].myGun === 'culverin' && r.raids[0].res === 'won' && r.raids[1].res === 'lost' && r.raids[2].res === 'declined' && !r.raids[2].n,
       '두 해마다 드레이크의 습격 세 번 (카디스 ' + r.raids[0].n + '척 이김 · 아조레스 ' + r.raids[1].n + '척 짐 · 카리브 물러남) — 무적함대는 아직');

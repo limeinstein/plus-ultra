@@ -68,7 +68,7 @@
     var f = F[id]; if (!f) return { name: id, lang: 3 };
     var keys = H.faceKeys(id), sp = { name: f.name, lang: 3, rigId: 'hist:' + id };
     try {
-      var A = G.Art, spec = A.npcSpec('hist_' + id, f.role || 'captain', f.st || 'ib', 'm'), base = A.portraitKeys ? A.portraitKeys(spec) || [] : [];
+      var A = G.Art, spec = A.npcSpec('hist_' + id, f.role || 'captain', f.st || 'ib', f.g || 'm'), base = A.portraitKeys ? A.portraitKeys(spec) || [] : [];
       sp.portrait = A.withImg(spec, keys.concat(base));
       sp.half = keys.map(function (k) { return k + '_half'; }).concat(G.Img && G.Img.chain && G.Img.chain.halfOf ? G.Img.chain.halfOf(base) : []);
     } catch (e) { /* 그림이 없어도 말은 한다 */ }

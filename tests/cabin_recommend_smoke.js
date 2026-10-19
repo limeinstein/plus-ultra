@@ -121,7 +121,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => { G.Cabins.remodel(4, 'interp'); document.querySelectorAll('.win .close, .window-close').forEach(b => b.click()); });
     await page.waitForTimeout(300);
     const it = await page.evaluate(async () => { const p = G.UI.choose; let got = null; G.UI.choose = async (t, o, x) => { got = { t, o: o.map(v => v.label + ' | ' + (v.right || '')), x: x && x.text }; return null; }; try { await (G.CabinView._pickFor ? G.CabinView._pickFor('interp', 4) : null); } finally { G.UI.choose = p; } return got; });
-    if (it) { console.log(it.o); ok(/말 \d가지|더할 말 없음/.test(it.o.join(' ')), '통역실 추천은 말로 센다'); }
+    if (it) { console.log(it.o); ok(/통역 [^|]*\d|더할 말 없음/.test(it.o.join(' ')), '통역실: 옮겨 주는 말(이름·단계)을 보인다'); }
+    // 통역실 고르기 창 — 부하마다 옮겨 주는 말 (2026-10-20)
+    await page.evaluate(() => { window.__pk = G.CabinView._pickFor('interp', 4); });
+    await page.waitForSelector('.cb-opt-sub', { timeout: 10000 });
+    const subs = await page.evaluate(() => [...document.querySelectorAll('.cb-opt-sub')].map(e => e.textContent));
+    console.log(subs);
+    ok(subs.some(t => /통역 .+ \d/.test(t)) || subs.every(t => !/통역/.test(t)), '통역실 고르기 창에 말 이름');
+    await page.waitForTimeout(350);
+    await page.screenshot({ path: path.join(OUT, '5_interp.png') });
+    await page.keyboard.press('Escape');
     ok(errors.length === 0, '콘솔 오류 0' + (errors.length ? ': ' + errors.join(' | ') : ''));
     console.log('통과 — 그림: ' + OUT);
   } catch (e) {

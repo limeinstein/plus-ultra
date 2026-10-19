@@ -580,13 +580,13 @@
     var pack = ['wagon', 'donkey', 'llama', 'yak', 'porter', 'camel', 'elephant'].indexOf(mt.id) >= 0 && mt.n > 0;
     return pack && U.sum(s.fleet.ships, function (sh) { return sh.guns.n; }) >= 4;
   }
-  /** 육상전 (대항해시대 3식 부대전 — js/games/landwar.js). o: {kind: native|bandit|beast|garrison, guns} */
+  /** 육상전 (대항해시대 3식 부대전 — js/games/landwar.js). o: {kind: native|bandit|beast|garrison, guns, leader: 적 우두머리 이름, hold: 퇴각 판 차례 수, flee: false면 피할 수 없다, winText} */
   async function landBattle(enemyName, n, beasts, o) {
     var s = S(), l = s.loc; o = o || {};
     var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');
     var terr = l.lon != null ? G.Geo.terrain(l.lon, l.lat) : 'grass';
     if (terr === 'sea') terr = 'grass';
-    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns() });
+    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt });   // leader·hold·flee: 이야기 사건의 싸움 (js/systems/aztec.js)
     var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
     var res = r.res;
     if (res === 'win') {
@@ -598,10 +598,12 @@
         UI.toast((G.Hunt ? G.Hunt.label(l.lon, l.lat) + ' 떼를' : '짐승들을') + ' 물리쳤다! 고기로 식량 약 ' + Math.round(meat / R.dailyUse()) + '일분을 얻었다.' + (ht ? ' ' + ht + '.' : ''), hide && hide.got.length ? 'sack' : 'bread', ht ? 6000 : 4200);
         if (hide && hide.got.length) G.State.log('뭍에서 ' + G.Hunt.label(l.lon, l.lat) + ' 떼를 물리치고 ' + hide.got.map(function (x) { return G.GOOD[x.id].name + ' ' + x.q + '통'; }).join(' · ') + U.jx(hide.got.map(function (x) { return G.GOOD[x.id].name + ' ' + x.q + '통'; }).join(' · '), '을/를') + ' 얻었다.');
       }
+      else if (o.winText) UI.toast(o.winText, 'sword');
       else if (kind === 'native') UI.toast('원주민 전사들을 물리쳤다.', 'sword');
       else { var loot = n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + loot + '닢)', 'sword'); }
     }
     else if (res === 'lose') { UI.toast('패배했다... 대원 ' + (r.dead) + '명을 잃었다.', 'skull'); s.fleet.fatigue = Math.min(100, s.fleet.fatigue + 20); }
+    else if (res === 'truce') UI.toast((o.halt && o.halt.toast) || '싸움이 멈추었다.', 'people', 4200);
     else UI.toast('싸움을 피해 물러났다.', 'boot');
     if (r.back) setTimeout(function () { UI.toast('쓰러졌던 대원 ' + r.back + '명이 치료를 받고 다시 일어섰다.', 'drop', 3800); }, 700);
     if (G.Game.scene === L) refreshHud();

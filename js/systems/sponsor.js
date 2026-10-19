@@ -6,16 +6,19 @@
   G.Sponsor = SP;
   function S() { return G.Game.state; }
 
+  /** 대가 바뀌는 해에 소수를 쓰면 달까지 본다 (1520.5 = 1520년 7월부터 — 아즈텍 황제). 정수만 쓰면 예전과 같다 */
+  function yearOf(date) { return date.y + ((date.m || 1) - 1) / 12; }
+  SP.yearOf = yearOf;
   SP.holder = function (sp, date) {
-    date = date || S().date;
-    for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (date.y >= h[0] && date.y < h[1]) return h[2]; }
+    date = date || S().date; var y = yearOf(date);
+    for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (y >= h[0] && y < h[1]) return h[2]; }
     return null;
   };
   SP.present = function (sp) { return !!SP.holder(sp); };
   /** 0-based index of the current title holder in sp.holders (-1 when vacant) */
   SP.holderIndex = function (sp, date) {
-    date = date || S().date;
-    for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (date.y >= h[0] && date.y < h[1]) return i; }
+    date = date || S().date; var y = yearOf(date);
+    for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (y >= h[0] && y < h[1]) return i; }
     return -1;
   };
   SP.holderName = function (sp) { return SP.holder(sp) || sp.title; };

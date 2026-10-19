@@ -33,12 +33,20 @@
   /** 잉글랜드 왕궁의 주인과 친분이 있는가 (만난 적이 있고 신뢰 40 이상) */
   TD.friend = function () { var r = S().sponsors && S().sponsors.en_king; return !!(r && r.met && (r.trust || 0) >= K.friend); };
   /** 왕(헨리 8세·엘리자베스 1세)의 이 사건 대사는 늘 알아듣게 — 탑의 공주 때는 읽히다가 여왕이 되자 게르만어로 뒤섞이던 것 (QA 2026-10-18) */
-  function who() { var o = SP().speaker(king()); o.lang = 3; o.li = null; return o; }
+  function who() {
+    var o = SP().speaker(king());
+    if (elizQueen()) {
+      var key = 'portraits/history/elizabeth_player';
+      o.portrait = G.Art.withImg(G.Art.npcSpec('elizabeth', 'noble', 'ne', 'f'), [key, 'portraits/sponsors/en_king_6']);
+      o.half = [key + '_half', 'portraits/sponsors/en_king_6_half'];
+    }
+    o.lang = 3; o.li = null; return o;
+  }
   function envoy() { return { name: '스티븐 가디너 (국왕의 특사)', portrait: G.Art.withImg(G.Art.npcSpec('gardiner', 'priest', 'ne', 'm'), G.Img.chain.npc('priest')), lang: 3 }; }
   function eliz() {
-    // 갇힌 공주는 왕관·예복의 여왕 그림(en_king_6)이 아니라 튜더 왕녀 그림으로 (QA 2026-10-18)
-    var key = 'portraits/princesses/court_princess_en_1';
-    return { name: '엘리자베스 공주', portrait: G.Art.withImg(G.Art.npcSpec('elizabeth', 'noble', 'ne', 'f'), [key, 'portraits/sponsors/en_king_6']), half: [key + '_half', 'portraits/sponsors/en_king_6_half'], lang: 3 };
+    // 런던 탑의 공주와 즉위 뒤 여왕이 같은 전용 얼굴·무릎상으로 이어진다.
+    var key = 'portraits/history/elizabeth_player';
+    return { name: '엘리자베스 공주', portrait: G.Art.withImg(G.Art.npcSpec('elizabeth', 'noble', 'ne', 'f'), [key, 'portraits/princesses/court_princess_en_1', 'portraits/sponsors/en_king_6']), half: [key + '_half', 'portraits/princesses/court_princess_en_1_half', 'portraits/sponsors/en_king_6_half'], lang: 3 };
   }
   function drake() { return G.MATE.drake ? { name: '프랜시스 드레이크', portrait: G.Scenes.mateSpec('drake'), half: G.Img.chain.mateHalf('drake'), lang: 3 } : { name: '프랜시스 드레이크' }; }
   function englishRefuges() { return ['요크', '브리스틀', '사우샘프턴', '플리머스'].map(function (n) { return G.CITY_DATA.filter(function (c) { return c.name === n; })[0]; }).filter(function (c) { return c && R.cityExists(c); }); }

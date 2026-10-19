@@ -132,7 +132,7 @@
     { id: 'jp_sakai', title: '사카이 회합중', type: 'merchant', city: 192, bld: 'mansion', pw: 3, wealth: 4, lang: 13, rel: 'J', taste: ['trade'],
       holders: [[1480, 1600, '사카이 회합중 대표']] },
     { id: 'az_king', title: '아즈텍 황제', type: 'king', city: 200, bld: 'palace', pw: 4, wealth: 5, lang: 11, rel: 'N', taste: ['treasure', 'geo', 'nature', 'people'],
-      holders: [[1480, 1486, '티소크'], [1486, 1502, '아우이소틀'], [1502, 1520, '목테수마 2세']] },
+      holders: [[1480, 1486, '티소크'], [1486, 1502, '아우이소틀'], [1502, 1520.5, '목테수마 2세'], [1520.5, 1520.9, '쿠이틀라우아크'], [1520.9, 1521.62, '쿠아우테목']] },   // 해의 소수 = 달 (1520.5 = 1520년 7월, js/systems/sponsor.js SP.holder) — js/systems/aztec.js
     { id: 'in_inca', title: '잉카 황제', type: 'king', city: 223, bld: 'palace', pw: 4, wealth: 5, lang: 11, rel: 'N', taste: ['treasure', 'geo', 'nature'],
       holders: [[1480, 1493, '투팍 잉카 유팡키'], [1493, 1527, '와이나 카팍'], [1527, 1533, '아타우알파']] },
     { id: 'es_hispaniola', title: '에스파뇰라 총독', type: 'gov', city: 194, bld: 'palace', pw: 3, wealth: 3, lang: 0, rel: 'C', nation: 'ES', taste: ['geo', 'treasure'],
@@ -400,7 +400,7 @@
     { y: 1517, m: 2, text: '오스만 제국이 알렉산드리아를 장악했다.', city: [78, '오스만 제국'] },
     { y: 1517, m: 10, text: '마르틴 루터가 95개조 반박문을 내걸었다.' },
     { y: 1519, m: 9, text: '마가야네스의 함대가 산루카르 데 바라메다를 떠나 대서양으로 나섰다.' },
-    { y: 1521, m: 8, text: '테노치티틀란이 함락되고 아즈텍 제국이 무너졌다.', city: [200, '에스파냐'] },
+    { y: 1521, m: 8, d: 13, text: '테노치티틀란이 함락되고 아즈텍 제국이 무너졌다.', city: [200, '에스파냐'] },
     { y: 1521, m: 8, text: '오스만 제국이 베오그라드를 점령했다.', city: [69, '오스만 제국'] },
     { y: 1522, m: 9, text: '빅토리아호가 세계를 한 바퀴 돌아 귀환했다.' },
     { y: 1526, m: 4, text: '파니파트 전투. 바부르가 델리에 무굴 제국을 세웠다.', city: [145, '무굴 제국'] },

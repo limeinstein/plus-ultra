@@ -124,6 +124,7 @@
   /** 항해사가 술집에 나타날 수 있는가 (해·개척 단계) */
   F.mateReady = function (m, year) {
     var y = year || S().date.y;
+    if (m.eventOnly) return false;          // 이야기 사건으로만 만나는 사람 (포카혼타스 — js/systems/pocahontas.js)
     if (y < m.y[0] || y > m.y[1]) return false;
     if (G.SeaFolk && G.SeaFolk.rivalBusy && G.SeaFolk.rivalBusy(m.name)) return false;          // 아직 발견을 다투는 경쟁자 (js/data/rivals.js) — 다 끝나면 고용할 수 있다
     return !m.after || m.after.every(F.known);

@@ -118,7 +118,7 @@
       if (d.witch) opts.push({ label: '점괘를 본다', value: 'fortune' });
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
       var opp = (d.g === 'f') !== (s.player.g === 'f');      // 제독과 다른 성(이성)
-      if (f || opp) opts.push({ label: '선물한다', value: 'gift' });
+      opts.push({ label: '선물한다', value: 'gift' });   // 남자 부하에게도 늘 — 남자 선물은 애정 없이 충성만 오른다 (2026-10-20)
       if (f) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
       var v = await ask(turn++ ? U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?']) : greet(d, m, f), opts);
@@ -157,7 +157,7 @@
       } else if (v === 'gift') {
         var gifts = MT.giftsFor(d);
         if (!gifts.length) { UI.toast(f ? '선물할 장신구가 없습니다. 시장에서 살 수 있습니다.' : '선물할 것이 없습니다 — 술·카드·장난감은 시장에서 사고, 남는 검이나 방어구도 줄 수 있습니다.', 'info', 4200); continue; }
-        var gloy = function (gv) { return opp ? Math.max(cf.giftLoyalMin || 3, Math.round(gv * (cf.giftLoyal == null ? 0.6 : cf.giftLoyal))) : 2; };
+        var gloy = function (gv) { return opp || !f ? Math.max(cf.giftLoyalMin || 3, Math.round(gv * (cf.giftLoyal == null ? 0.6 : cf.giftLoyal))) : 2; };   // 남자 부하(남자 선물·검·방어구)는 제독이 남자여도 선물 값만큼 충성
         var gi = await UI.choose(f ? '선물 — 장신구' : '선물 — 술·카드·장난감·검·방어구', gifts.map(function (it, i) { var dd = G.ITEM[it.id], v0 = MT.giftValue(dd); return { label: dd.name + (f ? '' : ' <small class="muted">' + (G.ITEM_KIND[dd.kind] || '') + '</small>'), right: f ? '♥' + v0 : '충성 +' + gloy(v0), value: i, icon: f ? 'heart' : 'handshake', thumb: G.Img.itemSrc(it) }; }), { width: 520 });
         if (gi == null) continue;
         var it = gifts[gi], gd = G.ITEM[it.id], gv = MT.giftValue(gd);
@@ -165,7 +165,8 @@
         R.removeItemObject(it);
         var af0 = m.aff || 0, lo0 = m.loyal || 70;
         gainAff(gv + R.skill('craft'));
-        // 이성 부하: 선물 값만큼 충성도 오른다 (리본 +3 · 향수 +5 · 머리장식 +7 · 케이프 +8 · 진주 목걸이 +12), 같은 성이면 예전처럼 +2
+        // 이성 부하: 선물 값만큼 충성도 오른다 (리본 +3 · 향수 +5 · 머리장식 +7 · 케이프 +8 · 진주 목걸이 +12), 여자 제독 → 여자 부하는 예전처럼 +2
+        // 남자 부하: 남자 선물(술·카드·장난감)·검·방어구 — 애정(호감)은 오르지 않고 충성만 선물 값만큼 (제독이 남자여도)
         var gl = gloy(gv);
         m.loyal = Math.min(100, lo0 + gl);
         UI.toast(d.name + ' — 충성 +' + (m.loyal - lo0) + (f ? ' · 호감 +' + ((m.aff || 0) - af0) : ''), 'heart', 3200);

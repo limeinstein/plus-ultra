@@ -164,7 +164,7 @@
   function skillNote(m, c) {
     var R = G.R, ks = c.skills || G.ROLE_SKILLS[c.role] || [], best = null, lv = 0;
     ks.forEach(function (k) { var v = R.mateSkill(m, k); if (v > lv) { lv = v; best = k; } });
-    return best ? G.SKILL_BY_ID[best].name + ' ' + lv : c.lang ? '통역' : ks.length ? '특기 없음' : '';
+    return best ? G.SKILL_BY_ID[best].name + ' ' + lv : c.lang ? langNote(m) : ks.length ? '특기 없음' : '';   // 통역실: 옮겨 주는 말 (2026-10-20)
   }
   function loyalTag(m) {
     var lo = m.loyal == null ? 70 : m.loyal, e = CB().eff(m);
@@ -186,11 +186,21 @@
     return (short ? ST_SHORT : ST_NAME).map(function (n, k) { return n + (short ? '' : ' ') + (st[k] == null ? '—' : st[k]); }).join(short ? ' ' : ' · ');
   }
   function langCount() { var L = G.LANGS || []; return L.length || Object.keys(L).length; }
-  /** 통역실: 제독보다 잘하는 말 */
-  function langNote(m) {
-    var p = S().player, n = 0;
-    for (var li = 0; li < langCount(); li++) if (CB().mateLang(m, li) > ((p.lg && p.lg[li]) || 0)) n++;
-    return n ? '제독이 모르는 말 ' + n + '가지' : '더할 말 없음';
+  /** 통역실: 제독보다 잘하는 말 — 「아랍어 3 · 페르시아어 2(제독 1)」 (숫자는 그 사람의 말 단계, 괄호는 제독의 단계) */
+  function langGains(m) {
+    var p = S().player, out = [];
+    for (var li = 0; li < langCount(); li++) {
+      var a = CB().mateLang(m, li), b = (p.lg && p.lg[li]) || 0;
+      if (a > b) out.push(G.LANGS[li] + ' ' + a + (b ? '(제독 ' + b + ')' : ''));
+    }
+    return out;
+  }
+  /** full이면 모두, 아니면 둘까지 보이고 나머지는 「외 n가지」 */
+  function langCountNote(m) { var n = langGains(m).length; return n ? '제독이 모르는 말 ' + n + '가지' : '더할 말 없음'; }
+  function langNote(m, full) {
+    var g = langGains(m);
+    if (!g.length) return '더할 말 없음';
+    return '통역 ' + (full || g.length <= 2 ? g.join(' · ') : g.slice(0, 2).join(' · ') + ' 외 ' + (g.length - 2) + '가지');
   }
   /** 이 방에 얼마나 맞는가: 방의 특기 가운데 가장 높은 단계(+ 나머지 조금) × 충성 효율. 통역실은 제독보다 잘하는 말의 단계 차 */
   function fitScore(m, c) {
@@ -283,8 +293,8 @@
     var opts = recommend(c).map(function (o) {
       var m = o.m, d = G.MATE[m.id];
       return { label: d.name + recTag(ranks[m.id]) + (m === cur ? ' (지금 이 자리)' : '') +
-          '<small class="muted cb-opt-sub" style="display:block;font-size:14px;line-height:1.35;margin-top:2px">특기 ' + U.esc(skillsOf(m)) + '<br>' + statsOf(m) + ' · 충성 ' + Math.round(m.loyal == null ? 70 : m.loyal) + '</small>', right: fitNote(m, c) + ' · ' + CB().placeName(m), value: m.id, icon: 'people', disabled: m === cur,
-        desc: '특기 ' + skillsOf(m) + ' — ' + statsOf(m) + ' · 충성 ' + Math.round(m.loyal == null ? 70 : m.loyal) };
+          '<small class="muted cb-opt-sub" style="display:block;font-size:14px;line-height:1.35;margin-top:2px">특기 ' + U.esc(skillsOf(m)) + '<br>' + statsOf(m) + ' · 충성 ' + Math.round(m.loyal == null ? 70 : m.loyal) + (c.lang ? '<br><b>' + U.esc(langNote(m, true)) + '</b>' : '') + '</small>', right: (c.lang ? langCountNote(m) : fitNote(m, c)) + ' · ' + CB().placeName(m), value: m.id, icon: 'people', disabled: m === cur,
+        desc: '특기 ' + skillsOf(m) + ' — ' + statsOf(m) + ' · 충성 ' + Math.round(m.loyal == null ? 70 : m.loyal) + (c.lang ? ' — ' + langNote(m, true) : '') };
     });
     if (cur) opts.push({ label: '자리를 비운다', value: '-', icon: 'boot' });
     return opts;
@@ -297,7 +307,7 @@
     var c = G.CABIN[type], role = ROLE_OF[type];
     var cur = role ? CB().roleMate(role) : CB().occupant(i);
     if (!S().mates.length) { UI.toast('배치할 부하가 없습니다. 술집에서 부하를 찾아보십시오.', 'people'); return; }
-    var v = await UI.choose(c.name + '에 둘 사람', mateOptions(c, cur), { width: 720, icon: c.icon, text: c.desc + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') + recLine(c) });
+    var v = await UI.choose(c.name + '에 둘 사람', mateOptions(c, cur), { width: 720, icon: c.icon, text: c.desc + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') + (c.lang ? '<br><span class="muted">「통역」 뒤는 그 사람이 옮겨 주는 말과 말 단계(3이 가장 능숙) — 괄호는 제독의 단계</span>' : '') + recLine(c) });
     if (v == null) return;
     if (v === '-') { if (role) { cur.role = 'none'; } else CB().place(cur, null); return; }
     var m = mateById(v); if (!m) return;
@@ -384,7 +394,7 @@
       { k: 'rep', ic: 'hammer', label: '바다 위 기함 수리', v: F('repair', 'repair'), rooms: '선박 수리실', fmt: function (v) { return '내구 +' + num(v) + '/일'; } },
       { k: 'pen', ic: 'bread', label: '식량', v: F('pen', 'pen'), rooms: '사육실', fmt: function (v) { return '+' + num(v) + '/일'; } },
       { k: 'stf', ic: 'strategy', label: '육상전 계략', v: F('staff', 'staff'), rooms: '참모실', fmt: function (v) { return '성공 +' + pct(v) + '%p · 피해 +' + pct(F('staff', 'staffDmg')) + '%'; } },
-      { k: 'adj', ic: 'people', label: '부관 (달마다 부하 충성)', v: cb.power('adjutant'), rooms: '부관실', fmt: function () { return '돌봄'; } },
+      { k: 'adj', ic: 'people', label: '불만 다독이기 (충성 ' + ((G.BALANCE.mates || {}).settle || 70) + ' 아래 부하)', v: cb.power('adjutant'), rooms: '부관실 — 급료를 치른 달마다', fmt: function () { return '충성 +' + (((G.BALANCE.mates || {}).adjutantLoyal == null ? 1 : G.BALANCE.mates.adjutantLoyal)) + '/달'; } },
       { k: 'art', ic: 'palette', label: '화실·조각실의 힘', v: cb.power('studio') + cb.power('sculpt'), rooms: '화실·조각실', fmt: function (v) { return '힘 ' + num(v); } }
     ];
     fx.forEach(function (o) { if (!o.text) o.text = o.v > 0 ? o.fmt(o.v) : ''; });

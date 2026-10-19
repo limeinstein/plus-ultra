@@ -30,6 +30,7 @@
   /** 선체 폭만큼 여유를 둔 뭍·섬·빙산 충돌. true면 그 자리로 갈 수 없다. */
   function terrainBlocked(x, y, b) {
     if (!st || !G.Geo || !G.Geo.sdf || !G.Geo.ready) return false;
+    if (st.npc && st.npc.lake) return false;   // 호수의 큰 싸움: 막힘 없는 물 (js/systems/aztec.js)
     var ll = geoAt(x, y);
     return G.Geo.sdf(ll[0], ll[1]) > -shorePad(b) || (G.Geo.berg && G.Geo.berg(ll[0], ll[1]));
   }
@@ -241,22 +242,36 @@
     var s = S(), npc = arg.npc || { kind: 'pirate', n: 1 };
     G.Game.showLayers(true, true, false);
     G.Game.ensureRenderer();
-    st = { cx: 0, cy: 0, npc: npc, t: 0, ships: [], fx: [], balls: [], paused: false, over: false, mode: 'follow', sel: null, busy: 0, log: [], fled: 0, center: { lon: s.loc.lon, lat: s.loc.lat }, seaArt: null };
+    st = { cx: 0, cy: 0, npc: npc, t: 0, ships: [], fx: [], balls: [], paused: false, over: false, mode: 'follow', sel: null, busy: 0, log: [], fled: 0, center: npc.center ? { lon: npc.center.lon, lat: npc.center.lat } : { lon: s.loc.lon, lat: s.loc.lat }, seaArt: null, spare: 0 };   // npc.center: 그 자리가 아닌 물 위에서 (호수의 큰 싸움)
     // player ships & crew distribution
     var f = s.fleet, totMax = R.crewMax();
-    f.ships.forEach(function (sh, i) {
+    if (npc.myFleet && npc.myFleet.length) {
+      // 이 싸움에서만 모는 배 (아즈텍 호수의 브리건틴·카누 — js/systems/aztec.js): 내 함대는 뭍에 두고, 선원이 이 배들에 나누어 탄다. 남은 선원은 기다린다
+      var mine = npc.myFleet.map(function (a, i) {
+        var t = G.SHIP[a.type] || G.SHIP.pinnace;
+        return { type: t.id, name: a.name, hp: t.hp, maxHp: t.hp, crewMax: t.crew[1], guns: { type: a.gun || 'saker', n: Math.max(1, Math.round(t.ports * 0.9)) }, sails: t.sails.slice(), admiral: i === 0, lent: true };
+      });
+      var cap = U.sum(mine, function (x) { return x.crewMax; }), put = Math.min(f.crew, cap);
+      st.spare = f.crew - put;
+      mine.forEach(function (sh, i) {
+        var b = makeShip(sh, 'me', i, mine.length);
+        b.crew = b.crew0 = Math.max(1, Math.round(put * sh.crewMax / Math.max(1, cap)));
+        st.ships.push(b);
+      });
+    } else f.ships.forEach(function (sh, i) {
       var b = makeShip(sh, 'me', i, f.ships.length);
       if (npc.myGun && b.guns.n > 0) b.guns.type = npc.myGun;   // 큰 해전에서 빌려 실은 대포 (드레이크의 캘버린포) — 이 싸움에서만, 배의 대포는 그대로
       b.crew = b.crew0 = Math.max(1, Math.round(f.crew * sh.crewMax / Math.max(1, totMax)));
       st.ships.push(b);
     });
+    var myN = st.ships.length;
     // 호위하는 상선: 우리 편이지만 내 배가 아니다 — 제 선원으로 싸우고, 기함 뒤에 숨는다 (js/systems/escort.js)
-    var escSh = G.Escort ? G.Escort.ship() : null;
-    if (escSh) { var eb = makeShip(escSh, 'me', f.ships.length, f.ships.length + 1); eb.flag = false; eb.escort = true; eb.crew = eb.crew0 = escSh.crew || G.SHIP[escSh.type].crew[0]; st.ships.push(eb); }
+    var escSh = G.Escort && !npc.myFleet ? G.Escort.ship() : null;
+    if (escSh) { var eb = makeShip(escSh, 'me', myN, myN + 1); eb.flag = false; eb.escort = true; eb.crew = eb.crew0 = escSh.crew || G.SHIP[escSh.type].crew[0]; st.ships.push(eb); }
     // 큰 해전의 우리 편 함대 (무적함대·레판토 — js/systems/relations.js G.Rel.greatBattle): 우리 편이지만 내 배가 아니다 — 제 선원으로 제멋대로 싸운다
     (npc.allies || []).forEach(function (a, i) {
       var t = G.SHIP[a.type] || G.SHIP.galleon, src = { type: t.id, name: a.name, hp: t.hp, maxHp: t.hp, crew: t.crew[1], guns: { type: a.gun || 'culverin', n: Math.max(4, Math.round(t.ports * 0.85)) }, sails: t.sails.slice() };
-      var ab = makeShip(src, 'me', f.ships.length + 1 + i, f.ships.length + 1 + npc.allies.length); ab.flag = false; ab.ally = true; ab.order = 'free'; ab.crew = ab.crew0 = Math.round(t.crew[1] * 0.85); st.ships.push(ab);
+      var ab = makeShip(src, 'me', myN + 1 + i, myN + 1 + npc.allies.length); ab.flag = false; ab.ally = true; ab.order = 'free'; ab.crew = ab.crew0 = Math.round(t.crew[1] * 0.85); st.ships.push(ab);
     });
     var en = enemyFleet(npc);
     en.forEach(function (sh, i) { var b = makeShip(sh, 'en', i, en.length); b.crew = b.crew0 = sh.crew; st.ships.push(b); });
@@ -1209,7 +1224,7 @@
       if (b.sunk || b.lostBoard) { var i = f.ships.indexOf(b.src); if (i >= 0) f.ships.splice(i, 1); return; }
       b.src.hp = Math.max(1, b.hp); survivors.push(b);
     });
-    f.crew = U.sum(survivors, function (b) { return b.crew; });
+    f.crew = U.sum(survivors, function (b) { return b.crew; }) + (st.spare || 0);   // 빌린 배로 싸웠으면 타지 못한 선원은 그대로
     var lines = [];
     if (G.Growth) G.Growth.battle(res, (st.npc && st.npc.n) || st.ships.filter(function (b) { return b.side !== 'me'; }).length);   // 전투 경험 (js/systems/growth.js)
     if (G.Escort) { try { G.Escort.afterBattle(st.ships, res, lines); } catch (e) { console.error(e); } }   // 호위하던 상선을 잃었는가
@@ -1224,7 +1239,7 @@
       st.ships.forEach(function (b) {
         if (b.side !== 'en') return;
         if (b.sunk || b.captured) gold += Math.round((st.npc.kind === 'merchant' ? 1400 : st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateLoot) || 900) : 700) * U.rf(0.6, 1.4) * (st.npc.kind === 'pirate' ? Math.max(1, G.SHIP[b.type].cap / 200) : G.SHIP[b.type].cap / 200));   // 작은 해적선도 한 척 몫은 낸다
-        if (b.captured) caps.push(b);
+        if (b.captured && !st.npc.noPrize) caps.push(b);   // noPrize: 호수의 카누·브리건틴은 끌고 갈 수 없다
       });
       s.player.gold += gold;
       var fame = st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateFameGain) || 25) * Math.max(1, st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length) : 10;   // 달아난 배는 치지 않는다
@@ -1249,7 +1264,7 @@
     } else if (res === 'flaglost') {
       // 기함을 잃고 흩어져 달아났다: 쫓기며 짐 절반을 버렸다
       var lostK = 0;
-      Object.keys(f.cargo).forEach(function (k) { var c = f.cargo[k], d = Math.ceil(c.q / 2); c.q -= d; lostK += d; if (c.q <= 0) delete f.cargo[k]; });
+      if (!st.npc.myFleet) Object.keys(f.cargo).forEach(function (k) { var c = f.cargo[k], d = Math.ceil(c.q / 2); c.q -= d; lostK += d; if (c.q <= 0) delete f.cargo[k]; });   // 빌린 배로 싸웠으면 짐은 뭍의 내 배에 그대로
       await UI.alert((st.myFlag ? '기함 ' + st.myFlag.name + '호를 잃었다! ' : '') + '지휘를 잃은 함대가 흩어져 달아났다...' + (lostK ? '<br>쫓기는 동안 짐 ' + lostK + '통을 바다에 버렸다.' : '') + (f.ships.length ? '<br><span class="muted">새 기함: ' + U.esc(f.ships[0].name) + '호</span>' : ''), '패배 — 기함 상실');
       if (!f.ships.length) { await ransom(); }
     } else if (res === 'escaped-enemy') {
@@ -1277,6 +1292,7 @@
     G.Scenes.city.B.harbor.trimCrew && G.Scenes.city.B.harbor.trimCrew();
     if (G.Game.scene !== B) return;
     if (!f.ships.length) return;
+    if (st.npc.backCity != null && G.CITY_DATA[st.npc.backCity]) { var bc = st.npc.backCity; UI.fade(function () { G.Game.go('city', { cityId: bc }); }); return; }   // 도시에서 나선 싸움이면 그 도시로 (호수의 큰 싸움)
     UI.fade(function () { G.Game.go('sea', { resume: true }); });
   }
   /** 해적의 물건: 무찌른 배마다 45%로 하나 — 장신구(선물)가 가장 흔하고, 무기·방어구·항해도구. 값진 것일수록 드물다 */
@@ -1288,8 +1304,7 @@
       var w = pool.map(function (it) { return (it.kind === 'gift' ? 3 : it.kind === 'weapon' ? 1.6 : 1) * 1000 / Math.max(200, it.price); });
       var tot = U.sum(w), r = U.rand() * tot, it = pool[0];
       for (var i = 0; i < pool.length; i++) { r -= w[i]; if (r <= 0) { it = pool[i]; break; } }
-      var kept = !R.itemsFull();
-      if (kept) R.addItem(it.id);
+      var kept = R.addItem(it.id);   // 칸이 차면 못 챙긴다 — 같은 물건이 있으면 그 칸에 (2026-10-20)
       out.push({ id: it.id, name: it.name, kept: kept });
     });
     return out;
@@ -1440,36 +1455,98 @@
     }
     fill();
     var win = UI.window({ title: '나포한 배의 짐', icon: 'sack', width: 820, closable: false,
-      html: '<div class="muted" style="font-size:16px;margin-bottom:8px">나포한 배' + (caps.length > 1 ? ' ' + caps.length + '척' : '') + '에 실려 있던 것입니다. 옮겨 실을 만큼 정하십시오. 싣지 않은 것은 배와 함께 두고 갑니다. 교역품은 품목 ' + maxKinds + '종까지, 선원은 탈 자리(' + seatLeft + '명)만큼.</div>' +
+      html: '<div class="muted" style="font-size:16px;margin-bottom:8px">나포한 배' + (caps.length > 1 ? ' ' + caps.length + '척' : '') + '에 실려 있던 것입니다. 옮겨 실을 만큼 정하십시오(◀ ▶ 단추나 키보드 ←→로 하나씩, Shift는 10씩 · ↑↓로 줄을 고릅니다). 싣지 않은 것은 배와 함께 두고 갑니다. 교역품은 품목 ' + maxKinds + '종까지, 선원은 탈 자리(' + seatLeft + '명)만큼.</div>' +
         '<div class="ph-quick flex" style="gap:8px;margin-bottom:8px"><button class="btn small" data-q="fill">자리만큼 싣는다</button><button class="btn small" data-q="none">아무것도 싣지 않는다</button></div>' +
         '<table class="tbl ph-tbl"></table><div class="ph-info" style="margin-top:10px;font-size:17px"></div>',
       buttons: [{ label: '옮겨 싣는다', value: 'ok', cls: 'navy' }] });
     var tbl = win.content.querySelector('.ph-tbl'), info = win.content.querySelector('.ph-info'), okBtn = win.el.querySelector('.foot .btn.navy');
-    function draw() {
-      tbl.innerHTML = '<tr><th>실린 것</th><th class="num">있는 양</th><th style="width:42%">옮겨 싣기</th><th class="num">싣는 양</th></tr>' + items.map(function (x, i) {
+    /* 수량 조절 (2026-10-20): 줄마다 ◀ ▶ (누르고 있으면 빨라진다, Shift는 10씩), 키보드 ←→ (Shift 10씩) · ↑↓ 줄 고르기 · Home 0 · End 최대.
+       표는 한 번만 만들고 값만 고친다 — 예전엔 값이 바뀔 때마다 표를 새로 그려 막대를 끌던 손이 놓쳤다. */
+    var sel = 0; for (var si = 0; si < items.length; si++) if (items[si].max) { sel = si; break; }
+    /** 이 줄에 더 실을 수 있는 최대 (짐칸·무게 여유 안에서) */
+    function fitMax(x) {
+      var keep = x.take; x.take = 0;
+      var u2 = usage(), roomV = x.kind === 'crew' ? Infinity : vol0 - u2.v, roomW = (wt0 - u2.w) / wtOf(x);
+      x.take = keep;
+      return Math.max(0, Math.min(x.max, Math.floor(Math.min(roomV, roomW) + 1e-9)));
+    }
+    function setTake(i, v) { var x = items[i]; if (!x || !x.max) return; x.take = U.clamp(Math.round(v), 0, x.max); refresh(); }
+    function step(i, d) {
+      var x = items[i]; if (!x || !x.max) return;
+      if (d > 0) setTake(i, Math.min(Math.max(x.take, fitMax(x)), x.take + d));   // 넘치게는 늘리지 않는다
+      else setTake(i, x.take + d);
+    }
+    function select(i) { if (items[i] && items[i].max) { sel = i; refresh(); } }
+    var hold = null;
+    function stopHold() { if (hold) { clearTimeout(hold.t); hold = null; } }
+    function startHold(i, d) {
+      stopHold(); step(i, d);
+      var h = hold = { n: 0 };
+      (function again(delay) {
+        h.t = setTimeout(function () {
+          if (hold !== h) return;
+          var before = items[i].take; h.n++; step(i, d * (h.n > 24 ? 10 : 1));
+          if (items[i].take === before) { stopHold(); return; }   // 끝에 닿으면 멈춘다 (잠긴 단추는 손을 뗀 것을 알리지 못한다)
+          again(h.n > 6 ? 45 : 95);
+        }, delay);
+      })(380);
+    }
+    function build() {
+      tbl.innerHTML = '<tr><th>실린 것</th><th class="num">있는 양</th><th style="width:48%">옮겨 싣기 <small class="muted">◀ ▶ · 키보드 ←→</small></th><th class="num">싣는 양</th></tr>' + items.map(function (x, i) {
         var unit = x.kind === 'crew' ? '명' : '통', note = x.noKind ? ' <small class="warn-text">품목 칸이 가득</small>' : x.kind === 'crew' && x.max < x.q ? ' <small class="muted">탈 자리 ' + x.max + '명</small>' : x.kind === 'good' && G.Cargo && G.Cargo.wt(x.id) !== 1 ? ' <small class="muted">무게 ' + G.Cargo.wt(x.id) + '</small>' : '';
-        return '<tr><td>' + G.icon(x.icon) + ' ' + U.esc(x.name) + note + '</td><td class="num">' + U.num(x.q) + unit + '</td>' +
-          '<td><div class="flex" style="gap:6px"><input type="range" data-i="' + i + '" min="0" max="' + x.max + '" value="' + x.take + '"' + (x.max ? '' : ' disabled') + ' style="flex:1"><button class="btn small" data-max="' + i + '"' + (x.max ? '' : ' disabled') + '>최대</button></div></td>' +
-          '<td class="num"><b>' + U.num(x.take) + '</b>' + unit + '</td></tr>';
+        var dis = x.max ? '' : ' disabled';
+        return '<tr data-row="' + i + '"><td>' + G.icon(x.icon) + ' ' + U.esc(x.name) + note + '</td><td class="num">' + U.num(x.q) + unit + '</td>' +
+          '<td><div class="flex" style="gap:5px;align-items:center">' +
+          '<button class="btn small ph-step" data-i="' + i + '" data-d="-1" title="하나 덜 (Shift 10) · 키보드 ←"' + dis + '>◀</button>' +
+          '<input type="range" data-i="' + i + '" min="0" max="' + x.max + '" value="' + x.take + '"' + dis + ' style="flex:1;min-width:0">' +
+          '<button class="btn small ph-step" data-i="' + i + '" data-d="1" title="하나 더 (Shift 10) · 키보드 →"' + dis + '>▶</button>' +
+          '<button class="btn small" data-max="' + i + '"' + dis + '>최대</button></div></td>' +
+          '<td class="num"><b class="ph-take"></b>' + unit + '</td></tr>';
       }).join('');
+      U.$$('tr[data-row]', tbl).forEach(function (tr) { tr.addEventListener('pointerdown', function () { select(+tr.dataset.row); }); });
+      U.$$('input[type=range]', tbl).forEach(function (r) { r.oninput = function () { sel = +r.dataset.i; items[sel].take = +r.value; refresh(); }; });
+      U.$$('button.ph-step', tbl).forEach(function (b) {
+        var i = +b.dataset.i, d = +b.dataset.d;
+        b.addEventListener('pointerdown', function (e) { if (e.button) return; e.preventDefault(); sel = i; startHold(i, d * (e.shiftKey ? 10 : 1)); });
+        b.addEventListener('click', function (e) { if (e.detail === 0) { sel = i; step(i, d * (e.shiftKey ? 10 : 1)); } });   // 키보드로 누른 단추
+      });
+      U.$$('button[data-max]', tbl).forEach(function (b) { b.onclick = function () { var i = +b.dataset.max; sel = i; setTake(i, fitMax(items[i])); }; });
+    }
+    function refresh() {
+      items.forEach(function (x, i) {
+        var tr = tbl.querySelector('tr[data-row="' + i + '"]'); if (!tr) return;
+        var r = tr.querySelector('input[type=range]'); if (+r.value !== x.take) r.value = x.take;
+        tr.querySelector('.ph-take').textContent = U.num(x.take);
+        var bs = tr.querySelectorAll('button.ph-step');
+        if (x.max) { bs[0].disabled = x.take <= 0; bs[1].disabled = x.take >= fitMax(x); }   // 더 실을 자리가 없으면 ▶ 잠금
+        tr.style.background = i === sel ? 'rgba(201,154,60,.16)' : '';
+        tr.style.boxShadow = i === sel ? 'inset 3px 0 0 #c99a3c' : '';
+      });
       var u = usage(), overV = u.v - vol0, overW = u.w - wt0, overK = kinds0 + u.nk > maxKinds;
       info.innerHTML = '짐칸 <b>' + U.num(Math.max(0, vol0 - u.v)) + '</b>통 남음' + (G.Cargo ? ' · 무게 여유 ' + U.num(Math.max(0, Math.floor(wt0 - u.w))) : '') +
         (overV > 0 ? ' — <span class="warn-text">짐칸이 ' + Math.ceil(overV) + '통 넘침</span>' : overW > 0 ? ' — <span class="warn-text">배가 버티는 무게를 넘음</span>' : '') +
         (overK ? ' — <span class="warn-text">교역품 품목이 ' + maxKinds + '종을 넘음</span>' : '');
       var bad = overV > 0 || overW > 0.001 || overK;
       okBtn.disabled = bad; okBtn.classList.toggle('disabled', bad);
-      U.$$('input[type=range]', tbl).forEach(function (r) { r.oninput = function () { items[+r.dataset.i].take = +r.value; draw(); }; });
-      U.$$('button[data-max]', tbl).forEach(function (b) {
-        b.onclick = function () {
-          var x = items[+b.dataset.max]; x.take = 0;
-          var u2 = usage(), roomV = x.kind === 'crew' ? Infinity : vol0 - u2.v, roomW = (wt0 - u2.w) / wtOf(x);
-          x.take = Math.max(0, Math.min(x.max, Math.floor(Math.min(roomV, roomW) + 1e-9))); draw();
-        };
-      });
     }
+    var draw = refresh;
     U.$$('button[data-q]', win.content).forEach(function (b) { b.onclick = function () { if (b.dataset.q === 'fill') fill(); else items.forEach(function (x) { x.take = 0; }); draw(); }; });
-    draw();
-    await win.result;
+    build(); refresh();
+    var unkey = UI.pushKey ? UI.pushKey(function (e) {
+      var k = e.key, m = e.shiftKey ? 10 : 1;
+      if (k === 'ArrowLeft' || k === 'ArrowRight') { step(sel, k === 'ArrowRight' ? m : -m); return true; }
+      if (k === 'ArrowUp' || k === 'ArrowDown') {
+        var dir = k === 'ArrowDown' ? 1 : -1;
+        for (var j = sel + dir; j >= 0 && j < items.length; j += dir) if (items[j].max) { sel = j; break; }
+        refresh(); var tr = tbl.querySelector('tr[data-row="' + sel + '"]'); if (tr && tr.scrollIntoView) tr.scrollIntoView({ block: 'nearest' });
+        return true;
+      }
+      if (k === 'Home') { setTake(sel, 0); return true; }
+      if (k === 'End') { var x = items[sel]; if (x) setTake(sel, Math.max(x.take, fitMax(x))); return true; }
+      return false;
+    }) : function () {};
+    document.addEventListener('pointerup', stopHold); document.addEventListener('pointercancel', stopHold);
+    try { await win.result; } finally { unkey(); stopHold(); document.removeEventListener('pointerup', stopHold); document.removeEventListener('pointercancel', stopHold); }
     var got = [];
     items.forEach(function (x) {
       if (!x.take) return;
@@ -1769,7 +1846,7 @@
     var me = st.ships.filter(function (b) { return b.side === 'me' && b.alive; }), en = st.ships.filter(function (b) { return b.side === 'en' && b.alive; });
     UI.hud.set('me', '아군 ' + me.length + '척 · 선원 ' + U.sum(me, function (b) { return b.crew; }));
     UI.hud.set('en', '적 ' + en.length + '척 · 선원 ' + U.sum(en, function (b) { return b.crew; }));
-    UI.hud.set('wind', U.dirName(st.wind.dir + Math.PI) + '풍' + (st.terrain && st.terrain.hasLand ? ' · 연안 전장' : ' · 격랑 해역'));
+    UI.hud.set('wind', U.dirName(st.wind.dir + Math.PI) + '풍' + (st.npc && st.npc.place ? ' · ' + st.npc.place : st.terrain && st.terrain.hasLand ? ' · 연안 전장' : ' · 격랑 해역'));   // npc.place: 큰 해전의 자리 이름 (텍스코코 호수)
     if (st.pf % 6 === 0) refreshOrders();
     if ((st.pf = (st.pf || 0) + 1) % 15 === 0 && el.panel) {
       el.panel.innerHTML = '<div class="fp-h">' + G.icon('ship') + '아군 함대</div>' + st.ships.filter(function (b) { return b.side === 'me'; }).map(function (b) {

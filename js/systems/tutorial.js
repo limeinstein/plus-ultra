@@ -60,7 +60,17 @@
     } catch (e) { console.error(e); }
     return {};
   }
-  function fmt(s) { var p = S().player; return String(s).replace(/\{name\}/g, p.name).replace(/<\/?b>/g, ''); }
+  /** 특기 단계: P = 주인공, 그 밖은 부하 id (부하 정의의 단계 — 특기 늘리기(js/data/renown.js)를 마친 값) */
+  function skOf(w, id) { if (w === 'P') return (S().player.sk || {})[id] || 0; var d = G.MATE && G.MATE[w]; return d && d.sk ? d.sk[id] || 0 : 0; }
+  TU.skOf = skOf;
+  function fmt(s) {
+    var p = S().player;
+    return String(s).replace(/\{name\}/g, p.name)
+      .replace(/\{sk:([A-Za-z_0-9]+):([a-z]+)\}/g, function (_, w, id) { return skOf(w, id); })
+      .replace(/\{pow:([A-Za-z_0-9]+):([a-z]+)\}/g, function (_, w, id) { return 1 + skOf(w, id); })
+      .replace(/<\/?b>/g, '');
+  }
+  TU.fmt = fmt;
   /** 대사 묶음을 차례로 보여 준다. 고르는 대답이 있으면 고른 값을 돌려준다 */
   async function play(lines) {
     var picked = null;

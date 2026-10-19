@@ -8,7 +8,10 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); }
+catch (e) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'fairytales');
 require('fs').mkdirSync(OUT, { recursive: true });
@@ -21,7 +24,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -83,6 +86,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log(JSON.stringify(r));
     ok(r.data.every(d => d[1] === 0 && /^portraits\/legendary\//.test(d[2] || '') && /^portraits\/legendary\/.*_half$/.test(d[3] || '')), '네 사람 품삯 0 · Codex 그림이 흉상·무릎상으로: ' + r.data.map(d => d[2]).join(', '));
+    const snowPic = r.data.filter(d => d[0] === 'snow_white')[0];
+    ok(snowPic && snowPic[2] === 'portraits/legendary/snow_white_player' && snowPic[3] === 'portraits/legendary/snow_white_player_half', '백설공주 이벤트에 새 플레이어 화풍 얼굴상·무릎상 연결');
     ok(r.spots.FR && r.spots.DE && r.spots.DK && !r.spots.jutIsle, '자리: 프랑스 숲 ' + r.spots.FR + ' · 독일 숲 ' + r.spots.DE + ' · 덴마크 섬 ' + r.spots.DK + ' (유틀란트는 섬이 아니다)');
     ok(!r.cinNo && r.cin && r.cinHired && r.glassLeft === 2, '신데렐라: 유리·세공이 없으면 안 나오고, 있으면 유리 한 통(3→' + r.glassLeft + ')으로 구두를 지어 합류');
     ok(!r.snow7 && !r.snowF && r.snow6 && r.snow && r.snowHired, '백설공주: 남자 일곱·여자 섞임이면 안 되고, 남자 꼭 여섯이면 사냥꾼을 물리치고 합류');

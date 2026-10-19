@@ -19,7 +19,7 @@
       { label: '항해사를 찾는다', icon: 'people', sub: (function () { var n = C.B.tavern.candidates(c).length; return n ? n + '명' : '없다'; })(), onClick: function () { return C.B.tavern.hire(c, innWife()); } },
       { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return C.B.tavern.organize(); } },
       G.MateTalk ? G.MateTalk.menuItem(c) : null,
-      { label: '허드렛일', icon: 'tools', onClick: function () { return INN.work(c); } },
+      { label: '허드렛일', icon: 'tools', sub: (function () { var L = INN.workLeft(), j = S().player.innJob; return L <= 0 ? '쉬어야 함 (숙박 ' + Math.max(1, innCfg().restNights - ((j && j.rest) || 0)) + '밤)' : j && j.used ? '남은 ' + L + '일' : ''; })(), onClick: function () { return INN.work(c); } },
       { label: '기능', icon: 'gear', sub: INN.canSave(c) ? '저장 가능' : '', onClick: function () { return INN.func(c); } }
     ];
   };
@@ -36,25 +36,46 @@
     // 묵는 동안 수명이 다했다: 그 이야기(js/systems/lifespan.js)가 이어지니 「피로가 풀렸다」는 하지 않는다 (QA 2026-10-10)
     if (s.life && s.life.end) { var nw = msgs.filter(function (m) { return m.history; }); if (nw.length) await C.news(nw); return; }
     s.fleet.fatigue = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
+    var rested = innRest(n);   // 허드렛일로 지친 몸: 열흘 넘게 묵으면 다시 석 달 일할 수 있다
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     var news = msgs.filter(function (m) { return m.history; }); if (news.length) await C.news(news);
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     G.Game.refreshHud();
-    await UI.say('피로가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
+    await UI.say('피로가 풀렸다! 체력이 회복됐다!' + (rested === 'fresh' ? '\n허드렛일로 지친 몸도 다 나았다 — 다시 석 달까지 일할 수 있다.' : rested ? '\n(허드렛일로 지친 몸은 아직이다 — 여관에서 ' + rested + '밤 더 묵어야 다시 일할 수 있다)' : '') + '\n(' + U.fmtDate(s.date) + ')', {});
     if (G.Family && G.Family.innEvent) await G.Family.innEvent(c);
   };
-  /* 허드렛일: 한 번에 최대 다섯 달(G.BALANCE.innWork.maxDays). 일한 날만큼 명성이 내려가고(하루 1),
-     부엌·장터에서 그 고장 사람들과 지내며 그 고장 말을 익힌다 (s.player.lgWork[말] = 쌓인 날) */
-  function innCfg() { return (G.BALANCE && G.BALANCE.innWork) || { maxDays: 150, famePerDay: 1, langDays: [40, 80, 120] }; }
+  /* 허드렛일: 모두 합쳐 석 달(G.BALANCE.innWork.maxDays 90일)을 넘겨 일할 수 없다. 여관에서 열흘(restNights) 넘게 묵으면 다시 석 달.
+     (어느 도시의 여관이든 합친다 · 묵은 밤도 여러 번에 걸쳐 합친다 · s.player.innJob = {used: 일한 날, rest: 그 뒤 묵은 밤})
+     일한 날만큼 명성이 내려가고(하루 1), 부엌·장터에서 그 고장 사람들과 지내며 그 고장 말을 익힌다 (s.player.lgWork[말] = 쌓인 날) */
+  function innCfg() { var k = (G.BALANCE && G.BALANCE.innWork) || {}; return { maxDays: k.maxDays || 90, restNights: k.restNights || 10, famePerDay: k.famePerDay == null ? 1 : k.famePerDay, langDays: k.langDays || [40, 80, 120] }; }
+  function innJob() { var p = S().player; return p.innJob || (p.innJob = { used: 0, rest: 0 }); }
+  /** 이번에 더 일할 수 있는 날 */
+  INN.workLeft = function () { return Math.max(0, innCfg().maxDays - (innJob().used || 0)); };
+  /** 묵은 밤을 센다: 일한 적이 있으면 rest가 쌓이고, 열흘이 되면 다시 석 달. 'fresh'(막 풀림) · 남은 밤 수 · 0(상관없음) */
+  function innRest(n) {
+    var j = innJob(), K = innCfg(); if (!j.used) return 0;
+    j.rest = (j.rest || 0) + n;
+    if (j.rest >= K.restNights) { j.used = 0; j.rest = 0; return 'fresh'; }
+    return K.restNights - j.rest;
+  }
+  INN.rest = innRest;
   INN.work = async function (c) {
     var s = S(), w = innWife(), K = innCfg(), li = c.lang, lname = li != null ? G.LANGS[li] : null;
     var lv0 = li != null ? (s.player.lg[li] || 0) : 3;
+    var j = innJob(), left = INN.workLeft();
+    if (left <= 0) {
+      await C.say(w, '어머, 얼굴이 많이 상하셨어요. 벌써 석 달이나 쉬지 않고 일하셨잖아요. 그러다 쓰러지세요.\f여관에서 푹 쉬고 오세요. 열흘은 묵으셔야 해요. 그다음에 다시 일손을 부탁드릴게요.' +
+        '\f(허드렛일은 석 달을 넘길 수 없다 — 여관에서 ' + (K.restNights - (j.rest || 0)) + '밤 더 묵으면 다시 석 달 일할 수 있다)');
+      return;
+    }
     var v = await C.ask(w, '일손이 필요하긴 해요. 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요.' + (lname && lv0 < 3 ? '\n(일하는 동안 ' + lname + U.jx(lname, '을/를') + ' 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)' : '\n(하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)'),
-      [{ label: '열흘 일한다 (10일)', value: 10 }, { label: '한 달 일한다 (30일)', value: 30 }, { label: '날수를 정한다 (최대 ' + Math.round(K.maxDays / 30) + '달)', value: -1 }, { label: '그만둔다', value: 0 }]);
-    if (v === -1) v = await UI.number({ title: '허드렛일', text: '며칠 일하시겠어요? (한 번에 최대 ' + K.maxDays + '일)', min: 1, max: K.maxDays, value: 60, unit: '일',
-      quick: [{ label: '석 달', value: Math.min(90, K.maxDays) }, { label: '다섯 달', value: K.maxDays }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
+      [10, 30].filter(function (d) { return d < left; }).map(function (d) { return { label: (d === 10 ? '열흘' : '한 달') + ' 일한다 (' + d + '일)', value: d }; })
+        .concat([{ label: '남은 ' + left + '일을 다 일한다', value: left }, { label: '날수를 정한다 (최대 ' + left + '일)', value: -1 }, { label: '그만둔다', value: 0 }]));
+    if (v === -1) v = await UI.number({ title: '허드렛일', text: '며칠 일하시겠어요? (석 달 가운데 남은 날 ' + left + '일 · 다 채우면 여관에서 ' + K.restNights + '밤 묵어야 다시 일할 수 있다)', min: 1, max: left, value: Math.min(30, left), unit: '일',
+      quick: [{ label: '열흘', value: Math.min(10, left) }, { label: '남은 날 모두', value: left }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
     if (!v) return;
-    v = Math.min(K.maxDays, v);
+    v = Math.min(left, v);
+    j.used = (j.used || 0) + v; j.rest = 0;
     var pay = Math.round(v * (8 + c.size * 4) * (0.8 + R.stat('str') / 150));
     await UI.fade(function () { G.Game.passDays(v); });
     s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
@@ -73,7 +94,9 @@
       if (lv > lv0) G.State.log(c.name + '의 여관에서 ' + v + '일 일하며 ' + lname + U.jx(lname, '을/를') + ' 익혔다 (' + G.LANG_LV[lv] + ').');
     }
     G.Game.refreshHud();
-    await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!' + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned);
+    var after = INN.workLeft();
+    await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!' + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned +
+      (after > 0 ? '\f(석 달 가운데 남은 날: ' + after + '일)' : '\f(석 달을 꼬박 일했다 — 여관에서 ' + K.restNights + '밤 넘게 묵어야 다시 일할 수 있다)'));
   };
   INN.func = async function (c) {
     var v = await UI.choose('기능', [
@@ -104,7 +127,13 @@
   function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
   function mkBuy(it) { var d = mkDeal(), b = mkBase(it); return d ? Math.max(1, Math.round(b * Math.min(1, d.buy))) : b; }
   // 이 도시에서 산 물건(it.from)은 치른 값(it.paid)보다 비싸게 되팔 수 없다 — 깎아 사서 그 자리에서 되팔아 남기던 것을 막는다
-  function mkSell(it) { var d = mkDeal(), c0 = C.city(), v = Math.round(itemValue(it) * R.itemMult(c0, it)); v = d ? Math.round(v * Math.max(1, d.sell)) : v; if (c0 && it.from === c0.id && it.paid != null) v = Math.min(v, it.paid); return v; }
+  function mkSell(it) { var d = mkDeal(), c0 = C.city(), v = Math.round(itemValue(it) * R.itemMult(c0, it)); v = d ? Math.round(v * Math.max(1, d.sell)) : v; var bp = c0 && R.paidAt ? R.paidAt(it, c0.id) : (c0 && it.from === c0.id ? it.paid : null); if (bp != null) v = Math.min(v, bp); return v; }
+  /** 물건의 능력치 한 줄 (구입·매각 목록과 확인 창) */
+  function itemStat(it) {
+    var d = G.ITEM[it.id] || {}, k = d.kind || it.kind;
+    return k === 'weapon' ? '공격 ' + d.atk : k === 'armor' ? '방어 ' + d.def : k === 'gift' && d.gv ? '호감 ' + d.gv : k === 'mgift' && d.gv ? '남자 선물 ' + d.gv : (G.ITEM_KIND[k] || '');
+  }
+  MK.itemStat = itemStat;
   MK.sellValue = mkSell;
   function mkThumb(it) {
     if (!it || !G.Img) return null;
@@ -166,7 +195,7 @@
       var st = MK.stock(c);
       if (!st.length) { await C.say(vendor(), '미안하네, 지금 물건이 떨어지고 없네.'); return; }
       var v = await UI.choose('구입 아이템 선택 — 소지금 ' + U.num(s.player.gold) + '닢', st.map(function (it) {
-        var ex = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : G.ITEM_KIND[it.kind];
+        var ex = itemStat(it);
         return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, desc: it.desc, thumb: mkThumb(it), icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: mkBuy(it) > s.player.gold };
       }), { width: 700 });
       if (!v) return;
@@ -194,6 +223,7 @@
   MK.sell = async function (c) {
     var s = S(), soldAny = false;
     for (;;) {
+      if (R.mergeItems) R.mergeItems();   // 같은 물건은 한 칸
       var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { var d = G.ITEM[x.it.id]; return !(x.it.evidence); });
       if (!list.length) {
         if (soldAny) { await C.say(vendor(), '이것으로 가져온 물건은 다 받았네. 좋은 거래였어!'); return; }   // 방금 마지막 물건을 판 뒤
@@ -203,15 +233,30 @@
         var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
         var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
         var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
-        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (x.it.from === c.id ? ' <span class="tag warn-text" title="이 시장에서 산 물건은 치른 값보다 비싸게 되팔 수 없습니다">여기서 삼 · 치른 값까지만</span>' : x.it.from != null && G.CITY_DATA[x.it.from] ? ' <small class="muted">' + G.CITY_DATA[x.it.from].name + '에서 삼</small>' : ''), right: U.num(val) + '닢', value: k, thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
+        var ex = itemStat(x.it), here = R.paidAt ? R.paidAt(x.it, c.id) != null : x.it.from === c.id, bought = R.buysOf ? Object.keys(R.buysOf(x.it)).filter(function (k) { return G.CITY_DATA[k] && +k !== c.id; }) : [];
+        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (ex ? ' <small class="muted">' + ex + '</small>' : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (here ? ' <span class="tag warn-text" title="이 시장에서 산 물건은 치른 값보다 비싸게 되팔 수 없습니다">여기서 삼 · 치른 값까지만</span>' : bought.length ? ' <small class="muted">' + bought.map(function (k) { return G.CITY_DATA[k].name; }).join('·') + '에서 삼</small>' : ''), right: U.num(val) + '닢' + (R.itemQty(x.it) > 1 ? ' <small class="muted">/개</small>' : ''), value: k, desc: (d.desc || x.it.desc || ''), thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
       }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
       if (v == null) return;
-      var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id];
-      await C.say(vendor(), rel ? U.pick(['이, 이건...! 이런 물건은 평생 한 번 볼까 말까 하지. 금화 ' + U.num(val) + '닢 내겠네.', '호오, 진귀한 물건이로군. 금화 ' + U.num(val) + '닢이면 어떤가?']) : '으~음. 금화 ' + U.num(val) + '닢이란 말이군.');
+      var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id], have = R.itemQty(x.it), nm = R.itemName(x.it), id0 = x.it.id;
+      // 여러 개면 몇 개 팔지 고른다 (구입과 같은 창 — 2026-10-20)
+      var q = 1;
+      if (have > 1) {
+        var eqd = s.player.equip.weapon === id0 || s.player.equip.armor === id0;
+        q = await UI.number({ title: nm + ' 매각', text: '한 개에 금화 ' + U.num(val) + '닢. 몇 개 팔겠습니까? (가진 것 ' + have + '개)' + (itemStat(x.it) ? '<br><span class="muted">' + itemStat(x.it) + '</span>' : '') + (eqd ? '<br><span class="muted">모두 팔면 장비가 풀립니다.</span>' : ''), min: 1, max: have, value: have, unit: '개',   // 처음에는 가진 만큼 모두 (2026-10-20)
+          quick: [{ label: '1개', value: 1 }, have > 10 ? { label: '10개', value: 10 } : null, { label: '모두 ' + have + '개', value: have }].filter(Boolean),
+          info: function (n) { return '<b>' + U.num(n * val) + '</b>닢 · 판 뒤 ' + nm + ' ' + (have - n) + '개'; } });
+        if (q == null) continue;
+      }
+      var total = val * q;
+      // 상인의 값 부르기는 유물일 때만 — 여느 물건은 곧바로 확인 창(값은 거기 나온다) (2026-10-20)
+      if (rel) await C.say(vendor(), U.pick(['이, 이건...! 이런 물건은 평생 한 번 볼까 말까 하지. 금화 ' + U.num(val) + '닢 내겠네.', '호오, 진귀한 물건이로군. 금화 ' + U.num(val) + '닢이면 어떤가?']));
       var warn = R.isProof(x.it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[x.it.disc].name) + '」 발견의 증거입니다. 아직 보고·발표하지 않았으니, 팔면 증거가 모자라 사례금과 명성이 줄 수 있습니다.</span>' : '';
-      if (!(await UI.confirm(R.itemName(x.it) + U.j(R.itemName(x.it), '을/를').slice(R.itemName(x.it).length) + ' 금화 ' + U.num(val) + '닢에 팔겠습니까?' + warn, '판다', '그만둔다'))) continue;
-      var id = x.it.id;
-      R.removeItemObject(x.it); s.player.gold += val; soldAny = true;
+      var pic = mkThumb(rel || G.ITEM[id0]), st0 = itemStat(x.it), dsc = (G.ITEM[id0] && G.ITEM[id0].desc) || x.it.desc || '';
+      var ask = nm + (q > 1 ? ' <b>' + q + '개</b>' : '') + (st0 ? ' <small class="muted">' + st0 + '</small>' : '') + (dsc ? '<br><span class="muted">' + U.esc(dsc) + '</span>' : '') + '<br>금화 ' + U.num(total) + '닢에 팔겠습니까?' + warn;
+      if (!(await UI.confirm(pic ? '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>' : ask, '판다', '그만둔다'))) continue;
+      var id = id0;
+      for (var qi = 0; qi < q; qi++) R.removeItemObject(x.it);
+      s.player.gold += total; soldAny = true;
       if (s.player.equip.weapon === id && !R.hasItem(id)) s.player.equip.weapon = null;
       if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
     }
@@ -731,13 +776,13 @@
      · 꺼낼 때는 소지품 칸이 남아야 한다 */
   HM.storeOne = function (it) {
     var s = S(), p = s.player, i = p.items.indexOf(it); if (i < 0 || R.isProof(it)) return false;
-    p.items.splice(i, 1); R.storage().push(it);
+    p.items.splice(i, 1); R.storage().push(it); if (R.mergeItemList) R.mergeItemList(R.storage());   // 보관함에서도 같은 물건은 한 칸
     ['weapon', 'armor'].forEach(function (k) { if (p.equip[k] === it.id && !p.items.some(function (x) { return x.id === it.id; })) p.equip[k] = null; });
     return true;
   };
   HM.takeOne = function (it) {
-    var st = R.storage(), i = st.indexOf(it); if (i < 0 || R.slotsUsed() >= R.ITEM_MAX) return false;
-    st.splice(i, 1); S().player.items.push(it); return true;
+    var st = R.storage(), i = st.indexOf(it); if (i < 0 || (R.slotsUsed() >= R.ITEM_MAX && !(R.stackFor && R.stackFor(it)))) return false;   // 같은 물건이 있으면 칸이 차도 그 칸에
+    st.splice(i, 1); S().player.items.push(it); if (R.mergeItems) R.mergeItems(); return true;   // 같은 물건이 있으면 그 칸에 합친다
   };
   HM.storage = async function (c) {
     var s = S(), p = s.player;

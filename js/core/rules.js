@@ -133,19 +133,69 @@
   R.slotsUsed = function () { return R.S().player.items.filter(function (it) { return !R.isProof(it); }).length; };
   R.itemsFull = function (n) { return R.slotsUsed() + (n || 1) > R.ITEM_MAX; };
   R.storage = function () { var p = R.S().player; return p.storage || (p.storage = []); };
+  /* 같은 물건은 한 칸 (2026-10-20): 따로 붙은 사정이 없는 물건(id·수량·남은 사용·산 곳만 가진 것)은 산 도시가 달라도 한 칸에 묶는다.
+     예전엔 산 도시가 다르거나(시장) 사건으로 받으면(R.addItem) 따로 쌓여 「나침반」이 두 칸 보였다.
+     산 곳은 it.buys = {도시 번호: 1개에 치른 값} — 그 도시 시장에는 치른 값보다 비싸게 되팔 수 없다 (옛 it.from·it.paid도 읽는다).
+     발견 증거·유물(disc)·이름 붙은 물건(name·kind)·다른 사정(legacy·since·value …)이 붙은 물건은 따로 둔다. */
+  var STACK_KEYS = { id: 1, qty: 1, n: 1, from: 1, paid: 1, buys: 1 };
+  R.stackable = function (x) { return !!x && !!G.ITEM[x.id] && Object.keys(x).every(function (k) { return STACK_KEYS[k] || x[k] == null; }); };
+  /** 산 곳과 1개에 치른 값 {도시: 값} */
+  R.buysOf = function (x) {
+    var b = {}; if (!x) return b;
+    if (x.buys) for (var k in x.buys) b[k] = x.buys[k];
+    if (x.from != null && x.paid != null && b[x.from] == null) b[x.from] = x.paid;
+    return b;
+  };
+  /** 이 도시에서 산 적이 있으면 1개에 치른 값 (없으면 null) */
+  R.paidAt = function (x, cityId) { var b = R.buysOf(x); return cityId != null && b[cityId] != null ? b[cityId] : null; };
+  /** y를 x에 합친다 (같은 id). 산 곳은 모으고, 같은 도시면 더 싸게 치른 값을 남긴다(되팔 때 덜 남기도록) */
+  function absorb(x, y) {
+    var b = R.buysOf(x), by = R.buysOf(y);
+    for (var k in by) b[k] = b[k] == null ? by[k] : Math.min(b[k], by[k]);
+    x.qty = R.itemQty(x) + R.itemQty(y);
+    delete x.from; delete x.paid;
+    if (Object.keys(b).length) x.buys = b; else delete x.buys;
+    if (x.n == null && y.n != null) x.n = y.n;
+  }
+  /** 소지품 목록에서 같은 물건 칸을 하나로 합친다 (옛 저장·보관함에서 꺼낸 것도) */
+  R.mergeItemList = function (items) {
+    if (!items || !items.length) return items;
+    var seen = {};
+    for (var i = 0; i < items.length; i++) {
+      var x = items[i]; if (!R.stackable(x)) continue;
+      var h = seen[x.id];
+      if (h) { absorb(h, x); items.splice(i, 1); i--; } else seen[x.id] = x;
+    }
+    return items;
+  };
+  R.mergeItems = function () { var S = R.S(); if (S && S.player) R.mergeItemList(S.player.items); };
+  /** 이 물건이 들어갈 기존 칸 (없으면 null) */
+  R.stackFor = function (o) { if (!R.stackable(o)) return null; return R.S().player.items.filter(function (x) { return x !== o && x.id === o.id && R.stackable(x); })[0] || null; };
   R.addItem = function (id, extra) {
     var S = R.S();
     var o = { id: id }; if (extra) for (var k in extra) o[k] = extra[k];
+    var def = G.ITEM[id];
+    var into = R.stackFor(o);
+    if (into) { absorb(into, o); return true; }   // 같은 물건이 있으면 그 칸에 (칸이 차도 받는다)
     if (!R.isProof(o) && R.slotsUsed() >= R.ITEM_MAX) return false;   // 발견 증거는 칸이 차도 챙긴다
-    var def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
+    if (def && def.consumable) o.n = def.consumable;
     S.player.items.push(o); return true;
   };
   /** 시장의 같은 일반 아이템은 한 칸에 묶는다. 발견 증거·유물처럼 개별 상태가 있는 물건에는 쓰지 않는다. */
   //   from·paid: 산 도시와 1개에 치른 값 — 산 도시가 다르면 따로 묶는다(같은 도시 시장에는 치른 값보다 비싸게 되팔 수 없다, js/city/misc.js)
   R.addMarketItems = function (id, qty, from, paid) {
     var S = R.S(), n = Math.max(1, Math.floor(qty || 1)), fk = from == null ? null : from;
-    var it = S.player.items.filter(function (x) { return x.id === id && !x.disc && !x.evidence && !x.name && !x.kind && (x.from == null ? null : x.from) === fk; })[0];
-    if (it) { if (paid != null) it.paid = Math.round(((it.paid != null ? it.paid : paid) * R.itemQty(it) + paid * n) / (R.itemQty(it) + n)); it.qty = R.itemQty(it) + n; return true; }
+    R.mergeItems();
+    var it = S.player.items.filter(function (x) { return x.id === id && R.stackable(x); })[0];   // 산 도시가 달라도 한 칸 (산 곳은 it.buys)
+    if (it) {
+      var b = R.buysOf(it);
+      if (fk != null && paid != null) {   // 같은 도시에서 또 샀으면 치른 값을 평균 (그 도시에서 산 수량은 따로 세지 않으므로 지금 칸의 수량으로 어림)
+        b[fk] = b[fk] == null ? paid : Math.round((b[fk] * R.itemQty(it) + paid * n) / (R.itemQty(it) + n));
+      }
+      it.qty = R.itemQty(it) + n; delete it.from; delete it.paid;
+      if (Object.keys(b).length) it.buys = b;
+      return true;
+    }
     if (R.slotsUsed() >= R.ITEM_MAX) return false;
     var o = { id: id, qty: n }, def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
     if (fk != null) o.from = fk; if (paid != null) o.paid = paid;
@@ -342,7 +392,7 @@
   /** 이 배의 선장: 기함은 제독('admiral'), 다른 배는 선장으로 임명한 동료(상태 객체), 없으면 null(갑판장이 몬다) */
   R.captain = function (sh) {
     var S = R.S(); if (!sh) return null;
-    if (S.fleet.ships[0] === sh) return 'admiral';
+    if (S.fleet.ships[0] === sh || sh.admiral) return 'admiral';   // admiral: 큰 해전에서 제독이 직접 모는 빌린 배의 기함 (js/scenes/battle.js npc.myFleet)
     for (var i = 0; i < S.mates.length; i++) { var m = S.mates[i]; if (m.role === 'captain' && m.ship === sh.uid) return m; }
     return null;
   };

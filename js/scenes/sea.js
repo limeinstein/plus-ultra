@@ -416,8 +416,8 @@
     st.busy++;
     var v = null;
     try {
-      v = await UI.ask('제독, 바람을 정면으로 안고 있어 배가 거의 나아가지 못합니다. 이 방위로 지그재그를 하며 거슬러 오를까요?', [
-        { label: '지그재그로 거슬러 오른다', value: 'tack' }, { label: '이대로 손으로 몬다', value: null }], G.Scenes.mateSpeaker('first'));
+      v = await UI.autoRun(function () { return UI.ask('제독, 바람을 정면으로 안고 있어 배가 거의 나아가지 못합니다. 이 방위로 지그재그를 하며 거슬러 오를까요?', [
+        { label: '지그재그로 거슬러 오른다', value: 'tack' }, { label: '이대로 손으로 몬다', value: null }], G.Scenes.mateSpeaker('first')); });
     } catch (e) { console.error(e); }
     st.busy--;
     if (v === 'tack') { takeCourse(S().loc.heading); UI.toast('지그재그로 거슬러 오릅니다. 방향키를 누르면 다시 손으로 몹니다.', 'sail', 4200); }
@@ -1410,7 +1410,7 @@
       if (G.Leo && G.Leo.pending()) await G.Leo.present();       // 레오나르도의 발명품
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
       if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 툴롱의 겨울 (하이레딘 파샤)
-      if (G.Disaster) await G.Disaster.sea();   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
+      if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);
       if (sensed.length) await G.Explore.report(sensed, l.lon, l.lat, 'sea');
@@ -1516,7 +1516,7 @@
       st.storm = 1; st.stormDays = U.ri(1, 3);
       if (G.Audio) G.Audio.sfx('storm');
       var stormFx = G.EventFx ? G.EventFx.show('storm') : null;   // 폭풍 그림은 피해를 알리는 말까지 띄워 둔다
-      await UI.say('제독! 폭풍입니다! 돛을 줄여라! 모두 밧줄을 붙잡아라!', G.Scenes.mateSpeaker('nav'));
+      await UI.autoRun(function () { return UI.say('제독! 폭풍입니다! 돛을 줄여라! 모두 밧줄을 붙잡아라!', G.Scenes.mateSpeaker('nav')); });   // 두 번째 폭풍부터는 5초 뒤 저절로 (UI.autoRun)
       // 폭풍 피해는 배마다 그 배 선장의 항해술로 줄인다 (기함의 항해술은 신호로 다른 배에도 절반만큼 미친다)
       var navF = R.skill('nav');
       var dmgOf = function (sh) { var nv = Math.max(R.shipSkill(sh, 'nav'), navF * 0.5); return U.clamp(1 - nv * 0.22 - Math.min((G.BALANCE && G.BALANCE.stormDmgCut) || 1, R.fleetBonus('storm') * 2), 0.2, 1) * (st.stormGuard > 0 ? 0.5 : 1); };
@@ -1542,7 +1542,7 @@
       var txt = '폭풍이 지나갔다... 배가 손상을 입었다.' + (lostCrew ? ' 선원 ' + lostCrew + '명이 바다에 휩쓸려 갔다.' : '') + (lostFood ? ' 식량 ' + lostFood + '통을 잃었다.' : '');
       if (saved.length) txt += '\n' + saved.map(function (x) { return x.name; }).join(', ') + '호는 ' + (G.Ships.has(saved[0], 'raft') ? '뗏목이라' : '칸막이 선창 덕에') + ' 가라앉지 않고 버텼다.';
       if (sunk.length) txt += '\n' + sunk.map(function (x) { return x.name; }).join(', ') + '호가 침몰했다!';
-      await UI.say(txt, {});
+      await UI.autoRun(function () { return UI.say(txt, { autoKey: 'storm:after' }); });   // 피해 글은 그때마다 달라도 같은 말로 친다
       if (stormFx) stormFx.stop();
       refreshHud();
     }
@@ -1556,7 +1556,7 @@
     // 배에 탄 아내와의 한때 (js/systems/familyevent.js)
     if (G.FamEv && (!G.Pace || G.Pace.ok('family'))) { try { if (await G.FamEv.atSea()) { if (G.Pace) G.Pace.mark('family'); refreshHud(); } } catch (e) { console.error(e); } }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
-    if (U.chance(0.07) && (!G.Pace || G.Pace.ok())) await G.Explore.seaEvent({ st: st, refresh: refreshHud });   // 앞 사건과 실제 시간 간격(G.Pace)
+    if (U.chance(0.07) && (!G.Pace || G.Pace.ok())) await UI.autoRun(function () { return G.Explore.seaEvent({ st: st, refresh: refreshHud }); });   // 두 번째부터는 5초 뒤 지난번처럼 (UI.autoRun)   // 앞 사건과 실제 시간 간격(G.Pace)
     // 부하들 사이의 썸: 때가 된 짝이 있으면 가끔 작은 사건 (js/systems/romance.js)
     if (G.Romance && (!G.Pace || G.Pace.ok('romance'))) { try { if (await G.Romance.seaDay() && G.Pace) G.Pace.mark('romance'); } catch (e) { console.error(e); } }
     // death of all crew / ships

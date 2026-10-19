@@ -404,6 +404,7 @@
     return best;
   }
   T.comm = comm;
+  T._mateCard = function (m, c) { return mateCard(m, c, function () {}); };   // 시험용
   T.mateSpeaker = function (m) { var cm = comm(m), li = cm.li; if (li < 0) for (var k in m.lg) { if (li < 0 || m.lg[k] > m.lg[li]) li = +k; } return { name: m.name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: cm.lv, li: li >= 0 ? li : null }; };
   function skillLine(m) {
     var out = [];
@@ -417,9 +418,10 @@
     var who = T.duo(T.mateSpeaker(m));
     if (!quiet) await UI.say(m.desc, {});
     for (;;) {
-      var w = await UI.ask('무슨 용건인가?', [{ label: '정보를 듣는다', value: 'info' }, { label: '부하로 고용한다', value: 'hire' }, { label: '떠난다', value: null }], who);
+      var w = await UI.ask('무슨 용건인가?', [{ label: '정보를 듣는다', value: 'info' }, { label: '능력치를 살펴본다', value: 'card' }, { label: '부하로 고용한다', value: 'hire' }, { label: '떠난다', value: null }], who);
       if (!w) return;
       if (w === 'info') { await T.mateInfo(c, m, who); continue; }
+      if (w === 'card') { if (await T.showCard(c, m) === 'hire' && await T.hireMate(c, m, who)) return; continue; }   // 고용하기 전에 능력치·특기·말을 본다 (2026-10-20)
       if (await T.hireMate(c, m, who)) return;
     }
   };
@@ -552,9 +554,16 @@
     return win.result;
   }
 
+  /** 술집에서 마주 앉은 사람의 인물 카드 (고용하기 전에 능력치·특기·말·필요 명성·월급을 본다) → 'hire' | null */
+  T.showCard = function (c, m) {
+    var win = UI.window({ title: m.name + ' — 인물 카드', icon: 'people', width: 820, parch: false, html: '<div class="hire-card parch mcard-solo"></div>' });
+    var el = win.content.querySelector('.hire-card');
+    el.appendChild(mateCard(m, c, function () { win.close('hire'); }, m.rival ? null : '부하로 고용한다', function () { win.close(null); }));
+    return win.result;
+  };
   var STATN = ['힘', '지력', '무력', '매력'];
   /** 대항해시대식 인물 카드: 초상 · 능력치 · 특기 · 말 */
-  function mateCard(m, c, onPick) {
+  function mateCard(m, c, onPick, pickLabel, onBack) {
     var s = S(), cm = comm(m), lock = s.player.fame < m.fame;
     var wrap = U.el('div', 'mcard');
     var head = U.el('div', 'mc-head');
@@ -602,9 +611,13 @@
       : cm.lv < 3 ? G.LANGS[cm.li] + '로 그럭저럭 뜻이 통한다. 처음에는 마음을 다 열지 않을 것이다.'
       : '말이 잘 통한다. 바로 이야기를 꺼내 볼 만하다.';
     foot.innerHTML = '<div class="mc-note">' + msg + '</div>';
-    var btn = U.el('button', 'btn navy', '만나서 이야기한다');
-    btn.onclick = onPick;
-    foot.appendChild(btn);
+    if (onBack) { var bk = U.el('button', 'btn ghost', '돌아간다'); bk.onclick = onBack; foot.appendChild(bk); }
+    if (pickLabel !== null) {
+      var btn = U.el('button', 'btn navy', pickLabel || '만나서 이야기한다');
+      btn.onclick = onPick;
+      if (pickLabel && (m.rival || !cm.lv || lock)) { btn.classList.add('disabled'); btn.disabled = true; btn.title = !cm.lv ? '말이 통하지 않는다' : '명성이 모자란다'; }
+      foot.appendChild(btn);
+    }
     wrap.appendChild(foot);
     return wrap;
   }

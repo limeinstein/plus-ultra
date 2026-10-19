@@ -1,4 +1,4 @@
-/* 제독의 수명(최대 80세) · 충성 90 이상 부하의 생일 선물 · 여관 허드렛일 한도 점검.
+/* 제독의 수명(최대 80세) · 충성 90 이상 부하의 생일 선물 · 여관 허드렛일 한도(석 달 · 열흘 묵으면 다시) 점검.
    node tests/lifespan_smoke.js   (스크린샷: OUT 또는 임시 폴더/lifespan_shots) */
 'use strict';
 const path = require('path');
@@ -123,24 +123,38 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForFunction(() => window.__end, null, { timeout: 10000 });
     ok(old.end === 85, '옛 저장 85세: 다음 날 수명이 다함 (' + old.end + '세)');
 
-    // ⑤ 여관 허드렛일 한도: 한 번에 최대 150일, 하루 명성 −1
+    // ⑤ 여관 허드렛일 한도: 모두 합쳐 석 달(90일), 하루 명성 −1 · 여관에서 열흘 넘게 묵으면 다시 석 달 (2026-10-20)
     await newGame();
     const inn = await page.evaluate(async () => {
-      const s = G.Game.state, C = G.Scenes.city, c = G.CITY_DATA[0], K = G.BALANCE.innWork;
-      let opts = null, num = null;
+      const s = G.Game.state, C = G.Scenes.city, c = G.CITY_DATA[0], K = G.BALANCE.innWork, INN = C.B.inn;
+      let opts = null, num = null, said = [];
       C.ask = async (w, t, o) => { opts = o.map(x => x.label + ':' + x.value); return -1; };
-      C.say = async () => {};
+      C.say = async (w, t) => { said.push(t); };
       G.UI.number = async (o) => { num = { max: o.max }; return 999; };
       G.UI.fade = async (fn) => { fn(); };
+      G.UI.say = async () => {};
       s.player.fame = 1000; G.Fame.add('so', 500);
       const d0 = s.day, f0 = G.Fame.total ? G.Fame.total() : s.player.fame;
-      await C.B.inn.work(c);
+      await INN.work(c);
       const f1 = G.Fame.total ? G.Fame.total() : s.player.fame;
-      return { K, opts, num, days: s.day - d0, fame: f0 - f1 };
+      const first = { opts, num, days: s.day - d0, fame: f0 - f1 };
+      // 석 달을 채웠다 → 일을 받지 않는다
+      opts = null; const d1 = s.day; await INN.work(c); const blocked = { asked: !!opts, days: s.day - d1, said: said[said.length - 1] };
+      // 여관에서 4박 + 5박 → 아직, 1박 더 → 다시 석 달
+      G.UI.number = async () => 4; s.player.gold = 99999; await INN.stay(c); const r1 = INN.workLeft();
+      G.UI.number = async () => 5; await INN.stay(c); const r2 = INN.workLeft();
+      G.UI.number = async () => 1; await INN.stay(c); const r3 = INN.workLeft();
+      // 30일 일하고 나면 60일 남는다
+      C.ask = async (w, t, o) => { opts = o.map(x => x.label + ':' + x.value); return 30; };
+      await INN.work(c); const r4 = INN.workLeft();
+      return { K, first, blocked, r1, r2, r3, r4, opts };
     });
     console.log(JSON.stringify(inn));
-    ok(inn.K.maxDays === 150 && inn.num.max === 150 && inn.days === 150, '허드렛일: 999일을 넣어도 한 번에 ' + inn.days + '일까지 (최대 ' + inn.K.maxDays + '일 = 다섯 달)');
-    ok(inn.fame > 0, '허드렛일 150일에 명성이 ' + inn.fame + ' 내려감');
+    ok(inn.K.maxDays === 90 && inn.first.num.max === 90 && inn.first.days === 90, '허드렛일: 999일을 넣어도 ' + inn.first.days + '일까지 (석 달 = ' + inn.K.maxDays + '일)');
+    ok(inn.first.fame > 0, '허드렛일 90일에 명성이 ' + inn.first.fame + ' 내려감');
+    ok(!inn.blocked.asked && inn.blocked.days === 0 && /열흘/.test(inn.blocked.said), '석 달을 채우면 더 일을 받지 않는다');
+    ok(inn.r1 === 0 && inn.r2 === 0 && inn.r3 === 90, '여관에서 4박·5박으로는 아직, 모두 10박이 되면 다시 석 달 (' + [inn.r1, inn.r2, inn.r3] + ')');
+    ok(inn.r4 === 60, '다시 30일 일하면 60일이 남는다 (' + inn.r4 + ')');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('스크린샷: ' + OUT);
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }

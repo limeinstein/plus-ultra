@@ -279,7 +279,8 @@
     var npc = { id: 'great_' + id, kind: 'navy', nation: spec.foe, n: spec.ships.length, ships: spec.ships.slice(), K: 1, zone: zone, hostile: true, great: id,
       allies: (spec.allies || []).map(function (a) { return { type: a.type, name: a.name, gun: a.gun }; }), label: spec.foeLabel || spec.foe + ' 함대',
       gun: spec.gun, myGun: spec.myGun, crewK: spec.crewK, gunK: spec.gunK, gunNote: spec.gunNote,
-      names: spec.names, boss: spec.boss };   // names: 적 배 이름(기함부터) · boss: 일기토에 나서는 적장 {hist: 인물 id, str, mar…}   // 대포: gun 적 함대 · myGun 우리 함대(이 싸움에서만) · allies[].gun 우리 편
+      names: spec.names, boss: spec.boss,
+      myFleet: spec.myFleet, center: spec.center, lake: spec.lake, backCity: spec.backCity, noPrize: spec.noPrize, place: spec.place };   // 아즈텍 호수의 큰 싸움: 이 싸움에서만 모는 배·물 위의 자리·끝나면 돌아갈 도시 (js/systems/aztec.js)   // names: 적 배 이름(기함부터) · boss: 일기토에 나서는 적장 {hist: 인물 id, str, mar…}   // 대포: gun 적 함대 · myGun 우리 함대(이 싸움에서만) · allies[].gun 우리 편
     await UI.fade(function () { G.Game.go('battle', { npc: npc }); });
     return true;
   };

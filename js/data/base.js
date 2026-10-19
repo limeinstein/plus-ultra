@@ -415,6 +415,8 @@
     // 교역소 일괄 거래 (js/city/trade.js T.batch): 여러 품목을 골라 한꺼번에 사고팔 때, 결제 전에 회계 단계만큼(흥정 횟수 acct.tries) 「한꺼번에니 더 깎아/쳐 달라」.
     //   한 번에 깎이는 몫 = base + 회계 단계 × perAcct + 경리 purser(+경리 회계 × 0.005) + 물량(통 수 / bulkPer × bulkMax, 최대 bulkMax). 2차부터 ×0.7, 모두 합쳐 cap까지.
     //   성공 확률은 값 깎기와 같은 T.haggleOdds — 차수마다 ×fade, 거절당할 때마다 ×acct.retryK. 파는 쪽 웃돈은 깎는 몫 × sellK (들여온 물건·다른 곳에서 산 몫에만)
+    // 항해 중 사건의 저절로 넘기기 (js/ui/ui.js UI.autoRun): 폭풍·바다의 사건·해일·맞바람 — 처음에는 기다리고, 같은 말·물음이 두 번째부터는 ms 동안 입력이 없으면 지난번처럼
+    seaAuto: { on: true, ms: 5000 },
     batchDeal: { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8 },
     questLate: { k: 0.5, min: 20, max: 60 },
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
@@ -444,7 +446,7 @@
     testChar: { stat: 99, luck: 99, gold: 999999999, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름 · gold: 소지금 최대(9억 9999만 9999닢)
     // 여관 허드렛일: 한 번에 최대 maxDays일. 하루에 명성이 famePerDay씩 내려가고(제독이 허드렛일을…), 그 고장 말을 익힌다 —
     // 말 단계(모름→기초→보통→능숙)마다 일한 날 langDays[지금 단계]일이 쌓이면 한 단계 오른다(지력이 높으면 빨리: 지력 50 기준)
-    innWork: { maxDays: 150, famePerDay: 1, langDays: [40, 80, 120] },
+    innWork: { maxDays: 90, restNights: 10, famePerDay: 1, langDays: [40, 80, 120] },   // 석 달을 넘겨 일할 수 없다 — 여관에서 열흘 넘게 묵으면 다시 석 달 (2026-10-20)
     // 식당 한 끼: 값 = base + 도시 등급×size + 음식 등급×tier, 하루 한 번 피로·체력을 회복 (js/city/restaurant.js)
     //   minSize = 식당이 서는 가장 작은 도시 등급 (그보다 작아도 이름난 음식이 있으면 선다 — js/data/cuisine_place.js)
     restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2, disc: [0, 2, 3, 4], so: [0, 1, 1, 2] },   // disc: 규율이 오르는 만큼 · so: 사교 명성이 살짝(사교 배수 ×3 전) (음식 등급별, 2026-10-17)
@@ -500,7 +502,8 @@
     regionFolk: { ratio: 0.8, every: 1, extraLang: 0.15, maxPerFill: 400 },
     // 부하와 이야기 (matetalk.js): 하루 한 번 이야기(충성 chatLoyal·호감 chatAff), 한잔(값 drinkCost × 도시 크기, 충성 drinkLoyal·호감 drinkAff).
     // 여성 부하는 호감이 wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다. 마녀의 점괘는 fortuneDays일에 한 번
-    //   이성 부하에게 선물: 충성 + max(giftLoyalMin, 선물 값(♥) × giftLoyal) — 같은 성이면 +2
+    //   이성 부하에게 선물: 충성 + max(giftLoyalMin, 선물 값(♥) × giftLoyal) — 여자 제독 → 여자 부하는 +2
+    //   남자 부하에게 남자 선물·검·방어구: 제독이 남자여도 같은 셈으로 충성만 (호감은 오르지 않는다)
     mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30, giftLoyal: 0.6, giftLoyalMin: 3 }
   };
 

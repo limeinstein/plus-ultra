@@ -211,7 +211,7 @@
           ['좋아하는 발견', sp.taste.map(G.tasteName).join(', ')], ['말', G.LANGS[sp.lang]],
           sp.nation ? ['나라', NATION[sp.nation]] : null
         ],
-        strip: sp.holders.map((h, i) => ({ label: h[2] + ' (' + h[0] + '~' + (h[1] >= 9999 ? '' : h[1]) + ')', key: (p => typeof p === 'string' ? 'portraits/sponsors/' + p : p ? 'portraits/sponsors/' + sp.id + '_' + p : 'portraits/sponsors/' + sp.id)(A.sponsorPic(sp, i)), kind: 'png', pic: () => portrait(A.sponsorSpec(sp, i)) })),
+        strip: sp.holders.map((h, i) => ({ label: h[2] + ' (' + Math.floor(h[0]) + '~' + (h[1] >= 9999 ? '' : Math.floor(h[1])) + ')', key: (p => typeof p === 'string' ? 'portraits/sponsors/' + p : p ? 'portraits/sponsors/' + sp.id + '_' + p : 'portraits/sponsors/' + sp.id)(A.sponsorPic(sp, i)), kind: 'png', pic: () => portrait(A.sponsorSpec(sp, i)) })),
         files: [
           { key: 'portraits/sponsors/' + sp.id + '_1', kind: 'png', note: '시대별 인물 — 아래 그림의 번호(1, 2, …)를 붙입니다' },
           { key: 'portraits/sponsors/' + sp.id, kind: 'png', note: '인물이 바뀌어도 같은 그림' }

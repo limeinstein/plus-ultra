@@ -57,8 +57,12 @@ const ROOT = path.resolve(__dirname, '..');
     ok(g1.d === 5, '남자 제독 → 여성 부하에게 향수: 충성 +' + g1.d + ' (예전 +2)');
     const male = G.MATES.find(x => x.g !== 'f' && x.fame >= 0 && !s.mates.some(y => y.id === x.id));
     const mm = G.Legend.join(male.id, null); mm.loyal = 60;
-    const g2 = await gift(mm, 'pearlnk');
-    ok(g2.d === 0 && g2.shown.indexOf('선물한다') < 0, '남자 제독 → 남자 부하: 선물 고르는 줄 없음');
+    s.player.items = [{ id: 'pearlnk' }];
+    const g2a = await gift(mm, 'nothing_extra');
+    ok(g2a.d === 0 && s.player.items.length === 1, '남자 제독 → 남자 부하: 장신구(여자 선물)는 줄 수 없다');
+    s.player.items = []; const aff0 = mm.aff;
+    const g2 = await gift(mm, 'brandy');
+    ok(g2.d === 5 && g2.shown.indexOf('선물한다') >= 0 && mm.aff === aff0, '남자 제독 → 남자 부하에게 브랜디: 애정은 그대로, 충성 +' + g2.d + ' (2026-10-20)');
     s.player.g = 'f';
     // 남자 선물과 여자 선물을 가른다
     s.player.items = [{ id: 'pearlnk' }, { id: 'brandy' }, { id: 'cards' }, { id: 'rapier' }, { id: 'rapier' }, { id: 'plate' }, { id: 'ring' }].filter(x => G.ITEM[x.id]);
