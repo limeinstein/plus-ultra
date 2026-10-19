@@ -19,7 +19,7 @@
       { label: '항해사를 찾는다', icon: 'people', sub: (function () { var n = C.B.tavern.candidates(c).length; return n ? n + '명' : '없다'; })(), onClick: function () { return C.B.tavern.hire(c, innWife()); } },
       { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return C.B.tavern.organize(); } },
       G.MateTalk ? G.MateTalk.menuItem(c) : null,
-      { label: '허드렛일', icon: 'tools', onClick: function () { return INN.work(c); } },
+      { label: '허드렛일', icon: 'tools', sub: (function () { var L = INN.workLeft(), j = S().player.innJob; return L <= 0 ? '쉬어야 함 (숙박 ' + Math.max(1, innCfg().restNights - ((j && j.rest) || 0)) + '밤)' : j && j.used ? '남은 ' + L + '일' : ''; })(), onClick: function () { return INN.work(c); } },
       { label: '기능', icon: 'gear', sub: INN.canSave(c) ? '저장 가능' : '', onClick: function () { return INN.func(c); } }
     ];
   };
@@ -36,25 +36,46 @@
     // 묵는 동안 수명이 다했다: 그 이야기(js/systems/lifespan.js)가 이어지니 「피로가 풀렸다」는 하지 않는다 (QA 2026-10-10)
     if (s.life && s.life.end) { var nw = msgs.filter(function (m) { return m.history; }); if (nw.length) await C.news(nw); return; }
     s.fleet.fatigue = 0; s.player.hp = Math.min(100, s.player.hp + 30 * n);
+    var rested = innRest(n);   // 허드렛일로 지친 몸: 열흘 넘게 묵으면 다시 석 달 일할 수 있다
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
     var news = msgs.filter(function (m) { return m.history; }); if (news.length) await C.news(news);
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     G.Game.refreshHud();
-    await UI.say('피로가 풀렸다! 체력이 회복됐다!\n(' + U.fmtDate(s.date) + ')', {});
+    await UI.say('피로가 풀렸다! 체력이 회복됐다!' + (rested === 'fresh' ? '\n허드렛일로 지친 몸도 다 나았다 — 다시 석 달까지 일할 수 있다.' : rested ? '\n(허드렛일로 지친 몸은 아직이다 — 여관에서 ' + rested + '밤 더 묵어야 다시 일할 수 있다)' : '') + '\n(' + U.fmtDate(s.date) + ')', {});
     if (G.Family && G.Family.innEvent) await G.Family.innEvent(c);
   };
-  /* 허드렛일: 한 번에 최대 다섯 달(G.BALANCE.innWork.maxDays). 일한 날만큼 명성이 내려가고(하루 1),
-     부엌·장터에서 그 고장 사람들과 지내며 그 고장 말을 익힌다 (s.player.lgWork[말] = 쌓인 날) */
-  function innCfg() { return (G.BALANCE && G.BALANCE.innWork) || { maxDays: 150, famePerDay: 1, langDays: [40, 80, 120] }; }
+  /* 허드렛일: 모두 합쳐 석 달(G.BALANCE.innWork.maxDays 90일)을 넘겨 일할 수 없다. 여관에서 열흘(restNights) 넘게 묵으면 다시 석 달.
+     (어느 도시의 여관이든 합친다 · 묵은 밤도 여러 번에 걸쳐 합친다 · s.player.innJob = {used: 일한 날, rest: 그 뒤 묵은 밤})
+     일한 날만큼 명성이 내려가고(하루 1), 부엌·장터에서 그 고장 사람들과 지내며 그 고장 말을 익힌다 (s.player.lgWork[말] = 쌓인 날) */
+  function innCfg() { var k = (G.BALANCE && G.BALANCE.innWork) || {}; return { maxDays: k.maxDays || 90, restNights: k.restNights || 10, famePerDay: k.famePerDay == null ? 1 : k.famePerDay, langDays: k.langDays || [40, 80, 120] }; }
+  function innJob() { var p = S().player; return p.innJob || (p.innJob = { used: 0, rest: 0 }); }
+  /** 이번에 더 일할 수 있는 날 */
+  INN.workLeft = function () { return Math.max(0, innCfg().maxDays - (innJob().used || 0)); };
+  /** 묵은 밤을 센다: 일한 적이 있으면 rest가 쌓이고, 열흘이 되면 다시 석 달. 'fresh'(막 풀림) · 남은 밤 수 · 0(상관없음) */
+  function innRest(n) {
+    var j = innJob(), K = innCfg(); if (!j.used) return 0;
+    j.rest = (j.rest || 0) + n;
+    if (j.rest >= K.restNights) { j.used = 0; j.rest = 0; return 'fresh'; }
+    return K.restNights - j.rest;
+  }
+  INN.rest = innRest;
   INN.work = async function (c) {
     var s = S(), w = innWife(), K = innCfg(), li = c.lang, lname = li != null ? G.LANGS[li] : null;
     var lv0 = li != null ? (s.player.lg[li] || 0) : 3;
+    var j = innJob(), left = INN.workLeft();
+    if (left <= 0) {
+      await C.say(w, '어머, 얼굴이 많이 상하셨어요. 벌써 석 달이나 쉬지 않고 일하셨잖아요. 그러다 쓰러지세요.\f여관에서 푹 쉬고 오세요. 열흘은 묵으셔야 해요. 그다음에 다시 일손을 부탁드릴게요.' +
+        '\f(허드렛일은 석 달을 넘길 수 없다 — 여관에서 ' + (K.restNights - (j.rest || 0)) + '밤 더 묵으면 다시 석 달 일할 수 있다)');
+      return;
+    }
     var v = await C.ask(w, '일손이 필요하긴 해요. 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요.' + (lname && lv0 < 3 ? '\n(일하는 동안 ' + lname + U.jx(lname, '을/를') + ' 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)' : '\n(하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)'),
-      [{ label: '열흘 일한다 (10일)', value: 10 }, { label: '한 달 일한다 (30일)', value: 30 }, { label: '날수를 정한다 (최대 ' + Math.round(K.maxDays / 30) + '달)', value: -1 }, { label: '그만둔다', value: 0 }]);
-    if (v === -1) v = await UI.number({ title: '허드렛일', text: '며칠 일하시겠어요? (한 번에 최대 ' + K.maxDays + '일)', min: 1, max: K.maxDays, value: 60, unit: '일',
-      quick: [{ label: '석 달', value: Math.min(90, K.maxDays) }, { label: '다섯 달', value: K.maxDays }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
+      [10, 30].filter(function (d) { return d < left; }).map(function (d) { return { label: (d === 10 ? '열흘' : '한 달') + ' 일한다 (' + d + '일)', value: d }; })
+        .concat([{ label: '남은 ' + left + '일을 다 일한다', value: left }, { label: '날수를 정한다 (최대 ' + left + '일)', value: -1 }, { label: '그만둔다', value: 0 }]));
+    if (v === -1) v = await UI.number({ title: '허드렛일', text: '며칠 일하시겠어요? (석 달 가운데 남은 날 ' + left + '일 · 다 채우면 여관에서 ' + K.restNights + '밤 묵어야 다시 일할 수 있다)', min: 1, max: left, value: Math.min(30, left), unit: '일',
+      quick: [{ label: '열흘', value: Math.min(10, left) }, { label: '남은 날 모두', value: left }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
     if (!v) return;
-    v = Math.min(K.maxDays, v);
+    v = Math.min(left, v);
+    j.used = (j.used || 0) + v; j.rest = 0;
     var pay = Math.round(v * (8 + c.size * 4) * (0.8 + R.stat('str') / 150));
     await UI.fade(function () { G.Game.passDays(v); });
     s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
@@ -73,7 +94,9 @@
       if (lv > lv0) G.State.log(c.name + '의 여관에서 ' + v + '일 일하며 ' + lname + U.jx(lname, '을/를') + ' 익혔다 (' + G.LANG_LV[lv] + ').');
     }
     G.Game.refreshHud();
-    await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!' + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned);
+    var after = INN.workLeft();
+    await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!' + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned +
+      (after > 0 ? '\f(석 달 가운데 남은 날: ' + after + '일)' : '\f(석 달을 꼬박 일했다 — 여관에서 ' + K.restNights + '밤 넘게 묵어야 다시 일할 수 있다)'));
   };
   INN.func = async function (c) {
     var v = await UI.choose('기능', [

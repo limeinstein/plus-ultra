@@ -444,7 +444,7 @@
     testChar: { stat: 99, luck: 99, gold: 999999999, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름 · gold: 소지금 최대(9억 9999만 9999닢)
     // 여관 허드렛일: 한 번에 최대 maxDays일. 하루에 명성이 famePerDay씩 내려가고(제독이 허드렛일을…), 그 고장 말을 익힌다 —
     // 말 단계(모름→기초→보통→능숙)마다 일한 날 langDays[지금 단계]일이 쌓이면 한 단계 오른다(지력이 높으면 빨리: 지력 50 기준)
-    innWork: { maxDays: 150, famePerDay: 1, langDays: [40, 80, 120] },
+    innWork: { maxDays: 90, restNights: 10, famePerDay: 1, langDays: [40, 80, 120] },   // 석 달을 넘겨 일할 수 없다 — 여관에서 열흘 넘게 묵으면 다시 석 달 (2026-10-20)
     // 식당 한 끼: 값 = base + 도시 등급×size + 음식 등급×tier, 하루 한 번 피로·체력을 회복 (js/city/restaurant.js)
     //   minSize = 식당이 서는 가장 작은 도시 등급 (그보다 작아도 이름난 음식이 있으면 선다 — js/data/cuisine_place.js)
     restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2, disc: [0, 2, 3, 4], so: [0, 1, 1, 2] },   // disc: 규율이 오르는 만큼 · so: 사교 명성이 살짝(사교 배수 ×3 전) (음식 등급별, 2026-10-17)
