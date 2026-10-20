@@ -71,16 +71,127 @@
       .sort(function (x, y) { return (x.days || 999) - (y.days || 999); });
   }
   H.autoDests = autoDests;
+  /* 자동항해 목적지 고르기 (2026-10-20 사용자 요청)
+     · 항구마다 이 항구에서 본 방향(북동쪽 …)과 날수
+     · 갈 수 있는 항구가 10곳을 넘으면: 즐겨찾기 → 가까운 항구 5곳 → 나머지는 지역(이베리아·서지중해·흑해 …)별로 묶어 눌러서 펼친다
+       지역 묶음이 10개가 되면 대륙(유럽·중동·동남아시아·동아시아 …)으로 묶는다. 지역·대륙은 가까운 곳부터, 가장 가까운 묶음이 8곳 이하면 펼친 채로
+     · ☆을 누르면 즐겨찾기 (최대 10곳, s.autoFav = [도시 id]) — 즐겨찾기는 늘 맨 위 */
+  var FAV_MAX = 10, NEAR_N = 5, GROUP_FROM = 10, AREA_MAX = 10;
+  // 지역 → 대륙
+  var CONT = {
+    '이베리아': '유럽', '대서양 섬': '유럽', '프랑스 서해안': '유럽', '브리튼·아일랜드': '유럽', '북해·저지대': '유럽', '발트해·스칸디나비아': '유럽',
+    '서지중해·이탈리아': '유럽', '동지중해': '유럽', '흑해': '유럽',
+    '마그레브': '중동·북아프리카', '레반트·이집트': '중동·북아프리카', '홍해·아덴': '중동·북아프리카', '페르시아만·오만': '중동·북아프리카',
+    '서아프리카': '아프리카', '남아프리카': '아프리카', '동아프리카': '아프리카',
+    '인도 서해안': '인도', '실론·벵골만': '인도',
+    '인도차이나·시암': '동남아시아', '말라카·수마트라': '동남아시아', '향료제도·자와': '동남아시아',
+    '중국 남부': '동아시아', '중국 북부': '동아시아', '조선': '동아시아', '일본': '동아시아', '시베리아': '동아시아',
+    '오세아니아': '오세아니아',
+    '누벨프랑스': '북아메리카', '북아메리카 동해안': '북아메리카', '북아메리카 서해안': '북아메리카', '카리브해·누에바 에스파냐': '북아메리카',
+    '브라질·라플라타': '남아메리카', '남아메리카 태평양': '남아메리카'
+  };
+  /** 항구의 지역 (자동항해 목적지 묶음) */
+  function areaOf(c) {
+    var la = c.lat, lo = c.lon;
+    switch (c.region) {
+      case 0: return lo < -12 ? '대서양 섬' : '이베리아';
+      case 1: return (lo >= 10.5 && la >= 53.8) || la >= 58 ? '발트해·스칸디나비아' : lo < 1.8 && la >= 50.3 ? '브리튼·아일랜드' : la < 50.3 ? '프랑스 서해안' : '북해·저지대';
+      case 2: return lo > 27.4 && la > 41.05 ? '흑해' : lo < 16 && la < 37 ? '마그레브' : lo >= 19 ? '동지중해' : '서지중해·이탈리아';
+      case 3: return la > 30 ? '마그레브' : lo < 25 && la > -17 ? '서아프리카' : lo < 25 ? '남아프리카' : '동아프리카';
+      case 4: return la > 29 && lo < 40 ? '레반트·이집트' : lo < 46 ? '홍해·아덴' : '페르시아만·오만';
+      case 5: return lo < 79 ? '인도 서해안' : '실론·벵골만';
+      case 6: return lo >= 124.5 && la >= 33 ? '조선' : la < 27 ? '중국 남부' : '중국 북부';
+      case 7: return '시베리아';
+      case 8: return la < -10 && lo > 140 ? '오세아니아' : la >= 8 && lo < 111 ? '인도차이나·시암' : lo < 107 ? '말라카·수마트라' : '향료제도·자와';
+      case 9: return '일본';
+      case 10:
+        if (lo < -115) return '북아메리카 서해안';
+        if (la >= 44) return '누벨프랑스';
+        if (la >= 29) return '북아메리카 동해안';
+        if (la >= 8 && lo > -101 && lo < -59) return '카리브해·누에바 에스파냐';
+        if (lo < -69 && la < 8) return '남아메리카 태평양';
+        return '브라질·라플라타';
+    }
+    return (G.REGIONS && G.REGIONS[c.region]) || '그 밖';
+  }
+  H.areaOf = areaOf;
+  H.contOf = function (c) { var a = areaOf(c); return CONT[a] || a; };
+  var DIRS = ['북', '북동', '동', '남동', '남', '남서', '서', '북서'];
+  /** a에서 본 b의 방향 (대권 첫 방위, 8방위) */
+  function dirName(a, b) {
+    var r = Math.PI / 180, la1 = a.lat * r, la2 = b.lat * r, dl = (b.lon - a.lon) * r;
+    var y = Math.sin(dl) * Math.cos(la2), x = Math.cos(la1) * Math.sin(la2) - Math.sin(la1) * Math.cos(la2) * Math.cos(dl);
+    var brg = (Math.atan2(y, x) / r + 360) % 360;
+    return DIRS[Math.round(brg / 45) % 8];
+  }
+  H.dirName = dirName;
+  function favs() { var s = S(); return s.autoFav || (s.autoFav = []); }
+  H.favs = favs;
+  /** 즐겨찾기 넣기·빼기 → true(넣음) · false(뺌) · null(10곳이 다 참) */
+  H.toggleFav = function (id) {
+    var f = favs(), i = f.indexOf(id);
+    if (i >= 0) { f.splice(i, 1); return false; }
+    if (f.length >= FAV_MAX) return null;
+    f.push(id); return true;
+  };
   /** 출항하면서 자동항해할 항구를 고른다 → 도시 id (그만두면 null). 보급이 모자라 보이면 한 번 더 묻는다 */
   async function pickAutoDest(c, dests, days) {
-    var opts = dests.map(function (x) {
-      var short = x.days != null && x.days > days;
-      return { label: x.c.name, value: x.c.id, icon: 'anchor',
-        right: (x.days != null ? '약 ' + x.days + '일' : '') + (short ? ' · <span class="warn-text">보급 모자람</span>' : ''),
-        desc: G.Routes.label(c.id, x.c.id) + (G.Routes.get(c.id, x.c.id) && G.Routes.get(c.id, x.c.id).best ? ' · 가장 빨랐던 항해 ' + G.Routes.get(c.id, x.c.id).best + '일' : '') };
-    });
-    var v = await UI.choose('자동항해 — 어디로 갈까요?', opts, { width: 640, icon: 'anchor',
-      text: '익힌 항로의 항구입니다. 출항하면 곧바로 그 항구까지 뱃길을 찾아 가서 입항합니다(×' + ((G.FX && G.FX.autoSailSpeed) || 4) + ' 배속). 바다에서 방향키·숫자판·바다를 누르면 손으로 몰게 됩니다. 실은 보급: 약 ' + days + '일분.' });
+    var open = {}, opened0 = false;   // 펼친 지역 (처음에는 가장 가까운 묶음을 펼쳐 둔다)
+    var grouped = dests.length > GROUP_FROM;
+    var win = UI.window({ title: '자동항해 — 어디로 갈까요?', icon: 'anchor', width: 680,
+      html: '<div style="font-size:17px;margin-bottom:8px;line-height:1.45">익힌 항로의 항구입니다. 고르면 그 항구까지 뱃길을 찾아 ×' + ((G.FX && G.FX.autoSailSpeed) || 4) + ' 배속으로 가서 입항합니다(방향키·바다를 누르면 손으로 몬다). 실은 보급: 약 ' + days + '일분.' +
+        '<br><span class="muted" style="font-size:15px">방향·날수는 이 항구에서 본 것 · ☆을 누르면 즐겨찾기 (' + FAV_MAX + '곳까지 · 맨 위에)</span></div><div class="choices autodest" style="max-height:450px;overflow-y:auto;padding-right:4px"></div>' });
+    var box = win.content.querySelector('.autodest');
+    function row(x) {
+      var fav = favs().indexOf(x.c.id) >= 0, short = x.days != null && x.days > days, rt = G.Routes.get(c.id, x.c.id);
+      var d = U.el('div', 'choice', G.icon('anchor') + '<span>' + U.esc(x.c.name) + ' <small class="muted">' + U.esc(areaOf(x.c) + (R.cityOwner(x.c) ? ' · ' + R.cityOwner(x.c) : '')) + '</small></span>' +
+        '<span class="r">' + dirName(c, x.c) + '쪽' + (x.days != null ? ' · 약 ' + x.days + '일' : '') + (short ? ' · <span class="warn-text">보급 모자람</span>' : '') + '</span>' +
+        '<span class="fav-star' + (fav ? ' on' : '') + '" title="' + (fav ? '즐겨찾기에서 뺀다' : '즐겨찾기') + '">' + (fav ? '★' : '☆') + '</span>');
+      d.title = G.Routes.label(c.id, x.c.id) + (rt && rt.best ? ' · 가장 빨랐던 항해 ' + rt.best + '일' : '');
+      d.onclick = function (e) {
+        if (e.target.classList.contains('fav-star')) {
+          e.stopPropagation();
+          var r0 = H.toggleFav(x.c.id);
+          if (r0 === null) UI.toast('즐겨찾기는 ' + FAV_MAX + '곳까지입니다. 하나를 빼고 넣으세요.', 'star', 3200);
+          draw(); return;
+        }
+        win.close(x.c.id);
+      };
+      return d;
+    }
+    function head(text, n, key) {
+      var h = U.el('div', key ? 'choice autodest-group' : 'autodest-head', (key ? '<span class="tri">' + (open[key] ? '▾' : '▸') + '</span>' : '') + '<span>' + text + '</span>' + (n != null ? '<span class="r">' + n + '곳</span>' : ''));
+      if (key) h.onclick = function () { open[key] = !open[key]; draw(); };
+      return h;
+    }
+    function draw() {
+      var top = box.scrollTop; box.innerHTML = '';
+      var fv = favs(), favRows = dests.filter(function (x) { return fv.indexOf(x.c.id) >= 0; });
+      var rest = dests.filter(function (x) { return fv.indexOf(x.c.id) < 0; });
+      if (!grouped) {
+        if (favRows.length) { box.appendChild(head('★ 즐겨찾기')); favRows.forEach(function (x) { box.appendChild(row(x)); }); box.appendChild(head('그 밖의 항구')); }
+        rest.forEach(function (x) { box.appendChild(row(x)); });
+      } else {
+        if (favRows.length) { box.appendChild(head('★ 즐겨찾기', favRows.length)); favRows.forEach(function (x) { box.appendChild(row(x)); }); }
+        var near = rest.slice(0, NEAR_N), far = rest.slice(NEAR_N);
+        if (near.length) { box.appendChild(head('가까운 항구', near.length)); near.forEach(function (x) { box.appendChild(row(x)); }); }
+        // 지역별로 묶고, 지역이 10개가 되면 대륙별로 — dests는 가까운 순이라 가까운 묶음이 먼저 온다
+        var byArea = far.map(function (x) { return areaOf(x.c); }), nArea = byArea.filter(function (a, i) { return byArea.indexOf(a) === i; }).length;
+        var cont = nArea >= AREA_MAX, groups = {}, order = [];
+        far.forEach(function (x, i) { var k = cont ? (CONT[byArea[i]] || byArea[i]) : byArea[i]; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(x); });
+        if (order.length && !opened0) { opened0 = true; if (groups[order[0]].length <= 8) open[order[0]] = true; }   // 가장 가까운 묶음이 작으면 펼쳐 둔다
+        if (order.length) box.appendChild(head(cont ? '대륙별 항구 <small class="muted">(가까운 대륙부터)</small>' : '지역별 항구 <small class="muted">(가까운 지역부터)</small>'));
+        order.forEach(function (k) {
+          var g = groups[k], d0 = g[0];
+          box.appendChild(head(U.esc(k) + ' <small class="muted">— ' + dirName(c, d0.c) + '쪽' + (d0.days != null ? ' · 약 ' + d0.days + '일부터' : '') + '</small>', g.length, k));
+          if (open[k]) g.forEach(function (x) { var r1 = row(x); r1.classList.add('autodest-sub'); box.appendChild(r1); });
+        });
+      }
+      box.scrollTop = top;
+      var first = box.querySelector('.choice:not(.dis)'); if (first && !box.querySelector('.kbd-focus')) first.classList.add('kbd-focus');
+    }
+    draw();
+    var v = await win.result;
     if (v == null) return null;
     var d = dests.filter(function (x) { return x.c.id === v; })[0];
     if (d && d.days != null && d.days > days) {
@@ -89,6 +200,7 @@
     }
     return v;
   }
+  H.pickAutoDest = pickAutoDest;
 
   // ---------------------------------------------------------------- 출항 준비 (선원·수리·보급을 한 번에)
   function prepPlan(c, days) {
