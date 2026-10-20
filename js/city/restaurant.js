@@ -50,7 +50,7 @@
     var gain = '피로 −' + (before - s.fleet.fatigue) + (dUp > 0 ? ' · 규율 +' + dUp : '') + (so > 0 ? ' · 사교 명성 +' + so : '');
     if (G.Game.refreshHud) G.Game.refreshHud();
     if (G.State && G.State.log) G.State.log(c.name + ' 식당에서 ' + d.name + U.jx(d.name, '을/를') + ' 먹었다. (금화 ' + p + '닢 · ' + gain + ')');
-    if (G.Audio) G.Audio.sfx('coin');
+    if (G.Audio) { G.Audio.sfx('pot'); setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 380); }   // 냄비 소리, 값을 치른다
     await C.say(owner(), d.name + U.jx(d.name, '은/는') + ' 이 고장의 맛을 잘 보여 주는 음식입니다.\f배도 든든해졌으니 좋은 항해가 되시길! (' + gain + ')');
   };
 })(window.G = window.G || {});

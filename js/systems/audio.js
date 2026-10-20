@@ -65,9 +65,57 @@
     var next = (old + 1 + Math.floor(Math.random() * (AU.SFX_VARIANTS - 1))) % AU.SFX_VARIANTS;
     lastVariant[name] = next; return next;
   }
+  // ---------------------------------------------------------------- 녹음 효과음 (js/data/sfxfiles.js · sounds/rpg/)
+  // 이름에 녹음이 있으면 그것을 내고(빠르기·파일을 조금씩 바꿔 매번 다르게), 'layer'면 합성음도 함께 낸다.
+  // ogg를 못 트는 브라우저이거나 파일을 못 읽으면 예전 합성음으로 돌아간다.
+  var smpCan = null, smpPool = {}, smpLast = {}, smpBad = {};
+  function canOgg() {
+    if (smpCan == null) { try { var a = document.createElement('audio'); smpCan = !!(a.canPlayType && a.canPlayType('audio/ogg; codecs="vorbis"')); } catch (e) { smpCan = false; } }
+    return smpCan;
+  }
+  function smpEl(f) {
+    var pool = smpPool[f] || (smpPool[f] = []);
+    for (var i = 0; i < pool.length; i++) if (pool[i].paused || pool[i].ended) return pool[i];
+    if (pool.length >= 4) return pool[0];                       // 넷이 다 울리는 중이면 가장 먼저 것을 처음부터 다시
+    var F = G.SFX_FILES, a = new Audio();
+    a.preload = 'auto'; a.addEventListener('error', function () { smpBad[f] = true; });
+    if ('preservesPitch' in a) a.preservesPitch = false; else if ('webkitPreservesPitch' in a) a.webkitPreservesPitch = false;   // 빠르기와 함께 음높이도 바뀌게
+    a.src = F.dir + f + (F.ext || '.ogg');
+    pool.push(a); return a;
+  }
+  /** 이 이름의 녹음을 낼 수 있는가 */
+  AU.hasSample = function (name) {
+    var F = G.SFX_FILES, e = F && F.sets && F.sets[name];
+    return !!(e && canOgg() && e.f.some(function (f) { return !smpBad[f]; }));
+  };
+  function playOne(e, name) {
+    var fs = e.f.filter(function (f) { return !smpBad[f]; }); if (!fs.length) return false;
+    var pick = fs.length > 1 ? fs.filter(function (x) { return x !== smpLast[name]; }) : fs, f = pick[Math.floor(Math.random() * pick.length)];
+    smpLast[name] = f;
+    var a = smpEl(f), r = e.rate ? e.rate[0] + Math.random() * (e.rate[1] - e.rate[0]) : 1;
+    try { a.currentTime = 0; } catch (x) { /* 아직 못 읽음 */ }
+    a.playbackRate = r;
+    a.volume = Math.max(0, Math.min(1, vol('sound', 0.5) * 0.8 * (e.v == null ? 1 : e.v) * (G.SFX_FILES.vol == null ? 1 : G.SFX_FILES.vol)));   // 0.8 = 합성음의 master
+    var p = a.play(); if (p && p.catch) p.catch(function () { /* 못 읽은 파일 · 자동 재생 막힘 */ });
+    return true;
+  }
+  /** 녹음 효과음 하나 (seq가 있으면 그 시각들에 한 번씩). 냈으면 true */
+  AU.sample = function (name) {
+    if (!ctx || ctx.state !== 'running' || !AU.hasSample(name)) return false;
+    var e = G.SFX_FILES.sets[name], seq = e.seq || [0];
+    if (!(vol('sound', 0.5) > 0)) return true;
+    seq.forEach(function (d) { if (d > 0) setTimeout(function () { playOne(e, name); }, d * 1000); else playOne(e, name); });
+    return true;
+  };
+  // 녹음만 있는 이름을 녹음 없이 부르면 비슷한 합성음으로
+  var SAMPLE_FALLBACK = { draw: 'sword', cut: 'sword', parry: 'sword', card: 'page', shuffle: 'page', reveal: 'page', book: 'page', landstep: 'breath', purse: 'coinland' };
+
   /** 두 번째 인수 0·1·2로 세 변형을 직접 고를 수 있고, 생략하면 바로 전과 다른 변형을 고른다. */
   AU.sfx = function (name, wantVariant) {
     if (!ctx || ctx.state !== 'running') return false;
+    var E = G.SFX_FILES && G.SFX_FILES.sets && G.SFX_FILES.sets[name];
+    if (E && AU.sample(name)) { if (E.mode !== 'layer') return true; }
+    else if (SAMPLE_FALLBACK[name]) name = SAMPLE_FALLBACK[name];
     var t = ctx.currentTime, oldTune = sfxTune, variant = pickVariant(name, wantVariant);
     sfxTune = [0.91, 1, 1.09][variant];
     switch (name) {
@@ -196,6 +244,8 @@
     if (!ctx || ctx.state !== 'running') return false;
     count = Math.max(1, Math.round(count || 1));
     var n = Math.min(count, 54), heavy = count >= 18, start = ctx.currentTime + (heavy ? 0.48 : 0.58);
+    // 매출: 동전이 떨어지는 순간 돈주머니에 쏟는 녹음 (큰 매출이면 한 번 더) — js/data/sfxfiles.js purse
+    setTimeout(function () { AU.sample('purse'); if (heavy) setTimeout(function () { AU.sample('purse2'); }, 280); }, (start - ctx.currentTime) * 1000);
     for (var i = 0; i < n; i++) {
       var gap = heavy ? 0.035 : count <= 3 ? 0.24 : 0.105;
       var at = start + i * gap + Math.random() * (heavy ? 0.16 : 0.045);
@@ -214,9 +264,14 @@
       sea: ['wake', 1.2 - k * 0.45], walk: ['breath', 2.9 - k * 0.6], horse: ['horse', 0.92 - k * 0.25], wagon: ['wagon', 1.15 - k * 0.3],
       run: ['run', 0.78 - k * 0.2], townstep: ['townstep', 0.94 - k * 0.2]
     }[kind];
+    // 뭍의 탐험대: 녹음이 있으면 발걸음(여럿이 걷는 무거운 걸음)을 내고, 숨소리는 네 번에 한 번
+    if (kind === 'walk' && AU.hasSample('landstep')) cfg = ['landstep', 1.0 - k * 0.2];
     if (!cfg || now < (travelAt[kind] || 0)) return false;
     travelAt[kind] = now + cfg[1];
-    if (kind === 'sea' && ((travelN[kind] = (travelN[kind] || 0) + 1) % 3 === 0)) cfg[0] = 'sail';
+    var nth = travelN[kind] = (travelN[kind] || 0) + 1;
+    if (kind === 'sea' && nth % 3 === 0) cfg[0] = 'sail';
+    if (kind === 'sea' && nth % 5 === 2) AU.sample('creak');                 // 항해 중 가끔 배 나무가 삐걱인다
+    if (kind === 'walk' && cfg[0] === 'landstep' && nth % 4 === 0) AU.sfx('breath');
     return AU.sfx(cfg[0]);
   };
 

@@ -125,16 +125,18 @@
       function render(reveal, moving, leaving) {
         el.querySelector('.en').innerHTML = rowHtml(en, 'en', reveal, moving, leaving);
         el.querySelector('.me').innerHTML = rowHtml(me, 'me', reveal, moving, leaving);
-        if (phase === 0) U.$$('.me .pcard', el).forEach(function (cd, i) { cd.onclick = function () { hold[i] = !hold[i]; render(false); }; });
+        if (phase === 0) U.$$('.me .pcard', el).forEach(function (cd, i) { cd.onclick = function () { hold[i] = !hold[i]; if (G.Audio) G.Audio.sfx('click'); render(false); }; });
       }
       async function dealOne(side, i, card) {
         if (side === 'en') en[i] = card; else me[i] = card;
         render(false, { side: side, index: i });
+        if (G.Audio) G.Audio.sfx('card');                             // 한 장씩 나눈다
         await pause('dealMs', 170);
       }
       async function firstDeal() {
         setButton('패를 나누는 중…', false);
         var pile = el.querySelector('.poker-deck'); pile.classList.add('active', 'shuffling');
+        if (G.Audio) G.Audio.sfx('shuffle');                          // 패를 섞는다
         await pause('shuffleMs', 720); pile.classList.remove('shuffling');
         setLog('한 장씩 패를 나누는 중…');
         for (var i = 0; i < 5; i++) {
@@ -153,6 +155,7 @@
         var dk = dealerHold(en), dropMe = hold.map(function (kept) { return !kept; }), dropEn = dk.map(function (kept) { return !kept; });
         setLog('홀드하지 않은 패를 거두는 중…');
         render(false, null, { me: dropMe, en: dropEn });
+        if (G.Audio && (dropMe.some(Boolean) || dropEn.some(Boolean))) G.Audio.sfx('card');   // 버린 패를 거둔다
         await pause('discardMs', 260);
         dropMe.forEach(function (drop, i) { if (drop) me[i] = null; });
         dropEn.forEach(function (drop, i) { if (drop) en[i] = null; });
@@ -163,6 +166,7 @@
           if (dropMe[i]) await dealOne('me', i, d.pop());
         }
         phase = 2; render(true);
+        if (G.Audio) G.Audio.sfx('reveal');                           // 패를 펼쳐 보인다
         el.querySelector('.poker-deck').classList.remove('active');
         var a = evalHand(me), b = evalHand(en), r = cmp(a, b);
         setLog('나: <b>' + handName(a) + '</b> &nbsp; 상대: <b>' + handName(b) + '</b> — ' + (r > 0 ? '<span class="good-text">나의 승리!</span>' : r < 0 ? '<span class="warn-text">상대의 승리...</span>' : '무승부'));

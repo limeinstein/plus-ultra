@@ -404,11 +404,13 @@
           if (crit) h *= 1.6;
           if (opts.ignoreArmor) h += b.def * 0.5;
           fx.push({ kind: 'spark', x: hx, y: H * 0.86 - 110, seed: U.rand() * 6, t: 0, life: 0.4 });
+          if (G.Audio) G.Audio.sfx('cut');                          // 칼이 들어갔다 (녹음 — js/data/sfxfiles.js)
           for (var hp = 0; hp < D.hitParticles; hp++) fx.push({ kind: 'hitParticle', x: hx + U.rf(-5, 5), y: H * 0.86 - 110 + U.rf(-5, 5), vx: U.rf(-75, 75), vy: U.rf(-95, 20), r: U.rf(1.5, 3.8), col: U.chance(0.55) ? '255,226,130' : '210,70,45', t: 0, life: D.particleLife });
           hurt(b, h, crit || opts.big);
           if (crit) bubble(a, '일섬!');
         } else {
           pose(b, 'block', 0.3); fx.push({ kind: 'spark', x: hx - (a === me ? 20 : -20), y: H * 0.86 - 122, seed: U.rand() * 6, t: 0, life: 0.35 });
+          if (G.Audio) G.Audio.sfx('parry');                        // 칼날이 부딪는 쇳소리
           b.spirit = Math.min(100, b.spirit + 6); num(b, '막음', '200,220,255');
         }
         setTimeout(function () { a.tx = 0; }, 180);
@@ -499,7 +501,7 @@
           else { f.spirit = Math.max(0, f.spirit - 10); o.spirit = Math.min(100, o.spirit + 10); say(U.esc(o.name) + U.jx(o.name, '은/는') + ' 속지 않았다.'); }
         } else if (id === 'secret') {
           var gun = f === me ? f.shoot >= 1 : (en.look === 'pirate' || en.look === 'captain') && U.chance(0.6);
-          pose(f, 'shoot', 0.5); await sleep(200);
+          pose(f, 'shoot', 0.5); if (!gun && G.Audio) G.Audio.sfx('draw'); await sleep(200);   // 품에서 단검을 뽑는다
           if (gun) { fx.push({ kind: 'flashS', x: posX(f) + (f === me ? 60 : -60), y: H * 0.86 - 56, t: 0, life: 0.2 }); for (var sm = 0; sm < 3; sm++) fx.push({ kind: 'smoke', x: posX(f) + (f === me ? 66 : -66), y: H * 0.86 - 56, d: f === me ? 1 : -1, t: -sm * 0.05, life: 1.4 }); if (G.Audio) G.Audio.sfx('gun'); }
           await sleep(150);
           var dd = o.maxHp * U.rf(gun ? 0.22 : 0.16, gun ? 0.3 : 0.22);
@@ -671,6 +673,7 @@
         stance = k; me.spirit = Math.min(100, me.spirit + STANCE[k].spirit);
         el.querySelector('.rd-stance').classList.add('gone');
         banner(STANCE[k].name, STANCE[k].en);
+        if (G.Audio) G.Audio.sfx('draw');                           // 일기토 시작: 칼을 뽑는다
         say('방침: <b>' + STANCE[k].name + '</b> — ' + STANCE[k].desc);
         bars(); prepareIntent(); techBtns(); sysBtns();
         timer = setTimeout(step, 1100);

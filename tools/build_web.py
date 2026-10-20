@@ -193,6 +193,17 @@ def main():
                 dst = os.path.join(OUT, 'music', fn)
                 keep.add(os.path.normpath(dst))
                 copy_if_changed(os.path.join(mdir, fn), dst)
+        # 녹음 효과음 (sounds/<묶음>/*.ogg — js/data/sfxfiles.js) — 그대로 복사 (안내문 License.txt도 함께)
+        sdir = os.path.join(pages.ROOT, 'sounds')
+        if os.path.isdir(sdir):
+            for dirpath, _, files in os.walk(sdir):
+                for fn in sorted(files):
+                    if not fn.lower().endswith(('.ogg', '.mp3', '.m4a', '.wav', '.txt')):
+                        continue
+                    rel = os.path.relpath(os.path.join(dirpath, fn), pages.ROOT)
+                    dst = os.path.join(OUT, rel)
+                    keep.add(os.path.normpath(dst))
+                    copy_if_changed(os.path.join(dirpath, fn), dst)
         tick()
         game = build_page('index.html', 'game', 'index.html', 'Loop of Good Hope — 더 먼 바다로', DESC, esbuild, manifest_rel)
         cat = build_page('catalog.html', 'catalog', 'catalog.html', 'Loop of Good Hope 도감', '게임에 나오는 도시·인물·발견물을 그림과 함께 보여 주고, 그림을 바꿀 때 쓸 파일 이름을 알려 주는 도감.', esbuild, manifest_rel)

@@ -200,6 +200,16 @@ def main():
                 dst = os.path.join(APP, 'music', fn)
                 keep.add(os.path.normpath(dst))
                 W.copy_if_changed(src, dst)
+    # 녹음 효과음 (sounds/<묶음>/*.ogg — js/data/sfxfiles.js)
+    sdir = os.path.join(pages.ROOT, 'sounds')
+    if os.path.isdir(sdir):
+        for dirpath, _, files in os.walk(sdir):
+            for fn in sorted(files):
+                if fn.lower().endswith(('.ogg', '.mp3', '.m4a', '.wav', '.txt')):
+                    rel = os.path.relpath(os.path.join(dirpath, fn), pages.ROOT)
+                    dst = os.path.join(APP, rel)
+                    keep.add(os.path.normpath(dst))
+                    W.copy_if_changed(os.path.join(dirpath, fn), dst)
     js_rel, css_rel = W.build_page('index.html', 'game', 'index.html', 'PLUS ULTRA — Loop of Good Hope', DESC, esbuild, manifest_rel)
     # GIF 팩 문: 설치형 게임에 「GIF 팩」(tools/build_gifpack.py)을 깔았으면 desktop/preload.js가 위치(PU_DESKTOP.gifpack)를 알려 주고,
     # 이 작은 파일이 그 목록(gifpack-list.js)을 읽어 발견물 GIF를 원본으로 쓰게 한다. 팩이 없으면 아무것도 하지 않는다.
