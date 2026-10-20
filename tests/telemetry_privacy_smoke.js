@@ -6,9 +6,10 @@ const { chromium } = require('playwright');
 const PAGE = process.env.PAGE || 'http://127.0.0.1:4179/';
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }
 
+let browser;
 (async function () {
   const errors = [], payloads = [];
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
+  browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: 1100, height: 760 } });
   page.on('pageerror', error => errors.push(String(error)));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -35,5 +36,6 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
   ok(payload.voyage.foundCities.length === 1 && payload.voyage.missingCities.length > 0, '방문·미방문 도시 목록 분리');
   ok(JSON.stringify(payload).length < 96000, '항해 현황 요청 크기 제한 준수');
   ok(errors.length === 0, '콘솔 오류 0');
-  await browser.close(); console.log('통과');
-})().catch(error => { console.error('실패:', error.message); process.exitCode = 1; });
+  console.log('통과');
+})().catch(error => { console.error('실패:', error.stack || error.message); process.exitCode = 1; })
+  .finally(async () => { if (browser) await browser.close(); });

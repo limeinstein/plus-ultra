@@ -6,11 +6,12 @@ const { chromium } = require('playwright');
 const PAGE = process.env.PAGE || 'http://127.0.0.1:4179/center/';
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }
 
+let browser;
 (async function () {
   const errors = [];
   let submitted = null;
   let presence = null;
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
+  browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: Number(process.env.WIDTH) || 960, height: Number(process.env.HEIGHT) || 900 } });
   page.on('pageerror', error => errors.push(String(error)));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -71,6 +72,6 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
   if (process.env.SCREENSHOT) await page.screenshot({ path: process.env.SCREENSHOT, fullPage: true });
   if (errors.length) console.error(errors.join('\n'));
   ok(errors.length === 0, '콘솔 오류 0');
-  await browser.close();
   console.log('통과');
-})().catch(error => { console.error('실패:', error.message); process.exitCode = 1; });
+})().catch(error => { console.error('실패:', error.stack || error.message); process.exitCode = 1; })
+  .finally(async () => { if (browser) await browser.close(); });
