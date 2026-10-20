@@ -431,6 +431,7 @@
       }
       case 'monster': {
         if (R.fleetBonus('monster') && !U.chance(0.3)) { await UI.say('뱃머리 장식이 번뜩이자, 물속의 거대한 그림자가 물러갔다.', {}); break; }
+        if (G.Audio) G.Audio.sfx('seamonster');                     // 깊은 바다에서 울리는 포효
         await UI.say('으악! 거대한 바다 괴물이 배를 덮친다!', {});
         var sh2 = U.pick(f.ships); sh2.hp = Math.max(1, sh2.hp - sh2.maxHp * 0.25); var lost2 = deathCap(U.ri(1, 6)); f.crew -= lost2;
         UI.toast(sh2.name + '호가 부서지고 선원 ' + lost2 + '명을 잃었다.', 'skull');

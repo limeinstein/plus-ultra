@@ -240,6 +240,7 @@
 
   B.enter = function (arg) {
     var s = S(), npc = arg.npc || { kind: 'pirate', n: 1 };
+    if (G.Audio) setTimeout(function () { if (G.Audio) G.Audio.sfx('drums'); }, 350);   // 해전이 시작된다: 북소리
     G.Game.showLayers(true, true, false);
     G.Game.ensureRenderer();
     st = { cx: 0, cy: 0, npc: npc, t: 0, ships: [], fx: [], balls: [], paused: false, over: false, mode: 'follow', sel: null, busy: 0, log: [], fled: 0, center: npc.center ? { lon: npc.center.lon, lat: npc.center.lat } : { lon: s.loc.lon, lat: s.loc.lat }, seaArt: null, spare: 0 };   // npc.center: 그 자리가 아닌 물 위에서 (호수의 큰 싸움)
@@ -772,6 +773,7 @@
   B.update = function (dt) {
     if (!st) return;
     st.t += dt;
+    if (G.Audio && G.Audio.amb && Date.now() >= (st.ambAt || 0)) { st.ambAt = Date.now() + 300; G.Audio.amb({ sea_close: 0.9, sea_wind: 0.35 }); }   // 뱃전에 부딪는 물결·바람
     var I = IMP();
     if (st.hitstop > 0) { st.hitstop -= dt; if (st.hitstop <= 0) { st.hitstop = 0; st.hsCool = I.hitstopCool; } }
     else if (st.hsCool > 0) st.hsCool -= dt;
@@ -1033,7 +1035,7 @@
   function sinkShip(t) {
     t.alive = false; t.sunk = true; t.hp = 0;
     log(t.name + (t.side === 'me' ? '호가 침몰했다!' : U.j(t.name, '이/가').slice(t.name.length) + ' 침몰했다!'));
-    if (G.Audio) G.Audio.sfx('splash');
+    if (G.Audio) { G.Audio.sfx('boom'); G.Audio.sfx('splash'); }   // 화약고가 터지고 가라앉는다
     st.fx.push({ kind: 'bigsplash', x: t.x, y: t.y, t: 0, life: 6, seed: Math.random(), len: t.len });
     var I2 = IMP(); st.hsCool = 0; hitstop(I2.hitstopSink); shake(I2.shakeSink); flash(I2.flashSink, t.side === 'me' ? '255,110,80' : '255,240,210');
     st.fx.push({ kind: 'blast', x: t.x, y: t.y, t: 0, life: 0.5, r: t.len * 0.9 });

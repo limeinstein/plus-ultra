@@ -392,7 +392,7 @@
     s.questDone[q.key] = 'done';
     s.stats.quests = (s.stats.quests || 0) + 1;
     s.stats.treasures = (s.stats.treasures || 0) + 1;
-    if (G.Audio) { G.Audio.sfx('latch'); setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 330); }   // 상자 걸쇠를 열고 금화
+    if (G.Audio) { G.Audio.sfx('latch'); setTimeout(function () { if (G.Audio) G.Audio.sfx('prize'); }, 330); }   // 상자 걸쇠를 열고 금화
 
     await UI.alert('<div style="font-size:19px;line-height:1.7">땅속 깊이에서 ' + box + U.jx(box, '이/가') + ' 나왔다!<br>안에는 금화와 은괴, 보석이 가득하다.<br><br><b>금화 ' + U.num(gold) + '닢</b>을 손에 넣었다. (명성 +' + gotFame + ')</div>', '보물 발견');
     G.State.log(q.city + ' 조합의 보물 지도대로 보물을 찾았다 — 금화 ' + U.num(gold) + '닢.');

@@ -368,7 +368,7 @@
         banner('전투 개시!', 1.4);
         var ups = mine.filter(function (u) { return u.up; }).map(unitName);
         say('전투 개시!' + (ups.length ? ' <b>' + ups.join(' · ') + '</b> — 특기 덕에 강해졌다.' : ''));
-        if (G.Audio) { G.Audio.sfx('draw'); setTimeout(function () { if (G.Audio) G.Audio.sfx('sword'); }, 420); }   // 칼을 뽑고 맞부딪친다
+        if (G.Audio) { G.Audio.sfx('drums'); G.Audio.sfx('draw'); setTimeout(function () { if (G.Audio) G.Audio.sfx('sword'); }, 420); }   // 북이 울리고, 칼을 뽑아 맞부딪친다
         cmdBar();
       }
       function myMul(u) {

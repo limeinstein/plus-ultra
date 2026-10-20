@@ -933,6 +933,11 @@
     //   배는 그대로 따라가고(속도만큼 뒤처지지 않아 배속을 올려도 배가 화면에서 떠밀리지 않는다), 어긋난 만큼만 부드럽게 좁힌다
     var P = FXS(), vsp = shipSpeed(), lead = Math.min(0.3, vsp * P.camLead * (sens().leadK || 1));   // 조작 감도: 느리게면 화면이 덜 내다본다
     if (G.Audio && G.Audio.travel) G.Audio.travel('sea', !frozen && !st.paused && vsp > 0.03 ? Math.min(1, 0.22 + vsp) : 0);   // 선체가 물을 가르는 소리
+    if (G.Audio && G.Audio.amb && Date.now() >= (st.ambAt || 0)) {   // 배경 소리: 물결(멈추면 바닷새도) · 센 바람 · 폭풍 (0.3초마다)
+      st.ambAt = Date.now() + 300;
+      var stormy = st.storm > 0, still = vsp < 0.05, wsp = st.windVis ? st.windVis.spd : 0.4;
+      G.Audio.amb({ sea_waves: stormy ? 0 : still ? 0.35 : 0.85, sea_birds: stormy || !still ? 0 : 0.8, sea_wind: stormy ? 0 : U.clamp((wsp - 0.45) * 1.8, 0, 0.75), sea_rough: stormy ? 1 : 0, storm: stormy ? 0.85 : 0 });
+    }
     var ld = vsp > 0.02 ? Math.atan2(st.vel[1], st.vel[0]) : l.heading;
     st.camLead = st.camLead || [0, 0];
     var kl = ease(dt, 1.2);

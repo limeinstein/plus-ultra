@@ -355,6 +355,13 @@
       var travelKind = MT().id === 'wagon' ? 'wagon' : MT().id === 'horse' ? 'horse' : MT().id === 'walk' && (st.fastDays > 0 || (st.pxs || 0) > 55) ? 'run' : 'walk';
       G.Audio.travel(travelKind, mv ? Math.min(1, 0.25 + (st.pxs || 0) / 80) : 0);   // 숨소리·말발굽·마차 바퀴
     }
+    if (G.Audio && G.Audio.amb && Date.now() >= (st.ambAt || 0)) {   // 배경 소리: 땅에 따라 새·밀림 · 야영하는 밤엔 부엉이 · 가끔 짐승·새 소리 (0.4초마다)
+      st.ambAt = Date.now() + 400;
+      var aTerr = G.Geo.terrain(l.lon, l.lat), wet = aTerr === 'jungle' && (S().day || 0) % 3 === 0, cold = /snow|tundra|ice|desert/.test(aTerr);
+      G.Audio.amb({ meadow: !st.camping && /grass|steppe|mountain/.test(aTerr) ? 1 : 0, forest: !st.camping && aTerr === 'forest' ? 1 : 0,
+        jungle: aTerr === 'jungle' && !wet ? 1 : 0, jungle_rain: wet ? 1 : 0, night: st.camping && !cold && aTerr !== 'jungle' ? 1 : 0 });
+      if (G.Audio.wild) G.Audio.wild(aTerr, { beasts: G.EventFx && G.EventFx.beastsHere ? G.EventFx.beastsHere() : null, mount: MT().id, camping: !!st.camping });
+    }
     st.gather += ((mv ? 0 : 1) - st.gather) * Math.min(1, dt * (mv ? 5 : 1.1));
     if (Math.abs(dx) > moved * 0.3 && moved > 0.02) st.face = dx > 0 ? 1 : -1;
     G.Party.age(st.pfx, dt);
@@ -473,7 +480,7 @@
     } else if (r < 0.55) {
       var bz = G.EventFx ? G.EventFx.beastsHere() : null;   // 그 땅의 짐승 (육상전에 나오는 짐승과 같다)
       var fxB = bz ? G.EventFx.show('beast', { animal: bz[1], pack: bz[0], bg: terr }) : null;
-      if (G.Audio) G.Audio.sfx('growl');
+      if (G.Audio) { if (G.Audio.beast) G.Audio.beast(bz && bz[1]); else G.Audio.sfx('growl'); }   // 짐승마다 다른 울음 (사자·하이에나·곰…) — js/data/sfxfiles.js beast
       await UI.say(U.pick(['사나운 짐승 떼가 습격해 왔다!', '굶주린 들짐승이 야영지를 덮쳤다!']), {});
       if (fxB) await fxB.stop();
       await landBattle('들짐승', foeSize(0.15, 0.35, 5, 40), true);

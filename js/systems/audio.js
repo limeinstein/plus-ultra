@@ -108,7 +108,72 @@
     return true;
   };
   // 녹음만 있는 이름을 녹음 없이 부르면 비슷한 합성음으로
-  var SAMPLE_FALLBACK = { draw: 'sword', cut: 'sword', parry: 'sword', card: 'page', shuffle: 'page', reveal: 'page', book: 'page', landstep: 'breath', purse: 'coinland' };
+  var SAMPLE_FALLBACK = { draw: 'sword', cut: 'sword', parry: 'sword', card: 'page', shuffle: 'page', reveal: 'page', book: 'page', landstep: 'breath', purse: 'coinland',
+    prize: 'coin', bet: 'coinland', drums: 'cannon', boom: 'cannon', seamonster: 'growl', roarBeast: 'growl', roarBig: 'growl', roarLion: 'growl', wolfAttack: 'growl' };
+
+  // ---------------------------------------------------------------- 배경 소리 (파도·항구·비·새 — js/data/sfxfiles.js amb)
+  // 장면이 매 순간 G.Audio.amb({이름: 0~1})로 크기를 알려 준다. 2.5초 넘게 소식이 없으면 그 소리는 서서히 사라진다
+  // (장면이 바뀌거나 건물에 들어가면 저절로 꺼진다). 크기는 실제 시간으로 부드럽게 옮겨 간다.
+  var ambEl = {}, ambCur = {}, ambWant = {}, ambSeen = {}, ambTimer = 0, ambBad = {};
+  AU.hasAmb = function (name) { var F = G.SFX_FILES, e = F && F.amb && F.amb[name]; return !!(e && canOgg() && !ambBad[name]); };
+  function ambTick() {
+    var now = Date.now(), live = 0, F = G.SFX_FILES || {}, master = vol('sound', 0.5) * 0.8 * (F.ambVol == null ? 1 : F.ambVol) * (F.vol == null ? 1 : F.vol);
+    Object.keys(ambEl).forEach(function (k) {
+      var want = now - (ambSeen[k] || 0) > 2500 ? 0 : (ambWant[k] || 0), cur = ambCur[k] || 0;
+      cur += (want - cur) * 0.12; if (Math.abs(want - cur) < 0.01) cur = want;           // 0.1초마다 12%씩 — 2~3초에 걸쳐 바뀐다
+      ambCur[k] = cur;
+      var a = ambEl[k], e = F.amb && F.amb[k];
+      a.volume = Math.max(0, Math.min(1, cur * master * (e ? e.v : 0.3)));
+      if (cur > 0.001 && master > 0) { live++; if (a.paused) { var p = a.play(); if (p && p.catch) p.catch(function () { /* 자동 재생 막힘 */ }); } }
+      else if (!a.paused) a.pause();
+    });
+    if (!live && !Object.keys(ambWant).some(function (k) { return ambWant[k] > 0 && now - (ambSeen[k] || 0) <= 2500; })) { clearInterval(ambTimer); ambTimer = 0; }
+  }
+  /** 배경 소리 크기 알리기: { sea_waves: 0.8, rain: 0.3 … } — 매 장면(또는 자주) 부른다 */
+  AU.amb = function (levels) {
+    if (!ctx || ctx.state !== 'running' || !levels) return false;
+    var F = G.SFX_FILES, now = Date.now(), any = false;
+    Object.keys(levels).forEach(function (k) {
+      if (!AU.hasAmb(k)) return;
+      var v = Math.max(0, Math.min(1, +levels[k] || 0));
+      if (!ambEl[k]) {
+        if (!(v > 0)) return;
+        var a = new Audio(); a.loop = true; a.preload = 'auto'; a.volume = 0;
+        a.addEventListener('error', function () { ambBad[k] = true; });
+        a.src = F.dir + F.amb[k].f + (F.ext || '.ogg');
+        ambEl[k] = a; ambCur[k] = 0;
+      }
+      ambWant[k] = v; ambSeen[k] = now; any = true;
+    });
+    if (any && !ambTimer) ambTimer = setInterval(ambTick, 100);
+    return any;
+  };
+  /** 지금 울리는 배경 소리 크기 (시험용) */
+  AU.ambState = function () { var o = {}; Object.keys(ambEl).forEach(function (k) { o[k] = { cur: +(ambCur[k] || 0).toFixed(3), playing: !ambEl[k].paused, vol: +ambEl[k].volume.toFixed(3) }; }); return o; };
+
+  // ---------------------------------------------------------------- 뭍의 짐승·새 소리 (가끔) · 덮치는 들짐승
+  var wildAt = 0;
+  /** 뭍에서 매 장면 부른다: terr 지금 땅 · opt {beasts: 그 땅의 짐승들, mount: 탈것 id, camping} — 정해진 간격마다 하나를 낸다 */
+  AU.wild = function (terr, opt) {
+    if (!ctx || ctx.state !== 'running') return false;
+    var W = G.SFX_FILES && G.SFX_FILES.wild; if (!W) return false;
+    var now = Date.now();
+    if (!wildAt) { wildAt = now + 1000 * (W.every[0] + Math.random() * (W.every[1] - W.every[0])) * 0.5; return false; }
+    if (now < wildAt) return false;
+    wildAt = now + 1000 * (W.every[0] + Math.random() * (W.every[1] - W.every[0]));
+    opt = opt || {};
+    var pool = (W[terr] || W.grass).slice();
+    if (opt.beasts && opt.beasts.some(function (b) { return b === 'hyena' || b === 'lion'; }) && W.africa) pool = pool.concat(W.africa);
+    if (opt.mount && W.mount && W.mount[opt.mount]) pool = pool.concat(W.mount[opt.mount]);
+    var name = pool[Math.floor(Math.random() * pool.length)];
+    return name ? AU.sample(name) : false;
+  };
+  AU.wildReset = function () { wildAt = 0; };
+  /** 들짐승이 덮칠 때: 짐승마다 다른 소리 (없으면 합성 으르렁) */
+  AU.beast = function (animal) {
+    var B = G.SFX_FILES && G.SFX_FILES.beast, n = B && animal && B[animal];
+    return AU.sfx(n || 'growl');
+  };
 
   /** 두 번째 인수 0·1·2로 세 변형을 직접 고를 수 있고, 생략하면 바로 전과 다른 변형을 고른다. */
   AU.sfx = function (name, wantVariant) {
@@ -245,7 +310,7 @@
     count = Math.max(1, Math.round(count || 1));
     var n = Math.min(count, 54), heavy = count >= 18, start = ctx.currentTime + (heavy ? 0.48 : 0.58);
     // 매출: 동전이 떨어지는 순간 돈주머니에 쏟는 녹음 (큰 매출이면 한 번 더) — js/data/sfxfiles.js purse
-    setTimeout(function () { AU.sample('purse'); if (heavy) setTimeout(function () { AU.sample('purse2'); }, 280); }, (start - ctx.currentTime) * 1000);
+    setTimeout(function () { AU.sample('purse'); if (heavy) setTimeout(function () { AU.sample('purse2'); }, 280); if (count >= 40) setTimeout(function () { AU.sample('prize'); }, 520); }, (start - ctx.currentTime) * 1000);   // 아주 큰 매출이면 금화 소리까지
     for (var i = 0; i < n; i++) {
       var gap = heavy ? 0.035 : count <= 3 ? 0.24 : 0.105;
       var at = start + i * gap + Math.random() * (heavy ? 0.16 : 0.045);
@@ -264,6 +329,8 @@
       sea: ['wake', 1.2 - k * 0.45], walk: ['breath', 2.9 - k * 0.6], horse: ['horse', 0.92 - k * 0.25], wagon: ['wagon', 1.15 - k * 0.3],
       run: ['run', 0.78 - k * 0.2], townstep: ['townstep', 0.94 - k * 0.2]
     }[kind];
+    // 말을 타고 가면 말발굽 녹음을 배경 소리로 깐다 (합성 말발굽 대신)
+    if (kind === 'horse' && AU.hasAmb('gallop')) { AU.amb({ gallop: 0.45 + 0.55 * k }); return true; }
     // 뭍의 탐험대: 녹음이 있으면 발걸음(여럿이 걷는 무거운 걸음)을 내고, 숨소리는 네 번에 한 번
     if (kind === 'walk' && AU.hasSample('landstep')) cfg = ['landstep', 1.0 - k * 0.2];
     if (!cfg || now < (travelAt[kind] || 0)) return false;
@@ -279,6 +346,8 @@
   var rainNode = null;
   AU.rain = function (v) {
     if (!ctx || ctx.state !== 'running') return false;
+    // 녹음한 빗소리가 있으면 그것을 깐다 (합성 빗소리는 끈다) — 배경 소리 rain
+    if (AU.hasAmb('rain')) { if (v) AU.amb({ rain: Math.min(1, 0.35 + 0.65 * v) }); v = 0; }
     if (!v) {
       if (rainNode) { var rn = rainNode; rainNode = null; rn.g.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.6); setTimeout(function () { try { rn.s.stop(); } catch (e) { /* 이미 멈춤 */ } }, 3000); }
       return false;

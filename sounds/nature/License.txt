@@ -1,0 +1,15 @@
+PLUS ULTRA — sounds/nature/ 출처
+
+Mixkit (https://mixkit.co) — Mixkit Sound Effects Free License (https://mixkit.co/license/#sfxFree)
+  게임·영상 등 작품 안에서 무료로 쓸 수 있고 출처 표기가 필요 없다. 효과음 파일만 따로 떼어 배포·판매할 수는 없다.
+  sea_waves(1196) sea_close(1195) sea_rough(1194) sea_birds(1185) sea_wind(1200) harbor(1208) rain(2399) storm(2390)
+  meadow(2472) forest(2473) night(2466) jungle(2433) jungle_rain(2415) gallop(77)
+  eagle(70) raven(62) songbird(68) goat(1771) donkey(310) horse_snort(80) dog(1) cat(93) hyena(419) lion(6)
+  wolf_howl(1775) wolves(2485) wolf_attack(1773) beast_roar(13) monster_roar(14) dragon_roar(16)
+  coins_clink(1993) coins_handle(1939) coin_prize(1999) war_drums(2784) boom_far(2782)
+
+Pixabay (https://pixabay.com) — Pixabay Content License (https://pixabay.com/service/license-summary/)
+  coin_spin   — universfield 「spinning coin on table」 (352448)
+  coin_drop1·2 — freesound_community 「coin sound」 (79325)에서 짧게 잘라 씀
+
+모두 ogg로 바꾸고 크기를 맞췄으며, 긴 배경 소리는 끝과 처음을 겹쳐 이음매 없이 반복되게 잘랐다.

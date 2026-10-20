@@ -89,8 +89,9 @@
       if (!bets.length) { await UI.say('돈이 없으면 앉을 자리도 없네.', opp); return; }
       var bet = await UI.choose('판돈을 정하십시오 — 소지금 ' + U.num(p.gold) + '닢', bets.map(function (b) { return { label: '금화 ' + U.num(b) + '닢', value: b, icon: 'coin' }; }).concat([{ label: '그만둔다', value: 0, icon: 'boot' }]), { width: 460, text: '<span class="muted">이 술집의 규칙: K-A-2-3-4처럼 에이스를 사이에 두고 돌아가는 연결도 스트레이트로 친다 (스트레이트 가운데 가장 낮다).</span>' });
       if (!bet) { await UI.say('쳇, 재미없군.', opp); return; }
+      if (G.Audio) G.Audio.sfx('bet');                                 // 판돈을 건다
       var res = await round(bet, opp);
-      if (res > 0) { p.gold += bet; if (G.Audio) G.Audio.sfx('coin'); }
+      if (res > 0) { p.gold += bet; if (G.Audio) G.Audio.sfx(bet >= 1000 ? 'prize' : 'coin'); }   // 큰 판을 따면 금화 소리
       else if (res < 0) p.gold -= bet;
       G.Game.refreshHud();
       if (!(await UI.confirm(res > 0 ? '이겼다! 금화 ' + U.num(bet) + '닢을 땄다. 한 판 더 하겠습니까?' : res < 0 ? '졌다... 금화 ' + U.num(bet) + '닢을 잃었다. 한 판 더 하겠습니까?' : '무승부. 한 판 더 하겠습니까?', '한 판 더', '그만둔다'))) return;

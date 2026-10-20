@@ -1033,6 +1033,7 @@
   T.update = function (dt) {
     if (!st || st.hidden) return;
     st.t += dt;
+    if (G.Audio && G.Audio.amb && Date.now() >= (st.ambAt || 0)) { st.ambAt = Date.now() + 300; G.Audio.amb({ harbor: 1 }); }   // 항구 바위에 찰싹이는 물결 (건물에 들어가면 사라진다)
     var moved = false;
     var k = 1 - Math.pow(0.0009, Math.min(0.05, dt));
     var d0 = st.camTo - st.cam;
