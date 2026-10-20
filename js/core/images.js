@@ -503,31 +503,35 @@
     }
     return age != null && age >= 40;
   };
-  /** 뒤를 이은 자녀(2대부터)의 가족 그림 정보 {sex, folder} — 저장된 player.heir, 옛 저장은 초상에 붙은 가족 그림 이름에서 알아낸다. 1대 제독은 null */
+  /** 뒤를 이은 자녀(2대부터)의 가족 그림 정보 {sex, folder, variant} — 저장된 player.heir, 옛 저장은 초상에 붙은 가족 그림 이름에서 알아낸다. 1대 제독은 null */
   I.heirKid = function (p) {
     if (!p) { var s = G.Game && G.Game.state; p = s && s.player; }
     if (!p || !(p.generation > 1)) return null;
     if (p.heir) return p.heir;
     var keys = [].concat((p.portrait && p.portrait.img) || []), m = null;
-    keys.some(function (x) { m = /^portraits\/family\/(?:([a-z_]+)\/)?(son|daughter)/.exec(String(x)); return !!m; });
-    return m ? { sex: m[2] === 'daughter' ? 'f' : 'm', folder: m[1] || '' } : null;
+    keys.some(function (x) { m = /^portraits\/family\/(?:([a-z_]+)\/)?(son|daughter).*?(?:_v([1-5]))?(?:_half)?$/.exec(String(x)); return !!m; });
+    return m ? { sex: m[2] === 'daughter' ? 'f' : 'm', folder: m[1] || '', variant: +(m[3] || 0) } : null;
   };
-  /** 뒤를 이은 자녀가 제독이 되었을 때의 얼굴·무릎상(half) 후보 — portraits/family/<폴더>/son_age15(_half) → son_age15(_half).
-      아들은 heirYoung(20)살이 되기 전까지만 소년의 모습이고 그 뒤로는 아버지의 생김새(젊은 얼굴 → 40대 얼굴)를 잇는다. 딸은 늘 딸의 그림. 해당 없으면 null */
+  /** 뒤를 이은 자녀가 제독이 되었을 때의 얼굴·무릎상(half) 후보 — 저장된 age15·age20 변형 → 지역·생김새별 그림 → 기본.
+      아들은 스무 살부터 age20을 쓰고 마흔부터 아버지의 40대 모습을 잇는다. 딸은 나이에 맞는 자녀 그림을 계속 쓴다. 해당 없으면 null */
   function heirChain(p, half, age) {
     var hk = I.heirKid(p); if (!hk) return null;
-    if (hk.sex !== 'f') {
-      if (age == null) { var s = G.Game && G.Game.state; if (!p) p = s && s.player; age = s && p === s.player && G.R && G.R.age ? G.R.age() : null; }
-      var lim = (G.BALANCE && G.BALANCE.family && G.BALANCE.family.heirYoung) || 20;
-      if (age == null || age >= lim) return null;
+    if (age == null) { var s = G.Game && G.Game.state; if (!p) p = s && s.player; age = s && p === s.player && G.R && G.R.age ? G.R.age() : null; }
+    if (hk.sex !== 'f' && age != null && age >= 40) return null;
+    var b = hk.sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', P = 'portraits/family/', out = [], v = +(hk.variant || 0);
+    var stage = age != null && age >= 20 ? 20 : 15;
+    if (v >= 1 && v <= 5) out.push(P + b + '_age' + stage + '_v' + v + sf);
+    if (hk.folder) out.push(P + hk.folder + '/' + b + '_age' + stage + sf);
+    out.push(P + b + '_age' + stage + sf);
+    if (stage === 20) {
+      if (v >= 1 && v <= 5) out.push(P + b + '_age15_v' + v + sf);
+      if (hk.folder) out.push(P + hk.folder + '/' + b + '_age15' + sf);
+      out.push(P + b + '_age15' + sf);
     }
-    var b = hk.sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', P = 'portraits/family/', out = [];
-    if (hk.folder) out.push(P + hk.folder + '/' + b + '_age15' + sf);
-    out.push(P + b + '_age15' + sf);
     return out;
   }
   I.heirChain = heirChain;
-  /** 대화창 얼굴: 40대 그림이 있으면 먼저, 없으면 고른 젊은 얼굴. 뒤를 이은 자녀는 가족 그림(아들은 스무 살 전까지)이 먼저 */
+  /** 대화창 얼굴: 뒤를 이은 자녀는 15세·20세 가족 그림이 먼저이고, 아들은 마흔부터 아버지의 40대 그림을 잇는다. */
   K.heroPortrait = function (p, age) {
     var id = I.heroLook(p), young = FACE + id, old = 'portraits/player-aged/' + id;
     var hc = heirChain(p, false, age); if (hc) return hc.concat([young]);
@@ -632,7 +636,7 @@
     // 아프리카(af 사헬·서아프리카, sw 스와힐리 해안, tr 열대 아프리카)는 아프리카·아랍 사람만. 열대(tropic) 묶음은 동남아·태평양 얼굴이라 동남아에만 쓴다
     af: ['africa', 'arabia'], sw: ['africa', 'arabia'], tr: ['africa'],
     'in': ['india'], se: ['seasia', 'tropic'], cn: ['china'], jp: ['japan'], kr: ['korea'], st: ['persia', 'china'],
-    co: ['iberia', 'france', 'westeurope'], az: ['native'], an: ['native'], na: ['native']
+    co: ['iberia', 'france', 'westeurope'], az: ['native'], an: ['inca'], na: ['native']
   };
   /** 도시 하나만 따로: 라사(티베트)는 초원 양식이지만 여급은 중국 묶음에서 */
   I.MAID_POOL_CITY = { 139: ['china'] };
@@ -828,11 +832,18 @@
     return both.length ? both : all;
   };
   K.player = function (face) { var l = I.heroFaces(); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
-  /** 아이 그림: 나이(stage 5·10·15)와 어머니 고장(region 폴더)에 맞는 것부터 — portraits/family/<고장>/daughter_age10(_half) → daughter_age10(_half) → daughter_<몇째> → daughter.
+  /** 아이 그림: 저장된 자녀 외형 변형(son_age10_v1…v5, daughter_age10_v1…v5)을 먼저 고른다.
+      변형이 없으면 portraits/family/<고장·제독 생김새>/son_age10(_half) → 기본 나이 그림 → 자녀 기본 그림.
       half = 무릎상(대화창 위에 서는 모습). 고르는 규칙은 js/systems/homelife.js (G.FAMILY_LOOK) */
-  K.kid = function (sex, order, stage, region, half) {
+  K.kid = function (sex, order, stage, region, half, variant) {
     var b = sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', P = 'portraits/family/', out = [];
-    if (stage) { if (region) out.push(P + region + '/' + b + '_age' + stage + sf); out.push(P + b + '_age' + stage + sf); }
+    if (stage) {
+      if (variant >= 1 && variant <= 5) {
+        out.push(P + b + '_age' + stage + '_v' + variant + sf);
+      }
+      if (region) out.push(P + region + '/' + b + '_age' + stage + sf);
+      out.push(P + b + '_age' + stage + sf);
+    }
     if (half) out.push(P + b + '_half'); else out.push(P + b + '_' + order, P + b);
     return out;
   };

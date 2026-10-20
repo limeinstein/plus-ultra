@@ -47,11 +47,11 @@ const ROOT = path.resolve(__dirname, '..');
         version: G.Scenes.title.version
       };
     });
-    assert.strictEqual(result.figures, 12, '역사 인물 12명');
+    assert.strictEqual(result.figures, 13, '역사 인물 13명');
     assert.deepStrictEqual(result.gates, { panama: true, tumbes: true, cusco: true, siege: true, tupac: true });
     assert(result.goldEvent && /잉카의 황금/.test(result.news), '금값 하락 시장 사건과 시대 소식');
     assert.deepStrictEqual(result.keys, ['cusco', 'panama', 'siege', 'tumbes', 'tupac']);
-    assert.strictEqual(result.version, '0.265');
+    assert.strictEqual(result.version, '0.268');
     assert.deepStrictEqual(errors, [], '콘솔 오류 0');
     console.log(JSON.stringify(result, null, 2));
   } finally {

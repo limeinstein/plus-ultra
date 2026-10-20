@@ -2,7 +2,8 @@
    내용은 js/data/homelife.js, 장면 그림은 js/art/homeart.js, 조정값은 G.BALANCE.homelife.
 
    저장 상태 (옛 저장에는 없다 — 쓸 때 만든다)
-   · 아이: k.edu['해:h:할 일'] = 올해 했다, k.playDay = 마지막으로 함께한 날, k.aim = 꿈(str·int·mar·cha), k.once = {한 번뿐인 일}
+   · 아이: k.edu['해:h:할 일'] = 올해 했다, k.playDay = 마지막으로 함께한 날, k.aim = 꿈(str·int·mar·cha), k.once = {한 번뿐인 일},
+           k.portraitVariant = 자녀 외형 변형(1~5, 이름·생일로 정해져 성장해도 유지)
            k.touch = 아버지와 함께한 횟수(할 일·집에서 생긴 일마다 1 — 옛 저장은 지금까지 한 일 수로 시작). 딸은 50번을 넘으면 왕실이 탐내는 신부감 (js/systems/kidwed.js)
    · 제독: p.keeps = [{id, kid, y}] 추억의 물건, p.homeEvt = 집에서 일이 생긴 마지막 날, p.homeSeen = 집에 마지막으로 들른 날,
            p.homeGap = {dinner: 날, portrait: 해} */
@@ -13,10 +14,10 @@
   function S() { return G.Game.state; }
   function F() { return G.Family; }
   function B() { return (G.BALANCE && G.BALANCE.homelife) || {}; }
-  function LOOK() { return G.FAMILY_LOOK || { stages: [[3, 5], [8, 10], [13, 15]], scale: {}, region: {} }; }
+  function LOOK() { return G.FAMILY_LOOK || { stages: [[3, 5], [8, 10], [13, 15], [20, 20]], scale: {}, region: {} }; }
 
   // ---------------------------------------------------------------- 아이 그림
-  /** 나이에 맞는 그림 번호 (5·10·15). 세 살 아래 아기는 0 */
+  /** 나이에 맞는 그림 번호 (5·10·15·20). 세 살 아래 아기는 0 */
   HL.stage = function (k) {
     var age = F().kidAge(k), st = 0;
     LOOK().stages.forEach(function (x) { if (age >= x[0]) st = x[1]; });
@@ -37,9 +38,19 @@
     var same = (S().player.kids || []).filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); });
     return Math.max(1, same.indexOf(k) + 1);
   }
+  /** 자녀마다 이름·생일에서 안정적으로 정한 외형 변형(1~5). 옛 저장도 처음 보일 때 같은 규칙으로 채운다. */
+  HL.variant = function (k) {
+    if (!k) return 0;
+    var saved = +k.portraitVariant;
+    if (saved >= 1 && saved <= 5) return saved;
+    var b = k.born || {}, seed = [k.name || '', b.y || 0, b.m || 0, b.d || 0, k.mother || '', order(k)].join('|'), h = 2166136261;
+    for (var i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+    k.portraitVariant = (h >>> 0) % 5 + 1;
+    return k.portraitVariant;
+  };
   /** 아이 그림 후보 (half = 무릎상) */
   HL.chain = function (k, half) {
-    return G.Img.chain.kid(k.sex, order(k), HL.stage(k) || 5, HL.folder(k), half);   // 아기는 가장 어린 그림
+    return G.Img.chain.kid(k.sex, order(k), HL.stage(k) || 5, HL.folder(k), half, HL.variant(k));   // 아기는 가장 어린 그림
   };
   /** 대화에서 말하는 아이 */
   HL.speaker = function (k, withAge) {

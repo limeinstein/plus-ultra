@@ -2,8 +2,9 @@
    규칙은 js/systems/homelife.js, 장면 그림은 js/art/homeart.js, 조정값은 G.BALANCE.homelife (js/data/base.js).
 
    아이 그림 (images/portraits/family/): <고장>/daughter_age5 · _age10 · _age15 (+ _half = 무릎상), son_… — 고장 폴더가 없으면 바로 아래 것.
-   · 나이: 3~7살 = age5, 8~12살 = age10, 13살부터 = age15 (G.FAMILY_LOOK.stages)
-   · 폴더: 딸은 어머니의 고장(여급 그림 묶음과 같은 이름 — iberia·france·korea…, I.maidStyle), 아들은 제독의 생김새(I.heroLook — sea_dog·muscle_swordsman…). 폴더에 없으면 기본 그림.
+   · 자녀 변형: son_age5_v1 … _v5, daughter_age5_v1 … _v5 (+ _half). 이름·생일로 하나를 정해 5·10·15·20살과 후계 시절까지 유지한다.
+   · 나이: 3~7살 = age5, 8~12살 = age10, 13~19살 = age15, 20살부터 = age20 (G.FAMILY_LOOK.stages)
+   · 폴더: v1~v5 변형이 먼저다. 딸은 누락 때 어머니 고장(iberia·france·korea…), 아들은 제독 생김새(sea_dog·muscle_swordsman…) 그림으로 물러난다.
 
    할 일 한 가지 = { id, name, icon, min·max(나이), pic(장면 그림 이름), cost(금화), days(걸리는 날), need(조건 이름), once(평생 한 번),
      intro: [줄…], pick: {text, opts:[{label, cost, fx, say}]}, fx: {bond, str, int, mar, cha, sk:{특기:상한}, keep:'추억 이름'}, done: [줄…], cold: [줄…] }
@@ -12,8 +13,8 @@
 (function (G) {
   'use strict';
   G.FAMILY_LOOK = {
-    stages: [[3, 5], [8, 10], [13, 15]],          // [이 나이부터, 그림 번호]
-    scale: { 5: 0.6, 10: 0.76, 15: 0.92 },        // 대화창 위에 설 때의 키 (어른 = 1)
+    stages: [[3, 5], [8, 10], [13, 15], [20, 20]], // [이 나이부터, 그림 번호]
+    scale: { 5: 0.6, 10: 0.76, 15: 0.92, 20: 1 },  // 대화창 위에 설 때의 키 (어른 = 1)
   };
 
   G.HOME_ACTS = [

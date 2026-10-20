@@ -1,5 +1,5 @@
 /* 잉카 제국의 멸망 (1524~1572)에 나오는 실제 인물들 — G.HIST_FIG 에 덧붙인다. 사건은 js/systems/incafall.js. 2026-10-19 사용자 요청
-   얼굴 그림: images/portraits/history/<id>.webp (384×384) · <id>_half.webp (1024×1536 투명 무릎상) — images/portraits/history/PROMPT.md 「잉카 제국의 멸망」
+   얼굴 그림: images/portraits/history/<id>.webp (448×448) · <id>_half.webp (1024×1536 투명 무릎상) — images/portraits/history/PROMPT.md 「잉카 제국의 멸망」
    피사로·데 소토는 경쟁 탐험가 그림(portraits/rivals/<이름>)을 그대로 쓴다. 그림이 없으면 역할(role)·양식(st: ib 이베리아, an 안데스)으로 그린 얼굴. */
 (function (G) {
   'use strict';
@@ -16,6 +16,7 @@
     // ── 잉카 — 타완틴수유 (네 지방의 나라)
     atahualpa: { name: '아타우알파', title: '사파 잉카 · 태양의 아들', st: 'an', role: 'king', born: 1502, look: '30대, 위엄 있는 얼굴, 이마에 붉은 술 장식(마스카파이차), 박쥐 털로 짠 망토, 금 귀마개' },
     manco: { name: '망코 잉카 유팡키', title: '사파 잉카 · 와이나 카팍의 아들', st: 'an', role: 'king', born: 1516, look: '20대, 젊고 날카로운 얼굴, 마스카파이차, 뒷날에는 에스파냐 갑옷을 걸치고 말을 탄다' },
+    curaocllo: { name: '쿠라 오클로', title: '코야 · 망코 잉카의 왕비이자 저항 지도자', st: 'an', role: 'native', g: 'f', born: 1508, look: '20대 후반, 두 갈래 검은 댕기머리, 붉은색·청록색 직물 전투복과 리클랴 망토, 금 투푸 핀, 가죽 방패와 돌팔매' },
     villacumu: { name: '비약 우무', title: '태양 신전의 대사제', st: 'an', role: 'priest', born: 1480, look: '50대, 금 원반 가슴 장식, 흰 운쿠, 엄하고 깊은 눈' },
     tupacamaru: { name: '투팍 아마루', title: '빌카밤바의 마지막 잉카', st: 'an', role: 'king', born: 1545, look: '20대 후반, 여윈 얼굴, 쇠사슬에 묶였지만 꼿꼿한 몸, 검은 망토' },
     toledo: { name: '프란시스코 데 톨레도', title: '페루 부왕', st: 'ib', role: 'noble', born: 1515, look: '50대, 엄격한 얼굴, 검은 옷에 흰 러프, 칼라트라바 기사단 십자가' }

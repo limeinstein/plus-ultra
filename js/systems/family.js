@@ -46,7 +46,7 @@
   function atHome() { var s = S(); return s.loc && s.loc.mode === 'city' && s.loc.city === (G.R.seat ? G.R.seat() : s.player.home); }   // 가족이 사는 도시 (총독 관저로 옮겼으면 그 개척 도시 — js/systems/colony.js)
   F.atHome = atHome;
   /** 지금 견습으로 배에 타고 있는 아이들 */
-  F.aboard = function () { return (S().player.kids || []).filter(function (k) { return k.aboard; }); };
+  F.aboard = function () { return (S().player.kids || []).filter(function (k) { return k.aboard && !k.lost; }); };   // k.lost: 섬에서 사라진 아이 (js/systems/peterpan.js)
 
   /** 아이의 타고난 능력: 제독을 닮고 조금씩 다르다 */
   function inborn() {
@@ -106,7 +106,7 @@
   F.newMonth = function () {
     var s = S(), p = s.player, out = [], c = cfg(), home = F.atHome();
     (p.kids || []).forEach(function (k) {
-      if (k.unnamed) return;
+      if (k.unnamed || k.lost) return;                             // 섬에서 사라진 아이 (js/systems/peterpan.js)
       var age = F.kidAge(k);
       if (k.aboard) {
         k.sea = (k.sea || 0) + 1;                                    // 함께 바다에 나간 달 수
@@ -208,6 +208,7 @@
     for (var i = 0; i < p.kids.length; i++) {
       var k = p.kids[i], age = F.kidAge(k), b; if (!k.st) k.st = inborn(); if (!k.edu) k.edu = {};
       if (k.unnamed || k.house != null) continue;          // 둘째 부인의 집에 사는 아이는 그 집에서 만난다
+      if (k.lost) { if (G.Peter) await UI.say(G.Peter.homeLine(k), w); continue; }   // 섬에서 사라진 아이 (js/systems/peterpan.js)
       b = F.bond(k);
       var sp = G.HomeLife ? G.HomeLife.speaker(k, true) : { name: k.name + ' (' + age + '세 · ' + F.bondWord(k) + ')', portrait: F.kidSpec(k), lang: 3 };
       if (k.aboard) {
@@ -296,7 +297,7 @@
   };
 
   /** 뒤를 이을 수 있는 아이: 어른이 된 아들 (딸은 뒤를 잇지 않는다) */
-  F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && k.sex !== 'f' && F.kidAge(k) >= ad; }); };
+  F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && !k.lost && k.sex !== 'f' && F.kidAge(k) >= ad; }); };
 
   F.retire = async function (forced) {
     var s = S(), p = s.player;
@@ -345,6 +346,7 @@
     // 새 제독의 모습: 아버지의 생김새(걷는 그림·일기토·스무 살 뒤의 얼굴)를 잇고, 아이 때의 그림 폴더를 기억한다 (G.Img.heirKid — 얼굴·전신상)
     var heirLook = G.Img.heroLook ? G.Img.heroLook(p) : (p.look || 'admiral');
     var heirArt = { sex: k.sex === 'f' ? 'f' : 'm', folder: (G.HomeLife ? G.HomeLife.folder(k) : '') || '' };
+    heirArt.variant = G.HomeLife && G.HomeLife.variant ? G.HomeLife.variant(k) : +(k.portraitVariant || 0);
     s.player = {
       look: heirLook, heir: heirArt,
       name: k.name, nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },

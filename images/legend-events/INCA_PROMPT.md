@@ -1,6 +1,6 @@
 # 잉카 제국의 멸망 — 장면 그림 주문서 (2026-10-19)
 
-사건: `js/systems/incafall.js` · 인물: `js/data/incafall.js`. 그림을 넣기만 하면 바로 쓰인다(코드 수정 없음). 없으면 장면 그림은 건너뛴다.
+사건: `js/systems/incafall.js` · 인물: `js/data/incafall.js`. 2026-10-20에 아래 여섯 장면과 전용 등장인물 초상을 모두 적용했다. 없으면 장면 그림은 건너뛴다.
 규격은 다른 장면 그림(`legend-events/cinderella_glass_slippers`)과 같다 — 가로 1881×836, 같은 화풍. 해상도를 낮추지 않는다.
 
 | 파일 | 장면 | 나오는 곳 |
@@ -11,3 +11,11 @@
 | `inca_coricancha.webp` | 쿠스코 태양의 신전 코리칸차 안뜰. 금으로 빚은 옥수수밭(금 줄기·은 이삭), 금 라마와 금 목동. 병사들이 지렛대로 벽의 금판을 뜯고, 흰 운쿠의 대사제가 멀리서 바라본다 | 쿠스코 (1533~1535) |
 | `inca_sacsayhuaman.webp` | 밤의 쿠스코 포위(1536). 지그재그 거석 성벽 위에 잉카 군의 횃불, 불붙은 초가지붕들, 돌팔매 | 쿠스코 (1536~1537) |
 | `inca_ollantaytambo.webp` | 우루밤바 골짜기의 올란타이탐보. 계단식 돌 밭 위에 잉카 전사들, 물길이 터진 들판의 진창에 말들이 빠진다. 계단 위에 말 탄 망코 잉카 | 망코 편 (1536~1537) |
+
+## 전용 인물 초상
+
+`images/portraits/history/<id>.webp`는 448×448 얼굴상, `<id>_half.webp`는 1024×1536 투명 무릎상이다. 돈키호테·산초의 사실적 회화 톤과 조명을 기준으로 통일했다.
+
+`pizarro` · `almagro` · `luque` · `hpizarro` · `desoto` · `valverde` · `felipillo` · `atahualpa` · `manco` · `curaocllo` · `villacumu` · `tupacamaru` · `toledo`
+
+쿠라 오클로는 성인 코야이자 망코 잉카의 저항 지도자로 쿠스코·삭사이와만·올란타이탐보 장면과 대사에 등장한다.

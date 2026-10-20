@@ -28,7 +28,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
   await page.waitForFunction(() => true); await page.waitForTimeout(500);
   const payload = payloads.filter(row => row && row.voyage).pop();
   ok(!!payload, '현재 항해 현황을 실시간 접속 신호에 포함');
-  ok(payload.version === '0.267' && payload.surface === 'game', '버전과 게임 화면 구분 전송');
+  ok(payload.version === '0.268' && payload.surface === 'game', '버전과 게임 화면 구분 전송');
   ok(!JSON.stringify(payload).includes('개인정보시험'), '실제 플레이어명은 전송하지 않음');
   ok(payload.voyage.current.name === '리스본' && payload.voyage.fame === 12345 && payload.voyage.playDays === 402, '게임 속 현재 도시·명성·항해 일수 전송');
   ok(payload.voyage.foundDiscoveries.length === 1 && payload.voyage.missingDiscoveries.length > 0, '발견·미발견 발견물 목록 분리');
