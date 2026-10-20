@@ -43,6 +43,8 @@
     }
     st.alive = true; st.busy = 0; st.keys = {}; st.dir = null;
     buildUI();
+    // 스코틀랜드의 작은 섬에 상륙: 견습 아이가 피터를 찾아 사라진다 (js/systems/peterpan.js)
+    if (arg.landing && G.Peter) { var st0 = st; st0.busy++; setTimeout(function () { (st0.alive ? G.Peter.onLanding(S().loc.lon, S().loc.lat) : Promise.resolve()).catch(function (e) { console.error(e); }).then(function () { st0.busy--; if (st0.alive) refreshHud(); }); }, 700); }
     if (G.Audio) G.Audio.music('land');
     if (G.EventFx) G.EventFx.preload('land');
     if (G.Party.preloadSprites) G.Party.preloadSprites(MT().id);
@@ -717,6 +719,8 @@
       refreshHud();
       // 야영을 마친 뒤: 독일 숲의 잠자는 숲속의 공주 · 덴마크 섬에서 사냥하다 만나는 인어공주 (js/systems/fairytales.js)
       if (v && G.Tale && G.Game.scene === L && S().loc.mode === 'land') { await G.Tale.onCamp(v, l.lon, l.lat); refreshHud(); }
+      // 스코틀랜드의 섬에서 약초를 캐면 피터 팬이 사라진 아이를 데려온다 (js/systems/peterpan.js)
+      if (v && G.Peter && G.Game.scene === L && S().loc.mode === 'land') { await G.Peter.onCamp(v, l.lon, l.lat); refreshHud(); }
       // 같은 곳을 맴돌며 야영하면 윌슨·표류기 (js/systems/castaway.js)
       if (v && G.Castaway && G.Game.scene === L && S().loc.mode === 'land') { await G.Castaway.afterCamp(); refreshHud(); }
     } catch (e) { console.error(e); }
@@ -927,6 +931,7 @@
     }
     s.loc.mount = { id: 'walk', n: 0 };
     delete s.landReturn;
+    if (G.Peter && !wiped && b.type !== 'city') { try { await G.Peter.onLeave(); } catch (e) { console.error(e); } }   // 섬에 두고 가는 아이 (js/systems/peterpan.js)
     G.State.log('육상 탐험을 마쳤다 — ' + sum);
     setTimeout(function () { UI.toast('육상 탐험을 마쳤다 — ' + sum, 'boot', 6000); }, 700);
     if (b.type === 'city') await UI.fade(function () { G.Game.go('city', { cityId: b.city, via: 'sea' }); });

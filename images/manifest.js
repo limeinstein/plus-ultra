@@ -4956,6 +4956,8 @@ G.IMAGE_FILES = {
   "portraits/legendary/nongae_half": "portraits/legendary/nongae_half.webp",
   "portraits/legendary/oda_nobunaga": "portraits/legendary/oda_nobunaga.webp",
   "portraits/legendary/oda_nobunaga_half": "portraits/legendary/oda_nobunaga_half.webp",
+  "portraits/legendary/peter_pan": "portraits/legendary/peter_pan.webp",
+  "portraits/legendary/peter_pan_half": "portraits/legendary/peter_pan_half.webp",
   "portraits/legendary/porthos": "portraits/legendary/porthos.webp",
   "portraits/legendary/porthos_half": "portraits/legendary/porthos_half.webp",
   "portraits/legendary/red_turban_archer": "portraits/legendary/red_turban_archer.webp",
