@@ -16,7 +16,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_|net::/.test(m.text())) errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Audio && G.SFX_FILES, null, { timeout: 90000 });
     const F = await page.evaluate(() => G.SFX_FILES);
     const files = [...new Set(Object.values(F.sets).flatMap(e => e.f).concat(Object.values(F.amb).map(e => e.f)))];
