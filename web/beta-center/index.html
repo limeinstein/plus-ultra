@@ -29,6 +29,7 @@
       <a href="#privacy">익명 통계</a>
       <a href="#feedback">피드백</a>
       <a href="#releases">배포 이력</a>
+      <a href="#voyages">항해 지도</a>
       <a class="nav-play" href="../">베타판 실행</a>
     </nav>
   </header>
@@ -69,7 +70,7 @@
       <div>
         <p class="kicker">ANONYMOUS VOYAGE LOG</p>
         <h2 id="privacy-title">누구인지가 아니라, 얼마나 항해했는지만 봅니다</h2>
-        <p>센터 방문 횟수, 베타판 실행 횟수, 실제 조작이 있었던 플레이 시간과 현재 접속자 수를 기록합니다. 이름·IP·계정·쿠키·기기 식별자·방문 경로는 저장하지 않습니다. 실시간 집계에는 탭을 닫으면 사라지는 무작위 임시 키만 쓰며 90초 뒤 집계에서 빠지고 10분이 지난 기록은 다음 집계 때 삭제됩니다.</p>
+        <p>센터 방문 횟수, 베타판 실행 횟수와 현재 접속 항해의 게임 속 위치·명성·항해 일수·발견 수를 기록합니다. 플레이어명은 서버로 보내지 않고 이름과 무관한 한 글자 익명 표식만 씁니다. IP·계정·쿠키·기기 식별자·방문 경로도 저장하지 않으며, 90초 뒤 공개 집계에서 빠지고 10분이 지난 임시 기록은 다음 집계 때 삭제됩니다.</p>
       </div>
       <a class="stats-link" href="https://plus-ultra-telemetry.luminary121284.chatgpt.site/" target="_blank" rel="noopener">공개 통계 보기 →</a>
     </section>
@@ -141,6 +142,27 @@
       </div>
       <div class="release-list">
         <details open>
+          <summary><span><b>VERSION 0.267</b><small>2026-10-20 · 정식·베타</small></span><i>익명 항해 지도</i></summary>
+          <div class="release-body">
+            <h3>실시간 익명 항해 통계</h3>
+            <ul>
+              <li>현재 접속 항해의 게임 속 위치를 세계 지도에 표시하고, 명성과 항해 기간 순위를 한 글자 익명 표식으로 공개합니다.</li>
+              <li>발견물·방문 도시의 완료·미완료 수, 발견 수가 가장 많은 항해자와 자주 발견된 발견물·도시를 함께 집계합니다.</li>
+              <li>실제 플레이어명은 전송하지 않으며 이름과 무관한 무작위 표식만 사용합니다. 항해 기록은 실시간 세션 동안만 유지됩니다.</li>
+            </ul>
+            <h3>관리자 점검</h3>
+            <ul>
+              <li>현재 접속 항해별 미발견 발견물, 미발견 도시 이벤트와 미방문 도시의 구체적인 이름은 관리자 인증 화면에서만 확인할 수 있습니다.</li>
+            </ul>
+            <h3>자동항해와 거리 화면</h3>
+            <ul>
+              <li>자동항해 목적지에 방향·예상 일수를 표시하고, 목적지가 많으면 가까운 항구와 지역·대륙 순으로 접어 보여 줍니다. 즐겨찾기는 최대 10곳까지 맨 위에 고정됩니다.</li>
+              <li>투명 여백 때문에 떠 보이던 천막·크랄·숲·푸에블로 고장의 거리 건물을 바닥선에 맞추고 문 앞 이동 위치도 보정했습니다.</li>
+              <li>바다에서 너무 먼 내륙 도시의 조합에서 보물 지도를 만들 때 생기던 오류를 막았습니다.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
           <summary><span><b>VERSION 0.266</b><small>2026-10-20 · 정식·베타</small></span><i>최신 배포</i></summary>
           <div class="release-body">
             <h3>아즈텍 제국과 포카혼타스</h3>
@@ -354,6 +376,39 @@
         </details>
       </div>
     </section>
+
+    <section class="voyages" id="voyages" aria-labelledby="voyages-title">
+      <div class="section-heading voyage-heading">
+        <div><p class="kicker">LIVE ANONYMOUS FLEET</p><h2 id="voyages-title">지금, 세계를 항해하는 사람들</h2><p>최근 90초 안에 신호가 있는 베타 항해만 표시합니다. 표식은 플레이어명에서 가져오지 않은 무작위 한글 한 글자입니다.</p></div>
+        <p class="voyage-status" id="voyage-stats-status" role="status" aria-live="polite">항해 지도를 불러오는 중입니다…</p>
+      </div>
+      <div class="world-board">
+        <div class="world-map" role="img" aria-label="현재 접속 항해의 게임 속 위치를 나타낸 세계 지도">
+          <svg viewBox="0 0 1000 500" aria-hidden="true" focusable="false">
+            <rect width="1000" height="500" rx="18" class="map-ocean"/>
+            <g class="map-grid"><path d="M0 125H1000M0 250H1000M0 375H1000M250 0V500M500 0V500M750 0V500"/></g>
+            <g class="map-land">
+              <path d="M82 104l43-38 91-25 66 21 44 54-22 46-54 10-22 43-39-9-18-50-51-8-38-44zm171 122 47 15 34 52-13 82-38 81-26-42 10-63-30-68z"/>
+              <path d="M430 95l55-39 89 4 49 33 95-18 111 24 69 58-18 48-79-5-44 26-48-15-38 18-31-38-55 5-25-37-65 2-45-30zm84 111 61 10 49 58-11 105-54 74-45-61-24-90z"/>
+              <path d="M803 337l55-30 70 24 25 54-39 48-72-6-44-48zM892 119l37-16 28 28-18 27-42-8z"/>
+            </g>
+          </svg>
+          <div class="map-pins" id="voyage-map-pins"></div>
+          <div class="map-empty" id="voyage-map-empty">현재 지도에 표시할 항해가 없습니다.</div>
+        </div>
+        <aside class="fleet-summary" aria-label="발견 요약">
+          <article><small>발견물 최다 항해자</small><strong id="discovery-champion">—</strong><span id="discovery-champion-detail">접속 항해 없음</span></article>
+          <article><small>방문 도시 최다 항해자</small><strong id="city-champion">—</strong><span id="city-champion-detail">접속 항해 없음</span></article>
+          <article><small>가장 자주 발견된 발견물</small><strong id="popular-discovery">—</strong><span id="popular-discovery-detail">집계 대기 중</span></article>
+          <article><small>가장 자주 방문한 도시</small><strong id="popular-city">—</strong><span id="popular-city-detail">집계 대기 중</span></article>
+        </aside>
+      </div>
+      <div class="ranking-grid">
+        <section class="ranking-card" aria-labelledby="fame-ranking-title"><header><p class="kicker">FAME</p><h3 id="fame-ranking-title">명성 순위</h3></header><ol id="fame-ranking"></ol></section>
+        <section class="ranking-card" aria-labelledby="duration-ranking-title"><header><p class="kicker">VOYAGE DAYS</p><h3 id="duration-ranking-title">항해 기간 순위</h3></header><ol id="duration-ranking"></ol></section>
+      </div>
+      <p class="voyage-privacy">공개 화면에는 실제 이름과 세부 미발견 목록을 표시하지 않습니다. 미발견 발견물·도시 이벤트·미방문 도시의 이름은 관리자 인증 화면에서만 확인됩니다.</p>
+    </section>
   </main>
 
   <footer>
@@ -363,5 +418,6 @@
 
   <script src="feedback.js?v={{ASSET_HASH}}"></script>
   <script src="telemetry.js?v={{ASSET_HASH}}"></script>
+  <script src="voyage-stats.js?v={{ASSET_HASH}}"></script>
 </body>
 </html>

@@ -1572,3 +1572,15 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 
 /* 술집: 마주 앉은 사람의 인물 카드 (js/city/tavern.js T.showCard) */
 .mcard-solo { max-height: 74vh; }
+/* 자동항해 목적지 — 방향·즐겨찾기·지역 묶음 (js/city/harbor.js pickAutoDest) */
+.autodest .fav-star { margin-left: 10px; font-size: 22px; line-height: 1; color: #a08250; cursor: pointer; padding: 0 4px; }
+.autodest .fav-star:hover { color: #c8902c; transform: scale(1.15); }
+.autodest .fav-star.on { color: #d49a1e; text-shadow: 0 0 2px rgba(120,80,10,.45); }
+.autodest .autodest-head { font-size: 15px; font-weight: 700; color: var(--ink-soft); margin: 6px 2px -2px; letter-spacing: .02em; }
+.autodest .autodest-head .r { margin-left: 8px; font-weight: 400; }
+.autodest .autodest-group { background: linear-gradient(180deg, #f3e3c0, #e3cc9c); }
+.autodest .autodest-group .tri { width: 18px; color: var(--brass-deep); }
+.autodest .autodest-sub { margin-left: 22px; }
+.autodest { gap: 5px; }
+.autodest .choice { padding: 6px 14px; font-size: 19px; }
+.autodest .choice small { font-size: 14px; }

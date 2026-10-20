@@ -925,6 +925,12 @@ Codex가 그린 가족 그림 30장(`images/family-events/`, 576×256)으로 32�
 - 해적·함대와의 마주침, 입항, 반란, 가족·부하의 일처럼 결과가 큰 일은 예전처럼 늘 기다립니다.
 - `UI.autoRun(fn)` 안의 `UI.say`·`UI.ask`만 해당 (`js/ui/ui.js`) · 조정값 `G.BALANCE.seaAuto {on, ms}` · 점검 `node tests/sea_auto_smoke.js`
 
+## 거리 건물이 떠 보이던 것 (2026-10-20)
+- 아가데스(천막 고장)의 교역소·술집·여관 그림은 아래에 그림 높이의 23~25%쯤 빈칸(말뚝 끝·옅은 티끌)이 있어, 거리 바닥선에 그림 바닥을 맞추면 건물이 공중에 떠 보였습니다. 크랄·숲·푸에블로 고장 그림 몇 장도 조금씩 그랬습니다.
+- `tools/exterior_foot.py`가 그림마다 아래 빈칸을 재어 `js/data/exteriorfoot.js`(51장)에 적고, 거리(`js/scenes/town.js` trimFoot)가 3% 넘는 빈칸을 잘라 바닥선에 붙입니다. 문 자리(문턱)도 그만큼 맞춥니다. 새 건물 그림을 넣으면 `python3 tools/exterior_foot.py`를 다시 돌립니다.
+- 내륙 도시(아가데스)의 조합에서 보물 지도를 만들다 오류가 나던 것도 고쳤습니다 (바다가 먼 도시에는 보물 지도가 없다).
+- 점검 `node tests/exterior_foot_smoke.js` (아가데스·콰줄루·키투와·리스본)
+
 ## 탐험과 도시를 더 재미있게 (재미 설계)
 
 | 목표 | 장치 |

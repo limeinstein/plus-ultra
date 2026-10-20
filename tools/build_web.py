@@ -106,11 +106,12 @@ def build_beta_center():
     css = pages.read(os.path.join('web', 'beta-center', 'styles.css'))
     js = pages.read(os.path.join('web', 'beta-center', 'feedback.js'))
     telemetry = pages.read(os.path.join('web', 'beta-center', 'telemetry.js'))
+    voyage_stats = pages.read(os.path.join('web', 'beta-center', 'voyage-stats.js'))
     title_js = pages.read(os.path.join('js', 'scenes', 'title.js'))
     match = re.search(r"T\.version\s*=\s*'([0-9]+\.[0-9]{3})'", title_js)
     if not match:
         raise SystemExit('베타 센터에 쓸 게임 버전을 찾지 못했습니다.')
-    stamp = pages.short_hash(css + '\n' + js + '\n' + telemetry)
+    stamp = pages.short_hash(css + '\n' + js + '\n' + telemetry + '\n' + voyage_stats)
     html = html.replace('{{VERSION}}', match.group(1)).replace('{{ASSET_HASH}}', stamp)
     telemetry = telemetry.replace('{{VERSION}}', match.group(1))
     files = {
@@ -118,6 +119,7 @@ def build_beta_center():
         'center/styles.css': css,
         'center/feedback.js': js,
         'center/telemetry.js': telemetry,
+        'center/voyage-stats.js': voyage_stats,
     }
     for rel, content in files.items():
         emit(rel, content)

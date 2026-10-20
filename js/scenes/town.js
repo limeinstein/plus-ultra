@@ -205,6 +205,23 @@
     ctx.restore();
     return cv;
   }
+  /** 거리 건물 그림 아래의 빈칸(그림 높이의 몇 할)을 잘라 낸다 — 표(G.EXT_FOOT)를 먼저, 없으면 픽셀을 읽어서(못 읽으면 그대로).
+      빈칸이 TRIM_MIN(3%)보다 작으면 그대로 1을 돌려준다. 자르면 {cv, k: 옛 높이/새 높이} */
+  var TRIM_MIN = 0.03, TRIM_KEEP = 0.008;
+  function trimFoot(cv, key) {
+    var h = cv.height, p = G.EXT_FOOT ? (key && G.EXT_FOOT[key]) || 0 : null;   // 표에 없는 그림은 빈칸이 거의 없는 것
+    if (p == null) {
+      try {
+        var w = cv.width, data = cv.getContext('2d').getImageData(0, 0, w, h).data, need = Math.max(2, w * 0.04 / 2), y;
+        for (y = h - 1; y > h * 0.5; y--) { var n = 0; for (var x = 0; x < w; x += 2) if (data[(y * w + x) * 4 + 3] > 128) n++; if (n >= need) break; }
+        p = (h - 1 - y) / h;
+      } catch (e) { p = 0; }
+    }
+    if (!(p > TRIM_MIN)) return 1;
+    var nh = Math.max(1, Math.round(h * (1 - p + TRIM_KEEP))), out = A.canvas(cv.width, nh);
+    out.getContext('2d').drawImage(cv, 0, 0);
+    return { cv: out, k: h / nh };
+  }
   /** 그림 아래 빈칸의 높이(px): 알파가 뚜렷한 가장 아랫줄부터 그림 바닥까지 */
   function footOf(cv, id) {
     try {
@@ -325,8 +342,12 @@
         var img = key && I.get(key);
         var cv = img ? prescale(img, h, flip) : fallback(b.kind, c, h, rng);
         if (!cv) return;
+        // 그림 아래의 빈칸을 잘라 바닥선에 붙인다 (js/data/exteriorfoot.js — tools/exterior_foot.py): 아가데스 천막처럼 아래가 비면 떠 보였다
+        var cut = img ? trimFoot(cv, key) : 1;
+        if (cut !== 1) cv = cut.cv;
         // 문 자리 (js/data/exteriordoors.js — tools/exterior_doors.py): 제독은 문 앞에 서서 문턱까지만 걸어 들어간다
         var dr = key && G.EXT_DOORS && G.EXT_DOORS[key], door = dr ? { cx: flip ? 1 - dr[0] : dr[0], foot: dr[1] } : { cx: 0.5, foot: 0.97 };
+        if (cut !== 1) door.foot = Math.min(0.995, door.foot * cut.k);
         items.push({ kind: b.kind, arg: b.arg, name: b.name, icon: b.icon, cv: cv, w: cv.width, h: cv.height, x: 0, door: door });
       });
     // 볼거리(도시 건축 발견물): 건물 줄 사이 제자리(l[1] = 거리의 몇 할쯤)에 광장 한 칸을 비우고 선다 — 앞 건물에 가리거나 하늘에 뜨지 않게
