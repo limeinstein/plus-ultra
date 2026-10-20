@@ -34,7 +34,9 @@
     return n / k;
   }
   function pickSpot(rng, from) {
-    var b = B(), want = G.Nav && G.Nav.ready() ? G.Nav.component(G.Nav.nearestSea(from.lon, from.lat, 12)[0], G.Nav.nearestSea(from.lon, from.lat, 12)[1]) : null;
+    var b = B(), ns = G.Nav && G.Nav.ready() ? G.Nav.nearestSea(from.lon, from.lat, 12) : null;
+    if (G.Nav && G.Nav.ready() && !ns) return null;      // 바다가 먼 내륙 도시(아가데스 같은 사막의 대상 도시)의 조합에는 보물 지도가 없다
+    var want = ns ? G.Nav.component(ns[0], ns[1]) : null;
     for (var tries = 0; tries < 900; tries++) {
       var a = rng() * Math.PI * 2, d = b.minD + rng() * (b.maxD - b.minD);
       var lon = G.Geo.wrapLon ? G.Geo.wrapLon(from.lon + Math.cos(a) * d) : from.lon + Math.cos(a) * d, lat = from.lat + Math.sin(a) * d * 0.75;
