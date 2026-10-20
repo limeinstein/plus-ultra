@@ -1049,6 +1049,7 @@
     st.hsCool = 0; hitstop(I.hitstopRam * k); shake(I.shakeClash * k); flash(I.flashClash * k, '255,232,190');
     jolt(me, me.x - en.x, me.y - en.y, I.knock * 1.2 * k); jolt(en, en.x - me.x, en.y - me.y, I.knock * 1.2 * k);
     me.hitT = en.hitT = I.shipFlash;
+    if (G.Audio) { G.Audio.sfx('creak'); setTimeout(function () { if (G.Audio) G.Audio.sfx('draw'); }, 260); }   // 뱃전이 부딪쳐 삐걱이고, 칼을 뽑아 건너간다
     for (var i = 0; i < 3; i++) st.fx.push({ kind: 'clash', x: mx + U.rf(-14, 14), y: my + U.rf(-14, 14), t: 0, life: 0.4, seed: Math.random(), s: 1.3 });
   }
   /** 백병전 한 판: 더 많이 쓰러진 쪽이 밀려나고, 칼 부딪치는 불꽃과 쓰러진 선원 수가 뜬다 */

@@ -485,6 +485,7 @@
   C.leave = async function () {
     var B = cur && cur.B;
     if (B && B.leave) await B.leave(C.city(), cur.arg);
+    if (G.Audio && cur && cur.kind !== 'gate') G.Audio.sfx('doorClose');   // 건물을 나서며 문을 닫는다 (성문은 문이 아니다)
     cur = null;
     C.main();
   };

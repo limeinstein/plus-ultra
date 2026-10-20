@@ -38,10 +38,12 @@
     if (tab === 'menu') return I.settings();
     tab = tab || lastTab || 'admiral';
     var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
+    if (G.Audio) G.Audio.sfx('book');                               // 수첩을 편다
+    if (win.result && win.result.then) win.result.then(function () { if (G.Audio) G.Audio.sfx('bookClose'); });   // 덮는다
     var tabs = U.el('div', 'tabs');
     TABS.concat(S().story && G.Story ? [['story', '아버지의 사진']] : []).forEach(function (t) {   // 이야기 모드 (js/systems/story.js)
       var b = U.el('div', 'tab' + (t[0] === tab ? ' on' : ''), t[1]);
-      b.onclick = function () { U.$$('.tab', tabs).forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); show(t[0]); };
+      b.onclick = function () { U.$$('.tab', tabs).forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); if (G.Audio) G.Audio.sfx('page'); show(t[0]); };
       tabs.appendChild(b);
     });
     win.el.insertBefore(tabs, win.content);
@@ -266,7 +268,7 @@
           cv.className = 'relic-ic'; td.appendChild(cv);
         }
       });
-      U.$$('[data-eq]', el).forEach(function (b) { b.onclick = function () { var it = p.items[+b.dataset.eq], d = G.ITEM[it.id]; p.equip[d.kind === 'weapon' ? 'weapon' : 'armor'] = it.id; render(); }; });
+      U.$$('[data-eq]', el).forEach(function (b) { b.onclick = function () { var it = p.items[+b.dataset.eq], d = G.ITEM[it.id]; p.equip[d.kind === 'weapon' ? 'weapon' : 'armor'] = it.id; if (G.Audio) G.Audio.sfx(d.kind === 'weapon' ? 'draw' : 'equip'); render(); }; });
       U.$$('[data-story-photo]', el).forEach(function (b) { b.onclick = function () { G.Story.showPhoto(); }; });
       U.$$('[data-read]', el).forEach(function (b) { b.onclick = async function () { await G.Disc.readRelic(p.items[+b.dataset.read]); render(); }; });
       U.$$('[data-del]', el).forEach(function (b) { b.onclick = async function () {
