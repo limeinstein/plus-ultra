@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.268';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.269';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 

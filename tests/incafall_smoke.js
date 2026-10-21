@@ -19,7 +19,7 @@ const ROOT = path.resolve(__dirname, '..');
     if (message.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load resource/.test(message.text())) errors.push(message.text());
   });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && G.IncaFall, null, { timeout: 120000 });
     const result = await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -51,7 +51,7 @@ const ROOT = path.resolve(__dirname, '..');
     assert.deepStrictEqual(result.gates, { panama: true, tumbes: true, cusco: true, siege: true, tupac: true });
     assert(result.goldEvent && /잉카의 황금/.test(result.news), '금값 하락 시장 사건과 시대 소식');
     assert.deepStrictEqual(result.keys, ['cusco', 'panama', 'siege', 'tumbes', 'tupac']);
-    assert.strictEqual(result.version, '0.268');
+    assert.strictEqual(result.version, '0.269');
     assert.deepStrictEqual(errors, [], '콘솔 오류 0');
     console.log(JSON.stringify(result, null, 2));
   } finally {

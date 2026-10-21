@@ -22,7 +22,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => { document.querySelectorAll('.modal-back').forEach(e => e.remove()); });
   }
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     await page.evaluate(() => G.Game.ensureGeo());
     await page.waitForFunction(() => G.Game.geoReady, null, { timeout: 120000, polling: 200 });

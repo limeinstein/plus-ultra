@@ -12,7 +12,7 @@ const ROOT = path.resolve(__dirname, '..');
   const page = await b.newPage({ viewport: { width: 1600, height: 900 } });
   const errs = []; page.on('pageerror', e => errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error' && !/Failed to load|net::|fonts|ERR_FILE/.test(m.text())) errs.push('CONSOLE ' + m.text()); });
   await page.addInitScript(() => { window.requestAnimationFrame = () => 0; });
-  await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+  await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForFunction(() => window.G && G.Game && G.Scenes && G.Scenes.sea && G.Scenes.city && G.Scenes.city.B.shipyard, null, { timeout: 90000 });
   const out = await page.evaluate(async () => {
     const R = []; const ok = (c, m) => R.push((c ? '✓ ' : '✗ ') + m);
@@ -62,7 +62,7 @@ const ROOT = path.resolve(__dirname, '..');
     ok(sh.rig === 1 && s.player.gold < g0, '1단 됨 (금화 ' + (g0 - s.player.gold) + '닢)');
     if (tech >= 3) { await click('2단'); await advance(); }
     if (tech >= 4) { await click('3단'); await advance(); }
-    await closeWin(); await closeWin(); await p.catch(() => {});
+    await closeWin(); await closeWin(); await Promise.race([p.catch(() => {}), sleep(2000)]);
     if (sh.rig < 3) { sh.rig = 3; sh.cap = Math.round(sh.cap * 0.96); R.push('   (조선 기술이 모자라 2·3단은 직접 매김)'); }
     const head3r = RR.fleetMotion(0, wind, env).vmg, down3r = RR.fleetMotion(Math.PI, wind, env).vmg;
     ok(head3r > head0 * 1.2, '삭구 3단: 맞바람 ' + head0.toFixed(3) + ' → ' + head3r.toFixed(3) + ' (+' + Math.round((head3r / head0 - 1) * 100) + '%)');
@@ -75,7 +75,7 @@ const ROOT = path.resolve(__dirname, '..');
     const pb = Y.buy(lis); await sleep(500);
     const buyTxt = (document.querySelector('.modal-back .win') || {}).textContent || '';
     ok(/맞바람/.test(buyTxt) && /(강함|보통|약함)/.test(buyTxt), '구입 카드에 맞바람 칸');
-    await closeWin(); await pb.catch(() => {});
+    await closeWin(); await Promise.race([pb.catch(() => {}), sleep(2000)]);
     // 5) 바다: 손으로 몰며 정면 맞바람 → 부관이 묻는다
     sh.rig = 0;
     s.settings.tackMode = 'on';                          // 설정 「맞바람 지그재그 — 언제나」 (기본은 곧게 — tests/tack_mode_smoke.js)
