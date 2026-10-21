@@ -20,8 +20,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_NAME|net::/.test(m.text())) errors.push(m.text()); });
+  await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/**', route => route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true}' }));
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);
+    const target = process.env.PAGE && /^https?:\/\//.test(process.env.PAGE) ? process.env.PAGE : pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href;
+    await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       const out = {}, UI = G.UI, CT = G.Court, F = G.Fame;
