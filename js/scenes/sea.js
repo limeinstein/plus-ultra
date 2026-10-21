@@ -416,11 +416,13 @@
     st.busy++;
     var v = null;
     try {
-      v = await UI.autoRun(function () { return UI.ask('제독, 바람을 정면으로 안고 있어 배가 거의 나아가지 못합니다. 이 방위로 지그재그를 하며 거슬러 오를까요?', [
-        { label: '지그재그로 거슬러 오른다', value: 'tack' }, { label: '이대로 손으로 몬다', value: null }], G.Scenes.mateSpeaker('first')); });
+      var zig = !G.Ctrl || !G.Ctrl.tackMode || G.Ctrl.tackMode() !== 'off';   // 설정 「맞바람 지그재그」가 곧게면 침로만 잡아 준다
+      v = await UI.autoRun(function () { return UI.ask(zig ? '제독, 바람을 정면으로 안고 있어 배가 거의 나아가지 못합니다. 이 방위로 지그재그를 하며 거슬러 오를까요?'
+        : '제독, 바람을 정면으로 안고 있어 배가 거의 나아가지 못합니다. 이 방위로 침로를 잡을까요? 돛을 비스듬히 받아 곧게 거슬러 오르겠습니다.', [
+        { label: zig ? '지그재그로 거슬러 오른다' : '침로를 잡고 거슬러 오른다', value: 'tack' }, { label: '이대로 손으로 몬다', value: null }], G.Scenes.mateSpeaker('first')); });
     } catch (e) { console.error(e); }
     st.busy--;
-    if (v === 'tack') { takeCourse(S().loc.heading); UI.toast('지그재그로 거슬러 오릅니다. 방향키를 누르면 다시 손으로 몹니다.', 'sail', 4200); }
+    if (v === 'tack') { takeCourse(S().loc.heading); UI.toast((G.Ctrl && G.Ctrl.tackMode && G.Ctrl.tackMode() === 'off' ? '침로를 잡고 거슬러 오릅니다.' : '지그재그로 거슬러 오릅니다.') + ' 방향키를 누르면 다시 손으로 몹니다.', 'sail', 4200); }
   }
   /** 사각돛 배가 맞바람에 굼뜰 때 부관이 일러 준다: 조선소 「개조」의 삭구 개량·돛 바꾸기 (석 달에 한 번) */
   function upwindTip() {
@@ -1102,7 +1104,8 @@
     } else if (st.path || st.dirCrs != null) {
       var crs = st.crs != null ? st.crs : h;
       m = R.fleetMotion(crs, wind);
-      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer && !st.pointerSteer && !portApproach();   // 방향키·마우스로 몰 때는 지그재그 없이 가리킨 쪽으로
+      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer && !st.pointerSteer && !portApproach() && tackAllowed(crs, m.theta);   // 방향키·마우스로 몰 때는 지그재그 없이 가리킨 쪽으로 · 설정 「맞바람 지그재그」
+      st.upwind = m.theta > 0.05;
       if (tack) {
         if (!st.tackTheta || !st.tackSide) st.tackSide = st.tackSide || (m.legP >= m.legM ? 1 : -1);
         st.tackTheta = m.theta;
@@ -1208,6 +1211,19 @@
     if (st.fx && G.SeaFX) G.SeaFX.step(st.fx, { x0: x0, y0: y0, x: l.lon, y: l.lat, h: l.heading, vx: vel[0], vy: vel[1], lat: lt, fwd: fw, turn: st.turnRate || 0, days: days }, shipGeom());
   }
   /** 지그재그 다리 방향 a로 0.15° 앞까지 넉넉한 물인가 */
+  /* 설정 「맞바람 지그재그」 (G.Ctrl.tackMode, 2026-10-21 — 「자동항해가 지그재그로 가서 불편하고 벽에 걸린다」):
+     off 곧게(기본) · open 먼바다에서만 — 두 다리 쪽 모두 openReach°까지 트여 있을 때 · on 언제나(예전).
+     곧게 가도 목적지로 다가가는 빠르기는 지그재그와 같다(vmg) — 맞바람이라 느린 것은 그대로, 뱃머리만 흔들리지 않는다 */
+  function tackAllowed(crs, theta) {
+    var mode = G.Ctrl && G.Ctrl.tackMode ? G.Ctrl.tackMode() : 'on';
+    if (mode === 'on') return true;
+    if (mode !== 'open') return false;
+    var l = S().loc, R0 = (FXS().openReach || 0.6);
+    return [1, -1].every(function (sg) {
+      var a = crs + sg * theta, c = Math.cos(a), sn = Math.sin(a);
+      return [0.35, 0.7, 1].every(function (f) { return G.Geo.isSea(l.lon + c * R0 * f, l.lat + sn * R0 * f, 0.5); });
+    });
+  }
   function legRoom(a) {
     var l = S().loc, c = Math.cos(a), sn = Math.sin(a);
     return G.Geo.isSea(l.lon + c * 0.08, l.lat + sn * 0.08, 0.5) && G.Geo.isSea(l.lon + c * 0.15, l.lat + sn * 0.15, 0.5);
@@ -1793,6 +1809,7 @@
       : st.manual ? (st.paused ? '수동 조타 — ↑ 돛을 펴고 출발 · ←→ 제자리에서 뱃머리 · Space 순항' : st.cruise ? '수동 조타(순항) — ←→ 뱃머리 · ↓·Space 멈춤' : '수동 조타 — ↑ 누르는 동안 나아가고 떼면 서서히 멈춤 · Space 순항')
       : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : followOn() ? '정지 — 마우스 따라가기 켬: 가려는 쪽 바다를 누르면 따라갑니다 · 방향키로도 출발 · 탐색 가능' : '정지 — 바다를 누르거나 방향키로 출발 · 탐색 가능') : followOn() ? '표류 중 — 가려는 쪽 바다를 누르면 마우스를 따라갑니다' : '표류 중 — 바다를 누르면 그곳까지 갑니다 · 마우스 따라가기는 ' + G.Keys.label('mouseFollow').replace(/^(왼쪽|오른쪽) /, ''));
     if (!st.manual && st.tackTheta && !st.paused) tgt += ' · <span style="color:#ffd98a">맞바람 — 지그재그로 거슬러 오르는 중</span>';
+    else if (!st.manual && st.upwind && !st.paused && (st.path || st.dirCrs != null)) tgt += ' · <span style="color:#ffd98a">맞바람 — 바람을 안고 천천히 거슬러 오르는 중</span>';
     if (st.handSteer) tgt += ' · 키를 잡는 동안 ×1';
     var v, vTxt;
     var now = st.paused ? 0 : shipSpeed();
