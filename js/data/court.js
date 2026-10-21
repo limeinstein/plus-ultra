@@ -25,7 +25,8 @@
     supplyPay: 2.2,                 // 납품 값 = 기준 시세 × 수량 × 이 배수
     shipsN: [2, 0.5, 5],            // 나포·해적 토벌 척수: [0] + [1] × 칸 (최대 [2])
     geoN: [1, 0.34, 3],             // 지리·자연 발견 건수
-    zooN: 5,                        // 동물원에 들일 신기한 동물 수
+    zooN: 5,                        // 동물원에 들일 신기한 동물 수 (식물은 빼고)
+    gardenN: 3,                     // 왕실 정원에 바칠 식물 수 — 찾아낸 식물·씨앗·묘목 (js/city/garden.js, 2026-10-21)
     museumN: 3,                     // 박물관에 바칠 발견 유물·명작 수 (js/systems/court.js — 다 바치면 그 도시에 왕립 박물관)
     galleryN: 3,                    // 미술관에 바칠 명작 수 (유럽 궁정 한정)
     exhibitSo: 25,                  // 박물관·미술관·동물원에 제독이 바친 것이 걸릴 때 한 점(한 종)마다 오르는 사교 명성 (2026-10-17)
@@ -157,6 +158,7 @@
     geo:      { name: '지리상의 발견', cat: 'ex', icon: 'compass' },
     treasure: { name: '보물 발견', cat: 'ex', icon: 'chest' },
     zoo:      { name: '동물원 건설', cat: 'ex', icon: 'star' },
+    garden:   { name: '왕실 정원 가꾸기', cat: 'ex', icon: 'leaf' },
     museum:   { name: '박물관 건립', cat: 'so', icon: 'bust' },
     gallery:  { name: '미술관 건립', cat: 'so', icon: 'palette' },
     supply:   { name: '교역품 납품', cat: 'tr', icon: 'sack' },
@@ -168,5 +170,5 @@
     envoy:    { name: '외교 특사', cat: 'so', icon: 'handshake' }
   };
   // 갈래마다 내놓을 수 있는 왕명
-  G.COURT.byCat = { ex: ['geo', 'treasure', 'zoo'], tr: ['supply', 'tribute'], bt: ['capture', 'rescue', 'pirates'], so: ['letter', 'envoy', 'museum', 'gallery'] };
+  G.COURT.byCat = { ex: ['geo', 'treasure', 'zoo', 'garden'], tr: ['supply', 'tribute'], bt: ['capture', 'rescue', 'pirates'], so: ['letter', 'envoy', 'museum', 'gallery'] };
 })(window.G = window.G || {});

@@ -69,7 +69,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 3) 동물원 건설 — 다음 작위
       G.Fame.add('ex', 10000); want = 'zoo';
       let zs = null; for (let i = 0; i < 300 && !zs; i++) { s.court.offers = {}; s.seed = 900 + i; if (CT.offers(king).some(x => x.kind === 'zoo')) zs = s.seed; }
-      G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city').slice(0, 5).forEach(d => { s.disc[d.id] = { me: true, found: 15100601 }; });
+      G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city' && !(G.Court.isPlant && G.Court.isPlant(d))).slice(0, 5).forEach(d => { s.disc[d.id] = { me: true, found: 15100601 }; });
       await CT.audience(king); out.zooTaken = CT.task() && CT.task().kind;
       await CT.audience(king);
       out.zooAt = s.court.zooAt.PT && s.court.zooAt.PT.ids.length;
@@ -95,7 +95,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const rel = Object.keys(G.RELIC).filter(id => G.RELIC[id].kind === 'treasure').slice(3, 5);
       const items = rel.map(id => ({ id, name: G.RELIC[id].name, desc: G.RELIC[id].desc, value: G.RELIC[id].price, disc: G.RELIC[id].relic }))
         .concat([{ id: 'masterwork', name: '「갑판 위의 학당」', desc: '갑판에 모인 부하들을 옛 철학자들처럼 늘어세운 큰 그림.', value: 11000, mw: true, by: 'raffaello', wk: 'paint', n: 0, y: 1509 }]);
-      s.court = { titles: { PT: 2 }, museum: { PT: { city: 0, y: 1510, sp: 'pt_king', items } }, zoo: { PT: 1510 }, zooAt: { PT: { city: 0, y: 1510, sp: 'pt_king', ids: G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city').slice(0, 5).map(d => d.id) } } };
+      s.court = { titles: { PT: 2 }, museum: { PT: { city: 0, y: 1510, sp: 'pt_king', items } }, zoo: { PT: 1510 }, zooAt: { PT: { city: 0, y: 1510, sp: 'pt_king', ids: G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city' && !(G.Court.isPlant && G.Court.isPlant(d))).slice(0, 5).map(d => d.id) } } };
       G.Game.go('city', { cityId: 0 });
       await new Promise(r => setTimeout(r, 2500));
       return G.Town && G.Town.active ? G.Town.active() : null;

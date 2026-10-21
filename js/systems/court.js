@@ -10,7 +10,11 @@
      작위는 가문의 것이라 제독의 뒤를 이은 자녀에게 그대로 이어진다.
    ■ 2026-10-16 왕명은 모든 종류 가운데 무작위로 셋(choices)이 나오고, 그 가운데 하나를 맡는다. 새 왕명 「박물관 건립」 — 발견 유물이나 명작(화실·조각실)을 셋 바친다.
      동물원·박물관 왕명을 마치면 그 군주의 도시에 왕립 동물원·왕립 박물관이 서고, 거기 들어가면 제독이 바친 동물·유물·명작을 볼 수 있다 (js/city/museum.js).
-   ■ 저장: s.court = {titles:{나라:칸}, task, offers, called, herald, seen, wait, zoo, zooUsed, zooAt:{나라:{city, y, ids}}, museum:{나라:{city, y, items}}, gallery:{나라:{city, y, items}}, done} — 없으면 빈 것으로 본다(옛 저장 그대로 열림) */
+   ■ 2026-10-21 왕실 정원: 식물(생물 발견물 가운데 나무·꽃·풀 — isPlant)과 식물 유물(씨앗·묘목·분재 — plantItem)은 박물관·미술관·동물원이 아니라
+     군주의 왕궁 안 「왕실 정원」에 바친다 (js/city/garden.js). 왕명 「왕실 정원 가꾸기」 — 정원에서 정원사에게 식물 gardenN종을 넘기면 그 자리에서 서임.
+     왕명이 없을 때도 정원에서 바칠 수 있다(한 종마다 사교 명성·신뢰). 옛 저장의 동물원·박물관에 들어가 있던 식물은 그 나라의 정원으로 옮긴다.
+   ■ 저장: s.court = {titles:{나라:칸}, task, offers, called, herald, seen, wait, zoo, zooUsed, zooAt:{나라:{city, y, ids}}, museum:{나라:{city, y, items}}, gallery:{나라:{city, y, items}},
+     garden:{나라:{city, sp, y, ids:[발견 id], items:[유물 기록], open}}, gardenUsed:{발견 id:1}, gardenDone:{나라:해}, done} — 없으면 빈 것으로 본다(옛 저장 그대로 열림) */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -22,7 +26,8 @@
   function st() {
     var s = S(); if (!s.court) s.court = {};
     var c = s.court;
-    ['titles', 'offers', 'called', 'herald', 'seen', 'wait', 'zoo', 'zooUsed', 'zooAt', 'museum', 'gallery'].forEach(function (k) { if (!c[k]) c[k] = {}; });
+    ['titles', 'offers', 'called', 'herald', 'seen', 'wait', 'zoo', 'zooUsed', 'zooAt', 'museum', 'gallery', 'garden', 'gardenUsed', 'gardenDone'].forEach(function (k) { if (!c[k]) c[k] = {}; });
+    if (!c.gmig) gardenMigrate(c);
     return c;
   }
   CT.state = st;
@@ -159,14 +164,58 @@
   function discCands(cats) {
     return G.DISCOVERIES.filter(function (d) { return cats.indexOf(d.cat) >= 0 && !d.bookOnly && d.how !== 'special' && !G.Disc.foundByMe(d.id) && G.Disc.available(d) && (!G.Disc.built || G.Disc.built(d)); });
   }
+  // ---------------------------------------------------------------- 식물 (왕실 정원 — 2026-10-21)
+  var PLANT_EXTRA = { bullocho: 1 };                     // plant 표시는 없지만 정원에 심는 것 (불로초 — 붉은 영지)
+  var PLANT_RELIC = { flowers: 1, huangshan: 1 };        // 자연 발견에서 가져온 식물 유물 (푸른 양귀비 씨앗 · 황산 소나무 분재)
+  /** 식물 발견물인가 (나무·꽃·풀) */
+  function isPlant(d) { return !!d && d.cat === 'creature' && !!(d.plant || PLANT_EXTRA[d.id]); }
+  CT.isPlant = isPlant;
+  /** 식물 유물(씨앗·묘목·분재)인가 — 소지품 하나 */
+  function plantItem(it) {
+    var r = it && G.RELIC && G.RELIC[it.id]; if (!r || r.kind !== 'animal') return false;
+    return isPlant(G.DISC[r.relic]) || !!PLANT_RELIC[r.relic];
+  }
+  CT.plantItem = plantItem;
+  function plantCands() { return discCands(['creature']).filter(isPlant); }
+  /** 정원에 바칠 수 있는 것: 찾아낸 식물(아직 어느 정원에도 없는 것) {d} + 소지품의 식물 유물 {it} */
+  function gardenPlants() {
+    var c = st(), out = [];
+    G.DISCOVERIES.forEach(function (d) { if (isPlant(d) && d.how !== 'city' && G.Disc.foundByMe(d.id) && !c.gardenUsed[d.id]) out.push({ d: d }); });
+    (S().player.items || []).forEach(function (it) { if (it && !it.evidence && plantItem(it)) out.push({ it: it }); });
+    return out;
+  }
+  CT.gardenPlants = gardenPlants;
+  /** 옛 저장: 동물원에 들어가 있던 식물과 박물관에 걸린 식물 유물을 그 나라의 왕실 정원으로 옮긴다 (한 번) */
+  function gardenMigrate(c) {
+    c.gmig = 1;
+    function gardenOf(realmId, rec) {
+      var g = c.garden[realmId];
+      if (!g) { var rm = G.COURT.realms[realmId], sp0 = rec && rec.sp ? G.SPONSOR[rec.sp] : rm && G.SPONSOR[rm.sponsors[0]]; g = c.garden[realmId] = { city: sp0 ? sp0.city : rec && rec.city, sp: sp0 ? sp0.id : null, y: rec && rec.y || S().date.y, ids: [], items: [] }; }
+      return g;
+    }
+    Object.keys(c.zooUsed).forEach(function (id) {
+      if (!isPlant(G.DISC[id])) return;
+      delete c.zooUsed[id]; c.gardenUsed[id] = 1;
+      var home = Object.keys(c.zooAt).filter(function (k) { return c.zooAt[k] && (c.zooAt[k].ids || []).indexOf(id) >= 0; })[0] || Object.keys(c.zoo)[0];
+      if (home) { var g = gardenOf(home, c.zooAt[home]); if (g.ids.indexOf(id) < 0) g.ids.push(id); }
+    });
+    Object.keys(c.zooAt).forEach(function (k) { var z = c.zooAt[k]; if (z && z.ids) z.ids = z.ids.filter(function (id) { return !isPlant(G.DISC[id]); }); });
+    Object.keys(c.museum).forEach(function (k) {
+      var m = c.museum[k]; if (!m || !m.items) return;
+      var pl = m.items.filter(function (x) { return !x.mw && plantItem({ id: x.id }); }); if (!pl.length) return;
+      m.items = m.items.filter(function (x) { return pl.indexOf(x) < 0; });
+      var g = gardenOf(k, m); pl.forEach(function (x) { g.items.push(x); });
+    });
+  }
   function zooAnimals() {
     var c = st();
-    return G.DISCOVERIES.filter(function (d) { return d.cat === 'creature' && d.how !== 'city' && G.Disc.foundByMe(d.id) && !c.zooUsed[d.id]; });
+    return G.DISCOVERIES.filter(function (d) { return d.cat === 'creature' && !isPlant(d) && d.how !== 'city' && G.Disc.foundByMe(d.id) && !c.zooUsed[d.id]; });   // 식물은 왕실 정원으로
   }
   /** 박물관에 바칠 수 있는 소지품: 발견 유물(증거품·단서 빼고)과 화가·조각가의 명작 */
   function museumItems() {
     return (S().player.items || []).filter(function (it) {
       if (!it || it.evidence || it.kind === 'clue' || it.kind === 'keepsake' || it.tale) return false;
+      if (plantItem(it)) return false;                     // 씨앗·묘목·분재는 왕실 정원으로
       return !!(it.mw || (G.RELIC && G.RELIC[it.id]));
     });
   }
@@ -208,10 +257,17 @@
     } else if (kind === 'zoo') {
       if (st().zoo[realm.id]) return null;
       t.n = b.zooN;
-      if (zooAnimals().length + discCands(['creature']).length < t.n) return null;
+      if (zooAnimals().length + discCands(['creature']).filter(function (d) { return !isPlant(d); }).length < t.n) return null;
       t.title = '왕립 동물원을 세울 신기한 동물 ' + t.n + '종을 찾아 그려 온다';
-      t.desc = '제독이 직접 찾아낸 신기한 동물(생물 발견물 — 도시의 개·고양이·말은 빼고) ' + t.n + '종. 이미 찾아 둔 것도 쳐 준다. 다 모이면 ' + G.CITY_DATA[sp.city].name + '에 왕립 동물원이 선다.';
+      t.desc = '제독이 직접 찾아낸 신기한 동물(생물 발견물 — 도시의 개·고양이·말과 식물은 빼고) ' + t.n + '종. 이미 찾아 둔 것도 쳐 준다. 다 모이면 ' + G.CITY_DATA[sp.city].name + '에 왕립 동물원이 선다.';
       t.fame += 150;
+    } else if (kind === 'garden') {
+      if (st().gardenDone[realm.id]) return null;
+      t.n = b.gardenN || 3; t.got = 0;
+      if (gardenPlants().length + plantCands().length < t.n) return null;
+      t.title = '왕실 정원에 심을 진귀한 식물 ' + t.n + '종을 바친다';
+      t.desc = '제독이 찾아낸 먼 땅의 식물(생물 발견물 가운데 나무·꽃·풀)이나, 발견한 자리에서 가져온 씨앗·묘목·분재를 ' + t.n + '종. 왕궁 안 「왕실 정원」에서 정원사에게 넘긴다 — 이미 찾아 둔 것도 쳐 준다. 다 넘기면 ' + realm.name + '의 군주가 정원으로 나와 작위를 내린다.';
+      t.fame += 120;
     } else if (kind === 'museum') {
       if (st().museum[realm.id]) return null;
       t.n = b.museumN || 3;
@@ -300,6 +356,7 @@
     var s = S();
     if (t.kind === 'geo' || t.kind === 'treasure') { var n = Math.min(t.n, foundSince(t)); return { done: n >= t.n, text: '발견 ' + n + '/' + t.n }; }
     if (t.kind === 'zoo') { var z = Math.min(t.n, zooAnimals().length); return { done: z >= t.n, text: '신기한 동물 ' + z + '/' + t.n + '종' }; }
+    if (t.kind === 'garden') { var gg = Math.min(t.n, t.got || 0); return { done: gg >= t.n, text: '정원에 바친 식물 ' + gg + '/' + t.n + '종 (지금 가진 것 ' + gardenPlants().length + '종)' }; }
     if (t.kind === 'museum') { var mu = Math.min(t.n, museumItems().length); return { done: mu >= t.n, text: '바칠 유물·명작 ' + mu + '/' + t.n + '점' }; }
     if (t.kind === 'gallery') { var ga = Math.min(t.n, galleryItems().length); return { done: ga >= t.n, text: '바칠 명작 ' + ga + '/' + t.n + '점' }; }
     if (t.kind === 'supply') { var cg = s.fleet.cargo[t.good], q = cg ? cg.q : 0; return { done: q >= t.qty, text: G.GOOD[t.good].name + ' ' + Math.min(q, t.qty) + '/' + t.qty + '통' }; }
@@ -373,6 +430,7 @@
     if (t.kind === 'geo') return '세상의 끝이 어디인지, 그대의 눈으로 보고 와서 내게 들려주시오.';
     if (t.kind === 'treasure') return '옛사람들이 감춘 것을 찾아내시오. 그 이야기만으로도 궁정이 떠들썩해질 것이오.';
     if (t.kind === 'zoo') return '코끼리며 기린이며, 책에서만 보던 짐승들을 내 백성에게 보여 주고 싶소. 그대가 그 길을 열어 주시오.';
+    if (t.kind === 'garden') return '내 정원에는 이 땅의 꽃밖에 없소. 바다 건너 먼 땅의 나무와 꽃을 심어, 계절마다 세상을 거니는 기분을 맛보고 싶구려. 가져오거든 정원사에게 넘기시오.';
     if (t.kind === 'museum') return '먼 나라의 보물과 이름난 화가의 그림을 백성들도 볼 수 있게 하고 싶소. 그대가 모은 것 가운데 귀한 것을 나누어 주시오.';
     if (t.kind === 'gallery') return '이름난 화가와 조각가의 솜씨를 한자리에 모아 백성에게 보여 주고 싶소. 그대의 명작을 나누어 주시오.';
     if (t.kind === 'supply') return G.GOOD[t.good].name + U.jx(G.GOOD[t.good].name, '은/는') + ' 궁정에서 늘 모자라는 물건이오. 값은 섭섭지 않게 치르겠소.';
@@ -401,7 +459,7 @@
     if (!t || t.sp !== sp.id) return;
     var p = CT.progress(t);
     if (!p.done) {
-      var v = await UI.ask('맡긴 일은 어찌 되었소?\n(' + t.title + ' — ' + p.text + ' · 남은 ' + Math.max(0, CT.remain(t)) + '일)', [
+      var v = await UI.ask('맡긴 일은 어찌 되었소?\n(' + t.title + ' — ' + p.text + ' · 남은 ' + Math.max(0, CT.remain(t)) + '일)' + (t.kind === 'garden' ? '\n식물은 이 왕궁 안 「왕실 정원」에서 정원사에게 넘기시오.' : ''), [
         { label: '아직 하는 중이라고 아뢴다', value: 0 },
         { label: '왕명을 내려놓는다 (신뢰 −' + B().failTrust + ' · 명성 −' + B().failFame + ')', value: 'quit' }], who);
       if (v === 'quit') {
@@ -422,10 +480,12 @@
     }
     if (t.kind === 'zoo') { var zl = zooAnimals().slice(0, t.n); zl.forEach(function (d) { c.zooUsed[d.id] = 1; }); c.zoo[realm.id] = s.date.y; c.zooAt[realm.id] = { city: sp.city, y: s.date.y, sp: sp.id, ids: zl.map(function (d) { return d.id; }) }; }
     // 제독이 바친 것이 박물관·미술관·동물원에 걸리면 사교 명성이 오른다 — 한 점(한 종)마다 B().exhibitSo (2026-10-17)
-    var exN = t.kind === 'museum' ? gave.length : t.kind === 'gallery' ? art.length : t.kind === 'zoo' ? zl.length : 0;
+    var exN = t.kind === 'museum' ? gave.length : t.kind === 'gallery' ? art.length : t.kind === 'zoo' ? zl.length : t.kind === 'garden' ? (t.got || 0) : 0;
+    if (t.kind === 'garden') c.gardenDone[realm.id] = s.date.y;
     t.exSo = exN ? G.Fame.add('so', exN * (B().exhibitSo == null ? 25 : B().exhibitSo)) : 0; t.exN = exN;
     var thanks = t.kind === 'rescue' ? '오오… ' + t.who + '! 무사했구나!\f' + s.player.name + ', 이 은혜는 평생 잊지 않겠소.'
       : t.kind === 'zoo' ? '이 그림들 좀 보시오! 이런 짐승이 정말 세상에 있단 말이오? 당장 사람을 보내 데려오게 하고, 성 밖에 동물원을 짓겠소.'
+      : t.kind === 'garden' ? '이 잎사귀며 꽃잎 좀 보시오! 정원사가 이런 것은 처음 본다며 손을 떨더구려. 내 정원이 온 세상을 품게 되었소.'
       : t.kind === 'museum' ? '이토록 귀한 것들을…! 왕궁 곁에 박물관을 짓고, 그대의 이름을 문 위에 새기겠소.'
       : t.kind === 'gallery' ? '훌륭하오! 이 명작들을 오래도록 보여 줄 미술관을 왕궁 곁에 세우겠소.'
       : t.kind === 'supply' ? '오, 정말로 구해 왔구려. 창고지기가 기뻐하겠소.'
@@ -479,6 +539,7 @@
     else if (d) x.disc = d.id;
     return x;
   }
+  CT.exhibitOf = exhibitOf;
   CT.exhibitSrc = function (x) { return x.mw ? (G.Studio && G.Studio.picture ? G.Studio.picture(x) : null) : (G.Img && G.Img.itemSrc ? G.Img.itemSrc({ id: x.id }) : null); };
   /** 이 도시에 제독이 세운 왕립 박물관·동물원·미술관 */
   CT.buildingsAt = function (cityId) {
@@ -494,7 +555,7 @@
   /** 동물원의 동물 (옛 저장은 동물원에 쓴 동물 모두) */
   CT.zooAnimalsOf = function (rec) {
     var ids = rec && rec.ids ? rec.ids : Object.keys(st().zooUsed);
-    return ids.map(function (id) { return G.DISC[id]; }).filter(Boolean);
+    return ids.map(function (id) { return G.DISC[id]; }).filter(function (d) { return d && !isPlant(d); });
   };
 
   // ================================================================ 기증 (2026-10-19)
@@ -510,6 +571,7 @@
     if (sp && tr) SP().addTrust(SP().rel(sp.id), n * tr);
     return so;
   }
+  CT.donateReward = donateReward;
   /** 한 점(한 종)씩 골라 기증한다 → {n, so} (그만두면 n 0) */
   CT.donate = async function (kind, realmId, curator) {
     var c = st(), s = S(), rec = kind === 'museum' ? c.museum[realmId] : kind === 'gallery' ? c.gallery[realmId] : null;
@@ -601,7 +663,8 @@
       (t.kind === 'zoo' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 동물원이 섰습니다. 도시에 들르면 바친 동물을 볼 수 있습니다.' : '') +
       (t.kind === 'museum' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 박물관이 섰습니다. 도시에 들르면 바친 유물·명작을 볼 수 있습니다.' : '') +
       (t.kind === 'gallery' ? '<br>' + G.CITY_DATA[sp.city].name + '에 왕립 미술관이 섰습니다. 도시에 들르면 바친 명작을 볼 수 있습니다.' : '') +
-      (t.exSo ? '<br>제독이 바친 ' + t.exN + (t.kind === 'zoo' ? '종' : '점') + U.jx(t.exN + (t.kind === 'zoo' ? '종' : '점'), '이/가') + ' 전시되어 사교 명성 <b>+' + t.exSo + '</b>' : '') + more, '서임');
+      (t.kind === 'garden' ? '<br>' + G.CITY_DATA[sp.city].name + ' 왕궁의 왕실 정원에 바친 식물이 자랍니다. 왕궁에 들르면 「왕실 정원」에서 볼 수 있습니다.' : '') +
+      (t.exSo ? '<br>제독이 바친 ' + t.exN + (t.kind === 'zoo' || t.kind === 'garden' ? '종' : '점') + U.jx(t.exN + (t.kind === 'zoo' || t.kind === 'garden' ? '종' : '점'), '이/가') + (t.kind === 'garden' ? ' 정원에 심어져' : ' 전시되어') + ' 사교 명성 <b>+' + t.exSo + '</b>' : '') + more, '서임');
     UI.toast(CT.fullName(tt, true) + '의 작위를 받았다!', 'crown', 6500);
     G.Game.refreshHud();
     if (s.settings.autosave !== false && G.State.save) G.State.save(0);
@@ -686,6 +749,7 @@
       else if (CT.pending(sp) && !t) sub = CT.isHome(realm) ? '부르심' : '명예 작위';
       else { var tt = CT.title(realm); sub = tt ? tt.ko : ''; dim = true; }
       out.push({ label: '왕명', icon: 'crown', sub: sub, dim: dim, onClick: function () { return CT.audience(sp); } });
+      if (G.Garden) out.push(G.Garden.menuItem(sp, realm));   // 왕궁 안의 왕실 정원 — 식물을 바치는 곳 (js/city/garden.js)
       var held = CT.marques().filter(function (x) { return x.realm === realm; }).length + CT.exempts().filter(function (x) { return x.realm === realm; }).length;
       out.push({ label: '특허장', icon: 'seal', sub: CT.rank(realm) ? (held ? '가진 것 ' + held + '장' : '사략허가장 · 면세증') : '작위 필요', dim: !CT.rank(realm), onClick: function () { return CT.charters(sp); } });
     }
@@ -955,6 +1019,8 @@
     if (ms.length) html += '<div class="muted" style="margin-top:6px;font-size:15px">제독이 세운 왕립 박물관: ' + ms.map(function (k) { var m = c.museum[k]; return G.CITY_DATA[m.city].name + ' (' + m.y + '년 · ' + m.items.length + '점)'; }).join(' · ') + '</div>';
     var gs = Object.keys(c.gallery);
     if (gs.length) html += '<div class="muted" style="margin-top:6px;font-size:15px">제독이 세운 왕립 미술관: ' + gs.map(function (k) { var g = c.gallery[k]; return G.CITY_DATA[g.city].name + ' (' + g.y + '년 · ' + g.items.length + '점)'; }).join(' · ') + '</div>';
+    var gd = Object.keys(c.garden).filter(function (k) { var g = c.garden[k]; return g && (g.ids.length || g.items.length); });
+    if (gd.length) html += '<div class="muted" style="margin-top:6px;font-size:15px">제독이 식물을 바친 왕실 정원: ' + gd.map(function (k) { var g = c.garden[k]; return G.CITY_DATA[g.city].name + ' (' + (g.ids.length + g.items.length) + '종)'; }).join(' · ') + '</div>';
     var zs = Object.keys(c.zoo);
     if (zs.length) html += '<div class="muted" style="margin-top:6px;font-size:15px">제독이 세운 왕립 동물원: ' + zs.map(function (k) { var r = G.COURT.realms[k]; return G.CITY_DATA[G.SPONSOR[r.sponsors[0]].city].name + ' (' + c.zoo[k] + '년)'; }).join(' · ') + '</div>';
     return html;

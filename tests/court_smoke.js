@@ -92,7 +92,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
           const ds = G.DISCOVERIES.filter(d => t.cats.includes(d.cat)).slice(0, t.n);
           ds.forEach(d => { s.disc[d.id] = { me: true, found: U_dn(s.date) }; });
         }
-        if (kind === 'zoo') G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city').slice(0, t.n).forEach(d => { s.disc[d.id] = { me: true, found: 14800601 }; });
+        if (kind === 'zoo') G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city' && !(G.Court.isPlant && G.Court.isPlant(d))).slice(0, t.n).forEach(d => { s.disc[d.id] = { me: true, found: 14800601 }; });
         function U_dn(d) { return d.y * 10000 + d.m * 100 + d.d; }
         const p1 = CT.progress(t).done, fame0 = s.player.fame, by0 = s.player.fameBy[t.cat];
         await CT.audience(king);
