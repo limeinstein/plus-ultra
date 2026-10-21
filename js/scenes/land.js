@@ -720,7 +720,8 @@
         if (U.chance(0.35)) { st.fastDays = 4; UI.toast('정찰 중에 지름길을 찾았다. 며칠 동안 걸음이 빨라진다.', 'boot', 4000); }
       } else if (v === 'herb') {
         spendDays(1);
-        if (U.chance(0.35 + R.skill('med') * 0.2 + R.skill('sci') * 0.1)) { st.herbs = 12; f.fatigue = Math.max(0, f.fatigue - 8); UI.toast('쓸 만한 약초를 넉넉히 캤다. 한동안 열병 걱정이 줄어든다.', 'drop', 4200); }
+        st.herbFound = U.chance(0.35 + R.skill('med') * 0.2 + R.skill('sci') * 0.1);   // 약초를 찾았나 (오를레앙의 처녀 잔 — js/systems/joan.js)
+        if (st.herbFound) { st.herbs = 12; f.fatigue = Math.max(0, f.fatigue - 8); UI.toast('쓸 만한 약초를 넉넉히 캤다. 한동안 열병 걱정이 줄어든다.', 'drop', 4200); }
         else UI.toast('약초를 알아볼 사람이 없어 헛걸음했다.', 'drop');
       }
       refreshHud();
@@ -728,6 +729,8 @@
       if (v && G.Tale && G.Game.scene === L && S().loc.mode === 'land') { await G.Tale.onCamp(v, l.lon, l.lat); refreshHud(); }
       // 스코틀랜드의 섬에서 약초를 캐면 피터 팬이 사라진 아이를 데려온다 (js/systems/peterpan.js)
       if (v && G.Peter && G.Game.scene === L && S().loc.mode === 'land') { await G.Peter.onCamp(v, l.lon, l.lat); refreshHud(); }
+      // 프랑스의 숲에서 약초를 찾으면 — 마녀로 몰린 오를레앙의 처녀 잔 (기함에 빈 예배실이 있을 때 · js/systems/joan.js)
+      if (v === 'herb' && G.Joan && G.Game.scene === L && S().loc.mode === 'land') { await G.Joan.onCamp(v, l.lon, l.lat, !!st.herbFound); refreshHud(); }
       // 같은 곳을 맴돌며 야영하면 윌슨·표류기 (js/systems/castaway.js)
       if (v && G.Castaway && G.Game.scene === L && S().loc.mode === 'land') { await G.Castaway.afterCamp(); refreshHud(); }
     } catch (e) { console.error(e); }
@@ -914,6 +917,7 @@
     return [lon, lat];
   }
   L.landPoint = landPoint;
+  L.camp = function () { return camp(); };   // 야영 메뉴 (시험용 — tests/joan_smoke.js)
   function nearestLand(lon, lat) {
     for (var r = 0.05; r < 0.6; r += 0.05) for (var a = 0; a < 16; a++) { var x = lon + Math.cos(a / 16 * 6.283) * r, y = lat + Math.sin(a / 16 * 6.283) * r; if (G.Geo.isLand(x, y)) return [x, y]; }
     return null;

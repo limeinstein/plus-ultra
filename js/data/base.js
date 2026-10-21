@@ -409,6 +409,8 @@
     //   med = 지중해 이슬람 항구로 치는 상자 [위도 남, 위도 북, 경도 서, 경도 동]. nonIslam = 이 나라가 다스리면 이슬람 도시라도 그냥 들어감
     // 남겨 둔 함대 (js/systems/strandfleet.js): 탐험대가 배에서 farDeg° 넘게 떨어진 항구에서 새 배를 지으면 원래 배는 그 자리에 남는다 —
     //   keepDays일 안에 findR° 안으로 찾으러 가면(출발 항구에 남겼으면 그 항구에 들어가면) 되찾고, 지나면 폐기. warn = 남은 날이 이만큼일 때 일러 줌
+    // 오를레앙의 처녀 잔 (js/systems/joan.js): 못 본 척하거나 일기토에 지면 coolDays일 뒤에 다시 (태우기를 거절하면 그 두 배)
+    joan: { coolDays: 30 },
     strand: { farDeg: 3, keepDays: 730, findR: 1.0, warn: [365, 90, 30] },
     sneak: { base: { holy: 0.1, islam: 0.4, closed: 0.25, treaty: 0.35, wanted: 0.3 },
       turban: 0.35, turbanHoly: 0.45, turbanChinaPort: 0.12, turbanChina: 0.04, mingrobe: 0.35, flag: 0.35,
