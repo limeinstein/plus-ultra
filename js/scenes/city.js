@@ -512,7 +512,15 @@
 
   // ---------------------------------------------------------------- entry refusal (called from sea when entering)
   /** returns null if free to enter, else {reason, text, bribe} */
+  /** 이 도시가 막는 까닭 {reason, text, bribe} 또는 null — 작위·사절이면 들어갈 수 있다 (C.entryWelcome · js/systems/sneak.js SN.welcome) */
   C.entryCheck = function (c) {
+    var b = entryBlock(c);
+    if (b && G.Sneak && G.Sneak.welcome && G.Sneak.welcome(c, b)) return null;
+    return b;
+  };
+  /** 막혔을 도시에 작위·사절로 들어갈 때 수비병의 말 {kind, realm, title, text} 또는 null */
+  C.entryWelcome = function (c) { var b = entryBlock(c); return b && G.Sneak && G.Sneak.welcome ? G.Sneak.welcome(c, b) : null; };
+  function entryBlock(c) {
     var s = S(), own = R.cityOwner(c);
     if (s.player.notoriety >= 60 && R.isHomeNation(c)) return { reason: 'wanted', text: '너 같은 악당을 마을에 들여보낼 수는 없다!!' };
     // 이슬람 성지·내륙·지중해 이슬람 도시는 이슬람 왕조가 다스리는 동안 이교도를 막는다 (js/systems/sneak.js G.Sneak)
@@ -524,18 +532,27 @@
     var tb = G.Treaty ? G.Treaty.entryBlock(c, own) : null;
     if (tb && !pass) return tb;
     return null;
-  };
+  }
   /** interactive handling; returns true if allowed in */
   C.handleEntry = async function (c) {
-    var chk = C.entryCheck(c); if (!chk) return true;
-    var s = S();
+    var chk = C.entryCheck(c), s = S();
     var guard = { name: c.name + ' 수비병', portrait: A.withImg(A.npcSpec('guard' + c.id, 'soldier', G.Img.folkStyle(c)), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
-    await UI.say(chk.text, guard);
+    if (!chk) {
+      // 작위·사절로 들어간다: 처음에는 수비병이 의심하다가 알아보는 말 · 다음부터는 짧게 알린다
+      var wel = C.entryWelcome ? C.entryWelcome(c) : null;
+      if (wel) {
+        var seen = s.flags.nobleIn || (s.flags.nobleIn = {}), key = wel.kind + ':' + (wel.kind === 'title' ? wel.realm.id + wel.title.n : wel.task.to);
+        if (seen[c.id] !== key) { seen[c.id] = key; await UI.say(wel.text, guard); }
+        else UI.toast(wel.kind === 'title' ? G.Court.fullName(wel.title) + ' — 수비병이 길을 비켜 섰다' : '사절의 신표 — 수비병이 길을 열었다', wel.kind === 'title' ? 'crown' : 'scroll', 3200);
+      }
+      return true;
+    }
+    await UI.say(chk.text + (G.Sneak && G.Sneak.wrongTitle ? G.Sneak.wrongTitle(c, chk) : ''), guard);   // 다른 나라의 작위는 소용없다
     for (;;) {
       var opts = [];
       if (chk.bribe) opts.push({ label: '교섭한다', value: 'talk' });
       var sch = G.Sneak ? G.Sneak.chance(c, chk.reason) : null;
-      opts.push({ label: '잠입한다' + (sch ? ' (가망 ' + Math.round(sch.p * 100) + '%' + (sch.dz ? ' · ' + G.ITEM[sch.dz].name : '') + ')' : ''), value: 'sneak' });
+      opts.push({ label: '잠입한다' + (sch ? ' (가망 ' + Math.round(sch.p * 100) + '%' + (sch.dz ? ' · ' + G.ITEM[sch.dz].name + (R.itemCount(sch.dz) > 1 ? ' ×' + R.itemCount(sch.dz) : '') : '') + ')' : ''), value: 'sneak' });
       if (chk.reason !== 'holy') opts.push({ label: '공격한다', value: 'attack' });
       opts.push({ label: '떠난다', value: 'leave' });
       var v = await C.mateAsk('제독, 어떻게 할까요?', opts);
@@ -564,13 +581,17 @@
         if (ch.dz) UI.toast(G.ITEM[ch.dz].name + '으로 변장했다', 'feather');
         if (U.chance(ch.p)) {
           if (G.Outcome) await G.Outcome.show('sneak_ok', { sub: c.name + '에 몰래 들어갔다' });   // 결과 연출: 발끝으로 경비 곁을 지나간다
-          await C.mate(ch.dz === 'turban' ? '터번 덕분에 아무도 우리를 의심하지 않았습니다. 제독, 이교도라는 것이 드러나지 않게 조심하십시오.' : ch.dz === 'mingrobe' ? '명나라 옷 덕분에 관리들이 우리를 그 고장 상인으로 여겼습니다. 제독, 말을 아끼십시오.' : '제독, 조심하십시오. 몰래 들어가는 데 성공했습니다.');
+          await C.mate(ch.dz === 'turban' ? '터번 덕분에 아무도 우리를 의심하지 않았습니다. 제독, 이교도라는 것이 드러나지 않게 조심하십시오.' : ch.dz === 'mingrobe' ? '명나라 옷 덕분에 관리들이 우리를 그 고장 상인으로 여겼습니다. 제독, 말을 아끼십시오.'
+            : ch.dz === 'flag_pt' || ch.dz === 'flag_es' ? G.ITEM[ch.dz].name + ' 덕분에 항구 관리들이 우리를 ' + (ch.dz === 'flag_pt' ? '포르투갈' : '에스파냐') + ' 배로 여겼습니다. 제독, 우리 나라 말은 삼가십시오.' : '제독, 조심하십시오. 몰래 들어가는 데 성공했습니다.');
           s.flags.sneaking = c.id; return true;
         }
         if (G.Outcome) await G.Outcome.show('sneak_fail', { sub: c.name + '의 경비에게 들키고 말았다' });   // 결과 연출: 등불에 비쳐 두 손을 든다
         await UI.say('침입자다! 잡아라!!', guard);
-        var lost = G.Sneak ? G.Sneak.caught(c, ch) : null;
-        if (lost) await UI.say('이 수상한 ' + lost + U.jx(lost, '은/는') + ' 압수한다!\n(' + lost + U.jx(lost, '을/를') + ' 빼앗겼다)', guard);
+        var lost = G.Sneak ? G.Sneak.caught(c, ch) : null;   // 쓴 변장 도구 하나를 불태운다 (여러 개면 남은 것을 다음에 쓴다)
+        if (lost) {
+          await UI.say('이 수상한 ' + lost.name + U.jx(lost.name, '은/는') + ' 당장 불태워 버려라!\n(' + lost.name + ' 하나가 불타 없어졌다' + (lost.left ? ' — 남은 것 ' + lost.left + '개' : '') + ')', guard);
+          if (lost.left) await C.mate('아직 ' + lost.name + U.jx(lost.name, '이/가') + ' ' + lost.left + '개 남았습니다. 다음에 다시 써 볼 수 있습니다.');
+        }
         if (U.chance(0.5)) { await C.mate('제독, 무사하셨습니까! 여기는 위험하니 포기합시다.'); return false; }
         var fine = Math.floor(s.player.gold * 0.5);
         s.player.gold -= fine; s.player.notoriety += 3;

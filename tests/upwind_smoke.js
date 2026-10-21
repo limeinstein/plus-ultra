@@ -78,6 +78,7 @@ const ROOT = path.resolve(__dirname, '..');
     await closeWin(); await pb.catch(() => {});
     // 5) 바다: 손으로 몰며 정면 맞바람 → 부관이 묻는다
     sh.rig = 0;
+    s.settings.tackMode = 'on';                          // 설정 「맞바람 지그재그 — 언제나」 (기본은 곧게 — tests/tack_mode_smoke.js)
     G.Game.go('sea', { depart: lis.id }); await sleep(300);
     const SEA = G.Scenes.sea, st = SEA.runtime();
     st.paused = false; st.manual = true; st.keys = { up: true }; st.cruise = true; st.thr = 1;

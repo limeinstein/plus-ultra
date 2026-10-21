@@ -68,6 +68,9 @@
     while (items.length < (k.bmItems || 3) && pool.length) { var i = Math.floor(r() * pool.length); items.push(pool.splice(i, 1)[0]); }
     items = items.map(function (id) { var d = G.ITEM[id]; return { id: id, name: d.name, price: itemPrice(id), early: d.from && y < d.from, sold: !!x.sold[id] }; });
     if (sw) items.unshift({ id: sw, name: G.ITEM[sw].name, price: itemPrice(sw), early: false, sold: !!x.sold[sw], named: true });   // 이 도시의 명검 (물건 수에 세지 않는다)
+    // 토르데시야스 조약 뒤: 상대 왕실의 국기 — 작위 없이 그 항구에 들어가려는 사람들을 위해 (기간마다 flagN장, 물건 수에 세지 않는다)
+    var fl = BM.flag();
+    if (fl) { var fn = k.bmFlags || 3, fs = x.sold[fl] || 0; items.push({ id: fl, name: G.ITEM[fl].name, price: itemPrice(fl), early: false, sold: fs >= fn, flag: true, left: fn - fs }); }
     // 밀수품: 먼 고장(지역 거리 3 이상)에서 나는 것 가운데, 이 도시가 팔지 않는 것
     var far = G.CITY_DATA.filter(function (o) { return R.cityExists(o) && o.goods && o.goods.length && G.REGION_DIST[c.region] && G.REGION_DIST[c.region][o.region] >= 3; });
     var goods = [], tries = 0;
@@ -81,6 +84,12 @@
     return { items: items, goods: goods };
   };
 
+  /** 이 제독에게 파는 국기 id: 토르데시야스 조약 뒤, 포르투갈 제독에게는 에스파냐 국기 · 에스파냐 제독에게는 포르투갈 국기 (아니면 null) */
+  BM.flag = function () {
+    var me = S().player.nation;
+    if (!G.Treaty || !G.Treaty.active || !G.Treaty.active()) return null;
+    return me === 'PT' ? 'flag_es' : me === 'ES' ? 'flag_pt' : null;
+  };
   /** 거간꾼의 귀띔: 다른 도시 뒷골목에 도는 명검 하나 (기간마다 바뀜) */
   BM.rumor = function (c) {
     var list = Object.keys(BM.SWORDS).map(Number).filter(function (id) { var o = G.CITY_DATA[id]; return id !== c.id && o && R.cityExists(o) && BM.sword(o) && G.ITEM[BM.SWORDS[id]].price >= 100000; });
@@ -104,7 +113,7 @@
       var st = BM.stock(c);
       var rows = st.items.map(function (it) {
         var d = G.ITEM[it.id] || {}, atk = d.kind === 'weapon' ? ' <small class="muted">공격 ' + d.atk + '</small>' : '';
-        return { label: (it.named ? '명검 · ' : '') + it.name + atk + (it.early ? ' <small class="warn-text">아직 시장에 나오지 않은 물건</small>' : ''), right: it.sold ? '팔렸다' : U.num(it.price) + '닢', value: 'i:' + it.id, desc: d.desc, thumb: G.Img.itemSrc ? G.Img.itemSrc({ id: it.id }) : null, icon: d.kind === 'weapon' ? 'sword' : 'seal', disabled: it.sold || it.price > s.player.gold };
+        return { label: (it.named ? '명검 · ' : '') + it.name + atk + (it.early ? ' <small class="warn-text">아직 시장에 나오지 않은 물건</small>' : '') + (it.flag ? ' <small class="muted">조약으로 막힌 항구에 잠입할 때 · 이번에 ' + Math.max(0, it.left) + '장</small>' : ''), right: it.sold ? '팔렸다' : U.num(it.price) + '닢', value: 'i:' + it.id, desc: d.desc, thumb: G.Img.itemSrc ? G.Img.itemSrc({ id: it.id }) : null, icon: d.kind === 'weapon' ? 'sword' : 'seal', disabled: it.sold || it.price > s.player.gold };
       }).concat(st.goods.map(function (g) {
         return { label: '밀수품: ' + g.name + ' <small class="muted">' + G.CITY_DATA[g.from].name + '에서 · ' + g.q + '통</small>', right: U.num(g.price) + '닢/통', value: 'g:' + g.id, icon: 'sack', disabled: !g.q || g.price > s.player.gold };
       }));
@@ -115,7 +124,7 @@
         var id = v.slice(2), it = st.items.filter(function (z) { return z.id === id; })[0];
         if (R.itemsFull()) { await C.mate('이 이상 가질 수 없습니다!'); continue; }
         if (!(await UI.confirm(it.name + '<br><span class="muted">' + (G.ITEM[id].desc || '') + '</span><br>금화 ' + U.num(it.price) + '닢에 사겠습니까?', '산다', '그만둔다'))) continue;
-        s.player.gold -= it.price; R.addItem(id, { from: c.id, paid: it.price }); x.sold[id] = 1;   // 산 곳 (같은 도시 시장에는 치른 값까지만)
+        s.player.gold -= it.price; R.addItem(id, { from: c.id, paid: it.price }); x.sold[id] = it.flag ? (x.sold[id] || 0) + 1 : 1;   // 산 곳 (같은 도시 시장에는 치른 값까지만) · 국기는 여러 장
         s.player.notoriety = (s.player.notoriety || 0) + (k.bmNoto || 1);
         G.State.log(c.name + '의 뒷골목 암시장에서 ' + it.name + U.jx(it.name, '을/를') + ' 샀다.');
         await C.say(who, U.pick(['좋은 거래였소. 어디서 났는지는 묻지 마시오.', '이 물건 이야기는 우리 둘만 아는 거요.']));

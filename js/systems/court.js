@@ -128,7 +128,9 @@
   CT.perkText = function () {
     var t = CT.best(); if (!t) return '';
     var h = B().haggle || { p: 0.04, disc: 0.005, own: 1.5 };
-    return '귀족의 권한 — 유럽·이슬람 도시에서 값 깎기 성공률 +' + Math.round(h.p * t.w * 100) + '%, 깎는 폭 +' + (Math.round(h.disc * t.w * 1000) / 10) + '%p (작위를 내린 나라의 땅에서는 ' + h.own + '배)';
+    var gates = CT.titles().filter(function (x) { return x.realm.kind === 'is' || x.realm.nation; }).map(function (x) { return x.realm.name; });
+    return '귀족의 권한 — 유럽·이슬람 도시에서 값 깎기 성공률 +' + Math.round(h.p * t.w * 100) + '%, 깎는 폭 +' + (Math.round(h.disc * t.w * 1000) / 10) + '%p (작위를 내린 나라의 땅에서는 ' + h.own + '배)' +
+      (gates.length ? ' · ' + gates.join('·') + '의 땅은 이교도·조약으로 막혀도 잠입 없이 들어간다' : '');   // js/systems/sneak.js SN.welcome
   };
 
   // ================================================================ 왕명 만들기

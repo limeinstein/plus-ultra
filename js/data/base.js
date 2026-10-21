@@ -371,8 +371,9 @@
     // 회계 단계(R.skill('acct'), 0~3)의 혜택 (js/systems/blackmarket.js G.Acct): 한 번 들를 때 흥정 횟수 tries[단계](경리가 있으면 +puTry, 거절될 때마다 성공률 ×retryK),
     //   시장에서 후려치기 성공 뒤 결제 추가 협상 marketDeals회(성공률 marketDealChance, 추가 할인 marketDealDisc),
     //   배가 버티는 무게 +wt[단계], blackMarket 단계부터 크기 bmSize 이상 항구의 비밀 암시장 — 물건 bmItems가지(값 ×bmMarkup)·밀수품 bmGoods가지(산지 값 ×bmGoodMarkup),
+    //   토르데시야스 조약 뒤에는 상대 왕실의 국기를 기간마다 bmFlags장 (js/systems/blackmarket.js BM.flag),
     //   bmPeriod일마다 바뀜, 거래마다 악명 +bmNoto
-    acct: { tries: [1, 2, 2, 3], puTry: 1, retryK: 0.7, wt: [0, 0.04, 0.08, 0.12], marketDeals: [0, 1, 2, 3], marketDealChance: [0, 0.55, 0.7, 0.85], marketDealDisc: [0, 0.03, 0.05, 0.07], blackMarket: 3, bmSize: 2, bmItems: 3, bmGoods: 2, bmMarkup: 1.5, bmGoodMarkup: 1.4, bmPeriod: 30, bmNoto: 1 },
+    acct: { tries: [1, 2, 2, 3], puTry: 1, retryK: 0.7, wt: [0, 0.04, 0.08, 0.12], marketDeals: [0, 1, 2, 3], marketDealChance: [0, 0.55, 0.7, 0.85], marketDealDisc: [0, 0.03, 0.05, 0.07], blackMarket: 3, bmSize: 2, bmItems: 3, bmFlags: 3, bmGoods: 2, bmMarkup: 1.5, bmGoodMarkup: 1.4, bmPeriod: 30, bmNoto: 1 },
     // 제독의 수명·생일 선물 (js/systems/lifespan.js): maxAge세 생일에 세상을 떠난다(아들이 있으면 뒤를 잇는다). warnFrom세부터 생일마다 귀띔.
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)
@@ -403,12 +404,13 @@
     // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)
     //   − 악명 × noto(최대 notoMax) − 얼마 전(alertDays일 안) 들킨 일(alert). min~max로 자른다.
     //   터번: 이슬람 도시 turban(성지 turbanHoly) · 중국 항구 turbanChinaPort · 중국 내륙 turbanChina. 명나라 옷: mingrobe
-    //   들키면 confiscate 확률로 변장 도구를 빼앗김. 교섭으로 받은 통행 허가는 passDays일.
+    //   국기(조약 항구에서 그 나라 배 행세 — 암시장): flag
+    //   들키면 confiscate 확률로 쓴 변장 도구 하나를 불태운다(1 = 언제나 — 여러 개 있으면 다음에 또 쓴다). 교섭으로 받은 통행 허가는 passDays일.
     //   med = 지중해 이슬람 항구로 치는 상자 [위도 남, 위도 북, 경도 서, 경도 동]. nonIslam = 이 나라가 다스리면 이슬람 도시라도 그냥 들어감
     sneak: { base: { holy: 0.1, islam: 0.4, closed: 0.25, treaty: 0.35, wanted: 0.3 },
-      turban: 0.35, turbanHoly: 0.45, turbanChinaPort: 0.12, turbanChina: 0.04, mingrobe: 0.35,
+      turban: 0.35, turbanHoly: 0.45, turbanChinaPort: 0.12, turbanChina: 0.04, mingrobe: 0.35, flag: 0.35,
       lang0: -0.1, langLv: 0.06, speech: 0.05, native: 0.1, noto: 0.003, notoMax: 0.2, alertDays: 30, alert: -0.15,
-      min: 0.05, max: 0.95, confiscate: 0.5, passDays: 365, med: [29, 41.5, -6.5, 37],
+      min: 0.05, max: 0.95, confiscate: 1, passDays: 365, med: [29, 41.5, -6.5, 37],
       nonIslam: ['카스티야', '에스파냐', '아라곤', '포르투갈', '프랑스', '영국', '잉글랜드', '네덜란드', '프로이센', '독일 제국', '이탈리아 왕국', '구호기사단',
         '베네치아', '제노바', '러시아 제국', '러시아 차르국', '돈 코사크', '스텐카 라진 반란군', '푸가초프 반란군', '영국 동인도 회사', '네덜란드 동인도 회사',
         '시크 미슬 연맹', '시크 제국', '마라타 동맹', '청', '준가르 칸국', '알와 왕국'] },

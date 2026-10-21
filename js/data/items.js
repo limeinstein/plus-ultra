@@ -43,7 +43,7 @@
     { id: 'sextant', name: '육분의', kind: 'tool', price: 2400, reg: [0, 1, 2], from: 1490, desc: '현재 위치의 위도와 경도를 알 수 있다.' },
     { id: 'astrolabe', name: '천문판', kind: 'tool', price: 1500, reg: [0, 2, 4], desc: '별로 위도를 잰다. 위도만 표시된다.' },
     { id: 'telescope', name: '망원경', kind: 'tool', price: 3800, reg: [1, 2], from: 1500, desc: '멀리 있는 함대를 먼저 발견하고, 망루와 정찰대가 수평선 너머의 발견물을 더 멀리서 알아챈다.' },
-    { id: 'turban', name: '터번', kind: 'tool', price: 400, reg: [2, 3, 4, 5, 7, 8], desc: '이슬람 상인처럼 변장한다. 이슬람 도시에 잠입할 때 크게, 중국 항구(회회 상인이 오가던 광주·천주 등)에서는 조금 도움이 된다.' },
+    { id: 'turban', name: '터번', kind: 'tool', price: 400, reg: [2, 3, 4, 5, 7, 8], desc: '이슬람 상인처럼 변장한다. 이슬람 도시에 잠입할 때 크게, 중국 항구(회회 상인이 오가던 광주·천주 등)에서는 조금 도움이 된다. 쓴다고 없어지지 않지만 들키면 불태워진다 — 여러 개 있으면 다음에 또 쓴다.' },
     { id: 'lime', name: '라임 절임', kind: 'tool', price: 600, reg: [0, 2, 3, 4, 5], consumable: 1, desc: '장기 항해의 괴혈병을 한동안(60일) 막아 준다. 이베리아·지중해·동아프리카·중근동·인도의 시장에서 판다.' },
     { id: 'cat', name: '배 고양이', kind: 'tool', price: 300, reg: [0, 1, 2], desc: '배에 사는 쥐를 잡아 식량을 지킨다.' },
     { id: 'charm', name: '행운의 부적', kind: 'tool', price: 1200, reg: [4, 3], desc: '이집트의 앵크. 작은 행운을 부른다.' },
@@ -77,7 +77,10 @@
     // 야영지에서 얻는 것 (js/systems/castaway.js)
     { id: 'wilson', name: '윌슨', kind: 'tool', price: 30, reg: [], rare: true, desc: '같은 야영지를 맴돌던 대원이 낡은 가죽 공에 숯으로 얼굴을 그려 넣은 말 없는 친구. 함께 있으면 야영에서 쉴 때 피로가 더 풀린다.' },
     { id: 'castawaylog', name: '표류기', kind: 'tool', price: 1600, reg: [], rare: true, desc: '한 야영지에서 석 달을 버티며 적은 나날의 기록. 물이 나는 곳·사냥감 다니는 길·날씨를 읽는 법이 담겨 육상 탐험 경비가 줄고 사냥·물 긷기가 넉넉해진다.' },
-    { id: 'mingrobe', name: '명나라 옷', kind: 'tool', price: 700, reg: [6, 8], desc: '명나라 상인의 단령(團領)과 망건. 쇄국한 중국 도시에 잠입할 때 크게 도움이 된다.' }
+    { id: 'mingrobe', name: '명나라 옷', kind: 'tool', price: 700, reg: [6, 8], desc: '명나라 상인의 단령(團領)과 망건. 쇄국한 중국 도시에 잠입할 때 크게 도움이 된다. 쓴다고 없어지지 않지만 들키면 불태워진다 — 여러 개 있으면 다음에 또 쓴다.' },
+    // 토르데시야스 조약 뒤 암시장에서만 (js/systems/blackmarket.js) — 상대 왕실 항구에 그 나라 배처럼 들어간다 (js/systems/sneak.js)
+    { id: 'flag_pt', name: '포르투갈 국기', kind: 'tool', price: 900, reg: [], rare: true, desc: '흰 바탕에 방패와 혼천의를 그린 포르투갈 왕실의 깃발. 토르데시야스 조약으로 막힌 포르투갈 항구에 잠입할 때 포르투갈 배 행세를 한다. 들키면 불태워진다 — 여러 장 있으면 다음에 또 쓴다.' },
+    { id: 'flag_es', name: '에스파냐 국기', kind: 'tool', price: 900, reg: [], rare: true, desc: '부르고뉴 십자가를 그린 에스파냐 왕실의 깃발. 토르데시야스 조약으로 막힌 에스파냐 항구에 잠입할 때 에스파냐 배 행세를 한다. 들키면 불태워진다 — 여러 장 있으면 다음에 또 쓴다.' }
   ];
   G.ITEM = {}; G.ITEMS.forEach(function (it) { G.ITEM[it.id] = it; });
   G.ITEM_KIND = { weapon: '무기', armor: '방어구', tool: '항해도구', gift: '장신구', mgift: '남자 선물', special: '특수', treasure: '보물', evidence: '증거품' };
