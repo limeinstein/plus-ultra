@@ -25,6 +25,9 @@
   function T() { return C().B.tavern; }
   G.BALANCE = G.BALANCE || {};
   G.BALANCE.wives = G.BALANCE.wives || { hideHome: 0.7, conceive: 0.3, maxKids: 5, maxSpouses: 12 };
+  // 2026-10-21 떠난 부인이 마음을 푸는 날수 · 부하와의 썸에서 결투한 뒤 (피로·규율·부인 충성)
+  if (G.BALANCE.wives.coldDays == null) G.BALANCE.wives.coldDays = 120;
+  if (!G.BALANCE.wives.affair) G.BALANCE.wives.affair = { fatigueWin: 15, fatigueLose: 25, wifeWin: 25, wifeLose: 15, discipline: 5 };
   function cfg() { return G.BALANCE.wives; }
 
   // ---------------------------------------------------------------- 누구인가
@@ -46,18 +49,7 @@
   /** 그 도시에 서 있는 둘째 부인의 집들 */
   W.housesAt = function (cid) { return W.list().filter(function (w) { return w.house && !w.aboard && w.city === cid; }); };
   /** 배에 함께 타고 있는 둘째 부인들 */
-  W.aboard = function () {
-    // 부하 출신 둘째 부인이 배에서 내렸는데(충성이 바닥나 떠남·해고) 「배에 함께」로 남아 있던 옛 저장: 제 집으로 보낸다 (QA 2026-10-21)
-    W.list().forEach(function (w) { if (w.aboard && w.kind === 'mate' && !mateRow(w.id)) W.mateLeft(w.id, true); });
-    return W.list().filter(function (w) { return w.aboard; });
-  };
-  /** 부하 출신 둘째 부인이 부하에서 빠졌다(떠남·해고): 배에서 내려 제 집(처음 만난 고장)에서 산다. 그 부인이면 기록을 돌려준다 */
-  W.mateLeft = function (id, quiet) {
-    var w = W.of(id); if (!w || w.kind !== 'mate' || !w.aboard) return null;
-    w.aboard = false; w.house = true; w.deliver = false;
-    if (!quiet) G.State.log(W.name(w) + U.jx(W.name(w), '이/가') + ' 배에서 내려 ' + W.cityName(w) + '의 집으로 갔다.');
-    return w;
-  };
+  W.aboard = function () { W.sync(); return W.list().filter(function (w) { return w.aboard; }); };
   function mateRow(id) { return S().mates.filter(function (m) { return m.id === id; })[0] || null; }
 
   // ---------------------------------------------------------------- 아이 수 (모두 합쳐 5명)
@@ -76,22 +68,23 @@
     var r = G.MATE_RANGE && G.MATE_RANGE[m && m.id]; if (r && r.home != null && G.CITY_DATA[r.home]) return r.home;
     return S().loc.city;
   }
-  function wedLog(name) { G.State.log(name + U.jx(name, '을/를') + ' 둘째 부인으로 맞았다.'); }
+  function wedLog(name) { var l = W.list(), w = l[l.length - 1]; G.State.log(name + U.jx(name, '을/를') + ' ' + (w ? W.ordinal(w) : '둘째 부인') + '으로 맞았다.'); }   // 막 맞은 부인 (목록 끝)
   /** 여급에게 청혼 (본처가 있을 때) — 그 도시에 집이 생긴다. true = 결혼함 */
   W.proposeMaid = async function (c, m, say) {
     var p = P();
     if (W.of(m.id)) { UI.toast('이미 부인입니다.', 'ring'); return false; }
     if (!W.canMarry()) { full(); return false; }
-    var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + m.name + U.jx(m.name, '은/는') + ' <b>둘째 부인</b>이 되어 이 도시 ' + c.name + '에 새 집을 얻어 삽니다. 그 집에서 아이를 가질 수도 있습니다.</small>', '청혼한다', '그만둔다');
+    var ord = W.ordinal(W.nextNo());
+    var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + m.name + U.jx(m.name, '은/는') + ' <b>' + ord + '</b>이 되어 이 도시 ' + c.name + '에 새 집을 얻어 삽니다. 그 집에서 아이를 가질 수도 있습니다.</small>', '청혼한다', '그만둔다');
     if (!ok) return false;
     R.removeItem('ring');
     if (G.Outcome) await G.Outcome.show('propose', { sub: m.name + U.jx(m.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
     await say('…고향에 부인이 계신 건 알아요. 그래도 저는 당신이 좋아요. 이 도시에서 당신을 기다릴게요.', 'shy');
-    W.list().push({ id: m.id, kind: 'maid', city: m.city, house: true, aboard: false, wed: S().day });
+    W.list().push({ id: m.id, kind: 'maid', city: m.city, house: true, aboard: false, wed: S().day, no: W.nextNo() });
     var st = S().maids[m.id]; if (st) st.aff = 100;
     wedLog(m.name);
     if (G.FamEv) { try { await G.FamEv.wedding({ id: m.id, second: true, city: c.id }); } catch (e) { console.error(e); } }   // 술집의 혼례 잔치
-    await UI.alert(m.name + U.jx(m.name, '과/와') + ' 혼인했다! ' + c.name + '에 「' + m.name + '의 집」이 생겼다. 도시 메뉴에서 찾아갈 수 있다.', '둘째 부인');
+    await UI.alert(m.name + U.jx(m.name, '과/와') + ' 혼인했다! ' + c.name + '에 「' + m.name + '의 집」이 생겼다. 도시 메뉴에서 찾아갈 수 있다.', ord);
     if (G.Game.cityHud) G.Game.cityHud();
     return true;
   };
@@ -100,12 +93,13 @@
     var p = P(), home = metCity(m), hc = G.CITY_DATA[home];
     if (W.of(d.id)) { UI.toast('이미 부인입니다.', 'ring'); return false; }
     if (!W.canMarry()) { full(); return false; }
-    var ok = await UI.confirm(d.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + d.name + U.jx(d.name, '은/는') + ' <b>둘째 부인</b>이 됩니다. 처음 만난 고장 ' + hc.name + '에 집을 마련해 데려다주거나, 부하로 남아 함께 항해할 수 있습니다.</small>', '청혼한다', '그만둔다');
+    var ord = W.ordinal(W.nextNo());
+    var ok = await UI.confirm(d.name + '에게 청혼하겠습니까?<br><small>고향에 본처(' + U.esc(Fm().wifeName()) + ')가 있으니 ' + d.name + U.jx(d.name, '은/는') + ' <b>' + ord + '</b>이 됩니다. 처음 만난 고장 ' + hc.name + '에 집을 마련해 데려다주거나, 부하로 남아 함께 항해할 수 있습니다.</small>', '청혼한다', '그만둔다');
     if (!ok) return false;
     R.removeItem('ring');
     if (G.Outcome) await G.Outcome.show('propose', { sub: d.name + U.jx(d.name, '이/가') + ' 반지를 받아 주었다' });   // 결과 연출 (js/ui/outcome.js)
     await say(d.witch ? '…둘째라도 상관없어요. 마녀는 원래 남의 눈 밖에서 사니까요.' : '…고향에 부인이 계신 건 알아요. 그래도 당신 곁에 있을래요.', 'shy');
-    var w = { id: d.id, kind: 'mate', city: home, house: false, aboard: true, wed: S().day };
+    var w = { id: d.id, kind: 'mate', city: home, house: false, aboard: true, wed: S().day, no: W.nextNo() };
     W.list().push(w);
     S().flags['gone_' + d.id] = 1;            // 이제 술집에 나타나지 않는다
     S().flags['wed_' + d.id] = 1;
@@ -114,7 +108,7 @@
     if (p.wifeAboard) {
       // 본처가 배에 있으니 둘째 부인은 배에 남을 수 없다 — 혼자 고장으로 떠난다
       settle(w, true);
-      await UI.alert(d.name + U.jx(d.name, '과/와') + ' 혼인했다. 하지만 배에는 본처가 타고 있어 ' + d.name + U.jx(d.name, '은/는') + ' 혼자 ' + hc.name + '로 떠났다. 그곳에 「' + d.name + '의 집」이 생겼다.', '둘째 부인');
+      await UI.alert(d.name + U.jx(d.name, '과/와') + ' 혼인했다. 하지만 배에는 본처가 타고 있어 ' + d.name + U.jx(d.name, '은/는') + ' 혼자 ' + hc.name + '로 떠났다. 그곳에 「' + d.name + '의 집」이 생겼다.', ord);
       return true;
     }
     var v = await UI.ask('앞으로 어떻게 할까?', [
@@ -122,9 +116,9 @@
       { label: '부하로 남아 함께 항해한다', value: 'sail' }], duo(w, 'warm'));
     if (v === 'home') {
       w.deliver = true;
-      if (S().loc.mode === 'city' && S().loc.city === home) { settle(w, false); await UI.alert(hc.name + '에 「' + d.name + '의 집」이 생겼다. ' + d.name + U.jx(d.name, '은/는') + ' 배에서 내려 그 집에서 산다.', '둘째 부인'); }
-      else await UI.alert(d.name + U.jx(d.name, '과/와') + ' 혼인했다! ' + hc.name + '에 들어가면 그곳에 집을 마련하고 배에서 내린다. 그때까지는 부하로 함께 간다.', '둘째 부인');
-    } else await UI.alert(d.name + U.jx(d.name, '과/와') + ' 혼인했다! 부하로 남아 함께 항해한다.<br><small class="muted">본국 항구에서는 남의 눈을 피해 숨기도 해서, 그동안은 특기를 쓸 수 없다. 처음 만난 ' + hc.name + '에 가면 집을 마련할 수 있다.</small>', '둘째 부인');
+      if (S().loc.mode === 'city' && S().loc.city === home) { settle(w, false); await UI.alert(hc.name + '에 「' + d.name + '의 집」이 생겼다. ' + d.name + U.jx(d.name, '은/는') + ' 배에서 내려 그 집에서 산다.', ord); }
+      else await UI.alert(d.name + U.jx(d.name, '과/와') + ' 혼인했다! ' + hc.name + '에 들어가면 그곳에 집을 마련하고 배에서 내린다. 그때까지는 부하로 함께 간다.', ord);
+    } else await UI.alert(d.name + U.jx(d.name, '과/와') + ' 혼인했다! 부하로 남아 함께 항해한다.<br><small class="muted">본국 항구에서는 남의 눈을 피해 숨기도 해서, 그동안은 특기를 쓸 수 없다. 처음 만난 ' + hc.name + '에 가면 집을 마련할 수 있다.</small>', ord);
     return true;
   };
   /** 둘째 부인이 배에서 내려 제 집에서 산다 (집이 없으면 생긴다). alone = 혼자 떠남 */
@@ -138,13 +132,14 @@
   W.board = async function (w) {
     var p = P();
     if (p.wifeAboard) { await UI.say('본처께서 배에 타고 계시잖아요. 저는 여기서 기다릴게요.', duo(w)); return; }
+    if (W.isCold(w)) { await UI.say('…아직은 배에 오르고 싶지 않아요. 당신이랑 한배에 있으면 또 숨이 막힐 것 같아요.', duo(w, 'sad')); return; }
     var mine = W.kidsOf(w).filter(function (k) { return Fm().kidAge(k) < 3; });
     if (w.preg && w.preg.told) { await UI.say('아기가 곧 태어나요. 지금은 배에 탈 수 없어요.', duo(w)); return; }
     if (mine.length) { await UI.say('아기가 아직 어려서 두고 갈 수 없어요. 조금 더 크면 함께 갈게요.', duo(w)); return; }
     var ok = await UI.confirm(W.name(w) + U.jx(W.name(w), '을/를') + ' 다시 배에 태워 부하로 함께 항해할까요?', '함께 간다', '그만둔다');
     if (!ok) return;
     w.aboard = true; w.house = true;          // 집은 그대로 남는다 (데려다주면 다시 산다)
-    if (!mateRow(w.id)) S().mates.push({ id: w.id, role: 'none', joined: U.dateNum(S().date), loyal: 90, from: w.city });
+    if (!mateRow(w.id)) S().mates.push({ id: w.id, role: 'none', joined: U.dateNum(S().date), loyal: w.warned ? 60 : 90, from: w.city });
     await UI.say(U.pick(['다시 바다로 나가는군요! 기다렸어요.', '집은 잘 잠가 둘게요. 가요, 당신.']), duo(w, 'happy'));
     UI.toast(W.name(w) + U.jx(W.name(w), '이/가') + ' 부하로 함대에 올랐다. (부하편성에서 역할을 맡기십시오)', 'people', 4500);
   };
@@ -211,6 +206,7 @@
   /** 매일 (family.js F.daily에 붙음): 둘째 부인의 임신 편지·출산 */
   W.daily = function () {
     var s = S(), out = [], fc = G.BALANCE.family || {};
+    W.sync();
     W.list().forEach(function (w) {
       var pr = w.preg; if (!pr) return;
       var here = there(w), nm = W.name(w);
@@ -288,11 +284,14 @@
   H2.sub = function (c, id) {
     var w = W.of(id); if (!w) return '';
     var kids = W.kidsOf(w);
-    return '둘째 부인' + (kids.length ? ' · 아이 ' + kids.length : '') + (w.preg && w.preg.told ? ' · 아기를 기다리는 중' : '');
+    return W.ordinal(w) + (W.isCold(w) ? ' · 아직 마음이 풀리지 않음' : '') + (kids.length ? ' · 아이 ' + kids.length : '') + (w.preg && w.preg.told ? ' · 아기를 기다리는 중' : '');
   };
   H2.enter = async function (c, id) {
     var w = W.of(id); if (!w) return false;
-    await UI.say(w.aboard   // 배에 함께 탄 둘째 부인이면 같이 돌아온 집 (2026-10-21)
+    if (W.isCold(w)) { await UI.say(U.pick(LEAVE.coldDoor), duo(w, 'sad')); UI.toast('문이 열리지 않는다. ' + Math.max(1, Math.round((w.cold - S().day) / 30)) + '달쯤 뒤에 다시 와 보자.', 'house', 4500); return false; }
+    var thawed = w.cold != null;   // 마음이 풀린 뒤 처음 찾아온 날: 인사 대신 화해의 말
+    if (thawed) { delete w.cold; await UI.say(U.pick(LEAVE.thaw), duo(w, 'warm')); G.State.log(W.name(w) + U.jx(W.name(w), '과/와') + ' 다시 마음을 터놓았다.'); }
+    if (!thawed) await UI.say(w.aboard   // 배에 함께 탄 둘째 부인이면 같이 돌아온 집 (2026-10-21)
       ? U.pick(['우리 집이에요! 같이 문을 여니까 꼭 새집 같아요.', '먼지부터 털어야겠네요. 배 위에서 내내 이 부엌 생각이 났어요.'])
       : U.pick(['어서 와요, 당신! 오늘은 우리 집에서 쉬어요.', '당신 배가 보였어요. 기다리고 있었어요.', '오셨군요. 따뜻한 수프를 데울게요.']), duo(w, 'happy'));
     if (G.FamEv) { try { await G.FamEv.homeReturn(w); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
@@ -328,7 +327,7 @@
   H2.panel = function (c, id) {
     var w = W.of(id); if (!w || !G.HomeLife || !G.HomeLife.familyPanel) return null;
     var sp = W.speaker(w), HL = G.HomeLife, babies = W.kidsOf(w).filter(function (k) { return Fm().kidAge(k) < 3; });
-    var list = [{ who: 'wife', name: W.name(w), sub: babies.length ? babies.map(function (k) { return Fm().kidName(k); }).join('·') + ' 안고 있다' : (w.preg && w.preg.told ? '아기를 기다리는 중' : '둘째 부인'), chain: sp.half || [], portrait: sp.portrait, scale: 1, onClick: function () { return W.talk(w); } }];
+    var list = [{ who: 'wife', name: W.name(w), sub: babies.length ? babies.map(function (k) { return Fm().kidName(k); }).join('·') + ' 안고 있다' : (w.preg && w.preg.told ? '아기를 기다리는 중' : W.ordinal(w)), chain: sp.half || [], portrait: sp.portrait, scale: 1, onClick: function () { return W.talk(w); } }];
     W.kidsOf(w).filter(function (k) { return !k.unnamed && Fm().kidAge(k) >= 3; }).sort(function (a, b) { return Fm().kidAge(a) - Fm().kidAge(b); }).forEach(function (k) {
       list.push({ who: 'kid', k: k, name: k.name, sub: Fm().kidAge(k) + '세 ' + Fm().bondHearts(k), chain: HL.chain(k, true), portrait: Fm().kidSpec(k), scale: ((G.FAMILY_LOOK || {}).scale || {})[HL.stage(k)] || 1 });
     });
@@ -336,11 +335,186 @@
   };
   H2.preload = function (c, id) { var w = W.of(id); if (!w) return null; var sp = W.speaker(w); return sp.half && sp.half.length ? [sp.half] : null; };
 
+
+  // ================================================================ 2026-10-21 몇째 부인 · 배 위 상태 바로잡기 · 떠나는 이야기 · 세대 교체 · 부하와의 썸
+  // ---------------------------------------------------------------- 몇째 부인 (본처가 첫째, 혼인한 차례대로 둘째·셋째·넷째 …)
+  var ORD = ['둘째', '셋째', '넷째', '다섯째', '여섯째', '일곱째', '여덟째', '아홉째', '열째', '열한째', '열두째', '열셋째'];
+  function ordWord(n) { return ORD[n - 2] || (n + '째'); }
+  /** 옛 저장: 차례(w.no)가 없으면 혼인한 차례대로 매긴다. 한 번 매긴 차례는 누가 떠나도 바뀌지 않는다 */
+  function assignNos() {
+    var used = {}, list = W.list(); list.forEach(function (w) { if (w.no) used[w.no] = 1; });
+    var n = 2; list.forEach(function (w) { if (!w.no) { while (used[n]) n++; w.no = n; used[n] = 1; } });
+  }
+  W.no = function (w) { if (!w.no) assignNos(); return w.no; };
+  /** 다음에 맞을 부인의 차례 */
+  W.nextNo = function () { assignNos(); var mx = 1; W.list().forEach(function (w) { mx = Math.max(mx, w.no || 1); }); (P().wivesGone || []).forEach(function (g) { mx = Math.max(mx, g.no || 1); }); return mx + 1; };
+  W.ordinal = function (w) { return ordWord(typeof w === 'number' ? w : W.no(w)) + ' 부인'; };
+
+  // ---------------------------------------------------------------- 배 위 상태 바로잡기
+  /* 배에 함께 탄다고 적혀 있는데 부하 명단에 없으면(충성이 바닥나 내렸거나 옛 저장) 그 사람은 배에 없다 —
+     예전엔 이런 부인이 「실종」되어 수첩에는 「배에 함께」로 남고 배 위의 사건까지 일어났다. 제 집으로 돌려보낸다. */
+  W.sync = function () {
+    var s = S(); if (!s || !s.player || !s.mates) return;
+    (s.player.wives2 || []).forEach(function (w) {
+      if (!w.aboard || w.kind !== 'mate' || mateRow(w.id)) return;
+      w.aboard = false; w.deliver = false; w.house = true;
+      if (w.cold == null) w.cold = s.day + coldDays();
+      G.State.log(W.name(w) + U.jx(W.name(w), '은/는') + ' 배에서 내려 ' + W.cityName(w) + '의 집으로 돌아갔다.');
+    });
+  };
+  function coldDays() { return cfg().coldDays || 120; }
+  /** 아직 마음이 풀리지 않았나 (집에 찾아가도 문을 열어 주지 않는다) */
+  W.isCold = function (w) { return w && w.cold != null && S().day < w.cold; };
+
+  // ---------------------------------------------------------------- 떠나는 이야기 — 「더 이상 당신이랑 못 살겠어요」
+  var LEAVE = {
+    knock: ['밤이 깊었다. 선실 문을 두드리는 소리 — {w}{이} 작은 짐 꾸러미를 끌어안고 서 있다. 눈가가 붉다.',
+      '항해 일지를 덮으려는데 {w}{이} 들어왔다. 말없이 반지를 손가락에서 뺐다 끼웠다 한다.'],
+    why: {
+      hidden: '항구에 들 때마다 저는 선실에 숨었어요. 당신 나라 사람들 앞에서는 당신 아내라고 말 한마디 못 하고요. 저는 당신 그림자로 살려고 반지를 받은 게 아니에요.',
+      idle: '배에서 제가 하는 일이 뭐예요? 방도, 할 일도 없이 하루 종일 당신만 기다려요. 당신은 바다만 보고요.',
+      many: '셋째, 넷째… 당신 곁에는 늘 다른 사람이 있어요. 저는 몇 번째인지 세는 것도 지쳤어요.',
+      plain: '당신은 늘 다음 항구, 다음 발견뿐이에요. 저는 그 사이 어디쯤에 놓여 있는 짐 같아요.'
+    },
+    last: ['더 이상 당신이랑은 못 살겠어요. 다음 항구에서 내릴게요.', '이제 그만할래요. 당신이랑은 더 못 살겠어요.'],
+    keepOk: ['…당신이 그렇게 말하는 건 처음이네요. 좋아요, 한 번만 더 믿어 볼게요. 다음엔 정말 떠날 거예요.', '…바보 같아요, 저. 또 넘어가 주네요. 이번이 마지막이에요.'],
+    keepNo: ['말로 될 일이 아니에요. 집으로 갈게요. 찾아오지 마세요… 당분간은요.', '미안해요. 오늘은 당신 말이 하나도 들리지 않아요.'],
+    home: ['…고마워요. {city}의 집에서 마음을 좀 추스를게요. 한동안은 찾아오지 마세요.', '집에 가 있을게요. 언젠가는… 다시 웃으면서 문을 열 수 있겠죠.'],
+    part: ['…그래요. 이게 서로에게 나아요. 반지는 돌려드릴게요.', '잘 지내요, 제독. 당신 바다가 늘 순하길 빌게요.'],
+    kids: '아이들은 당신 집안 아이예요. 본국으로 데려가 줘요. 가끔… 제 얘기도 해 주고요.',
+    coldDoor: ['(문 안쪽에서) …아직은 당신 얼굴 보고 싶지 않아요. 돌아가요.', '(창문 너머로) 오늘은 그냥 가 줘요. 아직이에요.'],
+    thaw: ['…생각 많이 했어요. 그래도 당신이 찾아와 주니까 좋네요. 들어와요.', '화가 다 풀린 건 아니에요. 그래도… 수프 데워 놨어요.']
+  };
+  function lf(t, w, extra) {
+    var o = { w: W.name(w), city: W.cityName(w) }; for (var k in extra || {}) o[k] = extra[k];
+    var J = { '이': '이/가', '을': '을/를', '은': '은/는', '과': '과/와' };
+    return String(t).replace(/\{(\w+)\}\{(이|을|은|과)\}/g, function (a, k, j) { var v = String(o[k] == null ? '' : o[k]); return v + U.jx(v, J[j]); })
+      .replace(/\{(\w+)\}/g, function (a, k) { return o[k] == null ? a : o[k]; });
+  }
+  /** 충성이 바닥난 부인(배에 함께 탄 부하 출신)이 떠나려 한다 — G.Cabins.farewell 이 부른다 */
+  W.farewell = async function (m) {
+    var s = S(), w = W.of(m.id); if (!w) return;
+    var sp = duo(w, 'sad'), nm = W.name(w), kids = W.kidsOf(w), why = m.hidden != null || w.hidHome ? 'hidden' : (!m.role || m.role === 'none') && m.room == null ? 'idle' : W.count() >= 3 ? 'many' : 'plain';
+    await UI.say(lf(U.pick(LEAVE.knock), w), {});
+    await UI.say(LEAVE.why[why], sp);
+    await UI.say(U.pick(LEAVE.last), sp);
+    var v = await UI.ask(W.ordinal(w) + ' ' + nm + U.jx(nm, '이/가') + ' 당신 곁을 떠나려 한다.', [
+      { label: '붙잡는다 — 「내가 잘못했소. 한 번만 다시 생각해 주오」', value: 'keep', icon: 'heart' },
+      { label: '집으로 보내 준다 — 「잠시 떨어져 지냅시다」', value: 'home', icon: 'house' },
+      { label: '헤어진다 — 반지를 돌려받는다', value: 'part', icon: 'boot' }], { name: P().name, portrait: P().portrait });
+    if (v === 'keep') {
+      var b = (G.BALANCE && G.BALANCE.mates) || {};
+      var pr = U.clamp((b.persuade == null ? 0.25 : b.persuade) + 0.1 + (R.stat('cha') - 50) / 200 + R.skill('speech') * (b.persuadeSpeech || 0.12) + (kids.length ? 0.1 : 0) - (w.warned ? 0.15 : 0), 0.05, 0.85);
+      if (U.chance(pr)) {
+        m.loyal = 40; w.warned = s.day;
+        await UI.say(U.pick(LEAVE.keepOk), duo(w, 'warm'));
+        UI.toast(nm + U.jx(nm, '을/를') + ' 붙잡았다. (충성 40) — 다음에 또 바닥나면 붙잡기 더 어렵다.', 'heart', 5200);
+        G.State.log(nm + '이(가) 떠나려 했으나 마음을 돌렸다.');
+        return;
+      }
+      await UI.say(U.pick(LEAVE.keepNo), sp);
+      v = 'home';
+    }
+    if (v === 'home') {
+      settle(w, !(s.loc && s.loc.mode === 'city' && s.loc.city === w.city));
+      w.cold = s.day + coldDays(); m.loyal = 0;
+      await UI.say(lf(U.pick(LEAVE.home), w), sp);
+      await UI.alert(nm + U.jx(nm, '은/는') + ' 배에서 내려 ' + W.cityName(w) + '의 집으로 갔다.<br><small class="muted">한동안(' + Math.round(coldDays() / 30) + '달쯤) 찾아가도 문을 열어 주지 않는다. 그 뒤에 찾아가면 다시 맞아 준다.</small>', W.ordinal(w));
+      G.State.log(nm + U.jx(nm, '이/가') + ' 「더는 당신이랑 못 살겠다」며 ' + W.cityName(w) + '의 집으로 떠났다.');
+      return;
+    }
+    // 헤어진다
+    await UI.say(U.pick(LEAVE.part), sp);
+    if (kids.length) { await UI.say(LEAVE.kids, sp); kids.forEach(function (k) { k.house = -1; }); }
+    W.divorce(w);
+    await UI.alert(nm + U.jx(nm, '과/와') + ' 헤어졌다. ' + nm + U.jx(nm, '은/는') + ' 배에서 내려 떠났다.' + (kids.length ? '<br>아이들(' + kids.map(function (k) { return k.name || '갓난아기'; }).join('·') + ')은 배에 태워 본국 자택으로 데려간다.' : ''), '이별');
+  };
+  /** 헤어진다: 부인 목록에서 빼고(차례는 남긴다), 배와 부하 명단에서도 내린다. 반지를 돌려받는다 */
+  W.divorce = function (w) {
+    var s = S(), p = P(), nm = W.name(w);
+    p.wives2 = W.list().filter(function (x) { return x !== w; });
+    (p.wivesGone = p.wivesGone || []).push({ id: w.id, no: W.no(w), city: w.city, day: s.day });
+    s.mates = s.mates.filter(function (x) { return x.id !== w.id; }); R.tidyCaptains();
+    s.flags['gone_' + w.id] = 1; s.flags['divorced_' + w.id] = 1;
+    if (G.Romance && G.Romance.st) { var ps = G.Romance.st().pairs; Object.keys(ps).forEach(function (k) { if (ps[k].f === w.id || ps[k].m === w.id) delete ps[k]; }); }
+    R.addItem('ring');
+    G.State.log(nm + U.jx(nm, '과/와') + ' 헤어졌다. (' + W.ordinal(w) + ')');
+  };
+
+  // ---------------------------------------------------------------- 세대 교체: 선대의 부인들은 사라지지 않는다
+  /* F.succeed(family.js)가 새 제독을 세우기 전에 부른다: 배에 탄 부인들은 저마다의 집으로 내리고,
+     선대의 본처·부인들을 새 제독의 「선대의 부인」(어머니·○째 부인)으로 남긴다. 돌려주는 값: 새 player.elders */
+  W.retire = function (p, heir) {
+    var s = S(), out = (p.elders || []).map(function (e) { var o = {}; for (var k in e) o[k] = e[k]; o.gen = (e.gen || 1) + 1; return o; });
+    var mother = heir && heir.mother;          // 둘째 부인부터의 아이면 그 어머니 id, 본처의 아이면 없음
+    if (p.wife) out.unshift({ id: p.wife, kind: 'main', city: p.home, title: !mother ? '어머니' : '선대의 본처', gen: 1 });
+    (p.wives2 || []).forEach(function (w) {
+      if (w.aboard) { if (w.kind === 'mate') s.mates = s.mates.filter(function (x) { return x.id !== w.id; }); w.aboard = false; w.house = true; }
+      out.push({ id: w.id, kind: w.kind, city: w.city, no: W.no(w), title: mother === w.id ? '어머니' : '선대의 ' + W.ordinal(w), gen: 1 });
+    });
+    if (R.tidyCaptains) R.tidyCaptains();
+    return out;
+  };
+  W.elders = function () { return P().elders || []; };
+  W.infoElders = function () {
+    var list = W.elders(); if (!list.length) return '';
+    return '<div>선대의 부인</div><div>' + list.map(function (e) {
+      var nm = W.name(e.id);
+      var c = G.CITY_DATA[e.city];
+      return U.esc(e.gen > 1 ? (e.title === '어머니' ? '할머니' : '선선대의 부인') : e.title) + ' ' + U.esc(nm) + (c ? ' <small class="muted">(' + c.name + (e.kind === 'main' ? ' 본가' : '의 집') + ')</small>' : '');
+    }).join(', ') + '</div>';
+  };
+
+  // ---------------------------------------------------------------- 배 위의 썸 — 부인과 부하 (G.Romance가 부른다)
+  var AFFAIR = {
+    n: ['달 없는 밤, 고물 쪽 밧줄 더미 그늘에서 웃음소리가 새어 나온다. {w}{과} {he}{이} 나란히 앉아 있다. {he}{이} {w}의 손등에 제 손을 슬며시 얹는다.',
+      '저녁 끼니 뒤, 갑판 끝에서 {he}{이} {w}에게 무언가를 건넨다 — 손수 깎은 머리빗이다. {w}{이} 얼굴을 붉히며 받아 든다.'],
+    w: ['다, 당신…! 그런 게 아니에요. 그냥 이야기를 했을 뿐이에요.', '당신… 언제부터 거기 있었어요?'],
+    me: ['{he}, 칼을 뽑아라. 내 아내에게 손을 댄 값은 이 갑판 위에서 치른다.', '선원들은 물러서라. {he}, 이건 제독과 부하의 일이 아니다. 사내와 사내의 일이다.'],
+    he: ['제독… 변명하지 않겠습니다. 피하지도 않겠습니다.', '…좋습니다. 이렇게 된 이상, 칼로 답하겠습니다.'],
+    crowd: '선원들이 둥글게 물러선다. 횃불 아래 두 사람이 마주 선다.',
+    win: { me: '일어나라. 목숨까지는 거두지 않겠다. 다만 다시는 내 아내 곁에 얼씬거리지 마라.', he: '…졌습니다. 할 말이 없습니다.', w: '…당신이 저를 위해 칼을 뽑을 줄은 몰랐어요. 미안해요. 다시는 한눈팔지 않을게요.' },
+    lose: { he: '…제독, 이제 그만하시지요. 저도 더는 싸울 마음이 없습니다.', w: '그만해요! 둘 다 그만! …당신이 다치는 건 보고 싶지 않아요. 제가 잘못했어요. 당신 곁에 있을게요.' },
+    after: '그날 밤 배 안은 쉽게 잠들지 못했다. 선원들이 수군거리고, {he}{은} 아무와도 눈을 마주치지 않는다.'
+  };
+  /** 부인(배에 탄 부하 출신)과 남자 부하 사이에 끌림이 생겼다 — 제독이 그 부하와 결투한다.
+      피로가 오르고(밤새 수군거림), 그 부하의 충성은 바닥(0 — 다음 달 떠나겠다고 나선다), 부인의 충성은 오른다. 두 사람은 오래 서먹해진다. */
+  W.affair = async function (p) {
+    var s = S(), w = W.of(p.f), hm = mateRow(p.m), wm = mateRow(p.f), hd = G.MATE[p.m]; if (!w || !hm || !wm || !hd) return;
+    var B = cfg().affair || { fatigueWin: 15, fatigueLose: 25, wifeWin: 25, wifeLose: 15, discipline: 5 };
+    var ex = { he: hd.name.split(' ')[0] }, me = { name: P().name, portrait: P().portrait }, hsp = { name: hd.name, portrait: G.Scenes.mateSpec(p.m), lang: 3 };
+    await UI.say(lf(U.pick(AFFAIR.n), w, ex), {});
+    await UI.say(U.pick(AFFAIR.w), duo(w, 'sad'));
+    await UI.say(lf(U.pick(AFFAIR.me), w, ex), me);
+    await UI.say(U.pick(AFFAIR.he), hsp);
+    await UI.say(AFFAIR.crowd, {});
+    var st = hd.st || [60, 50, 60, 50], res = 'win';
+    if (G.Games && G.Games.duel) {
+      res = await G.Games.duel({ name: hd.name, portrait: G.Scenes.mateSpec(p.m), look: 'rival', str: st[0], atk: 3 + Math.round(st[2] / 10), def: 1 + Math.floor(st[0] / 30),
+        skill: R.mateSkill(hm, 'sword'), mar: st[2], int: st[1], cha: st[3] }, { place: 'deck' });
+    }
+    var won = res === 'win';
+    if (won) { await UI.say(AFFAIR.win.me, me); await UI.say(AFFAIR.win.he, hsp); await UI.say(AFFAIR.win.w, duo(w, 'warm')); }
+    else { await UI.say(AFFAIR.lose.he, hsp); await UI.say(AFFAIR.lose.w, duo(w, 'warm')); }
+    await UI.say(lf(AFFAIR.after, w, ex), {});
+    var f = s.fleet, fat0 = f.fatigue || 0;
+    f.fatigue = U.clamp(fat0 + (won ? B.fatigueWin : B.fatigueLose), 0, 100);
+    f.discipline = U.clamp((f.discipline || 0) - (B.discipline || 0), 0, 100);
+    hm.loyal = p.m === 'rocco' ? 5 : 0;                 // 바닥 — 다음 달(G.Cabins.monthly) 배에서 내리겠다고 나선다
+    var wl0 = wm.loyal == null ? 70 : wm.loyal; wm.loyal = Math.min(100, wl0 + (won ? B.wifeWin : B.wifeLose));
+    p.stage = 'cold'; p.heat = 0; p.cd = s.day + ((G.BALANCE.romance || {}).coldDays || 180) * 3; p.due = null;
+    G.State.log(W.ordinal(w) + ' ' + W.name(w) + U.jx(W.name(w), '과/와') + ' 가까워진 ' + hd.name + U.jx(hd.name, '과/와') + ' 갑판에서 결투했다 (' + (won ? '이김' : '짐') + ').');
+    await UI.alert('<b>' + U.esc(hd.name) + '</b> 충성 → ' + hm.loyal + ' <small class="muted">(바닥 — 곧 배에서 내리겠다고 할 것이다)</small><br><b>' + U.esc(W.name(w)) + '</b> 충성 ' + Math.round(wl0) + ' → ' + Math.round(wm.loyal) +
+      '<br>함대 피로 +' + Math.round(f.fatigue - fat0) + (B.discipline ? ' · 규율 −' + B.discipline : ''), won ? '결투 — 이겼다' : '결투 — 졌다');
+    if (G.Game.refreshHud) G.Game.refreshHud();
+  };
+
   // ---------------------------------------------------------------- 수첩
   W.infoWife = function () {
+    W.sync();
     var p = P(), list = W.list();
     var h = p.wifeAboard ? ' <small class="muted">(배에 함께)</small>' : '';
-    if (list.length) h += '<br><small>둘째 부인: ' + list.map(function (w) { return U.esc(W.name(w)) + ' <span class="muted">(' + (w.aboard ? '배에 함께' + (w.deliver ? ' · ' + W.cityName(w) + '로 가는 중' : '') : W.cityName(w) + '의 집') + (w.preg && w.preg.told ? ' · 아기를 가짐' : '') + ')</span>'; }).join(', ') + '</small>';
+    if (list.length) h += '<br><small>' + list.slice().sort(function (a, b) { return W.no(a) - W.no(b); }).map(function (w) { return W.ordinal(w) + ' ' + U.esc(W.name(w)) + ' <span class="muted">(' + (w.aboard ? '배에 함께' + (w.deliver ? ' · ' + W.cityName(w) + '로 가는 중' : '') : W.cityName(w) + '의 집') + (w.preg && w.preg.told ? ' · 아기를 가짐' : '') + (W.isCold(w) ? ' · 마음이 상해 있음' : '') + ')</span>'; }).join(', ') + '</small>';
     return h;
   };
   W.kidTag = function (k) {
