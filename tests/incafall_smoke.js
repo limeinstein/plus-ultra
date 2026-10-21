@@ -51,7 +51,7 @@ const ROOT = path.resolve(__dirname, '..');
     assert.deepStrictEqual(result.gates, { panama: true, tumbes: true, cusco: true, siege: true, tupac: true });
     assert(result.goldEvent && /잉카의 황금/.test(result.news), '금값 하락 시장 사건과 시대 소식');
     assert.deepStrictEqual(result.keys, ['cusco', 'panama', 'siege', 'tumbes', 'tupac']);
-    assert.strictEqual(result.version, '0.270');
+    assert.strictEqual(result.version, '0.271');
     assert.deepStrictEqual(errors, [], '콘솔 오류 0');
     console.log(JSON.stringify(result, null, 2));
   } finally {

@@ -7,6 +7,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
+const GAME = process.env.PAGE || pathToFileURL(path.join(ROOT, 'index.html')).href;
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files'] });
@@ -15,7 +16,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' && !/fonts|ERR_|net::/.test(m.text())) errors.push(m.text()); });
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/**', route => route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true}' }));
+    await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo(); G.Nav.init();
@@ -31,7 +33,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       done(); await new Promise(r => setTimeout(r, 30));
       out.busyAfter = SEA.runtime().busy;
       // sea.js 안의 모든 끝맺음이 0 아래로 내려가지 않는 꼴인가
-      const src = await (await fetch('js/scenes/sea.js')).text().catch(() => '');
+      const src = window.PU_WEB_CHANNEL ? '' : await (await fetch('js/scenes/sea.js')).text().catch(() => '');
       out.rawDec = src.length > 1000 ? (src.match(/st\.busy--/g) || []).length : -1;
       // 바쁠 때는 상륙하지 않는다 (L 키)
       SEA.runtime().busy = 1; const sc0 = G.Game.sceneName;
