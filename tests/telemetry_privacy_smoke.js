@@ -26,7 +26,7 @@ let browser;
     const first = G.DISCOVERIES[0]; s.disc[first.id] = { me: 1, found: 1 };
     document.dispatchEvent(new Event('visibilitychange'));
   });
-  await page.waitForFunction(() => true); await page.waitForTimeout(500);
+  await page.waitForTimeout(500);
   const payload = payloads.filter(row => row && row.voyage).pop();
   ok(!!payload, '현재 항해 현황을 실시간 접속 신호에 포함');
   ok(payload.version === '0.269' && payload.surface === 'game', '버전과 게임 화면 구분 전송');
