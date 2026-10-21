@@ -37,7 +37,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // ① 열 도시 모두 명검 — 내륙·작은 항구도 암시장이 선다
     const all = await page.evaluate(() => {
       const BM = G.BlackMarket, out = [];
-      Object.keys(BM.SWORDS).forEach(id => { const c = G.CITY_DATA[+id], st = BM.stock(c), it = st.items[0]; out.push({ city: c.name, port: c.port, size: c.size, here: BM.here(c), open: BM.open(c), named: !!(it && it.named), id: it && it.id, want: BM.SWORDS[id], n: st.items.length, price: it && it.price }); });
+      Object.keys(BM.SWORDS).forEach(id => { const c = G.CITY_DATA[+id], st = BM.stock(c), it = st.items[0]; out.push({ city: c.name, port: c.port, size: c.size, here: BM.here(c), open: BM.open(c), named: !!(it && it.named), id: it && it.id, want: BM.SWORDS[id], n: st.items.filter(x => !x.flag).length, price: it && it.price }); });
       return out;
     });
     console.log(JSON.stringify(all));
@@ -52,7 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.player.sk.acct = 2; const m2 = T.menu(tim).filter(Boolean).map(m => m.label); const o2 = BM.open(tim);
       s.player.sk.acct = 3; const m3 = T.menu(tim).filter(Boolean).map(m => m.label);
       const st = BM.stock(c), rm = BM.rumor(c);
-      return { o2, m2: m2.indexOf('뒷골목 암시장') >= 0, m3: m3.indexOf('뒷골목 암시장') >= 0, n: st.items.length, named: st.items.some(x => x.named), rm, rmPrice: rm && G.ITEM[rm.item].price };
+      return { o2, m2: m2.indexOf('뒷골목 암시장') >= 0, m3: m3.indexOf('뒷골목 암시장') >= 0, n: st.items.filter(x => !x.flag).length, named: st.items.some(x => x.named), rm, rmPrice: rm && G.ITEM[rm.item].price };
     });
     console.log(JSON.stringify(lis));
     ok(!lis.o2 && !lis.m2 && lis.m3, '통북투 교역소: 회계 2에는 없고 회계 3에 「뒷골목 암시장」');
