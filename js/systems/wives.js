@@ -46,7 +46,18 @@
   /** 그 도시에 서 있는 둘째 부인의 집들 */
   W.housesAt = function (cid) { return W.list().filter(function (w) { return w.house && !w.aboard && w.city === cid; }); };
   /** 배에 함께 타고 있는 둘째 부인들 */
-  W.aboard = function () { return W.list().filter(function (w) { return w.aboard; }); };
+  W.aboard = function () {
+    // 부하 출신 둘째 부인이 배에서 내렸는데(충성이 바닥나 떠남·해고) 「배에 함께」로 남아 있던 옛 저장: 제 집으로 보낸다 (QA 2026-10-21)
+    W.list().forEach(function (w) { if (w.aboard && w.kind === 'mate' && !mateRow(w.id)) W.mateLeft(w.id, true); });
+    return W.list().filter(function (w) { return w.aboard; });
+  };
+  /** 부하 출신 둘째 부인이 부하에서 빠졌다(떠남·해고): 배에서 내려 제 집(처음 만난 고장)에서 산다. 그 부인이면 기록을 돌려준다 */
+  W.mateLeft = function (id, quiet) {
+    var w = W.of(id); if (!w || w.kind !== 'mate' || !w.aboard) return null;
+    w.aboard = false; w.house = true; w.deliver = false;
+    if (!quiet) G.State.log(W.name(w) + U.jx(W.name(w), '이/가') + ' 배에서 내려 ' + W.cityName(w) + '의 집으로 갔다.');
+    return w;
+  };
   function mateRow(id) { return S().mates.filter(function (m) { return m.id === id; })[0] || null; }
 
   // ---------------------------------------------------------------- 아이 수 (모두 합쳐 5명)

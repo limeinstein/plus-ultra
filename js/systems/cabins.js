@@ -325,9 +325,13 @@
         } else {
           if (v) await UI.say(U.pick(['말로 될 일이 아니오. 잘 있으시오.', '이미 마음을 정했소.']), sp);
           s.mates = s.mates.filter(function (x) { return x !== m; });
-          s.flags['gone_' + id] = 1;
-          G.State.log(d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 함대를 떠났다.');
-          UI.toast(d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 함대를 떠났다.', 'boot', 4500);
+          if (R().tidyCaptains) R().tidyCaptains();
+          // 부하 출신 둘째 부인이면 「배에 함께」를 풀고 제 집으로 — 예전에는 가족 칸에 배에 있는 것으로 남아 가족 사건이 계속 떴다 (QA 2026-10-21)
+          var wife = G.Wives && G.Wives.mateLeft ? G.Wives.mateLeft(id) : null;
+          if (!wife) s.flags['gone_' + id] = 1;
+          var msg = wife ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wife) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 함대를 떠났다.';
+          if (!wife) G.State.log(msg);
+          UI.toast(msg, wife ? 'house' : 'boot', 4500);
         }
       }
     } catch (e) { console.error(e); }
