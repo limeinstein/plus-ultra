@@ -82,7 +82,7 @@
   }
   function placeWord(q) { return q.island ? '섬' : '해안'; }
   function contOf(q) { var c = nearCity(q); return c ? (CONT[c.region] || G.REGIONS[c.region]) : '먼 바다'; }
-  function landOf(q) { var c = nearCity(q); if (!c) return '어느 나라'; var o = R.cityOwner ? R.cityOwner(c) : c.nation; return (o || '') + (G.REGIONS[c.region] ? ' 땅(' + G.REGIONS[c.region] + ')' : ' 땅'); }
+  function landOf(q) { var c = nearCity(q); if (!c) return '어느 나라'; var o = R.cityOwner ? R.cityOwner(c) : c.nation; var rn = G.regionLabel ? G.regionLabel(c) : G.REGIONS[c.region]; return (o || '') + (rn ? ' 땅(' + rn + ')' : ' 땅'); }
   function latlon(q) {
     var r = function (v) { return (Math.round(Math.abs(v) * 2) / 2).toFixed(1); };
     return (q.tlat >= 0 ? '북위 ' : '남위 ') + r(q.tlat) + '°, ' + (q.tlon >= 0 ? '동경 ' : '서경 ') + r(q.tlon) + '°';

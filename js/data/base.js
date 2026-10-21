@@ -2,7 +2,23 @@
 (function (G) {
   'use strict';
 
-  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '동아시아', '중앙아시아', '동남아시아', '일본', '아메리카'];   // 6번은 명(중국)과 조선 — 조선은 중국의 일부가 아니므로 「동아시아」 (2026-10-21)
+  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '중국·조선', '중앙아시아', '동남아시아', '일본', '아메리카'];   // 6번은 명(중국)과 조선 — 조선은 중국의 일부가 아니므로 「중국·조선」. 화면에는 「동아시아 · 중국 / 조선 / 일본」 (G.regionLabel, 2026-10-22)
+  /* 동아시아 (2026-10-22 사용자 요청 「조선·중국·일본은 동아시아로 묶고, 중국·일본을 가르는 곳에 조선도」):
+     지역 번호(교역 거리·시세·조약 따위의 규칙)는 그대로 6(중국·조선)·9(일본) — 보이는 이름만 「동아시아 · 중국 / 조선 / 일본」으로 가른다 */
+  G.EAST_ASIA = [6, 9];
+  /** 동아시아 도시의 나라 갈래: '중국' · '조선' · '일본' (동아시아가 아니면 null) */
+  G.subRegion = function (c) {
+    if (!c) return null;
+    if (c.region === 9) return '일본';
+    if (c.region === 6) return c.style === 'kr' || c.lang === 14 ? '조선' : '중국';
+    return null;
+  };
+  /** 도시의 지역 이름: 동아시아는 「동아시아 · 조선」처럼, 나머지는 G.REGIONS 그대로 */
+  G.regionLabel = function (c) {
+    if (!c) return '';
+    var sub = G.subRegion(c);
+    return sub ? '동아시아 · ' + sub : (G.REGIONS[c.region] || '');
+  };
   // trade distance between culture regions (0 = same)
   G.REGION_DIST = [
     //IB NE ME AF NE IN CN CA SE JP AM
