@@ -76,7 +76,7 @@
     o = o || {};
     var s = S(), p = P(), c = o.city != null ? G.CITY_DATA[o.city] : (s.loc && s.loc.mode === 'city' ? G.CITY_DATA[s.loc.city] : null);
     return { at: o.at, love: o.love || null, kids: (o.kids || []).slice(), babies: o.babies || [], aboard: !!o.aboard, mate: o.mate == null ? false : !!o.mate,
-      city: c ? c.name : '', home: G.CITY_DATA[p.home] ? G.CITY_DATA[p.home].name : '', days: o.days || 0, witness: !!o.witness, second: !!o.second, npc: o.npc || null };
+      city: c ? c.name : '', home: G.CITY_DATA[p.home] ? G.CITY_DATA[p.home].name : '', days: o.days || 0, witness: !!o.witness, second: !!o.second, npc: o.npc || null, together: !!o.together };   // together: 아내와 함께 항해하고 같이 집에 돌아왔다
   };
 
   // ---------------------------------------------------------------- 조건
@@ -106,6 +106,7 @@
       case 'witness': r = cs.witness; break;
       case 'rich': r = P().gold > 10000; break;
       case 'long': r = cs.days > 150; break;
+      case 'together': r = !!cs.together; break;
       default: r = true;
     }
     return not ? !r : r;
@@ -331,8 +332,8 @@
     if (!w && m.ret != null && s.day - m.ret <= 5) { m.home = s.day; return false; }   // 부두에서 막 마중을 받았다
     if (!w) m.home = s.day;
     if (away < (k.returnDays == null ? 45 : k.returnDays)) return false;
-    var hk = FE.homeKids(w);
-    var ok = await FE.run('return', FE.cast({ love: L, kids: hk.kids, babies: hk.babies, days: away }));
+    var hk = FE.homeKids(w), together = w ? !!w.aboard : !!p.wifeAboard;   // 아내가 배에 함께 탔다면 기다린 사람의 마중이 아니라, 오랜만에 같이 집에 돌아온 부부의 장면 (2026-10-21)
+    var ok = await FE.run('return', FE.cast({ love: L, kids: hk.kids, babies: hk.babies, days: away, together: together }));
     if (ok) { FE.entry.played = true; if (!w) m.ret = s.day; }
     return ok;
   };

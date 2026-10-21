@@ -18,16 +18,18 @@
     { id: 'chapel', name: '예배실', icon: 'pray', skills: ['theo'], cost: 1000, days: 2, desc: '기도하고 마음을 다잡는 방.', fx: '규율이 덜 떨어진다' },
     { id: 'sick', name: '진료실', icon: 'cross', skills: ['med', 'sci'], cost: 1500, days: 3, desc: '아픈 선원을 누이고 돌본다.', fx: '괴혈병이 느리게 번진다' },
     { id: 'rec', name: '오락실', icon: 'dice', skills: ['music'], cost: 900, days: 2, desc: '노래와 놀이로 시름을 잊는 방.', fx: '규율이 덜 떨어지고, 뱃노래가 자주 울린다' },
-    { id: 'rig', name: '조범실', icon: 'sail', skills: ['nav', 'ops'], cost: 1600, days: 3, desc: '돛과 밧줄을 맡은 사람들의 자리.', fx: '함대가 조금 빨라진다' },
+    { id: 'rig', name: '조범실', icon: 'sail', skills: ['nav', 'ops'], cost: 1600, days: 3, desc: '돛과 밧줄을 맡은 사람들의 자리.', fx: '함대가 빨라진다 — 방마다 (1 + 항해술·운용술 단계) × 1.56%, 여러 칸이면 더해진다 (16칸을 3단계 항해사로 채우면 최대 속력 2배)' },
     { id: 'repair', name: '선박 수리실', icon: 'hammer', skills: ['ship'], cost: 1500, days: 3, desc: '목수의 연장과 자재를 둔다.', fx: '바다 위에서 기함을 더 빨리 고친다 (자재가 있어야 한다)' },
     { id: 'pen', name: '사육실', icon: 'horse', skills: ['sci'], cost: 1100, days: 2, desc: '닭·염소를 길러 달걀과 젖을 얻는다.', fx: '날마다 식량이 조금 생긴다' },
     { id: 'gun', name: '포격실', icon: 'cannon', skills: ['gun'], cost: 1800, days: 3, desc: '포수들이 화약과 포탄을 다룬다.', fx: '기함의 포격이 세진다' },
     { id: 'marine', name: '해병 대기실', icon: 'sword', skills: ['sword', 'shoot'], cost: 1600, days: 3, desc: '백병전에 나설 사람들이 기다린다.', fx: '기함의 백병전이 세진다' },
-    // 2026-10-16 화실·음악실·참모실·조각실 (art: 전용 그림이 없을 때 빌려 쓰는 방 그림 — images/cabins/<id>.webp를 넣으면 바뀐다)
+    // 2026-10-16 화실·음악실·참모실·조각실 (art는 파일 누락 때만 쓰는 안전용 대체 그림)
     { id: 'studio', name: '화실', icon: 'palette', skills: ['art'], cost: 1300, days: 2, art: 'chart', desc: '이젤과 물감을 둔 밝은 방. 그림에 밝은 사람이 바다를 그린다.', fx: '미술품을 그려 짐칸에 싣는다 · 이름난 화가는 명작을 남긴다(사교 명성)' },
     { id: 'sculpt', name: '조각실', icon: 'bust', skills: ['craft'], cost: 1500, days: 3, art: 'repair', desc: '돌과 나무, 정과 끌을 둔 방. 세공에 밝은 사람이 깎고 빚는다.', fx: '조각품을 깎아 짐칸에 싣는다 · 이름난 조각가는 명작을 남긴다(사교 명성)' },
     { id: 'musicroom', name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '류트와 북을 둔 방. 음악에 밝은 사람이 날마다 가락을 들려준다.', fx: '날마다 쌓이는 피로가 준다' },
     { id: 'staff', name: '참모실', icon: 'strategy', skills: ['ops', 'hist', 'survey'], cost: 1400, days: 2, art: 'captain', desc: '지도와 병법서를 펼친 작전 회의실. 운용·역사·측량에 밝은 참모가 앉는다.', fx: '육상전의 계략(기습·함정·저격·작렬탄)이 잘 통하고 더 세진다' },
+    // 2026-10-21 창고: 사람을 두지 않는 방(noStaff). 기함 짐칸이 는다 — art는 파일 누락 때만 쓰는 안전용 대체 그림
+    { id: 'store', name: '창고', icon: 'chest', noStaff: true, cost: 1200, days: 2, art: 'repair', desc: '칸막이를 걷어 내고 선반과 고정 끈을 단 짐칸. 사람이 머물지 않는다.', fx: '기함 짐칸이 배 적재량의 5%씩 는다 (4칸까지) · 무게 한도는 그대로라 가벼운 짐에 좋다' },
     { id: 'interp', name: '통역실', icon: 'scroll', skills: [], lang: true, cost: 700, days: 1, desc: '여러 나라 말을 아는 사람의 방. 이 방에 있는 사람의 말도 통역으로 쓰인다.', fx: '이 방 사람의 말이 통역에 쓰인다' }
   ];
   G.CABIN = {};

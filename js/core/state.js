@@ -208,6 +208,7 @@
   ST.serialize = function () {
     var S = G.Game.state;
     var copy = {}; for (var k in S) if (k !== 'chartBits' && k !== 'chartDirty') copy[k] = S[k];
+    if (G.shipBuffKeys) copy.shipBuffs = G.shipBuffKeys();   // 메모리의 게임은 늘 지금 성능 — 불러올 때 다시 올리지 않게
     copy.chart = b64(S.chartBits);
     return safeStringify(copy);
   };
@@ -215,6 +216,7 @@
     var S = JSON.parse(json);
     if (G.TradeGoods) G.TradeGoods.migrate(S);     // 나뉜 교역품 (도자기 → 중국 도자기·유럽 도기 …)
     if (G.R && G.R.mergeItemList && S.player && S.player.items) G.R.mergeItemList(S.player.items);   // 같은 물건은 한 칸 (2026-10-20)
+    if (G.applyShipBuffs && S.fleet) G.applyShipBuffs(S);     // 성능을 올린 배 종류(프리깃·플류트 2026-10-21)를 이미 가진 배에도
     S.chartBits = S.chart ? unb64(S.chart) : new Uint8Array(CHART_W * CHART_H / 8);
     delete S.chart;
     return S;

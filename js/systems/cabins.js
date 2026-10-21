@@ -60,10 +60,22 @@
     var rooms = CB.rooms(), seen = {};
     s.mates.forEach(function (m) {
       if (m.room == null) return;
-      if (FIXED_ROLE[m.role] || m.role === 'captain' || m.room >= rooms.length || seen[m.room] || rooms[m.room] === 'hold' || (rooms[m.room] === 'account' && m.role !== 'purser')) { delete m.room; delete m.roomType; return; }
+      if (FIXED_ROLE[m.role] || m.role === 'captain' || m.room >= rooms.length || seen[m.room] || rooms[m.room] === 'hold' || CB.noStaff(rooms[m.room]) || (rooms[m.room] === 'account' && m.role !== 'purser')) { delete m.room; delete m.roomType; return; }
       seen[m.room] = 1; m.roomType = rooms[m.room];
     });
   };
+  /** 사람을 두지 않는 방인가 (창고) */
+  CB.noStaff = function (type) { var c = G.CABIN[type]; return !!(c && c.noStaff); };
+  /** 창고가 늘려 주는 짐칸(통): 기함만, 창고 한 칸마다 배 본래 적재량 × per, max칸까지 (G.BALANCE.cabins.store) */
+  CB.storeBonus = function (sh) {
+    var s = S(), f = s && s.fleet; if (!f || !f.ships.length) return 0;
+    sh = sh || f.ships[0]; if (sh !== f.ships[0] || !sh.cabins) return 0;
+    var t = G.SHIP[sh.type]; if (!t) return 0;
+    var k = B().store || {}, n = sh.cabins.filter(function (x) { return x === 'store'; }).length;
+    return Math.floor(t.cap * (k.per != null ? k.per : 0.05) * Math.min(n, k.max != null ? k.max : 4));
+  };
+  /** 창고 칸 수 (센 것 / 있는 것) */
+  CB.storeRooms = function () { var sh = CB.flagship(), k = B().store || {}, n = sh && sh.cabins ? sh.cabins.filter(function (x) { return x === 'store'; }).length : 0; return { n: n, used: Math.min(n, k.max != null ? k.max : 4) }; };
   /** 이 선실에 있는 부하 (없으면 null) */
   CB.occupant = function (i) { var s = S(); return s.mates.filter(function (m) { return m.room === i; })[0] || null; };
   /** 고정 자리(부관실·조타실·파수대)에 있는 부하 */
@@ -80,7 +92,7 @@
   CB.place = function (m, i) {
     var s = S(), rooms = CB.rooms();
     if (i == null) { if (m.role === 'purser' && m.roomType === 'account') m.role = 'none'; delete m.room; delete m.roomType; return; }
-    var type = rooms[i]; if (!type || type === 'hold') return;
+    var type = rooms[i]; if (!type || type === 'hold' || CB.noStaff(type)) return;   // 창고처럼 사람을 두지 않는 방
     var old = CB.occupant(i);
     if (old && old !== m) CB.place(old, null);
     if (m.roomType === 'account' && type !== 'account' && m.role === 'purser') m.role = 'none';
@@ -97,7 +109,7 @@
     var rooms = CB.rooms(); if (i <= 0 || i >= rooms.length || !G.CABIN[type] || G.CABIN[type].fixed) return false;
     var m = CB.occupant(i);
     rooms[i] = type;
-    if (m) { if (type === 'hold') CB.place(m, null); else CB.place(m, i); }
+    if (m) { if (type === 'hold' || CB.noStaff(type)) CB.place(m, null); else CB.place(m, i); }
     return true;
   };
 
@@ -130,7 +142,8 @@
     var sum = 0;
     if (c.fixed && c.role) sum = roomPower(c, CB.roleMate(c.role));
     else { var rooms = CB.rooms(); for (var i = 0; i < rooms.length; i++) if (rooms[i] === type) sum += roomPower(c, CB.occupant(i)); }
-    return Math.min(B().cap || 8, sum);
+    var caps = B().caps || {};
+    return Math.min(caps[type] || B().cap || 8, sum);   // 방 종류마다 다른 상한 (조범실 caps.rig 64 — 16칸을 3단계 항해사로 채우면 속력 2배)
   };
   /** 효과 값: G.BALANCE.cabins.fx[key] × 그 방의 힘 */
   CB.fx = function (type, key) { var v = ((B().fx || {})[key]) || 0; return v ? v * CB.power(type) : 0; };

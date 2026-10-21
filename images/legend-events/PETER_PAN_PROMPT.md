@@ -3,12 +3,14 @@
 J. M. 배리의 희곡(1904)·소설(1911)에 나오는 모습만 씁니다. 뒤에 나온 영화의 옷차림(초록 쫄쫄이 옷, 들쭉날쭉한 옷단, 붉은 깃털이 꽂힌 뾰족 모자, 뾰족한 귀)은 쓰지 않습니다.
 그림이 없으면 장면은 글만으로 지나갑니다.
 
-## 초상 (지금은 임시 그림 — 같은 이름으로 덮어쓰면 바로 바뀜)
+## 초상
 
 | 파일 | 크기 | 내용 |
 |---|---|---|
 | `images/portraits/legendary/peter_pan.webp` | 448×448 투명 | 흉상 |
 | `images/portraits/legendary/peter_pan_half.webp` | 1024×1536 투명 | 무릎상 (서 있는 모습) |
+
+원화는 `artifacts/legendary-portraits/peter_pan.png`에 보관했다. 무릎 아래까지 잘라 1024×1536 무릎상을 만들고, 같은 그림에서 얼굴을 자동으로 찾아 448×448 얼굴상을 만든다.
 
 ```text
 Use case: stylized-concept

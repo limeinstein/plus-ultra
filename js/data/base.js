@@ -265,11 +265,16 @@
     //   식당 배수 = 1 + (기함에 식당이 있으면 messHas) + 식당의 힘 × messPow · 제독 고향의 음식이면 규율 × home
     //   요리 단계가 높을수록 값비싼(등급 높은) 음식을 차린다 — 솜씨 배수 = 1 + (요리 단계 − 1) × skill
     //   풍미: 짐칸에 향신료(후추 등)가 있으면 + spice, 식자재(밀·어육·올리브유 등)가 있으면 + food — 차림이 바뀔 때 1통씩 쓴다
+    // 조범실 (2026-10-21): 방마다 힘(1 + 항해술·운용술 단계)×충성 효율, 조범실끼리는 caps.rig(64)까지 더한다 → 속력 + 힘 × fx.rig(1/64), 최대 rigMax(+100%).
+    //   예: 3단계 항해사 1명 +6.25% · 2명 +12.5% · 8명 +50% · 16명(조범실 16칸 — 중카락·대형 갤리온·갤리어스·보선·안택선) +100% = 최대 속력 2배
     cabins: { galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
-      slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, cols: 6, rigMax: 0.08, langDays: [90, 270, 730], farRate: 0.3,
-      fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.01, repair: 0.1, pen: 0.12,
+      slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, caps: { rig: 64 }, cols: 6, rigMax: 1.0, langDays: [90, 270, 730], farRate: 0.3,
+      fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.015625, repair: 0.1, pen: 0.12,
         gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1,
-        musicroom: 0.07, staff: 0.03, staffDmg: 0.06 } },   // 2026-10-16 음악실: 하루 피로 · 참모실: 육상전 계략(기습·함정·저격·작렬탄) 성공률 · 계략 피해 비율
+        musicroom: 0.07, staff: 0.03, staffDmg: 0.06 },
+      // 창고 (2026-10-21): 방 하나마다 기함 짐칸(부피)을 배 본래 적재량 × per 만큼 늘린다. max칸까지만 센다(그 뒤 칸은 헛방).
+      //   무게 한도(G.BALANCE.cargo.shipWt × 본래 적재량)는 그대로 — 향신료·비단처럼 가벼운 짐에만 쓸모가 크고 광석·금속은 무게에 먼저 걸린다.
+      store: { per: 0.05, max: 4 } },   // 2026-10-16 음악실: 하루 피로 · 참모실: 육상전 계략(기습·함정·저격·작렬탄) 성공률 · 계략 피해 비율
     // 화실·조각실 (js/systems/studio.js, 명작 표 js/data/masterworks.js). 방의 힘(1 + 그림·세공 단계)만큼 날마다 일이 쌓여 need가 차면 미술품·조각품 qty[단계]통을 짐칸에 싣는다.
     //   실존 화가·조각가는 따로 mwNeed만큼 쌓이면(힘 4면 90일) 명작 하나 — 값 = value[0] + 그 사람의 지명도 × value[1] (조각은 × sculptK), 사교 명성 = fame[0] + 지명도 × fame[1]
     //   예술가마다 그림·조각을 세 점씩 (js/data/masterworks.js). generic: 표에 없는 실존 화가가 남기는 명작 수
@@ -488,6 +493,7 @@
     homelife: { statMax: 90, skillChance: 0.6, ledgerGold: 4, dinnerRest: 10, cold: 30, coldBonus: 2, longAway: 300, birthdayDays: 10,
       happenGap: 20, happenChance: 0.55, keepChance: 0.03, keepRest: 4, keepFatigue: 25 },
     wives: { hideHome: 0.7, conceive: 0.3, maxKids: 5, maxSpouses: 12 },
+    kidVoy: { chance: 0.02, gap: 60 },   // 배에 탄 아이의 하루 (js/systems/kidvoyage.js): 바다 위 하루마다 일어날 확률 · 같은 아이는 며칠에 한 번까지
     family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
       // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill

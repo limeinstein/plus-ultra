@@ -16,6 +16,7 @@ STORY = {
     "images/portraits/mates/anselmo": (1024, 1024),
     "images/portraits/mates/estevao": (1024, 1024),
     "images/portraits/sponsors/pt_casanova": (1024, 1024),
+    "images/portraits/legendary/peter_pan": (448, 448),
 }
 RETIRED_EVENT = {
     "images/portraits/fairy-tales/snow_white",
@@ -55,4 +56,4 @@ for stem in RETIRED_EVENT:
     box = alpha.getbbox()
     assert box and box[3] == alpha.height, (knee, box)  # 인물이 무릎단인 그림 아래까지 이어진다
 
-print("거리 NPC 520장 + 이야기 인물 10장 + 철새용 옛 사건 인물 4장: RGBA 투명 배경·크기·무릎단 통과")
+print("거리 NPC 520장 + 이야기 인물 12장 + 철새용 옛 사건 인물 4장: RGBA 투명 배경·크기·무릎단 통과")

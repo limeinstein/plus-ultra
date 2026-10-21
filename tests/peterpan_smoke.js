@@ -47,6 +47,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.ready = PP.ready();
       out.img = !!G.Img.file('portraits/legendary/peter_pan') && !!G.Img.file('portraits/legendary/peter_pan_half');
       out.chain = G.Art.portraitKeys ? G.Art.portraitKeys(G.Art.mateSpec('peter_pan')).slice(0, 2) : [];
+      out.peterHalf = G.Legend.speaker('peter_pan').half;
+      out.kidHalf = G.HomeLife.speaker(p.kids[2]).half;
       out.tavern = G.Frontier.mateReady(G.MATE.peter_pan, 1550);
       return out;
     });
@@ -55,7 +57,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(a.main.every(x => !x[1]), '본토(에든버러·인버네스·포트윌리엄·킨타이어·케이스네스·아드나머칸)는 섬이 아니다');
     ok(a.none === null, '집에 있는 아이·어른이 된 견습은 데려가지 않는다');
     ok(a.pick === '이네스' && a.pick2 === '마테오' && a.ready, '견습 중 가장 어린 아이(딸도): ' + a.pick + ' → ' + a.pick2);
-    ok(a.img && a.tavern === false, '초상 그림 등록 ' + JSON.stringify(a.chain) + ' · 술집 항해사 후보로는 나오지 않는다');
+    ok(a.img && a.peterHalf.some(x => /peter_pan_half/.test(x)) && a.kidHalf.length && a.tavern === false,
+      '피터 팬·견습 자녀의 얼굴상·무릎상 등록 ' + JSON.stringify(a.chain) + ' · 술집 항해사 후보로는 나오지 않는다');
 
     // ---------------- 루이스 섬에 상륙
     await page.evaluate(() => {

@@ -3,11 +3,23 @@
    건물 그림: exteriors/museum·zoo, interiors/museum·zoo가 있으면 그것, 없으면 도서관·저택 그림을 빌린다. */
 (function (G) {
   'use strict';
-  var U = G.U, UI = G.UI, R = G.R, C = G.Scenes.city;
+  var U = G.U, UI = G.UI, R = G.R, C = G.Scenes.city, A = G.Art;
   function S() { return G.Game.state; }
   function recOf(kind, c, realmId) { return (G.Court.buildingsAt(c.id).filter(function (x) { return x.kind === kind && x.realm === realmId; })[0] || {}).rec || null; }
   function realmName(id) { var r = G.COURT.realms[id]; return r ? r.name : ''; }
-  function curator(c, kind) { return C.npc(kind === 'zoo' ? 'zookeeper' : 'curator', kind === 'zoo' ? '사육사' : '관장'); }
+  var MANAGER_ROLE = { zoo: 'maid', museum: 'scholar', gallery: 'official' };
+  var MANAGER_TITLE = { zoo: '사육사', museum: '박물관 관장', gallery: '미술관장' };
+  // 생성 원화의 성별을 보존한다. 동물원·박물관은 모두 여성, 미술관은 지역마다 다르다.
+  var GALLERY_GENDER = { ib: 'f', ne: 'm', it: 'f', gr: 'm', ru: 'f', is: 'm', pe: 'f', af: 'm', sw: 'f', in: 'm', se: 'f', cn: 'm', kr: 'f', jp: 'm', az: 'f', an: 'm', co: 'm', tr: 'f', st: 'm', na: 'm' };
+  /** 지역 복식과 건물 성격이 함께 드러나는 전용 관리자. 그림이 없으면 같은 지역의 역할 NPC를 쓴다. */
+  function curator(c, kind) {
+    var role = MANAGER_ROLE[kind], style = G.Img.folkStyle(c), key = 'portraits/building-managers/' + style + '/' + kind;
+    var who = C.npc(kind + '_manager', MANAGER_TITLE[kind]);
+    who.portrait = A.withImg(A.npcSpec('building-manager:' + c.id + ':' + kind, role, style, kind === 'gallery' ? GALLERY_GENDER[style] : 'f'),
+      [key, 'portraits/npc-roles/' + style + '/' + role]);
+    who.half = [key + '_half', 'portraits/npc-roles/' + style + '/' + role + '_half'];
+    return who;
+  }
   /** 「기증한다」 메뉴 — 지금 기증할 수 있는 수를 함께 보인다 (규칙: G.Court.donate, js/systems/court.js) */
   function donateItem(kind, c, arg) {
     var n = G.Court.donatable ? G.Court.donatable(kind).length : 0;
@@ -32,7 +44,7 @@
   C.B.museum = MU;
   MU.enter = async function (c, arg) {
     var rec = recOf('museum', c, arg), p = S().player;
-    await C.say(curator(c, 'museum'), rec ? '어서 오십시오, ' + p.name + ' 제독. 이 박물관은 제독께서 바치신 보물로 문을 열었습니다. 오늘도 구경하러 온 사람들로 붐빕니다.' : '어서 오십시오.');
+    await C.say(curator(c, 'museum'), rec ? '늦지는 않으셨군요, ' + p.name + ' 제독. 보물은 제가 빠짐없이 정리해 두었습니다. 제독을 기다린 건 아니고, 전시 기록을 다시 확인하던 참이었습니다.' : '조용히 관람해 주십시오. 딱히 제독을 기다린 것은 아닙니다.');
   };
   MU.menu = function (c, arg) {
     return [{ label: '전시실을 둘러본다', icon: 'bust', onClick: function () { return MU.show(c, arg); } }, donateItem('museum', c, arg)];
@@ -54,7 +66,7 @@
   C.B.gallery = GA;
   GA.enter = async function (c, arg) {
     var rec = recOf('gallery', c, arg), p = S().player;
-    await C.say(curator(c, 'gallery'), rec ? '어서 오십시오, ' + p.name + ' 제독. 제독께서 바치신 명작들이 이 미술관의 첫 전시가 되었습니다.' : '어서 오십시오.');
+    await C.say(curator(c, 'gallery'), rec ? p.name + ' 제독, 작품과 액자의 간격은 손가락 두 마디로 맞췄습니다. 제독께서 바치신 명작은 제가 정한 순서대로만 관람해 주십시오.' : '전시실에서는 정해진 동선과 간격을 지켜 주십시오.');
   };
   GA.menu = function (c, arg) {
     return [{ label: '작품 전시실을 둘러본다', icon: 'palette', onClick: function () { return GA.show(c, arg); } }, donateItem('gallery', c, arg)];
@@ -75,7 +87,7 @@
   C.B.zoo = ZO;
   ZO.enter = async function (c, arg) {
     var p = S().player;
-    await C.say(curator(c, 'zoo'), '어서 오십시오, ' + p.name + ' 제독! 제독께서 알려 주신 짐승들이 잘 지내고 있습니다. 아이들이 매일 구경하러 옵니다.');
+    await C.say(curator(c, 'zoo'), '어서 오세요, ' + p.name + ' 제독! 저, 오늘도 새벽부터 먹이를 챙겼어요. 제독께서 알려 주신 짐승들이 저를 알아보는 것 같아요! 아이들도 매일 구경하러 와요.');
   };
   ZO.menu = function (c, arg) {
     return [{ label: '동물들을 둘러본다', icon: 'horse', onClick: function () { return ZO.show(c, arg); } }, donateItem('zoo', c, arg)];

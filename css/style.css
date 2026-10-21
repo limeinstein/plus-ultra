@@ -1584,3 +1584,28 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .autodest { gap: 5px; }
 .autodest .choice { padding: 6px 14px; font-size: 19px; }
 .autodest .choice small { font-size: 14px; }
+
+/* 플레이 가이드북 — 쪽 넘기기 · 그림과 번호 설명 나란히 (2026-10-21, js/ui/guidebook.js) */
+.gb-page .gb-kicker { display: flex; justify-content: space-between; }
+.gb-page .gb-kicker span { letter-spacing: 0; }
+.gb-page .gb-lead { margin: 0 0 4px; }
+.gb-page .gb-lead p:first-child { margin-top: 0; }
+.gb-page h3:first-child, .gb-page .gb-lead + h3 { margin-top: 12px; }
+.gb-sec.on { color: #fff; background: rgba(240,192,64,.18); }
+.gb-duo { display: flex; gap: 18px; align-items: flex-start; margin: 10px 0 12px; }
+.gb-duo .gb-fig { flex: 0 0 54%; margin: 0; }
+.gb-duo .gb-fig img { width: 100%; max-height: none; }
+.gb-duo .gb-table { flex: 1; margin: 0; font-size: 14px; line-height: 1.38; }
+.gb-duo .gb-table th, .gb-duo .gb-table td { padding: 4px 7px; }
+.gb-page h2 { font-size: 25px; margin: 0 0 8px; padding-bottom: 4px; }
+.gb-page h3 { font-size: 20px; margin: 10px 0 6px; }
+.gb-page .gb-duo + ul, .gb-page .gb-duo + p { margin-top: 6px; }
+.gb-page ul li, .gb-page p { font-size: 16px; line-height: 1.6; }
+.gb-table.gb-legend td:first-child, .gb-table.gb-legend th:first-child { width: 38px; white-space: nowrap; text-align: center; padding-left: 4px; padding-right: 4px; }
+.gb-table.gb-legend td:first-child { font: bold 14px/1 sans-serif; color: #fff; }
+.gb-table.gb-legend td:first-child span { display: inline-block; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; background: #d0342c; box-shadow: 0 0 0 2px #fff, 0 1px 3px rgba(0,0,0,.4); }
+.gb-table.gb-legend td:nth-child(2) { white-space: nowrap; font-weight: bold; }
+@media (max-width: 1100px) { .gb-duo { flex-direction: column; } .gb-duo .gb-fig { flex: none; width: 100%; } }
+.gb-pair { display: flex; gap: 16px; align-items: flex-start; }
+.gb-pair .gb-fig { flex: 1; margin: 8px 0; }
+.gb-pair .gb-fig img { width: 100%; max-height: none; }

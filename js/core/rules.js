@@ -228,7 +228,7 @@
     };
   };
   R.gunLoad = function (s) { return s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].load : 1); };
-  R.shipCargoCap = function (s) { return Math.max(0, Math.floor(s.cap - R.gunLoad(s))); };
+  R.shipCargoCap = function (s) { return Math.max(0, Math.floor(s.cap + (G.Cabins && G.Cabins.storeBonus ? G.Cabins.storeBonus(s) : 0) - R.gunLoad(s))); };   // 기함의 창고는 짐칸(부피)만 늘린다 — 무게 한도는 s.cap 그대로 (js/systems/cargo.js)
   R.fleetCap = function () { return U.sum(R.S().fleet.ships, R.shipCargoCap); };
   /* 교역품의 산 곳: cg.lots = { 도시ID: { q, cost } } — 'x'는 산 곳 모름(나포·노획·만든 것·옛 저장)
      짐은 여러 곳에서 줄어들므로(폭풍·해적·보급·의뢰·상함…) 볼 때마다 cg.q에 맞춘다: 모자라면 'x'에 더하고, 남으면 고르게 덜어 낸다.
@@ -506,7 +506,7 @@
     var cm = R.crewMin();
     var crewF = f.crew >= cm ? 1 : Math.max(0.25, f.crew / cm);
     var fat = f.fatigue > 60 ? 1 - (f.fatigue - 60) / ((G.BALANCE && G.BALANCE.fatigueDiv) || 100) : 1, k = crewF * fat;
-    if (G.Cabins) k *= 1 + Math.min(((G.BALANCE.cabins || {}).rigMax) || 0.08, G.Cabins.fx('rig', 'rig'));   // 조범실: 돛을 맡은 사람들이 있으면 조금 빨라진다
+    if (G.Cabins) k *= 1 + Math.min(((G.BALANCE.cabins || {}).rigMax) || 1, G.Cabins.fx('rig', 'rig'));   // 조범실: 돛을 맡은 사람들 — 방마다 (1+항해·운용 단계)/64, 16칸을 3단계로 채우면 +100% (2배)
     var ek = G.Escort ? G.Escort.speedK(v * k, ang, wind, env) : 1; k *= ek;   // 호위하는 상선보다 빨리 가지 못한다 (js/systems/escort.js)
     R.fleetInfo = { slow: f.ships[r0.slow], assist: r0.assist, drag: r0.drag, vmin: r0.vmin, vs: vs0, tack: th0 > 0, row: row0, crewF: crewF, fat: fat, escort: ek < 0.999 };
     return { vmg: v * k, straight: r0.v * k, theta: th0, legP: lp * k, legM: lm * k };

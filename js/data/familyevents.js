@@ -12,7 +12,8 @@
    말하는 사람(w): 'n' 이야기 글 · 'me' 제독 · 'love' 아내/애인 · 'k1' 'k2' 'k3' 아이(맏이부터) · 'kids' 아이들 함께 · 'mate' 부관 · 'npc' 그 자리의 사람(혼례 주례 등)
    조건 낱말: wife 본처 · wife2 둘째 부인 · lover 결혼하지 않은 애인(여급) · married 아내(본처나 둘째) · matewife 부하였던 아내 · maidwife 여급이었던 아내 ·
               k1 k2 k3 아이 수 · nokids 아이 없음 · girl boy (k1이) 딸·아들 · small k1 8살 아래 · big k1 12살부터 · baby 갓난아기가 곁에 · preg 아기를 가졌다(알림) ·
-              mate 부관이 있다 · aboard 아이가 배에 탔다 · second 둘째 부인을 맞는 혼례 · rich 금화 1만 닢 넘게 · long 오래(150일 넘게) 떠나 있었다
+              mate 부관이 있다 · aboard 아이가 배에 탔다 · second 둘째 부인을 맞는 혼례 · rich 금화 1만 닢 넘게 · long 오래(150일 넘게) 떠나 있었다 ·
+              together 아내가 배에 함께 타고 항해해 같이 집에 돌아왔다(귀환)
               앞에 ! 를 붙이면 그 반대.
    글 안의 낱말: {k1|이/가} 처럼 | 뒤에 조사를 쓰면 이름에 맞춰 붙인다 (만 처럼 그냥 붙일 수도 있다) · {me} 제독 이름 · {love} 아내/애인 이름 · {you} 아내는 '당신', 애인은 '선장님' · {k1} {k2} {k3} 아이 이름 · {kids} 아이들 이름 ·
                  {child} k1이 아들이면 '아들' 딸이면 '딸' · {baby} 갓난아기 · {mate} 부관 이름 · {city} 지금 도시 · {home} 고향 · {days} 떠나 있던 날 */
@@ -112,7 +113,8 @@
       ], fx: { aff: 4, hp: 6 } },
 
     // ================================================================ 귀환 — 오래 떠나 있다가 집에 돌아온 날
-    { id: 'ret_door', at: 'return', img: 'family-events/11_return_doorway', title: '문지방 너머의 손',
+    // 아내가 집에서 기다린 귀환 (함께 항해했다면 아래 「같이 돌아온 집」 — together)
+    { id: 'ret_door', at: 'return', img: 'family-events/11_return_doorway', title: '문지방 너머의 손', need: ['!together'],
       lines: [
         { w: 'n', t: '{days}일 만의 {home}. 등 뒤로 돛대 숲이 저무는 부두를 지나 집 문을 연다. 문지방 너머에서 {love}가 손을 내민다.' },
         { w: 'love', t: '…정말 당신이에요? 꿈이면 깨지 마요.' },
@@ -122,7 +124,7 @@
         { w: 'k2', t: '아버지, 나 기억해요? 나 키 컸어요!', if: ['k2'] },
         { w: 'love', t: '{baby}가 당신 얼굴을 빤히 봐요. 아빠라고 알아보나 봐요.', if: ['baby'] }
       ], fx: { aff: 5, bond: 3, fatigue: -10 } },
-    { id: 'ret_lamp', at: 'return', img: 'family-events/14_return_waiting_lamp', title: '빗창 너머의 등불',
+    { id: 'ret_lamp', at: 'return', img: 'family-events/14_return_waiting_lamp', title: '빗창 너머의 등불', need: ['!together'],
       lines: [
         { w: 'n', t: '비 내리는 밤에 닿은 {home}. 집 창가에 아직 등불이 켜져 있다. 빗물 흐르는 유리 너머로 {love}가 손바닥을 댄다.' },
         { w: 'love', t: '(유리 너머로 입 모양만) 어서 들어와요!' },
@@ -131,7 +133,7 @@
         { w: 'kids', t: '(잠옷 바람으로 계단을 뛰어 내려온다) 아버지 왔어요?!', if: ['k1', 'small'] },
         { w: 'love', t: '{kids}, 다시 자러 가야지! …오늘만 봐줄게요.', if: ['k1', 'small'] }
       ], fx: { aff: 5, bond: 2, fatigue: -8 } },
-    { id: 'ret_cloak', at: 'return', img: 'family-events/15_return_remove_cloak', title: '젖은 망토를 벗기는 손', need: ['long'],
+    { id: 'ret_cloak', at: 'return', img: 'family-events/15_return_remove_cloak', title: '젖은 망토를 벗기는 손', need: ['long', '!together'],
       lines: [
         { w: 'n', t: '소금기와 빗물에 절은 항해 망토. {love}가 말없이 단추를 하나씩 풀어 벗겨 준다.' },
         { w: 'love', t: '어깨가 많이 야위었어요. 이번 항해는 힘들었죠?' },
@@ -139,7 +141,7 @@
         { w: 'love', t: '이제 그 이야기는 다 내 거예요. 하루에 하나씩 들려줘요.' },
         { w: 'k1', t: '아버지 망토에서 바다 냄새가 나요! 이건 제가 말릴게요.', if: ['k1'] }
       ], fx: { aff: 5, bond: 2, hp: 10, fatigue: -12 } },
-    { id: 'ret_gifts', at: 'return', img: 'family-events/13_return_unpack_gifts', title: '항해 상자 속 선물',
+    { id: 'ret_gifts', at: 'return', img: 'family-events/13_return_unpack_gifts', title: '항해 상자 속 선물', need: ['!together'],
       lines: [
         { w: 'n', t: '항해 상자의 뚜껑을 연다. 해도와 일지 사이에 먼 항구에서 하나씩 모아 온 작은 것들이 들어 있다.' },
         { w: 'me', t: '이건 아프리카 해안의 조개, 이건 동쪽 항구에서 산 비단 끈이오.' },
@@ -149,6 +151,40 @@
         { w: 'k1', t: '(상자 바닥의 해도를 꺼내 펼치며) 이 섬들… 언젠가 저도 다 가 볼 거예요.', if: ['big'] },
         { w: 'k2', t: '{k1|만} 주지 말고 저도요!', if: ['k2'] }
       ], fx: { aff: 4, bond: 4 } },
+    // ================================================================ 같이 돌아온 집 — 아내와 함께 항해하고 오랜만에 둘이 집에 돌아온 날 (2026-10-21)
+    { id: 'ret_tg_chest', at: 'return', img: 'family-events/13_return_unpack_gifts', title: '둘이 맞든 항해 상자', need: ['together'], w: 1.5,
+      lines: [
+        { w: 'n', t: '{days}일 만의 {home}. {love}와 둘이서 항해 상자를 맞들고 집 문을 연다. 덧창 틈으로 든 볕에 먼지가 반짝인다.' },
+        { w: 'love', t: '어머, 먼지 좀 봐요. 우리가 정말 오래 비웠네요. 창부터 열어요.' },
+        { w: 'me', t: '배 위에서는 날마다 붙어 있었는데, 이 문을 같이 여니 또 새롭구려.' },
+        { w: 'love', t: '바다에서는 당신이 제독이었지만, 이 문 안에서는 제가 안주인이에요. 자, 상자부터 풀어요.' },
+        { w: 'n', t: '해도와 일지 아래에서 작은 꾸러미들이 나온다. 항구에 닿을 때마다 {love}가 몰래 사 모은 것들이다.' },
+        { w: 'love', t: '이건 당신 몰래 산 거예요. 같이 다녔어도 비밀 하나쯤은 있어야죠.' },
+        { w: 'k1', t: '(유모 손을 뿌리치고 달려오며) 어머니! 아버지! 두 분이 같이 왔어요!', if: ['small'] },
+        { w: 'k1', t: '두 분이 다 떠나 계시니 집이 너무 조용했어요. …이번엔 어떤 바다를 보고 오셨어요?', if: ['big'] },
+        { w: 'k2', t: '어머니, 나 키 컸죠? 아버지보다 어머니가 더 보고 싶었어요!', if: ['k2'] },
+        { w: 'love', t: '{baby}야, 엄마 왔어. 그새 이렇게 컸네… 유모가 잘 돌봐 줬구나.', if: ['baby'] }
+      ], fx: { aff: 4, bond: 3, fatigue: -8 } },
+    { id: 'ret_tg_hearth', at: 'return', img: 'family-events/09_tavern_fireplace_cloak', title: '우리 집 난로 앞', need: ['together'],
+      lines: [
+        { w: 'n', t: '밤. {days}일 만에 우리 집 난로에 불을 지핀다. {love}가 소금기 밴 두 사람의 망토를 나란히 걸어 말린다.' },
+        { w: 'love', t: '선실 침대보다 넓은 데서 자려니 오히려 어색하겠어요.' },
+        { w: 'me', t: '파도 소리가 없으니 잠이 올지 모르겠소.' },
+        { w: 'love', t: '그럼 제가 곁에서 철썩철썩 해 줄까요? (웃음)' },
+        { w: 'love', t: '…폭풍 치던 그 밤, 당신이 갑판에서 내려오지 않아서 정말 무서웠어요. 그래도 같이 가길 잘했어요. 기다리는 것보다 백 배 나아요.' },
+        { w: 'me', t: '당신이 선실에 등불을 켜 두어서, 내려갈 곳을 잃지 않았지.' },
+        { w: 'kids', t: '(잠옷 바람으로 계단에서 고개를 내밀고) 바다 이야기 해 주세요! 고래 봤어요?', if: ['k1', 'small'] },
+        { w: 'love', t: '오늘만이에요. 아버지랑 엄마가 본 고래 이야기, 딱 하나만.', if: ['k1', 'small'] }
+      ], fx: { aff: 5, bond: 2, hp: 8, fatigue: -10 } },
+    { id: 'ret_tg_breakfast', at: 'return', img: 'family-events/21_family_breakfast', title: '집에서 맞는 첫 아침', need: ['together'],
+      lines: [
+        { w: 'n', t: '이튿날 아침. 건빵과 소금에 절인 고기 대신, 갓 구운 빵 냄새가 부엌에서 퍼진다.' },
+        { w: 'love', t: '배에서는 내내 요리사 솜씨만 먹었잖아요. 오늘부터는 제 차례예요.' },
+        { w: 'me', t: '(빵을 한 입 베어 물고) …이 맛을 잊고 있었구려.' },
+        { w: 'love', t: '바다에서는 당신이 저를 지켜 줬으니까, 뭍에서는 제가 당신을 살찌울 거예요.' },
+        { w: 'k1', t: '어머니 빵이다! 배에서도 이런 거 드셨어요?', if: ['small'] },
+        { w: 'k1', t: '다음 항해엔 저도 데려가 주세요. 두 분만 다니시는 건 불공평해요.', if: ['big'] }
+      ], fx: { aff: 4, bond: 3, hp: 6 } },
     // 고향 부두에서 (오래 떠나 있다가 고향 항구에 들어선 날 — 아내가 집에 있을 때)
     { id: 'dock_embrace', at: 'dock', img: 'family-events/12_return_dock_embrace', title: '새벽 부두의 포옹',
       lines: [

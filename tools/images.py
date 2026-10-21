@@ -391,7 +391,7 @@ def write_manifest(found):
 
 def is_valid(key, keys):
     family_age = re.match(r'^portraits/family/(?:[a-z_]+/)?(?:son|daughter)_age(?:5|10|15|20)(?:_v[1-5])?(?:_half)?$', key)
-    return key in keys or family_age or key.startswith(('portraits/player/', 'portraits/player-aged/', 'portraits/courtiers/', 'landmarks/', 'map-discoveries/', 'characters/',
+    return key in keys or family_age or key.startswith(('portraits/player/', 'portraits/player-aged/', 'portraits/courtiers/', 'portraits/building-managers/', 'landmarks/', 'map-discoveries/', 'characters/',
                                           'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'relics/', 'relic-kinds/',
                                           'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/', 'npc-walk/', 'guide/', 'masterworks/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
@@ -399,7 +399,7 @@ def is_valid(key, keys):
 def report(found, dups, keys):
     groups = [('타이틀', 'title'), ('거리 배경', 'backgrounds/'), ('거리 배경(공통)', 'bg-styles/'), ('건물 겉모습', 'exteriors/'), ('지역별 건물', 'exterior-styles/'),
               ('거리 볼거리', 'landmarks/'), ('지도 유적', 'map-discoveries/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
-              ('마을 사람', 'portraits/npc/'), ('거리 대화 NPC', 'portraits/street-folk/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'), ('왕실 신하', 'portraits/courtiers/'),
+              ('마을 사람', 'portraits/npc/'), ('시설 관리자', 'portraits/building-managers/'), ('거리 대화 NPC', 'portraits/street-folk/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'), ('왕실 신하', 'portraits/courtiers/'),
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
               ('항해 효과', 'effects/'), ('결과 연출', 'outcomes/'), ('이야기 사진', 'story/'), ('명작', 'masterworks/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]

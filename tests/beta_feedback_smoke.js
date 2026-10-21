@@ -16,6 +16,10 @@ let browser;
   page.on('pageerror', error => errors.push(String(error)));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
 
+  // 회귀 시험은 바깥 네트워크 없이도 돌아가야 한다. 글꼴 요청만 빈 응답으로 막고 화면·기능을 점검한다.
+  await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ status: 200, contentType: 'text/css', body: '' }));
+  await page.route('https://fonts.gstatic.com/**', route => route.fulfill({ status: 200, body: '' }));
+
   await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/feedback', async route => {
     if (route.request().method() === 'POST') {
       submitted = route.request().postDataJSON();
@@ -66,6 +70,16 @@ let browser;
   ok(typeof presence.sessionKey === 'string' && presence.sessionKey.length >= 20, '탭 한정 무작위 접속 키 전송');
   await page.waitForSelector('.voyage-pin');
   ok((await page.locator('.voyage-pin').first().innerText()) === '가*', '실제 이름 대신 한 글자 익명 표식으로 세계 지도 표시');
+  const mapLayout = await page.locator('.world-map').evaluate((map) => {
+    const image = map.querySelector('.world-map-art'), pin = map.querySelector('.voyage-pin');
+    const mr = map.getBoundingClientRect(), pr = pin.getBoundingClientRect();
+    return { width: mr.width, height: mr.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight,
+      pinX: pr.left + pr.width / 2 - mr.left, pinY: pr.top + pr.height / 2 - mr.top,
+      pinLeft: parseFloat(pin.style.left), pinTop: parseFloat(pin.style.top) };
+  });
+  ok(mapLayout.naturalWidth === 1600 && mapLayout.naturalHeight === 800, '게임 지형 자료로 만든 2:1 중세 지도 원화 로드');
+  ok(Math.abs(mapLayout.width / mapLayout.height - 2) < 0.01, '지도와 경·위도 표식 좌표계의 2:1 비율 유지');
+  ok(Math.abs(mapLayout.pinLeft / 100 - (-9.2 + 180) / 360) < 0.00001 && Math.abs(mapLayout.pinTop / 100 - (90 - 38.7) / 180) < 0.00001, '리스본 경·위도 표식을 지도 위 정확한 위치에 배치');
   ok((await page.locator('#fame-ranking').innerText()).includes('12,000'), '명성 순위와 현재 도시·미발견 수 표시');
   ok((await page.locator('#duration-ranking').innerText()).includes('1년 35일'), '게임 내 항해 기간 순위 표시');
   ok((await page.locator('#popular-discovery').innerText()) === '모아이' && (await page.locator('#popular-city').innerText()) === '리스본', '가장 자주 발견된 발견물과 도시 표시');

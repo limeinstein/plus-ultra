@@ -281,7 +281,9 @@
   };
   H2.enter = async function (c, id) {
     var w = W.of(id); if (!w) return false;
-    await UI.say(U.pick(['어서 와요, 당신! 오늘은 우리 집에서 쉬어요.', '당신 배가 보였어요. 기다리고 있었어요.', '오셨군요. 따뜻한 수프를 데울게요.']), duo(w, 'happy'));
+    await UI.say(w.aboard   // 배에 함께 탄 둘째 부인이면 같이 돌아온 집 (2026-10-21)
+      ? U.pick(['우리 집이에요! 같이 문을 여니까 꼭 새집 같아요.', '먼지부터 털어야겠네요. 배 위에서 내내 이 부엌 생각이 났어요.'])
+      : U.pick(['어서 와요, 당신! 오늘은 우리 집에서 쉬어요.', '당신 배가 보였어요. 기다리고 있었어요.', '오셨군요. 따뜻한 수프를 데울게요.']), duo(w, 'happy'));
     if (G.FamEv) { try { await G.FamEv.homeReturn(w); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     await W.visit(w, false);
     if (G.FamEv) { try { await G.FamEv.homeDay(w); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상

@@ -1,4 +1,4 @@
-/* 기함 선실 화면의 선박 36종·선실 23종 그림 등록과 실제 표시를 확인한다 (2026-10-16 새 방 넷은 전용 그림이 없으면 빌린 그림).
+/* 기함 선실 화면의 선박 36종·선실 24종 전용 그림 등록과 실제 표시를 확인한다.
    node tests/cabin_assets_smoke.js */
 'use strict';
 
@@ -88,7 +88,7 @@ function socket(url) {
       const value = await cdp.call('Runtime.evaluate', {
         expression: `(()=>{
           const shipMissing=G.SHIP_TYPES.filter(x=>!G.Img.has('ships/'+x.id)).map(x=>x.id);
-          const cabinMissing=G.CABINS.filter(x=>!G.Img.has('cabins/'+x.id)&&!(x.art&&G.Img.has('cabins/'+x.art))).map(x=>x.id);   // 새 방(화실·조각실·음악실·참모실)은 전용 그림이 오기 전까지 비슷한 방 그림(art)을 빌린다
+          const cabinMissing=G.CABINS.filter(x=>!G.Img.has('cabins/'+x.id)).map(x=>x.id);
           const room=[...document.querySelectorAll('.cb-card-art')];
           return {shipMissing,cabinMissing,shipReady:!!document.querySelector('.cb-stage.art-ready'),roomCount:room.length,roomReady:room.filter(x=>x.naturalWidth>100).length};
         })()`,

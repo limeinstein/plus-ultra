@@ -25,7 +25,7 @@ const ROOT = path.resolve(__dirname, '..');
     const U = id => RR.typeUpwind(id, 0);
     const car = U('caravel'), fri = U('frigate'), lg = U('lgalleon'), cog = U('cog');
     ok(fri.up / car.up > 0.65 && lg.up / car.up > 0.5, '맞바람: 카라벨 ' + car.up.toFixed(3) + ' · 프리깃 ' + fri.up.toFixed(3) + ' (' + Math.round(fri.up / car.up * 100) + '%) · 대형 갤리온 ' + lg.up.toFixed(3) + ' · 코그 ' + cog.up.toFixed(3));
-    const oldBest = 1.58 * Math.max(...[0, 15, 30, 45, 60, 75, 90].map(a => G.SHIP.frigate.sails.reduce((t, k) => t + (k === 'sq' ? (a < 60 ? 1 - a / 600 : 0.9 - (a - 60) * 0.0125) : RR.sailEff(k, a * Math.PI / 180)), 0) / 4));
+    const oldBest = G.SHIP.frigate.spd * Math.max(...[0, 15, 30, 45, 60, 75, 90].map(a => G.SHIP.frigate.sails.reduce((t, k) => t + (k === 'sq' ? (a < 60 ? 1 - a / 600 : 0.9 - (a - 60) * 0.0125) : RR.sailEff(k, a * Math.PI / 180)), 0) / 4));
     ok(Math.abs(fri.best - oldBest) < 1e-9, '프리깃 순풍·옆바람 최고 속력은 예전 곡선과 같음 ' + fri.best.toFixed(3) + ' = ' + oldBest.toFixed(3));
     ok(car.up > fri.up, '그래도 삼각돛 카라벨이 맞바람에는 더 빠르다');
     ok(RR.upwindWord(car) === '강함' && RR.upwindWord(cog) === '약함', '한 낱말: 카라벨 ' + RR.upwindWord(car) + ' · 프리깃 ' + RR.upwindWord(fri) + ' · 코그 ' + RR.upwindWord(cog) + ' · 갤리 ' + RR.upwindWord(U('galley')));

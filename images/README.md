@@ -48,6 +48,7 @@
 | 마을 사람 | `portraits/npc/역할.png` (예: `trader`), 문화권별 `_islam`, 도시별 `@0` | 512×512 |
 | 마을 사람 — 도시마다 다른 얼굴 | 같은 이름 뒤에 `_f`(여) `_m`(남) `_2` `_3` 을 붙이면 도시 번호에 따라 번갈아 나옵니다. 예: `portraits/npc/priest_europe_f.webp` (수녀) | 512×512 |
 | 마을 사람 — 도시 양식×역할 240장 | `portraits/npc-roles/양식/역할.webp` (예: 조선 상인 `kr/merchant.webp`). 양식 20종×역할 12종이며, `portraits/npc/역할@도시번호`가 있으면 도시 전용 그림을 먼저 씁니다. | 512×512, 투명 배경 |
+| 왕립 시설 관리자 | `portraits/building-managers/양식/zoo.webp` · `museum.webp` · `gallery.webp`, 무릎상은 `_half.webp`. 20지역×3시설이며 동물원은 풋풋한 새내기 사육사, 박물관은 엄숙한 츤데레 관장, 미술관은 고지식하고 깐깐한 고위 관리자입니다. | 얼굴 512×512 · 무릎상 1024×1536 |
 | 거리 보행 지역 NPC 14종 | `street-folk/역할_양식/walk_1.webp` … `walk_8.webp` — 마을 남녀·소년·소녀·촌장 할아버지·할머니·사서·여관 주인·동물·모험가·장사꾼·귀족 청년·병사·항해사 × 도시 양식 20종. 원본 4×2 시트는 `npc-walk/양식/역할_sheet.png`, `python tools/npc_walks.py`로 나눔. 기존 주민 경로 `man_양식`도 유지 | 한 장 380×444, 투명 배경·오른쪽 보행 전신 |
 | 국가별 항해사 후보·후원자 760장 | `portraits/pools/mates/국가/f/01.webp`, `portraits/pools/sponsors/국가/m/01.webp`. 국가 19종×항해사·후원자×여·남×10명 | 512×512, 투명 배경 |
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |
@@ -68,7 +69,7 @@
 | 지도에 남는 자연 경관 모형 | `map-discoveries/nature-1.png` … `nature-7.png`, `new-nature-1.png` … `new-nature-2.png` — 육상·항해 자연 경관 124곳(솔로몬의 광산 포함)을 4×4 셀에 배치. 직접 발견한 뒤 항해·육상·해도에 유적과 같은 크기로 표시 | 투명 배경 PNG, 4열×4행 |
 | 배 | `ships/배ID.webp` — 기함 선실에서 갑판·격벽·선실 칸이 보이는 측면 단면도 36종 (예: caravel·carrack·galleon·galley·dhow·junk·baochuan·panokseon·geobukseon·atakebune …, 전체 목록은 `python tools/images.py --list`, 모음은 `docs/art/flagship-cabin-cutaway-ships-preview.jpg`) | 880×480 |
 | 항해·해전 8방향 동작 배 | `ships-nav/배ID.webp` — `python tools/ship3d/bake.py`가 three.js 3D 모형으로 굽는 정박 3장·표류 5장·질주 8장 시트(치수·돛대 자리는 `tools/render_ship_sprites.py`와 같다) | 자동 생성 1792×3584, 셀 224×224, 수면 피벗 (112,139), 투명 배경 |
-| 기함 선실 | `cabins/선실ID.webp` — 함장실 `captain`, 부관실 `adjutant`, 조타실 `helm`, 파수대 `lookout`, 갑판 `deck`, 빈 선실 `hold`, 지도 제작실 `chart`, 요리실 `galley`, 식당 `mess`, 회계실 `account`, 예배실 `chapel`, 진료실 `sick`, 오락실 `rec`, 조범실 `rig`, 선박 수리실 `repair`, 사육실 `pen`, 포격실 `gun`, 해병 대기실 `marine`, 통역실 `interp` | 정사각형, 권장 320×320 |
+| 기함 선실 | `cabins/선실ID.webp` — 함장실 `captain`, 부관실 `adjutant`, 조타실 `helm`, 파수대 `lookout`, 갑판 `deck`, 빈 선실 `hold`, 지도 제작실 `chart`, 요리실 `galley`, 식당 `mess`, 회계실 `account`, 예배실 `chapel`, 진료실 `sick`, 오락실 `rec`, 조범실 `rig`, 선박 수리실 `repair`, 사육실 `pen`, 포격실 `gun`, 해병 대기실 `marine`, 화실 `studio`, 조각실 `sculpt`, 음악실 `musicroom`, 참모실 `staff`, 창고 `store`, 통역실 `interp` | 정사각형, 권장 320×320 |
 | 항해 효과 스프라이트 시트 | `effects/ship_spray.png`, `effects/departure_gull.png` | 1024×512, 4열×2행, 셀 256×256, 투명 배경 |
 | 육상전·육상 탐험·사건 스프라이트 | `sprites/시트.webp` — 우리 편 0~3단계(swordsmen·musketeers·cannons·officers), 지역 적(east_fighters·ottoman·natives·west_europe·india_central·southeast_asia·africa_regions·meso_south·north_america·pacific), 들짐승(animals), 항해 사건(whale·dolphin·mermaid·storm·raincloud·rain·sun), 탐험대 8방향(party_*) | `python tools/sprite_repack.py`가 원본(`_extra/sprite_src/`)을 고른 칸으로 다시 짠 것. 칸·피벗은 `js/data/sprites.js` |
 | 육상전 지형 배경 | `landwar/backgrounds/지형.png` — grass·steppe·desert·forest·jungle·mountain·snow·tundra·ice | 초광폭 2.25:1 이상, 가로 1800 이상 |

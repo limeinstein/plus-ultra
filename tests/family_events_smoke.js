@@ -52,7 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { n: E.length, imgs: new Set(E.map(e => e.img)).size, missing: E.filter(e => !G.Img.file(e.img)).map(e => e.id), ats };
     });
     console.log(JSON.stringify(data));
-    ok(data.n === 32 && data.imgs === 30 && !data.missing.length, '가족 사건 32가지, 그림 30장 모두 쓰고 모두 등록됨 — ' + JSON.stringify(data.ats));
+    ok(data.n === 35 && data.imgs === 30 && !data.missing.length, '가족 사건 35가지(같이 돌아온 집 3가지 포함), 그림 30장 모두 쓰고 모두 등록됨 — ' + JSON.stringify(data.ats));
 
     // ② 등장인물에 따라 대화가 늘고 준다 — 같은 귀환 장면, 아이 없음 / 어린 아이 둘 / 큰 아이·갓난아기
     const casts = await page.evaluate(() => {
@@ -175,12 +175,34 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     ok(port.a === 'fam_laundry' && port.b === 'dock_embrace' && port.c === 0, '항구: 견습 아이와 「정박한 배의 빨래」 · 200일 만의 고향 부두 마중 (그날 집에서는 귀환 장면을 되풀이하지 않음)');
 
+    // ⑦-2 아내와 함께 항해하고 돌아온 집 (2026-10-21): 기다린 사람의 마중·「야위었어요」가 아니라 같이 돌아온 부부의 장면
+    const tg = await page.evaluate(async () => {
+      const out = {};
+      for (const ab of [true, false]) {
+        const ids = [], lines = [];
+        for (let i = 0; i < 6; i++) {
+          const s = window.__fresh({ wife: true, kids: [6] }), p = s.player; p.wifeAboard = ab; p.homeSeen = s.day - 200;
+          window.__said = []; G.FamEv.entry = null;
+          await G.FamEv.homeReturn(); ids.push(p.famEv.lastId); lines.push(...window.__said.map(x => x[1]));
+        }
+        out[ab ? 'together' : 'waited'] = { ids, lines: lines.join(' | ') };
+      }
+      // 자택 인사 · 고향 항구 출항 인사
+      const s = window.__fresh({ wife: true }), p = s.player; p.wifeAboard = true; p.homeSeen = s.day - 120; window.__said = [];
+      const HM = G.Scenes.city.B.home; await HM.enter(G.CITY_DATA[0]); out.homeGreet = window.__said[0] ? window.__said[0][1] : '';
+      return out;
+    });
+    console.log(JSON.stringify(tg).slice(0, 600));
+    ok(tg.together.ids.every(id => /^ret_tg_/.test(id)) && !/야위었|정말 당신이에요|힘들었죠|기다리고 있/.test(tg.together.lines), '함께 항해한 아내와 돌아온 집: ' + [...new Set(tg.together.ids)].join('·') + ' — 마중·「야위었어요」 대사 없음');
+    ok(tg.waited.ids.every(id => /^ret_/.test(id) && !/^ret_tg_/.test(id)), '집에서 기다린 아내: 예전 귀환 장면 ' + [...new Set(tg.waited.ids)].join('·'));
+    ok(/우리 집|집 냄새|같이/.test(tg.homeGreet) && !/무사히 돌아와서/.test(tg.homeGreet), '자택 인사도 함께 돌아온 말: ' + tg.homeGreet);
+
     // ⑧ 화면: 실제 대화 창과 그림 (가족 등불 축제 · 술집 춤)
     await page.evaluate(() => { G.UI.say = G.UI.__say; G.UI.ask = G.UI.__ask; });
-    for (const [id, opt, name] of [['fam_lanterns', { wife: true, kids: [9, 6] }, 'lanterns'], ['tav_dance', { wife: true }, 'dance']]) {
+    for (const [id, opt, name] of [['fam_lanterns', { wife: true, kids: [9, 6] }, 'lanterns'], ['tav_dance', { wife: true }, 'dance'], ['ret_tg_chest', { wife: true, kids: [6] }, 'together'], ['ret_tg_hearth', { wife: true, kids: [6] }, 'together_hearth']]) {
       await page.evaluate(([id, opt]) => {
         const s = window.__fresh(opt), FE = G.FamEv, hk = FE.homeKids();
-        window.__done = false; FE.play(id, FE.cast({ love: FE.mainWife(), kids: hk.kids, babies: hk.babies, mate: true })).then(() => { window.__done = true; });
+        window.__done = false; FE.play(id, FE.cast({ love: FE.mainWife(), kids: hk.kids, babies: hk.babies, mate: true, days: 187, together: true })).then(() => { window.__done = true; });
       }, [id, opt]);
       await page.waitForTimeout(1800);
       await page.keyboard.press('Enter'); await page.waitForTimeout(700);

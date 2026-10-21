@@ -7,6 +7,8 @@
   ## 장 제목        — 왼쪽 차례의 한 장
   ### 절 제목       — 장 안의 소제목 (차례에 들여 씀)
   ![설명](guide/이름) — 한 줄에 그림 하나: images/guide/이름.webp (게임은 G.Img 로 읽는다)
+                      그림 바로 다음에 표가 오면 둘을 나란히 놓는다 (왼쪽 그림 · 오른쪽 표). 표 머리 첫 칸이 「번호」면 그림의 빨간 번호와 같은 동그라미로 그린다.
+  한 절(###)이 게임 안 가이드북의 한 쪽 — ←→ 로 넘겨 본다 (js/ui/guidebook.js)
   **굵게**, [글](주소), - 목록, 1. 번호 목록, - [ ] 할 일, | 표 |
 """
 import html
@@ -47,9 +49,13 @@ def inline(s):
 def table(rows):
     cells = [[c.strip() for c in r.strip().strip('|').split('|')] for r in rows]
     head, body = cells[0], [r for r in cells[2:]]
-    h = '<table class="gb-table"><thead><tr>' + ''.join('<th>%s</th>' % inline(c) for c in head) + '</tr></thead><tbody>'
+    cls = 'gb-table gb-legend' if head and head[0] in ('번호', '#') else 'gb-table'
+    h = '<table class="%s"><thead><tr>' % cls + ''.join('<th>%s</th>' % inline(c) for c in head) + '</tr></thead><tbody>'
     for r in body:
-        h += '<tr>' + ''.join('<td>%s</td>' % inline(c) for c in r) + '</tr>'
+        tds = ['<td>%s</td>' % inline(c) for c in r]
+        if cls.endswith('gb-legend') and tds:
+            tds[0] = '<td><span>%s</span></td>' % inline(r[0])   # 그림의 빨간 번호와 같은 동그라미
+        h += '<tr>' + ''.join(tds) + '</tr>'
     return h + '</tbody></table>'
 
 
@@ -65,8 +71,23 @@ def block_html(lines):
         m = re.match(r'^!\[([^\]]*)\]\(([^)]+)\)$', s)
         if m:
             alt, key = unescape_md(m.group(1)), m.group(2)
-            out.append('<figure class="gb-fig"><img data-gk="%s" alt="%s"><figcaption>%s</figcaption></figure>' % (html.escape(key), html.escape(alt), html.escape(alt, quote=False)))
+            fig = '<figure class="gb-fig"><img data-gk="%s" alt="%s"><figcaption>%s</figcaption></figure>' % (html.escape(key), html.escape(alt), html.escape(alt, quote=False))
             i += 1
+            j = i
+            while j < n and not lines[j].strip():
+                j += 1
+            if j < n and lines[j].strip().startswith('|'):   # 그림 + 바로 이어지는 표 = 나란히 (왼쪽 그림 · 오른쪽 번호 설명)
+                rows = []
+                while j < n and lines[j].strip().startswith('|'):
+                    rows.append(lines[j]); j += 1
+                out.append('<div class="gb-duo">' + fig + table(rows) + '</div>')
+                i = j
+            else:
+                out.append(fig)
+                # 그림만 둘 이상 잇달아 오면 나란히 (gb-pair)
+                if len(out) >= 2 and out[-2].startswith('<figure class="gb-fig">') and out[-1].startswith('<figure class="gb-fig">'):
+                    b2 = out.pop(); b1 = out.pop()
+                    out.append('<div class="gb-pair">' + b1 + b2 + '</div>')
             continue
         if s.startswith('### '):
             out.append('<h3 data-sec="%d">%s</h3>' % (len([o for o in out if o.startswith('<h3')]), inline(s[4:])))

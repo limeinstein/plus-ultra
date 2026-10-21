@@ -56,7 +56,9 @@
   }
   function newKid(sex) {
     var s = S();
-    return { name: '', unnamed: true, sex: sex, born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(), edu: {} };
+    var k = { name: '', unnamed: true, sex: sex, born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(), edu: {} };
+    if (G.KidVoy) k.temper = G.KidVoy.rollTemper(k, U.rand());   // 타고난 성격 (js/systems/kidvoyage.js)
+    return k;
   }
 
   /** 매일 (W.daily): 임신 소식·출산 */
@@ -325,6 +327,52 @@
     return G.Ending.show(forced ? 'death' : 'retire');
   };
 
+  /* 자택 보관함 물려주기 (2026-10-21 사용자 요청): 은퇴하면 보관함(s.player.storage)은 비지만, 새 제독에게 물려줄 물건을 고를 수 있다.
+     · 고른 것만 / 모두 / 하나도 물려주지 않는다 — 처음에는 모두 골라져 있다. 같은 물건이 쌓인 칸은 칸째로 고른다.
+     · 물려주지 않은 물건은 은퇴한 제독이 여생에 가져간다(사라진다) — 하나라도 남기면 한 번 더 묻는다.
+     · 창은 ✕·Esc로 닫지 않는다 (실수로 다 잃지 않게). 보관함이 비었으면 묻지 않는다.
+     돌려주는 것: 새 제독의 보관함 목록 (물건 객체는 그대로 옮긴다) */
+  F.pickStorage = async function (heirName) {
+    var st = (S().player.storage || []).slice();
+    if (!st.length) return [];
+    var sel = st.map(function () { return true; });
+    function n() { return sel.filter(Boolean).length; }
+    function row(it, i) {
+      var d = G.ITEM[it.id] || {}, rl = G.RELIC && G.RELIC[it.id], kind = d.kind || it.kind || (rl ? 'relic' : '');
+      var src = G.Img && G.Img.itemSrc ? G.Img.itemSrc(it) : null, q = R.itemQty ? R.itemQty(it) : 1;
+      return '<tr class="click" data-pk="' + i + '"><td class="pick" style="width:28px"><input type="checkbox" data-pk="' + i + '"' + (sel[i] ? ' checked' : '') + '></td>' +
+        '<td style="width:40px">' + (src ? '<img src="' + src + '" alt="" style="width:34px;height:34px;object-fit:contain">' : '') + '</td>' +
+        '<td><b>' + U.esc(R.itemName ? R.itemName(it) : (d.name || it.name || it.id)) + '</b>' + (q > 1 ? ' ×' + q : '') + (rl ? ' <span class="tag">유물</span>' : '') +
+        '<div class="muted" style="font-size:13px">' + U.esc((G.ITEM_KIND && G.ITEM_KIND[kind]) || (rl ? '발견 유물' : '')) + '</div></td></tr>';
+    }
+    function html() {
+      return '<div class="muted" style="margin-bottom:8px">은퇴하면 자택 보관함은 비워집니다. ' + U.esc(heirName) + '에게 물려줄 물건을 고르십시오 — 물려주지 않은 물건은 사라집니다.</div>' +
+        '<div class="flex" style="gap:8px;align-items:center;margin-bottom:6px"><b>' + n() + ' / ' + st.length + '칸 고름</b>' +
+        '<button class="btn small" data-pa="1">모두 고르기</button><button class="btn small ghost" data-pa="0">모두 풀기</button></div>' +
+        '<div style="max-height:52vh;overflow:auto"><table class="tbl">' + st.map(row).join('') + '</table></div>';
+    }
+    var win = UI.window({ title: '보관함 물려주기', icon: 'chest', width: 760, closable: false, html: html(),
+      buttons: [{ label: '고른 것을 물려준다', value: 'pick' }, { label: '모두 물려준다', value: 'all' }, { label: '물려주지 않는다', value: 'none', cls: 'ghost' }],
+      onBuild: function (el, w) {
+        function box() { return w.content || el; }
+        function redraw() { box().innerHTML = html(); wire(); }
+        function wire() {
+          U.$$('tr[data-pk]', box()).forEach(function (tr) { tr.onclick = function () { var i = +tr.dataset.pk; sel[i] = !sel[i]; redraw(); }; });
+          U.$$('[data-pa]', box()).forEach(function (b) { b.onclick = function () { var on = b.dataset.pa === '1'; sel = st.map(function () { return on; }); redraw(); }; });
+        }
+        wire();
+      } });
+    var v = await win.result;
+    var keep = v === 'all' ? st : v === 'none' ? [] : st.filter(function (it, i) { return sel[i]; });
+    var drop = st.length - keep.length;
+    if (drop > 0 && !(await UI.confirm('물려주지 않은 물건 ' + drop + '칸은 사라집니다.' + (keep.length ? '<br>' + keep.length + '칸만 ' + U.esc(heirName) + '에게 물려줍니다.' : '<br>보관함을 하나도 물려주지 않습니다.'), '그대로 한다', '다시 고른다'))) {
+      S().player.storage = st;   // 다시 고르기 — 목록은 그대로
+      return F.pickStorage(heirName);
+    }
+    G.State.log('자택 보관함 — ' + keep.length + '칸을 ' + heirName + '에게 물려주었다' + (drop ? ' (' + drop + '칸은 정리)' : '') + '.');
+    return keep.slice();
+  };
+
   F.succeed = async function (k) {
     var s = S(), p = s.player;
     var old = p.name;
@@ -335,7 +383,9 @@
     var said = bd >= 65 ? '「아버지께 배운 모든 것을 바다에서 증명하겠습니다.」' : bd >= 30 ? '「아버지의 이름에 부끄럽지 않게 하겠습니다.」' : '「…이제 제 방식대로 하겠습니다.」';
     await UI.alert(old + '의 모험은 여기서 막을 내린다.<br>그리고 그 뜻은 ' + k.name + '에게 이어진다...<br><br>' + k.name + ': ' + said +
       '<br><br><span class="muted">아버지와의 사이: ' + F.bondWord(k) + ' (' + bd + ')' + (sea ? ' · 견습 ' + sea + '달' : '') + ' — 명성의 ' + Math.round(fameK * 100) + '%, 특기의 ' + Math.round(skK * 100) + '%를 물려받는다.' +
-      '<br>후원자들은 새 제독을 아직 잘 모른다 — 쌓아 온 신뢰는 30%만 이어진다.</span>', '세대 교체');
+      '<br>후원자들은 새 제독을 아직 잘 모른다 — 쌓아 온 신뢰는 30%만 이어진다.' +
+      ((p.storage || []).length ? '<br>자택 보관함은 비워진다 — 물려줄 물건은 다음 창에서 고른다.' : '') + '</span>', '세대 교체');
+    var keepSt = await F.pickStorage(k.name);   // 자택 보관함: 고른 것만 새 제독에게 (F.pickStorage)
     var sk = {}; G.SKILLS.forEach(function (x) { sk[x.id] = Math.max(k.sk[x.id] || 0, Math.min(3, Math.floor((p.sk[x.id] || 0) * skK + (skK > 0.5 ? 0.5 : 0)))); });
     // 자라며 쌓은 능력 (F.newYear·가정교사). 옛 저장의 아이는 예전처럼 무작위
     var kst = k.st || { str: U.ri(50, 70), int: U.ri(45, 70), mar: U.ri(45, 70), cha: U.ri(45, 70) };
@@ -352,7 +402,7 @@
       name: k.name, nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
       luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), fameBy: p.fameBy ? U.clone(p.fameBy) : undefined,   // 갈래의 비율은 그대로 (G.Fame.sync가 줄어든 합에 맞춘다)
       notoriety: Math.round(p.notoriety * 0.3), gold: p.gold, bank: p.bank,
-      items: p.items, equip: p.equip, hp: 100, home: p.home, wife: null, kids: [], generation: (p.generation || 1) + 1, jailed: 0,
+      items: p.items, equip: p.equip, storage: keepSt, hp: 100, home: p.home, wife: null, kids: [], generation: (p.generation || 1) + 1, jailed: 0,
       portrait: F.kidSpec(k)
     };
     s.player.portrait.age = 'young';

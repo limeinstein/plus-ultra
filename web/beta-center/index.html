@@ -414,15 +414,7 @@
       </div>
       <div class="world-board">
         <div class="world-map" role="img" aria-label="현재 접속 항해의 게임 속 위치를 나타낸 세계 지도">
-          <svg viewBox="0 0 1000 500" aria-hidden="true" focusable="false">
-            <rect width="1000" height="500" rx="18" class="map-ocean"/>
-            <g class="map-grid"><path d="M0 125H1000M0 250H1000M0 375H1000M250 0V500M500 0V500M750 0V500"/></g>
-            <g class="map-land">
-              <path d="M82 104l43-38 91-25 66 21 44 54-22 46-54 10-22 43-39-9-18-50-51-8-38-44zm171 122 47 15 34 52-13 82-38 81-26-42 10-63-30-68z"/>
-              <path d="M430 95l55-39 89 4 49 33 95-18 111 24 69 58-18 48-79-5-44 26-48-15-38 18-31-38-55 5-25-37-65 2-45-30zm84 111 61 10 49 58-11 105-54 74-45-61-24-90z"/>
-              <path d="M803 337l55-30 70 24 25 54-39 48-72-6-44-48zM892 119l37-16 28 28-18 27-42-8z"/>
-            </g>
-          </svg>
+          <img class="world-map-art" src="world-map-medieval.png?v={{ASSET_HASH}}" width="1600" height="800" alt="" aria-hidden="true" draggable="false">
           <div class="map-pins" id="voyage-map-pins"></div>
           <div class="map-empty" id="voyage-map-empty">현재 지도에 표시할 항해가 없습니다.</div>
         </div>

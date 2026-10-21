@@ -34,6 +34,7 @@
       var pin = document.createElement('span');
       pin.className = 'voyage-pin'; pin.style.left = ((lon + 180) / 360 * 100) + '%'; pin.style.top = ((90 - lat) / 180 * 100) + '%';
       pin.textContent = row.alias; pin.title = row.alias + ' · ' + row.currentPlace + ' · 명성 ' + num(row.fame) + ' · ' + days(row.playDays);
+      pin.tabIndex = 0; pin.setAttribute('aria-label', pin.title + ' · 동경 ' + lon.toFixed(2) + '도 · 북위 ' + lat.toFixed(2) + '도');
       pins.appendChild(pin); shown++;
     });
     if (empty) empty.hidden = shown > 0;

@@ -2,8 +2,8 @@
    · 자녀(견습으로 배에 탄 어른이 되기 전의 아들·딸)를 데리고 스코틀랜드의 작은 섬에 상륙하면 아이가 그를 찾아 사라진다.
      그 섬에서 야영하며 약초를 캐면 그가 아이를 데리고 찾아와 돌려주고, 「이 섬을 나갈 수 있다면 어디든 좋다」며 따라온다.
    · 검술·항해·측량 3, 음악 2 · 품삯을 받지 않는다(wage 0)
-   · 그림: images/portraits/legendary/peter_pan.webp (흉상) · peter_pan_half.webp (무릎상)
-     지금 것은 임시 그림이다 — Codex로 그린 그림을 같은 이름으로 덮어쓰면 그대로 바뀐다 (프롬프트: images/legend-events/PETER_PAN_PROMPT.md)
+   · 그림: images/portraits/legendary/peter_pan.webp (얼굴상) · peter_pan_half.webp (무릎상)
+     내장 ImageGen 원화에서 같은 인물의 얼굴상·무릎상을 만들었다 (원화·프롬프트: artifacts/legendary-portraits/peter_pan.png · images/legend-events/PETER_PAN_PROMPT.md).
      J. M. 배리의 희곡(1904)·소설(1911)에 나오는 모습만 쓰고, 뒤에 나온 영화의 옷차림(초록 쫄쫄이·붉은 깃털 모자)은 쓰지 않는다. */
 (function (G) {
   'use strict';

@@ -754,7 +754,10 @@
   HM.enter = async function (c) {
     var s = S();
     var story = G.Story && G.Story.atHome && G.Story.atHome(c);   // 이야기 모드: 고향 집에는 어머니가 산다 (js/systems/story.js)
-    if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
+    // 아내가 배에 함께 탔다면: 기다린 사람의 마중이 아니라 같이 돌아온 부부의 말 (2026-10-21)
+    var away0 = G.FamEv && G.FamEv.awayDays ? G.FamEv.awayDays() : 0;
+    if (s.player.wife && s.player.wifeAboard) await UI.say(away0 >= 30 ? U.pick(['드디어 우리 집이에요. …' + away0 + '일 만이네요. 같이 문을 여니까 기분이 이상해요.', '집 냄새예요! 바다 냄새만 맡다가 오니까 눈물이 날 것 같아요.', '당신이랑 같이 돌아오니까, 이번엔 기다린 사람이 없네요. 그게 좋아요.']) : U.pick(['잠깐 들렀다 가요. 창은 열어 둘게요.', '짐 좀 풀고 가요. 다음 항해 준비는 같이 해요.']), G.Family.wifeSpeaker());
+    else if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
     if (story) { try { await G.Story.motherGreet(c); await G.Story.allowance(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금
     else if (!s.player.wife) await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
