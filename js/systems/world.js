@@ -29,6 +29,7 @@
     if (G.Leo) out = out.concat(G.Leo.daily());          // 레오나르도의 발명품 (js/systems/leonardo.js)
     if (G.Tudor) out = out.concat(G.Tudor.daily());
     if (G.Barb) out = out.concat(G.Barb.daily());        // 하이레딘 바르바로사의 습격 (js/systems/barbarossa.js)
+    if (G.Strand) out = out.concat(G.Strand.daily());     // 남겨 둔 함대: 남은 날 알림 · 기한이 지나면 폐기 (js/systems/strandfleet.js)
     if (G.IncaFall) out = out.concat(G.IncaFall.daily());
     if (G.Aztec) out = out.concat(G.Aztec.daily());       // 아즈텍 제국의 멸망 — 소식·천연두·정복 전쟁의 값 (js/systems/aztec.js) // 잉카 제국의 멸망 — 소식·잉카의 황금 (js/systems/incafall.js)
       // 튜더 왕실의 일 (js/systems/tudor.js)      // 화실·조각실: 미술품·조각품을 싣고, 실존 화가·조각가는 명작을 완성한다 (js/systems/studio.js)      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사

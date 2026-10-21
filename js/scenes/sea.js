@@ -1311,6 +1311,7 @@
     st.busy++;
     try {
       var msgs = G.Game.newDay();
+      if (G.Strand && G.Strand.list().length) msgs = msgs.concat(await G.Strand.atSea(l.lon, l.lat));   // 남겨 둔 배 곁에 왔으면 되찾는다 (js/systems/strandfleet.js)
       f.daysOut = (f.daysOut || 0) + 1;
       st.dayCount++;
       // wind of the day
