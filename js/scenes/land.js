@@ -21,7 +21,7 @@
     if (arg.from != null || arg.landing) {
       var base;
       if (arg.from != null) { var c = G.CITY_DATA[arg.from]; base = { type: 'city', city: c.id, lon: c.lon, lat: c.lat }; }
-      else base = { type: 'ship', lon: arg.landing.shipLon, lat: arg.landing.shipLat };
+      else base = { type: 'ship', lon: arg.landing.shipLon, lat: arg.landing.shipLat, heading: arg.landing.shipHeading };   // 뱃머리도 그대로 두고 내린다 (돌아오면 같은 쪽을 본다)
       var start = arg.from != null ? [base.lon, base.lat] : [arg.landing.lon, arg.landing.lat];
       start = landPoint(start[0], start[1]);   // 도시 자리가 강·만의 물 위인 곳(브레멘·말라카)은 가장 가까운 뭍에서 출발한다 — 물 위에서 나서면 한 걸음도 못 뗀다
       // 대항해시대 3처럼 선원 모두가 탐험대로 나선다 (배는 닻을 내리고 기다린다)
@@ -96,12 +96,12 @@
     el.city = btn('도시에 들어간다', 'castle', function () { enterCity(); });
     btn('야영', 'tent', function () { camp(); });
     btn('해도', 'map', function () { chart(); });
-    btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy--; }); });
+    btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     el.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
     var zb = U.el('div', 'zoomctl');
     [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
-    bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy--; }));   // 맨 오른쪽: 설정 (수첩 밖)
+    bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
     el.bar = bar; st.followArmed = false; refreshFollow();
     refreshBar(); refreshHud();
@@ -255,7 +255,7 @@
         { label: '들어간다', value: 1 }, { label: '지나간다', value: 0 }
       ], G.Scenes.mateSpeaker('first'));
     } catch (e) { console.error(e); }
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
     if (!st.alive || G.Game.scene !== L) return false;
     if (!v) { coolCityPrompt(c); if (cityAskMode() === 'stop') st.cityPromptBlock = c.id; return false; }   // 멈췄을 때만 묻기: 거절하면 그 성문 곁을 떠날 때까지 다시 묻지 않는다
     return enterCity(c);
@@ -414,7 +414,7 @@
       refreshHud();
       if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
       // 자연재해: 지진·화산·산사태·쓰나미·홍수가 탐험대를 덮친다 (js/systems/disaster.js)
-      if (G.Disaster) { await G.Disaster.land({ spend: spendDays, dailyCost: function () { return dailyCost(); }, mount: MT, refresh: refreshHud }); if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy--; await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); st.busy--; return; } }
+      if (G.Disaster) { await G.Disaster.land({ spend: spendDays, dailyCost: function () { return dailyCost(); }, mount: MT, refresh: refreshHud }); if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy = Math.max(0, st.busy - 1); await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); st.busy = Math.max(0, st.busy - 1); return; } }
       // discoveries
       var chk = G.Disc.checkLand(l.lon, l.lat);
       for (var i = 0; i < chk.hits.length; i++) {
@@ -449,9 +449,9 @@
         var tk = 'terr:' + terr, te = U.chance(0.55) && (!G.Pace || G.Pace.ok(tk, { noGap: true })) && await terrainEvent(terr);
         if (te) { if (G.Pace) G.Pace.mark(tk); } else await encounter(terr);
       }   // 튜토리얼에서는 우연한 만남을 재운다
-      if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy--; await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
+      if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy = Math.max(0, st.busy - 1); await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
     } catch (e) { console.error(e); }
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
   }
   L.runDay = runDay;   // 시험에서 하루를 바로 돌린다
   function landLine(d) {
@@ -732,7 +732,7 @@
       if (v && G.Castaway && G.Game.scene === L && S().loc.mode === 'land') { await G.Castaway.afterCamp(); refreshHud(); }
     } catch (e) { console.error(e); }
     st.camping = false;
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
   }
   function landRepairCfg() { var k = (G.BALANCE && G.BALANCE.landRepair) || {}; return { days: k.days || 2, perDay: k.perDay == null ? 0.07 : k.perDay, perSkill: k.perSkill == null ? 0.04 : k.perSkill, crewFloor: k.crewFloor == null ? 0.3 : k.crewFloor, fatigue: k.fatigue == null ? 3 : k.fatigue }; }
   /** 야영지에서 배를 고친다: 배가 보이는 물가에 대원들이 내려가 자재로 판자를 갈고 틈을 메운다.
@@ -865,7 +865,7 @@
     var s = S();
     st.busy++;
     var ok = await G.Scenes.city.handleEntry(c);
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
     if (!ok) { coolCityPrompt(c); return false; }
     if (s.known.indexOf(c.id) < 0) s.known.push(c.id);
     s.landReturn = { lon: s.loc.lon, lat: s.loc.lat, base: s.loc.base, party: s.loc.party, days: s.loc.days, mount: MT() };
@@ -942,7 +942,7 @@
     G.State.log('육상 탐험을 마쳤다 — ' + sum);
     setTimeout(function () { UI.toast('육상 탐험을 마쳤다 — ' + sum, 'boot', 6000); }, 700);
     if (b.type === 'city') await UI.fade(function () { G.Game.go('city', { cityId: b.city, via: 'sea' }); });
-    else { s.loc = { mode: 'sea', lon: b.lon, lat: b.lat, heading: 0 }; await UI.fade(function () { G.Game.go('sea', { resume: true, msg: wiped ? '탐험대를 잃고 배로 돌아왔다.' : '탐험을 마치고 배로 돌아왔다.' }); }); }
+    else { s.loc = { mode: 'sea', lon: b.lon, lat: b.lat, heading: b.heading != null ? b.heading : 0, from: b.from }; await UI.fade(function () { G.Game.go('sea', { resume: true, fromLand: true, msg: wiped ? '탐험대를 잃고 배로 돌아왔다.' : '탐험을 마치고 배로 돌아왔다.' }); }); }
   }
   async function chart() {
     st.busy++;
@@ -950,7 +950,7 @@
     var win = UI.window({ title: '주변 지도', icon: 'map', width: 1160, html: '<div class="chartwrap"></div>', buttons: [{ label: '닫기', value: 1 }] });
     G.ChartView.mount(win.content.querySelector('.chartwrap'), { w: 1100, h: 550, center: [l.lon, l.lat], span: 60 });
     await win.result;
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
   }
 
   // ---------------------------------------------------------------- render
