@@ -7,6 +7,7 @@
    cult 문화권 (eu 유럽 · is 이슬람·인도양 · sa 동남아시아 · ea 동아시아 · am 아메리카) — 다른 문화권 조선소에서는 수리비가 비싸다
    hull 그림 모양 · traits 특성 (G.SHIP_TRAITS) · armor 장갑 배수 · len 해전 선체 길이 배수 · feat 한 줄 특징 · where 파는 곳
    ※ 2026-10-18: 1520년 이후에 나오는 배는 지어지는 해(from)를 10년씩 당겼다 (갤리온 1525→1515 …). 조선소의 지역별 해 제한(js/city/shipyard.js)도 함께.
+   ※ 2026-10-21: 프리깃(적재 360→460·내구 84→104·포문 34→42·속도 1.58→1.70·선회 1.25→1.35·선원 최대 180→190)과 플류트(적재 540→680·내구 58→74·포문 10→14·속도 1.32→1.42·선회 0.9→1.0·선원 18~70→16~80) 성능을 올렸다 — 사용자 요청.
    lv 조선 기술 등급 (1~5) — 대항해시대 2처럼 도시 조선소의 기술(공업) 수준이 이 등급 이상이어야 짓는다. 기술 투자로 올린다. */
 (function (G) {
   'use strict';
@@ -72,10 +73,10 @@
     { id: 'lgalleon', name: '대형 갤리온', lv: 5, cult: 'eu', cap: 900, hp: 140, crew: [70, 300], ports: 54, spd: 1.2, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 82000, turn: 0.8, from: 1555, hull: 'west',
       traits: ['gundeck', 'highdeck'], feat: '태평양을 건너는 은 수송선', where: '세비야·리스본·아바나·아카풀코 (1555년~)',
       desc: '마닐라와 아카풀코를 잇던 거대한 갤리온. 은과 비단을 산더미처럼 싣고 포도 많다.' },
-    { id: 'fluyt', name: '플류트', lv: 3, cult: 'eu', cap: 540, hp: 58, crew: [18, 70], ports: 10, spd: 1.32, sails: ['sq', 'sq', 'lat'], maxMast: 3, price: 26000, turn: 0.9, from: 1585, hull: 'west',
+    { id: 'fluyt', name: '플류트', lv: 3, cult: 'eu', cap: 680, hp: 74, crew: [16, 80], ports: 14, spd: 1.42, sails: ['sq', 'sq', 'lat'], maxMast: 3, price: 26000, turn: 1.0, from: 1585, hull: 'west',
       traits: ['thrift'], feat: '싸게 많이 나르는 네덜란드의 짐배', where: '네덜란드·한자 동맹 (1585년~)',
       desc: '배 밑이 넓고 갑판이 좁은 네덜란드의 짐배. 적은 선원으로 많은 짐을 싸게 나른다.' },
-    { id: 'frigate', name: '프리깃', lv: 4, cult: 'eu', cap: 360, hp: 84, crew: [40, 180], ports: 34, spd: 1.58, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 60000, turn: 1.25, from: 1580, hull: 'west',
+    { id: 'frigate', name: '프리깃', lv: 4, cult: 'eu', cap: 460, hp: 104, crew: [40, 190], ports: 42, spd: 1.70, sails: ['sq', 'sq', 'sq', 'lat'], maxMast: 4, price: 60000, turn: 1.35, from: 1580, hull: 'west',
       traits: ['gundeck'], feat: '가장 빠른 군함', where: '잉글랜드·네덜란드·프랑스 (1580년~)',
       desc: '됭케르크 사략선에서 비롯된 날렵한 군함. 빠르고 잘 돌며 포열 갑판을 갖췄다.' },
 
@@ -188,4 +189,39 @@
     { id: 'balsawood', name: '발사나무', hp: 0.8, spd: 0.05, rep: 0.8, price: 0.9, local: true, desc: '안데스 해안의 아주 가벼운 나무. 뗏목배에는 좋지만 선체로는 약하다. (다른 고장으로 내보내지 않는다)' }
   ];
   G.TIMBER = {}; G.TIMBERS.forEach(function (t) { G.TIMBER[t.id] = t; });
+
+  /* 배 종류의 성능을 올렸을 때 이미 가진 배에도 나눠 준다 (저장을 불러올 때 js/core/state.js) — 배마다 적재·내구·선원 칸이 따로 저장되기 때문.
+     적재·선원은 늘어난 만큼 더하고(개조로 늘린 몫은 그대로), 내구는 같은 비율로 키운다. 포문 수는 그대로 두고 최대 포문만 늘어난다(조선소에서 늘린다). */
+  G.SHIP_BUFFS = [
+    { key: 'b1021', type: 'frigate', from: { cap: 360, hp: 84, crew: [40, 180] } },
+    { key: 'b1021', type: 'fluyt', from: { cap: 540, hp: 58, crew: [18, 70] } }
+  ];
+  G.shipBuffKeys = function () { return G.SHIP_BUFFS.map(function (b) { return b.key; }).filter(function (k, i, a) { return a.indexOf(k) === i; }); };
+  /** 저장 S에 아직 적용하지 않은 것만 (S.shipBuffs = 적용한 key — 저장할 때 늘 지금 것을 다 적는다, js/core/state.js) */
+  G.applyShipBuffs = function (S) {
+    if (!S) return 0;
+    var done = S.shipBuffs || [], todo = G.SHIP_BUFFS.filter(function (b) { return done.indexOf(b.key) < 0; });
+    S.shipBuffs = G.shipBuffKeys();
+    if (!todo.length) return 0;
+    var n = 0, seen = typeof WeakSet === 'function' ? new WeakSet() : null;
+    function fix(sh) {
+      todo.forEach(function (b) {
+        if (sh.type !== b.type) return;
+        var t = G.SHIP[b.type], o = b.from; if (!t) return;
+        if (typeof sh.cap === 'number') sh.cap += t.cap - o.cap;
+        if (typeof sh.maxHp === 'number') { var k = t.hp / o.hp; sh.maxHp = Math.max(1, Math.round(sh.maxHp * k)); if (typeof sh.hp === 'number') sh.hp = Math.min(sh.maxHp, Math.max(0, Math.round(sh.hp * k))); }
+        if (typeof sh.crewMin === 'number') sh.crewMin = Math.max(1, sh.crewMin + t.crew[0] - o.crew[0]);
+        if (typeof sh.crewMax === 'number') sh.crewMax = Math.max(sh.crewMin || 1, sh.crewMax + t.crew[1] - o.crew[1]);
+        n++;
+      });
+    }
+    (function walk(v, d) {   // 함대·맡긴 배·나포선 … 어디에 있든 배 꼴(uid·type·cap)을 찾는다
+      if (!v || typeof v !== 'object' || d > 7 || v instanceof Uint8Array) return;
+      if (seen) { if (seen.has(v)) return; seen.add(v); }
+      if (Array.isArray(v)) { for (var i = 0; i < v.length; i++) walk(v[i], d + 1); return; }
+      if (typeof v.type === 'string' && G.SHIP[v.type] && typeof v.cap === 'number' && v.uid) fix(v);
+      for (var k in v) if (k !== 'chartBits' && Object.prototype.hasOwnProperty.call(v, k) && v[k] && typeof v[k] === 'object') walk(v[k], d + 1);
+    })(S, 0);
+    return n;
+  };
 })(window.G = window.G || {});
