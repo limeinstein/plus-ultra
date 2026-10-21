@@ -175,6 +175,7 @@
   function leftWho() { var m = M.st(), r = DEBTORS.filter(function (d) { return !m.got[d.id]; }); return r.length ? '남은 빚쟁이는 ' + r.map(function (d) { return G.CITY_DATA[d.city].name + '의 ' + d.name; }).join(', ') : '세 사람 다 받으셨어요'; }
   function fill(t, o) { return String(t).replace(/\{(\w+)\}/g, function (a, k) { return o && o[k] != null ? o[k] : a; }); }
   async function say(lines, who, o) { lines = [].concat(lines); for (var i = 0; i < lines.length; i++) await UI.say(fill(lines[i], o), who); }
+  function pic(key, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/' + key, title: title }) : { stop: function () { return Promise.resolve(); } }; }
   /** 이 사건의 이름 있는 인물은 도시의 범용 역할 초상 대신 전용 얼굴상·무릎상을 쓴다. */
   function eventNpc(role, name, face) {
     var sp = C().npc(role, name);
@@ -189,20 +190,22 @@
     var s = S(); if (!s || !sp || sp.id !== CFG.sponsor || s.medici || !lorenzoHere()) return;
     if (G.Tutorial && G.Tutorial.active && G.Tutorial.active()) return;
     if ((SP().rel(sp.id).done || 0) < 1) return;
-    var due = Math.min(U.dateNum(U.addDays(s.date, Math.round(CFG.years * 365))), CFG.death);
-    var who = lorenzo();
-    await say(L.plea, who);
-    await UI.say(L.lucIn, {});
-    await UI.say(L.lucHi, luc('surprised'));
-    await UI.say(L.lorIntro, who);
-    await say(L.lucDebtors, luc());
-    await UI.say(fill(L.lorDue, { due: fmtDue(due) }), who);
-    var v = await UI.ask(L.ask, [{ label: L.yes, value: 1 }, { label: L.no, value: 0 }], who);
-    if (!v) { s.medici = { stage: 0, asked: today() }; await UI.say(L.noSay, who); await UI.say(L.lucNo, {}); return; }
-    start(due);
-    await UI.say(L.yesSay, who);
-    await UI.say(L.lucYes, luc('happy'));
-    UI.toast(L.memoGet, 'scroll', 5000);
+    var due = Math.min(U.dateNum(U.addDays(s.date, Math.round(CFG.years * 365))), CFG.death), pc = pic('medici_crisis', '메디치 은행의 위기');
+    try {
+      var who = lorenzo();
+      await say(L.plea, who);
+      await UI.say(L.lucIn, {});
+      await UI.say(L.lucHi, luc('surprised'));
+      await UI.say(L.lorIntro, who);
+      await say(L.lucDebtors, luc());
+      await UI.say(fill(L.lorDue, { due: fmtDue(due) }), who);
+      var v = await UI.ask(L.ask, [{ label: L.yes, value: 1 }, { label: L.no, value: 0 }], who);
+      if (!v) { s.medici = { stage: 0, asked: today() }; await UI.say(L.noSay, who); await UI.say(L.lucNo, {}); return; }
+      start(due);
+      await UI.say(L.yesSay, who);
+      await UI.say(L.lucYes, luc('happy'));
+      UI.toast(L.memoGet, 'scroll', 5000);
+    } finally { await pc.stop(); }
   }
   function start(due) {
     var s = S();
@@ -298,30 +301,32 @@
   async function demandKing(c, sp) {
     var s = S(), m = M.st(); if (!m || m.stage !== 2) return;
     if (m.kingTry && U.dayIndex(s.date) < m.kingTry) { await UI.say('국왕은 오늘 그대를 만나 주지 않는다. 며칠 뒤에 다시 청해 보자.', {}); return; }
-    var who = SP().speaker(sp);
-    await UI.say(L.kingAsk, who);
-    var kn = knight(c);
-    await UI.say(L.knight, kn);
-    if (m.hint) await UI.say(L.recall, {});
-    var v = await UI.ask(L.kchoose, [{ label: L.fight, value: 1 }, { label: L.leave, value: 0 }], { name: s.player.name, portrait: s.player.portrait });
-    if (!v) { await UI.say(L.kingLeft, who); return; }
-    var res = await G.Games.duel(kn, { place: 'tavern' });
-    if (res !== 'win') {
-      m.kingTry = U.dayIndex(s.date) + CFG.retry; m.lost = (m.lost || 0) + 1;
-      await UI.say(L.kingLose, who);
-      await UI.say(L.loseLetter[0], {}); await UI.say(L.loseLetter[1], lucLetter());
-      m.hint = 1;
-      return;
-    }
-    if (G.Fame) G.Fame.add('bt', 30);
-    await UI.say(L.kingWin, who);
-    if (m.visit && m.visit[2]) await UI.say(L.kingWinLuc, who);
-    await UI.say(L.kingPay, who);
-    s.player.gold += CFG.sum; m.stage = 3; m.paid = today();
-    if (G.Audio) G.Audio.sfx('coin');
-    G.Game.refreshHud();
-    G.State.log(SP().holderName(sp) + '에게서 메디치 은행의 빚 20만 두카트를 받아 냈다. 피렌체의 로렌초에게 전해야 한다 (기한 ' + fmtDue(m.due) + ').');
-    await UI.alert('잉글랜드 국왕이 메디치 은행의 빚을 갚았다.<br>금화 <b>' + U.num(CFG.sum) + '</b>닢(20만 두카트)을 받았다.<br><span class="muted">' + fmtDue(m.due) + '까지 피렌체의 로렌초 데 메디치에게 전해야 한다. 넘기면 악명 +' + CFG.notoriety + '</span>', '잉글랜드의 빚');
+    var who = SP().speaker(sp), pc = pic('medici_challenge', '왕의 기사');
+    try {
+      await UI.say(L.kingAsk, who);
+      var kn = knight(c);
+      await UI.say(L.knight, kn);
+      if (m.hint) await UI.say(L.recall, {});
+      var v = await UI.ask(L.kchoose, [{ label: L.fight, value: 1 }, { label: L.leave, value: 0 }], { name: s.player.name, portrait: s.player.portrait });
+      if (!v) { await UI.say(L.kingLeft, who); return; }
+      var res = await G.Games.duel(kn, { place: 'tavern' });
+      if (res !== 'win') {
+        m.kingTry = U.dayIndex(s.date) + CFG.retry; m.lost = (m.lost || 0) + 1;
+        await UI.say(L.kingLose, who);
+        await UI.say(L.loseLetter[0], {}); await UI.say(L.loseLetter[1], lucLetter());
+        m.hint = 1;
+        return;
+      }
+      if (G.Fame) G.Fame.add('bt', 30);
+      await UI.say(L.kingWin, who);
+      if (m.visit && m.visit[2]) await UI.say(L.kingWinLuc, who);
+      await UI.say(L.kingPay, who);
+      s.player.gold += CFG.sum; m.stage = 3; m.paid = today();
+      if (G.Audio) G.Audio.sfx('coin');
+      G.Game.refreshHud();
+      G.State.log(SP().holderName(sp) + '에게서 메디치 은행의 빚 20만 두카트를 받아 냈다. 피렌체의 로렌초에게 전해야 한다 (기한 ' + fmtDue(m.due) + ').');
+      await UI.alert('잉글랜드 국왕이 메디치 은행의 빚을 갚았다.<br>금화 <b>' + U.num(CFG.sum) + '</b>닢(20만 두카트)을 받았다.<br><span class="muted">' + fmtDue(m.due) + '까지 피렌체의 로렌초 데 메디치에게 전해야 한다. 넘기면 악명 +' + CFG.notoriety + '</span>', '잉글랜드의 빚');
+    } finally { await pc.stop(); }
   }
 
   // ---------------------------------------------------------------- 3 피렌체로 (로렌초에게 전한다)
@@ -329,24 +334,27 @@
     var s = S(), m = M.st(); if (!m || m.stage !== 3) return;
     var who = SP().speaker(sp);
     if (s.player.gold < CFG.sum) { await UI.say(fill(L.deliverShort, { sum: U.num(CFG.sum), gold: U.num(s.player.gold) }), who); return; }
-    s.player.gold -= CFG.sum;
-    await say(L.thanks, who);
-    await UI.say(L.countAct, {});
-    await UI.say(L.count, luc('happy'));
-    await UI.say(L.thanks2, who);
-    s.player.gold += CFG.reward;
-    if (G.Fame) G.Fame.add('so', 200);
-    SP().addTrust(SP().rel(sp.id), 20);
-    m.stage = 4; m.end = 'done'; m.done = today();
-    if (G.Audio) G.Audio.sfx('coin');
-    G.Game.refreshHud();
-    G.State.log('로렌초 데 메디치에게 20만 두카트를 전해 메디치 은행을 살렸다. (사례 3만 두카트)');
-    await UI.alert('메디치 은행을 살렸다!<br>사례 금화 <b>' + U.num(CFG.reward) + '</b>닢(3만 두카트) · 사교 명성 · 로렌초의 신뢰가 크게 올랐다.', '메디치 은행의 위기');
-    await UI.say(L.intro, who);
-    await meet('botticelli', L.botticelli, c);
-    var way = (m.luc || 0) >= 3 ? 'note' : (m.kind || 0) >= 3 ? 'kind' : 'mix';
-    var lucOk = await meet(LUCREZIA.id, L.lucJoin[way], c, function () { return UI.say(L.lorLuc, who); });
-    await UI.say(lucOk ? L.lorenzoEnd : L.lorenzoEndStay, who);
+    var pc = pic('medici_saved', '메디치 은행을 살리다');
+    try {
+      s.player.gold -= CFG.sum;
+      await say(L.thanks, who);
+      await UI.say(L.countAct, {});
+      await UI.say(L.count, luc('happy'));
+      await UI.say(L.thanks2, who);
+      s.player.gold += CFG.reward;
+      if (G.Fame) G.Fame.add('so', 200);
+      SP().addTrust(SP().rel(sp.id), 20);
+      m.stage = 4; m.end = 'done'; m.done = today();
+      if (G.Audio) G.Audio.sfx('coin');
+      G.Game.refreshHud();
+      G.State.log('로렌초 데 메디치에게 20만 두카트를 전해 메디치 은행을 살렸다. (사례 3만 두카트)');
+      await UI.alert('메디치 은행을 살렸다!<br>사례 금화 <b>' + U.num(CFG.reward) + '</b>닢(3만 두카트) · 사교 명성 · 로렌초의 신뢰가 크게 올랐다.', '메디치 은행의 위기');
+      await UI.say(L.intro, who);
+      await meet('botticelli', L.botticelli, c);
+      var way = (m.luc || 0) >= 3 ? 'note' : (m.kind || 0) >= 3 ? 'kind' : 'mix';
+      var lucOk = await meet(LUCREZIA.id, L.lucJoin[way], c, function () { return UI.say(L.lorLuc, who); });
+      await UI.say(lucOk ? L.lorenzoEnd : L.lorenzoEndStay, who);
+    } finally { await pc.stop(); }
   }
   /** 로렌초가 소개하는 사람 — 이미 부하이거나 떠나보냈으면 건너뛴다. before: 묻기 전에 끼우는 말 */
   async function meet(id, line, c, before) {

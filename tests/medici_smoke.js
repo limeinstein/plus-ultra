@@ -15,7 +15,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => { if (message.type() === 'error' && !/fonts|ERR_|net::/.test(message.text())) errors.push(message.text()); });
     await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/**', route => route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true}' }));
-    await page.goto(GAME);
+    await page.goto(GAME, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Medici && G.Medici._t, null, { timeout: 120000 });
     const art = await page.evaluate(async () => {
       const names = ['lucrezia_medici', 'calds', 'sousa', 'launay', 'ashford'];
@@ -31,9 +31,23 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
         });
         rows.push({ key, size });
       }
+      for (const name of ['medici_crisis', 'medici_challenge', 'medici_saved']) {
+        const key = 'legend-events/' + name;
+        const url = G.Img.src(key);
+        const size = await new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = () => resolve([image.naturalWidth, image.naturalHeight]);
+          image.onerror = reject;
+          image.src = url;
+        });
+        rows.push({ key, size });
+      }
       return rows;
     });
-    ok(art.length === 10 && art.every(row => row.size[0] === (row.key.endsWith('_half') ? 1024 : 448) && row.size[1] === (row.key.endsWith('_half') ? 1536 : 448)), '메디치 사건 인물 5명의 얼굴상·무릎상 10장을 원본 크기로 로드');
+    const portraits = art.filter(row => row.key.startsWith('portraits/'));
+    const eventShots = art.filter(row => row.key.startsWith('legend-events/'));
+    ok(portraits.length === 10 && portraits.every(row => row.size[0] === (row.key.endsWith('_half') ? 1024 : 448) && row.size[1] === (row.key.endsWith('_half') ? 1536 : 448)), '메디치 사건 인물 5명의 얼굴상·무릎상 10장을 원본 크기로 로드');
+    ok(eventShots.length === 3 && eventShots.every(row => row.size[0] >= 1880 && row.size[0] <= 1881 && row.size[1] === 836), '메디치 사건 장면 3장을 원본 1880∼1881×836 해상도로 로드');
     const result = await page.evaluate(async () => {
       const s = G.State.newGame({ name: '메디치 시험', nation: 'PT', job: 'merchant', age: 30, birth: { m: 1, d: 1 }, st: { str: 70, int: 70, mar: 70, cha: 70 }, sk: {}, lg: [], diff: 'normal' });
       G.Game.state = s;
@@ -50,6 +64,11 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
       G.UI.toast = () => {};
       G.Game.refreshHud = () => {};
       G.Games.duel = async () => 'win';
+      const pics = [];
+      G.FamEv.showPic = options => {
+        pics.push(options.img);
+        return { stop: async () => { pics.push('stop:' + options.img); } };
+      };
       G.Medici._t.start(14900101);
       for (const debtor of G.Medici.DEBTORS) await G.Medici._t.findDebtor(G.CITY_DATA[debtor.city]);
       const afterDebtors = { stage: s.medici.stage, got: Object.keys(s.medici.got).length, luc: s.medici.luc };
@@ -66,6 +85,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
         rewardGold: s.player.gold,
         mates: s.mates.map(mate => mate.id),
         note: G.Medici.note(),
+        pics,
         said: said.join('\n')
       };
     });
@@ -73,6 +93,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
     ok(result.afterKing.stage === 3 && result.afterKing.gold === 210000 && result.afterKing.hint === 1, '국왕의 기사를 이기면 20만 두카트를 받아 피렌체 귀환 단계로 진행');
     ok(result.end === 'done' && result.rewardGold === 40000, '로렌초에게 20만 두카트를 전하고 사례 3만 두카트를 받음');
     ok(result.mates.includes('botticelli') && result.mates.includes('lucrezia_medici'), '보티체리와 루크레치아가 동료로 합류');
+    ok(['medici_challenge', 'medici_saved'].every(name => result.pics.includes('legend-events/' + name) && result.pics.includes('stop:legend-events/' + name)), '국왕 결투·피렌체 정산 장면을 열고 대화 뒤 닫음');
     ok(!result.note && /메디치 은행을 살렸다/.test(result.said), '완료 뒤 진행 메모를 닫고 결말을 표시');
     ok(errors.length === 0, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('통과');

@@ -17,7 +17,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' && !/fonts|ERR_|net::/.test(m.text())) errors.push(m.text()); });
     await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/**', route => route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true}' }));
-    await page.goto(GAME);
+    await page.goto(GAME, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo(); G.Nav.init();
