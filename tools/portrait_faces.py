@@ -9,6 +9,7 @@
     pip install opencv-python-headless pillow
     python tools/portrait_faces.py                     # images/portraits/maids · images/maid-styles
     python tools/portrait_faces.py --model 경로.onnx   # 얼굴 찾기 모델 위치 (기본: tools/models/face_detection_yunet_2023mar.onnx)
+    python tools/portrait_faces.py --key portraits/legendary/snow_white --merge
 
 얼굴 찾기 모델은 OpenCV Zoo의 YuNet(MIT 사용권)이다. 없으면 받아 둔다:
     https://github.com/opencv/opencv_zoo/tree/main/models/face_detection_yunet  (face_detection_yunet_2023mar.onnx)
@@ -20,7 +21,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 IMG = os.path.join(ROOT, 'images')
 OUT = os.path.join(ROOT, 'js', 'data', 'portraitfaces.js')
-DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/building-managers', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/fairy-tales', 'portraits/street-folk']
+DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/building-managers', 'portraits/gardeners', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/fairy-tales', 'portraits/street-folk']
 
 def main():
     try:
@@ -33,6 +34,14 @@ def main():
     model = os.path.join(TOOLS, 'models', 'face_detection_yunet_2023mar.onnx')
     if '--model' in sys.argv:
         model = sys.argv[sys.argv.index('--model') + 1]
+    prefix = None
+    if '--prefix' in sys.argv:
+        prefix = sys.argv[sys.argv.index('--prefix') + 1].strip('/')
+    merge = '--merge' in sys.argv
+    exact_keys = set()
+    for index, arg in enumerate(sys.argv[:-1]):
+        if arg == '--key':
+            exact_keys.add(sys.argv[index + 1].strip('/'))
     if not os.path.exists(model):
         print('얼굴 찾기 모델이 없습니다: ' + model)
         print('https://github.com/opencv/opencv_zoo/tree/main/models/face_detection_yunet 에서 받아 두세요.')
@@ -48,6 +57,10 @@ def main():
     for d in DIRS:
         for ext in ('webp', 'png', 'jpg'):
             files += glob.glob(os.path.join(IMG, d, '**', '*.' + ext), recursive=True)
+    if prefix:
+        files = [f for f in files if os.path.splitext(os.path.relpath(f, IMG))[0].replace('\\', '/').startswith(prefix + '/')]
+    if exact_keys:
+        files = [f for f in files if os.path.splitext(os.path.relpath(f, IMG))[0].replace('\\', '/') in exact_keys]
     for f in sorted(files):
         key = os.path.splitext(os.path.relpath(f, IMG))[0].replace('\\', '/')
         im = Image.open(f).convert('RGBA')
@@ -70,13 +83,47 @@ def main():
             'eyes': [R(fb[4] / W), R(fb[5] / H), R(fb[6] / W), R(fb[7] / H)],   # 그림에서 왼쪽 눈, 오른쪽 눈
             'mouth': [R((fb[10] + fb[12]) / 2 / W), R((fb[11] + fb[13]) / 2 / H)]
         }
-    lines = ['/* tools/portrait_faces.py가 만든 얼굴 자리 (그림 기준 비율 0~1). 손으로 고치지 말고 도구를 다시 돌린다.',
-             '   box: [x, y, 너비, 높이] · eyes: [왼눈 x, y, 오른눈 x, y] · mouth: [x, y] */',
-             '(function (G) {', "  'use strict';", '  G.PORTRAIT_FACES = {']
     keys = sorted(out)
-    for i, k in enumerate(keys):
-        lines.append('    ' + json.dumps(k, ensure_ascii=False) + ': ' + json.dumps(out[k], separators=(',', ':')) + (',' if i < len(keys) - 1 else ''))
-    lines += ['  };', '})(window.G = window.G || {});', '']
+    fresh = ['    ' + json.dumps(k, ensure_ascii=False) + ': ' + json.dumps(out[k], separators=(',', ':')) for k in keys]
+    if merge:
+        if not prefix and not exact_keys:
+            print('--merge에는 --prefix 또는 --key가 필요합니다.')
+            return 1
+        with open(OUT, encoding='utf-8') as fh:
+            lines = fh.read().splitlines()
+        start = lines.index('  G.PORTRAIT_FACES = {') + 1
+        end = lines.index('  };', start)
+        old = []
+        replaced = set()
+        generated = {key: line for key, line in zip(keys, fresh)}
+        for line in lines[start:end]:
+            entry = line.strip().rstrip(',')
+            try:
+                old_key = json.loads(entry[:entry.index(':')])
+            except (ValueError, json.JSONDecodeError):
+                continue
+            if prefix and old_key.startswith(prefix + '/'):
+                continue
+            if old_key in exact_keys:
+                old.append(generated[old_key])
+                replaced.add(old_key)
+                continue
+            old.append(entry)
+        if prefix:
+            old.extend(fresh)
+        else:
+            old.extend(generated[key] for key in keys if key not in replaced)
+        entries = old
+        lines[start:end] = [line + (',' if i < len(entries) - 1 else '') for i, line in enumerate(entries)]
+        while lines and not lines[-1].strip():
+            lines.pop()
+        lines.append('')
+    else:
+        lines = ['/* tools/portrait_faces.py가 만든 얼굴 자리 (그림 기준 비율 0~1). 손으로 고치지 말고 도구를 다시 돌린다.',
+                 '   box: [x, y, 너비, 높이] · eyes: [왼눈 x, y, 오른눈 x, y] · mouth: [x, y] */',
+                 '(function (G) {', "  'use strict';", '  G.PORTRAIT_FACES = {']
+        lines += [line + (',' if i < len(fresh) - 1 else '') for i, line in enumerate(fresh)]
+        lines += ['  };', '})(window.G = window.G || {});', '']
     with open(OUT, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write('\n'.join(lines))
     print('얼굴 자리 %d장 → %s' % (len(out), os.path.relpath(OUT, ROOT)))

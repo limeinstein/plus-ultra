@@ -21,14 +21,17 @@
     { id: 'guandao', name: '청룡도', kind: 'weapon', atk: 20, price: 7600, reg: [6], desc: '팔고 있는 무기 중 최고로 강하다는 언월도.' },
     { id: 'katana', name: '일본도', kind: 'weapon', atk: 21, price: 8800, reg: [9], desc: '놀랄 만큼 잘 드는 동방의 칼.' },
     { id: 'macuahuitl', name: '마카나', kind: 'weapon', atk: 9, price: 1600, reg: [10], desc: '흑요석 날을 박은 목검.' },
-    { id: 'excalibur', name: '성검 엑스칼리버', kind: 'weapon', atk: 34, price: 0, reg: [], rare: true, desc: '호수의 여인이 맡겼다는 전설의 검.' },
+    { id: 'excalibur', name: '성검 엑스칼리버', kind: 'weapon', atk: 50, price: 0, reg: [], rare: true, desc: '호수의 여인이 맡겼다는 전설의 검.' },
     { id: 'longinus', name: '롱기누스의 창', kind: 'weapon', atk: 30, price: 0, reg: [], rare: true, desc: '성스러운 힘이 깃든 창.' },
-    // 대항해시대 2의 야시장 명검 — 시장에는 나오지 않고, 그 도시의 뒷골목 암시장에서만 판다 (js/systems/blackmarket.js BM.SWORDS · style = 일기토의 공격 갈래)
-    { id: 'claymore', name: '클레이모어', kind: 'weapon', atk: 18, price: 6400, reg: [], rare: true, style: 'bash', desc: '스코틀랜드 고지 사람들의 큰 양손검. 앞으로 기운 코등이 끝마다 네잎 고리가 달렸다.' },
-    { id: 'shivablade', name: '시바신의 마검', kind: 'weapon', atk: 27, price: 120000, reg: [], rare: true, style: 'slash', desc: '파괴의 신 시바에게 바쳤다는 굽은 칼. 칼등에 삼지창 무늬가 박혀 있고, 사원에서 흘러나왔다는 소문이 따라다닌다.' },
-    { id: 'runeblade', name: '룬 블레이드', kind: 'weapon', atk: 32, price: 150000, reg: [], rare: true, style: 'slash', desc: '칼날에 북방의 룬 문자가 새겨진 오래된 검. 어느 배가 어떻게 브라질 해안까지 싣고 왔는지 아무도 모른다.' },
-    { id: 'paladin', name: '성기사의 검', kind: 'weapon', atk: 33, price: 160000, reg: [], rare: true, style: 'slash', desc: '샤를마뉴의 열두 성기사가 지녔다고 전하는 십자 손잡이 검. 사하라를 건너온 대상의 짐 속에서 나왔다고 한다.' },
-    { id: 'muramasa', name: '요도 무라마사', kind: 'weapon', atk: 33, price: 160000, reg: [], rare: true, style: 'slash', made: 1501, desc: '이세의 칼장인 무라마사가 벼린 칼. 너무 잘 들어 주인에게 화를 부른다는 소문 때문에 요도(妖刀)라 불린다.' },
+    // 암시장 명검 — 시장에는 나오지 않고, 그 도시의 뒷골목 암시장에서만 판다 (js/systems/blackmarket.js BM.SWORDS · style = 일기토의 공격 갈래)
+    //   2026-10-21: 대항해시대 2의 지어낸 이름(성기사의 검·시바신의 마검·룬 블레이드)을 실존하는 명검으로 바꾸고 공격력 45 이상으로 (엑스칼리버 50 아래).
+    //   id는 옛 저장 때문에 그대로 둔다 (claymore → 월리스의 검, shivablade → 줄피카르, runeblade → 울프베르트, paladin → 주와이외즈)
+    { id: 'claymore', name: '월리스의 검', kind: 'weapon', atk: 45, price: 180000, reg: [], rare: true, style: 'bash', desc: '스코틀랜드의 영웅 윌리엄 월리스가 휘둘렀다는 키만 한 양손검. 1505년 제임스 4세가 손잡이를 새로 달게 했다는 그 칼이, 바다 건너 더블린 뒷골목에 나왔다.' },
+    { id: 'shivablade', name: '줄피카르', kind: 'weapon', atk: 46, price: 200000, reg: [], rare: true, style: 'slash', desc: '예언자의 사위 알리가 지녔다고 전하는, 칼끝이 두 갈래로 갈라진 검. 벵골 술탄의 보물고에서 흘러나왔다는 소문이 캘커타 뒷골목에 돈다.' },
+    { id: 'runeblade', name: '울프베르트', kind: 'weapon', atk: 46, price: 200000, reg: [], rare: true, style: 'slash', desc: '칼날에 「+VLFBERH+T」라는 글자를 상감한 북방의 옛 검. 바이킹 시대 장인이 도가니 강철로 벼려 지금 칼보다도 단단하다. 어느 배가 어떻게 브라질 해안까지 싣고 왔는지 아무도 모른다.' },
+    { id: 'paladin', name: '주와이외즈', kind: 'weapon', atk: 48, price: 250000, reg: [], rare: true, style: 'slash', desc: '샤를마뉴 대제의 검이라 전하는 프랑스 왕가의 대관식 검 「기쁨」. 생드니 수도원 보물고에 있어야 할 칼이 사하라를 건너온 대상의 짐 속에서 나왔다 — 진짜인지는 칼만이 안다.' },
+    { id: 'muramasa', name: '요도 무라마사', kind: 'weapon', atk: 47, price: 230000, reg: [], rare: true, style: 'slash', made: 1501, desc: '이세의 칼장인 무라마사가 벼린 칼. 너무 잘 들어 주인에게 화를 부른다는 소문 때문에 요도(妖刀)라 불린다.' },
+    { id: 'saingeom', name: '사인검', kind: 'weapon', atk: 46, price: 210000, reg: [], rare: true, style: 'thrust', desc: '범의 해·범의 달·범의 날·범의 시, 네 번 겹친 범의 기운이 모인 때에만 벼린다는 조선 왕실의 곧은 양날검. 칼날에 북두칠성과 스물여덟 별자리를 금은으로 새기고 사악한 것을 베는 주문을 적었다. 궁궐 무기고에 있어야 할 한 자루가 한양 뒷골목에 나왔다.' },   // 2026-10-21 · 한양 암시장
     // armor (def)
     { id: 'leather', name: '가죽 갑옷', kind: 'armor', def: 3, price: 700, reg: [0, 1, 2, 3, 4, 10], desc: '무두질한 가죽 갑옷.' },
     { id: 'chain', name: '체인메일', kind: 'armor', def: 6, price: 1800, reg: [0, 1, 2], desc: '쇠고리를 엮은 사슬 갑옷.' },
@@ -38,6 +41,10 @@
     { id: 'plate', name: '플레이트메일', kind: 'armor', def: 14, price: 7800, reg: [1], desc: '온몸을 감싸는 판금 갑옷. 무겁다.' },
     { id: 'lamellar', name: '라멜라 갑옷', kind: 'armor', def: 9, price: 3400, reg: [6, 7], desc: '작은 철편을 끈으로 엮은 갑옷.' },
     { id: 'samurai', name: '무사 갑옷', kind: 'armor', def: 12, price: 6400, reg: [9], desc: '옻칠한 동방 무사의 갑옷.' },
+    // 암시장 명품 갑옷 (2026-10-21, 대항해시대 2의 「성기사의 갑옷」 자리) — 아테네 뒷골목 암시장에만 (js/systems/blackmarket.js BM.SWORDS)
+    //   방어 30: 일기토 피해 = … − 방어 × 0.5 라서 45면 해적 두목의 한 칼이 거의 들어가지 않는다 — 플레이트메일(14)의 두 배쯤
+    { id: 'achilles', name: '아킬레우스의 갑옷', kind: 'armor', def: 30, price: 200000, reg: [], rare: true, desc: '대장장이 신 헤파이스토스가 하룻밤에 벼려 바다의 여신 테티스가 아들 아킬레우스에게 주었다는 청동 갑옷. 아테네 뒷골목의 골동 상인은 트로이 들판에서 파냈다고 우긴다.' },
+    { id: 'oyoroi', name: '오요로이', kind: 'armor', def: 29, price: 190000, reg: [], rare: true, desc: '말 위에서 활을 쏘던 옛 무사 대장의 큰 갑옷. 옻칠한 작은 비늘판 수천 장을 붉은 실로 엮고, 가슴에는 사슴 가죽에 그림을 찍어 댔다. 대대로 신사에 바쳐 두던 것이 전란 통에 흘러나와 쿄토 뒷골목에 돈다.' },   // 2026-10-21 · 쿄토 암시장
     // tools
     { id: 'compass', name: '나침반', kind: 'tool', price: 600, reg: [0, 1, 2, 4, 6], desc: '진행 방향과 풍향을 정확히 알 수 있다.' },
     { id: 'sextant', name: '육분의', kind: 'tool', price: 2400, reg: [0, 1, 2], from: 1490, desc: '현재 위치의 위도와 경도를 알 수 있다.' },

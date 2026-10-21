@@ -33,8 +33,9 @@
     return '';
   };
   /** 아이 그림 폴더: 딸은 어머니의 고장, 아들은 아버지(제독)의 생김새 (images/portraits/family/<폴더>/) */
-  HL.folder = function (k) { return k.sex === 'f' ? HL.region(k) : (G.Img.heroLook ? G.Img.heroLook() : ''); };
+  HL.folder = function (k) { if (k.artFolder != null) return k.artFolder; return k.sex === 'f' ? HL.region(k) : (G.Img.heroLook ? G.Img.heroLook() : ''); };   // 동생이 된 아이는 아이 때 폴더 그대로 (siblings.js)
   function order(k) {
+    if (k.sibOrder) return k.sibOrder;
     var same = (S().player.kids || []).filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); });
     return Math.max(1, same.indexOf(k) + 1);
   }
@@ -66,7 +67,8 @@
   /** 자택 화면에 세울 사람들 [{who:'wife'|'kid', k, name, sub, chain, scale}] — 아내와 집에 있는 아이들(어린 순). 아기는 아내 곁의 이름표로만 */
   HL.family = function () {
     var s = S(), p = s.player, out = [], Fm = F();
-    if (!p.wife) return out;
+    var sibs = G.Siblings ? G.Siblings.family() : [];   // 새 제독의 동생들 (js/systems/siblings.js)
+    if (!p.wife) return sibs;
     var ws = Fm.wifeSpeaker(), babies = (p.kids || []).filter(function (k) { return !k.aboard && k.house == null && Fm.kidAge(k) < 3; });
     var wchain = ws.half || [];
     if (!wchain.length && ws.portrait && G.Art.portraitKeys) { try { wchain = G.Img.chain.halfFor(G.Art.portraitKeys(ws.portrait)); } catch (e) { wchain = []; } }
@@ -74,7 +76,7 @@
     HL.kidsHome().slice().sort(function (a, b) { return Fm.kidAge(a) - Fm.kidAge(b); }).forEach(function (k) {
       out.push({ who: 'kid', k: k, name: k.name, sub: Fm.kidAge(k) + '세 ' + Fm.bondHearts(k), chain: HL.chain(k, true), portrait: Fm.kidSpec(k), scale: LOOK().scale[HL.stage(k)] || 1 });
     });
-    return out;
+    return out.concat(sibs);
   };
   /** 자택 메뉴 화면의 가족 (misc.js HM.panel): 아내와 아이들이 방 안에 서 있다. 누르면 그 사람과 이야기한다 */
   HL.familyPanel = function (list0) {
@@ -396,6 +398,7 @@
   /** 자택에 들어섰을 때 (misc.js HM.enter): 가끔 아이와 얽힌 일이 생긴다 */
   HL.happen = async function () {
     var s = S(), p = s.player, b = B(), UI = G.UI;
+    if (G.Siblings) { try { if (await G.Siblings.check()) { p.homeSeen = s.day; return; } } catch (e) { console.error(e); } }   // 스물두 살이 넘은 동생이 떠난다 (js/systems/siblings.js)
     if (G.KidWed) { try { if (await G.KidWed.check()) { p.homeSeen = s.day; return; } } catch (e) { console.error(e); } }   // 열여덟 살이 된 딸의 혼례 (js/systems/kidwed.js)
     var kids = HL.kidsHome(), seen = p.homeSeen;
     if (!p.wife || !kids.length) { p.homeSeen = s.day; return; }

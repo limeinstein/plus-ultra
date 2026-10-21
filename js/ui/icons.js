@@ -2,6 +2,7 @@
 (function (G) {
   'use strict';
   var P = {
+    leaf: '<path d="M5 19C5 10.5 10.5 4.5 20 4c-.5 9.5-6.5 15-15 15z"/><path d="M5 19l9-9M10 14.5h3.5M12.5 12V8.5"/>',
     compass: '<circle cx="12" cy="12" r="9"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
     rose: '<path d="M12 2l1.8 8.2L22 12l-8.2 1.8L12 22l-1.8-8.2L2 12l8.2-1.8z"/><path d="M12 7l.9 4.1L17 12l-4.1.9L12 17l-.9-4.1L7 12l4.1-.9z" fill="currentColor" opacity=".35"/>',
     coin: '<ellipse cx="9" cy="16" rx="6" ry="2.5"/><path d="M3 16v-3c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v3"/><ellipse cx="15" cy="8.5" rx="6" ry="2.5"/><path d="M9 8.5v3M21 8.5v3c0 1.4-2.7 2.5-6 2.5"/>',

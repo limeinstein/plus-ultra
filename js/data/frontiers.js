@@ -20,7 +20,7 @@
     { id: 'inner', name: '내륙 아시아', road: 'east', pre: ['indiaroute'] },
     { id: 'malacca', name: '말라카', road: 'east', pre: ['indiaroute'], gate: 'malacca', light: 1 },
     { id: 'spice', name: '향료제도', road: 'east', pre: ['malacca'], gate: 'spiceis', light: 1 },
-    { id: 'china', name: '중국', road: 'east', pre: ['spiceis'], gate: 'china', light: 1 },
+    { id: 'china', name: '동아시아', road: 'east', pre: ['spiceis'], gate: 'china', light: 1 },
     { id: 'japan', name: '지팡그', road: 'east', pre: ['spiceis'], gate: 'zipang' },
     { id: 'austral', name: '남방대륙', road: 'east', pre: ['spiceis'], gate: 'australia' },
     { id: 'west', name: '서인도', road: 'west', gate: 'westroute' },

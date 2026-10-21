@@ -1,10 +1,13 @@
 /* 뒤를 이은 자녀의 모습 (tests/heir_look_smoke.js) — node tests/heir_look_smoke.js
-   아들·딸은 이름·생일로 정한 외형 변형(1~5)을 5·10·15·20살과 후계 시절까지 유지한다. 아들은 마흔부터 아버지의 40대 얼굴.
+   아들·딸은 이름·생일로 정한 외형 변형(1~5)을 5·10·15·20·40살과 후계 시절까지 유지한다.
    옛 저장(look·heir 없음)도 초상에 붙은 그림 이름에서 알아낸다. */
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); }
+catch (error) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
@@ -32,7 +35,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       let s = fresh('sea_dog');
       out.kid = [5, 10, 15, 20].map(a => { s.player.kids = []; const k = kid('m', a); k.portraitVariant = 3; return G.HomeLife.chain(k, false)[0] + '|' + G.HomeLife.chain(k, true)[0]; }).join(' ');
       out.daughter = [5, 10, 15, 20].map(a => { s.player.kids = []; const k = kid('f', a); k.portraitVariant = 2; return G.HomeLife.chain(k, false)[0] + '|' + G.HomeLife.chain(k, true)[0]; }).join(' ');
-      out.has = ['son', 'daughter'].flatMap(b => [5, 10, 15, 20].flatMap(a => [1, 2, 3, 4, 5].flatMap(v => [b + '_age' + a + '_v' + v, b + '_age' + a + '_v' + v + '_half']))).map(x => I.has('portraits/family/' + x) ? 1 : 0).join('');
+      out.has = ['son', 'daughter'].flatMap(b => [5, 10, 15, 20, 40].flatMap(a => [1, 2, 3, 4, 5].flatMap(v => [b + '_age' + a + '_v' + v, b + '_age' + a + '_v' + v + '_half']))).map(x => I.has('portraits/family/' + x) ? 1 : 0).join('');
       out.looks = I.list('portraits/player/').map(x => x.split('/').pop()).filter(l => l !== 'admiral' && l !== 'ganghui').filter(l => !['5', '10', '15'].every(a => I.has('portraits/family/' + l + '/son_age' + a) && I.has('portraits/family/' + l + '/son_age' + a + '_half')));
       // 아들이 잇는다 (17살)
       s.player.kids = []; const son = kid('m', 17);
@@ -60,14 +63,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const P = 'portraits/family/';
     ok(r.kid === [5, 10, 15, 20].map(a => P + 'son_age' + a + '_v3|' + P + 'son_age' + a + '_v3_half').join(' '), '아들: 같은 외형 변형으로 5·10·15·20살 얼굴·무릎상이 이어진다');
     ok(r.daughter === [5, 10, 15, 20].map(a => P + 'daughter_age' + a + '_v2|' + P + 'daughter_age' + a + '_v2_half').join(' '), '딸: 같은 외형 변형으로 5·10·15·20살 얼굴·무릎상이 이어진다');
-    ok(r.has === '1'.repeat(80) && r.looks.length === 0, '자녀 2종 × 외형 5종 × 5·10·15·20살 × 얼굴·무릎상 80장이 모두 있다 ' + r.looks.join(','));
+    ok(r.has === '1'.repeat(100) && r.looks.length === 0, '자녀 2종 × 외형 5종 × 5·10·15·20·40살 × 얼굴·무릎상 100장이 모두 있다 ' + r.looks.join(','));
     ok(/^아들:2:sea_dog:\{"sex":"m","folder":"sea_dog","variant":4\}$/.test(r.succ), '아들이 이으면 아버지의 생김새와 자기 외형 변형을 잇는다 (' + r.succ + ')');
     ok(r.face17 === P + 'son_age15_v4|' + P + 'son_age15_v4_half|' + P + 'son_age15_v4', '17살 새 제독: 저장된 변형의 소년 얼굴·무릎상');
     ok(r.face25 === P + 'son_age20_v4|' + P + 'son_age20_v4_half', '스무 살부터: 저장된 변형의 성인 얼굴·무릎상 (' + r.face25 + ')');
-    ok(r.face45 === 'portraits/player-aged/sea_dog|characters/player_half_sea_dog_old', '마흔부터: 40대 모습');
+    ok(r.face45 === P + 'son_age40_v4|' + P + 'son_age40_v4_half', '마흔부터: 저장된 변형의 40대 아들 얼굴·무릎상');
     ok(r.grandson === P + 'son_age5_v2_half', '손자도 자기 외형 변형을 쓴다');
     ok(r.old === 'sea_dog|' + P + 'sea_dog/son_age15|' + P + 'sea_dog/son_age15_half', '옛 저장: 초상의 그림 이름에서 알아낸다 (' + r.old + ')');
-    ok(r.dau.indexOf('sea_dog:f:' + P + 'daughter_age15_v5') === 0 && r.dau.indexOf(P + 'daughter_age15_v5_half') >= 0 && r.dau45 === P + 'daughter_age20_v5', '딸이 이으면 저장된 변형의 15세·20세 얼굴·무릎상');
+    ok(r.dau.indexOf('sea_dog:f:' + P + 'daughter_age15_v5') === 0 && r.dau.indexOf(P + 'daughter_age15_v5_half') >= 0 && r.dau45 === P + 'daughter_age40_v5', '딸이 이으면 저장된 변형의 15세·20세·40세 얼굴·무릎상');
     ok(r.first === 'portraits/player/sea_dog|characters/player_half_sea_dog|null', '1대 제독은 예전 그대로');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
   } catch (e) { console.error('✗', e.message); process.exitCode = 1; } finally { await browser.close(); }

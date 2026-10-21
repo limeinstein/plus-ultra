@@ -259,7 +259,9 @@
       try { if (G.Img && G.Img.preload) await G.Img.preload([[pc[0]]], 1200); } catch (e) { /* 그림이 늦으면 글부터 */ }
       pic = G.FamEv.showPic({ img: pc[0], title: pc[1] });
     }
-    try { if (EV[ev]) await EV[ev](p); }
+    // 배에 함께 탄 부인과 다른 부하 사이의 끌림 — 어느 단계든 제독이 알아채고 결투로 끝낸다 (js/systems/wives.js W.affair)
+    var wifeCase = G.Wives && G.Wives.of && (G.Wives.of(p.f) || G.Wives.of(p.m));
+    try { if (wifeCase && G.Wives.affair) await G.Wives.affair(p); else if (EV[ev]) await EV[ev](p); }
     finally { if (pic) await pic.stop(); }
     G.Game.refreshHud();
   };

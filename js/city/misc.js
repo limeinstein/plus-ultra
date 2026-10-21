@@ -766,13 +766,14 @@
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상 (familyevent.js)
     if (story) { try { await G.Story.family(c, 'home'); } catch (e) { console.error(e); } }                  // 아내와 어머니 (이야기 모드)
   };
-  HM.sub = function (c) { var s = S(), st = G.Story && G.Story.atHome && G.Story.atHome(c); return s.player.wife ? (st ? '어머니와 가족이 기다리는 집' : '가족이 기다리는 집') : st ? '어머니가 계신 집' : '혼자 사는 집'; };
+  HM.sub = function (c) { var s = S(), st = G.Story && G.Story.atHome && G.Story.atHome(c); return s.player.wife ? (st ? '어머니와 가족이 기다리는 집' : '가족이 기다리는 집') : st ? '어머니가 계신 집' : G.Siblings && G.Siblings.home().length ? '동생들과 사는 집' : '혼자 사는 집'; };
   HM.menu = function (c) {
     var s = S();
     return [
       { label: '쉰다', icon: 'bed', onClick: function () { return HM.rest(c); } },
       G.Story && G.Story.atHome && G.Story.atHome(c) ? { label: '어머니와 이야기', icon: 'heart', sub: G.STORY.mother.name, onClick: function () { return G.Story.motherTalk(); } } : null,
       s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length + (G.Family.aboard().length ? ' (견습 ' + G.Family.aboard().length + ')' : '') : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
+      G.Siblings && G.Siblings.home().length ? { label: '동생들', icon: 'people', sub: G.Siblings.home().length + '명 · 함께 항해 ' + G.Siblings.aboard().length + '/' + G.Siblings.K().maxHire, onClick: function () { return G.Siblings.menu(c); } } : null,
       G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,
       G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,
       { label: '항해 일지 기록 (저장)', icon: 'save', onClick: function () { return G.Info.saveMenu(); } },

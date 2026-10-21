@@ -31,7 +31,7 @@
       if (RN.lang != null) o.lang = RN.lang;
       if (RN.cat) o.cat = RN.cat;
       if (RN.desc) { o.desc0 = o.desc0 || o.desc; o.desc = RN.desc; }
-      o.desc = o.desc + ' ' + RN.old;
+      // 옛 이름의 유래(RN.old)는 설명에 붙이지 않는다 — 대항해시대 3의 이름이 그대로 보이므로 (2026-10-21 사용자 요청). 찾기 전 이름은 단서 이름(js/data/cluenames.js)
     }
     D.push(o);
   }
@@ -238,13 +238,13 @@
   add('tiger', '호랑이', 'creature', 22.3, 89.5, 'land', 3, 8000, 8, 5, '줄무늬 털을 가진 거대한 고양이. 밀림의 왕이다.', '캘커타 동쪽 강 하구의 숲에 사람을 해치는 줄무늬 짐승이 있다고 한다.');
   add('panda', '고양이곰', 'creature', 30.9, 103.2, 'land', 5, 13000, 7, 6, '고양이와 곰을 섞은 듯한 흑백의 짐승. 대나무만 먹는다.', '성도 서쪽 산속 대나무 숲에 흑백의 곰이 산다고 한다.');
   add('porcupine', '아프리카 바늘두더지', 'creature', -2.0, 35.0, 'land', 3, 7400, 10, 3, '긴 가시를 흔들어 소리를 내며 적을 위협하는 짐승.', '몸바사 서쪽 초원에 바늘로 뒤덮인 짐승이 산다고 한다.');
-  add('coelacanth', '태고의 물고기', 'creature', -11.7, 43.3, 'special', 4, 12000, 5, 3, '먼 옛날부터 모습이 변하지 않았다는 물고기. 깊은 바다에 숨어 산다.', '모잠비크 북쪽 바다의 작은 섬들 근처 깊은 바다에 태고의 물고기가 산다고 한다.', { r: 1.2 });
+  add('coelacanth', '태고의 물고기', 'creature', -11.7, 43.3, 'special', 4, 12000, 5, 3, '먼 옛날부터 모습이 변하지 않았다는 물고기. 깊은 바다에 숨어 산다.', '모잠비크 북쪽 바다의 작은 섬들 근처 깊은 바다에 돌 속 옛 물고기와 꼭 닮은 물고기가 산다고 한다.', { r: 1.2 });
   add('warthog', '사마귀 멧돼지', 'creature', -3.0, 36.5, 'land', 3, 6600, 10, 3, '얼굴이 사마귀로 뒤덮인 아프리카의 멧돼지.', '말린디 서쪽 초원 깊은 곳에 기묘한 얼굴의 멧돼지가 산다고 한다.');
   add('komodo', '남쪽 바다의 괴수', 'creature', -8.55, 119.45, 'land', 4, 12000, 12, 8, '용의 모습을 한 거대한 도마뱀. 독이 있는 침으로 사냥한다.', '수라바야 동쪽의 외딴 섬에 용을 닮은 짐승이 산다고 한다.', { r: 0.4 });
   add('rafflesia', '지옥의 꽃', 'creature', -3.5, 102.5, 'land', 4, 9600, 12, 8, '고기 썩는 냄새를 풍기는 거대한 붉은 꽃. 사람 몸통만 하다.', '파렌반 서쪽 수마트라의 밀림에 썩은 냄새를 풍기는 거대한 꽃이 핀다고 한다.', { plant: true });
   add('carnivplant', '벌레잡이풀', 'creature', 6.0, 116.5, 'land', 4, 9000, 12, 8, '항아리 모양의 잎으로 벌레를 꾀어 잡아먹는 풀.', '브루나이 동쪽 높은 산에 벌레를 잡아먹는 항아리 풀이 자란다고 한다.', { plant: true });
   add('startower', '별탑', 'creature', 24.5, 9.5, 'land', 3, 8600, 5, 3, '사하라 사막에 우뚝 솟은 흰 탑. 옛 건축물인지 기묘한 식물인지 알 수 없다.', '트리폴리 남서쪽 사하라 깊은 곳에 별 모양 장식의 흰 탑이 있다고 한다.', { plant: true });
-  add('penguin', '헤엄치는 새', 'creature', -34.2, 18.45, 'land', 2, 6000, 10, 3, '날지 못하는 대신 물고기처럼 헤엄치는 바닷새.', '케이프 남쪽 해안의 바위에 헤엄치는 새들이 무리지어 산다고 한다.', { r: 0.4 });
+  add('penguin', '헤엄치는 새', 'creature', -34.2, 18.45, 'land', 2, 6000, 10, 3, '날지 못하는 대신 물고기처럼 헤엄치는 바닷새.', '케이프 남쪽 해안의 바위에 날지 못하는 바닷새들이 무리지어 산다고 한다.', { r: 0.4 });
   add('mandrill', '인면수', 'creature', 0.5, 10.5, 'land', 3, 7400, 10, 3, '빨강과 파랑으로 화장한 듯한 얼굴의 원숭이. 겁이 많다.', '산토메 동쪽 대륙의 밀림에 사람 얼굴을 한 원숭이가 산다고 한다.');
   add('ostrich', '달리는 새', 'creature', -22.0, 24.0, 'land', 3, 7800, 10, 3, '사람 키보다 큰 날지 못하는 새. 말보다 빨리 달린다.', '케이프 북쪽 칼라하리 초원에 말보다 빠른 거대한 새가 산다고 한다.');
   add('flamingo', '홍학', 'creature', -0.36, 36.08, 'land', 3, 7600, 10, 3, '연분홍 깃털과 굽은 부리를 가진 물새. 큰 무리를 이루어 얕은 호수에 선다.', '몸바사 북서쪽 리프트 계곡의 소금기 어린 호수에 물을 분홍빛으로 물들이는 새 떼가 산다고 한다.');
@@ -282,7 +282,7 @@
   trade('t_nutmeg', '육두구', 'nutmeg', [8], 4, 8400, 12, '향료제도 남쪽 작은 섬에서만 나는 귀한 열매.', '말라카 시장에 동쪽 섬에서 온 육두구가 나온다고 한다. 암보이나 가까운 섬들에서 난다고 한다.');
   trade('t_cinnamon', '계피', 'cinnamon', [5, 4], 3, 6400, 8, '실론 섬에서 나는 향기로운 나무껍질.', '베이루트에 들어오는 베네치아 갤리선이 실론의 계피를 사 간다고 한다. 실론의 콜롬보에서는 더 싸게 판다고 한다.', { rival: [1505, 9, '로렌수 드 알메이다'] });
   trade('t_ginger', '생강', 'ginger', [5, 4], 2, 4000, 8, '매운 뿌리 향신료. 약으로도 쓰인다.', '카이로의 향신료 시장에서 인도산 생강을 판다고 한다. 인도 남서 해안에서 많이 난다고 한다.');
-  trade('t_allspice', '새로운 향료', 'allspice', [10], 4, 7000, 11, '신대륙의 붉고 매운 향료. 여러 향신료의 맛이 한꺼번에 난다.', '신대륙 카리브 바다의 섬에서 새로운 향료가 난다고 한다.');
+  trade('t_allspice', '새로운 향료', 'allspice', [10], 4, 7000, 11, '신대륙의 붉고 매운 향료. 여러 향신료의 맛이 한꺼번에 난다.', '신대륙 카리브 바다의 섬에서 여러 향신료 맛이 한꺼번에 나는 열매가 난다고 한다.');
   trade('t_coffee', '사라센의 활력 음료', 'coffee', [3, 4], 3, 6400, 5, '볶아서 달이면 검은 음료가 되는 콩. 마시면 잠이 달아나고 힘이 난다.', '아덴이나 에티오피아의 고원에서 검은 콩을 판다고 한다.');
   trade('t_tea', '차', 'tea', [6], 4, 7600, 7, '정신을 맑게 하고 병을 물리친다는 잎. 동방 사람들은 매일 마신다.', '중국의 복주나 광주에서 찻잎을 살 수 있다고 한다.', { rival: [1557, 5, '포르투갈 상인'] });
   trade('t_cacao', '신세계의 강장 열매', 'cacao', [10], 3, 7400, 11, '화폐로도 쓰이는 신대륙의 열매. 달인 음료에는 강장 효과가 있다.', '누에바 에스파냐와 과테말라에서 카카오 열매를 화폐로 쓴다고 한다.', { rival: [1502, 8, '크리스토발 콜론'] });
@@ -352,6 +352,25 @@
     birthvenus: ['botticelli', 1484], pirireis: ['piri', 1513], rakubowl: ['h_rikyu', 1575], tsukumonasu: ['h_juko', 0], shahnameh: ['h_bihzad', 1522] };
   D.forEach(function (d) { var b = BY[d.id]; if (b && d.how === 'city') { d.by = b[0]; d.byFrom = b[1]; } });
 
+  /* 단서 이름과 발견물 이름 (js/data/cluenames.js, 2026-10-21)
+     찾기 전(제독도 경쟁자도 아직 못 찾음)에는 소문·책·수첩·후원자 제안에 단서 이름(d.clue)으로 보이고, 찾고 나면 발견물 이름(d.realName)으로 바뀐다.
+     d.name을 읽는 곳은 그대로 두고, 읽을 때 어느 쪽을 줄지 정한다(게터). 상태가 없는 화면(타이틀·도감)은 발견물 이름. d.name = … 은 발견물 이름을 바꾼다(명명). */
+  G.discKnown = function (d) {
+    var s = G.Game && G.Game.state; if (!s || !s.disc) return true;
+    if (s.tut && G.TUTORIAL && d.id === G.TUTORIAL.disc) return true;     // 튜토리얼: 멜라의 책이 이름을 그대로 알려 준다 (헤라클레스의 동굴)
+    var st = s.disc[d.id]; return !!(st && (st.found || st.rival || st.reported));
+  };
+  G.discClueInstall = function (o) {
+    var CN = G.DISC_NAMES && G.DISC_NAMES[o.id];
+    if (!CN || o._clueSet) return o;
+    if (CN.name && CN.name !== o.name) { if (!o.oldName) o.oldName = o.name; if (!o.name0) o.name0 = o.name; o.name = CN.name; }
+    if (!CN.clue || CN.clue === o.name) return o;
+    var real = o.name; o.clue = CN.clue; o._clueSet = true;
+    Object.defineProperty(o, 'realName', { get: function () { return real; }, set: function (v) { real = v; }, enumerable: false, configurable: true });
+    Object.defineProperty(o, 'name', { get: function () { return G.discKnown(o) ? real : (G.Names && G.Names.tx ? G.Names.tx(o.clue) : o.clue); }, set: function (v) { real = v; }, enumerable: true, configurable: true });
+    return o;
+  };
+  D.forEach(G.discClueInstall);
   G.DISCOVERIES = D;
   G.DISC = {}; D.forEach(function (d, i) { d.idx = i; G.DISC[d.id] = d; });
   G.DISC_CATS = { geo: '지리', nature: '자연', ruin: '유적', treasure: '보물', creature: '생물', people: '민족', trade: '교역품' };

@@ -18,7 +18,7 @@
     if (G.SeaNews) G.SeaNews.on(true);   // 항해 중에는 소식·알림을 작게 (js/ui/seanews.js)
     if (!G.Game.ensureRenderer()) { UI.alert('WebGL을 사용할 수 없어 바다를 그릴 수 없습니다.<br>' + (G.Game.rendererError || '')); }
     if (!st || arg.depart != null || arg.fresh) st = newRuntime();
-    st.alive = true; st.busy = 0; st.keys = {};
+    st.alive = true; st.busy = 0; st.keys = {};   // 앞 장면에서 끝나지 않은 일의 「바쁨」은 털어 낸다 (끝날 때 0 아래로 내려가지 않는다 — Math.max)
     if (G.EventFx) G.EventFx.preload('sea');
     if (!st.vel) st.vel = [0, 0];
     if (!st.fx && G.SeaFX) st.fx = G.SeaFX.create();
@@ -49,6 +49,9 @@
       s.loc.mode = 'sea';
       if (!st.cam) st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: 110 };
       st.paused = true;
+      // 상륙했다가 배로 돌아왔다: 내리기 전의 침로·손키·속도를 털고, 배가 뭍에 걸려 있거나 뱃머리가 뭍을 보고 있으면 물 쪽으로 (QA 2026-10-21 「상륙했다가 배가 껴 있다」)
+      if (arg.fromLand) clearHelm();
+      if (arg.fromLand || !G.Geo.isSea(s.loc.lon, s.loc.lat, 0.2)) unstick(!!arg.fromLand);
       // 해전을 마치고 돌아왔을 때 자동항해 중이던 항구가 있으면 그대로 이어 간다 (예전에는 멈춘 채 다시 눌러야 했다)
       if (arg.resume && st.path && st.target && st.target.city && ((st.autoOn && !G.Routes.autoOff()) || st.pilot)) {
         st.paused = false; st.vel = [0, 0]; st.stopping = false; st.prog = null;
@@ -71,6 +74,40 @@
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
   }
   SEA.runtime = function () { return st; };
+  /** 손키·침로·속도를 모두 턴다 (상륙했다가 돌아왔을 때) */
+  function clearHelm() {
+    st.vel = [0, 0]; st.path = null; st.target = null; st.dirCrs = null; st.manual = false; st.direct = false; st.pilot = false;
+    st.keys = {}; st.arrows = {}; st.arrowSteer = false; st.pointerSteer = false; st.stopping = false; st.braking = false; st.cruise = false; st.thr = 0;
+    st.tackTheta = 0; st.tackSide = 0; st.prog = null; st.pendingPort = null; st.turnRate = 0;
+  }
+  /** 배가 뭍에 걸렸으면 곁의 물로 옮기고, 뱃머리가 뭍을 보고 있으면 가장 트인 물 쪽으로 돌린다.
+      heading만 볼 때(always=false)는 배가 뭍 위에 있을 때만 움직인다. 옮겼거나 돌렸으면 true */
+  function unstick(always) {
+    var l = S().loc, moved = false;
+    if (!G.Geo.isSea(l.lon, l.lat, 0.2)) {
+      var w = deepWater(l.lon, l.lat) || G.Nav.nearestSea(l.lon, l.lat, 4);
+      if (w) { l.lon = G.Geo.wrapLon(w[0]); l.lat = w[1]; moved = true; }
+    }
+    if (!always && !moved) return false;
+    // 뱃길 그물(G.Nav)에서 배가 선 칸이 지나갈 수 없는 칸이면(물가에 바짝 댄 배) 곧게 이어진 가까운 물칸으로 띄운다 — 그대로면 바다를 눌러도 뱃길을 못 찾는다
+    var np = G.Nav.nearestSea(l.lon, l.lat, 6, null, true);
+    if (np && (Math.abs(np[0] - l.lon) > 1e-6 || Math.abs(np[1] - l.lat) > 1e-6) && G.Geo.isSea(np[0], np[1], 0.2)) { l.lon = G.Geo.wrapLon(np[0]); l.lat = np[1]; moved = true; }
+    // 뱃머리 앞이 물인가 (0.06°·0.15°·0.3°)
+    function run(h) { var c = Math.cos(h), sn = Math.sin(h), d = 0; for (var r = 0.03; r <= 1.0001; r += 0.03) { if (!G.Geo.isSea(l.lon + c * r, l.lat + sn * r, 0.2)) break; d = r; } return d; }
+    if (run(l.heading || 0) >= 0.3) return moved;
+    var best = null, bd = -1;
+    for (var a = 0; a < 24; a++) {
+      var h = a / 24 * Math.PI * 2, d = run(h);
+      var score = d - Math.abs(U.angDiff(l.heading || 0, h)) * 0.02;      // 길이가 같으면 지금 뱃머리에 가까운 쪽
+      if (score > bd) { bd = score; best = h; }
+    }
+    if (best != null && run(best) > 0) { l.heading = best; if (st.pose) { st.pose.roll = 0; st.pose.pitch = 0; } return true; }
+    // 둘레가 모두 막혔다(지형 자료가 거친 좁은 물): 가까운 넓은 물로 옮긴다
+    var far = G.Nav.nearestSea(l.lon, l.lat, 4);
+    if (far && (Math.abs(far[0] - l.lon) > 1e-6 || Math.abs(far[1] - l.lat) > 1e-6)) { l.lon = G.Geo.wrapLon(far[0]); l.lat = far[1]; return true; }
+    return moved;
+  }
+  SEA.unstick = unstick;
   /** 시험용: 반란 장면을 바로 띄운다 */
   SEA._mutiny = function () { return mutiny(); };
   function chartR() { return 1.2 + R.skill('survey') * 0.45 + (G.Ships.fleetHas('scout') ? 0.3 : 0) + (G.Cabins ? G.Cabins.fx('chart', 'chart') : 0); }
@@ -128,14 +165,14 @@
     hudEl.port = btn('입항', 'anchor', function () { tryEnterPort(); }, 'navy');
     hudEl.land = btn('상륙', 'boot', function () { tryLand(); });
     if (G.Fishing) btn('낚시', 'fish', function () { goFish(); });
-    if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { st.busy++; G.Rain.ask(false).then(function () { st.busy--; refreshButtons(); }, function () { st.busy--; }); }); hudEl.rain.style.display = G.Rain.raining() ? '' : 'none'; }   // 비가 오는 동안만 보인다
+    if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.style.display = G.Rain.raining() ? '' : 'none'; }   // 비가 오는 동안만 보인다
     btn('해도', 'map', function () { SEA.chart(); });
-    btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy--; }); });
+    btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     hudEl.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
     var zb = U.el('div', 'zoomctl');
     [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
-    bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy--; }));   // 맨 오른쪽: 설정 (수첩 밖)
+    bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
     hudEl.bar = bar; st.followArmed = false; refreshFollow();
     refreshBar(); refreshHud();
@@ -421,7 +458,7 @@
         : '제독, 바람을 정면으로 안고 있어 배가 거의 나아가지 못합니다. 이 방위로 침로를 잡을까요? 돛을 비스듬히 받아 곧게 거슬러 오르겠습니다.', [
         { label: zig ? '지그재그로 거슬러 오른다' : '침로를 잡고 거슬러 오른다', value: 'tack' }, { label: '이대로 손으로 몬다', value: null }], G.Scenes.mateSpeaker('first')); });
     } catch (e) { console.error(e); }
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
     if (v === 'tack') { takeCourse(S().loc.heading); UI.toast((G.Ctrl && G.Ctrl.tackMode && G.Ctrl.tackMode() === 'off' ? '침로를 잡고 거슬러 오릅니다.' : '지그재그로 거슬러 오릅니다.') + ' 방향키를 누르면 다시 손으로 몹니다.', 'sail', 4200); }
   }
   /** 사각돛 배가 맞바람에 굼뜰 때 부관이 일러 준다: 조선소 「개조」의 삭구 개량·돛 바꾸기 (석 달에 한 번) */
@@ -557,7 +594,7 @@
         { label: '입항한다', value: 1 }, { label: '지나간다', value: 0 }
       ], G.Scenes.mateSpeaker('first'));
     } catch (e) { console.error(e); }
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
     if (!st.alive || G.Game.scene !== SEA) return false;
     if (!v) { coolPortPrompt(c); if (portAskMode() === 'stop') st.portPromptBlock = c.id; return false; }   // 멈췄을 때만 묻기: 거절하면 그 항구 곁을 떠날 때까지 다시 묻지 않는다
     return tryEnterPort(c);
@@ -611,7 +648,7 @@
     st.busy++;
     try {
       var ok = await G.Scenes.city.handleEntry(c);
-      if (!ok) { st.busy--; st.paused = true; coolPortPrompt(c); refreshBar(); return false; }
+      if (!ok) { st.busy = Math.max(0, st.busy - 1); st.paused = true; coolPortPrompt(c); refreshBar(); return false; }
       if (c.region === 10) s_flags().fromEurope = false;
       st.paused = true; st.path = null; st.target = null; st.pendingPort = null;
       // 도시로 넘어가는 동안(화면이 어두워지는 사이)에도 바다는 바쁜 채로 둔다 — 예전에는 그 틈에 「입항하시겠습니까?」가 떠서 도시 안까지 따라왔다 (QA 2026-10-16)
@@ -626,19 +663,20 @@
     if (st.busy) return;
     st.busy++; st.paused = true; st.vel = [0, 0]; refreshBar();
     try { await G.Fishing.open({ storm: st.storm > 0 }); } catch (e) { console.error(e); }
-    st.busy--; refreshHud();
+    st.busy = Math.max(0, st.busy - 1); refreshHud();
   }
   async function tryLand() {
+    if (st.busy || UI.busy()) return;          // 바다의 하루 사건이 끝나지 않았다 — 그 사이에 내리면 돌아왔을 때 배가 멈춘 채 풀리지 않았다 (QA 2026-10-21)
     var p = landNear();
     if (!p) { UI.toast('해안에서 너무 멉니다. 육지에 더 가까이 가십시오.', 'boot'); return; }
     var s = S();
     if (s.fleet.crew < 5) { UI.toast('상륙할 선원이 모자랍니다.', 'people'); return; }
     st.busy++;
     var ok = await UI.ask('상륙해서 탐험하겠습니까? 배는 이곳에 정박시켜 둡니다.', [{ label: '상륙한다', value: true }, { label: '그만둔다', value: false }], G.Scenes.mateSpeaker('first'));
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
     if (!ok) return;
     st.paused = true; st.path = null;
-    await UI.fade(function () { G.Game.go('land', { landing: { lon: p[0], lat: p[1], shipLon: s.loc.lon, shipLat: s.loc.lat } }); });
+    await UI.fade(function () { G.Game.go('land', { landing: { lon: p[0], lat: p[1], shipLon: s.loc.lon, shipLat: s.loc.lat, shipHeading: s.loc.heading } }); });
   }
 
   // ================================================================ chart window
@@ -661,7 +699,7 @@
       }
     });
     await win.result;
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
   };
 
   // ================================================================ NPC fleets
@@ -797,7 +835,7 @@
     if (!byMe && n.hunt && G.Hostile) opts.push({ label: '배상금을 낸다 (금화 ' + U.num(G.Hostile.fee(n.nation)) + '닢 · 적대 −' + G.BALANCE.hostility.payCut + ')', value: 'repay' });
     if (byMe) opts.push({ label: '그냥 둔다', value: null });
     var v = await UI.ask(text, opts, G.Scenes.mateSpeaker('first'));
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
     if (!v) { n.cooldown = 3; goOnAfter(wasSailing); return; }
     if (v === 'plead') {
       var boss = { name: pl + ' 두목' };
@@ -862,11 +900,11 @@
         else if (s.player.gold < qty * price) UI.toast('금화가 모자란다.', 'coin');
         else { s.player.gold -= qty * price; f.food += qty / 2; f.water += qty / 2; UI.toast('식량과 물 ' + qty + '통을 샀다. (금화 ' + U.num(qty * price) + '닢)', 'bread'); refreshHud(); }
       } else if (v === 'attack') {
-        st.busy--; st.wasSailing = wasSailing; encounter(n, true); return;
+        st.busy = Math.max(0, st.busy - 1); st.wasSailing = wasSailing; encounter(n, true); return;
       }
     } catch (e) { console.error(e); }
     n.cooldown = 6;
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
     goOnAfter(wasSailing);
   }
 
@@ -1457,7 +1495,7 @@
       await crises(msgs);
       if (st.dayCount % 3 === 0) drawMini();
     } catch (e) { console.error(e); }
-    st.busy--;
+    st.busy = Math.max(0, st.busy - 1);
   }
   SEA.runDay = runDay;
   /** 멈춘 배에서 망루와 갑판 인원을 풀어 주변을 꼼꼼히 살핀다. 다른 배와 세계 시간은 그대로 흐른다. */

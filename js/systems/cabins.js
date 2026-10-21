@@ -314,6 +314,7 @@
       while (s.leaving.length) {
         var id = s.leaving.shift(), m = s.mates.filter(function (x) { return x.id === id; })[0], d = G.MATE[id];
         if (!m || !d || m.loyal > 0) continue;
+        if (G.Wives && G.Wives.of && G.Wives.of(id)) { await G.Wives.farewell(m); continue; }   // 배에 함께 탄 부인: 「더는 당신이랑 못 살겠어요」 (js/systems/wives.js)
         var b = BM(), sp = { name: d.name, portrait: G.Scenes.mateSpec(id), lang: 3 };
         await UI.say(U.pick(['제독, 더는 함께할 수 없소. 이 배에서 내리겠소.', '할 만큼 했소. 다음 항구에서… 아니, 지금 내 짐을 싸겠소.', '당신 밑에서는 더 볼 것이 없소. 여기서 갈라섭시다.']), sp);
         var v = await UI.ask(d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 배에서 내리려 한다.', [{ label: '붙잡는다 (설득)', value: 1 }, { label: '보내 준다', value: 0 }], sp);
@@ -325,7 +326,9 @@
         } else {
           if (v) await UI.say(U.pick(['말로 될 일이 아니오. 잘 있으시오.', '이미 마음을 정했소.']), sp);
           s.mates = s.mates.filter(function (x) { return x !== m; });
+          if (R().tidyCaptains) R().tidyCaptains();
           s.flags['gone_' + id] = 1;
+          if (G.Wives && G.Wives.sync) G.Wives.sync();   // 혹시 부인이었으면 「배에 함께」를 풀고 제 집으로 (부인은 위의 G.Wives.farewell 이 먼저 맡는다)
           G.State.log(d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 함대를 떠났다.');
           UI.toast(d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 함대를 떠났다.', 'boot', 4500);
         }

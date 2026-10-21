@@ -34,17 +34,17 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     await city(0);
 
-    // ① 열 도시 모두 명검 — 내륙·작은 항구도 암시장이 선다
+    // ① 열세 도시 모두 명검·명품 갑옷 — 내륙·작은 항구도 암시장이 선다
     const all = await page.evaluate(() => {
       const BM = G.BlackMarket, out = [];
       Object.keys(BM.SWORDS).forEach(id => { const c = G.CITY_DATA[+id], st = BM.stock(c), it = st.items[0]; out.push({ city: c.name, port: c.port, size: c.size, here: BM.here(c), open: BM.open(c), named: !!(it && it.named), id: it && it.id, want: BM.SWORDS[id], n: st.items.filter(x => !x.flag).length, price: it && it.price }); });
       return out;
     });
     console.log(JSON.stringify(all));
-    ok(all.length === 10 && all.every(x => x.here && x.open && x.named && x.id === x.want && x.n === 4), '열 도시의 암시장 맨 위에 그 도시의 명검 + 물건 3가지: ' + all.map(x => x.city + '=' + x.id).join(', '));
-    ok(all.filter(x => !x.port || x.size < 2).map(x => x.city).sort().join() === ['통북투', '카이로', '페르남부쿠'].sort().join(), '내륙(통북투·카이로)·작은 항구(페르남부쿠)에도 암시장이 선다');
+    ok(all.length === 13 && all.every(x => x.here && x.open && x.named && x.id === x.want && x.n === 4), '열세 도시의 암시장 맨 위에 그 도시의 명검·명품 갑옷 + 물건 3가지: ' + all.map(x => x.city + '=' + x.id).join(', '));
+    ok(all.filter(x => !x.port || x.size < 2).map(x => x.city).sort().join() === ['통북투', '카이로', '쿄토', '페르남부쿠'].sort().join(), '내륙(통북투·카이로·쿄토)·작은 항구(페르남부쿠)에도 암시장이 선다');
     const prices = Object.fromEntries(all.map(x => [x.want, x.price]));
-    ok(prices.muramasa === 240000 && prices.paladin === 240000 && prices.runeblade === 225000 && prices.shivablade === 180000 && prices.claymore === 9600, '명검 값(×1.5): 무라마사·성기사 240,000 · 룬 225,000 · 시바 180,000 · 클레이모어 9,600');
+    ok(prices.muramasa === 345000 && prices.paladin === 375000 && prices.runeblade === 300000 && prices.shivablade === 300000 && prices.claymore === 270000, '명검 값(×1.5): 주와이외즈 375,000 · 무라마사 345,000 · 울프베르트·줄피카르 300,000 · 월리스의 검 270,000');
 
     // ② 회계 2면 닫힘, 다른 도시(리스본)는 명검 없이 3가지 + 귀띔
     const lis = await page.evaluate(() => {
@@ -70,7 +70,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log(JSON.stringify(era));
     ok(!era.named && era.sakai.indexOf('muramasa') < 0 && era.sakai.length === 3, '1490년 사카이: 무라마사는 아직 없다 (' + era.sakai.join(',') + ')');
-    ok(!era.perExists && era.rumorCities.indexOf('muramasa') < 0 && era.rumorCities.indexOf('runeblade') < 0, '1490년 귀띔에 무라마사·룬 블레이드는 나오지 않는다 (' + [...new Set(era.rumorCities)].join(',') + ')');
+    ok(!era.perExists && era.rumorCities.indexOf('muramasa') < 0 && era.rumorCities.indexOf('runeblade') < 0, '1490년 귀띔에 무라마사·울프베르트는 나오지 않는다 (' + [...new Set(era.rumorCities)].join(',') + ')');
 
     // ④ 사카이에서 무라마사를 산다 — 값·악명·「팔렸다」·바로 차기
     await city(192);
@@ -87,17 +87,33 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { paid: gold0 - s.player.gold, noto: (s.player.notoriety || 0) - noto0, has: G.R.hasItem('muramasa'), eq: s.player.equip.weapon, w0, asks, rows: window.__rows, text: window.__text, sold: BM.stock(c).items[0].sold };
     });
     console.log(JSON.stringify(buy));
-    ok(buy.rows[0].indexOf('명검 · 요도 무라마사') === 0 && /공격 33/.test(buy.rows[0]), '사카이 암시장 첫 줄: ' + buy.rows[0].replace(/<[^>]+>/g, ''));
-    ok(buy.paid === 240000 && buy.noto === 1 && buy.has && buy.sold, '무라마사를 샀다: 240,000닢 · 악명 +1 · 이번 기간에는 「팔렸다」');
+    ok(buy.rows[0].indexOf('명검 · 요도 무라마사') === 0 && /공격 47/.test(buy.rows[0]), '사카이 암시장 첫 줄: ' + buy.rows[0].replace(/<[^>]+>/g, ''));
+    ok(buy.paid === 345000 && buy.noto === 1 && buy.has && buy.sold, '무라마사를 샀다: 345,000닢 · 악명 +1 · 이번 기간에는 「팔렸다」');
     ok(buy.eq === 'muramasa' && buy.asks.some(a => /바로 차겠습니까/.test(a)), '지금 찬 칼(' + buy.w0 + ')보다 나아서 바로 찼다');
     ok(/귀띔/.test(buy.text), '암시장 안내에 거간꾼의 귀띔');
+
+    // ④-2 아테네의 명품 갑옷 「아킬레우스의 갑옷」 — 방어 30, 사면 바로 입을지 묻는다
+    await city(72);
+    const ach = await page.evaluate(async () => {
+      const s = G.Game.state, BM = G.BlackMarket, c = G.CITY_DATA[72], C = G.Scenes.city;
+      C.say = async () => {}; C.mate = async () => {};
+      const answers = ['i:achilles', null], asks = [], ch0 = G.UI.choose, cf0 = G.UI.confirm, g0 = s.player.gold;
+      G.UI.choose = async (t, rows) => { window.__rows = rows.map(r => r.label + ' | ' + r.right); return answers.shift(); };
+      G.UI.confirm = async (t) => { asks.push(t); return true; };
+      await BM.visit(c);
+      G.UI.choose = ch0; G.UI.confirm = cf0;
+      return { row: window.__rows[0], paid: g0 - s.player.gold, armor: s.player.equip.armor, asks, rumor: Object.keys(BM.SWORDS).map(Number).filter(id => id !== 72).map(id => BM.rumor(G.CITY_DATA[id])).filter(r => r && r.item === 'achilles').map(r => r.text)[0] || '' };
+    });
+    console.log(JSON.stringify(ach));
+    ok(/^명품 갑옷 · 아킬레우스의 갑옷/.test(ach.row.replace(/<[^>]+>/g, '')) && /방어 30/.test(ach.row), '아테네 암시장 첫 줄: ' + ach.row.replace(/<[^>]+>/g, ''));
+    ok(ach.paid === 300000 && ach.armor === 'achilles' && ach.asks.some(a => /바로 입겠습니까/.test(a)), '아킬레우스의 갑옷을 300,000닢에 사서 바로 입었다');
 
     // ⑤ 일기토의 공격 갈래 · 시장·전리품에 안 나옴 · 그림
     const misc = await page.evaluate(() => {
       const ids = ['claymore', 'shivablade', 'runeblade', 'paladin', 'muramasa'];
       return { style: ids.map(id => G.Games.weaponStyle(id)), rare: ids.every(id => G.ITEM[id].rare && !G.ITEM[id].reg.length), img: ids.map(id => !!G.Img.itemSrc({ id })) };
     });
-    ok(misc.style.join() === 'bash,slash,slash,slash,slash', '일기토 공격 갈래: 클레이모어 치기, 나머지 베기');
+    ok(misc.style.join() === 'bash,slash,slash,slash,slash', '일기토 공격 갈래: 월리스의 검 치기, 나머지 베기');
     ok(misc.rare, '새 칼 다섯 자루는 시장·해적 전리품에 나오지 않는다 (rare · 파는 고장 없음)');
     ok(misc.img.every(Boolean), '새 칼 그림 5장 (images/items)');
 

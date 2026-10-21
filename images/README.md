@@ -48,7 +48,8 @@
 | 마을 사람 | `portraits/npc/역할.png` (예: `trader`), 문화권별 `_islam`, 도시별 `@0` | 512×512 |
 | 마을 사람 — 도시마다 다른 얼굴 | 같은 이름 뒤에 `_f`(여) `_m`(남) `_2` `_3` 을 붙이면 도시 번호에 따라 번갈아 나옵니다. 예: `portraits/npc/priest_europe_f.webp` (수녀) | 512×512 |
 | 마을 사람 — 도시 양식×역할 240장 | `portraits/npc-roles/양식/역할.webp` (예: 조선 상인 `kr/merchant.webp`). 양식 20종×역할 12종이며, `portraits/npc/역할@도시번호`가 있으면 도시 전용 그림을 먼저 씁니다. | 512×512, 투명 배경 |
-| 왕립 시설 관리자 | `portraits/building-managers/양식/zoo.webp` · `museum.webp` · `gallery.webp`, 무릎상은 `_half.webp`. 20지역×3시설이며 동물원은 풋풋한 새내기 사육사, 박물관은 엄숙한 츤데레 관장, 미술관은 고지식하고 깐깐한 고위 관리자입니다. | 얼굴 512×512 · 무릎상 1024×1536 |
+| 왕립 시설 관리자 | `portraits/building-managers/양식/zoo.webp` · `museum.webp` · `gallery.webp`, 무릎상은 `_half.webp`. 20지역×3시설이며 동물원은 풋풋한 새내기 사육사, 박물관은 엄숙한 츤데레 관장, 미술관은 고지식하고 깐깐한 고위 관리자입니다. | 얼굴 512×512 · 무릎상 1024×1536, 투명 배경 |
+| 왕실 정원·정원사 | 내부 장면 `interiors/royal-gardens/양식.webp`, 정원사 `portraits/gardeners/양식/gardener.webp`, 무릎상은 `gardener_half.webp`. 정원은 거리 외관이나 왕명에 연결하지 않은 지역별 내부 모습입니다. | 정원 1600×900 · 얼굴 512×512 · 무릎상 1024×1536, 인물만 투명 배경 |
 | 거리 보행 지역 NPC 14종 | `street-folk/역할_양식/walk_1.webp` … `walk_8.webp` — 마을 남녀·소년·소녀·촌장 할아버지·할머니·사서·여관 주인·동물·모험가·장사꾼·귀족 청년·병사·항해사 × 도시 양식 20종. 원본 4×2 시트는 `npc-walk/양식/역할_sheet.png`, `python tools/npc_walks.py`로 나눔. 기존 주민 경로 `man_양식`도 유지 | 한 장 380×444, 투명 배경·오른쪽 보행 전신 |
 | 국가별 항해사 후보·후원자 760장 | `portraits/pools/mates/국가/f/01.webp`, `portraits/pools/sponsors/국가/m/01.webp`. 국가 19종×항해사·후원자×여·남×10명 | 512×512, 투명 배경 |
 | 제독 얼굴 | `portraits/player/아무이름.png` — 여러 장 넣으면 제독을 만들 때 "얼굴" 버튼으로 고름 | 512×512 |

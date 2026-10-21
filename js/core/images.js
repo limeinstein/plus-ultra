@@ -512,18 +512,22 @@
     keys.some(function (x) { m = /^portraits\/family\/(?:([a-z_]+)\/)?(son|daughter).*?(?:_v([1-5]))?(?:_half)?$/.exec(String(x)); return !!m; });
     return m ? { sex: m[2] === 'daughter' ? 'f' : 'm', folder: m[1] || '', variant: +(m[3] || 0) } : null;
   };
-  /** 뒤를 이은 자녀가 제독이 되었을 때의 얼굴·무릎상(half) 후보 — 저장된 age15·age20 변형 → 지역·생김새별 그림 → 기본.
-      아들은 스무 살부터 age20을 쓰고 마흔부터 아버지의 40대 모습을 잇는다. 딸은 나이에 맞는 자녀 그림을 계속 쓴다. 해당 없으면 null */
+  /** 뒤를 이은 자녀가 제독이 되었을 때의 얼굴·무릎상(half) 후보 — 저장된 age15·age20·age40 변형 → 지역·생김새별 그림 → 기본.
+      아들·딸 모두 스무 살부터 age20, 마흔부터 age40을 쓴다. 해당 그림이 없으면 앞 나이 그림으로 내려간다. */
   function heirChain(p, half, age) {
     var hk = I.heirKid(p); if (!hk) return null;
     if (age == null) { var s = G.Game && G.Game.state; if (!p) p = s && s.player; age = s && p === s.player && G.R && G.R.age ? G.R.age() : null; }
-    if (hk.sex !== 'f' && age != null && age >= 40) return null;
     var b = hk.sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', P = 'portraits/family/', out = [], v = +(hk.variant || 0);
-    var stage = age != null && age >= 20 ? 20 : 15;
+    var stage = age != null && age >= 40 ? 40 : age != null && age >= 20 ? 20 : 15;
     if (v >= 1 && v <= 5) out.push(P + b + '_age' + stage + '_v' + v + sf);
     if (hk.folder) out.push(P + hk.folder + '/' + b + '_age' + stage + sf);
     out.push(P + b + '_age' + stage + sf);
-    if (stage === 20) {
+    if (stage === 40) {
+      if (v >= 1 && v <= 5) out.push(P + b + '_age20_v' + v + sf);
+      if (hk.folder) out.push(P + hk.folder + '/' + b + '_age20' + sf);
+      out.push(P + b + '_age20' + sf);
+    }
+    if (stage >= 20) {
       if (v >= 1 && v <= 5) out.push(P + b + '_age15_v' + v + sf);
       if (hk.folder) out.push(P + hk.folder + '/' + b + '_age15' + sf);
       out.push(P + b + '_age15' + sf);
@@ -531,7 +535,7 @@
     return out;
   }
   I.heirChain = heirChain;
-  /** 대화창 얼굴: 뒤를 이은 자녀는 15세·20세 가족 그림이 먼저이고, 아들은 마흔부터 아버지의 40대 그림을 잇는다. */
+  /** 대화창 얼굴: 뒤를 이은 자녀는 15세·20세·40세 가족 그림을 나이에 맞게 쓴다. */
   K.heroPortrait = function (p, age) {
     var id = I.heroLook(p), young = FACE + id, old = 'portraits/player-aged/' + id;
     var hc = heirChain(p, false, age); if (hc) return hc.concat([young]);

@@ -99,8 +99,9 @@
     var N = lv === 1 ? 3 : lv === 2 ? 4 : 5, best = Math.pow(2, N) - 1, limit = best + (lv === 1 ? 4 : lv === 2 ? 6 : 6), moves = 0, sel = null;
     var pegs = [[], [], []]; for (var n = N; n >= 1; n--) pegs[0].push(n);
     return new Promise(function (resolve) {
-      var win = UI.window({ title: title('돌 원반', lv), icon: 'gear', width: 820, closable: false, html:
-        '<div style="font-size:18px;line-height:1.6;margin-bottom:10px">석판에 새겨진 글: 「큰 돌은 작은 돌 위에 놓일 수 없다. 모든 돌을 오른쪽 기둥으로 옮겨라.」<br><span class="muted">기둥을 눌러 맨 위의 원반을 집고, 다른 기둥을 눌러 내려놓으십시오. 숫자 1·2·3 키로도 됩니다. (' + limit + '수 이내)</span></div>' +
+      // d.pzTitle · d.pzText: 유적이 아닌 곳의 장치(눈의 여왕의 얼음 원반 — js/systems/snowqueen.js)는 제 이름과 글을 쓴다
+      var win = UI.window({ title: d && d.pzTitle ? d.pzTitle + ' ' + GM.stars(lv) : title('돌 원반', lv), icon: 'gear', width: 820, closable: false, html:
+        '<div style="font-size:18px;line-height:1.6;margin-bottom:10px">' + (d && d.pzText ? d.pzText : '석판에 새겨진 글: 「큰 돌은 작은 돌 위에 놓일 수 없다. 모든 돌을 오른쪽 기둥으로 옮겨라.」') + '<br><span class="muted">기둥을 눌러 맨 위의 원반을 집고, 다른 기둥을 눌러 내려놓으십시오. 숫자 1·2·3 키로도 됩니다. (' + limit + '수 이내)</span></div>' +
         '<div class="hanoi"></div><div class="hstat center" style="font-size:18px;margin-top:8px"></div>',
         buttons: [{ label: '포기한다', value: 'give', cls: 'ghost', onClick: function () { resolve(false); } }],
         onKey: function (e) { var i = { 1: 0, 2: 1, 3: 2 }[e.key]; if (i != null) { click(i); return true; } return false; } });

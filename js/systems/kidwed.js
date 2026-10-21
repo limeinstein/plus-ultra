@@ -85,9 +85,7 @@
     await say(d.daughter, HL().speaker(k), k);
     var v = await UI.ask(fill(d.ask, k), [{ label: fill(d.yes, k), value: 'yes' }, { label: fill(d.no, k), value: 'no' }], HL().speaker(k));
     if (v !== 'yes') { await lines(d.noSay, k); k.wedNext = s.day + (b.waitDays || 365); F().addBond(k, 3); G.State.log(k.name + '의 왕실 혼담을 한 해 미루었다.'); return; }
-    var court = sp ? G.CITY_DATA[sp.city] : G.CITY_DATA[p.home];
-    var key = G.Img.pick(G.Img.chain.interior('church', court)) || G.Img.pick(G.Img.chain.interior('palace', court)) || 'romance-events/05_harbor_wedding';
-    var pc = pic(key, '왕세자비의 혼례');
+    var pc = pic('family-events/31_daughter_wedding_father_pov', '왕세자비의 혼례');
     try { await lines(d.wedding, k); } finally { if (pc) await pc.stop(); }
     // 결말 낭독 — 무릎 꿇은 아버지 앞에서
     await card(k, d.title, d.ending.map(function (t) { return U.esc(fill(t, k)); }).join('<br>'));
@@ -128,7 +126,7 @@
       { label: fill(D().commonNo, k), value: 'no' }], HL().speaker(k));
     if (v !== 'yes') { k.wedNext = s.day + (b.waitDays || 365); await lines(['k:…네, 아버지. 조금만 더 이 집에 있을게요.'], k); return; }
     var paid = Math.min(p.gold, gift); p.gold -= paid;
-    var pc = pic('romance-events/05_harbor_wedding', E.title);
+    var pc = pic('family-events/31_daughter_wedding_father_pov', E.title);
     try { await lines(['n:항구의 작은 성당에서 혼례가 열렸다. 선원들이 모자를 흔들며 노래를 불렀다.', 'k:아버지, 저 행복해 보여요? …다행이다.'], k); } finally { if (pc) await pc.stop(); }
     await card(k, E.title, E.ending.map(function (t) { return U.esc(fill(t, k)); }).join('<br>'));
     await say(D().commonLetter.join('\n'), HL().speaker(k), k);

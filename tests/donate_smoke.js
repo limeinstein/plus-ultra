@@ -43,7 +43,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
       s.player.items.push({ id: 'masterwork', name: '리스본 항구의 아침', desc: '시험용 그림', value: 4000, mw: true, by: mate.id, wk: 'paint', n: 0, y: 1529 });
       s.player.items.push({ id: 'masterwork', name: '항해사의 흉상', desc: '시험용 조각', value: 3000, mw: true, by: mate.id, wk: 'sculpt', n: 1, y: 1529 });
       // 동물: 찾은 신기한 동물 3종 (하나는 이미 동물원에 쓴 것)
-      const cr = G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city').slice(0, 3);
+      const cr = G.DISCOVERIES.filter(d => d.cat === 'creature' && d.how !== 'city' && !(G.Court.isPlant && G.Court.isPlant(d))).slice(0, 3);
       cr.forEach(d => { s.disc[d.id] = Object.assign(s.disc[d.id] || {}, { me: true, found: s.day + 1, y: 1525 }); });
       c.zooUsed[cr[0].id] = 1;
       s.loc = { mode: 'city', city, lon: G.CITY_DATA[city].lon, lat: G.CITY_DATA[city].lat };

@@ -38,6 +38,7 @@
         var o = { id: t[0], name: t[1], cat: 'treasure', lat: la, lon: lo, how: 'city', pw: t[7], val: Math.round(t[6] * 1.75 / 50) * 50, lang: c.lang, reg: c.region,
           desc: t[4], hint: t[5], r: 0.5, city: t[2], needHint: true, tale: true, year: t[3], need: prev ? [prev] : undefined };
         if (!o.need) delete o.need;
+        if (G.discClueInstall) G.discClueInstall(o);   // 단서 이름 (js/data/cluenames.js)
         o.idx = G.DISCOVERIES.length; G.DISCOVERIES.push(o); G.DISC[o.id] = o;
         prev = o.id;
       });

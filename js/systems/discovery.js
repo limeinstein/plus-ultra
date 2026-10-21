@@ -226,6 +226,7 @@
     }
     var mir = D.mirageNow(d);                                  // 미래의 건물: 신기루로 본 발견
     st.found = U.dateNum(s.date); st.me = true; st.evidence = true;
+    if (d.clue && d.clue !== d.name) setTimeout(function () { UI.toast('단서 「' + d.clue + '」의 정체 — ' + d.name, 'scroll', 5200); }, 400);   // 이제부터는 발견물 이름으로 (js/data/cluenames.js)
     if (mir) st.mirage = 1;
     s.stats.found++;
     D.collectionReward(s.stats.found);

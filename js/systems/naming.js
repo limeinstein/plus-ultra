@@ -42,7 +42,7 @@
   function remember() {
     if (ORIG) return;
     ORIG = { regions: G.REGIONS.slice(), cult: G.SHIP_CULT ? G.SHIP_CULT.am : null, zone: G.Ships ? G.Ships.ZONE_NAME.amer : null, disc: {} };
-    G.DISCOVERIES.forEach(function (d) { ORIG.disc[d.id] = { name: d.name, desc: d.desc, hint: d.hint }; });
+    G.DISCOVERIES.forEach(function (d) { ORIG.disc[d.id] = { name: d.realName != null ? d.realName : d.name, desc: d.desc, hint: d.hint }; });   // 단서 이름이 아니라 발견물 이름을 (js/data/cluenames.js)
     if (G.FRONTIERS) G.FRONTIERS.forEach(function (f) { f._name0 = f._name0 || f.name; });
   }
   /** 대륙 이름을 글에 바꿔 넣는다: 「신대륙」과, 제독이 이름을 지었으면 「아메리카」도 */

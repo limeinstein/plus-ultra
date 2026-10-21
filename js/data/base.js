@@ -2,7 +2,7 @@
 (function (G) {
   'use strict';
 
-  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '중국', '중앙아시아', '동남아시아', '일본', '아메리카'];
+  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '동아시아', '중앙아시아', '동남아시아', '일본', '아메리카'];   // 6번은 명(중국)과 조선 — 조선은 중국의 일부가 아니므로 「동아시아」 (2026-10-21)
   // trade distance between culture regions (0 = same)
   G.REGION_DIST = [
     //IB NE ME AF NE IN CN CA SE JP AM

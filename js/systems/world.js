@@ -30,6 +30,7 @@
     if (G.Tudor) out = out.concat(G.Tudor.daily());
     if (G.Barb) out = out.concat(G.Barb.daily());        // 하이레딘 바르바로사의 습격 (js/systems/barbarossa.js)
     if (G.IncaFall) out = out.concat(G.IncaFall.daily());
+    if (G.Medici) out = out.concat(G.Medici.daily());     // 메디치 은행의 위기 — 기한·로렌초의 죽음 (js/systems/medici.js)
     if (G.Aztec) out = out.concat(G.Aztec.daily());       // 아즈텍 제국의 멸망 — 소식·천연두·정복 전쟁의 값 (js/systems/aztec.js) // 잉카 제국의 멸망 — 소식·잉카의 황금 (js/systems/incafall.js)
       // 튜더 왕실의 일 (js/systems/tudor.js)      // 화실·조각실: 미술품·조각품을 싣고, 실존 화가·조각가는 명작을 완성한다 (js/systems/studio.js)      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
     // contract deadline warnings
@@ -113,6 +114,7 @@
     // 아이들이 자란다
     if (G.Family && G.Family.newYear) out = out.concat(G.Family.newYear());
     if (G.HomeLife) out = out.concat(G.HomeLife.newYear());
+    if (G.Siblings) out = out.concat(G.Siblings.newYear());   // 동생들이 자란다 · 스무 살 · 스물두 살 (js/systems/siblings.js)
     if (G.Wander) out = out.concat(G.Wander.newYear());
     // 새로 간행된 책: 도서관을 다시 찾을 이유가 생긴다
     G.BOOKS.forEach(function (b) {

@@ -386,6 +386,7 @@
       '<br>후원자들은 새 제독을 아직 잘 모른다 — 쌓아 온 신뢰는 30%만 이어진다.' +
       ((p.storage || []).length ? '<br>자택 보관함은 비워진다 — 물려줄 물건은 다음 창에서 고른다.' : '') + '</span>', '세대 교체');
     var keepSt = await F.pickStorage(k.name);   // 자택 보관함: 고른 것만 새 제독에게 (F.pickStorage)
+    var sibs = G.Siblings ? await G.Siblings.fromRetire(p, k) : [];   // 남은 아이들은 새 제독의 집에서 함께 산다 (js/systems/siblings.js)
     var sk = {}; G.SKILLS.forEach(function (x) { sk[x.id] = Math.max(k.sk[x.id] || 0, Math.min(3, Math.floor((p.sk[x.id] || 0) * skK + (skK > 0.5 ? 0.5 : 0)))); });
     // 자라며 쌓은 능력 (F.newYear·가정교사). 옛 저장의 아이는 예전처럼 무작위
     var kst = k.st || { str: U.ri(50, 70), int: U.ri(45, 70), mar: U.ri(45, 70), cha: U.ri(45, 70) };
@@ -402,7 +403,8 @@
       name: k.name, nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
       luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), fameBy: p.fameBy ? U.clone(p.fameBy) : undefined,   // 갈래의 비율은 그대로 (G.Fame.sync가 줄어든 합에 맞춘다)
       notoriety: Math.round(p.notoriety * 0.3), gold: p.gold, bank: p.bank,
-      items: p.items, equip: p.equip, storage: keepSt, hp: 100, home: p.home, wife: null, kids: [], generation: (p.generation || 1) + 1, jailed: 0,
+      items: p.items, equip: p.equip, storage: keepSt, hp: 100, home: p.home, wife: null, kids: [], siblings: sibs, generation: (p.generation || 1) + 1, jailed: 0,
+      elders: G.Wives && G.Wives.retire ? G.Wives.retire(p, k) : [],   // 선대의 부인들 — 어머니·○째 부인 (예전엔 세대 교체 때 목록에서 사라졌다)
       portrait: F.kidSpec(k)
     };
     s.player.portrait.age = 'young';

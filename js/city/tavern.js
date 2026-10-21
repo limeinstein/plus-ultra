@@ -869,7 +869,7 @@
       if (!v) continue;
       if (v === 'fire') {
         if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', G.Scenes.mateSpeaker('first')); continue; }
-        if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { s.mates.splice(i, 1); s.flags['gone_' + m.id] = 1; UI.toast(d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', 'boot'); }
+        if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; s.mates.splice(i, 1); R.tidyCaptains(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
         continue;
       }
       T.assign(m, v);

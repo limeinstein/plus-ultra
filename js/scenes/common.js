@@ -510,6 +510,7 @@
     if (G.Colony) G.Colony.apply();      // 이 일지의 개척 도시를 도시 자료에 넣는다 (다른 것보다 먼저 — 개척 도시에 머물던 일지)
     if (G.Names) G.Names.apply();
     if (G.Wander) G.Wander.apply();      // 철새 — 옛 저장에는 처음 불러올 때 생긴다
+    if (G.Siblings) G.Siblings.apply();   // 동생 항해사 (js/systems/siblings.js)
     var s = G.Game.state;
     if (!s.settings) s.settings = { diff: 'normal', speed: 1 };
     if (s.fleet && s.fleet.mat == null) s.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;   // 자재가 생기기 전 저장 파일
