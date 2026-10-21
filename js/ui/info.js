@@ -17,6 +17,7 @@
         return '<div class="fp-ship"><div class="flex"><b>' + (i === 0 ? '★ ' : '') + U.esc(sh.name) + '</b><span class="right cream-muted">' + G.SHIP[sh.type].name + '</span></div>' + UI.bar(sh.hp, sh.maxHp, sh.hp / sh.maxHp < 0.4 ? 'red dark' : 'green dark') + '</div>';
       }).join('') || '<div class="cream-muted">배가 없습니다</div>';
       if (G.Escort) h += G.Escort.panelHtml();   // 호위하는 상선
+      if (G.Strand) h += G.Strand.panelHtml();   // 남겨 둔 함대 (js/systems/strandfleet.js)
     }
     var days = f.ships.length ? Math.min(R.daysOfFood(), R.daysOfWater()) : 0;
     h += '<div class="fp-kv">' +

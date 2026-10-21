@@ -139,6 +139,12 @@
     }
     var price = Y.priceOf(c, picked, opt), wood = G.TIMBER[opt.id];
     if (s.player.gold < price) { await C.say(keeper(), '그렇다면 금화 ' + U.num(price) + '닢 필요하네. 돈이 모자라는군.'); return; }
+    // 탐험대가 배에서 멀리 떨어진 항구: 새 배로 여기서 떠날지 — 남겨 둔 배는 2년 안에 찾으러 가지 않으면 폐기 (js/systems/strandfleet.js)
+    var far = G.Strand ? G.Strand.farFrom(c) : null;
+    if (far) {
+      var fv = await C.mateAsk(G.Strand.askText(c, far), [{ label: '새 배를 지어 여기서 떠난다', value: 'go' }, { label: '그만둔다', value: null }]);
+      if (fv !== 'go') return;
+    }
     if (!(await UI.confirm(wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + U.jx(t.name, '을/를') + ' 금화 ' + U.num(price) + '닢에 사겠습니까? (내구력 ' + hpWith(t, opt.id) + ')', '산다', '그만둔다'))) return;
     var name = await UI.prompt('새 배의 이름', U.pick(G.SHIP_NAMES), 12);
     if (!name) name = U.pick(G.SHIP_NAMES);
@@ -146,6 +152,13 @@
     if (opt.how === 'cargo') SH().useCargoWood(opt.id, opt.need);
     var sh = R.newShip(picked, name, opt.id);
     if (G.ShipSprite) G.ShipSprite.want([sh.type]);
+    if (far) {
+      await G.Strand.leaveAndBoard(c, sh, far);
+      G.State.log(c.name + '에서 ' + wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + ' ' + name + '호를 샀다.');
+      await C.say(keeper(), '먼 길을 걸어온 사람들이군. 이 배라면 집까지 데려다줄 걸세. 행운을 비네!');
+      await C.mate(name + '호로 함대를 새로 꾸렸습니다. 이 항구에서 출항할 수 있습니다 — 보급을 잊지 마십시오. 남겨 둔 배는 ' + Math.round(((G.BALANCE.strand || {}).keepDays || 730) / 365) + '년 안에 찾으러 가면 되찾습니다.');
+      return;
+    }
     if (s.fleet.ships.length < G.MAX_SHIPS) { s.fleet.ships.push(sh); UI.toast(name + '호가 함대에 편입되었다.', 'ship'); }
     else { C.B.harbor.moored(c).push(sh); UI.toast(name + '호는 이 항구에 계류되었다. (함대가 가득 참)', 'anchor'); }
     G.State.log(c.name + '에서 ' + wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + ' ' + name + '호를 샀다.');
