@@ -1560,6 +1560,8 @@
     }
     // 배에 탄 아내와의 한때 (js/systems/familyevent.js)
     if (G.FamEv && (!G.Pace || G.Pace.ok('family'))) { try { if (await G.FamEv.atSea()) { if (G.Pace) G.Pace.mark('family'); refreshHud(); } } catch (e) { console.error(e); } }
+    // 배에 함께 탄 아이의 하루 — 나이·성별·성격마다 (js/systems/kidvoyage.js)
+    if (G.KidVoy && (!G.Pace || G.Pace.ok('kidvoy'))) { try { if (await G.KidVoy.atSea()) { if (G.Pace) G.Pace.mark('kidvoy'); refreshHud(); } } catch (e) { console.error(e); } }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
     if (U.chance(0.07) && (!G.Pace || G.Pace.ok())) await UI.autoRun(function () { return G.Explore.seaEvent({ st: st, refresh: refreshHud }); });   // 두 번째부터는 5초 뒤 지난번처럼 (UI.autoRun)   // 앞 사건과 실제 시간 간격(G.Pace)
     // 부하들 사이의 썸: 때가 된 짝이 있으면 가끔 작은 사건 (js/systems/romance.js)

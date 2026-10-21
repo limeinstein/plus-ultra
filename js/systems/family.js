@@ -56,7 +56,9 @@
   }
   function newKid(sex) {
     var s = S();
-    return { name: '', unnamed: true, sex: sex, born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(), edu: {} };
+    var k = { name: '', unnamed: true, sex: sex, born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(), edu: {} };
+    if (G.KidVoy) k.temper = G.KidVoy.rollTemper(k, U.rand());   // 타고난 성격 (js/systems/kidvoyage.js)
+    return k;
   }
 
   /** 매일 (W.daily): 임신 소식·출산 */
