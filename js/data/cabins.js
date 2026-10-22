@@ -1,14 +1,15 @@
 /* 기함의 선실 — 종류와 쓰임 (규칙은 js/systems/cabins.js, 화면은 js/ui/cabinview.js, 조정값은 js/data/base.js 의 G.BALANCE.cabins)
    · fixed: 어느 배에나 있는 자리 (고칠 수 없다). role: 그 자리에 앉는 사람은 「부하편성」의 그 역할과 같다.
    · skills: 이 방에 배치된 부하의 이 특기가 함대에 쓰인다(역할이 없어도). 방의 힘 = 1 + 그 특기 가운데 가장 높은 단계.
-   · cost·days: 조선소에서 이 방으로 고치는 값(금화)과 날수. */
+   · cost·days: 조선소에서 이 방으로 고치는 값(금화)과 날수.
+   · grow: 이 방에서 지내면 느는 특기 (없으면 skills의 첫 특기) — 3년·9년·27년이면 +1·+2·+3 (js/systems/cabins.js CB.grow · G.BALANCE.cabins.growDays) */
 (function (G) {
   'use strict';
   G.CABINS = [
     { id: 'captain', name: '함장실', icon: 'crown', fixed: true, who: 'admiral', desc: '제독의 방. 해도와 일지가 놓여 있다.' },
-    { id: 'adjutant', name: '부관실', icon: 'people', fixed: true, role: 'first', desc: '부관이 머문다. 전투·교섭·의술 같은 특기를 제독 대신 맡고, 부하들의 불만을 다독인다.', fx: '달마다 부하들의 충성이 조금 오른다' },
-    { id: 'helm', name: '조타실', icon: 'wheel', fixed: true, role: 'nav', desc: '항해사가 키를 잡는다. 항해술·운용술이 함대에 쓰인다.', fx: '날마다 쌓이는 피로가 준다' },
-    { id: 'lookout', name: '파수대', icon: 'telescope', fixed: true, role: 'surveyor', desc: '돛대 꼭대기의 망루. 측량사가 오르면 측량·역사학이 쓰이고 먼 곳의 발견물을 먼저 알아본다.', fx: '발견물을 알아보는 거리가 는다' },
+    { id: 'adjutant', name: '부관실', icon: 'people', fixed: true, role: 'first', grow: 'speech', desc: '부관이 머문다. 전투·교섭·의술 같은 특기를 제독 대신 맡고, 부하들의 불만을 다독인다.', fx: '달마다 부하들의 충성이 조금 오른다' },
+    { id: 'helm', name: '조타실', icon: 'wheel', fixed: true, role: 'nav', grow: 'nav', desc: '항해사가 키를 잡는다. 항해술·운용술이 함대에 쓰인다.', fx: '날마다 쌓이는 피로가 준다' },
+    { id: 'lookout', name: '파수대', icon: 'telescope', fixed: true, role: 'surveyor', grow: 'survey', desc: '돛대 꼭대기의 망루. 측량사가 오르면 측량·역사학이 쓰이고 먼 곳의 발견물을 먼저 알아본다.', fx: '발견물을 알아보는 거리가 는다' },
     { id: 'deck', name: '갑판', icon: 'ship', fixed: true, skills: ['ops', 'sword'], desc: '갑판을 맡은 사람이 선원들을 부린다.', fx: '규율이 덜 떨어진다' },
     { id: 'hold', name: '빈 선실', icon: 'sack', cost: 0, days: 0, desc: '아직 쓰임을 정하지 않은 방. 조선소에서 고칠 수 있다.' },
     { id: 'chart', name: '지도 제작실', icon: 'chart', skills: ['survey', 'art'], cost: 1400, days: 3, desc: '측량한 것을 해도로 옮긴다.', fx: '해도에 밝혀지는 넓이가 는다' },

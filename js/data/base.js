@@ -283,7 +283,8 @@
     //   풍미: 짐칸에 향신료(후추 등)가 있으면 + spice, 식자재(밀·어육·올리브유 등)가 있으면 + food — 차림이 바뀔 때 1통씩 쓴다
     // 조범실 (2026-10-21): 방마다 힘(1 + 항해술·운용술 단계)×충성 효율, 조범실끼리는 caps.rig(64)까지 더한다 → 속력 + 힘 × fx.rig(1/64), 최대 rigMax(+100%).
     //   예: 3단계 항해사 1명 +6.25% · 2명 +12.5% · 8명 +50% · 16명(조범실 16칸 — 중카락·대형 갤리온·갤리어스·보선·안택선) +100% = 최대 속력 2배
-    cabins: { galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
+    //   growDays: 선실(조타실·파수대·부관실·갑판 포함)에서 지낸 날이 이만큼 쌓이면 그 방의 특기(G.CABINS grow) +1·+2·+3 — 3년·9년·27년 (특기는 3까지)
+    cabins: { growDays: [1095, 3285, 9855], galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
       slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, caps: { rig: 64 }, cols: 6, rigMax: 1.0, langDays: [90, 270, 730], farRate: 0.3,
       fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.015625, repair: 0.1, pen: 0.12,
         gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1,

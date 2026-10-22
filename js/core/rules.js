@@ -399,6 +399,7 @@
   R.mateSkill = function (m, id) {
     if (R.mateHidden && R.mateHidden(m)) return 0;      // 본국 항구에서 숨어 있는 둘째 부인 (js/systems/wives.js)
     var d = G.MATE[m.id]; var lv = d ? ((m.sk && m.sk[id] != null ? m.sk[id] : d.sk[id]) || 0) : 0;
+    if (m.skg && m.skg[id]) lv = Math.min(3, lv + m.skg[id]);   // 선실에서 지내며 는 만큼 (js/systems/cabins.js CB.grow — 3까지)
     if (lv && m.loyal != null && G.Cabins) { var ef = G.Cabins.eff(m); if (ef < 1) lv = Math.max(m.loyal > ((G.BALANCE.mates || {}).veryLow || 20) ? 1 : 0, Math.floor(lv * ef + 1e-9)); }   // 충성 40 아래면 건성으로 한다: 3→2, 2→1 (20 아래면 3→1, 1→0) (G.BALANCE.mates)
     return R.mateHurt(m) ? Math.floor(lv / 2) : lv;
   };
