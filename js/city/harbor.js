@@ -556,15 +556,32 @@
     var s = S();
     var keeper = C.npc('harbormaster', '항구 관리인');
     var fee = 40 + c.size * 20;
-    var regs = [];
+    var regs = [], EA = G.EAST_ASIA || [], eaSubs = [];
+    // 동아시아(중국·조선·일본)는 한 묶음으로 고른 뒤 나라를 고른다 (2026-10-22)
+    var unk = function (fn) { return G.CITY_DATA.filter(function (x) { return fn(x) && s.known.indexOf(x.id) < 0 && R.cityExists(x); }).length; };
     G.REGIONS.forEach(function (r, i) {
-      var unknown = G.CITY_DATA.filter(function (x) { return x.region === i && s.known.indexOf(x.id) < 0 && R.cityExists(x); }).length;
-      if (G.REGION_DIST[c.region][i] <= 2 || s.flags['reg' + i]) regs.push({ label: r, right: unknown ? '미확인 ' + unknown + '곳' : '모두 앎', value: i, disabled: !unknown });
+      if (!(G.REGION_DIST[c.region][i] <= 2 || s.flags['reg' + i])) return;
+      if (EA.indexOf(i) >= 0 && G.subRegion) {
+        (i === 6 ? ['중국', '조선'] : ['일본']).forEach(function (sub) { eaSubs.push({ sub: sub, n: unk(function (x) { return x.region === i && G.subRegion(x) === sub; }) }); });
+        return;
+      }
+      var unknown = unk(function (x) { return x.region === i; });
+      regs.push({ label: r, right: unknown ? '미확인 ' + unknown + '곳' : '모두 앎', value: i, disabled: !unknown });
     });
+    if (eaSubs.length) {
+      var eaN = eaSubs.reduce(function (a, x) { return a + x.n; }, 0), at = 0;
+      regs.forEach(function (x, k) { if (x.value < 6) at = k + 1; });
+      regs.splice(at, 0, { label: '동아시아', right: eaN ? '미확인 ' + eaN + '곳' : '모두 앎', value: 'ea', disabled: !eaN, desc: eaSubs.map(function (x) { return x.sub; }).join(' · ') });
+    }
     await C.say(keeper, '다른 마을에 대해 듣고 싶나? 그렇다면 한 건당 금화 ' + fee + '닢이네.');
     var r = await UI.choose('어느 지방의 마을?', regs, { width: 560 });
     if (r == null) return;
-    var list = G.CITY_DATA.filter(function (x) { return x.region === r && s.known.indexOf(x.id) < 0 && R.cityExists(x); });
+    var sub = null;
+    if (r === 'ea') {
+      sub = eaSubs.length === 1 ? eaSubs[0].sub : await UI.choose('동아시아 — 어느 나라의 마을?', eaSubs.map(function (x) { return { label: x.sub, right: x.n ? '미확인 ' + x.n + '곳' : '모두 앎', value: x.sub, disabled: !x.n }; }), { width: 520 });
+      if (sub == null) return;
+    }
+    var list = G.CITY_DATA.filter(function (x) { return (sub ? G.subRegion(x) === sub : x.region === r) && s.known.indexOf(x.id) < 0 && R.cityExists(x); });
     if (!list.length) { await C.say(keeper, '공짜로 가르쳐 줄 것은 없네.'); return; }
     var pick = await UI.choose('어느 마을에 대해 물을까?', list.map(function (x) { return { label: x.name, right: x.port ? '항구' : '내륙', value: x.id }; }), { width: 520 });
     if (pick == null) return;

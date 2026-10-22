@@ -239,9 +239,43 @@
   CB.near = near;
   /** 하루: 한배를 탄 사람들이 서로의 모국어를 익힌다. 모두가 제독의 모국어를 하루만큼, 서로의 말은 가까운 방이면 하루·멀면 farRate 만큼.
       돌려주는 값: 알림 [{icon, text}] */
+  // ---------------------------------------------------------------- 선실에서 특기가 는다 (2026-10-22 사용자 요청)
+  // 방마다 키우는 특기(G.CABINS grow — 없으면 skills의 첫 특기: 지도 제작실 → 측량)가 있고, 그 방에서 지낸 날이 쌓이면 그 특기가 는다.
+  // 3년(1095일) +1 · 9년 +2 · 27년 +3 (G.BALANCE.cabins.growDays). 날은 특기마다 쌓인다 — 같은 특기를 키우는 다른 방으로 옮겨도 이어진다. 특기는 3까지.
+  // 저장: m.skd = {특기: 지낸 날} · m.skg = {특기: 늘어난 단계} (R.mateSkill이 더한다)
+  /** 이 방에서 느는 특기 (없으면 null) */
+  CB.growSkill = function (type) { var c = G.CABIN[type]; if (!c || c.noStaff || type === 'hold' || type === 'captain') return null; return c.grow || (c.skills && c.skills[0]) || null; };
+  /** 부하가 지금 지내는 방 종류 (부관·항해사·측량사는 부관실·조타실·파수대) — 없으면 null */
+  CB.roomOf = function (m) {
+    if (!m || m.role === 'captain') return null;
+    if (FIXED_ROLE[m.role]) return FIXED_ROLE[m.role];
+    if (m.room == null) return null;
+    return CB.rooms()[m.room] || null;
+  };
+  function growDays() { return B().growDays || [1095, 3285, 9855]; }
+  /** 지낸 날 → 늘어난 단계 (0~3) */
+  function growLevel(days) { var g = growDays(), n = 0; for (var i = 0; i < g.length; i++) if (days >= g[i]) n = i + 1; return n; }
+  CB.growLevel = growLevel;
+  /** 날마다: 방에 있는 부하의 그 방 특기에 하루가 쌓인다 — 단계가 오르면 알릴 말 */
+  CB.grow = function () {
+    var s = S(), out = []; if (!s || !s.mates) return out;
+    s.mates.forEach(function (m) {
+      var d = G.MATE[m.id]; if (!d) return;
+      var type = CB.roomOf(m), sk = CB.growSkill(type); if (!sk) return;
+      m.skd = m.skd || {}; m.skd[sk] = (m.skd[sk] || 0) + 1;
+      var g = growLevel(m.skd[sk]); m.skg = m.skg || {};
+      if (g <= (m.skg[sk] || 0)) return;
+      var before = R().mateSkill(m, sk);
+      m.skg[sk] = g;
+      var after = R().mateSkill(m, sk), nm = G.SKILL_BY_ID[sk].name, yrs = Math.round(m.skd[sk] / 365);
+      if (after > before) out.push({ icon: G.CABIN[type].icon || 'star', text: d.name + U.jx(d.name, '이/가') + ' ' + G.CABIN[type].name + '에서 ' + yrs + '년을 지내며 ' + nm + U.jx(nm, '이/가') + ' 늘었다 (' + nm + ' ' + before + ' → ' + after + ').' });
+    });
+    return out;
+  };
   CB.daily = function () {
     var s = S(), out = []; if (!s || !s.mates || !s.player) return out;
     CB.rooms();
+    out = out.concat(CB.grow());   // 선실에서 특기가 는다
     var p = s.player, far = B().farRate == null ? 0.3 : B().farRate;
     var aboard = s.mates.filter(function (m) { return G.MATE[m.id] && m.role !== 'captain'; });
     var away = s.mates.filter(function (m) { return G.MATE[m.id] && m.role === 'captain'; });   // 다른 배의 선장 — 제독의 말만 익힌다

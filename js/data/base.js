@@ -2,7 +2,23 @@
 (function (G) {
   'use strict';
 
-  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '동아시아', '중앙아시아', '동남아시아', '일본', '아메리카'];   // 6번은 명(중국)과 조선 — 조선은 중국의 일부가 아니므로 「동아시아」 (2026-10-21)
+  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '중국·조선', '중앙아시아', '동남아시아', '일본', '아메리카'];   // 6번은 명(중국)과 조선 — 조선은 중국의 일부가 아니므로 「중국·조선」. 화면에는 「동아시아 · 중국 / 조선 / 일본」 (G.regionLabel, 2026-10-22)
+  /* 동아시아 (2026-10-22 사용자 요청 「조선·중국·일본은 동아시아로 묶고, 중국·일본을 가르는 곳에 조선도」):
+     지역 번호(교역 거리·시세·조약 따위의 규칙)는 그대로 6(중국·조선)·9(일본) — 보이는 이름만 「동아시아 · 중국 / 조선 / 일본」으로 가른다 */
+  G.EAST_ASIA = [6, 9];
+  /** 동아시아 도시의 나라 갈래: '중국' · '조선' · '일본' (동아시아가 아니면 null) */
+  G.subRegion = function (c) {
+    if (!c) return null;
+    if (c.region === 9) return '일본';
+    if (c.region === 6) return c.style === 'kr' || c.lang === 14 ? '조선' : '중국';
+    return null;
+  };
+  /** 도시의 지역 이름: 동아시아는 「동아시아 · 조선」처럼, 나머지는 G.REGIONS 그대로 */
+  G.regionLabel = function (c) {
+    if (!c) return '';
+    var sub = G.subRegion(c);
+    return sub ? '동아시아 · ' + sub : (G.REGIONS[c.region] || '');
+  };
   // trade distance between culture regions (0 = same)
   G.REGION_DIST = [
     //IB NE ME AF NE IN CN CA SE JP AM
@@ -267,7 +283,8 @@
     //   풍미: 짐칸에 향신료(후추 등)가 있으면 + spice, 식자재(밀·어육·올리브유 등)가 있으면 + food — 차림이 바뀔 때 1통씩 쓴다
     // 조범실 (2026-10-21): 방마다 힘(1 + 항해술·운용술 단계)×충성 효율, 조범실끼리는 caps.rig(64)까지 더한다 → 속력 + 힘 × fx.rig(1/64), 최대 rigMax(+100%).
     //   예: 3단계 항해사 1명 +6.25% · 2명 +12.5% · 8명 +50% · 16명(조범실 16칸 — 중카락·대형 갤리온·갤리어스·보선·안택선) +100% = 최대 속력 2배
-    cabins: { galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
+    //   growDays: 선실(조타실·파수대·부관실·갑판 포함)에서 지낸 날이 이만큼 쌓이면 그 방의 특기(G.CABINS grow) +1·+2·+3 — 3년·9년·27년 (특기는 3까지)
+    cabins: { growDays: [1095, 3285, 9855], galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
       slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, caps: { rig: 64 }, cols: 6, rigMax: 1.0, langDays: [90, 270, 730], farRate: 0.3,
       fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.015625, repair: 0.1, pen: 0.12,
         gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1,

@@ -256,7 +256,7 @@
     var ban = U.el('div', 'city-banner wood brass-frame');
     ban.innerHTML = '<div class="nm">' + c.name + '</div>' +
       '<div class="meta"><span class="own-flag" style="background:' + C.nationColor(owner) + '"></span>' + U.esc(owner) + ' 영토' + (G.Dominion ? ' · ' + U.esc(G.CityInfo && G.CityInfo.leader ? G.CityInfo.leader(c) : G.Dominion.leader(owner).text) : '') + '</div>' +
-      '<div class="meta">' + G.REGIONS[c.region] + ' · ' + C.relName(c) + '</div>' +
+      '<div class="meta">' + (G.regionLabel ? G.regionLabel(c) : G.REGIONS[c.region]) + ' · ' + C.relName(c) + '</div>' +
       '<div class="meta">' + G.LANGS[c.lang] + ' ' + langPips(C.langLv(c)) + (m.ev ? ' · <span style="color:#f0c080">시세: ' + m.ev + '</span>' : '') + (G.Econ && G.Econ.cityNote(c) ? ' · <span style="color:#f0c080" title="세상의 시장 사건 — 교역소 「시세」에서 자세히">' + U.esc(G.Econ.cityNote(c)) + '</span>' : '') + '</div>' +
       (G.Fest && G.Fest.active(c) ? '<div class="meta" style="color:#ffd27a">' + G.icon('star') + ' ' + U.esc(G.Fest.banner(c)) + '</div>' : '');
     UI.add(ban);

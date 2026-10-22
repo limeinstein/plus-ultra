@@ -131,14 +131,14 @@
     const maid = G.MAIDS.find(m => m.city === c.id);
     const discs = G.DISCOVERIES.filter(d => d.how === 'city' && d.city === c.id);
     add(tCity, {
-      group: String(c.region), name: c.name, sub: '#' + c.id + ' · ' + G.REGIONS[c.region] + ' · ' + c.nation,
+      group: String(c.region), name: c.name, sub: '#' + c.id + ' · ' + (G.regionLabel ? G.regionLabel(c) : G.REGIONS[c.region]) + ' · ' + c.nation,
       meta: G.LANGS[c.lang] + ' · ' + (REL[c.rel] || '') + ' · ' + (c.port ? '항구' : '내륙') + ' · ' + SIZE[c.size],
       key: I.pick(I.chain.bg(c)) || 'backgrounds/' + c.id, kind: 'jpg', chain: I.chain.bg(c).concat(I.chain.city(c, 'day')), ar: '16 / 9',
       extra: c.goods.map(goodName).join(' ') + ' ' + STYLE[c.style],
       pic: () => I.make(I.chain.bg(c), 1600, 900, () => I.make(I.chain.city(c, 'day'), 1600, 900, () => A.cityScene(c, { time: 'day' }))),
       detail: () => ({
         facts: [
-          ['지역', G.REGIONS[c.region]], ['처음 다스리는 나라', G.Dominion ? G.Dominion.first(c) || c.nation : c.nation],
+          ['지역', G.regionLabel ? G.regionLabel(c) : G.REGIONS[c.region]], ['처음 다스리는 나라', G.Dominion ? G.Dominion.first(c) || c.nation : c.nation],
           G.Dominion && G.DOMINION[c.id] ? ['다스린 나라', G.Dominion.history(c).map(h => h.y + (h.m ? '.' + h.m : '') + ' ' + h.n + (G.NATION_LEADERS[h.n] ? ' (' + G.Dominion.leader(h.n, h.y).text + ')' : '')).join(' → ')] : null,
           G.DOMINION_NOTES && G.DOMINION_NOTES[c.id] && G.DOMINION_NOTES[c.id][0] ? ['내력', G.DOMINION_NOTES[c.id][0]] : null, ['말', G.LANGS[c.lang]], ['종교', REL[c.rel]],
           ['규모', SIZE[c.size] + (c.port ? ' · 항구' : ' · 내륙')], ['건물', facilities(c).join(', ')],
