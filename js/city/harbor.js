@@ -67,8 +67,8 @@
   /** 이 항구에서 자동항해로 곧장 갈 수 있는 항구 (익힌 항로 — G.Routes), 가까운 순 */
   function autoDests(c) {
     if (!G.Routes) return [];
-    return G.Routes.list().filter(function (r) { return r.open && (r.a === c.id || r.b === c.id); })
-      .map(function (r) { var o = G.CITY_DATA[r.a === c.id ? r.b : r.a]; return { c: o, days: G.Routes.days(c.id, o.id) }; })
+    return G.Routes.reachable(c.id)   // 곧장 오간 항구 + 이어진 항로망의 항구 (js/systems/routes.js — 대항해시대 4처럼)
+      .map(function (id) { var o = G.CITY_DATA[id]; return { c: o, days: G.Routes.days(c.id, id) }; })
       .filter(function (x) { return x.c && x.c.port && R.cityExists(x.c); })
       .sort(function (x, y) { return (x.days || 999) - (y.days || 999); });
   }
@@ -240,7 +240,9 @@
     if (!mine.length) return '<div class="plan-note" style="margin-bottom:8px">이 항구에서 자동항해로 갈 수 있는 곳이 아직 없습니다. 이 항구에서 출항해 다른 항구에 곧장 입항하면(또는 그 반대) 두 항구 사이의 자동항해가 열립니다.</div>';
     var other = function (r) { return G.CITY_DATA[r.a === c.id ? r.b : r.a].name; };
     var open = mine.filter(function (r) { return r.open; }).map(other), soon = mine.filter(function (r) { return !r.open; }).map(function (r) { return other(r) + ' ' + r.n + '/' + r.need; });
-    return '<div class="plan-note" style="margin-bottom:8px">' + (open.length ? '자동항해: <b>' + open.join('·') + '</b>' : '자동항해로 갈 수 있는 곳 없음') + (soon.length ? ' · 익히는 중: ' + soon.join(', ') : '') + '</div>';
+    var net = G.Routes.reachable(c.id).filter(function (id) { return !G.Routes.direct(c.id, id) && G.CITY_DATA[id].port && R.cityExists(G.CITY_DATA[id]); }).map(function (id) { return G.CITY_DATA[id].name; });
+    return '<div class="plan-note" style="margin-bottom:8px">' + (open.length ? '자동항해: <b>' + open.join('·') + '</b>' : '자동항해로 갈 수 있는 곳 없음') +
+      (net.length ? ' · 이어진 항로망으로: ' + net.slice(0, 12).join('·') + (net.length > 12 ? ' 외 ' + (net.length - 12) + '곳' : '') : '') + (soon.length ? ' · 익히는 중: ' + soon.join(', ') : '') + '</div>';
   }
   /** 계절풍 바다 연안 항구: 지금 부는 계절풍과 바뀌는 날 */
   function monsoonNote(c) {

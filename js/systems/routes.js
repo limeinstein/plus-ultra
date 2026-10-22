@@ -1,6 +1,9 @@
 /* 항로 경험과 자동항해 (G.Routes)
    한 항구에서 출항해 다른 항구에 곧장(사이에 다른 항구에 들르지 않고) 입항하면 그 두 항구가 이어져 자동항해가 열린다.
    예) 리스본에서 출항해 세우타에 입항 → 리스본–세우타 자동항해 (가는 길·오는 길 모두)
+   이어진 항로망 (2026-10-23 사용자 요청 — 대항해시대 4처럼): 곧장 오간 항로로 이어진 항구들은 서로 모두 자동항해가 열린다.
+   예) 리스본→세빌리아 (리스본–세빌리아) 다음 세빌리아→알제 → 세빌리아–알제와 함께 리스본–알제도 열린다.
+   저장에는 곧장 오간 항로(s.routes)만 남기고, 항로망(이어진 항구 묶음)은 그때그때 셈한다 (RT.net · 묶음이 바뀌면 다시).
    자동항해 = 항구를 고르면 뱃길을 알아서 찾아 ×4로 입항까지 가는 것. 열리지 않은 항로도 바닷길(뭍·섬을 돌아가는 길)은 따라가지만 배속은 그대로다 (sea.js setTarget).
    자동항해 중 방향키·숫자판·바다 누르기로 손으로 몰면 자동항해가 풀리고(voyage.autoOff),
    그 항해에서는 다시 쓸 수 없다 — 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓴다. */
@@ -37,22 +40,72 @@
   RT.isLong = function (a, b) { var d = RT.days(a, b); return d != null && d >= RT.LONG_DAYS; };
   RT.need = function (a, b) { return RT.isLong(a, b) ? RT.NEED_LONG : RT.NEED; };
   RT.count = function (a, b) { var r = RT.get(a, b); return r ? r.n : 0; };
-  RT.isOpen = function (a, b) {
+  /** 곧장 오간 항로가 열렸는가 (두 항구 사이를 한 번에 오간 적이 있다) */
+  RT.direct = function (a, b) {
     if (a == null || b == null || a === b) return false;
     var n = RT.count(a, b);
     if (n < RT.NEED) return false;               // 다녀온 적이 없으면 뱃길 길이를 잴 것도 없다 (해도는 도시마다 이것을 묻는다)
     return n >= RT.need(a, b);
+  };
+  // ---------------------------------------------------------------- 이어진 항로망
+  var NET = null, netState = null, netVer = -1;
+  RT.ver = 0;
+  /** 곧장 오간 항로로 이어진 항구 묶음: { of: {항구: 묶음 번호}, groups: [[항구…]], adj: {항구: [이웃…]} } */
+  RT.net = function () {
+    var s = S(), m = all(), nk = Object.keys(m).length;
+    if (NET && netState === s && netVer === RT.ver + ':' + nk) return NET;
+    var adj = {};
+    for (var k in m) {
+      var ab = k.split('-').map(Number);
+      if (!G.CITY_DATA[ab[0]] || !G.CITY_DATA[ab[1]] || !RT.direct(ab[0], ab[1])) continue;
+      (adj[ab[0]] = adj[ab[0]] || []).push(ab[1]); (adj[ab[1]] = adj[ab[1]] || []).push(ab[0]);
+    }
+    var of = {}, groups = [];
+    Object.keys(adj).forEach(function (st) {
+      st = +st; if (of[st] != null) return;
+      var g = [], q = [st]; of[st] = groups.length;
+      while (q.length) { var x = q.shift(); g.push(x); adj[x].forEach(function (y) { if (of[y] == null) { of[y] = groups.length; q.push(y); } }); }
+      groups.push(g);
+    });
+    NET = { of: of, groups: groups, adj: adj }; netState = s; netVer = RT.ver + ':' + nk;
+    return NET;
+  };
+  /** 자동항해가 열렸는가: 곧장 오갔거나, 곧장 오간 항로로 이어진 항구끼리 */
+  RT.isOpen = function (a, b) {
+    if (a == null || b == null || a === b) return false;
+    if (RT.direct(a, b)) return true;
+    var N = RT.net();
+    return N.of[a] != null && N.of[a] === N.of[b];
+  };
+  /** 이어진 항로망으로만 열렸는가 (곧장 오간 적은 없다) */
+  RT.linked = function (a, b) { return RT.isOpen(a, b) && !RT.direct(a, b); };
+  /** 이 항구에서 자동항해로 갈 수 있는 항구들 (곧장 오간 곳 + 항로망으로 이어진 곳) */
+  RT.reachable = function (a) {
+    var N = RT.net(), g = N.of[a]; if (a == null || g == null) return [];
+    return N.groups[g].filter(function (x) { return x !== a; });
+  };
+  /** 항로망에서 a에서 b까지 거쳐 가는 항구 (곧장 오간 항로를 따라 — 가장 적게 거치는 길) */
+  RT.via = function (a, b) {
+    var N = RT.net(); if (N.of[a] == null || N.of[a] !== N.of[b]) return [];
+    var prev = {}, q = [a]; prev[a] = a;
+    while (q.length) { var x = q.shift(); if (x === b) break; (N.adj[x] || []).forEach(function (y) { if (prev[y] == null) { prev[y] = x; q.push(y); } }); }
+    var out = [], c = prev[b]; while (c != null && c !== a) { out.unshift(c); c = prev[c]; }
+    return out;
   };
 
   /** 항구에 들어왔을 때: from에서 to까지의 항해를 한 번 센다. {n, need, opened, long} */
   RT.record = function (from, to, days) {
     if (from == null || to == null || from === to) return null;
     var k = RT.key(from, to), r = all()[k] || (all()[k] = { n: 0, best: null, last: 0 });
-    var wasOpen = RT.isOpen(from, to);
+    var wasDirect = RT.direct(from, to), before = {};
+    RT.reachable(to).forEach(function (x) { before[x] = 1; });
     r.n++; r.last = U.dateNum(S().date);
     if (days > 0 && (r.best == null || days < r.best)) r.best = days;
-    var open = RT.isOpen(from, to);
-    return { n: r.n, need: RT.need(from, to), opened: open && !wasOpen, open: open, long: RT.isLong(from, to), best: r.best };
+    RT.ver++;
+    var open = RT.direct(from, to);
+    // 이번 항해로 새로 이어진 항구 (항로망): 도착한 항구에서 새로 자동항해할 수 있게 된 곳 (곧장 온 출발 항구는 빼고)
+    var gained = open && !wasDirect ? RT.reachable(to).filter(function (x) { return !before[x] && x !== from && G.CITY_DATA[x] && G.CITY_DATA[x].port; }) : [];
+    return { n: r.n, need: RT.need(from, to), opened: open && !wasDirect, open: open, long: RT.isLong(from, to), best: r.best, linked: gained };
   };
   /** 이 항해를 시작한 항구 (자동항해 판정의 기준). 이번 항해에 자동항해를 풀었으면 null — 다음 항구에서 다시 */
   RT.origin = function () {
@@ -67,6 +120,7 @@
   /** 한 줄 설명: "리스본–세우타 · 아직 곧장 오간 적 없음" */
   RT.label = function (a, b) {
     var A = G.CITY_DATA[a], B = G.CITY_DATA[b];
+    if (RT.linked(a, b)) { var v = RT.via(a, b).map(function (x) { return G.CITY_DATA[x].name; }); return A.name + '–' + B.name + ' · 이어진 항로망' + (v.length ? ' (' + v.slice(0, 3).join('·') + (v.length > 3 ? ' 외 ' + (v.length - 3) + '곳' : '') + ' 거쳐 익힘)' : ''); }
     return A.name + '–' + B.name + ' · ' + (RT.isOpen(a, b) ? '이어진 항로' : '아직 곧장 오간 적 없음');
   };
   /** 수첩에 보일 목록: 다녀온 항로를 경험 순으로 */
