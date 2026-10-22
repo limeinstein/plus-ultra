@@ -218,6 +218,7 @@
     if (G.TradeGoods) G.TradeGoods.migrate(S);     // 나뉜 교역품 (도자기 → 중국 도자기·유럽 도기 …)
     if (G.R && G.R.mergeItemList && S.player && S.player.items) G.R.mergeItemList(S.player.items);   // 같은 물건은 한 칸 (2026-10-20)
     if (G.applyShipBuffs && S.fleet) G.applyShipBuffs(S);     // 성능을 올린 배 종류(프리깃·플류트 2026-10-21)를 이미 가진 배에도
+    if (G.MaidSwap) G.MaidSwap.register(S);       // 대가 바뀌며 새로 들어온 술집 여급 (2026-10-22)
     S.chartBits = S.chart ? unb64(S.chart) : new Uint8Array(CHART_W * CHART_H / 8);
     delete S.chart;
     return S;
