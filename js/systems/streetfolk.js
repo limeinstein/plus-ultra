@@ -326,13 +326,17 @@
     var text, useInfo = info && (f.animal || f.talked === 1 || U.chance(0.7));
     // 귀환 잔치 중인 도시: 잔치 이야기가 먼저 (js/systems/festival.js)
     var fest = G.Fest && !deaf ? G.Fest.line(f.type, c) : null;
-    if (fest && (f.animal || U.chance(0.75))) { useInfo = false; text = fest; }
+    // 사건·전설 부하의 소문 (js/systems/eventrumor.js — 5%): 이 고장 둘레에서 누군가 조건을 맞추면 일어날 일을 두루뭉술하게
+    var rum = !deaf && G.EventRumor ? G.EventRumor.pick(f, c) : null;
+    if (rum) { useInfo = false; f.rumored = true; text = rum.text; }
+    else if (fest && (f.animal || U.chance(0.75))) { useInfo = false; text = fest; }
     else if (useInfo) { f.used = true; text = info.text; }
     else text = fill(U.pick(lines), c);
     if (f.talked > 1 && !f.animal && !useInfo) text = U.pick(['또 만났군요. ', '아까 그 분이시군요. ', '']) + text;
     await UI.say(text, sp);
     if (deaf) { await C().mate('말이 통하지 않아 무슨 이야기인지 알아듣지 못했습니다.'); return; }
     if (useInfo && info.after) info.after();
+    if (rum) G.EventRumor.heard(rum.r, rum.body, c);
     if (useInfo && info.gold) G.Game.refreshHud();
   };
 })(window.G = window.G || {});
