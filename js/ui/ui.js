@@ -1018,7 +1018,10 @@
     var box = m.querySelector('.items');
     items.forEach(function (it) {
       if (!it) return;
-      var d = U.el('div', 'cmd' + (it.dim ? ' dim' : '') + (it.exit ? ' exit' : ''), G.icon(it.icon || 'chev') + '<span>' + it.label + '</span>' + (it.sub ? '<span class="sub">' + it.sub + '</span>' : ''));
+      // 설명(sub): 짧은 것(숫자·「저장 가능」 따위)은 오른쪽에 한 줄로, 긴 것은 버튼을 키우지 않게 풍선 도움말로 (2026-10-23 사용자 요청)
+      var subTxt = it.sub != null ? String(it.sub).replace(/<[^>]*>/g, '').trim() : '', inline = subTxt && (subTxt.length <= (opts && opts.subMax || 7) || /^[\d,.\s]+(닢|명|척|통|일|점|%)?$/.test(subTxt));   // 숫자(금고 잔액 등)는 길어도 한 줄로
+      var d = U.el('div', 'cmd' + (it.dim ? ' dim' : '') + (it.exit ? ' exit' : '') + (subTxt && !inline ? ' has-tip' : ''), G.icon(it.icon || 'chev') + '<span>' + it.label + '</span>' + (inline ? '<span class="sub">' + it.sub + '</span>' : subTxt ? '<span class="tipdot" aria-hidden="true">ⓘ</span>' : ''));
+      if (subTxt && !inline) { d.dataset.tip = subTxt; d.setAttribute('aria-label', String(it.label).replace(/<[^>]*>/g, '') + ' — ' + subTxt); }
       d.onclick = function () { if (UI.busy()) return; it.onClick && it.onClick(); };
       box.appendChild(d);
     });

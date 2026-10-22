@@ -1639,3 +1639,17 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .ft-kid.lost .ft-fate { color: #777; font-style: italic; }
 .ft-none { margin-top: 10px; font-size: 14px; color: #8a7350; }
 .ft-down { color: #c9a227; font-size: 22px; line-height: 1; margin: 8px 0; }
+/* 건물 메뉴의 긴 설명 → 풍선 도움말 (js/ui/ui.js UI.cmdMenu, 2026-10-23) — 메뉴가 오른쪽에 있으니 풍선은 왼쪽에 뜬다 */
+.cmd { position: relative; }
+.cmd .sub { white-space: nowrap; }
+.cmd .tipdot { position: absolute; right: 6px; top: 3px; font-size: 12px; line-height: 1; color: var(--cream-dim); opacity: .65; }
+.cmd.has-tip:hover::after, .cmd.has-tip.kbd-focus::after {
+  content: attr(data-tip); position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%); z-index: 30;
+  width: max-content; max-width: 260px; padding: 8px 12px; font-size: 15px; line-height: 1.45; white-space: normal; text-align: left;
+  color: #f3e6c8; background: rgba(28,20,13,.96); border: 1px solid var(--brass); border-radius: 3px; box-shadow: 0 4px 14px rgba(0,0,0,.45); pointer-events: none;
+}
+.cmd.has-tip:hover::before, .cmd.has-tip.kbd-focus::before {
+  content: ''; position: absolute; right: calc(100% - 4px); top: 50%; transform: translateY(-50%); border: 8px solid transparent; border-left-color: var(--brass); pointer-events: none; z-index: 31;
+}
+.cmdmenu:not(.many) .cmd > .sub { white-space: nowrap; flex: 0 0 auto; }   /* 짧은 것만 남으니 한 줄로 (긴 설명은 풍선) */
+.cmdmenu:not(.many) .cmd > span:not(.sub):not(.tipdot) { flex: 1 1 auto; }
