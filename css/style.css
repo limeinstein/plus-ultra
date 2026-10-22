@@ -1651,5 +1651,6 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .cmd.has-tip:hover::before, .cmd.has-tip.kbd-focus::before {
   content: ''; position: absolute; right: calc(100% - 4px); top: 50%; transform: translateY(-50%); border: 8px solid transparent; border-left-color: var(--brass); pointer-events: none; z-index: 31;
 }
+.cmdmenu:not(.many) .cmd { height: 44px; box-sizing: border-box; }
 .cmdmenu:not(.many) .cmd > .sub { white-space: nowrap; flex: 0 0 auto; }   /* 짧은 것만 남으니 한 줄로 (긴 설명은 풍선) */
 .cmdmenu:not(.many) .cmd > span:not(.sub):not(.tipdot) { flex: 1 1 auto; }
