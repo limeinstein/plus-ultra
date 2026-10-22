@@ -793,8 +793,10 @@
       var v = await ask(m.name + ' — 호감 ' + heart(st.aff), [
         { label: '한잔 산다', value: 'drink' }, { label: '이야기한다', value: 'talk' }, { label: '선물한다', value: 'gift' },
         (function () { var cd = G.FamEv ? G.FamEv.canDate(m.id) : null; return cd ? { label: '함께 시간을 보낸다' + (cd.ok ? '' : ' (' + cd.why + ')'), value: 'date', dis: !cd.ok } : null; })(),
+        G.MaidTip ? { label: '사례하고 소식을 묻는다' + (G.MaidTip.canAsk(st) ? '' : ' (호감이 더 있어야)'), value: 'tip', dis: !G.MaidTip.canAsk(st) } : null,   // 상선대·군함대·해적·철새의 행방 (js/systems/maidtip.js)
         { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }].filter(Boolean));
       if (!v) return;
+      if (v === 'tip') { await G.MaidTip.ask(c, m, st, say); continue; }
       if (v === 'date') { await G.FamEv.date(c, m); continue; }      // 데이트 — 건배·춤·쪽지·난롯가·저녁 (familyevent.js)
       if (v === 'drink') {
         var pr = 10 + c.size * 5; if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다.', 'coin'); continue; }
