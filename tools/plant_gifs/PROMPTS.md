@@ -7,7 +7,7 @@ Use case: photorealistic-natural
 Asset type: 9:4 panoramic game discovery animation source
 Primary request: Create a botanically accurate, breathtaking landscape revealing <SPECIES> in its native habitat.
 Subject: one unmistakable hero plant with the diagnostic form, leaves, flowers, fruit, roots or pitchers fully readable.
-Style/medium: cinematic high-end nature documentary photography, fully photorealistic; broad color masses and clear depth layers suitable for an oil-painting reconstruction.
+Style/medium: cinematic high-end nature documentary photography, fully photorealistic; broad tonal masses, clean silhouettes and clear depth layers suitable for a pen-sketch-to-photograph reveal.
 Composition/framing: very wide 9:4 landscape, fixed view, complete hero plant and habitat visible, no important detail near edges.
 Lighting/mood: soft dawn light after rain or mist, wondrous first discovery, tranquil and lifelike.
 Constraints: no people, no animals, no text, no labels, no border, no panel grid, no watermark, no illustration.
@@ -29,4 +29,6 @@ Constraints: no people, no animals, no text, no labels, no border, no panel grid
 | `startower` | 전설의 별탑 식물 | 타실리 사막, 석회화한 섬유질 줄기와 별 모양 수관, 건축물처럼도 보이는 모호함 |
 
 원화는 생성 후 `sources/ID.png`로 복사하며 사진 속 구도는 GIF 전 구간에서
-바뀌지 않습니다. 유화 단계는 `build.py`가 원화를 바탕으로 누적 합성합니다.
+바뀌지 않습니다. 펜화 단계는 `build.py`가 원화의 윤곽·명암을 추출해 같은
+구도 위에 누적 합성합니다. `js/data/plantdisc.js`의 신규 79종 지시문은
+`node tools/plant_gifs/prompts.js tools/plant_gifs/prompts.json`으로 만듭니다.

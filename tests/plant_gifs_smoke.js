@@ -8,7 +8,7 @@ const { pathToFileURL } = require('url');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
-const PLANTS = ['rubber','sequoia','breadfruit','lotus','welwitschia','mangrove','papyrus','rafflesia','carnivplant','startower'];
+const LEGACY_PLANTS = ['rubber','sequoia','breadfruit','lotus','welwitschia','mangrove','papyrus','rafflesia','carnivplant','startower'];
 const CHROME = [
   process.env.CHROME_PATH,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -36,7 +36,10 @@ function socket(url) {
       const p = pending.get(m.id); pending.delete(m.id);
       return m.error ? p.reject(new Error(m.error.message)) : p.resolve(m.result);
     }
-    if (m.method === 'Runtime.exceptionThrown') errors.push(m.params.exceptionDetails.text || '스크립트 예외');
+    if (m.method === 'Runtime.exceptionThrown') {
+      const d = m.params.exceptionDetails;
+      errors.push((d.exception && d.exception.description) || d.text || '스크립트 예외');
+    }
     if (m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error') errors.push(m.params.args.map(x => x.value || x.description || '').join(' '));
     if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error') {
       const entry = m.params.entry, url = entry.url || '';
@@ -68,7 +71,7 @@ function socket(url) {
       if (ready.result.value) break;
     }
     const q = await cdp.call('Runtime.evaluate', { expression: `new Promise(resolve=>{
-      const ids=${JSON.stringify(PLANTS)}, plants=ids.map(id=>G.DISC[id]).filter(Boolean);
+      const ids=${JSON.stringify(LEGACY_PLANTS)}.concat(G.PLANTS||[]), plants=ids.map(id=>G.DISC[id]).filter(Boolean);
       const gifs=ids.map(id=>G.Img.file('discoveries/'+id));
       const sheets=ids.map(id=>G.Img.file('discovery-sheets/'+id));
       const d=G.DISC.rafflesia, pic=G.Scenes.discoveryPicture(d);
@@ -86,7 +89,7 @@ function socket(url) {
     const result = q.result.value;
     await sleep(2300);
     console.log(JSON.stringify({ result, errors: cdp.errors }));
-    if (!result || result.plants !== 10 || result.marked !== 10 || result.gifs !== 10 || result.sheets !== 10 || result.reveals !== 10 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '지옥의 꽃' || result.ms !== 8400 || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.plants !== 89 || result.marked !== 89 || result.gifs !== 89 || result.sheets !== 89 || result.reveals !== 89 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '라플레시아' || result.ms !== 8400 || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

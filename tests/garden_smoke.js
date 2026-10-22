@@ -36,7 +36,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       }
       const relicOf = disc => Object.keys(G.RELIC).filter(id => G.RELIC[id].relic === disc)[0];
       // ---- 식물 가리기
-      out.plants = G.DISCOVERIES.filter(CT.isPlant).map(d => d.id);
+      out.plants = G.DISCOVERIES.filter(CT.isPlant).map(d => d.id).filter(id => (G.PLANTS || []).indexOf(id) < 0); out.newPlants = (G.PLANTS || []).filter(id => CT.isPlant(G.DISC[id])).length;   // 2026-10-22 식물 발견물 79종(js/data/plantdisc.js)은 따로 센다
       out.animalNot = ['tiger', 'giraffe', 'tarantula'].every(id => !CT.isPlant(G.DISC[id]));
       out.seedOk = ['sequoia', 'breadfruit', 'lotus', 'flowers', 'huangshan'].map(d => relicOf(d)).every(id => id && CT.plantItem({ id }));
       out.seedNot = ['tarantula', 'sargasso', 'rubber', 'papyrus'].map(d => relicOf(d)).filter(Boolean).every(id => !CT.plantItem({ id }));
@@ -106,7 +106,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return out;
     });
     console.log('   식물 ' + r.plants.length + '종: ' + r.plants.join(', '));
-    ok(r.plants.length === 11 && r.plants.indexOf('bullocho') >= 0 && r.animalNot, '나무·꽃·풀 11종(불로초 포함)은 식물, 호랑이·기린·거미는 아니다');
+    ok(r.plants.length === 11 && r.plants.indexOf('bullocho') >= 0 && r.animalNot && r.newPlants === 79, '나무·꽃·풀 11종(불로초 포함)과 새 식물 79종은 식물, 호랑이·기린·거미는 아니다');
     ok(r.seedOk && r.seedNot, '씨앗·묘목·분재(세쿼이아·빵나무·연꽃·푸른 양귀비·황산 소나무)는 식물 유물 — 거미 표본·모자반·고무공·파피루스는 아니다');
     ok(r.zoo === 'giraffe,tiger' && r.museum.indexOf('lotus') < 0 && r.museum !== '' && /rubber/.test(r.gardenHave) && /lotus/.test(r.gardenHave), '동물원에는 짐승만, 박물관에는 씨앗이 빠지고, 정원에 바칠 것: ' + r.gardenHave);
     console.log('   옛 저장: ' + JSON.stringify(r.mig) + ' · 동물원 전시 ' + r.zooShow);

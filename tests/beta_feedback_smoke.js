@@ -26,7 +26,11 @@ let browser;
       return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ accepted: true, id: 8 }) });
     }
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ posts: [{
-      id: 7, category: 'suggestion', title: '익명 글 보기 시험', detail: '게시판에 익명 글 내용이 표시됩니다.',
+      id: 8, category: 'bug', title: '진행 중 글 보기 시험', detail: '진행 중인 글은 게시판 위에 표시됩니다.',
+      steps: '', environment: 'Chrome', status: 'open', reply: '',
+      createdAt: '2026-10-18 12:00:00'
+    }, {
+      id: 7, category: 'suggestion', title: '완료 글 보기 시험', detail: '완료된 글 내용이 접힌 게시판에 표시됩니다.',
       steps: '', environment: 'Chrome', status: 'closed', reply: '개발팀 답변 표시 시험입니다.',
       repliedAt: '2026-10-18 00:00:00', createdAt: '2026-10-17 12:00:00'
     }] }) });
@@ -54,10 +58,15 @@ let browser;
   const shownVersion = ((await page.locator('.eyebrow').innerText()).match(/VERSION\s+(\d+\.\d{3})/) || [])[1];
   ok(!!shownVersion, '베타 센터에 배포 버전 표시');
   ok(await page.locator('#feedback-form').isVisible(), '로그인 없는 피드백 양식 표시');
-  ok((await page.locator('.post-title').first().innerText()).includes('익명 글 보기 시험'), '익명 글을 공개 게시판에 합쳐 표시');
-  await page.locator('.post').first().click();
+  ok((await page.locator('#board > .post .post-title').first().innerText()).includes('진행 중 글 보기 시험'), '진행 중 피드백을 게시판 위에 표시');
+  ok(await page.locator('.completed-board').isVisible() && !(await page.locator('.completed-board').getAttribute('open')), '완료된 피드백을 게시판 아래에 접어 배치');
+  ok(!(await page.locator('.completed-board .post').isVisible()), '완료된 피드백 내용은 처음에 숨김');
+  await page.locator('.completed-board > summary').click();
+  ok(await page.locator('.completed-board .post').isVisible(), '완료 게시판을 클릭하면 글 목록 표시');
+  ok((await page.locator('.completed-board .post-title').first().innerText()).includes('완료 글 보기 시험'), '완료된 익명 글을 보관함에 표시');
+  await page.locator('.completed-board .post').first().click();
   ok((await page.locator('.comment').first().innerText()).includes('개발팀 답변 표시 시험입니다.'), '익명 글 아래 관리자 답변 표시');
-  ok((await page.locator('.post-links a').first().getAttribute('href')).endsWith('/admin#feedback-7'), '익명 글에서 해당 관리자 답변 화면으로 연결');
+  ok((await page.locator('.completed-board .post-links a').first().getAttribute('href')).endsWith('/admin#feedback-7'), '익명 글에서 해당 관리자 답변 화면으로 연결');
 
   await page.locator('[name=title]').fill('로그인 없는 등록 시험');
   await page.locator('[name=detail]').fill('계정 없이도 의견을 보낼 수 있는지 확인합니다.');

@@ -125,6 +125,12 @@ def game_data():
                           ('treasure', 'treasure')):
             for did, name in re.findall(r"^\s*A\." + func + r"\('([^']+)',\s*'([^']+)'", extra, re.M):
                 d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
+    # 2026-10-22 신규 식물은 plantdisc.js의 P(...)가 생물 발견물로 더한다.
+    plant_path = os.path.join(ROOT, 'js/data/plantdisc.js')
+    if os.path.exists(plant_path):
+        plantdisc = read('js/data/plantdisc.js')
+        for did, name in re.findall(r"^\s*P\('([^']+)',\s*'([^']+)'", plantdisc, re.M):
+            d['discoveries'].append({'id': did, 'name': name, 'cat': 'creature'})
     chain_path = os.path.join(ROOT, 'js/data/chaindisc.js')
     if os.path.exists(chain_path):
         chain = read('js/data/chaindisc.js')

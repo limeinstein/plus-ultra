@@ -104,8 +104,18 @@
   };
 
   // ---------------------------------------------------------------- log
-  ST.log = function (text) {
-    var S = G.Game.state; S.log.push({ d: U.dateNum(S.date), t: text }); if (S.log.length > 300) S.log.shift();
+  /** 일지에 한 줄 — g: 중요도 A 발견·탐험 · B 전쟁·정치 · C 재해·세상 · D 일상 (없으면 글을 보고 가린다 — js/systems/journal.js) */
+  ST.log = function (text, g) {
+    var S = G.Game.state, J = G.Journal, e = { d: U.dateNum(S.date), t: text };
+    e.g = g || (J && J.grade ? J.grade(text) : 'D');
+    S.log.push(e);
+    if (J && J.onLog) J.onLog(e);
+    var cap = (G.BALANCE && G.BALANCE.journal && G.BALANCE.journal.cap) || 800;
+    while (S.log.length > cap) {   // 넘치면 오래된 일상(D)부터 지운다 — 큰일은 오래 남는다
+      var cut = 0;
+      for (var i = 0; i < S.log.length - 50; i++) if ((S.log[i].g || (J ? J.of(S.log[i]) : 'D')) === 'D') { cut = i; break; }
+      S.log.splice(cut, 1);
+    }
   };
 
   // ---------------------------------------------------------------- persistence
@@ -218,6 +228,7 @@
     if (G.TradeGoods) G.TradeGoods.migrate(S);     // 나뉜 교역품 (도자기 → 중국 도자기·유럽 도기 …)
     if (G.R && G.R.mergeItemList && S.player && S.player.items) G.R.mergeItemList(S.player.items);   // 같은 물건은 한 칸 (2026-10-20)
     if (G.applyShipBuffs && S.fleet) G.applyShipBuffs(S);     // 성능을 올린 배 종류(프리깃·플류트 2026-10-21)를 이미 가진 배에도
+    if (G.MaidSwap) G.MaidSwap.register(S);       // 대가 바뀌며 새로 들어온 술집 여급 (2026-10-22)
     S.chartBits = S.chart ? unb64(S.chart) : new Uint8Array(CHART_W * CHART_H / 8);
     delete S.chart;
     return S;

@@ -175,7 +175,8 @@
       I.NPCS.forEach(function (n) { add(K.npc(n[0], c)); add(K.npcHalf(n[0], c)); });
       I.INTERIORS.forEach(function (b) { add(K.interior(b[0], c)); });
       (G.SPONSORS || []).forEach(function (sp) { if (sp.city === c.id) I.list('portraits/sponsors/' + sp.id).forEach(function (k) { keys.push(k); }); });
-      (G.MAIDS || []).forEach(function (m) { if (m.city === c.id) { add(K.maid(m.id, c)); add(K.maidHalf(m.id, c)); } });
+      var tm = G.MaidSwap ? G.MaidSwap.at(c.id) : (G.MAIDS || []).filter(function (m) { return m.city === c.id; })[0];   // 그 술집에서 지금 일하는 여급
+      if (tm) { add(K.maid(tm.id, c)); add(K.maidHalf(tm.id, c)); }
       add(K.maidCity(c)); add(K.maidCityHalf(c));
       (G.MATES || []).forEach(function (m) { if (m.reg && m.reg[0] === c.region) add(K.mate(m.id)); });
     }

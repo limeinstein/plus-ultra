@@ -15,7 +15,7 @@
         s.history++;
         if (h.city) s.owners[h.city[0]] = h.city[1];
         if (!h.quiet) out.push({ icon: 'scroll', text: h.text, history: true });   // quiet: 따로 창을 띄우는 사건(토르데시야스 조약 — js/systems/treaty.js)
-        G.State.log(h.text);
+        G.State.log(h.text, G.Journal ? G.Journal.historyGrade(h) : null);   // 일지 중요도 (js/systems/journal.js)
       } else break;
     }
     out = out.concat(G.Disc.rivals());
@@ -82,7 +82,8 @@
     var s = S(), out = [];
     // 가족: 아이와의 사이(떨어져 지내면 서먹해진다)·견습 아이의 성장 (family.js)
     if (G.Family && G.Family.newMonth) out = out.concat(G.Family.newMonth());
-    // wages for companions
+    // wages for companions — 같은 부하가 두 줄이면 먼저 하나로 (두 번 치르지 않게, R.dedupeMates)
+    if (R && R.dedupeMates) R.dedupeMates();
     var wage = 0, paid = true;
     s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d) wage += d.wage; });
     if (G.Cabins) wage = G.Cabins.wages();        // 회계실이 있으면 조금 덜 든다

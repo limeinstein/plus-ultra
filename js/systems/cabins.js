@@ -274,7 +274,8 @@
   /** 한 달 급료 (회계실이 있으면 조금 덜 든다) */
   CB.wages = function () {
     var s = S(), w = 0;
-    s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d) w += d.wage || 0; });
+    var seen = {};   // 같은 사람이 두 줄이어도 한 번만
+    s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d && !seen[m.id]) { seen[m.id] = 1; w += d.wage || 0; } });
     return Math.round(w * Math.max(0.5, 1 - CB.fx('account', 'wage')));
   };
   /** 지금 재산으로 급료를 몇 달 버티나 */

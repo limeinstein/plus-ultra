@@ -91,50 +91,67 @@
     return body;
   }
 
+  function renderPost(post) {
+    var details = node('details', 'post');
+    var summary = node('summary');
+    var state = node('span', 'state ' + (post.state === 'closed' ? 'closed' : ''), post.state === 'closed' ? '반영·완료' : '진행 중');
+    var title = node('span', 'post-title');
+    var prefix = post.category ? '[' + (CATEGORY_LABELS[post.category] || '기타') + '] ' : '';
+    var byline = post.source === 'github' ? '#' + post.number + ' · ' + post.user.login : '익명 #' + post.id;
+    title.append(node('strong', '', prefix + post.title), node('small', '', byline + ' · ' + date(post.created_at)));
+    var meta = node('span', 'post-meta', post.comments ? '답변 ' + post.comments + '개' : '답변 대기');
+    summary.append(state, title, meta);
+
+    var body = node('div', 'post-body');
+    body.appendChild(node('div', 'post-text', postBody(post)));
+    if (post.source === 'github') {
+      var links = node('div', 'post-links');
+      links.append(link('GitHub에서 답변하기', post.html_url), link('원문 열기', post.html_url));
+      body.appendChild(links);
+    } else {
+      body.appendChild(node('p', 'post-meta', '로그인 없이 등록된 공개 피드백입니다.'));
+      var adminLinks = node('div', 'post-links');
+      adminLinks.appendChild(link('관리자 답변하기', FEEDBACK_ADMIN + '#feedback-' + post.id));
+      body.appendChild(adminLinks);
+    }
+    var comments = node('div', 'comments');
+    body.appendChild(comments);
+    details.addEventListener('toggle', function () {
+      if (details.open) loadComments(post, comments);
+    });
+    details.append(summary, body);
+    return details;
+  }
+
+  function renderCompleted(posts) {
+    var archive = node('details', 'completed-board');
+    var summary = node('summary', 'completed-board-summary');
+    var heading = node('span', 'completed-board-title');
+    heading.append(node('strong', '', '완료된 피드백'), node('small', '', '반영하거나 처리를 마친 글을 모았습니다.'));
+    summary.append(heading, node('span', 'completed-board-count', posts.length + '건'), node('span', 'completed-board-action', '클릭해서 보기'));
+    var list = node('div', 'completed-board-posts');
+    posts.forEach(function (post) { list.appendChild(renderPost(post)); });
+    archive.append(summary, list);
+    board.appendChild(archive);
+  }
+
   function render() {
     board.replaceChildren();
     var shown = posts.filter(function (post) {
       if (activeFilter === 'answered') return post.comments > 0;
-      if (activeFilter === 'open' || activeFilter === 'closed') return post.state === activeFilter;
+      if (activeFilter === 'open') return post.state === 'open';
       return true;
     });
+    var openPosts = shown.filter(function (post) { return post.state !== 'closed'; });
+    var completedPosts = shown.filter(function (post) { return post.state === 'closed'; });
     status.className = 'board-status';
-    status.textContent = '피드백 ' + shown.length + '건 · 최근 등록 순';
+    status.textContent = '피드백 ' + shown.length + '건 · 진행 중 ' + openPosts.length + '건 · 완료 ' + completedPosts.length + '건';
     if (!shown.length) {
       board.appendChild(node('p', 'board-empty', '이 조건에 맞는 피드백이 없습니다. 첫 항해 기록을 남겨 주세요.'));
       return;
     }
-    shown.forEach(function (post) {
-      var details = node('details', 'post');
-      var summary = node('summary');
-      var state = node('span', 'state ' + (post.state === 'closed' ? 'closed' : ''), post.state === 'closed' ? '반영·완료' : '진행 중');
-      var title = node('span', 'post-title');
-      var prefix = post.category ? '[' + (CATEGORY_LABELS[post.category] || '기타') + '] ' : '';
-      var byline = post.source === 'github' ? '#' + post.number + ' · ' + post.user.login : '익명 #' + post.id;
-      title.append(node('strong', '', prefix + post.title), node('small', '', byline + ' · ' + date(post.created_at)));
-      var meta = node('span', 'post-meta', post.comments ? '답변 ' + post.comments + '개' : '답변 대기');
-      summary.append(state, title, meta);
-
-      var body = node('div', 'post-body');
-      body.appendChild(node('div', 'post-text', postBody(post)));
-      if (post.source === 'github') {
-        var links = node('div', 'post-links');
-        links.append(link('GitHub에서 답변하기', post.html_url), link('원문 열기', post.html_url));
-        body.appendChild(links);
-      } else {
-        body.appendChild(node('p', 'post-meta', '로그인 없이 등록된 공개 피드백입니다.'));
-        var adminLinks = node('div', 'post-links');
-        adminLinks.appendChild(link('관리자 답변하기', FEEDBACK_ADMIN + '#feedback-' + post.id));
-        body.appendChild(adminLinks);
-      }
-      var comments = node('div', 'comments');
-      body.appendChild(comments);
-      details.addEventListener('toggle', function () {
-        if (details.open) loadComments(post, comments);
-      });
-      details.append(summary, body);
-      board.appendChild(details);
-    });
+    openPosts.forEach(function (post) { board.appendChild(renderPost(post)); });
+    if (completedPosts.length) renderCompleted(completedPosts);
   }
 
   function normalizeGithub(items) {

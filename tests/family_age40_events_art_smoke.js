@@ -12,7 +12,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files'] });
   const page = await browser.newPage();
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Img && G.Img.has, null, { timeout: 90000 });
     const result = await page.evaluate(async () => {
       const portraitKeys = ['daughter', 'son'].flatMap(sex => [1, 2, 3, 4, 5].flatMap(v => [
@@ -30,12 +30,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
         return { key, width: img.width, height: img.height, alpha: ctx.getImageData(0, 0, 1, 1).data[3] };
       }
-      return { portraits: await Promise.all(portraitKeys.map(inspect)), events: await Promise.all(eventKeys.map(inspect)) };
+      return {
+        portraits: await Promise.all(portraitKeys.map(inspect)), events: await Promise.all(eventKeys.map(inspect)),
+        successor: [G.Family.successorEvent({ sex: 'm' }), G.Family.successorEvent({ sex: 'f' })]
+      };
     });
     ok(result.portraits.length === 20, '40대 얼굴·무릎상 20장 로드');
     ok(result.portraits.every(x => (x.width === 448 && x.height === 448) || (x.width === 1024 && x.height === 1536)), '초상 크기 448×448 / 1024×1536');
     ok(result.portraits.every(x => x.alpha < 255), '모든 40대 초상의 투명 배경');
     ok(result.events.length === 6 && result.events.every(x => x.width === 576 && x.height === 256), '이벤트 6장 576×256 로드');
+    ok(result.successor[0].img === 'family-events/35_adult_son_first_command' && result.successor[1].img === 'family-events/34_adult_daughter_chart_gift', '아들·딸 후계자 장면을 성별에 맞게 선택');
   } catch (error) {
     console.error('✗', error.message); process.exitCode = 1;
   } finally { await browser.close(); }

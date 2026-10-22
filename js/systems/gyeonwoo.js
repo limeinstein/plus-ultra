@@ -112,6 +112,7 @@
     if (v === 'yes') {
       ['gyeonwoo', 'jiknyeo'].forEach(function (id) {
         var nm = G.Legend && G.Legend.join ? G.Legend.join(id, c) : null;
+        if (!nm) nm = s.mates.filter(function (x) { return x.id === id; })[0] || null;   // 이미 배에 있으면 그 줄을 쓴다 (두 줄이 되지 않게)
         if (!nm) { nm = { id: id, role: 'none', joined: U.dateNum(s.date), loyal: b.loyal || 90, from: c.id }; s.mates.push(nm); }
         nm.loyal = Math.max(nm.loyal || 0, b.loyal || 90);
       });

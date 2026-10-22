@@ -751,6 +751,8 @@
     if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships); return; } }
     // 사라진 왕녀: 레반트의 바르바리 해적 함대·홍해 요새의 함대 (js/systems/princess.js)
     if (G.Princess) { var prN = G.Princess.spawn(st.npcs); if (prN) { st.npcs.push(prN); if (G.ShipSprite) G.ShipSprite.want(prN.ships); return; } }
+    // 여급의 귀띔: 그 앞바다에 들어서면 일러 준 상선대·군함대·해적이 나타난다 (js/systems/maidtip.js)
+    if (G.MaidTip) { var mtN = G.MaidTip.spawn(st.npcs); if (mtN) { st.npcs.push(mtN); if (G.ShipSprite) G.ShipSprite.want(mtN.ships); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
     var pr = pirateChance(l.lon, l.lat);

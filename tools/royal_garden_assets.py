@@ -26,11 +26,10 @@ def cutout(image: Image.Image) -> Image.Image:
     global _CUTOUT_SESSION
     from rembg import new_session, remove
     if _CUTOUT_SESSION is None:
-        _CUTOUT_SESSION = new_session("u2net_human_seg")
-    removed = remove(image, session=_CUTOUT_SESSION, alpha_matting=True,
-                     alpha_matting_foreground_threshold=235,
-                     alpha_matting_background_threshold=12,
-                     alpha_matting_erode_size=6).convert("RGBA")
+        _CUTOUT_SESSION = new_session("birefnet-portrait")
+    # 예전 u2net_human_seg + 알파 매팅은 바구니·꽃·팔 사이를 몸과 함께 크게 지웠다.
+    # 인물과 든 물건을 함께 살리는 초상 전용 모형의 알파를 그대로 쓴다.
+    removed = remove(image, session=_CUTOUT_SESSION, alpha_matting=False).convert("RGBA")
     return defringe(removed)
 
 

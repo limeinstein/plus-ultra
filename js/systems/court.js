@@ -28,7 +28,18 @@
     var c = s.court;
     ['titles', 'offers', 'called', 'herald', 'seen', 'wait', 'zoo', 'zooUsed', 'zooAt', 'museum', 'gallery', 'garden', 'gardenUsed', 'gardenDone'].forEach(function (k) { if (!c[k]) c[k] = {}; });
     if (!c.gmig) gardenMigrate(c);
+    fixTitles(c);
     return c;
+  }
+  /** 사다리보다 높은 칸은 맨 위 칸으로 — 왕녀와 혼인해 특진한 뒤 그 전에 받은 왕명을 아뢰면 칸이 사다리를 넘어
+      작위가 수첩에서 사라지던 옛 저장을 바로잡는다 (2026-10-23) */
+  function fixTitles(c) {
+    if (!G.COURT || !G.COURT.realms) return;
+    Object.keys(c.titles).forEach(function (k) {
+      var r = G.COURT.realms[k], n = c.titles[k]; if (!r || !n) return;
+      var top = CT.ladder(r).length;
+      if (n > top) c.titles[k] = top;
+    });
   }
   CT.state = st;
   function today() { return U.dateNum(S().date); }
@@ -640,6 +651,8 @@
     SP().addTrust(rel, B().trust); rel.done = (rel.done || 0) + 1;
     c.done = (c.done || 0) + 1;
     var n = CT.rank(realm) + 1, tt = titleObj(realm, n), home = CT.isHome(realm), me = s.player.name;
+    // 이미 이 나라의 맨 위 작위 (왕명을 받은 뒤 왕녀와의 혼인으로 특진한 경우 등): 작위 대신 하사금을 더 내린다
+    if (!tt) { await topReward(sp, realm, t, gold, fame, late); return; }
     c.titles[realm.id] = n;
     if (G.Growth) G.Growth.event('cha', 1, (tt ? tt.ko : '작위') + ' 서임 — 궁정의 예법을 몸에 익혔다');   // 작위가 오를 때마다 매력 +1 (85부터는 경험으로)
     delete c.called[realm.id]; delete c.herald[realm.id];
@@ -666,6 +679,26 @@
       (t.kind === 'garden' ? '<br>' + G.CITY_DATA[sp.city].name + ' 왕궁의 왕실 정원에 바친 식물이 자랍니다. 왕궁에 들르면 「왕실 정원」에서 볼 수 있습니다.' : '') +
       (t.exSo ? '<br>제독이 바친 ' + t.exN + (t.kind === 'zoo' || t.kind === 'garden' ? '종' : '점') + U.jx(t.exN + (t.kind === 'zoo' || t.kind === 'garden' ? '종' : '점'), '이/가') + (t.kind === 'garden' ? ' 정원에 심어져' : ' 전시되어') + ' 사교 명성 <b>+' + t.exSo + '</b>' : '') + more, '서임');
     UI.toast(CT.fullName(tt, true) + '의 작위를 받았다!', 'crown', 6500);
+    G.Game.refreshHud();
+    if (s.settings.autosave !== false && G.State.save) G.State.save(0);
+  }
+  async function topReward(sp, realm, t, gold, fame, late) {
+    var c = st(), s = S(), who = SP().speaker(sp), cur = CT.title(realm);
+    var extra = Math.max(5000, t.gold || 0);
+    s.player.gold += extra;
+    delete c.called[realm.id]; delete c.herald[realm.id];
+    if (G.Audio) G.Audio.sfx('coin');
+    await UI.say(line(realm,
+      '그대는 이미 이 나라가 내릴 수 있는 가장 높은 작위를 지녔소. 더 올려 줄 자리가 없으니, 이 금고를 열어 그 공을 갚겠소.',
+      '그대에게 더 줄 작위가 없구려. 대신 이 금을 받으시오. 그대의 공은 잊지 않겠소.',
+      '그대는 이미 가장 높은 자리에 있소. 이 하사금으로 공을 갚겠소.'), who);
+    G.State.log(SP().holderName(sp) + '에게 왕명을 아뢰었다 — 이미 ' + (cur ? CT.fullName(cur, true) : '가장 높은 작위') + '라 작위 대신 하사금 ' + U.num(gold + extra) + '닢. (' + kindOf(t).name + ', ' + G.Fame.NAME[t.cat] + ' 명성 +' + fame + ')');
+    await UI.alert('<div class="center"><div style="font-size:17px" class="muted">' + U.esc(realm.name) + ' · 왕명 완수</div>' +
+      (cur ? '<div style="font-size:26px;font-weight:800;margin:6px 0">' + U.esc(cur.ko) + '</div><div class="muted">이 나라에서 받을 수 있는 가장 높은 작위 — 작위는 그대로입니다</div>' : '') + '</div><br>' +
+      '하사금 금화 <b>' + U.num(gold) + '</b>닢 + 작위 대신 <b>' + U.num(extra) + '</b>닢 · ' + G.Fame.NAME[t.cat] + ' 명성 <b>+' + fame + '</b> · 신뢰 +' + B().trust +
+      (late ? '<br><span class="muted">기한을 넘겨 보상이 줄었다</span>' : '') +
+      (t.exSo ? '<br>제독이 바친 ' + t.exN + (t.kind === 'zoo' || t.kind === 'garden' ? '종' : '점') + U.jx(t.exN + (t.kind === 'zoo' || t.kind === 'garden' ? '종' : '점'), '이/가') + (t.kind === 'garden' ? ' 정원에 심어져' : ' 전시되어') + ' 사교 명성 <b>+' + t.exSo + '</b>' : ''), '왕명');
+    UI.toast('왕명을 마쳤다 — 하사금 금화 ' + U.num(gold + extra) + '닢', 'crown', 5000);
     G.Game.refreshHud();
     if (s.settings.autosave !== false && G.State.save) G.State.save(0);
   }

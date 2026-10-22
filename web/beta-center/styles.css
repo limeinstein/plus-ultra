@@ -160,6 +160,19 @@ h1 em { color: var(--gold-bright); font-style: normal; }
 .comment header b { color: #28665f; }
 .comment header time { color: #777063; }
 .comment p { margin-bottom: 0; }
+.completed-board { margin-top: 1.25rem; border: 1px solid rgba(40,37,30,.28); background: rgba(103,81,40,.055); }
+.completed-board > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: 1rem; padding: 1rem 1.1rem; }
+.completed-board > summary::-webkit-details-marker { display: none; }
+.completed-board > summary:hover { background: rgba(103,81,40,.07); }
+.completed-board > summary::after { content: "+"; width: 1.5rem; color: #835938; font: 700 1.35rem/1 "Nanum Myeongjo",serif; text-align: center; }
+.completed-board[open] > summary::after { content: "−"; }
+.completed-board-title strong,.completed-board-title small { display: block; }
+.completed-board-title strong { color: #55472f; font: 400 1.15rem "Song Myung",serif; }
+.completed-board-title small { margin-top: .16rem; color: #777063; font-size: .72rem; }
+.completed-board-count { padding: .23rem .5rem; border: 1px solid #835938; color: #835938; font-size: .7rem; font-weight: 800; }
+.completed-board-action { color: #6f685a; font-size: .73rem; font-weight: 800; }
+.completed-board-posts { border-top: 1px solid rgba(40,37,30,.22); background: rgba(255,255,255,.18); }
+.completed-board-posts .post:last-child { border-bottom: 0; }
 .board-empty { padding: 2.4rem 1rem; text-align: center; color: #6d6658; border-bottom: 1px solid rgba(40,37,30,.18); }
 .board-error { color: #8c3f32; }
 
@@ -231,6 +244,7 @@ footer a:hover { color: var(--ink); }
   .post summary { grid-template-columns: 75px minmax(0,1fr); }
   .post-meta { grid-column: 2; }
   .post-body { margin-left: .5rem; }
+  .completed-board > summary { grid-template-columns: minmax(0,1fr) auto auto; }
 }
 
 @media (max-width: 520px) {
@@ -255,6 +269,8 @@ footer a:hover { color: var(--ink); }
   .board-tools { align-items: flex-start; flex-direction: column; }
   .post summary { padding-inline: 0; gap: .65rem; }
   .post-body { margin-inline: 0; padding-inline: 1rem; }
+  .completed-board > summary { grid-template-columns: minmax(0,1fr) auto; gap: .65rem; padding-inline: .8rem; }
+  .completed-board-action { display: none; }
   .attachment-help > div { padding-left: 1rem; }
   .release-list summary { align-items: flex-start; }
   .release-list summary i { display: none; }

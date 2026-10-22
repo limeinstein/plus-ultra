@@ -575,7 +575,11 @@
   var GT = { title: '성문', icon: 'gate', paint: 'gate', exitLabel: '마을로 돌아간다' };
   C.B.gate = GT;
   GT.enter = async function (c) {
-    var guard = { name: '수위', portrait: A.withImg(A.npcSpec('gate' + c.id, 'soldier', G.Img.folkStyle(c)), G.Img.chain.npc('guard', c)), lang: C.langLv(c), li: c.lang };
+    var style = G.Img.folkStyle(c), key = 'portraits/npc-roles/' + style + '/soldier';
+    // 유럽 공통 위병보다 이 고장의 실제 병사 그림을 쓴다. 얼굴상과 무릎상도 반드시 같은 사람이다.
+    var guard = C.npc('gatekeeper', '수위');
+    guard.portrait = A.withImg(A.npcSpec('gate' + c.id, 'soldier', style, 'm'), [key]);
+    guard.half = [key + '_half'];
     var of = G.Mounts.offers(c, S().date.y).map(function (id) { return G.Mounts.get(id).name; });
     await C.say(guard, C.hail(c, 'gate', ['성 밖은 위험하다. 조심해서 다녀오게.', '어디로 가려는가? 성 밖에는 도적과 들짐승이 많다네.', '탐험이라도 떠나려는가?']) + (of.length ? ' 성문 옆 마구간에서 ' + of.join('·') + U.jx(of[of.length - 1], '을/를') + ' 구할 수 있지.' : ''));
   };
@@ -776,6 +780,7 @@
       G.Siblings && G.Siblings.home().length ? { label: '동생들', icon: 'people', sub: G.Siblings.home().length + '명 · 함께 항해 ' + G.Siblings.aboard().length + '/' + G.Siblings.K().maxHire, onClick: function () { return G.Siblings.menu(c); } } : null,
       G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,
       G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,
+      G.FamilyTree && G.FamilyTree.has() ? { label: '가계도', icon: 'people', sub: (s.player.generation || 1) + '대째 가문', onClick: function () { return G.FamilyTree.open(); } } : null,
       { label: '항해 일지 기록 (저장)', icon: 'save', onClick: function () { return G.Info.saveMenu(); } },
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
       { label: '보관함', icon: 'chest', sub: '맡긴 물건 ' + R.storage().length + '점 · 소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX, onClick: function () { return HM.storage(c); } },

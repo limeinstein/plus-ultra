@@ -116,9 +116,15 @@
     if (out.length) {
       var heirName = heir.name;
       G.State.log(out.map(function (k) { return k.name; }).join('·') + ' — ' + heirName + '의 동생들은 ' + heirName + '의 집에서 함께 살게 되었다.');
-      await G.UI.alert(U.esc(fill(D().moveIn, null, { me: heirName, father: p.name })) +
-        '<div style="margin:10px 0 4px">' + out.map(function (k) { return '<b>' + U.esc(k.name) + '</b> <span class="muted">(' + (k.sex === 'f' ? '딸' : '아들') + ' · ' + age(k) + '세)</span>'; }).join('<br>') + '</div>' +
-        '<span class="muted" style="font-size:16px">' + U.esc(D().moveInNote) + '</span>', '남은 아이들');
+      var pc = pic('family-events/36_adult_siblings_homecoming', '형제자매의 새 출발');
+      try {
+        await G.UI.alert(U.esc(fill(D().moveIn, null, { me: heirName, father: p.name })) +
+          '<br><br>서로의 손을 맞잡은 형제자매는, 이 집을 다시 함께 지켜 가기로 했다.' +
+          '<div style="margin:10px 0 4px">' + out.map(function (k) { return '<b>' + U.esc(k.name) + '</b> <span class="muted">(' + (k.sex === 'f' ? '딸' : '아들') + ' · ' + age(k) + '세)</span>'; }).join('<br>') + '</div>' +
+          '<span class="muted" style="font-size:16px">' + U.esc(D().moveInNote) + '</span>', '형제자매의 새 출발');
+      } finally {
+        if (pc) await pc.stop();
+      }
     }
     return out;
   };

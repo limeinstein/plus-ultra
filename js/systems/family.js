@@ -63,6 +63,7 @@
 
   /** 매일 (W.daily): 임신 소식·출산 */
   F.daily = function () {
+    if (G.MaidSwap && !S().pwMig) G.MaidSwap.migrate();   // 옛 저장: 지난 대의 아내들 (js/systems/maidswap.js)
     var s = S(), p = s.player, out = [], c = cfg();
     if (!p.wife || !p.preg) return out;
     var pr = p.preg, days = s.day - pr.since, atHome = F.atHome();
@@ -322,7 +323,7 @@
     if (heirs.length) {
       var i = heirs.length > 1 ? await UI.choose('뒤를 이을 아들', heirs.map(function (k, j) { return { label: k.name, right: F.kidAge(k) + '세 · ' + F.bondWord(k), value: j }; }), { width: 420, cancel: false }) : 0;
       if (i == null) i = 0;
-      return F.succeed(heirs[i]);
+      return F.succeed(heirs[i], forced);
     }
     return G.Ending.show(forced ? 'death' : 'retire');
   };
@@ -373,20 +374,40 @@
     return keep.slice();
   };
 
-  F.succeed = async function (k) {
+  /** 세대 교체 장면 — 아들은 첫 지휘, 딸은 아버지에게서 해도를 물려받는다. */
+  F.successorEvent = function (k) {
+    return k && k.sex === 'f'
+      ? { img: 'family-events/34_adult_daughter_chart_gift', title: '물려받은 해도', text: '아버지는 오래 품어 온 해도와 항해 일지를 딸의 손에 건넸다.' }
+      : { img: 'family-events/35_adult_son_first_command', title: '첫 지휘', text: '아버지는 나침반과 함대의 지휘권을 아들의 손에 맡겼다.' };
+  };
+
+  F.succeed = async function (k, forced) {
     var s = S(), p = s.player;
     var old = p.name;
     G.State.log(old + U.j(old, '이/가').slice(old.length) + ' 은퇴하고 ' + k.name + U.j(k.name, '이/가').slice(k.name.length) + ' 뒤를 이었다.');
     // 아버지와의 사이가 물려받는 것을 정한다 — 가까울수록 명성(40~70%)과 특기(절반~3/4)를 많이, 견습으로 함께 다닌 해만큼 더
     var bd = F.bond(k), sea = k.sea || 0, c = cfg();
     var fameK = Math.min(0.8, 0.4 + 0.3 * bd / 100 + (sea >= 12 ? 0.05 : 0)), skK = bd >= 70 ? 0.75 : bd >= 40 ? 0.5 : 0.35;
+    // 아버지의 아내들은 모두 아버지를 따라간다 — 배에 타 있던 부하 출신 아내도 함대에서 내리고, 여급 출신 아내의 술집에는 새 여급이 (js/systems/maidswap.js)
+    var wifeIds = (p.wife ? [p.wife] : []).concat((p.wives2 || []).map(function (w) { return w.id; }));
+    var leftW = G.MaidSwap ? G.MaidSwap.retire(wifeIds) : [];
+    var wifeNote = leftW.length ? '<br>' + leftW.map(function (x) { return x.name; }).join('·') + U.jx(leftW[leftW.length - 1].name, '은/는') + (forced ? ' ' + old + '의 장례를 치른 뒤 함대를 떠나 그를 기리며 조용히 살기로 했다.' : ' 은퇴한 ' + old + U.jx(old, '을/를') + ' 따라 함께 떠났다.') : '';
     var said = bd >= 65 ? '「아버지께 배운 모든 것을 바다에서 증명하겠습니다.」' : bd >= 30 ? '「아버지의 이름에 부끄럽지 않게 하겠습니다.」' : '「…이제 제 방식대로 하겠습니다.」';
-    await UI.alert(old + '의 모험은 여기서 막을 내린다.<br>그리고 그 뜻은 ' + k.name + '에게 이어진다...<br><br>' + k.name + ': ' + said +
-      '<br><br><span class="muted">아버지와의 사이: ' + F.bondWord(k) + ' (' + bd + ')' + (sea ? ' · 견습 ' + sea + '달' : '') + ' — 명성의 ' + Math.round(fameK * 100) + '%, 특기의 ' + Math.round(skK * 100) + '%를 물려받는다.' +
-      '<br>후원자들은 새 제독을 아직 잘 모른다 — 쌓아 온 신뢰는 30%만 이어진다.' +
-      ((p.storage || []).length ? '<br>자택 보관함은 비워진다 — 물려줄 물건은 다음 창에서 고른다.' : '') + '</span>', '세대 교체');
+    var sev = F.successorEvent(k), spic = null;
+    if (G.FamEv && G.FamEv.showPic) {
+      try { spic = G.FamEv.showPic({ img: sev.img, title: sev.title, noStand: true }); } catch (e) { spic = null; }
+    }
+    try {
+      await UI.alert(old + '의 모험은 여기서 막을 내린다.<br>' + U.esc(sev.text) + '<br>그리고 그 뜻은 ' + k.name + '에게 이어진다...<br><br>' + k.name + ': ' + said +
+        '<br><br><span class="muted">아버지와의 사이: ' + F.bondWord(k) + ' (' + bd + ')' + (sea ? ' · 견습 ' + sea + '달' : '') + ' — 명성의 ' + Math.round(fameK * 100) + '%, 특기의 ' + Math.round(skK * 100) + '%를 물려받는다.' +
+        '<br>후원자들은 새 제독을 아직 잘 모른다 — 쌓아 온 신뢰는 30%만 이어진다.' + wifeNote +
+        ((p.storage || []).length ? '<br>자택 보관함은 비워진다 — 물려줄 물건은 다음 창에서 고른다.' : '') + '</span>', sev.title);
+    } finally {
+      if (spic) await spic.stop();
+    }
     var keepSt = await F.pickStorage(k.name);   // 자택 보관함: 고른 것만 새 제독에게 (F.pickStorage)
     var sibs = G.Siblings ? await G.Siblings.fromRetire(p, k) : [];   // 남은 아이들은 새 제독의 집에서 함께 산다 (js/systems/siblings.js)
+    if (G.FamilyTree) { try { G.FamilyTree.record(p, k, forced ? 'death' : 'retire'); } catch (e) { console.error(e); } }   // 가문의 가계도에 물러나는 제독을 남긴다 (js/systems/familytree.js)
     var sk = {}; G.SKILLS.forEach(function (x) { sk[x.id] = Math.max(k.sk[x.id] || 0, Math.min(3, Math.floor((p.sk[x.id] || 0) * skK + (skK > 0.5 ? 0.5 : 0)))); });
     // 자라며 쌓은 능력 (F.newYear·가정교사). 옛 저장의 아이는 예전처럼 무작위
     var kst = k.st || { str: U.ri(50, 70), int: U.ri(45, 70), mar: U.ri(45, 70), cha: U.ri(45, 70) };
@@ -403,7 +424,7 @@
       name: k.name, nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
       luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), fameBy: p.fameBy ? U.clone(p.fameBy) : undefined,   // 갈래의 비율은 그대로 (G.Fame.sync가 줄어든 합에 맞춘다)
       notoriety: Math.round(p.notoriety * 0.3), gold: p.gold, bank: p.bank,
-      items: p.items, equip: p.equip, storage: keepSt, hp: 100, home: p.home, wife: null, kids: [], siblings: sibs, generation: (p.generation || 1) + 1, jailed: 0,
+      items: p.items, equip: p.equip, storage: keepSt, hp: 100, home: p.home, wife: null, kids: [], siblings: sibs, since: s.date.y, generation: (p.generation || 1) + 1, jailed: 0,
       elders: G.Wives && G.Wives.retire ? G.Wives.retire(p, k) : [],   // 선대의 부인들 — 어머니·○째 부인 (예전엔 세대 교체 때 목록에서 사라졌다)
       portrait: F.kidSpec(k)
     };

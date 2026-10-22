@@ -291,7 +291,8 @@
     st.ships.forEach(function (b) { if (b.side === 'me' && !b.flag && !b.ally) b.order = 'follow'; });   // 큰 해전의 우리 편 함대는 제멋대로 싸운다(free)   // 함대 명령: 처음에는 모두 기함을 따른다
     buildUI();
     if (st.enFlag && st.ships.filter(function (b) { return b.side === 'en'; }).length > 1) setTimeout(function () { if (st && !st.over) UI.toast('적 기함(1번 · ' + st.enFlag.name + ')을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.', 'flag', 5200); }, 600);
-    if (npc.gunNote) setTimeout(function () { if (st && !st.over) UI.toast(npc.gunNote, 'cannon', 6500); }, 6000);   // 큰 해전의 대포 이야기 (무적함대: 우리는 멀리, 저들은 세게)
+    if (npc.gunNote) setTimeout(function () { if (st && !st.over) UI.toast(npc.gunNote, 'cannon', 6500); }, 6000);
+    if (npc.tacticNote) setTimeout(function () { if (st && !st.over) UI.toast(npc.tacticNote, 'skull', 6500); }, 5600);   // 이름난 해적의 전술 (js/systems/corsairs.js)   // 큰 해전의 대포 이야기 (무적함대: 우리는 멀리, 저들은 세게)
     if (G.Audio) G.Audio.music('battle');
     var foe = npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
     UI.toast(foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
@@ -644,10 +645,11 @@
     b.target = near; b.moveTo = null;
   }
   /** 포위·일제 사격의 힘: 우리 배들이 한 적을 여러 방향에서 쏘거나(학익진), 함께 한 적을 노려 쏘면(일제 공격) 포탄이 더 아프다 */
-  function envelop(t) {
-    if (t.envT != null && st.t - t.envT < 0.4) return t.envK;
+  function envelop(t, side) {
+    side = side || 'me';
+    if (t.envT != null && t.envS === side && st.t - t.envT < 0.4) return t.envK;
     var K = FO(), bs = [];
-    st.ships.forEach(function (m) { if (m.side !== 'me' || !m.alive) return; if (Math.hypot(m.x - t.x, m.y - t.y) < gunRange(m) * 1.15) bs.push(Math.atan2(m.y - t.y, m.x - t.x)); });
+    st.ships.forEach(function (m) { if (m.side !== side || !m.alive) return; if (Math.hypot(m.x - t.x, m.y - t.y) < gunRange(m) * 1.15) bs.push(Math.atan2(m.y - t.y, m.x - t.x)); });
     var k = 1;
     if (bs.length >= 2) {
       bs.sort(function (a, c) { return a - c; });
@@ -655,8 +657,8 @@
       var cover = Math.PI * 2 - gap, sp = K.envSpread || [1.6, 2.6], ek = K.envelop || [0.2, 0.35];
       if (bs.length >= 3 && cover >= sp[1]) k = 1 + ek[1]; else if (cover >= sp[0]) k = 1 + ek[0];
     }
-    if (k > 1 && !t.envLogged) { t.envLogged = true; log(t.name + U.jx(t.name, '을/를') + ' 에워쌌다! 여러 방향에서 포탄이 쏟아진다. (포격 +' + Math.round((k - 1) * 100) + '%)'); }
-    t.envT = st.t; t.envK = k;
+    if (k > 1 && !t.envLogged) { t.envLogged = true; log((side === 'en' ? '적 함대가 ' + t.name + U.jx(t.name, '을/를') + ' 학익진으로 에워쌌다! 사방에서 포탄이 쏟아진다' : t.name + U.jx(t.name, '을/를') + ' 에워쌌다! 여러 방향에서 포탄이 쏟아진다') + '. (포격 +' + Math.round((k - 1) * 100) + '%)'); }
+    t.envT = st.t; t.envK = k; t.envS = side;
     return k;
   }
   function orderDmg(b, t) {
@@ -854,12 +856,57 @@
     var mfl = st.myFlag;
     if (mfl && mfl.alive && near !== mfl && Math.hypot(mfl.x - b.x, mfl.y - b.y) < 1.4 * Math.hypot(near.x - b.x, near.y - b.y)) near = mfl;
     var kind = st.npc.kind;
+    if (st.npc.tactic && enemyTactic(b, foes, near, mfl)) return;   // 이름난 해적의 전술 (js/systems/corsairs.js)
     var myCrew = b.crew, theirCrew = near.crew;
     if (kind === 'merchant' || (b.hp < b.maxHp * 0.25 && kind !== 'navy')) { b.moveTo = [b.x + (b.x - near.x) * 3, b.y + (b.y - near.y) * 3]; b.target = null; b.fleeing = true; return; }
     var awe = st.ships.some(function (o) { return o.side === 'me' && o.flag && o.alive && has(o, 'awe'); });
     var boardK = (awe ? 2.0 : 1.3) * (has(near, 'spikes') ? 99 : 1) / (has(b, 'grapple') ? 1.25 : 1);
     if ((kind === 'pirate' || has(b, 'grapple')) && myCrew > theirCrew * boardK) { b.board = near; b.moveTo = [near.x, near.y]; b.target = near; return; }
     b.target = near; b.moveTo = null;
+  }
+  /** 이름난 해적의 전술 — true면 이번 생각은 끝
+      swarm(아랍 해적): 부하 배는 갈고리를 걸고 뛰어든다 · 기함은 뒤에서 포를 쏘다가 부하가 다 없어지면 돌진
+      crane(서양 사략 해적): 부하 배는 우리 기함을 학익진으로 감싸 포격만 · 기함은 사정거리 끝에서 쏜다 */
+  function enemyTactic(b, foes, near, mfl) {
+    var tac = st.npc.tactic, T = mfl && mfl.alive ? mfl : near, ef = st.enFlag;
+    var mates = st.ships.filter(function (o) { return o.side === 'en' && o.alive && !o.flag; });
+    b.close = 1; b.board = null;
+    if (!b.flag && b.hp < b.maxHp * 0.2) return false;                     // 다 부서진 부하 배는 달아난다 (기본 생각으로)
+    if (tac === 'swarm') {
+      if (!b.flag) {
+        var tg = has(near, 'spikes') ? T : near;                            // 쇠못 지붕에는 못 뛰어든다 — 다른 배를 노린다
+        if (has(tg, 'spikes')) { b.target = tg; b.moveTo = null; return true; }
+        b.board = tg; b.target = tg; b.moveTo = [tg.x, tg.y]; return true;
+      }
+      if (mates.length) {
+        // 기함: 부하들 뒤, 사정거리 끝에서 포를 쏜다 — 가까이 오면 물러난다
+        var keep = gunRange(b) * 0.55, cl = null, cd = keep;
+        foes.forEach(function (f) { var d = Math.hypot(f.x - b.x, f.y - b.y); if (d < cd) { cd = d; cl = f; } });
+        if (cl) { var dx = b.x - cl.x, dy = b.y - cl.y, dl = Math.hypot(dx, dy) || 1; b.moveTo = [b.x + dx / dl * 240, b.y + dy / dl * 240]; b.target = cl; }
+        else { b.target = T; b.moveTo = null; b.close = 1.0; }
+        return true;
+      }
+      if (!st.charged) { st.charged = true; log('적 기함 ' + b.name + U.jx(b.name, '이/가') + ' 돛과 노를 다 써서 돌진해 온다!'); }
+      if (has(T, 'spikes')) { b.target = T; b.moveTo = null; b.close = 0.5; return true; }
+      b.board = T; b.target = T; b.moveTo = [T.x, T.y];
+      return true;
+    }
+    if (tac === 'crane') {
+      if (b.flag || !ef || !ef.alive) {
+        var keep2 = gunRange(b) * 0.5, cl2 = null, cd2 = keep2;
+        foes.forEach(function (f) { var d = Math.hypot(f.x - b.x, f.y - b.y); if (d < cd2) { cd2 = d; cl2 = f; } });
+        if (cl2) { var ex = b.x - cl2.x, ey = b.y - cl2.y, el2 = Math.hypot(ex, ey) || 1; b.moveTo = [b.x + ex / el2 * 240, b.y + ey / el2 * 240]; b.target = cl2; }
+        else { b.target = T; b.moveTo = null; b.close = 1.05; }
+        return true;
+      }
+      var K = FO(), idx = mates.indexOf(b), th0 = Math.atan2(ef.y - T.y, ef.x - T.x), step = K.craneStep || 0.62;
+      var wing = Math.ceil((idx + 1) / 2), sgn = idx % 2 ? -1 : 1;
+      var th = th0 + sgn * Math.min(wing * step, K.craneMax || 1.45), R0 = gunRange(b) * (K.craneR || 0.72);
+      var slot = [T.x + Math.cos(th) * R0, T.y + Math.sin(th) * R0];
+      b.target = T; b.moveTo = slotGoal(b, slot, [T.x, T.y], sgn); b.crane = { T: T, th: th, R: R0 };
+      return true;
+    }
+    return false;
   }
   function moveShip(b, dt) {
     var goal = null;
@@ -989,7 +1036,7 @@
       var fwd = part >= 1 && sAng === b.heading ? b.len * 0.45 : 0;
       var ox = b.x + Math.cos(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd), oy = b.y + Math.sin(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd);
       var tx = t.x + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
-      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' ? orderDmg(b, t) : 1), target: t, from: b });
+      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), target: t, from: b });
       st.fx.push({ kind: 'smoke', x: ox + Math.cos(sAng) * 14, y: oy + Math.sin(sAng) * 14, vx: Math.cos(sAng) * 18, vy: Math.sin(sAng) * 18, t: 0, life: 2.4, r: 10 + U.rf(0, 8) });
       st.fx.push({ kind: 'muzzle', x: ox + Math.cos(sAng) * 10, y: oy + Math.sin(sAng) * 10, ang: sAng, t: 0, life: 0.2, s: U.rf(1.1, 1.5) });
       for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35), v3 = U.rf(160, 280); st.fx.push({ kind: 'spark', x: ox + Math.cos(sAng) * 12, y: oy + Math.sin(sAng) * 12, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: 0, life: U.rf(0.15, 0.3) }); }
@@ -1111,7 +1158,7 @@
     // captain duel between flagships
     if (me.flag && en.flag && st.npc.kind !== 'merchant' && !st.dueled) {
       var px = G.Games.proxy(), pd = px && G.MATE[px.id];
-      var nbN = st.npc.boss && st.npc.boss.hist && G.HIST_FIG && G.HIST_FIG[st.npc.boss.hist];
+      var nbN = st.npc.boss && (st.npc.boss.hist && G.HIST_FIG ? G.HIST_FIG[st.npc.boss.hist] : st.npc.boss.name ? st.npc.boss : null);   // 큰 해전의 적장 · 이름난 해적 (corsairs.js)
       var v = await UI.ask(nbN ? nbN.name + U.jx(nbN.name.replace(/\s*\(.*\)$/, ''), '이/가') + ' 칼을 뽑고 나섰다. "' + (st.npc.boss.line || '제독끼리 승부를 내자!') + '"' : '적의 두목이 나섰다. "제독끼리 승부를 내자!"', [{ label: '일기토를 받는다', value: 1 }].concat(pd ? [{ label: '부관 ' + pd.name + '에게 맡긴다', value: 2 }] : []).concat([{ label: '병사끼리 싸운다', value: 0 }]), {});
       if (v) {
         st.dueled = true;
@@ -1122,6 +1169,7 @@
         var boss = { name: st.npc.kind === 'pirate' ? '해적 두목' : '적 함장', look: bossLook, portrait: bossSpec, str: U.ri(55, 80), atk: U.ri(6, 12), def: U.ri(2, 6), skill: U.ri(0, 1), mar: U.ri(55, 78), int: U.ri(30, 60), cha: U.ri(30, 55) };
         var nb = st.npc.boss;   // 큰 해전: 이름난 적장이 나선다 (js/data/histfigures.js)
         if (nb && nb.hist && G.Hist) { var hs = G.Hist.speaker(nb.hist); boss.name = hs.name; boss.portrait = hs.portrait || boss.portrait; ['str', 'atk', 'def', 'skill', 'mar', 'int', 'cha', 'look'].forEach(function (k) { if (nb[k] != null) boss[k] = nb[k]; }); }
+        else if (nb && nb.name) { var cs = st.npc.cap && G.Captains && G.Captains.speaker ? G.Captains.speaker(st.npc) : null; boss.name = nb.name; if (cs && cs.portrait) boss.portrait = cs.portrait; ['str', 'atk', 'def', 'skill', 'mar', 'int', 'cha', 'look'].forEach(function (k) { if (nb[k] != null) boss[k] = nb[k]; }); }
         var res = await G.Games.duel(boss, v === 2 ? { mate: px, place: 'deck' } : { place: 'deck' });
         var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
         if (res === 'win') {
@@ -1404,7 +1452,7 @@
       .map(function (c) { return { c: c, d: G.Geo.dist(l.lon, l.lat, c.lon, c.lat) }; })
       .sort(function (a, b) { return a.d - b.d; }).slice(0, 4)
       .forEach(function (x) { R.cityGoods(x.c).forEach(function (id) { if (G.GOOD[id] && out.indexOf(id) < 0 && !(G.Slave && G.Slave.is(id))) out.push(id); }); });
-    if (!out.length) out = G.GOODS.filter(function (g) { return !g.nw; }).map(function (g) { return g.id; });
+    if (!out.length) out = G.GOODS.filter(function (g) { return !g.nw && !g.plant; }).map(function (g) { return g.id; });
     return out;
   }
   /** 나포선마다 실린 것을 모은다: [{key, kind:'food'|'water'|'mat'|'good'|'crew', id, name, q}] */

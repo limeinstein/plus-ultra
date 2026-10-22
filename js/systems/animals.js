@@ -16,7 +16,7 @@
   AN.local = function (c) {
     var s = S(); if (!c || !G.ANIMALS) return [];
     var out = [];
-    G.ANIMALS.forEach(function (id) {
+    G.ANIMALS.concat(G.PLANTS || []).forEach(function (id) {   // 식물 발견물(js/data/plantdisc.js)도 그 고장에서 듣는다 (2026-10-22)
       var d = G.DISC[id]; if (!d || d.bookOnly || s.hints[id] || G.Disc.foundByMe(id) || !G.Disc.built(d)) return;
       var near = d.near || AN.NEAR, dist = d.how === 'city' && d.city === c.id ? 0 : G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
       if (dist <= near) out.push({ d: d, dist: dist });
@@ -39,7 +39,7 @@
   AN.tavern = async function (c, who) {
     if (!U.chance(AN.TAVERN)) return false;
     var d = AN.pick(c); if (!d || !G.Disc.addHint(d.id, 'local:' + c.id)) return false;
-    await G.Scenes.city.say(who, U.pick(['이 근방에서는 다들 아는 이야기인데, ', '이 고장에 왔으면 이건 알아 두게. ', '여기 사람이라면 누구나 아는 짐승 이야기지. ']) + d.hint);
+    await G.Scenes.city.say(who, U.pick(['이 근방에서는 다들 아는 이야기인데, ', '이 고장에 왔으면 이건 알아 두게. ', d.plant ? '여기 사람이라면 누구나 아는 나무와 꽃 이야기지. ' : '여기 사람이라면 누구나 아는 짐승 이야기지. ']) + d.hint);
     G.UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll');
     await AN.after(d, c);
     return true;

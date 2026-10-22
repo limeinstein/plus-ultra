@@ -429,7 +429,18 @@
     return '대기';
   };
   /** 함대를 떠난 배나 기함이 된 배의 선장은 대기로 돌린다 */
+  /* 같은 부하가 명단(s.mates)에 두 줄 이상 있으면 하나만 남긴다 (2026-10-22 사용자 제보: 해고해도 「대기」로 남고 급료가 계속 나갔다).
+     옛 저장이나 사건 합류가 겹쳐 생긴 줄 — 남길 줄은 하는 일이 있는 쪽(선장·기함 역할 > 선실 > 대기), 같으면 먼저 들어온 쪽. 지운 줄 수를 돌려준다 */
+  R.dedupeMates = function () {
+    var S = R.S(); if (!S || !S.mates) return 0;
+    function score(m) { return m.role === 'captain' ? 3 : m.role && m.role !== 'none' ? 2 : m.room != null ? 1 : 0; }
+    var best = {}, n = 0;
+    S.mates.forEach(function (m) { if (m && (!best[m.id] || score(m) > score(best[m.id]))) best[m.id] = m; });
+    for (var i = S.mates.length - 1; i >= 0; i--) { var m = S.mates[i]; if (!m || best[m.id] !== m) { S.mates.splice(i, 1); n++; } }   // 같은 배열을 고친다 (다른 곳이 쥐고 있어도 맞게)
+    return n;
+  };
   R.tidyCaptains = function () {
+    R.dedupeMates();
     var S = R.S(), f = S.fleet;
     S.mates.forEach(function (m) {
       if (m.role !== 'captain') return;
@@ -691,7 +702,7 @@
     if (!extra) return base;
     var rng = U.makeRng(U.strHash('inv' + c.id));
     var pool = G.GOODS.filter(function (g) {
-      return base.indexOf(g.id) < 0 && !g.nw && R.regionalMult(g.id, c.region) < 1.25;
+      return base.indexOf(g.id) < 0 && !g.nw && !g.plant && R.regionalMult(g.id, c.region) < 1.25;   // plant: 식물 특산물은 제독이 심어야 생긴다 (js/systems/plantrade.js)
     });
     var out = base.slice();
     for (var i = 0; i < extra && pool.length; i++) {

@@ -62,7 +62,7 @@
     if (D.taken(id)) return false;                                                                // 경쟁자가 먼저 발표했다
     if (d0 && d0.bookOnly && !/^(book|relic|chain|contract|lead|legacy|rival)/.test(sr)) return false;   // 전설·희귀 동물·공룡: 책에서만
     if (d0 && !D.clueOk(d0, sr)) return false;                                                    // 주점·교역소·후원자의 이야기 ↔ 도서관 사료 (js/data/clues.js)
-    var here = d0 && (d0.animal || d0.folkLocal) && /^(local|town):/.test(sr) && D.built(d0);   // 그 고장에 와서 들은 동물·부족 이야기
+    var here = d0 && (d0.animal || d0.folkLocal || d0.plantLocal) && /^(local|town):/.test(sr) && D.built(d0);   // 그 고장에 와서 들은 동물·부족 이야기
     if (G.Frontier && d0 && !here && !G.Frontier.canHint(d0, src)) return false;
     if (s.hints[id]) {
       (s.hints[id].more = s.hints[id].more || []).push({ src: src, d: U.dateNum(s.date) });
@@ -531,6 +531,7 @@
         if (stage > was) {
           s.flags['rn_' + d.id] = stage;
           // 큰 발견(세력 4 이상)은 누구나 듣고, 그 밖은 단서·계약을 가진 제독만 귀를 기울인다
+          if (!(d.pw >= 4 || watching) && G.Journal) G.Journal.add(news[stage][1], 'A');   // 알림은 띄우지 않아도 일지에는 남긴다 (2026-10-23)
           if (d.pw >= 4 || watching) out.push({ icon: 'ship', history: true, text: news[stage][1] + (watching && !mine ? ' — 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 쫓는 제독에게는 반갑지 않은 소식이다.' : mine ? ' — 「' + d.name + '」' + U.jx(d.name, '은/는') + ' 이미 제독이 찾아 두었다. 서둘러 알려야 한다!' : '') });
         }
       } else if (!news && watching && !mine && left > 0 && left <= 4 && d.pw >= 2 && (d.how === 'sea' || d.how === 'land') && !s.flags['rn_' + d.id]) {

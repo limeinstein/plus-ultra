@@ -19,11 +19,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_NAME|Failed to load|net::/.test(m.text())) errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && G.Siblings && G.SIBLINGS, null, { timeout: 120000 });
     await page.evaluate(() => {
       const UI = G.UI;
-      window.__said = []; window.__asks = []; window.__pick = [];   // __pick: 차례대로 고를 value (없으면 막히지 않은 첫 것)
+      window.__said = []; window.__asks = []; window.__pick = []; window.__pics = [];   // __pick: 차례대로 고를 value (없으면 막히지 않은 첫 것)
       UI.say = async (t, who) => { window.__said.push((who && who.name ? who.name + ': ' : '') + t); };
       UI.alert = async (t) => { window.__said.push('[알림] ' + String(t).replace(/<[^>]+>/g, ' ')); };
       UI.toast = (t) => { window.__said.push('[토스트] ' + t); };
@@ -36,7 +36,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       };
       UI.choose = async (t, opts) => opts[0].value;
       G.Game.go = () => {}; G.Game.refreshHud = () => {}; G.State.save = () => {};
-      if (G.FamEv) G.FamEv.showPic = (o) => { window.__pic = o.img; return { stop: async () => {} }; };
+      if (G.FamEv) G.FamEv.showPic = (o) => { window.__pic = o.img; window.__pics.push(o.img); return { stop: async () => {} }; };
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 2; });
       const s = G.Game.state = G.State.newGame({ name: '아버지', nation: 'PT', job: 'explorer', age: 50, birth: { m: 4, d: 12 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 1), diff: 'normal' });
       s.date = { y: 1520, m: 6, d: 1 };
@@ -58,7 +58,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { name: p.name, gen: p.generation, sib: p.siblings.map(k => k.name + ':' + G.Family.kidAge(k)), kids: p.kids.length,
         art: p.siblings.filter(k => window.__art[k.name]).every(k => G.HomeLife.chain(k, true)[0].replace(/_v\d/, '') === window.__art[k.name].replace(/_v\d/, '')),
         faces: ['m', 'f'].every(sx => { const v = p.siblings.filter(k => k.sex === sx).map(k => k.portraitVariant).concat(sx === 'm' ? [p.heir.variant] : []); return new Set(v).size === v.length; }),
-        aboard: p.siblings.some(k => k.aboard), said: window.__said.join('\n') };
+        aboard: p.siblings.some(k => k.aboard), pics: window.__pics.slice(), said: window.__said.join('\n') };
     });
     ok(r.name === '주앙' && r.gen === 2 && r.kids === 0, '주앙이 뒤를 잇는다');
     ok(r.sib.length === 5 && !r.sib.some(x => /^마리아/.test(x)), '남은 아이 5명이 새 제독의 동생으로 (시집간 딸은 빼고) — ' + r.sib.join(', '));
@@ -66,6 +66,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.art, '아이 때 그림(폴더·순번·나이)이 그대로');
     ok(r.faces, '같은 성별 형제끼리(뒤를 이은 제독 포함) 얼굴이 겹치지 않는다');
     ok(!r.aboard, '견습으로 배에 타 있던 딸도 집으로');
+    ok(r.pics[0] === 'family-events/35_adult_son_first_command' && r.pics[1] === 'family-events/36_adult_siblings_homecoming', '아들의 첫 지휘 뒤 형제자매의 새 출발 그림');
     ok(/남은 아이들/.test(r.said) && /스무 살이 되면 항해사로/.test(r.said), '「남은 아이들」 알림');
 
     // 집: 메뉴 · 방 안의 가족

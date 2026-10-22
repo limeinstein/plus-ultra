@@ -58,7 +58,7 @@
         var txt = (ev.hist ? '【' + ev.name + '】 ' : '') + (ev.place || '') + '에서 ' + k.name + U.jx(k.name, '이/가') + ' 일어났다' + (def.tsu ? ' — 해일이 해안을 덮쳤다' : '') + '. ' + (ev.t || '');
         out.unshift({ icon: k.icon, text: txt.trim(), history: ev.hist || d < 6 });
         if (ev.hist) G.State.log(ev.name + ' — ' + (ev.place || '') + ' (' + k.name + ')');
-      }
+      } else if (!quiet && ev.hist && G.Journal) G.Journal.add(ev.name + ' — ' + (ev.place || '') + '에서 ' + k.name + U.jx(k.name, '이/가') + ' 일어났다는 소식이 들려온다.', 'C');   // 일지 (2026-10-23)
     }
     ev.out = out;
     return ev;

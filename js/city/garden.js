@@ -6,7 +6,7 @@
    · 저장: s.court.garden[나라] = {city, sp, y, ids:[발견 id], items:[유물 기록], open, don} · s.court.gardenUsed[발견 id] */
 (function (G) {
   'use strict';
-  var U = G.U, UI = G.UI, R = G.R;
+  var U = G.U, UI = G.UI, R = G.R, A = G.Art;
   var GD = G.Garden = {};
   function S() { return G.Game.state; }
   function CT() { return G.Court; }
@@ -14,8 +14,17 @@
   function rec(realm) { return CT().state().garden[realm.id] || null; }
   function count(g) { return g ? g.ids.length + g.items.length : 0; }
   function myTask(sp) { var t = CT().task(); return t && t.kind === 'garden' && t.sp === sp.id ? t : null; }
+  var GARDENER_GENDER = { ib: 'f', ne: 'm', it: 'm', gr: 'f', ru: 'm', is: 'f', pe: 'f', af: 'm', sw: 'f', in: 'm', se: 'f', cn: 'm', kr: 'f', jp: 'm', az: 'f', an: 'm', co: 'm', tr: 'm', st: 'f', na: 'f' };
+  /** 지역 복식과 작업 도구가 보이는 전용 정원사. 얼굴상·무릎상은 같은 원화에서 만든 짝을 쓴다. */
   function gardener() {
-    try { return C().npc('gardener', '왕실 정원사'); } catch (e) { return { name: '왕실 정원사', lang: 3 }; }
+    try {
+      var c = C().city(), style = G.Img.folkStyle(c), g = GARDENER_GENDER[style] || 'm';
+      var role = g === 'f' ? 'maid' : 'soldier', key = 'portraits/gardeners/' + style + '/gardener';
+      var who = C().npc('gardener', '왕실 정원사');
+      who.portrait = A.withImg(A.npcSpec('royal-gardener:' + c.id, role, style, g), [key, 'portraits/npc-roles/' + style + '/' + role]);
+      who.half = [key + '_half', 'portraits/npc-roles/' + style + '/' + role + '_half'];
+      return who;
+    } catch (e) { return { name: '왕실 정원사', lang: 3 }; }
   }
   function discPic(d) { var k = G.Img && G.Img.pick ? G.Img.pick(G.Img.chain.discovery(d)) : null; return k ? G.Img.src(k) : null; }
   function regName(d) { return d.reg != null && G.REGIONS[d.reg] ? G.REGIONS[d.reg] : '먼 땅'; }

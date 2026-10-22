@@ -254,7 +254,7 @@
     function add(g, d) { if (seen[g] || !G.GOOD[g] || d === 1) return; if (G.GOOD[g].nw && y < 1520) return; seen[g] = 1; out.push({ g: g, d: 1 + (d - 1) * (e.k || 1) }); }
     if (D.goodsOver) for (var g0 in D.goodsOver) add(g0, D.goodsOver[g0]);
     if (D.goods) for (var g1 in D.goods) add(g1, D.goods[g1]);
-    if (D.cats) G.GOODS.forEach(function (gd) { if (D.cats[gd.cat] != null) add(gd.id, D.cats[gd.cat]); });
+    if (D.cats) G.GOODS.forEach(function (gd) { if (D.cats[gd.cat] != null && !gd.plant) add(gd.id, D.cats[gd.cat]); });   // 식물 특산물은 심은 곳에만 있어 갈래 사건에서 뺀다
     return out.sort(function (a, b) { return Math.abs(Math.log(b.d)) - Math.abs(Math.log(a.d)); });
   };
   function names(list, n) { return list.slice(0, n).map(function (x) { return G.GOOD[x.g].name; }).join('·'); }

@@ -9,7 +9,7 @@
   G.MAX_MATES = Infinity;   // 부하는 몇 명이든 들일 수 있다 (급료가 버거우면 경리·부관이 말린다 — G.Cabins.wageWarning). 옛 코드가 보던 값이라 남겨 둔다
 
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
-  function maidOf(c) { return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }
+  function maidOf(c) { if (G.MaidSwap) return G.MaidSwap.at(c.id); return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }   // 지난 대 제독의 아내였던 여급 자리에는 새 여급 (js/systems/maidswap.js)
   T.maidOf = maidOf;
   T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), half: G.Img.chain.maidHalf(m.id, c), lang: R.cityLang(c).lv, li: R.cityLang(c).li }; };
   T.playerSpeaker = function () { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; };
@@ -793,8 +793,10 @@
       var v = await ask(m.name + ' — 호감 ' + heart(st.aff), [
         { label: '한잔 산다', value: 'drink' }, { label: '이야기한다', value: 'talk' }, { label: '선물한다', value: 'gift' },
         (function () { var cd = G.FamEv ? G.FamEv.canDate(m.id) : null; return cd ? { label: '함께 시간을 보낸다' + (cd.ok ? '' : ' (' + cd.why + ')'), value: 'date', dis: !cd.ok } : null; })(),
+        G.MaidTip ? { label: '사례하고 소식을 묻는다' + (G.MaidTip.canAsk(st) ? '' : ' (호감이 더 있어야)'), value: 'tip', dis: !G.MaidTip.canAsk(st) } : null,   // 상선대·군함대·해적·철새의 행방 (js/systems/maidtip.js)
         { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }].filter(Boolean));
       if (!v) return;
+      if (v === 'tip') { await G.MaidTip.ask(c, m, st, say); continue; }
       if (v === 'date') { await G.FamEv.date(c, m); continue; }      // 데이트 — 건배·춤·쪽지·난롯가·저녁 (familyevent.js)
       if (v === 'drink') {
         var pr = 10 + c.size * 5; if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다.', 'coin'); continue; }
@@ -868,8 +870,9 @@
       var v = await UI.choose(d.name + '의 역할', opts, { width: 600 });
       if (!v) continue;
       if (v === 'fire') {
+        // 해고: 그 사람의 줄을 모두 지운다 — 같은 사람이 두 줄이면 하나가 「대기」로 남아 급료가 계속 나갔다 (2026-10-22)
         if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', G.Scenes.mateSpeaker('first')); continue; }
-        if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; s.mates.splice(i, 1); R.tidyCaptains(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
+        if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; for (var fi = s.mates.length - 1; fi >= 0; fi--) if (s.mates[fi].id === m.id) s.mates.splice(fi, 1); R.tidyCaptains(); if (G.Cabins) G.Cabins.tidy(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
         continue;
       }
       T.assign(m, v);

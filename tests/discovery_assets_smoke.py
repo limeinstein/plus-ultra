@@ -28,7 +28,7 @@ known = set(all_ids)
 assert len(sea_ids) == 24 and sea_ids <= known, "본편 해양 발견물 누락: " + ", ".join(sorted(sea_ids - known))
 assert tutorial_ids == {"herc_cave"} and tutorial_ids <= known, "튜토리얼 발견물 누락"
 assert len(story_ids) == 7 and story_ids <= known, "이야기 발견물 누락: " + ", ".join(sorted(story_ids - known))
-assert len(known) == 844, f"전체 발견물 수가 예상과 다름: {len(known)}"
+assert len(known) == 923, f"전체 발견물 수가 예상과 다름: {len(known)}"
 
 folders = {
     "discoveries": ".gif",
@@ -52,7 +52,7 @@ orphaned = set.intersection(*asset_sets) - known
 assert not orphaned, "자료에 없는 발견물 그림: " + ", ".join(sorted(orphaned))
 
 print(
-    "PASS: discoveries 844 "
+    "PASS: discoveries 923 "
     f"(main {len(known - story_ids)}, story-only {len(story_ids)}, tutorial {len(tutorial_ids)}); "
     "GIF/end/sheet/manifest complete"
 )

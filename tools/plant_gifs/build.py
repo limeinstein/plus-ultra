@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""식물 원화 → 빈 캔버스에 유화가 완성되고 풍경이 숨 쉬는 발견 GIF.
+"""식물 원화 → 종이에 펜화가 완성되고 실사 풍경이 숨 쉬는 발견 GIF.
 
-실사 원화를 밑칠, 큰 붓질, 세부 붓질 순으로 캔버스에 드러낸다. 완성된
-유화는 같은 구도의 실사 풍경으로 이어지고, 마지막에는 잎·물·빛이 아주
+실사 원화에서 윤곽과 명암을 뽑아 연필 밑선, 검은 펜선, 해칭 순으로 종이에
+드러낸다. 완성된 펜화는 같은 구도의 실사 풍경으로 이어지고, 마지막에는 잎·물·빛이 아주
 조금 움직인 뒤 원래 장면으로 돌아온다.
 """
 from __future__ import annotations
@@ -26,6 +26,22 @@ PLANT_IDS = [
     "rubber", "sequoia", "breadfruit", "lotus", "welwitschia",
     "mangrove", "papyrus", "rafflesia", "carnivplant", "startower",
     "bullocho",
+    "bitterorange", "marmelo", "almond", "madrono", "chestnut",
+    "apple", "lingonberry", "cloudberry", "gooseberry", "blackcurrant",
+    "fig", "lemon", "carob", "citron", "marasca",
+    "baobab", "kola", "kalahari", "marula", "shea",
+    "datepalm", "pistachio", "apricot", "pomegranate", "blackmulberry",
+    "mango", "jackfruit", "tamarind", "amla", "coconut",
+    "lychee", "longan", "persimmon", "jujube", "omija",
+    "hamimelon", "wildapple", "walnut", "seabuckthorn", "barberry",
+    "durian", "mangosteen", "rambutan", "carambola", "salak",
+    "kishumikan", "yuzu", "nashi", "akebi", "biwa",
+    "pineapple", "avocado", "tomato", "cashew", "cherimoya",
+    "maehwa", "orchid", "chrysanthemum", "bamboo", "redpine",
+    "azalea", "tulip", "rose", "whiterose", "bluerose",
+    "corkoak", "majoroak", "stonepine", "gumarabic", "cedar",
+    "teak", "ginkgo", "populus", "camphor", "sakura",
+    "brazilwood", "nopal", "saguaro", "goldenbarrel",
 ]
 
 
@@ -39,54 +55,59 @@ def fit_source(src: Image.Image) -> Image.Image:
                         centering=(.5, .5))
 
 
-def canvas(seed: int) -> Image.Image:
-    """붓결이 희미하게 남은 따뜻한 아마포 캔버스."""
+def paper(seed: int) -> Image.Image:
+    """가는 섬유와 얼룩이 아주 희미하게 남은 따뜻한 스케치 종이."""
     rng = random.Random(seed)
-    base = Image.new("RGB", (W, H), (232, 222, 197))
-    noise = Image.effect_noise((W, H), 18).filter(ImageFilter.GaussianBlur(.35))
+    base = Image.new("RGB", (W, H), (242, 238, 224))
+    noise = Image.effect_noise((W, H), 12).filter(ImageFilter.GaussianBlur(.45))
     fibers = Image.new("L", (W, H), 0)
     d = ImageDraw.Draw(fibers)
-    for _ in range(150):
+    for _ in range(115):
         y = rng.randrange(H)
         d.line((0, y, W, y + rng.choice((-1, 0, 1))),
-               fill=rng.randrange(12, 34), width=rng.choice((1, 1, 2)))
-    for _ in range(70):
+               fill=rng.randrange(7, 18), width=1)
+    for _ in range(52):
         x = rng.randrange(W)
         d.line((x, 0, x + rng.choice((-1, 0, 1)), H),
-               fill=rng.randrange(8, 23))
-    texture = ImageChops.lighter(noise.point(lambda p: p // 7), fibers)
-    pale = Image.new("RGB", (W, H), (204, 186, 151))
+               fill=rng.randrange(5, 14))
+    texture = ImageChops.lighter(noise.point(lambda p: p // 10), fibers)
+    pale = Image.new("RGB", (W, H), (218, 210, 188))
     return Image.composite(pale, base, texture)
 
 
-def oil_layers(photo: Image.Image) -> tuple[Image.Image, Image.Image, Image.Image]:
-    """같은 구도의 밑칠·큰 붓질·세부 유화 세 단계를 만든다."""
-    def block(px: int) -> Image.Image:
-        sw = max(16, W // px)
-        sh = max(8, H // px)
-        return photo.resize((sw, sh), Image.Resampling.BILINEAR).resize(
-            (W, H), Image.Resampling.BICUBIC)
+def pen_layers(photo: Image.Image, sheet: Image.Image) -> tuple[Image.Image, Image.Image, Image.Image, Image.Image]:
+    """같은 구도의 연필 밑선·펜 윤곽·해칭·옅은 채색 네 단계를 만든다."""
+    gray = ImageOps.grayscale(photo).filter(ImageFilter.MedianFilter(3))
+    gray = ImageOps.autocontrast(gray, cutoff=1)
+    edges = gray.filter(ImageFilter.FIND_EDGES).filter(ImageFilter.GaussianBlur(.45))
+    edges = ImageOps.autocontrast(edges, cutoff=2)
+    pencil_mask = edges.point(lambda p: min(150, max(0, (p - 14) * 2)))
+    ink_mask = edges.point(lambda p: min(238, max(0, (p - 20) * 3)))
 
-    broad = ImageEnhance.Color(block(16)).enhance(1.12)
-    broad = ImageEnhance.Contrast(broad).enhance(.92)
-    middle = Image.blend(block(7), photo.filter(ImageFilter.MedianFilter(7)), .45)
-    middle = ImageEnhance.Color(middle).enhance(1.10)
-    fine = Image.blend(photo.filter(ImageFilter.MedianFilter(3)), middle, .34)
-    fine = ImageEnhance.Color(fine).enhance(1.08)
-    fine = ImageEnhance.Sharpness(fine).enhance(.72)
+    pencil = Image.composite(Image.new("RGB", (W, H), (105, 99, 86)), sheet, pencil_mask)
+    ink = Image.composite(Image.new("RGB", (W, H), (43, 44, 41)), pencil, ink_mask)
 
-    grain = Image.effect_noise((W, H), 24).filter(ImageFilter.GaussianBlur(.45))
-    hi = Image.new("RGB", (W, H), (246, 235, 207))
-    layers = []
-    for i, layer in enumerate((broad, middle, fine)):
-        k = (8, 6, 4)[i]
-        veil = grain.point(lambda p, strength=k: max(0, min(255, (p - 112) * strength)))
-        layers.append(Image.blend(layer, Image.composite(hi, layer, veil), .11))
-    return layers[0], layers[1], layers[2]
+    # 어두운 면에만 가는 사선과 교차선을 얹어 첨부 참고 이미지 같은 펜 음영을 만든다.
+    darkness = ImageOps.invert(gray).point(lambda p: min(255, max(0, (p - 42) * 2)))
+    hatch = Image.new("L", (W, H), 0)
+    hd = ImageDraw.Draw(hatch)
+    for x in range(-H, W + H, 9):
+        hd.line((x, H, x + H, 0), fill=128, width=1)
+    for x in range(-H, W + H, 17):
+        hd.line((x, 0, x + H, H), fill=76, width=1)
+    hatch = ImageChops.multiply(hatch, darkness)
+    hatched = Image.composite(Image.new("RGB", (W, H), (58, 57, 52)), ink, hatch)
+
+    muted = ImageEnhance.Color(photo).enhance(.38)
+    muted = ImageEnhance.Contrast(muted).enhance(.92)
+    wash = Image.blend(sheet, muted, .42)
+    wash = Image.composite(Image.new("RGB", (W, H), (55, 54, 49)), wash,
+                           ink_mask.point(lambda p: round(p * .72)))
+    return pencil, ink, hatched, wash
 
 
-def brush_schedule(seed: int) -> list[tuple[int, int, int, int, int]]:
-    """먼 하늘부터 땅과 중심 식물까지 차례로 채우는 굵은 붓질."""
+def pen_schedule(seed: int) -> list[tuple[int, int, int, int, int]]:
+    """먼 윤곽부터 땅과 중심 식물까지 차례로 드러내는 넓은 펜화 마스크."""
     rng = random.Random(seed)
     strokes: list[tuple[int, int, int, int, int]] = []
     bands = [
@@ -101,7 +122,7 @@ def brush_schedule(seed: int) -> list[tuple[int, int, int, int, int]]:
             length = rng.randrange(widths[0], widths[1] + 1)
             dy = rng.randrange(slope[0], slope[1] + 1)
             strokes.append((x, y, x + length, y + dy, rng.randrange(9, 22)))
-    # 주인공 식물은 마지막에 세로·사선의 짧은 붓으로 형태를 세운다.
+    # 주인공 식물은 마지막에 세로·사선의 짧은 선으로 형태를 세운다.
     for _ in range(46):
         x = rng.randrange(int(W * .17), int(W * .83))
         y = rng.randrange(int(H * .10), int(H * .94))
@@ -124,31 +145,31 @@ def add_strokes(mask: Image.Image, strokes: list[tuple[int, int, int, int, int]]
         d.ellipse((x1-r, y1-r, x1+r, y1+r), fill=ink)
 
 
-def painted_frames(photo: Image.Image, did: str) -> list[Image.Image]:
+def drawn_frames(photo: Image.Image, did: str) -> list[Image.Image]:
     seed = seed_for(did)
-    cloth = canvas(seed)
-    broad, middle, fine = oil_layers(photo)
-    strokes = brush_schedule(seed)
+    sheet = paper(seed)
+    pencil, ink, hatched, wash = pen_layers(photo, sheet)
+    strokes = pen_schedule(seed)
     mask = Image.new("L", (W, H), 0)
-    frames = [cloth]
+    frames = [sheet]
     cursor = 0
     for step in range(1, 11):
         stop = round(len(strokes) * step / 10)
         add_strokes(mask, strokes, cursor, stop, seed)
         cursor = stop
-        soft = mask.filter(ImageFilter.GaussianBlur(1.1))
+        soft = mask.filter(ImageFilter.GaussianBlur(.72))
         if step >= 8:
-            wash = Image.new("L", (W, H), round((step - 7) / 3 * 255))
-            soft = ImageChops.lighter(soft, wash)
+            full_mask = Image.new("L", (W, H), round((step - 7) / 3 * 255))
+            soft = ImageChops.lighter(soft, full_mask)
         if step <= 3:
-            paint = broad
+            drawing = pencil
         elif step <= 7:
-            paint = Image.blend(broad, middle, (step - 3) / 4)
+            drawing = Image.blend(pencil, ink, (step - 3) / 4)
         else:
-            paint = Image.blend(middle, fine, (step - 7) / 3)
-        frames.append(Image.composite(paint, cloth, soft))
-    frames.extend((Image.blend(middle, fine, .35),
-                   Image.blend(middle, fine, .68), fine))
+            drawing = Image.blend(ink, hatched, (step - 7) / 3)
+        frames.append(Image.composite(drawing, sheet, soft))
+    frames.extend((Image.blend(hatched, wash, .25),
+                   Image.blend(hatched, wash, .62), wash))
     return frames
 
 
@@ -176,10 +197,10 @@ def living_frame(photo: Image.Image, phase: float) -> Image.Image:
 
 def animation(src: Image.Image, did: str) -> tuple[list[Image.Image], list[int]]:
     photo = fit_source(src)
-    frames = painted_frames(photo, did)
-    oil = frames[-1]
+    frames = drawn_frames(photo, did)
+    drawing = frames[-1]
     for u in (.18, .42, .70, 1.0):
-        frames.append(Image.blend(oil, photo, u))
+        frames.append(Image.blend(drawing, photo, u))
     # 직전 장면이 이미 실사 원화이므로 0.0을 되풀이하지 않고 곧장 첫 숨결로 간다.
     for phase in (.08, .24, .40, .56, .72, 1.0):
         frames.append(living_frame(photo, phase))
