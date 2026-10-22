@@ -38,11 +38,10 @@ function ok(v, msg) { res.push([!!v, msg]); console.log((v ? '  ✓ ' : '  ✗ '
     out.s0 = R.mateSkill(a, 'survey');
     run(1094); out.s1094 = R.mateSkill(a, 'survey');
     run(1); out.s1095 = R.mateSkill(a, 'survey'); out.msg1 = msgs.map(x => x.text).join(' / ');
-    out.note = CB.growNote(a);
     out.h1095 = R.mateSkill(h, 'nav'); out.hNav = h.skg && h.skg.nav;   // 2 + 1 = 3
     run(3285 - 1095); out.s3285 = R.mateSkill(a, 'survey');
     out.hCap = R.mateSkill(h, 'nav');   // 3에서 멈춘다
-    run(9855 - 3285); out.s9855 = R.mateSkill(a, 'survey'); out.note3 = CB.growNote(a);
+    run(9855 - 3285); out.s9855 = R.mateSkill(a, 'survey');
     out.idle = idle.skd ? Object.keys(idle.skd).length : 0; out.cap = cap.skd ? Object.keys(cap.skd).length : 0;
     out.msgN = msgs.length;
     // 같은 특기를 키우는 다른 방(파수대)으로 옮겨도 이어진다
@@ -62,10 +61,8 @@ function ok(v, msg) { res.push([!!v, msg]); console.log((v ? '  ✓ ' : '  ✗ '
   ok(r.growChart === 'survey' && r.growHelm === 'nav' && !r.growHold && !r.growStore, '방마다 키우는 특기: 지도 제작실 측량 · 조타실 항해 · 창고 없음');
   ok(r.s0 === 0 && r.s1094 === 0 && r.s1095 === 1, '3년(1095일)째에 측량 0 → 1 (1094일 ' + r.s1094 + ')');
   ok(/지도 제작실에서 3년을 지내며 측량이 늘었다 \(측량 0 → 1\)/.test(r.msg1), '알림: ' + r.msg1);
-  ok(/측량 3년/.test(r.note) && /\+2까지 6년/.test(r.note), '진행 표시: ' + r.note);
   ok(r.s3285 === 2 && r.s9855 === 3, '9년 +2 · 27년 +3 (' + r.s3285 + ' · ' + r.s9855 + ')');
   ok(r.h1095 === 3 && r.hCap === 3, '조타실 항해사: 항해 2 → 3, 그 위로는 3에서 멈춘다');
-  ok(/다 컸다/.test(r.note3), '27년 뒤 표시: ' + r.note3);
   ok(r.idle === 0 && r.cap === 0, '방 없는 부하·다른 배 선장은 쌓이지 않는다');
   ok(r.msgN === 3 + 1, '알림은 단계가 오를 때만 (지도 제작실 3번 + 조타실 1번) — ' + r.msgN);
   ok(r.carry === 1, '지도 제작실 1001일 + 파수대 95일 = 3년 → 측량 1 (방을 옮겨도 이어진다)');

@@ -272,17 +272,6 @@
     });
     return out;
   };
-  /** 부하의 선실 성장 한 줄: 「측량 1년 2달 — +1까지 1년 10달」 (쌓인 것이 없으면 '') */
-  CB.growNote = function (m) {
-    if (!m || !m.skd) return '';
-    var g = growDays();
-    function ym(days) { var y = Math.floor(days / 365), mo = Math.floor((days % 365) / 30.4); return (y ? y + '년' : '') + (mo || !y ? (y ? ' ' : '') + mo + '달' : ''); }
-    return Object.keys(m.skd).filter(function (k) { return m.skd[k] > 0 && G.SKILL_BY_ID[k]; }).map(function (k) {
-      var dd = m.skd[k], lv = growLevel(dd), next = g[lv];
-      return G.SKILL_BY_ID[k].name + ' ' + ym(dd) + (lv ? ' (+' + lv + ')' : '') + (next ? ' — +' + (lv + 1) + '까지 ' + ym(next - dd) : ' — 다 컸다');
-    }).join(' · ');
-  };
-
   CB.daily = function () {
     var s = S(), out = []; if (!s || !s.mates || !s.player) return out;
     CB.rooms();

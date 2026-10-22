@@ -243,13 +243,6 @@
     try { if (S().player.portrait) return G.Art.portraitCanvas(S().player.portrait, size); } catch (e) { /* 얼굴 그림이 없으면 왕관 */ }
     return U.el('span', 'cb-ico', G.icon('crown'));
   }
-  /** 이 방에서 지내면 느는 특기 한 줄 (3년·9년·27년) */
-  function growLine(c) {
-    var sk = CB().growSkill && CB().growSkill(c.id), g = (G.BALANCE.cabins && G.BALANCE.cabins.growDays) || [1095, 3285, 9855];
-    if (!sk) return '';
-    var nm = G.SKILL_BY_ID[sk].name;
-    return '<br><span class="muted">이 방에서 지내면 ' + nm + U.jx(nm, '이/가') + ' 는다 — ' + g.map(function (d, i) { return Math.round(d / 365) + '년 +' + (i + 1); }).join(' · ') + '</span>';
-  }
   function roomTitle(c) { return c.name + ' — ' + c.desc + (c.fx ? '\n사람을 두면: ' + c.fx : ''); }
 
   /** 갑판 위의 고정 자리: 둥근 얼굴표 + 이름표 */
@@ -484,7 +477,7 @@
     var pw = role ? CB().power(type) : CB().powerAt(i);
     var pop = U.el('div', 'cb-pop');
     pop.innerHTML = '<div class="cb-pop-h">' + G.icon(c.icon) + '<b>' + (i ? i + '. ' : '') + c.name + '</b>' + powTag(pw) + '<button class="cb-pop-x" title="닫기 (Esc)">×</button></div>' +
-      '<div class="cb-pop-d">' + c.desc + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') + growLine(c) +
+      '<div class="cb-pop-d">' + c.desc + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') +
       (rec.some(function (x) { return x.score > 0; }) ? '' : '<br><span class="warn-text">이 방에 맞는 ' + (c.lang ? '말(제독이 모르는 말)' : '특기') + '을 가진 부하가 없습니다.</span>') + '</div>' +
       '<div class="cb-pop-list"></div><div class="cb-pop-f"></div>';
     var list = pop.querySelector('.cb-pop-list');
@@ -517,8 +510,7 @@
     ent.sort(function (a, b) { return (b.score - a.score) || (a.k - b.k); });
     var pop = U.el('div', 'cb-pop cb-pop-mate');
     pop.innerHTML = '<div class="cb-pop-h"><span class="cb-face big"></span><span class="cb-nm"><b class="n1">' + U.esc(d.name) + '</b><small>' + U.esc(CB().placeName(m)) + '</small></span><button class="cb-pop-x" title="닫기 (Esc)">×</button></div>' +
-      '<div class="cb-pop-d"><b>특기</b> ' + U.esc(skillsOf(m)) + '<br><b>능력</b> ' + statsOf(m) + ' · ' + loyalTag(m) +
-        (CB().growNote && CB().growNote(m) ? '<br><b>선실 성장</b> ' + U.esc(CB().growNote(m)) : '') + '</div>' +
+      '<div class="cb-pop-d"><b>특기</b> ' + U.esc(skillsOf(m)) + '<br><b>능력</b> ' + statsOf(m) + ' · ' + loyalTag(m) + '</div>' +
       '<div class="cb-pop-list"></div><div class="cb-pop-f"></div>';
     pop.querySelector('.cb-face').appendChild(face(m.id, 44));
     var list = pop.querySelector('.cb-pop-list');
@@ -526,7 +518,7 @@
       var here = e.o === m, best = fitTag(m, e.c);
       var row = U.el('div', 'cb-pop-row room' + (best ? ' best' : '') + (here ? ' cur' : ''),
         G.icon(e.c.icon) + '<span class="cb-nm"><span class="n1">' + (e.i ? e.i + '. ' : '') + e.c.name + best + (here ? ' <span class="tag">지금 이 자리</span>' : '') + '</span>' +
-        '<small class="cb-fit">' + fitNote(m, e.c) + (CB().growSkill && CB().growSkill(e.type) ? ' · 지내면 ' + G.SKILL_BY_ID[CB().growSkill(e.type)].name + U.jx(G.SKILL_BY_ID[CB().growSkill(e.type)].name, '이/가') + ' 는다' : '') + '</small></span>' +
+        '<small class="cb-fit">' + fitNote(m, e.c) + '</small></span>' +
         '<span class="cb-occ">' + (e.o && !here ? '<span class="cb-face"></span>' + U.esc(G.MATE[e.o.id].name) + (e.i == null ? '와 교대' : ' 대신') : e.o ? '' : '비어 있음') + '</span>');
       if (e.o && !here) row.querySelector('.cb-occ .cb-face').appendChild(face(e.o.id, 24));
       if (!here) row.onclick = function () { win.close({ k: 'set', type: e.type, i: e.i, id: m.id }); };
