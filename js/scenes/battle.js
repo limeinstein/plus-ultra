@@ -498,7 +498,7 @@
   /** 연기가 바람에 밀려가는 방향 (px/초, 화면 좌표) */
   function windDrift() { return [Math.cos(st.wind.dir) * (8 + 18 * st.wind.spd), -Math.sin(st.wind.dir) * (8 + 18 * st.wind.spd)]; }
   B.runtime = function () { return st; };
-  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen, geoAt: geoAt, terrainBlocked: terrainBlocked, terrainInfo: terrainInfo, resolveTerrain: resolveTerrain, geoScale: GEO_SCALE, arena: ARENA, navPath: navPath, lineClear: lineClear, shorePad: shorePad }; };   // 시험용
+  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen, geoAt: geoAt, terrainBlocked: terrainBlocked, terrainInfo: terrainInfo, resolveTerrain: resolveTerrain, geoScale: GEO_SCALE, arena: ARENA, navPath: navPath, lineClear: lineClear, shorePad: shorePad, inArena: inArena }; };   // 시험용
   B.feel = function () { return st ? { shake: st.shake || 0, flash: st.flash ? st.flash.a : 0, hitstop: st.hitstop || 0 } : null; };
 
   // ---------------------------------------------------------------- 함대 명령 (기함을 뺀 배들 — 전체 또는 고른 한 척)
@@ -867,6 +867,11 @@
   /** 이름난 해적의 전술 — true면 이번 생각은 끝
       swarm(아랍 해적): 부하 배는 갈고리를 걸고 뛰어든다 · 기함은 뒤에서 포를 쏘다가 부하가 다 없어지면 돌진
       crane(서양 사략 해적): 부하 배는 우리 기함을 학익진으로 감싸 포격만 · 기함은 사정거리 끝에서 쏜다 */
+  /** 물러나는 목표점을 전장 원 ×0.75 안으로 자른다 — 이름난 해적 기함이 뒤로 물러나다 전장 밖으로 달아나 싸움이 끝나던 것 (QA 2026-10-23) */
+  function inArena(p) {
+    var r = Math.hypot(p[0], p[1]), lim = ARENA * 0.75;
+    return r > lim ? [p[0] / r * lim, p[1] / r * lim] : p;
+  }
   function enemyTactic(b, foes, near, mfl) {
     var tac = st.npc.tactic, T = mfl && mfl.alive ? mfl : near, ef = st.enFlag;
     var mates = st.ships.filter(function (o) { return o.side === 'en' && o.alive && !o.flag; });
@@ -882,7 +887,7 @@
         // 기함: 부하들 뒤, 사정거리 끝에서 포를 쏜다 — 가까이 오면 물러난다
         var keep = gunRange(b) * 0.55, cl = null, cd = keep;
         foes.forEach(function (f) { var d = Math.hypot(f.x - b.x, f.y - b.y); if (d < cd) { cd = d; cl = f; } });
-        if (cl) { var dx = b.x - cl.x, dy = b.y - cl.y, dl = Math.hypot(dx, dy) || 1; b.moveTo = [b.x + dx / dl * 240, b.y + dy / dl * 240]; b.target = cl; }
+        if (cl) { var dx = b.x - cl.x, dy = b.y - cl.y, dl = Math.hypot(dx, dy) || 1; b.moveTo = inArena([b.x + dx / dl * 240, b.y + dy / dl * 240]); b.target = cl; }
         else { b.target = T; b.moveTo = null; b.close = 1.0; }
         return true;
       }
@@ -895,7 +900,7 @@
       if (b.flag || !ef || !ef.alive) {
         var keep2 = gunRange(b) * 0.5, cl2 = null, cd2 = keep2;
         foes.forEach(function (f) { var d = Math.hypot(f.x - b.x, f.y - b.y); if (d < cd2) { cd2 = d; cl2 = f; } });
-        if (cl2) { var ex = b.x - cl2.x, ey = b.y - cl2.y, el2 = Math.hypot(ex, ey) || 1; b.moveTo = [b.x + ex / el2 * 240, b.y + ey / el2 * 240]; b.target = cl2; }
+        if (cl2) { var ex = b.x - cl2.x, ey = b.y - cl2.y, el2 = Math.hypot(ex, ey) || 1; b.moveTo = inArena([b.x + ex / el2 * 240, b.y + ey / el2 * 240]); b.target = cl2; }
         else { b.target = T; b.moveTo = null; b.close = 1.05; }
         return true;
       }
@@ -1294,7 +1299,7 @@
       });
       s.player.gold += gold;
       var fame = st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateFameGain) || 25) * Math.max(1, st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length) : 10;   // 달아난 배는 치지 않는다
-      fame = G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !(G.Court && G.Court.lawful(st.npc))) s.player.notoriety += 5;
+      fame = G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !st.npc.great && !(G.Court && G.Court.lawful(st.npc))) s.player.notoriety += 5;   // 큰 해전(무적함대·레판토·제노바·아즈텍 호수)은 나라 편에 선 싸움 — 악명을 붙이지 않는다 (QA 2026-10-23)
       s.stats.sunk += st.ships.filter(function (b) { return b.side === 'en' && b.sunk; }).length;
       // 조합의 해적 퇴치 의뢰
       if (st.npc.kind === 'pirate' && G.Quest) {

@@ -187,11 +187,19 @@
     if (pool.length < 2) pool = pool.concat(can.filter(function (d) { return (d.tier || 1) === top - 1; }));
     if (!pool.length) pool = all.slice().sort(function (a, b) { return (a.tier || 1) - (b.tier || 1); }).slice(0, 1);
     if (!pool.length) return null;
+    // 차릴 음식이 하나뿐이면 차림이 바뀌지 않아 향신료가 줄지 않은 채 풍미가 이어지던 것 — 그 음식권의 다음 음식과 번갈아 차린다 (QA 2026-10-23)
+    //   (등급 제한 밖에서 빌려 온 음식은 효과를 원래 차림의 등급까지만 친다)
+    var poolTop = 0, borrowed = null;
+    pool.forEach(function (d) { poolTop = Math.max(poolTop, d.tier || 1); });
+    if (pool.length < 2) {
+      var rest = all.filter(function (d) { return pool.indexOf(d) < 0; }).sort(function (a, b) { return (a.tier || 1) - (b.tier || 1); });
+      if (rest.length) { borrowed = rest[0]; pool = pool.concat([borrowed]); }
+    }
     var s = S(), wk = Math.floor((s.day || 0) / 7), dish = pool[Math.abs(wk + U.strHash(ck.m.id)) % pool.length];
     var K = B().galleyMeal || {}, rooms = CB.rooms(), mess = rooms.indexOf('mess') >= 0;
     var mult = 1 + (mess ? (K.messHas == null ? 0.3 : K.messHas) : 0) + CB.power('mess') * (K.messPow == null ? 0.1 : K.messPow);
     var homeC = s.player && G.CITY_DATA[s.player.home], home = !!(homeC && G.CUISINE.zone && G.CUISINE.zone(homeC) === zone);
-    var tier = dish.tier || 1, eff = CB.eff(ck.m) * (1 + Math.max(0, lv - 1) * (K.skill == null ? 0.1 : K.skill));   // 충성 효율 × 솜씨
+    var tier = dish === borrowed ? Math.min(dish.tier || 1, poolTop) : (dish.tier || 1), eff = CB.eff(ck.m) * (1 + Math.max(0, lv - 1) * (K.skill == null ? 0.1 : K.skill));   // 충성 효율 × 솜씨
     // 풍미: 짐칸의 향신료·식자재 (가장 많이 실은 것을 쓴다)
     var cargo = (s.fleet && s.fleet.cargo) || {}, spice = null, food = null;
     Object.keys(cargo).forEach(function (id) { var g = G.GOOD[id], q = cargo[id] && cargo[id].q; if (!g || !(q > 0)) return;

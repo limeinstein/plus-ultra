@@ -158,6 +158,17 @@
     if (!LG.isFrance(c) || row('d_artagnan') || gone('d_artagnan') || D.done || cu.lgDart || cu.lgBuys < (K().dartBuys || 3)) return;
     cu.lgDart = 1;
     var s = S(), loan = K().dartLoan || 2000;
+    // 이미 돈을 빌려준 뒤 합류를 거절했으면 다음 만남에서 또 빌려 가던 것 — 이번에는 빌리지 않고 합류만 청한다 (QA 2026-10-23)
+    if (D.lent) {
+      await UI.say('물건을 사 들고 돌아서는데, 낯익은 노란 늙은 말이 앞을 가로막는다. 고삐를 쥔 사람은 그 가스코뉴 젊은이다.', {});
+      await say('d_artagnan', '나리! 또 뵙는군요. 그때 빌려주신 금화 ' + U.num(D.lent) + '닢, 아직 갚지 못해 밤마다 얼굴이 화끈거립니다.\f돈으로는 아직 못 갚아도 이 칼로는 갚을 수 있습니다. 이번에는 꼭 나리의 배에 태워 주십시오!');
+      if (await offer(['d_artagnan'], c, '달타냥이 다시 부하가 되기를 청한다.')) {
+        D.done = 1;
+        st().musk.seen.push(c.id);
+        await say('d_artagnan', '모두는 하나를 위하여, 하나는 모두를 위하여! ……아, 이건 제 친구들의 말인데, 언젠가 그 친구들도 소개해 드리지요.');
+      } else await say('d_artagnan', '이번에도 자리가 없군요. 그래도 빚은 잊지 않았습니다 — 또 뵙지요!');
+      return;
+    }
     await UI.say('물건을 세 번째 사 들고 돌아서는데, 노란 늙은 말의 고삐를 쥔 젊은이가 앞을 가로막는다.', {});
     await say('d_artagnan', '실례합니다, 나리! 그렇게 시원시원하게 물건을 사시는 걸 보니 마음이 넓은 분이 틀림없군요. 가스코뉴의 달타냥이라 합니다.');
     await say('d_artagnan', '파리에 올라와 총사대에 들어가려는데, 칼과 망토와 말을 새로 사야 해서요……. 아버지가 주신 돈은 길에서 다 떨어졌습니다.\f금화 ' + U.num(loan) + '닢만 빌려주실 수 있겠습니까? 가스코뉴 사람의 명예를 걸고 꼭 갚겠습니다!');

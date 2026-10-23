@@ -118,6 +118,8 @@
     var stance = null, myNext = 'auto', enIntent = null, intentSeen = false, round = 0, over = false, busy = false, paused = false, fast = false;
     var flags = { first: false, feintMe: false, feintEn: false, bluffEn: 0, lureEn: false };
     var fx = [], shakeT = 0, screenFlash = 0, screenFlashRgb = '255,244,220', logs = [], swapped = false;
+    // 끝나면 시작할 때의 곡으로 돌린다 — 바다·해전이 아니면 늘 거리 곡('town')이라 뭍·무덤 등에서 맞지 않던 것 (QA 2026-10-23)
+    var musicBack = G.Audio ? G.Audio.want : null;
     if (G.Audio) G.Audio.music('duel');   // 일기토 곡 (없으면 해전 곡의 코드 음악)
 
     return new Promise(function (resolve) {
@@ -614,7 +616,7 @@
         say(res === 'win' ? '<span class="good-text">' + ({ ko: U.esc(en.name) + U.jx(en.name, '이/가') + ' 쓰러졌다!', capture: U.esc(en.name) + U.jx(en.name, '을/를') + ' 사로잡았다!', persuade: U.esc(en.name) + U.jx(en.name, '이/가') + ' 칼을 거두었다!', rout: U.esc(en.name) + U.jx(en.name, '이/가') + ' 달아났다!' }[how]) + '</span>'
           : res === 'lose' ? '<span class="warn-text">' + (me.m ? U.esc(me.name) + U.jx(me.name, '이/가') : '제독이') + ' 쓰러지고 말았다...</span>' : '싸움을 피해 물러섰다.');
         el.querySelector('.rd-ctrl').classList.add('done');
-        setTimeout(function () { live = false; win.close(res); if (G.Audio) G.Audio.music(G.Game.sceneName === 'sea' || G.Game.sceneName === 'battle' ? 'sea' : 'town'); resolve(res); }, opt.fastEnd ? 60 : 1900);
+        setTimeout(function () { live = false; win.close(res); if (G.Audio) G.Audio.music(musicBack && musicBack !== 'duel' ? musicBack : G.Game.sceneName === 'sea' || G.Game.sceneName === 'battle' ? 'sea' : 'town'); resolve(res); }, opt.fastEnd ? 60 : 1900);
       }
 
       // ------------------------------------------------ 조작

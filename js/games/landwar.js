@@ -105,6 +105,8 @@
       SPR.preload(need);
       if (LA.cav[mi.name]) SPR.partyReady(LA.cav[mi.name]);   // 기병 그림(말 탄 탐험대)도 미리
     }
+    // 끝나면 시작할 때의 곡(장면·건물)으로 돌린다 — 늘 뭍 곡('land')으로 바꿔 도시·바다에서 맞지 않던 것 (QA 2026-10-23)
+    var musicBack = G.Audio ? { want: G.Audio.want, place: G.Audio.place } : null;
     if (G.Audio) G.Audio.music('landwar');   // 육상 전투 곡
 
     return new Promise(function (resolve) {
@@ -532,7 +534,7 @@
         else say((res === 'win' ? (lead.n <= 0 ? '<b>' + lead.name + U.jx(lead.name, '이/가') + ' 쓰러지자 남은 적이 흩어져 달아났다!</b>' : held ? '<b>끝까지 버텨 적을 뿌리치고 빠져나왔다!</b>' : '<b>적을 모두 물리쳤다!</b>') : res === 'lose' ? (adm.n <= 0 ? '<b class="warn-text">제독대가 무너졌다...</b>' : '<b class="warn-text">탐험대가 무너졌다...</b>') : '싸움을 피했다.') +
           (dead ? ' 쓰러진 대원 ' + dead + '명 가운데 ' + back + '명이 치료받고 일어섰다.' : ''));
         var ok = U.el('button', 'btn navy', '확인'); btns.appendChild(ok);
-        var done = function () { live = false; win.close(res); if (G.Audio) G.Audio.music('land'); resolve({ res: res, dead: dead - back, back: back, left: left + back, leaderDown: lead.n <= 0, held: !!held }); };
+        var done = function () { live = false; win.close(res); if (G.Audio) { if (musicBack && musicBack.want && musicBack.want !== 'landwar') { if (G.Audio.setPlace) G.Audio.setPlace(musicBack.place, true); G.Audio.music(musicBack.want); } else G.Audio.music('land'); } resolve({ res: res, dead: dead - back, back: back, left: left + back, leaderDown: lead.n <= 0, held: !!held }); };
         ok.onclick = done;
         if (opt.fastEnd) setTimeout(done, 50);
       }

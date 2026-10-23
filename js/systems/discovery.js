@@ -147,13 +147,16 @@
   };
   var FEAR_IDS = { bermuda: 1, f_giantsquid: 1, tarantula: 1, roc: 1, minotaur: 1, cannibal: 1, crystalskull: 1, antarctic: 1 };
   function strainCfg() { return (G.BALANCE && G.BALANCE.discoveryStrain) || { recover: 10, findK: 0.35 }; }
-  /** 발견의 여파로 0에 닿은 수치만 기억한다. 그 수치가 10 이상이 되면 다시 평소 발견 반경으로 돌아간다. */
+  /** 발견의 여파로 규율이 0에, 피로가 100에 닿은 것만 기억한다. 규율이 10 이상, 피로가 90 이하로 돌아오면 다시 평소 발견 반경으로 돌아간다. */
   D.strainState = function (quiet) {
     var s = S(), q = s.flags && s.flags.discoveryStrain;
     if (!q) return null;
     var f = s.fleet, need = strainCfg().recover || 10;
+    // 옛 저장은 피로 0(푹 쉰 상태)을 난조로 적었다 — 피로가 극에 달한 게 아니면 조용히 풀어 준다 (QA 2026-10-23)
+    if (q.v !== 2) { if (q.fatigue && (f.fatigue || 0) < 100) q.fatigue = false; q.v = 2; if (!q.discipline && !q.fatigue) { delete s.flags.discoveryStrain; return null; } }
     if (q.discipline && f.discipline >= need) q.discipline = false;
-    if (q.fatigue && f.fatigue >= need) q.fatigue = false;
+    // 피로는 클수록 나쁘다 — 100에 닿았던 피로가 100−recover 이하로 내려오면 풀린다 (QA 2026-10-23)
+    if (q.fatigue && (f.fatigue || 0) <= 100 - need) q.fatigue = false;
     if (!q.discipline && !q.fatigue) {
       delete s.flags.discoveryStrain;
       if (!quiet) UI.toast('탐험대가 마음을 추슬렀다 — 발견물을 다시 평소처럼 찾을 수 있다.', 'compass', 4200);
@@ -199,12 +202,14 @@
       key: key, name: meta.name, icon: meta.icon, line: meta.line,
       fatigue: Math.round(f.fatigue - before.fatigue), discipline: Math.round(f.discipline - before.discipline)
     };
-    // 여관·휴식으로 이미 0이던 것은 제외하고, 이번 발견의 여파가 실제로 0을 만든 경우만 잠근다.
+    // 이미 규율 0·피로 100이던 것은 제외하고, 이번 발견의 여파가 실제로 그 끝에 닿게 한 경우만 잠근다.
+    // 피로는 클수록 나쁜 값이라 0(푹 쉰 상태)이 아니라 100에 닿을 때 난조가 된다 (QA 2026-10-23)
     var zeroDiscipline = before.discipline > 0 && f.discipline <= 0;
-    var zeroFatigue = before.fatigue > 0 && f.fatigue <= 0;
+    var zeroFatigue = before.fatigue < 100 && f.fatigue >= 100;
     if (zeroDiscipline || zeroFatigue) {
       var flags = s.flags || (s.flags = {});
-      var strain = flags.discoveryStrain || (flags.discoveryStrain = { discipline: false, fatigue: false, d: U.dateNum(s.date) });
+      var strain = flags.discoveryStrain || (flags.discoveryStrain = { discipline: false, fatigue: false, d: U.dateNum(s.date), v: 2 });
+      strain.v = 2;
       strain.discipline = strain.discipline || zeroDiscipline;
       strain.fatigue = strain.fatigue || zeroFatigue;
       st.impact.strain = { discipline: zeroDiscipline, fatigue: zeroFatigue };
@@ -261,9 +266,10 @@
     if (mir && !inTown && G.Mirage && G.Mirage.vanish) await G.Mirage.vanish(d);
     UI.toast('발견의 여파 · ' + impact.name + ' — 피로 ' + (impact.fatigue > 0 ? '+' : '') + impact.fatigue + ' · 규율 ' + (impact.discipline > 0 ? '+' : '') + impact.discipline, impact.icon, 5200);
     if (impact.strain) {
-      var low = []; if (impact.strain.discipline) low.push('규율'); if (impact.strain.fatigue) low.push('피로');
-      var sc = strainCfg();
-      UI.toast(low.join('·') + '가 0에 닿았다 — ' + (sc.recover || 10) + ' 이상으로 돌아올 때까지 발견물을 찾기 어렵다.', 'compass', 6200);
+      var sc = strainCfg(), rc = sc.recover || 10, low = [];
+      if (impact.strain.discipline) low.push('규율이 바닥났다 (' + rc + ' 이상으로 돌아올 때까지)');
+      if (impact.strain.fatigue) low.push('피로가 극에 달했다 (' + (100 - rc) + ' 이하로 내려올 때까지)');   // 피로 100이 난조 (QA 2026-10-23)
+      UI.toast(low.join(' · ') + ' — 그동안 발견물을 찾기 어렵다.', 'compass', 6200);
     }
     if (loot > 0) UI.toast('값나가는 것을 챙겼다 — 금화 ' + U.num(loot) + '닢', 'coin', 4200);
     for (var wi = 0; wi < wait.length; wi++) await D.takeRelic(d, wait[wi]);

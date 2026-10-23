@@ -8,7 +8,8 @@
    · 아이가 없는 동안: 견습 목록(G.Family.aboard)에서 빠지고, 배우거나 사이가 변하지 않으며, 뒤를 이을 수 없다(G.Family.heirs). 자택에서는 아내가 걱정한다.
      섬을 떠나도 아이는 그 섬에 남는다 — 다시 상륙하면 부관이 귀띔한다. 에든버러 술집 주인이 옛말로 한 번 귀띔한다.
    · 장면 그림 (없으면 건너뜀): images/legend-events/peter_pan_vanish.webp · peter_pan_return.webp — 프롬프트 images/legend-events/PETER_PAN_PROMPT.md
-   · 저장: s.peter = { phase: 'lost'|'done', kid: p.kids 번호, isle: ISLES 열쇠, since: 날번호, back: 날번호 } · 아이에게 k.lost = 'peter' */
+   · 저장: s.peter = { phase: 'lost'|'done', kid: p.kids 번호(옛 저장), kidKey: 아이 열쇠(이름:생일), isle: ISLES 열쇠, since: 날번호, back: 날번호 } · 아이에게 k.lost = 'peter'
+   · 대가 바뀌면(js/systems/siblings.js SB.fromRetire) 섬에 남은 아이는 돌아오지 못한다 — s.peter 를 비우고 일지에 남긴다 (PP.closeLost). */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -59,10 +60,25 @@
     var p = st();
     return !p.phase && !row() && !s.flags['gone_' + ID];
   };
-  /** 섬에 남은 아이 (없으면 null) */
+  function kidKey(k) { return k ? k.name + ':' + (k.born ? k.born.y + '-' + k.born.m + '-' + k.born.d : '') : ''; }
+  PP.kidKey = kidKey;
+  /** 섬에 남은 아이 (없으면 null)
+      번호(p.kid)만 보면 대가 바뀐 뒤 새 대의 같은 번호 아이를 「되찾던」 것 — 아이 열쇠로, 그리고 k.lost 가 붙은 아이만 (QA 2026-10-23) */
   PP.lostKid = function () {
     var s = S(), p = st(); if (p.phase !== 'lost') return null;
-    return (s.player.kids || [])[p.kid] || null;
+    var kids = (s.player.kids || []).filter(function (k) { return k && k.lost === 'peter'; });
+    var k = p.kidKey ? kids.filter(function (x) { return kidKey(x) === p.kidKey; })[0] : null;
+    if (!k && !p.kidKey) { var byNo = (s.player.kids || [])[p.kid]; k = byNo && byNo.lost === 'peter' ? byNo : kids[0]; }   // 옛 저장 (번호만 있다)
+    if (!k) { PP.closeLost(); return null; }   // 옛 저장: 이 대에는 잃은 아이가 없다 — 이야기를 닫는다
+    if (!p.kidKey) p.kidKey = kidKey(k);
+    return k;
+  };
+  /** 섬에 남은 아이가 끝내 돌아오지 못했다 — 피터 이야기를 처음으로 되돌린다 (피터는 아직 섬에 있다) */
+  PP.closeLost = function (k) {
+    var s = S(); if (!s || !s.peter || s.peter.phase !== 'lost') return;
+    var isle = ISLES[s.peter.isle];
+    G.State.log((k ? k.name + U.jx(k.name, '은/는') + ' ' : '') + (isle ? isle.name : '스코틀랜드의 섬') + '에서 사라진 아이는 끝내 돌아오지 않았다.');
+    s.peter = {};
   };
 
   // ---------------------------------------------------------------- ① 상륙: 아이가 사라진다
@@ -92,7 +108,7 @@
       pc = pic('peter_pan_vanish', '비어 있는 잠자리');
       await narrate('그날 밤 늦게, 모닥불 곁을 살펴보니 ' + k.name + '의 잠자리가 비어 있다. 담요 위에 숯으로 꾹꾹 눌러 쓴 쪽지 한 장 — 「피터를 찾으러 가요. 금방 올게요.」 벗어 개켜 둔 겉옷에서 아까 그 약초 향이 아직 난다.');
       k.lost = 'peter';
-      p.phase = 'lost'; p.kid = s.player.kids.indexOf(k); p.isle = isle; p.since = s.day;
+      p.phase = 'lost'; p.kid = s.player.kids.indexOf(k); p.kidKey = kidKey(k); p.isle = isle; p.since = s.day;
       G.State.log(nm + '에서 ' + sonDau(k) + ' ' + k.name + U.jx(k.name, '이/가') + ' 사라졌다.');
       await UI.say('제독, 이 향은… 이 섬 산비탈 바위틈에만 나는 약초입니다. 아이가 그 약초밭 근처에 있었다는 뜻이지요.\f이 섬 어딘가에 야영지를 차리고 약초를 캐 보십시오. 같은 약초를 쫓다 보면 ' + k.name + U.jx(k.name, '이/가') + ' 지나간 자리에 닿을 겁니다.', first());
       UI.toast(k.name + U.jx(k.name, '이/가') + ' 섬 어딘가로 사라졌다 — 이 섬에서 야영하며 약초를 캐 보자', 'heart', 6000);

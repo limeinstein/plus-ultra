@@ -65,14 +65,18 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.city1505.indexOf('notredame') < 0 && r.buildings.indexOf('notredame') >= 0, '노트르담: 들어가는 것만으로는 안 찾고 눌러서');
     ok(r.menuHas.length === r.hereB.length, '이 도시 메뉴에 건물 발견물 ' + r.hereB.length + '곳 (' + r.hereB.join('·') + ')');
     // 파리: 메뉴의 「노트르담 대성당」을 누르면 그 자리에서 발견 (발견 연출은 건너뛴다)
-    const clear = async () => { for (let i = 0; i < 15; i++) { if (!(await page.evaluate(() => G.UI.busy()))) return; await page.keyboard.press('Enter'); await page.waitForTimeout(450); } };
+    // 새 게임 첫머리 이야기(리스본 아침)가 늦게 뜰 수 있어, 두 번 연달아 비어 있을 때까지 넘긴다
+    const clear = async () => { let idle = 0; for (let i = 0; i < 40 && idle < 2; i++) { if (!(await page.evaluate(() => G.UI.busy()))) { idle++; await page.waitForTimeout(600); continue; } idle = 0; await page.keyboard.press('Enter'); await page.waitForTimeout(450); } };
     await clear();
     await page.evaluate(() => { const s = G.Game.state, p = G.CITY_DATA.filter(c => c.name === '파리')[0]; s.date = { y: 1500, m: 6, d: 1 }; s.loc.city = p.id; G.Scenes.city.main(); });
     await page.waitForTimeout(1200); await clear();
     await page.evaluate(() => G.Scenes.city.main()); await page.waitForTimeout(600); await clear();
+    await page.evaluate(() => { if (!G.Scenes.city.current()) G.Scenes.city.main(); }); await page.waitForTimeout(400);
     const clicked = await page.evaluate(async () => {
       const found = [], orig = G.Disc.find; G.Disc.find = async (d, how) => { found.push(d.id + ':' + how); };
-      const el = Array.from(document.querySelectorAll('.cmdmenu .items > *')).find(e => e.textContent.indexOf('노트르담') >= 0);
+      // 찾기 전 메뉴에는 단서 이름(「센 강 섬의 성모 성당」)으로 나온다 — d.name이 지금 보이는 이름 (js/data/cluenames.js)
+      const nd = G.DISC.notredame.name;
+      const el = Array.from(document.querySelectorAll('.cmdmenu .items > *')).find(e => e.textContent.indexOf(nd) >= 0 || e.textContent.indexOf('노트르담') >= 0);
       if (el) el.click(); await new Promise(r => setTimeout(r, 2500)); G.Disc.find = orig; return { el: !!el, found };
     });
     ok(clicked.el && clicked.found.indexOf('notredame:city') >= 0, '파리 메뉴 「노트르담 대성당」을 누르면 발견');

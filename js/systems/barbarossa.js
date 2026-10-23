@@ -46,6 +46,11 @@
     if (!b.ok && t <= 15421231 && qualified()) b.ok = 1;                    // 1542년이 끝날 때까지 조건을 갖췄다
     if (b.stage === 'call' && t >= K.genoaFrom && !b.toldGenoa) { b.toldGenoa = 1; out.push({ icon: 'cannon', history: true, text: '【바르바로사】 하이레딘 파샤가 툴롱을 떠나 티레니아해를 휩쓸고 있다. 에스파냐·나폴리 함대가 깨지고 이탈리아 해안의 마을들이 불탔다 — 그의 함대가 제노바로 향한다는 소문이다. (7월까지 제노바로)' }); }
     if (b.stage === 'call' && t > K.genoaTo) { b.stage = 'missed'; out.push({ icon: 'scroll', text: '제노바의 일은 제독 없이 끝났다. 안드레아 도리아가 3,500두카트를 받고 투르구트 레이스를 풀어 주었고, 하이레딘의 함대는 제노바를 치지 않고 떠났다고 한다.' }); }
+    // 제노바의 일 도중(해전 중 끊김 등) 멈춰 'genoa'에 머물던 것 — 기한이 지나면 매듭짓는다 (크레피 화약 소식이 오도록) (QA 2026-10-23)
+    if (b.stage === 'genoa' && t > K.genoaTo) {
+      b.stage = 'done'; if (!b.genoa || b.genoa === 'fight') b.genoa = 'watch';
+      out.push({ icon: 'scroll', text: '제노바의 일은 끝났다. 안드레아 도리아가 3,500두카트를 받고 투르구트 레이스를 풀어 주었고, 하이레딘의 함대는 제노바를 치지 않고 떠났다고 한다.' });
+    }
     if (t >= 15440918 && !b.toldTruce && (b.stage === 'done' || b.stage === 'missed')) { b.toldTruce = 1; out.push({ icon: 'handshake', history: true, text: '【크레피 화약】 황제와 프랑스 왕이 화약을 맺었다. 하이레딘 파샤는 오스만 함대를 이끌고 툴롱을 떠나 코스탄티니예로 돌아갔다. 툴롱 사람들이 집으로 돌아온다.' }); }
     if (t >= 15460704 && !b.toldDeath && (b.met || b.stage === 'done')) { b.toldDeath = 1; out.push({ icon: 'scroll', history: true, text: '【하이레딘 파샤의 죽음】 「붉은 수염」 하이레딘 파샤가 코스탄티니예의 저택에서 세상을 떠났다. 술탄의 건축가 미마르 시난이 베식타시 바닷가에 그의 무덤을 짓는다고 한다.' }); }
     return out;
@@ -69,6 +74,7 @@
     G.State.log('카를 5세의 청으로 하이레딘 바르바로사에 맞서기로 했다 — 툴롱 앞바다를 살피고, 1544년 봄 제노바에서 안드레아 도리아를 돕는다.');
     UI.toast('툴롱 앞바다 (1543년 9월~1544년 5월) · 제노바 (1544년 4월~7월)', 'cannon', 6500);
   }
+  BB.call = charlesCall;   // 왕궁(js/city/palace.js)이 왕녀·개척 이야기보다 먼저 부른다 — 인사말만 생략되고 부름이 건너뛰어지던 것 (QA 2026-10-23)
   function hookCourt() {
     var CT = G.Court; if (!CT || CT._barb) return; CT._barb = true;
     var onEnter = CT.onEnter;
@@ -162,6 +168,7 @@
     boss: { hist: 'hayreddin', str: 70, mar: 86, int: 80, cha: 78, line: '이 붉은 수염이 아직 칼을 놓지 않았다는 걸 보여 주마!' },
     win: { fame: 700, gold: 12000, so: 150, text: '제노바 앞바다에서 하이레딘 파샤의 함대를 물리쳤다! 늙은 대제독은 배를 돌렸고, 투르구트 레이스는 도리아의 갤리선에 남았다.' },
     lose: '제노바 앞바다에서 물러났다. 하이레딘은 끝내 3,500두카트에 투르구트를 데려갔다.',
+    backCity: GENOA,   // 제노바에서 나선 싸움 — 끝나면 바다가 아니라 제노바로 돌아간다 (아즈텍 호수 싸움과 같게) (QA 2026-10-23)
     decline: '…그대가 물러난다면 나도 무리하지 않겠소. 결국 돈으로 매듭지어야겠군.',
     onWin: function () { var b = st(); b.genoa = 'won'; b.stage = 'done'; trustUp(15); if (G.SPONSOR.it_doria) G.Sponsor.addTrust(G.Sponsor.rel('it_doria'), 20); },
     onLose: function () { var b = st(); b.genoa = 'lost'; b.stage = 'done'; }

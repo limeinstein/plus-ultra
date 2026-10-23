@@ -18,6 +18,10 @@
   function S() { return G.Game && G.Game.state; }
   function T() { var s = S(); return s && s.story ? s.story : null; }
   function C() { return G.Scenes.city; }
+  // 날짜 간격을 dateNum(y*10000+m*100+d) 뺄셈으로 재면 달·해가 바뀔 때 날 수가 엉뚱했다 — 저장값(dateNum)을 실제 날 번호로 바꿔 뺀다 (QA 2026-10-23)
+  function dnDay(n) { n = +n || 0; return U.dayIndex({ y: Math.floor(n / 10000), m: Math.floor(n / 100) % 100 || 1, d: n % 100 || 1 }); }
+  function daysSince(n) { return U.dayIndex(S().date) - dnDay(n); }
+  ST._dnDay = dnDay;   // 시험용
   function inCity() { var s = S(); return G.Game.sceneName === 'city' && s && s.loc.mode === 'city'; }
   ST.active = function () { return !!T(); };
   ST.isTrace = function (id) { return D.traces.some(function (t) { return t[0] === id; }); };
@@ -284,7 +288,7 @@
     s.player.items.forEach(function (it) { if (it.id === 'watch') { it.desc = '다시 돌기 시작한 작은 시계. 두 해마다 한 번, 아틀란티스에서 아버지를 만날 수 있다.'; } });
     G.Fame.add('ex', 1200);
     G.State.log(D.ending.done + ' (명성 +1,200)');
-    var html = '<div style="font-size:19px;line-height:1.7">' + U.esc(D.ending.done) + '<br><span class="muted">걸린 날: ' + U.num(t.endDate - t.started) + '일 · 찾은 흔적 ' + t.found.length + ' / ' + D.traces.length + '</span>' +
+    var html = '<div style="font-size:19px;line-height:1.7">' + U.esc(D.ending.done) + '<br><span class="muted">걸린 날: ' + U.num(dnDay(t.endDate) - dnDay(t.started)) + '일 · 찾은 흔적 ' + t.found.length + ' / ' + D.traces.length + '</span>' +
       '<div class="sep"></div>이야기는 여기서 한 매듭을 짓습니다. 항해는 그대로 이어집니다 — 두 해마다 한 번 아틀란티스에 들르면 ' + ST.kin() + '를 다시 만날 수 있습니다.</div>';
     await UI.window({ title: '아버지의 사진 — 끝', icon: 'laurel', width: 680, html: html, buttons: [{ label: '항해를 이어 간다', value: 'ok', cls: 'navy' }] }).result;
     G.Game.refreshHud();
@@ -293,7 +297,7 @@
   ST.revisit = async function () {
     var s = S(), t = T(); if (!t || t.end !== 'done') return false;
     var now = U.dateNum(s.date), last = t.lastMeet || t.endDate;
-    if (now - last < 365 * 2 - 30) return false;
+    if (daysSince(last) < 365 * 2 - 30) return false;
     t.lastMeet = now;
     await UI.say('돌섬 위, 늙지 않은 ' + ST.kin() + '가 손을 흔든다. 「왔구나. 바람이 바뀌기 전에 이야기나 하자.」', ST.father());
     if (s.mates.length) await UI.say('……' + ST.kin() + '는 두 해 동안의 바다 이야기를 다 듣고 나서야 손을 놓아주었다.', {});
@@ -428,7 +432,7 @@
     var money = (s.player.gold || 0) + (s.player.bank || 0);
     if (money > (cf.below || 2000)) return false;
     var now = U.dateNum(s.date);
-    if (t.allowLast != null && now - t.allowLast < (cf.gap || 180)) {
+    if (t.allowLast != null && daysSince(t.allowLast) < (cf.gap || 180)) {
       if (t.allowSoonSaid !== t.allowLast) { t.allowSoonSaid = t.allowLast; await play(HD().allowanceSoon); }
       return false;
     }
@@ -457,7 +461,7 @@
   ST.family = async function (c, at, force) {
     var s = S(), t = T(), h = HD(); if (!ST.atHome(c) || !s.player.wife || !h.family) return false;
     var now = U.dateNum(s.date);
-    if (!force && t.famLast != null && now - t.famLast < (h.famGap || 20)) return false;
+    if (!force && t.famLast != null && daysSince(t.famLast) < (h.famGap || 20)) return false;
     var seen = t.famSeen || (t.famSeen = {});
     var cand = h.family.filter(function (e) { return e.at === at && famOk(e); });
     var fresh = cand.filter(function (e) { return !seen[e.id]; });

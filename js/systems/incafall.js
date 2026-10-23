@@ -21,7 +21,15 @@
   var U = G.U, UI = G.UI;
   var IF = G.IncaFall = {};
   function S() { return G.Game && G.Game.state; }
-  function st() { var s = S(); if (!s) return null; return s.incaFall || (s.incaFall = {}); }
+  function st() {
+    var s = S(); if (!s) return null;
+    if (!s.incaFall) {
+      s.incaFall = {};
+      // 옛 저장(1534년 뒤)을 불러오면 잉카의 황금(금값 폭락)이 엉뚱한 해에 시작되던 것 — 이미 지난 일은 알린 것으로 친다 (QA 2026-10-23)
+      if (U.dateNum(s.date) > K.goldAt) s.incaFall.told = { gold: 1 };
+    }
+    return s.incaFall;
+  }
   function today() { return U.dateNum(S().date); }
   function cityNow() { var s = S(); return s && s.loc && s.loc.mode === 'city' ? s.loc.city : null; }
   function H(id) { return G.Hist ? G.Hist.speaker(id) : { name: id, lang: 3 }; }
@@ -37,7 +45,7 @@
     partnerFrom: 15240101, partnerTo: 15321015,
     tumbesFrom: 15320401, ambushFrom: 15320801, capture: 15321116, ransomTo: 15330725,
     cuscoFrom: 15331115, cuscoTo: 15351231, siegeFrom: 15360501, siegeTo: 15370430, tupacFrom: 15720901, tupacTo: 15721231,
-    notoAmbush: 6, notoTake: 4, notoLoot: 3
+    notoAmbush: 6, notoTake: 4, notoLoot: 3, goldAt: 15340109
   };
   // 잉카의 황금이 세비야로 — 금이 흔해진다 (대항해시대 3의 가격혁명). 시장 사건으로 일으킨다 (js/systems/economy.js)
   var GOLD_EV = { id: 'incagold', name: '잉카의 황금', scope: 'area', r: 6, regions: [0, 1, 2], need: 'big', years: [9999, 9999], dur: [150, 220], lead: [0, 0], glut: true,
@@ -73,7 +81,7 @@
     news('execute', 15330726, met, 'skull', b.ransom === 'plead'
       ? '【아타우알파의 죽음】 카하마르카 광장에서 아타우알파가 교수형을 당했다. 방 하나를 황금으로 채우고도 목숨을 사지 못했다. 데 소토가 돌아와 그런 군대는 없었다고 피사로에게 소리쳤다 한다. …품속의 키푸 매듭이 무겁다.'
       : '【아타우알파의 죽음】 카하마르카 광장에서 잉카 황제 아타우알파가 교수형을 당했다. 세례를 받고 「프란시스코」라는 이름을 얻은 덕에 화형만은 면했다고 한다.');
-    if (!told.gold && t >= 15340109) {
+    if (!told.gold && t >= K.goldAt) {
       told.gold = 1;
       if (G.Econ && G.Econ.start && G.Econ.DEF && G.Econ.DEF.incagold) { try { var e = G.Econ.start('incagold', SEVILLE, { k: 1 }); if (e) e.told = 'on'; } catch (er) { console.error(er); } }
       out.push({ icon: 'coin', history: true, text: '【잉카의 황금】 에르난도 피사로가 국왕의 몫(오분의 일)을 싣고 세비야에 들어왔다. 녹인 금괴가 산처럼 쌓여, 이베리아와 둘레의 큰 도시들에서 금값이 뚝 떨어진다. 사람들은 처음으로 「금이 흔한 세상」을 본다.' });
@@ -369,6 +377,7 @@
   IF.pending = function () { var s = S(); if (!s) return false; return panamaOpen() || tumbesOpen() || cuscoOpen() || siegeOpen() || tupacOpen(); };
   IF.check = async function () {
     if (IF._busy) return false; IF._busy = true;
+    IF.evDay = U.dayIndex(S().date);   // 오늘 잉카 장면이 떴다 — 같은 입항의 포카혼타스는 다음으로 (QA 2026-10-23)
     try {
       if (panamaOpen()) await panama();
       else if (tumbesOpen()) await tumbes();

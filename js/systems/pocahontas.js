@@ -13,7 +13,7 @@
   var U = G.U, UI = G.UI, R = G.R;
   var PC = G.Pocahontas = {};
   var ID = 'h_pocahontas';
-  PC.K = { aztecFall: 15210813, coolDays: 90, haltTurn: 1, natives: 24, militia: 18, scale: 0.9, fameSo: 120 };
+  PC.K = { aztecFall: 15210813, afterAztecEnd: 30, coolDays: 90, haltTurn: 1, natives: 24, militia: 18, scale: 0.9, fameSo: 120 };
   PC.SKILLS = { cook: 3, speech: 3, craft: 3, music: 3, ship: 3, sword: 2 };
 
   // ---------------------------------------------------------------- 사람: 지역 사람 h_pocahontas를 사건 전용 동료로
@@ -59,7 +59,16 @@
     if (p.cool && s.day < p.cool) return false;
     if (today() < PC.K.aztecFall) return false;
     if (PC.slaver()) return false;
+    if (PC.busyDay()) return false;
     return true;
+  };
+  /** 아즈텍 결말과 포카혼타스(육상전 포함)가 같은 입항에서 연달아 뜨던 것 — 아즈텍 결말 뒤 30일, 또는 오늘 아즈텍·잉카 장면이 이미 떴으면 다음으로 (QA 2026-10-23) */
+  PC.busyDay = function () {
+    var s = S(), now = U.dayIndex(s.date), az = s.aztec;
+    if (az && az.endDay != null && now - az.endDay < PC.K.afterAztecEnd) return true;
+    if (G.Aztec && G.Aztec.evDay === now) return true;
+    if (G.IncaFall && G.IncaFall.evDay === now) return true;
+    return false;
   };
   PC.pending = function () { var c = cityNow(); return c != null && PC.isPort(G.CITY_DATA[c]) && PC.ready(); };
   PC.check = async function () {

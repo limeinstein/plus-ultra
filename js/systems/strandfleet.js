@@ -44,14 +44,21 @@
   };
   /** 새 배(sh)로 이 항구에서 함대를 새로 꾸린다: 원래 배와 짐은 그 자리에 남기고, 육상 탐험을 마친다 */
   SF.leaveAndBoard = async function (c, sh, far) {
-    var s = S(), f = s.fleet, b = B();
+    var s = S(), f = s.fleet, b = B(), rec = null;
     if (f.ships.length) {
-      var rec = { id: 'sf' + s.day + '_' + Math.floor(Math.random() * 1e6), ships: f.ships.slice(), cargo: f.cargo, food: f.food || 0, water: f.water || 0, mat: f.mat || 0,
+      rec = { id: 'sf' + s.day + '_' + Math.floor(Math.random() * 1e6), ships: f.ships.slice(), cargo: f.cargo, food: f.food || 0, water: f.water || 0, mat: f.mat || 0,
         lon: far.lon, lat: far.lat, city: far.base.type === 'city' ? far.base.city : null, place: far.place, since: s.day, until: s.day + num(b.keepDays, 730), warned: {} };
       (s.strands = s.strands || []).push(rec);
       G.State.log(far.place + '에 배 ' + rec.ships.length + '척(' + rec.ships.map(function (x) { return x.name + '호'; }).join('·') + ')을 남기고 ' + c.name + '에서 새 배로 떠나기로 했다.');
     }
     f.ships = [sh]; f.cargo = {}; f.food = 0; f.water = 0; f.mat = 0;
+    // 선원이 모두 새 배 한 척에 그대로 타던 것(갤리온 400명 → 카라벨 정원 30명) — 새 배 정원을 넘는 선원은 남긴 배에 둔다 (QA 2026-10-23)
+    var cmax = R.crewMax ? R.crewMax() : (sh.crewMax || 0), extra = Math.max(0, (f.crew || 0) - cmax);
+    if (extra > 0) {
+      if (rec) { rec.crew = extra; G.State.log('새 배 정원을 넘는 선원 ' + extra + '명은 ' + far.place + '의 배에 남았다.'); }
+      f.crew = cmax;
+    }
+    if (R.tidyCaptains) R.tidyCaptains();   // 남긴 배를 맡던 선장 부하는 선장 자리에서 풀린다
     // 육상 탐험을 여기서 마친다: 탈것은 이 도시 마구간에 · 이 항구에서 출항한다
     var lr = s.landReturn, mt = lr && lr.mount;
     if (mt && mt.id !== 'walk' && mt.n > 0 && G.Mounts && !G.Mounts.get(mt.id).hire) {
@@ -80,12 +87,14 @@
       if (a.lots) { b.lots = b.lots || {}; Object.keys(a.lots).forEach(function (k) { var x = a.lots[k], y = b.lots[k]; if (!y) b.lots[k] = x; else { y.cost = Math.round((y.cost * y.q + x.cost * x.q) / Math.max(1, y.q + x.q)); y.q += x.q; } }); }
     });
     f.food = (f.food || 0) + (rec.food || 0); f.water = (f.water || 0) + (rec.water || 0); f.mat = (f.mat || 0) + (rec.mat || 0);
+    f.crew = (f.crew || 0) + (rec.crew || 0);   // 남긴 배에 두었던 선원도 다시 함대로 (옛 저장은 rec.crew가 없다)
     var names = took.map(function (x) { return x.name + '호'; }).join('·') || '배';
     G.State.log(rec.place + '에 남겨 두었던 ' + names + U.jx(names, '을/를') + ' 되찾았다.');
     // 5척을 넘으면 넘는 수만큼 폐기 — 하나씩 고른다 (답이 없으면 가장 값어치가 낮은 배)
     var gone = [];
     while (f.ships.length > max) {
-      var over = f.ships.length - max, cands = f.ships.slice(1);
+      var over = f.ships.length - max, cands = f.ships.slice(1).filter(function (x) { return !x.loan; });   // 빌린 배는 폐기할 수 없다 (조선소 파기와 같게)
+      if (!cands.length) cands = f.ships.slice(1);
       var worth = function (sh) { return R.shipValue ? R.shipValue(sh) : (G.SHIP[sh.type].price || 0) * sh.hp / Math.max(1, sh.maxHp); };
       var pick = null;
       try {
@@ -97,9 +106,33 @@
       f.ships.splice(f.ships.indexOf(pick), 1); gone.push(pick.name + '호');
     }
     if (gone.length) G.State.log('함대가 ' + max + '척을 넘어 ' + gone.join('·') + U.jx(gone.join('·'), '을/를') + ' 폐기했다.');
+    if (R.tidyCaptains) R.tidyCaptains();   // 폐기한 배를 맡던 선장 부하는 선장 자리에서 풀린다 (QA 2026-10-23)
+    // 폐기 뒤 정원·짐칸을 넘으면 정리한다 — 넘는 선원은 여기서 내리고, 실을 곳이 없는 짐은 버린다 (QA 2026-10-23)
+    var tidy = '';
+    var cmax = R.crewMax ? R.crewMax() : Infinity;
+    if ((f.crew || 0) > cmax) { var off = f.crew - cmax; f.crew = cmax; tidy += ' 정원을 넘는 선원 ' + off + '명은 여기서 내렸다.'; G.State.log('함대 정원을 넘는 선원 ' + off + '명을 내렸다.'); }
+    if (R.used && R.fleetCap) { var over = Math.ceil(R.used() - R.fleetCap()); if (over > 0) { var lost = dumpOver(over); if (lost) { tidy += ' 짐칸이 모자라 ' + lost + '을 버렸다.'; G.State.log('짐칸이 모자라 ' + lost + '을 버렸다.'); } } }
     if (G.Game.refreshHud) G.Game.refreshHud();
     return rec.place + '에 남겨 두었던 ' + names + U.jx(names, '을/를') + ' 되찾았다! 싣고 있던 짐도 그대로다.' +
-      (gone.length ? ' 함대가 ' + max + '척을 넘어 ' + gone.join('·') + U.jx(gone.join('·'), '을/를') + ' 폐기했다.' : '');
+      (gone.length ? ' 함대가 ' + max + '척을 넘어 ' + gone.join('·') + U.jx(gone.join('·'), '을/를') + ' 폐기했다.' : '') + tidy;
+  }
+  /** 짐칸을 n만큼 넘었을 때: 값이 낮은 교역품부터 버리고, 그래도 넘으면 물·식량·자재를 덜어 낸다 — 버린 것을 말로 돌려준다 */
+  function dumpOver(n) {
+    var f = S().fleet, lost = [];
+    var price = function (id) { var g = G.GOOD && G.GOOD[id]; return (g && g.p) || (f.cargo[id] && f.cargo[id].cost) || 0; };
+    Object.keys(f.cargo || {}).sort(function (a, b) { return price(a) - price(b); }).forEach(function (id) {
+      if (n <= 0) return;
+      var it = f.cargo[id], t = Math.min(n, it.q); if (t <= 0) return;
+      it.q -= t; n -= t;
+      if (it.lots) { var left = t; Object.keys(it.lots).forEach(function (k) { if (left <= 0) return; var l = it.lots[k], d = Math.min(left, l.q); l.q -= d; left -= d; if (l.q <= 0) delete it.lots[k]; }); }
+      if (it.q <= 0) delete f.cargo[id];
+      var nm = (G.GOOD && G.GOOD[id] && G.GOOD[id].name) || id; lost.push(nm + ' ' + t + '통');
+    });
+    [['water', '물', '일분'], ['food', '식량', '일분'], ['mat', '자재', '통']].forEach(function (k) {
+      if (n <= 0) return; var have = Math.floor(f[k[0]] || 0), t = Math.min(n, have); if (t <= 0) return;
+      f[k[0]] -= t; n -= t; lost.push(k[1] + ' ' + t + k[2]);
+    });
+    return lost.join('·');
   }
   /** 바다에서 하루가 지날 때: 남겨 둔 배 곁에 왔으면 되찾는다 — 알릴 말들 (Promise) */
   SF.atSea = async function (lon, lat) {

@@ -47,7 +47,8 @@ const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed 
     ok(d.n === 83 && d.cats.nature === 30 && d.cats.ruin === 17 && d.cats.people === 36, '새 발견물 83곳: 자연 30 · 유적 17 · 민족 36');
     ok(!d.place.length, '뭍 발견물은 뭍에, 바다 발견물은 바다에 ' + d.place.join(', '));
     ok(!d.front.length && !d.relic.length, '모두 개척 단계와 유물이 있다 ' + d.front.concat(d.relic).join(','));
-    ok(d.people === 52 && !d.noFolk.length, '민족 발견물 52곳 모두 풍속(노래·춤…)을 갖는다 ' + d.noFolk.join(','));
+    // 52 → 51: 오로라(aurora, 옛 「천상의 커튼」)가 민족이 아니라 자연으로 옮겨 갔다 (js/data/realnames.js cat:'nature') — 의도된 것 (QA 2026-10-23)
+    ok(d.people === 51 && !d.noFolk.length, '민족 발견물 51곳 모두 풍속(노래·춤…)을 갖는다 ' + d.noFolk.join(','));
     ok(d.rewritten === 5, '이미 있던 민족 발견물은 풍속 위주 글로 바뀌고 옛 글은 desc0에 남는다');
     ok(d.renamed === 10, '외부인이 붙인 옛 이름 10곳은 실제 공동체를 드러내는 이름으로 바뀌고 옛 이름은 name0에 남는다');
     ok(!d.tribeCities.length, '부족 이름 도시 27곳 둘레마다 민족 발견물 ' + d.tribeCities.join(','));

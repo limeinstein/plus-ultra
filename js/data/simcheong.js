@@ -9,6 +9,7 @@
   var m = { id: 'simcheong', name: '심청', g: 'f', style: 'kr', role: 'maid', tone: 'polite', pic: 'sim_cheong',
     st: [46, 78, 38, 94], sk: { cook: 3, music: 3, craft: 3, nav: 3, ops: 3, speech: 3, acct: 3 }, skBoost: 1, lg: { 14: 3, 13: 3 },
     desc: '황주 도화동 심 봉사의 외동딸. 젖동냥으로 자라 열다섯에 앞 못 보는 아버지를 홀로 봉양했다. 삯바느질과 길쌈으로 끼니를 잇던 손끝이 야무지고, 부엌일과 셈에 빈틈이 없으며, 그녀가 부르는 노래에는 장터 사람들이 발걸음을 멈춘다. 포구에서 뱃사람들 틈에 자라 물때와 바람을 읽을 줄 알고, 왜관을 드나드는 상인들에게서 일본 말도 익혔다. 아버지의 눈을 뜨게 하려고 공양미 삼백 석에 제 몸을 인당수 제물로 팔았던 효녀.' };
+  m.minor = true;   // 열다섯 — 부하끼리의 썸·청혼 대상이 아니다 (js/systems/romance.js · js/city/matetalk.js, QA 2026-10-23)
   m.tale = true; m.fame = 0; m.wage = 0; m.y = [1480, 1700]; m.reg = []; m.face = 'portraits/legendary/' + m.pic;
   G.SIMCHEONG = m.id;
   if (G.MATES && !G.MATE[m.id]) { G.MATES.push(m); G.MATE[m.id] = m; }

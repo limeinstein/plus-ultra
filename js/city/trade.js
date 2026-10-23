@@ -16,8 +16,10 @@
   T.enter = async function (c) {
     var cur = C.current(), mk0 = R.market(c.id); cur.talked = false;
     // 같은 날 다시 들어와도 값 깎기를 새로 굴릴 수 없다 (나갔다 들어오기만 하면 되던 것)
-    cur.haggle = mk0.hag && mk0.hag.day === R.S().day ? mk0.hag.h : null;
-    cur.hagN = mk0.hag && mk0.hag.day === R.S().day ? (mk0.hag.n || (mk0.hag.h ? 99 : 0)) : 0;   // 오늘 이 교역소에서 흥정한 횟수 (회계 단계만큼 할 수 있다)
+    // 들어갈 때마다 하루가 흘러 날짜만으로는 막히지 않던 것 — 이번 입항(R.sameStay)이면 이어 쓴다 (QA 2026-10-23)
+    var same = mk0.hag && R.sameStay(mk0.hag.day, mk0.hag.pv);
+    cur.haggle = same ? mk0.hag.h : null;
+    cur.hagN = same ? (mk0.hag.n || (mk0.hag.h ? 99 : 0)) : 0;   // 이번에 이 교역소에서 흥정한 횟수 (회계 단계만큼 할 수 있다 — 일괄 거래 흥정과 나눠 쓴다)
     if (G.Ledger) G.Ledger.record(c);
     var lv = C.langLv(c);
     await C.say(keeper(), lv === 0 ? '어서 오게. 무엇을 찾나?' : C.hail(c, 'trade', ['어서 오게. 좋은 물건이 들어와 있다네.', '어서 오게! 오늘은 무엇을 사겠나?', '팔 물건이 있으면 보여 주게.']));
@@ -97,7 +99,7 @@
   /** 이 도시에서 산 몫 {q, cost} (없으면 null) — 그 몫은 산 값보다 비싸게 팔 수 없다 */
   function ownLot(c, id) { var cg = S().fleet.cargo[id]; if (!cg) return null; var o = R.cargoLots(cg)[c.id]; return o && o.q > 0 ? o : null; }
   T.ownLot = ownLot;
-  function keepHag(c, h) { var cur = C.current(); R.market(c.id).hag = { day: R.S().day, h: h, n: cur ? cur.hagN || 0 : 0 }; return h; }
+  function keepHag(c, h) { var cur = C.current(); R.market(c.id).hag = { day: R.S().day, pv: R.stayNo(), h: h, n: cur ? cur.hagN || 0 : 0 }; return h; }
   /** 흥정 횟수: 회계 단계에 따라 (G.Acct.tries) · 오늘 남은 횟수 */
   T.hagMax = function () { return G.Acct ? G.Acct.tries() : 1; };
   T.hagLeft = function (c) { var cur = C.current(); return Math.max(0, T.hagMax() - ((cur && cur.hagN) || 0)); };
@@ -497,6 +499,19 @@
     var K = BD(), acct = R.skill('acct'), pu = R.purser();
     return K.base + acct * K.perAcct + (pu ? K.purser + (pu.acct || 0) * 0.005 : 0) + Math.min(K.bulkMax, (qtyTotal || 0) / K.bulkPer * K.bulkMax);
   };
+  /** 이번 입항 동안의 일괄 흥정 상태 {buy·sell: 얻은 할인/웃돈 몫, used, fails} — 입항이 바뀌면 새로 */
+  function batState(c) {
+    var mk = R.market(c.id), b = mk.bat;
+    if (!b || !R.sameStay(b.day, b.pv)) b = mk.bat = { day: S().day, pv: R.stayNo(), buy: 0, sell: 0, used: 0, fails: 0 };
+    return b;
+  }
+  /** 일괄 흥정 상한: 낱개 값 깎기(h.buy·h.sell)와 곱으로 겹쳐 41%까지 되던 것 — 합쳐서 K.cap(파는 쪽은 K.cap×sellK)을 넘지 않게 (QA 2026-10-23) */
+  function batchCap(buy, K) {
+    var h = hag(); if (!h) return K.cap;
+    if (buy) return Math.max(0, Math.min(K.cap, 1 - (1 - K.cap) / Math.min(1, h.buy)));
+    return Math.max(0, Math.min(K.cap, ((1 + K.cap * K.sellK) / Math.max(1, h.sell || 1) - 1) / K.sellK));
+  }
+  T.batchCap = function (buy) { return batchCap(buy, BD()); };
   /** 일괄 거래에서 흥정할 수 있는 횟수 (회계 단계 · 경리) */
   T.batchTries = function () { return T.hagMax(); };
   /** 일괄 구입: 고른 품목의 기본 수량 — 짐칸·무게·돈·재고·품목 수 안에서 고르게 나눈다 */
@@ -536,7 +551,11 @@
     var plan = buy ? planBuy(c, ids) : null, qty = {};
     if (buy) { ids = Object.keys(plan.q); ids.forEach(function (id) { qty[id] = plan.q[id]; }); }
     else ids.forEach(function (id) { qty[id] = s.fleet.cargo[id].q; });
-    var disc = 0, used = 0, fails = 0, max = T.batchTries(), K = BD(), lines = [];
+    // 창을 닫았다 다시 열면 흥정이 처음부터 다시 되던 것 — 이번 입항 동안 R.market(c.id).bat에 남겨 이어 쓰고, 횟수는 낱개 흥정(cur.hagN)과 나눠 쓴다 (QA 2026-10-23)
+    var cur = C.current(), bs = batState(c), max = T.batchTries(), K = BD(), lines = [];
+    if (!cur) { var mh = R.market(c.id).hag, mSame = mh && R.sameStay(mh.day, mh.pv); cur = { haggle: mSame ? mh.h : null, hagN: mSame ? (mh.n || (mh.h ? 99 : 0)) : 0 }; }   // 교역소 밖에서 불렀을 때는 남겨 둔 흥정 기록으로
+    var capE = batchCap(buy, K), used = bs.used || 0, fails = bs.fails || 0, disc = Math.min(capE, bs[mode] || 0);
+    function keepBat() { bs.used = used; bs.fails = fails; bs[mode] = disc; R.market(c.id).hag = { day: S().day, pv: R.stayNo(), h: cur.haggle || null, n: cur.hagN || 0 }; }
     var talkOK = C.langLv(c) > 0;
     function rows() {
       return ids.map(function (id) {
@@ -552,7 +571,7 @@
       var rs = rows(), tot = 0, base = 0, nq = 0;
       rs.forEach(function (r) { tot += r.sub; base += r.base; nq += r.q; });
       var why = buy ? checkBuy(c, rs, disc) : null;
-      var left = Math.max(0, max - used);
+      var left = Math.max(0, max - (cur.hagN || 0));
       var step = T.batchStep(c, nq);
       var html = '<div class="flex" style="margin-bottom:8px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">' +
         (buy ? '적재 여유 <b>' + Math.max(0, Math.floor(R.freeVol())) + '</b>통' + (G.Cargo ? ' · 무게 여유 <b>' + Math.max(0, Math.floor(G.Cargo.wfree())) + '</b>' : '') : '고른 짐 ' + ids.length + '가지') + '</span></div>' +
@@ -568,10 +587,11 @@
         (plan && plan.skipped.length ? '<div class="warn-text" style="margin-top:6px">배에 실을 수 있는 품목 수(' + R.maxKinds() + '종)를 넘어 뺐습니다: ' + plan.skipped.map(function (id) { return G.GOOD[id].name; }).join('·') + '</div>' : '') +
         (why ? '<div class="warn-text" style="margin-top:6px">' + why + '</div>' : '') +
         '<div class="muted" style="margin-top:8px;font-size:15px">' + (talkOK ? '결제 전에 「한꺼번에 ' + (buy ? '사니 더 깎아 달라' : '넘기니 더 쳐 달라') + '」고 흥정할 수 있습니다 — 회계 ' + (G.Acct ? G.Acct.lv() : 0) + (R.purser() ? ' · 경리 ' + R.purser().name : '') + ' · 남은 흥정 ' + left + '번 (한 번에 약 ' + Math.round(step * (buy ? 100 : 100 * K.sellK)) + '%). 거절당해도 그때까지 깎은 값은 그대로입니다.' : '말이 통하지 않아 흥정은 할 수 없습니다.') +
+        (talkOK && capE < K.cap - 1e-9 ? '<br>값 깎기로 이미 ' + (buy ? '깎은' : '더 받는') + ' 몫과 합쳐 ' + Math.round(K.cap * (buy ? 100 : 100 * K.sellK)) + '%를 넘지 않게 — 일괄 흥정은 ' + (capE > 1e-9 ? Math.round(capE * (buy ? 100 : 100 * K.sellK)) + '%까지' : '더 할 수 없습니다') + '.' : '') +
         (lines.length ? '<br>' + lines.join(' · ') : '') + '</div>';
       var win = UI.window({ title: (buy ? '일괄 구입' : '일괄 매각') + ' — ' + c.name, icon: buy ? 'coin' : 'sack', width: 820, html: html,
         buttons: [
-          talkOK && left > 0 && disc < K.cap ? { label: '흥정한다 (' + (used + 1) + '차)', value: 'deal', cls: '' } : null,
+          talkOK && left > 0 && disc < capE - 1e-9 ? { label: '흥정한다 (' + (used + 1) + '차)', value: 'deal', cls: '' } : null,
           { label: buy ? '산다' : '판다', value: 'go', cls: 'green', disabled: !!why || !nq },
           { label: '돌아간다', value: null }
         ].filter(Boolean),
@@ -579,14 +599,14 @@
       var v = await win.result;
       if (v === 're') continue;
       if (v === 'deal') {
-        used++;
+        used++; cur.hagN = (cur.hagN || 0) + 1;
         var odds = T.haggleOdds(c), p = odds.p * Math.pow(K.fade, used - 1 - fails) * Math.pow((G.BALANCE && G.BALANCE.acct && G.BALANCE.acct.retryK) || 0.7, fails);
         var pu = R.purser();
         if (pu) await UI.say(U.pick(buy ? ['이만큼 한꺼번에 사 가는 손님이 흔하지 않을 텐데요. 셈을 다시 해 주시오.', '여러 가지를 통째로 사겠소. 운임 몫만큼은 빼 주시오.'] : ['이만큼 한꺼번에 넘기면 주인장도 수고를 던 셈이오. 값을 조금 더 쳐 주시오.', '여러 가지를 통째로 넘기겠소. 장부를 다시 보시오.']), G.Scenes.mateSpeaker('purser'));
         else await C.me(U.pick(buy ? ['이만큼 한꺼번에 사 가니 값을 좀 더 깎아 주게.', '여러 가지를 통째로 사겠네. 셈을 다시 해 주게.'] : ['이만큼 한꺼번에 넘기니 값을 좀 더 쳐 주게.', '여러 가지를 통째로 넘기겠네. 셈을 다시 해 주게.']));
         if (U.chance(p)) {
           var add = T.batchStep(c, nq) * (used > 1 ? 0.7 : 1);
-          disc = Math.min(K.cap, disc + add);
+          disc = Math.min(capE, disc + add);
           if (G.Growth) G.Growth.haggle();
           await C.say(k, U.pick(used > 1 ? ['허허, 끈질기군. 좋아, 조금 더 해 주지.', '알았네, 알았어. 이게 정말 마지막일세.'] : ['한꺼번에라면야… 좋아, 그렇게 하지.', '통째로라니 나쁘지 않군. 셈을 다시 해 보지.']));
           lines.push(used + '차 흥정 성공 ' + (buy ? '−' : '+') + Math.round(add * (buy ? 100 : 100 * K.sellK)) + '%');
@@ -595,8 +615,9 @@
           fails++;
           await C.say(k, U.pick(['그 값에는 못 하네.', '어림없는 소리 말게. 이미 싸게 쳐 주었네.', '그만 졸라도 되네. 값은 그대로일세.']));
           lines.push(used + '차 흥정 실패');
-          UI.toast(used + '차 흥정이 거절당했다 — 값은 그대로' + (max - used > 0 ? ' · ' + (max - used) + '번 더 해 볼 수 있다 (거절당할수록 주인이 굳어진다)' : ''), 'scales', 4200);
+          UI.toast(used + '차 흥정이 거절당했다 — 값은 그대로' + (max - cur.hagN > 0 ? ' · ' + (max - cur.hagN) + '번 더 해 볼 수 있다 (거절당할수록 주인이 굳어진다)' : ''), 'scales', 4200);
         }
+        keepBat();
         continue;
       }
       if (v !== 'go') return false;
@@ -639,6 +660,7 @@
   T.haggle = async function (c) {
     var cur = C.current(), k = keeper();
     if (cur.haggle) { await C.say(k, cur.haggle.ok ? '이미 충분히 깎아 주지 않았나!' : '더 이상 할 말 없네.'); return; }
+    if ((cur.hagN || 0) >= T.hagMax()) { await C.say(k, '오늘은 흥정할 만큼 하지 않았나. 값은 그대로일세.'); return; }   // 일괄 거래에서 흥정을 다 썼다 (같은 한도를 나눠 쓴다)
     if (C.langLv(c) === 0) { await C.mate('말이 통하지 않는 것만은 어쩔 수가 없군요.'); cur.haggle = keepHag(c, { ok: false }); return; }
     var o = T.haggleOdds(c), pu = o.pu, puSp = pu ? G.Scenes.mateSpeaker('purser') : null;
     if (pu) await UI.say(U.pick(['주인장, 장부를 좀 봅시다. 지난달 시세가 이보다 한참 쌌소. 이 값이면 우리는 옆 가게로 가겠소.', '이 물건 값에 운임과 관세를 다 얹었구려. 우리가 통째로 사 줄 테니 거품은 빼시오.', '현금으로 한꺼번에 치르겠소. 그러니 셈을 다시 하시오 — 한 푼도 허투루 낼 생각 없소.']), puSp);
@@ -648,7 +670,7 @@
     var ok = U.chance(o.p * Math.pow(K.retryK == null ? 0.7 : K.retryK, used));
     cur.hagN = used + 1;
     if (!ok && cur.hagN < max) {
-      R.market(c.id).hag = { day: S().day, h: null, n: cur.hagN };
+      R.market(c.id).hag = { day: S().day, pv: R.stayNo(), h: null, n: cur.hagN };
       await C.say(k, U.pick(['허, 그 값에는 못 주네.', '어림없는 소리 말게.', '그 값이면 내가 밑지네.']));
       UI.toast('흥정이 거절당했다 — 오늘 ' + (max - cur.hagN) + '번 더 흥정할 수 있다 (회계 ' + (G.Acct ? G.Acct.lv() : 0) + (pu ? ' · 경리 +1' : '') + '). 거절당할수록 주인이 굳어진다.', 'scales', 4600);
       return;

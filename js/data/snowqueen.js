@@ -6,7 +6,7 @@
 (function (G) {
   'use strict';
   var L = [
-    { id: 'gerda', name: '게르다', g: 'f', style: 'ne', role: 'maid', tone: 'cute', pic: 'gerda',
+    { id: 'gerda', name: '게르다', g: 'f', style: 'ne', role: 'maid', tone: 'cute', pic: 'gerda', minor: true,   // minor: 아이 — 썸·청혼 대상이 아니다 (QA 2026-10-23)
       st: [52, 64, 38, 90], sk: { speech: 1, cook: 1, med: 1 }, skBoost: 1, lg: { 3: 3 },
       desc: '눈의 여왕이 하얀 썰매에 태워 간 동생 카이를 찾아 맨발로 북쪽 끝까지 걸어온 소녀. 빨간 구두를 강물에 주고 길을 물었고, 까마귀와 산적의 딸과 핀란드 할머니의 도움을 받았다. 겁이 많지만 한번 마음먹으면 물러서지 않는다.' },
     { id: 'elizaveta', name: '엘리자베타', g: 'f', style: 'ru', role: 'noble', tone: 'polite', pic: 'elizaveta',

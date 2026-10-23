@@ -1,4 +1,5 @@
-/* 발견 여파가 규율·피로를 0으로 만들면 해당 수치가 10으로 회복될 때까지 야외 발견 반경이 줄어드는지 점검한다. */
+/* 발견 여파가 규율을 0으로, 피로를 100으로 만들면 규율 10 이상·피로 90 이하로 회복될 때까지 야외 발견 반경이 줄어드는지 점검한다.
+   피로 0(푹 쉰 상태)은 벌칙이 아니다 (QA 2026-10-23). */
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
@@ -33,11 +34,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       function probeHit() { s.discDay = null; return D.checkLand(at.lon, at.lat).hits.some(d => d.id === probe.id); }
       out.normalHit = probeHit();
 
+      // 좋은 발견으로 피로가 0이 되는 것은 난조가 아니다
       f.fatigue = 5; f.discipline = 50;
-      const fatigueImpact = D.applyImpact({ id: '__strain_fatigue', cat: 'nature', impact: 'awe' }, {});
+      const restImpact = D.applyImpact({ id: '__strain_rest', cat: 'nature', impact: 'awe' }, {});
+      out.rest = { value: f.fatigue, marked: !!restImpact.strain, k: D.findK(true) };
+
+      f.fatigue = 95; f.discipline = 50;
+      const fatigueImpact = D.applyImpact({ id: '__strain_fatigue', cat: 'creature', impact: 'fear' }, {});
       out.fatigue = { value: f.fatigue, marked: !!(fatigueImpact.strain && fatigueImpact.strain.fatigue), k0: D.findK(true), hit: probeHit() };
-      f.fatigue = 9; out.fatigue.k9 = D.findK(true);
-      f.fatigue = 10; out.fatigue.k10 = D.findK(false); out.fatigue.recoveredHit = probeHit();
+      f.fatigue = 91; out.fatigue.k91 = D.findK(true);
+      f.fatigue = 90; out.fatigue.k90 = D.findK(false); out.fatigue.recoveredHit = probeHit();
 
       delete s.flags.discoveryStrain;
       f.fatigue = 50; f.discipline = 3;
@@ -47,19 +53,25 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       f.discipline = 10; out.discipline.k10 = D.findK(false);
 
       delete s.flags.discoveryStrain;
-      f.fatigue = 0; f.discipline = 50;
-      const alreadyZero = D.applyImpact({ id: '__strain_already_zero', cat: 'nature', impact: 'awe' }, {});
+      f.fatigue = 100; f.discipline = 50;
+      const alreadyZero = D.applyImpact({ id: '__strain_already_zero', cat: 'creature', impact: 'fear' }, {});
       out.alreadyZero = !!alreadyZero.strain;
+      delete s.flags.discoveryStrain;
+      // 옛 저장: 피로 0을 난조로 적어 둔 것은 지금 피로가 낮으면 조용히 풀린다
+      f.fatigue = 20; f.discipline = 50; s.flags.discoveryStrain = { discipline: false, fatigue: true, d: 0 };
+      out.legacyK = D.findK(false); out.legacyGone = !s.flags.discoveryStrain;
       out.recoveryToast = toasts.filter(t => /평소처럼/.test(t)).length;
       G.DISCOVERIES.splice(G.DISCOVERIES.indexOf(probe), 1); delete G.DISC[probe.id];
       return out;
     });
     ok(r.normalHit, '평상시 발견 반경에서는 발견물이 잡힘');
-    ok(r.fatigue.value === 0 && r.fatigue.marked && r.fatigue.k0 === 0.35 && !r.fatigue.hit, '발견 여파로 피로 0 → 발견 반경 35%');
-    ok(r.fatigue.k9 === 0.35 && r.fatigue.k10 === 1 && r.fatigue.recoveredHit, '피로 9까지 유지, 10부터 정상 반경 회복');
+    ok(r.rest.value === 0 && !r.rest.marked && r.rest.k === 1, '좋은 발견으로 피로 0 → 벌칙 없음');
+    ok(r.fatigue.value === 100 && r.fatigue.marked && r.fatigue.k0 === 0.35 && !r.fatigue.hit, '발견 여파로 피로 100 → 발견 반경 35%');
+    ok(r.fatigue.k91 === 0.35 && r.fatigue.k90 === 1 && r.fatigue.recoveredHit, '피로 91까지 유지, 90 이하로 정상 반경 회복');
     ok(r.discipline.value === 0 && r.discipline.marked && r.discipline.k0 === 0.35, '발견 여파로 규율 0 → 발견 반경 35%');
     ok(r.discipline.k9 === 0.35 && r.discipline.k10 === 1, '규율 9까지 유지, 10부터 정상 반경 회복');
-    ok(!r.alreadyZero, '발견 전에 이미 0이던 수치는 새 제약을 만들지 않음');
+    ok(!r.alreadyZero, '발견 전에 이미 끝(피로 100)이던 수치는 새 제약을 만들지 않음');
+    ok(r.legacyK === 1 && r.legacyGone, '옛 저장의 피로 0 난조 표시는 불러온 뒤 풀림');
     ok(r.recoveryToast === 2, '회복 시 정상 탐색 복귀 안내');
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
     console.log('\n통과');

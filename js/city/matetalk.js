@@ -28,7 +28,7 @@
         var d = G.MATE[m.id]; if (!d) return { label: '—', value: -1, disabled: true };
         var tag = d.witch ? ' <span class="tag">마녀</span>' : d.wd ? ' <span class="tag">철새</span>' : '';
         return { label: U.esc(d.name) + tag, value: k, icon: d.g === 'f' ? 'heart' : 'people',
-          right: R.roleName(m) + ' · 충성 ' + Math.round(m.loyal || 70) + (d.g === 'f' && !d.sib ? ' · ' + heart(m.aff) : '') + (G.Romance && G.Romance.tag(m.id) ? ' · ' + U.esc(G.Romance.tag(m.id)) : '') };
+          right: R.roleName(m) + ' · 충성 ' + Math.round(m.loyal || 70) + (d.g === 'f' && !d.sib && !d.minor ? ' · ' + heart(m.aff) : '') + (G.Romance && G.Romance.tag(m.id) ? ' · ' + U.esc(G.Romance.tag(m.id)) : '') };
       }), { width: 620, icon: 'people', text: '누구와 이야기할까?' });
       if (i == null || i < 0) return;
       await MT.talk(c, s.mates[i]);
@@ -108,10 +108,13 @@
   MT.talk = async function (c, m) {
     var s = S(), d = G.MATE[m.id], cf = cfg(); if (!d) return;
     var f = d.g === 'f', today = U.dateNum(s.date);
+    // 아이(d.minor: 게르다·심청)는 동생처럼 호감·청혼이 없다 — 옛 저장에 쌓인 호감은 조용히 비운다 (QA 2026-10-23)
+    var noLove = !!(d.sib || d.minor);
+    if (d.minor && m.aff) m.aff = 0;
     function say(t, e) { return UI.say(t, speaker(d, e, false)); }
     function ask(t, ch) { return UI.ask(t, ch, speaker(d, 'warm', true)); }
     var turn = 0;
-    function gainAff(n) { if (f && !d.sib) m.aff = Math.min(100, (m.aff || 0) + n); }
+    function gainAff(n) { if (f && !noLove) m.aff = Math.min(100, (m.aff || 0) + n); }
     for (;;) {
       var bio = G.Bio && G.Bio.find(d.name);
       var opts = [{ label: '요즘 어떤가', value: 'chat' }, { label: '살아온 이야기', value: 'life' }, { label: '한잔 산다', value: 'drink' }];
@@ -119,7 +122,7 @@
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
       var opp = (d.g === 'f') !== (s.player.g === 'f');      // 제독과 다른 성(이성)
       opts.push({ label: '선물한다', value: 'gift' });   // 남자 부하에게도 늘 — 남자 선물은 애정 없이 충성만 오른다 (2026-10-20)
-      if (f && !d.sib) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
+      if (f && !noLove) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
       var v = await ask(turn++ ? U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?']) : greet(d, m, f), opts);
       if (!v) return;
@@ -138,9 +141,10 @@
         else await say(d.story || d.desc, 'warm');
       } else if (v === 'drink') {
         var pr = (cf.drinkCost || 8) * (2 + (c.size || 1));
-        if (m.drink === today) { await say(f ? '오늘은 이미 충분히 마셨어요. 내일 또 한잔해요.' : '오늘은 이미 충분히 마셨소. 내일 또 한잔합시다.', 'warm'); continue; }
+        // 같은 날·같은 입항이면 한 번 — 건물을 드나들면 하루가 흘러 다시 마실 수 있던 것 (QA 2026-10-23). 바다·뭍에서는 날짜만
+        if (m.drink === today || (m.drinkPv && G.R.stayNo && m.drinkPv === G.R.stayNo() && s.loc && s.loc.mode === 'city')) { await say(f ? '오늘은 이미 충분히 마셨어요. 내일 또 한잔해요.' : '오늘은 이미 충분히 마셨소. 내일 또 한잔합시다.', 'warm'); continue; }
         if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다. (금화 ' + pr + '닢)', 'coin'); continue; }
-        s.player.gold -= pr; m.drink = today;
+        s.player.gold -= pr; m.drink = today; if (G.R.stayNo) m.drinkPv = G.R.stayNo();
         m.loyal = Math.min(100, (m.loyal || 70) + (cf.drinkLoyal || 2)); gainAff(cf.drinkAff || 3);
         await say(U.pick(f ? ['고마워요, 제독. 건배!', '당신이랑 마시니까 더 맛있네요.', '오늘은 제가 노래 한 곡 불러 드릴게요.'] : ['제독이 사는 술이라면 사양 않겠소!', '바다와 제독을 위하여!', '크으, 이 맛에 뱃일을 하지.']), 'happy');
       } else if (v === 'fortune') {
@@ -169,7 +173,7 @@
         // 남자 부하: 남자 선물(술·카드·장난감)·검·방어구 — 애정(호감)은 오르지 않고 충성만 선물 값만큼 (제독이 남자여도)
         var gl = gloy(gv);
         m.loyal = Math.min(100, lo0 + gl);
-        UI.toast(d.name + ' — 충성 +' + (m.loyal - lo0) + (f && !d.sib ? ' · 호감 +' + ((m.aff || 0) - af0) : ''), 'heart', 3200);
+        UI.toast(d.name + ' — 충성 +' + (m.loyal - lo0) + (f && !noLove ? ' · 호감 +' + ((m.aff || 0) - af0) : ''), 'heart', 3200);
         await say(U.pick(f ? ['어머, 이걸 저에게요? 소중히 할게요.', '배 위에서 이런 선물을 받을 줄은 몰랐어요. 고마워요.'] : MEN_THANKS[gd.kind === 'weapon' || gd.kind === 'armor' ? gd.kind : gd.mg] || ['이걸 내게? …고맙소, 제독. 이 은혜는 잊지 않겠소.']), 'happy');
       } else if (v === 'w2home') {
         var wv = G.Wives.of(d.id), here = s.loc.mode === 'city' && s.loc.city === wv.city;

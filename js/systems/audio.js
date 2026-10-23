@@ -117,6 +117,7 @@
   var ambEl = {}, ambCur = {}, ambWant = {}, ambSeen = {}, ambTimer = 0, ambBad = {};
   AU.hasAmb = function (name) { var F = G.SFX_FILES, e = F && F.amb && F.amb[name]; return !!(e && canOgg() && !ambBad[name]); };
   function ambTick() {
+    if (typeof document !== 'undefined' && document.hidden) { ambHush(); return; }   // 탭을 숨긴 사이에는 울리지 않는다 (QA 2026-10-23)
     var now = Date.now(), live = 0, F = G.SFX_FILES || {}, master = vol('sound', 0.5) * 0.8 * (F.ambVol == null ? 1 : F.ambVol) * (F.vol == null ? 1 : F.vol);
     Object.keys(ambEl).forEach(function (k) {
       var want = now - (ambSeen[k] || 0) > 2500 ? 0 : (ambWant[k] || 0), cur = ambCur[k] || 0;
@@ -129,9 +130,23 @@
     });
     if (!live && !Object.keys(ambWant).some(function (k) { return ambWant[k] > 0 && now - (ambSeen[k] || 0) <= 2500; })) { clearInterval(ambTimer); ambTimer = 0; }
   }
+  /* 탭을 숨기면 배경 소리를 모두 멈추고 잊는다 — 다시 보이면 장면이 amb()를 부르는 대로 서서히 살아난다 (QA 2026-10-23) */
+  function ambHush() {
+    Object.keys(ambEl).forEach(function (k) { try { if (!ambEl[k].paused) ambEl[k].pause(); ambEl[k].volume = 0; } catch (x) { /* 무시 */ } ambCur[k] = 0; });
+    ambSeen = {}; ambWant = {};
+    if (ambTimer) { clearInterval(ambTimer); ambTimer = 0; }
+  }
+  if (typeof document !== 'undefined' && document.addEventListener) document.addEventListener('visibilitychange', function () { if (document.hidden) ambHush(); });
+  /* 한 배경 소리를 곧장 줄이기 시작 — 소리 상자(ctx)가 멈춰 있어도 이미 울리는 녹음은 꺼야 한다 */
+  function ambOff(k) {
+    if (!ambEl[k]) return;
+    ambWant[k] = 0; ambSeen[k] = Date.now();
+    if (!ambTimer) ambTimer = setInterval(ambTick, 100);
+  }
   /** 배경 소리 크기 알리기: { sea_waves: 0.8, rain: 0.3 … } — 매 장면(또는 자주) 부른다 */
   AU.amb = function (levels) {
     if (!ctx || ctx.state !== 'running' || !levels) return false;
+    if (typeof document !== 'undefined' && document.hidden) return false;   // 숨긴 탭에서는 다시 켜지 않는다
     var F = G.SFX_FILES, now = Date.now(), any = false;
     Object.keys(levels).forEach(function (k) {
       if (!AU.hasAmb(k)) return;
@@ -324,7 +339,9 @@
      게임 배속을 올려도 효과음이 겹치지 않는다. */
   var travelAt = {}, travelN = {};
   AU.travel = function (kind, intensity) {
-    if (!ctx || ctx.state !== 'running' || !intensity) { if (!intensity) delete travelAt[kind]; return false; }
+    // 멈추면(0) 말발굽 녹음도 곧장 줄인다 — 예전엔 여기서 돌아가 2.5초 기다린 뒤에야 사라졌다 (QA 2026-10-23)
+    if (!intensity) { delete travelAt[kind]; if (kind === 'horse') ambOff('gallop'); return false; }
+    if (!ctx || ctx.state !== 'running') return false;
     var now = ctx.currentTime, k = Math.max(0.15, Math.min(1, intensity)), cfg = {
       sea: ['wake', 1.2 - k * 0.45], walk: ['breath', 2.9 - k * 0.6], horse: ['horse', 0.92 - k * 0.25], wagon: ['wagon', 1.15 - k * 0.3],
       run: ['run', 0.78 - k * 0.2], townstep: ['townstep', 0.94 - k * 0.2]

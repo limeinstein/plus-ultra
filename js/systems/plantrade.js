@@ -65,6 +65,7 @@
   /** 지금 상태에 맞게 도시 특산물을 맞춘다: 심은 것은 넣고, (다른 일지에서) 심었던 것은 뺀다 */
   PT.sync = function () {
     var s = S(); synced = s; PT.ver++;
+    if (R.resetOrigins) R.resetOrigins();   // 기본 산지 캐시도 다시 센다 — 개척 도시 특산물이 판마다 다르게 잡히던 것 (QA 2026-10-23)
     var at = s && s.plantTrade && s.plantTrade.at || {};
     (G.CITY_DATA || []).forEach(function (c) {
       if (!c || !c.goods) return;
@@ -133,7 +134,7 @@
       '고맙네, 제독! 당장 성 밖 밭에 심겠네. 이 고장 농부들 솜씨라면 곧 장에 내놓을 수 있을 걸세.',
       '이걸로 이 교역소에도 남들이 부러워할 물건이 생겼군. 고맙네, 정말 고마워.',
       '자네가 먼 바다에서 가져온 것이 이 땅에 뿌리를 내리는구먼. 오늘부터 우리 장에서 「' + g.name + '」' + U.jx(g.name, '을/를') + ' 팔겠네.']));
-    UI.toast('「' + g.name + '」 — ' + c.name + ' 교역소의 특산물이 되었다 (발견물 「' + d.name + '」은 그대로)', { icon: 'leaf', src: thumb(d) }, 5200);
+    UI.toast('「' + g.name + '」 — ' + c.name + ' 교역소의 특산물이 되었다 (발견물 「' + d.name + '」' + U.jx(d.name, '은/는') + ' 그대로)', { icon: 'leaf', src: thumb(d) }, 5200);
     return true;
   }
   /** 교역소에 들어설 때: 주인이 먼저 청한다 */

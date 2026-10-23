@@ -6,9 +6,9 @@
    ■ 런던 탑의 엘리자베스 (메리 1세 시절, 1553.7~1558.11): 잉글랜드 왕궁의 주인과 친분이 있으면 런던 거리에 「런던 탑」이 보인다.
      갇힌 엘리자베스 공주가 언니(메리 여왕)가 자기를 죽이려 한다며 도움을 청한다 → 잉글랜드의 다른 도시(요크·브리스틀·사우샘프턴·플리머스)로
      넉 달 안에 피신시키면 성공 → 그녀가 여왕이 된 뒤(1558.11~) 런던 왕궁에 가면 그 보답으로 잉글랜드 기사(명예 작위 「기사」)로 임명한다.
-   ■ 드레이크의 습격 세 번 → 무적함대: 잉글랜드 기사가 되고 두 해마다 드레이크가 부른다 — ① 카디스 앞바다(무적함대 선단)
+   ■ 드레이크의 습격 세 번 → 무적함대: 잉글랜드 기사가 되고 두 해 뒤부터(습격은 1585·1586·1587년보다 이르지 않게, 한 해 간격) 드레이크가 부른다 — ① 카디스 앞바다(무적함대 선단)
      ② 아조레스 제도(보물선 산 펠리페호) ③ 카리브 해(서인도 함대). 부름마다 1년 안에 그 바다로 가면 드레이크의 배 세 척과 함께 싸운다
-     (이기든 지든 물러나든 놓치든 다음 부름은 두 해 뒤). 셋이 끝나고 두 해 뒤 무적함대가 떠난다 → 도버 해협·영국 해협에서
+     (이기든 지든 물러나든 놓치든 다음 부름은 한 해 뒤). 무적함대는 1588년 5월 28일에 떠난다(남은 습격은 지나간다) → 도버 해협·영국 해협에서
      우리 함대 + 드레이크의 배 세 척 대 무적함대 열두 척 (G.Rel.greatBattle). 우리 편은 모두 캘버린포(멀리), 에스파냐는 카논포(짧고 셈) —
      우리 배의 대포는 그 싸움에서만 바뀐다. 습격을 셋 다 이기면 무적함대의 병사가 줄어든다. 무적함대를 이기면 명성·포상금·작위 한 칸.
      레판토(1571, js/data/relevents.js cr_league1571)는 역사대로 그 해에 따로 벌어진다.
@@ -25,7 +25,15 @@
   function S() { return G.Game && G.Game.state; }
   function st() { var s = S(); if (!s) return null; var t = s.tudor || (s.tudor = {}); if (!t.div) t.div = { stage: 0 }; if (!t.eliz) t.eliz = { stage: 0 }; return t; }
   var K = { friend: 40, divY: [1527, 1533], envoyDays: 365, elizDays: 120, armadaDays: 730, armadaWindow: 180, raidWindow: 365 };   // armadaDays: 습격·무적함대 부름 사이(두 해) · raidWindow: 습격 하나를 기다려 주는 날
+  K.raidGap = 365;   // 습격 사이 (1585~1587에 셋이 다 들어가게 한 해)
   TD.K = K;
+  // 습격 ①②③을 부를 수 있는 가장 이른 날 (역사: 1585~1587년 드레이크의 습격) · 무적함대의 출항 (1588년 5월 28일 리스본)
+  var RAID_FROM = [15850101, 15860101, 15870101], ARM = { from: 15880528, to: 15880731 };
+  TD.ARM = ARM; TD.RAID_FROM = RAID_FROM;
+  /** dateNum 날짜를 s.day(게임 날 번호)로 */
+  function dayOf(n) { var s = S(); return s.day + U.dayIndex({ y: Math.floor(n / 10000), m: Math.floor(n / 100) % 100, d: n % 100 }) - U.dayIndex(s.date); }
+  /** 다음 습격을 부를 날 — 서임 두 해 뒤(d.next)와 그 습격의 역사 해(RAID_FROM) 가운데 늦은 날. 옛 저장의 이른 d.next도 여기서 걸러진다 */
+  function raidDay(d) { return Math.max(d.next || 0, dayOf(RAID_FROM[Math.min(d.done, RAID_FROM.length - 1)])); }
   function dn(d) { return d.y * 10000 + d.m * 100 + d.d; }
   function SP() { return G.Sponsor; }
   function king() { return G.SPONSOR.en_king; }
@@ -175,7 +183,7 @@
       { type: 'galleon', name: '골든 하인드호', gun: GUN.me },
       { type: 'carrack', name: '엘리자베스 보나벤처호', gun: GUN.me }];
   }
-  /** 습격 세 번 — 두 해마다 한 번 (box: [경도 서, 동, 위도 남, 북]) */
+  /** 습격 세 번 — 한 해 간격 (raidDay) (box: [경도 서, 동, 위도 남, 북]) */
   var RAIDS = [
     { id: 'drake_raid1', where: '카디스 앞바다', box: [-8.8, -5.6, 35.4, 37.4],
       foeLabel: '카디스의 무적함대 선단', ships: ['galleon', 'galley', 'galley', 'carrack', 'galley'],
@@ -200,7 +208,7 @@
     r.foe = '에스파냐'; r.allies = drakeShips(); r.who = { mate: 'drake' };
     r.ask = '드레이크의 습격 ' + (i + 1) + '/3 — ' + r.where + '에서 드레이크의 배 세 척과 함께 ' + r.foeLabel + U.jx(r.foeLabel, '을/를') + ' 치겠습니까?';
     r.gun = GUN.foe; r.myGun = GUN.me; r.gunNote = NOTE; r.gunK = 0.85; r.crewK = 0.8;
-    r.decline = '…그대의 사정도 있겠지. 이번엔 우리끼리 가겠소. 두 해 뒤에 다시 부르리다.';
+    r.decline = '…그대의 사정도 있겠지. 이번엔 우리끼리 가겠소. 다음에 다시 부르리다.';
     r.onWin = function () { var t = st(); t.drake.res[i] = 'won'; t.drake.won = (t.drake.won || 0) + 1; SP().addTrust(SP().rel('en_king'), 5); raidDone(); };
     r.onLose = function () { st().drake.res[i] = 'lost'; raidDone(); };
   });
@@ -234,7 +242,7 @@
   function inBox(b) { var l = S().loc; return !!(l && l.mode === 'sea' && l.lon >= b[0] && l.lon <= b[1] && l.lat >= b[2] && l.lat <= b[3]); }
   var CHANNEL = [-7, 3, 48.5, 52];
   function inChannel() { return inBox(CHANNEL); }
-  /** 습격 하나가 끝났다 (이기든 지든 물러나든 놓치든) — 다음 부름은 두 해 단위 */
+  /** 습격 하나가 끝났다 (이기든 지든 물러나든 놓치든) — 다음 부름은 raidDay */
   function raidDone() { var d = st().drake; if (!d || !d.call) return; d.done = Math.max(d.done, d.call); d.call = 0; }
   function raidOf(d) { return d && d.call ? RAIDS[d.call - 1] : null; }
   if (G.Rel) { RAIDS.forEach(function (r) { G.Rel.register(r); }); G.Rel.register(ARMADA); }
@@ -248,7 +256,8 @@
     var today = U.dateNum(s.date);
     if (t.div.stage === 1 && today > t.div.due) { t.div.stage = -2; SP().addTrust(SP().rel('en_king'), -8); out.push({ icon: 'scroll', text: '기한 안에 헨리 8세의 특사를 로마에 데려가지 못했다. 왕이 크게 실망했다. (신뢰 −8)' }); }
     if (t.eliz.stage === 1 && today > t.eliz.due) { t.eliz.stage = -2; out.push({ icon: 'skull', text: '엘리자베스 공주를 기한 안에 피신시키지 못했다. 공주는 여왕의 병사들에게 붙잡혀 우드스톡의 저택에 갇혔다고 한다.' }); }
-    // 기사가 되고 두 해마다: 습격 ①②③ → 그다음 두 해 뒤 무적함대 (옛 저장: 이미 무적함대가 불렸으면 그대로)
+    // 기사가 되고 두 해 뒤부터: 습격 ①②③ (1585년부터, 한 해 간격) → 무적함대는 1588년 5월 말에 (옛 저장: 이미 무적함대가 불렸으면 그대로)
+    // 서임 2년 뒤면 연도와 상관없이 습격·무적함대가 열리던 것 — 습격은 1585년 무렵부터, 무적함대는 역사대로 1588년에만 (QA 2026-10-23)
     if (t.knight && !t.armada) {
       var d = t.drake || (t.drake = { done: 0, call: 0, next: t.knight.day + K.armadaDays, res: [], won: 0 });
       var rd = raidOf(d);
@@ -256,15 +265,16 @@
         d.res[d.call - 1] = d.res[d.call - 1] || 'missed'; raidDone();
         out.push({ icon: 'cannon', text: '드레이크는 ' + rd.where + '에서 기다리다 홀로 싸우러 갔다. (습격 ' + d.done + '/3 — 놓침)' });
       }
-      if (!d.call && s.day >= d.next && elizQueen()) {
-        d.next += K.armadaDays;
-        if (d.done < RAIDS.length) {
-          d.call = d.done + 1; d.until = s.day + K.raidWindow; rd = RAIDS[d.call - 1];
-          out.push({ icon: 'cannon', history: true, text: rd.news });
-        } else {
-          t.armada = 'call'; t.armadaUntil = s.day + K.armadaWindow;
-          out.push({ icon: 'cannon', history: true, text: '【무적함대】 마침내 에스파냐의 무적함대가 잉글랜드로 떠났다! 드레이크가 편지를 보냈다 — 「세 번의 습격은 이날을 위한 것이었소. 우리 배 넷으로 저들의 앞줄 열두 척을 맡읍시다. 도버 해협·영국 해협으로 오시오.」' });
-        }
+      var calaisOn = t.calais && (t.calais.stage === 'call' || t.calais.stage === 'met');   // 여왕이 칼레 해전에 부른 제독은 그쪽이 같은 1588년의 싸움
+      if (elizQueen() && !calaisOn && today >= ARM.from && today <= ARM.to) {
+        rd = raidOf(d);
+        if (rd) { d.res[d.call - 1] = d.res[d.call - 1] || 'missed'; raidDone(); }   // 남은 습격은 무적함대에 밀려 지나간다
+        t.armada = 'call'; t.armadaUntil = s.day + K.armadaWindow;
+        out.push({ icon: 'cannon', history: true, text: '【무적함대】 마침내 에스파냐의 무적함대가 잉글랜드로 떠났다! 드레이크가 편지를 보냈다 — 「' + (d.done >= RAIDS.length ? '세 번의 습격은 이날을 위한 것이었소. ' : '') + '우리 배 넷으로 저들의 앞줄 열두 척을 맡읍시다. 도버 해협·영국 해협으로 오시오.」' });
+      } else if (!d.call && d.done < RAIDS.length && s.day >= raidDay(d) && elizQueen() && today < ARM.from) {
+        d.call = d.done + 1; d.until = s.day + K.raidWindow; rd = RAIDS[d.call - 1];
+        d.next = s.day + K.raidGap;
+        out.push({ icon: 'cannon', history: true, text: rd.news });
       }
     }
     // 칼레 해전: 무적함대가 칼레 앞바다에 닿았다 · 놓쳤다
@@ -290,7 +300,7 @@
       else if (rd && inBox(rd.box) && G.Rel) {
         rd.allies = drakeShips(); G.Rel.register(rd);
         var go = await G.Rel.greatBattle(rd);
-        if (!go) { t.drake.res[t.drake.call - 1] = 'declined'; raidDone(); }   // 물러나면 이번 습격은 지나가고, 두 해 뒤 다음 부름
+        if (!go) { t.drake.res[t.drake.call - 1] = 'declined'; raidDone(); }   // 물러나면 이번 습격은 지나가고, 한 해 뒤 다음 부름
       } else if (t.armada === 'call' && inChannel() && G.Rel) {
         var spec = armadaSpec(); G.Rel.register(spec);
         t.armada = 'met';

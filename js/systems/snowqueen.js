@@ -46,8 +46,15 @@
     SQ.LAKES.forEach(function (L) { var d = G.Geo.dist(lon, lat, L[1], L[2]); if (d <= r && d < bd) { bd = d; best = L[0]; } });
     return best;
   };
+  /** 모스크바로 가는 도중 게르다가 배를 떠났으면 이야기를 처음으로 — 「escort」에 묶여 다시 만날 수도 모스크바 장면도 없던 것 (QA 2026-10-23) */
+  function fixEscort() {
+    var q = st(), s = S();
+    if (q.stage === 'escort' && !row('gerda')) { delete q.stage; q.cool = s.day + (K().coolDays || 45); }
+  }
+  SQ.fixEscort = fixEscort;
   /** 아직 게르다를 만날 수 있는가 */
   SQ.ready = function () {
+    fixEscort();
     var q = st(), s = S();
     if (q.stage || row('gerda') || s.flags.gone_gerda) return false;
     return !(q.cool && s.day < q.cool);
@@ -184,6 +191,7 @@
     Cc.arrival = async function (c) {
       var r = await oa.apply(this, arguments);
       try {
+        fixEscort();
         if (c && c.id === K().moscow && st().stage === 'escort') await SQ.moscow(c);
         else if (c && c.id !== K().moscow && st().stage === 'stow') await SQ.reveal();
       } catch (e) { console.error(e); }

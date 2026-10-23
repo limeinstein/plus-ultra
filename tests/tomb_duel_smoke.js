@@ -38,11 +38,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForTimeout(1200);
     await page.evaluate(() => { document.querySelectorAll('.modal-back').forEach(e => e.remove()); });
 
-    // ① 자료: 무덤마다 무사 · 이집트는 람세스(왕가의 계곡)만 · 무열왕릉은 새 발견물
+    // ① 자료: 무덤마다 무사 · 이집트는 람세스(왕가의 계곡)만 · 무열왕릉은 새 발견물 (이름은 realName — 찾기 전 name은 단서 이름)
     const data = await page.evaluate(() => {
       const T = G.TOMB_GUARDS, ids = Object.keys(T);
       return { ids, missing: ids.filter(id => !G.DISC[id]), noSprite: ids.filter(id => !G.DUEL_ART.fighters.some(f => f.id === T[id].sprite)),
-        egypt: ['pyramid', 'giza', 'kings', 'tutankh'].filter(id => T[id]), kings: T.kings.kind + ' ' + T.kings.name, muyeol: G.DISC.muyeol && [G.DISC.muyeol.name, G.DISC.muyeol.cat, G.DISC.muyeol.how, T.muyeol.kind, T.muyeol.name, T.muyeol.sprite],
+        egypt: ['pyramid', 'giza', 'kings', 'tutankh'].filter(id => T[id]), kings: T.kings.kind + ' ' + T.kings.name, muyeol: G.DISC.muyeol && [G.DISC.muyeol.realName || G.DISC.muyeol.name, G.DISC.muyeol.cat, G.DISC.muyeol.how, T.muyeol.kind, T.muyeol.name, T.muyeol.sprite],
         noPic: ids.filter(id => !G.Img.file('discoveries/' + id)), notMan: ids.filter(id => T[id].pic ? !G.Img.file(T[id].pic) : (G.Art.rolePortraitGender(T[id].role, T[id].style) !== 'm' || !G.Img.file('portraits/npc-roles/' + T[id].style + '/' + T[id].role))), kinds: ids.map(id => id + ':' + T[id].kind).join(' ') };
     });
     console.log(JSON.stringify(data));

@@ -1,6 +1,6 @@
 /* PLUS ULTRA 설치형 게임 (Windows) — Electron 껍데기.
    게임 자체는 웹판과 같은 파일(tools/build_desktop.py가 desktop/app에 만든다)을 file://로 연다.
-   · 창: 1600×900에서 시작해 화면을 채운다(최대화) · F11 전체 화면 · F12 개발자 도구
+   · 창: 1600×900에서 시작해 화면을 채운다(최대화) · F11 전체 화면 · F12 개발자 도구(개발판·점검에서만 — 출시판은 막는다)
    · 저장: 게임이 쓰는 localStorage는 사용자 폴더(%APPDATA%\PLUS ULTRA)에 남아 업데이트·재설치에도 그대로
    · 업데이트: 켤 때 GitHub 릴리스(limeinstein/plus-ultra)에서 새 판을 찾아 뒤에서 받고(바뀐 조각만), 받으면 다시 시작할지 묻는다
    · GIF 팩: 「PLUS ULTRA GIF 팩」(desktop/gifpack.nsi)이 %APPDATA%\PLUS ULTRA\gifpack 에 깔려 있으면 preload.js로 위치를 알려 주고,
@@ -10,13 +10,17 @@
 const { app, BrowserWindow, Menu, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { pathToFileURL } = require('url');
+const { pathToFileURL, fileURLToPath } = require('url');
 
 const SMOKE = process.argv.includes('--smoke');
+// 출시판(설치본)에서는 개발자 도구를 막는다 — 점검(--smoke)·개발 실행에서는 그대로 (QA 2026-10-23)
+const DEVTOOLS = !app.isPackaged || SMOKE;
 let updater = null;
 try { updater = require('electron-updater').autoUpdater; } catch (e) { updater = null; }
 
-if (!SMOKE && !app.requestSingleInstanceLock()) app.quit();
+// 이미 켜진 게임이 있으면 이 쪽은 곧장 끝낸다 — 잠금을 얻었을 때만 창을 연다 (QA 2026-10-23, Electron 문서 예시대로)
+const GOT_LOCK = SMOKE || app.requestSingleInstanceLock();
+if (!GOT_LOCK) app.quit();
 
 let win = null;
 
@@ -27,6 +31,15 @@ function gifPackDir() {
   return cands.find(d => d && fs.existsSync(path.join(d, 'images', 'gifpack-list.js'))) || null;
 }
 
+/** file:// 주소가 게임 폴더(desktop/app) 안인가 */
+function insideApp(url) {
+  try {
+    const root = path.resolve(__dirname, 'app'), p = path.resolve(fileURLToPath(url.split(/[?#]/)[0]));
+    const rel = path.relative(root, p);
+    return rel === '' || (!!rel && !rel.startsWith('..') && !path.isAbsolute(rel));
+  } catch (e) { return false; }
+}
+
 function createWindow() {
   const pack = gifPackDir();
   win = new BrowserWindow({
@@ -34,7 +47,7 @@ function createWindow() {
     backgroundColor: '#07050a', title: 'PLUS ULTRA — Loop of Good Hope',
     icon: path.join(__dirname, 'icon.png'), show: false, autoHideMenuBar: true,
     webPreferences: {
-      contextIsolation: true, sandbox: true, backgroundThrottling: false, spellcheck: false,
+      contextIsolation: true, sandbox: true, backgroundThrottling: false, spellcheck: false, devTools: DEVTOOLS,
       preload: path.join(__dirname, 'preload.js'),
       additionalArguments: ['--pu-version=' + app.getVersion()].concat(pack ? ['--pu-gifpack=' + pathToFileURL(pack).href.replace(/\/$/, '')] : [])
     }
@@ -45,7 +58,7 @@ function createWindow() {
   win.webContents.on('before-input-event', (e, input) => {
     if (input.type !== 'keyDown') return;
     if (input.key === 'F11') { win.setFullScreen(!win.isFullScreen()); e.preventDefault(); }
-    else if (input.key === 'F12') { win.webContents.toggleDevTools(); e.preventDefault(); }
+    else if (input.key === 'F12') { if (DEVTOOLS) win.webContents.toggleDevTools(); e.preventDefault(); }
   });
   // 게임 안의 바깥 링크(자료 출처 등)는 기본 브라우저로
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -54,6 +67,8 @@ function createWindow() {
   });
   win.webContents.on('will-navigate', (e, url) => {
     if (/^https?:\/\//.test(url)) { e.preventDefault(); shell.openExternal(url); }
+    // file:// 중 게임 폴더(app) 밖으로 가는 것은 막는다 — 게임 자체 페이지(index.html 다시 읽기 등)는 그대로 (QA 2026-10-23)
+    else if (/^file:/i.test(url) && !insideApp(url)) e.preventDefault();
   });
   win.on('closed', () => { win = null; });
 }
@@ -104,9 +119,12 @@ function checkUpdates() {
   updater.checkForUpdates().catch(() => {});
 }
 
-app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
-app.whenReady().then(() => {
-  createWindow();
-  if (SMOKE) smoke(); else checkUpdates();
-});
-app.on('window-all-closed', () => app.quit());
+if (GOT_LOCK) {
+  // 두 번째로 켜면 새 창 대신 이미 열린 창을 되살려 앞으로
+  app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.show(); win.focus(); } });
+  app.whenReady().then(() => {
+    createWindow();
+    if (SMOKE) smoke(); else checkUpdates();
+  });
+  app.on('window-all-closed', () => app.quit());
+}

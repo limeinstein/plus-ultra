@@ -6,7 +6,8 @@
   function S() { return G.Game.state; }
   function K() { return (G.BALANCE && G.BALANCE.restaurant) || { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3] }; }
   function owner() { return C.npc('innkeeper', '식당 주인'); }
-  function used(c) { var s = S(); return !!(s.restaurant && s.restaurant.last && s.restaurant.last[c.id] === s.day); }
+  // 건물에 들어갈 때마다 하루가 흘러 나갔다 들어오면 또 먹을 수 있던 것 — 이번 입항(R.sameStay)에도 한 끼로 막는다 (QA 2026-10-23)
+  function used(c) { var s = S(), r = s.restaurant; return !!(r && r.last && R.sameStay(r.last[c.id], r.lastPv && r.lastPv[c.id])); }
   function price(c, d) { var k = K(); return Math.max(1, Math.round(k.base + c.size * k.size + d.tier * k.tier)); }
   function thumb(d) { var key = 'foods/' + d.id; return G.Img && G.Img.has(key) ? G.Img.src(key) : null; }
 
@@ -29,16 +30,16 @@
       return { value: x, thumb: thumb(x), icon: thumb(x) ? null : 'bread',
         label: '<b>' + U.esc(x.name) + '</b><br><small class="muted">' + U.esc(x.desc) + '</small>',
         right: U.num(p) + '닢', disabled: already || S().player.gold < p, desc: x.desc };
-    }), { width: 790, icon: 'bread', text: already ? '오늘 이 도시에서는 이미 한 끼를 먹었습니다. 내일 다시 맛볼 수 있습니다.' : '이 고장의 대표 음식을 한 끼 먹으면 항해 피로가 줄고, 선원들의 규율이 오르며, 사교 명성도 살짝 오릅니다.' });
+    }), { width: 790, icon: 'bread', text: already ? '이번에 이 도시에 들러서는 이미 한 끼를 먹었습니다. 다음에 들르면 다시 맛볼 수 있습니다.' : '이 고장의 대표 음식을 한 끼 먹으면 항해 피로가 줄고, 선원들의 규율이 오르며, 사교 명성도 살짝 오릅니다.' });
     if (!d) return;
     await T.eat(c, d);
   };
   T.eat = async function (c, d) {
     var s = S(), p = price(c, d), k = K();
-    if (used(c)) { await C.say(owner(), '오늘은 이미 든든히 드셨습니다. 내일 다시 오십시오.'); return; }
+    if (used(c)) { await C.say(owner(), '오늘은 이미 든든히 드셨습니다. 다음에 또 들러 주십시오.'); return; }
     if (s.player.gold < p) { await C.say(owner(), '소지금이 모자랍니다.'); return; }
     s.player.gold -= p;
-    s.restaurant = s.restaurant || {}; s.restaurant.last = s.restaurant.last || {}; s.restaurant.last[c.id] = s.day;
+    s.restaurant = s.restaurant || {}; s.restaurant.last = s.restaurant.last || {}; s.restaurant.last[c.id] = s.day; (s.restaurant.lastPv = s.restaurant.lastPv || {})[c.id] = R.stayNo();
     var before = s.fleet.fatigue || 0, rest = (k.rest[d.tier] == null ? 6 : k.rest[d.tier]);
     s.fleet.fatigue = Math.max(0, before - rest);
     s.player.hp = Math.min(100, (s.player.hp || 100) + (k.hp[d.tier] || 0));

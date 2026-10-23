@@ -87,6 +87,8 @@
     if (elders.length) G.State.log(fill(D().elders, null, { names: elders.map(function (k) { return k.name; }).join('·') }));
     var kids = (p.kids || []).slice(), used = {};
     kids.forEach(function (k) { if (k.name) used[k.name] = 1; });
+    // 피터 팬의 섬에서 사라진 채 대가 바뀌면 그 아이는 돌아오지 못한다 — 새 대의 같은 번호 아이를 「되찾지」 않게 이야기를 닫는다 (QA 2026-10-23)
+    if (G.Peter && G.Peter.closeLost && s.peter && s.peter.phase === 'lost') { try { G.Peter.closeLost(G.Peter.lostKid ? G.Peter.lostKid() : null); } catch (e) { console.error(e); } }
     var mother = Fm.wifeName ? Fm.wifeName() : '';
     // 같은 성별 형제와 얼굴(그림 변형 1~5)이 겹치지 않게 — 뒤를 이은 제독의 얼굴이 먼저
     var usedV = { m: {}, f: {} }; if (H && H.variant) usedV[heir.sex === 'f' ? 'f' : 'm'][H.variant(heir)] = 1;
@@ -108,7 +110,9 @@
         }
       }
       if (!k.mother && p.wife) k.mother = p.wife;
-      k.sib = { father: p.name, mother: mother, gen: (p.generation || 1) + 1, y: s.date.y };
+      // 어머니는 그 아이를 낳은 부인 (둘째 부인의 아이에게도 늘 본처 이름이 적히던 것 — QA 2026-10-23)
+      var mom = k.mother && k.mother !== p.wife && G.Wives && G.Wives.name ? G.Wives.name(k.mother) : mother;
+      k.sib = { father: p.name, mother: mom || mother, gen: (p.generation || 1) + 1, y: s.date.y };
       k.aboard = false; k.house = null; delete k.wedNext;
       if (k.sibBond == null) k.sibBond = U.clamp(45 + Math.round((Fm.bond(k) - 50) / 3), 20, 80);
       out.push(k);

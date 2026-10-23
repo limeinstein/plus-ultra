@@ -39,6 +39,8 @@
   var UI_SIZES = { auto: 0, small: 0.9, normal: 1, large: 1.15, xlarge: 1.3, max: 1.45 };   // 이름표는 js/ui/display.js D.SIZES
   Game.UI_SIZES = UI_SIZES;
   Game.uiSizePref = function () {
+    // 저장소를 막은 브라우저: 이번 판에 고른 크기(_uiSizeMem)를 먼저 — 설정 판이 늘 DEFAULT로 보이던 것 (QA 2026-10-23)
+    if (Game._uiSizeMem && UI_SIZES[Game._uiSizeMem] != null) return Game._uiSizeMem;
     try { var v = window.localStorage.getItem('pu.uiSize'); if (v && UI_SIZES[v] != null) return v; } catch (e) { /* 저장소를 못 쓰면 자동 */ }
     return 'auto';
   };

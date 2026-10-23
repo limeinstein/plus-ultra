@@ -46,8 +46,10 @@
     if (total / q < cost * (1 + (b.profit == null ? 0.3 : b.profit))) return null;
     var nat = nationOf(c), win = b.window || 90;
     fd.log = fd.log.filter(function (x) { return s.day - x.d <= win; });
-    if (fd.log.some(function (x) { return x.g === goodId && x.c === c.id && x.d === s.day; })) return null;   // 같은 날 같은 도시는 한 번
-    fd.log.push({ g: goodId, d: s.day, c: c.id, n: nat, r: c.region });
+    // 같은 날·같은 입항의 같은 도시는 한 번 — 건물을 드나들면 하루가 흘러 날짜만으로는 막히지 않던 것 (QA 2026-10-23)
+    var pv = G.R.stayNo ? G.R.stayNo() : null;
+    if (fd.log.some(function (x) { return x.g === goodId && x.c === c.id && (x.d === s.day || (pv && x.pv === pv)); })) return null;
+    fd.log.push({ g: goodId, d: s.day, c: c.id, n: nat, r: c.region, pv: pv || undefined });
     var mine = fd.log.filter(function (x) { return x.g === goodId; });
     var nN = nat ? mine.filter(function (x) { return x.n === nat; }).length : 0, nR = mine.filter(function (x) { return x.r === c.region; }).length;
     var need = b.need || 3, k = nN >= need ? 'n' : nR >= need ? 'r' : null;

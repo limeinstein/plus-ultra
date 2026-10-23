@@ -10,7 +10,14 @@
   var U = G.U, UI = G.UI, R = G.R;
   var LE = G.Leo = {};
   function S() { return G.Game && G.Game.state; }
-  function st() { var s = S(); if (!s) return null; var l = s.leo || (s.leo = {}); if (!l.given) l.given = []; if (!l.pend) l.pend = []; return l; }
+  function st() { var s = S(); if (!s) return null; var l = s.leo || (s.leo = {}); if (!l.given) l.given = []; if (!l.pend) l.pend = []; if (l.home) moveHome(l); return l; }
+  /** 옛 저장: 「고향 집에 두었다」던 발명품(l.home)은 읽는 곳이 없어 사라졌다 — 자택 보관함(R.storage)으로 옮긴다 (QA 2026-10-23) */
+  function moveHome(l) {
+    if (!R || !R.storage) return;
+    var box = R.storage();
+    (l.home || []).forEach(function (id) { var def = G.ITEM && G.ITEM[id]; if (def) box.push({ id: id, value: def.price }); });
+    delete l.home;
+  }
   var SPID = 'it_leonardo', MORO = 'it_moro';
   var INVENTIONS = [
     ['leo_ornithopter', '날개 치는 비행 기계 모형', 6000, '박쥐 날개를 본뜬 두 날개를 사람의 팔다리로 위아래로 치게 만든 비행 기계의 작은 모형. 「언젠가 사람은 새처럼 날 것」이라는 글이 거울 글씨로 적혀 있다.'],
@@ -55,9 +62,16 @@
     var present = SP.present;
     SP.present = function (x) { if (x && x.id === SPID && aboard()) return false; return present.apply(this, arguments); };
     // 계약을 마치고 보고하면 — 밤샘 이야기
-    ['report', 'lateReport'].forEach(function (k) {
+    // 일괄 보고(SP.batchReport → lateReport(…, {batch: true}))는 목록을 다 처리한 뒤 한 번만 — 처리 도중에 밤샘 이야기가 끼어들던 것 (QA 2026-10-23)
+    ['report', 'lateReport', 'batchReport'].forEach(function (k) {
       var f = SP[k]; if (!f) return;
-      SP[k] = async function (x) { var r0 = x && x.id === SPID ? (SP.rel(SPID).done || 0) : null; var res = await f.apply(this, arguments); if (r0 != null && (SP.rel(SPID).done || 0) > r0) await LE.nightTalk(); return res; };
+      SP[k] = async function (x) {
+        var inBatch = k === 'lateReport' && arguments[3] && arguments[3].batch;
+        var r0 = x && x.id === SPID && !inBatch ? (SP.rel(SPID).done || 0) : null;
+        var res = await f.apply(this, arguments);
+        if (r0 != null && (SP.rel(SPID).done || 0) > r0) await LE.nightTalk();
+        return res;
+      };
     });
     if (G.Errand && G.Errand.report) {
       var er = G.Errand.report;
@@ -138,9 +152,9 @@
         else await UI.say('제독님 앞으로 밀라노의 레오나르도 선생님께서 상자를 보내셨습니다. 편지도 함께요 — 「우리 우정의 증표로, 제가 만든 것 가운데 아끼는 것을 보냅니다. 「' + def.name + '」. 바다에서 쓸모가 있기를. — 레오나르도」', who);
         var kept = R.addItem(id, { value: def.price });
         l.given.push(id);
-        if (!kept) { l.home = l.home || []; l.home.push(id); }
+        if (!kept) R.storage().push({ id: id, value: def.price });   // 소지품이 가득하면 자택 보관함에 (전엔 l.home에 넣고 아무도 읽지 않아 사라졌다 — QA 2026-10-23)
         G.State.log('레오나르도 다 빈치에게서 발명품 「' + def.name + '」을 받았다.');
-        UI.toast('레오나르도의 발명품 「' + def.name + '」' + (kept ? ' — 소지품에 넣었다 (값 ' + U.num(def.price) + '닢)' : ' — 소지품이 가득해 고향 집에 두었다'), 'gear', 6000);
+        UI.toast('레오나르도의 발명품 「' + def.name + '」' + (kept ? ' — 소지품에 넣었다 (값 ' + U.num(def.price) + '닢)' : ' — 소지품이 가득해 자택 보관함에 맡겼다'), 'gear', 6000);
       }
     } catch (e) { console.error(e); }
     LE._busy = false;

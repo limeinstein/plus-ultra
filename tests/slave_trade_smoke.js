@@ -22,7 +22,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = G.Game.state = G.State.newGame({ name: '시험', nation: 'PT', job: 'merchant', age: 22, birth: { m: 4, d: 12 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 3), diff: 'normal' });
       const g = G.GOOD.slaves, d = G.DISC.t_slaves, city = n => G.CITY_DATA.find(c => c && c.name === n);
       out.good = !!g && G.GOODS[g.idx] === g && (g.idx === G.GOODS.length - 1 || (G.GOOD.tigerskin && G.GOOD.tigerskin.idx === g.idx + 1));   // 뒤에 붙은 호피(js/data/hunt.js)만 노예 뒤에
-      out.disc = d && d.cat + ':' + d.how + ':' + d.good + ':' + d.regions.join(',') + ':' + d.name;
+      out.disc = d && d.cat + ':' + d.how + ':' + d.good + ':' + d.regions.join(',') + ':' + (d.realName || d.name);   // 찾기 전 d.name은 단서 이름 (js/data/cluenames.js) — 발견물 이름은 realName
       out.impact = G.Disc.impactKind(d);
       out.cities = G.CITY_DATA.filter(c => c && c.goods && c.goods.includes('slaves')).map(c => c.name).join(',');
       const mina = city('산호르헤'), lis = city('리스본'), dom = city('산토도밍고'), cai = city('알렉산드리아');
