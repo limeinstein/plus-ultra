@@ -174,7 +174,7 @@
     if (SC.discoveryReplay) { try { out.shown = await SC.discoveryReplay(d, { title: ttl }); } catch (e) { console.error(e); } }
     else { var show = SC.discoveryShow ? SC.discoveryShow(d, { title: ttl }) : null; if (show) { out.close = show.close; out.shown = true; } }
     var SP = G.Sponsor, kd = P.kind(sp), liked = sp ? G.tasteHit(sp.taste, d) : d.pw >= 3;
-    var ctx = { d: d.name, h: sp ? SP.honor(sp) : '여러분', who: sp ? SP.holderName(sp) : '', me: s.player.name, reg: G.Disc.regName ? G.Disc.regName(d) : '', cat: (G.DISC_CATS || {})[d.cat] || '' };
+    var ctx = { d: d.name, h: sp ? SP.honor(sp) : '여러분', who: sp ? SP.holderName(sp) : '', me: s.player.name, reg: G.Disc.regName ? G.Disc.regName(d, true) : '', cat: (G.DISC_CATS || {})[d.cat] || '' };
     var me = sp ? SP.me(sp) : { name: s.player.name, portrait: s.player.portrait };
     var who = sp ? SP.speaker(sp) : crowdSpk();
     try {

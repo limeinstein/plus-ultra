@@ -7,10 +7,10 @@ const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
 (async () => {
-  const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding'] });
+  const b = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding'] });
   const page = await b.newPage({ viewport: { width: 640, height: 360 } });
   const errs = []; page.on('pageerror', e => errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error' && !/Failed to load|net::|fonts|ERR_FILE/.test(m.text())) errs.push('CONSOLE ' + m.text()); });
-  await page.addInitScript(() => { window.requestAnimationFrame = () => 0; window.createImageBitmap = undefined; document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = '*{animation:none!important;transition:none!important} body > *{visibility:hidden!important} canvas{display:none!important}'; document.head.appendChild(st); }); });
+  await page.addInitScript(() => { let seed = 73471; Math.random = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }; window.requestAnimationFrame = () => 0; window.createImageBitmap = undefined; document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = '*{animation:none!important;transition:none!important} body > *{visibility:hidden!important} canvas{display:none!important}'; document.head.appendChild(st); }); });
   await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
   await page.waitForFunction(() => window.G && G.Game && G.Scenes && G.Scenes.sea, null, { timeout: 90000 });
   const out = await page.evaluate(async () => {
@@ -20,6 +20,8 @@ const ROOT = path.resolve(__dirname, '..');
     G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; G.Disc.find = async () => {}; G.Explore.report = async () => {}; G.Explore.milestones = async () => {};
     const f = n => G.CITY_DATA.find(c => c && c.name === n).id; const A = f('리스본'), B = f('제노바');
     const s = G.Game.state; s.routes = {}; s.routes[G.Routes.key(A, B)] = { n: 1 }; if (s.known.indexOf(B) < 0) s.known.push(B); s.player.gold = 50000; s.player.fame = 3000;
+    // 항로·해적 선택만 시험한다. 굶주림과 무작위 질병이 선택창을 가로채지 않게 충분히 싣는다.
+    s.fleet.food = 999999; s.fleet.water = 999999; s.fleet.fatigue = 0; s.fleet.scurvy = 0;
     window.__arr = null; G.Scenes.city.handleEntry = async c => { window.__arr = c.id; return false; };
     const toasts = []; const t0 = G.UI.toast; G.UI.toast = function (m) { toasts.push(String(m)); return t0.apply(this, arguments); };
     G.Game.go('sea', { depart: A }); let SEA = G.Scenes.sea, st = SEA.runtime(); st.speed = 2;
@@ -34,19 +36,23 @@ const ROOT = path.resolve(__dirname, '..');
     let r = 'ok'; for (let k = 0; k < 30 && r === 'ok'; k++) r = await tick(1);
     const txt = ([...document.querySelectorAll('.modal-back')].pop() || {}).textContent || '';
     ok(/해적/.test(txt), '해적을 만남: ' + txt.slice(0, 40));
-    await pick('통행료'); for (let k = 0; k < 5 && G.UI.busy(); k++) await pick('');
+    ok(await pick('통행료'), '해적 선택창에서 통행료 단추를 정확히 고름'); for (let k = 0; k < 5 && G.UI.busy(); k++) await pick('');
     st.keepNpc = false; st.npcs = [];
     await new Promise(r => setTimeout(r, 30));
     ok(!st.paused && st.path && st.autoOn, '통행료를 내면 자동항해를 이어 감 (paused=' + st.paused + ')');
     const p0 = [s.loc.lon, s.loc.lat]; await tick(10); ok(G.Geo.dist(p0[0], p0[1], s.loc.lon, s.loc.lat) > 0.05, '실제로 다시 나아감');
     // 2) Space 정지 → Space 다시
+    // 항구 바로 곁의 Space는 의도대로 정박 명령이다. 자동항해 재개를 보려면 항구 반경을 벗어난 뒤 누른다.
+    for (let k = 0; k < 300 && SEA.portNear(); k++) { await tick(1); await clear(); }
+    ok(!SEA.portNear(), '항구 정박 반경을 벗어나 자동항해 정지·재개를 시험');
     const key = k => document.dispatchEvent(new KeyboardEvent('keydown', { key: k, code: k === ' ' ? 'Space' : k, bubbles: true }));
     await clear(); key(' '); for (let k = 0; k < 40 && !st.paused; k++) { if (await tick(1) === 'ui') await clear(); } ok(st.paused && st.path, 'Space로 멈춤 (길은 남음)');
     await clear(); key(' '); ok(!st.paused && st.path && st.autoOn, 'Space를 한 번 더 누르면 자동항해를 이어 감');
-    await tick(5); await clear();
     // 3) 해전 → 돌아오면 이어 감
-    st.keepNpc = true; st.npcs = [pirate()]; r = 'ok'; for (let k = 0; k < 60; k++) { r = await tick(1); if (r === 'ui') { if (/해적/.test(([...document.querySelectorAll('.modal-back')].pop() || {}).textContent)) break; await clear(); st.npcs = [pirate()]; } }
-    await pick('싸운다'); for (let k = 0; k < 60 && G.Game.scene === SEA; k++) await new Promise(r => setTimeout(r, 50));
+    // 첫 해적과 마주친 직후의 무작위 조우 간격 제한과 무관하게, 공개 SEA.meet로 두 번째 조우를 확정한다.
+    st.keepNpc = true; const foe = pirate(); st.npcs = [foe]; ok(SEA.meet(foe), '두 번째 해적 조우를 확정');
+    for (let k = 0; k < 60 && !G.UI.busy(); k++) await new Promise(r => setTimeout(r, 10));
+    ok(await pick('싸운다'), '해적 선택창에서 싸운다 단추를 정확히 고름'); for (let k = 0; k < 60 && G.Game.scene === SEA; k++) await new Promise(r => setTimeout(r, 50));
     ok(G.Game.scene !== SEA, '싸운다 → 해전 화면');
     st.keepNpc = false;
     G.Game.go('sea', { resume: true }); st = SEA.runtime();

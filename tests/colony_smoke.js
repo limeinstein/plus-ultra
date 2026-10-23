@@ -94,7 +94,7 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     const f1 = await page.evaluate(id => { const s = G.Game.state, e = s.colony.list[0], c = G.CITY_DATA[id]; return { name: c.name, stage: e.stage, need: e.need, blds: G.Scenes.city.buildings(c).map(b => b.name), town: G.Town.active(), items: G.Town.active() ? G.Town.item('tavern') != null : null, log: s.log.slice(-4).map(l => l.t || l.text || l) }; }, cid);
     ok(named && f1.name === '노바 리스보아' && f1.stage === 1, '이름 짓기 → 「' + f1.name + '」 1단계');
     ok(bannerShot, '도시를 세우는 순간: 금빛 글귀와 함께 새 거리 (그림)');
-    ok(f1.blds.join(',') === '항구,교역소,술집,여관,성문', '1단계 건물: ' + f1.blds.join(' · '));
+    ok(f1.blds.join(',') === '항구,교역소,술집,식당,여관,성문', '1단계 건물: ' + f1.blds.join(' · '));
     ok(f1.need && /wheat|timber/.test(f1.need.good) && f1.need.qty === 40, '첫 물자의 청: ' + JSON.stringify(f1.need));
     // ---- ④ 물자 3번 → 2·3·4단계
     for (let k = 1; k <= 3; k++) {

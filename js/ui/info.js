@@ -177,17 +177,25 @@
     var ks = {}; Object.keys(d.lg || {}).forEach(function (k) { ks[k] = 1; }); Object.keys(m.lgx || {}).forEach(function (k) { ks[k] = 1; });
     return Object.keys(ks).map(function (k) { var lv = R.mateLang(m, +k); return lv ? G.LANGS[k] + ' ' + G.LANG_LV[lv] + (lv > ((d.lg || {})[k] || 0) ? '★' : '') : ''; }).filter(Boolean).join(' · ');
   }
+  /** 부하의 특기: 타고난 것 + 선실에서 는 것(★) — 칸은 지금 쓰는 단계(충성이 낮거나 다치면 줄어든다), 줄었으면 (본디 n) (2026-10-23 QA 26) */
+  function mateSkills(m, d) {
+    var l = G.Cabins && G.Cabins.skillList ? G.Cabins.skillList(m, true) : Object.keys(d.sk).map(function (k) { return { id: k, name: G.SKILL_BY_ID[k].name, lv: R.mateSkill(m, k), raw: R.mateSkill(m, k), grown: 0 }; });
+    return l.map(function (x) {
+      return x.name + ' ' + pips(x.lv) + (x.grown > 0 ? '<b title="선실에서 지내며 ' + x.grown + '단계 늘었다" style="color:var(--gold)">★</b>' : '') + (x.lv < x.raw ? ' <small class="muted" title="충성이 낮거나 다쳐서 지금은 덜 쓴다">(본디 ' + x.raw + ')</small>' : '');
+    }).join(' &nbsp; ') || '<span class="muted">특기 없음</span>';
+  }
   PAGES.mates = function (el) {
     var s = S();
     if (!s.mates.length) { el.innerHTML = '<div class="muted">동료가 없습니다. 술집에서 동료를 찾아보십시오.</div>'; return; }
-    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」이나 항구의 「함대편성 → 선장 임명」에서 바꿉니다. 그 밖의 부하는 「기함 선실」에서 방(요리실·진료실·포격실…)에 두면 그 방의 특기가 함대에 쓰입니다. 자리가 없는 부하는 달마다 충성이 떨어지고, 충성이 40 아래면 일을 건성으로 하며, 0이 되면 배에서 내리려 합니다.</div><div class="mates"></div>';
+    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 선실에서 오래 지내면 그 방의 특기가 늘어납니다(★). 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」이나 항구의 「함대편성 → 선장 임명」에서 바꿉니다. 그 밖의 부하는 「기함 선실」에서 방(요리실·진료실·포격실…)에 두면 그 방의 특기가 함대에 쓰입니다. 자리가 없는 부하는 달마다 충성이 떨어지고, 충성이 40 아래면 일을 건성으로 하며, 0이 되면 배에서 내리려 합니다.</div><div class="mates"></div>';
     var box2 = el.querySelector('.mates');
     R.tidyCaptains();
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
       var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>' + (G.Banter ? '<span class="tag" title="생김새로 정해진 말투 — 동물·식물을 발견하면 이 말투로 수다를 떤다">말투 · ' + U.esc(G.Banter.toneName(m.id)) + '</span>' : '') + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
         '<div class="muted" style="font-size:16px;margin:4px 0">' + d.desc + '</div>' +
-        '<div style="font-size:16px">' + Object.keys(d.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + pips(d.sk[k]); }).join(' &nbsp; ') + '</div>' +
+        '<div style="font-size:16px">' + mateSkills(m, d) + '</div>' +
+        (G.Cabins && G.Cabins.growNote(m) ? '<div style="font-size:15px;margin-top:2px" class="muted">선실 수련 · ' + U.esc(G.Cabins.growNote(m)) + '</div>' : '') +
         '<div style="font-size:15px;margin-top:4px" class="muted">' + mateLangs(m, d) + '</div></div>');
       row.style.gridTemplateColumns = '96px 1fr';
       row.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 96));

@@ -9,7 +9,7 @@ const ROOT = path.resolve(__dirname, '..');
 const res = [];
 function ok(v, msg) { res.push([!!v, msg]); console.log((v ? '  ✓ ' : '  ✗ ') + msg); }
 (async function () {
-  const browser = await chromium.launch({ args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));

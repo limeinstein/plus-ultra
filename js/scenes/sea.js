@@ -798,7 +798,7 @@
       var n = st.npcs[i];
       if (!n.hostile || n.cooldown > 0) continue;
       if (G.Geo.dist(l.lon, l.lat, n.lon, n.lat) < 0.3) {
-        var pk = (n.kind === 'pirate' || n.kind === 'navy') ? 'ship:' + n.kind : null;   // 이야기의 배(추격자·왕녀 등)는 막지 않는다
+        var pk = (!n.tip && (n.kind === 'pirate' || n.kind === 'navy')) ? 'ship:' + n.kind : null;   // 이야기의 배(추격자·왕녀 등)·여급이 알려 준 배(사례금을 냈다)는 막지 않는다
         if (pk && G.Pace && !G.Pace.ok(pk, { noGap: true })) { n.cooldown = 3; continue; }
         if (pk && G.Pace) G.Pace.mark(pk);
         await encounter(n, false); return;
@@ -818,6 +818,7 @@
     st.paused = true; refreshBar();
     var k = NPC_KIND[n.kind];
     if (n.chaser && G.Fakes) G.Fakes.chaserMet(n);          // 추격자는 한 번뿐
+    if (n.tip && G.MaidTip && G.MaidTip.met) G.MaidTip.met(n.tip);   // 여급이 알려 준 배를 실제로 만났다 (js/systems/maidtip.js)
     var pl = G.Ships.pirateLabel(n.zone);
     var who = n.kind === 'pirate' ? pl + ' 함대' : n.label || (n.nation || '') + ' ' + k.name;
     var kinds = n.ships ? n.ships.filter(function (id, i) { return n.ships.indexOf(id) === i; }).map(function (id) { return G.SHIP[id].name; }).join('·') : '';
@@ -872,6 +873,7 @@
   }
   /** 적의가 없는 배와 신호를 주고받는다: 소식·시세·보급, 또는 공격 */
   async function hail(n) {
+    if (n.tip && G.MaidTip && G.MaidTip.met) G.MaidTip.met(n.tip);   // 여급이 알려 준 배를 실제로 만났다
     var s = S(), f = s.fleet, wasSailing = !st.paused;
     st.busy++; st.paused = true; refreshBar();
     var capStyle = A.fleetStyle(n.zone || G.Ships.zone(n.lon, n.lat), n.nation);

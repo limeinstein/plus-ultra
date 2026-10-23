@@ -43,7 +43,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const ev = { id: 'evidence', kind: 'evidence', evidence: true, name: '시험 해도', disc: 'capegood' }; p.items.push(ev);
       out.proofStore = HM.storeOne(ev);
       // 칸이 차 있으면 꺼내지 못한다
-      while (!R.itemsFull()) R.addItem(plain[2]);
+      var fillGuard = 0;
+      while (!R.itemsFull() && fillGuard < R.ITEM_MAX + 5) {
+        R.addItem(plain[2], { name: '꺼내기 시험 물건 ' + fillGuard });
+        fillGuard++;
+      }
+      if (!R.itemsFull()) throw new Error('소지품 채우기 시험이 ' + fillGuard + '번 안에 끝나지 않음');
       out.takeFull = HM.takeOne(R.storage()[0]);
       HM.storeOne(p.items.find(it => /시험 물건/.test(it.name || '')));
       out.take = HM.takeOne(R.storage().find(x => x.id === 'rapier'));

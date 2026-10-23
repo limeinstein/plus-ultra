@@ -124,7 +124,8 @@ body { font-family: var(--serif); font-weight: var(--body-weight, 400); color: v
 .cmd.kbd-focus { border-color: #f0cf7b; box-shadow: inset 0 0 0 2px rgba(240,207,123,.55), 0 0 16px rgba(240,207,123,.32); color: #fff8df; }
 .cmd svg { width: 24px; height: 24px; flex: 0 0 24px; color: var(--brass-hi); }
 .cmd .sub { margin-left: auto; font-size: 14px; color: var(--cream-dim); }
-.cmd.dim { opacity: .45; }
+.cmd.dim > * { opacity: .45; }   /* 흐린 항목: 버튼 안 글·그림만 흐리게 — 튜토리얼 「여기」 표(::after)와 도움말 풍선은 또렷하게 */
+.cmd.dim { border-color: #46351f; background: linear-gradient(180deg, rgba(46,34,23,.86), rgba(26,19,12,.86)); }
 .cmd.exit { margin-top: 6px; background: linear-gradient(180deg, rgba(40,52,70,.95), rgba(20,28,40,.95)); }
 
 /* ---------------------------------------------------------------- dialog box */
@@ -1639,18 +1640,32 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .ft-kid.lost .ft-fate { color: #777; font-style: italic; }
 .ft-none { margin-top: 10px; font-size: 14px; color: #8a7350; }
 .ft-down { color: #c9a227; font-size: 22px; line-height: 1; margin: 8px 0; }
-/* 건물 메뉴의 긴 설명 → 풍선 도움말 (js/ui/ui.js UI.cmdMenu, 2026-10-23) — 메뉴가 오른쪽에 있으니 풍선은 왼쪽에 뜬다 */
+/* 건물 메뉴의 긴 설명 → 풍선 도움말 (js/ui/ui.js UI.cmdMenu, 2026-10-23) — 메뉴마다 풍선 하나(.cmd-tip)를 메뉴 상자 바깥(메뉴가 오른쪽이면 왼쪽)에 띄운다.
+   버튼 ::after 를 쓰지 않으니 튜토리얼 「여기」 표(.cmd.tut-glow::after)를 덮지 않고, 흐린 항목의 투명도도 물려받지 않는다.
+   마우스를 올리거나 방향키로 고를 때만 뜬다 (메뉴를 막 열었을 때 첫 항목에 저절로 붙는 키보드 표시로는 뜨지 않는다) */
 .cmd { position: relative; }
 .cmd .sub { white-space: nowrap; }
 .cmd .tipdot { position: absolute; right: 6px; top: 3px; font-size: 12px; line-height: 1; color: var(--cream-dim); opacity: .65; }
-.cmd.has-tip:hover::after, .cmd.has-tip.kbd-focus::after {
-  content: attr(data-tip); position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%); z-index: 30;
-  width: max-content; max-width: 260px; padding: 8px 12px; font-size: 15px; line-height: 1.45; white-space: normal; text-align: left;
-  color: #f3e6c8; background: rgba(28,20,13,.96); border: 1px solid var(--brass); border-radius: 3px; box-shadow: 0 4px 14px rgba(0,0,0,.45); pointer-events: none;
+.cmd.dim > .tipdot { opacity: .45; }
+.cmd-tip {
+  display: none; position: absolute; right: calc(100% + 12px); top: 0; z-index: 30; box-sizing: border-box;
+  width: max-content; max-width: 260px; padding: 8px 12px; font-size: 15px; line-height: 1.45; white-space: normal; text-align: left; letter-spacing: 0;
+  color: #f3e6c8; background: rgba(28,20,13,.97); border: 1px solid var(--brass); border-radius: 3px; box-shadow: 0 4px 14px rgba(0,0,0,.45); pointer-events: none;
 }
-.cmd.has-tip:hover::before, .cmd.has-tip.kbd-focus::before {
-  content: ''; position: absolute; right: calc(100% - 4px); top: 50%; transform: translateY(-50%); border: 8px solid transparent; border-left-color: var(--brass); pointer-events: none; z-index: 31;
+.cmd-tip.on { display: block; }
+.cmd-tip::before {   /* 꼬리 — 버튼 쪽을 가리킨다 (--ay: 풍선 위에서 버튼 가운데까지) */
+  content: ''; position: absolute; left: 100%; top: var(--ay, 50%); transform: translateY(-50%); border: 8px solid transparent; border-left-color: var(--brass);
 }
+.cmd-tip.to-right { right: auto; left: calc(100% + 12px); }
+.cmd-tip.to-right::before { left: auto; right: 100%; border-left-color: transparent; border-right-color: var(--brass); }
+.cmdmenu.talk-hidden .cmd-tip { display: none; }
 .cmdmenu:not(.many) .cmd { height: 44px; box-sizing: border-box; }
-.cmdmenu:not(.many) .cmd > .sub { white-space: nowrap; flex: 0 0 auto; }   /* 짧은 것만 남으니 한 줄로 (긴 설명은 풍선) */
-.cmdmenu:not(.many) .cmd > span:not(.sub):not(.tipdot) { flex: 1 1 auto; }
+.cmdmenu:not(.many) .cmd > .sub { white-space: nowrap; flex: 0 0 auto; }   /* 짧은 수치·상태만 남으니 한 줄로 (긴 설명은 풍선) */
+.cmdmenu:not(.many) .cmd > span:not(.sub):not(.tipdot) { flex: 1 1 auto; min-width: 0; white-space: nowrap; }   /* 이름은 한 줄 — 자리를 미리 잡지 않으니 짧은 이름 옆의 「물건 값 131%」도 한 줄로. 넘치면 fitCmdMenu 가 맞춘다 */
+/* 넘치는 버튼 (js/ui/ui.js fitCmdMenu): ① 조금 작은 글 ② 오른쪽 작은 글을 두 줄로 — 그래도 넘치면 풍선으로 옮긴다 */
+.cmd.tight { gap: 8px; padding-left: 10px; padding-right: 10px; }
+.cmd.tight > span:not(.sub):not(.tipdot) { font-size: 17px; letter-spacing: 0; }
+.cmd.tight > .sub { font-size: 12.5px; letter-spacing: 0; }
+.cmdmenu:not(.many) .cmd.sub2 { padding-top: 2px; padding-bottom: 2px; }
+.cmdmenu:not(.many) .cmd.sub2 > span:not(.sub):not(.tipdot) { flex-shrink: 0; }   /* 두 줄로 접는 쪽은 작은 글 — 이름은 그대로 */
+.cmdmenu:not(.many) .cmd.sub2 > .sub { white-space: normal; flex: 0 1 auto; min-width: 0; max-width: 55%; line-height: 1.15; text-align: right; word-break: keep-all; }

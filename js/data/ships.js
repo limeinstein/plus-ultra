@@ -90,7 +90,7 @@
     { id: 'greatgalley', name: '대형 갤리', lv: 3, cult: 'eu', cap: 300, hp: 64, crew: [100, 230], ports: 8, spd: 1.12, oar: 0.7, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 26000, turn: 1.15, len: 1.35, hull: 'galley',
       traits: ['oar', 'bow', 'highdeck'], feat: '노 달린 큰 상선 — 비싼 짐을 안전하게', where: '베네치아·제노바',
       desc: '베네치아가 플랑드르와 알렉산드리아로 보내던 갤레아 그로사. 노와 돛을 함께 써 비싼 짐을 안전하게 나른다.' },
-    { id: 'galleass', name: '갤리어스', lv: 5, cult: 'eu', cap: 340, hp: 100, crew: [140, 320], ports: 32, spd: 1.0, oar: 0.6, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 58000, turn: 0.8, from: 1555, len: 1.45, hull: 'galley',
+    { id: 'galleass', name: '갤리어스', lv: 5, cult: 'eu', cap: 340, hp: 100, crew: [140, 320], ports: 32, spd: 1.0, oar: 0.6, sails: ['lat', 'lat', 'lat'], maxMast: 3, price: 45000, turn: 0.8, from: 1555, len: 1.45, hull: 'galley',
       traits: ['oar', 'dragon', 'highdeck', 'coast'], feat: '노 달린 떠다니는 포대', where: '베네치아 (1555년~)',
       desc: '대형 갤리에 포를 가득 실은 베네치아의 군선. 옆으로도 앞으로도 쏜다. 레판토에서 이름을 떨쳤다.' },
     { id: 'fusta', name: '푸스타', lv: 1, cult: 'eu', cap: 70, hp: 26, crew: [26, 70], ports: 3, spd: 1.18, oar: 0.95, sails: ['lat'], maxMast: 1, price: 5400, turn: 1.8, len: 1.25, hull: 'galley',

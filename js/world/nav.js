@@ -164,12 +164,24 @@
   };
   /** 뱃길의 길이 (°) */
   N.length = function (p) { var L = 0; for (var i = 1; p && i < p.length; i++) L += Math.hypot(G.Geo.wrapLon(p[i][0] - p[i - 1][0]), p[i][1] - p[i - 1][1]); return L; };
-  /** 자동항해의 뱃길: 배가 실제로 지나갈 수 있는 물로만 이어진 길이 그리 멀지 않으면(N.TIGHT_DETOUR배 + 1° 안) 그 길로, 아니면 N.path */
-  N.TIGHT_DETOUR = 1.25;
+  /** 경로를 거꾸로 뒤집되, 첫 점의 경도 틀(±360)에 맞춘다.
+      물가의 시작점 때문에 한쪽 방향에서만 길을 못 찾는 일이 있어, 엄격한 뱃길은 양방향으로 찾아 본다. */
+  function reversePath(p, lon0) {
+    p = p.slice().reverse();
+    if (!p.length) return p;
+    p[0] = [lon0, p[0][1]];
+    return unwrap(p);
+  }
+  /** 자동항해의 뱃길: 배가 실제로 지나갈 수 있는 물로만 이어진 길을 우선한다.
+      느슨한 길은 지도 자료의 가느다란 틈(파나마 지협 등)을 뱃길로 잘못 볼 수 있으므로,
+      엄격한 길이 한 방향에서만 찾아지면 반대 방향의 길을 뒤집어 쓴다. 둘 다 없을 때만 N.path로 물러난다. */
   N.seaPath = function (lon0, lat0, lon1, lat1, maxNodes) {
-    var a = N.path(lon0, lat0, lon1, lat1, maxNodes), b = N.pathTight(lon0, lat0, lon1, lat1, maxNodes, true);
-    if (b && (!a || N.length(b) <= N.length(a) * N.TIGHT_DETOUR + 1)) return b;
-    return a;
+    var b = N.pathTight(lon0, lat0, lon1, lat1, maxNodes, true);
+    if (!b) {
+      var back = N.pathTight(lon1, lat1, lon0, lat0, maxNodes, true);
+      if (back) b = reversePath(back, lon0);
+    }
+    return b || N.path(lon0, lat0, lon1, lat1, maxNodes);
   };
   function search(lon0, lat0, lon1, lat1, maxNodes, strict, tight) {
     N.init();

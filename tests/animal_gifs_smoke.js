@@ -9,7 +9,8 @@ const { pathToFileURL } = require('url');
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const CATALOG = pathToFileURL(path.join(ROOT, 'catalog.html')).href;
-const SCREEN = path.join(ROOT, 'docs', 'art', 'animal-gif-runtime.png');
+// 회귀 검사가 저장소의 문서 원화를 매번 덮어쓰지 않게 기본 캡처는 임시 폴더에 둔다.
+const SCREEN = process.env.OUT ? path.resolve(process.env.OUT, 'animal-gif-runtime.png') : path.join(os.tmpdir(), 'animal-gif-runtime.png');
 const BASE_ANIMALS = ['tarantula','llama','prairiedog','moose','frigatebird','tortoise','albatross','kangaroo','paradise','sable','tiger','panda','porcupine','coelacanth','warthog','komodo','penguin','mandrill','ostrich','flamingo','hippo','crocodile','polarbear'];
 const ADDED_ANIMALS = [...fs.readFileSync(path.join(ROOT, 'js', 'data', 'animals.js'), 'utf8').matchAll(/^\s*a\('([^']+)'/gm)].map(m => m[1]);
 const MORE_BEASTS = [...fs.readFileSync(path.join(ROOT, 'js', 'data', 'moredisc.js'), 'utf8').matchAll(/^\s*beast\('([^']+)'/gm)].map(m => m[1]);
@@ -111,7 +112,7 @@ function socket(url) {
     }))()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.animals !== 138 || result.gifs !== 138 || result.sheets !== 138 || result.reveals !== 138 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== catalog.expectedAnimated || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || !catalog.aria.includes('지옥의 꽃') || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.animals !== 138 || result.gifs !== 138 || result.sheets !== 138 || result.reveals !== 138 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== catalog.expectedAnimated || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || !catalog.aria.includes('라플레시아') || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

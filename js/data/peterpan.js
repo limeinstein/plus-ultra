@@ -10,6 +10,6 @@
   var m = { id: 'peter_pan', name: '피터 팬', g: 'm', style: 'ne', role: 'sailor', tone: 'shonen', pic: 'peter_pan', age: 'young',
     st: [56, 60, 82, 90], sk: { sword: 3, nav: 3, survey: 3, music: 2 }, skBoost: 1, lg: { 3: 3 },   // skBoost: 정해 준 능력 그대로 · 게르만어(스코틀랜드·잉글랜드 말)
     desc: '어른이 되기 싫어 태어난 날 밤 창문으로 달아났다는 소년. 스코틀랜드 서쪽 작은 섬의 바위 굴에서 혼자 살았다. 이가 아직 젖니 그대로이고, 기분이 좋으면 수탉처럼 「꼬끼오」 하고 운다. 바람을 타고 나는 법을 알아 높은 데서 별을 보고 길을 찾고, 섬의 물길과 여울을 손바닥처럼 꿴다. 해적과 칼싸움하는 것이 세상에서 제일 재미있다고 하며, 갈대 피리를 불면 바닷새들이 모여든다. 어른은 싫어하지만, 아이를 찾으러 섬 끝까지 온 제독만은 예외라고 한다.' };
-  m.tale = true; m.legend = true; m.fame = 0; m.wage = 0; m.y = [1480, 1700]; m.reg = []; m.face = 'portraits/legendary/' + m.pic; m.eventOnly = true;
+  m.tale = true; m.legend = true; m.fame = 0; m.wage = G.taleWage ? G.taleWage(m) : 0; m.y = [1480, 1700]; m.reg = []; m.face = 'portraits/legendary/' + m.pic; m.eventOnly = true;
   if (G.MATES && !G.MATE[m.id]) { G.MATES.push(m); G.MATE[m.id] = m; }
 })(window.G = window.G || {});

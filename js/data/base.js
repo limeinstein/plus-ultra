@@ -2,9 +2,9 @@
 (function (G) {
   'use strict';
 
-  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '중국·조선', '중앙아시아', '동남아시아', '일본', '아메리카'];   // 6번은 명(중국)과 조선 — 조선은 중국의 일부가 아니므로 「중국·조선」. 화면에는 「동아시아 · 중국 / 조선 / 일본」 (G.regionLabel, 2026-10-22)
+  G.REGIONS = ['이베리아', '북유럽', '지중해', '아프리카', '중근동', '인도', '동아시아', '중앙아시아', '동남아시아', '일본', '아메리카'];   // 6번은 명(중국)과 조선을 함께 담는 문화권 번호일 뿐 — 조선은 중국의 일부가 아니므로 이름은 「동아시아」. 낱낱의 고장·발견물은 G.regionLabel · G.regionLabelAt 으로 「동아시아 · 중국 / 조선 / 일본」 (2026-10-23)
   /* 동아시아 (2026-10-22 사용자 요청 「조선·중국·일본은 동아시아로 묶고, 중국·일본을 가르는 곳에 조선도」):
-     지역 번호(교역 거리·시세·조약 따위의 규칙)는 그대로 6(중국·조선)·9(일본) — 보이는 이름만 「동아시아 · 중국 / 조선 / 일본」으로 가른다 */
+     지역 번호(교역 거리·시세·조약 따위의 규칙)는 그대로 6(중국과 조선)·9(일본) — 보이는 이름만 「동아시아 · 중국 / 조선 / 일본」으로 가른다 */
   G.EAST_ASIA = [6, 9];
   /** 동아시아 도시의 나라 갈래: '중국' · '조선' · '일본' (동아시아가 아니면 null) */
   G.subRegion = function (c) {
@@ -18,6 +18,20 @@
     if (!c) return '';
     var sub = G.subRegion(c);
     return sub ? '동아시아 · ' + sub : (G.REGIONS[c.region] || '');
+  };
+  /** 땅 위 한 점(발견물·고장)의 나라 갈래: 지역 6이면 좌표로 '조선' · '중국', 9면 '일본', 나머지는 null.
+      조선 = 동경 124.5도 동쪽 · 북위 33~43도 (제주부터 두만강까지 — 압록강 서쪽 요동, 흑룡강 쪽 만주는 중국).
+      도시는 같은 갈래를 G.subRegion(도시의 거리 모양·말)으로 정하고, 지역 6의 모든 도시가 이 좌표 판정과 맞는다 (tests/region_label_smoke.js) */
+  G.subRegionAt = function (reg, lon, lat) {
+    if (reg === 9) return '일본';
+    if (reg !== 6) return null;
+    if (!isFinite(lon) || !isFinite(lat)) return null;
+    return lon >= 124.5 && lat >= 33 && lat < 43 ? '조선' : '중국';
+  };
+  /** 땅 위 한 점의 지역 이름: 「동아시아 · 조선」 · 「동아시아 · 중국」 · 「동아시아 · 일본」, 좌표가 없으면 「동아시아」, 나머지는 G.REGIONS 그대로 */
+  G.regionLabelAt = function (reg, lon, lat) {
+    var sub = G.subRegionAt(reg, lon, lat);
+    return sub ? '동아시아 · ' + sub : (G.REGIONS[reg] || '');
   };
   // trade distance between culture regions (0 = same)
   G.REGION_DIST = [
@@ -71,13 +85,21 @@
     { id: 'first', name: '부관' }, { id: 'nav', name: '항해사' }, { id: 'surveyor', name: '측량사' }, { id: 'interp', name: '통역' }, { id: 'purser', name: '경리' }
   ];
 
+  /** 이야기 부하의 품삯: 특기 합이 높은 사람만 받는다 (QA 2026-10-23 — 급료 0인데 게임에서 가장 강하던 것). G.BALANCE.taleWage */
+  G.taleWage = function (m) {
+    var K = (G.BALANCE && G.BALANCE.taleWage) || { from: 11, base: 20, per: 11, max: 250 }, n = 0, k;
+    for (k in (m.sk || {})) n += m.sk[k] || 0;
+    return n >= K.from ? Math.min(K.max, Math.round((K.base + K.per * n) / 5) * 5) : 0;
+  };
+  /** 합류 알림에 붙일 품삯 한 마디 */
+  G.wageNote = function (id) { var m = G.MATE && G.MATE[id]; return m && m.wage ? '월 품삯 ' + m.wage + '닢' : '품삯 없음'; };
   G.JOBS = [
     { id: 'explorer', name: '탐험가', desc: '항해와 측량에 능하다. 처음 시작하는 제독에게 권한다.', skills: { nav: 2, survey: 2, ops: 1 } },
     { id: 'digger', name: '발굴자', desc: '역사와 웅변에 밝아 유적을 찾는 데 강하다.', skills: { hist: 2, speech: 2 } },
     { id: 'hunter', name: '사냥꾼', desc: '운용술이 뛰어나 오랜 탐험을 견딘다. 생물 발견에 강하다.', skills: { ops: 3, sci: 1 } },
     { id: 'conq', name: '정복자', desc: '검술의 달인. 해전과 지상전에서 두각을 나타낸다.', skills: { sword: 3, gun: 1 } },
     { id: 'miss', name: '전도사', desc: '신학을 익혀 교회의 신뢰를 얻고 선원의 마음을 붙든다.', skills: { theo: 3, speech: 1 } },
-    { id: 'merchant', name: '상인', desc: '회계에 능해 교역으로 부를 쌓는다.', skills: { acct: 3, speech: 1 }, ship: 'tartane' },   // 코그(네모돛 하나)는 맞바람에 하루 0.12°밖에 못 가 마데이라 앞에서 굶었다 → 세모돛 타르타나
+    { id: 'merchant', name: '상인', desc: '회계에 능해 교역으로 부를 쌓는다.', skills: { acct: 3, speech: 1 } },   // 첫 배 카라벨 (QA 2026-10-23: 교역 직업이 타르타나로 더 불리하게 시작하던 것)   // 코그(네모돛 하나)는 맞바람에 하루 0.12°밖에 못 가 마데이라 앞에서 굶었다 → 세모돛 타르타나
     { id: 'soldier', name: '군인', desc: '포술과 사격술을 익힌 군인. 전투에 강하다.', skills: { gun: 2, shoot: 2 } }
   ];
 
@@ -305,7 +327,12 @@
     // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
     pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
     // 명성 칭호의 문턱: 신참 모험가 · 이름난 모험가 · 저명한 항해가 · 위대한 탐험가 · 대항해자 (예전 400·1600·4000·8000·15000 — 3년이면 끝 칭호였다)
-    fameTitles: [400, 1600, 5000, 12000, 25000],
+    fameTitles: [5000, 20000, 60000, 150000, 400000],   // QA 2026-10-23: 400·1,600·5,000·12,000·25,000 → 발견 25개면 끝나던 칭호를 늘림
+    tradeFameDiv: 800,   // 교역 이익 이만큼에 교역 명성 1 (예전 2,500 — 교역만으로는 궁정·작위가 막히던 것)
+    crewWage: { per: 2, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)
+    duelArmor: { k: 60, cap: 0.4 },   // 일기토 방어: 피해 × (1 − 방어/(방어+k)), 최대 cap까지만 줄인다 (예전: 방어×0.5를 빼서 방어 30이면 피해가 절반 넘게 줄던 것)
+    oarK: 0.8,   // 노 젓는 속력 배수 (코라코라·소조 같은 노배가 돛배보다 빠르던 것 — QA 2026-10-23)
+    taleWage: { from: 11, base: 20, per: 11, max: 250 },   // 이야기 부하: 특기 합이 from 이상이면 품삯 = base + per×특기 합 (최대 max, 5닢 단위)
     // 식량·물이 떨어진 날 쓰러지는 선원의 비율 [최소, 최대]
     starve: [0.03, 0.07],
     // 모든 것을 잃고 고향에서 다시 시작할 때 받는 배 (잃은 기함이 더 싼 배였으면 그 배)
@@ -446,7 +473,7 @@
     //   성공 확률은 값 깎기와 같은 T.haggleOdds — 차수마다 ×fade, 거절당할 때마다 ×acct.retryK. 파는 쪽 웃돈은 깎는 몫 × sellK (들여온 물건·다른 곳에서 산 몫에만)
     // 항해 중 사건의 저절로 넘기기 (js/ui/ui.js UI.autoRun): 폭풍·바다의 사건·해일·맞바람 — 처음에는 기다리고, 같은 말·물음이 두 번째부터는 ms 동안 입력이 없으면 지난번처럼
     seaAuto: { on: true, ms: 5000 },
-    batchDeal: { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8 },
+    batchDeal: { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8, floor: 0.8, ceil: 1.2 },   // floor·ceil: 값 깎기와 일괄 흥정을 합쳐 사는 값은 시세 ×0.8 아래로, 파는 값은 ×1.2 위로 가지 않는다 (QA 2026-10-23)
     questLate: { k: 0.5, min: 20, max: 60 },
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
     clueStack: { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 },
@@ -510,7 +537,8 @@
     //  strength: 시대 수요 배수의 세기(1 = 자료 그대로) · worldPerYear: 저절로 이는 유행이 한 해에 몇 번 · worldMin: 그 시대 수요가 이만큼 넘는 물건만 · worldMult/worldDays: 그 유행의 값 배수·날
     //  discChance/discGoods/discMult/discDays: 발견이 알려졌을 때 유행이 일 확률·물건 수·배수·날 · spreadDays/spreadChance: 세상의 유행이 이웃 유럽 지역으로 번지는 때·확률
     era: { on: true, strength: 1, worldPerYear: 2.5, worldMin: 1.05, worldMult: 1.7, worldDays: [60, 120], discChance: 0.85, discGoods: 2, discMult: 2, discDays: [90, 150], spreadDays: 30, spreadChance: 0.4 },
-    fad: { profit: 0.3, need: 3, window: 90, chance: 0.6, mult: 3, days: 60, cooldown: 180 },
+    fad: { profit: 0.3, need: 5, window: 90, chance: 0.3, mult: 1.6, days: 60,   // QA 2026-10-23: need 3→5 · chance 0.6→0.3 · mult 3→1.6 (제독이 마음대로 ×3 유행을 일으키던 것)
+      cooldown: 180 },
     // 자택에서 아이와 보내는 시간 (js/systems/homelife.js): 능력 상한 statMax · 특기를 익힐 확률 skillChance · 장부를 맡기면 지력×ledgerGold닢
     // · 가족 저녁의 피로 회복 dinnerRest · 사이가 cold 아래면 서먹한 첫마디(함께하면 +coldBonus) · 집을 longAway일 넘게 비웠다 오면 키 재기
     // · 생일 앞뒤 birthdayDays일 · 집에서 일이 생기는 간격 happenGap일·확률 happenChance · 바다에서 추억의 물건: 피로 keepFatigue부터 하루 keepChance, 피로 −keepRest

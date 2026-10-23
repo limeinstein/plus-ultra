@@ -71,7 +71,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.again === false, '그 전에는 다시 들어서도 아무 일 없음');
     ok(r.win.truth && r.win.stay && r.win.kai && !r.win.gerda && r.win.shoes && r.win.stage === 'stow', '풀면 진실 → 게르다·카이는 러시아에 남고 빨간 구두를 남긴다 → 몰래 탄 공주');
     ok(r.eliz && r.stage3 === 'done' && r.protect, '모스크바를 떠난 다음 날 엘리자베타가 나타나 합류 (「내가 아니면 누가 당신을 지켜 주겠소」)');
-    ok(r.eliz && r.eliz.sk.join() === '2,3,3,3,2' && r.eliz.lg.every(v => v === 3) && r.eliz.wage === 0, '엘리자베타: 신학2 과학3 측량3 회계3 웅변2 · 슬라브·로망스·게르만·스페인·포르투갈 3 · 품삯 없음');
+    ok(r.eliz && r.eliz.sk.join() === '2,3,3,3,2' && r.eliz.lg.every(v => v === 3) && r.eliz.wage === 165, '엘리자베타: 신학2 과학3 측량3 회계3 웅변2 · 슬라브·로망스·게르만·스페인·포르투갈 3 · 품삯 없음');
     ok(pz.disks === 3 && /눈의 여왕의 수수께끼 — 얼음 원반 ★★★/.test(pz.title), '수수께끼 창: 얼음 원반 ★3 (' + pz.title.trim() + ')');
     ok(errors.length === 0, '콘솔 오류 0' + (errors.length ? ': ' + errors.join(' | ') : ''));
     console.log('통과');

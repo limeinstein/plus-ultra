@@ -44,7 +44,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       var sp = (G.SPONSORS || []).filter(function (x) { return G.CITY_DATA[x.city] && G.CITY_DATA[x.city].region === 1; })[0];
       G.BALANCE.era.discChance = 1;
       s.disc.t_nutmeg = { me: true, found: 16520501, reported: sp.id };   // 교역품 발견 「육두구」 (경쟁자가 발표하지 않는 발견)
-      var msgs = G.Game.passDays(1).filter(function (m) { return /세상의 유행/.test(m.text); });
+      var msgs = G.Game.passDays(1).filter(function (m) { return m.history && /육두구/.test(m.text); });
       o.disc = msgs.map(function (m) { return m.text; });
       o.discFads = G.Fad.list().map(function (x) { return x.where + ':' + x.g + ':' + x.m + ':' + x.src; });
       o.fadLon = !!G.Fad.at(lon, 'nutmeg') && G.Fad.mult(lon, 'nutmeg') === 2;

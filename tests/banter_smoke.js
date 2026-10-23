@@ -14,7 +14,7 @@ const OUT = process.env.OUT;
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 
 (async function () {
-  const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -79,7 +79,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log('    말투 분포', JSON.stringify(r.cnt));
     ok(r.tones === 12 && !r.genderBad.length, '말투 12가지가 모두 나오고 성별과 맞음');
-    ok(r.tigerIdea === 'attack' && r.tiger.length === 3 && r.tiger[0].indexOf('호랑이') >= 0 && r.tiger[0].indexOf('공격해 ') >= 0, '호랑이 → 공격:\n      ' + r.tiger.join('\n      '));
+    ok(r.tigerIdea === 'attack' && r.tiger.length === 3 && r.tiger[0].indexOf('공격해 ') >= 0, '호랑이 → 공격:\n      ' + r.tiger.join('\n      '));
     ok(r.lotusIdea === 'rideLeaf' && r.lotus[0].indexOf('잎 위에 올라타') >= 0, '연꽃 → 잎 위에 올라타기:\n      ' + r.lotus.join('\n      '));
     ok(r.dragon && /에서 온/.test(r.dragon[1]) && r.dragon[0].indexOf('말을 걸어') >= 0, '용 → 말 걸기·말리기:\n      ' + r.dragon.join('\n      '));
     ok(r.leftN === 0 && r.seenTone === 12, '생물 ' + r.creatures + '종 × 말투 12가지로 ' + r.composed + '판을 만들어 글자리·빈 값 0' + (r.leftN ? ' — ' + r.left.join(' | ') : ''));

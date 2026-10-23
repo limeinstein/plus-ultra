@@ -1,7 +1,9 @@
 /* 가문의 가계도 (js/systems/familytree.js G.FamilyTree) — node tests/familytree_smoke.js   (BROWSER_EXE=크롬 경로)
    · 1대 제독이 물러나기 전에는 자택 메뉴에 「가계도」가 없다 · 물러나면 s.lineage 에 남고 메뉴가 생긴다
    · 세 대: 대마다 제독 ═ 본처 · 아이들 · 뒤를 이은 아이(금테) · 아이들의 앞날(시집감·항해사로 함께·제 길로·분가함·집에서 지냄)
-   · 바다에서 생을 마치고 이은 대는 「바다에서 생을 마침」 · 저장·불러오기에 남는다 · 옛 저장은 항해 일지에서 이름을 찾는다 · 콘솔 오류 0 */
+   · 바다에서 생을 마치고 이은 대는 「바다에서 생을 마침」 · 저장·불러오기에 남는다 · 옛 저장은 항해 일지에서 이름을 찾는다 · 콘솔 오류 0
+   · 2026-10-23 QA 2·3: 옛 저장은 불러올 때 한 번 선대를 s.lineage 에 남긴다(그 뒤 일지 줄이 지워져도 이름이 남는다) ·
+     since 없는 2대가 물러나면 재임 시작 해는 일지의 세대 교체 해(1510), 그것도 없으면 동생들이 집에 든 해, 아무것도 없으면 「?」 (1480 아님) */
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
@@ -68,11 +70,68 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     // 옛 저장: 2대째인데 기록이 없다 → 항해 일지에서 이름
     r = await page.evaluate(() => {
-      const s = G.Game.state; delete s.lineage; s.player.generation = 2;
+      const s = G.Game.state; delete s.lineage; delete s.flags.lineageV; s.player.generation = 2;   // 옛 저장 흉내 (기록·옮김 표시 없음)
       s.log.push({ d: 15000101, t: '베르나르두가 은퇴하고 ' + s.player.name + '이 뒤를 이었다.' });
       return { has: G.FamilyTree.has(), gens: G.FamilyTree.gens().map(g => g.e.gen + ':' + (g.e.name || '?') + (g.e.stub ? '(기록 없음)' : '')) };
     });
     ok(r.has && r.gens.length === 2 && /^1:베르나르두\(기록 없음\)/.test(r.gens[0]), '옛 저장은 항해 일지에서 선대 이름을 찾는다 — ' + r.gens.join(' / '));
+
+    // QA 2·3: 옛 저장(2대, since·lineage 없음)을 불러오기 → 한 번 옮김 → 일지 줄이 지워져도 이름이 남고, 2대가 물러나면 1510~1530
+    r = await page.evaluate(async () => {
+      const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 1; });
+      const mk = (name, extra) => {
+        G.Game.state = G.State.newGame({ name: name, nation: 'PT', job: 'explorer', age: 40, birth: { m: 4, d: 12 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 1), diff: 'normal' });
+        const o = JSON.parse(G.State.serialize());
+        o.player.generation = 2; delete o.player.since; delete o.lineage; delete o.flags.lineageV; delete o.flags.journalV;
+        o.date = { y: 1530, m: 6, d: 1 }; o.day = Math.round(50 * 365.25);
+        o.log = o.log.map(e => ({ d: e.d, t: e.t }));   // 등급 없는 옛 줄
+        extra(o);
+        return JSON.stringify(o);
+      };
+      const out = {};
+      // ① 일지에 「베르나르두가 은퇴하고 페드루가 뒤를 이었다」(1510)가 남아 있는 옛 저장
+      let json = mk('페드루', o => { o.log.push({ d: 15100301, t: '베르나르두가 은퇴하고 페드루가 뒤를 이었다.' }); });
+      let s = G.Game.state = G.State.deserialize(json);
+      out.a = { line: (s.lineage || []).map(e => e.gen + ':' + e.name + ':' + e.from + '~' + e.to + (e.stub ? ':stub' : '')), since: s.player.since, flag: s.flags.lineageV,
+        succG: (s.log.find(e => /은퇴하고/.test(e.t)) || {}).g };
+      s.log = s.log.filter(e => !/은퇴하고/.test(e.t));    // 일지 줄이 지워져도
+      out.a.after = G.FamilyTree.gens().map(g => g.e.gen + ':' + (g.e.name || '?'));
+      out.a.saved = G.State.deserialize(G.State.serialize()).lineage.map(e => e.name).join(',');
+      // 2대 페드루가 1530년에 물러남 → 「1510~1530년 제독」
+      s.player.kids.push({ name: '안토니우', sex: 'm', born: { y: 1510, m: 3, d: 5 }, sk: {}, lg: {}, st: { str: 55, int: 55, mar: 55, cha: 55 }, edu: {}, bond: 60 });
+      await G.Family.retire();
+      s = G.Game.state;
+      const e2 = s.lineage.find(e => e.gen === 2) || {};
+      out.a.e2 = e2.from + '~' + e2.to;
+      G.UI.window = ((orig) => function (o) { const w = orig.call(this, o); window.__ftw = w; return w; })(G.UI.window);
+      G.FamilyTree.open(); await new Promise(r => setTimeout(r, 300));
+      out.a.ui = [...document.querySelectorAll('.ft-win .ft-couple')].map(e => e.innerText.replace(/\s+/g, ' '));
+      window.__ftw.close(1);
+      // ② 일지 줄은 없고 동생들(1512년에 집에 듦)만 있는 옛 저장 → 1512
+      json = mk('조르즈', o => { o.player.siblings = [{ name: '이네스', sex: 'f', born: { y: 1495, m: 1, d: 1 }, sk: {}, lg: {}, st: {}, edu: {}, sib: { father: '루이', mother: '', gen: 2, y: 1512 } }]; });
+      s = G.Game.state = G.State.deserialize(json);
+      out.b = { since: s.player.since, line: s.lineage.map(e => e.gen + ':' + (e.name || '?') + ':' + e.from + '~' + e.to) };
+      // ③ 아무 단서도 없는 옛 저장 → 모름 (「?~1530년 제독」, 1480 아님)
+      json = mk('바스쿠', () => {});
+      s = G.Game.state = G.State.deserialize(json);
+      out.c = { since: s.player.since == null ? null : s.player.since };
+      s.player.kids.push({ name: '루이스', sex: 'm', born: { y: 1508, m: 3, d: 5 }, sk: {}, lg: {}, st: { str: 55, int: 55, mar: 55, cha: 55 }, edu: {}, bond: 60 });
+      await G.Family.retire();
+      s = G.Game.state;
+      const e3 = s.lineage.find(e => e.gen === 2) || {};
+      out.c.e2 = e3.from + '~' + e3.to;
+      G.FamilyTree.open(); await new Promise(r => setTimeout(r, 300));
+      out.c.ui = [...document.querySelectorAll('.ft-win .ft-couple')].map(e => e.innerText.replace(/\s+/g, ' '));
+      window.__ftw.close(1);
+      return out;
+    });
+    console.log(JSON.stringify(r));
+    ok(r.a.flag === 1 && r.a.line.length === 1 && /^1:베르나르두:\d{4}~1510:stub$/.test(r.a.line[0]) && r.a.since === 1510, '옛 저장 불러오기: 선대를 한 번 s.lineage 에 남기고 지금 제독의 since 를 채운다 — ' + r.a.line.join(' / ') + ' · since ' + r.a.since);
+    ok(r.a.succG === 'F', '세대 교체 줄은 가문(F) 등급 — 일상보다 오래 남는다');
+    ok(/^1:베르나르두/.test(r.a.after[0]) && r.a.saved === '베르나르두', '그 뒤 일지 줄이 지워져도 선대 이름이 남는다 (저장에도) — ' + r.a.after.join(' / '));
+    ok(r.a.e2 === '1510~1530' && r.a.ui.some(x => /2대 제독 페드루.*1510~1530년 제독/.test(x)), 'since 없는 2대가 물러나면 1510~1530년 제독 (게임 시작 해 아님) — ' + r.a.e2);
+    ok(r.b.since === 1512 && /^1:\?:\d{4}~1512$/.test(r.b.line[0]), '일지 줄이 없으면 동생들이 집에 든 해로 since — ' + r.b.since + ' · ' + r.b.line.join(' / '));
+    ok(r.c.since === null && r.c.e2 === 'null~1530' && r.c.ui.some(x => /2대 제독 바스쿠.*\?~1530년 제독/.test(x)) && !r.c.ui.some(x => /1480~1530/.test(x)), '단서가 없으면 「?~1530년 제독」 — ' + (r.c.ui.find(x => /2대/.test(x)) || ''));
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }
 })();

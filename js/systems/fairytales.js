@@ -117,7 +117,7 @@
     var m = G.MATE[id], nm = G.Legend && G.Legend.join ? G.Legend.join(id, null) : null;
     if (!nm) return null;
     st().met[id] = (st().met[id] || 0) + 1;
-    UI.toast(m.name + ' — 품삯을 받지 않는 항해사', 'heart', 4200);
+    UI.toast(m.name + ' — 항해사 (' + G.wageNote(id) + ')', 'heart', 4200);
     if (G.Achieve && G.Achieve.afterHire) { try { await G.Achieve.afterHire(id); } catch (e) { console.error(e); } }
     return nm;
   };
@@ -141,7 +141,7 @@
     await say(id, '어머… 꼭 맞아요! 두 짝이 다시 한 켤레가 됐어요.', 'happy');
     await narrate('그녀는 구두를 신고 몇 걸음 춤을 춰 보더니, 문득 멈춰 서서 성 쪽을 바라본다.');
     await say(id, '이상하죠. 이렇게 고운 구두를 신고 나니… 무도회보다 저 바다가 더 보고 싶어요. 열두 시가 되면 마법이 풀려도, 바다는 그대로 있을 테니까요.\f저를 배에 태워 주세요. 품삯은 필요 없어요. 부엌이든 갑판이든, 쓸고 닦는 일이라면 누구보다 잘해요.');
-    if (!(await ask('신데렐라가 무급 항해사로 함께 가겠다고 한다.', '배에 태운다', '무도회에 보낸다'))) {
+    if (!(await ask('신데렐라가 항해사로 함께 가겠다고 한다. (' + G.wageNote(id) + ')', '배에 태운다', '무도회에 보낸다'))) {
       await say(id, '…네, 그럼 무도회에 다녀올게요. 언젠가 다시 이 숲에서 뵈어요.'); cool(id); return false;
     }
     await T.join(id);
@@ -181,7 +181,7 @@
     var n = S().mates.length;
     await narrate('그녀는 일행을 하나하나 세어 본다. 제독, 그리고 남자 부하 ' + n + '명.');
     await say(id, '하나, 둘, 셋… 일곱. 일곱 사람이네요! 숲속 오두막의 아저씨들도 일곱이었어요.\f저, 요리도 하고 빨래도 하고, 아픈 사람도 돌볼 줄 알아요. 품삯은 필요 없어요. 다만 왕비님의 거울이 볼 수 없는 먼 바다로— 저를 데려가 주세요.', 'happy');
-    if (!(await ask('백설공주가 무급 항해사로 함께 가겠다고 한다.', '배에 태운다', '안전한 마을까지만 데려다준다'))) {
+    if (!(await ask('백설공주가 항해사로 함께 가겠다고 한다. (' + G.wageNote(id) + ')', '배에 태운다', '안전한 마을까지만 데려다준다'))) {
       await say(id, '…네. 그래도 구해 주신 은혜는 잊지 않을게요.'); cool(id); return false;
     }
     await T.join(id);

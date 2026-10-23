@@ -100,9 +100,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     ok(!d2.noPrep.length, '발표 12달 전: 「떠날 채비」 소문과 함께 단서 — ' + d2.prep.length + '곳 (' + d2.noPrep.join(',') + ')');
     ok(!d2.notTook.length, '발표 달: 경쟁자의 발견이 되고, 단서는 지워지고, 이제 찾을 수 없다 — ' + d2.took.length + '곳 (' + d2.notTook.join(',') + ')');
-    ok(!d2.seaHit && !d2.landHit, '경쟁자가 발표한 뒤에는 바다(모스켄 소용돌이)·뭍(인면수)에서 가까이 가도 발견되지 않는다');
-    const blocked = await page.evaluate(async () => { const r = await G.Disc.find(G.DISC.maelstrom, 'sea'); return { r, me: !!G.Game.state.disc.maelstrom.me }; });
-    ok(blocked.r === false && !blocked.me, 'D.find도 거절 — 「이미 디드리크 피닝이 발표했다」');
+    ok(d2.seaHit && d2.landHit, '경쟁자가 발표한 뒤에도 바다(모스켄 소용돌이)·뭍(인면수)에 가면 뒤늦게 찾을 수 있다 (2026-10-23)');
+    const late = await page.evaluate(async () => { window.__noRaf = true; const tick = setInterval(() => { document.querySelectorAll('.modal-back, .win, .disc-card').forEach(m => { const b = m.querySelector('.askrow .btn, .btn, button'); if (b) b.click(); else m.click(); }); }, 300); G.Disc.find(G.DISC.maelstrom, 'sea').catch(() => {}); for (let i = 0; i < 60 && !(G.Game.state.disc.maelstrom && G.Game.state.disc.maelstrom.me); i++) await new Promise(r => setTimeout(r, 250)); clearInterval(tick); const st = G.Game.state.disc.maelstrom; return { me: !!st.me, rival: st.rival, hint: !!G.Game.state.hints.maelstrom, newHint: G.Disc.addHint('mandrill', 'tavern:0') }; });
+    ok(late.me && late.rival && !late.hint && late.newHint === false, '뒤늦은 발견: 제독의 것이 되지만 첫 발견은 그대로 ' + late.rival + ' · 새 단서(후원 제안)는 생기지 않는다');
 
     // ③ 늦은 보고: 먼저 찾아 두고 알리지 않았는데 경쟁자가 발표 → 명성·사례금 절반
     const d3 = await page.evaluate(async () => {

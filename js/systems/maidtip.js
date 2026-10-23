@@ -7,7 +7,9 @@
      - 철새: 지금 어느 도시 술집·여관에 있는지 (가까운 순, 호감이 높을수록 여러 명). 철새는 한 달에 한 번 옮겨 다니니 서둘러야 한다.
    · 사례금: 종류마다 기본값 × 도시 크기 × 호감(낮을수록 비쌈) × 만난 횟수(자주 만날수록 쌈). 호감이 높을수록 기한이 넉넉하고 상선대 짐이 많다.
    · 같은 여급에게는 하루에 한 번만 묻는다. 묻고 나면 호감이 조금 오른다.
-   · 저장: s.maidTips = [{id, kind, nation, lon, lat, port, from, to, n, rich, by, city, spawned}] · s.maids[여급].tipDay
+   · 알려 준 척수 그대로 나타난다 (해적 구성·이름난 선장이 척수를 바꾸지 않는다 — js/systems/corsairs.js·seacaptains.js 가 npc.tip 을 본다).
+     나타난 배를 만나기 전에 입항·불러오기로 바다에서 사라지면, 기한 안에 그 앞바다에 다시 가면 또 나타난다 (2026-10-23 QA).
+   · 저장: s.maidTips = [{id, kind, nation, lon, lat, port, from, to, n, rich, by, city, spawned, met}] · s.maids[여급].tipDay
    조정값: G.BALANCE.maidTip */
 (function (G) {
   'use strict';
@@ -116,15 +118,18 @@
     var who = tip.kind === 'merchant' ? (tip.nation ? tip.nation + ' ' : '') + '상선대 ' + tip.n + '척' : tip.kind === 'navy' ? (tip.nation || '어느 나라') + ' 군함 ' + tip.n + '척' : (G.Ships ? G.Ships.pirateLabel(G.Ships.zone(tip.lon, tip.lat)) : '해적') + ' ' + tip.n + '척';
     return who + ' — ' + where + ' · ' + left + '일 안';
   };
-  /** 아직 유효한 소식 */
-  MT.active = function () { var s = S(); return list().filter(function (t) { return !t.spawned && s.day <= t.to; }); };
+  /** 아직 유효한 소식 (나타났지만 만나기 전에 바다에서 사라진 것도 — npcs: 지금 바다의 배들) */
+  function onSea(t, npcs) { return (npcs || []).some(function (n) { return n.tip === t.id; }); }
+  MT.active = function (npcs) { var s = S(); return list().filter(function (t) { return t.met == null && s.day <= t.to && (t.spawned == null || !npcs || !onSea(t, npcs)); }); };
+  /** 알려 준 배를 실제로 만났다 (sea.js 마주침·신호) — 이제 끝난 소식 */
+  MT.met = function (id) { var t = list().filter(function (x) { return x.id === id; })[0]; if (t) t.met = S().day; };
 
   // ---------------------------------------------------------------- 바다에서: 그 앞바다에 들어가면 배가 나타난다 (sea.js spawnNpcs)
   MT.spawn = function (npcs) {
     var s = S(), l = s.loc, k = K();
     var L = list(); if (!L.length) return null;
-    s.maidTips = L.filter(function (t) { return !t.spawned && s.day <= t.to + 30; });   // 오래된 소식은 치운다
-    var tip = MT.active().filter(function (t) { return G.Geo.dist(l.lon, l.lat, t.lon, t.lat) <= k.near; })[0];
+    s.maidTips = L.filter(function (t) { return t.met == null && s.day <= t.to + 30; });   // 만났거나 오래된 소식은 치운다
+    var tip = MT.active(npcs || []).filter(function (t) { return G.Geo.dist(l.lon, l.lat, t.lon, t.lat) <= k.near; })[0];
     if (!tip) return null;
     tip.spawned = s.day;
     var zone = G.Ships.zone(tip.lon, tip.lat), y = s.date.y;
@@ -140,12 +145,22 @@
       rich: tip.rich };
     npc.ships = G.Ships.enemyTypes(tip.kind, zone, tip.nation, tip.n, Kx, y);
     if (G.SeaFolk) G.SeaFolk.decorate(npc, npcs || []);
+    fitCount(npc, tip.n, Kx, y);   // 알려 준 척수 그대로
     if (tip.nation && tip.kind !== 'pirate') { npc.nation = tip.nation; if (G.SeaFolk.label) npc.label = G.SeaFolk.label(npc); }
     var mn = G.MAID && G.MAID[tip.by] ? G.MAID[tip.by].name : '여급';
     UI.toast(mn + U.jx(mn, '이/가') + ' 말한 ' + (npc.label || KIND[tip.kind].label) + U.jx(npc.label || '배', '이/가') + ' 수평선에 보인다!', tip.kind === 'pirate' ? 'skull' : 'ship', 5200);
     G.State.log(mn + '의 귀띔대로 ' + city(tip.port).name + ' 앞바다에서 ' + (npc.label || '배') + U.jx(npc.label || '배', '을/를') + ' 만났다.');
     return npc;
   };
+
+  /** 이름난 선장이 붙어 한 척 늘었거나 구성이 바뀌었어도 알려 준 척수에 맞춘다 (기함 = 첫 배는 그대로) */
+  function fitCount(npc, n, Kx, y) {
+    var a = npc.ships || (npc.ships = []);
+    while (a.length > n) a.pop();
+    while (a.length < n) { var more = G.Ships.enemyTypes(npc.kind, npc.zone, npc.nation, 1, Kx, y); a.push(more[0] || a[a.length - 1] || 'caravel'); }
+    if (npc.names && npc.names.length > n) npc.names.length = n;
+    npc.n = a.length;
+  }
 
   // ---------------------------------------------------------------- 철새의 행방
   MT.wanderers = function (c, st) {

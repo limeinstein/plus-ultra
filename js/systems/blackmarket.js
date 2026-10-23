@@ -92,7 +92,7 @@
   };
   /** 거간꾼의 귀띔: 다른 도시 뒷골목에 도는 명검 하나 (기간마다 바뀜) */
   BM.rumor = function (c) {
-    var list = Object.keys(BM.SWORDS).map(Number).filter(function (id) { var o = G.CITY_DATA[id]; return id !== c.id && o && R.cityExists(o) && BM.sword(o) && G.ITEM[BM.SWORDS[id]].price >= 100000; });
+    var list = Object.keys(BM.SWORDS).map(Number).filter(function (id) { var o = G.CITY_DATA[id]; return id !== c.id && o && R.cityExists(o) && BM.sword(o) && G.ITEM[BM.SWORDS[id]].price >= 50000; });   // 이름난 명검·갑옷만 (QA 2026-10-23 값 6만~9만으로 내림 — 예전 10만 기준)
     if (!list.length) return null;
     var o = G.CITY_DATA[list[Math.floor(rng(c)() * 997) % list.length]], it = G.ITEM[BM.SWORDS[o.id]];
     return { city: o.id, item: it.id, text: (it.kind === 'armor' ? '이름난 갑옷을 찾는다면 — ' : '명검을 찾는다면 — ') + o.name + '의 뒷골목에 「' + it.name + '」' + U.jx(it.name, '이/가') + ' 돈다더군.' };

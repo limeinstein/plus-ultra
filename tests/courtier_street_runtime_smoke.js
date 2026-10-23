@@ -35,14 +35,18 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
       const styles = G.Art.NPC_STYLES.map(style => {
         const city = G.CITY_DATA.find(c => G.Img.folkStyle(c) === style);
         const folk = G.StreetFolk.make('man', city, 5000, 1000, 768, 'art:' + style);
-        return { style, city: city.name, frames: folk.frames && folk.frames.length,
+        return { style, city: city.name, sprite: G.StreetFolk.spriteOf('man', city), frames: folk.frames && folk.frames.length, sheet: folk.frames && folk.frames[0] && folk.frames[0].k,
           face: G.Img.pick(G.Art.portraitKeys(folk.face.portrait)), half: G.Img.pick(folk.face.half) };
       });
-      await Promise.all(styles.flatMap(row => Array.from({ length: 8 }, (_, i) => G.Img.load('street-folk/man_' + row.style + '/walk_' + (i + 1)))));
+      await Promise.all(styles.map(row => G.Img.load(row.sheet)));
       return { courtiers, styles };
     });
     ok(coverage.courtiers.length === 22 && new Set(coverage.courtiers.map(x => x.face)).size === 22 && coverage.courtiers.every(x => /portraits\/courtiers\/.+/.test(x.face) && /_half$/.test(x.half)), '군주 22명마다 서로 다른 전속 신하 얼굴·무릎상');
-    ok(coverage.styles.length === 20 && coverage.styles.every(x => x.frames === 8 && x.face === 'portraits/npc-roles/' + x.style + '/native' && x.half === x.face + '_half'), '20개 지역 주민의 보행 8장과 같은 사람 얼굴·무릎상');
+    ok(coverage.styles.length === 20 && coverage.styles.every(x => {
+      const own = 'portraits/street-folk/' + x.sprite + '_' + x.style;
+      const faceMatches = x.face === own || x.face.indexOf('portraits/npc-roles/' + x.style + '/') === 0; // 걷는 그림과 성별이 다르면 같은 지역·성별 역할 얼굴
+      return x.frames === 8 && x.sheet === 'street-folk/' + x.sprite + '_' + x.style && faceMatches && x.half === x.face + '_half';
+    }), '20개 지역 주민의 보행 시트 8칸과 같은 지역·성별의 얼굴·무릎상');
 
     await page.evaluate(() => G.Game.go('city', { cityId: 0 }));
     await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Town.active(), null, { timeout: 60000 });

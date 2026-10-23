@@ -34,7 +34,7 @@
   /** 옛 저장: 지금까지의 기록으로 어림한다 */
   function guess(s) {
     var st = (s && s.stats) || {};
-    return { ex: 60 + (st.found || 0) * 160, tr: Math.max(0, st.profit || 0) / 2500 + (st.trades || 0) * 0.5, bt: (st.wins || 0) * 35 + (st.sunk || 0) * 10, so: (st.quests || 0) * 8 };
+    return { ex: 60 + (st.found || 0) * 160, tr: Math.max(0, st.profit || 0) / ((G.BALANCE && G.BALANCE.tradeFameDiv) || 800) + (st.trades || 0) * 0.5, bt: (st.wins || 0) * 35 + (st.sunk || 0) * 10, so: (st.quests || 0) * 8 };
   }
   /** 갈래의 합을 통합 명성과 맞춘다. 갈래 묶음을 돌려준다 */
   F.sync = function () {

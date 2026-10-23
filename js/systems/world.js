@@ -6,6 +6,9 @@
   G.World = W;
   function S() { return G.Game.state; }
 
+  /** 선원 급료 한 달 (G.BALANCE.crewWage.per × 선원 수) */
+  W.crewWage = function () { var s = S(), k = (G.BALANCE.crewWage || {}).per || 0; return s && s.fleet ? Math.round((s.fleet.crew || 0) * k) : 0; };
+
   W.daily = function () {
     var s = S(), out = [];
     // history
@@ -95,6 +98,18 @@
         s.mates.forEach(function (m) { m.loyal = Math.max(0, (m.loyal == null ? 70 : m.loyal) - 20); });
         out.push({ icon: 'coin', text: '동료들의 급료(' + U.num(wage) + '닢)를 지불하지 못했다! 불만이 쌓이고 있다.' });
         // 충성이 바닥난 사람은 곧 떠나겠다고 나선다 — 붙잡을 수 있다 (G.Cabins.monthly → farewell)
+      }
+    }
+    // 선원 급료 (QA 2026-10-23): 한 사람에 한 달 G.BALANCE.crewWage.per닢 — 못 주면 규율이 떨어지고 피로가 쌓인다
+    var cw = W.crewWage();
+    if (cw > 0) {
+      if (s.player.gold >= cw) s.player.gold -= cw;
+      else {
+        var CWB = G.BALANCE.crewWage || {};
+        s.player.gold = 0;
+        s.fleet.discipline = Math.max(0, (s.fleet.discipline || 0) - (CWB.unpaidDiscipline || 15));
+        s.fleet.fatigue = Math.min(100, (s.fleet.fatigue || 0) + (CWB.unpaidFatigue || 8));
+        out.push({ icon: 'coin', text: '선원들의 급료(' + U.num(cw) + '닢)를 다 치르지 못했다! 갑판에 불평이 번진다.' });
       }
     }
     if (G.Cabins) out = out.concat(G.Cabins.monthly(paid));

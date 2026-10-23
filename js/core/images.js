@@ -433,7 +433,11 @@
   /** 발견 유물: 전용 유물 그림, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */
   K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'discovery-ends/' + r.relic, 'discoveries/' + r.relic, 'relic-kinds/' + r.kind]; };
   /** 교역품: 품목별 그림, 없으면 갈래 공통 그림 */
-  K.good = function (g) { return ['goods/' + g.id, 'good-kinds/' + g.cat]; };
+  K.good = function (g) {
+    // 발견한 식물을 심어 얻는 교역품은 그 식물의 고해상도 마지막 장면을 전용 그림으로 쓴다.
+    // 별도 192px 그림을 다시 줄여 만들지 않아 원본 해상도를 보존하고, 없을 때만 갈래 공통 그림으로 물러난다.
+    return (g.plant && g.from ? ['discovery-ends/' + g.from, 'discoveries/' + g.from] : ['goods/' + g.id]).concat(['good-kinds/' + g.cat]);
+  };
   /** 소지품(일반 물건·유물) 그림의 주소 — 선택 창·알림·대화 단추의 작은 그림용. 그림이 없으면 null (코드로 그린 그림을 쓰는 자리는 I.make) */
   I.itemSrc = function (it) {
     if (!it) return null;

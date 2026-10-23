@@ -382,8 +382,10 @@
         if (a === en && flags.bluffEn > 0) c -= 0.3;
         return U.clamp(c, 0.15, 0.95);
       }
+      /** 방어: 피해 × (1 − 방어/(방어+k)), 줄이는 몫은 cap까지 (G.BALANCE.duelArmor — QA 2026-10-23) */
+      function armorK(b) { var A = (G.BALANCE && G.BALANCE.duelArmor) || { k: 60, cap: 0.4 }, df = Math.max(0, b.def || 0); return 1 - Math.min(A.cap, df / (df + A.k)); }
       function dmgOf(a, b, adv, k) {
-        var d = (6 + a.might * 0.12 + a.sword * 2.5 + a.atk * 0.7) * stK(a, 'dmg') * (adv > 0 ? 1.35 : adv < 0 ? 0.75 : 1) * U.rf(0.85, 1.15) * (k || 1) - b.def * 0.5;
+        var d = (6 + a.might * 0.12 + a.sword * 2.5 + a.atk * 0.7) * stK(a, 'dmg') * (adv > 0 ? 1.35 : adv < 0 ? 0.75 : 1) * U.rf(0.85, 1.15) * (k || 1) * armorK(b);
         d *= b === me && stance ? STANCE[stance].taken : 1;
         return Math.max(1, d);
       }
@@ -402,7 +404,7 @@
         if (ok) {
           var h = dmgOf(a, b, adv, opts.k), crit = !opts.noCrit && U.chance(0.05 + a.sword * 0.03);
           if (crit) h *= 1.6;
-          if (opts.ignoreArmor) h += b.def * 0.5;
+          if (opts.ignoreArmor) h /= armorK(b);   // 갑옷을 꿰뚫는 일격
           fx.push({ kind: 'spark', x: hx, y: H * 0.86 - 110, seed: U.rand() * 6, t: 0, life: 0.4 });
           if (G.Audio) G.Audio.sfx('cut');                          // 칼이 들어갔다 (녹음 — js/data/sfxfiles.js)
           for (var hp = 0; hp < D.hitParticles; hp++) fx.push({ kind: 'hitParticle', x: hx + U.rf(-5, 5), y: H * 0.86 - 110 + U.rf(-5, 5), vx: U.rf(-75, 75), vy: U.rf(-95, 20), r: U.rf(1.5, 3.8), col: U.chance(0.55) ? '255,226,130' : '210,70,45', t: 0, life: D.particleLife });

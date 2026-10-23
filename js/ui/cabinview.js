@@ -174,11 +174,15 @@
 
   /* 2026-10-17 추천 인물 · 특기와 능력치 ------------------------------------------------ */
   var ST_NAME = ['체력', '지력', '무력', '매력'], ST_SHORT = ['체', '지', '무', '매'];
-  /** 부하의 특기 (배에서 늘린 것·다친 동안 줄어든 것까지 — G.R.mateSkill) */
-  function skillsOf(m) {
-    var out = [];
-    (G.SKILLS || []).forEach(function (sk) { var v = G.R.mateSkill(m, sk.id); if (v > 0) out.push(sk.name + ' ' + v); });
-    return out.length ? out.join(' · ') : '특기 없음';
+  /** 부하의 특기 (선실에서 는 것 ★·충성이 낮거나 다쳐서 줄어든 것 (본디 n)까지 — G.Cabins.skillText) */
+  function skillsOf(m) { return CB().skillText(m); }
+  /** 지금 방에서 느는 특기의 진행 「측량 2년 140일 · 다음 단계 3년」 (없으면 '') */
+  function growOf(m) { var t = CB().growNote(m); return t ? '선실 수련 ' + t : ''; }
+  /** 좁은 선실 카드용 짧은 진행 「수련 2년/3년」 — 자세한 것은 마우스를 올리면 */
+  function growShort(m) {
+    var o = CB().growInfo(m); if (!o) return '';
+    var t = o.max || !o.next ? '수련 끝' : '수련 ' + (Math.floor(o.days / 365) ? Math.floor(o.days / 365) + '년' : (o.days % 365) + '일') + '/' + CB().yd(o.next);
+    return '<small class="cb-grow" title="' + U.esc(growOf(m)) + '">' + t + '</small>';
   }
   /** 능력치 네 가지 (short: 「체62 지71 …」) */
   function statsOf(m, short) {
@@ -279,7 +283,7 @@
     el.dataset.i = i;
     el.title = roomTitle(c);
     var h = '<div class="cb-h"><i class="cb-no">' + i + '</i>' + G.icon(c.icon) + '<b>' + c.name + '</b>' + powTag(o.pow) + '</div>';
-    if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + skillNote(m, c) + '</small></span></div>';
+    if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + skillNote(m, c) + '</small>' + growShort(m) + '</span></div>';
     else h += '<div class="cb-none">' + (c.id === 'hold' ? (o.yard ? '눌러서 쓰임을 정한다' : '조선소에서 고친다') : c.noStaff ? (o.storeLine || '짐칸') : '비어 있음') + '</div>';
     el.innerHTML = h;
     var art = artImage('cabins/' + c.id, 'cb-card-art', '') || (c.art ? artImage('cabins/' + c.art, 'cb-card-art', '') : null);   // 전용 그림이 없는 새 방은 비슷한 방 그림을 빌린다
@@ -510,7 +514,7 @@
     ent.sort(function (a, b) { return (b.score - a.score) || (a.k - b.k); });
     var pop = U.el('div', 'cb-pop cb-pop-mate');
     pop.innerHTML = '<div class="cb-pop-h"><span class="cb-face big"></span><span class="cb-nm"><b class="n1">' + U.esc(d.name) + '</b><small>' + U.esc(CB().placeName(m)) + '</small></span><button class="cb-pop-x" title="닫기 (Esc)">×</button></div>' +
-      '<div class="cb-pop-d"><b>특기</b> ' + U.esc(skillsOf(m)) + '<br><b>능력</b> ' + statsOf(m) + ' · ' + loyalTag(m) + '</div>' +
+      '<div class="cb-pop-d"><b>특기</b> ' + U.esc(skillsOf(m)) + (growOf(m) ? '<br><b>수련</b> ' + U.esc(CB().growNote(m)) : '') + '<br><b>능력</b> ' + statsOf(m) + ' · ' + loyalTag(m) + '</div>' +
       '<div class="cb-pop-list"></div><div class="cb-pop-f"></div>';
     pop.querySelector('.cb-face').appendChild(face(m.id, 44));
     var list = pop.querySelector('.cb-pop-list');
@@ -570,7 +574,7 @@
         '<div class="cb-ship-name">' + U.esc(sh.name) + '호 <small>· ' + U.esc(G.SHIP[sh.type].name) + '</small></div></div>' +
         '<div class="cb-cards" style="width:' + l.stageW + 'px;grid-template-columns:repeat(' + Math.min(CB().cols(), Math.max(1, n)) + ',minmax(0,' + (l.cardMax || 180) + 'px))"></div>' +
         '</div><div class="cb-side">' +
-        '<div class="cb-sub" title="맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 자리가 없는 부하는 달마다 충성이 떨어진다.">부하 <small class="muted">— 눌러서 자리를 정한다</small></div>' +
+        '<div class="cb-sub" title="맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 방마다 키우는 특기가 있어 그 방에서 ' + CB().growDays().map(CB().yd).join('·') + '을 지내면 한 단계씩 는다(3까지) — ★가 선실에서 는 특기, (본디 n)은 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기. 자리가 없는 부하는 달마다 충성이 떨어진다.">부하 <small class="muted">— 눌러서 자리를 정한다</small></div>' +
         '<div class="cb-roster" style="max-height:' + Math.min(l.rosterH || 360, 200) + 'px"></div>' +
         totalsHtml() + '</div></div>';   // 오른쪽 아래: 함대에 적용되는 능력 합계 (지금 힘을 내는 방·말 배우기 풀이는 제목에 마우스를 올리면)
       var win = UI.window({ title: '기함 선실 — ' + U.esc(sh.name) + '호', icon: 'ship', width: l.stageW + (l.side || 300) + 66, html: html, buttons: [{ label: '닫는다', value: null }], clickAny: false });
@@ -631,9 +635,9 @@
         return { m: m, k: k, idle: (!m.role || m.role === 'none') && m.room == null };
       }).sort(function (a, b) { return (b.idle - a.idle) || (a.k - b.k); }).forEach(function (o) {
         var m = o.m, d = G.MATE[m.id];
-        var chip = U.el('div', 'cb-mate' + (o.idle ? ' idle' : ''), '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + '</span><small>' + U.esc(CB().placeName(m)) + '</small><small class="cb-sk">' + U.esc(skillsOf(m)) + '</small><small class="cb-st">' + statsOf(m, true) + '</small>' + loyalTag(m) + '</span>');
+        var chip = U.el('div', 'cb-mate' + (o.idle ? ' idle' : ''), '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + '</span><small>' + U.esc(CB().placeName(m)) + '</small><small class="cb-sk">' + U.esc(skillsOf(m)) + '</small>' + (growOf(m) ? '<small class="cb-grow">' + U.esc(growOf(m)) + '</small>' : '') + '<small class="cb-st">' + statsOf(m, true) + '</small>' + loyalTag(m) + '</span>');
         chip.querySelector('.cb-face').appendChild(face(m.id, 40));
-        chip.title = '특기 ' + skillsOf(m) + '\n능력 ' + statsOf(m);
+        chip.title = '특기 ' + skillsOf(m) + (growOf(m) ? '\n' + growOf(m) : '') + '\n능력 ' + statsOf(m) + '\n★ 선실에서 지내며 는 특기 · (본디 n) 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기';
         chip.onclick = function () { popMate(win, chip, m); };
         dragFrom(chip, m);
         ros.appendChild(chip);

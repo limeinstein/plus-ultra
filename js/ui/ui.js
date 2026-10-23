@@ -198,8 +198,9 @@
     var menu = screenEl.querySelector('.cmdmenu'); if (!menu || menu.classList.contains('talk-hidden')) return false;
     var items = Array.prototype.slice.call(menu.querySelectorAll('.cmd'));
     var cur = menu.querySelector('.cmd.kbd-focus');
-    if (keyIs(e, 'up')) { selectKeyItem(items, cur, -1); return true; }
-    if (keyIs(e, 'down')) { selectKeyItem(items, cur, 1); return true; }
+    // 방향키로 고른 항목에 설명이 있으면 풍선을 띄운다 (메뉴를 막 열었을 때 저절로 붙은 표시에는 띄우지 않는다)
+    if (keyIs(e, 'up')) { cur = selectKeyItem(items, cur, -1); if (menu._showTip) menu._showTip(cur); return true; }
+    if (keyIs(e, 'down')) { cur = selectKeyItem(items, cur, 1); if (menu._showTip) menu._showTip(cur); return true; }
     if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) { cur = cur || selectKeyItem(items, null, 1); if (cur) cur.click(); return true; }
     return false;
   }
@@ -1016,19 +1017,91 @@
     if (opts && opts.left != null) { m.style.left = opts.left + 'px'; m.style.right = 'auto'; }
     m.innerHTML = '<h3>' + title + (sub ? '<small>' + sub + '</small>' : '') + '</h3><div class="items"></div>';
     var box = m.querySelector('.items');
+    // 도움말 풍선은 메뉴마다 하나 — 메뉴 상자 바깥(메뉴가 오른쪽이면 왼쪽)에 띄워 버튼·튜토리얼 「여기」 표·두 칸 메뉴의 옆 칸을 가리지 않는다
+    var tip = U.el('div', 'cmd-tip'), tipFor = null;
+    tip.setAttribute('aria-hidden', 'true');   // 설명은 버튼 aria-label 에 이미 들어 있다
+    m.appendChild(tip);
+    function showTip(d) {
+      if (!d || !d.dataset.tip || !d.isConnected || UI.busy() || m.classList.contains('talk-hidden')) { hideTip(); return; }
+      tipFor = d;
+      tip.textContent = d.dataset.tip;
+      tip.classList.toggle('to-right', m.style.right === 'auto');   // 왼쪽에 둔 메뉴면 풍선은 오른쪽
+      tip.classList.add('on');
+      var y = 0; for (var e = d; e && e !== m; e = e.offsetParent) y += e.offsetTop;   // 메뉴 안에서 버튼 가운데 높이
+      y += d.offsetHeight / 2;
+      var h = tip.offsetHeight, par = m.offsetParent, top = y - h / 2;
+      if (par) top = Math.max(4 - m.offsetTop, Math.min(top, par.clientHeight - m.offsetTop - h - 4));   // 화면 위아래 밖으로 나가지 않게
+      tip.style.top = Math.round(top) + 'px';
+      tip.style.setProperty('--ay', Math.round(U.clamp(y - top, 12, Math.max(12, h - 12))) + 'px');   // 꼬리는 버튼을 가리킨다
+    }
+    function hideTip() { tipFor = null; tip.classList.remove('on'); }
+    m._showTip = showTip; m._hideTip = hideTip;
     items.forEach(function (it) {
       if (!it) return;
-      // 설명(sub): 짧은 것(숫자·「저장 가능」 따위)은 오른쪽에 한 줄로, 긴 것은 버튼을 키우지 않게 풍선 도움말로 (2026-10-23 사용자 요청)
-      var subTxt = it.sub != null ? String(it.sub).replace(/<[^>]*>/g, '').trim() : '', inline = subTxt && (subTxt.length <= (opts && opts.subMax || 7) || /^[\d,.\s]+(닢|명|척|통|일|점|%)?$/.test(subTxt));   // 숫자(금고 잔액 등)는 길어도 한 줄로
-      var d = U.el('div', 'cmd' + (it.dim ? ' dim' : '') + (it.exit ? ' exit' : '') + (subTxt && !inline ? ' has-tip' : ''), G.icon(it.icon || 'chev') + '<span>' + it.label + '</span>' + (inline ? '<span class="sub">' + it.sub + '</span>' : subTxt ? '<span class="tipdot" aria-hidden="true">ⓘ</span>' : ''));
-      if (subTxt && !inline) { d.dataset.tip = subTxt; d.setAttribute('aria-label', String(it.label).replace(/<[^>]*>/g, '') + ' — ' + subTxt); }
-      d.onclick = function () { if (UI.busy()) return; it.onClick && it.onClick(); };
+      // 설명(sub): 짧은 수치·상태(「20·20일 · 자재 10」 「물건 값 131%」 「저장 가능」 따위)는 버튼 안 오른쪽에, 긴 설명은 버튼을 키우지 않게 풍선 도움말로
+      var subTxt = it.sub != null ? String(it.sub).replace(/<[^>]*>/g, '').trim() : '', inline = subTxt && subInline(subTxt, opts);
+      var d = U.el('div', 'cmd' + (it.dim ? ' dim' : '') + (it.exit ? ' exit' : ''), G.icon(it.icon || 'chev') + '<span>' + it.label + '</span>' + (inline ? '<span class="sub">' + it.sub + '</span>' : ''));
+      if (subTxt && !inline) makeTip(d, subTxt, it.label);
+      d.onclick = function () { hideTip(); if (UI.busy()) return; it.onClick && it.onClick(); };
+      d.addEventListener('mouseenter', function () { if (!m._fitted) fitCmdMenu(m); showTip(d); });   // 설명 없는 버튼에 오르면 앞 풍선을 거둔다
+      d.addEventListener('mouseleave', function () { if (tipFor === d) hideTip(); });
       box.appendChild(d);
     });
+    m.addEventListener('mouseleave', hideTip);
+    // 첫 항목의 키보드 표시는 「어디서 시작하나」만 알린다 — 풍선은 방향키로 실제로 고를 때 뜬다 (screenMenuKey)
     var first = box.querySelector('.cmd'); if (first && !townKeys()) first.classList.add('kbd-focus');   // 거리에서는 메뉴에 키 표시를 두지 않는다
     UI.add(m);
+    m._fit = function () { fitCmdMenu(m); };
+    m._fit();
     return m;
   };
+  /** 버튼 안에 둘 짧은 설명인가: 7자 이하 · 숫자뿐(금고 잔액) · 「·」로 나눈 마디마다 숫자가 든 짧은 수치·상태 */
+  function subInline(t, opts) {
+    if (t.length <= (opts && opts.subMax || 7) || /^[\d,.\s]+(닢|명|척|통|일|점|%)?$/.test(t)) return true;
+    // 「20·20일 · 자재 10」 「16명 / 8~36」 「물건 값 131%」 「조선 기술 4등급」 「맡긴 물건 0점 · 소지품 2/40」 「술 한 잔 10닢」 — 「자녀 2 · 아기를 기다리는 중」은 설명
+    return t.length <= 22 && t.split('·').every(function (p) { p = p.trim(); return p.length <= 12 && /\d/.test(p); });
+  }
+  function makeTip(d, txt, label) {
+    d.classList.add('has-tip'); d.dataset.tip = txt;
+    d.setAttribute('aria-label', String(label != null ? label : '').replace(/<[^>]*>/g, '').trim() + ' — ' + txt);
+    if (!d.querySelector('.tipdot')) d.appendChild(U.el('span', 'tipdot', 'ⓘ')).setAttribute('aria-hidden', 'true');
+  }
+  /** 버튼 안 글이 넘치나 (버튼 자신 · 그 안의 칸) — 화면 배율과 상관없는 offset 값으로 잰다 */
+  function cmdOver(d) {
+    if (d.scrollWidth > d.clientWidth + 1 || d.scrollHeight > d.clientHeight + 1) return true;
+    for (var i = 0; i < d.children.length; i++) {
+      var ch = d.children[i];
+      if (ch.classList.contains('tipdot')) continue;
+      if (ch.scrollWidth > ch.clientWidth + 1 && ch.clientWidth > 0) return true;
+      if (ch.offsetParent === d && (ch.offsetLeft < -1 || ch.offsetTop < -1 || ch.offsetLeft + ch.offsetWidth > d.clientWidth + 1 || ch.offsetTop + ch.offsetHeight > d.clientHeight + 1)) return true;
+    }
+    return false;
+  }
+  /** 넘치는 버튼: ① 오른쪽 작은 글을 두 줄로 ② 글을 조금 줄이고 ③ 그래도 넘치면 작은 글을 풍선 도움말로 옮긴다 (성문 「탐험을 떠난다 / 탈것을 고른다」) */
+  function fitCmdMenu(m) {
+    if (!m.isConnected || !m.offsetWidth) return;   // 아직 안 보이는 메뉴는 처음 마우스를 올릴 때 다시 잰다
+    m._fitted = true;
+    var many = m.classList.contains('many');
+    [].forEach.call(m.querySelectorAll('.items > .cmd'), function (d) {
+      d.classList.remove('tight', 'sub2');
+      if (!cmdOver(d)) return;
+      var sub = d.querySelector(':scope > .sub');
+      var tries = sub && !many ? [['sub2'], ['sub2', 'tight'], ['tight']] : [['tight']];
+      for (var i = 0; i < tries.length; i++) {
+        d.classList.remove('tight', 'sub2'); DOMTokenList.prototype.add.apply(d.classList, tries[i]);
+        if (!cmdOver(d)) return;
+      }
+      d.classList.remove('tight', 'sub2');
+      if (!sub) { d.classList.add('tight'); return; }
+      var lab = d.querySelector(':scope > span:not(.sub):not(.tipdot)');
+      var txt = sub.textContent.trim(); sub.remove(); makeTip(d, txt, lab ? lab.textContent : '');
+      if (cmdOver(d)) d.classList.add('tight');
+    });
+  }
+  // 글꼴(나눔명조 등)이 늦게 들어오면 글 폭이 바뀌니 떠 있는 메뉴를 다시 잰다
+  if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', function () {
+    if (screenEl) [].forEach.call(screenEl.querySelectorAll('.cmdmenu'), function (m) { if (m._fit) m._fit(); });
+  });
 
   /** 두 손가락 벌리기·오므리기로 확대 (휴대폰·태블릿). fn(배율) — 한 번 움직일 때마다 앞 모양 대비 배율 */
   UI.pinch = function (el, fn) {

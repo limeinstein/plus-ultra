@@ -930,7 +930,7 @@
   /** 볼거리를 누르거나 그 앞에서 ↑: 아직 찾지 않은 도시 건물 발견물이면 발견(city.lookAt), 그 밖에는 들여다보기 */
   T.lookMark = function (m) {
     if (!st || !m) return;
-    if (m.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(m.d) && !G.Disc.foundByMe(m.id) && G.Disc.built(m.d) && !(G.Disc.taken && G.Disc.taken(m.id)) && st.onPick) st.onPick('landmark', m.id);
+    if (m.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(m.d) && !G.Disc.foundByMe(m.id) && G.Disc.built(m.d) && st.onPick) st.onPick('landmark', m.id);
     else T.inspect(m);
   };
 

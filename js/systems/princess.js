@@ -38,7 +38,7 @@
   }
   P.crown = crown;
   function realm() { return G.COURT && G.COURT.realms.ES; }
-  function single() { var p = S().player; return !p.wife && p.g !== 'f'; }
+  function single() { var p = S().player; return !p.wife && p.g !== 'f' && !(p.heir && p.heir.sex === 'f'); }   // 뒤를 이은 딸 제독은 p.g 가 비어 있다 (2026-10-23)
   P.single = single;
   /** 왕녀의 고유 얼굴·무릎상 */
   P.speaker = function () {

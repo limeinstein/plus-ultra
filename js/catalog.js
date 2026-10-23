@@ -376,7 +376,7 @@
     note: '파일: <code>images/discoveries/ID.jpg</code> · 권장 1440×640(9:4) · 지리는 배 위의 발견 장면과 고지도 항로, 유적은 복원과 상공 회전, 자연 경관은 시간 변화 파노라마, 동물은 새끼의 등장과 성체 보호, 식물은 빈 캔버스의 유화가 실사 풍경으로 살아나는 과정, 보물은 암흑 속 큐레이터 조명과 360° 2회전, 교역품은 등불 켜진 시장 좌판으로 다가가는 장면을 GIF로 보여 줍니다.'
   });
   G.DISCOVERIES.forEach(d => {
-    const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : (G.Disc && G.Disc.regName ? G.Disc.regName(d) : G.REGIONS[d.reg]);
+    const where = d.how === 'trade' ? (d.regions || [d.reg]).map(r => G.REGIONS[r]).join('·') : (G.Disc && G.Disc.regName ? G.Disc.regName(d) : d.how === 'city' && CITY[d.city] && CITY[d.city].region === d.reg && G.regionLabel ? G.regionLabel(CITY[d.city]) : G.regionLabelAt ? G.regionLabelAt(d.reg, d.lon, d.lat) : G.REGIONS[d.reg]);   // 도감에는 discovery.js 가 없다 — 동아시아는 좌표로 「동아시아 · 조선 / 중국 / 일본」 (2026-10-23)
     const place = d.how === 'city' ? CITY[d.city].name + (d.cat === 'ruin' ? ' 시내 (그 건물을 누르면)' : d.by && G.MATE[d.by] ? ' — ' + G.MATE[d.by].name + '을(를) 만나면 (세상을 떠난 뒤에는 시내 건물에서)' : ' 시내 (건물에 들어가면)')
       : d.outskirts && d.homeCity != null ? CITY[d.homeCity].name + ' 근처 뭍 (도시 밖을 탐험하면)' : d.how === 'trade' ? goodName(d.good) + ' — ' + where + '에서 처음 살 때' : d.id === 'circum' ? '세계 일주를 마치고 출발한 항구로 돌아올 때' : lat(d.lat) + ', ' + lon(d.lon);
     const moving = d.cat === 'geo' || d.cat === 'ruin' || d.cat === 'nature' || d.natural || ((d.cat === 'creature' || d.cat === 'treasure' || d.cat === 'trade' || d.cat === 'people') && !!(G.Reel && G.Reel.has(d)));
@@ -415,14 +415,17 @@
     chips: [['all', '전체']].concat(Object.keys(G.GOOD_CATS).map(k => [k, G.GOOD_CATS[k]])),
     note: '교역소·함대 적재 목록·교역품 발견 카드에 쓰는 그림입니다. 파일: <code>images/goods/ID.webp</code> · 권장 192×192 투명 배경 · 갈래 공통 <code>good-kinds/갈래.webp</code>'
   });
-  G.GOODS.forEach(g => add(tGoods, {
-    group: g.cat, name: g.name, sub: G.GOOD_CATS[g.cat] + ' · ' + g.id,
-    meta: '기준값 ' + num(g.p) + '닢' + (G.Cargo ? ' · 무게 ' + G.Cargo.wt(g.id) + (G.Cargo.keep(g.id) ? ' · ' + G.Cargo.keep(g.id) + '일 신선' : '') : g.life ? ' · ' + g.life + '일 뒤 상함' : ''),
-    key: 'goods/' + g.id, kind: 'webp', chain: I.chain.good(g), ar: '1 / 1', extra: g.id,
-    pic: () => I.make(I.chain.good(g), 256, 256, () => A.relicArt({ id: 'good_' + g.id, name: g.name, kind: 'treasure' }, 256, 256), { fit: 'contain' }),
-    detail: () => ({ facts: [['갈래', G.GOOD_CATS[g.cat]], ['기준값', num(g.p) + '닢'], ['보관', G.Cargo ? (G.Cargo.keep(g.id) ? G.Cargo.keep(g.id) + '일 신선 → 넘으면 값이 떨어지고 두 배를 넘기면 상함' : '상하지 않음') : g.life ? g.life + '일' : '상하지 않음']].concat(G.Cargo ? [['무게', '1통에 ' + G.Cargo.wt(g.id)]] : []),
-      files: [{ key: 'goods/' + g.id, kind: 'webp', note: '이 교역품의 그림 (192×192, 투명 배경)' }, { key: 'good-kinds/' + g.cat, kind: 'webp', note: G.GOOD_CATS[g.cat] + ' 공통' }] })
-  }));
+  G.GOODS.forEach(g => {
+    const ownKey = g.plant && g.from ? 'discovery-ends/' + g.from : 'goods/' + g.id;
+    add(tGoods, {
+      group: g.cat, name: g.name, sub: G.GOOD_CATS[g.cat] + ' · ' + g.id,
+      meta: '기준값 ' + num(g.p) + '닢' + (G.Cargo ? ' · 무게 ' + G.Cargo.wt(g.id) + (G.Cargo.keep(g.id) ? ' · ' + G.Cargo.keep(g.id) + '일 신선' : '') : g.life ? ' · ' + g.life + '일 뒤 상함' : ''),
+      key: ownKey, kind: g.plant ? 'jpg' : 'webp', chain: I.chain.good(g), ar: '1 / 1', extra: g.id,
+      pic: () => I.make(I.chain.good(g), 256, 256, () => A.relicArt({ id: 'good_' + g.id, name: g.name, kind: 'treasure' }, 256, 256), { fit: 'contain' }),
+      detail: () => ({ facts: [['갈래', G.GOOD_CATS[g.cat]], ['기준값', num(g.p) + '닢'], ['보관', G.Cargo ? (G.Cargo.keep(g.id) ? G.Cargo.keep(g.id) + '일 신선 → 넘으면 값이 떨어지고 두 배를 넘기면 상함' : '상하지 않음') : g.life ? g.life + '일' : '상하지 않음']].concat(G.Cargo ? [['무게', '1통에 ' + G.Cargo.wt(g.id)]] : []),
+        files: [{ key: ownKey, kind: g.plant ? 'jpg' : 'webp', note: g.plant ? '이 교역품이 된 식물 발견의 고해상도 마지막 장면' : '이 교역품의 그림 (192×192, 투명 배경)' }, { key: 'good-kinds/' + g.cat, kind: 'webp', note: G.GOOD_CATS[g.cat] + ' 공통' }] })
+    });
+  });
 
   // ------------------------------------------------ ordinary items
   const tItems = tab('items', '소지품', {

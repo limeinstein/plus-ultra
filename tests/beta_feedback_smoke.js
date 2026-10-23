@@ -1,9 +1,16 @@
 /* 베타 센터 익명 피드백 회귀 점검.
-   PAGE=http://127.0.0.1:4179/center/ node tests/beta_feedback_smoke.js */
+   기본은 file:// 원본, 배포본은 PAGE=http://127.0.0.1:4179/center/ node tests/beta_feedback_smoke.js */
 'use strict';
+const path = require('path');
+const fs = require('fs');
+const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 
-const PAGE = process.env.PAGE || 'http://127.0.0.1:4179/center/';
+const ROOT = path.resolve(__dirname, '..');
+const CENTER = path.join(ROOT, 'web', 'beta-center', 'index.html');
+const LOCAL = !process.env.PAGE;
+const PAGE = process.env.PAGE || pathToFileURL(CENTER).href;
+const VERSION = (fs.readFileSync(path.join(ROOT, 'js', 'scenes', 'title.js'), 'utf8').match(/T\.version\s*=\s*'([^']+)'/) || [])[1];
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }
 
 let browser;
@@ -14,7 +21,11 @@ let browser;
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: Number(process.env.WIDTH) || 960, height: Number(process.env.HEIGHT) || 900 } });
   page.on('pageerror', error => errors.push(String(error)));
-  page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('console', message => { if (message.type() === 'error' && !/Failed to load|net::|ERR_FILE_NOT_FOUND/.test(message.text())) errors.push(message.text()); });
+  if (LOCAL) {
+    await page.route(PAGE, route => route.fulfill({ status: 200, contentType: 'text/html', body: fs.readFileSync(CENTER, 'utf8').replace(/\{\{VERSION\}\}/g, VERSION).replace(/\{\{ASSET_HASH\}\}/g, 'qa') }));
+    await page.route('**/telemetry.js*', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: fs.readFileSync(path.join(ROOT, 'web', 'beta-center', 'telemetry.js'), 'utf8').replace(/\{\{VERSION\}\}/g, VERSION) }));
+  }
 
   // 회귀 시험은 바깥 네트워크 없이도 돌아가야 한다. 글꼴 요청만 빈 응답으로 막고 화면·기능을 점검한다.
   await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ status: 200, contentType: 'text/css', body: '' }));

@@ -64,10 +64,20 @@
     }
     return best;
   };
+  /** 표에 보일 교역품인가: 식물 특산물(js/systems/plantrade.js)은 이 일지에서 그 식물을 찾았거나 어느 교역소에 심은 것만
+      — 아직 못 찾은 식물의 교역품 이름(파란 장미 등)이 발견물의 실제 이름을 미리 알려 주지 않게 */
+  L.shows = function (g) {
+    if (!g || !g.plant) return !!g;
+    if (g.from && G.Disc && G.Disc.foundByMe && G.Disc.foundByMe(g.from)) return true;
+    var s = S(), at = s && s.plantTrade && s.plantTrade.at;
+    if (at) for (var cid in at) if (at[cid] && at[cid].indexOf(g.id) >= 0) return true;
+    return false;
+  };
   /** 수첩 탭에 보일 표: 교역품마다 가장 싸게 사는 곳과 가장 비싸게 파는 곳 */
   L.table = function () {
     var rows = [];
     G.GOODS.forEach(function (g) {
+      if (!L.shows(g)) return;
       var sb = L.bestBuy(g.id), ss = L.bestSell(g.id);
       if (!sb && !ss) return;
       rows.push({ id: g.id, name: g.name, buy: sb, sell: ss, gain: sb && ss && ss.city !== sb.city ? ss.price - sb.price : null });

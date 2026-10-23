@@ -96,7 +96,7 @@
       await UI.say('그, 그러니까 구해 줬다고 해서 고맙다고 할 줄 알았다면 오산이야. …오산이라고!\f…그래도 불은 뜨거웠을 테니까. 그건 인정해.', joan());
       await UI.say('저희 배에는 비어 있는 예배실이 하나 있습니다. 하늘의 목소리를 듣기에는 바다 한가운데만큼 조용한 곳도 없지요.', first());
       await UI.say('예배실이… 비어 있다고? …하느님은 늘 이런 식으로 말씀하시지.\f착각하지 마. 당신을 따라가는 게 아니라 그 예배실을 지키러 가는 거야. 다들 칼 쓰는 법이 엉망일 테니 가르쳐 줄 사람도 필요할 거고.', joan());
-      if (!(await UI.ask('오를레앙의 처녀 잔이 무급 항해사로 함께 가겠다고 한다.', [{ label: '배에 태운다', value: 1 }, { label: '안전한 곳까지만 데려다준다', value: 0 }], me()))) {
+      if (!(await UI.ask('오를레앙의 처녀 잔이 항해사로 함께 가겠다고 한다. (' + G.wageNote('joan_of_arc') + ')', [{ label: '배에 태운다', value: 1 }, { label: '안전한 곳까지만 데려다준다', value: 0 }], me()))) {
         await UI.say('…그래, 마음대로 해. 어차피 나 혼자서도 잘해. 정말이야.', joan());
         j.cool = s.day + (K().coolDays || 30) * 2;
         return false;
@@ -108,7 +108,7 @@
       var ci = JN.emptyChapel();
       if (ci >= 0 && nm.role !== 'first' && G.Cabins && G.Cabins.place) G.Cabins.place(nm, ci);
       G.State.log('프랑스의 숲 가장자리 마을에서 마녀로 몰린 오를레앙의 처녀 잔을 화형대에서 구했다. 잔이 동료가 되었다.');
-      UI.toast('오를레앙의 처녀 잔 — 품삯을 받지 않는 항해사' + (nm.roomType === 'chapel' ? ' · 예배실' : ''), 'heart', 4600);
+      UI.toast('오를레앙의 처녀 잔 — 항해사 (' + G.wageNote('joan_of_arc') + ')' + (nm.roomType === 'chapel' ? ' · 예배실' : ''), 'heart', 4600);
       if (G.Achieve && G.Achieve.afterHire) { try { await G.Achieve.afterHire(ID); } catch (e) { console.error(e); } }
       await UI.say('…잘 부탁한다는 말은 안 할 거야. 대신 내 깃발 아래에서 지는 일은 없을 거야. 그건 약속하지.', joan('happy'));
       return true;

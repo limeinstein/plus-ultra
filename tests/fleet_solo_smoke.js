@@ -19,7 +19,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::/.test(m.text() + ' ' + ((m.location() || {}).url || ''))) errors.push('console: ' + m.text()); });
-  await page.addInitScript(() => { window.requestAnimationFrame = function () { return 0; }; });
+  await page.addInitScript(() => { var seed = 91827; Math.random = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }; window.requestAnimationFrame = function () { return 0; }; });
   const step = (sec) => page.evaluate((sec) => { var B = G.Scenes.battle; B.headless = true; for (var i = 0; i < sec * 20; i++) B.update(0.05); B.headless = false; B.update(0.01); }, sec);
   const start = (extra) => page.evaluate((extra) => {
     var s = G.Game.state = G.State.newGame({ name: '시험', nation: 'PT', job: 'explorer', age: 20, birth: { m: 3, d: 3 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk: {}, lg: G.LANGS.map(function (_, i) { return i === 1 ? 3 : 0; }), diff: 'normal' });
@@ -28,7 +28,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     for (var i = 0; i < extra; i++) { var sh = G.R.newShip('caravel', '매' + i); sh.guns = { type: 'culverin', n: 10 }; s.fleet.ships.push(sh); }
     s.fleet.crew = 120 + extra * 60; s.loc = { mode: 'sea', lon: -20, lat: 30, heading: 0 };
     G.Game.go('battle', { npc: { kind: 'navy', n: 2, nation: '잉글랜드' } });
-    G.Scenes.battle.debug().ships.forEach(function (b) { if (b.side === 'me') b.hp = b.maxHp = b.maxHp * 8; else { b.guns.n = Math.max(1, Math.round(b.guns.n / 3)); b.hp = b.maxHp = b.maxHp * 12; } });
+    G.Scenes.battle.debug().ships.forEach(function (b) {
+      if (b.side === 'me') b.hp = b.maxHp = b.maxHp * 20;
+      else { b.guns.n = Math.max(1, Math.round(b.guns.n / 3)); b.hp = b.maxHp = b.maxHp * 100; b.crew = b.maxCrew = 5000; b.morale = 100; }
+    });
   }, extra);
   try {
     await page.goto(GAME);

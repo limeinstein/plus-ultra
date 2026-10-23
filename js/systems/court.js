@@ -608,7 +608,7 @@
         if (kind === 'zoo') {
           var k = G.Img && G.Img.pick ? G.Img.pick(G.Img.chain.discovery(x)) : null;
           return { value: x, icon: k ? { src: G.Img.src(k), icon: 'horse' } : 'horse',
-            label: '<b>' + U.esc(x.name) + '</b><br><small class="muted">신기한 동물 · ' + U.esc(x.reg != null && G.REGIONS[x.reg] ? G.REGIONS[x.reg] : '먼 땅') + '</small>' };
+            label: '<b>' + U.esc(x.name) + '</b><br><small class="muted">신기한 동물 · ' + U.esc(x.reg != null && G.REGIONS[x.reg] ? (G.Disc && G.Disc.regName ? G.Disc.regName(x) : G.REGIONS[x.reg]) : '먼 땅') + '</small>' };
         }
         var src = itemSrc(x);
         return { value: x, icon: src ? { src: src, icon: 'chest' } : (x.mw ? (x.wk === 'sculpt' ? 'bust' : 'palette') : 'chest'),

@@ -107,7 +107,7 @@
   add('eldorado', '황금 뗏목상', 'treasure', 0.45, '금가루를 바른 왕이 호수 한가운데로 나아가는 의식을 본뜬 황금 뗏목.');
   add('jademask', '비취 가면', 'treasure', 0.45, '비취 조각을 맞춰 붙인 왕의 가면. 눈은 조개껍데기와 흑요석이다.');
   add('grail', '아서 왕의 성배', 'treasure', 0.4, '소박한 나무 잔처럼 보이지만, 손에 들면 따뜻한 빛이 번진다.');
-  add('grail', null, 'weapon', 0, null, { use: 'excalibur', price: 12000 });
+  add('grail', null, 'weapon', 0, null, { use: 'excalibur', price: 250000 });
   add('stcrown', '성 이슈트반의 왕관', 'treasure', 0.45, '꼭대기 십자가가 비스듬히 기운 왕관. 에나멜 성인상이 둘러 있다.');
   add('reliquary', '동방박사의 유물함', 'treasure', 0.4, '금과 보석과 에나멜로 지은 작은 성당 모양의 유물함.');
   add('ifehead', '이페의 두상', 'treasure', 0.45, '가는 줄무늬가 얼굴을 덮은 사실적인 왕의 두상.');

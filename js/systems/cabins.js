@@ -5,6 +5,7 @@
    · 배: sh.cabins = ['deck', 'hold', 'galley', …]  (0번은 늘 갑판, 그 뒤가 고칠 수 있는 선실)
    · 부하: m.room = 선실 번호(기함의 sh.cabins 자리), m.roomType = 그 방의 종류(기함을 바꿀 때 같은 방을 찾아 옮긴다)
            m.lgx = {말 번호: 배운 단계}, m.lgd = {말 번호: 함께 지낸 날}
+           m.skd = {특기: 선실에서 지낸 날}, m.skg = {특기: 늘어난 단계}, m.skw = {특기: 그 날을 쌓은 방 종류 · 여러 방이면 '*'}
    · 제독: player.lgd = {말 번호: 날}
    · 함대: fleet.cabinUid = 선실을 맞춰 둔 기함, state.leaving = [떠나겠다는 부하 id]
    옛 저장 파일에는 이것들이 없다 — 쓸 때 만들어 채운다. */
@@ -253,22 +254,71 @@
     return CB.rooms()[m.room] || null;
   };
   function growDays() { return B().growDays || [1095, 3285, 9855]; }
+  CB.growDays = growDays;
   /** 지낸 날 → 늘어난 단계 (0~3) */
   function growLevel(days) { var g = growDays(), n = 0; for (var i = 0; i < g.length; i++) if (days >= g[i]) n = i + 1; return n; }
   CB.growLevel = growLevel;
-  /** 날마다: 방에 있는 부하의 그 방 특기에 하루가 쌓인다 — 단계가 오르면 알릴 말 */
+  /** 부하의 본디 특기 단계: 타고난 것 + 선실에서 는 것 (3까지). 충성·부상으로 줄어든 것은 빼지 않는다 — 실제로 쓰는 단계는 R.mateSkill */
+  CB.baseSkill = function (m, id) { var d = G.MATE[m.id]; return d ? ((m.sk && m.sk[id] != null ? m.sk[id] : d.sk && d.sk[id]) || 0) : 0; };
+  CB.rawSkill = function (m, id) { var lv = CB.baseSkill(m, id); return m.skg && m.skg[id] ? Math.min(3, lv + m.skg[id]) : lv; };
+  /** 부하의 특기 목록 [{id, name, lv: 지금 쓰는 단계, raw: 본디 단계, grown: 선실에서 는 단계}] — all: 타고난 특기는 0이어도 넣는다 */
+  CB.skillList = function (m, all) {
+    var d = G.MATE[m.id] || {}, out = [];
+    (G.SKILLS || []).forEach(function (sk) {
+      var raw = CB.rawSkill(m, sk.id), lv = R().mateSkill(m, sk.id);
+      if (raw > 0 || lv > 0 || (all && d.sk && sk.id in d.sk)) out.push({ id: sk.id, name: sk.name, lv: lv, raw: raw, grown: raw - Math.min(3, CB.baseSkill(m, sk.id)) });
+    });
+    return out;
+  };
+  /** 특기 한 줄: 「항해술 2 · 측량 1★」 — ★ 선실에서 는 것, (본디 2) 충성이 낮거나 다쳐서 지금은 덜 쓰는 것 */
+  CB.skillText = function (m) {
+    var l = CB.skillList(m);
+    return l.length ? l.map(function (x) { return x.name + ' ' + x.lv + (x.grown > 0 ? '★' : '') + (x.lv < x.raw ? '(본디 ' + x.raw + ')' : ''); }).join(' · ') : '특기 없음';
+  };
+  /** 날 수 → 「2년 140일」 */
+  function yd(days) { var y = Math.floor(days / 365), d = days % 365; return (y ? y + '년' : '') + (y && d ? ' ' : '') + (d || !y ? d + '일' : ''); }
+  CB.yd = yd;
+  /** 지금 방에서 느는 특기의 진행 {sk, name, days: 쌓인 날, next: 다음 단계 날(없으면 null), max: 특기가 이미 3} — 늘 특기가 없으면 null */
+  CB.growInfo = function (m) {
+    var sk = m && CB.growSkill(CB.roomOf(m)); if (!sk || !G.MATE[m.id]) return null;
+    var days = (m.skd && m.skd[sk]) || 0, g = growDays(), lv = growLevel(days);
+    return { sk: sk, name: G.SKILL_BY_ID[sk].name, days: days, next: lv < g.length ? g[lv] : null, max: CB.rawSkill(m, sk) >= 3 };
+  };
+  /** 「측량 2년 140일 · 다음 단계 3년」 (늘 특기가 없으면 null) */
+  CB.growNote = function (m) {
+    var o = CB.growInfo(m); if (!o) return null;
+    if (o.max) return o.name + ' 3 — 더 늘지 않는다';
+    return o.name + ' ' + yd(o.days) + ' · ' + (o.next ? '다음 단계 ' + yd(o.next) : '다 늘었다');
+  };
+  /** 날마다: 방에 있는 부하의 그 방 특기에 하루가 쌓인다 — 단계가 오르면 알릴 말.
+      단계는 본디 단계(CB.rawSkill)로 견준다 — 충성이 낮거나 다쳐서 지금 덜 쓰더라도 는 것은 알린다 (2026-10-23 QA 32).
+      m.skw = {특기: 그 날을 쌓은 방 종류, 여러 방이면 '*'} — 방을 옮겼으면 「선실에서 … (지금 파수대)」로 알린다 (QA 33) */
   CB.grow = function () {
     var s = S(), out = []; if (!s || !s.mates) return out;
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
       var type = CB.roomOf(m), sk = CB.growSkill(type); if (!sk) return;
-      m.skd = m.skd || {}; m.skd[sk] = (m.skd[sk] || 0) + 1;
+      m.skd = m.skd || {}; m.skw = m.skw || {};
+      var prev = m.skd[sk] || 0;
+      if (m.skw[sk] == null) m.skw[sk] = prev > 0 ? '*' : type;   // 옛 저장: 어느 방에서 쌓았는지 모르면 여러 방으로 친다
+      else if (m.skw[sk] !== type) m.skw[sk] = '*';
+      m.skd[sk] = prev + 1;
       var g = growLevel(m.skd[sk]); m.skg = m.skg || {};
       if (g <= (m.skg[sk] || 0)) return;
-      var before = R().mateSkill(m, sk);
+      var before = CB.rawSkill(m, sk);
       m.skg[sk] = g;
-      var after = R().mateSkill(m, sk), nm = G.SKILL_BY_ID[sk].name, yrs = Math.round(m.skd[sk] / 365);
-      if (after > before) out.push({ icon: G.CABIN[type].icon || 'star', text: d.name + U.jx(d.name, '이/가') + ' ' + G.CABIN[type].name + '에서 ' + yrs + '년을 지내며 ' + nm + U.jx(nm, '이/가') + ' 늘었다 (' + nm + ' ' + before + ' → ' + after + ').' });
+      var after = CB.rawSkill(m, sk); if (after <= before) return;
+      var nm = G.SKILL_BY_ID[sk].name, yrs = Math.round(m.skd[sk] / 365), room = G.CABIN[type].name;
+      var t = d.name + U.jx(d.name, '이/가') + ' ' + (m.skw[sk] === type
+        ? room + '에서 ' + yrs + '년을 지내며 ' + nm + U.jx(nm, '이/가') + ' 늘었다 (' + nm + ' ' + before + ' → ' + after + ').'
+        : '선실에서 ' + nm + U.jx(nm, '을/를') + ' ' + yrs + '년 익혀 한 단계 늘었다 (' + nm + ' ' + before + ' → ' + after + ' · 지금 ' + room + ').');
+      var now = R().mateSkill(m, sk);
+      if (now < after) {
+        var lo = CB.eff(m) < 1, hu = R().mateHurt(m);
+        var why = lo && hu ? '충성이 낮고 다쳐 있어서' : lo ? '충성이 낮아 일을 건성으로 해서' : hu ? '다쳐 있어서' : '자리에 없어서';
+        t += ' 다만 ' + why + ' 지금은 ' + nm + ' ' + now + '만큼만 쓴다.';
+      }
+      out.push({ icon: G.CABIN[type].icon || 'star', text: t });
     });
     return out;
   };
@@ -313,7 +363,7 @@
     return Math.round(w * Math.max(0.5, 1 - CB.fx('account', 'wage')));
   };
   /** 지금 재산으로 급료를 몇 달 버티나 */
-  CB.wageMonths = function (extra) { var s = S(), w = CB.wages() + (extra || 0); return w > 0 ? Math.floor((s.player.gold + (s.player.bank || 0)) / w) : 999; };
+  CB.wageMonths = function (extra) { var s = S(), w = CB.wages() + (extra || 0) + (G.World && G.World.crewWage ? G.World.crewWage() : 0); return w > 0 ? Math.floor((s.player.gold + (s.player.bank || 0)) / w) : 999; };
   /** 급료가 버거우면 경리나 부관이 하는 말 (괜찮으면 null) — extra: 새로 들일 사람의 급료 */
   CB.wageWarning = function (extra) {
     var mo = CB.wageMonths(extra), lim = BM().warnMonths || 6; if (mo >= lim) return null;

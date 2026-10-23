@@ -9,7 +9,7 @@
    ■ 역사 사건(이베리아 두 왕실의 혼인·향료 제도 다툼, 십자군·교황청·오스만의 일): 그날이 되면 소식과 함께 관계가 바뀐다.
      십자군 호소는 교황의 사절이 제독을 찾아와 기부를 청하고(사교 명성·교황의 신뢰), 레판토처럼 큰 해전은 그 바다로 가면 함께 싸울 수 있다.
    ■ 큰 해전(G.Rel.greatBattle): 우리 편 함대(allies)와 함께 싸운다 — 무적함대(js/systems/tudor.js)·레판토가 쓴다.
-   ■ 저장: state.rel = {mod: {'키|키': {v, until, why}}, tier: {'키|키': 갈래}, seen: {사건 id: 1}, pend: [사절], battle: {id: 'won'|'lost'|…}} — 옛 저장에는 없다(쓸 때 만든다) */
+   ■ 저장: state.rel = {mod: {'키|키': {v, until, why}}, tier: {'키|키': 갈래}, seen: {사건 id: 1}, pend: [사절], battle: {id: 'won'|'lost'|…}, seaLog: {'키|키': 해전 소식을 일지에 적은 해}} — 옛 저장에는 없다(쓸 때 만든다) */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -164,11 +164,15 @@
       else if (x.tier === 'ally' && old !== 'ally') out.push({ icon: 'handshake', history: true, text: RL.name(a) + U.jx(RL.name(a), '과/와') + ' ' + RL.name(b) + U.jx(RL.name(b), '이/가') + ' 손을 잡았다.' + (x.why ? ' — ' + x.why : '') });
     }
     r.tierInit = 1;
-    // 달마다: 전쟁 중인 나라들의 해전 소식
+    // 달마다: 전쟁 중인 나라들의 해전 소식 — 알림은 그대로, 항해 일지에는 나라 쌍마다 해마다 한 줄만 (r.seaLog = {'키|키': 적은 해}, 2026-10-23 QA 1:
+    // 예전엔 달마다 적혀 일지 800줄의 절반을 채우고 제독의 일상 줄을 밀어냈다). 적은 줄도 「작은 소식」(minor)이라 넘칠 때 먼저 지운다 (js/systems/journal.js)
     if (s.date.d === 1) {
+      var seaLog = r.seaLog || (r.seaLog = {});
       ps.forEach(function (a, i) { ps.slice(i + 1).forEach(function (b) {
         if (!RL.atWar(a, b) || !U.chance(B().seaWarMonth) || a === 'HU' || b === 'HU' || a === 'PL' || b === 'PL' || a === 'RU' || b === 'RU') return;
-        out.push({ icon: 'cannon', text: U.pick(['{a} 함대와 {b} 함대가 {sea}에서 맞붙었다는 소식이 들려온다.', '{sea}에서 {a}의 군함이 {b}의 배를 쫓아 포를 쏘았다고 한다.', '{a}{과} {b}의 싸움이 바다로 번졌다 — {sea}에 화약 연기가 자욱하다고 한다.'])
+        var sk = key(a, b), once = seaLog[sk] !== s.date.y;
+        if (once) seaLog[sk] = s.date.y;
+        out.push({ icon: 'cannon', minor: true, nolog: !once, text: U.pick(['{a} 함대와 {b} 함대가 {sea}에서 맞붙었다는 소식이 들려온다.', '{sea}에서 {a}의 군함이 {b}의 배를 쫓아 포를 쏘았다고 한다.', '{a}{과} {b}의 싸움이 바다로 번졌다 — {sea}에 화약 연기가 자욱하다고 한다.'])
           .replace('{a}', RL.name(a)).replace('{b}', RL.name(b)).replace('{과}', U.jx(RL.name(a), '과/와')).replace('{sea}', seaOf(a, b)) });
       }); });
     }

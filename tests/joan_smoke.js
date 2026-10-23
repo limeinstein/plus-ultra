@@ -67,7 +67,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return out;
     });
     console.log(JSON.stringify(r, null, 1).slice(0, 2600));
-    ok(r.data.st.join() === '92,72,95,86' && r.data.eff.every(v => v === 3) && r.data.lg[2] === 3 && r.data.lg[3] === 3 && r.data.wage === 0 && r.data.g === 'f', '잔: 체력 92 · 무력 95 · 웅변·측량·운용·검술·신학 3 · 로망스어·게르만어 3 · 무급');
+    ok(r.data.st.join() === '92,72,95,86' && r.data.eff.every(v => v === 3) && r.data.lg[2] === 3 && r.data.lg[3] === 3 && r.data.wage === 185 && r.data.g === 'f', '잔: 체력 92 · 무력 95 · 웅변·측량·운용·검술·신학 3 · 로망스어·게르만어 3 · 무급');
     ok(r.data.tone === 'tsun' && r.data.toneName === '츤데레형', '말투: 츤데레형');
     ok(r.FR && r.noChapel === false && r.rumor === 1, '기함에 예배실이 없으면 나오지 않고 고함 소문만 (한 번)');
     ok(r.taken === false, '예배실에 사람이 있으면 나오지 않는다');

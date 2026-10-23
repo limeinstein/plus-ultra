@@ -6,6 +6,7 @@
    · 인어공주: 덴마크 섬에서 사냥 → 돌보면 합류 (유틀란트 반도에서는 안 나온다) · 수다에 끼지 않는다
    · 넷 → 업적 「Once Upon a Time」, 넷과 혼인 → 「Happily Ever After」. 콘솔 오류 0 */
 'use strict';
+const G_WAGE = { cinderella: 185, snow_white: 185, sleeping_beauty: 0, little_mermaid: 165 };   // QA 2026-10-23 이야기 부하 품삯 (G.taleWage)
 const path = require('path');
 const { pathToFileURL } = require('url');
 let playwright;
@@ -85,7 +86,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return out;
     });
     console.log(JSON.stringify(r));
-    ok(r.data.every(d => d[1] === 0 && /^portraits\/legendary\//.test(d[2] || '') && /^portraits\/legendary\/.*_half$/.test(d[3] || '')), '네 사람 품삯 0 · Codex 그림이 흉상·무릎상으로: ' + r.data.map(d => d[2]).join(', '));
+    ok(r.data.every(d => d[1] === G_WAGE[d[0]] && /^portraits\/legendary\//.test(d[2] || '') && /^portraits\/legendary\/.*_half$/.test(d[3] || '')), '네 사람 품삯(특기 합 11 이상만 — 신데렐라·백설공주 185, 인어공주 165, 잠자는 숲속의 공주 0) · Codex 그림이 흉상·무릎상으로: ' + r.data.map(d => d[2]).join(', '));
     const snowPic = r.data.filter(d => d[0] === 'snow_white')[0];
     ok(snowPic && snowPic[2] === 'portraits/legendary/snow_white_player' && snowPic[3] === 'portraits/legendary/snow_white_player_half', '백설공주 이벤트에 새 플레이어 화풍 얼굴상·무릎상 연결');
     ok(r.spots.FR && r.spots.DE && r.spots.DK && !r.spots.jutIsle, '자리: 프랑스 숲 ' + r.spots.FR + ' · 독일 숲 ' + r.spots.DE + ' · 덴마크 섬 ' + r.spots.DK + ' (유틀란트는 섬이 아니다)');

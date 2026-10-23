@@ -154,7 +154,7 @@
 
   // 로렌초의 딸 루크레치아 (1470~1553) — 술집에는 나오지 않고 이 이야기에서만 동료가 된다
   var LUCREZIA = { id: 'lucrezia_medici', name: '루크레치아 데 메디치', g: 'f', st: [42, 80, 30, 88], sk: { speech: 2, acct: 2, hist: 1, music: 1 }, lg: { 2: 3, 0: 1 }, fame: 0, wage: 150, y: [1470, 1553], reg: [],
-    style: 'it', tone: 'noble', face: 'portraits/medici/lucrezia_medici', halfKey: 'portraits/medici/lucrezia_medici_half',
+    style: 'it', tone: 'polite', face: 'portraits/medici/lucrezia_medici', halfKey: 'portraits/medici/lucrezia_medici_half',
     desc: '로렌초 데 메디치의 맏딸. 아버지 곁에서 은행의 장부와 각국 지점의 편지를 읽으며 자랐다. 셈이 밝고 말씨가 부드러워, 깐깐한 상인도 그녀 앞에서는 값을 깎아 준다.' };
   if (G.MATES && G.MATE && !G.MATE[LUCREZIA.id]) { G.MATES.push(LUCREZIA); G.MATE[LUCREZIA.id] = LUCREZIA; }
 

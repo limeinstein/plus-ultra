@@ -97,7 +97,7 @@
     var list = G.Court.zooAnimalsOf(rec);
     var cards = list.map(function (d) {
       var k = G.Img && G.Img.pick ? G.Img.pick(G.Img.chain.discovery(d)) : null;
-      return { src: k ? G.Img.src(k) : null, icon: 'horse', name: d.name, meta: '신기한 동물 · ' + (d.reg != null && G.REGIONS[d.reg] ? G.REGIONS[d.reg] : '먼 땅'), desc: d.desc || '' };
+      return { src: k ? G.Img.src(k) : null, icon: 'horse', name: d.name, meta: '신기한 동물 · ' + (d.reg != null && G.REGIONS[d.reg] ? (G.Disc && G.Disc.regName ? G.Disc.regName(d) : G.REGIONS[d.reg]) : '먼 땅'), desc: d.desc || '' };
     });
     return gallery(ZO.title(c, arg), (rec.y || '') + '년, ' + U.esc(S().player.name) + ' 제독이 찾아낸 짐승 ' + G.Court.recNote(rec, cards.length, '종') + '.', cards);
   };

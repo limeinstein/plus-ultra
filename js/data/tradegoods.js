@@ -80,7 +80,7 @@
   };
 
   G.BALANCE = G.BALANCE || {};
-  G.BALANCE.relay = G.BALANCE.relay || { buy: 0.72, sell: 0.6, floor: 1.15, stock: 0.6 };
+  G.BALANCE.relay = G.BALANCE.relay || { buy: 0.8, sell: 0.6, floor: 1.15, stock: 0.6 };   // buy 0.72→0.8 (QA 2026-10-23: 지역 경계를 넘는 짧은 중계 항로가 지나치게 남던 것)
 
   var TG = G.TradeGoods = { SPLIT: SPLIT, RELAY: RELAY, NEW: NEW };
 

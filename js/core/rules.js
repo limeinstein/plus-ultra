@@ -359,7 +359,7 @@
       var rad = th * Math.PI / 180, rel = Math.PI - rad;
       up = Math.max(up, t.spd * sailThrust(t.sails, rel) * R.rigK(t.sails, lvl, rel) * Math.cos(rad) * 0.92);
     }
-    var row = t.oar || 0;
+    var row = (t.oar || 0) * ((G.BALANCE && G.BALANCE.oarK) || 1);
     return { up: Math.max(up, row), best: Math.max(best, row), row: row > up };
   };
   /** 맞바람 성능 한 낱말: 강함 · 보통 · 약함 */
@@ -378,7 +378,7 @@
     var hpF = 0.6 + 0.4 * s.hp / s.maxHp;
     var v = base * thrust * w * hpF * (wind.calm ? 0.25 : 1);
     s._row = false;
-    if (t.oar) { var ov = t.oar * (1 + s.spdMod) * hpF; if (ov > v) { v = ov; s._row = true; } }   // 노: 바람과 상관없이
+    if (t.oar) { var ov = t.oar * ((G.BALANCE && G.BALANCE.oarK) || 1) * (1 + s.spdMod) * hpF; if (ov > v) { v = ov; s._row = true; } }   // 노: 바람과 상관없이
     env = env === undefined ? (G.Ships && G.Ships.env()) : env;
     if (env) {
       var tr = t.traits;
@@ -461,7 +461,7 @@
                짐 배분: 함대의 짐은 빠른 배부터 싣는다 — 느린 배일수록 가벼워진다
      4) 맞바람이면 지그재그(태킹)로 가장 잘 나아가는 방향을 고르고, 선원 수·피로를 곱한다 */
   R.FORM = { assist: 0.15, assistOps: 0.08, assistMax: 0.4, drag: 0.012, dragOps: 0.2, noCaptain: 0.96, handle: 0.035, load: 0.18 };
-  function baseSpd(s) { var t = G.SHIP[s.type]; return Math.max(t.spd, t.oar || 0) * (1 + (s.spdMod || 0)); }
+  function baseSpd(s) { var t = G.SHIP[s.type]; return Math.max(t.spd, (t.oar || 0) * ((G.BALANCE && G.BALANCE.oarK) || 1)) * (1 + (s.spdMod || 0)); }
   /** 짐 배분: 빠른 배부터 채운다. 배마다 짐 비율(0~1) */
   R.loadShares = function () {
     var f = R.S().fleet, left = R.used(), out = {};
@@ -636,7 +636,7 @@
   R.sells = function (c, goodId) { return R.cityGoods(c).indexOf(goodId) >= 0; };
   /** 중계무역: 이 도시가 산지가 아니라 먼 곳에서 들여와 파는 물건인가 (js/data/tradegoods.js) */
   R.isRelay = function (c, goodId) { return !!(G.TradeGoods && c && c.relay && G.TradeGoods.isRelay(c, goodId)); };
-  function RELAY() { return (G.BALANCE && G.BALANCE.relay) || { buy: 0.72, sell: 0.6, floor: 1.15, stock: 0.6 }; }
+  function RELAY() { return (G.BALANCE && G.BALANCE.relay) || { buy: 0.8, sell: 0.6, floor: 1.15, stock: 0.6 }; }
   /** 들여온 물건의 그 도시 값 (기준가의 몇 배): 진짜 산지에서 먼 만큼 비싸다. 사는 값은 산지 값 × floor 아래로 내려가지 않는다 */
   R.relayMult = function (c, goodId, side) {
     var K = RELAY(), m = R.regionalMult(goodId, c.region);
@@ -764,7 +764,7 @@
     return { ships: [sh], crew: Math.max(sh.crewMin, Math.min(sh.crewMax, 12)), food: 10, water: 10, mat: B.matStart || 10, cargo: {}, fatigue: 0, discipline: 60, daysOut: 0, sick: 0, scurvy: 0, rats: 0 };
   };
   R.fameTitle = function (f) {
-    var T = (G.BALANCE && G.BALANCE.fameTitles) || [400, 1600, 4000, 8000, 15000];
+    var T = (G.BALANCE && G.BALANCE.fameTitles) || [5000, 20000, 60000, 150000, 400000];
     if (f < T[0]) return '무명의 항해자'; if (f < T[1]) return '신참 모험가'; if (f < T[2]) return '이름난 모험가';
     if (f < T[3]) return '저명한 항해가'; if (f < T[4]) return '위대한 탐험가'; return '대항해자';
   };

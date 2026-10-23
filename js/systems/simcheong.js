@@ -115,10 +115,10 @@
     var q = st();
     await play([
       [ID, '제독님. 저는 이 은혜를 갚을 길이 없어요. 가진 것이라곤 바느질하던 손과, 장터에서 부르던 노래와, 포구에서 배운 물때 읽는 눈뿐이에요.'],
-      [ID, '품삯은 필요 없어요. 저를 배에 태워 주세요. 부엌일이든 장부든 돛줄이든 무엇이든 하겠어요. 인당수 너머 바다 끝에 무엇이 있는지, 이제는 살아서 보고 싶어요.'],
+      [ID, '품삯은 뱃사람들 받는 만큼만 주시면 돼요. 저를 배에 태워 주세요. 부엌일이든 장부든 돛줄이든 무엇이든 하겠어요. 인당수 너머 바다 끝에 무엇이 있는지, 이제는 살아서 보고 싶어요.'],
       ['D', '청아, 가거라. 눈을 떴으니 이 아비는 이제 혼자서도 살 수 있다. 은인을 따라가 큰 바다를 보고, 이 아비에게 이야기해 다오.']
     ]);
-    var v = await UI.ask('심청이 품삯 없이 함께 가겠다고 한다.', [{ label: '배에 태운다', value: 1 }, { label: '아버지 곁에 남게 한다', value: 0 }], me());
+    var v = await UI.ask('심청이 항해사로 함께 가겠다고 한다. (' + G.wageNote(ID) + ')', [{ label: '배에 태운다', value: 1 }, { label: '아버지 곁에 남게 한다', value: 0 }], me());
     var so = G.Fame.add('so', SM.K.fame);
     q.done = U.dateNum(S().date);
     if (!v) {
@@ -128,8 +128,8 @@
       return;
     }
     if (G.Legend && G.Legend.join) G.Legend.join(ID, c);
-    G.State.log('공양미 삼백 석 — 심 봉사가 눈을 떴다. 심청이 품삯 없이 항해사로 함께한다. (사교 명성 +' + so + ')');
-    UI.toast('심청 — 품삯을 받지 않는 항해사 (요리·음악·세공·항해·운용·웅변·회계 3단계)', 'heart', 5600);
+    G.State.log('공양미 삼백 석 — 심 봉사가 눈을 떴다. 심청이 항해사로 함께한다. (사교 명성 +' + so + ')');
+    UI.toast('심청 — 항해사 (' + G.wageNote(ID) + ' · 요리·음악·세공·항해·운용·웅변·회계 3단계)', 'heart', 5600);
     await say(ID, '이제 이 배가 제 집이에요. 오늘 저녁은 제가 지을게요 — 쌀은… 조금 남았죠?', 'happy');
     if (G.Achieve && G.Achieve.afterHire) { try { await G.Achieve.afterHire(ID); } catch (e) { console.error(e); } }
   }

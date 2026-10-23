@@ -36,10 +36,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     const named = await page.evaluate(looks => looks.map(([id, name]) => ({ id,
-      face: G.Img.has('portraits/player/' + id), half: G.Img.has('characters/player_half_' + id),
-      linked: G.Img.heroLook({ look: id }) === id, name: G.Img.heroName(id) === name
+      face: G.Img.has('portraits/mates/' + id), half: G.Img.has('portraits/mates/' + id + '_half'),
+      linked: !!G.MATE[id] && G.STORY_CREW.indexOf(id) >= 0, name: !!G.MATE[id] && G.MATE[id].name === name
     })), NAMED_LOOKS);
-    ok(named.length === 16 && named.every(x => x.face && x.half && x.linked && x.name), '이름이 정해진 주인공 16명 얼굴·무릎상·이름표 연결');
+    ok(named.length === 16 && named.every(x => x.face && x.half && x.linked && x.name), '항구 동료로 옮긴 이름 있는 인물 16명 얼굴·무릎상·이름표 연결');
     const hasSheet = await page.evaluate(() => G.Img.has('duel/fighters/ganghui'));
     console.log('이강희 일기토 시트: ' + (hasSheet ? '있음' : '아직 없음 (main_admiral로 대신)'));
 

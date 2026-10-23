@@ -123,12 +123,12 @@
       await UI.say('피터한테 바위틈 약초로 상처를 싸매는 법도 배웠어요. 걱정 끼쳐서 죄송해요, 아버지.', ks);
       UI.toast(k.name + U.jx(k.name, '이/가') + ' 돌아왔다. (사이 +12 · 의학 1)', 'heart', 4600);
       await narrate('소년은 바다 쪽, 닻을 내린 배를 오래 바라본다.');
-      await UI.say('…이 섬은 너무 작아. 어느 쪽으로 날아도 하루면 바다에 닿고, 늘 같은 갈매기만 날아. 해적도 안 오고.\f이 섬을 나갈 수만 있다면 어디든 좋아! 너희 배에 태워 줘. 품삯 같은 건 필요 없어 — 대신 해적이 나오면 내가 다 해치울게. 별을 보고 길도 찾아 줄게.', peter('happy'));
+      await UI.say('…이 섬은 너무 작아. 어느 쪽으로 날아도 하루면 바다에 닿고, 늘 같은 갈매기만 날아. 해적도 안 오고.\f이 섬을 나갈 수만 있다면 어디든 좋아! 너희 배에 태워 줘. 품삯은 남들만큼만 줘 — 대신 해적이 나오면 내가 다 해치울게. 별을 보고 길도 찾아 줄게.', peter('happy'));
       var nmRow = G.Legend && G.Legend.join ? G.Legend.join(ID, null) : null;
       p.phase = 'done'; p.back = s.day;
       G.State.log(nm + '에서 ' + sonDau(k) + ' ' + k.name + U.jx(k.name, '을/를') + ' 되찾았다. 피터 팬이 따라왔다.');
       if (nmRow) {
-        UI.toast('피터 팬 — 품삯을 받지 않는 항해사', 'heart', 4200);
+        UI.toast('피터 팬 — 항해사 (' + G.wageNote('peter_pan') + ')', 'heart', 4200);
         if (G.Achieve && G.Achieve.afterHire) { try { await G.Achieve.afterHire(ID); } catch (e) { console.error(e); } }
         await UI.say('좋아, 오늘부터 나는 이 배의 선원이야! 그래도 어른이 되라는 말은 하지 마. 그건 절대 안 해.', peter('happy'));
       }

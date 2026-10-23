@@ -27,7 +27,7 @@
     } catch (e) { return { name: '왕실 정원사', lang: 3 }; }
   }
   function discPic(d) { var k = G.Img && G.Img.pick ? G.Img.pick(G.Img.chain.discovery(d)) : null; return k ? G.Img.src(k) : null; }
-  function regName(d) { return d.reg != null && G.REGIONS[d.reg] ? G.REGIONS[d.reg] : '먼 땅'; }
+  function regName(d) { return d.reg != null && G.REGIONS[d.reg] ? (G.Disc && G.Disc.regName ? G.Disc.regName(d) : G.REGIONS[d.reg]) || G.REGIONS[d.reg] : '먼 땅'; }   // 동아시아는 「동아시아 · 조선 / 중국」 (2026-10-23)
 
   /** 왕궁 메뉴의 한 줄 */
   GD.menuItem = function (sp, realm) {

@@ -112,7 +112,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log('   ' + JSON.stringify(d));
     ok(d.crow && !d.lost && d.aboard && d.bond >= 12 && d.med === 1, '약초를 캐자 「꼬끼오」 — 피터 팬이 아이를 돌려준다 (사이 +' + d.bond + ' · 의학 1 · 다시 견습)');
-    ok(d.out && d.joined && d.wage === 0, '「이 섬을 나갈 수만 있다면 어디든 좋아」 — 무급 항해사로 합류 (' + d.role + ')');
+    ok(d.out && d.joined && d.wage === 140, '「이 섬을 나갈 수만 있다면 어디든 좋아」 — 항해사로 합류, 월 품삯 140 (' + d.role + ')');
     ok(d.sk.join() === '3,3,3,2', '능력: 검술·항해·측량 3, 음악 2 (' + d.sk.join('·') + ')');
 
     const e = await page.evaluate(async () => {

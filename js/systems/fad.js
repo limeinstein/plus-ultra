@@ -13,7 +13,7 @@
   var U = G.U, F = {};
   G.Fad = F;
   function S() { return G.Game && G.Game.state; }
-  function B() { return (G.BALANCE && G.BALANCE.fad) || { profit: 0.3, need: 3, window: 90, chance: 0.6, mult: 3, days: 60, cooldown: 180 }; }
+  function B() { return (G.BALANCE && G.BALANCE.fad) || { profit: 0.3, need: 5, window: 90, chance: 0.3, mult: 1.6, days: 60, cooldown: 180 }; }
   function st() { var s = S(); if (!s) return null; if (!s.fad) s.fad = { log: [], on: [], off: {} }; if (!s.fad.off) s.fad.off = {}; return s.fad; }
   function nationOf(c) { try { return G.R.cityOwner(c) || ''; } catch (e) { return ''; } }
   function key(g, k, v) { return g + '|' + k + '|' + v; }
@@ -29,7 +29,7 @@
     return null;
   };
   /** 값에 곱할 배수 (유행이 아니면 1) */
-  F.mult = function (c, goodId) { var f = F.at(c, goodId); return f ? (f.m || B().mult || 3) : 1; };   // 세상의 유행(js/systems/era.js)은 저마다 배수 m
+  F.mult = function (c, goodId) { var f = F.at(c, goodId); return f ? (f.m || B().mult || 1.6) : 1; };   // 세상의 유행(js/systems/era.js)은 저마다 배수 m
   /** 세상의 유행을 올린다 (js/systems/era.js — 발견의 유행·저절로 이는 유행·번짐): f = {g, k, key, since, until, m, src, why} */
   F.start = function (f) { var fd = st(); if (fd && f) fd.on.push(f); return f; };
   /** 유행하는 곳의 이름 */

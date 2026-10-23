@@ -9,9 +9,16 @@
   D.state = function (id) { return S().disc[id] || null; };
   /** 발견물이 있는 고장 이름 (보이는 이름만). 문화권(reg)에는 태평양·오세아니아 갈래가 없어
       폴리네시아·멜라네시아·미크로네시아·오스트레일리아의 발견물이 「아메리카」「동남아시아」로 보이던 것을 바로잡는다. 교역·거리 셈은 그대로 reg를 쓴다 */
-  D.regName = function (d) {
+  D.regName = function (d, short) {
     if (!d) return '';
     var lon = d.lon, lat = d.lat;
+    // 동아시아(지역 6·9): 조선은 중국의 일부가 아니다 — 도시에 있는 발견물은 그 도시의 갈래, 나머지는 좌표로 「동아시아 · 조선 / 중국 / 일본」.
+    // short 이면 「조선」「중국」「일본」만 (「조선 땅 깊숙이」「조선에서 찾은」처럼 말 속에 넣을 때) (2026-10-23)
+    if (d.how !== 'trade' && G.EAST_ASIA && G.EAST_ASIA.indexOf(d.reg) >= 0) {
+      var dc = d.city != null && G.CITY_DATA ? G.CITY_DATA[d.city] : null;
+      var sub = dc && dc.region === d.reg && G.subRegion ? G.subRegion(dc) : G.subRegionAt ? G.subRegionAt(d.reg, lon, lat) : null;
+      if (sub) return short ? sub : '동아시아 · ' + sub;
+    }
     if (d.how !== 'city' && d.how !== 'trade' && isFinite(lon) && isFinite(lat)) {
       var pac = lat > -56 && lat < 30 && (lon >= 145 || lon <= -140);                     // 태평양 한가운데 섬들 (괌·폰페이·하와이·사모아·뉴질랜드…)
       var east = lat <= -10 && lat > -56 && lon <= -100 && lon > -140;                     // 라파누이처럼 남동 태평양의 외딴 섬
@@ -22,6 +29,7 @@
   };
   D.foundByMe = function (id) { var d = S().disc[id]; return !!(d && d.found && d.me); };
   /** 경쟁자가 먼저 발표했다 — 제독은 이제 이 발견물을 찾을 수 없다 (js/data/rivals.js) */
+  /** 경쟁자가 먼저 발표했다 (제독은 아직 못 찾음) — 새 단서·후원 계약은 없지만, 그 자리에 가면 뒤늦게라도 찾을 수 있다 (2026-10-23) */
   D.taken = function (id) { var d = S().disc[id]; return !!(d && d.rival && !d.me); };
   D.hasHint = function (id) { return !!S().hints[id]; };
   /** 단서의 갈래: 'talk'(주점·교역소·후원자의 이야기) · 'book'(도서관 사료) — js/data/clues.js */
@@ -217,7 +225,7 @@
     var s = S();
     var st = s.disc[d.id] || (s.disc[d.id] = {});
     if (st.me) return false;
-    if (st.rival) { UI.toast('「' + d.name + '」' + U.jx(d.name, '은/는') + ' 이미 ' + st.rival + U.jx(st.rival, '이/가') + ' 발표했다 — 이제 제독의 발견이 될 수 없다.', 'flag', 4200); return false; }
+    if (st.rival) setTimeout(function () { UI.toast('「' + d.name + '」' + U.jx(d.name, '은/는') + ' 이미 ' + st.rival + U.jx(st.rival, '이/가') + ' 발표했다 — 뒤늦은 발견이라 명성은 덜하다.', 'flag', 4800); }, 600);   // 경쟁자가 발표한 뒤에도 찾을 수 있다 (2026-10-23)
     // 무덤 발견물: 그 고장의 무사가 나와 앞을 막는다 — 무덤지기에게 지면 이번에는 찾지 못하고, 도굴꾼에게 지면 부장품을 잃는다 (js/systems/tombduel.js)
     var tomb = { fameK: 1, stolen: false };
     if (G.TombDuel && how !== 'special' && how !== 'trade' && G.TombDuel.pending(d)) {
@@ -537,7 +545,7 @@
       } else if (!news && watching && !mine && left > 0 && left <= 4 && d.pw >= 2 && (d.how === 'sea' || d.how === 'land') && !s.flags['rn_' + d.id]) {
         // 따로 적은 소식이 없는 발견: 단서를 쥔 제독에게만 한 번, 경쟁자의 배가 그 바다에서 보였다는 소문
         s.flags['rn_' + d.id] = 1;
-        out.push({ icon: 'ship', history: true, text: '소문: ' + d.rival[2] + (d.how === 'land' ? ' 일행이 ' + D.regName(d) + ' 땅 깊숙이 들어가는 것을 보았다는 사람이 있다. ' : '의 배가 ' + D.regName(d) + ' 쪽 바다에서 보였다고 한다. ') + '「' + d.name + '」' + U.jx(d.name, '을/를') + ' 쫓는 것이 틀림없다.' });
+        out.push({ icon: 'ship', history: true, text: '소문: ' + d.rival[2] + (d.how === 'land' ? ' 일행이 ' + D.regName(d, true) + ' 땅 깊숙이 들어가는 것을 보았다는 사람이 있다. ' : '의 배가 ' + D.regName(d, true) + ' 쪽 바다에서 보였다고 한다. ') + '「' + d.name + '」' + U.jx(d.name, '을/를') + ' 쫓는 것이 틀림없다.' });
       }
       // 발표 lead달 전: 그 경쟁자가 떠날 채비를 한다는 소문과 함께 단서가 돈다 (제독이 먼저 찾을 수 있게)
       var lead = (G.BALANCE.rivals && G.BALANCE.rivals.lead) || 12;
@@ -560,19 +568,16 @@
         st = s.disc[d.id] || (s.disc[d.id] = {});
         st.rival = d.rival[2];
         if (st.me) st.late = true;               // 먼저 찾았지만 알리지 않았다 → 늦은 발표
-        else {                                   // 제독은 이제 찾을 수 없다: 단서를 지우고, 이 발견을 건 후원자 계약은 없던 일로
-          delete s.hints[d.id];
-          if (s.contract && s.contract.disc === d.id && !s.contract.circ) {
-            var kc = s.contract; if (G.Sponsor && G.Sponsor.returnLoan) G.Sponsor.returnLoan(kc);
-            s.contract = null;
-            out.push({ icon: 'seal', text: '후원자와 맺은 「' + d.name + '」 계약은 ' + d.rival[2] + '의 발표로 없던 일이 되었다. (선금은 돌려주지 않아도 된다' + (kc.loan ? ', 빌린 배는 후원자에게 돌아갔다' : '') + ')' });
-          }
+        else {                                   // 새 단서는 사라진다 (후원자에게 제안할 수 없다). 이미 맺은 계약은 그대로 — 기한 안에 찾아 보고하면 된다 (2026-10-23)
+          var kc = s.contract && s.contract.disc === d.id && !s.contract.circ ? s.contract : null;
+          if (!kc) delete s.hints[d.id];
+          if (kc) out.push({ icon: 'seal', text: '「' + d.name + '」' + U.jx(d.name, '은/는') + ' ' + d.rival[2] + '의 발표로 세상에 알려졌지만, 후원자와 맺은 계약은 그대로다. 기한 안에 찾아 보고하면 사례금을 받는다 (명성은 뒤늦은 몫).' });
         }
         if (!st.found) st.found = U.dateNum(s.date);
         var at = G.SeaFolk && G.SeaFolk.rivalCity ? G.SeaFolk.rivalCity(d.rival[2]) : null, wh = at ? at.name + '에서 ' : '';   // 머무는 도시가 있는 경쟁자는 그곳에서 발표
         var nn = G.Names ? G.Names.onRival(d) : null, oldName = G.Names && G.DISC[d.id].aka ? G.DISC[d.id].aka : d.name;
         if (st.me) out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다. 제독이 먼저 찾아 두고도 알리지 않은 사이의 일이다 — 이제 알려도 명성도 사례금도 절반만 받는다.' + (nn ? ' ' + nn : '') });
-        else out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다. 이제 그 발견은 그의 것이다.' + (nn ? ' ' + nn : '') });
+        else out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다. 뒤늦게 찾아도 첫 발견의 영예는 그의 것이다.' + (nn ? ' ' + nn : '') });
         G.State.log(d.rival[2] + ': 「' + d.name + '」 발견 발표' + (st.me ? ' (먼저 찾아 두었지만 알리지 않았다 — 늦은 발표는 명성 절반)' : ''));
       }
     });
@@ -631,7 +636,7 @@
   D.checkSea = function (lon, lat, opt) {
     var s = S(), hits = [], findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'sea' || D.foundByMe(d.id) || D.taken(d.id) || !D.needMet(d)) return;
+      if (d.how !== 'sea' || D.foundByMe(d.id) || !D.needMet(d)) return;   // 경쟁자가 발표했어도 찾을 수 있다
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat), r = d.r * D.clueK(d.id, 'find') * findK;
       if (dist >= r) return;   // 단서가 겹칠수록 넓게, 여파로 수치가 바닥나면 좁게
@@ -640,7 +645,7 @@
       hits.push(d);
     });
     // special geography conditions
-    function sp(id) { if (!D.foundByMe(id) && !D.taken(id) && D.needMet(G.DISC[id]) && (findK >= 1 || U.chance(findK))) hits.push(G.DISC[id]); }
+    function sp(id) { if (!D.foundByMe(id) && D.needMet(G.DISC[id]) && (findK >= 1 || U.chance(findK))) hits.push(G.DISC[id]); }
     if (lat < -34.2 && lon > 16 && lon < 30) sp('capegood');
     if (lon > -86 && lon < -60 && lat > 10 && lat < 27 && s.flags.fromEurope) sp('westroute');
     if (lon > 72 && lon < 78 && lat > 8 && lat < 20 && s.flags.viaCape) sp('indiaroute');
@@ -656,7 +661,7 @@
   D.checkLand = function (lon, lat, opt) {
     var hits = [], near = null, nearD = 99, findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'land' || D.foundByMe(d.id) || D.taken(d.id) || !D.needMet(d)) return;
+      if (d.how !== 'land' || D.foundByMe(d.id) || !D.needMet(d)) return;
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find') * findK;
@@ -675,16 +680,16 @@
   /** 그 사람을 만났을 때 찾는 작품들 — 작업을 시작한 해부터 */
   D.checkPerson = function (mateId) {
     var y = S().date.y;
-    return G.DISCOVERIES.filter(function (d) { return d.by === mateId && !D.foundByMe(d.id) && !D.taken(d.id) && y >= (d.byFrom || 0) && D.artistAround(d); });
+    return G.DISCOVERIES.filter(function (d) { return d.by === mateId && !D.foundByMe(d.id) && y >= (d.byFrom || 0) && D.artistAround(d); });
   };
   /** 도시 안 건물 발견물(유적·건축): 들어가는 것만으로는 안 찾고, 그 건물(거리의 볼거리나 메뉴의 이름)을 눌러야 찾는다 */
   D.isBuilding = function (d) { return d && d.how === 'city' && d.cat === 'ruin'; };
   D.cityBuildings = function (cityId) {
-    return G.DISCOVERIES.filter(function (d) { return D.isBuilding(d) && d.city === cityId && !D.foundByMe(d.id) && !D.taken(d.id) && D.built(d); });
+    return G.DISCOVERIES.filter(function (d) { return D.isBuilding(d) && d.city === cityId && !D.foundByMe(d.id) && D.built(d); });
   };
   D.checkCity = function (cityId) {
     return G.DISCOVERIES.filter(function (d) {
-      if (d.how !== 'city' || d.city !== cityId || D.foundByMe(d.id) || D.taken(d.id) || !D.needMet(d)) return false;
+      if (d.how !== 'city' || d.city !== cityId || D.foundByMe(d.id) || !D.needMet(d)) return false;
       if (D.isBuilding(d)) return false;                        // 건물은 눌러서 (D.cityBuildings)
       if (d.by && D.artistAround(d)) return false;              // 작가가 살아 있으면 그 사람을 만나서 (D.checkPerson)
       if (d.needHint && !S().hints[d.id]) return false;        // 동물: 이야기를 듣고 나서야 거리에서 알아본다

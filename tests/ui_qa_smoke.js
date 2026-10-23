@@ -33,8 +33,8 @@ const STAGE_RECT = (sel) => {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const errs = [];
   try {
-    // ---- 1 (a) 1600×900: 그대로 · 1280×720: 1.15배 · 1024×768: 1.3배
-    for (const [w, h, want] of [[1600, 900, 1], [1280, 720, 1.15], [1024, 768, 1.3]]) {
+    // ---- 1 (a) DPR 1 자동 크기: 1600×900·1280×720은 1.2배, 1024×768은 1.3배
+    for (const [w, h, want] of [[1600, 900, 1.2], [1280, 720, 1.2], [1024, 768, 1.3]]) {
       const { ctx, page } = await open(browser, { width: w, height: h });
       const r = await page.evaluate(async () => { const ui = document.getElementById('ui'); return { z: G.Game.uiZoom, css: ui.style.zoom, uw: ui.offsetWidth }; });
       ok(Math.abs(r.z - want) < 0.011 && (want === 1 ? !r.css : Math.abs(+r.css - want) < 0.011), w + '×' + h + ': 글씨·창 ' + Math.round(r.z * 100) + '% (UI 층 너비 ' + r.uw + ')');
@@ -72,16 +72,16 @@ const STAGE_RECT = (sel) => {
         await (new Function('return ' + NG)())();
         G.UI.say = async () => {}; G.Game.go('city', { cityId: 0 }); await new Promise(r => setTimeout(r, 2000));
         G.Info.open('menu'); await new Promise(r => setTimeout(r, 900));
-        const opts = [...document.querySelectorAll('[data-uisz]')].map(o => o.innerText);
-        document.querySelector('[data-uisz="max"]').click(); await new Promise(r => setTimeout(r, 400));
+        const opts = [...document.querySelectorAll('[data-dsz]')].map(o => o.innerText);
+        document.querySelector('[data-dsz="max"]').click(); await new Promise(r => setTimeout(r, 400));
         const z1 = G.Game.uiZoom, saved = localStorage.getItem('pu.uiSize');
         const hud = document.querySelector('.hud'), fit = hud.scrollWidth <= hud.clientWidth + 1;
-        document.querySelector('[data-uisz="auto"]').click(); await new Promise(r => setTimeout(r, 300));
-        return { opts, z1, saved, fit, z2: G.Game.uiZoom, note: (document.querySelector('[data-uisz]').closest('div').parentNode.innerText || '').slice(0, 80) };
+        document.querySelector('[data-dsz="auto"]').click(); await new Promise(r => setTimeout(r, 300));
+        return { opts, z1, saved, fit, z2: G.Game.uiZoom, note: (document.querySelector('[data-dsz]').closest('div').parentNode.innerText || '').slice(0, 80) };
       }, NEWGAME.toString());
-      ok(r.opts.join(',') === '자동,보통,크게,아주 크게,최대', '설정에 「글씨·창 크기」 ' + r.opts.join('·'));
+      ok(r.opts.join(',') === 'DEFAULT,작게,보통,조금 크게,크게,아주 크게', '설정에 「글자 크기」 ' + r.opts.join('·'));
       ok(r.z1 === 1.45 && r.saved === 'max' && r.fit, '「최대」 → 145%, 이 기기에 기억, 윗줄도 맞춰 줄어든다');
-      ok(r.z2 === 1, '「자동」(1600×900) → 100%');
+      ok(r.z2 === 1.2, '「자동」(1600×900 · DPR 1) → 120%');
       errs.push(...page.errors); await ctx.close();
     }
     // ---- 1 (c) 휴대폰: 1600px 무대가 화면을 넓히지 않는다 · 세로로 들면 돌리라는 안내

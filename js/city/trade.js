@@ -283,7 +283,7 @@
     if (fad) { var fb = (G.BALANCE.fad || {}); UI.toast(G.Fad.where(fad) + '에서 ' + G.GOOD[id].name + U.jx(G.GOOD[id].name, '이/가') + ' 유행을 탔다! ' + (fb.days || 60) + '일 동안 값이 ' + (fb.mult || 3) + '배로 뛴다.', 'star', 7000); }
     if (G.Hostile) G.Hostile.trade(c, total);
     if (G.Slave && G.Slave.is(id)) G.Slave.onSell(c, q);   // 노예 무역: 악명·「노예 상인」
-    if (profit > 0) { var tfame = profit / 2500; G.Fame.add('tr', Math.floor(tfame) + (U.chance(tfame % 1) ? 1 : 0)); }   // 2,500닢에 못 미치는 몫도 그만큼의 확률로 (첫 장사 이익 2천 닢이 교역 명성 0이 되지 않게)
+    if (profit > 0) { var tfame = profit / ((G.BALANCE && G.BALANCE.tradeFameDiv) || 800); G.Fame.add('tr', Math.floor(tfame) + (U.chance(tfame % 1) ? 1 : 0)); }   // 2,500닢에 못 미치는 몫도 그만큼의 확률로 (첫 장사 이익 2천 닢이 교역 명성 0이 되지 않게)
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
     G.Game.refreshHud();
     return { total: total, profit: profit, otherTotal: otherTotal };
@@ -537,6 +537,10 @@
     if (buy) { ids = Object.keys(plan.q); ids.forEach(function (id) { qty[id] = plan.q[id]; }); }
     else ids.forEach(function (id) { qty[id] = s.fleet.cargo[id].q; });
     var disc = 0, used = 0, fails = 0, max = T.batchTries(), K = BD(), lines = [];
+    // 값 깎기(회계)와 일괄 흥정이 곱으로 겹치지 않게: 합쳐서 사는 값 ×floor, 파는 값 ×ceil 까지만 (G.BALANCE.batchDeal — QA 2026-10-23)
+    var cap = K.cap, hh = hag(), hs = C.current() && C.current().haggle;
+    if (buy && hh) cap = Math.min(cap, Math.max(0, 1 - (K.floor || 0.8) / Math.min(1, hh.buy)));
+    if (!buy && hs && hs.ok && hs.sell > 1) cap = Math.min(cap, Math.max(0, ((K.ceil || 1.2) / hs.sell - 1) / K.sellK));
     var talkOK = C.langLv(c) > 0;
     function rows() {
       return ids.map(function (id) {
@@ -571,7 +575,7 @@
         (lines.length ? '<br>' + lines.join(' · ') : '') + '</div>';
       var win = UI.window({ title: (buy ? '일괄 구입' : '일괄 매각') + ' — ' + c.name, icon: buy ? 'coin' : 'sack', width: 820, html: html,
         buttons: [
-          talkOK && left > 0 && disc < K.cap ? { label: '흥정한다 (' + (used + 1) + '차)', value: 'deal', cls: '' } : null,
+          talkOK && left > 0 && disc < cap - 0.001 ? { label: '흥정한다 (' + (used + 1) + '차)', value: 'deal', cls: '' } : null,
           { label: buy ? '산다' : '판다', value: 'go', cls: 'green', disabled: !!why || !nq },
           { label: '돌아간다', value: null }
         ].filter(Boolean),
@@ -586,7 +590,7 @@
         else await C.me(U.pick(buy ? ['이만큼 한꺼번에 사 가니 값을 좀 더 깎아 주게.', '여러 가지를 통째로 사겠네. 셈을 다시 해 주게.'] : ['이만큼 한꺼번에 넘기니 값을 좀 더 쳐 주게.', '여러 가지를 통째로 넘기겠네. 셈을 다시 해 주게.']));
         if (U.chance(p)) {
           var add = T.batchStep(c, nq) * (used > 1 ? 0.7 : 1);
-          disc = Math.min(K.cap, disc + add);
+          disc = Math.min(cap, disc + add);
           if (G.Growth) G.Growth.haggle();
           await C.say(k, U.pick(used > 1 ? ['허허, 끈질기군. 좋아, 조금 더 해 주지.', '알았네, 알았어. 이게 정말 마지막일세.'] : ['한꺼번에라면야… 좋아, 그렇게 하지.', '통째로라니 나쁘지 않군. 셈을 다시 해 보지.']));
           lines.push(used + '차 흥정 성공 ' + (buy ? '−' : '+') + Math.round(add * (buy ? 100 : 100 * K.sellK)) + '%');

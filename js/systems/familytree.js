@@ -4,7 +4,9 @@
    ■ 보기: 위에서 아래로 1대 → 지금 제독. 대마다 「제독 ═ 부인」 아래에 아이들이 줄지어 서고, 뒤를 이은 아이는 금테 · 「▼ N대 제독」.
      아이들의 앞날: 뒤를 이음 · 시집감(혼처) · 제 길로(선장·학자·기사·상인) · 항해사로 함께 · 집에서 지냄 · 섬에서 사라짐 —
      새 제독의 동생이 된 아이는 지금의 모습(s.player.siblings)이나 다음 대의 기록에서 앞날을 읽는다.
-   ■ 옛 저장: 세대가 2대 이상인데 기록이 없으면 항해 일지(「…이 은퇴하고 …이 뒤를 이었다」)에서 이름만 찾아 채운다.
+   ■ 옛 저장: 세대가 2대 이상인데 기록이 없으면 항해 일지(「…이 은퇴하고 …이 뒤를 이었다」)에서 이름만 찾아 채운다 —
+     불러올 때 한 번만 찾아 s.lineage 에 남긴다 (FT.migrate · s.flags.lineageV — 2026-10-23 QA 2: 예전엔 열 때마다 일지를 뒤져, 그 줄이 지워지면 이름이 사라졌다).
+     재임 시작 해(from)가 없는 2대 이후 제독은 앞 대가 물러난 해 → 일지의 세대 교체 해 → 동생들이 집에 든 해 순으로 찾고, 없으면 「?」 (QA 3 — 예전엔 게임 시작 해 1480).
    ■ 저장: s.lineage = [{gen, name, born, from, to, end, age, title, nation, chain, wife:{name, chain}, wives:[이름], kids:[…], sibs:[…]}] */
 (function (G) {
   'use strict';
@@ -49,7 +51,7 @@
     var wives = (p.wives2 || []).map(function (w) { return G.Wives ? G.Wives.name(w) : '부인'; });
     var e = {
       gen: gen, name: p.name, nation: p.nation, born: p.born ? p.born.y : null,
-      from: p.since != null ? p.since : Math.round(s.date.y - (s.day || 0) / 365.25), to: s.date.y,
+      from: p.since != null ? p.since : startYear(s, p, gen), to: s.date.y,
       end: end === 'death' ? 'death' : 'retire', age: R.age ? R.age() : null,
       title: R.fameTitle ? R.fameTitle(p.fame || 0) : '', chain: heroKeys(p),
       wife: wife, wives: wives,
@@ -63,16 +65,35 @@
     return e;
   };
 
-  /** 옛 저장: 기록이 없는 선대를 항해 일지에서 찾은 이름으로 채운다 */
-  function legacy() {
-    var s = S(), line = s.lineage || [], gen = s.player.generation || 1;
-    if (gen <= 1) return line;
+  /** 항해 일지의 세대 교체 줄: {뒤를 이은 이름: {old: 물러난 이름, y: 해}} */
+  function succNames(s) {
     var names = {};
     (s.log || []).forEach(function (l) {
-      var m = /^(.+?)[이가] 은퇴하고 (.+?)[이가] 뒤를 이었다/.exec(String(l.t || ''));
+      var m = /^(.+?)[이가] 은퇴하고 (.+?)[이가] 뒤를 이었다/.exec(String(l && l.t || ''));
       if (m) names[m[2]] = { old: m[1], y: Math.floor((l.d || 0) / 10000) };
     });
-    var out = line.slice(), cur = s.player.name;
+    return names;
+  }
+  /** 게임을 시작한 해 (1대 제독이 제독이 된 해) */
+  function gameStart(s) { return Math.round(s.date.y - (s.day || 0) / 365.25); }
+  /** 제독 p(gen대)가 제독이 된 해 — since 가 없는 옛 저장의 2대 이후: 앞 대의 기록이 물러난 해 → 일지의 세대 교체 해 → 동생들(앞 대의 아이들)이 집에 든 해 → 모름(null) */
+  function startYear(s, p, gen) {
+    if ((gen || 1) <= 1) return gameStart(s);
+    var prev = (s.lineage || []).filter(function (x) { return x.gen === gen - 1; })[0];
+    if (prev && prev.to != null) return prev.to;
+    var n = p && p.name ? succNames(s)[p.name] : null;
+    if (n && n.y) return n.y;
+    var sb = ((p && p.siblings) || []).filter(function (k) { return k && k.sib && k.sib.y; })[0];
+    return sb ? sb.sib.y : null;
+  }
+  FT.startYear = function (p, gen) { var s = S(); p = p || s.player; return startYear(s, p, gen || p.generation || 1); };
+
+  /** 기록이 없는 선대를 채운다 — scan: 항해 일지에서 이름을 찾는다 (옛 저장의 첫 불러오기 한 번만) */
+  function fill(s, scan) {
+    var line = s.lineage || [], gen = (s.player && s.player.generation) || 1;
+    var out = line.slice();
+    if (gen <= 1) return out;
+    var names = scan ? succNames(s) : {}, cur = s.player.name;
     for (var g = gen - 1; g >= 1; g--) {
       var have = out.filter(function (x) { return x.gen === g; })[0];
       if (have) { cur = have.name; continue; }
@@ -80,7 +101,36 @@
       out.push({ gen: g, name: n ? n.old : '', to: n ? n.y : null, end: 'retire', kids: [], sibs: [], stub: true });
       cur = n ? n.old : '';
     }
-    return out.sort(function (a, b) { return a.gen - b.gen; });
+    out.sort(function (a, b) { return a.gen - b.gen; });
+    // 이름만 남은 대의 재임 시작 해: 1대는 게임을 시작한 해, 그 뒤는 앞 대가 물러난 해
+    out.forEach(function (e, i) {
+      if (!e.stub || e.from != null) return;
+      if (e.gen === 1) e.from = gameStart(s);
+      else { var pv = out[i - 1]; if (pv && pv.gen === e.gen - 1 && pv.to != null) e.from = pv.to; }
+    });
+    return out;
+  }
+  /** 옛 저장을 불러올 때 한 번 (js/core/state.js ST.deserialize): 일지에서 찾은 선대를 s.lineage 에 남기고, 지금 제독의 since 를 채운다 */
+  FT.VERSION = 1;
+  FT.migrate = function (s) {
+    if (!s || !s.player) return false;
+    var f = s.flags || (s.flags = {});
+    if ((f.lineageV || 0) >= FT.VERSION) return false;
+    f.lineageV = FT.VERSION;
+    var gen = s.player.generation || 1;
+    if (gen <= 1) return false;
+    var before = (s.lineage || []).length;
+    s.lineage = fill(s, true);
+    if (s.player.since == null) { var y = startYear(s, s.player, gen); if (y != null) s.player.since = y; }
+    var pv = s.lineage.filter(function (x) { return x.gen === gen - 1; })[0];   // 이름만 남은 앞 대가 물러난 해 = 지금 제독이 된 해
+    if (pv && pv.stub && pv.to == null && s.player.since != null) pv.to = s.player.since;
+    return s.lineage.length !== before;
+  };
+  /** 화면에 그릴 기록: 아직 옮기지 않은 판(불러오지 않고 이어 온 판)이면 지금 한 번 옮긴다 */
+  function legacy() {
+    var s = S();
+    if (((s.flags || {}).lineageV || 0) < FT.VERSION) FT.migrate(s);
+    return fill(s, false);
   }
 
   /** 가계도를 볼 수 있나 — 1대 제독이 물러난 뒤부터 */
@@ -136,7 +186,8 @@
   function years(e) {
     var a = e.born != null ? e.born + '년생' : '', b;
     if (e.now) b = (e.from != null ? e.from + '년부터 ' : '') + '지금 제독' + (e.age != null ? ' · ' + e.age + '세' : '');
-    else b = (e.from != null && e.to != null ? e.from + '~' + e.to + '년 제독' : e.to != null ? e.to + '년까지 제독' : '') + (e.end === 'death' ? ' · 바다에서 생을 마침' : e.to != null ? ' · 은퇴' : '');
+    // 언제 제독이 되었는지 모르면 「?」 (QA 3)
+    else b = (e.to != null ? (e.from != null ? e.from : '?') + '~' + e.to + '년 제독' : '') + (e.end === 'death' ? ' · 바다에서 생을 마침' : e.to != null ? ' · 은퇴' : '');
     return [a, b].filter(Boolean).join(' · ');
   }
   function html(gens) {

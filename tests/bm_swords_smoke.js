@@ -44,7 +44,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(all.length === 13 && all.every(x => x.here && x.open && x.named && x.id === x.want && x.n === 4), '열세 도시의 암시장 맨 위에 그 도시의 명검·명품 갑옷 + 물건 3가지: ' + all.map(x => x.city + '=' + x.id).join(', '));
     ok(all.filter(x => !x.port || x.size < 2).map(x => x.city).sort().join() === ['통북투', '카이로', '쿄토', '페르남부쿠'].sort().join(), '내륙(통북투·카이로·쿄토)·작은 항구(페르남부쿠)에도 암시장이 선다');
     const prices = Object.fromEntries(all.map(x => [x.want, x.price]));
-    ok(prices.muramasa === 345000 && prices.paladin === 375000 && prices.runeblade === 300000 && prices.shivablade === 300000 && prices.claymore === 270000, '명검 값(×1.5): 주와이외즈 375,000 · 무라마사 345,000 · 울프베르트·줄피카르 300,000 · 월리스의 검 270,000');
+    ok(prices.muramasa === 120000 && prices.paladin === 135000 && prices.runeblade === 105000 && prices.shivablade === 105000 && prices.claymore === 90000, '명검 값(×1.5): 주와이외즈 135,000 · 무라마사 120,000 · 울프베르트·줄피카르 105,000 · 월리스의 검 90,000 (QA 2026-10-23)');
 
     // ② 회계 2면 닫힘, 다른 도시(리스본)는 명검 없이 3가지 + 귀띔
     const lis = await page.evaluate(() => {
@@ -57,7 +57,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     console.log(JSON.stringify(lis));
     ok(!lis.o2 && !lis.m2 && lis.m3, '통북투 교역소: 회계 2에는 없고 회계 3에 「뒷골목 암시장」');
     ok(lis.n === 3 && !lis.named, '리스본(명검 없는 도시): 예전처럼 물건 3가지');
-    ok(lis.rm && lis.rmPrice >= 100000 && /뒷골목/.test(lis.rm.text), '거간꾼의 귀띔: ' + (lis.rm && lis.rm.text));
+    ok(lis.rm && lis.rmPrice >= 50000 && /뒷골목/.test(lis.rm.text), '거간꾼의 귀띔: ' + (lis.rm && lis.rm.text));
 
     // ③ 시대: 무라마사는 1501년부터, 페르남부쿠는 1535년에 세워진다
     const era = await page.evaluate(() => {
@@ -88,7 +88,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log(JSON.stringify(buy));
     ok(buy.rows[0].indexOf('명검 · 요도 무라마사') === 0 && /공격 47/.test(buy.rows[0]), '사카이 암시장 첫 줄: ' + buy.rows[0].replace(/<[^>]+>/g, ''));
-    ok(buy.paid === 345000 && buy.noto === 1 && buy.has && buy.sold, '무라마사를 샀다: 345,000닢 · 악명 +1 · 이번 기간에는 「팔렸다」');
+    ok(buy.paid === 120000 && buy.noto === 1 && buy.has && buy.sold, '무라마사를 샀다: 120,000닢 · 악명 +1 · 이번 기간에는 「팔렸다」');
     ok(buy.eq === 'muramasa' && buy.asks.some(a => /바로 차겠습니까/.test(a)), '지금 찬 칼(' + buy.w0 + ')보다 나아서 바로 찼다');
     ok(/귀띔/.test(buy.text), '암시장 안내에 거간꾼의 귀띔');
 
@@ -106,7 +106,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log(JSON.stringify(ach));
     ok(/^명품 갑옷 · 아킬레우스의 갑옷/.test(ach.row.replace(/<[^>]+>/g, '')) && /방어 30/.test(ach.row), '아테네 암시장 첫 줄: ' + ach.row.replace(/<[^>]+>/g, ''));
-    ok(ach.paid === 300000 && ach.armor === 'achilles' && ach.asks.some(a => /바로 입겠습니까/.test(a)), '아킬레우스의 갑옷을 300,000닢에 사서 바로 입었다');
+    ok(ach.paid === 120000 && ach.armor === 'achilles' && ach.asks.some(a => /바로 입겠습니까/.test(a)), '아킬레우스의 갑옷을 120,000닢(8만 ×1.5)에 사서 바로 입었다');
 
     // ⑤ 일기토의 공격 갈래 · 시장·전리품에 안 나옴 · 그림
     const misc = await page.evaluate(() => {

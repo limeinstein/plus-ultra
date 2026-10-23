@@ -215,6 +215,7 @@
   function busySet(npcs) { var b = {}; (npcs || []).forEach(function (x) { if (x.cap) b[x.cap.id] = 1; }); return b; }
   function boost(n, extra) {
     n.K = Math.min(1, (n.K || 0.3) + extra);
+    if (n.tip) return;   // 여급이 알려 준 배는 알려 준 척수 그대로 (js/systems/maidtip.js)
     if (G.Ships && n.ships && n.n < 5) { var more = G.Ships.enemyTypes(n.kind, n.zone, n.nation, 1, n.K, S().date.y); if (more[0]) { n.ships.push(more[0]); n.n = n.ships.length; } }
   }
   CP.assign = function (n, npcs) {
@@ -225,7 +226,7 @@
       var r = st(), zone = n.zone;
       var cand = CP.pirates().filter(function (c) { return !busy[c.id] && active(c, y) && c.zones.indexOf(zone) >= 0; }).map(function (c) { return { id: c.id, name: c.name, src: 'hist', desc: c.desc, g: FEMALE[c.id] ? 'f' : 'm', mate: c.mate, k: 'p' }; });
       Object.keys(r.prom).forEach(function (id) { var p = r.prom[id], d = G.MATE[id]; if (p.k === 'p' && p.zone === zone && d && !busy[id]) cand.push({ id: id, name: d.name, src: 'prom', desc: d.desc, g: d.g || 'm', mate: id, k: 'p' }); });
-      if (!cand.length || !U.chance(B().namedPirate)) return n;
+      if (n.tip || !cand.length || !U.chance(B().namedPirate)) return n;   // 여급이 알려 준 해적 떼는 이름 없는 해적 (알려 준 대로)
       n.cap = U.pick(cand); boost(n, 0.2);
       n.label = CP.label(n);
       return n;

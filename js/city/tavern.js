@@ -853,7 +853,7 @@
     for (;;) {
       R.tidyCaptains();
       if (!s.mates.length) { UI.toast('동료가 없습니다.', 'people'); return; }
-      var i = await UI.choose('부하편성', [{ label: '기함 선실 — 방마다 부하를 배치한다', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }].concat(s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: G.Cabins.placeName(m) + (G.Cabins.eff(m) < 1 ? ' · 충성 ' + Math.round(m.loyal) : ''), value: k, icon: 'people', desc: skillLine(d) + ' — ' + d.desc }; })), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역·경리는 한 명씩이고(경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다), 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });
+      var i = await UI.choose('부하편성', [{ label: '기함 선실 — 방마다 부하를 배치한다', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }].concat(s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: G.Cabins.placeName(m) + (G.Cabins.eff(m) < 1 ? ' · 충성 ' + Math.round(m.loyal) : ''), value: k, icon: 'people', desc: (G.Cabins.skillText ? G.Cabins.skillText(m) : skillLine(d)) + ' — ' + d.desc }; })), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역·경리는 한 명씩이고(경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다), 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });   // 특기는 선실에서 는 것(★)·충성이 낮아 덜 쓰는 것((본디 n))까지 — G.Cabins.skillText (2026-10-23 QA 26)
       if (i == null) return;
       if (i === 'cabin') { await G.CabinView.open(); continue; }
       var m = s.mates[i], d = G.MATE[m.id];

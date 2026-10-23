@@ -2,7 +2,9 @@
    · A 발견·탐험: 경쟁 탐험가의 출항 소식(알림이 뜨지 않는 발견도)·채비·발표 — 같은 날 같은 일은 한 줄
    · B 전쟁·정치: 나라 사이의 전쟁, 역사 속 도시 점령   · C 재해·세상: 멀리서 일어난 역사 속 지진도
    · D 일상: 아이와 보낸 시간   · 옛 줄(등급 없음)은 글로 가린다 · 넘치면 오래된 D부터
-   · 수첩 「일지」: 등급 표시 없이 날짜와 내용만 · 콘솔 오류 0 */
+   · 수첩 「일지」: 등급 표시 없이 날짜와 내용만 · 콘솔 오류 0
+   · 2026-10-23 QA 1·18: F 가문(은퇴·결혼·출생) · 해적 함대 격파는 B · 술집 항해사 소문은 D · 해전 분위기 소식은 알림은 달마다, 일지는 나라 쌍마다 해마다 한 줄 ·
+     넘치면 몫을 넘은 등급부터 (B가 넘쳐도 2년 전 일상 줄이 남는다) · 옛 저장 줄 등급 고침 (오래 돌리는 점검은 tests/journal_retention_smoke.js) */
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
@@ -66,6 +68,41 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const firstA = s.log.find(e => e.g === 'A');
       for (let i = 0; i < 900; i++) G.State.log('아들과 갑판을 닦았다 ' + i, 'D');
       out.cap = { len: s.log.length, keptA: s.log.indexOf(firstA) >= 0 };
+      // F 가문 · B 해적 함대 격파 · D 술집 항해사 소문 (QA 1·18)
+      out.gr = {
+        succ: J.grade('페드루가 은퇴하고 미겔이 뒤를 이었다.'), wed: J.grade('이사벨과 결혼했다.'), wife2: J.grade('카타리나를 셋째 부인으로 맞았다.'),
+        born: J.grade('아들이 태어났다.'), born2: J.grade('카타리나에게서 딸이 태어났다.'), kidwed: J.grade('주앙이 바르셀로나 상인와 혼례를 올렸다.'),
+        royal: J.grade('【이베리아 두 왕실의 혼인】 페르난도 왕자와 이사벨 왕녀가 결혼했다.'),
+        pirate: J.grade('레반트 바다에서 바르바리 해적 함대를 쳐부쉈다 — 왕녀는 홍해 수에즈 만의 해적 요새로 끌려갔다고 한다.'),
+        rumor: J.grade('소문: 「피에트로」가 리스본의 술집에 나타났다고 한다. 지도를 잘 그린다.'),
+        market: J.grade('시장 소식: 왕실 혼례 — 리스본 (조짐)')
+      };
+      // 해전 분위기 소식: 알림은 달마다, 일지는 나라 쌍마다 해마다 한 줄
+      const B = G.BALANCE.relations, p0 = B.seaWarMonth; B.seaWarMonth = 1;
+      G.Rel.set('FR', 'EN', -100, 15000101, '시험 전쟁');
+      s.date = { y: 1489, m: 1, d: 2 }; G.Rel.daily();
+      const SEA = /맞붙었다는 소식|싸움이 바다로 번졌다|포를 쏘았다고 한다/;
+      const seaBefore = s.log.filter(e => SEA.test(e.t)).length;
+      let pops = 0;
+      for (let m = 1; m <= 12; m++) { s.date = { y: 1489, m, d: 1 }; pops += G.Rel.daily().filter(x => SEA.test(x.text || '') && /프랑스/.test(x.text) && /잉글랜드/.test(x.text)).length; }
+      const seaLines = s.log.filter(e => SEA.test(e.t)).slice(seaBefore);
+      out.sea = { pops, lines: seaLines.filter(e => /프랑스/.test(e.t) && /잉글랜드/.test(e.t)).length, k: seaLines.every(e => e.k === 'sea' && e.g === 'B') };
+      B.seaWarMonth = p0;
+      // B가 넘쳐도 2년 전 일상 줄은 남는다 (예전: 오래된 D부터 지워 1년 만에 사라짐)
+      s.log.length = 0;
+      const dLine = { d: 14870115, t: '자택 — 아들과 갑판을 닦았다 (2년 전)', g: 'D' };
+      const wLine = { d: 14870116, t: '프랑스와 잉글랜드 사이에 전쟁이 벌어졌다.', g: 'B' };
+      s.log.push(dLine, wLine);
+      for (let i = 0; i < 1200; i++) G.State.log('잉글랜드 함대와 프랑스 함대가 북해에서 맞붙었다는 소식이 들려온다. ' + i, 'B');
+      out.minor = { len: s.log.length, sea: s.log.filter(e => SEA.test(e.t)).length, cap: G.BALANCE.journal.minor };
+      for (let i = 0; i < 1200; i++) G.State.log('오스만 제국이 베네치아의 섬을 포위했다. ' + i, 'B');
+      const comp = {}; s.log.forEach(e => { comp[e.g] = (comp[e.g] || 0) + 1; });
+      out.flood = { len: s.log.length, keptD: s.log.indexOf(dLine) >= 0, keptWar: s.log.indexOf(wLine) >= 0, comp };
+      // 옛 저장: 일상(D)으로 적힌 가문 줄·A로 적힌 술집 소문 → 불러올 때 한 번 고친다
+      const o = JSON.parse(G.State.serialize()); delete o.flags.journalV;
+      o.log = [{ d: 14850101, t: '페드루가 은퇴하고 미겔이 뒤를 이었다.', g: 'D' }, { d: 14850102, t: '소문: 「피에트로」가 리스본의 술집에 나타났다고 한다.', g: 'A' }, { d: 14850103, t: '오스만 제국이 로도스를 포위했다.' }];
+      const S2 = G.State.deserialize(JSON.stringify(o));
+      out.mig = S2.log.map(e => e.g).join('') + ':' + S2.flags.journalV;
       return out;
     });
     await page.screenshot({ path: path.join(OUT, 'journal.png') });
@@ -80,6 +117,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.oldB === 'B', '옛 줄은 글을 보고 가린다');
     ok(r.ui.quake && r.ui.dias && r.ui.badges === 0, '일지 창: 등급 표시 없이 내용만 (출항 소식·지진이 보인다)');
     ok(r.cap.len === 800 && r.cap.keptA, '800줄을 넘으면 오래된 일상부터 지우고 큰일은 남긴다');
+    const gr = r.gr;
+    ok(['succ', 'wed', 'wife2', 'born', 'born2', 'kidwed'].every(k => gr[k] === 'F'), '은퇴하고 뒤를 이음·결혼·셋째 부인·출생·자식 혼례는 F (가문) — ' + JSON.stringify(gr));
+    ok(gr.royal !== 'F' && gr.market === 'C', '왕실의 혼인 소식·시장 소식은 가문이 아니다 — ' + gr.royal + ' / ' + gr.market);
+    ok(gr.pirate === 'B' && gr.rumor === 'D', '해적 함대 격파는 B, 술집 항해사 소문은 D (QA 18)');
+    ok(r.sea.pops === 12 && r.sea.lines === 1 && r.sea.k, '해전 분위기 소식: 알림 12번, 일지에는 그 해 한 줄(작은 소식 표시) — ' + JSON.stringify(r.sea));
+    ok(r.minor.sea === r.minor.cap && r.minor.len === r.minor.cap + 2, '해전 분위기 소식은 일지 전체에서 ' + r.minor.cap + '줄까지 (1200줄을 적어도) — ' + JSON.stringify(r.minor));
+    ok(r.flood.len === 800 && r.flood.keptD && !r.flood.keptWar, 'B 소식 1200줄이 몰려도 2년 전 일상 줄은 남는다 (넘친 B는 B의 오래된 줄부터) — ' + JSON.stringify(r.flood.comp));
+    ok(r.mig === 'FDB:2', '옛 저장 불러오기: 가문 줄 D→F, 술집 소문 A→D, 등급 없는 줄에 등급 — ' + r.mig);
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
   } finally { await browser.close(); }
 })().catch(e => { console.error('✗ ' + e.message); process.exit(1); });

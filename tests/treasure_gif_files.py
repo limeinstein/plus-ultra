@@ -32,6 +32,8 @@ chain = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
 treasures |= set(re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'treasure'", chain, re.M))
 story = (ROOT / "js" / "data" / "story.js").read_text(encoding="utf-8")
 treasures |= set(re.findall(r"^\s*\['(ft_[^']+)',\s*'[^']+'", story, re.M))
+dh3 = (ROOT / "js" / "data" / "dh3disc.js").read_text(encoding="utf-8")
+treasures |= set(re.findall(r"A\.treasure\('([^']+)'", dh3))
 assert set(TREASURE_IDS) == treasures, (set(TREASURE_IDS) ^ treasures)
 
 for did in TREASURE_IDS:
@@ -50,15 +52,17 @@ for did in TREASURE_IDS:
 
     with Image.open(gif) as im:
         assert im.size == (576, 256), (did, im.size)
-        assert im.n_frames == 24, (did, im.n_frames)
+        story = did.startswith("ft_")
+        assert im.n_frames == (18 if story else 24), (did, im.n_frames)
         frames = []
         duration = 0
         for frame_no in range(im.n_frames):
             im.seek(frame_no)
             duration += im.info["duration"]
-            if frame_no in (2, 6, 11, 15, 23):
+            sample = (1, 5, 9, 13, 17) if story else (2, 6, 11, 15, 23)
+            if frame_no in sample:
                 frames.append(im.convert("RGB"))
-        assert duration == 8400, (did, duration)
+        assert duration == (2400 if story else 8400), (did, duration)
         # 두 회전 모두 정면과 뒷면이 충분히 달라야 하며 피날레도 존재해야 한다.
         turn = 0.8 if did in FLAT else 3.5
         assert difference(frames[0], frames[1]) > turn, did
@@ -68,6 +72,6 @@ for did in TREASURE_IDS:
     with Image.open(end) as im:
         assert im.size == (576, 256), (did, im.size)
     with Image.open(sheet) as im:
-        assert im.size == (3456, 1024), (did, im.size)
+        assert im.size == ((3456, 768) if did.startswith("ft_") else (3456, 1024)), (did, im.size)
 
 print(f"OK: {len(TREASURE_IDS)} treasure turntables, GIFs, final frames and runtime sheets")

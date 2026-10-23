@@ -18,7 +18,7 @@ async function openPage(b) {
   return page;
 }
 (async () => {
-  const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] });
+  const b = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] });
   let page = await openPage(b);
   let pairs = await page.evaluate(([N, SEED]) => {
     let seed = SEED; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -30,7 +30,7 @@ async function openPage(b) {
       const d = G.Geo.dist(a.lon, a.lat, c.lon, c.lat); if (d < 2 || d > 30) continue;
       const da = a.dock || [a.lat, a.lon], db = c.dock || [c.lat, c.lon];
       const sa = G.Nav.nearestSea(da[1], da[0], 12), sb = G.Nav.nearestSea(db[1], db[0], 12); if (!sa || !sb || G.Nav.component(sa[0], sa[1]) !== G.Nav.component(sb[0], sb[1])) continue;
-      const p = G.Nav.path(sa[0], sa[1], db[1], db[0], 120000); if (!p) continue;
+      const p = (G.Nav.seaPath || G.Nav.path)(sa[0], sa[1], db[1], db[0], 120000); if (!p) continue;
       let L = 0; for (let i = 1; i < p.length; i++) L += Math.hypot(G.Geo.wrapLon(p[i][0] - p[i - 1][0]), p[i][1] - p[i - 1][1]);
       if (L > 50) continue;
       out.push([a.id, c.id, +L.toFixed(1)]);
@@ -49,6 +49,7 @@ async function openPage(b) {
       G.State.newGame({ name: '주앙', nation: 'PT', job: 'explorer', age: 20, birth: { m: 1, d: 1 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
       G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; G.Disc.find = async () => {}; G.Disc.pickupLeft = async () => {}; G.Explore.report = async () => {}; G.Explore.milestones = async () => {};
       const s = G.Game.state; s.routes = {}; s.routes[G.Routes.key(A, B)] = { n: 1 }; if (s.known.indexOf(B) < 0) s.known.push(B); s.fleet.food = 9999; s.fleet.water = 9999;
+      const eta = G.Routes.estDays(A, B); // 해도 표시 예상일도 실제 자동항해와 같은 엄격한 뱃길이어야 한다.
       window.__arr = null; G.Scenes.city.handleEntry = async c => { window.__arr = c.id; return false; };
       const toasts = []; if (!G.UI.__t0) G.UI.__t0 = G.UI.toast; G.UI.toast = function (m) { toasts.push(String(m).slice(0, 70)); return G.UI.__t0.apply(this, arguments); };
       G.Game.go('sea', { depart: A }); const SEA = G.Scenes.sea, st = SEA.runtime(); st.speed = 4;
@@ -68,11 +69,12 @@ async function openPage(b) {
       }
       if (!why && window.__arr == null) why = 'days';
       const c = G.CITY_DATA[B], db = c.dock || [c.lat, c.lon];
-      return { A, B, an: G.CITY_DATA[A].name, bn: c.name, auto, arr: window.__arr, why, days: s.fleet.daysOut, left: +G.Geo.dist(s.loc.lon, s.loc.lat, db[1], db[0]).toFixed(2), loc: [+s.loc.lon.toFixed(2), +s.loc.lat.toFixed(2)], toasts: toasts.filter(t => !/출항|자동항해합니다|계절풍|쥐가|콜론|선원들에게|피로가/.test(t)).slice(-3), P: st.path && st.path.map(q => q.map(v => +v.toFixed(2))), trail };
+      return { A, B, an: G.CITY_DATA[A].name, bn: c.name, auto, eta, arr: window.__arr, why, days: s.fleet.daysOut, left: +G.Geo.dist(s.loc.lon, s.loc.lat, db[1], db[0]).toFixed(2), loc: [+s.loc.lon.toFixed(2), +s.loc.lat.toFixed(2)], toasts: toasts.filter(t => !/출항|자동항해합니다|계절풍|쥐가|콜론|선원들에게|피로가/.test(t)).slice(-3), P: st.path && st.path.map(q => q.map(v => +v.toFixed(2))), trail };
     }, [A, B, RS]);
-    const good = r.arr === B; if (good) ok++; else if (r.why === 'days') long++; if (!good) r.scene = await page.evaluate(() => { for (const k in G.Scenes) if (G.Scenes[k] === G.Game.scene) return k + ' alive=' + !!(G.Scenes.sea.runtime() && G.Scenes.sea.runtime().alive); return '?'; });
-    console.log((good ? 'OK  ' : 'FAIL') + ' ' + r.an + '→' + r.bn + ' L=' + L + ' days=' + r.days + ' left=' + r.left + ' t=' + Math.round((Date.now() - t0) / 1000) + 's' + (good ? '' : ' why=' + r.why + ' arr=' + r.arr + ' scene=' + r.scene + ' loc=' + r.loc + ' ' + JSON.stringify(r.toasts)));
-    if (!good) fs.appendFileSync(path.join(OUTDIR, 'autosail_fail_' + TAG + '.txt'), JSON.stringify(r) + '\n');
+    const etaOk = Number.isFinite(r.eta) && r.eta >= 1;
+    const good = r.arr === B && etaOk, far = r.arr !== B && r.why === 'days' && etaOk; if (good) ok++; else if (far) long++; if (!good) r.scene = await page.evaluate(() => { for (const k in G.Scenes) if (G.Scenes[k] === G.Game.scene) return k + ' alive=' + !!(G.Scenes.sea.runtime() && G.Scenes.sea.runtime().alive); return '?'; });
+    console.log((good ? 'OK  ' : far ? 'LONG' : 'FAIL') + ' ' + r.an + '→' + r.bn + ' L=' + L + ' ETA=' + r.eta + ' days=' + r.days + ' left=' + r.left + ' t=' + Math.round((Date.now() - t0) / 1000) + 's' + (good ? '' : ' why=' + (etaOk ? r.why : 'eta') + ' arr=' + r.arr + ' scene=' + r.scene + ' loc=' + r.loc + ' ' + JSON.stringify(r.toasts)));
+    if (!good && !far) fs.appendFileSync(path.join(OUTDIR, 'autosail_fail_' + TAG + '.txt'), JSON.stringify(r) + '\n');
   }
   errs.push(...page.errs);
   console.log('ARRIVED ' + ok + '/' + pairs.length + (long ? ' (200일 넘는 먼 항로 ' + long + ')' : '')); console.log([...new Set(errs)].slice(0, 10).join('\n') || '콘솔 오류 없음'); await b.close();

@@ -1,9 +1,11 @@
 /* 베타 게임 익명 항해 현황 전송 회귀 점검.
-   PAGE=http://127.0.0.1:4179/ node tests/telemetry_privacy_smoke.js */
+   기본은 file:// 웹 원본, 배포본은 PAGE=http://127.0.0.1:4179/ node tests/telemetry_privacy_smoke.js */
 'use strict';
+const path = require('path');
+const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 
-const PAGE = process.env.PAGE || 'http://127.0.0.1:4179/';
+const PAGE = process.env.PAGE || pathToFileURL(path.resolve(__dirname, '..', 'index.html')).href;
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }
 
 let browser;
@@ -11,6 +13,10 @@ let browser;
   const errors = [], payloads = [];
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: 1100, height: 760 } });
+  await page.addInitScript(() => {
+    window.PU_WEB_CHANNEL = 'beta';
+    window.PU_TELEMETRY_ENDPOINT = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event';
+  });
   page.on('pageerror', error => errors.push(String(error)));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event', route => route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true}' }));
@@ -28,8 +34,9 @@ let browser;
   });
   await page.waitForTimeout(500);
   const payload = payloads.filter(row => row && row.voyage).pop();
+  const currentVersion = await page.evaluate(() => G.Scenes.title.version);
   ok(!!payload, '현재 항해 현황을 실시간 접속 신호에 포함');
-  ok(payload.version === '0.272' && payload.surface === 'game', '버전과 게임 화면 구분 전송');
+  ok(payload.version === currentVersion && /^\d+\.\d{3}$/.test(payload.version) && payload.surface === 'game', '현재 버전과 게임 화면 구분 전송');
   ok(!JSON.stringify(payload).includes('개인정보시험'), '실제 플레이어명은 전송하지 않음');
   ok(payload.voyage.current.name === '리스본' && payload.voyage.fame === 12345 && payload.voyage.playDays === 402, '게임 속 현재 도시·명성·항해 일수 전송');
   ok(payload.voyage.foundDiscoveries.length === 1 && payload.voyage.missingDiscoveries.length > 0, '발견·미발견 발견물 목록 분리');

@@ -50,15 +50,15 @@
     n.n = n.ships.length;
   }
   CO.generic = function (n) {
-    var s = S(), y = s.date.y, K = n.K || 0;
+    var s = S(), y = s.date.y, K = n.K || 0, fixed = n.tip ? n.n : 0;   // 여급이 알려 준 해적은 알려 준 척수 그대로 (js/systems/maidtip.js)
     if (ARAB[n.zone]) {
-      var total = Math.min(1 + U.ri(2, 4), capCount());
+      var total = fixed || Math.min(1 + U.ri(2, 4), capCount());
       var flag = K < 0.15 ? 'fusta' : K < 0.35 ? 'galley' : 'greatgalley';
       if (flag === 'greatgalley' && K >= 0.7 && avail('galleass', y) && U.chance(0.5)) flag = 'galleass';
       var a = [flag]; for (var i = 1; i < total; i++) a.push('dhow');
       setShips(n, a); n.style = 'arab';
     } else if (WEST[n.zone]) {
-      var tw = Math.min(U.ri(3, 5), capCount());
+      var tw = fixed || Math.min(U.ri(3, 5), capCount());
       var b = [K < 0.35 ? 'caravel' : 'lcaravel'];
       for (var j = 1; j < tw; j++) b.push(U.chance(0.15 + K * 0.5) ? 'lcaravel' : 'caravel');
       setShips(n, b); n.style = 'west';

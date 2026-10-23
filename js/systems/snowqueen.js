@@ -140,7 +140,7 @@
     q.stage = 'done'; q.doneDay = S().day;
     if (nm) {
       G.State.log('「눈의 여왕」 엘리자베타가 몰래 배에 올라 따라나섰다.');
-      UI.toast('엘리자베타 — 신학 2 · 과학 3 · 측량 3 · 회계 3 · 웅변 2 · 다섯 나라 말 (품삯 없음)', 'heart', 5200);
+      UI.toast('엘리자베타 — 신학 2 · 과학 3 · 측량 3 · 회계 3 · 웅변 2 · 다섯 나라 말 (' + G.wageNote('elizaveta') + ')', 'heart', 5200);
     }
     return true;
   };

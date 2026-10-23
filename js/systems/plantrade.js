@@ -6,6 +6,7 @@
    · 발견물은 사라지지 않는다 — 다른 교역소에도 심을 수 있고 왕실 정원에도 바칠 수 있다
    · 한 교역소에 심을 수 있는 식물은 G.BALANCE.plantTrade.max(2)종까지
    · 기후: 열대 식물은 열대의 교역소에만, 한대 식물은 추운 곳에만 (G.BALANCE.plantTrade.zones — 위도 범위)
+   · 새 일지·불러오기: G.Game.state 가 바뀌면 곧바로 도시 특산물을 그 일지에 맞춘다 (PT.sync)
    저장: s.plantTrade = { at: {도시 id: [교역품 id…]}, ask: {도시 id: 다시 물을 날}, n: 심은 횟수 } */
 (function (G) {
   'use strict';
@@ -17,7 +18,8 @@
     max: 2,            // 한 교역소에 더할 수 있는 식물 특산물
     askDays: 30,       // 주인의 청을 거절하면 이만큼은 먼저 묻지 않는다
     fame: 3,           // 심을 때마다 교역 명성
-    zones: { trop: [0, 28], sub: [0, 38], temp: [20, 58], cold: [45, 90], any: [0, 90] }
+    // 위도 범위 — sub(따뜻한 땅)는 지중해 북쪽 끝(베니스 45.5°)까지: 나폴리 레몬·리스본 코르크참나무·라벤나 우산소나무가 제 고장에서 자란다
+    zones: { trop: [0, 28], sub: [0, 46], temp: [20, 58], cold: [45, 90], any: [0, 90] }
   };
   function K() { return G.BALANCE.plantTrade; }
   PT.ZONE_NAME = { trop: '열대', sub: '따뜻한 땅', temp: '온대', cold: '추운 북쪽 땅', any: '어디서나' };
@@ -76,6 +78,19 @@
   };
   function ensure() { if (synced !== S()) PT.sync(); }
   PT.ensure = ensure;
+  // 새 일지를 열거나 저장을 불러와 G.Game.state 가 바뀌는 순간 바로 맞춘다 — c.goods 를 바로 읽는 곳(지도·퀘스트 등)도 지난 일지의 식물 특산물을 보지 않게
+  (function watchState() {
+    var Gm = G.Game; if (!Gm || PT.watching) return;
+    var d = Object.getOwnPropertyDescriptor(Gm, 'state');
+    if (!d || !d.configurable || d.get || d.set) return;
+    var cur = Gm.state;
+    Object.defineProperty(Gm, 'state', {
+      configurable: true, enumerable: true,
+      get: function () { return cur; },
+      set: function (v) { cur = v; if (v !== synced) { try { PT.sync(); } catch (e) { console.error(e); } } }
+    });
+    PT.watching = true;
+  })();
 
   var baseOrigins = R.origins, oc = null, ocVer = -1;
   R.origins = function () {
@@ -113,7 +128,7 @@
   function C() { return G.Scenes.city; }
   function keeper() { return C().npc('trader', '교역소 주인'); }
   function thumb(d) { var k = G.Img && G.Img.pick ? G.Img.pick(G.Img.chain.discovery(d)) : null; return k ? G.Img.src(k) : null; }
-  function homeOf(d) { return G.REGIONS[d.reg] || '먼 땅'; }
+  function homeOf(d) { return (G.REGIONS[d.reg] && G.Disc && G.Disc.regName ? G.Disc.regName(d, true) : G.REGIONS[d.reg]) || '먼 땅'; }   // 말 속에 들어가므로 짧게 (「조선」·「중국」)
   /** 주인과의 대화: 심으면 true */
   async function offer(c, d, first) {
     var g = PT.crop(d), k = keeper();
@@ -133,7 +148,7 @@
       '고맙네, 제독! 당장 성 밖 밭에 심겠네. 이 고장 농부들 솜씨라면 곧 장에 내놓을 수 있을 걸세.',
       '이걸로 이 교역소에도 남들이 부러워할 물건이 생겼군. 고맙네, 정말 고마워.',
       '자네가 먼 바다에서 가져온 것이 이 땅에 뿌리를 내리는구먼. 오늘부터 우리 장에서 「' + g.name + '」' + U.jx(g.name, '을/를') + ' 팔겠네.']));
-    UI.toast('「' + g.name + '」 — ' + c.name + ' 교역소의 특산물이 되었다 (발견물 「' + d.name + '」은 그대로)', { icon: 'leaf', src: thumb(d) }, 5200);
+    UI.toast('「' + g.name + '」 — ' + c.name + ' 교역소의 특산물이 되었다 (발견물 「' + d.name + '」' + U.jx(d.name, '은/는') + ' 그대로)', { icon: 'leaf', src: thumb(d) }, 5200);
     return true;
   }
   /** 교역소에 들어설 때: 주인이 먼저 청한다 */

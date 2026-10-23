@@ -62,7 +62,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       var hp0 = s.fleet.ships[0].hp;
       var msgs = G.Game.passDays(3);
       var act = s.dis.act.map(function (e) { return e.kind; });
-      return { act: act, hp0: hp0, hp1: s.fleet.ships[0].hp, news: msgs.some(function (m) { return /리스본 대지진/.test(m.text) && m.history; }), mk: G.R.market(0).ev, hit: G.Disaster.cityHit(0), slow: G.Disaster.slow(-9.14, 38.7), far: G.Disaster.slow(10, 50) };
+      return { act: act, hp0: hp0, hp1: s.fleet.ships[0].hp, news: msgs.some(function (m) { return /모든 성인의 날/.test(m.text) && m.history; }), mk: G.R.market(0).ev, hit: G.Disaster.cityHit(0), slow: G.Disaster.slow(-9.14, 38.7), far: G.Disaster.slow(10, 50) };
     });
     ok(lis.act.indexOf('quake') >= 0 && lis.act.indexOf('tsunami') >= 0, '1755년 11월 1일 리스본: 지진과 해일 (' + lis.act.join(',') + ')');
     ok(lis.news, '세상의 소식으로 알린다');

@@ -82,6 +82,19 @@
     }
     return fallback ? fallback[Math.abs(U.strHash(seed)) % fallback.length] : null;
   }
+  /** 이미 쓰이는 이름들 — 모든 도시의 이름 있는 여급(새로 들어온 여급까지)·부하·지금과 지난 대의 부인 (QA 14: 예전엔 같은 도시만 보아 다른 도시 여급과 이름이 겹쳤다) */
+  function takenNames(s) {
+    var t = {};
+    Object.keys(G.MAID || {}).forEach(function (k) { var m = G.MAID[k]; if (m && m.name && (!m.gen || (s.maidGen && s.maidGen[k]))) t[m.name] = 1; });   // 다른 저장에서 올라온 새 여급은 빼고
+    Object.keys(s.maidGen || {}).forEach(function (k) { var r = s.maidGen[k]; if (r && r.name) t[r.name] = 1; });
+    Object.keys(G.MATE || {}).forEach(function (k) { var m = G.MATE[k]; if (m && m.name) t[m.name] = 1; });
+    (s.mates || []).forEach(function (m) { if (m && m.name) t[m.name] = 1; });
+    var p = s.player || {}, nameOf = function (id) { var d = id && (G.MAID[id] || G.MATE[id]); if (d && d.name) t[d.name] = 1; };
+    nameOf(p.wife); (p.wives2 || []).forEach(function (w) { nameOf(w.id); }); (p.elders || []).forEach(function (e) { nameOf(e.id); });
+    return t;
+  }
+  function nearNames(c) { var out = [], I = G.Img; ((I && I.maidPool && I.maidPool(c)) || []).forEach(function (k) { (NAMES[k] || []).forEach(function (x) { if (out.indexOf(x) < 0) out.push(x); }); }); return out; }
+  function allNames() { var out = []; Object.keys(NAMES).forEach(function (k) { NAMES[k].forEach(function (x) { if (out.indexOf(x) < 0) out.push(x); }); }); return out; }
   function styleOf(pic) { var m = pic && /^maid-styles\/([^/]+)\//.exec(pic); return m ? m[1] : null; }
   /** 새 여급 하나를 만들어 그 술집에 세운다 */
   MS.replace = function (old) {
@@ -91,8 +104,11 @@
     var id = base + '_g' + n, seed = id + ':' + (s.seed || 0) + ':' + s.date.y;
     var pic = pickFace(old.id, c, seed);
     var pool = NAMES[(G.Img.maidStyle ? G.Img.maidStyle(base, c) : '') || styleOf(pic)] || NAMES[styleOf(pic)] || NAMES.westeurope;   // 이름은 그 술집 고장(처음 여급)의 이름
-    var taken = {}; Object.keys(G.MAID).forEach(function (k) { var m = G.MAID[k]; if (m && m.city === old.city) taken[m.name] = 1; }); taken[old.name] = 1;
-    var names = pool.filter(function (x) { return !taken[x]; }); if (!names.length) names = pool.filter(function (x) { return x !== old.name; });
+    var taken = takenNames(s); taken[old.name] = 1;
+    var names = pool.filter(function (x) { return !taken[x]; });
+    if (!names.length) names = nearNames(c).filter(function (x) { return !taken[x]; });   // 그 고장 이름이 다 쓰였으면 이웃 고장(그 도시 그림 묶음들)의 이름
+    if (!names.length) names = allNames().filter(function (x) { return !taken[x]; });   // 그래도 없으면 어느 고장 이름이든
+    if (!names.length) names = pool.filter(function (x) { return x !== old.name; });
     var name = names[Math.abs(U.strHash(seed + 'n')) % names.length];
     var likes = LIKES.filter(function (x) { return x !== old.like; }), like = likes[Math.abs(U.strHash(seed + 'l')) % likes.length];
     var rec = { id: id, city: old.city, name: name, like: like, pic: pic, base: base, from: s.date.y };
@@ -124,23 +140,26 @@
     return out;
   };
   /** 옛 저장 (이 고침 전에 대가 바뀐 게임): 지난 대의 아내를 찾아 같은 일을 한 번 한다.
-      부하 출신 = 혼인 표시(s.flags['wed_' + id])가 있는데 지금 제독의 아내가 아닌 사람.
-      여급 출신 = 마지막 세대 교체 전의 일지에 「○○과 결혼했다」「○○을 둘째 부인으로 맞았다」로 남은 여급 (이름이 같은 여급이 여럿이면 호감 100인 사람) */
+      ① 선대의 부인 명단(p.elders — 세대 교체 때 Wives.retire가 남긴 id)에 있는 여급·부하 — 가장 정확하다 (QA 4: 옛 저장 일지는 300줄로 잘려 결혼 줄이 거의 없다)
+      ② 부하 출신 = 혼인 표시(s.flags['wed_' + id])가 있는데 지금 제독의 아내가 아닌 사람.
+      ③ 여급 출신 = 마지막 세대 교체 전의 일지에 「○○과 결혼했다」「○○을 둘째(셋째·넷째…) 부인으로 맞았다」로 남은 여급 (이름이 같은 여급이 여럿이면 호감 100인 사람) */
   MS.migrate = function () {
     var s = S(); if (!s || !s.player || s.pwMig) return;
     s.pwMig = 1;
     if ((s.player.generation || 1) < 2) return;
     var p = s.player, now = {}; if (p.wife) now[p.wife] = 1; (p.wives2 || []).forEach(function (w) { now[w.id] = 1; });
     var ids = [];
-    Object.keys(s.flags || {}).forEach(function (k) { var m = /^wed_(.+)$/.exec(k); if (m && G.MATE[m[1]] && !now[m[1]]) ids.push(m[1]); });
+    function add(id) { if (id && !now[id] && ids.indexOf(id) < 0) ids.push(id); }
+    (p.elders || []).forEach(function (e) { if (e && (G.MAID[e.id] || G.MATE[e.id])) add(e.id); });
+    Object.keys(s.flags || {}).forEach(function (k) { var m = /^wed_(.+)$/.exec(k); if (m && G.MATE[m[1]]) add(m[1]); });
     var log = s.log || [], cut = -1;
     for (var i = log.length - 1; i >= 0; i--) if (/은퇴하고 .* 뒤를 이었다/.test(log[i].t)) { cut = i; break; }
     for (var j = 0; j < cut; j++) {
-      var t = log[j].t, mm = /^(.+?)(?:과|와) 결혼했다/.exec(t) || /^(.+?)(?:을|를) 둘째 부인으로 맞았다/.exec(t);
+      var t = log[j].t, mm = /^(.+?)(?:과|와) 결혼했다/.exec(t) || /^(.+?)(?:을|를) \S+ 부인으로 맞았다/.exec(t);
       if (!mm) continue;
       var nm = mm[1], cand = (G.MAIDS || []).filter(function (x) { return x.name === nm; });
       if (cand.length > 1) cand = cand.filter(function (x) { return s.maids && s.maids[x.id] && s.maids[x.id].aff >= 100; });
-      if (cand.length === 1 && !now[cand[0].id]) ids.push(cand[0].id);
+      if (cand.length === 1) add(cand[0].id);
     }
     if (ids.length) MS.retire(ids);
   };

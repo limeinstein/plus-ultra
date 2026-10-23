@@ -361,6 +361,7 @@
     var st = s.disc[d.id]; return !!(st && (st.found || st.rival || st.reported));
   };
   G.discClueInstall = function (o) {
+    if (o.clue === 'book' || o.clue === 'talk') { o.clueVia = o.clue; delete o.clue; }   // 단서 갈래(사료·이야기)는 clueVia로 — d.clue는 단서 이름만 (js/data/clues.js)
     var CN = G.DISC_NAMES && G.DISC_NAMES[o.id];
     if (!CN || o._clueSet) return o;
     if (CN.name && CN.name !== o.name) { if (!o.oldName) o.oldName = o.name; if (!o.name0) o.name0 = o.name; o.name = CN.name; }

@@ -20,7 +20,7 @@
     G.ITEMS.push(shoes); G.ITEM.redshoes = shoes;
   }
   L.forEach(function (m) {
-    m.tale = true; m.fairy = true; m.fame = 0; m.wage = 0; m.y = [1480, 1700]; m.reg = []; m.face = 'portraits/legendary/' + m.pic;
+    m.tale = true; m.fairy = true; m.fame = 0; m.wage = G.taleWage ? G.taleWage(m) : 0; m.y = [1480, 1700]; m.reg = []; m.face = 'portraits/legendary/' + m.pic;
     if (G.MATES && !G.MATE[m.id]) { G.MATES.push(m); G.MATE[m.id] = m; }
   });
 })(window.G = window.G || {});
