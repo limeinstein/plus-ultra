@@ -268,7 +268,11 @@
         if (me && u.type === 'cav') r = LA.cav[u.ride] ? { party: LA.cav[u.ride] } : null;
         else if (me) { var mm = LA.mine[u.type]; if (mm) r = { id: mm[0], row: tierOf(u) }; }
         else if (u.special && u.special.party) r = { party: u.special.party };
-        else if (u.look === 'beast') r = { id: 'animals', row: SPR.row('animals', u.leader ? reg.b[1] : reg.b[0]), beast: 1 };
+        else if (u.look === 'beast') {
+          // e.beast: 이야기 사건의 짐승 이름들(예: 악어). 시트에 없으면 그 고장 짐승을 쓴다.
+          var bn = [].concat(e.beast || []).filter(function (nm) { return SPR.row('animals', nm) >= 0; })[0];
+          r = { id: 'animals', row: SPR.row('animals', bn || (u.leader ? reg.b[1] : reg.b[0])), beast: 1 };
+        }
         else if (e.kind === 'bandit' || e.kind === 'garrison') {
           var enemySheet = u.leader ? 'officers_enemy'
             : u.look === 'cannon' ? 'cannons_enemy'

@@ -597,7 +597,7 @@
     var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');
     var terr = l.lon != null ? G.Geo.terrain(l.lon, l.lat) : 'grass';
     if (terr === 'sea') terr = 'grass';
-    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt });   // leader·hold·flee: 이야기 사건의 싸움 (js/systems/aztec.js)
+    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader, beast: o.beast }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt });   // leader·hold·flee: 이야기 사건의 싸움 (js/systems/aztec.js)
     var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
     var res = r.res;
     if (res === 'win') {
@@ -740,6 +740,8 @@
       if (v && G.Peter && G.Game.scene === L && S().loc.mode === 'land') { await G.Peter.onCamp(v, l.lon, l.lat); refreshHud(); }
       // 프랑스의 숲에서 약초를 찾으면 — 마녀로 몰린 오를레앙의 처녀 잔 (기함에 빈 예배실이 있을 때 · js/systems/joan.js)
       if (v === 'herb' && G.Joan && G.Game.scene === L && S().loc.mode === 'land') { await G.Joan.onCamp(v, l.lon, l.lat, !!st.herbFound); refreshHud(); }
+      // 필리핀 섬에서 사냥하면 — 악어 「누노」와 마리아 (악어를 발견했을 때 · js/systems/seamaidens.js)
+      if (v === 'hunt' && G.Maria && G.Game.scene === L && S().loc.mode === 'land') { await G.Maria.onCamp(v, l.lon, l.lat); refreshHud(); }
       // 같은 곳을 맴돌며 야영하면 윌슨·표류기 (js/systems/castaway.js)
       if (v && G.Castaway && G.Game.scene === L && S().loc.mode === 'land') { await G.Castaway.afterCamp(); refreshHud(); }
     } catch (e) { console.error(e); }
