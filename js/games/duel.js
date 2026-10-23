@@ -135,11 +135,11 @@
         '<div class="rd-top"><div class="rd-side me"><div class="pp"></div><div class="info"><div class="nm"></div><div class="bar hp"><i></i><b></b></div><div class="bar sp"><i></i><b></b></div><div class="sub"></div></div></div>' +
         '<div class="rd-mid"><div class="rd-round"></div><div class="rd-rps">찌르기 <span>→</span> 베기 <span>→</span> 치기 <span>→</span> 찌르기<small>화살표 쪽을 이긴다</small></div></div>' +
         '<div class="rd-side en"><div class="info"><div class="nm"></div><div class="bar hp"><i></i><b></b></div><div class="bar sp"><i></i><b></b></div><div class="sub"></div></div><div class="pp"></div></div></div>' +
-        '<div class="rd-stage"><canvas width="' + W + '" height="' + H + '"></canvas><img class="rd-motion" alt="" aria-hidden="true"><div class="rd-cut-title"><b></b><small></small></div><div class="rd-stance"></div></div>' +
+        '<div class="rd-stage"><canvas width="' + W + '" height="' + H + '"></canvas><img class="rd-motion" alt="" aria-hidden="true"><div class="rd-cut-flash"></div><div class="rd-cut-title"><b></b><small></small></div><div class="rd-stance"></div></div>' +
         '<div class="rd-log"></div>' +
         '<div class="rd-ctrl"><div class="rd-moves"><div class="lbl">다음 수 <span class="intent"></span></div><div class="row"></div></div><div class="rd-techs"><div class="lbl">기술 <small>기세를 쓴다</small></div><div class="grid"></div></div><div class="rd-sys"></div></div></div>';
       var win = UI.window({ title: '일기토', icon: 'sword', width: 1120, html: html, closable: false });
-      var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), motionEl = el.querySelector('.rd-motion'), cutTitleEl = el.querySelector('.rd-cut-title');
+      var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), motionEl = el.querySelector('.rd-motion'), cutTitleEl = el.querySelector('.rd-cut-title'), cutFlashEl = el.querySelector('.rd-cut-flash');
       // 초상에 양식이 없으면 지금 있는 도시(바다면 가까운 도시)의 양식으로 전투원 그림을 고른다
       var hereStyle = (function () { var s0 = G.Game.state, c0 = s0 && s0.loc && G.CITY_DATA && G.CITY_DATA[s0.loc.city]; return c0 && c0.style; })();
       function fighterSprite(f) {
@@ -167,8 +167,8 @@
       function finisherKey(f, kind, extra) {
         var base = art.finishers && art.finishers.base || 'duel/finishers/';
         var cutins = art.finishers && art.finishers.cutins || 'duel/cutins/';
-        // 일격필살·필살기는 작은 전투 스프라이트가 아니라 인물별 전면 컷인을 쓴다.
-        if (kind === 'deathblow' || kind === 'special') return f.spriteId ? cutins + f.spriteId : null;
+        // 일격필살·필살기·호통은 작은 전투 스프라이트가 아니라 인물별 전면 컷인을 쓴다.
+        if (kind === 'deathblow' || kind === 'special' || kind === 'cutin') return f.spriteId ? cutins + f.spriteId : null;
         if (kind === 'roar') return base + (legendId(f) === 'zhang_fei' ? 'zhang_fei/roar' : 'common/roar');
         if (kind === 'secret') return base + 'common/secret_' + (extra ? 'gun' : 'dagger');
         return null;
@@ -178,7 +178,14 @@
         var token = ++motionToken, im = await I.load(key);
         if (!live || !im || token !== motionToken) return false;
         motionFighter = hideFighter ? f : null;
-        motionEl.className = 'rd-motion ' + f.side + (cutin ? ' cutin' : '');
+        var cls = 'rd-motion ' + f.side;
+        if (cutin) {
+          // 원화가 바라보는 쪽이 상대 쪽과 다르면 뒤집는다 (나는 왼쪽에서 오른쪽을, 적은 오른쪽에서 왼쪽을 친다)
+          var faceL = (art.finishers && art.finishers.cutinFaceLeft || []).indexOf(f.spriteId) >= 0;
+          var flip = (f.side === 'en') !== faceL;
+          cls += ' cutin' + (flip ? ' flip' : '') + ((f.side === 'en') !== flip ? ' from-r' : '');
+        }
+        motionEl.className = cls;
         motionEl.removeAttribute('src');
         void motionEl.offsetWidth; // 같은 GIF를 연달아 써도 첫 장면부터 다시 시작한다.
         motionEl.src = I.src(key);
@@ -186,7 +193,9 @@
         if (cutin) {
           cutTitleEl.querySelector('b').textContent = title || '';
           cutTitleEl.querySelector('small').textContent = sub || '';
-          cutTitleEl.classList.add('show');
+          cutTitleEl.className = 'rd-cut-title ' + f.side + ' show';
+          // 섬광 띠: 클래스를 뗐다 붙여야 같은 컷인을 연달아 써도 처음부터 다시 지나간다.
+          cutFlashEl.className = 'rd-cut-flash ' + f.side; void cutFlashEl.offsetWidth; cutFlashEl.classList.add('show');
         }
         return true;
       }
@@ -196,6 +205,7 @@
         motionEl.classList.remove('show');
         motionEl.removeAttribute('src');
         cutTitleEl.classList.remove('show');
+        cutFlashEl.classList.remove('show');
       }
       function setPortrait(f, sel) { var box = el.querySelector(sel + ' .pp'); box.innerHTML = ''; if (f.portrait) box.appendChild(A.portraitCanvas(f.portrait, 84)); }
       setPortrait(me, '.rd-side.me'); setPortrait(en, '.rd-side.en');
@@ -533,7 +543,7 @@
         var pr = function (base) { return U.clamp(base, 0.05, 0.95); };
         if (id === 'deathblow') {
           var p1 = pr(0.3 + (power(f) - power(o)) / 150 + (1 - o.hp / o.maxHp) * 0.35 + (f === me && stance === 'allout' ? 0.1 : 0));
-          var deathMotion = await startMotion(finisherKey(f, 'deathblow'), f, true, true, '일격필살', who + ' — ' + MOVE[f.style]);
+          var deathMotion = await startMotion(finisherKey(f, 'deathblow'), f, true, true, '일격필살', (f === me ? (me.m ? me.name : '제독') : en.name) + ' — ' + MOVE[f.style]);
           f.move = f.style; pose(f, 'windup', 0.35); await sleep(deathMotion ? 430 : 380); pose(f, 'lunge', 0.35); f.tx = 90; if (G.Audio) G.Audio.sfx('sword');
           fx.push({ kind: 'slashArc', x: W / 2, y: H * 0.86 - 120, a0: -2.2, dir: f === me ? 1 : -1, t: 0, life: 0.45 });
           await sleep(200);
@@ -602,8 +612,11 @@
           else { bubble(o, '어림없다!'); say(U.esc(o.name) + U.jx(o.name, '은/는') + ' 흔들리지 않았다.'); }
         } else if (id === 'roar') {
           var p7 = pr(0.4 + (f.might + f.cha - o.might - o.int) / 250);
+          var shout = U.pick(['물러서라!!', '덤벼라, 이 겁쟁이!', '누구 앞이라고!']);
+          // 호통: 먼저 인물 컷인이 화면을 덮고 고함을 띄운 뒤, 원래의 호통 기운(roar GIF)이 퍼진다
+          if (await startMotion(finisherKey(f, 'cutin'), f, true, true, '호통', shout)) { shakeT = 0.35; await sleep(760); stopMotion(); }
           var roarMotion = await startMotion(finisherKey(f, 'roar'), f, false);
-          pose(f, 'shout', 0.7); bubble(f, U.pick(['물러서라!!', '덤벼라, 이 겁쟁이!', '누구 앞이라고!']));
+          pose(f, 'shout', 0.7); bubble(f, shout);
           shakeT = 0.5; await sleep(700);
           if (roarMotion) stopMotion();
           if (U.chance(p7)) {
@@ -750,7 +763,7 @@
         return false;
       });
       win.result.then(function () { live = false; unkey(); clearTimeout(timer); });
-      G.Games._duelDebug = { me: me, en: en, flags: flags, choose: chooseStance, use: async function (id) { for (var i = 0; i < 200 && busy && !over; i++) await new Promise(function (r) { setTimeout(r, 30); }); if (over) return; queued = id; clearTimeout(timer); await step(); for (var j = 0; j < 200 && busy && !over; j++) await new Promise(function (r) { setTimeout(r, 30); }); }, step: step, techOk: function (id) { return techOk(TECH.filter(function (x) { return x.id === id; })[0]); }, get over() { return over; }, set fast(v) { fast = v; } };
+      G.Games._duelDebug = { me: me, en: en, flags: flags, choose: chooseStance, use: async function (id) { for (var i = 0; i < 200 && busy && !over; i++) await new Promise(function (r) { setTimeout(r, 30); }); if (over) return; queued = id; clearTimeout(timer); await step(); for (var j = 0; j < 200 && busy && !over; j++) await new Promise(function (r) { setTimeout(r, 30); }); }, step: step, useTech: useTech, techOk: function (id) { return techOk(TECH.filter(function (x) { return x.id === id; })[0]); }, get over() { return over; }, set fast(v) { fast = v; } };
       bars(); stancePanel(); moveBtns(); techBtns(); sysBtns();
       if (opt.stance) chooseStance(opt.stance);
     });

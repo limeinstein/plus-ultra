@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""일기토 전투원 원화를 화면 가득 차는 필살기 컷인 GIF로 만든다.
+"""일기토 전투원 원화를 화면 가득 차는 필살기 컷인 그림(정지 WebP 한 장)으로 만든다.
 
-ImageGen이 만든 `images/duel/cutins/source/<id>.png` 한 장을 받아, 먹선 등장 →
-무기 돌진 → 섬광 → 잉크가 가라앉는 짧은 화면 연출로 합성한다.
+ImageGen이 만든 `images/duel/cutins/_source/<id>.png` 한 장에 종이결·속도선·위아래 먹선 테두리를 입혀
+`images/duel/cutins/<id>.webp`로 저장한다. 먹선 등장 → 무기 돌진 → 섬광 → 멈춤은 게임 화면의 CSS가 움직인다.
+`--preview`는 예전 7장 GIF 연출을 확인용으로만 `.work/cutin_preview`에 만든다.
 `--references`는 ImageGen에 넣을 인물 참조 이미지를 `.work/cutin_refs`에 만든다.
 """
 import argparse
@@ -107,7 +108,22 @@ def streaks(size, color, phase, reverse=False):
     return layer.filter(ImageFilter.GaussianBlur(.6))
 
 
-def frame(base, fid, i):
+def light_sweep(size, pos, power):
+    """비스듬한 빛줄기 한 줄 (pos 0~1: 왼쪽→오른쪽 위치, power: 세기)."""
+    w, h = size
+    band = Image.new('L', (w * 2, h * 2), 0)
+    d = ImageDraw.Draw(band)
+    cx = int(w * 2 * pos)
+    for half, a in ((150, 50), (80, 110), (34, 190), (10, 255)):
+        d.rectangle((cx - half, 0, cx + half, h * 2), fill=int(a * power))
+    band = band.filter(ImageFilter.GaussianBlur(18)).rotate(-24, resample=Image.Resampling.BICUBIC)
+    band = band.crop((w // 2, h // 2, w // 2 + w, h // 2 + h))
+    glow = Image.new('RGBA', size, (255, 244, 208, 0))
+    glow.putalpha(band)
+    return glow
+
+
+def frame(base, fid, i, flash=True):
     warm, accent = PALETTE[region(fid)]
     zoom = [1.08, 1.055, 1.03, 1.0, 1.035, 1.015, 1.0][i]
     dx = [-44, -28, -12, 0, 20, 8, 0][i]
@@ -122,24 +138,38 @@ def frame(base, fid, i):
     # 위·아래 먹선 테두리와 순간적인 창끝/칼끝 섬광으로 컷인 전체가 전투 화면과 분리돼 보인다.
     d.rectangle((0, 0, SIZE[0], 10), fill=(22, 15, 10, 235))
     d.rectangle((0, SIZE[1] - 10, SIZE[0], SIZE[1]), fill=(22, 15, 10, 235))
-    if i in (3, 4):
-        cx, cy = (760, 178) if i == 3 else (850, 164)
-        for r, a in ((8, 255), (24, 150), (52, 55)):
-            d.ellipse((cx-r, cy-r, cx+r, cy+r), fill=(255, 246, 194, a))
-        d.line((cx - 300, cy + 42, cx + 160, cy - 28), fill=(255, 247, 211, 220), width=8)
+    if flash and i in (3, 4):
+        # 섬광: 고정된 원 대신 화면을 비스듬히 가로지르는 빛줄기 — 무기가 어디에 있든 어색하지 않다.
+        rgba = Image.alpha_composite(rgba, light_sweep(SIZE, .38 if i == 3 else .78, 1.0 if i == 3 else .6))
     if i == 0:
         veil = Image.new('RGBA', SIZE, (24, 17, 12, 0))
         vd = ImageDraw.Draw(veil)
         vd.rectangle((0, 0, 350, SIZE[1]), fill=(24, 17, 12, 175))
         rgba = Image.alpha_composite(rgba, veil)
-    return rgba.convert('P', palette=Image.Palette.ADAPTIVE, colors=255)
+    return rgba.convert('RGB')
 
 
 def build_one(path):
+    """정지 그림 한 장(WebP)만 만든다. 먹선 등장 → 돌진 → 섬광 → 멈춤은 게임 화면의 CSS 움직임이 맡는다
+    (css/style.css .rd-motion.cutin · .rd-cut-flash). 7장짜리 GIF는 한 장에 1.5MB였지만 정지 그림은 0.1~0.2MB다."""
     fid = path.stem
     base = Image.open(path).convert('RGB')
-    frames = [frame(base, fid, i) for i in range(7)]
-    dst = OUT / (fid + '.gif')
+    still = frame(base, fid, 3, flash=False)
+    dst = OUT / (fid + '.webp')
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    still.save(dst, quality=84, method=6)
+    old = OUT / (fid + '.gif')
+    if old.exists():
+        old.unlink()  # 예전 GIF가 남아 있으면 그림 목록(manifest)이 GIF를 먼저 집는다
+    print(fid, '→', dst.relative_to(ROOT))
+
+
+def preview_one(path):
+    """움직임을 눈으로 확인할 때만: 예전처럼 7장 GIF를 .work/cutin_preview에 만든다 (게임에는 쓰지 않는다)."""
+    fid = path.stem
+    base = Image.open(path).convert('RGB')
+    frames = [frame(base, fid, i).convert('P', palette=Image.Palette.ADAPTIVE, colors=255) for i in range(7)]
+    dst = ROOT / '.work' / 'cutin_preview' / (fid + '.gif')
     dst.parent.mkdir(parents=True, exist_ok=True)
     frames[0].save(dst, save_all=True, append_images=frames[1:], duration=[110, 90, 75, 85, 100, 150, 260], loop=0, disposal=2, optimize=True)
     print(fid, '→', dst.relative_to(ROOT))
@@ -151,19 +181,23 @@ def build():
         raise SystemExit('ImageGen 원화가 없습니다: ' + str(SOURCE))
     for path in paths:
         build_one(path)
-    print('컷인 GIF', len(paths), '장 완성')
+    print('컷인', len(paths), '장 완성')
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--references', action='store_true')
     ap.add_argument('--build', action='store_true')
+    ap.add_argument('--preview', action='store_true', help='움직임 확인용 GIF (.work/cutin_preview)')
     args = ap.parse_args()
     if args.references:
         make_references()
     if args.build:
         build()
-    if not args.references and not args.build:
+    if args.preview:
+        for path in sorted(SOURCE.glob('*.png')):
+            preview_one(path)
+    if not args.references and not args.build and not args.preview:
         ap.print_help()
 
 

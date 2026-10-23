@@ -94,10 +94,6 @@ for (const f of allFighters) {
     }
 }
 
-for (const f of allFighters) {
-  const im = gif(path.join(ROOT, 'images/duel/cutins', f.id + '.gif'));
-  ok(im.width === 1060 && im.height === 380 && im.frames === 7, f.id + ': 전면 필살기 컷인 1060×380, 7장');
-}
 ok(gif(path.join(ROOT, 'images/duel/finishers/zhang_fei/roar.gif')).frames >= 5, '장비 전용 호통 GIF');
 for (const id of ['secret_dagger', 'secret_gun', 'roar']) ok(gif(path.join(ROOT, 'images/duel/finishers/common', id + '.gif')).frames >= 5, id + ': 공통 기술 GIF');
 
@@ -111,9 +107,30 @@ for (const f of allFighters) {
   ok(manifest.includes('"duel/fighters/' + f.id + '"'), f.id + ': 매니페스트 등록 (python tools/images.py)');
   ok(manifest.includes('"duel/cutins/' + f.id + '"'), f.id + ': 전면 필살기 컷인 매니페스트 등록');
 }
-ok(/class="rd-motion"/.test(duelCode) && /cutins \+ f\.spriteId/.test(duelCode) && /startMotion\(finisherKey\(f, 'deathblow'\)/.test(duelCode), '일격필살을 인물별 전면 컷인 GIF로 재생');
+ok(/class="rd-motion"/.test(duelCode) && /cutins \+ f\.spriteId/.test(duelCode) && /startMotion\(finisherKey\(f, 'deathblow'\)/.test(duelCode), '일격필살을 인물별 전면 컷인으로 재생');
 ok(/zhang_fei\/roar/.test(duelCode) && /secret_/.test(duelCode), '장비 호통·공통 비밀무기 연결');
 for (const id of ['deck', 'land_battle', 'exploration', 'city', 'tavern']) ok(manifest.includes('"duel/backgrounds/' + id + '"'), id + ': 배경 매니페스트 등록');
+
+// 전면 필살기 컷인: 전투원마다 1060×380 정지 WebP 한 장 (움직임은 CSS), 예전 7장 GIF는 남기지 않는다
+function webpSize(file) {
+  const b = fs.readFileSync(file);
+  ok(b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WEBP', file + ': WebP 서명');
+  const kind = b.toString('ascii', 12, 16);
+  if (kind === 'VP8X') return { width: 1 + b.readUIntLE(24, 3), height: 1 + b.readUIntLE(27, 3), bytes: b.length, anim: !!(b[20] & 2) };
+  if (kind === 'VP8 ') return { width: b.readUInt16LE(26) & 0x3fff, height: b.readUInt16LE(28) & 0x3fff, bytes: b.length, anim: false };
+  if (kind === 'VP8L') { const v = b.readUInt32LE(21); return { width: (v & 0x3fff) + 1, height: ((v >> 14) & 0x3fff) + 1, bytes: b.length, anim: false }; }
+  throw new Error(file + ': 알 수 없는 WebP');
+}
+for (const f of allFighters) {
+  const file = path.join(ROOT, 'images/duel/cutins', f.id + '.webp');
+  const im = webpSize(file);
+  ok(im.width === 1060 && im.height === 380 && !im.anim && im.bytes < 400000, f.id + ': 컷인 1060×380 정지 WebP, 400KB 미만 (' + im.bytes + ')');
+  ok(!fs.existsSync(path.join(ROOT, 'images/duel/cutins', f.id + '.gif')), f.id + ': 예전 컷인 GIF가 남아 있으면 매니페스트가 GIF를 집는다');
+  ok(manifest.includes('"duel/cutins/' + f.id + '": "duel/cutins/' + f.id + '.webp"'), f.id + ': 컷인 매니페스트 등록');
+}
+const faceL = art.finishers.cutinFaceLeft || [];
+ok(faceL.length && faceL.every(id => allFighters.some(f => f.id === id)), '컷인 방향 목록(cutinFaceLeft)은 있는 전투원만');
+ok(/finisherKey\(f, 'cutin'\)/.test(duelCode) && /rd-cut-flash/.test(duelCode), '호통도 인물 컷인 뒤에 호통 기운이 퍼지고, 컷인마다 섬광이 지나간다');
 
 const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 ok(index.indexOf('js/data/duelart.js') > index.indexOf('js/data/seafx.js'), 'duelart는 seafx 뒤에서 읽어야 함');

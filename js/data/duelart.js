@@ -60,6 +60,10 @@
     finishers: {
       base: 'duel/finishers/',
       cutins: 'duel/cutins/',
+      // 컷인 원화에서 무기를 왼쪽으로 내지르는 인물 (나머지는 오른쪽). 내 쪽(왼쪽)에서 쓰면 좌우를 뒤집어 늘 상대를 향하게 한다
+      cutinFaceLeft: ['african_warrior', 'armored_navigator', 'army_officer', 'barbary_corsair', 'battle_vanguard', 'blackcoat_captain', 'blonde_pirate',
+        'caribbean_pirate', 'casanova', 'charismatic_admiral', 'columbus', 'cortes', 'east_asian_attendant', 'explorer', 'first_mate', 'hat_spinner',
+        'indian_warrior', 'native_chief', 'navigator_white', 'noble_scholar', 'redhair_pirate', 'sea_dog', 'sky_adventurer', 'spanish_soldier'],
       moves: ['slash', 'thrust', 'bash'],
       legends: ['guan_yu', 'zhang_fei', 'd_artagnan', 'athos', 'aramis'],
       common: { dagger: 'common/secret_dagger', gun: 'common/secret_gun', roar: 'common/roar' }

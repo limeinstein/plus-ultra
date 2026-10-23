@@ -1,7 +1,7 @@
 # 일기토 그림 묶음
 
 `fighters/`에는 투명 전투원 시트와 전설 전용 시트, `backgrounds/`에는 초광폭 전투 배경 5장,
-`cutins/`에는 화면 전체를 덮는 인물별 일격필살·필살기 GIF, `finishers/`에는 비밀무기·호통 보조 효과가 있습니다.
+`cutins/`에는 화면 전체를 덮는 인물별 일격필살·필살기·호통 컷인 그림, `finishers/`에는 비밀무기·호통 보조 효과가 있습니다.
 
 ## 전투원 시트
 
@@ -43,14 +43,16 @@
 `armored_navigator`, `sea_dog`, `muscle_swordsman`, `hat_spinner`, `charismatic_admiral`,
 `battle_vanguard`, `noble_scholar`, `casanova`, `army_officer`, `sky_adventurer`, `blackcoat_captain`.
 
-## 전면 필살기 컷인 GIF
+## 전면 필살기 컷인
 
-- 모든 전투원 시트마다 `cutins/<id>.gif`가 있다. 1060×380, 7장으로 어두운 먹선 등장 → 정면/3⁄4 정면 무기 돌진 → 섬광 → 잔상 정리 순서다.
+- 모든 전투원 시트마다 `cutins/<id>.webp`가 있다. 1060×380 정지 그림 한 장(0.1~0.2MB)이고, 게임 화면의 CSS가 0.86초 동안 먹빛으로 쓸려 들어옴 → 무기 돌진(확대가 풀림) → 비스듬한 섬광 → 멈춤으로 움직인다 (css/style.css `.rd-motion.cutin` · `.rd-cut-flash`). 적이 쓰면 좌우를 뒤집어 오른쪽에서 들어온다.
+- 일격필살·필살기는 컷인이 덮은 채로 칼이 들어가고, 호통은 컷인에 고함을 띄운 뒤 원래의 호통 기운(`finishers/.../roar.gif`)이 퍼진다.
+- 예전 7장 GIF(한 장 1.5MB)는 쓰지 않는다. 움직임을 그림으로 확인할 때만 `python tools/duel_cutins.py --preview`로 `.work/cutin_preview/`에 만든다.
 - 작은 전투 스프라이트를 확대하지 않고, 원본 얼굴·머리·복식·무기를 참조해 별도의 초광폭 원화를 만들었다. 원화는 `cutins/_source/`에 보관하며 매니페스트에는 넣지 않는다.
 - 지역 미술: 유럽권 채색 동판화, 중국 수묵·공필화, 조선 한지 수묵·민화, 일본 무사 우키요에, 이슬람권 마그레브·오스만 세밀화, 인도 라지푸트 세밀화, 동남아 칠화·목판화, 아프리카 직물·부조 선화, 아메리카 필사본·회화 문법.
 - 검술 3 전설인 관우·장비·달타냥·아토스·아라미스는 같은 인물 컷인 위에 각자 청룡언월·장판교 벽력·가스코뉴의 섬광·귀족의 십자검·성 미카엘의 기도 이름을 표시한다.
 - 장비의 호통은 `finishers/zhang_fei/roar.gif`, 다른 인물의 호통과 비밀무기는 `finishers/common/`의 투명 효과 GIF를 쓴다.
-- 컷인 다시 만들기: `python tools/duel_cutins.py --build`. ImageGen 인물 참조를 다시 뽑을 때는 `--references`를 쓴다.
+- 컷인 다시 만들기: `python tools/duel_cutins.py --build` (남아 있는 예전 `cutins/<id>.gif`는 지운다 — 남아 있으면 매니페스트가 GIF를 먼저 집는다). ImageGen 인물 참조를 다시 뽑을 때는 `--references`를 쓴다.
 
 ## 배경 파일
 
