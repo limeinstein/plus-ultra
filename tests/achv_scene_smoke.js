@@ -46,13 +46,13 @@ function ok(v, msg) { res.push(!!v); console.log((v ? '  ✓ ' : '  ✗ ') + msg
       return { info, seen, got: await page.evaluate(() => window.__got), left: await page.evaluate(() => ({ rib: !!document.querySelector('.achv-ribbon'), pic: !!document.querySelector('.famscene') })) };
     }
 
-    // ① 일곱 불가사의 — 발견물 그림을 차례로, 역사학 부하가 말한다
+    // ① 일곱 불가사의 — 업적 전용 그림과 역사학 부하의 대사
     const r1 = await run('wonders7', () => {
       const s = G.Game.state, ids = G.ACHIEVEMENTS.find(a => a.id === 'wonders7').ids;
       ids.forEach(id => { s.disc[id] = { me: 1, found: 1, d: 15000601 }; });
       const hid = G.MATES.find(d => d.sk && d.sk.hist >= 3 && d.wage && !d.eventOnly);
       s.mates = [{ id: hid.id, role: 'none', loyal: 80, sk: Object.assign({}, hid.sk) }];
-      return { hist: hid.name, pics: ids.filter(id => G.Img.file('discoveries/' + id)).length };
+      return { hist: hid.name };
     });
     const t1 = r1.seen.map(x => x.txt).join(' | ');
     ok(r1.got && r1.got.indexOf('wonders7') >= 0, '업적 「일곱 불가사의」를 이룬다');
@@ -61,7 +61,7 @@ function ok(v, msg) { res.push(!!v); console.log((v ? '  ✓ ' : '  ✗ ') + msg
     ok(/여덟 번째 경이/.test(t1), '제독의 한마디');
     ok(r1.seen.some(x => x.win), '마지막에 보상 창');
     const pn = new Set(r1.seen.map(x => x.pic).filter(Boolean));
-    ok(r1.info.pics === 0 || pn.size >= Math.min(3, r1.info.pics), '발견물 그림을 차례로 (' + [...pn].join(', ') + ')');
+    ok(pn.has('고대 세계의 일곱 불가사의'), '업적 전용 고해상도 그림 (' + [...pn].join(', ') + ')');
     ok(!r1.left.rib && !r1.left.pic, '끝나면 띠·그림이 걷힌다');
 
     // ② Once Upon a Time — 네 아가씨가 직접 말한다

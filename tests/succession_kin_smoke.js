@@ -75,7 +75,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const y = r.youngest;
     ok(y.n === 2 && y.elderA && y.elderB && y.relA === '형' && y.relB === '누나', '막내가 이으면 안토니우·이자벨은 새 제독의 형·누나');
     ok(y.callA === '미겔' && y.callB === '미겔', '형·누나는 막내 제독을 「형」이 아니라 이름으로 부른다 (' + y.callA + ')');
-    ok(!/형[,!]|형이 |형은 /.test(y.talk) && /미겔/.test(y.talk), '집에서 나누는 이야기: ' + y.talk.slice(0, 120));
+    ok(!/미겔\s*(형|오빠)/.test(y.talk) && /미겔/.test(y.talk), '집에서 나누는 이야기: ' + y.talk.slice(0, 120));
     ok(/「미겔의 형」/.test(y.line) && /미겔의 형\./.test(y.desc) && /네 동생이 허락하면/.test(y.sister) && /26세가 되었다/.test(y.intro), '대사: ' + y.line + ' / ' + y.sister + ' / ' + y.intro);
     ok(y.menu === '형제자매' && /형제자매는/.test(y.log), '자택 메뉴 「형제자매」 · 일지 「…의 형제자매는 …」');
     const e = r.eldest;

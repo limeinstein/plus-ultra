@@ -27,7 +27,7 @@
       if (T.bdayDone !== s.date.y && LF.givers().length) T.bday = s.date.y;
       if (age >= (k.warnFrom || 75) && age < LF.maxAge()) out.push({ icon: 'hourglass', text: R.fullName() + '도 어느덧 ' + age + '세. 남은 날이 많지 않다는 것을 스스로도 안다' + (G.Family && G.Family.heirs && G.Family.heirs().length ? '.' : ' — 뒤를 이을 아들이 아직 없다.'), lifeWarn: true });
     }
-    if (!T.end && !LF.dying && age >= LF.maxAge()) { T.end = age; G.State.log(R.fullName() + U.j(R.fullName(), '이/가').slice(R.fullName().length) + ' ' + age + '세가 되었다.'); }
+    if (!T.end && LF.dying !== s && age >= LF.maxAge()) { T.end = age; G.State.log(R.fullName() + U.j(R.fullName(), '이/가').slice(R.fullName().length) + ' ' + age + '세가 되었다.'); }
     return out;
   };
 
@@ -174,9 +174,9 @@
   LF.die = async function () {
     var s = S(), T = st(), name = R.fullName(), age = R.age();
     delete T.end;
-    if (age < LF.maxAge() || LF.dying) return;   // 이미 뒤를 이은 제독이다 (옛 저장에 남은 표시) — 그 사람의 수명이 아니다
-    LF.dying = true;
-    try { await dieNow(s, T, name, age); } finally { LF.dying = false; var T2 = st(); if (T2.end && R.age() < LF.maxAge()) delete T2.end; }
+    if (age < LF.maxAge() || LF.dying === s) return;   // 이미 뒤를 이은 제독이다 (옛 저장에 남은 표시) — 그 사람의 수명이 아니다
+    LF.dying = s;
+    try { await dieNow(s, T, name, age); } finally { if (LF.dying === s) LF.dying = null; var T2 = st(); if (T2.end && R.age() < LF.maxAge()) delete T2.end; }
   };
   async function dieNow(s, T, name, age) {
     var heirs = G.Family && G.Family.heirs ? G.Family.heirs() : [];

@@ -35,12 +35,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 0; });
       G.State.newGame({ name: '시험 제독', nation: 'PT', job: 'explorer', age: 25, birth: { m: 4, d: 12 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk, lg: G.LANGS.map(() => 3), diff: 'normal' });
       const s = G.Game.state, UI = G.UI, FE = G.FamEv, shown = [], pops = [];
-      const oldShow = FE.showPic, oldWindow = UI.window;
+      const oldShow = FE.showPic, oldStop = FE.stopPic, oldWindow = UI.window, oldSay = UI.say;
       FE.showPic = ev => { shown.push([ev.img, ev.title]); return { stop: async () => { shown.push(['stop', ev.img]); } }; };
+      FE.stopPic = async () => { shown.push(['stop']); };
+      UI.say = () => Promise.resolve(1);
       UI.window = o => { pops.push(o.html); return { result: Promise.resolve(1), close() {} }; };
       s.crewEver = { cinderella: 1, snow_white: 1, sleeping_beauty: 1 };
       await G.Achieve.afterHire('little_mermaid');
-      FE.showPic = oldShow; UI.window = oldWindow;
+      FE.showPic = oldShow; FE.stopPic = oldStop; UI.window = oldWindow; UI.say = oldSay;
       return { rows, total: G.ACHIEVEMENTS.length, once: G.Achieve.done('onceupon'), shown, pop: pops.some(x => /Once Upon a Time/.test(x)) };
     });
 
