@@ -84,29 +84,92 @@
   };
   function rewardText(a) { return '금화 ' + U.num(a.gold || 0) + '닢 · 명성 +' + U.num(a.fame || 0) + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
 
-  /** 발견한 뒤: 새 업적을 알리고, 한 가지 남은 업적을 귀띔한다 */
-  async function announce(got) {
-    for (var i = 0; i < got.length; i++) {
-      var a = got[i];
-      if (G.Audio) G.Audio.sfx('bell');
-      var shot = a.id === 'montcrew' ? { img: 'legend-events/montcrew_oath', title: '열 사람이 한 배에' }
-        : a.id === 'happily' ? { img: 'legend-events/happily_after_all', title: 'Happily After All' }
-        : G.Img && G.Img.file && G.Img.file('achievement-events/' + a.id) ? { img: 'achievement-events/' + a.id, title: a.name } : null;
-      var pc = shot && G.FamEv && G.FamEv.showPic ? G.FamEv.showPic(shot) : null;
-      try {
-        if (a.id === 'montcrew') {
-          await UI.say('마침내 루이스 몬테이루에서 이언 맥레오드까지, 서로 다른 바다에서 살아온 열 사람이 한 갑판에 모였다.', {});
-          var lead = G.Legend && G.Legend.speaker ? G.Legend.speaker('monteiro', 'happy') : { name: mateName('monteiro'), portrait: G.Art.mateSpec('monteiro') };
-          await UI.say('좋아, 이제 진짜 한 일당이다! 다들 오른팔 소매를 걷어 올려— 우리가 갈 바다를 향해 쭉 뻗어!', lead);
-          await UI.say('열 개의 오른팔이 동시에 하늘을 향했다. 돛을 부풀린 바람이 함성과 함께 갑판을 훑고 지나갔다.', {});
+  // ---------------------------------------------------------------- 업적 장면 (2026-10-23 사용자 요청 「모든 업적 달성할 때 개별 이벤트처럼」)
+  // 업적마다 하나의 사건처럼: 종소리·환호 → 금빛 띠 → 이 업적에 든 발견물 그림을 차례로 띄우며 이야기 → 알맞은 부하의 한마디 → 제독의 한마디 → 보상 창
+  // 대사는 js/data/achvevents.js (G.ACHV_EVENTS). 대사가 없는 업적도 그림·띠·보상 창으로 장면을 꾸린다.
+  function player() { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img && G.Img.chain.heroHalf ? G.Img.chain.heroHalf() : null }; }
+  function mateSp(m) { return { name: G.MATE[m.id].name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 }; }
+  /** 그 특기가 가장 높은 부하 (없으면 부관 · 갑판장) */
+  function bySkill(sk) {
+    var s = S(), best = null, bl = 0;
+    if (sk && sk !== 'first' && G.R && G.R.mateSkill) (s.mates || []).forEach(function (m) {
+      if (!m || !G.MATE[m.id]) return; var lv = G.R.mateSkill(m, sk) || 0;
+      if (lv > bl) { bl = lv; best = m; }
+    });
+    return best ? mateSp(best) : G.Scenes.mateSpeaker('first');
+  }
+  /** 이 업적에 든, 내가 찾은 발견물 가운데 그림이 있는 것 (최대 n) */
+  function pics(a, n) {
+    var my = mine(), ids = [];
+    if (a.ids) ids = a.ids.filter(found);
+    else if (a.cats) my.forEach(function (d) { if (a.cats.some(function (r) { return r.ids ? r.ids.indexOf(d.id) >= 0 : [].concat(r.cat).indexOf(d.cat) >= 0 && (r.reg == null || d.reg === r.reg); })) ids.push(d.id); });
+    else if (a.chains) (G.CHAINS || []).filter(AC.chainDone).forEach(function (ch) { ids.push(ch.ids[ch.ids.length - 1]); });
+    else if (a.everyReg || a.oneReg) ids = my.map(function (d) { return d.id; });
+    // 값진 것부터 (같은 값이면 원래 차례)
+    if (!a.ids) ids.sort(function (x, y) { return ((G.DISC[y] || {}).val || 0) - ((G.DISC[x] || {}).val || 0); });
+    return ids.filter(function (id) { return G.Img && G.Img.file('discoveries/' + id); }).slice(0, n || 3);
+  }
+  function show(img, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: img, title: title, noStand: false }) : null; }
+  /** 업적 전용 그림. 사건 자료가 지정한 그림을 우선하고, 업적별 고해상도 그림을 그 다음으로 쓴다. */
+  function achievementPic(a, ev) {
+    if (ev.pic) return { img: ev.pic, title: ev.picTitle || a.name };
+    if (a.id === 'montcrew') return { img: 'legend-events/montcrew_oath', title: '열 사람이 한 배에' };
+    if (a.id === 'happily') return { img: 'legend-events/happily_after_all', title: 'Happily After All' };
+    if (G.Img && G.Img.file && G.Img.file('achievement-events/' + a.id)) return { img: 'achievement-events/' + a.id, title: a.name };
+    return null;
+  }
+  /** 금빛 띠: 「업적 달성 — 이름」 (장면 내내 위에 떠 있다) */
+  function ribbon(a) {
+    var root = document.getElementById('ui'); if (!root) return null;
+    var el = document.createElement('div'); el.className = 'achv-ribbon';
+    el.innerHTML = '<span class="ar-k">업적 달성</span><span class="ar-n">' + U.esc(a.name) + '</span>' + (a.title ? '<span class="ar-t">칭호 「' + U.esc(a.title) + '」</span>' : '');
+    root.appendChild(el); requestAnimationFrame(function () { el.classList.add('on'); });
+    return { stop: function () { el.classList.remove('on'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 400); } };
+  }
+  /** 한 업적의 장면 */
+  AC.scene = async function (a) {
+    var ev = (G.ACHV_EVENTS || {})[a.id] || {}, s = S();
+    if (G.Audio) { G.Audio.sfx('bell'); setTimeout(function () { if (G.Audio) G.Audio.sfx('cheer'); }, 450); }
+    var fixedShot = achievementPic(a, ev), rb = ribbon(a), shots = fixedShot ? [] : pics(a, 3), pc = null, k = 0;
+    function next() {   // 줄이 바뀔 때마다 다음 발견물 그림으로 (그림이 다 떨어지면 마지막 것을 그대로)
+      if (fixedShot) { if (!pc) pc = show(fixedShot.img, fixedShot.title); return; }
+      if (k < shots.length) { var id = shots[k++]; pc = show('discoveries/' + id, (G.DISC[id] || {}).name || a.name); }
+    }
+    try {
+      next();
+      var lines = ev.n || [a.desc];
+      for (var i = 0; i < lines.length; i++) { if (i) next(); await UI.say(lines[i], {}); }
+      if (ev.cast) {
+        var inFleet = {}; (s.mates || []).forEach(function (m) { if (m) inFleet[m.id] = m; });
+        for (var c = 0; c < ev.cast.length; c++) {
+          var m = inFleet[ev.cast[c][0]]; if (!m || !G.MATE[m.id]) continue;   // 떠난 사람은 말하지 않는다
+          next();
+          var sp = G.Legend && G.Legend.speaker && G.Legend.speaker(m.id, 'happy'); if (!sp || !sp.name) sp = mateSp(m);
+          await UI.say(ev.cast[c][1], sp);
         }
-        await UI.window({ title: '업적 달성', icon: 'crown', width: 640, parch: true,
-          html: '<div class="achv-pop"><div class="achv-g">' + U.esc(a.group) + '</div><div class="achv-n">' + U.esc(a.name) + '</div><div class="achv-d">' + U.esc(a.desc) + '</div>' +
-            '<div class="achv-r">' + rewardText(a) + '</div></div>',
-          buttons: [{ label: '좋다', value: 1, cls: 'navy' }] }).result;
-      } finally { if (pc) await pc.stop(); }
+        if (ev.after) await UI.say(ev.after, {});
+      }
+      if (ev.m) { next(); await UI.say(ev.m, bySkill(ev.sk)); }
+      if (ev.p) { next(); await UI.say(ev.p, player()); }
+      await UI.window({ title: '업적 달성', icon: 'crown', width: 640, parch: true,
+        html: '<div class="achv-pop"><div class="achv-g">' + U.esc(a.group) + '</div><div class="achv-n">' + U.esc(a.name) + '</div><div class="achv-d">' + U.esc(a.desc) + '</div>' +
+          '<div class="achv-r">' + rewardText(a) + '</div></div>',
+        buttons: [{ label: '좋다', value: 1, cls: 'navy' }] }).result;
+    } finally {
+      if (rb) rb.stop();
+      if (G.FamEv && G.FamEv.stopPic) await G.FamEv.stopPic();
+    }
+  };
+
+  /** 발견한 뒤·동료를 들인 뒤·항구에 들어선 뒤: 새 업적마다 장면을 하나씩 (하루 셈에서 이룬 것도 함께) */
+  async function announce(got) {
+    var s = S(), pend = (s && s.achvPend) || [];
+    if (pend.length) { s.achvPend = []; pend.forEach(function (id) { var a = AC.get(id); if (a && got.indexOf(a) < 0) got = got.concat([a]); }); }
+    for (var i = 0; i < got.length; i++) {
+      try { await AC.scene(got[i]); } catch (e) { console.error(e); }
     }
   }
+  AC.playPending = function () { return announce([]); };
   AC.afterFind = async function (d) {
     var got = AC.check();
     await announce(got);
@@ -158,9 +221,28 @@
       var last = d.need[d.need.length - 1];
       if (G.Disc.addHint(id, 'chain:' + last)) out.push({ icon: 'scroll', text: '「' + name(last) + '」의 기록을 다시 살피다가 실마리를 찾았다 — ' + G.chainLine(id) + ' (새 단서: 「' + d.name + '」)' });
     }
-    AC.check().forEach(function (a) { out.push({ icon: 'crown', text: '업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다 — ' + rewardText(a) }); });
+    // 하루 셈에서 이룬 업적(혼인처럼 발견·고용이 아닌 길): 알림을 띄우고, 장면은 다음 항구에서 (AC.playPending)
+    // 옛 저장을 처음 불러온 날 한꺼번에 채워지는 업적은 알림만 — 장면이 줄줄이 뜨지 않게
+    var st = store(), first = !st._init; st._init = 1;
+    AC.check().forEach(function (a) {
+      out.push({ icon: 'crown', text: '업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다 — ' + rewardText(a) + (first ? '' : ' (다음 항구에서)') });
+      if (!first) (s.achvPend = s.achvPend || []).push(a.id);
+    });
     return out;
   };
+
+  // 항구에 들어설 때 밀린 업적 장면 (city.js는 이 파일보다 뒤에 읽힌다 — 다 읽힌 뒤 잇는다)
+  function hook() {
+    var Cc = G.Scenes && G.Scenes.city; if (!Cc || !Cc.arrival || AC.hooked) return;
+    AC.hooked = true;
+    var oa = Cc.arrival;
+    Cc.arrival = async function () {
+      var r = await oa.apply(this, arguments);
+      try { var s = S(); if (s && s.achvPend && s.achvPend.length) await announce([]); } catch (e) { console.error(e); }
+      return r;
+    };
+  }
+  if (typeof document !== 'undefined') { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', hook); else setTimeout(hook, 0); }
 
   AC.titles = function () { return AC.list().filter(function (a) { return a.title && AC.done(a.id); }).map(function (a) { return a.title; }); };
 
@@ -222,6 +304,8 @@
       '.achv-row.done .nm{color:#7a4f10}.achv-bar{height:6px;background:rgba(90,60,30,.15);border-radius:3px;margin:6px 0 4px;overflow:hidden}.achv-bar i{display:block;height:100%;background:linear-gradient(90deg,#b8862e,#e2b65a)}' +
       '.achv-items{font-size:14px;line-height:1.9}.ach-i{display:inline-block;padding:0 6px;margin:1px 2px;border-radius:4px;background:rgba(90,60,30,.08);color:rgba(60,40,20,.55)}.ach-i.ok{background:rgba(184,134,46,.22);color:#4a3008;font-weight:600}.ach-i.lock{letter-spacing:2px}' +
       '.ch-steps{font-size:14px;line-height:2}.ch-root{color:rgba(60,40,20,.75)}.ch-s{display:inline-block;padding:0 6px;border-radius:4px;background:rgba(90,60,30,.08)}.ch-s.ok{background:rgba(184,134,46,.25);font-weight:600}.ch-s.hint{background:rgba(40,110,170,.15)}.ch-s.lock{color:rgba(60,40,20,.4);letter-spacing:2px}' +
+      '.achv-ribbon{position:absolute;left:0;right:0;top:0;height:54px;z-index:80;display:flex;gap:16px;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .35s;background:linear-gradient(180deg,#3a250d,#24170a);border-bottom:2px solid #b8862e;box-shadow:0 2px 10px rgba(0,0,0,.5);color:#f6e2a8;text-shadow:0 1px 2px #000;white-space:nowrap}' +
+      '.achv-ribbon.on{opacity:1}.achv-ribbon .ar-k{font-size:15px;letter-spacing:.3em;color:#e2b65a}.achv-ribbon .ar-n{font-size:25px;font-weight:800}.achv-ribbon .ar-t{font-size:15px;color:#e8cf8a}' +
       '.achv-pop{text-align:center;padding:10px 6px}.achv-g{font-size:15px;color:#8a6a3a}.achv-n{font-size:30px;font-weight:800;margin:6px 0 10px}.achv-d{font-size:17px;line-height:1.6}.achv-r{margin-top:14px;font-size:16px;color:#7a4f10;font-weight:600}';
     document.head.appendChild(css);
   }
