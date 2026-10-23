@@ -132,6 +132,9 @@
     { ids: ['mu', 'atlantis', 'kumari', 'lemuria'] }, 1500, 100000, '가라앉은 대륙의 발견자');
   a('전설과 사슬', 'paradises', '숨은 낙원', '사람의 발길을 거부하던 숨은 땅 다섯을 찾았다.',
     { ids: ['shambhala', 'penglai', 'avalon', 'hyperborea', 'aztlan', 'paititi', 'ubar', 'prester', 'brendan'], n: 5 }, 1200, 80000, '낙원을 본 사람');
+  // 지역별 미스터리 유적 (js/data/mysterydisc.js — 1600년부터) 2026-10-24
+  a('전설과 사슬', 'mysteries', '세계의 수수께끼', '누가, 왜, 어떻게 세웠는지 아무도 모르는 유적 스무 곳을 찾았다.',
+    { ids: (G.MYSTERY_IDS || []).slice(), n: 20 }, 1000, 60000, '수수께끼를 푸는 자');
   a('전설과 사슬', 'monsters', '전설의 짐승들', '책에서만 보던 전설의 짐승 열을 제 눈으로 보았다.',
     { ids: ['phoenixw', 'blackdragon', 'chimera', 'cyclops', 'titan', 'reddragon', 'unicorn', 'dragon', 'phoenix', 'roc', 'minotaur', 'yeti', 'apophis', 'fenrir', 'jormungandr', 'leviathan', 'mermaid', 'elf', 'troll', 'nessie', 'mokele'], n: 10 }, 900, 50000, '전설의 사냥꾼');
 

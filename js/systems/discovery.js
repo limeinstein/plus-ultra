@@ -103,6 +103,8 @@
   /** 신기루로 본 발견인가 (이미 찾았으면 찾을 때의 기록, 아니면 지금 해) */
   D.isMirageFind = function (d) { var st = d && S().disc[d.id]; return st && st.me ? !!st.mirage : D.mirageNow(d); };
   D.mirageK = function (d) { return D.isMirageFind(d) ? (MC().futureK || 0.2) : 1; };
+  /** 그 해가 되어야 증거가 나오고 찾을 수 있는 발견물인가 (d.openY — 미스터리 유적은 1600년부터, js/data/mysterydisc.js) */
+  D.opened = function (d) { var s = S(); return !d || !d.openY || !s || s.date.y >= d.openY; };
   D.built = function (d) { return !d || !d.built || S().date.y >= d.built || D.isFuture(d); };
   /** 지금 단서를 들을 수 있는 발견물인가 */
   D.available = function (d) { return !G.Frontier || G.Frontier.available(d); };
@@ -642,7 +644,7 @@
   D.checkSea = function (lon, lat, opt) {
     var s = S(), hits = [], findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'sea' || D.foundByMe(d.id) || !D.needMet(d)) return;   // 경쟁자가 발표했어도 찾을 수 있다
+      if (d.how !== 'sea' || D.foundByMe(d.id) || !D.needMet(d) || !D.opened(d)) return;   // 경쟁자가 발표했어도 찾을 수 있다 · 아직 드러나지 않은 수수께끼(openY 전)는 없다
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat), r = d.r * D.clueK(d.id, 'find') * findK;
       if (dist >= r) return;   // 단서가 겹칠수록 넓게, 여파로 수치가 바닥나면 좁게
@@ -667,7 +669,7 @@
   D.checkLand = function (lon, lat, opt) {
     var hits = [], near = null, nearD = 99, findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'land' || D.foundByMe(d.id) || !D.needMet(d)) return;
+      if (d.how !== 'land' || D.foundByMe(d.id) || !D.needMet(d) || !D.opened(d)) return;   // 아직 드러나지 않은 수수께끼(openY 전)는 없다
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find') * findK;
