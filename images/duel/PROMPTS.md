@@ -2,6 +2,30 @@
 
 이 묶음은 내장 `imagegen` 도구로 생성했습니다. 기존 `images/characters/walk_1.webp`는 주인공의 인물·복식·렌더 밀도 참고로만 사용했고, 완성된 `main_admiral.png`를 나머지 시트의 화풍·그리드 기준으로 사용했습니다.
 
+## 전면 필살기 컷인 공통 프롬프트
+
+첨부된 삼국지식 화면은 **구도 참고만** 사용하고 UI·글자·인물·원화를 복제하지 않았습니다. 두 번째 입력에는 `tools/duel_cutins.py --references`로 뽑은 해당 전투원의 얼굴·복식·무기 참조를 넣었습니다.
+
+```text
+Use case: historical-scene
+Asset type: full-screen duel ultimate cut-in artwork for a 1060×380 animated GIF
+Input images: Image 1 is composition reference only; never copy its UI, text, character, or exact artwork. Image 2 is the fighter identity reference; preserve the exact face, hair, costume colors, silhouette, and weapon.
+Primary request: Create one continuous cinematic ultimate-attack scene of the referenced fighter turning toward the viewer and driving the weapon forward with extreme foreshortening, as if the attack bursts out of the screen.
+Composition/framing: ultra-wide 2.8:1, dynamic waist-up or three-quarter figure, face clearly visible with direct gaze, weapon aimed diagonally toward camera, strong left-to-right motion.
+Constraints: one fighter only; not comic panels or a sprite sheet. No text, letters, numbers, speech bubble, UI, border, logo, watermark, extra people, or modern objects.
+Style/medium: <아래 지역 화풍>
+```
+
+- 유럽·이베리아: 채색 르네상스 동판화와 강한 크로스해칭
+- 중국: 금빛 선지 위 공필 인물화와 힘 있는 수묵 필선
+- 조선: 한지 위 수묵화·민화 선묘
+- 일본: 무사 우키요에와 스미에 붓질
+- 이슬람권: 마그레브 장식 필사본과 오스만 세밀화
+- 인도: 광물 안료와 금니를 쓴 라지푸트 세밀화
+- 동남아: 칠화와 민간 목판화
+- 아프리카: 인디고 직물 기하와 목각 부조형 선화
+- 메소아메리카·북미: 각각 아마테 필사본 회화와 동부 삼림권 회화 문법
+
 ## 전투원 공통 프롬프트
 
 ```text

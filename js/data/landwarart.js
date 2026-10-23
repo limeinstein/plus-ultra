@@ -1,5 +1,6 @@
 /* 육상전 그림 짝짓기 (js/games/landwar.js) — Codex가 만든 육상전투 스프라이트 시트 15장(images/sprites/, js/data/sprites.js)을 부대에 잇는다.
-   · 우리 편: 시트의 줄이 단계(0~3)다. 보병 = 검술, 총병 = 사격술, 포병 = 포술 솜씨대로, 제독대 = 세 솜씨의 평균(셋 다 3이면 전설)
+   · 우리 편: 시트의 줄이 단계(0~3)다. 보병 = 검술, 총병 = 사격술, 포병 = 포술 솜씨대로, 제독대 = 세 솜씨의 평균(셋 다 3이면 전설).
+     육상전에서는 선실 자리와 상관없이 제독과 모든 동료 가운데 가장 높은 솜씨를 받는다.
        swordsmen  몽둥이 마을 사람 · 민병 검객 · 정예 결투가 · 소드 마스터
        musketeers 마을 사냥꾼 · 민병 명사수 · 베테랑 화승총병 · 정예 총사대
        cannons    훈련 포병 · 정규 포병 · 베테랑 포술장 · 포병 장교
@@ -9,7 +10,7 @@
 (function (G) {
   'use strict';
   var AF = ['natives', 'shaman'], AM = ['natives', 'warrior'];        // 06 시트: 서·중앙아프리카 주술 전사 / 아메리카 원주민 주술 전사
-  var GUN_ASIA = ['musketeers', 'lv1'], CANNON = ['cannons', 'lv1'], CANNON_E = ['cannons', 'lv0'];
+  var GUN_ASIA = ['musketeers_enemy', 'lv1'], CANNON = ['cannons_enemy', 'lv1'], CANNON_E = ['cannons_enemy', 'lv0'];
   var R = {
     iberia: { name: '이베리아', m: ['west_europe', 'rodelero'], r: ['west_europe', 'crossbow'], l: ['west_europe', 'rodelero'], c: CANNON, b: ['boar', 'bear'] },
     weurope: { name: '서유럽', m: ['west_europe', 'landsknecht'], r: ['west_europe', 'crossbow'], l: ['west_europe', 'landsknecht'], c: CANNON, b: ['boar', 'bear'] },

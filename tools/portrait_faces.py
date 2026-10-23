@@ -21,7 +21,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 IMG = os.path.join(ROOT, 'images')
 OUT = os.path.join(ROOT, 'js', 'data', 'portraitfaces.js')
-DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/building-managers', 'portraits/gardeners', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/fairy-tales', 'portraits/street-folk', 'portraits/medici']
+DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/building-managers', 'portraits/gardeners', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/history', 'portraits/fairy-tales', 'portraits/street-folk', 'portraits/medici']
 
 def main():
     try:

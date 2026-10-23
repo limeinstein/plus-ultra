@@ -59,6 +59,7 @@
     },
     finishers: {
       base: 'duel/finishers/',
+      cutins: 'duel/cutins/',
       moves: ['slash', 'thrust', 'bash'],
       legends: ['guan_yu', 'zhang_fei', 'd_artagnan', 'athos', 'aramis'],
       common: { dagger: 'common/secret_dagger', gun: 'common/secret_gun', roar: 'common/roar' }

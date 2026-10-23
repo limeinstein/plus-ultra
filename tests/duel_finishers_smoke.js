@@ -21,7 +21,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_FAILED/.test(m.text())) errors.push('console: ' + m.text()); });
   try {
-    await page.goto(GAME);
+    await page.goto(GAME, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     await page.evaluate(() => {
       G.State.newGame({ name: '시험 제독', nation: 'PT', job: 'explorer', age: 18, birth: { m: 1, d: 1 }, st: { str: 80, int: 60, mar: 90, cha: 70 }, sk: { sword: 3 }, lg: [], diff: 'normal' });
@@ -43,8 +43,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     await play('secret', 'duel/finishers/common/secret_dagger.gif');
     await play('roar', 'duel/finishers/zhang_fei/roar.gif');
-    await play('special', 'duel/finishers/zhang_fei/special.gif');
-    await play('deathblow', 'duel/finishers/zhang_fei/slash.gif');
+    await play('special', 'duel/cutins/zhang_fei.gif');
+    await play('deathblow', 'duel/cutins/zhang_fei.gif');
     ok(!errors.length, '콘솔 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   } finally {
     await browser.close();

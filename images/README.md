@@ -72,7 +72,7 @@
 | 항해·해전 8방향 동작 배 | `ships-nav/배ID.webp` — `python tools/ship3d/bake.py`가 three.js 3D 모형으로 굽는 정박 3장·표류 5장·질주 8장 시트(치수·돛대 자리는 `tools/render_ship_sprites.py`와 같다) | 자동 생성 1792×3584, 셀 224×224, 수면 피벗 (112,139), 투명 배경 |
 | 기함 선실 | `cabins/선실ID.webp` — 함장실 `captain`, 부관실 `adjutant`, 조타실 `helm`, 파수대 `lookout`, 갑판 `deck`, 빈 선실 `hold`, 지도 제작실 `chart`, 요리실 `galley`, 식당 `mess`, 회계실 `account`, 예배실 `chapel`, 진료실 `sick`, 오락실 `rec`, 조범실 `rig`, 선박 수리실 `repair`, 사육실 `pen`, 포격실 `gun`, 해병 대기실 `marine`, 화실 `studio`, 조각실 `sculpt`, 음악실 `musicroom`, 참모실 `staff`, 창고 `store`, 통역실 `interp` | 정사각형, 권장 320×320 |
 | 항해 효과 스프라이트 시트 | `effects/ship_spray.png`, `effects/departure_gull.png` | 1024×512, 4열×2행, 셀 256×256, 투명 배경 |
-| 육상전·육상 탐험·사건 스프라이트 | `sprites/시트.webp` — 우리 편 0~3단계(swordsmen·musketeers·cannons·officers), 지역 적(east_fighters·ottoman·natives·west_europe·india_central·southeast_asia·africa_regions·meso_south·north_america·pacific), 들짐승(animals), 항해 사건(whale·dolphin·mermaid·storm·raincloud·rain·sun), 탐험대 8방향(party_*) | `python tools/sprite_repack.py`가 원본(`_extra/sprite_src/`)을 고른 칸으로 다시 짠 것. 칸·피벗은 `js/data/sprites.js` |
+| 육상전·육상 탐험·사건 스프라이트 | `sprites/시트.webp` — 우리 편 0~3단계(swordsmen·musketeers·cannons·officers), 같은 병종의 갈색·흑색 적군판(`*_enemy`), 지역 적(east_fighters·ottoman·natives·west_europe·india_central·southeast_asia·africa_regions·meso_south·north_america·pacific), 들짐승(animals), 항해 사건(whale·dolphin·mermaid·storm·raincloud·rain·sun), 탐험대 8방향(party_*) | `python tools/sprite_repack.py`가 원본(`_extra/sprite_src/`)을 고른 칸으로 다시 짠 것. 칸·피벗은 `js/data/sprites.js` |
 | 육상전 지형 배경 | `landwar/backgrounds/지형.png` — grass·steppe·desert·forest·jungle·mountain·snow·tundra·ice | 초광폭 2.25:1 이상, 가로 1800 이상 |
 | 일기토 전투원 | `duel/fighters/이름.png` | 2592×1216, 6열×4행, 칸 432×304, 발밑 피벗 (165, 278), 투명 배경 — 1536×1024(칸 256) 원본을 `tools/duel_repack.py`로 다시 짠 것 |
 | 일기토 배경 | `duel/backgrounds/deck.png` 등 | 초광폭 2094×751 안팎 |
@@ -108,9 +108,9 @@
 ## 육상전·탐험 스프라이트 규격 (`images/sprites/`)
 
 - 원본은 그림 생성기로 만든 시트라 장면이 줄마다 제멋대로 놓이고 망토·칼·연기가 이웃 장면과 겹칩니다. `images/_extra/sprite_src/<시트>.png`에 두고 `python tools/sprite_repack.py`를 돌리면, 줄마다 장면 수를 알려 준 대로 잘라 **발밑 피벗이 같은 고른 칸**으로 다시 짜서 `sprites/<시트>.webp`와 `js/data/sprites.js`(칸 크기·피벗·동작별 장면 번호)를 만듭니다. `--debug`를 붙이면 장면마다 번호를 단 점검 그림이 `_extra/sprite_debug/`에 생깁니다.
-- 모든 그림은 오른쪽을 봅니다(적은 좌우 반전). 시트의 줄 = 병종(우리 편 시트는 줄 = 0~3단계), 칸 = 장면. 동작(idle·walk·attack·hurt·dead…)마다 쓸 장면 번호는 도구의 `SHEETS` 설정에 있습니다. 지역 적 시트 7장(`autoacts`)은 Codex 시트의 동작 차례(대기·전진·달리기·공격·헛손질·피격·뒤돌아 복귀)를 따라 저절로 고르며, 반쪽만 잘린 장면은 빼고 씁니다.
+- 모든 그림은 오른쪽을 봅니다(적은 좌우 반전). 시트의 줄 = 병종(우리 편과 같은 병종 적군판은 줄 = 0~3단계), 칸 = 장면. 아군은 상아·베이지·흰색, 적군판은 갈색·흑색 옷 표식으로 같은 실루엣도 바로 가릅니다. 동작(idle·walk·attack·hurt·dead…)마다 쓸 장면 번호는 도구의 `SHEETS` 설정에 있습니다. 지역 적 시트 7장(`autoacts`)은 Codex 시트의 동작 차례(대기·전진·달리기·공격·헛손질·피격·뒤돌아 복귀)를 따라 저절로 고르며, 반쪽만 잘린 장면은 빼고 씁니다.
 - 원본: `../Claude outputs/육상전투_스프라이트_시트/` 01~15 (README에 줄 구성). 08번까지는 처음 받은 묶음과 같은 그림입니다.
-- 쓰는 곳: 육상전(`js/games/landwar.js` — 우리 편 보병 = 검술, 총병 = 사격술, 포병 = 포술 단계의 줄, 제독대 = 세 솜씨 평균(셋 다 3이면 전설), 기병 = 말·낙타·코끼리 탄 탐험대. 적은 싸우는 땅 35곳마다 근접·원거리·우두머리·포대·짐승 — 짝은 `js/data/landwarart.js`), 육상 탐험 지도(`js/art/party.js` — 도보·말·짐꾼·당나귀·마차·낙타·라마·코끼리·순록 썰매·야크 탐험대 8방향), 사건 그림 창(`js/art/eventfx.js` — 고래·돌고래·인어·폭풍·비구름·소나기·뙤약볕·짐승 습격). 조정값은 `G.FX.sprites`(`js/data/seafx.js`).
+- 쓰는 곳: 육상전(`js/games/landwar.js` — 우리 편 보병 = 검술, 총병 = 사격술, 포병 = 포술 단계의 줄, 제독대 = 세 솜씨 평균(셋 다 3이면 전설). 이때 선실 배치와 무관하게 제독과 모든 동료의 최고 솜씨를 받는다. 기병 = 말·낙타·코끼리 탄 탐험대. 도적·수비대는 병력 수에 따라 0~3단계 갈색·흑색 적군판, 지역 고유 적은 싸우는 땅 35곳마다 근접·원거리·우두머리·포대·짐승 — 짝은 `js/data/landwarart.js`), 육상 탐험 지도(`js/art/party.js` — 도보·말·짐꾼·당나귀·마차·낙타·라마·코끼리·순록 썰매·야크 탐험대 8방향), 사건 그림 창(`js/art/eventfx.js` — 고래·돌고래·인어·폭풍·비구름·소나기·뙤약볕·짐승 습격). 조정값은 `G.FX.sprites`(`js/data/seafx.js`).
 - 탐험대 8방향 시트는 저장소 밖 `../assets/sprites/land_expedition/`의 매니페스트(줄 = N NE E SE S SW W NW)를 따라 반 크기로 줄여 `sprites/party_*.webp`로 씁니다(탈것마다 천천히·빨리 두 장, 모두 20장).
 - 크기는 장면들의 몸 키 가운데값(`bh`, 치켜든 무기 제외)으로 맞춥니다. 배포판(`tools/slim.py`)은 이 시트들을 줄이지 않고, 혹시 줄어 있어도 게임이 칸 좌표를 그림 크기에 맞춰 읽습니다.
 - 그림 파일이 없으면 예전처럼 코드로 그립니다(사건 그림 창은 띄우지 않음).

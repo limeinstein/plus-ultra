@@ -32,7 +32,7 @@ function ok(c, m) { assert(c, m); pass++; console.log('  ✓ ' + m); }
   };
   const click = re => page.evaluate(src => { const r = new RegExp(src); const b = [...document.querySelectorAll('.lwar button')].filter(x => !x.disabled && r.test(x.textContent))[0]; if (b) b.click(); return !!b; }, re.source);
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !G.Scenes.title.bootPending, null, { timeout: 120000 });
     await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -55,6 +55,8 @@ function ok(c, m) { assert(c, m); pass++; console.log('  ✓ ' + m); }
     const st0 = await page.evaluate(() => { const D = G.Games._landDebug; return { foes: D.foes.map(u => ({ name: u.name, cls: u.cls, sp: !!u.special })), lanes: D.mine.map(u => [u.line, u.lane]), cav: D.mine.filter(u => u.type === 'cav').length, st: D.state() }; });
     ok(st0.foes.some(u => u.sp && u.name === '재규어 전사'), '멕시코 원주민 40명 — 이름난 적 부대 「재규어 전사」(' + st0.foes.map(u => u.name).join('·') + ')');
     ok(st0.cav >= 1, '말 12마리 — 보병 한 부대가 기병이 된다');
+    const landSkill = await page.evaluate(() => { const D = G.Games._landDebug, u = D.mine.filter(x => x.type === 'inf')[0]; return { tier: D.tier(u), all: G.R.skillRead('sword'), placed: G.R.skill('sword') }; });
+    ok(landSkill.tier === landSkill.all && landSkill.all === 3, '육상전 병사는 모든 동료의 최고 검술을 받는다: 배치값 ' + landSkill.placed + ' · 전체 최고 ' + landSkill.all + ' · 그림 LV' + landSkill.tier);
     ok(st0.lanes.every(x => x[0] >= 0 && x[0] <= 2 && x[1] >= 0 && x[1] <= 2) && new Set(st0.lanes.map(x => x.join())).size === st0.lanes.length, '우리 부대가 세 줄 × 세 칸에 겹치지 않게 선다');
     ok(st0.st.feat.some(Boolean) || true, '전장 지형: ' + JSON.stringify(st0.st.feat) + ' · 날씨 ' + st0.st.weather);
     // 지휘관: 첫 부대에 관우
@@ -121,12 +123,14 @@ function ok(c, m) { assert(c, m); pass++; console.log('  ✓ ' + m); }
       const p = G.Games.landWar({ enemy: { name: '도적 떼', kind: 'bandit', n: 12 }, party: 80, terr: 'grass', guns: false, fastEnd: true });
       await new Promise(r => setTimeout(r, 300));
       const D = G.Games._landDebug;
+      const sheets = [...new Set(D.foes.map(u => { const sp = D.sprite(u); return sp && sp.id; }).filter(Boolean))];
       [...document.querySelectorAll('.lwar .lw-btns button')].filter(x => /전투 개시/.test(x.textContent))[0].click();
       let res = null; p.then(r => { res = r; });
       for (let i = 0; i < 40 && !res; i++) { const st = D.state(); if (st.phase === 'fight') { D.mine.forEach(u => { if (u.n > 0) D.setOrder(u, 'attack'); }); await D.run(); } await new Promise(r => setTimeout(r, 80)); }
       for (let i = 0; i < 50 && !res; i++) await new Promise(r => setTimeout(r, 50));
-      return { res, k0, k1: G.LandKit.st().musket };
+      return { res, k0, k1: G.LandKit.st().musket, sheets };
     });
+    ok(r2.sheets.includes('swordsmen_enemy') && r2.sheets.includes('officers_enemy'), '도적은 같은 병종의 갈색·흑색 적군 시트를 쓴다: ' + r2.sheets.join(' · '));
     ok(r2.res && (r2.res.res !== 'win' || r2.res.spoils.gold > 0), '도적에게 이기면 금화 전리품: ' + JSON.stringify(r2.res && r2.res.spoils));
     ok(r2.res.dead === 0 && r2.res.back === 0 || r2.k1 <= r2.k0 + ((r2.res.spoils && r2.res.spoils.muskets) || 0), '쓰러진 대원만큼 장비를 잃는다 (화승총 ' + r2.k0 + ' → ' + r2.k1 + ')');
 

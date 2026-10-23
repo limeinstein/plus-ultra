@@ -4,7 +4,10 @@
 const assert = require('assert');
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); }
+catch (e) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 (async function () {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
@@ -13,7 +16,7 @@ const ROOT = path.resolve(__dirname, '..');
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load resource|net::/.test(m.text())) errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && G.Napoleon, null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -29,6 +32,11 @@ const ROOT = path.resolve(__dirname, '..');
       const sea = (s, y, lon, lat) => { s.date = { y, m: 6, d: 1 }; s.loc = { mode: 'sea', lon, lat }; };
       const pirate = { kind: 'pirate', n: 2 }, sunk = [{ side: 'en', sunk: true }, { side: 'en' }], took = [{ side: 'en', captured: true }, { side: 'en', sunk: true }];
       const out = {};
+      out.pics = await Promise.all(['napoleon_rescue', 'napoleon_family', 'josephine_salon', 'napoleon_duel'].map(async id => {
+        const key = 'legend-events/' + id;
+        const size = await new Promise(resolve => { const im = new Image(); im.onload = () => resolve([im.naturalWidth, im.naturalHeight]); im.onerror = () => resolve([0, 0]); im.src = G.Img.src(key); });
+        return [id, !!G.Img.file(key), size[0], size[1]];
+      }));
       const N = G.MATE.napoleon;
       out.skills = Object.keys(N.sk).sort().map(k => k + N.sk[k]).join(' '); out.langs = Object.keys(N.lg).sort((a, b) => a - b).map(k => k + ':' + N.lg[k]).join(' ');
       out.data = { nap: !!(G.MATE.napoleon && G.MATE.napoleon.eventOnly), jos: G.MATE.josephine && G.MATE.josephine.g, tavern: G.Frontier.mateReady(G.MATE.napoleon, 1520) || G.Frontier.mateReady(G.MATE.josephine, 1520) };
@@ -64,6 +72,7 @@ const ROOT = path.resolve(__dirname, '..');
     });
     console.log(JSON.stringify(r, null, 1));
     assert.deepStrictEqual(r.data, { nap: true, jos: 'f', tavern: false }, '전설 동료 둘 — 술집에는 나오지 않는다');
+    assert(r.pics.every(x => x[1] && x[2] === 1881 && x[3] === 836), '나폴레옹 사건 그림 4장 — manifest 등록 · 1881×836');
     assert.strictEqual(r.skills, 'art1 gun3 hist3 music2 nav1 ops3 sci3 ship3 shoot3 speech3 survey3 sword2', '나폴레옹 특기 (사용자 지정)');
     assert.strictEqual(r.langs, '0:3 1:3 2:3 3:3 4:3 5:3 10:3', '나폴레옹 말: 스페인어·포르투갈어·로망스어·게르만어·슬라브·아랍어·아프리카어');
     assert(!r.before1510 && !r.outside && !r.boardFirst && !r.navy, '1510년 전·코르시카 밖·백병전·해군이면 일어나지 않는다');

@@ -48,13 +48,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     const missing = result.rows.filter(r => !r[2]);
     const badSize = result.rows.filter(r => r[3] !== 1881 || r[4] !== 836);
-    ok(result.total === 59, '업적 59개를 모두 검사한다');
-    ok(!missing.length, '업적 59개 모두 manifest 사건 그림이 있다');
-    ok(!badSize.length, '업적 사건 그림 59개가 모두 1881×836이다');
+    ok(result.total === 60, '업적 60개를 모두 검사한다');
+    ok(!missing.length, '업적 60개 모두 manifest 사건 그림이 있다');
+    ok(!badSize.length, '업적 사건 그림 60개가 모두 1881×836이다');
     ok(result.once && result.pop, '일반 업적 「Once Upon a Time」 달성과 팝업이 정상 동작한다');
     ok(result.shown[0][0] === 'achievement-events/onceupon' && result.shown[0][1] === 'Once Upon a Time' && result.shown.some(x => x[0] === 'stop'), '일반 업적도 전용 사건 그림을 열고 팝업 뒤 닫는다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
-    console.log('\n통과 — 업적 사건 그림 59개');
+    console.log('\n통과 — 업적 사건 그림 60개');
   } catch (e) {
     console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1;
   } finally { await browser.close(); }

@@ -56,6 +56,7 @@ Shot briefs:
 - `allchains` — eleven completed mystery relics assembled around a world map.
 - `sunken` — clear-ocean view of several legendary submerged civilizations.
 - `paradises` — respectful arrival at a hidden valley of gardens, lake, monasteries and pavilions.
+- `mysteries` — global archaeology panorama uniting Göbekli Tepe, Lascaux cave art, Newgrange, Sanxingdui clues, Meroë and Yonaguni's submerged terraces around a captain and scholar's chart table.
 - `monsters` — separated legendary beasts in one mythic valley, observed without combat.
 - `allround` — seven discovery disciplines displayed around an accomplished captain.
 - `scholar` — balanced archaeology and natural-history museum study.

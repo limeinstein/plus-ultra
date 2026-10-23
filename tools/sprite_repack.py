@@ -116,6 +116,11 @@ SHEETS = {
                 acts=dict(play=[0, 1, 2, 3])),
 }
 
+# 같은 병종의 적군 색상판. 장면 수·동작·피벗은 아군과 완전히 같고,
+# 원본 그림에서 베이지/흰색 표식을 갈색/흑색으로 바꾼 짝을 쓴다.
+for _ally in ('swordsmen', 'musketeers', 'cannons', 'officers'):
+    SHEETS[_ally + '_enemy'] = dict(SHEETS[_ally])
+
 
 def runs(v):
     r, s = [], None

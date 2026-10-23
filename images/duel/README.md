@@ -1,7 +1,7 @@
 # 일기토 그림 묶음
 
 `fighters/`에는 투명 전투원 시트와 전설 전용 시트, `backgrounds/`에는 초광폭 전투 배경 5장,
-`finishers/`에는 일격필살·필살기·비밀무기·호통 GIF가 있습니다.
+`cutins/`에는 화면 전체를 덮는 인물별 일격필살·필살기 GIF, `finishers/`에는 비밀무기·호통 보조 효과가 있습니다.
 
 ## 전투원 시트
 
@@ -43,12 +43,14 @@
 `armored_navigator`, `sea_dog`, `muscle_swordsman`, `hat_spinner`, `charismatic_admiral`,
 `battle_vanguard`, `noble_scholar`, `casanova`, `army_officer`, `sky_adventurer`, `blackcoat_captain`.
 
-## 필살 GIF
+## 전면 필살기 컷인 GIF
 
-- 모든 전투원 시트마다 `finishers/<id>/slash.gif`, `thrust.gif`, `bash.gif`가 있다. 준비 → 무기 휘두르기 → 전용 잔상 → 무기를 거두는 순서다.
-- 검술 3 전설인 관우·장비·달타냥·아토스·아라미스는 `special.gif`도 있으며 각자 청룡·벽력·섬광·십자검·기도의 검광을 쓴다.
+- 모든 전투원 시트마다 `cutins/<id>.gif`가 있다. 1060×380, 7장으로 어두운 먹선 등장 → 정면/3⁄4 정면 무기 돌진 → 섬광 → 잔상 정리 순서다.
+- 작은 전투 스프라이트를 확대하지 않고, 원본 얼굴·머리·복식·무기를 참조해 별도의 초광폭 원화를 만들었다. 원화는 `cutins/_source/`에 보관하며 매니페스트에는 넣지 않는다.
+- 지역 미술: 유럽권 채색 동판화, 중국 수묵·공필화, 조선 한지 수묵·민화, 일본 무사 우키요에, 이슬람권 마그레브·오스만 세밀화, 인도 라지푸트 세밀화, 동남아 칠화·목판화, 아프리카 직물·부조 선화, 아메리카 필사본·회화 문법.
+- 검술 3 전설인 관우·장비·달타냥·아토스·아라미스는 같은 인물 컷인 위에 각자 청룡언월·장판교 벽력·가스코뉴의 섬광·귀족의 십자검·성 미카엘의 기도 이름을 표시한다.
 - 장비의 호통은 `finishers/zhang_fei/roar.gif`, 다른 인물의 호통과 비밀무기는 `finishers/common/`의 투명 효과 GIF를 쓴다.
-- 다시 만들기: `python tools/duel_finishers.py`. 새 전설 시트 원본까지 가져올 때는 `--import-generated <폴더>`를 붙인다.
+- 컷인 다시 만들기: `python tools/duel_cutins.py --build`. ImageGen 인물 참조를 다시 뽑을 때는 `--references`를 쓴다.
 
 ## 배경 파일
 

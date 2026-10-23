@@ -68,7 +68,8 @@
   function S() { return G.Game.state; }
   function BL() { return (G.BALANCE && G.BALANCE.landwar) || {}; }
   function LD() { return G.LANDWAR || { VS: {}, SPECIAL: {}, MATE_SKILL: {}, EVENTS: [], ABILITY: {}, CLS_NAME: {} }; }
-  function sk(id) { return R.skill(id); }
+  /** 육상전은 선실 자리와 무관하게 제독과 모든 동료 가운데 가장 높은 솜씨를 쓴다. */
+  function sk(id) { return R.skillRead ? R.skillRead(id) : R.skill(id); }
   function mountInfo() {
     var l = S().loc || {}, mt = l.mount || { id: 'walk', n: 0 }, id = mt.id, n = mt.n || 0;
     var ride = id === 'horse' || id === 'camel' ? n : id === 'elephant' ? n * 6 : 0;
@@ -134,6 +135,7 @@
     var P0 = Math.max(1, opt.party);
     var here = s.loc || {}, LA = ART(), regKey = LA ? LA.regionOf(here.lon || 0, here.lat || 0) : null, reg = LA && regKey ? LA.regions[regKey] : null;
     var mine = formMine(P0, guns), foes = formFoe(e, regKey), Fk = FOES[e.kind] || FOES.bandit;
+    var enemyTier = U.clamp(Math.floor(Math.max(0, (e.n || 0) - 1) / 25), 0, 3);   // 1~25 · 26~50 · 51~75 · 76명 이상
     var foe0 = U.sum(foes, function (u) { return u.n; });
     var phase = 'form', over = false, busy = false, auto = false, sel = null, turnNo = 0, turnsDone = 0;
     var formation = 'line', scouted = false, scoutTried = false, revealed = false, hiddenMe = false, ambushBonus = 1, parleyTried = false;
@@ -153,6 +155,7 @@
     if (I && bgChain.length) I.resolve(bgChain).then(function (res) { if (res) bgImg = res.img; });
     if (useSpr) {
       var need = ['swordsmen', 'musketeers', 'cannons', 'officers', 'animals'];
+      if (e.kind === 'bandit' || e.kind === 'garrison') ['swordsmen_enemy', 'musketeers_enemy', 'cannons_enemy', 'officers_enemy'].forEach(function (id) { if (need.indexOf(id) < 0) need.push(id); });
       ['m', 'r', 'l', 'c', 'bandit'].forEach(function (k) { if (reg[k] && need.indexOf(reg[k][0]) < 0) need.push(reg[k][0]); });
       SPR.preload(need);
       if (LA.cav[mi.name]) SPR.partyReady(LA.cav[mi.name]);
@@ -266,6 +269,13 @@
         else if (me) { var mm = LA.mine[u.type]; if (mm) r = { id: mm[0], row: tierOf(u) }; }
         else if (u.special && u.special.party) r = { party: u.special.party };
         else if (u.look === 'beast') r = { id: 'animals', row: SPR.row('animals', u.leader ? reg.b[1] : reg.b[0]), beast: 1 };
+        else if (e.kind === 'bandit' || e.kind === 'garrison') {
+          var enemySheet = u.leader ? 'officers_enemy'
+            : u.look === 'cannon' ? 'cannons_enemy'
+            : u.look === 'musket' ? 'musketeers_enemy'
+            : 'swordsmen_enemy';
+          r = { id: enemySheet, row: enemyTier };
+        }
         else {
           L = u.special ? (reg[u.special.look] || reg.m)
             : u.leader ? reg.l
@@ -297,7 +307,7 @@
         var id = sp.id, row = sp.row;
         if (!SPR.ready(id)) return SPR.pending(id);
         var k = ((sp.beast ? SFX.beastH : SFX.unitH) || 46) / SPR.bodyH(id) * k0 * ((SFX.sheetK || {})[id] || 1);
-        var big = id === 'cannons' || (id === 'ottoman' && row === 1);
+        var big = id === 'cannons' || id === 'cannons_enemy' || (id === 'ottoman' && row === 1);
         var nf = U.clamp(Math.ceil(u.n / 4), 1, big ? 2 : sp.beast ? 3 : 6), gap = big ? 58 : sp.beast ? 42 : 24;
         for (var i = 0; i < nf; i++) {
           var col = i % 3, back = i >= 3, inRow = back ? nf - 3 : Math.min(nf, 3);
@@ -564,7 +574,7 @@
         requestAnimationFrame(loop);
       }
       requestAnimationFrame(loop);
-      G.Games._landDebug = { mine: mine, foes: foes, step: function (n) { for (var i = 0; i < (n || 1); i++) { mine.concat(foes).forEach(function (u) { if (u.tx != null) { u.x = u.tx; u.y = u.ty; } }); fx.forEach(function (e) { e.t += 0.1; }); } draw(); }, draw: draw,
+      G.Games._landDebug = { mine: mine, foes: foes, step: function (n) { for (var i = 0; i < (n || 1); i++) { mine.concat(foes).forEach(function (u) { if (u.tx != null) { u.x = u.tx; u.y = u.ty; } }); fx.forEach(function (e) { e.t += 0.1; }); } draw(); }, draw: draw, tier: tierOf, sprite: sprOf,
         state: function () { return { phase: phase, turn: turnNo, formation: formation, weather: weather, feat: feat, revealed: revealed, scouted: scouted, used: used, sel: sel, captured: captured }; },
         run: function () { return turn(); }, setOrder: function (u, act, tg) { setOrder(u, act, tg); }, plan: function () { planEnemy(); } };
 

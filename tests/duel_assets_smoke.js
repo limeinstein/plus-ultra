@@ -94,13 +94,9 @@ for (const f of allFighters) {
     }
 }
 
-for (const f of allFighters) for (const move of ['slash', 'thrust', 'bash']) {
-  const im = gif(path.join(ROOT, 'images/duel/finishers', f.id, move + '.gif'));
-  ok(im.width === CW && im.height === CH && im.frames >= 6, f.id + '/' + move + ': 432×304, 6장 이상 필살 GIF');
-}
-for (const id of ['guan_yu', 'zhang_fei', 'd_artagnan', 'athos', 'aramis']) {
-  const im = gif(path.join(ROOT, 'images/duel/finishers', id, 'special.gif'));
-  ok(im.frames === 8, id + ': 개별 필살기 8장');
+for (const f of allFighters) {
+  const im = gif(path.join(ROOT, 'images/duel/cutins', f.id + '.gif'));
+  ok(im.width === 1060 && im.height === 380 && im.frames === 7, f.id + ': 전면 필살기 컷인 1060×380, 7장');
 }
 ok(gif(path.join(ROOT, 'images/duel/finishers/zhang_fei/roar.gif')).frames >= 5, '장비 전용 호통 GIF');
 for (const id of ['secret_dagger', 'secret_gun', 'roar']) ok(gif(path.join(ROOT, 'images/duel/finishers/common', id + '.gif')).frames >= 5, id + ': 공통 기술 GIF');
@@ -113,9 +109,9 @@ for (const id of Object.values(art.backgrounds).filter((v, i, a) => a.indexOf(v)
 const manifest = fs.readFileSync(path.join(ROOT, 'images/manifest.js'), 'utf8');
 for (const f of allFighters) {
   ok(manifest.includes('"duel/fighters/' + f.id + '"'), f.id + ': 매니페스트 등록 (python tools/images.py)');
-  for (const move of ['slash', 'thrust', 'bash']) ok(manifest.includes('"duel/finishers/' + f.id + '/' + move + '"'), f.id + '/' + move + ': 필살 GIF 매니페스트 등록');
+  ok(manifest.includes('"duel/cutins/' + f.id + '"'), f.id + ': 전면 필살기 컷인 매니페스트 등록');
 }
-ok(/class="rd-motion"/.test(duelCode) && /startMotion\(finisherKey\(f, 'deathblow'\)/.test(duelCode), '일격필살 GIF를 DOM 움직이는 그림으로 재생');
+ok(/class="rd-motion"/.test(duelCode) && /cutins \+ f\.spriteId/.test(duelCode) && /startMotion\(finisherKey\(f, 'deathblow'\)/.test(duelCode), '일격필살을 인물별 전면 컷인 GIF로 재생');
 ok(/zhang_fei\/roar/.test(duelCode) && /secret_/.test(duelCode), '장비 호통·공통 비밀무기 연결');
 for (const id of ['deck', 'land_battle', 'exploration', 'city', 'tavern']) ok(manifest.includes('"duel/backgrounds/' + id + '"'), id + ': 배경 매니페스트 등록');
 
@@ -141,4 +137,4 @@ ok(!unused.length, '쓰이지 않는 전투원: ' + unused.join(', '));
 const L1 = art.layout({ naturalWidth: 1536, naturalHeight: 1024 }), L2 = art.layout({ naturalWidth: S.width, naturalHeight: S.height }), L3 = art.layout({ naturalWidth: S.width / 2, naturalHeight: S.height / 2 });
 ok(L1.cw === 256 && L1.py === 246 && L2.cw === CW && L2.py === S.pivot[1] && L3.cw === CW / 2 && L3.f === 0.5, '그림 크기로 칸·배율 고르기');
 
-console.log('일기토 전투원 ' + allFighters.length + '종(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·일격필살 GIF 3종씩·전설 필살기 5종·비밀무기·장비 호통·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');
+console.log('일기토 전투원 ' + allFighters.length + '종(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·인물별 전면 필살기 컷인 37종·비밀무기·장비 호통·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');
