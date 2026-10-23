@@ -37,7 +37,8 @@
   function fill(t, extra) {
     var s = S(), cl = CO.st(), sp = cl && cl.call && G.SPONSOR[cl.call.sp], o = { name: s.player.name, king: sp ? kingName(sp) + ' ' + SP().honor(sp) : '국왕 전하', city: sp ? G.CITY_DATA[sp.city].name : '' };
     for (var k in extra || {}) o[k] = extra[k];
-    return String(t).replace(/\{(\w+)\}/g, function (m, a) { return o[a] != null ? o[a] : m; });
+    // {key~을/를}: 그 값에 맞는 조사만 (「{colony}」{colony~을/를} → 「새 리스본」을) — 「」 뒤 조사가 받침과 어긋나던 것 (QA 2026-10-23)
+    return String(t).replace(/\{(\w+)(?:~([^}]+))?\}/g, function (m, a, pair) { return o[a] == null ? m : pair ? U.jx(String(o[a]), pair) : o[a]; });
   }
   CO.fill = fill;
   async function say(lines, who, extra) { lines = [].concat(lines); for (var i = 0; i < lines.length; i++) await UI.say(fill(lines[i], extra), who); }
@@ -63,6 +64,7 @@
     injected = [];
     var s = S(); if (!s) return;
     CO.list().forEach(function (e) { G.CITY_DATA[e.id] = cityOf(e); injected.push(e.id); });
+    replant();   // 개척 도시가 바뀌었으니 산지·식물 특산물을 다시 맞춘다 (QA 2026-10-23)
     if (s.player && s.player.seat != null && !G.CITY_DATA[s.player.seat]) delete s.player.seat;   // 사라진 도시에 가족을 두지 않는다
   };
   function cityOf(e) {
@@ -75,7 +77,9 @@
     c.goods = e.stage >= 1 ? (site.goods || []).filter(function (g) { return G.GOOD && G.GOOD[g]; }) : [];
     return c;
   }
-  CO.sync = function (e) { var c = cityOf(e); G.CITY_DATA[e.id] = c; if (injected.indexOf(e.id) < 0) injected.push(e.id); return c; };
+  // 물자를 넘겨 단계가 오르면 cityOf가 c.goods를 덮어써 심은 식물 특산물이 교역소에서 사라지던 것 — 다시 맞추고, 산지 캐시도 비운다 (QA 2026-10-23)
+  function replant() { if (R.resetOrigins) R.resetOrigins(); if (G.PlantTrade && G.PlantTrade.sync && S()) G.PlantTrade.sync(); }
+  CO.sync = function (e) { var c = cityOf(e); G.CITY_DATA[e.id] = c; if (injected.indexOf(e.id) < 0) injected.push(e.id); replant(); return c; };
 
   /** 개척 도시의 시설 (rules.js R.facilities) */
   CO.facilities = function (c) {
@@ -161,7 +165,7 @@
     if (s.known.indexOf(id) < 0) s.known.push(id);
     if (G.State.revealChart) G.State.revealChart(site.lon, site.lat, 4);
     s.player.gold += b.grant || 0;
-    G.State.log('국왕에게서 새 도시를 세울 곳으로 「' + site.name + '」을 받았다 (개척 자금 ' + U.num(b.grant || 0) + '닢).');
+    G.State.log('국왕에게서 새 도시를 세울 곳으로 「' + site.name + '」' + U.jx(site.name, '을/를') + ' 받았다 (개척 자금 ' + U.num(b.grant || 0) + '닢).');
     if (G.Game.refreshHud) G.Game.refreshHud();
     return e;
   };
@@ -282,7 +286,7 @@
       var v = await UI.prompt(L.nameAsk + ' (' + site.place + ')', name || def, 10);
       v = (v || '').replace(/[<>{}"'`\\]/g, '').replace(/\s+/g, ' ').trim();
       if (!v) v = def;
-      if (used0[v]) { UI.toast('「' + v + '」은 이미 있는 도시 이름이다. 다른 이름을 지어 주십시오.', 'flag', 4000); name = v + ' 신도시'; continue; }
+      if (used0[v]) { UI.toast('「' + v + '」' + U.jx(v, '은/는') + ' 이미 있는 도시 이름이다. 다른 이름을 지어 주십시오.', 'flag', 4000); name = v + ' 신도시'; continue; }
       return v;
     }
     return def + ' ' + (CO.list().length + 1);

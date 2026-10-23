@@ -148,7 +148,16 @@
     if (na === nb) return true;
     if (na.length > 14 && nb.length > 14 && (na.indexOf(nb) >= 0 || nb.indexOf(na) >= 0)) return true;
     var A = names(a), B = names(b);
-    return A.some(function (x) { return B.indexOf(x) >= 0 || (x.length >= 3 && nb.indexOf(x) >= 0); }) || B.some(function (x) { return x.length >= 3 && na.indexOf(x) >= 0; });
+    var named = A.some(function (x) { return B.indexOf(x) >= 0 || (x.length >= 3 && nb.indexOf(x) >= 0); }) || B.some(function (x) { return x.length >= 3 && na.indexOf(x) >= 0; });
+    // 이름만 같다고 같은 일로 치면 같은 날 다른 소식(같은 도시의 입항과 시세 폭락 등)이 합쳐졌다 — 글도 대부분(80%) 겹칠 때만 (QA 2026-10-23)
+    return named && overlap(na, nb) >= 0.8;
+  }
+  /** 두 글의 공통 글자 비율 (짧은 쪽 글자 수에 대해 — 짧은 머리글 「디아스: 희망봉 발견 발표」와 긴 본문은 같은 일로) */
+  function overlap(na, nb) {
+    var cnt = {}, common = 0, i, c;
+    for (i = 0; i < na.length; i++) { c = na.charAt(i); cnt[c] = (cnt[c] || 0) + 1; }
+    for (i = 0; i < nb.length; i++) { c = nb.charAt(i); if (cnt[c] > 0) { cnt[c]--; common++; } }
+    return common / Math.max(1, Math.min(na.length, nb.length));
   }
   function tidy(t) { return String(t || '').replace(/<[^>]+>/g, '').replace(/【([^】]+)】\s*/g, '$1 — ').replace(/\s+/g, ' ').trim(); }
   /** 오늘 이미 적은 줄 가운데 같은 일이 있는가 */

@@ -65,6 +65,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // ---------------- 회계 3: 세 번 — 1차 성공·2차 실패·3차 성공, 실패해도 값은 그대로
     const r3 = await page.evaluate(async () => {
       const s = G.Game.state, c = G.CITY_DATA[0], T = G.Scenes.city.B.trade; s.player.sk.acct = 3;
+      s.portVisit = (s.portVisit || 0) + 1; s.day++;   // 새 입항 — 흥정 횟수·일괄 흥정은 한 입항 동안 이어진다 (QA 2026-10-23)
       return { tries: T.batchTries() };
     });
     ok(r3.tries === 3, '회계 3: 흥정 3번');
@@ -84,6 +85,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // ---------------- 매각: 들여온 물건(다른 도시에서 산 것)은 웃돈, 이 도시에서 나는 물건은 웃돈 없음
     const sres = await page.evaluate(async () => {
       const s = G.Game.state, c = G.CITY_DATA[0], R = G.R, T = G.Scenes.city.B.trade;
+      s.portVisit = (s.portVisit || 0) + 1; s.day++;   // 새 입항
       const imp = Object.keys(G.GOOD).find(id => !R.sells(c, id) && !(G.Slave && G.Slave.is(id)) && R.sellPrice(c, id) > 50);
       const loc = R.cityGoods(c).find(id => R.sells(c, id));
       s.fleet.cargo = {}; s.fleet.cargo[imp] = { q: 20, cost: 50, from: 7, d: s.day }; R.cargoLots(s.fleet.cargo[imp]);

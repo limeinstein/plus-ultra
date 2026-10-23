@@ -1,11 +1,13 @@
 /* 베타 게임 익명 항해 현황 전송 회귀 점검.
-   기본은 file:// 웹 원본, 배포본은 PAGE=http://127.0.0.1:4179/ node tests/telemetry_privacy_smoke.js */
+   PAGE=http://127.0.0.1:4179/ node tests/telemetry_privacy_smoke.js
+   PAGE를 주지 않으면 이 폴더의 index.html을 베타 채널로 꾸며 연다. */
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 
 const PAGE = process.env.PAGE || pathToFileURL(path.resolve(__dirname, '..', 'index.html')).href;
+const FAKE_BETA = !process.env.PAGE;
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }
 
 let browser;
@@ -13,12 +15,12 @@ let browser;
   const errors = [], payloads = [];
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: 1100, height: 760 } });
-  await page.addInitScript(() => {
+  if (FAKE_BETA) await page.addInitScript(() => {
     window.PU_WEB_CHANNEL = 'beta';
     window.PU_TELEMETRY_ENDPOINT = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event';
   });
   page.on('pageerror', error => errors.push(String(error)));
-  page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('console', message => { if (message.type() === 'error' && !(FAKE_BETA && /ERR_FILE_NOT_FOUND|Failed to load resource|fonts\.(googleapis|gstatic)/.test(message.text()))) errors.push(message.text()); });
   await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event', route => route.fulfill({ status: 202, contentType: 'application/json', body: '{"accepted":true}' }));
   await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/presence', route => {
     if (route.request().method() === 'POST') payloads.push(route.request().postDataJSON());

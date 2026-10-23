@@ -487,7 +487,7 @@
       fear:    { fatigue: 14,  discipline: -4 },
       grief:   { fatigue: 4,   discipline: 3 }       // 숙연함 — 노예무역의 현장 같은 곳 (moredisc.js 고레 섬)
     },
-    // 발견의 여파로 규율·피로가 0에 닿으면 그 수치가 10으로 돌아올 때까지 야외 발견 반경이 줄어든다.
+    // 발견의 여파로 규율이 0에, 피로가 100에 닿으면 규율 recover 이상·피로 100−recover 이하로 돌아올 때까지 야외 발견 반경이 줄어든다. (피로 0은 푹 쉰 상태라 벌칙 아님 — QA 2026-10-23)
     discoveryStrain: { recover: 10, findK: 0.35 },
     // 물은 식량보다 싸다 (보급값 × waterPrice). 자재(수리용 목재·밧줄·돛천): 한 통 값 = 보급값 × matPrice
     waterPrice: 0.5, matPrice: 3,

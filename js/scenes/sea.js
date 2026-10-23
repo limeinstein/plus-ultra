@@ -798,7 +798,9 @@
       var n = st.npcs[i];
       if (!n.hostile || n.cooldown > 0) continue;
       if (G.Geo.dist(l.lon, l.lat, n.lon, n.lat) < 0.3) {
-        var pk = (!n.tip && (n.kind === 'pirate' || n.kind === 'navy')) ? 'ship:' + n.kind : null;   // 이야기의 배(추격자·왕녀 등)·여급이 알려 준 배(사례금을 냈다)는 막지 않는다
+        // 이야기의 배(추격자·왕녀·왕명·이름난 해적·전쟁 군함·추적 함대·튜토리얼 등)는 막지 않는다 — kind만 봐서 사건 간격에 막히던 것 (QA 2026-10-23)
+        var story = n.princess || n.court || n.cap || n.chaser || n.war || n.hunt || n.tut || n.great || n.tip;
+        var pk = !story && (n.kind === 'pirate' || n.kind === 'navy') ? 'ship:' + n.kind : null;
         if (pk && G.Pace && !G.Pace.ok(pk, { noGap: true })) { n.cooldown = 3; continue; }
         if (pk && G.Pace) G.Pace.mark(pk);
         await encounter(n, false); return;
@@ -818,7 +820,6 @@
     st.paused = true; refreshBar();
     var k = NPC_KIND[n.kind];
     if (n.chaser && G.Fakes) G.Fakes.chaserMet(n);          // 추격자는 한 번뿐
-    if (n.tip && G.MaidTip && G.MaidTip.met) G.MaidTip.met(n.tip);   // 여급이 알려 준 배를 실제로 만났다 (js/systems/maidtip.js)
     var pl = G.Ships.pirateLabel(n.zone);
     var who = n.kind === 'pirate' ? pl + ' 함대' : n.label || (n.nation || '') + ' ' + k.name;
     var kinds = n.ships ? n.ships.filter(function (id, i) { return n.ships.indexOf(id) === i; }).map(function (id) { return G.SHIP[id].name; }).join('·') : '';
@@ -873,7 +874,6 @@
   }
   /** 적의가 없는 배와 신호를 주고받는다: 소식·시세·보급, 또는 공격 */
   async function hail(n) {
-    if (n.tip && G.MaidTip && G.MaidTip.met) G.MaidTip.met(n.tip);   // 여급이 알려 준 배를 실제로 만났다
     var s = S(), f = s.fleet, wasSailing = !st.paused;
     st.busy++; st.paused = true; refreshBar();
     var capStyle = A.fleetStyle(n.zone || G.Ships.zone(n.lon, n.lat), n.nation);
@@ -1160,9 +1160,9 @@
           st.lastFlip = st.sailT; st.tackSide = -st.tackSide; st.xt = 0; st.tacks = (st.tacks || 0) + 1;
         }
         v = m.vmg / Math.cos(m.theta);               // 다리를 따라 달리는 속력 (목적 방향으로는 vmg만큼 다가간다)
-        st.tackDays = (st.tackDays || 0) + days;   // 맞바람 안내 (upwindTip)
-        if (st.tackDays > 2) upwindTip();
       } else { st.tackTheta = 0; v = m.vmg; }
+      // 맞바람 안내 (upwindTip): 지그재그 여부가 아니라 맞바람이라 느린 날로 센다 — 기본 설정(지그재그 끔)에서 안 뜨던 것 (QA 2026-10-23)
+      if (st.upwind) { st.tackDays = (st.tackDays || 0) + days; if (st.tackDays > 2) upwindTip(); }
       // 길목이 코앞인데 뱃머리가 크게 틀어져 있으면 속력을 줄여 선회 반경을 좁힌다 (길목을 맴돌지 않게)
       var off = Math.abs(U.angDiff(h, crs + (st.tackTheta ? st.tackSide * st.tackTheta : 0)));
       if (st.dW != null && st.dW < 0.6 && off > 0.6) v *= U.clamp(st.dW / 0.6, 0.35, 1);

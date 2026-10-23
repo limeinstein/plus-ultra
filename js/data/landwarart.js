@@ -57,8 +57,11 @@
     if (inb(lon, lat, 130, 178, 0, 23) && !inb(lon, lat, 130, 146, 23, 46)) return lon < 133 && lat < 14 ? 'moluccas' : 'micronesia';
     if ((lon >= 155 || lon <= -125) && lat >= -30 && lat <= 30) return 'polynesia';
     // 동아시아·동남아시아
+    // 조선을 일본보다 먼저 본다 — 일본 상자(동경 129~)가 동래·경주·울릉·독도까지 덮던 것 (QA 2026-10-23)
+    //   조선 상자 안이라도 북위 35도 아래 동경 129도 동쪽(쓰시마·이키·규슈·혼슈 서끝)과 두만강 건너 연해주는 예전대로 아래에서 가린다
+    if (inb(lon, lat, 124, 131, 33, 43.5) && !(lon >= 129 && lat < 35) && !(lon >= 130.7 && lat >= 42.3)) return 'korea';
+    if (inb(lon, lat, 130.7, 132.2, 36.8, 38)) return 'korea';     // 울릉도·독도
     if (inb(lon, lat, 129, 147, 30, 46)) return 'japan';
-    if (inb(lon, lat, 124, 131, 33, 43.5)) return 'korea';
     if (inb(lon, lat, 92, 135, -11, 23)) {
       if (lon >= 116) return 'moluccas';
       if (lat < -5 && lon >= 105) return 'java';

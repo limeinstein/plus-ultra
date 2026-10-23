@@ -541,6 +541,17 @@
         if (j2 >= 0) { out.returned = arr.splice(j2, 1)[0]; break; }
       }
     }
+    // 남겨 둔 함대(js/systems/strandfleet.js)에 둔 빌린 배도 돌려준 것으로 친다 — 잃은 것으로 물리던 것 (QA 2026-10-23)
+    if (!out.returned && s.strands && s.strands.length) {
+      for (var si = 0; si < s.strands.length && !out.returned; si++) {
+        var rec = s.strands[si], j3 = -1;
+        (rec.ships || []).forEach(function (sh, j) { if (sh.uid === k.loan) j3 = j; });
+        if (j3 < 0) continue;
+        out.returned = rec.ships.splice(j3, 1)[0];
+        if (!rec.ships.length) { s.strands.splice(si, 1); if (G.State && G.State.log) G.State.log(rec.place + '에 남겨 두었던 빌린 배 ' + out.returned.name + '호를 후원자가 거두어 갔다. 싣고 있던 짐도 함께 갔다.'); }
+        else if (G.State && G.State.log) G.State.log(rec.place + '에 남겨 두었던 빌린 배 ' + out.returned.name + '호를 후원자가 거두어 갔다.');
+      }
+    }
     if (!out.returned) { out.lost = true; out.cost = Math.round((G.SHIP[k.loanType] ? G.SHIP[k.loanType].price : 8000) * 0.6); }
     var CC = G.Scenes && G.Scenes.city;
     if (out.returned && CC && CC.B.harbor && CC.B.harbor.trimCrew) CC.B.harbor.trimCrew();

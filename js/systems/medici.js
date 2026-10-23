@@ -30,7 +30,8 @@
   var CFG = {
     sponsor: 'it_medici', king: 'en_king', florence: 30, london: 38,
     lorenzo: '로렌초 데 메디치', death: 14920408,      // 1492년 4월 8일
-    years: 2, sum: 200000, reward: 30000, notoriety: 50, retry: 7, purse: 5000
+    years: 2, sum: 200000, reward: 30000, notoriety: 50, retry: 7, purse: 5000,
+    shortNotoPer: 10000, shortNotoMax: 20      // 기한 실패 때 거둘 돈이 모자라면 1만 닢마다 악명 +1 (최대 +20)
   };
   M.CFG = CFG;
 
@@ -147,6 +148,7 @@
     lorenzoEndStay: '언젠가 그 아이가 다시 청하거든 들어주게. 피렌체의 문은 언제나 그대에게 열려 있을 걸세.',
     failNews: '피렌체에서 흉한 소식이 왔다 — 빚을 거두지 못한 메디치 은행이 끝내 무너졌다. 지점들이 문을 닫고, 피렌체의 상인들이 줄줄이 파산했다. 「메디치의 돈을 들고 사라진 뱃사람」이라는 소문이 항구마다 돈다. (악명 +{noto})',
     deathNews: '피렌체에서 부고가 왔다 — 로렌초 데 메디치가 세상을 떠났다. 빚을 다 거두지 못한 메디치 은행은 그를 따라 무너졌고, 사람들은 그 돈을 들고 사라진 뱃사람을 손가락질한다. (악명 +{noto})',
+    reclaim: '메디치 은행이 맡긴 돈을 거두어 갔다 (금화 {n}닢)',
     failLuc: '함께 온 짧은 편지 — 「장부를 덮었어요. 제독님을 원망하지는 않을게요. 다만 다시는 피렌체에 오지 마세요. 루크레치아.」',
     remind: '루크레치아의 편지 — 「아버지의 은행이 버틸 날이 반년 남았어요. {left}. 기다릴게요.」'
   };
@@ -325,7 +327,7 @@
       if (G.Audio) G.Audio.sfx('coin');
       G.Game.refreshHud();
       G.State.log(SP().holderName(sp) + '에게서 메디치 은행의 빚 20만 두카트를 받아 냈다. 피렌체의 로렌초에게 전해야 한다 (기한 ' + fmtDue(m.due) + ').');
-      await UI.alert('잉글랜드 국왕이 메디치 은행의 빚을 갚았다.<br>금화 <b>' + U.num(CFG.sum) + '</b>닢(20만 두카트)을 받았다.<br><span class="muted">' + fmtDue(m.due) + '까지 피렌체의 로렌초 데 메디치에게 전해야 한다. 넘기면 악명 +' + CFG.notoriety + '</span>', '잉글랜드의 빚');
+      await UI.alert('잉글랜드 국왕이 메디치 은행의 빚을 갚았다.<br>금화 <b>' + U.num(CFG.sum) + '</b>닢(20만 두카트)을 받았다.<br><span class="muted">' + fmtDue(m.due) + '까지 피렌체의 로렌초 데 메디치에게 전해야 한다. 넘기면 악명 +' + CFG.notoriety + ', 받은 돈도 메디치 은행이 거두어 간다</span>', '잉글랜드의 빚');
     } finally { await pc.stop(); }
   }
 
@@ -377,6 +379,9 @@
       s.player.notoriety = (s.player.notoriety || 0) + CFG.notoriety;
       var msg = fill(died ? L.deathNews : L.failNews, { noto: CFG.notoriety });
       out.push({ icon: 'skull', text: msg, history: true });
+      // 잉글랜드에서 받은 20만을 안 전해도 악명만 붙고 돈은 그대로 남던 것 — 기한을 넘기면 맡긴 돈을 거두어 간다 (QA 2026-10-23)
+      var back = m.stage === 3 ? reclaim(s, m) : null;
+      if (back) { out.push({ icon: 'coin', text: back.text }); G.State.log(back.text); }
       out.push({ icon: 'scroll', text: L.failLuc });
       G.State.log(msg);
       return out;
@@ -387,6 +392,19 @@
     }
     return out;
   };
+
+  /** 기한 실패 — 잉글랜드에서 받은 돈을 소지금에서, 모자라면 은행 예금에서 거둔다. 그래도 모자라면 악명을 조금 더 */
+  function reclaim(s, m) {
+    var p = s.player, need = CFG.sum, fromGold = Math.min(Math.max(0, p.gold || 0), need);
+    p.gold = (p.gold || 0) - fromGold; need -= fromGold;
+    var fromBank = Math.min(Math.max(0, p.bank || 0), need);
+    if (fromBank) { p.bank -= fromBank; need -= fromBank; }
+    var extra = need > 0 ? Math.min(CFG.shortNotoMax, Math.ceil(need / CFG.shortNotoPer)) : 0;
+    if (extra) p.notoriety = (p.notoriety || 0) + extra;
+    m.reclaimed = fromGold + fromBank; m.short = need;
+    if (G.Game && G.Game.refreshHud) G.Game.refreshHud();
+    return { text: L.reclaim.replace('{n}', U.num(fromGold + fromBank)) + (fromBank ? ' — 은행 예금에서 ' + U.num(fromBank) + '닢' : '') + (need > 0 ? ' · 모자란 ' + U.num(need) + '닢은 빚으로 남아 소문이 더 나빠졌다 (악명 +' + extra + ')' : '') };
+  }
 
   // ---------------------------------------------------------------- 도시 할 일 (js/scenes/city.js)
   M.todo = function (c) {

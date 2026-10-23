@@ -136,11 +136,27 @@
   // ---------------------------------------------------------------- 결과
   var STAT = { str: '힘', 'int': '지력', mar: '무력', cha: '매력' };
   /** 제독도 아이와 함께하며 조금씩 다시 배운다 — pst: {능력치: n}, 저마다 절반 확률 (G.BALANCE.homelife.adultChance) */
+  //   능력치를 곧바로 +1(상한 99) 하던 것이 성장 한도(G.Growth — 하루·한 해 한도, 높을수록 비싼 값)를 건너뛰었다 — 경험으로 돌린다 (QA 2026-10-23)
+  //   ADULT_XP: +1 한 번에 쌓는 경험 (능력 60 아래에서 1 오르는 데 120 — 세 번쯤 함께하면 1, 높을수록 더디다 · 하루 한도 45)
+  //   G.Growth 가 없으면(옛 구성) 능력마다 한 해 ADULT_YEAR 까지만 곧바로 오른다
+  var ADULT_XP = 40, ADULT_YEAR = 2;
   function adult(pst) {
-    var p = S().player, out = [], ch = B().adultChance == null ? 0.5 : B().adultChance;
+    var s = S(), p = s.player, out = [], ch = B().adultChance == null ? 0.5 : B().adultChance, GR = G.Growth;
     Object.keys(pst || {}).forEach(function (x) {
       if (!p.st || p.st[x] == null || !U.chance(ch)) return;
-      var before = p.st[x]; p.st[x] = Math.min(B().adultMax || 99, p.st[x] + pst[x]);
+      var before = p.st[x];
+      if (GR && GR.add && GR.state) {
+        var xs = GR.state(), y0 = xs && xs.y && xs.y.n === s.date.y ? (xs.y[x] || 0) : 0;
+        GR.add(x, ADULT_XP * pst[x], '아이와 함께하며 다시 배운다');
+        var xs2 = GR.state(), y1 = xs2 && xs2.y && xs2.y.n === s.date.y ? (xs2.y[x] || 0) : 0;
+        if (p.st[x] > before) out.push('제독 ' + STAT[x] + ' +' + (p.st[x] - before));
+        else if (y1 > y0) out.push('제독 ' + STAT[x] + ' 경험 +' + (y1 - y0));
+        return;
+      }
+      var yr = p.homeSt && p.homeSt.y === s.date.y ? p.homeSt : (p.homeSt = { y: s.date.y });
+      var n = Math.min(pst[x], ADULT_YEAR - (yr[x] || 0)); if (n <= 0) return;
+      p.st[x] = Math.min(B().adultMax || 99, p.st[x] + n);
+      yr[x] = (yr[x] || 0) + (p.st[x] - before);
       if (p.st[x] > before) out.push('제독 ' + STAT[x] + ' +' + (p.st[x] - before));
     });
     return out;

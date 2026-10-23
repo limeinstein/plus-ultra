@@ -32,6 +32,7 @@
     return k;
   }
   function eventCode(e) {
+    if (e && e.code === 'NumpadEnter') return 'Enter';   // 숫자판 Enter도 Enter로 — 확정이 먹지 않던 것 (QA 2026-10-23)
     if (e && e.code) return e.code;
     var k = e && e.key;
     if (k === ' ') return 'Space';
@@ -39,7 +40,13 @@
     if (/^[0-9]$/.test(k || '')) return 'Digit' + k;
     return k || '';
   }
-  function keyIs(e, action) { return eventCode(e) === keySettings()[action]; }
+  function keyIs(e, action) {
+    var keys = keySettings(), code = eventCode(e);
+    if (code === keys[action]) return true;
+    // 확정 키를 다른 키로 바꿨어도 숫자판 Enter는 확정으로 받는다 — 다른 동작이 Enter를 쓰지 않을 때만 (QA 2026-10-23)
+    if (action === 'confirm' && e && e.code === 'NumpadEnter') return !Object.keys(keys).some(function (id) { return keys[id] === 'Enter'; });
+    return false;
+  }
   function keyLabel(code) {
     var names = { ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', Enter: 'ENTER', Space: 'SPACE', Escape: 'ESC', ShiftLeft: '왼쪽 SHIFT', ShiftRight: '오른쪽 SHIFT', Backquote: '`' };
     if (names[code]) return names[code];
@@ -102,7 +109,12 @@
     /** 하단 메뉴가 화면보다 넓으면(작은 화면 · 큰 글씨 · 긴 항구 이름) 통째로 줄여 넣는다 */
     fitBar: function (bar) {
       if (!bar || !bar.parentNode) return;
+      // 바다·뭍 화면이 6프레임마다 불러 너비를 다시 재던 것 — 단추 글·보임·창 크기가 그대로면 건너뛴다 (QA 2026-10-23)
+      var sig = window.innerWidth + 'x' + window.innerHeight + '|' + (document.fonts ? document.fonts.status : '') + '|' + bar.parentNode.style.zoom;
+      for (var ci = 0; ci < bar.children.length; ci++) { var ch = bar.children[ci]; sig += '|' + ch.style.display + ':' + ch.className + ':' + ch.textContent; }
+      if (bar._sig === sig) return;
       var pw = bar.parentNode.clientWidth, w = bar.offsetWidth; if (!pw || !w) return;
+      bar._sig = sig;
       var k = w > pw - 16 ? Math.round((pw - 16) / w * 1000) / 1000 : 1;
       if (bar._k === k) return; bar._k = k;
       bar.style.transformOrigin = '50% 100%'; bar.style.transform = k < 1 ? 'translateX(-50%) scale(' + k + ')' : '';
@@ -771,11 +783,11 @@
         body.innerHTML = speech(box, pages[idx], opts) + '<div class="more">▼</div>'; shownAt = Date.now();
         shell.layout();
       }
-      var shownAt = 0;
+      var shownAt = 0, arm = null;
       function next() {
         if (finished || Date.now() - shownAt < 220) return;      // 두 번 눌러(더블클릭) 한 쪽을 건너뛰지 않게
         idx++;
-        if (idx >= pages.length) { done(); } else show();
+        if (idx >= pages.length) { done(); } else { show(); if (arm) arm(); }   // 손으로 넘겨도 새 쪽은 5초를 처음부터 센다 (QA 2026-10-23)
       }
       var auto = autoOn(), seen = auto ? seenStore() : null, sk = auto ? sayKey(pages.join('\f'), opts) : null, stopAuto = null;
       function done() { if (finished) return; finished = true; if (stopAuto) stopAuto(); unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
@@ -788,7 +800,7 @@
       // 항해 중 사건: 전에 본 말이면 5초 뒤 저절로 넘어간다 (쪽마다)
       if (auto && seen) {
         if (seen[sk]) {
-          var arm = function () { if (stopAuto) stopAuto(); stopAuto = autoTimer(box, '저절로 넘어갑니다', function () { stopAuto = null; shownAt = 0; next(); if (!finished) arm(); }, '누르면 바로 넘어간다'); };
+          arm = function () { if (stopAuto) stopAuto(); stopAuto = autoTimer(box, '저절로 넘어갑니다', function () { stopAuto = null; shownAt = 0; next(); }, '누르면 바로 넘어간다'); };
           arm();
         }
         seen[sk] = 1; var ks = Object.keys(seen); if (ks.length > 400) delete seen[ks[0]];
@@ -893,7 +905,8 @@
     var solo = opts.buttons && opts.buttons.length === 1 && !opts.onKey && opts.clickAny !== false ? opts.buttons[0] : null;
     var openedAt = Date.now();     // 막 연 창은 잠깐(0.4초) 누름을 받지 않는다 — 앞 창을 두 번 눌러(더블클릭) 새 창까지 넘겨 버리지 않게
     var selected = null;
-    function candidates() { return Array.prototype.slice.call(w.querySelectorAll('.choice:not(.dis), button:not([disabled]):not(.disabled), .opt[data-res], .opt[data-uisz], .opt[data-as], .opt[data-sh], .opt[data-bt], .opt[data-km], .opt[data-ms], .tab')); }
+    // 설정 창의 새 항목(글자 크기·글꼴·조작 감도…)도 방향키로 고르게 — .opt-row 안의 선택지 전체 (QA 2026-10-23)
+    function candidates() { return Array.prototype.slice.call(w.querySelectorAll('.choice:not(.dis), button:not([disabled]):not(.disabled), .opt[data-res], .opt[data-uisz], .opt[data-as], .opt[data-sh], .opt[data-bt], .opt[data-km], .opt[data-ms], .opt-row .opt:not(.dis), .tab')); }
     function moveSelection(step) { selected = selectKeyItem(candidates(), selected && selected.isConnected ? selected : w.querySelector('.kbd-focus'), step); return selected; }
     function pressSolo() { if (closed || Date.now() - openedAt < 400) return; if (solo.onClick) { var r = solo.onClick(api); if (r === false) return; } api.close(solo.value); }
     var unkey = pushKey(function (e) {

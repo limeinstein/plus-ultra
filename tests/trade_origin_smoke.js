@@ -47,11 +47,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.fleet.cargo[gid].q = 5; const nl = R.cargoLots(s.fleet.cargo[gid]); out.norm = Object.keys(nl).reduce((a, k) => a + nl[k].q, 0);
       const old = { q: 4, cost: 100, from: other.id, d: s.day }; out.oldSave = JSON.stringify(R.cargoLots(old));
       const prize = { q: 3, cost: 0, from: null, prize: true }; out.prize = R.cargoFromText(prize);
-      // ⑤ 시장 물건: 산 도시마다 따로 묶고, 산 도시 시장에서는 치른 값까지만
+      // ⑤ 시장 물건: 산 도시가 달라도 한 칸으로 묶고(산 곳마다 치른 값은 it.buys — rules.js R.addMarketItems), 산 도시 시장에서는 치른 값까지만
       s.player.items = [];
       R.addMarketItems('rapier', 1, c.id, 1); R.addMarketItems('rapier', 1, other.id, 1); R.addMarketItems('rapier', 1, c.id, 3);
-      const here = s.player.items.find(x => x.from === c.id), there = s.player.items.find(x => x.from === other.id);
-      out.items = { stacks: s.player.items.length, hereQty: here.qty, herePaid: here.paid, hereVal: B.market.sellValue(here), thereVal: B.market.sellValue(there) };
+      const one = s.player.items[0], buys = R.buysOf(one);
+      const hereVal = B.market.sellValue(one);
+      s.loc.city = other.id; const thereVal = B.market.sellValue(one); s.loc.city = c.id;
+      out.items = { stacks: s.player.items.length, qty: R.itemQty(one), herePaid: buys[c.id], therePaid: buys[other.id], hereVal, thereVal };
       // ⑥ 수첩 함대: 적재 교역품의 산 곳
       s.fleet.cargo = {}; s.fleet.cargo[gid] = { q: 8, cost: 50, from: c.id, d: s.day, lots: {} }; s.fleet.cargo[gid].lots[c.id] = { q: 5, cost: 50 }; s.fleet.cargo[gid].lots[other.id] = { q: 3, cost: 60 };
       out.other = other.name; out.city = c.name; out.good = G.GOOD[gid].name;
@@ -63,7 +65,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.mixed.got > 25 && r.mixed.left[0] && r.mixed.left[0].q === 5 && !Object.keys(r.mixed.left).some(k => k !== '0'), '섞인 짐 5통을 팔면 다른 곳(' + r.other + ')에서 산 몫부터 시세로 (' + r.mixed.got + '닢) — 남은 짐: ' + r.mixed.text);
     ok(r.norm === 5, '짐이 줄면 산 곳 몫도 맞춘다 (10 → 5)');
     ok(r.oldSave.indexOf('"q":4') > 0 && r.prize === '나포·노획', '옛 저장은 처음 산 곳으로, 나포한 짐은 「나포·노획」');
-    ok(r.items.stacks === 2 && r.items.hereQty === 2 && r.items.herePaid === 2 && r.items.hereVal === 2 && r.items.thereVal > 2, '시장 물건: 산 도시마다 따로 묶고(' + r.items.stacks + '칸), 산 도시 시장에서는 치른 값(' + r.items.hereVal + '닢)까지만 · 다른 곳에서 산 것은 ' + r.items.thereVal + '닢');
+    ok(r.items.stacks === 1 && r.items.qty === 3 && r.items.herePaid === 2 && r.items.therePaid === 1 && r.items.hereVal === 2, '시장 물건: 산 도시가 달라도 한 칸(' + r.items.stacks + '칸 ' + r.items.qty + '개) · 산 곳마다 치른 값(평균 ' + r.items.herePaid + '·' + r.items.therePaid + '닢) · 산 도시 시장에서는 치른 값(' + r.items.hereVal + '닢)까지만');
+    ok(r.items.thereVal <= 1, '다른 도시에서도 거기서 산 적이 있으면 그곳에서 치른 값까지만 (' + r.items.thereVal + '닢)');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('\n통과');
   } catch (e) {

@@ -24,9 +24,17 @@
   function S() { return G.Game && G.Game.state; }
   function st() {
     var s = S(); if (!s) return null;
-    if (!s.aztec) s.aztec = U.dateNum(s.date) > 15221231 ? { side: 'none', lock: 1, end: 'old', told: {} } : { told: {} };   // 오래된 저장은 방관으로
+    if (!s.aztec) {
+      s.aztec = U.dateNum(s.date) > 15221231 ? { side: 'none', lock: 1, end: 'old', told: {} } : { told: {} };   // 오래된 저장은 방관으로
+      // 옛 저장을 늦게 불러오면 이미 지난 소식·시장 사건(천연두·정복 전쟁)이 엉뚱한 해에 한꺼번에 뜨던 것 — 오늘 전에 지난 일은 알린 것으로 친다 (QA 2026-10-23)
+      var t0 = U.dateNum(s.date);
+      Object.keys(NEWS_AT).forEach(function (k) { if (NEWS_AT[k] < t0) s.aztec.told[k] = 1; });
+    }
     return s.aztec;
   }
+  // 날마다 소식의 날짜 (AZ.daily와 같은 값) — 상태를 새로 만들 때 이미 지난 것을 가려낸다
+  var NEWS_AT = { sail: 15190218, enter: 15191108, narvaez: 15200423, toxcatl: 15200522, moct: 15200630, noche: 15200701, otumba: 15200708,
+    pox: 15200915, cuitla: 15201204, war: 15210101, brig: 15210428, crown: 15200801, mexico: 15220301 };
   function today() { return U.dateNum(S().date); }
   function cityNow() { var s = S(); return s && s.loc && s.loc.mode === 'city' ? s.loc.city : null; }
   function H(id) { return G.Hist ? G.Hist.speaker(id) : { name: id, lang: 3 }; }
@@ -642,7 +650,7 @@
     return b.side === 'none' && !!b.met && (cityNow() === VERACRUZ || cityNow() === MEXICO || cityNow() === TENOCH || cityNow() === HAVANA || cityNow() === SANTIAGO);
   }
   async function ending() {
-    var b = st(), s = S(); b.end = b.side;
+    var b = st(), s = S(); b.end = b.side; b.endDay = U.dayIndex(s.date);   // endDay: 포카혼타스가 같은 입항에 연달아 뜨지 않게 (js/systems/pocahontas.js)
     if (b.lake === 'fighting') b.lake = 'lost';
     await withPic('aztec_fall', '독수리가 내려앉다 (1521.8.13)', function () { return play([
       [null, '1521년 8월 13일, 틀라텔롤코. 일흔닷새의 포위 끝에 마지막 구역이 무너졌다. 굶주린 사람들이 무너진 집 사이를 헤맨다. 시장이 있던 자리에 시체가 쌓였다.'],
@@ -758,6 +766,7 @@
   };
   AZ.check = async function () {
     if (AZ._busy) return false; AZ._busy = true;
+    AZ.evDay = U.dayIndex(S().date);   // 오늘 아즈텍 장면이 떴다 — 같은 입항의 포카혼타스는 다음으로 (QA 2026-10-23)
     try {
       if (endOpen()) await ending();
       else if (rumorOpen()) await rumor();

@@ -19,10 +19,11 @@
     var s = S(); if (!s || !s.player || !s.player.kids) return null;
     var age = K().age || 18;
     return s.player.kids.filter(function (k) {
-      return k.sex === 'f' && !k.unnamed && !k.married && k.house == null && F().kidAge(k) >= age && (k.wedNext == null || s.day >= k.wedNext);
+      return k.sex === 'f' && !k.unnamed && !k.married && !k.lost && k.house == null && F().kidAge(k) >= age   // !k.lost: 섬에서 사라진 딸은 혼례를 올리지 않는다 (QA 2026-10-23) && (k.wedNext == null || s.day >= k.wedNext);
     })[0] || null;
   };
-  KW.royal = function (k) { return HL().touch(k) >= (K().touch || 50); };
+  // 이미 왕세자비가 된 딸이 있으면(p.royalKin) 다음 딸은 보통 혼처로 — 딸마다 왕세자비가 되던 것 (QA 2026-10-23)
+  KW.royal = function (k) { var p = S() && S().player; if (p && p.royalKin) return false; return HL().touch(k) >= (K().touch || 50); };
 
   function crown() {
     try { if (G.Colony && G.Colony.crown) { var sp = G.Colony.crown(); if (sp) return sp; } } catch (e) { /* */ }
@@ -132,7 +133,7 @@
     await say(D().commonLetter.join('\n'), HL().speaker(k), k);
     k.married = { kind: kind, y: s.date.y, title: E.title }; k.aboard = false;
     F().addBond(k, 5);
-    G.State.log(k.name + U.jx(k.name, '이/가') + ' ' + E.suitor + '와 혼례를 올렸다. (지참금 금화 ' + U.num(paid) + '닢)');
+    G.State.log(k.name + U.jx(k.name, '이/가') + ' ' + E.suitor + U.jx(E.suitor, '과/와') + ' 혼례를 올렸다. (지참금 금화 ' + U.num(paid) + '닢)');
     UI.toast(k.name + ' — ' + E.title + (paid ? ' · 지참금 금화 ' + U.num(paid) + '닢' : ''), 'heart', 5000);
   }
 })(window.G = window.G || {});

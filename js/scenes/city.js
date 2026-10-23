@@ -129,6 +129,8 @@
     var s = S(), c = G.CITY_DATA[arg.cityId != null ? arg.cityId : s.loc.city];
     s.loc = { mode: 'city', city: c.id, lon: c.lon, lat: c.lat, heading: s.loc.heading || 0, via: arg.via || (arg.load && s.loc.mode === 'city' && s.loc.city === c.id && s.loc.via) || (c.port ? 'sea' : 'land') };   // 이어하기: 뭍길로 들어와 있던 도시는 그대로 뭍길(탐험대가 성문 밖에서 기다린다)
     cur = null; token++;
+    // 이번 입항 번호: 도시에 들어올 때마다 하나씩 (이어하기는 같은 입항) — 교역소 흥정·식당 한 끼 같은 「한 번만」을 이 번호로도 막는다 (R.sameStay · QA 2026-10-23)
+    if (!arg.load) s.portVisit = (s.portVisit || 0) + 1;
     busy = true;
     G.Game.showLayers(false, false, true);
     if (G.Img.count()) await C.preloadImages(c);
@@ -581,7 +583,8 @@
         // 잠입: 부관이 가망과 까닭(변장·말·화술·동료·악명)을 보여 주고, 성문에서 한 번 판정한다 (js/systems/sneak.js)
         var ch = G.Sneak ? G.Sneak.chance(c, chk.reason) : { p: 0.3 + R.skill('speech') * 0.05 + (C.langLv(c) >= 2 ? 0.15 : 0), dz: null };
         if (G.Sneak && !(await UI.confirm(G.Sneak.html(c, ch), '잠입한다', '그만둔다', '잠입 — ' + c.name))) continue;
-        if (ch.dz) UI.toast(G.ITEM[ch.dz].name + '으로 변장했다', 'feather');
+        // 국기는 「변장」이 아니라 「달았다」, 조사는 받침에 맞춰 (터번으로·명나라 옷으로 / ○○로) (QA 2026-10-23)
+        if (ch.dz) { var dzn = G.ITEM[ch.dz].name; UI.toast(ch.dz === 'flag_pt' || ch.dz === 'flag_es' ? dzn + U.jx(dzn, '을/를') + ' 달았다' : dzn + U.jx(dzn, '으로/로') + ' 변장했다', 'feather'); }
         if (U.chance(ch.p)) {
           if (G.Outcome) await G.Outcome.show('sneak_ok', { sub: c.name + '에 몰래 들어갔다' });   // 결과 연출: 발끝으로 경비 곁을 지나간다
           await C.mate(ch.dz === 'turban' ? '터번 덕분에 아무도 우리를 의심하지 않았습니다. 제독, 이교도라는 것이 드러나지 않게 조심하십시오.' : ch.dz === 'mingrobe' ? '명나라 옷 덕분에 관리들이 우리를 그 고장 상인으로 여겼습니다. 제독, 말을 아끼십시오.'

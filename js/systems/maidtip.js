@@ -178,7 +178,8 @@
   MT.ask = async function (c, m, st, say) {
     var s = S(), k = K();
     if (!MT.canAsk(st)) { await say('어머, 그런 이야기는… 아직 잘 모르는 분한테는 좀 그래요. 우리 좀 더 친해지면요.', 'warm'); return; }
-    if (st.tipDay === s.day) { await say('오늘은 제가 아는 건 다 말씀드렸어요. 며칠 지나면 손님들한테 또 들을 거예요.', 'warm'); return; }
+    // 술집을 나갔다 들어오기만 하면 하루가 흘러 또 물을 수 있던 것 — 이번 입항(R.sameStay)에도 한 번으로 막는다 (QA 2026-10-23)
+    if (G.R.sameStay(st.tipDay, st.tipPv)) { await say('오늘은 제가 아는 건 다 말씀드렸어요. 며칠 지나면 손님들한테 또 들을 거예요.', 'warm'); return; }
     var opts = Object.keys(KIND).map(function (kd) {
       var pr = MT.price(kd, c, st);
       return { label: KIND[kd].label, right: '금화 ' + U.num(pr) + '닢', value: kd, icon: KIND[kd].icon, desc: KIND[kd].desc, disabled: s.player.gold < pr };
@@ -191,7 +192,7 @@
     if (v === 'wander') {
       var ws = MT.wanderers(c, st);
       if (!ws.length) { await say('요즘은 떠돌이 항해사 이야기를 못 들었어요. 사례는 됐어요, 다음에 알려 드릴게요.', 'warm'); return; }
-      s.player.gold -= price; st.tipDay = s.day; st.aff = Math.min(100, (st.aff || 0) + 1);
+      s.player.gold -= price; st.tipDay = s.day; st.tipPv = G.R.stayNo(); st.aff = Math.min(100, (st.aff || 0) + 1);
       await say(U.pick(['쉿, 손님들이 하는 얘기를 들었는데요… ', '고마워요. 제가 들은 건 이래요. ']) + ws.map(function (w) {
         return w.m.name + ' (' + (w.m.natName || '') + (w.m.typeName ? ' ' + w.m.typeName : '') + ') — ' + w.c.name + ' 술집, 여기서 ' + dirName(c, w.c) + ' 약 ' + daysTo(c, w.c) + '일';
       }).join('\n') + '\n그 사람들 한 달쯤 지나면 또 다른 데로 떠나요.', 'warm');
@@ -201,7 +202,7 @@
     }
     var tip = MT.make(v, c, m, st);
     if (!tip) { await say('요즘은 그쪽 소식이 뚝 끊겼어요. 사례는 됐어요.', 'warm'); return; }
-    s.player.gold -= price; st.tipDay = s.day; st.aff = Math.min(100, (st.aff || 0) + 1);
+    s.player.gold -= price; st.tipDay = s.day; st.tipPv = G.R.stayNo(); st.aff = Math.min(100, (st.aff || 0) + 1);
     var lines = {
       merchant: ['짐을 가득 실은 배들이 지나간대요. 선원들이 술값을 미리 당겨 쓸 만큼요. ', '큰 장사 마치고 돌아가는 상선대가 있대요. '],
       navy: ['군함들이 그쪽 바다를 지킨대요. 괜히 마주치지 마세요. ', '군함이 순찰을 돈대요. 그 나라와 사이가 나쁘면 피하세요. '],

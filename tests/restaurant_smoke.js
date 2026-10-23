@@ -32,7 +32,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const first = { gold: s.player.gold, hp: s.player.hp, fatigue: s.fleet.fatigue, saved: s.restaurant.last[lisboa.id] };
       await T.eat(lisboa, dish);
       const twice = { gold: s.player.gold, hp: s.player.hp, fatigue: s.fleet.fatigue };
-      s.day++; await T.eat(lisboa, dish);
+      s.day++; await T.eat(lisboa, dish);   // 건물에 드나들며 하루가 흘러도 같은 입항이면 막힌다 (QA 2026-10-23)
+      const stay = { gold: s.player.gold, hp: s.player.hp, fatigue: s.fleet.fatigue };
+      s.day++; s.portVisit = (s.portVisit || 0) + 1; await T.eat(lisboa, dish);
       const next = { gold: s.player.gold, hp: s.player.hp, fatigue: s.fleet.fatigue };
       C.say = oldSay;
       const ordinaryCities = G.CITY_DATA.filter(c => c && !c.outpost && c.colony == null);
@@ -44,7 +46,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         extraRestaurants: ordinaryCities.filter(c => !G.CUISINE.hasRestaurant(c) && C.buildings(c).some(b => b.kind === 'restaurant')).length,
         outpostRestaurants: outposts.filter(c => C.buildings(c).some(b => b.kind === 'restaurant')).length,
         lisboa: G.CUISINE.dishes(lisboa).map(d => d.name), busan: G.CUISINE.dishes(busan).map(d => d.name),
-        before, first, twice, next, dish: dish.name
+        before, first, twice, stay, next, dish: dish.name
       };
     });
     ok(r.restaurantCount === r.cityCount && r.extraRestaurants === 0, '중도시 이상이거나 이름난 음식이 있는 도시 ' + r.cityCount + '곳에만 식당이 있다');
@@ -52,7 +54,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.lisboa.length === 6 && r.busan.length === 6, '지역 음식 여섯 가지: 리스본 ' + r.lisboa.join('·') + ' / 부산 ' + r.busan.join('·'));
     ok(r.first.gold < r.before.gold && r.first.fatigue < r.before.fatigue && r.first.hp > r.before.hp && r.first.saved === 20, '옛 저장에도 식사 기록을 만들고 ' + r.dish + ' 한 끼가 값·피로·체력을 바꾼다');
     ok(JSON.stringify(r.twice) === JSON.stringify({ gold: r.first.gold, hp: r.first.hp, fatigue: r.first.fatigue }), '같은 도시에서는 하루 한 끼만 먹는다');
-    ok(r.next.gold < r.twice.gold && r.next.fatigue < r.twice.fatigue, '다음 날에는 다시 먹을 수 있다');
+    ok(JSON.stringify(r.stay) === JSON.stringify(r.twice), '다음 날이라도 같은 입항(건물만 드나듦)이면 다시 먹지 못한다');
+    ok(r.next.gold < r.twice.gold && r.next.fatigue < r.twice.fatigue, '다음에 입항하면 다시 먹을 수 있다');
     ok(errors.length === 0, '콘솔 오류 0');
     console.log('\n통과');
   } catch (e) { console.error('✗', e.message); if (errors.length) console.error(errors.join(' | ')); process.exitCode = 1; }

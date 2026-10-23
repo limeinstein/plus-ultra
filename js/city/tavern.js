@@ -110,7 +110,8 @@
   // ---------------------------------------------------------------- 장사 소문 (살아 있는 경제 — js/systems/economy.js)
   /* 술 한 잔 값을 내면 주인이 요즘 장사꾼들 사이에 도는 이야기를 들려준다 — 「어느 도시에서 무슨 까닭으로 무엇이 모자란다/넘친다」.
      가까운 곳·아직 모르는 사건부터, 일어나기 전의 조짐도. 하루에 rumorAsk번 (G.BALANCE.econ) */
-  function rumorUsed(c) { var mk = R.market(c.id), r = mk.rum; return r && r.day === S().day ? r.n : 0; }
+  // 나갔다 들어오면 하루가 흘러 또 들을 수 있던 것 — 이번 입항(R.sameStay)에도 rumorAsk번으로 막는다 (QA 2026-10-23)
+  function rumorUsed(c) { var mk = R.market(c.id), r = mk.rum; return r && R.sameStay(r.day, r.pv) ? r.n : 0; }
   T.rumorLeft = function (c) { return ((G.BALANCE.econ || {}).rumorAsk || 2) - rumorUsed(c); };
   T.rumorSub = function (c) { var k = G.Econ.knownList().length; return T.rumorLeft(c) <= 0 ? '오늘은 다 들었다' : '술 한 잔 ' + (4 + c.size * 2) + '닢' + (k ? ' · 아는 소식 ' + k : ''); };
   T.rumor = async function (c) {
@@ -119,7 +120,7 @@
     if (T.rumorLeft(c) <= 0) { await C.say(m, '오늘 들은 이야기는 그게 다일세. 며칠 지나면 새 배들이 새 소식을 싣고 오겠지.'); return; }
     if (s.player.gold < price) { await C.say(m, '술 한 잔도 못 시키는 손님한테 해 줄 이야기는 없네.'); return; }
     s.player.gold -= price;
-    var mk = R.market(c.id); mk.rum = { day: s.day, n: rumorUsed(c) + 1 };
+    var mk = R.market(c.id); mk.rum = { day: s.day, pv: R.stayNo(), n: rumorUsed(c) + 1 };
     var list = G.Econ.rumors(c, K.rumorN || 2);
     if (!list.length) {
       // 사건이 없으면: 이 고장 특산물이 어디서 금값인지
@@ -800,9 +801,10 @@
       if (v === 'date') { await G.FamEv.date(c, m); continue; }      // 데이트 — 건배·춤·쪽지·난롯가·저녁 (familyevent.js)
       if (v === 'drink') {
         var pr = 10 + c.size * 5; if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다.', 'coin'); continue; }
+        // 술집을 나갔다 들어오면 하루가 흘러 호감을 또 올릴 수 있던 것 — 이번 입항(R.sameStay)에도 한 번으로 (QA 2026-10-23). 이미 마셨으면 술값을 받지 않는다
+        var today = U.dateNum(s.date); if (st.last === today || (st.lastPv != null && st.lastPv === R.stayNo())) { await say('오늘은 벌써 많이 마셨어요. 또 와 주세요.', 'warm'); continue; }
         s.player.gold -= pr;
-        var today = U.dateNum(s.date); if (st.last === today) { await say('오늘은 벌써 많이 마셨어요. 또 와 주세요.', 'warm'); continue; }
-        st.last = today; var gain = 2 + likeBonus(like);
+        st.last = today; st.lastPv = R.stayNo(); var gain = 2 + likeBonus(like);
         st.aff = Math.min(100, st.aff + gain);
         await say(U.pick(['고마워요! 건배!', '어머, 저한테요? 잘 마실게요.', '당신이랑 마시니까 더 맛있네요.']), 'happy');
       } else if (v === 'talk') {

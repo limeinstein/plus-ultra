@@ -43,7 +43,7 @@
     { id: 'it_pope', title: '로마 교황', type: 'pope', city: 33, bld: 'palace', pw: 5, wealth: 5, lang: 2, rel: 'C', taste: ['ruin', 'people', 'treasure'],
       holders: [[1480, 1484, '식스토 4세'], [1484, 1492, '인노첸시오 8세'], [1492, 1503, '알렉산데르 6세'], [1503, 1513, '율리오 2세'], [1513, 1521, '레오 10세'], [1522, 1534, '클레멘스 7세'], [1534, 1550, '바오로 3세'], [1550, 1600, '로마 교황']] },
     { id: 'it_medici', title: '메디치 가 당주', type: 'noble', city: 30, bld: 'palace', pw: 4, wealth: 5, lang: 2, rel: 'C', taste: ['treasure', 'ruin', 'nature'],
-      holders: [[1480, 1492, '로렌초 데 메디치'], [1492, 1494, '피에로 데 메디치'], [1512, 1519, '로렌초 2세 데 메디치'], [1531, 1537, '알레산드로 데 메디치'], [1537, 1600, '코시모 1세 데 메디치']] },
+      holders: [[1480, 1492.3, '로렌초 데 메디치'], [1492.3, 1494, '피에로 데 메디치'], [1512, 1519, '로렌초 2세 데 메디치'], [1531, 1537, '알레산드로 데 메디치'], [1537, 1600, '코시모 1세 데 메디치']] },
     { id: 'it_toscanelli', title: '피렌체의 천문학자', type: 'scholar', city: 30, bld: 'mansion', pw: 2, wealth: 2, lang: 2, rel: 'C', taste: ['geo'],
       holders: [[1480, 1482, '파올로 토스카넬리'], [1482, 1600, '피렌체 학당장']] },
     { id: 'it_doge', title: '베네치아 도제', type: 'king', city: 29, bld: 'palace', pw: 4, wealth: 5, lang: 2, rel: 'C', taste: ['treasure', 'geo', 'trade'],

@@ -28,7 +28,10 @@
   }
 
   function date(value) {
-    return new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(value));
+    // 날짜가 비었거나 잘못되면 Intl이 RangeError를 내 게시판이 비던 것 — 「—」로 (QA 2026-10-23)
+    var d = value ? new Date(value) : null;
+    if (!d || isNaN(d.getTime())) return '—';
+    return new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' }).format(d);
   }
 
   function request(url, options) {

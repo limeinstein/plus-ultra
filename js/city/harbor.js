@@ -309,7 +309,9 @@
     if (pl.hire) { f.crew += pl.hire; f.discipline = Math.max(30, f.discipline - pl.hire * 0.2); }
     if (pl.repCost) pl.broken.forEach(function (sh) { sh.hp = sh.maxHp; });
     var use = R.dailyUse();
-    f.food = Math.max(f.food, pl.days * use); f.water = Math.max(f.water, pl.days * use); f.mat = Math.max(f.mat || 0, pl.matTo);
+    var nf = Math.max(f.food, pl.days * use), nw = Math.max(f.water, pl.days * use), nm = Math.max(f.mat || 0, pl.matTo);
+    R.notePaid(c, 'food', f.food, nf, R.supplyCost(c)); R.notePaid(c, 'water', f.water, nw, R.waterCost(c)); R.notePaid(c, 'mat', f.mat || 0, nm, R.matCost(c));   // 산 값을 적어 둔다 (보급을 줄여 되팔 때의 상한)
+    f.food = nf; f.water = nw; f.mat = nm;
     s.lastSupply = d;
     G.Game.refreshHud();
     var go = await C.mateAsk('준비를 마쳤습니다! ' + (pl.hire ? '선원 ' + pl.hire + '명을 새로 태우고, ' : '') + (pl.repCost ? '배를 고치고, ' : '') + pl.days + '일분 식량과 물' + (pl.needM ? '·자재 ' + pl.needM + '통' : '') + '을 실었습니다. (금화 ' + U.num(pl.total) + '닢)\n바로 출항할까요?', [{ label: '출항한다', value: true }, { label: '아직', value: false }]);
@@ -354,7 +356,8 @@
     function amt(w, k) { return w[k] === cur[k] ? have[k] : (k === 'mat' ? w[k] : w[k] * use); }
     function load(w) { return amt(w, 'food') + amt(w, 'water') + amt(w, 'mat'); }
     function buyCost(w) { var n = 0; ['food', 'water', 'mat'].forEach(function (k) { n += Math.ceil(Math.max(0, amt(w, k) - have[k])) * price[k]; }); return n; }
-    function back(w) { var n = 0; ['food', 'water', 'mat'].forEach(function (k) { n += Math.floor(Math.max(0, have[k] - amt(w, k)) * price[k] * refund); }); return n; }
+    // 되파는 값은 산 값(평균)과 이 항구 값 가운데 싼 쪽 — 싼 항구에서 사서 비싼 항구에서 되팔아 남기던 것 (R.supplyBack · QA 2026-10-23)
+    function back(w) { var n = 0; ['food', 'water', 'mat'].forEach(function (k) { n += Math.floor(Math.max(0, have[k] - amt(w, k)) * R.supplyBack(c, k, refund)); }); return n; }
     function cost(w) { return buyCost(w) - back(w); }
     function fit(w, key) {        // 짐칸·소지금에 맞게 key 쪽을 줄인다 (지금보다 늘린 만큼만)
       while (w[key] > cur[key] && (load(w) > room + 1e-6 || cost(w) > s.player.gold)) w[key]--;
@@ -436,6 +439,7 @@
     if (pay > s.player.gold) { await C.mate('소지금이 모자랍니다.'); return; }
     var down = ['food', 'water', 'mat'].filter(function (k) { return amt(want, k) < have[k] - 1e-6; });
     s.player.gold -= pay;
+    ['food', 'water', 'mat'].forEach(function (k) { R.notePaid(c, k, have[k], amt(want, k), price[k]); });   // 늘린 만큼 평균 산 값을 적는다
     f.food = amt(want, 'food'); f.water = amt(want, 'water'); f.mat = amt(want, 'mat');
     if (!down.length || Math.min(want.food, want.water) >= 10) s.lastSupply = Math.min(want.food, want.water);   // 잠깐 덜어 낸 것은 다음 보급의 기본값으로 삼지 않는다
     s.lastMat = want.mat;

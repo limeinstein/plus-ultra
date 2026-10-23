@@ -209,7 +209,9 @@
     W.sync();
     W.list().forEach(function (w) {
       var pr = w.preg; if (!pr) return;
-      var here = there(w), nm = W.name(w);
+      // 배에 함께 탄 부인이면 「배 위의 해산」 — 그 도시의 집에서 편지가 오고 아이가 태어나던 것을 고친다 (QA 2026-10-23)
+      var ship = !!w.aboard, here = ship || there(w), nm = W.name(w);
+      if (!pr.told && s.day - pr.since >= 75 && ship) { pr.told = true; out.push({ icon: 'heart', text: '배 위에서 ' + nm + U.jx(nm, '이/가') + ' 살며시 귀띔했다. 「당신, 아기가 생겼어요.」' }); }
       if (!pr.told && s.day - pr.since >= 75 && !here) { pr.told = true; out.push({ icon: 'heart', text: W.cityName(w) + '의 ' + nm + '에게서 편지가 왔다. 「당신, 아기가 생겼어요. 이 도시에서 기다릴게요.」' }); }
       if (s.day < pr.due) return;
       var twins = U.chance(fc.twins || 0.03) && W.kidTotal() < W.maxKids(), born = [];
@@ -219,7 +221,9 @@
         P().kids.push(k); born.push(k);
       }
       w.preg = null; w.lastBirth = s.day;
-      out.push({ icon: 'heart', text: W.cityName(w) + '의 ' + nm + '에게서 ' + (twins ? '쌍둥이가' : born[0].sex === 'f' ? '딸이' : '아들이') + ' 태어났다! 그 집에 들러 이름을 지어 주자.' });
+      var bk = twins ? '쌍둥이가' : born[0].sex === 'f' ? '딸이' : '아들이';
+      out.push({ icon: 'heart', text: ship ? '배 위에서 ' + nm + '에게서 ' + bk + ' 태어났다! 아기는 ' + W.cityName(w) + '의 집에서 자란다 — 그 집에 들러 이름을 지어 주자.'
+        : W.cityName(w) + '의 ' + nm + '에게서 ' + bk + ' 태어났다! 그 집에 들러 이름을 지어 주자.' });
       G.State.log(nm + '에게서 ' + (twins ? '쌍둥이' : born[0].sex === 'f' ? '딸' : '아들') + '이 태어났다.');
     });
     return out;
@@ -409,7 +413,7 @@
         m.loyal = 40; w.warned = s.day;
         await UI.say(U.pick(LEAVE.keepOk), duo(w, 'warm'));
         UI.toast(nm + U.jx(nm, '을/를') + ' 붙잡았다. (충성 40) — 다음에 또 바닥나면 붙잡기 더 어렵다.', 'heart', 5200);
-        G.State.log(nm + '이(가) 떠나려 했으나 마음을 돌렸다.');
+        G.State.log(nm + U.jx(nm, '이/가') + ' 떠나려 했으나 마음을 돌렸다.');   // 조사를 이름에 맞춰 (QA 2026-10-23)
         return;
       }
       await UI.say(U.pick(LEAVE.keepNo), sp);

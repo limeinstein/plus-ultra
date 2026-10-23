@@ -412,7 +412,24 @@
     ST.save(0);
     return true;
   };
-  setInterval(function () { ST.autoSaveNow(); }, ST.AUTO_INTERVAL_MS);
+  /** 지금 사건·대화 한가운데인가 — 창이 떠 있거나(G.UI.busy) 도시 건물 일을 치르는 중(G.Scenes.city.isBusy) */
+  ST.midEvent = function () {
+    try {
+      if (G.UI && G.UI.busy && G.UI.busy()) return true;
+      var C = G.Scenes && G.Scenes.city;
+      if (G.Game && G.Game.sceneName === 'city' && C && C.isBusy && C.isBusy()) return true;
+    } catch (e) { /* 모르면 저장한다 */ }
+    return false;
+  };
+  // 사건 한가운데서도 1분마다 저장해, 불러오면 사건 앞뒤가 어긋나던 것 — 그때는 건너뛰고 틈이 나면 곧 저장한다 (QA 2026-10-23)
+  var autoWait = null;
+  function autoTick() {
+    if (autoWait) { clearTimeout(autoWait); autoWait = null; }
+    if (ST.midEvent()) { autoWait = setTimeout(autoTick, 5000); return; }
+    ST.autoSaveNow();
+  }
+  ST.autoTick = autoTick;
+  setInterval(autoTick, ST.AUTO_INTERVAL_MS);
 
   // ---- 파일로 내려받기 / 파일에서 불러오기
   ST.exportSlot = function (slot) {

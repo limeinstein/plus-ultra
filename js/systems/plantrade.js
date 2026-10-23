@@ -67,6 +67,7 @@
   /** 지금 상태에 맞게 도시 특산물을 맞춘다: 심은 것은 넣고, (다른 일지에서) 심었던 것은 뺀다 */
   PT.sync = function () {
     var s = S(); synced = s; PT.ver++;
+    if (R.resetOrigins) R.resetOrigins();   // 기본 산지 캐시도 다시 센다 — 개척 도시 특산물이 판마다 다르게 잡히던 것 (QA 2026-10-23)
     var at = s && s.plantTrade && s.plantTrade.at || {};
     (G.CITY_DATA || []).forEach(function (c) {
       if (!c || !c.goods) return;

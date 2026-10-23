@@ -1,5 +1,5 @@
 /* 조합 의뢰 「보물 찾기」 (G.TreasureHunt) — 대항해시대 2처럼 조합에서 보물 지도를 받아, 지도에 그려진 섬·해안을 찾아가
-   상륙해서 X 표시된 곳을 파면 보물(금화 1만~10만 닢)이 나온다.
+   상륙해서 X 표시된 곳을 파면 보물(금화 1만~5만 닢)이 나온다. 보물 지도는 한 번에 maxMaps장까지만 가질 수 있다.
    · 지도: 그 자리를 크게 확대한 중세 해도(포르톨라노) 풍 — 양피지, 잉크 해안선과 물가 빗금, 나침반 장미와 방위선, 산·숲 그림, 붉은 X.
      경위도는 적혀 있지 않다. 조합장이 「○○에서 ○쪽, 뱃길로 ○일쯤」이라고 일러 준다.
    · 받을 때 지도값(사례의 4%)을 낸다. 기한 안에 찾지 못하면 다른 조합 의뢰처럼 명성이 깎인다.
@@ -15,7 +15,8 @@
     chance: 0.55,          // 조합 게시판(열흘마다)에 보물 지도가 붙을 확률
     minFame: 0,            // 이 명성부터 보물 지도를 준다
     minD: 4, maxD: 38,     // 조합 도시에서 보물까지 거리(°)
-    reward: [10000, 100000],
+    reward: [10000, 50000],   // 지도 한 장이 큰 해전 상금보다 커서(5~10만) 윗값을 5만으로 낮췄다 (QA 2026-10-23)
+    maxMaps: 2,            // 동시에 가질 수 있는 보물 지도 수 (옛 저장에 이미 더 있으면 그대로, 새로 받지만 못한다)
     feeK: 0.04,            // 지도값 = 사례 × feeK
     digR: 0.35,            // 이만큼(°) 안에 들면 판다
     seaHintR: 0.9,         // 바다에서 항해사가 해안선을 알아보는 거리
@@ -185,13 +186,14 @@
       var out = offers.apply(this, arguments);
       try {
         var s = S(), blk = Math.floor(s.day / 10), q = make(c, blk);
-        if (q && !Q.list().some(function (x) { return x.key === q.key; }) && !(s.questDone && s.questDone[q.key])) out.push(q);
+        if (q && TH.list().length < B().maxMaps && !Q.list().some(function (x) { return x.key === q.key; }) && !(s.questDone && s.questDone[q.key])) out.push(q);
       } catch (e) { console.error(e); }
       return out;
     };
     var canAccept = Q.canAccept;
     Q.canAccept = function (q) {
       var no = canAccept.apply(this, arguments); if (no) return no;
+      if (q.kind === 'treasure' && TH.list().length >= B().maxMaps) return '보물 지도는 ' + B().maxMaps + '장까지만 가질 수 있습니다.';
       if (q.kind === 'treasure' && S().player.gold < q.fee) return '지도값 금화 ' + U.num(q.fee) + '닢이 있어야 합니다.';
       return null;
     };

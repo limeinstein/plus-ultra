@@ -30,7 +30,9 @@
       // 국왕의 부름·명예 작위: 군주가 먼저 왕명 이야기를 꺼낸다 (js/systems/court.js)
       // 사라진 왕녀: 에스파냐 국왕이 먼저 꺼낸다 (js/systems/princess.js) — 그 이야기를 했으면 왕명은 메뉴에서
       var prDone = false;
-      if (G.Princess) { try { prDone = await G.Princess.onEnter(sp); } catch (e) { console.error(e); } }
+      // 카를 5세의 부름은 인사말을 생략하므로, 왕녀·개척 이야기가 먼저 끝나 왕명(부름)이 건너뛰어지지 않게 가장 먼저 꺼낸다 (QA 2026-10-23)
+      if (G.Barb && G.Barb.call && G.Barb.callDue(sp)) { try { await G.Barb.call(sp); prDone = true; } catch (e) { console.error(e); } }
+      if (G.Princess && !prDone) { try { prDone = await G.Princess.onEnter(sp); } catch (e) { console.error(e); } }
       if (G.Colony && !prDone) { try { prDone = await G.Colony.onEnter(sp); } catch (e) { console.error(e); } }   // 새 도시 개척 (명성 200,000 · 400,000)
       if (G.Court && !prDone) { try { await G.Court.onEnter(sp); } catch (e) { console.error(e); } }
       // 이야기 모드: 카사노바 남작 저택에서 아내와 어머니를 마주친다 (js/systems/story.js)

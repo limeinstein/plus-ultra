@@ -577,6 +577,8 @@
     G.CITY_DATA.forEach(function (c) { c.goods.forEach(function (g) { (ORIGINS[g] = ORIGINS[g] || {})[c.region] = true; }); });
     return ORIGINS;
   };
+  // 산지 캐시를 비운다 — 개척 도시·식물 특산물로 특산물 목록이 바뀌면 다시 센다 (비우는 곳이 없어 판마다 산지 판정이 달랐다 · QA 2026-10-23)
+  R.resetOrigins = function () { ORIGINS = null; };
   R.regionalMult = function (goodId, region) {
     var o = R.origins()[goodId] || {}, d = 5;
     for (var r in o) d = Math.min(d, G.REGION_DIST[region][+r]);
@@ -586,6 +588,11 @@
     if (g.nw && region !== 10) m *= 1.15;
     return m;
   };
+  // ---------------------------------------------------------------- 이번 입항 (도시에 들어온 한 번 — js/scenes/city.js C.enter에서 하나씩 늘린다)
+  // 건물에 들어갈 때마다 하루가 흘러 「같은 날 한 번」 막기가 나갔다 들어오면 풀리던 것 — 이번 입항 번호로도 막는다 (QA 2026-10-23)
+  R.stayNo = function () { var S = R.S(); return (S && S.portVisit) || 0; };
+  /** 그 기록(날 day · 입항 번호 pv)이 오늘 것이거나 이번 입항 것인가 — 둘 중 하나라도 같으면 true */
+  R.sameStay = function (day, pv) { var S = R.S(); return (day != null && day === S.day) || (pv != null && pv === R.stayNo()); };
   R.market = function (cityId) {
     var S = R.S();
     var m = S.market[cityId];
@@ -752,6 +759,19 @@
   /** 물·자재 한 통 값 */
   R.waterCost = function (c) { return Math.max(1, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.waterPrice) || 0.5))); };
   R.matCost = function (c) { return Math.max(2, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.matPrice) || 3) * (R.facilities(c).shipyard ? 0.85 : 1) * R.catIndex(c, 'misc'))); };
+  /** 보급품 한 통 값 (k = food·water·mat) */
+  R.supplyPrice = function (c, k) { return k === 'mat' ? R.matCost(c) : k === 'water' ? R.waterCost(c) : R.supplyCost(c); };
+  // 보급을 줄여 되팔 때 싼 항구에서 사서 비싼 항구에서 되팔면 남던 것 — 산 값(평균)을 적어 두고 그 값을 넘지 않게 (QA 2026-10-23)
+  /** 실은 보급품의 평균 산 값 (옛 저장·적은 것이 없으면 이 항구 값) */
+  R.supplyPaid = function (c, k) { var p = R.S().fleet.paid; return p && p[k] > 0 ? p[k] : R.supplyPrice(c, k); };
+  /** 보급품을 before → after 통으로 늘리며 한 통에 unit닢을 냈다: 평균 산 값을 고친다 */
+  R.notePaid = function (c, k, before, after, unit) {
+    var f = R.S().fleet; before = Math.max(0, before || 0); if (!(after > before)) return;
+    var old = R.supplyPaid(c, k), p = f.paid || (f.paid = {});
+    p[k] = (old * before + unit * (after - before)) / after;
+  };
+  /** 줄여서 내릴 때 한 통에 돌려받는 값 (산 값과 이 항구 값 가운데 싼 쪽 × refund) */
+  R.supplyBack = function (c, k, refund) { return Math.min(R.supplyPaid(c, k), R.supplyPrice(c, k)) * refund; };
   R.supplyCost = function (c) { return Math.max(1, Math.round((c.region <= 2 ? 2 : 3) * (1 - 0.06 * R.investLv(c.id)))); }; // per 통
   R.innCost = function (c) { return 8 + c.size * 6; };
   R.surveyRange = function () { return [0.9, 1.4, 1.9, 2.6][R.skill('survey')] + (G.Ships && G.Ships.fleetHas('scout') ? 0.4 : 0) + (G.Cabins ? G.Cabins.fx('lookout', 'lookout') : 0); };   // 파수대에 사람을 올리면 더 멀리 본다

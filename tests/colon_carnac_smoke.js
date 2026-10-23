@@ -58,8 +58,19 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const hm = menu.find(x => x.label === '항해사를 찾는다');
     ok(hm && hm.sub === (cnt + 1) + '명', '「항해사를 찾는다」 ' + hm.sub + ' (항해사 ' + cnt + ' + 콜론)');
     ok((await listNames()).includes(NM), '명부에 크리스토발 콜론');
-    await page.evaluate(() => { G.Scenes.city.visit('tavern').catch(e => console.error(e)); });
-    await page.waitForTimeout(2500);
+    // 새 게임 첫머리(입항 사건·안내)가 끝나기 전에 부르면 visit이 무시되고, 그때 누른 Enter가 거리에서 발밑 건물(항구)에 들어가 버린다.
+    // 대화가 떠 있을 때만 Enter로 넘기고, 술집에 들어갈 때까지 visit을 다시 부른다 (QA 2026-10-23)
+    for (let i = 0; i < 40; i++) {
+      const st = await page.evaluate(() => ({ busy: G.UI.busy(), cur: G.Scenes.city.current() && G.Scenes.city.current().kind }));
+      if (st.cur === 'tavern') break;
+      if (st.busy) await page.keyboard.press('Enter');
+      else if (!st.cur) await page.evaluate(() => { const p = G.Scenes.city.visit('tavern'); if (p && p.catch) p.catch(e => console.error(e)); });
+      else await page.evaluate(() => G.Scenes.city.leave());
+      await page.waitForTimeout(400);
+    }
+    // 거리에서 술집까지 걸어가는 데 몇 초 걸린다 — 주인의 말이 뜰 때까지 기다린다
+    await page.waitForFunction(() => G.UI.busy(), null, { timeout: 20000 }).catch(() => {});
+    await page.waitForTimeout(500);
     let t = await bodyText();
     for (let i = 0; i < 4 && !/콜론/.test(t); i++) { await advance(); t = await bodyText(); }
     ok(/크리스토발 콜론이라는 자/.test(t), '술집에 들어가면 주인이 콜론을 귀띔');

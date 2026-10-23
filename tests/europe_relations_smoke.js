@@ -92,16 +92,16 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 드레이크의 습격 세 번 (두 해마다) — ① 이기고 ② 지고 ③ 물러난다
       let ar = null; G.Game.go = (sc, arg) => { ar = arg.npc; };
       out.raids = [];
-      for (let k = 0; k < 3; k++) {
+      for (let k = 0; k < 3; k++) {   // 습격은 1585·1586·1587년부터, 무적함대는 1588년 (QA 2026-10-23)
         s.loc = { mode: 'sea', lon: -40, lat: 30, heading: 0 };
-        s.day += 731; const nw = G.Tudor.daily(); const rd = G.Tudor.RAIDS[k]; const call = s.tudor.drake.call; const pendFar = G.Tudor.pending();
+        s.day += 731; s.date = { y: 1585 + k, m: 2, d: 1 }; const nw = G.Tudor.daily(); const rd = G.Tudor.RAIDS[k]; const call = s.tudor.drake.call; const pendFar = G.Tudor.pending();
         s.loc = { mode: 'sea', lon: (rd.box[0] + rd.box[1]) / 2, lat: (rd.box[2] + rd.box[3]) / 2, heading: 0 }; const pend = G.Tudor.pending();
         ar = null; answer = (t, o) => (k === 2 ? o[o.length - 1] : o[0]).value; await G.Tudor.check(); answer = null;
         if (ar) RL.afterBattle(ar, k === 0 ? 'win' : 'lose', []);
         out.raids.push({ call, news: nw.length, pendFar, pend, n: ar && ar.n, allies: ar && ar.allies.length, gun: ar && ar.gun, myGun: ar && ar.myGun, res: s.tudor.drake.res[k], done: s.tudor.drake.done, armada: s.tudor.armada || null });
       }
       s.loc = { mode: 'sea', lon: -40, lat: 30, heading: 0 };
-      s.day += 731; const news = G.Tudor.daily(); out.armadaCall = s.tudor.armada; out.armadaNews = news.length;
+      s.day += 731; s.date = { y: 1588, m: 6, d: 1 }; const news = G.Tudor.daily(); out.armadaCall = s.tudor.armada; out.armadaNews = news.length;
       s.loc = { mode: 'sea', lon: -1.5, lat: 50.3, heading: 0 }; out.armadaPend = G.Tudor.pending();
       ar = null; answer = (t, o) => o[0].value; await G.Tudor.check(); G.Game.go = go; answer = null;
       out.armada = ar && { n: ar.n, allies: ar.allies.map(a => a.name), allyGun: ar.allies.map(a => a.gun), great: ar.great, gun: ar.gun, myGun: ar.myGun };
@@ -124,9 +124,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.elizPics.length >= 3 && r.elizPics.every(p => p[0] === 'portraits/history/elizabeth_player' && p[1] === 'portraits/history/elizabeth_player_half'), '런던 탑의 공주부터 즉위한 여왕까지 새 엘리자베스 얼굴상·무릎상 연결');
     ok(r.raids.length === 3 && r.raids.every((x, i) => x.call === i + 1 && x.news === 1 && !x.pendFar && x.pend && x.done === i + 1 && !x.armada) &&
       r.raids[0].n === 5 && r.raids[0].allies === 3 && r.raids[0].gun === 'cannon' && r.raids[0].myGun === 'culverin' && r.raids[0].res === 'won' && r.raids[1].res === 'lost' && r.raids[2].res === 'declined' && !r.raids[2].n,
-      '두 해마다 드레이크의 습격 세 번 (카디스 ' + r.raids[0].n + '척 이김 · 아조레스 ' + r.raids[1].n + '척 짐 · 카리브 물러남) — 무적함대는 아직');
+      '1585~1587년 드레이크의 습격 세 번 (카디스 ' + r.raids[0].n + '척 이김 · 아조레스 ' + r.raids[1].n + '척 짐 · 카리브 물러남) — 무적함대는 아직');
     ok(r.armadaCall === 'call' && r.armadaPend && r.armada && r.armada.n === 12 && r.armada.allies.length === 3 && r.armada.allyGun.every(g => g === 'culverin') && r.armada.gun === 'cannon' && r.armada.myGun === 'culverin' && r.armadaWin[0] === 'won' && r.armadaWin[1] !== '기사',
-      '그다음 두 해 뒤 해협: 우리 함대 + 드레이크 3척(' + r.armada.allies.join(', ') + ' · 캘버린포) 대 무적함대 12척(카논포) → 이겨 ' + r.armadaWin[1]);
+      '1588년 해협: 우리 함대 + 드레이크 3척(' + r.armada.allies.join(', ') + ' · 캘버린포) 대 무적함대 12척(카논포) → 이겨 ' + r.armadaWin[1]);
 
     // 화면: 수첩의 유럽 정세 · 무적함대 해전 (우리 편 함대)
     await page.reload();

@@ -34,21 +34,25 @@
   // ---------------------------------------------------------------- main info window with tabs
   var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['achv', '업적'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['politics', '유럽 정세'], ['map', '해도'], ['log', '일지']];
   // 「설정」은 수첩 밖의 따로 된 창 (하단 메뉴 맨 오른쪽 단추 — I.settings). 옛 호출 I.open('menu')도 설정 창을 연다
-  var lastTab = null;   // 탭을 정하지 않고 열면(하단 메뉴 「수첩」) 지난번에 보던 탭 — 바다·뭍·도시 어디서 열어도 같다
+  var lastTab = null, lastTabOf = null;   // 탭을 정하지 않고 열면(하단 메뉴 「수첩」) 지난번에 보던 탭 — 바다·뭍·도시 어디서 열어도 같다
   I.open = function (tab) {
     if (tab === 'menu') return I.settings();
+    // 지난번 탭은 같은 항해(저장)에서만 — 다른 저장을 불러오면, 또는 지금 수첩에 없는 탭(이야기 모드의 「아버지의 사진」 등)이면 제독 탭 (QA 2026-10-23)
+    if (lastTabOf !== S()) lastTab = null;
+    var tabList = TABS.concat(S().story && G.Story ? [['story', '아버지의 사진']] : []);   // 이야기 모드 (js/systems/story.js)
+    if (!tab && lastTab && !tabList.some(function (t) { return t[0] === lastTab; })) lastTab = null;
     tab = tab || lastTab || 'admiral';
     var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
     if (G.Audio) G.Audio.sfx('book');                               // 수첩을 편다
     if (win.result && win.result.then) win.result.then(function () { if (G.Audio) G.Audio.sfx('bookClose'); });   // 덮는다
     var tabs = U.el('div', 'tabs');
-    TABS.concat(S().story && G.Story ? [['story', '아버지의 사진']] : []).forEach(function (t) {   // 이야기 모드 (js/systems/story.js)
+    tabList.forEach(function (t) {
       var b = U.el('div', 'tab' + (t[0] === tab ? ' on' : ''), t[1]);
       b.onclick = function () { U.$$('.tab', tabs).forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); if (G.Audio) G.Audio.sfx('page'); show(t[0]); };
       tabs.appendChild(b);
     });
     win.el.insertBefore(tabs, win.content);
-    function show(k) { lastTab = PAGES[k] ? k : 'admiral'; win.content.innerHTML = ''; win.content.scrollTop = 0; (PAGES[k] || PAGES.admiral)(win.content, win); }
+    function show(k) { lastTab = PAGES[k] ? k : 'admiral'; lastTabOf = S(); win.content.innerHTML = ''; win.content.scrollTop = 0; (PAGES[k] || PAGES.admiral)(win.content, win); }
     show(tab);
     return win.result;
   };
@@ -119,8 +123,8 @@
     var strainHtml = '';
     if (strain) {
       var need = [];
-      if (strain.discipline) need.push('규율 ' + Math.round(f.discipline) + '/' + strain.recover);
-      if (strain.fatigue) need.push('피로 ' + Math.round(f.fatigue) + '/' + strain.recover);
+      if (strain.discipline) need.push('규율 ' + Math.round(f.discipline) + '→' + strain.recover + ' 이상');
+      if (strain.fatigue) need.push('피로 ' + Math.round(f.fatigue) + '→' + (100 - strain.recover) + ' 이하');   // 피로는 내려와야 풀린다 (QA 2026-10-23)
       strainHtml = '<div class="card" style="margin-bottom:12px"><b class="warn-text">발견 난조</b> — 발견의 여파가 가라앉지 않았다. ' + need.join(' · ') + '이 될 때까지 야외 발견 반경 <b>' + Math.round(strain.findK * 100) + '%</b></div>';
     }
     var html = '<div class="grid3" style="margin-bottom:12px">' +

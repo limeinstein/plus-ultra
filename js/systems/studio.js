@@ -14,7 +14,13 @@
   var EAST_LANG = { 7: 1, 13: 1, 14: 1 };      // 중국어 · 동아시아토착어(일본) · 조선어 → 동양 서화
   function S() { return G.Game && G.Game.state; }
   function B() { return (G.BALANCE && G.BALANCE.studio) || { need: 60, qty: [1, 1, 2, 3], mwNeed: 360, value: [3000, 5], sculptK: 1.2, fame: [40, 0.06], generic: 3 }; }
-  function st(s) { s = s || S(); return s.studio || (s.studio = { pend: [], works: [], made: {}, home: [] }); }
+  function st(s) { s = s || S(); var t = s.studio || (s.studio = { pend: [], works: [], made: {}, home: [] }); toStorage(s, t); return t; }
+  /** 소지품이 가득해 studio.home 에 넣던 명작은 아무 데서도 읽지 않았다 — 자택 보관함(s.player.storage, js/city/misc.js)으로 옮긴다 (QA 2026-10-23) */
+  function toStorage(s, t) {
+    if (!t || !t.home || !t.home.length || !s || !s.player) return;
+    var box = s.player.storage || (s.player.storage = []);
+    while (t.home.length) box.push(t.home.shift());
+  }
   function R() { return G.R; }
 
   /** 실존 인물인가 (이야기·전설·옛이야기·마녀·떠돌이가 아닌, 지명도가 있는 사람) */
@@ -160,7 +166,8 @@
   }
   /** 바칠 명작이 있으면 화가가 들고 와 바친다 (바다의 하루 끝 · 도시에 들어설 때). 바쳤으면 true */
   ST.present = async function () {
-    var s = S(), UI = G.UI; if (!s || !s.studio || !s.studio.pend.length || ST._busy) return false;
+    var s = S(), UI = G.UI; if (s && s.studio) st(s);   // 옛 저장의 studio.home → 보관함
+    if (!s || !s.studio || !s.studio.pend.length || ST._busy) return false;
     ST._busy = true;
     try {
       while (s.studio.pend.length) {
@@ -170,11 +177,11 @@
         await UI.alert(card(p), '명작 — ' + d.name);
         var item = { id: 'masterwork', name: p.name, desc: p.desc + ' — ' + d.name + ' 작 (' + p.date.y + '년)', value: p.value, mw: true, by: p.by, wk: p.kind, n: p.n, y: p.date.y };
         var kept = G.R.addItem('masterwork', item);
-        if (!kept) s.studio.home.push(item);
+        if (!kept) G.R.storage().push(item);   // 자택 보관함에 맡긴다 (QA 2026-10-23)
         s.studio.works.push({ by: p.by, kind: p.kind, name: p.name, value: p.value, so: p.so, date: p.date, home: !kept });
         if (G.Fame) G.Fame.add('so', p.so); else s.player.fame += p.so;
         G.State.log(d.name + U.jx(d.name, '이/가') + ' 명작 ' + p.name + U.jx(p.name, '을/를') + ' 완성해 제독에게 바쳤다. (사교 명성 +' + p.so + ')');
-        UI.toast(p.name + ' — 사교 명성 +' + p.so + (kept ? ' · 소지품에 넣었다 (값 ' + U.num(p.value) + '닢)' : ' · 소지품이 가득해 고향 집에 걸어 두었다'), p.kind === 'sculpt' ? 'bust' : 'palette', 6000);
+        UI.toast(p.name + ' — 사교 명성 +' + p.so + (kept ? ' · 소지품에 넣었다 (값 ' + U.num(p.value) + '닢)' : ' · 소지품이 가득해 자택 보관함에 맡겼다'), p.kind === 'sculpt' ? 'bust' : 'palette', 6000);
       }
     } catch (e) { console.error(e); }
     ST._busy = false;

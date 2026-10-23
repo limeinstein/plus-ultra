@@ -44,6 +44,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.note = MT.html().replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       // 철새
       s.day += 1; G.UI.choose = async () => 'wander'; said = [];
+      await MT.ask(c, m, st, say); out.sameStay = said.pop(); said = [];   // 하루가 흘러도 같은 입항이면 막힌다 (QA 2026-10-23)
+      s.portVisit = (s.portVisit || 0) + 1;
       out.wanders = MT.wanderers(c, st).map(w => w.m.name + '@' + w.c.name);
       await MT.ask(c, m, st, say); out.wText = said.pop();
       // 바다: 상선대 소식 자리로 가면 나타난다
@@ -68,6 +70,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.menu && r.menu.length === 4, '물을 것 넷: ' + r.menu.join(' / '));
     ok(r.paid > 0 && /앞바다/.test(r.mText) && /일 안/.test(r.mText), '상선대: ' + r.mText.split('\n').pop() + ' (금화 ' + r.paid + ')');
     ok(/오늘은/.test(r.sameDay), '같은 여급에게는 하루 한 번');
+    ok(/오늘은/.test(r.sameStay || ''), '다음 날이라도 같은 입항이면 다시 묻지 못한다');
     ok(r.tips.every(Boolean), '해적·군함대: ' + r.tips.join(' / '));
     ok(/여급의 귀띔/.test(r.note), '수첩 할 일: ' + r.note.slice(0, 120));
     ok(r.wText && (r.wanders.length ? r.wanders.every(w => r.wText.indexOf(w.split('@')[0]) >= 0) : /못 들었/.test(r.wText)), '철새: ' + (r.wanders.join(', ') || '(근처에 없음)'));

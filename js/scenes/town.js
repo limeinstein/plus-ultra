@@ -962,6 +962,8 @@
       el.style.cursor = st.hover ? (st.hover.spec ? 'pointer' : st.hover.cv && !st.hover.kind ? 'zoom-in' : 'pointer') : 'default';
     });
     el.addEventListener('mouseup', function (e) {
+      // 왼쪽 단추로 여기서 누른 것만 — 우클릭으로 대화를 닫거나 건물을 나온 뒤의 mouseup, 다른 창에서 누르고 여기서 뗀 것으로 건물에 다시 들어가던 것 (QA 2026-10-23)
+      if (e.button !== 0 || !down) { if (e.button === 0) down = null; return; }
       if (!st) { down = null; return; }
       var p = pos(e);
       var wasDrag = moved > 8;
