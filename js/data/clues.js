@@ -27,7 +27,7 @@
     }
   }
   G.CLUE = {};
-  (G.DISCOVERIES || []).forEach(function (d) { G.CLUE[d.id] = d.clue === 'talk' || d.clue === 'book' ? d.clue : rule(d); });
+  (G.DISCOVERIES || []).forEach(function (d) { var ch = d.clueVia || d.clue; G.CLUE[d.id] = ch === 'talk' || ch === 'book' ? ch : rule(d); });
 
   G.CLUE_NAME = { talk: '이야기', book: '사료' };
   /** 이야기 갈래 안에서 주로 듣는 곳 */

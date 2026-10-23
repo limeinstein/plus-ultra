@@ -31,7 +31,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.dupGood = P.map(d => G.PlantTrade.crop(d)).filter(g => !g || baseNames.indexOf(g.name) >= 0).map(g => g ? g.name : 'none');
       out.goodsTail = G.GOODS.slice(-P.length).every(g => g.plant) && G.GOODS.every((g, i) => g.idx === i);
       out.allPlant = P.every(d => G.Court.isPlant(d) && d.cat === 'creature');
-      out.clue = P.every(d => d.clue && d.clue !== d.realName);
+      out.clue = P.every(d => d.clue ? d.clue !== d.realName : (G.DISC_NAMES[d.id] && G.DISC_NAMES[d.id].clue === d.name)) && P.some(d => d.clue) && P.some(d => !d.clue);   // 2026-10-23: 대항해시대 3처럼 이름 그대로인 것도 있다
       out.noCityGoods = G.CITY_DATA.every(c => !c || !c.goods || !c.goods.some(id => G.GOOD[id] && G.GOOD[id].plant));
       // ---- 새 일지
       await G.Game.ensureGeo();
@@ -87,7 +87,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.asked.every(Boolean), '매화·난초·국화·대나무·적송·진달래·튤립·장미·흰 장미·파란 장미');
     ok(!r.dupGood.length, '식물 교역품은 이미 있던 교역품과 이름이 겹치지 않는다 ' + r.dupGood.join(','));
     ok(r.goodsTail, '식물 교역품은 G.GOODS 끝에 (순번 그대로)');
-    ok(r.allPlant && r.clue, '모두 식물(왕실 정원) · 단서 이름이 따로 있다');
+    ok(r.allPlant && r.clue, '모두 식물(왕실 정원) · 단서 이름이 따로 있거나 처음부터 이름 그대로');
     ok(r.noCityGoods, '처음에는 어느 교역소도 식물 교역품을 팔지 않는다');
     ok(r.local.indexOf('mango') >= 0 && r.hintOk, '고아에서 이 고장 식물(망고) 이야기를 들을 수 있다 — ' + r.local.join(','));
     ok(/열대/.test(r.why.linMal) === false && /추운/.test(r.why.linMal) && /열대/.test(r.why.mangoLis) && r.why.mangoMal === null, '기후: 링곤베리는 말라카에 안 맞고, 망고는 리스본에 안 맞는다');
