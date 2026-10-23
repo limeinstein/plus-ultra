@@ -130,6 +130,8 @@
       await UI.say('제독, 이런 물고기는 처음 봅니다! 학자들에게 보여 주면 깜짝 놀라겠군요!', G.Scenes.mateSpeaker('surveyor'));
       await G.Disc.find(d, 'sea');
     }
+    // 베트남 연안에서 낚시를 마치면 — 갯벌의 처녀 떰 (옷감과 세공사가 있을 때 · js/systems/seamaidens.js)
+    if (G.Tam && G.Tam.afterFish) { try { await G.Tam.afterFish(); } catch (e) { console.error(e); } }
     if (G.Game.refreshHud) G.Game.refreshHud();
   };
 
