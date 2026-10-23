@@ -12,13 +12,14 @@ async function openPage(b) {
   const page = await b.newPage({ viewport: { width: 640, height: 360 } });
   page.errs = []; page.on('pageerror', e => page.errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error' && !/Failed to load|net::|fonts|ERR_FILE/.test(m.text())) page.errs.push('CONSOLE ' + m.text()); });
   await page.addInitScript(() => { let __s = 12345; window.__seed = n => { __s = (n >>> 0) || 1; }; Math.random = () => { __s ^= __s << 13; __s >>>= 0; __s ^= __s >>> 17; __s ^= __s << 5; __s >>>= 0; return __s / 4294967296; }; window.requestAnimationFrame = () => 0; window.createImageBitmap = undefined; document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = '*{animation:none!important;transition:none!important} body > *{visibility:hidden!important} canvas{display:none!important}'; document.head.appendChild(st); }); });
-  await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+  await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { timeout: 120000 });
   await page.waitForFunction(() => window.G && G.Game && G.Scenes && G.Scenes.sea, null, { timeout: 120000 });
   await page.evaluate(async () => { await G.Game.ensureGeo(); G.Nav.init(); });
   return page;
 }
 (async () => {
-  const b = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] });
+  const launch = () => chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] });
+  let b = await launch();
   let page = await openPage(b);
   let pairs = await page.evaluate(([N, SEED]) => {
     let seed = SEED; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -41,7 +42,7 @@ async function openPage(b) {
   console.log('pairs', pairs.length);
   let ok = 0, n = 0, long = 0; const errs = [];
   for (const [A, B, L] of pairs) {
-    if (n && n % 25 === 0) { errs.push(...page.errs); await page.close(); page = await openPage(b); }
+    if (n && n % 25 === 0) { errs.push(...page.errs); await page.close(); await b.close(); b = await launch(); page = await openPage(b); }
     n++;
     const t0 = Date.now();
     const r = await page.evaluate(async ([A, B, RS]) => {

@@ -17,7 +17,7 @@ const ROOT = path.resolve(__dirname, '..');
     const R = []; const ok = (c, m) => R.push((c ? '✓ ' : '✗ ') + m);
     await G.Game.ensureGeo(); G.Nav.init();
     G.State.newGame({ name: '주앙', nation: 'PT', job: 'explorer', age: 20, birth: { m: 1, d: 1 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
-    G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; G.Disc.find = async () => {}; G.Explore.report = async () => {}; G.Explore.milestones = async () => {};
+    G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; G.Disc.find = async () => {}; G.Disc.pickupLeft = async () => {}; G.Explore.report = async () => {}; G.Explore.milestones = async () => {};
     const f = n => G.CITY_DATA.find(c => c && c.name === n).id; const A = f('리스본'), B = f('제노바');
     const s = G.Game.state; s.routes = {}; s.routes[G.Routes.key(A, B)] = { n: 1 }; if (s.known.indexOf(B) < 0) s.known.push(B); s.player.gold = 50000; s.player.fame = 3000;
     // 항로·해적 선택만 시험한다. 굶주림과 무작위 질병이 선택창을 가로채지 않게 충분히 싣는다.
