@@ -76,8 +76,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const fam = G.HomeLife.family().map(f => f.name + ' ' + f.sub);
       return { menu, fam };
     });
-    ok(r.menu.some(x => /^동생들 \[.*함께 항해 0\/2/.test(x)), '자택 메뉴 「동생들」 — ' + r.menu.filter(x => /동생/.test(x)));
-    ok(r.fam.length === 4 && r.fam.every(x => /동생/.test(x)), '아내가 없어도 방 안에 동생들이 선다 (세 살 아래 빼고) — ' + r.fam.join(' / '));
+    ok(r.menu.some(x => /^형제자매 \[.*함께 항해 0\/2/.test(x)), '자택 메뉴 「형제자매」(손위 형제가 있다) — ' + r.menu.filter(x => /동생|형제/.test(x)));
+    ok(r.fam.length === 4 && r.fam.every(x => /동생|형|누나|오빠|언니/.test(x)), '아내가 없어도 방 안에 형제자매가 선다 (세 살 아래 빼고) — ' + r.fam.join(' / '));
 
     // 열 살 아래는 데려갈 수 없다 · 스무 살 마누엘을 항해사로
     r = await page.evaluate(async () => {
@@ -153,7 +153,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.ny.some(x => /이자벨.*스물두 살/.test(x)), '해마다 알림: ' + r.ny.join(' / '));
     ok(/이자벨: .*배에서 내렸어/.test(r.said), '배를 떠난 동생은 집으로 돌아온다');
     ok(r.did && r.k && r.left.kind === 'wed' && r.left.path === 'cha' && r.gold > 0, '이자벨이 시집간다 — ' + r.left.title + ' (지참금 ' + r.gold + '닢)');
-    ok(r.pic === 'family-events/32_daughter_wedding_brother_pov' && /백작 가문/.test(r.said) && /형님/.test(r.said) && /오빠/.test(r.said) && /동생 이자벨/.test(r.said), '시집가는 날: 신랑 인사(형님) · 동생(오빠) · 남자 형제 시점 혼례 그림 · 편지');
+    ok(r.pic === 'family-events/32_daughter_wedding_brother_pov' && /백작 가문/.test(r.said) && /처남/.test(r.said) && /주앙/.test(r.said) && !/오빠/.test(r.said) && /— 이자벨/.test(r.said), '시집가는 날: 누나 이자벨(21) — 신랑 인사(처남) · 막내 제독을 이름으로 · 남자 형제 시점 혼례 그림 · 편지');
     console.log('     ' + r.said.split('\n').filter(x => /^(백작|이자벨|\[알림\])/.test(x)).slice(0, 6).join('\n     ').slice(0, 900));
 
     // 마누엘(스물한 살, 배 위)은 떠나지 않는다 · 스무 살 알림

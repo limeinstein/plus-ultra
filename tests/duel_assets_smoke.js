@@ -42,12 +42,29 @@ function png(file, decode) {
   return out;
 }
 
+function gif(file) {
+  const b = fs.readFileSync(file);
+  ok(['GIF87a', 'GIF89a'].includes(b.toString('ascii', 0, 6)), file + ': GIF 서명');
+  const width = b.readUInt16LE(6), height = b.readUInt16LE(8), packed = b[10];
+  let at = 13 + ((packed & 0x80) ? 3 * (1 << ((packed & 7) + 1)) : 0), frames = 0;
+  function blocks() { while (at < b.length) { const n = b[at++]; if (!n) break; at += n; } }
+  while (at < b.length && b[at] !== 0x3b) {
+    const tag = b[at++];
+    if (tag === 0x21) { at++; blocks(); continue; }
+    if (tag !== 0x2c) throw new Error(file + ': 알 수 없는 GIF 블록 ' + tag);
+    frames++; at += 8; const ip = b[at++];
+    if (ip & 0x80) at += 3 * (1 << ((ip & 7) + 1));
+    at++; blocks();
+  }
+  return { width, height, frames };
+}
+
 const sandbox = { window: { G: {} } };
 sandbox.G = sandbox.window.G;
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/data/seafx.js'), 'utf8'), sandbox);
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/data/duelart.js'), 'utf8'), sandbox);
 const art = sandbox.G.DUEL_ART;
-ok(art && art.fighters.length === 21, '전투원 메타데이터는 21종이어야 함');
+ok(art && art.fighters.length === 24, '기본·전설 전투원 메타데이터는 24종이어야 함');
 const S = art.sheet, CW = S.cell[0], CH = S.cell[1], DUST = 4;
 ok(S.columns === 6 && S.rows === 4 && S.width === CW * 6 && S.height === CH * 4, '시트 크기 = 칸 × 6열·4행');
 ok(S.pivot[0] > S.safeMargin && S.pivot[0] < CW && S.pivot[1] > S.safeMargin && S.pivot[1] < CH, '발밑 피벗은 칸 안');
@@ -60,7 +77,8 @@ ok(/return \[3, D\.idleFrame == null \? 0 : D\.idleFrame\]/.test(duelCode) && !/
 const fighterDir = path.join(ROOT, 'images/duel/fighters');
 // 제독 생김새 시트(이강희 = ganghui 등): 21종 밖의 파일이 있으면 같은 규격으로 점검 — 없으면 main_admiral로 대신 나온다
 const heroes = fs.readdirSync(fighterDir).filter(n => /\.png$/.test(n)).map(n => n.slice(0, -4)).filter(id => !art.fighters.some(f => f.id === id));
-for (const f of art.fighters.concat(heroes.map(id => ({ id })))) {
+const allFighters = art.fighters.concat(heroes.map(id => ({ id })));
+for (const f of allFighters) {
   const file = path.join(fighterDir, f.id + '.png'), im = png(file, true);
   ok(im.width === S.width && im.height === S.height, f.id + ': ' + S.width + '×' + S.height + ' (tools/duel_repack.py로 다시 짠 시트)');
   ok(im.alpha(0, 0) === 0, f.id + ': 바깥 여백 투명');
@@ -76,13 +94,29 @@ for (const f of art.fighters.concat(heroes.map(id => ({ id })))) {
     }
 }
 
+for (const f of allFighters) for (const move of ['slash', 'thrust', 'bash']) {
+  const im = gif(path.join(ROOT, 'images/duel/finishers', f.id, move + '.gif'));
+  ok(im.width === CW && im.height === CH && im.frames >= 6, f.id + '/' + move + ': 432×304, 6장 이상 필살 GIF');
+}
+for (const id of ['guan_yu', 'zhang_fei', 'd_artagnan', 'athos', 'aramis']) {
+  const im = gif(path.join(ROOT, 'images/duel/finishers', id, 'special.gif'));
+  ok(im.frames === 8, id + ': 개별 필살기 8장');
+}
+ok(gif(path.join(ROOT, 'images/duel/finishers/zhang_fei/roar.gif')).frames >= 5, '장비 전용 호통 GIF');
+for (const id of ['secret_dagger', 'secret_gun', 'roar']) ok(gif(path.join(ROOT, 'images/duel/finishers/common', id + '.gif')).frames >= 5, id + ': 공통 기술 GIF');
+
 for (const id of Object.values(art.backgrounds).filter((v, i, a) => a.indexOf(v) === i)) {
   const im = png(path.join(ROOT, 'images/duel/backgrounds', id + '.png'), false);
   ok(im.width >= 2094 && im.height === 751, id + ': 초광폭 배경 크기');
 }
 
 const manifest = fs.readFileSync(path.join(ROOT, 'images/manifest.js'), 'utf8');
-for (const f of art.fighters.concat(heroes.map(id => ({ id })))) ok(manifest.includes('"duel/fighters/' + f.id + '"'), f.id + ': 매니페스트 등록 (python tools/images.py)');
+for (const f of allFighters) {
+  ok(manifest.includes('"duel/fighters/' + f.id + '"'), f.id + ': 매니페스트 등록 (python tools/images.py)');
+  for (const move of ['slash', 'thrust', 'bash']) ok(manifest.includes('"duel/finishers/' + f.id + '/' + move + '"'), f.id + '/' + move + ': 필살 GIF 매니페스트 등록');
+}
+ok(/class="rd-motion"/.test(duelCode) && /startMotion\(finisherKey\(f, 'deathblow'\)/.test(duelCode), '일격필살 GIF를 DOM 움직이는 그림으로 재생');
+ok(/zhang_fei\/roar/.test(duelCode) && /secret_/.test(duelCode), '장비 호통·공통 비밀무기 연결');
 for (const id of ['deck', 'land_battle', 'exploration', 'city', 'tavern']) ok(manifest.includes('"duel/backgrounds/' + id + '"'), id + ': 배경 매니페스트 등록');
 
 const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -107,4 +141,4 @@ ok(!unused.length, '쓰이지 않는 전투원: ' + unused.join(', '));
 const L1 = art.layout({ naturalWidth: 1536, naturalHeight: 1024 }), L2 = art.layout({ naturalWidth: S.width, naturalHeight: S.height }), L3 = art.layout({ naturalWidth: S.width / 2, naturalHeight: S.height / 2 });
 ok(L1.cw === 256 && L1.py === 246 && L2.cw === CW && L2.py === S.pivot[1] && L3.cw === CW / 2 && L3.f === 0.5, '그림 크기로 칸·배율 고르기');
 
-console.log('일기토 전투원 21종' + (heroes.length ? ' + 제독 생김새 ' + heroes.join('·') : '') + '(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·전 캐릭터 고정 대기 자세·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');
+console.log('일기토 전투원 ' + allFighters.length + '종(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·일격필살 GIF 3종씩·전설 필살기 5종·비밀무기·장비 호통·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');

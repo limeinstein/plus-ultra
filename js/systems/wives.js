@@ -105,6 +105,7 @@
     S().flags['wed_' + d.id] = 1;
     wedLog(d.name);
     if (G.FamEv) { try { await G.FamEv.wedding({ id: d.id, second: true }); } catch (e) { console.error(e); } }   // 갑판 위의 혼례
+    if (G.Achieve && G.Achieve.afterWed) { try { await G.Achieve.afterWed(d.id); } catch (e2) { console.error(e2); } }
     if (p.wifeAboard) {
       // 본처가 배에 있으니 둘째 부인은 배에 남을 수 없다 — 혼자 고장으로 떠난다
       settle(w, true);

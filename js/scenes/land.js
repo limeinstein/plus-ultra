@@ -470,11 +470,13 @@
       // 문화권 전용 그림이 있으면 쓰되, 모든 대륙을 같은 모습으로 만드는 옛 공통 그림은 쓰지 않는다.
       A.withImg(nativeSpec, [A.rolePortraitKey(nativeSpec), 'portraits/npc/native_' + nativeSpec.style]);
       var who = { name: nativeSpec.localName || '현지 주민', portrait: nativeSpec, lang: 3, li: l.lon < -30 ? 11 : l.lon > 90 ? 12 : 10, minLv: 1 };
-      var v = await UI.ask('원주민 무리를 만났다. 이쪽을 경계하고 있다.', [{ label: '선물을 준다', value: 'gift' }, { label: '말을 건다', value: 'talk' }, { label: '물건을 바꾼다', value: 'trade' }, { label: '지나간다', value: null }], who);
+      var friend = G.LandKit && G.LandKit.friendly(l.lon, l.lat);   // 육상전에서 포로를 풀어 준 땅 (js/systems/landkit.js)
+      var v = await UI.ask(friend ? '원주민 무리를 만났다. 포로를 풀어 준 제독을 알아보고 손을 흔든다.' : '원주민 무리를 만났다. 이쪽을 경계하고 있다.', [{ label: '선물을 준다', value: 'gift' }, { label: '말을 건다', value: 'talk' }, { label: '물건을 바꾼다', value: 'trade' }, { label: '지나간다', value: null }], who);
       if (v === 'trade') { await nativeTrade(who); refreshHud(); return; }
       if (v === 'gift') { await nativeGift(who); refreshHud(); return; }
       else if (v === 'talk') {
-        if (U.chance(0.5 + R.skill('speech') * 0.1)) { var d2 = nearHint(); if (d2) { G.Disc.addHint(d2.id, 'native'); await UI.say('(알아듣기 힘든 말이지만) ' + d2.hint, who); } else UI.toast('원주민들이 길을 가르쳐 주었다.', 'compass'); }
+        if (U.chance(0.5 + R.skill('speech') * 0.1 + (friend ? 0.4 : 0))) { var d2 = nearHint(); if (d2) { G.Disc.addHint(d2.id, 'native'); await UI.say('(알아듣기 힘든 말이지만) ' + d2.hint, who); } else UI.toast('원주민들이 길을 가르쳐 주었다.', 'compass'); }
+        else if (friend) UI.toast('원주민들은 고개를 갸웃하더니, 그래도 웃으며 길을 비켜 주었다.', 'people', 4000);
         else { await UI.say('원주민들이 화가 나서 달려든다!', {}); await landBattle('원주민 전사', foeSize(0.45, 0.95, 8), false, { kind: 'native' }); }
       }
     } else if (r < 0.55) {
@@ -514,7 +516,7 @@
     var worth;
     if (v === 'gold') { s.player.gold -= cost; worth = 1; }
     else { var it = trinkets[+v.slice(2)]; R.removeItemObject(it); worth = 1.4 + (G.ITEM[it.id].gv || 5) / 25; }
-    var pOk = U.clamp(0.72 + R.skill('speech') * 0.06 + (worth - 1) * 0.3, 0, 0.97);
+    var pOk = U.clamp(0.72 + R.skill('speech') * 0.06 + (worth - 1) * 0.3 + (G.LandKit && G.LandKit.friendly(l.lon, l.lat) ? 0.15 : 0), 0, 0.97);
     if (!U.chance(pOk)) { UI.toast('원주민들은 선물만 받고 숲으로 사라졌다.', 'people', 4000); return; }
     // 보급: 탐험대 전원이 며칠 먹고 마실 만큼
     var days = Math.round(U.rf(6, 10) * worth), roll = U.rand();
@@ -609,7 +611,14 @@
       }
       else if (o.winText) UI.toast(o.winText, 'sword');
       else if (kind === 'native') UI.toast('원주민 전사들을 물리쳤다.', 'sword');
-      else { var loot = n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + loot + '닢)', 'sword'); }
+      else { var loot = r.spoils && r.spoils.gold != null ? r.spoils.gold : n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + U.num(loot) + '닢)', 'sword'); }
+      // 노획한 말: 걷거나 말을 탄 탐험대면 말이 는다 (다른 탈것이면 팔아 금화로)
+      var hz = r.spoils && r.spoils.horses;
+      if (hz > 0) {
+        var mt0 = l.mount || { id: 'walk', n: 0 };
+        if (mt0.id === 'walk' || mt0.id === 'horse') { l.mount = { id: 'horse', n: (mt0.id === 'horse' ? mt0.n || 0 : 0) + hz }; setTimeout(function () { UI.toast('적의 말 ' + hz + '마리를 거두었다 — 이제 말이 ' + l.mount.n + '마리.', 'horse', 3800); }, 1400); }
+        else { var hg = hz * 40; s.player.gold += hg; setTimeout(function () { UI.toast('적의 말 ' + hz + '마리를 거두어 길가 마을에 팔았다 (금화 ' + hg + '닢).', 'coin', 3800); }, 1400); }
+      }
     }
     else if (res === 'lose') { UI.toast('패배했다... 대원 ' + (r.dead) + '명을 잃었다.', 'skull'); s.fleet.fatigue = Math.min(100, s.fleet.fatigue + 20); }
     else if (res === 'truce') UI.toast((o.halt && o.halt.toast) || '싸움이 멈추었다.', 'people', 4200);

@@ -18,6 +18,9 @@
     ['mesoamerican_warrior', '아메리카 전사', ['아메리카 전사', '재규어 전사']],
     ['guan_yu', '관우', ['관우']],
     ['zhang_fei', '장비', ['장비']],
+    ['d_artagnan', '달타냥', ['달타냥']],
+    ['athos', '아토스', ['아토스']],
+    ['aramis', '아라미스', ['아라미스']],
     ['joseon_swordsman', '하얀 도포를 입은 조선인 무사', ['조선인 무사', '조선 무사']],
     ['east_asian_attendant', '동양 여급', ['동양 여급']],
     ['samurai', '사무라이', ['사무라이']],
@@ -53,6 +56,12 @@
     backgrounds: {
       deck: 'deck', land: 'land_battle', battle: 'land_battle',
       explore: 'exploration', exploration: 'exploration', city: 'city', tavern: 'tavern'
+    },
+    finishers: {
+      base: 'duel/finishers/',
+      moves: ['slash', 'thrust', 'bash'],
+      legends: ['guan_yu', 'zhang_fei', 'd_artagnan', 'athos', 'aramis'],
+      common: { dagger: 'common/secret_dagger', gun: 'common/secret_gun', roar: 'common/roar' }
     }
   };
 

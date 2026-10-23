@@ -39,6 +39,17 @@ Subject: <아래 표의 인물 명세>
 | `native_chief` | 북동부 삼림권 하우데노쇼니풍 원주민 지도자, 사슴가죽옷·왐펌 띠, 전투봉·방패 |
 | `spanish_soldier` | 16세기 말 스페인 보병, 모리온·흉갑·황토색 더블릿·붉은 띠, 사이드소드·버클러 |
 
+## 검술 3 전설 추가 시트
+
+달타냥·아토스·아라미스의 `*_half.webp` 초상을 인물 참조로, `main_admiral.png`를 화풍·6×4 배열 참조로 함께 넣고 아래처럼 생성했습니다. 생성본은 `tools/duel_finishers.py --import-generated`로 2592×1216 게임 규격에 맞춥니다.
+
+```text
+Create a production-ready transparent 2D combat sprite sheet for <달타냥/아토스/아라미스>.
+Match the supplied portrait's face, hair, costume colors and weapon, and match the supplied atlas reference's polished hand-painted semi-realistic historical-RPG style.
+Strict 6 equal columns × 4 equal rows: attack 6 frames (anticipation, wind-up, step, contact, follow-through, stylish weapon-sheathing recovery); defense 4 frames then 2 empty; hit reaction 3 frames then 3 empty; action/idle 6 frames ending in signature flourish and return-ready.
+The character faces screen-right in every frame. Keep identical scale, camera, baseline and identity. Genuine alpha transparency; no background, floor, shadow, grid, labels, text or watermark; unused cells fully transparent.
+```
+
 ## 배경 공통 프롬프트
 
 ```text

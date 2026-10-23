@@ -103,6 +103,10 @@ LOOKS = (
     ("kato_kiyomasa", "가토 기요마사", "일본 전국시대"),
     ("al_vezas", "알 베자스", "대항해시대"),
     ("sera_alto_salvaraz", "세라 알토스 살바라즈", "대항해시대"),
+    ("napoleon", "나폴레옹 보나파르트", "나폴레옹 사건"),
+    ("josephine", "조제핀 드 보아르네", "나폴레옹 사건"),
+    ("letizia_bonaparte", "레티치아 보나파르트", "나폴레옹 사건"),
+    ("joseph_bonaparte", "조제프 보나파르트", "나폴레옹 사건"),
 )
 
 

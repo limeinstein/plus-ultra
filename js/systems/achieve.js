@@ -89,7 +89,10 @@
     for (var i = 0; i < got.length; i++) {
       var a = got[i];
       if (G.Audio) G.Audio.sfx('bell');
-      var pc = a.id === 'montcrew' && G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/montcrew_oath', title: '열 사람이 한 배에' }) : null;
+      var shot = a.id === 'montcrew' ? { img: 'legend-events/montcrew_oath', title: '열 사람이 한 배에' }
+        : a.id === 'happily' ? { img: 'legend-events/happily_after_all', title: 'Happily After All' }
+        : G.Img && G.Img.file && G.Img.file('achievement-events/' + a.id) ? { img: 'achievement-events/' + a.id, title: a.name } : null;
+      var pc = shot && G.FamEv && G.FamEv.showPic ? G.FamEv.showPic(shot) : null;
       try {
         if (a.id === 'montcrew') {
           await UI.say('마침내 루이스 몬테이루에서 이언 맥레오드까지, 서로 다른 바다에서 살아온 열 사람이 한 갑판에 모였다.', {});
@@ -133,6 +136,15 @@
         UI.toast('업적 「' + a.name + '」까지 한 사람 남았다' + (left.length === 1 ? ' — ' + left[0] : ''), 'crown', 5200);
       }
     });
+    return got;
+  };
+
+  /** 혼인 직후: 혼인 업적을 바로 알린다. 옛이야기의 네 아가씨를 모두 맞으면 전용 사건 그림도 함께 뜬다. */
+  AC.afterWed = async function (id) {
+    var ev = wedEver();
+    if (id && !ev[id]) ev[id] = U.dateNum(S().date);
+    var got = AC.check();
+    await announce(got);
     return got;
   };
 

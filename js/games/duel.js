@@ -32,6 +32,14 @@
   };
   G.DUEL_STANCE = STANCE;
   var SPECIAL = { slash: ['물리네', 'Moulinet', '칼을 풍차처럼 돌려 세 번 벤다'], thrust: ['플레슈', 'Flèche', '몸을 날려 번개처럼 찌른다 — 막기를 뚫는다'], bash: ['천둥 내려치기', 'Crushing blow', '온 힘으로 내려쳐 상대를 비틀거리게 한다'] };
+  // 검술 3 전설은 장기별 공용 필살기 대신 자기만의 이름과 연출을 쓴다.
+  var LEGEND_SPECIAL = {
+    guan_yu: ['청룡언월', 'Green Dragon Sweep', '청룡도를 크게 휘둘러 초록 칼바람으로 쓸어 버린다'],
+    zhang_fei: ['장판교 벽력', 'Bridge Thunder', '천지를 울리는 호통과 장팔사모의 일격을 함께 퍼붓는다'],
+    d_artagnan: ['가스코뉴의 섬광', 'Gascon Flash', '번개 같은 연속 찌르기로 한순간에 빈틈을 꿰뚫는다'],
+    athos: ['귀족의 십자검', 'Noble Cross', '흐트러짐 없는 두 번의 검격으로 십자 궤적을 새긴다'],
+    aramis: ['성 미카엘의 기도', 'Saint Michael', '짧은 기도 뒤 보랏빛 검광을 실어 날카롭게 파고든다']
+  };
   // 기술: cost 기세, once 한 번만, tip 설명
   var TECH = [
     { id: 'deathblow', name: '일격필살', en: 'Coup de grâce', cost: 50, tip: '한칼에 끝낸다. 상대가 많이 다쳤을수록(체력 45% 이하), 무력·검술이 높을수록 잘 된다. 빗나가면 크게 받아친다.' },
@@ -127,11 +135,11 @@
         '<div class="rd-top"><div class="rd-side me"><div class="pp"></div><div class="info"><div class="nm"></div><div class="bar hp"><i></i><b></b></div><div class="bar sp"><i></i><b></b></div><div class="sub"></div></div></div>' +
         '<div class="rd-mid"><div class="rd-round"></div><div class="rd-rps">찌르기 <span>→</span> 베기 <span>→</span> 치기 <span>→</span> 찌르기<small>화살표 쪽을 이긴다</small></div></div>' +
         '<div class="rd-side en"><div class="info"><div class="nm"></div><div class="bar hp"><i></i><b></b></div><div class="bar sp"><i></i><b></b></div><div class="sub"></div></div><div class="pp"></div></div></div>' +
-        '<div class="rd-stage"><canvas width="' + W + '" height="' + H + '"></canvas><div class="rd-stance"></div></div>' +
+        '<div class="rd-stage"><canvas width="' + W + '" height="' + H + '"></canvas><img class="rd-motion" alt="" aria-hidden="true"><div class="rd-stance"></div></div>' +
         '<div class="rd-log"></div>' +
         '<div class="rd-ctrl"><div class="rd-moves"><div class="lbl">다음 수 <span class="intent"></span></div><div class="row"></div></div><div class="rd-techs"><div class="lbl">기술 <small>기세를 쓴다</small></div><div class="grid"></div></div><div class="rd-sys"></div></div></div>';
       var win = UI.window({ title: '일기토', icon: 'sword', width: 1120, html: html, closable: false });
-      var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d');
+      var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), motionEl = el.querySelector('.rd-motion');
       // 초상에 양식이 없으면 지금 있는 도시(바다면 가까운 도시)의 양식으로 전투원 그림을 고른다
       var hereStyle = (function () { var s0 = G.Game.state, c0 = s0 && s0.loc && G.CITY_DATA && G.CITY_DATA[s0.loc.city]; return c0 && c0.style; })();
       function fighterSprite(f) {
@@ -150,6 +158,38 @@
         I.load(bgkey).then(function (im) { if (im) bgImg = im; });
       }
       var logEl = el.querySelector('.rd-log');
+      var motionFighter = null, motionToken = 0;
+      function legendId(f) {
+        var mid = f.m && f.m.id;
+        if (mid && LEGEND_SPECIAL[mid]) return mid;
+        return f.spriteId && LEGEND_SPECIAL[f.spriteId] ? f.spriteId : null;
+      }
+      function finisherKey(f, kind, extra) {
+        var base = art.finishers && art.finishers.base || 'duel/finishers/';
+        if (kind === 'deathblow') return f.spriteId ? base + f.spriteId + '/' + f.style : null;
+        if (kind === 'special') { var lid = legendId(f); return lid ? base + lid + '/special' : null; }
+        if (kind === 'roar') return base + (legendId(f) === 'zhang_fei' ? 'zhang_fei/roar' : 'common/roar');
+        if (kind === 'secret') return base + 'common/secret_' + (extra ? 'gun' : 'dagger');
+        return null;
+      }
+      async function startMotion(key, f, hideFighter) {
+        if (!key || !I || !I.has(key)) return false;
+        var token = ++motionToken, im = await I.load(key);
+        if (!live || !im || token !== motionToken) return false;
+        motionFighter = hideFighter ? f : null;
+        motionEl.className = 'rd-motion ' + f.side;
+        motionEl.removeAttribute('src');
+        void motionEl.offsetWidth; // 같은 GIF를 연달아 써도 첫 장면부터 다시 시작한다.
+        motionEl.src = I.src(key);
+        motionEl.classList.add('show');
+        return true;
+      }
+      function stopMotion() {
+        motionToken++;
+        motionFighter = null;
+        motionEl.classList.remove('show');
+        motionEl.removeAttribute('src');
+      }
       function setPortrait(f, sel) { var box = el.querySelector(sel + ' .pp'); box.innerHTML = ''; if (f.portrait) box.appendChild(A.portraitCanvas(f.portrait, 84)); }
       setPortrait(me, '.rd-side.me'); setPortrait(en, '.rd-side.en');
       function say(t) { logs.push(t); logEl.innerHTML = logs.slice(-2).map(function (x, i, a) { return '<div' + (i < a.length - 1 ? ' class="old"' : '') + '>' + x + '</div>'; }).join(''); }
@@ -338,8 +378,8 @@
         if (shakeT > 0 && G.Game.state.settings.shake !== false) ctx.translate(U.rf(-1, 1) * shakeT * D.shakeX, U.rf(-1, 1) * shakeT * D.shakeY);
         drawScene(t);
         var gy = H * 0.86;
-        drawFighter(me, W / 2 - 160, gy, 1, t);
-        drawFighter(en, W / 2 + 160, gy, -1, t);
+        if (motionFighter !== me) drawFighter(me, W / 2 - 160, gy, 1, t);
+        if (motionFighter !== en) drawFighter(en, W / 2 + 160, gy, -1, t);
         fx.forEach(function (e) {
           e.t += dt; var q = e.t / e.life; if (q < 0) return;
           if (e.kind === 'spark') { ctx.strokeStyle = 'rgba(255,240,180,' + (1 - q) + ')'; ctx.lineWidth = 2.5; for (var i = 0; i < 8; i++) { var a = i / 8 * 6.28 + e.seed; ctx.beginPath(); ctx.moveTo(e.x + Math.cos(a) * 5, e.y + Math.sin(a) * 5); ctx.lineTo(e.x + Math.cos(a) * (12 + q * 30), e.y + Math.sin(a) * (12 + q * 30)); ctx.stroke(); } }
@@ -486,11 +526,15 @@
         var pr = function (base) { return U.clamp(base, 0.05, 0.95); };
         if (id === 'deathblow') {
           var p1 = pr(0.3 + (power(f) - power(o)) / 150 + (1 - o.hp / o.maxHp) * 0.35 + (f === me && stance === 'allout' ? 0.1 : 0));
-          f.move = f.style; pose(f, 'windup', 0.35); await sleep(380); pose(f, 'lunge', 0.35); f.tx = 90; if (G.Audio) G.Audio.sfx('sword');
+          var deathMotion = await startMotion(finisherKey(f, 'deathblow'), f, true);
+          f.move = f.style; pose(f, 'windup', 0.35); await sleep(deathMotion ? 430 : 380); pose(f, 'lunge', 0.35); f.tx = 90; if (G.Audio) G.Audio.sfx('sword');
           fx.push({ kind: 'slashArc', x: W / 2, y: H * 0.86 - 120, a0: -2.2, dir: f === me ? 1 : -1, t: 0, life: 0.45 });
           await sleep(200);
-          if (U.chance(p1)) { fx.push({ kind: 'spark', x: W / 2, y: H * 0.86 - 110, seed: 1, t: 0, life: 0.6 }); hurt(o, Math.max(o.hp, o.maxHp * 0.6), true); say(who + '의 일격필살! 단칼에 베어 넘겼다!'); }
-          else { pose(o, 'block', 0.3); num(o, '빗나감', '220,220,220'); say(who + '의 일격필살이 빗나갔다! 크게 빈틈을 드러냈다.'); setTimeout(function () { f.tx = 0; }, 200); await sleep(300); await strike(o, o.style, { k: 1.4, sure: true, big: true }); }
+          var deathHit = U.chance(p1);
+          if (deathHit) { fx.push({ kind: 'spark', x: W / 2, y: H * 0.86 - 110, seed: 1, t: 0, life: 0.6 }); hurt(o, Math.max(o.hp, o.maxHp * 0.6), true); say(who + '의 일격필살! 단칼에 베어 넘겼다!'); }
+          else { pose(o, 'block', 0.3); num(o, '빗나감', '220,220,220'); say(who + '의 일격필살이 빗나갔다! 크게 빈틈을 드러냈다.'); setTimeout(function () { f.tx = 0; }, 200); }
+          if (deathMotion) { await sleep(420); stopMotion(); }
+          if (!deathHit) { await sleep(deathMotion ? 0 : 300); await strike(o, o.style, { k: 1.4, sure: true, big: true }); }
           f.tx = 0;
         } else if (id === 'first') { flags.first = f === me; bubble(f, '먼저 간다!'); say(who + U.jx(f === me && !me.m ? '제독' : f.name, '이/가') + ' 칼끝을 겨누며 선수를 노린다.'); if (f === en) { var r0 = await strike(en, en.style, { hitK: 0.25 }); } }
         else if (id === 'flank') { f.tx = 40; await sleep(150); await strike(f, f.style, { noAdv: true, k: 1.3, hitK: 0.2, ignoreArmor: true }); say(who + U.jx(f === me && !me.m ? '제독' : f.name, '이/가') + ' 옆으로 돌아 파고들었다!'); }
@@ -505,6 +549,7 @@
           else { f.spirit = Math.max(0, f.spirit - 10); o.spirit = Math.min(100, o.spirit + 10); say(U.esc(o.name) + U.jx(o.name, '은/는') + ' 속지 않았다.'); }
         } else if (id === 'secret') {
           var gun = f === me ? f.shoot >= 1 : (en.look === 'pirate' || en.look === 'captain') && U.chance(0.6);
+          var secretMotion = await startMotion(finisherKey(f, 'secret', gun), f, false);
           pose(f, 'shoot', 0.5); if (!gun && G.Audio) G.Audio.sfx('draw'); await sleep(200);   // 품에서 단검을 뽑는다
           if (gun) { fx.push({ kind: 'flashS', x: posX(f) + (f === me ? 60 : -60), y: H * 0.86 - 56, t: 0, life: 0.2 }); for (var sm = 0; sm < 3; sm++) fx.push({ kind: 'smoke', x: posX(f) + (f === me ? 66 : -66), y: H * 0.86 - 56, d: f === me ? 1 : -1, t: -sm * 0.05, life: 1.4 }); if (G.Audio) G.Audio.sfx('gun'); }
           await sleep(150);
@@ -512,6 +557,7 @@
           hurt(o, dd, true); result.secret = result.secret || f === me;
           bubble(o, gun ? '비겁한 놈!' : '단검이라니!'); say(who + U.jx(f === me && !me.m ? '제독' : f.name, '이/가') + ' 품에서 ' + (gun ? '권총을 꺼내 쏘았다!' : '단검을 던졌다!') + ' 구경꾼들이 야유한다.');
           cheer[f === me ? 0 : 1] = 0; cheer[f === me ? 1 : 0] = 1.5;
+          if (secretMotion) { await sleep(260); stopMotion(); }
         } else if (id === 'lure') {
           var p4 = pr(0.45 + (f.int - o.int) / 150 + (place === 'deck' ? 0.08 : 0));
           f.tx = -30; await sleep(200); f.tx = 0;
@@ -549,14 +595,18 @@
           else { bubble(o, '어림없다!'); say(U.esc(o.name) + U.jx(o.name, '은/는') + ' 흔들리지 않았다.'); }
         } else if (id === 'roar') {
           var p7 = pr(0.4 + (f.might + f.cha - o.might - o.int) / 250);
+          var roarMotion = await startMotion(finisherKey(f, 'roar'), f, false);
           pose(f, 'shout', 0.7); bubble(f, U.pick(['물러서라!!', '덤벼라, 이 겁쟁이!', '누구 앞이라고!']));
           shakeT = 0.5; await sleep(700);
+          if (roarMotion) stopMotion();
           if (U.chance(p7)) {
             if (o.hp <= o.maxHp * 0.25 && f === me) { pose(o, 'run', 3); bubble(o, '히익!'); say(U.esc(o.name) + U.jx(o.name, '이/가') + ' 호통에 겁을 먹고 달아났다!'); await sleep(700); end('rout'); return 'end'; }
             o.stun = 1; o.spirit = Math.max(0, o.spirit - 20); bubble(o, '...!'); say(U.esc(o.name) + U.jx(o.name, '이/가') + ' 호통에 얼어붙었다! (한 합 쉰다, 기세 −20)');
           } else { f.spirit = Math.max(0, f.spirit - 5); say(U.esc(o.name) + U.jx(o.name, '은/는') + ' 코웃음을 쳤다.'); }
         } else if (id === 'special') {
-          var sp = SPECIAL[f.style]; banner(sp[0] + '!', sp[1] + ' — ' + sp[2]);
+          var lid = legendId(f), sp = lid ? LEGEND_SPECIAL[lid] : SPECIAL[f.style]; banner(sp[0] + '!', sp[1] + ' — ' + sp[2]);
+          var specialMotion = lid && await startMotion(finisherKey(f, 'special'), f, true);
+          if (specialMotion) { await sleep(900); stopMotion(); }
           if (f.style === 'slash') { for (var h3 = 0; h3 < 3 && o.hp > 0; h3++) await strike(f, 'slash', { k: 0.75, sure: !(o === me && stance === 'guard' && U.chance(0.3)), noAdv: true, big: h3 === 2 }); }
           else if (f.style === 'thrust') await strike(f, 'thrust', { k: 2.4, sure: true, noAdv: true, ignoreArmor: true, big: true });
           else { await strike(f, 'bash', { k: 2.0, sure: !(o === me && stance === 'guard' && U.chance(0.3)), noAdv: true, big: true }); if (o.hp > 0) { o.stun = 1; say(U.esc(o.name) + U.jx(o.name, '이/가') + ' 비틀거린다!'); } }
@@ -637,7 +687,8 @@
         TECH.forEach(function (tc) {
           var ok = techOk(tc) && !over, lbl = tc.name;
           var b = U.el('button', 'btn small tech' + (queued === tc.id ? ' on' : '') + (ok ? '' : ' disabled'), lbl + (tc.cost ? '<i>' + tc.cost + '</i>' : '<i>1회</i>'));
-          b.title = tc.name + ' (' + tc.en + ') — ' + tc.tip + (tc.id === 'special' ? ' 지금: 「' + SPECIAL[me.style][0] + '」 — ' + SPECIAL[me.style][2] : '') + (tc.id === 'swap' && swapCandidate(me) ? ' 나설 사람: ' + swapCandidate(me).name : '');
+          var nowSpecial = LEGEND_SPECIAL[legendId(me)] || SPECIAL[me.style];
+          b.title = tc.name + ' (' + tc.en + ') — ' + tc.tip + (tc.id === 'special' ? ' 지금: 「' + nowSpecial[0] + '」 — ' + nowSpecial[2] : '') + (tc.id === 'swap' && swapCandidate(me) ? ' 나설 사람: ' + swapCandidate(me).name : '');
           if (!ok) b.disabled = true;
           b.onclick = function () { if (!techOk(tc)) return; queued = queued === tc.id ? null : tc.id; techBtns(); if (!busy) { clearTimeout(timer); step(); } };
           grid.appendChild(b);

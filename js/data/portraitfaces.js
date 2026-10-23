@@ -3222,6 +3222,10 @@
     "portraits/gardeners/sw/gardener": {"box":[0.4002,0.1559,0.1993,0.2674],"eyes":[0.4809,0.2732,0.5676,0.2616],"mouth":[0.5369,0.3554]},
     "portraits/gardeners/sw/gardener_half": {"box":[0.3743,0.0889,0.1394,0.1235],"eyes":[0.4404,0.1385,0.489,0.1368],"mouth":[0.467,0.1821]},
     "portraits/gardeners/tr/gardener": {"box":[0.4053,0.1444,0.2053,0.2589],"eyes":[0.5112,0.243,0.5807,0.2376],"mouth":[0.551,0.3396]},
-    "portraits/gardeners/tr/gardener_half": {"box":[0.4023,0.044,0.1451,0.1217],"eyes":[0.4765,0.0876,0.5225,0.0857],"mouth":[0.5067,0.1332]}
+    "portraits/gardeners/tr/gardener_half": {"box":[0.4023,0.044,0.1451,0.1217],"eyes":[0.4765,0.0876,0.5225,0.0857],"mouth":[0.5067,0.1332]},
+    "portraits/legendary/joseph_bonaparte": {"box":[0.305,0.2291,0.3726,0.486],"eyes":[0.4381,0.424,0.6044,0.4007],"mouth":[0.5418,0.5939]},
+    "portraits/legendary/josephine": {"box":[0.3185,0.2547,0.369,0.4621],"eyes":[0.3468,0.4645,0.4797,0.4081],"mouth":[0.4908,0.6005]},
+    "portraits/legendary/letizia_bonaparte": {"box":[0.3191,0.273,0.3686,0.4755],"eyes":[0.3735,0.4636,0.5132,0.4395],"mouth":[0.4797,0.6316]},
+    "portraits/legendary/napoleon": {"box":[0.3089,0.2436,0.3754,0.4611],"eyes":[0.4479,0.4383,0.6045,0.4036],"mouth":[0.5586,0.5945]}
   };
 })(window.G = window.G || {});

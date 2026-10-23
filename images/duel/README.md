@@ -1,6 +1,7 @@
 # 일기토 그림 묶음
 
-`fighters/`에는 투명 전투원 시트 21장, `backgrounds/`에는 초광폭 전투 배경 5장이 있습니다.
+`fighters/`에는 투명 전투원 시트와 전설 전용 시트, `backgrounds/`에는 초광폭 전투 배경 5장,
+`finishers/`에는 일격필살·필살기·비밀무기·호통 GIF가 있습니다.
 
 ## 전투원 시트
 
@@ -36,11 +37,18 @@
 
 ## 전투원 파일
 
-`main_admiral`, `first_mate`, `western_brawler`, `columbus`, `cortes`, `redhair_pirate`, `blonde_pirate`, `african_warrior`, `mesoamerican_warrior`, `guan_yu`, `zhang_fei`, `joseon_swordsman`, `east_asian_attendant`, `samurai`, `barbary_corsair`, `caribbean_pirate`, `explorer`, `vietnamese_woman`, `indian_warrior`, `native_chief`, `spanish_soldier`.
+`main_admiral`, `first_mate`, `western_brawler`, `columbus`, `cortes`, `redhair_pirate`, `blonde_pirate`, `african_warrior`, `mesoamerican_warrior`, `guan_yu`, `zhang_fei`, `d_artagnan`, `athos`, `aramis`, `joseon_swordsman`, `east_asian_attendant`, `samurai`, `barbary_corsair`, `caribbean_pirate`, `explorer`, `vietnamese_woman`, `indian_warrior`, `native_chief`, `spanish_soldier`.
 
 제독 생김새 시트(21종 밖, 얼굴 그림 이름과 같음): `ganghui`(이강희), `navigator_white`,
 `armored_navigator`, `sea_dog`, `muscle_swordsman`, `hat_spinner`, `charismatic_admiral`,
 `battle_vanguard`, `noble_scholar`, `casanova`, `army_officer`, `sky_adventurer`, `blackcoat_captain`.
+
+## 필살 GIF
+
+- 모든 전투원 시트마다 `finishers/<id>/slash.gif`, `thrust.gif`, `bash.gif`가 있다. 준비 → 무기 휘두르기 → 전용 잔상 → 무기를 거두는 순서다.
+- 검술 3 전설인 관우·장비·달타냥·아토스·아라미스는 `special.gif`도 있으며 각자 청룡·벽력·섬광·십자검·기도의 검광을 쓴다.
+- 장비의 호통은 `finishers/zhang_fei/roar.gif`, 다른 인물의 호통과 비밀무기는 `finishers/common/`의 투명 효과 GIF를 쓴다.
+- 다시 만들기: `python tools/duel_finishers.py`. 새 전설 시트 원본까지 가져올 때는 `--import-generated <폴더>`를 붙인다.
 
 ## 배경 파일
 

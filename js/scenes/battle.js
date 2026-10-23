@@ -1290,6 +1290,7 @@
       if (G.Captains) G.Captains.afterBattle(st.npc, res, st.ships, lines);   // 이름난 선장·해적의 기함을 나포하면 사로잡는다 (seacaptains.js)
       if (G.Court) G.Court.afterBattle(st.npc, res, st.ships, lines);   // 왕명: 나포·해적 토벌·왕녀 구출
       if (G.Princess) G.Princess.afterBattle(st.npc, res, st.ships, lines);   // 사라진 왕녀: 레반트의 해적 함대·요새의 함대
+      if (G.Napoleon) G.Napoleon.afterBattle(st.npc, res, st.ships, lines);   // 코르시카 바다의 소년 나폴레옹 (포격으로) · 사로잡힌 가족 (백병전으로) — js/systems/napoleon.js
       if (G.Rel) G.Rel.afterBattle(st.npc, res, lines);   // 큰 해전(무적함대·레판토)의 보상
       var gold = 0, caps = [];
       st.ships.forEach(function (b) {
@@ -1317,6 +1318,7 @@
       if (caps.length) await prizeFleet(caps.map(prizeShip));
       if (caps.length) await prizeHolds(caps);     // 나포선의 식량·물·자재·교역품·따르겠다는 선원을 옮겨 싣는다
       if (G.Princess) { try { await G.Princess.tell(); } catch (e) { console.error(e); } }   // 사로잡은 두목의 실토 · 왕녀와의 만남
+      if (G.Napoleon) { try { await G.Napoleon.tell(); } catch (e) { console.error(e); } }   // 바다에서 건진 소년 · 짐칸의 가족
     } else if (res === 'flaglost') {
       // 기함을 잃고 흩어져 달아났다: 쫓기며 짐 절반을 버렸다
       var lostK = 0;

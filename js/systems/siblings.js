@@ -36,12 +36,31 @@
   SB.ofMate = function (id) { return SB.all().filter(function (k) { return k.mateId === id; })[0] || null; };
 
   // ---------------------------------------------------------------- 글
-  function sexOf(p) { return p && p.g === 'f' ? 'f' : 'm'; }
-  SB.call = function (k) { var p = S().player; return D().call[sexOf(p)][k && k.sex === 'f' ? 'f' : 'm']; };
+  function sexOf(p) { return p && (p.g === 'f' || (p.heir && p.heir.sex === 'f')) ? 'f' : 'm'; }
+  function bornN(x) { return x && x.born ? x.born.y * 10000 + (x.born.m || 1) * 100 + (x.born.d || 1) : 0; }
+  /** 새 제독보다 먼저 태어난 형제인가 (막내가 뒤를 이으면 위의 아이들은 형·누나다 — 2026-10-23 사용자 요청) */
+  SB.elder = function (k) { var p = S().player, a = bornN(k), b = bornN(p); return !!(a && b && a < b); };
+  /** 새 제독이 그 형제를 이르는 말: 남동생·여동생 / 형·누나(제독이 남자) · 오빠·언니(제독이 여자) */
+  SB.rel = function (k) {
+    var f = k && k.sex === 'f';
+    if (!SB.elder(k)) return f ? '여동생' : '남동생';
+    return sexOf(S().player) === 'f' ? (f ? '언니' : '오빠') : (f ? '누나' : '형');
+  };
+  SB.relShort = function (k) { return SB.elder(k) ? SB.rel(k) : '동생'; };
+  /** 형제가 새 제독을 부르는 말: 동생은 형·오빠·누나·언니, 손위 형제는 이름으로 */
+  SB.call = function (k) {
+    var p = S().player;
+    if (SB.elder(k)) return String(p.name || '').split(' ')[0] || p.name;
+    return D().call[sexOf(p)][k && k.sex === 'f' ? 'f' : 'm'];
+  };
   function fill(t, k, extra) {
     var s = S(), p = s.player, sb = (k && k.sib) || {};
-    var o = { name: k ? k.name : '', me: p.name, call: SB.call(k), inlaw: D().inlaw[sexOf(p)], father: sb.father || '아버지', mother: sb.mother || '어머니',
-      home: (G.CITY_DATA[p.home] || {}).name || '' };
+    var a = k && k.born ? age(k) : 0, el = !!(k && SB.elder(k));
+    var o = { name: k ? k.name : '', me: p.name, call: k ? SB.call(k) : '', inlaw: el ? (sexOf(p) === 'f' ? '처제' : '처남') : D().inlaw[sexOf(p)], father: sb.father || '아버지', mother: sb.mother || '어머니',
+      home: (G.CITY_DATA[p.home] || {}).name || '',
+      rel: k ? SB.relShort(k) : '동생',                                   // 새 제독이 그 형제를 이르는 말 (동생·형·누나·오빠·언니)
+      fcall: k ? (el ? '네 동생' : '네 ' + SB.call(k)) : '',                // 아버지가 그 형제에게 새 제독을 이르는 말
+      agesay: !k || a === (K().leaveAge || 22) ? '스물두 살이' : a + '세가' };   // 「어느새 ○○ 되었다」 — 손위 형제는 이미 나이가 많다
     for (var x in extra || {}) o[x] = extra[x];
     return String(t).replace(/\{(\w+)(?::([^}]+))?\}/g, function (all, key, pair) {
       if (o[key] == null) return all;
@@ -119,12 +138,12 @@
     });
     if (out.length) {
       var heirName = heir.name;
-      G.State.log(out.map(function (k) { return k.name; }).join('·') + ' — ' + heirName + '의 동생들은 ' + heirName + '의 집에서 함께 살게 되었다.');
+      G.State.log(out.map(function (k) { return k.name; }).join('·') + ' — ' + heirName + '의 형제자매는 ' + heirName + '의 집에서 함께 살게 되었다.');
       var pc = pic('family-events/36_adult_siblings_homecoming', '형제자매의 새 출발');
       try {
         await G.UI.alert(U.esc(fill(D().moveIn, null, { me: heirName, father: p.name })) +
           '<br><br>서로의 손을 맞잡은 형제자매는, 이 집을 다시 함께 지켜 가기로 했다.' +
-          '<div style="margin:10px 0 4px">' + out.map(function (k) { return '<b>' + U.esc(k.name) + '</b> <span class="muted">(' + (k.sex === 'f' ? '딸' : '아들') + ' · ' + age(k) + '세)</span>'; }).join('<br>') + '</div>' +
+          '<div style="margin:10px 0 4px">' + out.map(function (k) { return '<b>' + U.esc(k.name) + '</b> <span class="muted">(' + SB.rel(k) + ' · ' + age(k) + '세)</span>'; }).join('<br>') + '</div>' +
           '<span class="muted" style="font-size:16px">' + U.esc(D().moveInNote) + '</span>', '형제자매의 새 출발');
       } finally {
         if (pc) await pc.stop();
@@ -177,7 +196,7 @@
   /** 형제 이야기 — 자택 「동생들」 · 방 안의 동생을 눌렀을 때 */
   SB.talk = async function (k, c) {
     var UI = G.UI, s = S(), c0 = K(), a = age(k), sx = k.sex === 'f' ? 'f' : 'm';
-    var band = a >= c0.hireAge ? 'adult' : a >= 10 ? 'teen' : 'child';
+    var band = SB.elder(k) && D().chat.elder ? 'elder' : a >= c0.hireAge ? 'adult' : a >= 10 ? 'teen' : 'child';
     var today = U.dateNum(s.date);
     for (var turn = 0; ; turn++) {
       var n = SB.aboard().length, can = a >= c0.hireAge, full = n >= c0.maxHire;
@@ -204,20 +223,22 @@
     var d = (k.mateId && st().defs[k.mateId]) || SB.makeDef(k);
     k.mateId = d.id; register(d);
     await UI.say(fill(D().hire.ask, k), SB.speaker(k));
-    if (!(await UI.confirm(U.esc(k.name) + U.jx(k.name, '을/를') + ' 항해사로 데려가겠습니까?<br><span class="muted">월급 금화 ' + U.num(d.wage) + '닢 (가족이라 절반) · 함께 항해하는 동생 ' + SB.aboard().length + '/' + c0.maxHire + '</span>', '데려간다', '다음에'))) return false;
+    if (!(await UI.confirm(U.esc(k.name) + U.jx(k.name, '을/를') + ' 항해사로 데려가겠습니까?<br><span class="muted">월급 금화 ' + U.num(d.wage) + '닢 (가족이라 절반) · 함께 항해하는 형제 ' + SB.aboard().length + '/' + c0.maxHire + '</span>', '데려간다', '다음에'))) return false;
     if (!G.Legend || !G.Legend.join(d.id, c)) return false;
     k.wasAboard = true;
     await lines(D().hire.yes.map(function (t) { return 'k:' + t; }), k);
     if (G.Game.cityHud) G.Game.cityHud();
     return true;
   };
+  /** 자택 메뉴 이름: 모두 동생이면 「동생들」, 손위 형제가 있으면 「형제자매」 */
+  SB.menuLabel = function () { return SB.home().some(SB.elder) ? '형제자매' : '동생들'; };
   /** 자택 메뉴 「동생들」 */
   SB.menu = async function (c) {
     for (;;) {
       var home = SB.home(); if (!home.length) return;
-      var k = home.length === 1 ? home[0] : await G.UI.choose('동생들', home.map(function (x) {
-        return { label: x.name, right: age(x) + '세 · ' + (x.sex === 'f' ? '여동생' : '남동생') + (age(x) >= K().hireAge ? ' · 항해사로 데려갈 수 있다' : ''), value: x };
-      }), { width: 520, text: '함께 항해하는 동생 ' + SB.aboard().length + '/' + K().maxHire });
+      var k = home.length === 1 ? home[0] : await G.UI.choose(SB.menuLabel(), home.map(function (x) {
+        return { label: x.name, right: age(x) + '세 · ' + SB.rel(x) + (age(x) >= K().hireAge ? ' · 항해사로 데려갈 수 있다' : ''), value: x };
+      }), { width: 520, text: '함께 항해하는 형제 ' + SB.aboard().length + '/' + K().maxHire });
       if (!k) return;
       await SB.talk(k, c);
       if (home.length === 1) return;
@@ -227,7 +248,7 @@
   SB.family = function () {
     var H = HL(), LOOK = G.FAMILY_LOOK || { scale: {} };
     return SB.home().filter(function (k) { return age(k) >= 3; }).map(function (k) {
-      return { who: 'kid', k: k, name: k.name, sub: age(k) + '세 · ' + (k.sex === 'f' ? '여동생' : '남동생'), chain: H.chain(k, true), portrait: F().kidSpec(k), scale: (LOOK.scale || {})[H.stage(k)] || 1,
+      return { who: 'kid', k: k, name: k.name, sub: age(k) + '세 · ' + SB.rel(k), chain: H.chain(k, true), portrait: F().kidSpec(k), scale: (LOOK.scale || {})[H.stage(k)] || 1,
         onClick: function () { return SB.talk(k); } };
     });
   };
@@ -302,8 +323,8 @@
     SB.home().forEach(function (k) {
       var a = age(k);
       if (a >= 3 && k.st) ['str', 'int', 'mar', 'cha'].forEach(function (x) { if (U.chance(0.5)) k.st[x] = Math.min(90, (k.st[x] || 50) + 1); });
-      if (a === c0.hireAge) out.push({ icon: 'star', text: '동생 ' + k.name + U.jx(k.name, '이/가') + ' 스무 살이 되었다. 집에 들르면 항해사로 데려갈 수 있다. (함께 항해 ' + c0.maxHire + '명까지)' });
-      if (a === c0.leaveAge) out.push({ icon: 'house', text: '동생 ' + k.name + U.jx(k.name, '이/가') + ' 스물두 살이 되었다. ' + (k.sex === 'f' ? '혼담이 오간다 — 집에 들르면 시집을 간다.' : '제 길을 찾아 떠날 채비를 한다 — 집에 들르면 작별한다.') });
+      if (a === c0.hireAge) out.push({ icon: 'star', text: SB.relShort(k) + ' ' + k.name + U.jx(k.name, '이/가') + ' 스무 살이 되었다. 집에 들르면 항해사로 데려갈 수 있다. (함께 항해 ' + c0.maxHire + '명까지)' });
+      if (a === c0.leaveAge) out.push({ icon: 'house', text: SB.relShort(k) + ' ' + k.name + U.jx(k.name, '이/가') + ' 스물두 살이 되었다. ' + (k.sex === 'f' ? '혼담이 오간다 — 집에 들르면 시집을 간다.' : '제 길을 찾아 떠날 채비를 한다 — 집에 들르면 작별한다.') });
     });
     return out;
   };
