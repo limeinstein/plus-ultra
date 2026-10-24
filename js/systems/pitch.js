@@ -197,6 +197,9 @@
         var tasty = G.RevealTalk && G.RevealTalk.edible ? G.RevealTalk.edible(d) : d.cat === 'trade';
         if (!tasty) { var pf = pool.filter(function (t) { return !/맛을|맛보/.test(t); }); if (pf.length) pool = pf; }
         var said = pick(c.angle === 'legend' ? 'legend' : c.angle + c.lv, pool);
+        // 그 발견물에 맞는 관찰을 그 부하의 특기·말투로 (js/systems/discvoice.js) — 맞는 관찰이 없으면 예전 말
+        var dvs = G.DiscVoice ? G.DiscVoice.pitch(d, c, A.sk) : null;
+        if (dvs && (c.angle !== 'legend' || U.chance(0.6))) said = dvs;
         await UI.say(P.fmt(said, Object.assign({ mate: c.name }, ctx)), mateSpk(c, sp));
         var p = P.chance(c, sp, d, liked), win = U.chance(p), dm = P.demo(c, sp), r = { id: c.id, angle: c.angle, lv: c.lv, p: p, win: win };
         if (G.Growth) G.Growth.gain('persuade', win ? 8 : 3, win ? '설득 경험 — 곁에서 거들었다' : null);   // 부하의 말을 제독이 곁에서 거든다
