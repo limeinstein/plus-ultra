@@ -414,6 +414,7 @@
   /** 자택에 들어섰을 때 (misc.js HM.enter): 가끔 아이와 얽힌 일이 생긴다 */
   HL.happen = async function () {
     var s = S(), p = s.player, b = B(), UI = G.UI;
+    p.homeGap = p.homeSeen == null ? 0 : s.day - p.homeSeen; p.homeGapDay = s.day;   // 얼마 만에 집에 왔나 — 아내의 「오래 비웠다 돌아온」 말 (family.js F.talk · voice.js)
     if (G.Siblings) { try { if (await G.Siblings.check()) { p.homeSeen = s.day; return; } } catch (e) { console.error(e); } }   // 스물두 살이 넘은 동생이 떠난다 (js/systems/siblings.js)
     if (G.KidWed) { try { if (await G.KidWed.check()) { p.homeSeen = s.day; return; } } catch (e) { console.error(e); } }   // 열여덟 살이 된 딸의 혼례 (js/systems/kidwed.js)
     var kids = HL.kidsHome(), seen = p.homeSeen;

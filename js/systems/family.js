@@ -205,11 +205,16 @@
 
   F.talk = async function () {
     var s = S(), p = s.player, w = F.wifeSpeaker(), c = cfg();
-    await UI.say(U.pick(['당신, 이번 항해는 어땠어요? 이야기 들려주세요.', '아이들이 당신을 많이 보고 싶어 했어요.', '몸 건강히 돌아와 줘서 고마워요.']), w);
-    if (p.preg) await UI.say(p.preg.told ? '배 속의 아기가 오늘 발로 찼어요. ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달만 기다리면 만나요.' : U.pick(['요즘 이상하게 신 것이 당겨요.', '요즘 몸이 조금 나른해요.']), w);
-    if (!p.kids.length && !p.preg) await UI.say(U.pick(['우리에게도 아이가 생기면 좋겠어요. 집에 자주 들러 줘요.', '당신이 집에 오래 있으면 좋겠어요.']), w);
-    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
-    if (low) await UI.say(low.name + U.jx(low.name, '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.', w);
+    // 아내의 말은 그 사람의 성품대로 (여급 like · 부하였던 아내는 말투 갈래나 고유 말 — js/systems/voice.js)
+    var VO = G.Voice, wl = function (kind, sub, fb) { return (VO && VO.wifeLine(p.wife, kind, sub)) || fb; };
+    var away = p.homeGapDay === s.day && p.homeGap >= ((G.BALANCE.homelife || {}).longAway || 300) && p.awaySaid !== s.day;
+    if (away) p.awaySaid = s.day;
+    await UI.say(away ? wl('away', null, '얼마 만이에요… 정말 오래 걸렸네요. 얼굴 좀 보여 줘요.') : wl('greet', null, U.pick(['당신, 이번 항해는 어땠어요? 이야기 들려주세요.', '아이들이 당신을 많이 보고 싶어 했어요.', '몸 건강히 돌아와 줘서 고마워요.'])), w);
+    if (p.preg) { var pn = Math.max(1, Math.round((p.preg.due - s.day) / 30)); await UI.say(p.preg.told ? wl('preg', { n: pn }, '배 속의 아기가 오늘 발로 찼어요. ' + pn + '달만 기다리면 만나요.') : wl('pregHint', null, U.pick(['요즘 이상하게 신 것이 당겨요.', '요즘 몸이 조금 나른해요.'])), w); }
+    if (!p.kids.length && !p.preg) await UI.say(wl('nokids', null, U.pick(['우리에게도 아이가 생기면 좋겠어요. 집에 자주 들러 줘요.', '당신이 집에 오래 있으면 좋겠어요.'])), w);
+    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
+    if (low) await UI.say(wl('lowKid', { kid: low.name }, low.name + U.jx(low.name, '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.'), w);
+    var kv = function (k, age, b, fb) { return (VO && VO.kid(k, age, b)) || fb; }, kr = function (k, kind, fb) { return (VO && VO.kidReact(k, kind)) || fb; };
     for (var i = 0; i < p.kids.length; i++) {
       var k = p.kids[i], age = F.kidAge(k), b; if (!k.st) k.st = inborn(); if (!k.edu) k.edu = {};
       if (k.unnamed || k.house != null) continue;          // 둘째 부인의 집에 사는 아이는 그 집에서 만난다
@@ -217,26 +222,26 @@
       b = F.bond(k);
       var sp = G.HomeLife ? G.HomeLife.speaker(k, true) : { name: k.name + ' (' + age + '세 · ' + F.bondWord(k) + ')', portrait: F.kidSpec(k), lang: 3 };
       if (k.aboard) {
-        await UI.say(U.pick(['아버지, 다음 항해는 어디로 가요? 저 밧줄 매는 법 다 익혔어요!', '아버지, 바다는 정말 넓어요. 고래도 봤어요!', '선원 아저씨들이 저더러 제법이래요.']), sp);
+        await UI.say((VO && VO.kidAboard(k)) || U.pick(['아버지, 다음 항해는 어디로 가요? 저 밧줄 매는 법 다 익혔어요!', '아버지, 바다는 정말 넓어요. 고래도 봤어요!', '선원 아저씨들이 저더러 제법이래요.']), sp);
         var ab = await UI.ask(k.name + U.jx(k.name, '은/는') + ' 견습으로 함대에 타고 있다 (' + (k.sea || 0) + '달째).', [{ label: '계속 데리고 다닌다', value: 1 }, { label: '집에 남게 한다', value: 0 }], sp);
         if (ab === 0) { k.aboard = false; await UI.say(b >= 60 ? '…알겠어요. 다음에 또 데려가 주세요, 아버지.' : '네.', sp); UI.toast(k.name + U.jx(k.name, '이/가') + ' 집에 남았다.', 'house'); }
         continue;
       }
-      if (age < 3) { await UI.say(U.pick(['아기가 당신을 보고 방긋 웃어요. 안아 줘요.', '밤마다 조금 울지만, 당신 목소리를 들으면 금방 그쳐요.']), w); continue; }
+      if (age < 3) { await UI.say(wl('baby', { kid: k.name }, U.pick(['아기가 당신을 보고 방긋 웃어요. 안아 줘요.', '밤마다 조금 울지만, 당신 목소리를 들으면 금방 그쳐요.'])), w); continue; }
       if (age < 6) {
-        await UI.say(b >= 40 ? U.pick(['아빠! 아빠! 안아 줘!', '아빠 배 타고 싶어!', '아빠, 바다에 고래 있어?']) : U.pick(['……(엄마 치마 뒤에 숨는다)', '아저씨 누구야?']), sp);
+        await UI.say(kv(k, age, b, b >= 40 ? U.pick(['아빠! 아빠! 안아 줘!', '아빠 배 타고 싶어!', '아빠, 바다에 고래 있어?']) : U.pick(['……(엄마 치마 뒤에 숨는다)', '아저씨 누구야?'])), sp);
         var play = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', [{ label: '함께 놀아 준다', value: 'play' }, { label: '옛날이야기를 들려준다', value: 'tale' }, { label: '그냥 둔다', value: null }], sp);
         if (play && k.edu[s.date.y + ':' + play] == null) {
           k.edu[s.date.y + ':' + play] = 1; F.addBond(k, 6);
-          if (play === 'play') { k.st.str = Math.min(90, k.st.str + 2); k.st.cha = Math.min(90, k.st.cha + 1); if (G.Audio) G.Audio.sfx('children'); await UI.say('아빠 최고! 또 놀아 줘!', sp); }
-          else { k.st.int = Math.min(90, k.st.int + 2); await UI.say('그래서 그 배는 어떻게 됐어? 또 들려줘!', sp); }
+          if (play === 'play') { k.st.str = Math.min(90, k.st.str + 2); k.st.cha = Math.min(90, k.st.cha + 1); if (G.Audio) G.Audio.sfx('children'); await UI.say(kr(k, 'play', '아빠 최고! 또 놀아 줘!'), sp); }
+          else { k.st.int = Math.min(90, k.st.int + 2); await UI.say(kr(k, 'tale', '그래서 그 배는 어떻게 됐어? 또 들려줘!'), sp); }
         } else if (play) await UI.say('올해는 벌써 많이 놀았어요. 이제 자야 해요.', w);
         continue;
       }
       if (age < (c.adult || 16)) {
-        await UI.say(b >= 65 ? U.pick(['아버지, 저도 크면 아버지처럼 먼 바다로 나갈 거예요.', '아버지, 바다 이야기 해 주세요!', '오늘 선생님께 지도 읽는 법을 배웠어요.'])
+        await UI.say(kv(k, age, b, b >= 65 ? U.pick(['아버지, 저도 크면 아버지처럼 먼 바다로 나갈 거예요.', '아버지, 바다 이야기 해 주세요!', '오늘 선생님께 지도 읽는 법을 배웠어요.'])
           : b >= 30 ? U.pick(['아버지, 오셨어요?', '이번에는 오래 계세요?', '오늘 선생님께 지도 읽는 법을 배웠어요.'])
-          : U.pick(['…아버지는 늘 바다에만 계시잖아요.', '어머니가 아버지 이야기를 해 주셨어요. 잘 기억이 안 나요.']), sp);
+          : U.pick(['…아버지는 늘 바다에만 계시잖아요.', '어머니가 아버지 이야기를 해 주셨어요. 잘 기억이 안 나요.'])), sp);
         var opts = [];
         if (!k.edu[s.date.y]) opts.push({ label: '가정교사를 붙인다 (금화 ' + U.num(c.eduCost || 800) + '닢)', value: 'edu' });
         if (!k.edu[s.date.y + ':story']) opts.push({ label: '항해 이야기를 들려준다', value: 'story' });
@@ -245,7 +250,7 @@
         var act = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', opts, sp);
         if (act === 'story') {
           k.edu[s.date.y + ':story'] = 1; F.addBond(k, 5); k.st.int = Math.min(90, k.st.int + 1);
-          await UI.say(b >= 30 ? '정말요? 그 바다 끝에 그런 게 있었어요? 저도 언젠가 꼭 가 볼래요!' : '……그런 일이 있었군요. (조금 귀를 기울인다)', sp);
+          await UI.say(b >= 30 ? kr(k, 'story', '정말요? 그 바다 끝에 그런 게 있었어요? 저도 언젠가 꼭 가 볼래요!') : kr(k, 'storyCold', '……그런 일이 있었군요. (조금 귀를 기울인다)'), sp);
         } else if (act === 'aboard') {
           if (b < 30) { await UI.say('…아버지 배에요? 저는… 아직 잘 모르겠어요.', sp); F.addBond(k, 2); continue; }
           var okA = await UI.confirm(k.name + U.jx(k.name, '을/를') + ' 견습 선원으로 함대에 태울까요?<br><small class="muted">함께 바다에 있는 동안 달마다 사이가 가까워지고 항해술·측량·검술 같은 특기를 익힙니다. 자택 「가족」에서 집에 남게 할 수 있습니다.</small>', '태운다', '그만둔다');
@@ -272,9 +277,9 @@
         continue;
       }
       // 어른
-      await UI.say(b >= 65 ? U.pick(['아버지, 이제 저도 어엿한 어른입니다. 언제든 배를 맡겨 주십시오.', '아버지의 뒤를 잇는 것이 제 꿈입니다.'])
+      await UI.say(kv(k, age, b, b >= 65 ? U.pick(['아버지, 이제 저도 어엿한 어른입니다. 언제든 배를 맡겨 주십시오.', '아버지의 뒤를 잇는 것이 제 꿈입니다.'])
         : b >= 30 ? U.pick(['아버지, 다녀오셨습니까.', '아버지의 배를 맡게 된다면 부끄럽지 않게 하겠습니다.'])
-        : U.pick(['…아버지는 저보다 바다를 더 사랑하시지요.', '뒤를 이으라 하시면 따르겠습니다. 그게 집안의 일이니까요.']), sp);
+        : U.pick(['…아버지는 저보다 바다를 더 사랑하시지요.', '뒤를 이으라 하시면 따르겠습니다. 그게 집안의 일이니까요.'])), sp);
       if (!k.aboard && !k.edu[s.date.y + ':story']) {
         var ad = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', [{ label: '항해 이야기를 나눈다', value: 'story' }, { label: '배에 태워 함께 다닌다', value: 'aboard' }, { label: '그냥 둔다', value: null }], sp);
         if (ad === 'story') { k.edu[s.date.y + ':story'] = 1; F.addBond(k, 5); }

@@ -305,9 +305,16 @@
   };
   W.talk = async function (w) {
     var s = S(), sp = duo(w), kids = W.kidsOf(w).filter(function (k) { return !k.unnamed; });
-    await UI.say(U.pick(['당신이 오면 이 집이 환해져요.', '이번에는 얼마나 머물 수 있어요?', '바다 이야기 들려줘요. 당신이 본 것들이 궁금해요.']), sp);
-    if (w.preg) await UI.say(w.preg.told ? '배 속의 아기가 잘 자라고 있어요. ' + Math.max(1, Math.round((w.preg.due - s.day) / 30)) + '달만 기다려요.' : '요즘 이상하게 졸려요.', sp);
-    if (kids.length) await UI.say(kids.map(function (k) { return k.name; }).join('·') + U.jx(kids[kids.length - 1].name, '이/가') + ' 아버지를 기다려요. 본국에 데려가고 싶으면 말해요. 서운하지만… 아이 앞날이 먼저니까요.', sp);
+    // 그 부인의 성품대로 (js/systems/voice.js — 여급 like · 부하였던 부인은 말투 갈래나 고유 말)
+    var VO = G.Voice, wl = function (kind, sub, fb) { return (VO && VO.wifeLine(w.id, kind, sub)) || fb; };
+    await UI.say(wl('home2', null, U.pick(['당신이 오면 이 집이 환해져요.', '이번에는 얼마나 머물 수 있어요?', '바다 이야기 들려줘요. 당신이 본 것들이 궁금해요.'])), sp);
+    if (w.preg) { var pn = Math.max(1, Math.round((w.preg.due - s.day) / 30)); await UI.say(w.preg.told ? wl('preg', { n: pn }, '배 속의 아기가 잘 자라고 있어요. ' + pn + '달만 기다려요.') : wl('pregHint', null, '요즘 이상하게 졸려요.'), sp); }
+    if (kids.length) {
+      var names = kids.map(function (k) { return k.name; }).join('·');
+      await UI.say(wl('kids2', { kids: names }, names + U.jx(kids[kids.length - 1].name, '이/가') + ' 아버지를 기다려요.') + ' 본국에 데려가고 싶으면 말해요. 서운하지만… 아이 앞날이 먼저니까요.', sp);
+      var k1 = U.pick(kids), a1 = Fm().kidAge(k1);
+      if (a1 >= 3 && VO) { var kl = VO.kid(k1, a1, Fm().bond(k1)); if (kl) await UI.say(kl, G.HomeLife ? G.HomeLife.speaker(k1, true) : { name: k1.name, portrait: Fm().kidSpec(k1), lang: 3 }); }   // 그 집 아이의 한마디
+    }
   };
   /** 아이를 본국 자택으로 데려간다 (배에 태워 고향에 들어가면 자택으로 옮긴다) */
   W.sendHome = async function (w) {

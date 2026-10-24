@@ -45,6 +45,9 @@
     return ['솔직히 요즘 마음이 좀 떠 있소…', '급료가 조금만 더 오르면 좋겠소.', '이 항해가 언제 끝날지 모르겠군.'];
   }
   // 요령 한마디 [남자 말씨, 여자 말씨]
+  /** 말투 (js/systems/voice.js) — 없으면 예전 말 */
+  function VO() { return G.Voice; }
+  function tipOf(d) { return (VO() && VO().tip(d)) || tip(d); }
   function tip(d) {
     var sk = d.sk || {}, f = d.g === 'f', t;
     if (sk.nav >= 2) t = ['긴 항해 전에는 물을 넉넉히 싣게. 바람이 멎으면 물이 먼저 바닥나는 법이지.', '긴 항해 전에는 물을 넉넉히 실어요. 바람이 멎으면 물이 먼저 바닥나거든요.'];
@@ -117,36 +120,48 @@
     function gainAff(n) { if (f && !noLove) m.aff = Math.min(100, (m.aff || 0) + n); }
     for (;;) {
       var bio = G.Bio && G.Bio.find(d.name);
-      var opts = [{ label: '요즘 어떤가', value: 'chat' }, { label: '살아온 이야기', value: 'life' }, { label: '한잔 산다', value: 'drink' }];
+      var opts = [{ label: '요즘 어떤가', value: 'chat' }, { label: '살아온 이야기', value: 'life' }];
+      // 이벤트로 얻은 부하는 저만의 옛이야기를 하나씩 들려준다 (js/systems/voice.js · js/data/voices_a·b·c.js)
+      if (VO() && VO().hasStories(d)) opts.push({ label: '옛이야기를 청한다', value: 'tale' });
+      opts.push({ label: '한잔 산다', value: 'drink' });
       if (d.witch) opts.push({ label: '점괘를 본다', value: 'fortune' });
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
       var opp = (d.g === 'f') !== (s.player.g === 'f');      // 제독과 다른 성(이성)
       opts.push({ label: '선물한다', value: 'gift' });   // 남자 부하에게도 늘 — 남자 선물은 애정 없이 충성만 오른다 (2026-10-20)
       if (f && !noLove) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
-      var v = await ask(turn++ ? U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?']) : greet(d, m, f), opts);
+      var v = await ask(turn++ ? ((VO() && VO().again(d)) || U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?'])) : ((VO() && VO().greet(d, m)) || greet(d, m, f)), opts);
       if (!v) return;
       if (v === 'chat') {
-        await say(U.pick(lines(d, m)), f && (m.aff || 0) >= 50 ? 'happy' : 'warm');
+        await say((VO() && VO().chat(d, m)) || U.pick(lines(d, m)), f && (m.aff || 0) >= 50 && !noLove ? 'happy' : 'warm');
         if (m.chat !== today) {
           m.chat = today; m.loyal = Math.min(100, (m.loyal || 70) + (cf.chatLoyal || 1)); gainAff(cf.chatAff || 2);
           if (U.chance(0.35)) {
             var dd = T().rumour(c);
             if (dd && G.Disc.addHint(dd.id, 'mate:' + d.id)) { await say((f ? '그러고 보니 이런 이야기를 들었어요. ' : '그러고 보니 이런 이야기를 들었소. ') + dd.hint, 'warm'); UI.toast('단서를 얻었다: 「' + dd.name + '」', 'scroll'); }
-            else await say(tip(d), 'warm');
-          } else await say(tip(d), 'warm');
+            else await say(tipOf(d), 'warm');
+          } else await say(tipOf(d), 'warm');
         }
       } else if (v === 'life') {
-        if (bio) { await say(f ? U.pick(['제 이야기요? 길어질 텐데 괜찮겠어요?', '그 이야기를 하려면 한 잔 더 있어야겠네요.']) : d.wd ? '내 이야기? 별로 대단할 건 없소만…' : U.pick(['내 지난 이야기라… 길어질 텐데 괜찮겠소?', '그 이야기를 하려면 술이 한 잔 더 필요하겠군.']), 'warm'); await G.Bio.show(d.name, { portrait: G.Scenes.mateSpec(d.id) }); }
-        else await say(d.story || d.desc, 'warm');
+        if (bio) { await say((VO() && VO().lifeIntro(d)) || (f ? U.pick(['제 이야기요? 길어질 텐데 괜찮겠어요?', '그 이야기를 하려면 한 잔 더 있어야겠네요.']) : d.wd ? '내 이야기? 별로 대단할 건 없소만…' : U.pick(['내 지난 이야기라… 길어질 텐데 괜찮겠소?', '그 이야기를 하려면 술이 한 잔 더 필요하겠군.'])), 'warm'); await G.Bio.show(d.name, { portrait: G.Scenes.mateSpec(d.id) }); }
+        else { var li = VO() && VO().unique(d) && VO().lifeIntro(d); if (li) await say(li, 'warm'); await say(d.story || d.desc, 'warm'); }
+      } else if (v === 'tale') {
+        // 옛이야기: 차례대로 한 편씩. 처음 듣는 이야기면 충성 +1 (한 편에 한 번)
+        var tl = VO().nextStory(d, m);
+        if (tl) {
+          await say(['<b>「' + tl.t + '」</b> <small>' + tl.n + '/' + tl.of + '</small>\n' + tl.l[0]].concat(tl.l.slice(1)).join('\f'), 'warm');
+          m.taleHeard = m.taleHeard || {};
+          if (!m.taleHeard[tl.n]) { m.taleHeard[tl.n] = 1; m.loyal = Math.min(100, (m.loyal || 70) + 1); gainAff(1); }
+          if (tl.last) await say(tl.end, 'happy');
+        }
       } else if (v === 'drink') {
         var pr = (cf.drinkCost || 8) * (2 + (c.size || 1));
         // 같은 날·같은 입항이면 한 번 — 건물을 드나들면 하루가 흘러 다시 마실 수 있던 것 (QA 2026-10-23). 바다·뭍에서는 날짜만
-        if (m.drink === today || (m.drinkPv && G.R.stayNo && m.drinkPv === G.R.stayNo() && s.loc && s.loc.mode === 'city')) { await say(f ? '오늘은 이미 충분히 마셨어요. 내일 또 한잔해요.' : '오늘은 이미 충분히 마셨소. 내일 또 한잔합시다.', 'warm'); continue; }
+        if (m.drink === today || (m.drinkPv && G.R.stayNo && m.drinkPv === G.R.stayNo() && s.loc && s.loc.mode === 'city')) { await say((VO() && VO().drinkDone(d)) || (f ? '오늘은 이미 충분히 마셨어요. 내일 또 한잔해요.' : '오늘은 이미 충분히 마셨소. 내일 또 한잔합시다.'), 'warm'); continue; }
         if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다. (금화 ' + pr + '닢)', 'coin'); continue; }
         s.player.gold -= pr; m.drink = today; if (G.R.stayNo) m.drinkPv = G.R.stayNo();
         m.loyal = Math.min(100, (m.loyal || 70) + (cf.drinkLoyal || 2)); gainAff(cf.drinkAff || 3);
-        await say(U.pick(f ? ['고마워요, 제독. 건배!', '당신이랑 마시니까 더 맛있네요.', '오늘은 제가 노래 한 곡 불러 드릴게요.'] : ['제독이 사는 술이라면 사양 않겠소!', '바다와 제독을 위하여!', '크으, 이 맛에 뱃일을 하지.']), 'happy');
+        await say((VO() && VO().drink(d)) || U.pick(f ? ['고마워요, 제독. 건배!', '당신이랑 마시니까 더 맛있네요.', '오늘은 제가 노래 한 곡 불러 드릴게요.'] : ['제독이 사는 술이라면 사양 않겠소!', '바다와 제독을 위하여!', '크으, 이 맛에 뱃일을 하지.']), 'happy');
       } else if (v === 'fortune') {
         var fd = cf.fortuneDays || 30;
         if (m.fortune != null && s.day - m.fortune < fd) { await say('수정 구슬도 쉬어야 해요. ' + (fd - (s.day - m.fortune)) + '일쯤 뒤에 다시 물어보세요.', 'warm'); continue; }
