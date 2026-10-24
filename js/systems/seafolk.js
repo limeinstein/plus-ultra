@@ -383,6 +383,7 @@
     return who;
   };
   SF.greet = function (n) {
+    if (n.route && G.TradeFleet) { var tg = G.TradeFleet.greet(n); if (tg && !(n.captain && n.captain.mate)) return tg; }   // 교역 항로의 상선대 (js/systems/tradefleets.js)
     if (n.exp) return '「' + n.exp.who + '의 함대요. ' + n.exp.nation + ' 왕실의 깃발 아래 항해 중이오. 무슨 일이오?」';
     if (n.captain && n.captain.mate) { var m = G.MATE[n.captain.mate]; return '「좋은 바람이오! 이 배의 선장 ' + (m ? m.name : '') + '이오. 무슨 일이오?」'; }
     return null;
