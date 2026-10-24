@@ -393,6 +393,9 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 .windbox canvas { position: static !important; }
 .sailbar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 18; display: flex; gap: 8px; padding: 8px 10px; }
 .sailbar .btn { min-height: 44px; padding: 6px 14px; font-size: 17px; }
+/* 입항 단추는 너비가 늘 같다 — 항구 이름이 길면 말줄임 (하단 메뉴가 커졌다 작아졌다 하며 단추가 밀리지 않게, 2026-10-25) */
+.sailbar .btn.portbtn { width: 214px; text-align: center; }
+.sailbar .btn.portbtn .pn { display: inline-block; max-width: 158px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
 .speedctl { display: flex; gap: 4px; align-items: center; padding: 0 6px; }
 .speedctl .opt { padding: 6px 10px; font-size: 15px; background: rgba(0,0,0,.3); color: var(--cream); border-color: #5a4428; }
 .speedctl .opt.on { background: linear-gradient(180deg, #2c4a6e, #1b2f48); }

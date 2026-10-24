@@ -162,10 +162,12 @@
     var sp = U.el('div', 'speedctl');
     SPEEDS.forEach(function (k) { var o = U.el('div', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.onclick = function (e) { e.stopPropagation(); st.speed = k; U.$$('.opt', sp).forEach(function (x) { x.classList.remove('on'); }); o.classList.add('on'); }; sp.appendChild(o); });
     bar.appendChild(sp);
-    hudEl.port = btn('입항', 'anchor', function () { tryEnterPort(); }, 'navy');
+    // 하단 메뉴는 크기가 늘 같다 (2026-10-25 — 항구 이름·비 대책 단추에 따라 너비가 바뀌어 단추 자리가 밀리면서 「상륙」을 누르려다 「낚시」를 누르던 것):
+    // 입항 단추는 너비를 정해 두고 긴 항구 이름은 말줄임(전체 이름은 풍선 도움말), 비 대책 단추는 늘 자리를 지키고 비가 올 때만 누를 수 있다
+    hudEl.port = btn('<span class="pn">입항</span>', 'anchor', function () { tryEnterPort(); }, 'navy portbtn');
     hudEl.land = btn('상륙', 'boot', function () { tryLand(); });
     if (G.Fishing) btn('낚시', 'fish', function () { goFish(); });
-    if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.style.display = G.Rain.raining() ? '' : 'none'; }   // 비가 오는 동안만 보인다
+    if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { if (!G.Rain.raining()) return; st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.classList.toggle('disabled', !G.Rain.raining()); }   // 비가 오는 동안만 누를 수 있다 (자리는 늘 그대로)
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     hudEl.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
@@ -1839,9 +1841,9 @@
   function refreshButtons() {
     refreshFollow();
     var pn = portNear();
-    if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
+    if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + '<span class="pn">' + (pn ? U.esc(pn.name) + ' 입항' : '입항') + '</span>'); var ptl = pn ? pn.name + ' 입항' : '가까운 항구가 없습니다'; if (hudEl.port.title !== ptl) hudEl.port.title = ptl; }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
-    if (hudEl.rain) { var rv = G.Rain.raining() ? '' : 'none'; if (hudEl.rain.style.display !== rv) hudEl.rain.style.display = rv; }
+    if (hudEl.rain) { var rn = !G.Rain.raining(); if (hudEl.rain.classList.contains('disabled') !== rn) { hudEl.rain.classList.toggle('disabled', rn); hudEl.rain.title = rn ? '비가 올 때 쓸 수 있습니다' : '비를 맞는 동안의 대책'; } }
     if (hudEl.search) {
       var canSearch = st.paused && !st.stopping && shipSpeed() < FXS().stopSpeed && !st.busy;
       hudEl.search.classList.toggle('disabled', !canSearch);
