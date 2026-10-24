@@ -5,7 +5,8 @@
      집에 사는 부하 출신 부인은 그 집에서 다시 배에 태울 수 있다.
    · 함께 항해하는 둘째 부인은 본국(제독 나라의 항구)에 들어서면 남의 눈을 피해 선실에 숨기도 한다 — 그 항구에 있는 동안 특기·말을 쓸 수 없다.
    · 배에 본처가 타고 있으면 둘째 부인은 배에 탈 수 없다 (본처를 태우면 배에 있던 둘째 부인은 제 집으로 간다).
-   · 둘째 부인의 집에서도 아이가 생긴다. 아이는 모두 합쳐 5명까지(본처의 아이와 함께 센다). 아이를 본국 자택으로 데려올 수 있다.
+   · 둘째 부인의 집에서도 아이가 생긴다. 아이는 부인 한 사람에게 5명까지 · 아들은 모든 부인을 합쳐 5명까지 · 딸은 부인마다 2명까지
+     (2026-10-24 사용자 요청, 조정값 G.BALANCE.family perMother·sons·daughtersPer). 아이를 본국 자택으로 데려올 수 있다.
    · 뒤를 이을 수 있는 것은 아들뿐 (family.js F.heirs).
    상태: s.player.wives2 = [{id, kind:'maid'|'mate', city, house, aboard, deliver, wed, preg, lastBirth, tryDay}]
          s.player.wifeAboard — 본처가 배에 타고 있다
@@ -24,7 +25,7 @@
   function C() { return G.Scenes.city; }
   function T() { return C().B.tavern; }
   G.BALANCE = G.BALANCE || {};
-  G.BALANCE.wives = G.BALANCE.wives || { hideHome: 0.7, conceive: 0.3, maxKids: 5, maxSpouses: 12 };
+  G.BALANCE.wives = G.BALANCE.wives || { hideHome: 0.7, conceive: 0.3, maxSpouses: 12 };
   // 2026-10-21 떠난 부인이 마음을 푸는 날수 · 부하와의 썸에서 결투한 뒤 (피로·규율·부인 충성)
   if (G.BALANCE.wives.coldDays == null) G.BALANCE.wives.coldDays = 120;
   if (!G.BALANCE.wives.affair) G.BALANCE.wives.affair = { fatigueWin: 15, fatigueLose: 25, wifeWin: 25, wifeLose: 15, discipline: 5 };
@@ -52,13 +53,52 @@
   W.aboard = function () { W.sync(); return W.list().filter(function (w) { return w.aboard; }); };
   function mateRow(id) { return S().mates.filter(function (m) { return m.id === id; })[0] || null; }
 
-  // ---------------------------------------------------------------- 아이 수 (모두 합쳐 5명)
-  W.kidTotal = function () {
-    var p = P(), n = (p.kids || []).length + (p.preg ? 1 : 0);
-    W.list().forEach(function (w) { if (w.preg) n++; });
+  // ---------------------------------------------------------------- 아이 수: 부인마다 5명 · 아들은 모두 합쳐 5명 · 딸은 부인마다 2명
+  /* 아들·딸은 아이가 생길 때(임신) 정해 둔다 (preg.sex — 겉으로는 보이지 않는다). 그래야 여러 부인이 한꺼번에 아이를 가져도 수를 넘지 않는다.
+     옛 저장의 임신(preg.sex 없음)은 태어날 때 남은 자리를 보고 정한다. 옛 저장에 이미 수를 넘는 아이가 있어도 없애지 않고 새 아이만 막는다. */
+  function kc() { var f = G.BALANCE.family || {}; return { mom: f.perMother || 5, sons: f.sons || 5, daughters: f.daughtersPer || 2 }; }
+  /** 어머니 열쇠: 본처 = 'main', 둘째 부인부터는 그 id */
+  W.momKey = function (w) { return w && w.id ? w.id : 'main'; };
+  W.momOf = function (k) { var p = P(); return k.mother && k.mother !== p.wife ? k.mother : 'main'; };
+  function pregOf(key) { var p = P(); if (key === 'main') return p.preg || null; var w = W.of(key); return w && w.preg || null; }
+  function allPregs() { var p = P(), out = p.preg ? [p.preg] : []; W.list().forEach(function (w) { if (w.preg) out.push(w.preg); }); return out; }
+  /** 그 어머니의 아이 수 (배 속 아기 포함): { all, f } */
+  W.momCount = function (key, skipPreg) {
+    var n = 0, f = 0;
+    (P().kids || []).forEach(function (k) { if (W.momOf(k) === key) { n++; if (k.sex === 'f') f++; } });
+    var pr = pregOf(key); if (pr && pr !== skipPreg) { n++; if (pr.sex === 'f') f++; }
+    return { all: n, f: f };
+  };
+  /** 모든 부인의 아들 수 (아들로 정해진 배 속 아기 포함) */
+  W.sonTotal = function (skipPreg) {
+    var n = (P().kids || []).filter(function (k) { return k.sex !== 'f'; }).length;
+    allPregs().forEach(function (pr) { if (pr !== skipPreg && pr.sex === 'm') n++; });
     return n;
   };
-  W.maxKids = function () { return cfg().maxKids || ((G.BALANCE.family || {}).maxKids) || 5; };
+  /** 그 어머니에게 새로 생길 수 있는 아이의 성별 (빈 배열 = 더는 아이가 생기지 않는다) */
+  W.sexesOpen = function (key, skipPreg) {
+    var K = kc(), c = W.momCount(key, skipPreg), out = [];
+    if (c.all >= K.mom) return out;
+    if (W.sonTotal(skipPreg) < K.sons) out.push('m');
+    if (c.f < K.daughters) out.push('f');
+    return out;
+  };
+  W.canConceive = function (key) { return W.sexesOpen(key).length > 0; };
+  /** 아이가 생긴다: 아들·딸을 이때 정한다 */
+  W.newPreg = function (key, day, gestation) { var o = W.sexesOpen(key); return { since: day, due: day + gestation, told: false, sex: o.length ? U.pick(o) : U.pick(['m', 'f']) }; };
+  /** 태어날 아이들의 성별: 임신 때 정한 성별, 쌍둥이는 남은 자리가 있을 때만 (twin = 쌍둥이를 굴린 결과) */
+  W.birthSexes = function (key, pr, twin) {
+    var o0 = W.sexesOpen(key, pr), first = pr && pr.sex ? pr.sex : o0.length ? U.pick(o0) : U.pick(['m', 'f']), out = [first];
+    if (twin) {
+      var K = kc(), c = W.momCount(key, pr), sons = W.sonTotal(pr) + (first === 'm' ? 1 : 0), f = c.f + (first === 'f' ? 1 : 0), o = [];
+      if (c.all + 1 < K.mom) { if (sons < K.sons) o.push('m'); if (f < K.daughters) o.push('f'); }
+      if (o.length) out.push(o.indexOf(first) >= 0 ? first : o[0]);   // 쌍둥이는 되도록 같은 성별
+    }
+    return out;
+  };
+  /** 아이 수 전체 (예전 호환 — 정보 창 등) */
+  W.kidTotal = function () { return (P().kids || []).length + allPregs().length; };
+  W.maxKids = function () { var K = kc(); return K.mom * W.count(); };
   W.kidsOf = function (w) { return (P().kids || []).filter(function (k) { return k.mother === w.id && k.house === w.city; }); };
 
   // ---------------------------------------------------------------- 청혼
@@ -215,9 +255,9 @@
       if (!pr.told && s.day - pr.since >= 75 && ship) { pr.told = true; out.push({ icon: 'heart', text: '배 위에서 ' + nm + U.jx(nm, '이/가') + ' 살며시 귀띔했다. 「당신, 아기가 생겼어요.」' }); }
       if (!pr.told && s.day - pr.since >= 75 && !here) { pr.told = true; out.push({ icon: 'heart', text: W.cityName(w) + '의 ' + nm + '에게서 편지가 왔다. 「당신, 아기가 생겼어요. 이 도시에서 기다릴게요.」' }); }
       if (s.day < pr.due) return;
-      var twins = U.chance(fc.twins || 0.03) && W.kidTotal() < W.maxKids(), born = [];
-      for (var t = 0; t < (twins ? 2 : 1); t++) {
-        var k = { name: '', unnamed: true, sex: U.pick(['m', 'f']), born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(w), edu: {}, mother: w.id, house: w.city };
+      var sexes = W.birthSexes(W.momKey(w), pr, U.chance(fc.twins || 0.03)), twins = sexes.length > 1, born = [];
+      for (var t = 0; t < sexes.length; t++) {
+        var k = { name: '', unnamed: true, sex: sexes[t], born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(w), edu: {}, mother: w.id, house: w.city };
         k.witness = here; k.bond = here ? (fc.bondBorn || 60) : (fc.bondMissed || 40);
         P().kids.push(k); born.push(k);
       }
@@ -258,9 +298,9 @@
       await UI.alert(W.name(w) + U.jx(W.name(w), '이/가') + ' 아이를 가졌다. ' + Math.max(1, Math.round((w.preg.due - s.day) / 30)) + '달쯤 뒤에 태어난다.', '기쁜 소식');
     }
     var md = G.MATE[w.id], tooOld = md && (md.old || (md.bornY && s.date.y - md.bornY > 45));
-    if (!w.preg && !tooOld && W.kidTotal() < W.maxKids() && (w.lastBirth == null || s.day - w.lastBirth >= (fc.gapDays || 300)) && (w.tryDay == null || s.day - w.tryDay >= (rest ? 3 : 20))) {
+    if (!w.preg && !tooOld && W.canConceive(W.momKey(w)) && (w.lastBirth == null || s.day - w.lastBirth >= (fc.gapDays || 300)) && (w.tryDay == null || s.day - w.tryDay >= (rest ? 3 : 20))) {
       w.tryDay = s.day;
-      if (U.chance((cfg().conceive || 0.3) * (rest ? 1.2 : 1))) w.preg = { since: s.day, due: s.day + (fc.gestation || 266), told: false };
+      if (U.chance((cfg().conceive || 0.3) * (rest ? 1.2 : 1))) w.preg = W.newPreg(W.momKey(w), s.day, fc.gestation || 266);
     }
   };
   W.talk = async function (w) {

@@ -78,9 +78,10 @@
       if (!atHome) out.push({ icon: 'heart', text: '고향의 아내가 곧 해산한다 (약 ' + Math.max(1, pr.due - s.day) + '일 뒤). 집에 돌아가 곁을 지켜 주자.' });
     }
     if (s.day >= pr.due) {
-      var twins = U.chance(c.twins || 0.03), born = [];
-      for (var t = 0; t < (twins ? 2 : 1); t++) {
-        var sex = U.pick(['m', 'f']); var k = newKid(sex);
+      // 아들·딸은 임신 때 정해 두었다 (부인마다 5명 · 아들 모두 5명 · 딸 부인마다 2명 — wives.js W.birthSexes)
+      var sexes = G.Wives && G.Wives.birthSexes ? G.Wives.birthSexes('main', pr, U.chance(c.twins || 0.03)) : [U.pick(['m', 'f'])], twins = sexes.length > 1, born = [];
+      for (var t = 0; t < sexes.length; t++) {
+        var sex = sexes[t]; var k = newKid(sex);
         k.witness = !!atHome;                                         // 제독이 해산을 지켜보았나 — 출산 장면·첫 사이
         k.bond = atHome ? (c.bondBorn || 60) : (c.bondMissed || 40);
         p.kids.push(k); born.push(k);
@@ -192,12 +193,13 @@
       G.State.log('아내가 아이를 가졌다.');
     }
     // 아이가 생긴다
-    var today = s.day, kidsN = G.Wives ? G.Wives.kidTotal() : p.kids.length + (p.preg ? 1 : 0), wm = F.wifeMate();   // 아이는 둘째 부인의 아이까지 모두 합쳐 5명
+    // 본처의 아이 5명까지 · 아들은 둘째 부인의 아이까지 모두 합쳐 5명 · 딸은 2명 (wives.js W.sexesOpen)
+    var today = s.day, room = G.Wives && G.Wives.canConceive ? G.Wives.canConceive('main') : p.kids.length + (p.preg ? 1 : 0) < (c.perMother || 5), wm = F.wifeMate();
     var tooOld = wm && (wm.old || (wm.bornY && s.date.y - wm.bornY > 45));   // 늙은 마녀·나이 든 아내
-    if (!p.preg && !tooOld && kidsN < (c.maxKids || 5) && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
+    if (!p.preg && !tooOld && room && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
         (p.tryDay == null || today - p.tryDay >= (rest ? 3 : 20))) {
       p.tryDay = today;
-      if (U.chance((c.conceive || 0.35) * (rest ? 1.2 : 1))) p.preg = { since: today, due: today + (c.gestation || 266), told: false };
+      if (U.chance((c.conceive || 0.35) * (rest ? 1.2 : 1))) p.preg = G.Wives && G.Wives.newPreg ? G.Wives.newPreg('main', today, c.gestation || 266) : { since: today, due: today + (c.gestation || 266), told: false };
     }
   };
 

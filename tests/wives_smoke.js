@@ -2,7 +2,7 @@
    · 본처가 있을 때 여급에게 청혼 → 그 여급의 도시에 「○○의 집」, 거리·메뉴에 건물
    · 부하에게 청혼 → 함께 항해 / 본국 항구에서 숨으면 특기 0 / 다른 항구에서는 그대로
    · 본처를 배에 태우면 배의 둘째 부인은 제 집으로, 본처가 있는 동안 다시 태울 수 없음
-   · 둘째 부인의 집에서 임신·출산·이름 짓기, 아이는 모두 합쳐 5명까지, 아이를 본국 자택으로
+   · 둘째 부인의 집에서 임신·출산·이름 짓기, 아이는 부인 한 사람에게 5명까지, 아이를 본국 자택으로
    · 배우자는 본처 포함 12명까지, 12명인 상태에서는 여급·부하 청혼 모두 막힘
    · 뒤를 잇는 것은 아들뿐
    대화창은 시험용으로 저절로 넘긴다(UI.say·ask·confirm·choose를 바꿔 끼움). 마지막에 둘째 부인의 집 화면을 찍는다.
@@ -88,9 +88,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.loc = { mode: 'city', city: maid.city, lon: 0, lat: 0, heading: 0 };
       await W.visit(w, false);
       out.kidName = kid.name;
-      // 아이 수 5명 제한
-      for (let i = 0; i < 4; i++) p.kids.push({ name: 'K' + i, sex: i % 2 ? 'm' : 'f', born: { y: s.date.y - 20, m: 1, d: 1 }, sk: {}, lg: {}, st: { str: 50, int: 50, mar: 50, cha: 50 }, edu: {} });
-      out.total = W.kidTotal();
+      // 아이 수: 부인 한 사람에게 5명까지 (이 부인의 아이 1 + 4)
+      for (let i = 0; i < 4; i++) p.kids.push({ name: 'K' + i, sex: i % 2 ? 'm' : 'f', mother: maid.id, house: maid.city + 1000, born: { y: s.date.y - 20, m: 1, d: 1 }, sk: {}, lg: {}, st: { str: 50, int: 50, mar: 50, cha: 50 }, edu: {} });
+      out.total = W.momCount(maid.id).all;
       w.tryDay = null; w.lastBirth = null; G.BALANCE.wives.conceive = 1;
       await W.visit(w, true);
       out.noMore = !w.preg;
@@ -131,7 +131,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.reboard, '본처를 집에 남기면 다시 함께 항해');
     ok(r.kidHouse === r.kidCity && r.birth.length, '둘째 부인의 집에서 출산 — ' + r.birth[0]);
     ok(r.kidName && r.kidName.length, '그 집에서 이름 짓기: ' + r.kidName);
-    ok(r.total === 5 && r.noMore, '아이는 모두 합쳐 5명까지 (더 생기지 않음)');
+    ok(r.total === 5 && r.noMore, '부인 한 사람의 아이는 5명까지 (더 생기지 않음)');
     ok(r.sentHouse === -1 && r.atHome && r.homeNews.length, '아이를 본국 자택으로 — ' + r.homeNews[0]);
     ok(r.heirs.length && r.heirs.every(x => x === 'm'), '후계자는 아들만 (' + r.heirs.join(',') + ')');
     ok(r.cap.count === 12 && r.cap.max === 12 && !r.cap.maid && !r.cap.mate && r.cap.after === 12 && r.cap.rings === 2,

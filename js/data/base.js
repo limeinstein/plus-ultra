@@ -511,7 +511,8 @@
     // 후원자의 대가 바뀔 때 (succession.js): 그 자리의 신뢰는 sponsorKeep만 남고, 제독의 자녀가 뒤를 이으면 모든 신뢰가 heirKeep만 남는다.
     // 유산: 떠난 사람과의 신뢰가 legacyTrust 이상이면 legacyBase + (신뢰 − legacyTrust)/60 확률로 물건·돈(재력 × 세력 × legacyGold)을 남긴다
     succession: { sponsorKeep: 0.5, heirKeep: 0.3, legacyTrust: 70, legacyBase: 0.35, legacyGold: 250 },
-    // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야, 자녀 maxKids명까지).
+    // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야).
+    // 아이 수 (wives.js W.sexesOpen, 2026-10-24): 부인 한 사람에게 perMother명까지 · 아들은 모든 부인을 합쳐 sons명까지 · 딸은 부인마다 daughtersPer명까지
     // 배우자 (wives.js): 본처를 포함해 maxSpouses명까지. 옛 저장에 더 많아도 없애지는 않고 새 혼인만 막는다.
     // gestation일 뒤에 태어나고(쌍둥이 twins), adult세가 되면 뒤를 이을 수 있다. 가정교사는 한 아이에게 해마다 한 번, 값 eduCost닢
     // 유행 (js/systems/fad.js): window일 안에 need번, 한 번에 profit 넘는 이익으로 같은 물건을 같은 나라·지역에 팔면 chance 확률로 유행
@@ -544,9 +545,9 @@
     // · 생일 앞뒤 birthdayDays일 · 집에서 일이 생기는 간격 happenGap일·확률 happenChance · 바다에서 추억의 물건: 피로 keepFatigue부터 하루 keepChance, 피로 −keepRest
     homelife: { statMax: 90, skillChance: 0.6, ledgerGold: 4, dinnerRest: 10, cold: 30, coldBonus: 2, longAway: 300, birthdayDays: 10,
       happenGap: 20, happenChance: 0.55, keepChance: 0.03, keepRest: 4, keepFatigue: 25 },
-    wives: { hideHome: 0.7, conceive: 0.3, maxKids: 5, maxSpouses: 12 },
+    wives: { hideHome: 0.7, conceive: 0.3, maxSpouses: 12 },
     kidVoy: { chance: 0.02, gap: 60 },   // 배에 탄 아이의 하루 (js/systems/kidvoyage.js): 바다 위 하루마다 일어날 확률 · 같은 아이는 며칠에 한 번까지
-    family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
+    family: { conceive: 0.35, gapDays: 300, perMother: 5, sons: 5, daughtersPer: 2, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
       // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill
       // · 해산 한 달 앞(nearDays)이면 소식과 자택 「해산을 기다린다」 · 견습은 apprenticeAge살부터
