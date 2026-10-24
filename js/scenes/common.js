@@ -350,13 +350,16 @@
     if (aLine) await UI.say(aLine, lead);
     var natural = d.cat === 'nature' || d.natural;
     var art = bestHand('art'), science = animal ? bestHand('sci') : { lv: 0 }, craft = (natural || animal || d.cat === 'geo') ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
-    if (science.lv) await UI.say(lineFor('sci', science.lv, d), science.speaker);
-    if (art.lv) await UI.say(lineFor('art', art.lv, d), art.speaker);
-    if (craft.lv) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
     var cook = d.cat === 'trade' && (!RT || !RT.edible || RT.edible(d)) ? bestHand('cook') : { lv: 0 }, music = d.cat === 'people' ? bestHand('music') : { lv: 0 };
-    if (cook.lv) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
-    if (music.lv) await UI.say(lineFor('music', music.lv, d), music.speaker);
-    if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv) { var ns = RT ? RT.noSkill(d) : null; if (ns) await UI.say(ns, lead); }
+    // 그 발견물만의 관찰을 특기가 맞는 부하들이 저마다의 말투로 (js/systems/discvoice.js · js/data/discfacts_1~8.js) — 관찰이 나온 특기는 예전 갈래 말을 건너뛴다
+    var said = {}, dvl = G.DiscVoice ? G.DiscVoice.reveal(d, 2) : [];
+    for (var dvi = 0; dvi < dvl.length; dvi++) { var dv = dvl[dvi]; said[dv.sk] = 1; await UI.say(dv.text, { name: dv.d.name, portrait: SC.mateSpec(dv.m.id), lang: 3 }); }
+    if (science.lv && !said.sci) await UI.say(lineFor('sci', science.lv, d), science.speaker);
+    if (art.lv && (!said.art || art.lv >= 2 && !dvl.length)) await UI.say(lineFor('art', art.lv, d), art.speaker);
+    if (craft.lv && !said.craft && !dvl.length) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
+    if (cook.lv && !said.cook && !dvl.length) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
+    if (music.lv && !said.music && !dvl.length) await UI.say(lineFor('music', music.lv, d), music.speaker);
+    if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv && !dvl.length) { var ns = RT ? RT.noSkill(d) : null; if (ns) await UI.say(ns, lead); }
     if (rec.k > 1.0001) {
       var extra = Math.round(fame - fame / rec.k);
       var recW = art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록';

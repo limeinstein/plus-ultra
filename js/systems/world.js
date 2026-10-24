@@ -23,7 +23,8 @@
     }
     out = out.concat(G.Disc.rivals());
     if (G.Cargo) out = out.concat(G.Cargo.daily());   // 오래 묵은 먹을거리·향신료가 상한다
-    if (G.Names) out = out.concat(G.Names.daily());       // 아메리고 베스푸치의 보고와 대륙 이름
+    if (G.Names) out = out.concat(G.Names.daily());
+    if (G.TradeFleet) out = out.concat(G.TradeFleet.daily());   // 교역 항로의 상선대: 열림·늘어남 (js/systems/tradefleets.js)       // 아메리고 베스푸치의 보고와 대륙 이름
     if (G.Frontier) out = out.concat(G.Frontier.tick());
     if (G.Achieve) out = out.concat(G.Achieve.daily());   // 옛 저장: 이미 이룬 업적·이미 열린 사슬의 단서
     if (G.Cabins) out = out.concat(G.Cabins.daily());

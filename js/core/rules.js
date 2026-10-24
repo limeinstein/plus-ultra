@@ -657,6 +657,7 @@
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행하는 물건은 사는 값도 뛴다 (js/systems/fad.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요: 1480~1700년 유럽 시장이 찾던 물건 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'buy');   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)
+    if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'buy');   // 교역 항로의 상선대: 실어 오는 쪽은 싸지고 나는 쪽은 비싸진다 (js/systems/tradefleets.js)
     return Math.max(1, Math.round(p));
   };
   /** price the city pays when you sell */
@@ -667,6 +668,7 @@
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행: 그 나라·지역에서 값이 몇 배 (js/systems/fad.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'sell');   // 세상의 시장 사건 (js/systems/economy.js)
+    if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'sell');   // 교역 항로의 상선대 (js/systems/tradefleets.js)
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자
@@ -746,7 +748,7 @@
       sx.sat += q * share * (1 - dd / rad) / R.satCap(t, goodId);
     });
   };
-  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)) * (G.Econ ? G.Econ.mult(c, goodId, 'stock') : 1))); };
+  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)) * (G.Econ ? G.Econ.mult(c, goodId, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, goodId, 'stock') : 1))); };
   R.maybeMarketEvent = function (c) {
     var m = R.market(c.id), S = R.S();
     if (m.ev) return;

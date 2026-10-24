@@ -756,7 +756,7 @@
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
     var pr = pirateChance(l.lon, l.lat);
-    var mr = 0.05 + ports * 0.02;
+    var mr = 0.05 + ports * 0.02 + (G.TradeFleet ? G.TradeFleet.seaChance(l.lon, l.lat) : 0);   // 교역 항로의 뱃길에서는 상선대를 더 자주 만난다
     var kind = null, f0 = s.fleet.ships[0];
     if (U.chance(pr) && (!G.Pace || G.Pace.ok('ship:pirate', { noGap: true }))) kind = 'pirate'; else if (U.chance(mr)) kind = U.chance(0.75) ? 'merchant' : 'navy';
     if (!kind) return;
@@ -772,6 +772,7 @@
       var npc = { id: Math.random().toString(36).slice(2), kind: kind, lon: lon, lat: lat, heading: U.rf(0, 6.28), n: n, K: K, spd: U.rf(0.9, 1.4), life: U.ri(6, 14), hostile: NPC_KIND[kind].hostile || (kind === 'navy' && s.player.notoriety > 40), nation: nation, zone: zone, ships: ships };
       // 위용: 기함이 거대한 보선이면 작은 해적 떼는 덤비지 않는다
       if (kind === 'pirate' && n <= 2 && f0 && G.Ships.has(f0, 'awe')) { npc.hostile = false; npc.awed = true; }
+      if (G.TradeFleet) G.TradeFleet.decorate(npc);       // 뱃길 위의 상선은 그 항로의 상선대 (js/systems/tradefleets.js)
       if (G.SeaFolk) G.SeaFolk.decorate(npc, st.npcs);   // 상선의 나라·선장(항해사), 적대국 함대는 덤빈다
       st.npcs.push(npc);
       if (G.ShipSprite) G.ShipSprite.want(ships);   // 화면에 들어오기 전에 그 배 그림을 풀어 둔다

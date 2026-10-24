@@ -60,7 +60,7 @@
     return ' <span class="tag ' + (v >= 1 ? 'era-up' : 'era-down') + '" title="' + U.esc('유럽 시장의 시대 수요 ×' + v.toFixed(2) + (nt ? ' — ' + nt : '')) + '">시대 ' + (v >= 1 ? '▲' : '▼') + '</span>';
   }
   /** 살아 있는 경제의 꼬리표 (js/systems/economy.js · js/data/econ.js): 세상의 시장 사건 ▲▼ */
-  function evTag(c, id) { return G.Econ ? G.Econ.tag(c, id) : ''; }
+  function evTag(c, id) { return (G.Econ ? G.Econ.tag(c, id) : '') + (G.TradeFleet ? G.TradeFleet.tag(c, id) : ''); }   // + 교역 항로의 상선대 ▼▲ (js/systems/tradefleets.js)
   /** 이 물건이 가장 비싸게 팔리는 지역들 (산지에서 먼 곳): [{r, m}] 큰 순 */
   function farRegions(id) {
     return G.REGIONS.map(function (n, r) { return { r: r, m: R.regionalMult(id, r) }; }).sort(function (a, b) { return b.m - a.m; });

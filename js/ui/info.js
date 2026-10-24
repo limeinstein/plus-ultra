@@ -433,6 +433,7 @@
   PAGES.trade = function (el) {
     var s = S();
     var econ = G.Econ ? G.Econ.box() : '';
+    if (G.TradeFleet) econ += G.TradeFleet.box();   // 교역 항로의 상선대 (js/systems/tradefleets.js)
     if (!G.Ledger || !G.Ledger.count()) { el.innerHTML = econ + eraBox() + '<div class="muted">아직 적어 둔 시세가 없습니다. 교역소에 들를 때마다 그 도시의 사는 값·파는 값이 이 수첩에 적힙니다.</div>'; return; }
     var rows = G.Ledger.table();
     var br = G.Ledger.bestRoute();
