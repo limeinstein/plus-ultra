@@ -13,11 +13,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main() -> None:
-    prompts = json.loads(
+    data = json.loads(
         (ROOT / "tools" / "new_discovery_assets" / "prompts.json").read_text(
             encoding="utf-8"
         )
-    )["mystery"]
+    )
+    prompts = data["mystery"]
     ids = [row["id"] for row in prompts]
     assert len(ids) == 110
     assert len(set(ids)) == 110
@@ -55,9 +56,31 @@ def main() -> None:
     )
     assert achievement.size == (1881, 836)
     assert '"achievement-events/mysteries"' in manifest
+
+    landmarks = data["mysteryLandmarks"]
+    map_sheets = data["mysteryIconSheets"]
+    assert not landmarks  # 현재 110곳은 육상 106곳·해상 4곳이며 도시형은 없다.
+    assert len(map_sheets) == 7
+    assert sum(len(row["ids"]) for row in map_sheets) == 110
+    for row in map_sheets:
+        icon_sheet = Image.open(ROOT / row["target"])
+        assert icon_sheet.width == icon_sheet.height
+        assert icon_sheet.width % 4 == 0
+        assert icon_sheet.mode == "RGBA"
+        assert icon_sheet.getchannel("A").getextrema()[0] == 0
+        assert f'"map-discoveries/{row["id"]}"' in manifest
+
+    last = Image.open(ROOT / map_sheets[-1]["target"])
+    cell = last.width // 4
+    alpha = last.getchannel("A")
+    for slot in (14, 15):
+        x = (slot % 4) * cell
+        y = (slot // 4) * cell
+        assert alpha.crop((x, y, x + cell, y + cell)).getextrema()[1] == 0
     print(
         "OK: mystery assets 110 × "
-        "(4×4 source, 16-frame GIF, ending, runtime sheet) + achievement shot"
+        "(4×4 source, 16-frame GIF, ending, runtime sheet) + "
+        "achievement shot + exploration icons 7 sheets"
     )
 
 

@@ -9,7 +9,7 @@
   G.MAX_MATES = Infinity;   // 부하는 몇 명이든 들일 수 있다 (급료가 버거우면 경리·부관이 말린다 — G.Cabins.wageWarning). 옛 코드가 보던 값이라 남겨 둔다
 
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
-  function maidOf(c) { if (G.MaidSwap) return G.MaidSwap.at(c.id); return G.MAIDS.filter(function (m) { return m.city === c.id; })[0] || null; }   // 지난 대 제독의 아내였던 여급 자리에는 새 여급 (js/systems/maidswap.js)
+  function maidOf(c) { if (G.MaidSwap) return G.MaidSwap.at(c.id); return G.baseMaidAt ? G.baseMaidAt(c.id) : G.MAIDS.filter(function (m) { return m.city === c.id && (!m.from || !S() || S().date.y >= m.from); })[0] || null; }   // 지난 대 제독의 아내였던 여급 자리에는 새 여급 (js/systems/maidswap.js)
   T.maidOf = maidOf;
   T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), half: G.Img.chain.maidHalf(m.id, c), lang: R.cityLang(c).lv, li: R.cityLang(c).li }; };
   T.playerSpeaker = function () { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; };

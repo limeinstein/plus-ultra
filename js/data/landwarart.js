@@ -19,33 +19,33 @@
     ottoman: { name: '오스만', m: ['ottoman', 'shield'], r: ['ottoman', 'janissary'], l: ['ottoman', 'shield'], c: ['ottoman', 'topcu'], b: ['hyena', 'hyena'] },
     persia: { name: '페르시아', m: ['india_central', 'qizilbash'], r: ['india_central', 'horse_archer'], l: ['india_central', 'qizilbash'], c: ['ottoman', 'topcu'], b: ['hyena', 'hyena'] },
     afghan: { name: '중앙아시아', m: ['india_central', 'afghan'], r: ['india_central', 'horse_archer'], l: ['india_central', 'afghan'], c: CANNON, b: ['hyena', 'bear'] },
-    india: { name: '인도', m: ['india_central', 'rajput'], r: ['india_central', 'mughal_gun'], l: ['india_central', 'rajput'], c: CANNON, b: ['tiger', 'tiger'] },
+    india: { name: '인도', m: ['india_central', 'rajput'], r: ['india_central', 'mughal_gun'], l: ['india_central', 'rajput'], c: CANNON, b: ['tiger', 'crocodile'] },
     china: { name: '중국', m: ['east_fighters', 'spearman'], r: GUN_ASIA, l: ['east_fighters', 'swordsman'], c: CANNON_E, bandit: ['east_fighters', 'brute'], b: ['tiger', 'tiger'] },
     korea: { name: '조선', m: ['east_fighters', 'spearman'], r: GUN_ASIA, l: ['east_fighters', 'scholar'], c: CANNON_E, bandit: ['east_fighters', 'brute'], b: ['bear', 'tiger'] },   // 조선: 곰 떼를 거느린 범 (호피)
     japan: { name: '일본', m: ['east_fighters', 'ninja'], r: GUN_ASIA, l: ['east_fighters', 'swordsman'], c: CANNON_E, bandit: ['east_fighters', 'ninja'], b: ['boar', 'boar'] },
-    thai: { name: '아유타야', m: ['southeast_asia', 'ayutthaya'], r: GUN_ASIA, l: ['southeast_asia', 'ayutthaya'], c: CANNON_E, b: ['tiger', 'tiger'] },
-    vietnam: { name: '대월', m: ['southeast_asia', 'daiviet'], r: GUN_ASIA, l: ['southeast_asia', 'daiviet'], c: CANNON_E, b: ['tiger', 'tiger'] },
-    malay: { name: '말레이', m: ['southeast_asia', 'malay'], r: ['southeast_asia', 'moluccan'], l: ['southeast_asia', 'malay'], c: CANNON_E, b: ['tiger', 'tiger'] },
-    java: { name: '자바', m: ['southeast_asia', 'javanese'], r: ['southeast_asia', 'moluccan'], l: ['southeast_asia', 'javanese'], c: CANNON_E, b: ['tiger', 'tiger'] },
-    moluccas: { name: '몰루카·필리핀', m: ['southeast_asia', 'moluccan'], r: ['southeast_asia', 'moluccan'], l: ['southeast_asia', 'malay'], c: CANNON_E, b: ['boar', 'boar'] },
+    thai: { name: '아유타야', m: ['southeast_asia', 'ayutthaya'], r: GUN_ASIA, l: ['southeast_asia', 'ayutthaya'], c: CANNON_E, b: ['tiger', 'crocodile'] },
+    vietnam: { name: '대월', m: ['southeast_asia', 'daiviet'], r: GUN_ASIA, l: ['southeast_asia', 'daiviet'], c: CANNON_E, b: ['tiger', 'crocodile'] },
+    malay: { name: '말레이', m: ['southeast_asia', 'malay'], r: ['southeast_asia', 'moluccan'], l: ['southeast_asia', 'malay'], c: CANNON_E, b: ['crocodile', 'tiger'] },
+    java: { name: '자바', m: ['southeast_asia', 'javanese'], r: ['southeast_asia', 'moluccan'], l: ['southeast_asia', 'javanese'], c: CANNON_E, b: ['crocodile', 'tiger'] },
+    moluccas: { name: '몰루카·필리핀', m: ['southeast_asia', 'moluccan'], r: ['southeast_asia', 'moluccan'], l: ['southeast_asia', 'malay'], c: CANNON_E, b: ['boar', 'crocodile'] },
     wafrica: { name: '서아프리카', m: ['africa_regions', 'sahel_spear'], r: ['africa_regions', 'w_archer'], l: AF, c: CANNON, b: ['hyena', 'lion'] },
     sahel: { name: '사헬', m: ['africa_regions', 'sahel_spear'], r: ['africa_regions', 'w_archer'], l: ['africa_regions', 'sahel_spear'], c: CANNON, b: ['hyena', 'lion'] },
     congo: { name: '콩고', m: ['africa_regions', 'kongo_axe'], r: ['africa_regions', 'w_archer'], l: AF, c: CANNON, b: ['hyena', 'lion'] },
     ethiopia: { name: '에티오피아', m: ['africa_regions', 'ethiopian'], r: ['africa_regions', 'w_archer'], l: ['africa_regions', 'ethiopian'], c: CANNON, b: ['hyena', 'lion'] },
-    swahili: { name: '스와힐리 해안', m: ['africa_regions', 'swahili'], r: ['africa_regions', 'w_archer'], l: ['africa_regions', 'swahili'], c: CANNON, b: ['hyena', 'lion'] },
+    swahili: { name: '스와힐리 해안', m: ['africa_regions', 'swahili'], r: ['africa_regions', 'w_archer'], l: ['africa_regions', 'swahili'], c: CANNON, b: ['crocodile', 'lion'] },
     mexico: { name: '멕시카', m: ['meso_south', 'eagle'], r: ['meso_south', 'amazon_bow'], l: ['meso_south', 'eagle'], c: CANNON, b: ['jaguar', 'jaguar'] },
-    maya: { name: '마야', m: ['meso_south', 'maya_spear'], r: ['meso_south', 'amazon_bow'], l: AM, c: CANNON, b: ['jaguar', 'jaguar'] },
-    caribbean: { name: '카리브', m: ['meso_south', 'taino'], r: ['meso_south', 'amazon_bow'], l: AM, c: CANNON, b: ['jaguar', 'jaguar'] },
+    maya: { name: '마야', m: ['meso_south', 'maya_spear'], r: ['meso_south', 'amazon_bow'], l: AM, c: CANNON, b: ['jaguar', 'crocodile'] },
+    caribbean: { name: '카리브', m: ['meso_south', 'taino'], r: ['meso_south', 'amazon_bow'], l: AM, c: CANNON, b: ['crocodile', 'jaguar'] },
     andes: { name: '안데스', m: ['meso_south', 'maya_spear'], r: ['meso_south', 'inca_sling'], l: AM, c: CANNON, b: ['jaguar', 'bear'] },
-    amazon: { name: '아마존', m: ['meso_south', 'taino'], r: ['meso_south', 'amazon_bow'], l: AM, c: CANNON, b: ['jaguar', 'jaguar'] },
+    amazon: { name: '아마존', m: ['meso_south', 'taino'], r: ['meso_south', 'amazon_bow'], l: AM, c: CANNON, b: ['jaguar', 'crocodile'] },
     woodland: { name: '북아메리카 삼림', m: ['north_america', 'woodland'], r: ['north_america', 'algonquin'], l: AM, c: CANNON, b: ['bear', 'bear'] },
     plains: { name: '대평원', m: ['north_america', 'plains'], r: ['north_america', 'algonquin'], l: AM, c: CANNON, b: ['bear', 'bear'] },
     pueblo: { name: '푸에블로', m: ['north_america', 'pueblo'], r: ['north_america', 'algonquin'], l: AM, c: CANNON, b: ['jaguar', 'bear'] },
     northwest: { name: '북서 해안', m: ['north_america', 'northwest'], r: ['north_america', 'algonquin'], l: ['north_america', 'northwest'], c: CANNON, b: ['bear', 'bear'] },
     maori: { name: '아오테아로아', m: ['pacific', 'maori'], r: ['pacific', 'micronesian'], l: ['pacific', 'maori'], c: CANNON, b: ['boar', 'boar'] },
     polynesia: { name: '폴리네시아', m: ['pacific', 'polynesian'], r: ['pacific', 'micronesian'], l: ['pacific', 'polynesian'], c: CANNON, b: ['boar', 'boar'] },
-    australia: { name: '오스트레일리아', m: ['pacific', 'aboriginal'], r: ['pacific', 'aboriginal'], l: ['pacific', 'aboriginal'], c: CANNON, b: ['boar', 'boar'] },
-    papua: { name: '파푸아', m: ['pacific', 'polynesian'], r: ['pacific', 'papuan'], l: ['pacific', 'papuan'], c: CANNON, b: ['boar', 'boar'] },
+    australia: { name: '오스트레일리아', m: ['pacific', 'aboriginal'], r: ['pacific', 'aboriginal'], l: ['pacific', 'aboriginal'], c: CANNON, b: ['boar', 'crocodile'] },
+    papua: { name: '파푸아', m: ['pacific', 'polynesian'], r: ['pacific', 'papuan'], l: ['pacific', 'papuan'], c: CANNON, b: ['boar', 'crocodile'] },
     micronesia: { name: '미크로네시아', m: ['pacific', 'micronesian'], r: ['pacific', 'micronesian'], l: ['pacific', 'polynesian'], c: CANNON, b: ['boar', 'boar'] }
   };
   function inb(lon, lat, x0, x1, y0, y1) { return lon >= x0 && lon <= x1 && lat >= y0 && lat <= y1; }
@@ -113,8 +113,8 @@
     regions: R,
     regionOf: regionOf,
     /** 우리 편 부대 종류 → 시트 (줄은 솜씨 단계) */
-    mine: { inf: ['swordsmen', 'sword'], gun: ['musketeers', 'shoot'], art: ['cannons', 'gun'], adm: ['officers', null] },
-    /** 기병은 탐험대 질주 시트 (탈것마다) */
-    cav: { '말': 'mounted_gallop', '낙타': 'camel_gallop', '코끼리': 'elephant_charge' }
+    mine: { inf: ['swordsmen', 'sword'], gun: ['musketeers', 'shoot'], cav: ['cavalry_horse', 'sword'], art: ['cannons', 'gun'], adm: ['officers', null] },
+    /** 기병도 보병과 같은 LV0~LV3 전투 시트. 실제 시트는 탈것마다 고른다. */
+    cav: { '말': 'cavalry_horse', '낙타': 'cavalry_camel', '코끼리': 'cavalry_elephant' }
   };
 })(window.G = window.G || {});

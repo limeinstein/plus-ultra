@@ -128,10 +128,42 @@ for (const cat of ['ruin', 'nature']) {
   }
 }
 
+// 2026-10-24 지역별 미스터리 유적 110곳. 도시형은 정면 외관으로,
+// 그 밖의 육상·해상 발견물은 탐험 지도에서 보이는 투명 미니어처로 만든다.
+vm.runInThisContext(fs.readFileSync(path.join(ROOT, 'js', 'data', 'mysterydisc.js'), 'utf8'),
+  { filename: 'mysterydisc.js' });
+const mysterySet = new Set(G.MYSTERY_IDS || []);
+const mysteryRows = G.WONDERS.list.filter(row => mysterySet.has(row[0])).map(row => ({
+  id: row[0], name: row[1], cat: row[2], lat: row[3], lon: row[4], how: row[5],
+  desc: row[10], hint: row[11], extra: row[12] || {}
+}));
+const mystery = mysteryRows.map(r => ({
+  id: r.id, name: r.name, cat: 'ruin', target: `tools/ruin_gifs/v3/master/${r.id}.png`,
+  transparent: false, prompt: ruinPrompt(r)
+}));
+const mysteryLandmarks = mysteryRows.filter(r => r.how === 'city').map(r => ({
+  id: r.id, name: r.name, cat: 'landmark',
+  target: `tools/new_discovery_assets/landmark-sources/${r.id}.png`,
+  final: `images/landmarks/${r.id}.webp`, transparent: true, prompt: landmarkPrompt(r)
+}));
+const mysteryIconSheets = [];
+const mysteryMapRows = mysteryRows.filter(r => r.how !== 'city');
+for (let offset = 0; offset < mysteryMapRows.length; offset += 16) {
+  const chunk = mysteryMapRows.slice(offset, offset + 16);
+  const no = 1 + Math.floor(offset / 16);
+  const cells = chunk.map((r, i) => `${i + 1}. ${r.name}: ${clean(r.desc)}`).join('\n');
+  mysteryIconSheets.push({
+    id: `mystery-ruins-${no}`, cat: 'map-sheet',
+    target: `images/map-discoveries/mystery-ruins-${no}.png`,
+    ids: chunk.map(r => r.id), transparent: true,
+    prompt: `Use case: stylized-concept\nAsset type: transparent 4x4 sprite sheet of miniature world-map discovery icons for a historical exploration game\nPrimary request: Create exactly ${chunk.length} distinct miniature archaeological mystery-site icons in the listed order, filled left-to-right then top-to-bottom in an exact 4-column by 4-row grid. ${chunk.length < 16 ? `Cells ${chunk.length + 1}-16 must stay fully transparent.` : ''}\n${cells}\nStyle/medium: consistent hand-painted isometric 3D game miniatures, realistic historical materials, crisp silhouettes, warm natural light, matching the existing PLUS ULTRA map-discovery sheets.\nComposition/framing: every icon is centered in its own equal square cell, complete silhouette, same visual scale, slightly elevated three-quarter view, small integral ground, rock, cave, wreck or water base as appropriate, generous clear separation.\nConstraints: genuinely transparent background; exact 4x4 grid alignment; no cell borders, captions, letters, numbers, people, logo, or watermark; do not merge neighboring icons; preserve the exact listed order.\nAvoid: opaque backdrop, flat pictograms, photorealistic rectangular photos, cropped structures, overlapping cells, duplicate icons.`
+  });
+}
+
 const payload = { generated: '2026-10-18', repaired: { sagres: {
   reason: '가상의 고탑 수도원 형태를 실제 사그레스의 낮은 요새·성당·바람장미로 교정',
   sourcePrompt: SAGRES_RUIN_PROMPT, mapIconPrompt: SAGRES_ICON_PROMPT
-} }, source, landmarks, iconSheets };
+} }, source, landmarks, iconSheets, mystery, mysteryLandmarks, mysteryIconSheets };
 const out = process.argv[2];
 if (out) {
   fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true });

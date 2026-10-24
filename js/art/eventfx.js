@@ -119,21 +119,23 @@
       x.fillStyle = g; x.fillRect(0, 0, w, h);
       S.draw(x, 'sun', f[0], f[1], w * 0.5, h * 0.8, k * (1 + 0.03 * Math.sin(t * 2)));
     } },
-    beast: { bg: 'grass', title: '짐승의 습격', ids: ['animals'], draw: function (x, w, h, t, o) {
-      var S = SPR(), row = S.row('animals', o.animal || 'boar'); if (row < 0) return;
-      var k = h * 0.36 / S.bodyH('animals'), run = 1.1, ax, act, tt;
+    beast: { bg: 'grass', title: '짐승의 습격', ids: ['animals', 'crocodile'], draw: function (x, w, h, t, o) {
+      var S = SPR();
+      function ref(nm) { var id = nm === 'crocodile' ? 'crocodile' : 'animals', row = S.row(id, nm); return row < 0 ? null : { id: id, row: row }; }
+      var lead = ref(o.animal || 'boar'); if (!lead) return;
+      var k = h * 0.36 / S.bodyH(lead.id), run = 1.1, ax, act, tt;
       // 오른쪽에서 달려들어 와서(왼쪽을 보고) 덮친다
       if (t < run) { act = 'run'; tt = t; ax = w * (1.05 - 0.55 * (t / run)); }
       else { act = 'attack'; tt = (t - run) % 1.4; ax = w * 0.5; }
       // 뒤따르는 떼 (조금 멀리, 작게)
       if (o.pack) [[0.22, 0.3], [0.8, 0.6]].forEach(function (p) {
-        var r2 = S.row('animals', o.pack); if (r2 < 0 || t < p[1]) return;
-        var tp = t - p[1], moving = tp < run, px = w * p[0] + (moving ? (1 - tp / run) * w * 0.45 : 0);
-        shadowAt(x, px, h * 0.78, 18 * k * 0.72);
-        S.draw(x, 'animals', r2, S.at('animals', r2, moving ? 'run' : 'idle', tp, moving ? 12 : 4), px, h * 0.78, k * 0.72, true);
+        var pack = ref(o.pack); if (!pack || t < p[1]) return;
+        var tp = t - p[1], moving = tp < run, px = w * p[0] + (moving ? (1 - tp / run) * w * 0.45 : 0), pk = h * 0.36 / S.bodyH(pack.id) * 0.72;
+        shadowAt(x, px, h * 0.78, 18 * pk);
+        S.draw(x, pack.id, pack.row, S.at(pack.id, pack.row, moving ? 'run' : 'idle', tp, moving ? 12 : 4), px, h * 0.78, pk, true);
       });
       shadowAt(x, ax, h * 0.9, 22 * k);
-      S.draw(x, 'animals', row, S.at('animals', row, act, tt, act === 'run' ? 12 : 7, act === 'run'), ax, h * 0.9, k, true);
+      S.draw(x, lead.id, lead.row, S.at(lead.id, lead.row, act, tt, act === 'run' ? 12 : 7, act === 'run'), ax, h * 0.9, k, true);
     } }
   };
   function shadowAt(x, cx, cy, rx) { x.fillStyle = 'rgba(0,0,0,.22)'; x.beginPath(); x.ellipse(cx, cy, rx, rx * 0.16, 0, 0, 7); x.fill(); }
@@ -225,7 +227,7 @@
   /** 장면에 들어갈 때 그 장면의 사건 그림을 미리 받아 둔다 (사건이 일어난 뒤에 받느라 창이 늦게 뜨지 않게) */
   EF.preload = function (where) {
     var S = SPR(); if (!S || C().events === false) return;
-    S.preload(where === 'land' ? ['animals', 'raincloud', 'rain', 'sun'] : ['whale', 'dolphin', 'mermaid', 'storm', 'raincloud', 'rain', 'sun']);
+    S.preload(where === 'land' ? ['animals', 'crocodile', 'raincloud', 'rain', 'sun'] : ['whale', 'dolphin', 'mermaid', 'storm', 'raincloud', 'rain', 'sun']);
   };
   /** 육상 탐험: 지금 자리의 짐승 떼 [떼, 우두머리] (육상전과 같은 규칙, js/data/landwarart.js) */
   EF.beastsHere = function () {

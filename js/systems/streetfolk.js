@@ -266,7 +266,7 @@
       var f = S().fleet, sh = f.ships[0]; if (!sh) return null;
       return { text: '항구에 있는 ' + sh.name + '호가 아저씨 배예요? 배가 ' + f.ships.length + '척이나 있어요? 우와, 선원도 ' + f.crew + '명이나!' };
     },
-    girl: function (c) { var m = G.MaidSwap ? G.MaidSwap.at(c.id) : G.MAIDS && G.MAIDS.filter(function (x) { return x.city === c.id; })[0]; return m ? { text: '술집에 ' + m.name + ' 언니 알아요? 엄청 예쁘고 노래도 잘해요. 선장님들이 다 그 언니 보러 온대요.' } : null; },
+    girl: function (c) { var m = G.MaidSwap ? G.MaidSwap.at(c.id) : G.baseMaidAt ? G.baseMaidAt(c.id) : G.MAIDS && G.MAIDS.filter(function (x) { return x.city === c.id; })[0]; return m ? { text: '술집에 ' + m.name + ' 언니 알아요? 엄청 예쁘고 노래도 잘해요. 선장님들이 다 그 언니 보러 온대요.' } : null; },
     elder: function (c) { return hintFor(c, ['ruin', 'nature', 'people', 'geo'], 'elder'); },
     grandma: function (c) {
       var f = S().fleet;

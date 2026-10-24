@@ -223,11 +223,11 @@
     const spec = A.maidSpec(m), c = CITY[m.city], reg = I.maidStyle ? I.maidStyle(m.id, c) : null;
     add(tPeople, {
       group: 'maid', portrait: true, name: m.name, sub: '여급 · ' + c.name + ' 술집',
-      meta: '좋아하는 사람: ' + G.LIKES[m.like].name + (reg ? ' · 그림: ' + (MAIDST[reg] || reg) : ''),
+      meta: '좋아하는 사람: ' + G.LIKES[m.like].name + (m.from ? ' · ' + m.from + '년부터 등장' : '') + (reg ? ' · 그림: ' + (MAIDST[reg] || reg) : ''),
       key: 'portraits/maids/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', half: I.chain.maidHalf(m.id, c).concat(I.chain.halfFor(A.portraitKeys(spec))),
       pic: () => portrait(spec),
       detail: () => ({
-        facts: [['일하는 곳', c.name + ' 술집'], ['좋아하는 사람', G.LIKES[m.like].name],
+        facts: [['일하는 곳', c.name + ' 술집'], m.from ? ['등장', m.from + '년부터'] : null, ['좋아하는 사람', G.LIKES[m.like].name],
           ['쓰는 그림', reg ? (MAIDST[reg] || reg) + ' (maid-styles/' + reg + ')' : '코드로 그린 초상'],
           ['결혼', '호감이 높아지면 반지를 건네 청혼할 수 있음']],
         files: [{ key: 'portraits/maids/' + m.id, kind: 'png', note: '이 여급만의 초상 (없으면 지역 그림을 쓴다)' },

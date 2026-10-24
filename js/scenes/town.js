@@ -148,7 +148,12 @@
     I.chain.heroWalk().forEach(function (k) { chains.push([k]); });
     I.chain.heroRun().forEach(function (k) { chains.push([k]); });
     ['walk', 'run', 'back'].forEach(function (kind) { chains.push(I.chain.heroMotion(kind)); });
-    buildings.forEach(function (b) { chains.push(I.chain.exterior(b.kind, c, b.arg)); });
+    buildings.forEach(function (b) {
+      var homeTier = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
+      var homeKind = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.baseKind(homeTier, c) : b.kind;
+      chains.push(I.chain.exterior(homeKind, c, homeKind === b.kind ? b.arg : ''));
+      if (b.kind === 'home' && homeTier > 0 && (homeTier === 1 || homeTier === 3 || homeKind === 'home')) chains.push(I.chain.exterior('home', c, ''));
+    });
     landmarks.forEach(function (l) { chains.push(I.chain.landmark(l[0])); });
     chains.push([groundKey(groundStyle(c).id)]);             // 지역 길바닥 그림
     function missing() { return chains.some(function (ch) { var k = I.pick(ch); return k && !I.get(k); }); }
@@ -178,6 +183,20 @@
       st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.enterT = 0; st.hero.entering = false; st.dirty = true; }
       if (st.hidden && G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); }
       if (back) spawnFolk();
+      // 왕궁에서 작위를 받아 나오면 같은 도시에서도 새 집이 곧바로 선다.
+      if (back && G.HomeBuilding && st.homeTier !== G.HomeBuilding.tier()) {
+        var old = st, c = st.city, buildings = G.Scenes.city.buildings(c);
+        var nextKind = G.HomeBuilding.baseKind(G.HomeBuilding.tier(), c);
+        var pre = [I.chain.exterior(nextKind, c, '')];
+        if (G.HomeBuilding.tier() === 1 || G.HomeBuilding.tier() === 3 || nextKind === 'home') pre.push(I.chain.exterior('home', c, ''));
+        I.preload(pre, 5000).then(function () {
+          if (st !== old) return;
+          var keep = { x: old.hero.x / Math.max(1, old.streetW), dir: old.hero.dir, onPick: old.onPick, cam: old.cam / Math.max(1, old.streetW) };
+          build(c, buildings, landmarksFor(c));
+          st.onPick = keep.onPick; st.hero.dir = keep.dir;
+          st.hero.x = keep.x * st.streetW; st.cam = st.camTo = clampCam(keep.cam * st.streetW); st.dirty = true;
+        });
+      }
     }
     return st ? st.hidden : true;
   };
@@ -332,15 +351,18 @@
     buildings.slice().sort(function (a, b) { return (order[a.kind] == null ? 50 : order[a.kind]) - (order[b.kind] == null ? 50 : order[b.kind]); })
       .forEach(function (b) {
         var h = SIZE[b.kind] || 430;
-        var key = I.pick(I.chain.exterior(b.kind, c, b.arg));
+        var homeTier = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
+        var drawingKind = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.baseKind(homeTier, c) : b.kind;
+        if (b.kind === 'home' && G.FX && G.FX.homeBuilding && G.FX.homeBuilding.heights) h = G.FX.homeBuilding.heights[homeTier] || h;
+        var key = I.pick(I.chain.exterior(drawingKind, c, drawingKind === b.kind ? b.arg : ''));
         // 그 고장 건물 그림을 쓰는 도시에서는, 유럽식 기본 그림 대신 그 고장 양식으로 그린다
-        var cultureKey = A.cultureOf ? 'exteriors/' + b.kind + '_' + A.cultureOf(c) : '';
+        var cultureKey = A.cultureOf ? 'exteriors/' + drawingKind + '_' + A.cultureOf(c) : '';
         if (key && es && key.indexOf('exterior-styles/') !== 0 && key.indexOf('@') < 0 && key !== cultureKey &&
             A.cultureOf && A.cultureOf(c) !== 'europe') key = null;
         var flip = false;
-        if (!key && SUBSTITUTE[b.kind]) { key = I.pick(I.chain.exterior(SUBSTITUTE[b.kind], c, '')); flip = !!key && b.kind !== 'govhall'; }
+        if (!key && SUBSTITUTE[drawingKind]) { key = I.pick(I.chain.exterior(SUBSTITUTE[drawingKind], c, '')); flip = !!key && b.kind !== 'govhall'; }
         var img = key && I.get(key);
-        var cv = img ? prescale(img, h, flip) : fallback(b.kind, c, h, rng);
+        var cv = img ? prescale(img, h, flip) : fallback(drawingKind, c, h, rng);
         if (!cv) return;
         // 그림 아래의 빈칸을 잘라 바닥선에 붙인다 (js/data/exteriorfoot.js — tools/exterior_foot.py): 아가데스 천막처럼 아래가 비면 떠 보였다
         var cut = img ? trimFoot(cv, key) : 1;
@@ -348,6 +370,16 @@
         // 문 자리 (js/data/exteriordoors.js — tools/exterior_doors.py): 제독은 문 앞에 서서 문턱까지만 걸어 들어간다
         var dr = key && G.EXT_DOORS && G.EXT_DOORS[key], door = dr ? { cx: flip ? 1 - dr[0] : dr[0], foot: dr[1] } : { cx: 0.5, foot: 0.97 };
         if (cut !== 1) door.foot = Math.min(0.995, door.foot * cut.k);
+        if (b.kind === 'home' && homeTier > 0 && (homeTier === 1 || homeTier === 3 || drawingKind === 'home')) {
+          var annexKey = I.pick(I.chain.exterior('home', c, '')), annexImg = annexKey && I.get(annexKey);
+          if (annexImg) {
+            var annex = prescale(annexImg, Math.round(h * (homeTier === 1 ? 0.66 : homeTier === 2 ? 0.60 : homeTier === 3 ? 0.73 : 0.58)), false);
+            var annexCut = trimFoot(annex, annexKey);
+            if (annexCut !== 1) annex = annexCut.cv;
+            var built = G.HomeBuilding.exterior(cv, annex, homeTier, door);
+            cv = built.cv; door = built.door;
+          }
+        }
         items.push({ kind: b.kind, arg: b.arg, name: b.name, icon: b.icon, cv: cv, w: cv.width, h: cv.height, x: 0, door: door });
       });
     // 볼거리(도시 건축 발견물): 건물 줄 사이 제자리(l[1] = 거리의 몇 할쯤)에 광장 한 칸을 비우고 선다 — 앞 건물에 가리거나 하늘에 뜨지 않게
@@ -384,7 +416,7 @@
     var ground = groundStrip(c, rng);
     marks.forEach(function (m) { m.pull = pullOf(m.cv, m.base, m.foot); m.plaza = plazaCanvas(m.cv, m.base, m.foot, ground, gs, m.pull); });   // 조감 그림 발치 아래 마당 (떠 보이지 않게)
     st = {
-      city: c, items: items, marks: marks, streetW: streetW,
+      city: c, items: items, marks: marks, streetW: streetW, homeTier: G.HomeBuilding ? G.HomeBuilding.tier() : 0,
       bg: bgKey ? I.get(bgKey) : cityBackdrop(c), ground: ground, groundStyle: ground._style, hidden: false,
       cam: 0, camTo: 0, hover: null, focus: null, t: 0,
       hero: { x: items.length ? items[0].x + items[0].w / 2 : W / 2, to: null, dir: 1, walking: false, dist: 0, idleT: 0, fade: 1, enterT: 0, entering: false },

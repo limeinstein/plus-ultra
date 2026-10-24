@@ -614,7 +614,7 @@
           var p7 = pr(0.4 + (f.might + f.cha - o.might - o.int) / 250);
           var shout = U.pick(['물러서라!!', '덤벼라, 이 겁쟁이!', '누구 앞이라고!']);
           // 호통: 먼저 인물 컷인이 화면을 덮고 고함을 띄운 뒤, 원래의 호통 기운(roar GIF)이 퍼진다
-          if (await startMotion(finisherKey(f, 'cutin'), f, true, true, '호통', shout)) { shakeT = 0.35; await sleep(760); stopMotion(); }
+          if (await startMotion(finisherKey(f, 'cutin'), f, true, true, '호통', shout)) { shakeT = 0.35; await sleep(900); stopMotion(); }
           var roarMotion = await startMotion(finisherKey(f, 'roar'), f, false);
           pose(f, 'shout', 0.7); bubble(f, shout);
           shakeT = 0.5; await sleep(700);

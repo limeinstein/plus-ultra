@@ -83,7 +83,7 @@
   function unitName(u) {
     if (u.side === 'en') return u.name;
     if (u.ally) return u.name || '사냥꾼';
-    var t = TYPES[u.type]; return u.type === 'cav' && u.ride === '코끼리' ? (u.up ? '중장 코끼리대' : '코끼리대') : (u.up ? t.up : t.name);
+    var t = TYPES[u.type]; return u.type === 'cav' && u.ride === '코끼리' ? (u.up ? '중장 코끼리대' : '코끼리대') : u.type === 'cav' && u.ride === '낙타' ? (u.up ? '중장 낙타 기병' : '낙타 기병') : (u.up ? t.up : t.name);
   }
   function clsOf(u) { return u.side === 'me' ? TYPES[u.type].cls : u.cls; }
   function reachOf(u) { var c = clsOf(u); return c === 'cav' ? 'cav' : c === 'missile' || c === 'horsearcher' ? 'shot' : c === 'art' ? 'art' : 'melee'; }
@@ -154,11 +154,11 @@
     var bgImg = null, bgChain = I && I.chain && I.chain.landWarBackground ? I.chain.landWarBackground(terr) : [];
     if (I && bgChain.length) I.resolve(bgChain).then(function (res) { if (res) bgImg = res.img; });
     if (useSpr) {
-      var need = ['swordsmen', 'musketeers', 'cannons', 'officers', 'animals'];
+      var need = ['swordsmen', 'musketeers', 'cannons', 'officers', 'animals', 'crocodile'];
       if (e.kind === 'bandit' || e.kind === 'garrison') ['swordsmen_enemy', 'musketeers_enemy', 'cannons_enemy', 'officers_enemy'].forEach(function (id) { if (need.indexOf(id) < 0) need.push(id); });
       ['m', 'r', 'l', 'c', 'bandit'].forEach(function (k) { if (reg[k] && need.indexOf(reg[k][0]) < 0) need.push(reg[k][0]); });
+      if (LA.cav[mi.name] && need.indexOf(LA.cav[mi.name]) < 0) need.push(LA.cav[mi.name]);
       SPR.preload(need);
-      if (LA.cav[mi.name]) SPR.partyReady(LA.cav[mi.name]);
       foes.forEach(function (u) { if (u.special && u.special.party) SPR.partyReady(u.special.party); });
     }
     // 끝나면 시작할 때의 곡(장면·건물)으로 돌린다 — 늘 뭍 곡('land')으로 바꿔 도시·바다에서 맞지 않던 것 (QA 2026-10-23)
@@ -261,19 +261,26 @@
         if (u.type === 'adm') return upgraded('adm') ? 3 : U.clamp(Math.floor((sk('sword') + sk('shoot') + sk('gun')) / 3), 0, 2);
         return 0;
       }
+      /** 짐승 이름 → 시트와 줄. 몸이 긴 악어는 독립 시트다. */
+      function beastSprite(nm) {
+        var id = nm === 'crocodile' ? 'crocodile' : 'animals', row = SPR.row(id, nm);
+        return row >= 0 ? { id: id, row: row, beast: 1 } : null;
+      }
       function sprOf(u) {
         if (!useSpr) return null;
-        if (u._spr !== undefined && u._sprType === u.type) return u._spr;
+        var cacheType = u.type + '|' + (u.ride || '');
+        if (u._spr !== undefined && u._sprType === cacheType) return u._spr;
         var me = u.side === 'me', r = null, L = null;
-        if (me && u.type === 'cav') r = LA.cav[u.ride] ? { party: LA.cav[u.ride] } : null;
+        if (me && u.type === 'cav') r = LA.cav[u.ride] ? { id: LA.cav[u.ride], row: tierOf(u), mounted: u.ride } : null;
         else if (me) { var mm = LA.mine[u.type]; if (mm) r = { id: mm[0], row: tierOf(u) }; }
         else if (u.special && u.special.party) r = { party: u.special.party };
         else if (u.look === 'beast') {
-          // e.beast: 이야기 사건의 짐승 이름들(예: 악어). 시트에 없으면 그 고장 짐승을 쓴다.
-          var bn = [].concat(e.beast || []).filter(function (nm) { return SPR.row('animals', nm) >= 0; })[0];
-          r = { id: 'animals', row: SPR.row('animals', bn || (u.leader ? reg.b[1] : reg.b[0])), beast: 1 };
+          // e.beast: 이야기 사건의 짐승 이름들. 전용 시트가 없으면 그 고장 짐승을 쓴다.
+          var names = [].concat(e.beast || []), bn = null;
+          for (var bi = 0; bi < names.length; bi++) if (beastSprite(names[bi])) { bn = names[bi]; break; }
+          r = beastSprite(bn || (u.leader ? reg.b[1] : reg.b[0]));
         }
-        else if (e.kind === 'bandit' || e.kind === 'garrison') {
+        else if ((e.kind === 'bandit' || e.kind === 'garrison') && !u.special) {   // 그 땅의 이름난 병사(예니체리 등)는 아래 지역 시트를 쓴다
           var enemySheet = u.leader ? 'officers_enemy'
             : u.look === 'cannon' ? 'cannons_enemy'
             : u.look === 'musket' ? 'musketeers_enemy'
@@ -290,7 +297,7 @@
           if (L) r = { id: L[0], row: SPR.row(L[0], L[1]) };
         }
         if (r && r.id && !(r.row >= 0)) r = null;
-        u._spr = r; u._sprType = u.type;
+        u._spr = r; u._sprType = cacheType;
         return r;
       }
       function actOf(u) {
@@ -310,9 +317,12 @@
         }
         var id = sp.id, row = sp.row;
         if (!SPR.ready(id)) return SPR.pending(id);
-        var k = ((sp.beast ? SFX.beastH : SFX.unitH) || 46) / SPR.bodyH(id) * k0 * ((SFX.sheetK || {})[id] || 1);
-        var big = id === 'cannons' || id === 'cannons_enemy' || (id === 'ottoman' && row === 1);
-        var nf = U.clamp(Math.ceil(u.n / 4), 1, big ? 2 : sp.beast ? 3 : 6), gap = big ? 58 : sp.beast ? 42 : 24;
+        var mountH = sp.mounted && (SFX.mountH || {})[sp.mounted];
+        var k = ((mountH || (sp.beast ? SFX.beastH : SFX.unitH)) || 46) / SPR.bodyH(id) * k0 * ((SFX.sheetK || {})[id] || 1);
+        var big = id === 'cannons' || id === 'cannons_enemy' || (id === 'ottoman' && row === 1) || sp.mounted;
+        var mountN = sp.mounted && (SFX.mountN || {})[sp.mounted];
+        var nf = U.clamp(Math.ceil(u.n / 4), 1, sp.mounted ? (mountN || 2) : big ? 2 : sp.beast ? 3 : 6);
+        var gap = sp.mounted ? (((SFX.mountGap || {})[sp.mounted]) || 58) : big ? 58 : sp.beast ? 42 : 24;
         for (var i = 0; i < nf; i++) {
           var col = i % 3, back = i >= 3, inRow = back ? nf - 3 : Math.min(nf, 3);
           var fx0 = x + (col - (inRow - 1) / 2) * gap * face - (back ? 10 * face : 0), fy0 = y - (back ? 14 : 0) + (col === 1 ? 5 : 0);

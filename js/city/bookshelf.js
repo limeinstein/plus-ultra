@@ -43,6 +43,7 @@
   function lv0(b) { return R.langRead(b.lang) > 0; }
   /** 서가에서의 상태: kind = read(검정) · open(노랑) · again(노랑, 전에 읽었지만 새로 알아들을 대목이 생김) · lock(빨강), why = era·lang·skill·later */
   LB.shelfState = function (b) {
+    if (b.jv) return { kind: 'jv', read: true, text: G.LogBooks.stateText(b.vol) + ' — 모항 도서관에 맡겨 둔 제독의 항해일지' };   // 항해일지 (js/systems/logbooks.js)
     var s = S(), y = s.date.y, read = !!s.flags['read_' + b.id];
     if ((b.y || 0) > y) return { kind: 'lock', why: 'era', read: read, text: '아직 쓰이지 않은 책 — ' + b.y + '년 무렵에야 나온다' };
     // 연작의 차례: 앞 책에 적힌 곳을 다 찾아야 이 책의 뜻이 이어진다 (js/data/cluebooks.js)
@@ -288,6 +289,7 @@
   }
   /** 서가에서 책 한 권을 골랐을 때 */
   LB.pick = async function (c, b) {
+    if (b.jv) { await G.LogBooks.read(b.vol); return; }   // 모항 도서관의 항해일지
     var s = S(), st = LB.shelfState(b);
     if (G.Audio) G.Audio.sfx('page');
     if (st.kind === 'lock') { await lockedBook(b, st); return; }
@@ -350,10 +352,11 @@
   }
   function posIn(e, root) { var x = 0, y = 0; while (e && e !== root) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; } return [x, y]; }
   LB.shelf = async function (c) {
-    var books = LB.shelfBooks(c);
+    var jv = G.LogBooks ? G.LogBooks.forLibrary(c) : [];   // 모항이면 제독의 항해일지(40년마다 한 권)가 맨 앞에 (2026-10-24)
+    var books = jv.concat(LB.shelfBooks(c));
     if (!books.length) { await C.say(C.npc('librarian', '사서'), '안됐습니다만, 읽으실 만한 책이 없습니다.'); return; }
     var rows = layout(c, books), reals = [];
-    var html = '<div class="bshelf-head"><span class="lg"><i class="bk read"></i>읽은 책</span><span class="lg"><i class="bk open"></i>읽을 수 있는 책</span><span class="lg"><i class="bk lock"></i>아직 읽을 수 없는 책</span>' +
+    var html = '<div class="bshelf-head">' + (jv.length ? '<span class="lg"><i class="bk jv"></i>항해일지</span>' : '') + '<span class="lg"><i class="bk read"></i>읽은 책</span><span class="lg"><i class="bk open"></i>읽을 수 있는 책</span><span class="lg"><i class="bk lock"></i>아직 읽을 수 없는 책</span>' +
       '<span class="cnt"></span></div><div class="bcase">';
     rows.forEach(function (items, ri) {
       html += '<div class="brow"><div class="bline">';
@@ -383,7 +386,7 @@
       tag.style.left = '0px'; tag.style.top = y + 'px';
       var tw = tag.offsetWidth, cw = cs.offsetWidth;
       tag.style.left = U.clamp(x - tw / 2, 6, cw - tw - 6) + 'px';
-      p.innerHTML = '<span class="pk ' + (st.kind === 'again' ? 'open' : st.kind) + '"></span><b>' + U.esc(b.title) + '</b><span class="muted"> · ' + langNm(b) + '</span><br><span class="st">' + U.esc(st.text) + '</span>';
+      p.innerHTML = '<span class="pk ' + (st.kind === 'again' ? 'open' : st.kind) + '"></span><b>' + U.esc(b.title) + '</b><span class="muted"> · ' + (b.jv ? '제독의 기록' : langNm(b)) + '</span><br><span class="st">' + U.esc(st.text) + '</span>';
     }
     async function choose(i) {
       if (busy || !reals[i]) return;

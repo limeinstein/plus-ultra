@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""일기토 전투원 원화를 화면 가득 차는 필살기 컷인 그림(정지 WebP 한 장)으로 만든다.
+"""일기토 전투원 원화를 화면 가득 차는 5단계 필살기 컷인 GIF로 만든다.
 
-ImageGen이 만든 `images/duel/cutins/_source/<id>.png` 한 장에 종이결·속도선·위아래 먹선 테두리를 입혀
-`images/duel/cutins/<id>.webp`로 저장한다. 먹선 등장 → 무기 돌진 → 섬광 → 멈춤은 게임 화면의 CSS가 움직인다.
-`--preview`는 예전 7장 GIF 연출을 확인용으로만 `.work/cutin_preview`에 만든다.
+ImageGen이 만든 `images/duel/cutins/_source/<id>.png`를 바탕으로
+기세 모으기 → 무기 당기기 → 돌진 → 타격 섬광 → 자세 회수의 다섯 장을
+`images/duel/cutins/<id>.gif`로 저장한다. 장비는 준비·회수 전용 원화도 쓴다.
+`--preview`는 같은 GIF를 `.work/cutin_preview`에 따로 만든다.
 `--references`는 ImageGen에 넣을 인물 참조 이미지를 `.work/cutin_refs`에 만든다.
 """
 import argparse
-import math
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +20,8 @@ OUT = ROOT / 'images' / 'duel' / 'cutins'
 REFS = ROOT / '.work' / 'cutin_refs'
 CELL = (432, 304)
 SIZE = (1060, 380)
+STAGE_NAMES = ('기세 모으기', '무기 당기기', '돌진', '타격 섬광', '자세 회수')
+STAGE_DURATIONS = (200, 150, 100, 120, 330)
 
 
 REGION = {
@@ -124,54 +126,76 @@ def light_sweep(size, pos, power):
 
 
 def frame(base, fid, i, flash=True):
+    """한 장씩 역할이 분명한 다섯 단계 화면을 만든다."""
     warm, accent = PALETTE[region(fid)]
-    zoom = [1.08, 1.055, 1.03, 1.0, 1.035, 1.015, 1.0][i]
-    dx = [-44, -28, -12, 0, 20, 8, 0][i]
+    zoom = [1.035, 1.01, 1.065, 1.105, 1.0][i]
+    dx = [-34, -14, 20, 42, 0][i]
     im = cover(base, SIZE, zoom, dx)
     if i == 0:
-        im = ImageEnhance.Color(im).enhance(.35)
+        im = ImageEnhance.Color(im).enhance(.45)
         im = ImageEnhance.Contrast(im).enhance(1.35)
+    elif i == 2:
+        im = ImageEnhance.Contrast(im).enhance(1.08)
+        im = ImageEnhance.Color(im).enhance(1.08)
     rgba = im.convert('RGBA')
     rgba = Image.alpha_composite(rgba, paper_texture(SIZE, warm, i + len(fid)))
-    rgba = Image.alpha_composite(rgba, streaks(SIZE, accent, [0.15, .35, .62, 1, .85, .55, .2][i], i % 2 == 0))
+    rgba = Image.alpha_composite(rgba, streaks(SIZE, accent, [.12, .38, 1, .82, .18][i], i in (0, 4)))
     d = ImageDraw.Draw(rgba)
     # 위·아래 먹선 테두리와 순간적인 창끝/칼끝 섬광으로 컷인 전체가 전투 화면과 분리돼 보인다.
     d.rectangle((0, 0, SIZE[0], 10), fill=(22, 15, 10, 235))
     d.rectangle((0, SIZE[1] - 10, SIZE[0], SIZE[1]), fill=(22, 15, 10, 235))
-    if flash and i in (3, 4):
-        # 섬광: 고정된 원 대신 화면을 비스듬히 가로지르는 빛줄기 — 무기가 어디에 있든 어색하지 않다.
-        rgba = Image.alpha_composite(rgba, light_sweep(SIZE, .38 if i == 3 else .78, 1.0 if i == 3 else .6))
+    if flash and i == 3:
+        # 타격 한 장에만 비스듬한 섬광을 둬 돌진·회수와 순간을 뚜렷이 나눈다.
+        rgba = Image.alpha_composite(rgba, light_sweep(SIZE, .55, 1.0))
     if i == 0:
         veil = Image.new('RGBA', SIZE, (24, 17, 12, 0))
         vd = ImageDraw.Draw(veil)
-        vd.rectangle((0, 0, 350, SIZE[1]), fill=(24, 17, 12, 175))
+        vd.rectangle((0, 0, 390, SIZE[1]), fill=(24, 17, 12, 170))
         rgba = Image.alpha_composite(rgba, veil)
     return rgba.convert('RGB')
 
 
-def build_one(path):
-    """정지 그림 한 장(WebP)만 만든다. 먹선 등장 → 돌진 → 섬광 → 멈춤은 게임 화면의 CSS 움직임이 맡는다
-    (css/style.css .rd-motion.cutin · .rd-cut-flash). 7장짜리 GIF는 한 장에 1.5MB였지만 정지 그림은 0.1~0.2MB다."""
+def stage_sources(path):
+    """장비는 실제 준비·회수 자세 원화를 쓰고, 나머지는 한 원화를 화면 동작으로 다섯 단계화한다."""
     fid = path.stem
     base = Image.open(path).convert('RGB')
-    still = frame(base, fid, 3, flash=False)
-    dst = OUT / (fid + '.webp')
+    if fid != 'zhang_fei':
+        return [base] * 5
+    special = SOURCE / fid
+    prepare = Image.open(special / 'prepare.png').convert('RGB')
+    recover = Image.open(special / 'recover.png').convert('RGB')
+    return [prepare, prepare, base, base, recover]
+
+
+def make_frames(path):
+    fid = path.stem
+    rgb = [frame(base, fid, i) for i, base in enumerate(stage_sources(path))]
+    # 컷인 37장을 모두 싣는 만큼 128색으로 줄이되, 인물의 얼굴·갑옷 윤곽은 디더링으로 보존한다.
+    return [im.quantize(colors=128, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG) for im in rgb]
+
+
+def save_gif(dst, frames):
     dst.parent.mkdir(parents=True, exist_ok=True)
-    still.save(dst, quality=84, method=6)
-    old = OUT / (fid + '.gif')
+    # loop를 넣지 않은 일회 재생 GIF: 끝난 뒤 회수 자세에서 멈추며, JS가 src를 다시 꽂을 때 처음부터 재생한다.
+    frames[0].save(dst, save_all=True, append_images=frames[1:], duration=STAGE_DURATIONS,
+                   disposal=2, optimize=True)
+
+
+def build_one(path):
+    fid = path.stem
+    dst = OUT / (fid + '.gif')
+    save_gif(dst, make_frames(path))
+    old = OUT / (fid + '.webp')
     if old.exists():
-        old.unlink()  # 예전 GIF가 남아 있으면 그림 목록(manifest)이 GIF를 먼저 집는다
-    print(fid, '→', dst.relative_to(ROOT))
+        old.unlink()  # 같은 키가 둘이면 manifest가 확장자 정렬 순서에 따라 달라진다.
+    print(fid, '→', dst.relative_to(ROOT), '(' + ' · '.join(STAGE_NAMES) + ')')
 
 
 def preview_one(path):
-    """움직임을 눈으로 확인할 때만: 예전처럼 7장 GIF를 .work/cutin_preview에 만든다 (게임에는 쓰지 않는다)."""
+    """게임 파일을 건드리지 않고 같은 5단계 결과를 눈으로 확인한다."""
     fid = path.stem
-    base = Image.open(path).convert('RGB')
-    frames = [frame(base, fid, i).convert('P', palette=Image.Palette.ADAPTIVE, colors=255) for i in range(7)]
     dst = ROOT / '.work' / 'cutin_preview' / (fid + '.gif')
-    dst.parent.mkdir(parents=True, exist_ok=True)
-    frames[0].save(dst, save_all=True, append_images=frames[1:], duration=[110, 90, 75, 85, 100, 150, 260], loop=0, disposal=2, optimize=True)
+    save_gif(dst, make_frames(path))
     print(fid, '→', dst.relative_to(ROOT))
 
 
@@ -181,14 +205,14 @@ def build():
         raise SystemExit('ImageGen 원화가 없습니다: ' + str(SOURCE))
     for path in paths:
         build_one(path)
-    print('컷인', len(paths), '장 완성')
+    print('5단계 컷인 GIF', len(paths), '장 완성')
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--references', action='store_true')
     ap.add_argument('--build', action='store_true')
-    ap.add_argument('--preview', action='store_true', help='움직임 확인용 GIF (.work/cutin_preview)')
+    ap.add_argument('--preview', action='store_true', help='게임 파일을 건드리지 않는 5단계 GIF 미리보기')
     args = ap.parse_args()
     if args.references:
         make_references()

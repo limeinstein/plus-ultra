@@ -511,7 +511,8 @@
     // 후원자의 대가 바뀔 때 (succession.js): 그 자리의 신뢰는 sponsorKeep만 남고, 제독의 자녀가 뒤를 이으면 모든 신뢰가 heirKeep만 남는다.
     // 유산: 떠난 사람과의 신뢰가 legacyTrust 이상이면 legacyBase + (신뢰 − legacyTrust)/60 확률로 물건·돈(재력 × 세력 × legacyGold)을 남긴다
     succession: { sponsorKeep: 0.5, heirKeep: 0.3, legacyTrust: 70, legacyBase: 0.35, legacyGold: 250 },
-    // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야, 자녀 maxKids명까지).
+    // 가족 (family.js): 결혼 뒤 자택에 들르거나 쉴 때 conceive 확률로 아이가 생긴다(마지막 출산 뒤 gapDays일이 지나야).
+    // 아이 수 (wives.js W.sexesOpen, 2026-10-24): 부인 한 사람에게 perMother명까지 · 아들은 모든 부인을 합쳐 sons명까지 · 딸은 부인마다 daughtersPer명까지
     // 배우자 (wives.js): 본처를 포함해 maxSpouses명까지. 옛 저장에 더 많아도 없애지는 않고 새 혼인만 막는다.
     // gestation일 뒤에 태어나고(쌍둥이 twins), adult세가 되면 뒤를 이을 수 있다. 가정교사는 한 아이에게 해마다 한 번, 값 eduCost닢
     // 유행 (js/systems/fad.js): window일 안에 need번, 한 번에 profit 넘는 이익으로 같은 물건을 같은 나라·지역에 팔면 chance 확률로 유행
@@ -544,9 +545,9 @@
     // · 생일 앞뒤 birthdayDays일 · 집에서 일이 생기는 간격 happenGap일·확률 happenChance · 바다에서 추억의 물건: 피로 keepFatigue부터 하루 keepChance, 피로 −keepRest
     homelife: { statMax: 90, skillChance: 0.6, ledgerGold: 4, dinnerRest: 10, cold: 30, coldBonus: 2, longAway: 300, birthdayDays: 10,
       happenGap: 20, happenChance: 0.55, keepChance: 0.03, keepRest: 4, keepFatigue: 25 },
-    wives: { hideHome: 0.7, conceive: 0.3, maxKids: 5, maxSpouses: 12 },
+    wives: { hideHome: 0.7, conceive: 0.3, maxSpouses: 12 },
     kidVoy: { chance: 0.02, gap: 60 },   // 배에 탄 아이의 하루 (js/systems/kidvoyage.js): 바다 위 하루마다 일어날 확률 · 같은 아이는 며칠에 한 번까지
-    family: { conceive: 0.35, gapDays: 300, maxKids: 5, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
+    family: { conceive: 0.35, gapDays: 300, perMother: 5, sons: 5, daughtersPer: 2, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
       // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill
       // · 해산 한 달 앞(nearDays)이면 소식과 자택 「해산을 기다린다」 · 견습은 apprenticeAge살부터
@@ -575,11 +576,19 @@
       tip: { sw: '말라카에서 중국·일본 쪽으로 올라가기 좋다', ne: '중국에서 말라카·자바 쪽으로 내려가기 좋다' } }
   ];
 
+  /* 대포. lv = 조선소의 조선 기술 등급(js/systems/ships.js SH.tech)이 이 이상이어야 그 조선소에서 단다 — 「기술 투자」로 올린다.
+     load 무게(짐칸·재장전) · range 사정 · dmg 위력 · acc 명중 · kill 갑판 선원을 쓰러뜨리는 배율(없으면 1) */
   G.CANNONS = [
-    { id: 'saker', name: '세이커포', price: 90, load: 1.0, range: 3, dmg: 3, acc: 0.62, desc: '값싸지만 위력은 위협 정도.' },
-    { id: 'culverin', name: '캘버린포', price: 260, load: 2.0, range: 5, dmg: 4, acc: 0.72, desc: '먼 거리를 겨냥해 맞추는 데 최고.' },
-    { id: 'perrier', name: '페리에포', price: 180, load: 1.5, range: 4, dmg: 5, acc: 0.64, desc: '균형이 좋아 추천할 만하다.' },
-    { id: 'cannon', name: '카논포', price: 380, load: 3.0, range: 2, dmg: 9, acc: 0.58, desc: '사정은 짧지만 맞으면 일격필살.' }
+    { id: 'saker', name: '세이커포', price: 90, load: 1.0, range: 3, dmg: 3, acc: 0.62, lv: 1, desc: '값싸지만 위력은 위협 정도.' },
+    { id: 'culverin', name: '캘버린포', price: 260, load: 2.0, range: 5, dmg: 4, acc: 0.72, lv: 1, desc: '먼 거리를 겨냥해 맞추는 데 최고.' },
+    { id: 'perrier', name: '페리에포', price: 180, load: 1.5, range: 4, dmg: 5, acc: 0.64, lv: 1, desc: '균형이 좋아 추천할 만하다.' },
+    { id: 'cannon', name: '카논포', price: 380, load: 3.0, range: 2, dmg: 9, acc: 0.58, lv: 1, desc: '사정은 짧지만 맞으면 일격필살.' },
+    { id: 'bsaker', name: '청동 세이커포', price: 170, load: 0.9, range: 3, dmg: 4, acc: 0.68, lv: 2, desc: '청동으로 부어 쇠 세이커보다 가볍고 고르게 맞는다. 작은 배에 알맞다.' },
+    { id: 'lculverin', name: '롱 캘버린포', price: 430, load: 2.4, range: 6, dmg: 5, acc: 0.74, lv: 3, desc: '포신을 한껏 늘린 캘버린. 어느 대포보다 멀리서 먼저 쏜다.' },
+    { id: 'pedrero', name: '페드레로포', price: 230, load: 1.1, range: 2, dmg: 6, acc: 0.6, kill: 2, lv: 2, desc: '돌 포탄과 산탄을 쏘는 짧은 포. 배보다 갑판 위 선원을 쓸어 낸다 (선원 피해 2배).' },
+    { id: 'bcannon', name: '청동 카논포', price: 560, load: 2.7, range: 3, dmg: 10, acc: 0.6, lv: 3, desc: '청동으로 다시 부은 카논. 쇠 카논보다 가볍고 조금 더 멀리 간다.' },
+    { id: 'hcannon', name: '중카논포', price: 820, load: 4.2, range: 3, dmg: 14, acc: 0.57, lv: 4, desc: '왕실 카논이라 불리는 큰 포. 무겁고 장전이 느리지만 한 방에 늑골을 부순다.' },
+    { id: 'carronade', name: '캐로네이드포', price: 640, load: 1.6, range: 2, dmg: 12, acc: 0.62, kill: 1.3, lv: 5, desc: '스코틀랜드 캐런 제철소의 짧고 가벼운 주철포. 사정은 짧지만 가까이 붙으면 중카논만큼 무섭고 장전도 빠르다.' }
   ];
   G.CANNON = {}; G.CANNONS.forEach(function (c) { G.CANNON[c.id] = c; });
 
@@ -600,6 +609,23 @@
     { id: 'angel', name: '천사상', price: 5200, luck: 0.06, storm: 0.1, morale: 0.08, desc: '천사의 가호. 저주를 풀 수 있다고 한다.' },
     { id: 'lion', name: '사자상', price: 3800, battle: 0.1, morale: 0.05, desc: '백수의 왕. 적을 위압한다.' },
     { id: 'whale', name: '백경상', price: 4500, hp: 0.12, spd: 0.02, desc: '바다의 왕자 백경.' },
+    // 조선 기술 2~5등급 조선소에서만 깎는 선수상 (lv) — 조선소 「기술 투자」로 등급을 올리면 늘어난다. lv가 없으면 1등급
+    { id: 'seahorse', name: '해마상', price: 1900, lv: 2, spd: 0.03, hp: 0.03, desc: '꼬리를 감아 버티는 해마. 배가 흔들려도 곧게 선다.' },
+    { id: 'goldeagle', name: '검독수리상', price: 2000, lv: 2, battle: 0.05, spd: 0.02, desc: '높은 하늘에서 내리꽂는 검독수리. 해전에서 먼저 덮친다.' },
+    { id: 'crane', name: '두루미상', price: 1800, lv: 2, luck: 0.04, morale: 0.04, desc: '천 년을 산다는 두루미. 먼 뱃길에 탈이 없기를 빈다.' },
+    { id: 'bear', name: '곰상', price: 2100, lv: 2, hp: 0.07, morale: 0.03, desc: '두 발로 일어선 큰 곰. 거친 파도에도 배가 버틴다.' },
+    { id: 'tigerhead', name: '범 머리상', price: 3200, lv: 3, battle: 0.08, morale: 0.04, desc: '입을 벌린 범의 머리. 적 선원이 보기만 해도 움츠러든다.' },
+    { id: 'griffin', name: '그리핀상', price: 3600, lv: 3, battle: 0.06, spd: 0.03, desc: '독수리 머리에 사자 몸. 보물을 지키는 짐승이 뱃머리를 지킨다.' },
+    { id: 'orca', name: '범고래상', price: 3400, lv: 3, battle: 0.06, monster: 0.1, desc: '바다의 사냥꾼. 큰 바다 짐승도 범고래 앞에서는 물러난다.' },
+    { id: 'stnicholas', name: '성 니콜라스상', price: 3500, lv: 3, storm: 0.1, morale: 0.05, desc: '뱃사람의 수호성인. 폭풍 속에서 기도하던 배를 건졌다고 전한다.' },
+    { id: 'pegasus', name: '천마상', price: 5600, lv: 4, spd: 0.07, luck: 0.03, desc: '날개 달린 말. 돛에 바람이 한 겹 더 실리는 듯하다.' },
+    { id: 'siren', name: '세이렌상', price: 5400, lv: 4, luck: 0.06, storm: 0.06, monster: 0.1, desc: '노래로 뱃사람을 홀리던 바다의 여인. 이제는 배를 위해 노래한다.' },
+    { id: 'qilin', name: '기린상', price: 5800, lv: 4, luck: 0.1, morale: 0.05, desc: '성군이 날 때 나타난다는 상서로운 짐승. 큰 복이 따른다.' },
+    { id: 'triton', name: '트리톤상', price: 6000, lv: 4, storm: 0.12, spd: 0.03, desc: '소라고둥을 부는 바다신의 아들. 고둥 소리에 파도가 가라앉는다.' },
+    { id: 'dragonking', name: '용상', price: 9500, lv: 5, battle: 0.12, storm: 0.08, monster: 0.2, desc: '여의주를 문 용. 바다의 짐승과 비바람이 모두 길을 비킨다.' },
+    { id: 'firebird', name: '불사조상', price: 9800, lv: 5, hp: 0.1, luck: 0.08, morale: 0.08, desc: '불 속에서 다시 태어나는 새. 부서져도 배가 다시 일어선다고 믿는다.' },
+    { id: 'michael', name: '대천사 미카엘상', price: 11000, lv: 5, battle: 0.1, storm: 0.12, morale: 0.1, desc: '창을 든 대천사. 뱃사람들이 마지막에 부르는 이름이다.' },
+    { id: 'garuda', name: '가루다상', price: 10500, lv: 5, spd: 0.06, battle: 0.06, monster: 0.4, desc: '뱀을 잡아먹는 신조. 바다뱀과 괴물이 가까이 오지 못한다.' },
     { id: 'goddess', name: '여신상', price: 9000, luck: 0.1, storm: 0.15, morale: 0.1, rare: true, desc: '바다의 여신. 모든 항해를 지켜 준다.' },
     { id: 'seagod', name: '해신상', price: 12000, spd: 0.06, storm: 0.2, monster: 0.5, rare: true, desc: '바다를 다스리는 신의 상.' },
     { id: 'demon', name: '마왕상', price: 6000, battle: 0.2, morale: -0.1, curse: true, rare: true, desc: '무서운 힘을 주지만 저주가 깃들어 있다.' }

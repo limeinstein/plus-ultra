@@ -31,7 +31,9 @@ const broken = restored.filter(m => G.Img.maidPic(m.id, G.CITY_DATA[m.city]) !==
 ok(restored.length === 30 && !broken.length, '복원한 초창기 30명은 얼굴상·무릎상을 정확히 고정해서 쓴다');
 
 const dated = added.filter(m => m.from);
-ok(dated.length === 7 && dated.every(m => G.CITY_DATA[m.city].founded === m.from), '신항구 여급 7명은 도시 설립 연도에 맞춰 등장한다');
+const founded = dated.filter(m => m.id !== 'm_hue');
+ok(founded.length === 7 && founded.every(m => G.CITY_DATA[m.city].founded === m.from), '신항구 여급 7명은 도시 설립 연도에 맞춰 등장한다');
+ok(G.MAID.m_hue.from === 1600 && G.MAID.m_bru.from === 1600, '응우옛과 아미한은 1600년부터 등장한다');
 const style = id => G.CITY_DATA[G.MAID[id].city].style;
 const regional = { africa: 0, india: 0, south: 0, america: 0 };
 ADDITIONAL.forEach(id => {

@@ -1,6 +1,6 @@
 /* 사냥 전리품 — 뭍에서 짐승 떼와 싸워 이기면 그 땅 짐승의 가죽을 얻는다 (js/systems/hunt.js · js/scenes/land.js landBattle). 2026-10-18
    ■ 짐승은 육상전 그림과 같은 짐승 (js/data/landwarart.js 지역별 b: [떼, 우두머리])
-     호랑이 → 호피(새 교역품 tigerskin) · 곰·사자·재규어 → 모피(fur) · 멧돼지·하이에나 → 피혁(hides)
+     호랑이 → 호피(새 교역품 tigerskin) · 곰·사자·재규어 → 모피(fur) · 멧돼지·하이에나·악어 → 피혁(hides)
    ■ 얻은 가죽은 배의 짐칸에 교역품으로 실린다 (짐칸·품목 수가 모자라면 두고 온다) → 어느 도시 교역소에서든 「매각」으로 판다.
      호피는 호랑이가 사는 인도·중국·동남아시아를 산지로 쳐서(R.origins) 그곳에서는 싸고, 멀리 갈수록(유럽·아메리카) 비싸다.
    ■ 조정값 G.BALANCE.hunt: per 짐승 한 마리당 가죽(통), max 한 번에 얻는 최대 통, lead 우두머리가 더 주는 통 */
@@ -24,6 +24,7 @@
     lion: { ko: '사자', good: 'fur', per: 0.3, max: 8, lead: 2 },
     jaguar: { ko: '재규어', good: 'fur', per: 0.3, max: 8, lead: 1 },
     boar: { ko: '멧돼지', good: 'hides', per: 0.5, max: 15, lead: 1 },
-    hyena: { ko: '하이에나', good: 'hides', per: 0.45, max: 12, lead: 1 }
+    hyena: { ko: '하이에나', good: 'hides', per: 0.45, max: 12, lead: 1 },
+    crocodile: { ko: '악어', good: 'hides', per: 0.55, max: 14, lead: 2 }
   };
 })(window.G = window.G || {});

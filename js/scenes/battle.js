@@ -1041,7 +1041,7 @@
       var fwd = part >= 1 && sAng === b.heading ? b.len * 0.45 : 0;
       var ox = b.x + Math.cos(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd), oy = b.y + Math.sin(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd);
       var tx = t.x + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
-      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), target: t, from: b });
+      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // kill: 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다
       st.fx.push({ kind: 'smoke', x: ox + Math.cos(sAng) * 14, y: oy + Math.sin(sAng) * 14, vx: Math.cos(sAng) * 18, vy: Math.sin(sAng) * 18, t: 0, life: 2.4, r: 10 + U.rf(0, 8) });
       st.fx.push({ kind: 'muzzle', x: ox + Math.cos(sAng) * 10, y: oy + Math.sin(sAng) * 10, ang: sAng, t: 0, life: 0.2, s: U.rf(1.1, 1.5) });
       for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35), v3 = U.rf(160, 280); st.fx.push({ kind: 'spark', x: ox + Math.cos(sAng) * 12, y: oy + Math.sin(sAng) * 12, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: 0, life: U.rf(0.15, 0.3) }); }
@@ -1056,7 +1056,7 @@
           var t = k.target;
           var dmg = k.dmg * (1 - (k.target.side === 'me' ? R.fleetBonus('hp') : 0)) * 1.1 * armorK(t);
           t.hp -= dmg;
-          var kill = Math.random() < 0.5 ? Math.ceil(dmg * 0.35 * (has(t, 'armor') ? 0.4 : has(t, 'raft') ? 1.5 : 1)) : 0; t.crew = Math.max(0, t.crew - kill);
+          var kill = Math.random() < 0.5 ? Math.ceil(dmg * 0.35 * (k.kill || 1) * (has(t, 'armor') ? 0.4 : has(t, 'raft') ? 1.5 : 1)) : 0; t.crew = Math.max(0, t.crew - kill);
           st.fx.push({ kind: 'hit', x: k.tx, y: k.ty, t: 0, life: 0.6 });
           hitBurst(k.tx, k.ty, k.tx - k.x, k.ty - k.y, dmg);
           dmgNumber(t, dmg, kill);

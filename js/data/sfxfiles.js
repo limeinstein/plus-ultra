@@ -103,6 +103,6 @@
       mount: { donkey: ['donkey'], horse: ['snort'], wagon: ['snort'] }   // 탈것이 내는 소리도 가끔
     },
     // 들짐승이 덮칠 때 (육상전 짐승 이름 → 소리)
-    beast: { lion: 'roarLion', hyena: 'hyena', tiger: 'roarBig', jaguar: 'roarBeast', bear: 'roarBig', boar: 'roarBeast', wolf: 'wolfAttack' }
+    beast: { lion: 'roarLion', hyena: 'hyena', tiger: 'roarBig', jaguar: 'roarBeast', bear: 'roarBig', boar: 'roarBeast', crocodile: 'roarBeast', wolf: 'wolfAttack' }
   };
 })(window.G = window.G || {});

@@ -49,8 +49,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     }
 
     await play('secret', 'duel/finishers/common/secret_dagger.gif');
-    await play('roar', ['duel/cutins/zhang_fei.webp', 'duel/finishers/zhang_fei/roar.gif'], 300);
-    await play('special', 'duel/cutins/zhang_fei.webp', 480);
+    await play('roar', ['duel/cutins/zhang_fei.gif', 'duel/finishers/zhang_fei/roar.gif'], 300);
+    await play('special', 'duel/cutins/zhang_fei.gif', 480);
     // 적이 쓰면 오른쪽에서 들어온다
     await page.evaluate(() => { const d = G.Games._duelDebug; d.en.spirit = 100; window.__duelMotion = d.useTech('special', d.en); });
     await page.waitForSelector('.rd-motion.cutin.en.show', { timeout: 10000 });
@@ -60,7 +60,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     if (OUT) { await page.waitForTimeout(250); await page.screenshot({ path: path.join(OUT, 'enemy_special.png'), clip: await page.locator('.rd-stage').boundingBox() }); }
     await page.evaluate(() => window.__duelMotion);
     // 일격필살은 맞으면 싸움이 끝나므로 맨 마지막에
-    await play('deathblow', 'duel/cutins/zhang_fei.webp', 120);
+    await play('deathblow', 'duel/cutins/zhang_fei.gif', 120);
     ok(!errors.length, '콘솔 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   } finally {
     await browser.close();

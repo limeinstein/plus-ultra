@@ -29,7 +29,14 @@
     ['map-discoveries/new-ruins-3', ['ganden', 'sera', 'drepung', 'sakya', 'kumbum', 'gyantsekumbum', 'karakorumturtle', 'orkhon', 'xanadu', 'deerstone', 'pazyryk', 'arzhan', 'isker', 'sikachi', 'karabalgasun', 'shamanrock']],
     ['map-discoveries/new-ruins-4', ['hegra', 'stcatherine', 'selimiye', 'sumela', 'nemrut', 'hattusa', 'ani', 'philae']],
     ['map-discoveries/new-nature-1', ['kinabalu', 'phongnha', 'toba', 'bromo', 'krakatau', 'mayon', 'chocolatehills', 'phangnga', 'kuangsi', 'tubbataha', 'baikal', 'lenapillars', 'kamgeysers', 'klyuchevskaya', 'yarlung', 'namtso']],
-    ['map-discoveries/new-nature-2', ['khovsgol', 'bayanzag', 'belukha', 'oymyakon', 'whitedesert', 'siwa', 'lakevan', 'rasmohammed', 'jebelshams']]
+    ['map-discoveries/new-nature-2', ['khovsgol', 'bayanzag', 'belukha', 'oymyakon', 'whitedesert', 'siwa', 'lakevan', 'rasmohammed', 'jebelshams']],
+    ['map-discoveries/mystery-ruins-1', ['altamira', 'coavalley', 'menga', 'almendres', 'millares', 'tudons', 'briteiros', 'azahara', 'canchoroano', 'atapuerca', 'lascaux', 'niaux', 'newgrange', 'skarabrae', 'callanish', 'externsteine']],
+    ['map-discoveries/mystery-ruins-2', ['biskupin', 'trelleborg', 'alesstenar', 'tanum', 'celsus', 'hypogeum', 'sunuraxi', 'baiae', 'pavlopetri', 'antikythera', 'catalhoyuk', 'camonica', 'varnagold', 'banditaccia', 'meroe', 'tiya']],
+    ['map-discoveries/mystery-ruins-3', ['wassu', 'mapungubwe', 'tsodilo', 'gedi', 'laasgeel', 'twyfelfontein', 'igboukwu', 'nok', 'gobeklitepe', 'baalbekstones', 'jerichotower', 'rujmelhiri', 'qumranscrolls', 'nabtaplaya', 'osireion', 'swimmerscave']],
+    ['map-discoveries/mystery-ruins-4', ['dilmunmounds', 'atlityam', 'roopkund', 'bhimbetka', 'dholavira', 'barabarcaves', 'elephantacaves', 'edakkal', 'sigiriya', 'ranikivav', 'unakoti', 'hirebenakal', 'caocaotomb', 'sanxingdui', 'mawangdui', 'tunximigul']],
+    ['map-discoveries/mystery-ruins-5', ['niuheliang', 'xixiatombs', 'bangudae', 'ganghwadolmen', 'janggunchong', 'jisandong', 'loulan', 'xiaohetomb', 'kharakhoto', 'porbajin', 'arkaim', 'issykkurgan', 'tamgaly', 'shahrisokhta', 'gonurtepe', 'tillyatepe']],
+    ['map-discoveries/mystery-ruins-6', ['gunungpadang', 'marospaint', 'niahcave', 'badamegalith', 'tagahouse', 'gwiongwion', 'kabayan', 'banchiang', 'oceo', 'pasemah', 'daisenkofun', 'ishibutai', 'iwafune', 'sannaimaruyama', 'oyustone', 'yoshinogari']],
+    ['map-discoveries/mystery-ruins-7', ['kamegaoka', 'hashihaka', 'yoshimihyakuana', 'iwatoyama', 'chavin', 'caral', 'kuelap', 'laventa', 'sagustinstatue', 'teyuna', 'diquis', 'cuevamanos', 'pedrainga', 'povertypoint']]
   ];
   var POS = {};
   SHEETS.forEach(function (s) { s[1].forEach(function (id, i) { POS[id] = { key: s[0], slot: i }; }); });

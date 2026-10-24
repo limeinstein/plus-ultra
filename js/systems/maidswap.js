@@ -55,7 +55,7 @@
     var s = S(); if (s && !s.pwMig) MS.migrate();
     var id = s && s.tavernMaid && s.tavernMaid[cityId];
     if (id) { if (!G.MAID[id]) MS.register(s); if (G.MAID[id]) return G.MAID[id]; }
-    return (G.MAIDS || []).filter(function (m) { return m.city === cityId; })[0] || null;
+    return G.baseMaidAt ? G.baseMaidAt(cityId) : (G.MAIDS || []).filter(function (m) { return m.city === cityId; })[0] || null;
   };
   /** 지금 쓰이는 여급 얼굴들 (새 여급과 겹치지 않게) */
   function usedFaces(c) {

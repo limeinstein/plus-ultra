@@ -39,9 +39,13 @@
   }
   C.interiorKeys = function (kind, c, variant) { return G.Img.chain.interior(kind, c, variant); };
   C.interior = function (kind, c, variant) {
-    var k = kind + ':' + c.id + ':' + (variant || '');
+    var homeTier = kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
+    var drawingKind = kind === 'home' && G.HomeBuilding ? G.HomeBuilding.roomKind(homeTier) : kind;
+    var drawingVariant = drawingKind === kind ? variant : '';
+    var k = kind + ':' + c.id + ':' + (variant || '') + ':' + homeTier;
     if (intCache[k]) return intCache[k];
-    var cv = G.Img.make(C.interiorKeys(kind, c, variant), 1600, 900, function () { return A.interior(kind, c, variant); });
+    var cv = G.Img.make(C.interiorKeys(drawingKind, c, drawingVariant), 1600, 900, function () { return A.interior(drawingKind, c, drawingVariant); });
+    if (kind === 'home' && G.HomeBuilding) cv = G.HomeBuilding.interior(cv, c, homeTier);
     return cachePut(intCache, intKeys, k, cv, 6);
   };
   /** preload the town's override pictures (view waits briefly, portraits load in the background) */
@@ -109,7 +113,7 @@
       out.push({ kind: x.kind, arg: x.realm, name: info[0], icon: info[1] });
     });   // 유럽 궁정의 왕명으로 세운 박물관·미술관·동물원 (js/city/museum.js)
     out.push({ kind: 'gate', name: '성문', icon: 'gate' });
-    if (c.id === (R.seat ? R.seat() : s.player.home)) out.push({ kind: 'home', name: '자택', icon: 'house' });   // 가족이 개척 도시의 총독 관저로 옮겼으면 고향 집은 비어 있다
+    if (c.id === (R.seat ? R.seat() : s.player.home)) out.push({ kind: 'home', name: c.colony != null ? '총독 관저' : G.HomeBuilding ? G.HomeBuilding.name() : '자택', icon: 'house' });   // 가족이 개척 도시의 총독 관저로 옮겼으면 고향 집은 비어 있다
     return out;
   };
 
@@ -396,7 +400,9 @@
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     var ikind = (typeof B.paint === 'function' ? B.paint(c, arg) : B.paint) || kind, ivar = B.variant ? B.variant(c, arg) : '';
     if (G.Img.count()) {
-      var pre = [C.interiorKeys(ikind, c, ivar)];
+      var homeTier = ikind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
+      var drawingKind = ikind === 'home' && G.HomeBuilding ? G.HomeBuilding.roomKind(homeTier) : ikind;
+      var pre = [C.interiorKeys(drawingKind, c, drawingKind === ikind ? ivar : '')];
       if (B.preload) { var ex = B.preload(c, arg); if (ex) pre = pre.concat(ex); }
       await G.Img.preload(pre, 1500);
     }

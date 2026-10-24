@@ -299,7 +299,8 @@
     { id: 'm_plb', city: 167, name: '라트나', like: 'steady', pic: 'maid-styles/tropic/1' },
     { id: 'm_ban', city: 168, name: '세카르', like: 'bold', pic: 'maid-styles/tropic/2' },
     { id: 'm_sur', city: 169, name: '아유', like: 'kind', pic: 'maid-styles/tropic/3' },
-    { id: 'm_bru', city: 170, name: '다양', like: 'strong', pic: 'maid-styles/tropic/4' },
+    // 1600년부터 브루나이 술집에서 일하는 필리핀계 여급. 떰·마리아 사건용 원화와는 별도 인물로 쓴다.
+    { id: 'm_bru', city: 170, name: '아미한', like: 'strong', pic: 'portraits/maids/m_bru', from: 1600 },
     { id: 'm_ter', city: 171, name: '누르바야', like: 'generous', pic: 'maid-styles/tropic/5' },
     { id: 'm_amb', city: 172, name: '멜라티', like: 'delicate', pic: 'maid-styles/tropic/6' },
     // 나머지 20명은 그 도시의 기존 고해상도 지역 묶음에서 안정적으로 고른다.
@@ -342,7 +343,8 @@
     { id: 'm_gol', city: 156, name: '사비트리', like: 'steady', pic: 'maid-styles/india/23' },
     { id: 'm_clc', city: 157, name: '카말라', like: 'generous', pic: 'maid-styles/india/24' },
     // 동남아시아 2명 — 이름이 없던 후에와 리골의 여급이다.
-    { id: 'm_hue', city: 164, name: '란', like: 'steady' },
+    // 1600년부터 유에 술집에서 일하는 대월 여급. 떰과 이름·신분을 분리한다.
+    { id: 'm_hue', city: 164, name: '응우옛', like: 'steady', pic: 'portraits/maids/m_hue', from: 1600 },
     { id: 'm_lig', city: 161, name: '사오', like: 'kind' },
     // 아메리카 24명: 메소아메리카 5, 안데스 7, 북아메리카 6, 초기 식민 항구 6.
     { id: 'm_tlx', city: 202, name: '시코흐텐카', like: 'brave', pic: 'maid-styles/native/13' },
@@ -371,6 +373,15 @@
     { id: 'm_per', city: 214, name: '베아트리스', like: 'generous', pic: 'maid-styles/westeurope/13', from: 1535 }
   ];
   G.MAID = {}; G.MAIDS.forEach(function (m) { G.MAID[m.id] = m; });
+  /** 시대가 맞는 이름 있는 여급. from은 그해부터, to는 그해 직전까지만 등장한다. */
+  G.maidAvailable = function (m, year) {
+    if (!m) return false;
+    if (year == null) year = G.Game && G.Game.state && G.Game.state.date ? G.Game.state.date.y : 9999;
+    return (!m.from || year >= m.from) && (!m.to || year < m.to);
+  };
+  G.baseMaidAt = function (cityId, year) {
+    return G.MAIDS.filter(function (m) { return m.city === cityId && G.maidAvailable(m, year); })[0] || null;
+  };
   G.LIKES = {
     bold: { name: '당당한', stat: 'fame' }, strong: { name: '강인한', stat: 'str' }, willful: { name: '의지가 강한', stat: 'int' },
     brave: { name: '용감한', stat: 'mar' }, kind: { name: '친절한', stat: 'cha' }, delicate: { name: '섬세한', stat: 'int' },

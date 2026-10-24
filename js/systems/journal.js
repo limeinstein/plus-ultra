@@ -83,14 +83,16 @@
     var b = G.BALANCE.journal || {};
     cap = cap || b.cap || 800;
     if (!log) return 0;
-    var cut = 0, i, mc = b.minor == null ? 40 : b.minor, minors = [];
+    var cut = 0, i, mc = b.minor == null ? 40 : b.minor, minors = [], gone = [];
+    // 지워진 줄은 항해일지 책(40년마다 한 권)의 묶음으로 옮긴다 (js/systems/logbooks.js — 2026-10-24)
+    function done() { if (gone.length && G.LogBooks && G.LogBooks.onDrop) { try { G.LogBooks.onDrop(log, gone); } catch (e) { console.error(e); } } return cut; }
     for (i = 0; i < log.length; i++) if (J.minor(log[i])) minors.push(i);
     if (mc >= 0 && minors.length > mc) {           // 작은 소식이 너무 많으면 오래된 것부터 (뒤에서부터 지워야 자리가 어긋나지 않는다)
       var drop = minors.slice(0, minors.length - mc);
-      for (i = drop.length - 1; i >= 0; i--) log.splice(drop[i], 1);
+      for (i = drop.length - 1; i >= 0; i--) gone.push(log.splice(drop[i], 1)[0]);
       cut += drop.length;
     }
-    if (log.length <= cap) return cut;
+    if (log.length <= cap) return done();
     var keep = Math.max(0, Math.min(b.keep == null ? 50 : b.keep, cap - 1));
     var q = J.shares(cap), n = {};
     J.ORDER.forEach(function (g) { n[g] = 0; });
@@ -111,10 +113,10 @@
       if (at < 0) for (i = 0; i < log.length; i++) if (log[i].g === pick) { at = i; break; }   // 그 등급이 모두 맨 뒤에만 있다
       if (at < 0) at = 0;
       n[log[at].g] = (n[log[at].g] || 1) - 1;
-      log.splice(at, 1);
+      gone.push(log.splice(at, 1)[0]);
       cut++;
     }
-    return cut;
+    return done();
   };
 
   // ---------------------------------------------------------------- 옛 저장

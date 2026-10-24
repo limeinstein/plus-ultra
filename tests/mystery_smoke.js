@@ -42,6 +42,14 @@ function ok(v, msg) { res.push(!!v); console.log((v ? '  ✓ ' : '  ✗ ') + msg
       if (G.BALANCE.noClueFind) G.BALANCE.noClueFind.on = false;
       out.y1599 = at(1599); out.y1600 = at(1600);
       out.land = pick.length;
+      out.views = {
+        city: ids.filter(id => G.DISC[id].how === 'city').length,
+        sea: ids.filter(id => G.DISC[id].how === 'sea').length,
+        map: ids.filter(id => {
+          const d = G.DISC[id], key = G.DiscoveryIcon.key(d);
+          return G.DiscoveryIcon.isMapLandmark(d) && key && G.Img.has(key);
+        }).length
+      };
       out.ach = G.ACHIEVEMENTS.find(a => a.id === 'mysteries');
       out.ach = out.ach && { n: out.ach.n, ids: out.ach.ids.length, ev: !!(G.ACHV_EVENTS && G.ACHV_EVENTS.mysteries) };
       return out;
@@ -53,6 +61,8 @@ function ok(v, msg) { res.push(!!v); console.log((v ? '  ✓ ' : '  ✗ ') + msg
     ok(r.dupId === 0, '발견물 id가 겹치지 않는다');
     ok(r.y1599.avail === 0 && r.y1599.hint === 0 && r.y1599.found === 0 && r.y1599.add === 0, '1599년: 단서도, 그 자리에 가도 찾을 수 없다 ' + JSON.stringify(r.y1599));
     ok(r.y1600.avail === 110 && r.y1600.hint === 110 && r.y1600.found >= r.land * 0.9 && r.y1600.add === 1, '1600년: 단서가 돌고 그 자리에서 찾는다 ' + JSON.stringify(r.y1600) + ' (뭍 ' + r.land + '곳)');
+    ok(r.views.city === 0 && r.views.sea === 4 && r.views.map === 110,
+      '도시형 0 · 육상/해상 탐험형 110곳이 항해·해도·육상 지도 그림과 연결됨 ' + JSON.stringify(r.views));
     ok(r.ach && r.ach.ids === 110 && r.ach.n === 20 && r.ach.ev, '업적 「세계의 수수께끼」(20곳)와 그 장면');
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
   } finally { await browser.close(); }

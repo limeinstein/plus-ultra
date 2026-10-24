@@ -179,7 +179,9 @@
     var types = Y.types(c), nextShips = types.filter(function (id) { return G.SHIP[id].lv === tech + 1; }).map(function (id) { return G.SHIP[id].name; });
     var head = '이 조선소의 기술은 ' + tech + '등급일세 (기본 ' + SHp.techBase(c) + '등급, 지금까지 들어온 투자 금화 ' + U.num(SHp.techAmt(c)) + '닢).';
     if (next == null) { await C.say(keeper(), head + ' ' + (tech >= 5 ? '이 이상은 어느 조선소도 짓지 못하는 배들뿐이지.' : '더 투자해도 이 조선소가 오를 수 있는 끝일세.')); return; }
-    await C.say(keeper(), head + ' 금화 ' + U.num(next) + '닢을 더 대 주면 도크를 넓히고 장인을 불러 ' + (tech + 1) + '등급 배를 지을 수 있네.' + (nextShips.length ? ' (' + nextShips.join('·') + ')' : ' 다만 이 고장에서 짓는 배 가운데 그 등급 배는 아직 없네.'));
+    var nextGear = Y.gearAt(tech + 1);
+    await C.say(keeper(), head + ' 금화 ' + U.num(next) + '닢을 더 대 주면 도크를 넓히고 장인을 불러 ' + (tech + 1) + '등급 배를 지을 수 있네.' + (nextShips.length ? ' (' + nextShips.join('·') + ')' : ' 다만 이 고장에서 짓는 배 가운데 그 등급 배는 아직 없네.') +
+      (nextGear ? ' 주물장과 목각장도 늘어 ' + nextGear + '도 만들 수 있게 되지.' : ''));
     if (s.player.gold < 1000) { await C.say(keeper(), '투자는 금화 1,000닢부터 받네.'); return; }
     var n = await UI.number({ title: '조선 기술 투자 (천 닢 단위)', min: 1, max: Math.floor(s.player.gold / 1000), value: Math.min(Math.floor(s.player.gold / 1000), Math.ceil(next / 1000)), unit: '천 닢',
       info: function (k) { var a = SHp.techAmt(c) + k * 1000, b = 0; for (var i = 1; i < SHp.TECH_INV.length; i++) if (a >= SHp.TECH_INV[i]) b = i; return '금화 ' + U.num(k * 1000) + '닢 → 조선 기술 ' + Math.min(5, SHp.techBase(c) + b) + '등급'; } });
@@ -190,7 +192,9 @@
     if (up > 0) {
       var now = SHp.tech(c), opened = Y.types(c).filter(function (id) { var lv = G.SHIP[id].lv; return lv > tech && lv <= now; }).map(function (id) { return G.SHIP[id].name; });
       G.State.log(c.name + ' 조선소에 금화 ' + U.num(amt) + '닢을 투자했다. 조선 기술 ' + now + '등급.');
-      await C.say(keeper(), '고맙네! 이제 ' + now + '등급 배까지 지을 수 있네.' + (opened.length ? ' ' + opened.join('·') + U.jx(opened[opened.length - 1], '을/를') + ' 주문해 보게.' : ''));
+      var gear = []; for (var lv = tech + 1; lv <= now; lv++) { var gl = Y.gearAt(lv); if (gl) gear.push(gl); }
+      await C.say(keeper(), '고맙네! 이제 ' + now + '등급 배까지 지을 수 있네.' + (opened.length ? ' ' + opened.join('·') + U.jx(opened[opened.length - 1], '을/를') + ' 주문해 보게.' : '') +
+        (gear.length ? ' 개조에서 ' + gear.join(', ') + '도 달아 주겠네.' : ''));
     } else {
       UI.toast(c.name + ' 조선소에 금화 ' + U.num(amt) + '닢을 투자했다.' + (SHp.techNext(c) != null ? ' (다음 등급까지 ' + U.num(SHp.techNext(c)) + '닢)' : ''), 'coin');
     }
@@ -263,13 +267,28 @@
       else if (v === 'name') { var nm = await UI.prompt('새 이름', sh.name, 12); if (nm) { sh.name = nm; UI.toast('선명을 ' + nm + '호로 바꾸었다.', 'scroll'); } }
     }
   };
+  /** 이 조선소에서 부어 달 수 있는 대포인가 — 조선 기술 등급(기술 투자로 오른다)이 대포의 lv 이상이어야 한다 */
+  Y.gunOk = function (c, g) { return (g.lv || 1) <= SH().tech(c); };
+  /** 조선 기술 lv등급이 되면 새로 달 수 있는 대포·선수상 이름 (투자 안내용) */
+  Y.gearAt = function (lv) {
+    var g = G.CANNONS.filter(function (x) { return (x.lv || 1) === lv; }).map(function (x) { return x.name; });
+    var f = G.FIGUREHEADS.filter(function (x) { return !x.rare && !x.relic && (x.lv || 1) === lv; }).map(function (x) { return x.name; });
+    return lv > 1 ? g.concat(f).join('·') : '';
+  };
   async function refitGuns(c, sh) {
-    var s = S();
-    var ty = await UI.choose('대포 종류', G.CANNONS.map(function (g) { return { label: g.name, right: '1문 ' + g.price + '닢 · 사정 ' + g.range + ' · 위력 ' + g.dmg + ' · 무게 ' + g.load, value: g.id, desc: g.desc, icon: 'cannon' }; }), { width: 700, text: '같은 종류로 수를 바꾸거나 다른 종류로 바꿔 달 수 있습니다. 떼어낸 대포는 반값에 사들입니다.' });
+    var s = S(), tech = SH().tech(c);
+    var more = G.CANNONS.filter(function (g) { return !Y.gunOk(c, g); });
+    var ty = await UI.choose('대포 종류', G.CANNONS.map(function (g) {
+      var ok = Y.gunOk(c, g), mine = g.id === sh.guns.type;
+      return { label: g.name + ((g.lv || 1) > 1 ? ' <span class="tag">기술 ' + g.lv + '</span>' : '') + (mine ? ' <span class="tag">지금</span>' : ''),
+        right: ok || mine ? '1문 ' + g.price + '닢 · 사정 ' + g.range + ' · 위력 ' + g.dmg + ' · 무게 ' + g.load : '조선 기술 ' + g.lv + '등급 필요',
+        value: g.id, desc: g.desc + (!ok && mine ? ' — 이 조선소에서는 줄이거나 떼어낼 수만 있다' : ''), icon: 'cannon', disabled: !ok && !mine };
+    }), { width: 760, text: '같은 종류로 수를 바꾸거나 다른 종류로 바꿔 달 수 있습니다. 떼어낸 대포는 반값에 사들입니다.' +
+      (more.length ? ' 이 조선소의 조선 기술은 <b>' + tech + '등급</b> — 「기술 투자」로 올리면 ' + more.map(function (g) { return g.name; }).join('·') + U.jx(more[more.length - 1].name, '을/를') + ' 부어 달 수 있습니다.' : '') });
     if (!ty) return;
     var g = G.CANNON[ty], old = G.CANNON[sh.guns.type];
     var refund = function (n) { return old ? Math.floor(old.price * 0.5 * n) : 0; };
-    var n = await UI.number({ title: g.name + ' 탑재 수', min: 0, max: sh.ports, value: ty === sh.guns.type ? sh.guns.n : Math.min(sh.ports, sh.guns.n || 4), unit: '문',
+    var n = await UI.number({ title: g.name + ' 탑재 수', min: 0, max: Y.gunOk(c, g) ? sh.ports : sh.guns.n, value: ty === sh.guns.type ? sh.guns.n : Math.min(sh.ports, sh.guns.n || 4), unit: '문',
       info: function (k) {
         var cost = ty === sh.guns.type ? Math.max(0, k - sh.guns.n) * g.price - (k < sh.guns.n ? refund(sh.guns.n - k) : 0) : k * g.price - refund(sh.guns.n);
         var cap = Math.max(0, Math.floor(sh.cap - k * g.load));
@@ -363,15 +382,20 @@
     s.player.gold -= n * price; sh.ports += n; UI.toast('포문을 ' + n + '문 늘렸다.', 'plus');
   }
   async function refitFig(c, sh) {
-    var s = S(), rng = U.makeRng(c.id * 17 + Math.floor(s.day / 60));
-    var sold = G.FIGUREHEADS.filter(function (f) { return !f.rare; }).filter(function () { return rng() < 0.45; });
+    var s = S(), rng = U.makeRng(c.id * 17 + Math.floor(s.day / 60)), tech = SH().tech(c);
+    // 조선 기술이 높을수록 깎을 수 있는 선수상이 늘고(lv), 들여 놓는 가짓수도 많아진다
+    var stock = 0.4 + tech * 0.05;
+    var sold = G.FIGUREHEADS.filter(function (f) { return !f.rare && !f.relic; }).filter(function (f) { return rng() < stock && (f.lv || 1) <= tech; });
+    var later = G.FIGUREHEADS.filter(function (f) { return !f.rare && !f.relic && (f.lv || 1) > tech; });
+    sold.sort(function (a, b) { return (b.lv || 1) - (a.lv || 1) || a.price - b.price; });   // 기술 투자로 늘어난 선수상을 위에
     // 소지품의 유물 선수상도 달 수 있다
     var mine = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { return G.FIGUREHEAD[x.it.id] && G.FIGUREHEAD[x.it.id].relic; });
     if (!sold.length && !mine.length && !sh.fig) { await C.say(keeper(), '지금은 선수상이 하나도 없네.'); return; }
     var opts = mine.map(function (x, k) { var f = G.FIGUREHEAD[x.it.id]; return { label: f.name + ' <span class="tag">소지품 · 유물</span>' + (R.isProof(x.it) ? ' <span class="tag">증거</span>' : ''), right: '달기 150닢', value: 'my' + k, desc: f.desc, icon: 'feather' }; })
-      .concat(sold.map(function (f) { return { label: f.name, right: U.num(f.price) + '닢', value: f.id, desc: f.desc, icon: 'feather' }; }))
+      .concat(sold.map(function (f) { return { label: f.name + ((f.lv || 1) > 1 ? ' <span class="tag">기술 ' + f.lv + '</span>' : ''), right: U.num(f.price) + '닢', value: f.id, desc: f.desc, icon: 'feather' }; }))
       .concat(sh.fig ? [{ label: '선수상 떼어내기', value: '_off', icon: 'tools', desc: G.FIGUREHEAD[sh.fig] && G.FIGUREHEAD[sh.fig].relic ? '유물 선수상은 떼어 소지품으로 돌려받는다' : '' }] : []);
-    var v = await UI.choose('선수상', opts, { width: 660, text: '선수상은 배를 지켜 주는 수호상입니다. 배마다 하나씩 달 수 있습니다.' + (sh.fig ? ' 지금: <b>' + G.FIGUREHEAD[sh.fig].name + '</b>' : '') });
+    var v = await UI.choose('선수상', opts, { width: 660, text: '선수상은 배를 지켜 주는 수호상입니다. 배마다 하나씩 달 수 있습니다.' + (sh.fig ? ' 지금: <b>' + G.FIGUREHEAD[sh.fig].name + '</b>' : '') +
+      (later.length ? '<br><small class="muted">조선 기술 ' + tech + '등급 — 「기술 투자」로 올리면 ' + later.length + '가지 선수상을 더 깎을 수 있습니다 (다음 등급: ' + later.filter(function (f) { return f.lv === tech + 1; }).map(function (f) { return f.name; }).join('·') + ')</small>' : '') });
     if (!v) return;
     if (v === '_off') { if (!(await takeOffFig(sh))) return; UI.toast('선수상을 떼어냈다.', 'tools'); return; }
     if (String(v).indexOf('my') === 0) {

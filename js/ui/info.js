@@ -381,6 +381,7 @@
     if (G.Court) html += G.Court.taskHtml();
     if (G.Escort) html += G.Escort.html();     // 상선 호위
     if (G.TreasureHunt) html += G.TreasureHunt.html();   // 조합의 보물 지도 — 「지도를 펼친다」
+    if (G.LittlePrince) html += G.LittlePrince.html();   // 어린 왕자의 지도 (js/systems/littleprince.js)
     // 조합 의뢰
     var qs = G.Quest ? G.Quest.list() : [];
     html += '<div class="sep"></div><h4 style="margin:0 0 8px">맡은 조합 의뢰</h4>';

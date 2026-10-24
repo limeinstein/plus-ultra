@@ -111,22 +111,13 @@ ok(/class="rd-motion"/.test(duelCode) && /cutins \+ f\.spriteId/.test(duelCode) 
 ok(/zhang_fei\/roar/.test(duelCode) && /secret_/.test(duelCode), '장비 호통·공통 비밀무기 연결');
 for (const id of ['deck', 'land_battle', 'exploration', 'city', 'tavern']) ok(manifest.includes('"duel/backgrounds/' + id + '"'), id + ': 배경 매니페스트 등록');
 
-// 전면 필살기 컷인: 전투원마다 1060×380 정지 WebP 한 장 (움직임은 CSS), 예전 7장 GIF는 남기지 않는다
-function webpSize(file) {
-  const b = fs.readFileSync(file);
-  ok(b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WEBP', file + ': WebP 서명');
-  const kind = b.toString('ascii', 12, 16);
-  if (kind === 'VP8X') return { width: 1 + b.readUIntLE(24, 3), height: 1 + b.readUIntLE(27, 3), bytes: b.length, anim: !!(b[20] & 2) };
-  if (kind === 'VP8 ') return { width: b.readUInt16LE(26) & 0x3fff, height: b.readUInt16LE(28) & 0x3fff, bytes: b.length, anim: false };
-  if (kind === 'VP8L') { const v = b.readUInt32LE(21); return { width: (v & 0x3fff) + 1, height: ((v >> 14) & 0x3fff) + 1, bytes: b.length, anim: false }; }
-  throw new Error(file + ': 알 수 없는 WebP');
-}
+// 전면 필살기 컷인: 전투원마다 준비·당기기·돌진·타격·회수의 1060×380 GIF 다섯 장면
 for (const f of allFighters) {
-  const file = path.join(ROOT, 'images/duel/cutins', f.id + '.webp');
-  const im = webpSize(file);
-  ok(im.width === 1060 && im.height === 380 && !im.anim && im.bytes < 400000, f.id + ': 컷인 1060×380 정지 WebP, 400KB 미만 (' + im.bytes + ')');
-  ok(!fs.existsSync(path.join(ROOT, 'images/duel/cutins', f.id + '.gif')), f.id + ': 예전 컷인 GIF가 남아 있으면 매니페스트가 GIF를 집는다');
-  ok(manifest.includes('"duel/cutins/' + f.id + '": "duel/cutins/' + f.id + '.webp"'), f.id + ': 컷인 매니페스트 등록');
+  const file = path.join(ROOT, 'images/duel/cutins', f.id + '.gif'), im = gif(file);
+  ok(im.width === 1060 && im.height === 380 && im.frames === 5, f.id + ': 컷인 1060×380, 정확히 5단계 GIF');
+  ok(fs.statSync(file).size < 2500000, f.id + ': 컷인 GIF 2.5MB 미만');
+  ok(!fs.existsSync(path.join(ROOT, 'images/duel/cutins', f.id + '.webp')), f.id + ': 교체 전 정지 WebP를 남기지 않음');
+  ok(manifest.includes('"duel/cutins/' + f.id + '": "duel/cutins/' + f.id + '.gif"'), f.id + ': GIF 컷인 매니페스트 등록');
 }
 const faceL = art.finishers.cutinFaceLeft || [];
 ok(faceL.length && faceL.every(id => allFighters.some(f => f.id === id)), '컷인 방향 목록(cutinFaceLeft)은 있는 전투원만');

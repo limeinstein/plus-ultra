@@ -9,6 +9,8 @@
     audio: { pet: { cat: 0.042, dog: 0.05 } },
     // 자택 장면 그림 (js/art/homeart.js): 그림 크기와 화면 위에서의 자리 (무대 1600×900)
     homeArt: { w: 900, h: 520, top: 78 },
+    // 집 외관 높이: 평민·유력자·남작·백작·공작 (거리의 다른 건물과 견줄 때)
+    homeBuilding: { heights: [340, 390, 415, 465, 520] },
     famScene: { w: 1008, top: 74 },
     // 내 컴퓨터의 코스타 델 솔 MP3 (js/systems/localost.js): 곡을 바꿀 때 겹쳐 바꾸는 초 fade · 곡 끝에서 처음과 겹쳐 돌리는 초 loopFade ·
     //   이 초 안에 같은 곡으로 돌아오면 이어서 resumeSec · 곡 이름이 떠 있는 초 showSec(0 = 안 띄움) · 음악 크기에 곱하는 값 gain · 파일 찾기 기다림 probeMs
@@ -303,6 +305,9 @@
     battle: true,        // 육상전 부대를 그림 시트로
     unitH: 56,           // 육상전 병사 몸 키(px, 1000×430 판 기준 — 치켜든 무기는 빼고) · 짐승은 beastH
     beastH: 40,
+    mountH: { '말': 76, '낙타': 80, '코끼리': 98 },       // 기병은 탈것까지 포함해 병사보다 크게
+    mountN: { '말': 2, '낙타': 2, '코끼리': 1 },          // 한 부대를 그릴 때 겹치는 기수 수
+    mountGap: { '말': 58, '낙타': 62, '코끼리': 78 },     // 여러 기수를 나란히 놓는 간격
     sheetK: { natives: 1.3 },   // 시트마다 덧붙이는 배율 — 원주민 주술 전사는 머리 위로 늘 지팡이가 솟아 몸이 작게 재진다
     battleFps: { idle: 5, walk: 10, attack: 12, hurt: 8, dead: 6 },
     events: true,        // 항해·육상 탐험 사건 그림 (js/art/eventfx.js)
