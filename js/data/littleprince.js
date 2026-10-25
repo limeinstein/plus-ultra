@@ -23,5 +23,5 @@
   Object.defineProperty(m, 'desc', { enumerable: true, configurable: true, get: function () { var s = G.Game && G.Game.state; return s && s.lprince && s.lprince.revealed ? m.descRevealed : desc0; } });
   if (G.MATES && !G.MATE[m.id]) { G.MATES.push(m); G.MATE[m.id] = m; }
   var B = G.BIOS = G.BIOS || {};
-  if (!B['어린 왕자']) B['어린 왕자'] = '앙투안 드 생텍쥐페리의 이야기(1943)에 나오는 소년. 장미 한 송이가 있는 작은 별을 떠나 여러 별을 돌다 지구의 사막에 내려왔다. 사막에 불시착한 비행사에게 그림을 그려 달라고 조른 일로 시작되는 그 이야기를, 이 게임에서는 사막에서 야영하던 제독이 만난다';
+  if (!B['어린 왕자']) B['어린 왕자'] = '앙투안 드 생텍쥐페리의 이야기(1943)에 나오는 소년. 장미 한 송이가 있는 작은 별을 떠나 여러 별을 돌다 지구의 사막에 내려왔다. 사막에 불시착한 비행사에게 그림을 그려 달라고 조른 일로 시작되는 그 이야기를, 이 게임에서는 사막에서 야영하던 제독이 만난다.';
 })(window.G = window.G || {});

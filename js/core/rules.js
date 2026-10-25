@@ -84,13 +84,15 @@
     return best;
   };
   R.skillRead = function (id) { return R.skillBest(id).lv; };
-  /** language level (admiral, 부관, 통역) */
+  /** language level (admiral, 부관, 통역 · 통역실 — 통역으로 임명해 통역실에 둔 통역관이 있으면 제독·기함의 부하가 아는 말까지) */
   R.lang = function (li) {
     var S = R.S(); var best = S.player.lg[li] || 0;
     S.mates.forEach(function (m) {
       if (m.role !== 'interp' && m.role !== 'first' && !(G.Cabins && G.Cabins.interprets(m))) return;   // 통역·부관, 통역실에 있는 사람
       var d = G.MATE[m.id]; if (!d) return; var lv = R.mateLang(m, li); if (lv > best) best = lv;
     });
+    var e = G.Cabins && G.Cabins.langEntry ? G.Cabins.langEntry(li) : null;   // 통역관: 일행이 아는 말을 모아 통역한다 (js/systems/cabins.js)
+    if (e && e.lv > best) best = e.lv;
     return best;
   };
   /** 이 도시에서 쓸 말: 그 도시의 말, 또는 포르투갈어가 통하는 항구(js/systems/treaty.js)라면 일행이 더 잘하는 쪽 — {li, lv, alt: 포르투갈어로 바꿨나} */

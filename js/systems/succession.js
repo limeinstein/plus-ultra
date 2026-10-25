@@ -116,6 +116,8 @@
   /** 해마다 (W.newYear) — 대가 바뀐 자리를 찾아 처리한다 */
   SC.year = function () {
     var s = S(), out = [], c = cfg();
+    var orph = G.Sponsor && G.Sponsor.orphanContract ? G.Sponsor.orphanContract() : null;   // 후원자의 도시가 사라진 계약 (2026-10-25)
+    if (orph) out.push(orph);
     if (!s.spHolder) { SC.sync(); return out; }
     G.SPONSORS.forEach(function (sp) {
       var prev = s.spHolder[sp.id], cur = SC.curKey(sp);
@@ -143,6 +145,12 @@
         var sameGen = h[4] === 'g' && nxt === sp.title;
         var who0 = h[2] === sp.title ? sp.title : sp.title + ' ' + h[2];
         if (!sameGen) out.push({ icon: 'crown', history: true, text: who0 + U.jx(h[2], '이/가') + ' ' + endedPlain(sp, h) + '.' + (nxt ? ' ' + nxt + U.jx(nxt, '이/가') + ' 뒤를 이었다.' : '') });
+      }
+      // 자리가 비었는데 그 후원자와 계약 중: 보고는 집사가 받는다고 알린다 (2026-10-25 — js/systems/sponsor.js SP.caretaker)
+      if (!cur && s.contract && s.contract.sponsor === sp.id) {
+        var cc = G.CITY_DATA[sp.city];
+        var stw = G.Sponsor.stewardName ? G.Sponsor.stewardName(sp) : sp.title + ' 가의 집사';
+        out.push({ icon: 'seal', text: sp.title + ' 자리가 비었다. 맺어 둔 계약의 보고는 ' + (cc ? cc.name + '에서 ' : '') + stw + U.jx(stw, '이/가') + ' 대신 받는다.' });
       }
       if (!rel) return;
       // 자리와 쌓은 신뢰는 절반만 남는다

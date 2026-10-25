@@ -105,7 +105,7 @@
   D.mirageK = function (d) { return D.isMirageFind(d) ? (MC().futureK || 0.2) : 1; };
   /** 그 해가 되어야 증거가 나오고 찾을 수 있는 발견물인가 (d.openY — 미스터리 유적은 1600년부터, js/data/mysterydisc.js) */
   D.opened = function (d) { var s = S(); return !d || !d.openY || !s || s.date.y >= d.openY; };
-  D.built = function (d) { return !d || !d.built || S().date.y >= d.built || D.isFuture(d); };
+  D.built = function (d) { return !d || !d.built || S().date.y >= d.built || (D.isFuture(d) && !(d.mirageFrom && S().date.y < d.mirageFrom)); };   // mirageFrom: 그 해 전에는 신기루로도 보이지 않는다 (js/data/miragedisc.js — 1610년부터)
   /** 지금 단서를 들을 수 있는 발견물인가 */
   D.available = function (d) { return !G.Frontier || G.Frontier.available(d); };
   /** 그림·세공이 발견물의 값어치를 올린다 — 제독이든 부하든(역할·배 상관없이) 가장 잘하는 사람의 솜씨.

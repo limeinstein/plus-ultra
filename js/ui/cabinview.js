@@ -192,10 +192,10 @@
   function langCount() { var L = G.LANGS || []; return L.length || Object.keys(L).length; }
   /** 통역실: 제독보다 잘하는 말 — 「아랍어 3 · 페르시아어 2(제독 1)」 (숫자는 그 사람의 말 단계, 괄호는 제독의 단계) */
   function langGains(m) {
-    var p = S().player, out = [];
+    var p = S().player, out = [], chief = m.role === 'interp' && CB().langEntry;   // 통역으로 임명한 사람: 통역실에 두면 일행이 아는 말까지 (통역 장부)
     for (var li = 0; li < langCount(); li++) {
-      var a = CB().mateLang(m, li), b = (p.lg && p.lg[li]) || 0;
-      if (a > b) out.push(G.LANGS[li] + ' ' + a + (b ? '(제독 ' + b + ')' : ''));
+      var e = chief ? CB().langEntry(li, m) : null, a = e ? e.lv : CB().mateLang(m, li), b = (p.lg && p.lg[li]) || 0;
+      if (a > b) out.push(G.LANGS[li] + ' ' + a + (e && e.src !== 'self' ? '(' + e.name + '에게 물어)' : b ? '(제독 ' + b + ')' : ''));
     }
     return out;
   }
@@ -204,7 +204,7 @@
   function langNote(m, full) {
     var g = langGains(m);
     if (!g.length) return '더할 말 없음';
-    return '통역 ' + (full || g.length <= 2 ? g.join(' · ') : g.slice(0, 2).join(' · ') + ' 외 ' + (g.length - 2) + '가지');
+    return (m.role === 'interp' ? '통역 장부 ' : '통역 ') + (full || g.length <= 2 ? g.join(' · ') : g.slice(0, 2).join(' · ') + ' 외 ' + (g.length - 2) + '가지');
   }
   /** 이 방에 얼마나 맞는가: 방의 특기 가운데 가장 높은 단계(+ 나머지 조금) × 충성 효율. 통역실은 제독보다 잘하는 말의 단계 차 */
   function fitScore(m, c) {
@@ -212,6 +212,7 @@
     if (c.lang) {
       var p = S().player, n = 0;
       for (var li = 0; li < langCount(); li++) { var a = CB().mateLang(m, li), b = (p.lg && p.lg[li]) || 0; if (a > b) n += a - b; }
+      if (m.role === 'interp' && CB().langEntry) n += 0.5 + langGains(m).length * 0.1;   // 통역으로 임명한 사람을 먼저 (통역관이 되어 일행의 말을 모은다)
       return n * CB().eff(m);
     }
     var ks = c.skills || G.ROLE_SKILLS[c.role] || [], best = 0, sum = 0;

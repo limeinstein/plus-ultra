@@ -102,7 +102,8 @@
       '<div><h4 style="margin:0 0 8px">특기 <small class="muted">(동료 포함 실효 수준)</small></h4><div class="skillgrid" style="grid-template-columns:1fr 1fr">' +
       G.SKILLS.map(function (sk) { var own = p.sk[sk.id] || 0, eff = R.skill(sk.id); return '<div class="flex" style="font-size:16px;gap:6px" title="' + sk.desc + '"><span style="width:70px">' + sk.name + '</span>' + pips(eff) + (eff > own ? '<small class="muted">동료</small>' : '') + '</div>'; }).join('') + '</div></div></div>' +
       '<div class="sep"></div><h4 style="margin:0 0 8px">언어</h4><div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:16px">' +
-      G.LANGS.map(function (l, i) { var own = p.lg[i] || 0, eff = R.lang(i); if (!eff) return ''; return '<span>' + l + ' ' + pips(eff) + (eff > own ? '<small class="muted"> 통역</small>' : '') + '</span>'; }).join('') + '</div></div></div>';
+      G.LANGS.map(function (l, i) { var own = p.lg[i] || 0, eff = R.lang(i); if (!eff) return ''; return '<span>' + l + ' ' + pips(eff) + (eff > own ? '<small class="muted"> 통역</small>' : '') + '</span>'; }).join('') + '</div>' +
+      interpBook() + '</div></div>';
     if (G.Growth) html += G.Growth.html();   // 경험과 성장 (js/systems/growth.js)
     el.innerHTML = html;
     var pc = el.querySelector('.pc');
@@ -175,6 +176,13 @@
         '짐은 빠른 배부터 싣고, 선장의 항해술 1마다 그 배가 3.5% 빨라집니다 (선장이 없으면 −4%).</div>';
     } else h += '<div class="plan-note" style="margin-top:6px">배가 한 척이면 그 배의 선속이 곧 함대 속력입니다. 두 척 이상이면 가장 느린 배에 맞추되, 운용술로 예인 보조를 받고 편대 유지 부담을 줄입니다.</div>';
     return h;
+  }
+  /** 통역 장부 (통역으로 임명해 통역실에 둔 통역관이 있을 때): 말마다 누가 아는지 — 통역관이 직접 · ○○에게 물어 (2026-10-25) */
+  function interpBook() {
+    var CB = G.Cabins, ci = CB && CB.chiefInterp ? CB.chiefInterp() : null; if (!ci) return '';
+    var nm = G.MATE[ci.id].name, book = CB.langBook() || [];
+    return '<div class="ibook"><b>통역 장부</b> <small class="muted">— 통역관 ' + U.esc(nm) + U.jx(nm, '이/가') + ' 통역실에서 일행이 아는 말을 모아 옮긴다 (모르는 말은 아는 사람에게 물어서 · 말을 빨리 배운다)</small><div class="ibook-list">' +
+      book.map(function (e) { return '<span>' + G.LANGS[e.li] + ' ' + pips(e.lv) + ' <small class="muted">' + (e.src === 'self' ? '직접' : U.esc(e.name) + '에게 물어' + (e.own ? ' (스스로 ' + e.own + ')' : '')) + '</small></span>'; }).join('') + '</div></div>';
   }
   /** 부하가 하는 말: 타고난 말과 배에서 익힌 말(★) */
   function mateLangs(m, d) {

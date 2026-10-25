@@ -4,13 +4,13 @@
   var U = G.U, UI = G.UI, R = G.R, C = G.Scenes.city, SP = G.Sponsor;
   function S() { return G.Game.state; }
 
-  function palaceSponsor(c) { return G.SPONSORS.filter(function (s) { return s.city === c.id && s.bld === 'palace' && SP.present(s); })[0] || null; }
+  function palaceSponsor(c) { return G.SPONSORS.filter(function (s) { return s.city === c.id && s.bld === 'palace' && SP.present(s); })[0] || G.SPONSORS.filter(function (s) { return s.city === c.id && s.bld === 'palace' && SP.caretaker(s); })[0] || null; }   // 주인이 없어도 계약 중인 왕궁은 시종장이 맞는다 (SP.caretaker)
   function make(kind) {
     var B = { paint: kind, icon: kind === 'palace' ? 'crown' : 'mansion' };
     B.title = function (c, arg) { return kind === 'palace' ? R.palaceName(c, arg && G.SPONSOR[arg]) : C.mansionName(G.SPONSOR[arg]); };
     B.variant = function (c, arg) { return arg || ''; };
     B.exitLabel = kind === 'palace' ? '물러난다' : '저택을 나온다';
-    B.sp = function (c, arg) { if (kind !== 'palace') return G.SPONSOR[arg]; var own = arg && G.SPONSOR[arg]; return own ? (SP.present(own) ? own : null) : palaceSponsor(c); };
+    B.sp = function (c, arg) { if (kind !== 'palace') return G.SPONSOR[arg]; var own = arg && G.SPONSOR[arg]; return own ? (SP.open(own) ? own : null) : palaceSponsor(c); };
     B.enter = async function (c, arg) {
       var sp = B.sp(c, arg);
       if (!sp) {
@@ -20,6 +20,7 @@
       }
       var ok = await SP.audience(sp);
       if (!ok) return false;
+      if (SP.caretaker(sp)) return true;   // 빈 자리: 집사가 보고만 받는다 (SP.caretaker)
       var who = SP.speaker(sp), rel = SP.rel(sp.id), s = S();
       var first = rel.met <= 1 || (G.Succession && G.Succession.firstMeetingBefore);
       var succ = G.Succession && G.Succession.newHolderBefore;
@@ -39,11 +40,12 @@
       if (G.Story && G.Story.family && G.STORY && sp.id === G.STORY.sponsor) { try { await G.Story.family(c, 'mansion'); } catch (e) { console.error(e); } }
       return true;
     };
-    B.sub = function (c, arg) { var sp = B.sp(c, arg); if (!sp) return ''; var tm = SP.rel(sp.id).met ? SP.temperOf(sp) : null; return SP.holderName(sp) + ' · ' + sp.title + ' (세력 ' + G.POWER_NAME[sp.pw] + (tm ? ' · 성품 ' + tm.name : '') + ')'; };
+    B.sub = function (c, arg) { var sp = B.sp(c, arg); if (!sp) return ''; if (SP.caretaker(sp)) { var stw = SP.stewardName(sp); return sp.title + ' — 자리가 비어 ' + stw + U.jx(stw, '이/가') + ' 맡고 있다'; } var tm = SP.rel(sp.id).met ? SP.temperOf(sp) : null; return SP.holderName(sp) + ' · ' + sp.title + ' (세력 ' + G.POWER_NAME[sp.pw] + (tm ? ' · 성품 ' + tm.name : '') + ')'; };
     B.menu = function (c, arg) {
       var sp = B.sp(c, arg), s = S(), k = s.contract;
       if (!sp) return [];
       var mine = k && k.sponsor === sp.id;
+      if (SP.caretaker(sp)) return [{ label: '보고', icon: 'seal', sub: G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') + ' · 집사가 대신 받는다' : '계약 중 · 집사가 대신 받는다', onClick: function () { return SP.report(sp); } }];
       return [
         { label: '모험 제안', icon: 'scroll', dim: !!k, onClick: function () { return SP.propose(sp); } },
         { label: '보고', icon: 'seal', sub: mine ? (G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') : '계약 중') : '', dim: !mine, onClick: function () { return SP.report(sp); } },

@@ -184,7 +184,7 @@
     G.State.log(name + U.j(name, '이/가').slice(name.length) + ' ' + age + '세로 세상을 떠났다.');
     await UI.alert(age + '세 생일이 지난 어느 밤, ' + name + U.jx(name, '은/는') + ' ' + where + ' 조용히 눈을 감았다.<br>' +
       '평생을 바다와 함께한 제독이었다. 곁을 지키던 이들이 마지막으로 들은 말은 바람과 물때에 관한 것이었다고 한다.<br><br>' +
-      (heirs.length ? '<span class="muted">이제 뜻을 이을 아들이 나설 차례다.</span>' : '<span class="warn-text">뒤를 이을 아들이 없어 모험은 여기서 막을 내린다.</span>'), '세월');
+      (heirs.length ? '<span class="muted">이제 뜻을 이을 아들이 나설 차례다.</span>' : G.Family.minorSon && G.Family.minorSon() ? '<span class="muted">뒤를 이을 맏아들은 아직 어리다 — 그 아이가 자라기를 기다린다.</span>' : '<span class="warn-text">뒤를 이을 아들이 없어 모험은 여기서 막을 내린다.</span>'), '세월');
     await G.Family.retire(true);
   };
 })(window.G = window.G || {});

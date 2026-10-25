@@ -308,6 +308,7 @@
     //   growDays: 선실(조타실·파수대·부관실·갑판 포함)에서 지낸 날이 이만큼 쌓이면 그 방의 특기(G.CABINS grow) +1·+2·+3 — 3년·9년·27년 (특기는 3까지)
     cabins: { growDays: [1095, 3285, 9855], galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
       slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, caps: { rig: 64 }, cols: 6, rigMax: 1.0, langDays: [90, 270, 730], farRate: 0.3,
+      interpRate: 2, interpAsk: 1,   // 통역관(통역으로 임명해 통역실에 둔 사람, 2026-10-25): 말을 배우는 속도 ×interpRate · 일행이 아는 말을 물어 가며 하루 interpAsk씩 (가르쳐 준 사람의 단계까지)
       fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.015625, repair: 0.1, pen: 0.12,
         gun: 0.03, marine: 0.04, haggle: 0.03, wage: 0.02, feast: 1.5, songs: 1,
         musicroom: 0.07, staff: 0.03, staffDmg: 0.06 },
@@ -327,6 +328,7 @@
     // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
     pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
     // 명성 칭호의 문턱: 신참 모험가 · 이름난 모험가 · 저명한 항해가 · 위대한 탐험가 · 대항해자 (예전 400·1600·4000·8000·15000 — 3년이면 끝 칭호였다)
+    supplyWarn: { critical: 7, toastGap: 10, toastDays: 15 },   // 항해 중 보급 경고: 창은 한 항해에 한 번 + 급할 때(남은 보급 critical일 아래) 한 번, 그 사이는 크게 벌어졌을 때만 귀퉁이 알림 (2026-10-25)
     fameTitles: [5000, 20000, 60000, 150000, 400000],   // QA 2026-10-23: 400·1,600·5,000·12,000·25,000 → 발견 25개면 끝나던 칭호를 늘림
     tradeFameDiv: 800,   // 교역 이익 이만큼에 교역 명성 1 (예전 2,500 — 교역만으로는 궁정·작위가 막히던 것)
     crewWage: { per: 2, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)

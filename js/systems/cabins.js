@@ -128,6 +128,46 @@
   };
   /** 통역실에 있는가 */
   CB.interprets = function (m) { if (m.room == null) return false; var c = G.CABIN[CB.rooms()[m.room]]; return !!(c && c.lang); };
+  // ---------------------------------------------------------------- 통역관 (2026-10-25 사용자 요청)
+  /* 통역으로 임명한(m.role 'interp') 사람을 통역실에 두면 「통역관」이 된다.
+     · 제 말뿐 아니라 제독과 기함에 탄 다른 부하들이 아는 말을 모두 모아(통역 장부) 통역한다 — 그 말을 가장 잘하는 사람의 단계만큼.
+       제가 모르는 말은 「○○이 알려 주었는데 —」처럼 누구에게 물어 옮기는지 밝힌다 (js/ui/ui.js speech).
+     · 말을 배우는 속도가 다른 부하보다 빠르다(G.BALANCE.cabins.interpRate) — 일행에게 물어 가며 그 사람이 아는 단계까지 익힌다. */
+  CB.isChief = function (m) { return !!(m && m.role === 'interp' && G.MATE[m.id] && CB.interprets(m) && !(R().mateHidden && R().mateHidden(m))); };
+  /** 통역관 (여럿이면 아는 말이 가장 많은 사람) — 없으면 null */
+  CB.chiefInterp = function () {
+    var s = S(); if (!s || !s.mates) return null;
+    var best = null, bs = -1, n = (G.LANGS || []).length;
+    s.mates.forEach(function (m) {
+      if (!CB.isChief(m)) return;
+      var t = 0; for (var li = 0; li < n; li++) t += R().mateLang(m, li);
+      if (t > bs) { bs = t; best = m; }
+    });
+    return best;
+  };
+  /** 통역 장부 한 줄: 그 말을 일행(통역관 자신·제독·기함의 부하) 가운데 가장 잘하는 사람 — {li, lv, own(통역관 자신의 단계), src: 'self'|'admiral'|부하 id, name}. 통역관이 없으면 null */
+  CB.langEntry = function (li, ci) {
+    var s = S(); ci = ci || CB.chiefInterp(); if (!ci) return null;
+    var own = R().mateLang(ci, li), e = { li: li, lv: own, own: own, src: 'self', name: G.MATE[ci.id].name };
+    var pl = (s.player.lg && s.player.lg[li]) || 0; if (pl > e.lv) { e.lv = pl; e.src = 'admiral'; e.name = '제독'; }
+    s.mates.forEach(function (m) {
+      if (m === ci || m.role === 'captain' || !G.MATE[m.id]) return;   // 다른 배의 선장은 기함에 없다
+      var lv = R().mateLang(m, li); if (lv > e.lv) { e.lv = lv; e.src = m.id; e.name = G.MATE[m.id].name; }
+    });
+    return e;
+  };
+  /** 통역 장부: 일행이 아는 말 모두 (단계가 높은 순) */
+  CB.langBook = function () {
+    var ci = CB.chiefInterp(); if (!ci) return null;
+    var out = [];
+    for (var li = 0; li < (G.LANGS || []).length; li++) { var e = CB.langEntry(li, ci); if (e.lv > 0) out.push(e); }
+    return out.sort(function (a, b) { return b.lv - a.lv || a.li - b.li; });
+  };
+  /** 통역관이 남에게 물어 옮길 때의 말머리 (k: 문장마다 정해진 수) */
+  CB.viaPhrase = function (name, k) {
+    var U2 = G.U, F = [name + U2.jx(name, '이/가') + ' 알려 주었는데 — ', name + '에게 물어보니 — ', name + ' 말로는 — ', name + U2.jx(name, '이/가') + ' 귀띔해 주기를 — '];
+    return F[Math.abs(k || 0) % F.length];
+  };
   function roomPower(c, m) {
     if (!m || !G.MATE[m.id]) return 0;
     var best = 0;
@@ -338,22 +378,36 @@
     var aboard = s.mates.filter(function (m) { return G.MATE[m.id] && m.role !== 'captain'; });
     var away = s.mates.filter(function (m) { return G.MATE[m.id] && m.role === 'captain'; });   // 다른 배의 선장 — 제독의 말만 익힌다
     var myNative = R().nativeLang ? R().nativeLang(p.nation) : 0;
-    function learn(who, name, gain, get, set) {
+    var chief = CB.chiefInterp(), iRate = B().interpRate || 2;
+    function learn(who, name, gain, get, set, cap, how) {
       Object.keys(gain).forEach(function (k) {
-        var li = +k, cur = get(li); if (cur >= 3) return;
+        var li = +k, cur = get(li); if (cur >= Math.min(3, cap && cap[k] != null ? cap[k] : 3)) return;   // cap: 가르쳐 준 사람의 단계까지만 (통역관이 물어 배우는 말)
         who.lgd = who.lgd || {};
-        who.lgd[li] = (who.lgd[li] || 0) + gain[k] * ((who.id && G.MATE[who.id] && G.MATE[who.id].lgk) || 1);   // lgk: 말을 빨리 배우는 사람 (이야기의 자코모 ×2)
+        who.lgd[li] = (who.lgd[li] || 0) + gain[k] * ((who.id && G.MATE[who.id] && G.MATE[who.id].lgk) || 1) * (who === chief ? iRate : 1);   // lgk: 말을 빨리 배우는 사람 (이야기의 자코모 ×2) · 통역관은 ×interpRate
         var lv = levelFor(who.lgd[li]);
         if (lv > cur) {
+          lv = Math.min(lv, cap && cap[k] != null ? Math.max(cap[k], cur) : 3);
+          if (lv <= cur) return;
           var fw = who.id && G.Tale && G.Tale.firstWords ? G.Tale.firstWords(who, li) : null;   // 말을 몰랐던 인어공주가 처음 말을 하는 날
-          set(li, lv); out.push(fw || { icon: 'scroll', text: name + U.j(name, '이/가').slice(name.length) + ' 한배에서 지내며 ' + G.LANGS[li] + '를 익혔다 (' + G.LANG_LV[lv] + ').' });
+          set(li, lv); out.push(fw || { icon: 'scroll', text: name + U.j(name, '이/가').slice(name.length) + (who === chief ? ' 통역실에서 ' + (how && how[k] ? how[k] + '에게 물어 가며 ' : '일행과 말을 나누며 ') : ' 한배에서 지내며 ') + G.LANGS[li] + '를 익혔다 (' + G.LANG_LV[lv] + ').' });
         }
       });
     }
     aboard.forEach(function (m) {
       var gain = {}; gain[myNative] = 1;
       aboard.forEach(function (o) { if (o === m) return; var li = CB.nativeLang(o); if (li == null) return; gain[li] = Math.max(gain[li] || 0, near(m, o) ? 1 : far); });
-      learn(m, G.MATE[m.id].name, gain, function (li) { return CB.mateLang(m, li); }, function (li, lv) { m.lgx = m.lgx || {}; m.lgx[li] = lv; });
+      var cap = null, how = null;
+      if (m === chief) {   // 통역관: 일행이 아는 말을 물어 가며 — 가르쳐 준 사람의 단계까지 (타고난 말은 3까지)
+        cap = {}; how = {};
+        Object.keys(gain).forEach(function (k) { cap[k] = 3; });
+        (CB.langBook() || []).forEach(function (e) {
+          if (e.src === 'self' || e.lv <= CB.mateLang(m, e.li)) return;
+          if (gain[e.li] == null || gain[e.li] < (B().interpAsk || 1)) gain[e.li] = B().interpAsk || 1;
+          if (cap[e.li] == null) cap[e.li] = e.lv;
+          how[e.li] = e.name;
+        });
+      }
+      learn(m, G.MATE[m.id].name, gain, function (li) { return CB.mateLang(m, li); }, function (li, lv) { m.lgx = m.lgx || {}; m.lgx[li] = lv; }, cap, how);
     });
     away.forEach(function (m) { var gain = {}; gain[myNative] = 1; learn(m, G.MATE[m.id].name, gain, function (li) { return CB.mateLang(m, li); }, function (li, lv) { m.lgx = m.lgx || {}; m.lgx[li] = lv; }); });
     var mine = {};

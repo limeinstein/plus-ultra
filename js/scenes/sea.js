@@ -162,10 +162,12 @@
     var sp = U.el('div', 'speedctl');
     SPEEDS.forEach(function (k) { var o = U.el('div', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.onclick = function (e) { e.stopPropagation(); st.speed = k; U.$$('.opt', sp).forEach(function (x) { x.classList.remove('on'); }); o.classList.add('on'); }; sp.appendChild(o); });
     bar.appendChild(sp);
-    hudEl.port = btn('입항', 'anchor', function () { tryEnterPort(); }, 'navy');
+    // 하단 메뉴는 크기가 늘 같다 (2026-10-25 — 항구 이름·비 대책 단추에 따라 너비가 바뀌어 단추 자리가 밀리면서 「상륙」을 누르려다 「낚시」를 누르던 것):
+    // 입항 단추는 너비를 정해 두고 긴 항구 이름은 말줄임(전체 이름은 풍선 도움말), 비 대책 단추는 늘 자리를 지키고 비가 올 때만 누를 수 있다
+    hudEl.port = btn('<span class="pn">입항</span>', 'anchor', function () { tryEnterPort(); }, 'navy portbtn');
     hudEl.land = btn('상륙', 'boot', function () { tryLand(); });
     if (G.Fishing) btn('낚시', 'fish', function () { goFish(); });
-    if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.style.display = G.Rain.raining() ? '' : 'none'; }   // 비가 오는 동안만 보인다
+    if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { if (!G.Rain.raining()) return; st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.classList.toggle('disabled', !G.Rain.raining()); }   // 비가 오는 동안만 누를 수 있다 (자리는 늘 그대로)
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     hudEl.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
@@ -1822,26 +1824,50 @@
     return Math.max(1, Math.ceil(d / Math.max(0.15, v)));
   }
   SEA.eta = etaDays;
-  /* 보급 경고: 한 번 알린 뒤에는 열흘이 지나 모자라는 날이 더 벌어졌거나, 갑자기 크게(15일) 벌어졌을 때만 다시
-     (같은 곳을 다시 눌러 길을 새로 잡아도, 쥐가 조금 먹어도 거듭 뜨지 않게) */
+  /* 보급 경고 (2026-10-25 사용자 요청 — 역풍·옆바람이 오갈 때마다 부관의 창이 거듭 떠 계속 눌러야 하던 것)
+     · 어림은 「오늘 바람」을 빼고 본다: 바람이 고르게 바뀔 때의 보통 속력 + 이 길에서 실제로 나아간 만큼 (그래서 맞바람·순풍이 오가도 흔들리지 않는다)
+     · 부관이 말로(창) 알리는 것은 한 항해(출항~입항)에 한 번 — 목적지를 바꾸거나 바다를 눌러 길을 새로 잡아도 다시 뜨지 않는다
+     · 그 뒤로는 모자라는 날이 크게(toastGap일) 더 벌어졌을 때만, toastDays일 넘게 지나서 화면 귀퉁이 알림으로 (누를 것 없음)
+     · 정말 급할 때(남은 보급이 critical일 아래인데 아직 멀다) 한 번 더 창으로 — 이것도 한 항해에 한 번
+     조정값 G.BALANCE.supplyWarn */
+  function warnEta() {
+    var d = pathLeft(); if (d == null) return null;
+    var l = S().loc, ang = st.crs != null && !st.manual ? st.crs : l.heading;
+    var v = typicalSpeed(ang), o = st.etaObs;
+    if (o && o.path === st.path && o.n >= 2 && o.v > 0) v = (v + o.v) / 2;   // 실제로 나아간 만큼도 반영
+    return Math.max(1, Math.ceil(d / Math.max(0.15, v)));
+  }
   function supplyWarn() {
-    var eta = etaDays(); if (eta == null) return;
+    var eta = warnEta(); if (eta == null) return;
+    var s = S(), K = (G.BALANCE && G.BALANCE.supplyWarn) || {}, crit = K.critical == null ? 7 : K.critical;
     var food = R.daysOfFood(), water = R.daysOfWater(), have = Math.min(food, water);
     var gap = Math.ceil(eta * 1.1) + 2 - have;                         // 가는 동안 지쳐 느려질 것까지 넉넉히 본다
     if (gap <= 0) return;
-    var key = st.target ? (st.target.city ? 'c' + st.target.city.id : Math.round(st.target.lon) + ',' + Math.round(st.target.lat)) : 'pt', w = st.warned;
-    var day = S().day;
-    if (w && w.key === key && !((day - w.day >= 10 && gap >= w.gap + 3) || gap >= w.gap + 15)) return;
-    st.warned = { key: key, gap: gap, day: day };
+    var voy = s.sailNo || 0, w = st.warned, day = s.day;
+    if (!w || w.voy !== voy) w = st.warned = { voy: voy, gap: 0, day: -999, told: false, crit: false };
     var what = food < water - 2 ? '식량이' : water < food - 2 ? '물이' : '식량과 물이';
-    UI.say('제독, 이대로라면 목적지에 닿기 전에 ' + what + ' 떨어질 수 있습니다! (식량 ' + food + '일분 · 물 ' + water + '일분 · 가는 데 약 ' + eta + '일)\n가까운 항구에 들러 보급하는 게 좋겠습니다.', G.Scenes.mateSpeaker('first'));
+    var nums = '(식량 ' + food + '일분 · 물 ' + water + '일분 · 가는 데 약 ' + eta + '일)';
+    if (!w.told) {                                                     // 이 항해의 첫 경고 — 부관이 말로
+      w.told = true; w.gap = gap; w.day = day;
+      UI.say('제독, 이대로라면 목적지에 닿기 전에 ' + what + ' 떨어질 수 있습니다! ' + nums + '\n가까운 항구에 들러 보급하는 게 좋겠습니다.', G.Scenes.mateSpeaker('first'));
+      return;
+    }
+    if (!w.crit && have <= crit && eta > have) {                       // 정말 급할 때 한 번 더
+      w.crit = true; w.gap = gap; w.day = day;
+      UI.say('제독, ' + what + ' ' + have + '일분밖에 남지 않았습니다. 목적지까지는 아직 약 ' + eta + '일 — 당장 가까운 항구로 가야 합니다!', G.Scenes.mateSpeaker('first'));
+      return;
+    }
+    if (gap >= w.gap + (K.toastGap || 10) && day - w.day >= (K.toastDays || 15)) {   // 크게 벌어졌을 때만 귀퉁이 알림
+      w.gap = gap; w.day = day;
+      UI.toast('보급이 모자랄 듯 — ' + nums, 'bread', 4500);
+    }
   }
   function refreshButtons() {
     refreshFollow();
     var pn = portNear();
-    if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + (pn ? pn.name + ' 입항' : '입항')); }
+    if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + '<span class="pn">' + (pn ? U.esc(pn.name) + ' 입항' : '입항') + '</span>'); var ptl = pn ? pn.name + ' 입항' : '가까운 항구가 없습니다'; if (hudEl.port.title !== ptl) hudEl.port.title = ptl; }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
-    if (hudEl.rain) { var rv = G.Rain.raining() ? '' : 'none'; if (hudEl.rain.style.display !== rv) hudEl.rain.style.display = rv; }
+    if (hudEl.rain) { var rn = !G.Rain.raining(); if (hudEl.rain.classList.contains('disabled') !== rn) { hudEl.rain.classList.toggle('disabled', rn); hudEl.rain.title = rn ? '비가 올 때 쓸 수 있습니다' : '비를 맞는 동안의 대책'; } }
     if (hudEl.search) {
       var canSearch = st.paused && !st.stopping && shipSpeed() < FXS().stopSpeed && !st.busy;
       hudEl.search.classList.toggle('disabled', !canSearch);

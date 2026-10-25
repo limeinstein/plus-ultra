@@ -98,12 +98,12 @@
     if (f.library) out.push({ kind: 'library', name: R.libraryName(c), icon: 'book' });
     if (f.palace) {
       // 이름 있는 왕궁은 지금 주인이 있는 곳마다 따로 (한양: 국왕의 경복궁, 세자의 창덕궁)
-      var pals = R.namedPalaces(c) ? G.SPONSORS.filter(function (x) { return x.city === c.id && x.bld === 'palace' && G.Sponsor && G.Sponsor.present(x); }) : [];
+      var pals = R.namedPalaces(c) ? G.SPONSORS.filter(function (x) { return x.city === c.id && x.bld === 'palace' && G.Sponsor && G.Sponsor.open(x); }) : [];   // open: 자리가 비었어도 계약 중이면 (G.Sponsor.caretaker)
       if (pals.length) pals.forEach(function (x) { out.push({ kind: 'palace', arg: x.id, name: R.palaceName(c, x), icon: 'crown' }); });
       else out.push({ kind: 'palace', name: R.palaceName(c), icon: 'crown' });
     }
     f.mansion.forEach(function (sid) {
-      var sp = G.SPONSOR[sid]; if (!G.Sponsor || !G.Sponsor.present(sp)) return;
+      var sp = G.SPONSOR[sid]; if (!G.Sponsor || !G.Sponsor.open(sp)) return;   // 자리가 비었어도 계약 중이면 집사가 맞는다 (2026-10-25)
       out.push({ kind: 'mansion', arg: sid, name: C.mansionName(sp), icon: 'mansion' });
     });
     if (f.guild) out.push({ kind: 'guild', name: '조합', icon: 'seal' });
@@ -310,7 +310,7 @@
       if (s.contract) {
         var sp = G.SPONSOR[s.contract.sponsor];
         var done = G.Errand.done(s.contract);
-        if (sp && sp.city === c.id && done && G.Sponsor.present(sp)) out.push({ kind: sp.bld === 'palace' ? 'palace' : 'mansion', arg: R.bldArg(sp), icon: 'crown', hot: true, text: G.Sponsor.holderName(sp) + '에게 ' + (s.contract.task ? '「' + G.Errand.name(s.contract) + '」' + U.jx(G.Errand.name(s.contract), '을/를') : '발견을') + ' 보고한다' });
+        if (sp && sp.city === c.id && done && G.Sponsor.open(sp)) out.push({ kind: sp.bld === 'palace' ? 'palace' : 'mansion', arg: R.bldArg(sp), icon: 'crown', hot: true, text: G.Sponsor.holderName(sp) + '에게 ' + (s.contract.task ? '「' + G.Errand.name(s.contract) + '」' + U.jx(G.Errand.name(s.contract), '을/를') : '발견을') + ' 보고한다' });
       }
       // 조합 의뢰
       if (G.Quest) {

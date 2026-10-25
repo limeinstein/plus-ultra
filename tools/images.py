@@ -146,6 +146,11 @@ def game_data():
             for func, cat in funcs:
                 for did, name in re.findall(r"^\s*" + func + r"\('([^']+)',\s*'([^']+)'", extra, re.M):
                     d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
+    # 1610년부터 나타나는 신규 신기루 건물 50곳도 전용 GIF를 갖는다.
+    mirage_path = os.path.join(ROOT, 'js/data/miragedisc.js')
+    if os.path.exists(mirage_path):
+        for did, name in re.findall(r"^\s*r\('([^']+)',\s*'([^']+)'", read('js/data/miragedisc.js'), re.M):
+            d['discoveries'].append({'id': did, 'name': name, 'cat': 'ruin'})
     # 이야기 모드의 아버지 흔적은 story.js에 자료가 있고 systems/story.js가
     # G.DISCOVERIES에 넣는다. 본편에서는 숨겨지지만 그림 이름은 함께 점검한다.
     story_path = os.path.join(ROOT, 'js/data/story.js')

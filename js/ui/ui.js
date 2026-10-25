@@ -336,9 +336,11 @@
     var html = TG.heard(raw, sit.own, sit.li);
     if (sit.team > sit.own && sit.mate) {
       var sub = U.el('div', 'interp parch');
-      var who = (sit.mate.role === 'interp' ? '통역' : sit.mate.role === 'room' ? '통역실' : '부관') + ' ' + sit.mate.name;
+      var who = (sit.mate.role === 'interp' ? '통역' : sit.mate.role === 'chief' ? '통역관' : sit.mate.role === 'room' ? '통역실' : '부관') + ' ' + sit.mate.name;
       var how = sit.team >= 3 ? '' : sit.team === 2 ? ' <small>(대강 알아들음)</small>' : ' <small>(띄엄띄엄 알아들음)</small>';
-      sub.innerHTML = '<div class="ipf"></div><div class="itext"><div class="iname">' + U.esc(who) + how + '</div>' + TG.relay(raw, sit.own, sit.team) + '</div>';
+      // 통역관이 제가 모르는 말을 옮길 때: 누구에게 물어 옮기는지 밝힌다 (「루이스가 알려 주었는데 — …」)
+      var via = sit.mate.via ? '<span class="ivia">' + U.esc(G.Cabins.viaPhrase(sit.mate.via, U.strHash ? U.strHash(raw) : raw.length)) + '</span>' : '';
+      sub.innerHTML = '<div class="ipf"></div><div class="itext"><div class="iname">' + U.esc(who) + (sit.mate.via ? ' <small>· ' + U.esc(sit.mate.via) + '에게 물어</small>' : '') + how + '</div>' + via + TG.relay(raw, sit.own, sit.team) + '</div>';
       try { var pc = G.Art.portraitCanvas(G.Scenes.mateSpec(sit.mate.id), 56); sub.querySelector('.ipf').appendChild(pc); } catch (e) { sub.querySelector('.ipf').style.display = 'none'; }
       box.appendChild(sub);
       box.classList.add('withinterp');

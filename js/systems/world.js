@@ -88,9 +88,9 @@
     if (G.Family && G.Family.newMonth) out = out.concat(G.Family.newMonth());
     // wages for companions — 같은 부하가 두 줄이면 먼저 하나로 (두 번 치르지 않게, R.dedupeMates)
     if (R && R.dedupeMates) R.dedupeMates();
-    var wage = 0, paid = true;
-    s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d) wage += d.wage; });
-    if (G.Cabins) wage = G.Cabins.wages();        // 회계실이 있으면 조금 덜 든다
+    var wage = 0, paid = true, laidUp = !!s.regency;   // 어린 맏아들을 기다리는 동안(js/systems/family.js F.regency): 함대는 닻을 내리고 급료·선실 충성은 멈춘다
+    if (!laidUp) s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d) wage += d.wage; });
+    if (G.Cabins && !laidUp) wage = G.Cabins.wages();        // 회계실이 있으면 조금 덜 든다
     if (wage > 0) {
       if (s.player.gold >= wage) { s.player.gold -= wage; }
       else {
@@ -102,7 +102,7 @@
       }
     }
     // 선원 급료 (QA 2026-10-23): 한 사람에 한 달 G.BALANCE.crewWage.per닢 — 못 주면 규율이 떨어지고 피로가 쌓인다
-    var cw = W.crewWage();
+    var cw = laidUp ? 0 : W.crewWage();
     if (cw > 0) {
       if (s.player.gold >= cw) s.player.gold -= cw;
       else {
@@ -113,7 +113,7 @@
         out.push({ icon: 'coin', text: '선원들의 급료(' + U.num(cw) + '닢)를 다 치르지 못했다! 갑판에 불평이 번진다.' });
       }
     }
-    if (G.Cabins) out = out.concat(G.Cabins.monthly(paid));
+    if (G.Cabins && !laidUp) out = out.concat(G.Cabins.monthly(paid));
     // 항해사들이 이웃 도시로 옮기거나 머문다
     if (G.MateMove) G.MateMove.month();
     // bank interest

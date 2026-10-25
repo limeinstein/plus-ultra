@@ -17,6 +17,19 @@
   var DQ = 'don_quixote', SP = 'sancho_panza';
   var TOLEDO = 4, TOURS = 16, TOULOUSE = 19, CORUNA = 2;
   Q.K = { coolDays: 60, fameStage: 60, fameEnd: 200 };
+  // 순례길 — 투르·툴루즈는 내륙 도시라 처음에는 지도에 없다(처음 아는 도시는 이베리아·서지중해와 프랑스의 항구뿐 — js/core/state.js).
+  //   순례를 시작하면 세 곳을 지도에 올리고, 어느 항구에 내려 육로로 가는지 알려 준다 (2026-10-25 피드백 「투르가 없다」)
+  var ROUTE = [
+    { id: TOURS, key: 'tours', name: '투르', what: '생마르탱 대성당', how: '낭트에 내려 성문에서 육로로 루아르 강을 따라 동쪽으로 약 160km' },
+    { id: TOULOUSE, key: 'toulouse', name: '툴루즈', what: '생세르냉 대성당', how: '보르도에 내려 성문에서 육로로 가론 강을 거슬러 남동쪽으로 약 220km' },
+    { id: CORUNA, key: null, name: '라코루냐', what: '산티아고 데 콤포스텔라', how: '갈리시아의 항구 — 배로 바로 들어간다' }
+  ];
+  Q.ROUTE = ROUTE;
+  /** 순례길의 도시를 지도에 올린다 (옛 저장도 도시에 들어설 때 맞춘다) */
+  Q.reveal = function () {
+    var s = S(); if (!s || !s.known) return;
+    ROUTE.forEach(function (r) { if (s.known.indexOf(r.id) < 0) s.known.push(r.id); });
+  };
   function S() { return G.Game && G.Game.state; }
   function st() { var s = S(); return s.quix || (s.quix = {}); }
   function row(id) { return S().mates.filter(function (x) { return x.id === id; })[0] || null; }
@@ -39,6 +52,7 @@
   Q.pending = function () {
     var s = S(); if (!s || !s.quix && cityNow() !== TOLEDO) return false;
     var q = st(), c = cityNow();
+    if (q.stage === 'pilgrim') Q.reveal();
     if (c === TOLEDO && Q.ready()) return true;
     if (q.stage !== 'pilgrim') return false;
     return (c === TOURS && !q.tours) || (c === TOULOUSE && !q.toulouse) || (c === CORUNA && (q.tours && q.toulouse || !q.warned));
@@ -84,10 +98,12 @@
       q.stage = 'pilgrim'; q.from = U.dateNum(S().date);
       await play([
         [DQ, '오오! 하늘이 이 슬픈 몰골의 기사에게 동지를 보내셨구나! 바다의 기사여, 이 순례가 끝나면 그대의 이름을 둘시네아 공주께 반드시 아뢰리다.'],
-        [SP, '나리, 그럼 배에 타는 김에 빵이랑 치즈랑 포도주 좀 넉넉히… 아, 아닙니다요. 제가 알아서 챙기겠습니다요.']
+        [SP, '나리, 그럼 배에 타는 김에 빵이랑 치즈랑 포도주 좀 넉넉히… 아, 아닙니다요. 제가 알아서 챙기겠습니다요.'],
+        [SP, '아, 그리고 바다의 기사 나리. 투르랑 툴루즈는 바닷가가 아니랍니다요. 투르는 낭트에서 내려 루아르 강을 따라 걸어 올라가고, 툴루즈는 보르도에서 내려 가론 강을 거슬러 가면 된다고 순례자들이 그럽디다요. 지도에 표시해 두었습니다요!']
       ]);
+      Q.reveal();
       G.State.log('라 만차의 풍차 언덕에서 돈키호테와 산초 판사를 만났다. 투르·툴루즈의 성소를 들러 산티아고까지 순례에 함께하기로 했다.');
-      UI.toast('순례 — 투르(생마르탱) · 툴루즈(생세르냉)를 들른 뒤 라코루냐(산티아고)로', 'scroll', 6500);
+      UI.toast('순례 — 투르(낭트에서 육로) · 툴루즈(보르도에서 육로)를 들른 뒤 라코루냐(산티아고)로 — 지도에 표시했다', 'scroll', 7000);
       if (G.Game.refreshHud) G.Game.refreshHud();
     } finally { await pc.stop(); }
   }
@@ -200,7 +216,7 @@
   // ---------------------------------------------------------------- 수첩 「할 일」 줄
   Q.html = function () {
     var s = S(), q = s && s.quix; if (!q || q.stage !== 'pilgrim') return '';
-    var li = [(q.tours ? '✓ ' : '') + '투르 — 생마르탱 대성당 (성 마르티노의 망토)', (q.toulouse ? '✓ ' : '') + '툴루즈 — 생세르냉 대성당', '라코루냐 — 산티아고 데 콤포스텔라 (두 성소를 들른 뒤)'];
+    var li = ROUTE.map(function (r) { var done = r.key && q[r.key]; return (done ? '✓ ' : '') + r.name + ' — ' + r.what + (r.key ? '' : ' (두 성소를 들른 뒤)') + (done ? '' : ' · ' + r.how); });
     return '<div class="sep"></div><h4 style="margin:0 0 8px">돈키호테와 산초의 산티아고 순례</h4><ul>' + li.map(function (x) { return '<li>' + U.esc(x) + '</li>'; }).join('') + '</ul>';
   };
   if (G.Court && G.Court.taskHtml && !G.Court._quixHtml) { G.Court._quixHtml = true; var th = G.Court.taskHtml; G.Court.taskHtml = function () { return th.apply(this, arguments) + Q.html(); }; }

@@ -23,7 +23,7 @@
     var s = S(), c = cfg();
     if (!d || !d.built || !s) return false;
     var y = s.date.y;
-    if (G.Disc && G.Disc.isFuture && G.Disc.isFuture(d)) return y < d.built && y >= (c.from || 1600);   // 미래의 건물: 1600년부터 소문이 돈다 (찾는 것은 언제든)
+    if (G.Disc && G.Disc.isFuture && G.Disc.isFuture(d)) return y < d.built && y >= (d.mirageFrom || c.from || 1600);   // 미래의 건물: 1600년부터(mirageFrom이 있으면 그 해부터) 소문이 돈다 (찾는 것은 언제든)
     return d.built > (c.after || 1600) && y >= (c.from || 1600) && y < d.built;
   };
   /** 아직 세워지지 않아 아무것도 없는가 (신기루 때도 아닌) — 단서·발견 모두 막힌다 */

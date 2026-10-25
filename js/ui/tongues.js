@@ -120,7 +120,7 @@
     return c && c.lang != null ? c.lang : 0;
   };
 
-  /** 화자 opts({li, lang})로 말하는 형편: {own, team, li, mate(옮겨 주는 동료), plain} */
+  /** 화자 opts({li, lang})로 말하는 형편: {own, team, li, mate(옮겨 주는 동료 — 통역관이면 role 'chief', via: 물어 옮긴 사람 이름), plain} */
   TG.situation = function (opts) {
     if (!opts || (opts.li == null && (opts.lang == null || opts.lang >= 3))) return { plain: true };
     var R = G.R, S = G.Game && G.Game.state;
@@ -137,6 +137,11 @@
         var lv = R.mateLang ? R.mateLang(m, li) : d.lg[li] || 0, sc = lv * 2 + (m.role === 'interp' || room ? 1 : 0);
         if (lv > own && sc > best) { best = sc; mate = { id: m.id, name: d.name, role: m.role === 'interp' || m.role === 'first' ? m.role : 'room' }; }
       });
+      // 통역관(통역으로 임명해 통역실에 둔 사람): 일행이 아는 말을 모아 옮긴다 — 제가 모르는 말은 아는 사람에게 물어서 (via)
+      var CB = G.Cabins, ci = CB && CB.chiefInterp ? CB.chiefInterp() : null, e = ci ? CB.langEntry(li, ci) : null;
+      if (e && e.lv > own) {   // 장부는 일행 가운데 가장 잘하는 사람의 단계라, 있으면 늘 통역관이 옮긴다
+        mate = { id: ci.id, name: G.MATE[ci.id].name, role: 'chief', via: e.src !== 'self' ? e.name : null, viaId: e.src !== 'self' && e.src !== 'admiral' ? e.src : null };
+      }
     }
     return { plain: own >= 3, own: own, team: team, li: li, mate: mate };
   };

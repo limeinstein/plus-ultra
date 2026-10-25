@@ -53,7 +53,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.same >= r.n * 0.2 && r.same <= r.n * 0.45, '단서와 이름이 같은 것 ' + r.same + '종 (' + Math.round(r.same / r.n * 100) + '%)');
     ok(r.sameOk, '같은 것은 찾기 전에도 진짜 이름으로 보인다');
     ok(r.diffOk, '다른 것은 찾기 전에 단서 이름으로 보인다 (' + r.diff + '종)' + (r.diffOk ? '' : ' ' + r.diffBad.join(' ; ')));
-    ok(!r.long.length && !r.dup.length, '따로 지은 단서는 12자 안 (평균 ' + r.avg + '자) · 겹치지 않는다' + (r.long.length ? ' ' + r.long.join(',') : ''));
+    ok(!r.long.length && !r.dup.length, '따로 지은 단서는 12자 안 (평균 ' + r.avg + '자) · 겹치지 않는다' + (r.long.length ? ' ' + r.long.join(',') : '') + (r.dup.length ? ' 겹침: ' + r.dup.join(',') : ''));
     ok(!r.nameable.length, '이름 붙이기 대상(곶·해협·항로·대륙)은 단서가 따로 있다');
     ok(r.famous.join() === '기자의 3대 피라미드,콜로세움,만리장성,타지마할,호랑이,후추,크라켄,마추픽추', '이름난 것은 그대로: ' + r.famous.join(' · '));
     ok(r.concrete.join() === '흰 온천 계단,라사의 큰 절,멕시코 피라미드,인도 황금 성물,서호의 매화', '짧고 무엇인지 보이는 단서: ' + r.concrete.join(' · '));

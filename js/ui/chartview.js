@@ -19,7 +19,8 @@
   CV.invalidate = function () { worldCv = null; };
 
   /** host 안에 해도를 만든다.
-      opts: {w, h, center:[lon,lat], span, ref: 기준 항구(자동항해 표식), actions(c) → [{label, icon, fn}], seaAction(lon,lat) → {label, fn}, select: 도시 id} */
+      opts: {w, h, center:[lon,lat], span, ref: 기준 항구(자동항해 표식), actions(c) → [{label, icon, fn}], actionsTop: 단추를 요약 표 위에(목적지 고르기처럼 단추가 할 일일 때),
+             seaAction(lon,lat) → {label, fn}, select: 도시 id} */
   /** 항로 선의 바닷길 (두 항구 부두 사이 G.Nav.path) — 한 번 찾으면 기억한다. null = 길 없음(곧은 줄) */
   var ROUTE_PATH = {};
   function routePath(a, b) {
@@ -181,6 +182,8 @@
       info.innerHTML = '<button class="ci-x" title="닫기">×</button>' + G.CityInfo.html(c, ref) +
         (acts.length ? '<div class="ci-acts">' + acts.map(function (a, i) { return '<button class="btn small' + (i === 0 ? ' navy' : '') + '" data-i="' + i + '">' + (a.icon ? G.icon(a.icon) : '') + U.esc(a.label) + '</button>'; }).join('') + '</div>' : '');
       info.hidden = false;
+      // 요약이 길면 맨 아래 단추가 창 밖으로 밀려 굴려야 보인다 — actionsTop이면 이름·꼬리표 바로 아래(표 위)로 올린다 (2026-10-25)
+      if (opts.actionsTop) { var ab = info.querySelector('.ci-acts'), tb = info.querySelector('.ci-tbl'); if (ab && tb) { tb.parentNode.insertBefore(ab, tb); ab.style.margin = '8px 0 10px'; } }
       info.querySelector('.ci-x').onclick = function () { sel = null; info.hidden = true; draw(); };
       U.$$('.ci-acts .btn', info).forEach(function (bt) { bt.onclick = function () { acts[+bt.dataset.i].fn(c); }; });
       draw();

@@ -150,9 +150,12 @@
   async function pickAutoDest(c, dests, days) {
     var open = {}, opened0 = false;   // 펼친 지역 (처음에는 가장 가까운 묶음을 펼쳐 둔다)
     var grouped = dests.length > GROUP_FROM;
-    var win = UI.window({ title: '자동항해 — 어디로 갈까요?', icon: 'anchor', width: 680,
+    // 「해도에서 고르기」: 목록 대신 해도를 펴서 항구를 눌러 고른다 (2026-10-25 사용자 요청).
+    //   단추가 하나뿐인 창은 Enter·바탕 누름이 그 단추로 가므로(UI.window solo) clickAny: false — Enter는 지금처럼 목록의 항구를 고른다
+    var win = UI.window({ title: '자동항해 — 어디로 갈까요?', icon: 'anchor', width: 680, clickAny: false,
       html: '<div style="font-size:17px;margin-bottom:8px;line-height:1.45">익힌 항로의 항구입니다. 고르면 그 항구까지 뱃길을 찾아 ×' + ((G.FX && G.FX.autoSailSpeed) || 4) + ' 배속으로 가서 입항합니다(방향키·바다를 누르면 손으로 몬다). 실은 보급: 약 ' + days + '일분.' +
-        '<br><span class="muted" style="font-size:15px">방향·날수는 이 항구에서 본 것 · ☆을 누르면 즐겨찾기 (' + FAV_MAX + '곳까지 · 맨 위에)</span></div><div class="choices autodest" style="max-height:450px;overflow-y:auto;padding-right:4px"></div>' });
+        '<br><span class="muted" style="font-size:15px">방향·날수는 이 항구에서 본 것 · ☆을 누르면 즐겨찾기 (' + FAV_MAX + '곳까지 · 맨 위에)</span></div><div class="choices autodest" style="max-height:450px;overflow-y:auto;padding-right:4px"></div>',
+      buttons: [{ label: '해도에서 고르기', icon: 'map', id: 'chartBtn', onClick: function () { pickOnChart(c, dests, win); return false; } }] });
     var box = win.content.querySelector('.autodest');
     function row(x) {
       var fav = favs().indexOf(x.c.id) >= 0, short = x.days != null && x.days > days, rt = G.Routes.get(c.id, x.c.id);
@@ -219,6 +222,27 @@
     return v;
   }
   H.pickAutoDest = pickAutoDest;
+  /** 해도를 펴서 자동항해 목적지를 고른다 (2026-10-25 사용자 요청) — 바다의 「해도」 창과 같은 G.ChartView.
+      처음 보이는 범위는 이 항구와 갈 수 있는 항구를 모두 담게. 청록 모서리 = 이 항구에서 자동항해할 수 있는 항구(ref).
+      항구를 누르면 요약 아래 「○○로 자동항해」 단추 — 누르면 목록 창(listWin)도 그 항구로 닫혀 pickAutoDest가 보급 점검을 이어 간다.
+      익힌 항로가 없는 항구는 단추 없이 요약만(요약에 「바닷길 따라 (자동항해 아님)」이 나온다). 해도 창을 닫으면 목록으로 돌아간다. */
+  async function pickOnChart(c, dests, listWin) {
+    var by = {}, W = 1120, Hh = 560, lo0 = c.lon, lo1 = c.lon, la0 = c.lat, la1 = c.lat;
+    dests.forEach(function (x) { by[x.c.id] = x; lo0 = Math.min(lo0, x.c.lon); lo1 = Math.max(lo1, x.c.lon); la0 = Math.min(la0, x.c.lat); la1 = Math.max(la1, x.c.lat); });
+    var span = Math.min(360, Math.max(30, (lo1 - lo0) * 1.25 + 8, ((la1 - la0) * 1.25 + 8) * W / Hh));
+    var cw = UI.window({ title: '자동항해 — 해도에서 고르기', icon: 'map', width: 1180,
+      html: '<div class="chartwrap"></div><div class="muted" style="font-size:15px;margin-top:6px">청록 모서리가 있는 항구가 ' + U.esc(c.name) + '에서 자동항해로 갈 수 있는 곳입니다. 항구를 누르면 요약과 「자동항해」 단추가 나옵니다 · 휠·＋/－로 확대, 끌어서 이동. 창을 닫으면 목록으로 돌아갑니다.</div>' });
+    G.ChartView.mount(cw.content.querySelector('.chartwrap'), {
+      w: W, h: Hh, center: [(lo0 + lo1) / 2, (la0 + la1) / 2], span: span, ref: c.id, actionsTop: true,
+      actions: function (t) {
+        var x = by[t.id]; if (!x) return [];
+        return [{ label: t.name + U.jx(t.name, '으로/로') + ' 자동항해' + (x.days != null ? ' (약 ' + x.days + '일' + (x.rough ? ', 어림' : '') + ')' : ''), icon: 'anchor', fn: function () { cw.close(t.id); } }];
+      }
+    });
+    var v = await cw.result;
+    if (v != null) listWin.close(v);
+  }
+  H.pickOnChart = pickOnChart;
 
   // ---------------------------------------------------------------- 출항 준비 (선원·수리·보급을 한 번에)
   function prepPlan(c, days) {

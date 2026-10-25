@@ -15,6 +15,48 @@
     return null;
   };
   SP.present = function (sp) { return !!SP.holder(sp); };
+  /* 자리가 빈 동안 맺어 둔 계약 (2026-10-25 버그 수정 — 브라간사 공작과 계약하고 돌아왔더니 오포르토에 저택이 없어 보고하지 못했다)
+     후원자 자리가 비면(sp.holders 사이의 틈 · 마지막 사람 뒤) 건물이 사라져, 그 후원자와 맺은 계약을 보고할 곳이 없었다.
+     → 그 후원자와 계약 중이면 저택(왕궁)은 그대로 남고, 집사(시종장)가 가문(왕실)을 대신해 보고를 받고 사례를 치른다.
+     왜 비었는지는 SP.VACANCY 에 적어 두면 집사가 들려준다 (없으면 「자리를 이을 분이 아직 정해지지 않았다」) */
+  SP.VACANCY = {
+    pt_braganza: [[1483, 1497, '1483년 6월, 국왕 주앙 2세께서 반역의 죄를 물어 페르난두 2세 공작님을 에보라에서 처형하시고 공작령을 왕실로 거두셨습니다. 어린 도련님들은 카스티야로 몸을 피하셨지요. 마누엘 왕께서 즉위하시면 자이미 도련님이 돌아와 공작 자리를 잇게 됩니다 — 그때까지 이 집은 제가 지킵니다.']]
+  };
+  function yNow(date) { return SP.yearOf ? SP.yearOf(date || S().date) : (date || S().date).y; }
+  /** 지금 비어 있는 자리의 앞 사람(마지막으로 자리에 있던 사람)과 다음 사람 — holders 항목 그대로 (없으면 null) */
+  SP.lastHolder = function (sp, date) { var y = yNow(date), best = null; sp.holders.forEach(function (h) { if (h[1] <= y && (!best || h[1] > best[1])) best = h; }); return best; };
+  SP.nextHolder = function (sp, date) { var y = yNow(date), best = null; sp.holders.forEach(function (h) { if (h[0] > y && (!best || h[0] < best[0])) best = h; }); return best; };
+  /** 빈 자리의 사연 — SP.VACANCY 에 적은 말, 없으면 앞 사람이 언제 세상을 떠났는지(물러났는지)와 뒤를 이을 사람이 있는지로 (2026-10-25) */
+  SP.vacancyNote = function (sp, date) {
+    var y = yNow(date), L = SP.VACANCY[sp.id] || sp.vacancy || [];
+    for (var i = 0; i < L.length; i++) if (y >= L[i][0] && y < L[i][1]) return L[i][2];
+    var last = SP.lastHolder(sp, date), next = SP.nextHolder(sp, date);
+    if (!last) return null;
+    var nm = last[2], gen = last[4] === 'g' || nm === sp.title;
+    var t = gen ? '' : nm + ' ' + SP.honor(sp) + '께서 ' + Math.floor(last[1]) + '년에 ' + (last[4] === 'x' ? '자리에서 물러나셨습니다.' : '세상을 떠나셨습니다.') + ' ';
+    return t + (next ? '뒤를 이으실 분은 아직 정해지지 않았습니다.' : '이제 그 자리를 이으실 분은 없습니다.');
+  };
+  /** 자리는 비었지만 이 후원자와 계약 중이다 — 집사가 대신 맞는다 */
+  SP.caretaker = function (sp) { var s = S(); return !!(sp && s && !SP.present(sp) && s.contract && s.contract.sponsor === sp.id); };
+  /** 후원자의 도시가 사라졌다(테노치티틀란 1521 · 뉴암스테르담 1664 …): 보고할 곳이 없으니 계약을 없던 일로 — 선금은 그대로, 빌린 배는 제독의 배가 된다.
+      해가 바뀔 때 (js/systems/succession.js SC.year). 처리했으면 소식 한 줄 */
+  SP.orphanContract = function () {
+    var s = S(), k = s && s.contract; if (!k) return null;
+    var sp = G.SPONSOR[k.sponsor], c = sp && G.CITY_DATA[sp.city];
+    if (sp && c && R.cityExists(c)) return null;
+    var keep = null;
+    if (k.loan) {
+      var all = s.fleet.ships.slice(); for (var cid in (s.moored || {})) all = all.concat(s.moored[cid] || []);
+      all.forEach(function (sh) { if (sh.uid === k.loan) { delete sh.loan; keep = sh; } });
+    }
+    s.contract = null;
+    var who = sp ? sp.title : '후원자', place = c ? c.name : '그 도시';
+    var text = who + U.jx(who, '과/와') + ' 맺은 계약은 ' + place + U.jx(place, '이/가') + ' 사라져 보고할 곳이 없어졌다 — 없던 일이 되었다. 받은 선금은 돌려주지 않아도 된다.' + (keep ? ' 빌린 ' + keep.name + '호는 이제 제독의 배다.' : '');
+    G.State.log(text);
+    return { icon: 'seal', text: text };
+  };
+  /** 건물이 보이는가: 주인이 있거나, 자리가 비었어도 계약 중이면 */
+  SP.open = function (sp) { return !!sp && (SP.present(sp) || SP.caretaker(sp)); };
   /** 0-based index of the current title holder in sp.holders (-1 when vacant) */
   SP.holderIndex = function (sp, date) {
     date = date || S().date; var y = yearOf(date);
@@ -27,6 +69,7 @@
   SP.honor = function (sp) { if (sp.honor) return sp.honor; if (/왕비|왕대비/.test(SP.holder(sp) || '')) return '전하'; return HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
   /** 후원자 얼굴: 흉상(portrait) + 무릎상(half — portraits/sponsors/<그림>_half, 있을 때만) */
   SP.face = function (sp) {
+    if (!SP.present(sp)) { var b = SP.butler(sp); return { name: SP.stewardName(sp), portrait: b.portrait, half: [], lang: b.lang, li: b.li }; }   // 빈 자리: 집사(시종장)가 맞는다
     var spec = A.sponsorSpec(sp, SP.holderIndex(sp)), half = G.Img.chain.halfOf(G.Art.portraitKeys(spec));
     // 이야기 모드의 후원자(카사노바 남작)처럼 전용 그림이 없는 사람: 그 고장 귀족(왕·성직자·상인)의 무릎상으로 선다 — 흉상 대화창으로 돌아가지 않게
     if (sp.tale) half = half.concat(['portraits/npc-roles/' + ((spec && spec.style) || 'ib') + '/' + ({ king: 'king', church: 'priest', merchant: 'merchant' }[sp.type] || 'noble') + '_half']);
@@ -46,6 +89,24 @@
   SP.langLv = function (sp) { return Math.max(R.lang(sp.lang), R.cityLang(G.CITY_DATA[sp.city]).lv); };
   /** 후원자와 나누는 말: 후원자의 말과 그 도시의 말 가운데 일행이 더 잘하는 쪽 */
   SP.langLi = function (sp) { var a = sp.lang, b = G.CITY_DATA[sp.city].lang; return a == null ? b : b == null ? a : (R.lang(b) > R.lang(a) ? b : a); };
+  /** 빈 자리를 지키는 사람 — 왕궁은 시종장, 귀족·상인 집안은 집사, 관청은 서기관, 학자·설교자는 제자 */
+  SP.stewardKind = function (sp) {
+    if (sp.bld === 'palace' || sp.type === 'king' || sp.type === 'pope') return 'chamber';
+    if (sp.type === 'official' || sp.type === 'gov') return 'clerk';
+    if (sp.type === 'scholar' || (sp.type === 'priest' && !/주교|추기경|대주교/.test(sp.title))) return 'pupil';
+    if (sp.type === 'priest') return 'cleric';
+    if (sp.type === 'merchant') return 'manager';
+    return 'butler';
+  };
+  SP.stewardName = function (sp) {
+    var k = SP.stewardKind(sp), last = SP.lastHolder(sp), nm = last && last[4] !== 'g' && last[2] !== sp.title ? last[2].replace(/\s*\([^)]*\)/g, '') : null;
+    if (k === 'chamber') return sp.title + '의 시종장';
+    if (k === 'clerk') return sp.title + ' 관저의 서기관';
+    if (k === 'pupil') return (nm || sp.title) + '의 제자';
+    if (k === 'cleric') return sp.title + '의 서기 신부';
+    if (k === 'manager') return sp.title + '의 지배인';
+    return sp.title + ' 가의 집사';
+  };
   SP.butler = function (sp) { var c = G.CITY_DATA[sp.city]; return { name: '집사', portrait: A.withImg(A.npcSpec('butler_' + sp.id, 'keeper', G.Img.folkStyle(c)), G.Img.chain.npc('butler', c)), lang: SP.langLv(sp), li: SP.langLi(sp) }; };
   SP.fameNeed = function (sp) { return G.POWER_FAME[sp.pw] || 0; };
   // ---------------------------------------------------------------- 말투 (js/data/sponsorvoice.js) · 성품
@@ -53,6 +114,7 @@
   SP.female = function (sp) { return femRe().test(SP.holder(sp) || sp.title); };
   /** 이 후원자의 말투: king · queen · noble · merchant · scholar · priest · official (왕궁의 왕명·특허장 대사도 군주 말투(하오체)로 맞췄다 — js/systems/court.js) */
   SP.voiceKey = function (sp) {
+    if (!SP.present(sp)) return 'official';   // 빈 자리: 집사·시종장·서기관이 대신 말한다 (높임말 — SP.caretaker)
     if (sp.voice) return sp.voice;
     if (SP.female(sp)) return sp.type === 'king' ? 'king' : 'queen';    // 여왕(군주)은 군주의 말투, 왕비·귀부인은 해요체
     return (G.SPONSOR_VOICE_OF || {})[sp.type] || 'noble';
@@ -98,6 +160,16 @@
   /** returns true if the audience goes ahead */
   SP.audience = async function (sp) {
     var s = S(), rel = SP.rel(sp.id), bt = SP.butler(sp);
+    if (!SP.present(sp)) {        // 빈 자리: 계약 중이면 집사가 대신 맞고, 아니면 돌려보낸다
+      if (!SP.caretaker(sp)) { await UI.say('주인께서는 지금 계시지 않습니다. 돌아가 주십시오.', bt); return false; }
+      var stw = SP.speaker(sp), note = SP.vacancyNote(sp), sk = SP.stewardKind(sp);
+      var org = sp.type === 'pope' ? '교황청' : sk === 'chamber' ? (sp.type === 'king' ? '왕실' : '궁정') : sk === 'clerk' ? '관청' : sk === 'cleric' ? '교구' : sk === 'manager' ? '상회' : '가문';
+      var keep = sk === 'pupil' ? '하지만 선생님께서 맺으신 약속은 제자인 제가 지키겠습니다. 보고는 제가 받고, 약속한 사례도 선생님이 남기신 돈으로 치러 드리지요.'
+        : '하지만 맺으신 계약은 ' + org + U.jx(org, '이/가') + ' 지킵니다. 보고는 제가 대신 받아, 약속한 사례도 ' + org + '에서 치러 드리지요.';
+      await UI.say(sp.title + ' 일로 오셨군요. …안타깝게도 지금 ' + (sk === 'chamber' ? '이 궁에는' : sk === 'clerk' ? '이 관저에는' : '이 집에는') + ' 주인이 계시지 않습니다.\f' + (note || '자리를 이을 분이 아직 정해지지 않았습니다.') + '\f' + keep, stw);
+      rel.met = (rel.met || 0) + 1;
+      return true;
+    }
     if (rel.banned && U.dateNum(s.date) < rel.banned) { await UI.say('만날 수 없는 사람은 만날 수 없습니다. 돌아가 주십시오.', bt); return false; }
     if (G.Tudor && G.Tudor.knightDue && G.Tudor.knightDue(sp)) return true;   // 런던 탑의 은혜를 갚으려는 엘리자베스 1세는 말이 서툴러도·명성이 모자라도 만나 준다 (QA 2026-10-18)
     if (SP.langLv(sp) === 0) { await UI.say('……', bt); await G.Scenes.city.mate('말이 통하지 않아서 상대해 주지 않았습니다.'); return false; }

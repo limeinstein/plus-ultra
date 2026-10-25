@@ -31,7 +31,7 @@
     { id: 'staff', name: '참모실', icon: 'strategy', skills: ['ops', 'hist', 'survey'], cost: 1400, days: 2, art: 'captain', desc: '지도와 병법서를 펼친 작전 회의실. 운용·역사·측량에 밝은 참모가 앉는다.', fx: '육상전의 계략(기습·함정·저격·작렬탄)이 잘 통하고 더 세진다' },
     // 2026-10-21 창고: 사람을 두지 않는 방(noStaff). 기함 짐칸이 는다 — art는 파일 누락 때만 쓰는 안전용 대체 그림
     { id: 'store', name: '창고', icon: 'chest', noStaff: true, cost: 1200, days: 2, art: 'repair', desc: '칸막이를 걷어 내고 선반과 고정 끈을 단 짐칸. 사람이 머물지 않는다.', fx: '기함 짐칸이 배 적재량의 5%씩 는다 (4칸까지) · 무게 한도는 그대로라 가벼운 짐에 좋다' },
-    { id: 'interp', name: '통역실', icon: 'scroll', skills: [], lang: true, cost: 700, days: 1, desc: '여러 나라 말을 아는 사람의 방. 이 방에 있는 사람의 말도 통역으로 쓰인다.', fx: '이 방 사람의 말이 통역에 쓰인다' }
+    { id: 'interp', name: '통역실', icon: 'scroll', skills: [], lang: true, cost: 700, days: 1, desc: '여러 나라 말을 아는 사람의 방. 이 방에 있는 사람의 말도 통역으로 쓰인다. 부하편성에서 통역으로 임명한 사람을 두면 통역관이 되어, 제독과 다른 부하들이 아는 말까지 모아 통역하고 말을 남보다 빨리 배운다.', fx: '이 방 사람의 말이 통역에 쓰인다 · 통역으로 임명한 사람이면 일행의 말을 모두 모아 통역하고 말을 빨리 배운다' }
   ];
   G.CABIN = {};
   G.CABINS.forEach(function (c) { G.CABIN[c.id] = c; });

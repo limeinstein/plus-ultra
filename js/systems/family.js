@@ -322,8 +322,11 @@
       var sp0 = G.SPONSOR[s.contract.sponsor];
       if (sp0 && G.Sponsor) { var r0 = G.Sponsor.rel(sp0.id); r0.fail = (r0.fail || 0) + 1; r0.trust = Math.max(0, r0.trust - 10); if (G.Sponsor.returnLoan) G.Sponsor.returnLoan(s.contract); }
     }
+    var young = F.heirs().length ? null : F.minorSon();
     if (!forced) {
-      var ok = await UI.confirm('제독의 자리에서 물러나 은퇴하겠습니까?' + (F.heirs().length ? '<br>어른이 된 아들에게 뒤를 잇게 할 수 있습니다.' : '<br><span class="warn-text">뒤를 이을 아들(16세 이상)이 없으면 모험은 여기서 끝납니다.</span>'), '은퇴한다', '그만둔다');
+      var ok = await UI.confirm('제독의 자리에서 물러나 은퇴하겠습니까?' + (F.heirs().length ? '<br>어른이 된 아들에게 뒤를 잇게 할 수 있습니다.'
+        : young ? '<br>맏아들 ' + F.kidName(young) + U.jx(F.kidName(young), '은/는') + ' 아직 ' + F.kidAge(young) + '세입니다. 열여섯 살이 될 때까지 약 ' + F.waitText(young) + ' 세월이 흐른 뒤, 그날 뒤를 잇습니다.'
+        : '<br><span class="warn-text">뒤를 이을 아들이 없으면 모험은 여기서 끝납니다.</span>'), '은퇴한다', '그만둔다');
       if (!ok) return;
     }
     var heirs = F.heirs();
@@ -332,7 +335,77 @@
       if (i == null) i = 0;
       return F.succeed(heirs[i], forced);
     }
+    // 맏아들이 아직 어리면 열여섯 살이 될 때까지 세월이 흐른 뒤 뒤를 잇는다 · 아들이 하나도 없으면 모험이 끝난다
+    young = F.minorSon();
+    if (young) return F.regency(young, forced);
     return G.Ending.show(forced ? 'death' : 'retire');
+  };
+
+  /* 어린 맏아들의 계승 (2026-10-25 사용자 요청)
+     은퇴하거나 쓰러졌을 때 어른(16세)이 된 아들이 없어도, 아직 어린 아들이 있으면 모험이 끝나지 않는다.
+     · 맏아들(가장 먼저 태어난 아들 — 둘째 부인의 아들도 셈한다, 섬에서 사라진 아이는 빼고)이 열여섯 살이 되는 날까지 세월이 그냥 흐른다.
+       그동안 함대는 고향 항구에 닻을 내리고(급료·선실 충성은 멈춘다 — js/systems/world.js s.regency), 세상은 그대로 움직인다(역사·경쟁자·시세·조약…).
+     · 그날 맏아들이 뒤를 잇는다(F.succeed) — 이름이 없던 갓난아기면 집안 어른들이 이름을 지어 둔다.
+     · 아들이 하나도 없으면 예전처럼 모험이 끝난다. */
+  F.minorSon = function () {
+    var ad = cfg().adult || 16;
+    return S().player.kids.filter(function (k) { return !k.lost && k.sex !== 'f' && (k.unnamed || F.kidAge(k) < ad); })
+      .sort(function (a, b) { return U.dayIndex(a.born) - U.dayIndex(b.born); })[0] || null;
+  };
+  /** 아이가 열여섯 살이 되는 날까지 남은 날 */
+  F.daysToAdult = function (k) { var ad = cfg().adult || 16; return Math.max(0, U.dayIndex({ y: k.born.y + ad, m: k.born.m, d: Math.min(k.born.d, U.daysInMonth(k.born.y + ad, k.born.m)) }) - U.dayIndex(S().date)); };
+  F.waitText = function (k) { var n = F.daysToAdult(k), y = Math.floor(n / 365), m = Math.floor((n - y * 365) / 30.4); return (y ? y + '년' : '') + (y && m ? ' ' : '') + (m ? m + '달' : '') + (!y && !m ? '며칠' : ''); };
+  F.regency = async function (k, forced) {
+    var s = S(), p = s.player, ad = cfg().adult || 16;
+    if (k.unnamed) {   // 이름을 짓지 못한 갓난아기 — 집안 어른들이 이름을 지어 둔다
+      var pool = F.names(k.sex).filter(function (n) { return !p.kids.some(function (o) { return o.name === n; }) && n !== p.name; });
+      k.name = pool[0] || F.names(k.sex)[0]; k.unnamed = false; k.met = true;
+      G.State.log('아들에게 「' + k.name + '」' + U.jx(k.name, '이라는/라는') + ' 이름이 지어졌다.');
+    }
+    var old = p.name, home = G.CITY_DATA[p.home] ? p.home : (s.loc.city != null ? s.loc.city : 0), hc = G.CITY_DATA[home];
+    var wait = F.waitText(k), age0 = F.kidAge(k), from = U.clone ? U.clone(s.date) : { y: s.date.y, m: s.date.m, d: s.date.d };
+    G.State.log(old + U.j(old, '이/가').slice(old.length) + (forced ? ' 세상을 떠났다' : ' 은퇴했다') + '. 맏아들 ' + k.name + U.jx(k.name, '이/가') + ' 자랄 때까지 집안이 함대를 지킨다.');
+    await UI.alert((forced ? old + '의 모험은 여기서 막을 내렸다.' : old + U.jx(old, '은/는') + ' 제독의 자리에서 물러났다.') + '<br>뒤를 이을 맏아들 <b>' + k.name + '</b>' + U.jx(k.name, '은/는') + ' 아직 ' + age0 + '세.<br><br>' +
+      '함대는 고향 ' + (hc ? hc.name : '항구') + '에 닻을 내리고, 집안은 아이가 열여섯 살이 되기를 기다린다.<br>그동안에도 세상은 멈추지 않는다 — 약 ' + wait + '의 세월이 흐른다.' +
+      '<br><span class="muted">기다리는 동안 부하·선원의 급료는 나가지 않는다.</span>', '세월이 흐른다');
+    // 함대는 고향 항구로
+    delete s.landReturn;
+    p.kids.forEach(function (x) { x.aboard = false; });   // 견습으로 배에 타던 아이들도 집으로
+    if (hc) s.loc = { mode: 'city', city: home, lon: hc.lon, lat: hc.lat };
+    s.regency = { heir: k.name, from: from, forced: !!forced };
+    // 세월이 흐른다 — 창에 해·달과 아이의 나이를 보여 주며 하루씩 넘긴다 (세상의 일은 모아 두었다가 끝에 몇 가지만 보여 준다)
+    var total = Math.max(1, F.daysToAdult(k)), done = 0, hist = [];
+    var win = UI.window({ title: '세월이 흐른다', icon: 'hourglass', width: 560, closable: false,
+      html: '<div class="regency"><div class="rg-date"></div><div class="rg-kid"></div><div class="rg-bar"><i></i></div><div class="rg-news muted"></div></div>' });
+    var el = win.content;
+    function show() {
+      var a = F.kidAge(k);
+      el.querySelector('.rg-date').textContent = s.date.y + '년 ' + s.date.m + '월';
+      el.querySelector('.rg-kid').textContent = k.name + ' ' + a + '세' + (a >= 12 ? ' — 바다를 동경하는 눈빛이 날카롭다' : a >= 6 ? ' — 글과 지도를 배운다' : ' — 어머니 곁에서 자란다');
+      el.querySelector('.rg-bar i').style.width = Math.min(100, Math.round(done / total * 100)) + '%';
+      if (hist.length) el.querySelector('.rg-news').textContent = hist[hist.length - 1];
+    }
+    show();
+    try {
+      for (var guard = 0; F.kidAge(k) < ad && !k.lost && guard < 366 * (ad + 2); guard++) {
+        var msgs = G.Game.newDay(); done++;
+        (msgs || []).forEach(function (m) { if (m && m.history && m.text) hist.push(s.date.y + '년 — ' + String(m.text).replace(/<[^>]+>/g, '')); });
+        if (s.life) { delete s.life.end; delete s.life.bday; }   // 물러난 제독의 수명·생일 선물은 세지 않는다
+        if (done % 20 === 0) { show(); await new Promise(function (r) { setTimeout(r, 0); }); }
+      }
+    } finally { delete s.regency; }
+    show(); win.close();
+    if (k.lost || F.kidAge(k) < ad) {   // 기다리는 동안 아이를 잃었다면 다음 아들 · 없으면 끝
+      var next = F.heirs()[0] || F.minorSon();
+      if (next && next !== k) return next.unnamed || F.kidAge(next) < ad ? F.regency(next, forced) : F.succeed(next, forced);
+      return G.Ending.show(forced ? 'death' : 'retire');
+    }
+    var news = []; for (var ni = 0, nn = Math.min(6, hist.length); ni < nn; ni++) news.push(hist[Math.floor((ni + 0.5) * hist.length / nn)]);   // 흐른 세월 전체에서 고르게 몇 가지
+    await UI.alert(U.fmtDate(from) + '부터 ' + U.fmtDate(s.date) + '까지, 세월이 흘렀다.<br><b>' + k.name + U.jx(k.name, '이/가') + ' 열여섯 살이 되었다.</b>' +
+      (news.length ? '<br><br><span class="muted">그 사이 세상에서는…</span><div style="font-size:15px;line-height:1.6;margin-top:4px">' + news.map(function (t) { return '· ' + U.esc(t); }).join('<br>') + '</div>' : ''), '열여섯 살');
+    var restart = !s.fleet.ships.length || s.fleet.crew <= 0;   // 이때는 F.succeed가 새 배로 고향에서 시작한다
+    await F.succeed(k, forced);
+    if (!restart) UI.fade(function () { G.Game.go('city', { cityId: home }); });
   };
 
   /* 자택 보관함 물려주기 (2026-10-21 사용자 요청): 은퇴하면 보관함(s.player.storage)은 비지만, 새 제독에게 물려줄 물건을 고를 수 있다.
