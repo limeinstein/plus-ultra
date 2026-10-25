@@ -62,7 +62,7 @@
   var CMDR_CRY = { guan_yu: '관운장이 여기 있다!', zhang_fei: '연인 장익덕이 여기 있다!', liu_bei: '백성을 지켜라!', zhuge_liang: '계책대로 움직여라.', d_artagnan: '하나는 모두를 위하여!',
     athos: '총사들이여, 검을!', porthos: '으하하, 덤벼라!', aramis: '침착하게 겨눠라.', drake: '엘 드라케가 간다!', barbarossa: '붉은 수염을 보아라!', joan_of_arc: '주님의 이름으로, 앞으로!',
     bokuden: '한 칼에 끝낸다.', don_quixote: '거인들이여, 각오하라!', sancho_panza: '나리, 저건 그냥 양 떼인데요!', marina: '물러서지 마세요!', tupac: '산이 우리 편이다!',
-    kisk: '은동고를 위하여!', leonardo: '포각을 조금만 더…', peter_pan: '꼬끼오~!', ahmad: '사막의 바람처럼!' };
+    kisk: '은동고를 위하여!', leonardo: '포각을 조금만 더…', peter_pan: '꼬끼오~!', pinocchio: '이번엔 진짜예요!', ahmad: '사막의 바람처럼!' };
   var OP_ICON = { ambush: '✦', trap: '⩚', snipe: '◎', shells: '✸', volley: '➶', cry: '⚑', roar: '‼' };
   function ART() { return G.LANDWAR_ART || null; }
   function S() { return G.Game.state; }
@@ -126,7 +126,8 @@
       var o = out[idx >= 0 ? idx : 0];
       o.name = SP.name; o.cls = SP.cls; o.pow = SP.pow; o.special = SP; o.look = SP.cls === 'missile' || SP.cls === 'horsearcher' ? 'bow' : SP.cls === 'art' ? 'cannon' : 'spear';
     }
-    out.push({ side: 'en', name: e.leader || F.leader[0], cls: e.kind === 'beast' ? 'beast' : 'blade', pow: F.leader[1], look: e.kind === 'beast' ? 'beast' : 'chief', n: lead, n0: lead, leader: true });
+    var lLook = e.leaderLook || (e.kind === 'beast' ? 'beast' : 'chief');   // leaderLook: 짐승 떼를 사람이 이끌 때 'chief' (타잔 — js/systems/tarzan.js)
+    out.push({ side: 'en', name: e.leader || F.leader[0], cls: lLook === 'beast' ? 'beast' : 'blade', pow: F.leader[1], look: lLook, n: lead, n0: lead, leader: true });
     return out;
   }
 

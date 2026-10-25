@@ -342,6 +342,7 @@
         break;
       }
       case 'whales': {
+        if (G.Pino && await G.Pino.whale(l.lon, l.lat)) break;   // 고래를 센다 · 대양에서 5번 넘게 만났으면 피노키오 (js/systems/pinocchio.js)
         var art = R.skill('art');
         if (art) {
           var fm = 4 + art * 4;
@@ -405,11 +406,14 @@
       }
       case 'songs': {
         // 음악: 솜씨 좋은 사람이 가락을 이끌면 더 크게 풀린다
-        var mw = bestWho('music'), sf = 8 + mus * 4;
+        var mw = bestWho('music'), sf = 8 + mus * 4, sd = 6 + mus * 2;
         await UI.say(mus ? mw + U.jx(mw, '이/가') + ' 류트를 꺼내 고향 노래를 타기 시작했다. 하나둘 따라 부르던 소리가 어느새 갑판을 가득 메우고, 발을 구르며 춤추는 선원까지 나왔다.'
           : '바람이 없는 밤, 누군가 고향 노래를 부르기 시작했다. 하나둘 따라 부르는 소리가 바다 위로 퍼져 나간다.', {});
-        f.fatigue = Math.max(0, f.fatigue - sf); f.discipline = Math.min(100, f.discipline + 6 + mus * 2);
-        if (mus) UI.toast('뱃노래에 피로가 풀렸다. 피로 −' + sf, 'people');
+        var dm = G.Pino && G.Pino.dance ? await G.Pino.dance() : 1;   // 피노키오 인형이 춤추면 음악의 효과가 커진다 (js/systems/pinocchio.js)
+        if (dm > 1) { sf = Math.round(sf * dm); sd = Math.round(sd * dm); }
+        f.fatigue = Math.max(0, f.fatigue - sf); f.discipline = Math.min(100, f.discipline + sd);
+        if (dm > 1) UI.toast('인형의 춤사위에 노래가 더 신이 났다! 피로 −' + sf + ' · 규율 +' + sd, 'people');
+        else if (mus) UI.toast('뱃노래에 피로가 풀렸다. 피로 −' + sf, 'people');
         break;
       }
       case 'feast': {

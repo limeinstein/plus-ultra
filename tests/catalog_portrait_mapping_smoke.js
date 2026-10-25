@@ -92,8 +92,11 @@ ok(I.maidList('seasia').includes('portraits/street-folk/town_woman_se'), '동남
 ok(I.maidList('tropic').includes('portraits/street-folk/innkeeper_se'), '열대 보조 고해상도 지역 인물도 유지한다');
 
 const catalog = fs.readFileSync(path.join(ROOT, 'js/catalog.js'), 'utf8');
+const catalogHtml = fs.readFileSync(path.join(ROOT, 'catalog.html'), 'utf8');
 ok(/chain:\s*A\.portraitKeys\(spec\)/.test(catalog), '도감 동료 카드가 게임과 같은 얼굴 선택 사슬을 쓴다');
 ok(/half:\s*I\.chain\.mateHalf\(m\.id\)/.test(catalog), '도감 동료 상세가 게임과 같은 반신 선택 사슬을 쓴다');
 ok(/I\.maidList\(sid\)/.test(catalog), '도감 여급 카드가 게임과 같은 품질 필터를 쓴다');
+ok(['js/data/pinocchio.js', 'js/data/tarzan.js'].every(src => catalogHtml.indexOf(src) >= 0 && catalogHtml.indexOf(src) < catalogHtml.indexOf('js/catalog.js')), '피노키오·타잔 자료를 도감보다 먼저 불러온다');
+ok(['pinocchio', 'pinocchio_half', 'geppetto', 'geppetto_half', 'tarzan', 'tarzan_half'].every(name => I.has('portraits/legendary/' + name)), '피노키오·제페토·타잔 얼굴상과 무릎상 파일이 모두 등록되어 있다');
 
 console.log('\n통과 — 지역 인물 ' + selected.length + '명, 고유 얼굴 ' + new Set(selected.map(x => x.face)).size + '장');

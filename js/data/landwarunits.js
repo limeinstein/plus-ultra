@@ -98,6 +98,7 @@
     kisk:         { name: '은동고의 여왕', kind: 'all', k: 1.15, region: ['wafrica', 'congo', 'sahel', 'swahili', 'ethiopia'], desc: '아프리카에서 모든 부대 +15%' },
     leonardo:     { name: '대포 설계', kind: 'art', k: 1.35, desc: '포 ×1.35' },
     peter_pan:    { name: '하늘의 아이', kind: 'snipe', k: 0.25, desc: '저격 성공 +25%p' },
+    pinocchio:    { name: '목수의 아들', kind: 'guard', k: 0.85, desc: '지휘 부대가 받는 피해 −15% (방책을 뚝딱 세운다)' },
     ahmad:        { name: '사막의 전사', kind: 'melee', k: 1.25, desc: '근접 ×1.25' }
   };
 
