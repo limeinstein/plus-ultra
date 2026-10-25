@@ -1798,3 +1798,35 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 /* 통역 장부 (제독 수첩 — js/ui/info.js interpBook, 2026-10-25) */
 .ibook { margin-top: 10px; font-size: 15px; }
 .ibook .ibook-list { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 4px; }
+
+/* 발견물 백과사전 (js/systems/encyclopedia.js) */
+.en-head { font-size: 15px; margin-bottom: 6px; }
+.en-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.en-tab { background: rgba(255,248,232,.5); border: 1px solid rgba(120,90,50,.4); border-radius: 5px; padding: 5px 11px; font: inherit; font-size: 15px; color: #3a2a18; cursor: pointer; }
+.en-tab small { color: #7a6040; }
+.en-tab.on { background: #2f4a6e; color: #f3e8cf; border-color: #1d3150; }
+.en-tab.on small { color: #d8c8a0; }
+.en-tab.done { box-shadow: inset 0 0 0 2px #b8862e; }
+.en-body { display: grid; grid-template-columns: 330px 1fr; gap: 14px; height: 58vh; }
+.en-left { display: flex; flex-direction: column; min-height: 0; }
+.en-q { font: inherit; font-size: 15px; padding: 6px 8px; margin-bottom: 6px; border: 1px solid rgba(120,90,50,.45); border-radius: 4px; background: rgba(255,252,244,.9); }
+.en-list { overflow-y: auto; flex: 1; min-height: 0; padding-right: 4px; }
+.en-row { display: flex; gap: 8px; align-items: center; padding: 5px 6px; border-radius: 5px; cursor: pointer; border: 1px solid transparent; }
+.en-row:hover { background: rgba(255,248,232,.6); }
+.en-row.on { background: rgba(47,74,110,.14); border-color: rgba(47,74,110,.45); }
+.en-row img, .en-noimg { width: 64px; height: 40px; object-fit: cover; border-radius: 3px; flex: none; display: flex; align-items: center; justify-content: center; }
+.en-rn { font-weight: 700; font-size: 15px; }
+.en-rm { font-size: 13px; color: #7a6040; }
+.en-right { overflow-y: auto; min-height: 0; padding-right: 6px; }
+.en-pic { height: 190px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+.en-pic img { max-width: 100%; max-height: 190px; object-fit: contain; border-radius: 4px; }
+.en-name { font-size: 24px; font-weight: 800; }
+.en-meta { font-size: 14px; color: #6a5236; margin: 4px 0 8px; }
+.en-desc { font-size: 16px; line-height: 1.6; }
+.en-sub { margin-top: 10px; font-size: 15px; }
+.en-facts { margin: 4px 0 0 0; padding-left: 18px; font-size: 15px; line-height: 1.55; }
+.en-facts li { margin-bottom: 4px; }
+.en-sk { display: inline-block; font-size: 12px; background: rgba(47,74,110,.12); border: 1px solid rgba(47,74,110,.35); border-radius: 3px; padding: 0 5px; margin-right: 4px; color: #2f4a6e; }
+.en-kids { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.en-kid { font: inherit; font-size: 15px; padding: 6px 12px; border-radius: 5px; border: 1px solid #8a5a1a; background: #f3e2b8; color: #3a2a18; cursor: pointer; }
+.en-kid[disabled] { opacity: .5; cursor: default; }

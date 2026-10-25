@@ -783,6 +783,7 @@
       G.FamilyTree && G.FamilyTree.has() ? { label: '가계도', icon: 'people', sub: (s.player.generation || 1) + '대째 가문', onClick: function () { return G.FamilyTree.open(); } } : null,
       { label: '항해 일지 기록 (저장)', icon: 'save', onClick: function () { return G.Info.saveMenu(); } },
       G.LogBooks ? { label: '서고', icon: 'book', sub: '항해일지 ' + G.LogBooks.volumes().length + '권' + (G.LogBooks.study().length ? ' · 책 ' + G.LogBooks.study().length + '권' : ''), onClick: function () { return G.LogBooks.open(c, HM.title(c)); } } : null,   // 항해일지(40년마다 한 권)와 발견물의 책 (js/systems/logbooks.js — 2026-10-24)
+      G.Encyc ? G.Encyc.menuItem(c) : null,   // 발견물 백과사전 (js/systems/encyclopedia.js)
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
       { label: '보관함', icon: 'chest', sub: '맡긴 물건 ' + R.storage().length + '점 · 소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX, onClick: function () { return HM.storage(c); } },
       { label: '은퇴', icon: 'log', onClick: function () { return G.Family.retire(); } }
