@@ -753,7 +753,7 @@
   };
 
   // ================================================================ 자택 (home)
-  var HM = { title: function (c) { return c && c.colony != null ? '총독 관저' : G.HomeBuilding ? G.HomeBuilding.name() : '자택'; }, icon: 'house', paint: 'home', exitLabel: '집을 나온다' };   // 개척 도시의 총독 관저도 자택처럼 (js/systems/colony.js)
+  var HM = { title: function (c) { return c && c.colony != null ? '총독 관저' : '자택'; }, icon: 'house', paint: 'home', exitLabel: '집을 나온다' };   // 개척 도시의 총독 관저도 자택처럼 (js/systems/colony.js) · 집 모양은 작위 따라 바뀌어도 이름은 「자택」(사용자 요청 2026-10-24)
   C.B.home = HM;
   HM.enter = async function (c) {
     var s = S();

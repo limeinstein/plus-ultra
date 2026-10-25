@@ -113,7 +113,7 @@
       out.push({ kind: x.kind, arg: x.realm, name: info[0], icon: info[1] });
     });   // 유럽 궁정의 왕명으로 세운 박물관·미술관·동물원 (js/city/museum.js)
     out.push({ kind: 'gate', name: '성문', icon: 'gate' });
-    if (c.id === (R.seat ? R.seat() : s.player.home)) out.push({ kind: 'home', name: c.colony != null ? '총독 관저' : G.HomeBuilding ? G.HomeBuilding.name() : '자택', icon: 'house' });   // 가족이 개척 도시의 총독 관저로 옮겼으면 고향 집은 비어 있다
+    if (c.id === (R.seat ? R.seat() : s.player.home)) out.push({ kind: 'home', name: c.colony != null ? '총독 관저' : '자택', icon: 'house' });   // 작위에 따라 모양이 바뀌어도 이름은 「자택」(사용자 요청 2026-10-24) · 가족이 개척 도시의 총독 관저로 옮겼으면 고향 집은 비어 있다
     return out;
   };
 

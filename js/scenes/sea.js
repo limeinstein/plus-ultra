@@ -1420,10 +1420,13 @@
       }
       // repairs at sea
       // 바다 위 수리: 배마다 그 배 선장(기함은 제독·부관)의 조선기술
+      //   선장이 없거나 조선기술이 없는(낮은) 배도 함대에서 가장 솜씨 좋은 목수(R.skill — 제독·부관·작업실 동료)가 고친다:
+      //   그 솜씨 × BAL.seaRepairShare. 예전에는 선장 솜씨만 봐서 선장 없는 호위선은 자재가 있어도 그대로였다 (사용자 피드백 2026-10-25)
       //   자재(f.mat)가 있어야 고친다 — 내구 1마다 자재 BAL.matPerHp통. 자재가 떨어지면 한 번 알린다
       var mph = BAL.matPerHp != null ? BAL.matPerHp : 0.4, wanted = false;
+      var fleetK = R.skill('ship') * (BAL.seaRepairShare != null ? BAL.seaRepairShare : 1);
       f.ships.forEach(function (sh) {
-        var k = R.shipSkill(sh, 'ship'); if (!k || sh.hp >= sh.maxHp) return;
+        var k = Math.max(R.shipSkill(sh, 'ship'), fleetK); if (!k || sh.hp >= sh.maxHp) return;
         wanted = true;
         var fix = Math.min(0.25 * k, sh.maxHp - sh.hp, (f.mat || 0) / mph);
         if (fix <= 0) return;

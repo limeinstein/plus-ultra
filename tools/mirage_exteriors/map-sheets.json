@@ -1,0 +1,44 @@
+[
+  {
+    "key": "map-discoveries/mirage-ruins-1",
+    "ids": [
+      "bernabeu",
+      "ponte25abril",
+      "forthbridge",
+      "berlintv",
+      "corinthcanal",
+      "oceanomonaco",
+      "bosphorusbridge",
+      "vicfallsbridge",
+      "yamoussoukro",
+      "tablemtn",
+      "ugandarail",
+      "suezcanal",
+      "aswandam",
+      "azaditower",
+      "kuwaittowers",
+      "victoriaterminus"
+    ]
+  },
+  {
+    "key": "map-discoveries/mirage-ruins-2",
+    "ids": [
+      "gatewayindia",
+      "mysorepalace",
+      "bochinatower",
+      "baikalrail",
+      "medeu",
+      "novosibopera",
+      "petronas",
+      "raffles",
+      "longbien",
+      "sansebastian",
+      "tomioka",
+      "goryokaku",
+      "akashibridge",
+      "disneyworld",
+      "wtc",
+      "nasajsc"
+    ]
+  }
+]

@@ -39,12 +39,24 @@
     ['map-discoveries/mystery-ruins-7', ['kamegaoka', 'hashihaka', 'yoshimihyakuana', 'iwatoyama', 'chavin', 'caral', 'kuelap', 'laventa', 'sagustinstatue', 'teyuna', 'diquis', 'cuevamanos', 'pedrainga', 'povertypoint']]
   ];
   var POS = {};
+  // 신규 신기루 32곳은 도시 밖 외관을 별도의 4×4 판 두 장으로 쓴다.
+  SHEETS.push(
+    ['map-discoveries/mirage-ruins-1', ['bernabeu', 'ponte25abril', 'forthbridge', 'berlintv', 'corinthcanal', 'oceanomonaco', 'bosphorusbridge', 'vicfallsbridge', 'yamoussoukro', 'tablemtn', 'ugandarail', 'suezcanal', 'aswandam', 'azaditower', 'kuwaittowers', 'victoriaterminus']],
+    ['map-discoveries/mirage-ruins-2', ['gatewayindia', 'mysorepalace', 'bochinatower', 'baikalrail', 'medeu', 'novosibopera', 'petronas', 'raffles', 'longbien', 'sansebastian', 'tomioka', 'goryokaku', 'akashibridge', 'disneyworld', 'wtc', 'nasajsc']]
+  );
   SHEETS.forEach(function (s) { s[1].forEach(function (id, i) { POS[id] = { key: s[0], slot: i }; }); });
 
   DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && POS[d.id]); };
   DI.visible = function () {
     if (!G.DISCOVERIES || !G.Disc) return [];
-    return G.DISCOVERIES.filter(function (d) { return DI.isMapLandmark(d) && G.Disc.foundByMe(d.id); });
+    return G.DISCOVERIES.filter(function (d) {
+      if (!DI.isMapLandmark(d)) return false;
+      // 미래의 신기루 외관은 출현·소멸하는 동안만 보이고 지도에 영구히 남지 않는다.
+      if (d.mirage50 && G.Disc.mirageNow && G.Disc.mirageNow(d)) {
+        return G.Disc.built(d) && G.Mirage && G.Mirage.mapAlpha && G.Mirage.mapAlpha(d) > 0;
+      }
+      return G.Disc.foundByMe(d.id);
+    });
   };
   DI.count = function () { return Object.keys(POS).length; };
   DI.key = function (d) { var p = d && POS[d.id]; return p ? p.key : null; };
@@ -77,6 +89,7 @@
     var dw = BASE * scale, dh = dw * sh / sw;
     met = { width: dw, height: dh, radius: Math.max(12, Math.max(dw, dh) * 0.46), top: -dh / 2, base: dh / 2 };
     ctx.save();
+    if (d.mirage50 && G.Disc && G.Disc.mirageNow && G.Disc.mirageNow(d) && G.Mirage && G.Mirage.mapAlpha) ctx.globalAlpha *= G.Mirage.mapAlpha(d);
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(im, col * sw + 0.5, row * sh + 0.5, sw - 1, sh - 1, x - dw / 2, y - dh / 2, dw, dh);
     if (opts.selected) {

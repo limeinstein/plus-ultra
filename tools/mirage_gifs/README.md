@@ -24,6 +24,7 @@ node tests/mirage50_assets_runtime.js
 
 한 곳만 다시 변환할 때는 `python tools/mirage_gifs/build.py --only empirestate`.
 도시 거리의 건물은 투명 배경을 쓰는 별도 규격이므로 이 도구는 발견 화면의 세 자산만 만든다.
+도시·육상·항해에서 보이는 투명 외관은 `tools/mirage_exteriors/README.md`를 참고한다.
 원화는 내장 ImageGen 도구로 장소마다 한 장씩 생성했으며, 기존 시네마틱 합성기와
 장면 판 도구를 재사용한다. `catalog.html`에도 신기루 자료를 불러와 도감에서 재생한다.
 발견 보상·연도·위치는 변경하지 않는다.

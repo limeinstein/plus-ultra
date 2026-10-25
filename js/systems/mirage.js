@@ -18,6 +18,29 @@
   function cfg() { return G.BALANCE.mirage; }
   function S() { return G.Game.state; }
 
+  /** 새 신기루는 발견 위치에 맞는 외관을 쓴다. 없는 그림은 기존 끝 장면으로 돌아간다. */
+  M.exteriorKey = function (d) {
+    if (!d || !G.Img) return null;
+    if (d.mirage50) {
+      var key = (d.how === 'city' ? 'landmarks/' : 'map-discoveries/mirage/') + d.id;
+      if (G.Img.file(key)) return key;
+    }
+    return G.Img.file('discovery-ends/' + d.id) ? 'discovery-ends/' + d.id : G.Img.pick(G.Img.chain.discovery(d));
+  };
+  var mapFades = {};
+  function trackMap(d, ms) {
+    if (!d.mirage50 || d.how === 'city') return;
+    mapFades[d.id] = { at: performance.now(), ms: ms };
+    if (G.DiscoveryIcon) G.DiscoveryIcon.preload([d]);
+  }
+  M.mapAlpha = function (d) {
+    var item = d && mapFades[d.id];
+    if (!item) return 0;
+    var a = Math.max(0, 1 - (performance.now() - item.at) / item.ms);
+    if (!a) delete mapFades[d.id];
+    return a;
+  };
+
   /** 아직 세워지지 않았지만 신기루로 보이는 때인가 */
   M.active = function (d) {
     var s = S(), c = cfg();
@@ -54,14 +77,16 @@
     return true;
   };
 
-  /** 신기루 그림: 마지막 장면(discovery-ends) 또는 발견물 그림을 일렁이게 띄웠다가 흩어지게 한다 */
+  /** 위치에 맞는 외관(없으면 마지막 장면)을 일렁이게 띄웠다가 흩어지게 한다 */
   M.show = function (d, first) {
     var root = document.getElementById('ui'); if (!root) return;
     var c = cfg(), ms = Math.round((c.show || 7) * 1000);
     var el = U.el('div', 'mirage');
     el.style.setProperty('--mirage-ms', ms + 'ms');
     var pic = U.el('div', 'mirage-pic');
-    var key = G.Img && (G.Img.file('discovery-ends/' + d.id) ? 'discovery-ends/' + d.id : G.Img.pick(G.Img.chain.discovery(d)));
+    var key = M.exteriorKey(d);
+    if (key && /^(landmarks\/|map-discoveries\/mirage\/)/.test(key)) pic.classList.add('mirage-exterior');
+    trackMap(d, ms);
     var src = key && G.Img.src(key);
     if (src) { var im = new Image(); im.src = src; im.alt = d.name; pic.appendChild(im); }
     else if (G.Art && G.Art.discoveryArt) { try { pic.appendChild(G.Art.discoveryArt(d, 720, 320)); } catch (e) { /* 그림이 없으면 글만 */ } }
@@ -84,7 +109,9 @@
     var el = U.el('div', 'mirage vanish');
     el.style.setProperty('--mirage-ms', ms + 'ms');
     var pic = U.el('div', 'mirage-pic');
-    var key = G.Img && (G.Img.file('discovery-ends/' + d.id) ? 'discovery-ends/' + d.id : G.Img.pick(G.Img.chain.discovery(d)));
+    var key = M.exteriorKey(d);
+    if (key && /^(landmarks\/|map-discoveries\/mirage\/)/.test(key)) pic.classList.add('mirage-exterior');
+    trackMap(d, ms);
     var src = key && G.Img.src(key);
     if (src) { var im = new Image(); im.src = src; im.alt = d.name; pic.appendChild(im); }
     else if (G.Art && G.Art.discoveryArt) { try { pic.appendChild(G.Art.discoveryArt(d, 720, 320)); } catch (e) { /* 그림이 없으면 글만 */ } }

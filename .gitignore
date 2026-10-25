@@ -24,6 +24,8 @@ music/_local/
 tools/discovery83/masters/
 # 신규 신기루 50곳의 ImageGen 시네마틱 원화는 작업 폴더에 보존한다.
 tools/mirage_gifs/masters/
+# 신기루 외관의 내장 ImageGen 원화
+tools/mirage_exteriors/sources/
 # 역사·종교 발견물 V3 시네마틱 원화 — tools/ruin_gifs/build_cinematic.py 가 읽는다
 tools/ruin_gifs/v3/master/
 # Codex 앞모습 시트(tools/street_faces.py 입력)

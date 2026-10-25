@@ -1,0 +1,541 @@
+[
+  {
+    "key": "legend-events/aztec_aguilar",
+    "title": "떠밀려 온 수도사",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_aguilar.webp",
+    "source": "sources/legend-events__aztec_aguilar.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Cozumel island coast, 1519. A sun-weathered adult castaway friar wearing a simple modest woven tunic kneels after stepping out of a canoe, holding a battered prayer book to his chest. Maya canoe paddlers look on; Spanish caravels offshore, turquoise surf, white sand. Compassionate encounter in morning light. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_veracruz",
+    "title": "베라크루스의 사절",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_veracruz.webp",
+    "source": "sources/legend-events__aztec_veracruz.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Veracruz beach settlement, 1519. Mexica envoys respectfully display a large golden sun disk, a silver disk and a green feather mantle before a Spanish expedition captain in a steel breastplate. An adult Indigenous woman interpreter in white embroidered cotton mediates. Sand dunes, wooden shelters and beached ships, thoughtful diplomatic tension. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_tenochtitlan",
+    "title": "호수 위의 도시",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_tenochtitlan.webp",
+    "source": "sources/legend-events__aztec_tenochtitlan.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Tenochtitlan in 1519 before the conquest. A breathtaking accurate panoramic view across Lake Texcoco toward a white stucco island city, canals crowded with canoes, three long causeways, central stepped Templo Mayor with twin shrines. Small mounted Spanish travelers on foreground causeway. Valley mountains, lake mist, no colonial churches. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_toxcatl",
+    "title": "톡스카틀 축제",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_toxcatl.webp",
+    "source": "sources/legend-events__aztec_toxcatl.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Toxcatl festival, Tenochtitlan temple courtyard, 1520. Mexica nobles in richly woven cotton, feather ornaments and garlands dance around a large ceremonial drum. Spanish guards remain at distant gates. A still moment of anxious anticipation before violence, humane portrayal, no wounds or violence. Sunlight against dark stone arcades, no colonial architecture. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_moctezuma",
+    "title": "황제의 마지막 부탁",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_moctezuma.webp",
+    "source": "sources/legend-events__aztec_moctezuma.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Moctezuma II inside a dim Mexica palace chamber in 1520, an older dignified man with straight dark hair and a green feather cloak sits on a low carved chair. His adult daughter in white embroidered cotton stands beside him with one hand on his shoulder. They gaze through a window toward distant smoke. Intimate somber scene, no injuries, no colonial architecture. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_noche_triste",
+    "title": "슬픈 밤",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_noche_triste.webp",
+    "source": "sources/legend-events__aztec_noche_triste.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A rainy moonless night on the Tlacopan causeway across Lake Texcoco in 1520. Exhausted Spanish soldiers with bundled supplies cross an improvised plank bridge over a gap, Maya and Mexica canoes with distant torches on dark water. Frightened hurried retreat, wind and reflective rain. No corpses, no gore, no visible injuries. Epic wide environmental storytelling. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_otumba",
+    "title": "오툰바 들판",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_otumba.webp",
+    "source": "sources/legend-events__aztec_otumba.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. The immense Otumba valley in July 1520. A Mexica captain wearing white quilted cotton armor and an imposing feather battle standard stands among an organized army; a small distant group of Spanish horsemen descends from a dry hillside. Broad dusty landscape, dramatic scale and clashing banners before engagement, no gore or wounded people. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_lake",
+    "title": "호수의 포위",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_lake.webp",
+    "source": "sources/legend-events__aztec_lake.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Lake Texcoco in 1521. Low wooden Spanish brigantines equipped with two masts, white sails and oars maneuver among numerous Mexica canoes with shield-bearing crews. The distant island city of Tenochtitlan under a smoky sky. View low over the lake, wind-filled sails, spray and dramatic clouds. No visible injuries or gore, no modern vessels. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_fall",
+    "title": "독수리가 내려앉다",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_fall.webp",
+    "source": "sources/legend-events__aztec_fall.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Tlatelolco lake shore, August 1521, somber rain clouds. A canoe intercepted beside a Spanish wooden brigantine carries Cuauhtemoc, a young adult Mexica emperor standing erect in a dignified turquoise cloak. Damaged stepped temples and stucco dwellings behind him. Respectful tragic tableau, no violence, no gore, no colonial buildings. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/aztec_escape",
+    "title": "마지막 밤의 카누",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/aztec_escape.webp",
+    "source": "sources/legend-events__aztec_escape.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A secret escape across Lake Texcoco in 1521. Rain falls over a dark reed bed; a narrow canoe glides silently away from distant torchlight. At the bow a proud young adult Mexica warrior holds an eagle helmet in his lap, bareheaded and wearing a simple cotton mantle. Moonlit water and mist, quiet hope, no injuries. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/joan_of_arc_stake",
+    "title": "화형대 앞의 잔",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/joan_of_arc_stake.webp",
+    "source": "sources/legend-events__joan_of_arc_stake.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A French forest-edge village square in a storybook version of the late medieval era. Joan of Arc, a determined young adult woman with short dark chestnut hair in a worn modest tunic and trousers, stands with loosely bound wrists beside an unlit stack of firewood and a timber post. A concerned priest tries to calm a crowd, a stern armed accuser in the distance. No fire touching anyone, no torture, no injuries. Focus on her courage and the chance of rescue. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/joan_of_arc_rescue",
+    "title": "풀려난 잔",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/joan_of_arc_rescue.webp",
+    "source": "sources/legend-events__joan_of_arc_rescue.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. The same French village square after a successful rescue. Joan of Arc, young adult with short dark chestnut hair and modest worn tunic and trousers, holds her newly freed hands and a small wooden cross, proud relieved expression. Cut loose rope on the ground beside an unlit wooden post. The rescuer is only a cloaked shoulder at the edge, no fixed face. The crowd disperses, warm sunlight through clouds, no injuries or violence. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/peter_pan_vanish",
+    "title": "비어 있는 잠자리",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/peter_pan_vanish.webp",
+    "source": "sources/legend-events__peter_pan_vanish.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A deserted Hebridean island campsite at dawn. Purple heather-covered hills, embers of a small campfire, an empty folded wool blanket and a neatly laid child-sized coat. A small paper note lies face-down so no writing is visible. Seabirds above a distant rocky ridge, sea mist. No people. Quiet unsettling absence, richly textured grass and canvas. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "legend-events/peter_pan_return",
+    "title": "바람을 타고 온 소년",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/legend-events/peter_pan_return.webp",
+    "source": "sources/legend-events__peter_pan_return.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A windy rocky Hebridean hillside with medicinal herbs. An original mischievous boy about twelve with tousled chestnut hair, freckles, a patched brown tunic of dry leaf layers and moss-dyed homespun wool, sea-grey scarf, rope belt and bare feet floats gently down holding a young apprentice sailors hand. Adult sailors carrying herb baskets look upward, a caravel anchored in the bay behind. Warm reunion. No pointed cap, green tights, pointed ears or film character styling. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/es_rescued",
+    "title": "해적 요새에서 구한 왕녀",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/es_rescued.webp",
+    "source": "sources/events__princess__es_rescued.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A rescued adult Spanish princess emerges from a Red Sea pirate fortress storeroom at sunset. Wavy brown hair, pearl-edged jeweled hood and light veil, blue gold-brocade gown with burgundy cloak, travel-worn but unharmed. She takes an offered gloved hand from a captain seen only from behind at the left edge, face and gender not defined. Sandstone arch, harbor and waiting caravel, relieved expression. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/es_return",
+    "title": "왕녀의 귀환",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/es_return.webp",
+    "source": "sources/events__princess__es_return.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A Spanish Renaissance palace hall at Seville. An adult princess with wavy brown hair, pearl-edged jeweled hood, light veil, navy blue gold-brocade gown and burgundy cloak returns safely. An older king in dignified dark Renaissance court dress welcomes her with open arms. Courtiers respectfully watch from a distance. Warm golden window light, emotional homecoming. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/es_wedding",
+    "title": "부마의 혼례",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/es_wedding.webp",
+    "source": "sources/events__princess__es_wedding.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A Spanish Renaissance royal wedding in a candlelit palace chapel. The adult bride with wavy brown hair, pearl-edged veil and ivory gown with navy blue and gold brocade offers a ring toward a captain whose gloved hand and formal cloak are visible only from the rear edge, without a fixed face or gender. A priest, flowers and distant courtiers. Hopeful soft light, dignified royal ceremony. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/eliz_tower",
+    "title": "런던 탑의 공주",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/eliz_tower.webp",
+    "source": "sources/events__princess__eliz_tower.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A young adult Tudor princess Elizabeth inside a stone tower room at night. Auburn chestnut hair beneath a pearl-edged Tudor hood, crimson velvet gown, white high-neck embroidered chemise and pearls, green-gold bodice. Standing by a narrow window overlooking the Thames and Tower of London. Embroidery on a small table, candlelight and cold moonlight, pensive resolve. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/eliz_safe",
+    "title": "무사히 닿은 항구",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/eliz_safe.webp",
+    "source": "sources/events__princess__eliz_safe.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. An adult Tudor princess Elizabeth steps ashore at a quiet English port in early morning. Auburn hair, pearl-edged Tudor hood, crimson velvet cloak over white and green-gold court dress. She glances back gratefully toward a captain shown as a distant cloaked back, no fixed face or gender. Tudor timber houses, dock ropes and a waiting caravel, safe refuge after an anxious crossing. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/eliz_knight",
+    "title": "여왕의 기사",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/eliz_knight.webp",
+    "source": "sources/events__princess__eliz_knight.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. Elizabeth I, an adult Tudor queen with auburn hair, pearls and a white and gold embroidered gown with crimson mantle, ceremonially rests a sword gently on the shoulder of a kneeling naval captain seen only from behind with obscured face and gender. A grand English palace hall, attentive courtiers, a shaft of gold light. A solemn award of knighthood, not combat. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/court_rescue",
+    "title": "왕녀가 돌아온 궁정",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/court_rescue.webp",
+    "source": "sources/events__princess__court_rescue.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A royal homecoming rendered as a symbolic Renaissance court scene usable for different kingdoms. Open palace doors reveal a safe harbor and anchored sailing ship; a rescued royal adult woman and her welcoming family appear as small distant backlit figures with no identifiable faces, specific nationality or heraldry. A travel cloak, pearls and flowers in the foreground. Golden relief and welcome, focus on environment. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/princess/royal_wedding",
+    "title": "두 왕실의 혼인",
+    "size": [
+      1881,
+      836
+    ],
+    "target": "images/events/princess/royal_wedding.webp",
+    "source": "sources/events__princess__royal_wedding.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A symbolic royal marriage announcement in a Renaissance court usable for different kingdoms. On a silk-covered foreground table: two wedding rings, a rolled diplomatic marriage parchment with wax seals and no readable writing, white flowers and a pearl-edged veil. Distant backlit adult royal silhouettes beneath two unmarked ceremonial banners. No identifiable faces or national heraldry. Warm grand palace light, focus on objects. Compose as an ultra-wide cinematic 2.25:1 landscape, face and important objects comfortably within the middle 75 percent height."
+  },
+  {
+    "key": "events/colony/found",
+    "title": "새 항구의 첫날",
+    "size": [
+      1600,
+      900
+    ],
+    "target": "images/events/colony/found.webp",
+    "source": "sources/events__colony__found.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A newly founded sixteenth-century ocean port on a tropical bay. Carpenters and local trading partners collaboratively build a wooden pier; a small caravel anchored offshore. Barrels and timber unloaded near a few whitewashed red-tile buildings, temporary awnings and palms. Early settlement scale, no grand palace yet. Welcoming warm afternoon, people small in a wide establishing composition. Compose as a wide 16:9 landscape."
+  },
+  {
+    "key": "events/colony/stage2",
+    "title": "시장과 교회가 선 날",
+    "size": [
+      1600,
+      900
+    ],
+    "target": "images/events/colony/stage2.webp",
+    "source": "sources/events__colony__stage2.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A modest sixteenth-century overseas port town grows around a lively market square. Colorful cloth awnings, grain baskets, local merchants and sailors trade together, beside a newly completed small whitewashed church and bell tower. The wooden harbor and a few caravels remain visible in the background. Warm afternoon, original detailed game environment illustration. Compose as a wide 16:9 landscape."
+  },
+  {
+    "key": "events/colony/stage3",
+    "title": "조합과 감찰관 저택",
+    "size": [
+      1600,
+      900
+    ],
+    "target": "images/events/colony/stage3.webp",
+    "source": "sources/events__colony__stage3.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A growing sixteenth-century overseas port town. A newly built merchants guild hall with timber balcony and a royal inspectors plaster mansion with arcades overlook a cobbled square. Clerks carry ledgers, craftspeople unload crates, local traders meet seafarers. Harbor masts behind low red roofs. Golden afternoon, clear architectural focal points. Compose as a wide 16:9 landscape."
+  },
+  {
+    "key": "events/colony/stage4",
+    "title": "총독령 도시",
+    "size": [
+      1600,
+      900
+    ],
+    "target": "images/events/colony/stage4.webp",
+    "source": "sources/events__colony__stage4.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A flourishing sixteenth-century overseas port seen from its main square. A newly finished governors palace with arcades and twin modest towers overlooks a busy harbor full of sailing ships. Townspeople and local trading families celebrate with unmarked fabric banners and flowers. Warm golden hour, dignified prosperity, no modern structures. Compose as a wide 16:9 landscape."
+  },
+  {
+    "key": "events/colony/governor",
+    "title": "총독 임명장",
+    "size": [
+      1600,
+      900
+    ],
+    "target": "images/events/colony/governor.webp",
+    "source": "sources/events__colony__governor.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A sixteenth-century governors reception hall. An official presents a sealed royal commission on a cushion; a naval captain seen from behind with obscured face receives it. Wax seal, parchment without readable lettering, carved wooden desk, tapestries and candles. An open arched window frames the growing port and its sailing fleet. Formal warm ceremony. Compose as a wide 16:9 landscape."
+  },
+  {
+    "key": "events/home/yard",
+    "title": "마당의 장난감 배",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/yard.webp",
+    "source": "sources/events__home__yard.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A quiet seafarers family courtyard in an early modern harbor town. At the LEFT a shallow wooden water tub holds a little handmade toy sailing boat. Potted herbs and laundry on the RIGHT, low plaster wall and terracotta roofs behind. Late morning sunlight, inviting family warmth. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/harbor",
+    "title": "노을 진 부두",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/harbor.webp",
+    "source": "sources/events__home__harbor.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A tranquil early modern wooden harbor at sunset. Small sailing boats moored on the LEFT and distant ships on the RIGHT, coiled ropes, low bollards and seabirds. Copper sun mirrored on blue water, warm lilac horizon. Open empty central foreground for a dialogue character. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/drawing",
+    "title": "함께 그리는 그림",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/drawing.webp",
+    "source": "sources/events__home__drawing.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A cozy seafarers family room. On a low table at the LEFT lie blank paper, a childs simple drawing of a little sailing ship without letters, charcoal and colored chalk. An arched window and potted herbs at the RIGHT reveal a harbor. Soft warm daylight, inviting activity props. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/shell",
+    "title": "조개 목걸이 선물",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/shell.webp",
+    "source": "sources/events__home__shell.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A warm seafarers family room with a worktable at the LEFT. A handmade necklace of delicate white and pink seashells, loose shells and thread rest beside a simple paper drawing of a toy boat. Sea light from the arched window at the RIGHT. Gentle afternoon intimacy, carefully detailed little keepsakes. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/night",
+    "title": "달빛 드는 방",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/night.webp",
+    "source": "sources/events__home__night.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A quiet early modern family bedroom at night. Wooden bed with a red wool blanket on the LEFT, a small beeswax candle beside it. Arched window on the RIGHT shows the moon, stars and a calm sea. Cool blue moonlight and amber candlelight, gentle safe atmosphere. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/swords",
+    "title": "마당의 목검",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/swords.webp",
+    "source": "sources/events__home__swords.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A sunlit family courtyard in an early modern harbor town. Two wooden practice swords lean against a low bench at the LEFT, a straw training dummy stands on the RIGHT. Plaster garden wall, herbs and terracotta roofs. Friendly martial practice environment, no people, no violence. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/duel",
+    "title": "성장한 아이와 검술 연습",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/duel.webp",
+    "source": "sources/events__home__duel.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. An early modern enclosed practice courtyard at dusk. Two sheathed steel training swords with blunted tips lean on a rack at the LEFT; a straw training dummy and a hanging padded target on the RIGHT. Warm sunset grazing old plaster and stone paving. Calm disciplined training setting, no people, no injuries. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/chart",
+    "title": "함께 펼친 해도",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/chart.webp",
+    "source": "sources/events__home__chart.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A seafarers early modern study. At the LEFT an oak table holds a hand-drawn nautical chart with coastlines but no readable lettering, brass dividers and a compass. At the RIGHT a terrestrial globe and bookshelves. Warm light from an arched window, room for a child dialogue sprite at center. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/pier",
+    "title": "새벽의 낚싯대",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/pier.webp",
+    "source": "sources/events__home__pier.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A quiet early modern harbor fishing pier at dawn. Two simple wooden fishing rods rest safely against low side railings at the LEFT and RIGHT, lines over calm reflective water, a bucket and coiled rope. Distant small sailing boats and pastel horizon. Peaceful shared family activity, empty center. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/book",
+    "title": "책과 깃펜",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/book.webp",
+    "source": "sources/events__home__book.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A warm early modern study set for a family language lesson. Open illustrated books without readable text, a quill in an inkpot and simple wood letter blocks without legible symbols sit on a table on the LEFT. Arched harbor window and bookshelves on the RIGHT. Clear welcoming daylight. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/market",
+    "title": "시장 나들이",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/market.webp",
+    "source": "sources/events__home__market.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A friendly sixteenth-century harbor town market with two produce stalls framing the LEFT and RIGHT, baskets of bread, cheese, fruit and folded cloth under striped awnings. The central walkway remains empty and visually quiet for a dialogue character. A few very small anonymous adult traders in background only, no readable signs. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/chess",
+    "title": "비 오는 날의 체스",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/chess.webp",
+    "source": "sources/events__home__chess.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A cozy early modern family sitting room during light rain. A wooden chessboard with a few carved ivory and dark wood pieces sits on a low table on the LEFT. A warm stone hearth on the RIGHT, wool cushions, rain streaks on a small window. Quiet strategic family game, no people. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/stars",
+    "title": "별로 길을 배우는 밤",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/stars.webp",
+    "source": "sources/events__home__stars.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. An early modern harbor terrace under a rich dark-blue starry sky. A brass mariners quadrant with plumb line rests on a small table on the LEFT; low stone railing and a folded star chart without writing on the RIGHT. Calm sea horizon and distant sailing ship silhouette. No telescope, no modern instruments, no people. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/ledger",
+    "title": "장부와 금화",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/ledger.webp",
+    "source": "sources/events__home__ledger.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A sunlit early modern seafarers home office. Open merchant ledger with indistinct tally marks only, quill, inkpot and modest neat stacks of gold coins on an oak desk on the LEFT. A small lockbox on the RIGHT below an arched window showing a harbor sail. Practical warm atmosphere, no people. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/window",
+    "title": "바다가 보이는 창",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/window.webp",
+    "source": "sources/events__home__window.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A quiet early modern family room with a broad arched window on the LEFT overlooking blue harbor water and distant white sailing ships. Burgundy curtains, a small carved chest and potted herbs on the RIGHT. Warm afternoon light across empty wood floor, reflective peaceful mood, no people. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/dinner",
+    "title": "온 가족의 저녁상",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/dinner.webp",
+    "source": "sources/events__home__dinner.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. An early modern family dining room ready for supper. A long wooden table arranged along the RIGHT has earthenware bowls, bread, a steaming stew pot and two candles. A glowing stone hearth at the LEFT. Empty chairs, simple woven cloth, cozy amber light. No people, calm center foreground. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/easel",
+    "title": "가족 그림을 기다리는 화실",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/easel.webp",
+    "source": "sources/events__home__easel.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A cozy early modern family painting room. A wooden easel and canvas on the LEFT show an unfinished harbor painting with only small indistinct figures, brushes and natural pigment pots below. Folded cloth and flowers on the RIGHT, side window daylight. No readable text, no actual people in the room. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/cake",
+    "title": "생일을 기다리는 과자",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/cake.webp",
+    "source": "sources/events__home__cake.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A warm early modern seafarers home prepared for a family birthday. On a low table on the LEFT, a rustic honey cake topped with three simple small wax candles, no modern frosting or plastic. Wrapped cloth gifts and handmade cloth bunting at the RIGHT. Gentle golden light, empty center, no people. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/vase",
+    "title": "깨진 꽃병",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/vase.webp",
+    "source": "sources/events__home__vase.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. An early modern family room after a small domestic mishap. On the LEFT foreground lie a few clean blue-glazed pottery shards, spilled water and fallen fresh flowers beside a low cabinet. A folded cleaning cloth and empty basin on the RIGHT. No sharp close-up danger or injuries, gentle late-day light, no people. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/bed",
+    "title": "아픈 아이를 돌보는 방",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/bed.webp",
+    "source": "sources/events__home__bed.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. A quiet early modern sickroom prepared for care. An empty wooden bed with soft blue quilt and clean linen pillows on the LEFT, no patient visible. A small basin of water, folded cool cloths and a ceramic cup on a stool, amber candle on the RIGHT. Soft evening light through arched window, protective tender mood, no medical distress. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/barrel",
+    "title": "식량 통 속의 작은 비밀",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/barrel.webp",
+    "source": "sources/events__home__barrel.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. An early modern harbor quay beside a sailing ship. Three wooden provision barrels on the LEFT, one lid slightly ajar with a small neatly folded childs cap and blanket visible inside, no child. A gangplank and coiled rope on the RIGHT, sea and ship masts behind. Gentle playful sense of a discovered stowaway, warm daylight. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  },
+  {
+    "key": "events/home/height",
+    "title": "문틀에 남은 키 자국",
+    "size": [
+      1280,
+      740
+    ],
+    "target": "images/events/home/height.webp",
+    "source": "sources/events__home__height.png",
+    "prompt": "Use case: historical-scene. Asset type: single finished cinematic event illustration for an Age of Sail adventure game. Style: richly detailed painterly realism, restrained oil-paint texture, natural expressive faces, tactile cloth and stone, cinematic atmospheric depth, warm highlights and cool shadows. Original illustration. One continuous wide landscape image, no montage, no panels, no border, no lettering, no captions, no watermark, no modern objects. An early modern seafarers family room. On the LEFT an old wooden doorpost carries several small hand-carved height marks without numbers or writing, a short stool below it. On the RIGHT an arched window shows harbor sails, warm sunlight on wood floor. Moving quiet evidence of a childs growth, no people. Background illustration only: NO PEOPLE, no faces or character silhouettes (except tiny distant traders if explicitly requested). Keep the central third visually quiet because a variable family-member portrait is rendered in front. Main props on the sides. Compose as a wide 1.73:1 landscape."
+  }
+]

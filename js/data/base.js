@@ -494,7 +494,8 @@
     // 물은 식량보다 싸다 (보급값 × waterPrice). 자재(수리용 목재·밧줄·돛천): 한 통 값 = 보급값 × matPrice
     waterPrice: 0.5, matPrice: 3,
     // 바다 위 수리: 내구 1을 고치는 데 드는 자재(통). 새 게임은 자재 matStart통으로 시작
-    matPerHp: 0.4, matStart: 10,
+    //   선장이 없거나 조선기술이 낮은 배는 함대의 가장 좋은 조선기술 × seaRepairShare로 고친다 (1 = 기함과 같은 빠르기 · 2026-10-25)
+    matPerHp: 0.4, matStart: 10, seaRepairShare: 1,
     // 보급에서 식량·물·자재를 줄이면(교역품 자리를 내려고) 이 항구 보급값 × supplyRefund 로 되판다
     supplyRefund: 0.5,
     // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금, 첫 함대(배 ID — 앞의 것이 기함)
