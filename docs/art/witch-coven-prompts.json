@@ -1,0 +1,26 @@
+[
+  {
+    "key": "potion",
+    "prompt": "Use case: illustration-story. Asset type: single cinematic event illustration for a historical fantasy sailing game, ultra-wide 9:4 landscape. The attached contact sheet is ONLY a reference for the adult witches' identities, costumes and painterly style: polished soft semi-realistic romantic fantasy, expressive faces, black lace/velvet/satin gowns, burgundy and gold details, detailed delicate fabrics. Create a new continuous scene, NOT a grid. All characters adults, clothed. No lettering, no title, no captions, no frame, no watermark. Inside a wooden Renaissance ship's galley at night, five witches cooperate to brew restorative potions in a glowing emerald cauldron. A silver-bob witch stirs, a blonde seer measures herbs, two others pour glowing liquid into glass cups, and a brunette in burgundy gives a cup to a weary adult sailor now standing upright and energized. Other adult sailors return to orderly duty in the background. Warm lamps, emerald vapor, ocean through portholes. Clear storytelling, friendly mischievous mood.",
+    "mode": "built-in imagegen",
+    "file": "images/events/witches/potion.png"
+  },
+  {
+    "key": "charm",
+    "prompt": "Use case: illustration-story. Asset type: single cinematic event illustration for a historical fantasy sailing game, ultra-wide 9:4 landscape. The attached contact sheet is ONLY a reference for the adult witches' identities, costumes and painterly style: polished soft semi-realistic romantic fantasy, expressive faces, black lace/velvet/satin gowns, burgundy and gold details, detailed delicate fabrics. Create a new continuous scene, NOT a grid. All characters adults, clothed. No lettering, no title, no captions, no frame, no watermark. On a Renaissance ship's deck at twilight, a group of elegant witches, three prominent women with others behind them, cast flowing golden-violet enchantment ribbons toward adult male sailor companions. The men stand in a disciplined line, hand over heart, pledge loyalty toward their captain whose back is visible at one edge. Lead brunette witch gestures confidently, blonde witch smiles slyly. Respectful theatrical fantasy magic, no sexual action. Sea, rigging, lamps, warm gold glow.",
+    "mode": "built-in imagegen",
+    "file": "images/events/witches/charm.png"
+  },
+  {
+    "key": "coven_oath",
+    "prompt": "Use case: illustration-story. Asset type: single cinematic event illustration for a historical fantasy sailing game, ultra-wide 9:4 landscape. The attached contact sheet is ONLY a reference for the adult witches' identities, costumes and painterly style: polished soft semi-realistic romantic fantasy, expressive faces, black lace/velvet/satin gowns, burgundy and gold details, detailed delicate fabrics. Create a new continuous scene, NOT a grid. All characters adults, clothed. No lettering, no title, no captions, no frame, no watermark. Thirteen adult witches form a solemn circle on a moonlit ship's deck, exchanging a magical oath of unbreakable loyalty. Four highly detailed women in foreground: silver-bob sorceress, brunette crimson crowned witch, blonde crescent seer, dark-skinned woman in black ivory hat; the other nine as distinct visible women in the circle. Hands linked by thin silver light around a floating glowing thirteen-point sigil. Tender united resolve, moon reflected on ocean, candles protected in lanterns. No written glyphs or readable text.",
+    "mode": "built-in imagegen",
+    "file": "images/events/witches/coven_oath.png"
+  },
+  {
+    "key": "wage_waiver",
+    "prompt": "Use case: illustration-story. Asset type: single cinematic event illustration for a historical fantasy sailing game, ultra-wide 9:4 landscape. The attached contact sheet is ONLY a reference for the adult witches' identities, costumes and painterly style: polished soft semi-realistic romantic fantasy, expressive faces, black lace/velvet/satin gowns, burgundy and gold details, detailed delicate fabrics. Create a new continuous scene, NOT a grid. All characters adults, clothed. No lettering, no title, no captions, no frame, no watermark. In a candlelit Renaissance captain's cabin, adult witches cheerfully refuse their monthly wages: foreground an elegant silver-haired witch pushes a pile of gold coins and a sealed coin pouch back across a wooden table toward an astonished captain, a brunette crimson-crowned witch raises a friendly refusing hand, a black-and-ivory hat witch closes the account ledger, others smile behind. Sixteen witches are implied by the full lively group extending into the background. Magical silver light, rich black lace gowns, warm solidarity and comic surprise. Ledger has no readable writing.",
+    "mode": "built-in imagegen",
+    "file": "images/events/witches/wage_waiver.png"
+  }
+]

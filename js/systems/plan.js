@@ -44,7 +44,7 @@
     var explore = d.how === 'land' ? Math.ceil(gp.land * 2 / 0.3) + 3 : d.how === 'city' ? (gp.land ? Math.ceil(gp.land * 2 / 0.3) + 1 : 1) : 2;
     var spare = Math.ceil((out + explore + back) * 0.2);
     var need = out + explore + back + spare;
-    var wage = 0; s.mates.forEach(function (m) { var md = G.MATE[m.id]; if (md) wage += md.wage; });
+    var wage = G.Cabins ? G.Cabins.wages() : U.sum(s.mates, function (m) { return R.mateWage(m.id); });
     var cashDays = wage > 0 ? Math.floor(s.player.gold / (wage / 30)) : null;
     var supply = s.fleet.ships.length ? Math.min(R.daysOfFood(), R.daysOfWater()) : 0;
     var dueLeft = s.contract && s.contract.disc === d.id ? daysUntil(s.contract.due) : null;

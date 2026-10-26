@@ -204,7 +204,7 @@
     R.tidyCaptains();
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
-      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>' + (G.Banter ? '<span class="tag" title="생김새로 정해진 말투 — 동물·식물을 발견하면 이 말투로 수다를 떤다">말투 · ' + U.esc(G.Banter.toneName(m.id)) + '</span>' : '') + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + d.wage + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
+      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>' + (G.Banter ? '<span class="tag" title="생김새로 정해진 말투 — 동물·식물을 발견하면 이 말투로 수다를 떤다">말투 · ' + U.esc(G.Banter.toneName(m.id)) + '</span>' : '') + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + R.mateWage(m.id) + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
         '<div class="muted" style="font-size:16px;margin:4px 0">' + d.desc + '</div>' +
         '<div style="font-size:16px">' + mateSkills(m, d) + '</div>' +
         (G.Cabins && G.Cabins.growNote(m) ? '<div style="font-size:15px;margin-top:2px" class="muted">선실 수련 · ' + U.esc(G.Cabins.growNote(m)) + '</div>' : '') +
@@ -233,7 +233,7 @@
       var tr = U.el('tr', '', '<td class="pp"></td><td><b>' + U.esc(m.name) + '</b>' + (G.Bio ? G.Bio.link(m.name) : '') + ' <small class="muted">' + (m.g === 'f' ? '여' : '남') + '</small></td>' +
         '<td>' + (m.witch ? '<span class="tag">' + (m.legend ? '전설의 마녀' : '마녀') + '</span>' : U.esc(m.natName + ' · ' + m.typeName) + (m.prevName ? ' <small class="muted">(' + (m.gen + 1) + '세대)</small>' : '')) + '</td>' +
         '<td>' + Object.keys(m.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + m.sk[k]; }).join(' · ') + '</td>' +
-        '<td>' + U.num(m.fame) + '</td><td>' + m.wage + '닢</td><td>' + (at ? U.esc(at.name) : '—') + '</td>');
+        '<td>' + U.num(m.fame) + '</td><td>' + R.mateWage(m.id) + '닢</td><td>' + (at ? U.esc(at.name) : '—') + '</td>');
       try { tr.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 48)); } catch (e) { /* 그림 없음 */ }
       tb.appendChild(tr);
     });

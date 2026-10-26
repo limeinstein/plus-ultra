@@ -245,9 +245,12 @@
   if (G.MATE_ZONES && !G.MATE_ZONES.namerica) G.MATE_ZONES.namerica = { name: '북아메리카 개척지', ids: [246, 247, 249, 250, 251, 252, 253, 254, 255, 256, 258, 259, 261, 262, 263] };
 
   // 마녀를 항해사 명부에 올린다 (여성 · 마녀는 witch, 전설은 legend)
-  W.forEach(function (w) {
+  W.forEach(function (w, wi) {
+    // 모임을 이루는 첫 열여섯 마녀는 같은 묶음으로 제작한 전용 얼굴·무릎상을 쓴다.
+    // 뒤의 역사 인물은 기존 고장별 얼굴을 유지한다.
+    var witchFace = wi < 16 ? 'portraits/witches/witch_' + String(wi + 1).padStart(2, '0') : null;
     var m = { id: w.id, name: w.name, g: 'f', witch: true, legend: !!w.legend, old: !!w.old, bornY: w.bornY, st: w.st, sk: w.sk, lg: w.lg, fame: w.fame, wage: w.wage, y: w.y, reg: [], desc: w.desc, style: w.style, role: w.role,
-      face: 'portraits/npc-roles/' + w.style + '/' + w.role };
+      face: witchFace || 'portraits/npc-roles/' + w.style + '/' + w.role };
     if (G.MATES && !G.MATE[w.id]) { G.MATES.push(m); G.MATE[w.id] = m; }
     if (G.MATE_RANGE) G.MATE_RANGE[w.id] = { zones: w.zones, home: w.home };
     if (G.BIOS) G.BIOS[w.name] = w.bio;

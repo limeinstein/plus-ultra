@@ -803,7 +803,7 @@
   K.halfFor = function (chain) {
     chain = [].concat(chain || []);
     var out = [], picked = I.pick(chain);
-    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals|fairy-tales)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
+    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals|witches|fairy-tales)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
     if (picked && /^maid-styles\//.test(picked) && !/_half$/.test(picked)) out.push(picked + '_half');   // 이름 없는 그 고장 여급 (술집 여급 무릎상과 같은 그림)
     if (picked && /^portraits\/(npc|npc-roles)\//.test(picked)) {
       out.push(picked + '_half');
@@ -812,7 +812,7 @@
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
-  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary|fairy-tales)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary|witches|fairy-tales)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
   /** 마을 사람 무릎상: 지금 보이는 얼굴과 같은 기존 무릎상을 먼저 쓴다. */
   K.npcHalf = function (id, c) {
     var own = K.halfOf(K.npc(id, c));

@@ -421,7 +421,7 @@
   CB.wages = function () {
     var s = S(), w = 0;
     var seen = {};   // 같은 사람이 두 줄이어도 한 번만
-    s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d && !seen[m.id]) { seen[m.id] = 1; w += d.wage || 0; } });
+    s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d && !seen[m.id]) { seen[m.id] = 1; w += R().mateWage(m.id); } });
     return Math.round(w * Math.max(0.5, 1 - CB.fx('account', 'wage')));
   };
   /** 지금 재산으로 급료를 몇 달 버티나 */
@@ -445,7 +445,7 @@
       var idle = (!m.role || m.role === 'none') && m.room == null;
       if (idle) lo -= b.idleLoyal == null ? 2 : b.idleLoyal;
       else if (paid && lo < (b.settle || 70)) lo += adj;
-      m.loyal = U.clamp(lo, m.id === 'rocco' ? 5 : 0, 100);
+      R().setLoyal(m, U.clamp(lo, m.id === 'rocco' ? 5 : 0, 100));
       if (m.loyal <= 0) { s.leaving = s.leaving || []; if (s.leaving.indexOf(m.id) < 0) s.leaving.push(m.id); }
     });
     if (paid) { var w = CB.wageWarning(); if (w) out.push({ icon: 'coin', text: (R().purser() ? '경리' : '부관') + ': 급료가 한 달 ' + U.num(w.wage) + '닢 — 가진 돈으로 ' + Math.max(0, w.months) + '달 버틴다.' }); }

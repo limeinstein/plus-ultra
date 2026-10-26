@@ -14,7 +14,11 @@ const OUT = path.join(ROOT, 'artifacts', 'portrait-knee-extension');
     args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
   const errors = [];
-  page.on('requestfailed', r => { if (!/fonts\.(googleapis|gstatic)/.test(r.url())) errors.push(r.url() + ': ' + r.failure().errorText); });
+  page.on('requestfailed', r => {
+    const why = (r.failure() || {}).errorText || '';
+    // 장면을 빠르게 바꾸며 캡처할 때 이전 음악 요청을 브라우저가 취소하는 것은 정상이다.
+    if (!/fonts\.(googleapis|gstatic)/.test(r.url()) && !(/\/music\/.*\.mp3(?:\?|$)/.test(r.url()) && /ERR_ABORTED/.test(why))) errors.push(r.url() + ': ' + why);
+  });
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load resource/.test(m.text() + ' ' + ((m.location() || {}).url || ''))) errors.push(m.text()); });
   try {
@@ -43,7 +47,9 @@ const OUT = path.join(ROOT, 'artifacts', 'portrait-knee-extension');
       return { counts: Object.fromEntries(groups.map(g => [g, all[g].length])), missing, mismatch,
         paths: groups.flatMap(g => all[g].map(k => k + '_half')) };
     });
-    assert.deepStrictEqual(coverage.counts, { rivals: 31, npc: 35, 'npc-roles': 240, mates: 91 });
+    // 전용 초상은 계속 늘어난다. 예전 수량을 정확히 고정하면 그림을 정상 추가해도 시험이 깨진다.
+    const minimum = { rivals: 31, npc: 35, 'npc-roles': 240, mates: 91 };
+    Object.keys(minimum).forEach(group => assert(coverage.counts[group] >= minimum[group], group + ' 초상 수가 기준보다 줄었다'));
     assert.deepStrictEqual(coverage.missing, []);
     assert.deepStrictEqual(coverage.mismatch, []);
     const failedLoads = await page.evaluate(async paths => {

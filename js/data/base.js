@@ -92,7 +92,7 @@
     return n >= K.from ? Math.min(K.max, Math.round((K.base + K.per * n) / 5) * 5) : 0;
   };
   /** 합류 알림에 붙일 품삯 한 마디 */
-  G.wageNote = function (id) { var m = G.MATE && G.MATE[id]; return m && m.wage ? '월 품삯 ' + m.wage + '닢' : '품삯 없음'; };
+  G.wageNote = function (id) { var m = G.MATE && G.MATE[id], w = G.R && G.R.mateWage ? G.R.mateWage(id) : (m && m.wage); return w ? '월 품삯 ' + w + '닢' : '품삯 없음'; };
   G.JOBS = [
     { id: 'explorer', name: '탐험가', desc: '항해와 측량에 능하다. 처음 시작하는 제독에게 권한다.', skills: { nav: 2, survey: 2, ops: 1 } },
     { id: 'digger', name: '발굴자', desc: '역사와 웅변에 밝아 유적을 찾는 데 강하다.', skills: { hist: 2, speech: 2 } },
@@ -560,6 +560,11 @@
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).
     // 떠도는 고장: 제 나라 고장에 더해 farZone 확률로 먼 고장 하나를 더 다닌다. 마녀 전설(legend)은 한 세대에 legendMax명까지 소문이 돈다
     wander: { perYear: 5, startN: 12, cycle: 30, epoch: 1480, rebornMax: 30, keepNation: 0.55, keepGender: 0.7, farZone: 0.35, legendMax: 2 },
+    // 마녀 모임: 조건은 누적. 첫 사건 뒤에는 gap일 간격, 각 사건은 days일 뒤 다시 열린다.
+    coven: { gap: 3, luck: 5, luckMax: 99, fatigue: 25, discipline: 15, theftRate: 0.05, theftMax: 3000, maleLoyal: 20,
+      oathCount: 13, freeCount: 16,
+      stages: { curse: { count: 3, days: 30 }, potion: { count: 5, days: 20 }, new_fashion_party: { count: 7, days: 60 },
+        charm: { count: 10, days: 30 }, coven_oath: { count: 13 }, wage_waiver: { count: 16 } } },
     // 고장 사람: 어느 5년 칸에도 고장(G.MATE_ZONES)마다 사람 사는 도시 수 × ratio명쯤의 항해사 후보가 있게, every해마다 세어 모자라면 그 고장 태생으로 채운다. extraLang: 다른 말 하나를 알 확률
     regionFolk: { ratio: 0.8, every: 1, extraLang: 0.15, maxPerFill: 400 },
     // 부하와 이야기 (matetalk.js): 하루 한 번 이야기(충성 chatLoyal·호감 chatAff), 한잔(값 drinkCost × 도시 크기, 충성 drinkLoyal·호감 drinkAff).

@@ -455,7 +455,7 @@
       var b = (G.BALANCE && G.BALANCE.mates) || {};
       var pr = U.clamp((b.persuade == null ? 0.25 : b.persuade) + 0.1 + (R.stat('cha') - 50) / 200 + R.skill('speech') * (b.persuadeSpeech || 0.12) + (kids.length ? 0.1 : 0) - (w.warned ? 0.15 : 0), 0.05, 0.85);
       if (U.chance(pr)) {
-        m.loyal = 40; w.warned = s.day;
+        R.setLoyal(m, 40); w.warned = s.day;
         await UI.say(U.pick(LEAVE.keepOk), duo(w, 'warm'));
         UI.toast(nm + U.jx(nm, '을/를') + ' 붙잡았다. (충성 40) — 다음에 또 바닥나면 붙잡기 더 어렵다.', 'heart', 5200);
         G.State.log(nm + U.jx(nm, '이/가') + ' 떠나려 했으나 마음을 돌렸다.');   // 조사를 이름에 맞춰 (QA 2026-10-23)
@@ -466,7 +466,7 @@
     }
     if (v === 'home') {
       settle(w, !(s.loc && s.loc.mode === 'city' && s.loc.city === w.city));
-      w.cold = s.day + coldDays(); m.loyal = 0;
+      w.cold = s.day + coldDays(); R.setLoyal(m, 0);
       await UI.say(lf(U.pick(LEAVE.home), w), sp);
       await UI.alert(nm + U.jx(nm, '은/는') + ' 배에서 내려 ' + W.cityName(w) + '의 집으로 갔다.<br><small class="muted">한동안(' + Math.round(coldDays() / 30) + '달쯤) 찾아가도 문을 열어 주지 않는다. 그 뒤에 찾아가면 다시 맞아 준다.</small>', W.ordinal(w));
       G.State.log(nm + U.jx(nm, '이/가') + ' 「더는 당신이랑 못 살겠다」며 ' + W.cityName(w) + '의 집으로 떠났다.');
@@ -549,7 +549,7 @@
     var f = s.fleet, fat0 = f.fatigue || 0;
     f.fatigue = U.clamp(fat0 + (won ? B.fatigueWin : B.fatigueLose), 0, 100);
     f.discipline = U.clamp((f.discipline || 0) - (B.discipline || 0), 0, 100);
-    hm.loyal = p.m === 'rocco' ? 5 : 0;                 // 바닥 — 다음 달(G.Cabins.monthly) 배에서 내리겠다고 나선다
+    R.setLoyal(hm, p.m === 'rocco' ? 5 : 0);            // 열셋의 마녀 결속도 함께 반영한다
     var wl0 = wm.loyal == null ? 70 : wm.loyal; wm.loyal = Math.min(100, wl0 + (won ? B.wifeWin : B.wifeLose));
     p.stage = 'cold'; p.heat = 0; p.cd = s.day + ((G.BALANCE.romance || {}).coldDays || 180) * 3; p.due = null;
     G.State.log(W.ordinal(w) + ' ' + W.name(w) + U.jx(W.name(w), '과/와') + ' 가까워진 ' + hd.name + U.jx(hd.name, '과/와') + ' 갑판에서 결투했다 (' + (won ? '이김' : '짐') + ').');

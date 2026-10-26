@@ -89,14 +89,14 @@
     // wages for companions — 같은 부하가 두 줄이면 먼저 하나로 (두 번 치르지 않게, R.dedupeMates)
     if (R && R.dedupeMates) R.dedupeMates();
     var wage = 0, paid = true, laidUp = !!s.regency;   // 어린 맏아들을 기다리는 동안(js/systems/family.js F.regency): 함대는 닻을 내리고 급료·선실 충성은 멈춘다
-    if (!laidUp) s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d) wage += d.wage; });
+    if (!laidUp) s.mates.forEach(function (m) { wage += R.mateWage(m.id); });
     if (G.Cabins && !laidUp) wage = G.Cabins.wages();        // 회계실이 있으면 조금 덜 든다
     if (wage > 0) {
       if (s.player.gold >= wage) { s.player.gold -= wage; }
       else {
         // unpaid: loyalty drops
         paid = false;
-        s.mates.forEach(function (m) { m.loyal = Math.max(0, (m.loyal == null ? 70 : m.loyal) - 20); });
+        s.mates.forEach(function (m) { R.setLoyal(m, (m.loyal == null ? 70 : m.loyal) - 20); });
         out.push({ icon: 'coin', text: '동료들의 급료(' + U.num(wage) + '닢)를 지불하지 못했다! 불만이 쌓이고 있다.' });
         // 충성이 바닥난 사람은 곧 떠나겠다고 나선다 — 붙잡을 수 있다 (G.Cabins.monthly → farewell)
       }

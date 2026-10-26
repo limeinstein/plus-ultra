@@ -6,6 +6,13 @@
   G.R = R;
 
   R.S = function () { return G.Game.state; };
+  // 충성을 바꾸는 공통 입구: 열셋의 마녀가 함께하면 마녀의 충성 하락을 막는다.
+  R.setLoyal = function (m, value) {
+    var old = m.loyal == null ? 70 : m.loyal;
+    m.loyal = U.clamp(G.Coven && G.Coven.protected(m) ? Math.max(old, value) : value, 0, 100);
+    return m.loyal;
+  };
+  R.mateWage = function (id) { var d = G.MATE[id]; return !d || (G.Coven && G.Coven.freeWage(id)) ? 0 : (d.wage || 0); };
 
   // ---------------------------------------------------------------- city helpers
   R.city = function (id) { return G.CITY_DATA[id]; };

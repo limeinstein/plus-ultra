@@ -374,7 +374,7 @@
       UI.toast('동료들의 충성심이 올랐다. 다음 원정도 함께하겠다고 한다.', 'people', 4200);
     } else {
       var leave = [];
-      s.mates.forEach(function (m) { m.loyal = (m.loyal || 70) - 6; if (m.loyal < 25 && m.id !== 'rocco') leave.push(m); });
+      s.mates.forEach(function (m) { G.R.setLoyal(m, (m.loyal || 70) - 6); if (m.loyal < 25 && m.id !== 'rocco') leave.push(m); });
       leave.forEach(function (m) { s.mates.splice(s.mates.indexOf(m), 1); s.flags['gone_' + m.id] = 1; });
       if (leave.length) await UI.say(leave.map(function (m) { return G.MATE[m.id].name; }).join('·') + U.jx(G.MATE[leave[leave.length - 1].id].name, '이/가') + ' 서운하다며 함대를 떠났다.', {});
       else UI.toast('동료들이 조금 서운해한다. (충성심 −6)', 'people');

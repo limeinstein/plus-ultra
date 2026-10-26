@@ -88,7 +88,7 @@
           p.apart = day;
           if (p.stage === 'wed' || p.stage === 'lover') {
             var stay = here[p.m] ? p.m : here[p.f] ? p.f : null, gone = stay === p.m ? p.f : p.m;
-            if (stay && p.stage === 'wed') { here[stay].loyal = Math.max(0, (here[stay].loyal || 70) - 10); out.push({ icon: 'heart', text: fill(L().widow, p, { a: short(gone), b: short(stay) }) }); }
+            if (stay && p.stage === 'wed') { G.R.setLoyal(here[stay], (here[stay].loyal || 70) - 10); out.push({ icon: 'heart', text: fill(L().widow, p, { a: short(gone), b: short(stay) }) }); }
             else if (stay) out.push({ icon: 'heart', text: fill(stay === p.m ? L().apart : L().apartF, p) });
           }
         }
@@ -104,8 +104,10 @@
       if (p.stage === 'lover' || p.stage === 'wed') {
         if (nr) { var g = b.nearLoyal * (p.stage === 'wed' ? 1.5 : 1); [p.m, p.f].forEach(function (id) { here[id].loyal = Math.min(100, (here[id].loyal || 70) + g); }); }
         s.fleet.discipline = Math.min(100, (s.fleet.discipline || 0) + b.discipline);
-        if (!st.done && !p.due && day >= (p.cd || 0) && U.chance(b.quarrel * (nr ? 1 : 2))) p.due = 'quarrel';
+        // 혼례 조건을 채운 날에는 무작위 다툼보다 혼례를 먼저 연다.
+        // 다툼을 먼저 뽑으면 충분히 오래 사귄 연인의 혼례가 운에 따라 계속 밀릴 수 있었다.
         if (p.stage === 'lover' && !p.due && p.heat >= b.steps.wed && day - (p.since || day) >= b.wedDays) p.due = 'wed';
+        if (!st.done && !p.due && day >= (p.cd || 0) && U.chance(b.quarrel * (nr ? 1 : 2))) p.due = 'quarrel';
       } else if (!p.due && NEXT[p.stage] && p.heat >= b.steps[NEXT[p.stage]]) p.due = NEXT[p.stage];
     });
     // 2) 아직 아무와도 엮이지 않은 여자 부하: 가장 잘 맞는 남자 부하에게 끌린다 — 완성된 커플이 있거나 이어지는 커플이 있으면 없음, 3년 넘은 부하끼리만
@@ -159,7 +161,7 @@
   async function choose(p, list, extra) {
     return UI.ask('어떻게 할까?', list.map(function (c) { return { label: fill(c[0], p, extra), value: c[1] }; }), {});
   }
-  function loyal(id, n) { var m = mateRow(id); if (m) m.loyal = U.clamp((m.loyal || 70) + n, 0, 100); }
+  function loyal(id, n) { var m = mateRow(id); if (m) G.R.setLoyal(m, (m.loyal || 70) + n); }
   function disc(n) { var f = S().fleet; f.discipline = U.clamp((f.discipline || 0) + n, 0, 100); }
   function log(t) { G.State.log(t); }
   function names(p) { return G.MATE[p.m].name + U.jx(G.MATE[p.m].name, '과/와') + ' ' + G.MATE[p.f].name; }

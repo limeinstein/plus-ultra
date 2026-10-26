@@ -478,6 +478,16 @@
     var title = typeof B.title === 'function' ? B.title(c, arg) : B.title;
     UI.cmdMenu(title, B.sub ? B.sub(c, arg) : '', items, { top: 72 });
     if (B.panel) { var pn = B.panel(c, arg); if (pn) UI.add(pn); }
+    // 어느 건물에서든 구석의 책 아이콘으로 수첩을 열고, 닫으면 이 메뉴로 돌아온다.
+    var notebook = U.el('button', 'btn bld-notebook', G.icon('book'));
+    notebook.type = 'button';
+    notebook.title = '항해 수첩';
+    notebook.setAttribute('aria-label', '항해 수첩 열기');
+    notebook.onclick = function (e) {
+      e.stopPropagation(); notebook.blur();
+      C.run(function () { return G.Info.open(); });
+    };
+    UI.add(notebook);
   };
   /** run a building command; re-render the menu afterwards if still inside */
   C.run = async function (fn) {

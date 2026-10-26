@@ -433,6 +433,9 @@ input[type=range] { accent-color: #2a4a70; width: 100%; }
 .good-text { color: #2e6a36; }
 
 /* ---------------------------------------------------------------- city extras */
+.btn.bld-notebook { position: absolute; left: 18px; bottom: 16px; z-index: 18; width: 52px; height: 52px; padding: 10px; }
+.btn.bld-notebook svg { width: 28px; height: 28px; }
+#ui.talking .bld-notebook, #ui.homeart-on .bld-notebook { visibility: hidden; pointer-events: none; }
 .infobar { position: absolute; left: 18px; bottom: 16px; display: flex; gap: 6px; padding: 8px 10px; z-index: 15; }
 .infobar .btn { font-size: 15px; min-height: 36px; padding: 4px 11px; gap: 6px; }
 .infobar .btn svg { width: 18px; height: 18px; }
