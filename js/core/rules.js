@@ -628,7 +628,7 @@
     '노동력부족': { cats: { craft: 1.3, cloth: 1.25 } }
   };
   R.MARKET_EVENTS = EVENTS;
-  /** 시세의 출렁임 (대항해시대 2·3처럼 도시마다 품목 갈래의 값이 천천히 오르내린다): 도시·갈래마다 정해진 주기와 폭의 물결 두 개 */
+  /** 시세의 출렁임 (도시마다 품목 갈래의 값이 천천히 오르내린다): 도시·갈래마다 정해진 주기와 폭의 물결 두 개 */
   R.drift = function (cityId, cat, day) {
     var S = R.S(), B = G.BALANCE || {}, A = B.driftAmp || [0.08, 0.15], P = B.driftPeriod || [70, 200];
     var h = U.strHash('drift:' + cityId + ':' + cat) >>> 0, d = day == null ? S.day : day;
@@ -737,7 +737,7 @@
     }
     return out;
   };
-  // 물량·기울기는 G.BALANCE.market (큰 배로 많이 사고팔수록 남게 — 대항해시대 2처럼)
+  // 물량·기울기는 G.BALANCE.market (큰 배로 많이 사고팔수록 남게)
   function MK() { return (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }); }
   R.onBuy = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); st.dep += q / (K.dep[0] + c.size * K.dep[1]); };
   /** 이 시장이 이 물건을 받아 줄 양 (포화 1에 해당하는 통 수): 그 고장 산물이면 적게(prodCap), 들여와 파는 물건이면 조금 적게(relayCap) */

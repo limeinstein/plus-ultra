@@ -69,7 +69,7 @@
   };
   function autoIds(c) {
     if (!G.Routes) return [];
-    return G.Routes.reachable(c.id)   // 곧장 오간 항구 + 이어진 항로망의 항구 (js/systems/routes.js — 대항해시대 4처럼)
+    return G.Routes.reachable(c.id)   // 곧장 오간 항구 + 이어진 항로망의 항구 (js/systems/routes.js)
       .filter(function (id) { var o = G.CITY_DATA[id]; return o && o.port && R.cityExists(o); });
   }
   /** 이 항구에서 자동항해로 갈 수 있는 항구 수 (출항 질문에 쓴다 — 날수는 셈하지 않는다) */
@@ -373,7 +373,7 @@
     if (G.Cargo) return G.Cargo.supplyFree(stores, crew, cargo);
     return R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0) - Math.ceil(stores.food) - Math.ceil(stores.water) - Math.ceil(stores.mat || 0);
   }
-  /** 보급: 식량(일분)·물(일분)·자재(통)를 따로 싣는다 (대항해시대 2식). 셋 다 짐칸을 차지한다 */
+  /** 보급: 식량(일분)·물(일분)·자재(통)를 따로 싣는다. 셋 다 짐칸을 차지한다 */
   /** 보급: 식량·물·자재를 날수(자재는 통)로 맞춘다. 늘리면 사고, 줄이면 이 항구 보급값 × G.BALANCE.supplyRefund 로 되판다 —
       교역소에서 짐을 더 실으려고 식량·물을 덜어 낼 때 (교역소에서 짐칸이 꽉 차면 여기로 불러온다: opts.need = 비우고 싶은 칸) */
   H.supply = async function (c, opts) {

@@ -213,7 +213,7 @@
         try { if (r) P.countFind(d); } catch (e) { console.error(e); }
         return r;
       };
-      P.findHooked = true;   // (js/systems/ytmusic.js가 나중에 한 겹 더 감싼다 — 사슬은 그대로)
+      P.findHooked = true;   // (js/systems/musicmoments.js가 나중에 한 겹 더 감싼다 — 사슬은 그대로)
     }
     // 도시에 들어서면: 제페토가 아들을 맡긴다
     var oa = Cc.arrival;

@@ -236,7 +236,7 @@
     return src + G.Disc.hintText(d) + ' ' + T.whereText(c, d);
   };
   // ---------------------------------------------------------------- 현지 소문: 이미 아는 목표의 방향을 좁힌다
-  // 책·소문이 '무엇이 있는가'를 알려 준다면, 그 고장 사람들은 '어느 쪽으로 며칠'을 알려 준다 (대항해시대 3의 현지 소문)
+  // 책·소문이 '무엇이 있는가'를 알려 준다면, 그 고장 사람들은 '어느 쪽으로 며칠'을 알려 준다 (현지 소문)
   var ASK_RANGE = 24;
   /** 이 도시에서 물어볼 만한 목표: 단서가 있거나 계약한, 아직 못 찾은 곳 중 가까운 것 */
   T.targets = function (c) {
@@ -574,7 +574,7 @@
     return win.result;
   };
   var STATN = ['힘', '지력', '무력', '매력'];
-  /** 대항해시대식 인물 카드: 초상 · 능력치 · 특기 · 말 */
+  /** 인물 카드: 초상 · 능력치 · 특기 · 말 */
   function mateCard(m, c, onPick, pickLabel, onBack) {
     var s = S(), cm = comm(m), lock = s.player.fame < m.fame;
     var wrap = U.el('div', 'mcard');

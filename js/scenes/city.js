@@ -225,7 +225,7 @@
       if (rt) parts.push(rt.open ? '자동항해 가능' : '항로 경험 ' + rt.n + '/' + rt.need + (rt.long ? ' (장거리)' : ''));
       if (days > 0 && v.from !== c.id) UI.toast(G.CITY_DATA[v.from].name + ' → ' + c.name + ' · ' + parts.join(' · '), 'log', 5500);
       if (rt && rt.opened) news.push({ icon: 'map', text: G.CITY_DATA[v.from].name + '–' + c.name + ' 항로를 익혔다' + (rt.long ? ' (장거리)' : '') + '. 이제 두 항구 사이는 목적지만 고르면 자동항해로 갈 수 있다 (오는 길도).' });
-      if (rt && rt.linked && rt.linked.length) news.push({ icon: 'map', text: '이어진 항로망을 따라 ' + c.name + '에서 ' + rt.linked.slice(0, 6).map(function (x) { return G.CITY_DATA[x].name; }).join('·') + (rt.linked.length > 6 ? ' 외 ' + (rt.linked.length - 6) + '곳' : '') + '까지도 자동항해로 갈 수 있게 되었다.' });   // 대항해시대 4처럼 (js/systems/routes.js)
+      if (rt && rt.linked && rt.linked.length) news.push({ icon: 'map', text: '이어진 항로망을 따라 ' + c.name + '에서 ' + rt.linked.slice(0, 6).map(function (x) { return G.CITY_DATA[x].name; }).join('·') + (rt.linked.length > 6 ? ' 외 ' + (rt.linked.length - 6) + '곳' : '') + '까지도 자동항해로 갈 수 있게 되었다.' });   // js/systems/routes.js
       delete s.voyage;
     }
     if (news.length) await C.news(news);
@@ -418,7 +418,7 @@
     }
     G.Game.setScene(C.interior(ikind, c, ivar));
     plaque(B, c, arg);
-    if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(kind);     // 건물의 곡: 주점(기존 음악·OST) · 왕궁·귀족 알현(OST) — 겹쳐 쌓이지 않는다
+    if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(kind);     // 건물의 곡: 주점·왕궁 — 겹쳐 쌓이지 않는다
     if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
     var ok = true;
     try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }

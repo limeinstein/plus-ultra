@@ -11,13 +11,10 @@
     homeArt: { w: 900, h: 520, top: 78 },
     // 집 외관 높이: 평민·유력자·남작·백작·공작 (거리의 다른 건물과 견줄 때)
     homeBuilding: { heights: [340, 390, 415, 465, 520] },
-    famScene: { w: 1008, top: 74 },
-    // 내 컴퓨터의 코스타 델 솔 MP3 (js/systems/localost.js): 곡을 바꿀 때 겹쳐 바꾸는 초 fade · 곡 끝에서 처음과 겹쳐 돌리는 초 loopFade ·
-    //   이 초 안에 같은 곡으로 돌아오면 이어서 resumeSec · 곡 이름이 떠 있는 초 showSec(0 = 안 띄움) · 음악 크기에 곱하는 값 gain · 파일 찾기 기다림 probeMs
+    famScene: { w: 1008, top: 74 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
     // 불러오는 그림 (js/ui/loader.js): 적어도 minShow ms 보여 주고 fadeMs 에 걸쳐 걷는다 · 장면 사이 검은 막이 fadeAfter ms 넘게 걸리면 작게 띄운다 ·
     //   게임을 시작할 때 그림 받기를 기다리는 가장 긴 시간 prepareMs · 도시에 들어서 앞바다를 미리 그리기 시작하는 때 cityWarmMs
     loader: { minShow: 450, fadeMs: 450, fadeAfter: 350, prepareMs: 5000, cityWarmMs: 1500 },
-    localOst: { fade: 2.5, loopFade: 3, resumeSec: 300, showSec: 3.2, gain: 0.9, probeMs: 6000 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
     // 자택 화면에 서 있는 가족 (homelife.js familyPanel): 어른 키 h, 설 자리(왼쪽·아래·너비), 옆 사람과 겹치는 비율
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
     // 기함 선실 화면 (js/ui/cabinview.js): 무대(배 그림) 크기, 오른쪽 명단 폭, 선체 속 선실 표·갑판 얼굴표 크기, 배 그림을 자르는 여백, 카드 최대 폭, 명단 높이
@@ -341,9 +338,6 @@
   G.FX.townHeroIdle = { fps: 12, sec: 2.4, scaleY: 0.004 };
   // 제독 달리기 아틀라스(49칸에 약 4걸음)를 넘기는 빠르기 칸/초 — 62면 한 걸음이 0.19초쯤 (js/scenes/town.js)
   G.FX.heroRun = { fps: 62 };
-  /** 코스타 델 솔 3 OST 유튜브 재생기 창 (js/systems/ytmusic.js) — 유튜브 규칙상 200×200보다 작게 하거나 숨길 수 없다.
-     w·h 재생기 크기 · idle 마우스를 올리지 않았을 때 흐림(0~1) · flash 곡이 바뀌면 또렷하게 보이는 초 · gap 구석에서 띄우는 px */
-  G.FX.ostBox = { w: 200, h: 200, idle: 0.5, flash: 2.5, gap: 8 };
   // 해전 물보라: 4×2칸, 각 256px. 크기는 해전 화면의 기준 px, 수명은 전투 초.
   G.FX.waterSplash = {
     on: true, cell: 256, cols: 4, frames: 8, anchor: [128, 176], max: 48,
@@ -365,6 +359,4 @@
       emerge: { name: '재등장 물기둥', life: 1.6, size: 255, under: false }
     }
   };
-  // 유튜브 OST 곡 돌림 (js/systems/ytmusic.js): 곡 끝 guard초 전에 그 곡 처음으로 되감는다 · 끝에서 줄이고 되감은 뒤 올리는 fade초 · 위치를 보는 간격(ms)
-  G.FX.ostLoop = { fade: 1.5, guard: 0.35, every: 250 };
 })(window.G = window.G || {});

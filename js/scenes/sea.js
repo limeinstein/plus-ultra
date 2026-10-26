@@ -347,7 +347,7 @@
     if (G.Keys.is(e, 'speed2')) { st.speed = 2; buildSpeed(); return true; }
     if (G.Keys.is(e, 'speed3')) { st.speed = 4; buildSpeed(); return true; }
     if (G.Keys.is(e, 'confirm')) { tryEnterPort(); return true; }
-    // 방향키 = 대항해시대 3처럼: 누르고 있는 동안 뱃머리가 그 방위(← 서 · → 동 · ↑ 북 · ↓ 남, 두 키 = 북서·남동 …) 쪽으로
+    // 방향키: 누르고 있는 동안 뱃머리가 그 방위(← 서 · → 동 · ↑ 북 · ↓ 남, 두 키 = 북서·남동 …) 쪽으로
     // 차츰 돌아가고, 떼면 그때 향한 쪽으로 곧게 나아간다. 지그재그 없이 뱃머리 쪽으로 가며(맞바람이면 느림), Space로 정지
     var dirAction = directionAction(e);
     if (!helmMode() && dirAction) {

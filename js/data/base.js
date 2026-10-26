@@ -252,7 +252,7 @@
       { id: 'cut', name: '돛 재단·밧줄 개량', up: 0.08, beam: 0.04, cap: 0, cost: 0.12, lv: 3, desc: '돛을 평평하게 새로 마름질하고 활대를 더 돌릴 수 있게 밧줄을 고친다. 옆바람에도 조금 빨라진다.' },
       { id: 'keel', name: '용골 보강', up: 0.08, beam: 0, cap: -0.04, cost: 0.16, lv: 4, desc: '용골을 깊게 덧대어 배가 바람에 옆으로 밀리지 않게 한다. 바닥짐이 늘어 적재량이 조금 준다.' }
     ],
-    // 제독 만들기 (scenes/create.js) — 대항해시대 3처럼 나이가 많을수록 보너스가 많다.
+    // 제독 만들기 (scenes/create.js) — 나이가 많을수록 보너스가 많다.
     // 능력 보너스 = statPts + (나이 − 18) × statPerYear (체력·지력·무력·매력에 나눠 줌, 한 능력 statMax까지)
     // 특기 점수 = 3 + (나이 − 18) ÷ 4 + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax · 지력 knowTop 이상이면 knowTopPts)
     create: { statPts: 4, statPerYear: 0.5, statMax: 99, knowFrom: 40, knowStep: 15, knowMax: 3, knowTop: 99, knowTopPts: 4 },
@@ -422,7 +422,7 @@
       keepGood: { fish: 150, beef: 120, dairy: 150, potato: 240, maize: 300, wheat: 420, rice: 480, beans: 420, olive: 480, palmoil: 480, sugar: 900, honey: 0, salt: 0, beer: 240, clove: 900, nutmeg: 900, horses: 300 },
       decayMin: 0.5, rotMonth: 0.06
     },
-    // 교역소 물량과 값의 기울기 (대항해시대 2처럼 큰 배로 많이 실어 나를수록 남게) — rules.js R.supply·onBuy·onSell·buyPrice·sellPrice
+    // 교역소 물량과 값의 기울기 (큰 배로 많이 실어 나를수록 남게) — rules.js R.supply·onBuy·onSell·buyPrice·sellPrice
     // 재고 = stock[0] + stock[1] × 도시 크기 · 사면 품귀(dep)가 q / (dep[0] + dep[1] × 크기)만큼 늘고 사는 값 × (1 + depPrice × 품귀)
     // 팔면 포화(sat)가 q / (sat[0] + sat[1] × 크기)만큼 늘고 파는 값 × e^(−satPrice × 포화). 품귀·포화는 25일마다 절반으로
     //   살아 있는 경제(2026-10-07): 시장이 받아 줄 양(sat 분모)은 그 고장 산물이면 ×prodCap, 들여와 파는 물건이면 ×relayCap.

@@ -8,7 +8,7 @@
      crew + n     : 이 항해사들 가운데 n명(없으면 모두)을 한 번이라도 동료로 들였다 (state.crewEver — 떠나거나 죽어도 센다)
      wed + n      : 이 사람들 가운데 n명(없으면 모두)과 혼인했다 (본처·둘째 부인 — state.wedEver, 사별·이혼해도 센다)
      collectionRule: 종류 ID — 현재 등록된 해당 종류의 발견물을 모두 직접 찾는다 (빈 목록은 미달성)
-   보상: fame(탐험 명성) · gold(금화) · title(칭호 — 수첩 「업적」에 모인다). 금액은 대항해시대 3의 수집 보상처럼 크게 잡았다. */
+   보상: fame(탐험 명성) · gold(금화) · title(칭호 — 수첩 「업적」에 모인다). 금액은 크게 잡았다. */
 (function (G) {
   'use strict';
   var A = G.ACHIEVEMENTS = [];

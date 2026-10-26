@@ -31,7 +31,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.dupGood = P.map(d => G.PlantTrade.crop(d)).filter(g => !g || baseNames.indexOf(g.name) >= 0).map(g => g ? g.name : 'none');
       out.goodsTail = G.GOODS.slice(-P.length).every(g => g.plant) && G.GOODS.every((g, i) => g.idx === i);
       out.allPlant = P.every(d => G.Court.isPlant(d) && d.cat === 'creature');
-      out.clue = P.every(d => d.clue ? d.clue !== d.realName : (G.DISC_NAMES[d.id] && G.DISC_NAMES[d.id].clue === d.name)) && P.some(d => d.clue) && P.some(d => !d.clue);   // 2026-10-23: 대항해시대 3처럼 이름 그대로인 것도 있다
+      out.clue = P.every(d => d.clue ? d.clue !== d.realName : (G.DISC_NAMES[d.id] && G.DISC_NAMES[d.id].clue === d.name)) && P.some(d => d.clue) && P.some(d => !d.clue);   // 2026-10-23: 이름 그대로인 것도 있다
       out.noCityGoods = G.CITY_DATA.every(c => !c || !c.goods || !c.goods.some(id => G.GOOD[id] && G.GOOD[id].plant));
       // ---- 새 일지
       await G.Game.ensureGeo();

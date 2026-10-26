@@ -4,7 +4,7 @@
   python tools/outcome_gifs/make_outcomes.py          → images/outcomes/*.gif
   python tools/outcome_gifs/make_outcomes.py --sheet  → 같은 그림의 장면들을 한 장에 늘어놓은 미리보기(tools/outcome_gifs/preview/)
 
-그림은 모두 이 파일에서 새로 그린 픽셀 그림이다 (원작의 그림을 옮기지 않았다).
+그림은 모두 이 파일에서 새로 그린 픽셀 그림이다.
   · 사람은 관절 각도로 움직이는 인형으로 그린다 — 뼈대(엉덩이·무릎·어깨·팔꿈치)의 각도를 장면마다 정하고 그 사이를 이어 그린다.
   · 각도는 「곧게 아래」가 0도, 바라보는 쪽으로 돌수록 +, 머리 위가 180도.
   · 바탕은 240×150 픽셀로 그리고 두 배로 키워 480×300 GIF로 쓴다. 한 번만 돌고 마지막 장면에서 멈춘다.

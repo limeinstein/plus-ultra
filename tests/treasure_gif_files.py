@@ -32,8 +32,8 @@ chain = (ROOT / "js" / "data" / "chaindisc.js").read_text(encoding="utf-8")
 treasures |= set(re.findall(r"^\s*c\('[^']+',\s*'([^']+)',\s*'[^']+',\s*'treasure'", chain, re.M))
 story = (ROOT / "js" / "data" / "story.js").read_text(encoding="utf-8")
 treasures |= set(re.findall(r"^\s*\['(ft_[^']+)',\s*'[^']+'", story, re.M))
-dh3 = (ROOT / "js" / "data" / "dh3disc.js").read_text(encoding="utf-8")
-treasures |= set(re.findall(r"A\.treasure\('([^']+)'", dh3))
+heritage = (ROOT / "js" / "data" / "heritagedisc.js").read_text(encoding="utf-8")
+treasures |= set(re.findall(r"A\.treasure\('([^']+)'", heritage))
 assert set(TREASURE_IDS) == treasures, (set(TREASURE_IDS) ^ treasures)
 
 for did in TREASURE_IDS:

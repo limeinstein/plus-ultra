@@ -1,6 +1,6 @@
 /* 귀환 잔치 (G.Fest) — 큰 발견(세력 3 이상·세계일주·전설)을 후원자에게 보고하거나 항구에서 발표하면 그 도시가 며칠 동안 잔치를 벌인다.
    - 시작할 때: 종·축포 소리와 함께 잔치가 열리는 장면, 부관의 한마디, 선원들 피로가 풀리고 부하들 충성이 조금 오른다
-   - 잔치 동안: 그 도시의 거리 사람들이 잔치 이야기를 하고(js/systems/streetfolk.js), 거리 음악이 잔치 가락으로 바뀐다(js/systems/audio.js · ytmusic.js)
+   - 잔치 동안: 그 도시의 거리 사람들이 잔치 이야기를 하고(js/systems/streetfolk.js), 거리 음악이 잔치 가락으로 바뀐다(js/systems/audio.js)
    - 도시 이름판에 「○○ 귀환 잔치가 한창이다」
    상태: state.fest = { city, disc, name, since, until }  · 대사는 js/data/festival.js */
 (function (G) {
