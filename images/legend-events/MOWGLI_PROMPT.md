@@ -22,6 +22,18 @@ Codex 내장 ImageGen의 참조 이미지 생성 모드로 만들었다. 사용�
 
 수정 모드: Codex 내장 ImageGen `edit` 두 차례 — 첫 번째는 표정과 수염만 수정, 두 번째는 같은 인물을 유지한 채 게임용 반사실적 화풍으로 정리.
 
+## 사건 장면 (2026-10-26)
+
+현재 작업본에 모글리 사건 코드와 장면 키가 아직 없으므로, 늑대 무리와의 첫 조우부터 합류까지 어느 사건 흐름에도 연결하기 쉬운 다섯 장으로 만들었다. 모두 Codex 내장 ImageGen `generate` 모드이며, 확정된 `mowgli_half.png`를 얼굴·체형·복식 참조로 사용했다. 결과는 다른 전설 사건과 같은 1881×836 크기의 WebP로 저장했다.
+
+공통 화풍: 16세기 중앙인도 밀림, 반사실적 수작업 디지털 유화, 사진 같은 모공과 광택을 줄인 게임용 인물화, 글자·UI·테두리·로고·워터마크 없음. 모글리는 검은 곱슬머리와 매끈한 무수염 얼굴, 황토색·짙은 갈색의 해진 천옷을 모든 장면에서 유지한다. 늑대는 회갈색 인도늑대로 그리며 특정 영화·애니메이션의 디자인을 따르지 않는다.
+
+- `mowgli_wolf_ambush.webp` — 푸른 달빛의 야영지를 늑대 무리가 포위하고, 모글리가 반얀나무 가지 위에서 탐험대를 지켜보는 첫 만남.
+- `mowgli_pack_leader.webp` — 아침 햇살 아래 모글리가 늑대와 탐험대 사이에 서서 손바닥을 펴고 무기를 내리게 하는 장면.
+- `mowgli_tiger.webp` — 비 내리는 골짜기에서 모글리와 늑대 무리가 벵골호랑이와 맞서고 탐험대를 뒤로 물리는 장면. 피와 상처는 없다.
+- `mowgli_red_flower.webp` — 밤비 속에서 모글리가 횃불 하나로 늑대 가족을 지키며 호랑이를 밀림으로 물러나게 하는 장면. 산불이나 상처는 없다.
+- `mowgli_farewell.webp` — 황금빛 새벽, 모글리가 자신을 키운 어미 늑대와 이마를 맞대고 환하게 웃으며 작별한 뒤 제독의 손을 잡으려는 장면.
+
 ## 최종 생성 지시문
 
 `Create one original transparent-background character master portrait for a historical adventure RPG, using the attached adult man's facial proportions, expression, tousled black hair, brown eyes and slightly forward three-quarter posture as the identity reference. Mowgli is an adult South Asian man in his early-to-mid twenties, raised alongside wolves in the jungles of central India. Preserve the large alert brown eyes, thick brows, softly serious vulnerable expression, clean-shaven youthful face and messy wavy black hair. Give him a lean, wiry, realistically muscular body shaped by climbing and running. Dress him in loose, weathered, practical, securely opaque handwoven cloth: an asymmetric dark-umber and muted-ochre shoulder drape and a rugged knee-length wrap tied with braided fiber cord. No modern shirt, armor, shoes, jewelry, Disney costume or bright red loincloth. Nonsexual heroic presentation. Head-to-knees composition with the entire head, hands and knees safely in frame; torso turned slightly, one shoulder closer, arms relaxed but ready, direct wary gaze. Subtle scars and jungle dust, warm brown skin, semi-realistic high-detail historical adventure game portrait, soft warm key light and faint jungle-green rim light. Isolated single character only, transparent background, no scenery, wolf, extra person, text, border or weapon. Vertical 2:3, 1024×1536.`
