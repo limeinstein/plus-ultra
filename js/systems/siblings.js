@@ -105,7 +105,7 @@
     var elders = (p.siblings || []).filter(function (k) { return !k.left && !SB.hired(k); });
     if (elders.length) G.State.log(fill(D().elders, null, { names: elders.map(function (k) { return k.name; }).join('·') }));
     var kids = (p.kids || []).slice(), used = {};
-    kids.forEach(function (k) { if (k.name) used[k.name] = 1; });
+    kids.forEach(function (k) { if (k.name) used[Fm.given ? Fm.given(k) : k.name] = 1; });
     // 피터 팬의 섬에서 사라진 채 대가 바뀌면 그 아이는 돌아오지 못한다 — 새 대의 같은 번호 아이를 「되찾지」 않게 이야기를 닫는다 (QA 2026-10-23)
     if (G.Peter && G.Peter.closeLost && s.peter && s.peter.phase === 'lost') { try { G.Peter.closeLost(G.Peter.lostKid ? G.Peter.lostKid() : null); } catch (e) { console.error(e); } }
     var mother = Fm.wifeName ? Fm.wifeName() : '';
@@ -115,7 +115,9 @@
       if (k === heir || k.lost || k.married) return;
       if (k.unnamed || !k.name) {   // 이름이 없는 갓난아기 — 남은 이름 가운데 하나
         var pool = Fm.names(k.sex).filter(function (n) { return !used[n]; });
-        k.name = pool.length ? pool[0] : Fm.names(k.sex)[0]; k.unnamed = false; used[k.name] = 1;
+        var nm = pool.length ? pool[0] : Fm.names(k.sex)[0];
+        if (Fm.setKidName) Fm.setKidName(k, nm); else { k.name = nm; k.unnamed = false; }   // 성은 아버지를 따른다 (family.js)
+        used[nm] = 1;
       }
       // 아이 때의 그림을 그대로 (옛 제독이 사라지면 어머니·순번을 다시 셀 수 없으니)
       if (H) {

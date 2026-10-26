@@ -268,8 +268,9 @@
       if (res.talk && res.talk.length) notes.push('사람들 입으로 전하는 이야기 ' + res.talk.length + '곳(' + res.talk.slice(0, 3).map(function (id) { return G.DISC[id].name; }).join('·') + (res.talk.length > 3 ? ' …' : '') + ') — ' + talkWhere(res.talk) + '에게 물어보자');
       var mo = res.more || [];
       gain = '<div class="bgain parch">' + (res.got.length ?
-        '<div class="gh">이 책에서 얻은 단서</div>' + res.got.map(function (d) { return '<div class="hint-item"><div class="nm">' + U.esc(d.name) + ' <span class="tag">' + G.DISC_CATS[d.cat] + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>'; }).join('') :
-        mo.length ? '' : '<div class="gh">새로 알게 된 것은 없었다.</div>') +
+        '<div class="gh">' + (res.head || '이 책에서 얻은 단서') + '</div>' + res.got.map(function (d) { return '<div class="hint-item"><div class="nm">' + U.esc(d.name) + ' <span class="tag">' + G.DISC_CATS[d.cat] + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>'; }).join('') :
+        mo.length ? '' : '<div class="gh">' + (res.empty || '새로 알게 된 것은 없었다.') + '</div>') +
+        (res.found && res.found.length ? '<div class="gh">이 책에 적힌 곳 가운데 이미 찾은 곳</div><div class="muted gn">' + res.found.map(function (d) { return U.esc(d.name); }).join(' · ') + '</div>' : '') +
         (mo.length ? '<div class="gh">들은 이야기와 맞아떨어진 대목 — 단서가 겹쳐 찾기가 쉬워졌다</div>' + mo.map(function (d) { return '<div class="hint-item"><div class="nm">' + U.esc(d.name) + ' <span class="tag">단서 ' + G.Disc.hintLv(d.id) + '겹</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>'; }).join('') : '') +
         (notes.length ? '<div class="muted gn">' + notes.join(' · ') + '</div>' : '') + '</div>';
     }
@@ -315,6 +316,30 @@
         await UI.say(LB.recall(b) + (res.got.length ? ' 그때는 몰랐던 대목이 이제는 눈에 들어온다.' : ''), meSpk());
       }
     } finally { unpin(); }
+  };
+
+  // ---------------------------------------------------------------- 자택 서고의 필사본 (js/systems/logbooks.js — 2026-10-26)
+  /** 이 책에서 얻어 아직 풀지 못한 단서(hints)와, 이 책에 적힌 곳 가운데 이미 찾은 곳(found) — 둘 다 발견물 정의 */
+  LB.fromBook = function (b) {
+    var s = S(), src = 'book:' + b.id, hints = [], found = [];
+    (b.discs || []).forEach(function (id) {
+      var d = G.DISC[id]; if (!d) return;
+      if (G.Disc.foundByMe(id)) { if (G.Disc.clueOk(d, 'book')) found.push(d); return; }
+      var h = s.hints && s.hints[id]; if (!h) return;
+      if (h.src === src || (h.more || []).some(function (x) { return x && x.src === src; })) hints.push(d);
+    });
+    return { hints: hints, found: found };
+  };
+  /** 집에서 필사본을 펼친다: 날은 지나지 않고 새 단서는 얻지 않는다 — 이 책에서 얻은 단서와 찾은 곳을 다시 본다 */
+  LB.homeRead = async function (b) {
+    if (!b) return;
+    var fb = LB.fromBook(b), st = LB.shelfState(b);
+    if (G.Audio) G.Audio.sfx('page');
+    var fresh = st && (st.kind === 'again' || st.kind === 'open') && st.t && st.t.fresh > 0;
+    await openBook(b, { got: fb.hints, found: fb.found, more: [], head: '이 책에서 얻은 단서 — 아직 찾지 못한 곳',
+      empty: fb.found.length ? '이 책에서 얻은 단서는 모두 풀었다.' : '이 책에서 얻은 단서는 없었다.' },
+      '자택 서고에서 필사본을 다시 펼쳤다. (날은 지나지 않는다)' + (fresh ? '<br>이제는 새로 알아들을 대목이 있을 것 같다 — 도서관에서 다시 읽어 보자.' : ''));
+    await UI.say(LB.recall(b), meSpk());
   };
 
   // ---------------------------------------------------------------- 서가 화면

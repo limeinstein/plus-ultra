@@ -514,6 +514,7 @@
     if (G.Names) G.Names.apply();
     if (G.Wander) G.Wander.apply();      // 철새 — 옛 저장에는 처음 불러올 때 생긴다
     if (G.Siblings) G.Siblings.apply();   // 동생 항해사 (js/systems/siblings.js)
+    if (G.Family && G.Family.fixNames) G.Family.fixNames();   // 아이는 아버지의 성을 따른다 — 성이 빠진 채 지어진 이름에 성을 붙인다 (2026-10-26)
     var s = G.Game.state;
     if (!s.settings) s.settings = { diff: 'normal', speed: 1 };
     if (s.fleet && s.fleet.mat == null) s.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;   // 자재가 생기기 전 저장 파일

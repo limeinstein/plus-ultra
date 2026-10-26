@@ -9,7 +9,8 @@
      권을 다 쓰면(40년이 지나면) 그 기간의 줄을 묶음과 일지에서 모아 한 권으로 엮는다 (s.logArc.vols) — 한 권은 volCap(1500)줄까지, 넘치면 일지와 같은 규칙(등급 몫)으로 줄인다.
    ■ 놓이는 곳: 자택의 「서고」(HM.menu — js/city/misc.js)와 모항(s.player.home) 도서관의 서가 (js/city/bookshelf.js — 맨 앞, 남색 책등)
    ■ 서고(s.study): 발견물에서 얻은 책(유물 가운데 서적 — kind 'book')을 소지품·보관함에서 꽂는다. 꽂은 책은 소지품 칸을 차지하지 않고, 꺼내 다시 들고 갈 수 있다.
-     · 아직 보고·발표하지 않은 발견의 증거인 책은 꽂지 못한다 (보고할 때 내밀어야 하니) · 서고는 집에 있으니 대를 이어도 그대로 */
+     · 아직 보고·발표하지 않은 발견의 증거인 책은 꽂지 못한다 (보고할 때 내밀어야 하니) · 서고는 집에 있으니 대를 이어도 그대로
+   ■ 필사본(s.studyCopies, 2026-10-26): 도서관 서가에서 한 번이라도 읽은 책(G.BOOKS)은 필사본으로 꽂는다 — 집에서 펼쳐 그 책에서 얻은 단서·찾은 곳을 다시 본다 (LBK.copies) */
 (function (G) {
   'use strict';
   var U = G.U;
@@ -173,6 +174,35 @@
   function bookName(it) { return R().itemName(it); }
   function bookFrom(it) { var d = def(it), dc = d && d.relic && G.DISC && G.DISC[d.relic]; return dc ? dc.name : ''; }
 
+  // ---------------------------------------------------------------- 도서관에서 읽은 책의 필사본 (s.studyCopies) — 2026-10-26 사용자 요청
+  /* 「자택에 읽은 발견물 책 꽂는 기능이 없어」 — 도서관 서가의 책(발견물의 단서가 실린 사료, G.BOOKS)은 그 자리에서 읽고 두고 오는 책이라
+     서고에 꽂을 길이 없었다. 한 번이라도 읽은 책(s.flags['read_<책>'])은 필사본으로 서고에 꽂는다.
+     · 소지품·보관함을 거치지 않는다 (책 id만 s.studyCopies에 남긴다) · 빼면 다시 「꽂을 책」으로 돌아간다 · 서고는 집에 있으니 대를 이어도 그대로
+     · 집에서 펼치면 그 책에서 얻은 단서와, 그 책에 적힌 곳 가운데 이미 찾은 곳을 본다 — 날은 지나지 않고 새 단서는 얻지 않는다
+       (말 실력이 늘어 새로 읽히는 대목은 도서관 서가에서 다시 읽어야 한다 — G.Scenes.city.B.library.homeRead) */
+  LBK.copies = function () { var s = S(); return s.studyCopies || (s.studyCopies = []); };
+  /** 한 번이라도 읽은 도서관 책 */
+  LBK.readBooks = function () { var s = S(), f = (s && s.flags) || {}; return (G.BOOKS || []).filter(function (b) { return !!f['read_' + b.id]; }); };
+  /** 꽂은 필사본 (책 정의 — 사라진 책 id는 건너뛴다) */
+  LBK.copyBooks = function () { return LBK.copies().map(function (id) { return G.BOOK && G.BOOK[id]; }).filter(Boolean); };
+  /** 아직 꽂지 않은, 읽은 책 */
+  LBK.copyCandidates = function () { var have = {}; LBK.copies().forEach(function (id) { have[id] = 1; }); return LBK.readBooks().filter(function (b) { return !have[b.id]; }); };
+  /** 필사본 한 권을 꽂는다 (읽은 책만) */
+  LBK.shelveCopy = function (b) {
+    var s = S(); if (!b || !G.BOOK || !G.BOOK[b.id] || !(s.flags && s.flags['read_' + b.id]) || LBK.copies().indexOf(b.id) >= 0) return false;
+    LBK.copies().push(b.id); return true;
+  };
+  /** 필사본 한 권을 서고에서 뺀다 */
+  LBK.unshelveCopy = function (b) { var a = LBK.copies(), i = a.indexOf(b && b.id); if (i < 0) return false; a.splice(i, 1); return true; };
+  /** 꽂을 수 있는 것이 하나라도 있나 (발견물의 책 + 읽은 책) */
+  LBK.canAdd = function () { return LBK.candidates().length > 0 || LBK.copyCandidates().length > 0; };
+  function LIB() { return G.Scenes && G.Scenes.city && G.Scenes.city.B && G.Scenes.city.B.library; }
+  /** 필사본 책등 아래 한 줄: 지은이·말·이 책에서 얻은 단서 수 */
+  function copyLine(b) {
+    var L = LIB(), n = L && L.fromBook ? L.fromBook(b) : null;
+    return U.esc(b.author || '지은이 모름') + ' · ' + U.esc((G.LANGS && G.LANGS[b.lang]) || '') + (n ? ' · 이 책에서 얻은 단서 ' + n.hints.length + '곳' + (n.found.length ? ' · 찾은 곳 ' + n.found.length + '곳' : '') : '');
+  }
+
   var SPINE = ['#5b3a1e', '#3e4a2c', '#4a2f3c', '#2f4250', '#6a4a22', '#47322a', '#3a3f5a', '#58402a'];
   function spine(cls, i, w, h, lab, col) {
     return '<div class="bk real ' + cls + '" data-i="' + i + '" style="width:' + w + 'px;height:' + h + 'px' + (col ? ';--c:' + col : '') + '"><i class="lab">' + (lab ? '<em>' + U.esc(lab) + '</em>' : '') + '</i></div>';
@@ -195,6 +225,16 @@
         if (v === 'read') await readBook(it);
         else if (v === 'take') { if (LBK.unshelve(it)) UI.toast('「' + nm + '」' + U.jx(nm, '을/를') + ' 꺼냈다.', 'book'); }
       }
+      if (act.kind === 'cp') {   // 도서관에서 읽은 책의 필사본
+        var b = act.b, bt = b.title || b.name;
+        var cv = await UI.choose(bt, [
+          { label: '펼쳐 본다', value: 'read', icon: 'book', right: '날은 지나지 않는다' },
+          { label: '서고에서 뺀다', value: 'out', icon: 'boot', right: '다시 꽂을 수 있다' },
+          { label: '그대로 둔다', value: null }
+        ], { width: 480 });
+        if (cv === 'read') { var L = LIB(); if (L && L.homeRead) await L.homeRead(b); }
+        else if (cv === 'out') { if (LBK.unshelveCopy(b)) UI.toast('「' + bt + '」 필사본을 서고에서 뺐다.', 'book'); }
+      }
     }
   };
   async function readBook(it) {
@@ -209,36 +249,50 @@
   async function addBooks() {
     var UI = G.UI;
     for (;;) {
-      var cand = LBK.candidates();
-      if (!cand.length) { await UI.alert('꽂을 책이 없다 — 발견물에서 얻은 책(탁본·해도·기록)을 소지품이나 보관함에 두면 여기에 꽂을 수 있다.'); return; }
+      var cand = LBK.candidates(), copies = LBK.copyCandidates();
+      if (!cand.length && !copies.length) { await UI.alert('꽂을 책이 없다 — 도서관에서 읽은 책은 필사본으로, 발견물에서 얻은 책(탁본·해도·기록)은 소지품이나 보관함에 두면 여기에 꽂을 수 있다.'); return; }
       var ok = cand.filter(function (x) { return !x.proof; });
       var opts = cand.map(function (x, i) {
         var from = bookFrom(x.it);
-        return { label: U.esc(bookName(x.it)) + (from ? ' <small class="muted">' + U.esc(from) + '</small>' : ''), value: i, icon: 'book', disabled: x.proof,
+        return { label: U.esc(bookName(x.it)) + (from ? ' <small class="muted">' + U.esc(from) + '</small>' : ''), value: 'i:' + i, icon: 'book', disabled: x.proof,
           right: x.proof ? '보고·발표하면 꽂을 수 있다' : x.from === 'storage' ? '보관함' : '소지품' };
       });
-      if (ok.length > 1) opts.unshift({ label: '모두 꽂는다 (' + ok.length + '권)', value: 'all', icon: 'plus' });
+      // 도서관에서 읽은 책 — 필사본 (소지품을 거치지 않는다)
+      copies.forEach(function (b) {
+        opts.push({ label: U.esc(b.title || b.name) + ' <small class="muted">' + U.esc(b.author || '지은이 모름') + '</small>', value: 'c:' + b.id, icon: 'scroll', right: '필사본 · 도서관에서 읽은 책' });
+      });
+      var nAll = ok.length + copies.length;
+      if (nAll > 1) opts.unshift({ label: '모두 꽂는다 (' + nAll + '권)', value: 'all', icon: 'plus' });
       opts.push({ label: '그만둔다', value: null });
-      var v = await UI.choose('서고 — 어느 책을 꽂을까?', opts, { width: 640, text: '꽂은 책은 소지품 칸을 차지하지 않습니다. 언제든 꺼내 갈 수 있습니다.' });
+      var v = await UI.choose('서고 — 어느 책을 꽂을까?', opts, { width: 680, text: '꽂은 책은 소지품 칸을 차지하지 않습니다. 발견물의 책은 언제든 꺼내 갈 수 있고, 도서관에서 읽은 책은 필사본으로 꽂아 집에서 다시 펼쳐 봅니다.' });
       if (v == null) return;
-      if (v === 'all') { ok.forEach(function (x) { LBK.shelve(x.it); }); if (G.Game.refreshHud) G.Game.refreshHud(); return; }
-      if (cand[v]) LBK.shelve(cand[v].it);
+      if (v === 'all') {
+        ok.forEach(function (x) { LBK.shelve(x.it); });
+        copies.forEach(function (b) { LBK.shelveCopy(b); });
+        if (G.Game.refreshHud) G.Game.refreshHud(); return;
+      }
+      if (String(v).indexOf('c:') === 0) LBK.shelveCopy(G.BOOK[String(v).slice(2)]);
+      else { var x0 = cand[+String(v).slice(2)]; if (x0) LBK.shelve(x0.it); }
       if (G.Game.refreshHud) G.Game.refreshHud();
     }
   }
   function studyWin(c, place) {
-    var UI = G.UI, vols = LBK.volumes(), books = LBK.study().slice(), reals = [], PER = 24;
+    var UI = G.UI, vols = LBK.volumes(), books = LBK.study().slice(), cps = LBK.copyBooks(), reals = [], PER = 24;
+    // 칸: 맨 위 항해일지 → 도서관에서 읽은 책의 필사본 → 발견물에서 얻은 책 (칸마다 24권)
     var rows = [vols.map(function (v) { return { jv: v }; })];
+    for (var j = 0; j < cps.length; j += PER) rows.push(cps.slice(j, j + PER).map(function (b) { return { cp: b }; }));
     for (var i = 0; i < books.length; i += PER) rows.push(books.slice(i, i + PER).map(function (it) { return { it: it }; }));
     while (rows.length < 2) rows.push([]);
     var rng = U.makeRng(U.strHash('study:' + (S().player.home || 0)));
-    var html = '<div class="bshelf-head"><span class="lg"><i class="bk jv"></i>항해일지</span><span class="lg"><i class="bk tome"></i>발견물에서 얻은 책</span><span class="cnt">항해일지 ' + vols.length + '권 · 꽂은 책 ' + books.length + '권</span></div><div class="bcase">';
+    var html = '<div class="bshelf-head"><span class="lg"><i class="bk jv"></i>항해일지</span><span class="lg"><i class="bk copy"></i>도서관에서 읽은 책 (필사본)</span><span class="lg"><i class="bk tome"></i>발견물에서 얻은 책</span>' +
+      '<span class="cnt">항해일지 ' + vols.length + '권 · 필사본 ' + cps.length + '권 · 발견물의 책 ' + books.length + '권</span></div><div class="bcase">';
     rows.forEach(function (row, ri) {
       html += '<div class="brow"><div class="bline">';
-      if (!row.length) html += '<div class="bempty">' + (ri === 1 && !books.length ? '빈 칸 — 발견물에서 얻은 책을 꽂을 수 있다' : '') + '</div>';
+      if (!row.length) html += '<div class="bempty">' + (ri === 1 && !books.length && !cps.length ? '빈 칸 — 도서관에서 읽은 책(필사본)이나 발견물에서 얻은 책을 꽂을 수 있다' : '') + '</div>';
       row.forEach(function (x) {
         var n = reals.length; reals.push(x);
         if (x.jv) html += spine('jv' + (x.jv.open ? ' writing' : ''), n, 46, 140, x.jv.no + '부');
+        else if (x.cp) html += spine('copy', n, 32 + Math.floor(rng() * 10), 118 + Math.floor(rng() * 24), '');
         else html += spine('tome', n, 30 + Math.floor(rng() * 12), 108 + Math.floor(rng() * 28), '', SPINE[Math.floor(rng() * SPINE.length)]);
       });
       html += '</div><div class="bplank"></div></div>';
@@ -249,12 +303,13 @@
       var p = api.content.querySelector('.bplate'), x = reals[i];
       if (!x) { p.innerHTML = '<span class="muted">책을 누르면 펼쳐 봅니다. 맨 윗칸은 항해일지 — 40년마다 한 권으로 엮입니다.</span>'; return; }
       if (x.jv) p.innerHTML = '<span class="pk jv"></span><b>' + U.esc(x.jv.title) + '</b><br><span class="st">' + LBK.stateText(x.jv) + '</span>';
+      else if (x.cp) p.innerHTML = '<span class="pk copy"></span><b>' + U.esc(x.cp.title || x.cp.name) + '</b><span class="muted"> · 필사본</span><br><span class="st">' + copyLine(x.cp) + '</span>';
       else { var f = bookFrom(x.it); p.innerHTML = '<span class="pk tome"></span><b>' + U.esc(bookName(x.it)) + '</b>' + (f ? '<span class="muted"> · 「' + U.esc(f) + '」</span>' : '') + '<br><span class="st">' + U.esc(String(x.it.desc || (def(x.it) || {}).desc || '')) + '</span>'; }
     }
-    function pick(i) { var x = reals[i]; if (!x) return; api.close(x.jv ? { kind: 'jv', v: x.jv } : { kind: 'bk', it: x.it }); }
-    var canAdd = LBK.candidates().length > 0;
+    function pick(i) { var x = reals[i]; if (!x) return; api.close(x.jv ? { kind: 'jv', v: x.jv } : x.cp ? { kind: 'cp', b: x.cp } : { kind: 'bk', it: x.it }); }
+    var canAdd = LBK.canAdd();
     api = UI.window({ title: (place || '자택') + ' — 서고', icon: 'book', width: 1240, parch: false, html: html,
-      buttons: [{ label: '책을 꽂는다', value: { kind: 'add' }, icon: 'plus', disabled: !canAdd, title: '소지품·보관함에 발견물의 책이 없다' }, { label: '닫는다', value: null }],
+      buttons: [{ label: '책을 꽂는다', value: { kind: 'add' }, icon: 'plus', disabled: !canAdd, title: '꽂을 책이 없다 — 도서관에서 책을 읽거나, 발견물에서 책을 얻자' }, { label: '닫는다', value: null }],
       onKey: function (e) {
         if (G.Keys.is(e, 'left') || G.Keys.is(e, 'up')) { focus = Math.max(0, focus - 1); mark(); return true; }
         if (G.Keys.is(e, 'right') || G.Keys.is(e, 'down')) { focus = Math.min(reals.length - 1, focus + 1); mark(); return true; }

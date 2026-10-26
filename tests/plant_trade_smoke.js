@@ -54,6 +54,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       answer = 0; said.length = 0;
       out.decline = await PT.atTrade(mal); out.askedLine = said.some(t => /특산물/.test(t)); out.cool = s.plantTrade.ask[160] - s.day;
       out.again = await PT.atTrade(mal);   // 쉬는 동안 다시 묻지 않는다
+      // 주인이 먼저 청하는 것은 사건처럼 가끔 (2026-10-26): 다른 교역소도 반년(offerGap) 안에는 묻지 않는다 · 한 해 2번까지 · 메뉴는 언제나
+      said.length = 0; const goa0 = G.CITY_DATA[150];
+      out.gapOther = await PT.atTrade(goa0); out.gapSilent = !said.length; out.menuStill = (G.Scenes.city.B.trade.menu(goa0) || []).filter(Boolean).some(m => m.label === '식물을 심는다');
+      const K0 = G.BALANCE.plantTrade, ch0 = K0.offerChance; K0.offerChance = 1;
+      s.day += K0.offerGap; out.afterGap = PT.canOffer(); await PT.atTrade(goa0); out.n2 = s.plantTrade.offer.n;
+      s.day += K0.offerGap; out.yearCap = s.plantTrade.offer.y === s.date.y ? !PT.canOffer() : true;   // 날짜(s.date)는 그대로라 같은 해 — 3번째는 막힌다
+      s.day -= K0.offerGap * 2; K0.offerChance = ch0; delete s.plantTrade.ask[150]; s.plantTrade.offer = null;
       // 메뉴에서 심는다 (값 높은 것부터: 용뇌)
       answer = 1; said.length = 0;
       out.p1 = PT.plant(G.DISC.camphor, mal);
@@ -93,6 +100,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(/열대/.test(r.why.linMal) === false && /추운/.test(r.why.linMal) && /열대/.test(r.why.mangoLis) && r.why.mangoMal === null, '기후: 링곤베리는 말라카에 안 맞고, 망고는 리스본에 안 맞는다');
     ok(r.menu, '교역소 메뉴 「식물을 심는다」');
     ok(r.decline === false && r.askedLine && r.cool === 30 && r.again === false, '주인이 먼저 청한다 → 거절하면 30일 동안 묻지 않는다');
+    ok(r.gapOther === false && r.gapSilent && r.menuStill && r.afterGap && r.n2 === 2 && r.yearCap, '주인의 청은 사건처럼 가끔 — 다른 교역소도 반년 안에는 묻지 않고, 한 해 2번까지 · 메뉴 「식물을 심는다」는 언제나');
     ok(r.sells1 && r.p2 && r.room === 0 && /자리가 없다/.test(r.full) && r.p3 === false && r.goods.length === 2, '심으면 특산물 · 한 교역소 2종까지 (' + r.goods.join(',') + ')');
     ok(r.stillFound && r.garden, '특산물이 되어도 발견물은 남는다 (왕실 정원에도 바칠 수 있다)');
     ok(r.origin && r.price.sellLis > r.price.sellMal, '심은 지역이 산지가 된다 — 리스본에서 더 비싸게 팔린다 ' + JSON.stringify(r.price));

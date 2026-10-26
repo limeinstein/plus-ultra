@@ -1,5 +1,5 @@
 /* Codex 그림 연결 점검 (2026-10-10)
-   · 유물 487종이 모두 전용 그림으로 · 교역품 79종이 모두 전용 그림(images/goods, 노예는 끊어진 족쇄)
+   · 유물 630종이 모두 전용 그림으로 · 교역품 79종이 모두 전용 그림(images/goods, 노예는 끊어진 족쇄)
    · 새 항해사 얼굴 6명(보쿠덴·첸·김·키스크·말린체·투팍) 흉상·무릎상
    · 얼굴 묶음(images/portraits/pools) 760장마다 무릎상 _half는 보존하되, 얼굴과 다른 몸을 포갠 옛 합성본은 부하 표시에 쓰지 않는다
    · 역사·종교 발견물 216곳(GIF·끝 장면·시트) · 대화창에 완성된 얼굴상·무릎상 한 쌍이 실제로 선다 · 콘솔 오류 0
@@ -52,7 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         borrowN: borrowers.length, badBorrowedPair, pairedId: borrowedPairs.length ? borrowedPairs[0].id : null, ruinN: ruins.length, discMiss,
         slaves: I.pick(K.good(G.GOOD.slaves)) };
     }, CINEMATIC_IDS);
-    ok(r.relicN === 487 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.join(','));
+    ok(r.relicN === 630 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.join(','));
     ok(r.goodN === 158 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (식물 79종은 발견 원화 · 노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
     ok(!r.mateMiss.length, '새 항해사 얼굴 6명 흉상·무릎상 ' + r.mateMiss.join(','));
     ok(r.poolN === 760 && !r.poolNoHalf.length, '얼굴 묶음 ' + r.poolN + '장 모두 무릎상이 있다 ' + r.poolNoHalf.slice(0, 5).join(','));

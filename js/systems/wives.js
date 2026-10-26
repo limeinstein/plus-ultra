@@ -283,11 +283,8 @@
     for (var i = 0; i < kids.length; i++) {
       var k = kids[i]; if (!k.unnamed) continue;
       await UI.say('이 아이에게 이름을 지어 주세요.', sp);
-      var pool = U.shuffle(Fm().names(k.sex).filter(function (n) { return !p.kids.some(function (o) { return o.name === n; }) && n !== p.name; })).slice(0, 4);
-      var v = await UI.choose((k.sex === 'f' ? '딸' : '아들') + '의 이름', pool.map(function (n) { return { label: n, value: n, icon: 'heart' }; }).concat([{ label: '직접 짓는다', value: '_', icon: 'scroll' }]), { width: 420, cancel: false });
-      if (v === '_' || !v) v = (await UI.prompt('아이의 이름', pool[0], 10)) || pool[0];
-      k.name = v; k.unnamed = false;
-      G.State.log(W.name(w) + '의 ' + (k.sex === 'f' ? '딸' : '아들') + '에게 「' + v + '」' + U.jx(v, '이라는/라는') + ' 이름을 지어 주었다.');
+      var full = await Fm().chooseKidName(k), v = Fm().given(k);   // 이름은 짓고 성은 아버지를 따른다 (family.js — 2026-10-26)
+      G.State.log(W.name(w) + '의 ' + (k.sex === 'f' ? '딸' : '아들') + '에게 「' + full + '」' + U.jx(full, '이라는/라는') + ' 이름을 지어 주었다.');
       await UI.say(v + '… 좋은 이름이에요.', sp);
     }
     if (fresh.length && G.FamEv) { try { await G.FamEv.birth(fresh, sawBirth, w); } catch (e) { console.error(e); } }   // 갓난아기와 맞는 첫 장면 (familyevent.js)
@@ -310,8 +307,8 @@
     await UI.say(wl('home2', null, U.pick(['당신이 오면 이 집이 환해져요.', '이번에는 얼마나 머물 수 있어요?', '바다 이야기 들려줘요. 당신이 본 것들이 궁금해요.'])), sp);
     if (w.preg) { var pn = Math.max(1, Math.round((w.preg.due - s.day) / 30)); await UI.say(w.preg.told ? wl('preg', { n: pn }, '배 속의 아기가 잘 자라고 있어요. ' + pn + '달만 기다려요.') : wl('pregHint', null, '요즘 이상하게 졸려요.'), sp); }
     if (kids.length) {
-      var names = kids.map(function (k) { return k.name; }).join('·');
-      await UI.say(wl('kids2', { kids: names }, names + U.jx(kids[kids.length - 1].name, '이/가') + ' 아버지를 기다려요.') + ' 본국에 데려가고 싶으면 말해요. 서운하지만… 아이 앞날이 먼저니까요.', sp);
+      var names = kids.map(function (k) { return Fm().given ? Fm().given(k) : k.name; }).join('·');   // 어머니는 아이를 성 없이 이름으로 부른다
+      await UI.say(wl('kids2', { kids: names }, names + U.jx(names, '이/가') + ' 아버지를 기다려요.') + ' 본국에 데려가고 싶으면 말해요. 서운하지만… 아이 앞날이 먼저니까요.', sp);
       var k1 = U.pick(kids), a1 = Fm().kidAge(k1);
       if (a1 >= 3 && VO) { var kl = VO.kid(k1, a1, Fm().bond(k1)); if (kl) await UI.say(kl, G.HomeLife ? G.HomeLife.speaker(k1, true) : { name: k1.name, portrait: Fm().kidSpec(k1), lang: 3 }); }   // 그 집 아이의 한마디
     }

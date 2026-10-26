@@ -112,7 +112,7 @@
 
   // ---------------------------------------------------------------- 글
   function fill(t, k) {
-    var nm = k ? k.name : '아이';
+    var nm = k ? (G.Family && G.Family.given ? G.Family.given(k) : k.name) : '아이';   // 집 안의 장면은 성 없이 이름으로 (성은 아버지를 따라 붙는다 — family.js 2026-10-26)
     return String(t).replace(/\{name(?::([^}]+))?\}/g, function (_, pair) { return pair ? U.j(nm, pair) : nm; });
   }
   /** 줄 하나를 말한다: 'k:…' 아이 · 'w:…' 아내 · 'n:…' 설명 */

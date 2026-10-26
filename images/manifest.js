@@ -6432,6 +6432,8 @@ G.IMAGE_FILES = {
   "portraits/legendary/mateo_half": "portraits/legendary/mateo_half.webp",
   "portraits/legendary/monte_cristo": "portraits/legendary/monte_cristo.webp",
   "portraits/legendary/monte_cristo_half": "portraits/legendary/monte_cristo_half.webp",
+  "portraits/legendary/mowgli": "portraits/legendary/mowgli.png",
+  "portraits/legendary/mowgli_half": "portraits/legendary/mowgli_half.png",
   "portraits/legendary/napoleon": "portraits/legendary/napoleon.webp",
   "portraits/legendary/napoleon_half": "portraits/legendary/napoleon_half.webp",
   "portraits/legendary/nongae": "portraits/legendary/nongae.webp",

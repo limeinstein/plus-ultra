@@ -36,6 +36,89 @@
   F.names = function (sex) { var n = NAMES[S().player.nation] || NAMES.PT; return n[sex === 'f' ? 'f' : 'm']; };
   F.kidName = function (k) { return k.unnamed ? (k.sex === 'f' ? '갓 태어난 딸' : '갓 태어난 아들') : k.name; };
 
+  // ---------------------------------------------------------------- 성: 아이는 아버지의 성을 물려받는다 (사용자 요청 2026-10-26)
+  /* 이름은 지어 주고 성은 아버지에게서 — k.given(지은 이름) · k.surname(아버지의 성) · k.name(부르는 이름 = 둘을 붙인 것, 만들기 화면과 같은 규칙).
+     뒤를 이은 아이는 그 이름·성 그대로 새 제독(p.given · p.surname · p.name)이 되어 그 아이들에게 다시 성을 물려준다.
+     예전에는 이름만 지어 성이 사라졌다. 옛 저장(제독의 성이 적혀 있지 않은 일지 — 대를 이은 제독 등):
+       첫 제독의 이름이 「이름 성」꼴이면 그 성을 불러올 때 붙이고(F.fixNames), 아니면 아기 이름을 지을 때·대를 이을 때 한 번 묻는다(F.askSurname) */
+  F.fullName = function (given, sur) {
+    var C = G.Scenes && G.Scenes.create, ko = /^[가-힣]+$/, p = S() && S().player;
+    given = String(given || '').trim(); sur = String(sur || '').trim();
+    // 성을 앞에 붙여 부르는 집안(이강희처럼)이면 아이 이름도 성을 앞에 — 프란시스쿠처럼 긴 이름이어도 한 집안이 같은 꼴로 (이프란시스쿠)
+    if (sur && given && ko.test(sur) && ko.test(given) && p && p.surname === sur && p.given != null && p.name === sur + p.given) return sur + given;
+    return C && C.fullName ? C.fullName(given, sur) : [given, sur].filter(Boolean).join(' ');
+  };
+  /** 성을 뺀 이름 (지은 이름) — 옛 아이는 이름이 곧 지은 이름 */
+  F.given = function (k) { return !k ? '' : k.given != null ? k.given : (k.name || ''); };
+  /** 집안의 성 — 모르면 null */
+  F.surname = function () { var p = S().player; return p && typeof p.surname === 'string' ? p.surname : null; };
+  /** 지은 이름에 집안의 성을 붙여 아이의 이름으로 (성을 모르면 이름만 — 나중에 성을 정하면 붙는다) */
+  F.setKidName = function (k, given) {
+    var sur = F.surname();
+    given = stripSurname(String(given || '').trim(), sur);   // 성까지 넣어 지었어도 두 번 붙지 않게
+    k.given = given; if (sur != null) k.surname = sur; else delete k.surname;
+    k.name = F.fullName(given, sur || ''); k.unnamed = false;
+    return k.name;
+  };
+  function stripSurname(name, sur) {
+    name = String(name || ''); if (!sur) return name;
+    if (name.length > sur.length + 1 && name.slice(-(sur.length + 1)) === ' ' + sur) return name.slice(0, -(sur.length + 1)).trim();
+    if (/^[가-힣]+$/.test(name) && name.length > sur.length && name.indexOf(sur) === 0 && /^[가-힣]+$/.test(sur)) return name.slice(sur.length);
+    return name;
+  }
+  function founderName() { var s = S(), l = s.lineage; return String((l && l.length && l[0].name) || s.player.name || ''); }
+  /** 첫 제독의 이름이 「이름 성」꼴(띄어 씀)이면 그 성 — 만들기 화면이 서양식 이름을 이렇게 붙인다 */
+  function sureSurname() { var n = founderName(), i = n.indexOf(' '); return i > 0 ? n.slice(i + 1).trim() : null; }
+  var KO_SUR = '김이박최정강조윤장임한오서신권황안송류전홍고문양손배백허유남심노하곽성차주우구민진나지엄채원천방공현함변염여추도소석선설마길연위표명기반라왕금옥육인맹제모탁국어은편용예경봉사부가복태목형피두감음빈동온호범좌팽승간상갈시화',
+    KO_SUR2 = ['남궁', '황보', '제갈', '선우', '독고', '사공', '서문', '동방'];
+  /** 물어볼 때 미리 넣어 둘 성 (한국식 이름이면 앞 글자) */
+  function guessSurname() {
+    var n = founderName(), sure = sureSurname(); if (sure != null) return sure;
+    if (/^[가-힣]{3,5}$/.test(n)) { if (KO_SUR2.indexOf(n.slice(0, 2)) >= 0) return n.slice(0, 2); if (KO_SUR.indexOf(n[0]) >= 0 && n.length <= 4) return n[0]; }
+    return '';
+  }
+  /** 집안의 성을 정한다 — 지금 제독과, 성이 아직 붙지 않은 아이·동생에게 붙인다 */
+  function applySurname(sur) {
+    var p = S().player;
+    if (p.given == null) p.given = stripSurname(p.name, sur);
+    p.surname = sur; p.name = F.fullName(p.given, sur);
+    (p.kids || []).concat(p.siblings || []).forEach(function (k) {
+      if (!k || k.unnamed || k.surname != null) return;
+      k.given = F.given(k); k.surname = sur; k.name = F.fullName(k.given, sur);
+    });
+  }
+  /** 불러온 일지: 성을 알면(만들기 화면에서 정한 성 · 첫 제독 이름이 「이름 성」꼴) 성이 없는 아이·동생에게 붙인다 (G.Game.resume) */
+  F.fixNames = function () {
+    var p = S() && S().player; if (!p) return;
+    var sur = F.surname(); if (sur == null) sur = sureSurname();
+    if (sur != null) applySurname(sur);
+  };
+  /** 집안의 성 → 정한 성. 성을 모르는 옛 일지면 한 번 묻는다(취소하면 짐작한 성). 성이 아직 붙지 않은 아이·동생에게도 붙인다 */
+  F.askSurname = async function () {
+    var sur = F.surname();
+    if (sur == null) {
+      sur = sureSurname();
+      if (sur == null) {
+        var g = guessSurname(), v = await UI.prompt('집안의 성 — 아이들이 물려받는다', g, 12);
+        sur = v == null ? g : v;
+      }
+      G.State.log('집안의 성을 「' + (sur || '없음') + '」' + U.jx(sur || '없음', '으로/로') + ' 정했다.');
+    }
+    applySurname(sur);
+    return sur;
+  };
+  /** 갓난아기의 이름을 고른다(이름 넷 + 직접 짓기) — 성은 아버지를 따라 붙는다. 붙인 이름을 돌려준다 (자택·둘째 부인의 집) */
+  F.chooseKidName = async function (k) {
+    var p = S().player, sur = await F.askSurname();
+    var taken = function (n) { return n === F.given(p) || p.kids.some(function (o) { return o !== k && !o.unnamed && F.given(o) === n; }); };
+    var pool = U.shuffle(F.names(k.sex).filter(function (n) { return !taken(n); })).slice(0, 4);
+    if (!pool.length) pool = F.names(k.sex).slice(0, 4);
+    var v = await UI.choose((k.sex === 'f' ? '딸' : '아들') + '의 이름' + (sur ? ' · 성 「' + sur + '」' : ''),
+      pool.map(function (n) { return { label: F.fullName(n, sur), value: n, icon: 'heart' }; }).concat([{ label: '직접 짓는다', value: '_', icon: 'scroll' }]), { width: 460, cancel: false });
+    if (v === '_' || !v) v = (await UI.prompt('아이의 이름' + (sur ? ' (성: ' + sur + ')' : ''), pool[0], 10)) || pool[0];
+    return F.setKidName(k, v);
+  };
+
   // ---------------------------------------------------------------- 아이와 제독의 사이 (k.bond 0~100)
   /* 대항해시대 3처럼 아이는 제독을 보고 자란다. 집에 자주 들르고, 놀아 주고, 가르치고, 견습으로 데리고 다니면 가까워지고
      오래 떨어져 지내면 서먹해진다. 사이가 좋을수록 뒤를 이을 때 명성·특기를 많이 물려받는다. */
@@ -175,11 +258,8 @@
     for (var i = 0; i < p.kids.length; i++) {
       var k = p.kids[i]; if (!k.unnamed || k.house != null) continue;
       await UI.say(U.pick(['당신, 우리 아기 좀 봐요. 당신을 꼭 닮았어요.', '이 아이가 당신을 기다렸어요. 이름을 지어 주세요.']), w);
-      var pool = U.shuffle(F.names(k.sex).filter(function (n) { return !p.kids.some(function (o) { return o.name === n; }) && n !== p.name; })).slice(0, 4);
-      var v = await UI.choose((k.sex === 'f' ? '딸' : '아들') + '의 이름', pool.map(function (n) { return { label: n, value: n, icon: 'heart' }; }).concat([{ label: '직접 짓는다', value: '_', icon: 'scroll' }]), { width: 420, cancel: false });
-      if (v === '_' || !v) v = (await UI.prompt('아이의 이름', pool[0], 10)) || pool[0];
-      k.name = v; k.unnamed = false;
-      G.State.log((k.sex === 'f' ? '딸' : '아들') + '에게 「' + v + '」' + U.jx(v, '이라는/라는') + ' 이름을 지어 주었다.');
+      var full = await F.chooseKidName(k), v = F.given(k);   // 이름은 짓고 성은 아버지를 따른다
+      G.State.log((k.sex === 'f' ? '딸' : '아들') + '에게 「' + full + '」' + U.jx(full, '이라는/라는') + ' 이름을 지어 주었다.');
       await UI.say(v + '… 좋은 이름이에요. ' + (k.sex === 'f' ? '분명 당신처럼 용감한 아이로 자랄 거예요.' : '언젠가 당신처럼 먼 바다로 나가겠죠.'), w);
     }
     // 갓난아기와 맞는 첫 장면 (이름을 지은 뒤) — 두 사람의 손에 안긴 아기 · 요람 곁의 첫 밤 (familyevent.js)
@@ -213,7 +293,7 @@
     if (p.preg) { var pn = Math.max(1, Math.round((p.preg.due - s.day) / 30)); await UI.say(p.preg.told ? wl('preg', { n: pn }, '배 속의 아기가 오늘 발로 찼어요. ' + pn + '달만 기다리면 만나요.') : wl('pregHint', null, U.pick(['요즘 이상하게 신 것이 당겨요.', '요즘 몸이 조금 나른해요.'])), w); }
     if (!p.kids.length && !p.preg) await UI.say(wl('nokids', null, U.pick(['우리에게도 아이가 생기면 좋겠어요. 집에 자주 들러 줘요.', '당신이 집에 오래 있으면 좋겠어요.'])), w);
     var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
-    if (low) await UI.say(wl('lowKid', { kid: low.name }, low.name + U.jx(low.name, '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.'), w);
+    if (low) await UI.say(wl('lowKid', { kid: F.given(low) }, F.given(low) + U.jx(F.given(low), '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.'), w);
     var kv = function (k, age, b, fb) { return (VO && VO.kid(k, age, b)) || fb; }, kr = function (k, kind, fb) { return (VO && VO.kidReact(k, kind)) || fb; };
     for (var i = 0; i < p.kids.length; i++) {
       var k = p.kids[i], age = F.kidAge(k), b; if (!k.st) k.st = inborn(); if (!k.edu) k.edu = {};
@@ -227,7 +307,7 @@
         if (ab === 0) { k.aboard = false; await UI.say(b >= 60 ? '…알겠어요. 다음에 또 데려가 주세요, 아버지.' : '네.', sp); UI.toast(k.name + U.jx(k.name, '이/가') + ' 집에 남았다.', 'house'); }
         continue;
       }
-      if (age < 3) { await UI.say(wl('baby', { kid: k.name }, U.pick(['아기가 당신을 보고 방긋 웃어요. 안아 줘요.', '밤마다 조금 울지만, 당신 목소리를 들으면 금방 그쳐요.'])), w); continue; }
+      if (age < 3) { await UI.say(wl('baby', { kid: F.given(k) }, U.pick(['아기가 당신을 보고 방긋 웃어요. 안아 줘요.', '밤마다 조금 울지만, 당신 목소리를 들으면 금방 그쳐요.'])), w); continue; }
       if (age < 6) {
         await UI.say(kv(k, age, b, b >= 40 ? U.pick(['아빠! 아빠! 안아 줘!', '아빠 배 타고 싶어!', '아빠, 바다에 고래 있어?']) : U.pick(['……(엄마 치마 뒤에 숨는다)', '아저씨 누구야?'])), sp);
         var play = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', [{ label: '함께 놀아 준다', value: 'play' }, { label: '옛날이야기를 들려준다', value: 'tale' }, { label: '그냥 둔다', value: null }], sp);
@@ -358,8 +438,8 @@
   F.regency = async function (k, forced) {
     var s = S(), p = s.player, ad = cfg().adult || 16;
     if (k.unnamed) {   // 이름을 짓지 못한 갓난아기 — 집안 어른들이 이름을 지어 둔다
-      var pool = F.names(k.sex).filter(function (n) { return !p.kids.some(function (o) { return o.name === n; }) && n !== p.name; });
-      k.name = pool[0] || F.names(k.sex)[0]; k.unnamed = false; k.met = true;
+      var pool = F.names(k.sex).filter(function (n) { return n !== F.given(p) && !p.kids.some(function (o) { return !o.unnamed && F.given(o) === n; }); });
+      F.setKidName(k, pool[0] || F.names(k.sex)[0]); k.met = true;   // 성은 아버지를 따른다 (성을 모르는 옛 일지는 대를 이을 때 묻고 붙인다)
       G.State.log('아들에게 「' + k.name + '」' + U.jx(k.name, '이라는/라는') + ' 이름이 지어졌다.');
     }
     var old = p.name, home = G.CITY_DATA[p.home] ? p.home : (s.loc.city != null ? s.loc.city : 0), hc = G.CITY_DATA[home];
@@ -463,6 +543,7 @@
 
   F.succeed = async function (k, forced) {
     var s = S(), p = s.player;
+    var sur = await F.askSurname();   // 뒤를 잇는 아이는 아버지의 성을 그대로 (옛 일지면 이때 한 번 묻는다 — 지금 제독·아이들 이름에도 붙는다)
     var old = p.name;
     G.State.log(old + U.j(old, '이/가').slice(old.length) + ' 은퇴하고 ' + k.name + U.j(k.name, '이/가').slice(k.name.length) + ' 뒤를 이었다.');
     // 아버지와의 사이가 물려받는 것을 정한다 — 가까울수록 명성(40~70%)과 특기(절반~3/4)를 많이, 견습으로 함께 다닌 해만큼 더
@@ -501,7 +582,8 @@
     heirArt.variant = G.HomeLife && G.HomeLife.variant ? G.HomeLife.variant(k) : +(k.portraitVariant || 0);
     s.player = {
       look: heirLook, heir: heirArt,
-      name: k.name, nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
+      name: F.fullName(F.given(k), k.surname != null ? k.surname : sur), given: F.given(k), surname: k.surname != null ? k.surname : sur,   // 아버지의 성을 이어 간다
+      nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
       luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), fameBy: p.fameBy ? U.clone(p.fameBy) : undefined,   // 갈래의 비율은 그대로 (G.Fame.sync가 줄어든 합에 맞춘다)
       notoriety: Math.round(p.notoriety * 0.3), gold: p.gold, bank: p.bank,
       items: p.items, equip: p.equip, storage: keepSt, hp: 100, home: p.home, wife: null, kids: [], siblings: sibs, since: s.date.y, generation: (p.generation || 1) + 1, jailed: 0,

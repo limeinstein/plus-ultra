@@ -245,6 +245,7 @@
     if (mir) st.mirage = 1;
     s.stats.found++;
     D.collectionReward(s.stats.found);
+    if (G.Encyc) { try { G.Encyc.onFind(d); } catch (e) { console.error(e); } }   // 발견물 백과사전: 한 갈래를 다 채우면 포상 (js/systems/encyclopedia.js)
     delete s.hints[d.id];
     var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d) * (tomb.fameK || 1));
     G.Fame.add('ex', fame);

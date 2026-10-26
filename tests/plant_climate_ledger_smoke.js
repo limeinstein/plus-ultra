@@ -71,7 +71,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       UI.say = async () => {}; UI.ask = async () => 1;
       NG('셋째', 'PT'); found('apple'); found('durian');
       const lis = G.CITY_DATA[0], goa = G.CITY_DATA[150];
-      await PT.atTrade(lis); await PT.atTrade(goa);
+      await PT.atTrade(lis); G.Game.state.plantTrade.offer = null; await PT.atTrade(goa);   // 주인이 먼저 청하는 것은 반년에 한 번 (2026-10-26) — 알림 조사만 보려고 쉬는 날을 지운다
       UI.toast = t0;
       out.toasts = toasts;
       // ---- 17: 게임 안 도시 이름

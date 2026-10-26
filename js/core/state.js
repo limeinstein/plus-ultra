@@ -17,7 +17,11 @@
       date: { y: 1480, m: 5, d: 1 },
       day: 0,
       player: {
-        name: p.name, nation: p.nation, job: p.job, born: { y: 1480 - p.age, m: p.birth.m, d: p.birth.d },
+        name: p.name,
+        // 제독 만들기에서 따로 받은 이름·성을 저장한다. 이 값이 빠지면 한국식 이름은 첫 출산/승계 때 성을 다시 물어보게 된다.
+        // 테스트·옛 호출부처럼 name만 넘긴 새 게임은 성 없는 이름으로 시작하고, 실제 옛 저장은 Family.fixNames/askSurname가 보정한다.
+        given: p.given != null ? p.given : p.name, surname: p.surname != null ? p.surname : '',
+        nation: p.nation, job: p.job, born: { y: 1480 - p.age, m: p.birth.m, d: p.birth.d },
         st: p.st, luck: U.ri(30, 70), sk: p.sk, lg: p.lg,
         fame: 0, notoriety: 0, gold: p.gold || 3000, bank: 0, items: [], equip: { weapon: 'rapier', armor: null },
         hp: 100, home: home, wife: null, kids: [], generation: 1, jailed: 0

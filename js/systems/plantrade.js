@@ -1,13 +1,16 @@
 /* 식물 특산물 (G.PlantTrade) — 2026-10-22 사용자 요청
    찾은 식물 발견물(js/data/plantdisc.js)을 들고 교역소에 가면, 교역소 주인이 그 식물을 이 고장에서 길러 특산물로 삼고 싶어 한다.
-   · 들어설 때: 심을 수 있는 식물이 있으면 주인이 먼저 청한다 (거절하면 G.BALANCE.plantTrade.askDays 동안은 먼저 묻지 않는다)
-   · 교역소 메뉴 「식물을 심는다」: 언제든 골라서 심는다 — 심을 수 없는 식물은 까닭(기후·이미 파는 물건·자리 없음)을 보여 준다
+   · 들어설 때: 심을 수 있는 식물이 있으면 주인이 먼저 청한다 — 사건처럼 가끔만 (2026-10-26 사용자 요청: 교역소에 갈 때마다 묘목 이야기를 꺼내지 않게)
+       모든 교역소를 통틀어 한 해에 offerPerYear(2)번까지 · 앞선 청에서 offerGap(180)일이 지나야 · 그때 들어선 교역소에서 offerChance 확률.
+       이 일지에서 처음 청할 때만은 확률 없이 (식물을 심을 수 있다는 것을 알려 준다). 거절한 교역소는 askDays 동안 다시 묻지 않는다
+   · 교역소 메뉴 「식물을 심는다」: 제독이 먼저 말을 꺼내는 길 — 위의 제한 없이 언제든 골라서 심는다. 심을 수 없는 식물은 까닭(기후·이미 파는 물건·자리 없음)을 보여 준다
    · 심으면 그 식물의 교역품(G.PLANT_CROP)이 그 교역소의 특산물(c.goods)이 된다 — 산지 값으로 사고, 그 지역은 산지로 친다(R.origins)
    · 발견물은 사라지지 않는다 — 다른 교역소에도 심을 수 있고 왕실 정원에도 바칠 수 있다
    · 한 교역소에 심을 수 있는 식물은 G.BALANCE.plantTrade.max(2)종까지
    · 기후: 열대 식물은 열대의 교역소에만, 한대 식물은 추운 곳에만 (G.BALANCE.plantTrade.zones — 위도 범위)
    · 새 일지·불러오기: G.Game.state 가 바뀌면 곧바로 도시 특산물을 그 일지에 맞춘다 (PT.sync)
-   저장: s.plantTrade = { at: {도시 id: [교역품 id…]}, ask: {도시 id: 다시 물을 날}, n: 심은 횟수 } */
+   저장: s.plantTrade = { at: {도시 id: [교역품 id…]}, ask: {도시 id: 다시 물을 날}, n: 심은 횟수,
+                          offer: {y: 센 해, n: 그 해에 주인이 먼저 청한 횟수, last: 마지막으로 청한 날, all: 지금까지 청한 횟수} — 옛 저장에 없으면 새로 만든다 } */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -16,7 +19,11 @@
   G.BALANCE = G.BALANCE || {};
   G.BALANCE.plantTrade = G.BALANCE.plantTrade || {
     max: 2,            // 한 교역소에 더할 수 있는 식물 특산물
-    askDays: 30,       // 주인의 청을 거절하면 이만큼은 먼저 묻지 않는다
+    askDays: 30,       // 주인의 청을 거절하면 그 교역소는 이만큼 먼저 묻지 않는다
+    // 주인이 먼저 청하는 것은 사건처럼 가끔 — 모든 교역소를 통틀어 (제독이 메뉴로 말을 꺼내는 것은 언제나)
+    offerPerYear: 2,   // 한 해(게임 연도)에 먼저 청하는 횟수
+    offerGap: 180,     // 앞선 청에서 이만큼 지나야 다시 청한다
+    offerChance: 0.3,  // 그 뒤 심을 수 있는 교역소에 들어설 때 청할 확률 (이 일지의 첫 청은 확률 없이)
     fame: 3,           // 심을 때마다 교역 명성
     // 위도 범위 — sub(따뜻한 땅)는 지중해 북쪽 끝(베니스 45.5°)까지: 나폴리 레몬·리스본 코르크참나무·라벤나 우산소나무가 제 고장에서 자란다
     zones: { trop: [0, 28], sub: [0, 46], temp: [20, 58], cold: [45, 90], any: [0, 90] }
@@ -141,7 +148,8 @@
       { label: '다음에 하겠다', value: 0 }]);
     if (!v) {
       if (first) st().ask[c.id] = S().day + (K().askDays || 30);
-      await C().say(k, '아쉽군. 마음이 바뀌면 언제든 들러 주게.');
+      await C().say(k, '아쉽군. 마음이 바뀌면 언제든 말해 주게.');
+      if (first) UI.toast('교역소 메뉴 「식물을 심는다」에서 언제든 직접 심을 수 있다', 'leaf', 4200);
       return false;
     }
     if (!PT.plant(d, c)) return false;
@@ -152,11 +160,28 @@
     UI.toast('「' + g.name + '」 — ' + c.name + ' 교역소의 특산물이 되었다 (발견물 「' + d.name + '」' + U.jx(d.name, '은/는') + ' 그대로)', { icon: 'leaf', src: thumb(d) }, 5200);
     return true;
   }
-  /** 교역소에 들어설 때: 주인이 먼저 청한다 */
+  /** 주인이 먼저 청한 기록 (한 해 횟수·마지막 날) — 옛 저장에는 없으니 새로 */
+  function offers() {
+    var p = st(), y = S().date.y; if (!p) return null;
+    var o = p.offer || (p.offer = { y: y, n: 0, last: null, all: 0 });
+    if (o.y !== y) { o.y = y; o.n = 0; }
+    return o;
+  }
+  /** 지금 주인이 먼저 청할 수 있는가 (한 해 횟수·간격 — 확률은 빼고) */
+  PT.canOffer = function () {
+    var o = offers(), k = K(); if (!o) return false;
+    if (o.n >= (k.offerPerYear != null ? k.offerPerYear : 2)) return false;
+    return o.last == null || S().day - o.last >= (k.offerGap != null ? k.offerGap : 180);
+  };
+  /** 교역소에 들어설 때: 주인이 먼저 청한다 — 사건처럼 가끔만 (머리말 참고). 청하면 offer의 결과(심었으면 true) */
   PT.atTrade = async function (c) {
     var p = st(); if (!p || !PT.room(c)) return false;
     if (p.ask[c.id] && S().day < p.ask[c.id]) return false;
+    if (!PT.canOffer()) return false;
     var list = PT.cands(c); if (!list.length) return false;
+    var o = offers(), k = K();
+    if (o.all && !U.chance(k.offerChance != null ? k.offerChance : 0.3)) return false;   // 첫 청은 확률 없이
+    o.n++; o.all = (o.all || 0) + 1; o.last = S().day;
     return offer(c, list[0], true);
   };
   /** 교역소 메뉴 한 줄 */
