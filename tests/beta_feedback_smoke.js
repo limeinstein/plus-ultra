@@ -4,7 +4,9 @@
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); } catch (_) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 
 const ROOT = path.resolve(__dirname, '..');
 const CENTER = path.join(ROOT, 'web', 'beta-center', 'index.html');

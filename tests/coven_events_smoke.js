@@ -96,7 +96,16 @@ fs.mkdirSync(out, { recursive: true });
     });
     console.log(result.checks.map(x => '✓ ' + x).join('\n'));
     await page.waitForFunction(() => !G.Loader.shown());
-    await page.evaluate(() => { G.UI.toast = () => {}; G.Game.state.settings.res = 0.35; G.Game.go('city', { cityId: 0, load: true }); });
+    await page.evaluate(() => {
+      G.UI.toast = () => {};
+      const s = G.Game.state;
+      // 도시 진입 직후의 자동 tick이 아래 전투 차단 검사보다 먼저 사건을 열지 않게 한다.
+      // 각 사건은 반복문 안에서 다시 due 상태로 만든다.
+      s.coven = { seen: {}, last: s.day };
+      G.COVEN_EVENTS.forEach(e => { s.coven.seen[e.id] = s.day; });
+      s.settings.res = 0.35;
+      G.Game.go('city', { cityId: 0, load: true });
+    });
     await page.waitForFunction(() => G.Game.sceneName === 'city' && !!document.querySelector('.city-banner'));
     // 실제 도시 화면에서 자동 발생 경로를 거쳐 여섯 장면을 모두 찍는다.
     for (const id of result.played) {
