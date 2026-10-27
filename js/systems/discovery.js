@@ -124,8 +124,9 @@
     var edible = d && d.cat === 'trade' && (!G.RevealTalk || !G.RevealTalk.edible || G.RevealTalk.edible(d));
     var care = edible ? 'cook' : d && d.cat === 'people' ? 'music' : null;
     var cv = care ? (R.skillRead ? R.skillRead(care) : R.skill(care)) : 0, kk = cv * CK;
-    return { art: art, craft: craft, ka: ka, kc: kc, care: care, kk: kk, careWho: care && R.skillBest ? R.skillBest(care).who : null,
-      k: 1 + ka + kc + kk, artWho: R.skillBest ? R.skillBest('art').who : null, craftWho: R.skillBest ? R.skillBest('craft').who : null };
+    var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0;
+    return { art: art, craft: craft, ka: ka, kc: kc, care: care, kk: kk, combo: combo, careWho: care && R.skillBest ? R.skillBest(care).who : null,
+      k: (1 + ka + kc + kk) * (1 + combo), artWho: R.skillBest ? R.skillBest('art').who : null, craftWho: R.skillBest ? R.skillBest('craft').who : null };
   };
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d) * D.mirageK(d)); };
@@ -142,7 +143,7 @@
   /** 발견 카드의 「가치」 칸: 올린 값과 그 까닭 */
   D.valueTag = function (d) {
     var v = D.valueParts(d); if (v.k <= 1.0001) return '가치 ' + U.num(d.val);
-    var why = []; if (v.ka) why.push('그림' + (v.artWho ? '·' + v.artWho : '') + ' +' + Math.round(v.ka * 100) + '%'); if (v.kc) why.push('세공' + (v.craftWho ? '·' + v.craftWho : '') + ' +' + Math.round(v.kc * 100) + '%'); if (v.kk) why.push((v.care === 'cook' ? '요리' : '음악') + (v.careWho ? '·' + v.careWho : '') + ' +' + Math.round(v.kk * 100) + '%');
+    var why = []; if (v.ka) why.push('그림' + (v.artWho ? '·' + v.artWho : '') + ' +' + Math.round(v.ka * 100) + '%'); if (v.kc) why.push('세공' + (v.craftWho ? '·' + v.craftWho : '') + ' +' + Math.round(v.kc * 100) + '%'); if (v.kk) why.push((v.care === 'cook' ? '요리' : '음악') + (v.careWho ? '·' + v.careWho : '') + ' +' + Math.round(v.kk * 100) + '%'); if (v.combo) why.push('숨은 능력 +' + Math.round(v.combo * 100) + '%');
     return '가치 ' + U.num(D.value(d)) + ' <small>(' + why.join(', ') + ')</small>';
   };
 
@@ -248,6 +249,7 @@
     if (G.Encyc) { try { G.Encyc.onFind(d); } catch (e) { console.error(e); } }   // 발견물 백과사전: 한 갈래를 다 채우면 포상 (js/systems/encyclopedia.js)
     delete s.hints[d.id];
     var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d) * (tomb.fameK || 1));
+    if (G.Career) fame += G.Career.discoveryFame(d, fame);
     G.Fame.add('ex', fame);
     // 증거품: 이름 붙은 증거(해도·지도)는 소지품으로 챙긴다 — 보고·발표할 때 건넨다 (잃으면 믿어 주지 않는다)
     if (d.evidence && !s.player.items.some(function (it) { return it.kind === 'evidence' && it.disc === d.id; })) {
@@ -267,6 +269,7 @@
     // 유적은 복원 GIF가 빛나며 돌고, 「○○ 발견」과 함께 제독·부하의 대화가 이어진다 (그림·세공 솜씨만큼 자세히)
     if (G.Scenes.discoveryReveal) { try { await G.Scenes.discoveryReveal(d, fame); } catch (e) { console.error(e); } }
     var impact = D.applyImpact(d, st);
+    if (G.Career) G.Career.afterDiscovery(d);
     // 칸이 남는 만큼 먼저 챙기고, 모자라면 카드를 본 뒤에 무엇을 버릴지 묻는다
     var wait = [];
     rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });

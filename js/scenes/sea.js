@@ -195,6 +195,7 @@
     UI.hud.set('days', (f.daysOut || 0) + '일째');
     var food = H.supply('food'), water = H.supply('water');
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
+    UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
     UI.hud.set('crew', f.crew + '명' + (f.crew < R.crewMin() ? '<small>/' + R.crewMin() + '</small>' : ''), f.crew < R.crewMin());
     UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
@@ -1394,7 +1395,8 @@
       if (G.Rain) fb += G.Rain.fatigue(st.storm > 0);              // 비: 기온대·소나기/폭우·비 대책에 따라 (js/systems/searain.js)
       f.fatigue = U.clamp(f.fatigue + fb, 0, 100);
       var morale = R.fleetBonus('morale');
-      f.discipline = U.clamp(f.discipline - (f.fatigue > 60 ? 0.9 : 0.25) + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
+      var discLoss = (f.fatigue > 60 ? 0.9 : 0.25) * (G.SkillCombos ? G.SkillCombos.factor('disciplineLoss') : 1);
+      f.discipline = U.clamp(f.discipline - discLoss + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
         + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0) + (GM ? GM.disc : 0) + (G.Rain ? G.Rain.discipline() : 0), 0, 100);
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
@@ -1428,7 +1430,8 @@
       f.ships.forEach(function (sh) {
         var k = Math.max(R.shipSkill(sh, 'ship'), fleetK); if (!k || sh.hp >= sh.maxHp) return;
         wanted = true;
-        var fix = Math.min(0.25 * k, sh.maxHp - sh.hp, (f.mat || 0) / mph);
+        var repairK = G.SkillCombos ? G.SkillCombos.factor('repairPower') : 1;
+        var fix = Math.min(0.25 * k * repairK, sh.maxHp - sh.hp, (f.mat || 0) / mph);
         if (fix <= 0) return;
         sh.hp += fix; f.mat = Math.max(0, (f.mat || 0) - fix * mph);
       });
@@ -1594,7 +1597,8 @@
       var lostCrew = 0, sunk = [];
       var offS = G.Ships.offshore(s.loc.lon, s.loc.lat), saved = [];
       f.ships.forEach(function (sh) {
-        var dm = sh.maxHp * U.rf(0.06, 0.24) * dmgOf(sh) * (1 - R.fleetBonus('hp')) * G.Ships.stormK(sh, offS);
+        var stormK = G.SkillCombos ? G.SkillCombos.factor('stormDamage') : 1;
+        var dm = sh.maxHp * U.rf(0.06, 0.24) * dmgOf(sh) * (1 - R.fleetBonus('hp')) * G.Ships.stormK(sh, offS) * stormK;
         sh.hp -= dm;
         if (sh.hp <= 0 && G.Ships.unsinkable(sh)) { sh.hp = 1; saved.push(sh); }
         if (sh.hp <= 0) sunk.push(sh);

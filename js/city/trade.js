@@ -196,6 +196,8 @@
     if (G.Growth) G.Growth.buy(q * price);   // 거래 경험 (js/systems/growth.js)
     if (G.Slave && G.Slave.is(id)) G.Slave.onBuy(c, q);   // 노예 무역: 악명·「노예 상인」
     if (G.Hostile) G.Hostile.trade(c, q * price);   // 그 나라와 교역하면 적대가 줄어든다
+    if (G.Ledger) G.Ledger.record(c);
+    G.Game.refreshHud();
   }
   T.applyBuy = applyBuy;
 
@@ -276,9 +278,12 @@
     var otherTotal = 0;
     while (left > 0) { var n = Math.min(chunk, left), p0 = sellP(c, id), o = Math.min(n, other); total += p0 * o + (own ? Math.min(p0, own.cost) : p0) * (n - o); otherTotal += p0 * o; other -= o; oSold += o; R.onSell(c, id, n); left -= n; }
     R.spill(c, id, q);      // 남는 물건은 상인들이 이웃 항구로 실어 돌린다
+    var lots = R.cargoLots(cg);
+    var imported = oSold === q && Object.keys(lots).every(function (k) { return !lots[k].q || (k !== 'x' && +k !== c.id && lots[k].cost > 0); }) && !(G.Slave && G.Slave.is(id));
     var cost0 = cg.cost, paid = R.takeCargoLots(cg, c.id, oSold, q - oSold);
     var profit = total - paid;
     s.player.gold += total; s.stats.profit += profit; s.stats.trades++;
+    var careerBonus = G.Career ? G.Career.tradeBonus(profit, imported) : 0;
     if (G.Growth) G.Growth.sell(profit);   // 거래 경험 — 이익이 클수록 (js/systems/growth.js)
     // 유행: 같은 물건을 같은 나라·지역에 거듭 팔아 큰 이익을 냈다 (js/systems/fad.js)
     var fad = G.Fad ? G.Fad.sold(c, id, q, total, cost0) : null;
@@ -287,8 +292,9 @@
     if (G.Slave && G.Slave.is(id)) G.Slave.onSell(c, q);   // 노예 무역: 악명·「노예 상인」
     if (profit > 0) { var tfame = profit / 2500; G.Fame.add('tr', Math.floor(tfame) + (U.chance(tfame % 1) ? 1 : 0)); }   // 2,500닢에 못 미치는 몫도 그만큼의 확률로 (첫 장사 이익 2천 닢이 교역 명성 0이 되지 않게)
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
+    if (G.Ledger) G.Ledger.record(c);
     G.Game.refreshHud();
-    return { total: total, profit: profit, otherTotal: otherTotal };
+    return { total: total, profit: profit, otherTotal: otherTotal, careerBonus: careerBonus };
   }
   T.sellQty = sellQty;
 
@@ -310,7 +316,10 @@
       var mineF = fads.filter(function (x) { return x.src === 'me'; }), worldF = fads.filter(function (x) { return x.src !== 'me'; });
       if (mineF.length) lines.push('요즘 이 고장에서는 ' + mineF.map(function (x) { return x.name; }).join('·') + U.jx(mineF[mineF.length - 1].name, '이/가') + ' 없어서 못 판다네. 누가 자꾸 들여와 팔더니 유행이 됐지. 한 ' + mineF[0].left + '일은 더 갈 걸세.');
       if (worldF.length) lines.push(worldF.map(function (x) { return (x.why ? x.why + U.jx(x.why, '으로/로') + ' ' : '') + x.name; }).join(', ') + U.jx(worldF[worldF.length - 1].name, '이/가') + ' 유행이라 값이 ' + worldF[0].m + '배는 뛰었지. 한 ' + worldF[0].left + '일은 갈 걸세.');
-      if (!fads.length) lines.push('같은 물건을 한 나라에 거듭 들여와 큰 이문을 남기면, 그 물건이 유행을 타서 값이 몇 배로 뛰는 일이 있다네. 석 달 안에 세 번쯤이면 소문이 나지.');
+      if (!fads.length) {
+        var fb = G.BALANCE.fad;
+        lines.push('같은 물건을 같은 나라나 지역에 들여와 산 값보다 ' + Math.round(fb.profit * 100) + '% 이상 비싸게 팔아 보게. ' + fb.window + '일 안에 ' + fb.need + '번 이상 그런 장사를 하면, 그때부터 조건을 채운 거래마다 ' + Math.round(fb.chance * 100) + '% 확률로 유행이 날 수 있지.\f같은 날 같은 도시에서 나눠 팔거나, 한 번 입항해 머무는 동안 거듭 판 것은 한 번으로 치네. 유행이 나면 ' + fb.days + '일 동안 값이 ' + fb.mult + '배로 뛰지. 유행이 끝난 뒤에는 ' + fb.cooldown + '일 동안 같은 곳에서 같은 물건의 유행이 다시 나지 않는다네.');
+      }
     }
     // 유럽 시장의 시대 수요: 지금 이 고장에서 값이 크게 오른 물건
     if (G.Era && G.Era.EUROPE.indexOf(c.region) >= 0) {
@@ -420,6 +429,7 @@
       var p = v === 'talk'
         ? 0.24 + R.skill('speech') * 0.16 + R.skill('acct') * 0.07 + (R.stat('cha') - 50) * 0.005 + (lv - 1) * 0.07
         : 0.22 + R.skill('sword') * 0.12 + (R.stat('mar') - 50) * 0.006 + (s.player.notoriety / 260);
+      if (G.SkillCombos) p += G.SkillCombos.bonus('debt');
       var dOk = U.chance(U.clamp(p, 0.1, 0.9));
       if (G.Growth) { if (v === 'talk') G.Growth.persuade(dOk, dOk ? '설득 경험 — 빚을 받아 냈다' : null); else G.Growth.gain('duel', dOk ? 6 : 2, '일기토 경험 — 윽박질렀다'); }
       if (dOk) {
@@ -650,7 +660,7 @@
 
   T.haggleOdds = function (c) {
     var acct = R.skill('acct'), lv = C.langLv(c), cha = R.stat('cha'), pu = R.purser();
-    var p = 0.25 + acct * 0.17 + (lv - 1) * 0.08 + (cha - 50) * 0.004 + (pu ? 0.12 + pu.acct * 0.05 : 0) + (G.Cabins ? G.Cabins.fx('account', 'haggle') : 0);
+    var p = 0.25 + acct * 0.17 + (lv - 1) * 0.08 + (cha - 50) * 0.004 + (pu ? 0.12 + pu.acct * 0.05 : 0) + (G.Cabins ? G.Cabins.fx('account', 'haggle') : 0) + (G.SkillCombos ? G.SkillCombos.bonus('haggle') : 0);
     var disc = 0.04 + acct * 0.03 + (pu ? 0.02 + pu.acct * 0.015 : 0);
     // 귀족의 권한: 작위가 있으면 유럽·이슬람 도시에서 더 잘, 더 많이 깎인다 (js/systems/court.js)
     var nb = G.Court ? G.Court.haggle(c) : null;

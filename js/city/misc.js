@@ -328,6 +328,7 @@
     s.flags.blessed = s.day + 120;      // 넉 달 동안 폭풍을 덜 만난다 (sea.js blessed)
     await UI.say('항해의 무사를 빌었다. 마음이 편안해진다. (넉 달 동안 폭풍을 조금 덜 만난다)', {});
     if (R.skill('theo') >= 1) { s.fleet.discipline = Math.min(100, s.fleet.discipline + 5); UI.toast('함께 기도한 선원들의 마음이 하나가 되었다. (규율 +5)', 'pray'); }
+    if (G.Career) G.Career.pray();
   };
   CH.heal = async function (c) {
     var s = S(), p = s.player;

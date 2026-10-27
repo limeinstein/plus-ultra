@@ -11,12 +11,31 @@
 (function (G) {
   'use strict';
   var A = G.ACHIEVEMENTS = [];
-  G.ACHV_GROUPS = ['고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '전설과 사슬', '조합', '동료'];
+  G.ACHV_GROUPS = ['명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '전설과 사슬', '조합', '동료'];
   function a(group, id, name, desc, rule, fame, gold, title) {
     var o = { group: group, id: id, name: name, desc: desc, fame: fame, gold: gold, title: title || null };
     for (var k in rule) o[k] = rule[k];
     A.push(o);
   }
+
+  // 명성 업적: 기존 승급 문턱을 공유한다. 일회성 보상이며 명성을 되돌려 주지 않는다.
+  var FK = G.BALANCE.fameAchievements;
+  G.BALANCE.fameTitles.forEach(function (n, i) {
+    var title = G.BALANCE.fameTitleNames[i + 1];
+    a('명성', 'fame_total_' + n, '명성의 이정표 · ' + title, '통합 명성 ' + n.toLocaleString('ko-KR') + '에 도달한다.',
+      { fameRule: { min: n } }, 0, FK.totalGold[i] || 0, title);
+  });
+  [{ id: 'ex', name: '탐험', titles: ['해도의 기록자', '미지의 개척자', '세계의 증인'] },
+    { id: 'tr', name: '교역', titles: ['항로의 거래인', '대양의 거상', '세계를 잇는 상인'] },
+    { id: 'bt', name: '전투', titles: ['갑판의 용사', '함대의 수호자', '백전의 제독'] },
+    { id: 'so', name: '사교', titles: ['항구의 벗', '바다의 중재자', '만인의 신뢰'] }].forEach(function (b) {
+    FK.branchSteps.forEach(function (n, i) {
+      a('명성 갈래', 'fame_' + b.id + '_' + n, b.titles[i], b.name + ' 명성 ' + n.toLocaleString('ko-KR') + '에 도달한다. 직업에 관계없이 달성할 수 있다.',
+        { fameRule: { cat: b.id, min: n } }, 0, FK.branchGold[i], b.titles[i]);
+    });
+  });
+  a('명성 갈래', 'fame_balanced', '네 바다의 조화', '탐험·교역·전투·사교 명성이 각각 ' + FK.balanced.toLocaleString('ko-KR') + ' 이상이다.',
+    { fameRule: { all: true, min: FK.balanced } }, 0, FK.balancedGold, '균형 잡힌 제독');
 
   // ------------------------------------------------------------------ 고대 문명
   a('고대 문명', 'wonders7', '고대 세계의 일곱 불가사의', '필론과 헤로도토스가 꼽은 일곱 경이를 모두 제 눈으로 보았다.',

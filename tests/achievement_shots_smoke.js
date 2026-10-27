@@ -21,7 +21,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForFunction(() => window.G && G.Game && G.Achieve && G.FamEv && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const result = await page.evaluate(async () => {
       const special = { montcrew: 'legend-events/montcrew_oath', happily: 'legend-events/happily_after_all' };
-      const rows = await Promise.all(G.ACHIEVEMENTS.map(async a => {
+      // 명성 이정표는 공적록 대사 장면을 쓴다. 기존 발견·동료 업적의 전용 그림 60개를 검사한다.
+      const illustrated = G.ACHIEVEMENTS.filter(a => !a.fameRule);
+      const rows = await Promise.all(illustrated.map(async a => {
         const key = special[a.id] || ('achievement-events/' + a.id);
         const size = await new Promise(resolve => {
           const im = new Image();
@@ -43,7 +45,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.crewEver = { cinderella: 1, snow_white: 1, sleeping_beauty: 1 };
       await G.Achieve.afterHire('little_mermaid');
       FE.showPic = oldShow; FE.stopPic = oldStop; UI.window = oldWindow; UI.say = oldSay;
-      return { rows, total: G.ACHIEVEMENTS.length, once: G.Achieve.done('onceupon'), shown, pop: pops.some(x => /Once Upon a Time/.test(x)) };
+      return { rows, total: illustrated.length, once: G.Achieve.done('onceupon'), shown, pop: pops.some(x => /Once Upon a Time/.test(x)) };
     });
 
     const missing = result.rows.filter(r => !r[2]);

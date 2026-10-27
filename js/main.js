@@ -285,10 +285,16 @@
   H.gold = function () { return U.num(Game.state.player.gold) + '<small>닢</small>'; };
   H.date = function () { return U.fmtDate(Game.state.date); };
   /** 보급 일수와 위기 단계. 교역품으로 대신 먹고 마실 수 있는 양도 포함한다. */
-  H.supply = function (kind) {
-    var days = kind === 'food' ? R.daysOfFood() : R.daysOfWater();
+  H.supply = function (kind, amount) {
+    var f = Game.state.fleet, cargo = R.provisionCargo(kind), use = R.dailyUse();
+    var stored = amount == null ? (f[kind] || 0) : amount;
+    var base = f.crew > 0 ? Math.floor(stored / use + 1e-6) : 999;
+    var days = f.crew > 0 ? Math.floor((stored + cargo) / use + 1e-6) : 999;
+    var extra = Math.max(0, days - base), name = kind === 'food' ? '식량' : '물통';
     var state = days <= 0 ? '고갈' : days < 3 ? '위기' : days < 7 ? '부족' : '';
-    return { days: days, text: (days >= 999 ? '—' : days + '일') + (state ? ' <small class="supply-state ' + (days < 3 ? 'crisis' : 'low') + '">' + state + '</small>' : ''), warn: days < 7 };
+    return { days: days, storedDays: base, cargoDays: extra,
+      tip: name + ' ' + base + '일' + (cargo ? ' + 교역품 대체분 ' + extra + '일 = 합계 ' + days + '일. 교역품을 팔면 대체분도 줄어듭니다.' : '. 교역품 대체분은 없습니다.'),
+      text: (days >= 999 ? '—' : extra ? base + '+<small title="교역품 대체분">' + extra + '</small>일' : days + '일') + (state ? ' <small class="supply-state ' + (days < 3 ? 'crisis' : 'low') + '">' + state + '</small>' : ''), warn: days < 7 };
   };
   /** 도시에 있을 때: 날짜 · 도시 · 위도·경도 · 식량·식수 · 피로 · 계약 | 소지금 · 명성 · 직위 */
   Game.cityHud = function () {
@@ -300,8 +306,8 @@
       { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: c ? '이 도시의 말과 제독 일행이 하는 수준 (동료 통역·부관 포함) — ' + G.LANG_LV[R.cityLang(c).lv || 0] + (R.cityLang(c).alt ? ' · 이 항구는 ' + G.LANGS[c.lang] + ' 대신 포르투갈어가 통한다 (' + G.Treaty.ptLang(c) + ')' : '') : '' },
       { k: 'lat', icon: 'compass', label: '위도', text: c ? U.fmtLat(c.lat) : H.lat() },
       { k: 'lon', label: '경도', text: c ? U.fmtLon(c.lon) : H.lon() },
-      { k: 'food', icon: 'bread', label: '식량', text: food.text },
-      { k: 'water', icon: 'drop', label: '식수', text: water.text },
+      { k: 'food', icon: 'bread', label: '식량', text: food.text, tip: food.tip },
+      { k: 'water', icon: 'drop', label: '식수', text: water.text, tip: water.tip },
       { k: 'fat', icon: 'hourglass', label: '피로', text: Math.round(f.fatigue || 0) + '%' },
       { k: 'contract', icon: 'seal', label: '계약', text: k.text, tip: k.tip },
       { grow: true },
@@ -310,6 +316,7 @@
       { k: 'title', icon: 'crown', label: '직위', text: H.title(), tip: H.titleTip() }
     ]);
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
+    UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
     UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
     UI.hud.set('contract', k.text, k.warn);
   };
@@ -322,18 +329,20 @@
     UI.hud.set('title', H.title()); UI.hud.tip('title', H.titleTip());
     var food = H.supply('food'), water = H.supply('water'), f = S.fleet || {};
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
+    UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
     UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
+    if (G.Info && G.Info.refreshFleetPanels) G.Info.refreshFleetPanels();
     Game.checkTitle();
   };
   /** 명성이 올라 부르는 이름이 바뀌면 축하해 준다 */
-  var TITLES = ['무명의 항해자', '신참 모험가', '이름난 모험가', '저명한 항해가', '위대한 탐험가', '대항해자'];
   Game.checkTitle = function () {
     var S = Game.state; if (!S || !S.player) return;
     var t = R.fameTitle(S.player.fame);
     if (!S.titleSeen) { S.titleSeen = t; return; }
     if (t === S.titleSeen) return;
-    if (TITLES.indexOf(t) > TITLES.indexOf(S.titleSeen)) {
+    var titles = G.BALANCE.fameTitleNames;
+    if (titles.indexOf(t) > titles.indexOf(S.titleSeen)) {
       UI.toast('명성이 드높아졌다 — 이제 세상은 제독을 「' + t + '」' + U.jx(t, '이라/라') + ' 부른다!', 'laurel', 6500);
       G.State.log('「' + t + '」' + U.jx(t, '으로/로') + ' 불리게 되었다. (명성 ' + U.num(S.player.fame) + ')');
       if (G.Audio) G.Audio.sfx('discover');

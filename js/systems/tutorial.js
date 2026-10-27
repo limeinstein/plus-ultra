@@ -186,6 +186,7 @@
     if (!t || scene() === 'title') { if (box) { box.remove(); box = null; shown = ''; } if (toasts) toasts.style.top = ''; root.classList.remove('tut-on'); return; }
     var st = step(), s = S();
     var goal = st.goal || '';
+    if (st.id === 'library' && !C().current()) goal = '거리에서 <b>도서관</b>으로 들어가 「열람」을 고른다';
     if (st.id === 'gate' && scene() === 'land') goal = '뭍에서 <b>서쪽 곶</b>으로 걸어간다 (땅을 누르면 걷는다)';
     if (st.id === 'auto' && scene() === 'sea') goal = '<b>세빌리아</b>까지 자동항해 (풀렸으면 「로코에게 키를 맡긴다」)';
     var helm = scene() === 'sea' && !!helmCity(), again = !!againLines();
@@ -223,6 +224,7 @@
   function wants(t, st) {
     var want = (st.glow || []).slice();
     function drop(x) { var i = want.indexOf(x); if (i >= 0) want.splice(i, 1); }
+    if (st.id === 'library' && !C().current()) want.push('도서관');
     if (st.id === 'tavern') { if (t.f.drink) drop('술을 마신다'); if (t.f.maid) drop('여급과 이야기'); }
     if (st.id === 'hire') D.mates.forEach(function (id) { if (!mate(id)) want.push(G.MATE[id].name); });
     if (st.id === 'roles') { var lc = mate('lacosa'); if (lc && lc.role === 'surveyor') want = []; }
@@ -325,17 +327,33 @@
     roles: function (t) { var m = mate('lacosa'); if (m && m.role === 'none') C().B.tavern.assign(m, 'surveyor'); t.f.role = m ? m.role : 'surveyor'; },
     sail: function (t) { t.f.sailed = 1; },
     cabin: function (t) { var m = mate('arana'); if (m) G.Cabins.place(m, 0); },
-    battle: function (t) { t.f.won = 1; dropPirate(); },
+    battle: async function (t) {
+      // 전투 안에서 건너뛰면 시작 직전 상태로 돌아간다. 승패 보상·손실은 없다.
+      if (scene() === 'battle') {
+        if (check) { G.Game.state = G.State.deserialize(check.data); t = T(); }
+        t.f.in_battle = t.f.skip_battle = t.f.won = 1;
+        await UI.fade(function () { G.Game.go('sea', { resume: true }); });
+      } else t.f.won = 1;
+      dropPirate();
+    },
     landwar: function (t) { t.f.lw = 1; },
     buy: function (t) { t.f.noCoral = 1; },
     sell: function (t) { t.f.noCoral = 1; }
   };
-  TU.skip = async function () {
-    var t = T(), st = step(); if (!t || !st || !SKIP[st.id] || UI.busy() || running) return;
-    if (!(await UI.confirm('「' + st.title + '」 단계를 건너뛸까요? 이 단계에서 할 일은 한 것으로 칩니다.', '건너뛴다', '그만둔다', '튜토리얼'))) return;
+  async function confirmSkip(t, st) {
+    if (!(await UI.confirm('「' + st.title + '」 단계를 건너뛸까요? 이 단계에서 할 일은 한 것으로 칩니다.', '건너뛴다', '그만둔다', '튜토리얼'))) return false;
+    if (T() !== t || step() !== st) return false;
     t.f['in_' + st.id] = 1; t.f['skip_' + st.id] = 1;
-    SKIP[st.id](t);
     UI.toast('단계를 건너뛰었다 — ' + st.title, 'info', 3200);
+    return true;
+  }
+  TU.skip = async function () {
+    var t = T(), st = step(); if (!t || !st || !SKIP[st.id] || UI.busy() || running) return false;
+    if (!(await confirmSkip(t, st))) return false;
+    running = true;
+    try { await SKIP[st.id](t); } finally { running = false; }
+    render();
+    return true;
   };
 
   // ================================================================ 고정 사건: 해적·도적·돌고래
@@ -385,10 +403,13 @@
       await play(st.intro); await play(st.teach);
       var n = D.bandits, party0 = l.party, crew0 = s.fleet.crew;
       for (;;) {
-        var r = await G.Games.landWar({ enemy: { name: '도적 떼', kind: 'bandit', n: n }, party: l.party, terr: 'mountain', guns: false });
+        var r = await G.Games.landWar({ enemy: { name: '도적 떼', kind: 'bandit', n: n }, party: l.party, terr: 'mountain', guns: false,
+          skip: function () { return confirmSkip(t, st); } });
+        if (r.res === 'skip') break;
         if (r.res === 'win') {
           var lost = l.party - r.left; l.party = Math.max(1, r.left); s.fleet.crew = Math.max(1, s.fleet.crew - lost);
-          var loot = n * 12; s.player.gold += loot; G.Fame.add('bt', 5 + (r.leaderDown ? 3 : 0));
+          var loot = r.spoils && r.spoils.gold != null ? r.spoils.gold : n * 12;
+          s.player.gold += loot; G.Fame.add('bt', 5 + (r.leaderDown ? 3 : 0));
           UI.toast('도적 떼를 물리쳤다! (금화 ' + loot + '닢)', 'sword', 4200);
           break;
         }
@@ -405,7 +426,7 @@
 
   // ================================================================ 단계마다: 끝났는가 / 그때그때 할 일
   var DONE = {
-    prologue: function (t, s) { return inCity(D.home) && C().current() && C().current().kind === 'library'; },
+    prologue: function (t, s) { return !!t.f.skip_prologue || (inCity(D.home) && C().current() && C().current().kind === 'library'); },
     library: function (t, s) { return !!t.f.book && !!s.hints[D.disc] || !!G.Disc.foundByMe(D.disc); },
     tavern: function (t, s) { return !!t.f.drink && !!t.f.maid; },
     hire: function (t, s) { return D.mates.every(function (id) { return !!mate(id); }); },
@@ -548,7 +569,7 @@
       var k = RT.key(D.home, D.port); if (!s.routes[k] || !s.routes[k].n) s.routes[k] = { n: 1, best: null, last: U.dateNum(s.date) };
       await play(st.done);
     },
-    landwar: async function (t, s, st) { await play(st.won); },
+    landwar: async function (t, s, st) { if (!t.f.skip_landwar) await play(st.won); },
     find: async function (t, s, st) { await play(st.done); },
     sell: async function (t, s, st) { if (!t.f.noCoral) await play(st.done); },
     report: async function (t, s, st) { await play(st.done); }
@@ -599,7 +620,7 @@
       if (scene() === 'battle') {
         var B = G.Scenes.battle, bs = B.runtime && B.runtime();
         if (bs && !bs.over && !t.f.battleIn && !UI.busy() && !running) {
-          t.f.battleIn = 1; bs.paused = true;
+          t.f.battleIn = 1; B.pause(true);
           if (t.f.weak) weaken(Math.pow(D.weak, t.f.weak));
           running = true;
           play(STEPS[IDX.battle].begin).catch(function (e) { console.error(e); }).then(function () { running = false; });
@@ -683,7 +704,11 @@
       return function (m, v) { var r = orig.apply(this, arguments), t = T(); if (t && m && m.id === 'lacosa') t.f.role = m.role; return r; };
     });
     // 출항 준비를 마쳤는가 (빛나는 단추를 「출항 준비」에서 「출항」으로)
-    wrap(Cy.B.harbor, 'prep', function (orig) { return async function () { var r = await orig.apply(this, arguments); if (T() && step()) T().f['prep_' + step().id] = 1; return r; }; });
+    wrap(Cy.B.harbor, 'prep', function (orig) { return async function () {
+      var t = T(), st = step(), r = await orig.apply(this, arguments);
+      if (r === true && t && T() === t && st) t.f['prep_' + st.id] = 1;
+      return r;
+    }; });
     // 후원자: 공작은 명성을 따지지 않고 만나 준다
     wrap(SP, 'fameNeed', function (orig) { return function (sp) { return T() && sp && sp.id === D.sponsor ? 0 : orig.apply(this, arguments); }; });
     wrap(Cy.B.mansion, 'enter', function (orig) {

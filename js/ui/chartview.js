@@ -9,6 +9,7 @@
   function S() { return G.Game.state; }
 
   var LAT_MIN = -75, LAT_MAX = 80, SPAN_MIN = 8, SPAN_MAX = 360;
+  var searchSerial = 0;
   // 세계 전체의 바탕 그림은 하루에 한 번만 다시 그린다
   var worldCv = null, worldKey = '';
   function worldTerrain() {
@@ -39,7 +40,9 @@
     var ref = opts.ref != null ? opts.ref : (s.loc.mode === 'city' ? s.loc.city : (G.Routes ? G.Routes.origin() : null));
     var here = s.loc.mode !== 'city' ? { lon: s.loc.lon, lat: s.loc.lat } : G.CITY_DATA[s.loc.city];
     var wrap = U.el('div', 'chartview');
-    wrap.innerHTML = '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
+    var searchId = 'chart-search-' + (++searchSerial);
+    wrap.innerHTML = '<div class="cv-search"><label for="' + searchId + '">도시 찾기</label><input id="' + searchId + '" type="search" placeholder="알고 있는 도시 이름" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="' + searchId + '-list"><div class="cv-results" id="' + searchId + '-list" role="listbox" hidden></div></div>' +
+      '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
       '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="세계 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
       '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적·자연 경관</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
       '<div class="cv-info" hidden></div>';
@@ -182,6 +185,7 @@
       info.innerHTML = '<button class="ci-x" title="닫기">×</button>' + G.CityInfo.html(c, ref) +
         (acts.length ? '<div class="ci-acts">' + acts.map(function (a, i) { return '<button class="btn small' + (i === 0 ? ' navy' : '') + '" data-i="' + i + '">' + (a.icon ? G.icon(a.icon) : '') + U.esc(a.label) + '</button>'; }).join('') + '</div>' : '');
       info.hidden = false;
+      info.scrollTop = 0;
       // 요약이 길면 맨 아래 단추가 창 밖으로 밀려 굴려야 보인다 — actionsTop이면 이름·꼬리표 바로 아래(표 위)로 올린다 (2026-10-25)
       if (opts.actionsTop) { var ab = info.querySelector('.ci-acts'), tb = info.querySelector('.ci-tbl'); if (ab && tb) { tb.parentNode.insertBefore(ab, tb); ab.style.margin = '8px 0 10px'; } }
       info.querySelector('.ci-x').onclick = function () { sel = null; info.hidden = true; draw(); };
@@ -194,10 +198,43 @@
       sel = null; seaSel = [lon, lat];
       info.innerHTML = '<button class="ci-x" title="닫기">×</button><div class="ci-h"><b>바다</b><span class="ci-sub">' + U.fmtLat(lat) + ' · ' + U.fmtLon(lon) + '</span></div><div class="ci-hint" style="margin:8px 0">' + U.esc(a.note || '') + '</div><div class="ci-acts"><button class="btn small navy">' + U.esc(a.label) + '</button></div>';
       info.hidden = false;
+      info.scrollTop = 0;
       info.querySelector('.ci-x').onclick = function () { seaSel = null; info.hidden = true; draw(); };
       info.querySelector('.ci-acts .btn').onclick = function () { a.fn(lon, lat); };
       draw();
     }
+
+    // 알고 있는 현존 도시만 찾는다. 선택은 위치·요약만 바꾸고 항해 명령은 기존 단추를 쓴다.
+    var search = wrap.querySelector('.cv-search'), field = search.querySelector('input'), hits = search.querySelector('.cv-results');
+    var matches = [], active = 0;
+    function fold(t) { return String(t || '').replace(/\s+/g, '').toLocaleLowerCase(); }
+    function closeSearch() { hits.hidden = true; field.setAttribute('aria-expanded', 'false'); field.removeAttribute('aria-activedescendant'); }
+    function chooseCity(c) {
+      closeSearch(); field.value = c.name;
+      view.lon = c.lon; view.lat = c.lat; view.span = Math.min(view.span, 32); clampView(); showCity(c);
+    }
+    function markSearch() {
+      U.$$('button', hits).forEach(function (b, i) { b.classList.toggle('on', i === active); b.setAttribute('aria-selected', i === active ? 'true' : 'false'); });
+      var b = hits.querySelectorAll('button')[active];
+      if (b) { field.setAttribute('aria-activedescendant', b.id); b.scrollIntoView({ block: 'nearest' }); }
+    }
+    field.oninput = function () {
+      var q = fold(field.value); active = 0;
+      if (!q) { matches = []; closeSearch(); return; }
+      matches = cities().filter(function (c) { return fold(c.name).indexOf(q) >= 0; }).sort(function (a, b) { return (fold(b.name) === q ? 1 : 0) - (fold(a.name) === q ? 1 : 0) || a.name.localeCompare(b.name, 'ko'); });
+      hits.innerHTML = matches.length ? matches.map(function (c, i) { return '<button type="button" role="option" id="' + searchId + '-hit-' + i + '">' + U.esc(c.name) + ' <small>' + U.esc(G.REGIONS[c.region] || '') + '</small></button>'; }).join('') : '<div class="cv-empty" role="status">알고 있는 도시 중에 일치하는 곳이 없습니다.</div>';
+      U.$$('button', hits).forEach(function (b, i) { b.onclick = function () { chooseCity(matches[i]); }; });
+      hits.hidden = false; field.setAttribute('aria-expanded', 'true'); markSearch();
+    };
+    field.onkeydown = function (e) {
+      if (e.isComposing) return;
+      if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); closeSearch(); field.blur(); }
+      else if (!hits.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        e.stopPropagation(); e.preventDefault();
+        if (matches.length) { active = (active + (e.key === 'ArrowDown' ? 1 : -1) + matches.length) % matches.length; markSearch(); }
+      } else if (e.key === 'Enter') { e.stopPropagation(); e.preventDefault(); if (!hits.hidden && matches[active]) chooseCity(matches[active]); }
+    };
+    wrap.addEventListener('mousedown', function (e) { if (!search.contains(e.target)) closeSearch(); });
 
     // ------------------------------------------------ 조작
     function zoomAt(k, x, y) {

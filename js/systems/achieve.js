@@ -42,6 +42,10 @@
     my = my || mine();
     var rows = [];
     function idsRow(ids, n, label) { var got = ids.filter(found); return { label: label || null, ids: ids, got: got, count: got.length, n: n || ids.length }; }
+    if (a.fameRule) {
+      var fr = a.fameRule, cats = fr.all ? ['ex', 'tr', 'bt', 'so'] : [fr.cat || null];
+      cats.forEach(function (cat) { rows.push({ label: (cat ? G.Fame.NAME[cat] : '통합') + ' 명성', count: G.Fame.get(cat), n: fr.min }); });
+    }
     if (a.ids) rows.push(idsRow(a.ids, a.n));
     if (a.cats) a.cats.forEach(function (r) {
       if (r.ids) { rows.push(idsRow(r.ids, r.n)); return; }
@@ -70,17 +74,32 @@
   };
 
   /** 아직 이루지 않은 업적 가운데 지금 이룬 것을 기록하고 보상한다 → 이룬 업적 목록 */
+  function grant(a) {
+    var s = S();
+    // 보상보다 먼저 기록하여 명성을 주는 기존 업적과 함께 처리해도 중복 지급하지 않는다.
+    store()[a.id] = { d: U.dateNum(s.date) };
+    if (a.gold) s.player.gold += a.gold;
+    if (a.fame && G.Fame) G.Fame.add('ex', a.fame);
+    G.State.log('업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다' + (a.title ? ' — 칭호 「' + a.title + '」' : '') + ' (금화 ' + U.num(a.gold || 0) + ', 명성 +' + (a.fame || 0) + ')');
+  }
   AC.check = function () {
     var s = S(), st = store(), my = mine(), got = [];
     AC.list().forEach(function (a) {
       if (st[a.id] || !AC.progress(a, my).done) return;
-      st[a.id] = { d: U.dateNum(s.date) };
-      if (a.gold) s.player.gold += a.gold;
-      if (a.fame && G.Fame) G.Fame.add('ex', a.fame);
-      G.State.log('업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다' + (a.title ? ' — 칭호 「' + a.title + '」' : '') + ' (금화 ' + U.num(a.gold || 0) + ', 명성 +' + (a.fame || 0) + ')');
+      grant(a);
       got.push(a);
     });
     return got;
+  };
+  /** 명성 획득 직후 보상은 즉시 지급하고, 장면은 기존 다음 항구/발견 뒤 대기열로 보낸다. */
+  AC.onFame = function () {
+    var s = S(), st = store();
+    AC.list().forEach(function (a) {
+      if (!a.fameRule || st[a.id] || !AC.progress(a, []).done) return;
+      grant(a);
+      var pend = s.achvPend || (s.achvPend = []); if (pend.indexOf(a.id) < 0) pend.push(a.id);
+      UI.toast('명성 업적 달성 · ' + a.name + ' (금화 ' + U.num(a.gold) + '닢)', 'crown', 4800);
+    });
   };
   function rewardText(a) { return '금화 ' + U.num(a.gold || 0) + '닢 · 명성 +' + U.num(a.fame || 0) + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
 
@@ -129,6 +148,10 @@
   /** 한 업적의 장면 */
   AC.scene = async function (a) {
     var ev = (G.ACHV_EVENTS || {})[a.id] || {}, s = S();
+    if (a.fameRule) ev = { n: [a.desc, '항구의 서기관이 제독의 행적을 공적록에 적고, 감사의 사례금을 건넸다.'],
+      sk: a.fameRule.cat === 'tr' ? 'acct' : a.fameRule.cat === 'bt' ? 'gun' : a.fameRule.cat === 'so' ? 'speech' : 'nav',
+      m: '이 이름은 한 번의 행운이 아니라, 우리가 쌓아 온 항해의 기록입니다.',
+      p: G.Career ? G.Career.line('honor') : '다음 항해에서도 이 이름에 부끄럽지 않도록 하자.' };
     if (G.Audio) { G.Audio.sfx('bell'); setTimeout(function () { if (G.Audio) G.Audio.sfx('cheer'); }, 450); }
     var fixedShot = achievementPic(a, ev), rb = ribbon(a), shots = fixedShot ? [] : pics(a, 3), pc = null, k = 0;
     function next() {   // 줄이 바뀔 때마다 다음 발견물 그림으로 (그림이 다 떨어지면 마지막 것을 그대로)
@@ -266,7 +289,8 @@
     var titles = AC.titles(), chains = G.CHAINS || [];
     var h = '<div class="achv-page">' +
       '<div class="achv-top"><b>업적 ' + doneN + ' / ' + list.length + '</b> · 사슬 ' + AC.chainsDone().length + ' / ' + chains.length +
-      (titles.length ? '<div class="achv-titles">' + titles.map(function (t) { return '<span class="tag good-text">' + U.esc(t) + '</span>'; }).join(' ') + '</div>' : '<div class="muted">발견의 주제를 맞춰 모으거나 이름난 동료들을 모으면 업적을 이루고 칭호를 얻는다.</div>') + '</div>';
+      (titles.length ? '<div class="achv-titles">' + titles.map(function (t) { return '<span class="tag good-text">' + U.esc(t) + '</span>'; }).join(' ') + '</div>' : '<div class="muted">명성을 쌓고 발견물·동료를 모으면 업적을 이루고 칭호를 얻는다.</div>') +
+      '<div class="muted" style="font-size:14px">명성 업적은 달성 당시 기록을 남기며 금화·칭호를 한 번만 준다. 명성 하락·세대 승계 후에도 유지된다. 칭호에 추가 능력 효과는 없다.</div></div>';
     // 사슬 지도
     h += '<h4 class="achv-h">꼬리에 꼬리를 무는 사슬</h4><div class="muted" style="font-size:14px;margin:-4px 0 6px">앞 고리를 찾으면 다음 고리의 단서가 풀린다. 열리기 전에는 그 자리에 가도 찾을 수 없다.</div>';
     chains.forEach(function (ch) {

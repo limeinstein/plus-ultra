@@ -4,7 +4,7 @@
      - 배: 그 도시에서 멀지 않은 항구 앞바다를 짚어 「○○ 앞바다, 이곳에서 ○쪽으로 ○일쯤 · ○일 안에」라고 일러 준다.
        그 앞바다(near° 안)에 기한 안에 들어가면 그 배들이 정말 나타난다 (js/scenes/sea.js spawnNpcs → MT.spawn). 한 번 나타나면 끝.
        상선대는 짐이 무거워 느리고 전리품이 많다 · 해적은 이름난 두목이 붙기 쉽다(현상금) · 군함대는 어느 나라 배인지 미리 안다.
-     - 철새: 지금 어느 도시 술집·여관에 있는지 (가까운 순, 호감이 높을수록 여러 명). 철새는 한 달에 한 번 옮겨 다니니 서둘러야 한다.
+     - 철새: 지금 어느 도시 술집·여관에 있는지 (가까운 순, 호감이 높을수록 여러 명). 소식을 들으면 59일 체류, 같은 소식을 다시 들어도 남은 날만 안내한다.
    · 사례금: 종류마다 기본값 × 도시 크기 × 호감(낮을수록 비쌈) × 만난 횟수(자주 만날수록 쌈). 호감이 높을수록 기한이 넉넉하고 상선대 짐이 많다.
    · 같은 여급에게는 하루에 한 번만 묻는다. 묻고 나면 호감이 조금 오른다.
    · 알려 준 척수 그대로 나타난다 (해적 구성·이름난 선장이 척수를 바꾸지 않는다 — js/systems/corsairs.js·seacaptains.js 가 npc.tip 을 본다).
@@ -193,9 +193,10 @@
       var ws = MT.wanderers(c, st);
       if (!ws.length) { await say('요즘은 떠돌이 항해사 이야기를 못 들었어요. 사례는 됐어요, 다음에 알려 드릴게요.', 'warm'); return; }
       s.player.gold -= price; st.tipDay = s.day; st.tipPv = G.R.stayNo(); st.aff = Math.min(100, (st.aff || 0) + 1);
+      ws.forEach(function (w) { w.stayLeft = G.MateMove.hear(w.m.id, w.c.id); });
       await say(U.pick(['쉿, 손님들이 하는 얘기를 들었는데요… ', '고마워요. 제가 들은 건 이래요. ']) + ws.map(function (w) {
-        return w.m.name + ' (' + (w.m.natName || '') + (w.m.typeName ? ' ' + w.m.typeName : '') + ') — ' + w.c.name + ' 술집, 여기서 ' + dirName(c, w.c) + ' 약 ' + daysTo(c, w.c) + '일';
-      }).join('\n') + '\n그 사람들 한 달쯤 지나면 또 다른 데로 떠나요.', 'warm');
+        return w.m.name + ' (' + (w.m.natName || '') + (w.m.typeName ? ' ' + w.m.typeName : '') + ') — ' + w.c.name + ' 술집, 여기서 ' + dirName(c, w.c) + ' 약 ' + daysTo(c, w.c) + '일 · 앞으로 ' + w.stayLeft + '일 동안 머물러요';
+      }).join('\n'), 'warm');
       ws.forEach(function (w) { G.State.log(m.name + '의 귀띔: 철새 ' + w.m.name + '(' + skillLine(w.m) + ')이(가) ' + w.c.name + ' 술집에 머문다.'); });
       if (G.Game.refreshHud) G.Game.refreshHud();
       return;

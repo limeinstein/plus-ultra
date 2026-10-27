@@ -24,6 +24,7 @@ function ok(c, m) { assert(c, m); pass++; console.log('  ✓ ' + m); }
   const btns = () => page.evaluate(() => [...document.querySelectorAll('.lwar .lw-btns button, .lwar .lw-pop button')].map(b => b.textContent.replace(/\s+/g, ' ').trim()));
   // 그림 위의 부대를 실제로 마우스로 누른다
   const unitAt = async (side, idx, act) => {
+    await page.waitForFunction(() => !window.G || !G.Loader || !G.Loader.shown(), null, { timeout: 120000 });
     const p = await page.evaluate(([side, idx]) => { const D = G.Games._landDebug; D.step(3); const list = (side === 'me' ? D.mine : D.foes).filter(u => u.n > 0 && (side !== 'me' || u.type !== 'adm')); const u = list[idx]; const r = document.querySelector('.lwar canvas').getBoundingClientRect(); return u ? { x: r.left + u.x / 1000 * r.width, y: r.top + (u.y - 22) / 440 * r.height } : null; }, [side, idx]);
     if (!p) return false;
     if (process.env.DBG) console.log('   at', JSON.stringify(p), await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return e ? e.tagName + '.' + e.className : 'none'; }, [p.x, p.y]));

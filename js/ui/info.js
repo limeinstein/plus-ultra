@@ -11,6 +11,7 @@
     opts = opts || {};
     var s = S(), f = s.fleet;
     var el = U.el('div', 'fleetpanel wood brass-frame');
+    el.dataset.compact = opts.compact ? '1' : '0';
     var h = '<div class="fp-h">' + G.icon('ship') + '함대 현황</div>';
     if (!opts.compact) {
       h += f.ships.map(function (sh, i) {
@@ -22,13 +23,20 @@
     var days = f.ships.length ? Math.min(R.daysOfFood(), R.daysOfWater()) : 0;
     h += '<div class="fp-kv">' +
       '<div>선원</div><div>' + f.crew + ' <small>(최저 ' + R.crewMin() + ' / 최대 ' + R.crewMax() + ')</small></div>' +
-      '<div>식량·물</div><div>' + (f.crew ? days + '일분' : '—') + '</div>' +
+      '<div>항해 가능</div><div>' + (f.crew ? days + '일분' : '—') + '</div>' +
+      '<div>식량</div><div title="' + U.esc(G.Game.hud.supply('food').tip) + '">' + G.Game.hud.supply('food').text + '</div>' +
+      '<div>물</div><div title="' + U.esc(G.Game.hud.supply('water').tip) + '">' + G.Game.hud.supply('water').text + '</div>' +
       '<div>적재</div><div>' + R.used() + ' / ' + R.fleetCap() + '통</div>' +
       '<div>소지금</div><div>' + U.num(s.player.gold) + '닢</div></div>';
     var ids = Object.keys(f.cargo);
     if (ids.length) h += '<div class="fp-cargo">' + ids.map(function (id) { return '<span title="' + U.esc('산 곳: ' + R.cargoFromText(f.cargo[id])) + '">' + G.goodDot(id) + G.GOOD[id].name + ' ' + f.cargo[id].q + '</span>'; }).join('') + '</div>';
     el.innerHTML = h;
     return el;
+  };
+  I.refreshFleetPanels = function () {
+    U.$$('.fleetpanel').forEach(function (el) {
+      el.parentNode.replaceChild(I.fleetPanel({ compact: el.dataset.compact === '1' }), el);
+    });
   };
 
   // ---------------------------------------------------------------- main info window with tabs
@@ -97,10 +105,11 @@
       (G.Hostile ? '<div>적대</div><div style="grid-column:span 3">' + G.Hostile.html() + '</div>' : '') +
       '<div>무기</div><div>' + (p.equip.weapon ? G.ITEM[p.equip.weapon].name + ' (공격 ' + G.ITEM[p.equip.weapon].atk + ')' : '없음') + '</div><div>방어구</div><div>' + (p.equip.armor ? G.ITEM[p.equip.armor].name + ' (방어 ' + G.ITEM[p.equip.armor].def + ')' : '없음') + '</div>' +
       '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') + (G.Wives ? G.Wives.infoWife() : '') : '없음') + '</div>' + (G.Wives && G.Wives.infoElders ? G.Wives.infoElders() : '') + '<div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return G.Family.kidName(k) + ' <small class="muted">' + G.Family.kidAge(k) + '세' + (k.sex === 'f' ? ' 딸' : ' 아들') + (k.aboard ? ' · 견습' : '') + (G.Peter ? G.Peter.tag(k) : '') + (G.KidVoy ? G.KidVoy.tag(k) : '') + (k.married ? ' · ' + (k.married.kind === 'away' ? '집을 떠남' : '출가 — ' + U.esc(k.married.title)) : '') + (G.Wives ? G.Wives.kidTag(k) : '') + '</small>' + (k.unnamed ? '' : ' ' + G.Family.bondHearts(k)); }).join(', ') : '없음') + '</div></div>' +
-      '<div class="sep"></div><div class="grid2">' +
+      (G.Career ? G.Career.html() : '') + '<div class="sep"></div><div class="grid2">' +
       '<div><h4 style="margin:0 0 8px">능력치</h4>' + G.STATS.map(function (st) { return '<div class="statrow"><span>' + st.name + '</span>' + UI.bar(p.st[st.id], 100, 'gold') + '<b>' + p.st[st.id] + '</b></div>'; }).join('') + '</div>' +
       '<div><h4 style="margin:0 0 8px">특기 <small class="muted">(동료 포함 실효 수준)</small></h4><div class="skillgrid" style="grid-template-columns:1fr 1fr">' +
       G.SKILLS.map(function (sk) { var own = p.sk[sk.id] || 0, eff = R.skill(sk.id); return '<div class="flex" style="font-size:16px;gap:6px" title="' + sk.desc + '"><span style="width:70px">' + sk.name + '</span>' + pips(eff) + (eff > own ? '<small class="muted">동료</small>' : '') + '</div>'; }).join('') + '</div></div></div>' +
+      '<div class="sep"></div><h4 style="margin:0 0 8px">숨은 능력 <small class="muted">(제독 본인의 LV3 특기 조합)</small></h4>' + (G.SkillCombos ? G.SkillCombos.html() : '') +
       '<div class="sep"></div><h4 style="margin:0 0 8px">언어</h4><div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:16px">' +
       G.LANGS.map(function (l, i) { var own = p.lg[i] || 0, eff = R.lang(i); if (!eff) return ''; return '<span>' + l + ' ' + pips(eff) + (eff > own ? '<small class="muted"> 통역</small>' : '') + '</span>'; }).join('') + '</div>' +
       interpBook() + '</div></div>';
@@ -224,16 +233,17 @@
     var ready = function (m) { return G.Frontier ? G.Frontier.mateReady(m, y) : true; };
     var list = G.MATES.filter(function (m) { return (m.wd || m.witch) && !hired[m.id] && !s.flags['gone_' + m.id] && ready(m); });
     var c = G.BALANCE.wander || {}, gen = G.Wander ? G.Wander.genOf(y) : 0, ep = (c.epoch || 1480) + (gen + 1) * (c.cycle || 30);
-    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 ' + (c.perYear || 5) + '명씩 새로 항구에 나타나고, ' + (c.cycle || 30) + '년마다 세대가 바뀌어 이름·국적·성별이 달라진 다음 세대가 나타납니다 (다음 세대: ' + ep + '년). 얼굴이 겹치는 사람도 있습니다. 마녀는 전설 속 마녀와 15~17세기에 마녀로 몰렸던 여인들입니다. 머무는 곳은 소문이라 한 달쯤 지나면 달라집니다.</div>' +
+    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 ' + (c.perYear || 5) + '명씩 새로 항구에 나타나고, ' + (c.cycle || 30) + '년마다 세대가 바뀌어 이름·국적·성별이 달라진 다음 세대가 나타납니다 (다음 세대: ' + ep + '년). 얼굴이 겹치는 사람도 있습니다. 마녀는 전설 속 마녀와 15~17세기에 마녀로 몰렸던 여인들입니다. 철새의 행방을 들으면 그날부터 ' + c.rumorStayDays + '일 동안 그 항구에 머뭅니다. 같은 정보를 다시 들어도 기간은 늘어나지 않습니다.</div>' +
       '<table class="tbl"><tr><th></th><th>이름</th><th>국적·갈래</th><th>특기</th><th>명성</th><th>월급</th><th>머무는 곳</th></tr></table>';
     var tb = el.querySelector('table');
     list.sort(function (a, b) { return (b.witch ? 1 : 0) - (a.witch ? 1 : 0) || a.fame - b.fame; });
     list.forEach(function (m) {
       var at = G.MateMove && G.MateMove.where(m.id);
+      var left = G.MateMove ? G.MateMove.rumorStayLeft(m.id) : 0;
       var tr = U.el('tr', '', '<td class="pp"></td><td><b>' + U.esc(m.name) + '</b>' + (G.Bio ? G.Bio.link(m.name) : '') + ' <small class="muted">' + (m.g === 'f' ? '여' : '남') + '</small></td>' +
         '<td>' + (m.witch ? '<span class="tag">' + (m.legend ? '전설의 마녀' : '마녀') + '</span>' : U.esc(m.natName + ' · ' + m.typeName) + (m.prevName ? ' <small class="muted">(' + (m.gen + 1) + '세대)</small>' : '')) + '</td>' +
         '<td>' + Object.keys(m.sk).map(function (k) { return G.SKILL_BY_ID[k].name + ' ' + m.sk[k]; }).join(' · ') + '</td>' +
-        '<td>' + U.num(m.fame) + '</td><td>' + R.mateWage(m.id) + '닢</td><td>' + (at ? U.esc(at.name) : '—') + '</td>');
+        '<td>' + U.num(m.fame) + '</td><td>' + R.mateWage(m.id) + '닢</td><td>' + (at ? U.esc(at.name) : '—') + (left ? '<br><small class="muted">체류 ' + left + '일 남음</small>' : '') + '</td>');
       try { tr.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 48)); } catch (e) { /* 그림 없음 */ }
       tb.appendChild(tr);
     });
@@ -613,6 +623,7 @@
   PAGES.menu = function (el, win) {
     var s = S(), st = s.settings;
     G.Keys.ensure(st);
+    G.State.rememberSettings(st);
     var kl = function (a) { return G.Keys.label(a, st); };
     var diffName = { easy: '쉬움', normal: '보통', original: '원작 규칙' }[st.diff] || st.diff;
     el.innerHTML = '<div class="kv" style="grid-template-columns:160px 1fr;align-items:center">' +
@@ -646,7 +657,7 @@
       '</div><div class="sep"></div><div class="flex" style="gap:12px">' +
       (st.diff === 'easy' ? '<button class="btn navy" data-act="save">항해 일지 기록</button>' : '') +
       '<button class="btn" data-act="title">타이틀로 돌아가기</button></div>';
-    U.$$('input[type=range]', el).forEach(function (r) { r.oninput = function () { st[r.dataset.k] = r.value / 100; if (G.Audio) G.Audio.setVolume(); }; });
+    U.$$('input[type=range]', el).forEach(function (r) { r.oninput = function () { st[r.dataset.k] = r.value / 100; G.State.rememberSettings(st); if (G.Audio) G.Audio.setVolume(); }; });
     U.$$('[data-fs]', el).forEach(function (o) { o.onclick = function () { var want = o.dataset.fs === '1'; (want === UI.fs.on() ? Promise.resolve() : want ? UI.fs.enter() : UI.fs.exit()).then(function () { setTimeout(function () { PAGES.menu(el, win); }, 120); }); }; });
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
     if (G.Display) G.Display.bind(el, function () { PAGES.menu(el, win); });

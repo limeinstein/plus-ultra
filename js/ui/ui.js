@@ -78,7 +78,7 @@
   function gameSettings() { var g = G.Game && G.Game.state; return g && g.settings; }
   G.Ctrl = {
     follow: function () { var st = gameSettings(); return !!(st && st.mouseFollow); },
-    setFollow: function (v) { var st = gameSettings(); if (st) st.mouseFollow = !!v; },
+    setFollow: function (v) { var st = gameSettings(); if (st) { st.mouseFollow = !!v; if (G.State) G.State.rememberSettings(st); } },
     /** 켬/끔을 바꾸고 알린다. 바뀐 값을 돌려준다 */
     toggle: function () {
       var v = !this.follow(); this.setFollow(v);
@@ -1002,9 +1002,16 @@
       '<div class="qk flex" style="margin-top:12px;flex-wrap:wrap;gap:6px"></div><div class="inf" style="margin-top:12px;font-size:17px;min-height:24px"></div>';
     var win = UI.window({ title: o.title, width: o.width || 560, html: html, buttons: [{ label: '취소', value: null }, { label: '결정', cls: 'navy', value: 'ok' }] });
     var rng = win.content.querySelector('input[type=range]'), fld = win.content.querySelector('.nfield'), inf = win.content.querySelector('.inf');
-    function set(v) { v = U.clamp(Math.round(+v || 0), min, max); val = v; rng.value = v; fld.value = v; if (o.info) inf.innerHTML = o.info(v); }
+    function set(v, editing) { v = U.clamp(Math.round(+v || 0), min, max); val = v; rng.value = v; if (!editing) fld.value = v; if (o.info) inf.innerHTML = o.info(v); }
     rng.oninput = function () { set(rng.value); };
+    // 입력 도중 빈 칸·마이너스는 남겨 두되 합계는 즉시 계산한다. 확정할 때는 화면의 값을 다시 읽는다.
+    fld.oninput = function () { set(fld.value, true); };
     fld.onchange = function () { set(fld.value); };
+    fld.onkeydown = function (e) {
+      if (e.isComposing) return;
+      if (keyIs(e, 'confirm')) { e.preventDefault(); e.stopPropagation(); set(fld.value); win.close('ok'); }
+      else if (keyIs(e, 'cancel')) { e.preventDefault(); e.stopPropagation(); win.close(null); }
+    };
     win.content.querySelector('.mn').onclick = function () { set(val - (o.step || 1)); };
     win.content.querySelector('.pl').onclick = function () { set(val + (o.step || 1)); };
     var qk = win.content.querySelector('.qk');
@@ -1012,7 +1019,7 @@
       var b = U.el('button', 'btn small', q.label); b.onclick = function () { set(q.value); }; qk.appendChild(b);
     });
     set(val);
-    return win.result.then(function (r) { return r === 'ok' ? val : null; });
+    return win.result.then(function (r) { if (r !== 'ok') return null; set(fld.value); return val; });
   };
 
   /** text input */

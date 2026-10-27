@@ -357,8 +357,12 @@
     var near = G.MateMove.nearby(c, function (m) { return G.Frontier ? G.Frontier.mateReady(m, y) : (y >= m.y[0] && y <= m.y[1]); }).slice(0, 2);
     if (!near.length) return '';
     var by = [];   // 같은 도시면 한데 묶는다
-    near.forEach(function (n) { var g = by.filter(function (b) { return b.c === n.c; })[0]; if (g) g.names.push(n.m.name); else by.push({ c: n.c, names: [n.m.name] }); });
-    return '\n' + by.map(function (b) { var nm = b.names.join('·'); return U.j(nm, '은/는') + ' 요즘 ' + b.c.name + '에 머문다더군'; }).join('. ') + '. 사람은 늘 옮겨 다니니, 한 달쯤 지나면 또 모르지.';
+    near.forEach(function (n) {
+      var left = G.MateMove.hear(n.m.id, n.c.id);
+      if (left > 0) { by.push({ c: n.c, names: [n.m.name], left: left }); return; }
+      var g = by.filter(function (b) { return b.c === n.c && !b.left; })[0]; if (g) g.names.push(n.m.name); else by.push({ c: n.c, names: [n.m.name] });
+    });
+    return '\n' + by.map(function (b) { var nm = b.names.join('·'); return U.j(nm, '은/는') + ' 요즘 ' + b.c.name + '에 머문다더군' + (b.left ? '. 앞으로 ' + b.left + '일 동안은 거기에 있을 걸세' : ''); }).join('. ') + (by.some(function (b) { return !b.left; }) ? '. 사람은 늘 옮겨 다니니, 한 달쯤 지나면 또 모르지.' : '.');
   };
   T.encounter = async function (c, force) {
     var cur = C.current(); cur.looked = true;

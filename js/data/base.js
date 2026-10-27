@@ -221,6 +221,22 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
+    // 직업의 잠재 특성: 새 발견·실제 거래·실제 전투에만 적용한다. 하루 한도는 저장에 남는다.
+    career: {
+      explorer: { fatigue: 2, daily: 4 },
+      digger: { rate: 0.05, perFind: 20, daily: 40 },
+      hunter: { rate: 0.1, daily: 1 },
+      conq: { boarding: 0.04 },
+      miss: { discipline: 2, fatigue: 2, daily: 1 },
+      merchant: { rate: 0.01, daily: 30 },
+      soldier: { discipline: 80, accuracy: 0.02 }
+    },
+    // 명성 업적은 일회성 금화·칭호만 준다. 명성/능력 배수는 없어 연쇄 보상과 힘의 격차를 막는다.
+    fameAchievements: {
+      totalGold: [300, 600, 1200, 2000, 3000, 4000, 6000, 8000, 10000],
+      branchSteps: [20000, 150000, 650000], branchGold: [300, 1000, 2500],
+      balanced: 20000, balancedGold: 1500
+    },
     // 맞바람 (js/core/rules.js sailEff·shipSpeed·fleetMotion)
     // sq: 사각돛 효율 꺾은선 [바람과 이루는 각(0 = 뒤바람, 180 = 정면 맞바람), 효율] — 예전에는 110°에서 0.29, 135° 넘으면 0.07이라
     //     비싼 사각돛 대형선(프리깃·대형 갤리온)이 맞바람에서 카라벨의 40%밖에 못 갔다. 순풍 쪽(0~60°)은 그대로.
@@ -327,9 +343,10 @@
     mates: { warnMonths: 6, low: 40, lowEff: 0.75, veryLow: 20, veryLowEff: 0.5, idleLoyal: 2, adjutantLoyal: 1, settle: 70, treatLoyal: 3, persuade: 0.25, persuadeSpeech: 0.12, persuadeLoyal: 25 },
     // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
     pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
-    // 명성 칭호의 문턱: 신참 모험가 · 이름난 모험가 · 저명한 항해가 · 위대한 탐험가 · 대항해자 (예전 400·1600·4000·8000·15000 — 3년이면 끝 칭호였다)
     supplyWarn: { critical: 7, toastGap: 10, toastDays: 15 },   // 항해 중 보급 경고: 창은 한 항해에 한 번 + 급할 때(남은 보급 critical일 아래) 한 번, 그 사이는 크게 벌어졌을 때만 귀퉁이 알림 (2026-10-25)
-    fameTitles: [5000, 20000, 60000, 150000, 400000],   // QA 2026-10-23: 400·1,600·5,000·12,000·25,000 → 발견 25개면 끝나던 칭호를 늘림
+    // 명성 칭호: 첫 이름은 0부터, 나머지는 같은 순서의 문턱 이상부터. 규칙·승급 알림·가이드북이 함께 쓴다.
+    fameTitles: [5000, 20000, 60000, 150000, 400000, 650000, 1000000, 1500000, 2000000],
+    fameTitleNames: ['무명의 항해자', '신참 모험가', '이름난 모험가', '저명한 항해가', '위대한 탐험가', '대항해자', '세계적인 대항해자', '전설의 대항해자', '바다의 영웅', '불멸의 항해자'],
     tradeFameDiv: 800,   // 교역 이익 이만큼에 교역 명성 1 (예전 2,500 — 교역만으로는 궁정·작위가 막히던 것)
     crewWage: { per: 2, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)
     duelArmor: { k: 60, cap: 0.4 },   // 일기토 방어: 피해 × (1 − 방어/(방어+k)), 최대 cap까지만 줄인다 (예전: 방어×0.5를 빼서 방어 30이면 피해가 절반 넘게 줄던 것)
@@ -559,7 +576,7 @@
     // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).
     // 떠도는 고장: 제 나라 고장에 더해 farZone 확률로 먼 고장 하나를 더 다닌다. 마녀 전설(legend)은 한 세대에 legendMax명까지 소문이 돈다
-    wander: { perYear: 5, startN: 12, cycle: 30, epoch: 1480, rebornMax: 30, keepNation: 0.55, keepGender: 0.7, farZone: 0.35, legendMax: 2 },
+    wander: { perYear: 5, startN: 12, cycle: 30, epoch: 1480, rebornMax: 30, keepNation: 0.55, keepGender: 0.7, farZone: 0.35, legendMax: 2, rumorStayDays: 59 },   // 행방을 들은 철새는 이 기간 같은 항구에 머문다. 다시 들어도 연장하지 않는다.
     // 마녀 모임: 조건은 누적. 첫 사건 뒤에는 gap일 간격, 각 사건은 days일 뒤 다시 열린다.
     coven: { gap: 3, luck: 5, luckMax: 99, fatigue: 25, discipline: 15, theftRate: 0.05, theftMax: 3000, maleLoyal: 20,
       oathCount: 13, freeCount: 16,

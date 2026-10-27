@@ -345,6 +345,7 @@
     G.Game.refreshHud();
     var go = await C.mateAsk('준비를 마쳤습니다! ' + (pl.hire ? '선원 ' + pl.hire + '명을 새로 태우고, ' : '') + (pl.repCost ? '배를 고치고, ' : '') + pl.days + '일분 식량과 물' + (pl.needM ? '·자재 ' + pl.needM + '통' : '') + '을 실었습니다. (금화 ' + U.num(pl.total) + '닢)\n바로 출항할까요?', [{ label: '출항한다', value: true }, { label: '아직', value: false }]);
     if (go) await H.depart(c);
+    return true;   // 보급을 확정한 경우만 준비 완료 — 취소·금화 부족은 완료로 세지 않는다
   };
 
   // ---------------------------------------------------------------- 계절풍 형편 (항구 관리인에게 묻는다)
@@ -405,49 +406,63 @@
     function rowMax(k) { return Math.max(cur[k], capacity([k])); }
     var html = (opts.need ? '<div class="woodnote" style="margin-bottom:10px">' + G.icon('ship') + ' 교역품을 더 실으려면 짐칸 <b>' + opts.need + '통</b>이 더 있어야 합니다. 식량·물·자재를 줄이면 그만큼 자리가 나고, 줄인 것은 이 항구 보급값의 ' + Math.round(refund * 100) + '%에 되팝니다.</div>' : '') +
       '<div class="muted" style="font-size:16px;margin-bottom:10px">승원 ' + f.crew + '명 · 짐칸 ' + U.num(R.fleetCap()) + '통 (교역품 ' + U.num(R.cargoQty()) + '통) — 식량·물·자재를 따로 정합니다. <b>지금보다 줄이면</b> 내려서 보급값의 ' + Math.round(refund * 100) + '%에 되팔고, 그 자리에 교역품을 더 실을 수 있습니다.</div>' +
+      '<div class="sup-total" style="padding:8px 10px;margin-bottom:10px;font-size:15px;background:rgba(90,60,30,.08)"></div>' +
       '<div class="sup-both" style="margin-bottom:10px;padding:8px 10px;border-radius:6px;background:rgba(90,60,30,.08)"><b>' + G.icon('calendar') + ' 식량·물 함께</b> <span class="muted" style="font-size:14px">(며칠 항해할 만큼)</span><br>' +
         '<input type="range" class="b-rng" style="width:230px;vertical-align:middle"> <input type="number" class="b-num num-in" style="width:70px"> 일분 ' +
         [10, 20, 40, 60, 90].map(function (d) { return '<button class="btn small bq" data-d="' + d + '">' + d + '일</button>'; }).join(' ') + ' <button class="btn small bq" data-d="max">최대</button></div>' +
-      '<table class="tbl supply"><tr><th></th><th class="num">지금</th><th>남길 양</th><th></th></tr>' +
+      '<table class="tbl supply"><tr><th></th><th class="num">지금 보급품</th><th>남길 보급품</th><th></th></tr>' +
       rows.map(function (r) { return '<tr data-k="' + r[0] + '"><td>' + G.icon(r[2]) + ' <b>' + r[1] + '</b><div class="muted" style="font-size:13px">' + r[4] + '</div></td><td class="num">' + cur[r[0]] + r[3] + '</td>' +
-        '<td><input type="range" min="0" max="' + rowMax(r[0]) + '" value="' + want[r[0]] + '" style="width:260px"> <input type="number" class="num-in" min="0" value="' + want[r[0]] + '" style="width:74px"> ' + r[3] + '</td>' +
+        '<td><input type="range" min="0" max="' + rowMax(r[0]) + '" value="' + want[r[0]] + '" style="width:200px"> <input type="number" class="num-in" min="0" value="' + want[r[0]] + '" style="width:74px"> ' + r[3] + '</td>' +
         '<td><button class="btn small q" data-q="max">최대</button> <button class="btn small q" data-q="cur">그대로</button> <button class="btn small q" data-q="zero">비움</button></td></tr>'; }).join('') + '</table>' +
       '<div class="sup-info" style="margin-top:10px;font-size:17px"></div><div class="sup-cargo" style="margin-top:8px;font-size:15px"></div>';
-    var win = UI.window({ title: '보급 — ' + c.name, icon: 'bread', width: 820, html: html, buttons: [{ label: '그만둔다', value: null }, { label: '맞춘다', value: 'ok', cls: 'navy' }] });
+    var win = UI.window({ title: '보급 — ' + c.name, icon: 'bread', width: 900, html: html, buttons: [{ label: '그만둔다', value: null }, { label: '맞춘다', value: 'ok', cls: 'navy' }] });
     var el = win.content, info = el.querySelector('.sup-info');
     // 식량·물을 같은 날수로 한꺼번에: 짐칸·소지금에 맞게 둘을 함께 줄인다 (지금보다 적게 하면 내린다)
     var bMax = Math.max(Math.min(cur.food, cur.water), capacity(['food', 'water']));
     var bR = el.querySelector('.b-rng'), bN = el.querySelector('.b-num');
     bR.min = 0; bR.max = bMax; bN.min = 0;
-    function setBoth(d) {
-      d = Math.max(0, Math.floor(+d || 0));
+    // 직접 입력한 큰 수도 실제 짐칸 한도부터 줄여 불필요한 반복을 피한다.
+    function inputLimit(v, k) { return Math.max(0, Math.min(Math.floor(+v || 0), Math.max(cur[k], Math.floor(R.fleetCap() / (k === 'mat' ? 1 : use))))); }
+    function numberInput(inp, apply) {
+      inp.oninput = function () { apply(inp.value, inp); };
+      inp.onchange = function () { apply(inp.value); };
+      inp.onkeydown = function (e) {
+        if (e.isComposing) return;
+        if (G.Keys.is(e, 'confirm')) { e.preventDefault(); e.stopPropagation(); apply(inp.value); win.close('ok'); }
+        else if (G.Keys.is(e, 'cancel')) { e.preventDefault(); e.stopPropagation(); win.close(null); }
+      };
+    }
+    function setBoth(d, editing) {
+      d = Math.max(inputLimit(d, 'food'), inputLimit(d, 'water'));
       want.food = d; want.water = d;
       while ((free(want) < -1e-9 || cost(want) > s.player.gold) && (want.food > cur.food || want.water > cur.water)) {
         if (want.food > cur.food) want.food--; if (want.water > cur.water && (free(want) < -1e-9 || cost(want) > s.player.gold)) want.water--;
       }
-      refresh();
+      refresh(null, editing);
     }
     bR.oninput = function () { setBoth(this.value); };
-    bN.onchange = function () { setBoth(this.value); };
+    numberInput(bN, setBoth);
     U.$$('.bq', el).forEach(function (b) { b.onclick = function () { setBoth(b.dataset.d === 'max' ? 99999 : +b.dataset.d); }; });
-    function refresh(changed) {
+    function refresh(changed, editing) {
       if (changed) fit(want, changed);
       bR.max = Math.max(Math.min(cur.food, cur.water), capacity(['food', 'water']));
-      var both = Math.min(want.food, want.water); bR.value = both; bN.value = both;
-      rows.forEach(function (r) { var tr = el.querySelector('tr[data-k="' + r[0] + '"]'); tr.querySelector('input[type=range]').max = Math.max(rowMax(r[0]), want[r[0]]); tr.querySelector('input[type=range]').value = want[r[0]]; tr.querySelector('input[type=number]').value = want[r[0]]; });
+      var both = Math.min(want.food, want.water); bR.value = both; if (editing !== bN) bN.value = both;
+      rows.forEach(function (r) { var tr = el.querySelector('tr[data-k="' + r[0] + '"]'); tr.querySelector('input[type=range]').max = Math.max(rowMax(r[0]), want[r[0]]); tr.querySelector('input[type=range]').value = want[r[0]]; var num = tr.querySelector('input[type=number]'); if (editing !== num) num.value = want[r[0]]; });
       var left = free(want), days = Math.min(want.food, want.water), buy = buyCost(want), got = back(want);
       var gain = Math.max(0, Math.floor(left + 1e-9)) - Math.max(0, Math.floor(R.free()));
-      info.innerHTML = '항해 가능 <b>' + days + '일</b> (식량 ' + want.food + '일 · 물 ' + want.water + '일) · 자재 ' + want.mat + '통' +
+      var fs = G.Game.hud.supply('food', amt(want, 'food')), ws = G.Game.hud.supply('water', amt(want, 'water'));
+      el.querySelector('.sup-total').innerHTML = '맞춘 뒤 교역품 포함 항해 가능 <b>' + Math.min(fs.days, ws.days) + '일</b><br>식량 ' + fs.storedDays + '+' + fs.cargoDays + '일 · 물 ' + ws.storedDays + '+' + ws.cargoDays + '일 <small>(보급품+교역품 대체분 · 교역품을 팔면 감소)</small>';
+      info.innerHTML = '보급품만 <b>' + days + '일</b> (식량 ' + want.food + '일 · 물 ' + want.water + '일) · 자재 ' + want.mat + '통' +
         (buy ? ' · 사는 값 금화 <b>' + U.num(buy) + '</b>닢' : '') + (got ? ' · 되판 값 <b class="good-text">+' + U.num(got) + '</b>닢' : '') +
         (!buy && !got ? ' · 그대로' : '') + ' · 남는 짐칸 ' + Math.max(0, Math.floor(left + 1e-9)) + '통' +
         (gain > 0 ? '<div class="good-text" style="font-size:15px;margin-top:4px">교역품을 ' + U.num(gain) + '통 더 실을 수 있게 됩니다' + (opts.need ? (gain >= opts.need ? ' — 넉넉합니다.' : ' — 아직 ' + (opts.need - gain) + '통 모자랍니다.') : '.') + '</div>' : '') +
-        (days < 5 && (want.food < cur.food || want.water < cur.water) ? '<div class="warn-text" style="font-size:15px;margin-top:4px">식량·물이 ' + days + '일분뿐입니다. 출항 전에 다시 채우십시오.</div>' : '');
+        (days < 5 && (want.food < cur.food || want.water < cur.water) ? '<div class="warn-text" style="font-size:15px;margin-top:4px">보급품만으로는 ' + days + '일분뿐입니다. 출항 전에 다시 채우십시오.</div>' : '');
     }
     rows.forEach(function (r) {
       var tr = el.querySelector('tr[data-k="' + r[0] + '"]');
-      var set = function (v) { want[r[0]] = Math.max(0, Math.floor(+v || 0)); refresh(r[0]); };
+      var set = function (v, editing) { want[r[0]] = inputLimit(v, r[0]); refresh(r[0], editing); };
       tr.querySelector('input[type=range]').oninput = function () { set(this.value); };
-      tr.querySelector('input[type=number]').onchange = function () { set(this.value); };
+      numberInput(tr.querySelector('input[type=number]'), set);
       U.$$('.q', tr).forEach(function (b) { b.onclick = function () { set(b.dataset.q === 'max' ? 99999 : b.dataset.q === 'zero' ? 0 : cur[r[0]]); }; });
     });
     // 교역품 식량·주류: 모자라면 바다에서 먹고 마시고, 여기서 보급품으로 옮겨 둘 수도 있다

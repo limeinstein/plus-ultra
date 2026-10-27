@@ -371,6 +371,10 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 .opt:hover:not(.on) { background: rgba(255,250,236,.85); }
 .statrow { display: grid; grid-template-columns: 90px 1fr 50px; align-items: center; gap: 10px; font-size: 18px; margin: 5px 0; }
 .skillgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 18px; }
+.skill-combos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.skill-combos .card { padding: 9px 12px; }
+.skill-combos .card b, .skill-combos .card small { display: block; }
+.skill-combos .card small { margin-top: 3px; color: var(--ink-soft); line-height: 1.45; }
 .skillrow { display: grid; grid-template-columns: 96px 1fr 34px 34px; gap: 6px; align-items: center; font-size: 17px; }
 .pips { display: flex; gap: 4px; }
 .pips i { width: 14px; height: 14px; border: 1px solid rgba(90,65,35,.55); transform: rotate(45deg) scale(.8); background: rgba(255,255,255,.3); }
@@ -657,6 +661,16 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 /* ---------------------------------------------------------------- 해도 보기 (ChartView) */
 .chartview { position: relative; border: 2px solid #7a5c33; background: #d6c49c; user-select: none; }
 .chartview canvas { touch-action: none; }
+.cv-search { position: relative; display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: #f2e7cc; border-bottom: 1px solid #7a5c33; color: #3a2410; font-size: 16px; }
+.cv-search label { margin: 0; white-space: nowrap; }
+.cv-search input { flex: 1; min-width: 0; max-width: 400px; padding: 4px 8px; font-size: 16px; }
+.cv-results { position: absolute; z-index: 5; top: 100%; left: 10px; width: min(440px, calc(100% - 20px)); max-height: 220px; overflow-y: auto; background: #faf4e4; border: 1px solid #7a5c33; box-shadow: 0 4px 12px #0004; }
+.cv-results button { display: block; width: 100%; padding: 8px 12px; border: 0; background: transparent; color: #3a2410; text-align: left; font-size: 17px; cursor: pointer; }
+.cv-results button.on, .cv-results button:hover { background: #dcc99b; }
+.cv-results small { color: #6a5944; }
+.cv-empty { padding: 10px; }
+.chartview .cv-zoom { top: 58px; }
+.chartview .cv-info { top: 58px; max-height: calc(100% - 68px); }
 .mapcatch { touch-action: none; }   /* 바다·육지 화면: 브라우저가 페이지를 확대·스크롤하지 않고 게임이 두 손가락 확대를 받는다 */
 .cv-zoom { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; }
 .cv-zoom .btn { min-width: 44px; padding: 4px 10px; font-size: 17px; }
@@ -1382,7 +1396,7 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 #stage.dz-shake #world, #stage.dz-shake #overlay, #stage.dz-shake #scene { animation: dzshake .11s linear infinite; }
 
 /* 튜토리얼 「첫 항해」 — 안내 상자와 빛나는 단추 (js/systems/tutorial.js) */
-.tutbox { position: absolute; left: 50%; top: 46px; transform: translateX(-50%); width: 680px; max-width: 62%; z-index: 62; pointer-events: auto;
+.tutbox { position: absolute; left: 50%; top: 46px; transform: translateX(-50%); width: 680px; max-width: 62%; z-index: 59; pointer-events: auto;
   padding: 9px 16px 10px; border: 2px solid #7a5a2e; box-shadow: 0 6px 22px rgba(0,0,0,.45); font-size: 16px; line-height: 1.5; color: var(--ink, #2b2118); }
 .tutbox .tb-h { display: flex; align-items: baseline; gap: 10px; font-size: 16px; }
 /* 대화 중(무릎상이 서 있을 때)에는 얼굴을 가리지 않게 왼쪽 위 도시 이름판 자리로 비켜 작게(그동안 이름판은 숨김) — 대화가 끝나면 다시 가운데 위로 */

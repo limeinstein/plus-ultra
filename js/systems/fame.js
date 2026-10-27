@@ -51,7 +51,7 @@
     var p = P(); if (!p) return 0;
     n = Math.round(n || 0);
     var b = F.sync(); if (!n) return 0;
-    if (n > 0) { cat = F.NAME[cat] ? cat : 'ex'; n = F.mul(cat, n); b[cat] = (b[cat] || 0) + n; p.fame += n; if (cat === 'so' && G.Growth) G.Growth.social(n); return n; }   // 사교 명성 → 사교 경험 (js/systems/growth.js)
+    if (n > 0) { cat = F.NAME[cat] ? cat : 'ex'; n = F.mul(cat, n); b[cat] = (b[cat] || 0) + n; p.fame += n; if (cat === 'so' && G.Growth) G.Growth.social(n); if (G.Achieve) G.Achieve.onFame(); return n; }   // 사교 명성 → 사교 경험 (js/systems/growth.js)
     var lose = Math.min(p.fame, -n);
     if (F.NAME[cat]) {
       var own = Math.min(b[cat] || 0, lose); b[cat] -= own; p.fame -= own;

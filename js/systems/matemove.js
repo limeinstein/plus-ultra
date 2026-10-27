@@ -1,6 +1,7 @@
 /* 항해사(부하 후보)의 발걸음: 도시마다 머무는 항해사가 있고, 한 달에 한 번 이웃 도시로 옮기거나 머문다.
    자기 고장(G.MATE_RANGE → G.MATE_ZONES)의 도시만 다닌다. 만날 수 있는 곳은 그 도시의 술집·여관뿐.
-   저장: s.mateLoc = {항해사ID: 도시 번호} (없으면 처음 쓸 때 채운다 — 옛 저장 파일도 그대로 열린다) */
+   저장: s.mateLoc = {항해사ID: 도시 번호}, s.mateRumorStay = {철새ID: {city, until}}.
+   행방을 들은 철새는 until까지 움직이지 않으며, 같은 소식을 다시 들어도 기한은 늘지 않는다 (옛 저장은 소식을 처음 들을 때 만든다). */
 (function (G) {
   'use strict';
   var U = G.U, MM = {};
@@ -9,6 +10,29 @@
   function CFG() { return G.MATE_MOVE || {}; }
   function city(id) { return G.CITY_DATA[id]; }
   function exists(c, y) { return c && !(c.founded && y < c.founded) && !(c.until && y >= c.until); }
+  function rumorStay(id) {
+    var s = S(), h = s && s.mateRumorStay && s.mateRumorStay[id], m = G.MATE[id];
+    if (!h) return null;
+    if (!m || !m.wd || h.until <= s.day || !city(h.city) || !G.R.cityExists(city(h.city))) {
+      delete s.mateRumorStay[id]; return null;
+    }
+    return h;
+  }
+  /** 이미 들은 행방의 남은 체류 일수. 읽기만 해서는 새 기한을 만들지 않는다. */
+  MM.rumorStayLeft = function (id) { var h = rumorStay(id); return h ? h.until - S().day : 0; };
+  /** 술집에서 실제로 알려 준 철새만 머물게 한다. 같은 사람·항구를 다시 들어도 남은 일수 그대로. */
+  MM.hear = function (id, cityId) {
+    var s = S(), m = G.MATE[id];
+    if (!m || !m.wd || s.flags['gone_' + id] || s.mates.some(function (x) { return x.id === id; })) return 0;
+    var at = MM.where(id); if (!at || at.id !== cityId) return 0;
+    var h = rumorStay(id);
+    if (!h) {
+      var days = G.BALANCE.wander.rumorStayDays;
+      h = { city: cityId, until: s.day + days };
+      (s.mateRumorStay || (s.mateRumorStay = {}))[id] = h;
+    }
+    return h.until - s.day;
+  };
   function dist(a, b) {
     var dl = Math.abs(a.lon - b.lon); if (dl > 180) dl = 360 - dl;
     var dx = dl * Math.cos((a.lat + b.lat) / 2 * Math.PI / 180), dy = a.lat - b.lat;
@@ -55,6 +79,8 @@
     s.mateLoc = s.mateLoc || {};
     var y = s.date.y;
     G.MATES.forEach(function (m) {
+      var held = rumorStay(m.id);
+      if (held) { s.mateLoc[m.id] = held.city; return; }
       var cur = s.mateLoc[m.id];
       if (cur == null || !exists(city(cur), y) || MM.range(m.id).indexOf(cur) < 0) {
         var st = pickStart(m.id, y);
@@ -70,7 +96,7 @@
     var s = S(), y = s.date.y, locs = MM.locs(), cfg = CFG(), out = [];
     var hired = {}; s.mates.forEach(function (x) { hired[x.id] = 1; });
     G.MATES.forEach(function (m) {
-      if (hired[m.id] || s.flags['gone_' + m.id]) return;
+      if (hired[m.id] || s.flags['gone_' + m.id] || MM.rumorStayLeft(m.id) > 0) return;
       var cur = city(locs[m.id]); if (!cur) return;
       if (U.chance(cfg.stay == null ? 0.5 : cfg.stay)) return;
       var rng = MM.range(m.id).filter(function (cid) { return cid !== cur.id && exists(city(cid), y); });

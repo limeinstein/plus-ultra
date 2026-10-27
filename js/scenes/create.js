@@ -79,6 +79,15 @@
     for (var i = 0; i < p.lg.length; i++) for (var l2 = bl[i] + 1; l2 <= p.lg[i]; l2++) n += cost(l2);
     return n;
   }
+  // 다시 굴리기·생일 변경으로 지력이 내려가도 고른 특기는 지우지 않는다. 출항 전에 다시 검사한다.
+  function buildError() {
+    var skN = G.SKILLS.filter(function (s) { return p.sk[s.id] > 0; }).length;
+    var lgN = p.lg.filter(function (v) { return v > 0; }).length;
+    if (skN > R.skillCap(p.st.int)) return '특기가 ' + skN + '개로 현재 한도 ' + R.skillCap(p.st.int) + '개를 넘습니다. 특기를 줄이거나 지력을 올리십시오.';
+    if (lgN > R.langCap(p.st.int)) return '어학이 ' + lgN + '개로 현재 한도 ' + R.langCap(p.st.int) + '개를 넘습니다. 어학을 줄이거나 지력을 올리십시오.';
+    if (spent() > points()) return '특기·어학 점수가 모자랍니다. 배분을 줄이거나 지력을 올리십시오.';
+    return '';
+  }
   function reset(keepStats) {
     p.sk = baseSkills(); p.lg = baseLangs();
     if (!keepStats) rollStats();
@@ -88,7 +97,8 @@
     starting = false;
     UI.hud.hide();
     G.Game.showLayers(false, false, true);
-    p = { name: '', given: '', surname: '', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1 };
+    p = { name: '', given: '', surname: '', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1,
+      skipIntro: G.State.introSeen() || !!(G.Game.state && G.Game.state.flags && G.Game.state.flags.prologue) };
     setName(U.pick(NAMES.PT));
     reset(false);
     render();
@@ -119,9 +129,11 @@
       '<div class="sect parch ornament-corners" style="flex:1"><h4>직업</h4><div class="opt-row">' +
       G.JOBS.map(function (j) { return opt('job', j.id, j.name, p.job === j.id); }).join('') + '</div>' +
       '<div style="margin-top:10px;font-size:17px;line-height:1.55">' + G.JOBS.filter(function (j) { return j.id === p.job; })[0].desc + '</div>' +
+      (G.Career ? '<div class="muted" style="margin-top:6px;font-size:14px">잠재 특성의 실마리: ' + U.esc(G.Career.hint(p.job)) + '</div>' : '') +
       '<div class="sep"></div><h4 style="border:0;margin-bottom:6px">난이도</h4><div class="opt-row">' +
       opt('diff', 'easy', '쉬움', p.diff === 'easy') + opt('diff', 'normal', '보통', p.diff === 'normal') + opt('diff', 'original', '원작 규칙', p.diff === 'original') + '</div>' +
       '<div class="muted" style="margin-top:6px;font-size:15px;line-height:1.5">' + { easy: '입출항에 1일, 소지금 5000닢. 가볍게 즐기는 항해.', normal: '입출항에 3일. 균형 잡힌 모험.', original: '입출항에 10일, 저장은 자국 항구의 여관에서만. 옛 항해자의 고난 그대로.' }[p.diff] + '</div>' +
+      '<label style="display:block;margin-top:14px;font-size:16px"><input type="checkbox" id="skipintro"' + (p.skipIntro ? ' checked' : '') + '> 시작 안내 건너뛰기</label>' +
       '</div></div>';
     // column 3
     var pts = points(), used = spent();
@@ -146,7 +158,7 @@
       h += '<div class="skillrow" title="' + l + '"><span style="font-size:14px">' + l + '</span><span class="pips">' + pips(p.lg[i], bl[i]) + '</span>' +
         '<button class="btn mini" data-lg="' + i + '" data-d="-1">−</button><button class="btn mini" data-lg="' + i + '" data-d="1">＋</button></div>';
     });
-    h += '</div></div><div class="flex" style="justify-content:flex-end;gap:12px"><button class="btn" id="back">' + G.icon('back') + '타이틀로</button><button class="btn navy" id="go" style="min-width:260px">' + G.icon('ship') + '출항 준비 완료</button></div></div>';
+    h += '</div><div class="cr-error warn-text" role="status" style="margin-top:8px;font-size:15px">' + buildError() + '</div></div><div class="flex" style="justify-content:flex-end;gap:12px"><button class="btn" id="back">' + G.icon('back') + '타이틀로</button><button class="btn navy" id="go" style="min-width:260px">' + G.icon('ship') + '출항 준비 완료</button></div></div>';
     box.innerHTML = h;
     UI.add(box);
     // portrait
@@ -168,6 +180,7 @@
       };
     });
     box.querySelector('#rn').onclick = function () { setName(U.pick(NAMES[p.nation])); render(); };
+    box.querySelector('#skipintro').onchange = function (e) { p.skipIntro = e.target.checked; };
     box.querySelector('#bm').onchange = function (e) { p.birth.m = +e.target.value; p.birth.d = Math.min(p.birth.d, U.daysInMonth(1460, p.birth.m)); rollStats(); render(); };
     box.querySelector('#bd').onchange = function (e) { p.birth.d = +e.target.value; rollStats(); render(); };
     box.querySelector('#age').onchange = function (e) { p.age = +e.target.value; reset(false); render(); };
@@ -276,8 +289,13 @@
     p.given = String(p.given || '').trim(); p.surname = String(p.surname || '').trim();
     p.name = fullName(p.given, p.surname);
     if (!p.given) { UI.toast('이름을 입력하세요.', 'info'); return; }
-    if (!test && spent() > points()) { UI.toast('특기 점수를 너무 많이 썼습니다.', 'info'); return; }
+    var error = !test && buildError();
+    if (error) { UI.toast(error, 'info'); return; }
     starting = true;
+    if (!test) {
+      var statLeft = statPoints() - statSpent(), skillLeft = points() - spent();
+      if ((statLeft > 0 || skillLeft > 0) && !(await UI.confirm('아직 능력 점수 ' + statLeft + '점·특기 점수 ' + skillLeft + '점이 남아 있습니다. 남긴 점수는 시작 후 배분할 수 없습니다. 그대로 시작할까요?', '그대로 시작', '배분으로 돌아가기', '남은 보너스 점수'))) { starting = false; return; }
+    }
     await G.Game.ensureGeo();
     var T = test ? G.BALANCE.testChar : null;
     var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000, ships: T ? T.ships : null });
@@ -289,7 +307,8 @@
     A.withImg(S.player.portrait, faceKey);
     S.player.look = faceKey.length ? faceKey[0].slice('portraits/player/'.length) : 'admiral';
     G.Game.state = S;
-    await G.Game.launch('첫 항해를 준비하는 중…', function () { G.Game.go('city', { cityId: S.player.home, prologue: true }); });
+    if (p.skipIntro) { S.flags.prologue = true; G.State.markIntroSeen(); }
+    await G.Game.launch('첫 항해를 준비하는 중…', function () { G.Game.go('city', { cityId: S.player.home, prologue: !p.skipIntro }); });
   }
   C.exit = function () { };
 })(window.G = window.G || {});

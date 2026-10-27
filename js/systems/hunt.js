@@ -39,13 +39,15 @@
       if (!G.GOOD[x.id] || x.q <= 0) return;
       var room = Math.max(0, Math.floor(R.free())), kindOk = f.cargo[x.id] || Object.keys(f.cargo).length < R.maxKinds();
       var q = kindOk ? Math.min(x.q, room) : 0;
+      var baseQ = q;
+      if (q > 0 && G.Career) q += G.Career.huntBonus(q, room);
       if (q > 0) {
         var cg = f.cargo[x.id];
         if (cg) { cg.cost = Math.round(cg.cost * cg.q / (cg.q + q)); cg.q += q; }   // 공짜로 얻은 것 — 매입가 평균이 그만큼 내려간다
         else f.cargo[x.id] = { q: q, cost: 0, from: null, d: s.day, hunt: true };
         got.push({ id: x.id, q: q });
       }
-      if (q < x.q) left.push({ id: x.id, q: x.q - q });
+      if (baseQ < x.q) left.push({ id: x.id, q: x.q - baseQ });
     });
     return { got: got, left: left };
   };

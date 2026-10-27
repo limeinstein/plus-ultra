@@ -33,11 +33,17 @@
     back.onclick = close;
   }
 
+  /** 칭호 안내는 규칙과 같은 이름·문턱으로 만든다. */
+  function fameTitles() {
+    var B = G.BALANCE;
+    return '<table class="gb-table fame-titles"><thead><tr><th>필요 명성</th><th>칭호</th></tr></thead><tbody>' +
+      B.fameTitleNames.map(function (name, i) { return '<tr><td>' + U.num(i ? B.fameTitles[i - 1] : 0) + ' 이상</td><td>' + U.esc(name) + '</td></tr>'; }).join('') + '</tbody></table>';
+  }
   /** 장들을 쪽으로 나눈다: [{ch, k(장 안의 쪽 번호), n(장의 쪽 수), title, html}] */
   GB.pages = function (B) {
     var out = [];
     (B || G.GUIDEBOOK).chapters.forEach(function (c, ci) {
-      var parts = c.html.split(/(?=<h3 data-sec=")/), intro = '', secs = [];
+      var parts = c.html.replace(/<p>\{\{명성_칭호\}\}<\/p>/g, fameTitles).split(/(?=<h3 data-sec=")/), intro = '', secs = [];
       parts.forEach(function (h) { if (/^<h3 data-sec="/.test(h)) secs.push(h); else intro += h; });
       if (!secs.length) secs = [''];
       secs.forEach(function (h, k) {

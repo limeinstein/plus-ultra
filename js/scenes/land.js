@@ -161,6 +161,7 @@
     var dc = dailyCost(); UI.hud.set('cost', U.num(dc) + '닢', s.player.gold < dc * 5);
     var food = H.supply('food'), water = H.supply('water');
     UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
+    UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
     UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     UI.hud.set('fame', U.num(s.player.fame));
@@ -398,7 +399,8 @@
       var mt = MT(), M = G.Mounts;
       payDay(msgs, terr);
       // 피로: 걸음의 피로는 탈것이 덜어 주고, 추위는 털옷·썰매가 조금 덜어 준다
-      f.fatigue = U.clamp(f.fatigue + (1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party) - R.skill('ops') * 0.3, 0, 100);
+      var landFat = G.SkillCombos ? G.SkillCombos.factor('landFatigue') : 1;
+      f.fatigue = U.clamp(f.fatigue + ((1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party)) * landFat - R.skill('ops') * 0.3, 0, 100);
       f.fatigue = Math.max(0, f.fatigue - R.skillRead('cook') * ((((G.BALANCE || {}).crewCare || {}).landCook) || 0.15));   // 요리: 야영지 끼니
       // 알맞지 않은 땅에서는 짐승을 잃는다
       var rk = M.risk(mt, terr);
@@ -406,7 +408,8 @@
         mt.n--; msgs.push({ icon: 'skull', text: M.lossText(mt.id, terr) + (mt.n > 0 ? ' (남은 ' + M.get(mt.id).name + ' ' + mt.n + ')' : '') });
         if (mt.n <= 0) { msgs.push({ icon: 'boot', text: '이제 모두 걸어서 간다.' }); l.mount = { id: 'walk', n: 0 }; }
       }
-      if (T.sick && U.chance((0.04 - R.skill('med') * 0.01) * (st.herbs > 0 ? 0.3 : 1))) { var sk = U.ri(1, 2); l.party = Math.max(0, l.party - sk); f.crew = Math.max(0, f.crew - sk); msgs.push({ icon: 'skull', text: '열병으로 대원 ' + sk + '명을 잃었다.' }); }
+      var sickK = G.SkillCombos ? G.SkillCombos.factor('landSick') : 1;
+      if (T.sick && U.chance((0.04 - R.skill('med') * 0.01) * (st.herbs > 0 ? 0.3 : 1) * sickK)) { var sk = U.ri(1, 2); l.party = Math.max(0, l.party - sk); f.crew = Math.max(0, f.crew - sk); msgs.push({ icon: 'skull', text: '열병으로 대원 ' + sk + '명을 잃었다.' }); }
       G.State.revealChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
       // discover inland cities
       G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c) || s.known.indexOf(c.id) >= 0) return; if (G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.8) { s.known.push(c.id); UI.toast('새로운 도시 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'castle', 4000); G.Fame.add('ex', 5); } });
@@ -642,7 +645,8 @@
     var T = TERR[terr] || TERR.grass;
     var mk = (M.use(mt, terr, l.party, 'food') + M.use(mt, terr, l.party, 'water')) / 2;   // 먹이·물을 덜 쓰는 짐승이면 그만큼 싸다
     var cw = G.Castaway ? G.Castaway.costMult() : 1;   // 표류기: 그 땅에서 살아남는 법을 알아 덜 든다
-    return Math.max(1, Math.round((K.base + K.perMan * (l.party || 0)) * mk * cw * (1 + (K.thirsty || 0) * ((T.thirst || 1) - 1))));
+    var cb = G.SkillCombos ? G.SkillCombos.factor('landCost') : 1;
+    return Math.max(1, Math.round((K.base + K.perMan * (l.party || 0)) * mk * cw * cb * (1 + (K.thirsty || 0) * ((T.thirst || 1) - 1))));
   }
   L.dailyCost = function () { return dailyCost(); };
   /** 하루 경비를 낸다. 모자라면 가진 만큼 내고, 대원들이 지치고 몇은 떠난다 */

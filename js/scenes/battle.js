@@ -360,7 +360,7 @@
     UI.add(catcher);
     var bar = U.el('div', 'sailbar wood brass-frame');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = function (e) { e.stopPropagation(); if (!UI.busy() && !st.busy) fn(); }; bar.appendChild(b); return b; }
-    el.pause = btn('일시정지', 'pause', function () { st.paused = !st.paused; el.pause.innerHTML = G.icon(st.paused ? 'sail' : 'pause') + (st.paused ? '재개' : '일시정지'); });
+    el.pause = btn('일시정지', 'pause', function () { B.pause(!st.paused); });
     // 해전 배속: ×1 · ×2 · ×3 (설정에 남는다 · 키 + / −)
     var sp = U.el('div', 'speedctl');
     BSPEEDS.forEach(function (k) { var o = U.el('div', 'opt' + (battleSpeed() === k ? ' on' : ''), '×' + k); o.title = '해전 배속 ×' + k + ' (키 + / −)'; o.dataset.k = k; o.onclick = function (e) { e.stopPropagation(); setBattleSpeed(k); }; sp.appendChild(o); });
@@ -409,6 +409,13 @@
     UI.toast('해전 배속 ×' + k, 'sail', 1200);
   }
   B.speed = function (k) { if (k != null) setBattleSpeed(k); return battleSpeed(); };
+  /** 튜토리얼이 싸움을 멈출 때도 단추에 현재 상태를 함께 반영한다. */
+  B.pause = function (paused) {
+    if (!st) return false;
+    st.paused = !!paused;
+    if (el.pause) el.pause.innerHTML = G.icon(st.paused ? 'sail' : 'pause') + (st.paused ? '재개' : '일시정지');
+    return st.paused;
+  };
   // 해전 화면은 y가 아래로 커진다: ↑ = 화면 위(북)
   var ARROWDIR = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
   function directionAction(e) { return ['left', 'right', 'up', 'down'].filter(function (a) { return G.Keys.is(e, a); })[0] || null; }
@@ -1081,6 +1088,9 @@
     var shots = Math.max(1, Math.round(b.guns.n / 2 * (part || 1)));
     var acc = c.acc * (1 + gunSk * 0.1) * (1.15 - 0.5 * d / rng);
     if (b.side === 'me') { var bonus = R.fleetBonus('battle'); acc *= 1 + bonus; if (R.hasItem('shells')) acc *= 1.05; }
+    var careerBaseAcc = acc;
+    if (b.side === 'me' && G.SkillCombos) acc *= G.SkillCombos.factor('cannonAccuracy');
+    if (b.side === 'me' && G.Career) acc += G.Career.accuracy(b.src === S().fleet.ships[0], careerBaseAcc);
     if (G.Audio && st.sfxT !== Math.floor(st.t * 4)) { st.sfxT = Math.floor(st.t * 4); G.Audio.sfx('cannon'); }
     if (b.side === 'me') { var I0 = IMP(); shake(I0.shakeFire); flash(I0.flashFire, '255,226,170'); }
     jolt(b, -Math.cos(sAng), -Math.sin(sAng), 2 + Math.min(3, shots * 0.4));             // 포를 쏜 반동으로 배가 반대쪽으로 밀린다
@@ -1090,7 +1100,7 @@
       var fwd = part >= 1 && sAng === b.heading ? b.len * 0.45 : 0;
       var ox = b.x + Math.cos(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd), oy = b.y + Math.sin(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd);
       var tx = t.x + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
-      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // kill: 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다
+      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' && G.SkillCombos ? G.SkillCombos.factor('cannonPower') : 1) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // kill: 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다
       st.fx.push({ kind: 'smoke', x: ox + Math.cos(sAng) * 14, y: oy + Math.sin(sAng) * 14, vx: Math.cos(sAng) * 18, vy: Math.sin(sAng) * 18, t: 0, life: 2.4, r: 10 + U.rf(0, 8) });
       st.fx.push({ kind: 'muzzle', x: ox + Math.cos(sAng) * 10, y: oy + Math.sin(sAng) * 10, ang: sAng, t: 0, life: 0.2, s: U.rf(1.1, 1.5) });
       for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35), v3 = U.rf(160, 280); st.fx.push({ kind: 'spark', x: ox + Math.cos(sAng) * 12, y: oy + Math.sin(sAng) * 12, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: 0, life: U.rf(0.15, 0.3) }); }
@@ -1247,7 +1257,8 @@
     // 백병전은 그 배를 지휘하는 사람의 검술과 공격력 (갑판장뿐이면 ×0.9)
     var sword = R.shipSkill(me.src, 'sword'), atk = R.shipAtk(me.src), capK = R.captain(me.src) ? 1 : 0.9;
     // 높은 갑판은 공격·방어 모두 유리하고, 접현 돌격은 먼저 건 쪽의 첫 공격이 세다
-    var myK = (has(me, 'highdeck') ? 1.2 : 1) * (!enemyStarted && has(me, 'grapple') ? 1.15 : 1);
+    var myK = (has(me, 'highdeck') ? 1.2 : 1) * (!enemyStarted && has(me, 'grapple') ? 1.15 : 1) * (G.SkillCombos ? G.SkillCombos.factor('boardingPower') : 1);
+    if (G.Career) myK *= G.Career.boardingK(me.src === S().fleet.ships[0], me.crew, en.crew);
     var enK = (has(en, 'highdeck') ? 1.2 : 1) * (enemyStarted && has(en, 'grapple') ? 1.15 : 1);
     var myPow = me.crew * (1 + sword * 0.18 + atk / 60) * (0.7 + S().fleet.discipline / 300) * myK * capK * (1 + cabinK(me, 'marine'));
     var enSk = (st.npc.kind === 'pirate' ? 1.25 : st.npc.kind === 'navy' ? 1.15 : 0.8) * enK;

@@ -25,7 +25,7 @@
     var s = S(), i;
     for (i = G.MATES.length - 1; i >= 0; i--) if (G.MATES[i].id === id) G.MATES.splice(i, 1);
     delete G.MATE[id]; delete G.MATE_RANGE[id];
-    if (s) { if (s.mateLoc) delete s.mateLoc[id]; if (s.wander) delete s.wander.defs[id]; }
+    if (s) { if (s.mateLoc) delete s.mateLoc[id]; if (s.mateRumorStay) delete s.mateRumorStay[id]; if (s.wander) delete s.wander.defs[id]; }
   }
   /** 새 게임·불러오기: 지난 게임의 철새를 치우고 이 게임의 철새를 올린다 */
   WD.apply = function () {
@@ -175,7 +175,7 @@
   // ---------------------------------------------------------------- 해마다
   function busy(id) {
     var s = S();
-    return s.mates.some(function (m) { return m.id === id; }) || s.player.wife === id;
+    return s.mates.some(function (m) { return m.id === id; }) || s.player.wife === id || (G.MateMove && G.MateMove.rumorStayLeft(id) > 0);
   }
   WD.newYear = function () {
     var s = S(), c = cfg(), out = [];

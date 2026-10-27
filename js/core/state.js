@@ -8,6 +8,38 @@
   var CHART_W = 720, CHART_H = 360; // 0.5 degree cells
   ST.CHART_W = CHART_W; ST.CHART_H = CHART_H;
 
+  // 회차 규칙(diff·speed)은 저장에, 개인 취향은 이 기기에 따로 둔다. 옛 저장에는 새 필드가 필요 없다.
+  var PREF_KEY = 'plusultra_preferences', prefs = null;
+  var prefBools = ['autosave', 'shake', 'banter', 'mouseFollow'];
+  var prefEnums = { musicSrc: ['base', 'ost'], keyMode: ['dir', 'helm'], ctrlSens: ['slow', 'normal', 'fast'], portAsk: ['notify', 'stop', 'ask'], tackMode: ['off', 'open', 'on'] };
+  function readPrefs() {
+    if (prefs) return prefs;
+    prefs = {};
+    try { copyPrefs(JSON.parse(lsGet(PREF_KEY) || '{}'), prefs); } catch (e) { /* 잘못된 개인 설정은 기본값 */ }
+    return prefs;
+  }
+  function copyPrefs(src, dst) {
+    if (!src || typeof src !== 'object') return;
+    ['sound', 'music', 'res'].forEach(function (k) { var v = src[k]; if (typeof v === 'number' && isFinite(v) && v >= (k === 'res' ? 0.1 : 0) && v <= 1) dst[k] = v; });
+    prefBools.forEach(function (k) { if (typeof src[k] === 'boolean') dst[k] = src[k]; });
+    Object.keys(prefEnums).forEach(function (k) { if (prefEnums[k].indexOf(src[k]) >= 0) dst[k] = src[k]; });
+    if (src.keys && typeof src.keys === 'object') {
+      var keys = G.Keys ? G.Keys.defaults() : {};
+      Object.keys(keys).forEach(function (k) { if (typeof src.keys[k] === 'string' && /^[A-Za-z][A-Za-z0-9]{0,30}$/.test(src.keys[k])) keys[k] = src.keys[k]; });
+      dst.keys = keys;
+    }
+  }
+  ST.rememberSettings = function (st) { var p = readPrefs(); copyPrefs(st, p); lsSet(PREF_KEY, JSON.stringify(p)); };
+  ST.newSettings = function (diff) {
+    var st = { diff: diff || 'normal', speed: 1, sound: 0.5, music: 0.35, keys: G.Keys ? G.Keys.defaults() : { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3' } };
+    // 개인 설정을 따로 적기 전의 저장도 한 번 이어받는다. 이미 기기에 기억한 설정은 덮지 않는다.
+    if (!Object.keys(readPrefs()).length && G.Game && G.Game.state && G.Game.state.settings) ST.rememberSettings(G.Game.state.settings);
+    copyPrefs(readPrefs(), st);
+    return st;
+  };
+  ST.introSeen = function () { return lsGet('plusultra_intro_seen') === '1'; };
+  ST.markIntroSeen = function () { lsSet('plusultra_intro_seen', '1'); };
+
   /** params: {name, nation, job, age, birth:{m,d}, st:{...}, sk:{...}, lg:[...], diff} */
   ST.newGame = function (p) {
     var home = p.nation === 'PT' ? 0 : 7;
@@ -36,7 +68,7 @@
       flags: {}, log: [], history: 0,
       stats: { trades: 0, profit: 0, battles: 0, wins: 0, sunk: 0, captured: 0, distance: 0, found: 0 },
       circ: null,
-      settings: { diff: p.diff || 'normal', speed: 1, sound: 0.5, music: 0.35, keys: G.Keys ? G.Keys.defaults() : { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3' } }
+      settings: ST.newSettings(p.diff)
     };
     S.player.items.push({ id: 'rapier' });
     S.player.items.push({ id: 'compass' });

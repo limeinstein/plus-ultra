@@ -69,7 +69,11 @@
   };
   C.say = function (who, text) { return UI.say(text, who); };
   /** 건물에 들어설 때의 인사: 작위가 있으면 유럽·이슬람 도시에서는 공손하게 (G.Court.hail), 아니면 lines에서 하나 */
-  C.hail = function (c, kind, lines) { return G.Court ? G.Court.hail(c, kind, lines) : U.pick(lines); };
+  C.hail = function (c, kind, lines) {
+    var text = G.Court ? G.Court.hail(c, kind, lines) : U.pick(lines);
+    var jobLine = G.Career && G.Career.hail(kind);
+    return text + (jobLine ? '\f' + jobLine : '');
+  };
   C.ask = function (who, text, choices, opts) {
     opts = opts || {};
     var o = { name: who && who.name, portrait: who && who.portrait, lang: opts.plain ? 3 : who && who.lang, li: opts.plain ? null : who && who.li, minLv: who && who.minLv, cancel: opts.cancel };
@@ -530,6 +534,7 @@
       '돈이 궁하면 교역소에서 싸게 사서 다른 항구에 비싸게 파는 것도 방법입니다. 출항하실 때는 항구에서 보급을 잊지 마십시오.', sp);
     await UI.say('자, 무엇부터 하시겠습니까? 제독의 명령만 기다리겠습니다.', sp);
     s.flags.prologue = true;
+    G.State.markIntroSeen();
   };
 
   // ---------------------------------------------------------------- entry refusal (called from sea when entering)

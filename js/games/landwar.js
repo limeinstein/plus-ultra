@@ -11,8 +11,9 @@
    ■ 싸우는 중: 판마다 한 번쯤 사건 (원군·적의 원군·소나기·안개·화약 부족·짐승 난입)
    ■ 끝: 결과 판 — 전리품·노획한 말·화승총·포로 (몸값을 받거나 풀어 준다 — 풀어 주면 그 땅 원주민이 반긴다)
    - 적 우두머리를 쓰러뜨리면 남은 적이 항복해 이긴다. 제독대가 무너지거나 대원이 2할 밑으로 줄면 진다 · 쓰러진 대원 일부는 의학 솜씨만큼 살아 돌아온다
-   G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n, leader}, party, terr, guns, flee, hold, halt, noHurt, fastEnd })
-     → {res: win|lose|flee|truce, dead, back, left, leaderDown, held, spoils: {gold, horses, muskets, prisoners, ransom, freed}}
+   G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n, leader}, party, terr, guns, flee, hold, halt, noHurt, fastEnd, skip })
+     → {res: win|lose|flee|truce|skip, dead, back, left, leaderDown, held, spoils: {gold, horses, muskets, prisoners, ransom, freed}}
+   - skip: 건너뛰기 확인 함수(비동기) — true를 돌려주면 보상·손실 없이 닫는다. 튜토리얼에서만 넘긴다.
    - hold: 「퇴각 판」 — 적의 차례를 hold번 버티면(제독대가 살아 있으면) 빠져나가 이긴다 (아즈텍의 슬픈 밤 — js/systems/aztec.js)
    - halt: {turn, banner, text, after} — 그 차례가 끝났을 때 아직 승부가 나지 않았으면 누군가 끼어들어 싸움이 멈춘다 (res 'truce') — 포카혼타스의 중재 (js/systems/pocahontas.js) */
 (function (G) {
@@ -138,7 +139,7 @@
     var mine = formMine(P0, guns), foes = formFoe(e, regKey), Fk = FOES[e.kind] || FOES.bandit;
     var enemyTier = U.clamp(Math.floor(Math.max(0, (e.n || 0) - 1) / 25), 0, 3);   // 1~25 · 26~50 · 51~75 · 76명 이상
     var foe0 = U.sum(foes, function (u) { return u.n; });
-    var phase = 'form', over = false, busy = false, auto = false, sel = null, turnNo = 0, turnsDone = 0;
+    var phase = 'form', over = false, busy = false, auto = false, skipping = false, sel = null, turnNo = 0, turnsDone = 0;
     var formation = 'line', scouted = false, scoutTried = false, revealed = false, hiddenMe = false, ambushBonus = 1, parleyTried = false;
     var used = {}, trapOn = false, stunEn = false, cryOn = false, ammoT = 0, fogT = 0, eventDone = false, roared = false, duelDone = false, onceUsed = {};
     var HOLD = Math.max(0, opt.hold || 0), rounds = 0, captured = 0;
@@ -179,6 +180,27 @@
       var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), btns = el.querySelector('.lw-btns'), logEl = el.querySelector('.lw-log');
       var popEl = el.querySelector('.lw-pop'), tipEl = el.querySelector('.lw-tip'), unitsEl = popEl;   // 부대 명령은 그림 위에 뜨는 작은 창에서 한다
       function say(t) { log.push(t); logEl.innerHTML = log.slice(-2).map(function (x, i, a) { return '<div' + (i < a.length - 1 ? ' class="old"' : '') + '>' + x + '</div>'; }).join(''); }
+      function finishBattle(result) {
+        if (!live) return;
+        over = true; auto = false; live = false; win.close(result.res);
+        if (G.Audio) {
+          if (musicBack && musicBack.want && musicBack.want !== 'landwar') { if (G.Audio.setPlace) G.Audio.setPlace(musicBack.place, true); G.Audio.music(musicBack.want); }
+          else G.Audio.music('land');
+        }
+        resolve(result);
+      }
+      function skipButton(row) {
+        if (typeof opt.skip !== 'function') return;
+        btn(row, '이 단계 건너뛰기', 'small ghost', async function () {
+          if (skipping) return;
+          var wasAuto = auto; auto = false; skipping = true;
+          try {
+            if (await opt.skip()) { finishBattle({ res: 'skip', dead: 0, back: 0, left: P0, leaderDown: false, spoils: {} }); return; }
+          } finally { skipping = false; }
+          auto = wasAuto;
+          if (auto && !over) turn();
+        }, false, '보상이나 손실 없이 튜토리얼의 다음 단계로 간다');
+      }
 
       // ------------------------------------------------ 자리 (줄 · 칸)
       function alive(list) { return list.filter(function (u) { return u.n > 0; }); }
@@ -669,6 +691,7 @@
       var hakaT = false;
       function kills(att, def, extra) {
         var base = Math.max(1, att.n) * powOf(att) * U.rf(0.2, 0.3) * dmgK(att, def) * (extra || 1);
+        if (G.SkillCombos) base *= G.SkillCombos.factor(att.side === 'me' ? 'landPower' : 'landLoss');
         var n = Math.round(base); if (n < 1 && U.chance(base)) n = 1;
         return Math.min(def.n, n);
       }
@@ -778,7 +801,7 @@
         var b = U.el('button', 'btn ' + (cls || ''), label);
         if (dis) { b.classList.add('disabled'); b.disabled = true; }
         if (tip) b.title = tip;
-        b.onclick = function () { if (always || (!busy && !over)) fn(); };
+        b.onclick = function () { if (!skipping && (always || (!busy && !over))) fn(); };
         parent.appendChild(b); return b;
       }
       function formInfo() {
@@ -820,6 +843,7 @@
         row.appendChild(U.el('span', 'lw-grow'));
         var go = U.el('button', 'btn red lw-go', '전투 개시'); go.onclick = start; row.appendChild(go);
         var fl = U.el('button', 'btn small ghost', '피한다'); fl.onclick = function () { tryFlee(true); }; if (opt.flee !== false) row.appendChild(fl);
+        skipButton(row);
         btns.appendChild(row);
         if (!formSaid) {
           formSaid = true;
@@ -870,6 +894,7 @@
         var ab = btn(row, auto ? '자동 멈춤' : '자동', 'small ghost', function () { auto = !auto; cmdBar(); if (auto && !busy) turn(); }, false, '「모두 공격」을 되풀이한다');
         if (auto) ab.classList.add('on');
         if (opt.flee !== false) btn(row, '후퇴', 'small ghost', function () { tryFlee(false); }, false, '싸움에서 빠져나간다 (실패하면 적이 뒤를 친다)');
+        skipButton(row);
         btns.appendChild(row);
         unitBar();
       }
@@ -1127,7 +1152,7 @@
       }
       function mainAct(u) { return u.ord ? u.ord.act : 'wait'; }
       async function turn() {
-        if (busy || over || phase !== 'fight') return; busy = true;
+        if (busy || over || skipping || phase !== 'fight') return; busy = true;
         try {
           cmdBarLock();
           // 0) 제독의 특수 작전
@@ -1292,7 +1317,7 @@
         if (sp.muskets) loot.push('화승총 ' + sp.muskets + '정 (탐험 장비에 더함)');
         if (loot.length) lines.push('전리품: ' + loot.join(' · '));
         say(lines.join('<br>'));
-        var done = function () { live = false; win.close(res); if (G.Audio) { if (musicBack && musicBack.want && musicBack.want !== 'landwar') { if (G.Audio.setPlace) G.Audio.setPlace(musicBack.place, true); G.Audio.music(musicBack.want); } else G.Audio.music('land'); } resolve({ res: res, dead: dead - back, back: back, left: left + back, leaderDown: leaderDown, held: !!held, spoils: sp }); };
+        var done = function () { finishBattle({ res: res, dead: dead - back, back: back, left: left + back, leaderDown: leaderDown, held: !!held, spoils: sp }); };
         function okBtn() { var ok = U.el('button', 'btn navy', '확인'); ok.onclick = done; btns.appendChild(ok); }
         if (sp.prisoners > 0 && !opt.fastEnd) {
           var rate = K.ransom || [15, 30], ransom = Math.round(sp.prisoners * U.ri(rate[0], rate[1]) * (e.kind === 'native' ? 0.4 : 1));

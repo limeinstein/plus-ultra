@@ -289,7 +289,7 @@
   R.crewMin = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMin; }); };
   R.crewMax = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMax; }); };
   R.maxKinds = function () { return 3 + R.S().fleet.ships.length * 2; };
-  R.dailyUse = function (crew) { var k = (G.BALANCE && G.BALANCE.ration) || 0.025; return Math.max(0.4, (crew == null ? R.S().fleet.crew : crew) * k); };
+  R.dailyUse = function (crew) { var k = (G.BALANCE && G.BALANCE.ration) || 0.025, cb = G.SkillCombos ? G.SkillCombos.factor('supplyUse') : 1; return Math.max(0.4, (crew == null ? R.S().fleet.crew : crew) * k * cb); };
   /** 교역품 가운데 먹고 마실 수 있는 것: 식량이 떨어지면 곡식·어육·고기·유제품을, 물이 떨어지면 맥주·포도주를 먹고 마신다
       (상하기 쉬운 것부터). 1통 = 식량·물 1통 */
   R.PROVISION = { food: ['fish', 'beef', 'dairy', 'potato', 'maize', 'wheat', 'rice', 'beans'], water: ['beer', 'wine'] };
@@ -528,6 +528,7 @@
     var crewF = f.crew >= cm ? 1 : Math.max(0.25, f.crew / cm);
     var fat = f.fatigue > 60 ? 1 - (f.fatigue - 60) / ((G.BALANCE && G.BALANCE.fatigueDiv) || 100) : 1, k = crewF * fat;
     if (G.Cabins) k *= 1 + Math.min(((G.BALANCE.cabins || {}).rigMax) || 1, G.Cabins.fx('rig', 'rig'));   // 조범실: 돛을 맡은 사람들 — 방마다 (1+항해·운용 단계)/64, 16칸을 3단계로 채우면 +100% (2배)
+    if (G.SkillCombos) k *= G.SkillCombos.factor('seaSpeed');
     var ek = G.Escort ? G.Escort.speedK(v * k, ang, wind, env) : 1; k *= ek;   // 호위하는 상선보다 빨리 가지 못한다 (js/systems/escort.js)
     R.fleetInfo = { slow: f.ships[r0.slow], assist: r0.assist, drag: r0.drag, vmin: r0.vmin, vs: vs0, tack: th0 > 0, row: row0, crewF: crewF, fat: fat, escort: ek < 0.999 };
     return { vmg: v * k, straight: r0.v * k, theta: th0, legP: lp * k, legM: lm * k };
@@ -667,6 +668,7 @@
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요: 1480~1700년 유럽 시장이 찾던 물건 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'buy');   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'buy');   // 교역 항로의 상선대: 실어 오는 쪽은 싸지고 나는 쪽은 비싸진다 (js/systems/tradefleets.js)
+    if (G.SkillCombos) p *= G.SkillCombos.factor('buyPrice');
     return Math.max(1, Math.round(p));
   };
   /** price the city pays when you sell */
@@ -678,6 +680,7 @@
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'sell');   // 세상의 시장 사건 (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'sell');   // 교역 항로의 상선대 (js/systems/tradefleets.js)
+    if (G.SkillCombos) p *= G.SkillCombos.factor('sellPrice');
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자
@@ -795,8 +798,8 @@
     return { ships: [sh], crew: Math.max(sh.crewMin, Math.min(sh.crewMax, 12)), food: 10, water: 10, mat: B.matStart || 10, cargo: {}, fatigue: 0, discipline: 60, daysOut: 0, sick: 0, scurvy: 0, rats: 0 };
   };
   R.fameTitle = function (f) {
-    var T = (G.BALANCE && G.BALANCE.fameTitles) || [5000, 20000, 60000, 150000, 400000];
-    if (f < T[0]) return '무명의 항해자'; if (f < T[1]) return '신참 모험가'; if (f < T[2]) return '이름난 모험가';
-    if (f < T[3]) return '저명한 항해가'; if (f < T[4]) return '위대한 탐험가'; return '대항해자';
+    var B = G.BALANCE, i = 0;
+    while (i < B.fameTitles.length && f >= B.fameTitles[i]) i++;
+    return B.fameTitleNames[i];
   };
 })(window.G = window.G || {});
