@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""게임용 7×7 걷기 아틀라스를 7장의 7×1 무손실 PNG로 내보낸다.
+"""게임용 7×7 걷기·달리기 아틀라스를 7장의 7×1 무손실 PNG로 내보낸다.
 
 각 캐릭터의 런타임 아틀라스는 이미 49칸, 고정 발밑 피벗, 투명 배경으로
 검증된다. 이 도구는 그 칸을 다시 그리지 않고 그대로 복사하므로 실제 게임과
@@ -45,15 +45,15 @@ def validate_cell(cell: Image.Image, index: int) -> dict:
     return {"frame": index + 1, "bbox": bbox, "footline": bbox[3] - 1, "edge_touch": touches}
 
 
-def export(root: Path, look: str) -> dict:
-    runtime = root / "images" / "characters" / look / "motion" / "walk.webp"
+def export(root: Path, look: str, motion: str = "walk") -> dict:
+    runtime = root / "images" / "characters" / look / "motion" / f"{motion}.webp"
     if not runtime.exists():
         raise FileNotFoundError(runtime)
     sheet = Image.open(runtime).convert("RGBA")
     if sheet.width % COLS or sheet.height % ROWS:
         raise ValueError(f"7×7로 나눌 수 없는 아틀라스: {runtime} ({sheet.size})")
     cell_w, cell_h = sheet.width // COLS, sheet.height // ROWS
-    output = root / "artifacts" / "player-motion-sheets" / look / "walk49"
+    output = root / "artifacts" / "player-motion-sheets" / look / f"{motion}49"
     output.mkdir(parents=True, exist_ok=True)
     checks = []
     for row in range(ROWS):
@@ -64,12 +64,13 @@ def export(root: Path, look: str) -> dict:
             checks.append(validate_cell(cell, index))
             strip.alpha_composite(cell, (col * cell_w, 0))
         start, end = row * 7 + 1, row * 7 + 7
-        strip.save(output / f"walk_{row + 1:02d}_frames_{start:02d}-{end:02d}.png", "PNG", compress_level=4)
-    sheet.save(output / "walk_master_7x7.png", "PNG", compress_level=4)
+        strip.save(output / f"{motion}_{row + 1:02d}_frames_{start:02d}-{end:02d}.png", "PNG", compress_level=4)
+    sheet.save(output / f"{motion}_master_7x7.png", "PNG", compress_level=4)
     footlines = [x["footline"] for x in checks]
     edge_touches = [x["frame"] for x in checks if x["edge_touch"]]
     report = {
         "look": look,
+        "motion": motion,
         "runtime": str(runtime),
         "output": str(output),
         "frames": 49,
@@ -82,7 +83,7 @@ def export(root: Path, look: str) -> dict:
         "edge_touches": edge_touches,
         "transparent_corner": sheet.getpixel((0, 0))[3] == 0,
     }
-    (output / "walk49_export_report.json").write_text(
+    (output / f"{motion}49_export_report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     return report
@@ -92,9 +93,10 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("looks", nargs="*", choices=LOOKS)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--motion", choices=("walk", "run"), default="walk")
     args = parser.parse_args()
     root = args.root.resolve()
-    reports = [export(root, look) for look in (args.looks or LOOKS)]
+    reports = [export(root, look, args.motion) for look in (args.looks or LOOKS)]
     bad = [r["look"] for r in reports if r["edge_touches"] or not r["transparent_corner"]]
     summary = {
         "characters": len(reports),
@@ -103,7 +105,7 @@ def main() -> int:
         "invalid": bad,
         "reports": reports,
     }
-    destination = root / "artifacts" / "player-motion-sheets" / "walk49_export_report.json"
+    destination = root / "artifacts" / "player-motion-sheets" / f"{args.motion}49_export_report.json"
     destination.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({k: summary[k] for k in ("characters", "strips", "frames", "invalid")}, ensure_ascii=False))
     print(destination)

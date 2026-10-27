@@ -772,6 +772,8 @@
   };
 
   UI.say = function (text, opts) {
+    var picWait = G.FamEv && G.FamEv.pendingPic && G.FamEv.pendingPic();
+    if (picWait) return picWait.then(function () { return UI.say(text, opts); });
     opts = withFace(opts || {});
     var pages = Array.isArray(text) ? text.slice() : String(text).split('\f');
     if (!opts.raw) { var allNotes = []; pages = pages.map(function (pg) { var r = UI.tidySpeech(pg); allNotes = allNotes.concat(r.notes); return r.text; }); noteToast(allNotes); }
@@ -813,6 +815,8 @@
   /** speech + inline choices. choices: [{label, value, dis, icon, thumb}] | strings. returns value (null on Esc if cancel !== false)
       thumb: 단추 앞에 작은 그림(소지품·교역품 그림 주소) */
   UI.ask = function (text, choices, opts) {
+    var picWait = G.FamEv && G.FamEv.pendingPic && G.FamEv.pendingPic();
+    if (picWait) return picWait.then(function () { return UI.ask(text, choices, opts); });
     opts = withFace(opts || {});
     var list = choices.map(function (o, i) { return typeof o === 'string' ? { label: o, value: i } : o; });
     return new Promise(function (resolve) {

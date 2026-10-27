@@ -339,9 +339,14 @@ def valid_keys(d):
     for s in d['ships']:
         k['ships/' + s['id']] = '배 · ' + s['name']
         k['ships-nav/' + s['id']] = '항해·해전 8방향 동작 배 · ' + s['name']
+    monster_art = read('js/data/seamonsterart.js')
+    for name, key in re.findall(r"name: '([^']+)', key: '([^']+)'", monster_art):
+        k[key] = '해전 괴물 · ' + name
     for c in d['cabins']:
         k['cabins/' + c['id']] = '기함 선실 · ' + c['name']
     k['effects/ship_spray'] = '항해 효과 · 선수 물보라 스프라이트 시트'
+    for effect, label in [('cannon', '포탄 착수'), ('hull', '선체 피격'), ('volley', '사방 분출'), ('wake', '돌진 물살'), ('ram', '충돌 폭발'), ('dive', '잠수 소용돌이'), ('emerge', '재등장 물기둥')]:
+        k['effects/water/' + effect] = '해전 물보라 · ' + label
     k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
     k['effects/trade_coin'] = '교역 이익 효과 · 제독에게 쏟아지는 금화'
     k['story/photo'] = '이야기 모드 · 아버지의 사진'

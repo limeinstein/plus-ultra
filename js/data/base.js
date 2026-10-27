@@ -237,6 +237,8 @@
       branchSteps: [20000, 150000, 650000], branchGold: [300, 1000, 2500],
       balanced: 20000, balancedGold: 1500
     },
+    // 발견물 완성: 전체 1개·종류별 12개. 보상은 각 업적을 처음 이룰 때만 준다.
+    discoveryAchievements: { allGold: 200000, allFame: 5000, kindGold: 25000, kindFame: 1000 },
     // 맞바람 (js/core/rules.js sailEff·shipSpeed·fleetMotion)
     // sq: 사각돛 효율 꺾은선 [바람과 이루는 각(0 = 뒤바람, 180 = 정면 맞바람), 효율] — 예전에는 110°에서 0.29, 135° 넘으면 0.07이라
     //     비싼 사각돛 대형선(프리깃·대형 갤리온)이 맞바람에서 카라벨의 40%밖에 못 갔다. 순풍 쪽(0~60°)은 그대로.
@@ -394,6 +396,17 @@
     // 항해·육상 탐험 중 가까운 도시에 들어갈지 물었을 때 거절하면, 같은 도시의 물음을 실제 시간으로 이만큼 쉬었다가 다시 띄운다.
     cityEntryPrompt: { cooldownMs: 30000 },   // 「지나간다」를 고른 뒤 같은 항구·성문을 다시 묻기까지 (실제 시간 ms) — 그 사이에도 도시를 직접 누르면 바로 들어간다
     seaSearch: { days: 1, senseBoost: 1.8, chartBonus: 1.2 },
+    // 해상 괴물: 처치한 달·날부터 자료의 years년 뒤 새 해역에 재등장한다.
+    seaMonsters: {
+      hpK: 4, spawnNear: [3, 9], spawnTries: 600, spawnMove: 18, spacing: 4,
+      seaMargin: 1.2, openProbe: 0.7, newsRange: 15, sight: 5, meetRange: 0.6,
+      avoidDays: 3, mapLen: 0.55, speed: 42, turn: 1.4, standOff: 380,
+      surfaceSeconds: 22, diveSeconds: 1.6, hiddenSeconds: 7, emergeSeconds: 1.6,
+      firstAttack: 3, volleySeconds: 6, rays: 16, shotRange: 1000, shotSpeed: 460,
+      shotHpK: 0.055, shotRadius: 8, chargeSpeed: 235, chargeWindup: 1.2, chargeAimTurn: 3.5,
+      chargeSeconds: 2.1, chargeRecovery: 3, ramHpK: 0.16, ramRadius: 30,
+      hitRadiusK: 0.2, commonFame: 100, legendFame: 250
+    },
     // 사건의 간격 (js/systems/pace.js): 항해·육상 탐험의 우연한 사건 사이 실제 시간 gapMs(ms), 같은 사건은 실제 시간 sameMs와 게임 날수 sameDays가 지나야 다시
     //   (하루가 실제로 1초 남짓이라 날수만으로는 화면에서 사건이 연달아 터진다). 폭풍·해적은 간격을 건너뛰되 같은 일은 sameMs 안에 되풀이되지 않는다
     eventPace: { gapMs: 40000, sameMs: 90000, sameDays: 30 },

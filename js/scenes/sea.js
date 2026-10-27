@@ -282,6 +282,15 @@
     }
     var npc = npcAt(p[0], p[1]);
     if (npc) { approachNpc(npc); return; }
+    if (G.SeaMonsters) {
+      var monsters = G.SeaMonsters.near(S().loc.lon, S().loc.lat, G.BALANCE.seaMonsters.sight);
+      var monster = monsters.filter(function (m) { var q = toScreen(m.lon, m.lat); return Math.hypot(q[0] - p[0], q[1] - p[1]) < 40; })[0];
+      if (monster) {
+        if (G.Geo.dist(S().loc.lon, S().loc.lat, monster.lon, monster.lat) <= G.BALANCE.seaMonsters.meetRange) encounterMonster(monster);
+        else setTarget(monster.lon, monster.lat, null);
+        return;
+      }
+    }
     var mk = G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
     if (mk) {
       if (mk.d.how === 'land') { UI.toast('해안 가까이 가서 상륙하면 조사할 수 있습니다.', 'boot', 3200); var sea = G.Nav.nearestSea(mk.lon, mk.lat, 6); if (sea) { setTarget(sea[0], sea[1], null); return; } }
@@ -797,6 +806,8 @@
     }
   }
   async function checkEncounters() {
+    if (st.busy || UI.busy() || !st.alive) return;
+    if (G.SeaMonsters) { var monster = G.SeaMonsters.contact(); if (monster) { await encounterMonster(monster); return; } }
     var s = S(), l = s.loc;
     for (var i = 0; i < st.npcs.length; i++) {
       var n = st.npcs[i];
@@ -813,6 +824,22 @@
   }
   /** 정해 둔 배와 바로 마주친다 — 우리 배가 서 있어도 (튜토리얼의 해적, js/systems/tutorial.js) */
   SEA.meet = function (n) { if (!st || !st.alive || st.busy || UI.busy() || !n) return false; encounter(n, false); return true; };
+  async function encounterMonster(monster) {
+    if (!st || !st.alive || st.busy || UI.busy() || !monster || !monster.active) return false;
+    var here = st, s = S(); here.busy++; here.paused = true; refreshBar();
+    try {
+      await G.SeaMonsters.discover(monster);
+      if (st !== here || G.Game.state !== s || G.Game.scene !== SEA) return false;
+      var meta = G.SEA_MONSTER_ART[monster.id], cfg = G.BALANCE.seaMonsters;
+      var v = await UI.ask('「' + meta.name + '」' + U.jx(meta.name, '이/가') + ' 모습을 드러냈습니다! 잠수한 동안은 공격할 수 없습니다. 어떻게 하겠습니까?',
+        [{ label: '싸운다', value: 'fight' }, { label: '조심해서 물러난다', value: 'leave' }], G.Scenes.mateSpeaker('first'));
+      G.SeaMonsters.avoid(monster);
+      if (v === 'fight') await UI.fade(function () { G.Game.go('battle', { npc: G.SeaMonsters.npc(monster) }); });
+      else UI.toast(cfg.avoidDays + '일 동안 거리를 두며 지나갑니다.', 'sail', 3000);
+      return true;
+    } finally { if (st === here) here.busy = Math.max(0, here.busy - 1); }
+  }
+  SEA.meetMonster = function (id) { return G.SeaMonsters ? encounterMonster(G.SeaMonsters.sync()[id]) : Promise.resolve(false); };
   /** 마주침(해적·함대·신호)이 싸움 없이 끝났을 때: 그 전에 가던 길(자동항해·침로)이 있으면 다시 돛을 편다 */
   function goOnAfter(wasSailing) {
     if (wasSailing && st.alive && st.paused && !st.manual && (st.path || st.dirCrs != null)) { st.paused = false; st.stopping = false; st.prog = null; refreshBar(); }
@@ -1949,6 +1976,7 @@
     var tsu = G.Quake && G.Quake.active('tsunami');
     if (tsu) G.Quake.drawSea(ctx, [toScreen(l.lon, l.lat)], { qo: st.qo, key: Math.round(st.cam.lon * st.cam.zoom / 3) + ',' + Math.round(st.cam.lat * st.cam.zoom / 3) + ',' + Math.round(st.cam.zoom),   // 뭍 판은 카메라가 3px 넘게 움직일 때만 새로
       land: function (x, y) { return G.Geo.isLand(st.cam.lon + (x - 800) / st.cam.zoom, st.cam.lat - (y - 450) / st.cam.zoom); } });
+    if (G.SeaMonsters) G.SeaMonsters.drawSea(ctx, toScreen, z, st.t);
     // npcs
     st.npcs.forEach(function (n) {
       if (G.ShipSprite && n.ships) G.ShipSprite.want(n.ships);

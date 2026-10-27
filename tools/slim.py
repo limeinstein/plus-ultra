@@ -83,6 +83,13 @@ HQ = [
 
 
 def hq_for(key):
+    # 얼굴상과 같은 접두어 규칙이 무릎상까지 416~640px로 줄이지 않게 한다.
+    # 대화창에서 580~640px 높이로 보이므로 축소본도 그보다 크게 남긴다.
+    if key.endswith('_half'):
+        if key.startswith(('portraits/maids/', 'maid-styles/')):
+            return 1024, 86
+        if key.startswith('portraits/'):
+            return 768, 82
     for pre, side, q in HQ:
         if key.startswith(pre):
             return side, q
@@ -103,9 +110,9 @@ FLOOR = {
 
 
 def floor_for(key):
-    # 무릎상(대화창 위에 640px 높이로 서는 그림): 전체 배율을 낮춰도 긴 변 384px 아래로 줄이지 않는다
-    if key.startswith('portraits/') and key.endswith('_half'):
-        return 384
+    # 인물이 대화창에 서는 실제 높이보다 작아진 그림을 다시 늘리지 않는다.
+    if key.startswith(('portraits/', 'maid-styles/')) and key.endswith('_half'):
+        return 640
     for pre, side in FLOOR.items():
         if key.startswith(pre):
             return side
@@ -115,11 +122,13 @@ def floor_for(key):
 def rule_for(key):
     # 이름 있는 여급은 대화창과 2인 구도에서 크게 보인다. 지역 공용 그림보다 한 단계 선명하게 남긴다.
     if key.startswith('portraits/maids/') and key.endswith('_half'):
-        return 768, 'webp', 74
+        return 1024, 'webp', 86
     if key.startswith('portraits/maids/'):
         return 512, 'webp', 74
     if key.startswith('maid-styles/') and key.endswith('_half'):
-        return 512, 'webp', 68          # 술집에 서 있는 모습은 580px로 보여 지나치게 줄이지 않는다
+        return 1024, 'webp', 86
+    if key.startswith('portraits/') and key.endswith('_half'):
+        return 768, 'webp', 82
     for pre, side, fmt, q in RULES:
         if key.startswith(pre):
             return side, fmt, q

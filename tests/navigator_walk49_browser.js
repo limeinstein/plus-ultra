@@ -4,7 +4,10 @@
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); }
+catch (_) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 
 const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'artifacts', 'player-motion-sheets', 'navigator_white', 'walk49');

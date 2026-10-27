@@ -200,11 +200,20 @@
     var cover = ev.noStand != null ? !!ev.noStand : String(ev.img).indexOf('legend-events/') === 0;
     if (cover) root.classList.add('scenepic-on');
     requestAnimationFrame(function () { box.classList.add('on'); });
-    var hd = { box: box };
+    var hd = { box: box, cover: cover, stopped: false, pending: !ev.canvas };
+    // 처음 보는 장면도 공용 로더의 재시도·미리 풀기를 거친다. 대화는 준비가 끝난 뒤 시작한다.
+    hd.ready = ev.canvas ? Promise.resolve(ev.canvas) : I.wait(I.load(ev.img)).then(function (loaded) {
+      if (loaded && !hd.stopped) img.src = loaded.src;
+      hd.pending = false;
+      return loaded;
+    }, function () { hd.pending = false; return null; });
     hd.stop = function () {
+      if (hd.stopping) return hd.stopping;
+      hd.stopped = true;
       if (curPic === hd) { curPic = null; root.classList.remove('homeart-on'); root.classList.remove('scenepic-on'); }
       box.classList.remove('on');
-      return new Promise(function (res) { setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); res(); }, 260); });
+      hd.stopping = new Promise(function (res) { setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); res(); }, 260); });
+      return hd.stopping;
     };
     curPic = hd;
     return hd;
@@ -212,6 +221,21 @@
 
   /** 떠 있는 장면 그림을 걷는다 */
   FE.stopPic = function () { return curPic ? curPic.stop() : Promise.resolve(); };
+  /** 대화가 시작되기 전에 지금 장면 그림의 준비를 기다린다. 없는 파일 때문에 계속 막히지는 않는다. */
+  FE.pendingPic = function () { return curPic && curPic.pending ? curPic.ready : null; };
+  /** 업적처럼 다른 사건 안에서 열리는 장면: 원래 그림을 보관했다가 끝난 뒤 되돌린다. */
+  FE.suspendPic = function () {
+    var saved = curPic, restored = false;
+    if (saved) { curPic = null; saved.box.hidden = true; }
+    return { restore: function () {
+      if (restored) return;
+      restored = true;
+      if (!saved || saved.stopped || !saved.box.isConnected || curPic) return;
+      curPic = saved; saved.box.hidden = false;
+      var root = document.getElementById('ui');
+      if (root) { root.classList.add('homeart-on'); root.classList.toggle('scenepic-on', saved.cover); }
+    } };
+  };
 
   // ---------------------------------------------------------------- 효과
   function addLove(L, n) {

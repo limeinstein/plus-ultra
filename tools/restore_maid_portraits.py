@@ -18,6 +18,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,15 +69,32 @@ def remove_green(im: Image.Image) -> Image.Image:
     alpha[alpha < 0.035] = 0.0
     alpha[alpha > 0.965] = 1.0
 
-    # 반투명 가장자리는 녹색 배경 위 합성값을 역산하여 녹색 테두리를 없앤다.
+    # 생성 원본의 배경은 #00ff00과 조금 다르다(예: 3,249,10).
+    # 실제 배경색으로 역산한 뒤, 경계에 남은 녹색 혼합분만 제거한다.
+    background_pixels = rgb[(dominance > 150) & (green > 200)]
+    background = (np.median(background_pixels, axis=0) if len(background_pixels)
+                  else np.array([0.0, 255.0, 0.0]))
     safe = np.maximum(alpha, 1.0 / 255.0)
-    clean = rgb.copy()
-    clean[:, :, 0] = rgb[:, :, 0] / safe
-    clean[:, :, 2] = rgb[:, :, 2] / safe
-    clean[:, :, 1] = (rgb[:, :, 1] - (1.0 - alpha) * 255.0) / safe
+    clean = (rgb - (1.0 - alpha[:, :, None]) * background) / safe[:, :, None]
     clean = np.clip(clean, 0, 255).astype(np.uint8)
+    clean[alpha == 0.0] = 0
     rgba = np.dstack((clean, np.rint(alpha * 255.0).astype(np.uint8)))
-    return Image.fromarray(rgba, "RGBA")
+    return despill_green_edges(Image.fromarray(rgba, "RGBA"))
+
+
+def despill_green_edges(image: Image.Image) -> Image.Image:
+    """머리카락 사이의 얇은 녹색 번짐을 지우고 녹색 옷 내부는 보존한다."""
+    rgba = np.array(image.convert("RGBA"))
+    rgb = rgba[:, :, :3].astype(np.int16)
+    alpha = rgba[:, :, 3]
+    # 어두운 배경 혼합 픽셀은 알파가 255여도 머리카락 사이에 남을 수 있다.
+    # 경계 15px와 반투명 픽셀에 한정하고 알파·인물의 형상은 바꾸지 않는다.
+    boundary = (alpha < 255) | (ndimage.distance_transform_edt(alpha > 0) <= 15)
+    maximum = np.maximum(rgb[:, :, 0], rgb[:, :, 2])
+    spill = boundary & (rgb[:, :, 1] - maximum > 12) & (alpha > 0)
+    rgba[:, :, 1][spill] = maximum[spill].astype(np.uint8)
+    rgba[alpha == 0] = 0
+    return Image.fromarray(rgba)
 
 
 def detect_face(rgb: Image.Image) -> tuple[float, float, float, float]:

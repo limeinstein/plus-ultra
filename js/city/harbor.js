@@ -15,6 +15,7 @@
     if (s.loc.via === 'land') { await UI.say('우리 함대는 이 항구에 없습니다. 탐험대로 돌아가 배가 있는 곳까지 가야 합니다.', sp); return false; }
     var line = c.id === s.player.home ? U.pick(['제독, 역시 모항이 좋군요.', '모항에 돌아오면 안심되는군요.', '출항할 때에는 말해 주십시오. 곧 준비하겠습니다.']) : U.pick(['출항할 때에는 말해 주십시오. 곧 준비하겠습니다.', '제독, 이 마을에서 잠깐 쉽시다.', '배는 잘 정박해 두었습니다.']);
     UI.toast(sp.name + ': ' + line, 'anchor', 2600);
+    if (G.SeaMonsters) await G.SeaMonsters.tell(c, sp, false);
   };
   H.sub = function () { return '부관이 출항 준비를 돕습니다'; };
   H.menu = function (c) {
@@ -26,6 +27,7 @@
       { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : R.daysOfFood() + '·' + R.daysOfWater() + '일 · 자재 ' + Math.floor(S().fleet.mat || 0), onClick: function () { return H.supply(c); } },
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
       { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } },
+      G.SeaMonsters ? { label: '해상 괴물 소식', icon: 'skull', sub: G.SeaMonsters.news(c).length + '건', onClick: function () { return G.SeaMonsters.tell(c, G.Scenes.mateSpeaker('first'), true); } } : null,
       { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } }
     ].concat(G.Colony ? G.Colony.harborItems(c) : []);   // 개척 도시: 개척 물자를 넘긴다
   };
@@ -73,8 +75,8 @@
   /** 이 항구에서 자동항해로 갈 수 있는 항구 수 (출항 질문에 쓴다 — 날수는 셈하지 않는다) */
   function autoCount(c) { return autoIds(c).length; }
   H.autoCount = autoCount;
-  /** 이 항구에서 자동항해로 갈 수 있는 항구 (익힌 항로 — G.Routes), 가까운 순.
-      날수는 뱃길 찾기 없이 매긴다 (G.Routes.roughDays — 다녀온 날수·재 둔 뱃길·거쳐 가는 항로의 합·곧은 거리). rough=true면 어림.
+  /** 이 항구에서 자동항해로 갈 수 있는 항구 (익힌 항로 — G.Routes), 항해 날수 순.
+      날수는 뱃길 찾기 없이 매긴다 (G.Routes.roughDays — 재 둔 뱃길·다녀온 날수·경유 항로의 합). rough=true면 어림.
       항구가 180곳·항로가 1500개여도 목록이 곧 열리게 — 정확한 날수(뱃길 찾기)는 목적지를 고른 뒤 한 곳만 */
   function autoDests(c) {
     return autoIds(c)
@@ -88,7 +90,6 @@
        지역 묶음이 10개가 되면 대륙(유럽·중동·동남아시아·동아시아 …)으로 묶는다. 지역·대륙은 가까운 곳부터, 가장 가까운 묶음이 8곳 이하면 펼친 채로
      · ☆을 누르면 즐겨찾기 (최대 10곳, s.autoFav = [도시 id]) — 즐겨찾기는 늘 맨 위 */
   var FAV_MAX = 10, NEAR_N = 5, GROUP_FROM = 10, AREA_MAX = 10;
-  var ROUGH_SAFE = 3;   // 어림 날수 × 이만큼보다 보급이 적으면 고른 뒤 뱃길을 재어 보급 경고를 정확히 (실제 뱃길 120쌍을 재 보니 곧은 거리 어림 × 3이 9할 넘게 실제 날수를 넘는다)
   // 지역 → 대륙
   var CONT = {
     '이베리아': '유럽', '대서양 섬': '유럽', '프랑스 서해안': '유럽', '브리튼·아일랜드': '유럽', '북해·저지대': '유럽', '발트해·스칸디나비아': '유럽',
@@ -154,7 +155,7 @@
     //   단추가 하나뿐인 창은 Enter·바탕 누름이 그 단추로 가므로(UI.window solo) clickAny: false — Enter는 지금처럼 목록의 항구를 고른다
     var win = UI.window({ title: '자동항해 — 어디로 갈까요?', icon: 'anchor', width: 680, clickAny: false,
       html: '<div style="font-size:17px;margin-bottom:8px;line-height:1.45">익힌 항로의 항구입니다. 고르면 그 항구까지 뱃길을 찾아 ×' + ((G.FX && G.FX.autoSailSpeed) || 4) + ' 배속으로 가서 입항합니다(방향키·바다를 누르면 손으로 몬다). 실은 보급: 약 ' + days + '일분.' +
-        '<br><span class="muted" style="font-size:15px">방향·날수는 이 항구에서 본 것 · ☆을 누르면 즐겨찾기 (' + FAV_MAX + '곳까지 · 맨 위에)</span></div><div class="choices autodest" style="max-height:450px;overflow-y:auto;padding-right:4px"></div>',
+        '<br><span class="muted" style="font-size:15px">날수는 익힌 뱃길 기준 · 출항 전에 현재 함대의 뱃길과 보급을 다시 확인합니다.<br>방향은 이 항구에서 본 것 · ☆을 누르면 즐겨찾기 (' + FAV_MAX + '곳까지 · 맨 위에)</span></div><div class="choices autodest" style="max-height:450px;overflow-y:auto;padding-right:4px"></div>',
       buttons: [{ label: '해도에서 고르기', icon: 'map', id: 'chartBtn', onClick: function () { pickOnChart(c, dests, win); return false; } }] });
     var box = win.content.querySelector('.autodest');
     function row(x) {
@@ -208,13 +209,14 @@
     draw();
     var v = await win.result;
     if (v == null) return null;
-    var d = dests.filter(function (x) { return x.c.id === v; })[0];
-    // 어림 날수로 고른 곳은, 보급이 넉넉하지 않을 때만 그곳 하나의 뱃길을 재어 날수를 바로잡는다 (어림이 짧게 나와 보급 경고가 빠지지 않게).
-    // 보급이 어림의 ROUGH_SAFE배 넘게 넉넉하면 재지 않는다 — 먼 항구는 뱃길 찾기가 1~2초 걸리고, 바다에 나가면 어차피 뱃길을 찾는다(sea.js setTarget).
-    if (d && d.rough && d.days != null && days < d.days * ROUGH_SAFE) {
-      var ex = G.Routes.days(c.id, v);
-      if (ex != null) d = { c: d.c, days: ex, rough: false };
-    }
+    var d;
+    // 옛 최단 기록이나 직선거리에 여유 배수를 곱해도 현재 선속·대륙 우회에 필요한 보급을 보장하지 못한다.
+    // 고른 한 곳은 항상 실제 뱃길과 현재 함대 속력으로 확인한다. 잰 뱃길은 다음 목록에서도 재사용한다.
+    if (G.Nav && !G.Nav.ready()) G.Nav.init();
+    var ex = G.Routes.estDays(c.id, v);
+    if (ex == null) { await C.mate('제독, 그 항구까지의 뱃길을 확인하지 못했습니다. 다른 목적지를 골라 주십시오.'); return null; }
+    d = { c: G.CITY_DATA[v], days: ex, rough: false };
+    days = Math.min(R.daysOfFood(), R.daysOfWater());
     if (d && d.days != null && d.days > days) {
       var ok = await C.mateAsk('제독, ' + d.c.name + '까지는 ' + d.days + '일쯤 걸리는데 식량·물은 ' + days + '일분뿐입니다. 그대로 떠나시겠습니까?', [{ label: '그대로 출항', value: true }, { label: '그만둔다', value: false }]);
       if (!ok) return null;

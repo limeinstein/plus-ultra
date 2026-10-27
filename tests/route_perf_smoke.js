@@ -194,7 +194,12 @@ function sail(arg) {
     const ti = T.chain.tight;
     ok(ti.before === false && ti.rough && ti.rough.rough && ti.exact.measured && ti.d.warn && ti.d.warn.indexOf(ti.exact.days + '일쯤') >= 0 && ti.exact.days > ti.sup,
       '보급 ' + ti.sup + '일분: 어림 ' + (ti.rough && ti.rough.days) + '일 → 고른 뒤 그곳만 뱃길을 재어 ' + ti.exact.days + '일 · 보급 경고 (' + ti.d.pickMs + 'ms) — ' + ti.d.warn);
-    ok(Math.abs(T.chain.d1.farRow.match(/약 (\d+)일/)[1] - T.chain.sail.exactDays) <= T.chain.sail.exactDays * 0.5, '체인 어림 날수가 실제 뱃길 날수와 크게 다르지 않다 (' + T.chain.d1.farRow.match(/약 (\d+)일/)[1] + ' vs ' + T.chain.sail.exactDays + ')');
+    // 59구간을 각각 4일로 기록한 시험 자료다. 목록은 익힌 항로의 합을 보수적으로 표시하고,
+    // 목적지를 고른 뒤 재 둔 지름길이 있으면 다음 목록부터 현재 선속의 예상으로 바뀐다.
+    ok(+T.chain.d1.farRow.match(/약 (\d+)일/)[1] === (T.chain.nPorts - 1) * 4,
+      '항로망 어림은 익힌 구간 날수를 더한다 (직선거리로 대륙을 가로질러 줄이지 않음): ' + T.chain.d1.farRow);
+    ok(!/어림/.test(T.chain.d2.farRow) && +T.chain.d2.farRow.match(/약 (\d+)일/)[1] < +T.chain.d1.farRow.match(/약 (\d+)일/)[1],
+      '목적지 선택 때 실제 뱃길을 재면 다음 목록에서 측정 날수로 갱신된다: ' + T.chain.d2.farRow);
     ok(T.big.perFrame.isOpenAllCitiesMs < 2, '모든 도시 isOpen 한 번 (매 장면) ' + T.big.perFrame.isOpenAllCitiesMs + 'ms · 항로 수첩 ' + T.big.perFrame.listMs + 'ms');
     fast(T.big.perFrame.listMs, '항로 수첩 목록');
     ok(T.cache.goneN > 0 && T.cache.gone && !T.cache.gone.openAP && !T.cache.gone.inDests, '없어진 항구(' + (T.cache.gone && T.cache.gone.x) + ')는 항로망 다리가 아니다');

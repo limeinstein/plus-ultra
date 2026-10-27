@@ -37,6 +37,7 @@
     var rs = X.seaRange() * (boost || 1), rc = X.coastRange() * (boost || 1), rl = X.landRange() * (boost || 1);
     G.DISCOVERIES.forEach(function (d) {
       if (mk[d.id] || G.Disc.foundByMe(d.id)) return;
+      if (G.SeaMonsters && G.SeaMonsters.is(d.id)) return;
       if (d.how !== 'sea' && d.how !== 'land') return;
       if (!G.Disc.available(d)) return;          // 아직 소문조차 없는 것은 알아보지 못한다
       if (d.bookOnly && !s.hints[d.id]) return;   // 전설·공룡은 책을 읽고 나서야 알아본다
@@ -75,6 +76,7 @@
     for (var id in mk) {
       var d = G.DISC[id];
       if (!d || G.Disc.foundByMe(id)) continue;
+      if (G.SeaMonsters && G.SeaMonsters.is(id)) continue;
       if (mode === 'land' && d.how !== 'land') continue;
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
       var u = U.clamp(dist * 0.32, 0.05, 1.6);
@@ -221,7 +223,7 @@
     var table = [
       ['bottle', 9], ['drift', 7], ['crate', 6], ['dolphins', trop ? 8 : 3], ['fish', 7], ['ghost', 3],
       ['wreck', 5], ['birds', nearLand ? 9 : 1], ['redsky', 5], ['fever', 4], ['whales', cold ? 7 : 4],
-      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', (st.calm ? 8 : 2) + mus * 1.5 + (G.Cabins ? G.Cabins.fx('rec', 'songs') : 0)], ['feast', (cook ? 2 + cook * 2 : 0) + (cook && G.Cabins ? G.Cabins.fx('galley', 'feast') : 0)], ['map', 2], ['monster', 1], ['shoal', nearLand ? 6 : 0],
+      ['trader', 5], ['iceberg', cold ? 7 : 0], ['songs', (st.calm ? 8 : 2) + mus * 1.5 + (G.Cabins ? G.Cabins.fx('rec', 'songs') : 0)], ['feast', (cook ? 2 + cook * 2 : 0) + (cook && G.Cabins ? G.Cabins.fx('galley', 'feast') : 0)], ['map', 2], ['monster', G.SeaMonsters ? 0 : 1], ['shoal', nearLand ? 6 : 0],
       ['siren', trop ? 2.5 : 0.6]
     ];
     // 최근에 겪은 일은 덜 나오게 한다 (같은 사건이 되풀이되지 않도록)
@@ -434,6 +436,7 @@
         break;
       }
       case 'monster': {
+        if (G.SeaMonsters) break;  // 피해만 주던 옛 우연한 괴물 사건은 실제 출몰·해전으로 대신한다.
         if (R.fleetBonus('monster') && !U.chance(0.3)) { await UI.say('뱃머리 장식이 번뜩이자, 물속의 거대한 그림자가 물러갔다.', {}); break; }
         if (G.Audio) G.Audio.sfx('seamonster');                     // 깊은 바다에서 울리는 포효
         await UI.say('으악! 거대한 바다 괴물이 배를 덮친다!', {});

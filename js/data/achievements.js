@@ -7,11 +7,12 @@
      oneReg       : { cats: [분류…], n } — 한 지역에서 분류마다 n가지씩
      crew + n     : 이 항해사들 가운데 n명(없으면 모두)을 한 번이라도 동료로 들였다 (state.crewEver — 떠나거나 죽어도 센다)
      wed + n      : 이 사람들 가운데 n명(없으면 모두)과 혼인했다 (본처·둘째 부인 — state.wedEver, 사별·이혼해도 센다)
+     collectionRule: 종류 ID — 현재 등록된 해당 종류의 발견물을 모두 직접 찾는다 (빈 목록은 미달성)
    보상: fame(탐험 명성) · gold(금화) · title(칭호 — 수첩 「업적」에 모인다). 금액은 대항해시대 3의 수집 보상처럼 크게 잡았다. */
 (function (G) {
   'use strict';
   var A = G.ACHIEVEMENTS = [];
-  G.ACHV_GROUPS = ['명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '전설과 사슬', '조합', '동료'];
+  G.ACHV_GROUPS = ['발견물 완성', '명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '전설과 사슬', '조합', '동료'];
   function a(group, id, name, desc, rule, fame, gold, title) {
     var o = { group: group, id: id, name: name, desc: desc, fame: fame, gold: gold, title: title || null };
     for (var k in rule) o[k] = rule[k];
@@ -36,6 +37,53 @@
   });
   a('명성 갈래', 'fame_balanced', '네 바다의 조화', '탐험·교역·전투·사교 명성이 각각 ' + FK.balanced.toLocaleString('ko-KR') + ' 이상이다.',
     { fameRule: { all: true, min: FK.balanced } }, 0, FK.balancedGold, '균형 잡힌 제독');
+
+  // 발견물 완성은 기본 일곱 갈래를 모두 포함한다. 동물·식물과 세 관심사는 겹쳐 셀 수 있다.
+  // 분모는 달성 검사 때 G.DISC에서 읽는다. 시대·개척 단계로 아직 닫힌 발견물도 빠뜨리지 않는다.
+  function plant(d) { return d.cat === 'creature' && !!(d.plant || d.id === 'bullocho'); }
+  function interest(type, d) { return !!(G.INTERESTS && G.INTERESTS[type] && G.INTERESTS[type].has(d)); }
+  G.DISC_COLLECTIONS = [
+    { id: 'all', name: '전체 발견물', has: function () { return true; } },
+    { id: 'geo', name: '지리', has: function (d) { return d.cat === 'geo'; } },
+    { id: 'nature', name: '자연', has: function (d) { return d.cat === 'nature'; } },
+    { id: 'ruin', name: '유적', has: function (d) { return d.cat === 'ruin'; } },
+    { id: 'treasure', name: '보물', has: function (d) { return d.cat === 'treasure'; } },
+    { id: 'creature', name: '생물 전체', has: function (d) { return d.cat === 'creature'; } },
+    { id: 'people', name: '민족·풍속', has: function (d) { return d.cat === 'people'; } },
+    { id: 'trade', name: '교역품', has: function (d) { return d.cat === 'trade'; } },
+    { id: 'animal', name: '동물', has: function (d) { return d.cat === 'creature' && !plant(d) && !interest('myth', d); } },
+    { id: 'plant', name: '식물', has: plant },
+    { id: 'myth', name: '전설·미신', has: function (d) { return interest('myth', d); } },
+    { id: 'faith', name: '종교', has: function (d) { return interest('faith', d); } },
+    { id: 'art', name: '미술품', has: function (d) { return interest('art', d); } }
+  ];
+  var DK = G.BALANCE.discoveryAchievements;
+  a('발견물 완성', 'complete_all', '세계를 다 읽은 자', '모든 종류의 발견물을 빠짐없이 직접 발견한다. 시대가 지나 열리는 발견물과 사슬의 끝도 포함한다.',
+    { collectionRule: 'all' }, DK.allFame, DK.allGold, '세계를 다 읽은 자');
+  a('발견물 완성', 'complete_geo', '해도의 마지막 여백', '모든 지리 발견물을 직접 찾아 해도의 마지막 여백을 채운다.',
+    { collectionRule: 'geo' }, DK.kindFame, DK.kindGold, '완전한 해도의 주인');
+  a('발견물 완성', 'complete_nature', '대지가 들려준 모든 이야기', '모든 자연 발견물을 직접 찾아 산과 강, 바다의 경이를 기록한다.',
+    { collectionRule: 'nature' }, DK.kindFame, DK.kindGold, '대자연의 기록자');
+  a('발견물 완성', 'complete_ruin', '돌에 새긴 시간의 끝', '모든 유적 발견물을 직접 찾아 사라진 문명의 자취를 잇는다.',
+    { collectionRule: 'ruin' }, DK.kindFame, DK.kindGold, '문명의 증인');
+  a('발견물 완성', 'complete_treasure', '보물보다 빛나는 항해', '모든 보물 발견물을 직접 찾아 그 안에 담긴 이야기를 기록한다.',
+    { collectionRule: 'treasure' }, DK.kindFame, DK.kindGold, '보물 대백과의 주인');
+  a('발견물 완성', 'complete_creature', '생명의 대백과', '모든 생물 발견물을 직접 기록한다. 동물·식물과 전설 속 생물까지 포함한다.',
+    { collectionRule: 'creature' }, DK.kindFame, DK.kindGold, '생명의 기록자');
+  a('발견물 완성', 'complete_people', '세상 모든 이웃의 벗', '모든 민족·풍속 발견물을 직접 만나 그곳의 삶과 문화를 기록한다.',
+    { collectionRule: 'people' }, DK.kindFame, DK.kindGold, '세상 모든 이웃의 벗');
+  a('발견물 완성', 'complete_trade', '온 세상을 잇는 항로', '발견물로 등록된 모든 교역품을 직접 발견한다. 사고판 수량과 소지품 수는 세지 않는다.',
+    { collectionRule: 'trade' }, DK.kindFame, DK.kindGold, '세계 교역의 개척자');
+  a('발견물 완성', 'complete_animal', '만 가지 숨결의 기록', '동물 발견물을 모두 직접 발견한다. 식물과 전설·미신에 속한 생물은 따로 센다.',
+    { collectionRule: 'animal' }, DK.kindFame, DK.kindGold, '동물 대백과의 저자');
+  a('발견물 완성', 'complete_plant', '사계절을 품은 정원', '식물 발견물을 모두 직접 찾아 세상의 꽃과 나무, 풀을 기록한다.',
+    { collectionRule: 'plant' }, DK.kindFame, DK.kindGold, '세계 식물의 기록자');
+  a('발견물 완성', 'complete_myth', '전설 너머까지 닿은 자', '전설·미신에 속한 발견물을 모두 직접 찾는다. 전설의 생물·땅·물건을 함께 센다.',
+    { collectionRule: 'myth' }, DK.kindFame, DK.kindGold, '전설의 마지막 목격자');
+  a('발견물 완성', 'complete_faith', '모든 기도에 귀 기울이다', '종교에 속한 발견물을 모두 직접 찾아 성지와 성물에 담긴 믿음을 기록한다.',
+    { collectionRule: 'faith' }, DK.kindFame, DK.kindGold, '모든 성지의 순례자');
+  a('발견물 완성', 'complete_art', '아름다움의 모든 이름', '미술품에 속한 발견물을 모두 직접 찾는다. 그림·조각·공예품과 예술을 모은 곳도 포함한다.',
+    { collectionRule: 'art' }, DK.kindFame, DK.kindGold, '아름다움의 증인');
 
   // ------------------------------------------------------------------ 고대 문명
   a('고대 문명', 'wonders7', '고대 세계의 일곱 불가사의', '필론과 헤로도토스가 꼽은 일곱 경이를 모두 제 눈으로 보았다.',
@@ -105,7 +153,7 @@
   a('생물', 'savanna', '사바나의 짐승들', '세렝게티 평원과 그곳의 큰 짐승 다섯을 만났다.',
     { cats: [{ ids: ['serengeti'], n: 1 }, { ids: ['lion', 'elephant', 'rhino', 'giraffe', 'zebra', 'hippo', 'cheetah', 'hyena', 'antelope'], n: 5 }] }, 400, 18000);
   a('생물', 'seamonsters', '바다 괴물 도감', '뱃사람들이 두려워한 바다 괴물들을 찾아냈다.',
-    { ids: ['kraken', 'leviathan', 'zaratan', 'isonade', 'bakunawa', 'jormungandr', 'cipactli', 'f_giantsquid', 'f_oarfish', 'nessie', 'mokele'], n: 6 }, 550, 28000, '괴물 사냥꾼');
+    { ids: ['kraken', 'giant-octopus', 'sea-serpent', 'sea-dragon', 'man-eating-shark', 'ghost-ship', 'leviathan', 'zaratan', 'isonade', 'bakunawa', 'jormungandr', 'cipactli', 'f_giantsquid', 'f_oarfish', 'nessie', 'mokele'], n: 6 }, 550, 28000, '괴물 사냥꾼');
   a('생물', 'pets', '개와 고양이', '여러 나라의 개 다섯과 고양이 셋을 만났다.',
     { cats: [{ ids: ['shiba', 'pomeranian', 'pug', 'corgi', 'yorkie', 'shihtzu', 'golden', 'bostonterrier', 'dachshund', 'papillon'], n: 5 },
              { ids: ['siamese', 'russianblue', 'persian', 'angora', 'koreancat'], n: 3 }] }, 250, 10000, '동물 애호가');

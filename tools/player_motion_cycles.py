@@ -5,16 +5,14 @@
 그림에 따라 다리를 크게 벌린 채 멈춰 섰다 → 두 발 사이가 가장 좁은(발을 모은) 칸을 고른다.
 G.HERO_MOTION[look] = { idle: 칸 번호, skip: [쓰지 않는 동작] }
 
-skip: 그 생김새의 얼굴(portraits/player · characters/player_half_*)과 다른 사람으로 그려진 동작 아틀라스.
-      거리에서는 그 동작 대신 그 생김새의 예전 8장 걷는 그림(characters/<생김새>/walk_*)을 쓴다.
-      Codex가 다시 그리면 여기서 빼고 이 도구를 다시 돌린다 (2026-10-15 점검)."""
+skip: 얼굴과 외형이 달라 쓰지 않는 뒷모습 아틀라스.
+      걷기·달리기는 update_player_walk_loops.py로 보정해 연결했다.
+      뒷모습을 다시 그리면 여기서 빼고 이 도구를 다시 돌린다."""
 SKIP = {
-    'admiral': ['walk'],                       # 걷기에만 갈색 모자 — 얼굴·달리기·뒤돌기는 모자 없음
-    'blackcoat_captain': ['walk'],             # 걷기에만 모자
     'casanova': ['back'],                      # 문 들어가기에만 모자
-    'hat_spinner': ['walk', 'run', 'back'],    # 얼굴은 모자를 손가락에 돌리는데 세 동작 모두 모자를 썼다
-    'navigator_white': ['run', 'back'],        # 달리기는 모자, 문 들어가기는 파란 코트+모자 (다른 사람)
-    'sky_adventurer': ['walk', 'run', 'back'], # 가죽옷 모험가인데 세 동작 모두 파란 코트+모자를 쓴 다른 사람
+    'hat_spinner': ['back'],                   # 뒷모습은 모자를 쓴 다른 외형
+    'navigator_white': ['back'],               # 뒷모습은 파란 코트+모자를 쓴 다른 외형
+    'sky_adventurer': ['back'],                 # 뒷모습은 파란 코트+모자를 쓴 다른 외형
 }
 import glob, json
 from pathlib import Path

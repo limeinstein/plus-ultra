@@ -1,0 +1,116 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-10-27",
+  "shots": [
+    {
+      "id": "fame_total_5000",
+      "name": "신참 모험가",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An inexperienced adult Iberian navigator receives the first modest brass compass from a kindly harbor clerk at a rough dockside desk; a single small caravel waits in soft morning mist. Intimate hopeful beginning, simple clothing and rolled chart."
+    },
+    {
+      "id": "fame_total_20000",
+      "name": "이름난 모험가",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: A returning adult navigator walks down a caravel gangplank to smiling dockworkers and a few cheering port families; a clerk offers a small sealed commendation. Sunlit Lisbon-like stone quay, two caravels, warm recognition."
+    },
+    {
+      "id": "fame_total_60000",
+      "name": "저명한 항해가",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An accomplished adult navigator presents a newly charted sea route across a broad parchment chart to attentive scholars and ship captains in a Renaissance chart room overlooking the harbor. Brass dividers and astrolabe, afternoon window light."
+    },
+    {
+      "id": "fame_total_150000",
+      "name": "위대한 탐험가",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An adult expedition leader and multicultural crew stand on a lush tropical headland looking out across a magnificent newly reached bay, waterfall and distant mountains; anchored caravels below. Rolled chart, windblown cloak, triumphant discovery."
+    },
+    {
+      "id": "fame_total_400000",
+      "name": "대항해자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An admired adult admiral on a carved wooden flagship quarterdeck surveys a substantial fleet of Renaissance sailing ships leaving a busy fortified harbor; officers salute, crimson pennants and shining ocean, confident golden morning."
+    },
+    {
+      "id": "fame_total_650000",
+      "name": "세계적인 대항해자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An adult master navigator welcomes dignitaries and seafarers from Africa, Asia and Europe on a great harbor terrace around an antique globe; ships and architectural details evoke a connected world. Broad warm evening light, international acclaim."
+    },
+    {
+      "id": "fame_total_1000000",
+      "name": "전설의 대항해자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: A celebrated adult admiral returns aboard a magnificent galleon as an entire Renaissance harbor celebrates with pennants, flowers and packed stone quays; the admiral is seen three-quarter from behind beside loyal crew. Sun breaks through immense clouds, legendary homecoming."
+    },
+    {
+      "id": "fame_total_1500000",
+      "name": "바다의 영웅",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: A heroic adult admiral reaches from a weathered flagship toward rescued sailors climbing a rope ladder after a great storm; several allied ships emerge safely behind through parting clouds. Compassionate triumph, sea spray, blue and gold, no injuries."
+    },
+    {
+      "id": "fame_total_2000000",
+      "name": "불멸의 항해자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An elderly legendary navigator surrounded by adult crew of several generations passes a treasured brass compass and unlettered voyage journal to a younger adult navigator on a flagship deck at sunrise; a vast fleet and radiant horizon beyond. Quiet monumental legacy."
+    },
+    {
+      "id": "fame_ex_20000",
+      "name": "해도의 기록자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An adult chartmaker carefully draws coastlines with quill and dividers on a large parchment nautical chart inside a wooden ship cabin; companion holds a brass astrolabe near an open window showing an unfamiliar coastline. Morning light, focused first achievement."
+    },
+    {
+      "id": "fame_ex_150000",
+      "name": "미지의 개척자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An adult expedition party emerges from dense rainforest onto an immense ancient stone terrace above a misty valley, their navigator raises a compass as companions unfold a chart. Tiny anchored caravel far below. Awe, green foliage, shafts of gold."
+    },
+    {
+      "id": "fame_ex_650000",
+      "name": "세계의 증인",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: A mature adult explorer and diverse adult companions in a Renaissance map library compare open sketchbooks of mountains, plants and coastlines around an antique globe; rare shells, botanical specimens and brass instruments. Distant ships through arched window, profound wonder."
+    },
+    {
+      "id": "fame_tr_20000",
+      "name": "항로의 거래인",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: Two adult merchants seal their first important overseas transaction with a handshake on a busy Renaissance quay; clerk balances brass scales beside modest sacks of pepper and rolled cloth, a merchant caravel behind. Candid friendly scene, morning sun."
+    },
+    {
+      "id": "fame_tr_150000",
+      "name": "대양의 거상",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: A prosperous adult maritime merchant oversees unloading spice chests, porcelain and silk from several galleons in a sprawling tropical trading port; port workers coordinate with sailors, rich but practical Renaissance attire, lively panoramic market, amber light."
+    },
+    {
+      "id": "fame_tr_650000",
+      "name": "세계를 잇는 상인",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: Adult traders from Europe, East Africa, India and East Asia work together around a harbor warehouse table holding silk, spices and porcelain; an antique globe and scales embody worldwide exchange, different wooden merchant ships beyond. Respectful partnership, late golden sunlight."
+    },
+    {
+      "id": "fame_bt_20000",
+      "name": "갑판의 용사",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: A brave adult sailor protects fellow crew on a Renaissance wooden ship deck as an officer presents a simple honor token; furled cannon ropes, lowered swords, torn sail repaired by companions, calm sea after a hard-fought victory. No blood or injuries, intimate pride."
+    },
+    {
+      "id": "fame_bt_150000",
+      "name": "함대의 수호자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An adult admiral on a galleon quarterdeck directs protective warships between a convoy of merchant vessels and distant threatening sails; officers relay orders beside bronze cannons, dramatic ocean and sunlight. Defensive resolve, no explosions obscuring the scene."
+    },
+    {
+      "id": "fame_bt_650000",
+      "name": "백전의 제독",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An experienced adult admiral with a weathered cloak stands beside loyal veteran officers on a battle-worn but proud flagship after victory; allied galleons form an immense orderly fleet behind, bronze cannons silent and sheathed swords. Majestic storm-clearing sky, no gore."
+    },
+    {
+      "id": "fame_so_20000",
+      "name": "항구의 벗",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An approachable adult navigator shares bread and a toast with dockworkers, an innkeeper, a merchant and sailors at an outdoor table beside a modest Renaissance harbor tavern. Warm authentic friendship, wooden mugs, sailboats in evening light."
+    },
+    {
+      "id": "fame_so_150000",
+      "name": "바다의 중재자",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: An adult navigator calmly brings two rival adult sea captains to a handshake across a chart table in a Renaissance harbor council chamber; their officers watch with relief, sealed scroll and olive sprig, quiet ships beyond tall windows. Balanced composition, gentle daylight."
+    },
+    {
+      "id": "fame_so_650000",
+      "name": "만인의 신뢰",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: A trusted adult navigator is welcomed in a harbor courtyard by adult envoys, merchants, sailors and scholars from multiple cultures, each offering an open hand or respectful gesture; no monarch on a throne. Warm faces, Renaissance dress, sunlit arches and sea, shared trust."
+    },
+    {
+      "id": "fame_balanced",
+      "name": "네 바다의 조화",
+      "prompt": "Use case: historical-scene. Asset type: dedicated achievement event illustration for the Renaissance Age of Sail game PLUS ULTRA. Create ONE full-bleed panoramic picture, aspect ratio 9:4 (approximately 1881x836), detailed polished semi-realistic painterly historical game art, believable faces and hands, finely textured wood, cloth and brass, atmospheric cinematic light. Historically inspired 15th-16th century clothing and wooden sailing ships, no modern objects. Compose the important action within the central 80% and keep bottom edge free of essential facial detail for a game dialog overlay. No text, lettering, numbers, interface, frame, border, logo or watermark. Scene: Four adult companions representing exploration with an astrolabe, trade with brass scales and spices, fleet protection with a sheathed sword, and diplomacy with a sealed parchment stand together around an antique globe and nautical chart on a flagship deck. Equal emphasis, luminous calm sea and four distant sailing ships, harmony."
+    }
+  ]
+}

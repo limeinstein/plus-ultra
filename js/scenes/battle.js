@@ -208,6 +208,7 @@
 
   // ---------------------------------------------------------------- setup
   function enemyFleet(npc) {
+    if (npc.monster && G.SeaMonsters) return [G.SeaMonsters.enemy(npc)];
     var s = S(), n = npc.n || 1, list = [];
     var fameK = npc.K != null ? npc.K : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));   // 해적은 명성과 우리 함대 크기로 정한 세기 (sea.js pirateK)
     var zone = npc.zone || G.Ships.zone(s.loc.lon, s.loc.lat);
@@ -228,7 +229,7 @@
     var t = G.SHIP[src.type];
     var len = (58 + Math.min(1000, t.cap) / 14) * 1.5 * (t.len || 1);
     var x = side === 'me' ? -380 : 380, y = (i - (n - 1) / 2) * 150;
-    return {
+    var b = {
       side: side, src: src, name: src.name, type: src.type, x: x + U.rf(-30, 30), y: y + U.rf(-20, 20), heading: side === 'me' ? 0 : Math.PI,
       hp: src.hp, maxHp: src.maxHp, crew: 0, crew0: 0, guns: { type: src.guns.type, n: src.guns.n }, sails: src.sails, len: len,
       reload: [U.rf(0, 2), U.rf(0, 2), U.rf(0, 2)], alive: true, captured: false, fled: false, target: null, moveTo: null, sink: 0, flag: i === 0, no: i + 1, speedK: t.spd, turn: t.turn || 1,
@@ -236,6 +237,8 @@
       vel: null, spd: 0, lat: 0, turnRate: 0,
       fx: G.SeaFX ? G.SeaFX.create({ spacing: BFX.wakeSpacing, life: BFX.wakeLife, maxPoints: 280, kz: 1 }) : null   // 해전 좌표(px)와 해전 시간(1.5초 = 물보라의 하루)으로
     };
+    if (src.monster && G.SeaMonsters) G.SeaMonsters.decorate(b, src);
+    return b;
   }
 
   // 배끼리 가리키는 목표·포탄은 번호로 바꾼다. 그림·입력·길찾기 캐시는 불러올 때 다시 만든다.
@@ -245,11 +248,11 @@
     if (B.saveBlocked()) throw new Error('백병전이나 해전 결과를 처리하는 중에는 잠시 저장할 수 없습니다.');
     var out = { v: 1 };
     Object.keys(st).forEach(function (k) {
-      if (['ships', 'fx', 'seaArt', 'seaArtRect', 'nav', 'terrain', 'unkey', 'arrows', 'mouse'].indexOf(k) < 0) out[k] = st[k];
+      if (['ships', 'fx', 'seaArt', 'seaArtRect', 'nav', 'terrain', 'unkey', 'arrows', 'mouse', 'shaker'].indexOf(k) < 0) out[k] = st[k];
     });
     out.ships = st.ships.map(function (b) {
       var sh = {};
-      Object.keys(b).forEach(function (k) { if (['src', 't', 'tr', 'fx', 'ride', 'rig'].indexOf(k) < 0) sh[k] = b[k]; });
+      Object.keys(b).forEach(function (k) { if (['src', 't', 'tr', 'fx', 'ride', 'rig', 'trem'].indexOf(k) < 0) sh[k] = b[k]; });
       sh.fleetIndex = S().fleet.ships.indexOf(b.src);
       if (sh.fleetIndex < 0 && !b.escort) sh.src = b.src;
       return sh;
@@ -260,7 +263,7 @@
     }));
   };
   function restoreBattle(saved) {
-    st = U.clone(saved); delete st.v;
+    st = U.clone(saved); delete st.v; delete st.shaker;
     var ships = st.ships;
     function refs(value) {
       if (!value || typeof value !== 'object') return value;
@@ -272,7 +275,8 @@
     ships.forEach(function (b) {
       b.src = b.fleetIndex >= 0 ? S().fleet.ships[b.fleetIndex] : b.escort && G.Escort ? G.Escort.ship() : b.src;
       delete b.fleetIndex;
-      b.t = G.SHIP[b.type]; b.tr = b.t.traits;
+      b.t = G.SHIP[b.type]; b.tr = b.monster ? [] : b.t.traits;
+      delete b.trem;
       b.fx = G.SeaFX ? G.SeaFX.create({ spacing: BFX.wakeSpacing, life: BFX.wakeLife, maxPoints: 280, kz: 1 }) : null;
     });
     st.fx = []; st.busy = 0;
@@ -335,6 +339,8 @@
       G.Img.load('battle/rough-sea').then(function (im) { if (im && st === here) { st.seaArt = im; st.seaArtRect = artRect(im); } });
     }
     if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000);
+    if (G.SeaMonsterSprite) G.SeaMonsterSprite.preload(st.ships.filter(function (b) { return b.monster; }).map(function (b) { return b.monster; }));
+    if (G.WaterSplash) G.WaterSplash.preload();
     buildUI();
     st.pf = 14;   // 첫 장면부터 복원한 내구·선원 정보를 보여 준다.
     if (st.paused) el.pause.innerHTML = G.icon('sail') + '재개';
@@ -343,7 +349,7 @@
     if (!arg.battle && npc.gunNote) setTimeout(function () { if (st === entered && !st.over) UI.toast(npc.gunNote, 'cannon', 6500); }, 6000);
     if (!arg.battle && npc.tacticNote) setTimeout(function () { if (st === entered && !st.over) UI.toast(npc.tacticNote, 'skull', 6500); }, 5600);   // 이름난 해적의 전술 (js/systems/corsairs.js)   // 큰 해전의 대포 이야기 (무적함대: 우리는 멀리, 저들은 세게)
     if (G.Audio) G.Audio.music('battle');
-    var foe = npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
+    var foe = npc.monster ? G.SEA_MONSTER_ART[npc.monster].name : npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
     UI.toast(arg.battle ? '저장한 해전을 이어갑니다.' : foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
   };
   B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; battleState = null; };
@@ -366,6 +372,7 @@
     BSPEEDS.forEach(function (k) { var o = U.el('div', 'opt' + (battleSpeed() === k ? ' on' : ''), '×' + k); o.title = '해전 배속 ×' + k + ' (키 + / −)'; o.dataset.k = k; o.onclick = function (e) { e.stopPropagation(); setBattleSpeed(k); }; sp.appendChild(o); });
     bar.appendChild(sp); el.speed = sp;
     el.board = btn('백병전', 'sword', function () { boardNearest(); }, 'red');
+    if (st.npc.monster) { el.board.disabled = true; el.board.title = '해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.'; }
     el.flee = btn('퇴각', 'boot', function () { st.retreat = true; var f0 = flagship(); if (f0) { f0.steer = null; f0.halt = false; } UI.toast('퇴각! 전장 가장자리로 벗어나십시오.', 'boot'); });
     UI.add(bar);
     el.panel = UI.add(U.el('div', 'battlepanel wood brass-frame', ''));
@@ -465,7 +472,7 @@
     if (tagW) {
       var tx = x0 + r * 2 + 6 + tw + 6;
       ctx.fillStyle = me ? 'rgba(226,176,74,.9)' : 'rgba(216,80,58,.9)'; ctx.fillRect(tx, y - 13, tagW, 17);
-      ctx.fillStyle = '#1a0e04'; var f1 = ctx.font; ctx.font = '800 11px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.fillText('기함', tx + tagW / 2, y); ctx.font = f1;
+      ctx.fillStyle = '#1a0e04'; var f1 = ctx.font; ctx.font = '800 11px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.fillText(b.monster ? '괴물' : '기함', tx + tagW / 2, y); ctx.font = f1;
     }
     ctx.textAlign = 'center';
   }
@@ -477,7 +484,7 @@
     if (e.button !== 0 || UI.busy() || st.over) return;
     var p = pos(e), w = toWorld(p[0], p[1]), fs = flagship(); if (!fs) return;
     var hit = null, bd = Math.max(50, 34 / (st.vz || 1));     // 화면이 멀어져도 누르기 쉽게
-    st.ships.forEach(function (b) { if (!b.alive || b.side !== 'en') return; var d = Math.hypot(b.x - w[0], b.y - w[1]); if (d < bd) { bd = d; hit = b; } });
+    st.ships.forEach(function (b) { if (!targetable(b) || b.side !== 'en') return; var d = Math.hypot(b.x - w[0], b.y - w[1]); if (d < bd) { bd = d; hit = b; } });
     // 우리 배를 누르면 그 배를 고른다 (기함을 누르면 고르기를 푼다) — 고른 배에게는 적함 클릭 = 그 적을 노림, 바다 클릭 = 그 자리를 지킴
     var mine = null, md = Math.max(46, 30 / (st.vz || 1));
     st.ships.forEach(function (b) { if (!b.alive || b.side !== 'me') return; var d = Math.hypot(b.x - w[0], b.y - w[1]); if (d < md) { md = d; mine = b; } });
@@ -519,6 +526,19 @@
     b.trem = b.trem || G.Shake.make((Math.random() * 1e9) | 0, { freq: 16, yk: 0.5 });
     b.trem.kick(px, { f: 9 + Math.random() * 6, tau: 0.07 + Math.random() * 0.07, yk: 0.6 });
     b.trem.kick(px * 0.6, { t0: (performance.now() / 1000) + 0.05 + Math.random() * 0.06, yk: 0.6 });
+  }
+  /** 공격 한 번에 반동 한 번. 사방 포탄 수만큼 흔들림을 중첩하지 않는다. */
+  function attackFeel(b, action) {
+    var c = G.FX.waterSplash;
+    if (st.attackFeelT == null || st.t - st.attackFeelT >= c.attackGap) {
+      shake(c.shake[action] || 0); st.attackFeelT = st.t;
+    }
+    tremor(b, c.tremor[action] || 0);
+  }
+  function waterFx(id, b, angle) {
+    if (!G.WaterSplash) return;
+    var c = G.FX.waterSplash, scale = U.clamp(b.len * c.shipScale, c.minScale, c.maxScale);
+    G.WaterSplash.emit(st, id, b.x, b.y, scale, angle == null ? b.heading : angle);
   }
   function flash(a, rgb) { if (!st || !feelOn() || !(a > 0)) return; if (!st.flash || a >= st.flash.a) st.flash = { a: a, c: rgb || '255,244,220' }; }
   /** 히트스톱: 잠깐 모든 배와 포탄을 멈춘다 (흔들림·번쩍임은 그 사이에도 움직인다) */
@@ -676,7 +696,7 @@
     }
     if (o === 'focus') {
       b.target = T; b.moveTo = null; b.close = K.focusR || 0.55;
-      b.boardIntent = !has(T, 'spikes') && b.crew > T.crew * (K.board || 1.5) && b.crew >= 8;
+      b.boardIntent = !T.monster && !has(T, 'spikes') && b.crew > T.crew * (K.board || 1.5) && b.crew >= 8;
       return;
     }
     if (o === 'gun') {
@@ -848,15 +868,15 @@
       while (left > 1e-4 && !st.busy && !st.over) {
         var sdt = Math.min(left, 0.05); left -= sdt;
         st.ships.forEach(function (b) { if (b.alive) think(b, sdt); });
-        st.ships.forEach(function (b) { if (b.alive) moveShip(b, sdt); });
+        st.ships.forEach(function (b) { if (b.alive && !b.monster) moveShip(b, sdt); });
         st.ships.forEach(function (b) { if (b.fx) G.SeaFX.age(b.fx, sdt / BFX.day); });
-        st.ships.forEach(function (b) { if (b.alive) gunnery(b, sdt); });
+        st.ships.forEach(function (b) { if (b.alive && !b.monster) gunnery(b, sdt); });
         updateBalls(sdt);
         checkEnd();
       }
       // 크게 부서진 배는 검은 연기를 뿜는다 (연기는 그 자리에 남아 바람에 밀린다 — 움직이는 배 뒤로 꼬리가 생긴다)
       st.ships.forEach(function (b) {
-        if (!b.alive || b.fled) return;
+        if (!b.alive || b.fled || b.monster) return;
         var hr = b.hp / b.maxHp; if (hr >= I.burnAt) return;
         b.smokeT = (b.smokeT || 0) - dt; if (b.smokeT > 0) return;
         b.smokeT = 0.1 + hr * 0.5;
@@ -896,9 +916,16 @@
     return sail;
   }
   function has(b, k) { return b.tr.indexOf(k) >= 0; }
+  function targetable(b) { return G.SeaMonsters ? G.SeaMonsters.targetable(b) : b && b.alive; }
   function boardRange(b) { return has(b, 'grapple') ? 80 : 55; }
   function think(b, dt) {
-    var foes = st.ships.filter(function (o) { return o.alive && o.side !== b.side; });
+    if (b.monster && G.SeaMonsters) {
+      G.SeaMonsters.step(b, dt, st, { arena: ARENA, resolveTerrain: resolveTerrain, armor: armorK, hullBreak: hullBreak, log: log,
+        effect: function (action) { waterFx(action === 'rush' ? 'wake' : action, b); if (action !== 'wake') attackFeel(b, action); },
+        hit: function (o, damage, from) { o.hitT = IMP().shipFlash; dmgNumber(o, damage, 0); hitBurst(o.x, o.y, o.x - from.x, o.y - from.y, damage); waterFx('ram', o, from.heading); tremor(o, G.FX.waterSplash.tremor.ram); jolt(o, o.x - from.x, o.y - from.y, IMP().knock); shake(IMP().shakeClash); } });
+      return;
+    }
+    var foes = st.ships.filter(function (o) { return targetable(o) && o.side !== b.side; });
     if (!foes.length) return;
     var near = foes.slice().sort(function (p, q) { return Math.hypot(p.x - b.x, p.y - b.y) - Math.hypot(q.x - b.x, q.y - b.y); })[0];
     if (b.side === 'me') {
@@ -979,7 +1006,7 @@
       else if (ed < ARENA * 0.65) st.edgeWarned = false;
     }
     else if (b.moveTo) goal = b.moveTo;
-    else if (b.target && b.target.alive) {
+    else if (targetable(b.target)) {
       // stand off at gun range and present the broadside
       var t = b.target, d = Math.hypot(t.x - b.x, t.y - b.y), rng = gunRange(b) * (b.close || 1);   // b.close: 함대 명령마다 붙는 거리 (일제 공격은 가까이, 포격전은 멀리)
       var ang = Math.atan2(t.y - b.y, t.x - b.x);
@@ -1016,13 +1043,14 @@
     // ship separation
     if (b.ramCd > 0) b.ramCd -= dt;
     st.ships.forEach(function (o) {
-      if (o === b || !o.alive) return;
+      if (o === b || !targetable(o)) return;
       var dx = b.x - o.x, dy = b.y - o.y, d = Math.hypot(dx, dy);
       // 충파: 뱃머리로 적선을 들이받는다
       if (has(b, 'ram') && o.side !== b.side && b.ramCd <= 0 && d < 34 + (b.len + o.len) * 0.18 && !st.busy && Math.abs(U.angDiff(b.heading, Math.atan2(-dy, -dx))) < 0.7) {
         var rd = (8 + b.t.hp * 0.12) * U.rf(0.8, 1.2) * armorK(o);
-        o.hp -= rd; o.crew = Math.max(0, o.crew - Math.ceil(o.crew * 0.05)); b.hp -= 1.5; b.ramCd = 5;
+        o.hp -= rd; if (!o.monster) o.crew = Math.max(0, o.crew - Math.ceil(o.crew * 0.05)); b.hp -= 1.5; b.ramCd = 5;
         st.fx.push({ kind: 'hit', x: (b.x + o.x) / 2, y: (b.y + o.y) / 2, t: 0, life: 0.8 });
+        waterFx('ram', o, b.heading); tremor(b, G.FX.waterSplash.tremor.ram); tremor(o, G.FX.waterSplash.tremor.ram);
         var bn = shipLabel(b), on = shipLabel(o);
         log(bn + U.jx(bn, '이/가') + ' ' + on + U.jx(on, '을/를') + ' 들이받았다!');
         var I3 = IMP(); o.hitT = I3.shipFlash; jolt(o, o.x - b.x, o.y - b.y, I3.knock); jolt(b, b.x - o.x, b.y - o.y, I3.knock * 0.4);
@@ -1064,7 +1092,7 @@
       var sAng = side === 2 ? b.heading : b.heading + (side === 0 ? -Math.PI / 2 : Math.PI / 2);
       var tgt = null, best = 1e9, part = 1;
       st.ships.forEach(function (o) {
-        if (!o.alive || o.side === b.side) return;
+        if (!targetable(o) || o.side === b.side) return;
         var dx = o.x - b.x, dy = o.y - b.y, d = Math.hypot(dx, dy);
         if (d > rng) return;
         var a = Math.abs(U.angDiff(sAng, Math.atan2(dy, dx))), k;
@@ -1085,6 +1113,7 @@
     }
   }
   function fire(b, t, c, d, rng, gunSk, sAng, part) {
+    if (!targetable(t)) return;
     var shots = Math.max(1, Math.round(b.guns.n / 2 * (part || 1)));
     var acc = c.acc * (1 + gunSk * 0.1) * (1.15 - 0.5 * d / rng);
     if (b.side === 'me') { var bonus = R.fleetBonus('battle'); acc *= 1 + bonus; if (R.hasItem('shells')) acc *= 1.05; }
@@ -1092,7 +1121,8 @@
     if (b.side === 'me' && G.SkillCombos) acc *= G.SkillCombos.factor('cannonAccuracy');
     if (b.side === 'me' && G.Career) acc += G.Career.accuracy(b.src === S().fleet.ships[0], careerBaseAcc);
     if (G.Audio && st.sfxT !== Math.floor(st.t * 4)) { st.sfxT = Math.floor(st.t * 4); G.Audio.sfx('cannon'); }
-    if (b.side === 'me') { var I0 = IMP(); shake(I0.shakeFire); flash(I0.flashFire, '255,226,170'); }
+    attackFeel(b, 'fire');
+    if (b.side === 'me') { var I0 = IMP(); flash(I0.flashFire, '255,226,170'); }
     jolt(b, -Math.cos(sAng), -Math.sin(sAng), 2 + Math.min(3, shots * 0.4));             // 포를 쏜 반동으로 배가 반대쪽으로 밀린다
     st.fx.push({ kind: 'ring', x: b.x + Math.cos(sAng) * b.len * 0.22, y: b.y + Math.sin(sAng) * b.len * 0.22, t: 0, life: 0.55, r: b.len * 0.55 });   // 물 위에 퍼지는 충격파
     for (var i = 0; i < shots; i++) {
@@ -1108,16 +1138,22 @@
   }
   function updateBalls(dt) {
     for (var i = st.balls.length - 1; i >= 0; i--) {
-      var k = st.balls[i]; k.t += dt;
+      var k = st.balls[i];
+      if (k.radial && G.SeaMonsters) {
+        var victim = G.SeaMonsters.projectileHit(k, st, dt);
+        if (victim) { k.target = victim; k.hit = true; k.tx = victim.x; k.ty = victim.y; k.t = k.dur; }
+      }
+      k.t += dt;
       if (k.t >= k.dur) {
         st.balls.splice(i, 1);
-        if (k.hit && k.target.alive) {
+        if (k.hit && targetable(k.target)) {
           var t = k.target;
           var dmg = k.dmg * (1 - (k.target.side === 'me' ? R.fleetBonus('hp') : 0)) * 1.1 * armorK(t);
           t.hp -= dmg;
-          var kill = Math.random() < 0.5 ? Math.ceil(dmg * 0.35 * (k.kill || 1) * (has(t, 'armor') ? 0.4 : has(t, 'raft') ? 1.5 : 1)) : 0; t.crew = Math.max(0, t.crew - kill);
+          var kill = !t.monster && Math.random() < 0.5 ? Math.ceil(dmg * 0.35 * (k.kill || 1) * (has(t, 'armor') ? 0.4 : has(t, 'raft') ? 1.5 : 1)) : 0; t.crew = Math.max(0, t.crew - kill);
           st.fx.push({ kind: 'hit', x: k.tx, y: k.ty, t: 0, life: 0.6 });
           hitBurst(k.tx, k.ty, k.tx - k.x, k.ty - k.y, dmg);
+          if (G.WaterSplash) G.WaterSplash.emit(st, 'hull', k.tx, k.ty, 1, Math.atan2(k.ty - k.y, k.tx - k.x));
           dmgNumber(t, dmg, kill);
           // 타격감: 맞은 배가 번쩍이며 포탄 방향으로 밀리고, 잠깐 멈추고, 화면이 흔들린다
           var I1 = IMP(), mine = t.side === 'me', big = Math.min(1, dmg / Math.max(1, t.maxHp) * 8);
@@ -1129,7 +1165,10 @@
           if (big > 0.7) zoomKick(I1.zoomHit);
           if (t.hp <= 0) hullBreak(t);
           else if (t.crew <= 0) { t.alive = false; t.captured = t.side === 'en'; t.drifting = true; log(t.name + '의 선원이 전멸했다.'); }
-        } else { st.fx.push({ kind: 'splash', x: k.tx, y: k.ty, t: 0, life: 2.2, seed: Math.random() }); st.fx.push({ kind: 'ring', x: k.tx, y: k.ty, t: 0, life: 0.45, r: 22 }); }
+        } else {
+          if (G.WaterSplash) G.WaterSplash.emit(st, 'cannon', k.tx, k.ty);
+          else st.fx.push({ kind: 'splash', x: k.tx, y: k.ty, t: 0, life: 2.2, seed: Math.random() });
+        }
       }
     }
   }
@@ -1148,6 +1187,7 @@
     log(t.name + (t.side === 'me' ? '호가 침몰했다!' : U.j(t.name, '이/가').slice(t.name.length) + ' 침몰했다!'));
     if (G.Audio) { G.Audio.sfx('boom'); G.Audio.sfx('splash'); }   // 화약고가 터지고 가라앉는다
     st.fx.push({ kind: 'bigsplash', x: t.x, y: t.y, t: 0, life: 6, seed: Math.random(), len: t.len });
+    waterFx('emerge', t);
     var I2 = IMP(); st.hsCool = 0; hitstop(I2.hitstopSink); shake(I2.shakeSink); flash(I2.flashSink, t.side === 'me' ? '255,110,80' : '255,240,210');
     st.fx.push({ kind: 'blast', x: t.x, y: t.y, t: 0, life: 0.5, r: t.len * 0.9 });
     hitBurst(t.x, t.y, U.rf(-1, 1), U.rf(-1, 1), 14); zoomKick(I2.zoomSink);
@@ -1188,6 +1228,7 @@
     jolt(me, dx, dy, IMP().knock); jolt(en, -dx, -dy, IMP().knock);
   }
   function boardNearest() {
+    if (st && st.npc.monster) { UI.toast('해상 괴물은 포격과 충파로 쓰러뜨려야 합니다. 백병전·일기토는 없습니다.', 'cannon'); return; }
     var fs = flagship(); if (!fs || st.over) return;
     var best = null, bd = 1e9;
     st.ships.forEach(function (o) {
@@ -1198,6 +1239,7 @@
     boarding(best[1], best[0], false);
   }
   async function boarding(enemy, mine, enemyStarted) {
+    if (enemy.monster || mine.monster) { if (mine) mine.boardIntent = false; return; }
     if (st.busy) return;
     st.busy++;
     var s = S();
@@ -1332,7 +1374,9 @@
     // 튜토리얼의 해전에서 지거나 물러나면 되돌려서 다시 싸운다 (js/systems/tutorial.js)
     if (res !== 'win' && res !== 'escaped-enemy' && G.Tutorial && G.Tutorial.active && G.Tutorial.active()) { try { if (await G.Tutorial.battleLost(res)) return; } catch (e) { console.error(e); } }
     var s = S(), f = s.fleet;
+    var finishing = st;
     await U.sleep(900);
+    if (st !== finishing || S() !== s) return;
     // apply damage & crew back to state
     var survivors = [];
     st.ships.forEach(function (b) {
@@ -1344,7 +1388,21 @@
     var lines = [];
     if (G.Growth) G.Growth.battle(res, (st.npc && st.npc.n) || st.ships.filter(function (b) { return b.side !== 'me'; }).length);   // 전투 경험 (js/systems/growth.js)
     if (G.Escort) { try { G.Escort.afterBattle(st.ships, res, lines); } catch (e) { console.error(e); } }   // 호위하던 상선을 잃었는가
-    if (res === 'win') {
+    if (st.npc.monster && G.SeaMonsters) {
+      G.SeaMonsters.afterBattle(st.npc, res, st.ships);
+      var monsterName = G.SEA_MONSTER_ART[st.npc.monster].name;
+      if (res === 'win') {
+        s.stats.wins++;
+        var legend = G.SEA_MONSTERS[st.npc.monster].years > 10;
+        var monsterFame = G.Fame.add('bt', legend ? G.BALANCE.seaMonsters.legendFame : G.BALANCE.seaMonsters.commonFame);
+        lines.push(monsterName + U.jx(monsterName, '을/를') + ' 무찔렀다! (전투 명성 +' + monsterFame + ')');
+        lines.push('다음 출몰은 ' + G.SEA_MONSTERS[st.npc.monster].years + '년 뒤, 다른 바다에서 일어납니다.');
+        await UI.alert(lines.join('<br>'), '해상 괴물 토벌');
+      } else {
+        await UI.alert(monsterName + '의 공격을 피해 물러났다. 괴물은 그 해역에 남아 있다.', '해상 괴물 — 퇴각');
+        if (!f.ships.length) await ransom(true);
+      }
+    } else if (res === 'win') {
       s.stats.wins++;
       if (G.SeaFolk) G.SeaFolk.afterBattle(st.npc, res, lines);   // 탐험 함대를 꺾으면 그 항해가 한 해 늦어진다
       if (G.Captains) G.Captains.afterBattle(st.npc, res, st.ships, lines);   // 이름난 선장·해적의 기함을 나포하면 사로잡는다 (seacaptains.js)
@@ -1682,13 +1740,13 @@
     if (got.length) { UI.toast('나포한 배에서 ' + got.join(' · ') + U.jx(got[got.length - 1], '을/를') + ' 옮겨 실었다.', 'sack', 5200); G.State.log('나포한 배에서 ' + got.join(', ') + '을(를) 얻었다.'); }
     if (G.Game.refreshHud) G.Game.refreshHud();
   }
-  async function ransom() {
+  async function ransom(rescued) {
     var s = S(), p = s.player;
     var fee = Math.floor((p.gold + p.bank) * 0.5);
     var fromGold = Math.min(p.gold, fee);                   // 모자라는 만큼만 금고에서 (예전에는 금고에서 몸값을 한 번 더 냈다)
     p.gold -= fromGold; p.bank = Math.max(0, (p.bank || 0) - (fee - fromGold));
     var home = G.CITY_DATA[p.home];
-    await UI.say('몸값을 치르고 풀려났다. 몇 달 뒤, 겨우 고향 ' + home.name + '에 돌아왔다...', {});
+    await UI.say(rescued ? '지나가던 배에 구조되어 치료와 귀향 비용을 치렀다. 몇 달 뒤 고향 ' + home.name + '에 돌아왔다...' : '몸값을 치르고 풀려났다. 몇 달 뒤, 겨우 고향 ' + home.name + '에 돌아왔다...', {});
     G.Game.passDays(90);
     s.fleet = R.restartFleet(s.fleet.ships[0] && s.fleet.ships[0].type);
     G.Fame.add('bt', -100);
@@ -1703,10 +1761,8 @@
   /** 포탄이 물에 떨어진 자리: 퍼지는 고리와 옅어지는 거품 자국 (배 아래에) */
   function splashUnder(ctx, p, f, u) {
     var a = 1 - u;
-    ctx.fillStyle = 'rgba(226,238,242,' + (0.28 * a * a).toFixed(3) + ')';
-    ctx.beginPath(); ctx.ellipse(p[0], p[1], 5 + u * 18, 3.5 + u * 13, f.seed * 3, 0, 6.2832); ctx.fill();
+    if (G.WaterSplash) G.WaterSplash.ripple(ctx, p[0], p[1], 28, u, f.seed);
     for (var i = 0; i < 5; i++) { var r0 = rs(f, i), ang = r0 * 6.2832, d = (4 + u * 16) * (0.3 + rs(f, i + 7)); ctx.fillStyle = 'rgba(240,248,250,' + (0.35 * a).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(p[0] + Math.cos(ang) * d, p[1] + Math.sin(ang) * d * 0.75, 1 + rs(f, i + 3) * 2.2, 0, 6.2832); ctx.fill(); }
-    if (f.t < 1.2) { var ru = f.t / 1.2; ctx.strokeStyle = 'rgba(236,246,250,' + (0.55 * (1 - ru)).toFixed(3) + ')'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(p[0], p[1], 4 + ru * 28, 3 + ru * 20, 0, 0, 6.2832); ctx.stroke(); }
   }
   /** 물기둥: 솟았다가 떨어지는 물방울 (배 위에 그린다) */
   function splashColumn(ctx, p, f) {
@@ -1724,16 +1780,14 @@
   /** 가라앉는 배: 거품이 넓게 번지고 소용돌이가 돌며 잔해 조각이 떠돈다 */
   function sinkFoam(ctx, p, f, u) {
     var a = 1 - u, R0 = (f.len || 100) * 0.5;
-    ctx.fillStyle = 'rgba(214,230,236,' + (0.30 * a).toFixed(3) + ')';
-    ctx.beginPath(); ctx.ellipse(p[0], p[1], R0 * (0.7 + u * 0.9), R0 * (0.45 + u * 0.7), f.seed * 2, 0, 6.2832); ctx.fill();
-    ctx.strokeStyle = 'rgba(236,246,250,' + (0.45 * a).toFixed(3) + ')'; ctx.lineWidth = 1.6;
+    ctx.strokeStyle = 'rgba(166,197,207,' + (G.FX.waterSplash.rippleOpacity * a).toFixed(3) + ')'; ctx.lineWidth = G.FX.waterSplash.rippleLine;
     for (var k = 0; k < 3; k++) { var r = R0 * (0.25 + k * 0.22) * (1 + u * 0.6), a0 = f.t * (1.2 - k * 0.3) + k * 2; ctx.beginPath(); ctx.arc(p[0], p[1], r, a0, a0 + 2.2); ctx.stroke(); }
     for (var i = 0; i < 14; i++) {
       var ang = rs(f, i) * 6.2832 + f.t * 0.15, d = R0 * (0.2 + rs(f, i + 20) * (0.8 + u)), bx = p[0] + Math.cos(ang) * d, by = p[1] + Math.sin(ang) * d * 0.8;
       if (i < 6) { ctx.fillStyle = 'rgba(92,64,38,' + (0.8 * a).toFixed(3) + ')'; ctx.save(); ctx.translate(bx, by); ctx.rotate(rs(f, i + 40) * 3); ctx.fillRect(-4 - rs(f, i) * 5, -1.2, 8 + rs(f, i) * 10, 2.4); ctx.restore(); }
       else { ctx.fillStyle = 'rgba(244,250,252,' + (0.5 * a * (0.5 + 0.5 * Math.sin(f.t * 4 + i))).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(bx, by, 1.2 + rs(f, i) * 2, 0, 6.2832); ctx.fill(); }
     }
-    if (f.t < 1.5) { var ru = f.t / 1.5; ctx.strokeStyle = 'rgba(240,248,250,' + (0.6 * (1 - ru)).toFixed(3) + ')'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(p[0], p[1], R0 * (0.6 + ru * 1.6), R0 * (0.45 + ru * 1.2), 0, 0, 6.2832); ctx.stroke(); }
+    if (G.WaterSplash) G.WaterSplash.ripple(ctx, p[0], p[1], R0, u, f.seed);
   }
 
   // ---------------------------------------------------------------- rendering
@@ -1764,11 +1818,8 @@
       ctx.restore();
       return;
     }
-    if (f.kind === 'ring') {          // 물 위에 퍼지는 충격파 고리
-      ctx.save(); ctx.globalCompositeOperation = 'source-over';
-      ctx.strokeStyle = 'rgba(236,246,250,' + (0.6 * (1 - u)).toFixed(3) + ')'; ctx.lineWidth = 2.2 * (1 - u) + 0.6;
-      ctx.beginPath(); ctx.ellipse(q[0], q[1], f.r * (0.3 + u), f.r * (0.22 + u * 0.75), 0, 0, 7); ctx.stroke();
-      ctx.restore();
+    if (f.kind === 'ring') {          // 포격 반동의 잔물결은 닫힌 원 없이 옅게 끊어 그린다
+      if (G.WaterSplash) G.WaterSplash.ripple(ctx, q[0], q[1], f.r, u, f.x + f.y);
       return;
     }
     if (f.kind === 'debris') {        // 나뭇조각: 튀어 올랐다가 물에 떨어진다
@@ -1893,6 +1944,7 @@
       if (f.kind === 'splash') splashUnder(ctx, p, f, u);
       if (f.kind === 'bigsplash') sinkFoam(ctx, p, f, u);
       if (f.kind === 'ring') impactFx(ctx, f, 1 - u);          // 물 위의 충격파 고리는 배 아래에
+      if (f.kind === 'waterSprite' && G.FX.waterSplash.types[f.style].under) G.WaterSplash.draw(ctx, f, p[0], p[1]);
     });
     // ships
     st.ships.forEach(function (b) {
@@ -1901,6 +1953,9 @@
       if (b.trem && !b.trem.idle()) { var tq = b.trem.sample(performance.now() / 1000, 0); p = [p[0] + tq[0], p[1] + tq[1]]; }   // 맞은 배의 떨림 (그림만)
       ctx.save();
       if (!b.alive) { ctx.globalAlpha = b.sunk ? 1 - b.sink : 0.75; }
+      if (b.monster && G.SeaMonsters) {
+        G.SeaMonsters.draw(ctx, b, p[0], p[1], st.t);
+      } else {
       var spec = A.shipLook(b.type, { sails: b.sails, flag: b.side === 'me' ? '#1d3f7a' : st.npc.kind === 'pirate' ? '#111' : '#8a1e1e' });
       if (b.side === 'en') { spec.cross = false; if (st.npc.kind === 'pirate') { spec.hull = '#2a2420'; if (spec.hullType === 'west' || spec.hullType === 'galley' || spec.hullType === 'dhow') spec.sail = '#4a4440'; } }
       // 선체의 흔들림(선회 때 바깥으로 기울고, 물결에 오르내림)과 선체에 붙은 물(선수 파도·선측 물줄기)
@@ -1913,9 +1968,10 @@
       A.shipTop(ctx, p[0], p[1], -b.heading + (b.sunk ? b.sink * 0.6 : 0), b.len * (b.sunk ? 1 - b.sink * 0.3 : 1), spec, st.t);
       // 맞은 배: 잠깐 하얗게 번쩍인다 (같은 그림을 밝게 한 번 더 겹친다)
       if (b.hitT > 0 && !b.sunk) { var hk = Math.min(1, b.hitT / Math.max(0.01, IMP().shipFlash)); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.75 * hk; A.shipTop(ctx, p[0], p[1], -b.heading, b.len, spec, st.t); }
+      }
       ctx.restore();
       // 불길: 크게 부서진 배의 갑판 두세 곳이 일렁인다
-      if (b.alive && b.hp / b.maxHp < IMP().fireAt) burnGlow(ctx, b, p);
+      if (b.alive && !b.monster && b.hp / b.maxHp < IMP().fireAt) burnGlow(ctx, b, p);
       if (!b.alive) return;
       // bars
       // 막대·이름표는 화면 배율과 상관없이 읽히는 크기로 (선체 위 끝에 붙여 그린다)
@@ -1935,7 +1991,7 @@
         ctx.fillStyle = 'rgba(255,240,200,.85)'; ctx.beginPath(); ctx.moveTo(sx + Math.cos(b.steer) * 12, sy + Math.sin(b.steer) * 12); ctx.lineTo(sx + Math.cos(b.steer + 2.5) * 10, sy + Math.sin(b.steer + 2.5) * 10); ctx.lineTo(sx + Math.cos(b.steer - 2.5) * 10, sy + Math.sin(b.steer - 2.5) * 10); ctx.closePath(); ctx.fill();
       }
       if (b.side === 'me' && b.flag && b.moveTo) { var mp = toScreen(b.moveTo[0], b.moveTo[1]); ctx.strokeStyle = 'rgba(255,240,200,.7)'; ctx.setLineDash([5, 6]); ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(mp[0], mp[1]); ctx.stroke(); ctx.setLineDash([]); }
-      if (b.side === 'me' && b.flag && b.target && b.target.alive) { var tp = toScreen(b.target.x, b.target.y); ctx.strokeStyle = 'rgba(255,90,60,.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(tp[0], tp[1], b.target.len * 0.6, 0, 7); ctx.stroke(); }
+      if (b.side === 'me' && b.flag && targetable(b.target)) { var tp = toScreen(b.target.x, b.target.y); ctx.strokeStyle = 'rgba(255,90,60,.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(tp[0], tp[1], b.target.len * 0.6, 0, 7); ctx.stroke(); }
     });
     // cannon balls
     // 포탄: 물 위의 그림자, 뒤로 끌리는 연기 꼬리, 막 떠난 포탄의 달군 빛
@@ -1947,7 +2003,7 @@
       ctx.fillStyle = 'rgba(0,18,28,0.28)'; ctx.beginPath(); ctx.ellipse(c[2], c[3], 3.4, 2, 0, 0, 7); ctx.fill();
       for (var i = 5; i >= 1; i--) { var q2 = at(Math.max(0, u - i * 0.04)); ctx.fillStyle = 'rgba(214,210,200,' + (0.3 * (1 - i / 6)).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(q2[0], q2[1], 1.8 + i * 0.7, 0, 7); ctx.fill(); }
       if (u < 0.4) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; var gb = ctx.createRadialGradient(c[0], c[1], 0, c[0], c[1], 9); gb.addColorStop(0, 'rgba(255,200,120,' + (0.8 * (1 - u / 0.4)).toFixed(3) + ')'); gb.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = gb; ctx.beginPath(); ctx.arc(c[0], c[1], 9, 0, 7); ctx.fill(); ctx.restore(); }
-      ctx.fillStyle = '#151210'; ctx.beginPath(); ctx.arc(c[0], c[1], 3.3, 0, 7); ctx.fill();
+      ctx.fillStyle = k2.element === 'water' ? '#88e4ff' : k2.element === 'ghost' ? '#8cf9bb' : '#151210'; ctx.beginPath(); ctx.arc(c[0], c[1], k2.radial ? 5 : 3.3, 0, 7); ctx.fill();
       ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.arc(c[0] - 1, c[1] - 1, 1.1, 0, 7); ctx.fill();
     });
     // smoke & hits over ships
@@ -1957,21 +2013,23 @@
       if (f.kind === 'hit') { var q = toScreen(f.x, f.y); ctx.fillStyle = 'rgba(255,170,60,' + a + ')'; ctx.beginPath(); ctx.arc(q[0], q[1], 6 + f.t * 20, 0, 7); ctx.fill(); }
       if (IMPACT_KINDS[f.kind]) impactFx(ctx, f, a);
       if (f.kind === 'splash') splashColumn(ctx, toScreen(f.x, f.y), f);
+      if (f.kind === 'waterSprite' && !G.FX.waterSplash.types[f.style].under) { var wp = toScreen(f.x, f.y); G.WaterSplash.draw(ctx, f, wp[0], wp[1]); }
     });
     // 항해 중 내리던 비는 전투에 들어와도 끊기지 않는다. 화면 공간으로 그려 카메라 확대·타격 흔들림에 빗줄기가 늘어나지 않게 한다.
     if (G.Rain && G.Rain.raining()) G.Rain.draw(ctx, st.t, st.wind.dir, false, function (x, y) { var w = toWorld(x, y); return !terrainBlocked(w[0], w[1], null); });
     // HUD texts
     var me = st.ships.filter(function (b) { return b.side === 'me' && b.alive; }), en = st.ships.filter(function (b) { return b.side === 'en' && b.alive; });
     UI.hud.set('me', '아군 ' + me.length + '척 · 선원 ' + U.sum(me, function (b) { return b.crew; }));
-    UI.hud.set('en', '적 ' + en.length + '척 · 선원 ' + U.sum(en, function (b) { return b.crew; }));
+    UI.hud.set('en', st.npc.monster && en[0] ? en[0].name + ' · ' + G.SeaMonsters.phaseLabel(en[0]) : '적 ' + en.length + '척 · 선원 ' + U.sum(en, function (b) { return b.crew; }));
     UI.hud.set('wind', U.dirName(st.wind.dir + Math.PI) + '풍' + (st.npc && st.npc.place ? ' · ' + st.npc.place : st.terrain && st.terrain.hasLand ? ' · 연안 전장' : ' · 격랑 해역'));   // npc.place: 큰 해전의 자리 이름 (텍스코코 호수)
     if (st.pf % 6 === 0) refreshOrders();
     if ((st.pf = (st.pf || 0) + 1) % 15 === 0 && el.panel) {
       el.panel.innerHTML = '<div class="fp-h">' + G.icon('ship') + '아군 함대</div>' + st.ships.filter(function (b) { return b.side === 'me'; }).map(function (b) {
         return '<div class="fp-ship"><div class="flex"><span class="shipno' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag">기함</span>' : '') + '<small class="cream-muted" style="margin-left:6px">' + U.esc(R.captainName(b.src)) + '</small><span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.fled ? '이탈' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'green dark') + '</div>';
-      }).join('') + '<div class="fp-h" style="margin-top:8px">' + G.icon('flag') + '적 함대 <small class="cream-muted">— 1번 기함을 무찌르면 승리</small></div>' + st.ships.filter(function (b) { return b.side === 'en'; }).map(function (b) {
-        return '<div class="fp-ship en"><div class="flex"><span class="shipno en' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag en">기함</span>' : '') + '<span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.captured ? '나포' : b.fled ? '달아남' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '</div>';
-      }).join('') + '<div class="cream-muted" style="font-size:14px;margin-top:6px">방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · P: 일시정지 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기' + (st.terrain && st.terrain.hasLand ? '<br><b>섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.</b>' : '') + '</div>';
+      }).join('') + '<div class="fp-h" style="margin-top:8px">' + G.icon('flag') + (st.npc.monster ? '해상 괴물 <small class="cream-muted">— 잠수 중 공격 불가</small>' : '적 함대 <small class="cream-muted">— 1번 기함을 무찌르면 승리</small>') + '</div>' + st.ships.filter(function (b) { return b.side === 'en'; }).map(function (b) {
+        if (b.monster) return '<div class="fp-ship en"><div class="flex"><b>' + U.esc(b.name) + '</b><span class="right cream-muted">괴물</span></div><div class="cream-muted" style="font-size:14px">' + (b.alive ? G.SeaMonsters.phaseLabel(b) : '처치') + '</div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '<small>내구 ' + Math.ceil(Math.max(0, b.hp)) + ' / ' + b.maxHp + '</small></div>';
+        return '<div class="fp-ship en"><div class="flex"><span class="shipno en' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag en">' + (b.monster ? '괴물' : '기함') + '</span>' : '') + '<span class="right cream-muted">' + (b.monster ? (b.alive ? G.SeaMonsters.phaseLabel(b) : '처치') : b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.captured ? '나포' : b.fled ? '달아남' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '</div>';
+      }).join('') + '<div class="cream-muted" style="font-size:14px;margin-top:6px">방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · ' + (st.npc.monster ? '괴물에게 백병전·일기토 불가 · ' : 'B: 백병전 · ') + 'P: 일시정지 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기' + (st.terrain && st.terrain.hasLand ? '<br><b>섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.</b>' : '') + '</div>';
     }
   }
 })(window.G = window.G || {});

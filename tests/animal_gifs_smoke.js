@@ -112,7 +112,7 @@ function socket(url) {
     }))()`, returnByValue: true });
     catalog = c.result.value;
     console.log(JSON.stringify({ result, catalog, errors: cdp.errors }));
-    if (!result || result.animals !== 138 || result.gifs !== 138 || result.sheets !== 138 || result.reveals !== 138 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== catalog.expectedAnimated || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || !catalog.aria.includes('라플레시아') || cdp.errors.length) process.exitCode = 1;
+    if (!result || result.animals !== 143 || result.gifs !== 143 || result.sheets !== 143 || result.reveals !== 143 || !result.loaded || result.tag !== 'CANVAS' || result.size[0] !== 1152 || result.size[1] !== 512 || result.aria !== '사자' || !catalog || catalog.cards !== catalog.expected || catalog.animated !== catalog.expectedAnimated || !catalog.aria.includes('사자') || !catalog.aria.includes('티라노사우루스') || !catalog.aria.includes('홍학') || !catalog.aria.includes('라플레시아') || !catalog.aria.includes('크라켄') || !catalog.aria.includes('유령선') || cdp.errors.length) process.exitCode = 1;
     cdp.ws.close();
   } finally { browser.kill(); }
 })().then(() => process.exit(process.exitCode || 0), err => { console.error(err.stack || err); process.exit(1); });

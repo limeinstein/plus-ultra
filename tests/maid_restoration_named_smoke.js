@@ -21,9 +21,9 @@ const PREVIOUS = ['m_cai','m_asw','m_tri','m_alg','m_cas','m_dam','m_sin','m_ank
 const ADDITIONAL = ['m_ark','m_tgh','m_jen','m_kan','m_axu','m_kha','m_oyo','m_kat','m_fut','m_aga','m_sof','m_moz','m_mom','m_mli','m_mog','m_sle','m_ife','m_rwa','m_diu','m_bij','m_knr','m_coh','m_gol','m_clc','m_hue','m_lig','m_tlx','m_trp','m_mit','m_mrd','m_gtm','m_bog','m_qui','m_tum','m_cha','m_cuz','m_naz','m_pot','m_mdw','m_kit','m_ono','m_oso','m_hoc','m_std','m_snt','m_jam','m_sju','m_mex','m_pan','m_per'];
 const previous = PREVIOUS.map(id => G.MAID[id]).filter(Boolean);
 const added = ADDITIONAL.map(id => G.MAID[id]).filter(Boolean);
-ok(G.MAIDS.length === 175 && previous.length === 50 && added.length === 50, '기존 125명에 이름 있는 여급 50명을 추가했다');
-ok(new Set(G.MAIDS.map(m => m.id)).size === 175, '여급 ID 175개가 모두 고유하다');
-ok(new Set(G.MAIDS.map(m => m.city)).size === 175, '한 도시에 이름 있는 여급은 한 명뿐이다');
+ok(G.MAIDS.length === 185 && previous.length === 50 && added.length === 50, '기존 복원 여급에 1550년 신규 10명을 더해 모두 185명이다');
+ok(new Set(G.MAIDS.map(m => m.id)).size === 185, '여급 ID 185개가 모두 고유하다');
+ok(new Set(G.MAIDS.map(m => m.city)).size === 185, '한 도시에 이름 있는 여급은 한 명뿐이다');
 ok(added.every(m => m.name && G.LIKES[m.like] && G.CITY_DATA[m.city]), '추가 50명 모두 이름·취향·도시가 있다');
 
 const restored = previous.filter(m => m.pic);
@@ -50,6 +50,6 @@ const archive = [].concat(range('arabia',14,19), range('india',19,30), range('ch
 ok(archive.length === 98 && archive.every(k => G.Img.has(k) && G.Img.has(k + '_half')), 'ZIP의 초창기 여급 98명 모두 얼굴상·무릎상이 있다');
 const namedCities = new Set(G.MAIDS.map(m => m.city));
 const unnamed = G.CITY_DATA.filter(c => !namedCities.has(c.id));
-ok(unnamed.length === 134 && unnamed.some(c => G.Img.maidPool(c)), '이름 없는 여급 도시도 ' + unnamed.length + '곳 남아 있다');
+ok(unnamed.length === 124 && unnamed.some(c => G.Img.maidPool(c)), '이름 없는 여급 도시도 ' + unnamed.length + '곳 남아 있다');
 
-console.log('\n통과 — 이름 있는 여급 175명, 추가 50명·초창기 원본 복원 98명, 이름 없는 도시 ' + unnamed.length + '곳');
+console.log('\n통과 — 이름 있는 여급 185명, 초창기 원본 복원 98명·1550년 신규 10명, 이름 없는 도시 ' + unnamed.length + '곳');

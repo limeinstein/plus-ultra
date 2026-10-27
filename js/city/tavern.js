@@ -66,6 +66,7 @@
   T.enter = async function (c) {
     var cur = C.current(); cur.looked = false; cur.drinks = 0; cur.asked = 0;
     var mn = G.Monsoon ? G.Monsoon.portNote(c) : null;
+    if (G.SeaMonsters) await G.SeaMonsters.tell(c, master(), false);
     await C.say(master(), C.hail(c, 'tavern', ['어서 오게! 목을 축이고 가게.', '어서 오게. 오늘도 손님이 많군.', '뱃사람이라면 언제든 환영일세.']) + (mn ? '\f' + (mn.phase === 'sw' ? '요즘은 남서 계절풍이 한창이라 ' : '요즘은 북동 계절풍이라 ') + mn.zone.tip[mn.phase] + '더군. ' + mn.next.date.m + '월 ' + mn.next.date.d + '일 무렵이면 바람이 뒤집힐 걸세.' : ''));
     // 이 도시에 머무는 경쟁 탐험가를 처음 보면 주인이 귀띔한다 (콜론 — 리스본)
     var rv = T.rivalsStaying(c).filter(function (r) { return !r.atSea && !S().flags['seenRival_' + r.name]; })[0];

@@ -370,7 +370,18 @@
     { id: 'm_sju', city: 198, name: '이사벨', like: 'kind', pic: 'maid-styles/westeurope/10', from: 1521 },
     { id: 'm_mex', city: 201, name: '후아나', like: 'willful', pic: 'maid-styles/westeurope/11', from: 1522 },
     { id: 'm_pan', city: 210, name: '레오노라', like: 'steady', pic: 'maid-styles/westeurope/12', from: 1519 },
-    { id: 'm_per', city: 214, name: '베아트리스', like: 'generous', pic: 'maid-styles/westeurope/13', from: 1535 }
+    { id: 'm_per', city: 214, name: '베아트리스', like: 'generous', pic: 'maid-styles/westeurope/13', from: 1535 },
+    // 1550년 신규 여급 10명. 기존 이름 있는 여급이 없는 도시이며 모두 전용 얼굴상·무릎상을 쓴다.
+    { id: 'm_1550_qz', city: 175, name: '심약란', like: 'steady', pic: 'portraits/maids/m_1550_qz', from: 1550 },
+    { id: 'm_1550_hs', city: 229, name: '윤소월', like: 'kind', pic: 'portraits/maids/m_1550_hs', from: 1550 },
+    { id: 'm_1550_edo', city: 297, name: '오미오', like: 'delicate', pic: 'portraits/maids/m_1550_edo', from: 1550 },
+    { id: 'm_1550_cag', city: 35, name: '리비아 세라', like: 'kind', pic: 'portraits/maids/m_1550_cag', from: 1550 },
+    { id: 'm_1550_vis', city: 65, name: '에바 린드', like: 'strong', pic: 'portraits/maids/m_1550_vis', from: 1550 },
+    { id: 'm_1550_yor', city: 41, name: '세실리 에번턴', like: 'generous', pic: 'portraits/maids/m_1550_yor', from: 1550 },
+    { id: 'm_1550_mag', city: 50, name: '마르타 켈러', like: 'steady', pic: 'portraits/maids/m_1550_mag', from: 1550 },
+    { id: 'm_1550_hor', city: 128, name: '미라 데사이', like: 'bold', pic: 'portraits/maids/m_1550_hor', from: 1550 },
+    { id: 'm_1550_ade', city: 124, name: '사미라 알하킴', like: 'brave', pic: 'portraits/maids/m_1550_ade', from: 1550 },
+    { id: 'm_1550_mlg', city: 9, name: '이사벨 데루나', like: 'willful', pic: 'portraits/maids/m_1550_mlg', from: 1550 }
   ];
   G.MAID = {}; G.MAIDS.forEach(function (m) { G.MAID[m.id] = m; });
   /** 시대가 맞는 이름 있는 여급. from은 그해부터, to는 그해 직전까지만 등장한다. */

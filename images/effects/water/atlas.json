@@ -1,0 +1,433 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "cell": 256,
+  "cols": 4,
+  "rows": 2,
+  "frames": 8,
+  "anchor": [
+    128,
+    176
+  ],
+  "assets": [
+    {
+      "id": "cannon",
+      "name": "포탄 착수",
+      "key": "effects/water/cannon",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceScale": 0.44022118430235685,
+      "sourceCells": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 444,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 887,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 1331,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 0,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 444,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        },
+        {
+          "left": 887,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 1331,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        }
+      ]
+    },
+    {
+      "id": "hull",
+      "name": "선체 피격",
+      "key": "effects/water/hull",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceScale": 0.44022118430235685,
+      "sourceCells": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 444,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 887,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 1331,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 0,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 444,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        },
+        {
+          "left": 887,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 1331,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        }
+      ]
+    },
+    {
+      "id": "volley",
+      "name": "분출 포격",
+      "key": "effects/water/volley",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceScale": 0.44022118430235685,
+      "sourceCells": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 444,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 887,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 1331,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 0,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 444,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        },
+        {
+          "left": 887,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 1331,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        }
+      ]
+    },
+    {
+      "id": "wake",
+      "name": "돌진 물살",
+      "key": "effects/water/wake",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceScale": 0.44022118430235685,
+      "sourceCells": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 444,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 887,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 1331,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 0,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 444,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        },
+        {
+          "left": 887,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 1331,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        }
+      ]
+    },
+    {
+      "id": "ram",
+      "name": "충돌 폭발",
+      "key": "effects/water/ram",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceScale": 0.44022118430235685,
+      "sourceCells": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 444,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 887,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 1331,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 0,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 444,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        },
+        {
+          "left": 887,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 1331,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        }
+      ]
+    },
+    {
+      "id": "dive",
+      "name": "잠수 소용돌이",
+      "key": "effects/water/dive",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceScale": 0.44022118430235685,
+      "sourceCells": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 444,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 887,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 1331,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 0,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 444,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        },
+        {
+          "left": 887,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 1331,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        }
+      ]
+    },
+    {
+      "id": "emerge",
+      "name": "재등장 물기둥",
+      "key": "effects/water/emerge",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceScale": 0.44022118430235685,
+      "sourceCells": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 444,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 887,
+          "top": 0,
+          "width": 444,
+          "height": 444
+        },
+        {
+          "left": 1331,
+          "top": 0,
+          "width": 443,
+          "height": 444
+        },
+        {
+          "left": 0,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 444,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        },
+        {
+          "left": 887,
+          "top": 444,
+          "width": 444,
+          "height": 443
+        },
+        {
+          "left": 1331,
+          "top": 444,
+          "width": 443,
+          "height": 443
+        }
+      ]
+    }
+  ]
+}

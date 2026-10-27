@@ -21,16 +21,29 @@ ANIMAL_IDS = BASE_ANIMAL_IDS + [
     did for did in ADDED_ANIMAL_IDS + MORE_BEAST_IDS if did not in BASE_ANIMAL_IDS
 ]
 
+
+def source_for(did):
+    """빌더와 동일하게 ID-vN.png 중 가장 높은 수정본을 검사한다."""
+    folder = ROOT / "tools" / "animal_gifs" / "sources"
+    candidates = [folder / f"{did}.png", *folder.glob(f"{did}-v*.png")]
+
+    def version(path):
+        match = re.fullmatch(rf"{re.escape(did)}-v(\d+)", path.stem)
+        return int(match.group(1)) if match else 1
+
+    existing = [path for path in candidates if path.exists()]
+    return max(existing, key=version) if existing else folder / f"{did}.png"
+
 data = (ROOT / "js" / "data" / "discoveries.js").read_text(encoding="utf-8")
 creatures = set(re.findall(r"^\s*add\('([^']+)', '[^']+', 'creature'", data, re.M))
 assert set(BASE_ANIMAL_IDS) <= creatures
 assert len(ADDED_ANIMAL_IDS) == 94, len(ADDED_ANIMAL_IDS)
-assert len(MORE_BEAST_IDS) == 21, len(MORE_BEAST_IDS)
-assert len(ANIMAL_IDS) == 138, len(ANIMAL_IDS)
+assert len(MORE_BEAST_IDS) == 26, len(MORE_BEAST_IDS)
+assert len(ANIMAL_IDS) == 143, len(ANIMAL_IDS)
 assert len(ANIMAL_IDS) == len(set(ANIMAL_IDS)), "duplicate animal discovery id"
 
 for did in ANIMAL_IDS:
-    source = ROOT / "tools" / "animal_gifs" / "sources" / f"{did}.png"
+    source = source_for(did)
     gif = ROOT / "images" / "discoveries" / f"{did}.gif"
     end = ROOT / "images" / "discovery-ends" / f"{did}.jpg"
     sheet = ROOT / "images" / "discovery-sheets" / f"{did}.webp"

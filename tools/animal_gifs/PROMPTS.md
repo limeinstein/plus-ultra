@@ -82,3 +82,23 @@ captions, logos, watermarks, panel numbers, cartoons, paintings, or plush-toy st
 fossils, museum, or exhibit`를 덧붙였습니다. 전설동물에는 `coherent photorealistic
 natural creature in its traditional habitat`를 덧붙였고, 엘프와 인어는
 `family-friendly, fully covered, nonsexual`로 제한했습니다.
+
+## 신규 해상 괴물 6종 (2026-10-27)
+
+내장 이미지 생성 모드로 각 괴물의 설정을 네 장면의 발견 서사로 재구성했습니다.
+공통으로 정확한 2×2 격자, 같은 개체·장소·시대, 글자와 UI 없음, 작은 시대 선박을
+통한 크기 대비, 9:4 크롭 안전 영역을 지정했습니다. 결과는 기존 원본을 보존하는
+`sources/ID-v2.png`로 저장했습니다.
+
+| ID | 네 장면의 핵심 연출 |
+|---|---|
+| `isonade` | 수면의 꼬리 가시 → 갈고리 꼬리 → 물고기 머리 → 범선을 감싼 전체 형태 |
+| `bakunawa` | 수중 그림자 → 달로 솟는 머리 → 반월식 → 달을 삼키는 바다뱀 |
+| `zaratan` | 섬으로 오인 → 등에서 야영 → 거북 머리 출현 → 섬째 잠수 |
+| `leviathan` | 끓는 수면의 방패 비늘 → 연기 콧구멍 → 불타는 입 → 배를 에워싼 몸 |
+| `jormungandr` | 수평선의 원형 몸 → 소머리 미끼 → 오로라 아래 머리 → 세계를 감싼 고리 |
+| `cipactli` | 수중 악어 그림자 → 수면의 관절 입 → 다중 입 근접 → 악어물고기 전체 형태 |
+
+세부 프롬프트는 게임 데이터의 설명과 단서를 그대로 기준 삼았으며, 시팍틀리는
+육상 네발짐승이 되지 않도록 `fully aquatic`, `crocodile-fish`, `fish tail`,
+`mouths at every major body joint`를 명시했습니다.

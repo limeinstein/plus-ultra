@@ -34,6 +34,13 @@
   AC.list = function () { return G.ACHIEVEMENTS || []; };
   AC.get = function (id) { return AC.list().filter(function (a) { return a.id === id; })[0] || null; };
   AC.done = function (id) { return !!store()[id]; };
+  /** 현재 자료에서 종류별 목록을 만든다. 경쟁자의 발견·시대·단서 유무로 분모를 줄이지 않는다. */
+  AC.collectionPool = function (type) {
+    var kind = (G.DISC_COLLECTIONS || []).filter(function (x) { return x.id === type; })[0];
+    if (!kind) return [];
+    var s = S();
+    return Object.keys(G.DISC || {}).filter(function (id) { var d = G.DISC[id]; return d && d.id === id && (!d.tale || !!(s && s.story)) && kind.has(d); });
+  };
   AC.chainDone = function (ch) { return ch.ids.every(found); };
   AC.chainsDone = function () { return (G.CHAINS || []).filter(AC.chainDone); };
 
@@ -45,6 +52,10 @@
     if (a.fameRule) {
       var fr = a.fameRule, cats = fr.all ? ['ex', 'tr', 'bt', 'so'] : [fr.cat || null];
       cats.forEach(function (cat) { rows.push({ label: (cat ? G.Fame.NAME[cat] : '통합') + ' 명성', count: G.Fame.get(cat), n: fr.min }); });
+    }
+    if (a.collectionRule) {
+      var pool = AC.collectionPool(a.collectionRule), got = pool.filter(found);
+      rows.push({ collection: true, label: '직접 발견', ids: pool, got: got, count: got.length, n: pool.length });
     }
     if (a.ids) rows.push(idsRow(a.ids, a.n));
     if (a.cats) a.cats.forEach(function (r) {
@@ -69,7 +80,7 @@
       if (best) rows = rows.concat(best.rows);
     }
     var have = 0, need = 0, ok = true;
-    rows.forEach(function (x) { have += Math.min(x.count, x.n); need += x.n; if (x.count < x.n) ok = false; });
+    rows.forEach(function (x) { have += Math.min(x.count, x.n); need += x.n; if (x.count < x.n || (x.collection && !x.n)) ok = false; });
     return { have: have, need: need, done: ok && rows.length > 0, rows: rows };
   };
 
@@ -120,7 +131,8 @@
   /** 이 업적에 든, 내가 찾은 발견물 가운데 그림이 있는 것 (최대 n) */
   function pics(a, n) {
     var my = mine(), ids = [];
-    if (a.ids) ids = a.ids.filter(found);
+    if (a.collectionRule) ids = AC.collectionPool(a.collectionRule).filter(found);
+    else if (a.ids) ids = a.ids.filter(found);
     else if (a.cats) my.forEach(function (d) { if (a.cats.some(function (r) { return r.ids ? r.ids.indexOf(d.id) >= 0 : [].concat(r.cat).indexOf(d.cat) >= 0 && (r.reg == null || d.reg === r.reg); })) ids.push(d.id); });
     else if (a.chains) (G.CHAINS || []).filter(AC.chainDone).forEach(function (ch) { ids.push(ch.ids[ch.ids.length - 1]); });
     else if (a.everyReg || a.oneReg) ids = my.map(function (d) { return d.id; });
@@ -128,7 +140,7 @@
     if (!a.ids) ids.sort(function (x, y) { return ((G.DISC[y] || {}).val || 0) - ((G.DISC[x] || {}).val || 0); });
     return ids.filter(function (id) { return G.Img && G.Img.file('discoveries/' + id); }).slice(0, n || 3);
   }
-  function show(img, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: img, title: title, noStand: false }) : null; }
+  function show(img, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: img, title: title, noStand: true }) : null; }
   /** 업적 전용 그림. 사건 자료가 지정한 그림을 우선하고, 업적별 고해상도 그림을 그 다음으로 쓴다. */
   function achievementPic(a, ev) {
     if (ev.pic) return { img: ev.pic, title: ev.picTitle || a.name };
@@ -153,6 +165,7 @@
       m: '이 이름은 한 번의 행운이 아니라, 우리가 쌓아 온 항해의 기록입니다.',
       p: G.Career ? G.Career.line('honor') : '다음 항해에서도 이 이름에 부끄럽지 않도록 하자.' };
     if (G.Audio) { G.Audio.sfx('bell'); setTimeout(function () { if (G.Audio) G.Audio.sfx('cheer'); }, 450); }
+    var heldPic = G.FamEv && G.FamEv.suspendPic ? G.FamEv.suspendPic() : null;
     var fixedShot = achievementPic(a, ev), rb = ribbon(a), shots = fixedShot ? [] : pics(a, 3), pc = null, k = 0;
     function next() {   // 줄이 바뀔 때마다 다음 발견물 그림으로 (그림이 다 떨어지면 마지막 것을 그대로)
       if (fixedShot) { if (!pc) pc = show(fixedShot.img, fixedShot.title); return; }
@@ -181,6 +194,7 @@
     } finally {
       if (rb) rb.stop();
       if (G.FamEv && G.FamEv.stopPic) await G.FamEv.stopPic();
+      if (heldPic) heldPic.restore();
     }
   };
 
@@ -200,7 +214,7 @@
     var my = mine();
     AC.list().forEach(function (a) {
       if (AC.done(a.id)) return;
-      var inIt = (a.ids && a.ids.indexOf(d.id) >= 0) || (a.cats && a.cats.some(function (r) { return r.ids ? r.ids.indexOf(d.id) >= 0 : [].concat(r.cat).indexOf(d.cat) >= 0; }));
+      var inIt = (a.collectionRule && AC.collectionPool(a.collectionRule).indexOf(d.id) >= 0) || (a.ids && a.ids.indexOf(d.id) >= 0) || (a.cats && a.cats.some(function (r) { return r.ids ? r.ids.indexOf(d.id) >= 0 : [].concat(r.cat).indexOf(d.cat) >= 0; }));
       if (!inIt) return;
       var p = AC.progress(a, my);
       if (p.need - p.have === 1) UI.toast('업적 「' + a.name + '」까지 한 가지 남았다', 'crown', 5200);
@@ -284,6 +298,42 @@
     if (d.need && !G.Disc.needMet(d) && !S().hints[id]) return '<span class="ach-i lock">？？？</span>';
     return '<span class="ach-i">' + U.esc(d.name) + '</span>';
   }
+  /** 완성 업적: 그림·진행·남은 기록을 한 카드에 모은다. 실마리 없는 발견물의 이름은 감춘다. */
+  function collectionHtml(list, st, my) {
+    var cards = list.filter(function (a) { return !!a.collectionRule; });
+    if (!cards.length) return '';
+    var h = '<section class="ac-collections" aria-label="발견물 완성 업적"><h4 class="achv-h">세계 발견 대백과</h4>' +
+      '<p class="ac-intro">직접 발견한 기록으로 완성하는 항해의 대백과. 그림을 펼치면 남은 기록을 볼 수 있다.</p>' +
+      '<div class="ac-grid">';
+    cards.forEach(function (a) {
+      var p = AC.progress(a, my), row = p.rows[0], done = st[a.id], all = a.collectionRule === 'all';
+      var kind = (G.DISC_COLLECTIONS || []).filter(function (x) { return x.id === a.collectionRule; })[0];
+      var pct = p.need ? Math.floor(100 * p.have / p.need) : 0, key = 'achievement-events/' + a.id;
+      var remaining = row.ids.filter(function (id) { return row.got.indexOf(id) < 0; });
+      var known = remaining.filter(function (id) { var d = G.DISC[id], s = S(); return (s.hints && s.hints[id]) || (s.disc[id] && s.disc[id].found) || (d.need && G.Disc.needMet(d)); });
+      h += '<details id="collection-' + a.collectionRule + '" class="ac-card' + (all ? ' ac-grand' : '') + (done ? ' ac-earned' : '') + '"><summary>' +
+        '<div class="ac-art">' + (G.Img && G.Img.file(key) ? '<img src="' + U.esc(G.Img.src(key)) + '" alt="" loading="lazy">' : '') +
+        '<span class="ac-stamp">' + (done ? '★ 완성' : pct + '% 기록') + '</span></div>' +
+        '<div class="ac-body"><div class="ac-kind">' + U.esc(kind ? kind.name : a.collectionRule) + '</div>' +
+        '<div class="ac-name">' + U.esc(a.name) + '</div>' +
+        '<div class="ac-count"><b>' + U.num(p.have) + '</b><span> / ' + U.num(p.need) + ' 발견</span>' +
+        '<span class="ac-open">남은 기록 펼치기</span></div>' +
+        '<div class="achv-bar" role="progressbar" aria-label="' + U.esc(a.name) + ' 발견 진행" aria-valuemin="0" aria-valuemax="' + Math.max(1, p.need) + '" aria-valuenow="' + p.have + '"><i style="width:' + pct + '%"></i></div>' +
+        '<div class="ac-prize">칭호 「' + U.esc(a.title) + '」 · 금화 ' + U.num(a.gold) + '닢</div></div></summary>' +
+        '<div class="ac-detail"><p>' + U.esc(a.desc) + '</p><p class="muted">' + rewardText(a) + ' · 첫 달성 때 한 번 지급</p>';
+      if (!p.need) h += '<p class="muted">아직 등록된 발견물이 없다.</p>';
+      else if (!remaining.length) h += '<p class="ac-complete">이 갈래의 마지막 기록까지 모두 채웠다.</p>';
+      else {
+        h += '<b>남은 발견물 ' + U.num(remaining.length) + '가지</b>';
+        if (known.length) h += '<div class="ac-missing">' + known.map(itemHtml).join(' ') + '</div>';
+        var unknown = remaining.length - known.length;
+        if (unknown) h += '<p class="muted">아직 실마리를 얻지 못한 발견물 ' + U.num(unknown) + '가지 · 책과 소문, 앞선 발견에서 단서를 찾자.</p>';
+      }
+      if (done) h += '<p class="ac-complete">달성한 칭호와 보상 기록은 이후 발견물이 늘어나도 남는다.</p>';
+      h += '</div></details>';
+    });
+    return h + '</div><p class="ac-footnote">기본 7갈래에 동물·식물·전설·미신·종교·미술품을 더했다. 한 발견물이 여러 갈래에 들 수 있다. 경쟁자가 먼저 찾았어도 직접 발견해야 세며, 이후 시대에 열리는 발견물도 전체 수에 포함한다. 이야기 전용 발견물은 이야기 모드에서만 센다.</p></section>';
+  }
   AC.page = function (el) {
     var list = AC.list(), st = store(), my = mine(), doneN = list.filter(function (a) { return st[a.id]; }).length;
     var titles = AC.titles(), chains = G.CHAINS || [];
@@ -291,6 +341,7 @@
       '<div class="achv-top"><b>업적 ' + doneN + ' / ' + list.length + '</b> · 사슬 ' + AC.chainsDone().length + ' / ' + chains.length +
       (titles.length ? '<div class="achv-titles">' + titles.map(function (t) { return '<span class="tag good-text">' + U.esc(t) + '</span>'; }).join(' ') + '</div>' : '<div class="muted">명성을 쌓고 발견물·동료를 모으면 업적을 이루고 칭호를 얻는다.</div>') +
       '<div class="muted" style="font-size:14px">명성 업적은 달성 당시 기록을 남기며 금화·칭호를 한 번만 준다. 명성 하락·세대 승계 후에도 유지된다. 칭호에 추가 능력 효과는 없다.</div></div>';
+    h += collectionHtml(list, st, my);
     // 사슬 지도
     h += '<h4 class="achv-h">꼬리에 꼬리를 무는 사슬</h4><div class="muted" style="font-size:14px;margin:-4px 0 6px">앞 고리를 찾으면 다음 고리의 단서가 풀린다. 열리기 전에는 그 자리에 가도 찾을 수 없다.</div>';
     chains.forEach(function (ch) {
@@ -300,6 +351,7 @@
     });
     // 갈래별 업적
     (G.ACHV_GROUPS || []).forEach(function (g) {
+      if (g === '발견물 완성') return;
       var as = list.filter(function (a) { return a.group === g; }); if (!as.length) return;
       h += '<h4 class="achv-h">' + U.esc(g) + '</h4>';
       as.forEach(function (a) {
@@ -331,6 +383,12 @@
       '.achv-ribbon{position:absolute;left:0;right:0;top:0;height:54px;z-index:80;display:flex;gap:16px;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .35s;background:linear-gradient(180deg,#3a250d,#24170a);border-bottom:2px solid #b8862e;box-shadow:0 2px 10px rgba(0,0,0,.5);color:#f6e2a8;text-shadow:0 1px 2px #000;white-space:nowrap}' +
       '.achv-ribbon.on{opacity:1}.achv-ribbon .ar-k{font-size:15px;letter-spacing:.3em;color:#e2b65a}.achv-ribbon .ar-n{font-size:25px;font-weight:800}.achv-ribbon .ar-t{font-size:15px;color:#e8cf8a}' +
       '.achv-pop{text-align:center;padding:10px 6px}.achv-g{font-size:15px;color:#8a6a3a}.achv-n{font-size:30px;font-weight:800;margin:6px 0 10px}.achv-d{font-size:17px;line-height:1.6}.achv-r{margin-top:14px;font-size:16px;color:#7a4f10;font-weight:600}';
+    css.textContent += '.ac-intro{margin:0 0 12px;color:#68533a;font-size:15px}.ac-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}' +
+      '.ac-card{min-width:0;border:1px solid #b29b71;border-radius:7px;overflow:hidden;background:rgba(255,251,237,.6)}.ac-card summary{cursor:pointer;list-style:none}.ac-card summary::-webkit-details-marker{display:none}.ac-card summary:focus-visible{outline:3px solid #337a99;outline-offset:-4px}.ac-card[open]{border-color:#8a6329}' +
+      '.ac-art{position:relative;aspect-ratio:9/4;overflow:hidden;background:#2e352e}.ac-art img{width:100%;height:100%;object-fit:cover;display:block}.ac-stamp{position:absolute;right:10px;top:9px;padding:3px 9px;background:rgba(27,30,26,.86);color:#f8e7bd;border:1px solid #c4a665;border-radius:3px;font-size:13px}' +
+      '.ac-body{padding:11px 13px 13px}.ac-kind{font-size:12px;color:#856b44;letter-spacing:.1em}.ac-name{font-size:20px;line-height:1.45;font-weight:800;margin:3px 0 9px;color:#3f2f19}.ac-count{display:flex;align-items:baseline;gap:4px;font-size:14px;color:#786b55}.ac-count b{font-size:24px;color:#644615;font-variant-numeric:tabular-nums}.ac-open{margin-left:auto;font-size:12px}.ac-card[open] .ac-open{font-size:0}.ac-card[open] .ac-open:after{content:"기록 접기";font-size:12px}' +
+      '.ac-prize{font-size:12px;color:#7b633d;line-height:1.6}.ac-detail{padding:0 13px 13px;font-size:14px;border-top:1px solid rgba(100,70,25,.18)}.ac-detail p{margin:9px 0}.ac-missing{max-height:220px;overflow:auto;margin-top:8px;line-height:1.8}.ac-complete{color:#785314;font-weight:700}.ac-earned{border-color:#a17327;box-shadow:inset 0 0 0 1px rgba(190,145,60,.3)}.ac-earned .ac-stamp{background:#765014;color:#fff0b8}' +
+      '.ac-grand{grid-column:1/-1;background:linear-gradient(120deg,#252d2c,#3d3020);border-color:#b9934e;color:#f5e7ce}.ac-grand summary{display:grid;grid-template-columns:1.3fr 1fr;align-items:center}.ac-grand .ac-art{height:100%;min-height:210px}.ac-grand .ac-body{padding:20px}.ac-grand .ac-name{font-size:30px;color:#f7e4b2}.ac-grand .ac-kind,.ac-grand .ac-count,.ac-grand .ac-prize,.ac-grand .muted{color:#d3c3a6}.ac-grand .ac-count b{color:#f1cb78;font-size:32px}.ac-grand .achv-bar{background:#191f1d;height:8px}.ac-grand .ac-detail{border-color:#826b45}.ac-grand .ac-complete{color:#efd092}.ac-grand .ach-i{color:#dccbaa;background:#51482f}.ac-footnote{font-size:12px;line-height:1.7;color:#827052;margin:12px 0 20px}@media(max-width:700px){.ac-grand summary{grid-template-columns:1fr}.ac-grand .ac-art{min-height:0}.ac-grand .ac-name{font-size:25px}}';
     document.head.appendChild(css);
   }
 })(window.G = window.G || {});

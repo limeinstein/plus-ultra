@@ -43,7 +43,7 @@
       animations: {
         attack: { row: 0, frames: 6, frameMs: [120, 90, 80, 70, 100, 140] },
         defense: { row: 1, frames: 4, frameMs: [90, 110, 80, 130] },
-        hit: { row: 2, frames: 3, frameMs: [70, 110, 170] },
+        hit: { row: 2, frames: 3, frameMs: [70, 110, 300] }, // 충격 → 무릎 꺾임 → 바닥에 쓰러져 잠시 멈춤
         action: { row: 3, frames: 6, frameMs: [180, 180, 180, 180, 150, 180] }
       }
     },

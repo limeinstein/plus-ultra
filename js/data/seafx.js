@@ -143,6 +143,16 @@
       dust: 1.0,          // 발밑 먼지·눈보라·풀잎의 양
       maxStepHz: 2.2      // 걸음이 이보다 빨라지지 않는다 (초당 걸음 주기) — 빨리 가도 장난감처럼 종종거리지 않게
     },
+    seaMonster: {        // 해상 괴물의 행 전환. 초 단위이며 전투 규칙을 바꾸지 않는다.
+      actions: {
+        idle: { frames: [0, 1, 0], seconds: 2.4, loop: true },
+        swim: { frames: [0, 1, 0], seconds: 0.9, loop: true },
+        attack: { frames: [0, 2, 0], seconds: 1.0, loop: false },
+        dive: { frames: [0, 3, 4], seconds: 1.6, loop: false },
+        submerged: { frames: [4], seconds: 1, loop: true },
+        emerge: { frames: [4, 5, 0], seconds: 1.6, loop: false }
+      }
+    },
     sprite: {             // 8방향 동작 배 그림 시트 (js/art/shipsprite.js, images/ships-nav/)
       halfBelow: 0.55,    // 화면에 그리는 배율(장치 픽셀 기준)이 이보다 작으면 반 크기 사본을 쓴다 — 0이면 늘 원본
       hold: 0.12,         // 방위 칸이 바뀌는 경계에서 먼저 쓰던 칸을 칸 폭의 이만큼 더 붙잡는다 (뱃머리가 흔들려도 깜박이지 않게)
@@ -332,6 +342,27 @@
   /** 코스타 델 솔 3 OST 유튜브 재생기 창 (js/systems/ytmusic.js) — 유튜브 규칙상 200×200보다 작게 하거나 숨길 수 없다.
      w·h 재생기 크기 · idle 마우스를 올리지 않았을 때 흐림(0~1) · flash 곡이 바뀌면 또렷하게 보이는 초 · gap 구석에서 띄우는 px */
   G.FX.ostBox = { w: 200, h: 200, idle: 0.5, flash: 2.5, gap: 8 };
+  // 해전 물보라: 4×2칸, 각 256px. 크기는 해전 화면의 기준 px, 수명은 전투 초.
+  G.FX.waterSplash = {
+    on: true, cell: 256, cols: 4, frames: 8, anchor: [128, 176], max: 48,
+    fadeIn: 0.035, fadeOut: 0.2, planeY: 0.62,
+    opacity: 0.72, rippleOpacity: 0.12, rippleLine: 1.1, rippleParts: 5,
+    rippleSpan: 0.4, rippleGrow: 0.7,
+    alpha: { spray: 0.9, base: 0.28, edge: 0.05, sprayAt: 0.48, baseAt: 0.69, edgeAt: 0.85 },
+    fallbackStart: 0.08, fallbackGrow: 0.28, fallbackLine: 4,
+    wakeEvery: 0.24, attackGap: 0.08, shipScale: 0.012, minScale: 0.75, maxScale: 1.8,
+    shake: { fire: 3.2, volley: 7, rush: 4.5, dive: 2.5, emerge: 6 },
+    tremor: { fire: 3.8, volley: 5, rush: 3, dive: 1.5, emerge: 4, ram: 7 },
+    types: {
+      cannon: { name: '포탄 착수', life: 1.05, size: 100, under: false },
+      hull: { name: '선체 피격', life: 0.75, size: 128, under: false, directional: true },
+      volley: { name: '사방 분출', life: 1.25, size: 210, under: false },
+      wake: { name: '돌진 물살', life: 0.85, size: 180, under: true, directional: true },
+      ram: { name: '충돌 폭발', life: 1.1, size: 245, under: false, directional: true },
+      dive: { name: '잠수 소용돌이', life: 1.6, size: 240, under: true },
+      emerge: { name: '재등장 물기둥', life: 1.6, size: 255, under: false }
+    }
+  };
   // 유튜브 OST 곡 돌림 (js/systems/ytmusic.js): 곡 끝 guard초 전에 그 곡 처음으로 되감는다 · 끝에서 줄이고 되감은 뒤 올리는 fade초 · 위치를 보는 간격(ms)
   G.FX.ostLoop = { fade: 1.5, guard: 0.35, every: 250 };
 })(window.G = window.G || {});

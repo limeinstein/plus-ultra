@@ -649,6 +649,7 @@
     var s = S(), hits = [], findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'sea' || D.foundByMe(d.id) || !D.needMet(d) || !D.opened(d)) return;   // 경쟁자가 발표했어도 찾을 수 있다 · 아직 드러나지 않은 수수께끼(openY 전)는 없다
+      if (G.SeaMonsters && G.SeaMonsters.is(d.id)) return;  // 괴물은 저장된 실제 출몰 자리에서 마주쳐 발견한다.
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat), r = d.r * D.clueK(d.id, 'find') * findK;
       if (dist >= r) return;   // 단서가 겹칠수록 넓게, 여파로 수치가 바닥나면 좁게

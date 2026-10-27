@@ -287,8 +287,12 @@
         if (pose === 'windup') return [0, 1];
         if (pose === 'lunge') return [0, Math.min(5, 2 + Math.floor(p * 4))];
         if (pose === 'block') return [1, Math.min(3, Math.floor(p * 4))];
-        if (pose === 'hit') return [2, Math.min(2, Math.floor(p * 3))];
-        if (pose === 'down') return [2, 0];                       // 뒤로 젖혀지는 장면으로 쓰러진다
+        if (pose === 'hit' || pose === 'down') {
+          var hit = art.sheet.animations.hit, ms = (f.pt || 0) * (f.poseDur || hitDuration()) * 1000 / (fast ? 0.5 : 1);
+          var col = 0;
+          while (col < hit.frames - 1 && ms >= hit.frameMs[col]) { ms -= hit.frameMs[col]; col++; }
+          return [hit.row, col];                                // 마지막은 실제 착지 그림, 패배 뒤에도 그대로 유지
+        }
         if (pose === 'kneel') return [2, 1];                      // 비틀거리며 주저앉음(항복·생포)
         if (pose === 'shout' || pose === 'shoot') return [3, 4];
         if (pose === 'run') return [3, Math.floor(t * 8) % 4];    // 물러설 때는 대기 동작을 빨리
@@ -302,10 +306,9 @@
         var breathing = f.pose === 'idle' ? (Math.sin(t * (D.breathRate || 1.35) + (face > 0 ? 0 : 1.5)) + 1) * 0.5 : 0;
         var breathScale = 1 + breathing * (D.breathScale == null ? 0.0018 : D.breathScale);
         ctx.save(); ctx.translate(bx + f.x * face, by); ctx.scale(face * (1 + (breathScale - 1) * 0.35), breathScale);
-        // 쓰러짐: 발을 축으로 뒤로 넘어감(0.45초), 항복·생포: 조금 주저앉음
+        // 쓰러진 그림은 시트에서 이미 바닥에 맞췄다. 다시 회전하면 바닥 밑으로 들어간다.
         var q = Math.min(1, (f.pt || 0) * (f.poseDur || 0.35) / 0.45);
-        if (f.pose === 'down') { ctx.rotate(-q * 0.95); ctx.translate(0, q * 6); }   // 피격 첫 장면이 이미 30° 남짓 젖혀져 있어 합쳐 눕는다
-        else if (f.pose === 'kneel') ctx.translate(0, q * 12);
+        if (f.pose === 'kneel') ctx.translate(0, q * 12);
         ctx.drawImage(f.spriteImg, sx, sy, L.cw, L.ch, -L.px * k, -L.py * k, w, h);
         if (f.flash > 0) {
           ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = Math.min(0.7, f.flash * 0.5);
@@ -419,12 +422,15 @@
       // ------------------------------------------------ 연출 도우미
       function sleep(ms) { return new Promise(function (r) { setTimeout(r, fast ? ms * 0.5 : ms); }); }
       function pose(f, name, dur) { f.pose = name; f.pt = 0; f.poseT = dur || 0.35; f.poseDur = dur || 0.35; }
+      function hitDuration() { return art.sheet.animations.hit.frameMs.reduce(function (sum, ms) { return sum + ms; }, 0) / 1000; }
       function posX(f) { return f === me ? W / 2 - 160 : W / 2 + 160; }
       function banner(text, sub) { fx = fx.filter(function (e) { return e.kind !== 'banner'; }); fx.push({ kind: 'banner', text: text, sub: sub, t: 0, life: 1.5 }); }
       function bubble(f, text) { fx.push({ kind: 'bubble', text: text, x: posX(f) + f.x * (f === me ? 1 : -1), y: H * 0.86 - 190, t: 0, life: 1.6 }); }
       function num(f, text, col, big) { fx.push({ kind: 'num', text: text, col: col || '255,236,160', big: big, x: posX(f) + U.rf(-12, 12), y: H * 0.86 - 170, t: 0, life: 1.1 }); }
       function hurt(f, d, big) {
-        d = Math.max(1, Math.round(d)); f.hp = Math.max(0, f.hp - d); f.flash = 0.9; pose(f, 'hit', 0.3); f.tx = -D.knockback; setTimeout(function () { f.tx = 0; }, D.knockReturnMs);
+        d = Math.max(1, Math.round(d)); f.hp = Math.max(0, f.hp - d); f.flash = 0.9;
+        pose(f, f.hp <= 0 ? 'down' : 'hit', hitDuration() * (fast ? 0.5 : 1));
+        f.tx = -D.knockback; setTimeout(function () { f.tx = 0; }, D.knockReturnMs);
         num(f, '−' + d, f === me ? '255,140,120' : '255,236,160', big); shakeT = Math.min(1, shakeT + (big ? D.shakeBig : D.shakeHit));
         screenFlash = Math.max(screenFlash, big ? D.flashBig : f === me ? D.flashTaken : D.flashHit); screenFlashRgb = f === me ? '255,120,100' : '255,244,220';
         (f === me ? en : me).spirit = Math.min(100, (f === me ? en : me).spirit + 10); f.spirit = Math.min(100, f.spirit + 4);
@@ -475,7 +481,7 @@
           b.spirit = Math.min(100, b.spirit + 6); num(b, '막음', '200,220,255');
         }
         setTimeout(function () { a.tx = 0; }, 180);
-        await sleep(300);
+        await sleep(ok ? hitDuration() * 1000 : 300);
         return { ok: ok, adv: adv };
       }
       function pickEnemyMove() {
@@ -680,8 +686,8 @@
         var winHow = { ko: 1, capture: 1, persuade: 1, rout: 1 };
         var res = winHow[how] ? 'win' : how === 'flee' ? 'flee' : 'lose';
         result.how = how === 'captured' || how === 'persuaded' ? 'lose' : how; result.stance = stance;
-        if (res === 'win') { if (how === 'ko') { pose(en, 'down', 5); } cheer[0] = 3; banner({ ko: '승리!', capture: '생포!', persuade: '설득 성공!', rout: '상대가 달아났다!' }[how]); }
-        else if (res === 'lose') { pose(me, how === 'captured' || how === 'persuaded' ? 'kneel' : 'down', 5); cheer[1] = 3; banner('패배...'); }
+        if (res === 'win') { if (how === 'ko' && en.pose !== 'down') { pose(en, 'down', 5); } cheer[0] = 3; banner({ ko: '승리!', capture: '생포!', persuade: '설득 성공!', rout: '상대가 달아났다!' }[how]); }
+        else if (res === 'lose') { if (me.pose !== 'down') pose(me, how === 'captured' || how === 'persuaded' ? 'kneel' : 'down', 5); cheer[1] = 3; banner('패배...'); }
         else banner('물러섰다');
         if (!me.m && me.admiral) p.hp = U.clamp(Math.round(100 * me.hp / me.maxHp), 5, 100);
         if (!me.m && me.admiral && G.Growth) G.Growth.duel(res);   // 제독이 직접 칼을 맞댄 일기토만 경험이 된다 (js/systems/growth.js)

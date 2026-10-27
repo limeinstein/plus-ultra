@@ -5,6 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
+const { execFileSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 function load(file) { vm.runInThisContext(fs.readFileSync(path.join(ROOT, file), 'utf8'), { filename: file }); }
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }
@@ -42,7 +43,17 @@ for (const x of cases) {
   for (const suffix of ['', '_half']) {
     const a = fs.readFileSync(path.join(ROOT, 'images/portraits/maids', x.id + suffix + '.webp'));
     const b = fs.readFileSync(path.join(ROOT, 'images/portraits/legendary', x.source + suffix + '.webp'));
-    ok(a.equals(b), `${x.name}: ${suffix ? '무릎상' : '얼굴상'}은 새 원화를 정확히 사용`);
+    if (suffix) {
+      ok(a.equals(b), `${x.name}: 무릎상은 새 원화를 정확히 사용`);
+    } else {
+      // 원화 448px 얼굴상을 1024px로 보간 확대한 뒤에도 같은 얼굴·알파여야 한다.
+      // 압축·약한 선명화 오차만 허용하며 다른 얼굴로 바뀌면 큰 차이로 실패한다.
+      execFileSync(process.env.PYTHON || 'python', ['-c',
+        'from PIL import Image; import numpy as np,sys; a=Image.open(sys.argv[1]).convert("RGBA"); b=Image.open(sys.argv[2]).convert("RGBA").resize(a.size,Image.Resampling.LANCZOS); x=np.array(a).astype(float); y=np.array(b).astype(float); mask=(x[:,:,3]>200)&(y[:,:,3]>200); assert mask.any(); assert np.abs(x[:,:,3]-y[:,:,3]).max()<=1; assert np.abs(x[:,:,:3]-y[:,:,:3])[mask].mean()<3',
+        path.join(ROOT, 'images/portraits/maids', x.id + '.webp'),
+        path.join(ROOT, 'images/portraits/legendary', x.source + '.webp')]);
+      ok(true, `${x.name}: 확대 얼굴상도 원화의 얼굴·투명도를 유지`);
+    }
   }
 }
 

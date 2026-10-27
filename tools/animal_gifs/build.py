@@ -157,6 +157,20 @@ def animation(src: Image.Image) -> list[Image.Image]:
     return [frame_at(panels, i / (FRAME_COUNT - 1)) for i in range(FRAME_COUNT)]
 
 
+def source_for(did: str) -> Path:
+    """원본은 보존하고 ID-v2.png, ID-v3.png 같은 최신 수정본을 우선한다."""
+    candidates = [SOURCES / f"{did}.png", *SOURCES.glob(f"{did}-v*.png")]
+
+    def version(path: Path) -> int:
+        match = re.fullmatch(rf"{re.escape(did)}-v(\d+)", path.stem)
+        return int(match.group(1)) if match else 1
+
+    existing = [path for path in candidates if path.exists()]
+    if not existing:
+        return SOURCES / f"{did}.png"
+    return max(existing, key=version)
+
+
 def shared_palette(frames: list[Image.Image]) -> Image.Image:
     sample = Image.new("RGB", (W * 4, H * 2))
     picks = [round(i * (len(frames) - 1) / 7) for i in range(8)]
@@ -168,7 +182,7 @@ def shared_palette(frames: list[Image.Image]) -> Image.Image:
 
 
 def build_one(did: str) -> Path:
-    source = SOURCES / f"{did}.png"
+    source = source_for(did)
     with Image.open(source) as raw:
         src = raw.convert("RGB")
     frames = animation(src)
@@ -194,7 +208,7 @@ def main() -> None:
     unknown = sorted((wanted or set()) - set(ANIMAL_IDS))
     if unknown:
         raise SystemExit("unknown animal discovery ids: " + ", ".join(unknown))
-    missing = [did for did in ids if not (SOURCES / f"{did}.png").exists()]
+    missing = [did for did in ids if not source_for(did).exists()]
     if missing:
         raise SystemExit("missing animal storyboard sources: " + ", ".join(missing))
     for n, did in enumerate(ids, 1):

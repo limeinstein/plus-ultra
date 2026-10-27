@@ -34,6 +34,13 @@ function png(file, decode) {
     }
   }
   out.alpha = (x, y) => rows[y * stride + x * 4 + 3];
+  out.bounds = (x0, y0, w, h) => {
+    let l = w, t = h, r = 0, b = 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (out.alpha(x0 + x, y0 + y) > 4) {
+      l = Math.min(l, x); t = Math.min(t, y); r = Math.max(r, x + 1); b = Math.max(b, y + 1);
+    }
+    return { l, t, r, b, w: r - l, h: b - t };
+  };
   out.maxAlpha = (x0, y0, w, h) => {
     let max = 0;
     for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) max = Math.max(max, rows[y * stride + x * 4 + 3]);
@@ -83,6 +90,13 @@ for (const f of allFighters) {
   ok(im.width === S.width && im.height === S.height, f.id + ': ' + S.width + '×' + S.height + ' (tools/duel_repack.py로 다시 짠 시트)');
   ok(im.alpha(0, 0) === 0, f.id + ': 바깥 여백 투명');
   ok(im.maxAlpha(0, 3 * CH, CW, CH) > DUST, f.id + ': 고정 대기 자세 프레임이 있음');
+  const fall = im.bounds(2 * CW, 2 * CH, CW, CH);
+  ok(Math.abs(fall.b - S.pivot[1]) <= 1 && fall.w > fall.h * 2.5 && fall.h < 120,
+    f.id + ': 피격 마지막 장면은 바닥에 누운 자세 ' + JSON.stringify(fall));
+  if (f.id === 'athos' || f.id === 'aramis') {
+    const idle = im.bounds(0, 3 * CH, CW, CH);
+    ok(idle.h >= 180 && idle.h <= 240, f.id + ': 삼총사 크기 보정 ' + JSON.stringify(idle));
+  }
   for (const cell of [[4, 1], [5, 1], [3, 2], [4, 2], [5, 2]])
     ok(im.maxAlpha(cell[0] * CW, cell[1] * CH, CW, CH) <= DUST, f.id + ': 비사용 셀 전체 투명 ' + cell.join(','));
   // 쓰는 칸의 테두리 1px이 비어 있으면 그림이 옆 칸으로 넘어가지 않은 것

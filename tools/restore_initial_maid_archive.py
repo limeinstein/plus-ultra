@@ -83,15 +83,40 @@ def sheet_cell_box(sheet: Sheet, size: tuple[int, int], rows: int, column: int, 
 
 def clean_source(cell: Image.Image) -> Image.Image:
     """원본의 투명도는 보존하고, 완전 투명 픽셀의 색 잡음만 지운다."""
-    rgba = cell.convert("RGBA")
+    pixels = np.array(cell.convert("RGBA"))
+    # 원본 PNG의 알파 1~4에는 빨강·노랑 등 진단용 RGB가 남아 있다.
+    # RGB만 보고 다시 누끼를 따면 이 색이 불투명한 형광 테두리로 살아난다.
+    pixels[pixels[:, :, 3] <= 4] = 0
+    rgba = Image.fromarray(pixels)
     alpha = rgba.getchannel("A")
     # 카카오톡 PNG는 인물의 최대 알파가 251~255이므로 임계값으로 다시 따지 않는다.
-    transparent = Image.new("RGBA", rgba.size, (0, 0, 0, 0))
-    transparent.paste(rgba, mask=alpha)
     bbox = alpha.getbbox()
     if not bbox:
         raise RuntimeError("빈 원본 칸입니다")
-    return transparent.crop(bbox)
+    # paste(..., mask=alpha)는 알파를 두 번 곱해 머리카락·베일을 손상시킨다.
+    return rgba.crop(bbox)
+
+
+def separation_rgb(sheet: Image.Image) -> np.ndarray:
+    """인물 분리용 RGB에는 원본 투명도를 검정 위에 한 번만 합성한다."""
+    backdrop = Image.new("RGBA", sheet.size, (0, 0, 0, 255))
+    backdrop.alpha_composite(clean_source_canvas(sheet))
+    return np.asarray(backdrop.convert("RGB"))
+
+
+def clean_source_canvas(sheet: Image.Image) -> Image.Image:
+    """원본 좌표를 유지하면서 거의 투명한 진단색만 지운다."""
+    pixels = np.array(sheet.convert("RGBA"))
+    pixels[pixels[:, :, 3] <= 4] = 0
+    return Image.fromarray(pixels)
+
+
+def preserve_source_alpha(subject: Image.Image, sheet: Image.Image) -> Image.Image:
+    """인물 분리 결과는 영역 선택에만 쓰고 색·알파는 PNG 원본에서 가져온다."""
+    pixels = np.array(clean_source_canvas(sheet))
+    selected = np.asarray(subject.getchannel("A")) > 0
+    pixels[~selected] = 0
+    return Image.fromarray(pixels)
 
 
 def detect_sheet_faces(rgb: np.ndarray, columns: int) -> list[tuple[int, int]]:
@@ -222,7 +247,9 @@ def main() -> int:
                 # 맞닿은 소매·머리카락을 고정 칸으로 자르지 않고 얼굴에서 연결된 객체로 분리한다.
                 sheet_import.PEOPLE = spec.columns
                 sheet_import.detect_faces = lambda rgb, columns=spec.columns: detect_sheet_faces(rgb, columns)
-                separated = sheet_import.individual_subjects(np.asarray(sheet.convert("RGB")))
+                separated = sheet_import.individual_subjects(separation_rgb(sheet))
+                separated = [[preserve_source_alpha(person, sheet) for person in row]
+                             for row in separated]
             index = 0
             for face_row, half_row in spec.row_pairs:
                 for column in range(spec.columns):

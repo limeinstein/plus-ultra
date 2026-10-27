@@ -1,0 +1,73 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "useCase": "precise-object-edit",
+  "transparent_background": true,
+  "assets": [
+    {
+      "id": "cannon",
+      "name": "포탄 착수",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a17d26-4893-7b71-a950-ee5f1803e219\\exec-3360cad7-cc9b-4c57-9e27-f5550fd25d23.png",
+      "sourceCopy": "art_sources/water-splashes/translucent-sources/cannon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+      "originalSourceCopy": "art_sources/water-splashes/sources/cannon.png",
+      "referencedImage": "art_sources/water-splashes/sources/cannon.png"
+    },
+    {
+      "id": "hull",
+      "name": "선체 피격",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a17d26-4893-7b71-a950-ee5f1803e219\\exec-a17fa7b1-3b7a-428f-b81c-83703c86e0e8.png",
+      "sourceCopy": "art_sources/water-splashes/translucent-sources/hull.png",
+      "prompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+      "originalSourceCopy": "art_sources/water-splashes/sources/hull.png",
+      "referencedImage": "art_sources/water-splashes/sources/hull.png"
+    },
+    {
+      "id": "volley",
+      "name": "분출 포격",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a17d26-4893-7b71-a950-ee5f1803e219\\exec-cfed44f1-b010-4909-9064-210eb12a240e.png",
+      "sourceCopy": "art_sources/water-splashes/translucent-sources/volley.png",
+      "prompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+      "originalSourceCopy": "art_sources/water-splashes/sources/volley.png",
+      "referencedImage": "art_sources/water-splashes/sources/volley.png"
+    },
+    {
+      "id": "wake",
+      "name": "돌진 물살",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a17d26-4893-7b71-a950-ee5f1803e219\\exec-a0f70d40-9a4a-44cd-b063-686ad1e0dd29.png",
+      "sourceCopy": "art_sources/water-splashes/translucent-sources/wake.png",
+      "prompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+      "originalSourceCopy": "art_sources/water-splashes/sources/wake.png",
+      "referencedImage": "art_sources/water-splashes/sources/wake.png"
+    },
+    {
+      "id": "ram",
+      "name": "충돌 폭발",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a17d26-4893-7b71-a950-ee5f1803e219\\exec-3868e4af-620c-42f0-ab17-29f875915788.png",
+      "sourceCopy": "art_sources/water-splashes/translucent-sources/ram.png",
+      "prompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+      "originalSourceCopy": "art_sources/water-splashes/sources/ram.png",
+      "referencedImage": "art_sources/water-splashes/sources/ram.png"
+    },
+    {
+      "id": "dive",
+      "name": "잠수 소용돌이",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a17d26-4893-7b71-a950-ee5f1803e219\\exec-88c8888e-8f9b-4dc5-9a86-cdde9f22cecb.png",
+      "sourceCopy": "art_sources/water-splashes/translucent-sources/dive.png",
+      "prompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+      "originalSourceCopy": "art_sources/water-splashes/sources/dive.png",
+      "referencedImage": "art_sources/water-splashes/sources/dive.png"
+    },
+    {
+      "id": "emerge",
+      "name": "재등장 물기둥",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a17d26-4893-7b71-a950-ee5f1803e219\\exec-50a960f4-8957-4708-ab58-63af05980a86.png",
+      "sourceCopy": "art_sources/water-splashes/translucent-sources/emerge.png",
+      "prompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+      "originalSourceCopy": "art_sources/water-splashes/sources/emerge.png",
+      "referencedImage": "art_sources/water-splashes/sources/emerge.png"
+    }
+  ],
+  "revision": 2,
+  "editPrompt": "Use case: precise-object-edit. Asset type: existing naval battle VFX sprite sheet, RGBA.\nImage 1 is the EDIT TARGET. Fix ONLY the unnatural solid circular white ripple / opaque blue water-disc appearance and opacity. Preserve the EXACT eight chronological frames, FOUR columns TWO rows, same cell positions, same water-plane anchor, camera, scale, action identity and silhouette of the rising splash. Keep the layout and transparent gutters unchanged.\nReplace every solid flat oval water patch and continuous white ring at the base with sparse irregular broken foam wisps and thin scattering droplets. Leave the center and large gaps genuinely TRANSPARENT so the game's moving sea is visible THROUGH the effect. Water sheets and mist should have real partial alpha, mostly 10–35% opacity; foam crests can reach 55–70% but only along a few thin irregular accents. Feather the outer edge into zero alpha, no hard circular perimeter. Small final-frame foam should dissolve in disconnected fragments rather than a white circle. Keep the seven kinds' original visual identity and animation progression; for the whirlpool keep the curved inward movement as translucent disconnected spiral streaks with a clear center. No added background, ocean disk, closed ring, white outline, new text, grid or additional objects. Real transparent background and translucent water alpha, no checkerboard baked into pixels.",
+  "originalPrompts": "art_sources/water-splashes/v1/prompts.json"
+}

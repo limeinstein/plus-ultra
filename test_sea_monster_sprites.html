@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>해상 괴물 · 해전 스프라이트</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0c1924;color:#e8e2d3;font:15px/1.6 system-ui,sans-serif}main{max-width:1180px;margin:auto;padding:30px 24px}header{display:flex;gap:25px;align-items:center;justify-content:space-between}h1{font-size:30px;margin:0;color:#f0dbab}p{margin:6px 0 16px;color:#9db4c1}.reference{text-align:center;font-size:12px;color:#c0d0d7}.reference canvas{display:block;width:240px;height:135px}nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 24px}button,select{font:inherit;color:#dee8eb;border:1px solid #395463;border-radius:7px;background:#172d3c;padding:7px 12px}button{cursor:pointer}button[aria-pressed=true]{background:#ad8043;color:#fff3d9;border-color:#d5a261}label{color:#b8cbd3}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{overflow:hidden;border:1px solid #304958;border-radius:12px;background:#122736}.card h2{display:flex;align-items:center;justify-content:space-between;font-size:17px;margin:0;padding:12px 17px 0;color:#f0dfbf}.card span{font-size:12px;font-weight:400;color:#a8c9c9}.card canvas{display:block;width:100%;height:auto}.card footer{display:flex;gap:15px;padding:0 17px 12px;font-size:12px}.card a,a{color:#a2c9cd}details{margin-top:26px;border-top:1px solid #304958;padding-top:18px}summary{cursor:pointer;color:#d5c7ac}.atlas{max-width:100%;background:#284f67;margin-top:15px}.note{font-size:13px;margin-top:20px}.error{color:#ffb39b}@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}header{display:block}.reference{display:none}main{padding:18px 12px}}@media(max-width:430px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body><main>
+<header><div><h1>심해에서 온 열두 괴물</h1><p>보선과 같은 224 × 224 칸 · 8방향 · 대기부터 잠수와 재등장까지</p><div id="status" role="status">그림을 불러오고 있습니다…</div></div><div class="reference">크기 기준 · 보선<canvas id="reference" width="480" height="270"></canvas></div></header>
+<nav id="controls"><button data-state="cycle" aria-pressed="true">전체 동작</button><button data-state="idle">대기</button><button data-state="swim">이동</button><button data-state="attack">공격</button><button data-state="dive">잠수 / 안개 소멸</button><button data-state="submerged">수중 은신</button><button data-state="emerge">재등장</button><label>방향 <select id="direction"><option value="0">동 →</option><option value="1">북동 ↗</option><option value="2">북 ↑</option><option value="3">북서 ↖</option><option value="4">서 ←</option><option value="5">남서 ↙</option><option value="6">남 ↓</option><option value="7">남동 ↘</option></select></label><label><input type="checkbox" id="rotate">방향 순환</label><label><input type="checkbox" id="paused">멈춤</label></nav>
+<div id="cards" class="grid"></div>
+<details><summary>스프라이트 시트 전체 보기 · 가로 8방향 × 세로 6상태</summary><p>행 순서: 대기 → 이동 → 공격 → 잠수 → 수중 은신 → 재등장</p><select id="atlas-select"></select><br><img id="atlas" class="atlas" alt="선택한 괴물의 48칸 투명 스프라이트 시트"></details>
+<p class="note">괴생물은 수중 은신 때 몸을 감추고 잔물결과 기포만 남깁니다. 유령선은 옅은 안개로 사라졌다 다시 모습을 드러냅니다.<br>이 화면은 그림과 동작을 검수하는 곳입니다. 실제 출몰·재등장과 전투는 게임의 항해 화면에서 동작합니다.</p>
+</main>
+<script src="images/manifest.js"></script><script src="js/core/images.js"></script><script src="js/data/seafx.js"></script><script src="js/data/shipart.js"></script><script src="js/data/seamonsterart.js"></script><script src="js/art/seamonstersprite.js"></script>
+<script>
+(function () {
+  'use strict';
+  var ids = Object.keys(G.SEA_MONSTER_ART), views = [], mode = 'cycle', elapsed = 0, previous = null, reference = null;
+  var names = { idle:'수면 대기', swim:'이동', attack:'공격', dive:'잠수', submerged:'수중 은신', emerge:'재등장' };
+  ids.forEach(function (id) {
+    var meta=G.SEA_MONSTER_ART[id], card=document.createElement('article'); card.className='card';
+    card.innerHTML='<h2>'+meta.name+'<span></span></h2><canvas width="680" height="400"></canvas><footer><a href="images/sea-monsters/'+id+'.webp" download>WebP 시트</a><a href="art_sources/sea-monsters/sheets/'+id+'.png" download>PNG 시트</a></footer>';
+    document.getElementById('cards').appendChild(card);
+    views.push({id:id,ctx:card.querySelector('canvas').getContext('2d'),label:card.querySelector('span')});
+    var option=document.createElement('option'); option.value=id;option.textContent=meta.name;document.getElementById('atlas-select').appendChild(option);
+  });
+  function atlas(){document.getElementById('atlas').src='images/sea-monsters/'+document.getElementById('atlas-select').value+'.webp';}
+  document.getElementById('atlas-select').onchange=atlas;atlas();
+  document.querySelectorAll('[data-state]').forEach(function (b) {b.onclick=function(){mode=b.dataset.state;elapsed=0;document.querySelectorAll('[data-state]').forEach(function(q){q.setAttribute('aria-pressed',String(q===b));});};});
+  function water(ctx,w,h,t) {
+    ctx.clearRect(0,0,w,h);var gradient=ctx.createLinearGradient(0,0,0,h);gradient.addColorStop(0,'#122736');gradient.addColorStop(1,'#284f67');ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='rgba(150,196,211,.07)';ctx.lineWidth=1;
+    for(var k=0;k<7;k++){ctx.beginPath();for(var x=0;x<=w;x+=12){var y=25+k*31+Math.sin(x*.024+k+t*.5)*3;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+  }
+  function current(t){if(mode!=='cycle')return {state:mode,time:t};var states=['idle','swim','attack','dive','submerged','emerge'],lengths=[1.8,1.8,1,1.6,1.8,1.6];t%=9.6;for(var i=0;i<states.length;i++){if(t<lengths[i])return {state:states[i],time:t};t-=lengths[i];}return {state:'idle',time:0};}
+  function loop(now){if(previous!==null&&!document.getElementById('paused').checked)elapsed+=Math.min(.1,(now-previous)/1000);previous=now;
+    var state=current(elapsed),dir=Number(document.getElementById('direction').value);if(document.getElementById('rotate').checked)dir=Math.floor(elapsed/2)%8;
+    views.forEach(function(v){var ctx=v.ctx;ctx.save();ctx.scale(2,2);water(ctx,340,200,elapsed);G.SeaMonsterSprite.draw(ctx,170,132,dir*Math.PI/4,158,{type:v.id,state:state.state,elapsed:state.time},elapsed);ctx.restore();v.label.textContent=v.id==='ghost-ship'&&state.state==='dive'?'안개 속 소멸':v.id==='ghost-ship'&&state.state==='submerged'?'안개 은신':names[state.state];});
+    var ctx=document.getElementById('reference').getContext('2d');ctx.clearRect(0,0,480,270);if(reference){var m=G.SHIP_ART.baochuan,c=m.cell;ctx.save();ctx.scale(2,2);ctx.drawImage(reference,3*c,dir*c,c,c,120-m.anchor[0],96-m.anchor[1],c,c);ctx.restore();}
+    window.MONSTER_PREVIEW={ready:ids.every(function(id){return G.SeaMonsterSprite.status(id)==='ok';}),mode:mode,state:state.state,direction:dir};requestAnimationFrame(loop);
+  }
+  Promise.all([G.SeaMonsterSprite.preload(ids),G.Img.load('ships-nav/baochuan').then(function(img){reference=img;})]).then(function(){var good=ids.filter(function(id){return G.SeaMonsterSprite.status(id)==='ok';}).length;var status=document.getElementById('status');status.textContent=good+'종 / '+ids.length+'종 준비 · 총 '+(ids.length*G.SEA_MONSTER_LAYOUT.dirs*G.SEA_MONSTER_LAYOUT.rows)+'칸';if(good!==ids.length)status.className='error';requestAnimationFrame(loop);});
+})();
+</script></body></html>

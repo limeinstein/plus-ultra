@@ -42,9 +42,18 @@ def audit() -> dict:
         add('events/colony/' + key, source)
     source = ROOT / 'js/data/achievements.js'
     text = source.read_text(encoding='utf-8')
-    for key in re.findall(r"\ba\('[^']*',\s*'([a-z0-9_]+)'", text):
+    for key in re.findall(r"\ba\('[^']*',\s*'([a-z0-9_]+)'\s*,", text):
         if key not in ('montcrew', 'happily'):
             add('achievement-events/' + key, source)
+    # 명성 업적 ID는 문턱·갈래를 이어 만들어서, 실제 자료의 값으로 펼쳐 검사한다.
+    balance = (ROOT / 'js/data/base.js').read_text(encoding='utf-8')
+    total_steps = json.loads(re.search(r'\bfameTitles:\s*(\[[^\]]+\])', balance)[1])
+    branch_steps = json.loads(re.search(r'\bbranchSteps:\s*(\[[^\]]+\])', balance)[1])
+    for step in total_steps:
+        add('achievement-events/fame_total_' + str(step), source)
+    for branch in re.findall(r"\{ id: '([^']+)', name: '[^']+', titles:", text):
+        for step in branch_steps:
+            add('achievement-events/fame_' + branch + '_' + str(step), source)
 
     rows = []
     for key, refs in sorted(sources.items()):

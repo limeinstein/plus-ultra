@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+해상 괴물 12종은 `sea-monsters/`의 투명 WebP 시트를 쓴다. 한 칸 224×224, 8방향×6상태이며 보선과 같은 수면 기준점이다. 좌표는 `sea-monsters/atlas.json`, 사용법은 `docs/art/sea-monsters.md`, 미리보기는 `test_sea_monster_sprites.html`에 있다.
+
 이 폴더에 정해진 이름으로 그림 파일을 넣으면, 게임이 코드로 그리던 그림 대신 그 파일을 씁니다.
 넣지 않은 그림은 원래대로 코드가 그립니다.
 

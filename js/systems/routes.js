@@ -28,7 +28,7 @@
   // 경험이 없을 때의 날수 (뱃길 길이 ÷ 지금 함대의 평균 선속)
   // 뱃길 길이(°)만 기억해 두고 날수는 그때의 선속으로 나눈다 (배를 바꾸면 날수도 바뀐다). 길이 없으면 -1.
   // 뱃길 찾기(G.Nav.seaPath)는 무거워서, 출항 목적지 목록은 RT.roughDays(어림)를 쓰고 이것은 목적지를 고른 뒤에만 부른다.
-  var lenCache = {};
+  var lenCache = {}, lenVer = 0;
   var spdNow = null;
   function once(fn) { Promise.resolve().then(fn); }
   function speed() {   // 평균 선속 — 한 차례 안에서는 한 번만 센다 (목록의 항구마다 배 다섯 척의 선속을 다시 세지 않게)
@@ -45,6 +45,7 @@
       // 실제 항해와 같은 엄격한 뱃길을 써야 파나마 같은 지협을 가로지른 짧은 예상이 나오지 않는다.
       var p = (G.Nav.seaPath || G.Nav.path)(da[1], da[0], db[1], db[0]);
       L = lenCache[k] = p ? pathLen(p) : -1;
+      lenVer++;
     }
     return L < 0 ? null : Math.max(1, Math.ceil(L / Math.max(0.3, G.Plan ? G.Plan.avgSpeed() : 0.9)));   // 정확한 셈은 지금 선속 그대로
   };
@@ -56,18 +57,18 @@
     var da = dockOf(A), db = dockOf(B);
     return Math.max(1, Math.ceil(Math.hypot(G.Geo.wrapLon(db[1] - da[1]), db[0] - da[0]) * RT.DETOUR / v));
   }
-  /** 길찾기 없이 매기는 한 구간 날수: 다녀온 적 있으면 가장 빨랐던 날수 → 재 둔 뱃길 → 곧은 거리 어림 */
+  /** 길찾기 없이 매기는 한 구간 날수: 재 둔 뱃길을 지금 선속으로 환산 → 지난 항해 기록 → 거리 어림 */
   function legDays(a, b, v) {
-    var r = RT.get(a, b); if (r && r.best) return r.best;
     var L = lenCache[RT.key(a, b)];
-    if (L != null && L >= 0) return Math.max(1, Math.ceil(L / v));
+    if (L != null) return L < 0 ? null : Math.max(1, Math.ceil(L / v));
+    var r = RT.get(a, b); if (r && r.best) return r.best;
     return lineDays(a, b, v);
   }
   // 한 항구에서 항로망의 모든 항구까지, 곧장 오간 구간 날수를 더한 가장 짧은 합 (다익스트라 — 항구 수백 곳·항로 천여 개라도 몇 ms. 목록을 열 때 한 번)
   var chainMemo = null;
   function chainFrom(a, v) {
     var N = RT.net();
-    if (chainMemo && chainMemo.a === a && chainMemo.net === N && chainMemo.v === v) return chainMemo.d;
+    if (chainMemo && chainMemo.a === a && chainMemo.net === N && chainMemo.v === v && chainMemo.lenVer === lenVer) return chainMemo.d;
     var d = {}, done = {}, list = [a]; d[a] = 0;
     while (list.length) {
       var bi = 0; for (var i = 1; i < list.length; i++) if (d[list[i]] < d[list[bi]]) bi = i;
@@ -79,20 +80,19 @@
         if (d[y] == null) { d[y] = d[x] + w; list.push(y); } else if (d[x] + w < d[y]) d[y] = d[x] + w;
       });
     }
-    chainMemo = { a: a, net: N, v: v, d: d };
+    chainMemo = { a: a, net: N, v: v, lenVer: lenVer, d: d };
     return d;
   }
   /** 출항 목적지 목록에 쓰는 가벼운 날수 (뱃길 찾기 없음) → {days, rough}. rough=true면 어림 (화면에 「어림」).
-      다녀온 적 있으면 가장 빨랐던 날수, 뱃길을 재 두었으면 그 날수(rough=false).
-      아니면 곧은 거리 어림과, 이어진 항로망으로 거쳐 가는 구간 날수의 가장 짧은 합 가운데 작은 쪽
-      (자동항해는 거쳐 간 항구를 들르지 않고 바닷길로 곧장 가므로 그 합보다 길지는 않다). */
+      뱃길을 재 두었으면 지금 선속의 날수, 아니면 지난 항해 기록(rough=false).
+      이어진 항로망은 경유 구간의 날수를 더한다(rough=true). 직선거리와 작은 쪽을 고르면
+      아프리카를 돌아야 하는 아시아→지중해 항구가 유럽보다 가까운 것으로 잘못 나온다. */
   RT.roughDays = function (a, b) {
-    var r = RT.get(a, b); if (r && r.best) return { days: r.best, rough: false };
     var v = speed(), L = lenCache[RT.key(a, b)];
     if (L != null) return { days: L < 0 ? null : Math.max(1, Math.ceil(L / v)), rough: false };
-    var line = lineDays(a, b, v);
-    if (RT.linked(a, b)) { var c = chainFrom(a, v)[b]; if (c != null && (line == null || c < line)) line = c; }
-    return { days: line, rough: true };
+    var r = RT.get(a, b); if (r && r.best) return { days: r.best, rough: false };
+    if (RT.linked(a, b)) { var c = chainFrom(a, v)[b]; if (c != null) return { days: c, rough: true }; }
+    return { days: lineDays(a, b, v), rough: true };
   };
   /** 그 항로의 날수: 다녀온 적이 있으면 가장 빨랐던 날수, 없으면 뱃길을 재어 셈 (처음 한 번은 무겁다) */
   RT.days = function (a, b) { var r = RT.get(a, b); return r && r.best ? r.best : RT.estDays(a, b); };
