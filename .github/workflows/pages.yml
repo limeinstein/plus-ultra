@@ -24,11 +24,11 @@ jobs:
         with:
           ref: main
           path: stable
+          fetch-depth: 1
       - name: 베타판 소스 받기
-        uses: actions/checkout@v4
-        with:
-          ref: beta
-          path: beta
+        run: |
+          git -C stable fetch --depth=1 origin beta
+          git -C stable worktree add --detach "$GITHUB_WORKSPACE/beta" FETCH_HEAD
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -49,6 +49,8 @@ jobs:
       - name: 베타 웹 배포판 만들기
         working-directory: beta
         run: python tools/build_web.py --channel beta --out "$GITHUB_WORKSPACE/site/beta" --no-zip
+      - name: 정식·베타 공용 자산 중복 제거
+        run: python stable/tools/share_pages_assets.py --site "$GITHUB_WORKSPACE/site"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
