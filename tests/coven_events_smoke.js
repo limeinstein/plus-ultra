@@ -17,7 +17,12 @@ fs.mkdirSync(out, { recursive: true });
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
     page.on('pageerror', e => errors.push(e.message));
-    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+    page.on('console', m => {
+      if (m.type() === 'error') {
+        const where = m.location && m.location().url ? ' @ ' + m.location().url : '';
+        errors.push(m.text() + where);
+      }
+    });
     if (process.env.PAGE) await page.route('https://plus-ultra-telemetry.luminary121284.chatgpt.site/**', route => route.fulfill({ status: 204, contentType: 'application/json', body: '{}' }));
     // 게임 시간은 직접 진행한다. 그림·로딩 화면의 프레임은 정상 실행한다.
     await page.addInitScript(() => { window.requestAnimationFrame = cb => cb.name === 'loop' ? 0 : setTimeout(() => cb(performance.now()), 16); });

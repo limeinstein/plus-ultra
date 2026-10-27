@@ -26,6 +26,8 @@
     return out.sort(function (a, b) { return a.age - b.age; }).slice(0, n || 8);
   };
   function fresh(row) { return row && S().day - row.t <= L.OLD; }
+  // 시세를 적은 뒤 전쟁이 나도 즉시 반영한다. 옛 기록은 남겨 두고 추천할 때만 거른다.
+  function tradable(cityId) { var c = G.CITY_DATA[cityId]; return !!c && !(G.Rel && G.Rel.embargo(c)); }
   L.age = function (cityId) { var row = book()[cityId]; return row ? S().day - row.t : null; };
 
   /** 이 교역품을 가장 비싸게 사 주는 곳 (알려진 기록 중) */
@@ -33,7 +35,7 @@
     var g = G.GOOD[goodId], b = book(), best = null;
     if (!g) return null;
     for (var id in b) {
-      if (+id === except || !fresh(b[id])) continue;
+      if (+id === except || !fresh(b[id]) || !tradable(+id)) continue;
       var p = b[id].s[g.idx];
       if (p && (!best || p > best.price)) best = { city: +id, price: p, age: S().day - b[id].t };
     }
@@ -43,7 +45,7 @@
   L.bestBuy = function (goodId, except) {
     var b = book(), best = null;
     for (var id in b) {
-      if (+id === except || !fresh(b[id])) continue;
+      if (+id === except || !fresh(b[id]) || !tradable(+id)) continue;
       var p = b[id].b[goodId];
       if (p && (!best || p < best.price)) best = { city: +id, price: p, age: S().day - b[id].t };
     }
@@ -53,7 +55,7 @@
   L.bestRoute = function (from) {
     var b = book(), best = null;
     for (var id in b) {
-      if (!fresh(b[id])) continue;
+      if (!fresh(b[id]) || !tradable(+id)) continue;
       if (from != null && +id !== from) continue;
       for (var gid in b[id].b) {
         var buy = b[id].b[gid], sell = L.bestSell(gid, +id);

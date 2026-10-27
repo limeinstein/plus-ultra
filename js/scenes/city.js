@@ -334,7 +334,7 @@
       // 교역: 배당과 남는 장사
       var iv = R.investTick(c);
       if (iv.div >= 100) out.push({ kind: 'trade', icon: 'coin', text: '교역소 배당 금화 ' + U.num(Math.floor(iv.div)) + '닢이 쌓였다' });
-      if (G.Ledger) {
+      if (G.Ledger && !(G.Rel && G.Rel.embargo(c))) {
         var br = G.Ledger.bestRoute(c.id);
         if (br && br.gain >= 8) out.push({ kind: 'trade', icon: 'scales', text: G.GOOD[br.good].name + U.jx(G.GOOD[br.good].name, '을/를') + ' 사서 ' + G.CITY_DATA[br.sell].name + '에 팔면 1통 +' + U.num(br.gain) + '닢' });
         var sellHere = Object.keys(s.fleet.cargo).filter(function (id) {

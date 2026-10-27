@@ -256,9 +256,13 @@
     var use = R.dailyUse(crewTo), price = R.supplyCost(c);
     // 자재: 배마다 3통 + 6통을 채워 둔다 (바다 위 수리용)
     var matTo = Math.max(f.mat || 0, 6 + f.ships.length * 3), needM = Math.ceil(matTo - (f.mat || 0));
-    var room = R.supplyRoom() - matTo;
-    var maxDays = Math.max(0, Math.floor(room / (use * 2)));
-    var maxEmpty = Math.max(0, Math.floor((R.fleetCap() - (G.Quest ? G.Quest.load() : 0) - matTo) / (use * 2)));   // 짐이 없을 때
+    function stores(d) { return { food: Math.max(f.food, d * use), water: Math.max(f.water, d * use), mat: matTo }; }
+    function maxSupply(cargo) {
+      var lo = 0, hi = Math.max(0, Math.floor(R.fleetCap() / (use * 2)));
+      while (lo < hi) { var mid = Math.ceil((lo + hi) / 2); if (supplyFree(stores(mid), crewTo, cargo) >= -1e-9) lo = mid; else hi = mid - 1; }
+      return lo;
+    }
+    var maxDays = maxSupply(), maxEmpty = maxSupply({});
     var d = Math.min(days, maxDays);
     var needF = Math.max(0, d * use - f.food), needW = Math.max(0, d * use - f.water);
     var supCost = Math.ceil(needF) * price + Math.ceil(needW) * R.waterCost(c) + needM * R.matCost(c);
@@ -328,6 +332,7 @@
     });
     if (!d) return;
     var pl = prepPlan(c, d);
+    if (pl.days < 1) { await C.mate('짐칸이나 무게 한도를 넘습니다. 짐을 먼저 줄이십시오.'); return; }
     if (pl.total > s.player.gold) { await C.mate('제독, 금화가 ' + U.num(pl.total - s.player.gold) + '닢 모자랍니다. 날수를 줄이십시오.'); return; }
     s.player.gold -= pl.total;
     if (pl.hire) { f.crew += pl.hire; f.discipline = Math.max(30, f.discipline - pl.hire * 0.2); }
@@ -361,6 +366,10 @@
   };
 
   // ---------------------------------------------------------------- supply
+  function supplyFree(stores, crew, cargo) {
+    if (G.Cargo) return G.Cargo.supplyFree(stores, crew, cargo);
+    return R.fleetCap() - R.cargoQty() - (G.Quest ? G.Quest.load() : 0) - Math.ceil(stores.food) - Math.ceil(stores.water) - Math.ceil(stores.mat || 0);
+  }
   /** 보급: 식량(일분)·물(일분)·자재(통)를 따로 싣는다 (대항해시대 2식). 셋 다 짐칸을 차지한다 */
   /** 보급: 식량·물·자재를 날수(자재는 통)로 맞춘다. 늘리면 사고, 줄이면 이 항구 보급값 × G.BALANCE.supplyRefund 로 되판다 —
       교역소에서 짐을 더 실으려고 식량·물을 덜어 낼 때 (교역소에서 짐칸이 꽉 차면 여기로 불러온다: opts.need = 비우고 싶은 칸) */
@@ -371,24 +380,29 @@
     var use = R.dailyUse(), pF = R.supplyCost(c), pW = R.waterCost(c), pM = R.matCost(c);
     var refund = (G.BALANCE && G.BALANCE.supplyRefund != null) ? G.BALANCE.supplyRefund : 0.5;
     var price = { food: pF, water: pW, mat: pM };
-    var room = R.supplyRoom();   // 식량·물·자재에 쓸 수 있는 칸
     var cur = { food: Math.floor(f.food / use), water: Math.floor(f.water / use), mat: Math.floor(f.mat || 0) };
     var have = { food: f.food, water: f.water, mat: f.mat || 0 };
     var want = { food: Math.max(cur.food, s.lastSupply || 30), water: Math.max(cur.water, s.lastSupply || 30), mat: Math.max(cur.mat, s.lastMat != null ? s.lastMat : 6 + f.ships.length * 3) };
     if (opts.need) want = { food: cur.food, water: cur.water, mat: cur.mat };   // 교역소에서 불렀으면 지금 그대로에서 시작
     /** 실제로 남을 양(통): 손대지 않은 것은 지금 양 그대로 */
     function amt(w, k) { return w[k] === cur[k] ? have[k] : (k === 'mat' ? w[k] : w[k] * use); }
-    function load(w) { return amt(w, 'food') + amt(w, 'water') + amt(w, 'mat'); }
+    function stores(w) { return { food: amt(w, 'food'), water: amt(w, 'water'), mat: amt(w, 'mat') }; }
+    function free(w) { return supplyFree(stores(w)); }
     function buyCost(w) { var n = 0; ['food', 'water', 'mat'].forEach(function (k) { n += Math.ceil(Math.max(0, amt(w, k) - have[k])) * price[k]; }); return n; }
     // 되파는 값은 산 값(평균)과 이 항구 값 가운데 싼 쪽 — 싼 항구에서 사서 비싼 항구에서 되팔아 남기던 것 (R.supplyBack · QA 2026-10-23)
     function back(w) { var n = 0; ['food', 'water', 'mat'].forEach(function (k) { n += Math.floor(Math.max(0, have[k] - amt(w, k)) * R.supplyBack(c, k, refund)); }); return n; }
     function cost(w) { return buyCost(w) - back(w); }
     function fit(w, key) {        // 짐칸·소지금에 맞게 key 쪽을 줄인다 (지금보다 늘린 만큼만)
-      while (w[key] > cur[key] && (load(w) > room + 1e-6 || cost(w) > s.player.gold)) w[key]--;
+      while (w[key] > cur[key] && (free(w) < -1e-9 || cost(w) > s.player.gold)) w[key]--;
     }
     ['mat', 'water', 'food'].forEach(function (k) { fit(want, k); });
     var rows = [['food', '식량', 'bread', '일분', pF + '닢/통 · 하루 ' + use.toFixed(1) + '통'], ['water', '물', 'drop', '일분', pW + '닢/통 · 하루 ' + use.toFixed(1) + '통'], ['mat', '자재', 'hammer', '통', pM + '닢/통 · 바다 위 수리에 씀 (내구 1에 ' + ((G.BALANCE && G.BALANCE.matPerHp) || 0.4) + '통)']];
-    function rowMax(k) { return Math.max(cur[k], k === 'mat' ? Math.floor(room - have.food - have.water) : Math.floor((room - have.mat - (k === 'food' ? have.water : have.food)) / use)); }
+    function capacity(keys) {
+      var lo = 0, hi = Math.max(0, Math.floor(R.fleetCap() / (keys[0] === 'mat' ? 1 : use))), w = { food: want.food, water: want.water, mat: want.mat };
+      while (lo < hi) { var mid = Math.ceil((lo + hi) / 2); keys.forEach(function (k) { w[k] = mid; }); if (free(w) >= -1e-9) lo = mid; else hi = mid - 1; }
+      return lo;
+    }
+    function rowMax(k) { return Math.max(cur[k], capacity([k])); }
     var html = (opts.need ? '<div class="woodnote" style="margin-bottom:10px">' + G.icon('ship') + ' 교역품을 더 실으려면 짐칸 <b>' + opts.need + '통</b>이 더 있어야 합니다. 식량·물·자재를 줄이면 그만큼 자리가 나고, 줄인 것은 이 항구 보급값의 ' + Math.round(refund * 100) + '%에 되팝니다.</div>' : '') +
       '<div class="muted" style="font-size:16px;margin-bottom:10px">승원 ' + f.crew + '명 · 짐칸 ' + U.num(R.fleetCap()) + '통 (교역품 ' + U.num(R.cargoQty()) + '통) — 식량·물·자재를 따로 정합니다. <b>지금보다 줄이면</b> 내려서 보급값의 ' + Math.round(refund * 100) + '%에 되팔고, 그 자리에 교역품을 더 실을 수 있습니다.</div>' +
       '<div class="sup-both" style="margin-bottom:10px;padding:8px 10px;border-radius:6px;background:rgba(90,60,30,.08)"><b>' + G.icon('calendar') + ' 식량·물 함께</b> <span class="muted" style="font-size:14px">(며칠 항해할 만큼)</span><br>' +
@@ -402,14 +416,14 @@
     var win = UI.window({ title: '보급 — ' + c.name, icon: 'bread', width: 820, html: html, buttons: [{ label: '그만둔다', value: null }, { label: '맞춘다', value: 'ok', cls: 'navy' }] });
     var el = win.content, info = el.querySelector('.sup-info');
     // 식량·물을 같은 날수로 한꺼번에: 짐칸·소지금에 맞게 둘을 함께 줄인다 (지금보다 적게 하면 내린다)
-    var bMax = Math.max(Math.min(cur.food, cur.water), Math.floor((room - have.mat) / (use * 2)));
+    var bMax = Math.max(Math.min(cur.food, cur.water), capacity(['food', 'water']));
     var bR = el.querySelector('.b-rng'), bN = el.querySelector('.b-num');
     bR.min = 0; bR.max = bMax; bN.min = 0;
     function setBoth(d) {
       d = Math.max(0, Math.floor(+d || 0));
       want.food = d; want.water = d;
-      while ((load(want) > room + 1e-6 || cost(want) > s.player.gold) && (want.food > cur.food || want.water > cur.water)) {
-        if (want.food > cur.food) want.food--; if (want.water > cur.water && (load(want) > room + 1e-6 || cost(want) > s.player.gold)) want.water--;
+      while ((free(want) < -1e-9 || cost(want) > s.player.gold) && (want.food > cur.food || want.water > cur.water)) {
+        if (want.food > cur.food) want.food--; if (want.water > cur.water && (free(want) < -1e-9 || cost(want) > s.player.gold)) want.water--;
       }
       refresh();
     }
@@ -418,15 +432,14 @@
     U.$$('.bq', el).forEach(function (b) { b.onclick = function () { setBoth(b.dataset.d === 'max' ? 99999 : +b.dataset.d); }; });
     function refresh(changed) {
       if (changed) fit(want, changed);
+      bR.max = Math.max(Math.min(cur.food, cur.water), capacity(['food', 'water']));
       var both = Math.min(want.food, want.water); bR.value = both; bN.value = both;
       rows.forEach(function (r) { var tr = el.querySelector('tr[data-k="' + r[0] + '"]'); tr.querySelector('input[type=range]').max = Math.max(rowMax(r[0]), want[r[0]]); tr.querySelector('input[type=range]').value = want[r[0]]; tr.querySelector('input[type=number]').value = want[r[0]]; });
-      var free = room - load(want), days = Math.min(want.food, want.water), buy = buyCost(want), got = back(want);
-      // 교역품에 새로 쓸 수 있게 되는 칸 (짐칸 셈 R.used처럼 식량·물·자재는 통 단위로 올려 센다)
-      var freed = ['food', 'water', 'mat'].reduce(function (n, k) { return n + Math.ceil(have[k] - 1e-9) - Math.ceil(amt(want, k) - 1e-9); }, 0);
-      var gain = Math.max(0, Math.floor(R.free()) + freed) - Math.max(0, Math.floor(R.free()));
+      var left = free(want), days = Math.min(want.food, want.water), buy = buyCost(want), got = back(want);
+      var gain = Math.max(0, Math.floor(left + 1e-9)) - Math.max(0, Math.floor(R.free()));
       info.innerHTML = '항해 가능 <b>' + days + '일</b> (식량 ' + want.food + '일 · 물 ' + want.water + '일) · 자재 ' + want.mat + '통' +
         (buy ? ' · 사는 값 금화 <b>' + U.num(buy) + '</b>닢' : '') + (got ? ' · 되판 값 <b class="good-text">+' + U.num(got) + '</b>닢' : '') +
-        (!buy && !got ? ' · 그대로' : '') + ' · 남는 짐칸 ' + Math.max(0, Math.floor(free)) + '통' +
+        (!buy && !got ? ' · 그대로' : '') + ' · 남는 짐칸 ' + Math.max(0, Math.floor(left + 1e-9)) + '통' +
         (gain > 0 ? '<div class="good-text" style="font-size:15px;margin-top:4px">교역품을 ' + U.num(gain) + '통 더 실을 수 있게 됩니다' + (opts.need ? (gain >= opts.need ? ' — 넉넉합니다.' : ' — 아직 ' + (opts.need - gain) + '통 모자랍니다.') : '.') + '</div>' : '') +
         (days < 5 && (want.food < cur.food || want.water < cur.water) ? '<div class="warn-text" style="font-size:15px;margin-top:4px">식량·물이 ' + days + '일분뿐입니다. 출항 전에 다시 채우십시오.</div>' : '');
     }
@@ -445,7 +458,6 @@
       cargoEl.innerHTML = '교역품 가운데 식량 <b>' + cf + '통</b>' + (cw ? ' · 맥주·포도주 <b>' + cw + '통</b>' : '') + ' — 바다에서 식량·물이 모자라면 먹고 마십니다. <button class="btn small mv">지금 보급품으로 옮긴다</button>';
       cargoEl.querySelector('.mv').onclick = function () {
         f.food += R.eatCargo('food', cf); f.water += R.eatCargo('water', cw);
-        room = R.supplyRoom();
         have.food = f.food; have.water = f.water;
         cur.food = Math.floor(f.food / use); cur.water = Math.floor(f.water / use);
         want.food = Math.max(want.food, cur.food); want.water = Math.max(want.water, cur.water);
@@ -461,6 +473,7 @@
     var buy = buyCost(want), got = back(want), pay = buy - got;
     if (!buy && !got && want.food === cur.food && want.water === cur.water && want.mat === cur.mat) return;
     if (pay > s.player.gold) { await C.mate('소지금이 모자랍니다.'); return; }
+    if (free(want) < -1e-9) { await C.mate('짐칸이나 무게 한도를 넘습니다. 보급량을 줄이십시오.'); return; }
     var down = ['food', 'water', 'mat'].filter(function (k) { return amt(want, k) < have[k] - 1e-6; });
     s.player.gold -= pay;
     ['food', 'water', 'mat'].forEach(function (k) { R.notePaid(c, k, have[k], amt(want, k), price[k]); });   // 늘린 만큼 평균 산 값을 적는다

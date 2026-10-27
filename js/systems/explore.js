@@ -450,7 +450,7 @@
   X.marketTip = function () {
     var L = G.Ledger && G.Ledger.bestRoute ? G.Ledger.bestRoute() : null;
     if (L) return G.GOOD[L.good].name + U.jx(G.GOOD[L.good].name, '은/는') + ' ' + G.CITY_DATA[L.buy].name + '에서 사서 ' + G.CITY_DATA[L.sell].name + '에 가져가면 한 통에 ' + U.num(L.gain) + '닢은 남는다더군.';
-    var s = S(), known = s.known.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && c.goods && c.goods.length; });
+    var s = S(), known = s.known.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && c.goods && c.goods.length && !(G.Rel && G.Rel.embargo(c)); });
     if (!known.length) return null;
     var c = U.pick(known), g = U.pick(c.goods);
     return G.GOOD[g] ? c.name + '의 ' + G.GOOD[g].name + U.jx(G.GOOD[g].name, '이/가') + ' 싸다더군.' : null;

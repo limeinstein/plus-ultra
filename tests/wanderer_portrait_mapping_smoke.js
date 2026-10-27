@@ -62,4 +62,30 @@ const shownHalf = G.Img.pick(G.Img.chain.mateHalf(legacyPool.id));
 assert.strictEqual(shownFace, legacyPool.face, '라미 마레즈형 옛 저장의 표시 얼굴을 교체한다');
 assert.strictEqual(shownHalf, shownFace + '_half', '라미 마레즈형 옛 저장의 표시 무릎상이 정확히 같은 사람이다');
 
-console.log('통과 — 철새 얼굴 후보 ' + keys.size + '쌍, 누락 0쌍, 옛 합성 묶음 저장 교체, 옛 사건 인물 여성 철새 2명 연결');
+// 제보 #72: 여성 철새에게 남성·다른 문화권의 얼굴이 저장된 경우도 불러오며 교정한다.
+const maria = {
+  id: 'wd_maria_ronaldo', name: '마리아 호날두', g: 'f', wd: true, nat: 'PT',
+  type: 'nav', role: 'maid', style: 'ib', st: [50, 50, 50, 50], sk: {},
+  face: 'portraits/npc-roles/is/priest', halfKey: 'portraits/npc-roles/is/priest_half', zones: [], home: null
+};
+G.Game.state.wander.defs[maria.id] = maria;
+G.Wander.apply();
+const ibWomen = G.Wander.facePool('ib', 'f', 'nav');
+assert(ibWomen.includes(maria.face), '마리아 호날두의 저장된 남성 얼굴을 이베리아 여성 후보로 교정한다');
+const corrected = maria.face;
+assert.strictEqual(G.Img.pick(G.Img.chain.mateHalf(maria.id)), corrected + '_half');
+assert.strictEqual(G.Img.pick(G.Art.portraitKeys(G.Art.mateSpec(maria.id))), corrected);
+G.Wander.apply();
+assert.strictEqual(maria.face, corrected, '반복해서 불러와도 교정된 얼굴을 유지한다');
+
+// 같은 ID를 다시 불러와도 옛 얼굴 캐시나 저장된 다른 사람의 몸을 쓰지 않는다.
+const reloaded = Object.assign({}, maria, {
+  face: ibWomen.find(k => k !== corrected), halfKey: 'portraits/npc-roles/is/priest_half'
+});
+G.MATE[maria.id] = reloaded;
+assert.strictEqual(G.Img.pick(G.Img.chain.mateHalf(maria.id)), reloaded.face + '_half');
+assert.strictEqual(G.Img.pick(G.Art.portraitKeys(G.Art.mateSpec(maria.id))), reloaded.face);
+assert.strictEqual(reloaded.name, '마리아 호날두');
+assert.strictEqual(reloaded.g, 'f');
+
+console.log('통과 — 철새 얼굴 후보 ' + keys.size + '쌍, 누락 0쌍, 옛 합성 묶음·남성 얼굴 교정, 같은 ID 재로딩, 여성 얼굴·무릎상 일치');

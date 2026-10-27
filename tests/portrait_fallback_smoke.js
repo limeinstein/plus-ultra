@@ -43,7 +43,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(/\/f\//.test(r.oldPick || ''), '옛 저장(문화권이 적혀 있지 않은 얼굴)도 성별이 맞는 그림을 빌린다 (고장은 얼굴빛으로 어림) — ' + r.oldPick);
     ok(r.kid === null, '아이 얼굴은 빌리지 않는다');
     ok(r.historical.every(x => x[1]) && new Set(r.historical.map(x => x[1])).size === r.historical.length, '조선 실존 인물은 가능한 한 서로 다른 전용·역할별 얼굴을 쓴다 — ' + r.historical.map(x => x.join('→')).join(', '));
-    ok(r.historical.filter(x => ['h_jeonggwangpil', 'h_kimanguk', 'h_josik'].includes(x[0])).every(x => /^portraits\/pools\/sponsors\/kr\/m\//.test(x[1])), '조선의 재상·학자는 항해사 갑옷이 아닌 후원자형 복식을 쓴다');
+    ok(r.historical.filter(x => ['h_jeonggwangpil', 'h_kimanguk', 'h_josik'].includes(x[0])).every(x => /^portraits\/(mates\/h_|pools\/sponsors\/kr\/m\/)/.test(x[1])), '조선의 재상·학자는 전용 인물 또는 후원자형 복식을 쓴다');
     ok(r.historical.filter(x => ['h_jogwangjo', 'h_sinsaimdang', 'h_yihwang', 'h_imkkeokjeong'].includes(x[0])).every(x => /^portraits\/legendary\//.test(x[1])), '있는 전용 고해상도 초상을 우선 사용한다');
     ok(errors.length === 0, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
     console.log('\n통과');

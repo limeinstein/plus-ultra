@@ -778,12 +778,14 @@
   K.mateHalf = function (id) {
     var out = ['portraits/mates/' + id + '_half'];
     var d = G.MATE && G.MATE[id];
+    // 얼굴을 먼저 교정해야 옛 저장의 잘못된 무릎상이 앞에서 선택되지 않는다.
+    var spec = G.Art && G.Art.mateSpec ? G.Art.mateSpec(id) : null;
     // 철새처럼 빌린 얼굴은 저장된 짝을 먼저 쓴다. 단, 옛 묶음 합성 무릎상과
     // 얼굴과 다른 잘못된 저장값은 건너뛰고 아래의 실제 얼굴 사슬에서 다시 고른다.
     if (d && d.halfKey && !/^portraits\/pools\//.test(d.halfKey) && (!(d.wd || d.native) || !d.face || d.halfKey === d.face + '_half')) out.push(d.halfKey);
     // 전용 얼굴이 없는 동료도 현재 얼굴과 같은 문화권·성별의 무릎상을 빌린다.
-    if (G.Art && G.Art.mateSpec && G.Art.portraitKeys) {
-      out = out.concat(K.halfOf(G.Art.portraitKeys(G.Art.mateSpec(id))));
+    if (spec && G.Art.portraitKeys) {
+      out = out.concat(K.halfOf(G.Art.portraitKeys(spec)));
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };

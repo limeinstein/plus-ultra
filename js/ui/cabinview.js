@@ -564,11 +564,11 @@
       var rooms = CB().rooms(), l = L(), n = rooms.length - 1;
       var hasArt = G.Img && G.Img.has('ships/' + sh.type);
       var sp = (hasArt && SPOT[sh.type]) || SPOT_DEF, v = view(sp);
-      var wage = CB().wages(), warn = CB().wageWarning();
+      var wage = CB().totalWages(), warn = CB().wageWarning();
       var idle = s.mates.filter(function (m) { return G.MATE[m.id] && (!m.role || m.role === 'none') && m.room == null; }).length;
       var html = '<div class="cb-top"><span>' + G.icon('bed') + '선실 <b>' + n + '</b>칸 <small class="muted">(큰 배일수록 많다)</small></span>' +
         '<span>' + G.icon('people') + '부하 <b>' + s.mates.length + '</b>명' + (idle ? ' <small class="warn-text">· 자리 없음 ' + idle + '</small>' : '') + '</span>' +
-        '<span' + (warn ? ' class="warn-text"' : '') + '>' + G.icon('coin') + '급료 한 달 <b>' + U.num(wage) + '</b>닢' + (warn ? ' — 가진 돈으로 ' + Math.max(0, warn.months) + '달' : '') + '</span>' +
+        '<span title="동료·선원 급료는 소지금에서 지급합니다. 예금은 금고에서 미리 찾으십시오."' + (warn ? ' class="warn-text"' : '') + '>' + G.icon('coin') + '동료·선원 급료 한 달 <b>' + U.num(wage) + '</b>닢' + (warn ? ' — 소지금으로 ' + Math.max(0, warn.months) + '달' : '') + '</span>' +
         '<span class="muted cb-tip">' + (opts.yard ? '방을 누르면 사람을 두거나 고칩니다.' : '방을 누르면 사람을 둡니다 · 방을 고치는 일은 조선소에서.') + ' 부하를 끌어다 방에 놓아도 됩니다.</span></div>' +
         '<div class="cb-body"><div class="cb-main">' +
         '<div class="cb-stage" style="width:' + l.stageW + 'px;height:' + l.stageH + 'px"><canvas class="cb-stage-base"></canvas><div class="cb-stage-shade"></div>' +

@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, R = G.R, A = G.Art;
   var B = {};
   G.Scenes.battle = B;
-  var st = null;
+  var st = null, battleState = null;
   function S() { return G.Game.state; }
   var SCALE = 1;           // px per battle unit
   var ARENA = 1800;        // retreat radius from arena centre (2026-10-17 1300 → 1800: 전장을 넓혔다)
@@ -238,66 +238,115 @@
     };
   }
 
+  // 배끼리 가리키는 목표·포탄은 번호로 바꾼다. 그림·입력·길찾기 캐시는 불러올 때 다시 만든다.
+  B.saveBlocked = function () { return !!(st && battleState === S() && (st.busy || st.over)); };
+  B.snapshot = function () {
+    if (!st || battleState !== S()) return null;
+    if (B.saveBlocked()) throw new Error('백병전이나 해전 결과를 처리하는 중에는 잠시 저장할 수 없습니다.');
+    var out = { v: 1 };
+    Object.keys(st).forEach(function (k) {
+      if (['ships', 'fx', 'seaArt', 'seaArtRect', 'nav', 'terrain', 'unkey', 'arrows', 'mouse'].indexOf(k) < 0) out[k] = st[k];
+    });
+    out.ships = st.ships.map(function (b) {
+      var sh = {};
+      Object.keys(b).forEach(function (k) { if (['src', 't', 'tr', 'fx', 'ride', 'rig'].indexOf(k) < 0) sh[k] = b[k]; });
+      sh.fleetIndex = S().fleet.ships.indexOf(b.src);
+      if (sh.fleetIndex < 0 && !b.escort) sh.src = b.src;
+      return sh;
+    });
+    return JSON.parse(JSON.stringify(out, function (k, value) {
+      var i = st.ships.indexOf(value);
+      return i < 0 ? value : { battleShip: i };
+    }));
+  };
+  function restoreBattle(saved) {
+    st = U.clone(saved); delete st.v;
+    var ships = st.ships;
+    function refs(value) {
+      if (!value || typeof value !== 'object') return value;
+      if (Object.keys(value).length === 1 && value.battleShip != null) return ships[value.battleShip] || null;
+      Object.keys(value).forEach(function (k) { value[k] = refs(value[k]); });
+      return value;
+    }
+    refs(st);
+    ships.forEach(function (b) {
+      b.src = b.fleetIndex >= 0 ? S().fleet.ships[b.fleetIndex] : b.escort && G.Escort ? G.Escort.ship() : b.src;
+      delete b.fleetIndex;
+      b.t = G.SHIP[b.type]; b.tr = b.t.traits;
+      b.fx = G.SeaFX ? G.SeaFX.create({ spacing: BFX.wakeSpacing, life: BFX.wakeLife, maxPoints: 280, kz: 1 }) : null;
+    });
+    st.fx = []; st.busy = 0;
+    delete S().battle;
+  }
+
   B.enter = function (arg) {
     var s = S(), npc = arg.npc || { kind: 'pirate', n: 1 };
+    battleState = s;
     if (G.Audio) setTimeout(function () { if (G.Audio) G.Audio.sfx('drums'); }, 350);   // 해전이 시작된다: 북소리
     G.Game.showLayers(true, true, false);
     G.Game.ensureRenderer();
     st = { cx: 0, cy: 0, npc: npc, t: 0, ships: [], fx: [], balls: [], paused: false, over: false, mode: 'follow', sel: null, busy: 0, log: [], fled: 0, center: npc.center ? { lon: npc.center.lon, lat: npc.center.lat } : { lon: s.loc.lon, lat: s.loc.lat }, seaArt: null, spare: 0 };   // npc.center: 그 자리가 아닌 물 위에서 (호수의 큰 싸움)
-    // player ships & crew distribution
-    var f = s.fleet, totMax = R.crewMax();
-    if (npc.myFleet && npc.myFleet.length) {
-      // 이 싸움에서만 모는 배 (아즈텍 호수의 브리건틴·카누 — js/systems/aztec.js): 내 함대는 뭍에 두고, 선원이 이 배들에 나누어 탄다. 남은 선원은 기다린다
-      var mine = npc.myFleet.map(function (a, i) {
-        var t = G.SHIP[a.type] || G.SHIP.pinnace;
-        return { type: t.id, name: a.name, hp: t.hp, maxHp: t.hp, crewMax: t.crew[1], guns: { type: a.gun || 'saker', n: Math.max(1, Math.round(t.ports * 0.9)) }, sails: t.sails.slice(), admiral: i === 0, lent: true };
-      });
-      var cap = U.sum(mine, function (x) { return x.crewMax; }), put = Math.min(f.crew, cap);
-      st.spare = f.crew - put;
-      mine.forEach(function (sh, i) {
-        var b = makeShip(sh, 'me', i, mine.length);
-        b.crew = b.crew0 = Math.max(1, Math.round(put * sh.crewMax / Math.max(1, cap)));
+    if (arg.battle) {
+      restoreBattle(arg.battle); npc = st.npc;
+    } else {
+      // player ships & crew distribution
+      var f = s.fleet, totMax = R.crewMax();
+      if (npc.myFleet && npc.myFleet.length) {
+        // 이 싸움에서만 모는 배 (아즈텍 호수의 브리건틴·카누 — js/systems/aztec.js): 내 함대는 뭍에 두고, 선원이 이 배들에 나누어 탄다. 남은 선원은 기다린다
+        var mine = npc.myFleet.map(function (a, i) {
+          var t = G.SHIP[a.type] || G.SHIP.pinnace;
+          return { type: t.id, name: a.name, hp: t.hp, maxHp: t.hp, crewMax: t.crew[1], guns: { type: a.gun || 'saker', n: Math.max(1, Math.round(t.ports * 0.9)) }, sails: t.sails.slice(), admiral: i === 0, lent: true };
+        });
+        var cap = U.sum(mine, function (x) { return x.crewMax; }), put = Math.min(f.crew, cap);
+        st.spare = f.crew - put;
+        mine.forEach(function (sh, i) {
+          var b = makeShip(sh, 'me', i, mine.length);
+          b.crew = b.crew0 = Math.max(1, Math.round(put * sh.crewMax / Math.max(1, cap)));
+          st.ships.push(b);
+        });
+      } else f.ships.forEach(function (sh, i) {
+        var b = makeShip(sh, 'me', i, f.ships.length);
+        if (npc.myGun && b.guns.n > 0) b.guns.type = npc.myGun;   // 큰 해전에서 빌려 실은 대포 (드레이크의 캘버린포) — 이 싸움에서만, 배의 대포는 그대로
+        b.crew = b.crew0 = Math.max(1, Math.round(f.crew * sh.crewMax / Math.max(1, totMax)));
         st.ships.push(b);
       });
-    } else f.ships.forEach(function (sh, i) {
-      var b = makeShip(sh, 'me', i, f.ships.length);
-      if (npc.myGun && b.guns.n > 0) b.guns.type = npc.myGun;   // 큰 해전에서 빌려 실은 대포 (드레이크의 캘버린포) — 이 싸움에서만, 배의 대포는 그대로
-      b.crew = b.crew0 = Math.max(1, Math.round(f.crew * sh.crewMax / Math.max(1, totMax)));
-      st.ships.push(b);
-    });
-    var myN = st.ships.length;
-    // 호위하는 상선: 우리 편이지만 내 배가 아니다 — 제 선원으로 싸우고, 기함 뒤에 숨는다 (js/systems/escort.js)
-    var escSh = G.Escort && !npc.myFleet ? G.Escort.ship() : null;
-    if (escSh) { var eb = makeShip(escSh, 'me', myN, myN + 1); eb.flag = false; eb.escort = true; eb.crew = eb.crew0 = escSh.crew || G.SHIP[escSh.type].crew[0]; st.ships.push(eb); }
-    // 큰 해전의 우리 편 함대 (무적함대·레판토 — js/systems/relations.js G.Rel.greatBattle): 우리 편이지만 내 배가 아니다 — 제 선원으로 제멋대로 싸운다
-    (npc.allies || []).forEach(function (a, i) {
-      var t = G.SHIP[a.type] || G.SHIP.galleon, src = { type: t.id, name: a.name, hp: t.hp, maxHp: t.hp, crew: t.crew[1], guns: { type: a.gun || 'culverin', n: Math.max(4, Math.round(t.ports * 0.85)) }, sails: t.sails.slice() };
-      var ab = makeShip(src, 'me', myN + 1 + i, myN + 1 + npc.allies.length); ab.flag = false; ab.ally = true; ab.order = 'free'; ab.crew = ab.crew0 = Math.round(t.crew[1] * 0.85); st.ships.push(ab);
-    });
-    var en = enemyFleet(npc);
-    en.forEach(function (sh, i) { var b = makeShip(sh, 'en', i, en.length); b.crew = b.crew0 = sh.crew; st.ships.push(b); });
-    settleStartingShips();
+      var myN = st.ships.length;
+      // 호위하는 상선: 우리 편이지만 내 배가 아니다 — 제 선원으로 싸우고, 기함 뒤에 숨는다 (js/systems/escort.js)
+      var escSh = G.Escort && !npc.myFleet ? G.Escort.ship() : null;
+      if (escSh) { var eb = makeShip(escSh, 'me', myN, myN + 1); eb.flag = false; eb.escort = true; eb.crew = eb.crew0 = escSh.crew || G.SHIP[escSh.type].crew[0]; st.ships.push(eb); }
+      // 큰 해전의 우리 편 함대 (무적함대·레판토 — js/systems/relations.js G.Rel.greatBattle): 우리 편이지만 내 배가 아니다 — 제 선원으로 제멋대로 싸운다
+      (npc.allies || []).forEach(function (a, i) {
+        var t = G.SHIP[a.type] || G.SHIP.galleon, src = { type: t.id, name: a.name, hp: t.hp, maxHp: t.hp, crew: t.crew[1], guns: { type: a.gun || 'culverin', n: Math.max(4, Math.round(t.ports * 0.85)) }, sails: t.sails.slice() };
+        var ab = makeShip(src, 'me', myN + 1 + i, myN + 1 + npc.allies.length); ab.flag = false; ab.ally = true; ab.order = 'free'; ab.crew = ab.crew0 = Math.round(t.crew[1] * 0.85); st.ships.push(ab);
+      });
+      var en = enemyFleet(npc);
+      en.forEach(function (sh, i) { var b = makeShip(sh, 'en', i, en.length); b.crew = b.crew0 = sh.crew; st.ships.push(b); });
+      settleStartingShips();
+      st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
+      s.stats.battles++;
+      // 기함: 양쪽 모두 1번 배. 적 기함을 가라앉히거나 나포하면 이기고, 우리 기함을 잃으면 진다
+      st.myFlag = st.ships.filter(function (b) { return b.side === 'me'; })[0] || null;
+      st.enFlag = st.ships.filter(function (b) { return b.side === 'en'; })[0] || null;
+      st.ships.forEach(function (b) { if (b.side === 'me' && !b.flag && !b.ally) b.order = 'follow'; });   // 큰 해전의 우리 편 함대는 제멋대로 싸운다(free)
+    }
     st.terrain = terrainInfo();
     if (G.Img && G.Img.has('battle/rough-sea')) {
       var here = st;
       G.Img.load('battle/rough-sea').then(function (im) { if (im && st === here) { st.seaArt = im; st.seaArtRect = artRect(im); } });
     }
     if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000);
-    st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
-    s.stats.battles++;
-    // 기함: 양쪽 모두 1번 배. 적 기함을 가라앉히거나 나포하면 이기고, 우리 기함을 잃으면 진다
-    st.myFlag = st.ships.filter(function (b) { return b.side === 'me'; })[0] || null;
-    st.enFlag = st.ships.filter(function (b) { return b.side === 'en'; })[0] || null;
-    st.ships.forEach(function (b) { if (b.side === 'me' && !b.flag && !b.ally) b.order = 'follow'; });   // 큰 해전의 우리 편 함대는 제멋대로 싸운다(free)   // 함대 명령: 처음에는 모두 기함을 따른다
     buildUI();
-    if (st.enFlag && st.ships.filter(function (b) { return b.side === 'en'; }).length > 1) setTimeout(function () { if (st && !st.over) UI.toast('적 기함(1번 · ' + st.enFlag.name + ')을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.', 'flag', 5200); }, 600);
-    if (npc.gunNote) setTimeout(function () { if (st && !st.over) UI.toast(npc.gunNote, 'cannon', 6500); }, 6000);
-    if (npc.tacticNote) setTimeout(function () { if (st && !st.over) UI.toast(npc.tacticNote, 'skull', 6500); }, 5600);   // 이름난 해적의 전술 (js/systems/corsairs.js)   // 큰 해전의 대포 이야기 (무적함대: 우리는 멀리, 저들은 세게)
+    st.pf = 14;   // 첫 장면부터 복원한 내구·선원 정보를 보여 준다.
+    if (st.paused) el.pause.innerHTML = G.icon('sail') + '재개';
+    var entered = st;
+    if (!arg.battle && st.enFlag && st.ships.filter(function (b) { return b.side === 'en'; }).length > 1) setTimeout(function () { if (st === entered && !st.over) UI.toast('적 기함(1번 · ' + st.enFlag.name + ')을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.', 'flag', 5200); }, 600);
+    if (!arg.battle && npc.gunNote) setTimeout(function () { if (st === entered && !st.over) UI.toast(npc.gunNote, 'cannon', 6500); }, 6000);
+    if (!arg.battle && npc.tacticNote) setTimeout(function () { if (st === entered && !st.over) UI.toast(npc.tacticNote, 'skull', 6500); }, 5600);   // 이름난 해적의 전술 (js/systems/corsairs.js)   // 큰 해전의 대포 이야기 (무적함대: 우리는 멀리, 저들은 세게)
     if (G.Audio) G.Audio.music('battle');
     var foe = npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
-    UI.toast(foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
+    UI.toast(arg.battle ? '저장한 해전을 이어갑니다.' : foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
   };
-  B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; };
+  B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; battleState = null; };
   B.debug = function () { return st; };
 
   // ---------------------------------------------------------------- UI

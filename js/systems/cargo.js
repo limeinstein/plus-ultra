@@ -29,17 +29,18 @@
   /** 함대가 버티는 무게 — 회계 단계가 높으면 짐을 고르게 나눠 싣고 묶어 조금 더 버틴다 (G.Acct.wtBonus, G.BALANCE.acct.wt) */
   CG.fleetWtCap = function () { var n = U.sum(S().fleet.ships, CG.shipWtCap), b = G.Acct ? G.Acct.wtBonus() : 0; return b ? Math.floor(n * (1 + b)) : n; };
   /** 늘 실려 있는 무게: 선원 · 대포 · 포탄 */
-  CG.fixedWt = function () {
+  CG.fixedWt = function (crew) {
     var f = S().fleet, k = K();
-    return f.crew * (k.crewWt != null ? k.crewWt : 0.1) + U.sum(f.ships, function (s) {
+    return (crew == null ? f.crew : crew) * (k.crewWt != null ? k.crewWt : 0.1) + U.sum(f.ships, function (s) {
       var c = G.CANNON[s.guns.type];
       return s.guns.n * ((c ? c.load : 1) * (k.gunWt != null ? k.gunWt : 1.5) + (k.shotWt != null ? k.shotWt : 0.25));
     });
   };
   CG.goodsWt = function (cargo) { var n = 0; for (var id in cargo) n += cargo[id].q * CG.wt(id); return n; };
   /** 식량·물·자재·의뢰 짐의 무게 */
-  CG.storesWt = function () {
-    var f = S().fleet, k = K();
+  CG.storesVol = function (stores) { var f = stores || S().fleet; return Math.ceil(f.food || 0) + Math.ceil(f.water || 0) + Math.ceil(f.mat || 0); };
+  CG.storesWt = function (stores) {
+    var f = stores || S().fleet, k = K();
     return (Math.ceil(f.food || 0) + Math.ceil(f.water || 0)) * (k.supWt != null ? k.supWt : 1) + Math.ceil(f.mat || 0) * (k.matWt != null ? k.matWt : 1.2) + (G.Quest ? G.Quest.load() : 0);
   };
   CG.fleetWt = function () { return CG.fixedWt() + CG.goodsWt(S().fleet.cargo) + CG.storesWt(); };
@@ -55,6 +56,13 @@
     var vol = R.fleetCap() - R.cargoQty() - q;
     var wt = CG.fleetWtCap() - CG.fixedWt() - CG.goodsWt(f.cargo) - q;
     return Math.min(vol, Math.floor(wt));
+  };
+  /** 보급 후 남을 자리: 실제 적재와 같은 통 단위 올림·품목별 무게로 검사한다. crew는 출항 준비 뒤 승원 수. */
+  CG.supplyFree = function (stores, crew, cargo) {
+    var goods = cargo || S().fleet.cargo, q = G.Quest ? G.Quest.load() : 0, vol = 0;
+    for (var id in goods) vol += goods[id].q;
+    return Math.min(R.fleetCap() - vol - q - CG.storesVol(stores),
+      CG.fleetWtCap() - CG.fixedWt(crew) - CG.goodsWt(goods) - CG.storesWt(stores));
   };
   /** 짐 무게 비율 0~1 — 선원·대포를 뺀 몫 가운데 짐이 차지한 비율. 속력의 짐 보정(R.loadShares)이 부피 비율과 견주어 큰 쪽을 쓴다 */
   CG.loadRatio = function () {

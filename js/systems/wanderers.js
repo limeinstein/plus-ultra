@@ -114,14 +114,12 @@
     });
     return out;
   };
-  /** 옛 저장의 얼굴 묶음 합성본을 버리고, id로 고른 안정적인 완성 초상 한 쌍으로 옮긴다. */
+  /** 옛 저장의 합성본·다른 성별/문화권 얼굴을 id로 고른 완성 초상 한 쌍으로 옮긴다. */
   WD.fixPortrait = function (d) {
     if (!d) return d;
-    if (/^portraits\/pools\//.test(d.face || '')) {
-      var pool = WD.facePool(d.style || 'ib', d.g, d.type);
-      if (d.local) pool = pool.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 고장 사람은 다른 문화권 항해사의 옷을 빌리지 않는다
-      if (pool.length) d.face = pool[Math.abs(U.strHash('wander-pair:' + d.id)) % pool.length];
-    }
+    var pool = WD.facePool(d.style || 'ib', d.g, d.type);
+    if (d.local) pool = pool.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 고장 사람은 다른 문화권 항해사의 옷을 빌리지 않는다
+    if (pool.indexOf(d.face) < 0) d.face = pool.length ? pool[Math.abs(U.strHash('wander-pair:' + d.id)) % pool.length] : null;
     if (d.face && facePairOk(d.face)) d.halfKey = d.face + '_half';
     else if (d.wd) d.halfKey = null;
     return d;
@@ -170,6 +168,7 @@
       face: face, halfKey: face && facePairOk(face) ? face + '_half' : null,
       zones: zones, home: home, gen: genOf(y), born: y, line: opts.prev ? opts.prev.line || opts.prev.id : id, prevName: opts.prev ? opts.prev.name : null, nameFrom: nm.from
     };
+    WD.fixPortrait(def);   // 국적이 바뀐 다음 세대도 새 문화권·성별에 맞는 얼굴을 쓴다
     return G.MateSkills ? G.MateSkills.wander(def) : def;   // 특기를 한두 단계 더 (js/data/renown.js)
   };
 

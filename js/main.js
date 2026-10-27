@@ -345,7 +345,11 @@
   /** advance world time by n days (in port / on land); returns list of messages */
   Game.passDays = function (n) {
     var msgs = [];
-    for (var i = 0; i < n; i++) { var m = Game.newDay(); if (m && m.length) msgs = msgs.concat(m); }
+    for (var i = 0; i < n; i++) {
+      // 수명이 다한 날에서 멈춘다. 후계를 정하기 전에 남은 날의 급료·계약 기한을 처리하지 않는다.
+      if (Game.state.life && Game.state.life.end) break;
+      var m = Game.newDay(); if (m && m.length) msgs = msgs.concat(m);
+    }
     return msgs;
   };
   /** one day passes: world-level processing. returns array of notices */

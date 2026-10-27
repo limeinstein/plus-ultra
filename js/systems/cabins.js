@@ -424,13 +424,15 @@
     s.mates.forEach(function (m) { var d = G.MATE[m.id]; if (d && !seen[m.id]) { seen[m.id] = 1; w += R().mateWage(m.id); } });
     return Math.round(w * Math.max(0.5, 1 - CB.fx('account', 'wage')));
   };
-  /** 지금 재산으로 급료를 몇 달 버티나 */
-  CB.wageMonths = function (extra) { var s = S(), w = CB.wages() + (extra || 0) + (G.World && G.World.crewWage ? G.World.crewWage() : 0); return w > 0 ? Math.floor((s.player.gold + (s.player.bank || 0)) / w) : 999; };
+  /** 동료와 선원에게 줄 한 달 급료 합계 */
+  CB.totalWages = function (extra) { return CB.wages() + (extra || 0) + (G.World && G.World.crewWage ? G.World.crewWage() : 0); };
+  /** 급료는 소지금에서만 지급한다. 예금은 금고에서 찾아야 쓸 수 있다. */
+  CB.wageMonths = function (extra) { var w = CB.totalWages(extra); return w > 0 ? Math.floor(S().player.gold / w) : 999; };
   /** 급료가 버거우면 경리나 부관이 하는 말 (괜찮으면 null) — extra: 새로 들일 사람의 급료 */
   CB.wageWarning = function (extra) {
     var mo = CB.wageMonths(extra), lim = BM().warnMonths || 6; if (mo >= lim) return null;
-    var w = CB.wages() + (extra || 0);
-    return { months: mo, wage: w, text: '제독, 부하들의 급료가 한 달에 금화 ' + U.num(w) + '닢입니다. 지금 가진 돈으로는 ' + (mo <= 0 ? '이번 달 급료도 치르지 못합니다.' : mo + '달밖에 버티지 못합니다.') + ' 급료가 밀리면 충성이 크게 떨어집니다.' };
+    var w = CB.totalWages(extra);
+    return { months: mo, wage: w, text: '제독, 동료·선원 급료가 한 달에 금화 ' + U.num(w) + '닢입니다. 소지금으로는 ' + (mo <= 0 ? '이번 달 급료도 치르지 못합니다.' : mo + '달밖에 버티지 못합니다.') + ' 예금은 금고에서 미리 찾아야 합니다. 급료가 밀리면 충성과 규율이 떨어집니다.' };
   };
   /** 경고를 말할 사람: 경리, 없으면 부관, 없으면 갑판장 */
   CB.warnSpeaker = function () { var SC = G.Scenes; return SC.mateSpeaker ? SC.mateSpeaker(R().purser() ? 'purser' : 'first') : {}; };
@@ -448,7 +450,7 @@
       R().setLoyal(m, U.clamp(lo, m.id === 'rocco' ? 5 : 0, 100));
       if (m.loyal <= 0) { s.leaving = s.leaving || []; if (s.leaving.indexOf(m.id) < 0) s.leaving.push(m.id); }
     });
-    if (paid) { var w = CB.wageWarning(); if (w) out.push({ icon: 'coin', text: (R().purser() ? '경리' : '부관') + ': 급료가 한 달 ' + U.num(w.wage) + '닢 — 가진 돈으로 ' + Math.max(0, w.months) + '달 버틴다.' }); }
+    if (paid) { var w = CB.wageWarning(); if (w) out.push({ icon: 'coin', text: (R().purser() ? '경리' : '부관') + ': 동료·선원 급료가 한 달 ' + U.num(w.wage) + '닢 — 소지금으로 ' + Math.max(0, w.months) + '달 버틴다. 예금은 금고에서 미리 찾아야 한다.' }); }
     var low = s.mates.filter(function (m) { return m.loyal != null && m.loyal > 0 && m.loyal <= (b.low == null ? 40 : b.low); });
     if (low.length) out.push({ icon: 'people', text: low.map(function (m) { return G.MATE[m.id].name; }).join('·') + '의 충성이 낮아 일을 건성으로 한다.' });
     return out;

@@ -520,7 +520,8 @@
     if (s.fleet && s.fleet.mat == null) s.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;   // 자재가 생기기 전 저장 파일
     // 불러오는 그림을 띄운 채 바다·탐험·도시를 미리 준비하고 들어간다 (js/ui/loader.js · main.js Game.launch)
     return G.Game.launch('항해 일지를 펼치는 중…', function () {
-      if (s.loc.mode === 'sea') G.Game.go('sea', { resume: true });
+      if (s.battle) G.Game.go('battle', { battle: s.battle });
+      else if (s.loc.mode === 'sea') G.Game.go('sea', { resume: true });
       else if (s.loc.mode === 'land' && G.Scenes.land) G.Game.go('land', { resume: true });
       else G.Game.go('city', { cityId: s.loc.city, load: true });
     });

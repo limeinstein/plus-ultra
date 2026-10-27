@@ -222,8 +222,10 @@
     return out[Math.abs(U.strHash('paired-mate:' + (d.id || d.name || own))) % out.length];
   };
   A.mateSpec = function (id) {
-    if (mateSpecCache[id]) return mateSpecCache[id];
     var d = G.MATE[id]; if (!d) return null;
+    // 불러온 게임에서는 같은 철새 ID라도 정의와 얼굴이 달라질 수 있다.
+    if (mateSpecCache[id] && !d.wd) return mateSpecCache[id];
+    if (d.wd && G.Wander && G.Wander.fixPortrait) G.Wander.fixPortrait(d);
     var sk = d.sk || {}, role = 'sailor';
     if (d.role) role = d.role;
     else if (sk.theo >= 2) role = 'priest';

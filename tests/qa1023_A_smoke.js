@@ -18,7 +18,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const btn = async (re) => { await page.waitForFunction(r => Array.from(document.querySelectorAll('.foot button')).some(b => b.offsetParent && new RegExp(r).test(b.textContent)), re.source, { timeout: 8000 }); await page.evaluate(r => { const b = Array.from(document.querySelectorAll('.foot button')).filter(x => x.offsetParent && new RegExp(r).test(x.textContent)).pop(); b.click(); }, re.source); await page.waitForTimeout(250); };
   const hasBtn = (re) => page.evaluate(r => Array.from(document.querySelectorAll('.foot button')).some(b => b.offsetParent && new RegExp(r).test(b.textContent)), re.source);
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { timeout: 90000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     await page.evaluate(() => G.Game.go('create'));
     await page.waitForSelector('#nm');

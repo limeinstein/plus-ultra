@@ -4,7 +4,8 @@
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let pw; try { pw = require('playwright'); } catch (e) { pw = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = pw;
 const ROOT = path.resolve(__dirname, '..');
 const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'lifespan_shots');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
@@ -85,7 +86,26 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => { const s = G.Game.state; s.player.born = { y: 1480 - 80, m: 6, d: 10 }; s.date = { y: 1480, m: 6, d: 9 }; });
     const a79 = await page.evaluate(() => G.R.age());
     const warn = await page.evaluate(() => { const s = G.Game.state; s.date = { y: 1479, m: 6, d: 9 }; const m = G.Game.passDays(1); s.date = { y: 1480, m: 6, d: 9 }; return m.filter(x => x.lifeWarn).length; });
-    await page.evaluate(() => G.Game.passDays(1));
+    const longStay = await page.evaluate(async () => {
+      const s = G.Game.state, c = G.CITY_DATA[0], d0 = s.day, gold0 = s.player.gold;
+      s.contract = { due: 14800611 };
+      const number = G.UI.number, fade = G.UI.fade, say = G.UI.say, news = G.Scenes.city.news;
+      let recovered = false;
+      G.UI.number = async () => 60;
+      G.UI.fade = async fn => fn();
+      G.UI.say = async () => { recovered = true; };
+      G.Scenes.city.news = async () => {};
+      try {
+        await G.Scenes.city.B.inn.stay(c);
+        const extra = G.Game.passDays(60);
+        return { date: s.date, days: s.day - d0, gold: s.player.gold, expectedGold: gold0 - 60 * G.R.innCost(c),
+          warned: !!s.contract.warned, end: s.life.end, extra: extra.length, recovered };
+      } finally { G.UI.number = number; G.UI.fade = fade; G.UI.say = say; G.Scenes.city.news = news; }
+    });
+    ok(longStay.days === 1 && longStay.date.y === 1480 && longStay.date.m === 6 && longStay.date.d === 10 && longStay.end === 80,
+      '80세 생일 전날 60박: 하루만 지나고 수명이 다한 날에 멈춘다');
+    ok(longStay.gold === longStay.expectedGold && !longStay.warned, '선불 숙박비만 차감되고 사망일 이후 급료·계약 기한 처리는 없다');
+    ok(longStay.extra === 0 && !longStay.recovered, '후계 처리 전 다시 날짜를 넘겨도 멈추며 숙박 회복 대화는 나오지 않는다');
     await page.waitForSelector('.win .title', { timeout: 10000 });
     await page.waitForFunction(() => [...document.querySelectorAll('.win .title')].some(e => /세월/.test(e.textContent)), null, { timeout: 10000 });
     await page.waitForTimeout(500);
@@ -104,7 +124,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => {
       const s = G.Game.state; s.player.born = { y: 1400, m: 6, d: 10 }; s.date = { y: 1480, m: 6, d: 9 };
       s.player.kids = [{ name: '주앙', sex: 'm', born: { y: 1455, m: 3, d: 3 }, sk: {}, lg: {}, st: { str: 60, int: 60, mar: 60, cha: 60 }, edu: {} }];
-      G.Game.passDays(1);
+      G.Game.passDays(60);
+      if (s.date.m !== 6 || s.date.d !== 10) throw new Error('후계가 있어도 수명이 다한 날에 멈춰야 한다');
     });
     let heirName = null;
     for (let i = 0; i < 8; i++) {
@@ -115,6 +136,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     }
     const heir = await page.evaluate(() => ({ name: G.Game.state.player.name, age: G.R.age(), end: G.Game.state.life && G.Game.state.life.end }));
     ok(/주앙/.test(heir.name) && heir.age < 80 && !heir.end, '아들이 뒤를 이었다: ' + heir.name + ' (' + heir.age + '세)');
+    ok(await page.evaluate(() => { const s = G.Game.state, d0 = s.day; G.Game.passDays(2); return s.day === d0 + 2; }), '후계 처리를 마치면 날짜가 다시 정상적으로 흐른다');
     await page.evaluate(() => { document.querySelectorAll('.modal-back').forEach(e => e.remove()); });
 
     // ④ 옛 저장: 이미 85세 — 다음 날 세상을 떠난다

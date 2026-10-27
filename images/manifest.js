@@ -5673,6 +5673,7 @@ G.IMAGE_FILES = {
   "map-discoveries/ruins-7": "map-discoveries/ruins-7.png",
   "map-discoveries/ruins-8": "map-discoveries/ruins-8.png",
   "map-discoveries/ruins-9": "map-discoveries/ruins-9.png",
+  "map-discoveries/sanchi": "map-discoveries/sanchi.png",
   "masterworks/botticelli_paint0": "masterworks/botticelli_paint0.webp",
   "masterworks/botticelli_paint1": "masterworks/botticelli_paint1.webp",
   "masterworks/botticelli_paint2": "masterworks/botticelli_paint2.webp",

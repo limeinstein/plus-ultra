@@ -45,6 +45,9 @@
     ['map-discoveries/mirage-ruins-2', ['gatewayindia', 'mysorepalace', 'bochinatower', 'baikalrail', 'medeu', 'novosibopera', 'petronas', 'raffles', 'longbien', 'sansebastian', 'tomioka', 'goryokaku', 'akashibridge', 'disneyworld', 'wtc', 'nasajsc']]
   );
   SHEETS.forEach(function (s) { s[1].forEach(function (id, i) { POS[id] = { key: s[0], slot: i }; }); });
+  // 기존 4×4 판의 산치 칸 윗부분에는 위 칸(제우스상)의 받침대가 걸쳐 있다.
+  // 경계가 겹치지 않는 전용 투명 그림을 쓴다.
+  POS.sanchi = { key: 'map-discoveries/sanchi', slot: 0, cols: 1, rows: 1 };
 
   DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && POS[d.id]); };
   DI.visible = function () {
@@ -85,7 +88,8 @@
     var im = G.Img.get(p.key);
     if (!im) { request(p.key); return met; }
     var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
-    var col = p.slot % COLS, row = Math.floor(p.slot / COLS), sw = iw / COLS, sh = ih / ROWS;
+    var cols = p.cols || COLS, rows = p.rows || ROWS;
+    var col = p.slot % cols, row = Math.floor(p.slot / cols), sw = iw / cols, sh = ih / rows;
     var dw = BASE * scale, dh = dw * sh / sw;
     met = { width: dw, height: dh, radius: Math.max(12, Math.max(dw, dh) * 0.46), top: -dh / 2, base: dh / 2 };
     ctx.save();

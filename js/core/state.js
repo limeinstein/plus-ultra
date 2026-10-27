@@ -222,6 +222,17 @@
   ST.serialize = function () {
     var S = G.Game.state;
     var copy = {}; for (var k in S) if (k !== 'chartBits' && k !== 'chartDirty') copy[k] = S[k];
+    var battle = G.Scenes && G.Scenes.battle, snap = battle && battle.snapshot && battle.snapshot();
+    if (snap) {
+      copy.battle = snap;
+      // 전투가 끝나기 전에도 일지의 함대에는 현재 피해를 적는다. 실제 함대 정산은 해전 종료 때 한 번만 한다.
+      copy.fleet = Object.assign({}, S.fleet);
+      copy.fleet.ships = S.fleet.ships.map(function (sh, i) {
+        var b = snap.ships.filter(function (b) { return b.fleetIndex === i; })[0];
+        return b ? Object.assign({}, sh, { hp: Math.max(0, b.hp) }) : sh;
+      });
+      copy.fleet.crew = (snap.spare || 0) + U.sum(snap.ships.filter(function (b) { return b.side === 'me' && !b.escort && !b.ally && !b.sunk && !b.lostBoard; }), function (b) { return b.crew; });
+    }
     if (G.shipBuffKeys) copy.shipBuffs = G.shipBuffKeys();   // 메모리의 게임은 늘 지금 성능 — 불러올 때 다시 올리지 않게
     copy.chart = b64(S.chartBits);
     return safeStringify(copy);
@@ -351,6 +362,7 @@
 
   /** 저장: 결과 {ok, where:'browser'|'backup'|null, msg} — 브라우저 저장소가 막혀도 IndexedDB에 남으면 ok */
   ST.saveAsync = function (slot) {
+    if (battleSaveBlocked()) return Promise.resolve({ ok: false, where: null, msg: '백병전이나 해전 결과를 처리하는 중에는 잠시 저장할 수 없습니다.' });
     if (slot === 0) slot = nextAutoSlot();
     lastSaveSlot = slot;
     persist();
@@ -373,6 +385,7 @@
   };
   /** 예전처럼 바로 돌려받는 저장 (자동 저장) — 브라우저 저장소에 넣었으면 true. 보조 저장소 기록은 뒤에서 이어진다 */
   ST.save = function (slot) {
+    if (battleSaveBlocked()) return false;
     var p = ST.saveAsync(slot), actual = lastSaveSlot;
     p.then(function (r) { if (!r.ok && G.UI && G.UI.toast) G.UI.toast('자동 저장 실패 — ' + r.msg, 'book', 6000); });
     return !!lsGet(KEY + actual + '_meta') || !!mem[actual];
@@ -413,18 +426,24 @@
   ST.autoSaveNow = function () {
     var game = G.Game, S = game && game.state, scene = game && game.sceneName;
     if (!S || !S.player || scene === 'title' || scene === 'create' || (S.settings && S.settings.autosave === false)) return false;
+    if (battleSaveBlocked()) return false;
     ST.save(0);
     return true;
   };
   /** 지금 사건·대화 한가운데인가 — 창이 떠 있거나(G.UI.busy) 도시 건물 일을 치르는 중(G.Scenes.city.isBusy) */
   ST.midEvent = function () {
     try {
+      if (battleSaveBlocked()) return true;
       if (G.UI && G.UI.busy && G.UI.busy()) return true;
       var C = G.Scenes && G.Scenes.city;
       if (G.Game && G.Game.sceneName === 'city' && C && C.isBusy && C.isBusy()) return true;
     } catch (e) { /* 모르면 저장한다 */ }
     return false;
   };
+  function battleSaveBlocked() {
+    var B = G.Scenes && G.Scenes.battle;
+    return !!(B && B.saveBlocked && B.saveBlocked());
+  }
   // 사건 한가운데서도 1분마다 저장해, 불러오면 사건 앞뒤가 어긋나던 것 — 그때는 건너뛰고 틈이 나면 곧 저장한다 (QA 2026-10-23)
   var autoWait = null;
   function autoTick() {
@@ -442,7 +461,10 @@
     return download(raw.indexOf(PACK) === 0 ? raw : packed(raw), meta, slot);
   };
   /** 지금 진행을 곧바로 파일로 (브라우저 저장소가 모두 막혔을 때) */
-  ST.exportNow = function () { try { return download(packed(ST.serialize()), metaNow(), null); } catch (e) { console.error(e); return false; } };
+  ST.exportNow = function () {
+    if (battleSaveBlocked()) { if (G.UI && G.UI.toast) G.UI.toast('백병전이나 해전 결과 처리가 끝난 뒤 저장하십시오.', 'book'); return false; }
+    try { return download(packed(ST.serialize()), metaNow(), null); } catch (e) { console.error(e); return false; }
+  };
   function download(data, meta, slot) {
     var body = JSON.stringify({ format: 'plusultra-save', v: 1, slot: slot, meta: meta, data: data });
     var d = new Date(meta.t || Date.now()), pad = function (n) { return (n < 10 ? '0' : '') + n; };
