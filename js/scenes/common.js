@@ -360,6 +360,9 @@
     if (cook.lv && !said.cook && !dvl.length) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
     if (music.lv && !said.music && !dvl.length) await UI.say(lineFor('music', music.lv, d), music.speaker);
     if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv && !dvl.length) { var ns = RT ? RT.noSkill(d) : null; if (ns) await UI.say(ns, lead); }
+    // 배에 함께 탄 아내·자식도 저마다 5% 확률로 한마디 — 아내는 사랑 이야기, 아이는 나이에 맞게 (js/systems/famvoice.js · js/data/discfam_1~8.js)
+    var fam = G.FamVoice ? G.FamVoice.reveal(d) : [];
+    for (var fvi = 0; fvi < fam.length; fvi++) await UI.say(fam[fvi].text, fam[fvi].speaker);
     if (rec.k > 1.0001) {
       var extra = Math.round(fame - fame / rec.k);
       var recW = art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록';
