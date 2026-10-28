@@ -104,11 +104,11 @@ def main():
                 continue
             if prefix and old_key.startswith(prefix + '/'):
                 continue
-            if old_key in exact_keys:
+            if old_key in exact_keys and old_key in generated:
                 old.append(generated[old_key])
                 replaced.add(old_key)
                 continue
-            old.append(entry)
+            old.append(line.rstrip().rstrip(','))
         if prefix:
             old.extend(fresh)
         else:

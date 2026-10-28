@@ -37,6 +37,7 @@ def materialize():
     report = []
     for asset in specs:
         ident = asset['id']
+        portrait_dir = asset.get('portrait_dir','portraits/history')
         result_key=asset['type']+':'+ident if asset['type']+':'+ident in results else ident
         if result_key not in results:
             continue
@@ -46,15 +47,16 @@ def materialize():
         saved = OUT/'sources'/asset['type']/f'{ident}.png'
         saved.parent.mkdir(parents=True,exist_ok=True)
         origin = Path(results[result_key]['source'])
-        if not saved.exists() or saved.stat().st_size != origin.stat().st_size:
+        if not saved.exists() or saved.stat().st_size != origin.stat().st_size or saved.stat().st_mtime < origin.stat().st_mtime:
             shutil.copy2(origin,saved)
-        target=ROOT/'images'/('portraits/history/'+ident+'_half.webp' if asset['type']=='portrait' else 'legend-events/'+ident+'.webp')
+        target=ROOT/'images'/(portrait_dir+'/'+ident+'_half.webp' if asset['type']=='portrait' else 'legend-events/'+ident+'.webp')
         row=cached.get((asset['type'],ident))
-        valid=bool(row and target.exists() and target.stat().st_mtime>=origin.stat().st_mtime)
+        valid=bool(row and target.exists() and target.stat().st_mtime>=origin.stat().st_mtime
+          and row.get('crop')==asset.get('crop') and row.get('face_crop')==asset.get('face_crop'))
         if valid:
             paths=[target]
             if asset['type']=='portrait':
-                paths.append(ROOT/'images/portraits/history'/f'{ident}.webp')
+                paths.append(ROOT/'images'/portrait_dir/f'{ident}.webp')
             try:
                 for picture in paths:
                     with Image.open(picture) as im:
@@ -69,15 +71,28 @@ def materialize():
         if asset['type']=='portrait':
             alpha = im.getchannel('A')
             assert alpha.getextrema()[0]==0, (ident,'투명 배경 없음')
+            # 전신 원화를 받은 경우 명세에 검수한 무릎단 영역을 적어 둔다. 종횡비는 유지한다.
+            if asset.get('crop'):
+                x0,y0,x1,y1=asset['crop']
+                im=im.crop((round(x0*im.width),round(y0*im.height),round(x1*im.width),round(y1*im.height)))
             half = ImageOps.contain(im,(1008,1520),Image.Resampling.LANCZOS)
             canvas = Image.new('RGBA',(1024,1536))
             canvas.alpha_composite(half,((1024-half.width)//2,8))
-            face = face_square(canvas).resize((448,448),Image.Resampling.LANCZOS)
-            path = ROOT/'images/portraits/history'/ident
+            if asset.get('face_crop'):
+                # 사람 얼굴 검출기가 읽지 못하는 동물 화자의 수동 검수 영역.
+                x0,y0,x1,y1=asset['face_crop']
+                face=canvas.crop((round(x0*1024),round(y0*1536),round(x1*1024),round(y1*1536)))
+                face=ImageOps.fit(face,(448,448),Image.Resampling.LANCZOS)
+            else:
+                face = face_square(canvas).resize((448,448),Image.Resampling.LANCZOS)
+            path = ROOT/'images'/portrait_dir/ident
+            path.parent.mkdir(parents=True,exist_ok=True)
             save_asset(canvas,str(path)+'_half.webp',quality=94,method=6,exact=True)
             save_asset(face,str(path)+'.webp',quality=94,method=6,exact=True)
             report.append({'id':ident,'type':'portrait','size':[1024,1536],'face_size':[448,448],
-                'detected_face':detect_face(canvas),'alpha_range':alpha.getextrema()})
+                'detected_face':detect_face(canvas),'alpha_range':alpha.getextrema(),
+                **({'crop':asset['crop']} if asset.get('crop') else {}),
+                **({'face_crop':asset['face_crop']} if asset.get('face_crop') else {})})
         else:
             picture = ImageOps.fit(im,(1881,836),Image.Resampling.LANCZOS,centering=(.5,.5))
             path = ROOT/'images/legend-events'/f'{ident}.webp'
@@ -89,7 +104,7 @@ def materialize():
 
 def preview():
     specs=json.loads(SPECS.read_text(encoding='utf-8'))['assets']
-    font=ImageFont.truetype('C:/Windows/Fonts/malgun.ttf',18)
+    font=ImageFont.truetype('C:/Windows/Fonts/malgun.ttf',16)
     for kind in ('face','portrait','scene'):
         source_kind='portrait' if kind=='face' else kind
         assets=[a for a in specs if a['type']==source_kind and (OUT/'sources'/source_kind/f'{a["id"]}.png').exists()]
@@ -101,12 +116,18 @@ def preview():
         draw=ImageDraw.Draw(sheet)
         for i,a in enumerate(assets):
             x,y=i%cols*cw,i//cols*ch
-            key='portraits/history/'+a['id']+('.webp' if kind=='face' else '_half.webp') if source_kind=='portrait' else 'legend-events/'+a['id']+'.webp'
+            key=a.get('portrait_dir','portraits/history')+'/'+a['id']+('.webp' if kind=='face' else '_half.webp') if source_kind=='portrait' else 'legend-events/'+a['id']+'.webp'
             p=ROOT/'images'/key
             with Image.open(p) as im:
                 display=ImageOps.contain(im.convert('RGBA'),(cw-12,ch-40),Image.Resampling.LANCZOS)
             sheet.paste(display,(x+(cw-display.width)//2,y+4),display)
-            draw.text((x+6,y+ch-30),a['name'],font=font,fill='#f5dfae')
+            lines=['']
+            for char in a['name']:
+                if draw.textbbox((0,0),lines[-1]+char,font=font)[2]>cw-12:
+                    lines.append('')
+                lines[-1]+=char
+            for j,line in enumerate(lines[:2]):
+                draw.text((x+6,y+ch-38+j*18),line,font=font,fill='#f5dfae')
         sheet.save(OUT/f'{kind}-preview.jpg',quality=92)
 
 

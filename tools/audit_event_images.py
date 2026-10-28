@@ -23,7 +23,12 @@ def audit() -> dict:
         text = re.sub(r'/\*.*?\*/|//[^\n]*', '', text, flags=re.S)
         for key in re.findall(r"['\"](" + PREFIXES + r"/[a-z0-9_]*[a-z0-9])['\"](?!\s*\+)", text):
             add(key, source)
-        if "img: 'legend-events/' + key" in text:
+        # 역사 장면 도우미와 큰 해전 자료의 짧은 이름도 실제 경로로 펼친다.
+        for key in re.findall(r"\bwithScene\(\s*'([a-z0-9_]+)'", text):
+            add('legend-events/' + key, source)
+        for key in re.findall(r"\b(?:councilPic|foePic)\s*:\s*'([a-z0-9_]+)'", text):
+            add('legend-events/' + key, source)
+        if re.search(r"img:\s*'legend-events/'\s*\+\s*(?:key|img)\b", text):
             for key in re.findall(r"\b(?:pic|withPic)\('([a-z0-9_]+)'", text):
                 add('legend-events/' + key, source)
         if "img: 'legend-events/little_prince_' + key" in text:

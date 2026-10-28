@@ -8,7 +8,7 @@ const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 global.window = { G: {} };
-for (const file of ['wonders.js', 'discadd.js', 'dh3disc.js', 'seasiadisc.js', 'northasiadisc.js', 'arabiadisc.js', 'zoodisc.js']) {
+for (const file of ['wonders.js', 'discadd.js', 'heritagedisc.js', 'seasiadisc.js', 'northasiadisc.js', 'arabiadisc.js', 'zoodisc.js']) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, 'js', 'data', file), 'utf8'), { filename: file });
 }
 

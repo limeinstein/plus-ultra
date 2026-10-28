@@ -68,7 +68,7 @@ Codex 내장 이미지 생성 도구에 아래 공통 지시와 보물별 주제
 
 ## 2026-10-02 두 번째로 더한 보물 53종 (원화 아직 없음)
 
-이름·설명은 `js/data/discoveries.js`(「도자기·보석·세계 국보·르네상스와 대항해시대 예술품」 묶음)에 있다.
+이름·설명은 `js/data/discoveries.js`(「도자기·보석·세계 국보·르네상스와 대항해 시대 예술품」 묶음)에 있다.
 물건(도자기·보석·조각)은 위 공통 프롬프트 그대로 회전 전시, **그림·벽화·책·병풍**은 회전 대신 어두운 전시실 벽에
 걸린 작품을 스포트라이트가 천천히 훑는 4×2 시점(정면·좌우 비스듬히·가까이)으로 만들면 된다 — 옛 명화는 퍼블릭 도메인이라 실제 작품을 보여 줘도 되지만
 게임 화풍에 맞게 다시 그린 것이 어울린다.
@@ -76,7 +76,7 @@ Codex 내장 이미지 생성 도구에 아래 공통 지시와 보물별 주제
 - 도자기: goryeoceladon, tangsancai, qinghua, ruware, moonjar, iznikware, lustreware, aritaware, rakubowl, tsukumonasu
 - 보석·왕관: blackprince, ironcrown, wenceslas, paladoro, timurruby, peacockthrone, mogokruby, lankasapphire, muzoemerald, peregrina
 - 세계 국보: nefertiti, hammurabi, venusmilo, nike, laocoon, ajanta(벽화), qingming(두루마리), lanting(글씨), tripitaka(경판), hunmin(책), benin, moctezuma, sunstone, incadisc, mayacodex(책)
-- 르네상스·대항해시대(그림): monalisa, creation, lastsupper, birthvenus, ghentaltar, durer, earthlydelights, urbinovenus, babeltower, orgaz, ambassadors, nanbanscreen, baburnama, shahnameh, pirireis / (조각·공예) david, saliera, belemmonstrance
+- 르네상스·대항해 시대(그림): monalisa, creation, lastsupper, birthvenus, ghentaltar, durer, earthlydelights, urbinovenus, babeltower, orgaz, ambassadors, nanbanscreen, baburnama, shahnameh, pirireis / (조각·공예) david, saliera, belemmonstrance
 
 ## 2026-10-04 — 그림이 없던 62종을 절차적 3D로 채움
 
