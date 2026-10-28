@@ -177,6 +177,7 @@
   }
 
   function load() {
+    if (refresh.disabled) return;
     refresh.disabled = true;
     status.textContent = '게시판을 불러오는 중입니다…';
     var github = request(API + '/issues?state=all&labels=beta-feedback&sort=updated&direction=desc&per_page=50', {
@@ -238,5 +239,12 @@
     });
   });
   refresh.addEventListener('click', load);
+  // GitHub에서 답변·완료 처리하고 돌아오면 바뀐 상태를 보관함에 바로 반영합니다.
+  window.addEventListener('focus', function () {
+    if (!document.hidden) load();
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) load();
+  });
   load();
 })();
