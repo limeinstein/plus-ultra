@@ -776,7 +776,15 @@
     if (picWait) return picWait.then(function () { return UI.say(text, opts); });
     opts = withFace(opts || {});
     var pages = Array.isArray(text) ? text.slice() : String(text).split('\f');
-    if (!opts.raw) { var allNotes = []; pages = pages.map(function (pg) { var r = UI.tidySpeech(pg); allNotes = allNotes.concat(r.notes); return r.text; }); noteToast(allNotes); }
+    if (!opts.raw) {
+      var allNotes = [], orig = pages;
+      pages = pages.map(function (pg) { var r = UI.tidySpeech(pg); allNotes = allNotes.concat(r.notes); return r.text; });
+      // 괄호 안내만 있던 쪽(「\f(남은 날: 12일)」)은 안내를 알림으로 돌리고 나면 빈 쪽이 된다 — 빈 대사창이 뜨지 않게 건너뛴다.
+      // 모든 쪽이 비면 원래 글을 그대로 보인다 (QA 2026-10-26: 여관 허드렛일을 마치면 빈 대사창이 떴다)
+      var kept = pages.filter(function (pg) { return /\S/.test(String(pg).replace(/<[^>]*>/g, '')); });
+      if (kept.length) { pages = kept; noteToast(allNotes); }
+      else if (orig.some(function (pg) { return /\S/.test(String(pg)); })) pages = orig.filter(function (pg) { return /\S/.test(String(pg)); });
+    }
     return new Promise(function (resolve) {
       var back = U.el('div', 'modal-back clear catch');
       var shell = dialogShell(back, opts, false), box = shell.box;
