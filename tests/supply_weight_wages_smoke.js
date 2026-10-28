@@ -80,6 +80,17 @@ const { chromium } = playwright;
     await open(() => { resetSupplyTest(); G.Game.state.fleet.mat = 90.2; startSupplyTest(); });
     await set('mat', 5); s = await pay(); safe(s, '기존 초과 적재도 보급품을 내려 해소할 수 있다'); assert(s.result.got > 0);
 
+    // 교역품 때문에 이미 무게가 넘칠 때: 보급품을 조금만 내려도(아직 넘쳐도) 내릴 수 있다 · 늘리는 것은 막는다 (2026-10-28 QA)
+    await open(() => { resetSupplyTest(); const f = G.Game.state.fleet; f.mat = 10; f.cargo = { iron: { q: 32, cost: 10 } }; startSupplyTest(); });
+    const heavy = await page.evaluate(() => supplySnapshot());
+    await set('mat', 9); s = await pay();
+    assert(heavy.weight > heavy.weightCap && s.mat === 9 && !s.messages.some(t => /무게 한도/.test(t)), '넘친 상태에서 일부만 내리기: ' + JSON.stringify([heavy.weight, heavy.weightCap, s.mat, s.messages]));
+    console.log('✓ 교역품으로 이미 무게가 넘쳐도 보급품을 일부 내릴 수 있다');
+    await open(() => { resetSupplyTest(); const f = G.Game.state.fleet; f.mat = 9; f.cargo = { iron: { q: 32, cost: 10 } }; startSupplyTest(); });
+    await set('mat', 12); s = await pay();
+    assert(s.mat === 9, '넘친 상태에서 늘리기는 막는다(입력 상한 또는 결제 직전 검사): ' + JSON.stringify([s.mat, s.messages]));
+    console.log('✓ 무게가 넘친 상태에서 보급품을 늘리는 것은 막는다');
+
     const prep = await page.evaluate(async () => {
       resetSupplyTest(); const f = G.Game.state.fleet;
       f.ships[0].cap = 200; f.crew = 1; f.food = 60.1; f.water = 0.1; f.mat = 1;

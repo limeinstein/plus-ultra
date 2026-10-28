@@ -128,7 +128,7 @@
       if (api.effect && (b.monsterPhase === 'dive' || b.monsterPhase === 'emerge')) api.effect(b.monsterPhase);
       if (b.monsterPhase === 'dive') {
         st.ships.forEach(function (o) { if (o.target === b) { o.target = null; o.boardIntent = false; } });
-        api.log(b.name + '이 물속으로 숨는다! 떠오를 때까지 공격할 수 없다.');
+        api.log(b.name + U.jx(b.name, '이/가') + ' 물속으로 숨는다! 떠오를 때까지 공격할 수 없다.');
       }
     }
     b.crew = b.crew0; b.attackAnim = (b.attackAnim || 0) + dt; b.attackTime = Math.max(0, (b.attackTime || 0) - dt);
@@ -145,7 +145,7 @@
       b.chargeTime -= dt;
       if (b.chargeStage === 'wait' && b.attackCd <= 0) {
         b.chargeStage = 'windup'; b.chargeTime = cfg.chargeWindup; b.chargeHeading = angle; b.chargeHits = []; b.chargeTarget = target;
-        api.log(b.name + '이 몸을 낮춘다! 돌진 방향을 피해라!');
+        api.log(b.name + U.jx(b.name, '이/가') + ' 몸을 낮춘다! 돌진 방향을 피해라!');
       }
       if (b.chargeStage === 'windup') {
         // 준비하는 동안에는 같은 배의 현재 자리를 겨눈다. 출발한 뒤에는 그 방향으로 곧게 달린다.
@@ -183,7 +183,7 @@
       var index = st.ships.indexOf(o);
       if (b.chargeHits.indexOf(index) >= 0 || distanceSegment(o.x, o.y, ox, oy, b.x, b.y) >= cfg.ramRadius + o.len * cfg.hitRadiusK) return;
       b.chargeHits.push(index); var dmg = b.maxHp / cfg.hpK * cfg.ramHpK * api.armor(o);
-      o.hp -= dmg; api.hit(o, dmg, b); api.log(b.name + '이 ' + o.name + '호를 들이받았다!');
+      o.hp -= dmg; api.hit(o, dmg, b); api.log(b.name + U.jx(b.name, '이/가') + ' ' + o.name + '호를 들이받았다!');
       if (o.hp <= 0) api.hullBreak(o);
     });
   };

@@ -361,7 +361,7 @@
     el.innerHTML = ids.map(function (id) {
       var d = G.DISC[id], h = s.hints[id];
       var st = s.disc[id];
-      return '<div class="hint-item"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (G.CLUE ? '<span class="tag">' + G.CLUE_NAME[G.Disc.clue(d)] + '</span>' : '') + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + (G.Disc.hintLv(id) > 1 ? '<span class="tag good-text">단서 ' + G.Disc.hintLv(id) + '겹</span>' : '') + '<span class="right muted" style="font-size:14px">' + G.Disc.hintSrcs(id).map(srcName).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>';
+      return '<div class="hint-item"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (G.CLUE ? '<span class="tag">' + G.CLUE_NAME[G.Disc.clue(d)] + '</span>' : '') + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + (G.Disc.hintLv(id) > 1 ? '<span class="tag good-text">단서 ' + G.Disc.hintLv(id) + '겹</span>' : '') + '<span class="right muted" style="font-size:14px">' + G.Disc.hintSrcs(id).map(srcName).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') + '</span></div><div class="tx">' + U.esc(d.hint) + (G.SeaMonsters && G.SeaMonsters.is(id) ? '<br><span class="muted">해상 괴물은 옛이야기 속 바다에 머물지 않는다. 지금 출몰한 해역은 항구의 「해상 괴물 소식」으로 확인해야 한다.</span>' : '') + '</div></div>';
     }).join('');
   };
   function srcName(src) {
@@ -374,7 +374,7 @@
     if (p[0] === 'chain' && G.DISC[p[1]]) return '「' + G.DISC[p[1]].name + '」에서 이어진 실마리';
     if (p[0] === 'relic' && G.RELIC && G.RELIC[p[1]]) return '「' + G.RELIC[p[1]].name + '」에 적힌 이야기';
     var SRC = { sponsor: '후원자의 이야기', contract: '후원자 계약', rival: '경쟁자에게서', lookout: '망루·정찰대', bottle: '병 속 편지', hail: '지나가던 배',
-      native: '원주민', nomad: '유목민', local: '고장 사람의 이야기', town: '거리의 마을 사람', lead: '큰 항로 이야기', story: '아버지의 자취', legacy: '선대의 연구 노트', witch: '점쟁이', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
+      native: '원주민', nomad: '유목민', local: '고장 사람의 이야기', town: '거리의 마을 사람', lead: '큰 항로 이야기', story: '아버지의 자취', legacy: '선대의 연구 노트', witch: '점쟁이', monster: '항구의 괴물 목격 소식', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
     return SRC[p[0]] || '';
   }
 

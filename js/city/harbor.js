@@ -490,7 +490,7 @@
     var buy = buyCost(want), got = back(want), pay = buy - got;
     if (!buy && !got && want.food === cur.food && want.water === cur.water && want.mat === cur.mat) return;
     if (pay > s.player.gold) { await C.mate('소지금이 모자랍니다.'); return; }
-    if (free(want) < -1e-9) { await C.mate('짐칸이나 무게 한도를 넘습니다. 보급량을 줄이십시오.'); return; }
+    if (free(want) < -1e-9 && ['food', 'water', 'mat'].some(function (k) { return amt(want, k) > have[k] + 1e-6; })) { await C.mate('짐칸이나 무게 한도를 넘습니다. 보급량을 줄이십시오.'); return; }
     var down = ['food', 'water', 'mat'].filter(function (k) { return amt(want, k) < have[k] - 1e-6; });
     s.player.gold -= pay;
     ['food', 'water', 'mat'].forEach(function (k) { R.notePaid(c, k, have[k], amt(want, k), price[k]); });   // 늘린 만큼 평균 산 값을 적는다

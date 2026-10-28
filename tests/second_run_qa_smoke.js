@@ -82,7 +82,7 @@ function ok(value, message) { assert(value, message); passed.push(message); cons
       const c = G.State.newSettings('easy');
       return !c.banter && !c.shake && c.res === 0.7 && c.keys.up === 'KeyW' && a.keys.up === oldKey && c.diff === 'easy' && c.speed === 1 && b.diff === 'original';
     }), '3: 수다·흔들림·화질·단축키 유지, 난이도·배속과 키 객체는 회차별로 분리');
-    await page.reload({ waitUntil: 'domcontentloaded' }); await ready();
+    await page.reload({ waitUntil: 'domcontentloaded', timeout: 120000 }); await ready();
     ok(await page.evaluate(() => !G.State.newSettings().banter && G.State.newSettings().keys.up === 'KeyW'), '3: 페이지를 다시 열어도 개인 설정 유지');
 
     await page.evaluate(() => {

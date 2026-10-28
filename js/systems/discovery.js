@@ -130,7 +130,7 @@
   };
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d) * D.mirageK(d)); };
-  D.fameFor = function (d) { return Math.round(D.value(d) / 26 + d.pw * 30 * D.mirageK(d)); };
+  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round(D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)); };   // 숨은 능력의 「발견 명성 +N%」가 pw 몫에도 같이 붙게
   /** 현장 기록 보너스 — 유적은 그림(정밀한 도판)·세공(짜임·재료 기록)에 밝은 사람이 있으면 명성이 더 오른다.
       값어치(D.value)와 따로, 명성에만 곱한다. 발견 순간·후원자 보고·늦은 보고에 모두 쓴다. d 없이 부르면 1(옛 호출과 호환). */
   D.RECORD_K = { art: 0.05, craft: 0.04 };

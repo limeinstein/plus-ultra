@@ -89,7 +89,7 @@ function ok(value, message) { assert(value, message); passed++; console.log('  �
     ok(await page.evaluate(() => !G.Game.state.tut.f.prep_depart && [...document.querySelectorAll('.cmd.tut-glow')].some(el => el.textContent.includes('출항 준비'))), '출항 준비 취소 후에는 준비 완료로 세지 않고 준비 버튼 강조');
     // 보급 확정 후 「아직」은 출항만 미루며 준비는 완료다.
     await page.locator('.cmd').filter({hasText:'출항 준비'}).click();
-    await page.getByRole('button', {name:'결정',exact:true}).click();
+    await page.locator('.modal-back .win .btn').filter({hasText:'결정'}).click();
     await page.evaluate(async () => { await Q.until(() => Q.idle() && G.Game.state.tut.f.prep_depart, ['아직']); });
     ok(await page.evaluate(() => !!G.Game.state.tut.f.prep_depart), '보급을 확정하면 출항을 미뤄도 준비 완료');
 

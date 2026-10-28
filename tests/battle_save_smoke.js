@@ -127,6 +127,15 @@ function ok(value, text) { if (!value) throw new Error(text); console.log('  ✓
     });
     ok(settlement, '자동 저장에서 재개한 뒤 추가 피해와 침몰선 제거를 한 번만 정산한다');
 
+    const tutorial = await page.evaluate(() => {
+      // 튜토리얼 연습 해전은 지면 시작 전으로 되돌린다(tutorial.js의 메모리 사본) — 일지에는 해전 앞(바다)으로 남긴다 (2026-10-28 QA)
+      G.Game.go('battle', { npc: { kind: 'pirate', n: 1, K: 0, tut: true } });
+      const snap = G.Scenes.battle.snapshot(), back = G.State.deserialize(G.State.serialize());
+      G.Game.go('sea', { resume: true });
+      return snap === null && !back.battle;
+    });
+    ok(tutorial, '튜토리얼 연습 해전은 해전 상태를 일지에 넣지 않는다');
+
     const special = await page.evaluate(async () => {
       const s = G.Game.state, originalHp = s.fleet.ships[0].hp;
       s.fleet.crew = 300;

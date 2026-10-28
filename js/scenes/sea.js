@@ -826,7 +826,7 @@
   SEA.meet = function (n) { if (!st || !st.alive || st.busy || UI.busy() || !n) return false; encounter(n, false); return true; };
   async function encounterMonster(monster) {
     if (!st || !st.alive || st.busy || UI.busy() || !monster || !monster.active) return false;
-    var here = st, s = S(); here.busy++; here.paused = true; refreshBar();
+    var here = st, s = S(), wasSailing = !st.paused || st.wasSailing; st.wasSailing = false; here.busy++; here.paused = true; refreshBar();
     try {
       await G.SeaMonsters.discover(monster);
       if (st !== here || G.Game.state !== s || G.Game.scene !== SEA) return false;
@@ -835,7 +835,7 @@
         [{ label: '싸운다', value: 'fight' }, { label: '조심해서 물러난다', value: 'leave' }], G.Scenes.mateSpeaker('first'));
       G.SeaMonsters.avoid(monster);
       if (v === 'fight') await UI.fade(function () { G.Game.go('battle', { npc: G.SeaMonsters.npc(monster) }); });
-      else UI.toast(cfg.avoidDays + '일 동안 거리를 두며 지나갑니다.', 'sail', 3000);
+      else { UI.toast(cfg.avoidDays + '일 동안 거리를 두며 지나갑니다.', 'sail', 3000); goOnAfter(wasSailing); }
       return true;
     } finally { if (st === here) here.busy = Math.max(0, here.busy - 1); }
   }
