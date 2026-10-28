@@ -1548,6 +1548,7 @@
     f.ships = keepShips;
     s.player.gold += got;
     R.tidyCaptains();
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 나포한 배·잃은 배 — 다른 배의 선장·조타수·갑판·파수꾼을 다시 (js/systems/crewauto.js)
     var leftCrew = Math.max(0, f.crew - R.crewMax()); if (leftCrew) f.crew = R.crewMax();   // 탈 자리가 없는 선원은 버린 배에 남는다
     var over = Math.ceil(R.used() - R.fleetCap()), lost = 0;
     if (over > 0) {      // 넘치는 짐: 싼 교역품부터 버린다

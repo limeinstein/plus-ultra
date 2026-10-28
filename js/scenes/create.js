@@ -37,7 +37,7 @@
     p.base = st; p.bon = { str: 0, int: 0, mar: 0, cha: 0 };
     calcStats();
   }
-  /* 대항해시대 3처럼 — 나이가 많을수록 보너스 점수가 많다
+  /* 나이가 많을수록 보너스 점수가 많다
      · 능력 보너스(BAL.statPts + 나이 × statPerYear): 체력·지력·무력·매력에 직접 나눠 준다
      · 특기 점수 = 나이 몫(3 + (나이 − 18) ÷ 4) + 지식 보너스(지력 knowFrom부터 knowStep마다 +1, 최대 knowMax · 지력 knowTop(99) 이상이면 knowTopPts(+4)) — 지력에 보너스를 주면 특기 점수도 는다
      조정값: G.BALANCE.create */
@@ -131,7 +131,7 @@
       '<div style="margin-top:10px;font-size:17px;line-height:1.55">' + G.JOBS.filter(function (j) { return j.id === p.job; })[0].desc + '</div>' +
       (G.Career ? '<div class="muted" style="margin-top:6px;font-size:14px">잠재 특성의 실마리: ' + U.esc(G.Career.hint(p.job)) + '</div>' : '') +
       '<div class="sep"></div><h4 style="border:0;margin-bottom:6px">난이도</h4><div class="opt-row">' +
-      opt('diff', 'easy', '쉬움', p.diff === 'easy') + opt('diff', 'normal', '보통', p.diff === 'normal') + opt('diff', 'original', '원작 규칙', p.diff === 'original') + '</div>' +
+      opt('diff', 'easy', '쉬움', p.diff === 'easy') + opt('diff', 'normal', '보통', p.diff === 'normal') + opt('diff', 'original', '엄격 규칙', p.diff === 'original') + '</div>' +
       '<div class="muted" style="margin-top:6px;font-size:15px;line-height:1.5">' + { easy: '입출항에 1일, 소지금 5000닢. 가볍게 즐기는 항해.', normal: '입출항에 3일. 균형 잡힌 모험.', original: '입출항에 10일, 저장은 자국 항구의 여관에서만. 옛 항해자의 고난 그대로.' }[p.diff] + '</div>' +
       '<label style="display:block;margin-top:14px;font-size:16px"><input type="checkbox" id="skipintro"' + (p.skipIntro ? ' checked' : '') + '> 시작 안내 건너뛰기</label>' +
       '</div></div>';

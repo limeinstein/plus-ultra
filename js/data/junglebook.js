@@ -3,7 +3,7 @@
    · 모글리는 스무 살 남짓한 청년 — 늑대 무리에서 자라 정글의 짐승 말을 안다 (그림: Codex가 만든 portraits/legendary/mowgli·_half)
    · 세공·사격·측량·조선기술 3. 사람의 말은 모른다 — 배에 오른 뒤 90일 동안 힌두어·아프리카토착어·동남아시아토착어·페르시아어를 3단계까지 익힌다
    · 옛이야기 동료(tale) — 술집에는 나오지 않고 사건으로만 만난다 (eventOnly). 품삯은 옛이야기 동료 규칙(G.taleWage)
-   · 장면: 바나나 도둑·수수께끼·사람의 모습 그림(mowgli_bananas·_riddle·_human)은 아직 없어 건너뛰고, 합류할 때 어미 늑대와의 작별(mowgli_farewell)을 보인다 */
+   · 장면: 바나나 도둑·수수께끼·사람의 모습(mowgli_bananas·_riddle·_human), 합류할 때 어미 늑대와의 작별(mowgli_farewell)을 보인다 */
 (function (G) {
   'use strict';
   G.BALANCE = G.BALANCE || {};

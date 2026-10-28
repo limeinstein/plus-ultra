@@ -7,7 +7,7 @@
    · 비밀 암시장: 단계 blackMarket 이상이면 크기 bmSize 이상인 항구의 교역소에 「뒷골목 암시장」이 열린다 —
      시장에 나오지 않는 물건(속사포·잠수 폭탄·아직 나오지 않은 항해 도구·변장 옷), 먼 고장의 밀수품을 웃돈(bmMarkup·bmGoodMarkup)을 얹어 판다.
      물건은 bmPeriod일마다 바뀌고, 한 번 산 물건은 그 기간에 다시 나오지 않는다. 거래할 때마다 악명 +bmNoto.
-   · 명검: 대항해시대 2의 야시장에서 팔던 칼은 그 도시의 암시장에 늘 한 자루 나온다 (BM.SWORDS — 실존 명검: 울프베르트·주와이외즈·줄피카르·월리스의 검·
+   · 명검: 몇몇 도시의 암시장에는 그 도시의 명검이 늘 한 자루 나온다 (BM.SWORDS — 실존 명검: 울프베르트·주와이외즈·줄피카르·월리스의 검·
      요도 무라마사·사인검(한양) 등 · 아테네는 명품 갑옷 「아킬레우스의 갑옷」, 쿄토는 「오요로이」). 명검이 있는 도시는 내륙(통북투·카이로)이나 작은 항구(페르남부쿠)라도 암시장이 선다.
      다른 도시의 거간꾼은 어디에 어떤 명검이 도는지 귀띔한다 (BM.rumor).
    · 저장: s.bm = {도시 번호: {per: 기간 번호, sold: {물건 id: 1}}}
@@ -45,7 +45,7 @@
   // ---------------------------------------------------------------- 암시장
   var ITEMS = ['rapidgun', 'divebomb', 'shells', 'telescope', 'sextant', 'turban', 'mingrobe', 'lime', 'flamberge', 'katana'];
   var BASE = { divebomb: 12000 };            // 값이 0인 물건의 암시장 값
-  /** 대항해시대 2의 야시장 명검 — 도시 번호 → 물건 (그 도시 암시장에 늘 한 자루) */
+  /** 암시장 명검 — 도시 번호 → 물건 (그 도시 암시장에 늘 한 자루) */
   BM.SWORDS = { 72: 'achilles', 64: 'bastard', 21: 'estoc', 45: 'flamberge', 43: 'claymore', 79: 'shamshir', 175: 'guandao', 157: 'shivablade', 214: 'runeblade', 93: 'paladin', 192: 'muramasa', 190: 'saingeom', 193: 'oyoroi' };   // 한양 사인검 · 쿄토 오요로이 (2026-10-21)
   /** 이 도시 암시장의 명검 (아직 벼려지지 않은 칼이면 null) */
   BM.sword = function (c) { var id = c && BM.SWORDS[c.id], d = id && G.ITEM[id]; return d && (!d.made || S().date.y >= d.made) ? id : null; };

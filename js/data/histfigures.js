@@ -47,7 +47,10 @@
     piyale: { name: '피얄레 파샤', portraitName: '퓌알레 파샤', title: '바르바로사 함대의 젊은 선장 (뒷날 대제독)', st: 'is', role: 'captain', born: 1515, look: '20대 후반, 크로아티아 출신, 가는 수염, 오스만 장교 차림' },
     mimar: { name: '미마르 시난', title: '술탄의 궁정 건축가', st: 'is', role: 'scholar', mate: 'h_sinan', born: 1490, look: '50대, 흰 수염, 건축가의 펠트 모자와 컴퍼스·설계도' },
     charles: { name: '카를 5세', title: '신성 로마 황제 · 에스파냐 국왕', st: 'ib', role: 'king', face: 'portraits/sponsors/de_emperor_3', born: 1500, look: '40대, 합스부르크 턱과 짧은 수염, 황금 양털 훈장과 검은 옷' },
-    adoria: { name: '안드레아 도리아', title: '제노바의 제독 · 황제의 함대 사령관', st: 'it', role: 'noble', face: 'portraits/sponsors/it_doria', born: 1466, look: '70대 후반, 길고 흰 수염, 검은 옷에 황금 양털 훈장, 꼿꼿함' }
+    adoria: { name: '안드레아 도리아', title: '제노바의 제독 · 황제의 함대 사령관', st: 'it', role: 'noble', face: 'portraits/sponsors/it_doria', born: 1466, look: '70대 후반, 길고 흰 수염, 검은 옷에 황금 양털 훈장, 꼿꼿함' },
+    gardiner: { name: '스티븐 가디너 (국왕의 특사)', title: '헨리 8세의 혼인 무효 청원 특사', st: 'ne', role: 'priest', look: '긴 얼굴의 중년 성직자, 검은 사각 모자와 모피를 댄 검은 법의, 봉인한 청원서와 문서 가방' },
+    tudor_tower_guard: { name: '탑의 위병', title: '런던 탑 위병', st: 'ne', role: 'soldier', fiction: true, look: '넓은 턱과 검은 수염, 붉은 튜더 근위복, 할버드와 열쇠 꾸러미' },
+    papal_legate: { name: '교황의 사절', title: '교황청 외교 사절', st: 'it', role: 'priest', fiction: true, look: '수염 없는 긴 얼굴과 굽은 코, 벗겨진 머리, 자주색 망토와 봉인한 교서' }
   };
   Object.keys(F).forEach(function (id) { F[id].id = id; });
 
@@ -76,6 +79,16 @@
   };
   /** 그림이 실제로 있는가 (시험·도감) */
   H.hasFace = function (id) { return !!(G.Img && G.Img.has && H.faceKeys(id).some(function (k) { return G.Img.has(k); })); };
+  /** 역사 장면을 준비한 뒤 대사를 진행하고, 선택·오류·장면 전환 뒤에도 액자를 정리한다. */
+  H.withScene = async function (key, title, run) {
+    var pc = null, img = key && 'legend-events/' + key;
+    if (img && G.Img && G.Img.has(img) && G.FamEv && G.FamEv.showPic) {
+      await G.Img.load(img);
+      pc = G.FamEv.showPic({ img: img, title: title });
+    }
+    try { return await run(); }
+    finally { if (pc) await pc.stop(); }
+  };
   /** 대사 묶음을 차례로: [[인물 id 또는 null(내레이션), 말], …] */
   H.play = async function (lines) {
     for (var i = 0; i < (lines || []).length; i++) {

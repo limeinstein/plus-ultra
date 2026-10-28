@@ -20,7 +20,7 @@
     AU.setVolume();
     return true;
   }
-  AU.setVolume = function () { if (G.YTM) G.YTM.setVolume(); setFileVolume(); if (!ctx) return; musicGain.gain.value = vol('music', 0.35) * 0.5; sfxGain.gain.value = vol('sound', 0.5); };
+  AU.setVolume = function () { setFileVolume(); if (!ctx) return; musicGain.gain.value = vol('music', 0.35) * 0.5; sfxGain.gain.value = vol('sound', 0.5); };
   AU.unlock = function () {
     if (!init()) return;
     if (ctx.state === 'suspended') ctx.resume();
@@ -582,9 +582,7 @@
     AU.want = name; hold = { track: null, n: 0 };
     if (name !== prev) sceneMemo(name, prev);
     if (name !== 'town' && name !== 'battle' && name !== 'duel') AU.place = null;     // 도시를 떠나면 건물 곡은 끝 (일기토는 건물 안에서도 벌어진다)
-    // 설정 「배경 음악」이 코스타 델 솔 3 OST면 유튜브 재생기로 (js/systems/ytmusic.js). 미니 게임 같은 「잠깐」 곡 동안에는 장면만 기억해 둔다
-    var Y = G.YTM;
-    if (Y) { Y.install(); if (Y.on()) { if (Y.inMoment() && !force) return; var yt = Y.pick(name === 'duel' ? 'battle' : name); if (yt) { genStop(); stopFile(); Y.play(yt); return; } Y.pause(); } else Y.pause(); }
+    if (G.MusicMoments) G.MusicMoments.install();   // 미니 게임·육상전 같은 「잠깐」 곡을 감싸 둔다 (js/systems/musicmoments.js)
     if (moments.length && !force) { var mt = momentTrack(); if (mt) return; }      // 「잠깐」 곡 동안에는 장면만 기억
     var t = AU.pick(name);
     if (t && t.indexOf('gen:') === 0) { parkFile(); genMusic(t.slice(4)); return; }
@@ -594,7 +592,7 @@
     genMusic(sc && sc.gen || name);
   };
   /* 파일 음악의 「잠깐」 곡 — 전설의 대륙을 찾는 순간 · 육상전 · 세계 일주 귀환 (G.MUSIC.moments).
-     js/systems/ytmusic.js 가 감싸 둔 순간에 OST가 꺼져 있으면 여기로 온다. 끝나면 AU.fileResume() */
+     js/systems/musicmoments.js 가 감싸 둔 순간에 여기로 온다. 끝나면 AU.fileResume() */
   var moments = [];
   function momentTrack() { for (var i = moments.length - 1; i >= 0; i--) { var t = (MT().moments || {})[moments[i]]; if (usable(t)) return t; } return null; }
   AU.fileMoment = function (name) {
@@ -617,15 +615,13 @@
     AU.place = kind;
     if (!quiet && AU.want === 'town') AU.music('town', true);
   };
-  /** 지금 들리는 곡 (파일 이름 · 'gen:이름' · OST 곡 'ost:id') — 시험·도감용 */
+  /** 지금 들리는 곡 (파일 이름 · 'gen:이름') — 시험·도감용 */
   AU.now = function () {
-    if (G.YTM && G.YTM.on() && G.YTM.current()) return 'ost:' + G.YTM.current();
     return fileTrack || (AU.genNow() ? 'gen:' + AU.genNow() : null);
   };
   /** 하루에 한 번(Game.newDay): 바다·뭍에서 자리가 바뀌면 곡을 바꾼다. hold일 연달아 다른 곳이어야 바꿔 경계에서 오락가락하지 않게 */
   AU.daily = function () {
     var name = AU.want; if (name !== 'sea' && name !== 'land') return;
-    if (G.YTM && G.YTM.on()) { if (!G.YTM.inMoment()) { var yt = G.YTM.pick(name); if (yt && yt !== G.YTM.current()) G.YTM.play(yt); } return; }
     if (momentTrack()) return;
     var t = AU.pick(name), now = fileTrack || (cur ? 'gen:' + cur : null);
     if (!t || t === now) { hold = { track: null, n: 0 }; return; }
@@ -636,8 +632,8 @@
   AU.nowPlaying = function () { return fileTrack; };
   /** 시험용: 지금 곡의 재생 상태 */
   AU.fileStatus = function () { var d = decks[deckOn]; return d ? { track: fileTrack, time: +d.currentTime.toFixed(2), paused: d.paused, volume: +d.volume.toFixed(2) } : null; };
-  AU.stop = function () { AU.want = null; genStop(); stopFile(); if (G.YTM) G.YTM.pause(); };
-  /** 건물·미니 게임·사건의 「잠깐」 곡 (OST일 때만) — 끝나면 AU.resume() */
-  AU.moment = function (name) { if (G.YTM) G.YTM.moment(name); };
-  AU.resume = function () { if (G.YTM) G.YTM.resume(); };
+  AU.stop = function () { AU.want = null; genStop(); stopFile(); };
+  /** 미니 게임·사건의 「잠깐」 곡 — 끝나면 AU.resume() */
+  AU.moment = function (name) { AU.fileMoment(name); };
+  AU.resume = function () { AU.fileResume(); };
 })(window.G = window.G || {});

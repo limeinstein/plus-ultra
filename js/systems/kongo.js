@@ -37,16 +37,22 @@
     var f = face('kongo_ptking', 'king', 'ib', 'm', 'portraits/npc-roles/ib/king'); return { name: '주앙 2세', portrait: f.portrait, half: f.half, lang: 3 };
   }
   function kingName() { var sp = G.SPONSOR && G.SPONSOR.pt_king; return sp && G.Sponsor && G.Sponsor.present(sp) ? G.Sponsor.holderName(sp) : '주앙 2세'; }
+  function person(id, name) {
+    var sp = G.Hist ? G.Hist.speaker(id) : { name: name, lang: 3 };
+    if (name) sp.name = name;
+    sp.special = true;
+    return sp;
+  }
   function who(code) {
     var k = K.st() || {}, f;
     if (code === 'k') return king();
     if (code === 'm') return G.Scenes.mateSpeaker('first');
     if (code === 'c') { f = face('kongo_cao', 'captain', 'ib', 'm', 'portraits/rivals/디오구 캉'); return { name: '디오구 캉', portrait: f.portrait, half: f.half, lang: 3, special: true }; }
-    if (code === 's') { f = face('kongo_nsaku', 'noble', 'af', 'm', 'portraits/npc-roles/af/noble'); return { name: k.ep2 ? '주앙 다 실바 (은사쿠)' : '은사쿠', portrait: f.portrait, half: f.half, lang: 3, special: true }; }
-    if (code === 'y') { f = face('kongo_soyo', 'official', 'af', 'm', 'portraits/npc-roles/af/official'); return { name: '마니 소요 (소요의 주인)', portrait: f.portrait, half: f.half, lang: 3 }; }
-    if (code === 'g') { f = face('kongo_king', 'king', 'af', 'm', 'portraits/npc-roles/af/king'); return { name: k.bapt ? '주앙 1세 (은징가 아 은쿠우)' : '마니 콩고 은징가 아 은쿠우', portrait: f.portrait, half: f.half, lang: 3, special: true }; }
-    if (code === 'a') { f = face('kongo_afonso', 'scholar', 'af', 'm', 'portraits/npc-roles/af/scholar'); return { name: k.bapt ? '아폰수 왕자 (음벰바 아 은징가)' : '음벰바 아 은징가 왕자', portrait: f.portrait, half: f.half, lang: 3, special: true }; }
-    if (code === 'p') { f = face('kongo_priest', 'priest', 'ib', 'm', 'portraits/npc-roles/ib/priest'); return { name: '사제', portrait: f.portrait, half: f.half, lang: 3 }; }
+    if (code === 's') return person(k.ep2 ? 'kongo_nsaku_envoy' : 'kongo_nsaku');
+    if (code === 'y') return person('kongo_soyo');
+    if (code === 'g') return person('kongo_nkuwu', k.bapt ? '주앙 1세 (은징가 아 은쿠우)' : '마니 콩고 은징가 아 은쿠우');
+    if (code === 'a') return person('kongo_afonso', k.bapt ? '아폰수 왕자 (음벰바 아 은징가)' : '음벰바 아 은징가 왕자');
+    if (code === 'p') return person('kongo_priest');
     return {};
   }
   function fill(t, extra) {

@@ -2,7 +2,7 @@
    · 톨레도에 들어서면 라 만차 들판의 풍차에 돌격하는 늙은 기사와 당나귀 탄 종자를 만난다 → 산티아고 순례에 함께해 달라고 청한다
    · 프랑스 길의 두 성소(투르의 생마르탱 · 툴루즈의 생세르냉)를 들른 뒤 라코루냐(산티아고 데 콤포스텔라)에 이르면 둘이 무급 항해사로 합류한다
    그림: images/portraits/legendary/don_quixote(.webp · _half.webp) · sancho_panza. 장면 그림은 images/legend-events/quixote_*.webp
-   항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [힘, 지력, 무력, 매력], lg = {말 번호: 단계}). */
+   항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [체력, 지력, 무력, 매력], lg = {말 번호: 단계}). */
 (function (G) {
   'use strict';
   var L = [

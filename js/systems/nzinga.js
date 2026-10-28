@@ -53,7 +53,7 @@
   function atLuanda() { var s = S(); return !!(s && s.loc && s.loc.mode === 'city' && s.loc.city === LUANDA); }
   function H(id) { return G.Hist ? G.Hist.speaker(id) : { name: id, lang: 3 }; }
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
-  var WIC = { name: '네덜란드 서인도 회사 사령관', lang: 3 }, IMB = { name: '임방갈라 전사', lang: 3 }, SA = { name: '살바도르 코헤이아 드 사', lang: 3 };
+  var WIC = H('nzinga_wic'), IMB = H('nzinga_imb'), SA = H('salvador_sa');
   async function play(lines) {
     for (var i = 0; i < lines.length; i++) {
       var l = lines[i]; if (!l) continue;

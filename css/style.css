@@ -491,6 +491,8 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .hint-item { padding: 10px 12px; border-bottom: 1px solid rgba(90,65,35,.2); }
 .hint-item .nm { font-weight: 700; font-size: 19px; }
 .hint-item .tx { font-size: 17px; color: var(--ink-2); margin-top: 3px; line-height: 1.55; }
+.hint-item.hl { background: rgba(226,187,79,.28); box-shadow: inset 4px 0 0 #b8892a; animation: hintHl 2.4s ease-out 1; }   /* 해도의 ? 표식에서 온 단서 (2026-10-26) */
+@keyframes hintHl { 0% { background: rgba(226,187,79,.6); } 100% { background: rgba(226,187,79,.28); } }
 .fleetpanel { position: absolute; left: 22px; top: 168px; width: 340px; padding: 14px 16px; z-index: 14; font-size: 16px; color: var(--cream); }
 .fleetpanel .fp-h { display: flex; gap: 8px; align-items: center; color: var(--brass-hi); font-size: 18px; margin-bottom: 8px; letter-spacing: .06em; }
 .fleetpanel .fp-h svg { width: 20px; height: 20px; }
@@ -974,7 +976,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .lwar .btn.lw-op small { margin: 0; font-size: 11px; color: var(--cream-2); }
 .lwar .btn.lw-op em { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 24px; font-weight: 800; color: #fff; background: rgba(0,0,0,.45); border-radius: inherit; }
 .lwar .btn.lw-op.on { box-shadow: 0 0 0 3px var(--gold), 0 0 14px rgba(217,180,95,.6); }
-/* 윗줄 상태 표시: 두 줄 칸 (대항해시대 3처럼 이름 + 값) */
+/* 윗줄 상태 표시: 두 줄 칸 (이름 + 값) */
 .hud .cell.two { gap: 7px; padding: 0 12px; height: 42px; }
 .hud .cell.two .tv { display: flex; flex-direction: column; justify-content: center; line-height: 1.12; }
 .hud .cell.two em { font-style: normal; font-size: 12px; color: var(--cream-dim); letter-spacing: .08em; }
@@ -1013,7 +1015,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .mount-item .mi-at { color: var(--green); font-size: 14px; font-weight: 700; margin: 2px 0; }
 .mount-item small { color: var(--ink-soft); font-size: 13px; line-height: 1.35; }
 .mount-rule { margin-top: 8px; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
-/* 일기토 (삼국지 6식 방침·기술 + 대항해시대 2식 갑판 결투) */
+/* 일기토 (방침·기술을 고르는 갑판 결투) */
 .rduel { display: flex; flex-direction: column; gap: 8px; }
 .rduel .rd-top { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; }
 .rduel .rd-side { display: flex; gap: 10px; align-items: center; }
@@ -1307,7 +1309,9 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .cb-roster { display: flex; flex-direction: column; gap: 5px; overflow-y: auto; padding: 2px 4px 2px 2px; min-height: 60px; border: 1px dashed transparent; }
 .cb-mate { display: flex; align-items: center; gap: 7px; padding: 3px 8px 3px 3px; cursor: pointer; border: 1px solid rgba(110,80,40,.45); background: rgba(255,250,236,.55); }
 .cb-mate:hover { background: rgba(255,246,214,.95); border-color: #b8862f; }
-.cb-mate.idle { border-style: dashed; border-color: rgba(176,74,47,.6); background: rgba(232,205,170,.5); }
+.cb-mate.idle { border: 1px solid #b4472c; border-left-width: 5px; background: linear-gradient(90deg, rgba(222,136,104,.55), rgba(240,196,170,.45)); }
+.cb-mate.idle:hover { background: linear-gradient(90deg, rgba(232,150,116,.7), rgba(248,210,186,.6)); }
+.cb-mate.away { border-left: 4px solid #5d7f97; background: rgba(196,214,224,.45); }
 .cb-mate .cb-face { width: 40px; height: 40px; }
 .cb-mate .cb-nm { font-size: 14px; }
 .cb-loyal { font-size: 12px; color: var(--ink-soft); }
@@ -1324,10 +1328,6 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .shipcard .pips { display: inline-flex; vertical-align: -2px; }
 
 /* 자택 장면 그림 (js/art/homeart.js) — 대화하는 사람 뒤에 걸리는 액자 */
-/* 내 MP3로 트는 코스타 델 솔 곡 이름 (js/systems/localost.js) — 곡이 바뀔 때 왼쪽 아래에 잠깐 */
-.ost-now { position: absolute; left: 24px; bottom: 74px; z-index: 95; pointer-events: none; padding: 5px 14px; font-size: 15px; letter-spacing: .04em; color: var(--cream);
-  background: linear-gradient(90deg, rgba(20,14,8,.82), rgba(20,14,8,0)); border-left: 2px solid var(--brass); opacity: 0; transform: translateX(-10px); transition: opacity .6s ease, transform .6s ease; }
-.ost-now.on { opacity: .92; transform: none; }
 /* 가족 사건 그림 (js/systems/familyevent.js) — 대화창 위에 576×256 그림을 크게, 천천히 다가간다 */
 .famscene { position: absolute; z-index: 12; padding: 10px; pointer-events: none !important; opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease; }
 .famscene.on { opacity: 1; transform: none; }
@@ -1875,3 +1875,32 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .mksell .mkthumb { width: 34px; height: 34px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
 .mksell input.mqr { width: 170px; vertical-align: middle; }
 .mksell input.mq { width: 64px; text-align: right; font: inherit; }
+
+/* 2026-10-28 대기(자리 없음 — 달마다 충성이 떨어진다)는 붉은 바탕, 다른 배 사람은 푸른 바탕 · 자동 배치 · 다른 배의 자리 */
+.cb-idle-tag { display: inline-block; padding: 0 6px; margin-left: 4px; font-size: 12px; font-weight: 700; line-height: 1.5; color: #fff; background: #b4472c; border: 0; border-radius: 3px; vertical-align: 1px; }
+.choice.mate-idle { border-left: 5px solid #b4472c; background: linear-gradient(90deg, rgba(222,136,104,.5), rgba(244,214,190,.5)); }
+.choice.mate-idle .r { color: #8d3218; font-weight: 700; }
+.choice.mate-away { border-left: 4px solid #5d7f97; background: linear-gradient(90deg, rgba(186,208,222,.55), rgba(236,232,214,.4)); }
+.shipcard.mate-idle { border-left: 6px solid #b4472c; background: linear-gradient(90deg, rgba(222,136,104,.42), rgba(255,250,236,.35) 70%); }
+.shipcard.mate-away { border-left: 5px solid #5d7f97; background: linear-gradient(90deg, rgba(186,208,222,.45), rgba(255,250,236,.35) 70%); }
+.cb-top .cb-auto { margin-left: -8px; }
+.cb-top .cb-auto .ic { width: 17px; height: 17px; margin-right: 4px; }
+.cb-others { margin-top: 12px; max-width: 100%; box-sizing: border-box; }
+.cb-oship { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; padding: 5px 8px; margin-bottom: 5px; border: 1px solid rgba(93,127,151,.55); border-left: 4px solid #5d7f97; background: rgba(206,222,230,.35); font-size: 14px; }
+.cb-oname { min-width: 150px; font-weight: 700; font-size: 15px; }
+.cb-oname .ic, .cb-oseat .ic { width: 15px; height: 15px; vertical-align: -2px; margin-right: 3px; }
+.cb-oseat { display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border: 1px solid rgba(110,80,40,.35); background: rgba(255,250,236,.6); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.cb-oseat b { font-weight: 700; margin-right: 3px; color: var(--ink-2); }
+.cb-oseat.empty { opacity: .7; border-style: dashed; }
+.cb-oseat.empty i { color: var(--ink-soft); }
+.cb-oseat.cabins { display: block; flex-basis: 100%; white-space: normal; }
+.cb-oseat b, .cb-oseat .ic { flex: none; }
+
+/* 수첩 동료의 능력치 · 철새(아는 항해사)의 흐린 옛 소식 (2026-10-28, js/ui/info.js · js/systems/mateknow.js) */
+.mate-st { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 15px; margin: 2px 0 4px; }
+.mate-st span { display: inline-flex; align-items: center; gap: 5px; }
+.mate-st b { font-weight: 600; color: var(--ink, #3a2a16); }
+.mate-st .bar { display: inline-block; width: 54px; height: 6px; border-radius: 3px; background: rgba(60,40,20,.18); overflow: hidden; }
+.mate-st .bar i { display: block; height: 100%; background: #b8862b; }
+tr.mk-stale td { opacity: .62; }
+tr.mk-stale td.pp { filter: grayscale(.7); }

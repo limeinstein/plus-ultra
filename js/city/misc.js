@@ -648,7 +648,7 @@
     ];
   };
   function unitOf(id) { return id === 'porter' ? '패' : id === 'wagon' ? '대' : id === 'reindeer' ? '대' : '필'; }
-  /** 탐험대 인원: 대항해시대 3처럼 선원 모두가 나선다 */
+  /** 탐험대 인원: 선원 모두가 나선다 */
   GT.partySize = function () { return S().fleet.crew; };
   GT.explore = async function (c) {
     var s = S();

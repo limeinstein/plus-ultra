@@ -767,7 +767,7 @@
       if (!ok) return;
       s.player.notoriety += 8;
     }
-    // 선박 대여: 넉넉한 후원자는 먼 원정에 쓸 배를 빌려준다 (정산 때 돌려받는다 — 대항해시대 3)
+    // 선박 대여: 넉넉한 후원자는 먼 원정에 쓸 배를 빌려준다 (정산 때 돌려받는다)
     var loanShip = null, lt = loanType(sp, d, circ, o);
     if (lt) {
       if (s.fleet.ships.length >= G.MAX_SHIPS) await UI.say(L('loanFull'), who);

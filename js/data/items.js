@@ -24,7 +24,7 @@
     { id: 'excalibur', name: '성검 엑스칼리버', kind: 'weapon', atk: 50, price: 250000, reg: [], rare: true, desc: '호수의 여인이 맡겼다는 전설의 검.' },
     { id: 'longinus', name: '롱기누스의 창', kind: 'weapon', atk: 30, price: 0, reg: [], rare: true, desc: '성스러운 힘이 깃든 창.' },
     // 암시장 명검 — 시장에는 나오지 않고, 그 도시의 뒷골목 암시장에서만 판다 (js/systems/blackmarket.js BM.SWORDS · style = 일기토의 공격 갈래)
-    //   2026-10-21: 대항해시대 2의 지어낸 이름(성기사의 검·시바신의 마검·룬 블레이드)을 실존하는 명검으로 바꾸고 공격력 45 이상으로 (엑스칼리버 50 아래).
+    //   2026-10-21: 예전의 지어낸 이름(성기사의 검·시바신의 마검·룬 블레이드)을 실존하는 명검으로 바꾸고 공격력 45 이상으로 (엑스칼리버 50 아래).
     //   id는 옛 저장 때문에 그대로 둔다 (claymore → 월리스의 검, shivablade → 줄피카르, runeblade → 울프베르트, paladin → 주와이외즈)
     { id: 'claymore', name: '월리스의 검', kind: 'weapon', atk: 45, price: 60000, reg: [], rare: true, style: 'bash', desc: '스코틀랜드의 영웅 윌리엄 월리스가 휘둘렀다는 키만 한 양손검. 1505년 제임스 4세가 손잡이를 새로 달게 했다는 그 칼이, 바다 건너 더블린 뒷골목에 나왔다.' },
     { id: 'shivablade', name: '줄피카르', kind: 'weapon', atk: 46, price: 70000, reg: [], rare: true, style: 'slash', desc: '예언자의 사위 알리가 지녔다고 전하는, 칼끝이 두 갈래로 갈라진 검. 벵골 술탄의 보물고에서 흘러나왔다는 소문이 캘커타 뒷골목에 돈다.' },
@@ -41,7 +41,7 @@
     { id: 'plate', name: '플레이트메일', kind: 'armor', def: 14, price: 7800, reg: [1], desc: '온몸을 감싸는 판금 갑옷. 무겁다.' },
     { id: 'lamellar', name: '라멜라 갑옷', kind: 'armor', def: 9, price: 3400, reg: [6, 7], desc: '작은 철편을 끈으로 엮은 갑옷.' },
     { id: 'samurai', name: '무사 갑옷', kind: 'armor', def: 12, price: 6400, reg: [9], desc: '옻칠한 동방 무사의 갑옷.' },
-    // 암시장 명품 갑옷 (2026-10-21, 대항해시대 2의 「성기사의 갑옷」 자리) — 아테네 뒷골목 암시장에만 (js/systems/blackmarket.js BM.SWORDS)
+    // 암시장 명품 갑옷 (2026-10-21, 예전 「성기사의 갑옷」 자리) — 아테네 뒷골목 암시장에만 (js/systems/blackmarket.js BM.SWORDS)
     //   방어 30: 일기토 피해 = … − 방어 × 0.5 라서 45면 해적 두목의 한 칼이 거의 들어가지 않는다 — 플레이트메일(14)의 두 배쯤
     { id: 'achilles', name: '아킬레우스의 갑옷', kind: 'armor', def: 30, price: 80000, reg: [], rare: true, desc: '대장장이 신 헤파이스토스가 하룻밤에 벼려 바다의 여신 테티스가 아들 아킬레우스에게 주었다는 청동 갑옷. 아테네 뒷골목의 골동 상인은 트로이 들판에서 파냈다고 우긴다.' },
     { id: 'oyoroi', name: '오요로이', kind: 'armor', def: 29, price: 190000, reg: [], rare: true, desc: '말 위에서 활을 쏘던 옛 무사 대장의 큰 갑옷. 옻칠한 작은 비늘판 수천 장을 붉은 실로 엮고, 가슴에는 사슴 가죽에 그림을 찍어 댔다. 대대로 신사에 바쳐 두던 것이 전란 통에 흘러나와 쿄토 뒷골목에 돈다.' },   // 2026-10-21 · 쿄토 암시장

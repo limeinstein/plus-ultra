@@ -17,4 +17,11 @@
   };
   Object.keys(L).forEach(function (id) { if (!F[id]) { L[id].id = id; F[id] = L[id]; } });
   G.NZINGA_FIGS = Object.keys(L);
+  var extra = {
+    nzinga_wic: { name: '네덜란드 서인도 회사 사령관', st: 'ne', role: 'captain' },
+    nzinga_imb: { name: '임방갈라 전사', st: 'af', role: 'soldier' },
+    salvador_sa: { name: '살바도르 코헤이아 드 사', st: 'ib', role: 'captain' }
+  };
+  Object.keys(extra).forEach(function (id) { if (!F[id]) { extra[id].id = id; F[id] = extra[id]; } });
+  G.NZINGA_EXTRA_FIGS = Object.keys(extra);
 })(window.G = window.G || {});

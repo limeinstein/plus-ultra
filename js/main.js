@@ -249,13 +249,14 @@
     if (Game.scene && Game.scene.update) {
       try { Game.scene.update(dt); } catch (e) { console.error(e); }
     }
-    if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }   // 생일 선물·수명이 다한 날 (js/systems/lifespan.js)
+    if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }
+    if (G.MateLeave && Game.state) { try { G.MateLeave.tick(); } catch (e) { console.error(e); } }   // 오래 함께한 부하와의 이별 (js/systems/mateleave.js)   // 생일 선물·수명이 다한 날 (js/systems/lifespan.js)
     if (G.Coven && Game.state) { try { G.Coven.tick(); } catch (e) { console.error(e); } }
     requestAnimationFrame(loop);
   }
 
   // ---------------------------------------------------------------- HUD helpers
-  // 윗줄 상태 표시 (대항해시대 3처럼 도시·항해·육상 탐험마다 보이는 것이 다르다)
+  // 윗줄 상태 표시 (도시·항해·육상 탐험마다 보이는 것이 다르다)
   var H = Game.hud = {};
   function dnDate(n) { return new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100); }
   /** 계약 남은 날: {text, warn, tip} */

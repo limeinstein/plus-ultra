@@ -1,4 +1,4 @@
-/* 육상전 — 대항해시대 3의 육상전처럼 탐험대를 부대로 나누어 싸운다 (규칙·글·그림은 이 게임에서 새로 만들었다). 2026-10-23 크게 고침 — 자료는 js/data/landwarunits.js
+/* 육상전 — 탐험대를 부대로 나누어 싸운다. 2026-10-23 크게 고침 — 자료는 js/data/landwarunits.js
    ■ 전장: 양쪽 모두 앞줄·가운데줄·뒷줄 세 줄, 줄마다 세 칸(위·가운데·아래). 근접 부대는 맨 앞줄끼리(옆 칸까지) 싸우고, 기병은 앞줄에서 뒷줄까지 파고들며,
      총·활은 두 줄 안, 포는 어디든 닿는다. 앞줄이 무너지면 다음 줄이 앞줄이 된다. 칸마다 언덕·숲·개울이 놓이고, 비·안개·더위가 싸움을 바꾼다
    ■ 병종 상성(가위바위보): 창병 > 기병 > 활·총·포 > 걷는 보병 … (G.LANDWAR.VS). 부대를 고르면 적 부대 위에 유리 ▲ · 불리 ▼ 가 뜬다
@@ -63,7 +63,7 @@
   var CMDR_CRY = { guan_yu: '관운장이 여기 있다!', zhang_fei: '연인 장익덕이 여기 있다!', liu_bei: '백성을 지켜라!', zhuge_liang: '계책대로 움직여라.', d_artagnan: '하나는 모두를 위하여!',
     athos: '총사들이여, 검을!', porthos: '으하하, 덤벼라!', aramis: '침착하게 겨눠라.', drake: '엘 드라케가 간다!', barbarossa: '붉은 수염을 보아라!', joan_of_arc: '주님의 이름으로, 앞으로!',
     bokuden: '한 칼에 끝낸다.', don_quixote: '거인들이여, 각오하라!', sancho_panza: '나리, 저건 그냥 양 떼인데요!', marina: '물러서지 마세요!', tupac: '산이 우리 편이다!',
-    kisk: '은동고를 위하여!', leonardo: '포각을 조금만 더…', peter_pan: '꼬끼오~!', pinocchio: '이번엔 진짜예요!', ahmad: '사막의 바람처럼!' };
+    kisk: '은동고를 위하여!', leonardo: '포각을 조금만 더…', peter_pan: '꼬끼오~!', pinocchio: '이번엔 진짜예요!', chaska: '바람이여, 불어라!', ahmad: '사막의 바람처럼!' };
   var OP_ICON = { ambush: '✦', trap: '⩚', snipe: '◎', shells: '✸', volley: '➶', cry: '⚑', roar: '‼' };
   function ART() { return G.LANDWAR_ART || null; }
   function S() { return G.Game.state; }

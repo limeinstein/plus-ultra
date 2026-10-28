@@ -13,7 +13,7 @@
   function rumorStay(id) {
     var s = S(), h = s && s.mateRumorStay && s.mateRumorStay[id], m = G.MATE[id];
     if (!h) return null;
-    if (!m || !m.wd || h.until <= s.day || !city(h.city) || !G.R.cityExists(city(h.city))) {
+    if (!m || (!m.wd && !h.any) || h.until <= s.day || !city(h.city) || !G.R.cityExists(city(h.city))) {
       delete s.mateRumorStay[id]; return null;
     }
     return h;

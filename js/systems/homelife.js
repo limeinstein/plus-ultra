@@ -134,7 +134,7 @@
   HL.addTouch = function (k, n) { if (!k) return 0; k.touch = HL.touch(k) + (n == null ? 1 : n); return k.touch; };
 
   // ---------------------------------------------------------------- 결과
-  var STAT = { str: '힘', 'int': '지력', mar: '무력', cha: '매력' };
+  var STAT = { str: '체력', 'int': '지력', mar: '무력', cha: '매력' };
   /** 제독도 아이와 함께하며 조금씩 다시 배운다 — pst: {능력치: n}, 저마다 절반 확률 (G.BALANCE.homelife.adultChance) */
   //   능력치를 곧바로 +1(상한 99) 하던 것이 성장 한도(G.Growth — 하루·한 해 한도, 높을수록 비싼 값)를 건너뛰었다 — 경험으로 돌린다 (QA 2026-10-23)
   //   ADULT_XP: +1 한 번에 쌓는 경험 (능력 60 아래에서 1 오르는 데 120 — 세 번쯤 함께하면 1, 높을수록 더디다 · 하루 한도 45)
@@ -378,7 +378,7 @@
       });
       var st = k.st || {};
       var v = await UI.choose(k.name + ' (' + F().kidAge(k) + '세)', opts, { width: 600, icon: 'heart',
-        text: F().bondHearts(k) + ' ' + F().bondWord(k) + ' · 함께한 시간 ' + HL.touch(k) + '번 — 힘 ' + (st.str || 0) + ' · 지력 ' + (st['int'] || 0) + ' · 무력 ' + (st.mar || 0) + ' · 매력 ' + (st.cha || 0) +
+        text: F().bondHearts(k) + ' ' + F().bondWord(k) + ' · 함께한 시간 ' + HL.touch(k) + '번 — 체력 ' + (st.str || 0) + ' · 지력 ' + (st['int'] || 0) + ' · 무력 ' + (st.mar || 0) + ' · 매력 ' + (st.cha || 0) +
           (Object.keys(k.sk || {}).length ? '<br><small class="muted">' + Object.keys(k.sk).map(function (id) { return (G.SKILL_BY_ID[id] || { name: id }).name + ' ' + k.sk[id]; }).join(' · ') + '</small>' : '') });
       if (v == null) return;
       var a = list.filter(function (x) { return x.id === v; })[0];

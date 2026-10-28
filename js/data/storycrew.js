@@ -1,6 +1,6 @@
 /* 이야기 속 동료 스물여섯 사람 — 역사책에는 없는, 이 게임만의 항해사들. 1480년부터 저마다의 고향 술집·여관에서 만날 수 있다.
    그림: images/portraits/mates/<id>.webp (흉상 448×448) · <id>_half.webp (무릎상 1024×1536, 투명)
-   항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [힘, 지력, 무력, 매력], lg = {말 번호: 단계}, reg = 고장).
+   항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [체력, 지력, 무력, 매력], lg = {말 번호: 단계}, reg = 고장).
    돌아다니는 곳은 G.MATE_RANGE (js/data/materange.js 다음에 읽는다). */
 (function (G) {
   'use strict';

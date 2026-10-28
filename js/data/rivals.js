@@ -174,7 +174,7 @@
   ];
 
   // ------------------------------------------------------------------ 경쟁자 (술집 명부·대화·바다의 대사)
-  // card.st = [힘, 지력, 무력, 매력] · sk = 특기 · lg = {말 번호: 단계} (js/data/base.js G.LANGS) · y = 태어난 해와 죽은 해
+  // card.st = [체력, 지력, 무력, 매력] · sk = 특기 · lg = {말 번호: 단계} (js/data/base.js G.LANGS) · y = 태어난 해와 죽은 해
   var R = G.RIVAL_STAYS = G.RIVAL_STAYS || {};
   function add(nm, o) { R[nm] = o; }
 

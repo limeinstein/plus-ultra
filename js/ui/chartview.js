@@ -44,12 +44,13 @@
     wrap.innerHTML = '<div class="cv-search"><label for="' + searchId + '">도시 찾기</label><input id="' + searchId + '" type="search" placeholder="알고 있는 도시 이름" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="' + searchId + '-list"><div class="cv-results" id="' + searchId + '-list" role="listbox" hidden></div></div>' +
       '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
       '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="세계 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
-      '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적·자연 경관</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span></div>' +
+      '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적·자연 경관</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span><span>? 단서(술집 소문·망루) — 올리면 이름, 누르면 단서</span></div>' +
       '<div class="cv-info" hidden></div>';
     host.appendChild(wrap);
     var cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d'), info = wrap.querySelector('.cv-info');
     cv.style.width = '100%'; cv.style.height = 'auto'; cv.style.display = 'block';
     var view = { lon: opts.center ? opts.center[0] : (here ? U.clamp(here.lon, -150, 150) : 0), lat: opts.center ? opts.center[1] : (here ? here.lat : 20), span: opts.span || 120 };
+    var drawnMarks = [], hoverMark = null;   // ? 표식 (I.chartMarks가 그린 것) — 마우스를 올리면 이름, 누르면 단서 (2026-10-26)
     var crisp = null, crispKey = '', idleT = null, hover = null, hoverDisc = null, sel = opts.select != null ? G.CITY_DATA[opts.select] : null, seaSel = null, dead = false;
     function latSpan() { return view.span * H / W; }
     function clampView() {
@@ -103,7 +104,7 @@
       if (more) setTimeout(function () { if (!dead) draw(); }, 40);
       if (G.Treaty) G.Treaty.drawChart(ctx, function (lon, lat) { return px(lon, lat, b); }, W, H);   // 토르데시야스·사라고사 선
       var fs = 13, font = getComputedStyle(document.body).fontFamily;
-      I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {});
+      drawnMarks = I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {}) || [];
       // 제독이 직접 발견한 도시 밖 유적·자연 경관만 지도에 남긴다.
       var landmarkScale = cityScale * 0.95, landmarkLabels = [];
       landmarks().forEach(function (d) {
@@ -140,6 +141,14 @@
         if (x + tw > W) x = p[0] - L[2] - 5 - tw;
         ctx.fillStyle = 'rgba(30,20,12,.82)'; ctx.fillRect(x, y - 10, tw, 20); ctx.fillStyle = '#f2e7cc'; ctx.fillText(d.name, x + 5, y + 1);
       });
+      // ? 표식에 마우스를 올렸으면 어떤 발견물의 단서인지
+      if (hoverMark && G.Explore && G.Explore.markerTip) {
+        var hm = drawnMarks.filter(function (q) { return q.m.d === hoverMark.m.d; })[0] || hoverMark;
+        var tt = G.Explore.markerTip(hm.m), sub = '누르면 단서를 봅니다', tw2 = Math.max(ctx.measureText(tt).width, ctx.measureText(sub).width) + 14, tx = hm.x + 14, ty = hm.y - 32;
+        if (tx + tw2 > W) tx = hm.x - 14 - tw2; if (ty < 2) ty = hm.y + 14;
+        ctx.fillStyle = 'rgba(30,20,12,.88)'; ctx.fillRect(tx, ty, tw2, 38);
+        ctx.fillStyle = '#f2e7cc'; ctx.fillText(tt, tx + 7, ty + 11); ctx.fillStyle = 'rgba(242,231,204,.7)'; ctx.fillText(sub, tx + 7, ty + 28);
+      }
       if (sel) { var sp2 = px(sel.lon, sel.lat, b); ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 2; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.arc(sp2[0], sp2[1], 12 * zk, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
       if (seaSel) { var q2 = px(seaSel[0], seaSel[1], b); ctx.strokeStyle = '#1e3552'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(q2[0] - 7, q2[1] - 7); ctx.lineTo(q2[0] + 7, q2[1] + 7); ctx.moveTo(q2[0] + 7, q2[1] - 7); ctx.lineTo(q2[0] - 7, q2[1] + 7); ctx.stroke(); }
       // 지금 위치
@@ -172,6 +181,26 @@
         if (d <= hit * hit && d < bd) { bd = d; best = c; }
       });
       return best;
+    }
+    function markAt(x, y) {
+      var best = null, bd = 16 * 16;
+      drawnMarks.forEach(function (q) { var d = (q.x - x) * (q.x - x) + (q.y - y) * (q.y - y); if (d < bd) { bd = d; best = q; } });
+      return best;
+    }
+    /** ? 표식을 눌렀을 때: 단서 이름·갈래·어디서 들었나·단서 글 · 「수첩 단서에서 보기」 */
+    function showMark(q) {
+      var o = G.Explore.markerInfo(q.m), dw = here ? U.dirName(Math.atan2(q.m.lat - here.lat, G.Geo.wrapLon(q.m.lon - here.lon))) : '';
+      sel = null; seaSel = null;
+      var act = opts.markAction ? opts.markAction(q.m) : null;
+      info.innerHTML = '<button class="ci-x" title="닫기">×</button><div class="ci-h"><b>' + U.esc(o.name) + '</b><span class="ci-sub">' + U.esc(o.cat) + ' · 아직 찾지 못한 발견물</span></div>' +
+        '<div class="ci-hint" style="margin:8px 0">' + U.esc(o.hint) + '</div>' +
+        '<div class="muted" style="font-size:14px">' + U.esc(o.src) + (o.lv > 1 ? ' · 단서 ' + o.lv + '겹' : '') + (dw ? ' · 여기서 ' + dw + '쪽 약 ' + o.dist.toFixed(1) + '°' : '') + ' · 표식은 짐작한 자리 — 가까이 갈수록 좁혀집니다</div>' +
+        '<div class="ci-acts">' + (o.hasHint ? '<button class="btn small navy" data-a="hint">' + G.icon('book') + '수첩 「단서」에서 보기</button>' : '') + (act ? '<button class="btn small" data-a="go">' + U.esc(act.label) + '</button>' : '') + '</div>';
+      info.hidden = false;
+      info.querySelector('.ci-x').onclick = function () { info.hidden = true; draw(); };
+      var hb = info.querySelector('[data-a="hint"]'); if (hb) hb.onclick = function () { if (opts.onHint) opts.onHint(o.id); else if (I.showHint) I.showHint(o.id); };
+      var gb = info.querySelector('[data-a="go"]'); if (gb) gb.onclick = function () { act.fn(q.m); };
+      draw();
     }
     function landmarkAt(x, y) {
       var b = box(), scale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15) * 0.95;
@@ -255,18 +284,19 @@
         if (drag.moved) { view.lon = drag.lon - dx / W * view.span; view.lat = drag.lat + dy / H * latSpan(); clampView(); cv.style.cursor = 'grabbing'; draw(); }
         return;
       }
-      var hc = cityAt(p[0], p[1]), hd = hc ? null : landmarkAt(p[0], p[1]);
-      if (hc !== hover || hd !== hoverDisc) { hover = hc; hoverDisc = hd; cv.style.cursor = hc || hd ? 'pointer' : 'grab'; draw(); }
+      var hc = cityAt(p[0], p[1]), hd = hc ? null : landmarkAt(p[0], p[1]), hq = hc || hd ? null : markAt(p[0], p[1]);
+      var mkChanged = (hq ? hq.m.d : null) !== (hoverMark ? hoverMark.m.d : null);
+      if (hc !== hover || hd !== hoverDisc || mkChanged) { hover = hc; hoverDisc = hd; hoverMark = hq; cv.style.cursor = hc || hd || hq ? 'pointer' : 'grab'; draw(); }
     }
     function onUp(e) {
       if (!drag) return;
       var d = drag; drag = null; cv.style.cursor = hover || hoverDisc ? 'pointer' : 'grab';
       if (d.moved) return;
-      var p = evPos(e), c = cityAt(p[0], p[1]), dsc = c ? null : landmarkAt(p[0], p[1]);
-      if (c) showCity(c); else if (dsc && G.Scenes && G.Scenes.discoveryCard) G.Scenes.discoveryCard(dsc, 0); else { var w = toWorld(p[0], p[1]); showSea(w[0], w[1]); }
+      var p = evPos(e), c = cityAt(p[0], p[1]), dsc = c ? null : landmarkAt(p[0], p[1]), mq = c || dsc ? null : markAt(p[0], p[1]);
+      if (c) showCity(c); else if (mq && G.Explore && G.Explore.markerInfo) showMark(mq); else if (dsc && G.Scenes && G.Scenes.discoveryCard) G.Scenes.discoveryCard(dsc, 0); else { var w = toWorld(p[0], p[1]); showSea(w[0], w[1]); }
     }
     window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
-    cv.addEventListener('mouseleave', function () { if ((hover || hoverDisc) && !drag) { hover = null; hoverDisc = null; draw(); } });
+    cv.addEventListener('mouseleave', function () { if ((hover || hoverDisc || hoverMark) && !drag) { hover = null; hoverDisc = null; hoverMark = null; draw(); } });
     cv.addEventListener('dblclick', function (e) { var p = evPos(e); zoomAt(2, p[0], p[1]); });
     U.$$('.cv-zoom .btn', wrap).forEach(function (b) {
       b.onclick = function (e) {
@@ -284,6 +314,8 @@
     clampView(); draw();
     if (G.DiscoveryIcon) G.DiscoveryIcon.preload(landmarks()).then(function () { if (!dead) draw(); });
     if (sel) showCity(sel);
-    return { el: wrap, redraw: draw, view: view, select: showCity };
+    var api = { el: wrap, redraw: draw, view: view, select: showCity, marks: function () { return drawnMarks; }, showMark: showMark };
+    wrap._cv = api;   // 시험용 (tests/chart_hint_marks_smoke.js)
+    return api;
   };
 })(window.G = window.G || {});

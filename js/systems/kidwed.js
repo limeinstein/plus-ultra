@@ -1,7 +1,7 @@
 /* 열여덟 살이 된 딸의 혼례 (G.KidWed) — 자료·대사: js/data/kidwed.js (G.KIDWED · G.BALANCE.kidwed)
    ■ 언제: 자택에 들어설 때(js/systems/homelife.js HL.happen) 열여덟 살이 넘은, 아직 시집가지 않은 딸이 있으면 — 한 번에 한 딸.
    ■ 아버지와 함께한 시간(k.touch — 할 일·집에서 생긴 일마다 1)이 50번을 넘으면: 왕궁 전령이 와서 왕세자비로 청한다 → 혼례 · 결말 낭독 · 딸의 편지.
-     그 밖에는 딸이 가장 잘 자란 능력으로 혼처가 정해진다(매력 = 귀족, 지력 = 학자, 무력 = 기사, 힘 = 선장). 사이가 20 아래면 편지 한 장 남기고 떠난다.
+     그 밖에는 딸이 가장 잘 자란 능력으로 혼처가 정해진다(매력 = 귀족, 지력 = 학자, 무력 = 기사, 체력 = 선장). 사이가 20 아래면 편지 한 장 남기고 떠난다.
    ■ 「아직은 품에 두고 싶다」를 고르면 한 해 뒤에 다시 청한다.
    ■ 저장: k.married = {kind:'prince'|'cha'|'int'|'mar'|'str'|'away', y, title}, k.wedNext = 다시 청하는 날. 시집간 딸은 집(HL.kidsHome)에 없다. */
 (function (G) {
@@ -19,7 +19,7 @@
     var s = S(); if (!s || !s.player || !s.player.kids) return null;
     var age = K().age || 18;
     return s.player.kids.filter(function (k) {
-      return k.sex === 'f' && !k.unnamed && !k.married && !k.lost && k.house == null && F().kidAge(k) >= age   // !k.lost: 섬에서 사라진 딸은 혼례를 올리지 않는다 (QA 2026-10-23) && (k.wedNext == null || s.day >= k.wedNext);
+      return k.sex === 'f' && !k.unnamed && !k.married && !k.lost && k.house == null && F().kidAge(k) >= age && (k.wedNext == null || s.day >= k.wedNext);   // !k.lost: 섬에서 사라진 딸은 혼례를 올리지 않는다 (QA 2026-10-23) · wedNext 조건이 주석 안에 들어가 「아직은 품에 두고 싶다」가 먹지 않던 것 (2026-10-28)
     })[0] || null;
   };
   // 이미 왕세자비가 된 딸이 있으면(p.royalKin) 다음 딸은 보통 혼처로 — 딸마다 왕세자비가 되던 것 (QA 2026-10-23)

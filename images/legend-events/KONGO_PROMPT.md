@@ -1,7 +1,9 @@
 # 포르투갈과 콩고 그림 주문서 (2026-10-28)
 
 이벤트: `js/systems/kongo.js` · 대사: `js/data/kongo.js`. 넣기만 하면 바로 쓰인다(없으면 그림 없이 대화만). 규격은 기존 전설 장면 그림과 같다(1881×836).
-인물 얼굴은 이미 있는 그림을 빌린다 — 주앙 2세 `sponsors/pt_king`, 디오구 캉 `rivals/디오구 캉`, 콩고 사람 `npc-roles/af/*`, 사제 `npc-roles/ib/priest`.
+주앙 2세는 기존 `sponsors/pt_king_1`, 디오구 캉은 `rivals/디오구 캉`을 쓴다. 콩고 주요 인물·사제는 `portraits/history/kongo_*`의 전용 얼굴상·투명 무릎상을 쓴다. 은사쿠의 두 복식은 같은 얼굴을 참조했다.
+
+아래 일곱 장면은 제작·연결 완료했다. 원화·실제 생성 지시문·검수 기록은 `docs/art/other-event-art-20261028.md`와 `tools/other_event_art_prompts.json`에 있다.
 
 | 파일 | 내용 |
 |---|---|

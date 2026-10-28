@@ -193,7 +193,7 @@
       var ws = MT.wanderers(c, st);
       if (!ws.length) { await say('요즘은 떠돌이 항해사 이야기를 못 들었어요. 사례는 됐어요, 다음에 알려 드릴게요.', 'warm'); return; }
       s.player.gold -= price; st.tipDay = s.day; st.tipPv = G.R.stayNo(); st.aff = Math.min(100, (st.aff || 0) + 1);
-      ws.forEach(function (w) { w.stayLeft = G.MateMove.hear(w.m.id, w.c.id); });
+      ws.forEach(function (w) { w.stayLeft = G.MateMove.hear(w.m.id, w.c.id); if (G.MateKnow) G.MateKnow.know(w.m.id, w.c.id, 'tip'); });
       await say(U.pick(['쉿, 손님들이 하는 얘기를 들었는데요… ', '고마워요. 제가 들은 건 이래요. ']) + ws.map(function (w) {
         return w.m.name + ' (' + (w.m.natName || '') + (w.m.typeName ? ' ' + w.m.typeName : '') + ') — ' + w.c.name + ' 술집, 여기서 ' + dirName(c, w.c) + ' 약 ' + daysTo(c, w.c) + '일 · 앞으로 ' + w.stayLeft + '일 동안 머물러요';
       }).join('\n'), 'warm');

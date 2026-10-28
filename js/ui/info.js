@@ -55,12 +55,13 @@
     if (win.result && win.result.then) win.result.then(function () { if (G.Audio) G.Audio.sfx('bookClose'); });   // 덮는다
     var tabs = U.el('div', 'tabs');
     tabList.forEach(function (t) {
-      var b = U.el('div', 'tab' + (t[0] === tab ? ' on' : ''), t[1]);
+      var b = U.el('div', 'tab' + (t[0] === tab ? ' on' : ''), t[1]); b.dataset.k = t[0];
       b.onclick = function () { U.$$('.tab', tabs).forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); if (G.Audio) G.Audio.sfx('page'); show(t[0]); };
       tabs.appendChild(b);
     });
     win.el.insertBefore(tabs, win.content);
     function show(k) { lastTab = PAGES[k] ? k : 'admiral'; lastTabOf = S(); win.content.innerHTML = ''; win.content.scrollTop = 0; (PAGES[k] || PAGES.admiral)(win.content, win); }
+    win.goTab = function (k) { U.$$('.tab', tabs).forEach(function (x) { x.classList.toggle('on', x.dataset.k === k); }); show(k); };   // 해도의 ? 표식 → 「단서」 (I.showHint)
     show(tab);
     return win.result;
   };
@@ -205,16 +206,27 @@
       return x.name + ' ' + pips(x.lv) + (x.grown > 0 ? '<b title="선실에서 지내며 ' + x.grown + '단계 늘었다" style="color:var(--gold)">★</b>' : '') + (x.lv < x.raw ? ' <small class="muted" title="충성이 낮거나 다쳐서 지금은 덜 쓴다">(본디 ' + x.raw + ')</small>' : '');
     }).join(' &nbsp; ') || '<span class="muted">특기 없음</span>';
   }
+  /** 부하의 능력치 네 가지 — 체력·지력·무력·매력 (2026-10-28) */
+  function mateStats(d) {
+    var st = d.st || [];
+    return '<div class="mate-st">' + (G.STATS || []).map(function (x, i) {
+      var v = st[i] == null ? 0 : st[i];
+      return '<span title="' + U.esc(x.name) + ' ' + v + '"><b>' + U.esc(x.name) + '</b> ' + (st[i] == null ? '—' : v) + '<em class="bar"><i style="width:' + Math.max(0, Math.min(100, v)) + '%"></i></em></span>';
+    }).join('') + '</div>';
+  }
   PAGES.mates = function (el) {
     var s = S();
     if (!s.mates.length) { el.innerHTML = '<div class="muted">동료가 없습니다. 술집에서 동료를 찾아보십시오.</div>'; return; }
-    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 선실에서 오래 지내면 그 방의 특기가 늘어납니다(★). 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」이나 항구의 「함대편성 → 선장 임명」에서 바꿉니다. 그 밖의 부하는 「기함 선실」에서 방(요리실·진료실·포격실…)에 두면 그 방의 특기가 함대에 쓰입니다. 자리가 없는 부하는 달마다 충성이 떨어지고, 충성이 40 아래면 일을 건성으로 하며, 0이 되면 배에서 내리려 합니다.</div><div class="mates"></div>';
+    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 선실에서 오래 지내면 그 방의 특기가 늘어납니다(★). 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」에서 바꿉니다. 다른 배의 선장·조타수·갑판·파수꾼·선실은 능력에 맞게 저절로 정해지고(조타수·갑판·파수꾼·선실은 충성만 지킨다), 자리가 없는 부하는 붉은 바탕으로 보입니다. 그 밖의 부하는 「기함 선실」에서 방(요리실·진료실·포격실…)에 두면 그 방의 특기가 함대에 쓰입니다. 자리가 없는 부하는 달마다 충성이 떨어지고, 충성이 40 아래면 일을 건성으로 하며, 0이 되면 배에서 내리려 합니다.</div><div class="mates"></div>';
     var box2 = el.querySelector('.mates');
     R.tidyCaptains();
+    if (G.CrewAuto) G.CrewAuto.refresh();
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;
-      var row = U.el('div', 'shipcard', '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>' + (G.Banter ? '<span class="tag" title="생김새로 정해진 말투 — 동물·식물을 발견하면 이 말투로 수다를 떤다">말투 · ' + U.esc(G.Banter.toneName(m.id)) + '</span>' : '') + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + R.mateWage(m.id) + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
+      var rc = G.CabinView && G.CabinView.rowClass ? G.CabinView.rowClass(m) : '';   // 대기(자리 없음)는 붉은 바탕, 다른 배 사람은 푸른 바탕 (2026-10-28)
+      var row = U.el('div', 'shipcard' + (rc ? ' mate-' + rc : ''), '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + (rc === 'idle' ? '<span class="tag cb-idle-tag" title="자리가 없는 부하는 달마다 충성이 떨어진다 — 기함 선실에 두거나 술집 「부하편성」의 자동 배치">대기 · 자리 없음</span>' : '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>') + (G.Banter ? '<span class="tag" title="생김새로 정해진 말투 — 동물·식물을 발견하면 이 말투로 수다를 떤다">말투 · ' + U.esc(G.Banter.toneName(m.id)) + '</span>' : '') + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + R.mateWage(m.id) + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
         '<div class="muted" style="font-size:16px;margin:4px 0">' + d.desc + '</div>' +
+        mateStats(d) +
         '<div style="font-size:16px">' + mateSkills(m, d) + '</div>' +
         (G.Cabins && G.Cabins.growNote(m) ? '<div style="font-size:15px;margin-top:2px" class="muted">선실 수련 · ' + U.esc(G.Cabins.growNote(m)) + '</div>' : '') +
         '<div style="font-size:15px;margin-top:4px" class="muted">' + mateLangs(m, d) + '</div></div>');
@@ -228,6 +240,7 @@
 
   /** 철새 명부: 지금 항구를 떠도는 떠돌이 항해사와 마녀 (소문으로 들은 머무는 곳) */
   PAGES.wander = function (el) {
+    if (G.MateKnow) return G.MateKnow.page(el);   // 소식을 아는 항해사만 · 들은 그때의 곳 (js/systems/mateknow.js)
     var s = S(), y = s.date.y, hired = {};
     s.mates.forEach(function (m) { hired[m.id] = 1; });
     var ready = function (m) { return G.Frontier ? G.Frontier.mateReady(m, y) : true; };
@@ -361,9 +374,20 @@
     el.innerHTML = ids.map(function (id) {
       var d = G.DISC[id], h = s.hints[id];
       var st = s.disc[id];
-      return '<div class="hint-item"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (G.CLUE ? '<span class="tag">' + G.CLUE_NAME[G.Disc.clue(d)] + '</span>' : '') + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + (G.Disc.hintLv(id) > 1 ? '<span class="tag good-text">단서 ' + G.Disc.hintLv(id) + '겹</span>' : '') + '<span class="right muted" style="font-size:14px">' + G.Disc.hintSrcs(id).map(srcName).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') + '</span></div><div class="tx">' + U.esc(G.Disc.hintText(d)) + '</div></div>';
+      return '<div class="hint-item" data-hid="' + id + '"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (G.CLUE ? '<span class="tag">' + G.CLUE_NAME[G.Disc.clue(d)] + '</span>' : '') + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + (G.Disc.hintLv(id) > 1 ? '<span class="tag good-text">단서 ' + G.Disc.hintLv(id) + '겹</span>' : '') + '<span class="right muted" style="font-size:14px">' + G.Disc.hintSrcs(id).map(srcName).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') + '</span></div><div class="tx">' + U.esc(G.Disc.hintText(d)) + '</div></div>';
     }).join('');
+    // 해도의 ? 표식에서 「단서 보기」로 왔으면 그 단서로 내려가 잠깐 빛낸다 (I.focusHint)
+    var fid = I.focusHint; I.focusHint = null;
+    var it = fid && el.querySelector('.hint-item[data-hid="' + fid + '"]');
+    if (it) { it.classList.add('hl'); setTimeout(function () { try { it.scrollIntoView({ block: 'center' }); } catch (e) { /* 옛 브라우저 */ } }, 30); }
   };
+  /** 단서 하나를 수첩 「단서」에서 보여 준다 — 수첩이 열려 있으면(win.goTab) 그 수첩에서, 아니면 새로 연다 */
+  I.showHint = function (id, win) {
+    I.focusHint = id;
+    if (win && win.goTab) { win.goTab('hints'); return null; }
+    return I.open('hints');
+  };
+  I.srcName = function (src) { return srcName(src); };   // 해도의 ? 표식이 어디서 들은 단서인지 (js/systems/explore.js X.markerInfo)
   function srcName(src) {
     if (!src) return '';
     var p = String(src).split(':');
@@ -396,6 +420,7 @@
     // 왕명 (js/systems/court.js)
     if (G.Princess) html += G.Princess.html();   // 국왕의 특명 — 사라진 왕녀
     if (G.Colony) html += G.Colony.html();       // 개척 도시
+    if (G.Sky) html += G.Sky.html();             // 하늘을 재는 사람들 — 나침반과 망원경
     if (G.Kongo) html += G.Kongo.html();         // 포르투갈과 콩고 — 강가의 돌기둥 · 주앙 1세의 세례
     if (G.Teppo) html += G.Teppo.html();         // 철포 삼백 자루 — 총 300을 사카이로
     if (G.Gyeonwoo) html += G.Gyeonwoo.html();   // 견우와 직녀 — 항주 → 사카이 → 한산도
@@ -479,9 +504,9 @@
     }).join('') + '</div>';
   };
 
-  PAGES.map = function (el) {
+  PAGES.map = function (el, win) {
     el.innerHTML = '<div class="flex" style="margin-bottom:8px"><span class="muted">탐험한 바다만 그려집니다. 휠·＋/－로 확대하고 끌어서 옮기며, 도시를 누르면 요약이 나옵니다.</span><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div><div class="mapbox"></div>';
-    G.ChartView.mount(el.querySelector('.mapbox'), { w: 1100, h: 560 });
+    G.ChartView.mount(el.querySelector('.mapbox'), { w: 1100, h: 560, onHint: function (id) { I.showHint(id, win); } });
     // 이어진 항로: 한 항구에서 출항해 다른 항구에 곧장 입항하면 자동항해가 열린다
     var list = G.Routes ? G.Routes.list() : [];
     var h = '<div class="sep"></div><h4 style="margin:0 0 6px">항로 경험 <small class="muted">— 한 항구에서 출항해 다른 항구에 곧장(다른 항구에 들르지 않고) 입항하면 두 항구 사이의 자동항해가 열립니다(오는 길도). 자동항해 중 손으로 몰면 풀리고, 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓸 수 있습니다.</small></h4>';
@@ -596,11 +621,12 @@
   };
   /** 망루·정찰대가 본 것(? 표식)과 계약 목표 부근 (px: 경위도 → 화면) */
   I.chartMarks = function (ctx, px, fs, spanLon, w, h, shipPos, opts) {
-    var s = S();
+    var s = S(), drawn = [];   // 그린 ? 표식과 화면 자리 (해도에서 마우스를 올리면 이름 — js/ui/chartview.js)
     opts = opts || {};
     if (!opts.noMarks && G.Explore && shipPos) {
       G.Explore.markers(shipPos.lon, shipPos.lat, 'sea').forEach(function (m) {
         var p = px(m.lon, m.lat); if (p[0] < -20 || p[0] > w + 20 || p[1] < -20 || p[1] > h + 20) return;
+        drawn.push({ m: m, x: p[0], y: p[1] });
         var rr = Math.max(5, m.r / spanLon * w);
         ctx.strokeStyle = 'rgba(40,70,120,.75)'; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
         ctx.beginPath(); ctx.arc(p[0], p[1], rr, 0, 7); ctx.stroke(); ctx.setLineDash([]);
@@ -619,6 +645,7 @@
         ctx.strokeStyle = 'rgba(176,30,30,.8)'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(tp[0], tp[1], 14, 0, 7); ctx.stroke(); ctx.setLineDash([]);
       }
     }
+    return drawn;
   };
   I.invalidateLand = function () { landRaster = null; };
 
@@ -628,15 +655,11 @@
     G.Keys.ensure(st);
     G.State.rememberSettings(st);
     var kl = function (a) { return G.Keys.label(a, st); };
-    var diffName = { easy: '쉬움', normal: '보통', original: '원작 규칙' }[st.diff] || st.diff;
+    var diffName = { easy: '쉬움', normal: '보통', original: '엄격 규칙' }[st.diff] || st.diff;
     el.innerHTML = '<div class="kv" style="grid-template-columns:160px 1fr;align-items:center">' +
       '<div>난이도</div><div>' + diffName + ' <small class="muted">(' + (st.diff === 'original' ? '저장은 모국 도시의 여관에서만' : st.diff === 'easy' ? '어디서나 저장 가능' : '저장은 여관에서') + ')</small></div>' +
       '<div>효과음</div><div><input type="range" min="0" max="100" data-k="sound" value="' + Math.round((st.sound != null ? st.sound : 0.5) * 100) + '"></div>' +
       '<div>음악</div><div><input type="range" min="0" max="100" data-k="music" value="' + Math.round((st.music != null ? st.music : 0.35) * 100) + '"></div>' +
-      '<div>배경 음악</div><div><div class="opt-row"><div class="opt' + (st.musicSrc !== 'ost' ? ' on' : '') + '" data-ms="base">기존 음악</div><div class="opt' + (st.musicSrc === 'ost' ? ' on' : '') + '" data-ms="ost">코스타 델 솔 3 OST</div></div>' +
-        '<small class="muted">' + (st.musicSrc === 'ost' ? (G.YTM && G.YTM.local && G.YTM.local() ? '내 컴퓨터의 MP3로 틉니다 (' + U.esc(G.LocalOST.source()) + ') — 곡 사이를 부드럽게 넘기고, 듣던 곡으로 돌아오면 이어서 틉니다' : G.YTM && G.YTM.failed() ? '유튜브를 읽지 못해 기존 음악으로 틀고 있습니다' : '장면마다 유튜브 영상으로 틉니다 — 유튜브 규칙상 재생기(200×200)는 숨길 수 없어 구석에 흐리게 둡니다 · 끌어서 옮길 수 있습니다') : '게임에 들어 있는 곡과 코드로 만든 음악') + '</small>' +
-        (G.LocalOST ? '<div class="flex" style="gap:8px;margin-top:4px"><button class="btn small" data-act="mp3">「Costa Del Sol BGM 모음.mp3」 고르기</button>' + (G.LocalOST.stored() ? '<button class="btn small ghost" data-act="mp3x">고른 파일 지우기</button>' : '') + '<input type="file" accept="audio/mpeg,.mp3" data-mp3 style="display:none"></div>' +
-          '<small class="muted">가진 MP3를 고르면 이 브라우저에만 보관해 유튜브 창 없이 틉니다 (게임 파일에는 넣지 않습니다). 게임 폴더 옆 Ref 폴더나 music/_local/costa_del_sol.mp3 에 두면 저절로 찾습니다.</small>' : '') + '</div>' +
       (UI.fs && UI.fs.can() ? '<div>전체 화면</div><div><div class="opt-row"><div class="opt' + (UI.fs.on() ? ' on' : '') + '" data-fs="1">켬</div><div class="opt' + (UI.fs.on() ? '' : ' on') + '" data-fs="0">끔</div></div>' +
         '<small class="muted">F11로도 켜고 끕니다. 게임이 켠 전체 화면에서는 마우스를 맨 위로 올려도 브라우저 메뉴가 내려오지 않습니다.</small></div>' : '') +
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
@@ -683,19 +706,6 @@
       o.onblur = function () { if (o.isConnected && o.textContent === '새 키를 누르세요…') { off(); o.textContent = old; o.classList.remove('navy'); } };
     }; });
     var kr = el.querySelector('[data-act=keyreset]'); if (kr) kr.onclick = function () { G.Keys.reset(st); PAGES.menu(el, win); };
-    U.$$('[data-ms]', el).forEach(function (o) { o.onclick = function () { if (G.YTM) G.YTM.setSource(o.dataset.ms); else st.musicSrc = o.dataset.ms; PAGES.menu(el, win); }; });
-    var mb = el.querySelector('[data-act=mp3]'), mi = el.querySelector('[data-mp3]');
-    if (mb && mi) {
-      mb.onclick = function () { mi.click(); };
-      mi.onchange = async function () {
-        var f = mi.files && mi.files[0]; if (!f) return;
-        UI.toast('MP3를 확인하는 중…', 'info', 2000);
-        if (await G.LocalOST.useFile(f)) { if (G.YTM) G.YTM.setSource('ost'); UI.toast('「' + f.name + '」' + G.U.jx(f.name, '으로/로') + ' 코스타 델 솔 음악을 틉니다.', 'info', 4000); }
-        else UI.toast('이 파일은 「Costa Del Sol BGM 모음」이 아닌 것 같습니다 (길이가 맞지 않음).', 'info', 4500);
-        PAGES.menu(el, win);
-      };
-    }
-    var mx = el.querySelector('[data-act=mp3x]'); if (mx) mx.onclick = async function () { await G.LocalOST.forget(); if (G.Audio) G.Audio.music(G.Audio.want || 'town', true); PAGES.menu(el, win); };
     var sv = el.querySelector('[data-act=save]'); if (sv) sv.onclick = async function () { await I.saveMenu(); };
     el.querySelector('[data-act=title]').onclick = async function () {
       if (await UI.confirm('저장하지 않은 진행은 사라집니다. 타이틀로 돌아가겠습니까?')) { win.close(null); UI.fade(function () { G.Game.go('title'); }); }

@@ -137,6 +137,7 @@
     var s = S(), c = G.CITY_DATA[arg.cityId != null ? arg.cityId : s.loc.city];
     s.loc = { mode: 'city', city: c.id, lon: c.lon, lat: c.lat, heading: s.loc.heading || 0, via: arg.via || (arg.load && s.loc.mode === 'city' && s.loc.city === c.id && s.loc.via) || (c.port ? 'sea' : 'land') };   // 이어하기: 뭍길로 들어와 있던 도시는 그대로 뭍길(탐험대가 성문 밖에서 기다린다)
     cur = null; token++;
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 자리 없는 부하를 빈 자리에, 다른 배는 능력에 맞게 (js/systems/crewauto.js)
     // 이번 입항 번호: 도시에 들어올 때마다 하나씩 (이어하기는 같은 입항) — 교역소 흥정·식당 한 끼 같은 「한 번만」을 이 번호로도 막는다 (R.sameStay · QA 2026-10-23)
     if (!arg.load) s.portVisit = (s.portVisit || 0) + 1;
     busy = true;
@@ -166,12 +167,16 @@
       if (G.Sim && G.Sim.pending()) await G.Sim.check();         // 공양미 삼백 석 — 심청 (js/systems/simcheong.js)
       if (G.IncaFall && G.IncaFall.pending()) await G.IncaFall.check();   // 잉카 제국의 멸망 — 파나마·카하마르카·쿠스코 (js/systems/incafall.js)
       if (G.Aztec && G.Aztec.pending()) await G.Aztec.check();
+      if (G.Potosi && G.Potosi.pending()) await G.Potosi.check();   // 포토시 은광 — 바람의 불 · 차스카 구출 (js/systems/potosi.js)
       if (G.Nzinga && G.Nzinga.pending()) await G.Nzinga.check();   // 은징가 여왕의 저항 — 루안다 (js/systems/nzinga.js)
       if (G.GoaMal && G.GoaMal.pending()) await G.GoaMal.check();   // 포르투갈의 고아·말라카 점령 — 코친·고아·말라카 (js/systems/goamalacca.js)
       if (G.Mina && G.Mina.pending()) await G.Mina.check();   // 엘미나 요새 건설 — 리스본·산호르헤 (js/systems/elmina.js)
+      if (G.MingFall && G.MingFall.pending()) await G.MingFall.check();   // 명의 북경 붕괴·청의 입관 — 숭정제의 마지막 편지 (js/systems/mingfall.js)
       if (G.Mughal && G.Mughal.pending()) await G.Mughal.check();   // 무굴 제국의 성립 — 디우·카불·델리 (js/systems/mughal.js)
       if (G.Napoleon && G.Napoleon.pending()) await G.Napoleon.check();   // 오스트리아의 살롱 — 조제핀과 나폴레옹의 일기토 (js/systems/napoleon.js)   // 아즈텍 제국의 멸망 — 쿠바·베라크루스·투라스칼라·테노치티틀란 (js/systems/aztec.js)
       if (G.Pocahontas && G.Pocahontas.pending()) await G.Pocahontas.check();   // 포카혼타스의 중재 — 북·중앙아메리카 항구 (js/systems/pocahontas.js)
+      if (G.DutchWar && G.DutchWar.pending()) await G.DutchWar.check();   // 네덜란드 독립 전쟁 — 개미와 베짱이, 암스테르담 (js/systems/dutchwar.js)
+      if (G.NewWorld && G.NewWorld.pending()) await G.NewWorld.check();   // 콜럼버스의 신대륙 발견과 그 뒤 — 세비야·그라나다·바르셀로나·산토도밍고·산티아고·자메이카 (js/systems/newworld.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -225,7 +230,7 @@
       if (rt) parts.push(rt.open ? '자동항해 가능' : '항로 경험 ' + rt.n + '/' + rt.need + (rt.long ? ' (장거리)' : ''));
       if (days > 0 && v.from !== c.id) UI.toast(G.CITY_DATA[v.from].name + ' → ' + c.name + ' · ' + parts.join(' · '), 'log', 5500);
       if (rt && rt.opened) news.push({ icon: 'map', text: G.CITY_DATA[v.from].name + '–' + c.name + ' 항로를 익혔다' + (rt.long ? ' (장거리)' : '') + '. 이제 두 항구 사이는 목적지만 고르면 자동항해로 갈 수 있다 (오는 길도).' });
-      if (rt && rt.linked && rt.linked.length) news.push({ icon: 'map', text: '이어진 항로망을 따라 ' + c.name + '에서 ' + rt.linked.slice(0, 6).map(function (x) { return G.CITY_DATA[x].name; }).join('·') + (rt.linked.length > 6 ? ' 외 ' + (rt.linked.length - 6) + '곳' : '') + '까지도 자동항해로 갈 수 있게 되었다.' });   // 대항해시대 4처럼 (js/systems/routes.js)
+      if (rt && rt.linked && rt.linked.length) news.push({ icon: 'map', text: '이어진 항로망을 따라 ' + c.name + '에서 ' + rt.linked.slice(0, 6).map(function (x) { return G.CITY_DATA[x].name; }).join('·') + (rt.linked.length > 6 ? ' 외 ' + (rt.linked.length - 6) + '곳' : '') + '까지도 자동항해로 갈 수 있게 되었다.' });   // js/systems/routes.js
       delete s.voyage;
     }
     if (news.length) await C.news(news);
@@ -237,6 +242,7 @@
     if (G.Romance) { try { await G.Romance.arrival(c); } catch (e) { console.error(e); } }   // 부하들 사이의 썸 — 혼례는 항구에서
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
     if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }
+    if (G.Sky) { try { await G.Sky.arrival(c); } catch (e) { console.error(e); } }   // 하늘을 재는 사람들: 단치히·뉘른베르크(코페르니쿠스) · 프라하(케플러) · 베니스·피렌체·로마·암스테르담(갈릴레이)
     if (G.Kongo) { try { await G.Kongo.arrival(c); } catch (e) { console.error(e); } }   // 포르투갈과 콩고: 리스본(국왕의 명·보고) · 르완다(돌려보내기·세례)
     if (G.Teppo) { try { await G.Teppo.arrival(c); } catch (e) { console.error(e); } }   // 철포 삼백 자루: 일본 항구에서 도키치로의 부탁 → 사카이에서 노부나가에게 전한다
     if (G.Gyeonwoo) { try { await G.Gyeonwoo.arrival(c); } catch (e) { console.error(e); } }   // 견우와 직녀: 거북선으로 조선 도시 → 항주 → 사카이 → 한산도
@@ -418,7 +424,7 @@
     }
     G.Game.setScene(C.interior(ikind, c, ivar));
     plaque(B, c, arg);
-    if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(kind);     // 건물의 곡: 주점(기존 음악·OST) · 왕궁·귀족 알현(OST) — 겹쳐 쌓이지 않는다
+    if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(kind);     // 건물의 곡: 주점·왕궁 — 겹쳐 쌓이지 않는다
     if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
     var ok = true;
     try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }

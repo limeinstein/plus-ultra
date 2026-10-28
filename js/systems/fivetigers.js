@@ -3,7 +3,7 @@
    ■ 언제: 바다의 하루(seaChance) 또는 입항(portChance) — 부하들 사이의 썸(js/systems/romance.js) 사건이 없을 때. 한 판에 한 번.
    ■ 끝나면: 모인 사람 능력치가 조금 오른다(gain) · 충성 + · 규율 +.
      능력치는 항해사 정의(G.MATE[id].st)에 더해 두고(본래 값은 st0), 저장은 s.tigers.bonus — 불러오거나 새 게임이면 다시 입힌다 (G.Tigers.apply).
-   ■ 저장: s.tigers = { since: 다섯이 처음 함께한 날, done: 날짜, bonus: {id: [힘, 지력, 무력, 매력]} } */
+   ■ 저장: s.tigers = { since: 다섯이 처음 함께한 날, done: 날짜, bonus: {id: [체력, 지력, 무력, 매력]} } */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI;
@@ -49,7 +49,7 @@
     TG.apply();
     return g;
   }
-  var STN = ['힘', '지력', '무력', '매력'];
+  var STN = ['체력', '지력', '무력', '매력'];
   function gainText(g) { return g.map(function (v, i) { return v ? STN[i] + ' +' + v : ''; }).filter(Boolean).join(' · '); }
 
   // ---------------------------------------------------------------- 이야기

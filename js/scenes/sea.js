@@ -347,7 +347,7 @@
     if (G.Keys.is(e, 'speed2')) { st.speed = 2; buildSpeed(); return true; }
     if (G.Keys.is(e, 'speed3')) { st.speed = 4; buildSpeed(); return true; }
     if (G.Keys.is(e, 'confirm')) { tryEnterPort(); return true; }
-    // 방향키 = 대항해시대 3처럼: 누르고 있는 동안 뱃머리가 그 방위(← 서 · → 동 · ↑ 북 · ↓ 남, 두 키 = 북서·남동 …) 쪽으로
+    // 방향키: 누르고 있는 동안 뱃머리가 그 방위(← 서 · → 동 · ↑ 북 · ↓ 남, 두 키 = 북서·남동 …) 쪽으로
     // 차츰 돌아가고, 떼면 그때 향한 쪽으로 곧게 나아간다. 지그재그 없이 뱃머리 쪽으로 가며(맞바람이면 느림), Space로 정지
     var dirAction = directionAction(e);
     if (!helmMode() && dirAction) {
@@ -704,6 +704,13 @@
         if (!c.port) return [];
         var o = RT.origin(), open = RT.isOpen(o, c.id);
         return [{ label: open ? c.name + U.jx(c.name, '으로/로') + ' 자동항해' : c.name + ' 쪽으로 바닷길 따라', icon: open ? 'anchor' : 'map', fn: function () { win.close('go'); setTimeout(function () { setCityTarget(c); }, 30); } }];
+      },
+      // ? 표식(단서)을 누르면: 그쪽으로 간다 (뭍의 발견이면 가까운 바다로) — js/ui/chartview.js showMark
+      markAction: function (m) {
+        return { label: m.d.how === 'land' ? '가까운 해안으로 간다' : '이 단서 쪽으로 간다', fn: function (mm) {
+          win.close('go');
+          setTimeout(function () { if (mm.d.how === 'land') { var sea = G.Nav.nearestSea(mm.lon, mm.lat, 6); if (sea) { setTarget(sea[0], sea[1], null); return; } } setTarget(mm.lon, mm.lat, null); }, 30);
+        } };
       },
       seaAction: function (lon, lat) {
         if (!G.Geo.isSea(lon, lat, 0.2)) return null;
@@ -1519,6 +1526,7 @@
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
       if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 툴롱의 겨울 (하이레딘 파샤)
       if (G.Kongo && G.Kongo.seaPending()) await G.Kongo.atSea();   // 콩고 강 어귀: 디오구 캉과 돌기둥 (js/systems/kongo.js)
+      if (G.Sky && G.Sky.seaPending()) await G.Sky.atSea();   // 나침반의 비켜 감을 잰다(케플러) · 망원경으로 목성의 달(갈릴레이) (js/systems/skylore.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);
@@ -2063,7 +2071,7 @@
         else {
           var hn = npcAt(st.mouse[0], st.mouse[1]);
           if (hn) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (hn.kind === 'pirate' ? G.Ships.pirateLabel(hn.zone) : hn.label || (hn.nation || '') + ' ' + NPC_KIND[hn.kind].name) + ' ' + hn.n + '척' + (hn.ships ? ' (' + hn.ships.map(function (id) { return G.SHIP[id].name; }).join('·') + ')' : '') + (hn.awed ? ' — 우리 배를 보고 달아난다' : hn.hostile ? '' : ' — 클릭하면 신호를 보냅니다'));
-          else { var hm = G.Explore.markerAt(st.marks || [], toScreen, st.mouse[0], st.mouse[1]); if (hm) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, '망루가 본 것 (' + G.DISC_CATS[hm.d.cat] + ') · 약 ' + hm.dist.toFixed(1) + '° — 클릭하면 향합니다'); }
+          else { var hm = G.Explore.markerAt(st.marks || [], toScreen, st.mouse[0], st.mouse[1]); if (hm) tip(ctx, st.mouse[0] + 14, st.mouse[1] + 18, (G.Explore.markerTip ? G.Explore.markerTip(hm) : '망루가 본 것 (' + G.DISC_CATS[hm.d.cat] + ') · 약 ' + hm.dist.toFixed(1) + '°') + ' — 클릭하면 향합니다'); }
         }
       }
     }

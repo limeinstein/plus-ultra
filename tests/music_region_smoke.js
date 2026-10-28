@@ -1,7 +1,7 @@
 /* 고장에 맞는 음악 · 주점에서 나오면 거리의 곡 (tests/music_region_smoke.js) — node tests/music_region_smoke.js
    기존 음악(music/「제목.mp3」, js/data/music.js): 첫 화면 항해(태평양) · 도시마다 지역 곡 · 바다(지중해·대서양·인도양·태평양·남태평양·남극해 북극해) ·
    뭍(사막·정글·북부·동아시아·그 고장) · 주점·왕궁 · 고향 귀환 · 결혼 후 첫 항해 · 일기토·육상 전투·해상 전투 · 전설의 대륙
-   코스타 델 솔 3 OST: 가짜 유튜브 재생기로 — 주점 21번 → 나오면 그 도시의 곡, 건물을 여러 번 드나들어도 쌓이지 않고 바다로 나가면 바다 곡. 콘솔 오류 0. */
+   콘솔 오류 0. */
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
@@ -14,11 +14,6 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_NAME|Failed to load|net::/.test(m.text())) errors.push(m.text()); });
-  // 가짜 유튜브 재생기: 무엇을 틀었는지 적어 둔다
-  await page.addInitScript(() => {
-    window.__yt = [];
-    window.YT = { Player: function (id, o) { const p = { loadVideoById: v => window.__yt.push(v.videoId + '@' + v.startSeconds), setVolume() {}, playVideo() {}, pauseVideo() { window.__yt.push('pause'); } }; setTimeout(() => o.events.onReady(), 0); return p; } };
-  });
   try {
     await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
@@ -26,7 +21,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       await G.Game.ensureGeo();
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 1; });
       const s = G.Game.state = G.State.newGame({ name: '시험', nation: 'PT', job: 'merchant', age: 22, birth: { m: 4, d: 12 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 3), diff: 'normal' });
-      s.settings.res = 0.35; s.date = { y: 1560, m: 6, d: 1 }; s.player.home = 0;
+      s.settings.res = 0.35; s.date = { y: 1500, m: 6, d: 1 }; s.player.home = 0;   // 22살로 시작한 해(1480)에서 20년 — 수명이 다해 눈을 감지 않게
       if (G.BALANCE.disaster) G.BALANCE.disaster.random = 0;
     });
     // ⓪ 첫 화면: 항해(태평양) · 곡 파일 41개가 모두 읽힌다
@@ -43,7 +38,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => {
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 1; });
       const s = G.Game.state = G.State.newGame({ name: '시험', nation: 'PT', job: 'merchant', age: 22, birth: { m: 4, d: 12 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 3), diff: 'normal' });
-      s.settings.res = 0.35; s.date = { y: 1560, m: 6, d: 1 }; s.player.home = 0;
+      s.settings.res = 0.35; s.date = { y: 1500, m: 6, d: 1 }; s.player.home = 0;   // 22살로 시작한 해(1480)에서 20년 — 수명이 다해 눈을 감지 않게
     });
 
     // ① 도시마다 고장의 곡 · 바다 · 뭍
@@ -149,8 +144,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const A = G.Audio, o = {};
       A.music('duel'); o.duel = A.now(); A.music('landwar'); o.lw = A.now(); A.music('battle'); o.bat = A.now();
       A.music('sea'); o.sea = A.now();
-      G.YTM.moment('minigame'); o.mini = A.now(); G.YTM.resume(); o.miniBack = A.now();
-      G.YTM.moment('legend'); o.mom = A.now(); A.music('town'); o.momKeep = A.now(); A.music('sea'); G.YTM.resume(); o.back = A.now();
+      G.Audio.moment('minigame'); o.mini = A.now(); G.Audio.resume(); o.miniBack = A.now();
+      G.Audio.moment('legend'); o.mom = A.now(); A.music('town'); o.momKeep = A.now(); A.music('sea'); G.Audio.resume(); o.back = A.now();
       return o;
     });
     ok(fx.duel === '일기토' && fx.lw === '육상 전투' && fx.bat === '해상 전투', '일기토 · 육상 전투 · 해상 전투');
@@ -159,37 +154,6 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await city(kag);
     ok(await page.evaluate(() => G.Audio.now()) === '일본', '나가사키 거리: 일본 곡');
 
-    // ③ 코스타 델 솔 3 OST (가짜 유튜브): 주점 → 나오면 그 도시 곡, 드나들어도 쌓이지 않는다
-    await page.evaluate(() => { G.YTM.setSource('ost'); });
-    await city(0);
-    await page.waitForTimeout(200);
-    const o = await page.evaluate(() => G.YTM.current());
-    const seq = [];
-    for (let k = 0; k < 3; k++) {
-      await page.evaluate(() => { G.Scenes.city.visit('tavern'); });
-      await clickThrough(() => G.Scenes.city.current() && !G.Scenes.city.isBusy() && !document.querySelector('#ui .modal-back'));
-      seq.push(await page.evaluate(() => G.YTM.current()));
-      await page.evaluate(() => G.Scenes.city.leave()); await page.waitForTimeout(200);
-      seq.push(await page.evaluate(() => G.YTM.current()));
-    }
-    ok(o === 't13' && seq.join() === 't21,t13,t21,t13,t21,t13' && await page.evaluate(() => !G.YTM.inMoment()), 'OST: 고향 리스본(귀환 13) → 주점 21 → 나오면 13, 세 번 드나들어도 그대로 (' + seq.join(',') + ')');
-    await page.evaluate(() => { G.Scenes.city.visit('tavern'); });
-    await clickThrough(() => G.Scenes.city.current() && !G.Scenes.city.isBusy() && !document.querySelector('#ui .modal-back'));
-    await page.evaluate(() => { G.Game.go('sea', { depart: 0 }); });
-    await page.waitForFunction(() => G.Game.sceneName === 'sea', null, { timeout: 30000 });
-    const os = await page.evaluate(() => G.YTM.current());
-    ok(os !== 't21' && /^t(23|14|01)$/.test(os), 'OST: 주점에서 곧장 출항하면 바다 곡 (' + os + ')');
-    await page.waitForFunction(() => +getComputedStyle(document.querySelector('.ost-box')).opacity < 0.6, null, { timeout: 15000 }).catch(() => {});
-    const bx = await page.evaluate(() => { const b = document.querySelector('.ost-box'), r = b.getBoundingClientRect(), hud = document.querySelector('.hud').getBoundingClientRect(); return { hov: b.matches(':hover'), yt: window.__yt.slice(-4).join(), x: r.left, y: r.top, w: r.width, right: innerWidth - r.right, top: r.top - hud.bottom, op: +getComputedStyle(b).opacity, pw: b.querySelector('#ost-player') ? b.querySelector('#ost-player').parentNode.getBoundingClientRect().width : 0 }; });
-    ok(bx.right < 20 && bx.top >= 0 && bx.top < 20 && bx.op < 0.6 && bx.pw >= 200, 'OST 재생기: 바다에서는 오른쪽 위 구석, 곡이 바뀐 뒤 흐리게(' + bx.op + '), 크기 ' + bx.pw + 'px(유튜브 최소 200)');
-    await city(kag);
-    ok(await page.evaluate(() => G.YTM.current()) === 't26', 'OST: 나가사키는 26 (일본)');
-    const cx = await page.evaluate(() => { const r = document.querySelector('.ost-box').getBoundingClientRect(); return r.left; });
-    ok(cx < 30, 'OST 재생기: 도시에서는 왼쪽 (오른쪽 건물 메뉴를 가리지 않게)');
-    const bat = await page.evaluate(() => G.CITY_DATA.findIndex(c => c.name === window.__seN));
-    await city(bat);
-    ok(await page.evaluate(() => G.YTM.current()) === 't17', 'OST: ' + await page.evaluate(() => window.__seN) + '(동남아)는 17 동남아시아');
-    ok(await page.evaluate(() => window.__yt.length > 6 && window.__yt.every(x => x === 'pause' || /^\w+@\d+$/.test(x))), '가짜 재생기에 곡이 시각과 함께 넘어갔다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
     console.log('\n통과');
   } catch (e) { console.error('✗', e.message); if (errors.length) console.error('콘솔 오류: ' + errors.slice(0, 5).join(' | ')); process.exitCode = 1; }

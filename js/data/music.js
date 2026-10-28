@@ -165,7 +165,7 @@
       duel:    { def: '일기토', gen: 'battle' },
       landwar: { def: '육상 전투', gen: 'battle' }
     },
-    // 장면 사이의 「잠깐」 곡 (js/systems/ytmusic.js 가 감싸 둔 순간 — 파일 음악일 때도). minigame: 퍼즐·포커·낚시
+    // 장면 사이의 「잠깐」 곡 (js/systems/musicmoments.js 가 감싸 둔 순간). minigame: 퍼즐·포커·낚시
     moments: { legend: '무대륙 아틀란티스', landwar: '육상 전투', minigame: '미니 게임', circum: '귀환' }
   };
 })(window.G = window.G || {});

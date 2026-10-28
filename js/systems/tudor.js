@@ -50,7 +50,7 @@
     }
     o.lang = 3; o.li = null; return o;
   }
-  function envoy() { return { name: '스티븐 가디너 (국왕의 특사)', portrait: G.Art.withImg(G.Art.npcSpec('gardiner', 'priest', 'ne', 'm'), G.Img.chain.npc('priest')), lang: 3 }; }
+  function envoy() { return G.Hist.speaker('gardiner'); }
   function eliz() {
     // 런던 탑의 공주와 즉위 뒤 여왕이 같은 전용 얼굴·무릎상으로 이어진다.
     var key = 'portraits/history/elizabeth_player';
@@ -68,6 +68,9 @@
 
   // ================================================================ 헨리 8세의 이혼
   async function henryAsk() {
+    return G.Hist.withScene('tudor_marriage_petition', '헨리 8세의 혼인 무효 청원', henryAskLines);
+  }
+  async function henryAskLines() {
     var t = st(), s = S(), w = who();
     await UI.say('…제독, 그대에게만 털어놓는 일이오. 짐과 카탈리나 왕비 사이에는 아들이 없소. 형의 아내였던 사람과 혼인한 것이 주님의 뜻을 거스른 것이 아니었나 밤마다 괴롭소.\f로마의 교황 성하께 이 혼인을 무효로 해 달라고 청할 생각이오. 그런데 황제 카를이 — 왕비의 조카 말이오 — 로마를 쥐고 흔드니, 짐의 특사가 무사히 닿을지 모르겠소.', w);
     var v = await UI.ask('헨리 8세가 특사를 로마 교황청까지 바래다 달라고 청한다.', [{ label: '특사를 태워 로마로 가겠다고 약속한다', value: 'yes' }, { label: '교회의 일에는 끼고 싶지 않다고 사양한다', value: 'no' }], w);
@@ -79,6 +82,9 @@
     UI.toast('왕의 특사를 태웠다 — 로마의 교황궁으로', 'scroll', 5000);
   }
   async function popeAnswer(pope) {
+    return G.Hist.withScene('tudor_rome_petition', '로마 — 교황의 답변', function () { return popeAnswerLines(pope); });
+  }
+  async function popeAnswerLines(pope) {
     var t = st(), pw = SP().speaker(pope);
     await UI.say('교황 성하, 잉글랜드의 헨리 국왕 폐하께서 아뢰옵니다. 폐하와 카탈리나 왕비의 혼인은 처음부터 무효이니, 그것을 밝혀 주시기를 간청하십니다.', envoy());
     await UI.say('…잉글랜드 왕의 고뇌는 안다. 허나 짐의 전임자께서 특별히 허락하신 혼인을 짐이 뒤집을 수는 없다. 게다가 — 왕비는 황제의 고모다. 황제의 군대가 이 도시를 짓밟은 것이 엊그제 일이니라.\f돌아가 전하라. 교황청은 이 혼인을 무효로 할 수 없다고.', pw);
@@ -116,7 +122,7 @@
     var C = G.Scenes && G.Scenes.city; if (!C || !C.B || C.B.tower) return;
     var TW = { title: '런던 탑', icon: 'castle', paint: function () { return G.Img && G.Img.has('interiors/tower') ? 'tower' : 'gate'; }, exitLabel: '런던 탑을 나온다' };
     TW.enter = async function (c) {
-      var guard = { name: '탑의 위병', portrait: G.Art.withImg(G.Art.npcSpec('towerguard', 'soldier', 'ne', 'm'), G.Img.chain.npc('guard', c)), lang: 3 };
+      var guard = G.Hist.speaker('tudor_tower_guard');
       await UI.say('여기는 여왕 폐하의 감옥이오. …국왕 폐하와 친분이 있는 분이라니, 잠깐이라면 들여보내 드리지. 공주님은 저 종탑 방에 계시오.', guard);
       return true;
     };
@@ -343,6 +349,8 @@
   }
   var CALAIS_BATTLE = {
     id: 'calais', foe: '에스파냐', foeLabel: '무적함대 (메디나 시도니아 공작)',
+    councilPic: 'calais_council', councilTitle: '그라블린 — 잉글랜드 작전 회의',
+    foePic: 'calais_spanish_council', foeTitle: '무적함대의 기함',
     allies: [{ type: 'lgalleon', name: '아크 로열호 (하워드 경)', gun: GUN.me }, { type: 'galleon', name: '리벤지호 (드레이크)', gun: GUN.me },
       { type: 'galleon', name: '빅토리호 (호킨스)', gun: GUN.me }, { type: 'galleon', name: '뱅가드호 (윈터)', gun: GUN.me }],
     who: { hist: 'drake' }, ask: '칼레 해전 — 그라블린 앞바다에서 하워드 경·드레이크·호킨스·윈터의 배와 함께 흩어진 무적함대에 맞서겠습니까?',
@@ -388,6 +396,9 @@
   }
   /** 칼레 앞바다에 닿았을 때: 화선의 밤 → 그라블린 앞바다의 해전 */
   async function calaisNight() {
+    return G.Hist.withScene('calais_fireships', '칼레 — 여덟 척의 화선', calaisNightLines);
+  }
+  async function calaisNightLines() {
     var c = calais(), h = hist('howard'), s = S();
     c.stage = 'met';
     await UI.say('제독, 와 주었구려! 저기 보이시오? 칼레 앞바다에 닻을 내린 초승달 — 저것이 무적함대요. 저들은 파르마 공의 군대를 기다리고 있소.\f허나 유스티누스 반 나사우의 네덜란드 배들이 플랑드르 해안을 막고 있으니, 파르마 공은 나오지 못하오. 저들은 이 앞바다에 갇힌 셈이지.', h);

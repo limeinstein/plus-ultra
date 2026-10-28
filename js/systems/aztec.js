@@ -1,4 +1,4 @@
-/* 아즈텍 제국의 멸망 — 호수 위의 도시 (G.Aztec) 2026-10-19 사용자 요청 「아즈텍 제국 멸망 시나리오 (대항해시대3 참고)」 → 「이벤트 개발해」
+/* 아즈텍 제국의 멸망 — 호수 위의 도시 (G.Aztec) 2026-10-19 사용자 요청 「아즈텍 제국 멸망 시나리오」 → 「이벤트 개발해」
    기획 문서: Claude Docs 「아즈텍 제국 멸망 시나리오」. 잉카 제국의 멸망(js/systems/incafall.js)과 같은 꼴 — 역사 날짜·장소에 제독이 있으면 이야기에 끼어든다.
    역사는 바뀌지 않는다. 어느 갈래로 가도 테노치티틀란은 1521년 8월 13일에 무너진다. 바뀌는 것은 누가 살아남고, 무엇이 남고, 제독이 무엇을 얻고 잃는가다.
    ■ 열두 장 (사람: js/data/aztec.js)
@@ -95,6 +95,7 @@
     var nm = { id: id, role: role, joined: today(), loyal: loyal || 70, from: cityNow() };
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }
     s.mates.push(nm);
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     log(U.j(m.name, '이/가') + ' 동료가 되었다.');
     UI.toast(m.name + ' 동료가 되었다. (' + (R.roleName ? R.roleName(nm) : nm.role) + ')', 'people', 5000);
     return true;

@@ -61,7 +61,7 @@
     var rooms = CB.rooms(), seen = {};
     s.mates.forEach(function (m) {
       if (m.room == null) return;
-      if (FIXED_ROLE[m.role] || m.role === 'captain' || m.room >= rooms.length || seen[m.room] || rooms[m.room] === 'hold' || CB.noStaff(rooms[m.room]) || (rooms[m.room] === 'account' && m.role !== 'purser')) { delete m.room; delete m.roomType; return; }
+      if (FIXED_ROLE[m.role] || m.role === 'captain' || m.role === 'crew' || m.room >= rooms.length || seen[m.room] || rooms[m.room] === 'hold' || CB.noStaff(rooms[m.room]) || (rooms[m.room] === 'account' && m.role !== 'purser')) { delete m.room; delete m.roomType; return; }
       seen[m.room] = 1; m.roomType = rooms[m.room];
     });
   };
@@ -84,6 +84,7 @@
   /** 부하가 지금 있는 곳의 이름 */
   CB.placeName = function (m) {
     if (m.role === 'captain') return R().roleName(m);
+    if (m.role === 'crew' && G.CrewAuto) return G.CrewAuto.placeName(m);   // 다른 배의 조타수·갑판·파수꾼·선실
     if (FIXED_ROLE[m.role]) return G.CABIN[FIXED_ROLE[m.role]].name;
     var rooms = CB.rooms();
     if (m.room != null && rooms[m.room]) return G.CABIN[rooms[m.room]].name + (m.role === 'interp' ? ' · 통역' : '');
@@ -97,7 +98,7 @@
     var old = CB.occupant(i);
     if (old && old !== m) CB.place(old, null);
     if (m.roomType === 'account' && type !== 'account' && m.role === 'purser') m.role = 'none';
-    if (FIXED_ROLE[m.role] || m.role === 'captain') { m.role = 'none'; delete m.ship; }
+    if (FIXED_ROLE[m.role] || m.role === 'captain' || m.role === 'crew') { m.role = 'none'; delete m.ship; delete m.post; }   // 다른 배에서 기함으로 데려온다
     m.room = i; m.roomType = type;
     if (type === 'account') {          // 회계실에 앉은 사람이 경리다
       s.mates.forEach(function (x) { if (x !== m && x.role === 'purser') x.role = 'none'; });
@@ -122,7 +123,7 @@
   };
   /** 이 부하의 이 특기가 선실 덕에 함대에 쓰이는가 */
   CB.activates = function (m, skill) {
-    if (m.room == null || m.role === 'captain') return false;
+    if (m.room == null || m.role === 'captain' || m.role === 'crew') return false;
     var rooms = CB.rooms(), c = G.CABIN[rooms[m.room]];
     return !!(c && c.skills && c.skills.indexOf(skill) >= 0);
   };
@@ -151,7 +152,7 @@
     var own = R().mateLang(ci, li), e = { li: li, lv: own, own: own, src: 'self', name: G.MATE[ci.id].name };
     var pl = (s.player.lg && s.player.lg[li]) || 0; if (pl > e.lv) { e.lv = pl; e.src = 'admiral'; e.name = '제독'; }
     s.mates.forEach(function (m) {
-      if (m === ci || m.role === 'captain' || !G.MATE[m.id]) return;   // 다른 배의 선장은 기함에 없다
+      if (m === ci || m.role === 'captain' || m.role === 'crew' || !G.MATE[m.id]) return;   // 다른 배의 선장·선원은 기함에 없다
       var lv = R().mateLang(m, li); if (lv > e.lv) { e.lv = lv; e.src = m.id; e.name = G.MATE[m.id].name; }
     });
     return e;
@@ -296,7 +297,7 @@
   CB.growSkill = function (type) { var c = G.CABIN[type]; if (!c || c.noStaff || type === 'hold' || type === 'captain') return null; return c.grow || (c.skills && c.skills[0]) || null; };
   /** 부하가 지금 지내는 방 종류 (부관·항해사·측량사는 부관실·조타실·파수대) — 없으면 null */
   CB.roomOf = function (m) {
-    if (!m || m.role === 'captain') return null;
+    if (!m || m.role === 'captain' || m.role === 'crew') return null;   // 다른 배의 자리에서는 특기가 늘지 않는다 (충성만 지킨다)
     if (FIXED_ROLE[m.role]) return FIXED_ROLE[m.role];
     if (m.room == null) return null;
     return CB.rooms()[m.room] || null;
@@ -375,8 +376,8 @@
     CB.rooms();
     out = out.concat(CB.grow());   // 선실에서 특기가 는다
     var p = s.player, far = B().farRate == null ? 0.3 : B().farRate;
-    var aboard = s.mates.filter(function (m) { return G.MATE[m.id] && m.role !== 'captain'; });
-    var away = s.mates.filter(function (m) { return G.MATE[m.id] && m.role === 'captain'; });   // 다른 배의 선장 — 제독의 말만 익힌다
+    var aboard = s.mates.filter(function (m) { return G.MATE[m.id] && m.role !== 'captain' && m.role !== 'crew'; });
+    var away = s.mates.filter(function (m) { return G.MATE[m.id] && (m.role === 'captain' || m.role === 'crew'); });   // 다른 배의 선장·선원 — 제독의 말만 익힌다
     var myNative = R().nativeLang ? R().nativeLang(p.nation) : 0;
     var chief = CB.chiefInterp(), iRate = B().interpRate || 2;
     function learn(who, name, gain, get, set, cap, how) {
@@ -440,6 +441,8 @@
   CB.monthly = function (paid) {
     var s = S(), b = BM(), out = [];
     var adj = CB.power('adjutant') > 0 ? (b.adjutantLoyal == null ? 1 : b.adjutantLoyal) : 0;
+    var moved = G.CrewAuto ? G.CrewAuto.refresh() : [], got = G.CrewAuto && G.CrewAuto.notice(moved);   // 충성을 셈하기 전에 자리 없는 부하를 빈 자리에 (js/systems/crewauto.js)
+    if (got) out.push({ icon: 'people', text: got });
     CB.tidy();
     s.mates.forEach(function (m) {
       var d = G.MATE[m.id]; if (!d) return;

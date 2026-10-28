@@ -224,7 +224,7 @@
       var h = '<svg class="emb" viewBox="0 0 48 48">' + emblemSvg() + '</svg>';
       cells.forEach(function (c) {
         if (c.grow) { h += '<div class="grow"></div>'; return; }
-        // label이 있으면 두 줄 칸 (작은 이름 + 값) — 대항해시대 3의 윗줄 상태 표시처럼
+        // label이 있으면 두 줄 칸 (작은 이름 + 값)
         if (c.label) h += '<div class="cell two' + (c.cls ? ' ' + c.cls : '') + '" data-k="' + (c.k || '') + '"' + (c.tip ? ' title="' + U.esc(c.tip) + '"' : '') + '>' + (c.icon ? G.icon(c.icon) : '') + '<div class="tv"><em>' + c.label + '</em><span>' + (c.text || '') + '</span></div></div>';
         else h += '<div class="cell' + (c.cls ? ' ' + c.cls : '') + '" data-k="' + (c.k || '') + '">' + (c.icon ? G.icon(c.icon) : '') + '<span>' + c.text + '</span></div>';
       });
@@ -983,7 +983,7 @@
     var ch = win.content.querySelector('.choices');
     list.forEach(function (o, i) {
       var lead = o.thumb ? '<img class="choice-thumb" src="' + o.thumb + '" alt="">' : (o.icon ? G.icon(o.icon) : '');
-      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : ''), lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
+      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : '') + (o.cls ? ' ' + o.cls : ''), lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
       if (o.desc) d.title = o.desc;
       d.onclick = function () { win.close(o.value); };
       ch.appendChild(d);

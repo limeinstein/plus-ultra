@@ -200,7 +200,9 @@
     ['IncaFall', 'daily', 'B'],              // 잉카 정복
     ['GoaMal', 'daily', 'B'],                // 포르투갈의 고아·말라카 점령
     ['Mina', 'daily', 'B'],                  // 엘미나 요새 건설
+    ['MingFall', 'daily', 'B'],              // 명의 북경 붕괴·청의 입관
     ['Nzinga', 'daily', 'B'],                // 은징가 여왕의 저항
+    ['Potosi', 'daily', 'B'],                // 포토시 은광
     ['Succession', 'year', function (m) { return m && m.icon === 'crown' ? 'B' : null; }],   // 군주·후원자의 대가 바뀜 (유품·기억은 일상)
     ['Disaster', 'daily', 'C'],              // 지진·화산·산사태·해일·홍수
     ['Econ', 'daily', 'C', true],            // 시장 사건 (가뭄·전쟁·풍작…)

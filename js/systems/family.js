@@ -120,7 +120,7 @@
   };
 
   // ---------------------------------------------------------------- 아이와 제독의 사이 (k.bond 0~100)
-  /* 대항해시대 3처럼 아이는 제독을 보고 자란다. 집에 자주 들르고, 놀아 주고, 가르치고, 견습으로 데리고 다니면 가까워지고
+  /* 아이는 제독을 보고 자란다. 집에 자주 들르고, 놀아 주고, 가르치고, 견습으로 데리고 다니면 가까워지고
      오래 떨어져 지내면 서먹해진다. 사이가 좋을수록 뒤를 이을 때 명성·특기를 많이 물려받는다. */
   F.bond = function (k) { return k.bond == null ? 50 : k.bond; };
   F.addBond = function (k, n) { k.bond = Math.max(0, Math.min(100, F.bond(k) + n)); return k.bond; };
@@ -194,6 +194,7 @@
     var s = S(), p = s.player, out = [], c = cfg(), home = F.atHome();
     (p.kids || []).forEach(function (k) {
       if (k.unnamed || k.lost) return;                             // 섬에서 사라진 아이 (js/systems/peterpan.js)
+      if (k.married) return;                                       // 시집간 딸: 제 집에 사니 아버지가 집을 비워도 사이가 식지 않는다 (2026-10-28 피드백) — 편지로 가까워진다 (marriedLetter)
       var age = F.kidAge(k);
       if (k.aboard) {
         k.sea = (k.sea || 0) + 1;                                    // 함께 바다에 나간 달 수
@@ -252,7 +253,7 @@
     // 집에 들르면 아이들과 가까워진다 (보름에 한 번)
     if (p.lastHomeBond == null || s.day - p.lastHomeBond >= 15) {
       p.lastHomeBond = s.day;
-      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard && k.house == null) F.addBond(k, c.bondVisit || 3); });
+      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard && k.house == null && !k.married) F.addBond(k, c.bondVisit || 3); });
     }
     // 이름 없는 아기
     for (var i = 0; i < p.kids.length; i++) {
@@ -292,12 +293,13 @@
     await UI.say(away ? wl('away', null, '얼마 만이에요… 정말 오래 걸렸네요. 얼굴 좀 보여 줘요.') : wl('greet', null, U.pick(['당신, 이번 항해는 어땠어요? 이야기 들려주세요.', '아이들이 당신을 많이 보고 싶어 했어요.', '몸 건강히 돌아와 줘서 고마워요.'])), w);
     if (p.preg) { var pn = Math.max(1, Math.round((p.preg.due - s.day) / 30)); await UI.say(p.preg.told ? wl('preg', { n: pn }, '배 속의 아기가 오늘 발로 찼어요. ' + pn + '달만 기다리면 만나요.') : wl('pregHint', null, U.pick(['요즘 이상하게 신 것이 당겨요.', '요즘 몸이 조금 나른해요.'])), w); }
     if (!p.kids.length && !p.preg) await UI.say(wl('nokids', null, U.pick(['우리에게도 아이가 생기면 좋겠어요. 집에 자주 들러 줘요.', '당신이 집에 오래 있으면 좋겠어요.'])), w);
-    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
+    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
     if (low) await UI.say(wl('lowKid', { kid: F.given(low) }, F.given(low) + U.jx(F.given(low), '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.'), w);
     var kv = function (k, age, b, fb) { return (VO && VO.kid(k, age, b)) || fb; }, kr = function (k, kind, fb) { return (VO && VO.kidReact(k, kind)) || fb; };
     for (var i = 0; i < p.kids.length; i++) {
       var k = p.kids[i], age = F.kidAge(k), b; if (!k.st) k.st = inborn(); if (!k.edu) k.edu = {};
       if (k.unnamed || k.house != null) continue;          // 둘째 부인의 집에 사는 아이는 그 집에서 만난다
+      if (k.married) { await marriedLetter(k, w); continue; }   // 시집간 딸은 집에 없다 — 아내가 그 딸의 편지를 전하고, 답장으로 가까워진다 (2026-10-28 피드백)
       if (k.lost) { if (G.Peter) await UI.say(G.Peter.homeLine(k), w); continue; }   // 섬에서 사라진 아이 (js/systems/peterpan.js)
       b = F.bond(k);
       var sp = G.HomeLife ? G.HomeLife.speaker(k, true) : { name: k.name + ' (' + age + '세 · ' + F.bondWord(k) + ')', portrait: F.kidSpec(k), lang: 3 };
@@ -368,6 +370,31 @@
     }
   };
 
+  /** 시집간 딸 (js/systems/kidwed.js k.married): 집에 없으니 아내가 편지를 전한다. 해마다 한 번 답장 — 사이가 가까워진다 (G.BALANCE.family.letterBond · giftBond · giftCost) */
+  async function marriedLetter(k, w) {
+    var s = S(), p = s.player, c = cfg(), b = F.bond(k), nm = F.given(k), mw = k.married || {}, where = mw.title ? mw.title + '에서' : '시댁에서';
+    if (!k.edu) k.edu = {};
+    var key = s.date.y + ':letter';
+    if (k.edu[key]) { await UI.say(nm + U.jx(nm, '은/는') + ' ' + where + ' 잘 지낸대요. 올해 보낸 답장도 받았다고 하더라고요.', w); return; }
+    var line = mw.kind === 'away' && b < 30 ? nm + ' 소식은 아직 뜸해요. 떠날 때 남긴 그 편지가 마지막이었죠…. 그래도 당신이 먼저 편지를 써 보면 어떨까요? 아버지 글씨를 보면 마음이 풀릴지도 몰라요.'
+      : b >= 65 ? nm + U.jx(nm, '이/가') + ' 편지를 보냈어요! ' + where + ' 잘 지낸대요. 끝에 「아버지 항해 이야기도 들려주세요」라고 적었네요.'
+      : b >= 30 ? nm + U.jx(nm, '이/가') + ' 편지를 보냈어요. ' + where + ' 잘 지낸대요. 당신 안부도 묻네요.'
+      : nm + '한테서 짧은 편지가 왔어요. …당신 이야기는 한 줄도 없네요. 먼저 답장을 써 줘요. 시집간 딸한테 아버지 편지만큼 반가운 것도 없어요.';
+    await UI.say(line, w);
+    var gc = c.giftCost || 500, lb = c.letterBond || 6, gb = c.giftBond || 12;
+    var v = await UI.ask(nm + '에게 답장을 보낼까? (지금 사이: ' + F.bondWord(k) + ')', [
+      { label: '답장을 쓴다 (사이 +' + lb + ')', value: 'letter' },
+      { label: '선물과 함께 편지를 보낸다 — 금화 ' + U.num(gc) + '닢 (사이 +' + gb + ')', value: 'gift', dis: p.gold < gc },
+      { label: '다음에 쓴다', value: null }], w);
+    if (!v) return;
+    if (v === 'gift') { if (p.gold < gc) { UI.toast('금화가 모자랍니다.', 'coin'); return; } p.gold -= gc; }
+    k.edu[key] = v; F.addBond(k, v === 'gift' ? gb : lb);
+    await UI.say(v === 'gift' ? '선물까지요? ' + nm + U.jx(nm, '이/가') + ' 무척 기뻐하겠어요. 내일 아침 배편에 부칠게요.' : '당신 글씨를 보면 ' + nm + U.jx(nm, '이/가') + ' 좋아할 거예요. 내일 부칠게요.', w);
+    UI.toast(nm + U.jx(nm, '과/와') + '의 사이가 가까워졌다 (' + F.bondWord(k) + ')', 'heart', 3800);
+    if (G.Game.refreshHud) G.Game.refreshHud();
+  }
+  F.marriedLetter = marriedLetter;
+
   /** 해산이 한 달 안으로 다가왔고 집에 있으면: 집에서 기다린다 (날이 지나 해산 → 출산 장면) */
   F.canAwait = function () { var p = S().player, pr = p.preg; return !!(p.wife && pr && pr.told && pr.due - S().day <= (cfg().nearDays || 30) && F.atHome()); };
   F.awaitBirth = async function () {
@@ -381,7 +408,7 @@
   };
 
   F.innEvent = async function (c) {
-    var s = S(), kids = (s.player.kids || []).filter(function (k) { return !k.unnamed && F.kidAge(k) >= 3; });
+    var s = S(), kids = (s.player.kids || []).filter(function (k) { return !k.unnamed && !k.married && !k.aboard && F.kidAge(k) >= 3; });
     if (!kids.length || c.id !== (G.R.seat ? G.R.seat() : s.player.home)) return;
     if (U.chance(0.3)) { var k = U.pick(kids); await UI.say(U.pick(['앗, 아버지! 지금 여관 아주머니가 과자 주셨어요.', '아버지는 이 여관에 머문 적 있어요?']), G.HomeLife ? G.HomeLife.speaker(k) : { name: k.name, portrait: F.kidSpec(k), lang: 3 }); }
   };
@@ -391,7 +418,7 @@
 
   F.retire = async function (forced) {
     var s = S(), p = s.player;
-    // 후원 계약이 끝나지 않았으면 물러날 수 없다 (대항해시대 3: 계약 중에는 세대교체 불가)
+    // 후원 계약이 끝나지 않았으면 물러날 수 없다 (계약 중에는 세대교체 불가)
     if (!forced && s.contract) {
       var kd = G.Errand.name(s.contract);
       await UI.alert('후원자와 맺은 계약(「' + kd + '」)이 아직 끝나지 않았습니다.<br>후원자에게 보고하거나 계약을 포기한 뒤에 물러날 수 있습니다.', '은퇴할 수 없습니다');

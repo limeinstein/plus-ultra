@@ -24,7 +24,7 @@
       else base = { type: 'ship', lon: arg.landing.shipLon, lat: arg.landing.shipLat, heading: arg.landing.shipHeading };   // 뱃머리도 그대로 두고 내린다 (돌아오면 같은 쪽을 본다)
       var start = arg.from != null ? [base.lon, base.lat] : [arg.landing.lon, arg.landing.lat];
       start = landPoint(start[0], start[1]);   // 도시 자리가 강·만의 물 위인 곳(브레멘·말라카)은 가장 가까운 뭍에서 출발한다 — 물 위에서 나서면 한 걸음도 못 뗀다
-      // 대항해시대 3처럼 선원 모두가 탐험대로 나선다 (배는 닻을 내리고 기다린다)
+      // 선원 모두가 탐험대로 나선다 (배는 닻을 내리고 기다린다)
       var party = s.fleet.crew;
       var mt = cleanMount(arg.mount);
       s.loc = { mode: 'land', lon: start[0], lat: start[1], heading: 0, base: base, party: party, days: 0, party0: party, found0: s.stats.found, marks0: Object.keys(s.marks || {}).length, mount: mt };
@@ -617,7 +617,7 @@
     var pack = ['wagon', 'donkey', 'llama', 'yak', 'porter', 'camel', 'elephant'].indexOf(mt.id) >= 0 && mt.n > 0;
     return pack && U.sum(s.fleet.ships, function (sh) { return sh.guns.n; }) >= 4;
   }
-  /** 육상전 (대항해시대 3식 부대전 — js/games/landwar.js). o: {kind: native|bandit|beast|garrison, guns, leader: 적 우두머리 이름, hold: 퇴각 판 차례 수, flee: false면 피할 수 없다, winText} */
+  /** 육상전 (부대전 — js/games/landwar.js). o: {kind: native|bandit|beast|garrison, guns, leader: 적 우두머리 이름, hold: 퇴각 판 차례 수, flee: false면 피할 수 없다, winText} */
   async function landBattle(enemyName, n, beasts, o) {
     var s = S(), l = s.loc; o = o || {};
     var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');

@@ -552,11 +552,49 @@
     if (nth > max) return '헛방 (' + max + '칸까지만 센다)';
     return '짐칸 +' + U.num(Math.floor(((t && t.cap) || 0) * (k.per != null ? k.per : 0.05))) + '통';
   }
+  // ---------------------------------------------------------------- 다른 배의 사람들 · 자동 배치 (2026-10-28)
+  /* 기함 말고 다른 배는 선장 · 조타수 · 갑판 · 파수꾼과 그 배 크기만큼의 선실 — 사람은 G.CrewAuto 가 능력에 맞게 저절로 앉힌다(읽기만).
+     「자동 배치」는 술집 역할(부관·항해사·측량사·통역·경리)이 없는 부하 모두를 기함 선실과 다른 배 자리에 다시 앉힌다. */
+  function othersHtml(width) {
+    var CA = G.CrewAuto, ships = CA ? CA.others() : [];
+    if (!ships.length) return '';
+    function nm(m) { return U.esc(G.MATE[m.id].name); }
+    function seat(m, ic, label, tip) {
+      return '<span class="cb-oseat' + (m ? '' : ' empty') + '" title="' + U.esc(tip) + '">' + G.icon(ic) + '<b>' + label + '</b>' + (m ? nm(m) : '<i>비어 있음</i>') + '</span>';
+    }
+    return '<div class="cb-others"' + (width ? ' style="width:' + width + 'px"' : '') + '><div class="cb-sub">다른 배 <small class="muted">— 능력에 맞게 저절로 앉는다 · 선장은 그 배를 몰고, 조타수·갑판·파수꾼·선실은 충성이 떨어지지 않게 할 뿐</small></div>' +
+      ships.map(function (sh) {
+        var o = CA.crewOf(sh), n = CA.berths(sh), cap = o.captain;
+        return '<div class="cb-oship"><div class="cb-oname">' + G.icon('ship') + U.esc(sh.name) + '호 <small class="muted">' + U.esc(G.SHIP[sh.type].name) + '</small></div>' +
+          seat(cap, 'crown', '선장', cap ? '항해술 ' + G.R.mateSkill(cap, 'nav') + ' · 포술 ' + G.R.mateSkill(cap, 'gun') + ' · 검술 ' + G.R.mateSkill(cap, 'sword') + ' · 조선기술 ' + G.R.mateSkill(cap, 'ship') + ' — 이 배에만 쓰인다' : '선장이 없으면 갑판장이 몬다 (속도 −4%, 재장전 +10%, 백병전 ×0.9)') +
+          CA.POSTS.map(function (p) { return seat(o[p.id], p.icon, p.name, p.desc + ' 충성이 떨어지지 않는다.'); }).join('') +
+          '<span class="cb-oseat cabins" title="이 배의 선실 — 자리가 없는 부하가 머문다. 충성이 떨어지지 않는다.">' + G.icon('bed') + '<b>선실</b>' + o.cabin.length + '/' + n + (o.cabin.length ? ' · ' + o.cabin.map(nm).join('·') : '') + '</span></div>';
+      }).join('') + '</div>';
+  }
+  CV._othersHtml = othersHtml;   // 시험용
+  /** 다른 배의 사람들을 보여 준다 (술집 부하편성·조선소 함대편성에서) */
+  CV.showOthers = async function () {
+    if (G.CrewAuto) G.CrewAuto.refresh();
+    var h = othersHtml() || '<div class="muted">기함 말고 다른 배가 없습니다.</div>';
+    await UI.window({ title: '다른 배의 사람들', icon: 'ship', width: 820, html: h, buttons: [{ label: '닫는다', value: null }] }).result;
+  };
+  /** 「자동 배치」 — 물어본 뒤 다시 앉히고 알린다. 바뀐 사람 목록(그만두면 null) */
+  CV.autoAll = async function (ask) {
+    var CA = G.CrewAuto; if (!CA) return null;
+    if (ask !== false && !await UI.confirm('술집에서 정한 역할(부관·항해사·측량사·통역·경리)이 없는 부하를 모두 능력에 맞게 다시 앉힐까요?<br><small class="muted">기함 선실은 그 방에 맞는 특기를 가진 사람부터, 다른 배는 선장 → 조타수·갑판·파수꾼 → 선실 차례로 채웁니다.</small>', '자동 배치', '그만둔다', '자동 배치')) return null;
+    var moved = CA.autoAll(), idle = CA.idleCount();
+    UI.toast((moved.length ? moved.length + '명의 자리를 능력에 맞게 바꿨다.' : '지금 배치가 이미 능력에 맞습니다.') + (idle ? ' 자리가 모자라 ' + idle + '명은 대기 — 큰 배를 들이거나 선실을 늘리십시오.' : ''), 'people', idle ? 6000 : 4000);
+    return moved;
+  };
+  /** 명단 한 줄의 꾸밈: 대기(자리 없음 — 충성이 떨어진다)·다른 배 */
+  CV.rowClass = function (m) { return G.CrewAuto && G.CrewAuto.idle(m) ? 'idle' : m.role === 'captain' || m.role === 'crew' ? 'away' : ''; };
+
   /** 선실 화면을 연다. opts.yard = 조선소가 있는 도시(방을 고칠 수 있다) */
   CV.open = async function (opts) {
     opts = opts || {};
     var s = S();
     lastTotals = null;   // 창을 새로 열 때는 ▲▼ 없이
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 자리 없는 부하를 빈 방·다른 배에 (손으로 「대기」로 뺀 사람은 창을 닫을 때까지 그대로)
     for (;;) {
       var sh = CB().flagship();
       if (!sh) { UI.toast('기함이 없습니다.', 'ship'); return; }
@@ -567,19 +605,22 @@
       var wage = CB().totalWages(), warn = CB().wageWarning();
       var idle = s.mates.filter(function (m) { return G.MATE[m.id] && (!m.role || m.role === 'none') && m.room == null; }).length;
       var html = '<div class="cb-top"><span>' + G.icon('bed') + '선실 <b>' + n + '</b>칸 <small class="muted">(큰 배일수록 많다)</small></span>' +
-        '<span>' + G.icon('people') + '부하 <b>' + s.mates.length + '</b>명' + (idle ? ' <small class="warn-text">· 자리 없음 ' + idle + '</small>' : '') + '</span>' +
+        '<span>' + G.icon('people') + '부하 <b>' + s.mates.length + '</b>명' + (idle ? ' <small class="warn-text cb-idle-n" title="자리가 없는 부하는 달마다 충성이 떨어진다 — 명단에 붉은 바탕으로 보인다">· 대기 ' + idle + '</small>' : '') + '</span>' +
+        '<button class="btn small cb-auto" title="술집 역할(부관·항해사·측량사·통역·경리)이 없는 부하를 능력에 맞게 기함 선실과 다른 배 자리에 앉힌다">' + G.icon('people') + '자동 배치</button>' +
         '<span title="동료·선원 급료는 소지금에서 지급합니다. 예금은 금고에서 미리 찾으십시오."' + (warn ? ' class="warn-text"' : '') + '>' + G.icon('coin') + '동료·선원 급료 한 달 <b>' + U.num(wage) + '</b>닢' + (warn ? ' — 소지금으로 ' + Math.max(0, warn.months) + '달' : '') + '</span>' +
         '<span class="muted cb-tip">' + (opts.yard ? '방을 누르면 사람을 두거나 고칩니다.' : '방을 누르면 사람을 둡니다 · 방을 고치는 일은 조선소에서.') + ' 부하를 끌어다 방에 놓아도 됩니다.</span></div>' +
         '<div class="cb-body"><div class="cb-main">' +
         '<div class="cb-stage" style="width:' + l.stageW + 'px;height:' + l.stageH + 'px"><canvas class="cb-stage-base"></canvas><div class="cb-stage-shade"></div>' +
         '<div class="cb-ship-name">' + U.esc(sh.name) + '호 <small>· ' + U.esc(G.SHIP[sh.type].name) + '</small></div></div>' +
         '<div class="cb-cards" style="width:' + l.stageW + 'px;grid-template-columns:repeat(' + Math.min(CB().cols(), Math.max(1, n)) + ',minmax(0,' + (l.cardMax || 180) + 'px))"></div>' +
+        othersHtml(l.stageW) +
         '</div><div class="cb-side">' +
         '<div class="cb-sub" title="맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 방마다 키우는 특기가 있어 그 방에서 ' + CB().growDays().map(CB().yd).join('·') + '을 지내면 한 단계씩 는다(3까지) — ★가 선실에서 는 특기, (본디 n)은 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기. 자리가 없는 부하는 달마다 충성이 떨어진다.">부하 <small class="muted">— 눌러서 자리를 정한다</small></div>' +
         '<div class="cb-roster" style="max-height:' + Math.min(l.rosterH || 360, 200) + 'px"></div>' +
         totalsHtml() + '</div></div>';   // 오른쪽 아래: 함대에 적용되는 능력 합계 (지금 힘을 내는 방·말 배우기 풀이는 제목에 마우스를 올리면)
       var win = UI.window({ title: '기함 선실 — ' + U.esc(sh.name) + '호', icon: 'ship', width: l.stageW + (l.side || 300) + 66, html: html, buttons: [{ label: '닫는다', value: null }], clickAny: false });
       var stage = win.content.querySelector('.cb-stage'), cards = win.content.querySelector('.cb-cards');
+      win.content.querySelector('.cb-auto').onclick = function () { win.close({ k: 'auto' }); };
       drawFallback(stage.querySelector('.cb-stage-base'), v, sp);
       if (hasArt) placeShipArt(stage, sh, v);
 
@@ -636,7 +677,8 @@
         return { m: m, k: k, idle: (!m.role || m.role === 'none') && m.room == null };
       }).sort(function (a, b) { return (b.idle - a.idle) || (a.k - b.k); }).forEach(function (o) {
         var m = o.m, d = G.MATE[m.id];
-        var chip = U.el('div', 'cb-mate' + (o.idle ? ' idle' : ''), '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + '</span><small>' + U.esc(CB().placeName(m)) + '</small><small class="cb-sk">' + U.esc(skillsOf(m)) + '</small>' + (growOf(m) ? '<small class="cb-grow">' + U.esc(growOf(m)) + '</small>' : '') + '<small class="cb-st">' + statsOf(m, true) + '</small>' + loyalTag(m) + '</span>');
+        var rc = CV.rowClass(m);
+        var chip = U.el('div', 'cb-mate' + (rc ? ' ' + rc : ''), '<span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(d.name) + (o.idle ? ' <span class="cb-idle-tag">대기</span>' : '') + '</span><small>' + (o.idle ? '자리 없음 — 달마다 충성 −' + ((G.BALANCE.mates || {}).idleLoyal == null ? 2 : G.BALANCE.mates.idleLoyal) : U.esc(CB().placeName(m))) + '</small><small class="cb-sk">' + U.esc(skillsOf(m)) + '</small>' + (growOf(m) ? '<small class="cb-grow">' + U.esc(growOf(m)) + '</small>' : '') + '<small class="cb-st">' + statsOf(m, true) + '</small>' + loyalTag(m) + '</span>');
         chip.querySelector('.cb-face').appendChild(face(m.id, 40));
         chip.title = '특기 ' + skillsOf(m) + (growOf(m) ? '\n' + growOf(m) : '') + '\n능력 ' + statsOf(m) + '\n★ 선실에서 지내며 는 특기 · (본디 n) 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기';
         chip.onclick = function () { popMate(win, chip, m); };
@@ -653,7 +695,8 @@
       var a;
       try { a = await win.result; } finally { window.removeEventListener('keydown', esc, true); document.removeEventListener('mousedown', outside, true); }
       if (!a) return;
-      if (a.k === 'set') await setFromPop(a);
+      if (a.k === 'auto') await CV.autoAll();
+      else if (a.k === 'set') await setFromPop(a);
       else if (a.k === 'clear') { if (ROLE_OF[a.type]) { var rm = CB().roleMate(ROLE_OF[a.type]); if (rm) rm.role = 'none'; } else { var oc = CB().occupant(a.i); if (oc) CB().place(oc, null); } }
       else if (a.k === 'remodel') await remodel(a.i, opts.yard);
       else if (a.k === 'drop') await dropMate(a.id, a.to);

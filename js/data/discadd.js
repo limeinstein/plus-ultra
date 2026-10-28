@@ -1,5 +1,5 @@
 /* 발견물 더하기 도우미 (G.DiscAdd) — 2026-10-18
-   지역별로 더한 발견물 파일(dh3disc.js · seasiadisc.js · northasiadisc.js · arabiadisc.js · zoodisc.js)이 함께 쓴다.
+   지역별로 더한 발견물 파일(heritagedisc.js · seasiadisc.js · northasiadisc.js · arabiadisc.js · zoodisc.js)이 함께 쓴다.
    moredisc.js·animals.js와 같은 방식으로 G.WONDERS 묶음(list·relics·front·leads)에 넣는다 → discoveries.js·relics.js·frontiers.js가 그대로 읽는다.
 
    ruin(id, 이름, 위도, 경도, 찾는 법, 난이도, 가치, 언어, 지역, 개척 단계, 칸, 세운 해, 설명, 소문, 덧붙임)   — 유적·종교 건축 (cat ruin)

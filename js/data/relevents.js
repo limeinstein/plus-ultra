@@ -60,6 +60,8 @@
       mods: [['ES', 'VE', 50, 1574, '신성 동맹'], ['ES', 'PA', 80, 1574, '신성 동맹'], ['VE', 'PA', 60, 1574, '신성 동맹']], who: L,
       ask: { text: '키프로스가 무너졌소. 이번에는 말로만 하는 십자군이 아니오 — 돈 후안 데 아우스트리아가 이백 척이 넘는 갤리선을 이끌고 나서오. 기부도 좋고, 그대의 배로 함께 싸워 준다면 더 좋겠소. 9월에서 11월 사이 레판토 앞바다로 오시오.', gold: 3000, so: 70, trust: ['it_pope', 8], label: '신성 동맹에 기부한다' },
       battle: { id: 'lepanto', box: [19.2, 22.6, 37.6, 39.6], until: { y: 1571, m: 11, d: 30 }, foe: '오스만 제국', foeLabel: '오스만 대함대 (뮈에진자데 알리 파샤)',
+          councilPic: 'lepanto_allied_council', councilTitle: '레판토 — 신성 동맹 작전 회의',
+          foePic: 'lepanto_ottoman_council', foeTitle: '레판토 — 오스만 기함',
         // 인물: js/data/histfigures.js (얼굴 그림 images/portraits/history/<id>)
         ships: ['galleass', 'galley', 'galley', 'galley', 'galley', 'galley', 'galley', 'galley', 'galley'],
         names: ['술타나호 (알리 파샤)', '울루츠 알리의 갤리선', '슐루크 메흐메트의 갤리선', '페르테브 파샤의 갤리선', '카라 호자의 갤리선', '하산 레이스의 갤리선', '메흐메트 베이의 갤리선', '알제의 갤리선', '로도스의 갤리선'],

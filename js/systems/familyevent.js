@@ -65,7 +65,7 @@
   function byAge(a, b) { return Fm().kidAge(b) - Fm().kidAge(a); }
   /** 집에 있는 아이들 [이름 있는 3살 넘은 아이, 갓난아기] — w 가 있으면 그 둘째 부인의 집 */
   FE.homeKids = function (w) {
-    var p = P(), list = w ? (G.Wives ? G.Wives.kidsOf(w) : []) : (p.kids || []).filter(function (k) { return !k.aboard && k.house == null; });
+    var p = P(), list = w ? (G.Wives ? G.Wives.kidsOf(w).filter(function (k) { return !k.married; }) : []) : (p.kids || []).filter(function (k) { return !k.aboard && k.house == null && !k.married; });   // 시집간 딸은 집에 없다
     return { kids: list.filter(named).sort(byAge), babies: list.filter(function (k) { return !named(k); }) };
   };
   FE.aboardKids = function () { return (Fm().aboard() || []).filter(named).sort(byAge); };

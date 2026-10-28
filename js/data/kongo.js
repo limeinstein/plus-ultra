@@ -36,6 +36,20 @@
     gift1: 'kongo_raffia', gift2: 'kongo_horn'
   };
 
+  // 왕실·탐험가의 기존 초상은 유지하고 콩고의 주요 인물에 전용 초상을 붙인다.
+  var figures = {
+    kongo_nsaku: { name: '은사쿠', st: 'af', role: 'noble' },
+    kongo_nsaku_envoy: { name: '주앙 다 실바 (은사쿠)', st: 'af', role: 'noble' },
+    kongo_soyo: { name: '마니 소요 (소요의 주인)', st: 'af', role: 'official' },
+    kongo_nkuwu: { name: '마니 콩고 은징가 아 은쿠우', st: 'af', role: 'king' },
+    kongo_afonso: { name: '음벰바 아 은징가 왕자', st: 'af', role: 'scholar' },
+    kongo_priest: { name: '사제', st: 'ib', role: 'priest' },
+    kongo_leonor: { name: '레오노르 왕비', st: 'af', role: 'noble', g: 'f' }
+  };
+  var F = G.HIST_FIG = G.HIST_FIG || {};
+  Object.keys(figures).forEach(function (id) { if (!F[id]) { figures[id].id = id; F[id] = figures[id]; } });
+  G.KONGO_FIGS = Object.keys(figures);
+
   var ITEMS = [
     { id: 'kongo_raffia', name: '콩고 왕의 라피아 천', kind: 'treasure', price: 9000, rare: true, reg: [],
       desc: '라피아 야자 잎의 실로 짠 천. 콩고 사람들은 이 천을 돈처럼 쓰고, 왕실 직조공이 짠 것은 벨벳처럼 부드럽고 무늬가 촘촘하다. 콩고 왕이 처음 사귄 남쪽 바다의 선장에게 보낸 선물.' },

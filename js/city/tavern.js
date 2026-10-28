@@ -79,6 +79,7 @@
     return [
       { label: '술을 마신다', icon: 'mug', onClick: function () { return T.drink(c); } },
       { label: '한턱 낸다', icon: 'coin', onClick: function () { return T.treat(c); } },
+      { label: '보너스를 지급한다', icon: 'coin', sub: T.bonusSub(), dim: !T.bonusOk(), onClick: function () { return T.bonus(c); } },   // 부하 충성 보너스 (금화 100만 닢부터 — 2026-10-28)
       G.Econ ? { label: '장사 소문을 듣는다', icon: 'scales', sub: T.rumorSub(c), dim: T.rumorLeft(c) <= 0, onClick: function () { return T.rumor(c); } } : null,
       (function () { var k = S().contract, tm = G.TreasureHunt ? G.TreasureHunt.list().length : 0; return { label: '정보를 듣는다', icon: 'scroll', sub: k ? '계약: ' + G.Errand.name(k) + (tm ? ' · 보물 지도' : '') : tm ? '보물 지도 이야기' : '계약한 일이 없다', dim: !k && !tm, onClick: function () { return T.info(c); } }; })(),
       (function () { var tg = T.targets(c); return tg.length ? { label: '목표를 수소문한다', icon: 'map', sub: tg.length + '곳', onClick: function () { return T.askTarget(c); } } : null; })(),
@@ -190,6 +191,72 @@
     if (U.chance(0.6)) await T.encounter(c, true);
   };
 
+  // ---------------------------------------------------------------- 보너스 (2026-10-28 사용자 요청)
+  /* 부하들의 충성을 한 번에 크게 올리는 보너스. 소지금이 금화(두카드) 100만 닢 이상일 때만 줄 수 있다 — 비싸지만 효과가 크다.
+     · 전원에게: 기본 20만 + 충성이 100이 아닌 부하 한 사람마다 5만 → 그 부하들 충성 +30, 함대 규율 +20
+     · 한 사람에게 특별 보너스: 15만 → 충성 +50
+     조정값 G.BALANCE.mateBonus */
+  function BK() {
+    var b = (G.BALANCE && G.BALANCE.mateBonus) || {}, d = { minGold: 1000000, allBase: 200000, allPer: 50000, allLoyal: 30, oneCost: 150000, oneLoyal: 50, discipline: 20 };
+    for (var k in d) if (b[k] == null) b[k] = d[k];
+    return b;
+  }
+  T.bonusCfg = BK;
+  function loyalOf(m) { return m.loyal == null ? 70 : m.loyal; }
+  function bonusMates() { return (S().mates || []).filter(function (m) { return G.MATE[m.id] && !(R.mateHidden && R.mateHidden(m)); }); }
+  T.bonusOk = function () { return S().player.gold >= BK().minGold && bonusMates().length > 0; };
+  T.bonusSub = function () { var n = bonusMates().length; return S().player.gold < BK().minGold ? '소지금 금화 ' + U.num(BK().minGold) + '닢부터' : n ? '부하 ' + n + '명' : '부하가 없다'; };
+  /** 전원 보너스의 값: 충성이 이미 100인 부하는 셈하지 않는다 */
+  T.bonusAllCost = function () { var k = BK(), n = bonusMates().filter(function (m) { return loyalOf(m) < 100; }).length; return n ? k.allBase + k.allPer * n : 0; };
+  function mateSp(m) { var d = G.MATE[m.id]; return { name: d.name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 }; }
+  function raise(m, n) { var before = loyalOf(m); R.setLoyal(m, Math.min(100, before + n)); return loyalOf(m) - before; }
+  T.bonus = async function (c) {
+    var s = S(), p = s.player, k = BK(), list = bonusMates();
+    if (!list.length) { UI.toast('보너스를 줄 부하가 없습니다.', 'people'); return; }
+    if (p.gold < k.minGold) {
+      await C.mate('제독, 보너스는 금고가 넉넉할 때나 하는 이야기입니다. 소지금이 금화 ' + U.num(k.minGold) + '닢(두카드)은 되어야 부하들 앞에서 체면이 섭니다.');
+      return;
+    }
+    var allCost = T.bonusAllCost(), low = list.slice().sort(function (a, b) { return loyalOf(a) - loyalOf(b); });
+    var v = await UI.choose('보너스 — 소지금 금화 ' + U.num(p.gold) + '닢', [
+      { label: '부하 전원에게 보너스', right: allCost ? '금화 ' + U.num(allCost) + '닢' : '모두 충성 100', value: 'all', icon: 'people', disabled: !allCost || p.gold < allCost,
+        desc: '충성이 100이 아닌 부하 ' + list.filter(function (m) { return loyalOf(m) < 100; }).length + '명의 충성 +' + k.allLoyal + ' · 함대 규율 +' + k.discipline + ' (기본 ' + U.num(k.allBase) + ' + 한 사람 ' + U.num(k.allPer) + ')' },
+      { label: '한 사람에게 특별 보너스', right: '금화 ' + U.num(k.oneCost) + '닢', value: 'one', icon: 'heart', desc: '고른 부하 한 사람의 충성 +' + k.oneLoyal },
+      { label: '그만둔다', value: null }
+    ], { width: 620, text: '<span class="muted">충성이 낮은 부하: ' + low.slice(0, 4).map(function (m) { return U.esc(G.MATE[m.id].name) + ' ' + loyalOf(m); }).join(' · ') + '</span>' });
+    if (!v) return;
+    if (v === 'all') {
+      if (!allCost || p.gold < allCost) return;
+      if (!(await UI.confirm('부하 전원에게 보너스를 줍니다. 금화 ' + U.num(allCost) + '닢이 듭니다.', '준다', '그만둔다'))) return;
+      p.gold -= allCost;
+      var before = low.map(function (m) { return { m: m, b: loyalOf(m) }; }), up = 0, n = 0;
+      list.forEach(function (m) { var g = raise(m, k.allLoyal); if (g > 0) { up += g; n++; } });
+      s.fleet.discipline = Math.min(100, (s.fleet.discipline || 0) + k.discipline);
+      if (G.Audio) G.Audio.sfx('prize');
+      await UI.say('모두 들어라! 지금까지 이 함대를 지켜 준 너희에게 보너스를 내리겠다. 한 사람도 빠짐없이!', { name: p.name, portrait: p.portrait });
+      var w = before[0];
+      if (w && w.b < 50) await UI.say(U.pick(['…제독, 솔직히 다음 항구에서 내릴 생각이었습니다. 이런 대접을 받고 떠나면 사람이 아니지요.', '이렇게까지 해 주시다니… 앞으로 제독 곁을 지키겠습니다.']), mateSp(w.m));
+      await C.mate(U.pick(['제독 만세! 이 함대에서 일하는 게 자랑스럽습니다!', '선원들 사이에도 소문이 퍼지겠군요. 제독은 공을 잊지 않는 분이라고!']));
+      UI.toast('부하 ' + n + '명의 충성이 올랐다 (+' + k.allLoyal + ') · 규율 +' + k.discipline + ' · 금화 −' + U.num(allCost), 'coin', 5200);
+      G.State.log('술집에서 부하 전원에게 보너스를 주었다 (금화 ' + U.num(allCost) + '닢 · 부하 ' + n + '명 충성 +' + k.allLoyal + ').');
+    } else {
+      var pick = await UI.choose('누구에게 특별 보너스를 줄까', low.map(function (m, i) {
+        var d = G.MATE[m.id], full = loyalOf(m) >= 100;
+        return { label: U.esc(d.name), right: '충성 ' + loyalOf(m) + (full ? ' · 이미 최고' : ' → ' + Math.min(100, loyalOf(m) + k.oneLoyal)), value: i, disabled: full, icon: 'heart' };
+      }), { width: 560 });
+      if (pick == null) return;
+      var m = low[pick]; if (!m || p.gold < k.oneCost || loyalOf(m) >= 100) return;   // 막힌 줄도 누르면 고른 값이 온다 (UI.choose)
+      p.gold -= k.oneCost;
+      var b0 = loyalOf(m), g = raise(m, k.oneLoyal), sp = mateSp(m);
+      if (G.Audio) G.Audio.sfx('prize');
+      await UI.say(G.MATE[m.id].name + ', 그동안 수고 많았다. 이건 너만을 위한 보너스다.', { name: p.name, portrait: p.portrait });
+      await UI.say(b0 < 40 ? '…저 같은 사람에게 이런 큰돈을요? 제독을 오해하고 있었나 봅니다. 이 은혜는 잊지 않겠습니다.' : b0 < 75 ? '이렇게 큰 보너스를… 감사합니다, 제독! 앞으로도 힘껏 모시겠습니다.' : '제독, 돈이 아니어도 저는 제독을 따릅니다. …그래도 기쁜 건 어쩔 수 없군요!', sp);
+      UI.toast(G.MATE[m.id].name + '의 충성 ' + b0 + ' → ' + loyalOf(m) + ' · 금화 −' + U.num(k.oneCost), 'heart', 4800);
+      G.State.log(G.MATE[m.id].name + '에게 특별 보너스를 주었다 (금화 ' + U.num(k.oneCost) + '닢 · 충성 +' + g + ').');
+    }
+    if (G.Game.refreshHud) G.Game.refreshHud();
+  };
+
   // ---------------------------------------------------------------- information (rumours about discoveries)
   /* 정보: 후원자와 계약을 맺었을 때만 — 그 계약(발견·해도 작성·물건 조달·세계일주)에 관한 이야기를 들려준다.
      무엇을 맡았는지 모르면 술집 주인도 들려줄 말이 없다. (가벼운 소문은 손님·동료·후원자에게서 따로 듣는다) */
@@ -236,7 +303,7 @@
     return src + G.Disc.hintText(d) + ' ' + T.whereText(c, d);
   };
   // ---------------------------------------------------------------- 현지 소문: 이미 아는 목표의 방향을 좁힌다
-  // 책·소문이 '무엇이 있는가'를 알려 준다면, 그 고장 사람들은 '어느 쪽으로 며칠'을 알려 준다 (대항해시대 3의 현지 소문)
+  // 책·소문이 '무엇이 있는가'를 알려 준다면, 그 고장 사람들은 '어느 쪽으로 며칠'을 알려 준다 (현지 소문)
   var ASK_RANGE = 24;
   /** 이 도시에서 물어볼 만한 목표: 단서가 있거나 계약한, 아직 못 찾은 곳 중 가까운 것 */
   T.targets = function (c) {
@@ -365,6 +432,7 @@
     if (!near.length) return '';
     var by = [];   // 같은 도시면 한데 묶는다
     near.forEach(function (n) {
+      if (G.MateKnow) G.MateKnow.know(n.m.id, n.c.id, 'rumor');   // 귀띔으로 들은 행방 (js/systems/mateknow.js)
       var left = G.MateMove.hear(n.m.id, n.c.id);
       if (left > 0) { by.push({ c: n.c, names: [n.m.name], left: left }); return; }
       var g = by.filter(function (b) { return b.c === n.c && !b.left; })[0]; if (g) g.names.push(n.m.name); else by.push({ c: n.c, names: [n.m.name] });
@@ -427,6 +495,7 @@
 
   /** 항해사 한 사람과 마주 앉는다 — 정보를 듣거나 고용한다 */
   T.talkMate = async function (c, m, quiet) {
+    if (G.MateKnow && m && !m.rival && G.MATE[m.id]) G.MateKnow.know(m.id, c.id, 'met');
     var who = T.duo(T.mateSpeaker(m));
     if (!quiet) await UI.say(m.desc, {});
     for (;;) {
@@ -495,6 +564,7 @@
     var nm = { id: m.id, role: role, joined: U.dateNum(s.date), loyal: 40 + cm.lv * 10, from: c.id };   // from: 처음 만난 도시 (둘째 부인의 집 — wives.js)
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }   // 빈 배가 있으면 선장으로
     s.mates.push(nm); role = nm;
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     G.State.log(U.j(m.name, '이/가') + ' 동료가 되었다.');
     await UI.say(U.pick(['좋소, 당신과 함께 가지. 실망시키지 마시오.', '재미있겠군. 잘 부탁하오, 제독.', '당신의 배에 오르겠소. 세상 끝까지라도.']), who);
     UI.toast(m.name + ' 동료가 되었다. (' + roleName(role) + ')', 'people');
@@ -508,6 +578,7 @@
     var s = S();
     var list = function () { return keeper ? T.candidates(c) : T.hireList(c); };   // 술집 명부에는 머무는 경쟁 탐험가도 (여관 안주인은 모른다)
     var cands = list();
+    if (G.MateKnow) cands.forEach(function (x) { if (!x.rival && G.MATE[x.id]) G.MateKnow.know(x.id, c.id, 'met'); });   // 명부에서 본 항해사 (수첩 「철새」 · js/systems/mateknow.js)
     if (!cands.length) {
       var away = keeper ? null : T.rivalsStaying(c).filter(function (r) { return r.atSea; })[0];
       await C.say(keeper || master(), '배를 타겠다는 사람 말인가? 지금 이 도시에는 눈에 띄는 자가 없군.' + T.mateHint(c) + (away && G.RIVAL_STAYS[away.name].away ? '\f' + G.RIVAL_STAYS[away.name].away : ''));
@@ -573,8 +644,8 @@
     el.appendChild(mateCard(m, c, function () { win.close('hire'); }, m.rival ? null : '부하로 고용한다', function () { win.close(null); }));
     return win.result;
   };
-  var STATN = ['힘', '지력', '무력', '매력'];
-  /** 대항해시대식 인물 카드: 초상 · 능력치 · 특기 · 말 */
+  var STATN = ['체력', '지력', '무력', '매력'];
+  /** 인물 카드: 초상 · 능력치 · 특기 · 말 */
   function mateCard(m, c, onPick, pickLabel, onBack) {
     var s = S(), cm = comm(m), lock = s.player.fame < m.fame;
     var wrap = U.el('div', 'mcard');
@@ -801,14 +872,17 @@
     if (G.Wives && G.Wives.of(m.id)) { await say('어머, 당신! 여기서는 일하는 중이에요. 집으로 와요, 기다릴게요.', 'happy'); return; }
     var greet = st.aff < 20 ? '어서 오세요. 처음 뵙는 분이네요.' : st.aff < 50 ? '어머, 또 오셨네요!' : st.aff < 80 ? '와 주셨군요! 기다리고 있었어요.' : '당신 얼굴을 보니 정말 기뻐요.';
     await say(greet, st.aff >= 50 ? 'happy' : 'warm');
+    if (G.MateKnow) { try { await G.MateKnow.deliver(c, m, say); } catch (e) { console.error(e); } }   // 부탁한 항해사의 행방 — 날이 찼으면 (js/systems/mateknow.js)
     for (;;) {
       var v = await ask(m.name + ' — 호감 ' + heart(st.aff), [
         { label: '한잔 산다', value: 'drink' }, { label: '이야기한다', value: 'talk' }, { label: '선물한다', value: 'gift' },
         (function () { var cd = G.FamEv ? G.FamEv.canDate(m.id) : null; return cd ? { label: '함께 시간을 보낸다' + (cd.ok ? '' : ' (' + cd.why + ')'), value: 'date', dis: !cd.ok } : null; })(),
-        G.MaidTip ? { label: '사례하고 소식을 묻는다' + (G.MaidTip.canAsk(st) ? '' : ' (호감이 더 있어야)'), value: 'tip', dis: !G.MaidTip.canAsk(st) } : null,   // 상선대·군함대·해적·철새의 행방 (js/systems/maidtip.js)
+        G.MaidTip ? { label: '사례하고 소식을 묻는다' + (G.MaidTip.canAsk(st) ? '' : ' (호감이 더 있어야)'), value: 'tip', dis: !G.MaidTip.canAsk(st) } : null,
+        G.MateKnow ? { label: '항해사의 행방을 부탁한다' + (G.MateKnow.seekSub(m) ? ' (' + G.MateKnow.seekSub(m) + ')' : ''), value: 'seek' } : null,   // 만났거나 인연이 있던 항해사 — 20일쯤 (js/systems/mateknow.js)   // 상선대·군함대·해적·철새의 행방 (js/systems/maidtip.js)
         { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }].filter(Boolean));
       if (!v) return;
       if (v === 'tip') { await G.MaidTip.ask(c, m, st, say); continue; }
+      if (v === 'seek') { await G.MateKnow.seek(c, m, st, say); continue; }
       if (v === 'date') { await G.FamEv.date(c, m); continue; }      // 데이트 — 건배·춤·쪽지·난롯가·저녁 (familyevent.js)
       if (v === 'drink') {
         var pr = 10 + c.size * 5; if (s.player.gold < pr) { UI.toast('소지금이 모자랍니다.', 'coin'); continue; }
@@ -866,25 +940,30 @@
     for (;;) {
       R.tidyCaptains();
       if (!s.mates.length) { UI.toast('동료가 없습니다.', 'people'); return; }
-      var i = await UI.choose('부하편성', [{ label: '기함 선실 — 방마다 부하를 배치한다', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }].concat(s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: G.Cabins.placeName(m) + (G.Cabins.eff(m) < 1 ? ' · 충성 ' + Math.round(m.loyal) : ''), value: k, icon: 'people', desc: (G.Cabins.skillText ? G.Cabins.skillText(m) : skillLine(d)) + ' — ' + d.desc }; })), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역·경리는 한 명씩이고(경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다), 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });   // 특기는 선실에서 는 것(★)·충성이 낮아 덜 쓰는 것((본디 n))까지 — G.Cabins.skillText (2026-10-23 QA 26)
+      if (G.CrewAuto) G.CrewAuto.refresh();   // 자리 없는 부하를 빈 자리에, 다른 배는 능력에 맞게 (js/systems/crewauto.js)
+      var others = s.fleet.ships.length - 1, idleN = G.CrewAuto ? G.CrewAuto.idleCount() : 0;
+      var head = [{ label: '기함 선실 — 방마다 부하를 배치한다', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' },
+        { label: '자동 배치 — 능력에 맞게 기함 선실과 다른 배 자리를 정한다', right: idleN ? '<span class="warn-text">대기 ' + idleN + '명</span>' : '', value: 'auto', icon: 'people' }];
+      if (others > 0) head.push({ label: '다른 배의 사람들 — 선장·조타수·갑판·파수꾼·선실', right: others + '척 · 자동', value: 'others', icon: 'ship' });
+      // 대기(자리 없음 — 달마다 충성이 떨어진다)는 붉은 바탕, 다른 배 사람은 푸른 바탕 (G.CabinView.rowClass) — 2026-10-28
+      var i = await UI.choose('부하편성', head.concat(s.mates.map(function (m, k) { var d = G.MATE[m.id], rc = G.CabinView && G.CabinView.rowClass ? G.CabinView.rowClass(m) : ''; return { label: d.name + (rc === 'idle' ? ' <span class="cb-idle-tag">대기</span>' : ''), right: (rc === 'idle' ? '자리 없음 — 충성이 떨어진다' : G.Cabins.placeName(m)) + (G.Cabins.eff(m) < 1 ? ' · 충성 ' + Math.round(m.loyal) : ''), value: k, icon: 'people', cls: rc ? 'mate-' + rc : '', desc: (G.Cabins.skillText ? G.Cabins.skillText(m) : skillLine(d)) + ' — ' + d.desc }; })), { width: 640, text: '역할을 바꿀 동료를 고르십시오. 여기서 정하는 것은 <b>기함</b>의 부관·항해사·측량사·통역·경리 (한 명씩 — 경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다)입니다. 기함의 선장은 제독입니다.<br><small class="muted">기함 말고 다른 배의 선장·조타수·갑판·파수꾼·선실은 능력에 맞게 저절로 정해집니다 — 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰이고, 나머지 자리는 충성이 떨어지지 않게 할 뿐입니다.</small>' });   // 특기는 선실에서 는 것(★)·충성이 낮아 덜 쓰는 것((본디 n))까지 — G.Cabins.skillText (2026-10-23 QA 26)
       if (i == null) return;
       if (i === 'cabin') { await G.CabinView.open(); continue; }
+      if (i === 'auto') { await G.CabinView.autoAll(); continue; }
+      if (i === 'others') { await G.CabinView.showOthers(); continue; }
       var m = s.mates[i], d = G.MATE[m.id];
       var opts = G.ROLES.map(function (r) {
         var holder = s.mates.filter(function (x) { return x.role === r.id && x !== m; })[0];
         return { label: '기함 ' + r.name, right: holder ? G.MATE[holder.id].name + '와 교대' : '', value: r.id };
       });
-      s.fleet.ships.slice(1).forEach(function (sh) {
-        var cap = R.captain(sh);
-        opts.push({ label: '선장 — ' + U.esc(sh.name) + '호', right: G.SHIP[sh.type].name + (cap && cap !== m ? ' · ' + G.MATE[cap.id].name + '와 교대' : cap === m ? ' · 지금 맡고 있음' : ' · 지금은 갑판장'), value: 'cap:' + sh.uid, icon: 'ship',
-          desc: d.name + '의 항해술 ' + R.mateSkill(m, 'nav') + ' · 포술 ' + R.mateSkill(m, 'gun') + ' · 검술 ' + R.mateSkill(m, 'sword') + ' · 조선기술 ' + R.mateSkill(m, 'ship') + ' — 이 배에만 쓰인다' });
-      });
-      opts = opts.concat([{ label: '대기', value: 'none' }, { label: '해고한다', value: 'fire', icon: 'boot' }]);
+      // 다른 배의 선장은 여기서 고르지 않는다 — 능력에 맞게 저절로 (js/systems/crewauto.js · 2026-10-28 사용자 요청)
+      opts = opts.concat([{ label: '역할 없음', right: '빈 선실이나 다른 배 자리에 저절로', value: 'none' }, { label: '해고한다', value: 'fire', icon: 'boot' }]);
       var v = await UI.choose(d.name + '의 역할', opts, { width: 600 });
       if (!v) continue;
       if (v === 'fire') {
         // 해고: 그 사람의 줄을 모두 지운다 — 같은 사람이 두 줄이면 하나가 「대기」로 남아 급료가 계속 나갔다 (2026-10-22)
-        if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', G.Scenes.mateSpeaker('first')); continue; }
+        // 로코는 해고할 수 없다 — 말하는 사람은 로코 자신 (지금 부관이 다른 사람이면 그 사람 얼굴·이름이 뜨던 버그 — 2026-10-28 피드백)
+        if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', { name: d.name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 }); continue; }
         if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; for (var fi = s.mates.length - 1; fi >= 0; fi--) if (s.mates[fi].id === m.id) s.mates.splice(fi, 1); R.tidyCaptains(); if (G.Cabins) G.Cabins.tidy(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
         continue;
       }
@@ -902,7 +981,7 @@
       other = v === 'none' ? null : s.mates.filter(function (x) { return x !== m && x.role === v; })[0];
       m.role = v; delete m.ship;
     }
-    if (other) { other.role = oldRole || 'none'; if (oldRole === 'captain') other.ship = oldShip; else delete other.ship; }
+    if (other) { other.role = (oldRole === 'crew' ? 'none' : oldRole) || 'none'; if (oldRole === 'captain') other.ship = oldShip; else delete other.ship; }   // 다른 배의 조타수 등이었으면 대기로 — 다음 채우기 때 자리를 얻는다
     R.tidyCaptains();
     if (G.Cabins) G.Cabins.tidy();   // 부관·항해사·측량사·선장이 되면 선실을 비운다
     // m이 앉아 있던 선실은 자리를 바꾼 사람(밀려난 선장·부관 등)이 넘겨받는다 — 대기로 남지 않게 (2026-10-17)

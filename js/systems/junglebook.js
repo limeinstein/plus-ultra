@@ -19,7 +19,11 @@
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
   function who(emo) { return G.Legend && G.Legend.speaker ? G.Legend.speaker(ID, emo) : { name: G.MATE[ID].name, portrait: G.Scenes.mateSpec(ID), lang: 3 }; }
   function boy() { return Object.assign({}, who(), { name: '정글의 청년' }); }   // 이름을 알기 전
-  function ape() { return { name: '늙은 오랑우탄', lang: 3 }; }   // 사람 얼굴을 그리지 않는다
+  function ape() {
+    // 동물 얼굴은 사람용 절차 얼굴 대신 전용 원화를 그대로 표시한다.
+    return { name: '늙은 오랑우탄', lang: 3, rigNoFace: true,
+      portrait: G.Art.withImg({}, ['portraits/history/mowgli_ape']), half: ['portraits/history/mowgli_ape_half'] };
+  }
   function mateSp(m) { return G.Legend && G.Legend.speaker ? G.Legend.speaker(m.id) : { name: G.MATE[m.id].name, portrait: G.Scenes.mateSpec(m.id), lang: 3 }; }
   function narrate(t) { return UI.say(t, {}); }
   function pic(key, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/' + key, title: title }) : null; }   // 그림이 없으면 건너뛴다

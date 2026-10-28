@@ -11,11 +11,13 @@
 
   // ================================================================ 탐지 범위 (°)
   /** 바다에서 망루가 수평선 너머를 살피는 거리 */
-  X.seaRange = function () { return 3.0 + R.skill('survey') * 0.9 + (R.hasItem('telescope') ? 1.4 : 0); };
+  /** 망원경이 늘려 주는 거리: 보통 망원경 v · 갈릴레이의 망원경(js/systems/skylore.js) v × G.BALANCE.sky.scopeK */
+  function scope(v) { if (R.hasItem('sky_gscope')) return v * ((G.BALANCE.sky && G.BALANCE.sky.scopeK) || 1.5); return R.hasItem('telescope') ? v : 0; }
+  X.seaRange = function () { return 3.0 + R.skill('survey') * 0.9 + scope(1.4); };
   /** 배에서 해안 가까운 육상 발견물을 알아보는 거리 */
-  X.coastRange = function () { return 0.9 + R.skill('survey') * 0.25 + (R.hasItem('telescope') ? 0.5 : 0); };
+  X.coastRange = function () { return 0.9 + R.skill('survey') * 0.25 + scope(0.5); };
   /** 육지에서 정찰대가 알아채는 거리 */
-  X.landRange = function () { return 1.0 + R.skill('survey') * 0.3 + R.skill('hist') * 0.2 + (R.hasItem('telescope') ? 0.3 : 0); };
+  X.landRange = function () { return 1.0 + R.skill('survey') * 0.3 + R.skill('hist') * 0.2 + scope(0.3); };
 
   var CAT_COL = { geo: '#7fc4ff', nature: '#8fe08a', ruin: '#f0c070', treasure: '#ffd24a', creature: '#ff9a7a', people: '#e0a8ff', trade: '#e8e0c8' };
   X.catColor = function (cat) { return CAT_COL[cat] || '#f2e7cc'; };
@@ -130,6 +132,20 @@
     ctx.fillText('?', 0, bob + 1);
     ctx.textBaseline = 'alphabetic';
     ctx.restore();
+  };
+  /** 표식이 무엇인지 (2026-10-26 사용자 요청 — 해도의 ?에 마우스를 올리면 어떤 발견물의 단서인지):
+      { name: 발견물 이름(수첩 「단서」와 같은 이름), cat: 갈래, src: 어디서 들었나(술집의 소문·망루…), hint: 단서 글, dist } */
+  X.markerInfo = function (m) {
+    var s = S(), d = m.d, mk = marks()[d.id] || {};
+    var srcs = G.Disc.hintSrcs ? G.Disc.hintSrcs(d.id) : [], nm = G.Info && G.Info.srcName ? G.Info.srcName : null;
+    var src = nm ? srcs.map(nm).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') : '';
+    if (!src) src = mk.mode === 'rumor' ? '술집의 소문' : mk.mode === 'land' ? '정찰대가 본 것' : '망루가 본 것';
+    return { id: d.id, name: d.name, cat: G.DISC_CATS[d.cat] || '', src: src, hint: (G.Disc.hintText ? G.Disc.hintText(d) : d.hint) || '', dist: m.dist, lv: G.Disc.hintLv ? G.Disc.hintLv(d.id) : 1, hasHint: !!(s.hints && s.hints[d.id]) };
+  };
+  /** 마우스를 올렸을 때 한 줄 */
+  X.markerTip = function (m) {
+    var o = X.markerInfo(m);
+    return '「' + o.name + '」 (' + o.cat + ') · ' + o.src + (o.dist != null ? ' · 약 ' + o.dist.toFixed(1) + '°' : '');
   };
   /** 화면의 (x,y) 가까이 있는 표식 */
   X.markerAt = function (list, toScreen, x, y) {

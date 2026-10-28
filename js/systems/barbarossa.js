@@ -59,6 +59,9 @@
   // ================================================================ ① 황제의 부름 (1543)
   BB.callDue = function (sp) { var b = st(); return !!(b && b.ok && !b.stage && isCharles(sp) && today() >= K.callFrom && today() <= K.callTo); };
   async function charlesCall(sp) {
+    return G.Hist.withScene('barb_charles_audience', '카를 5세의 부름', function () { return charlesCallLines(sp); });
+  }
+  async function charlesCallLines(sp) {
     var b = st(), s = S(), w = G.Sponsor.speaker(sp); w.lang = 3; w.li = null;
     await UI.say('왔구려, 제독. 그대의 이름에 붙은 작위가 헛된 것이 아니라면, 오늘 내 이야기를 끝까지 들어 주시오.', w);
     await UI.say('세 해 전, 나는 하이레딘에게 사람을 보냈소. 이쪽으로 넘어오면 내 함대의 대제독으로 삼고 북아프리카 전부를 다스리는 부왕으로 봉하겠다고. …그 늙은 해적은 웃기만 했다더군. 쉴레이만이 베푼 은덕을 배신할 생각은 털끝만큼도 없다면서.', w);
@@ -87,6 +90,9 @@
   // ================================================================ ② 툴롱의 겨울 (1543~1544)
   function toulonOpen() { var b = st(); return !!(b && b.stage === 'call' && !b.toulon && today() >= K.toulonFrom && today() <= K.toulonTo && inBox(TOULON)); }
   async function toulon() {
+    return G.Hist.withScene('barb_toulon_winter', '바르바로사 — 툴롱의 겨울', toulonLines);
+  }
+  async function toulonLines() {
     var b = st(); b.toulon = 1; b.met = 1;
     await play([
       [null, '툴롱 앞바다. 항구에는 갤리선 백여 척이 빼곡하고, 성당 종탑 대신 첨탑처럼 세운 장대에서 아잔이 울려 퍼진다. 프랑스 사람은 보이지 않는다 — 이 겨울, 툴롱은 이슬람 도시다.'],
@@ -108,6 +114,9 @@
   // ================================================================ ③ 제노바 (1544)
   function genoaOpen() { var b = st(), s = S(); return !!(b && b.stage === 'call' && today() >= K.genoaFrom && today() <= K.genoaTo && s.loc.mode === 'city' && s.loc.city === GENOA); }
   async function genoa() {
+    return G.Hist.withScene('barb_genoa_ransom', '제노바 — 투르구트의 몸값', genoaLines);
+  }
+  async function genoaLines() {
     var b = st(), s = S(); b.stage = 'genoa'; b.met = 1;
     await play([
       [null, '제노바 앞바다를 하이레딘의 갤리선들이 메우고 있다. 성벽 위의 사람들이 숨을 죽인다.'],

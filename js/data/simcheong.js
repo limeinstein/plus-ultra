@@ -3,7 +3,7 @@
    · 쌀 300으로 남경 뱃사람들과의 약조를 풀어 주면 품삯 없이 합류한다
    · 요리·음악·세공·항해·운용·웅변·회계 3단계, 조선어·일본어 능숙
    그림: images/portraits/legendary/sim_cheong(.webp · _half.webp) · 장면 images/legend-events/simcheong_*.webp
-   항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [힘, 지력, 무력, 매력], lg = {말 번호: 단계}). */
+   항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [체력, 지력, 무력, 매력], lg = {말 번호: 단계}). */
 (function (G) {
   'use strict';
   var m = { id: 'simcheong', name: '심청', g: 'f', style: 'kr', role: 'maid', tone: 'polite', pic: 'sim_cheong',

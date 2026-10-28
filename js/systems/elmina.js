@@ -77,9 +77,11 @@
   }
   function pic(key, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/' + key, title: title }) : { stop: function () { return Promise.resolve(); } }; }
   async function withPic(key, title, fn) { var pc = pic(key, title); try { return await fn(); } finally { await pc.stop(); } }
-  // 이름 없는 사람
-  var KING = { name: '국왕 주앙 2세', lang: 3 }, TRADER = { name: '아칸 상인', lang: 3 }, ELDER = { name: '두 마을의 노인', lang: 3 },
-    FACTOR = { name: '서인도 회사의 상관장', lang: 3 }, MOTHER = { name: '쇠사슬에 묶인 여인', lang: 3 };
+  // 주앙 2세는 기존 왕실 초상, 나머지 화자는 사건 전용 얼굴·무릎상을 쓴다.
+  var KING = { name: '국왕 주앙 2세', lang: 3, rigId: 'mina:joao2',
+    portrait: G.Art.withImg(G.Art.npcSpec('mina_joao2', 'king', 'ib', 'm'), ['portraits/sponsors/pt_king_1']),
+    half: ['portraits/sponsors/pt_king_1_half'] },
+    TRADER = H('mina_trader'), ELDER = H('mina_elder'), FACTOR = H('mina_factor'), MOTHER = H('mina_mother');
   function crownTrust(n) {
     if (!G.Sponsor || !G.SPONSOR) return;
     ['pt_king', 'pt_casaindia'].forEach(function (id) { if (G.SPONSOR[id]) { var r = G.Sponsor.rel(id); if (r.met || n < 0) G.Sponsor.addTrust(r, n); } });

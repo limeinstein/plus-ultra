@@ -15,4 +15,13 @@
   };
   Object.keys(L).forEach(function (id) { if (!F[id]) { L[id].id = id; F[id] = L[id]; } });
   G.MINA_FIGS = Object.keys(L);
+  // 사건의 이름 없는 화자도 서로 다른 전용 초상을 쓴다.
+  var extra = {
+    mina_elder: { name: '두 마을의 노인', st: 'af', role: 'elder' },
+    mina_trader: { name: '아칸 상인', st: 'af', role: 'merchant', g: 'f' },
+    mina_factor: { name: '서인도 회사의 상관장', st: 'ne', role: 'merchant' },
+    mina_mother: { name: '쇠사슬에 묶인 여인', st: 'af', role: 'native', g: 'f' }
+  };
+  Object.keys(extra).forEach(function (id) { if (!F[id]) { extra[id].id = id; F[id] = extra[id]; } });
+  G.MINA_EXTRA_FIGS = Object.keys(extra);
 })(window.G = window.G || {});

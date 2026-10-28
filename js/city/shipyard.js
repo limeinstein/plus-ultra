@@ -173,7 +173,7 @@
   }
   function stars(v) { var n = Math.round((v - 0.9) / 0.14); n = U.clamp(n, 1, 5); return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n); }
 
-  // ---------------------------------------------------------------- 기술 투자 (대항해시대 2의 공업 투자)
+  // ---------------------------------------------------------------- 기술 투자 (공업 투자)
   Y.invest = async function (c) {
     var s = S(), SHp = SH(), tech = SHp.tech(c), next = SHp.techNext(c);
     var types = Y.types(c), nextShips = types.filter(function (id) { return G.SHIP[id].lv === tech + 1; }).map(function (id) { return G.SHIP[id].name; });

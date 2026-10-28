@@ -1,4 +1,4 @@
-/* 암시장 명검 점검: 대항해시대 2의 야시장 칼이 그 도시의 뒷골목 암시장에 늘 한 자루 나오는지 (js/systems/blackmarket.js BM.SWORDS)
+/* 암시장 명검 점검: 명검이 그 도시의 뒷골목 암시장에 늘 한 자루 나오는지 (js/systems/blackmarket.js BM.SWORDS)
    node tests/bm_swords_smoke.js   (스크린샷: OUT 또는 임시 폴더/bm_swords_shots) */
 'use strict';
 const path = require('path');
