@@ -979,6 +979,8 @@
       // 멈춰 있어도 바다의 시간은 흐른다 (닻을 내리고 기다리는 것): 날이 가고 식량·물이 줄고, 다른 배들은 제 갈 길을 가며 다가오기도 한다.
       // 배속 단추와 상관없이 G.FX.waitSpeed(기본 ×1)로 천천히 흐른다 (멈춰서 생각하는 동안 식량이 빨리 줄지 않게). 0이면 예전처럼 시간이 멈춘다
       var wsp = G.FX && G.FX.waitSpeed != null ? G.FX.waitSpeed : 1;
+      st.afk = !!(G.Game.afk && G.Game.afk(G.FX && G.FX.afkSec != null ? G.FX.afkSec : 90));   // 자리를 비웠으면 멈춘 바다의 시간도 멈춘다 (베타 피드백 #87)
+      if (st.afk) wsp = 0;
       var wDays = dt * wsp / DAY_SEC;
       if (wDays > 0) {
         var wn = Math.max(1, Math.ceil(wDays / 0.08)), wD = wDays / wn, wDue = false;
@@ -1922,7 +1924,7 @@
     var eta = etaDays(), have = Math.min(R.daysOfFood(), R.daysOfWater());
     var etaTxt = eta != null ? ' · <span style="color:' + (have < eta + 2 ? '#ff9f7a' : '#cfe8b0') + '">도착까지 약 ' + eta + '일 / 보급 ' + have + '일분</span>' : '';
     var oc = G.Explore.oceanOf(l.lon, l.lat);
-    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⚓ 멈춤</b> <span style="opacity:.8">(시간은 흐른다)</span> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (G.Rain ? G.Rain.tag() : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
+    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⚓ 멈춤</b> <span style="opacity:.8">' + (st.afk ? '(자리를 비운 사이 시간을 멈췄다 — 아무 키나 누르면 다시 흐른다)' : '(시간은 흐른다)') + '</span> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (G.Rain ? G.Rain.tag() : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
   }
   /** 글이 바뀌었을 때만 고친다 (같은 글을 다시 넣으면 브라우저가 매번 새로 배치한다) */
   function setHtml(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }

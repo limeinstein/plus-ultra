@@ -146,7 +146,8 @@
       await UI.say('기분이 나쁘다......눈이 도는군~ ~우웩~', {});
       await C.say(master(), '손님, 괜찮습니까! 얼굴이 새파랍니다, 손님, 손님!');
       await UI.fade(function () { G.Game.passDays(1); });
-      if (U.chance(0.35)) { var lost = Math.floor(s.player.gold * U.rf(0.1, 0.3)); s.player.gold -= lost; await UI.say('정신을 잃었었군... 아무래도 여관 같군.\n돈을 도둑맞았다!! (금화 ' + U.num(lost) + '닢)', {}); }
+      // 취해 쓰러진 사이 털린 돈: 지닌 돈의 10~30%이되 주머니에 넣고 다닐 만큼까지만 (큰 재산이 한 번에 수십만 닢씩 사라지던 것 — 베타 피드백 #87)
+      if (U.chance(0.35)) { var lost = Math.min(Math.floor(s.player.gold * U.rf(0.1, 0.3)), 500 + c.size * 250); s.player.gold -= lost; await UI.say('정신을 잃었었군... 아무래도 여관 같군.\n돈을 도둑맞았다!! (금화 ' + U.num(lost) + '닢)', {}); }
       else if (U.chance(0.2)) { var got = U.ri(50, 400); s.player.gold += got; await UI.say('정신이 드는군..... 기억에 없는 돈을 쥐고 있었군! (금화 ' + got + '닢)', {}); }
       else await C.mate('제독! 이봐요, 제독! 괜찮습니까? ...어젯밤엔 좀 과하셨습니다.');
       return C.leave();

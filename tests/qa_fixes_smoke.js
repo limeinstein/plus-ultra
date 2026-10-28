@@ -74,18 +74,28 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const SEA = G.Scenes.sea, st = SEA.runtime();
       st.paused = true; st.path = null; st.npcs = [{ id: 'm1', kind: 'merchant', lon: s.loc.lon - 1, lat: s.loc.lat, heading: Math.PI / 2, n: 1, K: 0, spd: 1, life: 60, hostile: false, zone: G.Ships.zone(s.loc.lon, s.loc.lat), ships: [] }];
       const d0 = s.day, f0 = s.fleet.food, p0 = [s.loc.lon, s.loc.lat], n0 = st.npcs[0] ? [st.npcs[0].lon, st.npcs[0].lat] : null;
+      G.Game.lastInput = Date.now();   // 방금 손을 댄 것으로 (자리를 비우면 멈춘다 — 아래 afk 검사)
       for (let i = 0; i < 60; i++) { SEA.update(0.1); await new Promise(r => setTimeout(r, 0)); }
       const n1 = st.npcs[0] ? [st.npcs[0].lon, st.npcs[0].lat] : null;
       const out = { days: s.day - d0, food: f0 - s.fleet.food, moved: G.Geo.dist(p0[0], p0[1], s.loc.lon, s.loc.lat), npcMoved: n0 && n1 ? G.Geo.dist(n0[0], n0[1], n1[0], n1[1]) : -1,
         hud: (document.querySelector('#hud') || document.body).innerText.indexOf('멈춤') >= 0 };
       G.FX.waitSpeed = 0; const d1 = s.day; for (let i = 0; i < 60; i++) { SEA.update(0.1); await new Promise(r => setTimeout(r, 0)); }
       out.off = s.day - d1; G.FX.waitSpeed = 1;
+      // 자리를 비우면(입력 없이 afkSec초) 멈춘 바다의 시간도 멈춘다 — 베타 피드백 #87 (2026-10-28)
+      G.Game.lastInput = Date.now() - (G.FX.afkSec + 5) * 1000; const d2 = s.day, f2 = s.fleet.food;
+      for (let i = 0; i < 60; i++) { SEA.update(0.1); await new Promise(r => setTimeout(r, 0)); }
+      out.afk = { days: s.day - d2, food: f2 - s.fleet.food, hud: (document.querySelector('#hud') || document.body).innerText.indexOf('자리를 비운') >= 0 };
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift' })); const d3 = s.day;
+      for (let i = 0; i < 60; i++) { SEA.update(0.1); await new Promise(r => setTimeout(r, 0)); }
+      out.back = s.day - d3;
       return out;
     });
     ok(w.days >= 4 && w.food > 0 && w.moved < 0.01, '멈춘 채 6초: ' + w.days + '일이 지나고 식량이 줄며(' + w.food.toFixed(2) + ') 내 배는 제자리');
     ok(w.npcMoved > 0, '멈춰 있는 동안 다른 배는 제 갈 길을 간다 (' + w.npcMoved.toFixed(2) + '°)');
     ok(w.hud, '상태 줄: 「⚓ 멈춤 (시간은 흐른다)」');
     ok(w.off === 0, 'G.FX.waitSpeed = 0 이면 예전처럼 시간이 멈춘다');
+    ok(w.afk.days === 0 && w.afk.food === 0 && w.afk.hud, '자리를 비우면(입력 없이 ' + 90 + '초) 멈춘 바다의 시간도 멈추고 상태 줄에 알린다 ' + JSON.stringify(w.afk));
+    ok(w.back >= 4, '키를 누르면 다시 흐른다 (' + w.back + '일)');
 
     // ---- 5 웅변 설득의 승리·좌절 그림
     const p = await page.evaluate(async () => {
