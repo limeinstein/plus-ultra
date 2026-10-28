@@ -28,6 +28,7 @@
       if (seen[e.id] == null) return true;
       if (e.once || s.day - seen[e.id] < e.days) return false;
       if (e.id === 'curse' && s.player.luck >= K().luckMax) return false;
+      if (e.id === 'charm' && !males().some(function (m) { return (m.loyal == null ? 70 : m.loyal) < 100; })) return false;   // 모두 충성 100이면 홀릴 까닭이 없다
       if (e.id === 'potion' && s.fleet.fatigue <= 0 && s.fleet.discipline >= 100) return false;
       return true;
     });
@@ -36,7 +37,7 @@
   };
   C.effect = function (e) {
     var s = S(), b = K(), f = s.fleet, before;
-    if (e.id === 'curse') { before = s.player.luck == null ? 50 : s.player.luck; s.player.luck = Math.min(b.luckMax, before + b.luck); return '행운 +' + (s.player.luck - before) + ' → ' + s.player.luck; }
+    if (e.id === 'curse') { before = s.player.luck == null ? 50 : s.player.luck; s.player.luck = Math.min(b.luckMax, before + b.luck); return '행운 +' + (s.player.luck - before) + ' → ' + s.player.luck + ' (바다의 사고를 피할 가능성 +' + Math.round(G.R.playerLuck() * 100) + '%)'; }
     if (e.id === 'potion') {
       before = f.fatigue; var disc = f.discipline;
       f.fatigue = Math.max(0, before - b.fatigue); f.discipline = Math.min(100, disc + b.discipline);

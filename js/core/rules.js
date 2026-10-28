@@ -12,6 +12,8 @@
     m.loyal = U.clamp(G.Coven && G.Coven.protected(m) ? Math.max(old, value) : value, 0, 100);
     return m.loyal;
   };
+  // 제독의 행운(s.player.luck, 기본 50): 50을 넘는 만큼 바다의 나쁜 일을 피할 가능성이 오른다 (99면 +0.098 — 여신상 하나쯤). 마녀의 저주(js/systems/coven.js)·가족 사건이 올린다
+  R.playerLuck = function () { var p = R.S() && R.S().player, l = p && p.luck != null ? p.luck : 50; return Math.max(0, l - 50) / 500; };
   R.mateWage = function (id) { var d = G.MATE[id]; return !d || (G.Coven && G.Coven.freeWage(id)) ? 0 : (d.wage || 0); };
 
   // ---------------------------------------------------------------- city helpers

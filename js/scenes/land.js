@@ -441,6 +441,7 @@
       if (G.Tale) await G.Tale.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 옛이야기의 아가씨들: 프랑스 숲의 신데렐라·백설공주 (js/systems/fairytales.js)
       if (G.TreasureHunt) await G.TreasureHunt.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 조합의 보물 지도: X 자리에 서면 판다 (js/systems/treasurehunt.js)
       if (G.LittlePrince) await G.LittlePrince.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 어린 왕자의 지도: 사막 속 숨은 우물 (js/systems/littleprince.js)
+      if (G.Mowgli) await G.Mowgli.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 정글북: 델리 근처 숲의 바나나 도둑과 모글리 (js/systems/junglebook.js)
       if (G.Princess) await G.Princess.onLand({ battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });
       // 정찰대: 가까운 발견물을 알아채고 지도에 표식을 남긴다
       var sensed = G.Explore.sense('land', l.lon, l.lat, Math.max(st.scoutBoost || 1, 1 + G.Mounts.scout(MT(), l.party)));

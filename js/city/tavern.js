@@ -476,10 +476,10 @@
     if (!cm.lv) { await C.mate('말이 한 마디도 통하지 않습니다. 통역을 구하거나 저 사람의 말을 익혀야겠습니다.'); return false; }
     if (s.player.fame < m.fame) { await UI.say('자네 밑에서 일하라고? 미안하지만 아직 자네 이름은 들어 본 적이 없군. (필요 명성 ' + U.num(m.fame) + ')', who); return false; }
     var note = cm.lv >= 3 ? '' : '\n' + G.LANGS[cm.li] + '가 ' + (cm.lv === 1 ? '조금' : '어지간히') + '밖에 통하지 않는다. 손짓을 섞으면 뜻은 전해지겠지만, 처음에는 마음을 다 열지 않을 것이다.';
-    var ok = await UI.confirm(U.j(m.name, '을/를') + ' 월급 금화 ' + U.num(m.wage) + '닢에 고용하겠습니까?' + note, '고용한다', '그만둔다');
+    var ok = await UI.confirm(U.j(m.name, '을/를') + ' 월급 금화 ' + U.num(R.mateWage(m.id)) + '닢에 고용하겠습니까?' + note, '고용한다', '그만둔다');
     if (!ok) return false;
     // 급료가 버거우면 경리(없으면 부관)가 말린다 — 그래도 들일 수는 있다
-    var warn = G.Cabins && G.Cabins.wageWarning(m.wage);
+    var warn = G.Cabins && G.Cabins.wageWarning(R.mateWage(m.id));   // 마녀 열여섯이 모이면 마녀는 무급 (js/systems/coven.js)
     if (warn) {
       await UI.say(warn.text, G.Cabins.warnSpeaker());
       if (!await UI.confirm('그래도 ' + U.j(m.name, '을/를') + ' 고용하겠습니까?', '고용한다', '그만둔다')) return false;
@@ -544,7 +544,7 @@
       var lock = !d.rival && s.player.fame < d.fame, cm = comm(d);
       var row = U.el('div', 'hire-row' + (lock ? ' lock' : ''),
         '<span class="nm">' + U.esc(d.name) + '</span>' +
-        '<span class="rt">' + (d.rival ? '고용 불가' : lock ? '명성 ' + U.num(d.fame) : U.num(d.wage) + '닢') + '</span>' +
+        '<span class="rt">' + (d.rival ? '고용 불가' : lock ? '명성 ' + U.num(d.fame) : U.num(R.mateWage(d.id)) + '닢') + '</span>' +
         '<span class="sk">' + U.esc(skillLine(d)) + (cm.lv ? '' : ' · <b>말 안 통함</b>') + '</span>');
       row.onclick = function () { sel = d; render(); };
       row.ondblclick = function () { win.close(d); };
@@ -581,7 +581,7 @@
       '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (m.rival ? U.esc((G.SeaFolk.rivalCity(m.rival) || {}).name || '') + '에 머묾' : G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
       ' · ' + m.y[0] + '~' + m.y[1] + '년' + (m.renown ? ' · <span class="renown" title="실존 인물 — 지명도가 높을수록 특기가 많다">지명도 ' + '★'.repeat(m.renown) + ' ' + G.RENOWN_NAME[m.renown] + '</span>' : '') + '</div>' +
       (m.rival ? '<div class="mt"><b class="warn">고용할 수 없다</b> — 스스로 함대를 꾸려 발견을 다투는 경쟁 탐험가</div>' : '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +
-      ' · 월급 <b>금화 ' + U.num(m.wage) + '닢</b></div>') +
+      ' · 월급 <b>금화 ' + U.num(R.mateWage(m.id)) + '닢</b></div>') +
       '<div class="mc-desc">' + U.esc(m.desc || '') + '</div>'));
     wrap.appendChild(head);
 
