@@ -70,6 +70,7 @@
   function RB() { return (G.BALANCE && G.BALANCE.rivals) || { lead: 12, talk: 36 }; }
   F.available = function (d) {
     if (!d) return false;
+    if (d.mirageFrom && S().date.y < d.mirageFrom) return false;   // 신기루로도 아직 보이지 않는 해 (js/data/miragedisc.js 1610 · amer1630.js 대학 1650)
     if (d.openY && S().date.y < d.openY) return false;                                           // 미스터리 유적: 그 해(1600년)가 되어야 증거가 나온다 (js/data/mysterydisc.js)
     if (d.built && S().date.y < d.built && !(G.Mirage && G.Mirage.active(d))) return false;      // 아직 세워지지 않은 건물 (1600년부터는 신기루로 소문이 돈다)
     if (d.need && !d.need.every(function (id) { return G.Disc.foundByMe(id); })) return false;   // 발견의 연쇄
@@ -93,6 +94,7 @@
   };
   /** 단서를 얻을 수 있는가: 들을 수 있는 것, 또는 그 단계에 소문이 돌 때 경쟁자 본인에게서 듣는 관문 이야기 */
   F.canHint = function (d, src) {
+    if (d && d.mirageFrom && S().date.y < d.mirageFrom) return false;
     if (d && d.openY && S().date.y < d.openY) return false;                                       // 미스터리 유적: 1600년 전에는 어떤 길로도 단서가 없다
     if (d && d.built && S().date.y < d.built && !(G.Mirage && G.Mirage.active(d))) return false;   // 아직 없는 건물은 책·유물로도 단서가 나오지 않는다 (신기루 때는 된다)
     if (F.available(d)) return true;

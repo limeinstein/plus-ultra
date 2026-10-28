@@ -143,6 +143,21 @@
     out.sort(function (a, b) { return F.map(function (x) { return x[0]; }).indexOf(a.sk) - F.map(function (x) { return x[0]; }).indexOf(b.sk); });
     return out;
   };
+  /** 발견 직후 부하 한 사람의 바람 (d.wish → G.DISC_WISH[d.wish] — 아메리카 대학의 신기루 「나 같은 사람들도 배울 수 있는 학교라니…」, js/data/amer1630.js)
+      배운 것이 가장 적은 부하(역사학·과학·신학이 낮은 사람)가 말한다 — {m, d, text} 또는 null */
+  DV.wish = function (d, skip) {
+    var L = d && d.wish && G.DISC_WISH && G.DISC_WISH[d.wish], s = S(); if (!L || !L.length || !s) return null;
+    var best = null, bestK = 99;
+    (s.mates || []).forEach(function (m) {
+      var md = G.MATE[m.id]; if (!md || (skip && skip[m.id]) || (R.mateHidden && R.mateHidden(m))) return;
+      var k = (R.mateSkill(m, 'hist') || 0) + (R.mateSkill(m, 'sci') || 0) + (R.mateSkill(m, 'theo') || 0) + Math.random() * 0.9;
+      if (k < bestK) { bestK = k; best = { m: m, d: md }; }
+    });
+    if (!best) return null;
+    var V = G.Voice, reg = V ? V.reg(best.d) : (best.d.g === 'f' ? 'yo' : 'hao');
+    var t = DV.conv(U.pickFresh('dv:wish:' + d.wish, L), reg).replace(/\{나\}/g, reg === 'sp' || reg === 'yo' ? '저' : '나');
+    return { m: best.m, d: best.d, text: t };
+  };
   /** 보고 자리에서 거드는 부하 c(pitch.js candidates)의 말: 그 쪽의 특기에 맞는 관찰 + 쪽에 맞는 맺음말. 맞는 관찰이 없으면 null */
   DV.pitch = function (d, c, angleSk) {
     var F = DV.facts(d), md = G.MATE[c.id]; if (!F || !md) return null;

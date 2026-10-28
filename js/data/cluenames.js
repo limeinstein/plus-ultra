@@ -11,6 +11,8 @@
 (function (G) {
   'use strict';
   G.DISC_NAMES = {
+    // 0.286 해상 괴물 (js/data/seamonsters.js) — 뱃사람들이 이름으로 듣던 괴물이라 단서도 이름 그대로 (2026-10-28)
+    'giant-octopus': { clue: '대왕문어' }, 'sea-serpent': { clue: '바다뱀' }, 'sea-dragon': { clue: '해룡' }, 'man-eating-shark': { clue: '식인상어' }, 'ghost-ship': { clue: '유령선' },
     aurora: { clue: '오로라', name: '오로라' },
     capegood: { clue: '폭풍의 곶' },
     westroute: { clue: '서쪽 바닷길' },

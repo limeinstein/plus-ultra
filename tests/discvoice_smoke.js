@@ -31,7 +31,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         if (d.id === 'circum') return;
         const F = G.DISC_FACTS[d.id];
         if (!F) { out.bad.push('없음 ' + d.id); return; }
-        if (F.length < 3 || F.length > 5) out.bad.push(d.id + ' 개수 ' + F.length);
+        const minF = G.AMER1630 && G.AMER1630.indexOf(d.id) >= 0 ? 2 : 3;   // 아메리카 1630의 발견물은 대사가 많지 않게 2개씩 (js/data/amer1630.js, 2026-10-28)
+        if (F.length < minF || F.length > 5) out.bad.push(d.id + ' 개수 ' + F.length);
         F.forEach(f => {
           facts++; skillCount[f[0]] = (skillCount[f[0]] || 0) + 1;
           if (SK.indexOf(f[0]) < 0) out.bad.push(d.id + ' 특기 ' + f[0]);

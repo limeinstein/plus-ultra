@@ -107,15 +107,18 @@
      아직 없는 것을 잠깐 본 것이라 유물·노획은 없고, 발견 명성·가치는 거리·위치에 비해 적다 (G.BALANCE.mirage.futureK).
      도시 안 건물은 발견하기 전까지 거리에 일렁이며 서 있다가, 발견하는 순간 흩어져 사라진다 (js/scenes/town.js T.vanish). */
   function MC() { return (G.BALANCE && G.BALANCE.mirage) || {}; }
-  D.isFuture = function (d) { return !!(d && d.cat === 'ruin' && d.built && d.built >= (MC().future || 1800)); };
+  D.isFuture = function (d) { return !!(d && d.cat === 'ruin' && d.built && (d.alwaysMirage || d.built >= (MC().future || 1800))); };   // alwaysMirage: 세운 해와 상관없이 늘 신기루로 본다 (아메리카의 대학 — js/data/amer1630.js)
   /** 지금은 아직 세워지지 않은 미래의 건물인가 (그 해가 지나면 여느 발견물) */
-  D.mirageNow = function (d) { return D.isFuture(d) && S().date.y < d.built; };
+  D.mirageNow = function (d) { return D.isFuture(d) && (d.alwaysMirage || S().date.y < d.built); };
   /** 신기루로 본 발견인가 (이미 찾았으면 찾을 때의 기록, 아니면 지금 해) */
   D.isMirageFind = function (d) { var st = d && S().disc[d.id]; return st && st.me ? !!st.mirage : D.mirageNow(d); };
   D.mirageK = function (d) { return D.isMirageFind(d) ? (MC().futureK || 0.2) : 1; };
   /** 그 해가 되어야 증거가 나오고 찾을 수 있는 발견물인가 (d.openY — 미스터리 유적은 1600년부터, js/data/mysterydisc.js) */
   D.opened = function (d) { var s = S(); return !d || !d.openY || !s || s.date.y >= d.openY; };
-  D.built = function (d) { return !d || !d.built || S().date.y >= d.built || (D.isFuture(d) && !(d.mirageFrom && S().date.y < d.mirageFrom)); };   // mirageFrom: 그 해 전에는 신기루로도 보이지 않는다 (js/data/miragedisc.js — 1610년부터)
+  D.built = function (d) {
+    if (d && (d.openY || d.mirageFrom) && S().date.y < (d.openY || d.mirageFrom)) return false;   // 아직 드러나지 않았다 (openY: 그 해부터 · mirageFrom: 그 해부터 신기루로) — 2026-10-28
+    return !d || !d.built || S().date.y >= d.built || (D.isFuture(d) && !(d.mirageFrom && S().date.y < d.mirageFrom));
+  };   // mirageFrom: 그 해 전에는 신기루로도 보이지 않는다 (js/data/miragedisc.js — 1610년부터)
   /** 지금 단서를 들을 수 있는 발견물인가 */
   D.available = function (d) { return !G.Frontier || G.Frontier.available(d); };
   /** 그림·세공이 발견물의 값어치를 올린다 — 제독이든 부하든(역할·배 상관없이) 가장 잘하는 사람의 솜씨.
@@ -277,6 +280,7 @@
     G.State.log(d.name + U.j(d.name, '을/를').slice(d.name.length) + (mir ? ' 신기루로 보았다. 아직 세상에 없는 것이 잠시 떠올랐다가 흩어졌다. (발견으로 기록)' : ' 발견했다.'));
     if (G.Audio) G.Audio.sfx('discover');
     // 유적은 복원 GIF가 빛나며 돌고, 「○○ 발견」과 함께 제독·부하의 대화가 이어진다 (그림·세공 솜씨만큼 자세히)
+    var revealed = !!(G.Scenes.hasReveal && G.Scenes.hasReveal(d));
     if (G.Scenes.discoveryReveal) { try { await G.Scenes.discoveryReveal(d, fame); } catch (e) { console.error(e); } }
     var impact = D.applyImpact(d, st);
     if (G.Career) G.Career.afterDiscovery(d);
@@ -285,6 +289,8 @@
     rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });
     st.relics = got.map(function (r) { return r.id; });
     await G.Scenes.discoveryCard(d, fame, got.concat(wait));
+    // 장면 그림이 없는 발견물도 부하들이 그 발견물의 관찰·바람을 말한다 (아메리카 1630년의 발견물·대학의 신기루 — js/data/amer1630.js)
+    if (!revealed && G.Scenes.discoveryVoices) { try { await G.Scenes.discoveryVoices(d); } catch (e) { console.error(e); } }
     // 보는 사이 흩어져 사라진다 — 거리에서 본 도시 건물은 거리의 그림이 흩어지므로(city.lookAt → Town.vanish) 따로 띄우지 않는다
     var inTown = how === 'city' && G.Town && G.Town.active && G.Town.active() && !G.Town.hidden();
     if (mir && !inTown && G.Mirage && G.Mirage.vanish) await G.Mirage.vanish(d);

@@ -160,6 +160,16 @@
     return { sheet: sheet, gif: gif, end: end };
   }
   SC.hasReveal = function (d) { return !!revealKeys(d); };
+  /** 장면 그림(GIF·장면 판)이 아직 없는 발견물: 발견 카드 뒤에 부하들의 관찰과 바람만 들려준다 (js/systems/discvoice.js) — 2026-10-28 */
+  SC.discoveryVoices = async function (d) {
+    var dvl = G.DiscVoice ? G.DiscVoice.reveal(d, 2) : [], used = {};
+    for (var i = 0; i < dvl.length; i++) { used[dvl[i].m.id] = 1; await UI.say(dvl[i].text, { name: dvl[i].d.name, portrait: SC.mateSpec(dvl[i].m.id), lang: 3 }); }
+    var w = G.DiscVoice && G.DiscVoice.wish ? G.DiscVoice.wish(d) : null;
+    if (w) await UI.say(w.text, { name: w.d.name, portrait: SC.mateSpec(w.m.id), lang: 3 });
+    var fam = G.FamVoice ? G.FamVoice.reveal(d) : [];   // 배에 함께 탄 아내·자식 (js/systems/famvoice.js)
+    for (var fi = 0; fi < fam.length; fi++) await UI.say(fam[fi].text, fam[fi].speaker);
+    return dvl.length + (w ? 1 : 0) + fam.length;
+  };
   SC._lineFor = function (kind, lv, d) { return lineFor(kind, lv, d); };   // 시험용 (tests/reveal_talk_smoke.js)
   /** 그 기술을 가장 잘하는 사람: {lv, speaker, me} (제독 자신일 수도 있다) */
   function bestHand(id) {
@@ -354,6 +364,9 @@
     // 그 발견물만의 관찰을 특기가 맞는 부하들이 저마다의 말투로 (js/systems/discvoice.js · js/data/discfacts_1~8.js) — 관찰이 나온 특기는 예전 갈래 말을 건너뛴다
     var said = {}, dvl = G.DiscVoice ? G.DiscVoice.reveal(d, 2) : [];
     for (var dvi = 0; dvi < dvl.length; dvi++) { var dv = dvl[dvi]; said[dv.sk] = 1; await UI.say(dv.text, { name: dv.d.name, portrait: SC.mateSpec(dv.m.id), lang: 3 }); }
+    // 그 발견물을 본 부하의 바람 (아메리카 대학의 신기루 — 「나 같은 사람들도 배울 수 있는 학교라니…」 js/data/amer1630.js)
+    var wsh = G.DiscVoice && G.DiscVoice.wish ? G.DiscVoice.wish(d) : null;
+    if (wsh) await UI.say(wsh.text, { name: wsh.d.name, portrait: SC.mateSpec(wsh.m.id), lang: 3 });
     if (science.lv && !said.sci) await UI.say(lineFor('sci', science.lv, d), science.speaker);
     if (art.lv && (!said.art || art.lv >= 2 && !dvl.length)) await UI.say(lineFor('art', art.lv, d), art.speaker);
     if (craft.lv && !said.craft && !dvl.length) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
