@@ -1034,6 +1034,57 @@
     return win.result.then(function (r) { if (r !== 'ok') return null; set(fld.value); return val; });
   };
 
+  /* 여러 개 고르기 도구 (2026-10-28 — 「발견물 보고 때 전체 선택·전체 해제·검색」 제안):
+     bar(빈 div)에 [전체 선택] [전체 해제] [찾기 칸] 「N / M건 고름」을 그린다. 일괄 보고·발표·교역소 매각/구입·시장 매각이 같이 쓴다.
+     opt.rows(): 줄 요소들 · opt.box(줄): 그 줄의 체크박스(없으면 고를 수 없는 줄) · opt.text(줄): 찾기에 쓰는 글(없으면 찾기 칸 없음)
+     opt.onChange(): 고른 것이 바뀔 때 · opt.unit: 「건」「가지」「개」 · opt.rowClick: 줄 아무 데나 눌러도 체크가 바뀐다
+     찾는 말이 있으면 전체 선택·해제는 찾아서 보이는 줄에만 한다. 돌려주는 값: {update} */
+  UI.checkTools = function (bar, opt) {
+    var unit = opt.unit || '건', hasQ = !!opt.text;
+    bar.classList.add('cktools');
+    bar.innerHTML = '<button type="button" class="btn small ck-all">☑ 전체 선택</button><button type="button" class="btn small ck-none">☐ 전체 해제</button>' +
+      (hasQ ? '<input type="search" class="ck-q" placeholder="' + U.esc(opt.placeholder || '이름으로 찾기') + '" autocomplete="off">' : '') + '<span class="ck-count muted"></span>';
+    var q = bar.querySelector('.ck-q'), cnt = bar.querySelector('.ck-count'), bAll = bar.querySelector('.ck-all'), bNone = bar.querySelector('.ck-none');
+    function norm(t) { return String(t || '').toLowerCase().replace(/\s+/g, ''); }
+    function rows() { return opt.rows().filter(Boolean); }
+    function shown(r) { return r.style.display !== 'none'; }
+    function boxes(vis) { return rows().filter(function (r) { return !vis || shown(r); }).map(opt.box).filter(function (b) { return b && !b.disabled; }); }
+    function update() {
+      var all = boxes(false), on = all.filter(function (b) { return b.checked; }).length, word = q && q.value.trim();
+      cnt.innerHTML = '<b>' + on + '</b> / ' + all.length + unit + ' 고름' + (word ? ' · 찾은 것 ' + boxes(true).length + unit : '');
+      bAll.textContent = word ? '☑ 찾은 것 모두 선택' : '☑ 전체 선택';
+      bNone.textContent = word ? '☐ 찾은 것 모두 해제' : '☐ 전체 해제';
+      if (opt.onChange) opt.onChange();
+    }
+    function setAll(v) { boxes(true).forEach(function (b) { b.checked = v; if (opt.onSet) opt.onSet(b, v); }); update(); }
+    bAll.onclick = function (e) { e.stopPropagation(); setAll(true); };
+    bNone.onclick = function (e) { e.stopPropagation(); setAll(false); };
+    if (q) {
+      q.oninput = function () {
+        var w = norm(q.value);
+        rows().forEach(function (r) { r.style.display = !w || norm(opt.text(r)).indexOf(w) >= 0 ? '' : 'none'; });
+        update();
+      };
+      // 찾기 칸에서 치는 글자가 게임 단축키로 새지 않게. Esc는 글을 지우고, 빈 칸이면 칸을 벗어난다(다음 Esc로 창을 닫는다)
+      q.onkeydown = function (e) {
+        if (e.isComposing) return;
+        e.stopPropagation();
+        if (e.key === 'Escape') { e.preventDefault(); if (q.value) { q.value = ''; q.oninput(); } else q.blur(); }
+        else if (e.key === 'Enter') e.preventDefault();
+      };
+    }
+    rows().forEach(function (r) {
+      var b = opt.box(r); if (!b) return;
+      b.addEventListener('change', function () { if (opt.onSet) opt.onSet(b, b.checked); update(); });
+      if (opt.rowClick) r.addEventListener('click', function (e) {
+        if (e.target === b || (e.target.closest && e.target.closest('input, button, select, label, a'))) return;
+        b.checked = !b.checked; if (opt.onSet) opt.onSet(b, b.checked); update();
+      });
+    });
+    update();
+    return { update: update };
+  };
+
   /** text input */
   UI.prompt = function (title, value, max) {
     var win = UI.window({ title: title, width: 520, html: '<input class="nfield" type="text" maxlength="' + (max || 16) + '" style="width:100%" value="' + U.esc(value || '') + '">',

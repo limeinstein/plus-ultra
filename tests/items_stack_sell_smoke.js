@@ -2,7 +2,7 @@
    · 처음 가진 나침반 + 시장에서 산 나침반(다른 도시) + 사건으로 받은 나침반 → 한 칸 ×3, 산 곳은 it.buys
    · 옛 저장의 따로 쌓인 칸도 불러올 때 합친다 · 산 도시에서는 치른 값까지만(R.paidAt)
    · 소지품이 가득해도 이미 가진 물건은 그 칸에 받는다 · 발견 유물은 따로 둔다
-   · 매각: 목록에 능력치, 여러 개면 수량 창(구입과 같은), 확인 창에 그림·설명·능력치, 판 수량만큼 금화 · 콘솔 오류 0 */
+   · 매각: 목록에 능력치, 체크박스·전체 선택/해제·찾기, 여러 개면 수량 막대, 확인 창에 그림·설명·능력치, 판 수량만큼 금화 · 콘솔 오류 0 */
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
@@ -61,20 +61,30 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => { window.__noRaf = true; window.__sold = null; const c = G.CITY_DATA[0]; G.Scenes.city.B.market.sell(c).then(() => { window.__sold = 1; }); });
     // 상인 인사 대화 넘기기 → 목록
     const until = async (fn, ms) => { const t = Date.now(); while (Date.now() - t < ms) { if (await page.evaluate(fn)) return true; await page.waitForTimeout(150); } return false; };
-    await until(() => document.querySelector('.choices .choice'), 8000);
-    const rows = await page.evaluate(() => [...document.querySelectorAll('.choices .choice')].map(x => x.textContent.replace(/\s+/g, ' ').trim()));
+    // 매각 창 (2026-10-28): 체크박스 + 전체 선택·전체 해제·찾기 + 물건마다 수량 막대
+    await until(() => document.querySelector('table.mksell'), 8000);
+    const rows = await page.evaluate(() => [...document.querySelectorAll('table.mksell tr[data-ck]')].map(x => x.textContent.replace(/\s+/g, ' ').trim()));
     console.log(rows);
-    ok(rows.some(t => /나침반 ×7.*항해도구/.test(t)) && rows.some(t => /레이피어.*공격 \d+/.test(t)), '매각 목록에 수량과 능력치 (나침반 ×7 · 항해도구, 레이피어 · 공격)');
-    ok(rows.filter(t => /^.*나침반/.test(t)).length === 1, '나침반은 한 줄');
-    await page.evaluate(() => { const c = [...document.querySelectorAll('.choices .choice')].find(x => /나침반/.test(x.textContent)); c.click(); });
-    ok(await until(() => document.querySelector('input.nfield'), 5000), '여러 개면 수량 창이 뜬다');
-    const numText = await page.evaluate(() => document.querySelector('input.nfield').closest('.win').textContent.replace(/\s+/g, ' '));
-    ok(/한 개에 금화 [\d,]+닢/.test(numText) && /가진 것 7개/.test(numText) && /항해도구/.test(numText), '수량 창: 한 개 값 · 가진 수 · 능력치');
+    ok(rows.some(t => /나침반.*항해도구.*\/ 7/.test(t)) && rows.some(t => /레이피어.*공격 \d+/.test(t)), '매각 목록에 수량과 능력치 (나침반 / 7 · 항해도구, 레이피어 · 공격)');
+    ok(rows.filter(t => /나침반/.test(t)).length === 1, '나침반은 한 줄');
+    const tools = await page.evaluate(() => {
+      const el = document.querySelector('table.mksell').closest('.win'), cnt = () => el.querySelector('.ck-count').textContent;
+      const o = { c0: cnt() };
+      el.querySelector('.ck-all').click(); o.all = cnt(); o.allN = el.querySelectorAll('input.mpick:checked').length;
+      el.querySelector('.ck-none').click(); o.none = el.querySelectorAll('input.mpick:checked').length;
+      const q = el.querySelector('.ck-q'); q.value = '나침'; q.dispatchEvent(new Event('input')); o.shown = [...el.querySelectorAll('tr[data-ck]')].filter(r => r.style.display !== 'none').length;
+      q.value = ''; q.dispatchEvent(new Event('input'));
+      return o;
+    });
+    console.log(tools);
+    ok(tools.allN === rows.length && tools.none === 0 && tools.shown === 1, '전체 선택 ' + tools.allN + '가지 · 전체 해제 0 · 「나침」 찾기 1줄');
+    // 나침반 막대를 3으로 끈다 → 그 줄이 저절로 골라진다
+    await page.evaluate(() => { const tr = [...document.querySelectorAll('table.mksell tr[data-ck]')].find(x => /나침반/.test(x.textContent)); const r = tr.querySelector('input.mqr'); r.value = '3'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+    const sel = await page.evaluate(() => ({ n: document.querySelectorAll('input.mpick:checked').length, sum: document.querySelector('.mk-sum').textContent }));
+    ok(sel.n === 1 && /1가지 3개/.test(sel.sum), '수량 막대를 끌면 그 물건이 골라지고 합계가 바뀐다 (' + sel.sum + ')');
     await page.screenshot({ path: path.join(OUT, '1_qty.png') });
-    await page.evaluate(() => { const f = document.querySelector('input.nfield'); f.value = '3'; f.dispatchEvent(new Event('input', { bubbles: true })); f.dispatchEvent(new Event('change', { bubbles: true })); });
-    await page.waitForTimeout(200);
     const unit = await page.evaluate(() => G.Scenes.city.B.market.sellValue(G.Game.state.player.items.find(x => x.id === 'compass')));
-    await page.evaluate(() => { const b = [...document.querySelectorAll('.win .foot .btn')].find(x => /확인|정한다|산다|좋다|navy/.test(x.textContent + x.className)); (b || document.querySelector('.win .foot .btn.navy')).click(); });
+    await page.evaluate(() => { const b = [...document.querySelectorAll('.win .foot .btn')].find(x => /고른 것을 판다/.test(x.textContent)); b.click(); });
     // 상인 말 → 확인 창
     for (let i = 0; i < 30; i++) {
       const st = await page.evaluate(() => ({ conf: !!document.querySelector('.win .foot .btn.navy') && /팔겠습니까/.test(document.querySelector('.win').textContent), say: !!document.querySelector('.modal-back.catch') }));

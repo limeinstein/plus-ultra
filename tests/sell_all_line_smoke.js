@@ -51,7 +51,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // ④ 시장: 마지막 물건을 판다 / 처음부터 없음
       const MK = B.market;
       const itemId = Object.keys(G.ITEM).find(id => !G.ITEM[id].evidence && G.ITEM[id].price);
-      s.player.items = [{ id: itemId }]; said = []; winQ = [0];
+      s.player.items = [{ id: itemId }]; said = []; winQ = [];
+      MK.sellPick = async (c2, list) => list.map(x => ({ x: x, q: G.R.itemQty(x.it), val: MK.sellValue(x.it) }));   // 매각 창(2026-10-28 여러 개 고르기)에서 모두 고른 셈
       if (MK && MK.sell) { await MK.sell(c); out.mk = said.slice(); s.player.items = []; said = []; await MK.sell(c); out.mkEmpty = said.slice(); }
       out.me = s.player.name;
       return out;
