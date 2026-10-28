@@ -95,6 +95,7 @@
     var nm = { id: id, role: role, joined: today(), loyal: loyal || 70, from: cityNow() };
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }
     s.mates.push(nm);
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     log(U.j(m.name, '이/가') + ' 동료가 되었다.');
     UI.toast(m.name + ' 동료가 되었다. (' + (R.roleName ? R.roleName(nm) : nm.role) + ')', 'people', 5000);
     return true;

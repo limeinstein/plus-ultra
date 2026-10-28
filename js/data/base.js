@@ -324,6 +324,8 @@
     // 조범실 (2026-10-21): 방마다 힘(1 + 항해술·운용술 단계)×충성 효율, 조범실끼리는 caps.rig(64)까지 더한다 → 속력 + 힘 × fx.rig(1/64), 최대 rigMax(+100%).
     //   예: 3단계 항해사 1명 +6.25% · 2명 +12.5% · 8명 +50% · 16명(조범실 16칸 — 중카락·대형 갤리온·갤리어스·보선·안택선) +100% = 최대 속력 2배
     //   growDays: 선실(조타실·파수대·부관실·갑판 포함)에서 지낸 날이 이만큼 쌓이면 그 방의 특기(G.CABINS grow) +1·+2·+3 — 3년·9년·27년 (특기는 3까지)
+    // 자동 배치 (js/systems/crewauto.js): 자리마다의 기본값 — 기함 방 flag · 다른 배 선장 cap · 조타수·갑판·파수꾼 post · 다른 배 선실 berth (+ 그 자리에 맞는 정도). capW = 선장에 맞는 정도의 특기 무게
+    crewAuto: { flag: 1, cap: 1.5, post: 0.3, berth: 0.1, capW: { nav: 1, gun: 0.6, sword: 0.6, ship: 0.3 } },
     cabins: { growDays: [1095, 3285, 9855], galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
       slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, caps: { rig: 64 }, cols: 6, rigMax: 1.0, langDays: [90, 270, 730], farRate: 0.3,
       interpRate: 2, interpAsk: 1,   // 통역관(통역으로 임명해 통역실에 둔 사람, 2026-10-25): 말을 배우는 속도 ×interpRate · 일행이 아는 말을 물어 가며 하루 interpAsk씩 (가르쳐 준 사람의 단계까지)

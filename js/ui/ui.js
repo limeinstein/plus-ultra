@@ -983,7 +983,7 @@
     var ch = win.content.querySelector('.choices');
     list.forEach(function (o, i) {
       var lead = o.thumb ? '<img class="choice-thumb" src="' + o.thumb + '" alt="">' : (o.icon ? G.icon(o.icon) : '');
-      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : ''), lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
+      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : '') + (o.cls ? ' ' + o.cls : ''), lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
       if (o.desc) d.title = o.desc;
       d.onclick = function () { win.close(o.value); };
       ch.appendChild(d);

@@ -84,6 +84,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const lr = await page.evaluate(() => {
       const s = G.Game.state, CB = G.Cabins, [mA, mB, mC] = s.mates;
       [mA, mB, mC].forEach(m => { m.lgx = {}; m.lgd = {}; });
+      [mB, mC].forEach(m => { if (m.room != null) CB.place(m, null); m.role = 'none'; delete m.ship; delete m.post; });   // 도시에 들어올 때 저절로 앉은 자리(2026-10-28 자동 배치)에서 빼 — 맞닿은 방이 아닌 보통 부하로 견준다
       // 견줄 말: 보통 부하도 아직 능숙하지 않은 말 (제독의 모국어 포르투갈어 — 둘 다 같은 하루 몫을 받는다)
       const other = [mB, mC].find(m => CB.mateLang(m, 1) < 3);
       const said = [];

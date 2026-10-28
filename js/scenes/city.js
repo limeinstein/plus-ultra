@@ -137,6 +137,7 @@
     var s = S(), c = G.CITY_DATA[arg.cityId != null ? arg.cityId : s.loc.city];
     s.loc = { mode: 'city', city: c.id, lon: c.lon, lat: c.lat, heading: s.loc.heading || 0, via: arg.via || (arg.load && s.loc.mode === 'city' && s.loc.city === c.id && s.loc.via) || (c.port ? 'sea' : 'land') };   // 이어하기: 뭍길로 들어와 있던 도시는 그대로 뭍길(탐험대가 성문 밖에서 기다린다)
     cur = null; token++;
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 자리 없는 부하를 빈 자리에, 다른 배는 능력에 맞게 (js/systems/crewauto.js)
     // 이번 입항 번호: 도시에 들어올 때마다 하나씩 (이어하기는 같은 입항) — 교역소 흥정·식당 한 끼 같은 「한 번만」을 이 번호로도 막는다 (R.sameStay · QA 2026-10-23)
     if (!arg.load) s.portVisit = (s.portVisit || 0) + 1;
     busy = true;

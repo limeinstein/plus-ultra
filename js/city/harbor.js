@@ -64,6 +64,7 @@
       ? U.pick(['자, 가요! 집은 이웃 아주머니께 부탁해 뒀어요.', '이번엔 어디까지 데려가 줄 거예요? 저도 해도 볼 줄 알아요.', '바다 냄새가 벌써 좋네요. 출항해요, 당신.'])
       : U.pick(['부디, 무사히 돌아 오세요.', '꼭 돌아오세요.', '엉뚱한 짓은 하지 말아요. 기다리고 있을 테니.']), G.Family ? G.Family.wifeSpeaker() : {});
     s.flags.departed = true;
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     if (c.id === s.player.home) s.circ = { cum: 0, from: c.id };
     await UI.fade(function () { G.Game.go('sea', autoTo != null ? { depart: c.id, autoTo: autoTo } : { depart: c.id }); });
   };
@@ -508,12 +509,13 @@
     for (;;) {
       var dock = moored(c);
       R.tidyCaptains();
-      var html = '<div style="font-size:16px;margin-bottom:8px" class="muted">함대에는 최대 ' + MAX_SHIPS + '척까지 편성할 수 있습니다. 맨 위의 배가 기함이고 제독이 지휘합니다. 다른 배는 동료를 선장으로 앉히고, 없으면 갑판장이 몹니다. 편성에서 뺀 배는 이 항구에 계류됩니다.</div>' +
+      if (G.CrewAuto) G.CrewAuto.refresh();   // 편입·계류한 배의 선장·조타수·갑판·파수꾼 (능력에 맞게 저절로)
+      var html = '<div style="font-size:16px;margin-bottom:8px" class="muted">함대에는 최대 ' + MAX_SHIPS + '척까지 편성할 수 있습니다. 맨 위의 배가 기함이고 제독이 지휘합니다. 다른 배의 선장·조타수·갑판·파수꾼은 동료 가운데 능력에 맞는 사람이 저절로 맡고, 선장이 없으면 갑판장이 몹니다. 편성에서 뺀 배는 이 항구에 계류됩니다.</div>' +
         '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>선장</th><th class="num">내구력</th><th class="num">선원</th><th class="num">적재</th><th class="num">대포</th></tr>' +
         s.fleet.ships.map(function (sh, i) { return shipRow(sh, i === 0 ? '기함' : '함대'); }).join('') +
         dock.map(function (sh) { return shipRow(sh, '계류'); }).join('') + '</table>';
       var v = await UI.window({ title: '함대편성', icon: 'ship', width: 980, html: html, buttons: [
-        { label: '기함 변경', value: 'flag' }, { label: '선장 임명', value: 'cap' }, { label: '선박 편입', value: 'add' }, { label: '선박 삭제', value: 'remove' }, { label: '선박 파기', value: 'scrap', cls: 'red' }, { label: '편성 종료', value: null, cls: 'navy' }] }).result;
+        { label: '기함 변경', value: 'flag' }, { label: '배마다 사람', value: 'cap' }, { label: '선박 편입', value: 'add' }, { label: '선박 삭제', value: 'remove' }, { label: '선박 파기', value: 'scrap', cls: 'red' }, { label: '편성 종료', value: null, cls: 'navy' }] }).result;
       if (!v) break;
       if (v === 'flag') {
         if (s.fleet.ships.length < 2) { UI.toast('기함을 바꿀 배가 없습니다.', 'info'); continue; }
@@ -525,19 +527,13 @@
           s.mates.forEach(function (m) { if (m.role === 'captain' && m.ship === sh.uid) m.ship = oldFlag.uid; });
           s.fleet.ships.unshift(sh);
           if (G.Cabins) G.Cabins.rooms();   // 부하들이 새 기함의 같은 방으로 옮겨 간다 (맞는 방이 없으면 다시 배치해야 한다)
+          if (G.R.tidyCaptains) G.R.tidyCaptains();
+          if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
         } else s.fleet.ships.splice(i + 1, 0, sh);
       } else if (v === 'cap') {
-        if (s.fleet.ships.length < 2) { UI.toast('기함은 제독이 지휘합니다. 선장을 둘 배가 없습니다.', 'info'); continue; }
-        var ci = await pickShip('선장을 둘 배', s.fleet.ships.slice(1)); if (ci == null) continue;
-        var tsh = s.fleet.ships[ci + 1];
-        if (!s.mates.length) { UI.toast('동료가 없습니다. 술집에서 항해사를 구하십시오.', 'people'); continue; }
-        var mv = await UI.choose(tsh.name + '호의 선장', s.mates.map(function (m, k) {
-          var d = G.MATE[m.id];
-          return { label: d.name, right: R.roleName(m), value: k, icon: 'people', desc: '항해술 ' + R.mateSkill(m, 'nav') + ' · 포술 ' + R.mateSkill(m, 'gun') + ' · 검술 ' + R.mateSkill(m, 'sword') + ' · 조선기술 ' + R.mateSkill(m, 'ship') + ' · 무력 ' + d.st[2] };
-        }).concat([{ label: '갑판장에게 맡긴다', value: -1, icon: 'people', desc: '선장이 없으면 속도 −4%, 재장전 +10%, 백병전 ×0.9' }]), { width: 640, text: '선장의 항해술은 그 배의 속도와 폭풍 피해, 포술은 포격, 검술·무력은 백병전, 조선기술은 바다 위 수리에 쓰입니다. 기함 참모(부관·항해사 등)를 선장으로 보내면 그 자리는 비거나 원래 선장이 맡습니다.' });
-        if (mv == null) continue;
-        if (mv === -1) { s.mates.forEach(function (m) { if (m.role === 'captain' && m.ship === tsh.uid) { m.role = 'none'; delete m.ship; } }); }
-        else C.B.tavern.assign(s.mates[mv], 'cap:' + tsh.uid);
+        // 다른 배의 선장·조타수·갑판·파수꾼은 능력에 맞게 저절로 (js/systems/crewauto.js · 2026-10-28 사용자 요청) — 여기서는 보여 주기만
+        if (s.fleet.ships.length < 2) { UI.toast('기함은 제독이 지휘합니다. 다른 배가 없습니다.', 'info'); continue; }
+        await G.CabinView.showOthers();
       } else if (v === 'add') {
         if (!dock.length) { UI.toast('이 항구에 계류된 배가 없습니다.', 'info'); continue; }
         if (s.fleet.ships.length >= MAX_SHIPS) { UI.toast('이 이상 편입할 수 없습니다.', 'info'); continue; }

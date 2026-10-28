@@ -495,6 +495,7 @@
     var nm = { id: m.id, role: role, joined: U.dateNum(s.date), loyal: 40 + cm.lv * 10, from: c.id };   // from: 처음 만난 도시 (둘째 부인의 집 — wives.js)
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }   // 빈 배가 있으면 선장으로
     s.mates.push(nm); role = nm;
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     G.State.log(U.j(m.name, '이/가') + ' 동료가 되었다.');
     await UI.say(U.pick(['좋소, 당신과 함께 가지. 실망시키지 마시오.', '재미있겠군. 잘 부탁하오, 제독.', '당신의 배에 오르겠소. 세상 끝까지라도.']), who);
     UI.toast(m.name + ' 동료가 되었다. (' + roleName(role) + ')', 'people');
@@ -866,20 +867,24 @@
     for (;;) {
       R.tidyCaptains();
       if (!s.mates.length) { UI.toast('동료가 없습니다.', 'people'); return; }
-      var i = await UI.choose('부하편성', [{ label: '기함 선실 — 방마다 부하를 배치한다', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }].concat(s.mates.map(function (m, k) { var d = G.MATE[m.id]; return { label: d.name, right: G.Cabins.placeName(m) + (G.Cabins.eff(m) < 1 ? ' · 충성 ' + Math.round(m.loyal) : ''), value: k, icon: 'people', desc: (G.Cabins.skillText ? G.Cabins.skillText(m) : skillLine(d)) + ' — ' + d.desc }; })), { width: 620, text: '역할을 바꿀 동료를 고르십시오. 기함의 부관·항해사·측량사·통역·경리는 한 명씩이고(경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다), 기함 말고 다른 배에는 선장을 한 명씩 둘 수 있습니다. 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰입니다.' });   // 특기는 선실에서 는 것(★)·충성이 낮아 덜 쓰는 것((본디 n))까지 — G.Cabins.skillText (2026-10-23 QA 26)
+      if (G.CrewAuto) G.CrewAuto.refresh();   // 자리 없는 부하를 빈 자리에, 다른 배는 능력에 맞게 (js/systems/crewauto.js)
+      var others = s.fleet.ships.length - 1, idleN = G.CrewAuto ? G.CrewAuto.idleCount() : 0;
+      var head = [{ label: '기함 선실 — 방마다 부하를 배치한다', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' },
+        { label: '자동 배치 — 능력에 맞게 기함 선실과 다른 배 자리를 정한다', right: idleN ? '<span class="warn-text">대기 ' + idleN + '명</span>' : '', value: 'auto', icon: 'people' }];
+      if (others > 0) head.push({ label: '다른 배의 사람들 — 선장·조타수·갑판·파수꾼·선실', right: others + '척 · 자동', value: 'others', icon: 'ship' });
+      // 대기(자리 없음 — 달마다 충성이 떨어진다)는 붉은 바탕, 다른 배 사람은 푸른 바탕 (G.CabinView.rowClass) — 2026-10-28
+      var i = await UI.choose('부하편성', head.concat(s.mates.map(function (m, k) { var d = G.MATE[m.id], rc = G.CabinView && G.CabinView.rowClass ? G.CabinView.rowClass(m) : ''; return { label: d.name + (rc === 'idle' ? ' <span class="cb-idle-tag">대기</span>' : ''), right: (rc === 'idle' ? '자리 없음 — 충성이 떨어진다' : G.Cabins.placeName(m)) + (G.Cabins.eff(m) < 1 ? ' · 충성 ' + Math.round(m.loyal) : ''), value: k, icon: 'people', cls: rc ? 'mate-' + rc : '', desc: (G.Cabins.skillText ? G.Cabins.skillText(m) : skillLine(d)) + ' — ' + d.desc }; })), { width: 640, text: '역할을 바꿀 동료를 고르십시오. 여기서 정하는 것은 <b>기함</b>의 부관·항해사·측량사·통역·경리 (한 명씩 — 경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다)입니다. 기함의 선장은 제독입니다.<br><small class="muted">기함 말고 다른 배의 선장·조타수·갑판·파수꾼·선실은 능력에 맞게 저절로 정해집니다 — 선장의 항해술·포술·검술·조선기술은 그 배에만 쓰이고, 나머지 자리는 충성이 떨어지지 않게 할 뿐입니다.</small>' });   // 특기는 선실에서 는 것(★)·충성이 낮아 덜 쓰는 것((본디 n))까지 — G.Cabins.skillText (2026-10-23 QA 26)
       if (i == null) return;
       if (i === 'cabin') { await G.CabinView.open(); continue; }
+      if (i === 'auto') { await G.CabinView.autoAll(); continue; }
+      if (i === 'others') { await G.CabinView.showOthers(); continue; }
       var m = s.mates[i], d = G.MATE[m.id];
       var opts = G.ROLES.map(function (r) {
         var holder = s.mates.filter(function (x) { return x.role === r.id && x !== m; })[0];
         return { label: '기함 ' + r.name, right: holder ? G.MATE[holder.id].name + '와 교대' : '', value: r.id };
       });
-      s.fleet.ships.slice(1).forEach(function (sh) {
-        var cap = R.captain(sh);
-        opts.push({ label: '선장 — ' + U.esc(sh.name) + '호', right: G.SHIP[sh.type].name + (cap && cap !== m ? ' · ' + G.MATE[cap.id].name + '와 교대' : cap === m ? ' · 지금 맡고 있음' : ' · 지금은 갑판장'), value: 'cap:' + sh.uid, icon: 'ship',
-          desc: d.name + '의 항해술 ' + R.mateSkill(m, 'nav') + ' · 포술 ' + R.mateSkill(m, 'gun') + ' · 검술 ' + R.mateSkill(m, 'sword') + ' · 조선기술 ' + R.mateSkill(m, 'ship') + ' — 이 배에만 쓰인다' });
-      });
-      opts = opts.concat([{ label: '대기', value: 'none' }, { label: '해고한다', value: 'fire', icon: 'boot' }]);
+      // 다른 배의 선장은 여기서 고르지 않는다 — 능력에 맞게 저절로 (js/systems/crewauto.js · 2026-10-28 사용자 요청)
+      opts = opts.concat([{ label: '역할 없음', right: '빈 선실이나 다른 배 자리에 저절로', value: 'none' }, { label: '해고한다', value: 'fire', icon: 'boot' }]);
       var v = await UI.choose(d.name + '의 역할', opts, { width: 600 });
       if (!v) continue;
       if (v === 'fire') {
@@ -902,7 +907,7 @@
       other = v === 'none' ? null : s.mates.filter(function (x) { return x !== m && x.role === v; })[0];
       m.role = v; delete m.ship;
     }
-    if (other) { other.role = oldRole || 'none'; if (oldRole === 'captain') other.ship = oldShip; else delete other.ship; }
+    if (other) { other.role = (oldRole === 'crew' ? 'none' : oldRole) || 'none'; if (oldRole === 'captain') other.ship = oldShip; else delete other.ship; }   // 다른 배의 조타수 등이었으면 대기로 — 다음 채우기 때 자리를 얻는다
     R.tidyCaptains();
     if (G.Cabins) G.Cabins.tidy();   // 부관·항해사·측량사·선장이 되면 선실을 비운다
     // m이 앉아 있던 선실은 자리를 바꾼 사람(밀려난 선장·부관 등)이 넘겨받는다 — 대기로 남지 않게 (2026-10-17)

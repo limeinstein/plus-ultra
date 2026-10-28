@@ -38,7 +38,7 @@
   LG.isOttoman = function (c) { return !!c && owner(c) === '오스만 제국'; };
 
   /** 부하로 맞는다 — 고용 절차(js/city/tavern.js T.hireMate)처럼 빈 자리를 맡긴다. 말이 덜 통해도 마음은 처음부터 열려 있다 */
-  function roleName(r) { if (r.role === 'captain') return '선장'; var d = G.ROLES.filter(function (x) { return x.id === r.role; })[0]; return d ? d.name : '대기'; }
+  function roleName(r) { if (R.roleName) return R.roleName(r); if (r.role === 'captain') return '선장'; var d = G.ROLES.filter(function (x) { return x.id === r.role; })[0]; return d ? d.name : '대기'; }
   LG.join = function (id, c) {
     var s = S(), m = G.MATE[id]; if (!m || row(id)) return null;
     if (R.tidyCaptains) R.tidyCaptains();
@@ -46,6 +46,7 @@
     var nm = { id: id, role: role, joined: U.dateNum(s.date), loyal: K().loyal || 80, from: c ? c.id : (s.loc && s.loc.city != null ? s.loc.city : s.player.home) };
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }
     s.mates.push(nm);
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     delete s.flags['gone_' + id];
     G.State.log(U.j(m.name, '이/가') + ' 동료가 되었다.');
     UI.toast(m.name + ' 동료가 되었다. (' + roleName(nm) + ')', 'people', 3600);

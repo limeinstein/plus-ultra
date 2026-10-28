@@ -434,6 +434,7 @@
   R.roleName = function (m) {
     var role = typeof m === 'string' ? m : m && m.role;
     if (role === 'captain') { var sh = m && R.S().fleet.ships.filter(function (x) { return x.uid === m.ship; })[0]; return sh ? '선장 · ' + sh.name + '호' : '선장'; }
+    if (role === 'crew') return m && typeof m === 'object' && G.CrewAuto ? G.CrewAuto.placeName(m) : '다른 배';   // 다른 배의 조타수·갑판·파수꾼·선실 (js/systems/crewauto.js)
     var r = G.ROLES.filter(function (x) { return x.id === role; })[0];
     if (r) return r.name;
     // 역할이 없어도 기함 선실(갑판·요리실 …)에 있으면 대기가 아니다 — 그 방 이름 (선장 임명·부하와 이야기 목록 등)
@@ -459,6 +460,7 @@
       var i = -1; f.ships.forEach(function (x, k) { if (x.uid === m.ship) i = k; });
       if (i <= 0) { m.role = 'none'; delete m.ship; }
     });
+    if (G.CrewAuto) G.CrewAuto.tidy();   // 다른 배의 조타수·갑판·파수꾼·선실 자리도 (없어진 배·기함이 된 배)
   };
   R.captainName = function (sh) { var c = R.captain(sh); return c === 'admiral' ? '제독' : c ? G.MATE[c.id].name : '갑판장'; };
   /** 백병전 공격력: 제독은 차고 있는 무기, 동료 선장은 무력, 갑판장은 맨손 */
