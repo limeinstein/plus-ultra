@@ -236,7 +236,7 @@
     recent.push(pick); if (recent.length > 6) recent.shift();
     st.lastEvt = s.day;
     var first = mate('first');
-    var luck = R.fleetBonus('luck') * 2;                    // 선수상의 행운: 나쁜 일을 피할 가능성
+    var luck = R.fleetBonus('luck') * 2 + (R.playerLuck ? R.playerLuck() : 0);   // 선수상의 행운 + 제독의 행운: 나쁜 일을 피할 가능성
     var EF = G.EventFx, fxSay = function (kind, text, who) { return EF ? EF.during(kind, function () { return UI.say(text, who || {}); }) : UI.say(text, who || {}); };
     var deathCap = function (n) { var k = (G.BALANCE && G.BALANCE.eventDeath) || 1; return Math.max(0, Math.min(f.crew - 1, n, Math.max(1, Math.round(f.crew * k)))); };
     switch (pick) {
@@ -245,7 +245,7 @@
         await UI.say('파도 사이로 초록빛 병 하나가 떠내려왔다. 코르크 마개로 단단히 막혀 있다.', {});
         if (d) {
           G.Disc.addHint(d.id, 'bottle');
-          await UI.say('병 속 편지: "…' + d.hint + '"\n\n누군가 남긴 기록이다. 글씨가 번져 있지만 알아볼 수는 있다.', {});
+          await UI.say('병 속 편지: "…' + G.Disc.hintText(d) + '"\n\n누군가 남긴 기록이다. 글씨가 번져 있지만 알아볼 수는 있다.', {});
           UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll', 4200);
         } else {
           await UI.say('병 속 편지: "이 편지를 줍는 사람에게. 나는 무사히 고향에 돌아갔다오. 바다가 그대에게도 친절하기를."', {});
@@ -453,7 +453,7 @@
   X.marketTip = function () {
     var L = G.Ledger && G.Ledger.bestRoute ? G.Ledger.bestRoute() : null;
     if (L) return G.GOOD[L.good].name + U.jx(G.GOOD[L.good].name, '은/는') + ' ' + G.CITY_DATA[L.buy].name + '에서 사서 ' + G.CITY_DATA[L.sell].name + '에 가져가면 한 통에 ' + U.num(L.gain) + '닢은 남는다더군.';
-    var s = S(), known = s.known.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && c.goods && c.goods.length && !(G.Rel && G.Rel.embargo(c)); });
+    var s = S(), known = s.known.map(function (id) { return G.CITY_DATA[id]; }).filter(function (c) { return c && R.cityExists(c) && c.goods && c.goods.length && !(G.Rel && G.Rel.embargo(c)); });
     if (!known.length) return null;
     var c = U.pick(known), g = U.pick(c.goods);
     return G.GOOD[g] ? c.name + '의 ' + G.GOOD[g].name + U.jx(G.GOOD[g].name, '이/가') + ' 싸다더군.' : null;

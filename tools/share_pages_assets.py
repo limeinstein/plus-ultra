@@ -60,8 +60,8 @@ def verify_identical(stable_dir: Path, beta_dir: Path) -> tuple[int, int]:
     return len(stable_files), total_bytes
 
 
-def rewrite_beta_references(beta_root: Path) -> tuple[int, int]:
-    names = "|".join(re.escape(name) for name in SHARED_DIRS)
+def rewrite_beta_references(beta_root: Path, shared: tuple[str, ...] = SHARED_DIRS) -> tuple[int, int]:
+    names = "|".join(re.escape(name) for name in shared)
     pattern = re.compile(rf"(?<![:/A-Za-z0-9_-])((?:\.\./|\./)*)(?:{names})/")
     changed_files = 0
     changed_refs = 0
@@ -98,17 +98,29 @@ def main() -> int:
 
     total_files = 0
     total_bytes = 0
+    shared: list[str] = []
     for name in SHARED_DIRS:
         stable_dir = site_root / name
         beta_dir = beta_root / name
         if not stable_dir.is_dir() or not beta_dir.is_dir():
-            raise SystemExit(f"missing shared directory: {name}")
-        file_count, byte_count = verify_identical(stable_dir, beta_dir)
+            print(f"shared Pages assets: {name} kept in beta (missing directory)")
+            continue
+        # 정식(main)과 베타(beta) 가지의 그림·소리가 다르면(한쪽만 새 그림을 받은 때) 배포 전체를 멈추지 않고
+        # 그 폴더만 베타에 그대로 둔다 — 2026-10-28 QA
+        try:
+            file_count, byte_count = verify_identical(stable_dir, beta_dir)
+        except SystemExit as error:
+            print(f"shared Pages assets: {name} kept in beta ({error})")
+            continue
+        shared.append(name)
         total_files += file_count
         total_bytes += byte_count
 
-    changed_files, changed_refs = rewrite_beta_references(beta_root)
-    for name in SHARED_DIRS:
+    if not shared:
+        print("shared Pages assets: nothing shared")
+        return 0
+    changed_files, changed_refs = rewrite_beta_references(beta_root, tuple(shared))
+    for name in shared:
         shutil.rmtree(beta_root / name)
 
     print(

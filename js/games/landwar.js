@@ -122,7 +122,7 @@
     }
     // 그 땅의 이름난 병사: 원주민·수비대와의 싸움에서 적이 20명을 넘으면 한 부대가 바뀐다
     var SP = regKey && LD().SPECIAL[regKey];
-    if (SP && (e.kind === 'native' || e.kind === 'garrison') && n >= 20 && out.length) {
+    if (SP && !e.noSpecial && (e.kind === 'native' || e.kind === 'garrison') && n >= 20 && out.length) {
       var idx = SP.cls === 'missile' || SP.cls === 'horsearcher' ? out.map(function (u) { return u.cls; }).lastIndexOf('missile') : 0;
       var o = out[idx >= 0 ? idx : 0];
       o.name = SP.name; o.cls = SP.cls; o.pow = SP.pow; o.special = SP; o.look = SP.cls === 'missile' || SP.cls === 'horsearcher' ? 'bow' : SP.cls === 'art' ? 'cannon' : 'spear';

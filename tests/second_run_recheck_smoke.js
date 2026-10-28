@@ -82,6 +82,8 @@ function ok(value, message) { assert(value, message); passed.push(message); cons
     await page.getByRole('button', { name: '돌아간다', exact: true }).click();
     await page.getByText('교역소를 나온다', { exact: true }).click();
     await page.getByText('항구', { exact: true }).click();
+    // 0.286부터 항구에 들어서면 해상 괴물 소식 대화가 나올 수 있다 — 넘긴다
+    for (let i = 0; i < 20; i++) { await page.waitForTimeout(300); if (await page.locator('.dlg').count()) await page.locator('.dlg').click(); else if (await page.evaluate(() => !G.Scenes.city.isBusy())) break; }
     await page.waitForFunction(() => !G.Scenes.city.isBusy() && G.Scenes.city.current()?.kind === 'harbor', null, { polling: 100 });
     await page.getByText('보급', { exact: true }).click();
     const before = await page.evaluate(() => ({ food: G.Game.state.fleet.food, water: G.Game.state.fleet.water, gold: G.Game.state.player.gold }));

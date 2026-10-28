@@ -75,14 +75,18 @@
       quick: [{ label: '열흘', value: Math.min(10, left) }, { label: '남은 날 모두', value: left }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
     if (!v) return;
     v = Math.min(left, v);
-    j.used = (j.used || 0) + v; j.rest = 0;
-    var pay = Math.round(v * (8 + c.size * 4) * (0.8 + R.stat('str') / 150));
+    var day0 = s.day, dailyPay = (8 + c.size * 4) * (0.8 + R.stat('str') / 150);
     await UI.fade(function () { G.Game.passDays(v); });
+    if (S() !== s) return;
+    v = Math.max(0, Math.min(v, s.day - day0));
+    if (!v) return;
+    j.used = (j.used || 0) + v; j.rest = 0;
+    var pay = Math.round(v * dailyPay);
     s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
     var lost = -G.Fame.add('so', -v * K.famePerDay);
     // 말 익히기 — 지력 50이면 하루가 하루, 지력이 높을수록 빨리
     var learned = '';
-    if (li != null && lv0 < 3) {
+    if (!(s.life && s.life.end) && li != null && lv0 < 3) {
       var lw = s.player.lgWork || (s.player.lgWork = {}), got = v * (0.6 + (R.stat('int') || 50) / 125);
       lw[li] = (lw[li] || 0) + got;
       var lv = lv0;
@@ -94,6 +98,7 @@
       if (lv > lv0) G.State.log(c.name + '의 여관에서 ' + v + '일 일하며 ' + lname + U.jx(lname, '을/를') + ' 익혔다 (' + G.LANG_LV[lv] + ').');
     }
     G.Game.refreshHud();
+    if (s.life && s.life.end) return;
     var after = INN.workLeft();
     await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!' + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned +
       (after > 0 ? '\f(석 달 가운데 남은 날: ' + after + '일)' : '\f(석 달을 꼬박 일했다 — 여관에서 ' + K.restNights + '밤 넘게 묵어야 다시 일할 수 있다)'));
@@ -229,37 +234,84 @@
         if (soldAny) { await C.say(vendor(), '이것으로 가져온 물건은 다 받았네. 좋은 거래였어!'); return; }   // 방금 마지막 물건을 판 뒤
         await C.say(vendor(), '응? 도대체 무엇을 팔겠다는 건가?'); return;
       }
-      var v = await UI.choose('매각', list.map(function (x, k) {
-        var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it);
-        var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
-        var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
-        var ex = itemStat(x.it), here = R.paidAt ? R.paidAt(x.it, c.id) != null : x.it.from === c.id, bought = R.buysOf ? Object.keys(R.buysOf(x.it)).filter(function (k) { return G.CITY_DATA[k] && +k !== c.id; }) : [];
-        return { label: R.itemName(x.it) + (R.itemQty(x.it) > 1 ? ' ×' + R.itemQty(x.it) : '') + (ex ? ' <small class="muted">' + ex + '</small>' : '') + (eq ? ' <span class="tag">장비 중</span>' : '') + (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (here ? ' <span class="tag warn-text" title="이 시장에서 산 물건은 치른 값보다 비싸게 되팔 수 없습니다">여기서 삼 · 치른 값까지만</span>' : bought.length ? ' <small class="muted">' + bought.map(function (k) { return G.CITY_DATA[k].name; }).join('·') + '에서 삼</small>' : ''), right: U.num(val) + '닢' + (R.itemQty(x.it) > 1 ? ' <small class="muted">/개</small>' : ''), value: k, desc: (d.desc || x.it.desc || ''), thumb: mkThumb(rl || d), icon: rl ? 'crown' : 'coin' };
-      }), { width: 680, text: '팔고 싶은 물건이 있으면 어디 보여주게! 먼 곳의 진귀한 유물이라면 값을 잘 쳐 주지.' });
-      if (v == null) return;
-      var x = list[v], val = mkSell(x.it), rel = G.RELIC && G.RELIC[x.it.id], have = R.itemQty(x.it), nm = R.itemName(x.it), id0 = x.it.id;
-      // 여러 개면 몇 개 팔지 고른다 (구입과 같은 창 — 2026-10-20)
-      var q = 1;
-      if (have > 1) {
-        var eqd = s.player.equip.weapon === id0 || s.player.equip.armor === id0;
-        q = await UI.number({ title: nm + ' 매각', text: '한 개에 금화 ' + U.num(val) + '닢. 몇 개 팔겠습니까? (가진 것 ' + have + '개)' + (itemStat(x.it) ? '<br><span class="muted">' + itemStat(x.it) + '</span>' : '') + (eqd ? '<br><span class="muted">모두 팔면 장비가 풀립니다.</span>' : ''), min: 1, max: have, value: have, unit: '개',   // 처음에는 가진 만큼 모두 (2026-10-20)
-          quick: [{ label: '1개', value: 1 }, have > 10 ? { label: '10개', value: 10 } : null, { label: '모두 ' + have + '개', value: have }].filter(Boolean),
-          info: function (n) { return '<b>' + U.num(n * val) + '</b>닢 · 판 뒤 ' + nm + ' ' + (have - n) + '개'; } });
-        if (q == null) continue;
-      }
-      var total = val * q;
-      // 상인의 값 부르기는 유물일 때만 — 여느 물건은 곧바로 확인 창(값은 거기 나온다) (2026-10-20)
-      if (rel) await C.say(vendor(), U.pick(['이, 이건...! 이런 물건은 평생 한 번 볼까 말까 하지. 금화 ' + U.num(val) + '닢 내겠네.', '호오, 진귀한 물건이로군. 금화 ' + U.num(val) + '닢이면 어떤가?']));
-      var warn = R.isProof(x.it) ? '<br><span class="warn-text">「' + U.esc(G.DISC[x.it.disc].name) + '」 발견의 증거입니다. 아직 보고·발표하지 않았으니, 팔면 증거가 모자라 사례금과 명성이 줄 수 있습니다.</span>' : '';
-      var pic = mkThumb(rel || G.ITEM[id0]), st0 = itemStat(x.it), dsc = (G.ITEM[id0] && G.ITEM[id0].desc) || x.it.desc || '';
-      var ask = nm + (q > 1 ? ' <b>' + q + '개</b>' : '') + (st0 ? ' <small class="muted">' + st0 + '</small>' : '') + (dsc ? '<br><span class="muted">' + U.esc(dsc) + '</span>' : '') + '<br>금화 ' + U.num(total) + '닢에 팔겠습니까?' + warn;
-      if (!(await UI.confirm(pic ? '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>' : ask, '판다', '그만둔다'))) continue;
-      var id = id0;
-      for (var qi = 0; qi < q; qi++) R.removeItemObject(x.it);
+      // 여러 개를 골라 한꺼번에 판다 (2026-10-28): 전체 선택 뒤 팔지 않을 것만 끄고, 물건마다 수량은 막대로 (처음에는 가진 만큼 모두)
+      var pickedRows = await MK.sellPick(c, list);
+      if (!pickedRows) return;
+      var total = 0, cnt = 0, proofs = [], rels = [], lines = [];
+      pickedRows.forEach(function (p) { total += p.val * p.q; cnt += p.q; if (R.isProof(p.x.it)) proofs.push(G.DISC[p.x.it.disc].name); if (G.RELIC && G.RELIC[p.x.it.id]) rels.push(p); lines.push(U.esc(R.itemName(p.x.it)) + (p.q > 1 ? ' <b>' + p.q + '개</b>' : '') + ' <small class="muted">' + U.num(p.val * p.q) + '닢</small>'); });
+      // 상인의 값 부르기는 유물일 때만 — 여느 물건은 곧바로 확인 창 (2026-10-20)
+      if (rels.length) await C.say(vendor(), rels.length > 1 ? U.pick(['이, 이건...! 진귀한 유물이 ' + rels.length + '점이나! 평생 한 번 볼까 말까 한 것들이지.', '호오, 이런 물건들을 한꺼번에 보다니. 값은 잘 쳐 주겠네.']) : U.pick(['이, 이건...! 이런 물건은 평생 한 번 볼까 말까 하지. 금화 ' + U.num(rels[0].val) + '닢 내겠네.', '호오, 진귀한 물건이로군. 금화 ' + U.num(rels[0].val) + '닢이면 어떤가?']));
+      var warn = proofs.length ? '<br><span class="warn-text">' + proofs.map(function (n) { return '「' + U.esc(n) + '」'; }).join('·') + ' 발견의 증거가 들어 있습니다. 아직 보고·발표하지 않았으니, 팔면 증거가 모자라 사례금과 명성이 줄 수 있습니다.</span>' : '';
+      // 장비 중인 무기·갑옷을 모두 팔면 장비가 풀린다 (전체 선택으로 함께 골라졌을 수 있다)
+      var eqOff = pickedRows.filter(function (p) { var id = p.x.it.id; return (s.player.equip.weapon === id || s.player.equip.armor === id) && p.q >= R.itemCount(id); });
+      if (eqOff.length) warn += '<br><span class="warn-text">장비 중인 ' + eqOff.map(function (p) { return U.esc(R.itemName(p.x.it)); }).join('·') + '도 팝니다 — 장비가 풀립니다.</span>';
+      var one = pickedRows.length === 1 ? pickedRows[0] : null, ask;
+      if (one) {
+        var pic = mkThumb((G.RELIC && G.RELIC[one.x.it.id]) || G.ITEM[one.x.it.id]), st0 = itemStat(one.x.it), dsc = (G.ITEM[one.x.it.id] && G.ITEM[one.x.it.id].desc) || one.x.it.desc || '';
+        ask = R.itemName(one.x.it) + (one.q > 1 ? ' <b>' + one.q + '개</b>' : '') + (st0 ? ' <small class="muted">' + st0 + '</small>' : '') + (dsc ? '<br><span class="muted">' + U.esc(dsc) + '</span>' : '') + '<br>금화 ' + U.num(total) + '닢에 팔겠습니까?' + warn;
+        if (pic) ask = '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>';
+      } else ask = pickedRows.length + '가지 ' + cnt + '개를 금화 <b>' + U.num(total) + '</b>닢에 팔겠습니까?<div style="margin-top:6px;font-size:15px;max-height:30vh;overflow:auto">' + lines.join('<br>') + '</div>' + warn;
+      if (!(await UI.confirm(ask, '판다', '그만둔다'))) continue;
+      pickedRows.forEach(function (p) {
+        var id = p.x.it.id;
+        for (var qi = 0; qi < p.q; qi++) R.removeItemObject(p.x.it);
+        if (s.player.equip.weapon === id && !R.hasItem(id)) s.player.equip.weapon = null;
+        if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
+      });
       s.player.gold += total; soldAny = true;
-      if (s.player.equip.weapon === id && !R.hasItem(id)) s.player.equip.weapon = null;
-      if (s.player.equip.armor === id && !R.hasItem(id)) s.player.equip.armor = null;
+      if (pickedRows.length > 1) UI.toast(pickedRows.length + '가지 ' + cnt + '개를 팔아 금화 ' + U.num(total) + '닢을 받았다.', 'coin');
+      G.Game.refreshHud();
     }
+  };
+  /** 시장 매각 창: 체크박스로 여러 물건을 고르고(전체 선택·전체 해제·찾기), 물건마다 수량을 막대로 정한다.
+      돌려주는 값: [{x, q, val}] (고른 것) 또는 null (돌아간다) */
+  MK.sellPick = function (c, list) {
+    var s = S();
+    var rows = list.map(function (x, k) {
+      var d = G.ITEM[x.it.id] || {}, val = mkSell(x.it), have = R.itemQty(x.it);
+      var eq = s.player.equip.weapon === x.it.id || s.player.equip.armor === x.it.id;
+      var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
+      var ex = itemStat(x.it), here = R.paidAt ? R.paidAt(x.it, c.id) != null : x.it.from === c.id, bought = R.buysOf ? Object.keys(R.buysOf(x.it)).filter(function (k2) { return G.CITY_DATA[k2] && +k2 !== c.id; }) : [];
+      var th = mkThumb(rl || d), nm = R.itemName(x.it);
+      return '<tr data-ck data-k="' + k + '" data-q="' + U.esc(nm + ' ' + (d.kind || '') + (pf ? ' 증거' : '') + (rl ? ' 유물' : '')) + '" title="' + U.esc(d.desc || x.it.desc || '') + '">' +
+        '<td style="width:30px"><input type="checkbox" class="mpick" data-k="' + k + '"></td>' +
+        '<td>' + (th ? '<img class="mkthumb" src="' + th + '" alt="">' : '') + '<b>' + U.esc(nm) + '</b>' + (ex ? ' <small class="muted">' + ex + '</small>' : '') + (eq ? ' <span class="tag">장비 중</span>' : '') +
+        (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') +
+        (here ? ' <span class="tag warn-text" title="이 시장에서 산 물건은 치른 값보다 비싸게 되팔 수 없습니다">여기서 삼 · 치른 값까지만</span>' : bought.length ? ' <small class="muted">' + bought.map(function (k2) { return G.CITY_DATA[k2].name; }).join('·') + '에서 삼</small>' : '') + '</td>' +
+        '<td class="num">' + U.num(val) + '닢</td>' +
+        '<td class="num" style="white-space:nowrap">' + (have > 1 ? '<input type="range" class="mqr" data-k="' + k + '" min="1" max="' + have + '" value="' + have + '" title="끌어서 몇 개 팔지 정한다"> ' : '') +
+        '<input type="number" class="mq" data-k="' + k + '" min="1" max="' + have + '" value="' + have + '"' + (have > 1 ? '' : ' disabled') + '> <small class="muted">/ ' + have + '</small></td>' +
+        '<td class="num mk-sub" data-k="' + k + '">' + U.num(val * have) + '닢</td></tr>';
+    }).join('');
+    var html = '<div class="muted" style="margin-bottom:8px">팔 물건을 고르십시오. 「전체 선택」 뒤 남길 것만 끄면 됩니다. 여러 개 가진 물건은 막대를 끌어 몇 개 팔지 정합니다. 먼 곳의 진귀한 유물일수록 값을 잘 쳐 줍니다.</div>' +
+      '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl mksell"><tr><th></th><th>물건</th><th class="num">1개 값</th><th class="num">팔 수량</th><th class="num">받을 돈</th></tr>' + rows + '</table></div>' +
+      '<div class="mk-sum" style="margin-top:10px;font-size:18px"></div>';
+    var out = null;
+    function qOf(el, k) { var f = el.querySelector('input.mq[data-k="' + k + '"]'), x = list[k], have = R.itemQty(x.it); return U.clamp(Math.floor(+(f && f.value) || have), 1, have); }
+    function picks(el) { return U.$$('input.mpick', el).filter(function (b) { return b.checked; }).map(function (b) { var k = +b.dataset.k; return { x: list[k], q: qOf(el, k), val: mkSell(list[k].it) }; }); }
+    var win = UI.window({ title: '매각 — ' + c.name + ' 시장', icon: 'sack', width: 900, html: html,
+      buttons: [{ label: '고른 것을 판다', value: 'go', cls: 'green', icon: 'sack', onClick: function (w) { out = picks(w.content); if (!out.length) { UI.toast('팔 물건을 하나 이상 고르십시오 (줄을 누르거나 「전체 선택」).', 'sack'); return false; } } }, { label: '돌아간다', value: null }],
+      onBuild: function (el) {
+        var sum = el.querySelector('.mk-sum');
+        function total() { var t = 0, n = 0, p = picks(el); p.forEach(function (r) { t += r.val * r.q; n += r.q; }); sum.innerHTML = p.length ? '고른 것 ' + p.length + '가지 ' + n + '개 · 금화 <b>' + U.num(t) + '</b>닢' : '<span class="muted">아직 고른 물건이 없습니다</span>'; }
+        function sub(k) { var c2 = el.querySelector('.mk-sub[data-k="' + k + '"]'); if (c2) c2.textContent = U.num(mkSell(list[k].it) * qOf(el, k)) + '닢'; }
+        function check(k) { var b = el.querySelector('input.mpick[data-k="' + k + '"]'); if (b && !b.checked) { b.checked = true; b.dispatchEvent(new Event('change')); } }
+        U.$$('input.mqr', el).forEach(function (rg) {
+          var f = el.querySelector('input.mq[data-k="' + rg.dataset.k + '"]');
+          rg.oninput = function () { f.value = rg.value; sub(rg.dataset.k); check(rg.dataset.k); total(); };   // 수량을 만지면 그 물건을 고른 것으로
+          rg.onkeydown = function (e) { e.stopPropagation(); };
+        });
+        U.$$('input.mq', el).forEach(function (f) {
+          f.oninput = function () { var k = f.dataset.k, r = el.querySelector('input.mqr[data-k="' + k + '"]'); if (r) r.value = qOf(el, k); sub(k); check(k); total(); };
+          f.onchange = function () { f.value = qOf(el, f.dataset.k); f.oninput(); };
+          f.onkeydown = function (e) { e.stopPropagation(); if (e.key === 'Enter') f.onchange(); };
+        });
+        UI.checkTools(el.querySelector('.ck-bar'), {
+          rows: function () { return U.$$('tr[data-ck]', el); }, box: function (r) { return r.querySelector('input.mpick'); },
+          text: function (r) { return r.getAttribute('data-q'); }, placeholder: '물건 이름으로 찾기', unit: '가지', rowClick: true, onChange: total
+        });
+      } });
+    return win.result.then(function (v) { return v === 'go' && out && out.length ? out : null; });
   };
   /** 경리의 흥정: 성공하면 이번 방문 동안 사는 값 −(8~22)%, 파는 값 +(6~15)% — 실패해도 값은 그대로 */
   MK.haggle = async function (c) {
@@ -407,7 +459,7 @@
     if (missed) notes.push(G.LANGS[b.lang] + '가 서툴러 놓친 대목 ' + missed + '곳');
     if (!got.length) { await UI.say('「' + b.title + '」' + U.jx(b.title, '을/를') + ' 읽었다.\n' + (laterTxt || (missed ? '어려운 구절이 많아 다 이해하지 못했다...' : '새로 알게 된 것은 없었다.')) + (notes.length ? '\n(' + notes.join(' · ') + ')' : ''), {}); return; }
     var html = '<div style="font-size:18px;margin-bottom:10px">「' + b.title + '」에서 다음 단서를 얻었다.' + (missed ? ' <span class="muted">(언어 실력이 부족해 일부만 이해했다)</span>' : '') + '</div>' +
-      got.map(function (d) { return '<div class="hint-item"><div class="nm">' + d.name + ' <span class="tag">' + G.DISC_CATS[d.cat] + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>'; }).join('') +
+      got.map(function (d) { return '<div class="hint-item"><div class="nm">' + d.name + ' <span class="tag">' + G.DISC_CATS[d.cat] + '</span></div><div class="tx">' + U.esc(G.Disc.hintText(d)) + '</div></div>'; }).join('') +
       (laterTxt ? '<div class="muted" style="margin-top:10px;font-size:16px">' + laterTxt + '</div>' : '') +
       (notes.length ? '<div class="muted" style="margin-top:6px;font-size:15px">' + notes.join(' · ') + '</div>' : '');
     await UI.window({ title: '열람', icon: 'book', width: 760, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result;
@@ -549,6 +601,7 @@
     if (!(await UI.confirm(G.SKILL_BY_ID[v].name + ' 수행에 ' + days + '일, 금화 ' + U.num(cost) + '닢이 듭니다. 수행하겠습니까?', '수행한다', '그만둔다'))) return;
     p.gold -= cost;
     await UI.fade(function () { G.Game.passDays(days); });
+    if (S() !== s || (s.life && s.life.end)) return;
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     var ch = 0.45 + p.st.int / 200 - lv * 0.08;
     if (U.chance(ch)) { p.sk[v] = lv + 1; await C.say(master(c), '훌륭하네! ' + U.j(G.SKILL_BY_ID[v].name, '이/가') + ' 한 단계 올랐네.'); G.State.log(G.SKILL_BY_ID[v].name + ' 수행을 마쳤다. (' + (lv + 1) + '단계)'); }
@@ -567,6 +620,7 @@
     if (!(await UI.confirm(G.LANGS[v] + ' 공부에 ' + days + '일, 금화 ' + U.num(cost) + '닢이 듭니다. 공부하겠습니까?', '공부한다', '그만둔다'))) return;
     p.gold -= cost;
     await UI.fade(function () { G.Game.passDays(days); });
+    if (S() !== s || (s.life && s.life.end)) return;
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     if (U.chance(0.55 + p.st.int / 250 - lv * 0.08)) { p.lg[v] = lv + 1; await C.say(master(c), G.LANGS[v] + '를 제법 하게 되었군! (' + G.LANG_LV[lv + 1] + ')'); }
     else await C.say(master(c), '말이란 하루아침에 느는 것이 아니지. 다음에 또 오게.');
@@ -604,7 +658,11 @@
     if (!mt) return;
     var ok = await C.mateAsk('탐험을 떠납니까? ' + (mt.id === 'walk' ? '걸어서 갑니다. ' : G.Mounts.get(mt.id).name + ' ' + mt.n + unitOf(mt.id) + U.jx(unitOf(mt.id), '과/와') + ' 함께 갑니다. ') + '준비하는 데 10일 걸립니다. 좋습니까?', [{ label: '떠난다', value: true }, { label: '그만둔다', value: false }]);
     if (!ok) { GT.undo(c, mt); return; }
-    await UI.fade(function () { G.Game.passDays(10); G.Game.go('land', { from: c.id, mount: mt }); });
+    await UI.fade(function () {
+      G.Game.passDays(10);
+      if (S() !== s || (s.life && s.life.end)) { if (S() === s) GT.undo(c, mt); return; }
+      G.Game.go('land', { from: c.id, mount: mt });
+    });
   };
   GT.backToParty = async function (c) {
     var mt = await GT.outfit(c, 'resume');
@@ -796,6 +854,7 @@
   HM.rest = async function (c) {
     var s = S();
     await UI.fade(function () { G.Game.passDays(3); });
+    if (S() !== s || (s.life && s.life.end)) return;
     s.player.hp = 100; s.fleet.fatigue = 0;
     await UI.say(s.player.wife ? '가족과 함께 집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.' : '집에서 푹 쉬었다. 몸도 마음도 가벼워졌다.', {});
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(true);

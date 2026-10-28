@@ -15,7 +15,8 @@
     if (!d || d.how === 'trade' || d.id === 'circum') return null;
     if (d.how === 'city') { var c = G.CITY_DATA[d.city], dk = c.dock || [c.lat, c.lon]; return { sea: [dk[1], dk[0]], land: c.port ? 0 : G.Geo.dist(dk[1], dk[0], c.lon, c.lat) }; }
     if (d.how === 'land') { var ns = G.Nav.nearestSea(d.lon, d.lat, 16); if (!ns) return null; return { sea: ns, land: G.Geo.dist(ns[0], ns[1], d.lon, d.lat) }; }
-    return { sea: [d.lon, d.lat], land: 0 };
+    var at = G.Disc.position(d);
+    return at ? { sea: [at.lon, at.lat], land: 0 } : null;
   }
   P.goalPoint = goalPoint;
   function pathLen(p) { var L = 0; for (var i = 1; i < p.length; i++) L += Math.hypot(G.Geo.wrapLon(p[i][0] - p[i - 1][0]), p[i][1] - p[i - 1][1]); return L; }

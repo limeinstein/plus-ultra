@@ -202,8 +202,12 @@
     requestAnimationFrame(function () { box.classList.add('on'); });
     var hd = { box: box, cover: cover, stopped: false, pending: !ev.canvas };
     // 처음 보는 장면도 공용 로더의 재시도·미리 풀기를 거친다. 대화는 준비가 끝난 뒤 시작한다.
-    hd.ready = ev.canvas ? Promise.resolve(ev.canvas) : I.wait(I.load(ev.img)).then(function (loaded) {
-      if (loaded && !hd.stopped) img.src = loaded.src;
+    hd.ready = ev.canvas ? Promise.resolve(ev.canvas) : I.wait(I.load(ev.img).then(function (loaded) {
+      if (!loaded || hd.stopped) return loaded;
+      if (img.src !== loaded.src) img.src = loaded.src;
+      // 같은 주소라도 화면의 <img>는 따로 받아 풀 수 있다. 화면에 놓인 그림 자체가 풀릴 때까지 기다린다.
+      return (img.decode ? img.decode() : Promise.resolve()).then(function () { return loaded; }, function () { return loaded; });
+    })).then(function (loaded) {
       hd.pending = false;
       return loaded;
     }, function () { hd.pending = false; return null; });

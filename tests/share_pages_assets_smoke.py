@@ -79,4 +79,20 @@ with tempfile.TemporaryDirectory() as temp:
         )
     }
 
+# 정식과 베타의 그림이 다르면 그 폴더만 베타에 남기고 나머지는 나눠 쓴다 (배포가 멈추지 않는다)
+with tempfile.TemporaryDirectory() as temp:
+    site = Path(temp) / "site"
+    beta = site / "beta"
+    for name in ("images", "music", "sounds"):
+        for root in (site, beta):
+            (root / name).mkdir(parents=True, exist_ok=True)
+            (root / name / "a.bin").write_bytes(b"same")
+    (beta / "images" / "new_only_in_beta.webp").write_bytes(b"beta-new")
+    (beta / "index.html").write_text('<img src="images/a.bin"><audio src="music/a.bin">', encoding="utf-8")
+    result = subprocess.run([sys.executable, str(TOOL), "--site", str(site)], check=True, capture_output=True, text=True)
+    html = (beta / "index.html").read_text(encoding="utf-8")
+    assert "images kept in beta" in result.stdout, result.stdout
+    assert (beta / "images" / "new_only_in_beta.webp").exists() and '"images/a.bin"' in html
+    assert not (beta / "music").exists() and '"../music/a.bin"' in html
+
 print("share_pages_assets_smoke: ok")

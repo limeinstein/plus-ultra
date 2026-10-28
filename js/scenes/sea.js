@@ -807,7 +807,7 @@
   }
   async function checkEncounters() {
     if (st.busy || UI.busy() || !st.alive) return;
-    if (G.SeaMonsters) { var monster = G.SeaMonsters.contact(); if (monster) { await encounterMonster(monster); return; } }
+    if (G.SeaMonsters) { var monster = G.SeaMonsters.contact(); if (monster) { if (!G.SeaMonsters.repel(monster)) await encounterMonster(monster); return; } }
     var s = S(), l = s.loc;
     for (var i = 0; i < st.npcs.length; i++) {
       var n = st.npcs[i];
@@ -826,7 +826,8 @@
   SEA.meet = function (n) { if (!st || !st.alive || st.busy || UI.busy() || !n) return false; encounter(n, false); return true; };
   async function encounterMonster(monster) {
     if (!st || !st.alive || st.busy || UI.busy() || !monster || !monster.active) return false;
-    var here = st, s = S(); here.busy++; here.paused = true; refreshBar();
+    var here = st, s = S(), wasSailing = !st.paused || st.wasSailing, passed = false;
+    here.wasSailing = false; here.busy++; here.paused = true; refreshBar();
     try {
       await G.SeaMonsters.discover(monster);
       if (st !== here || G.Game.state !== s || G.Game.scene !== SEA) return false;
@@ -835,9 +836,14 @@
         [{ label: '싸운다', value: 'fight' }, { label: '조심해서 물러난다', value: 'leave' }], G.Scenes.mateSpeaker('first'));
       G.SeaMonsters.avoid(monster);
       if (v === 'fight') await UI.fade(function () { G.Game.go('battle', { npc: G.SeaMonsters.npc(monster) }); });
-      else UI.toast(cfg.avoidDays + '일 동안 거리를 두며 지나갑니다.', 'sail', 3000);
+      else { passed = true; UI.toast(cfg.avoidDays + '일 동안 거리를 두며 지나갑니다.', 'sail', 3000); }
       return true;
-    } finally { if (st === here) here.busy = Math.max(0, here.busy - 1); }
+    } finally {
+      if (st === here) {
+        here.busy = Math.max(0, here.busy - 1);
+        if (passed && G.Game.state === s && G.Game.scene === SEA) goOnAfter(wasSailing);
+      }
+    }
   }
   SEA.meetMonster = function (id) { return G.SeaMonsters ? encounterMonster(G.SeaMonsters.sync()[id]) : Promise.resolve(false); };
   /** 마주침(해적·함대·신호)이 싸움 없이 끝났을 때: 그 전에 가던 길(자동항해·침로)이 있으면 다시 돛을 편다 */
@@ -925,7 +931,7 @@
         else {
           n.talked = true;
           var r = U.rand(), d = G.Explore.nearUnknown(s.loc.lon, s.loc.lat, 30);
-          if (d && r < 0.45) { G.Disc.addHint(d.id, 'hail'); await UI.say('뱃사람들 사이에 도는 이야기가 있소. ' + d.hint, who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll', 4200); }
+          if (d && r < 0.45) { G.Disc.addHint(d.id, 'hail'); await UI.say('뱃사람들 사이에 도는 이야기가 있소. ' + G.Disc.hintText(d), who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll', 4200); }
           else { var tip = G.Explore.marketTip(); await UI.say(tip || '요즘 바다는 조용하오. 해적만 조심하시오.', who); }
           f.discipline = Math.min(100, f.discipline + 2);
         }
@@ -979,6 +985,8 @@
       // 멈춰 있어도 바다의 시간은 흐른다 (닻을 내리고 기다리는 것): 날이 가고 식량·물이 줄고, 다른 배들은 제 갈 길을 가며 다가오기도 한다.
       // 배속 단추와 상관없이 G.FX.waitSpeed(기본 ×1)로 천천히 흐른다 (멈춰서 생각하는 동안 식량이 빨리 줄지 않게). 0이면 예전처럼 시간이 멈춘다
       var wsp = G.FX && G.FX.waitSpeed != null ? G.FX.waitSpeed : 1;
+      st.afk = !!(G.Game.afk && G.Game.afk(G.FX && G.FX.afkSec != null ? G.FX.afkSec : 90));   // 자리를 비웠으면 멈춘 바다의 시간도 멈춘다 (베타 피드백 #87)
+      if (st.afk) wsp = 0;
       var wDays = dt * wsp / DAY_SEC;
       if (wDays > 0) {
         var wn = Math.max(1, Math.ceil(wDays / 0.08)), wD = wDays / wn, wDue = false;
@@ -1510,6 +1518,7 @@
       if (G.Leo && G.Leo.pending()) await G.Leo.present();       // 레오나르도의 발명품
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
       if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 툴롱의 겨울 (하이레딘 파샤)
+      if (G.Kongo && G.Kongo.seaPending()) await G.Kongo.atSea();   // 콩고 강 어귀: 디오구 캉과 돌기둥 (js/systems/kongo.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);
@@ -1922,7 +1931,7 @@
     var eta = etaDays(), have = Math.min(R.daysOfFood(), R.daysOfWater());
     var etaTxt = eta != null ? ' · <span style="color:' + (have < eta + 2 ? '#ff9f7a' : '#cfe8b0') + '">도착까지 약 ' + eta + '일 / 보급 ' + have + '일분</span>' : '';
     var oc = G.Explore.oceanOf(l.lon, l.lat);
-    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⚓ 멈춤</b> <span style="opacity:.8">(시간은 흐른다)</span> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (G.Rain ? G.Rain.tag() : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
+    if (hudEl.status) setHtml(hudEl.status, (st.paused ? '<b>⚓ 멈춤</b> <span style="opacity:.8">' + (st.afk ? '(자리를 비운 사이 시간을 멈췄다 — 아무 키나 누르면 다시 흐른다)' : '(시간은 흐른다)') + '</span> · ' : st.stopping ? '<b>돛을 거두고 멈추는 중</b> · ' : '') + tgt + etaTxt + (st.storm ? ' · <span style="color:#ff9f7a">폭풍</span>' : '') + (G.Rain ? G.Rain.tag() : '') + (st.calm ? ' · 무풍' : '') + (st.tail > 0.005 && !st.paused ? ' · <span style="color:#bfe6ff" title="구름이 흘러가는 쪽으로 달리고 있다">순풍을 탔다 +' + Math.round(st.tail * 100) + '%</span>' : '') + (st.stormGuard > 0 ? ' · 폭풍 대비' : '') + monsoonTag() + '<br><span class="coord">' + (oc ? oc[1] + ' · ' : '') + '속력 ' + vTxt + (s.fleet.ships.length > 1 && R.fleetInfo && R.fleetInfo.slow ? ' (' + U.esc(R.fleetInfo.slow.name) + '호에 맞춤)' : '') + ' · 진로 ' + U.dirName(l.heading) + ' · 항해 ' + (s.fleet.daysOut || 0) + '일째' + (s.contract ? ' · 계약: ' + G.Errand.name(s.contract) : '') + '</span>');
   }
   /** 글이 바뀌었을 때만 고친다 (같은 글을 다시 넣으면 브라우저가 매번 새로 배치한다) */
   function setHtml(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }
@@ -1940,10 +1949,10 @@
       ctx.fillStyle = 'rgba(20,50,90,.85)'; ctx.font = '600 15px ' + fontFam(); ctx.textAlign = 'center'; ctx.fillText('해도 작성 목표', tz[0], tz[1] - 0.8 * z - 6); ctx.textAlign = 'left';
     }
     // contract zone
-    var ct = s.contract && G.DISC[s.contract.disc];
-    if (ct && ct.how !== 'trade' && !(ct.lat === 0 && ct.lon === 0) && G.Disc.hasHint(ct.id) && !G.Disc.foundByMe(ct.id)) {
+    var ct = s.contract && G.DISC[s.contract.disc], at = G.Disc.position(ct);
+    if (ct && at && ct.how !== 'trade' && !(at.lat === 0 && at.lon === 0) && G.Disc.hasHint(ct.id) && !G.Disc.foundByMe(ct.id)) {
       var rng = U.makeRng(U.strHash(ct.id)), zk = G.Disc.clueK(ct.id, 'zone'), zr = 3.2 * zk;   // 단서가 겹칠수록 원이 좁아지고 실제 자리로 모인다
-      var zc = toScreen(ct.lon + (rng() - 0.5) * 3 * zk, ct.lat + (rng() - 0.5) * 3 * zk);
+      var zc = toScreen(at.lon + (rng() - 0.5) * 3 * zk, at.lat + (rng() - 0.5) * 3 * zk);
       ctx.strokeStyle = 'rgba(200,40,30,.55)'; ctx.lineWidth = 2; ctx.setLineDash([8, 8]);
       ctx.beginPath(); ctx.arc(zc[0], zc[1], zr * z, 0, 7); ctx.stroke(); ctx.setLineDash([]);
       var lvz = G.Disc.hintLv(ct.id);

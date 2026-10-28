@@ -20,6 +20,8 @@ let browser;
   const errors = [];
   let submitted = null;
   let presence = null;
+  let githubCompleted = false;
+  let githubLoads = 0;
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: Number(process.env.WIDTH) || 960, height: Number(process.env.HEIGHT) || 900 } });
   page.on('pageerror', error => errors.push(String(error)));
@@ -63,15 +65,22 @@ let browser;
       cityRanking: [{ alias: '가*', foundCityCount: 30, missingCityCount: 5 }],
       popularDiscoveries: [{ id: 'moai', name: '모아이', count: 1 }], popularCities: [{ id: 0, name: '리스본', count: 1 }]
     }) }));
-  await page.route('https://api.github.com/repos/limeinstein/plus-ultra/issues**', route =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+  await page.route('https://api.github.com/repos/limeinstein/plus-ultra/issues**', route => {
+    githubLoads++;
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([7, 8].map(number => ({
+      number, title: '로그인 피드백 시험 ' + number, body: '개발자가 답변한 GitHub 피드백입니다.',
+      state: githubCompleted ? 'closed' : 'open', comments: 1, user: { login: 'tester' },
+      created_at: '2026-10-27T10:00:00Z', updated_at: '2026-10-27T11:00:00Z',
+      html_url: 'https://github.com/limeinstein/plus-ultra/issues/' + number
+    }))) });
+  });
 
   await page.goto(PAGE, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.post');
   const shownVersion = ((await page.locator('.eyebrow').innerText()).match(/VERSION\s+(\d+\.\d{3})/) || [])[1];
   ok(!!shownVersion, '베타 센터에 배포 버전 표시');
   ok(await page.locator('#feedback-form').isVisible(), '로그인 없는 피드백 양식 표시');
-  ok((await page.locator('#board > .post .post-title').first().innerText()).includes('진행 중 글 보기 시험'), '진행 중 피드백을 게시판 위에 표시');
+  ok(await page.locator('#board > .post').filter({ hasText: '진행 중 글 보기 시험' }).isVisible(), '진행 중 피드백을 게시판 위에 표시');
   ok(await page.locator('.completed-board').isVisible() && !(await page.locator('.completed-board').getAttribute('open')), '완료된 피드백을 게시판 아래에 접어 배치');
   ok(!(await page.locator('.completed-board .post').isVisible()), '완료된 피드백 내용은 처음에 숨김');
   await page.locator('.completed-board > summary').click();
@@ -80,6 +89,19 @@ let browser;
   await page.locator('.completed-board .post').first().click();
   ok((await page.locator('.comment').first().innerText()).includes('개발팀 답변 표시 시험입니다.'), '익명 글 아래 관리자 답변 표시');
   ok((await page.locator('.completed-board .post-links a').first().getAttribute('href')).endsWith('/admin#feedback-7'), '익명 글에서 해당 관리자 답변 화면으로 연결');
+
+  ok(await page.locator('#board > .post').filter({ hasText: '로그인 피드백 시험' }).count() === 2, '답변만 있고 완료하지 않은 로그인 글은 진행 중 유지');
+  githubCompleted = true;
+  const previousLoads = githubLoads;
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await page.waitForFunction(() => document.querySelector('.completed-board-count').textContent === '3건');
+  ok(githubLoads > previousLoads, 'GitHub에서 돌아오면 완료 상태를 다시 조회');
+  ok(await page.locator('#board > .post').filter({ hasText: '로그인 피드백 시험' }).count() === 0, '완료한 로그인 글 두 건을 진행 중 목록에서 제거');
+  ok(await page.locator('.completed-board .post').count() === 3 && !(await page.locator('.completed-board').getAttribute('open')), '완료한 로그인 글과 익명 글을 같은 접힌 보관함에 배치');
+  ok(!(await page.getByText('로그인 피드백 시험 7', { exact: true }).isVisible()) && !(await page.getByText('로그인 피드백 시험 8', { exact: true }).isVisible()), '완료 처리한 두 게시물을 기본 화면에서 숨김');
+  await page.locator('[data-filter="open"]').click();
+  ok(await page.locator('#board > .post').count() === 1 && await page.locator('.completed-board').count() === 0, '진행 중 필터에서 완료한 로그인·익명 글 모두 제외');
+  await page.locator('[data-filter="all"]').click();
 
   await page.locator('[name=title]').fill('로그인 없는 등록 시험');
   await page.locator('[name=detail]').fill('계정 없이도 의견을 보낼 수 있는지 확인합니다.');

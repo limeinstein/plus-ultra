@@ -84,7 +84,7 @@
     // occasionally drop a hint that matches the sponsor's taste — 이야기 갈래(talk)만. 옛 유적·전설은 도서관으로 보낸다
     if (rel.trust >= 25 && U.chance(0.5)) {
       var cand = G.DISCOVERIES.filter(function (d) { return G.tasteHit(sp.taste, d) && !d.bookOnly && G.Disc.clueOk(d, 'sponsor') && G.Disc.rumourW(d, 'sponsor:' + sp.id) && !G.Disc.foundByMe(d.id) && d.pw <= sp.pw && d.how !== 'special' && G.Disc.available(d); });
-      if (cand.length) { var d = U.weighted(cand, function (x) { return G.Disc.rumourW(x, 'sponsor:' + sp.id); }); lines.push(L(G.Disc.hasHint(d.id) ? 'chatHintKnown' : 'chatHintNew') + d.hint); G.Disc.noteHint(d, 'sponsor:' + sp.id); }
+      if (cand.length) { var d = U.weighted(cand, function (x) { return G.Disc.rumourW(x, 'sponsor:' + sp.id); }); lines.push(L(G.Disc.hasHint(d.id) ? 'chatHintKnown' : 'chatHintNew') + G.Disc.hintText(d)); G.Disc.noteHint(d, 'sponsor:' + sp.id); }
       var bk = cand.length && U.chance(0.6) ? null : libraryTip(sp);
       if (bk) lines.push(L('chatBook', { city: bk.city.name, book: bk.book.title, bookJ: bk.book.name || bk.book.title, d: bk.disc.name }));
     } else if (s.player.fame < 200) lines.push(L('chatSmall'));

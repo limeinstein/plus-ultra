@@ -7,6 +7,14 @@
   function S() { return G.Game.state; }
 
   D.state = function (id) { return S().disc[id] || null; };
+  D.position = function (d) {
+    if (!d) return null;
+    if (G.SeaMonsters && G.SeaMonsters.is(d.id)) return G.SeaMonsters.position(d.id);
+    return d.lon != null && d.lat != null ? { lon: d.lon, lat: d.lat } : null;
+  };
+  D.hintText = function (d) {
+    return d && G.SeaMonsters && G.SeaMonsters.is(d.id) ? G.SeaMonsters.hintText(d) : (d && d.hint) || '';
+  };
   /** 발견물이 있는 고장 이름 (보이는 이름만). 문화권(reg)에는 태평양·오세아니아 갈래가 없어
       폴리네시아·멜라네시아·미크로네시아·오스트레일리아의 발견물이 「아메리카」「동남아시아」로 보이던 것을 바로잡는다. 교역·거리 셈은 그대로 reg를 쓴다 */
   D.regName = function (d, short) {
@@ -66,12 +74,14 @@
   D.addHint = function (id, src) {
     var s = S(); D.lastMore = null; if (D.foundByMe(id)) return false;
     var d0 = G.DISC[id], sr = String(src || '');
+    // 실제 항구 목격은 책 전용·개척 단계와 무관한 단서다. 다른 발견물에는 적용하지 않는다.
+    var monsterNews = G.SeaMonsters && G.SeaMonsters.is(id) && /^monster:\d+:\d+$/.test(sr);
     if (s.hints[id] && !D.canStack(id, sr)) return false;
     if (D.taken(id)) return false;                                                                // 경쟁자가 먼저 발표했다
-    if (d0 && d0.bookOnly && !/^(book|relic|chain|contract|lead|legacy|rival)/.test(sr)) return false;   // 전설·희귀 동물·공룡: 책에서만
+    if (d0 && d0.bookOnly && !monsterNews && !/^(book|relic|chain|contract|lead|legacy|rival)/.test(sr)) return false;   // 전설·희귀 동물·공룡: 책에서만
     if (d0 && !D.clueOk(d0, sr)) return false;                                                    // 주점·교역소·후원자의 이야기 ↔ 도서관 사료 (js/data/clues.js)
     var here = d0 && (d0.animal || d0.folkLocal || d0.plantLocal) && /^(local|town):/.test(sr) && D.built(d0);   // 그 고장에 와서 들은 동물·부족 이야기
-    if (G.Frontier && d0 && !here && !G.Frontier.canHint(d0, src)) return false;
+    if (G.Frontier && d0 && !here && !monsterNews && !G.Frontier.canHint(d0, src)) return false;
     if (s.hints[id]) {
       (s.hints[id].more = s.hints[id].more || []).push({ src: src, d: U.dateNum(s.date) });
       D.lastMore = id;
@@ -130,7 +140,7 @@
   };
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d) * D.mirageK(d)); };
-  D.fameFor = function (d) { return Math.round(D.value(d) / 26 + d.pw * 30 * D.mirageK(d)); };
+  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round(D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)); };   // 숨은 능력의 「발견 명성 +N%」가 pw 몫에도 같이 붙게
   /** 현장 기록 보너스 — 유적은 그림(정밀한 도판)·세공(짜임·재료 기록)에 밝은 사람이 있으면 명성이 더 오른다.
       값어치(D.value)와 따로, 명성에만 곱한다. 발견 순간·후원자 보고·늦은 보고에 모두 쓴다. d 없이 부르면 1(옛 호출과 호환). */
   D.RECORD_K = { art: 0.05, craft: 0.04 };
@@ -565,7 +575,7 @@
         s.flags['prep_' + d.id] = 1;
         var pc = G.SeaFolk && G.SeaFolk.rivalCity ? G.SeaFolk.rivalCity(d.rival[2]) : null;
         var gotH = D.addHint(d.id, 'rival');
-        out.push({ icon: 'hourglass', history: true, text: U.j(d.rival[2], '이/가') + ' 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아 떠날 채비를 한다고 한다.' + (pc ? ' 지금은 ' + pc.name + '에 머물고 있다.' : '') + ' ' + d.hint + (gotH ? ' 이 이야기는 단서로 적어 두었다.' : '') + ' ' + U.howLong(left * 30) + ' 뒤면 그의 발표가 나올 거라는 말이 돈다.' });
+        out.push({ icon: 'hourglass', history: true, text: U.j(d.rival[2], '이/가') + ' 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아 떠날 채비를 한다고 한다.' + (pc ? ' 지금은 ' + pc.name + '에 머물고 있다.' : '') + ' ' + G.Disc.hintText(d) + (gotH ? ' 이 이야기는 단서로 적어 두었다.' : '') + ' ' + U.howLong(left * 30) + ' 뒤면 그의 발표가 나올 거라는 말이 돈다.' });
       }
       if (left > 0 && left <= 8 && s.hints[d.id] && !mine && !s.flags['warn_' + d.id]) {
         s.flags['warn_' + d.id] = 1;

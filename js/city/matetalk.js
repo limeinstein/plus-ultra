@@ -138,7 +138,7 @@
           m.chat = today; m.loyal = Math.min(100, (m.loyal || 70) + (cf.chatLoyal || 1)); gainAff(cf.chatAff || 2);
           if (U.chance(0.35)) {
             var dd = T().rumour(c);
-            if (dd && G.Disc.addHint(dd.id, 'mate:' + d.id)) { await say((f ? '그러고 보니 이런 이야기를 들었어요. ' : '그러고 보니 이런 이야기를 들었소. ') + dd.hint, 'warm'); UI.toast('단서를 얻었다: 「' + dd.name + '」', 'scroll'); }
+            if (dd && G.Disc.addHint(dd.id, 'mate:' + d.id)) { await say((f ? '그러고 보니 이런 이야기를 들었어요. ' : '그러고 보니 이런 이야기를 들었소. ') + G.Disc.hintText(dd), 'warm'); UI.toast('단서를 얻었다: 「' + dd.name + '」', 'scroll'); }
             else await say(tipOf(d), 'warm');
           } else await say(tipOf(d), 'warm');
         }

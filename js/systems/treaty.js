@@ -71,6 +71,7 @@
     if (!c || c.lang === 1 || !S()) return null;
     var y = S().date.y;
     if (R.cityOwner(c) === '포르투갈') return '포르투갈이 다스리는 항구라 포르투갈어가 통한다';
+    if (G.Kongo && G.Kongo.ptLang) { var kg = G.Kongo.ptLang(c); if (kg) return kg; }   // 콩고 왕국 (js/systems/kongo.js)
     var p = D().ptPorts.filter(function (x) { return x[0] === c.name && y >= x[1] && y <= x[2]; })[0];
     return p ? p[3] : null;
   };

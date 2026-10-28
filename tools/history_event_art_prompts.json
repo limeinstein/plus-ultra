@@ -1,0 +1,344 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-10-28",
+  "assets": [
+    {
+      "id": "teppo_tokichiro",
+      "name": "기노시타 도키치로",
+      "subject": "Japanese man, about 24, short wiry build, lively narrow eyes, prominent cheekbones, large ears and playful intelligent smile, sparse moustache. A poor retainer in a worn brown kosode, indigo sash, short sheathed sword, a tally stick in one hand. Young Toyotomi Hideyoshi before wealth or power.",
+      "group": "japan",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Japanese man, about 24, short wiry build, lively narrow eyes, prominent cheekbones, large ears and playful intelligent smile, sparse moustache. A poor retainer in a worn brown kosode, indigo sash, short sheathed sword, a tally stick in one hand. Young Toyotomi Hideyoshi before wealth or power.",
+      "transparent_background": true
+    },
+    {
+      "id": "teppo_hideyoshi",
+      "name": "하시바 히데요시",
+      "subject": "Japanese commander about 44, lean distinctive angular face, lively narrow eyes, prominent cheekbones and ears, thin moustache and small goatee, now somber. White mourning kosode under practical dark lacquer armor, a modest golden gourd at belt, folded command fan held low. No crown or grand golden court robe.",
+      "group": "japan",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Japanese commander about 44, lean distinctive angular face, lively narrow eyes, prominent cheekbones and ears, thin moustache and small goatee, now somber. White mourning kosode under practical dark lacquer armor, a modest golden gourd at belt, folded command fan held low. No crown or grand golden court robe.",
+      "transparent_background": true
+    },
+    {
+      "id": "babur",
+      "name": "바부르",
+      "subject": "Central Asian Timurid ruler Babur, about 42, fit horseman's build, short neatly trimmed black beard, sharp curious eyes, white turban with one modest feather, emerald green gold-embroidered caftan, curved sheathed sabre. Holds a small closed leather memoir book and reed pen.",
+      "group": "mughal",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Central Asian Timurid ruler Babur, about 42, fit horseman's build, short neatly trimmed black beard, sharp curious eyes, white turban with one modest feather, emerald green gold-embroidered caftan, curved sheathed sabre. Holds a small closed leather memoir book and reed pen.",
+      "transparent_background": true
+    },
+    {
+      "id": "humayun",
+      "name": "후마윤",
+      "subject": "Humayun at about 19, Central Asian Timurid prince, youthful slender soft face, very light moustache, thoughtful dreamy eyes. Tall ivory turban with pearls, teal silk caftan and subtle gold embroidery, holds a small brass astrolabe.",
+      "group": "mughal",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Humayun at about 19, Central Asian Timurid prince, youthful slender soft face, very light moustache, thoughtful dreamy eyes. Tall ivory turban with pearls, teal silk caftan and subtle gold embroidery, holds a small brass astrolabe.",
+      "transparent_background": true
+    },
+    {
+      "id": "aliquli",
+      "name": "우스타드 알리 쿨리",
+      "subject": "Ustad Ali Quli, Ottoman-trained master gunner about 45, weathered face and powder-stained hands, short greying beard. Early 16th century low red Ottoman felt cap, practical wool coat and leather apron, powder flask and gun tools on belt. Weighs one small dark iron cannonball on his palm.",
+      "group": "mughal",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Ustad Ali Quli, Ottoman-trained master gunner about 45, weathered face and powder-stained hands, short greying beard. Early 16th century low red Ottoman felt cap, practical wool coat and leather apron, powder flask and gun tools on belt. Weighs one small dark iron cannonball on his palm.",
+      "transparent_background": true
+    },
+    {
+      "id": "ibrahim",
+      "name": "이브라힘 로디",
+      "subject": "Ibrahim Lodi, Afghan sultan of Delhi about 40, broad stocky build and proud full face, thick Afghan beard. Ivory and gold turban with a large ruby, deep burgundy silk robe with restrained gold brocade, jeweled sheathed dagger. A controlled haughty expression, standing pose.",
+      "group": "mughal",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Ibrahim Lodi, Afghan sultan of Delhi about 40, broad stocky build and proud full face, thick Afghan beard. Ivory and gold turban with a large ruby, deep burgundy silk robe with restrained gold brocade, jeweled sheathed dagger. A controlled haughty expression, standing pose.",
+      "transparent_background": true
+    },
+    {
+      "id": "albuquerque",
+      "name": "아폰수 드 알부케르크",
+      "subject": "Afonso de Albuquerque around age 57, thin upright Portuguese commander, stern narrow eyes and long white beard reaching upper chest. Weathered steel breastplate over black early 1500s clothes, small red Santiago sword-cross badge, plain dark cap, sheathed sword and rolled nautical chart.",
+      "group": "goa",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Afonso de Albuquerque around age 57, thin upright Portuguese commander, stern narrow eyes and long white beard reaching upper chest. Weathered steel breastplate over black early 1500s clothes, small red Santiago sword-cross badge, plain dark cap, sheathed sword and rolled nautical chart.",
+      "transparent_background": true
+    },
+    {
+      "id": "magellan",
+      "name": "젊은 마가야네스",
+      "subject": "Fernao de Magalhaes (Magellan) in his late 20s serving in the Portuguese India fleet, dark short beard, deep-set stubborn watchful eyes. Early 1500s dark wool doublet, worn brown leather sleeveless jerkin, modest cap, sword at hip, one hand holds a ship's compass. Young, practical and quietly resolute.",
+      "group": "goa",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Fernao de Magalhaes (Magellan) in his late 20s serving in the Portuguese India fleet, dark short beard, deep-set stubborn watchful eyes. Early 1500s dark wool doublet, worn brown leather sleeveless jerkin, modest cap, sword at hip, one hand holds a ship's compass. Young, practical and quietly resolute.",
+      "transparent_background": true
+    },
+    {
+      "id": "araujo",
+      "name": "루이 드 아라우주",
+      "subject": "Rui de Araujo, Portuguese factor and captive merchant in his mid 30s, gaunt tired face, unkempt brown beard, rumpled faded blue Portuguese doublet and linen shirt. Faint healed shackle marks at wrists, no wounds. Holds a small folded secret letter discreetly in one hand.",
+      "group": "malacca",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Rui de Araujo, Portuguese factor and captive merchant in his mid 30s, gaunt tired face, unkempt brown beard, rumpled faded blue Portuguese doublet and linen shirt. Faint healed shackle marks at wrists, no wounds. Holds a small folded secret letter discreetly in one hand.",
+      "transparent_background": true
+    },
+    {
+      "id": "timoja",
+      "name": "티모자",
+      "subject": "Timoja, Indian maritime captain about 40, dark sun-weathered skin, thick black moustache, confident alert eyes. White wrapped coastal Indian turban, ivory cotton tunic, red waist sash, single gold earring, curved sheathed sword. Lean seafaring build, holds a coiled thin boat rope.",
+      "group": "goa",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Timoja, Indian maritime captain about 40, dark sun-weathered skin, thick black moustache, confident alert eyes. White wrapped coastal Indian turban, ivory cotton tunic, red waist sash, single gold earring, curved sheathed sword. Lean seafaring build, holds a coiled thin boat rope.",
+      "transparent_background": true
+    },
+    {
+      "id": "rasulkhan",
+      "name": "라술 칸",
+      "subject": "Rasul Khan, Deccan Bijapur garrison commander about 40, thick black beard, tired resolute eyes, green wrapped turban, early 16th-century Indian chain mail over muted blue cotton, round dark shield held low and sheathed sword. Dignified and human, no fantasy armor.",
+      "group": "goa",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Rasul Khan, Deccan Bijapur garrison commander about 40, thick black beard, tired resolute eyes, green wrapped turban, early 16th-century Indian chain mail over muted blue cotton, round dark shield held low and sheathed sword. Dignified and human, no fantasy armor.",
+      "transparent_background": true
+    },
+    {
+      "id": "mahmud",
+      "name": "술탄 마흐무드 샤",
+      "subject": "Sultan Mahmud Shah of Malacca about 43, Malay man, proud yet weary face, neatly trimmed moustache and short beard. Royal yellow silk baju, gold-thread folded Malay headcloth, fine woven songket waist cloth, sheathed gold-hilted wavy kris. Early 1500s Malay court clothing.",
+      "group": "malacca",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Sultan Mahmud Shah of Malacca about 43, Malay man, proud yet weary face, neatly trimmed moustache and short beard. Royal yellow silk baju, gold-thread folded Malay headcloth, fine woven songket waist cloth, sheathed gold-hilted wavy kris. Early 1500s Malay court clothing.",
+      "transparent_background": true
+    },
+    {
+      "id": "ahmadshah",
+      "name": "아흐마드 샤",
+      "subject": "Ahmad Shah, young Malay royal commander about 21, fierce youthful face, light moustache, gold folded Malay headcloth, practical dark leather armor over rich muted red baju, woven waist cloth, spear held vertically beside him and sheathed kris. No elephant in this isolated portrait.",
+      "group": "malacca",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Ahmad Shah, young Malay royal commander about 21, fierce youthful face, light moustache, gold folded Malay headcloth, practical dark leather armor over rich muted red baju, woven waist cloth, spear held vertically beside him and sheathed kris. No elephant in this isolated portrait.",
+      "transparent_background": true
+    },
+    {
+      "id": "ninachatu",
+      "name": "니나 차투",
+      "subject": "Nina Chatu, Tamil merchant in Malacca about 46, brown skin, intelligent cautious eyes, short salt-and-pepper beard, horizontal sacred ash marks on forehead. White cotton dhoti and shawl, modest gold chain, holding a bundle of palm-leaf account records and stylus.",
+      "group": "malacca",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Nina Chatu, Tamil merchant in Malacca about 46, brown skin, intelligent cautious eyes, short salt-and-pepper beard, horizontal sacred ash marks on forehead. White cotton dhoti and shawl, modest gold chain, holding a bundle of palm-leaf account records and stylus.",
+      "transparent_background": true
+    },
+    {
+      "id": "goa_envoy",
+      "name": "아딜 샤의 사절",
+      "subject": "Unnamed mature Bijapur diplomatic envoy about 45, South Asian man with neatly groomed beard and diplomatic calm. Cream turban, muted blue-green Deccan robe, dark sash, simple seal ring. Holds a closed diplomatic letter in a cloth sleeve. Distinct from Rasul Khan.",
+      "group": "goa",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Unnamed mature Bijapur diplomatic envoy about 45, South Asian man with neatly groomed beard and diplomatic calm. Cream turban, muted blue-green Deccan robe, dark sash, simple seal ring. Holds a closed diplomatic letter in a cloth sleeve. Distinct from Rasul Khan.",
+      "transparent_background": true
+    },
+    {
+      "id": "malacca_junk",
+      "name": "중국 정크선 선장",
+      "subject": "Unnamed Chinese merchant-junk captain about 48, Ming era, broad weathered face, short black moustache and chin beard, dark cloth cap, practical indigo cross-collar robe and brown belt, holding a small abacus and a folded navigation chart. Calm experienced seafarer.",
+      "group": "malacca",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Unnamed Chinese merchant-junk captain about 48, Ming era, broad weathered face, short black moustache and chin beard, dark cloth cap, practical indigo cross-collar robe and brown belt, holding a small abacus and a folded navigation chart. Calm experienced seafarer.",
+      "transparent_background": true
+    },
+    {
+      "id": "malacca_bendahara",
+      "name": "말라카의 벤다하라",
+      "subject": "Unnamed senior Malay court minister about 55, dignified serious face, neatly trimmed greying beard. Restrained dark teal baju, finely woven gold songket sash and folded Malay headcloth, holding a sealed document at waist. Early 16th century Malacca administrative court attire.",
+      "group": "malacca",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: one isolated high quality historical RPG dialogue character cutout, portrait canvas 1024x1536 (2:3). Original painterly realistic illustration with subtle oil texture, realistic human proportions, natural facial anatomy, tactile linen, silk, leather and metals, warm soft key light, restrained saturated colors, matching an Age of Sail adventure game. Composition: SINGLE person, entire head and headgear fully visible to just BELOW BOTH KNEES, both hands visible naturally, safe margins on top and sides, upright three-quarter pose, natural body proportions, no huge head, no portrait inset, no frame, no captions, no text, no watermark. TRANSPARENT background, clean natural alpha edges, no scenery, no ground, no cast shadow. Subject: Unnamed senior Malay court minister about 55, dignified serious face, neatly trimmed greying beard. Restrained dark teal baju, finely woven gold songket sash and folded Malay headcloth, holding a sealed document at waist. Early 16th century Malacca administrative court attire.",
+      "transparent_background": true
+    },
+    {
+      "id": "teppo_offer",
+      "name": "도키치로의 부탁",
+      "subject": "Sakai Japanese harbor mid 1550s. Young humble Tokichiro in worn brown kosode smiles energetically while stepping up the gangplank of a Portuguese carrack to request a shipment of matchlock guns. Rice sacks and barrels on quay, Japanese tiled rooftops and mountains in background.",
+      "people": [
+        "teppo_tokichiro"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Sakai Japanese harbor mid 1550s. Young humble Tokichiro in worn brown kosode smiles energetically while stepping up the gangplank of a Portuguese carrack to request a shipment of matchlock guns. Rice sacks and barrels on quay, Japanese tiled rooftops and mountains in background.",
+      "transparent_background": false
+    },
+    {
+      "id": "teppo_firing",
+      "name": "사카이 부두의 시험 사격",
+      "subject": "Sakai quay, 1560s. Oda Nobunaga, recognizable face from portrait, in dark red-black armor and a black European-style cloak, carefully aims an early matchlock gun toward an empty suit of armor fixed on a distant timber post; a curling cloud of white gun smoke just after firing. Tokichiro counts guns in open wooden shipping crates nearby. Samurai attendants and a Portuguese carrack behind. Weapon and hands anatomically coherent.",
+      "people": [
+        "oda_nobunaga",
+        "teppo_tokichiro"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Sakai quay, 1560s. Oda Nobunaga, recognizable face from portrait, in dark red-black armor and a black European-style cloak, carefully aims an early matchlock gun toward an empty suit of armor fixed on a distant timber post; a curling cloud of white gun smoke just after firing. Tokichiro counts guns in open wooden shipping crates nearby. Samurai attendants and a Portuguese carrack behind. Weapon and hands anatomically coherent.",
+      "transparent_background": false
+    },
+    {
+      "id": "teppo_hideyoshi",
+      "name": "히데요시의 금 표주박",
+      "subject": "Sakai harbor summer 1582. Somber middle-aged Hashiba Hideyoshi in white mourning clothes under practical dark armor offers a small golden gourd keepsake to an anonymous visiting ship captain seen from behind. Stacked wooden gun crates and a line of golden-gourd war standards in sea breeze, melancholy late afternoon.",
+      "people": [
+        "teppo_hideyoshi"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Sakai harbor summer 1582. Somber middle-aged Hashiba Hideyoshi in white mourning clothes under practical dark armor offers a small golden gourd keepsake to an anonymous visiting ship captain seen from behind. Stacked wooden gun crates and a line of golden-gourd war standards in sea breeze, melancholy late afternoon.",
+      "transparent_background": false
+    },
+    {
+      "id": "mughal_gunner",
+      "name": "디우의 포술장",
+      "subject": "Diu harbor about 1520. Red-capped master gunner Ustad Ali Quli opens a wooden shipping chest and inspects the straight barrel of a European matchlock while bargaining with a visiting sea captain seen from behind. Coiled ropes, small bronze cannon, sailing ships and stone fort in warm evening light.",
+      "people": [
+        "aliquli"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Diu harbor about 1520. Red-capped master gunner Ustad Ali Quli opens a wooden shipping chest and inspects the straight barrel of a European matchlock while bargaining with a visiting sea captain seen from behind. Coiled ropes, small bronze cannon, sailing ships and stone fort in warm evening light.",
+      "transparent_background": false
+    },
+    {
+      "id": "mughal_garden",
+      "name": "카불의 정원",
+      "subject": "Kabul's four-part garden in early 1520s. Babur in emerald caftan and white turban cuts a ripe melon and offers a slice to a visiting sea captain. Narrow irrigation rills divide planted beds, poplars, distant snow-covered Hindu Kush mountains. A quiet attendant carries a memoir book and inkpot. Warm hospitable atmosphere.",
+      "people": [
+        "babur"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Kabul's four-part garden in early 1520s. Babur in emerald caftan and white turban cuts a ripe melon and offers a slice to a visiting sea captain. Narrow irrigation rills divide planted beds, poplars, distant snow-covered Hindu Kush mountains. A quiet attendant carries a memoir book and inkpot. Warm hospitable atmosphere.",
+      "transparent_background": false
+    },
+    {
+      "id": "mughal_sultan",
+      "name": "델리의 술탄",
+      "subject": "Delhi Lodi court before 1526, not later Mughal architecture. Sultan Ibrahim Lodi in jeweled turban and burgundy silk sits beneath a silk canopy among red sandstone pillars; Afghan nobles stand beside him. Through the courtyard gate stand dignified decorated war elephants. Tense imposing audience, no Taj Mahal.",
+      "people": [
+        "ibrahim"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Delhi Lodi court before 1526, not later Mughal architecture. Sultan Ibrahim Lodi in jeweled turban and burgundy silk sits beneath a silk canopy among red sandstone pillars; Afghan nobles stand beside him. Through the courtyard gate stand dignified decorated war elephants. Tense imposing audience, no Taj Mahal.",
+      "transparent_background": false
+    },
+    {
+      "id": "mughal_panipat",
+      "name": "파니파트 전투",
+      "subject": "Panipat plain, 1526. Wide epic battle landscape viewed from behind Babur's chained wagon barricade. Ali Quli's early bronze cannon and matchlock teams fire white smoke through gaps; distant war elephants and Afghan cavalry recoil amid dust on the opposite side. Central Asian mounted archers sweep around distant flanks. Strong geographical clarity, dramatic scale, no gore.",
+      "people": [
+        "aliquli",
+        "babur"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Panipat plain, 1526. Wide epic battle landscape viewed from behind Babur's chained wagon barricade. Ali Quli's early bronze cannon and matchlock teams fire white smoke through gaps; distant war elephants and Afghan cavalry recoil amid dust on the opposite side. Central Asian mounted archers sweep around distant flanks. Strong geographical clarity, dramatic scale, no gore.",
+      "transparent_background": false
+    },
+    {
+      "id": "mughal_crown",
+      "name": "델리의 새 황제",
+      "subject": "Delhi in 1526, early Sultanate-era Friday mosque courtyard, no later Shah Jahan architecture. Babur now in white ceremonial clothes stands respectfully while a scholar reads a sermon from an unlettered open book. Youthful Humayun offers an open small casket holding a large clear diamond. Morning light, gathered townspeople and banners, dignified new reign.",
+      "people": [
+        "babur",
+        "humayun"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Delhi in 1526, early Sultanate-era Friday mosque courtyard, no later Shah Jahan architecture. Babur now in white ceremonial clothes stands respectfully while a scholar reads a sermon from an unlettered open book. Youthful Humayun offers an open small casket holding a large clear diamond. Morning light, gathered townspeople and banners, dignified new reign.",
+      "transparent_background": false
+    },
+    {
+      "id": "goa_council",
+      "name": "코친의 새 총독",
+      "subject": "Portuguese coastal fort at Cochin, 1509. White-bearded Albuquerque bends over a nautical chart with young dark-bearded Magellan and the Indian sea captain Timoja in white turban and red sash. Pepper sacks and palm trees outside, anchored carracks in tropical harbor. A strategic council before the Goa expedition.",
+      "people": [
+        "albuquerque",
+        "magellan",
+        "timoja"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Portuguese coastal fort at Cochin, 1509. White-bearded Albuquerque bends over a nautical chart with young dark-bearded Magellan and the Indian sea captain Timoja in white turban and red sash. Pepper sacks and palm trees outside, anchored carracks in tropical harbor. A strategic council before the Goa expedition.",
+      "transparent_background": false
+    },
+    {
+      "id": "goa_keys",
+      "name": "고아의 열쇠",
+      "subject": "Goa river city March 1510. A small respectful delegation presents large iron city keys on a plain cloth to white-bearded Albuquerque beside confident white-turbaned Timoja. Open old Deccan city gate and market streets, horses, distant Mandovi river and Portuguese sailing ships. Uneasy peaceful handover, no later colonial cathedral.",
+      "people": [
+        "albuquerque",
+        "timoja"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Goa river city March 1510. A small respectful delegation presents large iron city keys on a plain cloth to white-bearded Albuquerque beside confident white-turbaned Timoja. Open old Deccan city gate and market streets, horses, distant Mandovi river and Portuguese sailing ships. Uneasy peaceful handover, no later colonial cathedral.",
+      "transparent_background": false
+    },
+    {
+      "id": "goa_mandovi",
+      "name": "만도비 강의 우기",
+      "subject": "Mandovi river mouth, monsoon 1510. Stormbound early Portuguese carracks in driving rain. On foreground deck white-bearded Albuquerque in weathered breastplate meets a cream-turbaned Bijapur envoy; between them a small last wine barrel and a diplomatic letter. Emaciated but uninjured sailors, grey humid skies and flooded mangrove banks.",
+      "people": [
+        "albuquerque",
+        "goa_envoy"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Mandovi river mouth, monsoon 1510. Stormbound early Portuguese carracks in driving rain. On foreground deck white-bearded Albuquerque in weathered breastplate meets a cream-turbaned Bijapur envoy; between them a small last wine barrel and a diplomatic letter. Emaciated but uninjured sailors, grey humid skies and flooded mangrove banks.",
+      "transparent_background": false
+    },
+    {
+      "id": "goa_catherine",
+      "name": "성 카타리나의 날",
+      "subject": "Goa November 1510. Portuguese soldiers in early 1500s armor advance toward old Deccan fort gate through powder smoke while defenders with green turbans and chainmail hold the parapet. Albuquerque directs from a low foreground boat, Rasul Khan visible near gate. Tense expansive historical siege, no gore, no modern weapons or later colonial monuments.",
+      "people": [
+        "albuquerque",
+        "rasulkhan"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Goa November 1510. Portuguese soldiers in early 1500s armor advance toward old Deccan fort gate through powder smoke while defenders with green turbans and chainmail hold the parapet. Albuquerque directs from a low foreground boat, Rasul Khan visible near gate. Tense expansive historical siege, no gore, no modern weapons or later colonial monuments.",
+      "transparent_background": false
+    },
+    {
+      "id": "goa_three_days",
+      "name": "고아의 피난민",
+      "subject": "Goa after the November 1510 capture. Compassionate nocturnal scene: an anonymous visiting sea captain and sailors quietly help Muslim civilian families board a small boat away from a distant smoke-lit street. A mother gathers children, an elderly man carries household bundle, warm lantern and moonlit Mandovi water. Emphasize shelter and humanity, no graphic violence.",
+      "people": [],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Goa after the November 1510 capture. Compassionate nocturnal scene: an anonymous visiting sea captain and sailors quietly help Muslim civilian families board a small boat away from a distant smoke-lit street. A mother gathers children, an elderly man carries household bundle, warm lantern and moonlit Mandovi water. Emphasize shelter and humanity, no graphic violence.",
+      "transparent_background": false
+    },
+    {
+      "id": "malacca_letter",
+      "name": "말라카의 편지",
+      "subject": "Malacca trading quarter 1510. Cautious Tamil merchant Nina Chatu discreetly passes a folded secret letter to a visiting sea captain near a spice warehouse. A shadowed lattice window in background suggests captive Portuguese factor Rui de Araujo. Malay tiled houses, palm-leaf ledgers, spice baskets and moored Chinese junks in tropical evening.",
+      "people": [
+        "ninachatu",
+        "araujo"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Malacca trading quarter 1510. Cautious Tamil merchant Nina Chatu discreetly passes a folded secret letter to a visiting sea captain near a spice warehouse. A shadowed lattice window in background suggests captive Portuguese factor Rui de Araujo. Malay tiled houses, palm-leaf ledgers, spice baskets and moored Chinese junks in tropical evening.",
+      "transparent_background": false
+    },
+    {
+      "id": "malacca_bridge",
+      "name": "말라카의 다리",
+      "subject": "Malacca river bridge July 1511, early Malay port city, no modern skyline. Portuguese boat crews and soldiers advance toward a timber-stone river bridge; on the opposite bank young Malay commander Ahmad Shah on an armored elephant raises a spear. The grand yellow-clad Sultan Mahmud and court standards stand farther behind. Smoky river, Malay merchant houses and distant Chinese junks, no gore.",
+      "people": [
+        "ahmadshah",
+        "mahmud",
+        "albuquerque"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Malacca river bridge July 1511, early Malay port city, no modern skyline. Portuguese boat crews and soldiers advance toward a timber-stone river bridge; on the opposite bank young Malay commander Ahmad Shah on an armored elephant raises a spear. The grand yellow-clad Sultan Mahmud and court standards stand farther behind. Smoky river, Malay merchant houses and distant Chinese junks, no gore.",
+      "transparent_background": false
+    },
+    {
+      "id": "malacca_flor",
+      "name": "바다의 꽃",
+      "subject": "Malacca harbor late 1511. The huge weatherworn Portuguese nau Flor de la Mar takes aboard heavy wooden treasure chests, textiles and brass vessels via rope tackle. White-bearded Albuquerque and an anonymous sea captain inspect a conspicuously old leaking plank and discuss moving some cargo to a smaller sound ship alongside. Turquoise harbor and distant tropical storm cloud, no fantasy galleon.",
+      "people": [
+        "albuquerque"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: one finished wide cinematic story event illustration for an Age of Sail RPG. Original richly detailed painterly realism, subtle oil-paint texture, expressive natural human faces, believable cloth and period architecture, atmospheric depth, warm highlights and cool shadows. Panoramic landscape 2.25:1, intended final 1881x836; compose complete story across wide frame with safe vertical crop margins. Single continuous scene, no montage, no frame, no text, no captions, no watermarks, no modern objects. People in any references establish the SAME facial identity, not copied poses or collage. Scene: Malacca harbor late 1511. The huge weatherworn Portuguese nau Flor de la Mar takes aboard heavy wooden treasure chests, textiles and brass vessels via rope tackle. White-bearded Albuquerque and an anonymous sea captain inspect a conspicuously old leaking plank and discuss moving some cargo to a smaller sound ship alongside. Turquoise harbor and distant tropical storm cloud, no fantasy galleon.",
+      "transparent_background": false
+    }
+  ]
+}

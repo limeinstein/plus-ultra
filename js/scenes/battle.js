@@ -245,6 +245,8 @@
   B.saveBlocked = function () { return !!(st && battleState === S() && (st.busy || st.over)); };
   B.snapshot = function () {
     if (!st || battleState !== S()) return null;
+    // 튜토리얼 해적과의 연습 해전은 지면 시작 전으로 되돌린다(tutorial.js check). 그 사본은 메모리에만 있으므로 일지에는 해전 앞(바다)으로 남긴다.
+    if (st.npc && st.npc.tut) return null;
     if (B.saveBlocked()) throw new Error('백병전이나 해전 결과를 처리하는 중에는 잠시 저장할 수 없습니다.');
     var out = { v: 1 };
     Object.keys(st).forEach(function (k) {
@@ -920,7 +922,7 @@
   function boardRange(b) { return has(b, 'grapple') ? 80 : 55; }
   function think(b, dt) {
     if (b.monster && G.SeaMonsters) {
-      G.SeaMonsters.step(b, dt, st, { arena: ARENA, resolveTerrain: resolveTerrain, armor: armorK, hullBreak: hullBreak, log: log,
+      G.SeaMonsters.step(b, dt, st, { arena: ARENA, resolveTerrain: resolveTerrain, armor: function (o) { return armorK(o) * (o.side === 'me' ? Math.max(0.5, 1 - R.fleetBonus('monster')) : 1); }, hullBreak: hullBreak, log: log,
         effect: function (action) { waterFx(action === 'rush' ? 'wake' : action, b); if (action !== 'wake') attackFeel(b, action); },
         hit: function (o, damage, from) { o.hitT = IMP().shipFlash; dmgNumber(o, damage, 0); hitBurst(o.x, o.y, o.x - from.x, o.y - from.y, damage); waterFx('ram', o, from.heading); tremor(o, G.FX.waterSplash.tremor.ram); jolt(o, o.x - from.x, o.y - from.y, IMP().knock); shake(IMP().shakeClash); } });
       return;
@@ -1148,7 +1150,7 @@
         st.balls.splice(i, 1);
         if (k.hit && targetable(k.target)) {
           var t = k.target;
-          var dmg = k.dmg * (1 - (k.target.side === 'me' ? R.fleetBonus('hp') : 0)) * 1.1 * armorK(t);
+          var dmg = k.dmg * (1 - (k.target.side === 'me' ? R.fleetBonus('hp') : 0)) * 1.1 * armorK(t) * (k.radial && t.side === 'me' ? Math.max(0.5, 1 - R.fleetBonus('monster')) : 1);
           t.hp -= dmg;
           var kill = !t.monster && Math.random() < 0.5 ? Math.ceil(dmg * 0.35 * (k.kill || 1) * (has(t, 'armor') ? 0.4 : has(t, 'raft') ? 1.5 : 1)) : 0; t.crew = Math.max(0, t.crew - kill);
           st.fx.push({ kind: 'hit', x: k.tx, y: k.ty, t: 0, life: 0.6 });

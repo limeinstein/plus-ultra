@@ -106,12 +106,19 @@
   T.buyP = buyP; T.sellP = sellP;
 
   /** 구입·매각 표: 줄을 누르면 그 품목 하나를 사고팔고, 왼쪽 네모를 누르면 일괄 거래에 고른다 */
-  function pickWire(el, w, sel, onPick) {
+  function pickWire(el, w, sel, onPick, unit) {
     U.$$('tr.click', el).forEach(function (tr) {
       tr.onclick = function (e) { if (e && e.target && e.target.closest && e.target.closest('td.pick')) return; onPick(tr.dataset.id); w.close('pick'); };
     });
     U.$$('input.bpick', el).forEach(function (cb) { cb.onclick = function (e) { e.stopPropagation(); sel[cb.dataset.id] = cb.checked; }; });
-    U.$$('td.pick', el).forEach(function (td) { td.onclick = function (e) { if (e.target === td) { var cb = td.querySelector('input'); cb.checked = !cb.checked; sel[cb.dataset.id] = cb.checked; } }; });
+    U.$$('td.pick', el).forEach(function (td) { td.onclick = function (e) { if (e.target === td) { var cb = td.querySelector('input'); cb.checked = !cb.checked; sel[cb.dataset.id] = cb.checked; cb.dispatchEvent(new Event('change')); } }; });
+    // 전체 선택·전체 해제·찾기 (2026-10-28): 모두 고른 뒤 팔지 않을 것만 끄고 「고른 것 한꺼번에」
+    var bar = el.querySelector('.ck-bar');
+    if (bar) UI.checkTools(bar, {
+      rows: function () { return U.$$('tr.click', el); }, box: function (r) { return r.querySelector('input.bpick'); },
+      text: function (r) { var g = G.GOOD[r.dataset.id]; return g ? g.name + ' ' + (G.GOOD_CATS[g.cat] || '') : ''; }, placeholder: '품목·분류로 찾기', unit: unit || '가지',
+      onSet: function (b, v) { sel[b.dataset.id] = v; }
+    });
   }
 
   // ---------------------------------------------------------------- buy
@@ -127,7 +134,7 @@
           '<td class="num">' + where(bs) + '</td><td class="num ' + (gain > 0 ? 'down' : 'up') + '">' + (gain == null ? '' : (gain > 0 ? '+' : '') + U.num(gain)) + '</td></tr>';
       }).join('');
       var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, Math.floor(R.freeVol())) + '</b>통' + (G.Cargo ? ' · 무게 여유 <b>' + Math.max(0, Math.floor(G.Cargo.wfree())) + '</b>' : '') + ' · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
-        '<table class="tbl"><tr><th title="골라서 한꺼번에 산다">✓</th><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table>' +
+        '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl"><tr><th title="골라서 한꺼번에 산다">✓</th><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table></div>' +
         '<div class="muted" style="margin-top:6px;font-size:14px">매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다.' + (R.cityGoods(c).some(function (id) { return R.isRelay(c, id); }) ? ' 「중계」는 이 항구가 먼 산지에서 들여온 물건이라 산지보다 비쌉니다.' : '') + ' 「특산 ×N」은 이 고장 산물 — 산지에서 먼 곳에서는 약 N배에 팔립니다. ▲▼는 세상의 시장 사건(가뭄·전쟁·풍작…)으로 모자라거나 넘치는 물건입니다.</div>' +
         (hag() ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 ' + Math.round((1 - hag().buy) * 100) + '% 싸게 살 수 있습니다.</div>' : '') +
         (duty(c) ? '<div class="good-text" style="margin-top:6px">면세증 — 관세 없이 ' + Math.round(duty(c) * 100) + '% 싸게 삽니다. 들여온 물건은 ' + Math.round(duty(c) * 100) + '% 비싸게 팝니다.</div>' : '') + (G.Rel ? G.Rel.tradeNote(c) : '');
@@ -223,7 +230,7 @@
         return '<tr class="click" data-id="' + id + '"><td class="pick"><input type="checkbox" class="bpick" data-id="' + id + '"' + (sel[id] ? ' checked' : '') + ' title="골라서 한꺼번에 판다"></td><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="' + U.esc('이 나라·지역에서 유행하는 물건 — 값이 ' + (G.Fad.at(c, id).m || (G.BALANCE.fad || {}).mult || 3) + '배' + (G.Fad.at(c, id).why ? ' (' + G.Fad.at(c, id).why + ')' : '')) + '">유행 · ' + (G.Fad.at(c, id).until - s.day) + '일</span>' : '') + rareTag(c, id) + eraTag(c, id) + evTag(c, id) + (spoil != null && spoil < 30 ? ' <span class="warn-text" style="font-size:14px">(' + spoil + '일 후 상함)</span>' : '') + (fs && fs.text ? ' <span class="' + (fs.f < 1 ? 'warn-text' : 'muted') + '" style="font-size:14px" title="산 지 ' + fs.age + '일 · 신선하게 파는 기간 ' + fs.keep + '일">(' + fs.text + ')</span>' : '') + ownTag + '</td><td style="font-size:14px">' + U.esc(R.cargoFromText(cg)) + '</td><td class="num">' + cg.q + '</td><td class="num">' + U.num(cg.cost) + '</td><td class="num"><b>' + U.num(p) + '</b></td><td class="num ' + (pr >= 0 ? 'down' : 'up') + '">' + (pr >= 0 ? '+' : '') + Math.round(pr * 100) + '%</td>' +
           '<td class="num" style="font-size:14px">' + demandCell(c, id) + '</td><td class="num' + (better ? ' warn-text' : '') + '">' + (bs ? where(bs) : '<span class="muted">—</span>') + '</td></tr>';
       }).join('');
-      var html = '<table class="tbl"><tr><th title="골라서 한꺼번에 판다">✓</th><th>품목</th><th>산 곳</th><th class="num">수량</th><th class="num">산 값</th><th class="num">여기 시세</th><th class="num">이익</th><th class="num" title="값이 무너지기 전에 이 시장이 더 받아 줄 양">받아 줄 양</th><th class="num">다른 곳 최고가</th></tr>' + rows + '</table>' +
+      var html = '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl"><tr><th title="골라서 한꺼번에 판다">✓</th><th>품목</th><th>산 곳</th><th class="num">수량</th><th class="num">산 값</th><th class="num">여기 시세</th><th class="num">이익</th><th class="num" title="값이 무너지기 전에 이 시장이 더 받아 줄 양">받아 줄 양</th><th class="num">다른 곳 최고가</th></tr>' + rows + '</table></div>' +
         '<div class="muted" style="margin-top:8px;font-size:15px">이 교역소에서 산 물건은 산 값보다 비싸게 되팔 수 없습니다(「여기서 산」 표시 — 다른 곳에서 산 몫부터 팝니다). 같은 물건을 한꺼번에 많이 팔면 값이 떨어지고, 「받아 줄 양」을 넘기면 폭락합니다(이웃 항구 값도 조금 떨어집니다). 그 물건이 나는 고장(「산지」)은 조금만 받아 줍니다. 산지에서 멀리 떨어진 곳(「귀함」)일수록 비싸게 팔립니다. 먹을거리·향신료·기호품은 오래 실어 두면 묵어서 값이 떨어지고, 더 오래되면 상해 줄어듭니다.</div>';
       var picked = null;
       var win = UI.window({ title: '매각 — ' + c.name, icon: 'sack', width: 1140, html: html, buttons: [{ label: '고른 것 한꺼번에 판다', value: 'batch', cls: 'green', icon: 'sack' }, { label: '모두 판다', value: 'all', cls: 'green' }, { label: '돌아간다', value: null }],
@@ -350,7 +357,7 @@
       var goods = cand.filter(function (x) { return x.how === 'trade'; }), jewels = cand.filter(function (x) { return x.how !== 'trade'; });
       var pool = hot.length && U.chance(0.7) ? hot : !jewels.length ? goods : !goods.length ? jewels : U.chance(0.6) ? goods : jewels;
       var d = U.weighted(pool, function (x) { return G.Disc.rumourW(x, 'trade:' + c.id); });
-      lines.push((G.Disc.hasHint(d.id) ? '자네도 들었을지 모르겠네만, 여기서도 다들 하는 이야기지. ' : d.how === 'trade' ? '그러고 보니 ' : '물건 보는 눈이 있는 손님들 사이에 이런 이야기가 돈다네. ') + d.hint);
+      lines.push((G.Disc.hasHint(d.id) ? '자네도 들었을지 모르겠네만, 여기서도 다들 하는 이야기지. ' : d.how === 'trade' ? '그러고 보니 ' : '물건 보는 눈이 있는 손님들 사이에 이런 이야기가 돈다네. ') + G.Disc.hintText(d));
       G.Disc.noteHint(d, 'trade:' + c.id);
     }
     if (!lines.length) lines.push(U.pick(['요즘은 장사가 영 시원찮군.', '바닷길이 험해서 물건이 잘 들어오지 않는다네.', '좋은 물건은 먼 곳에서 온다네. 자네 같은 뱃사람 덕분이지.']));
@@ -566,7 +573,7 @@
     if (!cur) { var mh = R.market(c.id).hag, mSame = mh && R.sameStay(mh.day, mh.pv); cur = { haggle: mSame ? mh.h : null, hagN: mSame ? (mh.n || (mh.h ? 99 : 0)) : 0 }; }   // 교역소 밖에서 불렀을 때는 남겨 둔 흥정 기록으로
     var capE = batchCap(buy, K), used = bs.used || 0, fails = bs.fails || 0, disc = Math.min(capE, bs[mode] || 0);
     function keepBat() { bs.used = used; bs.fails = fails; bs[mode] = disc; R.market(c.id).hag = { day: S().day, pv: R.stayNo(), h: cur.haggle || null, n: cur.hagN || 0 }; }
-    var talkOK = C.langLv(c) > 0;
+    var talkOK = C.langLv(c) > 0, bqT = 0, bqFocus = null;   // 수량 막대 (아래 onBuild)
     function rows() {
       return ids.map(function (id) {
         var g = G.GOOD[id], n = Math.max(0, Math.floor(qty[id] || 0));
@@ -590,7 +597,9 @@
           var g = G.GOOD[r.id], mx = buy ? R.supply(c, r.id) : r.max;
           return '<tr><td>' + G.goodDot(r.id) + '<b>' + g.name + '</b>' + (!buy && r.noBonus && disc ? ' <small class="muted" title="이 도시에서 나는 물건이거나 이 교역소에서 산 몫 — 웃돈 없이 시세대로">웃돈 없음</small>' : '') + '</td>' +
             '<td class="num">' + U.num(buy ? Math.max(1, Math.round(r.p * (1 - disc))) : r.p) + (buy && disc ? ' <s class="muted">' + U.num(r.p) + '</s>' : '') + '</td>' +
-            '<td class="num"><input type="number" class="bq" data-id="' + r.id + '" min="0" max="' + mx + '" value="' + r.q + '" style="width:84px;text-align:right;font:inherit"> <small class="muted">/ ' + U.num(mx) + '</small></td>' +
+            // 수량: 막대를 끌거나(놓으면 셈을 다시) 칸에 바로 친다 (2026-10-28)
+            '<td class="num"><div class="bqwrap"><input type="range" class="bqr" data-id="' + r.id + '" min="0" max="' + mx + '" value="' + Math.min(r.q, mx) + '" title="끌어서 수량을 정한다">' +
+            '<input type="number" class="bq" data-id="' + r.id + '" min="0" max="' + mx + '" value="' + r.q + '" style="width:84px;text-align:right;font:inherit"> <small class="muted">/ ' + U.num(mx) + '</small></div></td>' +
             '<td class="num">' + U.num(r.sub) + (r.bonus ? ' <small class="down">(+' + U.num(r.bonus) + ')</small>' : '') + '</td></tr>';
         }).join('') +
         '<tr><td colspan="3" class="num"><b>합계</b>' + (disc ? ' <span class="good-text">일괄 흥정 ' + (buy ? '−' : '+') + Math.round(disc * (buy ? 100 : 100 * K.sellK)) + '%</span>' : '') + '</td><td class="num"><b>' + U.num(tot) + '</b>' + (disc && tot !== base ? ' <s class="muted">' + U.num(base) + '</s>' : '') + '</td></tr></table>' +
@@ -605,7 +614,17 @@
           { label: buy ? '산다' : '판다', value: 'go', cls: 'green', disabled: !!why || !nq },
           { label: '돌아간다', value: null }
         ].filter(Boolean),
-        onBuild: function (el, w) { U.$$('input.bq', el).forEach(function (inp) { inp.onchange = function () { var v = Math.max(0, Math.min(+inp.max || 0, Math.floor(+inp.value || 0))); qty[inp.dataset.id] = v; w.close('re'); }; inp.onkeydown = function (e) { e.stopPropagation(); if (e.key === 'Enter') inp.onchange(); }; }); } });
+        onBuild: function (el, w) {
+          U.$$('input.bq', el).forEach(function (inp) { inp.onchange = function () { var v = Math.max(0, Math.min(+inp.max || 0, Math.floor(+inp.value || 0))); qty[inp.dataset.id] = v; w.close('re'); }; inp.onkeydown = function (e) { e.stopPropagation(); if (e.key === 'Enter') inp.onchange(); }; });
+          U.$$('input.bqr', el).forEach(function (rg) {
+            var fld = el.querySelector('input.bq[data-id="' + rg.dataset.id + '"]');
+            rg.oninput = function () { if (fld) fld.value = rg.value; };                         // 끄는 동안은 숫자만
+            // 놓으면 받을 돈·치를 돈을 다시 셈 — 방향키로 한 통씩 움직일 때는 잠깐 멈춘 뒤에 한 번만, 다시 그린 창에서도 그 막대를 잡고 있게
+            rg.onchange = function () { clearTimeout(bqT); bqT = setTimeout(function () { qty[rg.dataset.id] = Math.max(0, Math.floor(+rg.value || 0)); bqFocus = document.activeElement === rg ? rg.dataset.id : null; w.close('re'); }, 220); };
+            rg.onkeydown = function (e) { e.stopPropagation(); };                              // ←→로 한 통씩 (창의 방향키 고르기로 새지 않게)
+            if (bqFocus === rg.dataset.id) setTimeout(function () { rg.focus(); }, 0);
+          });
+        } });
       var v = await win.result;
       if (v === 're') continue;
       if (v === 'deal') {

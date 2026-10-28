@@ -268,10 +268,10 @@
       if (res.talk && res.talk.length) notes.push('사람들 입으로 전하는 이야기 ' + res.talk.length + '곳(' + res.talk.slice(0, 3).map(function (id) { return G.DISC[id].name; }).join('·') + (res.talk.length > 3 ? ' …' : '') + ') — ' + talkWhere(res.talk) + '에게 물어보자');
       var mo = res.more || [];
       gain = '<div class="bgain parch">' + (res.got.length ?
-        '<div class="gh">' + (res.head || '이 책에서 얻은 단서') + '</div>' + res.got.map(function (d) { return '<div class="hint-item"><div class="nm">' + U.esc(d.name) + ' <span class="tag">' + G.DISC_CATS[d.cat] + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>'; }).join('') :
+        '<div class="gh">' + (res.head || '이 책에서 얻은 단서') + '</div>' + res.got.map(function (d) { return '<div class="hint-item"><div class="nm">' + U.esc(d.name) + ' <span class="tag">' + G.DISC_CATS[d.cat] + '</span></div><div class="tx">' + U.esc(G.Disc.hintText(d)) + '</div></div>'; }).join('') :
         mo.length ? '' : '<div class="gh">' + (res.empty || '새로 알게 된 것은 없었다.') + '</div>') +
         (res.found && res.found.length ? '<div class="gh">이 책에 적힌 곳 가운데 이미 찾은 곳</div><div class="muted gn">' + res.found.map(function (d) { return U.esc(d.name); }).join(' · ') + '</div>' : '') +
-        (mo.length ? '<div class="gh">들은 이야기와 맞아떨어진 대목 — 단서가 겹쳐 찾기가 쉬워졌다</div>' + mo.map(function (d) { return '<div class="hint-item"><div class="nm">' + U.esc(d.name) + ' <span class="tag">단서 ' + G.Disc.hintLv(d.id) + '겹</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>'; }).join('') : '') +
+        (mo.length ? '<div class="gh">들은 이야기와 맞아떨어진 대목 — 단서가 겹쳐 찾기가 쉬워졌다</div>' + mo.map(function (d) { return '<div class="hint-item"><div class="nm">' + U.esc(d.name) + ' <span class="tag">단서 ' + G.Disc.hintLv(d.id) + '겹</span></div><div class="tx">' + U.esc(G.Disc.hintText(d)) + '</div></div>'; }).join('') : '') +
         (notes.length ? '<div class="muted gn">' + notes.join(' · ') + '</div>' : '') + '</div>';
     }
     var html = '<div class="obook">' +

@@ -253,7 +253,7 @@
     });
     if (!cand.length) return null;
     var d = U.pick(cand);
-    return { text: (who === 'elder' ? '내 할아버지께 들은 이야기가 있네. ' : '모험가들 사이에 도는 이야기요. ') + d.hint, after: function () { G.Disc.noteHint(d, src); } };
+    return { text: (who === 'elder' ? '내 할아버지께 들은 이야기가 있네. ' : '모험가들 사이에 도는 이야기요. ') + G.Disc.hintText(d), after: function () { G.Disc.noteHint(d, src); } };
   }
   var INFO = {
     man: function (c) { var e = G.Econ && (G.Econ.activeAt(c.id)[0] || G.Econ.rumors(c, 1)[0]); return e ? { text: '장사꾼들한테 들었는데 말이오, ' + G.Econ.say(e, c), after: function () { G.Econ.learn(e); } } : null; },

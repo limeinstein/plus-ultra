@@ -490,7 +490,7 @@
     var buy = buyCost(want), got = back(want), pay = buy - got;
     if (!buy && !got && want.food === cur.food && want.water === cur.water && want.mat === cur.mat) return;
     if (pay > s.player.gold) { await C.mate('소지금이 모자랍니다.'); return; }
-    if (free(want) < -1e-9) { await C.mate('짐칸이나 무게 한도를 넘습니다. 보급량을 줄이십시오.'); return; }
+    if (free(want) < -1e-9 && ['food', 'water', 'mat'].some(function (k) { return amt(want, k) > have[k] + 1e-6; })) { await C.mate('짐칸이나 무게 한도를 넘습니다. 보급량을 줄이십시오.'); return; }
     var down = ['food', 'water', 'mat'].filter(function (k) { return amt(want, k) < have[k] - 1e-6; });
     s.player.gold -= pay;
     ['food', 'water', 'mat'].forEach(function (k) { R.notePaid(c, k, have[k], amt(want, k), price[k]); });   // 늘린 만큼 평균 산 값을 적는다
@@ -675,7 +675,8 @@
   H.pickAnnouncements = function (list) {
     var rows = list.map(function (d) {
       var pf = G.Disc.proofItems(d.id).filter(function (it) { return !it.evidence; });
-      return '<label class="choice" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">' +
+      var q = d.name + ' ' + (G.DISC_CATS[d.cat] || '') + ' ' + (G.regionLabelAt ? G.regionLabelAt(d.reg, d.lon, d.lat) : '');   // 찾기 칸: 이름·갈래·지역
+      return '<label class="choice" data-ck data-q="' + U.esc(q) + '" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">' +
         '<input type="checkbox" data-disc="' + U.esc(d.id) + '" style="margin-top:6px;transform:scale(1.2)">' +
         '<span style="flex:1"><b>' + U.esc(d.name) + '</b>' +
         (G.Disc.isLate(d.id) ? ' <span class="tag">늦은 발표 · 명성 절반</span>' : '') +
@@ -687,19 +688,19 @@
     var picked = [];
     var win = UI.window({ title: '발표할 발견물 — 복수 선택', icon: 'flag', width: 760,
       html: '<div class="muted" style="margin-bottom:10px">여러 발견을 골라 한꺼번에 발표할 수 있습니다. 후원자 계약이 든 발견은 계약이 깨집니다.</div>' +
-        '<div style="margin-bottom:10px"><button class="btn small all-toggle">모두 선택 / 해제</button> <span class="pick-count muted">0건 선택</span></div>' +
-        '<div style="max-height:52vh;overflow:auto">' + rows + '</div>',
+        '<div class="ck-bar"></div>' +
+        '<div class="ck-scroll" style="max-height:52vh">' + rows + '</div>',
       buttons: [{ label: '취소', value: null }, { label: '선택한 발견 발표', value: 'selected', cls: 'navy', onClick: function () {
         picked = Array.prototype.slice.call(win.content.querySelectorAll('input[data-disc]:checked')).map(function (x) { return x.getAttribute('data-disc'); });
         if (!picked.length) { UI.toast('발표할 발견을 하나 이상 고르십시오.', 'flag'); return false; }
       } }, { label: '전부 발표', value: 'all', icon: 'flag' }]
     });
-    function update() { var n = win.content.querySelectorAll('input[data-disc]:checked').length; win.content.querySelector('.pick-count').textContent = n + '건 선택'; }
-    Array.prototype.forEach.call(win.content.querySelectorAll('input[data-disc]'), function (x) { x.onchange = update; });
-    win.content.querySelector('.all-toggle').onclick = function () {
-      var xs = Array.prototype.slice.call(win.content.querySelectorAll('input[data-disc]')), all = xs.every(function (x) { return x.checked; });
-      xs.forEach(function (x) { x.checked = !all; }); update();
-    };
+    // 전체 선택·전체 해제·찾기 (UI.checkTools — 2026-10-28): 모두 고른 뒤 발표하지 않을 것만 끌 수 있다
+    UI.checkTools(win.content.querySelector('.ck-bar'), {
+      rows: function () { return Array.prototype.slice.call(win.content.querySelectorAll('[data-ck]')); },
+      box: function (r) { return r.querySelector('input[data-disc]'); },
+      text: function (r) { return r.getAttribute('data-q'); }, placeholder: '이름·갈래·지역으로 찾기'
+    });
     return win.result.then(function (v) { return v === 'all' ? list.map(function (d) { return d.id; }) : v === 'selected' ? picked : null; });
   };
 

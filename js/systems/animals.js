@@ -39,7 +39,7 @@
   AN.tavern = async function (c, who) {
     if (!U.chance(AN.TAVERN)) return false;
     var d = AN.pick(c); if (!d || !G.Disc.addHint(d.id, 'local:' + c.id)) return false;
-    await G.Scenes.city.say(who, U.pick(['이 근방에서는 다들 아는 이야기인데, ', '이 고장에 왔으면 이건 알아 두게. ', d.plant ? '여기 사람이라면 누구나 아는 나무와 꽃 이야기지. ' : '여기 사람이라면 누구나 아는 짐승 이야기지. ']) + d.hint);
+    await G.Scenes.city.say(who, U.pick(['이 근방에서는 다들 아는 이야기인데, ', '이 고장에 왔으면 이건 알아 두게. ', d.plant ? '여기 사람이라면 누구나 아는 나무와 꽃 이야기지. ' : '여기 사람이라면 누구나 아는 짐승 이야기지. ']) + G.Disc.hintText(d));
     G.UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll');
     await AN.after(d, c);
     return true;
@@ -50,7 +50,7 @@
     var d = AN.pick(c); if (!d || !G.Disc.addHint(d.id, 'town:' + c.id)) return;
     var C = G.Scenes.city, who = C.npc('vendor', '마을 사람');
     who.name = '마을 사람';
-    await C.say(who, U.pick(['처음 오신 분인가 보군요. ', '바다 건너 오셨다고요? 그럼 이건 모르시겠네. ', '여기 오셨으면 구경 한번 해 보시구려. ']) + d.hint);
+    await C.say(who, U.pick(['처음 오신 분인가 보군요. ', '바다 건너 오셨다고요? 그럼 이건 모르시겠네. ', '여기 오셨으면 구경 한번 해 보시구려. ']) + G.Disc.hintText(d));
     G.UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll');
     await AN.after(d, c);
   };

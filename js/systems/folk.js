@@ -22,7 +22,7 @@
     var f = d.folk || {}, bits = [];
     if (f.music) bits.push('노래: ' + f.music);
     if (f.dance) bits.push('춤: ' + f.dance);
-    return d.hint + (bits.length ? '\n(' + bits[0] + ')' : '');
+    return G.Disc.hintText(d) + (bits.length ? '\n(' + bits[0] + ')' : '');
   }
   /** 도시에 들어설 때 (C.arrival) */
   FK.town = async function (c, first) {

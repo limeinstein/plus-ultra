@@ -50,6 +50,26 @@
   M.contact = function () {
     var s = S(); return M.near(s.loc.lon, s.loc.lat, K().meetRange).filter(function (e) { return U.dayIndex(s.date) >= (e.avoidUntil || 0); })[0] || null;
   };
+  /** 책·단서·계약도 옛 고정 좌표 대신 지금 출몰한 해역을 함께 쓴다. */
+  M.position = function (id) {
+    var e = M.sync()[id];
+    return e && e.active ? { lon: e.lon, lat: e.lat } : null;
+  };
+  M.hintText = function (d) {
+    var e = M.sync()[d.id], old = d.hint ? '옛 기록: ' + d.hint + '\n' : '';
+    if (!e || !e.active) return old + '「' + d.name + '」의 최근 목격 소식은 없다. 항구에서 새 출몰 소식을 확인하자.';
+    var c = ports().sort(function (a, b) { return G.Geo.dist(e.lon, e.lat, a.lon, a.lat) - G.Geo.dist(e.lon, e.lat, b.lon, b.lat); })[0];
+    return old + '현재 출몰: 「' + d.name + '」은 옛 기록의 해역에만 나타나지 않는다. ' + (c ? '최근 ' + c.name + '의 ' + U.dirName(Math.atan2(e.lat - c.lat, G.Geo.wrapLon(e.lon - c.lon))) + '쪽 바다' : '먼바다') +
+      '에서 목격되었다. (' + U.fmtLat(e.lat) + ' · ' + U.fmtLon(e.lon) + ')';
+  };
+  /** 자동 조우에서 선수상의 표시된 보호 확률을 한 번 적용한다. 직접 다가가 싸우는 선택은 막지 않는다. */
+  M.repel = function (e) {
+    var chance = U.clamp(G.R.fleetBonus('monster'), 0, 1);
+    if (!chance || !U.chance(chance)) return false;
+    M.avoid(e);
+    G.UI.toast('선수상이 빛나자 「' + name(e.id) + '」' + U.jx(name(e.id), '이/가') + ' 물러났다. ' + K().avoidDays + '일 동안 안전하게 지나간다.', 'ship');
+    return true;
+  };
   M.news = function (c) { return M.near(c.lon, c.lat, K().newsRange); };
   M.newsText = function (c, e) {
     var angle = Math.atan2(e.lat - c.lat, G.Geo.wrapLon(e.lon - c.lon));
@@ -57,12 +77,14 @@
       (data(e.id).attack === 'charge' ? '엄청난 속도로 배를 들이받는다고 한다.' : '사방으로 물덩이와 포탄을 뿜어 배를 부순다고 한다.') + ' 물속에 숨으면 공격이 닿지 않으니 조심해야 한다.';
   };
   M.tell = async function (c, who, all) {
-    var news = M.news(c), fresh = news.filter(function (e) { return !e.reports[c.id]; });
+    var s = S(), news = M.news(c), fresh = news.filter(function (e) { return !(e.reports || {})[c.id]; });
     var list = all ? news : fresh.slice(0, 1);
     for (var i = 0; i < list.length; i++) {
-      var e = list[i]; await G.UI.say(M.newsText(c, e), who || {}); e.reports[c.id] = U.dateNum(S().date);
+      var e = list[i]; await G.UI.say(M.newsText(c, e), who || {});
+      if (S() !== s) return i;
+      (e.reports || (e.reports = {}))[c.id] = U.dateNum(s.date);
       // 소식은 단서이며 발견 확정은 실제로 마주쳤을 때만 한다.
-      if (G.Disc && G.DISC[e.id]) G.Disc.addHint(e.id, 'monster:' + c.id + ':' + e.cycle);
+      if (G.Disc && G.DISC[e.id]) G.Disc.noteHint(G.DISC[e.id], 'monster:' + c.id + ':' + e.cycle);
     }
     if (all && !news.length) await G.UI.say('이 근처 바다에서 새로 목격된 괴물 소식은 없다.', who || {});
     return list.length;
@@ -128,7 +150,7 @@
       if (api.effect && (b.monsterPhase === 'dive' || b.monsterPhase === 'emerge')) api.effect(b.monsterPhase);
       if (b.monsterPhase === 'dive') {
         st.ships.forEach(function (o) { if (o.target === b) { o.target = null; o.boardIntent = false; } });
-        api.log(b.name + '이 물속으로 숨는다! 떠오를 때까지 공격할 수 없다.');
+        api.log(b.name + U.jx(b.name, '이/가') + ' 물속으로 숨는다! 떠오를 때까지 공격할 수 없다.');
       }
     }
     b.crew = b.crew0; b.attackAnim = (b.attackAnim || 0) + dt; b.attackTime = Math.max(0, (b.attackTime || 0) - dt);
@@ -145,7 +167,7 @@
       b.chargeTime -= dt;
       if (b.chargeStage === 'wait' && b.attackCd <= 0) {
         b.chargeStage = 'windup'; b.chargeTime = cfg.chargeWindup; b.chargeHeading = angle; b.chargeHits = []; b.chargeTarget = target;
-        api.log(b.name + '이 몸을 낮춘다! 돌진 방향을 피해라!');
+        api.log(b.name + U.jx(b.name, '이/가') + ' 몸을 낮춘다! 돌진 방향을 피해라!');
       }
       if (b.chargeStage === 'windup') {
         // 준비하는 동안에는 같은 배의 현재 자리를 겨눈다. 출발한 뒤에는 그 방향으로 곧게 달린다.
@@ -183,7 +205,7 @@
       var index = st.ships.indexOf(o);
       if (b.chargeHits.indexOf(index) >= 0 || distanceSegment(o.x, o.y, ox, oy, b.x, b.y) >= cfg.ramRadius + o.len * cfg.hitRadiusK) return;
       b.chargeHits.push(index); var dmg = b.maxHp / cfg.hpK * cfg.ramHpK * api.armor(o);
-      o.hp -= dmg; api.hit(o, dmg, b); api.log(b.name + '이 ' + o.name + '호를 들이받았다!');
+      o.hp -= dmg; api.hit(o, dmg, b); api.log(b.name + U.jx(b.name, '이/가') + ' ' + o.name + '호를 들이받았다!');
       if (o.hp <= 0) api.hullBreak(o);
     });
   };

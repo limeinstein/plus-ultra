@@ -78,7 +78,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       st.hero.x = Math.min(300, st.streetW / 3);
       st.hero.dist = 0;
       st.cam = st.camTo = Math.max(0, Math.min(st.streetW - 1600, st.hero.x - 800));
-      G.Town.walkTo(st.streetW - 180);
+      // 먼 목적지는 달리기로 바뀌므로, 49칸 걷기 시트를 검사할 때는 RUN_DIST(420px) 안쪽을 걷게 한다.
+      G.Town.walkTo(Math.min(st.streetW - 180, st.hero.x + 320));
     });
     await page.waitForTimeout(320);
     await page.screenshot({ path: SHOT });

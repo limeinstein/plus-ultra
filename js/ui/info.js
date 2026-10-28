@@ -361,7 +361,7 @@
     el.innerHTML = ids.map(function (id) {
       var d = G.DISC[id], h = s.hints[id];
       var st = s.disc[id];
-      return '<div class="hint-item"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (G.CLUE ? '<span class="tag">' + G.CLUE_NAME[G.Disc.clue(d)] + '</span>' : '') + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + (G.Disc.hintLv(id) > 1 ? '<span class="tag good-text">단서 ' + G.Disc.hintLv(id) + '겹</span>' : '') + '<span class="right muted" style="font-size:14px">' + G.Disc.hintSrcs(id).map(srcName).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') + '</span></div><div class="tx">' + U.esc(d.hint) + '</div></div>';
+      return '<div class="hint-item"><div class="flex"><span class="nm">' + d.name + '</span><span class="tag">' + G.DISC_CATS[d.cat] + '</span>' + (G.CLUE ? '<span class="tag">' + G.CLUE_NAME[G.Disc.clue(d)] + '</span>' : '') + (st && st.rival ? '<span class="tag warn-text">' + U.esc(st.rival) + ' 선점</span>' : '') + (G.Disc.hintLv(id) > 1 ? '<span class="tag good-text">단서 ' + G.Disc.hintLv(id) + '겹</span>' : '') + '<span class="right muted" style="font-size:14px">' + G.Disc.hintSrcs(id).map(srcName).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).join(' · ') + '</span></div><div class="tx">' + U.esc(G.Disc.hintText(d)) + '</div></div>';
     }).join('');
   };
   function srcName(src) {
@@ -370,11 +370,12 @@
     if (p[0] === 'book') { var b = G.BOOKS.filter(function (x) { return x.id === p[1]; })[0]; return b ? b.title : '책'; }
     if (p[0] === 'tavern') return (G.CITY_DATA[p[1]] ? G.CITY_DATA[p[1]].name + ' ' : '') + '술집의 소문';
     if (p[0] === 'trade') return (G.CITY_DATA[p[1]] ? G.CITY_DATA[p[1]].name + ' ' : '') + '교역소';
+    if (p[0] === 'monster') return (G.CITY_DATA[p[1]] ? G.CITY_DATA[p[1]].name + ' ' : '') + '괴물 목격 소식';
     if (p[0] === 'mate') return '동료의 이야기';
     if (p[0] === 'chain' && G.DISC[p[1]]) return '「' + G.DISC[p[1]].name + '」에서 이어진 실마리';
     if (p[0] === 'relic' && G.RELIC && G.RELIC[p[1]]) return '「' + G.RELIC[p[1]].name + '」에 적힌 이야기';
     var SRC = { sponsor: '후원자의 이야기', contract: '후원자 계약', rival: '경쟁자에게서', lookout: '망루·정찰대', bottle: '병 속 편지', hail: '지나가던 배',
-      native: '원주민', nomad: '유목민', local: '고장 사람의 이야기', town: '거리의 마을 사람', lead: '큰 항로 이야기', story: '아버지의 자취', legacy: '선대의 연구 노트', witch: '점쟁이', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
+      native: '원주민', nomad: '유목민', local: '고장 사람의 이야기', town: '거리의 마을 사람', lead: '큰 항로 이야기', story: '아버지의 자취', legacy: '선대의 연구 노트', witch: '점쟁이', monster: '항구의 괴물 목격 소식', ghost: '유령선의 항해 일지', map: '보물 지도 조각' };
     return SRC[p[0]] || '';
   }
 
@@ -388,13 +389,15 @@
         '<div>목적</div><div><b>' + U.esc(G.Errand.name(k)) + '</b>' + (k.small ? ' <span class="tag">작은 계약</span>' : '') + '</div><div>기한</div><div>' + U.fmtDate(due) + (U.dateNum(s.date) > k.due ? ' <span class="warn-text">(기한 초과)</span>' : '') + '</div>' +
         '<div>선금</div><div>' + U.num(k.advance) + '닢</div><div>성공 보수</div><div>' + U.num(k.reward) + '닢' + (tk && tk.fame ? ' · 명성 +' + G.Fame.mul(tk.kind === 'procure' ? 'tr' : 'ex', tk.fame) : '') + '</div>' +
         '<div>상태</div><div>' + (G.Errand.done(k) ? '<span class="good-text">' + G.Errand.status(k) + '</span>' : G.Errand.status(k)) + '</div></div>' +
-        (tk && tk.kind !== 'confirm' ? '<div class="hint-item" style="margin-top:10px"><div class="tx">' + U.esc(tk.desc || '') + (sp && G.Sponsor.fameNeed(sp) > s.player.fame ? ' (후원자를 만날 명성이 모자라면 집사에게 보고합니다)' : '') + '</div></div>' : d && !k.circ ? '<div class="hint-item" style="margin-top:10px"><div class="tx">' + U.esc(d.hint) + '</div></div>' : '') +
+        (tk && tk.kind !== 'confirm' ? '<div class="hint-item" style="margin-top:10px"><div class="tx">' + U.esc(tk.desc || '') + (sp && G.Sponsor.fameNeed(sp) > s.player.fame ? ' (후원자를 만날 명성이 모자라면 집사에게 보고합니다)' : '') + '</div></div>' : d && !k.circ ? '<div class="hint-item" style="margin-top:10px"><div class="tx">' + U.esc(G.Disc.hintText(d)) + '</div></div>' : '') +
         (k.loan ? '<div class="muted" style="margin-top:6px;font-size:15px">빌린 배: ' + U.esc(k.loanName || '') + '호 — 정산할 때 돌려줍니다. 잃으면 배값을 물어야 합니다.</div>' : '') +
         (G.Plan && !tk && !G.Disc.foundByMe(k.disc) ? G.Plan.html(G.Plan.forContract()) : '');
     } else html += '<div class="muted">진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.</div>';
     // 왕명 (js/systems/court.js)
     if (G.Princess) html += G.Princess.html();   // 국왕의 특명 — 사라진 왕녀
     if (G.Colony) html += G.Colony.html();       // 개척 도시
+    if (G.Kongo) html += G.Kongo.html();         // 포르투갈과 콩고 — 강가의 돌기둥 · 주앙 1세의 세례
+    if (G.Teppo) html += G.Teppo.html();         // 철포 삼백 자루 — 총 300을 사카이로
     if (G.Gyeonwoo) html += G.Gyeonwoo.html();   // 견우와 직녀 — 항주 → 사카이 → 한산도
     if (G.Court) html += G.Court.taskHtml();
     if (G.Escort) html += G.Escort.html();     // 상선 호위
@@ -610,9 +613,9 @@
       ctx.strokeStyle = 'rgba(30,80,150,.85)'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(sv[0], sv[1], 12, 0, 7); ctx.stroke(); ctx.setLineDash([]);
     }
     if (s.contract && !opts.noTarget) {
-      var dd = G.DISC[s.contract.disc];
-      if (dd && dd.lon != null && dd.how !== 'trade' && !(dd.lat === 0 && dd.lon === 0) && G.Disc.hasHint(dd.id)) {
-        var tp = px(dd.lon, dd.lat);
+      var dd = G.DISC[s.contract.disc], at = G.Disc.position(dd);
+      if (dd && at && dd.how !== 'trade' && !(at.lat === 0 && at.lon === 0) && G.Disc.hasHint(dd.id)) {
+        var tp = px(at.lon, at.lat);
         ctx.strokeStyle = 'rgba(176,30,30,.8)'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(tp[0], tp[1], 14, 0, 7); ctx.stroke(); ctx.setLineDash([]);
       }
     }

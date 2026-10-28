@@ -121,7 +121,7 @@
     var l = F.leads(cityId)[0]; if (!l) return null;
     var d = G.DISC[l.disc];
     if (!G.Disc.addHint(l.disc, 'lead:' + (who || 'tavern') + ':' + cityId)) return null;
-    return { disc: d, text: l.line + ' ' + d.hint };
+    return { disc: d, text: l.line + ' ' + G.Disc.hintText(d) };
   };
   /** 항해사가 술집에 나타날 수 있는가 (해·개척 단계) */
   F.mateReady = function (m, year) {

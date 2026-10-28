@@ -352,6 +352,11 @@
 
   // ---------------------------------------------------------------- time
   /** advance world time by n days (in port / on land); returns list of messages */
+  // 마지막 입력(키보드·마우스·터치)의 실제 시각 — 자리를 비웠는지 본다 (js/scenes/sea.js 멈춘 바다의 시간)
+  Game.lastInput = Date.now();
+  ['keydown', 'pointerdown', 'pointermove', 'wheel', 'touchstart'].forEach(function (ev) { window.addEventListener(ev, function () { Game.lastInput = Date.now(); }, { passive: true, capture: true }); });
+  /** 입력 없이 sec초가 지났는가 */
+  Game.afk = function (sec) { return sec > 0 && Date.now() - (Game.lastInput || 0) > sec * 1000; };
   Game.passDays = function (n) {
     var msgs = [];
     for (var i = 0; i < n; i++) {

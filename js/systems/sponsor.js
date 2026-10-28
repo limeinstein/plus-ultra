@@ -261,7 +261,8 @@
   }
   function offerFor(sp, d) {
     var s = S(), c = G.CITY_DATA[sp.city];
-    var dist = d.how === 'trade' ? 60 : G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
+    var at = G.Disc.position(d);
+    var dist = d.how === 'trade' ? 60 : at ? G.Geo.dist(c.lon, c.lat, at.lon, at.lat) : 0;
     var years = U.clamp(Math.round(1 + dist / 45), 1, 6);
     if (d.id === 'circum') years = 5;
     var w = sp.wealth;
@@ -326,13 +327,13 @@
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
         if (x.batch) return { label: '찾아 둔 발견을 한꺼번에 보고한다 <span class="tag">' + x.n + '건</span>', right: '일괄 보고', value: i, icon: 'scroll', desc: '값진 것부터 차례로 보고 — 올해 이 후원자에게 두 번째부터는 사례금이 줄어든다 (한 건씩 보고할 때와 같은 셈)' };
         var gr = x.found && G.Disc.gradeOf ? G.Disc.gradeOf(x.d) : null;
-        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: x.d.hint };
+        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: G.Disc.hintText(x.d) };
       }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다</span>' + (tm ? ' · 성품: <b>' + tm.name + '</b> <span class="muted">— ' + tm.desc + '</span>' : '') });
       if (pick == null) { await UI.say(L('pickCancel'), who); return; }
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
       if (x.batch) { var bd = await SP.batchReport(sp); if (bd) return; continue; }
-      await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found || x.fake ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : d.hint + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp));
+      await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found || x.fake ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : G.Disc.hintText(d) + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp));
       if (tutDuke(sp) && d.id === G.TUTORIAL.disc && !x.found && !x.fake) { await UI.say(L('like'), who); return SP.negotiate(sp, d, 1.1, false); }   // 튜토리얼: 공작은 늘 응한다
       // too heavy?
       var need = G.POWER_FAME[d.pw] || 0;
@@ -465,7 +466,8 @@
     if (!ok.length) { await UI.say(SP.line(sp, 'meh'), who); return false; }
     var rows = list.map(function (x, i) {
       var e = x.est;
-      return '<tr' + (x.ok ? '' : ' class="muted"') + '><td>' + (x.ok ? '<input type="checkbox" data-i="' + i + '" checked>' : '') + '</td><td><b>' + U.esc(x.d.name) + '</b>' +
+      var q = x.d.name + ' ' + (G.DISC_CATS[x.d.cat] || '') + ' ' + (G.regionLabelAt ? G.regionLabelAt(x.d.reg, x.d.lon, x.d.lat) : '');   // 찾기 칸: 이름·갈래·지역
+      return '<tr data-ck data-q="' + U.esc(q) + '"' + (x.ok ? '' : ' class="muted"') + '><td>' + (x.ok ? '<input type="checkbox" data-i="' + i + '" checked>' : '') + '</td><td><b>' + U.esc(x.d.name) + '</b>' +
         (G.Disc.isLate(x.d.id) ? ' <span class="tag">경쟁자가 먼저</span>' : '') + (x.gr ? ' <span class="tag">증거 · ' + U.esc(x.gr.name) + '</span>' : '') + '</td>' +
         (x.ok ? '<td class="num">' + U.num(e.pay) + '닢' + (e.cut ? ' <small class="muted">(깎임)</small>' : '') + '</td><td class="num">+' + U.num(e.fame) + '</td>' : '<td colspan="2" class="muted">관심 밖 — 따로 설득해 보고</td>') + '</tr>';
     }).join('');
@@ -473,17 +475,21 @@
     var picked = ok.slice();
     if (!opt.all) {
       var t0 = tot(picked);
+      // 처음에는 모두 골라 둔다 — 보고하기 싫은 것만 끄거나, 「전체 해제」 뒤 보고할 것만 고른다. 찾기 칸으로 이름·갈래·지역을 찾는다 (2026-10-28 제안)
       var win = UI.window({ title: SP.holderName(sp) + '에게 일괄 보고', icon: 'scroll', width: 860,
-        html: '<div class="muted" style="margin-bottom:8px">값진 것부터 차례로 보고합니다. 올해 이 후원자에게 한 보고가 늘수록 다음 보고의 사례금은 줄어듭니다 — 한 건씩 보고할 때와 같은 셈입니다. (어림값 — 증거를 내면 달라질 수 있습니다)</div>' +
-          '<table class="tbl"><tr><th></th><th>발견</th><th class="num">사례금(어림)</th><th class="num">명성</th></tr>' + rows + '</table>' +
+        html: '<div class="muted" style="margin-bottom:8px">값진 것부터 차례로 보고합니다. 보고하지 않을 것은 체크를 끄십시오. 올해 이 후원자에게 한 보고가 늘수록 다음 보고의 사례금은 줄어듭니다 — 한 건씩 보고할 때와 같은 셈입니다. (어림값 — 증거를 내면 달라질 수 있습니다)</div>' +
+          '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl"><tr><th></th><th>발견</th><th class="num">사례금(어림)</th><th class="num">명성</th></tr>' + rows + '</table></div>' +
           '<div class="bt-sum" style="margin-top:10px;font-size:18px">합계: 금화 <b>' + U.num(t0[0]) + '</b>닢 · 명성 <b>+' + U.num(t0[1]) + '</b></div>',
-        buttons: [{ label: '보고한다', value: 'go', cls: 'navy' }, { label: '그만둔다', value: null }],
+        buttons: [{ label: '고른 것을 보고한다', value: 'go', cls: 'navy', onClick: function () { if (!picked.length) { UI.toast('보고할 발견을 하나 이상 고르십시오.', 'scroll'); return false; } } }, { label: '그만둔다', value: null }],
         onBuild: function (el) {
           var sum = el.querySelector('.bt-sum');
-          U.$$('input[type=checkbox]', el).forEach(function (cb) { cb.onchange = function () {
-            picked = U.$$('input[type=checkbox]', el).filter(function (c) { return c.checked; }).map(function (c) { return list[+c.dataset.i]; });
-            var t = tot(picked); sum.innerHTML = '합계: 금화 <b>' + U.num(t[0]) + '</b>닢 · 명성 <b>+' + U.num(t[1]) + '</b> <small class="muted">(빼면 뒤의 것이 덜 깎인다)</small>';
-          }; });
+          UI.checkTools(el.querySelector('.ck-bar'), {
+            rows: function () { return U.$$('tr[data-ck]', el); }, box: function (r) { return r.querySelector('input[type=checkbox]'); },
+            text: function (r) { return r.getAttribute('data-q'); }, placeholder: '이름·갈래·지역으로 찾기', rowClick: true,
+            onChange: function () {
+              picked = U.$$('input[type=checkbox]', el).filter(function (c) { return c.checked; }).map(function (c) { return list[+c.dataset.i]; });
+              var t = tot(picked); sum.innerHTML = '합계: ' + picked.length + '건 · 금화 <b>' + U.num(t[0]) + '</b>닢 · 명성 <b>+' + U.num(t[1]) + '</b>' + (picked.length < ok.length ? ' <small class="muted">(빼면 뒤의 것이 덜 깎인다)</small>' : '');
+            } });
         } });
       var v = await win.result;
       if (v !== 'go' || !picked.length) return false;

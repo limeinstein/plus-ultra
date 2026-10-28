@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """sprite-gen 얼굴 레이어로 걷기의 머리를 달리기에 고정한다.
 
-걷기 대기 칸을 원본으로 삼아 정수 좌표로만 옮긴다. 하얀 남방 항해사는
-먼저 걷기 머리 폭을 54px로 맞춘다. 몸통과 팔다리, 바닥선은 보존한다.
+걷기 칸을 원본으로 삼아 정수 좌표로만 옮긴다. 하얀 남방 항해사는
+작은 대기 칸 대신 실제 걷기 첫 칸을 얼굴 기준으로 사용한다.
 목·옷깃의 경계만 3px 안에서 섞으며 결과와 원본을 따로 보관한다.
 """
 from __future__ import annotations
@@ -32,13 +32,18 @@ CUTS = {
     'ganghui':               [32, 32, 37, 41, 47, 54, 54, 48, 42, 42],
     'hat_spinner':           [32, 32, 41, 46, 51, 57, 56, 49, 43, 43],
     'muscle_swordsman':      [33, 33, 40, 44, 50, 56, 54, 48, 41, 41],
-    'navigator_white':      [33, 33, 47, 52, 59, 67, 65, 60, 52, 47],
+    'navigator_white':      [33, 33, 42, 46, 51, 57, 56, 52, 47, 47],
     'noble_scholar':         [31, 31, 37, 41, 47, 54, 54, 48, 42, 42],
     'sea_dog':               [33, 33, 40, 45, 51, 57, 55, 49, 43, 43],
     'sky_adventurer':        [35, 35, 45, 49, 55, 61, 61, 55, 49, 49],
 }
-FACE_BOTTOM = dict(zip(CUTS, (44,43,44,46,49,45,45,46,47,47,54,43,46,50)))
-NAVIGATOR_HEAD_WIDTH = 54
+FACE_BOTTOM = dict(zip(CUTS, (44,43,44,46,49,45,45,46,47,47,43,43,46,50)))
+
+
+def reference_index(look, idle):
+    # 하얀 남방의 대기 칸(35)은 40px, 걷기 첫 칸은 43px다.
+    # 움직이는 몸과 비교해야 하므로 걷기 첫 칸의 원래 얼굴을 쓴다.
+    return 0 if look == 'navigator_white' else idle
 
 
 def record_lock(look, reference_index, records, walkpath, runpath):
@@ -51,10 +56,10 @@ def record_lock(look, reference_index, records, walkpath, runpath):
         'translations':[r['translation'] for r in records],
     }
     if look == 'navigator_white':
-        manifest['characters'][look]['head_width'] = NAVIGATOR_HEAD_WIDTH
+        manifest['characters'][look]['run_head_width'] = head_width(cells(walkpath)[reference_index])
     # 한 인물의 좌표를 한 줄에 모아 원본과 49칸 대응 관계를 읽기 쉽게 둔다.
     rows = [json.dumps(k)+': '+json.dumps(v,ensure_ascii=False) for k,v in manifest['characters'].items()]
-    path.write_text('{"version":1,"characters":{\n'+',\n'.join(rows)+'\n}}\n',encoding='utf-8')
+    path.write_text('{"version":1,"characters":{\n'+',\n'.join(rows)+'\n}}\n', encoding='utf-8', newline='\n')
 
 
 def head_centre(frame):
@@ -67,38 +72,6 @@ def head_width(frame):
     top = box(frame)[1]
     bb = frame.getchannel('A').crop((0,top,frame.width,top+30)).point(lambda a:255 if a>40 else 0).getbbox()
     return bb[2]-bb[0]
-
-
-def prepare_walking_faces(look, walking, reference_index):
-    """하얀 남방의 작았던 원본 머리를 보정하고 두 동작이 함께 쓸 기준을 만든다."""
-    if look != 'navigator_white':
-        return walking
-    reference = walking[reference_index]
-    current_width = head_width(reference)
-    if current_width == NAVIGATOR_HEAD_WIDTH:
-        return walking
-    from sprite_gen.util.resample import resize_cell
-    factor = NAVIGATOR_HEAD_WIDTH/current_width
-    cx,top = head_centre(reference),box(reference)[1]
-    enlarged = resize_cell(reference,(round(reference.width*factor),round(reference.height*factor)))
-    placed = Image.new('RGBA',reference.size)
-    placed.paste(enlarged,(cx-round(cx*factor),top-round(top*factor)))
-    xx = np.arange(reference.width)-cx
-    yy = np.arange(reference.height)[:,None]
-    weight = np.clip((top+np.interp(xx,XS,CUTS[look])[None,:]-yy)/3,0,1).astype(np.float32)
-    original = np.asarray(reference)
-    a,b = original.astype(np.float32),np.asarray(placed).astype(np.float32)
-    for picture in (a,b):
-        picture[:,:,:3] *= picture[:,:,3:]/255
-    mixed = a*(1-weight[:,:,None])+b*weight[:,:,None]
-    mixed[:,:,:3] = np.divide(mixed[:,:,:3]*255,mixed[:,:,3:],out=np.zeros_like(mixed[:,:,:3]),where=mixed[:,:,3:]>0)
-    data = np.clip(np.rint(mixed),0,255).astype(np.uint8)
-    data[weight==0] = original[weight==0]
-    canonical = Image.fromarray(data)
-    assert head_width(canonical) == NAVIGATOR_HEAD_WIDTH, '하얀 남방 머리 폭 보정 실패'
-    result,records = lock_faces(look,canonical,walking)
-    assert all(head_width(f)==NAVIGATOR_HEAD_WIDTH for f in result)
-    return result
 
 
 def preview(looks, sequences, target):
@@ -171,21 +144,21 @@ def build(look, cfg, args):
     if not backup.exists():
         shutil.copy2(runpath,backup)
     walking, running = cells(walkpath), cells(backup)
-    reference_index = cfg['idle']
-    reference = walking[reference_index]
+    chosen_index = reference_index(look,cfg['idle'])
+    reference = walking[chosen_index]
     reference.save(dest/'walking-head-reference.png')
     output, records = lock_faces(look, reference, running)
     save_sheet(output,dest/'run.webp')
     contact(output,dest/'contact.png')
     report = {'look':look,'method':'sprite-gen.video.face_layer.warp, integer translation, premultiplied neck blend',
-              'walking_reference_frame':reference_index,'walking_sha256':digest(walkpath),
+              'walking_reference_frame':chosen_index,'walking_sha256':digest(walkpath),
               'before_run_sha256':digest(backup),'after_run_sha256':digest(dest/'run.webp'),
               'head_scale':1,'cut_x':XS,'cut_y':CUTS[look],
               'frames':records,'output':metrics(output),'walking':metrics(walking)}
     (dest/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
     if args.apply:
         shutil.copy2(dest/'run.webp',runpath)
-        record_lock(look,reference_index,records,walkpath,runpath)
+        record_lock(look,chosen_index,records,walkpath,runpath)
     print(f'{look}: 얼굴 49칸 동일, 키 {report["output"]["height_min"]}~{report["output"]["height_max"]}',flush=True)
     return report, (walking,running,output)
 

@@ -12,6 +12,8 @@
     m.loyal = U.clamp(G.Coven && G.Coven.protected(m) ? Math.max(old, value) : value, 0, 100);
     return m.loyal;
   };
+  // 제독의 행운(s.player.luck, 기본 50): 50을 넘는 만큼 바다의 나쁜 일을 피할 가능성이 오른다 (99면 +0.098 — 여신상 하나쯤). 마녀의 저주(js/systems/coven.js)·가족 사건이 올린다
+  R.playerLuck = function () { var p = R.S() && R.S().player, l = p && p.luck != null ? p.luck : 50; return Math.max(0, l - 50) / 500; };
   R.mateWage = function (id) { var d = G.MATE[id]; return !d || (G.Coven && G.Coven.freeWage(id)) ? 0 : (d.wage || 0); };
 
   // ---------------------------------------------------------------- city helpers
@@ -668,6 +670,7 @@
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요: 1480~1700년 유럽 시장이 찾던 물건 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'buy');   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'buy');   // 교역 항로의 상선대: 실어 오는 쪽은 싸지고 나는 쪽은 비싸진다 (js/systems/tradefleets.js)
+    if (G.Kongo) p *= G.Kongo.mult(c, goodId, 'buy');   // 콩고 왕국과 맺은 교역 (js/systems/kongo.js)
     if (G.SkillCombos) p *= G.SkillCombos.factor('buyPrice');
     return Math.max(1, Math.round(p));
   };
@@ -680,6 +683,7 @@
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'sell');   // 세상의 시장 사건 (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'sell');   // 교역 항로의 상선대 (js/systems/tradefleets.js)
+    if (G.Kongo) p *= G.Kongo.mult(c, goodId, 'sell');   // 콩고 왕국과 맺은 교역
     if (G.SkillCombos) p *= G.SkillCombos.factor('sellPrice');
     return Math.max(1, Math.round(p));
   };

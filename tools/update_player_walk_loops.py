@@ -278,18 +278,14 @@ def build(look, cfg, args, engine):
     if any(b < a-1e-9 for a, b in zip(selected_phases, selected_phases[1:])):
         raise ValueError(f'{look}: 보행 자세의 시간 순서가 역전됨')
     face_lock = None
-    if motion == 'walk':
-        from match_player_motion_faces import prepare_walking_faces
-        frames = prepare_walking_faces(look,frames,cfg.get('idle',0))
-        screen = ghost_screen(frames)
     if motion == 'run':
         # 보간 뒤에 걷기 원본 얼굴을 고정한다. 먼저 합성하면 RIFE가 얼굴을 다시 변형한다.
-        from match_player_motion_faces import lock_faces
+        from match_player_motion_faces import lock_faces, reference_index
         current_cfg = read_config(ROOT/'js/data/heromotion.js')[look]
         walkpath = ROOT/'images/characters'/look/'motion/walk.webp'
-        reference_index = current_cfg['idle']
-        frames, face_records = lock_faces(look,cells(walkpath)[reference_index],frames)
-        face_lock = {'walking_reference_frame':reference_index,'walking_sha256':digest(walkpath),
+        chosen_index = reference_index(look,current_cfg['idle'])
+        frames, face_records = lock_faces(look,cells(walkpath)[chosen_index],frames)
+        face_lock = {'walking_reference_frame':chosen_index,'walking_sha256':digest(walkpath),
                      'scale':1,'frames':face_records}
         screen = ghost_screen(frames)
     measured = metrics(frames)

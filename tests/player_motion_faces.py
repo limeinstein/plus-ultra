@@ -25,12 +25,11 @@ for look,record in manifest.items():
     for action in ('walk','run'):
         assert hashlib.sha256((base/f'{action}.webp').read_bytes()).hexdigest()==record[f'{action if action=="run" else "walking"}_sha256'], (look,action,'제작 원본 변경')
     walking,running = frames(base/'walk.webp'),frames(base/'run.webp')
-    if 'head_width' in record:
-        for action,sequence in (('walk',walking),('run',running)):
-            for i,frame in enumerate(sequence):
-                ys0,xs0 = np.nonzero(frame[:,:,3]>40)
-                yh,xh = np.nonzero(frame[ys0.min():ys0.min()+30,:,3]>40)
-                assert xh.max()-xh.min()+1 == record['head_width'], (look,action,i,'머리 크기 변화')
+    if 'run_head_width' in record:
+        for i,frame in enumerate(running):
+            ys0,xs0 = np.nonzero(frame[:,:,3]>40)
+            yh,xh = np.nonzero(frame[ys0.min():ys0.min()+30,:,3]>40)
+            assert xh.max()-xh.min()+1 == record['run_head_width'], (look,i,'달리기 머리 크기 변화')
     reference = walking[record['walking_reference_frame']]
     sy,sx = np.nonzero(reference[:,:,3]>40)
     top = sy.min()

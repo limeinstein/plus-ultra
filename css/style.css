@@ -574,6 +574,11 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .create .sect { min-height: 0; }
 .sailbar .btn { white-space: nowrap; }
 .sailbar { white-space: nowrap; }
+/* 육상 탐험 단추 줄: 배속(×0.5~×4) 칸이 들어가도 화면 안에 들도록 단추 여백을 조금 줄인다 */
+.sailbar.land-bar { gap: 6px; }
+.sailbar.land-bar .btn { padding: 6px 11px; }
+.sailbar.land-bar .speedctl { padding: 0 2px; gap: 3px; }
+.sailbar.land-bar .speedctl .opt { padding: 6px 8px; }
 .zoomctl { display: flex; flex-direction: column; gap: 2px; justify-content: center; }
 .zoomctl .btn { min-height: 21px; padding: 0 9px; font-size: 14px; line-height: 1; }
 
@@ -1853,3 +1858,20 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .en-kids { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
 .en-kid { font: inherit; font-size: 15px; padding: 6px 12px; border-radius: 5px; border: 1px solid #8a5a1a; background: #f3e2b8; color: #3a2a18; cursor: pointer; }
 .en-kid[disabled] { opacity: .5; cursor: default; }
+
+/* 여러 개 고르기 도구 (UI.checkTools — 일괄 보고·발표·교역소 매각/구입·시장 매각, 2026-10-28) */
+.cktools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 8px; }
+.cktools .ck-q { flex: 1 1 200px; min-width: 160px; max-width: 360px; font-family: var(--serif); font-size: 17px; color: var(--ink); background: rgba(255,252,242,.8); border: 1px solid rgba(110,80,40,.5); padding: 5px 10px; border-radius: 3px; outline: none; }
+.cktools .ck-q:focus { border-color: var(--brass-dk); background: #fffaf0; }
+.cktools .ck-count { margin-left: auto; font-size: 15px; }
+.ck-scroll { max-height: 50vh; overflow: auto; }
+.ck-scroll table.tbl tr:first-child th { position: sticky; top: 0; z-index: 1; background: var(--parch); }
+.ck-scroll tr[data-ck] { cursor: pointer; }
+.ck-scroll input[type=checkbox], .cktools + .ck-scroll input[type=checkbox] { transform: scale(1.25); cursor: pointer; }
+/* 일괄 구입·매각 창의 수량 막대 — 끌어서 수량을 정한다 */
+.tbl.batch .bqwrap { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.tbl.batch input.bqr { width: 200px; vertical-align: middle; }
+.mksell td { vertical-align: middle; }
+.mksell .mkthumb { width: 34px; height: 34px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
+.mksell input.mqr { width: 170px; vertical-align: middle; }
+.mksell input.mq { width: 64px; text-align: right; font: inherit; }

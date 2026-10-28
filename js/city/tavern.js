@@ -32,7 +32,7 @@
     var d = U.chance(0.45) ? T.rumour(c, { stack: true }) : null;
     if (d) {
       var known = G.Disc.hasHint(d.id);
-      await UI.say((known ? '그 이야기라면 여기 손님들도 하더군요. ' : '손님들이 이런 이야기를 하더군요. ') + d.hint, who);
+      await UI.say((known ? '그 이야기라면 여기 손님들도 하더군요. ' : '손님들이 이런 이야기를 하더군요. ') + G.Disc.hintText(d), who);
       G.Disc.noteHint(d, 'tavern:' + c.id);
       return;
     }
@@ -146,7 +146,8 @@
       await UI.say('기분이 나쁘다......눈이 도는군~ ~우웩~', {});
       await C.say(master(), '손님, 괜찮습니까! 얼굴이 새파랍니다, 손님, 손님!');
       await UI.fade(function () { G.Game.passDays(1); });
-      if (U.chance(0.35)) { var lost = Math.floor(s.player.gold * U.rf(0.1, 0.3)); s.player.gold -= lost; await UI.say('정신을 잃었었군... 아무래도 여관 같군.\n돈을 도둑맞았다!! (금화 ' + U.num(lost) + '닢)', {}); }
+      // 취해 쓰러진 사이 털린 돈: 지닌 돈의 10~30%이되 주머니에 넣고 다닐 만큼까지만 (큰 재산이 한 번에 수십만 닢씩 사라지던 것 — 베타 피드백 #87)
+      if (U.chance(0.35)) { var lost = Math.min(Math.floor(s.player.gold * U.rf(0.1, 0.3)), 500 + c.size * 250); s.player.gold -= lost; await UI.say('정신을 잃었었군... 아무래도 여관 같군.\n돈을 도둑맞았다!! (금화 ' + U.num(lost) + '닢)', {}); }
       else if (U.chance(0.2)) { var got = U.ri(50, 400); s.player.gold += got; await UI.say('정신이 드는군..... 기억에 없는 돈을 쥐고 있었군! (금화 ' + got + '닢)', {}); }
       else await C.mate('제독! 이봐요, 제독! 괜찮습니까? ...어젯밤엔 좀 과하셨습니다.');
       return C.leave();
@@ -226,13 +227,13 @@
     G.Disc.addHint(d.id, 'contract:' + k.sponsor);
     if (d.how === 'city') {
       var cc = G.CITY_DATA[d.city], here = cc.id === c.id ? '바로 이 도시일세. ' : cc.name + '에 가면 ';
-      if (d.by && G.Disc.artistAround && G.Disc.artistAround(d)) { var am = G.MATE[d.by]; return src + d.hint + ' 그걸 만든 ' + am.name + U.jx(am.name, '을/를') + ' 만나 이야기해 보게. 요즘 어디서 지내는지는 술집마다 소문이 다르더군.'; }
-      if (G.Disc.isBuilding && G.Disc.isBuilding(d)) return src + d.hint + ' ' + here + '거리를 걷다 그 건물 앞에 가서 직접 보게.';
-      return src + d.hint + ' ' + here + '건물들을 하나하나 둘러보면 눈에 띌 걸세.';
+      if (d.by && G.Disc.artistAround && G.Disc.artistAround(d)) { var am = G.MATE[d.by]; return src + G.Disc.hintText(d) + ' 그걸 만든 ' + am.name + U.jx(am.name, '을/를') + ' 만나 이야기해 보게. 요즘 어디서 지내는지는 술집마다 소문이 다르더군.'; }
+      if (G.Disc.isBuilding && G.Disc.isBuilding(d)) return src + G.Disc.hintText(d) + ' ' + here + '거리를 걷다 그 건물 앞에 가서 직접 보게.';
+      return src + G.Disc.hintText(d) + ' ' + here + '건물들을 하나하나 둘러보면 눈에 띌 걸세.';
     }
-    if (d.how === 'trade' || d.how === 'special' || d.lon == null) return src + d.hint;
+    if (d.how === 'trade' || d.how === 'special' || d.lon == null) return src + G.Disc.hintText(d);
     T.markRumour(c, d);
-    return src + d.hint + ' ' + T.whereText(c, d);
+    return src + G.Disc.hintText(d) + ' ' + T.whereText(c, d);
   };
   // ---------------------------------------------------------------- 현지 소문: 이미 아는 목표의 방향을 좁힌다
   // 책·소문이 '무엇이 있는가'를 알려 준다면, 그 고장 사람들은 '어느 쪽으로 며칠'을 알려 준다 (대항해시대 3의 현지 소문)
@@ -246,16 +247,20 @@
       if (!d || G.Disc.foundByMe(d.id) || d.how === 'trade' || d.how === 'city' || d.id === 'circum') return false;
       if (d.how === 'special' && !(d.lat || d.lon)) return false;
       if (mk[d.id] && mk[d.id].u != null && mk[d.id].u <= 0.35) return false;      // 이미 충분히 좁혔다
-      return G.Geo.dist(c.lon, c.lat, d.lon, d.lat) <= ASK_RANGE;
+      var at = G.Disc.position(d);
+      return at && G.Geo.dist(c.lon, c.lat, at.lon, at.lat) <= ASK_RANGE;
     }).sort(function (a, b) {
       var ka = s.contract && s.contract.disc === a.id ? 0 : 1, kb = s.contract && s.contract.disc === b.id ? 0 : 1;
-      return ka - kb || G.Geo.dist(c.lon, c.lat, a.lon, a.lat) - G.Geo.dist(c.lon, c.lat, b.lon, b.lat);
+      var aa = G.Disc.position(a), bb = G.Disc.position(b);
+      return ka - kb || G.Geo.dist(c.lon, c.lat, aa.lon, aa.lat) - G.Geo.dist(c.lon, c.lat, bb.lon, bb.lat);
     });
   };
   /** 이 도시에서 본 그곳의 방향·거리 (뭍길·뱃길 어림) */
   T.whereText = function (c, d) {
-    var dist = G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
-    var dir = U.dirName(Math.atan2(d.lat - c.lat, G.Geo.wrapLon(d.lon - c.lon)));
+    var at = G.Disc.position(d);
+    if (!at) return '최근에는 목격 소식이 없네. 항구에서 새 소식을 기다려 보게.';
+    var dist = G.Geo.dist(c.lon, c.lat, at.lon, at.lat);
+    var dir = U.dirName(Math.atan2(at.lat - c.lat, G.Geo.wrapLon(at.lon - c.lon)));
     var land = d.how === 'land', where;
     if (dist < 0.8) where = '바로 이 근처라네. 성문을 나서면 금방이지.';
     else if (!c.port && dist > 6) where = dir + '쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 ' + Math.max(1, Math.round(dist / 0.8)) + '일은 가야 할 걸세.';
@@ -271,7 +276,8 @@
   };
   /** 해도에 그 방향을 표시한다 (이미 더 좁혀 두었으면 그대로) */
   T.markRumour = function (c, d) {
-    var s = S(), dist = G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
+    var at = G.Disc.position(d); if (!at) return false;
+    var s = S(), dist = G.Geo.dist(c.lon, c.lat, at.lon, at.lat);
     var mk = s.marks || (s.marks = {}), u = U.clamp(dist * 0.15, 0.3, 1.2);
     if (!mk[d.id] || mk[d.id].u == null || mk[d.id].u > u) {
       mk[d.id] = { t: s.day, mode: 'rumor', u: u };
@@ -289,8 +295,8 @@
     var d = list[0];
     if (list.length > 1) {
       var i = await UI.choose('어느 곳을 물어볼까?', list.map(function (x, k) {
-        var dist = G.Geo.dist(c.lon, c.lat, x.lon, x.lat);
-        return { label: x.name + (s.contract && s.contract.disc === x.id ? ' ★계약' : ''), right: G.DISC_CATS[x.cat] + ' · ' + (dist < 8 ? '이 근처' : '조금 먼 곳'), value: k, icon: 'map', desc: x.hint };
+        var at = G.Disc.position(x), dist = G.Geo.dist(c.lon, c.lat, at.lon, at.lat);
+        return { label: x.name + (s.contract && s.contract.disc === x.id ? ' ★계약' : ''), right: G.DISC_CATS[x.cat] + ' · ' + (dist < 8 ? '이 근처' : '조금 먼 곳'), value: k, icon: 'map', desc: G.Disc.hintText(x) };
       }), { width: 720 });
       if (i == null) return;
       d = list[i];
@@ -465,7 +471,7 @@
     if (G.Game.refreshHud) G.Game.refreshHud();
     var src = 'mate:' + m.id;
     var d = U.weighted(cand, function (x) { return (x.by === m.id ? 3 : 1) * (x.pw <= 2 ? 2 : 1) * G.Disc.rumourW(x, src); });
-    await UI.say(U.pick(['캬, 이 맛이지. 좋아, 내가 직접 보고 들은 이야기를 하나 해 주지. ', '고맙네. 이 바다에서 내가 아는 이야기라면... ']) + d.hint, who);
+    await UI.say(U.pick(['캬, 이 맛이지. 좋아, 내가 직접 보고 들은 이야기를 하나 해 주지. ', '고맙네. 이 바다에서 내가 아는 이야기라면... ']) + G.Disc.hintText(d), who);
     G.Disc.noteHint(d, src);
   };
 
@@ -476,10 +482,10 @@
     if (!cm.lv) { await C.mate('말이 한 마디도 통하지 않습니다. 통역을 구하거나 저 사람의 말을 익혀야겠습니다.'); return false; }
     if (s.player.fame < m.fame) { await UI.say('자네 밑에서 일하라고? 미안하지만 아직 자네 이름은 들어 본 적이 없군. (필요 명성 ' + U.num(m.fame) + ')', who); return false; }
     var note = cm.lv >= 3 ? '' : '\n' + G.LANGS[cm.li] + '가 ' + (cm.lv === 1 ? '조금' : '어지간히') + '밖에 통하지 않는다. 손짓을 섞으면 뜻은 전해지겠지만, 처음에는 마음을 다 열지 않을 것이다.';
-    var ok = await UI.confirm(U.j(m.name, '을/를') + ' 월급 금화 ' + U.num(m.wage) + '닢에 고용하겠습니까?' + note, '고용한다', '그만둔다');
+    var ok = await UI.confirm(U.j(m.name, '을/를') + ' 월급 금화 ' + U.num(R.mateWage(m.id)) + '닢에 고용하겠습니까?' + note, '고용한다', '그만둔다');
     if (!ok) return false;
     // 급료가 버거우면 경리(없으면 부관)가 말린다 — 그래도 들일 수는 있다
-    var warn = G.Cabins && G.Cabins.wageWarning(m.wage);
+    var warn = G.Cabins && G.Cabins.wageWarning(R.mateWage(m.id));   // 마녀 열여섯이 모이면 마녀는 무급 (js/systems/coven.js)
     if (warn) {
       await UI.say(warn.text, G.Cabins.warnSpeaker());
       if (!await UI.confirm('그래도 ' + U.j(m.name, '을/를') + ' 고용하겠습니까?', '고용한다', '그만둔다')) return false;
@@ -544,7 +550,7 @@
       var lock = !d.rival && s.player.fame < d.fame, cm = comm(d);
       var row = U.el('div', 'hire-row' + (lock ? ' lock' : ''),
         '<span class="nm">' + U.esc(d.name) + '</span>' +
-        '<span class="rt">' + (d.rival ? '고용 불가' : lock ? '명성 ' + U.num(d.fame) : U.num(d.wage) + '닢') + '</span>' +
+        '<span class="rt">' + (d.rival ? '고용 불가' : lock ? '명성 ' + U.num(d.fame) : U.num(R.mateWage(d.id)) + '닢') + '</span>' +
         '<span class="sk">' + U.esc(skillLine(d)) + (cm.lv ? '' : ' · <b>말 안 통함</b>') + '</span>');
       row.onclick = function () { sel = d; render(); };
       row.ondblclick = function () { win.close(d); };
@@ -581,7 +587,7 @@
       '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (m.rival ? U.esc((G.SeaFolk.rivalCity(m.rival) || {}).name || '') + '에 머묾' : G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
       ' · ' + m.y[0] + '~' + m.y[1] + '년' + (m.renown ? ' · <span class="renown" title="실존 인물 — 지명도가 높을수록 특기가 많다">지명도 ' + '★'.repeat(m.renown) + ' ' + G.RENOWN_NAME[m.renown] + '</span>' : '') + '</div>' +
       (m.rival ? '<div class="mt"><b class="warn">고용할 수 없다</b> — 스스로 함대를 꾸려 발견을 다투는 경쟁 탐험가</div>' : '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +
-      ' · 월급 <b>금화 ' + U.num(m.wage) + '닢</b></div>') +
+      ' · 월급 <b>금화 ' + U.num(R.mateWage(m.id)) + '닢</b></div>') +
       '<div class="mc-desc">' + U.esc(m.desc || '') + '</div>'));
     wrap.appendChild(head);
 
@@ -640,7 +646,7 @@
     var roll = U.rand();
     if (roll < 0.55) {
       var d = T.rumour(c, { stack: true });
-      if (d) { var kn = G.Disc.hasHint(d.id); await UI.say((kn ? '자네도 들었나? 나도 들은 얘긴데... ' : '이건 비밀인데 말이야... ') + d.hint, who); G.Disc.noteHint(d, 'tavern:' + c.id); return; }
+      if (d) { var kn = G.Disc.hasHint(d.id); await UI.say((kn ? '자네도 들었나? 나도 들은 얘긴데... ' : '이건 비밀인데 말이야... ') + G.Disc.hintText(d), who); G.Disc.noteHint(d, 'tavern:' + c.id); return; }
     }
     if (roll < 0.8) {
       // price tip
@@ -696,7 +702,7 @@
     for (;;) {
       var v = await UI.ask('무슨 용건인가?', [{ label: '정보를 듣는다', value: 'info' }, { label: '일기토를 신청한다', value: 'duel' }, { label: '떠난다', value: null }], who);
       if (!v) return;
-      if (v === 'info') { await UI.say('나는 곧 큰 항해를 떠날 걸세. ' + d.hint, who); if (G.Disc.addHint(d.id, 'rival')) UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); continue; }
+      if (v === 'info') { await UI.say('나는 곧 큰 항해를 떠날 걸세. ' + G.Disc.hintText(d), who); if (G.Disc.addHint(d.id, 'rival')) UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); continue; }
       if (await T.rivalDuel(d, who)) return;
     }
   };
@@ -773,7 +779,7 @@
       if (last && last.by === 'me' && bt && !s.flags['rivalBeaten_' + last.d.id]) { s.flags['rivalBeaten_' + last.d.id] = 1; await UI.say(bt, who); }
       else if (last && last.by === 'rival' && done[last.d.id] && !s.flags['rivalDone_' + last.d.id]) { s.flags['rivalDone_' + last.d.id] = 1; await UI.say(done[last.d.id], who); }
       if (soon) {
-        await UI.say(plan[d.id] || '나는 곧 큰 항해를 떠날 걸세. ' + d.hint, who);
+        await UI.say(plan[d.id] || '나는 곧 큰 항해를 떠날 걸세. ' + G.Disc.hintText(d), who);
         if (G.Disc.addHint(d.id, 'rival')) UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll');
       } else await UI.say(info.dream || '언젠가 더 먼 바다로 갈 거요.', who);
     }
@@ -816,7 +822,7 @@
         if (st.aff < 30) await say('저는 ' + like.name + ' 남자가 좋아요. ' + (m.like === 'generous' ? '역시 남자는 통이 커야죠.' : '그런 사람이 이상형이에요.'), 'warm');
         else {
           var d = U.chance(0.5) ? T.rumour(c, { stack: true }) : null;
-          if (d) { var kn2 = G.Disc.hasHint(d.id); await say((kn2 ? '그 이야기, 여기 손님들도 똑같이 하던데요. ' : '손님들이 이런 이야기를 하더라고요. ') + d.hint, 'warm'); G.Disc.noteHint(d, 'tavern:' + c.id); }
+          if (d) { var kn2 = G.Disc.hasHint(d.id); await say((kn2 ? '그 이야기, 여기 손님들도 똑같이 하던데요. ' : '손님들이 이런 이야기를 하더라고요. ') + G.Disc.hintText(d), 'warm'); G.Disc.noteHint(d, 'tavern:' + c.id); }
           else await say(U.pick(['바다 너머에는 뭐가 있을까요? 언젠가 저도 가 보고 싶어요.', '항해 이야기 더 들려주세요!', '몸조심하세요. 바다는 무서운 곳이니까요.']), 'warm');
         }
       } else if (v === 'gift') {

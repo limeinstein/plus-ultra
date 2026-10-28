@@ -49,7 +49,16 @@
     if (G.EventFx) G.EventFx.preload('land');
     if (G.Party.preloadSprites) G.Party.preloadSprites(MT().id);
   };
-  function newSt(start) { return { cam: { lon: start[0], lat: start[1], zoom: 170 }, path: null, t: 0, busy: 0, paused: true, dayAcc: 0, speed: 1, trail: [], seen: {}, near: null, lastHint: -99, gph: 0, gdist: 0, gather: 1, face: 1, pfx: G.Party.newFx(), unit: {} }; }
+  // 탐험 배속 (바다와 같은 ×0.5 · ×1 · ×2 · ×4) — 고른 배속은 설정(settings.landSpeed)에 남아 다음 상륙에도 이어진다
+  var LSPEEDS = [0.5, 1, 2, 4];
+  function landSpeed0() { var se = S() && S().settings, v = se && se.landSpeed; return LSPEEDS.indexOf(v) >= 0 ? v : 1; }
+  function setSpeed(k) {
+    if (!st || LSPEEDS.indexOf(k) < 0) return;
+    st.speed = k; if (S() && S().settings) S().settings.landSpeed = k;
+    U.$$('.land-speed .opt').forEach(function (o, i) { o.classList.toggle('on', LSPEEDS[i] === k); });
+  }
+  L.setSpeed = setSpeed;
+  function newSt(start) { return { cam: { lon: start[0], lat: start[1], zoom: 170 }, path: null, t: 0, busy: 0, paused: true, dayAcc: 0, speed: landSpeed0(), trail: [], seen: {}, near: null, lastHint: -99, gph: 0, gdist: 0, gather: 1, face: 1, pfx: G.Party.newFx(), unit: {} }; }
   L.runtime = function () { return st; };
   L.refreshBar = function () { if (st && st.alive) refreshBar(); };
   function cleanMount(m) { return m && m.id && m.id !== 'walk' && m.n > 0 ? { id: m.id, n: m.n, draft: m.draft || 'horse', style: m.style || null } : { id: 'walk', n: 0 }; }
@@ -89,7 +98,7 @@
     UI.pinch(catcher, zoomBy);
     UI.add(catcher);
     el.status = UI.add(U.el('div', 'status-strip wood', ''));
-    var bar = U.el('div', 'sailbar wood brass-frame');
+    var bar = U.el('div', 'sailbar land-bar wood brass-frame');   // land-bar: 배속 칸이 들어갈 자리를 내려고 단추 여백을 조금 줄인다 (css/style.css)
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = function (e) { e.stopPropagation(); b.blur(); if (!UI.busy() && !st.busy) fn(); }; bar.appendChild(b); return b; }
     el.pause = btn('정지', 'pause', function () { st.paused = !st.paused; if (st.paused) disarmFollow(); refreshBar(); });
     el.back = btn('돌아간다', 'anchor', function () { goBack(); }, 'navy');
@@ -97,7 +106,11 @@
     btn('야영', 'tent', function () { camp(); });
     btn('해도', 'map', function () { chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
-    el.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
+    el.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');
+    // 배속 (바다와 같은 모양 · 키: 설정의 속도 키 — 기본 ` 1 2 3)
+    var sp = U.el('div', 'speedctl land-speed');
+    LSPEEDS.forEach(function (k) { var o = U.el('div', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.title = '탐험 배속 ×' + k + ' — 걸음과 날짜가 그만큼 빨리 흐른다'; o.onclick = function (e) { e.stopPropagation(); setSpeed(k); }; sp.appendChild(o); });
+    bar.appendChild(sp);   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
     var zb = U.el('div', 'zoomctl');
     [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
     bar.appendChild(zb);
@@ -144,6 +157,13 @@
       return true;
     }
     if (k === 'm' || k === 'M') { chart(); return true; }
+    // 배속 키 (바다와 같다: 기본 ` = ×0.5, 1 = ×1, 2 = ×2, 3 = ×4) — 숫자판의 1·3은 그대로 대각선 걷기
+    if (!/^Numpad/.test(e.code || '')) {
+      if (G.Keys.is(e, 'speedHalf')) { setSpeed(0.5); return true; }
+      if (G.Keys.is(e, 'speed1')) { setSpeed(1); return true; }
+      if (G.Keys.is(e, 'speed2')) { setSpeed(2); return true; }
+      if (G.Keys.is(e, 'speed3')) { setSpeed(4); return true; }
+    }
     if (e.code === 'Numpad5' || k === '5') { st.dir = null; st.path = null; disarmFollow(); st.paused = true; refreshBar(); return true; }
     if (NUMDIR[e.code]) { st.dir = norm(NUMDIR[e.code]); st.path = null; disarmFollow(); st.paused = false; refreshBar(); return true; }
     if (k === '+' || k === '=') { zoomBy(1.2); return true; }
@@ -441,6 +461,7 @@
       if (G.Tale) await G.Tale.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 옛이야기의 아가씨들: 프랑스 숲의 신데렐라·백설공주 (js/systems/fairytales.js)
       if (G.TreasureHunt) await G.TreasureHunt.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 조합의 보물 지도: X 자리에 서면 판다 (js/systems/treasurehunt.js)
       if (G.LittlePrince) await G.LittlePrince.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 어린 왕자의 지도: 사막 속 숨은 우물 (js/systems/littleprince.js)
+      if (G.Mowgli) await G.Mowgli.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 정글북: 델리 근처 숲의 바나나 도둑과 모글리 (js/systems/junglebook.js)
       if (G.Princess) await G.Princess.onLand({ battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });
       // 정찰대: 가까운 발견물을 알아채고 지도에 표식을 남긴다
       var sensed = G.Explore.sense('land', l.lon, l.lat, Math.max(st.scoutBoost || 1, 1 + G.Mounts.scout(MT(), l.party)));
@@ -534,7 +555,7 @@
     } else UI.toast('원주민들이 기뻐하며 식량과 물을 약 ' + days + '일분씩 나누어 주었다.', 'bread', 4200);
     if (fire) await campfire(who);
     var d = U.chance(fire ? 0.8 : 0.45) ? nearHint() : null;
-    if (d) { G.Disc.addHint(d.id, 'native'); await UI.say('(손짓발짓으로) ' + d.hint, who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
+    if (d) { G.Disc.addHint(d.id, 'native'); await UI.say('(손짓발짓으로) ' + G.Disc.hintText(d), who); UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); }
   }
   /** 캠프파이어: 원주민의 모닥불 곁에서 하룻밤 — 여관에서처럼 피로가 풀리고 몸이 낫는다 */
   async function campfire(who) {
@@ -602,7 +623,7 @@
     var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');
     var terr = l.lon != null ? G.Geo.terrain(l.lon, l.lat) : 'grass';
     if (terr === 'sea') terr = 'grass';
-    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader, beast: o.beast, leaderLook: o.leaderLook }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt });   // leader·hold·flee: 이야기 사건의 싸움 (js/systems/aztec.js)
+    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader, beast: o.beast, leaderLook: o.leaderLook, noSpecial: o.noSpecial }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt });   // leader·hold·flee: 이야기 사건의 싸움 (js/systems/aztec.js)
     var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
     var res = r.res;
     if (res === 'win') {

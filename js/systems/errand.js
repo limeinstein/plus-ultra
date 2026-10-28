@@ -93,7 +93,7 @@
     var d = cand[Math.floor(rng() * Math.min(cand.length, 3))], dist = G.Geo.dist(c.lon, c.lat, d.lon, d.lat);
     return { kind: 'confirm', disc: d.id, title: '「' + d.name + '」 소문 확인',
       advance: 300, reward: Math.max(1200, round100(d.val * (0.28 + 0.03 * (sp.wealth || 2)))), fame: 0, years: dist > 18 ? 2 : 1,
-      desc: '요즘 이런 소문이 도네. ' + d.hint + ' 정말인지 가서 확인해 오게.' };
+      desc: '요즘 이런 소문이 도네. ' + G.Disc.hintText(d) + ' 정말인지 가서 확인해 오게.' };
   }
   function round100(x) { return Math.max(100, Math.round(x / 100) * 100); }
 

@@ -166,6 +166,10 @@
       if (G.Sim && G.Sim.pending()) await G.Sim.check();         // 공양미 삼백 석 — 심청 (js/systems/simcheong.js)
       if (G.IncaFall && G.IncaFall.pending()) await G.IncaFall.check();   // 잉카 제국의 멸망 — 파나마·카하마르카·쿠스코 (js/systems/incafall.js)
       if (G.Aztec && G.Aztec.pending()) await G.Aztec.check();
+      if (G.Nzinga && G.Nzinga.pending()) await G.Nzinga.check();   // 은징가 여왕의 저항 — 루안다 (js/systems/nzinga.js)
+      if (G.GoaMal && G.GoaMal.pending()) await G.GoaMal.check();   // 포르투갈의 고아·말라카 점령 — 코친·고아·말라카 (js/systems/goamalacca.js)
+      if (G.Mina && G.Mina.pending()) await G.Mina.check();   // 엘미나 요새 건설 — 리스본·산호르헤 (js/systems/elmina.js)
+      if (G.Mughal && G.Mughal.pending()) await G.Mughal.check();   // 무굴 제국의 성립 — 디우·카불·델리 (js/systems/mughal.js)
       if (G.Napoleon && G.Napoleon.pending()) await G.Napoleon.check();   // 오스트리아의 살롱 — 조제핀과 나폴레옹의 일기토 (js/systems/napoleon.js)   // 아즈텍 제국의 멸망 — 쿠바·베라크루스·투라스칼라·테노치티틀란 (js/systems/aztec.js)
       if (G.Pocahontas && G.Pocahontas.pending()) await G.Pocahontas.check();   // 포카혼타스의 중재 — 북·중앙아메리카 항구 (js/systems/pocahontas.js)
     } catch (e) { console.error(e); }
@@ -233,6 +237,8 @@
     if (G.Romance) { try { await G.Romance.arrival(c); } catch (e) { console.error(e); } }   // 부하들 사이의 썸 — 혼례는 항구에서
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
     if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }
+    if (G.Kongo) { try { await G.Kongo.arrival(c); } catch (e) { console.error(e); } }   // 포르투갈과 콩고: 리스본(국왕의 명·보고) · 르완다(돌려보내기·세례)
+    if (G.Teppo) { try { await G.Teppo.arrival(c); } catch (e) { console.error(e); } }   // 철포 삼백 자루: 일본 항구에서 도키치로의 부탁 → 사카이에서 노부나가에게 전한다
     if (G.Gyeonwoo) { try { await G.Gyeonwoo.arrival(c); } catch (e) { console.error(e); } }   // 견우와 직녀: 거북선으로 조선 도시 → 항주 → 사카이 → 한산도
     if (G.Colony && c.colony != null) { try { await G.Colony.arrival(c); } catch (e) { console.error(e); } }   // 개척지에 닻을 내리면 도시를 세운다 · 개척 물자   // 사라진 왕녀: 에스파냐 땅에서 전령이 부름을 전한다
     if (G.Disaster) { try { await G.Disaster.arrival(c); } catch (e) { console.error(e); } }   // 재해가 덮친 도시의 모습 · 구호금   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
