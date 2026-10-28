@@ -18,6 +18,7 @@ from portrait_asset_layout import detect_face
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'artifacts/history-event-art-20261028'
 SPECS = ROOT/'tools/history_event_art_prompts.json'
+FACE_SIZE = (1024, 1024)  # 원본 해상도를 줄이지 않는 대화창 얼굴상 규격
 
 
 def save_asset(image,path,**options):
@@ -52,7 +53,8 @@ def materialize():
         target=ROOT/'images'/(portrait_dir+'/'+ident+'_half.webp' if asset['type']=='portrait' else 'legend-events/'+ident+'.webp')
         row=cached.get((asset['type'],ident))
         valid=bool(row and target.exists() and target.stat().st_mtime>=origin.stat().st_mtime
-          and row.get('crop')==asset.get('crop') and row.get('face_crop')==asset.get('face_crop'))
+          and row.get('crop')==asset.get('crop') and row.get('face_crop')==asset.get('face_crop')
+          and (asset['type']!='portrait' or row.get('face_size')==list(FACE_SIZE)))
         if valid:
             paths=[target]
             if asset['type']=='portrait':
@@ -82,14 +84,14 @@ def materialize():
                 # 사람 얼굴 검출기가 읽지 못하는 동물 화자의 수동 검수 영역.
                 x0,y0,x1,y1=asset['face_crop']
                 face=canvas.crop((round(x0*1024),round(y0*1536),round(x1*1024),round(y1*1536)))
-                face=ImageOps.fit(face,(448,448),Image.Resampling.LANCZOS)
+                face=ImageOps.fit(face,FACE_SIZE,Image.Resampling.LANCZOS)
             else:
-                face = face_square(canvas).resize((448,448),Image.Resampling.LANCZOS)
+                face = face_square(canvas).resize(FACE_SIZE,Image.Resampling.LANCZOS)
             path = ROOT/'images'/portrait_dir/ident
             path.parent.mkdir(parents=True,exist_ok=True)
             save_asset(canvas,str(path)+'_half.webp',quality=94,method=6,exact=True)
             save_asset(face,str(path)+'.webp',quality=94,method=6,exact=True)
-            report.append({'id':ident,'type':'portrait','size':[1024,1536],'face_size':[448,448],
+            report.append({'id':ident,'type':'portrait','size':[1024,1536],'face_size':list(FACE_SIZE),
                 'detected_face':detect_face(canvas),'alpha_range':alpha.getextrema(),
                 **({'crop':asset['crop']} if asset.get('crop') else {}),
                 **({'face_crop':asset['face_crop']} if asset.get('face_crop') else {})})

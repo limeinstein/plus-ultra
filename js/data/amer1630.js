@@ -8,7 +8,7 @@
    ■ 대학 10곳: 아이비리그 8 + 스탠퍼드 + 존스 홉킨스 — 언제 가도 「신기루로 본 발견」(alwaysMirage), 1650년부터 (mirageFrom)
      · 발견 직후 부하 한 사람이 「나 같은 사람들도 배울 수 있는 학교라니…」 같은 바람을 말한다 (G.DISC_WISH · js/systems/discvoice.js DV.wish)
    ■ 단서 이름(G.DISC_NAMES)과 특기별 관찰 2개(G.DISC_FACTS)를 함께 넣는다 — 대사가 너무 많지 않게 2개씩
-   ■ 그림은 아직 없다 — 발견물은 갈래 그림(discovery-cats/<갈래>), 지도는 기본 표식으로 나온다
+   ■ 개별 발견 GIF 70종 — discoveries/<ID>.gif · discovery-ends/<ID>.jpg · discovery-sheets/<ID>.webp (docs/art/amer1630-gifs.md)
    글은 실제 자료를 바탕으로 이 게임을 위해 새로 썼다. */
 (function (G) {
   'use strict';

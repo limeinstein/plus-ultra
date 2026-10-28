@@ -1,0 +1,176 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-10-29",
+  "assets": [
+    {
+      "id": "gardiner",
+      "name": "스티븐 가디너",
+      "prompt": "Use case: stylized-concept. One finished production portrait for a Renaissance ocean adventure RPG. Clearly painted 2D game illustration with modeled facial planes, visible restrained brushwork and matte skin, consistent with reference's material detail but less photographic. Single adult character, vertical 1024x1536, entire head and headgear and both hands safely inside frame with margins. Head through kneecaps only, bottom edge cuts directly at kneecaps; no shins, ankles, feet, shoes, ground or pedestal. Natural adult proportions, no stretched torso or short thick legs. Genuinely transparent alpha background, clean silhouette with no scenery, backdrop, shadow, text, logo, border or watermark. Reference is rendering style only, do NOT duplicate its face or clothes. Stephen Gardiner, English royal envoy in Henry VIII's marriage-annulment petition, represented as a mature English church diplomat around age 45. Long lean face, shrewd slightly tired brown eyes, straight prominent nose, clean shaven, brown hair mostly hidden under a black square Tudor clerical cap. Black wool scholar-cleric robe with dark fur-lined shoulders over a simple white linen neck opening, leather belt, small plain cross. Holds a rolled sealed petition and a small leather document case with both hands at waist, cautious intelligent serious expression, composed three-quarter stance. Period-inspired game interpretation rather than a claim of exact historical facial reconstruction.",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/rivals/찰스 하워드_half.webp"
+      ]
+    },
+    {
+      "id": "tudor_tower_guard",
+      "name": "런던 탑의 위병",
+      "prompt": "Use case: stylized-concept. One finished production portrait for a Renaissance ocean adventure RPG. Clearly painted 2D game illustration with modeled facial planes, visible restrained brushwork and matte skin, consistent with reference's material detail but less photographic. Single adult character, vertical 1024x1536, entire head and headgear and both hands safely inside frame with margins. Head through kneecaps only, bottom edge cuts directly at kneecaps; no shins, ankles, feet, shoes, ground or pedestal. Natural adult proportions, no stretched torso or short thick legs. Genuinely transparent alpha background, clean silhouette with no scenery, backdrop, shadow, text, logo, border or watermark. Reference is rendering style only, do NOT duplicate its face or clothes. One original fictional adult English Tower of London guard, age 42, sturdy but naturally proportioned, thick short black hair, a broad square jaw, broken-looking broad nose, dark thick eyebrows, close black beard and watchful deep-set eyes; face clearly different from a refined noble admiral. Early Tudor red wool guard coat with simple pale royal badge, dark leather belt and gloves, black flat Tudor cap, dark hose visible only through knees. Holds a period halberd upright at his side with its head fully inside the top safe margin; other hand grips a ring of iron prison keys at belt. Alert but not villainous, looks slightly toward viewer.",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        0.94
+      ],
+      "transparent_background": true,
+      "refs": []
+    },
+    {
+      "id": "papal_legate",
+      "name": "교황의 사절",
+      "prompt": "Use case: stylized-concept. One finished production portrait for a Renaissance ocean adventure RPG. Clearly painted 2D game illustration with modeled facial planes, visible restrained brushwork and matte skin, consistent with reference's material detail but less photographic. Single adult character, vertical 1024x1536, entire head and headgear and both hands safely inside frame with margins. Head through kneecaps only, bottom edge cuts directly at kneecaps; no shins, ankles, feet, shoes, ground or pedestal. Natural adult proportions, no stretched torso or short thick legs. Genuinely transparent alpha background, clean silhouette with no scenery, backdrop, shadow, text, logo, border or watermark. Reference is rendering style only, do NOT duplicate its face or clothes. One original fictional adult Italian papal diplomat around age 57, clearly distinct from an English cleric. Very long thin olive face, pronounced hooked nose, bald crown with wisps of grey hair at sides, entirely clean-shaven cheeks and chin, small deep-set dark eyes, arched thin brows, diplomatic restrained expression. Dark plum clerical mantle over charcoal cassock, modest silver cross pendant, no hat, no papal tiara and no cardinal grandeur. One hand presents a folded parchment dispatch with red wax seal, the other holds a closed prayer book at his waist. Composed three-quarter stance, sober Renaissance court diplomacy.",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "refs": []
+    },
+    {
+      "id": "barb_charles_audience",
+      "name": "카를 5세의 부름",
+      "people": [
+        "charles"
+      ],
+      "subject": "1543, a private imperial audience chamber. Emperor Charles V, matching his existing portrait, sits beside a broad oak table with a hand-drawn Mediterranean sea chart and sealed dispatches, pointing toward Provence and Genoa. An original adult sea captain seen from the back listens in foreground. Window light, dark wood, restrained imperial gold and black. This is a worried diplomatic briefing about Barbarossa, no giant battle or new extra named figure.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. 1543, a private imperial audience chamber. Emperor Charles V, matching his existing portrait, sits beside a broad oak table with a hand-drawn Mediterranean sea chart and sealed dispatches, pointing toward Provence and Genoa. An original adult sea captain seen from the back listens in foreground. Window light, dark wood, restrained imperial gold and black. This is a worried diplomatic briefing about Barbarossa, no giant battle or new extra named figure."
+    },
+    {
+      "id": "barb_toulon_winter",
+      "name": "바르바로사 — 툴롱의 겨울",
+      "people": [
+        "hayreddin",
+        "sinan",
+        "sokollu",
+        "piyale"
+      ],
+      "subject": "Winter 1543-1544 in Toulon harbor temporarily hosting the Ottoman fleet. On a broad anchored Ottoman galley quarterdeck Hayreddin Barbarossa, matching white turban white-grey beard red-striped fur kaftan, welcomes an adult visiting sea captain seen from behind. Sinan Pasha with white beard and chart stands to his left, Sokollu with neat court turban and dark beard and young Piyale with fine beard stand nearby. Behind them compact rows of long oared galleys with furled sails, cold harbor sky and French stone waterfront. Four distinct commanders in a calm guarded meeting; preserve each reference identity, no modern telescope.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. Winter 1543-1544 in Toulon harbor temporarily hosting the Ottoman fleet. On a broad anchored Ottoman galley quarterdeck Hayreddin Barbarossa, matching white turban white-grey beard red-striped fur kaftan, welcomes an adult visiting sea captain seen from behind. Sinan Pasha with the same dark beard as his portrait and chart stands to his left, Sokollu with tall court turban and white beard and Piyale with his reference's turban and brown beard stand nearby. Behind them compact rows of long oared galleys with furled sails, cold harbor sky and French stone waterfront. Four distinct commanders in a calm guarded meeting; preserve each reference identity, no modern telescope."
+    },
+    {
+      "id": "barb_genoa_ransom",
+      "name": "제노바 — 투르구트의 몸값",
+      "people": [
+        "hayreddin",
+        "adoria",
+        "turgut"
+      ],
+      "subject": "1544, a Genoese palazzo room overlooking the harbor. Two elderly admirals Hayreddin Barbarossa in massive white turban red-striped fur kaftan and Andrea Doria with long white beard black aristocratic clothes sit across a long table negotiating calmly. Turgut Reis, same existing dark-bearded turbaned face, stands near the table with loose iron wrist shackles held low, no wounds or suffering. A small pouch with gold ducats and a sealed agreement lies between admirals. Masts of galleys visible through tall window, tense elegant diplomacy, no readable writing, no violence.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. 1544, a Genoese palazzo room overlooking the harbor. Two elderly admirals Hayreddin Barbarossa in massive white turban red-striped fur kaftan and Andrea Doria with long white beard black aristocratic clothes sit across a long table negotiating calmly. Turgut Reis, same existing grey-bearded turbaned face, stands near the table with loose iron wrist shackles held low, no wounds or suffering. A small pouch with gold ducats and a sealed agreement lies between admirals. Masts of galleys visible through tall window, tense elegant diplomacy, no readable writing, no violence."
+    },
+    {
+      "id": "tudor_marriage_petition",
+      "name": "튜더 왕실 — 혼인 무효 청원",
+      "people": [
+        "henry",
+        "gardiner"
+      ],
+      "subject": "A Tudor royal private chamber in the late 1520s. Henry VIII, matching supplied existing portrait's broad face and royal outfit, sits at a table under warm window light. Stephen Gardiner, the same newly designed lean clean-shaven black-capped church diplomat with fur-lined black robe, stands nearby presenting a sealed petition and document case. Original adult visiting captain with back to camera listens. A map of the route from England to Rome and rolled papers on table, private worried political request, no bride or invented romantic scene.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. A Tudor royal private chamber in the late 1520s. Henry VIII, matching supplied existing portrait's broad face and royal outfit, sits at a table under warm window light. Stephen Gardiner, the same newly designed lean clean-shaven black-capped church diplomat with fur-lined black robe, stands nearby presenting a sealed petition and document case. Original adult visiting captain with back to camera listens. A map of the route from England to Rome and rolled papers on table, private worried political request, no bride or invented romantic scene."
+    },
+    {
+      "id": "calais_fireships",
+      "name": "칼레 — 여덟 척의 화선",
+      "people": [
+        "howard",
+        "winter",
+        "drake"
+      ],
+      "subject": "Night off Calais in 1588. On an English galleon's quarterdeck Howard, Winter and Drake with the same supplied faces, beards and clothes watch eight burning unmanned fireships drift toward distant anchored Spanish galleons. Howard holding baton and Winter pointing across water, Drake alert beside them. Faces read in reflected orange light, cool night sea, broken crescent formation of distant ships cutting anchors. Wide naval atmosphere, no burning people or injuries, no steamships, no modern guns.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. Night off Calais in 1588. On an English galleon's quarterdeck Howard, Winter and Drake with the same supplied faces, beards and clothes watch eight burning unmanned fireships drift toward distant anchored Spanish galleons. Howard holding baton and Winter pointing across water, Drake alert beside them. Faces read in reflected orange light, cool night sea, broken crescent formation of distant ships cutting anchors. Wide naval atmosphere, no burning people or injuries, no steamships, no modern guns."
+    },
+    {
+      "id": "calais_council",
+      "name": "그라블린 — 잉글랜드 작전 회의",
+      "people": [
+        "howard",
+        "drake",
+        "hawkins",
+        "winter"
+      ],
+      "subject": "Dawn 1588 after the fireship night, aboard English flagship Ark Royal. Four distinct English commanders Howard, Drake, Hawkins and Winter crowd naturally around a weathered chart table on open quarterdeck. Howard leads with baton, Hawkins points to gunnery distances on a chart, elderly white-bearded Winter watches, Drake listens firmly. Existing respective clothing and faces exactly recognizable. Behind them English galleons and distant scattered Spanish sails in pink-grey Channel haze. Thoughtful planning before battle, no invented extra admiral and no modern navigation instruments.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. Dawn 1588 after the fireship night, aboard English flagship Ark Royal. Four distinct English commanders Howard, Drake, Hawkins and Winter crowd naturally around a weathered chart table on open quarterdeck. Howard leads with baton, Hawkins points to gunnery distances on a chart, elderly white-bearded Winter watches, Drake listens firmly. Existing respective clothing and faces exactly recognizable. Behind them English galleons and distant scattered Spanish sails in pink-grey Channel haze. Thoughtful planning before battle, no invented extra admiral and no modern navigation instruments."
+    },
+    {
+      "id": "lepanto_allied_council",
+      "name": "레판토 — 신성 동맹 작전 회의",
+      "people": [
+        "donjuan",
+        "colonna",
+        "venier"
+      ],
+      "subject": "Morning 1571 before Lepanto, aboard the Holy League flagship Real. Young Don Juan of Austria in supplied ornate armor and red sash commands beside a sea chart, Marcantonio Colonna with dark beard and papal red outer garment listens on left, elderly long white-bearded Venetian commander Sebastiano Venier in red robe and armor stands on right, determined. Other officers anonymous in background, galley oars and furled sails across blue water, modest cross banner without readable lettering. Faces match references and remain clear. No battle injuries, no modern ships.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. Morning 1571 before Lepanto, aboard the Holy League flagship Real. Young Don Juan of Austria in supplied ornate armor and red sash commands beside a sea chart, Marcantonio Colonna with dark beard and papal red outer garment listens on left, elderly long white-bearded Venetian commander Sebastiano Venier in red robe and armor stands on right, determined. Other officers anonymous in background, galley oars and furled sails across blue water, modest cross banner without readable lettering. Faces match references and remain clear. No battle injuries, no modern ships."
+    },
+    {
+      "id": "lepanto_ottoman_council",
+      "name": "레판토 — 오스만 기함",
+      "people": [
+        "alipasha",
+        "uluch",
+        "suluk"
+      ],
+      "subject": "Morning 1571 on Ottoman flagship Sultana before Lepanto. Muezzinzade Ali Pasha, supplied black beard large white turban silk kaftan, studies a chart on deck. Uluç Ali with rough reddish beard turban and leather vest gestures toward open sea; lean Suluq Mehmed with green turban and armor points toward distant coast. Three unmistakably different faces matching references. Rows of Ottoman oared galleys behind, green and red textile accents, calm tense command meeting. No combat wounds, no modern flag symbols or invented readable calligraphy.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. Morning 1571 on Ottoman flagship Sultana before Lepanto. Muezzinzade Ali Pasha, supplied black beard large white turban silk kaftan, studies a chart on deck. Uluç Ali with rough reddish beard turban and leather vest gestures toward open sea; lean Suluq Mehmed with green turban and armor points toward distant coast. Three unmistakably different faces matching references. Rows of Ottoman oared galleys behind, green and red textile accents, calm tense command meeting. No combat wounds, no modern flag symbols or invented readable calligraphy."
+    },
+    {
+      "id": "tudor_rome_petition",
+      "name": "로마 — 교황의 답변",
+      "type": "scene",
+      "transparent_background": false,
+      "people": [
+        "pope",
+        "gardiner"
+      ],
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. Rome, papal audience chamber in late 1520s. Pope Clement VII with the same face, beard, papal cap and garments as supplied game portrait sits in a carved chair beside an oak table. English envoy Stephen Gardiner with matching newly designed lean clean-shaven face, black square cap and fur-lined black robe presents a rolled sealed petition. An original adult captain seen from behind stands quietly nearby. The pope gravely raises a hand in refusal, Gardiner listens tensely. Renaissance stone architecture, tapestry and tall window light, a private diplomatic rejection. No inquisitorial violence or invented extra named figures."
+    },
+    {
+      "id": "calais_spanish_council",
+      "name": "칼레 — 무적함대의 기함",
+      "type": "scene",
+      "transparent_background": false,
+      "people": [
+        "medina",
+        "recalde",
+        "oquendo"
+      ],
+      "prompt": "Use case: historical-scene. One panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG. Hand-painted 2D digital oil game art, restrained expressive brushwork, matte painted faces, tactile materials, atmospheric depth, natural anatomy. Attached character portraits are identity and costume references only: preserve matching faces, age, hair, beard and clothing while staging them organically in new action; do not paste cutouts or reproduce portrait backgrounds. Medium-wide scene with key faces and gestures inside central 80 percent and safe crop room at top and bottom. No text, UI, logo, watermark, border, collage or readable writing. Aboard Spanish Armada flagship San Martin at grey dawn after the fireship attack in 1588. Medina Sidonia matching supplied aristocratic dark hair and short beard looks worried over a sea chart. Recalde matching rugged beard and worn cuirass leans forward firmly; elderly white-bearded Oquendo with Basque beret and armor points through an open window toward scattered galleons. Keep three distinct existing game faces and respective clothes. Chart table, swinging lantern, damp wood, distant smoke at sea. Tense command meeting with no injury, gore, readable writing or modern instruments."
+    }
+  ]
+}

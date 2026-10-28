@@ -92,7 +92,7 @@
     delete s.flags['gone_' + id];
     if (R.tidyCaptains) R.tidyCaptains();
     var role = G.ROLES.map(function (r) { return r.id; }).filter(function (rid) { return !s.mates.some(function (x) { return x.role === rid; }); })[0] || 'none';
-    var nm = { id: id, role: role, joined: today(), loyal: loyal || 70, from: cityNow() };
+    var nm = { id: id, role: role, ev: 1, joined: today(), loyal: loyal || 70, from: cityNow() };   // ev: 사건으로 얻은 부하 (이별에서 뺀다 — js/systems/mateleave.js)
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }
     s.mates.push(nm);
     if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)

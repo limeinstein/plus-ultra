@@ -43,7 +43,7 @@
     var s = S(), m = G.MATE[id]; if (!m || row(id)) return null;
     if (R.tidyCaptains) R.tidyCaptains();
     var role = G.ROLES.map(function (r) { return r.id; }).filter(function (rid) { return !s.mates.some(function (x) { return x.role === rid; }); })[0] || 'none';
-    var nm = { id: id, role: role, joined: U.dateNum(s.date), loyal: K().loyal || 80, from: c ? c.id : (s.loc && s.loc.city != null ? s.loc.city : s.player.home) };
+    var nm = { id: id, role: role, ev: 1, joined: U.dateNum(s.date), loyal: K().loyal || 80, from: c ? c.id : (s.loc && s.loc.city != null ? s.loc.city : s.player.home) };
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }
     s.mates.push(nm);
     if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)

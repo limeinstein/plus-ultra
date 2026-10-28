@@ -11,8 +11,12 @@
     wangchengen: { name: '왕승은', title: '사례감 병필태감 · 황제 곁에 끝까지 남은 환관', st: 'cn', role: 'noble', born: 1600, look: '40대, 수염 없는 둥근 얼굴, 검은 환관 모자와 짙은 붉은 옷, 등불을 든 떨리는 손' },
     schall: { name: '아담 샬 폰 벨', full: 'Johann Adam Schall von Bell (중국 이름 탕약망)', title: '예수회 신부 · 명의 흠천감에서 일하는 독일인', st: 'ne', role: 'priest', born: 1592, look: '50대, 길고 흰 수염, 명나라 학자의 검은 관과 비단 도포, 목에 작은 십자가, 손에 대포 주조 도면' },
     // ── 대순(이자성의 나라)
-    liuzongmin: { name: '유종민', title: '대순의 권장군 · 북경을 차지한 장수', st: 'cn', role: 'soldier', born: 1609, look: '30대, 거친 수염과 그을린 얼굴, 대순의 붉은 전포 위에 쇠비늘 갑옷, 술잔과 칼, 오만한 웃음' }
+    liuzongmin: { name: '유종민', title: '대순의 권장군 · 북경을 차지한 장수', st: 'cn', role: 'soldier', born: 1609, look: '30대, 거친 수염과 그을린 얼굴, 대순의 붉은 전포 위에 쇠비늘 갑옷, 술잔과 칼, 오만한 웃음' },
+    ming_old_maid: { name: '늙은 궁녀', title: '황제의 편지를 보관한 옛 궁녀', st: 'cn', role: 'noble', g: 'f', fiction: true, look: '회색 쪽머리의 노년 여성, 빛바랜 청회색 겹옷, 노란 비단에 싼 편지와 옥비녀' },
+    ming_gate_guard: { name: '대순의 문지기', title: '유종민 저택의 문지기', st: 'cn', role: 'soldier', fiction: true, look: '붉은 군모와 검은 누비 군복, 짧은 콧수염, 창을 가로막는 손' },
+    qing_banner_soldier: { name: '청나라 기병', title: '북경의 팔기군 기병', st: 'cn', role: 'soldier', fiction: true, look: '변발, 남색 찰갑 군복과 붉은 깃, 말고삐와 활집' }
   };
   Object.keys(L).forEach(function (id) { if (!F[id]) { L[id].id = id; F[id] = L[id]; } });
-  G.MINGFALL_FIGS = Object.keys(L);
+  G.MINGFALL_FIGS = ['chongzhen', 'wangchengen', 'schall', 'liuzongmin'];
+  G.MINGFALL_EXTRAS = ['ming_old_maid', 'ming_gate_guard', 'qing_banner_soldier'];
 })(window.G = window.G || {});

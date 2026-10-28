@@ -112,7 +112,7 @@
       if (!again) { l.declined = 1; await UI.say('…아쉽군요. 하지만 이해합니다. 저는 여기서 기다리겠습니다. 언젠가 제 발명품이 당신의 항해에 쓸모가 있기를 바랍니다. 우리 우정이 깊어지거든, 제가 만든 것을 보내 드리지요.', who); }
       return false;
     }
-    s.mates.push({ id: 'leonardo', role: 'none', loyal: 95 });
+    s.mates.push({ id: 'leonardo', role: 'none', ev: 1, loyal: 95 });   // ev: 사건으로 얻은 부하 (이별에서 뺀다 — js/systems/mateleave.js)
     l.joined = U.dateNum(s.date); l.declined = 0;
     await UI.say('고맙습니다! 공책과 붓, 그리고 마음만 챙기면 됩니다. 아, 그리고 — 당신의 생일이 돌아올 때마다 제가 만든 것을 하나씩 드리겠습니다. 항해의 값이라 생각해 주십시오.', { name: '레오나르도 다 빈치', portrait: G.Scenes.mateSpec('leonardo'), half: G.Img.chain.mateHalf('leonardo'), lang: 3 });
     G.State.log('레오나르도 다 빈치가 배에 올랐다.');

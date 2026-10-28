@@ -79,7 +79,7 @@
   }
   function pic(key, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/' + key, title: title }) : { stop: function () { return Promise.resolve(); } }; }
   async function withPic(key, title, fn) { var pc = pic(key, title); try { return await fn(); } finally { await pc.stop(); } }
-  var MAID = { name: '늙은 궁녀', lang: 3 }, GATE = { name: '대순의 문지기', lang: 3 }, BANNER = { name: '청나라 기병', lang: 3 };
+  var MAID = H('ming_old_maid'), GATE = H('ming_gate_guard'), BANNER = H('qing_banner_soldier');
   function giveLetter() {
     var p = S().player; if (hasLetter()) return;
     p.items.push({ id: LETTER, kind: 'keepsake', name: '숭정제의 마지막 편지', desc: '1644년 봄, 명의 마지막 황제 숭정제가 「원원에게」라고 겉봉에 쓴 편지. 노란 비단에 싸여 있고, 매화를 새긴 옥비녀 하나가 함께 들어 있다. 「짐이 떠난 뒤에」 전해 달라고 했다.' });

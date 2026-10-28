@@ -1,0 +1,704 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-10-29",
+  "assets": [
+    {
+      "id": "nw_mendoza",
+      "name": "멘도사 추기경",
+      "group": "newworld",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Cardinal Pedro Gonzalez de Mendoza, Spanish church statesman in his mid sixties. Long narrow clean-shaven face with relaxed clever smile, red cardinal hat and scarlet mantle, large ring, hands calmly holding a sealed court letter. Late fifteenth-century court cleric, no papal tiara."
+    },
+    {
+      "id": "nw_ovando",
+      "name": "오반도 총독",
+      "group": "newworld",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Nicolas de Ovando, Spanish colonial governor in his forties. Distinct narrow cold eyes, neatly trimmed short grey beard, angular hard jaw. Opaque white Calatrava knight's mantle with simple red cross over black Renaissance doublet, leather belt, holds a closed account ledger and rolled decree."
+    },
+    {
+      "id": "nw_montesinos",
+      "name": "몬테시노스 수사",
+      "group": "newworld",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Anton de Montesinos, Dominican friar in his thirties. Broad earnest clean-shaven face, shaved tonsure, dark intent eyes, white Dominican habit under black mantle, one hand raised emphatically in a sermon gesture, other holds small closed prayer book. Passionate moral conviction, dignified posture."
+    },
+    {
+      "id": "nw_lascasas",
+      "name": "라스 카사스",
+      "group": "newworld",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Bartolome de Las Casas as a young adult priest age 29. Round full clean-shaven thoughtful face, close brown hair, deep reflective brown eyes and troubled gentle expression. Simple black priest's robe and narrow white collar, both hands clasp a small prayer book close to his abdomen."
+    },
+    {
+      "id": "nw_enriquillo",
+      "name": "엔리키요",
+      "group": "newworld",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Enriquillo, adult Taino leader age 25, copper-brown skin, straight shoulder-length black hair, strong cheekbones, firm attentive eyes. Shell and stone necklace, plain loose off-white Spanish linen shirt with open collar and wide woven cotton belt, simple opaque earth-toned knee-length cotton wrap. No feather warbonnet, no caricature. One hand on belt, one presents a small carved stone cemi."
+    },
+    {
+      "id": "nw_cacique",
+      "name": "타이노 추장",
+      "group": "newworld",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. An original adult Taino village chief around age 54, copper-brown weathered skin, long straight black hair streaked grey, tired but dignified eyes, lean mature face. Small feather and cotton headband, broad woven opaque cotton mantle and knee-length cotton wrap, muted red and black painted arm motifs, round gold guanin pendant. Holds a wooden ceremonial staff, no weapons drawn and no exotic caricature."
+    },
+    {
+      "id": "chongzhen",
+      "name": "숭정제",
+      "group": "mingfall",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Chongzhen emperor in the game's 1644 storyline, Chinese man in early thirties, gaunt pale face, short thin mustache and pointed beard, sleepless reddened eyes, black hair in a loosened Ming topknot. Plain white layered Ming robe instead of imperial yellow dragon robes. One hand holds a writing brush, the other a folded letter wrapped in yellow silk. Controlled sorrow and resolve, dignified natural posture. No self-harm imagery."
+    },
+    {
+      "id": "wangchengen",
+      "name": "왕승은",
+      "group": "mingfall",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Wang Chengen, Chinese court eunuch in his forties, broad round clean-shaven face, worried expressive eyes, black Ming eunuch court cap, dark crimson robe with plain dark belt. Holds a small period lantern low in one hand and folded sleeve in other, subtle tremor in posture. No beard, no caricature."
+    },
+    {
+      "id": "schall",
+      "name": "아담 샬 폰 벨",
+      "group": "mingfall",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Johann Adam Schall von Bell, German Jesuit scholar at Ming court in his early fifties. Distinct European long face and long white-grey beard, black Ming scholar cap and dark silk scholar robe, small cross pendant. Holds a cannon-foundry drawing roll and pair of dividers, thoughtful technical concentration, no modern blueprints or machinery."
+    },
+    {
+      "id": "liuzongmin",
+      "name": "유종민",
+      "group": "mingfall",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Liu Zongmin, adult Chinese Dashun general age 35. Sunburned broad rugged face, thick coarse black beard, heavy eyebrows and arrogant faint grin. Red military robe with dark iron lamellar armor, sword sheathed at belt, one hand holds a small bronze wine cup and other rests on sword hilt. Historical game interpretation, no violence."
+    },
+    {
+      "id": "huallpa",
+      "name": "디에고 우알파",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Diego Huallpa, adult Andean llama herder in his thirties. Broad sun-weathered brown face, straight black hair, observant kind eyes, clean-shaven. Striped woven Andean wool poncho and warm ear-flap chullo cap, opaque earth-tone knee-length tunic, holds a coiled llama lead rope and a small rough piece of silver-bearing ore. Dignified practical expert."
+    },
+    {
+      "id": "villarroel",
+      "name": "후안 데 비야로엘",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Juan de Villarroel, Spanish mining claimant in his thirties. Long pointed face, short black beard, shrewd but reserved eyes. Worn steel breastplate over brown Renaissance doublet, broad-brimmed felt hat, sheathed sword and rolled mine registration document in hand. Dusty practical mining frontier clothes."
+    },
+    {
+      "id": "kusimayta",
+      "name": "쿠시 마이타",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Kusi Mayta, fictional Qaraqara kuraka around age 52. Distinct deeply lined brown Andean face, strong nose, grey-streaked straight hair, dignified worried eyes, clean-shaven. Gold ear plugs, red striped woven mantle over opaque dark wool tunic, wooden staff with carved knob, plain woven headband. Protective father, no caricature."
+    },
+    {
+      "id": "ayala",
+      "name": "로드리고 데 아얄라",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Rodrigo de Ayala, fictional Spanish encomendero age 44. Broad heavy full-cheeked face, small calculating eyes, pointed dark beard. Black velvet doublet and long coat, gold chain and several silver rings. One hand holds a small closed silver account book, other rests on waist. Affluent self-important posture, not a uniformed soldier."
+    },
+    {
+      "id": "mendo",
+      "name": "감독관 멘도",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Mendo, fictional Spanish mine overseer around age 35. Lean scarred angular face, stubble, dark cropped hair, hard focused eyes. Dark leather jerkin over coarse cream shirt, belt with a coiled whip and sheathed short sword; hands hold a closed key ring and a folded work tally. Whip stays coiled, no injuries or active violence."
+    },
+    {
+      "id": "chaska",
+      "name": "차스카",
+      "group": "potosi",
+      "portrait_dir": "portraits/legendary",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. Chaska, an original fictional adult Qaraqara Andean woman age 25, beautiful and poised, warm medium-brown skin, long black hair in two thick braids, luminous dark eyes and fine strong facial features, gentle confident smile. Wears a rich opaque red and indigo woven anacu dress and patterned lliqlla mantle fastened with a silver tupu pin, tasteful silver earrings, woven belt. Skilled silver craftswoman and singer, hands naturally holding a small clay silverworking crucible and a folded bright woven cloth at waist. Fully clothed, natural adult proportions, no exaggerated head or chest, no European ballgown or modern styling."
+    },
+    {
+      "id": "ming_old_maid",
+      "name": "늙은 궁녀",
+      "group": "mingfall",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. An original fictional elderly Chinese former palace attendant around age 63. Softly lined oval face, grey hair neatly pinned in a low Ming bun, sorrowful steady eyes. Faded muted blue-grey Ming woman's jacket and dark long skirt, plain wooden hairpin. Both hands respectfully present a small letter wrapped in yellow silk with a pale jade plum hairpin resting on the cloth. Dignified and resilient, no corpse or self-harm imagery."
+    },
+    {
+      "id": "ming_gate_guard",
+      "name": "대순의 문지기",
+      "group": "mingfall",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. An original fictional adult Chinese Dashun mansion gate guard around age 38. Broad square face, short thick mustache, black hair under a red cloth military cap, wary calculating eyes. Dark padded Ming-era guard jacket with red sash and a few lamellar panels. Holds a short period spear upright safely inside frame and keeps other palm out in a stop gesture, no modern uniform."
+    },
+    {
+      "id": "qing_banner_soldier",
+      "name": "청나라 기병",
+      "group": "mingfall",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. An original fictional adult Manchu Qing banner cavalryman around age 32, lean long face, trimmed small mustache, alert neutral eyes, shaved front scalp and single long queue braid visible behind shoulder. Seventeenth-century dark blue padded brigandine coat with brass studs and red collar, fur-trimmed cap, sheathed curved saber and bow case at waist. Stands dismounted holding horse reins, NO horse in portrait, no modern gun."
+    },
+    {
+      "id": "potosi_soldier",
+      "name": "에스파냐 병사",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. An original fictional adult Spanish frontier soldier around age 28, freckled angular face, short auburn hair and small reddish mustache. Plain steel morion helmet, worn grey breastplate over muted ochre doublet, brown leather gloves. Holds a period pike upright with head safely inside frame, other hand rests on belt. Grounded ordinary guard, not a rich noble."
+    },
+    {
+      "id": "potosi_arriero",
+      "name": "라마 몰이꾼",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. An original fictional adult Andean llama caravan handler around age 36. Narrow brown sun-weathered face, short black hair, cheerful knowing eyes, clean-shaven. Rust-red woven wool poncho, simple brown brimmed hat with woven band, dark opaque tunic ending at kneecaps. Holds a coiled rope and folded saddle blanket, resourceful practical posture."
+    },
+    {
+      "id": "potosi_oidor",
+      "name": "왕실 감찰관",
+      "group": "potosi",
+      "type": "portrait",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. One production character portrait for a historical ocean adventure RPG. Rich hand-painted 2D digital oil game illustration with visible brushwork, matte skin and modeled face planes, never photographic. Give this individual a clearly distinct face, not a repeated generic face. Single adult, vertical 1024x1536, whole head/headgear, shoulders and both hands safely inside frame. Knee-length composition cropped DIRECTLY THROUGH KNEECAPS at lower image edge, absolutely no calves, ankles, feet, shoes, floor, scenery, platform or cast shadow. Normal adult head size and natural uncompressed torso and thighs. Clean genuine transparent alpha background. No text, letters, labels, logo, watermark, border or second figure. An original fictional adult Spanish royal audiencia inspector around age 56. Narrow long clean-shaven face, grey temples, sharp judicious eyes. Severe black legal robe, flat black Renaissance scholar cap, narrow white linen collar. Holds a petition folio and quill, sober professional expression, no weapons and no cardinal robes."
+    },
+    {
+      "id": "nw_santafe",
+      "name": "산타페의 약속",
+      "group": "newworld",
+      "people": [
+        "colon"
+      ],
+      "subject": "1492, cold winter road outside Granada city gate. Columbus in same existing burgundy explorer clothes walks beside a mule bearing his sea-chart chest, head lowered after disappointment. A royal messenger on horseback approaches from behind raising a sealed summons. Distant Alhambra-like medieval towers on a hill, winter dust and early light, no later domed cathedral.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. 1492, cold winter road outside Granada city gate. Columbus in same existing burgundy explorer clothes walks beside a mule bearing his sea-chart chest, head lowered after disappointment. A royal messenger on horseback approaches from behind raising a sealed summons. Distant Alhambra-like medieval towers on a hill, winter dust and early light, no later domed cathedral."
+    },
+    {
+      "id": "nw_mutiny",
+      "name": "바다 한가운데의 사흘",
+      "group": "newworld",
+      "people": [
+        "colon"
+      ],
+      "subject": "October 1492 on Santa Maria's cramped wooden deck in endless Atlantic at sunset. Columbus stands under mast with both hands spread calmly, facing worried adult sailors protesting and pointing toward horizon, no physical fight. Green reeds floating on water and a few birds flying southwest suggest land nearby. Period rigging and sail, no telescope.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. October 1492 on Santa Maria's cramped wooden deck in endless Atlantic at sunset. Columbus stands under mast with both hands spread calmly, facing worried adult sailors protesting and pointing toward horizon, no physical fight. Green reeds floating on water and a few birds flying southwest suggest land nearby. Period rigging and sail, no telescope."
+    },
+    {
+      "id": "nw_guanahani",
+      "name": "과나하니의 아침",
+      "group": "newworld",
+      "people": [
+        "colon",
+        "nw_cacique"
+      ],
+      "subject": "Morning October 1492, pale Caribbean beach and turquoise sea. Columbus kneels on sand holding a plain Castilian expedition standard without readable letters; three small late-fifteenth-century sailing ships anchored offshore. A dignified Taino chief and fully clothed island adults approach cautiously from tree line carrying a parrot perch and cotton yarn. Respectful first encounter, wonder and uncertainty, no armed assault.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Morning October 1492, pale Caribbean beach and turquoise sea. Columbus kneels on sand holding a plain Castilian expedition standard without readable letters; three small late-fifteenth-century sailing ships anchored offshore. A dignified Taino chief and fully clothed island adults approach cautiously from tree line carrying a parrot perch and cotton yarn. Respectful first encounter, wonder and uncertainty, no armed assault."
+    },
+    {
+      "id": "nw_egg",
+      "name": "콜론의 달걀",
+      "group": "newworld",
+      "people": [
+        "colon",
+        "nw_mendoza"
+      ],
+      "subject": "A candlelit Barcelona banquet. One hard-boiled egg with slightly flattened cracked base stands UPRIGHT clearly at center of a long table. Columbus with same existing face stands arms folded, faint pleased smile. Scarlet-clad Cardinal Mendoza sits at head of table, adult nobles react with surprise. Parrot feathers and small gold pieces on table, rich late-medieval hall, no readable letters.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. A candlelit Barcelona banquet. One hard-boiled egg with slightly flattened cracked base stands UPRIGHT clearly at center of a long table. Columbus with same existing face stands arms folded, faint pleased smile. Scarlet-clad Cardinal Mendoza sits at head of table, adult nobles react with surprise. Parrot feathers and small gold pieces on table, rich late-medieval hall, no readable letters."
+    },
+    {
+      "id": "nw_encomienda",
+      "name": "엔코미엔다",
+      "group": "newworld",
+      "people": [
+        "nw_ovando",
+        "nw_cacique"
+      ],
+      "subject": "Early colonial Santo Domingo river landing, stone houses under construction. White-mantled Governor Ovando opens an account ledger in foreground while a worried Taino chief faces him. In background fully clothed Taino adult workers carry burdens up a path; horses, pigs and bundled sugarcane seedlings unloaded from boats. Unequal authority shown through distance and posture, no assault or wounds.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Early colonial Santo Domingo river landing, stone houses under construction. White-mantled Governor Ovando opens an account ledger in foreground while a worried Taino chief faces him. In background fully clothed Taino adult workers carry burdens up a path; horses, pigs and bundled sugarcane seedlings unloaded from boats. Unequal authority shown through distance and posture, no assault or wounds."
+    },
+    {
+      "id": "nw_sermon",
+      "name": "이들은 사람이 아닙니까",
+      "group": "newworld",
+      "people": [
+        "nw_montesinos",
+        "nw_ovando",
+        "nw_lascasas"
+      ],
+      "subject": "1511 in a humble thatched-roof island church. Dominican friar Montesinos in white habit and black mantle stands at wooden pulpit raising one hand with moral urgency. White-mantled governor and settlers in front row look uncomfortable. Young black-robed Las Casas in rear clasps hands thoughtfully. The SAME three reference faces, window light, no readable sermon text.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. 1511 in a humble thatched-roof island church. Dominican friar Montesinos in white habit and black mantle stands at wooden pulpit raising one hand with moral urgency. White-mantled governor and settlers in front row look uncomfortable. Young black-robed Las Casas in rear clasps hands thoughtfully. The SAME three reference faces, window light, no readable sermon text."
+    },
+    {
+      "id": "nw_pox",
+      "name": "마을을 돌보는 의원",
+      "group": "newworld",
+      "people": [
+        "nw_enriquillo",
+        "nw_cacique"
+      ],
+      "subject": "Taino village beside forest around 1518-1520. Round thatched bohio huts, a few fully clothed sick villagers resting quietly in hammocks under blankets. Adult European ship's healer with a plain cloth over mouth offers a bowl of water to a clothed child sitting upright with family nearby. Dignified chief and young Enriquillo wait nearby with herbs and boiling water pot. Compassionate care, exhaustion and slight hope; absolutely no lesions, wounds, death or graphic illness.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Taino village beside forest around 1518-1520. Round thatched bohio huts, a few fully clothed sick villagers resting quietly in hammocks under blankets. Adult European ship's healer with a plain cloth over mouth offers a bowl of water to a clothed child sitting upright with family nearby. Dignified chief and young Enriquillo wait nearby with herbs and boiling water pot. Compassionate care, exhaustion and slight hope; absolutely no lesions, wounds, death or graphic illness."
+    },
+    {
+      "id": "ming_foundry",
+      "name": "흠천감의 대포",
+      "group": "mingfall",
+      "people": [
+        "schall",
+        "wangchengen"
+      ],
+      "subject": "Beijing spring 1644, late-Ming cannon foundry courtyard. Grey-bearded Jesuit scholar Schall in black Ming scholar cap and robe with small cross explains a traditional cast bronze cannon and rolled drawing to a visiting adult sea captain seen from behind. Eunuch Wang Chengen in crimson robe with small lantern waits at doorway. Charcoal furnace and bronze casting molds, no modern machinery or modern guns.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Beijing spring 1644, late-Ming cannon foundry courtyard. Grey-bearded Jesuit scholar Schall in black Ming scholar cap and robe with small cross explains a traditional cast bronze cannon and rolled drawing to a visiting adult sea captain seen from behind. Eunuch Wang Chengen in crimson robe with small lantern waits at doorway. Charcoal furnace and bronze casting molds, no modern machinery or modern guns."
+    },
+    {
+      "id": "ming_meishan",
+      "name": "매산의 밤",
+      "group": "mingfall",
+      "people": [
+        "chongzhen",
+        "wangchengen"
+      ],
+      "subject": "Night before Beijing falls in 1644, quiet Meishan hillside overlooking dark palace roofs. Weary Chongzhen in plain white Ming robe, loose topknot and short beard, solemnly hands a yellow-silk-wrapped letter and jade hairpin to a visiting adult captain with back to camera. Wang Chengen holds a warm lantern beside him. No imperial suicide, rope, hanging body or weapon action. A living emperor's intimate last diplomatic request.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Night before Beijing falls in 1644, quiet Meishan hillside overlooking dark palace roofs. Weary Chongzhen in plain white Ming robe, loose topknot and short beard, solemnly hands a yellow-silk-wrapped letter and jade hairpin to a visiting adult captain with back to camera. Wang Chengen holds a warm lantern beside him. No imperial suicide, rope, hanging body or weapon action. A living emperor's intimate last diplomatic request."
+    },
+    {
+      "id": "ming_robe",
+      "name": "옷깃의 유언",
+      "group": "mingfall",
+      "people": [
+        "ming_old_maid"
+      ],
+      "subject": "Beijing alley after regime collapse, subdued early morning. Elderly former palace maid with SAME grey bun and faded blue-grey jacket grips a visiting adult captain's sleeve with one hand and presents a yellow silk-wrapped letter and jade hairpin with the other. Distant shuttered Ming houses and muted banners, grief and dignity, no corpse, self-harm objects or readable lettering.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Beijing alley after regime collapse, subdued early morning. Elderly former palace maid with SAME grey bun and faded blue-grey jacket grips a visiting adult captain's sleeve with one hand and presents a yellow silk-wrapped letter and jade hairpin with the other. Distant shuttered Ming houses and muted banners, grief and dignity, no corpse, self-harm objects or readable lettering."
+    },
+    {
+      "id": "ming_mansion",
+      "name": "대순의 저택",
+      "group": "mingfall",
+      "people": [
+        "liuzongmin",
+        "ming_gate_guard",
+        "chen"
+      ],
+      "subject": "A Beijing noble mansion taken over by Dashun forces in spring 1644, red banners over gate. Wary gate guard in red cap and padded armor blocks an adult visitor with a spear held across passage. Beyond gate Liu Zongmin in red robe and lamellar armor sits with a wine cup in courtyard; in a separate illuminated window the fully clothed adult singer Chen Yuanyuan in SAME cream-red Ming costume is visible with her pipa. Guarded residence and uneasy tension, no sexual violence, grabbing or restraint.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. A Beijing noble mansion taken over by Dashun forces in spring 1644, red banners over gate. Wary gate guard in red cap and padded armor blocks an adult visitor with a spear held across passage. Beyond gate Liu Zongmin in red robe and lamellar armor sits with a wine cup in courtyard; in a separate illuminated window the fully clothed adult singer Chen Yuanyuan in SAME cream-red Ming costume is visible with her pipa. Guarded residence and uneasy tension, no sexual violence, grabbing or restraint."
+    },
+    {
+      "id": "ming_tree",
+      "name": "매산의 홰나무",
+      "group": "mingfall",
+      "people": [
+        "chen",
+        "qing_banner_soldier"
+      ],
+      "subject": "Summer 1644 Meishan hillside. Chen Yuanyuan, SAME adult face, cream floral Ming robe, red shawl and pipa, kneels quietly beneath a living old scholar tree beside a single incense holder, looking up with grief. At a respectful distance below hill a dismounted Qing banner cavalryman holds horse reins. Distant old palace roofs and light haze. No rope, hanging, corpse or self-harm means. A scene of remembrance and a living woman's decision.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Summer 1644 Meishan hillside. Chen Yuanyuan, SAME adult face, cream floral Ming robe, red shawl and pipa, kneels quietly beneath a living old scholar tree beside a single incense holder, looking up with grief. At a respectful distance below hill a dismounted Qing banner cavalryman holds horse reins. Distant old palace roofs and light haze. No rope, hanging, corpse or self-harm means. A scene of remembrance and a living woman's decision."
+    },
+    {
+      "id": "ming_join",
+      "name": "노래가 들리는 곳으로",
+      "group": "mingfall",
+      "people": [
+        "chen"
+      ],
+      "subject": "Early morning on a wooden river boat at Beijing's old canal wharf. Adult Chen Yuanyuan in SAME cream-red floral Ming dress and hair ornaments holds her pipa and folded letter, faces a visiting sea captain seen from behind and asks to travel. Gentle resolved expression rather than tears, water reflecting pale light, low period buildings and bundles ready for departure. No open ocean harbor or modern skyline.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Early morning on a wooden river boat at Beijing's old canal wharf. Adult Chen Yuanyuan in SAME cream-red floral Ming dress and hair ornaments holds her pipa and folded letter, faces a visiting sea captain seen from behind and asks to travel. Gentle resolved expression rather than tears, water reflecting pale light, low period buildings and bundles ready for departure. No open ocean harbor or modern skyline."
+    },
+    {
+      "id": "potosi_wayra",
+      "name": "은산의 바람 화로",
+      "group": "potosi",
+      "people": [
+        "huallpa",
+        "villarroel",
+        "kusimayta",
+        "chaska"
+      ],
+      "subject": "Potosi high Andean plateau 1545 at dusk, red Cerro Rico mountain, treeless slopes dotted with glowing small clay wayra wind furnaces. Huallpa with chullo and llama rope explains silver ore, adult Chaska in red-indigo woven dress tends a small clay crucible with skill, father Kusi Mayta watches. Armored claimant Villarroel approaches with a rolled registration document, tense ownership dispute without violence. Llamas and distant miners, no modern mining machinery.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Potosi high Andean plateau 1545 at dusk, red Cerro Rico mountain, treeless slopes dotted with glowing small clay wayra wind furnaces. Huallpa with chullo and llama rope explains silver ore, adult Chaska in red-indigo woven dress tends a small clay crucible with skill, father Kusi Mayta watches. Armored claimant Villarroel approaches with a rolled registration document, tense ownership dispute without violence. Llamas and distant miners, no modern mining machinery."
+    },
+    {
+      "id": "potosi_hostage",
+      "name": "쿠라카의 부탁",
+      "group": "potosi",
+      "people": [
+        "kusimayta",
+        "chaska",
+        "ayala",
+        "mendo"
+      ],
+      "subject": "1546 at an Andean stone manor courtyard near silver mine. Worried elder Kusi Mayta appeals to a visiting adult captain seen from behind outside the guarded gate. Deeper in courtyard adult Chaska in SAME red-indigo woven dress stands fully clothed beside a shut wooden door, guarded at a respectful distance by lean overseer Mendo with whip coiled on belt. Affluent Ayala in black velvet watches from balcony holding ledger. No tied limbs, grabbing, threat to body, sexual content or injury; the conflict is hostage diplomacy.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. 1546 at an Andean stone manor courtyard near silver mine. Worried elder Kusi Mayta appeals to a visiting adult captain seen from behind outside the guarded gate. Deeper in courtyard adult Chaska in SAME red-indigo woven dress stands fully clothed beside a shut wooden door, guarded at a respectful distance by lean overseer Mendo with whip coiled on belt. Affluent Ayala in black velvet watches from balcony holding ledger. No tied limbs, grabbing, threat to body, sexual content or injury; the conflict is hostage diplomacy."
+    },
+    {
+      "id": "potosi_caravan",
+      "name": "은을 나르는 라마 행렬",
+      "group": "potosi",
+      "people": [
+        "potosi_arriero",
+        "mendo"
+      ],
+      "subject": "A high Andean mountain path leading toward a stone mining estate. A line of llamas loaded with wool sacks and silver ingot bundles, the SAME red-poncho caravan handler leading them, quietly conferring with an adult visiting captain by the first llama. Mendo watches estate gate in distance. Covert rescue approach disguised as ordinary transport, cold mountain air, no violence and no modern pack animals.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. A high Andean mountain path leading toward a stone mining estate. A line of llamas loaded with wool sacks and silver ingot bundles, the SAME red-poncho caravan handler leading them, quietly conferring with an adult visiting captain by the first llama. Mendo watches estate gate in distance. Covert rescue approach disguised as ordinary transport, cold mountain air, no violence and no modern pack animals."
+    },
+    {
+      "id": "potosi_tunnel",
+      "name": "옛 잉카 갱도",
+      "group": "potosi",
+      "people": [
+        "huallpa"
+      ],
+      "subject": "An old narrow stone-lined Andean mine passage by lantern light, adult Huallpa as a local guide showing two fully clothed adult sailors a side tunnel toward an old estate foundation. Rough stone, wooden supports, small ore baskets and a low pool of warm light; suspenseful careful movement. No trapped victim, collapse, injuries, modern helmets or electric lamps.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. An old narrow stone-lined Andean mine passage by lantern light, adult Huallpa as a local guide showing two fully clothed adult sailors a side tunnel toward an old estate foundation. Rough stone, wooden supports, small ore baskets and a low pool of warm light; suspenseful careful movement. No trapped victim, collapse, injuries, modern helmets or electric lamps."
+    },
+    {
+      "id": "potosi_star",
+      "name": "샛별",
+      "group": "potosi",
+      "people": [
+        "chaska",
+        "kusimayta"
+      ],
+      "subject": "Quiet safe dawn below Potosi mountain after a successful rescue. Adult Chaska in SAME red-indigo woven dress and silver tupu fastener looks toward a visiting adult captain seen from behind with grateful self-possessed smile, one hand holds a small silverwork ornament. Father Kusi Mayta with staff stands nearby giving his blessing. Woven blanket bundles and llamas ready for the journey, mountain sky brightening, wind stirs her braids; no open ocean at inland Potosi.",
+      "type": "scene",
+      "transparent_background": false,
+      "prompt": "Use case: historical-scene. Finished panoramic 1881x836 (2.25:1) event illustration for the same historical ocean adventure RPG. Clearly hand-painted 2D oil game art with brushwork, matte faces, natural expressive anatomy and coherent material detail. Character references specify identity, hair, costume and color only: stage those SAME recognizable people naturally in the new scene, do not paste portrait cutouts or reuse their backgrounds. Important faces/actions inside central 80 percent with safe crop room top and bottom. No text, UI, border, watermark, readable writing, modern objects or modern landmarks. No gore, exposed wounds, torture, sexual violence or self-harm depiction. All identifiable female characters are adults and fully clothed. Quiet safe dawn below Potosi mountain after a successful rescue. Adult Chaska in SAME red-indigo woven dress and silver tupu fastener looks toward a visiting adult captain seen from behind with grateful self-possessed smile, one hand holds a small silverwork ornament. Father Kusi Mayta with staff stands nearby giving his blessing. Woven blanket bundles and llamas ready for the journey, mountain sky brightening, wind stirs her braids; no open ocean at inland Potosi."
+    }
+  ],
+  "cases": [
+    {
+      "key": "nw_santafe",
+      "id": "colon",
+      "name": "산타페의 약속",
+      "rival": "크리스토발 콜론"
+    },
+    {
+      "key": "nw_mutiny",
+      "id": "colon",
+      "name": "바다 한가운데의 사흘",
+      "rival": "크리스토발 콜론"
+    },
+    {
+      "key": "nw_guanahani",
+      "id": "colon",
+      "name": "과나하니의 아침",
+      "rival": "크리스토발 콜론"
+    },
+    {
+      "key": "nw_egg",
+      "id": "colon",
+      "name": "콜론의 달걀",
+      "rival": "크리스토발 콜론"
+    },
+    {
+      "key": "nw_encomienda",
+      "id": "nw_ovando",
+      "name": "엔코미엔다"
+    },
+    {
+      "key": "nw_sermon",
+      "id": "nw_montesinos",
+      "name": "이들은 사람이 아닙니까"
+    },
+    {
+      "key": "nw_pox",
+      "id": "nw_enriquillo",
+      "name": "마을을 돌보는 의원"
+    },
+    {
+      "key": "ming_foundry",
+      "id": "schall",
+      "name": "흠천감의 대포"
+    },
+    {
+      "key": "ming_meishan",
+      "id": "chongzhen",
+      "name": "매산의 밤"
+    },
+    {
+      "key": "ming_robe",
+      "id": "ming_old_maid",
+      "name": "옷깃의 유언"
+    },
+    {
+      "key": "ming_mansion",
+      "id": "liuzongmin",
+      "name": "대순의 저택"
+    },
+    {
+      "key": "ming_tree",
+      "id": "h_chenyuanyuan",
+      "name": "매산의 홰나무",
+      "legend": true
+    },
+    {
+      "key": "ming_join",
+      "id": "h_chenyuanyuan",
+      "name": "노래가 들리는 곳으로",
+      "legend": true
+    },
+    {
+      "key": "potosi_wayra",
+      "id": "huallpa",
+      "name": "은산의 바람 화로"
+    },
+    {
+      "key": "potosi_hostage",
+      "id": "kusimayta",
+      "name": "쿠라카의 부탁"
+    },
+    {
+      "key": "potosi_caravan",
+      "id": "potosi_arriero",
+      "name": "은을 나르는 라마 행렬"
+    },
+    {
+      "key": "potosi_tunnel",
+      "id": "huallpa",
+      "name": "옛 잉카 갱도"
+    },
+    {
+      "key": "potosi_star",
+      "id": "chaska",
+      "name": "샛별",
+      "legend": true
+    },
+    {
+      "key": "nw_santafe",
+      "id": "nw_mendoza",
+      "name": "멘도사 추기경"
+    },
+    {
+      "key": "nw_santafe",
+      "id": "nw_lascasas",
+      "name": "라스 카사스"
+    },
+    {
+      "key": "nw_santafe",
+      "id": "nw_cacique",
+      "name": "타이노 추장"
+    },
+    {
+      "key": "ming_foundry",
+      "id": "wangchengen",
+      "name": "왕승은"
+    },
+    {
+      "key": "potosi_wayra",
+      "id": "villarroel",
+      "name": "후안 데 비야로엘"
+    },
+    {
+      "key": "potosi_wayra",
+      "id": "ayala",
+      "name": "로드리고 데 아얄라"
+    },
+    {
+      "key": "potosi_wayra",
+      "id": "mendo",
+      "name": "감독관 멘도"
+    },
+    {
+      "key": "ming_foundry",
+      "id": "ming_gate_guard",
+      "name": "대순의 문지기"
+    },
+    {
+      "key": "ming_foundry",
+      "id": "qing_banner_soldier",
+      "name": "청나라 기병"
+    },
+    {
+      "key": "potosi_wayra",
+      "id": "potosi_soldier",
+      "name": "에스파냐 병사"
+    },
+    {
+      "key": "potosi_wayra",
+      "id": "potosi_oidor",
+      "name": "왕실 감찰관"
+    }
+  ]
+}

@@ -1,13 +1,18 @@
 /* 오래 함께한 부하와의 이별 (G.MateLeave) — 대사·조정값: js/data/mateleave.js (G.MATE_LEAVE · G.BALANCE.mateLeave). 2026-10-28 사용자 요청
    ■ 누가: 제독이 60세(oldAge)를 넘었거나, 20년(longYears) 넘게 함께 항해한 부하. 제독이 늙었더라도 3년(minYears) 안 된 부하는 아니다.
      본처·둘째 부인, 동생(js/systems/siblings.js), 첫 항해 안내 중, 섭정 중에는 없다.
-   ■ 언제: 달마다(js/systems/world.js W.newMonth) 한 사람씩 가능성(monthly) — 둘 다 해당하면 ×bothK, 실존 인물이 역사 속 활약을 마친 해를 넘겼으면 ×pastK.
-     한 해에 사망·이별은 많아야 둘(perYear). 사건은 도시·바다·뭍에서 다른 창이 없을 때 띄운다 (main.js 의 loop → MLV.tick).
+     사건으로 얻은 부하도 빠진다 (2026-10-29 사용자 요청 — MLV.eventMate): 옛이야기·전설 동료(tale), 술집에 나오지 않는 사건 동료(eventOnly),
+     사건이 맞아들인 부하(m.ev — G.Legend.join · 아즈텍 joinMate · 레오나르도), 옛 저장은 evIds와 아즈텍 사건의 세 사람.
+   ■ 언제: 달마다(js/systems/world.js W.newMonth) — 겪을 수 있는 부하마다 가능성(monthly · 둘 다 해당하면 ×bothK, 실존 인물이 역사 속 활약을 마친 해를 넘겼으면 ×pastK)을 모아 그달 일어날지 정한다.
+     한 제독이 80세(maxAge)가 될 때까지 모두 3번(lifeMax — 위기를 넘기거나 붙잡은 것도 센다), 사건 사이는 3년(gapDays) 넘게, 한 해에 많아야 둘(perYear). 2026-10-29 사용자 요청
+     누가 겪나: 무작위가 아니라 「최근 선실에 머문 날」(m.cabRec — 기함의 선실·부관실·조타실·파수대에 있던 날, cabinHalf일마다 절반으로 친다)이 가장 적은 부하부터.
+     같으면 선실에서 지낸 날 모두(m.skd 합)가 적은 쪽, 그다음 오래 함께한 쪽.
+     사건은 도시·바다·뭍에서 다른 창이 없을 때 띄운다 (main.js 의 loop → MLV.tick).
    ■ 무엇: 사망(병·늙음) · 건강(무릎·눈·손 — 배에서 내려 고향으로) · 다른 일(손주·제 배·수도원·항해기·술집).
      사망·건강은 위기를 넘길 수 있다 — 짐칸의 약재(교역품 herbs 1통) · 배의 의원(의학 특기, 진료실이 있으면 더) · 제독의 의학 · 항구의 의원(도시에서만, 금화).
      넘기면 그 부하는 calm일 동안 다시 겪지 않고, 한 해 셈에도 들지 않는다. 다른 일로 떠나는 부하는 충성이 holdLoyal 이상이면 붙잡아 볼 수 있다.
    ■ 떠난 부하: 함대에서 빠지고 술집에 다시 나타나지 않는다(gone_). 남은 이야기는 s.mateFate[id] = {kind, why, y, home, at} — 여급에게 행방을 물으면 이것을 알려 준다.
-   ■ 저장: s.mateLeave = {y: 해, n: 그해 일어난 수, pend: [{id, kind, why}]} · s.mates[i].leaveCd */
+   ■ 저장: s.mateLeave = {y: 해, n: 그해 일어난 수, pend: [{id, kind, why}], life: {gen, n}, last: 마지막 사건 날, td: 선실 날을 센 날} · s.mates[i].leaveCd · s.mates[i].cabRec */
 (function (G) {
   'use strict';
   var U = G.U;
@@ -22,6 +27,36 @@
     return o;
   }
   MLV.st = st;
+  /** 이 제독이 겪은 이별 사건 수 {gen, n} — 대가 바뀌면 새로 센다. 옛 저장은 이 제독이 어른이 된 뒤 떠난 부하(s.mateFate) 수로 채운다 */
+  function life() {
+    var s = S(), o = st(), g = s.player.generation || 1;
+    if (!o.life || o.life.gen !== g) {
+      var n = 0;
+      if (!o.life) { var y0 = (s.date.y - (R().age ? R().age() : 0)) + 16; Object.keys(s.mateFate || {}).forEach(function (id) { var f = s.mateFate[id]; if (f && f.y >= y0) n++; }); }
+      o.life = { gen: g, n: Math.min(n, K().lifeMax || 3) };
+    }
+    return o.life;
+  }
+  MLV.life = life;
+  /** 지금 기함의 선실(갑판이 아닌 방 · 부관실·조타실·파수대)에 있나 */
+  MLV.inCabin = function (m) { var t = G.Cabins && G.Cabins.roomOf ? G.Cabins.roomOf(m) : null; return !!t && t !== 'deck'; };
+  /** 「최근 선실에 머문 날」을 센다 — 지난 날은 cabinHalf일마다 절반 (MLV.tick이 날이 바뀔 때마다 부른다) */
+  MLV.track = function () {
+    var s = S(); if (!s || !s.mates || s.day == null) return;
+    var o = st(); if (o.td == null) { o.td = s.day; return; }
+    var d = s.day - o.td; if (d <= 0) return;
+    d = Math.min(d, 3650); o.td = s.day;
+    var q = Math.pow(0.5, 1 / (K().cabinHalf || 365)), qd = Math.pow(q, d), add = (1 - qd) / (1 - q);
+    s.mates.forEach(function (m) { m.cabRec = (m.cabRec || 0) * qd + (MLV.inCabin(m) ? add : 0); });
+  };
+  function cabinAll(m) { var n = 0; for (var k in (m.skd || {})) n += m.skd[k] || 0; return n; }
+  /** 겪을 수 있는 부하를 차례로 — 최근 선실에 머문 날이 적은 부하부터 [{m, w, rec}] */
+  MLV.order = function () {
+    var s = S();
+    return s.mates.map(function (m, i) { return { m: m, w: MLV.weight(m), rec: m.cabRec || 0, all: cabinAll(m), yrs: MLV.years(m), i: i }; })
+      .filter(function (x) { return x.w > 0; })
+      .sort(function (a, b) { return (a.rec - b.rec) || (a.all - b.all) || (b.yrs - a.yrs) || (a.i - b.i); });
+  };
   /** 함께한 햇수 (joined 0 = 처음부터 함께한 부하 → 게임 날수로) */
   MLV.years = function (m) {
     var s = S();
@@ -30,9 +65,17 @@
   };
   function tut() { return !!(G.Tutorial && G.Tutorial.active && G.Tutorial.active()); }
   function isWife(id) { var p = S().player; return p.wife === id || !!(G.Wives && G.Wives.of && G.Wives.of(id)); }
+  /** 사건으로 얻은 부하인가 — 이별을 겪지 않는다 */
+  MLV.eventMate = function (m) {
+    var d = G.MATE[m.id], s = S(); if (!d) return false;
+    if (m.ev || d.tale || d.eventOnly) return true;
+    if ((K().evIds || []).indexOf(m.id) >= 0) return true;
+    if (s.aztec && ['aguilar', 'marina', 'h_cuauhtemoc'].indexOf(m.id) >= 0 && m.joined && m.joined >= 15190101 && m.joined <= 15211231) return true;   // 옛 저장: 아즈텍 사건 동안 들어온 세 사람
+    return false;
+  };
   /** 이 부하가 이별을 겪을 수 있나 — 배수(0이면 아니다) */
   MLV.weight = function (m) {
-    var s = S(), k = K(), d = G.MATE[m.id]; if (!d || d.sib || isWife(m.id)) return 0;
+    var s = S(), k = K(), d = G.MATE[m.id]; if (!d || d.sib || isWife(m.id) || MLV.eventMate(m)) return 0;
     if (m.leaveCd && s.day < m.leaveCd) return 0;
     if (st().pend.some(function (x) { return x.id === m.id; })) return 0;
     var yrs = MLV.years(m), old = R().age() >= k.oldAge, long = yrs >= k.longYears;
@@ -49,15 +92,20 @@
     var s = S(), k = K(), o = st();
     if (!s || !s.mates || !s.mates.length || tut() || s.regency) return [];
     if (o.n >= k.perYear) return [];
-    U.shuffle(s.mates.slice()).forEach(function (m) {
-      if (o.n >= k.perYear) return;
-      var w = MLV.weight(m); if (!w || !U.chance(k.monthly * w)) return;
+    var L = life(); if (L.n >= (k.lifeMax || 3)) return [];                        // 이 제독이 80세가 될 때까지 모두 3번
+    if (o.last != null && s.day - o.last < (k.gapDays || 0)) return [];            // 사건 사이는 3년 넘게
+    if (R().age && R().age() > (k.maxAge || 80)) return [];
+    MLV.track();
+    var cand = MLV.order(); if (!cand.length) return [];
+    var none = 1; cand.forEach(function (x) { none *= 1 - Math.min(1, k.monthly * x.w); });
+    if (!U.chance(1 - none)) return [];
+    [cand[0].m].forEach(function (m) {                                              // 최근 선실에 가장 덜 머문 부하
       var d = G.MATE[m.id], kw = { death: k.kinds.death * (MLV.past(d) ? 2 : 1), health: k.kinds.health, other: k.kinds.other };
       var kind = U.weighted(Object.keys(kw), function (x) { return kw[x]; });
       var e = { id: m.id, kind: kind };
       if (kind === 'other') e.why = U.pick(D().other.reasons).id;
       if (kind === 'health') e.line = U.ri(0, D().health.lines.length - 1);
-      o.pend.push(e); o.n++;
+      o.pend.push(e); o.n++; L.n++; o.last = s.day;
     });
     return [];
   };
@@ -213,12 +261,14 @@
     return true;
   }
   MLV.tick = function () {
-    var s = S(); if (!s || !s.mateLeave || !s.mateLeave.pend || !s.mateLeave.pend.length) return;
+    var s = S();
+    if (s && s.mates && s.date && (!s.mateLeave || s.mateLeave.td !== s.day)) { try { MLV.track(); } catch (e) { console.error(e); } }   // 날이 바뀌면 선실에 머문 날을 센다
+    if (!s || !s.mateLeave || !s.mateLeave.pend || !s.mateLeave.pend.length) return;
     if (!ready()) return;
     MLV.running = s;
     var e = s.mateLeave.pend.shift();
     (async function () {
-      try { if (row(e.id)) await MLV.play(e); else st().n = Math.max(0, st().n - 1); } catch (err) { console.error(err); }   // 그새 배를 떠난 부하는 셈에서 뺀다
+      try { if (row(e.id)) await MLV.play(e); else { st().n = Math.max(0, st().n - 1); life().n = Math.max(0, life().n - 1); } } catch (err) { console.error(err); }   // 그새 배를 떠난 부하는 셈에서 뺀다
       if (MLV.running === s) MLV.running = null;
     })();
   };

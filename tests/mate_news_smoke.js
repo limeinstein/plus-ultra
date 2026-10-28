@@ -8,7 +8,9 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
@@ -51,19 +53,50 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.n === 6 && /체력 \d+ 지력 \d+ 무력 \d+ 매력 \d+/.test(r.first), '수첩 「동료」에 체력·지력·무력·매력 — ' + r.first);
     ok(r.stats === '체력,지력,무력,매력', '능력치 이름: ' + r.stats);
 
-    // ② 이별: 한 해에 많아야 둘
+    // ② 이별: 제독이 80세가 될 때까지 모두 3번 · 사건 사이 3년 넘게 · 최근 선실에 덜 머문 부하부터 (2026-10-29 사용자 요청)
     r = await page.evaluate(() => {
       const ML = G.MateLeave, k = G.BALANCE.mateLeave, s = G.Game.state; k.monthly = 1;
+      const keep = { mates: JSON.parse(JSON.stringify(s.mates)), date: Object.assign({}, s.date), day: s.day };
       const w = s.mates.map(m => ML.weight(m));
-      for (let i = 0; i < 12; i++) ML.newMonth();
-      const n1 = s.mateLeave.pend.length, young = s.mateLeave.pend.some(e => e.id === window.__ids[5]);
-      s.mateLeave.pend = []; s.date.y = 1521; for (let i = 0; i < 12; i++) ML.newMonth();
-      const n2 = s.mateLeave.pend.length; s.date.y = 1520;
-      s.mateLeave.pend = [];
-      return { w, n1, n2, young };
+      // 최근 선실에 머문 날: 0번 300 · 1번 40 · 나머지 0 (3번은 예전에 선실에서 500일을 지냈다)
+      s.mates.forEach((m, i) => { m.cabRec = [300, 40, 0, 0, 0, 0][i]; m.skd = i === 3 ? { nav: 500 } : {}; });
+      s.mateLeave = { y: s.date.y, n: 0, pend: [], td: s.day, life: { gen: s.player.generation || 1, n: 0 } };
+      const order = ML.order().map(x => window.__ids.indexOf(x.m.id));
+      const ids = [], years = [];
+      for (let y = 0; y < 16; y++) {
+        for (let i = 0; i < 12; i++) ML.newMonth();
+        s.mateLeave.pend.forEach(e => { ids.push(window.__ids.indexOf(e.id)); years.push(s.date.y); s.mates = s.mates.filter(m => m.id !== e.id); });
+        s.mateLeave.pend = []; s.day += 365; s.date.y += 1;
+      }
+      const life = s.mateLeave.life.n;
+      // 선실에 있으면 날이 쌓인다
+      s.mates = JSON.parse(JSON.stringify(keep.mates)); s.date = keep.date; s.day = keep.day;
+      G.Cabins.rooms(); const m0 = s.mates[0]; m0.room = 1; m0.cabRec = 0; s.mateLeave.td = s.day; s.day += 10; ML.track();
+      const rec = Math.round(m0.cabRec), inCab = ML.inCabin(m0), deck = (m0.room = 0, ML.inCabin(m0));
+      s.mates = keep.mates; s.day = keep.day; s.date = keep.date; s.mateLeave = { y: s.date.y, n: 0, pend: [] };
+      return { w, order, ids, years, life, rec, inCab, deck };
     });
     ok(r.w.slice(0, 5).every(x => x > 0) && r.w[5] === 0, '60세↑·20년↑ 부하만 (2년 된 부하는 아니다) — 배수 ' + r.w.join(','));
-    ok(r.n1 === 2 && r.n2 === 2 && !r.young, '한 해에 사망·이별은 많아야 둘 (그해 ' + r.n1 + ' · 다음 해 ' + r.n2 + ')');
+    ok(r.order.join(',') === '2,4,3,1,0', '최근 선실에 덜 머문 부하부터 (같으면 선실 날 모두가 적은 쪽 · 오래 함께한 쪽) — ' + r.order.join(','));
+    ok(r.ids.length === 3 && r.life === 3 && r.ids[0] === 2 && r.ids[1] === 4, '80세까지 모두 3번 — ' + r.ids.join(',') + ' (' + r.years.join('·') + '년)');
+    ok(r.years[1] - r.years[0] >= 3 && r.years[2] - r.years[1] >= 3, '사건 사이는 3년 넘게');
+    ok(r.inCab && !r.deck && r.rec === 10, '선실(갑판 아닌 방)에 있으면 「최근 선실에 머문 날」이 쌓인다 (10일 → ' + r.rec + ')');
+    // 사건으로 얻은 부하는 이별을 겪지 않는다 (2026-10-29 사용자 요청)
+    r = await page.evaluate(() => {
+      const s = G.Game.state, ML = G.MateLeave, m0 = s.mates[0], before = ML.weight(m0);
+      m0.ev = 1; const evW = ML.weight(m0), inOrder = ML.order().some(x => x.m === m0); delete m0.ev;
+      const tale = G.MATES.find(m => m.tale && !m.sib), poca = G.MATE.h_pocahontas, chen = G.MATE.h_chenyuanyuan;
+      const tw = tale ? ML.weight({ id: tale.id, joined: 14950101, loyal: 90 }) : 0;
+      const pw = poca ? ML.weight({ id: poca.id, joined: 14950101, loyal: 90 }) : 0;   // 옛 저장(표시 없음)
+      const cw = chen ? ML.weight({ id: chen.id, joined: 14950101, loyal: 90 }) : 0;
+      // G.Legend.join으로 맞은 부하에는 표시가 붙는다
+      const free = G.MATES.find(m => !m.wd && !m.witch && !m.sib && !m.tale && !m.eventOnly && !s.mates.some(x => x.id === m.id) && !(ML.past && ML.past(m)));
+      const nm = G.Legend.join(free.id, G.CITY_DATA[0]); const legEv = !!(nm && nm.ev); s.mates = s.mates.filter(x => x.id !== free.id);
+      return { before, evW, inOrder, tw, pw, cw, legEv, tale: tale && tale.name };
+    });
+    ok(r.before > 0 && r.evW === 0 && !r.inOrder, '사건으로 얻은 부하(m.ev)는 이별 대상에서 빠진다');
+    ok(r.tw === 0 && r.pw === 0 && r.cw === 0, '옛이야기 동료(' + r.tale + ') · 포카혼타스 · 진원원은 표시가 없어도 빠진다');
+    ok(r.legEv, 'G.Legend.join으로 맞은 부하에는 사건 표시(ev)가 붙는다');
     r = await page.evaluate(() => {
       const s = G.Game.state, ML = G.MateLeave; s.player.born.y = 1500;   // 제독 21세 → 20년 넘은 부하만
       const w = s.mates.map(m => ML.weight(m)); s.player.born.y = 1455; return w;

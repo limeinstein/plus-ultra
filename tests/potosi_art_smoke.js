@@ -4,7 +4,9 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 const PEOPLE = ['chaska', 'huallpa', 'villarroel', 'kusimayta', 'ayala', 'mendo'];
 const EVENTS = ['potosi_wayra', 'potosi_hostage', 'potosi_caravan', 'potosi_tunnel', 'potosi_star'];
@@ -48,7 +50,8 @@ const OUT = path.join(ROOT, 'artifacts/potosi-art/runtime');
       return { decoded, speakers };
     }, { people: PEOPLE, events: EVENTS });
     for (const item of result.decoded) {
-      const expected = item.key.startsWith('legend-events/') ? [1800, 800] : item.key.endsWith('_half') ? [1024, 1536] : [1024, 1024];
+      // 장면과 무릎상은 공용 규격, 얼굴상은 원본 해상도를 줄이지 않는 1024px 규격으로 검사한다.
+      const expected = item.key.startsWith('legend-events/') ? [1881, 836] : item.key.endsWith('_half') ? [1024, 1536] : [1024, 1024];
       assert.deepStrictEqual([item.width, item.height], expected, item.key);
     }
     for (const sp of result.speakers) assert.strictEqual(sp.half, sp.expected, sp.id);

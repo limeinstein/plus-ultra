@@ -10,9 +10,11 @@ const ROOT = path.resolve(__dirname, '..');
 const other = process.env.EVENT_ART_SET === 'other';
 const dutch = process.env.EVENT_ART_SET === 'dutch';
 const gap = process.env.EVENT_ART_SET === 'gap';
-const suite = gap ? 'history_gap' : dutch ? 'dutch' : other ? 'other' : 'history';
-const OUT = path.join(ROOT, 'artifacts', gap ? 'history-gap-art-20261029' : suite + '-event-art-20261028');
-const assets = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', gap ? 'history_gap_art_prompts.json' : suite + '_event_art_prompts.json'), 'utf8')).assets;
+const addon = process.env.EVENT_ART_SET === 'addon';
+const suite = addon ? 'history_addon' : gap ? 'history_gap' : dutch ? 'dutch' : other ? 'other' : 'history';
+const OUT = path.join(ROOT, 'artifacts', addon ? 'history-addon-art-20261029' : gap ? 'history-gap-art-20261029' : suite + '-event-art-20261028');
+const artData = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', gap || addon ? suite + '_art_prompts.json' : suite + '_event_art_prompts.json'), 'utf8'));
+const assets = artData.assets;
 const expectedCount = assets.reduce((n,a) => n + (a.type === 'portrait' ? 2 : 1),0);
 function ok(v, message) { if (!v) throw new Error(message); }
 
@@ -38,7 +40,7 @@ function ok(v, message) { if (!v) throw new Error(message); }
           if (!G.Img.has(key)) throw new Error('등록 누락: ' + key);
           const im = await G.Img.load(key);
           if (!im || !im.naturalWidth) throw new Error('읽기 실패: ' + key);
-          const expected = a.type === 'scene' ? [1881,836] : key.endsWith('_half') ? [1024,1536] : [448,448];
+          const expected = a.type === 'scene' ? [1881,836] : key.endsWith('_half') ? [1024,1536] : [1024,1024];
           if (im.naturalWidth !== expected[0] || im.naturalHeight !== expected[1]) throw new Error('규격 오류: ' + key);
           if (key.endsWith('_half')) {
             const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 1536;
@@ -79,7 +81,7 @@ function ok(v, message) { if (!v) throw new Error(message); }
     await page.waitForFunction(() => G.Game.sceneName === 'city');
     await page.waitForTimeout(2200); // 첫 도시의 메뉴와 거리 그림 준비가 끝난 뒤 대화를 연다.
     await page.waitForFunction(() => !document.querySelector('.toast'),null,{timeout:10000});
-    const cases = gap ? [
+    const cases = addon ? artData.cases : gap ? [
       { key:'barb_charles_audience',id:'charles',name:'카를 5세' },
       { key:'barb_toulon_winter',id:'hayreddin',name:'하이레딘 파샤' },
       { key:'barb_genoa_ransom',id:'turgut',name:'투르구트 레이스' },
@@ -114,7 +116,7 @@ function ok(v, message) { if (!v) throw new Error(message); }
     for (const spec of cases) {
       await page.evaluate(spec => {
         const key = 'portraits/history/' + spec.id;
-        const who = spec.legend ? G.Legend.speaker(spec.id) : G.HIST_FIG[spec.id] ? G.Hist.speaker(spec.id) : {
+        const who = spec.rival ? { name:spec.rival,portrait:G.Art.rivalSpec(spec.rival),half:G.Img.chain.rivalHalf(spec.rival),lang:3 } : spec.legend ? G.Legend.speaker(spec.id) : G.HIST_FIG[spec.id] ? G.Hist.speaker(spec.id) : {
           name:spec.name,portrait:G.Art.withImg(G.Art.npcSpec(spec.id,'soldier','jp','m'),[key]),half:[key+'_half'],lang:3,rigNoFace:spec.id==='mowgli_ape'
         };
         window.artSpeaker = who;

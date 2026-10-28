@@ -13,10 +13,14 @@
     villarroel: { name: '후안 데 비야로엘', title: '포토시에 처음 광구를 등록한 에스파냐 사람', st: 'ib', role: 'soldier', born: 1510, look: '30대, 짧은 검은 수염, 낡은 흉갑과 넓은 챙 모자, 허리에 칼과 등록 문서 두루마리' },
     kusimayta: { name: '쿠시 마이타', title: '카라카라 사람들의 쿠라카 (지어낸 인물)', st: 'an', role: 'king', born: 1495, look: '50대, 주름진 얼굴, 금 귀마개, 붉은 줄무늬 망토, 지팡이' },
     ayala: { name: '로드리고 데 아얄라', title: '포토시의 엔코멘데로 (지어낸 인물)', st: 'ib', role: 'noble', born: 1505, look: '40대, 살찐 얼굴과 뾰족한 수염, 검은 벨벳 옷에 금 사슬, 은반지를 여럿 낀 손' },
-    mendo: { name: '감독관 멘도', title: '아얄라의 광산 감독관 (지어낸 인물)', st: 'ib', role: 'soldier', born: 1515, look: '30대, 흉터 난 얼굴, 가죽 조끼와 채찍, 허리에 짧은 칼' }
+    mendo: { name: '감독관 멘도', title: '아얄라의 광산 감독관 (지어낸 인물)', st: 'ib', role: 'soldier', born: 1515, look: '30대, 흉터 난 얼굴, 가죽 조끼와 채찍, 허리에 짧은 칼' },
+    potosi_soldier: { name: '에스파냐 병사', title: '포토시의 병사', st: 'ib', role: 'soldier', fiction: true, look: '붉은 콧수염, 낡은 모리온 투구와 흉갑, 황토색 군복과 장창' },
+    potosi_arriero: { name: '라마 몰이꾼', title: '은을 나르는 라마 행렬의 마부', st: 'an', role: 'native', fiction: true, look: '햇볕에 그을린 좁은 얼굴, 적갈색 판초, 밧줄과 접은 안장 담요' },
+    potosi_oidor: { name: '왕실 감찰관', title: '광산 청원을 듣는 왕실 관리', st: 'ib', role: 'official', fiction: true, look: '회색 머리의 수염 없는 긴 얼굴, 검은 법복과 사각 모자, 청원 서류와 깃펜' }
   };
   Object.keys(L).forEach(function (id) { if (!F[id]) { L[id].id = id; F[id] = L[id]; } });
-  G.POTOSI_FIGS = Object.keys(L);
+  G.POTOSI_FIGS = ['huallpa', 'villarroel', 'kusimayta', 'ayala', 'mendo'];
+  G.POTOSI_EXTRAS = ['potosi_soldier', 'potosi_arriero', 'potosi_oidor'];
 
   // ── 동료: 차스카 (사건으로만 만난다)
   var m = { id: 'chaska', name: '차스카', g: 'f', style: 'an', role: 'noble', tone: 'polite', pic: 'chaska', age: 'young',
