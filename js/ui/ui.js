@@ -988,6 +988,23 @@
       d.onclick = function () { win.close(o.value); };
       ch.appendChild(d);
     });
+    // 갈래 단추 (2026-10-29): 고를 것에 cat 이 있고 갈래가 둘 이상이면 [전체 · 지리 3 · 보물 2 …] — cat 이 없는 줄(일괄 보고 등)은 늘 보인다
+    //   opts.catName(열쇠) 이름 · opts.catOrder 차례 · opts.catState 다시 열어도 이어 갈 {cat}
+    var catKeys = [], catN = {};
+    list.forEach(function (o) { if (o.cat == null || o.cat === '') return; if (!catN[o.cat]) { catN[o.cat] = 0; catKeys.push(o.cat); } catN[o.cat]++; });
+    if (catKeys.length >= 2 && opts.cats !== false) {
+      if (opts.catOrder) catKeys.sort(function (a, b) { var i = opts.catOrder.indexOf(a), j = opts.catOrder.indexOf(b); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j); });
+      var cst = opts.catState || {}, cur = catN[cst.cat] ? cst.cat : '', bar = U.el('div', 'ck-cats choice-cats');
+      ch.parentNode.insertBefore(bar, ch);
+      var drawC = function () {
+        bar.innerHTML = '<button type="button" class="ck-cat' + (cur ? '' : ' on') + '" data-cat="">전체</button>' + catKeys.map(function (k) {
+          return '<button type="button" class="ck-cat' + (cur === k ? ' on' : '') + '" data-cat="' + U.esc(k) + '">' + U.esc(opts.catName ? opts.catName(k) : k) + ' <small>' + catN[k] + '</small></button>';
+        }).join('');
+        U.$$('.ck-cat', bar).forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); cur = b.getAttribute('data-cat'); cst.cat = cur; drawC(); } ; });
+        U.$$('.choice', ch).forEach(function (d, i) { var o = list[i]; d.style.display = !cur || o.cat == null || o.cat === '' || o.cat === cur ? '' : 'none'; });
+      };
+      drawC();
+    }
     var first = ch.querySelector('.choice:not(.dis)'); if (first) first.classList.add('kbd-focus');
     return win.result;
   };
@@ -1039,32 +1056,75 @@
      opt.rows(): 줄 요소들 · opt.box(줄): 그 줄의 체크박스(없으면 고를 수 없는 줄) · opt.text(줄): 찾기에 쓰는 글(없으면 찾기 칸 없음)
      opt.onChange(): 고른 것이 바뀔 때 · opt.unit: 「건」「가지」「개」 · opt.rowClick: 줄 아무 데나 눌러도 체크가 바뀐다
      찾는 말이 있으면 전체 선택·해제는 찾아서 보이는 줄에만 한다. 돌려주는 값: {update} */
+  /* 2026-10-29 갈래 거르기·정렬 (피드백 「발견물 보고 때 갈래별로 정렬·거르기」 · 「소지품 고정」):
+     opt.cat(줄): 그 줄의 갈래 열쇠 · opt.catName(열쇠): 이름 · opt.catOrder: 열쇠 차례 — 있으면 [전체 · 지리 3 · 보물 2 …] 단추가 생긴다 (있는 갈래만, 개수와 함께)
+     opt.sorts: [{id, label, key(줄) → 비교값, desc}] — 있으면 「정렬」 고르기 칸. 맨 처음 것이 처음 차례(지금 차례 그대로이면 key 없이)
+     opt.skipAll(줄): 참이면 「전체 선택」에서 빠진다 (고정 📌한 소지품) — 하나씩은 고를 수 있다
+     opt.state: 창을 다시 열어도 갈래·정렬을 이어 가는 그릇 {cat, sort} (찾는 말은 잇지 않는다)
+     opt.onFilter(): 보이는 줄이 바뀔 때 */
   UI.checkTools = function (bar, opt) {
-    var unit = opt.unit || '건', hasQ = !!opt.text;
+    var unit = opt.unit || '건', hasQ = !!opt.text, st = opt.state || {};
     bar.classList.add('cktools');
     bar.innerHTML = '<button type="button" class="btn small ck-all">☑ 전체 선택</button><button type="button" class="btn small ck-none">☐ 전체 해제</button>' +
-      (hasQ ? '<input type="search" class="ck-q" placeholder="' + U.esc(opt.placeholder || '이름으로 찾기') + '" autocomplete="off">' : '') + '<span class="ck-count muted"></span>';
-    var q = bar.querySelector('.ck-q'), cnt = bar.querySelector('.ck-count'), bAll = bar.querySelector('.ck-all'), bNone = bar.querySelector('.ck-none');
+      (hasQ ? '<input type="search" class="ck-q" placeholder="' + U.esc(opt.placeholder || '이름으로 찾기') + '" autocomplete="off">' : '') +
+      (opt.sorts && opt.sorts.length > 1 ? '<label class="ck-sortl">정렬 <select class="ck-sort">' + opt.sorts.map(function (o) { return '<option value="' + U.esc(o.id) + '">' + U.esc(o.label) + '</option>'; }).join('') + '</select></label>' : '') +
+      '<span class="ck-count muted"></span>' + (opt.cat ? '<div class="ck-cats"></div>' : '');
+    var q = bar.querySelector('.ck-q'), cnt = bar.querySelector('.ck-count'), bAll = bar.querySelector('.ck-all'), bNone = bar.querySelector('.ck-none'), sel = bar.querySelector('.ck-sort'), cats = bar.querySelector('.ck-cats');
+    var cat = st.cat || '', orig = null;
     function norm(t) { return String(t || '').toLowerCase().replace(/\s+/g, ''); }
     function rows() { return opt.rows().filter(Boolean); }
     function shown(r) { return r.style.display !== 'none'; }
-    function boxes(vis) { return rows().filter(function (r) { return !vis || shown(r); }).map(opt.box).filter(function (b) { return b && !b.disabled; }); }
+    function filtered() { return !!((q && q.value.trim()) || cat); }
+    function boxes(vis, forAll) { return rows().filter(function (r) { return (!vis || shown(r)) && !(forAll && opt.skipAll && opt.skipAll(r)); }).map(opt.box).filter(function (b) { return b && !b.disabled; }); }
     function update() {
-      var all = boxes(false), on = all.filter(function (b) { return b.checked; }).length, word = q && q.value.trim();
-      cnt.innerHTML = '<b>' + on + '</b> / ' + all.length + unit + ' 고름' + (word ? ' · 찾은 것 ' + boxes(true).length + unit : '');
-      bAll.textContent = word ? '☑ 찾은 것 모두 선택' : '☑ 전체 선택';
-      bNone.textContent = word ? '☐ 찾은 것 모두 해제' : '☐ 전체 해제';
+      var all = boxes(false), on = all.filter(function (b) { return b.checked; }).length, f = filtered(), w = cat ? '보이는 것' : '찾은 것';   // 찾기만 하면 「찾은 것」, 갈래를 고르면 「보이는 것」
+      var skip = opt.skipAll ? rows().filter(function (r) { return shown(r) && opt.skipAll(r); }).length : 0;
+      cnt.innerHTML = '<b>' + on + '</b> / ' + all.length + unit + ' 고름' + (f ? ' · ' + w + ' ' + boxes(true).length + unit : '') + (skip ? ' · <span title="고정한 것은 「전체 선택」에서 빠진다">' + G.icon('pin') + skip + '</span>' : '');
+      bAll.textContent = f ? '☑ ' + w + ' 모두 선택' : '☑ 전체 선택';
+      bNone.textContent = f ? '☐ ' + w + ' 모두 해제' : '☐ 전체 해제';
       if (opt.onChange) opt.onChange();
     }
-    function setAll(v) { boxes(true).forEach(function (b) { b.checked = v; if (opt.onSet) opt.onSet(b, v); }); update(); }
+    function setAll(v) { boxes(true, v).forEach(function (b) { b.checked = v; if (opt.onSet) opt.onSet(b, v); }); update(); }
     bAll.onclick = function (e) { e.stopPropagation(); setAll(true); };
     bNone.onclick = function (e) { e.stopPropagation(); setAll(false); };
+    function applyFilter() {
+      var w = q ? norm(q.value) : '';
+      rows().forEach(function (r) { r.style.display = (!w || norm(opt.text(r)).indexOf(w) >= 0) && (!cat || opt.cat(r) === cat) ? '' : 'none'; });
+      st.cat = cat;
+      if (opt.onFilter) opt.onFilter();
+    }
+    function drawCats() {
+      if (!cats) return;
+      var n = {}, all = rows(), keys = [];
+      all.forEach(function (r) { var k = opt.cat(r); if (k == null || k === '') return; if (!n[k]) { n[k] = 0; keys.push(k); } n[k]++; });
+      if (opt.catOrder) keys.sort(function (a, b) { var i = opt.catOrder.indexOf(a), j = opt.catOrder.indexOf(b); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j); });
+      if (cat && !n[cat]) cat = '';
+      if (keys.length < 2 && !cat) { cats.style.display = 'none'; return; }
+      cats.style.display = '';
+      cats.innerHTML = '<button type="button" class="ck-cat' + (cat ? '' : ' on') + '" data-cat="">전체 <small>' + all.length + '</small></button>' + keys.map(function (k) {
+        return '<button type="button" class="ck-cat' + (cat === k ? ' on' : '') + '" data-cat="' + U.esc(k) + '">' + U.esc(opt.catName ? opt.catName(k) : k) + ' <small>' + n[k] + '</small></button>';
+      }).join('');
+      U.$$('.ck-cat', cats).forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); cat = b.getAttribute('data-cat'); drawCats(); applyFilter(); update(); }; });
+    }
+    function doSort() {
+      if (!sel) return;
+      var o = opt.sorts.filter(function (x) { return x.id === sel.value; })[0] || opt.sorts[0], list = rows();
+      if (!orig) orig = list.slice();
+      var arr = !o.key ? orig.slice() : orig.slice().sort(function (a, b) {
+        var x = o.key(a), y = o.key(b), c = typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y), 'ko');
+        return (o.desc ? -c : c) || (orig.indexOf(a) - orig.indexOf(b));
+      });
+      arr.forEach(function (r) { if (r.parentNode) r.parentNode.appendChild(r); });   // 같은 부모 안에서 차례만 바꾼다 (머리줄은 맨 앞에 그대로)
+      st.sort = sel.value;
+    }
+    if (sel) {
+      if (st.sort && opt.sorts.some(function (x) { return x.id === st.sort; })) sel.value = st.sort;
+      sel.onchange = function () { doSort(); update(); };
+      sel.onkeydown = function (e) { e.stopPropagation(); };
+      if (sel.value !== opt.sorts[0].id) doSort();
+    }
     if (q) {
-      q.oninput = function () {
-        var w = norm(q.value);
-        rows().forEach(function (r) { r.style.display = !w || norm(opt.text(r)).indexOf(w) >= 0 ? '' : 'none'; });
-        update();
-      };
+      q.oninput = function () { applyFilter(); update(); };
       // 찾기 칸에서 치는 글자가 게임 단축키로 새지 않게. Esc는 글을 지우고, 빈 칸이면 칸을 벗어난다(다음 Esc로 창을 닫는다)
       q.onkeydown = function (e) {
         if (e.isComposing) return;
@@ -1081,8 +1141,10 @@
         b.checked = !b.checked; if (opt.onSet) opt.onSet(b, b.checked); update();
       });
     });
+    drawCats();
+    if (cat) applyFilter();
     update();
-    return { update: update };
+    return { update: update, refresh: function () { drawCats(); applyFilter(); update(); }, state: st };
   };
 
   /** text input */

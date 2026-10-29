@@ -1904,3 +1904,23 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .mate-st .bar i { display: block; height: 100%; background: #b8862b; }
 tr.mk-stale td { opacity: .62; }
 tr.mk-stale td.pp { filter: grayscale(.7); }
+
+/* 2026-10-29 갈래 거르기·정렬 · 소지품 고정(📌) — js/ui/sortfilter.js · UI.checkTools · UI.choose */
+.ck-cats { display: flex; flex-wrap: wrap; gap: 5px; flex-basis: 100%; margin: 2px 0 0; }
+.choice-cats, .st-cats, .icf-bar .ck-cats { margin: 0 0 8px; }
+.ck-cat { font-family: var(--serif); font-size: 15px; line-height: 1.2; padding: 3px 10px; border: 1px solid rgba(110,80,40,.45); background: rgba(255,250,236,.6); color: var(--ink-2); border-radius: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.ck-cat small { color: var(--ink-soft); font-size: 12px; }
+.ck-cat:hover { background: #fff6e0; border-color: var(--brass-dk); }
+.ck-cat.on { background: #3d2b16; color: #f6e7c4; border-color: #3d2b16; }
+.ck-cat.on small { color: #e3cf9f; }
+.ck-cat .ic { width: 14px; height: 14px; }
+.ck-sortl { font-size: 15px; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 5px; }
+.ck-sortl select { font-family: var(--serif); font-size: 15px; color: var(--ink); background: rgba(255,252,242,.85); border: 1px solid rgba(110,80,40,.5); border-radius: 3px; padding: 3px 6px; }
+.icf-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0 0 8px; }
+.icf-bar .ck-cats { flex: 1 1 auto; flex-basis: auto; margin: 0; }
+.st-sortl { margin: 0 0 6px; }
+.pin-b { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 0; vertical-align: -6px; border: 1px solid rgba(110,80,40,.35); border-radius: 50%; background: rgba(255,250,236,.5); color: rgba(90,65,35,.45); cursor: pointer; }
+.pin-b .ic { width: 15px; height: 15px; }
+.pin-b:hover { color: #8d3218; border-color: #b4472c; }
+.pin-b.on { color: #fff; background: #b4472c; border-color: #8d3218; }
+tr[data-pin] td { background: rgba(214,170,90,.12); }

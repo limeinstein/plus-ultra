@@ -282,12 +282,16 @@
       }).join('') : '<div class="muted">보유한 이동 장비가 없습니다. 도시 성문의 마구간에서 말·당나귀 같은 탈것을 사면 이곳에 표시됩니다.</div>';
       return '<div class="mount-gear"><h4>이동 장비 <small>소지품 칸을 쓰지 않음</small></h4><div class="mount-items">' + cards + '</div><div class="mount-rule">말·당나귀 같은 탈것은 소모품이 아닙니다. 탐험 중 쓰러진 수량만 잃고, 살아 돌아온 탈것은 출발한 도시 마구간에 자동으로 맡겨져 재사용됩니다. 다른 도시에서 쓰려면 그 도시 마구간에서 따로 마련해야 합니다.</div></div>';
     }
-    function render() {
+    // 종류 단추·정렬·고정(📌) (2026-10-29 피드백) — js/ui/sortfilter.js. 버리거나 장비해 다시 그려도 스크롤 자리는 그대로
+    var ist = I._itemSt || (I._itemSt = { cat: '', sort: 'base' });
+    function render(top) {
+      var scr = G.scrollParent ? G.scrollParent(el) : null, y0 = scr ? scr.scrollTop : 0;
       var nRel = p.items.filter(function (it) { return G.RELIC && G.RELIC[it.id]; }).length;
       var fk = G.Fakes ? G.Fakes.list() : [];       // 모조품 (js/systems/fakes.js) — 짐 칸은 차지하지 않는다
     var fakeHtml = fk.length ? '<div class="mount-gear"><h4>모조품 <small>보고할 때 증거로 내밀 수 있다 · 들키면 벌금이나 옥살이</small></h4><div class="muted">' + fk.map(function (d) { return '「' + U.esc(d.name) + '」' + (G.Fakes.count(d.id) > 1 ? ' ×' + G.Fakes.count(d.id) : '') + (G.Disc.foundByMe(d.id) ? ' <span class="tag">진짜도 가짐</span>' : ''); }).join(' · ') + '</div></div>' : '';
-    el.innerHTML = mountGear() + fakeHtml + '<div class="muted" style="margin:14px 0 10px">소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX + (R.slotsUsed() > R.ITEM_MAX ? ' <b class="warn-text">(넘침 — 새 물건을 받지 못한다)</b>' : '') + ((p.storage || []).length ? ' · 자택 보관함 ' + p.storage.length + '점' : '') + ' · 발견의 증거는 칸을 차지하지 않는다 (보고·발표하면 차지한다)' + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div><table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
-        p.items.map(function (it, i) {
+    el.innerHTML = mountGear() + fakeHtml + '<div class="muted" style="margin:14px 0 10px">소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX + (R.slotsUsed() > R.ITEM_MAX ? ' <b class="warn-text">(넘침 — 새 물건을 받지 못한다)</b>' : '') + ((p.storage || []).length ? ' · 자택 보관함 ' + p.storage.length + '점' : '') + ' · 발견의 증거는 칸을 차지하지 않는다 (보고·발표하면 차지한다)' + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div>' + (G.ItemCat ? G.ItemCat.barHtml(p.items, ist) : '') + '<table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
+        (G.ItemCat ? G.ItemCat.view(p.items, ist) : p.items.map(function (it, i) { return { it: it, i: i }; })).map(function (x) {
+          var it = x.it, i = x.i;
           var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind, rl = G.RELIC && G.RELIC[it.id];
           var eq = (kind === 'weapon' && p.equip.weapon === it.id) || (kind === 'armor' && p.equip.armor === it.id);
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
@@ -299,8 +303,12 @@
           var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (kind === 'fig' && G.FIGUREHEAD[it.id] ? (G.FigFx ? G.FigFx.html(G.FIGUREHEAD[it.id], true) : '') + '<div class="muted" style="font-size:14px">조선소의 「개조 → 선수상」에서 배에 달 수 있다 (품삯 150닢).</div>' : '');
           var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
           var itemDesc = it.id === 'photo' && G.STORY && G.STORY.photo ? G.STORY.photo.desc : (it.desc || d.desc || '');
-          return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + (it.n > 1 ? ' <small class="muted">(남은 사용 ' + it.n + '회)</small>' : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
+          return '<tr><td class="ic" data-ic="' + i + '"></td><td>' + (G.ItemPin ? G.ItemPin.button(it) + ' ' : '') + '<b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + (it.n > 1 ? ' <small class="muted">(남은 사용 ' + it.n + '회)</small>' : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
         }).join('') + '</table>';
+      if (G.ItemCat && ist.cat && !G.ItemCat.view(p.items, ist).length) el.querySelector('.items-tbl').insertAdjacentHTML('beforeend', '<tr><td colspan="5" class="muted">이 종류의 물건이 없다</td></tr>');
+      if (G.ItemCat) G.ItemCat.wireBar(el, ist, function (t) { render(t); });
+      if (G.ItemPin) G.ItemPin.wire(el, function () { render(); });
+      if (scr) scr.scrollTop = top ? Math.min(y0, (el.querySelector('.icf-bar') || el).offsetTop) : y0;
       // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
       U.$$('[data-ic]', el).forEach(function (td) {
         var it = p.items[+td.dataset.ic], d = G.ITEM[it.id], rl = G.RELIC && G.RELIC[it.id], art = rl || d;

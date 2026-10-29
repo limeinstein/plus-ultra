@@ -673,7 +673,7 @@
     var rows = list.map(function (d) {
       var pf = G.Disc.proofItems(d.id).filter(function (it) { return !it.evidence; });
       var q = d.name + ' ' + (G.DISC_CATS[d.cat] || '') + ' ' + (G.regionLabelAt ? G.regionLabelAt(d.reg, d.lon, d.lat) : '');   // 찾기 칸: 이름·갈래·지역
-      return '<label class="choice" data-ck data-q="' + U.esc(q) + '" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">' +
+      return '<label class="choice" data-ck data-q="' + U.esc(q) + '"' + (G.DiscPick ? G.DiscPick.attrs(d) : '') + ' style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">' +
         '<input type="checkbox" data-disc="' + U.esc(d.id) + '" style="margin-top:6px;transform:scale(1.2)">' +
         '<span style="flex:1"><b>' + U.esc(d.name) + '</b>' +
         (G.Disc.isLate(d.id) ? ' <span class="tag">늦은 발표 · 명성 절반</span>' : '') +
@@ -693,11 +693,12 @@
       } }, { label: '전부 발표', value: 'all', icon: 'flag' }]
     });
     // 전체 선택·전체 해제·찾기 (UI.checkTools — 2026-10-28): 모두 고른 뒤 발표하지 않을 것만 끌 수 있다
-    UI.checkTools(win.content.querySelector('.ck-bar'), {
+    // 갈래별 거르기·정렬 (2026-10-29 피드백) — G.DiscPick (js/ui/sortfilter.js). 「전부 발표」는 거른 것과 상관없이 모두
+    UI.checkTools(win.content.querySelector('.ck-bar'), Object.assign(G.DiscPick ? G.DiscPick.opts('처음 차례', null, G.DiscPick.state) : {}, {
       rows: function () { return Array.prototype.slice.call(win.content.querySelectorAll('[data-ck]')); },
       box: function (r) { return r.querySelector('input[data-disc]'); },
       text: function (r) { return r.getAttribute('data-q'); }, placeholder: '이름·갈래·지역으로 찾기'
-    });
+    }));
     return win.result.then(function (v) { return v === 'all' ? list.map(function (d) { return d.id; }) : v === 'selected' ? picked : null; });
   };
 
