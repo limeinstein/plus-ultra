@@ -429,7 +429,10 @@
   var K = I.chain = {};
   K.title = function () { return ['title']; };
   /** 일반 소지품: 그 물건 그림, 없으면 종류 공통 그림 */
-  K.item = function (it) { return ['items/' + it.id, 'item-kinds/' + it.kind, 'relic-kinds/' + it.kind]; };
+  K.item = function (it) {
+    var lf = it.legend && G.FIGUREHEAD && G.FIGUREHEAD[it.id];   // 전설의 선수상: 그 괴물의 그림 (js/data/figlegend.js)
+    return ['items/' + it.id].concat(lf && lf.src ? ['discovery-ends/' + lf.src, 'discoveries/' + lf.src, 'sea-monsters/' + lf.src] : []).concat(['item-kinds/' + it.kind, 'relic-kinds/' + it.kind]);
+  };
   /** 발견 유물: 전용 유물 그림, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */
   K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'discovery-ends/' + r.relic, 'discoveries/' + r.relic, 'relic-kinds/' + r.kind]; };
   /** 교역품: 품목별 그림, 없으면 갈래 공통 그림 */

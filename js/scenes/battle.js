@@ -1119,6 +1119,7 @@
     var shots = Math.max(1, Math.round(b.guns.n / 2 * (part || 1)));
     var acc = c.acc * (1 + gunSk * 0.1) * (1.15 - 0.5 * d / rng);
     if (b.side === 'me') { var bonus = R.fleetBonus('battle'); acc *= 1 + bonus; if (R.hasItem('shells')) acc *= 1.05; }
+    else if (G.FigFx) acc *= G.FigFx.enemyAccK();   // 전설 「떨리는 포수」 (js/systems/figfx.js)
     var careerBaseAcc = acc;
     if (b.side === 'me' && G.SkillCombos) acc *= G.SkillCombos.factor('cannonAccuracy');
     if (b.side === 'me' && G.Career) acc += G.Career.accuracy(b.src === S().fleet.ships[0], careerBaseAcc);

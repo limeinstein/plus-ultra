@@ -384,7 +384,7 @@
     s.sails.forEach(function (k) { thrust += sailEff(k, rel); });
     thrust /= Math.max(1, t.sails.length);
     if (s.rig) thrust *= R.rigK(s.sails, s.rig, rel);   // 삭구 개량 (조선소)
-    var base = t.spd * (1 + s.spdMod) * (1 + (R.figure(s) && R.figure(s).spd || 0));
+    var base = t.spd * (1 + s.spdMod) * (1 + Math.max(R.figure(s) && R.figure(s).spd || 0, G.FigFx ? G.FigFx.wakeSpd() : 0));   // 전설 「끌어 주는 꼬리」는 함대 모든 배에 (js/systems/figfx.js)
     var w = 0.35 + 0.8 * wind.spd;
     var hpF = 0.6 + 0.4 * s.hp / s.maxHp;
     var v = base * thrust * w * hpF * (wind.calm ? 0.25 : 1);

@@ -210,6 +210,7 @@
     var sh = list[i], v = R.shipValue(sh);
     if (!(await UI.confirm(sh.name + '호를 금화 ' + U.num(v) + '닢에 팔겠습니까?', '판다', '그만둔다'))) return;
     var fi = s.fleet.ships.indexOf(sh); if (fi >= 0) s.fleet.ships.splice(fi, 1); else dock.splice(dock.indexOf(sh), 1);
+    if (G.FigFx) G.FigFx.salvage(sh);   // 유물·전설 선수상은 떼어 돌려받는다
     s.player.gold += v;
     C.B.harbor.trimCrew();
     UI.toast(sh.name + '호를 팔았다. (금화 ' + U.num(v) + '닢)', 'coin');
@@ -252,7 +253,7 @@
         { label: '돛', right: sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join('·'), value: 'sail', icon: 'sail' },
         { label: '삭구 개량 (맞바람)', right: rigLabel(sh), value: 'rig', icon: 'gear' },
         { label: '포문 증설', right: sh.ports + '/' + t.ports + '문', value: 'port', icon: 'plus', disabled: sh.ports >= t.ports },
-        { label: '선수상', right: sh.fig ? G.FIGUREHEAD[sh.fig].name : '없음', value: 'fig', icon: 'feather' },
+        { label: '선수상', right: sh.fig ? G.FIGUREHEAD[sh.fig].name : '없음', value: 'fig', icon: 'feather', desc: sh.fig && G.FigFx ? G.FigFx.short(G.FIGUREHEAD[sh.fig]) : '' },
         { label: '선체 다시 짓기 (목재)', right: (SH().wood(sh) || { name: '보통 목재' }).name, value: 'wood', icon: 'hammer' },
         { label: '선명 변경', right: sh.name, value: 'name', icon: 'scroll' }
       ].concat(sh === s.fleet.ships[0] && G.CabinView ? [{ label: '선실 개조', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }] : []), { width: 600, text: '소지금 ' + U.num(s.player.gold) + '닢' });
@@ -382,21 +383,25 @@
     s.player.gold -= n * price; sh.ports += n; UI.toast('포문을 ' + n + '문 늘렸다.', 'plus');
   }
   async function refitFig(c, sh) {
-    var s = S(), rng = U.makeRng(c.id * 17 + Math.floor(s.day / 60)), tech = SH().tech(c);
-    // 조선 기술이 높을수록 깎을 수 있는 선수상이 늘고(lv), 들여 놓는 가짓수도 많아진다
-    var stock = 0.4 + tech * 0.05;
-    var sold = G.FIGUREHEADS.filter(function (f) { return !f.rare && !f.relic; }).filter(function (f) { return rng() < stock && (f.lv || 1) <= tech; });
-    var later = G.FIGUREHEADS.filter(function (f) { return !f.rare && !f.relic && (f.lv || 1) > tech; });
+    var s = S(), tech = SH().tech(c);
+    // 조선 기술 등급(기술 투자로 오른다)이 선수상의 lv 이상이면 깎아 준다 — 대포와 같다 (2026-10-29). 그 위 등급은 잠긴 채 보인다
+    var shop = G.FIGUREHEADS.filter(function (f) { return !f.rare && !f.relic; });
+    var sold = shop.filter(function (f) { return (f.lv || 1) <= tech; });
+    var later = shop.filter(function (f) { return (f.lv || 1) > tech; });
     sold.sort(function (a, b) { return (b.lv || 1) - (a.lv || 1) || a.price - b.price; });   // 기술 투자로 늘어난 선수상을 위에
+    later.sort(function (a, b) { return (a.lv || 1) - (b.lv || 1) || a.price - b.price; });
     // 소지품의 유물 선수상도 달 수 있다
-    var mine = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { return G.FIGUREHEAD[x.it.id] && G.FIGUREHEAD[x.it.id].relic; });
+    var FX = G.FigFx, ll = function (f) { return FX ? FX.labelLine(f) : ''; }, tip = function (f) { return f.desc + (FX ? ' — ' + FX.plain(f) : ''); };
+    var mine = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { var f0 = G.FIGUREHEAD[x.it.id]; return f0 && (f0.relic || f0.legend); });
     if (!sold.length && !mine.length && !sh.fig) { await C.say(keeper(), '지금은 선수상이 하나도 없네.'); return; }
-    var opts = mine.map(function (x, k) { var f = G.FIGUREHEAD[x.it.id]; return { label: f.name + ' <span class="tag">소지품 · 유물</span>' + (R.isProof(x.it) ? ' <span class="tag">증거</span>' : ''), right: '달기 150닢', value: 'my' + k, desc: f.desc, icon: 'feather' }; })
-      .concat(sold.map(function (f) { return { label: f.name + ((f.lv || 1) > 1 ? ' <span class="tag">기술 ' + f.lv + '</span>' : ''), right: U.num(f.price) + '닢', value: f.id, desc: f.desc, icon: 'feather' }; }))
-      .concat(sh.fig ? [{ label: '선수상 떼어내기', value: '_off', icon: 'tools', desc: G.FIGUREHEAD[sh.fig] && G.FIGUREHEAD[sh.fig].relic ? '유물 선수상은 떼어 소지품으로 돌려받는다' : '' }] : []);
-    var v = await UI.choose('선수상', opts, { width: 660, text: '선수상은 배를 지켜 주는 수호상입니다. 배마다 하나씩 달 수 있습니다.' + (sh.fig ? ' 지금: <b>' + G.FIGUREHEAD[sh.fig].name + '</b>' : '') +
-      (later.length ? '<br><small class="muted">조선 기술 ' + tech + '등급 — 「기술 투자」로 올리면 ' + later.length + '가지 선수상을 더 깎을 수 있습니다 (다음 등급: ' + later.filter(function (f) { return f.lv === tech + 1; }).map(function (f) { return f.name; }).join('·') + ')</small>' : '') });
-    if (!v) return;
+    var opts = mine.map(function (x, k) { var f = G.FIGUREHEAD[x.it.id]; return { label: f.name + (f.legend ? (FX ? FX.tag(f) : '') : ' <span class="tag">' + (f.great ? '위대한 발견' : '소지품 · 유물') + '</span>') + (R.isProof(x.it) ? ' <span class="tag">증거</span>' : '') + ll(f), right: '달기 150닢', value: 'my' + k, desc: tip(f), icon: 'feather' }; })
+      .concat(sold.map(function (f) { return { label: f.name + ((f.lv || 1) > 1 ? ' <span class="tag">기술 ' + f.lv + '</span>' : ''), right: U.num(f.price) + '닢', value: f.id, desc: tip(f), icon: 'feather' }; }).map(function (o, i) { o.label += ll(sold[i]); return o; }))
+      .concat(later.map(function (f) { return { label: f.name + ' <span class="tag">기술 ' + f.lv + '</span>' + ll(f), right: '조선 기술 ' + f.lv + '등급 필요', value: '_lock', desc: tip(f), icon: 'feather', disabled: true }; }))
+      .concat(sh.fig ? [{ label: '선수상 떼어내기', value: '_off', icon: 'tools', desc: FX && FX.keepable(G.FIGUREHEAD[sh.fig]) ? (G.FIGUREHEAD[sh.fig].legend ? '전설' : '유물') + ' 선수상은 떼어 소지품으로 돌려받는다' : '' }] : []);
+    var v = await UI.choose('선수상', opts, { width: 720, text: '선수상은 배를 지켜 주는 수호상입니다. 배마다 하나씩 달 수 있습니다.' + (sh.fig ? ' 지금: <b>' + G.FIGUREHEAD[sh.fig].name + '</b>' + (FX ? ' <small>(' + FX.short(G.FIGUREHEAD[sh.fig]) + ')</small>' : '') : '') +
+      '<br><small class="muted">여러 배에 달면 같은 효과는 가장 큰 것 하나가 그대로, 다른 배의 것은 ¼만 더해집니다. 속력만은 단 배에만 붙습니다. ★ 전설의 선수상은 전설의 바다 괴물을 무찌르면 건집니다.</small>' +
+      (later.length ? '<br><small class="muted">이 조선소의 조선 기술은 <b>' + tech + '등급</b> — 「기술 투자」로 올리면 ' + later.length + '가지 선수상을 더 깎을 수 있습니다' + (later.some(function (f) { return f.lv === tech + 1; }) ? ' (다음 등급: ' + later.filter(function (f) { return f.lv === tech + 1; }).map(function (f) { return f.name; }).join('·') + ')' : '') + '</small>' : '') });
+    if (!v || v === '_lock') return;
     if (v === '_off') { if (!(await takeOffFig(sh))) return; UI.toast('선수상을 떼어냈다.', 'tools'); return; }
     if (String(v).indexOf('my') === 0) {
       var x = mine[+String(v).slice(2)], rf = G.FIGUREHEAD[x.it.id];
@@ -411,14 +416,14 @@
     var f = G.FIGUREHEAD[v];
     if (s.player.gold < f.price) { await C.say(keeper(), '돈이 모자라는군.'); return; }
     if (sh.fig && !(await takeOffFig(sh))) return;
-    s.player.gold -= f.price; sh.fig = v; UI.toast(sh.name + '호에 ' + f.name + U.j(f.name, '을/를').slice(f.name.length) + ' 달았다. ' + f.desc, 'feather');
+    s.player.gold -= f.price; sh.fig = v; UI.toast(sh.name + '호에 ' + f.name + U.j(f.name, '을/를').slice(f.name.length) + ' 달았다. ' + (FX ? FX.short(f) : f.desc), 'feather');
   }
   /** 달린 선수상을 뗀다. 유물 선수상은 소지품으로 돌려받는다 (칸이 없으면 묻는다) */
   async function takeOffFig(sh) {
     var f = G.FIGUREHEAD[sh.fig];
-    if (f && f.relic) {
+    if (f && (f.relic || f.legend)) {
       if (R.itemsFull()) { if (!(await UI.confirm('소지품이 가득 차서 ' + f.name + U.jx(f.name, '을/를') + ' 돌려받을 자리가 없습니다. 버리겠습니까? (다시 구할 수 없는 유물입니다)', '버린다', '그만둔다'))) return false; }
-      else { R.addItem(f.id, { disc: f.relic, done: true }); UI.toast(f.name + U.jx(f.name, '을/를') + ' 소지품으로 돌려받았다.', { src: G.Img.itemSrc(f.id), icon: 'chest' }); }
+      else { R.addItem(f.id, f.relic ? { disc: f.relic, done: true } : null); UI.toast(f.name + U.jx(f.name, '을/를') + ' 소지품으로 돌려받았다.', { src: G.Img.itemSrc(f.id), icon: 'chest' }); }
     }
     sh.fig = null; return true;
   }

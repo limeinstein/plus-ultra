@@ -254,7 +254,7 @@
     var first = mate('first');
     var luck = R.fleetBonus('luck') * 2 + (R.playerLuck ? R.playerLuck() : 0);   // 선수상의 행운 + 제독의 행운: 나쁜 일을 피할 가능성
     var EF = G.EventFx, fxSay = function (kind, text, who) { return EF ? EF.during(kind, function () { return UI.say(text, who || {}); }) : UI.say(text, who || {}); };
-    var deathCap = function (n) { var k = (G.BALANCE && G.BALANCE.eventDeath) || 1; return Math.max(0, Math.min(f.crew - 1, n, Math.max(1, Math.round(f.crew * k)))); };
+    var deathCap = function (n) { var k = (G.BALANCE && G.BALANCE.eventDeath) || 1; if (G.FigFx) n = G.FigFx.crewLoss(n); return Math.max(0, Math.min(f.crew - 1, n, Math.max(1, Math.round(f.crew * k)))); };   // 전설 「어머니의 품」: 절반
     switch (pick) {
       case 'bottle': {
         var d = nearUnknown(l.lon, l.lat, 26);

@@ -554,6 +554,7 @@
         var ss = all[q];
         if (!(await UI.confirm(ss.name + '호를 파기합니다. 되돌릴 수 없습니다. 좋습니까?', '파기한다', '그만둔다'))) continue;
         var fi = s.fleet.ships.indexOf(ss); if (fi >= 0) s.fleet.ships.splice(fi, 1); else dock.splice(dock.indexOf(ss), 1);
+        if (G.FigFx) G.FigFx.salvage(ss);   // 유물·전설 선수상은 떼어 돌려받는다
         trimCrew();
       }
     }
