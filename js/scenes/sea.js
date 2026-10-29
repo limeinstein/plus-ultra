@@ -978,9 +978,11 @@
       var dayDue = false;
       for (var k = 0; k < nsub && !st.busy && !st.paused; k++) {
         var h0 = l.heading;
+        var chartLon = l.lon, chartLat = l.lat;
         steer(subT, spd);
         st.turnRate = st.turnRate * 0.7 + (U.angDiff(h0, l.heading) / Math.max(subD, 1e-4)) * 0.3;   // 선회율 (rad/일)
         move(subD, subT);
+        if (l.lon !== chartLon || l.lat !== chartLat) G.State.surveyChart(l.lon, l.lat, chartR());
         if (st.fx && G.SeaFX) { G.SeaFX.age(st.fx, subD); st.fxAged = true; }
         updateNpcs(subD);
         st.dayAcc += subD;

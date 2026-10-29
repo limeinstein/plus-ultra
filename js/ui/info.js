@@ -337,7 +337,7 @@
   PAGES.disc = function (el) {
     var s = S();
     var mine = G.DISCOVERIES.filter(function (d) { return G.Disc.foundByMe(d.id); });
-    var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:20px">발견물 ' + mine.length + ' / ' + G.DISCOVERIES.length + '</b><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div>';
+    var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:20px">발견물 ' + mine.length + ' / ' + G.DISCOVERIES.length + '</b><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div>' + (G.Carto ? G.Carto.statusHtml() : '');
     html += frontierBoard();
     Object.keys(G.DISC_CATS).forEach(function (cat) {
       var all = G.DISCOVERIES.filter(function (d) { return d.cat === cat; });

@@ -341,6 +341,7 @@
       st.dayAcc += days;
       if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); }
     }
+    if (l.lon !== px0 || l.lat !== py0) G.State.surveyChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
     animate(dt, px0, py0);
     var dxc = G.Geo.wrapLon(l.lon - st.cam.lon), kc = 1 - Math.exp(-dt * 3);
     st.cam.lon = G.Geo.wrapLon(st.cam.lon + dxc * kc); st.cam.lat += (l.lat - st.cam.lat) * kc;

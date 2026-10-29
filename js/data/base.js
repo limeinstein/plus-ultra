@@ -511,6 +511,7 @@
     questLate: { k: 0.5, min: 20, max: 60 },
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
     birdRevisit: { years: 2, fameK: 0.10, radius: 0.65 }, // 조류: 마지막 관찰로부터 2년 뒤 현장 재방문, 최초 발견 명성의 10%
+    chartSurvey: { max: 4 }, // 재탐사: 윤곽 → 강 → 산 → 지형. 시야 밖으로 나갔다 돌아와야 한 번 더 센다.
     clueStack: { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
     // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
