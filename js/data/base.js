@@ -632,44 +632,55 @@
   ];
   G.CANNON = {}; G.CANNONS.forEach(function (c) { G.CANNON[c.id] = c; });
 
-  // figureheads: bonus keys: spd, hp, luck, storm, monster, morale, battle, curse
+  // figureheads: bonus keys: spd, hp, luck, storm, monster, morale, battle, curse — 실제 효과 글은 js/systems/figfx.js
+  // 조선소에서 깎는 선수상은 그 조선소의 조선 기술 등급(lv, 「기술 투자」로 오른다) 이상이어야 판다 — 대포(G.CANNONS lv)와 같다 (2026-10-29)
+  // 신화의 짐승 선수상은 조선소에서 팔지 않는다 — 위대한 발견의 유물로만 (js/data/figrelics.js) · 전설의 선수상은 전설의 바다 괴물을 무찔러야 (js/data/figlegend.js)
   G.FIGUREHEADS = [
-    { id: 'falcon', name: '송골매상', price: 800, spd: 0.03, desc: '송골매가 날개치는 모습. 속도가 약간 오른다.' },
-    { id: 'fairy', name: '요정상', price: 1200, luck: 0.05, desc: '요정을 형상화한 상. 행운이 따른다.' },
-    { id: 'admiral', name: '제독상', price: 1500, morale: 0.1, desc: '위엄 있는 제독의 상. 선원의 규율이 오른다.' },
-    { id: 'swan', name: '백조상', price: 1100, storm: 0.06, desc: '더러움 없는 백조. 폭풍을 조금 피한다.' },
-    { id: 'horse', name: '마상', price: 1000, spd: 0.02, morale: 0.04, desc: '힘차게 달리는 말의 상.' },
-    { id: 'leopard', name: '표범상', price: 1600, battle: 0.05, desc: '사나운 표범. 해전에서 기세를 올린다.' },
-    { id: 'turtle', name: '거북상', price: 1400, hp: 0.08, desc: '단단한 바다거북. 선체를 지켜 준다.' },
-    { id: 'wolf', name: '이리상', price: 1300, battle: 0.04, morale: 0.03, desc: '무리를 이끄는 이리의 상.' },
-    { id: 'owl', name: '올빼미상', price: 1700, storm: 0.05, luck: 0.03, desc: '밤을 지배하는 올빼미. 위험을 먼저 알아챈다.' },
-    { id: 'dolphin', name: '돌고래상', price: 1800, spd: 0.04, storm: 0.03, desc: '뱃사람의 친구 돌고래.' },
-    { id: 'shark', name: '상어상', price: 2600, battle: 0.08, desc: '바다의 자객. 해전에서 강하다.' },
-    { id: 'unicorn', name: '일각수상', price: 4200, luck: 0.08, monster: 0.3, desc: '전설의 짐승. 괴물이 가까이 오지 않는다.' },
-    { id: 'angel', name: '천사상', price: 5200, luck: 0.06, storm: 0.1, morale: 0.08, desc: '천사의 가호. 저주를 풀 수 있다고 한다.' },
-    { id: 'lion', name: '사자상', price: 3800, battle: 0.1, morale: 0.05, desc: '백수의 왕. 적을 위압한다.' },
-    { id: 'whale', name: '백경상', price: 4500, hp: 0.12, spd: 0.02, desc: '바다의 왕자 백경.' },
-    // 조선 기술 2~5등급 조선소에서만 깎는 선수상 (lv) — 조선소 「기술 투자」로 등급을 올리면 늘어난다. lv가 없으면 1등급
+    // ---- 1등급
+    { id: 'falcon', name: '송골매상', price: 800, lv: 1, spd: 0.03, desc: '송골매가 날개치는 모습. 날쌘 새처럼 배가 가벼워진다.' },
+    { id: 'horse', name: '마상', price: 1000, lv: 1, spd: 0.02, morale: 0.04, desc: '힘차게 달리는 말의 상.' },
+    { id: 'swan', name: '백조상', price: 1100, lv: 1, storm: 0.06, desc: '더러움 없는 백조. 거친 날씨를 미리 알고 비켜 간다.' },
+    { id: 'wolf', name: '이리상', price: 1300, lv: 1, battle: 0.04, morale: 0.03, desc: '무리를 이끄는 이리의 상.' },
+    { id: 'turtle', name: '거북상', price: 1400, lv: 1, hp: 0.08, desc: '단단한 바다거북. 선체를 지켜 준다.' },
+    { id: 'admiral', name: '제독상', price: 1500, lv: 1, morale: 0.1, desc: '위엄 있는 제독의 상. 선원의 규율이 오른다.' },
+    { id: 'leopard', name: '표범상', price: 1600, lv: 1, battle: 0.05, desc: '사나운 표범. 해전에서 기세를 올린다.' },
+    { id: 'owl', name: '올빼미상', price: 1700, lv: 1, storm: 0.05, luck: 0.03, desc: '밤을 지배하는 올빼미. 위험을 먼저 알아챈다.' },
+    { id: 'dolphin', name: '돌고래상', price: 1800, lv: 1, spd: 0.04, storm: 0.03, desc: '뱃사람의 친구 돌고래.' },
+    // ---- 2등급
     { id: 'seahorse', name: '해마상', price: 1900, lv: 2, spd: 0.03, hp: 0.03, desc: '꼬리를 감아 버티는 해마. 배가 흔들려도 곧게 선다.' },
-    { id: 'goldeagle', name: '검독수리상', price: 2000, lv: 2, battle: 0.05, spd: 0.02, desc: '높은 하늘에서 내리꽂는 검독수리. 해전에서 먼저 덮친다.' },
     { id: 'crane', name: '두루미상', price: 1800, lv: 2, luck: 0.04, morale: 0.04, desc: '천 년을 산다는 두루미. 먼 뱃길에 탈이 없기를 빈다.' },
+    { id: 'goldeagle', name: '검독수리상', price: 2000, lv: 2, battle: 0.05, spd: 0.02, desc: '높은 하늘에서 내리꽂는 검독수리. 해전에서 먼저 덮친다.' },
     { id: 'bear', name: '곰상', price: 2100, lv: 2, hp: 0.07, morale: 0.03, desc: '두 발로 일어선 큰 곰. 거친 파도에도 배가 버틴다.' },
+    { id: 'shark', name: '상어상', price: 2600, lv: 2, battle: 0.08, desc: '바다의 자객. 해전에서 강하다.' },
+    // ---- 3등급
     { id: 'tigerhead', name: '범 머리상', price: 3200, lv: 3, battle: 0.08, morale: 0.04, desc: '입을 벌린 범의 머리. 적 선원이 보기만 해도 움츠러든다.' },
-    { id: 'griffin', name: '그리핀상', price: 3600, lv: 3, battle: 0.06, spd: 0.03, desc: '독수리 머리에 사자 몸. 보물을 지키는 짐승이 뱃머리를 지킨다.' },
     { id: 'orca', name: '범고래상', price: 3400, lv: 3, battle: 0.06, monster: 0.1, desc: '바다의 사냥꾼. 큰 바다 짐승도 범고래 앞에서는 물러난다.' },
     { id: 'stnicholas', name: '성 니콜라스상', price: 3500, lv: 3, storm: 0.1, morale: 0.05, desc: '뱃사람의 수호성인. 폭풍 속에서 기도하던 배를 건졌다고 전한다.' },
-    { id: 'pegasus', name: '천마상', price: 5600, lv: 4, spd: 0.07, luck: 0.03, desc: '날개 달린 말. 돛에 바람이 한 겹 더 실리는 듯하다.' },
-    { id: 'siren', name: '세이렌상', price: 5400, lv: 4, luck: 0.06, storm: 0.06, monster: 0.1, desc: '노래로 뱃사람을 홀리던 바다의 여인. 이제는 배를 위해 노래한다.' },
-    { id: 'qilin', name: '기린상', price: 5800, lv: 4, luck: 0.1, morale: 0.05, desc: '성군이 날 때 나타난다는 상서로운 짐승. 큰 복이 따른다.' },
-    { id: 'triton', name: '트리톤상', price: 6000, lv: 4, storm: 0.12, spd: 0.03, desc: '소라고둥을 부는 바다신의 아들. 고둥 소리에 파도가 가라앉는다.' },
-    { id: 'dragonking', name: '용상', price: 9500, lv: 5, battle: 0.12, storm: 0.08, monster: 0.2, desc: '여의주를 문 용. 바다의 짐승과 비바람이 모두 길을 비킨다.' },
-    { id: 'firebird', name: '불사조상', price: 9800, lv: 5, hp: 0.1, luck: 0.08, morale: 0.08, desc: '불 속에서 다시 태어나는 새. 부서져도 배가 다시 일어선다고 믿는다.' },
+    { id: 'lion', name: '사자상', price: 3800, lv: 3, battle: 0.1, morale: 0.05, desc: '백수의 왕. 적을 위압한다.' },
+    // ---- 4등급
+    { id: 'whale', name: '백경상', price: 4500, lv: 4, hp: 0.12, spd: 0.02, desc: '바다의 왕자 흰 고래. 어떤 파도도 그 등을 넘지 못한다.' },
+    { id: 'angel', name: '천사상', price: 5200, lv: 4, luck: 0.06, storm: 0.1, morale: 0.08, desc: '날개를 편 천사의 가호. 배에 깃든 저주를 풀 수 있다고 한다.' },
+    { id: 'stellamaris', name: '바다의 별 성모상', price: 5600, lv: 4, storm: 0.1, luck: 0.05, morale: 0.05, desc: '별 관을 쓰고 아기를 안은 성모. 뱃사람들은 「바다의 별」이라 부르며 먼 뱃길을 맡긴다.' },
+    // ---- 5등급
+    { id: 'royalcrest', name: '왕실 문장상', price: 9000, lv: 5, battle: 0.08, morale: 0.1, luck: 0.04, desc: '왕관과 방패, 두 마리 사자를 새긴 왕실 문장. 왕의 배라는 표시라 선원들이 허리를 펴고 적도 함부로 덤비지 못한다.' },
     { id: 'michael', name: '대천사 미카엘상', price: 11000, lv: 5, battle: 0.1, storm: 0.12, morale: 0.1, desc: '창을 든 대천사. 뱃사람들이 마지막에 부르는 이름이다.' },
-    { id: 'garuda', name: '가루다상', price: 10500, lv: 5, spd: 0.06, battle: 0.06, monster: 0.4, desc: '뱀을 잡아먹는 신조. 바다뱀과 괴물이 가까이 오지 못한다.' },
-    { id: 'goddess', name: '여신상', price: 9000, luck: 0.1, storm: 0.15, morale: 0.1, rare: true, desc: '바다의 여신. 모든 항해를 지켜 준다.' },
-    { id: 'seagod', name: '해신상', price: 12000, spd: 0.06, storm: 0.2, monster: 0.5, rare: true, desc: '바다를 다스리는 신의 상.' },
-    { id: 'demon', name: '마왕상', price: 6000, battle: 0.2, morale: -0.1, curse: true, rare: true, desc: '무서운 힘을 주지만 저주가 깃들어 있다.' }
+    // ---- 위대한 발견에서만 (js/data/figrelics.js 가 발견 유물로 잇는다) — great: 발견 id
+    { id: 'fairy', name: '요정상', price: 3200, great: 'avalon', luck: 0.08, morale: 0.04, desc: '사과나무 섬의 요정을 깎은 상. 아발론의 물가에서 건졌다 — 요정이 따르는 배에는 행운이 따른다.' },
+    { id: 'unicorn', name: '일각수상', price: 6200, great: 'unicorn', luck: 0.08, monster: 0.3, desc: '이마에 뿔 하나 달린 흰 짐승. 독과 괴물이 가까이 오지 않는다.' },
+    { id: 'griffin', name: '그리핀상', price: 4800, great: 'persepolis', battle: 0.06, spd: 0.03, desc: '페르세폴리스 기둥머리의 날개 달린 짐승을 본뜬 상. 보물을 지키는 짐승이 뱃머리를 지킨다.' },
+    { id: 'pegasus', name: '천마상', price: 6600, great: 'parthenon', spd: 0.07, luck: 0.03, desc: '파르테논 박공에서 떨어진 날개 달린 말 조각. 돛에 바람이 한 겹 더 실리는 듯하다.' },
+    { id: 'siren', name: '세이렌상', price: 6400, great: 'troy', luck: 0.06, storm: 0.06, monster: 0.1, desc: '오디세우스를 홀리던 바다의 여인. 트로이의 폐허에서 나와 이제는 배를 위해 노래한다.' },
+    { id: 'triton', name: '트리톤상', price: 8000, great: 'atlantis', storm: 0.12, spd: 0.03, monster: 0.1, desc: '소라고둥을 부는 바다신의 아들. 가라앉은 아틀란티스의 신전 앞에 서 있었다 — 고둥 소리에 파도가 가라앉는다.' },
+    { id: 'qilin', name: '기린상', price: 6800, great: 'giraffe', luck: 0.1, morale: 0.05, desc: '정화의 함대가 명나라 황제에게 바친 「기린」. 성군이 날 때 나타나는 상서로운 짐승이라 큰 복이 따른다.' },
+    { id: 'dragonking', name: '용상', price: 11000, great: 'blackdragon', battle: 0.12, storm: 0.08, monster: 0.2, desc: '흑룡강의 흑룡이 물고 있던 여의주를 문 용. 바다의 짐승과 비바람이 모두 길을 비킨다.' },
+    { id: 'firebird', name: '불사조상', price: 10500, great: 'kyivsophia', hp: 0.1, luck: 0.08, morale: 0.08, desc: '슬라브 옛이야기의 불새. 키이우 성 소피아의 금빛 모자이크 아래 잠들어 있었다 — 부서져도 배가 다시 일어선다고 믿는다.' },
+    { id: 'garuda', name: '가루다상', price: 11500, great: 'prambanan', spd: 0.06, battle: 0.06, monster: 0.4, desc: '프람바난 가루다 사당의 신조. 뱀을 잡아먹는 새라 바다뱀과 괴물이 가까이 오지 못한다.' },
+    // ---- 전설: 전설의 바다 괴물을 무찌르면 (js/data/figlegend.js 가 덕·전설의 힘을 채운다)
+    { id: 'goddess', name: '바다의 여신상', price: 9000, rare: true, legend: true, desc: '' },
+    { id: 'seagod', name: '해신상', price: 12000, rare: true, legend: true, desc: '' },
+    { id: 'demon', name: '마왕상', price: 6000, rare: true, legend: true, curse: true, desc: '' }
   ];
+  G.FIGUREHEADS.forEach(function (f) { if (f.great) f.rare = true; });
   G.FIGUREHEAD = {}; G.FIGUREHEADS.forEach(function (f) { G.FIGUREHEAD[f.id] = f; });
 
   G.SHIP_NAMES = ['산티아고', '산마르코', '산안토니오', '산마르틴', '산세바스찬', '산조르디', '아르메리아', '루이자', '카타리나', '콘세프시온', '블랑카', '에레오노라', '요한나', '테레사', '디니스', '산타마리아', '후아나', '아순시온', '콘스탄시아', '베렌게라', '트리니다드', '빅토리아', '에스페란사', '산가브리엘', '산라파엘', '베리오', '핀타', '니냐', '플로르 데 라 마르', '보아 비아젱'];

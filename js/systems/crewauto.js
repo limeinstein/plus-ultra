@@ -20,9 +20,9 @@
   function K() { return (G.BALANCE && G.BALANCE.crewAuto) || {}; }
 
   CA.POSTS = [
-    { id: 'helm', name: '조타수', icon: 'wheel', skills: ['nav', 'ops'], desc: '키를 잡는다.' },
-    { id: 'deck', name: '갑판', icon: 'ship', skills: ['ops', 'sword'], desc: '갑판에서 선원들을 부린다.' },
-    { id: 'lookout', name: '파수꾼', icon: 'telescope', skills: ['survey', 'hist'], desc: '돛대 꼭대기에서 바다를 살핀다.' }
+    { id: 'helm', name: '조타수', icon: 'wheel', skills: ['nav', 'ops'], main: ['nav'], sub: ['ops'], desc: '키를 잡는다.' },
+    { id: 'deck', name: '갑판', icon: 'ship', skills: ['ops', 'sword'], main: ['ops'], sub: ['sword'], desc: '갑판에서 선원들을 부린다.' },
+    { id: 'lookout', name: '파수꾼', icon: 'telescope', skills: ['survey', 'hist'], main: ['survey'], sub: ['hist'], desc: '돛대 꼭대기에서 바다를 살핀다.' }
   ];
   CA.POST = {};
   CA.POSTS.forEach(function (p) { CA.POST[p.id] = p; });
@@ -73,6 +73,12 @@
   function skill(m, id) { return R().mateSkill(m, id); }
   /** 특기 가운데 가장 높은 단계 + 나머지 조금 */
   function bestOf(m, ks) { var best = 0, sum = 0; (ks || []).forEach(function (k) { var v = skill(m, k); best = Math.max(best, v); sum += v; }); return best + (sum - best) * 0.1; }
+  /** 주 특기(★) 그대로 · 보조 특기(☆) 절반 + 다른 특기 조금 — 기함 선실과 같은 셈 (js/systems/cabins.js CB.roomLevel · 2026-10-29 피드백) */
+  function fitOf(m, c) {
+    if (!CB() || !CB().roomLevel) return bestOf(m, c.skills || G.ROLE_SKILLS[c.role] || []);
+    var rs = CB().roomSkills(c), lv = CB().roomLevel(c, m), sum = 0; rs.main.concat(rs.sub).forEach(function (k) { sum += skill(m, k); });
+    return lv ? lv + sum * 0.05 : 0;
+  }
   /** 기함 방에 맞는 정도 (선실 화면의 추천과 같은 셈 — 통역실은 제독보다 잘하는 말) */
   CA.roomFit = function (m, type) {
     var c = G.CABIN[type]; if (!c || !G.MATE[m.id]) return 0;
@@ -81,7 +87,7 @@
       for (var li = 0; li < L.length; li++) { var a = CB().mateLang(m, li), b = (p.lg && p.lg[li]) || 0; if (a > b) n += a - b; }
       return Math.min(3, n * 0.5) * eff(m);
     }
-    return bestOf(m, c.skills || G.ROLE_SKILLS[c.role] || []) * eff(m);
+    return fitOf(m, c) * eff(m);
   };
   /** 선장에 맞는 정도: 항해술(속력·폭풍) · 포술 · 검술 · 조선기술 + 무력(백병전) — 0~4 */
   CA.captainFit = function (m) {
@@ -92,7 +98,7 @@
     return (t / (ws || 1) + str / 100) * eff(m);
   };
   /** 다른 배의 조타수·갑판·파수꾼에 맞는 정도 */
-  CA.postFit = function (m, post) { var p = CA.POST[post]; return p && G.MATE[m.id] ? bestOf(m, p.skills) * eff(m) : 0; };
+  CA.postFit = function (m, post) { var p = CA.POST[post]; return p && G.MATE[m.id] ? fitOf(m, p) * eff(m) : 0; };
 
   // ---------------------------------------------------------------- 자리와 배치
   function isAt(m, st) {

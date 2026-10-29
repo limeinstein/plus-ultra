@@ -126,7 +126,7 @@
     out.forEach(function (l) { seen[l[0]] = true; used.push(l[1]); });
     (G.DISCOVERIES || []).filter(function (d) {
       return d.cat === 'ruin' && d.how === 'city' && d.city === c.id && !seen[d.id] &&
-        (!G.Disc || !G.Disc.built || G.Disc.built(d)) && !mirageGone(d) && I.pick(I.chain.landmark(d.id));
+        (!G.Disc || !G.Disc.built || (G.Disc.inTown ? G.Disc.inTown(d) : G.Disc.built(d))) && !mirageGone(d) && I.pick(I.chain.landmark(d.id));   // 도시의 신기루는 이번 입항에 떴을 때만 (js/systems/discovery.js D.inTown)
     }).forEach(function (d) {
       var best = 0.5, bestGap = -1;
       for (var i = 1; i < 20; i++) {
@@ -962,7 +962,7 @@
   /** 볼거리를 누르거나 그 앞에서 ↑: 아직 찾지 않은 도시 건물 발견물이면 발견(city.lookAt), 그 밖에는 들여다보기 */
   T.lookMark = function (m) {
     if (!st || !m) return;
-    if (m.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(m.d) && !G.Disc.foundByMe(m.id) && G.Disc.built(m.d) && st.onPick) st.onPick('landmark', m.id);
+    if (m.d && G.Disc && G.Disc.isBuilding && G.Disc.isBuilding(m.d) && !G.Disc.foundByMe(m.id) && (G.Disc.inTown ? G.Disc.inTown(m.d) : G.Disc.built(m.d)) && st.onPick) st.onPick('landmark', m.id);
     else T.inspect(m);
   };
 

@@ -1,0 +1,309 @@
+{
+  "assets": [
+    {
+      "id": "glory_mary2",
+      "name": "메리 2세",
+      "event": "glory",
+      "g": "f",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Mary II, 26-year-old adult English queen in 1689. Tall graceful body, expressive dark eyes, black hair swept into a high loose updo, soft face-framing curls and fine flyaway strands. Kind assured closed-mouth smile, head gently tilted, one hand lifted with open palm in welcome, other gathering a fold of her skirt at hip. Pearl necklace, warm ivory and muted royal-blue silk late seventeenth-century gown, low wide square neckline, softly off-shoulder draped sleeves, fitted embroidered bodice, rich full skirt cropped at knees. Regal and warm, tiny pearl hairpins, no crown needed. The woman must read unmistakably as a mature ADULT of the stated age, original fictionalized game face, not a likeness copy of reference. Fuller curvy build with a generous bust, natural body proportions; an elegant fitted period bodice with an open neckline showing upper chest and cleavage, clothing opaque and intact. Graceful character-driven gesture rather than an erotic pose. Borrow reference expressions, poise and softly flowing hair only, translate into painted illustration; preserve individual age, hair color, role. ",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e6426c8f-e6a6-42bb-9ff3-1915d876e14b.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-48ec5809-fd87-4c35-b673-efdc9242745d.png"
+      ]
+    },
+    {
+      "id": "lu_katharina",
+      "name": "카타리나 폰 보라",
+      "event": "reformation",
+      "g": "f",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Create ONE historical fantasy RPG dialogue character illustration, transparent background, vertical1024x1536. Katharina von Bora, explicitly a 24-year-old ADULT woman as established in this game's fiction. Original painted game character, not photorealistic, expressive clear gray eyes, soft painterly skin, strong straight nose, warm chestnut hair in a loose bun beneath a light ivory veil set back from hairline, delicate flowing strands around cheeks. A determined warm half-smile, chin slightly raised, upright shoulders, arms relaxed crossed at waist. She wears an opaque black fitted medieval gown over an ivory linen chemise with a broad square neckline covering the chest, loose ivory sleeves, a simple small cross pendant and ring of convent keys at belt. Graceful curvy adult silhouette, confident investigator personality, rich cloth folds and painted edge control. No cleavage emphasis. Single standing person from the full top of head down to the KNEE EDGE exactly; no lower legs or feet. Leave safe margins round hands, hair, head. Genuine transparent alpha, no floor shadow, scenery, gradients, glow, text, labels, border or watermark. Reference is used only for hair texture, relaxed expression and painted adaptation, not exact identity or body.",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-48ec5809-fd87-4c35-b673-efdc9242745d.png"
+      ]
+    },
+    {
+      "id": "wp_abbess",
+      "name": "페르덴의 수녀원장",
+      "event": "westphalia",
+      "g": "f",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: A fictional ADULT German abbess aged 48 in 1648. Dignified mature woman, subtly lined olive complexion, firm intelligent dark eyes, dark brown hair with a few silver strands framed by a white linen veil worn behind the forehead. Wry knowing half-smile, one eyebrow lifted, one hand raised in measured argument, other holds a sealed property charter. Historical fantasy black velvet convent gown with a shaped fitted bodice, broad open square ivory neckline framing the upper chest, draped elbow-length black cape leaving neckline visible, ivory sleeves, simple silver cross pendant, heavy keys at waist. Attractive mature fuller figure, authority and personality, clearly not a young woman. The woman must read unmistakably as a mature ADULT of the stated age, original fictionalized game face, not a likeness copy of reference. Fuller curvy build with a generous bust, natural body proportions; an elegant fitted period bodice with an open neckline showing upper chest and cleavage, clothing opaque and intact. Graceful character-driven gesture rather than an erotic pose. Borrow reference expressions, poise and softly flowing hair only, translate into painted illustration; preserve individual age, hair color, role. ",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-48ec5809-fd87-4c35-b673-efdc9242745d.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3813d733-1262-403e-9bf1-9b74211adb07.png"
+      ]
+    },
+    {
+      "id": "glory_james2",
+      "name": "제임스 2세",
+      "event": "glory",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: James II in 1688, man 55, long flowing black periwig, narrow tired face, heavy-lidded troubled eyes, clean shaven. Dark plum velvet coat with subdued gold edging, white lace cravat, blue Garter sash. One hand holds a pair of soft gloves at waist, other touches a small signet ring. Weary royal dignity.",
+      "refs": []
+    },
+    {
+      "id": "glory_william3",
+      "name": "오라녜 공 빌럼",
+      "event": "glory",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: William III of Orange in 1688, man 38, thin and angular, hooked nose, pale long face, long brown periwig. Dark steel breastplate over sober indigo coat, bright orange sash across chest, white lace neckcloth. Holds a rolled naval plan naturally at waist, composed determined gaze.",
+      "refs": []
+    },
+    {
+      "id": "glory_bentinck",
+      "name": "한스 빌럼 벤팅크",
+      "event": "glory",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Hans Willem Bentinck in 1688, man39, sturdy athletic build, short golden blond periwig, square jaw, steady practical expression. Black seventeenth-century coat, white plain cravat, sword hilt visible at hip, one hand supporting a leather document case, other holding a sealed dispatch.",
+      "refs": []
+    },
+    {
+      "id": "glory_herbert",
+      "name": "아서 허버트 제독",
+      "event": "glory",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Arthur Herbert as described by game in1688, man40, rugged broad face, black eyepatch over one eye, weathered chestnut hair to shoulders, strong nose and jaw. Navy blue English sea-officer coat with brass buttons, restrained gold braid, linen cravat. Strong relaxed stance, one hand on a folded sea chart and other resting at belt.",
+      "refs": []
+    },
+    {
+      "id": "glory_dartmouth",
+      "name": "다트머스 경",
+      "event": "glory",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: George Legge Baron Dartmouth in1688, man41, worried oval face, long dark brown curls, fine mustache. Rich red naval coat, white lace cravat, plain black belt. Both hands hold a long slim early brass telescope horizontally across waist, concerned gaze angled slightly aside.",
+      "refs": []
+    },
+    {
+      "id": "glory_halifax",
+      "name": "핼리팩스 후작",
+      "event": "glory",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: George Savile Marquess of Halifax in1689, man56, silver curled periwig, thin incisive eyebrows and sharp wry eyes, aristocratic long face. Speaker's deep red robe over black court dress, lace neckcloth. Holding a folded cream parchment and spectacles at waist, one finger marking a point as if delivering a dry remark.",
+      "refs": []
+    },
+    {
+      "id": "glory_locke",
+      "name": "존 로크",
+      "event": "glory",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: John Locke in1689, man57, thin long intelligent clean-shaven face, high forehead and natural swept-back silver gray hair without wig, contemplative warm eyes. Modest plain black scholar coat, soft white falling collar. One hand holds a small bound book, other makes an understated explanatory gesture.",
+      "refs": []
+    },
+    {
+      "id": "lu_cardinal",
+      "name": "그라우엔펠스 추기경",
+      "event": "reformation",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional Otto von Grauenfels, corrupt German cardinal age54, heavy jowls, fleshy smug cheeks, pursed moist-looking lips, small calculating eyes. Red cardinal cap and sumptuous crimson mantle over white cassock, several jeweled rings including one large signet, holding a wine goblet at chest level, other hand rests smugly on belly. Rich character design, not grotesque.",
+      "refs": []
+    },
+    {
+      "id": "lu_ruprecht",
+      "name": "비서 루프레히트",
+      "event": "reformation",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional secretary Ruprecht, age34, gaunt pale narrow face, thin neat mustache, black flat soft cap, suspicious sidelong glance, small tight smile. Plain close-fitting black late-medieval clerk tunic, belt with a ring of keys. Holding a thick leather ledger against hip, other hand pinches an ink-stained quill.",
+      "refs": []
+    },
+    {
+      "id": "lu_canon",
+      "name": "참사회원 볼프강",
+      "event": "reformation",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional canon Wolfgang, age63, round cheerful rosy face, red bulbous nose, gray stubble, balding tonsured gray hair, kindly tipsy grin. Worn dark priest robe with subtle burgundy wine stain on sleeve, comfortable plump belly. Holding a simple pewter cup away from face with one hand, other open conversationally.",
+      "refs": []
+    },
+    {
+      "id": "lu_tetzel",
+      "name": "요한 테첼",
+      "event": "reformation",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Johann Tetzel as game figure, age43, broad round face, short dark tonsured hair, clean-shaven, confident persuasive preacher's open expression. White Dominican tunic under black mantle. Holds a small iron-banded wooden indulgence money box against waist with one hand and a sealed folded paper with other. Box compact and fully within silhouette.",
+      "refs": []
+    },
+    {
+      "id": "lu_konrad",
+      "name": "비단 상인 콘라트",
+      "event": "reformation",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional silk merchant Konrad, man45, rounded sleek face, neatly combed brown hair, clipped beard, self-satisfied smile. Rich dark green late-medieval merchant robe with brown fur collar and burgundy lining, gilt chain. Displaying a parchment with a large red wax seal in one hand, other tucked confidently at belt. No readable writing.",
+      "refs": []
+    },
+    {
+      "id": "lu_kurt",
+      "name": "기사 쿠르트",
+      "event": "reformation",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional knight Kurt, man34, angular scarred face, short uneven dark hair, light stubble, mocking one-sided smirk. Soot-smudged early16th-century steel armor with battered red surcoat and worn leather straps. Relaxed hand on sheathed sword hilt at hip, other holds helmet against thigh. Helmet fully visible inside frame.",
+      "refs": []
+    },
+    {
+      "id": "guicciardini",
+      "name": "프란체스코 귀차르디니",
+      "event": "romesack",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Francesco Guicciardini in1527, man44, round serious face, thick dark beard, black soft cap. Black velvet Florentine court doublet with a steel breastplate over it, white linen collar. Folded campaign map and bundle of sealed letters held at waist, intelligent commander assessing a crisis.",
+      "refs": []
+    },
+    {
+      "id": "bourbon",
+      "name": "부르봉 공작 샤를",
+      "event": "romesack",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Charles III Duke of Bourbon in1527, man37, sharp aquiline face, short trimmed brown beard, firm intent eyes, medium brown hair. Silver Renaissance plate armor and distinctive white mantle draped back from shoulders, one hand on a short visible section of wooden siege ladder entering from side, other rests on sword belt. Avoid full ladder beyond frame, no battle background.",
+      "refs": []
+    },
+    {
+      "id": "roist",
+      "name": "카스파르 뢰이스트",
+      "event": "romesack",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Kaspar Roist in1527, man49, large sturdy build, thick dark mustache, weathered broad face, serious loyal expression. Early Renaissance Swiss Guard yellow-blue-red striped puffed sleeves and steel cuirass, dark red soft cap. Holds a halberd shaft with blade fully contained diagonally behind shoulder, other hand raised protectively at waist. No modern parade uniform.",
+      "refs": []
+    },
+    {
+      "id": "cellini",
+      "name": "벤베누토 첼리니",
+      "event": "romesack",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Benvenuto Cellini in1527, man27, lively dark curly hair, pointed short beard, sharp lively brown eyes. Ivory artisan shirt with sleeves rolled at forearms, dark brown leather waistcoat and belt marked with gunpowder dust. Small goldsmith's hammer in one hand, early short matchlock firearm cradled low across waist with other, muzzle inside image. Energetic proud artisan.",
+      "refs": []
+    },
+    {
+      "id": "wp_pauw",
+      "name": "아드리안 파우",
+      "event": "westphalia",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Adriaan Pauw in1648, man63, short graying beard, neat black cap, meticulous stern lined face. Black silk Dutch statesman's dress and a wide white pleated ruff collar. Both hands neatly hold a folded treaty parchment at waist, sober precise stance.",
+      "refs": []
+    },
+    {
+      "id": "wp_penaranda",
+      "name": "페냐란다 백작",
+      "event": "westphalia",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Gaspar de Bracamonte Count of Penaranda in1648, man53, elegant tired face, neatly pointed dark mustache and goatee, shoulder-length dark hair with gray threads. Austere black Spanish court outfit with white golilla collar, red sword-shaped order cross embroidered on chest. Holds dark leather dispatch folio and gloves at waist, restrained proud posture.",
+      "refs": []
+    },
+    {
+      "id": "wp_terborch",
+      "name": "헤라르트 테르보르흐",
+      "event": "westphalia",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Gerard ter Borch in1648, man31, slender oval face, fine mustache, shoulder-length brown hair, quiet observant eyes. Modest brown Dutch coat with plain white linen collar, small wooden drawing board tucked under one arm, fingers bearing tiny paint smudges, holding brush in other hand. Slightly inquisitive tilt of head.",
+      "refs": []
+    },
+    {
+      "id": "wp_salvius",
+      "name": "요한 아들레르 살비우스",
+      "event": "westphalia",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Johan Adler Salvius in1648, man58, round learned face, white trimmed goatee, natural graying hair to ears, small period gold-rimmed round spectacles. Deep navy diplomatic coat with fur collar. Holding a compact ledger and bookmark at waist, patient calculation in eyes.",
+      "refs": []
+    },
+    {
+      "id": "rs_landsknecht",
+      "name": "란츠크네히트",
+      "event": "romesack",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional German landsknecht mercenary in1527, man35, sunburned angular face, blond mustache, unruly blond hair, hard hungry grin. Dramatic but worn slashed red-yellow-black doublet, short steel breastplate, broad feathered cap with feather entirely visible. Hand grips sheathed sword belt, other raised impatiently. No battlefield.",
+      "refs": []
+    },
+    {
+      "id": "rs_roman",
+      "name": "로마 시민",
+      "event": "romesack",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional Roman civilian craftsman in1527, man48, olive skin, graying short beard, deep weary expressive eyes, disheveled dark hair. Worn ochre linen shirt, earth-brown vest and burgundy waist sash, dust on sleeves. One hand pressed to heart, other palm open in grief, humane dignified face. No wounds or gore.",
+      "refs": []
+    },
+    {
+      "id": "rs_spanish_officer",
+      "name": "에스파냐 장교",
+      "event": "romesack",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional Spanish officer in1527, man38, sharp suspicious eyes, close black beard, dark brown hair under a plain soft black cap. Blackened steel cuirass over muted dark red doublet, leather sword belt. One hand weighs a small closed coin pouch at waist, other planted on belt, wary skeptical sideways expression.",
+      "refs": []
+    },
+    {
+      "id": "wp_pastor",
+      "name": "페르덴의 루터파 목사",
+      "event": "westphalia",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional Lutheran pastor in1648 Verden, man56, lean lined kind face, short graying beard, graying hair, concerned earnest expression. Plain black wool coat, white modest split clerical collar of the period. Holding a crumpled black broad brim hat in hands at waist as if making a heartfelt argument, no modern clergy shirt.",
+      "refs": []
+    },
+    {
+      "id": "wp_councillor",
+      "name": "브레멘 시참사",
+      "event": "westphalia",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional Bremen city councillor in1648, man52, broad ruddy face, well-groomed brown beard with silver streaks, arched practical eyebrows. Dark green velvet municipal robe with black fur trim and small gold chain, broad white linen collar, black soft hat. One hand supports a municipal charter at hip, other gestures dryly toward an imaginary discussion.",
+      "refs": []
+    },
+    {
+      "id": "wp_crier",
+      "name": "암스테르담의 포고관",
+      "event": "westphalia",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional Amsterdam town crier in1648, man42, bright narrow face, curled brown mustache, chestnut hair under broad black felt hat with small orange ribbon. Dark blue civic coat with brass buttons, white collar. Holds a partly unrolled cream proclamation at chest height and small brass handbell low at waist, lively public-speaking expression, no writing.",
+      "refs": []
+    },
+    {
+      "id": "hg_messenger",
+      "name": "국왕의 전령",
+      "event": "huguenot",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional French royal messenger circa1627, man29, youthful but adult athletic face, neatly trimmed dark mustache, wavy black hair, confident breathless smile. Blue tabard with a small gold fleur-de-lis emblem over leather riding doublet and pale linen shirt, feathered dark hat. One hand holds sealed scroll, other rests on leather satchel at hip; no horse.",
+      "refs": []
+    },
+    {
+      "id": "hg_pastor",
+      "name": "라로셸의 목사",
+      "event": "huguenot",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional elderly Huguenot pastor of La Rochelle circa1628, man67, thin weathered face, full silver beard, gentle resolute gray eyes, long gray hair under plain black cap. Worn charcoal Protestant robe and modest white collar. Holds a small closed Bible against waist and offers an open palm with other hand, humanity and resolve, no injuries.",
+      "refs": []
+    },
+    {
+      "id": "hg_marshal",
+      "name": "국왕의 원수",
+      "event": "huguenot",
+      "g": "m",
+      "type": "portrait",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up dialogue character painting for a historical sailing RPG, vertical 1024x1536. Art direction: polished stylized semi-realistic HAND-PAINTED game illustration, visibly painted shadow shapes, elegant fine edges, expressive eyes, softly simplified skin, restrained beautiful details, NOT a photograph, NOT photorealistic, no pores or photographic lens effects, not a 3D render, not chibi. Period-specific historical fantasy interpretation. One adult character alone; standing with natural gesture, three-quarter view mostly facing viewer, calm readable dialogue expression. Framing: include complete head/hair/hat with 4 percent top safe margin, all hands and held items, torso, hips and thighs, LOWER EDGE CUTS EXACTLY AT KNEES; ABSOLUTELY NO calves, shins, boots or feet. Large figure centered without stretching. Genuine transparent background alpha, no background glow, no scenery, no ground or shadow outside figure. No text, labels, borders or watermarks. Subject: Fictional senior French royal marshal circa1600, man55, stern broad face, thick salt-and-pepper mustache and short beard, gray-streaked dark waves. Blackened steel armor, dark blue sash and maroon cloak, small white lace collar. One hand holds command baton at waist, other rests on belt, authoritative but measured expression.",
+      "refs": []
+    }
+  ]
+}

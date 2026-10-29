@@ -31,6 +31,13 @@ def audit() -> dict:
         if re.search(r"img:\s*'legend-events/'\s*\+\s*(?:key|img)\b", text):
             for key in re.findall(r"\b(?:pic|withPic)\('([a-z0-9_]+)'", text):
                 add('legend-events/' + key, source)
+        # 천문학 사건의 scene(...)과 생존 여부에 따라 고르는 두 장면도 펼친다.
+        if "function scene(img, title, fn)" in text and "'legend-events/' + img" in text:
+            for key in re.findall(r"\bscene\('([a-z0-9_]+)'", text):
+                add('legend-events/' + key, source)
+            for a, b in re.findall(r"\bscene\([^,\n]*\?\s*'([a-z0-9_]+)'\s*:\s*'([a-z0-9_]+)'", text):
+                add('legend-events/' + a, source)
+                add('legend-events/' + b, source)
         if "img: 'legend-events/little_prince_' + key" in text:
             for key in re.findall(r"\bshot\('([a-z0-9_]+)'", text):
                 add('legend-events/little_prince_' + key, source)

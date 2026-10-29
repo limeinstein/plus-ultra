@@ -1440,6 +1440,7 @@
       var discLoss = (f.fatigue > 60 ? 0.9 : 0.25) * (G.SkillCombos ? G.SkillCombos.factor('disciplineLoss') : 1);
       f.discipline = U.clamp(f.discipline - discLoss + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
         + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0) + (GM ? GM.disc : 0) + (G.Rain ? G.Rain.discipline() : 0), 0, 100);
+      if (G.FigFx) G.FigFx.daily(msgs);   // 선수상: 아무는 등딱지·저주·세상 끝의 속삭임 (js/systems/figfx.js)
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();
@@ -1447,6 +1448,7 @@
         f.scurvy = (f.scurvy || 0) + U.clamp((0.8 + (f.daysOut - onset) * (BAL.scurvyGrow || 0.04)) * Math.max(0.35, 1 - med * 0.18 - sci * 0.08) * Math.max(0.4, 1 - (CBN ? CBN.fx('sick', 'sick') : 0)), 0.05, 4);
         if (f.scurvy > 18 && U.chance(0.5)) {
           var sx = f.crew * (BAL.scurvyDeath || 0.012) * f.scurvy / 18, sd = Math.floor(sx) + (U.chance(sx % 1) ? 1 : 0);   // 작은 배라고 매번 한 명씩 쓰러지지는 않는다
+          if (G.FigFx) sd = G.FigFx.crewLoss(sd);
           f.crew = Math.max(0, f.crew - sd);
           if (!st.scurvyWarned) { msgs.push({ icon: 'skull', text: '괴혈병이 번지고 있다! 선원이 하나둘 쓰러진다...' }); st.scurvyWarned = true; }
         }
@@ -1526,7 +1528,10 @@
       if (G.Tudor && G.Tudor.pending()) await G.Tudor.check();   // 엘리자베스의 피신·무적함대
       if (G.Barb && G.Barb.pending()) await G.Barb.check();      // 툴롱의 겨울 (하이레딘 파샤)
       if (G.Kongo && G.Kongo.seaPending()) await G.Kongo.atSea();   // 콩고 강 어귀: 디오구 캉과 돌기둥 (js/systems/kongo.js)
+      if (G.Huguenot && G.Huguenot.seaAfterPending()) await G.Huguenot.afterSeaAll();   // 라로셸 봉쇄를 뚫고 돌아온 날 (js/systems/huguenot.js)
+      else if (G.Huguenot && G.Huguenot.seaPending()) await G.Huguenot.atSea();   // 위그노 내전 — 라로셸 앞바다에서 총사 넷과 어느 편에 설지
       if (G.Sky && G.Sky.seaPending()) await G.Sky.atSea();   // 나침반의 비켜 감을 잰다(케플러) · 망원경으로 목성의 달(갈릴레이) (js/systems/skylore.js)
+      if (G.Glory && G.Glory.seaPending()) await G.Glory.atSea();   // 영국 해협: 개신교의 바람 (js/systems/glory.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);
@@ -1589,6 +1594,7 @@
   SEA.etaDays = function () { return etaDays(); };
   function seaLine(d) {
     if (d.cat === 'geo') return '제독! 저것을 보십시오. 우리가 찾던 곳이 틀림없습니다!';
+    if (G.Disc.isPlant && G.Disc.isPlant(d)) return '제독, 저 해안에 처음 보는 ' + G.Disc.plantWord(d) + U.jx(G.Disc.plantWord(d), '이/가') + ' 보입니다! 상륙해서 살펴보시지요.';   // 식물 (2026-10-29)
     if (d.cat === 'creature') return '제독, 뱃전에 이상한 것이 있습니다! 저런 생물은 처음 봅니다!';
     return '제독! 저기 무언가 보입니다!';
   }
@@ -1620,7 +1626,8 @@
   function weatherDay(msgs) {
     var s = S(), l = s.loc, f = s.fleet;
     if (st.stormDays > 0) return;
-    var p = stormChance(l.lon, l.lat, s.date.m) * Math.max((G.BALANCE && G.BALANCE.stormFloor) || 0, (1 - R.fleetBonus('storm') * 3) * (blessed() ? 0.75 : 1)) * (s.settings.diff === 'easy' ? 0.6 : 1) * (st.stormRisk > 0 ? 2.6 : 1);
+    var FFX = G.FigFx;   // 선수상: 하한(전설 「고요한 바다」는 더 낮게)·저주 (js/systems/figfx.js)
+    var p = stormChance(l.lon, l.lat, s.date.m) * Math.max(FFX ? FFX.stormFloor() : ((G.BALANCE && G.BALANCE.stormFloor) || 0), (1 - R.fleetBonus('storm') * 3) * (blessed() ? 0.75 : 1)) * (s.settings.diff === 'easy' ? 0.6 : 1) * (st.stormRisk > 0 ? 2.6 : 1) * (FFX ? FFX.stormMul() : 1);
     if (U.chance(p) && (!G.Pace || G.Pace.ok('storm', { noGap: true }))) {
       st.stormPending = true; if (G.Pace) G.Pace.mark('storm');
     } else if (U.chance(0.012) && Math.abs(l.lat) < 12 && (!G.Pace || G.Pace.ok('calm', { noGap: true }))) { if (G.Pace) G.Pace.mark('calm', { quiet: true }); st.calm = U.ri(2, 5); msgs.push({ icon: 'wind', text: '바람이 멎었다. 무풍지대다...' }); if (G.EventFx) G.EventFx.flash('sun', 3.2); }
@@ -1648,6 +1655,7 @@
         if (sh.hp <= 0) sunk.push(sh);
       });
       lostCrew = Math.round(f.crew * U.rf(0, 0.06) * dmgK);
+      if (G.FigFx) lostCrew = G.FigFx.crewLoss(lostCrew);   // 전설 「어머니의 품」
       f.crew = Math.max(0, f.crew - lostCrew);
       f.fatigue = Math.min(100, f.fatigue + 12);
       var lostFood = Math.round(f.food * U.rf(0, 0.1) * dmgK); f.food -= lostFood; if (lostFood) st.warnedFor = null;

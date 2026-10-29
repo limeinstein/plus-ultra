@@ -343,7 +343,7 @@
     // ---- 대화
     var s = S(), p = s.player, me = { name: p.name, portrait: p.portrait };
     var lead = SC.mateSpeaker('first');
-    var legend = d.real && d.real.legend, animal = d.cat === 'creature';
+    var legend = d.real && d.real.legend, animal = d.cat === 'creature' && !(G.Disc.isPlant && G.Disc.isPlant(d));   // 식물에는 「새끼 뒤에 성체가…」를 덧붙이지 않는다
     // 세계일주: 모항으로 돌아온 순간 — 발견물 앞에서 외치는 말이 아니라 귀향의 말
     if (d.id === 'circum') {
       var homeC = G.CITY_DATA[p.home] || {}, crew = s.fleet && s.fleet.ships ? s.fleet.ships.reduce(function (a, sh) { return a + (sh.crew || 0); }, 0) : 0;

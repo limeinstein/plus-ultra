@@ -11,8 +11,9 @@ const other = process.env.EVENT_ART_SET === 'other';
 const dutch = process.env.EVENT_ART_SET === 'dutch';
 const gap = process.env.EVENT_ART_SET === 'gap';
 const addon = process.env.EVENT_ART_SET === 'addon';
-const suite = addon ? 'history_addon' : gap ? 'history_gap' : dutch ? 'dutch' : other ? 'other' : 'history';
-const OUT = path.join(ROOT, 'artifacts', addon ? 'history-addon-art-20261029' : gap ? 'history-gap-art-20261029' : suite + '-event-art-20261028');
+const sky = process.env.EVENT_ART_SET === 'sky';
+const suite = sky ? 'sky' : addon ? 'history_addon' : gap ? 'history_gap' : dutch ? 'dutch' : other ? 'other' : 'history';
+const OUT = path.join(ROOT, 'artifacts', sky ? 'sky-event-art-20261029' : addon ? 'history-addon-art-20261029' : gap ? 'history-gap-art-20261029' : suite + '-event-art-20261028');
 const artData = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', gap || addon ? suite + '_art_prompts.json' : suite + '_event_art_prompts.json'), 'utf8'));
 const assets = artData.assets;
 const expectedCount = assets.reduce((n,a) => n + (a.type === 'portrait' ? 2 : 1),0);
@@ -40,8 +41,10 @@ function ok(v, message) { if (!v) throw new Error(message); }
           if (!G.Img.has(key)) throw new Error('등록 누락: ' + key);
           const im = await G.Img.load(key);
           if (!im || !im.naturalWidth) throw new Error('읽기 실패: ' + key);
-          const expected = a.type === 'scene' ? [1881,836] : key.endsWith('_half') ? [1024,1536] : [1024,1024];
-          if (im.naturalWidth !== expected[0] || im.naturalHeight !== expected[1]) throw new Error('규격 오류: ' + key);
+          const expected = a.type === 'scene' ? [1881,836] : key.endsWith('_half') ? [1024,1536] : null;
+          if (expected && (im.naturalWidth !== expected[0] || im.naturalHeight !== expected[1])) throw new Error('규격 오류: ' + key);
+          // 초기 역사 얼굴상은 448 정사각, 새 얼굴상은 1024 정사각이다. 어느 쪽도 배포 때 축소하지 않는다.
+          if (!expected && (im.naturalWidth !== im.naturalHeight || im.naturalWidth < 448)) throw new Error('얼굴상 해상도 오류: ' + key);
           if (key.endsWith('_half')) {
             const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 1536;
             const c = canvas.getContext('2d'); c.drawImage(im,0,0);
@@ -81,7 +84,7 @@ function ok(v, message) { if (!v) throw new Error(message); }
     await page.waitForFunction(() => G.Game.sceneName === 'city');
     await page.waitForTimeout(2200); // 첫 도시의 메뉴와 거리 그림 준비가 끝난 뒤 대화를 연다.
     await page.waitForFunction(() => !document.querySelector('.toast'),null,{timeout:10000});
-    const cases = addon ? artData.cases : gap ? [
+    const cases = sky || addon ? artData.cases : gap ? [
       { key:'barb_charles_audience',id:'charles',name:'카를 5세' },
       { key:'barb_toulon_winter',id:'hayreddin',name:'하이레딘 파샤' },
       { key:'barb_genoa_ransom',id:'turgut',name:'투르구트 레이스' },

@@ -408,7 +408,7 @@ def write_manifest(found):
 def is_valid(key, keys):
     family_age = re.match(r'^portraits/family/(?:[a-z_]+/)?(?:son|daughter)_age(?:5|10|15|20)(?:_v[1-5])?(?:_half)?$', key)
     return key in keys or family_age or key.startswith(('portraits/player/', 'portraits/player-aged/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
-                                          'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'relics/', 'relic-kinds/',
+                                          'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'figureheads/', 'relics/', 'relic-kinds/',
                                           'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/', 'npc-walk/', 'guide/', 'masterworks/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
 

@@ -50,7 +50,18 @@
     adoria: { name: '안드레아 도리아', title: '제노바의 제독 · 황제의 함대 사령관', st: 'it', role: 'noble', face: 'portraits/sponsors/it_doria', born: 1466, look: '70대 후반, 길고 흰 수염, 검은 옷에 황금 양털 훈장, 꼿꼿함' },
     gardiner: { name: '스티븐 가디너 (국왕의 특사)', title: '헨리 8세의 혼인 무효 청원 특사', st: 'ne', role: 'priest', look: '긴 얼굴의 중년 성직자, 검은 사각 모자와 모피를 댄 검은 법의, 봉인한 청원서와 문서 가방' },
     tudor_tower_guard: { name: '탑의 위병', title: '런던 탑 위병', st: 'ne', role: 'soldier', fiction: true, look: '넓은 턱과 검은 수염, 붉은 튜더 근위복, 할버드와 열쇠 꾸러미' },
-    papal_legate: { name: '교황의 사절', title: '교황청 외교 사절', st: 'it', role: 'priest', fiction: true, look: '수염 없는 긴 얼굴과 굽은 코, 벗겨진 머리, 자주색 망토와 봉인한 교서' }
+    papal_legate: { name: '교황의 사절', title: '교황청 외교 사절', st: 'it', role: 'priest', fiction: true, look: '수염 없는 긴 얼굴과 굽은 코, 벗겨진 머리, 자주색 망토와 봉인한 교서' },
+    // ── 새 역사 사건의 이름 없는 화자: 인물화가 있는 창작 역할 인물
+    rs_landsknecht: { name: '란츠크네히트', title: '로마로 진군하는 황제군 용병', st: 'ne', role: 'soldier', fiction: true },
+    rs_roman: { name: '로마 사람', title: '약탈을 겪은 로마 시민', st: 'it', role: 'merchant', fiction: true },
+    rs_spanish_officer: { name: '에스파냐 장교', title: '로마의 황제군 장교', st: 'ib', role: 'captain', fiction: true },
+    wp_pastor: { name: '페르덴의 루터파 목사', title: '교회 소유권을 다투는 목사', st: 'ne', role: 'priest', fiction: true },
+    wp_abbess: { name: '수녀원장', title: '페르덴의 교회 소유권을 다투는 수녀원장', st: 'ne', role: 'noble', g: 'f', fiction: true },
+    wp_councillor: { name: '브레멘 시참사', title: '브레멘의 자치와 조약을 설명하는 시참사', st: 'ne', role: 'official', fiction: true },
+    wp_crier: { name: '암스테르담의 포고관', title: '네덜란드 독립을 알리는 포고관', st: 'ne', role: 'official', fiction: true },
+    hg_messenger: { name: '국왕의 전령', title: '라로셸 진영으로 총사를 부르는 전령', st: 'ne', role: 'soldier', fiction: true },
+    hg_pastor: { name: '라로셸의 목사', title: '봉쇄된 라로셸의 위그노 목사', st: 'ne', role: 'priest', fiction: true },
+    hg_marshal: { name: '국왕의 원수', title: '라로셸을 에워싼 왕군 지휘관', st: 'ne', role: 'captain', fiction: true }
   };
   Object.keys(F).forEach(function (id) { F[id].id = id; });
 

@@ -120,6 +120,8 @@
     return (G.SPONSOR_VOICE_OF || {})[sp.type] || 'noble';
   };
   /** 후원자의 한마디. ctx의 값이 {키}에 들어간다 ({x|을/를} 조사 붙임, {^x|을/를} 조사만) */
+  /** 무엇을 찾았는지에 맞춘 한마디 — 식물은 「그런 짐승이…」가 아니라 cat_plant (2026-10-29) */
+  SP.catLine = function (sp, d) { return (G.Disc.isPlant && G.Disc.isPlant(d) && SP.line(sp, 'cat_plant')) || SP.line(sp, 'cat_' + d.cat); };
   SP.line = function (sp, key, ctx) {
     var VV = G.SPONSOR_VOICE || {}, v = VV[SP.voiceKey(sp)] || {}, t = v[key];
     if (t == null) t = (VV.noble || {})[key];
@@ -327,8 +329,9 @@
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
         if (x.batch) return { label: '찾아 둔 발견을 한꺼번에 보고한다 <span class="tag">' + x.n + '건</span>', right: '일괄 보고', value: i, icon: 'scroll', desc: '값진 것부터 차례로 보고 — 올해 이 후원자에게 두 번째부터는 사례금이 줄어든다 (한 건씩 보고할 때와 같은 셈)' };
         var gr = x.found && G.Disc.gradeOf ? G.Disc.gradeOf(x.d) : null;
-        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: G.Disc.hintText(x.d) };
-      }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다</span>' + (tm ? ' · 성품: <b>' + tm.name + '</b> <span class="muted">— ' + tm.desc + '</span>' : '') });
+        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: G.Disc.hintText(x.d), cat: x.circ ? '' : x.d.cat };   // cat: 갈래 단추로 거른다 (2026-10-29)
+      }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다</span>' + (tm ? ' · 성품: <b>' + tm.name + '</b> <span class="muted">— ' + tm.desc + '</span>' : ''),
+        catName: function (k) { return G.DISC_CATS[k] || k; }, catOrder: Object.keys(G.DISC_CATS), catState: G.DiscPick ? G.DiscPick.state : null });
       if (pick == null) { await UI.say(L('pickCancel'), who); return; }
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
@@ -416,7 +419,7 @@
     var pr = ev === 'fake' ? { noProof: false, given: [], back: [], bonus: 0 } : SP.submitProof(sp, d), bothUp = 0;
     if (pr.noProof) { pay = Math.round(pay * SP.noProofK(sp) / 100) * 100; fame = Math.round(fame * 0.8); }
     if (ev === 'both') { G.Fakes.give(d.id, -1); pay = Math.round(pay * ((G.BALANCE.fakes && G.BALANCE.fakes.bothK) || 1.3) / 100) * 100; bothUp = (G.BALANCE.fakes && G.BALANCE.fakes.bothTrust) || 10; }
-    var lateHead = SP.proofLine(pr, d, true, sp) + (G.Disc.isLate(d.id) ? L('lateRival', { rival: st.rival }) : L('lateGood') + (U.chance(0.55) ? L('cat_' + d.cat) + ' ' : ''));
+    var lateHead = SP.proofLine(pr, d, true, sp) + (G.Disc.isLate(d.id) ? L('lateRival', { rival: st.rival }) : L('lateGood') + (U.chance(0.55) ? SP.catLine(sp, d) + ' ' : ''));
     if (batch) {   // 일괄 보고: 말·창 없이 기록만
       st = s.disc[d.id] || st; st.reported = sp.id; s.disc[d.id] = st; if (G.Tudor && G.Tudor.onReport) G.Tudor.onReport(sp, d);
       s.player.gold += pay; var fGot = G.Fame.add('ex', fame); SP.addTrust(rel, 6 + pr.bonus + (tp === 'generous' ? 3 : 0)); rel.done = (rel.done || 0) + 1; rel.promise = 0;
@@ -467,7 +470,7 @@
     var rows = list.map(function (x, i) {
       var e = x.est;
       var q = x.d.name + ' ' + (G.DISC_CATS[x.d.cat] || '') + ' ' + (G.regionLabelAt ? G.regionLabelAt(x.d.reg, x.d.lon, x.d.lat) : '');   // 찾기 칸: 이름·갈래·지역
-      return '<tr data-ck data-q="' + U.esc(q) + '"' + (x.ok ? '' : ' class="muted"') + '><td>' + (x.ok ? '<input type="checkbox" data-i="' + i + '" checked>' : '') + '</td><td><b>' + U.esc(x.d.name) + '</b>' +
+      return '<tr data-ck data-q="' + U.esc(q) + '"' + (G.DiscPick ? G.DiscPick.attrs(x.d, { val: x.ok ? e.pay : 0 }) : '') + (x.ok ? '' : ' class="muted"') + '><td>' + (x.ok ? '<input type="checkbox" data-i="' + i + '" checked>' : '') + '</td><td><b>' + U.esc(x.d.name) + '</b> <small class="muted">' + U.esc((G.DISC_CATS && G.DISC_CATS[x.d.cat]) || '') + '</small>' +
         (G.Disc.isLate(x.d.id) ? ' <span class="tag">경쟁자가 먼저</span>' : '') + (x.gr ? ' <span class="tag">증거 · ' + U.esc(x.gr.name) + '</span>' : '') + '</td>' +
         (x.ok ? '<td class="num">' + U.num(e.pay) + '닢' + (e.cut ? ' <small class="muted">(깎임)</small>' : '') + '</td><td class="num">+' + U.num(e.fame) + '</td>' : '<td colspan="2" class="muted">관심 밖 — 따로 설득해 보고</td>') + '</tr>';
     }).join('');
@@ -483,13 +486,14 @@
         buttons: [{ label: '고른 것을 보고한다', value: 'go', cls: 'navy', onClick: function () { if (!picked.length) { UI.toast('보고할 발견을 하나 이상 고르십시오.', 'scroll'); return false; } } }, { label: '그만둔다', value: null }],
         onBuild: function (el) {
           var sum = el.querySelector('.bt-sum');
-          UI.checkTools(el.querySelector('.ck-bar'), {
+          // 갈래별 거르기·정렬 (2026-10-29 피드백) — G.DiscPick (js/ui/sortfilter.js)
+          UI.checkTools(el.querySelector('.ck-bar'), Object.assign(G.DiscPick ? G.DiscPick.opts('값진 순', '사례금 높은 순', G.DiscPick.state) : {}, {
             rows: function () { return U.$$('tr[data-ck]', el); }, box: function (r) { return r.querySelector('input[type=checkbox]'); },
             text: function (r) { return r.getAttribute('data-q'); }, placeholder: '이름·갈래·지역으로 찾기', rowClick: true,
             onChange: function () {
               picked = U.$$('input[type=checkbox]', el).filter(function (c) { return c.checked; }).map(function (c) { return list[+c.dataset.i]; });
               var t = tot(picked); sum.innerHTML = '합계: ' + picked.length + '건 · 금화 <b>' + U.num(t[0]) + '</b>닢 · 명성 <b>+' + U.num(t[1]) + '</b>' + (picked.length < ok.length ? ' <small class="muted">(빼면 뒤의 것이 덜 깎인다)</small>' : '');
-            } });
+            } }));
         } });
       var v = await win.result;
       if (v !== 'go' || !picked.length) return false;
@@ -873,7 +877,7 @@
     var pl = k.circ || ev === 'fake' ? '' : SP.proofLine(pr, d, false, sp);
     // 맞이하는 말: 늦었는지, 몇 번째 거래인지, 무엇을 찾았는지에 따라 (js/data/sponsorvoice.js)
     var hailKey = late ? 'hailLate' : ((rel.done || 0) >= 3 && U.chance(0.5) ? 'hailFriend' : 'hail');
-    var catLine = !k.circ && d && U.chance(0.55) && L('cat_' + d.cat);       // 무엇을 찾았는지에 맞춘 한마디 (늘 하지는 않는다)
+    var catLine = !k.circ && d && U.chance(0.55) && SP.catLine(sp, d);       // 무엇을 찾았는지에 맞춘 한마디 (늘 하지는 않는다)
     var headTxt = (k.circ ? L('hailCirc') : L(hailKey, { d: d.name }) + (catLine ? ' ' + catLine : '')) + (late && k.circ ? '\n' + L('pastDue') : '') +
       (pl ? '\n' + pl : '') + circTxt + bothTxt + trTxt + lostTxt;
     // 맞이한 뒤: 발견물 그림을 다시 띄우고 제독이 내놓는다 — 후원자의 관심사에 따른 반응, 부하들이 값어치를 띄우는 말 (js/systems/pitch.js)

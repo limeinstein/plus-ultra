@@ -15,7 +15,9 @@
 
   function duelFx() {
     return (G.FX && G.FX.duel) || { spriteSize: 230, idleFrame: 0, breathRate: 1.35, breathScale: 0.0018, shakeX: 10, shakeY: 6, shakeHit: 0.25, shakeBig: 0.6, shakeDecay: 2.5,
-      flashHit: 0.10, flashTaken: 0.16, flashBig: 0.25, flashDecay: 6, knockback: 26, knockReturnMs: 260, hitParticles: 10, particleLife: 0.42 };
+      flashHit: 0.10, flashTaken: 0.16, flashBig: 0.25, flashDecay: 6, hitMs: 220, hitLean: 0.045,
+      downMs: [100, 380, 500, 280], downAngle: 1.45, downNarrow: 0.3, downSink: 0.18, downBlend: 0.35, downHoldMs: 280,
+      knockback: 8, downKnockback: 20, knockReturnMs: 260, hitParticles: 10, particleLife: 0.42 };
   }
 
   // ---------------------------------------------------------------- 이름표
@@ -287,16 +289,61 @@
         if (pose === 'windup') return [0, 1];
         if (pose === 'lunge') return [0, Math.min(5, 2 + Math.floor(p * 4))];
         if (pose === 'block') return [1, Math.min(3, Math.floor(p * 4))];
-        if (pose === 'hit' || pose === 'down') {
-          var hit = art.sheet.animations.hit, ms = (f.pt || 0) * (f.poseDur || hitDuration()) * 1000 / (fast ? 0.5 : 1);
-          var col = 0;
-          while (col < hit.frames - 1 && ms >= hit.frameMs[col]) { ms -= hit.frameMs[col]; col++; }
-          return [hit.row, col];                                // 마지막은 실제 착지 그림, 패배 뒤에도 그대로 유지
-        }
+        if (pose === 'hit') return [3, D.idleFrame == null ? 0 : D.idleFrame]; // 가벼운 피격은 선 자세의 반동만
         if (pose === 'kneel') return [2, 1];                      // 비틀거리며 주저앉음(항복·생포)
         if (pose === 'shout' || pose === 'shoot') return [3, 4];
         if (pose === 'run') return [3, Math.floor(t * 8) % 4];    // 물러설 때는 대기 동작을 빨리
         return [3, D.idleFrame == null ? 0 : D.idleFrame];       // 대기: 고개가 까닥이지 않도록 안정된 자세 한 장
+      }
+      function smooth(q) { q = Math.max(0, Math.min(1, q)); return q * q * (3 - 2 * q); }
+      /** 무릎을 굽힌 그림을 바닥에 붙여 천천히 기울인 뒤 실제 누운 그림으로 잇는다.
+          외곽점으로 매 순간 바닥 접촉을 맞추므로 외투·장화가 땅 밑으로 내려가지 않는다. */
+      function drawDown(f, L, k) {
+        var times = D.downMs, ms = Math.min(1, f.pt || 0) * downDuration() * 1000;
+        var geo = L.cw / L.f === art.sheet.cell[0] && art.fallGeometry && art.fallGeometry[f.spriteId];
+        var floor = geo ? geo.ground : L.py / L.f;
+        function cell(col, alpha, bottom) {
+          if (alpha <= 0) return;
+          ctx.save(); ctx.globalAlpha *= alpha;
+          ctx.drawImage(f.spriteImg, col * L.cw, 2 * L.ch, L.cw, L.ch,
+            -L.px * k, (floor - bottom - L.py / L.f) * L.f * k, L.cw * k, L.ch * k);
+          ctx.restore();
+        }
+        var hitBottom = geo ? geo.hit : L.py / L.f, kneeBottom = geo ? geo.knee : L.py / L.f;
+        if (ms < times[0]) { cell(0, 1, hitBottom); return; }
+        if (ms < times[0] + times[1]) {
+          var sit = smooth((ms - times[0]) / times[1]);
+          cell(0, 1 - sit, hitBottom);
+          ctx.save(); ctx.translate(0, (floor - L.py / L.f) * L.f * k);
+          ctx.scale(1, 1 - D.downSink * sit);
+          // 정규 발밑으로 옮겨 줄인 뒤 원래 바닥 높이에 둔다.
+          ctx.translate(0, -(floor - L.py / L.f) * L.f * k);
+          cell(1, sit, kneeBottom); ctx.restore(); return;
+        }
+        var fall = smooth((ms - times[0] - times[1]) / times[2]);
+        var blend = smooth((fall - D.downBlend) / (1 - D.downBlend));
+        if (blend < 1) {
+          var angle = -D.downAngle * fall, cs = Math.cos(angle), sn = Math.sin(angle);
+          var xs = 1 - (1 - D.downNarrow) * fall, ys = 1 - D.downSink * (1 - fall);
+          var edge = geo ? geo.edge : [[-90, 0], [90, 0], [-90, -180], [90, -180]];
+          var bottom = -Infinity, top = Infinity, left = Infinity, right = -Infinity, kneeHeight = 0;
+          edge.forEach(function (v) {
+            var x = cs * xs * v[0] - sn * ys * v[1], y = sn * xs * v[0] + cs * ys * v[1];
+            bottom = Math.max(bottom, y); top = Math.min(top, y); left = Math.min(left, x); right = Math.max(right, x);
+            kneeHeight = Math.max(kneeHeight, -v[1]);
+          });
+          // 기울어지는 중에도 머리가 위로 튀지 않고 바닥 쪽으로 계속 낮아진다.
+          var height = kneeHeight * (1 - D.downSink) * (1 - fall) + (geo ? geo.rest : 60) * fall;
+          var sink = height / Math.max(1, bottom - top);
+          ctx.save(); ctx.globalAlpha *= 1 - blend;
+          ctx.translate(-(left + right) * 0.5 * fall * L.f * k, (floor - L.py / L.f - bottom * sink) * L.f * k);
+          ctx.scale(1, sink);
+          ctx.rotate(angle); ctx.scale(xs, ys);
+          ctx.drawImage(f.spriteImg, L.cw, 2 * L.ch, L.cw, L.ch,
+            -L.px * k, -kneeBottom * L.f * k, L.cw * k, L.ch * k);
+          ctx.restore();
+        }
+        cell(2, blend, L.py / L.f);
       }
       function drawSpriteFighter(f, bx, by, face, t) {
         var fr = spriteFrame(f, t), L = art.layout ? art.layout(f.spriteImg) : { cw: 256, ch: 256, px: 128, py: 246, f: 1 };
@@ -306,7 +353,11 @@
         var breathing = f.pose === 'idle' ? (Math.sin(t * (D.breathRate || 1.35) + (face > 0 ? 0 : 1.5)) + 1) * 0.5 : 0;
         var breathScale = 1 + breathing * (D.breathScale == null ? 0.0018 : D.breathScale);
         ctx.save(); ctx.translate(bx + f.x * face, by); ctx.scale(face * (1 + (breathScale - 1) * 0.35), breathScale);
-        // 쓰러진 그림은 시트에서 이미 바닥에 맞췄다. 다시 회전하면 바닥 밑으로 들어간다.
+        if (f.pose === 'down') { drawDown(f, L, k); ctx.restore(); return; }
+        if (f.pose === 'hit') {
+          var recoil = Math.sin(Math.PI * Math.pow(Math.min(1, f.pt || 0), 0.55));
+          ctx.transform(1, 0, D.hitLean * recoil, 1, 0, 0);
+        }
         var q = Math.min(1, (f.pt || 0) * (f.poseDur || 0.35) / 0.45);
         if (f.pose === 'kneel') ctx.translate(0, q * 12);
         ctx.drawImage(f.spriteImg, sx, sy, L.cw, L.ch, -L.px * k, -L.py * k, w, h);
@@ -323,7 +374,7 @@
         var L = LOOK[f.look] || LOOK.brawler, k = f.pt, pose = f.pose;
         var bob = pose === 'idle' ? Math.sin(t * (D.breathRate || 1.35) + (face > 0 ? 0 : 1.5)) * 0.45 : 0;
         ctx.save(); ctx.translate(bx + f.x * face, by); ctx.scale(1.4, 1.4);
-        if (pose === 'down') { ctx.rotate(-face * Math.PI / 2 * Math.min(1, k * 2)); ctx.translate(0, -10 * Math.min(1, k * 2)); }
+        if (pose === 'down') { var fallQ = smooth((k * downDuration() * 1000 - D.downMs[0]) / (D.downMs[1] + D.downMs[2])); ctx.translate(0, -10 * fallQ); ctx.rotate(-face * Math.PI / 2 * fallQ); }
         if (pose === 'kneel') ctx.translate(0, 22);
         ctx.scale(face, 1);
         // 그림자
@@ -422,15 +473,16 @@
       // ------------------------------------------------ 연출 도우미
       function sleep(ms) { return new Promise(function (r) { setTimeout(r, fast ? ms * 0.5 : ms); }); }
       function pose(f, name, dur) { f.pose = name; f.pt = 0; f.poseT = dur || 0.35; f.poseDur = dur || 0.35; }
-      function hitDuration() { return art.sheet.animations.hit.frameMs.reduce(function (sum, ms) { return sum + ms; }, 0) / 1000; }
+      function downDuration() { return D.downMs.reduce(function (sum, ms) { return sum + ms; }, 0) / 1000; }
+      function hitDuration(f) { return f && f.hp <= 0 ? downDuration() : D.hitMs / 1000; }
       function posX(f) { return f === me ? W / 2 - 160 : W / 2 + 160; }
       function banner(text, sub) { fx = fx.filter(function (e) { return e.kind !== 'banner'; }); fx.push({ kind: 'banner', text: text, sub: sub, t: 0, life: 1.5 }); }
       function bubble(f, text) { fx.push({ kind: 'bubble', text: text, x: posX(f) + f.x * (f === me ? 1 : -1), y: H * 0.86 - 190, t: 0, life: 1.6 }); }
       function num(f, text, col, big) { fx.push({ kind: 'num', text: text, col: col || '255,236,160', big: big, x: posX(f) + U.rf(-12, 12), y: H * 0.86 - 170, t: 0, life: 1.1 }); }
       function hurt(f, d, big) {
         d = Math.max(1, Math.round(d)); f.hp = Math.max(0, f.hp - d); f.flash = 0.9;
-        pose(f, f.hp <= 0 ? 'down' : 'hit', hitDuration() * (fast ? 0.5 : 1));
-        f.tx = -D.knockback; setTimeout(function () { f.tx = 0; }, D.knockReturnMs);
+        pose(f, f.hp <= 0 ? 'down' : 'hit', hitDuration(f) * (fast ? 0.5 : 1));
+        f.tx = -(f.hp <= 0 ? D.downKnockback : D.knockback); setTimeout(function () { f.tx = 0; }, D.knockReturnMs * (fast ? 0.5 : 1));
         num(f, '−' + d, f === me ? '255,140,120' : '255,236,160', big); shakeT = Math.min(1, shakeT + (big ? D.shakeBig : D.shakeHit));
         screenFlash = Math.max(screenFlash, big ? D.flashBig : f === me ? D.flashTaken : D.flashHit); screenFlashRgb = f === me ? '255,120,100' : '255,244,220';
         (f === me ? en : me).spirit = Math.min(100, (f === me ? en : me).spirit + 10); f.spirit = Math.min(100, f.spirit + 4);
@@ -481,7 +533,7 @@
           b.spirit = Math.min(100, b.spirit + 6); num(b, '막음', '200,220,255');
         }
         setTimeout(function () { a.tx = 0; }, 180);
-        await sleep(ok ? hitDuration() * 1000 : 300);
+        await sleep(ok ? hitDuration(b) * 1000 : 300);
         return { ok: ok, adv: adv };
       }
       function pickEnemyMove() {
@@ -686,15 +738,23 @@
         var winHow = { ko: 1, capture: 1, persuade: 1, rout: 1 };
         var res = winHow[how] ? 'win' : how === 'flee' ? 'flee' : 'lose';
         result.how = how === 'captured' || how === 'persuaded' ? 'lose' : how; result.stance = stance;
-        if (res === 'win') { if (how === 'ko' && en.pose !== 'down') { pose(en, 'down', 5); } cheer[0] = 3; banner({ ko: '승리!', capture: '생포!', persuade: '설득 성공!', rout: '상대가 달아났다!' }[how]); }
-        else if (res === 'lose') { if (me.pose !== 'down') pose(me, how === 'captured' || how === 'persuaded' ? 'kneel' : 'down', 5); cheer[1] = 3; banner('패배...'); }
+        if (res === 'win') { if (how === 'ko' && en.pose !== 'down') { pose(en, 'down', downDuration() * (fast ? 0.5 : 1)); } cheer[0] = 3; banner({ ko: '승리!', capture: '생포!', persuade: '설득 성공!', rout: '상대가 달아났다!' }[how]); }
+        else if (res === 'lose') { if (me.pose !== 'down') pose(me, how === 'captured' || how === 'persuaded' ? 'kneel' : 'down', downDuration() * (fast ? 0.5 : 1)); cheer[1] = 3; banner('패배...'); }
         else banner('물러섰다');
         if (!me.m && me.admiral) p.hp = U.clamp(Math.round(100 * me.hp / me.maxHp), 5, 100);
         if (!me.m && me.admiral && G.Growth) G.Growth.duel(res);   // 제독이 직접 칼을 맞댄 일기토만 경험이 된다 (js/systems/growth.js)
         say(res === 'win' ? '<span class="good-text">' + ({ ko: U.esc(en.name) + U.jx(en.name, '이/가') + ' 쓰러졌다!', capture: U.esc(en.name) + U.jx(en.name, '을/를') + ' 사로잡았다!', persuade: U.esc(en.name) + U.jx(en.name, '이/가') + ' 칼을 거두었다!', rout: U.esc(en.name) + U.jx(en.name, '이/가') + ' 달아났다!' }[how]) + '</span>'
           : res === 'lose' ? '<span class="warn-text">' + (me.m ? U.esc(me.name) + U.jx(me.name, '이/가') : '제독이') + ' 쓰러지고 말았다...</span>' : '싸움을 피해 물러섰다.');
         el.querySelector('.rd-ctrl').classList.add('done');
-        setTimeout(function () { live = false; win.close(res); if (G.Audio) G.Audio.music(musicBack && musicBack !== 'duel' ? musicBack : G.Game.sceneName === 'sea' || G.Game.sceneName === 'battle' ? 'sea' : 'town'); resolve(res); }, opt.fastEnd ? 60 : 1900);
+        var falling = [me, en].filter(function (f) { return f.pose === 'down'; })[0];
+        var closeDelay = Math.max(opt.fastEnd ? 60 : 1900, falling ? Math.max(0, falling.poseT) * 1000 + D.downHoldMs : 0);
+        setTimeout(function closeAfterLanding() {
+          // 느린 기기에서도 마지막 타격 뒤의 착지가 잘리지 않게 실제 재생 완료를 기다린다.
+          if (live && falling && falling.poseT > 0) { setTimeout(closeAfterLanding, Math.max(50, D.downHoldMs)); return; }
+          live = false; win.close(res);
+          if (G.Audio) G.Audio.music(musicBack && musicBack !== 'duel' ? musicBack : G.Game.sceneName === 'sea' || G.Game.sceneName === 'battle' ? 'sea' : 'town');
+          resolve(res);
+        }, closeDelay);
       }
 
       // ------------------------------------------------ 조작

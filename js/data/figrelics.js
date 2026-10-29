@@ -52,4 +52,13 @@
   r('tanahlot', '바다뱀 수호상', 'fig', 0.2, '바위 사원 밑 동굴을 지키는 성스러운 바다뱀을 깎은 상. 사원을 해치려는 것을 물리친다고 한다.', { monster: 0.1, storm: 0.03 });
   r('poompuhar', '마카라 선수상', 'fig', 0.2, '바다에 잠긴 옛 항구에서 건진, 악어 몸에 코끼리 코를 한 바다 짐승 마카라의 상. 강과 바다의 문을 지킨다.', { monster: 0.12, spd: 0.02 });
   r('munmu', '동해 용의 돌비늘', 'fig', 0.18, '바다 무덤 둘레에서 주운 비늘 무늬 돌. 죽어서 용이 되어 바다를 지키겠다던 왕의 이야기가 서려 있다.', { monster: 0.1, storm: 0.04, battle: 0.03 });
+
+  // ---------------------------------------------------------------- 위대한 발견의 신화 선수상 (2026-10-29 사용자 요청 「몇몇 선수상은 바다 괴물 퇴치나 위대한 발견을 통해서 구할 수 있게」)
+  // 예전에는 조선소에서 팔던 것 — js/data/base.js G.FIGUREHEADS 의 great(발견 id). 같은 id를 유물로 써서(use) 옛 저장의 배에 단 선수상도 그대로다
+  if (G.FIGUREHEADS && G.ITEMS && G.ITEM) G.FIGUREHEADS.forEach(function (f) {
+    if (!f.great) return;
+    f.relic = f.great; f.rare = true;
+    if (!G.ITEM[f.id]) { var it = { id: f.id, name: f.name, kind: 'fig', price: f.price, rare: true, reg: [], desc: f.desc }; G.ITEMS.push(it); G.ITEM[f.id] = it; }
+    r(f.great, f.name, 'fig', 0, f.desc, { use: f.id, price: f.price });
+  });
 })(window.G = window.G || {});

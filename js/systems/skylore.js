@@ -43,16 +43,16 @@
   function who(code) {
     switch (code) {
       case 'c': return sponsor('pl_copernicus', '니콜라우스 코페르니쿠스', 'sky_cop', 'scholar', 'ne');
-      case 'r': return npc('레티쿠스', 'sky_rheticus', 'scholar', 'ne', 'portraits/npc-roles/ne/scholar', true);
-      case 'o': return npc('안드레아스 오시안더', 'sky_osiander', 'priest', 'ne', 'portraits/npc-roles/ne/priest');
-      case 't': return npc('인쇄업자 페트레이우스', 'sky_petreius', 'merchant', 'ne', 'portraits/npc-roles/ne/merchant');
-      case 'g': return npc('티데만 기제 주교', 'sky_giese', 'noble', 'ne', 'portraits/npc-roles/ne/noble');
+      case 'r': return npc('레티쿠스', 'sky_rheticus', 'scholar', 'ne', 'portraits/history/sky_rheticus', true);
+      case 'o': return npc('안드레아스 오시안더', 'sky_osiander', 'priest', 'ne', 'portraits/history/sky_osiander');
+      case 't': return npc('인쇄업자 페트레이우스', 'sky_petreius', 'merchant', 'ne', 'portraits/history/sky_petreius');
+      case 'g': return npc('티데만 기제 주교', 'sky_giese', 'noble', 'ne', 'portraits/history/sky_giese');
       case 'k': return mate('kepler');
       case 'l': return mate('galileo');
       case 'd': return sponsor('it_doge', '베네치아 도제', 'sky_doge', 'king', 'it');
-      case 'q': return npc('종교재판관', 'sky_inq', 'priest', 'it', 'portraits/npc-roles/it/priest');
-      case 'f': return npc('풀젠치오 미칸치오 수사', 'sky_micanzio', 'scholar', 'it', 'portraits/npc-roles/it/scholar');
-      case 'e': return npc('로데베이크 엘제비르', 'sky_elzevir', 'merchant', 'ne', 'portraits/npc-roles/ne/merchant');
+      case 'q': return npc('종교재판관', 'sky_inq', 'priest', 'it', 'portraits/history/sky_inq');
+      case 'f': return npc('풀젠치오 미칸치오 수사', 'sky_micanzio', 'scholar', 'it', 'portraits/history/sky_micanzio');
+      case 'e': return npc('로데베이크 엘제비르', 'sky_elzevir', 'merchant', 'ne', 'portraits/history/sky_elzevir');
       case 'm': return G.Scenes.mateSpeaker('first');
     }
     return {};

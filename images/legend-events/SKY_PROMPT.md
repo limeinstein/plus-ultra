@@ -1,7 +1,9 @@
 # 하늘을 재는 사람들 — 나침반과 망원경 그림 주문서 (2026-10-29)
 
 이벤트: `js/systems/skylore.js` · 대사: `js/data/skylore.js`. 넣기만 하면 바로 쓰인다(없으면 그림 없이 대화만). 규격은 기존 전설 장면 그림과 같다(1881×836).
-얼굴은 이미 있는 그림을 쓴다 — 코페르니쿠스 `sponsors/pl_copernicus`, 케플러·갈릴레이 `mates/kepler`·`mates/galileo`, 도제 `sponsors/it_doge`, 그 밖 `npc-roles/ne`·`npc-roles/it`.
+얼굴은 코페르니쿠스 `sponsors/pl_copernicus`, 케플러·갈릴레이 `mates/kepler`·`mates/galileo`, 도제 `sponsors/it_doge`를 사용한다. 새 화자 7명은 `portraits/history/sky_*`의 전용 얼굴상·투명 무릎상에 연결했다.
+
+아래 장면 10종과 인물화 제작 완료. 실제 생성 지시문과 참조는 `tools/sky_event_art_prompts.json`, 원화·미리보기·검사 결과는 `artifacts/sky-event-art-20261029/`, 제작 기록은 `docs/art/sky-event-art-20261029.md`에 있다.
 
 | 파일 | 내용 |
 |---|---|

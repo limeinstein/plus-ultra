@@ -46,6 +46,9 @@
       venom: [['handle', 'danger']],
       tree: [['climb', 'ok'], ['mast', 'silly']],
       flower: [['smell', 'silly'], ['hair', 'silly']],
+      fruit: [['fruit', 'ok'], ['taste', 'silly']],        // 열매 맺는 나무 (2026-10-29 — 사과나무를 「머리에 꽂아 보자」가 나오지 않게)
+      cactus: [['handle', 'danger']],
+      fungus: [['taste', 'danger']],
       dragon: [['talk', 'myth'], ['ride', 'danger']],
       giant: [['talk', 'myth']],
       mythbird: [['flyRide', 'myth'], ['talk', 'myth']],

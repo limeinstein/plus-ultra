@@ -1,0 +1,226 @@
+{
+  "assets": [
+    {
+      "id": "sky_rheticus",
+      "type": "portrait",
+      "name": "레티쿠스",
+      "prompt": "Use case: historical-scene. Asset type: transparent knee-up RPG dialogue portrait, vertical 1024x1536. Create Georg Joachim Rheticus in 1539, a German scholar aged 25, slender angular youthful face, clean shaven, lively thoughtful brown eyes, medium brown hair under a modest soft black Renaissance scholar cap. Black wool scholar gown, muted dark green doublet, white linen small collar, holding a tied manuscript bundle and a simple wooden measuring rule at waist. Polished realistic hand-painted historical adventure game art matching the reference's rendering quality, natural skin, detailed fabrics; this is a NEW distinct person, do not copy the reference's face or clothes. Standing three-quarter view gently towards viewer, top of hat fully visible with 4% clear margin, both hands visible, lower edge ends precisely at knees, no shins or feet. Figure large and centered, no background or ground, genuine transparent alpha, no shadow outside figure, no text, no border, no watermark. Reference image is style only."
+    },
+    {
+      "id": "sky_osiander",
+      "name": "안드레아스 오시안더",
+      "subject": "Andreas Osiander, Nuremberg Lutheran theologian in 1542, age 44, stocky broad face, reddish brown close beard, wary shrewd eyes, black soft scholar cap, plain heavy black clerical gown with modest white shirt collar (NOT Catholic cardinal costume), holding a quill and loose preface sheet at waist.",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: single transparent knee-up RPG dialogue character portrait, 1024x1536 vertical. Polished realistic painted historical adventure game artwork, natural face anatomy, fine fabric details, restrained rich colors, warm dimensional illumination matching supplied STYLE reference only. New person, do not reuse reference identity or its elaborate costume. One standing person, three-quarter towards viewer, entire hat/head visible with clear top margin, both hands fully visible, crop precisely at knees; no shins, feet, pedestal, surrounding scene or props beyond held objects. Genuine transparent background alpha, NO gradient, NO aura, NO backdrop glow or floor shadow. No text, frame, watermarks. Subject: Andreas Osiander, Nuremberg Lutheran theologian in 1542, age 44, stocky broad face, reddish brown close beard, wary shrewd eyes, black soft scholar cap, plain heavy black clerical gown with modest white shirt collar (NOT Catholic cardinal costume), holding a quill and loose preface sheet at waist.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/potosi_oidor_half.webp"
+      ]
+    },
+    {
+      "id": "sky_petreius",
+      "name": "요하네스 페트레이우스",
+      "subject": "Johannes Petreius, Nuremberg master printer in 1542, age 45, sturdy workman's build, broad square jaw, short dark beard graying at temples, small dark brown soft cap, russet wool doublet and dark ink-stained leather work apron over it. Ink-stained fingertips hold one fresh sheet with faint concentric astronomy circles and a small wooden composing stick. Warm practical expression.",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: single transparent knee-up RPG dialogue character portrait, 1024x1536 vertical. Polished realistic painted historical adventure game artwork, natural face anatomy, fine fabric details, restrained rich colors, warm dimensional illumination matching supplied STYLE reference only. New person, do not reuse reference identity or its elaborate costume. One standing person, three-quarter towards viewer, entire hat/head visible with clear top margin, both hands fully visible, crop precisely at knees; no shins, feet, pedestal, surrounding scene or props beyond held objects. Genuine transparent background alpha, NO gradient, NO aura, NO backdrop glow or floor shadow. No text, frame, watermarks. Subject: Johannes Petreius, Nuremberg master printer in 1542, age 45, sturdy workman's build, broad square jaw, short dark beard graying at temples, small dark brown soft cap, russet wool doublet and dark ink-stained leather work apron over it. Ink-stained fingertips hold one fresh sheet with faint concentric astronomy circles and a small wooden composing stick. Warm practical expression.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/potosi_oidor_half.webp"
+      ]
+    },
+    {
+      "id": "sky_giese",
+      "name": "티데만 기제 주교",
+      "subject": "Tiedemann Giese, bishop of Kulm in 1543, age 63, narrow kindly lined face, short thinning silver hair, clean shaven, gentle thoughtful eyes. Sixteenth-century Catholic bishop's violet cassock beneath a modest dark wool cape, small violet skullcap and simple pectoral cross, no mitre. Holding a closed leather-bound book at waist in both hands, quiet sorrow.",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: single transparent knee-up RPG dialogue character portrait, 1024x1536 vertical. Polished realistic painted historical adventure game artwork, natural face anatomy, fine fabric details, restrained rich colors, warm dimensional illumination matching supplied STYLE reference only. New person, do not reuse reference identity or its elaborate costume. One standing person, three-quarter towards viewer, entire hat/head visible with clear top margin, both hands fully visible, crop precisely at knees; no shins, feet, pedestal, surrounding scene or props beyond held objects. Genuine transparent background alpha, NO gradient, NO aura, NO backdrop glow or floor shadow. No text, frame, watermarks. Subject: Tiedemann Giese, bishop of Kulm in 1543, age 63, narrow kindly lined face, short thinning silver hair, clean shaven, gentle thoughtful eyes. Sixteenth-century Catholic bishop's violet cassock beneath a modest dark wool cape, small violet skullcap and simple pectoral cross, no mitre. Holding a closed leather-bound book at waist in both hands, quiet sorrow.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/potosi_oidor_half.webp"
+      ]
+    },
+    {
+      "id": "sky_inq",
+      "name": "종교재판관",
+      "subject": "A fictional Italian Dominican inquisitor in Rome in 1633, man age 58, stern clean-shaven long face, close gray tonsured hair, dark concentrated eyes. Dominican white tunic and black cappa, sober austere unembellished clothes, holding a small closed legal folio between natural hands. Historically grounded supporting character, not a specific named historical person.",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: single transparent knee-up RPG dialogue character portrait, 1024x1536 vertical. Polished realistic painted historical adventure game artwork, natural face anatomy, fine fabric details, restrained rich colors, warm dimensional illumination matching supplied STYLE reference only. New person, do not reuse reference identity or its elaborate costume. One standing person, three-quarter towards viewer, entire hat/head visible with clear top margin, both hands fully visible, crop precisely at knees; no shins, feet, pedestal, surrounding scene or props beyond held objects. Genuine transparent background alpha, NO gradient, NO aura, NO backdrop glow or floor shadow. No text, frame, watermarks. Subject: A fictional Italian Dominican inquisitor in Rome in 1633, man age 58, stern clean-shaven long face, close gray tonsured hair, dark concentrated eyes. Dominican white tunic and black cappa, sober austere unembellished clothes, holding a small closed legal folio between natural hands. Historically grounded supporting character, not a specific named historical person.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/potosi_oidor_half.webp"
+      ]
+    },
+    {
+      "id": "sky_micanzio",
+      "name": "풀젠치오 미칸치오",
+      "subject": "Fulgenzio Micanzio, Venetian Servite friar in 1636, age 66, warm intelligent long face, balding gray hair, short gray beard, kind intent gaze, modest plain black Servite habit and black mantle with simple black cap pushed back. Holding a tied paper manuscript and plain travel satchel at waist, cautious but hopeful expression.",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: single transparent knee-up RPG dialogue character portrait, 1024x1536 vertical. Polished realistic painted historical adventure game artwork, natural face anatomy, fine fabric details, restrained rich colors, warm dimensional illumination matching supplied STYLE reference only. New person, do not reuse reference identity or its elaborate costume. One standing person, three-quarter towards viewer, entire hat/head visible with clear top margin, both hands fully visible, crop precisely at knees; no shins, feet, pedestal, surrounding scene or props beyond held objects. Genuine transparent background alpha, NO gradient, NO aura, NO backdrop glow or floor shadow. No text, frame, watermarks. Subject: Fulgenzio Micanzio, Venetian Servite friar in 1636, age 66, warm intelligent long face, balding gray hair, short gray beard, kind intent gaze, modest plain black Servite habit and black mantle with simple black cap pushed back. Holding a tied paper manuscript and plain travel satchel at waist, cautious but hopeful expression.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/potosi_oidor_half.webp"
+      ]
+    },
+    {
+      "id": "sky_elzevir",
+      "name": "로데베이크 엘제비르",
+      "subject": "Lodewijk Elzevir the younger, Dutch printer in Amsterdam in 1638, approximately 34 years old, distinct broad forehead, long dark blond curls to ears, neat short mustache and pointed beard, bright welcoming eyes. Black wool Dutch doublet, plain wide white linen falling collar rather than ruff, leather belt, sleeves rolled just at cuffs, holding a freshly bound small book with blank cover and a folded sheet. No modern glasses.",
+      "type": "portrait",
+      "prompt": "Use case: historical-scene. Asset type: single transparent knee-up RPG dialogue character portrait, 1024x1536 vertical. Polished realistic painted historical adventure game artwork, natural face anatomy, fine fabric details, restrained rich colors, warm dimensional illumination matching supplied STYLE reference only. New person, do not reuse reference identity or its elaborate costume. One standing person, three-quarter towards viewer, entire hat/head visible with clear top margin, both hands fully visible, crop precisely at knees; no shins, feet, pedestal, surrounding scene or props beyond held objects. Genuine transparent background alpha, NO gradient, NO aura, NO backdrop glow or floor shadow. No text, frame, watermarks. Subject: Lodewijk Elzevir the younger, Dutch printer in Amsterdam in 1638, approximately 34 years old, distinct broad forehead, long dark blond curls to ears, neat short mustache and pointed beard, bright welcoming eyes. Black wool Dutch doublet, plain wide white linen falling collar rather than ruff, leather belt, sleeves rolled just at cuffs, holding a freshly bound small book with blank cover and a folded sheet. No modern glasses.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/potosi_oidor_half.webp"
+      ]
+    },
+    {
+      "id": "sky_frauenburg",
+      "name": "프라우엔부르크의 탑 방",
+      "desc": "1539, quiet high stone study in Frauenburg cathedral tower by the Baltic. An aging Nicolaus Copernicus with graying wavy bob hair, long face, dark fur-lined robe (reference 1 identity aged naturally to 66) carefully gives a tied stack of astronomy manuscripts to young clean-shaven Rheticus (reference 2 identity). Wooden measuring rulers, armillary sphere and piles of parchment cover a table; arched window opens onto gray blue Baltic water. Hope and reluctance, afternoon side light.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/pl_copernicus_half.webp",
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-b2521470-bbac-4904-a3e8-1f3689100435.png"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1539, quiet high stone study in Frauenburg cathedral tower by the Baltic. An aging Nicolaus Copernicus with graying wavy bob hair, long face, dark fur-lined robe (reference 1 identity aged naturally to 66) carefully gives a tied stack of astronomy manuscripts to young clean-shaven Rheticus (reference 2 identity). Wooden measuring rulers, armillary sphere and piles of parchment cover a table; arched window opens onto gray blue Baltic water. Hope and reluctance, afternoon side light."
+    },
+    {
+      "id": "sky_nuremberg",
+      "name": "뉘른베르크 인쇄소",
+      "desc": "1542 Nuremberg print workshop, master printer Petreius in russet doublet and leather apron (reference 1 identity) accepts a thick manuscript across a table while stocky reddish bearded theologian Osiander (reference 2 identity) writes a preface with a quill nearby. Large timber screw printing press, trays of lead movable type, sheets hanging from lines, a printed page with heliocentric concentric orbital circles in foreground. Warm window light and ink-stained tools; visibly different actions and faces.",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-f4663232-53bc-4886-8038-764505a4be6a.png",
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-e92725ad-f5be-4cea-9421-a026b782da26.png"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1542 Nuremberg print workshop, master printer Petreius in russet doublet and leather apron (reference 1 identity) accepts a thick manuscript across a table while stocky reddish bearded theologian Osiander (reference 2 identity) writes a preface with a quill nearby. Large timber screw printing press, trays of lead movable type, sheets hanging from lines, a printed page with heliocentric concentric orbital circles in foreground. Warm window light and ink-stained tools; visibly different actions and faces."
+    },
+    {
+      "id": "sky_firstbook",
+      "name": "코페르니쿠스의 첫 책",
+      "desc": "May 1543, modest stone tower bedchamber in Frauenburg. A frail 70-year-old Copernicus (reference 1 identity naturally aged, silver wavy hair, long clean-shaven face) reclines in a wooden bed beneath linen sheets, both trembling hands resting on a newly printed open astronomy book on his lap. Its page shows small concentric planetary orbit circles. A Renaissance sea captain in a simple dark traveling coat stands quietly near the window with cap held in hands. Soft morning Baltic window light falls on old scholar's moved expression, restrained intimate emotion.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/pl_copernicus_half.webp"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: May 1543, modest stone tower bedchamber in Frauenburg. A frail 70-year-old Copernicus (reference 1 identity naturally aged, silver wavy hair, long clean-shaven face) reclines in a wooden bed beneath linen sheets, both trembling hands resting on a newly printed open astronomy book on his lap. Its page shows small concentric planetary orbit circles. A Renaissance sea captain in a simple dark traveling coat stands quietly near the window with cap held in hands. Soft morning Baltic window light falls on old scholar's moved expression, restrained intimate emotion."
+    },
+    {
+      "id": "sky_prague",
+      "name": "프라하의 셈하는 방",
+      "desc": "1600 Prague, narrow imperial court study crowded with columns of numerical manuscript pages. Slender Johannes Kepler (reference 1 exact identity: wavy brown hair, mustache and pointed beard, white ruff, black and dark red doublet) leans over a desk scrutinizing a brass magnetic compass beside a terrestrial globe. A sailor's handwritten navigation log and wooden dividers lie beside him. Cold blue city light through tall window, amber candle on desk, tense intellectual concentration.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/kepler_half.webp"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1600 Prague, narrow imperial court study crowded with columns of numerical manuscript pages. Slender Johannes Kepler (reference 1 exact identity: wavy brown hair, mustache and pointed beard, white ruff, black and dark red doublet) leans over a desk scrutinizing a brass magnetic compass beside a terrestrial globe. A sailor's handwritten navigation log and wooden dividers lie beside him. Cold blue city light through tall window, amber candle on desk, tense intellectual concentration."
+    },
+    {
+      "id": "sky_ellipse",
+      "name": "케플러의 타원",
+      "desc": "Early dawn in Kepler's Prague study. Johannes Kepler (reference 1 identity) and a sea captain bend together over one large parchment on a candlelit table. The clearly drawn orbit is an elongated ELLIPSE with a small drawn sun at ONE OFFSET FOCUS, not in its geometric center. Nearby a brass compass, dividers, ship navigation notebook with indistinct ink, loose observation pages. Kepler points with a fine quill at the ellipse; expression of discovery. Pale blue dawn through window, amber candle wax, composition focused on hands and parchment and faces.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/kepler_half.webp"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: Early dawn in Kepler's Prague study. Johannes Kepler (reference 1 identity) and a sea captain bend together over one large parchment on a candlelit table. The clearly drawn orbit is an elongated ELLIPSE with a small drawn sun at ONE OFFSET FOCUS, not in its geometric center. Nearby a brass compass, dividers, ship navigation notebook with indistinct ink, loose observation pages. Kepler points with a fine quill at the ellipse; expression of discovery. Pale blue dawn through window, amber candle wax, composition focused on hands and parchment and faces."
+    },
+    {
+      "id": "sky_campanile",
+      "name": "산 마르코 종탑의 망원경",
+      "desc": "1609 at the open arched top of San Marco campanile in Venice. Galileo (reference 1 identity, receding gray hair, broad intelligent face, thick gray beard, black doublet and white falling collar) guides a Venetian elder in a rich crimson robe looking through a slender LEATHER-WRAPPED early refracting telescope resting on a wood support. Two other crimson-robed elders wait in curiosity. Beyond the arches a luminous Venetian lagoon and distant incoming sailing ship, terracotta roofs below. Golden late afternoon, wonder and practical maritime discovery. Telescope is a narrow long historical tube, not a modern observatory instrument.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/galileo_half.webp"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1609 at the open arched top of San Marco campanile in Venice. Galileo (reference 1 identity, receding gray hair, broad intelligent face, thick gray beard, black doublet and white falling collar) guides a Venetian elder in a rich crimson robe looking through a slender LEATHER-WRAPPED early refracting telescope resting on a wood support. Two other crimson-robed elders wait in curiosity. Beyond the arches a luminous Venetian lagoon and distant incoming sailing ship, terracotta roofs below. Golden late afternoon, wonder and practical maritime discovery. Telescope is a narrow long historical tube, not a modern observatory instrument."
+    },
+    {
+      "id": "sky_deck",
+      "name": "흔들리는 갑판의 목성",
+      "desc": "1610 night on a gently rolling sailing ship far offshore. A sea captain sits in a wooden chair suspended by ropes from the mast rigging, feet clear of deck, bracing a slender brass and leather early telescope tilted up towards the sky. Sailor steadies a guide rope nearby. Moonlit sea, dark folded sail and taut rigging, tiny lantern glow. In a clear patch of sky a bright Jupiter point with four very small aligned star-like pinpoints nearby, an understated storytelling motif without inset or diagram. Deep indigo, silver reflected water, daring fragile observation aboard a ship. No enormous planet, no sci-fi.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/legend-events/kongo_call.webp"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1610 night on a gently rolling sailing ship far offshore. A sea captain sits in a wooden chair suspended by ropes from the mast rigging, feet clear of deck, bracing a slender brass and leather early telescope tilted up towards the sky. Sailor steadies a guide rope nearby. Moonlit sea, dark folded sail and taut rigging, tiny lantern glow. In a clear patch of sky a bright Jupiter point with four very small aligned star-like pinpoints nearby, an understated storytelling motif without inset or diagram. Deep indigo, silver reflected water, daring fragile observation aboard a ship. No enormous planet, no sci-fi."
+    },
+    {
+      "id": "sky_trial",
+      "name": "1633년 로마의 재판",
+      "desc": "1633, austere dark chamber at Santa Maria sopra Minerva, Rome. Elderly Galileo (reference 1 identity naturally aged 69 with receding white hair and full gray white beard) in simple white penitential robe kneels with bowed head before a long elevated table of Catholic cardinals in crimson. A stern Dominican inquisitor (reference 2 identity, clean shaven gray tonsured head, white tunic and black cappa) stands holding a closed legal folio. Low angle wide composition, towering stone walls, solemn shaft of daylight, restrained historical drama, no torture, no chains, no crowd spectacle.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/galileo_half.webp",
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-e9d964ed-3322-40a2-bc74-9addd5401ebc.png"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1633, austere dark chamber at Santa Maria sopra Minerva, Rome. Elderly Galileo (reference 1 identity naturally aged 69 with receding white hair and full gray white beard) in simple white penitential robe kneels with bowed head before a long elevated table of Catholic cardinals in crimson. A stern Dominican inquisitor (reference 2 identity, clean shaven gray tonsured head, white tunic and black cappa) stands holding a closed legal folio. Low angle wide composition, towering stone walls, solemn shaft of daylight, restrained historical drama, no torture, no chains, no crowd spectacle."
+    },
+    {
+      "id": "sky_arcetri",
+      "name": "아르체트리의 창가",
+      "desc": "1636, modest villa study at Arcetri near Florence. Nearly blind elderly Galileo (reference 1 identity aged to 72, receding white hair and full white beard, dark simple doublet and white collar) sits by an open window, fingertips feeling the edges of a tied manuscript bundle. Kindly gray-bearded Servite friar Fulgenzio Micanzio (reference 2 identity, plain black habit, brown satchel) receives the pages discreetly at his side. Olive hills and warm Tuscany countryside through window, soft afternoon light, courage and quiet resolve, no legible text.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/galileo_half.webp",
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-bdd05c25-9326-47a2-a259-aad592665087.png"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1636, modest villa study at Arcetri near Florence. Nearly blind elderly Galileo (reference 1 identity aged to 72, receding white hair and full white beard, dark simple doublet and white collar) sits by an open window, fingertips feeling the edges of a tied manuscript bundle. Kindly gray-bearded Servite friar Fulgenzio Micanzio (reference 2 identity, plain black habit, brown satchel) receives the pages discreetly at his side. Olive hills and warm Tuscany countryside through window, soft afternoon light, courage and quiet resolve, no legible text."
+    },
+    {
+      "id": "sky_elzevir",
+      "name": "암스테르담의 원고",
+      "desc": "1638 canal-side print workshop in Amsterdam. Young Dutch printer Lodewijk Elzevir (reference 1 identity: dark blond curls, fine mustache and pointed beard, black doublet and plain broad white collar) carefully lifts a tied scientific manuscript bundle out of an open plain wooden shipping crate containing a few herbal books. A travel-worn sea captain watches in relief. Wooden printing press, type drawers, drying sheets and a canal with brick gabled houses through leaded window. Cool northern light with warm paper and timber, hopeful clandestine handoff. No readable words on crate or papers.",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-65ab329a-fd7a-4f0a-9444-9ce587e48e75.png"
+      ],
+      "type": "scene",
+      "prompt": "Use case: historical-scene. Asset type: cinematic wide event illustration for historical sailing RPG, panoramic 2.25:1 landscape 1881x836 composition. New original richly detailed realistic painted game art with natural expressive people, coherent anatomy, subtle brushwork, tactile wood, stone, cloth, paper and brass, dramatic warm/cool light. Single unified wide scene without collage, panels, labels, captions, text overlay, watermarks or borders, no modern objects. Key action centered with breathing room at sides for wide crop. References supply identities and/or style as specified. Scene: 1638 canal-side print workshop in Amsterdam. Young Dutch printer Lodewijk Elzevir (reference 1 identity: dark blond curls, fine mustache and pointed beard, black doublet and plain broad white collar) carefully lifts a tied scientific manuscript bundle out of an open plain wooden shipping crate containing a few herbal books. A travel-worn sea captain watches in relief. Wooden printing press, type drawers, drying sheets and a canal with brick gabled houses through leaded window. Cool northern light with warm paper and timber, hopeful clandestine handoff. No readable words on crate or papers."
+    }
+  ],
+  "cases": [
+    {
+      "key": "sky_frauenburg",
+      "id": "sky_rheticus",
+      "name": "레티쿠스"
+    },
+    {
+      "key": "sky_nuremberg",
+      "id": "sky_petreius",
+      "name": "요하네스 페트레이우스"
+    },
+    {
+      "key": "sky_firstbook",
+      "id": "sky_giese",
+      "name": "티데만 기제 주교"
+    },
+    {
+      "key": "sky_prague",
+      "id": "sky_rheticus",
+      "name": "레티쿠스"
+    },
+    {
+      "key": "sky_ellipse",
+      "id": "sky_osiander",
+      "name": "안드레아스 오시안더"
+    },
+    {
+      "key": "sky_campanile",
+      "id": "sky_osiander",
+      "name": "안드레아스 오시안더"
+    },
+    {
+      "key": "sky_deck",
+      "id": "sky_petreius",
+      "name": "요하네스 페트레이우스"
+    },
+    {
+      "key": "sky_trial",
+      "id": "sky_inq",
+      "name": "종교재판관"
+    },
+    {
+      "key": "sky_arcetri",
+      "id": "sky_micanzio",
+      "name": "풀젠치오 미칸치오"
+    },
+    {
+      "key": "sky_elzevir",
+      "id": "sky_elzevir",
+      "name": "로데베이크 엘제비르"
+    }
+  ]
+}

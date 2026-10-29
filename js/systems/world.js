@@ -36,11 +36,13 @@
     if (G.Strand) out = out.concat(G.Strand.daily());     // 남겨 둔 함대: 남은 날 알림 · 기한이 지나면 폐기 (js/systems/strandfleet.js)
     if (G.IncaFall) out = out.concat(G.IncaFall.daily());
     if (G.Medici) out = out.concat(G.Medici.daily());     // 메디치 은행의 위기 — 기한·로렌초의 죽음 (js/systems/medici.js)
+    if (G.RomeSack) out = out.concat(G.RomeSack.daily());   // 1527년 로마 약탈 — 교황의 항복·마키아벨리·탈출 (js/systems/romesack.js)
     if (G.Potosi) out = out.concat(G.Potosi.daily());     // 포토시 은광 — 황제의 마을 · 미타 · 수은 (js/systems/potosi.js)
     if (G.Nzinga) out = out.concat(G.Nzinga.daily());     // 은징가 여왕의 저항 — 은동고·마탐바의 소식 (js/systems/nzinga.js)
     if (G.GoaMal) out = out.concat(G.GoaMal.daily());     // 포르투갈의 고아·말라카 점령 — 소식·말라카의 향료 (js/systems/goamalacca.js)
     if (G.Mina) out = out.concat(G.Mina.daily());         // 엘미나 요새 건설 — 소식·미나의 금 (js/systems/elmina.js)
     if (G.MingFall) out = out.concat(G.MingFall.daily());   // 명의 북경 붕괴·청의 입관 — 소식 (js/systems/mingfall.js)
+    if (G.Westphalia) out = out.concat(G.Westphalia.daily());   // 베스트팔렌 조약 — 소식·전쟁 뒤 독일 시장 (js/systems/westphalia.js)
     if (G.Aztec) out = out.concat(G.Aztec.daily());       // 아즈텍 제국의 멸망 — 소식·천연두·정복 전쟁의 값 (js/systems/aztec.js) // 잉카 제국의 멸망 — 소식·잉카의 황금 (js/systems/incafall.js)
       // 튜더 왕실의 일 (js/systems/tudor.js)      // 화실·조각실: 미술품·조각품을 싣고, 실존 화가·조각가는 명작을 완성한다 (js/systems/studio.js)      // 한배에서 지내며 서로의 말을 익힌다   // 새로 열린 개척 단계, 새로 나타난 항해사
     // contract deadline warnings
@@ -81,6 +83,7 @@
     if (G.Court) out = out.concat(G.Court.daily());         // 국왕의 부름(명성 10,000마다)·왕명의 기한
     if (G.Romance) out = out.concat(G.Romance.daily());   // 부하들 사이의 썸 (js/systems/romance.js)
     if (G.Princess) out = out.concat(G.Princess.daily());
+    if (G.Glory) out = out.concat(G.Glory.daily());         // 명예혁명과 권리장전 — 기한 · 소식 · 권리장전의 날(면세증·교역 증서) (js/systems/glory.js)
     if (G.Sky) out = out.concat(G.Sky.daily());             // 하늘을 재는 사람들 — 기한 · 코페르니쿠스의 첫 책 · 케플러·갈릴레이의 뒷이야기 (js/systems/skylore.js)
     if (G.Kongo) out = out.concat(G.Kongo.daily());         // 포르투갈과 콩고 — 두 편의 기한 · 2편의 부름 · 세례(1491.5.3)와 뒷이야기 (js/systems/kongo.js)
     if (G.Teppo) out = out.concat(G.Teppo.daily());         // 철포 삼백 자루 — 기한 · 나가시노·혼노지 같은 뒷이야기 (js/systems/teppo.js)

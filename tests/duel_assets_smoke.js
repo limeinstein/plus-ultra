@@ -93,6 +93,9 @@ for (const f of allFighters) {
   const fall = im.bounds(2 * CW, 2 * CH, CW, CH);
   ok(Math.abs(fall.b - S.pivot[1]) <= 1 && fall.w > fall.h * 2.5 && fall.h < 120,
     f.id + ': 피격 마지막 장면은 바닥에 누운 자세 ' + JSON.stringify(fall));
+  const geo = art.fallGeometry[f.id], knee = im.bounds(CW, 2 * CH, CW, CH), idleGround = im.bounds(0, 3 * CH, CW, CH).b;
+  ok(geo && geo.ground === idleGround && geo.knee === knee.b && geo.rest === fall.h && geo.edge.length >= 4,
+    f.id + ': 느린 착지의 바닥·무릎 외곽·누운 높이가 실제 시트와 같음');
   if (f.id === 'athos' || f.id === 'aramis') {
     const idle = im.bounds(0, 3 * CH, CW, CH);
     ok(idle.h >= 180 && idle.h <= 240, f.id + ': 삼총사 크기 보정 ' + JSON.stringify(idle));

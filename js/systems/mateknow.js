@@ -1,7 +1,8 @@
-/* 항해사 소식 (G.MateKnow) — 수첩 「철새」에는 소식을 아는 항해사만, 여급에게 행방을 부탁하기. 2026-10-28 사용자 요청
+/* 항해사 소식 (G.MateKnow) — 수첩 「철새」, 여급에게 행방을 부탁하기. 2026-10-28 사용자 요청
+   ※ 2026-10-29 사용자 요청: 「철새」는 다시 모든 철새를 보여 주되, 아직 닿지 못한 대륙에 고향을 둔 철새는 숨기고 그 대륙에 닿으면 연다 (아래 「대륙」).
    ■ 아는 항해사 (s.mateKnow = {id: {c: 도시, d: 날번호, how}}) — how: met(술집 명부에서 보았다·이야기했다) · rumor(술집 주인·여관 안주인의 귀띔)
      · tip(여급에게 사례하고 들은 철새) · maid(여급이 찾아 준 행방) · crew(함께 항해했던 부하) · fate(배를 떠난 부하의 남은 이야기)
-   ■ 수첩 「철새」: 세계의 모든 철새가 아니라, 소식을 아는 항해사(철새·마녀·실존 항해사 모두)만. 머무는 곳은 「들은 그때의 곳」이다 —
+   ■ 수첩 「철새」 아래 칸 「소식을 아는 항해사」: 철새가 아닌 항해사(실존 인물 등)는 소식을 아는 사람만. 머무는 곳은 「들은 그때의 곳」이다 —
      들은 지 fresh(30)일이 지나면 「예전에 ○○ (1503년 5월)」로 흐리게 적고 지금은 떠났을지도 모른다고 한다(실제로는 한 달에 한 번 옮겨 다닌다, js/systems/matemove.js).
      행방을 들어 그 항구에 머무는 동안(s.mateRumorStay)은 「체류 N일 남음」.
    ■ 여급에게 「항해사의 행방을 부탁한다」(js/city/tavern.js T.maid): 이름을 적는다 →
@@ -164,24 +165,106 @@
   };
   if (G.Court && G.Court.taskHtml && !G.Court._mateSeekHtml) { G.Court._mateSeekHtml = true; var th = G.Court.taskHtml; G.Court.taskHtml = function () { return th.apply(this, arguments) + MK.html(); }; }
 
+  // ================================================================ 대륙 — 닿은 대륙의 철새만 수첩에 (2026-10-29 사용자 요청)
+  /* 수첩 「철새」는 다시 모든 철새·마녀를 지금 머무는 곳과 함께 보여 준다. 다만 제독이 아직 한 번도 들어가 보지 못한 대륙에 고향(home)을 둔 철새는 숨기고,
+     그 대륙의 도시에 처음 들어선 다음 날 「철새 소식이 열렸다」고 알린다. 이미 만났거나 소식을 들은 사람(s.mateKnow)은 대륙과 상관없이 보인다.
+     대륙: 유럽(이베리아·북유럽·지중해) · 아프리카 · 중근동(중근동·중앙아시아) · 인도 · 동남아시아 · 남쪽 대륙(동남아시아 지역의 남위 10° 아래) · 동아시아 · 아메리카
+     닿은 대륙 = 들어가 본 도시(s.visited)와 제독의 고향 도시가 있는 대륙. 저장: s.wanderOpen = [열린 대륙] (알림용) */
+  var CONT = [
+    { id: 'europe', name: '유럽', regs: [0, 1, 2] }, { id: 'africa', name: '아프리카', regs: [3] }, { id: 'mideast', name: '중근동', regs: [4, 7] },
+    { id: 'india', name: '인도', regs: [5] }, { id: 'seasia', name: '동남아시아', regs: [8] }, { id: 'oceania', name: '남쪽 대륙', regs: [] },
+    { id: 'eastasia', name: '동아시아', regs: [6, 9] }, { id: 'america', name: '아메리카', regs: [10] }];
+  MK.CONT = CONT;
+  /** 도시의 대륙 id (없으면 null) */
+  MK.contOf = function (c) {
+    if (!c) return null;
+    if (c.region === 8 && c.lat < -10) return 'oceania';
+    for (var i = 0; i < CONT.length; i++) if (CONT[i].regs.indexOf(c.region) >= 0) return CONT[i].id;
+    return null;
+  };
+  MK.contName = function (id) { var c = CONT.filter(function (x) { return x.id === id; })[0]; return c ? c.name : ''; };
+  /** 철새·마녀의 대륙 — 고향 도시, 없으면 처음 고장의 첫 도시 */
+  MK.mateCont = function (m) {
+    var r = G.MATE_RANGE && G.MATE_RANGE[m.id], home = m.home != null ? m.home : r && r.home;
+    if (home != null && city(home)) return MK.contOf(city(home));
+    var zs = m.zones || (r && r.zones) || [], z = zs.length && G.MATE_ZONES ? G.MATE_ZONES[zs[0]] : null;
+    return z && z.ids && z.ids.length ? MK.contOf(city(z.ids[0])) : null;
+  };
+  /** 제독이 닿은 대륙 {id: true} */
+  MK.reached = function () {
+    var s = S(), out = {};
+    Object.keys(s.visited || {}).forEach(function (id) { if (s.visited[id] > 0) { var k = MK.contOf(city(+id)); if (k) out[k] = true; } });
+    var hk = MK.contOf(city(s.player && s.player.home)); if (hk) out[hk] = true;
+    return out;
+  };
+  /** 수첩에 보이는 철새인가 */
+  MK.shown = function (m, reached) {
+    if (MK.known(m.id)) return true;
+    var k = MK.mateCont(m); return !k || !!(reached || MK.reached())[k];
+  };
+  /** 지금 항구를 떠도는 철새·마녀 (함대에 없고, 떠나지 않았고, 이 해에 나타날 수 있는 사람) */
+  function wanderers() {
+    var s = S(), y = s.date.y;
+    return G.MATES.filter(function (m) { return (m.wd || m.witch) && !m.sib && !hired(m.id) && !s.flags['gone_' + m.id] && (G.Frontier ? G.Frontier.mateReady(m, y) : true); });
+  }
+  MK.wanderers = wanderers;
+  /** 날마다: 처음 닿은 대륙이 있으면 그 대륙 철새 소식이 열렸다고 알린다 (처음 부를 때는 알리지 않고 지금 닿은 대륙만 적는다) */
+  MK.openDaily = function () {
+    var s = S(), out = []; if (!s || !s.player) return out;
+    var reached = MK.reached();
+    if (!s.wanderOpen) { s.wanderOpen = Object.keys(reached); return out; }
+    Object.keys(reached).forEach(function (k) {
+      if (s.wanderOpen.indexOf(k) >= 0) return;
+      s.wanderOpen.push(k);
+      var n = wanderers().filter(function (m) { return MK.mateCont(m) === k && !MK.known(m.id); }).length;
+      if (n) out.push({ icon: 'people', text: '【철새 소식】 처음으로 ' + MK.contName(k) + '에 닿았다. 그 바다를 떠도는 철새 ' + n + '명의 소식이 수첩 「철새」에 열렸다.' });
+    });
+    return out;
+  };
+  (function hookDaily() {
+    var W = G.World; if (!W || W._wanderOpen) return; W._wanderOpen = true;
+    var od = W.daily;
+    W.daily = function () { var out = od.apply(this, arguments) || []; try { out = out.concat(MK.openDaily()); } catch (e) { console.error(e); } return out; };
+  })();
+
   // ================================================================ 수첩 「철새」 (js/ui/info.js PAGES.wander)
   MK.page = function (el) {
-    var s = S(), R = G.R, A = G.Art, list = MK.list(), k = K();
-    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">소식을 아는 항해사만 적힙니다 — 술집에서 직접 보았거나, 술집 주인·여관 안주인·여급에게 행방을 들었거나, 함께 항해했던 사람. ' +
-      '적힌 곳은 <b>소식을 들은 그때</b>의 곳입니다. 항해사는 한 달에 한 번쯤 옮겨 다니므로, 들은 지 ' + k.fresh + '일이 지나면 흐리게 「예전에 ○○」로 바뀝니다. ' +
-      '행방을 들은 철새와 여급이 찾아 준 사람은 한동안 그 항구에 머뭅니다. 만났거나 인연이 있던 항해사는 술집 여급에게 「항해사의 행방을 부탁한다」로 찾을 수 있습니다.</div>' +
-      '<table class="tbl"><tr><th></th><th>이름</th><th>갈래</th><th>능력치</th><th>특기</th><th>월급</th><th>마지막으로 들은 곳</th></tr></table>';
+    var s = S(), R = G.R, A = G.Art, k = K(), reached = MK.reached();
+    var all = wanderers(), list = all.filter(function (m) { return MK.shown(m, reached); });
+    var hid = {}; all.forEach(function (m) { if (!MK.shown(m, reached)) { var c = MK.mateCont(m); hid[c] = (hid[c] || 0) + 1; } });
+    var others = MK.list().filter(function (d) { return !d.wd && !d.witch; });   // 철새가 아닌 항해사 — 소식을 들은 사람만
+    var c0 = G.BALANCE.wander || {};
+    var hidTxt = Object.keys(hid).map(function (c) { return MK.contName(c) + ' ' + hid[c] + '명'; }).join(' · ');
+    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 ' + (c0.perYear || 5) + '명씩 새로 항구에 나타나고, ' + (c0.cycle || 30) + '년마다 세대가 바뀝니다. ' +
+      '제독이 <b>닿은 대륙</b>(' + CONT.filter(function (c) { return reached[c.id]; }).map(function (c) { return c.name; }).join('·') + ')을 고향으로 둔 철새와, 이미 만났거나 소식을 들은 철새가 적힙니다. ' +
+      '행방을 들은 철새와 여급이 찾아 준 사람은 한동안 그 항구에 머뭅니다.</div>' +
+      (hidTxt ? '<div class="muted" style="margin-bottom:10px;font-size:15px">🔒 아직 닿지 못한 대륙의 철새 — ' + U.esc(hidTxt) + ' <small>(그 대륙의 항구에 처음 들어서면 열립니다)</small></div>' : '') +
+      '<table class="tbl"><tr><th></th><th>이름</th><th>국적·갈래</th><th>능력치</th><th>특기</th><th>명성</th><th>월급</th><th>머무는 곳</th></tr></table>';
     var tb = el.querySelector('table');
+    function stats(m) { var st = m.st || []; return (G.STATS || []).map(function (x, i) { return x.name.slice(0, 1) + ' ' + (st[i] == null ? '—' : st[i]); }).join(' '); }
+    function skills(m) { return Object.keys(m.sk || {}).filter(function (x) { return m.sk[x] > 0 && G.SKILL_BY_ID[x]; }).map(function (x) { return G.SKILL_BY_ID[x].name + ' ' + m.sk[x]; }).join(' · '); }
+    function face(tr, m) { try { tr.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 48)); } catch (e) { /* 그림 없음 */ } }
+    function nameCell(m) { return '<b>' + U.esc(m.name) + '</b>' + (G.Bio ? G.Bio.link(m.name) : '') + ' <small class="muted">' + (m.g === 'f' ? '여' : '남') + '</small>' + (know()[m.id] && know()[m.id].crew ? ' <small class="muted">· 옛 부하</small>' : ''); }
+    list.sort(function (a, b) { return (b.witch ? 1 : 0) - (a.witch ? 1 : 0) || (a.fame || 0) - (b.fame || 0); });
     list.forEach(function (m) {
-      var w = MK.whereText(m.id), st = m.st || [];
-      var kind = m.witch ? '<span class="tag">' + (m.legend ? '전설의 마녀' : '마녀') + '</span>' : m.wd ? U.esc(m.natName + ' · ' + m.typeName) + (m.prevName ? ' <small class="muted">(' + (m.gen + 1) + '세대)</small>' : '') + ' <span class="tag">철새</span>' : '<span class="tag">항해사</span>';
-      var tr = U.el('tr', w.stale ? 'mk-stale' : '', '<td class="pp"></td><td><b>' + U.esc(m.name) + '</b>' + (G.Bio ? G.Bio.link(m.name) : '') + ' <small class="muted">' + (m.g === 'f' ? '여' : '남') + '</small>' + (know()[m.id] && know()[m.id].crew ? ' <small class="muted">· 옛 부하</small>' : '') + '</td>' +
-        '<td style="white-space:nowrap">' + kind + '</td><td style="white-space:nowrap">' + (G.STATS || []).map(function (x, i) { return x.name.slice(0, 1) + ' ' + (st[i] == null ? '—' : st[i]); }).join(' ') + '</td>' +
-        '<td>' + Object.keys(m.sk || {}).filter(function (x) { return m.sk[x] > 0 && G.SKILL_BY_ID[x]; }).map(function (x) { return G.SKILL_BY_ID[x].name + ' ' + m.sk[x]; }).join(' · ') + '</td>' +
-        '<td style="white-space:nowrap">' + R.mateWage(m.id) + '닢</td><td>' + (w.stale ? '<i class="muted">' + U.esc(w.text) + '</i>' : U.esc(w.text)) + '</td>');
-      try { tr.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 48)); } catch (e) { /* 그림 없음 */ }
-      tb.appendChild(tr);
+      var at = G.MateMove && G.MateMove.where(m.id), left = G.MateMove ? G.MateMove.rumorStayLeft(m.id) : 0;
+      var kind = m.witch ? '<span class="tag">' + (m.legend ? '전설의 마녀' : '마녀') + '</span>' : U.esc((m.natName || '') + ' · ' + (m.typeName || '')) + (m.prevName ? ' <small class="muted">(' + (m.gen + 1) + '세대)</small>' : '');
+      var tr = U.el('tr', '', '<td class="pp"></td><td>' + nameCell(m) + '</td><td style="white-space:nowrap">' + kind + '</td><td style="white-space:nowrap">' + stats(m) + '</td><td>' + skills(m) + '</td>' +
+        '<td style="white-space:nowrap">' + U.num(m.fame || 0) + '</td><td style="white-space:nowrap">' + R.mateWage(m.id) + '닢</td><td>' + (at ? U.esc(at.name) : '—') + (left ? '<br><small class="muted">체류 ' + left + '일 남음</small>' : '') + '</td>');
+      face(tr, m); tb.appendChild(tr);
     });
-    if (!list.length) el.appendChild(U.el('div', 'muted', '아직 소식을 아는 항해사가 없습니다. 술집에서 항해사를 찾거나 주인·여급에게 행방을 들어 보십시오.'));
+    if (!list.length) el.appendChild(U.el('div', 'muted', '지금 닿은 대륙에는 소문난 철새가 없습니다.'));
+    if (others.length) {
+      el.appendChild(U.el('h4', '', '소식을 아는 항해사'));
+      el.appendChild(U.el('div', 'muted', '철새가 아닌 항해사는 소식을 들은 사람만 적힙니다. 적힌 곳은 소식을 들은 그때의 곳 — 들은 지 ' + k.fresh + '일이 지나면 흐리게 「예전에 ○○」로 바뀝니다. 술집 여급에게 「항해사의 행방을 부탁한다」로 찾을 수 있습니다.'));
+      var t2 = U.el('table', 'tbl mk-known', '<tr><th></th><th>이름</th><th>능력치</th><th>특기</th><th>월급</th><th>마지막으로 들은 곳</th></tr>');
+      others.forEach(function (m) {
+        var w = MK.whereText(m.id);
+        var tr = U.el('tr', w.stale ? 'mk-stale' : '', '<td class="pp"></td><td>' + nameCell(m) + ' <span class="tag">항해사</span></td><td style="white-space:nowrap">' + stats(m) + '</td><td>' + skills(m) + '</td>' +
+          '<td style="white-space:nowrap">' + R.mateWage(m.id) + '닢</td><td>' + (w.stale ? '<i class="muted">' + U.esc(w.text) + '</i>' : U.esc(w.text)) + '</td>');
+        face(tr, m); t2.appendChild(tr);
+      });
+      el.appendChild(t2);
+    }
   };
 })(window.G = window.G || {});

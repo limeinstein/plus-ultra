@@ -429,14 +429,32 @@
   var K = I.chain = {};
   K.title = function () { return ['title']; };
   /** 일반 소지품: 그 물건 그림, 없으면 종류 공통 그림 */
-  K.item = function (it) { return ['items/' + it.id, 'item-kinds/' + it.kind, 'relic-kinds/' + it.kind]; };
+  K.item = function (it) {
+    var lf = it.legend && G.FIGUREHEAD && G.FIGUREHEAD[it.id];   // 전설의 선수상: 그 괴물의 그림 (js/data/figlegend.js)
+    return ['items/' + it.id].concat(lf && lf.src ? ['discovery-ends/' + lf.src, 'discoveries/' + lf.src, 'sea-monsters/' + lf.src] : []).concat(['item-kinds/' + it.kind, 'relic-kinds/' + it.kind]);
+  };
   /** 발견 유물: 전용 유물 그림, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */
   K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'discovery-ends/' + r.relic, 'discoveries/' + r.relic, 'relic-kinds/' + r.kind]; };
+  /** 선수상: 전용 조각 그림을 먼저 쓰고, 발견 유물은 원래 유물 그림으로 잇는다. */
+  K.figurehead = function (f) {
+    var r = G.RELIC && G.RELIC[f.id];
+    var legend = f && f.legend && f.src
+      ? ['discovery-ends/' + f.src, 'discoveries/' + f.src, 'sea-monsters/' + f.src]
+      : [];
+    return ['figureheads/' + f.id].concat(r ? K.relic(r) : legend.concat(['items/' + f.id, 'relic-kinds/fig']));
+  };
+  I.figureheadSrc = function (f) {
+    if (typeof f === 'string') f = G.FIGUREHEAD && G.FIGUREHEAD[f];
+    var k = f && I.pick(K.figurehead(f));
+    return k ? I.src(k) : null;
+  };
   /** 교역품: 품목별 그림, 없으면 갈래 공통 그림 */
   K.good = function (g) {
-    // 발견한 식물을 심어 얻는 교역품은 그 식물의 고해상도 마지막 장면을 전용 그림으로 쓴다.
-    // 별도 192px 그림을 다시 줄여 만들지 않아 원본 해상도를 보존하고, 없을 때만 갈래 공통 그림으로 물러난다.
-    return (g.plant && g.from ? ['discovery-ends/' + g.from, 'discoveries/' + g.from] : ['goods/' + g.id]).concat(['good-kinds/' + g.cat]);
+    // 식물 특산물도 열매·목재·가공품의 전용 상품 그림을 먼저 쓴다.
+    // 전용 그림이 없는 사용자 그림 묶음에서는 식물 발견 장면을 대신 쓸 수 있다.
+    var keys = ['goods/' + g.id];
+    if (g.plant && g.from) keys.push('discovery-ends/' + g.from, 'discoveries/' + g.from);
+    return keys.concat(['good-kinds/' + g.cat]);
   };
   /** 소지품(일반 물건·유물) 그림의 주소 — 선택 창·알림·대화 단추의 작은 그림용. 그림이 없으면 null (코드로 그린 그림을 쓰는 자리는 I.make) */
   I.itemSrc = function (it) {

@@ -169,11 +169,34 @@
     var U2 = G.U, F = [name + U2.jx(name, '이/가') + ' 알려 주었는데 — ', name + '에게 물어보니 — ', name + ' 말로는 — ', name + U2.jx(name, '이/가') + ' 귀띔해 주기를 — '];
     return F[Math.abs(k || 0) % F.length];
   };
+  // ---------------------------------------------------------------- 방이 보는 특기 (2026-10-29 피드백)
+  /** 이 방(또는 다른 배의 자리)이 보는 특기 {main:[주 특기], sub:[보조 특기]} — 자료에 없으면 skills(역할 특기)의 첫째가 주, 나머지가 보조 */
+  CB.roomSkills = function (c) {
+    if (!c) return { main: [], sub: [] };
+    if (c.main) return { main: c.main.slice(), sub: (c.sub || []).slice() };
+    var ks = c.skills || G.ROLE_SKILLS[c.role] || [];
+    return { main: ks.slice(0, 1), sub: ks.slice(1) };
+  };
+  CB.subK = function () { var k = B().subK; return k == null ? 0.5 : k; };
+  /** 이 사람이 이 방에서 내는 특기 단계와 그 특기: {lv: 방에 쓰이는 단계, sk, raw: 그 특기의 단계, main: 주 특기인가} — 주 특기는 그대로, 보조 특기는 절반 */
+  CB.roomBest = function (c, m) {
+    var rs = CB.roomSkills(c), best = { lv: 0, sk: null, raw: 0, main: true };
+    if (!m || !G.MATE[m.id]) return best;
+    rs.main.forEach(function (k) { var v = R().mateSkill(m, k); if (v > best.lv) best = { lv: v, sk: k, raw: v, main: true }; });
+    rs.sub.forEach(function (k) { var v = R().mateSkill(m, k), e = v * CB.subK(); if (e > best.lv) best = { lv: e, sk: k, raw: v, main: false }; });
+    return best;
+  };
+  CB.roomLevel = function (c, m) { return CB.roomBest(c, m).lv; };
+  /** 「★항해술 · ☆운용술(절반)」 */
+  CB.skillLabel = function (c) {
+    var rs = CB.roomSkills(c), nm = function (k) { return (G.SKILL_BY_ID[k] || {}).name || k; };
+    if (c && c.lang) return '말(제독이 모르는 말)';
+    if (!rs.main.length && !rs.sub.length) return '';
+    return rs.main.map(function (k) { return '★' + nm(k); }).concat(rs.sub.map(function (k) { return '☆' + nm(k); })).join(' · ') + (rs.sub.length ? ' <small class="muted">(☆는 절반만 친다)</small>' : '');
+  };
   function roomPower(c, m) {
     if (!m || !G.MATE[m.id]) return 0;
-    var best = 0;
-    (c.skills || G.ROLE_SKILLS[c.role] || []).forEach(function (k) { best = Math.max(best, R().mateSkill(m, k)); });
-    return (1 + best) * CB.eff(m);
+    return (1 + CB.roomLevel(c, m)) * CB.eff(m);   // 주 특기는 그대로, 보조 특기는 절반 (예전: 방의 특기 가운데 가장 높은 것 — 갑판의 검술과 운용술이 같게 쳐졌다)
   }
   /** 방 하나의 힘: 비었으면 0, 사람이 있으면 (1 + 특기 단계) × 충성 효율 */
   CB.powerAt = function (i) { var rooms = CB.rooms(), c = G.CABIN[rooms[i]]; return c ? roomPower(c, CB.occupant(i)) : 0; };

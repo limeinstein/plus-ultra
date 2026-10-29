@@ -115,7 +115,20 @@
   D.mirageK = function (d) { return D.isMirageFind(d) ? (MC().futureK || 0.2) : 1; };
   /** 그 해가 되어야 증거가 나오고 찾을 수 있는 발견물인가 (d.openY — 미스터리 유적은 1600년부터, js/data/mysterydisc.js) */
   D.opened = function (d) { var s = S(); return !d || !d.openY || !s || s.date.y >= d.openY; };
+  /** 도시의 신기루 — 도시 안에 아직 세워지지 않은 미래의 건물 (2026-10-29 사용자 요청: 1485년까지는 나오지 않고, 그 뒤로는 입항할 때 10% 확률로 나온다) */
+  D.cityMirage = function (d) { return !!(d && D.isBuilding(d) && D.mirageNow(d)); };
+  /** 이번 입항(s.portVisit)에 이 도시에 신기루가 떴는가 — 입항마다 도시별로 한 번 굴린다 (이어하기는 같은 입항이라 그대로) */
+  D.mirageRoll = function (cityId) {
+    var s = S(); if (!s) return false;
+    var v = s.portVisit || 0, r = s.mirageVisit;
+    if (!r || r.v !== v) r = s.mirageVisit = { v: v, c: {} };
+    if (r.c[cityId] == null) r.c[cityId] = U.chance(MC().cityChance != null ? MC().cityChance : 0.1) ? 1 : 0;
+    return !!r.c[cityId];
+  };
+  /** 도시 거리·메뉴에 이 건물 발견물이 서 있는가 — 신기루는 그 입항에 떴을 때만 */
+  D.inTown = function (d) { return D.built(d) && (!D.cityMirage(d) || D.mirageRoll(d.city)); };
   D.built = function (d) {
+    if (d && D.cityMirage(d) && S().date.y < (MC().cityFrom || 1486)) return false;   // 도시의 신기루는 1485년까지 나오지 않는다 (소문·단서도)
     if (d && (d.openY || d.mirageFrom) && S().date.y < (d.openY || d.mirageFrom)) return false;   // 아직 드러나지 않았다 (openY: 그 해부터 · mirageFrom: 그 해부터 신기루로) — 2026-10-28
     return !d || !d.built || S().date.y >= d.built || (D.isFuture(d) && !(d.mirageFrom && S().date.y < d.mirageFrom));
   };   // mirageFrom: 그 해 전에는 신기루로도 보이지 않는다 (js/data/miragedisc.js — 1610년부터)
@@ -159,6 +172,29 @@
     var why = []; if (v.ka) why.push('그림' + (v.artWho ? '·' + v.artWho : '') + ' +' + Math.round(v.ka * 100) + '%'); if (v.kc) why.push('세공' + (v.craftWho ? '·' + v.craftWho : '') + ' +' + Math.round(v.kc * 100) + '%'); if (v.kk) why.push((v.care === 'cook' ? '요리' : '음악') + (v.careWho ? '·' + v.careWho : '') + ' +' + Math.round(v.kk * 100) + '%'); if (v.combo) why.push('숨은 능력 +' + Math.round(v.combo * 100) + '%');
     return '가치 ' + U.num(D.value(d)) + ' <small>(' + why.join(', ') + ')</small>';
   };
+
+  // ---------------------------------------------------------------- 식물 (2026-10-29 — 나무·꽃을 찾았는데 짐승을 만난 말이 나오던 것)
+  /* 식물 발견물은 분류가 생물(creature)이라, 발견하는 순간의 말(「저기 이상한 생물이 있습니다! 조심하십시오!」「저런 짐승은 처음 봅니다」)·
+     후원자의 반응(「그런 짐승이…」)·부하들의 수다(열매 나무를 「머리에 꽂아 보자」)가 짐승 기준으로 나왔다. 아래로 가려 식물의 말을 쓴다. */
+  var PLANT_EXTRA = { bullocho: 1 };                                             // plant 표시는 없지만 식물 (불로초 — 붉은 영지)
+  var PLANT_KIND = {
+    flower: { maehwa: 1, orchid: 1, chrysanthemum: 1, azalea: 1, tulip: 1, rose: 1, whiterose: 1, bluerose: 1, sakura: 1, lotus: 1, rafflesia: 1, welwitschia: 1, papyrus: 1, carnivplant: 1 },
+    cactus: { nopal: 1, saguaro: 1, goldenbarrel: 1 },
+    fungus: { bullocho: 1 },
+    tree: { bamboo: 1, redpine: 1, corkoak: 1, majoroak: 1, stonepine: 1, gumarabic: 1, cedar: 1, teak: 1, ginkgo: 1, populus: 1, camphor: 1, brazilwood: 1,
+      rubber: 1, sequoia: 1, mangrove: 1, startower: 1 }
+  };
+  /** 식물 발견물인가 (나무·꽃·열매·선인장·버섯) */
+  D.isPlant = function (d) { return !!d && d.cat === 'creature' && !!(d.plant || PLANT_EXTRA[d.id]); };
+  /** 식물의 갈래: tree 나무 · fruit 열매 · flower 꽃 · cactus 선인장 · fungus 버섯 (식물이 아니면 null) */
+  D.plantKind = function (d) {
+    if (!D.isPlant(d)) return null;
+    if (d.cactus) return 'cactus'; if (d.tree) return 'tree'; if (d.flower) return 'flower';   // 식물 자료의 표시 (js/data/plantdisc.js)
+    for (var k in PLANT_KIND) if (PLANT_KIND[k][d.id]) return k;
+    return G.PLANT_CROP && G.PLANT_CROP[d.id] ? 'fruit' : /나무|송|목$/.test(d.name || '') ? 'tree' : 'fruit';
+  };
+  var PLANT_WORD = { tree: '나무', fruit: '열매', flower: '꽃', cactus: '선인장', fungus: '버섯' };
+  D.plantWord = function (d) { return PLANT_WORD[D.plantKind(d)] || '식물'; };
 
   // ---------------------------------------------------------------- 발견의 여파 (감정 변화)
   var IMPACT = {
@@ -208,6 +244,7 @@
     if (FEAR_IDS[d.id] || ((d.cat === 'creature' || d.cat === 'people' || d.cat === 'nature') && scary)) return 'fear';
     if (d.cat === 'geo') return 'triumph';
     if (d.cat === 'treasure' || d.cat === 'trade') return 'delight';
+    if (D.isPlant(d)) return 'awe';                                   // 나무·꽃 앞에서는 「처음 보는 존재」가 아니라 감동 (2026-10-29)
     if (d.cat === 'creature' || d.cat === 'people') return 'wonder';
     return 'awe';
   };
@@ -714,7 +751,7 @@
   /** 도시 안 건물 발견물(유적·건축): 들어가는 것만으로는 안 찾고, 그 건물(거리의 볼거리나 메뉴의 이름)을 눌러야 찾는다 */
   D.isBuilding = function (d) { return d && d.how === 'city' && d.cat === 'ruin'; };
   D.cityBuildings = function (cityId) {
-    return G.DISCOVERIES.filter(function (d) { return D.isBuilding(d) && d.city === cityId && !D.foundByMe(d.id) && D.built(d); });
+    return G.DISCOVERIES.filter(function (d) { return D.isBuilding(d) && d.city === cityId && !D.foundByMe(d.id) && D.inTown(d); });
   };
   D.checkCity = function (cityId) {
     return G.DISCOVERIES.filter(function (d) {
@@ -722,7 +759,7 @@
       if (D.isBuilding(d)) return false;                        // 건물은 눌러서 (D.cityBuildings)
       if (d.by && D.artistAround(d)) return false;              // 작가가 살아 있으면 그 사람을 만나서 (D.checkPerson)
       if (d.needHint && !S().hints[d.id]) return false;        // 동물: 이야기를 듣고 나서야 거리에서 알아본다
-      if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return false; }   // 신기루
+      if (!D.built(d)) { if (G.Mirage && D.mirageRoll(cityId)) G.Mirage.see(d); return false; }   // 신기루 — 입항할 때 cityChance 확률로
       return true;
     });
   };

@@ -141,25 +141,33 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     ok(r.gone && r.fate.kind === 'other' && r.fate.why === 'tavern' && /붙잡는다/.test(r.opts), '술집 주인이 되러 떠났다 (붙잡기 실패) — ' + r.opts);
 
-    // ④ 아는 항해사 · 수첩 「철새」
+    // ④ 수첩 「철새」 — 닿은 대륙의 철새는 모두 · 닿지 못한 대륙은 숨김 · 처음 닿으면 열림 (2026-10-29 사용자 요청)
     r = await page.evaluate(() => {
       const s = G.Game.state, MK = G.MateKnow, home = G.CITY_DATA[s.player.home];
-      const all = G.MATES.filter(m => m.wd || m.witch).length;
-      const near = G.MateMove.nearby(home, null, 20).filter(n => !n.m.sib).slice(0, 3);
-      window.__near = near.map(n => n.m.id);
-      G.Scenes.city.B.tavern.mateHint(home);   // 술집 주인의 귀띔 — 두 사람까지
-      const known = Object.keys(s.mateKnow).filter(id => s.mateKnow[id].how === 'rumor');
-      window.__near = known;
+      G.Scenes.city.B.tavern.mateHint(home);   // 술집 주인의 귀띔 — 뒤의 「행방 부탁」 시험이 쓴다
+      window.__near = Object.keys(s.mateKnow).filter(id => s.mateKnow[id].how === 'rumor');
+      s.visited = {}; s.visited[home.id] = 1; delete s.wanderOpen; MK.openDaily();
+      const all = MK.wanderers(), reached = Object.keys(MK.reached());
+      const shownCount = all.filter(m => MK.shown(m)).length;
+      const amer = all.filter(m => MK.mateCont(m) === 'america' && !MK.known(m.id));
       const el = document.createElement('div'); MK.page(el);
-      const rows1 = [...el.querySelectorAll('tr')].length - 1, txt1 = el.innerText;
-      s.day += 40; const el2 = document.createElement('div'); MK.page(el2);
-      const stale = [...el2.querySelectorAll('tr.mk-stale')].length, txt2 = el2.innerText;
+      const rows1 = el.querySelector('table').querySelectorAll('tr').length - 1, lock1 = /아직 닿지 못한 대륙의 철새/.test(el.innerText), amerIn1 = amer.some(m => el.innerText.includes(m.name));
+      const havana = G.CITY_DATA.find(c => c && c.region === 10 && c.port);   // 아메리카 항구에 처음 들어선다
+      s.visited[havana.id] = 1;
+      const news = MK.openDaily(), again = MK.openDaily();
+      const el2 = document.createElement('div'); MK.page(el2);
+      const rows2 = el2.querySelector('table').querySelectorAll('tr').length - 1, amerIn2 = amer.every(m => el2.innerText.includes(m.name));
+      const real = G.MATES.find(m => !m.wd && !m.witch && !m.sib && !m.tale && !m.eventOnly && !s.mates.some(x => x.id === m.id) && !s.flags['gone_' + m.id]);
+      MK.know(real.id, home.id, 'rumor'); s.day += 40;
+      const el3 = document.createElement('div'); MK.page(el3);
+      const stale = el3.querySelectorAll('table.mk-known tr.mk-stale').length, sample = (el3.innerText.match(/예전에[^\n]*/) || [''])[0];
       s.day -= 40;
-      return { all, known: known.length, rows1, stale, sample1: (txt1.match(/[^\n]*일 전 소식[^\n]*|[^\n]*오늘 소식[^\n]*|[^\n]*머무는 중[^\n]*/) || [''])[0], sample2: (txt2.match(/예전에[^\n]*/) || [''])[0] };
+      return { all: all.length, shownCount, reached, amer: amer.length, rows1, lock1, amerIn1, news: news.map(n => n.text), again: again.length, rows2, amerIn2, stale, sample };
     });
-    ok(r.known >= 1 && r.rows1 === r.known + 0 || r.rows1 >= r.known, '귀띔으로 들은 항해사가 수첩 「철새」에 (철새 전체 ' + r.all + '명 중 ' + r.rows1 + '명만)');
-    ok(r.rows1 < r.all, '세계의 모든 철새를 적지 않는다');
-    ok(r.stale >= 1 && /예전에 .+ \(\d+년 \d+월\) — 지금은 떠났을지도/.test(r.sample2), '시간이 지나면 과거 위치로 — ' + r.sample2);
+    ok(r.rows1 === r.shownCount && r.rows1 > 0 && r.rows1 < r.all && r.lock1, '닿은 대륙(' + r.reached.join('·') + ')의 철새는 모두 보인다 — ' + r.rows1 + '명 / 전체 ' + r.all + '명 · 나머지는 숨김');
+    ok(r.amer > 0 && !r.amerIn1 && r.amerIn2 && r.rows2 > r.rows1, '아메리카에 닿기 전에는 숨김 → 닿으면 열림 (' + r.amer + '명 · ' + r.rows1 + ' → ' + r.rows2 + ')');
+    ok(r.news.length === 1 && /처음으로 아메리카에 닿았다/.test(r.news[0]) && r.again === 0, '처음 닿았을 때 한 번만 알림 — ' + r.news[0]);
+    ok(r.stale >= 1 && /예전에 .+ \(\d+년 \d+월\) — 지금은 떠났을지도/.test(r.sample), '철새가 아닌 항해사는 소식을 들은 사람만 · 시간이 지나면 과거 위치로 — ' + r.sample);
 
     // ⑤ 여급에게 행방 부탁
     r = await page.evaluate(async () => {

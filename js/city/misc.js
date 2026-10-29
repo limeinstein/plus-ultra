@@ -227,6 +227,7 @@
   };
   MK.sell = async function (c) {
     var s = S(), soldAny = false;
+    MK._scroll = 0;   // 판 뒤 다시 여는 창은 보던 자리 그대로 (2026-10-29 피드백) — 시장에 새로 들어올 때만 처음부터
     for (;;) {
       if (R.mergeItems) R.mergeItems();   // 같은 물건은 한 칸
       var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { var d = G.ITEM[x.it.id]; return !(x.it.evidence); });
@@ -273,9 +274,9 @@
       var pf = R.isProof(x.it), rl = G.RELIC && G.RELIC[x.it.id];
       var ex = itemStat(x.it), here = R.paidAt ? R.paidAt(x.it, c.id) != null : x.it.from === c.id, bought = R.buysOf ? Object.keys(R.buysOf(x.it)).filter(function (k2) { return G.CITY_DATA[k2] && +k2 !== c.id; }) : [];
       var th = mkThumb(rl || d), nm = R.itemName(x.it);
-      return '<tr data-ck data-k="' + k + '" data-q="' + U.esc(nm + ' ' + (d.kind || '') + (pf ? ' 증거' : '') + (rl ? ' 유물' : '')) + '" title="' + U.esc(d.desc || x.it.desc || '') + '">' +
+      return '<tr data-ck data-k="' + k + '" data-q="' + U.esc(nm + ' ' + (d.kind || '') + (pf ? ' 증거' : '') + (rl ? ' 유물' : '')) + '"' + (G.ItemCat ? G.ItemCat.attrs(x.it, val) : '') + ' title="' + U.esc(d.desc || x.it.desc || '') + '">' +
         '<td style="width:30px"><input type="checkbox" class="mpick" data-k="' + k + '"></td>' +
-        '<td>' + (th ? '<img class="mkthumb" src="' + th + '" alt="">' : '') + '<b>' + U.esc(nm) + '</b>' + (ex ? ' <small class="muted">' + ex + '</small>' : '') + (eq ? ' <span class="tag">장비 중</span>' : '') +
+        '<td>' + (G.ItemPin ? G.ItemPin.button(x.it) + ' ' : '') + (th ? '<img class="mkthumb" src="' + th + '" alt="">' : '') + '<b>' + U.esc(nm) + '</b>' + (ex ? ' <small class="muted">' + ex + '</small>' : '') + (eq ? ' <span class="tag">장비 중</span>' : '') +
         (pf ? ' <span class="tag">「' + U.esc(G.DISC[x.it.disc].name) + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') +
         (here ? ' <span class="tag warn-text" title="이 시장에서 산 물건은 치른 값보다 비싸게 되팔 수 없습니다">여기서 삼 · 치른 값까지만</span>' : bought.length ? ' <small class="muted">' + bought.map(function (k2) { return G.CITY_DATA[k2].name; }).join('·') + '에서 삼</small>' : '') + '</td>' +
         '<td class="num">' + U.num(val) + '닢</td>' +
@@ -283,7 +284,7 @@
         '<input type="number" class="mq" data-k="' + k + '" min="1" max="' + have + '" value="' + have + '"' + (have > 1 ? '' : ' disabled') + '> <small class="muted">/ ' + have + '</small></td>' +
         '<td class="num mk-sub" data-k="' + k + '">' + U.num(val * have) + '닢</td></tr>';
     }).join('');
-    var html = '<div class="muted" style="margin-bottom:8px">팔 물건을 고르십시오. 「전체 선택」 뒤 남길 것만 끄면 됩니다. 여러 개 가진 물건은 막대를 끌어 몇 개 팔지 정합니다. 먼 곳의 진귀한 유물일수록 값을 잘 쳐 줍니다.</div>' +
+    var html = '<div class="muted" style="margin-bottom:8px">팔 물건을 고르십시오. 「전체 선택」 뒤 남길 것만 끄면 됩니다. ' + (G.ItemPin ? '물건 앞 ' + G.icon('pin') + '을 눌러 고정하면 「전체 선택」에서 빠집니다. ' : '') + ' 여러 개 가진 물건은 막대를 끌어 몇 개 팔지 정합니다. 먼 곳의 진귀한 유물일수록 값을 잘 쳐 줍니다.</div>' +
       '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl mksell"><tr><th></th><th>물건</th><th class="num">1개 값</th><th class="num">팔 수량</th><th class="num">받을 돈</th></tr>' + rows + '</table></div>' +
       '<div class="mk-sum" style="margin-top:10px;font-size:18px"></div>';
     var out = null;
@@ -306,10 +307,15 @@
           f.onchange = function () { f.value = qOf(el, f.dataset.k); f.oninput(); };
           f.onkeydown = function (e) { e.stopPropagation(); if (e.key === 'Enter') f.onchange(); };
         });
-        UI.checkTools(el.querySelector('.ck-bar'), {
+        // 종류별 거르기·정렬 · 고정(📌)한 물건은 「전체 선택」에서 빠진다 (2026-10-29 피드백) — js/ui/sortfilter.js
+        var ck = UI.checkTools(el.querySelector('.ck-bar'), Object.assign(G.ItemCat ? G.ItemCat.opts(G.ItemCat.state.market || (G.ItemCat.state.market = {}), true) : {}, {
           rows: function () { return U.$$('tr[data-ck]', el); }, box: function (r) { return r.querySelector('input.mpick'); },
           text: function (r) { return r.getAttribute('data-q'); }, placeholder: '물건 이름으로 찾기', unit: '가지', rowClick: true, onChange: total
-        });
+        }));
+        if (G.ItemPin) G.ItemPin.wire(el, function () { ck.update(); });
+        // 팔고 나서 다시 열면 보던 자리 그대로
+        var sc = el.querySelector('.ck-scroll');
+        if (sc) { sc.addEventListener('scroll', function () { MK._scroll = sc.scrollTop; }); if (MK._scroll) { sc.scrollTop = MK._scroll; setTimeout(function () { sc.scrollTop = MK._scroll; }, 0); } }
       } });
     return win.result.then(function (v) { return v === 'go' && out && out.length ? out : null; });
   };
@@ -872,39 +878,96 @@
     var st = R.storage(), i = st.indexOf(it); if (i < 0 || (R.slotsUsed() >= R.ITEM_MAX && !(R.stackFor && R.stackFor(it)))) return false;   // 같은 물건이 있으면 칸이 차도 그 칸에
     st.splice(i, 1); S().player.items.push(it); if (R.mergeItems) R.mergeItems(); return true;   // 같은 물건이 있으면 그 칸에 합친다
   };
+  /* 2026-10-29 피드백: 소지품 쪽에 종류 단추(전체·무기·항해도구 … · 고정)와 정렬, 물건마다 고정(📌) 단추.
+     「모두 맡긴다」는 장비 중·증거·고정한 것과 항해도구(라임·고양이·육분의 …)를 빼고 맡긴다 — 종류 단추로 한 종류만 보이면 그 종류를 모두(항해도구도).
+     맡기거나 꺼내도 두 칸의 스크롤 자리는 그대로 (G.KeepScroll). */
+  HM._st = { cat: '', sort: 'base' };
+  HM.storeAllList = function (cat) {
+    var p = S().player, IC = G.ItemCat, IP = G.ItemPin;
+    return p.items.filter(function (it) {
+      var eq = p.equip.weapon === it.id || p.equip.armor === it.id, k = IC ? IC.of(it) : '';
+      if (eq || R.isProof(it) || (IP && IP.is(it))) return false;
+      if (cat === 'pin') return false;
+      return cat ? k === cat : k !== 'tool';
+    });
+  };
   HM.storage = async function (c) {
-    var s = S(), p = s.player;
+    var s = S(), p = s.player, IC = G.ItemCat, IP = G.ItemPin, st = HM._st;
     function row(it, i, side) {
       var d = G.ITEM[it.id] || {}, rl = G.RELIC && G.RELIC[it.id], kind = d.kind || it.kind || (rl ? 'relic' : '');
       var src = G.Img && G.Img.itemSrc ? G.Img.itemSrc(it) : null, eq = side === 'p' && ((p.equip.weapon === it.id) || (p.equip.armor === it.id));
       var proof = side === 'p' && R.isProof(it);
       var btn = side === 'p' ? (proof ? '<span class="tag warn-text" title="아직 보고·발표하지 않은 발견의 증거 — 칸을 차지하지 않는다">증거</span>' : '<button class="btn small" data-st="' + i + '">맡긴다</button>')
         : '<button class="btn small' + (R.slotsUsed() >= R.ITEM_MAX ? ' disabled' : '') + '" data-tk="' + i + '">꺼낸다</button>';
-      return '<tr><td style="width:40px">' + (src ? '<img src="' + src + '" alt="" style="width:34px;height:34px;object-fit:contain">' : '') + '</td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') +
-        (eq ? ' <span class="tag">장비 중</span>' : '') + (rl && !proof ? ' <span class="tag">유물</span>' : '') + '<div class="muted" style="font-size:13px">' + U.esc(G.ITEM_KIND[kind] || (rl ? '발견 유물' : '')) + '</div></td><td style="text-align:right">' + btn + '</td></tr>';
+      var catName = IC ? IC.name(IC.of(it)) : (G.ITEM_KIND[kind] || (rl ? '발견 유물' : ''));
+      return '<tr' + (IC ? IC.attrs(it, 0) : '') + '><td style="width:40px">' + (src ? '<img src="' + src + '" alt="" style="width:34px;height:34px;object-fit:contain">' : '') + '</td><td>' + (IP ? IP.button(it) + ' ' : '') + '<b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') +
+        (eq ? ' <span class="tag">장비 중</span>' : '') + (rl && !proof ? ' <span class="tag">유물</span>' : '') + '<div class="muted" style="font-size:13px">' + U.esc(catName) + '</div></td><td style="text-align:right">' + btn + '</td></tr>';
+    }
+    /** 소지품 쪽: 종류로 거르고 정렬한 [{it, i}] */
+    function shownItems() {
+      var arr = p.items.map(function (it, i) { return { it: it, i: i, k: IC ? IC.of(it) : '' }; });
+      if (st.cat === 'pin') arr = arr.filter(function (x) { return IP && IP.is(x.it); });
+      else if (st.cat) arr = arr.filter(function (x) { return x.k === st.cat; });
+      var nm = function (x) { return R.itemName(x.it); };
+      if (st.sort === 'kind' && IC) arr.sort(function (a, b) { return (IC.idx(a.k) - IC.idx(b.k)) || nm(a).localeCompare(nm(b), 'ko'); });
+      else if (st.sort === 'name') arr.sort(function (a, b) { return nm(a).localeCompare(nm(b), 'ko'); });
+      else if (st.sort === 'pin' && IP) arr.sort(function (a, b) { return (IP.is(b.it) - IP.is(a.it)) || (a.i - b.i); });
+      return arr;
+    }
+    function chips() {
+      if (!IC) return '';
+      var n = {}, keys = [], pins = 0;
+      p.items.forEach(function (it) { var k = IC.of(it); if (!n[k]) { n[k] = 0; keys.push(k); } n[k]++; if (IP && IP.is(it)) pins++; });
+      keys.sort(function (a, b) { return IC.idx(a) - IC.idx(b); });
+      if (st.cat && st.cat !== 'pin' && !n[st.cat]) st.cat = '';
+      if (st.cat === 'pin' && !pins) st.cat = '';
+      return '<div class="ck-cats st-cats"><button type="button" class="ck-cat' + (st.cat ? '' : ' on') + '" data-scat="">전체 <small>' + p.items.length + '</small></button>' +
+        keys.map(function (k) { return '<button type="button" class="ck-cat' + (st.cat === k ? ' on' : '') + '" data-scat="' + k + '">' + U.esc(IC.name(k)) + ' <small>' + n[k] + '</small></button>'; }).join('') +
+        (pins ? '<button type="button" class="ck-cat pin' + (st.cat === 'pin' ? ' on' : '') + '" data-scat="pin">' + G.icon('pin') + '고정 <small>' + pins + '</small></button>' : '') + '</div>' +
+        '<label class="ck-sortl st-sortl">정렬 <select class="st-sort">' + [['base', '가진 차례'], ['kind', '종류'], ['name', '이름'], ['pin', '고정한 것 먼저']].map(function (o) { return '<option value="' + o[0] + '"' + (st.sort === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>';
+    }
+    function allLabel() {
+      var n = HM.storeAllList(st.cat).length;
+      if (st.cat === 'pin') return '';
+      return '<button class="btn small" data-all="1"' + (n ? '' : ' disabled') + ' title="장비 중인 것·아직 보고하지 않은 증거·고정(📌)한 것은 맡기지 않는다' + (st.cat ? '' : ' · 항해도구(라임·고양이·육분의 …)는 배에 두고 쓰니 뺀다 — 맡기려면 「항해도구」 단추를 누른 뒤') + '">' +
+        (st.cat ? '보이는 ' + U.esc(IC.name(st.cat)) + ' 모두 맡긴다' : '장비 중·증거·고정·항해도구 말고 모두 맡긴다') + ' <small>(' + n + ')</small></button>';
     }
     function html() {
-      var st = R.storage(), used = R.slotsUsed(), over = used > R.ITEM_MAX;
-      return '<div class="muted" style="margin-bottom:8px">맡긴 물건은 몇 개든 둘 수 있고 소지품 칸을 차지하지 않습니다. 아직 보고·발표하지 않은 발견의 <b>증거</b>는 칸을 차지하지 않으니 들고 다니십시오 — 보고·발표하면 그때부터 칸을 차지합니다.</div>' +
+      var stor = R.storage(), used = R.slotsUsed(), over = used > R.ITEM_MAX, vis = shownItems();
+      return '<div class="muted" style="margin-bottom:8px">맡긴 물건은 몇 개든 둘 수 있고 소지품 칸을 차지하지 않습니다. 아직 보고·발표하지 않은 발견의 <b>증거</b>는 칸을 차지하지 않으니 들고 다니십시오 — 보고·발표하면 그때부터 칸을 차지합니다.' + (IP ? ' 물건 앞 ' + G.icon('pin') + '을 누르면 <b>고정</b> — 「모두 맡긴다」와 시장의 「전체 선택」에서 빠집니다.' : '') + '</div>' +
         '<div style="display:flex;gap:18px;align-items:flex-start">' +
-        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">소지품 <span class="' + (over ? 'warn-text' : 'muted') + '">' + used + '/' + R.ITEM_MAX + '</span>' + (over ? ' <small class="warn-text">넘침 — 맡겨 주십시오</small>' : '') + '</h4><div style="max-height:52vh;overflow:auto"><table class="tbl">' +
-        (p.items.length ? p.items.map(function (it, i) { return row(it, i, 'p'); }).join('') : '<tr><td class="muted">비어 있다</td></tr>') + '</table></div>' +
-        '<div style="margin-top:8px"><button class="btn small" data-all="1">장비 중인 것·증거 말고 모두 맡긴다</button></div></div>' +
-        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">보관함 <span class="muted">' + st.length + '점</span></h4><div style="max-height:52vh;overflow:auto"><table class="tbl">' +
-        (st.length ? st.map(function (it, i) { return row(it, i, 's'); }).join('') : '<tr><td class="muted">맡긴 물건이 없다</td></tr>') + '</table></div></div></div>';
+        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">소지품 <span class="' + (over ? 'warn-text' : 'muted') + '">' + used + '/' + R.ITEM_MAX + '</span>' + (over ? ' <small class="warn-text">넘침 — 맡겨 주십시오</small>' : '') + '</h4>' + chips() +
+        '<div class="st-scroll st-p" style="max-height:48vh;overflow:auto"><table class="tbl">' +
+        (vis.length ? vis.map(function (x) { return row(x.it, x.i, 'p'); }).join('') : '<tr><td class="muted">' + (p.items.length ? '이 종류의 물건이 없다' : '비어 있다') + '</td></tr>') + '</table></div>' +
+        '<div style="margin-top:8px">' + allLabel() + '</div></div>' +
+        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">보관함 <span class="muted">' + stor.length + '점</span></h4><div class="st-scroll st-s" style="max-height:52vh;overflow:auto"><table class="tbl">' +
+        (stor.length ? stor.map(function (it, i) { return row(it, i, 's'); }).join('') : '<tr><td class="muted">맡긴 물건이 없다</td></tr>') + '</table></div></div></div>';
     }
     var win = UI.window({ title: (HM.title(c)) + ' — 보관함', icon: 'chest', width: 1020, html: html(), buttons: [{ label: '닫기', value: 1 }],
       onBuild: function (el, w) {
+        function box() { return w.content || el.querySelector('.content') || el; }
         function wire() {
-          var box = w.content || el.querySelector('.content');
-          U.$$('[data-st]', box).forEach(function (b) { b.onclick = function () { HM.storeOne(p.items[+b.dataset.st]); redraw(); }; });
-          U.$$('[data-tk]', box).forEach(function (b) { b.onclick = function () { if (!HM.takeOne(R.storage()[+b.dataset.tk])) UI.toast('소지품 칸이 모자랍니다.', 'chest'); redraw(); }; });
-          U.$$('[data-all]', box).forEach(function (b) { b.onclick = function () {
-            p.items.slice().forEach(function (it) { var eq = p.equip.weapon === it.id || p.equip.armor === it.id; if (!eq && !R.isProof(it)) HM.storeOne(it); });
+          var bx = box();
+          U.$$('[data-st]', bx).forEach(function (b) { b.onclick = function () { HM.storeOne(p.items[+b.dataset.st]); redraw(); }; });
+          U.$$('[data-tk]', bx).forEach(function (b) { b.onclick = function () { if (!HM.takeOne(R.storage()[+b.dataset.tk])) UI.toast('소지품 칸이 모자랍니다.', 'chest'); redraw(); }; });
+          U.$$('[data-all]', bx).forEach(function (b) { b.onclick = function () {
+            var list = HM.storeAllList(st.cat), n = 0;
+            list.forEach(function (it) { if (HM.storeOne(it)) n++; });
+            if (n) UI.toast(n + '가지를 맡겼다.' + (!st.cat && p.items.some(function (it) { return IC && IC.of(it) === 'tool'; }) ? ' 항해도구는 배에 두었다.' : ''), 'chest', 3200);
             redraw();
           }; });
+          U.$$('[data-scat]', bx).forEach(function (b) { b.onclick = function () { st.cat = b.getAttribute('data-scat'); redraw(true); }; });
+          var so = bx.querySelector('.st-sort'); if (so) { so.onchange = function () { st.sort = so.value; redraw(true); }; so.onkeydown = function (e) { e.stopPropagation(); }; }
+          if (IP) IP.wire(bx, function () { redraw(); });
         }
-        function redraw() { var box = w.content || el.querySelector('.content'); box.innerHTML = html(); wire(); if (G.Game.refreshHud) G.Game.refreshHud(); }
+        /** 다시 그린다 — 종류·정렬을 바꾼 때(top)만 소지품 칸을 맨 위로, 맡기기·꺼내기·고정은 보던 자리 그대로 */
+        function redraw(top) {
+          var bx = box(), back = G.KeepScroll ? G.KeepScroll(bx, '.st-scroll') : null;
+          bx.innerHTML = html(); wire();
+          if (back) back();
+          if (top) { var sp = bx.querySelector('.st-p'); if (sp) sp.scrollTop = 0; }
+          if (G.Game.refreshHud) G.Game.refreshHud();
+        }
         wire();
       } });
     await win.result;

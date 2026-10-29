@@ -416,14 +416,32 @@
     note: '교역소·함대 적재 목록·교역품 발견 카드에 쓰는 그림입니다. 파일: <code>images/goods/ID.webp</code> · 권장 192×192 투명 배경 · 갈래 공통 <code>good-kinds/갈래.webp</code>'
   });
   G.GOODS.forEach(g => {
-    const ownKey = g.plant && g.from ? 'discovery-ends/' + g.from : 'goods/' + g.id;
+    const ownKey = 'goods/' + g.id;
     add(tGoods, {
       group: g.cat, name: g.name, sub: G.GOOD_CATS[g.cat] + ' · ' + g.id,
       meta: '기준값 ' + num(g.p) + '닢' + (G.Cargo ? ' · 무게 ' + G.Cargo.wt(g.id) + (G.Cargo.keep(g.id) ? ' · ' + G.Cargo.keep(g.id) + '일 신선' : '') : g.life ? ' · ' + g.life + '일 뒤 상함' : ''),
-      key: ownKey, kind: g.plant ? 'jpg' : 'webp', chain: I.chain.good(g), ar: '1 / 1', extra: g.id,
+      key: ownKey, kind: 'webp', chain: I.chain.good(g), ar: '1 / 1', extra: g.id,
       pic: () => I.make(I.chain.good(g), 256, 256, () => A.relicArt({ id: 'good_' + g.id, name: g.name, kind: 'treasure' }, 256, 256), { fit: 'contain' }),
       detail: () => ({ facts: [['갈래', G.GOOD_CATS[g.cat]], ['기준값', num(g.p) + '닢'], ['보관', G.Cargo ? (G.Cargo.keep(g.id) ? G.Cargo.keep(g.id) + '일 신선 → 넘으면 값이 떨어지고 두 배를 넘기면 상함' : '상하지 않음') : g.life ? g.life + '일' : '상하지 않음']].concat(G.Cargo ? [['무게', '1통에 ' + G.Cargo.wt(g.id)]] : []),
-        files: [{ key: ownKey, kind: g.plant ? 'jpg' : 'webp', note: g.plant ? '이 교역품이 된 식물 발견의 고해상도 마지막 장면' : '이 교역품의 그림 (192×192, 투명 배경)' }, { key: 'good-kinds/' + g.cat, kind: 'webp', note: G.GOOD_CATS[g.cat] + ' 공통' }] })
+        files: [{ key: ownKey, kind: 'webp', note: g.plant ? '심어 얻는 특산물의 전용 상품 그림 (투명 배경)' : '이 교역품의 그림 (192×192, 투명 배경)' }, { key: 'good-kinds/' + g.cat, kind: 'webp', note: G.GOOD_CATS[g.cat] + ' 공통' }] })
+    });
+  });
+
+  // ------------------------------------------------ 선수상
+  const tFigs = tab('figureheads', '선수상', {
+    chips: [['all', '전체'], ['shipyard', '조선소'], ['rare', '희귀'], ['relic', '발견 유물']],
+    note: '배의 뱃머리에 다는 수호 조각입니다. 파일: <code>images/figureheads/ID.webp</code> · 교역품과 같은 192×192 투명 배경 · 발견 유물은 기존 유물 그림도 함께 씁니다.'
+  });
+  G.FIGUREHEADS.forEach(f => {
+    const group = f.relic ? 'relic' : f.rare ? 'rare' : 'shipyard';
+    const effect = Object.entries({ spd: '속도', hp: '선체', luck: '행운', storm: '폭풍 피하기', monster: '괴물 쫓기', morale: '규율', battle: '해전' })
+      .filter(([k]) => f[k]).map(([k, label]) => label + ' ' + (f[k] > 0 ? '+' : '') + Math.round(f[k] * 100) + '%').join(' · ');
+    add(tFigs, {
+      group, name: f.name, sub: (f.relic ? '발견 유물' : f.rare ? '희귀 선수상' : '조선 기술 ' + (f.lv || 1) + '등급') + ' · ' + f.id,
+      meta: effect, key: 'figureheads/' + f.id, kind: 'webp', chain: I.chain.figurehead(f), ar: '1 / 1', extra: f.desc,
+      pic: () => I.make(I.chain.figurehead(f), 192, 192, () => A.relicArt({ id: f.id, name: f.name, kind: 'fig' }, 192, 192), { fit: 'contain' }),
+      detail: () => ({ text: f.desc, facts: [['효과', effect], ['기준값', num(f.price) + '닢']],
+        files: [{ key: 'figureheads/' + f.id, kind: 'webp', note: '선수상 전용 그림 (192×192, 투명 배경)' }].concat(f.relic ? [{ key: 'relics/' + f.id, kind: 'webp', note: '발견 유물 그림' }] : []) })
     });
   });
 

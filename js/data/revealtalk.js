@@ -18,6 +18,16 @@
       '모두 손대지 마라! 제독께서 먼저 보셔야 한다.', '먼지를 털어 내니 금빛이 올라옵니다. {d}, 틀림없습니다.'],
     creature: ['쉿, 제독. 소리를 내면 달아납니다. 저기, 바위 그늘에 있습니다.', '선원들이 겁을 먹었습니다. 저런 짐승은 처음 봅니다.',
       '{d}입니다, 제독! 책에서 본 그림하고는 사뭇 다릅니다.', '저 녀석이 우리를 빤히 보고 있습니다. 더 다가가지 마십시오.'],
+    // 식물 (2026-10-29): 나무·열매·꽃·선인장·버섯 — 짐승을 만난 말(「쉿, 달아납니다」「저런 짐승은 처음 봅니다」)이 나오지 않게
+    plant: ['제독, 저것 좀 보십시오! 이 고장 사람들이 말하던 {d}입니다.', '{d}입니다, 제독! 소문으로만 듣던 그것이 정말 여기 자라고 있습니다.'],
+    plant_tree: ['제독, 저 나무 좀 보십시오! 어른 열 명이 팔을 벌려도 둘레가 모자라겠습니다.', '나무꾼 출신 선원이 넋을 놓고 올려다봅니다. 저게 {d}입니다, 제독.',
+      '저 나무로 돛대를 깎으면 폭풍에도 끄떡없겠습니다. {d}, 틀림없습니다.', '그늘에 들어서니 공기부터 다릅니다. 이게 {d}입니다, 제독.'],
+    plant_fruit: ['제독, 가지마다 열매가 주렁주렁합니다! 이게 {d}입니다.', '단내가 여기까지 납니다, 제독. 선원들이 벌써 침을 삼킵니다.',
+      '이 고장 사람들이 따 먹는다는 바로 그 열매입니다. {d}, 틀림없습니다.'],
+    plant_flower: ['제독, 저 꽃 좀 보십시오! 바람에 향기가 실려 옵니다.', '꽃잎 빛깔이 이 세상 것 같지 않습니다. 이게 {d}입니다.',
+      '선원들이 꽃 앞에서 모자를 벗습니다. {d}, 소문 그대로입니다.'],
+    plant_cactus: ['제독, 가시투성이 기둥이 서 있습니다! 이게 {d}입니다.', '물 한 방울 없는 땅에서 저렇게 자라다니요. 맨손으로는 만지지 마십시오, 제독.'],
+    plant_fungus: ['제독, 고목 밑동에 붉게 빛나는 것이 있습니다! 이게 {d}입니다.', '옻칠을 한 것처럼 반들반들합니다. 이게 그 귀하다는 {d}입니다, 제독.'],
     people: ['제독, 마을 사람들이 나왔습니다. 손에 든 건 무기가 아니라 선물 같습니다.', '처음 듣는 말입니다만, 웃는 얼굴은 어디나 같군요.',
       '아이들이 배를 보고 뛰어옵니다. 이 사람들이 {d}입니다.', '어른으로 보이는 노인이 앞으로 나섭니다. 예를 갖추시지요, 제독.'],
     nature: ['제독, 저 너머를 보십시오. 말이 나오지 않습니다.', '이런 경치를 두고 돌아가면 아무도 우리 말을 믿지 않을 겁니다.',
@@ -45,6 +55,7 @@
     contract: ['후원자께 가져갈 선물이 생겼구나. 꼼꼼히 기록해라.', '약속을 지킬 수 있겠구나. 하나도 빠뜨리지 말고 적어라.'],
     rival: ['한발 늦었으면 남의 이름으로 남을 뻔했구나.', '이번만큼은 우리가 빨랐구나. 서둘러 돌아가 알리자.'],
     creature: ['겁주지 마라. 우리가 손님이다.', '조용히, 멀리서 보자. 저 녀석들 땅이다.'],
+    plant: ['꺾지 말고 씨앗과 가지를 조심히 챙겨라. 고향 땅에서도 자랄지 모른다.', '잎과 꽃, 열매를 하나씩 그려 두어라. 학자들이 반길 것이다.', '이 고장 사람들에게 기르는 법을 물어보자. 정원사들이 탐낼 것이다.'],
     people: ['무기를 내려라. 우리는 장사하러 온 것이지 싸우러 온 게 아니다.', '선물을 꺼내라. 첫인사가 앞날을 정한다.'],
     treasure: ['함부로 손대지 마라. 하나하나 적어 두고 옮긴다.', '이건 우리 것이 아니라 이 땅의 이야기다. 조심히 다뤄라.'],
     grave: ['…이것도 이 바다의 한 모습이구나. 보고 들은 그대로 적어 두어라.', '마음이 무겁구나. 이 일을 잊지 말자.', '돈이 사람 위에 서는 곳이구나. 우리가 무엇을 할지는 우리가 정한다.']
@@ -53,6 +64,7 @@
   T.NOSKILL = {
     creature: ['생물에 밝은 사람이나 화가가 함께였다면 생김새를 더 자세히 남겼을 텐데요. 눈에 새겨 두겠습니다.', '가까이 갈 수는 없으니 발자국과 생김새를 잘 기억해 두어야겠습니다.',
       '저 녀석 생김새를 말로 옮기자니 막막합니다. 그림 그릴 줄 아는 친구가 하나 있었으면 좋겠습니다.'],
+    plant: ['식물에 밝은 학자나 화가가 함께였다면 잎맥 하나까지 그려 갔을 텐데요. 가지 하나를 꺾어 말려 두겠습니다.', '잎과 꽃의 생김새를 말로만 적자니 막막합니다. 그림 그릴 줄 아는 친구가 하나 있었으면 좋겠습니다.'],
     nature: ['그림을 그릴 줄 아는 사람이 있었더라면 이 넓은 풍경을 그대로 옮겨 갈 수 있었을 텐데요.', '산줄기와 물길의 생김새를 화첩에 남기지 못해 아쉽습니다. 눈에 새겨 두어야겠습니다.'],
     any: ['그림을 그릴 줄 아는 사람이 있었더라면 이 모습을 그대로 옮겨 갈 수 있었을 텐데요. 말로만 전하면 믿어 줄지 모르겠습니다.', '솜씨 좋은 화가나 장인이 함께였다면 짜임새까지 자세히 적어 갔을 텐데, 아쉽습니다.',
       '손재주 있는 사람이 하나만 있었어도 본이라도 떠 갔을 텐데요.']
@@ -102,6 +114,8 @@
     if (ctx.contract && G.U.chance(0.6)) return pick('contract', T.SHOUT.contract, ctx);
     if (ctx.legend && G.U.chance(0.6)) return pick('legend', T.SHOUT.legend, ctx);
     if (d.cat === 'trade' && T.tradeKind(d) === 'grave') return pick('trade_grave', T.SHOUT.trade_grave, ctx);
+    var pk = G.Disc && G.Disc.plantKind ? G.Disc.plantKind(d) : null;   // 식물: 짐승의 말 대신 (2026-10-29)
+    if (pk) { var PL = (T.SHOUT['plant_' + pk] || []).concat(T.SHOUT.plant).concat(G.U.chance(0.25) ? T.SHOUT.any : []); return pick('plant_' + pk, PL, ctx); }
     var L = (T.SHOUT[d.cat] || []).concat(d.cat === 'trade' ? T.SHOUT['trade_' + T.tradeKind(d)] || [] : []).concat(G.U.chance(0.25) ? T.SHOUT.any : []);
     return pick(d.cat === 'trade' ? 'trade_' + T.tradeKind(d) : d.cat || 'any', L.length ? L : T.SHOUT.any, ctx);
   };
@@ -113,13 +127,14 @@
     if (ctx.close && G.U.chance(0.6)) return pick('r-rival', T.REPLY.rival, ctx);
     if (ctx.contract && G.U.chance(0.5)) return pick('r-contract', T.REPLY.contract, ctx);
     if (ctx.legend) return pick('r-legend', T.REPLY.legend, ctx);
-    var L = T.REPLY.any.concat(T.REPLY[d.cat] || []);
-    return pick('r-' + (d.cat || 'any'), L, ctx);
+    var ck = G.Disc && G.Disc.isPlant && G.Disc.isPlant(d) ? 'plant' : d.cat;   // 식물에 「겁주지 마라」가 나오지 않게
+    var L = T.REPLY.any.concat(T.REPLY[ck] || []);
+    return pick('r-' + (ck || 'any'), L, ctx);
   };
   /** 기록할 사람이 없을 때의 아쉬움 — 셋 중 하나꼴로만 (증거 등급 알림이 따로 있다) */
   T.noSkill = function (d) {
     if (!G.U.chance(0.35)) return null;
-    var key = d.cat === 'creature' ? 'creature' : (d.cat === 'nature' || d.natural) ? 'nature' : 'any';
+    var key = G.Disc && G.Disc.isPlant && G.Disc.isPlant(d) ? 'plant' : d.cat === 'creature' ? 'creature' : (d.cat === 'nature' || d.natural) ? 'nature' : 'any';
     return pick('n-' + key, T.NOSKILL[key], { d: d.name });
   };
   T.animal = function () { return G.U.chance(0.5) ? pick('animal', T.ANIMAL, {}) : null; };

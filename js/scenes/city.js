@@ -167,16 +167,20 @@
       if (G.Sim && G.Sim.pending()) await G.Sim.check();         // 공양미 삼백 석 — 심청 (js/systems/simcheong.js)
       if (G.IncaFall && G.IncaFall.pending()) await G.IncaFall.check();   // 잉카 제국의 멸망 — 파나마·카하마르카·쿠스코 (js/systems/incafall.js)
       if (G.Aztec && G.Aztec.pending()) await G.Aztec.check();
+      if (G.RomeSack && G.RomeSack.pending()) await G.RomeSack.check();   // 1527년 로마 약탈 — 피렌체·로마 (js/systems/romesack.js)
       if (G.Potosi && G.Potosi.pending()) await G.Potosi.check();   // 포토시 은광 — 바람의 불 · 차스카 구출 (js/systems/potosi.js)
       if (G.Nzinga && G.Nzinga.pending()) await G.Nzinga.check();   // 은징가 여왕의 저항 — 루안다 (js/systems/nzinga.js)
       if (G.GoaMal && G.GoaMal.pending()) await G.GoaMal.check();   // 포르투갈의 고아·말라카 점령 — 코친·고아·말라카 (js/systems/goamalacca.js)
       if (G.Mina && G.Mina.pending()) await G.Mina.check();   // 엘미나 요새 건설 — 리스본·산호르헤 (js/systems/elmina.js)
       if (G.MingFall && G.MingFall.pending()) await G.MingFall.check();   // 명의 북경 붕괴·청의 입관 — 숭정제의 마지막 편지 (js/systems/mingfall.js)
+      if (G.Westphalia && G.Westphalia.pending()) await G.Westphalia.check();   // 베스트팔렌 조약 — 암스테르담·브레멘 (js/systems/westphalia.js)
       if (G.Mughal && G.Mughal.pending()) await G.Mughal.check();   // 무굴 제국의 성립 — 디우·카불·델리 (js/systems/mughal.js)
+      if (G.Huguenot && G.Huguenot.pending()) await G.Huguenot.check();   // 위그노 내전 — 국왕의 전령이 총사 넷을 라로셸로 부른다 (js/systems/huguenot.js)
       if (G.Napoleon && G.Napoleon.pending()) await G.Napoleon.check();   // 오스트리아의 살롱 — 조제핀과 나폴레옹의 일기토 (js/systems/napoleon.js)   // 아즈텍 제국의 멸망 — 쿠바·베라크루스·투라스칼라·테노치티틀란 (js/systems/aztec.js)
       if (G.Pocahontas && G.Pocahontas.pending()) await G.Pocahontas.check();   // 포카혼타스의 중재 — 북·중앙아메리카 항구 (js/systems/pocahontas.js)
       if (G.DutchWar && G.DutchWar.pending()) await G.DutchWar.check();   // 네덜란드 독립 전쟁 — 개미와 베짱이, 암스테르담 (js/systems/dutchwar.js)
       if (G.NewWorld && G.NewWorld.pending()) await G.NewWorld.check();   // 콜럼버스의 신대륙 발견과 그 뒤 — 세비야·그라나다·바르셀로나·산토도밍고·산티아고·자메이카 (js/systems/newworld.js)
+      if (G.Reform && G.Reform.pending()) await G.Reform.check();   // 루터의 종교 개혁 — 면죄받은 자들 (추리 수사극), 마그데부르크 (js/systems/reformation.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -242,6 +246,7 @@
     if (G.Romance) { try { await G.Romance.arrival(c); } catch (e) { console.error(e); } }   // 부하들 사이의 썸 — 혼례는 항구에서
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
     if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }
+    if (G.Glory) { try { await G.Glory.arrival(c); } catch (e) { console.error(e); } }   // 명예혁명: 암스테르담(오라녜 공) · 런던(제임스 2세·권리 선언) · 프랑스 항구(망명)
     if (G.Sky) { try { await G.Sky.arrival(c); } catch (e) { console.error(e); } }   // 하늘을 재는 사람들: 단치히·뉘른베르크(코페르니쿠스) · 프라하(케플러) · 베니스·피렌체·로마·암스테르담(갈릴레이)
     if (G.Kongo) { try { await G.Kongo.arrival(c); } catch (e) { console.error(e); } }   // 포르투갈과 콩고: 리스본(국왕의 명·보고) · 르완다(돌려보내기·세례)
     if (G.Teppo) { try { await G.Teppo.arrival(c); } catch (e) { console.error(e); } }   // 철포 삼백 자루: 일본 항구에서 도키치로의 부탁 → 사카이에서 노부나가에게 전한다
@@ -448,7 +453,7 @@
     var d = G.DISC[id], c = C.city();
     if (!d || !c) return;
     if (G.Disc.foundByMe(id)) { UI.toast('「' + d.name + '」 — 이미 찾은 곳이다.', 'star'); return; }
-    if (!G.Disc.isBuilding(d) || d.city !== c.id || !G.Disc.built(d)) return;
+    if (!G.Disc.isBuilding(d) || d.city !== c.id || !(G.Disc.inTown ? G.Disc.inTown(d) : G.Disc.built(d))) return;   // 신기루는 이번 입항에 떴을 때만
     busy = true;
     try {
       if (G.Town.active() && !G.Town.hidden() && G.Town.focusMark) await G.Town.focusMark(id);

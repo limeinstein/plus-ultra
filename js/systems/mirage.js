@@ -15,6 +15,9 @@
   G.Mirage = M;
   G.BALANCE = G.BALANCE || {};
   G.BALANCE.mirage = G.BALANCE.mirage || { from: 1600, after: 1600, again: 45, fame: 12, show: 7, future: 1800, futureK: 0.2, vanish: 3.2 };
+  // 도시의 신기루 (2026-10-29 사용자 요청): cityFrom년 전에는 도시 안에 신기루 건물이 나오지 않고, 그 뒤로는 도시에 들어설 때마다 cityChance 확률로 나타난다 (js/systems/discovery.js D.inTown)
+  if (G.BALANCE.mirage.cityFrom == null) G.BALANCE.mirage.cityFrom = 1486;
+  if (G.BALANCE.mirage.cityChance == null) G.BALANCE.mirage.cityChance = 0.1;
   function cfg() { return G.BALANCE.mirage; }
   function S() { return G.Game.state; }
 

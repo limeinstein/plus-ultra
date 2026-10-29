@@ -1,7 +1,7 @@
 /* 조선소 대포·선수상 늘리기 (tests/shipyard_gear_smoke.js) — node tests/shipyard_gear_smoke.js
    · 대포 10종: 세이커·캘버린·페리에·카논(1등급) + 청동 세이커·페드레로(2) · 롱 캘버린·청동 카논(3) · 중카논(4) · 캐로네이드(5)
    · 조선 기술이 모자라면 대포 목록에서 잠기고, 「기술 투자」로 올리면 풀린다 (지금 달린 대포는 줄이거나 뗄 수만 있다)
-   · 선수상: 조선 기술 2~5등급에서만 깎는 16가지 · 발견에 딸려 오는 선수상 33가지 (js/data/figrelics.js)
+   · 선수상: 조선 기술 1~5등급으로 해금(2026-10-29 — 신화의 짐승은 위대한 발견, 전설은 바다 괴물에서만: tests/figurehead_smoke.js) · 발견에 딸려 오는 선수상 33가지 (js/data/figrelics.js)
    · 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다 (kill). 콘솔 오류 0 */
 const path = require('path');
 const fs = require('fs');
@@ -26,7 +26,7 @@ const ROOT = path.resolve(__dirname, '..');
     const ids = G.CANNONS.map(c => c.id + '/' + c.lv);
     ok(G.CANNONS.length === 10 && ids.join(' ') === 'saker/1 culverin/1 perrier/1 cannon/1 bsaker/2 lculverin/3 pedrero/2 bcannon/3 hcannon/4 carronade/5', '대포 10종: ' + G.CANNONS.map(c => c.name).join('·'));
     const shop = G.FIGUREHEADS.filter(f => !f.rare && !f.relic), hi = shop.filter(f => (f.lv || 1) > 1);
-    ok(hi.length === 16 && [2, 3, 4, 5].every(lv => hi.filter(f => f.lv === lv).length === 4), '조선 기술 2~5등급 선수상 16가지 (등급마다 4): ' + hi.map(f => f.name + f.lv).join(' '));
+    ok(hi.length >= 12 && [2, 3, 4, 5].every(lv => hi.filter(f => f.lv === lv).length >= 2), '조선 기술 2~5등급 선수상 ' + hi.length + '가지 (등급마다 둘 이상): ' + hi.map(f => f.name + f.lv).join(' '));
     const rel = G.FIGUREHEADS.filter(f => f.relic);
     const NEW = ['narwhal', 'humpback', 'manatee', 'mermaid', 'kraken', 'leviathan', 'dolphin', 'sealion', 'sailfish', 'f_marlin', 'manta', 'walrus', 'eagle', 'tiger', 'peacock', 'hornbill', 'paradise', 'dragon', 'phoenix', 'phoenixw', 'folk_maori', 'folk_hawaii', 'folk_bajau', 'moai', 'trelleborg', 'byrsa', 'gadir', 'antikythera', 'flordelamar', 'mahabali', 'tanahlot', 'poompuhar', 'munmu'];
     const got = NEW.filter(d => rel.some(f => f.relic === d && G.DISC[d] && G.RELICS[d].some(r => r.id === f.id && r.kind === 'fig')));
@@ -62,7 +62,7 @@ const ROOT = path.resolve(__dirname, '..');
     await closeAll(); await Promise.race([m.p.catch(() => {}), sleep(1500)]); await closeAll();
 
     // 3) 기술 투자로 5등급 → 모두 풀린다, 캐로네이드 6문
-    ok(/캐로네이드포/.test(Y.gearAt(5)) && /용상/.test(Y.gearAt(5)), '5등급이 되면 새로 다는 것: ' + Y.gearAt(5));
+    ok(/캐로네이드포/.test(Y.gearAt(5)) && /대천사 미카엘상/.test(Y.gearAt(5)), '5등급이 되면 새로 다는 것: ' + Y.gearAt(5));
     SH.techInvest(city, 70000);
     ok(SH.tech(city) === 5, '기술 투자 7만 닢 → 조선 기술 ' + SH.tech(city) + '등급');
     m = await gunMenu();
@@ -93,11 +93,12 @@ const ROOT = path.resolve(__dirname, '..');
       return { rows, text };
     }
     const lowFig = await figRows(low);
-    ok(!lowFig.rows.some(t => /기술 [2-5]/.test(t)) && /기술 투자/.test(lowFig.text), '1등급 조선소: 기술 선수상 없음, 「기술 투자」로 더 깎을 수 있다고 알려 줌');
+    const lowEls = await (async () => { const p = Y.refit(low); await click('산 가브리엘'); await click('선수상'); await sleep(120); const e = choices().map(x => ({ t: x.textContent.replace(/\s+/g, ' '), dis: x.classList.contains('dis') })); await closeAll(); await Promise.race([p.catch(() => {}), sleep(1500)]); await closeAll(); return e; })();
+    ok(lowEls.filter(x => /기술 [2-5]/.test(x.t)).length === hi.length && lowEls.filter(x => /기술 [2-5]/.test(x.t)).every(x => x.dis) && /기술 투자/.test(lowFig.text), '1등급 조선소: 2~5등급 선수상은 잠긴 채 보이고(대포처럼) 「기술 투자」로 풀린다고 알려 줌');
     G.Game.go('city', { cityId: city0.id }); await sleep(300);
     const seen = new Set();
-    for (let k = 0; k < 6; k++) { s.day += 60; const f = await figRows(city0); f.rows.forEach(t => { const h = hi.find(x => t.indexOf(x.name) === 0); if (h) seen.add(h.lv); }); }
-    ok(seen.size >= 3, '5등급 조선소에서 여러 철에 걸쳐 나온 기술 선수상 등급: ' + [...seen].sort().join('·'));
+    { const f = await figRows(city0); f.rows.forEach(t => { const h = hi.find(x => t.indexOf(x.name) === 0); if (h) seen.add(h.lv); }); }
+    ok(seen.size === 4, '5등급 조선소: 2~5등급 선수상이 모두 나온다 (철마다 바뀌지 않음): ' + [...seen].sort().join('·'));
     // 소지품의 발견 선수상을 달 수 있다
     RR.addItem('r_mermaid', { disc: 'mermaid', done: true });
     const pf = Y.refit(city0); await click('산 가브리엘'); await click('선수상'); await sleep(120);

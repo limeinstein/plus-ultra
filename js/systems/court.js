@@ -906,6 +906,7 @@
           await UI.say(U.pick(['제독, 이제 우리도 깃발 아래 칼을 찬 사람들입니다. 바다의 해적 놈들도 같은 패라며 웬만해선 건드리지 않겠지요.', '사략선장이라… 소문은 빨리 돕니다, 제독. 해적들도 허가장 든 배는 피해 갑니다. 저들 사이에서도 체면이란 게 있거든요.']), G.Scenes.mateSpeaker('first'));
         }
       } else {
+        if (G.Glory && G.Glory.noDispense && G.Glory.noDispense(realm)) { await UI.say(G.Glory.dispenseLine(), who); continue; }   // 권리장전(1689) — 면제권이 사라졌다 (js/systems/glory.js)
         if (s.player.gold < eFee) { UI.toast('금화가 모자랍니다. (' + U.num(eFee) + '닢)', 'coin'); continue; }
         s.player.gold -= eFee; G.Game.refreshHud();
         pa.exempt[realm.id] = U.dateNum(U.addDays(s.date, Math.round(pp.exemptYears * 365)));

@@ -74,7 +74,10 @@
   /** 갈래: 표에 없으면 이름으로 짐작 */
   BT.kindOf = function (d) {
     var k = B().kindOf[d.id]; if (k) return k;
+    var pk = G.Disc && G.Disc.plantKind ? G.Disc.plantKind(d) : null;   // 식물은 갈래대로 (열매·선인장·버섯 — 2026-10-29)
+    if (pk && B().kinds[pk]) return pk;
     var n = d.name || '';
+    if (/나무늘보/.test(n)) return 'small';                            // 「나무」가 들어가도 짐승
     if (/용|룡|드래곤|뱀|괴물|괴수|귀신|거인|요정|크라켄/.test(n)) return 'giant';
     if (/나무|꽃|풀|버섯|이끼/.test(n)) return 'flower';
     if (/새$|조$|수리|매$/.test(n)) return 'bird';

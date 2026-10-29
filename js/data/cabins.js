@@ -2,33 +2,35 @@
    · fixed: 어느 배에나 있는 자리 (고칠 수 없다). role: 그 자리에 앉는 사람은 「부하편성」의 그 역할과 같다.
    · skills: 이 방에 배치된 부하의 이 특기가 함대에 쓰인다(역할이 없어도). 방의 힘 = 1 + 그 특기 가운데 가장 높은 단계.
    · cost·days: 조선소에서 이 방으로 고치는 값(금화)과 날수.
+   · main·sub (2026-10-29 피드백 「선실이 어떤 능력을 중요하게 보는지 표시」): 방의 힘을 정하는 특기. 주 특기(★)는 그 단계 그대로, 보조 특기(☆)는 절반(G.BALANCE.cabins.subK)만 친다.
+     방의 힘 = (1 + max(주 특기 단계, 보조 특기 단계 × 0.5)) × 충성 효율 — 추천 순서도 같은 셈 (js/systems/cabins.js CB.roomLevel). skills는 함대에 쓰이는 특기(주·보조 모두)
    · grow: 이 방에서 지내면 느는 특기 (없으면 skills의 첫 특기) — 3년·9년·27년이면 +1·+2·+3 (js/systems/cabins.js CB.grow · G.BALANCE.cabins.growDays) */
 (function (G) {
   'use strict';
   G.CABINS = [
     { id: 'captain', name: '함장실', icon: 'crown', fixed: true, who: 'admiral', desc: '제독의 방. 해도와 일지가 놓여 있다.' },
-    { id: 'adjutant', name: '부관실', icon: 'people', fixed: true, role: 'first', grow: 'speech', desc: '부관이 머문다. 전투·교섭·의술 같은 특기를 제독 대신 맡고, 부하들의 불만을 다독인다.', fx: '달마다 부하들의 충성이 조금 오른다' },
-    { id: 'helm', name: '조타실', icon: 'wheel', fixed: true, role: 'nav', grow: 'nav', desc: '항해사가 키를 잡는다. 항해술·운용술이 함대에 쓰인다.', fx: '날마다 쌓이는 피로가 준다' },
-    { id: 'lookout', name: '파수대', icon: 'telescope', fixed: true, role: 'surveyor', grow: 'survey', desc: '돛대 꼭대기의 망루. 측량사가 오르면 측량·역사학이 쓰이고 먼 곳의 발견물을 먼저 알아본다.', fx: '발견물을 알아보는 거리가 는다' },
-    { id: 'deck', name: '갑판', icon: 'ship', fixed: true, skills: ['ops', 'sword'], desc: '갑판을 맡은 사람이 선원들을 부린다.', fx: '규율이 덜 떨어진다' },
+    { id: 'adjutant', main: ['speech'], sub: ['theo'], name: '부관실', icon: 'people', fixed: true, role: 'first', grow: 'speech', desc: '부관이 머문다. 전투·교섭·의술 같은 특기를 제독 대신 맡고, 부하들의 불만을 다독인다.', fx: '달마다 부하들의 충성이 조금 오른다' },
+    { id: 'helm', main: ['nav'], sub: ['ops'], name: '조타실', icon: 'wheel', fixed: true, role: 'nav', grow: 'nav', desc: '항해사가 키를 잡는다. 항해술·운용술이 함대에 쓰인다.', fx: '날마다 쌓이는 피로가 준다' },
+    { id: 'lookout', main: ['survey'], sub: ['hist'], name: '파수대', icon: 'telescope', fixed: true, role: 'surveyor', grow: 'survey', desc: '돛대 꼭대기의 망루. 측량사가 오르면 측량·역사학이 쓰이고 먼 곳의 발견물을 먼저 알아본다.', fx: '발견물을 알아보는 거리가 는다' },
+    { id: 'deck', main: ['ops'], sub: ['sword'], name: '갑판', icon: 'ship', fixed: true, skills: ['ops', 'sword'], desc: '갑판을 맡은 사람이 선원들을 부린다.', fx: '규율이 덜 떨어진다' },
     { id: 'hold', name: '빈 선실', icon: 'sack', cost: 0, days: 0, desc: '아직 쓰임을 정하지 않은 방. 조선소에서 고칠 수 있다.' },
-    { id: 'chart', name: '지도 제작실', icon: 'chart', skills: ['survey', 'art'], cost: 1400, days: 3, desc: '측량한 것을 해도로 옮긴다.', fx: '해도에 밝혀지는 넓이가 는다' },
-    { id: 'galley', name: '요리실', icon: 'bread', skills: ['cook'], cost: 900, days: 2, desc: '따뜻한 끼니를 짓는 부엌.', fx: '피로가 덜 쌓이고, 별미를 차리는 일이 잦아진다 · 요리에 밝은 사람이면 그 사람 고장(모국어)의 음식을 차려 날마다 피로를 덜고 규율을 돋운다 — 요리 단계가 높을수록 값비싼 음식, 식당·향신료·식자재가 있으면 더' },
-    { id: 'mess', name: '식당', icon: 'mug', skills: ['cook', 'speech'], cost: 800, days: 2, desc: '선원들이 둘러앉아 먹고 쉬는 곳.', fx: '피로와 규율을 조금씩 돌본다 · 요리실의 차림이 더 효과를 낸다' },
-    { id: 'account', name: '회계실', icon: 'coin', skills: ['acct'], role: 'purser', cost: 1200, days: 2, desc: '경리가 장부를 맞춘다. 이 방에 앉은 사람이 경리다.', fx: '값 깎기가 잘 통하고 급료가 덜 든다' },
-    { id: 'chapel', name: '예배실', icon: 'pray', skills: ['theo'], cost: 1000, days: 2, desc: '기도하고 마음을 다잡는 방.', fx: '규율이 덜 떨어진다' },
-    { id: 'sick', name: '진료실', icon: 'cross', skills: ['med', 'sci'], cost: 1500, days: 3, desc: '아픈 선원을 누이고 돌본다.', fx: '괴혈병이 느리게 번진다' },
-    { id: 'rec', name: '오락실', icon: 'dice', skills: ['music'], cost: 900, days: 2, desc: '노래와 놀이로 시름을 잊는 방.', fx: '규율이 덜 떨어지고, 뱃노래가 자주 울린다' },
-    { id: 'rig', name: '조범실', icon: 'sail', skills: ['nav', 'ops'], cost: 1600, days: 3, desc: '돛과 밧줄을 맡은 사람들의 자리.', fx: '함대가 빨라진다 — 방마다 (1 + 항해술·운용술 단계) × 1.56%, 여러 칸이면 더해진다 (16칸을 3단계 항해사로 채우면 최대 속력 2배)' },
-    { id: 'repair', name: '선박 수리실', icon: 'hammer', skills: ['ship'], cost: 1500, days: 3, desc: '목수의 연장과 자재를 둔다.', fx: '바다 위에서 기함을 더 빨리 고친다 (자재가 있어야 한다)' },
-    { id: 'pen', name: '사육실', icon: 'horse', skills: ['sci'], cost: 1100, days: 2, desc: '닭·염소를 길러 달걀과 젖을 얻는다.', fx: '날마다 식량이 조금 생긴다' },
-    { id: 'gun', name: '포격실', icon: 'cannon', skills: ['gun'], cost: 1800, days: 3, desc: '포수들이 화약과 포탄을 다룬다.', fx: '기함의 포격이 세진다' },
-    { id: 'marine', name: '해병 대기실', icon: 'sword', skills: ['sword', 'shoot'], cost: 1600, days: 3, desc: '백병전에 나설 사람들이 기다린다.', fx: '기함의 백병전이 세진다' },
+    { id: 'chart', main: ['survey'], sub: ['art'], name: '지도 제작실', icon: 'chart', skills: ['survey', 'art'], cost: 1400, days: 3, desc: '측량한 것을 해도로 옮긴다.', fx: '해도에 밝혀지는 넓이가 는다' },
+    { id: 'galley', main: ['cook'], sub: [], name: '요리실', icon: 'bread', skills: ['cook'], cost: 900, days: 2, desc: '따뜻한 끼니를 짓는 부엌.', fx: '피로가 덜 쌓이고, 별미를 차리는 일이 잦아진다 · 요리에 밝은 사람이면 그 사람 고장(모국어)의 음식을 차려 날마다 피로를 덜고 규율을 돋운다 — 요리 단계가 높을수록 값비싼 음식, 식당·향신료·식자재가 있으면 더' },
+    { id: 'mess', main: ['cook'], sub: ['speech'], name: '식당', icon: 'mug', skills: ['cook', 'speech'], cost: 800, days: 2, desc: '선원들이 둘러앉아 먹고 쉬는 곳.', fx: '피로와 규율을 조금씩 돌본다 · 요리실의 차림이 더 효과를 낸다' },
+    { id: 'account', main: ['acct'], sub: [], name: '회계실', icon: 'coin', skills: ['acct'], role: 'purser', cost: 1200, days: 2, desc: '경리가 장부를 맞춘다. 이 방에 앉은 사람이 경리다.', fx: '값 깎기가 잘 통하고 급료가 덜 든다' },
+    { id: 'chapel', main: ['theo'], sub: [], name: '예배실', icon: 'pray', skills: ['theo'], cost: 1000, days: 2, desc: '기도하고 마음을 다잡는 방.', fx: '규율이 덜 떨어진다' },
+    { id: 'sick', main: ['med'], sub: ['sci'], name: '진료실', icon: 'cross', skills: ['med', 'sci'], cost: 1500, days: 3, desc: '아픈 선원을 누이고 돌본다.', fx: '괴혈병이 느리게 번진다' },
+    { id: 'rec', main: ['music'], sub: [], name: '오락실', icon: 'dice', skills: ['music'], cost: 900, days: 2, desc: '노래와 놀이로 시름을 잊는 방.', fx: '규율이 덜 떨어지고, 뱃노래가 자주 울린다' },
+    { id: 'rig', main: ['nav'], sub: ['ops'], name: '조범실', icon: 'sail', skills: ['nav', 'ops'], cost: 1600, days: 3, desc: '돛과 밧줄을 맡은 사람들의 자리.', fx: '함대가 빨라진다 — 방마다 (1 + 항해술·운용술 단계) × 1.56%, 여러 칸이면 더해진다 (16칸을 3단계 항해사로 채우면 최대 속력 2배)' },
+    { id: 'repair', main: ['ship'], sub: [], name: '선박 수리실', icon: 'hammer', skills: ['ship'], cost: 1500, days: 3, desc: '목수의 연장과 자재를 둔다.', fx: '바다 위에서 기함을 더 빨리 고친다 (자재가 있어야 한다)' },
+    { id: 'pen', main: ['sci'], sub: [], name: '사육실', icon: 'horse', skills: ['sci'], cost: 1100, days: 2, desc: '닭·염소를 길러 달걀과 젖을 얻는다.', fx: '날마다 식량이 조금 생긴다' },
+    { id: 'gun', main: ['gun'], sub: [], name: '포격실', icon: 'cannon', skills: ['gun'], cost: 1800, days: 3, desc: '포수들이 화약과 포탄을 다룬다.', fx: '기함의 포격이 세진다' },
+    { id: 'marine', main: ['sword'], sub: ['shoot'], name: '해병 대기실', icon: 'sword', skills: ['sword', 'shoot'], cost: 1600, days: 3, desc: '백병전에 나설 사람들이 기다린다.', fx: '기함의 백병전이 세진다' },
     // 2026-10-16 화실·음악실·참모실·조각실 (art는 파일 누락 때만 쓰는 안전용 대체 그림)
-    { id: 'studio', name: '화실', icon: 'palette', skills: ['art'], cost: 1300, days: 2, art: 'chart', desc: '이젤과 물감을 둔 밝은 방. 그림에 밝은 사람이 바다를 그린다.', fx: '미술품을 그려 짐칸에 싣는다 · 이름난 화가는 명작을 남긴다(사교 명성)' },
-    { id: 'sculpt', name: '조각실', icon: 'bust', skills: ['craft'], cost: 1500, days: 3, art: 'repair', desc: '돌과 나무, 정과 끌을 둔 방. 세공에 밝은 사람이 깎고 빚는다.', fx: '조각품을 깎아 짐칸에 싣는다 · 이름난 조각가는 명작을 남긴다(사교 명성)' },
-    { id: 'musicroom', name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '류트와 북을 둔 방. 음악에 밝은 사람이 날마다 가락을 들려준다.', fx: '날마다 쌓이는 피로가 준다' },
-    { id: 'staff', name: '참모실', icon: 'strategy', skills: ['ops', 'hist', 'survey'], cost: 1400, days: 2, art: 'captain', desc: '지도와 병법서를 펼친 작전 회의실. 운용·역사·측량에 밝은 참모가 앉는다.', fx: '육상전의 계략(기습·함정·저격·작렬탄)이 잘 통하고 더 세진다' },
+    { id: 'studio', main: ['art'], sub: [], name: '화실', icon: 'palette', skills: ['art'], cost: 1300, days: 2, art: 'chart', desc: '이젤과 물감을 둔 밝은 방. 그림에 밝은 사람이 바다를 그린다.', fx: '미술품을 그려 짐칸에 싣는다 · 이름난 화가는 명작을 남긴다(사교 명성)' },
+    { id: 'sculpt', main: ['craft'], sub: [], name: '조각실', icon: 'bust', skills: ['craft'], cost: 1500, days: 3, art: 'repair', desc: '돌과 나무, 정과 끌을 둔 방. 세공에 밝은 사람이 깎고 빚는다.', fx: '조각품을 깎아 짐칸에 싣는다 · 이름난 조각가는 명작을 남긴다(사교 명성)' },
+    { id: 'musicroom', main: ['music'], sub: [], name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '류트와 북을 둔 방. 음악에 밝은 사람이 날마다 가락을 들려준다.', fx: '날마다 쌓이는 피로가 준다' },
+    { id: 'staff', main: ['ops'], sub: ['hist', 'survey'], name: '참모실', icon: 'strategy', skills: ['ops', 'hist', 'survey'], cost: 1400, days: 2, art: 'captain', desc: '지도와 병법서를 펼친 작전 회의실. 운용·역사·측량에 밝은 참모가 앉는다.', fx: '육상전의 계략(기습·함정·저격·작렬탄)이 잘 통하고 더 세진다' },
     // 2026-10-21 창고: 사람을 두지 않는 방(noStaff). 기함 짐칸이 는다 — art는 파일 누락 때만 쓰는 안전용 대체 그림
     { id: 'store', name: '창고', icon: 'chest', noStaff: true, cost: 1200, days: 2, art: 'repair', desc: '칸막이를 걷어 내고 선반과 고정 끈을 단 짐칸. 사람이 머물지 않는다.', fx: '기함 짐칸이 배 적재량의 5%씩 는다 (4칸까지) · 무게 한도는 그대로라 가벼운 짐에 좋다' },
     { id: 'interp', name: '통역실', icon: 'scroll', skills: [], lang: true, cost: 700, days: 1, desc: '여러 나라 말을 아는 사람의 방. 이 방에 있는 사람의 말도 통역으로 쓰인다. 부하편성에서 통역으로 임명한 사람을 두면 통역관이 되어, 제독과 다른 부하들이 아는 말까지 모아 통역하고 말을 남보다 빨리 배운다.', fx: '이 방 사람의 말이 통역에 쓰인다 · 통역으로 임명한 사람이면 일행의 말을 모두 모아 통역하고 말을 빨리 배운다' }

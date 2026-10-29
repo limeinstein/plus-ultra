@@ -28,9 +28,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const r = await page.evaluate(async () => {
       const out = {}, UI = G.UI, SK = G.Sky, B = G.BALANCE.sky, C = G.CITY_DATA;
       await G.Game.ensureGeo(); TT.auto = false;
-      const said = [], asks = []; let answer = {}, toasts = [];
+      const said = [], asks = [], artFaces = [], artScenes = []; let answer = {}, toasts = [];
+      const originalPic = G.FamEv.showPic;
+      G.FamEv.showPic = ev => { artScenes.push(ev.img); return originalPic(ev); };
       window.__ui = { say: UI.say, ask: UI.ask, alert: UI.alert, confirm: UI.confirm, toast: UI.toast, save: G.State.save };
-      UI.say = async (t, w) => { said.push((w && w.name ? w.name + ': ' : '') + String(t)); };
+      UI.say = async (t, w) => {
+        said.push((w && w.name ? w.name + ': ' : '') + String(t));
+        if (w && w.portrait) artFaces.push({name:w.name,face:G.Img.pick(G.Art.portraitKeys(w.portrait)),half:G.Img.pick(w.half)});
+      };
       UI.ask = async (t, o) => { asks.push(String(t) + ' [' + o.map(x => x.value).join(',') + ']'); for (const k in answer) if (String(t).indexOf(k) >= 0) return answer[k]; return o[0].value; };
       UI.alert = async t => { said.push('[창] ' + String(t).replace(/<[^>]+>/g, ' ')); }; UI.confirm = async () => true; UI.toast = t => { toasts.push(String(t)); };
       G.State.save = () => {};
@@ -119,6 +124,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       setDate(s, 1638, 7, 15); out.missMs = /레이던/.test(SK.daily().map(x => x.text).join('|'));
       // 옛 저장
       s = fresh(); delete s.sky; setDate(s, 1640, 1, 1); out.old = SK.daily().length === 0 && SK.html() === '' && !s.sky;
+      G.FamEv.showPic = originalPic;
+      out.artFaces = artFaces;
+      out.artScenes = [...new Set(artScenes)];
+      out.artCleanup = !document.querySelector('.famscene') && !document.getElementById('ui').classList.contains('scenepic-on');
       return out;
     });
     console.log('  코페르니쿠스:', r.copLines[4]);
@@ -148,6 +157,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.galNews === '0,1,1', '원고를 나른 사람에게 책 소식 없음 · 갈릴레이의 죽음 · 뉴턴');
     ok(r.missTrial && r.missMs, '재판·원고를 놓친 사람에게는 소식으로');
     ok(r.old, '옛 저장(state.sky 없음)은 그대로');
+    const art = JSON.parse(require('fs').readFileSync(path.join(ROOT,'tools/sky_event_art_prompts.json'),'utf8'));
+    for (const a of art.assets.filter(a=>a.type==='portrait')) {
+      ok(r.artFaces.some(f=>f.face==='portraits/history/'+a.id && f.half==='portraits/history/'+a.id+'_half'),a.name+' 실제 화자의 얼굴상·무릎상 연결');
+    }
+    for (const a of art.assets.filter(a=>a.type==='scene')) ok(r.artScenes.includes('legend-events/'+a.id),a.name+' 실제 사건 장면 호출');
+    ok(r.artCleanup,'사건이 끝나면 그림과 화면 상태 정리');
+    require('fs').writeFileSync(path.join(ROOT,'artifacts/sky-event-art-20261029/flow-results.json'),JSON.stringify({faces:r.artFaces,scenes:r.artScenes,cleanup:r.artCleanup},null,2));
 
     // ---- 실제 화면: 베니스에서 갈릴레이
     const shot = await page.evaluate(async () => {

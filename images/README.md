@@ -16,6 +16,10 @@
 
 ## 파일 이름 규칙
 
+식물을 교역소에 심어 얻는 특산물 79종은 `goods/p_교역품ID.webp`에 전용 상품 그림을 둡니다
+(예: `goods/p_rosewater.webp`, `goods/p_durian.webp`). 이 그림을 식물 발견 장면보다 먼저 표시합니다.
+투명 배경과 원화 해상도를 보존하며, 전체 그림과 제작 지시문은 `../docs/art/plant-goods-20261029.md`에 있습니다.
+
 | 그림 | 파일 이름 | 권장 크기 |
 |---|---|---|
 | 타이틀 화면 | `title.jpg` | 1600×900 |
@@ -66,6 +70,7 @@
 | 일반 소지품 | `items/아이템ID.webp` (레이피어 `rapier`, 나침반 `compass`, 약속 반지 `ring` 등) · 종류 공통 `item-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
 | 식당 음식 | `foods/음식ID.webp` (피시 앤 칩스 `fish_chips`, 베이징덕 `peking_duck` 등). 120종 이름과 지역 배정은 `js/data/cuisine.js` | 투명 배경 정사각형, 권장 256×256 |
 | 실존 예술가의 가상 명작 | `masterworks/부하ID_paint0.webp` … `_paint2.webp`, 조각가는 `_sculpt0.webp` … `_sculpt2.webp`. 제목·설명은 `js/data/masterworks.js`, 생성 근거와 프롬프트는 `docs/art/masterworks-generation.md` | 1400×1000 WebP (7:5), 액자·글자·서명 없이 작품만 |
+| 선수상 | `figureheads/선수상ID.webp` (예: `falcon`, `dragonking`, `goddess`) | 교역품과 같은 192×192 투명 배경, 조선소·도감에 표시 |
 | 발견 유물 | `relics/유물ID.webp` (예: `r_qinshi`, `r_sillacrown`) · 종류 공통 `relic-kinds/종류.webp` | 투명 배경 정사각형, 권장 256×256 |
 | 교역품 | `goods/교역품ID.webp` (후추 `pepper`, 비단 `silk`, 대포 `cannon` 등) · 갈래 공통 `good-kinds/갈래.webp` | 투명 배경 정사각형, 권장 192×192 |
 | 지도에 남는 역사·종교 유적 모형 | `map-discoveries/ruins-1.png` … `ruins-10.png`, `new-ruins-1.png` … `new-ruins-4.png` — 도시 밖 유적 200곳을 4×4 셀에 배치. 직접 발견한 뒤 항해·육상·해도에 표시 | 투명 배경 PNG, 4열×4행 |

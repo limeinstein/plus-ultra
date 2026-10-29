@@ -148,9 +148,9 @@
       '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>선장</th><th>목재</th><th class="num">내구력</th><th class="num">적재량</th><th>대포</th><th>돛</th><th>선수상</th></tr>' +
       f.ships.map(function (sh, i) {
         var w = G.Ships.wood(sh);
-        return '<tr><td>' + (i === 0 ? '<span class="tag">기함</span>' : '') + '</td><td><b>' + U.esc(sh.name) + '</b>' + (sh.loan ? ' <small class="muted">(빌린 배)</small>' : '') + '</td><td>' + G.SHIP[sh.type].name + '</td><td>' + U.esc(R.captainName(sh)) + '</td><td>' + (w ? w.name : '<span class="muted">—</span>') + '</td><td class="num">' + Math.round(sh.hp) + '/' + sh.maxHp + '</td><td class="num">' + R.shipCargoCap(sh) + '</td><td>' + (G.CANNON[sh.guns.type] || {}).name + ' ' + sh.guns.n + '/' + sh.ports + '</td><td>' + sh.sails.map(function (k) { return k === 'sq' ? '□' : k === 'bat' ? '▤' : '△'; }).join('') + '</td><td>' + (sh.fig ? G.FIGUREHEAD[sh.fig].name : '—') + '</td></tr>' +
+        return '<tr><td>' + (i === 0 ? '<span class="tag">기함</span>' : '') + '</td><td><b>' + U.esc(sh.name) + '</b>' + (sh.loan ? ' <small class="muted">(빌린 배)</small>' : '') + '</td><td>' + G.SHIP[sh.type].name + '</td><td>' + U.esc(R.captainName(sh)) + '</td><td>' + (w ? w.name : '<span class="muted">—</span>') + '</td><td class="num">' + Math.round(sh.hp) + '/' + sh.maxHp + '</td><td class="num">' + R.shipCargoCap(sh) + '</td><td>' + (G.CANNON[sh.guns.type] || {}).name + ' ' + sh.guns.n + '/' + sh.ports + '</td><td>' + sh.sails.map(function (k) { return k === 'sq' ? '□' : k === 'bat' ? '▤' : '△'; }).join('') + '</td><td' + (sh.fig && G.FigFx ? ' title="' + U.esc(G.FigFx.plain(G.FIGUREHEAD[sh.fig])) + '"' : '') + '>' + (sh.fig ? G.FIGUREHEAD[sh.fig].name + (G.FIGUREHEAD[sh.fig].legend ? ' ★' : '') : '—') + '</td></tr>' +
           '<tr class="sub"><td></td><td colspan="9"><div class="traits">' + G.Ships.traitChips(sh) + '<span class="cult">' + G.SHIP[sh.type].feat + '</span></div></td></tr>';
-      }).join('') + '</table>' + speedReport();
+      }).join('') + '</table>' + speedReport() + (G.FigFx ? G.FigFx.fleetHtml() : '');
     var ids = Object.keys(f.cargo);
     html += '<div class="sep"></div><h4 style="margin:0 0 8px">적재 교역품</h4>' + (ids.length ? '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th>산 곳</th></tr>' + ids.map(function (id) { var c = f.cargo[id]; return '<tr><td>' + G.goodDot(id) + G.GOOD[id].name + '</td><td class="num">' + c.q + '</td><td class="num">' + U.num(c.cost) + '</td><td>' + U.esc(R.cargoFromText(c)) + '</td></tr>'; }).join('') + '</table>' : '<div class="muted">없음</div>');
     if (s.moored) {
@@ -282,25 +282,33 @@
       }).join('') : '<div class="muted">보유한 이동 장비가 없습니다. 도시 성문의 마구간에서 말·당나귀 같은 탈것을 사면 이곳에 표시됩니다.</div>';
       return '<div class="mount-gear"><h4>이동 장비 <small>소지품 칸을 쓰지 않음</small></h4><div class="mount-items">' + cards + '</div><div class="mount-rule">말·당나귀 같은 탈것은 소모품이 아닙니다. 탐험 중 쓰러진 수량만 잃고, 살아 돌아온 탈것은 출발한 도시 마구간에 자동으로 맡겨져 재사용됩니다. 다른 도시에서 쓰려면 그 도시 마구간에서 따로 마련해야 합니다.</div></div>';
     }
-    function render() {
+    // 종류 단추·정렬·고정(📌) (2026-10-29 피드백) — js/ui/sortfilter.js. 버리거나 장비해 다시 그려도 스크롤 자리는 그대로
+    var ist = I._itemSt || (I._itemSt = { cat: '', sort: 'base' });
+    function render(top) {
+      var scr = G.scrollParent ? G.scrollParent(el) : null, y0 = scr ? scr.scrollTop : 0;
       var nRel = p.items.filter(function (it) { return G.RELIC && G.RELIC[it.id]; }).length;
       var fk = G.Fakes ? G.Fakes.list() : [];       // 모조품 (js/systems/fakes.js) — 짐 칸은 차지하지 않는다
     var fakeHtml = fk.length ? '<div class="mount-gear"><h4>모조품 <small>보고할 때 증거로 내밀 수 있다 · 들키면 벌금이나 옥살이</small></h4><div class="muted">' + fk.map(function (d) { return '「' + U.esc(d.name) + '」' + (G.Fakes.count(d.id) > 1 ? ' ×' + G.Fakes.count(d.id) : '') + (G.Disc.foundByMe(d.id) ? ' <span class="tag">진짜도 가짐</span>' : ''); }).join(' · ') + '</div></div>' : '';
-    el.innerHTML = mountGear() + fakeHtml + '<div class="muted" style="margin:14px 0 10px">소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX + (R.slotsUsed() > R.ITEM_MAX ? ' <b class="warn-text">(넘침 — 새 물건을 받지 못한다)</b>' : '') + ((p.storage || []).length ? ' · 자택 보관함 ' + p.storage.length + '점' : '') + ' · 발견의 증거는 칸을 차지하지 않는다 (보고·발표하면 차지한다)' + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div><table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
-        p.items.map(function (it, i) {
+    el.innerHTML = mountGear() + fakeHtml + '<div class="muted" style="margin:14px 0 10px">소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX + (R.slotsUsed() > R.ITEM_MAX ? ' <b class="warn-text">(넘침 — 새 물건을 받지 못한다)</b>' : '') + ((p.storage || []).length ? ' · 자택 보관함 ' + p.storage.length + '점' : '') + ' · 발견의 증거는 칸을 차지하지 않는다 (보고·발표하면 차지한다)' + (nRel ? ' · 발견 유물 ' + nRel + '점 — <b>증거</b> 표시가 붙은 것은 아직 보고·발표하지 않은 발견의 증거입니다. 후원자에게 보고하면 바치고, 항구에서 발표하면 제독의 것이 됩니다.' : '') + '</div>' + (G.ItemCat ? G.ItemCat.barHtml(p.items, ist) : '') + '<table class="tbl items-tbl"><tr><th></th><th>이름</th><th>종류</th><th>설명</th><th></th></tr>' +
+        (G.ItemCat ? G.ItemCat.view(p.items, ist) : p.items.map(function (it, i) { return { it: it, i: i }; })).map(function (x) {
+          var it = x.it, i = x.i;
           var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind, rl = G.RELIC && G.RELIC[it.id];
           var eq = (kind === 'weapon' && p.equip.weapon === it.id) || (kind === 'armor' && p.equip.armor === it.id);
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
           if (it.id === 'photo' && G.Story && G.Story.showPhoto) act += ' <button class="btn small" data-story-photo="' + i + '">사진을 본다</button>';
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
           var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : kind === 'mgift' && d.gv ? '남자 선물 ' + d.gv : '';
-          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '') + (function () { var b = R.buysOf ? R.buysOf(it) : {}, ks = Object.keys(b).filter(function (k) { return G.CITY_DATA[k]; }); if (!ks.length && it.from != null && G.CITY_DATA[it.from]) return ' <small class="muted">' + G.CITY_DATA[it.from].name + '에서 삼</small>'; return ks.length ? ' <small class="muted">' + ks.map(function (k) { return G.CITY_DATA[k].name; }).join('·') + '에서 삼' + (ks.length === 1 ? ' · ' + U.num(b[ks[0]]) + '닢' : '') + '</small>' : ''; })();
+          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '') + (G.FigFx && G.FIGUREHEAD[it.id] ? G.FigFx.tag(G.FIGUREHEAD[it.id]) : '') + (function () { var b = R.buysOf ? R.buysOf(it) : {}, ks = Object.keys(b).filter(function (k) { return G.CITY_DATA[k]; }); if (!ks.length && it.from != null && G.CITY_DATA[it.from]) return ' <small class="muted">' + G.CITY_DATA[it.from].name + '에서 삼</small>'; return ks.length ? ' <small class="muted">' + ks.map(function (k) { return G.CITY_DATA[k].name; }).join('·') + '에서 삼' + (ks.length === 1 ? ' · ' + U.num(b[ks[0]]) + '닢' : '') + '</small>' : ''; })();
           var ob = rl && rl.real && rl.real.obj;
-          var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (rl && rl.kind === 'fig' ? '<div class="muted" style="font-size:14px">조선소의 「선수상」에서 배에 달 수 있다.</div>' : '');
+          var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (kind === 'fig' && G.FIGUREHEAD[it.id] ? (G.FigFx ? G.FigFx.html(G.FIGUREHEAD[it.id], true) : '') + '<div class="muted" style="font-size:14px">조선소의 「개조 → 선수상」에서 배에 달 수 있다 (품삯 150닢).</div>' : '');
           var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
           var itemDesc = it.id === 'photo' && G.STORY && G.STORY.photo ? G.STORY.photo.desc : (it.desc || d.desc || '');
-          return '<tr><td class="ic" data-ic="' + i + '"></td><td><b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + (it.n > 1 ? ' <small class="muted">(남은 사용 ' + it.n + '회)</small>' : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
+          return '<tr><td class="ic" data-ic="' + i + '"></td><td>' + (G.ItemPin ? G.ItemPin.button(it) + ' ' : '') + '<b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + (it.n > 1 ? ' <small class="muted">(남은 사용 ' + it.n + '회)</small>' : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
         }).join('') + '</table>';
+      if (G.ItemCat && ist.cat && !G.ItemCat.view(p.items, ist).length) el.querySelector('.items-tbl').insertAdjacentHTML('beforeend', '<tr><td colspan="5" class="muted">이 종류의 물건이 없다</td></tr>');
+      if (G.ItemCat) G.ItemCat.wireBar(el, ist, function (t) { render(t); });
+      if (G.ItemPin) G.ItemPin.wire(el, function () { render(); });
+      if (scr) scr.scrollTop = top ? Math.min(y0, (el.querySelector('.icf-bar') || el).offsetTop) : y0;
       // 유물은 작은 그림을 곁들인다 (images/relics/ID 가 있으면 그 그림)
       U.$$('[data-ic]', el).forEach(function (td) {
         var it = p.items[+td.dataset.ic], d = G.ITEM[it.id], rl = G.RELIC && G.RELIC[it.id], art = rl || d;
@@ -420,6 +428,7 @@
     // 왕명 (js/systems/court.js)
     if (G.Princess) html += G.Princess.html();   // 국왕의 특명 — 사라진 왕녀
     if (G.Colony) html += G.Colony.html();       // 개척 도시
+    if (G.Glory) html += G.Glory.html();         // 명예혁명 — 해협·런던·프랑스
     if (G.Sky) html += G.Sky.html();             // 하늘을 재는 사람들 — 나침반과 망원경
     if (G.Kongo) html += G.Kongo.html();         // 포르투갈과 콩고 — 강가의 돌기둥 · 주앙 1세의 세례
     if (G.Teppo) html += G.Teppo.html();         // 철포 삼백 자루 — 총 300을 사카이로

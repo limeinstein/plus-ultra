@@ -384,7 +384,7 @@
     s.sails.forEach(function (k) { thrust += sailEff(k, rel); });
     thrust /= Math.max(1, t.sails.length);
     if (s.rig) thrust *= R.rigK(s.sails, s.rig, rel);   // 삭구 개량 (조선소)
-    var base = t.spd * (1 + s.spdMod) * (1 + (R.figure(s) && R.figure(s).spd || 0));
+    var base = t.spd * (1 + s.spdMod) * (1 + Math.max(R.figure(s) && R.figure(s).spd || 0, G.FigFx ? G.FigFx.wakeSpd() : 0));   // 전설 「끌어 주는 꼬리」는 함대 모든 배에 (js/systems/figfx.js)
     var w = 0.35 + 0.8 * wind.spd;
     var hpF = 0.6 + 0.4 * s.hp / s.maxHp;
     var v = base * thrust * w * hpF * (wind.calm ? 0.25 : 1);
@@ -673,6 +673,7 @@
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'buy');   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'buy');   // 교역 항로의 상선대: 실어 오는 쪽은 싸지고 나는 쪽은 비싸진다 (js/systems/tradefleets.js)
     if (G.Kongo) p *= G.Kongo.mult(c, goodId, 'buy');   // 콩고 왕국과 맺은 교역 (js/systems/kongo.js)
+    if (G.Glory) p *= G.Glory.mult(c, goodId, 'buy');   // 의회의 교역 증서 — 잉글랜드 항구 (js/systems/glory.js)
     if (G.SkillCombos) p *= G.SkillCombos.factor('buyPrice');
     return Math.max(1, Math.round(p));
   };
@@ -686,6 +687,7 @@
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'sell');   // 세상의 시장 사건 (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'sell');   // 교역 항로의 상선대 (js/systems/tradefleets.js)
     if (G.Kongo) p *= G.Kongo.mult(c, goodId, 'sell');   // 콩고 왕국과 맺은 교역
+    if (G.Glory) p *= G.Glory.mult(c, goodId, 'sell');   // 의회의 교역 증서
     if (G.SkillCombos) p *= G.SkillCombos.factor('sellPrice');
     return Math.max(1, Math.round(p));
   };

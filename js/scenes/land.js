@@ -481,6 +481,9 @@
   L.runDay = runDay;   // 시험에서 하루를 바로 돌린다
   function landLine(d) {
     if (d.cat === 'nature') return '제독, 저 경치를 보십시오! 이런 곳이 있었다니...';
+    var pk = G.Disc.plantKind ? G.Disc.plantKind(d) : null;   // 식물: 「이상한 생물이 있습니다! 조심하십시오!」가 아니라 (2026-10-29)
+    if (pk) return ({ tree: '제독, 저 앞에 처음 보는 나무가 서 있습니다! 가까이 가 보시지요.', fruit: '제독, 저기 처음 보는 열매가 열린 나무가 있습니다! 가까이 가 보시지요.',
+      flower: '제독, 저기 처음 보는 꽃이 피어 있습니다! 가까이 가 보시지요.', cactus: '제독, 저기 처음 보는 선인장이 있습니다! 가시를 조심하십시오.', fungus: '제독, 저 고목 밑동에 처음 보는 버섯이 있습니다!' })[pk];
     if (d.cat === 'creature') return '제독, 저기 이상한 생물이 있습니다! 조심하십시오!';
     if (d.cat === 'people') return '제독, 처음 보는 사람들입니다. 적의는 없어 보입니다.';
     return '제독! 찾았습니다! 저것이 틀림없습니다!';

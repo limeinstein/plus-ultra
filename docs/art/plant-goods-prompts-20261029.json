@@ -1,0 +1,403 @@
+{
+  "date": "2026-10-29",
+  "tool": "내장 image_gen",
+  "background": "투명",
+  "base_prompt": "Use case: stylized-concept. Asset: one square trade commodity inventory icon for a historical maritime RPG. Realistic hand-painted antique still-life, detailed natural materials, rich restrained colors, soft warm upper-left light, elegant classic strategy game art matching existing fruit and spice inventory icons. Single compact group centered in square, slightly elevated three-quarter view, all objects fully visible with 10% clear margin, readable small. Genuine transparent RGBA background outside object silhouette. No floor, scene, frame, border, text, labels, logos or watermark. No people, no modern packaging. Depict the harvested or processed commodity itself, not a landscape or a tree in nature. Subject: ",
+  "assets": [
+    {
+      "id": "p_bitterorange",
+      "file": "images/goods/p_bitterorange.webp",
+      "subject": "Seville bitter oranges: three small deep orange fruits with rough slightly irregular rind, one cut half with vivid orange flesh, a short twig with two dark green citrus leaves. Compact balanced grouping."
+    },
+    {
+      "id": "p_marmelo",
+      "file": "images/goods/p_marmelo.webp",
+      "subject": "Quinces (marmelo): two large irregular pear-shaped golden-yellow quinces with velvety rind and one cut wedge revealing firm pale flesh and brown seeds, two muted green leaves."
+    },
+    {
+      "id": "p_almond",
+      "file": "images/goods/p_almond.webp",
+      "subject": "Almonds: a small open coarse linen pouch spilling tan ridged almond shells and brown almond kernels, one split shell revealing its kernel. Clearly almond-shaped, not walnuts."
+    },
+    {
+      "id": "p_madrono",
+      "file": "images/goods/p_madrono.webp",
+      "subject": "Strawberry-tree fruits (Arbutus unedo, madrono): a compact handful of round rough knobbly red and orange berries, one short twig with narrow dark glossy serrated leaves. No ordinary strawberries."
+    },
+    {
+      "id": "p_chestnut",
+      "file": "images/goods/p_chestnut.webp",
+      "subject": "Chestnuts: five glossy rich brown chestnuts with pale flat bases, one split green-brown spiny husk cradling a chestnut, one peeled pale yellow nut."
+    },
+    {
+      "id": "p_apple",
+      "file": "images/goods/p_apple.webp",
+      "subject": "Normandy apples: three rustic red apples with softly streaked yellow-green patches, one crisp pale cut wedge and a small green leaf."
+    },
+    {
+      "id": "p_lingonberry",
+      "file": "images/goods/p_lingonberry.webp",
+      "subject": "Lingonberries: a low small rustic wooden cup overflowing with small round glossy scarlet berries, a short sprig with tiny oval evergreen leaves and a few loose red berries."
+    },
+    {
+      "id": "p_cloudberry",
+      "file": "images/goods/p_cloudberry.webp",
+      "subject": "Cloudberries: a compact handful of amber-gold berries composed of plump translucent raspberry-like drupelets, one short stem and broad lobed green leaf. Soft warm orange berries, no red raspberries."
+    },
+    {
+      "id": "p_gooseberry",
+      "file": "images/goods/p_gooseberry.webp",
+      "subject": "Gooseberries: several translucent pale green round berries with clear longitudinal white stripes and tiny dry blossom tips, a short thorny twig with lobed leaves."
+    },
+    {
+      "id": "p_blackcurrant",
+      "file": "images/goods/p_blackcurrant.webp",
+      "subject": "Blackcurrants: two short clusters of round glossy purple-black berries on fine branching stems, a lobed currant leaf and a few loose berries."
+    },
+    {
+      "id": "p_fig",
+      "file": "images/goods/p_fig.webp",
+      "subject": "Dried figs as merchant goods: a small shallow wicker basket of wrinkled brown flattened dried figs, several loose dried figs and one torn open showing dense amber seeds. No fresh purple figs."
+    },
+    {
+      "id": "p_lemon",
+      "file": "images/goods/p_lemon.webp",
+      "subject": "Amalfi lemons: two large oval bright golden-yellow lemons with tapered tips and dimpled thick rind, one juicy cut half, a pair of elongated dark green leaves."
+    },
+    {
+      "id": "p_carob",
+      "file": "images/goods/p_carob.webp",
+      "subject": "Carob pods: a short tied bundle of long curved dark chestnut-brown leathery flattened pods, one broken pod showing glossy small brown seeds."
+    },
+    {
+      "id": "p_citron",
+      "file": "images/goods/p_citron.webp",
+      "subject": "Calabrian citron fruits: a large elongated lumpy yellow citron with very rugged thick rind, one thick wedge showing extremely thick white pith and small pale yellow pulp center, two leaves."
+    },
+    {
+      "id": "p_marasca",
+      "file": "images/goods/p_marasca.webp",
+      "subject": "Marasca sour cherries: a small cluster of deep burgundy almost black-red cherries on slender green-brown paired stems, a few loose cherries and one cut cherry revealing the stone."
+    },
+    {
+      "id": "p_baobab",
+      "file": "images/goods/p_baobab.webp",
+      "subject": "Baobab fruits: two oval brown velvety thick-shelled pods with long thin woody stems, one split pod showing chalky white crumbly fruit pulp and dark seeds."
+    },
+    {
+      "id": "p_kola",
+      "file": "images/goods/p_kola.webp",
+      "subject": "Kola nuts: an opened woody greenish-brown star pod containing large pink and cream wedge-shaped seeds, several reddish-pink kola nuts arranged closely at its base."
+    },
+    {
+      "id": "p_watermelon",
+      "file": "images/goods/p_watermelon.webp",
+      "subject": "Watermelon: one round small green-striped melon with one large triangular wedge of juicy red flesh and black seeds, compact grouping with no ground."
+    },
+    {
+      "id": "p_marula",
+      "file": "images/goods/p_marula.webp",
+      "subject": "Marula fruit: several small oval golden-yellow plum-like fruits, one cut fruit revealing pale juicy creamy flesh around a large tan stone, a small green leaflet."
+    },
+    {
+      "id": "p_shea",
+      "file": "images/goods/p_shea.webp",
+      "subject": "Shea butter commodity: a squat rough hand-carved wooden bowl filled with creamy ivory solid butter, a small wooden scoop resting against it, two brown shea nuts and one split shell. No leaves or tree, no dairy."
+    },
+    {
+      "id": "p_date",
+      "file": "images/goods/p_date.webp",
+      "subject": "Dried dates: a small shallow woven palm basket filled with wrinkled amber-brown dates, three dates in front and a short date fruit stalk. No palm tree."
+    },
+    {
+      "id": "p_pistachio",
+      "file": "images/goods/p_pistachio.webp",
+      "subject": "Pistachios: a small open linen sack spilling pale split shells exposing vivid green-purple kernels, a few shelled pistachio kernels in front."
+    },
+    {
+      "id": "p_apricot",
+      "file": "images/goods/p_apricot.webp",
+      "subject": "Dried apricots: a compact shallow wooden bowl filled with wrinkled flattened orange-gold dried apricot halves, several loose dry halves. Not fresh whole apricots."
+    },
+    {
+      "id": "p_pomegranate",
+      "file": "images/goods/p_pomegranate.webp",
+      "subject": "Pomegranates: one round dark red fruit with a crown calyx, one split half packed with ruby-red seeds, a few scattered arils and one small leaf."
+    },
+    {
+      "id": "p_mulberry",
+      "file": "images/goods/p_mulberry.webp",
+      "subject": "Black mulberries: a compact handful of elongated bumpy deep purple-black mulberries, one shorter red immature berry and one broad heart-shaped green mulberry leaf."
+    },
+    {
+      "id": "p_mango",
+      "file": "images/goods/p_mango.webp",
+      "subject": "Alphonso mangoes: two rounded oblong golden-yellow mangoes with subtle orange blush, one cut cheek displaying rich smooth orange flesh, a narrow green leaf."
+    },
+    {
+      "id": "p_jackfruit",
+      "file": "images/goods/p_jackfruit.webp",
+      "subject": "Jackfruit: one oblong green-yellow fruit with fine close-packed knobbly rind, one large cut section showing many golden fleshy bulbs around a pale central core, a few loose yellow bulbs."
+    },
+    {
+      "id": "p_tamarind",
+      "file": "images/goods/p_tamarind.webp",
+      "subject": "Tamarind: several curved tan brittle dry pods, one cracked open exposing sticky dark brown segmented pulp and dark seeds, one small paired-leaf sprig."
+    },
+    {
+      "id": "p_amla",
+      "file": "images/goods/p_amla.webp",
+      "subject": "Amla Indian gooseberry: several smooth pale yellow-green round fruits with six subtle vertical grooves, one cut half with firm translucent pale flesh and a small seed, a fine feathery leaf sprig."
+    },
+    {
+      "id": "p_coconut",
+      "file": "images/goods/p_coconut.webp",
+      "subject": "Coconuts: one rough hairy brown coconut and one clean split half exposing thick bright white flesh around a hollow center. Compact grouping, no drink straw."
+    },
+    {
+      "id": "p_lychee",
+      "file": "images/goods/p_lychee.webp",
+      "subject": "Lychees: a small cluster of rosy-red rough textured fruits, two peeled pearly translucent white lychees, one cut to show the glossy brown seed, a narrow glossy leaf."
+    },
+    {
+      "id": "p_longan",
+      "file": "images/goods/p_longan.webp",
+      "subject": "Dried longan commodity: a low rustic bowl holding tan-brown wrinkled whole dried longans, several cracked dried shells exposing dark amber translucent dried pulp and one dark seed. Not fresh green fruit."
+    },
+    {
+      "id": "p_persimmon",
+      "file": "images/goods/p_persimmon.webp",
+      "subject": "Korean dried persimmons (gotgam): a compact short string of four wrinkled amber-brown dried persimmons tied by their brown calyxes, a few loose flattened dried fruits with fine natural white sugar bloom. Clearly dried, no fresh glossy persimmons."
+    },
+    {
+      "id": "p_jujube",
+      "file": "images/goods/p_jujube.webp",
+      "subject": "Dried jujubes: an open small coarse cloth pouch spilling oblong wrinkled glossy deep reddish-brown dates, one split fruit with cream flesh and long stone. Clearly jujube red dates."
+    },
+    {
+      "id": "p_omija",
+      "file": "images/goods/p_omija.webp",
+      "subject": "Dried omija schisandra berries: a shallow small wooden bowl of tiny wrinkled deep crimson berries and a short hanging cluster of red berries on a fine stem, a few loose dried berries."
+    },
+    {
+      "id": "p_hamimelon",
+      "file": "images/goods/p_hamimelon.webp",
+      "subject": "Hami melon: one elongated oval pale yellow melon with fine dense netted rind and subtle dark green longitudinal bands, a cut wedge revealing crisp salmon-orange flesh and tan seeds."
+    },
+    {
+      "id": "p_wildapple",
+      "file": "images/goods/p_wildapple.webp",
+      "subject": "Almaty wild apples: a compact cluster of four small irregular apples in yellow-green and streaked crimson colors, one small cut half, a slender leafy twig. Rustic small wild apples, distinct from large red Normandy apples."
+    },
+    {
+      "id": "p_walnut",
+      "file": "images/goods/p_walnut.webp",
+      "subject": "Walnuts: four deeply ridged tan-brown whole walnuts and two cracked shells revealing golden crinkled butterfly-like kernels."
+    },
+    {
+      "id": "p_seabuckthorn",
+      "file": "images/goods/p_seabuckthorn.webp",
+      "subject": "Sea buckthorn berries: two short woody sprigs densely packed with small bright orange oval berries, narrow silvery-green leaves and a few loose orange berries."
+    },
+    {
+      "id": "p_barberry",
+      "file": "images/goods/p_barberry.webp",
+      "subject": "Dried Persian barberries (zereshk): a little shallow earthenware bowl of tiny elongated wrinkled dark ruby-red berries, a small wooden scoop of the berries and a few loose berries. Clearly dried spice."
+    },
+    {
+      "id": "p_durian",
+      "file": "images/goods/p_durian.webp",
+      "subject": "Durian: one compact oval green-brown fruit with large sharp pyramidal spines and one thick shell section opened to show plump buttery pale yellow lobes."
+    },
+    {
+      "id": "p_mangosteen",
+      "file": "images/goods/p_mangosteen.webp",
+      "subject": "Mangosteens: two small round deep purple fruits with thick green four-lobed calyxes, one cut open revealing snow-white segmented flesh inside thick purple rind."
+    },
+    {
+      "id": "p_rambutan",
+      "file": "images/goods/p_rambutan.webp",
+      "subject": "Rambutans: several small bright red oval fruits covered in long soft curved red-green hairs, one peeled to show shiny translucent white flesh and brown seed. Clearly hairy, distinct from lychee."
+    },
+    {
+      "id": "p_carambola",
+      "file": "images/goods/p_carambola.webp",
+      "subject": "Starfruit (carambola): two golden yellow-green oblong fruits with five pronounced ridges and several crisp five-pointed star-shaped cross sections."
+    },
+    {
+      "id": "p_salak",
+      "file": "images/goods/p_salak.webp",
+      "subject": "Salak snake fruit: three small teardrop-shaped chestnut-brown fruits with overlapping shiny snake-scale skins, one peeled exposing three smooth ivory lobes."
+    },
+    {
+      "id": "p_mikan",
+      "file": "images/goods/p_mikan.webp",
+      "subject": "Kishu mandarins: three small flattened orange mandarins with thin smooth bright orange skin, one partly peeled to reveal small orange segments, a small narrow leaf. Distinct from large bitter oranges."
+    },
+    {
+      "id": "p_yuzu",
+      "file": "images/goods/p_yuzu.webp",
+      "subject": "Yuzu: two round squat bright yellow citrus fruits with very coarse pebbled rind, a cut half with thick pale pith and many large seeds, one short twig with dark leaves."
+    },
+    {
+      "id": "p_nashi",
+      "file": "images/goods/p_nashi.webp",
+      "subject": "Asian nashi pears: two round golden tan pears with fine pale speckling and short brown stems, one cut wedge revealing crisp ivory flesh, a green leaf. Round Asian pears, no European pear shape."
+    },
+    {
+      "id": "p_akebi",
+      "file": "images/goods/p_akebi.webp",
+      "subject": "Akebi fruits: two elongated pale violet-purple pods naturally split lengthwise to reveal white translucent pulp dotted with many small black seeds, a short vine and one five-leaf cluster."
+    },
+    {
+      "id": "p_biwa",
+      "file": "images/goods/p_biwa.webp",
+      "subject": "Loquats: a small cluster of oval orange-gold fruits with brown star-shaped blossom tips, one halved exposing two large shiny brown seeds and pale orange flesh, a long deeply veined green leaf."
+    },
+    {
+      "id": "p_pineapple",
+      "file": "images/goods/p_pineapple.webp",
+      "subject": "Pineapple: one squat golden ripe pineapple with a compact spiky dusty green crown, one thick cut wedge revealing golden flesh, natural antique botanical still life."
+    },
+    {
+      "id": "p_avocado",
+      "file": "images/goods/p_avocado.webp",
+      "subject": "Avocados: one pear-shaped dark pebbled green fruit, one cut half showing pale yellow-green creamy flesh and a large round brown stone, a small green leaf."
+    },
+    {
+      "id": "p_tomato",
+      "file": "images/goods/p_tomato.webp",
+      "subject": "Historical heirloom tomatoes: three irregular softly ribbed red tomatoes with green star calyxes, one cut half with visible seed chambers, no modern stickers."
+    },
+    {
+      "id": "p_cashew",
+      "file": "images/goods/p_cashew.webp",
+      "subject": "Cashew nuts commodity: a small shallow woven basket spilling pale ivory kidney-shaped shelled cashews, two tan-gray curved cashew shells beside them. Focus edible nuts, no red cashew apples."
+    },
+    {
+      "id": "p_cherimoya",
+      "file": "images/goods/p_cherimoya.webp",
+      "subject": "Cherimoyas: one heart-shaped pale green fruit with distinct soft scale-like overlapping skin, one cut half showing creamy white flesh and glossy large black seeds."
+    },
+    {
+      "id": "p_maesil",
+      "file": "images/goods/p_maesil.webp",
+      "subject": "Green maesil ume plums: a compact handful of small round light green plums with faint natural fuzz and shallow seam, one pale green cut half with a tan pit, a small narrow green leaf."
+    },
+    {
+      "id": "p_orchid",
+      "file": "images/goods/p_orchid.webp",
+      "subject": "East Asian scholarly potted orchid commodity: an elegant small unglazed dark clay flowerpot containing slender arching green leaves and two delicate pale cream-green orchid blossoms. Entire plant and pot visible, compact square silhouette, not a landscape."
+    },
+    {
+      "id": "p_chrysanthemum",
+      "file": "images/goods/p_chrysanthemum.webp",
+      "subject": "Chrysanthemum tea commodity: a small open coarse linen tea pouch filled with dried cream-yellow chrysanthemum flower heads, a small shallow wooden scoop with dried flowers and two loose flower heads. No teacup liquid, no fresh garden plant."
+    },
+    {
+      "id": "p_bamboo",
+      "file": "images/goods/p_bamboo.webp",
+      "subject": "Bamboo trade timber: a short bundle of six cut green-gold bamboo poles tied with coarse hemp rope, visible hollow cut ends and characteristic nodes, one small leafy sprig. No bamboo forest."
+    },
+    {
+      "id": "p_redpine",
+      "file": "images/goods/p_redpine.webp",
+      "subject": "Korean hwangjangmok red pine timber: a compact tied stack of three squared golden-yellow heartwood beams and one short bark-edged pine log with reddish flaky bark and visible golden growth rings. No standing tree, no landscape."
+    },
+    {
+      "id": "p_azalea",
+      "file": "images/goods/p_azalea.webp",
+      "subject": "Dugyeonju Korean azalea flower wine: a squat traditional warm-gray buncheong ceramic wine jar with a small cloth-tied lid and a shallow ceramic cup of pale amber wine, one short sprig of pink azalea blossoms beside it. Joseon era style, no letters or label."
+    },
+    {
+      "id": "p_tulip",
+      "file": "images/goods/p_tulip.webp",
+      "subject": "Tulip bulbs commodity: four teardrop-shaped papery tan-brown tulip bulbs with fine dried roots, one small green shoot and a single elegant deep red pointed-petal tulip bloom on a short stem indicating origin. Focus bulbs, not bouquet."
+    },
+    {
+      "id": "p_rosewater",
+      "file": "images/goods/p_rosewater.webp",
+      "subject": "Damask rosewater: a small elegant clear pale green historical glass flask with a long narrow neck and simple stopper filled with clear rosewater, two dusty pink Damask rose blossoms and a few petals at its base. No label, no writing, no modern perfume packaging."
+    },
+    {
+      "id": "p_whiterose",
+      "file": "images/goods/p_whiterose.webp",
+      "subject": "White rose seedling for trade: a small flowering white rose shrub with several white blossoms and soft green leaves, its compact root ball wrapped in coarse burlap tied with hemp cord. Entire small seedling visible, no garden, no vase."
+    },
+    {
+      "id": "p_bluerose",
+      "file": "images/goods/p_bluerose.webp",
+      "subject": "Blue rose commodity: three extraordinary deep blue rose blossoms with natural velvety blue petals on short thorny stems with dark green leaves, loosely tied with plain hemp cord. Compact elegant bouquet, no vase, no magical glow."
+    },
+    {
+      "id": "p_cork",
+      "file": "images/goods/p_cork.webp",
+      "subject": "Cork commodity: a short stack of curled thick cork oak bark slabs with rugged gray-brown outer surface and warm tan porous inner cork, several hand-cut simple cork bottle stoppers. No tree or bottle."
+    },
+    {
+      "id": "p_oak",
+      "file": "images/goods/p_oak.webp",
+      "subject": "Oak timber commodity: a compact stack of three thick light warm-brown oak beams with clear coarse grain and visible end grain, one short rugged dark bark oak log, coarse rope tie. No tree or scenery."
+    },
+    {
+      "id": "p_pinenut",
+      "file": "images/goods/p_pinenut.webp",
+      "subject": "Pine nuts: one open brown stone-pine cone, several elongated ivory shelled pine nuts and a few brown shell-covered pine seeds, compact merchant still life."
+    },
+    {
+      "id": "p_gumarabic",
+      "file": "images/goods/p_gumarabic.webp",
+      "subject": "Gum arabic: a small open coarse linen pouch spilling irregular translucent pale honey-amber gum resin tears, a small cluster of resin pieces in front. Natural acacia gum, not rubber, no tree."
+    },
+    {
+      "id": "p_cedar",
+      "file": "images/goods/p_cedar.webp",
+      "subject": "Lebanon cedar timber: a compact stack of three reddish golden cedar wood planks with fine straight grain and a short pale bark log exposing reddish aromatic heartwood, a tiny cedar needle sprig as identifier. No forest."
+    },
+    {
+      "id": "p_teak",
+      "file": "images/goods/p_teak.webp",
+      "subject": "Teak trade timber: three short thick squared rich golden-brown teak boards with dark straight grain and naturally oily satin surface, neatly tied with weathered hemp rope. No tree or woodworking tools."
+    },
+    {
+      "id": "p_ginkgo",
+      "file": "images/goods/p_ginkgo.webp",
+      "subject": "Ginkgo nuts: several oval ivory shell-on ginkgo nuts, two cracked to reveal yellow-green kernels and one golden fan-shaped ginkgo leaf. Clearly edible seed commodity, no orange fleshy whole fruits."
+    },
+    {
+      "id": "p_populus",
+      "file": "images/goods/p_populus.webp",
+      "subject": "Hutonglei desert poplar resin commodity: a shallow small earthenware bowl holding irregular chalky white and pale cream hardened resin tears and crystalline lumps, several loose resin pieces and one small dry poplar twig. No standing tree."
+    },
+    {
+      "id": "p_camphor",
+      "file": "images/goods/p_camphor.webp",
+      "subject": "Borneol camphor commodity from Barus: a tiny open dark wooden spice box filled with translucent snowy white crystalline flakes and small icy shards, a little brass spoon bearing a few white crystals. Precious historical aromatic resin, not gemstones, no tree, no labels."
+    },
+    {
+      "id": "p_sakura",
+      "file": "images/goods/p_sakura.webp",
+      "subject": "Yoshino cherry seedling for trade: a small slender cherry sapling bearing a few delicate pale pink cherry blossoms and small fresh leaves, compact root ball wrapped in coarse burlap and tied with hemp cord. Entire small sapling visible, no landscape, no vase."
+    },
+    {
+      "id": "p_brazilwood",
+      "file": "images/goods/p_brazilwood.webp",
+      "subject": "Brazilwood dyewood commodity: three short cut rough-barked log sections showing vivid ember-red heartwood and a small heap of deep red wood chips, tied loosely with coarse rope. No tree or landscape."
+    },
+    {
+      "id": "p_cochineal",
+      "file": "images/goods/p_cochineal.webp",
+      "subject": "Cochineal crimson dye commodity: a small rustic clay bowl containing deep crimson powder, a small wooden scoop and a few dried silvery-dark cochineal grains beside it. Rich red pigment is focal point, no cactus, no live insect scene, no labels."
+    },
+    {
+      "id": "p_saguaro",
+      "file": "images/goods/p_saguaro.webp",
+      "subject": "Saguaro cactus fruits commodity: four oval red-green fruits, two split open lengthwise showing brilliant crimson pulp packed with tiny black seeds and pale inner rind. No whole cactus, compact harvested fruit arrangement."
+    },
+    {
+      "id": "p_cactuspot",
+      "file": "images/goods/p_cactuspot.webp",
+      "subject": "Golden barrel cactus in a small rough terracotta pot for trade: one round green ribbed cactus covered in dense fine golden spines and pale woolly crown, pot and entire cactus visible. No desert scene, compact square silhouette."
+    }
+  ]
+}
