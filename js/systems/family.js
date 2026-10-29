@@ -595,6 +595,7 @@
     }
     var keepSt = await F.pickStorage(k.name);   // 자택 보관함: 고른 것만 새 제독에게 (F.pickStorage)
     var sibs = G.Siblings ? await G.Siblings.fromRetire(p, k) : [];   // 남은 아이들은 새 제독의 집에서 함께 산다 (js/systems/siblings.js)
+    if (G.OldGuard) { try { await G.OldGuard.atSucceed(p, k, forced); } catch (e) { console.error(e); } }   // 노장들은 물러나는 제독과 함께 내리고, 둘까지 새 제독 곁에 남는다 · 친족·소꿉친구 (js/systems/oldguard.js)
     if (G.FamilyTree) { try { G.FamilyTree.record(p, k, forced ? 'death' : 'retire'); } catch (e) { console.error(e); } }   // 가문의 가계도에 물러나는 제독을 남긴다 (js/systems/familytree.js)
     var sk = {}; G.SKILLS.forEach(function (x) { sk[x.id] = Math.max(k.sk[x.id] || 0, Math.min(3, Math.floor((p.sk[x.id] || 0) * skK + (skK > 0.5 ? 0.5 : 0)))); });
     // 자라며 쌓은 능력 (F.newYear·가정교사). 옛 저장의 아이는 예전처럼 무작위

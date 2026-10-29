@@ -500,6 +500,7 @@
           UI.toast(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 붙잡았다. (충성 ' + m.loyal + ')', 'people', 4000);
         } else {
           if (v) await UI.say(U.pick(['말로 될 일이 아니오. 잘 있으시오.', '이미 마음을 정했소.']), sp);
+          if (G.OldGuard) G.OldGuard.left(id, 'quit');   // 사건 동료는 스무 해 뒤 철새로 (js/systems/oldguard.js)
           s.mates = s.mates.filter(function (x) { return x !== m; });
           if (R().tidyCaptains) R().tidyCaptains();
           s.flags['gone_' + id] = 1;

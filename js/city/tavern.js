@@ -964,7 +964,7 @@
         // 해고: 그 사람의 줄을 모두 지운다 — 같은 사람이 두 줄이면 하나가 「대기」로 남아 급료가 계속 나갔다 (2026-10-22)
         // 로코는 해고할 수 없다 — 말하는 사람은 로코 자신 (지금 부관이 다른 사람이면 그 사람 얼굴·이름이 뜨던 버그 — 2026-10-28 피드백)
         if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', { name: d.name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 }); continue; }
-        if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; for (var fi = s.mates.length - 1; fi >= 0; fi--) if (s.mates[fi].id === m.id) s.mates.splice(fi, 1); R.tidyCaptains(); if (G.Cabins) G.Cabins.tidy(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
+        if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; if (!wf && G.OldGuard) G.OldGuard.left(m.id, 'fire'); for (var fi = s.mates.length - 1; fi >= 0; fi--) if (s.mates[fi].id === m.id) s.mates.splice(fi, 1); R.tidyCaptains(); if (G.Cabins) G.Cabins.tidy(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
         continue;
       }
       T.assign(m, v);

@@ -73,4 +73,3 @@
 - 원화 33장 모두 얼굴 검출 성공. 얼굴 크기와 비율을 바꾸는 재묘사는 하지 않았다.
 
 환경에서는 번들 Playwright의 `NODE_PATH`와 로컬 Chrome의 `BROWSER_EXE`를 지정했다. 결과는 아티팩트 폴더의 `browser-results.json`, `asset-report.json`, `*-smoke.log`에 있다. 검사가 띄운 브라우저·게임 과정은 모두 종료했다.
-

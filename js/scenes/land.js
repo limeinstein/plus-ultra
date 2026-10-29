@@ -194,6 +194,7 @@
   function pos(e) { var r = G.Game.canvases().overlay.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
   // st.qo: 이번 장면을 그릴 때 쓴 지진 흔들림(화면 px, js/art/quakefx.js). 카메라(st.cam)에는 더하지 않고 그리기·클릭 변환에만 넣는다
   function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
+  L.toScreen = toScreen;
   function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
   /* 마우스 따라가기 (기본 끔 · 수첩 옆 단추나 Shift, G.Ctrl): 끔이면 누른 곳까지 걷고, 켬이면 가려는 쪽을 한 번 누른 뒤로는
      마우스를 옮기는 대로 발걸음이 돈다(조작 감도만큼 차츰). 도시·표식을 누르면 예전처럼 그리로 간다 */

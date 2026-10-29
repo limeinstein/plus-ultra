@@ -136,7 +136,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { busy, inSevilla, free, rivalInLisbon };
     });
     ok(d4.busy && d4.inSevilla, '1495년: 베스푸치는 주아팅가 해안을 다투는 중 — 고용할 수 없고 세비야 명부에 「경쟁자」로');
-    ok(d4.free && !d4.rivalInLisbon, '1503년: 다툼이 끝나 다시 고용할 수 있는 항해사 (경쟁자 카드는 없다)');
+    ok(!d4.free && !d4.rivalInLisbon, '1503년: 다툼이 끝나도 라이벌은 부하 후보가 되지 않는다 (경쟁자 카드도 없다 — js/systems/matepower.js, 2026-10-29)');
 
     // ⑤ 술집: 1481년 베르겐 — 피닝이 명부에, 계획을 듣고 단서를 얻는다
     const d5 = await page.evaluate(() => {

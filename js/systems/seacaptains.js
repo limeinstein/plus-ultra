@@ -293,6 +293,7 @@
     if (c.src === 'prom' || (c.mate && G.MATE[c.mate])) {
       // 철새가 된다 — 가까운 항구의 술집에서 고용할 수 있다
       var id = c.mate || c.id;
+      (s.capFreed || (s.capFreed = {}))[id] = 1;   // 권력자(바르바로사 등)라도 사로잡아 풀어 주면 부하 후보가 된다 (js/systems/matepower.js — 사용자 결정 2026-10-29)
       if (c.src !== 'prom') r.out[c.id] = 1;                     // 바르바로사처럼 명부에 있는 사람은 그 자리에서 내려온다
       var city = release(id, here ? here.id : s.player.home);
       lines.push('<b>' + c.name + U.jx(c.name, '을/를') + ' 사로잡았다!</b> 함대를 잃은 ' + c.name + U.jx(c.name, '은/는') + ' 철새가 되어 ' + (city ? city.name + '의 술집으로' : '뭍으로') + ' 떠났다 — 그곳에서 고용할 수 있다.');

@@ -300,7 +300,8 @@
     delete s.hints[d.id];
     var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d) * (tomb.fameK || 1));
     if (G.Career) fame += G.Career.discoveryFame(d, fame);
-    G.Fame.add('ex', fame);
+    var foundFame = G.Fame.add('ex', fame);
+    if (G.Birds) G.Birds.record(d, foundFame);
     // 증거품: 이름 붙은 증거(해도·지도)는 소지품으로 챙긴다 — 보고·발표할 때 건넨다 (잃으면 믿어 주지 않는다)
     if (d.evidence && !s.player.items.some(function (it) { return it.kind === 'evidence' && it.disc === d.id; })) {
       s.player.items.push({ id: 'evidence', kind: 'evidence', evidence: true, name: d.evidence, disc: d.id,
@@ -377,6 +378,7 @@
     if (G.Frontier) { var fm = G.Frontier.tick(); if (fm.length && G.Scenes.city && G.Scenes.city.news) await G.Scenes.city.news(fm); }
     // 발견의 주제 조합으로 이룬 업적 (js/systems/achieve.js)
     if (G.Achieve) { try { await G.Achieve.afterFind(d); } catch (e) { console.error(e); } }
+    if (G.Birds) G.Birds.onFind(d);
     G.Game.refreshHud && G.Game.refreshHud();
     return true;
   };

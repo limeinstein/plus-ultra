@@ -1,8 +1,8 @@
 /* 오래 함께한 부하와의 이별 (G.MateLeave) — 대사·조정값: js/data/mateleave.js (G.MATE_LEAVE · G.BALANCE.mateLeave). 2026-10-28 사용자 요청
-   ■ 누가: 제독이 60세(oldAge)를 넘었거나, 20년(longYears) 넘게 함께 항해한 부하. 제독이 늙었더라도 3년(minYears) 안 된 부하는 아니다.
-     본처·둘째 부인, 동생(js/systems/siblings.js), 첫 항해 안내 중, 섭정 중에는 없다.
-     사건으로 얻은 부하도 빠진다 (2026-10-29 사용자 요청 — MLV.eventMate): 옛이야기·전설 동료(tale), 술집에 나오지 않는 사건 동료(eventOnly),
-     사건이 맞아들인 부하(m.ev — G.Legend.join · 아즈텍 joinMate · 레오나르도), 옛 저장은 evIds와 아즈텍 사건의 세 사람.
+   ■ 누가: 40년(longYears) 넘게 함께 항해했지만 지금 기함의 선실(부관실·조타실·파수대 포함)에 들지 못하고 다른 배의 선장도 아닌 부하 — 「노장」 (2026-10-29 사용자 요청 · js/systems/oldguard.js)
+     제독이 60세(oldAge)를 넘었으면 가능성이 bothK배. 본처·둘째 부인, 동생(js/systems/siblings.js), 첫 항해 안내 중, 섭정 중에는 없다.
+     사건으로 얻은 부하(MLV.eventMate — 옛이야기·전설 동료(tale), 술집에 나오지 않는 사건 동료(eventOnly), 사건이 맞아들인 부하(m.ev), 옛 저장은 evIds와 아즈텍 사건의 세 사람)는
+     죽지 않고 고향으로 돌아갈 뿐이다 — 배에서 내리고 스무 해 뒤 다른 이름의 철새로 나타난다 (G.OldGuard.left · newYear).
    ■ 언제: 달마다(js/systems/world.js W.newMonth) — 겪을 수 있는 부하마다 가능성(monthly · 둘 다 해당하면 ×bothK, 실존 인물이 역사 속 활약을 마친 해를 넘겼으면 ×pastK)을 모아 그달 일어날지 정한다.
      한 제독이 80세(maxAge)가 될 때까지 모두 3번(lifeMax — 위기를 넘기거나 붙잡은 것도 센다), 사건 사이는 3년(gapDays) 넘게, 한 해에 많아야 둘(perYear). 2026-10-29 사용자 요청
      누가 겪나: 무작위가 아니라 「최근 선실에 머문 날」(m.cabRec — 기함의 선실·부관실·조타실·파수대에 있던 날, cabinHalf일마다 절반으로 친다)이 가장 적은 부하부터.
@@ -75,12 +75,12 @@
   };
   /** 이 부하가 이별을 겪을 수 있나 — 배수(0이면 아니다) */
   MLV.weight = function (m) {
-    var s = S(), k = K(), d = G.MATE[m.id]; if (!d || d.sib || isWife(m.id) || MLV.eventMate(m)) return 0;
+    var s = S(), k = K(), d = G.MATE[m.id]; if (!d || d.sib || isWife(m.id)) return 0;
+    if (m.role === 'captain' || MLV.inCabin(m)) return 0;                          // 기함의 선실에 들었거나 다른 배의 선장이면 아니다 (2026-10-29)
     if (m.leaveCd && s.day < m.leaveCd) return 0;
     if (st().pend.some(function (x) { return x.id === m.id; })) return 0;
-    var yrs = MLV.years(m), old = R().age() >= k.oldAge, long = yrs >= k.longYears;
-    if (!long && !(old && yrs >= k.minYears)) return 0;
-    var w = old && long ? k.bothK : 1;
+    if (MLV.years(m) < k.longYears) return 0;                                      // 40년 넘게 함께한 노장만
+    var w = R().age() >= k.oldAge ? k.bothK : 1;
     if (MLV.past(d)) w *= k.pastK;
     return w;
   };
@@ -100,10 +100,10 @@
     var none = 1; cand.forEach(function (x) { none *= 1 - Math.min(1, k.monthly * x.w); });
     if (!U.chance(1 - none)) return [];
     [cand[0].m].forEach(function (m) {                                              // 최근 선실에 가장 덜 머문 부하
-      var d = G.MATE[m.id], kw = { death: k.kinds.death * (MLV.past(d) ? 2 : 1), health: k.kinds.health, other: k.kinds.other };
+      var d = G.MATE[m.id], kw = { death: MLV.eventMate(m) ? 0 : k.kinds.death * (MLV.past(d) ? 2 : 1), health: k.kinds.health, other: k.kinds.other };   // 사건 동료는 죽지 않고 고향으로
       var kind = U.weighted(Object.keys(kw), function (x) { return kw[x]; });
       var e = { id: m.id, kind: kind };
-      if (kind === 'other') e.why = U.pick(D().other.reasons).id;
+      if (kind === 'other') e.why = U.pick(D().other.reasons.filter(function (r) { return r.pick !== false; })).id;
       if (kind === 'health') e.line = U.ri(0, D().health.lines.length - 1);
       o.pend.push(e); o.n++; L.n++; o.last = s.day;
     });
@@ -189,6 +189,7 @@
   function leave(id, kind, why, extra) {
     var s = S(), d = G.MATE[id], m = row(id), hc = homeOf(id), c = here();
     var yrs = m ? MLV.years(m) : 0;
+    if (G.OldGuard) G.OldGuard.left(id, kind);   // 사건 동료는 스무 해 뒤 철새로 (js/systems/oldguard.js)
     s.mates = s.mates.filter(function (x) { return x.id !== id; });
     if (R().tidyCaptains) R().tidyCaptains();
     s.flags['gone_' + id] = 1;

@@ -155,7 +155,7 @@ const ROOT = path.resolve(__dirname, '..');
     assert(c.marinaStays, '「멈추라」를 두 번 — 말린체가 남는다');
     const a = r.aztec;
     assert.strictEqual(a.side, 'aztec'); assert(a.crown, '황제에게서 깃털관을 직접 받는다'); assert(a.marinaA && a.marinaLeft, '말린체는 돕다가 끝에 떠난다');
-    assert(a.cuauh, '호수에서 이기면 쿠아우테목이 부하로'); assert.strictEqual(a.title, 1, '에스파냐 제독은 작위 한 칸을 잃는다');
+    assert(!a.cuauh, '호수에서 이겨도 황제 쿠아우테목은 부하가 되지 않는다 — 마야 해안에 내린다 (js/systems/matepower.js, 2026-10-29)'); assert.strictEqual(a.title, 1, '에스파냐 제독은 작위 한 칸을 잃는다');
     assert.strictEqual(a.ban, 'aztecban'); assert.strictEqual(a.banLater, null, '입항 금지는 1525년까지');
     assert.strictEqual(a.noche, 'held'); assert.strictEqual(a.lakeFoe, '에스파냐'); assert(a.mask);
     assert.deepStrictEqual(r.none, { side: 'none', codex: true, pox: true, war: true, enter: true, defs: true }, '방관 — 소식·시장 사건·그림 문서');

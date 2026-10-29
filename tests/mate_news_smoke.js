@@ -1,7 +1,7 @@
 /* 부하 능력치 · 오래 함께한 부하와의 이별 · 아는 항해사(철새) · 여급에게 행방 부탁 — node tests/mate_news_smoke.js   (BROWSER_EXE=크롬 경로)
    js/ui/info.js (동료 능력치) · js/systems/mateleave.js · js/systems/mateknow.js
    · 수첩 「동료」에 체력·지력·무력·매력 · 능력치 이름에 「힘」이 없다
-   · 이별: 제독 60세↑ 또는 20년↑ — 한 해에 많아야 둘 · 3년 안 된 부하·아내·동생은 아니다 · 약재/배의 의원/항구 의원으로 위기를 넘기면 셈에서 빠진다
+   · 이별: 40년↑ 함께했고 기함의 선실·다른 배의 선장 자리에 없는 노장만 — 한 해에 많아야 둘 · 아내·동생은 아니다 · 사건 동료는 죽지 않는다 · 약재/배의 의원/항구 의원으로 위기를 넘기면 셈에서 빠진다
      · 사망·건강·다른 일(붙잡기·퇴직금) — 함대에서 빠지고 gone_ · 남은 이야기(s.mateFate)
    · 수첩 「철새」: 아는 항해사만 · 들은 지 30일이 지나면 「예전에」 · 술집 귀띔·명부가 소식을 남긴다
    · 여급: 모르는 이름 · 인연 없는 사람 · 먼 곳 · 부탁(20일쯤) → 날이 차기 전엔 아직 → 찬 뒤 행방 + 그 항구에 머문다 · 떠난 부하는 남은 이야기 · 콘솔 오류 0 */
@@ -37,7 +37,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.date = { y: 1520, m: 2, d: 1 }; s.player.born = { y: 1455, m: 1, d: 1 }; s.player.gold = 50000;
       const pick = G.MATES.filter(m => !m.wd && !m.witch && !m.sib && m.st && m.y && m.y[1] < 9000).slice(0, 6);
       window.__ids = pick.map(m => m.id);
-      s.mates = pick.map((m, i) => ({ id: m.id, role: 'none', joined: i < 5 ? 14950101 : 15180101, loyal: 90 }));   // 다섯은 25년, 하나는 2년
+      s.mates = pick.map((m, i) => ({ id: m.id, role: 'none', joined: i < 5 ? 14750101 : 14850101, loyal: 90 }));   // 다섯은 45년, 하나는 35년 (40년 넘은 노장만 — 2026-10-29)
       if (G.Wander) G.Wander.apply();
     });
 
@@ -76,32 +76,38 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.mates = keep.mates; s.day = keep.day; s.date = keep.date; s.mateLeave = { y: s.date.y, n: 0, pend: [] };
       return { w, order, ids, years, life, rec, inCab, deck };
     });
-    ok(r.w.slice(0, 5).every(x => x > 0) && r.w[5] === 0, '60세↑·20년↑ 부하만 (2년 된 부하는 아니다) — 배수 ' + r.w.join(','));
+    ok(r.w.slice(0, 5).every(x => x > 0) && r.w[5] === 0, '40년 넘게 함께한 노장만 (35년 된 부하는 아니다) — 배수 ' + r.w.join(','));
     ok(r.order.join(',') === '2,4,3,1,0', '최근 선실에 덜 머문 부하부터 (같으면 선실 날 모두가 적은 쪽 · 오래 함께한 쪽) — ' + r.order.join(','));
     ok(r.ids.length === 3 && r.life === 3 && r.ids[0] === 2 && r.ids[1] === 4, '80세까지 모두 3번 — ' + r.ids.join(',') + ' (' + r.years.join('·') + '년)');
     ok(r.years[1] - r.years[0] >= 3 && r.years[2] - r.years[1] >= 3, '사건 사이는 3년 넘게');
     ok(r.inCab && !r.deck && r.rec === 10, '선실(갑판 아닌 방)에 있으면 「최근 선실에 머문 날」이 쌓인다 (10일 → ' + r.rec + ')');
-    // 사건으로 얻은 부하는 이별을 겪지 않는다 (2026-10-29 사용자 요청)
+    // 사건으로 얻은 부하는 죽지 않고 고향으로만 — 스무 해 뒤 철새로 (2026-10-29 사용자 요청: js/systems/oldguard.js)
     r = await page.evaluate(() => {
-      const s = G.Game.state, ML = G.MateLeave, m0 = s.mates[0], before = ML.weight(m0);
-      m0.ev = 1; const evW = ML.weight(m0), inOrder = ML.order().some(x => x.m === m0); delete m0.ev;
-      const tale = G.MATES.find(m => m.tale && !m.sib), poca = G.MATE.h_pocahontas, chen = G.MATE.h_chenyuanyuan;
-      const tw = tale ? ML.weight({ id: tale.id, joined: 14950101, loyal: 90 }) : 0;
-      const pw = poca ? ML.weight({ id: poca.id, joined: 14950101, loyal: 90 }) : 0;   // 옛 저장(표시 없음)
-      const cw = chen ? ML.weight({ id: chen.id, joined: 14950101, loyal: 90 }) : 0;
+      const s = G.Game.state, ML = G.MateLeave, k = G.BALANCE.mateLeave, m0 = s.mates[0], before = ML.weight(m0);
+      m0.ev = 1; const evW = ML.weight(m0);
+      const keep = JSON.stringify(s.mateLeave), kinds = {};
+      for (let i = 0; i < 60; i++) {
+        s.mateLeave = { y: s.date.y, n: 0, pend: [], td: s.day, life: { gen: s.player.generation || 1, n: 0 } };
+        s.mates.forEach(m => { m.cabRec = m === m0 ? 0 : 999; });
+        ML.newMonth(); const e = s.mateLeave.pend[0]; if (e && e.id === m0.id) kinds[e.kind] = (kinds[e.kind] || 0) + 1;
+      }
+      s.mateLeave = JSON.parse(keep); delete m0.ev;
+      // 기함의 선실에 들었거나 다른 배의 선장이면 아니다
+      G.Cabins.rooms(); m0.room = 1; const cabW = ML.weight(m0); m0.room = undefined;
+      m0.role = 'captain'; const capW = ML.weight(m0); m0.role = 'none';
       // G.Legend.join으로 맞은 부하에는 표시가 붙는다
       const free = G.MATES.find(m => !m.wd && !m.witch && !m.sib && !m.tale && !m.eventOnly && !s.mates.some(x => x.id === m.id) && !(ML.past && ML.past(m)));
       const nm = G.Legend.join(free.id, G.CITY_DATA[0]); const legEv = !!(nm && nm.ev); s.mates = s.mates.filter(x => x.id !== free.id);
-      return { before, evW, inOrder, tw, pw, cw, legEv, tale: tale && tale.name };
+      return { before, evW, kinds, cabW, capW, legEv };
     });
-    ok(r.before > 0 && r.evW === 0 && !r.inOrder, '사건으로 얻은 부하(m.ev)는 이별 대상에서 빠진다');
-    ok(r.tw === 0 && r.pw === 0 && r.cw === 0, '옛이야기 동료(' + r.tale + ') · 포카혼타스 · 진원원은 표시가 없어도 빠진다');
+    ok(r.before > 0 && r.evW > 0 && !r.kinds.death && (r.kinds.health || 0) + (r.kinds.other || 0) > 0, '사건 동료(m.ev)도 40년이 넘으면 배를 떠나지만 죽지는 않는다 — ' + JSON.stringify(r.kinds));
+    ok(r.cabW === 0 && r.capW === 0, '기함의 선실에 든 부하 · 다른 배의 선장은 이별을 겪지 않는다');
     ok(r.legEv, 'G.Legend.join으로 맞은 부하에는 사건 표시(ev)가 붙는다');
     r = await page.evaluate(() => {
-      const s = G.Game.state, ML = G.MateLeave; s.player.born.y = 1500;   // 제독 21세 → 20년 넘은 부하만
+      const s = G.Game.state, ML = G.MateLeave; s.player.born.y = 1500;   // 제독 21세여도 40년 넘은 부하는 (옛 기록의 부하)
       const w = s.mates.map(m => ML.weight(m)); s.player.born.y = 1455; return w;
     });
-    ok(r.slice(0, 5).every(x => x > 0) && r[5] === 0, '제독이 젊어도 20년 넘게 함께한 부하는 겪을 수 있다');
+    ok(r.slice(0, 5).every(x => x > 0) && r[5] === 0, '제독이 젊어도 40년 넘게 함께한 부하는 겪을 수 있다');
 
     // ③ 위기: 약재로 넘긴다 → 남고 셈에서 빠진다
     r = await page.evaluate(async () => {
@@ -130,7 +136,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { gone: !s.mates.some(m => m.id === id) && !!s.flags['gone_' + id], fate: s.mateFate[id], said: window.__said.join('\n'), log: s.log.slice(-1)[0].t, nm };
     });
     ok(r.gone && r.fate.kind === 'death' && r.fate.sea, r.nm + ' — 바다에서 세상을 떠났다 (함대에서 빠짐 · 남은 이야기)');
-    ok(/마지막 항해/.test(r.said) && /함께한 25년/.test(r.log), '마지막 말 · 바다 장례 · 일지: ' + r.log);
+    ok(/마지막 항해/.test(r.said) && /함께한 45년/.test(r.log), '마지막 말 · 바다 장례 · 일지: ' + r.log);
     // 다른 일 — 붙잡기 실패 → 퇴직금
     r = await page.evaluate(async () => {
       const s = G.Game.state, ML = G.MateLeave, k = G.BALANCE.mateLeave, id = window.__ids[4]; k.holdChance = 0;

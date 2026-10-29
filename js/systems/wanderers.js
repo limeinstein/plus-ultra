@@ -43,6 +43,7 @@
       if (G.MateSkills) G.MateSkills.wander(d);
       register(d);
     }   // 옛 저장의 철새도 특기를 한 번 더 받는다
+    if (G.OldGuard) G.OldGuard.apply();   // 세대 교체 때 찾아온 친족·소꿉친구 항해사 (js/systems/oldguard.js)
     if (G.RegionFolk) G.RegionFolk.fill();   // 고장마다 도시 수의 80%쯤은 사람이 있게 (5년 칸마다)
     if (G.Bio) G.Bio.reset();
   };
@@ -116,7 +117,7 @@
   };
   /** 옛 저장의 합성본·다른 성별/문화권 얼굴을 id로 고른 완성 초상 한 쌍으로 옮긴다. */
   WD.fixPortrait = function (d) {
-    if (!d) return d;
+    if (!d || d.ret) return d;   // 스무 해 만에 돌아온 사건 동료는 제 얼굴 그대로 (js/systems/oldguard.js)
     var pool = WD.facePool(d.style || 'ib', d.g, d.type);
     if (d.local) pool = pool.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 고장 사람은 다른 문화권 항해사의 옷을 빌리지 않는다
     if (pool.indexOf(d.face) < 0) d.face = pool.length ? pool[Math.abs(U.strHash('wander-pair:' + d.id)) % pool.length] : null;
@@ -206,6 +207,7 @@
         return d.name + '(' + d.natName + ' ' + d.typeName + (at ? ', ' + at.name : '') + ')';
       }).join(', ') + '.' });
     }
+    if (G.OldGuard) out = out.concat(G.OldGuard.newYear());   // 배에서 내린 사건 동료가 스무 해 뒤 다른 이름의 철새로 (js/systems/oldguard.js)
     if (G.RegionFolk) G.RegionFolk.fill();
     if (G.Bio) G.Bio.reset();
     return out;

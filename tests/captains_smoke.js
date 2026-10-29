@@ -87,7 +87,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.SeaFolk.decorate(nv, []);
       const g0 = s.player.gold, l2 = [];
       G.Captains.afterBattle(nv, 'win', [{ side: 'en', flag: true, captured: true }], l2);
-      out.ransom = s.player.gold - g0; out.histOut = !!s.capRoster.out[nv.cap.id]; out.histName = nv.cap.name; out.histMate = nv.cap.mate || null; out.histLine = l2.join(' ').replace(/<[^>]+>/g, '');
+      out.ransom = s.player.gold - g0; out.histOut = !!s.capRoster.out[nv.cap.id]; out.histName = nv.cap.name; out.histMate = nv.cap.mate || null; out.histBlocked = !!(nv.cap.mate && G.MatePower && G.MatePower.blocked(G.MATE[nv.cap.mate])); out.histLine = l2.join(' ').replace(/<[^>]+>/g, '');
       // 다른 선장 수에 비해 저장 크기
       out.saveLen = JSON.stringify(s.capRoster).length;
       return out;
@@ -104,7 +104,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.prom && r.gone, '10년 고용되지 않은 철새 → ' + JSON.stringify(r.prom) + ' — ' + r.promNews);
     ok(r.fleetLabel && r.speaker, '그 함대: ' + r.fleetLabel);
     ok(r.freed && r.where && /철새/.test(r.capLine), '기함 나포 → 다시 철새 (' + r.where + ') — ' + r.capLine.replace(/<[^>]+>/g, ''));
-    ok(r.histOut && (r.histMate ? /철새/.test(r.histLine) : r.ransom > 0), '명부의 선장 ' + r.histName + ' 사로잡음 → ' + (r.histMate ? '항해사로 이어진 사람이라 철새가 됨' : '몸값 ' + r.ransom) + ', 명부에서 빠짐');
+    ok(r.histOut && (r.histMate && !r.histBlocked ? /철새/.test(r.histLine) : r.ransom > 0 && !/철새가 되어/.test(r.histLine)), '명부의 선장 ' + r.histName + ' 사로잡음 → ' + (r.histMate && !r.histBlocked ? '항해사로 이어진 사람이라 철새가 됨' : (r.histBlocked ? '권력자라 부하 후보가 되지 않고 ' : '') + '몸값 ' + r.ransom) + ', 명부에서 빠짐');
     console.log('    저장 크기 ' + r.saveLen + '자');
     // 바다에 나가 며칠
     await page.evaluate(() => { const s = G.Game.state; s.date.y = 1560; s.capRoster = null; G.Game.go('sea', { depart: s.player.home }); });

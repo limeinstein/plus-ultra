@@ -89,7 +89,8 @@ const SHOTS = process.env.SHOT_DIR || '';
     await shot('02_어린왕자의_지도.png');
     const mapNote = await page.evaluate(() => document.querySelector('.tmap-note').textContent);
     await page.evaluate(() => { [...document.querySelectorAll('.win .foot button')].filter(b => /접는다/.test(b.textContent))[0].click(); });
-    await page.evaluate(() => window.__camp);
+    // 명성이 오르며 뜨는 「업적 달성」 창은 닫아 준다 (2026-10-29 — 창이 떠 있으면 야영이 끝나지 않는다)
+    await page.evaluate(async () => { let done = false; window.__camp.then(() => { done = true; }); for (let i = 0; i < 200 && !done; i++) { [...document.querySelectorAll('.win .foot button')].filter(b => /^좋다$/.test(b.textContent.trim())).forEach(b => b.click()); await new Promise(r => setTimeout(r, 100)); } return window.__camp; });
     const met = await page.evaluate(() => {
       const s = G.Game.state, p = s.lprince, l = s.loc, m = G.MATE.little_prince;
       return { phase: p.phase, food: s.fleet.food, joined: s.mates.some(x => x.id === 'little_prince'),

@@ -18,6 +18,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push(e.message));
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.evaluate(() => { if (window.G && G.BALANCE && G.BALANCE.oldGuard) G.BALANCE.oldGuard.kinChance = 0; });   // 세대 교체 때 친족·소꿉친구 고르기 창을 띄우지 않는다 (tests/old_guard_smoke.js 가 따로 본다)
     await page.waitForFunction(() => window.G && G.Game && G.Wives && G.Wives.hooked, null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo();

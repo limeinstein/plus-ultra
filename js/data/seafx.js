@@ -306,6 +306,12 @@
     sendoffSec: 7.5,     // 배웅이 이어지는 시간(초)
     title: true          // 「모항 ○○을 떠나다」 글귀
   };
+  // 조류 무리: 4열×2행 시트, 각 개체가 다른 간격·날갯짓으로 지나간다.
+  G.FX.birds = { count: 8, duration: 8, stagger: 1.2, spacing: 62, size: 100,
+    frameMs: 105, travel: 1000, height: 120, arc: 130, groundOffset: 35, fade: 0.7,
+    groundStep: 0.025, groundSteps: 100, groundSpacing: 0.24, surfaceSearch: 2, surfaceAngles: 16,
+    frameById: { hummingbird: 45, albatross: 150, condor: 155, roc: 160, crane: 135, flamingo: 135 },
+    sizeById: { hummingbird: 0.6, vinousbird: 0.65, budgie: 0.7, ploverbird: 0.7, kiwi: 0.75, roc: 1.4, phoenix: 1.3, condor: 1.2, albatross: 1.2 } };
   // 그린 스프라이트 시트 (js/art/sprites.js · images/sprites/ — tools/sprite_repack.py 가 만든다)
   G.FX.sprites = {
     party: true,         // 육상 탐험대를 8방향 그림 시트로 (탈것마다 천천히·빨리 두 장 — 시트가 없는 탈것은 코드 그림)
