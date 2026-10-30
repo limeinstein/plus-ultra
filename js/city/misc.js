@@ -340,6 +340,9 @@
     } else {
       cur.mk = { ok: false };      // 실패하면 값은 그대로 (올라가지 않는다)
       await C.say(vendor(), U.pick(['흥! 그 값에 팔 바에야 바다에 던지겠네.', '장사를 모르는구먼. 싫으면 관두게!']));
+      // 모항이면 소꿉친구가 나타나 거든다 (js/systems/osa.js)
+      var oh = null; if (G.Osa && G.Osa.haggleHelp) { try { oh = await G.Osa.haggleHelp(c, 'market'); } catch (e) { console.error(e); } }
+      if (oh) { cur.mk = { ok: true, buy: 1 - oh.disc, sell: 1 + oh.disc * 0.7, osa: true }; return; }
       UI.toast('흥정 실패 — 값은 그대로입니다.', 'scales');
     }
   };

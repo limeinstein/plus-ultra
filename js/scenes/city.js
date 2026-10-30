@@ -257,6 +257,8 @@
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
     // 고향 부두의 마중 · 배에 탄 아이와 항구의 한때 (js/systems/familyevent.js)
     if (G.FamEv && arg.arrive && s.loc.via !== 'land') { try { await G.FamEv.arrive(c); } catch (e) { console.error(e); } }
+    // 뒤를 이은 제독이 모항에 돌아오면 가끔 어릴 적 소꿉친구와 (js/systems/osa.js)
+    if (G.Osa) { try { await G.Osa.arrival(c, arg); } catch (e) { console.error(e); } }
     // contract reminder
     if (s.contract) {
       var sp = G.SPONSOR[s.contract.sponsor];
@@ -431,6 +433,7 @@
     plaque(B, c, arg);
     if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(kind);     // 건물의 곡: 주점·왕궁 — 겹쳐 쌓이지 않는다
     if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
+    if (G.Osa) { try { await G.Osa.enter(c, kind); } catch (e) { console.error(e); } }   // 모항에서 소꿉친구의 특기 장면 (요리→항구, 의학→여관 …)
     var ok = true;
     try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }
     busy = false;

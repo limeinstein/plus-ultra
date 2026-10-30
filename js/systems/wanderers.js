@@ -44,6 +44,7 @@
       register(d);
     }   // 옛 저장의 철새도 특기를 한 번 더 받는다
     if (G.OldGuard) G.OldGuard.apply();   // 세대 교체 때 찾아온 친족·소꿉친구 항해사 (js/systems/oldguard.js)
+    if (G.Osa) G.Osa.apply();             // 모항에서 다시 만난 소꿉친구 (아내·함께 오른 동료로 쓰인다 — js/systems/osa.js)
     if (G.RegionFolk) G.RegionFolk.fill();   // 고장마다 도시 수의 80%쯤은 사람이 있게 (5년 칸마다)
     if (G.Bio) G.Bio.reset();
   };

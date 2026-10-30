@@ -1925,3 +1925,19 @@ tr.mk-stale td.pp { filter: grayscale(.7); }
 .pin-b:hover { color: #8d3218; border-color: #b4472c; }
 .pin-b.on { color: #fff; background: #b4472c; border-color: #8d3218; }
 tr[data-pin] td { background: rgba(214,170,90,.12); }
+
+/* 소꿉친구의 회상 (G.Osa.memory — 2026-10-30): 화면이 바랜 빛으로 물들고 한 줄씩 떠오른다 */
+body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-sepia .dlg-actors { filter: sepia(.75) saturate(.7) brightness(.82) blur(1.5px); transition: filter 1.2s ease; }
+#scene, #world, #overlay { transition: filter 1.2s ease; }
+.osa-mem { position: absolute; inset: 0; z-index: 400; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease; cursor: pointer; pointer-events: auto;
+  -webkit-backdrop-filter: sepia(.85) blur(7px) brightness(.5); backdrop-filter: sepia(.85) blur(7px) brightness(.5);   /* 뒤의 거리·메뉴는 바랜 사진처럼 흐려진다 */
+  background: radial-gradient(ellipse at center, rgba(110,80,45,.35) 0%, rgba(55,36,18,.72) 60%, rgba(20,12,4,.93) 100%),
+              repeating-linear-gradient(0deg, rgba(255,240,210,.035) 0 1px, transparent 1px 3px); }
+.osa-mem.on { opacity: 1; }
+.osa-mem.out { opacity: 0; transition: opacity .6s ease; }
+.osa-mem-in { width: min(820px, 86%); padding: 34px 44px 28px; color: #f6e7c8; font-family: var(--serif); text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.osa-mem-t { font-size: 22px; letter-spacing: .12em; color: #e9c98f; margin-bottom: 22px; font-style: italic; border-bottom: 1px solid rgba(233,201,143,.35); padding-bottom: 10px; }
+.osa-mem-l p { font-size: 24px; line-height: 1.75; margin: 0 0 10px; animation: osaLine 1.4s ease both; }
+.osa-mem-more { text-align: right; color: rgba(246,231,200,.6); font-size: 16px; animation: osaBlink 1.6s ease-in-out infinite; }
+@keyframes osaLine { from { opacity: 0; transform: translateY(6px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes osaBlink { 0%, 100% { opacity: .25; } 50% { opacity: .9; } }
