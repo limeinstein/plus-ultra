@@ -40,7 +40,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         zone: Object.keys(G.MATE_ZONES).filter(z => G.MATE_ZONES[z].ids.indexOf(id) >= 0).join(','), ext: G.Img.extStyle(c), bg: G.Img.pick(G.Img.chain.bg(c)) };
     }), IDS);
     d.forEach(x => console.log('   ' + JSON.stringify(x)));
-    ok(G_len(await page.evaluate(() => G.CITY_DATA.length)) === 309 && d.every(x => x.exists), '도시 309곳 — 부족 마을 11곳이 1490년에 있다');
+    ok(G_len(await page.evaluate(() => G.CITY_DATA.length)) === 316 && d.every(x => x.exists), '도시 316곳 — 부족 마을 11곳이 1490년에 있다');
     ok(d.every(x => x.blds === 'trade,tavern,inn,market,church,guild,gate'), '부족 마을 건물: 교역소·술집·여관·시장·사당·조합·성문 (왕궁·조선소 없음)');
     ok(d.every(x => x.church === (x.rel === 'I' ? '모스크' : '사당')) && d.filter(x => x.ext === 'kraal' || x.ext === 'tent').every(x => /exterior-styles\/(kraal|tent)\/church/.test(x.churchPic)), '사당 이름(이슬람 마을은 모스크) · 벌집 오두막·천막 마을은 새 사당 그림: ' + d.map(x => x.name + ':' + x.church + ':' + x.churchPic).join(' '));
     ok(d.every(x => x.land), '11곳 모두 땅 위 (Geo.isLand)');
