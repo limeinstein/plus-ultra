@@ -498,7 +498,7 @@
     }
     show();
     try {
-      for (var guard = 0; F.kidAge(k) < ad && !k.lost && guard < 366 * (ad + 2); guard++) {
+      for (var guard = 0; F.kidAge(k) < ad && !k.lost && guard < 366 * (ad + 2) && !(G.EraEnd && G.EraEnd.over(s)); guard++) {
         var msgs = G.Game.newDay(); done++;
         (msgs || []).forEach(function (m) { if (m && m.history && m.text) hist.push(s.date.y + '년 — ' + String(m.text).replace(/<[^>]+>/g, '')); });
         if (s.life) { delete s.life.end; delete s.life.bday; }   // 물러난 제독의 수명·생일 선물은 세지 않는다
@@ -506,6 +506,7 @@
       }
     } finally { delete s.regency; }
     show(); win.close();
+    if (G.EraEnd && G.EraEnd.over(s)) { if (hc) UI.fade(function () { G.Game.go('city', { cityId: home }); }); return; }   // 아이가 자라기 전에 대항해시대가 끝났다 — 끝 장면은 G.EraEnd.tick (js/systems/eraend.js)
     if (k.lost || F.kidAge(k) < ad) {   // 기다리는 동안 아이를 잃었다면 다음 아들 · 없으면 끝
       var next = F.heirs()[0] || F.minorSon();
       if (next && next !== k) return next.unnamed || F.kidAge(next) < ad ? F.regency(next, forced) : F.succeed(next, forced);
@@ -663,7 +664,7 @@
     var title = R.fameTitle(p.fame);
     var html = '<div class="center" style="font-family:var(--latin);letter-spacing:.4em;color:#7a5c33;font-size:20px">FINIS</div>' +
       '<div class="center" style="font-size:34px;font-weight:800;margin:10px 0">' + U.esc(p.name) + '</div>' +
-      '<div class="center muted" style="font-size:18px">' + (reason === 'death' ? deathPlace(s) : '은퇴하여 여생을 보내다') + ' · ' + U.fmtDate(s.date) + '</div>' +
+      '<div class="center muted" style="font-size:18px">' + (reason === 'era' ? '대항해시대가 막을 내리다' : reason === 'death' ? deathPlace(s) : '은퇴하여 여생을 보내다') + ' · ' + U.fmtDate(s.date) + '</div>' +
       '<div class="sep brass"></div><div class="kv" style="grid-template-columns:200px 1fr;font-size:19px">' +
       '<div>칭호</div><div><b>' + title + '</b></div><div>명성</div><div>' + U.num(p.fame) + '</div>' +
       '<div>발견</div><div>' + found.length + ' / ' + G.DISCOVERIES.length + '</div>' +

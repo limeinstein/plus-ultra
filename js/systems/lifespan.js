@@ -134,6 +134,7 @@
   /** 날마다 화면 틈에 (main.js loop) */
   LF.tick = function () {
     var s = G.Game.state; if (!s || !s.life) return;
+    if (G.EraEnd && G.EraEnd.over(s)) return;   // 대항해시대가 끝났다 — 끝 장면이 먼저 (js/systems/eraend.js)
     var T = s.life; if (!(T.bday && T.bdayDone !== T.bday) && !T.end) return;
     if (!ready()) return;
     LF.running = s;

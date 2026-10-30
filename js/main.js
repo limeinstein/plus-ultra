@@ -250,6 +250,7 @@
       try { Game.scene.update(dt); } catch (e) { console.error(e); }
     }
     if (G.Birds) { try { G.Birds.update(dt); } catch (e) { console.error(e); } }
+    if (G.EraEnd && Game.state) { try { G.EraEnd.tick(); } catch (e) { console.error(e); } }   // 1700년 1월 1일 대항해시대의 끝 — 수명·이별보다 먼저 (js/systems/eraend.js)
     if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }
     if (G.MateLeave && Game.state) { try { G.MateLeave.tick(); } catch (e) { console.error(e); } }
     if (G.FirstLove && Game.state) { try { G.FirstLove.tick(); } catch (e) { console.error(e); } }   // 소꿉친구는 첫사랑이었다 — 첫 항해·비밀·데이트·청혼 (js/systems/firstlove.js)   // 오래 함께한 부하와의 이별 (js/systems/mateleave.js)   // 생일 선물·수명이 다한 날 (js/systems/lifespan.js)
@@ -365,6 +366,7 @@
     for (var i = 0; i < n; i++) {
       // 수명이 다한 날에서 멈춘다. 후계를 정하기 전에 남은 날의 급료·계약 기한을 처리하지 않는다.
       if (Game.state.life && Game.state.life.end) break;
+      if (G.EraEnd && G.EraEnd.over(Game.state)) break;   // 1700년 1월 1일 — 대항해시대가 끝났다 (js/systems/eraend.js)
       var m = Game.newDay(); if (m && m.length) msgs = msgs.concat(m);
     }
     return msgs;
@@ -372,11 +374,13 @@
   /** one day passes: world-level processing. returns array of notices */
   Game.newDay = function () {
     var S = Game.state; var out = [];
+    if (G.EraEnd && G.EraEnd.over(S)) return out;   // 대항해시대가 끝난 날(1700년 1월 1일)에서 세월이 멈춘다 — 끝 장면은 loop의 G.EraEnd.tick
     var prev = S.date;
     S.date = U.addDays(S.date, 1); S.day++;
     if (S.date.m !== prev.m) out = out.concat(G.World.newMonth());
     if (S.date.y !== prev.y) out = out.concat(G.World.newYear());
     out = out.concat(G.World.daily());
+    if (G.EraEnd) out = out.concat(G.EraEnd.daily());
     if (G.Audio && G.Audio.daily) G.Audio.daily();   // 바다·뭍에서 지역이 바뀌면 음악도
     if (G.Quest) out = out.concat(G.Quest.daily());
     // 스트레스는 피로 하나로 합쳤다: 옛 저장에 남은 스트레스는 절반을 피로에 더하고 지운다

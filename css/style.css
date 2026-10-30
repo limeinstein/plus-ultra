@@ -1952,3 +1952,36 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .osa-mem-more { text-align: right; color: rgba(246,231,200,.6); font-size: 16px; animation: osaBlink 1.6s ease-in-out infinite; }
 @keyframes osaLine { from { opacity: 0; transform: translateY(6px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes osaBlink { 0%, 100% { opacity: .25; } 50% { opacity: .9; } }
+
+/* 대항해시대의 끝 — 1700년 1월 1일 온 화면 나레이션 (js/systems/eraend.js) */
+.era-end { position: absolute; inset: 0; z-index: 5; pointer-events: auto; overflow: hidden; background: #000; color: #f3e6c4; font-family: var(--serif); opacity: 0; transition: opacity 1.6s ease; cursor: pointer; user-select: none; }
+.era-end.on { opacity: 1; }
+.era-end.leave { opacity: 0; transition: opacity .7s ease; }
+.era-end .ee-bg { position: absolute; inset: -2%; background: #05070c center / cover no-repeat; filter: brightness(.16) saturate(.35) blur(1.5px); transform: scale(1.1); transition: filter 7s ease, transform 60s linear; }
+.era-end.on .ee-bg { transform: scale(1.02); }
+.era-end.lift .ee-bg { filter: brightness(.3) saturate(.55) blur(1px); }
+.era-end.dawn .ee-bg { filter: brightness(.74) saturate(.95) blur(0); transition: filter 6s ease, transform 60s linear; }
+.era-end .ee-dawn { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 45% at 49% 38%, rgba(255,196,110,.55), rgba(255,140,60,.18) 45%, transparent 75%); opacity: 0; transition: opacity 6s ease; mix-blend-mode: screen; }
+.era-end.dawn .ee-dawn { opacity: 1; }
+.era-end .ee-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.15) 40%, rgba(0,0,0,.6)); }
+.era-end.dawn .ee-veil { background: linear-gradient(180deg, rgba(0,0,0,.25), transparent 40%, rgba(0,0,0,.55)); transition: background 6s; }
+.era-end .ee-date { position: absolute; top: 92px; left: 0; right: 0; text-align: center; font-size: 22px; letter-spacing: .5em; color: #d7bb84; opacity: 0; transition: opacity 2s; text-shadow: 0 2px 8px #000; }
+.era-end.dated .ee-date { opacity: .9; }
+.era-end .ee-text { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; transition: opacity 1.1s; }
+.era-end .ee-text.out { opacity: 0; }
+.era-end .ee-text::before { content: ''; position: absolute; z-index: -1; left: 50%; top: 50%; width: 1240px; height: 340px; transform: translate(-50%, -50%); background: radial-gradient(closest-side, rgba(5,4,3,.62), rgba(5,4,3,.38) 55%, transparent); opacity: 0; transition: opacity 4s ease; }
+.era-end.dawn .ee-text::before { opacity: 1; }
+.era-end .ee-text { z-index: 1; }
+.era-end .ee-line { margin: 0 0 18px; font-size: 34px; line-height: 1.5; letter-spacing: .06em; text-shadow: 0 2px 10px #000, 0 0 24px rgba(0,0,0,.9); opacity: 0; transform: translateY(10px); transition: opacity 1.8s ease, transform 1.8s ease; }
+.era-end .ee-line.in { opacity: 1; transform: none; }
+.era-end .ee-text.last .ee-line:first-child { font-size: 40px; font-weight: 800; color: #fff3d6; }
+.era-end .ee-text.last .ee-line:nth-child(2) { color: #ffe1a6; }
+.era-end .ee-finis { position: absolute; bottom: 120px; left: 0; right: 0; text-align: center; font-family: var(--latin); letter-spacing: .6em; font-size: 22px; color: #e9cf95; opacity: 0; transition: opacity 2.5s; text-shadow: 0 2px 8px #000; }
+.era-end.done .ee-finis { opacity: .95; }
+.era-end button { position: absolute; font-family: var(--serif); cursor: pointer; }
+.era-end .ee-skip { right: 34px; bottom: 30px; background: rgba(0,0,0,.35); color: #cdb98f; border: 1px solid rgba(205,185,143,.4); border-radius: 6px; padding: 8px 18px; font-size: 16px; }
+.era-end .ee-skip:hover { color: #fff1cc; border-color: #e3c68d; }
+.era-end .ee-next { left: 50%; bottom: 46px; transform: translateX(-50%); background: linear-gradient(#2a4a70, #1e3552); color: #f2e7cc; border: 1px solid #b8925a; border-radius: 8px; padding: 11px 38px; font-size: 20px; letter-spacing: .1em; box-shadow: 0 4px 18px rgba(0,0,0,.6); animation: eeglow 2.4s ease-in-out infinite; }
+.era-end .ee-next[hidden], .era-end .ee-skip[hidden] { display: none; }
+@keyframes eeglow { 50% { box-shadow: 0 0 22px rgba(227,198,141,.55), 0 4px 18px rgba(0,0,0,.6); } }
+@media (prefers-reduced-motion: reduce) { .era-end .ee-bg { transition: filter 2s ease; transform: none !important; } }
