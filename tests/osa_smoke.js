@@ -69,9 +69,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.gen1 = O.open();
       p.generation = 2; p.heir = { sex: 'm' }; s.lineage = [{ gen: 1, name: '주앙 다 시우바' }];
       out.gen2 = O.open();
+      // 세대 교체 때 소꿉친구가 함대에 올라와 있으면 열지 않는다 (그쪽 이야기)
+      s.mates.push({ id: '__kinf', role: 'none', loyal: 90 }); G.MATE.__kinf = { id: '__kinf', name: '친구', g: 'f', kin: 'friend' };
+      out.kinBlock = O.open() === false;
+      s.mates.pop(); delete G.MATE.__kinf;
       return out;
     });
     ok(r2.gen1 === false && r2.gen2 === true, '1대 제독에게는 없고, 뒤를 이은 2대부터 열린다');
+    ok(r2.kinBlock, '세대 교체 때 소꿉친구가 이미 함대에 올라왔다면 모항의 소꿉친구 이야기는 열리지 않는다');
     await page.evaluate(() => { G.Game.go('city', { cityId: G.Game.state.player.home }); });
     await page.waitForFunction(() => G.Game.sceneName === 'city', null, { timeout: 30000 });
     await page.waitForTimeout(1200);

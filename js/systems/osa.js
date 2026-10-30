@@ -51,6 +51,8 @@
     var p = P(); if (!p || gen() < 2) return false;
     var a = age(), K = O.cfg(); if (a < K.minAge || a > K.maxAge) return false;
     var o = sync(); if (o.stage >= 4) return false;
+    // 세대 교체 때 이미 소꿉친구가 함대에 올라왔다면(js/systems/oldguard.js 'friend' — 그쪽의 이야기가 있다) 모항의 소꿉친구 이야기는 열지 않는다
+    if (o.stage === 0 && (S().mates || []).some(function (m) { var d = G.MATE[m.id]; return d && d.kin === 'friend'; })) return false;
     return true;
   };
 
@@ -80,7 +82,7 @@
     var d = G.Wander && G.Wander.make ? G.Wander.make({ nat: natKey(p), g: g, type: TYPE[sk] }) : null;
     if (!d) return null;
     d.id = 'osa_' + gen() + '_' + s.date.y + '_' + (s.day || 0);
-    delete d.wd; d.osa = true; d.kin = 'friend'; d.kinTag = '소꿉친구'; d.line = d.id;
+    delete d.wd; d.osa = true; d.kin = 'osa'; d.kinTag = '소꿉친구'; d.line = d.id;   // kin 'osa' — 세대 교체 때 함대에 오는 소꿉친구(oldguard.js 'friend', 첫사랑 이야기)와 섞이지 않게
     d.home = p.home; d.zones = []; d.gen = undefined; d.prevName = null;
     d.born = p.born ? p.born.y : d.born;
     d.sk = d.sk || {}; d.sk[sk] = Math.max(2, d.sk[sk] || 0);
@@ -269,7 +271,7 @@
     if (O.heirFemale()) {
       await O.run(ps.join);
       var row = G.Legend && G.Legend.join ? G.Legend.join(d.id, home()) : null;
-      if (row) { delete row.ev; row.loyal = 100; row.kin = 'friend'; }
+      if (row) { delete row.ev; row.loyal = 100; row.kin = 'osa'; }
       o.stage = 4; o.done = 'join';
       G.State.log('소꿉친구 ' + d.name + U.jx(d.name, '이/가') + ' 함대에 올랐다 — 평생 곁에 있기로 했다.');
       await UI.alert(d.name + U.jx(d.name, '이/가') + ' 함대에 올랐다! 평생 ' + p.name + '의 곁에 있기로 했다.', '함께 떠나는 바다');
