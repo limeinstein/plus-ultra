@@ -9,6 +9,7 @@
    · 같은 여급에게는 하루에 한 번만 묻는다. 묻고 나면 호감이 조금 오른다.
    · 알려 준 척수 그대로 나타난다 (해적 구성·이름난 선장이 척수를 바꾸지 않는다 — js/systems/corsairs.js·seacaptains.js 가 npc.tip 을 본다).
      나타난 배를 만나기 전에 입항·불러오기로 바다에서 사라지면, 기한 안에 그 앞바다에 다시 가면 또 나타난다 (2026-10-23 QA).
+     한 번 마주치면(싸움·도망·통행료·사정 어느 쪽이든) 끝 — sea.js encounter 가 MT.met 을 부른다 (2026-10-31: 예전엔 부르는 곳이 없어 싸울 때마다 다시 솟았다).
    · 저장: s.maidTips = [{id, kind, nation, lon, lat, port, from, to, n, rich, by, city, spawned, met}] · s.maids[여급].tipDay
    조정값: G.BALANCE.maidTip */
 (function (G) {
