@@ -1,5 +1,9 @@
 # images — 그림 교체 폴더
 
+식당 커피 20종은 `drinks/<커피ID>.webp`의 512×512 투명 그림을 쓴다(예: `drinks/iced_americano.webp`). 기존 음식 120종은 `foods/<음식ID>.webp`다. 커피 차림표에 각 잔의 그림을 표시하며, 원본·지시문·미리보기·검사는 `../docs/art/coffee-menu-20261031.md`에 있다.
+
+나비·나방 17종은 `effects/butterflies/<발견물ID>.webp`의 투명 4열×2행 비행 시트를 쓴다(1024×512, 8프레임). 조류보다 작은 30~60마리의 무작위 무리로 표시한다. 제작·생성 지시문·재관찰 보상은 `docs/art/butterfly-flocks-20261031.md`에 있다.
+
 해상 괴물 12종은 `sea-monsters/`의 투명 WebP 시트를 쓴다. 한 칸 224×224, 8방향×6상태이며 보선과 같은 수면 기준점이다. 좌표는 `sea-monsters/atlas.json`, 사용법은 `docs/art/sea-monsters.md`, 미리보기는 `test_sea_monster_sprites.html`에 있다.
 
 이 폴더에 정해진 이름으로 그림 파일을 넣으면, 게임이 코드로 그리던 그림 대신 그 파일을 씁니다.

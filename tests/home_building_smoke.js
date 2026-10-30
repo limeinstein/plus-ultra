@@ -40,7 +40,7 @@ function ok(value, message) { if (!value) throw new Error(message); console.log(
     });
     ok(result.every(rows => rows.every((r, i) => r.tier === i)), '평민·유력자·남작·백작·공작급이 5단계에 대응');
     ok(result.every(rows => new Set(rows.map(r => r.ext)).size === 5), '각 지역의 자택 외관 5단계가 서로 다름');
-    ok(result.every(rows => new Set(rows.map(r => r.room)).size === 5), '각 지역의 자택 실내 5단계가 서로 다름');
+    ok(result.every(rows => new Set(rows.map(r => r.room)).size === 3 && rows[0].room === rows[1].room && rows[3].room === rows[4].room), '각 지역의 자택 실내는 집·저택·궁전 원화를 사용하고 같은 원화에 도형 장식을 덧그리지 않음');
     ok(result.every(rows => rows.every(r => r.door.cx > 0 && r.door.cx < 1 && r.door.foot > 0 && r.door.foot <= 1)), '모든 단계에서 출입문 좌표가 유효');
     ok(new Set(result.map(rows => rows[4].ext)).size === 6, '이베리아·아랍·동아시아·북미 세 양식의 공작급 외관이 서로 다름');
     ok(!errors.length, '콘솔 오류 0' + (errors.length ? ': ' + errors.join(' | ') : ''));

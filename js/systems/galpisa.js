@@ -47,11 +47,16 @@
   function row(id) { return (S().mates || []).filter(function (x) { return x.id === id; })[0] || null; }
   function gal(emo) { return G.Legend && G.Legend.speaker && G.MATE.galileo ? G.Legend.speaker('galileo', emo) : { name: '갈릴레오 갈릴레이', lang: 3 }; }
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
-  var PROF = { name: '아리스토텔레스파 교수', lang: 3 }, STUDENT = { name: '피사 대학의 학생', lang: 3 }, SEXTON = { name: '대성당 성당지기', lang: 3 };
+  // 이름만 나오던 피사의 조연도 각각 전용 초상을 쓴다.
+  var figs = G.HIST_FIG = G.HIST_FIG || {};
+  [['gp_professor', '아리스토텔레스파 교수', 'scholar'], ['gp_student', '피사 대학의 학생', 'scholar'], ['gp_sexton', '대성당 성당지기', 'priest']].forEach(function (a) {
+    if (!figs[a[0]]) figs[a[0]] = { id: a[0], name: a[1], title: '피사의 사람', st: 'it', role: a[2], g: 'm', fiction: true };
+  });
+  var PROF = 'gp_professor', STUDENT = 'gp_student', SEXTON = 'gp_sexton';
   async function play(lines) {
     for (var i = 0; i < lines.length; i++) {
       var l = lines[i]; if (!l) continue;
-      var who = l[0] === 'P' ? me() : l[0] === 'G' ? gal(l[2]) : l[0] && typeof l[0] === 'object' ? l[0] : {};
+      var who = l[0] === 'P' ? me() : l[0] === 'G' ? gal(l[2]) : l[0] && typeof l[0] === 'object' ? l[0] : l[0] && G.Hist ? G.Hist.speaker(l[0]) : {};
       await UI.say(l[1], who);
     }
   }

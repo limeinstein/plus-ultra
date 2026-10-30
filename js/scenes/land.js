@@ -1074,7 +1074,7 @@
     // 탐험대 모형: 발밑 먼지 → 고리 → 줄지어 선 대원들
     var pp = tp[0], mvg = (st.movT || 0) > 0;
     G.Party.drawFx(ctx, st.pfx, toScreen);
-    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit, canStand: expeditionGround });
+    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit, canStand: expeditionGround, follow: { x: l.lon, y: -l.lat, zoom: st.cam.zoom, wrap: 360 } });
     // 도시 이름은 탐험대 위에 (가려지지 않게)
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;

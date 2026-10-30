@@ -62,6 +62,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 기한이 지난 소식은 나오지 않는다
       const t2 = s.maidTips.find(t => t.kind === 'pirate'); t2.to = s.day - 1; s.loc.lon = t2.lon; s.loc.lat = t2.lat; rt.npcs = [];
       SEA.spawnNpcsForTest(); out.expired = rt.npcs.some(x => x.tip === t2.id);
+      // 해적 소식: 한 번 마주쳐 싸우면(도망쳐도) 그 앞바다에서 다시 솟지 않는다 (베타 피드백 2026-10-31 — 발렌시아 앞바다에서 8번)
+      t2.to = s.day + 30; t2.spawned = null; t2.met = null; rt.npcs = [];
+      let pn = null; for (let i = 0; i < 8 && !pn; i++) { s.day++; SEA.spawnNpcsForTest(); pn = rt.npcs.find(x => x.tip === t2.id); }
+      const ask = G.UI.ask, fade = G.UI.fade; G.UI.ask = async () => 'fight'; G.UI.fade = async () => {};
+      if (pn) await SEA.encounterForTest(pn, false);
+      G.UI.ask = ask; G.UI.fade = fade;
+      out.pirateFirst = !!pn; out.pirateMet = t2.met != null;
+      const again = []; for (let i = 0; i < 6; i++) { s.day++; SEA.spawnNpcsForTest(); again.push(rt.npcs.filter(x => x.tip === t2.id).length); rt.npcs = rt.npcs.filter(x => x.tip !== t2.id); }
+      out.pirateAgain = again.reduce((a, b) => a + b, 0);
       return out;
     });
     console.log(JSON.stringify(r, null, 1));
@@ -76,6 +85,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.wText && (r.wanders.length ? r.wanders.every(w => r.wText.indexOf(w.split('@')[0]) >= 0) : /못 들었/.test(r.wText)), '철새: ' + (r.wanders.join(', ') || '(근처에 없음)'));
     ok(r.spawn && r.spawn.kind === 'merchant' && r.spawn.ships > 0, '그 앞바다에 가면 상선대가 나타난다: ' + JSON.stringify(r.spawn));
     ok(r.spawnedOnce === 1, '한 번만 나타난다');
+    ok(r.pirateFirst && r.pirateMet && r.pirateAgain === 0, JSON.stringify([r.pirateFirst, r.pirateMet, r.pirateAgain]) + ' 해적 소식은 한 번 마주쳐 싸우면 끝 — 그 앞바다를 다시 지나도 또 솟지 않는다 (예전엔 기한까지 계속)');
     ok(!r.expired, '기한이 지나면 나타나지 않는다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }

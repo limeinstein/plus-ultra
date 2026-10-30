@@ -446,18 +446,19 @@
   });
 
   // ------------------------------------------------ ordinary items
+  const ITEM_KIND = Object.assign({ keepsake: '소중한 물건' }, G.ITEM_KIND);
   const tItems = tab('items', '소지품', {
-    chips: [['all', '전체']].concat(Object.keys(G.ITEM_KIND).filter(k => k !== 'book' && k !== 'fig' && k !== 'animal').map(k => [k, G.ITEM_KIND[k]])),
+    chips: [['all', '전체']].concat(Object.keys(ITEM_KIND).filter(k => k !== 'book' && k !== 'fig' && k !== 'animal').map(k => [k, ITEM_KIND[k]])),
     note: '시장과 수첩 소지품에 쓰는 일반 장비·도구·장신구 그림입니다. 파일: <code>images/items/ID.webp</code> · 권장 256×256 투명 배경 · 종류 공통 <code>item-kinds/종류.webp</code>'
   });
   G.ITEMS.filter(it => !(G.RELIC && G.RELIC[it.id])).forEach(it => {
-    const stat = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : it.kind === 'gift' ? '호감 ' + it.gv : it.kind === 'mgift' ? '남자 선물 ' + it.gv : G.ITEM_KIND[it.kind];
+    const stat = it.kind === 'weapon' ? '공격 ' + it.atk : it.kind === 'armor' ? '방어 ' + it.def : it.kind === 'gift' ? '호감 ' + it.gv : it.kind === 'mgift' ? '남자 선물 ' + it.gv : ITEM_KIND[it.kind];
     add(tItems, {
-      group: it.kind, name: it.name, sub: (G.ITEM_KIND[it.kind] || it.kind) + ' · ' + it.id,
+      group: it.kind, name: it.name, sub: (ITEM_KIND[it.kind] || it.kind) + ' · ' + it.id,
       meta: stat + (it.price ? ' · ' + num(it.price) + '닢' : ''), key: 'items/' + it.id, kind: 'webp', chain: I.chain.item(it), ar: '1 / 1', extra: it.desc,
       pic: () => I.make(I.chain.item(it), 256, 256, () => A.relicArt(it, 256, 256), { fit: 'contain' }),
-      detail: () => ({ text: it.desc, facts: [['종류', G.ITEM_KIND[it.kind] || it.kind], ['효과', stat], ['기준값', it.price ? num(it.price) + '닢' : '팔지 않음']],
-        files: [{ key: 'items/' + it.id, kind: 'webp', note: '이 소지품의 그림 (256×256, 투명 배경)' }, { key: 'item-kinds/' + it.kind, kind: 'webp', note: (G.ITEM_KIND[it.kind] || it.kind) + ' 공통' }] })
+      detail: () => ({ text: it.desc, facts: [['종류', ITEM_KIND[it.kind] || it.kind], ['효과', stat], ['기준값', it.price ? num(it.price) + '닢' : '팔지 않음']],
+        files: [{ key: 'items/' + it.id, kind: 'webp', note: '이 소지품의 그림 (256×256, 투명 배경)' }, { key: 'item-kinds/' + it.kind, kind: 'webp', note: (ITEM_KIND[it.kind] || it.kind) + ' 공통' }] })
     });
   });
 

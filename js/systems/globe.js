@@ -42,7 +42,7 @@
   function sp(id, emo) { return G.Legend && G.Legend.speaker && G.MATE[id] ? G.Legend.speaker(id, emo) : { name: id, lang: 3 }; }
   function H(id) { return G.Hist ? G.Hist.speaker(id) : { name: id, lang: 3 }; }
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
-  var CROWD = { name: '관객', lang: 3 }, WOMAN = { name: '사과 파는 아낙', lang: 3 };
+  var CROWD = 'globe_audience', WOMAN = 'globe_apple_seller';
   async function play(lines) {
     for (var i = 0; i < lines.length; i++) {
       var l = lines[i]; if (!l) continue;

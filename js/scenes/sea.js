@@ -762,6 +762,7 @@
   }
   SEA.pirateChance = pirateChance;
   SEA.spawnNpcsForTest = function () { spawnNpcs(); };   // 시험용 (tests/privateer_smoke.js)
+  SEA.encounterForTest = function (n, byMe) { return encounter(n, byMe); };   // 시험용 (tests/maidtip_smoke.js)
   SEA.canPlead = canPlead;
   function spawnNpcs() {
     var s = S(), l = s.loc;
@@ -866,6 +867,7 @@
     st.paused = true; refreshBar();
     var k = NPC_KIND[n.kind];
     if (n.chaser && G.Fakes) G.Fakes.chaserMet(n);          // 추격자는 한 번뿐
+    if (n.tip && G.MaidTip) G.MaidTip.met(n.tip);            // 여급이 알려 준 배도 한 번뿐 — 싸우든 도망치든 다시 솟아나지 않는다 (베타 피드백 2026-10-31: 발렌시아 앞바다에서 해적이 8번)
     var pl = G.Ships.pirateLabel(n.zone);
     var who = n.kind === 'pirate' ? pl + ' 함대' : n.label || (n.nation || '') + ' ' + k.name;
     var kinds = n.ships ? n.ships.filter(function (id, i) { return n.ships.indexOf(id) === i; }).map(function (id) { return G.SHIP[id].name; }).join('·') : '';

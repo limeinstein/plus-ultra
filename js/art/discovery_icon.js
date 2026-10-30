@@ -49,13 +49,96 @@
   // 경계가 겹치지 않는 전용 투명 그림을 쓴다.
   POS.sanchi = { key: 'map-discoveries/sanchi', slot: 0, cols: 1, rows: 1 };
 
+  // 2026-10-31 누락 외관 자동 등록 시작
+  POS.aurora = { key: "map-discoveries/completion/aurora", slot: 0, cols: 1, rows: 1 };
+  POS.maldives = { key: "map-discoveries/completion/maldives", slot: 0, cols: 1, rows: 1 };
+  POS.yosemite = { key: "map-discoveries/completion/yosemite", slot: 0, cols: 1, rows: 1 };
+  POS.prismatic = { key: "map-discoveries/completion/prismatic", slot: 0, cols: 1, rows: 1 };
+  POS.delicatearch = { key: "map-discoveries/completion/delicatearch", slot: 0, cols: 1, rows: 1 };
+  POS.bryce = { key: "map-discoveries/completion/bryce", slot: 0, cols: 1, rows: 1 };
+  POS.deathvalley = { key: "map-discoveries/completion/deathvalley", slot: 0, cols: 1, rows: 1 };
+  POS.mammothcave = { key: "map-discoveries/completion/mammothcave", slot: 0, cols: 1, rows: 1 };
+  POS.everglades = { key: "map-discoveries/completion/everglades", slot: 0, cols: 1, rows: 1 };
+  POS.fundy = { key: "map-discoveries/completion/fundy", slot: 0, cols: 1, rows: 1 };
+  POS.atacama = { key: "map-discoveries/completion/atacama", slot: 0, cols: 1, rows: 1 };
+  POS.titicaca = { key: "map-discoveries/completion/titicaca", slot: 0, cols: 1, rows: 1 };
+  POS.pantanal = { key: "map-discoveries/completion/pantanal", slot: 0, cols: 1, rows: 1 };
+  POS.galapagos = { key: "map-discoveries/completion/galapagos", slot: 0, cols: 1, rows: 1 };
+  POS.peritomoreno = { key: "map-discoveries/completion/peritomoreno", slot: 0, cols: 1, rows: 1 };
+  POS.aconcagua = { key: "map-discoveries/completion/aconcagua", slot: 0, cols: 1, rows: 1 };
+  POS.lencois = { key: "map-discoveries/completion/lencois", slot: 0, cols: 1, rows: 1 };
+  POS.copan = { key: "map-discoveries/completion/copan", slot: 0, cols: 1, rows: 1 };
+  POS.quirigua = { key: "map-discoveries/completion/quirigua", slot: 0, cols: 1, rows: 1 };
+  POS.joyaceren = { key: "map-discoveries/completion/joyaceren", slot: 0, cols: 1, rows: 1 };
+  POS.elmirador = { key: "map-discoveries/completion/elmirador", slot: 0, cols: 1, rows: 1 };
+  POS.pisac = { key: "map-discoveries/completion/pisac", slot: 0, cols: 1, rows: 1 };
+  POS.ollantaytambo = { key: "map-discoveries/completion/ollantaytambo", slot: 0, cols: 1, rows: 1 };
+  POS.moray = { key: "map-discoveries/completion/moray", slot: 0, cols: 1, rows: 1 };
+  POS.choquequirao = { key: "map-discoveries/completion/choquequirao", slot: 0, cols: 1, rows: 1 };
+  POS.sipan = { key: "map-discoveries/completion/sipan", slot: 0, cols: 1, rows: 1 };
+  POS.tierradentro = { key: "map-discoveries/completion/tierradentro", slot: 0, cols: 1, rows: 1 };
+  POS.pachacamac = { key: "map-discoveries/completion/pachacamac", slot: 0, cols: 1, rows: 1 };
+  POS.etowah = { key: "map-discoveries/completion/etowah", slot: 0, cols: 1, rows: 1 };
+  POS.moundville = { key: "map-discoveries/completion/moundville", slot: 0, cols: 1, rows: 1 };
+  POS.casagrande = { key: "map-discoveries/completion/casagrande", slot: 0, cols: 1, rows: 1 };
+  POS.yale = { key: "map-discoveries/completion/yale", slot: 0, cols: 1, rows: 1 };
+  POS.princeton = { key: "map-discoveries/completion/princeton", slot: 0, cols: 1, rows: 1 };
+  POS.dartmouth = { key: "map-discoveries/completion/dartmouth", slot: 0, cols: 1, rows: 1 };
+  POS.cornell = { key: "map-discoveries/completion/cornell", slot: 0, cols: 1, rows: 1 };
+  POS.stanford = { key: "map-discoveries/completion/stanford", slot: 0, cols: 1, rows: 1 };
+  POS.jhu = { key: "map-discoveries/completion/jhu", slot: 0, cols: 1, rows: 1 };
+  POS.worcesterwall = { key: "map-discoveries/completion/worcesterwall", slot: 0, cols: 1, rows: 1 };
+  POS.manwoldae = { key: "map-discoveries/completion/manwoldae", slot: 0, cols: 1, rows: 1 };
+  POS.somnath = { key: "map-discoveries/completion/somnath", slot: 0, cols: 1, rows: 1 };
+  POS.alnuri = { key: "map-discoveries/completion/alnuri", slot: 0, cols: 1, rows: 1 };
+  POS.aleppomosque = { key: "map-discoveries/completion/aleppomosque", slot: 0, cols: 1, rows: 1 };
+  POS.samui = { key: "map-discoveries/completion/samui", slot: 0, cols: 1, rows: 1 };
+  POS.phuket = { key: "map-discoveries/completion/phuket", slot: 0, cols: 1, rows: 1 };
+  POS.langkawi = { key: "map-discoveries/completion/langkawi", slot: 0, cols: 1, rows: 1 };
+  POS.penang = { key: "map-discoveries/completion/penang", slot: 0, cols: 1, rows: 1 };
+  POS.bali = { key: "map-discoveries/completion/bali", slot: 0, cols: 1, rows: 1 };
+  POS.boracay = { key: "map-discoveries/completion/boracay", slot: 0, cols: 1, rows: 1 };
+  POS.cebu = { key: "map-discoveries/completion/cebu", slot: 0, cols: 1, rows: 1 };
+  POS.palawan = { key: "map-discoveries/completion/palawan", slot: 0, cols: 1, rows: 1 };
+  POS.srilanka = { key: "map-discoveries/completion/srilanka", slot: 0, cols: 1, rows: 1 };
+  POS.seychelles = { key: "map-discoveries/completion/seychelles", slot: 0, cols: 1, rows: 1 };
+  POS.zanzibar = { key: "map-discoveries/completion/zanzibar", slot: 0, cols: 1, rows: 1 };
+  POS.mauritius = { key: "map-discoveries/completion/mauritius", slot: 0, cols: 1, rows: 1 };
+  POS.okinawa = { key: "map-discoveries/completion/okinawa", slot: 0, cols: 1, rows: 1 };
+  POS.jeju = { key: "map-discoveries/completion/jeju", slot: 0, cols: 1, rows: 1 };
+  POS.mallorca = { key: "map-discoveries/completion/mallorca", slot: 0, cols: 1, rows: 1 };
+  POS.ibiza = { key: "map-discoveries/completion/ibiza", slot: 0, cols: 1, rows: 1 };
+  POS.sardinia = { key: "map-discoveries/completion/sardinia", slot: 0, cols: 1, rows: 1 };
+  POS.capri = { key: "map-discoveries/completion/capri", slot: 0, cols: 1, rows: 1 };
+  POS.sicily = { key: "map-discoveries/completion/sicily", slot: 0, cols: 1, rows: 1 };
+  POS.malta = { key: "map-discoveries/completion/malta", slot: 0, cols: 1, rows: 1 };
+  POS.milos = { key: "map-discoveries/completion/milos", slot: 0, cols: 1, rows: 1 };
+  POS.santorini = { key: "map-discoveries/completion/santorini", slot: 0, cols: 1, rows: 1 };
+  POS.madeira = { key: "map-discoveries/completion/madeira", slot: 0, cols: 1, rows: 1 };
+  POS.azores = { key: "map-discoveries/completion/azores", slot: 0, cols: 1, rows: 1 };
+  POS.skye = { key: "map-discoveries/completion/skye", slot: 0, cols: 1, rows: 1 };
+  POS.bahamas = { key: "map-discoveries/completion/bahamas", slot: 0, cols: 1, rows: 1 };
+  POS.jamaica = { key: "map-discoveries/completion/jamaica", slot: 0, cols: 1, rows: 1 };
+  POS.dominica = { key: "map-discoveries/completion/dominica", slot: 0, cols: 1, rows: 1 };
+  POS.stlucia = { key: "map-discoveries/completion/stlucia", slot: 0, cols: 1, rows: 1 };
+  POS.grenada = { key: "map-discoveries/completion/grenada", slot: 0, cols: 1, rows: 1 };
+  POS.aruba = { key: "map-discoveries/completion/aruba", slot: 0, cols: 1, rows: 1 };
+  POS.goldenisles = { key: "map-discoveries/completion/goldenisles", slot: 0, cols: 1, rows: 1 };
+  POS.maui = { key: "map-discoveries/completion/maui", slot: 0, cols: 1, rows: 1 };
+  POS.oahu = { key: "map-discoveries/completion/oahu", slot: 0, cols: 1, rows: 1 };
+  POS.fiji = { key: "map-discoveries/completion/fiji", slot: 0, cols: 1, rows: 1 };
+  POS.tahiti = { key: "map-discoveries/completion/tahiti", slot: 0, cols: 1, rows: 1 };
+  POS.borabora = { key: "map-discoveries/completion/borabora", slot: 0, cols: 1, rows: 1 };
+  POS.cookisles = { key: "map-discoveries/completion/cookisles", slot: 0, cols: 1, rows: 1 };
+  // 2026-10-31 누락 외관 자동 등록 끝
+
   DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && POS[d.id]); };
   DI.visible = function () {
     if (!G.DISCOVERIES || !G.Disc) return [];
     return G.DISCOVERIES.filter(function (d) {
       if (!DI.isMapLandmark(d)) return false;
       // 미래의 신기루 외관은 출현·소멸하는 동안만 보이고 지도에 영구히 남지 않는다.
-      if (d.mirage50 && G.Disc.mirageNow && G.Disc.mirageNow(d)) {
+      if ((d.mirage50 || d.alwaysMirage) && G.Disc.mirageNow && G.Disc.mirageNow(d)) {
         return G.Disc.built(d) && G.Mirage && G.Mirage.mapAlpha && G.Mirage.mapAlpha(d) > 0;
       }
       return G.Disc.foundByMe(d.id);
@@ -93,7 +176,7 @@
     var dw = BASE * scale, dh = dw * sh / sw;
     met = { width: dw, height: dh, radius: Math.max(12, Math.max(dw, dh) * 0.46), top: -dh / 2, base: dh / 2 };
     ctx.save();
-    if (d.mirage50 && G.Disc && G.Disc.mirageNow && G.Disc.mirageNow(d) && G.Mirage && G.Mirage.mapAlpha) ctx.globalAlpha *= G.Mirage.mapAlpha(d);
+    if ((d.mirage50 || d.alwaysMirage) && G.Disc && G.Disc.mirageNow && G.Disc.mirageNow(d) && G.Mirage && G.Mirage.mapAlpha) ctx.globalAlpha *= G.Mirage.mapAlpha(d);
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(im, col * sw + 0.5, row * sh + 0.5, sw - 1, sh - 1, x - dw / 2, y - dh / 2, dw, dh);
     if (opts.selected) {

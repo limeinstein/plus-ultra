@@ -1,0 +1,545 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "id": "morpho",
+      "name": "모르포나비",
+      "kind": "animal",
+      "description": "아마존 강가 숲길 위로 손바닥보다 큰 나비가 날개를 펼칠 때마다 하늘빛이 번쩍이고, 접으면 갈색 눈알 무늬만 남아 숲 그늘에 감쪽같이 사라진다. 날갯짓이 느려 푸른 빛이 깜박깜박 꺼졌다 켜지는 듯하다. 썩은 과일 냄새에 이끌려 땅 가까이 내려앉기도 한다.",
+      "target": "tools/insect_gifs/sources/morpho.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Morpho butterfly in Amazon riverbank rainforest; adult upper wings brilliant electric sky blue with black margins, underside brown with eyespots. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6cfbaba9-6e3e-41df-9ed1-584f1356ec25.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/morpho.gif",
+        "images/discovery-ends/morpho.jpg",
+        "images/discovery-sheets/morpho.webp"
+      ]
+    },
+    {
+      "id": "glasswing",
+      "name": "유리날개나비",
+      "kind": "animal",
+      "description": "안개 낀 산숲 그늘에서 날개가 유리처럼 비쳐 뒤편 잎맥까지 보이는 나비가 떠다닌다. 날개 가장자리에만 가는 밤색 테와 흰 점이 둘려 있어, 나는 모습이 꼭 빈 창틀만 날아가는 듯하다. 수십 마리가 한 덤불에 모여 앉아도 눈여겨보지 않으면 그냥 지나친다.",
+      "target": "tools/insect_gifs/sources/glasswing.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Greta oto glasswing butterfly in Costa Rican cloud forest; large genuinely transparent wing membranes with delicate dark brown veins and rims, small white and amber forewing accents. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6d21d8f6-7508-466a-9908-e8cd772d672f.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/glasswing.gif",
+        "images/discovery-ends/glasswing.jpg",
+        "images/discovery-sheets/glasswing.webp"
+      ]
+    },
+    {
+      "id": "hercules",
+      "name": "헤라클레스장수풍뎅이",
+      "kind": "animal",
+      "description": "도미니카 섬 산숲의 썩은 통나무 곁에서, 사람 손바닥을 넘는 풍뎅이가 긴 뿔 두 개를 집게처럼 벌리고 버틴다. 등딱지는 누런 올리브빛 바탕에 검은 점이 박혔는데, 축축한 밤이 되면 온통 검게 변한다. 수컷끼리 뿔로 상대를 집어 들어 나뭇가지 아래로 내던진다.",
+      "target": "tools/insect_gifs/sources/hercules.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Dynastes hercules beetle on a wet Caribbean rainforest log; tan olive elytra with dark flecks, shiny black head and thorax, two extremely long opposed horns forming a pincer, six legs. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-62f32ab0-24bd-4078-bac2-d282d3b5dd14.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/hercules.gif",
+        "images/discovery-ends/hercules.jpg",
+        "images/discovery-sheets/hercules.webp"
+      ]
+    },
+    {
+      "id": "titanus",
+      "name": "타이탄하늘소",
+      "kind": "animal",
+      "description": "기아나 숲 깊은 곳에서 밤 등불 아래로 두 손바닥을 이은 만큼 큰 하늘소가 둔하게 날아와 떨어진다. 몸은 밤색 갑옷처럼 반들거리고, 낫 같은 큰 턱은 손가락 굵기 나뭇가지를 똑 끊을 만큼 억세다. 건드리면 쉬익 소리를 내며 턱을 벌려 위협한다.",
+      "target": "tools/insect_gifs/sources/titanus.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Titanus giganteus longhorn beetle in Guianan rainforest; very large dark reddish brown elongated beetle, long segmented antennae and strong jaws, NO rhinoceros horns. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-f417e3e6-cfca-4ba1-8e72-be8c5216c2f1.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/titanus.gif",
+        "images/discovery-ends/titanus.jpg",
+        "images/discovery-sheets/titanus.webp"
+      ]
+    },
+    {
+      "id": "monarchwinter",
+      "name": "제왕나비의 겨울 숲",
+      "kind": "animal",
+      "description": "미초아칸 높은 산의 전나무 숲에 들어서면 가지마다 주홍 나비가 비늘처럼 빽빽이 매달려 나무 전체가 주황빛으로 늘어져 있다. 해가 비치면 수없이 많은 나비가 한꺼번에 날아올라 날갯소리가 빗소리처럼 숲을 채운다. 무게를 못 이긴 가지가 뚝 꺾이는 소리도 들린다.",
+      "target": "tools/insect_gifs/sources/monarchwinter.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: overwintering monarch butterflies in a Mexican highland oyamel fir forest; dense orange and black Danaus plexippus butterflies clinging in immense clusters to trunks and branches. Sequence read left to right, top to bottom: 1 distant shaded fir forest with brown folded-wing clusters camouflaged on trunks; 2 closer clusters of individually visible closed-wing monarchs; 3 orange wings begin opening in sunlight; 4 a magnificent wide view of countless orange monarch butterflies covering trees, with several clear complete adults in foreground. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-12338938-b542-469d-9663-249cc62b122c.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/monarchwinter.gif",
+        "images/discovery-ends/monarchwinter.jpg",
+        "images/discovery-sheets/monarchwinter.webp"
+      ]
+    },
+    {
+      "id": "silverscarab",
+      "name": "은빛 보석풍뎅이",
+      "kind": "animal",
+      "description": "안개 낀 산숲의 밤, 등불로 날아든 풍뎅이를 손에 올리면 갓 두드려 편 은덩이처럼 거울빛으로 번쩍인다. 엄지 마디만 한 둥근 몸에 사람 얼굴과 등불이 그대로 비친다. 같은 숲에서는 금빛으로 빛나는 놈도 함께 잡힌다.",
+      "target": "tools/insect_gifs/sources/silverscarab.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Chrysina limbata jewel scarab in Central American montane forest; small oval beetle with astonishingly smooth mirror-silver elytra and thorax, dark slender legs, natural metallic reflection. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-830c7371-833d-470f-8c45-85fb919db12c.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/silverscarab.gif",
+        "images/discovery-ends/silverscarab.jpg",
+        "images/discovery-sheets/silverscarab.webp"
+      ]
+    },
+    {
+      "id": "lanternfly",
+      "name": "땅콩머리꽃매미",
+      "kind": "animal",
+      "description": "오리노코 강가 숲 나무줄기에 손가락 길이의 벌레가 붙어 있는데, 머리가 땅콩 껍데기처럼 부풀어 옆에서 보면 이빨을 드러낸 악어 얼굴 같다. 건드리면 뒷날개를 확 펼쳐 커다란 노란 눈알 무늬 한 쌍을 드러낸다. 원주민들은 이 벌레에 쏘이면 죽는다며 가까이 가지 않는다.",
+      "target": "tools/insect_gifs/sources/lanternfly.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Fulgora laternaria lanternfly on a tropical Venezuelan tree trunk; long peanut-shaped head extension, mottled tan folded wings, two large eye spots on exposed hindwings; an insect, not a glowing lantern. Sequence read left to right, top to bottom: 1 camouflaged mottled folded wings against tree bark; 2 the full head and its peanut-shaped extension come into view; 3 the same adult begins spreading its wings; 4 one complete adult with wings open showing its natural hindwing eye spots. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-dded30e9-eda6-4fe9-b3f4-74daa78276de.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/lanternfly.gif",
+        "images/discovery-ends/lanternfly.jpg",
+        "images/discovery-sheets/lanternfly.webp"
+      ]
+    },
+    {
+      "id": "lunamoth",
+      "name": "루나나방",
+      "kind": "animal",
+      "description": "버지니아 숲의 초여름 밤, 등불 가에 손바닥만 한 연둣빛 나방이 내려앉는다. 뒷날개 끝이 리본처럼 길게 늘어져 날 때마다 하늘하늘 흔들리고, 날개마다 작은 눈 같은 둥근 점이 하나씩 박혀 있다. 이 나방은 입이 없어 아무것도 먹지 못하고 며칠 만에 죽는다.",
+      "target": "tools/insect_gifs/sources/lunamoth.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Actias luna moth in temperate North American deciduous woodland; pale lime-green wings, one small round eye spot on each wing, long slender hindwing tails, feathery antennae. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-56b3fbab-9361-4027-968d-54cc014c41d2.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/lunamoth.gif",
+        "images/discovery-ends/lunamoth.jpg",
+        "images/discovery-sheets/lunamoth.webp"
+      ]
+    },
+    {
+      "id": "periodical",
+      "name": "십칠년매미 떼",
+      "kind": "animal",
+      "description": "오하이오 골짜기 숲에서 어느 늦봄, 땅속에서 셀 수 없이 많은 매미가 한꺼번에 기어 나와 나무줄기마다 허물이 다닥다닥 붙는다. 검은 몸에 붉은 눈, 주황빛 날개맥을 한 매미 떼가 우는 소리가 귀가 먹먹할 만큼 숲을 뒤덮는다. 원주민들은 열일곱 해에 한 번 이 떼가 돌아온다고 말한다.",
+      "target": "tools/insect_gifs/sources/periodical.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Magicicada periodical cicada emergence in eastern North American oak woods; black adult bodies, bright red eyes, clear orange-veined wings and brown empty nymph shells on tree bark. Sequence read left to right, top to bottom: 1 small cracks in leaf-covered woodland soil; 2 a brown cicada nymph climbs tree bark; 3 a pale winged adult emerges beside its empty brown shell; 4 several complete black red-eyed adults with transparent wings on a trunk and a woodland emergence behind. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-92fdcccd-5a69-4bcf-9b82-05b129dff465.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/periodical.gif",
+        "images/discovery-ends/periodical.jpg",
+        "images/discovery-sheets/periodical.webp"
+      ]
+    },
+    {
+      "id": "eightyeight",
+      "name": "88나비",
+      "kind": "animal",
+      "description": "안데스 동쪽 아마존 상류 강가 모래톱에 내려앉은 작은 나비가 날개를 접으면, 흰 바탕에 검은 줄로 숫자 88이 또렷하게 그려져 있다. 날개를 펴면 검은 바탕에 푸른 띠가 한 줄 반짝인다. 땀 묻은 손이나 소매에 즐겨 내려앉아 짠맛을 핥는다.",
+      "target": "tools/insect_gifs/sources/eightyeight.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Diaethria clymena eighty-eight butterfly in Peruvian rainforest; underside hindwings cream-white with two black ring-shaped markings resembling a natural 88 pattern, red forewing underside, upper wings black with an iridescent blue band. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-2042d789-646c-4fb2-b7a3-25d947a1ecf2.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/eightyeight.gif",
+        "images/discovery-ends/eightyeight.jpg",
+        "images/discovery-sheets/eightyeight.webp"
+      ]
+    },
+    {
+      "id": "swallowtail",
+      "name": "호랑나비",
+      "kind": "animal",
+      "description": "노란 바탕에 검은 줄무늬가 범의 가죽처럼 그어진 큰 나비가 산기슭 길섶을 너울너울 난다. 뒷날개 끝에는 제비 꼬리 같은 돌기가 달렸고, 그 곁에 붉은 점과 푸른 점이 박혀 있다. 탱자나무와 산초나무 둘레를 맴돌며 잎에 알을 하나씩 붙이고 간다.",
+      "target": "tools/insect_gifs/sources/swallowtail.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Papilio xuthus swallowtail butterfly beside a Korean meadow; cream-yellow wings with strong black tiger stripes, long hindwing tails, small blue and orange hindwing edge accents. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-0700d33c-389e-4359-bd12-f558bace3276.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/swallowtail.gif",
+        "images/discovery-ends/swallowtail.jpg",
+        "images/discovery-sheets/swallowtail.webp"
+      ]
+    },
+    {
+      "id": "emeraldswallow",
+      "name": "에메랄드제비나비",
+      "kind": "animal",
+      "description": "검은 비단 같은 날개 위로 초록빛 띠가 비스듬히 가로지르는 나비가 개울가에서 번쩍인다. 날개 바탕에는 초록 가루가 흩뿌려져 있어 고개를 돌릴 때마다 빛이 달라진다. 수컷 여럿이 젖은 모래톱에 내려앉아 물을 빨다가 그림자만 비쳐도 한꺼번에 날아오른다.",
+      "target": "tools/insect_gifs/sources/emeraldswallow.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Papilio palinurus emerald swallowtail butterfly in Southeast Asian rainforest; velvety black wings crossed by a broad glowing emerald green diagonal band, small hindwing tails. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-70837cc7-3aaf-4efc-a99e-1e41d6338571.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/emeraldswallow.gif",
+        "images/discovery-ends/emeraldswallow.jpg",
+        "images/discovery-sheets/emeraldswallow.webp"
+      ]
+    },
+    {
+      "id": "birdwing",
+      "name": "버드윙나비",
+      "kind": "animal",
+      "description": "밀림 꼭대기 위로 새인 줄 알았던 그림자가 내려오자, 그것은 사람 두 손을 펼친 것보다 넓은 날개의 나비였다. 비단제비나비 무리 가운데서도 가장 큰 것으로, 암컷은 갈색 바탕에 크림빛 무늬를 두르고 수컷은 청록빛 날개에 샛노란 배를 지녔다. 높은 나뭇가지 사이를 천천히 미끄러지듯 날며 좀처럼 땅 가까이 내려오지 않는다.",
+      "target": "tools/insect_gifs/sources/birdwing.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Ornithoptera alexandrae birdwing butterfly in New Guinea rainforest; extremely broad large black wings with rich emerald and turquoise-green panels, yellow abdomen and fine black antennae. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-a2736906-868c-46e4-aae8-60df4006c2ea.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/birdwing.gif",
+        "images/discovery-ends/birdwing.jpg",
+        "images/discovery-sheets/birdwing.webp"
+      ]
+    },
+    {
+      "id": "sasakia",
+      "name": "왕오색나비",
+      "kind": "animal",
+      "description": "산골 상수리나무 줄기에 흐르는 나무진에 손바닥만 한 나비가 내려앉아 있다. 수컷의 날개는 검은 바탕에 흰 점이 흩어지고, 날개 안쪽이 햇빛을 받으면 짙은 보랏빛으로 타오른다. 다른 벌레가 다가오면 날개를 퍼덕여 쫓아내고, 새를 따라붙을 만큼 날갯짓이 힘차다.",
+      "target": "tools/insect_gifs/sources/sasakia.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Sasakia charonda great purple emperor butterfly in Japanese deciduous forest; dark broad wings with iridescent blue-violet central sheen, cream white spots and small orange hindwing markings. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6a8aa7c4-c2a6-4a80-82ce-0e1909604660.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/sasakia.gif",
+        "images/discovery-ends/sasakia.jpg",
+        "images/discovery-sheets/sasakia.webp"
+      ]
+    },
+    {
+      "id": "atlasmoth",
+      "name": "아틀라스나방",
+      "kind": "animal",
+      "description": "밤중에 횃불 곁으로 쟁반만 한 나방이 묵직하게 날아와 천막 기둥에 붙었다. 적갈색 날개마다 창호지를 오려 붙인 듯 반투명한 세모 창이 나 있고, 앞날개 끝은 뱀 머리처럼 굽어 있다. 앉은 채 꼼짝도 하지 않다가 건드리면 날개를 떨어 뱀이 고개를 드는 시늉을 한다.",
+      "target": "tools/insect_gifs/sources/atlasmoth.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Attacus atlas moth in Malay rainforest; immense rust-brown wings with cream and dark bands, translucent triangular windows, naturally curved forewing tips, feathery antennae. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-39d1dc9d-30ff-4029-b432-8e14a43b909c.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/atlasmoth.gif",
+        "images/discovery-ends/atlasmoth.jpg",
+        "images/discovery-sheets/atlasmoth.webp"
+      ]
+    },
+    {
+      "id": "deadleaf",
+      "name": "가랑잎나비",
+      "kind": "animal",
+      "description": "숲길 나뭇가지에 붙은 마른 잎 하나가 갑자기 날아올라, 남빛과 주황 띠가 선명한 나비가 되었다. 다시 가지에 앉아 날개를 접자 날개 뒷면은 잎맥과 벌레 먹은 자국, 곰팡이 얼룩까지 갖춘 영락없는 가랑잎이다. 뒷날개 끝은 잎자루처럼 가늘게 뻗어 가지에 닿아 있다.",
+      "target": "tools/insect_gifs/sources/deadleaf.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Kallima inachus dead-leaf butterfly in Assamese woodland; closed underside exactly resembles a brown dry leaf with midrib and veins, opened upper wings reveal brilliant blue and orange bands. Sequence read left to right, top to bottom: 1 a brown leaf-like shape hidden among dry leaves; 2 the same butterfly with its leaf-veined wings closed is visible in profile; 3 it starts opening wings to reveal blue and orange; 4 the complete adult butterfly has its vivid blue-orange upper wings spread, all wing edges fully visible. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-4407005a-7618-4abb-ba74-1acb7ea85a73.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/deadleaf.gif",
+        "images/discovery-ends/deadleaf.jpg",
+        "images/discovery-sheets/deadleaf.webp"
+      ]
+    },
+    {
+      "id": "bhutanglory",
+      "name": "부탄글로리",
+      "kind": "animal",
+      "description": "안개 낀 산중 숲 높은 가지 사이로 검은 나비가 느릿하게 맴돈다. 검은 날개에 연노란 실금이 촘촘히 그어지고, 뒷날개에는 주홍 무늬와 함께 꼬리가 셋이나 길게 늘어졌다. 비가 그친 뒤에야 나무 꼭대기에서 내려와 잠시 날다가 다시 안개 속으로 사라진다.",
+      "target": "tools/insect_gifs/sources/bhutanglory.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Bhutanitis lidderdalii Bhutan glory butterfly in Himalayan cloud forest; elegant black wings densely crossed by fine cream-white stripes, long hindwing tails, red and yellow spots near hindwing bases. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-675ffadb-a4ad-48be-a6a6-33a187d1d67d.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/bhutanglory.gif",
+        "images/discovery-ends/bhutanglory.jpg",
+        "images/discovery-sheets/bhutanglory.webp"
+      ]
+    },
+    {
+      "id": "chalcosoma",
+      "name": "코카서스장수풍뎅이",
+      "kind": "animal",
+      "description": "고원 숲 나무줄기에 손바닥만 한 검은 풍뎅이가 매달려 있다. 등은 쇠를 갈아 놓은 듯 푸르스름하게 번들거리고, 가슴에서 긴 뿔 두 개가 앞으로 뻗고 머리에서 또 하나가 치켜 솟아 뿔이 셋이다. 손을 내밀면 다리를 버티고 뿔을 쳐들어 덤빈다.",
+      "target": "tools/insect_gifs/sources/chalcosoma.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Chalcosoma chiron Caucasus rhinoceros beetle on a Sumatran forest log; glossy black body, THREE distinct long curved horns: one from head and two from thorax, six stout legs. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-cf6f8168-0887-4d52-bdf3-111541728722.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/chalcosoma.gif",
+        "images/discovery-ends/chalcosoma.jpg",
+        "images/discovery-sheets/chalcosoma.webp"
+      ]
+    },
+    {
+      "id": "giraffestag",
+      "name": "기라파톱사슴벌레",
+      "kind": "animal",
+      "description": "밤 등불에 날아든 검은 사슴벌레가 탁자 위를 기는데, 턱 길이가 몸통의 절반을 넘는다. 가느다란 두 턱은 끝이 안으로 굽고 톱니 같은 돌기가 줄지어 나 있다. 손가락을 들이대자 턱을 활짝 벌렸다가 무서운 힘으로 조인다.",
+      "target": "tools/insect_gifs/sources/giraffestag.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Prosopocoilus giraffa stag beetle on a Javan tropical log; long dark black-brown body with a very long paired set of serrated antler-like mandibles, NO rhinoceros horn. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-32af1bac-01fd-40e6-bf42-c2e01af7a887.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/giraffestag.gif",
+        "images/discovery-ends/giraffestag.jpg",
+        "images/discovery-sheets/giraffestag.webp"
+      ]
+    },
+    {
+      "id": "tamamushi",
+      "name": "비단벌레",
+      "kind": "animal",
+      "description": "여름 한낮 팽나무 꼭대기 둘레를 손가락 마디만 한 벌레들이 햇빛을 튕기며 맴돈다. 등딱지는 초록 쇠붙이처럼 빛나고 그 위로 붉고 보랏빛 도는 줄 두 가닥이 길게 내려간다. 죽은 뒤에도 빛이 바래지 않아 옛사람들이 이 날개로 귀한 물건을 꾸몄다고 한다.",
+      "target": "tools/insect_gifs/sources/tamamushi.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Chrysochroa fulgidissima jewel beetle on a Korean forest leaf; slender elongated metallic emerald-green body with two fine red-copper longitudinal stripes down its smooth elytra. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-3257849d-c7aa-413b-a14c-18417da93082.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/tamamushi.gif",
+        "images/discovery-ends/tamamushi.jpg",
+        "images/discovery-sheets/tamamushi.webp"
+      ]
+    },
+    {
+      "id": "fireflyriver",
+      "name": "반딧불이 강",
+      "kind": "animal",
+      "description": "어둠이 내린 강 하구, 물가에 늘어선 맹그로브 나무들이 하나같이 불을 켰다 껐다 한다. 수천 마리 반딧불이 마치 한 사람의 신호에 맞춘 듯 같은 박자로 깜빡여, 나무 전체가 숨을 쉬는 등불처럼 보인다. 노를 멈추면 강물 위에도 그 불빛이 그대로 비쳐 깜빡인다.",
+      "target": "tools/insect_gifs/sources/fireflyriver.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: synchronously flashing Pteroptyx fireflies among mangroves lining a quiet Malay river at night; warm yellow-green tiny natural points of light reflected in still water, tropical dark forest silhouettes, no artificial lamps. Sequence read left to right, top to bottom: 1 dark tranquil moonlit mangrove river without visible firefly lights; 2 a few natural firefly points begin glowing among leaves; 3 dozens of flashing points and close individual tiny beetles; 4 hundreds of delicate warm firefly points along the river and their reflections, retaining dark natural night exposure. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-f698ff48-21a4-41ee-9c44-c055ed2fde9f.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/fireflyriver.gif",
+        "images/discovery-ends/fireflyriver.jpg",
+        "images/discovery-sheets/fireflyriver.webp"
+      ]
+    },
+    {
+      "id": "orchidmantis",
+      "name": "난초사마귀",
+      "kind": "animal",
+      "description": "숲 가장자리 꽃 덤불에 분홍빛 도는 흰 꽃 한 송이가 다리를 들고 걸어간다. 가까이 보니 사마귀로, 네 다리마다 꽃잎처럼 넓적한 돌기가 붙고 몸 전체가 난초 꽃잎 빛깔이다. 꽃인 줄 알고 날아든 벌이 닿는 순간 앞다리가 번개처럼 낚아챈다.",
+      "target": "tools/insect_gifs/sources/orchidmantis.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Hymenopus coronatus orchid mantis on a tropical orchid; white and pale pink body, broad petal-shaped leg lobes, triangular head, two folded raptorial forelegs, anatomically plausible six-legged mantis. Sequence read left to right, top to bottom: 1 only a camouflaged foreleg and antenna peek from behind an orchid; 2 a small white-pink mantis nymph appears; 3 the adult mantis slowly unfolds its petal-like forelegs; 4 one complete adult orchid mantis stands clearly on an orchid petal. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-bd8a8939-d1e7-4974-8af9-20d408de3555.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/orchidmantis.gif",
+        "images/discovery-ends/orchidmantis.jpg",
+        "images/discovery-sheets/orchidmantis.webp"
+      ]
+    },
+    {
+      "id": "rainbowstag",
+      "name": "무지개사슴벌레",
+      "kind": "animal",
+      "description": "산호초가 늘어선 해안 뒤편 밀림, 쓰러져 썩어 가는 나무 위에 손가락만 한 사슴벌레가 기어 나온다. 등은 초록에서 붉은 금빛, 보랏빛까지 무지개처럼 번져 빛나고, 수컷의 턱은 위로 휘어 올라가 끝이 갈라졌다. 등불을 비추면 몸을 돌릴 때마다 빛깔이 바뀌어 보는 이들이 탄성을 지른다.",
+      "target": "tools/insect_gifs/sources/rainbowstag.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Phalacrognathus muelleri rainbow stag beetle in Queensland rainforest; glossy metallic green, copper-red and purple elytra, paired curved serrated jaws, six legs. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-0d324079-0861-4364-bb0d-a66c4d544a51.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/rainbowstag.gif",
+        "images/discovery-ends/rainbowstag.jpg",
+        "images/discovery-sheets/rainbowstag.webp"
+      ]
+    },
+    {
+      "id": "sunsetmoth",
+      "name": "마다가스카르 석양나방",
+      "kind": "animal",
+      "description": "검은 바탕 날개에 초록, 주황, 붉은, 푸른 띠가 가로질러 보는 각도마다 무지개처럼 빛깔이 바뀐다. 뒷날개 끝에는 흰 술이 달린 짧은 꼬리가 여럿 붙었다. 나방이라는데도 한낮 숲 가장자리 꽃 사이를 나비처럼 날아다녀 선원들이 몇 번이고 눈을 의심한다.",
+      "target": "tools/insect_gifs/sources/sunsetmoth.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Chrysiridia rhipheus Madagascan sunset moth in Malagasy forest; spectacular iridescent green, blue and orange bands on black wings, elegant short white-fringed hindwing tails. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-50239328-dcc4-4ebb-a43c-7a69f4b5a885.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/sunsetmoth.gif",
+        "images/discovery-ends/sunsetmoth.jpg",
+        "images/discovery-sheets/sunsetmoth.webp"
+      ]
+    },
+    {
+      "id": "cometmoth",
+      "name": "혜성나방",
+      "kind": "animal",
+      "description": "두 손바닥을 편 것만 한 노란 날개에 붉은 갈색 눈알 무늬가 넷 박혀 있다. 뒷날개 끝에서 늘어진 두 가닥 꼬리가 몸길이의 몇 배나 되어, 밤하늘을 가르는 꼬리별처럼 흔들린다. 입이 없어 아무것도 먹지 못하고 며칠 만에 숨을 거둔다고 원주민이 일러 준다.",
+      "target": "tools/insect_gifs/sources/cometmoth.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Argema mittrei Madagascan comet moth in Malagasy rainforest; broad pale golden-yellow wings with four red-brown eye spots and extremely long narrow reddish-yellow hindwing tails. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-a8520f22-faaf-4754-bafd-7174243ae356.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/cometmoth.gif",
+        "images/discovery-ends/cometmoth.jpg",
+        "images/discovery-sheets/cometmoth.webp"
+      ]
+    },
+    {
+      "id": "giantswallow",
+      "name": "아프리카큰제비나비",
+      "kind": "animal",
+      "description": "앞날개가 칼날처럼 길고 좁으며, 활짝 펴면 사람 손 두 뼘을 넘는 주황빛 날개에 검은 무늬가 굵게 그어져 있다. 수컷은 높은 나무 꼭대기를 맴돌다 한낮에야 강가 젖은 모래에 내려앉는다. 새도 원숭이도 이 나비만은 건드리지 않는데, 몸에 독을 품었기 때문이라 한다.",
+      "target": "tools/insect_gifs/sources/giantswallow.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Papilio antimachus African giant swallowtail in Cameroonian rainforest; exceptionally long narrow orange-brown wings with bold black reticulated markings, no exaggerated fantasy tails. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-91fabc59-1574-40c9-8e7b-0219eb13a420.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/giantswallow.gif",
+        "images/discovery-ends/giantswallow.jpg",
+        "images/discovery-sheets/giantswallow.webp"
+      ]
+    },
+    {
+      "id": "goliath",
+      "name": "골리앗꽃무지",
+      "kind": "animal",
+      "description": "어른 손바닥을 가득 채우는 풍뎅이로, 가슴판에 희고 검은 줄무늬가 선명하고 딱지날개는 밤색 비단처럼 윤이 난다. 수컷 머리에는 짧은 갈래 뿔이 솟았다. 나무 꼭대기에서 수액과 익은 과일을 빨다가 날아오를 때면 작은 새가 지나가듯 붕붕 소리가 난다.",
+      "target": "tools/insect_gifs/sources/goliath.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: male Goliathus goliatus beetle on a West African tropical log; large stout beetle with black and white striped thorax, chestnut-brown elytra, small forked Y-shaped head horn and six strong legs. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6d2e36bd-c241-468a-9f15-5fda2192eb18.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/goliath.gif",
+        "images/discovery-ends/goliath.jpg",
+        "images/discovery-sheets/goliath.webp"
+      ]
+    },
+    {
+      "id": "sacredscarab",
+      "name": "성스러운 쇠똥구리",
+      "kind": "animal",
+      "description": "손가락 한 마디만 한 새까만 풍뎅이가 제 몸보다 큰 쇠똥 경단을 뒷다리로 밀며 뒷걸음질 친다. 머리 앞쪽은 톱니 달린 부채처럼 생겨 똥을 긁어모으기 좋다. 옛 이집트 사람들은 이 벌레가 해를 굴려 하늘을 건넌다 믿고 케프리 신으로 섬겼다.",
+      "target": "tools/insect_gifs/sources/sacredscarab.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Scarabaeus sacer sacred dung beetle on a sandy Nile bank; stout matt black scarab with a shovel-like head and toothed front legs, pushing a round brown dung ball, a living ordinary insect without gold ornaments. Sequence read left to right, top to bottom: 1 a concealed beetle antenna or foreleg peeks out of its natural log or leaf shelter; 2 the adult beetle head and thorax emerge; 3 the same adult crawls into view from a side angle showing natural joints; 4 the whole adult beetle in a clear three-quarter macro view with both antennae, all six legs and complete horns or mandibles fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-73bdcffc-f71c-42fe-a57b-5caca0c2d273.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/sacredscarab.gif",
+        "images/discovery-ends/sacredscarab.jpg",
+        "images/discovery-sheets/sacredscarab.webp"
+      ]
+    },
+    {
+      "id": "motherpearl",
+      "name": "진주모나비",
+      "kind": "animal",
+      "description": "희끄무레한 날개가 빛을 받으면 조개껍데기 안쪽처럼 연분홍과 연둣빛으로 은은하게 어른거린다. 앞날개 끝은 갈고리처럼 휘었고, 날개마다 작은 눈알 무늬가 박혀 있다. 바다처럼 넓은 호숫가 숲 그늘에서 미끄러지듯 날다가 나뭇잎 뒤에 날개를 펴고 앉는다.",
+      "target": "tools/insect_gifs/sources/motherpearl.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Salamis parhassus mother-of-pearl butterfly in East African forest; broad pearly white wings with subtle violet iridescence, dark violet-brown margins and small eye-like markings. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-a4f38fb5-8ec6-47cf-b10d-7e09f0be7b1d.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/motherpearl.gif",
+        "images/discovery-ends/motherpearl.jpg",
+        "images/discovery-sheets/motherpearl.webp"
+      ]
+    },
+    {
+      "id": "peacockbf",
+      "name": "공작나비",
+      "kind": "animal",
+      "description": "붉은 갈색 날개 네 귀퉁이마다 푸르고 노란 둥근 눈알 무늬가 박혀 공작 꼬리 깃을 보는 듯하다. 날개를 접으면 뒷면은 그을린 나무껍질처럼 시커메 눈에 잘 띄지 않는다. 쐐기풀 우거진 숲길에서 흔히 날며, 건드리면 날개를 번쩍 펴 눈알을 내보이고 사각사각 소리를 낸다.",
+      "target": "tools/insect_gifs/sources/peacockbf.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game insect discovery master storyboard. Create ONE EXACT regular 2-column by 2-row grid, FOUR equally sized WIDE landscape panels. Overall image landscape 9:4, approximately 2304x1024; every panel also wide 9:4. Subject: Aglais io European peacock butterfly on a woodland nettle; rich rusty-red wings with FOUR prominent blue, black, cream and yellow eye spots, one on each wing. Sequence read left to right, top to bottom: 1 the species is partly concealed as a small natural caterpillar on a leaf; 2 a natural pupa or cocoon hangs in its habitat; 3 the adult has just emerged and begins opening its wings; 4 one complete beautiful adult with fully spread wings, both antennae and all wing tips and long tails fully inside the picture. Each panel is a separate continuous natural scene of this species in the same coherent habitat. Detailed hand-painted natural history illustration, delicate watercolor and fine ink with rich believable textures and soft cinematic natural lighting. Respect insect anatomy, six legs and two antennae, true wing structure and species markings. The final complete insect occupies at most 65 percent of its panel height and 75 percent of width, with ample natural habitat on all sides so wings, tails and horns cannot be cropped. No anthropomorphic parent-and-baby scenes, no people, no hands, no pinned specimens, no glass cases, no captions, text, numbers, logos or watermarks. Thin straight grid lines only.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-a80bda8a-1497-4bcb-b14b-9119f2b6dba5.png",
+      "source_size": [
+        1881,
+        836
+      ],
+      "files": [
+        "images/discoveries/peacockbf.gif",
+        "images/discovery-ends/peacockbf.jpg",
+        "images/discovery-sheets/peacockbf.webp"
+      ]
+    }
+  ]
+}

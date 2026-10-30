@@ -35,7 +35,7 @@
   var m = { id: 'newton', name: '아이작 뉴턴', short: '뉴턴', g: 'm', style: 'ne', role: 'scholar', tone: 'genius', pic: 'newton', bornY: 1643,
     st: [45, 97, 30, 55], sk: { acct: 1, survey: 3, sci: 3, ship: 3, craft: 3, nav: 3, speech: 3 }, skBoost: 1, lg: { 3: 3, 2: 3 },
     desc: '잉글랜드 링컨셔 울즈소프의 농가에서 태어난 수학자. 떨어지는 사과를 보고 달이 왜 떨어지지 않는지를 물었고, 그 답으로 하늘과 땅을 하나의 법칙으로 묶은 『자연철학의 수학적 원리(프린키피아)』를 썼다. 손수 반사 망원경을 갈아 만들 만큼 손재주가 좋고, 조수와 달의 움직임으로 바다 위의 자리를 재는 일에 누구보다 밝다. 사람을 잘 믿지 않고 비판에는 날카롭지만, 일단 마음을 열면 밤새 별과 숫자를 이야기한다.' };
-  m.tale = true; m.legend = true; m.fame = 0; m.wage = G.taleWage ? G.taleWage(m) : 0; m.y = [1665, 1727]; m.reg = []; m.face = 'portraits/history/newton'; m.eventOnly = true;
+  m.tale = true; m.legend = true; m.fame = 0; m.wage = G.taleWage ? G.taleWage(m) : 0; m.y = [1665, 1727]; m.reg = []; m.face = 'portraits/history/newton'; m.halfKey = m.face + '_half'; m.eventOnly = true;
   if (G.MATES && !G.MATE[m.id]) { G.MATES.push(m); G.MATE[m.id] = m; }
 
   if (G.ITEMS && G.ITEM) {

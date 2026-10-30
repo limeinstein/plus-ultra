@@ -19,6 +19,9 @@ const executablePath=[process.env.CHROME_PATH,'C:/Program Files/Google/Chrome/Ap
   const result=await page.evaluate(async rows=>{
    G.State.newGame({name:'외관 시험',nation:'PT',job:'explorer',age:30,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:[],diff:'normal'});
    const s=G.Game.state;s.settings.res=.35;s.prologueDone=true;
+   // 이 검사는 그림 배치를 보므로 이번 입항에는 반드시 출현시킨다.
+   // 출현 확률과 연도 규칙은 city_mirage_smoke.js에서 따로 확인한다.
+   G.BALANCE.mirage.cityChance=1;
    const loaded=await Promise.all(rows.map(r=>G.Img.load(r.target.slice(7,-5))));
    if(loaded.some(x=>!x))throw Error('외관 그림을 읽지 못했습니다.');
    const city=rows.filter(r=>r.kind==='city'),field=rows.filter(r=>r.kind!=='city');

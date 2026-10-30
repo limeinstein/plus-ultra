@@ -19,6 +19,17 @@
   fig('chenlin', { name: '진린', title: '명나라 수군 도독', st: 'cn', role: 'captain', born: 1543, look: '50대, 명나라 수군 갑옷, 거만하지만 의리 있는 얼굴' });
   G.IMJIN_FIGS = ['kimsimin', 'songsanghyeon', 'sinrip', 'seonjo', 'gwanghae', 'gwonyul', 'wongyun', 'konishi', 'chenlin'];
 
+  // 이름만 나오던 조연도 전용 얼굴상·무릎상을 쓴다 (2026-10-31).
+  fig('yiwan', { name: '이완', title: '이순신의 조카 · 수군 군관', st: 'kr', role: 'soldier', look: '젊은 얼굴, 남색 군복과 어두운 갑옷, 북채, 다급한 눈빛' });
+  fig('baeseol', { name: '배설', title: '경상우수사', st: 'kr', role: 'captain', look: '지친 중년 얼굴, 어두운 붉은 두정갑, 남색 띠와 해도' });
+  fig('imjin_officer', { name: '김시민의 군관', title: '동래의 소식을 전하는 군관', st: 'kr', role: 'soldier', look: '갓과 푸른 철릭, 문서를 내미는 젊은 군관' });
+  fig('imjin_peddler', { name: '갓장수', title: '피란길의 갓장수', st: 'kr', role: 'merchant', look: '황토색 삼베옷, 갓짐을 진 웃는 노인' });
+  fig('imjin_refugee', { name: '피란민', title: '한양의 피란민', st: 'kr', role: 'maid', g: 'f', look: '해진 저고리와 푸른 치마, 보따리를 안은 중년 여인' });
+  fig('imjin_youth', { name: '젊은 의병', title: '나라를 지키려는 젊은이', st: 'kr', role: 'soldier', look: '흰 머리띠와 삼베옷, 녹색 띠, 창을 쥔 청년' });
+  fig('imjin_soldier', { name: '왜병', title: '왜군 조총병', st: 'jp', role: 'soldier', look: '진가사와 검은 갑옷, 갈색 옷, 조총을 든 병사' });
+  fig('imjin_elder', { name: '피란민 노인', title: '한양에 남은 노인', st: 'kr', role: 'merchant', look: '수척한 얼굴과 흰 수염, 해진 회갈색 옷, 보따리를 안고 앉은 노인' });
+  G.IMJIN_SUPPORT_FIGS = ['yiwan', 'baeseol', 'imjin_officer', 'imjin_peddler', 'imjin_refugee', 'imjin_youth', 'imjin_soldier', 'imjin_elder'];
+
   // ── 동료: 김덕령 (사건으로만)
   var k = { id: 'h_kimdeokryeong', name: '김덕령', g: 'm', style: 'kr', role: 'soldier', tone: 'plain', age: 'young',
     st: [88, 62, 90, 70], sk: { sword: 3, ops: 2 }, lg: { 14: 3 }, fame: 900, wage: 110, y: [1592, 1625], reg: [6],

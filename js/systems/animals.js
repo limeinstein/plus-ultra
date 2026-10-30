@@ -46,6 +46,9 @@
   };
   /** 도시에 들어설 때 (C.arrival): 거리의 마을 사람이 이 고장 동물 이야기를 꺼낸다 */
   AN.town = async function (c) {
+    // 입항 이야기가 이어지는 사이 도시를 떠났으면(출항·성문·장면 바뀜) 말을 걸지 않는다 — C.npc가 지금 도시를 찾지 못해 오류가 나던 것 (2026-10-31 QA)
+    var gs = G.Game.state;
+    if (!c || G.Game.sceneName !== 'city' || !gs || !gs.loc || gs.loc.city !== c.id) return;
     if (!U.chance(AN.TOWN)) return;
     var d = AN.pick(c); if (!d || !G.Disc.addHint(d.id, 'town:' + c.id)) return;
     var C = G.Scenes.city, who = C.npc('vendor', '마을 사람');

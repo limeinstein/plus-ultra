@@ -1,0 +1,393 @@
+{
+  "date": "2026-10-31",
+  "mode": "내장 ImageGen",
+  "portraits": [
+    {
+      "id": "newton",
+      "name": "아이작 뉴턴",
+      "kind": "mate",
+      "key": "portraits/history/newton",
+      "g": "m",
+      "prompt": "Use case: background-extraction. Edit the attached finished Newton knee-up character. Preserve EXACT character, clothing, face, pose, staff, framing, knee-length crop and painted art. Remove ALL brown/gold/black backdrop, haze, gradients, shadows and glow around him. Produce a clean isolated game sprite with a genuinely transparent alpha background at 1024x1536. Outside the character and brass staff every pixel should be fully transparent; character and clothing should be opaque except antialiased contour. No checkerboard painted into the image, no scene, no text, no new objects.",
+      "face_prompt": "Use case: identity-preserve. Create the square FACE PORTRAIT asset of the EXACT same adult Newton from the attached completed knee-up illustration. Same long silver-blond wavy hair, angular clean-shaven face, intense stern grey eyes, age, expression, gaze, head angle, ivory cloak, black-and-gold scholarly clothing and white cravat. Frame head and shoulders with a large readable face, crop below upper chest, generous hair margin, no hands or staff in this square version. Semi-realistic hand-painted historical adventure RPG illustration with visible brushwork and painted planes; not a photograph. Genuine transparent alpha background, no gradient, scenery, text, frame or watermark. 1024x1024 PNG.",
+      "half_source": "artifacts/event-art-20261031/sources/newton_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/newton_face.png",
+      "half_file": "images/portraits/history/newton_half.webp",
+      "face_file": "images/portraits/history/newton.webp",
+      "initial_prompt": "Use case: stylized-concept. Game character portrait, one isolated adult Isaac Newton, knee-up down to the kneecaps, 1024x1536 vertical with genuine transparent alpha. Reference image 1 is the design inspiration: preserve long wavy silver-blond hair, angular clean-shaven intense face, commanding scholarly presence, ivory open sweeping scholar cloak over black-and-gold richly textured seventeenth-century coat, burgundy sash, white loosely tied cravat, ornate brass armillary staff in left hand, right hand extended in a confident explaining gesture. Adapt to the existing game's lush hand-painted semi-realistic historical RPG character style, expressive painted planes, warm light, detailed fabric and metal, not photographic or 3D, not anime. Clearly readable face, entire head and both hands, visible knees along bottom crop, no feet; lively asymmetrical silhouette, cloak opens to show layered tailored clothing. No background, rubble, other characters, magic rays, particles, lettering, watermark or frame. Newton should look formidable and intellectually intense, adult in his thirties/forties. Reference is inspiration rather than copying ruined scenery."
+    },
+    {
+      "id": "anne_hathaway",
+      "name": "앤 해서웨이",
+      "kind": "mate",
+      "key": "portraits/legendary/anne_hathaway",
+      "g": "f",
+      "prompt": "Use case: stylized-concept. Create ONE isolated adult female game character Anne Hathaway (the game's Shakespeare story character), inspired ONLY in facial features, dark wavy hairstyle, composed gentle expression and elegant presence by the attached adult portrait photo. Transform into the existing semi-realistic hand-painted historical adventure RPG style, clearly illustrated painted facial planes, not photographic. Early seventeenth-century English library keeper: deep teal wool-and-silk dress, ivory linen chemise, fitted embroidered bodice with a tasteful square neckline, sleeves softly rolled at wrists, long flowing skirt visible THROUGH THE KNEECAPS at bottom crop. Natural adult body proportions, no sexual emphasis or body alteration from the photo. Dark brown wavy hair half pinned with simple ribbon, expressive hazel eyes, subtle knowing smile, slight three-quarter turn. One arm cradles two leather-bound books, free hand offers a ribbon bookmark as if inviting someone to the shelves. Dynamic graceful asymmetry, rich tactile fabrics, warm golden light, readable large face, hands and entire head visible. Transparent alpha background; no library scenery, backdrop, shadow behind figure, gradient, vignette, lettering, watermark or frame. 1024x1536 knee-length game cutout.",
+      "face_prompt": "Use case: identity-preserve. Create the square FACE PORTRAIT of the EXACT SAME adult woman from the attached completed game illustration: same expressive hazel eyes, delicate arched eyebrows, long dark brown half-pinned wavy hair, slightly knowing gentle smile, same facial shape and three-quarter head angle. Preserve ivory chemise, teal and gold early-seventeenth-century English dress collar and ribbon hair tie. Head and shoulders only, large readable face, crop below upper chest, no hands, no books or bookmarks visible. Match the painterly semi-realistic historical RPG illustration, clearly painted planes rather than photographic skin. Genuine transparent alpha background, no gradient, scenery, text, frame or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/anne_hathaway_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/anne_hathaway_face.png",
+      "half_file": "images/portraits/legendary/anne_hathaway_half.webp",
+      "face_file": "images/portraits/legendary/anne_hathaway.webp"
+    },
+    {
+      "id": "gp_professor",
+      "name": "아리스토텔레스파 교수",
+      "kind": "history",
+      "key": "portraits/history/gp_professor",
+      "g": "m",
+      "design": "An elderly Italian Aristotelian university professor in Pisa around 1590, adult late fifties, balding temples under a soft square black academic cap, long hook nose, narrowed suspicious eyes, thin grey pointed beard. Burgundy academic gown and dark velvet stole with ivory linen collar, scholarly leather belt. Leaning forward arguing, one finger raised beside face and other grips a large closed scholarly volume. Indignant pinched expression, lively caricatured dignity, not a wizard.",
+      "prompt": "Use case: stylized-concept. An elderly Italian Aristotelian university professor in Pisa around 1590, adult late fifties, balding temples under a soft square black academic cap, long hook nose, narrowed suspicious eyes, thin grey pointed beard. Burgundy academic gown and dark velvet stole with ivory linen collar, scholarly leather belt. Leaning forward arguing, one finger raised beside face and other grips a large closed scholarly volume. Indignant pinched expression, lively caricatured dignity, not a wizard. One isolated character in the current game's lush semi-realistic HAND-PAINTED historical adventure RPG illustration style, visible painted facial planes and brush texture, rich cloth detail, warm soft light, not photography or 3D. Vertical 1024x1536 KNEE-UP, bottom edge through kneecaps, no feet, complete headgear with margin and both hands visible, face large and expressive, lively asymmetrical silhouette. Genuine transparent alpha outside character; no gradient, scenery, ground, other people, lettering, frame, watermark or prop label.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of EXACT SAME adult 아리스토텔레스파 교수 in attached finished knee-up art. Preserve his long nose, skeptical stern raised brows, grey pointed beard, age, face identity, head angle, gaze, black academic cap, burgundy gown, ivory collar and painterly lighting. Large face in head-and-shoulders framing, cut below upper chest. No hands, book or pointing finger. Genuine transparent alpha, no background gradient, scenery, text, frame or watermark. Lush semi-realistic hand-painted historical RPG illustration with clearly painted planes, not photographic. 1024x1024 PNG.",
+      "half_source": "artifacts/event-art-20261031/sources/gp_professor_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/gp_professor_face.png",
+      "half_file": "images/portraits/history/gp_professor_half.webp",
+      "face_file": "images/portraits/history/gp_professor.webp"
+    },
+    {
+      "id": "gp_student",
+      "name": "피사 대학의 학생",
+      "kind": "history",
+      "key": "portraits/history/gp_student",
+      "g": "m",
+      "design": "An adult Italian university student in Pisa around 1590, age twenty-two, slim, curly chestnut hair, clean shaven broad cheekbones and bright amber eyes. Ochre-and-olive fitted Renaissance doublet with loose ivory shirt sleeves, open dark blue scholar cloak, leather belt and notebook. Half turning excitedly upward, one arm raised in delighted applause, other holds open notebook and charcoal. Exuberant open smile, clearly adult, no child.",
+      "prompt": "Use case: stylized-concept. An adult Italian university student in Pisa around 1590, age twenty-two, slim, curly chestnut hair, clean shaven broad cheekbones and bright amber eyes. Ochre-and-olive fitted Renaissance doublet with loose ivory shirt sleeves, open dark blue scholar cloak, leather belt and notebook. Half turning excitedly upward, one arm raised in delighted applause, other holds open notebook and charcoal. Exuberant open smile, clearly adult, no child. One isolated adult in the current game's lush semi-realistic HAND-PAINTED historical adventure RPG illustration style, visibly painted facial planes and brush texture, rich cloth, warm light, not photograph or 3D. Vertical 1024x1536 knee-up DOWN THROUGH THE KNEECAPS, breeches at knee visible, no feet. Full head and natural hands visible with safe margin, face large, asymmetrical animated pose. Genuine transparent alpha, no background gradient or scenery, no other people, lettering, frame or watermark.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of exact same adult Pisa student from attached completed game illustration. Preserve curly chestnut hair, amber eyes looking upwards, joyful open smile, face proportions, clean-shaven age twenty-two, head angle, ochre doublet and navy cloak, ivory shirt. Framing head and shoulders, face large, no hands, notebook or charcoal. Same hand-painted semi-realistic historical RPG art with visible brushwork, not photograph. Genuine transparent alpha outside head and shoulders, no gradient, scenery, lettering, frame or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/gp_student_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/gp_student_face.png",
+      "half_file": "images/portraits/history/gp_student_half.webp",
+      "face_file": "images/portraits/history/gp_student.webp"
+    },
+    {
+      "id": "gp_sexton",
+      "name": "대성당 성당지기",
+      "kind": "history",
+      "key": "portraits/history/gp_sexton",
+      "g": "m",
+      "design": "An adult cathedral sexton in Pisa around 1583, sturdy man in his fifties, round ruddy face, salt-and-pepper close beard, kindly bemused small eyes. Plain grey-brown wool tunic beneath long olive tabard, rolled linen cuffs, small worn skullcap, heavy brass cathedral keys at belt. One hand cups a brass oil lamp low, other touches chest while listening to a young scholar talk about a swinging lamp. Gentle amused half-smile and head tilt, no bishop vestments, no modern uniform.",
+      "prompt": "Use case: stylized-concept. An adult cathedral sexton in Pisa around 1583, sturdy man in his fifties, round ruddy face, salt-and-pepper close beard, kindly bemused small eyes. Plain grey-brown wool tunic beneath long olive tabard, rolled linen cuffs, small worn skullcap, heavy brass cathedral keys at belt. One hand cups a brass oil lamp low, other touches chest while listening to a young scholar talk about a swinging lamp. Gentle amused half-smile and head tilt, no bishop vestments, no modern uniform. ONE isolated adult character in lush semi-realistic HAND-PAINTED historical adventure RPG illustration matching the current game, visible brush strokes and painted facial planes, warm light, tactile modest textiles, not photo or 3D. Vertical 1024x1536 from full head to knees, bottom crop at kneecaps, no feet. Both hands and all headgear visible, natural asymmetrical stance with large expressive face. Genuine transparent alpha outside character, no background gradient, shadows behind him, scenery, other people, text, watermark or border.",
+      "face_prompt": "Use case: identity-preserve. Make a square head-and-shoulders FACE PORTRAIT of EXACT SAME adult cathedral sexton from attached completed game art. Same round ruddy face, warm amused small eyes looking aside, salt-grey close beard, head tilt, kindly smile, brown skullcap, olive tabard, grey tunic and ivory collar. Keep age and identity and painterly warm lighting. Large readable face with whole cap, no hands, lamp or keys. Clearly hand-painted semi-realistic historical RPG illustration, not photograph. Genuine transparent alpha background, no gradient, scenery, lettering, border or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/gp_sexton_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/gp_sexton_face.png",
+      "half_file": "images/portraits/history/gp_sexton_half.webp",
+      "face_file": "images/portraits/history/gp_sexton.webp"
+    },
+    {
+      "id": "globe_audience",
+      "name": "관객",
+      "kind": "history",
+      "key": "portraits/history/globe_audience",
+      "g": "m",
+      "design": "An adult London Globe theatre spectator around 1613, expressive stocky man early thirties with wavy auburn hair and short mustache, broad smiling face with one tooth slightly uneven. Well worn rust leather jerkin over ivory linen shirt, blue breeches and teal slashed shoulder mantle, soft feathered cap tilted jauntily. Leaning back laughing at a stage joke, one palm raised in applause, other loosely holds a small pewter drinking cup low. Distinctive lively eyes and delighted face.",
+      "prompt": "Use case: stylized-concept. An adult London Globe theatre spectator around 1613, expressive stocky man early thirties with wavy auburn hair and short mustache, broad smiling face with one tooth slightly uneven. Well worn rust leather jerkin over ivory linen shirt, blue breeches and teal slashed shoulder mantle, soft feathered cap tilted jauntily. Leaning back laughing at a stage joke, one palm raised in applause, other loosely holds a small pewter drinking cup low. Distinctive lively eyes and delighted face. ONE isolated adult in lush semi-realistic HAND-PAINTED historical adventure RPG illustration matching current character art, rich warm cloth and metal, visible painted facial planes and brush texture, not photo or 3D. Portrait canvas 1024x1536, whole head to kneecaps, breeches and knees at lower crop, no feet. Safe margin around cap and both hands, face large. Natural exuberant dynamic pose and asymmetrical silhouette. Genuine transparent alpha, no background gradient, scene, other people, lettering, watermark or border.",
+      "face_prompt": "Use case: identity-preserve. Square head-and-shoulders FACE PORTRAIT asset of exact same adult Globe audience man in attached game illustration. Same auburn wavy hair, short mustache, broad ruddy face, laughing open mouth, delighted eyes looking sideways-up, tilted teal feathered cap, rust leather jerkin and ivory collar. Preserve face identity, expression, head tilt and age. Large readable face, whole cap and feather in crop with some margin, no hands or cup. Lush semi-realistic hand-painted historical RPG illustration, painted facial planes, not photo. Genuine transparent alpha, no gradient, backdrop, scenery, text, frame or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/globe_audience_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/globe_audience_face.png",
+      "half_file": "images/portraits/history/globe_audience_half.webp",
+      "face_file": "images/portraits/history/globe_audience.webp"
+    },
+    {
+      "id": "globe_apple_seller",
+      "name": "사과 파는 아낙",
+      "kind": "history",
+      "key": "portraits/history/globe_apple_seller",
+      "g": "f",
+      "design": "An original fictional adult London apple seller around 1613, age thirty-five, curvaceous full-busted sturdy figure with adult proportions, warm freckled face, hazel eyes and auburn curls loosely pinned under a small ivory linen cap. Russet and golden-ochre fitted bodice, generous open square neckline with tasteful visible cleavage, loose ivory chemise sleeves, rich green skirt and apron gathered at hip. No nudity, opaque period fabrics. Holds a wicker basket of apples against one hip, raises a red apple toward viewer with playful confident knowing smile and one eyebrow raised. More spirited and less conservative styling, natural body and lively merchant gesture, not based on a real person.",
+      "prompt": "Use case: stylized-concept. An original fictional adult London apple seller around 1613, age thirty-five, curvaceous full-busted sturdy figure with adult proportions, warm freckled face, hazel eyes and auburn curls loosely pinned under a small ivory linen cap. Russet and golden-ochre fitted bodice, generous open square neckline with tasteful visible cleavage, loose ivory chemise sleeves, rich green skirt and apron gathered at hip. No nudity, opaque period fabrics. Holds a wicker basket of apples against one hip, raises a red apple toward viewer with playful confident knowing smile and one eyebrow raised. More spirited and less conservative styling, natural body and lively merchant gesture, not based on a real person. ONE isolated adult character, lush semi-realistic HAND-PAINTED historical adventure RPG style matching existing game characters, visible painted facial planes and brush texture, rich fabric and wicker detail, warm soft light, not photograph or 3D. Portrait 1024x1536, whole head to kneecaps at bottom edge, no feet; all hands and cap included, natural lively three-quarter stance, large expressive face. Genuine transparent alpha background, no gradient, scenery, other people, lettering, frame or watermark.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of EXACT SAME original fictional adult apple seller in attached completed game illustration. Preserve warm freckled face, hazel eyes, playful knowing smile, raised brow, auburn curls and ivory linen cap, same age thirty-five, head angle and face identity. Head and shoulders only with large readable face, include collar of russet-gold bodice and ivory chemise, no hands, basket or apples. Clearly hand-painted semi-realistic historical RPG art with warm painterly facial planes, not photograph. Genuine transparent alpha, no gradient, scenery, lettering, border or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/globe_apple_seller_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/globe_apple_seller_face.png",
+      "half_file": "images/portraits/history/globe_apple_seller_half.webp",
+      "face_file": "images/portraits/history/globe_apple_seller.webp"
+    },
+    {
+      "id": "sim_father",
+      "name": "심 봉사",
+      "kind": "history",
+      "key": "portraits/history/sim_father",
+      "g": "m",
+      "design": "Sim Cheong's blind father from Korean folktale, poor adult older Korean man in his late fifties, gaunt weathered face, milky unfocused closed eyes and sparse long salt-white beard, anxious brows. Patched pale grey hemp hanbok robe with faded charcoal vest and simple white headband around topknot, straw rope belt. Bent slightly forward, one hand grips wooden walking stick, other reaches open searching for his daughter, mouth slightly open calling. Dignified vulnerable emotional expression, expressive painterly hands, no caricature of disability.",
+      "prompt": "Use case: stylized-concept. Sim Cheong's blind father from Korean folktale, poor adult older Korean man in his late fifties, gaunt weathered face, milky unfocused closed eyes and sparse long salt-white beard, anxious brows. Patched pale grey hemp hanbok robe with faded charcoal vest and simple white headband around topknot, straw rope belt. Bent slightly forward, one hand grips wooden walking stick, other reaches open searching for his daughter, mouth slightly open calling. Dignified vulnerable emotional expression, expressive painterly hands, no caricature of disability. ONE isolated adult in lush semi-realistic HAND-PAINTED Korean historical adventure RPG character style matching current game portraits, expressive painted facial planes and brushwork, tactile hemp cloth, warm diffuse light, not photograph or 3D. Vertical 1024x1536 from complete head to kneecaps at bottom crop, no feet, both hands and cane upper part visible with safe margin. Large readable face, asymmetrical emotional pose. Genuine transparent alpha background, no gradient, scenery, ground, other people, lettering, watermark or border.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of exact same adult Sim Cheong's father in attached completed knee-up illustration. Preserve gaunt weathered Korean face, long sparse white beard, blind unfocused pale eyes, deeply worried brows, parted calling mouth, head lifted slightly, white cloth headband and grey topknot, patched ivory hemp collar and charcoal vest. Same identity, age, expression and gaze. Large head-and-shoulders face crop, no hands or cane. Lush semi-realistic hand-painted historical RPG art, visible painted planes and brush texture, not photo. Genuine transparent alpha, no gradient, backdrop, scenery, text, border or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/sim_father_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/sim_father_face.png",
+      "half_file": "images/portraits/history/sim_father_half.webp",
+      "face_file": "images/portraits/history/sim_father.webp"
+    },
+    {
+      "id": "sim_boatman",
+      "name": "남경 뱃사람 두목",
+      "kind": "history",
+      "key": "portraits/history/sim_boatman",
+      "g": "m",
+      "design": "A fictional adult Ming Chinese merchant ship leader from Nanjing in Korean Sim Cheong folktale, muscular broad shouldered man in his forties, square jaw, tanned skin, short black forked beard and heavy skeptical brows. Weathered indigo crossed-collar sea coat with rust sleeves, mustard cloth waist sash and practical leather belt, dark navy headcloth over topknot. Holds a coiled mooring rope in one hand low, other hand opens toward an unseen ship insisting on departure, stern impatient expression, body twisted in forceful merchant stance. No emperor robes, no Japanese armor.",
+      "prompt": "Use case: stylized-concept. A fictional adult Ming Chinese merchant ship leader from Nanjing in Korean Sim Cheong folktale, muscular broad shouldered man in his forties, square jaw, tanned skin, short black forked beard and heavy skeptical brows. Weathered indigo crossed-collar sea coat with rust sleeves, mustard cloth waist sash and practical leather belt, dark navy headcloth over topknot. Holds a coiled mooring rope in one hand low, other hand opens toward an unseen ship insisting on departure, stern impatient expression, body twisted in forceful merchant stance. No emperor robes, no Japanese armor. ONE isolated adult in lush semi-realistic HAND-PAINTED East Asian historical adventure RPG art matching current game portraits, visibly painted facial planes and brush texture, warm light, rich worn cloth and rope texture, not photo or 3D. 1024x1536 portrait from full head THROUGH KNEECAPS at bottom crop, no feet; both hands and headwrap visible with safety margin, large readable face, energetic asymmetry. Genuine transparent alpha background, no gradient, scenery, water, ship, other people, lettering, watermark or frame.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of exact same adult Ming Chinese merchant ship leader from attached finished game illustration. Preserve broad tanned square jaw, short black forked beard and mustache, stern impatient eyes looking sideways, heavy brows, navy headcloth and topknot, indigo sea coat and rust shirt collar. Same face identity, age, angle, expression and warm painterly light. Head-and-shoulders framing with large face, no hands or rope. Clearly hand-painted semi-realistic historical adventure RPG art, not photography. Genuine transparent alpha, no background, gradient, scenery, text, frame or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/sim_boatman_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/sim_boatman_face.png",
+      "half_file": "images/portraits/history/sim_boatman_half.webp",
+      "face_file": "images/portraits/history/sim_boatman.webp"
+    },
+    {
+      "id": "burbage",
+      "name": "리처드 버비지",
+      "kind": "history",
+      "key": "portraits/history/burbage",
+      "g": "m",
+      "design": "Richard Burbage the English Globe theatre's leading actor around 1613, adult man in his forties, powerful barrel chest, broad square ruddy face, dark wavy hair, full close dark beard, resonant expressive brown eyes. Stage costume for playing Henry VIII: rich crimson velvet mantle over dark gold brocade doublet and knee breeches, small theatrical Tudor gold crown on a dark flat cap, white linen ruff. One hand extends outward in a grand declaiming gesture, other lightly holds a rolled play script. Regal stage confidence, hearty open speaking mouth, obviously a male actor and not a woman.",
+      "prompt": "Use case: stylized-concept. Richard Burbage the English Globe theatre's leading actor around 1613, adult man in his forties, powerful barrel chest, broad square ruddy face, dark wavy hair, full close dark beard, resonant expressive brown eyes. Stage costume for playing Henry VIII: rich crimson velvet mantle over dark gold brocade doublet and knee breeches, small theatrical Tudor gold crown on a dark flat cap, white linen ruff. One hand extends outward in a grand declaiming gesture, other lightly holds a rolled play script. Regal stage confidence, hearty open speaking mouth, obviously a male actor and not a woman. ONE isolated adult character in lush semi-realistic HAND-PAINTED historical adventure RPG style matching current game portraits, visible painted facial planes and brush texture, warm theatrical light, rich cloth and brass, not photograph or 3D. 1024x1536 portrait from full head through kneecaps, no feet; full crown, hands and script visible with margin. Face large and readable, dramatic asymmetrical theatrical gesture. Genuine transparent alpha background, no gradient, scenery, stage, other people, text, watermark or frame.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT asset of EXACT SAME adult male Richard Burbage from attached finished knee-up art. Preserve broad ruddy face, dark wavy hair and close full beard, expressive brown eyes looking aside, open declaiming mouth, head tilt, stage gold crown on black cap, ivory ruff and crimson velvet mantle. Large readable face, whole crown with margin, shoulders only, no hands or script. Same semi-realistic hand-painted historical RPG art, visible painted planes, not photograph. Genuine transparent alpha, no gradient, backdrop, scenery, text, border or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/burbage_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/burbage_face.png",
+      "half_file": "images/portraits/history/burbage_half.webp",
+      "face_file": "images/portraits/history/burbage.webp"
+    },
+    {
+      "id": "nt_halley",
+      "name": "에드먼드 핼리",
+      "kind": "history",
+      "key": "portraits/history/nt_halley",
+      "g": "m",
+      "design": "Edmond Halley, adult English astronomer in his early thirties around 1686, open friendly oval face, lively blue-grey eyes, long shoulder-length wavy chestnut hair, clean-shaven face with optimistic smile. Deep royal-blue late-seventeenth-century long coat with restrained brass buttons, cream waistcoat, white loosely tied linen cravat and knee breeches. Leans forward presenting a bundle of manuscript pages, other hand holds unfolded hand-drawn comet orbit diagram without readable labels. Scholarly warm enthusiasm, no sword, no plumed hat, no warrior armor.",
+      "prompt": "Use case: stylized-concept. Edmond Halley, adult English astronomer in his early thirties around 1686, open friendly oval face, lively blue-grey eyes, long shoulder-length wavy chestnut hair, clean-shaven face with optimistic smile. Deep royal-blue late-seventeenth-century long coat with restrained brass buttons, cream waistcoat, white loosely tied linen cravat and knee breeches. Leans forward presenting a bundle of manuscript pages, other hand holds unfolded hand-drawn comet orbit diagram without readable labels. Scholarly warm enthusiasm, no sword, no plumed hat, no warrior armor. ONE isolated adult in lush semi-realistic HAND-PAINTED historical adventure RPG illustration matching current game character style, visible painted facial planes and brushwork, rich fabric and paper detail, warm soft light, not photo or 3D. 1024x1536 vertical from full head to THROUGH KNEECAPS at lower edge, no feet. Both hands and head safe within frame; face large, open welcoming lively stance. Genuine transparent alpha, no background gradient, scenery, people, lettering, diagram labels, frame or watermark.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of exact same adult Edmond Halley in attached completed knee-up illustration. Preserve long wavy chestnut hair, clean-shaven friendly oval face, optimistic toothy smile, blue-grey eyes, face proportions, age and three-quarter head angle. Same royal-blue coat, ivory cravat and cream waistcoat collar. Head and shoulders, large readable face, safe hair margin, no hands, manuscript or diagram. Lush semi-realistic HAND-PAINTED historical RPG art, visible painted planes, not photograph. Genuine transparent alpha, no background gradient, scenery, text, frame or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/nt_halley_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/nt_halley_face.png",
+      "half_file": "images/portraits/history/nt_halley_half.webp",
+      "face_file": "images/portraits/history/nt_halley.webp"
+    },
+    {
+      "id": "nt_hooke",
+      "name": "로버트 후크",
+      "kind": "history",
+      "key": "portraits/history/nt_hooke",
+      "g": "m",
+      "design": "Robert Hooke, adult English experimental scientist in his early fifties around 1686, lean angular face with long nose and intense suspicious dark eyes, untidy shoulder-length dark hair with grey strands, narrow black mustache and sparse chin beard. Slightly hunched back, worn dark-brown long coat over charcoal waistcoat, rumpled open ivory collar, knee breeches. A small brass microscope and metal coil spring protrude from deep coat pockets. One index finger raised accusingly as he argues, other hand clutches rolled letter. Temperamental sharp expression, emphatic dynamic pose, clearly male scientist, no dress or female face.",
+      "prompt": "Use case: stylized-concept. Robert Hooke, adult English experimental scientist in his early fifties around 1686, lean angular face with long nose and intense suspicious dark eyes, untidy shoulder-length dark hair with grey strands, narrow black mustache and sparse chin beard. Slightly hunched back, worn dark-brown long coat over charcoal waistcoat, rumpled open ivory collar, knee breeches. A small brass microscope and metal coil spring protrude from deep coat pockets. One index finger raised accusingly as he argues, other hand clutches rolled letter. Temperamental sharp expression, emphatic dynamic pose, clearly male scientist, no dress or female face. ONE isolated adult in lush semi-realistic HAND-PAINTED historical adventure RPG illustration matching current game portraits, visibly painted facial planes and brushwork, rich worn fabric and brass detail, warm soft light, not photograph or 3D. 1024x1536 vertical from complete head THROUGH KNEECAPS at lower crop, no feet; all hands and top of head inside safe margin, face large and expressive, crooked asymmetrical silhouette. Genuine transparent alpha background, no gradient, scene, other people, lettering, watermark or frame.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of EXACT SAME adult male Robert Hooke from attached completed game illustration. Same lean angular long-nosed face, intense suspicious dark eyes, thin black mustache and sparse pointed chin beard, untidy shoulder-length brown-grey hair, furrowed brows, indignant tight mouth, head angle and age. Same worn brown coat and rumpled ivory open collar. Head and shoulders with large face, no finger, hands, letter or tools. Semi-realistic hand-painted historical RPG illustration with visible painterly facial planes, not photo. Genuine transparent alpha, no gradient, scenery, lettering, frame or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/nt_hooke_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/nt_hooke_face.png",
+      "half_file": "images/portraits/history/nt_hooke_half.webp",
+      "face_file": "images/portraits/history/nt_hooke.webp"
+    },
+    {
+      "id": "nt_broker",
+      "name": "익스체인지 앨리의 중개인",
+      "kind": "history",
+      "key": "portraits/history/nt_broker",
+      "g": "m",
+      "design": "An original fictional adult London stockbroker in Exchange Alley around 1720, plump man in his forties, fleshy bright ruddy face, small shrewd dark eyes, broad sly salesman's grin, powdered curled periwig with dark ribbon. Flashy burgundy knee-length coat open over ornate gold-button mustard waistcoat, white neckcloth, knee breeches, quill tucked behind ear. One hand fans several stock certificates with ornamental blank seals and no readable writing, other beckons persuasively palm upward. Greedy ebullient merchant character, clearly male, not a noble lady.",
+      "prompt": "Use case: stylized-concept. An original fictional adult London stockbroker in Exchange Alley around 1720, plump man in his forties, fleshy bright ruddy face, small shrewd dark eyes, broad sly salesman's grin, powdered curled periwig with dark ribbon. Flashy burgundy knee-length coat open over ornate gold-button mustard waistcoat, white neckcloth, knee breeches, quill tucked behind ear. One hand fans several stock certificates with ornamental blank seals and no readable writing, other beckons persuasively palm upward. Greedy ebullient merchant character, clearly male, not a noble lady. ONE isolated adult in lush semi-realistic HAND-PAINTED historical adventure RPG character style matching current game, visible painted facial planes and brushwork, rich cloth and paper, warm soft light, not photo or 3D. 1024x1536 portrait from whole wig THROUGH KNEECAPS at bottom crop, no feet. Both hands and certificates safe within frame; face large, confident forward lean and lively asymmetry. Genuine transparent alpha background, no gradient, scenery, crowds, lettering, numbers, labels, frame or watermark.",
+      "face_prompt": "Use case: identity-preserve. Square FACE PORTRAIT of EXACT SAME original fictional adult male stockbroker in attached finished game illustration. Preserve plump ruddy face, shrewd dark eyes, greedy broad smile, powdered white curled wig tied with black ribbon, quill behind ear, face proportions, age, head tilt. Same burgundy coat, mustard waistcoat and white neckcloth collar. Head-and-shoulders large readable face, whole wig safe in frame, no hands or certificates. Same lush semi-realistic hand-painted historical RPG art with painted facial planes, not photo. Genuine transparent alpha, no gradient, backdrop, scenery, lettering, border or watermark. 1024x1024.",
+      "half_source": "artifacts/event-art-20261031/sources/nt_broker_half.png",
+      "face_source": "artifacts/event-art-20261031/sources/nt_broker_face.png",
+      "half_file": "images/portraits/history/nt_broker_half.webp",
+      "face_file": "images/portraits/history/nt_broker.webp"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "galileo_lamp",
+      "name": "흔들리는 대성당의 등불",
+      "prompt": "Pisa cathedral interior around 1583. Younger adult Galileo, age nineteen or twenty, dark chestnut hair and only faint short beard, retaining facial proportions and thoughtful eyes of referenced older Galileo, wears plain black scholar gown and ivory linen collar, NO telescope. He places two fingertips against his wrist to count pulse while intently watching a large bronze oil chandelier suspended by a long chain, caught off-center in a swing. Referenced kindly stocky olive-tabarded sexton with keys at belt stands beside him holding a small brass lamp, amused head tilt. Anonymous adult foreign sea captain from behind offers a small sand hourglass. Striped marble columns, high vaulted roof and soft afternoon sunbeams, intellectual wonder and pendulum motion, no magic or light trails. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: galileo, gp_sexton. Galileo reference is older: portray a younger adult version as specified, same face family, no long grey beard.",
+      "references": [
+        {
+          "id": "galileo",
+          "source": "artifacts/event-art-20261031/references/galileo.png"
+        },
+        {
+          "id": "gp_sexton",
+          "source": "artifacts/event-art-20261031/references/gp_sexton.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/galileo_lamp.png",
+      "file": "images/legend-events/galileo_lamp.webp"
+    },
+    {
+      "id": "galileo_tower",
+      "name": "사탑에서 놓은 두 공",
+      "prompt": "Pisa leaning bell tower around 1590, compelling wide view along the high open marble belfry balcony with lower levels and cathedral square visible below to establish its height. Young adult Galileo around twenty-six, recognizable younger facial proportions of referenced Galileo, short dark beard and brown hair, black scholar gown and ivory collar, NO telescope, leans safely over stone balustrade after simultaneously releasing a dark large iron cannonball and a small musket ball, both falling side by side just below his open hands. An anonymous foreign sea captain in rear three-quarter view beside him has also released his hand. Below in sunlit square, referenced burgundy-gowned suspicious professor protests and referenced curly-haired ochre-and-blue adult student raises arm excitedly among scholars. Clearly distinct two balls, educational dramatic discovery, no injury or falling people, no magic. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: galileo, gp_professor, gp_student. Galileo reference is older: portray a younger adult version as specified with smooth face, dark hair and short beard, no grey beard.",
+      "references": [
+        {
+          "id": "galileo",
+          "source": "artifacts/event-art-20261031/references/galileo.png"
+        },
+        {
+          "id": "gp_professor",
+          "source": "artifacts/event-art-20261031/references/gp_professor.png"
+        },
+        {
+          "id": "gp_student",
+          "source": "artifacts/event-art-20261031/references/gp_student.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/galileo_tower.png",
+      "file": "images/legend-events/galileo_tower.webp"
+    },
+    {
+      "id": "galileo_feather",
+      "name": "깃털과 총알",
+      "prompt": "At the marble balustrade of Pisa leaning bell tower around 1590, young adult Galileo with recognizable younger facial proportions of referenced Galileo, short dark beard and brown hair, plain black scholar gown and ivory collar, NO telescope. He smiles knowingly while releasing a small iron musket ball that drops straight down and a single white goose feather that floats slowly beside his outstretched other hand, capture natural different motion without diagrams. An anonymous adult foreign sea captain watches beside him from back/side. Through the arches and railings, the cathedral square far below shows the burgundy-robed referenced professor looking argumentative and ochre-and-blue adult student cheering. Golden afternoon breeze, scientific curiosity, no zero gravity, no modern apparatus, no text. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: galileo, gp_professor, gp_student. Galileo reference is older: portray a younger adult version as specified with smooth face, dark brown hair and short dark beard, no grey beard. Make feather and small ball clearly visible against sky near his hands; ball already lower than feather.",
+      "references": [
+        {
+          "id": "galileo",
+          "source": "artifacts/event-art-20261031/references/galileo.png"
+        },
+        {
+          "id": "gp_professor",
+          "source": "artifacts/event-art-20261031/references/gp_professor.png"
+        },
+        {
+          "id": "gp_student",
+          "source": "artifacts/event-art-20261031/references/gp_student.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/galileo_feather.png",
+      "file": "images/legend-events/galileo_feather.webp"
+    },
+    {
+      "id": "globe_anne",
+      "name": "앤이 런던에 온 날",
+      "prompt": "Bankside London outside the timber-and-plaster Globe theatre around 1613, Thames masts and a theatre flag in background. Referenced Anne in teal-and-gold early-seventeenth-century dress and ivory chemise, natural adult proportions, dark wavy hair half tied, carries two leather-bound books under one arm and smiles firmly while greeting referenced Shakespeare in black-and-gold doublet with white lace ruff. Shakespeare scratches his head in sheepish affectionate surprise and opens his free hand toward an anonymous foreign captain viewed from behind at frame edge. Referenced auburn-haired apple seller at a small wicker fruit stall smiles knowingly in the middle distance. Lively welcoming street scene, warm early summer light, expressive faces. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: anne_hathaway, shakespeare, globe_apple_seller.",
+      "references": [
+        {
+          "id": "anne_hathaway",
+          "source": "artifacts/event-art-20261031/references/anne_hathaway.png"
+        },
+        {
+          "id": "shakespeare",
+          "source": "artifacts/event-art-20261031/references/shakespeare.png"
+        },
+        {
+          "id": "globe_apple_seller",
+          "source": "artifacts/event-art-20261031/references/globe_apple_seller.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/globe_anne.png",
+      "file": "images/legend-events/globe_anne.webp"
+    },
+    {
+      "id": "globe_fire",
+      "name": "글로브 극장의 불",
+      "prompt": "Inside the open-air circular Globe theatre London afternoon 29 June 1613. The thatched roof of wooden galleries catches fire from a small stage cannon, high orange flames and smoky sunlight above, no gore or dead bodies. Referenced male actor Burbage wearing stage Tudor crown and crimson mantle stands on raised stage alarmed with rolled script. Referenced Shakespeare in black-and-gold doublet leads referenced Anne in teal dress toward exit, her books held close. Foreground referenced laughing auburn male spectator now startled as small smoldering patch appears at hem of his breeches; referenced auburn female apple seller quickly pours ale from a ceramic jug to extinguish it, clever brave expression. Sailors guide crowd orderly through two arch exits. Dramatic wide action composition, everyone's clothing opaque, no graphic burns or exposed body. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: anne_hathaway, shakespeare, burbage, globe_audience, globe_apple_seller.",
+      "references": [
+        {
+          "id": "anne_hathaway",
+          "source": "artifacts/event-art-20261031/references/anne_hathaway.png"
+        },
+        {
+          "id": "shakespeare",
+          "source": "artifacts/event-art-20261031/references/shakespeare.png"
+        },
+        {
+          "id": "burbage",
+          "source": "artifacts/event-art-20261031/references/burbage.png"
+        },
+        {
+          "id": "globe_audience",
+          "source": "artifacts/event-art-20261031/references/globe_audience.png"
+        },
+        {
+          "id": "globe_apple_seller",
+          "source": "artifacts/event-art-20261031/references/globe_apple_seller.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/globe_fire.png",
+      "file": "images/legend-events/globe_fire.webp"
+    },
+    {
+      "id": "globe_thames",
+      "name": "템스 강가의 밤",
+      "prompt": "Quiet Thames riverbank at night London 1613 after the Globe fire. Referenced Shakespeare in black-and-gold doublet and white ruff sits on worn stone steps tenderly holding referenced Anne's hand. Anne in teal-and-gold dress with ivory chemise, natural adult proportions, dark wavy hair a little loosened, looks at him with emotional relief and a small tear, lightly soot-marked cheeks, no injuries. Scorched oak manuscript chest rests between their knees with handwritten plays peeking out. Anonymous foreign captain sits nearby in three-quarter back view listening respectfully. Across dark water the burnt theatre glows with dying embers, small Thames boats and city rooftops under moonlit smoke. Intimate heartfelt reunion, fully clothed, no sexual framing. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: anne_hathaway, shakespeare.",
+      "references": [
+        {
+          "id": "anne_hathaway",
+          "source": "artifacts/event-art-20261031/references/anne_hathaway.png"
+        },
+        {
+          "id": "shakespeare",
+          "source": "artifacts/event-art-20261031/references/shakespeare.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/globe_thames.png",
+      "file": "images/legend-events/globe_thames.webp"
+    },
+    {
+      "id": "globe_deck",
+      "name": "갑판 위의 무대",
+      "prompt": "Sunset aboard an age-of-sail wooden ship on calm open sea. Referenced Shakespeare in familiar black-and-gold doublet, white lace ruff and short beard stands on low foredeck dramatically reciting a play, one arm extended and script in other hand. Referenced Anne in familiar teal-and-gold period dress and ivory chemise, natural adult proportions, sits on a coil of thick rope singing with a gentle knowing smile, one hand keeping rhythm and a leather-bound book resting in lap. Relaxed adult sailors of varied backgrounds sit around them listening, a helmsman smiles, sails and rigging catch golden breeze. A shipboard theatre with joyful expressive gestures, warm orange dusk and deep blue sea, no instruments not implied, no lettering. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: anne_hathaway, shakespeare.",
+      "references": [
+        {
+          "id": "anne_hathaway",
+          "source": "artifacts/event-art-20261031/references/anne_hathaway.png"
+        },
+        {
+          "id": "shakespeare",
+          "source": "artifacts/event-art-20261031/references/shakespeare.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/globe_deck.png",
+      "file": "images/legend-events/globe_deck.webp"
+    },
+    {
+      "id": "nt_apple",
+      "name": "울즈소프의 사과나무",
+      "prompt": "Woolsthorpe Lincolnshire, summer 1666. Low stone farmhouse, orchard, dry stone wall and rolling green countryside. A younger adult version of the referenced Newton sits under an apple tree, distinctive angular clean-shaven face and long silver-blond waves, simplified black-and-gold scholar coat with flowing ivory cloak and white cravat. An open notebook lies on his knee, he lifts a freshly fallen red apple and looks thoughtfully toward a faint daytime moon. His brass armillary staff rests against the tree, small and plausible as this game's scholarly accessory, no magic. Anonymous sea captain and one sailor watch over the stone wall from behind. Warm quiet afternoon light, sense of discovery. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: newton.",
+      "references": [
+        {
+          "id": "newton",
+          "source": "artifacts/event-art-20261031/references/newton.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/nt_apple.png",
+      "file": "images/legend-events/nt_apple.webp"
+    },
+    {
+      "id": "nt_principia",
+      "name": "『프린키피아』의 원고",
+      "prompt": "London Gresham College Royal Society meeting room around 1686, candlelit long oak table. Referenced Newton with silver-blond long hair and ivory cloak leans sternly over orbital manuscript diagrams. Referenced friendly Halley in royal blue coat eagerly spreads a thick bundle of handwritten manuscript across the table for an anonymous foreign sea captain seen from behind. Referenced wiry dark-haired Hooke in worn brown coat stands at doorway raising an accusing finger and clutching a letter, microscope and spring tucked in his pocket. Stacks of unsold fish natural-history books with small fish engravings, quills, compass and copper instrument on table. Animated scholarly disagreement, no weapons. Warm candlelight against blue window dusk, clear distinct faces. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: newton, nt_halley, nt_hooke.",
+      "references": [
+        {
+          "id": "newton",
+          "source": "artifacts/event-art-20261031/references/newton.png"
+        },
+        {
+          "id": "nt_halley",
+          "source": "artifacts/event-art-20261031/references/nt_halley.png"
+        },
+        {
+          "id": "nt_hooke",
+          "source": "artifacts/event-art-20261031/references/nt_hooke.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/nt_principia.png",
+      "file": "images/legend-events/nt_principia.webp"
+    },
+    {
+      "id": "nt_bubble",
+      "name": "익스체인지 앨리",
+      "prompt": "London Exchange Alley coffeehouse lane around 1720, packed stock-trading crowd in early eighteenth-century clothes, paper certificates waved in the air and money bags at tables, an unlettered dark chalkboard on a wall. Referenced pudgy white-wigged male broker in burgundy-and-gold coat fans certificates and loudly beckons buyers. To one side an elderly version of the referenced Newton, same angular face and flowing silver hair now older with wrinkles, crimson outer coat over familiar black-and-gold waistcoat, ivory cloak draped on chair, sits pale and troubled with a crumpled certificate. Frenzied optimism mixed with anxious foreshadowing, strong crowd movement, no modern suits or printed graphs, no legible writing. Use case: historical-scene / game event key art. Very wide landscape PANORAMA, aspect ratio 2.25:1, 1881x836, fill entire frame with painted scene, no letterboxing. Lush semi-realistic HAND-PAINTED historical adventure RPG illustration consistent with attached game character references, visible brush texture and painted facial planes, not photograph, not 3D or anime. Reference images identify the named characters in order; preserve distinctive faces and costume motifs, changing pose/expression naturally for this scene and age only where specified. Characters large enough to recognize, lively storytelling gestures, strong depth and environmental detail. No readable letters, numbers, subtitles, captions, border, UI, watermark or modern objects. Opaque complete background. Attached character references in order: newton, nt_broker.",
+      "references": [
+        {
+          "id": "newton",
+          "source": "artifacts/event-art-20261031/references/newton.png"
+        },
+        {
+          "id": "nt_broker",
+          "source": "artifacts/event-art-20261031/references/nt_broker.png"
+        }
+      ],
+      "source": "artifacts/event-art-20261031/sources/nt_bubble.png",
+      "file": "images/legend-events/nt_bubble.webp"
+    }
+  ],
+  "user_references": [
+    {
+      "id": "newton",
+      "source": "artifacts/event-art-20261031/references/newton_user_reference.png"
+    },
+    {
+      "id": "anne_hathaway",
+      "source": "artifacts/event-art-20261031/references/anne_user_reference.png"
+    }
+  ]
+}

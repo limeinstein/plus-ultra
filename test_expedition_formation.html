@@ -7,7 +7,7 @@
 body{background:#172a29;color:#eee5ce;font:16px 'Malgun Gothic',sans-serif;margin:0;padding:28px}h1{margin:0 0 10px;font-size:28px}p{color:#b9cbc1;line-height:1.6}.bar{display:flex;gap:18px;flex-wrap:wrap;margin:22px 0;padding:18px;background:#263e39;border-radius:8px}label{display:flex;align-items:center;gap:8px}select,button{padding:8px;color:#f8edd8;background:#314f44;border:1px solid #698670;border-radius:5px;font:inherit}button{cursor:pointer}#grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(410px,1fr));gap:18px}article{border:1px solid #587060;border-radius:8px;overflow:hidden;background:#24392f}h2{font-size:18px;margin:16px}canvas{display:block;width:100%;height:auto}.meta{padding:12px 16px;color:#bdcfbd}a{color:#e8d598;text-decoration:none}footer{margin-top:24px;color:#a6beac}
 </style>
 <h1>육상 탐험 · 다이아 편대</h1>
-<p>선장이 앞장서고 동료들이 좌우와 후미에서 따라갑니다. 방향·정지·재출발·회전과 4명보다 작은 탐험대를 비교할 수 있습니다.</p>
+<p>이 화면은 이동 수단별 원화·자세 비교입니다. <a href="test_expedition_following.html">실제로 제독을 따라 걷고 모퉁이를 도는 모습 보기</a></p>
 <div class="bar">
 <label>방향 <select id="direction"><option value="0" selected>북 ↑</option><option value="1">북동 ↗</option><option value="2">동 →</option><option value="3">남동 ↘</option><option value="4">남 ↓</option><option value="5">남서 ↙</option><option value="6">서 ←</option><option value="7">북서 ↖</option></select></label>
 <label>동작 <select id="action"><option value="walk">이동</option><option value="turn">방향 전환</option><option value="camp">야영</option></select></label>
@@ -30,6 +30,8 @@ body{background:#172a29;color:#eee5ce;font:16px 'Malgun Gothic',sans-serif;margi
   defs.forEach(function(d){var a=document.createElement('article');a.innerHTML='<h2>'+d[1]+'</h2><canvas width="600" height="420"></canvas><div class="meta"></div>';var key=G.ExpeditionFormation.variant({mount:{id:d[0]},region:d[2],draft:d[3]});a.querySelector('.meta').innerHTML='<a href="images/'+G.EXPEDITION_FOLLOWERS.sheets[key].file+'">동료 스프라이트 시트</a>'; $('grid').appendChild(a);cards.push({id:d[0],region:d[2],draft:d[3],cv:a.querySelector('canvas'),cache:{}});G.ExpeditionMotion.preload(d[0]);});
   $('pause').onclick=function(){paused=!paused;this.textContent=paused?'걸음 이어가기':'걸음 정지';};
   $('step').onclick=function(){paused=true;phase=(Math.floor(phase*4)+1)/4;step=true;$('pause').textContent='걸음 이어가기';};
+  // 이 화면은 경로 추종이 아니라 시트의 방향별 자세를 직접 고르는 비교표다.
+  $('direction').onchange=function(){cards.forEach(function(c){c.cache={};});};
   var before=performance.now();
   function draw(now){var dt=Math.min(0.06,(now-before)/1000);before=now;time+=dt;if(!paused)phase+=dt*(+$('speed').value)*1.1;
     var dir=+$('direction').value,action=$('action').value;if(action==='turn')dir=Math.floor(time/0.65)%8;

@@ -1,0 +1,186 @@
+{
+  "date": "2026-10-31",
+  "mode": "내장 ImageGen",
+  "assets": [
+    {
+      "id": "iced_americano",
+      "name": "아이스 아메리카노",
+      "key": "drinks/iced_americano",
+      "design": "Tall clear straight-sided tumbler filled with dark amber-black iced americano, many large translucent ice cubes clearly visible near surface, crisp glass rim and small condensation droplets, no straw, no milk.",
+      "prompt": "Tall clear straight-sided tumbler filled with dark amber-black iced americano, many large translucent ice cubes clearly visible near surface, crisp glass rim and small condensation droplets, no straw, no milk. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/iced_americano.png",
+      "file": "images/drinks/iced_americano.webp"
+    },
+    {
+      "id": "espresso",
+      "name": "에스프레소",
+      "key": "drinks/espresso",
+      "design": "Tiny ivory porcelain demitasse cup of espresso on matching little saucer, rich dark coffee and smooth golden-brown crema ring, small loop handle, a few roasted beans near saucer. No milk or cream.",
+      "prompt": "Tiny ivory porcelain demitasse cup of espresso on matching little saucer, rich dark coffee and smooth golden-brown crema ring, small loop handle, a few roasted beans near saucer. No milk or cream. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/espresso.png",
+      "file": "images/drinks/espresso.webp"
+    },
+    {
+      "id": "cappuccino",
+      "name": "카푸치노",
+      "key": "drinks/cappuccino",
+      "design": "Rounded medium ivory porcelain cappuccino cup on saucer, thick deep white milk foam dome with delicate cocoa dust across part of foam, warm coffee-brown ring at edge. Not whipped cream, no tall glass.",
+      "prompt": "Rounded medium ivory porcelain cappuccino cup on saucer, thick deep white milk foam dome with delicate cocoa dust across part of foam, warm coffee-brown ring at edge. Not whipped cream, no tall glass. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/cappuccino.png",
+      "file": "images/drinks/cappuccino.webp"
+    },
+    {
+      "id": "macchiato",
+      "name": "마키아토",
+      "key": "drinks/macchiato",
+      "design": "Very small dark blue porcelain espresso cup on cream saucer, dark brown espresso with golden crema and just ONE small irregular white dollop of milk foam in center, clearly mostly black coffee. No whipped cream.",
+      "prompt": "Very small dark blue porcelain espresso cup on cream saucer, dark brown espresso with golden crema and just ONE small irregular white dollop of milk foam in center, clearly mostly black coffee. No whipped cream. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/macchiato.png",
+      "file": "images/drinks/macchiato.webp"
+    },
+    {
+      "id": "con_panna",
+      "name": "콘파냐",
+      "key": "drinks/con_panna",
+      "design": "Small ivory espresso cup on saucer, dark espresso visible below a high lush curled swirl of white whipped cream with defined soft peaks. Coffee cup small, whipped cream generously piled, no chocolate or fruit.",
+      "prompt": "Small ivory espresso cup on saucer, dark espresso visible below a high lush curled swirl of white whipped cream with defined soft peaks. Coffee cup small, whipped cream generously piled, no chocolate or fruit. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/con_panna.png",
+      "file": "images/drinks/con_panna.webp"
+    },
+    {
+      "id": "cafe_au_lait",
+      "name": "카페오레",
+      "key": "drinks/cafe_au_lait",
+      "design": "Broad handleless French breakfast cafe-au-lait bowl in ivory ceramic with a thin cobalt-blue stripe, filled with even warm light brown milk coffee, fine soft steam, no foam art, no whipped cream.",
+      "prompt": "Broad handleless French breakfast cafe-au-lait bowl in ivory ceramic with a thin cobalt-blue stripe, filled with even warm light brown milk coffee, fine soft steam, no foam art, no whipped cream. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/cafe_au_lait.png",
+      "file": "images/drinks/cafe_au_lait.webp"
+    },
+    {
+      "id": "einspanner",
+      "name": "아인슈페너",
+      "key": "drinks/einspanner",
+      "design": "Elegant clear handled Viennese coffee glass on a small saucer, black coffee occupying lower two thirds topped with a thick cool ivory cream layer, gently softly mounded surface, strong visible contrast between dark coffee and thick pale cream, no straw.",
+      "prompt": "Elegant clear handled Viennese coffee glass on a small saucer, black coffee occupying lower two thirds topped with a thick cool ivory cream layer, gently softly mounded surface, strong visible contrast between dark coffee and thick pale cream, no straw. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/einspanner.png",
+      "file": "images/drinks/einspanner.webp"
+    },
+    {
+      "id": "cafe_con_leche",
+      "name": "카페 콘 레체",
+      "key": "drinks/cafe_con_leche",
+      "design": "Tall narrow clear handled glass of Spanish-Portuguese cafe con leche on a small simple ceramic saucer, evenly blended golden-tan hot milk coffee made with equal coffee and milk, very thin pale milk film on top, no thick foam or whipped cream.",
+      "prompt": "Tall narrow clear handled glass of Spanish-Portuguese cafe con leche on a small simple ceramic saucer, evenly blended golden-tan hot milk coffee made with equal coffee and milk, very thin pale milk film on top, no thick foam or whipped cream. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/cafe_con_leche.png",
+      "file": "images/drinks/cafe_con_leche.webp"
+    },
+    {
+      "id": "irish_coffee",
+      "name": "아이리시 커피",
+      "key": "drinks/irish_coffee",
+      "design": "Classic clear footed Irish coffee glass with small loop handle and short sturdy stem, dark coffee with subtle warm amber whiskey tone, a clean horizontal floating white cream layer on top, no whipped-cream peaks, subtle steam, no bottle.",
+      "prompt": "Classic clear footed Irish coffee glass with small loop handle and short sturdy stem, dark coffee with subtle warm amber whiskey tone, a clean horizontal floating white cream layer on top, no whipped-cream peaks, subtle steam, no bottle. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/irish_coffee.png",
+      "file": "images/drinks/irish_coffee.webp"
+    },
+    {
+      "id": "cafe_latte",
+      "name": "카페라떼",
+      "key": "drinks/cafe_latte",
+      "design": "Generous large ivory ceramic latte cup with broad handle on matching saucer, creamy light tan milk coffee with a thin milk microfoam surface and a simple white leaf rosetta latte-art pattern, broad inviting bowl, no whipped cream.",
+      "prompt": "Generous large ivory ceramic latte cup with broad handle on matching saucer, creamy light tan milk coffee with a thin milk microfoam surface and a simple white leaf rosetta latte-art pattern, broad inviting bowl, no whipped cream. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/cafe_latte.png",
+      "file": "images/drinks/cafe_latte.webp"
+    },
+    {
+      "id": "vanilla_latte",
+      "name": "바닐라라떼",
+      "key": "drinks/vanilla_latte",
+      "design": "Tall clear handled glass of creamy pale caramel vanilla latte, thin silky white foam on top and a tiny golden syrup sheen, two brown vanilla pods and a small vanilla blossom beside the base, no whipped cream, no brand.",
+      "prompt": "Tall clear handled glass of creamy pale caramel vanilla latte, thin silky white foam on top and a tiny golden syrup sheen, two brown vanilla pods and a small vanilla blossom beside the base, no whipped cream, no brand. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/vanilla_latte.png",
+      "file": "images/drinks/vanilla_latte.webp"
+    },
+    {
+      "id": "cafe_de_olla",
+      "name": "카페 데 오야",
+      "key": "drinks/cafe_de_olla",
+      "design": "Rustic Mexican reddish brown clay mug with broad flared rim and simple loop handle, filled with steaming dark cinnamon coffee, one cinnamon stick rests across mug rim, a second cinnamon piece and a tiny unwrapped brown piloncillo sugar cone beside base.",
+      "prompt": "Rustic Mexican reddish brown clay mug with broad flared rim and simple loop handle, filled with steaming dark cinnamon coffee, one cinnamon stick rests across mug rim, a second cinnamon piece and a tiny unwrapped brown piloncillo sugar cone beside base. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/cafe_de_olla.png",
+      "file": "images/drinks/cafe_de_olla.webp"
+    },
+    {
+      "id": "cold_brew",
+      "name": "콜드브루",
+      "key": "drinks/cold_brew",
+      "design": "Low clear cylindrical tumbler of smooth dark amber cold-brew black coffee, transparent warm coffee edges, gently chilled condensation on glass, clean calm surface with no foam or milk, one large clear rectangular ice cube partly submerged, no brewing machine or straw.",
+      "prompt": "Low clear cylindrical tumbler of smooth dark amber cold-brew black coffee, transparent warm coffee edges, gently chilled condensation on glass, clean calm surface with no foam or milk, one large clear rectangular ice cube partly submerged, no brewing machine or straw. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/cold_brew.png",
+      "file": "images/drinks/cold_brew.webp"
+    },
+    {
+      "id": "ca_phe_sua_da",
+      "name": "카페 쓰어다",
+      "key": "drinks/ca_phe_sua_da",
+      "design": "Vietnamese ca phe sua da: short sturdy clear glass shows a thick white condensed milk layer at bottom, dark coffee above it and distinct ice cubes; small brushed stainless-steel phin filter with lid rests neatly over top rim, a few slow dark droplets implied at filter edge, no straw.",
+      "prompt": "Vietnamese ca phe sua da: short sturdy clear glass shows a thick white condensed milk layer at bottom, dark coffee above it and distinct ice cubes; small brushed stainless-steel phin filter with lid rests neatly over top rim, a few slow dark droplets implied at filter edge, no straw. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/ca_phe_sua_da.png",
+      "file": "images/drinks/ca_phe_sua_da.webp"
+    },
+    {
+      "id": "filter_kaapi",
+      "name": "남인도 필터 커피",
+      "key": "drinks/filter_kaapi",
+      "design": "South Indian filter kaapi in a small polished brass tumbler nested inside a broad shallow brass davara bowl, rich tan milk coffee with fine frothy bubbly top, warm lustrous brass, two nested vessels clearly visible, no kettle or filter machine.",
+      "prompt": "South Indian filter kaapi in a small polished brass tumbler nested inside a broad shallow brass davara bowl, rich tan milk coffee with fine frothy bubbly top, warm lustrous brass, two nested vessels clearly visible, no kettle or filter machine. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/filter_kaapi.png",
+      "file": "images/drinks/filter_kaapi.webp"
+    },
+    {
+      "id": "turkish_coffee",
+      "name": "튀르키예 커피",
+      "key": "drinks/turkish_coffee",
+      "design": "Traditional Turkish coffee: small delicate white porcelain fincan cup with gold filigree rim on ornate little saucer, dark thick coffee with fine brown foam; beside it a tiny engraved copper cezve pot with a long slim wooden handle, both fit within icon, no steam plume obscuring objects.",
+      "prompt": "Traditional Turkish coffee: small delicate white porcelain fincan cup with gold filigree rim on ornate little saucer, dark thick coffee with fine brown foam; beside it a tiny engraved copper cezve pot with a long slim wooden handle, both fit within icon, no steam plume obscuring objects. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/turkish_coffee.png",
+      "file": "images/drinks/turkish_coffee.webp"
+    },
+    {
+      "id": "qahwa",
+      "name": "아라비아 카흐와",
+      "key": "drinks/qahwa",
+      "design": "Arabian qahwa service: small ivory handleless finjan cup filled with pale golden lightly roasted cardamom coffee; miniature polished brass dallah coffee pot with curved spout beside it, two glossy dates and a few green cardamom pods at base. Coffee is golden, not black.",
+      "prompt": "Arabian qahwa service: small ivory handleless finjan cup filled with pale golden lightly roasted cardamom coffee; miniature polished brass dallah coffee pot with curved spout beside it, two glossy dates and a few green cardamom pods at base. Coffee is golden, not black. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/qahwa.png",
+      "file": "images/drinks/qahwa.webp"
+    },
+    {
+      "id": "cafe_mocha",
+      "name": "카페모카",
+      "key": "drinks/cafe_mocha",
+      "design": "Clear handled glass cup of rich warm brown mocha coffee with chocolate and milk, topped with a small lush white cream swirl and fine dark chocolate drizzle, a few dark chocolate curls beside saucer. Not a giant dessert, coffee remains main subject.",
+      "prompt": "Clear handled glass cup of rich warm brown mocha coffee with chocolate and milk, topped with a small lush white cream swirl and fine dark chocolate drizzle, a few dark chocolate curls beside saucer. Not a giant dessert, coffee remains main subject. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/cafe_mocha.png",
+      "file": "images/drinks/cafe_mocha.webp"
+    },
+    {
+      "id": "buna",
+      "name": "분나",
+      "key": "drinks/buna",
+      "design": "Ethiopian buna coffee service: round black clay jebena pot with tall narrow neck, pointed spout and single loop handle, beside it a tiny handleless ivory cup decorated with restrained red-green bands and filled with black coffee, small pile of roasted beans at base. Rich tactile clay and traditional small cup.",
+      "prompt": "Ethiopian buna coffee service: round black clay jebena pot with tall narrow neck, pointed spout and single loop handle, beside it a tiny handleless ivory cup decorated with restrained red-green bands and filled with black coffee, small pile of roasted beans at base. Rich tactile clay and traditional small cup. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/buna.png",
+      "file": "images/drinks/buna.webp"
+    },
+    {
+      "id": "flat_white",
+      "name": "플랫 화이트",
+      "key": "drinks/flat_white",
+      "design": "Compact low red ceramic cup on matching red saucer, strong tan espresso-and-milk flat white with very thin flat glossy microfoam, a simple small white heart latte-art shape, clean level surface, no thick foam mound or cream. Smaller cup than a latte.",
+      "prompt": "Compact low red ceramic cup on matching red saucer, strong tan espresso-and-milk flat white with very thin flat glossy microfoam, a simple small white heart latte-art shape, clean level surface, no thick foam mound or cream. Smaller cup than a latte. Use case: stylized-concept / game restaurant menu icon. ONE isolated drink serving, three-quarter view from slightly above (about 30 degrees), centered large readable silhouette, full vessel and all indicated small accessories inside frame with 7 percent safe margin. Lush semi-realistic HAND-PAINTED food illustration matching existing game meal icons: rich appetizing colors, delicate brush texture, warm soft upper-left light, crisp material details, not photograph, not flat vector or cartoon. Square 1024x1024 PNG with genuine transparent alpha background, no table or ground, no backdrop, vignette or painted shadow outside serving, no people or hands, no words, letters, logo, watermark or border. Avoid modern disposable plastic or paper cups. This game intentionally includes modern coffee menu recipes, keep each drink recognizable.",
+      "source": "artifacts/menu-art-20261031/sources/flat_white.png",
+      "file": "images/drinks/flat_white.webp"
+    }
+  ]
+}

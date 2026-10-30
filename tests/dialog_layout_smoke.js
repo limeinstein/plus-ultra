@@ -42,18 +42,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         const st = m && m.querySelector('.dlg-stage');
         const sides = [...document.querySelectorAll('.dlg-actor')].map(a => ['left', 'right', 'center'].find(k => a.classList.contains(k)) + (a.classList.contains('active') ? '*' : '')).join(',');
         const tall = document.querySelectorAll('.dlg-actor.tall').length, bust = document.querySelectorAll('.dlg-actor.bust').length;
-        const rigSafe = [...document.querySelectorAll('.dlg-actor.tall .portrait-rig')].every(root => {
-          if (root.classList.contains('rig-single')) {
-            const whole = root.querySelector('.rig-fallback');
-            return !!whole && root.querySelectorAll('.rig-piece').length === 0;
-          }
-          const base = root.querySelector('.rig-base'), pieces = [...root.querySelectorAll('.rig-piece')];
-          if (!base || pieces.length !== 3) return false;
-          const baseVisible = Number(getComputedStyle(base).opacity) > .5;
-          const pieceVisible = pieces.map(e => Number(getComputedStyle(e).opacity) > .5);
-          return root.classList.contains('rig-ready')
-            ? !baseVisible && pieceVisible.every(Boolean)
-            : baseVisible && pieceVisible.every(v => !v);
+        const rigSafe = [...document.querySelectorAll('.dlg-actor .portrait-rig')].every(root => {
+          const whole = root.querySelector('.rig-fallback');
+          return root.classList.contains('rig-single') && !!whole
+            && root.querySelectorAll('.rig-piece, .rig-facefx').length === 0;
         });
         const r = { kind: st ? (st.classList.contains('duo') ? 'duo' : 'solo') : m && m.querySelector('.dlg .pframe') ? 'face' : m ? 'box' : 'none', sides, tall, bust, rigSafe };
         if (!keepOpen) { (m.querySelector('.dlg') || m).click(); await p; }
@@ -92,6 +84,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.both.tall === 2 && r.both.bust === 0, '두 사람 다 무릎상이 있으면 둘 다 무릎상 (' + r.both.tall + ')');
     ok(r.both.rigSafe, '무릎상은 머리·몸통을 자르지 않은 완성본 한 장으로 보여 얼굴이 분리되지 않는다');
     ok(r.mixed.tall === 0 && r.mixed.bust === 2, '한 사람이라도 무릎상이 없으면 둘 다 얼굴 — 무릎상 ' + r.mixed.tall + ' · 얼굴 ' + r.mixed.bust);
+    ok(r.mixed.rigSafe, '얼굴상으로 바뀌어도 머리·몸통을 자르지 않은 완성본 한 장으로 보여 얼굴이 깨지지 않는다');
     // 얼굴(흉상)은 테두리·배경 없이 투명 배경 그림만
     const look = await ev(async () => {
       const C = G.Scenes.city, pr = G.UI.say('어서 오시오.', Object.assign({}, C.npc('herald', '왕실 전령'), { noHalf: true }));
@@ -149,6 +142,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     r.me = await ev(async () => { const m = [...document.querySelectorAll('#ui .modal-back')].pop(); (m.querySelector('.dlg') || m).click(); await new Promise(r2 => setTimeout(r2, 200)); const now0 = Date.now; Date.now = () => now0() + 61000; /* 1분이 지난 셈 */ return probe('…돛을 거두자.', G.Scenes.city.B.tavern.playerSpeaker()); });
     ok(/^duo\[left,right\*\]$/.test(fmt(r.mate)) && /^duo\[left\*\]$/.test(fmt(r.me)), '바다: 부하와 마주 선다 (예전에는 얼굴 칸) · 마주 선 사람이 없으면 제독만 왼쪽 — ' + fmt(r.mate) + ' ' + fmt(r.me));
     ok(r.mate.tall === 0 && r.mate.bust === 2 && r.me.tall === 0, '바다의 보통 대화는 두 사람 얼굴(흉상)만 — 무릎상 ' + r.mate.tall + ' · 흉상 ' + r.mate.bust);
+    ok(r.mate.rigSafe && r.me.rigSafe, '바다의 얼굴상도 분할 없이 완성본 한 장으로 표시');
     // ---- 바다의 특별한 사건: 부하끼리 썸(special) · 가족(아이 이름) → 무릎상
     r = await ev(async () => {
       const out = {}, base = G.Scenes.mateSpeaker('first');

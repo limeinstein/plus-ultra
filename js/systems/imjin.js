@@ -59,7 +59,7 @@
   function H(id) { return G.Hist ? G.Hist.speaker(id) : { name: id, lang: 3 }; }
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
   function first() { return G.Scenes && G.Scenes.mateSpeaker ? G.Scenes.mateSpeaker('first') : { name: '부관', lang: 3 }; }
-  var CROWD = { name: '피란민', lang: 3 }, YOUTH = { name: '젊은 의병', lang: 3 }, PEDDLER = { name: '갓장수', lang: 3 }, OFFICER = { name: '김시민의 군관', lang: 3 }, SOLDIER = { name: '왜병', lang: 3 };
+  var CROWD = 'imjin_refugee', YOUTH = 'imjin_youth', PEDDLER = 'imjin_peddler', OFFICER = 'imjin_officer', SOLDIER = 'imjin_soldier';
   var WHO = { P: me, N: function (e) { return mateSp('h_nongae', e); }, GJ: function (e) { return mateSp('h_gwakjaeu', e); }, KD: function (e) { return mateSp('h_kimdeokryeong', e); },
     YS: function (e) { return mateSp('h_yisunsin', e); }, HJ: function (e) { return mateSp('h_heojun', e); }, F: first };
   async function play(lines) {
@@ -423,7 +423,7 @@
       ['seonjo', '(가마 휘장을 들추고) …그대가 동래에서 온 이방인인가. ' + (b.tangeum === 'skip' ? '신립이 탄금대에서 무너졌다는 소식이 먼저 왔다. 그대의 말이 사실이라면 — 왜적이 이십만이라니.' : '신립에게 소식을 전했다고 들었다. 그런데도 신립이 무너졌단 말인가.') + ' …과인은 북으로 간다. 명나라에 원병을 청할 것이다.'],
       [CROWD, '(빗속에서 돌을 던지며) 임금이 백성을 버리고 가는구나! 누구를 믿고 살란 말이오!'],
       [null, '가마가 떠나자 성난 사람들이 궁궐로 몰려간다. 노비 문서를 둔 장례원에 먼저 불이 붙고, 이윽고 경복궁의 기와지붕 위로 불길이 솟는다.'],
-      [CROWD, '(무너진 담 아래 주저앉은 노인) 다 끝났소… 왜놈이 오면 다 죽는 거요. 나라가 없는데 무엇을 지키오.']
+      ['imjin_elder', '(무너진 담 아래 주저앉은 노인) 다 끝났소… 왜놈이 오면 다 죽는 거요. 나라가 없는데 무엇을 지키오.']
     ]); });
     await play([
       [YOUTH, '(삿갓 아래 젖은 얼굴의 젊은이들이 둘러선다) 할아버지, 그래도 나라는 지켜야 합니다! 임금이 가셨어도 이 땅은 우리 땅입니다. 고을마다 의병이 일어선다 했습니다. 우리도 남쪽으로 내려가 싸우겠습니다!'],
@@ -646,7 +646,7 @@
     await play(b.chil === 'won'
       ? [[null, '칠천량의 바다가 불탔다. 판옥선과 거북선이 하나둘 불길에 삼켜지고, 원균은 뭍으로 올랐다가 끝내 돌아오지 못했다.'],
         [null, '그 불길 사이로 제독의 배가 길을 열었다. 뒤를 따라 판옥선 열두 척이 빠져나왔다 — 조선 수군에 남은 배의 전부였다.'],
-        [{ name: '배설', lang: 3 }, '(떨리는 목소리로) 이 열두 척을… 백의종군하는 이순신 공께 가져가겠소. 그분이라면 이것으로도 싸울 것이오.']]
+        ['baeseol', '(떨리는 목소리로) 이 열두 척을… 백의종군하는 이순신 공께 가져가겠소. 그분이라면 이것으로도 싸울 것이오.']]
       : [[null, '칠천량의 바다가 불탔다. 판옥선과 거북선이 하나둘 불길에 삼켜지고, 원균은 뭍으로 올랐다가 끝내 돌아오지 못했다. 조선 수군이 무너졌다.']]);
     log(b.chil === 'won' ? '칠천량에서 조선 수군이 무너졌다. 불길 속에서 판옥선 열두 척을 건져 냈다.' : '칠천량에서 조선 수군이 무너졌다.');
     UI.toast('무술년(1598년 겨울) 이후 한산도·동래에서 — 마지막 바다', 'ship', 6000);
@@ -677,7 +677,7 @@
     await withPic('imjin_yisunsin', '노량의 새벽 (1598)', function () { return play([
       [null, '새벽. 관음포로 달아나는 왜선을 쫓아 이순신의 대장선이 북을 울린다. 이순신이 손수 북채를 잡았다.'],
       [null, '그때 — 어둠 속 왜선에서 날아온 총알 하나가 그의 왼쪽 가슴을 꿰뚫었다. 이순신이 북 앞에 쓰러진다.'],
-      [{ name: '이순신의 조카 이완', lang: 3 }, '숙부님! 숙부님!']
+      ['yiwan', '숙부님! 숙부님!']
     ]); });
     await UI.ask('이순신이 쓰러졌다', [{ label: '배를 붙여 이순신의 대장선으로 건너간다', value: 'go', icon: 'heart' }], me());
     if (h.lv >= 1) {
@@ -686,7 +686,7 @@
         [hs, h.who ? '비키시오! (상처를 누르며) 총알이 뼈에 걸려 심장까지는 가지 않았소. 피만 멎으면 살 수 있소 — 천과 뜨거운 물을!' : '(제독이 직접 상처를 누른다) 총알이 갈비뼈에 걸렸다. 심장까지는 가지 않았다. 피만 멎으면 산다 — 천과 뜨거운 물을!'],
         [null, hn + U.jx(hn, '이/가') + ' 피를 멎게 하는 사이, 이순신이 눈을 떴다. 북소리는 그치지 않았다. 바다는 아직 싸우고 있다.'],
         ['YS', '(가쁜 숨으로) …싸움은 어떻게 되었느냐.'],
-        [{ name: '이완', lang: 3 }, '이기고 있습니다! 왜선들이 달아납니다!'],
+        ['yiwan', '이기고 있습니다! 왜선들이 달아납니다!'],
         ['YS', '그렇다면… 전쟁은 이제 끝났다. (제독의 손을 잡으며) 완아, 들어라. 나의 죽음을 알리지 마라. 이 갑옷을 입고 네가 북을 쳐라. 이순신은 오늘 노량에서 죽었다 — 그렇게 하라.'],
         ['YS', '(제독에게) 조정은 전쟁이 끝나면 장수를 두려워하오. 칼을 쥔 사람은 살아서 돌아갈 곳이 없소. …나를 그대의 배에 태워 주시오. 이름 없는 늙은 뱃사람으로. 바다에서는 그래도 쓸모가 있을 것이오.']
       ]);

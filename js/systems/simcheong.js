@@ -19,12 +19,11 @@
   function takeRice(n) { var c = S().fleet.cargo; if (!c.rice || c.rice.q < n) return false; c.rice.q -= n; if (c.rice.q <= 0) delete c.rice; return true; }
   function who(id, emo) { return G.Legend && G.Legend.speaker ? G.Legend.speaker(id, emo) : { name: G.MATE[id].name, lang: 3 }; }
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
-  var DAD = { name: '심 봉사', lang: 3 }, BOSS = { name: '남경 뱃사람 두목', lang: 3 };
-  function art(role, style, seed) { try { return G.Art.withImg(G.Art.npcSpec(seed, role, style, 'm'), ['portraits/npc-roles/' + style + '/' + role]); } catch (e) { return null; } }
+  var DAD = 'sim_father', BOSS = 'sim_boatman';
   function say(k, text, emo) {
     if (k === 'P') return UI.say(text, me());
-    if (k === 'D') { if (!DAD.portrait) DAD.portrait = art('priest', 'kr', 'sim_dad'); return UI.say(text, DAD); }
-    if (k === 'B') { if (!BOSS.portrait) BOSS.portrait = art('sailor', 'cn', 'sim_boss'); return UI.say(text, BOSS); }
+    if (k === 'D') return UI.say(text, G.Hist.speaker(DAD));
+    if (k === 'B') return UI.say(text, G.Hist.speaker(BOSS));
     if (k === 'M') return UI.say(text, G.Scenes.mateSpeaker ? G.Scenes.mateSpeaker('first') : {});
     if (k) return UI.say(text, who(k, emo));
     return UI.say(text, {});

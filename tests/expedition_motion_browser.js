@@ -62,10 +62,9 @@ const OUT = process.env.EXPEDITION_TEST_OUT || path.join(ROOT, 'docs/art');
     await page.waitForTimeout(200);
     await page.screenshot({path:path.join(OUT,'expedition-motion-camp.png'),fullPage:true});
     assert.deepStrictEqual(errors,[],'미리보기 콘솔 오류');
-    // 외부 글꼴 대신 기본 글꼴로 시험해 인터넷 상태와 관계없이 파일 실행을 확인한다.
-    await page.route('https://fonts.googleapis.com/**',route=>route.fulfill({status:200,contentType:'text/css',body:''}));
+    // 요청 가로채기는 file://의 병렬 스크립트를 지연시킬 수 있어 쓰지 않는다.
     await page.setViewportSize({width:960,height:540});
-    await page.goto(pathToFileURL(path.join(ROOT,'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT,'index.html')).href,{waitUntil:'domcontentloaded',timeout:90000});
     await page.waitForFunction(()=>window.G && G.Game && G.State,null,{timeout:60000});
     await page.evaluate(()=>G.Game.ensureGeo());
     await page.evaluate(()=>{

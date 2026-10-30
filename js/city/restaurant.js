@@ -33,7 +33,8 @@
     if (!ds.length) return;
     var d = await UI.choose(c.name + ' 식당 커피', ds.map(function (x) {
       var p = CF.price(c, x), tasted = s.coffee && s.coffee.tasted && s.coffee.tasted[x.id];
-      return { value: x, icon: 'mug',
+      var key = 'drinks/' + x.id, img = G.Img && G.Img.has(key) ? G.Img.src(key) : null;
+      return { value: x, thumb: img, icon: img ? null : 'mug',
         label: '<b>' + U.esc(x.name) + '</b>' + (tasted ? '' : ' <small class="good-text">처음 맛본다</small>') + '<br><small class="muted">' + U.esc(x.desc) + '</small>',
         right: U.num(p) + '닢', disabled: already || s.player.gold < p, desc: x.desc };
     }), { width: 790, icon: 'mug', text: already ? '이번에 이 도시에 들러서는 이미 한 잔 마셨습니다. 다음에 들르면 다시 마실 수 있습니다.' : '커피를 이 고장에 들여온 제독이 직접 한 잔 마시면 사람들 사이에 이름이 오르내립니다. 처음 맛보는 커피는 이야깃거리가 더 됩니다. (식사와는 따로, 들를 때마다 한 잔)' });

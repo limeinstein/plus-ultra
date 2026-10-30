@@ -10,6 +10,10 @@
   if (!F.burbage) F.burbage = { id: 'burbage', name: '리처드 버비지', title: '국왕 극단의 으뜸 배우', st: 'ne', role: 'noble', born: 1567, look: '40대, 굵은 목소리가 들릴 듯한 넓은 가슴, 짧은 수염, 무대 의상인 왕의 붉은 망토와 금관(헨리 8세 역)' };
   G.GLOBE_FIGS = ['burbage'];
 
+  // 극장 앞 조연의 전용 얼굴상·무릎상 (2026-10-31).
+  if (!F.globe_audience) F.globe_audience = { id: 'globe_audience', name: '관객', title: '글로브의 관객', st: 'ne', role: 'merchant', g: 'm', fiction: true };
+  if (!F.globe_apple_seller) F.globe_apple_seller = { id: 'globe_apple_seller', name: '사과 파는 아낙', title: '극장 앞 사과 장수', st: 'ne', role: 'merchant', g: 'f', fiction: true };
+
   // ── 동료: 앤 해서웨이 (사건으로만)
   var a = { id: 'anne_hathaway', name: '앤 해서웨이', g: 'f', style: 'ne', role: 'maid', tone: 'polite', pic: 'anne_hathaway', age: 'mid',
     st: [56, 74, 40, 80], sk: { cook: 3, med: 2, music: 2, speech: 1 }, skBoost: 1, lg: { 3: 3 },

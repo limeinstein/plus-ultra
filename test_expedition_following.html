@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제독을 따라가는 탐험대</title>
+<style>body{margin:0;padding:24px;background:#172b29;color:#eee5ce;font:16px 'Malgun Gothic',sans-serif}main{max-width:1120px;margin:auto}h1{font-size:26px}p{color:#b8cbbd;line-height:1.6}.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:15px;background:#294236;margin-bottom:16px;border-radius:8px}button,select{background:#385644;border:1px solid #7a957b;color:#fff1d4;font:inherit;padding:8px;border-radius:5px}button{cursor:pointer}canvas{width:100%;height:auto;border:1px solid #788e72;border-radius:8px}.note{font-size:14px}a{color:#e7ce91}</style>
+<main><h1>제독을 따라가는 탐험대</h1><p>대열을 고정하지 않고 각 동료가 지나온 길을 쫓습니다. 모퉁이에서는 줄이 좁아지고, 넓은 곳에서는 서서히 벌어집니다.</p>
+<div class="bar"><select id="mount"></select><select id="road"><option value="wide">넓은 땅</option><option value="narrow">좁은 굽은 길</option></select><button id="pause">제독 멈춤</button><button id="turn">멈춰서 90° 회전</button><button id="reset">출발부터</button><label><input id="trails" type="checkbox" checked>발자국</label><label><input id="camera" type="checkbox">카메라만 이동</label><select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></div>
+<canvas id="stage" width="1120" height="640"></canvas><p id="status" class="note"></p><p class="note"><a href="test_expedition_formation.html">모든 이동 수단의 원화·자세 비교</a></p></main>
+<script src="images/manifest.js"></script><script src="js/core/images.js"></script><script src="js/data/seafx.js"></script><script src="js/data/expedition_motion.js"></script><script src="js/data/expedition_followers.js"></script><script src="js/art/party.js"></script><script src="js/art/expedition_motion.js"></script><script src="js/art/expedition_formation.js"></script>
+<script>
+(function(){'use strict';
+  var $=function(id){return document.getElementById(id);},cv=$('stage'),ctx=cv.getContext('2d'),state;
+  var route=[[-180,80],[170,80],[170,-140],[-130,-140],[-130,110],[180,110],[180,-100],[-180,-100]];
+  Object.keys(G.EXPEDITION_MOTION.mounts).forEach(function(id){var o=document.createElement('option');o.value=id;o.textContent=G.EXPEDITION_MOTION.mounts[id].label;$('mount').appendChild(o);});
+  function reset(){state={x:route[0][0],y:route[0][1],next:1,head:0,time:0,phase:0,cache:{},points:[],paused:false,items:[]};$('pause').textContent='제독 멈춤';G.ExpeditionMotion.preload($('mount').value);}
+  function pointDistance(x,y,a,b){var dx=b[0]-a[0],dy=b[1]-a[1],u=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-u*dx,y-a[1]-u*dy);}
+  function land(x,y){return $('road').value!=='narrow'||route.some(function(a,i){return pointDistance(x,y,a,route[(i+1)%route.length])<=22;});}
+  function step(dt){dt=Math.min(0.1,dt);state.time+=dt;var distance=0,speed=+$('speed').value;
+    if(!state.paused){var dest=route[state.next],dx=dest[0]-state.x,dy=dest[1]-state.y,len=Math.hypot(dx,dy);distance=Math.min(len,58*speed*dt);state.head=Math.atan2(-dy,dx);if(len>0){state.x+=dx/len*distance;state.y+=dy/len*distance;}if(len<=distance+0.001)state.next=(state.next+1)%route.length;var role=$('mount').value==='walk'?'foot':$('mount').value;state.phase+=Math.min(distance/(G.FX.sprites.expedition.formation.follow.strides[role]||20),2.2*dt);}
+    if(distance>0){state.points.push([state.x,state.y]);if(state.points.length>650)state.points.shift();}
+    var camX=state.x*0.4+($('camera').checked?Math.sin(state.time)*65:0),camY=state.y*0.4;
+    function project(x,y){return[cv.width/2+x-camX,cv.height/2+y-camY];}
+    ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle=$('road').value==='narrow'?'#294b59':'#869d6e';ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#aeaa78';ctx.lineWidth=$('road').value==='narrow'?44:86;ctx.beginPath();route.forEach(function(p,i){var q=project(p[0],p[1]);if(i)ctx.lineTo(q[0],q[1]);else ctx.moveTo(q[0],q[1]);});ctx.closePath();ctx.stroke();
+    if($('trails').checked){ctx.strokeStyle='rgba(52,53,32,.4)';ctx.lineWidth=2;ctx.setLineDash([3,7]);ctx.beginPath();state.points.forEach(function(p,i){var q=project(p[0],p[1]);if(i)ctx.lineTo(q[0],q[1]);else ctx.moveTo(q[0],q[1]);});ctx.stroke();ctx.setLineDash([]);}
+    var p=project(state.x,state.y),u={pts:[p],follow:{x:state.x,y:state.y,zoom:1},mount:{id:$('mount').value,n:20},party:4,head:state.head,moving:distance>0,phase:state.phase,t:state.time,size:1.1,cache:state.cache,ring:true,canStand:function(x,y){return land(x-cv.width/2+camX,y-cv.height/2+camY);}};
+    state.items=G.ExpeditionMotion.draw(ctx,u)||[];
+    $('status').textContent=(state.paused?'제독 정지':'제독 이동')+' · 동료 '+state.items.filter(function(it){return!it.leader&&it.moving;}).length+'명 걷는 중 · 각자 돌아서고 따라온 뒤 멈춥니다.';
+    return state.items;
+  }
+  $('pause').onclick=function(){state.paused=!state.paused;this.textContent=state.paused?'제독 다시 출발':'제독 멈춤';};
+  $('turn').onclick=function(){state.paused=true;state.head+=Math.PI/2;$('pause').textContent='제독 다시 출발';};
+  $('camera').onchange=function(){if(this.checked){state.paused=true;$('pause').textContent='제독 다시 출발';}};
+  $('reset').onclick=reset;$('mount').onchange=reset;$('road').onchange=reset;reset();
+  window.followDemo={step:step,reset:reset,get state(){return state;}};
+  var before=performance.now();function draw(now){step(Math.min(0.06,(now-before)/1000));before=now;requestAnimationFrame(draw);}requestAnimationFrame(draw);
+})();
+</script></html>

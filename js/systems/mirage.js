@@ -28,11 +28,14 @@
       var key = (d.how === 'city' ? 'landmarks/' : 'map-discoveries/mirage/') + d.id;
       if (G.Img.file(key)) return key;
     }
+    // 새로 채운 도시·야외 외관은 신기루에서도 같은 모습을 쓴다.
+    var exterior = (d.how === 'city' ? 'landmarks/' : 'map-discoveries/completion/') + d.id;
+    if (G.Img.file(exterior)) return exterior;
     return G.Img.file('discovery-ends/' + d.id) ? 'discovery-ends/' + d.id : G.Img.pick(G.Img.chain.discovery(d));
   };
   var mapFades = {};
   function trackMap(d, ms) {
-    if (!d.mirage50 || d.how === 'city') return;
+    if (!(d.mirage50 || d.alwaysMirage) || d.how === 'city') return;
     mapFades[d.id] = { at: performance.now(), ms: ms };
     if (G.DiscoveryIcon) G.DiscoveryIcon.preload([d]);
   }
@@ -89,7 +92,7 @@
     el.style.setProperty('--mirage-ms', ms + 'ms');
     var pic = U.el('div', 'mirage-pic');
     var key = M.exteriorKey(d);
-    if (key && /^(landmarks\/|map-discoveries\/mirage\/)/.test(key)) pic.classList.add('mirage-exterior');
+    if (key && /^(landmarks\/|map-discoveries\/(mirage|completion)\/)/.test(key)) pic.classList.add('mirage-exterior');
     trackMap(d, ms);
     var src = key && G.Img.src(key);
     if (src) { var im = new Image(); im.src = src; im.alt = d.name; pic.appendChild(im); }
@@ -114,7 +117,7 @@
     el.style.setProperty('--mirage-ms', ms + 'ms');
     var pic = U.el('div', 'mirage-pic');
     var key = M.exteriorKey(d);
-    if (key && /^(landmarks\/|map-discoveries\/mirage\/)/.test(key)) pic.classList.add('mirage-exterior');
+    if (key && /^(landmarks\/|map-discoveries\/(mirage|completion)\/)/.test(key)) pic.classList.add('mirage-exterior');
     trackMap(d, ms);
     var src = key && G.Img.src(key);
     if (src) { var im = new Image(); im.src = src; im.alt = d.name; pic.appendChild(im); }

@@ -7,7 +7,10 @@ try { ({ chromium } = require('playwright')); }
 catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'artifacts/additions-20261030');
-const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-20261030-prompts.json'), 'utf8')).assets;
+const baseRows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-20261030-prompts.json'), 'utf8')).assets;
+const insectSpec = path.join(ROOT, 'docs/art/insects-20261030-prompts.json');
+const insectRows = fs.existsSync(insectSpec) ? JSON.parse(fs.readFileSync(insectSpec, 'utf8')).assets : [];
+const rows = baseRows.concat(insectRows);
 (async () => {
   const browser = await chromium.launch({
     executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -27,7 +30,7 @@ const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-2026
       function ok(value, message) { if (!value) throw new Error(message); }
       for (const row of rows) {
         const id = row.id;
-        if (row.kind === 'nature' || row.kind === 'ruin') {
+        if (row.kind === 'nature' || row.kind === 'ruin' || row.kind === 'animal') {
           const d = G.DISC[id];
           ok(d && G.Img.has('discoveries/' + id) && G.Reel.has(d), id + ': 발견 그림 등록');
           const reel = await G.Reel.load(G.Reel.key(d));
@@ -50,7 +53,13 @@ const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-2026
         loaded.push(id);
       }
       ok(G.RESORTS.every(id => G.Reel.has(G.DISC[id])), '기존 두 곳을 포함해 휴양지 40곳에 모두 발견 연출');
-      for (const id of ['jeju', 'capri', 'septizodium', 'manwoldae']) {
+      const bugs=rows.filter(r=>r.kind==='animal').map(r=>r.id);
+      for(const relic of Object.values(G.RELIC).filter(r=>bugs.includes(r.relic))) {
+        const key=G.Img.pick(G.Img.chain.relic(relic));
+        ok(key==='discovery-ends/'+relic.relic || key==='relics/'+relic.id, relic.id+': 곤충 표본 전용 그림');
+        ok(await G.Img.load(key),relic.id+': 곤충 표본 그림 해독');
+      }
+      for (const id of ['jeju', 'capri', 'septizodium', 'manwoldae'].concat(bugs.length ? ['morpho','cometmoth'] : [])) {
         const reel = G.Reel.now('discovery-sheets/' + id), cv = document.createElement('canvas');
         cv.width = 576; cv.height = 256; document.body.appendChild(cv);
         const movie = G.Reel.play(cv, reel, { ms: 180 });
@@ -62,11 +71,11 @@ const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-2026
       const prefer = G.PREFER_GIF;
       try {
         G.PREFER_GIF = true;
-        ok(rows.filter(r => /nature|ruin/.test(r.kind)).every(r => !G.Reel.has(G.DISC[r.id]) && G.Img.isAnim(G.Img.pick(['discoveries/' + r.id]))), 'GIF 팩 원본 경로');
+        ok(rows.filter(r => /nature|ruin|animal/.test(r.kind)).every(r => !G.Reel.has(G.DISC[r.id]) && G.Img.isAnim(G.Img.pick(['discoveries/' + r.id]))), 'GIF 팩 원본 경로');
       } finally { G.PREFER_GIF = prefer; }
       return { loaded, animated };
     }, rows);
-    console.log('PASS: 76종 file:// 그림 해독·투명도·전용 아이콘 체인·휴양지 40곳·실제 재생');
+    console.log('PASS: '+rows.length+'종 file:// 그림 해독·투명도·전용 아이콘 체인·휴양지 40곳·실제 재생');
     await page.evaluate(async rows => {
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 1; });
       G.State.newGame({ name: '발견 그림 검수', nation: 'PT', job: 'explorer', age: 30, birth: { m: 1, d: 1 },
@@ -86,7 +95,8 @@ const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-2026
       G.FX.reveal.playMs = 220; G.FX.reveal.titleMs = 1600; G.FX.reveal.replayTitleMs = 100;
       window.additionLines = []; G.UI.say = async text => { window.additionLines.push(text); };
     });
-    for (const id of ['jeju', 'septizodium']) {
+    const revealIds=['jeju','septizodium'].concat(insectRows.length?['morpho']:[]);
+    for (const id of revealIds) {
       await page.evaluate(id => {
         window.additionRevealDone = false;
         G.Scenes.discoveryReveal(G.DISC[id], 100).then(v => { window.additionRevealDone = v; });
@@ -119,7 +129,7 @@ const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-2026
     await catalog.waitForSelector('#detail[open]');
     await catalog.screenshot({ path: path.join(OUT, 'catalog-gat.png'), animations: 'disabled' });
     assert.deepStrictEqual(errors, [], '브라우저 콘솔 오류');
-    fs.writeFileSync(path.join(OUT, 'runtime-report.json'), JSON.stringify({ ...report, inventoryIcons: 31, catalogCount, revealAndReplay: ['jeju', 'septizodium'], errors }, null, 2));
-    console.log('PASS: 실제 수첩 아이콘 31개·자연/유적 발견·다시 보기·도감 76종, 콘솔 오류 0');
+    fs.writeFileSync(path.join(OUT, 'runtime-report.json'), JSON.stringify({ ...report, inventoryIcons: 31, catalogCount, revealAndReplay: revealIds, errors }, null, 2));
+    console.log('PASS: 실제 수첩 아이콘 31개·자연/유적/곤충 발견·다시 보기·도감 '+catalogCount+'종, 콘솔 오류 0');
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

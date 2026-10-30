@@ -1,0 +1,450 @@
+{
+  "date": "2026-10-31",
+  "mode": "내장 ImageGen",
+  "portraits": [
+    {
+      "id": "yiwan",
+      "name": "이완",
+      "key": "portraits/history/yiwan",
+      "prompt": "Korean naval officer Yi Wan, the admiral's young adult nephew. Late twenties, slim athletic build, distinctive narrow oval face, thick straight brows, short black mustache and very short chin stubble, anxious attentive dark eyes. Korean dark iron helmet with short red tassel and red cloth neck guards, navy-blue padded naval coat beneath restrained dark lamellar chest armor, red sash, Korean short sword sheathed at waist. Lean slightly forward, one hand raised open as if calling to his uncle, other holds a pair of drumsticks low. Earnest alarmed expression, NOT old and not same face as Yi Sun-sin. Use case: stylized-concept historical adventure RPG character. One isolated adult character, semi-realistic HAND-PAINTED digital oil game illustration matching ornate Korean historical portraits, visible painterly planes, expressive distinct face, warm soft light, detailed tactile fabrics and metal, not a photograph. Vertical 2:3 KNEE-UP composition, no feet, complete headgear and natural hands visible, simple asymmetrical lively gesture, adult proportions. Main face large and readable. Genuine transparent alpha background, no gradient, backdrop, scenery, text, lettering, watermark, border or second person. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/yiwan_half.png",
+      "face_prompt": "Use case: identity-preserve / square game face portrait. Create the FACE PORTRAIT version of the EXACT same 이완 adult character in the attached finished knee-up illustration. Preserve the exact face identity, age, gender, facial proportions, eyes, nose, hair, mustache and beard if any, expression, gaze and head angle. Same headgear, collar and upper shoulder clothing, same hand-painted rendering and warm light. Change ONLY framing to a square close head-and-shoulders portrait with large readable face. Include main headgear, cut below upper chest. Exclude hands, weapons, dispatch, bundles and hat merchandise from the crop so the face stays clear. Semi-realistic hand-painted historical RPG illustration, visible painted planes and delicate brush texture, not a photo. Genuine transparent alpha background, no gradient, scenery, lettering, frame or watermark. 1024x1024 transparent PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/yiwan_face.png",
+      "half_file": "images/portraits/history/yiwan_half.webp",
+      "face_file": "images/portraits/history/yiwan.webp"
+    },
+    {
+      "id": "baeseol",
+      "name": "배설",
+      "key": "portraits/history/baeseol",
+      "prompt": "Korean naval commander Bae Seol, middle-aged man in his forties, long tired face, puffy wary eyes, thick uneven black beard with a few grey strands, deep forehead lines, salt-weathered olive skin. Practical battered dark steel Korean conical helmet with red neck flaps, subdued dark red studded brigandine over navy sleeves and navy sash, modest belt. One hand grips a rolled nautical chart against chest, other extends a halting gesture. Troubled exhausted expression, tightly pressed lips, distinct from proud round-faced Won Gyun. No modern uniform. Use case: stylized-concept historical adventure RPG character. One isolated adult character, semi-realistic HAND-PAINTED digital oil game illustration matching ornate Korean historical portraits, visible painterly planes, expressive distinct face, warm soft light, detailed tactile fabrics and metal, not a photograph. Vertical 2:3 KNEE-UP composition, no feet, complete headgear and natural hands visible, simple asymmetrical lively gesture, adult proportions. Main face large and readable. Genuine transparent alpha background, no gradient, backdrop, scenery, text, lettering, watermark, border or second person. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/baeseol_half.png",
+      "face_prompt": "Use case: identity-preserve / square game face portrait. Create the FACE PORTRAIT version of the EXACT same 배설 adult character in the attached finished knee-up illustration. Preserve the exact face identity, age, gender, facial proportions, eyes, nose, hair, mustache and beard if any, expression, gaze and head angle. Same headgear, collar and upper shoulder clothing, same hand-painted rendering and warm light. Change ONLY framing to a square close head-and-shoulders portrait with large readable face. Include main headgear, cut below upper chest. Exclude hands, weapons, dispatch, bundles and hat merchandise from the crop so the face stays clear. Semi-realistic hand-painted historical RPG illustration, visible painted planes and delicate brush texture, not a photo. Genuine transparent alpha background, no gradient, scenery, lettering, frame or watermark. 1024x1024 transparent PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/baeseol_face.png",
+      "half_file": "images/portraits/history/baeseol_half.webp",
+      "face_file": "images/portraits/history/baeseol.webp"
+    },
+    {
+      "id": "imjin_officer",
+      "name": "김시민의 군관",
+      "key": "portraits/history/imjin_officer",
+      "prompt": "Korean military messenger of Dongnae in his thirties, sun-browned lean face, high cheekbones, neatly trimmed small black mustache, intelligent urgent eyes. Per story he wears a black broad-brimmed traditional Korean gat over a topknot, dark blue practical cheollik military robe with pale collar, maroon narrow waist sash, plain leather belt and a sheathed Korean sword. One hand holds an unlabeled sealed dispatch respectfully forward, other rests beside belt. Alert serious expression, not a civil official's sideways-wing hat and not a gilt commander helmet. Use case: stylized-concept historical adventure RPG character. One isolated adult character, semi-realistic HAND-PAINTED digital oil game illustration matching ornate Korean historical portraits, visible painterly planes, expressive distinct face, warm soft light, detailed tactile fabrics and metal, not a photograph. Vertical 2:3 KNEE-UP composition, no feet, complete headgear and natural hands visible, simple asymmetrical lively gesture, adult proportions. Main face large and readable. Genuine transparent alpha background, no gradient, backdrop, scenery, text, lettering, watermark, border or second person. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/imjin_officer_half.png",
+      "face_prompt": "Use case: identity-preserve / square game face portrait. Create the FACE PORTRAIT version of the EXACT same 김시민의 군관 adult character in the attached finished knee-up illustration. Preserve the exact face identity, age, gender, facial proportions, eyes, nose, hair, mustache and beard if any, expression, gaze and head angle. Same headgear, collar and upper shoulder clothing, same hand-painted rendering and warm light. Change ONLY framing to a square close head-and-shoulders portrait with large readable face. Include main headgear, cut below upper chest. Exclude hands, weapons, dispatch, bundles and hat merchandise from the crop so the face stays clear. Semi-realistic hand-painted historical RPG illustration, visible painted planes and delicate brush texture, not a photo. Genuine transparent alpha background, no gradient, scenery, lettering, frame or watermark. 1024x1024 transparent PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/imjin_officer_face.png",
+      "half_file": "images/portraits/history/imjin_officer_half.webp",
+      "face_file": "images/portraits/history/imjin_officer.webp"
+    },
+    {
+      "id": "imjin_peddler",
+      "name": "갓장수",
+      "key": "portraits/history/imjin_peddler",
+      "prompt": "Korean itinerant hat seller aged about sixty, distinctive kindly round wrinkled face, thin grey mustache, small wispy grey beard and lively smiling eyes. Plain ochre-brown hemp robe, cream undercollar, faded teal cloth belt, simple black cloth headband and topknot. Carries a light wooden rack with several neatly nested black horsehair gat hats at one side; holds one black gat by brim in both hands at waist as if offering it to customer. Amused warm smile, humble practical clothes, no weapons and no luxurious official ornaments. Use case: stylized-concept historical adventure RPG character. One isolated adult character, semi-realistic HAND-PAINTED digital oil game illustration matching ornate Korean historical portraits, visible painterly planes, expressive distinct face, warm soft light, detailed tactile fabrics and metal, not a photograph. Vertical 2:3 KNEE-UP composition, no feet, complete headgear and natural hands visible, simple asymmetrical lively gesture, adult proportions. Main face large and readable. Genuine transparent alpha background, no gradient, backdrop, scenery, text, lettering, watermark, border or second person. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/imjin_peddler_half.png",
+      "face_prompt": "Use case: identity-preserve / square game face portrait. Create the FACE PORTRAIT version of the EXACT same 갓장수 adult character in the attached finished knee-up illustration. Preserve the exact face identity, age, gender, facial proportions, eyes, nose, hair, mustache and beard if any, expression, gaze and head angle. Same headgear, collar and upper shoulder clothing, same hand-painted rendering and warm light. Change ONLY framing to a square close head-and-shoulders portrait with large readable face. Include main headgear, cut below upper chest. Exclude hands, weapons, dispatch, bundles and hat merchandise from the crop so the face stays clear. Semi-realistic hand-painted historical RPG illustration, visible painted planes and delicate brush texture, not a photo. Genuine transparent alpha background, no gradient, scenery, lettering, frame or watermark. 1024x1024 transparent PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/imjin_peddler_face.png",
+      "half_file": "images/portraits/history/imjin_peddler_half.webp",
+      "face_file": "images/portraits/history/imjin_peddler.webp"
+    },
+    {
+      "id": "imjin_refugee",
+      "name": "피란민",
+      "key": "portraits/history/imjin_refugee",
+      "prompt": "Adult Korean refugee woman in her late forties, distinctive broad tired face with fine sun wrinkles, worried expressive dark eyes and dark hair in a low practical bun with scattered grey strands, simple cloth head wrap. Worn faded ivory jeogori over dull grey-blue long chima, patched cotton cloth and plain shoes not in frame. She holds a tied beige cloth travel bundle close to her chest, one free hand gestures urgently toward the road. Frightened but dignified expression, fully clothed opaque traditional dress, no jewelry or weapons, no injuries or suffering spectacle. Use case: stylized-concept historical adventure RPG character. One isolated adult character, semi-realistic HAND-PAINTED digital oil game illustration matching ornate Korean historical portraits, visible painterly planes, expressive distinct face, warm soft light, detailed tactile fabrics and metal, not a photograph. Vertical 2:3 KNEE-UP composition, no feet, complete headgear and natural hands visible, simple asymmetrical lively gesture, adult proportions. Main face large and readable. Genuine transparent alpha background, no gradient, backdrop, scenery, text, lettering, watermark, border or second person. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/imjin_refugee_half.png",
+      "face_prompt": "Use case: identity-preserve / square game face portrait. Create the FACE PORTRAIT version of the EXACT same 피란민 adult character in the attached finished knee-up illustration. Preserve the exact face identity, age, gender, facial proportions, eyes, nose, hair, mustache and beard if any, expression, gaze and head angle. Same headgear, collar and upper shoulder clothing, same hand-painted rendering and warm light. Change ONLY framing to a square close head-and-shoulders portrait with large readable face. Include main headgear, cut below upper chest. Exclude hands, weapons, dispatch, bundles and hat merchandise from the crop so the face stays clear. Semi-realistic hand-painted historical RPG illustration, visible painted planes and delicate brush texture, not a photo. Genuine transparent alpha background, no gradient, scenery, lettering, frame or watermark. 1024x1024 transparent PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/imjin_refugee_face.png",
+      "half_file": "images/portraits/history/imjin_refugee_half.webp",
+      "face_file": "images/portraits/history/imjin_refugee.webp"
+    },
+    {
+      "id": "imjin_youth",
+      "name": "젊은 의병",
+      "key": "portraits/history/imjin_youth",
+      "prompt": "Young ADULT Korean volunteer defender aged twenty-one, distinct energetic broad cheekbones, youthful clean-shaven face, thick straight black brows and determined dark eyes. Plain undyed beige hemp robe over loose dark blue trousers, coarse dark green waist sash, white cloth headband over topknot. Holds a simple Korean spear at a safe diagonal, spare straw rope and a small wooden water gourd at waist. Bold forward-leaning stance with a resolute half-open mouth as if urging people onward. Not a professional armored general and not a child. Use case: stylized-concept historical adventure RPG character. One isolated adult character, semi-realistic HAND-PAINTED digital oil game illustration matching ornate Korean historical portraits, visible painterly planes, expressive distinct face, warm soft light, detailed tactile fabrics and metal, not a photograph. Vertical 2:3 KNEE-UP composition, no feet, complete headgear and natural hands visible, simple asymmetrical lively gesture, adult proportions. Main face large and readable. Genuine transparent alpha background, no gradient, backdrop, scenery, text, lettering, watermark, border or second person. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/imjin_youth_half.png",
+      "face_prompt": "Use case: identity-preserve / square game face portrait. Create the FACE PORTRAIT version of the EXACT same 젊은 의병 adult character in the attached finished knee-up illustration. Preserve the exact face identity, age, gender, facial proportions, eyes, nose, hair, mustache and beard if any, expression, gaze and head angle. Same headgear, collar and upper shoulder clothing, same hand-painted rendering and warm light. Change ONLY framing to a square close head-and-shoulders portrait with large readable face. Include main headgear, cut below upper chest. Exclude hands, weapons, dispatch, bundles and hat merchandise from the crop so the face stays clear. Semi-realistic hand-painted historical RPG illustration, visible painted planes and delicate brush texture, not a photo. Genuine transparent alpha background, no gradient, scenery, lettering, frame or watermark. 1024x1024 transparent PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/imjin_youth_face.png",
+      "half_file": "images/portraits/history/imjin_youth_half.webp",
+      "face_file": "images/portraits/history/imjin_youth.webp"
+    },
+    {
+      "id": "imjin_soldier",
+      "name": "왜병",
+      "key": "portraits/history/imjin_soldier",
+      "prompt": "Japanese ashigaru soldier in his late twenties during a late-sixteenth-century invasion. Distinct broad square face with small black mustache and sparse chin beard, narrowed watchful eyes, rough sunburned skin. Black low conical jingasa iron hat tied with dark red cord, worn dark brown-black lacquered simple segmented cuirass with faded red lacing over muted brown kimono sleeves and loose trousers, simple cloth belt, a plain sheathed katana. Holds a long matchlock tanegashima musket diagonally LOW across body, muzzle away from viewer, naturally fitted hands. Stern alert expression. Low-ranking soldier, no golden daimyo crest, no Korean hat, no modern gun. Use case: stylized-concept historical adventure RPG character. One isolated adult character, semi-realistic HAND-PAINTED digital oil game illustration matching ornate Korean historical portraits, visible painterly planes, expressive distinct face, warm soft light, detailed tactile fabrics and metal, not a photograph. Vertical 2:3 KNEE-UP composition, no feet, complete headgear and natural hands visible, simple asymmetrical lively gesture, adult proportions. Main face large and readable. Genuine transparent alpha background, no gradient, backdrop, scenery, text, lettering, watermark, border or second person. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/imjin_soldier_half.png",
+      "face_prompt": "Use case: identity-preserve / square game face portrait. Create the FACE PORTRAIT version of the EXACT same 왜병 adult character in the attached finished knee-up illustration. Preserve the exact face identity, age, gender, facial proportions, eyes, nose, hair, mustache and beard if any, expression, gaze and head angle. Same headgear, collar and upper shoulder clothing, same hand-painted rendering and warm light. Change ONLY framing to a square close head-and-shoulders portrait with large readable face. Include main headgear, cut below upper chest. Exclude hands, weapons, dispatch, bundles and hat merchandise from the crop so the face stays clear. Semi-realistic hand-painted historical RPG illustration, visible painted planes and delicate brush texture, not a photo. Genuine transparent alpha background, no gradient, scenery, lettering, frame or watermark. 1024x1024 transparent PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/imjin_soldier_face.png",
+      "half_file": "images/portraits/history/imjin_soldier_half.webp",
+      "face_file": "images/portraits/history/imjin_soldier.webp"
+    },
+    {
+      "id": "imjin_elder",
+      "name": "피란민 노인",
+      "key": "portraits/history/imjin_elder",
+      "prompt": "Use case: stylized-concept historical RPG portrait. A single elderly Korean male refugee in his late sixties, distinct gaunt long lined face, hollow weary dark eyes, thin white mustache and sparse short white beard, wrinkled forehead, greying hair in a simple topknot under a worn beige cloth headband. Plain patched grey-brown hemp robe with white undercollar, dark grey loose trousers. Seated on an invisible low stool implied only by bent knees, holding a tied cloth travel bundle against lap and raising one palm in sorrowful disbelief. Dignified worried tired expression, natural anatomy, no injury or exposed body, no religious robes or ornate hats. Clearly male grandfather. Semi-realistic hand-painted historical adventure game illustration, warm modeled face planes, subtle brush texture and rough cloth. Vertical 2:3 head through knees crop, no feet, single isolated man on genuine transparent alpha background, no stool visible, ground, scenery, gradient, text, logo or frame. 1024x1536 transparent PNG.",
+      "transparent_background": true,
+      "half_source": "artifacts/imjin-missing-art-20261031/sources/imjin_elder_half.png",
+      "face_prompt": "Use case: identity-preserve. Square head-and-shoulders portrait of EXACT same elderly Korean male refugee in attached game image. Preserve identical elderly gaunt face, worried eyes, sparse white beard and mustache, wrinkled brow, beige cloth headband, grey topknot, grey-brown patched robe and mournful expression. No bundle or hands in face crop, large clearly readable face. Same semi-realistic hand-painted historical RPG illustration, soft warm light, genuine transparent alpha background, no backdrop, gradient, text or frame, 1024x1024 PNG.",
+      "face_source": "artifacts/imjin-missing-art-20261031/sources/imjin_elder_face.png",
+      "half_file": "images/portraits/history/imjin_elder_half.webp",
+      "face_file": "images/portraits/history/imjin_elder.webp"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "imjin_busan",
+      "name": "부산포 앞바다",
+      "people": [],
+      "subject": "1592 Busan harbor seen from a Korean panokseon deck, countless Japanese wooden invasion ships and pale square sails stretch across a hazy horizon, Japanese soldiers disembark in distant coves, black smoke rises over small Busanjin stone walls, several enemy ships turn toward foreground Korean warship. Tense wind and waves, traditional wooden warships, no European ships, no explosions like modern warfare.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. 1592 Busan harbor seen from a Korean panokseon deck, countless Japanese wooden invasion ships and pale square sails stretch across a hazy horizon, Japanese soldiers disembark in distant coves, black smoke rises over small Busanjin stone walls, several enemy ships turn toward foreground Korean warship. Tense wind and waves, traditional wooden warships, no European ships, no explosions like modern warfare. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_busan.png",
+      "references": [],
+      "revision_prompt": "Precise historical affiliation correction ONLY. Preserve this entire panoramic wooden invasion-fleet painting, people, ships, coastline, smoke, lighting and composition. The very nearest foreground ship at left is a KOREAN panokseon, its crew Korean defenders. REMOVE the black three-comma Japanese tomoe emblems from ALL flags and white sailcloth attached to this nearest foreground ship. Replace foreground flag/sail markings with plain unmarked cream sailcloth and a small plain NAVY BLUE pennant. The approaching middle-distance Japanese ships KEEP their Japanese tomoe emblems. Do not alter any people, ship shapes or framing. Keep painterly RPG scene, 1881x836 wide full opaque scene, no caption or new writing.",
+      "file": "images/legend-events/imjin_busan.webp"
+    },
+    {
+      "id": "imjin_dongnae",
+      "name": "동래 읍성의 논개",
+      "people": [
+        "nongae",
+        "imjin_soldier"
+      ],
+      "subject": "1592 Dongnae walled-town alley near the harbor. Adult Korean woman Nongae, exactly the illustrated face and ivory/burgundy/navy fully opaque hanbok of reference, stands defiant with a small hairpin held defensively. Two Japanese ashigaru in jingasa and worn dark armor close in from a short distance, while several frightened fully clothed townspeople retreat toward a stone gate. Rescue moment, tense but non-graphic, nobody restrained or exposed, no sexual imagery, no contact with her clothes. Korean tiled roofs, bundles and dust.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. 1592 Dongnae walled-town alley near the harbor. Adult Korean woman Nongae, exactly the illustrated face and ivory/burgundy/navy fully opaque hanbok of reference, stands defiant with a small hairpin held defensively. Two Japanese ashigaru in jingasa and worn dark armor close in from a short distance, while several frightened fully clothed townspeople retreat toward a stone gate. Rescue moment, tense but non-graphic, nobody restrained or exposed, no sexual imagery, no contact with her clothes. Korean tiled roofs, bundles and dust. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_dongnae.png",
+      "references": [
+        {
+          "id": "nongae",
+          "source": "artifacts/imjin-missing-art-20261031/references/nongae.png"
+        },
+        {
+          "id": "imjin_soldier",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_soldier.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_dongnae.webp"
+    },
+    {
+      "id": "imjin_kimsimin",
+      "name": "비단 궤짝을 맡기는 김시민",
+      "people": [
+        "kimsimin",
+        "songsanghyeon",
+        "imjin_officer"
+      ],
+      "subject": "Dongnae fortress courtyard 1592. Armored Korean general Kim Si-min in dark lamellar armor and red sleeves hands an open sturdy wooden chest filled with neatly folded silk bolts to an anonymous foreign sea captain seen from behind in a simple dark travel coat. Civil magistrate Song Sang-hyeon in cobalt-blue official robe and black winged samo stands on the stone stair behind, firm and composed; the blue-robed messenger holds a dispatch beside chest. Referenced faces and clothing retained. Korean fortress gate and distant smoke, solemn urgent duty.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Dongnae fortress courtyard 1592. Armored Korean general Kim Si-min in dark lamellar armor and red sleeves hands an open sturdy wooden chest filled with neatly folded silk bolts to an anonymous foreign sea captain seen from behind in a simple dark travel coat. Civil magistrate Song Sang-hyeon in cobalt-blue official robe and black winged samo stands on the stone stair behind, firm and composed; the blue-robed messenger holds a dispatch beside chest. Referenced faces and clothing retained. Korean fortress gate and distant smoke, solemn urgent duty. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_kimsimin.png",
+      "references": [
+        {
+          "id": "kimsimin",
+          "source": "artifacts/imjin-missing-art-20261031/references/kimsimin.png"
+        },
+        {
+          "id": "songsanghyeon",
+          "source": "artifacts/imjin-missing-art-20261031/references/songsanghyeon.png"
+        },
+        {
+          "id": "imjin_officer",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_officer.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_kimsimin.webp"
+    },
+    {
+      "id": "imjin_breakout",
+      "name": "동래 성문 밖 돌파",
+      "people": [
+        "imjin_officer",
+        "imjin_soldier"
+      ],
+      "subject": "Outside Dongnae stone gate, 1592, a small mixed group of Korean defenders and foreign sailors pushes through the dusty road toward northern hills. Blue-robed Korean messenger leads with sword held low. Japanese ashigaru matchlock line across a field lets off a thin ribbon of white smoke; defenders take cover behind earthen bank and timber cart. Readable dynamic escape with no blood or visible wounds, tiled gate tower behind and rugged green foothills.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Outside Dongnae stone gate, 1592, a small mixed group of Korean defenders and foreign sailors pushes through the dusty road toward northern hills. Blue-robed Korean messenger leads with sword held low. Japanese ashigaru matchlock line across a field lets off a thin ribbon of white smoke; defenders take cover behind earthen bank and timber cart. Readable dynamic escape with no blood or visible wounds, tiled gate tower behind and rugged green foothills. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_breakout.png",
+      "references": [
+        {
+          "id": "imjin_officer",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_officer.png"
+        },
+        {
+          "id": "imjin_soldier",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_soldier.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_breakout.webp"
+    },
+    {
+      "id": "imjin_tangeum",
+      "name": "탄금대의 신립",
+      "people": [
+        "sinrip",
+        "imjin_youth"
+      ],
+      "subject": "Chungju Tangeumdae beside wide river, 1592. Proud Korean cavalry commander Sin Rip in red studded brigandine and red-plumed helmet sits high on a dark brown horse, chin raised confidently, gesturing toward a Japanese matchlock line in far distance. Rows of Korean riders and bowmen assemble behind among spring reeds, river blocks retreat behind their ranks, an adult volunteer on foot listens anxiously. Large expressive commander in central foreground, no active injuries.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Chungju Tangeumdae beside wide river, 1592. Proud Korean cavalry commander Sin Rip in red studded brigandine and red-plumed helmet sits high on a dark brown horse, chin raised confidently, gesturing toward a Japanese matchlock line in far distance. Rows of Korean riders and bowmen assemble behind among spring reeds, river blocks retreat behind their ranks, an adult volunteer on foot listens anxiously. Large expressive commander in central foreground, no active injuries. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_tangeum.png",
+      "references": [
+        {
+          "id": "sinrip",
+          "source": "artifacts/imjin-missing-art-20261031/references/sinrip.png"
+        },
+        {
+          "id": "imjin_youth",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_youth.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_tangeum.webp"
+    },
+    {
+      "id": "imjin_sinrip",
+      "name": "신립의 마지막 돌격",
+      "people": [
+        "sinrip",
+        "imjin_soldier"
+      ],
+      "subject": "Tangeumdae riverbank at late afternoon, 1592. Korean general Sin Rip on a rearing dark horse, red brigandine and crimson helmet plume, turns protectively toward an anonymous foreign captain retreating at frame edge and then leads remaining mounted guards toward the river through drifting matchlock smoke. Dramatic diagonal movement, scattered rider silhouettes, river and low cliffs behind, courageous tragic resolve without bodies, gore or wounds.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Tangeumdae riverbank at late afternoon, 1592. Korean general Sin Rip on a rearing dark horse, red brigandine and crimson helmet plume, turns protectively toward an anonymous foreign captain retreating at frame edge and then leads remaining mounted guards toward the river through drifting matchlock smoke. Dramatic diagonal movement, scattered rider silhouettes, river and low cliffs behind, courageous tragic resolve without bodies, gore or wounds. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_sinrip.png",
+      "references": [
+        {
+          "id": "sinrip",
+          "source": "artifacts/imjin-missing-art-20261031/references/sinrip.png"
+        },
+        {
+          "id": "imjin_soldier",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_soldier.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_sinrip.webp"
+    },
+    {
+      "id": "imjin_flight",
+      "name": "경복궁을 떠나는 선조",
+      "people": [
+        "seonjo",
+        "gwanghae",
+        "heojun",
+        "imjin_refugee"
+      ],
+      "subject": "Rainy dawn at late-sixteenth-century Gyeongbokgung palace gate in Hanyang. King Seonjo in crimson dragon gonryongpo and upright-wing royal hat looks nervously back as attendants guide him toward a modest covered royal litter. Young clean-shaven crown prince Gwanghae in indigo dragon robe remains near gathered worried commoners, leaning forward to hear an older refugee woman. Physician Heo Jun in reference red-black robe and gold-black hat kneels beside medicine bundles and tends a fully clothed elderly man. Burning roofs and smoke far away, solemn large Korean palace gate, rain, no later nineteenth-century palace decorations, all four faces distinct.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Rainy dawn at late-sixteenth-century Gyeongbokgung palace gate in Hanyang. King Seonjo in crimson dragon gonryongpo and upright-wing royal hat looks nervously back as attendants guide him toward a modest covered royal litter. Young clean-shaven crown prince Gwanghae in indigo dragon robe remains near gathered worried commoners, leaning forward to hear an older refugee woman. Physician Heo Jun in reference red-black robe and gold-black hat kneels beside medicine bundles and tends a fully clothed elderly man. Burning roofs and smoke far away, solemn large Korean palace gate, rain, no later nineteenth-century palace decorations, all four faces distinct. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_flight.png",
+      "references": [
+        {
+          "id": "seonjo",
+          "source": "artifacts/imjin-missing-art-20261031/references/seonjo.png"
+        },
+        {
+          "id": "gwanghae",
+          "source": "artifacts/imjin-missing-art-20261031/references/gwanghae.png"
+        },
+        {
+          "id": "heojun",
+          "source": "artifacts/imjin-missing-art-20261031/references/heojun.png"
+        },
+        {
+          "id": "imjin_refugee",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_refugee.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_flight.webp"
+    },
+    {
+      "id": "imjin_gwak",
+      "name": "홍의장군과 상복의 김덕령",
+      "people": [
+        "gwakjaeu",
+        "kimdeokryeong",
+        "imjin_refugee",
+        "imjin_soldier"
+      ],
+      "subject": "Rural road south of Hanyang 1592. Gwak Jae-u in brilliant red robe and broad black hat rides a chestnut horse, drawing his Korean bow toward empty distance. Young Kim Deok-ryeong in undyed ivory mourning hemp and white headband stands with two iron maces held low, shielding fully clothed refugee families with bundles as a few Japanese ashigaru withdraw beyond a broken cart. Green fields and distant burned farm roofs, dramatic heroism and cooperation, no gore, no modern elements.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Rural road south of Hanyang 1592. Gwak Jae-u in brilliant red robe and broad black hat rides a chestnut horse, drawing his Korean bow toward empty distance. Young Kim Deok-ryeong in undyed ivory mourning hemp and white headband stands with two iron maces held low, shielding fully clothed refugee families with bundles as a few Japanese ashigaru withdraw beyond a broken cart. Green fields and distant burned farm roofs, dramatic heroism and cooperation, no gore, no modern elements. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_gwak.png",
+      "references": [
+        {
+          "id": "gwakjaeu",
+          "source": "artifacts/imjin-missing-art-20261031/references/gwakjaeu.png"
+        },
+        {
+          "id": "kimdeokryeong",
+          "source": "artifacts/imjin-missing-art-20261031/references/kimdeokryeong.png"
+        },
+        {
+          "id": "imjin_refugee",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_refugee.png"
+        },
+        {
+          "id": "imjin_soldier",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_soldier.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_gwak.webp"
+    },
+    {
+      "id": "imjin_haengju",
+      "name": "행주산성의 권율",
+      "people": [
+        "gwonyul",
+        "imjin_refugee",
+        "imjin_youth"
+      ],
+      "subject": "Haengju mountain fortress Korean war-camp. Silver-bearded general Gwon Yul in reference red-and-gold scale armor with plumed helmet stands beside an opened silk chest and bundles of arrows, receiving a respectful report from an anonymous foreign captain shown from behind. In middle ground adult Korean women in practical opaque skirts knotted for work carry stones in apron folds to defenders along low timber-and-earth ramparts. Clear view of river and steep hills below, quiet preparation, dignified determined people, no sexual emphasis.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Haengju mountain fortress Korean war-camp. Silver-bearded general Gwon Yul in reference red-and-gold scale armor with plumed helmet stands beside an opened silk chest and bundles of arrows, receiving a respectful report from an anonymous foreign captain shown from behind. In middle ground adult Korean women in practical opaque skirts knotted for work carry stones in apron folds to defenders along low timber-and-earth ramparts. Clear view of river and steep hills below, quiet preparation, dignified determined people, no sexual emphasis. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_haengju.png",
+      "references": [
+        {
+          "id": "gwonyul",
+          "source": "artifacts/imjin-missing-art-20261031/references/gwonyul.png"
+        },
+        {
+          "id": "imjin_refugee",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_refugee.png"
+        },
+        {
+          "id": "imjin_youth",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_youth.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_haengju.webp"
+    },
+    {
+      "id": "imjin_wongyun",
+      "name": "원균과 가라앉은 배",
+      "people": [
+        "wongyun",
+        "imjin_officer"
+      ],
+      "subject": "A damaged southern Korean naval quay in 1592. Ruddy round-faced Korean naval officer Won Gyun, exactly reference red brigandine and helmet, sits under a simple canvas shade holding a bronze drinking cup with an overconfident crooked grin. A blue-robed messenger stands tensely beside a chart table. Beyond the jetty several deliberately scuttled Korean warship hulls lie half submerged with tilted masts, grey morning sea, dramatic contrast between his relaxed posture and the ruined fleet. No modern bottles, no gore.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. A damaged southern Korean naval quay in 1592. Ruddy round-faced Korean naval officer Won Gyun, exactly reference red brigandine and helmet, sits under a simple canvas shade holding a bronze drinking cup with an overconfident crooked grin. A blue-robed messenger stands tensely beside a chart table. Beyond the jetty several deliberately scuttled Korean warship hulls lie half submerged with tilted masts, grey morning sea, dramatic contrast between his relaxed posture and the ruined fleet. No modern bottles, no gore. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_wongyun.png",
+      "references": [
+        {
+          "id": "wongyun",
+          "source": "artifacts/imjin-missing-art-20261031/references/wongyun.png"
+        },
+        {
+          "id": "imjin_officer",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_officer.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_wongyun.webp"
+    },
+    {
+      "id": "imjin_hansan_council",
+      "name": "한산도 군략 회의",
+      "people": [
+        "yisunsin",
+        "imjin_officer"
+      ],
+      "subject": "Night inside a Korean panokseon flagship cabin at Hansando 1592. Young stern admiral Yi Sun-sin in red-and-gold scale armor, black compact beard and red-plumed Korean helmet, EXACT current illustrated identity, leans over a hand-drawn sea chart of a narrow strait. He uses one fingertip and small wooden ship tokens to arrange a broad crane-wing formation; two Korean officers including blue-robed messenger listen intently. Oil lamps illuminate painted faces, dark sea and anchored Korean ships visible through open door. No words or readable script on chart, no trident-shaped staff.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Night inside a Korean panokseon flagship cabin at Hansando 1592. Young stern admiral Yi Sun-sin in red-and-gold scale armor, black compact beard and red-plumed Korean helmet, EXACT current illustrated identity, leans over a hand-drawn sea chart of a narrow strait. He uses one fingertip and small wooden ship tokens to arrange a broad crane-wing formation; two Korean officers including blue-robed messenger listen intently. Oil lamps illuminate painted faces, dark sea and anchored Korean ships visible through open door. No words or readable script on chart, no trident-shaped staff. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_hansan_council.png",
+      "references": [
+        {
+          "id": "yisunsin",
+          "source": "artifacts/imjin-missing-art-20261031/references/yisunsin.png"
+        },
+        {
+          "id": "imjin_officer",
+          "source": "artifacts/imjin-missing-art-20261031/references/imjin_officer.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_hansan_council.webp"
+    },
+    {
+      "id": "imjin_chil",
+      "name": "칠천량의 밤",
+      "people": [
+        "wongyun",
+        "baeseol"
+      ],
+      "subject": "Night battle at Chilcheollyang 1597. View across the deck of a Korean panokseon: exhausted Bae Seol in battered dark red brigandine and modest Korean helmet gestures to a narrow open waterway as a handful of Korean ships pull away from burning fleet. Round-faced Won Gyun in red armor stands farther along the quay amid chaotic signals. Firelit traditional Korean wooden panokseon and low-domed turtle ships in distance, Japanese matchlock smoke and silhouettes beyond, black water and hot orange light, no human injuries or bodies, cinematic tragedy.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Night battle at Chilcheollyang 1597. View across the deck of a Korean panokseon: exhausted Bae Seol in battered dark red brigandine and modest Korean helmet gestures to a narrow open waterway as a handful of Korean ships pull away from burning fleet. Round-faced Won Gyun in red armor stands farther along the quay amid chaotic signals. Firelit traditional Korean wooden panokseon and low-domed turtle ships in distance, Japanese matchlock smoke and silhouettes beyond, black water and hot orange light, no human injuries or bodies, cinematic tragedy. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_chil.png",
+      "references": [
+        {
+          "id": "wongyun",
+          "source": "artifacts/imjin-missing-art-20261031/references/wongyun.png"
+        },
+        {
+          "id": "baeseol",
+          "source": "artifacts/imjin-missing-art-20261031/references/baeseol.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_chil.webp"
+    },
+    {
+      "id": "imjin_noryang",
+      "name": "노량의 마지막 바다",
+      "people": [
+        "yisunsin",
+        "chenlin",
+        "yiwan"
+      ],
+      "subject": "Winter night 1598 before Noryang sea battle. On the high deck of a Korean panokseon, young stern Yi Sun-sin in red-and-gold scale armor and red-plumed round-finial helmet stands shoulder to shoulder with Ming admiral Chen Lin in red brigandine, blue sash and Ming helmet, both faces exactly referenced and clearly different. Young officer Yi Wan holds drumsticks beside a large war drum. Beyond them Korean panokseon and low armored turtle ships join taller Ming junks with battened sails beneath moonlit winter clouds, enemy fleet lights across strait, solemn allied resolve.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Winter night 1598 before Noryang sea battle. On the high deck of a Korean panokseon, young stern Yi Sun-sin in red-and-gold scale armor and red-plumed round-finial helmet stands shoulder to shoulder with Ming admiral Chen Lin in red brigandine, blue sash and Ming helmet, both faces exactly referenced and clearly different. Young officer Yi Wan holds drumsticks beside a large war drum. Beyond them Korean panokseon and low armored turtle ships join taller Ming junks with battened sails beneath moonlit winter clouds, enemy fleet lights across strait, solemn allied resolve. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_noryang.png",
+      "references": [
+        {
+          "id": "yisunsin",
+          "source": "artifacts/imjin-missing-art-20261031/references/yisunsin.png"
+        },
+        {
+          "id": "chenlin",
+          "source": "artifacts/imjin-missing-art-20261031/references/chenlin.png"
+        },
+        {
+          "id": "yiwan",
+          "source": "artifacts/imjin-missing-art-20261031/references/yiwan.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_noryang.webp"
+    },
+    {
+      "id": "imjin_yisunsin",
+      "name": "노량의 새벽",
+      "people": [
+        "yisunsin",
+        "yiwan"
+      ],
+      "subject": "Dawn on Korean flagship during Noryang 1598. Young admiral Yi Sun-sin, same red-and-gold armor and black short beard as reference, sits weakened against a large war drum, helmet plume droops beside him. His adult nephew Yi Wan in navy naval coat and dark helmet kneels close, supporting his shoulder with an anxious tearful expression. An anonymous foreign captain seen from behind presses a CLEAN folded white cloth over left armored chest, no visible blood or wound. Admiral raises one steady hand, face stern but fading, softly glowing sunrise and distant retreating ships across quiet smoky sea. Dignified poignant scene, no gore, no corpse, no trident object.",
+      "prompt": "Use case: historical-scene. Create ONE panoramic event illustration for a semi-realistic HAND-PAINTED historical ocean adventure RPG. Dawn on Korean flagship during Noryang 1598. Young admiral Yi Sun-sin, same red-and-gold armor and black short beard as reference, sits weakened against a large war drum, helmet plume droops beside him. His adult nephew Yi Wan in navy naval coat and dark helmet kneels close, supporting his shoulder with an anxious tearful expression. An anonymous foreign captain seen from behind presses a CLEAN folded white cloth over left armored chest, no visible blood or wound. Admiral raises one steady hand, face stern but fading, softly glowing sunrise and distant retreating ships across quiet smoky sea. Dignified poignant scene, no gore, no corpse, no trident object. Match attached character references for their corresponding facial identity, age, clothing colors and Korean/Japanese/Ming headgear; stage them naturally in the scene, never paste flat portrait cutouts. Visibly painted face planes, rich tactile wood and cloth, cinematic natural lighting and atmospheric depth. Wide 2.25:1 composition, important faces and actions in central 80 percent with clear safe margins for crop, medium-distance readable characters. No modern equipment, fantasy monsters, UI, captions, readable writing, watermark, frame, logo or collage. Full painted scene background, not transparent. Target 1881x836.",
+      "transparent_background": false,
+      "source": "artifacts/imjin-missing-art-20261031/sources/imjin_yisunsin.png",
+      "references": [
+        {
+          "id": "yisunsin",
+          "source": "artifacts/imjin-missing-art-20261031/references/yisunsin.png"
+        },
+        {
+          "id": "yiwan",
+          "source": "artifacts/imjin-missing-art-20261031/references/yiwan.png"
+        }
+      ],
+      "file": "images/legend-events/imjin_yisunsin.webp"
+    }
+  ]
+}

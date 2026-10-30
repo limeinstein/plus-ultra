@@ -112,10 +112,12 @@
     host.appendChild(root);
 
     var so = sourceOf(opts), src = so && so.src;
-    /* 무릎상은 머리수건·긴 머리·목걸이·망토가 목선을 가로지르는 그림이 많다.
-       한 장을 머리·몸통·하체로 잘라 따로 흔들면 그 장식까지 잘려 얼굴을 몸에 붙인 듯
-       보이므로, 무릎상은 언제나 완성된 한 장으로 움직인다. 흉상만 2.5D 조각을 쓴다. */
-    var layered = opts.layered !== false && profile !== 'half' && !!src;
+    /* 인물 그림은 얼굴상·무릎상을 가리지 않고 언제나 완성된 원본 한 장으로 표시한다.
+       예전에는 얼굴상만 머리·몸통·하체로 나눴는데, 그림마다 목선·머리카락·모자 위치가
+       달라 얼굴 좌표가 조금만 어긋나도 이마나 턱에 절단선이 생겼다. 무릎상 로딩 실패 뒤
+       얼굴상으로 바뀌는 순간에도 같은 현상이 재발할 수 있어 분할 리그를 전부 끈다.
+       rig-single의 아주 작은 전체 그림 움직임은 남아 있으므로 대화 화면은 정지하지 않는다. */
+    var layered = false;
     // 몸이 그림 끝에 닿아 잘린 무릎상(팔꿈치·소매·망토): 그 쪽 끝을 부드럽게 흐려 칼로 자른 선이 보이지 않게 (tools/half_edge.py → G.HALF_EDGE)
     var cut = profile === 'half' && so && so.key && G.HALF_EDGE ? G.HALF_EDGE[so.key] : '';
     if (cut && cut.indexOf('l') >= 0) root.classList.add('cut-l');

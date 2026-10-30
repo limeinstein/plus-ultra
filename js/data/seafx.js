@@ -337,6 +337,11 @@
     entryWalk: 0.30, entryDive: 0.12, diveHeight: 24, splashSize: 22,
     frameById: { hummingbird: 45, albatross: 150, condor: 155, roc: 160, crane: 135, flamingo: 135 },
     sizeById: { hummingbird: 0.6, vinousbird: 0.65, budgie: 0.7, ploverbird: 0.7, kiwi: 0.75, roc: 1.4, phoenix: 1.3, condor: 1.2, albatross: 1.2 } };
+  // 나비·나방: 조류보다 작게, 무리·개체마다 등장과 퇴장 시점을 달리한다.
+  G.FX.butterflies = { count: [30, 60], duration: 11, stagger: 2.4, life: [7, 11], size: 32,
+    frameMs: 75, height: 110, scale: [0.65, 1.1], flap: [0.7, 1.4], fadeRange: [0.35, 0.85],
+    spreadX: [-330, 270], spreadY: [-140, 100], drift: [-25, 45], rise: [4, 15],
+    swayX: [12, 35], swayY: [14, 45], frequency: [1.1, 2.8], swayRatio: 0.73, tilt: 0.25 };
   // 그린 스프라이트 시트 (js/art/sprites.js · images/sprites/ — tools/sprite_repack.py 가 만든다)
   G.FX.sprites = {
     party: true,         // 육상 탐험대를 8방향 그림 시트로 (탈것마다 천천히·빨리 두 장 — 시트가 없는 탈것은 코드 그림)
@@ -354,6 +359,17 @@
         enabled: true, maxMembers: 4, lateralY: 0.72, turnRate: 4.8,
         groundMinGap: 20, groundAngles: 24, groundRadii: [1, 0.85, 0.7, 0.55, 0.4, 0.25, 0.1],
         phaseOffsets: [0, 0.21, 0.48, 0.73],
+        follow: {       // 자리로 옮겨 붙이지 않고 각 대원이 제독의 지나온 길을 쫓는다.
+          maxDelta: 0.1, teleportPx: 120, trailStep: 0.7, trailPoints: 600,
+          backSlots: [0, 1, 1.3, 2.15], lineSlots: [0, 1, 2, 3], sideSlots: [0, -0.8, 0.8, 0],
+          bendAngle: 1.3, closeRate: 4.5, openRate: 0.75,
+          stopDistance: 2.5, arrivalSeconds: 0.3, minSpeed: 22, catchup: 1.32, catchupExtra: 12,
+          acceleration: 210, turnRate: 4.1, speedSmooth: 6,
+          separation: 18, separationGap: 0.42, separationWeight: 0.9,
+          groundStep: 7, lookAhead: 32,
+          strides: { foot: 20, porter: 20, horse: 40, camel: 46, camel2: 46, donkey: 22,
+            llama: 24, yak: 30, wagon: 34, oxwagon: 34, elephant: 50, reindeer: 36 }
+        },
         gaps: { walk: [44, 34], porter: [48, 38], horse: [64, 56], camel: [72, 62],
           donkey: [60, 50], llama: [60, 50], yak: [64, 56], wagon: [100, 86], elephant: [100, 88], reindeer: [94, 80] }
       }
