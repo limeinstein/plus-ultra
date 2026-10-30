@@ -97,7 +97,7 @@ const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-2026
       assert.strictEqual(await page.locator('.reveal').count(), 0, id + ': 발견 장면 정리');
       assert(await page.evaluate(id => G.Scenes.discoveryReplay(G.DISC[id]), id), id + ': 수첩 다시 보기');
     }
-    const catalog = await page.context().newPage();
+    const catalog = await browser.newPage({ viewport: { width: 1280, height: 800 } });
     catalog.on('pageerror', e => errors.push('도감: ' + e.message));
     catalog.on('console', m => { if (m.type() === 'error') errors.push('도감: ' + m.text()); });
     await catalog.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ contentType: 'text/css', body: '' }));
@@ -112,6 +112,7 @@ const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/additions-2026
     }, rows);
     await catalog.locator('#tab-items').click();
     await catalog.locator('#q').fill('imjin_gat');
+    await catalog.waitForFunction(() => document.querySelectorAll('.card').length === 1);
     await catalog.waitForSelector('.card .thumb canvas, .card .thumb img');
     assert.strictEqual(await catalog.locator('.card').count(), 1, '도감에서 새 사건 소지품 찾기');
     await catalog.locator('.card').click();
