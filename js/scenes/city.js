@@ -167,6 +167,9 @@
       if (G.Sim && G.Sim.pending()) await G.Sim.check();         // 공양미 삼백 석 — 심청 (js/systems/simcheong.js)
       if (G.IncaFall && G.IncaFall.pending()) await G.IncaFall.check();   // 잉카 제국의 멸망 — 파나마·카하마르카·쿠스코 (js/systems/incafall.js)
       if (G.Aztec && G.Aztec.pending()) await G.Aztec.check();
+      if (G.Imjin && G.Imjin.pending()) await G.Imjin.check();   // 임진왜란 — 동래·한양·한산도 (js/systems/imjin.js)
+      if (G.Globe && G.Globe.pending()) await G.Globe.check();   // 셰익스피어와 글로브의 불 — 앤 해서웨이 (js/systems/globe.js)
+      if (G.GalPisa && G.GalPisa.pending()) await G.GalPisa.check();   // 갈릴레오와 피사의 사탑 (js/systems/galpisa.js)
       if (G.RomeSack && G.RomeSack.pending()) await G.RomeSack.check();   // 1527년 로마 약탈 — 피렌체·로마 (js/systems/romesack.js)
       if (G.Potosi && G.Potosi.pending()) await G.Potosi.check();   // 포토시 은광 — 바람의 불 · 차스카 구출 (js/systems/potosi.js)
       if (G.Nzinga && G.Nzinga.pending()) await G.Nzinga.check();   // 은징가 여왕의 저항 — 루안다 (js/systems/nzinga.js)
@@ -181,6 +184,7 @@
       if (G.DutchWar && G.DutchWar.pending()) await G.DutchWar.check();   // 네덜란드 독립 전쟁 — 개미와 베짱이, 암스테르담 (js/systems/dutchwar.js)
       if (G.NewWorld && G.NewWorld.pending()) await G.NewWorld.check();   // 콜럼버스의 신대륙 발견과 그 뒤 — 세비야·그라나다·바르셀로나·산토도밍고·산티아고·자메이카 (js/systems/newworld.js)
       if (G.Reform && G.Reform.pending()) await G.Reform.check();   // 루터의 종교 개혁 — 면죄받은 자들 (추리 수사극), 마그데부르크 (js/systems/reformation.js)
+      if (G.Newton && G.Newton.pending()) await G.Newton.check();   // 아이작 뉴턴 — 『프린키피아』(1686~87) · 남해 회사 주식(1720), 런던 (js/systems/newton.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -257,6 +261,8 @@
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
     // 고향 부두의 마중 · 배에 탄 아이와 항구의 한때 (js/systems/familyevent.js)
     if (G.FamEv && arg.arrive && s.loc.via !== 'land') { try { await G.FamEv.arrive(c); } catch (e) { console.error(e); } }
+    // 뒤를 이은 제독이 모항에 돌아오면 가끔 어릴 적 소꿉친구와 (js/systems/osa.js)
+    if (G.Osa) { try { await G.Osa.arrival(c, arg); } catch (e) { console.error(e); } }
     // contract reminder
     if (s.contract) {
       var sp = G.SPONSOR[s.contract.sponsor];
@@ -431,6 +437,7 @@
     plaque(B, c, arg);
     if (G.Audio && G.Audio.setPlace) G.Audio.setPlace(kind);     // 건물의 곡: 주점·왕궁 — 겹쳐 쌓이지 않는다
     if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
+    if (G.Osa) { try { await G.Osa.enter(c, kind); } catch (e) { console.error(e); } }   // 모항에서 소꿉친구의 특기 장면 (요리→항구, 의학→여관 …)
     var ok = true;
     try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }
     busy = false;

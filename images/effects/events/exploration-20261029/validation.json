@@ -1,0 +1,172 @@
+[
+  {
+    "id": "oasis",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 745064,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "0cb8e3273137eef452a44b237f0450299bcc0b7d4caecbf753a7734061421fcf"
+  },
+  {
+    "id": "shooting_star",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 1107693,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "71980ba89d3d6d47b9bd0b67ff862ba7c1d17ead6d96075faf8a2a9296129e34"
+  },
+  {
+    "id": "milky_way",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 520553,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "b35c1e4a2878e17a5292e7c4c5bb1af343d0a6185faf1ccad155654e014c7f46"
+  },
+  {
+    "id": "solar_eclipse",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 428980,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "a32dbc2d87c44eb62a0cd1235ef1a3f61eb4481cc3133278416b0a5f46752f83"
+  },
+  {
+    "id": "lunar_eclipse",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 778729,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "94f5f5f9e98b96efe1b0a56397118e94ad22bf6338166d04558c2e5496b8fb09"
+  },
+  {
+    "id": "extreme_heat",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 770060,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "4e3dfb8b565a213efc0a69c5295228a8969e308c2937771fdc64cecd0f4984da"
+  },
+  {
+    "id": "extreme_cold",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 716303,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "9bab19cb276c05d7051a0a474eaedc944688b89ae369ebf24f7bf545152a16f1"
+  },
+  {
+    "id": "waterspout",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 850374,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "95c211b7c8c97055fbbd9487c708e4962f03c5f9d3a30c59e4bf6b4cac9f49fa"
+  },
+  {
+    "id": "tsunami",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 969424,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "2d72b1b193d1974f2a4d000135eb0931e7ec6226c0eb0862dd09957fbe6cbdac"
+  },
+  {
+    "id": "locust_swarm",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "transparentPixels": 990249,
+    "distinctFrames": 8,
+    "separatorPixelsAboveAlpha8": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "187296332a34de3d184e9c2a8358cafe592f2358816c96bcd7ba09d18ff6cc09"
+  }
+]

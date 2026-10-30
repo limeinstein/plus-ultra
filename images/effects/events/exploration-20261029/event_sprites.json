@@ -1,0 +1,1502 @@
+{
+  "version": 1,
+  "generator": "built-in image_gen",
+  "styleReference": "../../departure_gull.png",
+  "frameOrder": "left-to-right, then top-to-bottom",
+  "columns": 4,
+  "rows": 2,
+  "alphaThreshold": 8,
+  "sliceRule": "Use xBounds/yBounds (not assumed equal cells); alpha-trim within each region at alpha > 8; use pivotNormalized for each event. Preserve source alpha.",
+  "events": {
+    "oasis": {
+      "name": "오아시스",
+      "file": "oasis.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 160,
+      "playback": "loop",
+      "pivotNormalized": [
+        0.5,
+        1.0
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            35,
+            52,
+            419,
+            423
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            35,
+            50,
+            418,
+            423
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            35,
+            54,
+            418,
+            424
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            35,
+            66,
+            418,
+            424
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            36,
+            58,
+            419,
+            424
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            35,
+            53,
+            419,
+            424
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            35,
+            52,
+            418,
+            424
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            35,
+            47,
+            419,
+            424
+          ]
+        }
+      ]
+    },
+    "shooting_star": {
+      "name": "별똥별",
+      "file": "shooting_star.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 100,
+      "playback": "once",
+      "pivotNormalized": [
+        0.5,
+        0.5
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            102,
+            133,
+            270,
+            284
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            49,
+            94,
+            319,
+            326
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            35,
+            90,
+            328,
+            339
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            14,
+            54,
+            395,
+            375
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            12,
+            32,
+            425,
+            376
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            17,
+            47,
+            401,
+            354
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            47,
+            71,
+            392,
+            343
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            47,
+            88,
+            363,
+            332
+          ]
+        }
+      ]
+    },
+    "milky_way": {
+      "name": "은하수",
+      "file": "milky_way.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 200,
+      "playback": "loop",
+      "pivotNormalized": [
+        0.5,
+        0.5
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            25,
+            52,
+            424,
+            405
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            23,
+            52,
+            425,
+            405
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            25,
+            51,
+            425,
+            404
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            25,
+            50,
+            425,
+            404
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            24,
+            49,
+            426,
+            402
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            25,
+            48,
+            425,
+            403
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            25,
+            47,
+            425,
+            400
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            24,
+            51,
+            426,
+            403
+          ]
+        }
+      ]
+    },
+    "solar_eclipse": {
+      "name": "일식",
+      "file": "solar_eclipse.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 230,
+      "playback": "once",
+      "pivotNormalized": [
+        0.5,
+        0.5
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            49,
+            53,
+            407,
+            414
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            41,
+            56,
+            405,
+            413
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            44,
+            60,
+            398,
+            409
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            43,
+            63,
+            392,
+            406
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            54,
+            58,
+            397,
+            397
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            57,
+            60,
+            395,
+            390
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            32,
+            27,
+            410,
+            419
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            13,
+            21,
+            419,
+            433
+          ]
+        }
+      ]
+    },
+    "lunar_eclipse": {
+      "name": "월식",
+      "file": "lunar_eclipse.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 230,
+      "playback": "once",
+      "pivotNormalized": [
+        0.5,
+        0.5
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            47,
+            51,
+            395,
+            394
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            52,
+            52,
+            401,
+            394
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            52,
+            51,
+            399,
+            394
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            55,
+            52,
+            400,
+            393
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            46,
+            33,
+            395,
+            376
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            52,
+            35,
+            401,
+            376
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            51,
+            34,
+            402,
+            377
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            53,
+            34,
+            401,
+            376
+          ]
+        }
+      ]
+    },
+    "extreme_heat": {
+      "name": "혹서기",
+      "file": "extreme_heat.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 140,
+      "playback": "loop",
+      "pivotNormalized": [
+        0.5,
+        1.0
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            97,
+            64,
+            362,
+            406
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            96,
+            64,
+            364,
+            406
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            85,
+            50,
+            360,
+            403
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            80,
+            58,
+            361,
+            409
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            91,
+            55,
+            364,
+            389
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            84,
+            43,
+            369,
+            383
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            81,
+            44,
+            362,
+            388
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            83,
+            43,
+            359,
+            386
+          ]
+        }
+      ]
+    },
+    "extreme_cold": {
+      "name": "혹한기",
+      "file": "extreme_cold.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 120,
+      "playback": "loop",
+      "pivotNormalized": [
+        0.5,
+        1.0
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            41,
+            239,
+            402,
+            403
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            42,
+            176,
+            410,
+            405
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            49,
+            125,
+            423,
+            405
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            38,
+            63,
+            423,
+            405
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            46,
+            69,
+            416,
+            395
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            53,
+            112,
+            411,
+            394
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            54,
+            158,
+            414,
+            394
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            65,
+            230,
+            412,
+            394
+          ]
+        }
+      ]
+    },
+    "waterspout": {
+      "name": "용오름",
+      "file": "waterspout.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 110,
+      "playback": "loop",
+      "pivotNormalized": [
+        0.5,
+        1.0
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            55,
+            42,
+            418,
+            430
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            55,
+            45,
+            402,
+            428
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            47,
+            47,
+            400,
+            429
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            51,
+            36,
+            406,
+            428
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            45,
+            30,
+            405,
+            408
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            48,
+            24,
+            395,
+            407
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            55,
+            28,
+            401,
+            408
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            44,
+            29,
+            402,
+            407
+          ]
+        }
+      ]
+    },
+    "tsunami": {
+      "name": "쓰나미",
+      "file": "tsunami.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 120,
+      "playback": "once",
+      "pivotNormalized": [
+        0.5,
+        1.0
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        465,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            465
+          ],
+          "alphaBounds": [
+            49,
+            345,
+            412,
+            463
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            465
+          ],
+          "alphaBounds": [
+            35,
+            272,
+            423,
+            462
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            465
+          ],
+          "alphaBounds": [
+            29,
+            192,
+            420,
+            463
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            465
+          ],
+          "alphaBounds": [
+            33,
+            113,
+            419,
+            461
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            465,
+            444,
+            422
+          ],
+          "alphaBounds": [
+            34,
+            66,
+            415,
+            369
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            465,
+            443,
+            422
+          ],
+          "alphaBounds": [
+            32,
+            102,
+            433,
+            369
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            465,
+            443,
+            422
+          ],
+          "alphaBounds": [
+            28,
+            188,
+            420,
+            369
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            465,
+            444,
+            422
+          ],
+          "alphaBounds": [
+            33,
+            251,
+            410,
+            370
+          ]
+        }
+      ]
+    },
+    "locust_swarm": {
+      "name": "메뚜기떼",
+      "file": "locust_swarm.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "frameCount": 8,
+      "frameDurationMs": 90,
+      "playback": "loop",
+      "pivotNormalized": [
+        0.5,
+        1.0
+      ],
+      "xBounds": [
+        0,
+        444,
+        887,
+        1330,
+        1774
+      ],
+      "yBounds": [
+        0,
+        444,
+        887
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            30,
+            131,
+            434,
+            378
+          ]
+        },
+        {
+          "index": 1,
+          "sourceRect": [
+            444,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            22,
+            87,
+            426,
+            368
+          ]
+        },
+        {
+          "index": 2,
+          "sourceRect": [
+            887,
+            0,
+            443,
+            444
+          ],
+          "alphaBounds": [
+            20,
+            133,
+            428,
+            376
+          ]
+        },
+        {
+          "index": 3,
+          "sourceRect": [
+            1330,
+            0,
+            444,
+            444
+          ],
+          "alphaBounds": [
+            14,
+            80,
+            419,
+            370
+          ]
+        },
+        {
+          "index": 4,
+          "sourceRect": [
+            0,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            30,
+            107,
+            432,
+            337
+          ]
+        },
+        {
+          "index": 5,
+          "sourceRect": [
+            444,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            19,
+            63,
+            432,
+            347
+          ]
+        },
+        {
+          "index": 6,
+          "sourceRect": [
+            887,
+            444,
+            443,
+            443
+          ],
+          "alphaBounds": [
+            27,
+            112,
+            419,
+            337
+          ]
+        },
+        {
+          "index": 7,
+          "sourceRect": [
+            1330,
+            444,
+            444,
+            443
+          ],
+          "alphaBounds": [
+            17,
+            67,
+            419,
+            355
+          ]
+        }
+      ]
+    }
+  }
+}

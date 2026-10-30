@@ -196,6 +196,8 @@
   function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   L.toScreen = toScreen;
   function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
+  // 편대의 표시 위치만 확인한다. 선장의 실제 이동·지형 판정과는 별개다.
+  function expeditionGround(x, y) { var p = toWorld(x, y); return G.Geo.isLand(p[0], p[1]); }
   /* 마우스 따라가기 (기본 끔 · 수첩 옆 단추나 Shift, G.Ctrl): 끔이면 누른 곳까지 걷고, 켬이면 가려는 쪽을 한 번 누른 뒤로는
      마우스를 옮기는 대로 발걸음이 돈다(조작 감도만큼 차츰). 도시·표식을 누르면 예전처럼 그리로 간다 */
   function followOn() { return !!(G.Ctrl && G.Ctrl.follow()); }
@@ -341,6 +343,7 @@
       st.dayAcc += days;
       if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); }
     }
+    if (l.lon !== px0 || l.lat !== py0) G.State.surveyChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
     animate(dt, px0, py0);
     var dxc = G.Geo.wrapLon(l.lon - st.cam.lon), kc = 1 - Math.exp(-dt * 3);
     st.cam.lon = G.Geo.wrapLon(st.cam.lon + dxc * kc); st.cam.lat += (l.lat - st.cam.lat) * kc;
@@ -463,6 +466,8 @@
       if (G.TreasureHunt) await G.TreasureHunt.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 조합의 보물 지도: X 자리에 서면 판다 (js/systems/treasurehunt.js)
       if (G.LittlePrince) await G.LittlePrince.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 어린 왕자의 지도: 사막 속 숨은 우물 (js/systems/littleprince.js)
       if (G.Mowgli) await G.Mowgli.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 정글북: 델리 근처 숲의 바나나 도둑과 모글리 (js/systems/junglebook.js)
+      if (G.Newton) await G.Newton.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 뉴턴과 사과: 링컨셔 울즈소프의 과수원 (js/systems/newton.js)
+      if (G.Imjin) await G.Imjin.onLand(l.lon, l.lat, { battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 임진왜란: 동래 성문 밖·탄금대·곽재우·행주산성 (js/systems/imjin.js)
       if (G.Princess) await G.Princess.onLand({ battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });
       // 정찰대: 가까운 발견물을 알아채고 지도에 표식을 남긴다
       var sensed = G.Explore.sense('land', l.lon, l.lat, Math.max(st.scoutBoost || 1, 1 + G.Mounts.scout(MT(), l.party)));
@@ -472,8 +477,11 @@
       if (st.fastDays > 0) st.fastDays--;
       // random encounters (지형마다 다른 사건이 먼저 일어날 수 있다)
       if (U.chance(0.1) && (!G.Pace || G.Pace.ok()) && !(G.Tutorial && G.Tutorial.quiet && G.Tutorial.quiet())) {   // 앞 사건과 실제 시간 간격(G.Pace)
-        var tk = 'terr:' + terr, te = U.chance(0.55) && (!G.Pace || G.Pace.ok(tk, { noGap: true })) && await terrainEvent(terr);
-        if (te) { if (G.Pace) G.Pace.mark(tk); } else await encounter(terr);
+        if (G.JourneyEv && await G.JourneyEv.landDay(terr, { dailyCost: function () { return dailyCost(terr); }, refresh: refreshHud })) { /* 하늘과 날씨의 드문 사건 — 별똥별·메뚜기떼·혹서·혹한… (js/systems/journeyev.js) */ }
+        else {
+          var tk = 'terr:' + terr, te = U.chance(0.55) && (!G.Pace || G.Pace.ok(tk, { noGap: true })) && await terrainEvent(terr);
+          if (te) { if (G.Pace) G.Pace.mark(tk); } else await encounter(terr);
+        }
       }   // 튜토리얼에서는 우연한 만남을 재운다
       if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy = Math.max(0, st.busy - 1); await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
     } catch (e) { console.error(e); }
@@ -861,7 +869,8 @@
         s.player.gold -= lp; f.fatigue = Math.min(100, f.fatigue + 10);
         UI.toast('모래폭풍에 물자를 잃어 다시 샀다. (금화 ' + U.num(lp) + '닢)', 'wind');
       } else {
-        await UI.say('야자나무 그늘 아래 맑은 물이 고인 오아시스다!', sp);
+        var oasisSay = function () { return UI.say('야자나무 그늘 아래 맑은 물이 고인 오아시스다!', sp); };
+        await (G.JourneyEv ? G.JourneyEv.during('oasis', oasisSay) : oasisSay());   // 오아시스 그림 (js/systems/journeyev.js)
         f.water += R.dailyUse() * 8; f.fatigue = Math.max(0, f.fatigue - 15);
         UI.toast('물을 가득 채우고 쉬었다.', 'drop');
       }
@@ -1065,7 +1074,7 @@
     // 탐험대 모형: 발밑 먼지 → 고리 → 줄지어 선 대원들
     var pp = tp[0], mvg = (st.movT || 0) > 0;
     G.Party.drawFx(ctx, st.pfx, toScreen);
-    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit });
+    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit, canStand: expeditionGround });
     // 도시 이름은 탐험대 위에 (가려지지 않게)
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;

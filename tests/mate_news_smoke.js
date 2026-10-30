@@ -114,7 +114,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = G.Game.state, ML = G.MateLeave, k = G.BALANCE.mateLeave, id = window.__ids[0];
       s.fleet.cargo.herbs = { q: 3, cost: 60 }; k.herbs = 1; k.herbsMed = 0;
       const o = ML.st(); o.n = 1; window.__said = []; window.__pick = ['herbs']; window.__asks = [];
-      await ML.play({ id, kind: 'death' });
+      const chance = G.U.chance; G.U.chance = () => true;
+      try { await ML.play({ id, kind: 'death' }); }
+      finally { G.U.chance = chance; }
       return { still: s.mates.some(m => m.id === id), herbs: s.fleet.cargo.herbs.q, n: o.n, cd: s.mates.find(m => m.id === id).leaveCd > s.day, opts: window.__asks[0].opts.join(' | '), said: window.__said.join('\n') };
     });
     ok(r.still && r.herbs === 2 && r.n === 0 && r.cd, '약재 1통으로 위기를 넘겼다 — 남고, 한 해 셈에서 빠지고, 한동안 다시 겪지 않는다');
@@ -124,7 +126,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = G.Game.state, ML = G.MateLeave, k = G.BALANCE.mateLeave, id = window.__ids[1], doc = s.mates.find(m => m.id === window.__ids[2]);
       doc.sk = Object.assign({}, doc.sk || {}, { med: 3 }); k.doctor = [1, 1, 1];
       window.__pick = ['doctor']; window.__said = []; window.__asks = [];
-      await ML.play({ id, kind: 'health', line: 1 });
+      const chance = G.U.chance; G.U.chance = () => true;
+      try { await ML.play({ id, kind: 'health', line: 1 }); }
+      finally { G.U.chance = chance; }
       return { still: s.mates.some(m => m.id === id), opts: window.__asks[0].opts.join(' | '), said: window.__said.join('\n') };
     });
     ok(r.still && /배의 의원 .+에게 맡긴다/.test(r.opts), '배의 의원(의학)에게 맡겨 건강 위기를 넘겼다 — ' + r.opts.split(' | ').find(x => /의원/.test(x)));

@@ -1,0 +1,54 @@
+{
+  "version": "selected-v2",
+  "description": "사용자가 빨간색으로 표시한 여덟 명만 개별 자르기. 다른 24명은 face-layout/before 원래 얼굴상을 유지한다. 좌표는 1024×1536 무릎상 기준.",
+  "crops": {
+    "cf_east_noble": [
+      145,
+      -30,
+      745,
+      570
+    ],
+    "cf_south_villager": [
+      140,
+      -30,
+      720,
+      550
+    ],
+    "cf_sea_sailor": [
+      260,
+      -40,
+      800,
+      500
+    ],
+    "cf_sea_noble": [
+      310,
+      -30,
+      910,
+      570
+    ],
+    "cf_mena_villager": [
+      140,
+      -35,
+      700,
+      525
+    ],
+    "cf_mena_knight": [
+      300,
+      -75,
+      860,
+      485
+    ],
+    "cf_africa_sailor": [
+      285,
+      -60,
+      865,
+      520
+    ],
+    "cf_america_sailor": [
+      350,
+      -60,
+      890,
+      480
+    ]
+  }
+}

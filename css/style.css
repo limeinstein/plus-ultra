@@ -284,6 +284,11 @@ img.inline-ic { width: 34px; height: 34px; object-fit: contain; vertical-align: 
 .keybind-row b { display: block; font-size: 16px; }
 .keybind-row small { display: block; margin-top: 2px; font-size: 12px; line-height: 1.25; color: var(--ink-soft); }
 .keybind-btn { min-width: 106px; white-space: nowrap; }
+/* 수첩 단축키 (2026-10-30): 수첩 탭 바로가기 묶음 제목 · 「없음」 칸은 흐리게 · 빼기 단추 */
+.keybind-sub { grid-column: 1 / -1; margin-top: 8px; padding: 2px 4px; border-bottom: 1px solid rgba(96,68,32,.3); }
+.keybind-sub b { font-size: 16px; } .keybind-sub small { margin-left: 10px; font-size: 12px; color: var(--ink-soft); }
+.keybind-row.none .keybind-btn { opacity: .62; }
+.keybind-clr { padding-left: 10px; padding-right: 10px; white-space: nowrap; }
 
 /* ---------------------------------------------------------------- tables */
 table.tbl { width: 100%; border-collapse: collapse; font-size: 18px; color: var(--ink); }
@@ -391,10 +396,10 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 .caption { position: absolute; right: 26px; bottom: 16px; font-size: 16px; color: rgba(242,231,204,.72); letter-spacing: .06em; z-index: 13; text-shadow: 0 1px 4px #000; }
 
 /* ---------------------------------------------------------------- sailing HUD extras */
-.minimap { position: absolute; left: 18px; bottom: 18px; width: 300px; height: 210px; z-index: 18; padding: 8px; cursor: pointer; }
+.minimap { position: absolute; left: 18px; bottom: var(--sea-bar-top, 94px); width: 300px; height: 210px; z-index: 18; padding: 8px; cursor: pointer; }
 .minimap canvas { position: static !important; width: 284px; height: 194px; display: block; }
 .minimap .lbl { position: absolute; left: 16px; top: 10px; font-size: 15px; color: var(--ink); z-index: 2; letter-spacing: .05em; }
-.windbox { position: absolute; right: 18px; bottom: 18px; width: 270px; height: 150px; z-index: 18; display: flex; gap: 10px; padding: 10px 12px; }
+.windbox { position: absolute; right: 18px; bottom: var(--sea-bar-top, 94px); width: 270px; height: 150px; z-index: 18; display: flex; gap: 10px; padding: 10px 12px; }
 .windbox canvas { position: static !important; }
 .sailbar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 18; display: flex; gap: 8px; padding: 8px 10px; width: calc(100% - 20px); box-sizing: border-box; }
 .sailbar .btn { min-height: 44px; padding: 6px 14px; font-size: 17px; }
@@ -998,6 +1003,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .disc-folk dd { margin: 0; color: var(--ink-2); }
 .disc-impact { margin: 12px auto; padding: 10px 14px; max-width: 610px; border: 1px solid rgba(94,67,34,.38); border-radius: 6px; background: rgba(255,248,222,.56); text-align: left; }
 .disc-impact.fear { border-color: rgba(126,32,28,.55); background: rgba(126,32,28,.09); }
+.disc-impact.rest { border-color: rgba(40,128,140,.55); background: rgba(60,160,170,.10); }   /* 휴양지 섬 (2026-10-30) */
 .disc-impact .di-title { display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 18px; color: var(--ink); }
 .disc-impact .di-title svg { width: 20px; height: 20px; }
 .disc-impact .di-line { margin: 5px 0 8px; text-align: center; font-size: 15px; color: var(--ink-2); }
@@ -1557,7 +1563,13 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .ui-zoomed .create { zoom: var(--unz, 1); }
 /* 글씨·창 크기를 키우면 UI 층이 좁아진다: 바다의 아래 단추줄과 작은 해도·바람 판이 겹치지 않게 해도·바람 판을 단추줄 위로,
    항해 중 알림은 상태줄과 겹치지 않게 상태줄 아래 왼쪽으로 */
-.ui-zoomed .minimap, .ui-zoomed .windbox { bottom: 94px; }
+.ui-zoomed .minimap, .ui-zoomed .windbox { bottom: var(--sea-bar-top, 94px); }
+/* 작은 해도·바람 판: 아래 단추줄 바로 위(--sea-bar-top은 js/ui/hudpin.js 가 잰다) · 메모지처럼 끌어서 옮기기 (2026-10-30) */
+.hud-pin { touch-action: none; user-select: none; }
+.windbox.hud-pin { cursor: grab; }
+.hud-pin.hp-drag { cursor: grabbing !important; box-shadow: 0 0 0 2px rgba(232,195,90,.75), 0 12px 28px rgba(0,0,0,.55); opacity: .92; transition: none; }
+.hud-pin .hp-reset { position: absolute; right: 4px; top: 4px; z-index: 3; width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 1px solid rgba(217,180,95,.7); background: rgba(28,19,11,.85); color: #f2e2b6; font-size: 15px; line-height: 22px; cursor: pointer; display: none; }
+.hud-pin.hp-moved:hover .hp-reset { display: block; }
 .ui-zoomed #ui.at-sea .toasts { left: 18px; top: 168px; transform: none; align-items: flex-start; }
 
 /* ---------------------------------------------------------------- 개척 도시 (js/systems/colony.js · js/city/colonyhall.js) */
@@ -1924,3 +1936,19 @@ tr.mk-stale td.pp { filter: grayscale(.7); }
 .pin-b:hover { color: #8d3218; border-color: #b4472c; }
 .pin-b.on { color: #fff; background: #b4472c; border-color: #8d3218; }
 tr[data-pin] td { background: rgba(214,170,90,.12); }
+
+/* 소꿉친구의 회상 (G.Osa.memory — 2026-10-30): 화면이 바랜 빛으로 물들고 한 줄씩 떠오른다 */
+body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-sepia .dlg-actors { filter: sepia(.75) saturate(.7) brightness(.82) blur(1.5px); transition: filter 1.2s ease; }
+#scene, #world, #overlay { transition: filter 1.2s ease; }
+.osa-mem { position: absolute; inset: 0; z-index: 400; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease; cursor: pointer; pointer-events: auto;
+  -webkit-backdrop-filter: sepia(.85) blur(7px) brightness(.5); backdrop-filter: sepia(.85) blur(7px) brightness(.5);   /* 뒤의 거리·메뉴는 바랜 사진처럼 흐려진다 */
+  background: radial-gradient(ellipse at center, rgba(110,80,45,.35) 0%, rgba(55,36,18,.72) 60%, rgba(20,12,4,.93) 100%),
+              repeating-linear-gradient(0deg, rgba(255,240,210,.035) 0 1px, transparent 1px 3px); }
+.osa-mem.on { opacity: 1; }
+.osa-mem.out { opacity: 0; transition: opacity .6s ease; }
+.osa-mem-in { width: min(820px, 86%); padding: 34px 44px 28px; color: #f6e7c8; font-family: var(--serif); text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.osa-mem-t { font-size: 22px; letter-spacing: .12em; color: #e9c98f; margin-bottom: 22px; font-style: italic; border-bottom: 1px solid rgba(233,201,143,.35); padding-bottom: 10px; }
+.osa-mem-l p { font-size: 24px; line-height: 1.75; margin: 0 0 10px; animation: osaLine 1.4s ease both; }
+.osa-mem-more { text-align: right; color: rgba(246,231,200,.6); font-size: 16px; animation: osaBlink 1.6s ease-in-out infinite; }
+@keyframes osaLine { from { opacity: 0; transform: translateY(6px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes osaBlink { 0%, 100% { opacity: .25; } 50% { opacity: .9; } }

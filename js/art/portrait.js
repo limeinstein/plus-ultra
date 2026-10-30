@@ -223,8 +223,8 @@
   };
   A.mateSpec = function (id) {
     var d = G.MATE[id]; if (!d) return null;
-    // 불러온 게임에서는 같은 철새 ID라도 정의와 얼굴이 달라질 수 있다.
-    if (mateSpecCache[id] && !d.wd) return mateSpecCache[id];
+    // 불러온 게임에서는 같은 철새·친족 ID라도 정의와 얼굴이 달라질 수 있다.
+    if (mateSpecCache[id] && !d.wd && !d.kin) return mateSpecCache[id];
     if (d.wd && G.Wander && G.Wander.fixPortrait) G.Wander.fixPortrait(d);
     var sk = d.sk || {}, role = 'sailor';
     if (d.role) role = d.role;
@@ -633,6 +633,46 @@
     out.push(g === 'f' ? 'portraits/npc/tavernkeeper_europe_f' : 'portraits/npc/captain');
     return out;
   };
+  var portraitAlpha = new WeakMap();
+  function transparentPortrait(im) {
+    if (portraitAlpha.has(im)) return portraitAlpha.get(im);
+    var transparent = false;
+    try {
+      var c = A.canvas(2, 2), x = c.getContext('2d');
+      var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
+      [[0, 0], [iw - 1, 0], [0, ih - 1], [iw - 1, ih - 1]].forEach(function (p, i) {
+        x.drawImage(im, p[0], p[1], 1, 1, i % 2, Math.floor(i / 2), 1, 1);
+      });
+      var pixels = x.getImageData(0, 0, 2, 2).data;
+      for (var i = 3; i < pixels.length; i += 4) if (pixels[i] === 0) transparent = true;
+    } catch (e) { /* 외부 그림을 읽을 수 없으면 빈 가장자리가 생기지 않는 자르기를 쓴다. */ }
+    portraitAlpha.set(im, transparent);
+    return transparent;
+  }
+  function centerPortrait(ctx, w, h, key) {
+    var k = G.FX && G.FX.portraitFace, f = G.PORTRAIT_FACES && G.PORTRAIT_FACES[key];
+    if (!k || !f || !f.box || !f.eyes || !f.mouth || /_half$/.test(key)) return;
+    var im = G.Img.get(key); if (!im) return;
+    var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
+    if (!iw || !ih || iw !== ih || f.box[2] < k.minFaceWidth) return;
+    // 옆을 보는 얼굴은 검출 상자에 뒤통수·머리카락이 넓게 들어간다. 실제 이목구비를 기준으로 삼는다.
+    var cx = (f.eyes[0] + f.eyes[2] + f.mouth[0] * 2) / 4;
+    if (!isFinite(cx) || Math.abs(cx - 0.5) <= k.deadZone) return;
+    var shift = U.clamp(0.5 - cx, -k.maxShift, k.maxShift);
+    // 얼굴 자체가 잘리지 않도록 얼굴 상자를 안쪽에 남긴다.
+    shift = U.clamp(shift, -f.box[0], 1 - f.box[0] - f.box[2]);
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = k.bg; ctx.fillRect(0, 0, w, h);
+    if (transparentPortrait(im)) {
+      // 투명 원화는 크기·높이를 유지한 채 가로로만 옮긴다.
+      ctx.drawImage(im, shift * w, 0, w, h);
+    } else {
+      // 배경이 있는 초상은 필요한 만큼만 확대해 빈 띠가 생기지 않게 한다.
+      var side = 1 - Math.abs(shift) * 2, sx = U.clamp(cx - side / 2, 0, 1 - side);
+      var eyeY = (f.eyes[1] + f.eyes[3]) / 2, sy = U.clamp(eyeY * (1 - side), 0, 1 - side);
+      ctx.drawImage(im, sx * iw, sy * ih, side * iw, side * ih, 0, 0, w, h);
+    }
+  }
   A.portraitCanvas = function (spec, size) {
     size = size || 134;
     // 무대 전체가 CSS로 확대되므로 논리 크기 2배만 그리면 큰 화면에서 다시 흐려진다.
@@ -643,7 +683,7 @@
     var px = Math.max(1, Math.round(size * ratio));
     var chain = A.portraitKeys(spec);
     if (chain && G.Img.pick(chain)) {
-      var oc = G.Img.make(chain, px, px, function () { var pc = A.canvas(px, px); A.drawPortrait(pc.getContext('2d'), px, spec); return pc; }, { fy: 0.25, bg: '#1a120c' });
+      var oc = G.Img.make(chain, px, px, function () { var pc = A.canvas(px, px); A.drawPortrait(pc.getContext('2d'), px, spec); return pc; }, { fy: 0.25, bg: '#1a120c', post: centerPortrait });
       oc.style.width = size + 'px'; oc.style.height = size + 'px';
       return oc;
     }

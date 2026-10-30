@@ -25,7 +25,10 @@
     Object.keys(prefEnums).forEach(function (k) { if (prefEnums[k].indexOf(src[k]) >= 0) dst[k] = src[k]; });
     if (src.keys && typeof src.keys === 'object') {
       var keys = G.Keys ? G.Keys.defaults() : {};
-      Object.keys(keys).forEach(function (k) { if (typeof src.keys[k] === 'string' && /^[A-Za-z][A-Za-z0-9]{0,30}$/.test(src.keys[k])) keys[k] = src.keys[k]; });
+      Object.keys(keys).forEach(function (k) {
+        if (typeof src.keys[k] === 'string' && /^[A-Za-z][A-Za-z0-9]{0,30}$/.test(src.keys[k])) keys[k] = src.keys[k];
+        else if (src.keys[k] === '' && G.Keys && G.Keys.optional(k)) keys[k] = '';   // 뺀 단축키(수첩 등)는 「없음」 그대로 (2026-10-30)
+      });
       dst.keys = keys;
     }
   }
@@ -113,7 +116,10 @@
   };
 
   // ---------------------------------------------------------------- sea chart bitset
-  ST.chartInit = function (S) { S.chartBits = new Uint8Array(CHART_W * CHART_H / 8); };
+  ST.chartInit = function (S) {
+    S.chartBits = new Uint8Array(CHART_W * CHART_H / 8);
+    S.chartPasses = new Uint8Array(CHART_W * CHART_H); S.chartLast = null; S.chartRevision = 0;
+  };
   ST.revealChart = function (lon, lat, r) {
     var S = G.Game.state; if (!S.chartBits) ST.chartInit(S);
     var cx = Math.floor((lon + 180) * 2), cy = Math.floor((90 - lat) * 2), rr = Math.ceil(r * 2), n = 0;
@@ -125,8 +131,38 @@
         if (!(S.chartBits[i >> 3] & (1 << (i & 7)))) { S.chartBits[i >> 3] |= 1 << (i & 7); n++; }
       }
     }
-    if (n) S.chartDirty = true;
+    if (n) { S.chartDirty = true; S.chartRevision = (S.chartRevision || 0) + 1; }
     return n;
+  };
+  /** 실제 이동 때만 호출한다. 같은 시야의 겹치는 칸은 처음 들어올 때 한 번만 기록한다. */
+  ST.surveyChart = function (lon, lat, r) {
+    var S = G.Game.state; if (!S.chartBits) ST.chartInit(S);
+    if (!S.chartPasses) S.chartPasses = new Uint8Array(CHART_W * CHART_H);
+    var cx = Math.floor((G.Geo.wrapLon(lon) + 180) * 2), cy = Math.floor((90 - lat) * 2), rr = Math.ceil(r * 2);
+    var prev = S.chartLast, changed = 0, cap = G.BALANCE.chartSurvey.max;
+    if (prev && prev.x === cx && prev.y === cy && prev.r === rr) return 0;
+    for (var y = Math.max(0, cy - rr); y <= Math.min(CHART_H - 1, cy + rr); y++) {
+      for (var x = cx - rr; x <= cx + rr; x++) {
+        var dx = x - cx, dy = y - cy; if (dx * dx + dy * dy > rr * rr) continue;
+        var xx = ((x % CHART_W) + CHART_W) % CHART_W, i = y * CHART_W + xx;
+        if (prev) {
+          var pdx = Math.abs(xx - prev.x); pdx = Math.min(pdx, CHART_W - pdx);
+          var pdy = y - prev.y;
+          if (pdx * pdx + pdy * pdy <= prev.r * prev.r) continue;
+        }
+        if (S.chartPasses[i] < cap) { S.chartPasses[i]++; changed++; }
+        S.chartBits[i >> 3] |= 1 << (i & 7);
+      }
+    }
+    S.chartLast = { x: cx, y: cy, r: rr };
+    if (changed) { S.chartDirty = true; S.chartRevision = (S.chartRevision || 0) + 1; }
+    return changed;
+  };
+  ST.chartLevel = function (lon, lat) {
+    var S = G.Game.state, x = Math.floor((G.Geo.wrapLon(lon) + 180) * 2), y = Math.floor((90 - lat) * 2);
+    if (y < 0 || y >= CHART_H) return 0;
+    var i = y * CHART_W + x;
+    return Math.max(S.chartPasses ? S.chartPasses[i] || 0 : 0, S.chartBits && (S.chartBits[i >> 3] & (1 << (i & 7))) ? 1 : 0);
   };
   ST.charted = function (lon, lat) {
     var S = G.Game.state; if (!S.chartBits) return false;
@@ -253,7 +289,7 @@
   }
   ST.serialize = function () {
     var S = G.Game.state;
-    var copy = {}; for (var k in S) if (k !== 'chartBits' && k !== 'chartDirty') copy[k] = S[k];
+    var copy = {}; for (var k in S) if (k !== 'chartBits' && k !== 'chartPasses' && k !== 'chartDirty') copy[k] = S[k];
     var battle = G.Scenes && G.Scenes.battle, snap = battle && battle.snapshot && battle.snapshot();
     if (snap) {
       copy.battle = snap;
@@ -267,6 +303,7 @@
     }
     if (G.shipBuffKeys) copy.shipBuffs = G.shipBuffKeys();   // 메모리의 게임은 늘 지금 성능 — 불러올 때 다시 올리지 않게
     copy.chart = b64(S.chartBits);
+    if (S.chartPasses) copy.chartSurvey = b64(S.chartPasses);
     return safeStringify(copy);
   };
   ST.deserialize = function (json) {
@@ -278,6 +315,9 @@
     if (G.FamilyTree && G.FamilyTree.migrate) { try { G.FamilyTree.migrate(S); } catch (e) { console.warn(e); } }   // 옛 저장의 선대를 일지에서 한 번 찾아 s.lineage 에 (한 번)
     if (G.MaidSwap) G.MaidSwap.register(S);       // 대가 바뀌며 새로 들어온 술집 여급 (2026-10-22)
     S.chartBits = S.chart ? unb64(S.chart) : new Uint8Array(CHART_W * CHART_H / 8);
+    S.chartPasses = S.chartSurvey ? unb64(S.chartSurvey) : new Uint8Array(CHART_W * CHART_H);
+    if (S.chartPasses.length !== CHART_W * CHART_H) S.chartPasses = new Uint8Array(CHART_W * CHART_H);
+    delete S.chartSurvey;
     delete S.chart;
     return S;
   };

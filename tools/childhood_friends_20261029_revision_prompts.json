@@ -1,0 +1,850 @@
+{
+  "mode": "built-in image_gen",
+  "reason": "표정·얼굴 구도의 반복을 줄이는 사용자 수정 요청",
+  "assets": [
+    {
+      "id": "cf_med_villager",
+      "name": "지중해 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-0da90d99-0b6c-4150-8ace-40b0e119102c.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-56c626dd-d70c-4c72-8737-a04f192f6e3b.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 26. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face turned 55 degrees toward SCREEN RIGHT, looking sideways past camera. Required expression, readable even at thumbnail size: surprised delight: clearly raised eyebrows, widened eyes and an open rounded smile. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: rounder cheeks, short nose with rounded tip, full asymmetric lips, broad lower face. Keep her 지중해 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: SHORT tousled ash-brown bob ending at jaw, no tied hair. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face turned 55 degrees toward SCREEN RIGHT, looking sideways past camera",
+      "expression": "surprised delight: clearly raised eyebrows, widened eyes and an open rounded smile",
+      "face_design": "rounder cheeks, short nose with rounded tip, full asymmetric lips, broad lower face",
+      "hair_revision": "SHORT tousled ash-brown bob ending at jaw, no tied hair",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-56c626dd-d70c-4c72-8737-a04f192f6e3b.png"
+    },
+    {
+      "id": "cf_med_sailor",
+      "name": "지중해 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-b481f5ab-a2fc-4ead-880b-cfabf0dc0f64.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-e46b679d-3849-4238-a989-df7e2ae3fe44.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 27. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head squarely FRONTAL, face looking directly at viewer. Required expression, readable even at thumbnail size: exuberant laugh with upper teeth visible, open mouth and lifted cheeks, eyes crinkled. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: long oval face, strong straight nose, slightly widely spaced eyes, distinct dimple on one side. Keep her 지중해 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long windblown chestnut locks. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head squarely FRONTAL, face looking directly at viewer",
+      "expression": "exuberant laugh with upper teeth visible, open mouth and lifted cheeks, eyes crinkled",
+      "face_design": "long oval face, strong straight nose, slightly widely spaced eyes, distinct dimple on one side",
+      "hair_revision": "long windblown chestnut locks",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-e46b679d-3849-4238-a989-df7e2ae3fe44.png"
+    },
+    {
+      "id": "cf_med_knight",
+      "name": "지중해 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-b1cbd4ee-323e-4acd-81a9-29f489216c13.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-165c3552-bc62-4eea-9a76-984bb3138945.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 28. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: pronounced SCREEN LEFT near-profile at 65 degrees, chin slightly lowered. Required expression, readable even at thumbnail size: fierce concentration, sharply knitted brows, firm closed lips and set jaw. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: angular jaw, high cheekbones, long aquiline nose and narrower eyes. Keep her 지중해 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: loosely braided golden chestnut hair. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "pronounced SCREEN LEFT near-profile at 65 degrees, chin slightly lowered",
+      "expression": "fierce concentration, sharply knitted brows, firm closed lips and set jaw",
+      "face_design": "angular jaw, high cheekbones, long aquiline nose and narrower eyes",
+      "hair_revision": "loosely braided golden chestnut hair",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-165c3552-bc62-4eea-9a76-984bb3138945.png"
+    },
+    {
+      "id": "cf_med_noble",
+      "name": "지중해 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-1db730d9-0e94-4fa3-a7e6-e0707739825c.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-5ec13fe6-500e-4b12-a822-9333f2c9577f.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 29. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: fully FRONTAL face with chin slightly tucked, eyebrows visibly asymmetrical. Required expression, readable even at thumbnail size: affectionately annoyed skepticism: one brow lifted, the other furrowed, lips pressed into a small pout. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: heart-shaped face, pointed chin, broad expressive brows, large hazel eyes. Keep her 지중해 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: chestnut high ponytail with CREAM ribbon and visible feathered bangs. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "fully FRONTAL face with chin slightly tucked, eyebrows visibly asymmetrical",
+      "expression": "affectionately annoyed skepticism: one brow lifted, the other furrowed, lips pressed into a small pout",
+      "face_design": "heart-shaped face, pointed chin, broad expressive brows, large hazel eyes",
+      "hair_revision": "chestnut high ponytail with CREAM ribbon and visible feathered bangs",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-5ec13fe6-500e-4b12-a822-9333f2c9577f.png"
+    },
+    {
+      "id": "cf_north_villager",
+      "name": "북유럽 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-d08bf365-8975-4aac-ad98-3eff8cb1f8e3.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-72a5964b-2f72-4551-aa27-598aa189c11d.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 30. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face FRONTAL but looking DOWN toward the book, chin lowered noticeably. Required expression, readable even at thumbnail size: bashful happy smile, eyes smiling downward, subtly rosy cheeks, closed lips with a small dimple. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: soft square adult face, low cheekbones, freckled broad nose, thinner upper lip. Keep her 북유럽 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: very SHORT pale blonde wavy bob with fringe, no bun and no long hair. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face FRONTAL but looking DOWN toward the book, chin lowered noticeably",
+      "expression": "bashful happy smile, eyes smiling downward, subtly rosy cheeks, closed lips with a small dimple",
+      "face_design": "soft square adult face, low cheekbones, freckled broad nose, thinner upper lip",
+      "hair_revision": "very SHORT pale blonde wavy bob with fringe, no bun and no long hair",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-72a5964b-2f72-4551-aa27-598aa189c11d.png"
+    },
+    {
+      "id": "cf_north_sailor",
+      "name": "북유럽 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-5c5a7bf7-deae-4bda-b5bc-8e2a1589e18f.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-9275f2e5-9a7c-4630-8ae7-78731a3afd37.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 26. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 50 degrees toward SCREEN RIGHT and tilted slightly back. Required expression, readable even at thumbnail size: playful wink and big cheeky toothy grin, one eye naturally closed. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: slightly long face, prominent freckles, long slim nose, broad smile. Keep her 북유럽 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long COPPER RED hair, dark soft sailor cap. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 50 degrees toward SCREEN RIGHT and tilted slightly back",
+      "expression": "playful wink and big cheeky toothy grin, one eye naturally closed",
+      "face_design": "slightly long face, prominent freckles, long slim nose, broad smile",
+      "hair_revision": "long COPPER RED hair, dark soft sailor cap",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-9275f2e5-9a7c-4630-8ae7-78731a3afd37.png"
+    },
+    {
+      "id": "cf_north_knight",
+      "name": "북유럽 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-e772eaca-a3f2-40b3-9eff-727d567cd767.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-fe4f9416-e172-452c-9c38-022294a307cc.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 27. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 45 degrees toward SCREEN LEFT with chin raised. Required expression, readable even at thumbnail size: defiant challenge: narrowed eyes and a tense asymmetric half grin with one raised brow. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: broad jaw, compact face, small straight nose, thick eyebrows. Keep her 북유럽 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: loose honey blonde side braids with metal clasps. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 45 degrees toward SCREEN LEFT with chin raised",
+      "expression": "defiant challenge: narrowed eyes and a tense asymmetric half grin with one raised brow",
+      "face_design": "broad jaw, compact face, small straight nose, thick eyebrows",
+      "hair_revision": "loose honey blonde side braids with metal clasps",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-fe4f9416-e172-452c-9c38-022294a307cc.png"
+    },
+    {
+      "id": "cf_north_noble",
+      "name": "북유럽 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-ef51e76f-2ad2-4fca-aace-76fb1b91f410.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-c25d6125-a008-4d02-8452-89d3c4dcb560.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 28. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head strongly turned 65 degrees toward SCREEN LEFT, gaze angled down. Required expression, readable even at thumbnail size: quiet melancholy: relaxed lowered brows, soft downturned lips, reflective distant eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: long narrow face, straight high nose bridge, long chin, small mouth. Keep her 북유럽 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long loose honey blonde waves, no bun. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head strongly turned 65 degrees toward SCREEN LEFT, gaze angled down",
+      "expression": "quiet melancholy: relaxed lowered brows, soft downturned lips, reflective distant eyes",
+      "face_design": "long narrow face, straight high nose bridge, long chin, small mouth",
+      "hair_revision": "long loose honey blonde waves, no bun",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-c25d6125-a008-4d02-8452-89d3c4dcb560.png"
+    },
+    {
+      "id": "cf_east_villager",
+      "name": "동아시아 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-d2d0c427-e43c-48dd-a103-aadaf5a893ed.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-a08b3782-cbc7-4d0e-b62e-517647f93445.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 29. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face mostly FRONTAL, tilted 20 degrees toward shoulder, eyes looking down to SCREEN RIGHT. Required expression, readable even at thumbnail size: absorbed thought: furrow at the inner brows, gently pursed lips, lowered eyelids. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: round adult face, softly broad cheeks, short rounded nose, thicker lower lip. Keep her 동아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long black layered hair with substantial wispy bangs. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face mostly FRONTAL, tilted 20 degrees toward shoulder, eyes looking down to SCREEN RIGHT",
+      "expression": "absorbed thought: furrow at the inner brows, gently pursed lips, lowered eyelids",
+      "face_design": "round adult face, softly broad cheeks, short rounded nose, thicker lower lip",
+      "hair_revision": "long black layered hair with substantial wispy bangs",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-a08b3782-cbc7-4d0e-b62e-517647f93445.png"
+    },
+    {
+      "id": "cf_east_sailor",
+      "name": "동아시아 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-415fb386-93b1-40d8-b482-d85645a9f58f.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-701c2802-9b16-46f0-9972-8e97eba61692.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 30. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: FRONTAL face, head tilted 25 degrees toward SCREEN LEFT, chin lifted. Required expression, readable even at thumbnail size: boisterous open-mouthed laugh, visible teeth and smiling crescent eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: oval face with fuller cheekbones, broad friendly mouth, short nose. Keep her 동아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: dark high ponytail with flying wispy bangs and ribbon. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "FRONTAL face, head tilted 25 degrees toward SCREEN LEFT, chin lifted",
+      "expression": "boisterous open-mouthed laugh, visible teeth and smiling crescent eyes",
+      "face_design": "oval face with fuller cheekbones, broad friendly mouth, short nose",
+      "hair_revision": "dark high ponytail with flying wispy bangs and ribbon",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-701c2802-9b16-46f0-9972-8e97eba61692.png"
+    },
+    {
+      "id": "cf_east_knight",
+      "name": "동아시아 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-97ce0863-cd2f-4e50-8b2c-383b49f76cb8.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-0e3354d7-8e1f-4ecb-a8da-2969151f7b04.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 26. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 65 degrees toward SCREEN RIGHT, neck following the turn. Required expression, readable even at thumbnail size: startled alertness: eyes wide, brows raised, lips parted as if saying 'ah'. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: angular diamond face, strong jaw, flat straight brows, long nose. Keep her 동아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: truly SHORT dark wavy chin-length bob, no ponytail. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 65 degrees toward SCREEN RIGHT, neck following the turn",
+      "expression": "startled alertness: eyes wide, brows raised, lips parted as if saying 'ah'",
+      "face_design": "angular diamond face, strong jaw, flat straight brows, long nose",
+      "hair_revision": "truly SHORT dark wavy chin-length bob, no ponytail",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-0e3354d7-8e1f-4ecb-a8da-2969151f7b04.png"
+    },
+    {
+      "id": "cf_east_noble",
+      "name": "동아시아 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-8d9d1637-3b9e-4c67-851c-28243eeab4cd.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-dadbf33b-7ec4-4723-bb01-c970d8ac5976.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 27. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face turned 45 degrees toward SCREEN LEFT, chin gently lowered. Required expression, readable even at thumbnail size: warm amused smile with eyes nearly closed and raised cheeks, lips slightly parted. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: soft heart face, high cheeks, delicate longer nose, wide soft lips. Keep her 동아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: dark loose updo and silver floral hairpin. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face turned 45 degrees toward SCREEN LEFT, chin gently lowered",
+      "expression": "warm amused smile with eyes nearly closed and raised cheeks, lips slightly parted",
+      "face_design": "soft heart face, high cheeks, delicate longer nose, wide soft lips",
+      "hair_revision": "dark loose updo and silver floral hairpin",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-dadbf33b-7ec4-4723-bb01-c970d8ac5976.png"
+    },
+    {
+      "id": "cf_south_villager",
+      "name": "남아시아 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-f8b303b3-39e2-4cdd-a777-c62d27cd4557.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-767e22d9-17f4-4932-8fb4-7335a9fdbb75.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 28. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 60 degrees toward SCREEN LEFT and slightly lowered. Required expression, readable even at thumbnail size: patient serious concentration: knitted brows, pressed lips, intent eyes inspecting something off to the side. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: fuller oval face, wide rounded nose, thick straight eyebrows, full lower lip. Keep her 남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long BLACK flowing wavy hair under green woven scarf. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 60 degrees toward SCREEN LEFT and slightly lowered",
+      "expression": "patient serious concentration: knitted brows, pressed lips, intent eyes inspecting something off to the side",
+      "face_design": "fuller oval face, wide rounded nose, thick straight eyebrows, full lower lip",
+      "hair_revision": "long BLACK flowing wavy hair under green woven scarf",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-767e22d9-17f4-4932-8fb4-7335a9fdbb75.png"
+    },
+    {
+      "id": "cf_south_sailor",
+      "name": "남아시아 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-fb6f6d24-dc4e-494c-85b3-3443c472fba8.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-d5e62b7a-a17e-401c-8339-1993b77a7009.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 29. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face FRONTAL, head leaning gently 15 degrees toward SCREEN RIGHT. Required expression, readable even at thumbnail size: confident teasing grin with upper teeth visible and one brow raised. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: broad squarish adult face, strong cheekbones, short wide nose, wide mouth. Keep her 남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: very SHORT shaggy BLACK bob cropped around ears and nape. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face FRONTAL, head leaning gently 15 degrees toward SCREEN RIGHT",
+      "expression": "confident teasing grin with upper teeth visible and one brow raised",
+      "face_design": "broad squarish adult face, strong cheekbones, short wide nose, wide mouth",
+      "hair_revision": "very SHORT shaggy BLACK bob cropped around ears and nape",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-d5e62b7a-a17e-401c-8339-1993b77a7009.png"
+    },
+    {
+      "id": "cf_south_knight",
+      "name": "남아시아 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-1c8191d2-9970-49c2-9730-7cfe29723e3e.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-de3e054c-50c8-441b-9eca-b296763a32f7.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 30. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face turned 55 degrees toward SCREEN RIGHT, chin DOWN, gaze lifted from under brows. Required expression, readable even at thumbnail size: weary determination: deeply furrowed brows, narrowed tired eyes, lips firmly set. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: long mature face, pronounced jawline, broad straight nose, thin lips. Keep her 남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long sun-streaked dark brown loose hair. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face turned 55 degrees toward SCREEN RIGHT, chin DOWN, gaze lifted from under brows",
+      "expression": "weary determination: deeply furrowed brows, narrowed tired eyes, lips firmly set",
+      "face_design": "long mature face, pronounced jawline, broad straight nose, thin lips",
+      "hair_revision": "long sun-streaked dark brown loose hair",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-de3e054c-50c8-441b-9eca-b296763a32f7.png"
+    },
+    {
+      "id": "cf_south_noble",
+      "name": "남아시아 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-7fd50667-4886-4426-8e97-2456d53b0c66.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-398d4b95-2f8c-4271-b88f-3d4c1b93bef3.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 26. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face FRONTAL, chin lowered, eyes glancing to SCREEN LEFT. Required expression, readable even at thumbnail size: sudden doubtful surprise: uneven raised brows, small open mouth and questioning eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: narrow heart-shaped face, long nose with gentle arch, wide-set almond eyes. Keep her 남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: dark brown loose bun and pronounced stray face-framing locks. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face FRONTAL, chin lowered, eyes glancing to SCREEN LEFT",
+      "expression": "sudden doubtful surprise: uneven raised brows, small open mouth and questioning eyes",
+      "face_design": "narrow heart-shaped face, long nose with gentle arch, wide-set almond eyes",
+      "hair_revision": "dark brown loose bun and pronounced stray face-framing locks",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-398d4b95-2f8c-4271-b88f-3d4c1b93bef3.png"
+    },
+    {
+      "id": "cf_sea_villager",
+      "name": "동남아시아 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-5013d0ae-48a0-4278-a4a6-9dac81a454f6.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-d94077f6-b722-4b3f-97ce-81ad918cadc9.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 27. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face turned 50 degrees toward SCREEN RIGHT, cheek tilted toward shoulder. Required expression, readable even at thumbnail size: gentle full smile with a small glimpse of teeth, warm smiling eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: round full adult cheeks, short broad nose, pronounced lips, soft jaw. Keep her 동남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: SHORT dark curly bob ending at jaw, no bun. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face turned 50 degrees toward SCREEN RIGHT, cheek tilted toward shoulder",
+      "expression": "gentle full smile with a small glimpse of teeth, warm smiling eyes",
+      "face_design": "round full adult cheeks, short broad nose, pronounced lips, soft jaw",
+      "hair_revision": "SHORT dark curly bob ending at jaw, no bun",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-d94077f6-b722-4b3f-97ce-81ad918cadc9.png"
+    },
+    {
+      "id": "cf_sea_sailor",
+      "name": "동남아시아 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-874dd1ac-b121-4458-b266-0ac8aac969ec.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-ceb9b26b-2a23-407a-82b9-08fe1f173510.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 28. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face turned 60 degrees toward SCREEN LEFT and slightly UP. Required expression, readable even at thumbnail size: excited wonder: eyebrows high, eyes wide and mouth open in a broad delighted smile. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: small angular adult face, pronounced cheekbones, short pointed nose, thick low brows. Keep her 동남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: BLACK hair in TWO clearly separate small braided knots, wispy side bangs. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face turned 60 degrees toward SCREEN LEFT and slightly UP",
+      "expression": "excited wonder: eyebrows high, eyes wide and mouth open in a broad delighted smile",
+      "face_design": "small angular adult face, pronounced cheekbones, short pointed nose, thick low brows",
+      "hair_revision": "BLACK hair in TWO clearly separate small braided knots, wispy side bangs",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-ceb9b26b-2a23-407a-82b9-08fe1f173510.png"
+    },
+    {
+      "id": "cf_sea_knight",
+      "name": "동남아시아 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-dc07800b-119e-4648-89fa-09eca3b3f604.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-713c17fd-c5da-4818-8efc-9039b74205d8.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 29. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face FRONTAL and chin noticeably UP, gaze slightly down toward viewer. Required expression, readable even at thumbnail size: unimpressed cool confidence: one brow raised, lips lightly pressed, eyes half-lidded. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: long diamond face, prominent nose bridge, angular chin, slender lips. Keep her 동남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: dark SHOULDER LENGTH shaggy layers with bangs, no bun. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face FRONTAL and chin noticeably UP, gaze slightly down toward viewer",
+      "expression": "unimpressed cool confidence: one brow raised, lips lightly pressed, eyes half-lidded",
+      "face_design": "long diamond face, prominent nose bridge, angular chin, slender lips",
+      "hair_revision": "dark SHOULDER LENGTH shaggy layers with bangs, no bun",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-713c17fd-c5da-4818-8efc-9039b74205d8.png"
+    },
+    {
+      "id": "cf_sea_noble",
+      "name": "동남아시아 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-59549ff3-705d-462c-b2ec-0d998f059092.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-e2d2fa0a-68d6-44e7-9558-02595feb4bd5.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 30. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 65 degrees toward SCREEN RIGHT, eyes angled DOWN, hand near chin. Required expression, readable even at thumbnail size: deeply puzzled thought: pinched brows, slightly pursed lips and focused gaze. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: broad forehead, narrow jaw, gently hooked nose, wide lips. Keep her 동남아시아 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long glossy BLACK ponytail tied with a simple narrow ribbon. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 65 degrees toward SCREEN RIGHT, eyes angled DOWN, hand near chin",
+      "expression": "deeply puzzled thought: pinched brows, slightly pursed lips and focused gaze",
+      "face_design": "broad forehead, narrow jaw, gently hooked nose, wide lips",
+      "hair_revision": "long glossy BLACK ponytail tied with a simple narrow ribbon",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-e2d2fa0a-68d6-44e7-9558-02595feb4bd5.png"
+    },
+    {
+      "id": "cf_mena_villager",
+      "name": "서아시아·북아프리카 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-fd1cc8a1-8476-42fa-8126-2024474a3f57.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-9fe60cdd-9a1f-4f29-9d0c-f79076907d50.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 26. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 50 degrees toward SCREEN LEFT with chin lowered. Required expression, readable even at thumbnail size: tender sympathetic concern: inner brows raised, soft sad smile, gentle attentive eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: soft rounded face, wide nose bridge, full cheeks, small mouth. Keep her 서아시아·북아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: dark brown low loose bun with large side tendrils. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 50 degrees toward SCREEN LEFT with chin lowered",
+      "expression": "tender sympathetic concern: inner brows raised, soft sad smile, gentle attentive eyes",
+      "face_design": "soft rounded face, wide nose bridge, full cheeks, small mouth",
+      "hair_revision": "dark brown low loose bun with large side tendrils",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-9fe60cdd-9a1f-4f29-9d0c-f79076907d50.png"
+    },
+    {
+      "id": "cf_mena_sailor",
+      "name": "서아시아·북아프리카 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-7df7e5cc-648f-4824-ac8d-420f1709a862.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-5d8cd1f2-6ea7-4a44-9759-f272d2406058.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 27. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face FRONTAL with head tilted 20 degrees toward SCREEN RIGHT. Required expression, readable even at thumbnail size: mischievous grin with one eye winking and teeth visible, lifted cheek. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: narrow angular face, aquiline nose, large arched eyebrows, thin upper lip. Keep her 서아시아·북아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: loose windblown honey brown layers and face-framing long bangs. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face FRONTAL with head tilted 20 degrees toward SCREEN RIGHT",
+      "expression": "mischievous grin with one eye winking and teeth visible, lifted cheek",
+      "face_design": "narrow angular face, aquiline nose, large arched eyebrows, thin upper lip",
+      "hair_revision": "loose windblown honey brown layers and face-framing long bangs",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-5d8cd1f2-6ea7-4a44-9759-f272d2406058.png"
+    },
+    {
+      "id": "cf_mena_knight",
+      "name": "서아시아·북아프리카 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-0db414bd-92b9-4beb-9b01-5e40c691e5e1.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-02096954-2608-4c03-8977-aeae8efca40e.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 28. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 65 degrees toward SCREEN RIGHT, chin raised, gaze held offscreen. Required expression, readable even at thumbnail size: angry determined frown: tightly knitted brows, compressed mouth, steady narrowed eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: square strong adult face, broad cheeks, wide straight nose, heavy brows. Keep her 서아시아·북아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: very voluminous DARK tight CURLS around face and shoulders. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 65 degrees toward SCREEN RIGHT, chin raised, gaze held offscreen",
+      "expression": "angry determined frown: tightly knitted brows, compressed mouth, steady narrowed eyes",
+      "face_design": "square strong adult face, broad cheeks, wide straight nose, heavy brows",
+      "hair_revision": "very voluminous DARK tight CURLS around face and shoulders",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-02096954-2608-4c03-8977-aeae8efca40e.png"
+    },
+    {
+      "id": "cf_mena_noble",
+      "name": "서아시아·북아프리카 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-aca62e07-7d14-4016-a867-e44f04ca8d7a.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-4ef9fd60-798c-4fce-8e5a-2080e411cedb.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 29. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face FRONTAL looking directly at viewer, chin slightly lowered. Required expression, readable even at thumbnail size: surprised skeptical reaction: wide eyes, one brow much higher than the other, lips slightly open. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: long elegant adult face, pointed chin, narrow arched nose and full lower lip. Keep her 서아시아·북아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: dark abundant CURLS in high half-up knot, spiral locks and gold hoops. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face FRONTAL looking directly at viewer, chin slightly lowered",
+      "expression": "surprised skeptical reaction: wide eyes, one brow much higher than the other, lips slightly open",
+      "face_design": "long elegant adult face, pointed chin, narrow arched nose and full lower lip",
+      "hair_revision": "dark abundant CURLS in high half-up knot, spiral locks and gold hoops",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-4ef9fd60-798c-4fce-8e5a-2080e411cedb.png"
+    },
+    {
+      "id": "cf_africa_villager",
+      "name": "아프리카 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-2f12715f-08dd-4f37-8e63-a337fe0ad4f8.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-dc964a66-c716-477f-b14b-41c1cf7969c5.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 30. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face FRONTAL, tilted 20 degrees toward SCREEN LEFT, eyes cast down. Required expression, readable even at thumbnail size: quiet pleased smile, eyes nearly closed, cheeks visibly lifted. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: round adult face, broad nose, full smiling lips and soft jaw. Keep her 아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long BLACK coily waves with short forehead CURLS. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face FRONTAL, tilted 20 degrees toward SCREEN LEFT, eyes cast down",
+      "expression": "quiet pleased smile, eyes nearly closed, cheeks visibly lifted",
+      "face_design": "round adult face, broad nose, full smiling lips and soft jaw",
+      "hair_revision": "long BLACK coily waves with short forehead CURLS",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-dc964a66-c716-477f-b14b-41c1cf7969c5.png"
+    },
+    {
+      "id": "cf_africa_sailor",
+      "name": "아프리카 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-8036280e-cc1a-4692-b407-afe2d85e5f7d.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-6a836784-194c-4163-b5ef-91cbd5c86fa5.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 26. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 60 degrees toward SCREEN RIGHT and slightly back over shoulder. Required expression, readable even at thumbnail size: joyful open-mouth laugh, upper teeth visible, brows lifted, bright eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: long face, prominent high cheekbones, slim broad-tipped nose, wide smile. Keep her 아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long black BOX BRAIDS, clearly defined individual thick braids over shoulder. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 60 degrees toward SCREEN RIGHT and slightly back over shoulder",
+      "expression": "joyful open-mouth laugh, upper teeth visible, brows lifted, bright eyes",
+      "face_design": "long face, prominent high cheekbones, slim broad-tipped nose, wide smile",
+      "hair_revision": "long black BOX BRAIDS, clearly defined individual thick braids over shoulder",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-6a836784-194c-4163-b5ef-91cbd5c86fa5.png"
+    },
+    {
+      "id": "cf_africa_knight",
+      "name": "아프리카 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-2034ff48-fd4b-4e49-a4b7-eef837d02998.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-aae6a7bd-7c98-4e09-a76d-989599f2d2bb.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 27. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face turned 55 degrees toward SCREEN LEFT and chin lowered. Required expression, readable even at thumbnail size: analytical doubt: sharp furrow between brows, one brow lifted, lips compressed to one side. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: broad square adult face, strong jaw, short broad nose, strong curved eyebrows. Keep her 아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: TWO long thick BLACK braids from two braided crown knots. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face turned 55 degrees toward SCREEN LEFT and chin lowered",
+      "expression": "analytical doubt: sharp furrow between brows, one brow lifted, lips compressed to one side",
+      "face_design": "broad square adult face, strong jaw, short broad nose, strong curved eyebrows",
+      "hair_revision": "TWO long thick BLACK braids from two braided crown knots",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-aae6a7bd-7c98-4e09-a76d-989599f2d2bb.png"
+    },
+    {
+      "id": "cf_africa_noble",
+      "name": "아프리카 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-3ad3fd2e-220f-40b3-b62c-aefcd98ca5c6.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-00301d59-acf9-4d78-a339-4393d79f0936.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 28. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: head turned 65 degrees toward SCREEN LEFT, chin UP, gaze over shoulder. Required expression, readable even at thumbnail size: quiet restrained pride, serious mouth gently parted and focused thoughtful eyes. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: diamond adult face, high cheekbones, broad straight nose, long full lips. Keep her 아프리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: very voluminous SIDE SWEPT black CURLS framing one cheek. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "head turned 65 degrees toward SCREEN LEFT, chin UP, gaze over shoulder",
+      "expression": "quiet restrained pride, serious mouth gently parted and focused thoughtful eyes",
+      "face_design": "diamond adult face, high cheekbones, broad straight nose, long full lips",
+      "hair_revision": "very voluminous SIDE SWEPT black CURLS framing one cheek",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-00301d59-acf9-4d78-a339-4393d79f0936.png"
+    },
+    {
+      "id": "cf_america_villager",
+      "name": "아메리카 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-8c813316-542b-4b5c-b825-e449b88e6845.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-481f70d3-6ef8-41ab-a9ba-8309f6a574b3.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 29. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: FRONTAL face, head tilted 15 degrees toward SCREEN RIGHT, gaze away to left. Required expression, readable even at thumbnail size: visible exasperation: knitted brows, eyes rolled slightly upward and closed lips pulled sideways. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: broad rectangular adult face, strong jaw, long nose, thinner lips. Keep her 아메리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long straight BLACK hair loosely half tied with sparse stray strands. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "FRONTAL face, head tilted 15 degrees toward SCREEN RIGHT, gaze away to left",
+      "expression": "visible exasperation: knitted brows, eyes rolled slightly upward and closed lips pulled sideways",
+      "face_design": "broad rectangular adult face, strong jaw, long nose, thinner lips",
+      "hair_revision": "long straight BLACK hair loosely half tied with sparse stray strands",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-481f70d3-6ef8-41ab-a9ba-8309f6a574b3.png"
+    },
+    {
+      "id": "cf_america_sailor",
+      "name": "아메리카 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-c3c7249f-7450-4ebd-9af1-5044634070d5.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-db702218-09b8-4dc2-9153-60aec0320519.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 30. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: strong SCREEN RIGHT near-profile at 70 degrees, chin lifted as if spotting distant land. Required expression, readable even at thumbnail size: awe and anticipation: widened eyes, raised inner brow, mouth softly open. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: long oval adult face, prominent curved nose, firm chin and broad cheeks. Keep her 아메리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long STRAIGHT glossy BLACK hair half tied, no brown waves. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "strong SCREEN RIGHT near-profile at 70 degrees, chin lifted as if spotting distant land",
+      "expression": "awe and anticipation: widened eyes, raised inner brow, mouth softly open",
+      "face_design": "long oval adult face, prominent curved nose, firm chin and broad cheeks",
+      "hair_revision": "long STRAIGHT glossy BLACK hair half tied, no brown waves",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-db702218-09b8-4dc2-9153-60aec0320519.png"
+    },
+    {
+      "id": "cf_america_knight",
+      "name": "아메리카 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-21efbe16-e46b-4eee-b6b5-c8b6c9456a7d.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-3b0f01a4-fbe2-4cab-b33c-68473d7f519a.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 26. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face turned 50 degrees toward SCREEN LEFT, chin lowered, looking UP under brows. Required expression, readable even at thumbnail size: fearless challenging smile: brow lowered, bright narrowed eyes and teeth just visible. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: wide angular face, strong nose, full lower lip and asymmetric cheek dimple. Keep her 아메리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: long abundant DARK spiraling CURLS. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face turned 50 degrees toward SCREEN LEFT, chin lowered, looking UP under brows",
+      "expression": "fearless challenging smile: brow lowered, bright narrowed eyes and teeth just visible",
+      "face_design": "wide angular face, strong nose, full lower lip and asymmetric cheek dimple",
+      "hair_revision": "long abundant DARK spiraling CURLS",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-3b0f01a4-fbe2-4cab-b33c-68473d7f519a.png"
+    },
+    {
+      "id": "cf_america_noble",
+      "name": "아메리카 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-bd11f6a3-7466-4af9-b0e8-c801c6e1180e.png",
+      "reference_mode": "adult-original-portrait-edit",
+      "refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-3d8cdfea-0d7f-4806-9e7b-18900cff9592.png"
+      ],
+      "prompt": "Use case: precise-object-edit / stylized-concept. Image 1 is the EDIT TARGET, an original illustration of an ADULT woman age 27. Make one revised transparent knee-up game character.\nThe user found the faces and angles too repetitive. Make a BOLD and unmistakable change to her head orientation, expression and facial silhouette, not a tiny retouch.\nREQUIRED HEAD ANGLE: face fully FRONTAL with chin slightly UP, head gently tilted toward SCREEN LEFT. Required expression, readable even at thumbnail size: bright genuine toothy smile with raised cheeks, happy eyes and lifted brows. Eyes, brows, cheeks and mouth must work together.\nDistinct mature facial structure for THIS woman: soft square adult face, short broad nose, full cheeks and a generous wide smile. Keep her 아메리카 heritage and adult appearance. Avoid using the same smooth oval face as other game women.\nHAIR correction: high DARK ponytail tied with WOVEN RED ribbon and wispy side locks. Keep painted grouped locks and organic windblown texture. Respect the requested exact hair length and arrangement rather than replacing every style with a loose bun.\nBODY: retain this character's outfit, colors, full bust, opaque neckline coverage, profession, props and knee-up framing. Adjust neck, shoulders and near hand naturally to support the new head angle; do not paste a disconnected head. Keep both hands anatomically sound. One character only.\nSTYLE: keep this target's 2D hand-painted fantasy illustration, with a slightly stronger expressive illustrated facial design and visible brush grouping. No photo look or 3D render.\nBackground MUST remain genuinely transparent alpha, no backdrop or glow. Leave margin around all hair and elbows. No text, alternate view inset, border, logos or watermark. No modern clothing, no nudity. No childlike facial proportions. Show the final single revised knee-up portrait only.",
+      "revision": 1,
+      "face_direction": "face fully FRONTAL with chin slightly UP, head gently tilted toward SCREEN LEFT",
+      "expression": "bright genuine toothy smile with raised cheeks, happy eyes and lifted brows",
+      "face_design": "soft square adult face, short broad nose, full cheeks and a generous wide smile",
+      "hair_revision": "high DARK ponytail tied with WOVEN RED ribbon and wispy side locks",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a184e9-804c-76d0-8186-438abe3c3bec\\exec-3d8cdfea-0d7f-4806-9e7b-18900cff9592.png"
+    }
+  ]
+}

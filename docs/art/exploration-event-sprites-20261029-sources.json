@@ -1,0 +1,82 @@
+[
+  {
+    "id": "oasis",
+    "name": "오아시스",
+    "ms": 160,
+    "playback": "loop",
+    "subject": "A compact desert oasis miniature: two gracefully curved date palms, a turquoise shallow spring with a small irregular sand-and-grass rim. Slight elevated three-quarter view. Eight successive gentle wind poses: fronds lean left, settle, lean right and return, concentric water ripples expand and highlights move. Preserve exact palm trunks, spring silhouette, ground anchor and scale. Warm golden sand against fresh green fronds and turquoise water. Isolated small organic oasis only, no desert panorama, no square terrain base.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-ea8bee77-7702-47cc-82f4-95fb60ebe0b0.png"
+  },
+  {
+    "id": "shooting_star",
+    "name": "별똥별",
+    "ms": 100,
+    "playback": "once",
+    "subject": "One silver-white meteor shooting diagonally from upper left toward lower right, with a slender luminous gold-white trailing tail extending back toward upper left. Eight clear consecutive phases: tiny spark appears, head brightens, tail grows, long bright streak, strongest luminous head, tail breaks into fine fading sparks, faint fragments, last small fading spark. Keep all stages within the centered common envelope. No starscape, no night sky disk, no magical five-point star, no fireball explosion; luminous meteor effect only.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-9bddcdb6-e8d8-48ed-bc14-7cff1426175e.png"
+  },
+  {
+    "id": "milky_way",
+    "name": "은하수",
+    "ms": 200,
+    "playback": "loop",
+    "subject": "An isolated softly irregular diagonal ribbon of the Milky Way made of dense tiny silver stars, muted blue-violet interstellar glow, and dark transparent gaps/dust lanes. The whole ribbon fits centered inside each square cell from lower left to upper right, tapering to true transparency at all edges. Eight successive subtle twinkle phases with fixed large-scale ribbon shape and different tiny star brightness. No opaque night sky rectangle or circle, no moon, no planets, no ocean, no nebula background fill, no spiral galaxy. Readable graceful strip of celestial starlight only.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-b7e5fc22-5ac6-413c-a18a-8fed61e7d9ed.png"
+  },
+  {
+    "id": "solar_eclipse",
+    "name": "일식",
+    "ms": 230,
+    "playback": "once",
+    "subject": "Eight consecutive stages of a solar eclipse using a single centered fixed-size sun disk: 1 unobscured warm pale-gold sun; 2 small dark lunar bite entering from upper right; 3 quarter covered; 4 half covered; 5 thin crescent; 6 nearly completely covered with one tiny diamond-ring point; 7 totality, opaque deep charcoal lunar disk and fine silver-white corona; 8 totality with subtly extended delicate corona. Lunar occluder moves consistently from upper right toward center; no visible separate moon outline outside sun. Corona contained well inside cell. No entire sky, no extra stars, no eyes or face, no UI. Clearly distinct eclipse stages, not eight identical annular rings.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-7f3d894b-490e-413f-874b-c190d4b3cb6b.png"
+  },
+  {
+    "id": "lunar_eclipse",
+    "name": "월식",
+    "ms": 230,
+    "playback": "once",
+    "subject": "Eight consecutive stages of a LUNAR eclipse: one identical centered realistically textured moon disk at fixed diameter, progressing from pale silver full moon to deep copper-red blood moon. Earth's curved shadow advances from the right: full silver; first dark curved bite; one-quarter shadowed with dim rust-red area; half shadowed; three-quarters shadowed; almost fully dim red; total copper-red moon; deeper muted brick-red totality. Entire moon silhouette remains a full circular disk in every frame, its craters and maria remain coherent. No solar corona, no luminous gold ring, no flames, no surrounding night sky, no planets, no stars. Transparent outside moon.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-adf58554-9b10-444f-8fe6-c439951b088b.png"
+  },
+  {
+    "id": "extreme_heat",
+    "name": "혹서기",
+    "ms": 140,
+    "playback": "loop",
+    "subject": "Extreme heat weather effect: one small intensely glowing pale-gold sun above three translucent warm amber rising heat-shimmer wisps and tiny dusty motes. Eight successive loop phases of sun ray pulsation and heat wisps wavering upward. Preserve center and size of sun; strong readable sun at top center, delicate undulating heat below it. Painterly natural sunlight, no emoji face, no thermometer, no red arrows, no fire, no desert/ocean/background plate. All wisps terminate inside cell and fade to true transparency.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-38f62b09-46fa-4145-8a13-33a11fcebc9c.png"
+  },
+  {
+    "id": "extreme_cold",
+    "name": "혹한기",
+    "ms": 120,
+    "playback": "loop",
+    "subject": "Extreme cold weather effect: a compact pale blue-gray wind gust carrying fine diagonal snow grains and several delicate six-armed ice crystals over a small irregular icy frost cluster at the bottom. Eight consecutive blizzard loop phases, gust curls progress left to right, snowflakes drift and tiny ice highlights shimmer while frost base stays anchored. Pale icy blue, silver-white, restrained gray-blue shadows readable on sea or terrain. Do not include sun, thermometer, characters, landscape, snow globe, ground tile or large opaque cloud backdrop. No repeated static poses.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-f46fe5ec-450a-46e7-ade1-8afb89efa83c.png"
+  },
+  {
+    "id": "waterspout",
+    "name": "용오름",
+    "ms": 110,
+    "playback": "loop",
+    "subject": "A tall slender ocean waterspout, a continuous gray-blue rotating funnel joining a compact dark storm-cloud cap above to a small circular turquoise white-spray contact splash below. Eight visibly different successive rotation phases: spiral ribbons curl around funnel, cloud curls rotate, bottom spray and droplets travel around contact ring. Fixed cloud/funnel scale, vertical centerline and bottom water-contact pivot throughout. Match painterly natural seaborne weather effect. All cloud, funnel and spray fit individually in each cell. No boat, sea plane, skyline, scenery, broad tornado debris field, lightning or text.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-8c7813c8-9f0d-4dd0-bf9d-0b3d20b6cb50.png"
+  },
+  {
+    "id": "tsunami",
+    "name": "쓰나미",
+    "ms": 120,
+    "playback": "once",
+    "subject": "An isolated massive tsunami surge miniature, side-three-quarter view: a wide thick wall of dark turquoise water with a heavy broken white foamy top and muddy blue undertow; NOT a thin hollow surfing curl. Eight successive stages anchored at same bottom center: low heavy swelling water ridge; rising thick surge; tall broad face; largest wall of water; crest breaks forward; wall collapses into dense white turbulent foam; powerful broad rushing foam; low spreading residual froth. Every stage fits the same square cell with generous transparent margin; no edge cropping. Self-contained water volume and immediate spray only. No ocean plane/horizon, no ships/people/buildings/coastline.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-737fdc23-aa81-485b-8e97-9421724d1c75.png"
+  },
+  {
+    "id": "locust_swarm",
+    "name": "메뚜기떼",
+    "ms": 90,
+    "playback": "loop",
+    "subject": "A compact airborne swarm of many small naturally proportioned tawny-brown desert locusts moving right. Five or six nearest insects clearly show segmented bodies, long folded hind legs, antennae and translucent beating wings, with many smaller insects behind. Eight consecutive flight-loop poses: wingbeats cycle, swarm undulates and changes spacing subtly while overall centered envelope and scale remain fixed. Natural ochre-brown and muted golden wings, crisp silhouettes. No giant monster insects, no birds/butterflies, no black solid smoke blob, no sky background, no field/crops, no floor. Keep every insect inside its own cell.",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1873c-e66c-75d1-b567-883bcfd039b2\\exec-549b8b32-f417-4c66-9e3b-e68284596026.png"
+  }
+]

@@ -3,7 +3,8 @@
            그 밖의 선실(갑판·요리실 …)은 손으로 두거나 선실 화면의 「자동 배치」로 능력에 맞게 채운다.
    · 다른 배: 선장 · 조타수 · 갑판 · 파수꾼 네 자리와 그 배 크기만큼의 선실(G.Cabins.slots). 사람은 늘 자동으로, 능력에 맞게 앉힌다.
      선장은 예전처럼 그 배를 몬다(R.captain — 항해술·포술·검술·조선기술·무력).
-     조타수·갑판·파수꾼·선실은 함대 효과가 없다 — 「할 일 없는 부하」가 되지 않게 해 달마다 충성이 떨어지지 않을 뿐이다.
+     조타수·갑판·선실은 함대 효과가 없다 — 「할 일 없는 부하」가 되지 않게 해 달마다 충성이 떨어지지 않을 뿐이다.
+     파수꾼만은 측량 단계마다 지도 제작 속도 +5% (js/systems/cartography.js — 2026-10-29)
    · 자동으로 채우는 때(CA.refresh): 도시에 들어올 때 · 출항할 때 · 달마다(충성을 셈하기 전) · 부하가 들어왔을 때 · 기함을 바꿨을 때 · 해전 뒤 · 선실·편성 화면을 열 때.
      첫 항해 안내(튜토리얼) 중에는 저절로 채우지 않는다 — 제독이 선실에 앉혀 보는 단계가 있다.
      이때는 자리가 없는 부하와 다른 배의 사람만 움직이고, 기함 선실에 앉은 사람은 그대로 둔다(기함의 빈 방은 채운다).
@@ -22,7 +23,7 @@
   CA.POSTS = [
     { id: 'helm', name: '조타수', icon: 'wheel', skills: ['nav', 'ops'], main: ['nav'], sub: ['ops'], desc: '키를 잡는다.' },
     { id: 'deck', name: '갑판', icon: 'ship', skills: ['ops', 'sword'], main: ['ops'], sub: ['sword'], desc: '갑판에서 선원들을 부린다.' },
-    { id: 'lookout', name: '파수꾼', icon: 'telescope', skills: ['survey', 'hist'], main: ['survey'], sub: ['hist'], desc: '돛대 꼭대기에서 바다를 살핀다.' }
+    { id: 'lookout', name: '파수꾼', icon: 'telescope', skills: ['survey', 'hist'], main: ['survey'], sub: ['hist'], desc: '돛대 꼭대기에서 바다를 살핀다. 측량 단계마다 해도가 5%씩 빨리 상세해진다.' }
   ];
   CA.POST = {};
   CA.POSTS.forEach(function (p) { CA.POST[p.id] = p; });

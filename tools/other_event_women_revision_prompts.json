@@ -1,0 +1,59 @@
+{
+  "mode": "built-in image_gen edit",
+  "date": "2026-10-28",
+  "request": "무릎단에서 자르고, 첨부한 얼굴을 참고해 흑인 여성 여섯 명을 젊은 성인으로 다시 그린다.",
+  "assets": [
+    {
+      "id": "mina_trader",
+      "refs": [
+        2,
+        5
+      ],
+      "description": "A beautiful young adult Akan merchant, apparent age 26, graceful open dark eyes, refined arched brows, balanced oval face, full softly copper toned lips, warm rich brown skin. Use photo 2 for lips and softly sculpted facial planes, photo 3 for eye shape and delicate oval face. Eyes open. Friendly intelligent expression.",
+      "prompt": "Use case: identity-preserve / character redesign. Edit the FIRST image, the existing isolated historical game character. The remaining photos are facial-feature references only; do not copy their modern clothing, setting, watermark or photographic finish. A beautiful young adult Akan merchant, apparent age 26, graceful open dark eyes, refined arched brows, balanced oval face, full softly copper toned lips, warm rich brown skin. Use photo 2 for lips and softly sculpted facial planes, photo 3 for eye shape and delicate oval face. Eyes open. Friendly intelligent expression. Preserve the first image's recognizable historical costume, headwear, jewelry, props, hand gestures, overall pose and natural head-to-body proportion. Make her an unmistakably adult woman in her mid-to-late twenties, elegant and attractive. Semi realistic hand painted digital oil game art with softly modeled facial planes; no photo collage, no plastic skin, no modern fashion makeup. Recompose as a TRUE KNEE-LENGTH PORTRAIT: head to kneecaps, crop exactly at or just below the knees, NO shins, NO ankles, NO feet or shoes anywhere. Face large and clearly readable, normal sized head, long natural torso and thighs, both hands visible, entire headdress safely in frame. Vertical 2:3, 1024x1536, genuinely transparent background, one isolated character only, no painted background or ground shadow, no text, border or watermark."
+    },
+    {
+      "id": "mina_mother",
+      "refs": [
+        4
+      ],
+      "description": "A beautiful young adult Akan mother, apparent age 26, with the photo's large soft dark eyes, refined oval face, expressive natural brows and naturally full lips. Rich warm brown skin, gentle serious expression with quiet dignity. Smooth youthful face without aging lines.",
+      "prompt": "Use case: identity-preserve / character redesign. Edit the FIRST image, the existing isolated historical game character. The remaining photos are facial-feature references only; do not copy their modern clothing, setting, watermark or photographic finish. A beautiful young adult Akan mother, apparent age 26, with the photo's large soft dark eyes, refined oval face, expressive natural brows and naturally full lips. Rich warm brown skin, gentle serious expression with quiet dignity. Smooth youthful face without aging lines. Preserve the first image's recognizable historical costume, headwear, jewelry, props, hand gestures, overall pose and natural head-to-body proportion. Make her an unmistakably adult woman in her mid-to-late twenties, elegant and attractive. Semi realistic hand painted digital oil game art with softly modeled facial planes; no photo collage, no plastic skin, no modern fashion makeup. Recompose as a TRUE KNEE-LENGTH PORTRAIT: head to kneecaps, crop exactly at or just below the knees, NO shins, NO ankles, NO feet or shoes anywhere. Face large and clearly readable, normal sized head, long natural torso and thighs, both hands visible, entire headdress safely in frame. Vertical 2:3, 1024x1536, genuinely transparent background, one isolated character only, no painted background or ground shadow, no text, border or watermark."
+    },
+    {
+      "id": "njinga",
+      "refs": [
+        4,
+        1
+      ],
+      "description": "A beautiful young adult Queen Njinga, apparent age 28, striking almond shaped dark eyes, strong elegant brows, refined oval cheekbones, softly full lips, deep luminous brown skin. Use the two photos as facial beauty references blended into one distinct face. Commanding composed expression, youthful face with no aged lines.",
+      "prompt": "Use case: identity-preserve / character redesign. Edit the FIRST image, the existing isolated historical game character. The remaining photos are facial-feature references only; do not copy their modern clothing, setting, watermark or photographic finish. A beautiful young adult Queen Njinga, apparent age 28, striking almond shaped dark eyes, strong elegant brows, refined oval cheekbones, softly full lips, deep luminous brown skin. Use the two photos as facial beauty references blended into one distinct face. Commanding composed expression, youthful face with no aged lines. Preserve the first image's recognizable historical costume, headwear, jewelry, props, hand gestures, overall pose and natural head-to-body proportion. Make her an unmistakably adult woman in her mid-to-late twenties, elegant and attractive. Semi realistic hand painted digital oil game art with softly modeled facial planes; no photo collage, no plastic skin, no modern fashion makeup. Recompose as a TRUE KNEE-LENGTH PORTRAIT: head to kneecaps, crop exactly at or just below the knees, NO shins, NO ankles, NO feet or shoes anywhere. Face large and clearly readable, normal sized head, long natural torso and thighs, both hands visible, entire headdress safely in frame. Vertical 2:3, 1024x1536, genuinely transparent background, one isolated character only, no painted background or ground shadow, no text, border or watermark."
+    },
+    {
+      "id": "kifunji",
+      "refs": [
+        1
+      ],
+      "description": "A beautiful young adult Ndongo noblewoman Kifunji, apparent age 24. Use the photo's deep brown skin, alert almond shaped eyes, graceful small oval face and softly parted full lips as the facial reference. Calm intelligent gaze, smooth youthful skin, distinct from Queen Njinga.",
+      "prompt": "Use case: identity-preserve / character redesign. Edit the FIRST image, the existing isolated historical game character. The remaining photos are facial-feature references only; do not copy their modern clothing, setting, watermark or photographic finish. A beautiful young adult Ndongo noblewoman Kifunji, apparent age 24. Use the photo's deep brown skin, alert almond shaped eyes, graceful small oval face and softly parted full lips as the facial reference. Calm intelligent gaze, smooth youthful skin, distinct from Queen Njinga. Preserve the first image's recognizable historical costume, headwear, jewelry, props, hand gestures, overall pose and natural head-to-body proportion. Make her an unmistakably adult woman in her mid-to-late twenties, elegant and attractive. Semi realistic hand painted digital oil game art with softly modeled facial planes; no photo collage, no plastic skin, no modern fashion makeup. Recompose as a TRUE KNEE-LENGTH PORTRAIT: head to kneecaps, crop exactly at or just below the knees, NO shins, NO ankles, NO feet or shoes anywhere. Face large and clearly readable, normal sized head, long natural torso and thighs, both hands visible, entire headdress safely in frame. Vertical 2:3, 1024x1536, genuinely transparent background, one isolated character only, no painted background or ground shadow, no text, border or watermark."
+    },
+    {
+      "id": "kambu",
+      "refs": [
+        3,
+        2
+      ],
+      "description": "A beautiful young adult Ndongo noblewoman Kambu, apparent age 27. Use photo 2 for a slender balanced oval face, elegant dark eyes and nose, photo 3 for full lips and softly glowing warm brown skin. Eyes open. Hopeful composed expression, no old age lines or hollow elderly cheeks.",
+      "prompt": "Use case: identity-preserve / character redesign. Edit the FIRST image, the existing isolated historical game character. The remaining photos are facial-feature references only; do not copy their modern clothing, setting, watermark or photographic finish. A beautiful young adult Ndongo noblewoman Kambu, apparent age 27. Use photo 2 for a slender balanced oval face, elegant dark eyes and nose, photo 3 for full lips and softly glowing warm brown skin. Eyes open. Hopeful composed expression, no old age lines or hollow elderly cheeks. Preserve the first image's recognizable historical costume, headwear, jewelry, props, hand gestures, overall pose and natural head-to-body proportion. Make her an unmistakably adult woman in her mid-to-late twenties, elegant and attractive. Semi realistic hand painted digital oil game art with softly modeled facial planes; no photo collage, no plastic skin, no modern fashion makeup. Recompose as a TRUE KNEE-LENGTH PORTRAIT: head to kneecaps, crop exactly at or just below the knees, NO shins, NO ankles, NO feet or shoes anywhere. Face large and clearly readable, normal sized head, long natural torso and thighs, both hands visible, entire headdress safely in frame. Vertical 2:3, 1024x1536, genuinely transparent background, one isolated character only, no painted background or ground shadow, no text, border or watermark."
+    },
+    {
+      "id": "kongo_leonor",
+      "refs": [
+        5,
+        2
+      ],
+      "description": "A beautiful young adult Kongo Queen Leonor, apparent age 28. Use photo 2 for expressive large almond eyes, full soft lips, oval facial proportions and elegant brows; photo 3 for warm copper light and supple brown skin. Eyes open, natural brown or warm hazel irises. Quiet regal warmth and a gentle restrained smile.",
+      "prompt": "Use case: identity-preserve / character redesign. Edit the FIRST image, the existing isolated historical game character. The remaining photos are facial-feature references only; do not copy their modern clothing, setting, watermark or photographic finish. A beautiful young adult Kongo Queen Leonor, apparent age 28. Use photo 2 for expressive large almond eyes, full soft lips, oval facial proportions and elegant brows; photo 3 for warm copper light and supple brown skin. Eyes open, natural brown or warm hazel irises. Quiet regal warmth and a gentle restrained smile. Preserve the first image's recognizable historical costume, headwear, jewelry, props, hand gestures, overall pose and natural head-to-body proportion. Make her an unmistakably adult woman in her mid-to-late twenties, elegant and attractive. Semi realistic hand painted digital oil game art with softly modeled facial planes; no photo collage, no plastic skin, no modern fashion makeup. Recompose as a TRUE KNEE-LENGTH PORTRAIT: head to kneecaps, crop exactly at or just below the knees, NO shins, NO ankles, NO feet or shoes anywhere. Face large and clearly readable, normal sized head, long natural torso and thighs, both hands visible, entire headdress safely in frame. Vertical 2:3, 1024x1536, genuinely transparent background, one isolated character only, no painted background or ground shadow, no text, border or watermark."
+    }
+  ]
+}

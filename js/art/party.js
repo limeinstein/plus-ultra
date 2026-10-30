@@ -552,8 +552,8 @@
     var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, ground[0]); g.addColorStop(1, ground[1]);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = 'rgba(0,0,0,.08)'; for (var i = 0; i < 26; i++) { var rx = (i * 97.3 + t * 30) % (W + 20) - 10, ry = (i * 53.7) % H; ctx.fillRect(W - rx, ry, 3, 1.5); }
-    var sc = H / 120, pts = [];
-    for (var k = 0; k < 40; k++) pts.push([W * 0.78 - k * 8 * sc, H * 0.8]);
+    var sc = G.ExpeditionFormation ? Math.min(W / 400, H / 240) : H / 120, pts = [];
+    for (var k = 0; k < 40; k++) pts.push([W * 0.78 - k * 8 * sc, H * (G.ExpeditionFormation ? 0.7 : 0.8)]);
     P.draw(ctx, { pts: pts, head: 0, moving: true, phase: t * 1.4, dist: t * 60, t: t, mount: { id: id, n: 99 }, party: 12, draft: draft, region: region, gather: 0, face: 1, flag: '#1d3f7a', gait: id === 'horse' ? 'trot' : 'walk', size: sc * 0.95 });
   };
 })(window.G = window.G || {});

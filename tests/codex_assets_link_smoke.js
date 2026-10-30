@@ -1,5 +1,5 @@
-/* Codex 그림 연결 점검 (2026-10-10)
-   · 유물 630종이 모두 전용 그림으로 · 교역품 79종이 모두 전용 그림(images/goods, 노예는 끊어진 족쇄)
+/* 그림 연결 점검 (2026-10-10)
+   · 유물 664종과 교역품 158종이 모두 전용 그림으로(노예는 끊어진 족쇄)
    · 새 항해사 얼굴 6명(보쿠덴·첸·김·키스크·말린체·투팍) 흉상·무릎상
    · 얼굴 묶음(images/portraits/pools) 760장마다 무릎상 _half는 보존하되, 얼굴과 다른 몸을 포갠 옛 합성본은 부하 표시에 쓰지 않는다
    · 역사·종교 발견물 216곳(GIF·끝 장면·시트) · 대화창에 완성된 얼굴상·무릎상 한 쌍이 실제로 선다 · 콘솔 오류 0
@@ -33,7 +33,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const relics = Object.keys(G.RELIC).map(id => G.RELIC[id]);
       const relicMiss = relics.filter(rl => !/^(relics|items|discovery-ends|discoveries)\//.test(I.pick(K.relic(rl)) || '')).map(rl => rl.id);
       const goods = Object.keys(G.GOOD).map(id => G.GOOD[id]);
-      const goodMiss = goods.filter(g => g.plant ? I.pick(K.good(g)) !== 'discovery-ends/' + g.from : !/^goods\//.test(I.pick(K.good(g)) || '')).map(g => g.id);
+      const goodMiss = goods.filter(g => !/^goods\//.test(I.pick(K.good(g)) || '')).map(g => g.id);
       const mates = ['bokuden', 'chen', 'kim', 'kisk', 'marina', 'tupac'];
       const mateMiss = mates.filter(id => !G.MATE[id] || I.pick(K.mate(id)) !== 'portraits/mates/' + id || I.pick(K.mateHalf(id)) !== 'portraits/mates/' + id + '_half');
       const poolFaces = I.list('portraits/pools/').filter(k => !/_half$/.test(k));
@@ -52,8 +52,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         borrowN: borrowers.length, badBorrowedPair, pairedId: borrowedPairs.length ? borrowedPairs[0].id : null, ruinN: ruins.length, discMiss,
         slaves: I.pick(K.good(G.GOOD.slaves)) };
     }, CINEMATIC_IDS);
-    ok(r.relicN === 630 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.join(','));
-    ok(r.goodN === 158 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (식물 79종은 발견 원화 · 노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
+    ok(r.relicN === 664 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.join(','));
+    ok(r.goodN === 158 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
     ok(!r.mateMiss.length, '새 항해사 얼굴 6명 흉상·무릎상 ' + r.mateMiss.join(','));
     ok(r.poolN === 760 && !r.poolNoHalf.length, '얼굴 묶음 ' + r.poolN + '장 모두 무릎상이 있다 ' + r.poolNoHalf.slice(0, 5).join(','));
     ok(!r.badBorrowedPair.length, '전용 그림 없는 항해사 ' + r.borrowN + '명도 합성 묶음 없이 완성된 얼굴상·무릎상 한 쌍으로 선다');

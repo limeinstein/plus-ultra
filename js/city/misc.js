@@ -230,7 +230,7 @@
     MK._scroll = 0;   // 판 뒤 다시 여는 창은 보던 자리 그대로 (2026-10-29 피드백) — 시장에 새로 들어올 때만 처음부터
     for (;;) {
       if (R.mergeItems) R.mergeItems();   // 같은 물건은 한 칸
-      var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { var d = G.ITEM[x.it.id]; return !(x.it.evidence); });
+      var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { var d = G.ITEM[x.it.id]; return !(x.it.evidence) && !(d && d.noSell); });   // noSell: 맡은 물건 (임진왜란의 비단 — js/data/imjin.js)
       if (!list.length) {
         if (soldAny) { await C.say(vendor(), '이것으로 가져온 물건은 다 받았네. 좋은 거래였어!'); return; }   // 방금 마지막 물건을 판 뒤
         await C.say(vendor(), '응? 도대체 무엇을 팔겠다는 건가?'); return;
@@ -340,6 +340,9 @@
     } else {
       cur.mk = { ok: false };      // 실패하면 값은 그대로 (올라가지 않는다)
       await C.say(vendor(), U.pick(['흥! 그 값에 팔 바에야 바다에 던지겠네.', '장사를 모르는구먼. 싫으면 관두게!']));
+      // 모항이면 소꿉친구가 나타나 거든다 (js/systems/osa.js)
+      var oh = null; if (G.Osa && G.Osa.haggleHelp) { try { oh = await G.Osa.haggleHelp(c, 'market'); } catch (e) { console.error(e); } }
+      if (oh) { cur.mk = { ok: true, buy: 1 - oh.disc, sell: 1 + oh.disc * 0.7, osa: true }; return; }
       UI.toast('흥정 실패 — 값은 그대로입니다.', 'scales');
     }
   };
@@ -827,11 +830,12 @@
     var away0 = G.FamEv && G.FamEv.awayDays ? G.FamEv.awayDays() : 0;
     if (s.player.wife && s.player.wifeAboard) await UI.say(away0 >= 30 ? U.pick(['드디어 우리 집이에요. …' + away0 + '일 만이네요. 같이 문을 여니까 기분이 이상해요.', '집 냄새예요! 바다 냄새만 맡다가 오니까 눈물이 날 것 같아요.', '당신이랑 같이 돌아오니까, 이번엔 기다린 사람이 없네요. 그게 좋아요.']) : U.pick(['잠깐 들렀다 가요. 창은 열어 둘게요.', '짐 좀 풀고 가요. 다음 항해 준비는 같이 해요.']), G.Family.wifeSpeaker());
     else if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
-    if (story) { try { await G.Story.motherGreet(c); await G.Story.allowance(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금
+    if (story) { try { var intro = await G.Story.motherGreet(c); await G.Story.allowance(c); if (G.Story.grandmaVisit && !(G.Story.heirMode && G.Story.heirMode() && intro === 'intro')) await G.Story.grandmaVisit(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금, 대를 이은 뒤면 할머니가 가끔 들른다
     else if (!s.player.wife) await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
     if (G.HomeLife) await G.HomeLife.happen();                                    // 가끔 아이와 얽힌 일이 생긴다 (homelife.js)
+    if (G.HeirPlan) { try { await G.HeirPlan.homeEvents(c); } catch (e) { console.error(e); } }   // 아들의 소꿉친구가 찾아온다 · 후계를 위한 안배를 권한다 (js/systems/heirplan.js)
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상 (familyevent.js)
     if (story) { try { await G.Story.family(c, 'home'); } catch (e) { console.error(e); } }                  // 아내와 어머니 (이야기 모드)
   };
@@ -840,7 +844,7 @@
     var s = S();
     return [
       { label: '쉰다', icon: 'bed', onClick: function () { return HM.rest(c); } },
-      G.Story && G.Story.atHome && G.Story.atHome(c) ? { label: '어머니와 이야기', icon: 'heart', sub: G.STORY.mother.name, onClick: function () { return G.Story.motherTalk(); } } : null,
+      G.Story && G.Story.atHome && G.Story.atHome(c) ? { label: '어머니와 이야기', icon: 'heart', sub: G.Story.motherName ? G.Story.motherName() : G.STORY.mother.name, onClick: function () { return G.Story.motherTalk(); } } : null,
       s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length + (G.Family.aboard().length ? ' (견습 ' + G.Family.aboard().length + ')' : '') : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
       G.Siblings && G.Siblings.home().length ? { label: G.Siblings.menuLabel ? G.Siblings.menuLabel() : '동생들', icon: 'people', sub: G.Siblings.home().length + '명 · 함께 항해 ' + G.Siblings.aboard().length + '/' + G.Siblings.K().maxHire, onClick: function () { return G.Siblings.menu(c); } } : null,
       G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,
@@ -851,6 +855,7 @@
       G.Encyc ? G.Encyc.menuItem(c) : null,   // 발견물 백과사전 (js/systems/encyclopedia.js)
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
       { label: '보관함', icon: 'chest', sub: '맡긴 물건 ' + R.storage().length + '점 · 소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX, onClick: function () { return HM.storage(c); } },
+      G.HeirPlan && G.HeirPlan.canArrange() ? { label: G.HEIR_PLAN.council.menu, icon: 'people', sub: G.HeirPlan.menuSub(), onClick: function () { return G.HeirPlan.arrange(c); } } : null,   // 옛 부하에게 아들의 앞날을 부탁한다 (js/systems/heirplan.js)
       { label: '은퇴', icon: 'log', onClick: function () { return G.Family.retire(); } }
     ];
   };

@@ -76,7 +76,8 @@
   /** 이 부하가 이별을 겪을 수 있나 — 배수(0이면 아니다) */
   MLV.weight = function (m) {
     var s = S(), k = K(), d = G.MATE[m.id]; if (!d || d.sib || isWife(m.id)) return 0;
-    if (m.role === 'captain' || MLV.inCabin(m)) return 0;                          // 기함의 선실에 들었거나 다른 배의 선장이면 아니다 (2026-10-29)
+    if (m.role === 'captain' || MLV.inCabin(m)) return 0;
+    if (G.HeirPlan && G.HeirPlan.pledged(m)) return 0;                             // 후계를 맡기로 약속한 부하는 그날까지 떠나지 않는다 (js/systems/heirplan.js)                          // 기함의 선실에 들었거나 다른 배의 선장이면 아니다 (2026-10-29)
     if (m.leaveCd && s.day < m.leaveCd) return 0;
     if (st().pend.some(function (x) { return x.id === m.id; })) return 0;
     if (MLV.years(m) < k.longYears) return 0;                                      // 40년 넘게 함께한 노장만

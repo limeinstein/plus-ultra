@@ -36,6 +36,9 @@
     if (G.Strand) out = out.concat(G.Strand.daily());     // 남겨 둔 함대: 남은 날 알림 · 기한이 지나면 폐기 (js/systems/strandfleet.js)
     if (G.IncaFall) out = out.concat(G.IncaFall.daily());
     if (G.Medici) out = out.concat(G.Medici.daily());     // 메디치 은행의 위기 — 기한·로렌초의 죽음 (js/systems/medici.js)
+    if (G.Imjin) out = out.concat(G.Imjin.daily());       // 임진왜란 — 부산진에서 노량까지 (js/systems/imjin.js)
+    if (G.Globe) out = out.concat(G.Globe.daily());       // 셰익스피어와 글로브의 불 — 템페스트·장례·첫 전집 (js/systems/globe.js)
+    if (G.GalPisa) out = out.concat(G.GalPisa.daily());     // 갈릴레오와 피사의 사탑 — 파도바·코레시오·비비아니 (js/systems/galpisa.js)
     if (G.RomeSack) out = out.concat(G.RomeSack.daily());   // 1527년 로마 약탈 — 교황의 항복·마키아벨리·탈출 (js/systems/romesack.js)
     if (G.Potosi) out = out.concat(G.Potosi.daily());     // 포토시 은광 — 황제의 마을 · 미타 · 수은 (js/systems/potosi.js)
     if (G.Nzinga) out = out.concat(G.Nzinga.daily());     // 은징가 여왕의 저항 — 은동고·마탐바의 소식 (js/systems/nzinga.js)

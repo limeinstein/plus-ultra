@@ -1,0 +1,47 @@
+{
+  "mode": "built-in image_gen edit",
+  "assets": [
+    {
+      "id": "mina_door",
+      "woman": "mina_mother",
+      "subject": "foreground woman in the ochre and indigo head wrap and dress",
+      "prompt": "Use case: identity-preserve. Edit the FIRST image, a panoramic game event scene. Replace only the facial appearance of the foreground woman in the ochre and indigo head wrap and dress with the SAME beautiful young ADULT woman in the SECOND image, matching her exact eye shape, nose, lips, skin tone and apparent age in her mid-to-late twenties. Follow the second image's youthful facial design; remove elderly wrinkles and sagging features from this woman. Adapt her new face naturally to the original head angle and scene light. Keep her head the SAME proportional size relative to her body, preserve adult natural anatomy, costume, hairstyle/headwear, jewelry, pose and gestures, and preserve all other characters, architecture, props, background, camera framing and painterly style. Do not paste the isolated portrait into the scene. Do not change the composition, do not add or remove people, no labels, text or watermark. Output the same panoramic 2.25:1 event image."
+    },
+    {
+      "id": "nzinga_chair",
+      "woman": "njinga",
+      "subject": "Queen Njinga seated on the attendant's back, wearing red cloth and a feather circlet",
+      "prompt": "Use case: identity-preserve. Edit the FIRST image, a panoramic game event scene. Replace only the facial appearance of the Queen Njinga seated on the attendant's back, wearing red cloth and a feather circlet with the SAME beautiful young ADULT woman in the SECOND image, matching her exact eye shape, nose, lips, skin tone and apparent age in her mid-to-late twenties. Follow the second image's youthful facial design; remove elderly wrinkles and sagging features from this woman. Adapt her new face naturally to the original head angle and scene light. Keep her head the SAME proportional size relative to her body, preserve adult natural anatomy, costume, hairstyle/headwear, jewelry, pose and gestures, and preserve all other characters, architecture, props, background, camera framing and painterly style. Do not paste the isolated portrait into the scene. Do not change the composition, do not add or remove people, no labels, text or watermark. Output the same panoramic 2.25:1 event image."
+    },
+    {
+      "id": "nzinga_kifunji",
+      "woman": "kifunji",
+      "subject": "woman in the blue head wrap passing a letter",
+      "prompt": "Use case: identity-preserve. Edit the FIRST image, a panoramic game event scene. Replace only the facial appearance of the woman in the blue head wrap passing a letter with the SAME beautiful young ADULT woman in the SECOND image, matching her exact eye shape, nose, lips, skin tone and apparent age in her mid-to-late twenties. Follow the second image's youthful facial design; remove elderly wrinkles and sagging features from this woman. Adapt her new face naturally to the original head angle and scene light. Keep her head the SAME proportional size relative to her body, preserve adult natural anatomy, costume, hairstyle/headwear, jewelry, pose and gestures, and preserve all other characters, architecture, props, background, camera framing and painterly style. Do not paste the isolated portrait into the scene. Do not change the composition, do not add or remove people, no labels, text or watermark. Output the same panoramic 2.25:1 event image."
+    },
+    {
+      "id": "nzinga_kilombo",
+      "woman": "njinga",
+      "subject": "Queen Njinga offering the axe",
+      "prompt": "Use case: identity-preserve. Edit the FIRST image, a panoramic game event scene. Replace only the facial appearance of the Queen Njinga offering the axe with the SAME beautiful young ADULT woman in the SECOND image, matching her exact eye shape, nose, lips, skin tone and apparent age in her mid-to-late twenties. Follow the second image's youthful facial design; remove elderly wrinkles and sagging features from this woman. Adapt her new face naturally to the original head angle and scene light. Keep her head the SAME proportional size relative to her body, preserve adult natural anatomy, costume, hairstyle/headwear, jewelry, pose and gestures, and preserve all other characters, architecture, props, background, camera framing and painterly style. Do not paste the isolated portrait into the scene. Do not change the composition, do not add or remove people, no labels, text or watermark. Output the same panoramic 2.25:1 event image."
+    },
+    {
+      "id": "nzinga_kombi",
+      "woman": "njinga",
+      "subject": "Queen Njinga in red and leopard cloth pointing toward the river",
+      "prompt": "Use case: identity-preserve. Edit the FIRST image, a panoramic game event scene. Replace only the facial appearance of the Queen Njinga in red and leopard cloth pointing toward the river with the SAME beautiful young ADULT woman in the SECOND image, matching her exact eye shape, nose, lips, skin tone and apparent age in her mid-to-late twenties. Follow the second image's youthful facial design; remove elderly wrinkles and sagging features from this woman. Adapt her new face naturally to the original head angle and scene light. Keep her head the SAME proportional size relative to her body, preserve adult natural anatomy, costume, hairstyle/headwear, jewelry, pose and gestures, and preserve all other characters, architecture, props, background, camera framing and painterly style. Do not paste the isolated portrait into the scene. Do not change the composition, do not add or remove people, no labels, text or watermark. Output the same panoramic 2.25:1 event image."
+    },
+    {
+      "id": "nzinga_kambu",
+      "woman": "kambu",
+      "subject": "woman in the red head wrap and brown dress holding a rosary",
+      "prompt": "Use case: identity-preserve. Edit the FIRST image, a panoramic game event scene. Replace only the facial appearance of the woman in the red head wrap and brown dress holding a rosary with the SAME beautiful young ADULT woman in the SECOND image, matching her exact eye shape, nose, lips, skin tone and apparent age in her mid-to-late twenties. Follow the second image's youthful facial design; remove elderly wrinkles and sagging features from this woman. Adapt her new face naturally to the original head angle and scene light. Keep her head the SAME proportional size relative to her body, preserve adult natural anatomy, costume, hairstyle/headwear, jewelry, pose and gestures, and preserve all other characters, architecture, props, background, camera framing and painterly style. Do not paste the isolated portrait into the scene. Do not change the composition, do not add or remove people, no labels, text or watermark. Output the same panoramic 2.25:1 event image."
+    },
+    {
+      "id": "kongo_baptism",
+      "woman": "kongo_leonor",
+      "subject": "Queen Leonor in the cream and red woven dress standing to the left",
+      "prompt": "Use case: identity-preserve. Edit the FIRST image, a panoramic game event scene. Replace only the facial appearance of the Queen Leonor in the cream and red woven dress standing to the left with the SAME beautiful young ADULT woman in the SECOND image, matching her exact eye shape, nose, lips, skin tone and apparent age in her mid-to-late twenties. Follow the second image's youthful facial design; remove elderly wrinkles and sagging features from this woman. Adapt her new face naturally to the original head angle and scene light. Keep her head the SAME proportional size relative to her body, preserve adult natural anatomy, costume, hairstyle/headwear, jewelry, pose and gestures, and preserve all other characters, architecture, props, background, camera framing and painterly style. Do not paste the isolated portrait into the scene. Do not change the composition, do not add or remove people, no labels, text or watermark. Output the same panoramic 2.25:1 event image."
+    }
+  ]
+}

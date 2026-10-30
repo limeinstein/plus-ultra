@@ -173,6 +173,12 @@
       decodeMs: 1200,     // 받은 그림을 미리 풀어 두기(decode)를 기다리는 가장 긴 시간
       graceMs: 8000       // 배·부대·사람 그림을 받는 동안 코드 그림 대신 비워 두는 가장 긴 시간
     },
+    portraitFace: {       // 작은 얼굴상: 머리카락·모자 대신 눈과 입을 가운데에 맞춘다
+      deadZone: 0.055,    // 이 정도의 작은 가로 차이는 원래 구도를 유지
+      maxShift: 0.25,     // 한 번에 옮길 수 있는 그림 너비 비율
+      minFaceWidth: 0.18, // 무릎상·전신상이 임시로 쓰인 경우는 보정하지 않는다
+      bg: '#1a120c'
+    },
     dialogue: {           // 대화 인물 2.5D 리그 (js/art/portrait_rig.js)
       breath: 1.0,        // 호흡에 따른 상체 움직임
       sway: 1.0,          // 듣고 있을 때의 고개·몸 기울기
@@ -306,10 +312,29 @@
     sendoffSec: 7.5,     // 배웅이 이어지는 시간(초)
     title: true          // 「모항 ○○을 떠나다」 글귀
   };
+  // 양피지 해도: 실제 탐사한 범위만 단계별로 드러낸다.
+  G.FX.chart = {
+    viewPadding: 4, viewMinSpan: 48,
+    wear: { foldAlpha: .07, foldLight: .16, foldWidth: 3, edgeStep: 8, edgeDepth: 7,
+      backing: '#665038', edgeInk: 'rgba(86,54,25,.55)', tearLength: 38, tearWidth: 3, dripLength: 25, inkAlpha: .19 },
+    paper: [226, 208, 163], land: [211, 190, 139], sea: [143, 170, 162], ink: [105, 78, 42], river: [79, 129, 139],
+    grain: 5, stain: 20, fineCoast: 0.2, riverWidth: 0.7, relief: 24, edgeFade: 12, edgeRagged: 6,
+    detailMinStep: 0.3, detailGap: 28, mountainSize: 7, mountainFrom: 0.56, treeSize: 4,
+    mountainInk: 'rgba(91,66,37,.68)', forestInk: 'rgba(61,91,58,.50)', gridInk: 'rgba(100,72,39,.18)', rhumbInk: 'rgba(103,72,37,.12)',
+    terrainColors: [[143,170,162], [173,183,128], [191,187,131], [133,158,113], [114,147,105], [218,193,133], [170,154,119], [220,219,198], [181,186,164], [230,230,211]],
+    motifs: ['kraken', 'dragon', 'compass', 'edge', 'eldorado', 'sevencities', 'fountain', 'magnetic', 'maelstrom', 'whaleisland', 'roclegend', 'presterjohn', 'treasureisle', 'ghostship'],
+    motifGrid: { lon: -165, lat: -60, cols: 9, rows: 5, lonStep: 40, latStep: 30 },
+    motifMinCanvas: 500, motifWorldSize: 20, motifMinSize: 115, motifMaxSize: 250, motifAlpha: 0.48
+  };
   // 조류 무리: 4열×2행 시트, 각 개체가 다른 간격·날갯짓으로 지나간다.
   G.FX.birds = { count: 8, duration: 8, stagger: 1.2, spacing: 62, size: 100,
+    countById: { phoenixw: 1, phoenix: 1, flamingo: 32, crane: 24, bncrane: 24, stork: 24, mallard: 24,
+      sacredibis: 24, ploverbird: 24, albatross: 16, frigatebird: 16, snowyowl: 16 },
+    runCount: [1, 2], largeColumns: 6,
     frameMs: 105, travel: 1000, height: 120, arc: 130, groundOffset: 35, fade: 0.7,
     groundStep: 0.025, groundSteps: 100, groundSpacing: 0.24, surfaceSearch: 2, surfaceAngles: 16,
+    coastSearch: 12, coastSearchStep: 0.15, coastBisect: 16, shoreSpacing: 0.07, shoreWalk: 0.45,
+    entryWalk: 0.30, entryDive: 0.12, diveHeight: 24, splashSize: 22,
     frameById: { hummingbird: 45, albatross: 150, condor: 155, roc: 160, crane: 135, flamingo: 135 },
     sizeById: { hummingbird: 0.6, vinousbird: 0.65, budgie: 0.7, ploverbird: 0.7, kiwi: 0.75, roc: 1.4, phoenix: 1.3, condor: 1.2, albatross: 1.2 } };
   // 그린 스프라이트 시트 (js/art/sprites.js · images/sprites/ — tools/sprite_repack.py 가 만든다)
@@ -324,7 +349,14 @@
       previewHz: 1.1, campFps: 7,
       // 제독의 기준 키. 앉은 자세는 원본별 인물 비율로 보정한다.
       // 탈것 전체 높이를 같게 맞추지 않으므로 코끼리는 자연히 크게 보인다.
-      admiralHeight: 52
+      admiralHeight: 52,
+      formation: {      // 선장·좌우 동료·후미의 다이아 편대. [뒤쪽 간격, 좌우 폭] (화면 px × 탐험대 크기)
+        enabled: true, maxMembers: 4, lateralY: 0.72, turnRate: 4.8,
+        groundMinGap: 20, groundAngles: 24, groundRadii: [1, 0.85, 0.7, 0.55, 0.4, 0.25, 0.1],
+        phaseOffsets: [0, 0.21, 0.48, 0.73],
+        gaps: { walk: [44, 34], porter: [48, 38], horse: [64, 56], camel: [72, 62],
+          donkey: [60, 50], llama: [60, 50], yak: [64, 56], wagon: [100, 86], elephant: [100, 88], reindeer: [94, 80] }
+      }
     },
     battle: true,        // 육상전 부대를 그림 시트로
     unitH: 56,           // 육상전 병사 몸 키(px, 1000×430 판 기준 — 치켜든 무기는 빼고) · 짐승은 beastH
@@ -373,5 +405,13 @@
       dive: { name: '잠수 소용돌이', life: 1.6, size: 240, under: true },
       emerge: { name: '재등장 물기둥', life: 1.6, size: 255, under: false }
     }
+  };
+  // 승계 사건 샷: 실제 후계자·소꿉친구·선택한 노장의 무릎상을 새 배경에 함께 놓는다.
+  G.FX.oldGuardShot = {
+    visit: { oldX: 0.18, heirX: 0.47, friendX: 0.78, h: 1.04, y: 0.04 },
+    join: { heirX: 0.27, friendX: 0.68, h: 1.04, y: 0.04 },
+    arrange: { oldX: 0.32, heirX: 0.68, h: 1.04, y: 0.04 },
+    aide: { heirX: 0.18, oldX: 0.40, mateX: [0.64, 0.84], h: 1.01, y: 0.05 },
+    mourning: { heirX: 0.25, mateX: [0.56, 0.80], h: 1.02, y: 0.04 }
   };
 })(window.G = window.G || {});

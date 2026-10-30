@@ -205,6 +205,9 @@
     ['Nzinga', 'daily', 'B'],                // 은징가 여왕의 저항
     ['Potosi', 'daily', 'B'],                // 포토시 은광
     ['RomeSack', 'daily', 'B'],              // 1527년 로마 약탈
+    ['GalPisa', 'daily', 'B'],               // 갈릴레오와 피사의 사탑
+    ['Imjin', 'daily', 'B'],                 // 임진왜란
+    ['Globe', 'daily', 'B'],                 // 셰익스피어와 글로브의 불
     ['Succession', 'year', function (m) { return m && m.icon === 'crown' ? 'B' : null; }],   // 군주·후원자의 대가 바뀜 (유품·기억은 일상)
     ['Disaster', 'daily', 'C'],              // 지진·화산·산사태·해일·홍수
     ['Econ', 'daily', 'C', true],            // 시장 사건 (가뭄·전쟁·풍작…)

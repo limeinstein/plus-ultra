@@ -50,7 +50,7 @@
         { label: '모험 제안', icon: 'scroll', dim: !!k, onClick: function () { return SP.propose(sp); } },
         { label: '보고', icon: 'seal', sub: mine ? (G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') : '계약 중') : '', dim: !mine, onClick: function () { return SP.report(sp); } },
         { label: '이야기', icon: 'people', onClick: function () { return chat(sp); } }
-      ].concat(G.Princess ? G.Princess.palaceItems(sp) : []).concat(G.Colony ? G.Colony.palaceItems(sp) : []).concat(G.Court ? G.Court.palaceItems(sp) : []);   // 사라진 왕녀 · 왕명·친서·특사
+      ].concat(G.Carto && G.Carto.canHear(sp) ? [G.Carto.menuItem(sp)] : []).concat(G.Princess ? G.Princess.palaceItems(sp) : []).concat(G.Colony ? G.Colony.palaceItems(sp) : []).concat(G.Court ? G.Court.palaceItems(sp) : []);   // 사라진 왕녀 · 왕명·친서·특사
     };
     return B;
   }

@@ -276,7 +276,7 @@
     if (spec.council && G.Hist) await G.Hist.withScene(spec.councilPic, spec.councilTitle, function () { return G.Hist.play(spec.council); });
     if (spec.intro) await UI.say(spec.intro, who);
     if (spec.foeScene && G.Hist) await G.Hist.withScene(spec.foePic, spec.foeTitle, function () { return G.Hist.play(spec.foeScene); });
-    var v = await UI.ask(spec.ask || '함께 싸우겠습니까?', [{ label: '함께 싸운다', value: 'fight' }, { label: '물러난다', value: 'no' }], who);
+    var v = await UI.ask(spec.ask || '함께 싸우겠습니까?', [{ label: spec.fightLabel || '함께 싸운다', value: 'fight' }, { label: spec.noLabel || '물러난다', value: 'no' }], who);
     if (v !== 'fight') { r.battle[id] = 'declined'; await UI.say(spec.decline || '…그대의 사정도 있겠지. 우리끼리 싸우겠소.', who); return false; }
     r.battle[id] = 'fighting';
     var zone = G.Ships.zone(s.loc.lon, s.loc.lat);

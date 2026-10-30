@@ -9,7 +9,7 @@
 
   // ---------------------------------------------------------------- keyboard bindings
   // 저장 파일마다 바꿀 수 있는 공통 키. code를 저장해 한글/영문 입력 상태와 무관하게 같은 물리 키를 쓴다.
-  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speedHalf: 'Backquote', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3', mouseFollow: 'ShiftLeft' };
+  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speedHalf: 'Backquote', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3', mouseFollow: 'ShiftLeft', notebook: 'KeyN' };
   var KEY_ACTIONS = [
     { id: 'up', label: '위', desc: '메뉴 위 · 거리 건물 입장 · 바다/육상/해전 북쪽' },
     { id: 'down', label: '아래', desc: '메뉴 아래 · 바다/육상/해전 남쪽' },
@@ -22,13 +22,22 @@
     { id: 'speed1', label: '속도 ×1', desc: '바다·육상 탐험 배속 1' },
     { id: 'speed2', label: '속도 ×2', desc: '바다·육상 탐험 배속 2' },
     { id: 'speed3', label: '속도 ×4', desc: '바다·육상 탐험 배속 4' },
-    { id: 'mouseFollow', label: '마우스 따라가기', desc: '바다·육상 탐험에서 켬/끔 (기본 SHIFT — 왼쪽·오른쪽 모두)' }
+    { id: 'mouseFollow', label: '마우스 따라가기', desc: '바다·육상 탐험에서 켬/끔 (기본 SHIFT — 왼쪽·오른쪽 모두)' },
+    // 수첩 단축키 (2026-10-30 사용자 요청 「수첩 단축기 넣을 수 있게 해줘」) — optional: 「없음」으로 뺄 수 있다. 수첩 탭마다의 키는 js/ui/info.js 가 G.Keys.register로 더한다
+    { id: 'notebook', label: '수첩', desc: '항해 수첩 열기·닫기 — 도시·바다·육상 탐험에서 「수첩」 단추가 보일 때', optional: true }
   ];
+  function actionOf(id) { for (var i = 0; i < KEY_ACTIONS.length; i++) if (KEY_ACTIONS[i].id === id) return KEY_ACTIONS[i]; return null; }
+  function isOptional(id) { var a = actionOf(id); return !!(a && a.optional); }
   function keySettings(s) {
     s = s || (G.Game && G.Game.state && G.Game.state.settings);
     if (!s) return KEY_DEFAULTS;
     var k = s.keys || (s.keys = {});
-    Object.keys(KEY_DEFAULTS).forEach(function (id) { if (!k[id]) k[id] = KEY_DEFAULTS[id]; });
+    Object.keys(KEY_DEFAULTS).forEach(function (id) {
+      if (isOptional(id)) {
+        // 뺄 수 있는 키는 「없음」('')도 지킨다. 옛 저장에 처음 더할 때 그 키를 이미 다른 동작이 쓰고 있으면 없음으로
+        if (!(id in k)) { var d = KEY_DEFAULTS[id] || ''; k[id] = d && Object.keys(k).some(function (o) { return o !== id && k[o] === d; }) ? '' : d; }
+      } else if (!k[id]) k[id] = KEY_DEFAULTS[id];
+    });
     return k;
   }
   function eventCode(e) {
@@ -42,7 +51,7 @@
   }
   function keyIs(e, action) {
     var keys = keySettings(), code = eventCode(e);
-    if (code === keys[action]) return true;
+    if (keys[action] && code === keys[action]) return true;   // 「없음」('')인 동작은 어떤 키에도 맞지 않는다
     // 확정 키를 다른 키로 바꿨어도 숫자판 Enter는 확정으로 받는다 — 다른 동작이 Enter를 쓰지 않을 때만 (QA 2026-10-23)
     if (action === 'confirm' && e && e.code === 'NumpadEnter') return !Object.keys(keys).some(function (id) { return keys[id] === 'Enter'; });
     return false;
@@ -61,12 +70,25 @@
     ensure: keySettings,
     code: eventCode,
     is: keyIs,
-    label: function (action, settings) { return keyLabel(keySettings(settings)[action]); },
+    label: function (action, settings) { var c = keySettings(settings)[action]; return c ? keyLabel(c) : '없음'; },
+    /** 키를 정한다. 그 키를 쓰던 동작과는 키를 맞바꾼다 — 단, 이쪽이 「없음」이면 꼭 있어야 하는 동작(방향·확정·취소…)의 키는 빼앗지 않는다.
+        돌려주는 것: { ok, other(맞바꾼 동작), blocked(막은 동작) } */
     bind: function (settings, action, code) {
-      var keys = keySettings(settings), old = keys[action], other = null;
+      var keys = keySettings(settings), old = keys[action] || '', other = null;
       Object.keys(keys).some(function (id) { if (id !== action && keys[id] === code) { other = id; return true; } return false; });
+      if (other && !old && !isOptional(other)) return { ok: false, blocked: other };
       keys[action] = code;
       if (other) keys[other] = old;
+      return { ok: true, other: other };
+    },
+    /** 뺄 수 있는 동작의 키를 「없음」으로 */
+    clear: function (settings, action) { if (!isOptional(action)) return false; keySettings(settings)[action] = ''; return true; },
+    optional: isOptional,
+    action: actionOf,
+    /** 다른 파일이 동작을 더한다 (수첩 탭 바로가기 — js/ui/info.js). {id, label, desc, group, def('' = 없음)} — 늘 뺄 수 있는 동작 */
+    register: function (a) {
+      if (!a || !a.id || actionOf(a.id)) return;
+      a.optional = true; KEY_ACTIONS.push(a); KEY_DEFAULTS[a.id] = a.def || '';
     },
     reset: function (settings) { settings.keys = this.defaults(); return settings.keys; }
   };
@@ -176,7 +198,37 @@
       if (routeKey(cancel) || UI.busy()) e.preventDefault();
     });
   };
+  /* 수첩 단축키 (2026-10-30): 창이 하나도 없고, 지금 장면의 「수첩」 단추가 보일 때만 — 그 단추를 누른 것과 같다
+     (바다·뭍은 단추가 멈춤을 맡는다). 장면이 따로 쓰는 보조 키(M 해도·L 상륙·F 낚시)보다 설정한 키가 먼저다.
+     수첩 탭 키(nb_<탭>)는 그 탭으로 연다. 수첩이 열려 있을 때의 닫기·탭 넘기기는 수첩 창(js/ui/info.js I.open)이 받는다 */
+  function notebookButton() {
+    if (!root) return null;
+    var bs = root.querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) {
+      var b = bs[i];
+      if (b.disabled || b.classList.contains('disabled') || !b.offsetParent) continue;
+      if (b.textContent.replace(/\s+/g, '') === '수첩') return b;
+    }
+    return null;
+  }
+  function notebookKey(e) {
+    if (!e || e.repeat || UI.busy() || !(G.Game && G.Game.state)) return false;
+    var t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return false;
+    var nm = G.Game.sceneName; if (nm !== 'city' && nm !== 'sea' && nm !== 'land') return false;
+    var tab = null;
+    if (!keyIs(e, 'notebook')) {
+      var keys = keySettings(); tab = Object.keys(keys).filter(function (id) { return id.indexOf('nb_') === 0 && keyIs(e, id); })[0];
+      if (!tab) return false;
+      tab = tab.slice(3);
+    }
+    var b = notebookButton(); if (!b) return false;
+    if (tab && G.Info && G.Info.preset) G.Info.preset(tab);   // 단추는 지난번 탭으로 연다 — 그 탭으로 맞춰 둔다
+    b.click();
+    return true;
+  }
+  UI.notebookKey = notebookKey;
   function routeKey(e) {
+    if (notebookKey(e)) return true;
     for (var i = keyHandlers.length - 1; i >= 0; i--) if (keyHandlers[i](e) === true) return true;
     if (screenMenuKey(e)) return true;
     return !!(G.Game && G.Game.onKey && G.Game.onKey(e) === true);

@@ -5,6 +5,9 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 sources = json.loads((ROOT / 'tools/bird_sprite_sources.json').read_text(encoding='utf-8'))
+shore_sources = ROOT / 'tools/bird_shore_sources.json'
+if shore_sources.exists():
+    sources += json.loads(shore_sources.read_text(encoding='utf-8'))
 out = ROOT / 'images/effects/birds'
 out.mkdir(parents=True, exist_ok=True)
 preview = Image.new('RGB', (1000, ((len(sources) + 3) // 4) * 160), '#9cabae')

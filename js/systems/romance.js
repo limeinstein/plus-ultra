@@ -115,10 +115,10 @@
     var busy = {};
     Object.keys(ps).forEach(function (k) { var p = ps[k]; if (p.stage !== 'none') { busy[p.m] = 1; busy[p.f] = 1; } });
     if (G.Gyeonwoo && G.Gyeonwoo.pairOf && G.Gyeonwoo.pairOf('gyeonwoo')) { busy.gyeonwoo = 1; busy.jiknyeo = 1; }
-    var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id] && !G.MATE[id].minor && RM.veteran(id); });   // 아이(피터 팬 같은 소년)는 빼고 (QA 2026-10-23)
+    var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id] && !G.MATE[id].minor && !G.MATE[id].wed && RM.veteran(id); });   // 아이(피터 팬 같은 소년)는 빼고 (QA 2026-10-23)
     // 등용 순(배에 오른 순서)대로 먼저 맺어지지 않게: 날마다 여자 부하의 차례를 섞고, 끌리는 남자도 궁합만큼의 확률로 고른다
     //   (이미 끌림이 쌓인 짝이 있으면 그 짝을 이어 간다 — 날마다 상대가 바뀌지 않게)
-    var fems = U.shuffle(Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && !G.MATE[id].minor && s.player.wife !== id && RM.veteran(id); }));
+    var fems = U.shuffle(Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && !G.MATE[id].minor && !G.MATE[id].wed && s.player.wife !== id && RM.veteran(id); }));
     U.shuffle(males);
     fems.forEach(function (f) {
       var best = null, cand = [], keep = null;

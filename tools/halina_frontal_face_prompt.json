@@ -1,0 +1,11 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-10-29",
+  "target": "images/portraits/legendary/halina.webp",
+  "references": [
+    "images/portraits/legendary/halina.webp",
+    "images/portraits/legendary/halina_half.webp"
+  ],
+  "transparent_background": true,
+  "prompt": "Edit target: image 1, the square face portrait of Halina. Image 2 is supporting reference for the SAME character's identity, costume, hair color, and painterly game art style. Redraw ONLY the square FACE PORTRAIT as a truly frontal head-and-shoulders portrait facing directly toward the viewer, with both eyes equally visible and a straight centered nose, head upright and eyes looking at the viewer. It must be recognizably the same adult young Dutch red-haired merchant's daughter: pale lightly freckled skin, vivid pale blue eyes, long abundant wavy copper-auburn hair, matching facial features, natural cheerful bold personality. Preserve the original painterly semi-realistic historical RPG illustration style, detailed soft brushwork, warm natural light, the same cream linen collar and navy-blue garment visible at the shoulders, and subtle burgundy hair ribbon if visible. Give her a lively warm confident smile with slightly parted lips, less exaggerated open mouth than the side-profile reference. COMPOSITION: 1024x1024 square high-resolution bust thumbnail asset; full crown and the entire head, chin and both shoulders inside the canvas with a modest margin above the hair. Face visibly centered on the vertical centerline; eyes roughly at 42% image height; head occupies most of the square while retaining the top of the hair and chin. Shoulders face forward too. One person, one image. Transparent background with clean smooth alpha edges, no backdrop, no black or colored matte, no text, no border, no sheet or before/after layout. Do not edit the full knee portrait; it is reference only. Output only the newly painted centered frontal square face portrait."
+}

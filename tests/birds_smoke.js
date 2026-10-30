@@ -66,6 +66,21 @@ const out = path.join(root, 'artifacts/birds-20261029'); fs.mkdirSync(out, { rec
       const missing = G.DISCOVERIES.filter(x => x.cat === 'creature' && birdNames.test(x.name) && !G.Birds.isBird(x));
       ok(!missing.length, '추가 지역 자료의 조류도 빠짐없이 포함: ' + missing.map(x => x.id).join(','));
       ok(['penguin', 'magellanpenguin', 'emperorpenguin'].every(id => G.Birds.kinds[id] === 'swim') && ['ostrich', 'kiwi', 'emu', 'roadrunner'].every(id => G.Birds.kinds[id] === 'run'), '펭귄 3종은 헤엄·타조·키위·에뮤·로드러너는 달리기');
+      ok(['phoenixw', 'phoenix'].every(id => G.Birds.count(G.DISC[id]) === 1), '불사조·봉황은 한 마리');
+      ok(G.Birds.count(G.DISC.flamingo) === 32 && ['crane', 'bncrane', 'stork', 'mallard'].every(id => G.Birds.count(G.DISC[id]) === 24), '홍학 32마리·주요 철새 24마리');
+      ['ostrich', 'kiwi', 'emu', 'roadrunner'].forEach(id => {
+        const counts = Array.from({ length: 20 }, (_, i) => G.Birds.count(G.DISC[id], G.U.makeRng(i + 1)));
+        ok(counts.every(n => n === 1 || n === 2), id + ': 걷거나 뛰는 새는 1~2마리');
+      });
+      const entry = G.Birds.entryPath({ lon: -9.2, lat: 38.7 }, 0);
+      ok(entry && entry.walk.length > 1 && entry.walk.every(q => G.Geo.isLand(q[0], q[1])) && entry.swim.every(q => !G.Geo.isLand(q[0], q[1])), '펭귄은 해안 육지에서 출발해 물속 경로로 이어짐');
+      ok(G.Birds.entryPose(entry, 0.1).phase === 'walk' && G.Birds.entryPose(entry, 0.35).phase === 'dive' && G.Birds.entryPose(entry, 0.8).phase === 'swim', '시간에 따라 걸음 → 입수 → 헤엄 순서로 전환');
+      ['penguin', 'magellanpenguin', 'emperorpenguin'].forEach(id => {
+        const d = G.DISC[id], e = G.Birds.entryPath(d, 0);
+        ok(e && e.walk.length > 1 && e.swim.length > 1 && e.walk.every(q => G.Geo.isLand(q[0], q[1])) && e.swim.every(q => !G.Geo.isLand(q[0], q[1])), id + ': 실제 발견 해안에서 육지 출발·바다 진입 가능');
+      });
+      const shores = await Promise.all(['penguin', 'magellanpenguin', 'emperorpenguin'].map(id => G.Img.load('effects/birds/' + id + '_shore')));
+      ok(shores.every(img => img && img.width === 1024 && img.height === 512), '펭귄 3종의 해안 걸음·입수 전용 시트 해독');
       ['run', 'swim'].forEach(kind => {
         const p = G.Birds.groundPath({ lon: -9.2, lat: 38.7 }, kind, 0);
         ok(p.length > 1 && p.every(q => G.Geo.isLand(q[0], q[1]) === (kind === 'run')), kind + ': 해안 경로의 모든 점이 알맞은 땅·물 위');
@@ -104,7 +119,7 @@ const out = path.join(root, 'artifacts/birds-20261029'); fs.mkdirSync(out, { rec
       ctx.drawImage = function () { n++; return original(...arguments); };
       G.Birds.draw(ctx, () => [800, 450], 'sea'); return n;
     });
-    assert.strictEqual(drawn, 8, '8마리를 서로 다른 프레임으로 그림');
+    assert.strictEqual(drawn, 32, '홍학 32마리를 서로 다른 프레임으로 그림');
     await page.screenshot({ path: path.join(out, 'flamingo-flock-sea.png') });
     await page.evaluate(async () => {
       G.Game.go('land', { from: 0 });
@@ -115,8 +130,41 @@ const out = path.join(root, 'artifacts/birds-20261029'); fs.mkdirSync(out, { rec
     await page.waitForFunction(() => { G.Img.want('effects/birds/kiwi'); return G.Img.get('effects/birds/kiwi'); }, null, { polling: 100 });
     await page.evaluate(() => { G.Scenes.land.update(1 / 30); for (let i = 0; i < 70; i++) G.Birds.update(1 / 30); });
     await page.screenshot({ path: path.join(out, 'kiwi-flock-land.png') });
+    const runnerCount = await page.evaluate(() => {
+      const ctx = document.createElement('canvas').getContext('2d'); let count = 0;
+      ctx.drawImage = () => count++;
+      G.Birds.draw(ctx, G.Scenes.land.toScreen, 'land'); return count;
+    });
+    assert(runnerCount >= 1 && runnerCount <= 2, '실제 키위 렌더링도 1~2마리');
+    await page.evaluate(async () => {
+      G.Game.state = G.State.deserialize(G.State.serialize());
+      const s = G.Game.state, d = G.DISC.phoenixw;
+      s.disc.phoenixw = { me: true, found: G.U.dateNum(s.date) }; G.Birds.record(d, 500); G.Birds.show(d, s.disc.phoenixw);
+      await G.Img.load('effects/birds/phoenixw');
+      for (let i = 0; i < 70; i++) G.Birds.update(1 / 30);
+    });
+    const phoenixCount = await page.evaluate(() => {
+      const ctx = document.createElement('canvas').getContext('2d'); let count = 0;
+      ctx.drawImage = () => count++;
+      G.Birds.draw(ctx, G.Scenes.land.toScreen, 'land'); return count;
+    });
+    assert.strictEqual(phoenixCount, 1, '실제 불사조 렌더링은 한 마리');
+    await page.screenshot({ path: path.join(out, 'phoenix-single.png') });
+    // 같은 펭귄 무리가 해안에서 입수하는 세 시점을 찍는다.
+    await page.evaluate(async () => {
+      G.Game.state = G.State.deserialize(G.State.serialize());
+      const s = G.Game.state, d = G.DISC.penguin;
+      s.disc.penguin = { me: true, found: G.U.dateNum(s.date) }; G.Birds.record(d, 500);
+      window.__penguinFlock = G.Birds.show(d, s.disc.penguin);
+      window.__penguinFlock.members.forEach(b => { b.delay = 0; });
+      await Promise.all([G.Img.load('effects/birds/penguin'), G.Img.load('effects/birds/penguin_shore')]);
+    });
+    for (const [phase, u] of [['walk', .15], ['dive', .36], ['swim', .5]]) {
+      await page.evaluate(u => { window.__penguinFlock.t = u * G.FX.birds.duration; G.Scenes.land.update(1 / 30); G.Birds.update(0); }, u);
+      await page.screenshot({ path: path.join(out, `penguin-${phase}.png`) });
+    }
     assert.deepStrictEqual(errors, []);
-    fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ ...report, drawn, errors }, null, 2));
-    console.log(`PASS: ${report.checks.length + 3} checks, ${report.ids.length} species, ${drawn} flock members, no console errors`);
+    fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ ...report, drawn, runnerCount, phoenixCount, errors }, null, 2));
+    console.log(`PASS: ${report.checks.length + 5} checks, ${report.ids.length} species, flamingos ${drawn}, runners ${runnerCount}, phoenix ${phoenixCount}, no console errors`);
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

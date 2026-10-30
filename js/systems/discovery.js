@@ -128,6 +128,7 @@
   /** 도시 거리·메뉴에 이 건물 발견물이 서 있는가 — 신기루는 그 입항에 떴을 때만 */
   D.inTown = function (d) { return D.built(d) && (!D.cityMirage(d) || D.mirageRoll(d.city)); };
   D.built = function (d) {
+    if (d && d.goneY && S().date.y >= d.goneY && !D.foundByMe(d.id)) return false;   // 허물어져 사라졌다 — 그 전에 찾지 못하면 찾을 수 없다 (셉티조디움 1588 · 콘스탄티누스 욕장 1605 — js/data/heritage1030disc.js)
     if (d && D.cityMirage(d) && S().date.y < (MC().cityFrom || 1486)) return false;   // 도시의 신기루는 1485년까지 나오지 않는다 (소문·단서도)
     if (d && (d.openY || d.mirageFrom) && S().date.y < (d.openY || d.mirageFrom)) return false;   // 아직 드러나지 않았다 (openY: 그 해부터 · mirageFrom: 그 해부터 신기루로) — 2026-10-28
     return !d || !d.built || S().date.y >= d.built || (D.isFuture(d) && !(d.mirageFrom && S().date.y < d.mirageFrom));
@@ -203,7 +204,8 @@
     delight: { name: '흥분', icon: 'chest', line: '귀한 발견을 손에 넣었다는 기쁨이 대원들에게 번졌다.' },
     wonder:  { name: '경이', icon: 'compass', line: '처음 보는 존재를 마주한 놀라움이 마음을 환기했다.' },
     fear:    { name: '공포', icon: 'skull', line: '기괴하고 두려운 광경이 대원들의 마음에 오래 남았다.' },
-    grief:   { name: '숙연함', icon: 'skull', line: '사람이 사람을 사고판 자리 앞에서 대원들은 한동안 말을 잃었다. 웃고 떠드는 이가 없었다.' }
+    grief:   { name: '숙연함', icon: 'skull', line: '사람이 사람을 사고판 자리 앞에서 대원들은 한동안 말을 잃었다. 웃고 떠드는 이가 없었다.' },
+    rest:    { name: '휴양', icon: 'sun', line: '맑은 바다와 고운 모래, 그늘진 나무 아래에서 대원들이 모처럼 몸과 마음을 쉬었다. 웃음소리가 다시 갑판에 돌아왔다.' }   // 휴양지 섬 (js/data/resortdisc.js · 2026-10-30)
   };
   var FEAR_IDS = { bermuda: 1, f_giantsquid: 1, tarantula: 1, roc: 1, minotaur: 1, cannibal: 1, crystalskull: 1, antarctic: 1 };
   function strainCfg() { return (G.BALANCE && G.BALANCE.discoveryStrain) || { recover: 10, findK: 0.35 }; }

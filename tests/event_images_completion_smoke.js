@@ -3,7 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 const rows = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/event_image_completion_prompts.json'), 'utf8'));
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }

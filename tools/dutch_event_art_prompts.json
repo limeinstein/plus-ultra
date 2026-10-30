@@ -1,0 +1,128 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-10-28",
+  "assets": [
+    {
+      "id": "halina",
+      "name": "할리나",
+      "portrait_dir": "portraits/legendary",
+      "face_source": "artifacts/halina-frontal-20261029/source.png",
+      "face_prompt": "tools/halina_frontal_face_prompt.json",
+      "prompt": "Use case: stylized-concept. Production portrait for a Renaissance ocean adventure RPG. One original fictional clearly adult character, hand painted 2D digital oil illustration, visible restrained brushwork, simplified facial planes and matte skin, warm modeled light and readable silhouette, not photographic, not anime or chibi. Vertical 1024x1536. Composition is a knee-length portrait: whole head and hair and both hands comfortably in frame, lower canvas edge cuts directly through kneecaps. Absolutely no calves, shins, ankles, feet, shoes, floor, pedestal or standing shadow. Natural uncompressed torso and thighs. Isolated on genuinely transparent alpha background, no scene, no text, logo, watermark, border, extra people. Halina, fictional Dutch adult woman age 25. Use the first photo only as an expression/hair/gesture reference: long flowing wavy copper-auburn hair, animated delighted open-mouth smile, head turning to viewer's right in a lively three-quarter view, keep enough face visible for both eyes. Create an original illustrated face rather than an exact photograph likeness. Beautiful mature features, bright grey-blue eyes, light freckles. Feminine full-figured adult silhouette with defined waist and naturally balanced body proportions, fully clothed. A fitted librarian-inspired late Renaissance navy wool dress, tailored buttoned bodice over opaque ivory linen blouse, open folded collar, rolled sleeves, fitted waist belt, flowing skirt, subtle red ribbon tying only part of her hair; lively tasteful adventure costume. Left forearm cradles two leather bound books and a ledger at the waist, a quill tucked at belt; right hand on hip. Confident warm outspoken personality. Style reference second image for painted rendering only.",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f6fa2f62-af2f-43b9-97a5-81cf0d82361d.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/kifunji_half.webp"
+      ],
+      "type": "portrait",
+      "transparent_background": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "verberk",
+      "name": "페르베르크",
+      "portrait_dir": "portraits/legendary",
+      "prompt": "Use case: stylized-concept. Create one original fictional adult woman aged 28, Margaretha Verberk, for a Renaissance ocean-adventure RPG. Clearly hand-painted 2D game illustration, matte facial planes and brush texture, NOT photographic. Blonde hair with wispy bangs and pearl hairpins, mature refined face, slightly tilted head, amused superior closed-mouth smirk and eyes looking down toward viewer. Normal natural adult anatomy, dignified fully clothed noblewoman in elegant black and burgundy silk Renaissance dress with opaque ivory lace neckline, gold embroidery, puffed sleeves, pearl earrings. Left hand on hip, right hand holds folded fan at waist. Special asymmetric knee-length composition: one leg bent and lifted, one dark leather boot pressing on a closed navy book with red ribbon on top of a stack of books at the height of her other kneecap. Show that one lifted boot and the book clearly inside the lower frame. Opposite supporting leg extends straight down but is CUT AT THE KNEECAP by bottom image edge; no second foot, floor or full-body view. Plausible hip knee and foot joints under gown, head and both hands safely inside frame. The dismissive gesture is about rivalry over a book. Entire character and book stack isolated on TRUE TRANSPARENT ALPHA background with zero scenery or backdrop or shadows. 1024x1536 vertical, no text, logo or border. Reference image is for painterly game rendering only.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/kifunji_half.webp"
+      ],
+      "type": "portrait",
+      "transparent_background": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "nl_jan",
+      "name": "얀",
+      "prompt": "Use case: stylized-concept. Production portrait for a Renaissance ocean adventure RPG. One original fictional clearly adult character, hand painted 2D digital oil illustration, visible restrained brushwork, simplified facial planes and matte skin, warm modeled light and readable silhouette, not photographic, not anime or chibi. Vertical 1024x1536. Composition is a knee-length portrait: whole head and hair and both hands comfortably in frame, lower canvas edge cuts directly through kneecaps. Absolutely no calves, shins, ankles, feet, shoes, floor, pedestal or standing shadow. Natural uncompressed torso and thighs. Isolated on genuinely transparent alpha background, no scene, no text, logo, watermark, border, extra people. Jan Claeszoon, fictional Dutch sea beggar sailor and lute player age 27. Windswept blond hair, sun-tanned angular face, lively mischievous grin, distinct narrow eyes. Worn ash-grey wool sailor's open coat over faded ochre shirt, belt with sheathed dagger, plain crescent silver medal without writing. Lute slung diagonally on his back with visible pegbox and strap. One hand casually on belt, other holding lute strap, three quarter friendly stance. Match the supplied game's painted rendering only.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/kifunji_half.webp"
+      ],
+      "type": "portrait",
+      "transparent_background": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "nl_pieter",
+      "name": "피터르",
+      "prompt": "Use case: stylized-concept. Production portrait for a Renaissance ocean adventure RPG. One original fictional clearly adult character, hand painted 2D digital oil illustration, visible restrained brushwork, simplified facial planes and matte skin, warm modeled light and readable silhouette, not photographic, not anime or chibi. Vertical 1024x1536. Composition is a knee-length portrait: whole head and hair and both hands comfortably in frame, lower canvas edge cuts directly through kneecaps. Absolutely no calves, shins, ankles, feet, shoes, floor, pedestal or standing shadow. Natural uncompressed torso and thighs. Isolated on genuinely transparent alpha background, no scene, no text, logo, watermark, border, extra people. Pieter Huygens, fictional Dutch grain merchant's son age 28. Neatly side parted chestnut brown hair, clean shaven earnest rounded face, soft worried brown eyes, subtly anxious polite expression, distinct from a rugged sailor. Modest black wool merchant doublet with small white linen collar, charcoal long coat and brown leather belt. Both hands hold a brown ledger and small handful of golden wheat stems at mid waist. Natural three quarter standing posture. Supplied image is game's painted rendering only.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/kifunji_half.webp"
+      ],
+      "type": "portrait",
+      "transparent_background": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "nl_dirk",
+      "name": "디르크",
+      "prompt": "Use case: stylized-concept. Production portrait for a Renaissance ocean adventure RPG. One original fictional clearly adult character, hand painted 2D digital oil illustration, visible restrained brushwork, simplified facial planes and matte skin, warm modeled light and readable silhouette, not photographic, not anime or chibi. Vertical 1024x1536. Composition is a knee-length portrait: whole head and hair and both hands comfortably in frame, lower canvas edge cuts directly through kneecaps. Absolutely no calves, shins, ankles, feet, shoes, floor, pedestal or standing shadow. Natural uncompressed torso and thighs. Isolated on genuinely transparent alpha background, no scene, no text, logo, watermark, border, extra people. Dirk van Verberk, fictional Spanish-aligned Dutch tercio officer age 31. Dark brown neatly short hair, trim pointed beard and mustache, sharp haughty eyes, proud stern mature angular face. Polished sixteenth century steel breastplate, burgundy red Spanish sash, dark leather gloves, black and cream padded doublet, sword belt with sheathed rapier. Holds a steel morion helmet under left arm, right hand rests on sword pommel. Three quarter authoritative stance, no modern gun. Supplied image is game's painted rendering only.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/kifunji_half.webp"
+      ],
+      "type": "portrait",
+      "transparent_background": true,
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "dutch_summer",
+      "name": "여름의 노래 — 담 광장",
+      "people": [
+        "halina",
+        "verberk",
+        "nl_jan",
+        "nl_pieter",
+        "nl_dirk"
+      ],
+      "prompt": "Use case: historical-scene. One finished panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG, clearly hand-painted 2D digital oil game key art with visible brushwork, matte painted faces, expressive anatomy, atmospheric depth. Use provided character portraits ONLY as identity, hair, expression range and costume references, stage them organically in new action, no pasted cutouts, no photocollage. Preserve the same faces and clothing, all adult characters. Main faces and gestures inside central 80 percent with safe crop margins. No UI, text, captions, logos, readable writing, border or watermark. Amsterdam Dam square herring market around 1570, lively golden summer afternoon. Halina in fitted navy librarian-style dress and flowing auburn hair with small red ribbon stands on a sturdy low barrel behind herring baskets, speaking passionately, smiling open mouth and gesturing with right hand. Pieter in black merchant coat stands to her left, worried, gently touching only her sleeve. Jan in weathered grey coat with lute stands nearby grinning. On right Verberk in burgundy-black gold-trimmed noble silk gown, blonde hair and bangs, knowing smile, hand on hip holding folded fan, debates Halina confidently. Dirk with steel cuirass and red sash behind Verberk sternly watches. Clear narrative five distinct adults, medium-wide ensemble with readable faces. Crowds in background, herring barrels, salt sacks, old Dutch stepped-gable brick buildings and church tower, no modern items. Not literal ants or grasshoppers. Verberk visibly plants one raised dark boot on Halina's closed navy book with red ribbon resting on a low market crate, maintaining a downward superior knowing smirk and hand on hip; rivalry is clear, no injury. Halina notices this while continuing to argue.",
+      "type": "scene",
+      "transparent_background": false
+    },
+    {
+      "id": "dutch_canal",
+      "name": "개미의 곳간 — 밤 운하",
+      "people": [
+        "halina",
+        "nl_jan",
+        "nl_dirk"
+      ],
+      "prompt": "Use case: historical-scene. One finished panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG, clearly hand-painted 2D digital oil game key art with visible brushwork, matte painted faces, expressive anatomy, atmospheric depth. Use provided character portraits ONLY as identity, hair, expression range and costume references, stage them organically in new action, no pasted cutouts, no photocollage. Preserve the same faces and clothing, all adult characters. Main faces and gestures inside central 80 percent with safe crop margins. No UI, text, captions, logos, readable writing, border or watermark. Moonless blue night outside Amsterdam city walls, quiet canal mouth and reeds. Halina, auburn wavy hair, fitted navy dress, temporary dark traveling cloak draped around one shoulder, shields a warm lantern with its fabric and urgently gestures for grain sacks to be passed to a low flat-bottomed sea-beggar boat in foreground. Jan, blond in grey sailor coat with lute on back, receives a wheat sack from dockworkers. Behind them on raised embankment Dirk, steel breastplate and red sash, leads a Spanish patrol holding torches, pikes and early matchlock arquebuses. Tense interception moment before fighting, no injury or gore. Halina central face readable in warm lantern light, Jan left, Dirk upper right separated by canal space; cool blue water and orange torches, cinematic but painted.",
+      "type": "scene",
+      "transparent_background": false
+    },
+    {
+      "id": "dutch_manor",
+      "name": "왕의 곳간 — 페르베르크 저택",
+      "people": [
+        "verberk",
+        "nl_jan"
+      ],
+      "prompt": "Use case: historical-scene. One finished panoramic 1881x836 (2.25:1) event illustration for a Renaissance ocean adventure RPG, clearly hand-painted 2D digital oil game key art with visible brushwork, matte painted faces, expressive anatomy, atmospheric depth. Use provided character portraits ONLY as identity, hair, expression range and costume references, stage them organically in new action, no pasted cutouts, no photocollage. Preserve the same faces and clothing, all adult characters. Main faces and gestures inside central 80 percent with safe crop margins. No UI, text, captions, logos, readable writing, border or watermark. Inside a canal-side Dutch noble manor stone granary around 1570, warm oil lamps, rows of wheat sacks and timber beams. Verberk, adult blonde noblewoman with bangs, black and burgundy gold-trimmed silk gown and ivory lace, stands firmly in center-right counting grain with an open ledger at her waist, turns toward the door with a startled but resolute expression, keeping the same recognizable face. Jan, windswept blond sailor in worn grey coat and silver crescent medal, stands at the broken timber doorway on left with a short dagger held low, leading a few determined sea beggars with hooks and clubs. Servants pause carrying grain sacks. Clear confrontation over food, no contact violence or injuries, no frightened child. Readable faces, detailed hands, narrow view through door shows canal. Rich dramatic hand-painted game illustration.",
+      "type": "scene",
+      "transparent_background": false
+    }
+  ]
+}

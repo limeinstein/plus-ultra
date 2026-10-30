@@ -362,8 +362,12 @@
       await UI.say(kv(k, age, b, b >= 65 ? U.pick(['아버지, 이제 저도 어엿한 어른입니다. 언제든 배를 맡겨 주십시오.', '아버지의 뒤를 잇는 것이 제 꿈입니다.'])
         : b >= 30 ? U.pick(['아버지, 다녀오셨습니까.', '아버지의 배를 맡게 된다면 부끄럽지 않게 하겠습니다.'])
         : U.pick(['…아버지는 저보다 바다를 더 사랑하시지요.', '뒤를 이으라 하시면 따르겠습니다. 그게 집안의 일이니까요.'])), sp);
-      if (!k.aboard && !k.edu[s.date.y + ':story']) {
-        var ad = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', [{ label: '항해 이야기를 나눈다', value: 'story' }, { label: '배에 태워 함께 다닌다', value: 'aboard' }, { label: '그냥 둔다', value: null }], sp);
+      if (!k.aboard) {
+        // 항해 이야기는 해마다 한 번, 배에 태우는 선택은 언제든 할 수 있다.
+        var adultOpts = [];
+        if (!k.edu[s.date.y + ':story']) adultOpts.push({ label: '항해 이야기를 나눈다', value: 'story' });
+        adultOpts.push({ label: '배에 태워 함께 다닌다', value: 'aboard' }, { label: '그냥 둔다', value: null });
+        var ad = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', adultOpts, sp);
         if (ad === 'story') { k.edu[s.date.y + ':story'] = 1; F.addBond(k, 5); }
         else if (ad === 'aboard') { k.aboard = true; F.addBond(k, 3); UI.toast(k.name + U.jx(k.name, '이/가') + ' 함대에 올랐다.', 'ship'); }
       }
@@ -579,7 +583,11 @@
     // 아버지의 아내들은 모두 아버지를 따라간다 — 배에 타 있던 부하 출신 아내도 함대에서 내리고, 여급 출신 아내의 술집에는 새 여급이 (js/systems/maidswap.js)
     var wifeIds = (p.wife ? [p.wife] : []).concat((p.wives2 || []).map(function (w) { return w.id; }));
     var leftW = G.MaidSwap ? G.MaidSwap.retire(wifeIds) : [];
-    var wifeNote = leftW.length ? '<br>' + leftW.map(function (x) { return x.name; }).join('·') + U.jx(leftW[leftW.length - 1].name, '은/는') + (forced ? ' ' + old + '의 장례를 치른 뒤 함대를 떠나 그를 기리며 조용히 살기로 했다.' : ' 은퇴한 ' + old + U.jx(old, '을/를') + ' 따라 함께 떠났다.') : '';
+    // 이야기 모드: 본처(1부인)는 고향 집에 남아 새 제독의 어머니로 집을 지킨다 (js/systems/story.js — 2026-10-30)
+    var stayMain = s.story && p.wife && G.Wives ? G.Wives.name(p.wife) : null, homeC = G.CITY_DATA[p.home];
+    var goneW = stayMain ? leftW.filter(function (x) { return x.name !== stayMain; }) : leftW;
+    var wifeNote = (goneW.length ? '<br>' + goneW.map(function (x) { return x.name; }).join('·') + U.jx(goneW[goneW.length - 1].name, '은/는') + (forced ? ' ' + old + '의 장례를 치른 뒤 함대를 떠나 그를 기리며 조용히 살기로 했다.' : ' 은퇴한 ' + old + U.jx(old, '을/를') + ' 따라 함께 떠났다.') : '') +
+      (stayMain ? '<br>' + stayMain + U.jx(stayMain, '은/는') + ' ' + (homeC ? homeC.name + '의 ' : '') + '집에 남아 ' + k.name + '의 어머니로 집을 지킨다.' : '');
     var said = bd >= 65 ? '「아버지께 배운 모든 것을 바다에서 증명하겠습니다.」' : bd >= 30 ? '「아버지의 이름에 부끄럽지 않게 하겠습니다.」' : '「…이제 제 방식대로 하겠습니다.」';
     var sev = F.successorEvent(k), spic = null;
     if (G.FamEv && G.FamEv.showPic) {

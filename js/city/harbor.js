@@ -40,6 +40,7 @@
   H.depart = async function (c) {
     var s = S(), f = s.fleet;
     if (!f.ships.length) { await C.mate('제독, 배를 손에 넣지 않으면 바다에 나갈 수 없습니다.'); return; }
+    if (G.Imjin && G.Imjin.portShut(c)) { await G.Imjin.portShutSay(); return; }   // 임진왜란: 부산포 어귀를 왜선이 막았다 (js/systems/imjin.js)
     var cm = R.crewMin();
     if (f.crew < Math.ceil(cm / 3) || f.crew < 5) { await C.mate('선원이 모자랍니다. 이래서는 출항할 수 없습니다!'); return; }
     if (f.crew < cm) {

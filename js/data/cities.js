@@ -309,4 +309,11 @@
 {"id":306,"name":"아가데스","lat":16.97,"lon":7.99,"port":0,"region":3,"lang":5,"rel":"I","size":1,"style":"af","nation":"투아레그","founded":0,"goods":["salt","leathergoods","jewelry"],"flags":"T"},
 {"id":307,"name":"보라나","lat":4.9,"lon":38.1,"port":0,"region":3,"lang":10,"rel":"N","size":1,"style":"tr","nation":"오로모","founded":0,"goods":["beef","coffee","honey"],"flags":"T"},
 {"id":308,"name":"쿠마시","lat":6.69,"lon":-1.62,"port":0,"region":3,"lang":10,"rel":"N","size":2,"style":"tr","nation":"아샨티","founded":0,"goods":["gold","palmoil","cottoncloth"],"flags":"T"},
+{"id":309,"name":"장가구","lat":40.81,"lon":114.88,"port":0,"region":6,"lang":7,"rel":"K","size":2,"style":"cn","nation":"명","founded":1429,"goods":["tea","horses","woolcloth","hides"],"flags":""},
+{"id":310,"name":"차하르 올도","lat":42.95,"lon":116.10,"port":0,"region":7,"lang":9,"rel":"B","size":1,"style":"st","nation":"몽골","founded":0,"goods":["horses","wool","hides","dairy"],"flags":"P"},
+{"id":311,"name":"굴자","lat":43.92,"lon":81.32,"port":0,"region":7,"lang":9,"rel":"B","size":1,"style":"st","nation":"모굴리스탄","founded":0,"goods":["horses","wool","hides","jade"],"flags":""},
+{"id":312,"name":"심양","lat":41.80,"lon":123.43,"port":0,"region":6,"lang":7,"rel":"K","size":3,"style":"cn","nation":"명","founded":0,"goods":["iron","fur","silk","rice"],"flags":"LP"},
+{"id":313,"name":"길림","lat":43.84,"lon":126.55,"port":0,"region":7,"lang":13,"rel":"N","size":1,"style":"st","nation":"울라 여진","founded":0,"goods":["fur","timber","fish","herbs"],"flags":""},
+{"id":314,"name":"요양","lat":41.27,"lon":123.17,"port":0,"region":6,"lang":7,"rel":"K","size":2,"style":"cn","nation":"명","founded":0,"goods":["iron","rice","silk","fur"],"flags":"L"},
+{"id":315,"name":"국내성","lat":41.14,"lon":126.18,"port":0,"region":6,"lang":14,"rel":"N","size":1,"style":"kr","nation":"건주여진","founded":0,"goods":["fish","herbs","antique"],"flags":""},
 ];})(window.G=window.G||{});

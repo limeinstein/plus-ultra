@@ -15,13 +15,39 @@
   C.B.restaurant = T;
   T.sub = function (c) {
     var ds = G.CUISINE.dishes(c);
-    return (ds[0] ? ds[0].name + ' 외 ' + (ds.length - 1) + '가지' : '오늘의 음식') + (used(c) ? ' · 오늘 식사함' : '');
+    var cafe = G.Coffee ? G.Coffee.menu(c).length : 0;
+    return (ds[0] ? ds[0].name + ' 외 ' + (ds.length - 1) + '가지' : '오늘의 음식') + (cafe ? ' · 커피 ' + cafe + '가지' : '') + (used(c) ? ' · 오늘 식사함' : '');
   };
   T.enter = async function (c) {
     await C.say(owner(), C.hail(c, 'restaurant', ['어서 오십시오. 이 고장에서 난 것으로 든든하게 차려 드리지요.', '먼 길 오셨군요. 따뜻한 음식부터 드십시오.', '오늘도 좋은 재료가 들어왔습니다. 차림표를 보시지요.']));
   };
   T.menu = function (c) {
-    return [{ label: '차림표를 본다', icon: 'bread', sub: used(c) ? '오늘은 이미 먹었다' : G.CUISINE.dishes(c).length + '가지', onClick: function () { return T.choose(c); } }];
+    var rows = [{ label: '차림표를 본다', icon: 'bread', sub: used(c) ? '오늘은 이미 먹었다' : G.CUISINE.dishes(c).length + '가지', onClick: function () { return T.choose(c); } }];
+    // 커피 메뉴 — 이 문화권에 커피를 팔아 연 것만 (js/systems/coffee.js · 2026-10-30)
+    var cafe = G.Coffee ? G.Coffee.menu(c) : [];
+    if (cafe.length) rows.push({ label: '커피를 마신다', icon: 'mug', sub: G.Coffee.used(c) ? '오늘은 이미 마셨다' : cafe.length + '가지', onClick: function () { return T.coffee(c); } });
+    return rows;
+  };
+  T.coffee = async function (c) {
+    var CF = G.Coffee, ds = CF.menu(c), already = CF.used(c), s = S();
+    if (!ds.length) return;
+    var d = await UI.choose(c.name + ' 식당 커피', ds.map(function (x) {
+      var p = CF.price(c, x), tasted = s.coffee && s.coffee.tasted && s.coffee.tasted[x.id];
+      return { value: x, icon: 'mug',
+        label: '<b>' + U.esc(x.name) + '</b>' + (tasted ? '' : ' <small class="good-text">처음 맛본다</small>') + '<br><small class="muted">' + U.esc(x.desc) + '</small>',
+        right: U.num(p) + '닢', disabled: already || s.player.gold < p, desc: x.desc };
+    }), { width: 790, icon: 'mug', text: already ? '이번에 이 도시에 들러서는 이미 한 잔 마셨습니다. 다음에 들르면 다시 마실 수 있습니다.' : '커피를 이 고장에 들여온 제독이 직접 한 잔 마시면 사람들 사이에 이름이 오르내립니다. 처음 맛보는 커피는 이야깃거리가 더 됩니다. (식사와는 따로, 들를 때마다 한 잔)' });
+    if (!d) return;
+    var r = CF.drink(c, d);
+    if (r === 'used') { await C.say(owner(), '오늘은 벌써 한 잔 하셨지요. 너무 많이 드시면 밤에 잠을 못 이루십니다.'); return; }
+    if (r === 'gold') { await C.say(owner(), '소지금이 모자랍니다.'); return; }
+    if (!r || typeof r === 'string') return;
+    var gain = (r.so > 0 ? '사교 명성 +' + r.so : '') + (r.rest > 0 ? (r.so > 0 ? ' · ' : '') + '피로 −' + r.rest : '');
+    if (G.Game.refreshHud) G.Game.refreshHud();
+    if (G.State && G.State.log) G.State.log(c.name + ' 식당에서 ' + d.name + U.jx(d.name, '을/를') + ' 마셨다. (금화 ' + r.price + '닢' + (gain ? ' · ' + gain : '') + ')');
+    if (G.Audio) { G.Audio.sfx('pot'); setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 380); }
+    var n = CF.count();
+    await C.say(owner(), (r.first ? '이 고장에 커피를 들여오신 그 제독이시라고요? 손님들이 다들 쳐다봅니다. ' : '늘 드시던 그것으로 내렸습니다. ') + d.name + U.jx(d.name, '은/는') + ' 이 집의 자랑이지요.\f향이 오래 남는 한 잔이었다. (' + gain + (r.first ? ' · 맛본 커피 ' + n.tasted + '/' + n.all : '') + ')');
   };
   T.choose = async function (c) {
     var ds = G.CUISINE.dishes(c), already = used(c);

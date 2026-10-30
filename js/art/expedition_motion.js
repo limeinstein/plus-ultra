@@ -16,6 +16,7 @@
   E.preload = function (id) {
     var m = spec(id || 'walk');
     ['walk', 'walkFront', 'turn', 'camp'].forEach(function (action) { picture(asset(m, action)); });
+    if (G.ExpeditionFormation) G.ExpeditionFormation.preload(id);
   };
   E.ready = function (id, action) {
     var m = spec(id); action = action || 'walk';
@@ -62,6 +63,10 @@
     if (!im) return false;
     var cell = chosen.sheet.cells[chosen.index];
     if (!cell) return false;
+    if (G.ExpeditionFormation) {
+      var formation = G.ExpeditionFormation.draw(ctx, u, chosen, im);
+      if (formation) return formation;
+    }
     var m = spec(chosen.id), p = u.pts[0];
     var s = u.size || (G.FX && G.FX.party && G.FX.party.size) || 1;
     var k = E.scale(chosen.sheet, s);

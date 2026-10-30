@@ -1,0 +1,670 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "cf_med_villager",
+      "name": "지중해 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-0da90d99-0b6c-4150-8ace-40b0e119102c.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0da90d99-0b6c-4150-8ace-40b0e119102c.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 26, Mediterranean woman, warm olive skin, hazel eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: ash-brown windswept short wavy bob, curious sideways glance, resting cheek lightly against hand. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia.  Palette sage and cream.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_med_sailor",
+      "name": "지중해 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-b481f5ab-a2fc-4ead-880b-cfabf0dc0f64.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b481f5ab-a2fc-4ead-880b-cfabf0dc0f64.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 27, Mediterranean woman, warm olive skin, hazel eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: long windblown chestnut hair, eager determined gaze, one hand grips a short coil of rope near shoulder, other hand on waist. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass.  Palette ochre and cream.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_med_knight",
+      "name": "지중해 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-b1cbd4ee-323e-4acd-81a9-29f489216c13.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b1cbd4ee-323e-4acd-81a9-29f489216c13.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 28, Mediterranean woman, warm olive skin, hazel eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: golden chestnut hair loosely braided back with flyaways, focused alert face, hand on sword pommel, poised weight shift. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor.  Palette ivory and steel blue.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_med_noble",
+      "name": "지중해 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "지중해",
+      "styles": [
+        "ib",
+        "it",
+        "gr"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-1db730d9-0e94-4fa3-a7e6-e0707739825c.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1db730d9-0e94-4fa3-a7e6-e0707739825c.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 29, Mediterranean woman, warm olive skin, hazel eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: chestnut high ponytail tied with cream linen ribbon, feathered bangs, one eyebrow lifted in skeptical affection, folded hands at waist. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia.  Palette navy and antique gold.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_north_villager",
+      "name": "북유럽 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-d08bf365-8975-4aac-ad98-3eff8cb1f8e3.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 30, Northern European woman, fair freckled skin, blue or green eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: tousled short pale blonde curls and light freckles, warm curious gaze, one hand holding a closed herb book at hip. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia.  Palette oatmeal and moss.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_north_sailor",
+      "name": "북유럽 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-5c5a7bf7-deae-4bda-b5bc-8e2a1589e18f.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 26, Northern European woman, fair freckled skin, blue or green eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long copper red hair with a sideswept fringe, jaunty soft dark sailor cap, exuberant grin, holding a rolled chart. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass.  Palette rust and indigo.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_north_knight",
+      "name": "북유럽 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-e772eaca-a3f2-40b3-9eff-727d567cd767.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 27, Northern European woman, fair freckled skin, blue or green eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: honey blonde hair in intricate loose side braids with silver hair clasps, firm determined gaze, relaxed hand on sheathed sword. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor.  Palette chocolate leather and steel.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_north_noble",
+      "name": "북유럽 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "북유럽",
+      "styles": [
+        "ne",
+        "ru"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-ef51e76f-2ad2-4fca-aace-76fb1b91f410.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 28, Northern European woman, fair freckled skin, blue or green eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long loose honey blonde waves, self-assured direct gaze, one hand gathering a skirt fold in a natural standing pose. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia.  Palette wine and muted gold.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_east_villager",
+      "name": "동아시아 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-d2d0c427-e43c-48dd-a103-aadaf5a893ed.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 29, East Asian woman, natural warm ivory skin, dark brown eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long black soft layered hair with wispy bangs, thoughtful sideways glance, fingertips resting lightly against cheek. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia. Use historically inspired East Asian wrap seams, subtle woven cloud trims and waist sash translated into the medieval fantasy outfit. Palette pale blue and cream.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_east_sailor",
+      "name": "동아시아 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-415fb386-93b1-40d8-b482-d85645a9f58f.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 30, East Asian woman, natural warm ivory skin, dark brown eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: dark loose ponytail and wispy bangs, broad energetic smile, small enthusiastic raised fist near shoulder. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass. Use historically inspired East Asian wrap seams, subtle woven cloud trims and waist sash translated into the medieval fantasy outfit. Palette coral and navy.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_east_knight",
+      "name": "동아시아 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-97ce0863-cd2f-4e50-8b2c-383b49f76cb8.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 26, East Asian woman, natural warm ivory skin, dark brown eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: short dark wavy chin-length bob, alert sideways glance, one hand touching the hilt of a sheathed sword. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor. Use historically inspired East Asian wrap seams, subtle woven cloud trims and waist sash translated into the medieval fantasy outfit. Palette deep teal and dark steel.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_east_noble",
+      "name": "동아시아 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "동아시아",
+      "styles": [
+        "cn",
+        "kr",
+        "jp"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-8d9d1637-3b9e-4c67-851c-28243eeab4cd.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-8d9d1637-3b9e-4c67-851c-28243eeab4cd.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 27, East Asian woman, natural warm ivory skin, dark brown eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: dark hair in a loose updo secured with a silver floral hairpin, loose face-framing strands, composed gaze to the side, loosely folded arms. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia. Use historically inspired East Asian wrap seams, subtle woven cloud trims and waist sash translated into the medieval fantasy outfit. Palette white and peacock blue.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_south_villager",
+      "name": "남아시아 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-f8b303b3-39e2-4cdd-a777-c62d27cd4557.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 28, South Asian woman, rich medium brown skin, dark eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long black flowing hair under a pale green woven head scarf, kind open expression, holding a folded market cloth at hip. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia. Use medieval Indian textile borders, small brass accents and draped waist cloth. Palette pale green and terracotta.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_south_sailor",
+      "name": "남아시아 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-fb6f6d24-dc4e-494c-85b3-3443c472fba8.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fb6f6d24-dc4e-494c-85b3-3443c472fba8.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 29, South Asian woman, rich medium brown skin, dark eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: dark short shaggy bob with separated airy strands, friendly relaxed gaze and slight head tilt, one hand behind nape with elbow kept close. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass. Use medieval Indian textile borders, small brass accents and draped waist cloth. Palette cream and oxblood.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_south_knight",
+      "name": "남아시아 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-1c8191d2-9970-49c2-9730-7cfe29723e3e.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1c8191d2-9970-49c2-9730-7cfe29723e3e.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 30, South Asian woman, rich medium brown skin, dark eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: long sun-streaked dark brown hair with loose front strands, determined thoughtful face, one forearm resting on sword hilt. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor. Use medieval Indian textile borders, small brass accents and draped waist cloth. Palette sandstone and dark leather.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_south_noble",
+      "name": "남아시아 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "남아시아",
+      "styles": [
+        "in"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-7fd50667-4886-4426-8e97-2456d53b0c66.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-7fd50667-4886-4426-8e97-2456d53b0c66.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 26, South Asian woman, rich medium brown skin, dark eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: dark brown hair in a loose windswept bun, intelligent amused gaze, fingertips at cheek, standing elegantly. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia. Use medieval Indian textile borders, small brass accents and draped waist cloth. Palette cream and emerald.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_sea_villager",
+      "name": "동남아시아 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-5013d0ae-48a0-4278-a4a6-9dac81a454f6.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 27, Southeast Asian woman, warm tawny skin, deep brown eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: short dark soft curly bob with airy flyaways, calm curious face, holding a basket of folded linen. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia. Use medieval maritime Southeast Asian woven waist panels and subtle geometric silk trim. Palette ochre and jade.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_sea_sailor",
+      "name": "동남아시아 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-874dd1ac-b121-4458-b266-0ac8aac969ec.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 28, Southeast Asian woman, warm tawny skin, deep brown eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: black hair gathered into two small practical braided knots with wispy side strands, quietly determined gaze, one hand holding a brass compass. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass. Use medieval maritime Southeast Asian woven waist panels and subtle geometric silk trim. Palette sky blue and dark brown.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_sea_knight",
+      "name": "동남아시아 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-dc07800b-119e-4648-89fa-09eca3b3f604.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-dc07800b-119e-4648-89fa-09eca3b3f604.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 29, Southeast Asian woman, warm tawny skin, deep brown eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: dark shoulder-length shaggy layers and wispy bangs, confident lifted chin, one hand pushing hair away from forehead. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor. Use medieval maritime Southeast Asian woven waist panels and subtle geometric silk trim. Palette blackened steel and plum.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_sea_noble",
+      "name": "동남아시아 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "동남아시아",
+      "styles": [
+        "se"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-59549ff3-705d-462c-b2ec-0d998f059092.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 30, Southeast Asian woman, warm tawny skin, deep brown eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long glossy black ponytail, thoughtful gaze, hand near chin without touching lips, draped silk sleeve in other hand. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia. Use medieval maritime Southeast Asian woven waist panels and subtle geometric silk trim. Palette cream and burgundy.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_mena_villager",
+      "name": "서아시아·북아프리카 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-fd1cc8a1-8476-42fa-8126-2024474a3f57.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 26, West Asian / North African woman, copper olive skin, almond amber eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: dark brown loose voluminous low bun, soft face-framing strands, gentle reflective gaze, hands holding a pottery cup at waist. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia. Use medieval Persian/Maghrebi embroidered borders and woven sash details. Palette sienna and cream.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_mena_sailor",
+      "name": "서아시아·북아프리카 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-7df7e5cc-648f-4824-ac8d-420f1709a862.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 27, West Asian / North African woman, copper olive skin, almond amber eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: windblown dark honey brown layered hair with long bangs, playful knowing smile, thumb hooked at belt beside chart case. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass. Use medieval Persian/Maghrebi embroidered borders and woven sash details. Palette navy and copper.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_mena_knight",
+      "name": "서아시아·북아프리카 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-0db414bd-92b9-4beb-9b01-5e40c691e5e1.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0db414bd-92b9-4beb-9b01-5e40c691e5e1.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 28, West Asian / North African woman, copper olive skin, almond amber eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: very voluminous long dark tight curls, focused sideways gaze, hand on sword belt, grounded balanced stance. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor. Use medieval Persian/Maghrebi embroidered borders and woven sash details. Palette charcoal and leather brown.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_mena_noble",
+      "name": "서아시아·북아프리카 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "서아시아·북아프리카",
+      "styles": [
+        "is",
+        "pe"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-aca62e07-7d14-4016-a867-e44f04ca8d7a.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-aca62e07-7d14-4016-a867-e44f04ca8d7a.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 29, West Asian / North African woman, copper olive skin, almond amber eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: dark abundant curls in a loose half-up knot, long cascading spiral locks, assured gaze, gold hoop earrings and small pendant, hands lightly joined. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia. Use medieval Persian/Maghrebi embroidered borders and woven sash details. Palette mulberry and antique gold.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_africa_villager",
+      "name": "아프리카 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-2f12715f-08dd-4f37-8e63-a337fe0ad4f8.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 30, Black African woman, beautiful deep brown skin, dark eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long dark coily waves with soft forehead curls, thoughtful expression, one hand cradles chin while standing, other holding a closed herb book. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia. Use medieval African woven geometric textile borders, layered waist sash and brass fastenings. Palette warm cream and indigo.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_africa_sailor",
+      "name": "아프리카 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-8036280e-cc1a-4692-b407-afe2d85e5f7d.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 26, Black African woman, beautiful deep brown skin, dark eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long black box braids gathered behind one shoulder, friendly look over shoulder but body facing front, holding a rolled chart near waist. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass. Use medieval African woven geometric textile borders, layered waist sash and brass fastenings. Palette turquoise and ochre.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_africa_knight",
+      "name": "아프리카 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-2034ff48-fd4b-4e49-a4b7-eef837d02998.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 27, Black African woman, beautiful deep brown skin, dark eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: two long thick black braids emerging from braided crown knots, light freckling, analytical sideways gaze, fingers at chin, sword in scabbard. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor. Use medieval African woven geometric textile borders, layered waist sash and brass fastenings. Palette dark green and bronze.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_africa_noble",
+      "name": "아프리카 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "아프리카",
+      "styles": [
+        "af",
+        "sw"
+      ],
+      "adultAge": 28,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-3ad3fd2e-220f-40b3-b62c-aefcd98ca5c6.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3ad3fd2e-220f-40b3-b62c-aefcd98ca5c6.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 28, Black African woman, beautiful deep brown skin, dark eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: very voluminous side-swept black curls, calm confident direct gaze, pearl earrings, arms loosely folded low at waist. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia. Use medieval African woven geometric textile borders, layered waist sash and brass fastenings. Palette deep blue and silver.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_america_villager",
+      "name": "아메리카 마을 주민",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "villager",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 29,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-8c813316-542b-4b5c-b825-e449b88e6845.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 29, Indigenous American woman, warm brown skin, dark expressive eyes, a working villager and harbor artisan. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long black hair loosely half tied with wispy face-framing strands, serious introspective expression, hands holding a woven textile. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: gathered linen blouse with an open square neckline, laced fitted wool bodice and full skirt; waist workpouch; no royal regalia. Use preindustrial Indigenous American woven geometric textiles, turquoise accents and layered wrap panels, adapted to the class. Palette cream and warm red.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_america_sailor",
+      "name": "아메리카 항해사 지망생",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "sailor",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 30,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-c3c7249f-7450-4ebd-9af1-5044634070d5.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 30, Indigenous American woman, warm brown skin, dark expressive eyes, an enthusiastic would-be navigator preparing her first voyage. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: long straight glossy dark hair half tied, head in subtle three-quarter profile with alert gaze, hand presenting a small compass. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: open-collar opaque linen shirt with rolled sleeves, fitted short leather waistcoat, belted loose knee-breeches, sailing rope or a small rolled chart; brass compass. Use preindustrial Indigenous American woven geometric textiles, turquoise accents and layered wrap panels, adapted to the class. Palette black and woven ochre.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_america_knight",
+      "name": "아메리카 기사",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "knight",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 26,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-21efbe16-e46b-4eee-b6b5-c8b6c9456a7d.png",
+      "reference_mode": "adult-hair-expression",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-21efbe16-e46b-4eee-b6b5-c8b6c9456a7d.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 26, Indigenous American woman, warm brown skin, dark expressive eyes, a landless knight or local sworn sword, never a commander. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate. Image 2 is ONLY reference for the adult expression, hair texture and gesture. Reimagine a new distinct adult character with the requested heritage and medieval clothing.\nSubject design: long abundant dark spiraling curls, slight confident head tilt, calm brave gaze, hand relaxed over sheathed sword hilt. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: layered leather and metal shoulder bracers, tailored protective brigandine with an open collar and an opaque linen chest panel, wide belt, practical skirt panels over trousers, sheathed sword; no bikini armor. Use preindustrial Indigenous American woven geometric textiles, turquoise accents and layered wrap panels, adapted to the class. Palette leather umber and faded purple.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    },
+    {
+      "id": "cf_america_noble",
+      "name": "아메리카 귀족 영애",
+      "g": "f",
+      "type": "portrait",
+      "portrait_dir": "portraits/childhood-friends",
+      "friendClass": "noble",
+      "origin": "아메리카",
+      "styles": [
+        "co",
+        "az",
+        "an",
+        "na",
+        "tr"
+      ],
+      "adultAge": 27,
+      "reference_source": "C:/Users/User/AppData/Local/Temp/codex-clipboard-bd11f6a3-7466-4af9-b0e8-c801c6e1180e.png",
+      "reference_mode": "generic-hair-gesture-only-no-likeness",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/lu_katharina_half.webp"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent knee-up character illustration for a medieval Age of Sail RPG dialogue.\nPrimary request: Create ONE original clearly mature ADULT woman age 27, Indigenous American woman, warm brown skin, dark expressive eyes, a daughter of minor gentry without ruling powers. She grew up in the same port neighborhood as the new admiral and is now reunited with her childhood friend AS AN ADULT.\nInput images: Image 1 is ONLY a reference for painterly costume material and game palette, not an identity to duplicate.\nSubject design: high dark flowing ponytail bound with woven red ribbon, bright friendly smile, welcoming open hand close to body. Feminine adult proportions, a naturally generous full bust supported by the opaque fitted bodice, a tasteful open neckline appropriate to the design. Confident friendly personality and dignified nonsexual presentation.\nCostume: elegant low square neckline, opaque brocade fitted gown, embroidered sleeves, fine waist girdle and modest jewelry; no crown or royal insignia. Use preindustrial Indigenous American woven geometric textiles, turquoise accents and layered wrap panels, adapted to the class. Palette turquoise and warm gold.\nStyle/medium: unmistakably HAND PAINTED 2D fantasy game illustration with elegant simplified face planes, expressive illustrated eyes, visible broad brushwork and grouped hair locks. More illustrative and less realistic than the references; no photographic pores, no camera look, no glossy 3D render. Crisp readable silhouette and expressive adult face.\nComposition: one character only, vertical 2:3 format, entire head and hair plus both hands visible, frame down through the knees. Body facing mostly front, face a little three-quarter turned. Leave transparent margin around head, elbows and silhouette. Soft painted warm side light.\nBackground: genuinely transparent alpha, isolated game character, no scenery, no floor, no shadow puddle.\nConstraints: opaque covered chest, no nudity, no lingerie, no provocative pose. No modern sweaters, headphones, zippers, jeans, school uniforms or phones. No babyface or childlike facial proportions. No text, border, logos or watermark. Only one person, no companion, no face inset."
+    }
+  ]
+}

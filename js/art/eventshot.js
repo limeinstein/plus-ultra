@@ -4,7 +4,7 @@
    ■ 없으면 있는 그림으로 장면을 꾸린다: 그 자리의 배경(왕궁 안·런던 탑·항구·사막·거친 바다) + 사람들의 무릎상 + 빛(금빛·밤·노을·한낮)
      — 주인공(공주)은 밝게 빛나고, 곁의 사람은 한 톤 어둡게. 액자는 옛이야기 장면 그림과 같은 틀(G.FamEv.showPic)이다.
    ■ 그림 속 사람이 주인공이므로, 그동안 대화는 대화창 안의 얼굴로 한다 (scenepic-on — js/ui/ui.js dialogShell).
-   ■ G.EventShot.show(o) → Promise<handle> (handle.stop() → Promise). o = { key, title, bg: [그림 열쇠…], cast: [{ half: [열쇠…], x: 0~1, lead, flip, h }], light, sparkle } */
+   ■ G.EventShot.show(o) → Promise<handle> (handle.stop() → Promise). o = { key, imageKey?(합성 그림의 장면 이름), title, bg: [그림 열쇠…], cast: [{ half: [열쇠…], x: 0~1, lead, flip, h }], light, sparkle } */
 (function (G) {
   'use strict';
   var ES = {};
@@ -69,7 +69,7 @@
     if (!G.FamEv || !G.FamEv.showPic) return Promise.resolve(none);
     var own = o.key && I() && I().pick(['events/princess/' + o.key]);
     if (own) return Promise.resolve(G.FamEv.showPic({ img: own, title: o.title, noStand: true }) || none);
-    return ES.compose(o).then(function (cv) { return G.FamEv.showPic({ canvas: cv, title: o.title, noStand: true }) || none; }, function (e) { console.error(e); return none; });
+    return ES.compose(o).then(function (cv) { return G.FamEv.showPic({ canvas: cv, img: o.imageKey, title: o.title, noStand: true }) || none; }, function (e) { console.error(e); return none; });
   };
 
   // ---------------------------------------------------------------- 공주 장면

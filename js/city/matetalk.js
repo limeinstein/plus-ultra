@@ -112,7 +112,7 @@
     var s = S(), d = G.MATE[m.id], cf = cfg(); if (!d) return;
     var f = d.g === 'f', today = U.dateNum(s.date);
     // 아이(d.minor: 게르다·심청)는 동생처럼 호감·청혼이 없다 — 옛 저장에 쌓인 호감은 조용히 비운다 (QA 2026-10-23)
-    var noLove = !!(d.sib || d.minor);
+    var noLove = !!(d.sib || d.minor || d.wed);   // d.wed: 이미 짝이 있는 부하 (셰익스피어와 앤 — js/data/globe.js)
     if (d.minor && m.aff) m.aff = 0;
     function say(t, e) { return UI.say(t, speaker(d, e, false)); }
     function ask(t, ch) { return UI.ask(t, ch, speaker(d, 'warm', true)); }

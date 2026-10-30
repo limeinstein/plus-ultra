@@ -43,14 +43,27 @@
   var TABS = [['admiral', '제독'], ['fleet', '함대'], ['mates', '동료'], ['wander', '철새'], ['items', '소지품'], ['disc', '발견물'], ['hints', '단서'], ['achv', '업적'], ['contract', '계약·의뢰'], ['trade', '교역 수첩'], ['politics', '유럽 정세'], ['map', '해도'], ['log', '일지']];
   // 「설정」은 수첩 밖의 따로 된 창 (하단 메뉴 맨 오른쪽 단추 — I.settings). 옛 호출 I.open('menu')도 설정 창을 연다
   var lastTab = null, lastTabOf = null;   // 탭을 정하지 않고 열면(하단 메뉴 「수첩」) 지난번에 보던 탭 — 바다·뭍·도시 어디서 열어도 같다
+  // 수첩 탭마다의 단축키 (2026-10-30) — 기본은 없음. 설정 「키보드 설정」에서 정한다 (G.Keys, js/ui/ui.js)
+  TABS.forEach(function (t) { if (G.Keys && G.Keys.register) G.Keys.register({ id: 'nb_' + t[0], label: '수첩 — ' + t[1], desc: '수첩을 「' + t[1] + '」 탭으로 열기 · 열려 있으면 그 탭으로', group: 'notebook' }); });
+  /** 다음에 탭을 정하지 않고 열 때(하단 「수첩」 단추) 펼칠 탭 — 탭 단축키가 단추를 누르기 전에 맞춘다 */
+  I.preset = function (tab) { lastTab = tab; lastTabOf = S(); };
   I.open = function (tab) {
     if (tab === 'menu') return I.settings();
     // 지난번 탭은 같은 항해(저장)에서만 — 다른 저장을 불러오면, 또는 지금 수첩에 없는 탭(이야기 모드의 「아버지의 사진」 등)이면 제독 탭 (QA 2026-10-23)
     if (lastTabOf !== S()) lastTab = null;
-    var tabList = TABS.concat(S().story && G.Story ? [['story', '아버지의 사진']] : []);   // 이야기 모드 (js/systems/story.js)
+    var tabList = TABS.concat(S().story && G.Story ? [['story', G.Story.photoName ? G.Story.photoName() : '아버지의 사진']] : []);   // 이야기 모드 (js/systems/story.js)
     if (!tab && lastTab && !tabList.some(function (t) { return t[0] === lastTab; })) lastTab = null;
     tab = tab || lastTab || 'admiral';
-    var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
+    var nbKey = G.Keys ? G.Keys.label('notebook') : '없음';
+    var win = UI.window({ title: '항해 수첩' + (nbKey !== '없음' ? ' <small class="muted" style="font-size:14px">(' + U.esc(nbKey) + ' — 열기·닫기)</small>' : ''), icon: 'book', width: 1180, height: 780, html: '',
+      // 수첩 단축키로 닫고, 탭 단축키로 그 탭으로 넘어간다 (글을 쓰는 칸에서는 받지 않는다)
+      onKey: function (e) {
+        var t = e.target; if (e.repeat || (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return false;
+        if (G.Keys.is(e, 'notebook')) { win.close(null); return true; }
+        var hit = tabList.filter(function (x) { return G.Keys.is(e, 'nb_' + x[0]); })[0];
+        if (hit) { if (G.Audio) G.Audio.sfx('page'); win.goTab(hit[0]); return true; }
+        return false;
+      } });
     if (G.Audio) G.Audio.sfx('book');                               // 수첩을 편다
     if (win.result && win.result.then) win.result.then(function () { if (G.Audio) G.Audio.sfx('bookClose'); });   // 덮는다
     var tabs = U.el('div', 'tabs');
@@ -337,7 +350,7 @@
   PAGES.disc = function (el) {
     var s = S();
     var mine = G.DISCOVERIES.filter(function (d) { return G.Disc.foundByMe(d.id); });
-    var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:20px">발견물 ' + mine.length + ' / ' + G.DISCOVERIES.length + '</b><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div>';
+    var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:20px">발견물 ' + mine.length + ' / ' + G.DISCOVERIES.length + '</b><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div>' + (G.Carto ? G.Carto.statusHtml() : '');
     html += frontierBoard();
     Object.keys(G.DISC_CATS).forEach(function (cat) {
       var all = G.DISCOVERIES.filter(function (d) { return d.cat === cat; });
@@ -514,7 +527,7 @@
   };
 
   PAGES.map = function (el, win) {
-    el.innerHTML = '<div class="flex" style="margin-bottom:8px"><span class="muted">탐험한 바다만 그려집니다. 휠·＋/－로 확대하고 끌어서 옮기며, 도시를 누르면 요약이 나옵니다.</span><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div><div class="mapbox"></div>';
+    el.innerHTML = '<div class="flex" style="margin-bottom:8px"><span class="muted">거듭 지나온 길이 자세해집니다: 윤곽 → 강 → 산 → 지형. 휠로 확대·축소하고 끌어서 옮깁니다.</span><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div><div class="mapbox"></div>';
     G.ChartView.mount(el.querySelector('.mapbox'), { w: 1100, h: 560, onHint: function (id) { I.showHint(id, win); } });
     // 이어진 항로: 한 항구에서 출항해 다른 항구에 곧장 입항하면 자동항해가 열린다
     var list = G.Routes ? G.Routes.list() : [];
@@ -527,74 +540,14 @@
   };
 
   // ---------------------------------------------------------------- parchment sea chart (2D)
-  var landRaster = null;
-  function buildLand() {
-    var W = 720, H = 360, a = new Uint8Array(W * H);
-    for (var y = 0; y < H; y++) for (var x = 0; x < W; x++) {
-      var lon = -180 + (x + 0.5) * 0.5, lat = 90 - (y + 0.5) * 0.5;
-      a[y * W + x] = G.Geo.isLand(lon, lat) ? 1 : 0;
-    }
-    return a;
-  }
-  /** 해도의 바탕: 탐험한 바다·뭍·해안선·경위선. box = {lon0, lon1, lat0, lat1} */
-  I.chartTerrain = function (w, h, box) {
-    if (!landRaster) landRaster = buildLand();
-    var lon0 = box.lon0, lon1 = box.lon1, lat0 = box.lat0, lat1 = box.lat1;
-    var cv = A.canvas(w, h), ctx = cv.getContext('2d');
-    var img = ctx.createImageData(w, h), d = img.data;
-    var fine = (lon1 - lon0) / w < 0.2;   // small area: sample the coastline directly
-    // 칸마다 G.State.charted 를 두 번씩 부르던 것을, 열·줄의 격자 번호를 미리 세어 두고 탐험 비트를 바로 읽는다.
-    // 해안선도 점마다 fillRect 하지 않고 같은 픽셀 판에 바로 섞는다 (세계 해도 1440×620 기준 약 4배 빠름).
-    var S = G.Game.state, bits = S && S.chartBits, x, y, o;
-    var gxs = new Int32Array(w), lons = new Float64Array(w), cls = new Uint8Array(w * h);   // cls: 0 안 가 본 곳 · 1 가 본 바다 · 2 가 본 뭍
-    for (x = 0; x < w; x++) { lons[x] = lon0 + (x + 0.5) / w * (lon1 - lon0); gxs[x] = U.clamp(Math.floor((G.Geo.wrapLon(lons[x]) + 180) * 2), 0, 719); }
-    for (y = 0; y < h; y++) {
-      var lat = lat1 - (y + 0.5) / h * (lat1 - lat0);
-      var cy = Math.floor((90 - lat) * 2), inChart = !!bits && cy >= 0 && cy < 360, gy = U.clamp(cy, 0, 359), row = gy * 720;
-      for (x = 0; x < w; x++) {
-        var gi = row + gxs[x];
-        var seen = inChart && (bits[gi >> 3] & (1 << (gi & 7)));
-        var land = fine ? (G.Geo.sdfRaw(lons[x], lat) > 0 ? 1 : 0) : landRaster[gi];
-        o = (y * w + x) * 4;
-        var r, g, b;
-        if (!seen && box.reveal) {   // 소문으로 아는 바다 (개척지 고르기 등): 안 가 본 곳도 뭍·바다를 옅게
-          if (land) { r = 206; g = 184; b = 136; cls[y * w + x] = 4; } else { r = 192; g = 196; b = 172; cls[y * w + x] = 3; }
-        }
-        else if (!seen) { r = 214; g = 196; b = 156; }
-        else if (land) { r = 196; g = 168; b = 112; cls[y * w + x] = 2; }
-        else { r = 150; g = 178; b = 176; cls[y * w + x] = 1; }
-        var n = ((x * 73856093) ^ (y * 19349663)) & 15;
-        d[o] = r - n; d[o + 1] = g - n; d[o + 2] = b - n; d[o + 3] = 255;
-      }
-    }
-    // coast ink on charted land edges
-    for (y = 1; y < h - 1; y++) {
-      for (x = 1; x < w - 1; x++) {
-        var ci = y * w + x, c0 = cls[ci];
-        if (!c0) continue;
-        var isL = c0 === 2 || c0 === 4, rL = cls[ci + 1] === 2 || cls[ci + 1] === 4, dL = cls[ci + w] === 2 || cls[ci + w] === 4;
-        if (isL !== rL || isL !== dL) {
-          o = ci * 4;
-          if (c0 >= 3) { d[o] = d[o] * 0.6 + 32; d[o + 1] = d[o + 1] * 0.6 + 20; d[o + 2] = d[o + 2] * 0.6 + 8; }   // 안 가 본 곳의 해안선은 옅게
-          else { d[o] = d[o] * 0.32 + 54.4; d[o + 1] = d[o + 1] * 0.32 + 34; d[o + 2] = d[o + 2] * 0.32 + 13.6; }    // 갈색 먹선 rgb(80,50,20)을 0.68만큼
-        }
-      }
-    }
-    ctx.putImageData(img, 0, 0);
-    function px(lon, lat) { return [(lon - lon0) / (lon1 - lon0) * w, (lat1 - lat) / (lat1 - lat0) * h]; }
-    // grid (확대하면 더 촘촘하게)
-    var step = (lon1 - lon0) > 120 ? 30 : (lon1 - lon0) > 40 ? 10 : 5;
-    ctx.strokeStyle = 'rgba(90,60,30,.18)'; ctx.lineWidth = 1;
-    for (var gl = Math.ceil(lon0 / step) * step; gl <= lon1; gl += step) { var p0 = px(gl, 0); ctx.beginPath(); ctx.moveTo(p0[0], 0); ctx.lineTo(p0[0], h); ctx.stroke(); }
-    for (var gt = Math.ceil(lat0 / step) * step; gt <= lat1; gt += step) { var p1 = px(0, gt); ctx.beginPath(); ctx.moveTo(0, p1[1]); ctx.lineTo(w, p1[1]); ctx.stroke(); }
-    ctx.strokeStyle = 'rgba(150,40,30,.3)'; var eq = px(0, 0); ctx.beginPath(); ctx.moveTo(0, eq[1]); ctx.lineTo(w, eq[1]); ctx.stroke();
-    return cv;
-  };
+  /** 탐사 단계에 맞춰 그리는 양피지 해도. 작은 지도도 같은 판을 쓴다. */
+  I.chartTerrain = function (w, h, box) { return G.ChartArt.terrain(w, h, box); };
   /** draws the explored chart. opts: {lon0, lat0, lon1, lat1, marks:[{lon,lat,color,label}], ship:{lon,lat,heading}, labels:true 이면 도시 이름} */
   I.chartCanvas = function (w, h, opts) {
     opts = opts || {};
     var box = { lon0: opts.lon0 != null ? opts.lon0 : -180, lon1: opts.lon1 != null ? opts.lon1 : 180, lat0: opts.lat0 != null ? opts.lat0 : -75, lat1: opts.lat1 != null ? opts.lat1 : 80, reveal: !!opts.reveal };
     var cv = I.chartTerrain(w, h, box), ctx = cv.getContext('2d');
+    G.ChartArt.finish(ctx, w, h);
     I.chartOverlay(ctx, w, h, box, opts);
     // vignette border
     var g2 = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.4, w / 2, h / 2, Math.max(w, h) * 0.7);
@@ -686,9 +639,14 @@
         '<small class="muted">' + ({ notify: '항구·성문 곁을 지나면 창 없이 알리기만 합니다 — 들어가려면 ' + kl('confirm') + '나 「입항」·「도시에 들어간다」 단추', stop: '지나갈 때는 알리기만 하고, 그 곁에 멈춰 서면 들어갈지 묻습니다', ask: '항구·성문 곁에 닿을 때마다 들어갈지 묻습니다 (예전 방식)' })[G.Ctrl.portAsk()] + '</small></div>' +
       '<div>맞바람 지그재그</div><div><div class="opt-row">' + [['off', '곧게 가기'], ['open', '먼바다에서만'], ['on', '언제나']].map(function (o) { return '<div class="opt' + (G.Ctrl.tackMode() === o[0] ? ' on' : '') + '" data-tk="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
         '<small class="muted">' + ({ off: '자동항해·침로가 맞바람이어도 좌우로 꺾지 않고 곧게 갑니다 — 맞바람이라 느린 것은 같고, 도착하는 날도 지그재그와 같습니다', open: '사방이 트인 먼바다에서만 좌우로 번갈아 거슬러 오르고, 뭍·섬이 가까우면 곧게 갑니다', on: '맞바람이면 언제나 좌우로 번갈아 거슬러 오릅니다 (예전 방식 — 해안 가까이에서는 다리가 뭍에 걸릴 수 있습니다)' }[G.Ctrl.tackMode()]) + '</small></div>' +
-      '<div>키보드 설정</div><div><div class="keybind-grid">' + G.Keys.actions.map(function (a) {
-        return '<div class="keybind-row"><span><b>' + U.esc(a.label) + '</b><small>' + U.esc(a.desc) + '</small></span><button class="btn small keybind-btn" data-keyact="' + a.id + '">' + U.esc(G.Keys.label(a.id, st)) + '</button></div>';
-      }).join('') + '</div><div class="flex" style="gap:8px;margin-top:8px"><button class="btn small ghost" data-act="keyreset">기본 키로 되돌리기</button><small class="muted">바꿀 항목을 누른 뒤 새 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다.</small></div></div>' +
+      '<div>키보드 설정</div><div><div class="keybind-grid">' + G.Keys.actions.map(function (a, ai, all) {
+        var head = a.group === 'notebook' && !(all[ai - 1] && all[ai - 1].group === 'notebook') ?
+          '<div class="keybind-sub"><b>수첩 탭 바로가기</b><small>기본은 없음 — 정해 두면 수첩이 닫혀 있을 때는 그 탭으로 열고, 열려 있을 때는 그 탭으로 넘어갑니다</small></div>' : '';
+        var none = !st.keys[a.id];
+        return head + '<div class="keybind-row' + (none ? ' none' : '') + '"><span><b>' + U.esc(a.label) + '</b><small>' + U.esc(a.desc) + '</small></span>' +
+          (a.optional && !none ? '<button class="btn small ghost keybind-clr" data-keyclr="' + a.id + '" title="이 단축키를 뺍니다">빼기</button>' : '') +
+          '<button class="btn small keybind-btn" data-keyact="' + a.id + '">' + U.esc(G.Keys.label(a.id, st)) + '</button></div>';
+      }).join('') + '</div><div class="flex" style="gap:8px;margin-top:8px"><button class="btn small ghost" data-act="keyreset">기본 키로 되돌리기</button><small class="muted">바꿀 항목을 누른 뒤 새 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다. 수첩 단축키는 「빼기」로 뺄 수 있습니다(키를 기다릴 때 Delete도 뺍니다).</small></div></div>' +
       '</div><div class="sep"></div><div class="flex" style="gap:12px">' +
       (st.diff === 'easy' ? '<button class="btn navy" data-act="save">항해 일지 기록</button>' : '') +
       '<button class="btn" data-act="title">타이틀로 돌아가기</button></div>';
@@ -710,10 +668,14 @@
       var off = UI.pushKey(function (e) {
         if (e.repeat) return true;
         var code = G.Keys.code(e); if (!code) return true;
-        G.Keys.bind(st, action, code); off(); PAGES.menu(el, win); return true;
+        if ((code === 'Delete' || code === 'Backspace') && G.Keys.optional(action)) { G.Keys.clear(st, action); off(); G.State.rememberSettings(st); PAGES.menu(el, win); return true; }
+        var r = G.Keys.bind(st, action, code);
+        if (r && r.blocked) { var ba = G.Keys.action(r.blocked); UI.toast('그 키는 「' + (ba ? ba.label : r.blocked) + '」에 쓰고 있어 바꿀 수 없습니다 — 다른 키를 고르십시오.', 'info', 3600); }
+        off(); G.State.rememberSettings(st); PAGES.menu(el, win); return true;
       });
       o.onblur = function () { if (o.isConnected && o.textContent === '새 키를 누르세요…') { off(); o.textContent = old; o.classList.remove('navy'); } };
     }; });
+    U.$$('[data-keyclr]', el).forEach(function (o) { o.onclick = function () { G.Keys.clear(st, o.dataset.keyclr); G.State.rememberSettings(st); PAGES.menu(el, win); }; });
     var kr = el.querySelector('[data-act=keyreset]'); if (kr) kr.onclick = function () { G.Keys.reset(st); PAGES.menu(el, win); };
     var sv = el.querySelector('[data-act=save]'); if (sv) sv.onclick = async function () { await I.saveMenu(); };
     el.querySelector('[data-act=title]').onclick = async function () {

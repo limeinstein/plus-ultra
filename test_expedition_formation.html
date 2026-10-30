@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>육상 탐험 다이아 편대</title>
+<style>
+body{background:#172a29;color:#eee5ce;font:16px 'Malgun Gothic',sans-serif;margin:0;padding:28px}h1{margin:0 0 10px;font-size:28px}p{color:#b9cbc1;line-height:1.6}.bar{display:flex;gap:18px;flex-wrap:wrap;margin:22px 0;padding:18px;background:#263e39;border-radius:8px}label{display:flex;align-items:center;gap:8px}select,button{padding:8px;color:#f8edd8;background:#314f44;border:1px solid #698670;border-radius:5px;font:inherit}button{cursor:pointer}#grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(410px,1fr));gap:18px}article{border:1px solid #587060;border-radius:8px;overflow:hidden;background:#24392f}h2{font-size:18px;margin:16px}canvas{display:block;width:100%;height:auto}.meta{padding:12px 16px;color:#bdcfbd}a{color:#e8d598;text-decoration:none}footer{margin-top:24px;color:#a6beac}
+</style>
+<h1>육상 탐험 · 다이아 편대</h1>
+<p>선장이 앞장서고 동료들이 좌우와 후미에서 따라갑니다. 방향·정지·재출발·회전과 4명보다 작은 탐험대를 비교할 수 있습니다.</p>
+<div class="bar">
+<label>방향 <select id="direction"><option value="0" selected>북 ↑</option><option value="1">북동 ↗</option><option value="2">동 →</option><option value="3">남동 ↘</option><option value="4">남 ↓</option><option value="5">남서 ↙</option><option value="6">서 ←</option><option value="7">북서 ↖</option></select></label>
+<label>동작 <select id="action"><option value="walk">이동</option><option value="turn">방향 전환</option><option value="camp">야영</option></select></label>
+<label>대원 <select id="party"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>12</option></select></label>
+<label>탈것 <select id="supply"><option value="99">충분함</option><option value="1">1필·1대</option></select></label>
+<label>속도 <select id="speed"><option value="0.5">0.5×</option><option selected value="1">1×</option><option value="2">2×</option></select></label>
+<button id="pause">걸음 정지</button><button id="step">한 자세씩</button>
+<label>바탕 <select id="ground"><option value="#889b70">초원</option><option value="#c9b47e">사막</option><option value="#cdd7d4">설원</option><option value="#263c38">어둠</option></select></label>
+</div>
+<main id="grid"></main>
+<footer>10가지 이동 수단 · 단봉/쌍봉낙타와 말/소 마차 구분 · 동료용 12장, 8방향 × 4자세. 화면에 선원 전체 수를 늘어놓지 않고 선장 포함 최대 4자리로 표시합니다.</footer>
+<script src="images/manifest.js"></script><script src="js/core/images.js"></script><script src="js/data/seafx.js"></script>
+<script src="js/data/expedition_motion.js"></script><script src="js/data/expedition_followers.js"></script>
+<script src="js/art/party.js"></script><script src="js/art/expedition_motion.js"></script><script src="js/art/expedition_formation.js"></script>
+<script>
+(function(){
+  'use strict';
+  var $=function(id){return document.getElementById(id);},cards=[],phase=0,time=0,paused=false,step=false;
+  var defs=[['walk','도보'],['porter','짐꾼'],['horse','말'],['camel','단봉낙타'],['camel','쌍봉낙타','st'],['donkey','당나귀'],['llama','라마'],['yak','야크'],['wagon','말 마차'],['wagon','소 마차',null,'ox'],['elephant','코끼리'],['reindeer','순록 썰매']];
+  defs.forEach(function(d){var a=document.createElement('article');a.innerHTML='<h2>'+d[1]+'</h2><canvas width="600" height="420"></canvas><div class="meta"></div>';var key=G.ExpeditionFormation.variant({mount:{id:d[0]},region:d[2],draft:d[3]});a.querySelector('.meta').innerHTML='<a href="images/'+G.EXPEDITION_FOLLOWERS.sheets[key].file+'">동료 스프라이트 시트</a>'; $('grid').appendChild(a);cards.push({id:d[0],region:d[2],draft:d[3],cv:a.querySelector('canvas'),cache:{}});G.ExpeditionMotion.preload(d[0]);});
+  $('pause').onclick=function(){paused=!paused;this.textContent=paused?'걸음 이어가기':'걸음 정지';};
+  $('step').onclick=function(){paused=true;phase=(Math.floor(phase*4)+1)/4;step=true;$('pause').textContent='걸음 이어가기';};
+  var before=performance.now();
+  function draw(now){var dt=Math.min(0.06,(now-before)/1000);before=now;time+=dt;if(!paused)phase+=dt*(+$('speed').value)*1.1;
+    var dir=+$('direction').value,action=$('action').value;if(action==='turn')dir=Math.floor(time/0.65)%8;
+    cards.forEach(function(c){var ctx=c.cv.getContext('2d'),head=Math.PI/2-dir*Math.PI/4;
+      var u={pts:[[0,0]],mount:{id:c.id,n:+$('supply').value},region:c.region,draft:c.draft,party:+$('party').value,head:head,phase:phase,t:time,moving:(!paused||step)&&action==='walk',camping:action==='camp',size:1,cache:c.cache,ring:true};
+      ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle=$('ground').value;ctx.fillRect(0,0,600,420);
+      if(action==='camp'){ctx.translate(300,300);u.size=1.5;G.ExpeditionMotion.draw(ctx,u);return;}
+      var list=G.ExpeditionMotion.draw(ctx,u),bounds=[-35,-70,35,15];
+      if(list)list.forEach(function(it){if(!it.cell)return;var r=it.cell,k=it.scale;bounds[0]=Math.min(bounds[0],it.x-r[4]*k);bounds[1]=Math.min(bounds[1],it.y-r[5]*k);bounds[2]=Math.max(bounds[2],it.x+(r[2]-r[4])*k);bounds[3]=Math.max(bounds[3],it.y+(r[3]-r[5])*k);});
+      ctx.fillStyle=$('ground').value;ctx.fillRect(0,0,600,420);var k=Math.min(1.7,540/(bounds[2]-bounds[0]),350/(bounds[3]-bounds[1]));ctx.translate(300-(bounds[0]+bounds[2])*k/2,210-(bounds[1]+bounds[3])*k/2);ctx.scale(k,k);G.ExpeditionMotion.draw(ctx,u);
+    });step=false;requestAnimationFrame(draw);
+  }requestAnimationFrame(draw);
+})();
+</script>
+</html>

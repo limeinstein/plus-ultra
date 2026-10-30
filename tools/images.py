@@ -348,6 +348,12 @@ def valid_keys(d):
     for effect, label in [('cannon', '포탄 착수'), ('hull', '선체 피격'), ('volley', '사방 분출'), ('wake', '돌진 물살'), ('ram', '충돌 폭발'), ('dive', '잠수 소용돌이'), ('emerge', '재등장 물기둥')]:
         k['effects/water/' + effect] = '해전 물보라 · ' + label
     k['effects/departure_gull'] = '출항 효과 · 갈매기 비행 스프라이트 시트'
+    for city in (143, 144, 296):
+        k['backgrounds/steppe-20261030/' + str(city)] = '몽골 도시 · 초원과 사원의 전용 배경'
+    for motif in ('kraken', 'dragon', 'edge', 'compass', 'eldorado', 'sevencities', 'fountain', 'magnetic', 'maelstrom', 'whaleisland', 'roclegend', 'presterjohn', 'treasureisle', 'ghostship'):
+        k['chart/' + motif] = '중세 해도 · 미지의 전설 양피지 장식'
+    for penguin in ('penguin', 'magellanpenguin', 'emperorpenguin'):
+        k['effects/birds/' + penguin + '_shore'] = '펭귄 · 해안 걸음·바다 입수 스프라이트 시트'
     for bird in ('frigatebird albatross paradise flamingo roc ploverbird peacock vinousbird crane eagle falcon mallard stork parrot turkey phoenix budgie condor hummingbird penguin magellanpenguin ostrich kiwi snowyowl bncrane hornbill sacredibis baldeagle toucan emu emperorpenguin roadrunner phoenixw').split():
         k['effects/birds/' + bird] = '조류 무리 · 비행·달리기·헤엄 스프라이트 시트'
     k['effects/trade_coin'] = '교역 이익 효과 · 제독에게 쏟아지는 금화'

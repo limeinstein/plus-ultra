@@ -177,6 +177,7 @@
     bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
     hudEl.bar = bar; st.followArmed = false; refreshFollow();
+    if (G.HudPin) { G.HudPin.pin(mm, 'minimap', '해도'); G.HudPin.pin(wb, 'windbox', '바람 판'); }   // 단추줄 위에 · 끌어서 옮기기 (js/ui/hudpin.js — 2026-10-30)
     refreshBar(); refreshHud();
     if (st.unkey) st.unkey();
     st.unkey = UI.pushKey(onKey);
@@ -659,6 +660,7 @@
     if (G.Img.prefetchCity) G.Img.prefetchCity(c, 'near');
     st.busy++;
     try {
+      if (G.Imjin && G.Imjin.beforePort) { var ijGo = false; try { ijGo = await G.Imjin.beforePort(c); } catch (e) { console.error(e); } if (ijGo) { st.busy = Math.max(0, st.busy - 1); st.paused = true; refreshBar(); return true; } }   // 임진왜란: 부산포 앞바다의 왜선 (js/systems/imjin.js)
       var ok = await G.Scenes.city.handleEntry(c);
       if (!ok) { st.busy = Math.max(0, st.busy - 1); st.paused = true; coolPortPrompt(c); refreshBar(); return false; }
       if (c.region === 10) s_flags().fromEurope = false;
@@ -978,9 +980,11 @@
       var dayDue = false;
       for (var k = 0; k < nsub && !st.busy && !st.paused; k++) {
         var h0 = l.heading;
+        var chartLon = l.lon, chartLat = l.lat;
         steer(subT, spd);
         st.turnRate = st.turnRate * 0.7 + (U.angDiff(h0, l.heading) / Math.max(subD, 1e-4)) * 0.3;   // 선회율 (rad/일)
         move(subD, subT);
+        if (l.lon !== chartLon || l.lat !== chartLat) G.State.surveyChart(l.lon, l.lat, chartR());
         if (st.fx && G.SeaFX) { G.SeaFX.age(st.fx, subD); st.fxAged = true; }
         updateNpcs(subD);
         st.dayAcc += subD;
@@ -1684,7 +1688,8 @@
     // 배에 함께 탄 아이의 하루 — 나이·성별·성격마다 (js/systems/kidvoyage.js)
     if (G.KidVoy && (!G.Pace || G.Pace.ok('kidvoy'))) { try { if (await G.KidVoy.atSea()) { if (G.Pace) G.Pace.mark('kidvoy'); refreshHud(); } } catch (e) { console.error(e); } }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
-    if (U.chance(0.07) && (!G.Pace || G.Pace.ok())) await UI.autoRun(function () { return G.Explore.seaEvent({ st: st, refresh: refreshHud }); });   // 두 번째부터는 5초 뒤 지난번처럼 (UI.autoRun)   // 앞 사건과 실제 시간 간격(G.Pace)
+    if (G.JourneyEv && (!G.Pace || G.Pace.ok()) && await UI.autoRun(function () { return G.JourneyEv.seaDay({ st: st, refresh: refreshHud }); })) { /* 하늘과 날씨의 드문 사건 — 별똥별·은하수·일식·용오름… (js/systems/journeyev.js) */ }
+    else if (U.chance(0.07) && (!G.Pace || G.Pace.ok())) await UI.autoRun(function () { return G.Explore.seaEvent({ st: st, refresh: refreshHud }); });   // 두 번째부터는 5초 뒤 지난번처럼 (UI.autoRun)   // 앞 사건과 실제 시간 간격(G.Pace)
     // 부하들 사이의 썸: 때가 된 짝이 있으면 가끔 작은 사건 (js/systems/romance.js)
     if (G.Romance && (!G.Pace || G.Pace.ok('romance'))) { try { if (await G.Romance.seaDay() && G.Pace) G.Pace.mark('romance'); } catch (e) { console.error(e); } }
     // death of all crew / ships

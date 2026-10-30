@@ -1,0 +1,17 @@
+[
+  {
+    "id": "penguin_shore",
+    "prompt": "Use case: stylized-concept. Asset type: transparent 2D naturalist game animation sprite sheet. EXACTLY eight frames in strict 4 columns by 2 rows, equal square cells, image aspect ratio 2:1. Subject: African penguin, black back, white belly, a single black chest stripe and pink skin above eyes. Facing RIGHT side view. Top row frames 0,1,2,3: UPRIGHT walking waddle cycle on invisible shore, feet alternating, flippers slightly open. Bottom row frames 4,5,6,7: a sequential dive from upright crouch to leaning forward to horizontal airborne belly-first hop to horizontal swimming entry. One same penguin centered per cell, consistent anatomical size. Keep the whole penguin inside its own cell with 15% transparent margins. Fine hand-painted naturalist game art with clear silhouette at 60px. Genuine transparent alpha background. No water, no ground, no splash, no shadows, no labels or grid lines. No other animals.",
+    "path": "C:\\Users\\User\\.codex\\generated_images\\01a18790-fc0e-7ad3-830d-b75a8d7665c2\\exec-b23c28e7-8815-4f22-b4f7-084f2ea44cfe.png"
+  },
+  {
+    "id": "magellanpenguin_shore",
+    "prompt": "Use case: stylized-concept. Asset type: transparent 2D naturalist game animation sprite sheet. EXACTLY eight frames in strict 4 columns by 2 rows, equal square cells, image aspect ratio 2:1. Subject: Magellanic penguin, black back, white belly, two black chest bands and white face band. Facing RIGHT side view. Top row frames 0,1,2,3: UPRIGHT walking waddle cycle on invisible shore, feet alternating, flippers slightly open. Bottom row frames 4,5,6,7: a sequential dive from upright crouch to leaning forward to horizontal airborne belly-first hop to horizontal swimming entry. One same penguin centered per cell, consistent anatomical size. Keep the whole penguin inside its own cell with 15% transparent margins. Fine hand-painted naturalist game art with clear silhouette at 60px. Genuine transparent alpha background. No water, no ground, no splash, no shadows, no labels or grid lines. No other animals.",
+    "path": "C:\\Users\\User\\.codex\\generated_images\\01a18790-fc0e-7ad3-830d-b75a8d7665c2\\exec-b27a6d48-c791-4780-98ac-188e57182573.png"
+  },
+  {
+    "id": "emperorpenguin_shore",
+    "prompt": "Use case: stylized-concept. Asset type: transparent 2D naturalist game animation sprite sheet. EXACTLY eight frames in strict 4 columns by 2 rows, equal square cells, image aspect ratio 2:1. Subject: emperor penguin, black head and back, white belly, golden yellow ear patches and upper chest. Facing RIGHT side view. Top row frames 0,1,2,3: UPRIGHT walking waddle cycle on invisible shore, feet alternating, flippers slightly open. Bottom row frames 4,5,6,7: a sequential dive from upright crouch to leaning forward to horizontal airborne belly-first hop to horizontal swimming entry. One same penguin centered per cell, consistent anatomical size. Keep the whole penguin inside its own cell with 15% transparent margins. Fine hand-painted naturalist game art with clear silhouette at 60px. Genuine transparent alpha background. No water, no ground, no splash, no shadows, no labels or grid lines. No other animals.",
+    "path": "C:\\Users\\User\\.codex\\generated_images\\01a18790-fc0e-7ad3-830d-b75a8d7665c2\\exec-388ed773-1bba-42d2-acc9-23416c8bb7a5.png"
+  }
+]

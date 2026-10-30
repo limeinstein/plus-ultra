@@ -131,6 +131,7 @@
     var s = S(), f = CI.flags(c, ref), visited = !!(s.visited && s.visited[c.id]) || (s.loc.mode === 'city' && s.loc.city === c.id);
     var tags = (f.home ? '<span class="citag home">고향</span>' : '') + (f.auto ? '<span class="citag auto">자동항해</span>' : '') + (f.sponsor ? '<span class="citag sp">후원자</span>' : '') + (f.contract ? '<span class="citag ct">계약</span>' : '') + (visited ? '' : '<span class="citag new">가 본 적 없음</span>');
     return '<div class="ci-h"><b>' + U.esc(c.name) + '</b><span class="ci-sub">' + (G.regionLabel ? G.regionLabel(c) : G.REGIONS[c.region]) + '</span></div><div class="ci-tags">' + tags + '</div>' +
+      (G.SteppeCities && G.SteppeCities.note(c) ? '<div class="ci-hint">' + U.esc(G.SteppeCities.note(c)) + '</div>' : '') +
       '<table class="ci-tbl">' + CI.summary(c, ref).map(function (r) {
         return '<tr><th>' + r.k + '</th><td>' + r.v + (r.src ? '<div class="ci-src">' + U.esc(r.src) + '</div>' : '') + (r.hint ? '<div class="ci-hint">' + U.esc(r.hint) + '</div>' : '') + '</td></tr>';
       }).join('') + '</table>';

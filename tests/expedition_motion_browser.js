@@ -4,9 +4,12 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const {pathToFileURL} = require('url');
-const {chromium} = require('playwright');
+let pw;
+try { pw = require('playwright'); }
+catch (_) { pw = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = pw;
 const ROOT = path.resolve(__dirname,'..');
-const OUT = path.join(ROOT,'docs/art');
+const OUT = process.env.EXPEDITION_TEST_OUT || path.join(ROOT, 'docs/art');
 (async function () {
   const browser = await chromium.launch({executablePath:process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--use-gl=swiftshader','--no-sandbox','--enable-unsafe-swiftshader']});
   try {

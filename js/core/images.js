@@ -466,6 +466,8 @@
   /** town background: per-city file, then a numbered variant for the style (port / inland), then the style */
   K.bg = function (c) {
     var out = ['backgrounds/' + c.id];
+    var s = G.Game && G.Game.state;
+    if (c.bgKey && (!c.bgFrom || (s && s.date && s.date.y >= c.bgFrom))) out.unshift(c.bgKey);
     if (c.bgRef != null) out.push('backgrounds/' + c.bgRef);   // 개척 도시: 이웃 식민 도시의 바닷가 풍경을 빌린다 (js/systems/colony.js)
     var base = 'bg-styles/' + c.style + (c.port ? '_port' : '_inland');
     var list = I.list(base + '_');
@@ -594,6 +596,8 @@
   K.landmark = function (id) { return ['landmarks/' + id]; };
   K.city = function (c, time) {
     var t = time && time !== 'day' ? time : null, out = [];
+    var s = G.Game && G.Game.state;
+    if (c.bgKey && (!c.bgFrom || (s && s.date && s.date.y >= c.bgFrom))) out.push(c.bgKey);
     if (t) out.push('cities/' + c.id + '_' + t);
     out.push('cities/' + c.id);
     if (t) out.push('city-styles/' + c.style + '_' + t);
@@ -823,7 +827,7 @@
   K.halfFor = function (chain) {
     chain = [].concat(chain || []);
     var out = [], picked = I.pick(chain);
-    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals|witches|fairy-tales)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
+    chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals|witches|fairy-tales|childhood-friends)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
     if (picked && /^maid-styles\//.test(picked) && !/_half$/.test(picked)) out.push(picked + '_half');   // 이름 없는 그 고장 여급 (술집 여급 무릎상과 같은 그림)
     if (picked && /^portraits\/(npc|npc-roles)\//.test(picked)) {
       out.push(picked + '_half');
@@ -832,7 +836,7 @@
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
-  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary|witches|fairy-tales)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary|witches|fairy-tales|childhood-friends)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
   /** 마을 사람 무릎상: 지금 보이는 얼굴과 같은 기존 무릎상을 먼저 쓴다. */
   K.npcHalf = function (id, c) {
     var own = K.halfOf(K.npc(id, c));

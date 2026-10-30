@@ -11,13 +11,27 @@
   var LAT_MIN = -75, LAT_MAX = 80, SPAN_MIN = 8, SPAN_MAX = 360;
   var searchSerial = 0;
   // 세계 전체의 바탕 그림은 하루에 한 번만 다시 그린다
-  var worldCv = null, worldKey = '';
+  var worldCv = null, worldKey = '', worldState = null;
   function worldTerrain() {
-    var s = S(), k = s.day + ':' + s.known.length;
-    if (!worldCv || worldKey !== k) { worldCv = I.chartTerrain(1440, 620, { lon0: -180, lon1: 180, lat0: LAT_MIN, lat1: LAT_MAX }); worldKey = k; }
+    var s = S(), k = s.day + ':' + s.known.length + ':' + (s.chartRevision || 0) + ':' + G.ChartArt.revision;
+    if (!worldCv || worldKey !== k || worldState !== s) { worldCv = I.chartTerrain(1440, 620, { lon0: -180, lon1: 180, lat0: LAT_MIN, lat1: LAT_MAX }); worldKey = k; worldState = s; }
     return worldCv;
   }
   CV.invalidate = function () { worldCv = null; };
+  /** 알고 있는 해도의 테두리에 맞춘다. 새 대륙을 그리면 다음에 펼칠 범위도 넓어진다. */
+  CV.exploredView = function (w, h) {
+    var s = S(), bits = s.chartBits, x0 = 720, x1 = -1, y0 = 360, y1 = -1;
+    if (bits) for (var y = 0; y < 360; y++) for (var x = 0; x < 720; x++) {
+      var i = y * 720 + x; if (!(bits[i >> 3] & (1 << (i & 7)))) continue;
+      var lat = 90 - (y + .5) / 2; if (lat < LAT_MIN || lat > LAT_MAX) continue;
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+    }
+    if (x1 < 0) return { lon: 5, lat: 43, span: 68 };
+    var p = G.FX.chart.viewPadding, west = x0 / 2 - 180, east = (x1 + 1) / 2 - 180;
+    var north = 90 - y0 / 2, south = 90 - (y1 + 1) / 2;
+    return { lon: (west + east) / 2, lat: (north + south) / 2,
+      span: Math.min(SPAN_MAX, Math.max(G.FX.chart.viewMinSpan, east - west + p * 2, (north - south + p * 2) * w / h)) };
+  };
 
   /** host 안에 해도를 만든다.
       opts: {w, h, center:[lon,lat], span, ref: 기준 항구(자동항해 표식), actions(c) → [{label, icon, fn}], actionsTop: 단추를 요약 표 위에(목적지 고르기처럼 단추가 할 일일 때),
@@ -43,13 +57,15 @@
     var searchId = 'chart-search-' + (++searchSerial);
     wrap.innerHTML = '<div class="cv-search"><label for="' + searchId + '">도시 찾기</label><input id="' + searchId + '" type="search" placeholder="알고 있는 도시 이름" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="' + searchId + '-list"><div class="cv-results" id="' + searchId + '-list" role="listbox" hidden></div></div>' +
       '<canvas class="cv-map" width="' + W + '" height="' + H + '"></canvas>' +
-      '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="세계 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
+      '<div class="cv-zoom"><button class="btn small" data-z="in" title="확대">＋</button><button class="btn small" data-z="out" title="축소">－</button><button class="btn small" data-z="all" title="알려진 해도 전체">전체</button><button class="btn small" data-z="me" title="지금 위치">여기</button></div>' +
       '<div class="cv-legend"><span>⚑ 수도</span><span>모형 크기: 대·중·소</span><span>▥ 발견한 유적·자연 경관</span><span>〰 항구</span><span>┄ 내륙</span><span>⌜ 청록 모서리: 자동항해</span><span><i class="lg own"></i>밑줄 색: 다스리는 나라</span><span><i class="lg dia"></i>후원자</span><span><i class="lg flag"></i>계약</span><span><i class="lg me"></i>지금 위치</span><span>? 단서(술집 소문·망루) — 올리면 이름, 누르면 단서</span></div>' +
       '<div class="cv-info" hidden></div>';
+    wrap.querySelector('.cv-legend').insertAdjacentHTML('afterbegin', '<span>재탐사 ① 윤곽 ② 강 ③ 산 ④ 지형</span><span>미지의 삽화: 옛 항해자의 상상</span>');
     host.appendChild(wrap);
     var cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d'), info = wrap.querySelector('.cv-info');
     cv.style.width = '100%'; cv.style.height = 'auto'; cv.style.display = 'block';
-    var view = { lon: opts.center ? opts.center[0] : (here ? U.clamp(here.lon, -150, 150) : 0), lat: opts.center ? opts.center[1] : (here ? here.lat : 20), span: opts.span || 120 };
+    var fit = CV.exploredView(W, H);
+    var view = !opts.center && !opts.span ? fit : { lon: opts.center ? opts.center[0] : (here ? U.clamp(here.lon, -150, 150) : 0), lat: opts.center ? opts.center[1] : (here ? here.lat : 20), span: opts.span || fit.span };
     var drawnMarks = [], hoverMark = null;   // ? 표식 (I.chartMarks가 그린 것) — 마우스를 올리면 이름, 누르면 단서 (2026-10-26)
     var crisp = null, crispKey = '', idleT = null, hover = null, hoverDisc = null, sel = opts.select != null ? G.CITY_DATA[opts.select] : null, seaSel = null, dead = false;
     function latSpan() { return view.span * H / W; }
@@ -66,7 +82,7 @@
 
     // ------------------------------------------------ 그리기
     function terrain() {
-      var b = box(), key = b.lon0.toFixed(3) + ':' + b.lat0.toFixed(3) + ':' + view.span.toFixed(3);
+      var b = box(), key = b.lon0.toFixed(3) + ':' + b.lat0.toFixed(3) + ':' + view.span.toFixed(3) + ':' + (S().chartRevision || 0) + ':' + G.ChartArt.revision;
       if (crisp && crispKey === key) { ctx.drawImage(crisp, 0, 0); return; }
       var wc = worldTerrain(), sx = (b.lon0 + 180) / 360 * wc.width, sy = (LAT_MAX - b.lat1) / (LAT_MAX - LAT_MIN) * wc.height;
       var sw = view.span / 360 * wc.width, sh = latSpan() / (LAT_MAX - LAT_MIN) * wc.height;
@@ -82,7 +98,7 @@
       if (dead) return;
       var b = box(), zk = Math.pow(U.clamp(360 / view.span, 1, 40), 0.28);
       var cityScale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15);
-      ctx.save(); terrain();
+      ctx.save(); terrain(); G.ChartArt.finish(ctx, W, H);
       // 항로 경험 (열린 항로 진한 선, 익히는 중 점선)
       // 바닷길은 한 그리기에 몇 개씩만 찾고(한 개에 수십 ms), 남으면 곧 다시 그린다
       var budget = 3, more = false;
@@ -250,7 +266,7 @@
     field.oninput = function () {
       var q = fold(field.value); active = 0;
       if (!q) { matches = []; closeSearch(); return; }
-      matches = cities().filter(function (c) { return fold(c.name).indexOf(q) >= 0; }).sort(function (a, b) { return (fold(b.name) === q ? 1 : 0) - (fold(a.name) === q ? 1 : 0) || a.name.localeCompare(b.name, 'ko'); });
+      matches = cities().filter(function (c) { return fold([c.name].concat(c.aliases || []).join(' ')).indexOf(q) >= 0; }).sort(function (a, b) { return (fold(b.name) === q ? 1 : 0) - (fold(a.name) === q ? 1 : 0) || a.name.localeCompare(b.name, 'ko'); });
       hits.innerHTML = matches.length ? matches.map(function (c, i) { return '<button type="button" role="option" id="' + searchId + '-hit-' + i + '">' + U.esc(c.name) + ' <small>' + U.esc(G.REGIONS[c.region] || '') + '</small></button>'; }).join('') : '<div class="cv-empty" role="status">알고 있는 도시 중에 일치하는 곳이 없습니다.</div>';
       U.$$('button', hits).forEach(function (b, i) { b.onclick = function () { chooseCity(matches[i]); }; });
       hits.hidden = false; field.setAttribute('aria-expanded', 'true'); markSearch();
@@ -303,7 +319,7 @@
         e.stopPropagation();
         var z = b.dataset.z;
         if (z === 'in') zoomAt(1.6, W / 2, H / 2); else if (z === 'out') zoomAt(1 / 1.6, W / 2, H / 2);
-        else if (z === 'all') { view.span = 360; clampView(); draw(); }
+        else if (z === 'all') { var fitted = CV.exploredView(W, H); view.lon = fitted.lon; view.lat = fitted.lat; view.span = fitted.span; clampView(); draw(); }
         else if (z === 'me' && here) { view.lon = here.lon; view.lat = here.lat; view.span = Math.min(view.span, 60); clampView(); draw(); }
       };
     });
@@ -312,6 +328,7 @@
     mo.observe(document.body, { childList: true, subtree: true });
     cv.style.cursor = 'grab';
     clampView(); draw();
+    G.ChartArt.preload().then(function () { if (!dead) { crisp = null; CV.invalidate(); draw(); } });
     if (G.DiscoveryIcon) G.DiscoveryIcon.preload(landmarks()).then(function () { if (!dead) draw(); });
     if (sel) showCity(sel);
     var api = { el: wrap, redraw: draw, view: view, select: showCity, marks: function () { return drawnMarks; }, showMark: showMark };

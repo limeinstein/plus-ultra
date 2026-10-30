@@ -297,6 +297,9 @@
     if (fad) { var fb = (G.BALANCE.fad || {}); UI.toast(G.Fad.where(fad) + '에서 ' + G.GOOD[id].name + U.jx(G.GOOD[id].name, '이/가') + ' 유행을 탔다! ' + (fb.days || 60) + '일 동안 값이 ' + (fb.mult || 3) + '배로 뛴다.', 'star', 7000); }
     if (G.Hostile) G.Hostile.trade(c, total);
     if (G.Slave && G.Slave.is(id)) G.Slave.onSell(c, q);   // 노예 무역: 악명·「노예 상인」
+    // 커피를 팔면 그 문화권 식당에 커피 메뉴가 하나씩 생긴다 (js/systems/coffee.js)
+    var cafe = G.Coffee ? G.Coffee.sold(c, id, q) : null;
+    if (cafe) UI.toast(G.Coffee.soldText(c, cafe), 'mug', 7000);
     if (profit > 0) { var tfame = profit / 2500; G.Fame.add('tr', Math.floor(tfame) + (U.chance(tfame % 1) ? 1 : 0)); }   // 2,500닢에 못 미치는 몫도 그만큼의 확률로 (첫 장사 이익 2천 닢이 교역 명성 0이 되지 않게)
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
     if (G.Ledger) G.Ledger.record(c);
@@ -701,6 +704,7 @@
     if (!ok && cur.hagN < max) {
       R.market(c.id).hag = { day: S().day, pv: R.stayNo(), h: null, n: cur.hagN };
       await C.say(k, U.pick(['허, 그 값에는 못 주네.', '어림없는 소리 말게.', '그 값이면 내가 밑지네.']));
+      if (await osaHelp(c, cur)) return;   // 모항이면 소꿉친구가 나타나 거든다 (js/systems/osa.js)
       UI.toast('흥정이 거절당했다 — 오늘 ' + (max - cur.hagN) + '번 더 흥정할 수 있다 (회계 ' + (G.Acct ? G.Acct.lv() : 0) + (pu ? ' · 경리 +1' : '') + '). 거절당할수록 주인이 굳어진다.', 'scales', 4600);
       return;
     }
@@ -714,6 +718,15 @@
     } else if (!cur.haggle) {
       cur.haggle = keepHag(c, { ok: false });
       await C.say(k, U.pick(['어림없는 소리! 이 값도 밑지고 파는 걸세.', '싫으면 다른 데 가 보게.', '값을 깎으려거든 장사를 좀 더 배우고 오게.']));
+      await osaHelp(c, cur);
     }
   };
+  /** 모항에서 흥정이 막혔을 때 소꿉친구가 나타나 거든다 — 거들었으면 이번 방문의 값 깎기를 이룬 것으로 (js/systems/osa.js) */
+  async function osaHelp(c, cur) {
+    if (!G.Osa || !G.Osa.haggleHelp) return false;
+    var oh = null; try { oh = await G.Osa.haggleHelp(c, 'trade'); } catch (e) { console.error(e); }
+    if (!oh) return false;
+    cur.haggle = keepHag(c, { ok: true, buy: 1 - oh.disc, sell: 1 + oh.disc * 0.6, osa: true });
+    return true;
+  }
 })(window.G = window.G || {});

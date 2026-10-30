@@ -91,8 +91,9 @@ async function connect(url) {
     })()`);
     for (let i = 0; i < IDS.length; i++) {
       const row = await evaluate(`(async () => {
-        const c = G.CITY_DATA[${IDS[i]}], key = 'backgrounds/' + c.id;
+        const c = G.CITY_DATA[${IDS[i]}];
         G.Game.state.date = { y: Math.max(1480, c.founded), m: 6, d: 1 };
+        const key = G.Img.pick(G.Img.chain.bg(c));
         G.Game.state.day = 0; G.Game.state.loc.city = c.id;
         await G.Img.load(key);
         const img = G.Img.get(key), buildings = G.Scenes.city.buildings(c);

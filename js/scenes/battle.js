@@ -576,7 +576,7 @@
   /** 연기가 바람에 밀려가는 방향 (px/초, 화면 좌표) */
   function windDrift() { return [Math.cos(st.wind.dir) * (8 + 18 * st.wind.spd), -Math.sin(st.wind.dir) * (8 + 18 * st.wind.spd)]; }
   B.runtime = function () { return st; };
-  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen, geoAt: geoAt, terrainBlocked: terrainBlocked, terrainInfo: terrainInfo, resolveTerrain: resolveTerrain, geoScale: GEO_SCALE, arena: ARENA, navPath: navPath, lineClear: lineClear, shorePad: shorePad, inArena: inArena }; };   // 시험용
+  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen, geoAt: geoAt, terrainBlocked: terrainBlocked, terrainInfo: terrainInfo, resolveTerrain: resolveTerrain, geoScale: GEO_SCALE, arena: ARENA, navPath: navPath, lineClear: lineClear, shorePad: shorePad, inArena: inArena, seize: seize }; };   // 시험용
   B.feel = function () { return st ? { shake: st.shake || 0, flash: st.flash ? st.flash.a : 0, hitstop: st.hitstop || 0 } : null; };
 
   // ---------------------------------------------------------------- 함대 명령 (기함을 뺀 배들 — 전체 또는 고른 한 척)
@@ -797,7 +797,7 @@
     var cur = st.sel ? [st.sel] : mine.filter(function (b) { return b.alive; });
     if (!one) ORDERS.forEach(function (o) { el.cmdBtns[o.id].classList.toggle('on', cur.length > 0 && cur.every(function (b) { return b.order === o.id; })); });
     el.cmdList.innerHTML = mine.map(function (b) {
-      var tx = !b.alive ? (b.sunk ? '침몰' : b.fled ? '이탈' : '상실') : (ORDER_NAME[b.order] || '') + (b.order === 'attack' && b.otarget ? ' · ' + b.otarget.name : '');
+      var tx = !b.alive ? (b.sunk ? '침몰' : b.fled ? '이탈' : b.seized ? '빼앗김' : '상실') : (ORDER_NAME[b.order] || '') + (b.order === 'attack' && b.otarget ? ' · ' + b.otarget.name : '');
       if (b.escort && b.alive) tx = b.order === 'retreat' ? '호위 · 퇴각' : '호위 · 기함 뒤에 숨는다';   // 호위하는 상선은 퇴각 말고는 명령을 듣지 않는다
       return '<div class="ord-row' + (st.sel === b ? ' sel' : '') + (b.alive ? '' : ' gone') + '" data-no="' + b.no + '"><span class="shipno">' + b.no + '</span><b>' + U.esc(b.name) + '</b><span class="right">' + U.esc(tx) + '</span></div>';
     }).join('');
@@ -1167,7 +1167,12 @@
           flash(mine ? I1.flashTaken : I1.flashHit, mine ? '255,120,90' : '255,236,200');
           if (big > 0.7) zoomKick(I1.zoomHit);
           if (t.hp <= 0) hullBreak(t);
-          else if (t.crew <= 0) { t.alive = false; t.captured = t.side === 'en'; t.drifting = true; log(t.name + '의 선원이 전멸했다.'); }
+          else if (t.crew <= 0) {
+            t.alive = false; t.captured = t.side === 'en'; t.drifting = true;
+            // 아군 배는 가라앉지 않고 적에게 넘어간다(seized) — 이 싸움에 이기면 되찾는다 (finish, 2026-10-30)
+            if (t.side === 'me') { seize(t, 0); log(t.name + '호의 선원이 전멸해 적에게 넘어갔다 — 이 싸움에 이기면 되찾는다.'); }
+            else log(t.name + '의 선원이 전멸했다.');
+          }
         } else {
           if (G.WaterSplash) G.WaterSplash.emit(st, 'cannon', k.tx, k.ty);
           else st.fx.push({ kind: 'splash', x: k.tx, y: k.ty, t: 0, life: 2.2, seed: Math.random() });
@@ -1331,11 +1336,20 @@
       en.alive = false; en.captured = true;
       await UI.say(en.name + U.j(en.name, '을/를').slice(en.name.length) + ' 점령했다! (아군 선원 ' + me.crew + '명 남음)', {});
     } else if (me.crew <= 0 || me.crew < me.crew0 * 0.1) {
-      me.alive = false; me.lostBoard = true;
-      await UI.say(me.name + '호가 적에게 넘어갔다...', {});
+      me.alive = false; seize(me, me.crew, true);   // 「빼앗김」 글자는 위에서 이미 띄웠다
+      await UI.say(me.name + '호가 적에게 넘어갔다... 이 싸움에 이기면 되찾을 수 있다.', {});
     } else await UI.say('양쪽 모두 큰 피해를 입고 물러섰다.', {});
     st.busy--;
     checkEnd();
+  }
+
+  /* 아군 배가 적에게 넘어간다 (2026-10-30 사용자 요청 「해상전투 중 아군 선박이 침몰이 아닌 선원수0으로 나포되고, 그 전투에 승리했을때 배를 되돌려 받을 수 있게」)
+     포격으로 선원이 전멸했거나(남은 사람 0) 백병전에서 졌을 때(남은 선원은 포로) — 가라앉은 배와 달리 이기면 되찾는다(finish).
+     지거나 물러나거나 적이 달아나면 적이 끌고 간다(함대에서 빠진다). b.seized · b.prisoners */
+  function seize(b, prisoners, quiet) {
+    if (!b || b.seized) return;
+    b.seized = true; b.prisoners = Math.max(0, Math.round(prisoners || 0)); b.crew = 0;
+    if (!quiet) st.fx.push({ kind: 'float', x: b.x, y: b.y - b.len * 0.5 - 118, text: '빼앗김', col: '255,120,100', size: 40, t: 0, life: 1.7 });
   }
 
   // ---------------------------------------------------------------- end of battle
@@ -1381,14 +1395,30 @@
     await U.sleep(900);
     if (st !== finishing || S() !== s) return;
     // apply damage & crew back to state
-    var survivors = [];
+    var survivors = [], recovered = [], seizedLost = [];
     st.ships.forEach(function (b) {
       if (b.side !== 'me' || b.escort || b.ally) return;          // 호위하는 상선·큰 해전의 우리 편 함대는 내 배·내 선원이 아니다
-      if (b.sunk || b.lostBoard) { var i = f.ships.indexOf(b.src); if (i >= 0) f.ships.splice(i, 1); return; }
+      if (b.sunk) { var i = f.ships.indexOf(b.src); if (i >= 0) f.ships.splice(i, 1); return; }
+      // 적에게 넘어간 배(seize): 이기면 되찾는다 — 포로로 잡혔던 선원도 함께 돌아온다. 지면 적이 끌고 간다
+      if (b.seized || b.lostBoard) {
+        if (res === 'win') { b.src.hp = Math.max(1, b.hp); b.crew = b.prisoners || 0; survivors.push(b); recovered.push(b); return; }
+        var j = f.ships.indexOf(b.src); if (j >= 0) f.ships.splice(j, 1); seizedLost.push(b); return;
+      }
       b.src.hp = Math.max(1, b.hp); survivors.push(b);
     });
+    if (seizedLost.length) {
+      if (R.tidyCaptains) R.tidyCaptains();   // 그 배의 선장은 기함으로 돌아온다
+      G.State.log(seizedLost.map(function (b) { return b.name + '호'; }).join('·') + U.jx(seizedLost[seizedLost.length - 1].name + '호', '을/를') + ' 적에게 빼앗겼다.');
+    }
     f.crew = U.sum(survivors, function (b) { return b.crew; }) + (st.spare || 0);   // 빌린 배로 싸웠으면 타지 못한 선원은 그대로
     var lines = [];
+    if (recovered.length) {
+      var rn = recovered.map(function (b) { return b.name + '호'; }).join('·'), back = U.sum(recovered, function (b) { return b.prisoners || 0; });
+      lines.push('빼앗겼던 <b>' + U.esc(rn) + '</b>' + U.jx(rn, '을/를') + ' 되찾았다!' + (back ? ' 붙잡혀 있던 선원 ' + back + '명도 돌아왔다.' : '') +
+        (f.crew < R.crewMin() ? '<br><span class="muted">선원이 모자랍니다 — 항구에서 선원을 채우십시오.</span>' : ''));
+      G.State.log('해전에서 이겨 빼앗겼던 ' + rn + U.jx(rn, '을/를') + ' 되찾았다.');
+    }
+    if (seizedLost.length) UI.toast(seizedLost.map(function (b) { return b.name + '호'; }).join('·') + ' — 적에게 빼앗긴 채 끌려갔다.', 'boot', 5200);   // 진 싸움의 알림창은 lines를 쓰지 않는다
     if (G.Growth) G.Growth.battle(res, (st.npc && st.npc.n) || st.ships.filter(function (b) { return b.side !== 'me'; }).length);   // 전투 경험 (js/systems/growth.js)
     if (G.Escort) { try { G.Escort.afterBattle(st.ships, res, lines); } catch (e) { console.error(e); } }   // 호위하던 상선을 잃었는가
     if (st.npc.monster && G.SeaMonsters) {
@@ -2029,7 +2059,7 @@
     if (st.pf % 6 === 0) refreshOrders();
     if ((st.pf = (st.pf || 0) + 1) % 15 === 0 && el.panel) {
       el.panel.innerHTML = '<div class="fp-h">' + G.icon('ship') + '아군 함대</div>' + st.ships.filter(function (b) { return b.side === 'me'; }).map(function (b) {
-        return '<div class="fp-ship"><div class="flex"><span class="shipno' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag">기함</span>' : '') + '<small class="cream-muted" style="margin-left:6px">' + U.esc(R.captainName(b.src)) + '</small><span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.fled ? '이탈' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'green dark') + '</div>';
+        return '<div class="fp-ship"><div class="flex"><span class="shipno' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag">기함</span>' : '') + '<small class="cream-muted" style="margin-left:6px">' + U.esc(R.captainName(b.src)) + '</small><span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.fled ? '이탈' : b.seized ? '빼앗김 — 이기면 되찾는다' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'green dark') + '</div>';
       }).join('') + '<div class="fp-h" style="margin-top:8px">' + G.icon('flag') + (st.npc.monster ? '해상 괴물 <small class="cream-muted">— 잠수 중 공격 불가</small>' : '적 함대 <small class="cream-muted">— 1번 기함을 무찌르면 승리</small>') + '</div>' + st.ships.filter(function (b) { return b.side === 'en'; }).map(function (b) {
         if (b.monster) return '<div class="fp-ship en"><div class="flex"><b>' + U.esc(b.name) + '</b><span class="right cream-muted">괴물</span></div><div class="cream-muted" style="font-size:14px">' + (b.alive ? G.SeaMonsters.phaseLabel(b) : '처치') + '</div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '<small>내구 ' + Math.ceil(Math.max(0, b.hp)) + ' / ' + b.maxHp + '</small></div>';
         return '<div class="fp-ship en"><div class="flex"><span class="shipno en' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag en">' + (b.monster ? '괴물' : '기함') + '</span>' : '') + '<span class="right cream-muted">' + (b.monster ? (b.alive ? G.SeaMonsters.phaseLabel(b) : '처치') : b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.captured ? '나포' : b.fled ? '달아남' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '</div>';

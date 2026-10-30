@@ -1,0 +1,375 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "glory_amsterdam",
+      "name": "암스테르담의 준비",
+      "type": "scene",
+      "event": "glory",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Amsterdam summer 1688 canal-side quays, seventeenth-century Dutch merchant ships preparing to sail, stacks of powder casks and bundles of horse fodder, warm late light. Hans Willem Bentinck, the sturdy man in reference, approaches a sea captain seen from behind, carrying folded dispatches. Purposeful quiet intrigue.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_bentinck.webp"
+      ]
+    },
+    {
+      "id": "glory_wind",
+      "name": "개신교의 바람",
+      "type": "scene",
+      "event": "glory",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. English Channel November 1688, vast fleet of wooden sailing ships running west on an easterly wind, ORANGE pennant on the flagship, chalk coastline receding in atmospheric distance. Thin pale William of Orange in cuirass and orange sash from reference stands on foreground quarterdeck surveying the fleet. Awe and resolute momentum.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_william3.webp"
+      ]
+    },
+    {
+      "id": "glory_whitehall",
+      "name": "화이트홀의 국왕",
+      "type": "scene",
+      "event": "glory",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Whitehall Palace London autumn 1688, candlelit palace gallery, courtiers whispering at a distance. James II, lean tired middle-aged king with long dark wig, white lace collar and blue Garter sash from reference, stands three-quarter profile gazing through tall window onto Thames. Political isolation, deep burgundy and cool dusk.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_james2.webp"
+      ]
+    },
+    {
+      "id": "glory_gunfleet",
+      "name": "군플리트의 함대",
+      "type": "scene",
+      "event": "glory",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Thames estuary Gunfleet sandbanks November 1688, English wooden warships with red naval ensigns held at anchor in a strong contrary easterly wind, furled sails, a distant passing fleet on horizon. Dartmouth in red navy coat and dark wig from reference watches with a telescope lowered on foreground deck, worried seamen behind.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_dartmouth.webp"
+      ]
+    },
+    {
+      "id": "glory_seal",
+      "name": "템스강의 국새",
+      "type": "scene",
+      "event": "glory",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. London winter night 1688, small wooden escape boat on dark Thames. Cloaked James II from reference leans over gunwale, his gloved hand just releasing a heavy silver great seal above black water, a small restrained splash reflecting hidden lantern. Tower and old riverside buildings faint through mist. Secret departure, not a triumph.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_james2.webp"
+      ]
+    },
+    {
+      "id": "glory_france",
+      "name": "프랑스로 떠난 왕",
+      "type": "scene",
+      "event": "glory",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. French harbour winter 1688, exhausted James II from reference stepping off wooden ship gangplank onto wet quay, French nobles quietly receiving him. He turns his pale weary face back toward northern sea. Seventeenth-century wool cloaks, pale cold sky, emotionally restrained exile.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_james2.webp"
+      ]
+    },
+    {
+      "id": "glory_banqueting",
+      "name": "권리 선언",
+      "type": "scene",
+      "event": "glory",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Banqueting House Whitehall 1689, elegant high-ceiling hall with richly painted allegorical ceiling in original painterly interpretation, assembled peers and Commons. Thin William III in dark wig and tall graceful Mary II with swept black hair and pearls stand together on dais. Halifax holds a parchment facing assembly, parchment has no legible script. Solemn conditional acceptance of crown, warm gold light.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_william3.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_mary2.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\glory_halifax.webp"
+      ]
+    },
+    {
+      "id": "lu_case",
+      "name": "면죄받은 자들",
+      "type": "scene",
+      "event": "lu",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Game fictional investigation in Magdeburg around 1500. Candlelit corner table of Golden Stag tavern; young Martin Luther in black Augustinian habit from first reference compares two indulgence parchments bearing red wax seals, adult Katharina aged 24 in white coif and black nun habit from second reference hands him one ledger page. Captain nearby only from rear, wine cask beside table, cathedral spire through window. Historical mystery mood.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\sponsors\\de_luther.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\lu_katharina.webp"
+      ]
+    },
+    {
+      "id": "lu_wine",
+      "name": "참사회원의 포도주",
+      "type": "scene",
+      "event": "lu",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Magdeburg chapter lodging, jovial elderly canon Wolfgang from first reference with flushed nose raises wine cup in animated speech, modest stained priest robe and round belly. Young Luther from second reference quietly taking notes across table. Candlelight glances on pewter and wine casks, investigative dark Flemish painting mood.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\lu_canon.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\sponsors\\de_luther.webp"
+      ]
+    },
+    {
+      "id": "lu_beer",
+      "name": "수도사들의 맥주",
+      "type": "scene",
+      "event": "lu",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Arched monastery cellar, plain lay brothers in worn habits clink earthenware beer mugs and sing at long rustic table. Adult Katharina aged 24 from reference in white coif and dark habit stands partly concealed in shadow near doorway, observant expression, not drinking. Amber barrels and lamp, cloister atmosphere.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\lu_katharina.webp"
+      ]
+    },
+    {
+      "id": "lu_feast",
+      "name": "추기경의 연회",
+      "type": "scene",
+      "event": "lu",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Fictional German cardinal Grauenfels from first reference in ornate crimson robes at candlelit doorway of a lavish banquet hall. He reaches to obstruct adult Katharina aged 24 from second reference by holding her fully clothed wrist. She firmly pulls her arm free, upright and defiant, ledger held tightly in her other hand. Distant clergymen asleep over banquet table. Depict abuse of power and her decisive refusal, dignified nonsexual framing, no revealing clothing or injury.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\lu_cardinal.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\lu_katharina.webp"
+      ]
+    },
+    {
+      "id": "lu_accuse",
+      "name": "성문 앞의 고발",
+      "type": "scene",
+      "event": "lu",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Magdeburg city gate at night, torch-bearing private guards of crimson-robed cardinal block passage. Young Luther from reference in dark monk habit stands squarely in front clutching sealed accusation papers to chest, captain seen at his side. Steady moral courage against intimidating silhouettes, cool stone and red torchlight.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\sponsors\\de_luther.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\lu_cardinal.webp"
+      ]
+    },
+    {
+      "id": "lu_freedom",
+      "name": "빈 맥주 통",
+      "type": "scene",
+      "event": "lu",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Dawn at German medieval city gate, wooden cart laden with closed beer barrels being taken out by a sea captain in travelling cloak seen from behind. One barrel lid slightly ajar, revealing only adult Katharina's alert smiling eyes and white coif from reference safely inside. Sleepy gatekeeper yawns beside gate. Clever humane escape, warm pink dawn, no danger to body.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\lu_katharina.webp"
+      ]
+    },
+    {
+      "id": "huguenot_call",
+      "name": "보르도의 전령",
+      "type": "scene",
+      "event": "huguenot",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Bordeaux harbour 1627, royal messenger in blue fleur-de-lis livery halts horse and unfurls sealed summons. Four distinct musketeers from supplied character references face him: young d'Artagnan, reserved dark Athos, large jovial Porthos, elegant Aramis. Blue musketeer cloaks, hats and rapiers, merchant masts and gulls behind. Original game faces, not movie actors.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\d_artagnan.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\athos.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\porthos.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\aramis.webp"
+      ]
+    },
+    {
+      "id": "huguenot_bastion",
+      "name": "보루 위의 아침",
+      "type": "scene",
+      "event": "huguenot",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Outside La Rochelle 1627, four game musketeers from references calmly eat breakfast behind a battered earth bastion while distant cannon smoke drifts. Improvised tablecloth laid on overturned wooden barrel. Large Porthos laughs holding a chicken leg, Athos raises wine cup while watching city wall, Aramis and young d'Artagnan share bread. Brave understated camaraderie, non-graphic battle background.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\d_artagnan.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\athos.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\porthos.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\aramis.webp"
+      ]
+    },
+    {
+      "id": "huguenot_blockade",
+      "name": "라로셸의 봉쇄",
+      "type": "scene",
+      "event": "huguenot",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Moonless night at La Rochelle harbour mouth, enormous iron chain and wooden palisade stretch across dark water. A wooden relief sailing vessel with lamps covered approaches the barrier cautiously, royal warship lookout signals a small warning light. Two characteristic medieval harbour towers visible far behind. Suspense, silver-black water and tiny amber light, no explosions.",
+      "refs": []
+    },
+    {
+      "id": "huguenot_peace",
+      "name": "성벽 아래의 화해",
+      "type": "scene",
+      "event": "huguenot",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. La Rochelle stone wall in 1628, small boat carrying a white truce flag reaches wall beneath tired but hopeful townspeople. Elegant Aramis from first reference and an elderly Protestant pastor from second reference clasp a folded peace document with both hands between them. Gentle morning light, restrained reconciliation, no visible wounds or emaciated bodies.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\legendary\\aramis.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\hg_pastor.webp"
+      ]
+    },
+    {
+      "id": "romesack_fog",
+      "name": "안개 낀 로마의 성벽",
+      "type": "scene",
+      "event": "romesack",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Borgo walls Rome dawn May 6 1527 in thick fog, imperial soldiers with pikes and ladders approach old brick fortification, Swiss guards and a sea captain's men defend above. Charles Duke of Bourbon from reference identifiable by WHITE cloak over polished armour leads at ladder base, historical arquebus smoke, no gore or exposed wounds, tense panoramic action. Old St Peter's silhouette, no completed modern baroque basilica.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\bourbon.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\roist.webp"
+      ]
+    },
+    {
+      "id": "romesack_passetto",
+      "name": "파세토의 피신",
+      "type": "scene",
+      "event": "romesack",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Rome May 1527 narrow elevated fortified Passetto corridor with crenellated stone walls, Pope Clement VII from reference wears purple cloak OVER white cassock and clutches rosary while hurrying toward massive round Castel Sant'Angelo in distance. Swiss guard captain Roist from reference with halberd and striped uniform guides him; rear guards shield doorway. Smoke below, resolute urgent rescue, no gore.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\sponsors\\it_pope_6.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\roist.webp"
+      ]
+    },
+    {
+      "id": "romesack_sack",
+      "name": "약탈의 여드레",
+      "type": "scene",
+      "event": "romesack",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Rome 1527 after sack, ruined stone lane beside Tiber at night. A ship captain's sailors confront drunken looters burdened with sacks of stolen gold cups and silver candlesticks. Frightened but uninjured Roman townspeople sheltered in doorway, a warm lantern illuminates recovered treasure, smoke and damaged old church in distance. Non-graphic historical drama, no corpses, no torture.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\rs_landsknecht.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\rs_roman.webp"
+      ]
+    },
+    {
+      "id": "romesack_machiavelli",
+      "name": "마키아벨리의 원고",
+      "type": "scene",
+      "event": "romesack",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Florence 1527, thin angular Niccolo Machiavelli from supplied game portrait with short dark hair and sober black Florentine robe, anger and grief tempered by resolve, solemnly hands a tied bundle of handwritten manuscript pages to visiting captain seen three-quarter from rear. Old Italian stone loggia and troubled city square beyond, daylight. No readable writing or book title.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\sponsors\\it_machiavelli.webp"
+      ]
+    },
+    {
+      "id": "romesack_peddler",
+      "name": "행상인 옷을 입은 교황",
+      "type": "scene",
+      "event": "romesack",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Rome winter night 1527 secret escape: Clement VII from reference disguised as humble peddler in plain wool cap and brown cloak, NO crown or papal regalia, slips into a covered wooden merchant cart near old north gate. A quiet sailor helps, distant imperial guard watches another direction. Lantern glow and moonlit fortress silhouette, secrecy and relief.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\sponsors\\it_pope_6.webp"
+      ]
+    },
+    {
+      "id": "westphalia_barge",
+      "name": "뮌스터로 가는 배",
+      "type": "scene",
+      "event": "westphalia",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Amsterdam Dam and canal April 1648, sober delegation barge with dark pennant tied beside quay, town hall under construction behind. Older Dutch diplomat Adriaan Pauw from reference in black silk and white ruff holds folded treaty invitation while speaking to sea captain seen from rear. Quiet anticipation after eighty years of war, soft Dutch spring light.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\wp_pauw.webp"
+      ]
+    },
+    {
+      "id": "westphalia_oath",
+      "name": "뮌스터의 맹세",
+      "type": "scene",
+      "event": "westphalia",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Munster town hall peace chamber May 15 1648. Adriaan Pauw and Dutch delegates in sober black raise right hands with two fingers. Across wooden table Spanish Count Penaranda rests hand on gospel book and crucifix. Young painter Ter Borch watches from corner holding small drawing board. Use reference faces. Original composition, do not reproduce a historic painting. Rich wood panelling, candlelight, solemn equal diplomacy, no readable text.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\wp_pauw.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\wp_penaranda.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\wp_terborch.webp"
+      ]
+    },
+    {
+      "id": "westphalia_bells",
+      "name": "평화의 종",
+      "type": "scene",
+      "event": "westphalia",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Amsterdam June 1648 after peace proclamation, seventeenth-century Dutch canal square filled with relieved families and merchants; small flags and bells ringing in church tower, distant barge, gentle daylight through rain-washed clouds, faces smiling quietly after generations of war. No huge modern crowd, no text or signs.",
+      "refs": []
+    },
+    {
+      "id": "westphalia_church",
+      "name": "1624년의 교회",
+      "type": "scene",
+      "event": "westphalia",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. Bremen town hall courtyard 1648, Swedish diplomat Salvius from first reference with gold spectacles and blue fur-trimmed coat mediates between Lutheran village pastor and Catholic abbess from other references beside a waiting carriage. Each holds a folded petition, earnest disagreement becoming thoughtful listening. Old stone town hall, northern light, visual balance, no readable writing.",
+      "refs": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\wp_salvius.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\wp_pastor.webp",
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\history\\wp_abbess.webp"
+      ]
+    },
+    {
+      "id": "oldguard_join_med",
+      "name": "지중해 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: Mediterranean Iberian harbour, warm stucco houses, terracotta roofs and old stone quays, caravel rigging, clear turquoise water. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_join_north",
+      "name": "북유럽 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: northern European harbour, timber and brick gabled merchant houses, grey-blue sea and tall wooden merchant ship rigging, cool morning haze. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_join_east",
+      "name": "동아시아 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: East Asian historical harbour, tiled timber-roofed quayside buildings, merchant junk and ocean-going wooden ship, calm jade water and pine hills. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_join_south",
+      "name": "남아시아 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: South Asian Indian Ocean port, stone and timber warehouses, palms, carved balconies, lateen and square rigged wooden trading vessels, warm monsoon light. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_join_sea",
+      "name": "동남아시아 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: Southeast Asian maritime port, raised timber houses and sloped tile roofs, palms, wooden junks and trading ships, glowing tropical morning. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_join_mena",
+      "name": "중동·북아프리카 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: Middle Eastern North African port, pale stone arches and minaret skyline, dhow lateen sails and ocean trading ship, amber desert-coast sunrise. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_join_africa",
+      "name": "사하라 이남 아프리카 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: West African Atlantic harbour, coastal earthen and timber buildings, woven trade bundles, palms and ocean-going wooden sailing vessel, rich warm morning light. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_join_america",
+      "name": "아메리카 소꿉친구의 합류 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: early colonial American harbour, timber and limewashed stone buildings with low red tile roofs, green coastal hills, mixed wooden sailing vessels, pearly morning mist. A broad wooden ship gangplank and welcoming quarterdeck in FOREGROUND connect to old home-town quay. Weathered rope coils and small travel chest at lower edge, a pair of worn childhood toy wooden swords tucked together beside chest hints at a long-kept friendship. EMPTY central foreground with clear space at 25 and 68 percent width for two full knee-up adult character portraits to be composited by the game. Keep main horizon behind their shoulders, uncluttered silhouettes. No large or identifiable people anywhere in foreground. Tiny distant working sailors only. Hopeful morning departure and fulfilled promise. Never draw the foreground protagonists: game inserts their exact stored portraits.",
+      "refs": []
+    },
+    {
+      "id": "oldguard_arrange",
+      "name": "후계자를 위한 안배 배경",
+      "type": "scene",
+      "event": "oldguard",
+      "prompt": "Use case: historical-scene. Asset type: one finished ultra-wide narrative event painting for the PLUS ULTRA historical sailing RPG. ONE continuous scene, aspect ratio 9:4, target 1881x836. Rich semi-realistic HAND-PAINTED illustration, clearly painted material and fabric, expressive believable faces, period architecture, cinematic layered depth, finely controlled light, restrained gold highlights, consistent with the game existing event art. Key faces, hands and story props inside central 84 percent of frame with generous safe margins. No captions, text, readable writing, UI, border, logo, watermark, split panels, modern objects, photographic lens effects or film actors. Reference portraits, when supplied, define these specific game characters' faces, hair and clothing; transfer their identity into the scene, do not paste portrait rectangles. BACKGROUND PLATE for runtime character compositing: interior of an Age of Sail flagship captain's chart cabin, richly worn wooden beams, leaded stern windows opening onto quiet home harbour at late golden light, old navigation charts with unlettered routes, brass compass and folded logbook on low table near bottom edge. EMPTY foreground at 16,42,65,84 percent width for actual old admiral, adult heir and veteran officers composited in game. No painted foreground people. Dignified intimate passing of trust and duty, warm steady light, generous headroom. No modern uniform or readable writing.",
+      "refs": []
+    },
+    {
+      "id": "childfriend_visit",
+      "name": "소꿉친구가 찾아온 집",
+      "event": "heirplan",
+      "type": "scene",
+      "folder": "family-events",
+      "refs": [],
+      "prompt": "Use case: historical-scene. Asset type: EMPTY background painting for exact game character portraits composited at runtime, ONE continuous 9:4 ultra-wide scene target1881x836. High quality semi-realistic hand-painted Age of Sail RPG art, finely painted wood and cloth, warm cinematic light. Keep foreground mostly empty at 18%,48%,78% width for knee-up adults placed by game, generous headroom and clear wall behind their faces. No foreground people, no mannequins, no faces, no text, labels, readable writing, border, watermark or modern objects. A welcoming historical seafarer's modest prosperous home beside a harbour, timber door open onto a small stone garden path and distant ship masts at late afternoon. Travel chest and two worn childhood wooden practice swords beside doorway lower right, folded sea cloak and fresh flowers at edge of room. The young adult friend has just arrived but NO protagonists painted: the exact friend, adult heir and old captain will be inserted by game. Hopeful familiar reunion, russet wood and cream plaster, low table at bottom only, no visual obstacles across center."
+    },
+    {
+      "id": "heir_council",
+      "name": "저녁 식탁의 후계 부탁",
+      "event": "heirplan",
+      "type": "scene",
+      "folder": "family-events",
+      "refs": [],
+      "prompt": "Use case: historical-scene. Asset type: EMPTY background painting for exact game character portraits composited at runtime, ONE continuous 9:4 ultra-wide scene target1881x836. High quality semi-realistic hand-painted Age of Sail RPG art, finely painted wood and cloth, warm cinematic light. Keep foreground mostly empty at 18%,48%,78% width for knee-up adults placed by game, generous headroom and clear wall behind their faces. No foreground people, no mannequins, no faces, no text, labels, readable writing, border, watermark or modern objects. A historical retired seafarer's family dining room overlooking quiet home harbour at dusk. Long low wooden supper table enters bottom edge with bread, pewter cups, closed logbook and a brass compass. Old chart on rear wall without readable writing, soft hearth and few candles, sturdy wooden chairs near edges only, EMPTY space in front of table for old admiral, adult heir and invited veteran sailors composited at runtime. Dignified intimate trusting conversation about protecting next generation, amber light from left windows, calm shadows, NOT a royal palace and NOT a captain's cabin."
+    }
+  ],
+  "aliases": {
+    "family-events/childfriend_join": "legend-events/oldguard_join_med",
+    "family-events/oldguard_farewell": "legend-events/oldguard_join_med"
+  }
+}

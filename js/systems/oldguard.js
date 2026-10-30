@@ -44,6 +44,7 @@
   OG.tags = function (m, d) {
     var s = S(), out = '';
     if (d && d.kinTag) out += '<span class="tag">' + U.esc(d.kinTag) + '</span>';
+    if (G.HeirPlan && G.HeirPlan.pledged(m)) out += '<span class="tag" title="후계를 위한 안배 — 세대 교체 때 새 제독 곁에 남기로 약속했다. 그날까지 배를 떠나지 않는다">안배</span>';
     if (m.aide && s.day < (m.leaveCd || 0)) out += '<span class="tag" title="세대 교체 때 새 제독 곁에 남은 노장 — 한동안 배를 떠나지 않는다">후견</span>';
     else if (OG.isVeteran(m)) out += '<span class="tag" title="40년 넘게 함께했지만 기함의 선실·다른 배의 선장 자리에 없다 — 언젠가 배를 떠날 수 있고, 세대 교체 때는 선대와 함께 내린다">노장 · ' + years(m) + '년</span>';
     return out;
@@ -159,15 +160,40 @@
     var s = S(), WD = G.Wander, nk = natKey(p), k0 = D().kin[kind];
     var types = kind === 'uncle' ? ['nav', 'war', 'trade', 'doctor'] : kind === 'friend' ? ['nav', 'war', 'gun', 'survey', 'cook'] : ['nav', 'trade', 'war', 'survey', 'scholar'];
     var g = kind === 'uncle' ? 'm' : (U.chance(kind === 'friend' ? 0.4 : 0.3) ? 'f' : 'm');
+    var look = null, friendClass = null;
+    if (kind === 'friend' && g === 'f') {
+      var nations = G.WANDER_NATIONS || {}, style = (nations[nk] || {}).style;
+      // 같은 항구에서 자란 이주민 집안도 만난다. 아직 알려지지 않았거나 생기지 않은 국적은 쓰지 않는다.
+      var available = Object.keys(nations).filter(function (n) {
+        var x = nations[n];
+        return (!x.from || s.date.y >= x.from) && (!x.after || !G.Frontier || x.after.every(function (id) { return G.Frontier.known(id); }));
+      });
+      var allLooks = (G.OLD_GUARD_FRIEND_LOOKS || []).filter(function (x) {
+        return x.adult && available.some(function (n) { return x.styles.indexOf(nations[n].style) >= 0; });
+      });
+      var local = (G.OLD_GUARD_FRIEND_LOOKS || []).filter(function (x) { return x.adult && x.styles.indexOf(style) >= 0; });
+      var looks = local.length && U.chance(K().friendLocalChance) ? local : allLooks;
+      if (looks.length) {
+        look = U.pick(looks); friendClass = D().friendClasses && D().friendClasses[look.kind];
+        if (look.styles.indexOf(style) < 0) nk = U.pick(available.filter(function (n) { return look.styles.indexOf(nations[n].style) >= 0; }));
+        if (friendClass) types = friendClass.types;
+      }
+    }
     var d = WD.make({ nat: nk, g: g, type: U.pick(types) }); if (!d) return null;
     if (kind === 'cousin' && p.surname) { var gv = (d.nameFrom && d.nameFrom[0] ? d.nameFrom[0].split(' ')[0] : d.name.split(' ')[0]); d.name = G.Family && G.Family.fullName ? G.Family.fullName(gv, p.surname) : gv + ' ' + p.surname; }
     if (kind === 'uncle') d.st = d.st.map(function (v, i) { return Math.min(92, v + (i === 1 ? 8 : 4)); });
     var o = st(); o.seq = (o.seq || 0) + 1;
     var hc = city(p.home);
-    d.id = 'kin_' + s.date.y + '_' + o.seq; delete d.wd; d.kin = kind; d.kinTag = k0.tag; d.line = d.id;
+    d.id = 'kin_' + s.date.y + '_' + o.seq; delete d.wd; d.kin = kind; d.kinOf = k.name; d.kinTag = k0.tag; d.line = d.id;   // kinOf: 누구의 친족·소꿉친구인가 (첫사랑 — js/systems/firstlove.js)
     d.home = p.home; d.zones = []; d.gen = undefined;
     var fo = { heir: k.name, old: p.name, home: hc ? hc.name : '', name: d.name };
     d.desc = fill(k0.desc, fo); d.story = d.desc; d.prevName = null;
+    if (look && friendClass) {
+      d.face = look.face; d.halfKey = look.halfKey; d.role = friendClass.role;
+      d.friendLook = look.id; d.friendClass = look.kind; d.friendOrigin = look.origin; d.friendAdult = true;
+      d.kinTag = k0.tag + ' · ' + friendClass.tag; d.typeName = friendClass.tag;
+      d.desc += ' ' + fill(friendClass.desc, fo); d.story = d.desc;
+    }
     return d;
   };
   function kinKind() { var w = K().kinKinds; return U.weighted(Object.keys(w), function (x) { return w[x]; }); }
@@ -175,6 +201,38 @@
   // ---------------------------------------------------------------- 세대 교체
   function mateSp(id) { var d = G.MATE[id]; return { name: d.name, portrait: G.Scenes.mateSpec(id), half: G.Img.chain.mateHalf(id), lang: 3 }; }
   function heirSp(k) { return { name: k.name, portrait: G.Family && G.Family.kidSpec ? G.Family.kidSpec(k) : null, lang: 3 }; }
+  /** 생김새와 고향은 저장된 인물을 따른다. 이주민 친구여도 함께 자란 모항의 배경을 쓴다. */
+  async function showShot(kind, p, k, people, forced) {
+    var d = D().shots, ES = G.EventShot, I = G.Img, fx = G.FX && G.FX.oldGuardShot;
+    if (!d || !ES || !I || !fx) return null;
+    var region = 'med', style = ((G.WANDER_NATIONS || {})[natKey(p)] || {}).style;
+    var look = (G.OLD_GUARD_FRIEND_LOOKS || []).filter(function (x) { return x.styles.indexOf(style) >= 0; })[0];
+    if (look) region = look.id.split('_')[1];
+    var port = kind === 'join' || kind === 'farewell';
+    var bg = port ? d.joinPrefix + region : kind === 'visit' ? d.visitBg : kind === 'council' ? d.councilBg : d.cabin;
+    if (!I.has(bg)) return null;
+    var pos = kind === 'join' ? fx.join : kind === 'visit' ? fx.visit : forced ? fx.mourning : kind === 'council' ? (people.length ? fx.aide : fx.arrange) : kind === 'farewell' ? fx.aide : fx[kind], cast = [];
+    var heir = G.HomeLife && k.born ? G.HomeLife.chain(k, true) : I.chain.kid(k.sex, 1, 5, '', true);
+    function add(half, x, lead) { cast.push({ half: half, x: x, lead: !!lead, h: pos.h, y: pos.y }); }
+    add(heir, pos.heirX, kind !== 'join' && kind !== 'visit');
+    if (kind === 'join' || kind === 'visit') {
+      if (kind === 'visit') add(I.chain.heroHalf(), pos.oldX, false);
+      add(I.chain.mateHalf(people[0].id), pos.friendX, true);
+    }
+    else {
+      if (!forced) add(I.chain.heroHalf(), pos.oldX, false);
+      (people || []).slice(0, (pos.mateX || []).length).forEach(function (m, i) { add(I.chain.mateHalf(m.id), pos.mateX[i], false); });
+    }
+    var title = kind === 'join' ? (people[0].kin === 'friend' ? d.friend : d.kin) : forced ? d.mourning : d[kind];
+    var imageKey = kind === 'visit' ? d.visitBg : kind === 'council' ? d.councilBg : kind === 'join' ? d.joinKey : kind === 'farewell' ? d.farewellKey : d.cabin;
+    return ES.show({ title: title, imageKey: imageKey, bg: [bg], cast: cast, light: forced && kind !== 'join' ? 'night' : kind === 'farewell' ? 'dusk' : 'gold', sparkle: false });
+  }
+  OG.showShot = showShot;
+  async function withShot(kind, p, k, people, forced, run) {
+    var pc = await showShot(kind, p, k, people, forced);
+    try { return await run(); }
+    finally { if (pc && pc.stop) await pc.stop(); }
+  }
   async function lines(list, id, o, k) {
     for (var i = 0; i < list.length; i++) {
       var l = list[i], who = l.slice(0, 2), t = fill(l.slice(2), o);
@@ -188,32 +246,35 @@
     (G.SKILLS || []).forEach(function (x) { var lv = G.Cabins && G.Cabins.rawSkill ? G.Cabins.rawSkill(m, x.id) : ((d.sk || {})[x.id] || 0); if (lv > 0) out.push({ n: x.name, lv: lv }); });
     return out.sort(function (a, b) { return b.lv - a.lv; }).slice(0, 3).map(function (x) { return x.n + ' ' + x.lv; }).join(' · ');
   }
-  /** 남을 사람 고르기 — cands: [{m?, def?, kin?}] → 고른 것 */
-  OG.pick = async function (cands, o) {
-    var UI = G.UI, max = K().keep, sel = cands.map(function () { return false; });
+  /** 남을 사람 고르기 — cands: [{m?, def?, kin?, pre?(처음부터 고름), dis?(고를 수 없음), tags?(덧붙일 꼬리표 html)}] → 고른 것
+      opt: {title, head, max, btn} — 후계를 위한 인선(js/systems/heirplan.js)도 같은 창을 쓴다 */
+  OG.pick = async function (cands, o, opt) {
+    opt = opt || {};
+    var UI = G.UI, max = opt.max != null ? opt.max : K().keep, sel = cands.map(function (c) { return !!c.pre && !c.dis; });
+    while (sel.filter(Boolean).length > max) sel[sel.lastIndexOf(true)] = false;
     function n() { return sel.filter(Boolean).length; }
     function row(c, i) {
-      var d = c.def || G.MATE[c.m.id], on = sel[i], dis = !on && n() >= max;
-      var right = c.def ? '<span class="tag">' + U.esc(c.def.kinTag) + '</span> ' + U.esc(c.def.typeName || '') : '함께한 ' + years(c.m) + '년' + (OG.isEvent(c.m) ? ' <span class="tag">사건 동료</span>' : '');
+      var d = c.def || G.MATE[c.m.id], on = sel[i], dis = c.dis || (!on && n() >= max);
+      var right = (c.def ? '<span class="tag">' + U.esc(c.def.kinTag) + '</span> ' + U.esc(c.def.typeName || '') : '함께한 ' + years(c.m) + '년' + (OG.isEvent(c.m) ? ' <span class="tag">사건 동료</span>' : '')) + (c.tags || '');
       var sub = c.def ? U.esc(c.def.desc) : U.esc(bestSk(c.m) || '');
       return '<tr class="click" data-og="' + i + '" style="' + (dis ? 'opacity:.45' : '') + '"><td class="pick" style="width:28px"><input type="checkbox" data-og="' + i + '"' + (on ? ' checked' : '') + (dis ? ' disabled' : '') + '></td>' +
         '<td><b>' + U.esc(d.name) + '</b> <span class="muted">' + right + '</span><div class="muted" style="font-size:13px">' + sub + '</div></td></tr>';
     }
     function html() {
-      return '<div class="muted" style="margin-bottom:8px">' + fill(D().pickHead, o) + '</div><div style="margin-bottom:6px"><b>' + n() + ' / ' + max + '명 고름</b></div>' +
+      return '<div class="muted" style="margin-bottom:8px">' + fill(opt.head || D().pickHead, o) + '</div><div style="margin-bottom:6px"><b>' + n() + ' / ' + max + '명 고름</b></div>' +
         '<div style="max-height:52vh;overflow:auto"><table class="tbl">' + cands.map(row).join('') + '</table></div>';
     }
     for (;;) {
-      var win = UI.window({ title: D().pickTitle, icon: 'people', width: 760, closable: false, html: html(),
-        buttons: [{ label: '고른 사람을 남긴다', value: 'pick' }],
+      var win = UI.window({ title: opt.title || D().pickTitle, icon: 'people', width: 760, closable: false, html: html(),
+        buttons: [{ label: opt.btn || '고른 사람을 남긴다', value: 'pick' }],
         onBuild: function (el, w) {
           function box() { return w.content || el; }
           function redraw() { box().innerHTML = html(); wire(); }
-          function wire() { U.$$('tr[data-og]', box()).forEach(function (tr) { tr.onclick = function (ev) { if (ev) ev.preventDefault(); var i = +tr.dataset.og; if (!sel[i] && n() >= max) return; sel[i] = !sel[i]; redraw(); }; }); }
+          function wire() { U.$$('tr[data-og]', box()).forEach(function (tr) { tr.onclick = function (ev) { if (ev) ev.preventDefault(); var i = +tr.dataset.og; if (cands[i].dis || (!sel[i] && n() >= max)) return; sel[i] = !sel[i]; redraw(); }; }); }
           wire();
         } });
       await win.result;
-      if (n() || !cands.some(function (c) { return c.m; }) || (await UI.confirm(fill(D().pickNone, o), '그대로 한다', '다시 고른다'))) break;
+      if (n() || opt.noneOk || !cands.some(function (c) { return c.m; }) || (await UI.confirm(fill(D().pickNone, o), '그대로 한다', '다시 고른다'))) break;
     }
     return cands.filter(function (c, i) { return sel[i]; });
   };
@@ -221,33 +282,51 @@
   OG.atSucceed = async function (p, k, forced) {
     var s = S(), UI = G.UI, c0 = K(), vets = OG.veterans(), hc = city(p.home);
     var o = { old: p.name, heir: k.name, yrs: c0.years, young: k.sex === 'f' ? '아가씨' : '도련님', home: hc ? hc.name : '' };
-    var kin = null;
-    if (U.chance(c0.kinChance)) { try { kin = OG.makeKin(kinKind(), p, k); } catch (e) { console.error(e); kin = null; } }
-    if (!vets.length && !kin) return { kept: [], gone: [] };
-    var cands = vets.map(function (m) { return { m: m }; }); if (kin) cands.push({ def: kin, kin: true });
-    await UI.alert(fill(vets.length ? D().intro : D().introKin, o), '노장들');
-    var chosen = await OG.pick(cands, o);
+    var kin = null, plan = G.HeirPlan ? G.HeirPlan.forSucceed(p, k) : { friend: null, pledged: [] };   // 후계를 위한 안배 — 약속한 부하·소꿉친구 (js/systems/heirplan.js)
+    if (plan.friend) kin = plan.friend;
+    else if (U.chance(c0.kinChance)) { try { kin = OG.makeKin(kinKind(), p, k); } catch (e) { console.error(e); kin = null; } }
+    var extra = plan.pledged.filter(function (m) { return vets.indexOf(m) < 0; });   // 노장이 아니어도 약속한 부하는 후견 후보
+    if (!vets.length && !kin && !extra.length) { if (G.HeirPlan) G.HeirPlan.afterSucceed(); return { kept: [], gone: [] }; }
+    var pt = '<span class="tag">약속</span>';
+    var cands = vets.concat(extra).map(function (m) { var pl = plan.pledged.indexOf(m) >= 0; return { m: m, pre: pl, pledged: pl, tags: pl ? ' ' + pt : '' }; });
+    if (kin) cands.push({ def: kin, kin: true, pre: !!plan.friend, tags: plan.friend ? ' ' + pt : '' });
+    if (plan.friend && G.HeirPlan) await G.HeirPlan.friendArrives(kin, o, k);
+    var chosen = await withShot('arrange', p, k, [], forced, async function () {
+      await UI.alert(fill(vets.length ? D().intro : D().introKin, o), '노장들');
+      return OG.pick(cands, o);
+    });
     var kept = [], gone = [], gen = (p.generation || 1) + 1;
     // 남는 노장
     chosen.filter(function (c) { return c.m; }).forEach(function (c, i) {
       var m = c.m; m.aide = { gen: gen, y: s.date.y }; m.loyal = Math.max(m.loyal || 0, c0.aideLoyal); m.leaveCd = Math.max(m.leaveCd || 0, (s.day || 0) + c0.aideCalm);
       kept.push(m.id);
       G.State.log(fill(D().aideLog, { name: G.MATE[m.id].name, heir: k.name }));
-      c.say = D().stay[i % D().stay.length];
+      c.say = c.pledged && G.HEIR_PLAN ? [G.HEIR_PLAN.council.pledgeStay] : D().stay[i % D().stay.length];
     });
-    for (var i = 0; i < chosen.length; i++) {
-      var c = chosen[i];
-      if (c.m) { await lines(c.say, c.m.id, Object.assign({}, o, { name: G.MATE[c.m.id].name })); }
-    }
-    if (chosen.some(function (c) { return c.m; })) await lines([D().stayHeir], null, o, k);
+    var aides = chosen.filter(function (c) { return c.m; });
+    if (aides.length) await withShot('aide', p, k, aides.map(function (c) { return c.m; }), forced, async function () {
+      if (!forced) await UI.say(fill(D().askAide, { names: aides.map(function (c) { return G.MATE[c.m.id].name; }).join('·'), heir: k.name }),
+        { name: p.name, portrait: p.portrait, half: G.Img.chain.heroHalf(), lang: 3 });
+      for (var i = 0; i < aides.length; i++) {
+        var c = aides[i];
+        await lines(c.say, c.m.id, Object.assign({}, o, { name: G.MATE[c.m.id].name }));
+      }
+      await lines([D().stayHeir], null, o, k);
+    });
     // 함께 오는 친족·소꿉친구
     var kc = chosen.filter(function (c) { return c.kin; })[0];
     if (kc) {
       var d = kc.def; st().defs[d.id] = d; register(d);
       var row = G.Legend && G.Legend.join ? G.Legend.join(d.id, hc) : null;
       if (row) { delete row.ev; row.loyal = c0.kinLoyal; row.kin = d.kin; kept.push(d.id); }
-      await lines(D().kin[d.kin].lines, d.id, Object.assign({}, o, { name: d.name }), k);
+      var joinTalk = async function () {
+        await lines(D().kin[d.kin].lines, d.id, Object.assign({}, o, { name: d.name }), k);
+        var fc = d.friendClass && D().friendClasses && D().friendClasses[d.friendClass];
+        if (fc) await lines(fc.lines, d.id, Object.assign({}, o, { name: d.name }), k);
+      };
+      if (row) await withShot('join', p, k, [d], forced, joinTalk); else await joinTalk();
       G.State.log(fill(D().kin.join, { name: d.name, heir: k.name, tag: d.kinTag }));
+      if (G.HeirPlan) G.HeirPlan.stopPic();
     }
     // 내리는 노장
     var leave = vets.filter(function (m) { return kept.indexOf(m.id) < 0; });
@@ -265,8 +344,11 @@
       if (R().tidyCaptains) R().tidyCaptains();
       if (G.Cabins && G.Cabins.tidy) G.Cabins.tidy();
       var names = gone.map(function (id) { return G.MATE[id].name; }), last = names[names.length - 1];
-      await UI.alert(fill(forced ? D().goDeath : D().goRetire, Object.assign({}, o, { namesW: names.join('·') + U.jx(last, '은/는') })), '노장들');
+      await withShot('farewell', p, k, leave, forced, function () {
+        return UI.alert(fill(forced ? D().goDeath : D().goRetire, Object.assign({}, o, { namesW: names.join('·') + U.jx(last, '은/는') })), '노장들');
+      });
     }
+    if (G.HeirPlan) G.HeirPlan.afterSucceed();
     return { kept: kept, gone: gone };
   };
 })(window.G = window.G || {});

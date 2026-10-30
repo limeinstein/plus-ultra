@@ -1,0 +1,1347 @@
+{
+  "generator": "built-in image_gen; pinocchio_doll: existing three.js icon pipeline",
+  "assets": [
+    {
+      "id": "samui",
+      "name": "코사무이",
+      "kind": "nature",
+      "description": "야자나무가 빽빽한 섬 둘레로 하얀 모래밭이 활처럼 휘어 있다. 물이 맑아 무릎 깊이의 바닥 조개까지 보이고, 저녁이면 바다가 연분홍으로 물든다.",
+      "target": "tools/nature_gifs/sources/samui.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Koh Samui: ivory crescent beach, coconut groves over low green hills, clear turquoise Gulf of Siam, granite rocks. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-39bea525-f24a-44d1-8820-b882c3d90bff.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/samui.gif",
+        "images/discovery-ends/samui.jpg",
+        "images/discovery-sheets/samui.webp"
+      ]
+    },
+    {
+      "id": "phuket",
+      "name": "푸켓",
+      "kind": "nature",
+      "description": "초록 언덕이 바다로 흘러내린 섬의 서쪽에 넓은 만이 줄지어 있다. 고운 모래가 발목까지 빠지고, 앞바다에는 석회암 바위섬들이 떠 있다.",
+      "target": "tools/nature_gifs/sources/phuket.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Phuket west coast: broad sandy bays below lush green headlands, distant steep limestone islets. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-303b7d74-83b8-45ad-b2f9-c799cc5c09a5.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/phuket.gif",
+        "images/discovery-ends/phuket.jpg",
+        "images/discovery-sheets/phuket.webp"
+      ]
+    },
+    {
+      "id": "langkawi",
+      "name": "랑카위",
+      "kind": "nature",
+      "description": "크고 작은 섬 아흔아홉 개가 모여 있고, 큰 섬에는 맹그로브 숲과 폭포가 흐르는 산이 있다. 독수리가 맴도는 바다 위로 붉은 해가 진다.",
+      "target": "tools/nature_gifs/sources/langkawi.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Langkawi archipelago: many green limestone islands, mangrove estuaries, forested peaks and a distant waterfall, a small eagle high in the sky. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-f4c0535a-f48b-48be-b842-a18ce5c663b1.png",
+      "source_size": [
+        2170,
+        725
+      ],
+      "files": [
+        "images/discoveries/langkawi.gif",
+        "images/discovery-ends/langkawi.jpg",
+        "images/discovery-sheets/langkawi.webp"
+      ]
+    },
+    {
+      "id": "penang",
+      "name": "페낭",
+      "kind": "nature",
+      "description": "숲이 우거진 언덕 섬 북쪽에 하얀 모래 바닷가가 길게 뻗어 있다. 바위 사이로 맑은 샘물이 흘러내려 지나가는 배들이 물을 채우고 간다.",
+      "target": "tools/nature_gifs/sources/penang.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Penang northern coast before colonial development: a long pale beach beneath densely wooded rolling hills, freshwater stream between granite boulders. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-542ae672-e241-4242-a7c6-9c703842dc7b.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/penang.gif",
+        "images/discovery-ends/penang.jpg",
+        "images/discovery-sheets/penang.webp"
+      ]
+    },
+    {
+      "id": "bali",
+      "name": "발리",
+      "kind": "nature",
+      "description": "화산 기슭의 계단 논이 바다까지 내려오고, 남쪽 바닷가에는 큰 파도가 하얗게 부서진다. 바닷가 사원마다 꽃과 향을 바친 접시가 놓여 있다.",
+      "target": "tools/nature_gifs/sources/bali.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Bali: volcanic mountain far behind terraced wet rice fields descending toward a rugged southern coast, breaking surf and a small precolonial stone sea shrine. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-d93fe137-f8e7-464f-9172-ae3319d16d6f.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/bali.gif",
+        "images/discovery-ends/bali.jpg",
+        "images/discovery-sheets/bali.webp"
+      ]
+    },
+    {
+      "id": "boracay",
+      "name": "보라카이",
+      "kind": "nature",
+      "description": "나비 모양의 작은 섬 서쪽에 밀가루처럼 고운 흰 모래밭이 끝없이 이어진다. 물빛이 얕은 곳은 연두, 깊은 곳은 짙은 남색으로 층층이 갈린다.",
+      "target": "tools/nature_gifs/sources/boracay.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Boracay White Beach: exceptionally fine white sand along an elongated low palm-covered island, pale green shallows changing through turquoise to navy open sea. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-98a27cc1-830d-4f38-9117-9c9f13fa906c.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/boracay.gif",
+        "images/discovery-ends/boracay.jpg",
+        "images/discovery-sheets/boracay.webp"
+      ]
+    },
+    {
+      "id": "cebu",
+      "name": "세부",
+      "kind": "nature",
+      "description": "큰 섬과 막탄 섬 사이 바다가 잔잔하고, 둘레 산호초에는 물고기 떼가 반짝인다. 야자 그늘 아래 마을 사람들이 그물을 깁는다.",
+      "target": "tools/nature_gifs/sources/cebu.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Cebu and Mactan: calm narrow tropical channel between two green islands, visible coral patches under clear water, coconut grove and tiny precolonial thatched fishing huts. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-960d41b4-00d1-4e8e-a87a-69ff156e4b67.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/cebu.gif",
+        "images/discovery-ends/cebu.jpg",
+        "images/discovery-sheets/cebu.webp"
+      ]
+    },
+    {
+      "id": "palawan",
+      "name": "팔라완",
+      "kind": "nature",
+      "description": "검은 석회암 절벽이 바다에서 곧장 솟고, 그 사이 잔잔한 석호에 비취색 물이 고여 있다. 절벽 아래 숨은 모래밭은 배를 타야만 닿는다.",
+      "target": "tools/nature_gifs/sources/palawan.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Palawan El Nido: towering dark jagged limestone karst cliffs rising vertically from jade-green enclosed lagoons, hidden pale beaches and lush jungle. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-efc9c7b8-3dcf-43fe-a25a-835397dfce0b.png",
+      "source_size": [
+        2170,
+        725
+      ],
+      "files": [
+        "images/discoveries/palawan.gif",
+        "images/discovery-ends/palawan.jpg",
+        "images/discovery-sheets/palawan.webp"
+      ]
+    },
+    {
+      "id": "srilanka",
+      "name": "스리랑카",
+      "kind": "nature",
+      "description": "섬 남쪽 바닷가에 야자가 바다 쪽으로 기울어 자라고, 고운 모래 만에 큰 바다거북이 알을 낳으러 오른다. 앞바다 물결 위로 고래가 숨을 뿜는다.",
+      "target": "tools/nature_gifs/sources/srilanka.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of southern Sri Lanka coast: curved golden sandy bay, coconut palms leaning over the sea, a small sea turtle near the waterline and a very distant whale spout. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-7ed80980-f4a1-4bde-8c94-3947d3b066e7.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/srilanka.gif",
+        "images/discovery-ends/srilanka.jpg",
+        "images/discovery-sheets/srilanka.webp"
+      ]
+    },
+    {
+      "id": "seychelles",
+      "name": "세이셸 제도",
+      "kind": "nature",
+      "description": "사람이 살지 않는 화강암 섬들이 바다 한가운데 솟아 있다. 둥글게 깎인 잿빛 바위 사이 모래밭에 거대한 거북이 느릿느릿 걷는다.",
+      "target": "tools/nature_gifs/sources/seychelles.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Seychelles: massive smooth rounded pale grey granite boulders along a white sand cove, dense tropical foliage, turquoise water and a small giant tortoise on the sand. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-bc8ce6f3-457b-4cbd-a1a5-3a852ce67d7e.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/seychelles.gif",
+        "images/discovery-ends/seychelles.jpg",
+        "images/discovery-sheets/seychelles.webp"
+      ]
+    },
+    {
+      "id": "zanzibar",
+      "name": "잔지바르 섬",
+      "kind": "nature",
+      "description": "섬 북쪽 끝 바닷가에 산호 모래가 눈처럼 희고, 썰물 때면 바다가 멀리 물러나 해초밭이 드러난다. 삼각돛을 단 배들이 노을 속을 미끄러진다.",
+      "target": "tools/nature_gifs/sources/zanzibar.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of northern Zanzibar: dazzling white coral sand, shallow tidal sea with long exposed seagrass flats, palms and one tiny distant wooden lateen dhow. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-f2ebf017-47b2-458b-af6e-e263583f520a.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/zanzibar.gif",
+        "images/discovery-ends/zanzibar.jpg",
+        "images/discovery-sheets/zanzibar.webp"
+      ]
+    },
+    {
+      "id": "mauritius",
+      "name": "모리셔스",
+      "kind": "nature",
+      "description": "산호초가 섬을 띠처럼 둘러 바깥 파도는 하얗게 부서지고 안쪽 물은 거울처럼 잔잔하다. 숲에는 날지 못하는 커다란 새가 사람을 겁내지 않고 걸어 다닌다.",
+      "target": "tools/nature_gifs/sources/mauritius.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Mauritius before settlement: a continuous ring of offshore coral reef with breaking white surf, calm turquoise lagoon, lush island with angular volcanic mountains, a small dodo at the forest edge. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-2e85a042-9ac0-4617-b5ad-a059ddeca98c.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/mauritius.gif",
+        "images/discovery-ends/mauritius.jpg",
+        "images/discovery-sheets/mauritius.webp"
+      ]
+    },
+    {
+      "id": "okinawa",
+      "name": "오키나와",
+      "kind": "nature",
+      "description": "산호초가 둘러싼 섬의 서쪽 바닷가는 물빛이 엷은 비취색이다. 붉은 기와집 지붕마다 사자 탈을 쓴 수호상이 바다를 내려다본다.",
+      "target": "tools/nature_gifs/sources/okinawa.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Okinawa west coast: pale jade lagoon within a fringing coral reef, low subtropical hills and a tiny old Ryukyu hamlet with red clay tile roofs. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-c5803ef5-7da0-4502-9a0b-8212f0b71e1f.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/okinawa.gif",
+        "images/discovery-ends/okinawa.jpg",
+        "images/discovery-sheets/okinawa.webp"
+      ]
+    },
+    {
+      "id": "jeju",
+      "name": "제주도",
+      "kind": "nature",
+      "description": "한라산이 섬 한가운데 우뚝 서고, 서쪽 바닷가에는 흰 모래 너머로 물빛이 옥색에서 쪽빛으로 바뀐다. 검은 현무암 돌담 사이로 바람이 끊이지 않는다.",
+      "target": "tools/nature_gifs/sources/jeju.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Jeju Hyeopjae western beach: white sand, black basalt shore rocks and dry stone walls, jade to indigo water, small Biyangdo islet offshore, broad distant Hallasan volcano, no coconut palms. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-c926b496-aa0a-4586-a5ed-a708b44f828e.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/jeju.gif",
+        "images/discovery-ends/jeju.jpg",
+        "images/discovery-sheets/jeju.webp"
+      ]
+    },
+    {
+      "id": "mallorca",
+      "name": "마요르카 섬",
+      "kind": "nature",
+      "description": "섬 북쪽 끝 절벽 아래로 소나무 숲이 바다까지 내려오고, 작은 만마다 물이 유리처럼 맑다. 바위 언덕에는 올리브와 아몬드 나무가 줄지어 있다.",
+      "target": "tools/nature_gifs/sources/mallorca.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of northern Mallorca Formentor: high limestone headlands and pine forest descending to glass-clear tiny coves, olive and almond groves. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-c4b9280e-e900-4ae5-902f-08243e7b97b0.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/mallorca.gif",
+        "images/discovery-ends/mallorca.jpg",
+        "images/discovery-sheets/mallorca.webp"
+      ]
+    },
+    {
+      "id": "ibiza",
+      "name": "이비자",
+      "kind": "nature",
+      "description": "소나무가 덮인 낮은 섬의 바닷가마다 하얀 모래와 투명한 물이 있다. 남쪽 들판에는 소금밭이 햇빛에 눈부시게 빛난다.",
+      "target": "tools/nature_gifs/sources/ibiza.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Ibiza before modern development: low pine-covered Mediterranean island, broad white sandy cove, clear blue sea and modest traditional salt pans visible in the southern flatlands. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-de72aaf4-0580-4ecc-bd97-4af4e5f43815.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/ibiza.gif",
+        "images/discovery-ends/ibiza.jpg",
+        "images/discovery-sheets/ibiza.webp"
+      ]
+    },
+    {
+      "id": "sardinia",
+      "name": "사르디니아",
+      "kind": "nature",
+      "description": "섬 북동쪽 바닷가에 바람에 깎인 화강암 바위들이 늘어서고, 그 사이 작은 만의 물빛이 에메랄드처럼 짙다. 물이 맑아 바닥 모래 무늬가 그대로 비친다.",
+      "target": "tools/nature_gifs/sources/sardinia.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of northeastern Sardinia: wind-carved pinkish granite boulders, Mediterranean scrub, tiny emerald-water inlets with clear visible rippled sand. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-0fb1f63a-8630-4cc3-ad9b-9c3997ae81a0.png",
+      "source_size": [
+        2162,
+        727
+      ],
+      "files": [
+        "images/discoveries/sardinia.gif",
+        "images/discovery-ends/sardinia.jpg",
+        "images/discovery-sheets/sardinia.webp"
+      ]
+    },
+    {
+      "id": "capri",
+      "name": "카프리",
+      "kind": "nature",
+      "description": "나폴리 만 끝의 바위섬 절벽 아래 낮은 굴 입구가 있다. 배를 눕혀 들어가면 굴 안의 물이 등불을 켠 듯 파랗게 빛난다.",
+      "target": "tools/nature_gifs/sources/capri.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Capri Blue Grotto: view from inside the low natural limestone sea cave across intensely luminous blue water toward the small low sea entrance; ancient natural cavern, no constructed doorway. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6bc63cc4-5d51-4d5f-b3a7-240eaa04acf1.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/capri.gif",
+        "images/discovery-ends/capri.jpg",
+        "images/discovery-sheets/capri.webp"
+      ]
+    },
+    {
+      "id": "sicily",
+      "name": "시칠리아",
+      "kind": "nature",
+      "description": "섬 동쪽 바닷가 벼랑 위 마을 아래로 작은 섬 하나가 모래톱으로 이어져 있다. 멀리 에트나산이 연기를 피우고, 레몬과 오렌지 향이 바닷바람에 실려 온다.",
+      "target": "tools/nature_gifs/sources/sicily.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Sicily Taormina coast: Isola Bella rocky green islet joined to shore by a thin sandy tombolo, steep coastal cliffs, distant smoking Mount Etna and citrus groves. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-10e21f97-5132-42e2-9365-cd4fa4c769ad.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/sicily.gif",
+        "images/discovery-ends/sicily.jpg",
+        "images/discovery-sheets/sicily.webp"
+      ]
+    },
+    {
+      "id": "malta",
+      "name": "몰타",
+      "kind": "nature",
+      "description": "두 섬 사이 좁은 물길에 바닥 모래가 다 비치는 하늘빛 석호가 있다. 노란 석회암 절벽이 둘러서서 바람을 막는다.",
+      "target": "tools/nature_gifs/sources/malta.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Malta Comino Blue Lagoon: narrow pale cyan lagoon between low ochre limestone islands, bare rocky headlands, clear water revealing the sandy seabed. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-2a67c422-da87-42d7-98e4-557be7f748d3.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/malta.gif",
+        "images/discovery-ends/malta.jpg",
+        "images/discovery-sheets/malta.webp"
+      ]
+    },
+    {
+      "id": "milos",
+      "name": "밀로스",
+      "kind": "nature",
+      "description": "바닷가 바위가 달 표면처럼 하얗고 매끈하게 굽이친다. 하얀 바위 사이로 바닷물이 쪽빛으로 고이고, 섬 곳곳에 바닷속으로 이어지는 굴이 있다.",
+      "target": "tools/nature_gifs/sources/milos.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Milos Sarakiniko: flowing smooth brilliant white volcanic rock formations and small sea caves around deep cobalt-blue water, sparse dry vegetation. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-c7124aaf-a991-467a-96f8-f4d5e76a5973.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/milos.gif",
+        "images/discovery-ends/milos.jpg",
+        "images/discovery-sheets/milos.webp"
+      ]
+    },
+    {
+      "id": "santorini",
+      "name": "산토리니",
+      "kind": "nature",
+      "description": "바다 한가운데 둥글게 빠진 화산 분화구 둘레로 깎아지른 절벽이 서 있다. 절벽 꼭대기에 하얀 집들이 눈처럼 얹혀 있고, 노을이 분화구 바다를 붉게 물들인다.",
+      "target": "tools/nature_gifs/sources/santorini.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Santorini before modern tourism: immense semicircular dark volcanic caldera cliffs surrounding deep blue water, sparse small simple whitewashed medieval houses atop the rim; no modern hotels or swimming pools. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-edaf9f25-af05-4c33-ae17-509d686ff851.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/santorini.gif",
+        "images/discovery-ends/santorini.jpg",
+        "images/discovery-sheets/santorini.webp"
+      ]
+    },
+    {
+      "id": "madeira",
+      "name": "마데이라 섬",
+      "kind": "nature",
+      "description": "바다에서 곧장 솟은 초록 산비탈에 계단 밭과 물길이 층층이 걸려 있다. 절벽마다 꽃이 흐드러지고, 사철 봄처럼 따뜻하다.",
+      "target": "tools/nature_gifs/sources/madeira.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Madeira: steep lush green mountains rising directly from the Atlantic, small cultivated terraces and narrow old irrigation channels, tall sea cliffs and native flowering vegetation. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-cbb800f3-b647-475e-9b37-e1082bef3805.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/madeira.gif",
+        "images/discovery-ends/madeira.jpg",
+        "images/discovery-sheets/madeira.webp"
+      ]
+    },
+    {
+      "id": "azores",
+      "name": "아조레스 제도",
+      "kind": "nature",
+      "description": "대서양 한가운데 섬의 큰 분화구 안에 호수 두 개가 나란히 고여 있다. 하나는 푸르고 하나는 초록빛이며, 둘레 산비탈에 수국이 울타리처럼 핀다.",
+      "target": "tools/nature_gifs/sources/azores.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Azores Sete Cidades: two adjacent blue and green lakes enclosed by one broad lush volcanic caldera, rolling fern-covered slopes, mist and distant Atlantic coastline. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-44686357-fa84-44e4-a8e9-da3f9660c55b.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/azores.gif",
+        "images/discovery-ends/azores.jpg",
+        "images/discovery-sheets/azores.webp"
+      ]
+    },
+    {
+      "id": "skye",
+      "name": "스카이섬",
+      "kind": "nature",
+      "description": "안개 낀 섬에 검은 바위 봉우리가 톱날처럼 솟고, 골짜기 물웅덩이는 바닥까지 하늘빛으로 맑다. 바닷가 절벽에서 폭포가 바다로 곧장 떨어진다.",
+      "target": "tools/nature_gifs/sources/skye.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Isle of Skye: rugged dark Cuillin mountains, sweeping green moorland, steep sea cliffs and a cold indigo inlet under shifting clouds; no palm trees. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-c44f3f1d-3afc-453b-967a-51973cea548d.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/skye.gif",
+        "images/discovery-ends/skye.jpg",
+        "images/discovery-sheets/skye.webp"
+      ]
+    },
+    {
+      "id": "bahamas",
+      "name": "바하마",
+      "kind": "nature",
+      "description": "낮은 산호섬들이 줄지어 떠 있고, 얕은 바다가 수십 리에 걸쳐 투명한 하늘빛이다. 바닷가 모래에 연분홍빛이 감돌고 거북이 물속을 미끄러진다.",
+      "target": "tools/nature_gifs/sources/bahamas.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Bahamas: low flat sandy islands and mangrove cays, very shallow translucent turquoise banks in long sandbar patterns, darker blue channels. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-22a2345f-5a8c-4be0-ba9f-650a2fad7ba0.png",
+      "source_size": [
+        2170,
+        725
+      ],
+      "files": [
+        "images/discoveries/bahamas.gif",
+        "images/discovery-ends/bahamas.jpg",
+        "images/discovery-sheets/bahamas.webp"
+      ]
+    },
+    {
+      "id": "jamaica",
+      "name": "자메이카 섬",
+      "kind": "nature",
+      "description": "푸른 산줄기가 섬 등뼈처럼 이어지고, 북쪽 바닷가에는 맑은 물이 산에서 흘러내려 바다로 떨어진다. 하얀 모래만 너머 물빛이 연두에서 남색으로 짙어진다.",
+      "target": "tools/nature_gifs/sources/jamaica.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Jamaica north coast before tourism: lush mountainous green island with broad golden-white sandy bay, coconut groves, small river reaching the turquoise sea. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-ec0672f2-9010-40b0-b4a6-b09f8258366d.png",
+      "source_size": [
+        2170,
+        725
+      ],
+      "files": [
+        "images/discoveries/jamaica.gif",
+        "images/discovery-ends/jamaica.jpg",
+        "images/discovery-sheets/jamaica.webp"
+      ]
+    },
+    {
+      "id": "dominica",
+      "name": "도미니카",
+      "kind": "nature",
+      "description": "산이 바다까지 가파르게 내려오고, 숲이 너무 짙어 섬 전체가 초록 이끼처럼 보인다. 골짜기에서 더운 물이 끓어오르는 호수와 폭포가 숨어 있다.",
+      "target": "tools/nature_gifs/sources/dominica.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Dominica: steep rainforest-covered volcanic mountains, waterfalls reaching a dark rugged coastal cove, humid mists, deep blue Caribbean Sea; no broad white resort beach. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-28771a88-90bb-4511-b798-f8706fc18ba8.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/dominica.gif",
+        "images/discovery-ends/dominica.jpg",
+        "images/discovery-sheets/dominica.webp"
+      ]
+    },
+    {
+      "id": "stlucia",
+      "name": "세인트루시아",
+      "kind": "nature",
+      "description": "바닷가에 뾰족한 쌍둥이 산이 하늘로 솟아 있다. 산 아래 숲에서 더운 김과 유황 냄새가 오르고, 그 앞 바다는 산호가 비칠 만큼 맑다.",
+      "target": "tools/nature_gifs/sources/stlucia.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Saint Lucia: two distinct steep pointed Piton volcanic peaks beside a lush coastal bay, small sandy crescent and dense rainforest. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-dbdf7787-f0b8-4fc4-a8e2-90aeda76460c.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/stlucia.gif",
+        "images/discovery-ends/stlucia.jpg",
+        "images/discovery-sheets/stlucia.webp"
+      ]
+    },
+    {
+      "id": "grenada",
+      "name": "그레나다",
+      "kind": "nature",
+      "description": "섬 남서쪽에 하얀 모래밭이 한 줄로 길게 휘어 있고, 언덕에는 향긋한 나무들이 숲을 이룬다. 물이 따뜻하고 잔잔해 아이도 걸어 들어갈 만하다.",
+      "target": "tools/nature_gifs/sources/grenada.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Grenada: green rounded volcanic hills behind a long curved pale beach, tropical rainforest and quiet clear Caribbean water, no modern structures. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-4fcbb9b3-ab34-4170-b2e3-e8dd01bc3928.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/grenada.gif",
+        "images/discovery-ends/grenada.jpg",
+        "images/discovery-sheets/grenada.webp"
+      ]
+    },
+    {
+      "id": "aruba",
+      "name": "아루바",
+      "kind": "nature",
+      "description": "비가 적은 낮은 섬 바닷가에 눈부신 흰 모래가 펼쳐지고, 바람에 한쪽으로 휜 나무들이 서 있다. 바다가 잔잔해 물속 모래 무늬가 그대로 보인다.",
+      "target": "tools/nature_gifs/sources/aruba.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Aruba: dry low Caribbean island, wind-bent divi-divi trees, cactus and scrub behind white sand, intense turquoise sea; arid landscape, not tropical jungle. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-2d031bea-02b5-4251-9865-e3287a0bc4ef.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/aruba.gif",
+        "images/discovery-ends/aruba.jpg",
+        "images/discovery-sheets/aruba.webp"
+      ]
+    },
+    {
+      "id": "goldenisles",
+      "name": "골든 아일즈",
+      "kind": "nature",
+      "description": "바닷가 늪지 앞에 낮은 섬들이 줄지어 있고, 오래된 참나무 가지에 회색 이끼가 커튼처럼 늘어져 있다. 해 질 녘 갈대밭이 황금빛으로 물든다.",
+      "target": "tools/nature_gifs/sources/goldenisles.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Georgia Golden Isles before colonial settlement: low Atlantic barrier islands, golden sand dunes, extensive salt marsh tidal creeks, maritime live oak forest draped with Spanish moss. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-7f3f0349-d377-4ccf-a2be-2f6dad6cd05d.png",
+      "source_size": [
+        2170,
+        725
+      ],
+      "files": [
+        "images/discoveries/goldenisles.gif",
+        "images/discovery-ends/goldenisles.jpg",
+        "images/discovery-sheets/goldenisles.webp"
+      ]
+    },
+    {
+      "id": "maui",
+      "name": "마우이",
+      "kind": "nature",
+      "description": "거대한 화산이 섬 한쪽을 차지하고, 서쪽 바닷가 앞바다에서는 겨울마다 혹등고래가 새끼를 데리고 물을 뿜는다. 산꼭대기 분화구 위로 해가 구름바다를 뚫고 뜬다.",
+      "target": "tools/nature_gifs/sources/maui.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Maui: broad Haleakala volcanic mountain in the distance, lush green valleys opening to a long golden sandy bay, offshore deep blue Pacific water and breaking white surf. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-e895da26-3fb5-4eb2-ae1b-fc5f20b8f5d5.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/maui.gif",
+        "images/discovery-ends/maui.jpg",
+        "images/discovery-sheets/maui.webp"
+      ]
+    },
+    {
+      "id": "oahu",
+      "name": "오아후",
+      "kind": "nature",
+      "description": "섬 북쪽 바닷가에 겨울이면 집채만 한 파도가 둥글게 말려 부서진다. 섬사람들이 나무판을 타고 그 파도 위를 미끄러져 내려온다.",
+      "target": "tools/nature_gifs/sources/oahu.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Oahu north shore, not Waikiki: tall curling white ocean waves approaching an open sandy beach, green sharp ridges far inland, scattered coastal palms, no Diamond Head foreground. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-4c7d30c6-6c4e-4cbb-b85e-1a46378148d3.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/oahu.gif",
+        "images/discovery-ends/oahu.jpg",
+        "images/discovery-sheets/oahu.webp"
+      ]
+    },
+    {
+      "id": "fiji",
+      "name": "피지 제도",
+      "kind": "nature",
+      "description": "수백 개 섬 둘레로 산호초가 겹겹이 이어지고, 작은 모래섬마다 야자 몇 그루가 서 있다. 물속은 부드러운 산호가 꽃밭처럼 흔들린다.",
+      "target": "tools/nature_gifs/sources/fiji.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Fiji: scattered emerald volcanic islands surrounded by fringing coral reefs, white beaches, clear turquoise lagoons, tiny distant traditional thatched village. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-881cc3c7-9ac5-4325-8889-40109a3034b5.png",
+      "source_size": [
+        2170,
+        725
+      ],
+      "files": [
+        "images/discoveries/fiji.gif",
+        "images/discovery-ends/fiji.jpg",
+        "images/discovery-sheets/fiji.webp"
+      ]
+    },
+    {
+      "id": "tahiti",
+      "name": "타히티",
+      "kind": "nature",
+      "description": "초록 산봉우리가 구름에 걸려 있고, 바닷가 모래는 화산 돌이 부서져 검게 반짝인다. 섬사람들은 꽃을 귀에 꽂고 노래하며 배를 맞는다.",
+      "target": "tools/nature_gifs/sources/tahiti.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Tahiti: very tall lush jagged volcanic interior mountains behind a palm-fringed dark volcanic shoreline, calm turquoise lagoon inside a reef, no overwater bungalows. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-8ba37d30-6f42-4492-8c2e-6362425ff0ca.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "files": [
+        "images/discoveries/tahiti.gif",
+        "images/discovery-ends/tahiti.jpg",
+        "images/discovery-sheets/tahiti.webp"
+      ]
+    },
+    {
+      "id": "borabora",
+      "name": "보라보라",
+      "kind": "nature",
+      "description": "검은 화산 봉우리 하나를 산호초 고리가 둘러싸고, 그 안쪽 석호는 여러 겹의 푸른빛으로 빛난다. 고리 위 작은 모래섬마다 야자가 서 있다.",
+      "target": "tools/nature_gifs/sources/borabora.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Bora Bora before European development: Mount Otemanu dramatic twin volcanic crags inside a luminous turquoise lagoon enclosed by a low white sand coral motu ring, no bungalows. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6bdf14c6-ef73-40ae-a826-883c1f009bb2.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/borabora.gif",
+        "images/discovery-ends/borabora.jpg",
+        "images/discovery-sheets/borabora.webp"
+      ]
+    },
+    {
+      "id": "cookisles",
+      "name": "쿡 제도",
+      "kind": "nature",
+      "description": "삼각형 산호초 안에 넓고 얕은 석호가 펼쳐지고, 물빛이 하늘빛과 옥빛으로 갈려 반짝인다. 썰물 때면 모래톱이 길게 드러나 걸어서 작은 섬으로 건너간다.",
+      "target": "tools/nature_gifs/sources/cookisles.png",
+      "prompt": "Use case: stylized-concept. Asset type: historical exploration game nature discovery panorama. Create one uninterrupted extremely wide 3:1 panoramic landscape of Cook Islands Aitutaki: broad shallow turquoise triangular lagoon dotted with low palm-covered coral motu and long bright white sandbars, distant low lush main island. Richly detailed hand-painted watercolor with delicate ink linework, refined historical travel sketchbook, believable geography and natural texture. Distant elevated viewpoint, stable horizon, generous scenery extending left and right for a cinematic camera pan. Balanced early daylight. Set before modern development. No modern structures, resorts, piers, modern boats, tourists, signs, text, labels, panels, collage, frame, border, logo or watermark. Output landscape panorama, approximately 2048x683.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-cc22302a-dc63-4cc6-9589-4ec5bd3e7018.png",
+      "source_size": [
+        2171,
+        724
+      ],
+      "files": [
+        "images/discoveries/cookisles.gif",
+        "images/discovery-ends/cookisles.jpg",
+        "images/discovery-sheets/cookisles.webp"
+      ]
+    },
+    {
+      "id": "constbaths",
+      "name": "콘스탄티누스 욕장",
+      "kind": "ruin",
+      "description": "퀴리날레 언덕 위에 콘스탄티누스 황제가 지은 로마의 마지막 큰 공중목욕탕. 뜨거운 물방·미지근한 물방·찬물방이 차례로 이어졌고, 둥근 천장 아래 대리석 기둥이 줄지어 섰다. 지금은 무너진 벽돌 아치와 반쯤 묻힌 기둥 사이로 염소가 풀을 뜯는다. 언덕의 귀족들이 돌을 하나둘 뜯어 가 새 저택을 짓는 중이라 머지않아 사라질 것이다.",
+      "target": "tools/ruin_gifs/v3/master/constbaths.png",
+      "prompt": "Use case: historical-scene. Asset type: game discovery animation master storyboard. Create ONE EXACT 4-column by 4-row regular grid, exactly 16 equally sized rectangular panels, overall landscape 4:3 image at least 2048x1536. Read left to right, top to bottom. All panels depict the SAME coherent historical site: Baths of Constantine on Rome's Quirinal Hill: Roman brick barrel vaults, semicircular bath chambers, marble columns and dolphin floor mosaics. Real-world views show the partly collapsed overgrown ruins as encountered around 1500, not a complete modern reconstruction. Panels 1-5 only: tabletop miniature construction on an old wooden drafting desk with parchment architectural drawings: 1 foundations laid out, 2 masonry rising, 3 structure, 4 facade and roof details, 5 complete model. Panel 6: match-cut to the full-scale actual historical site in its period condition. 7 approach its entrance, 8 eye-level view through its actual central space, 9 a second interior view or open ruined precinct if no surviving interior, 10 exit looking out. Panels 11-16: wide full-building views progressing around the site from different angles, 11 midday, 12 late afternoon, 13 sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. No invented rooms for ruins, facades or walls. Keep historical materials, building silhouette and geography consistent. Richly detailed painterly historical illustration, warm cinematic natural light, convincing materials. Keep whole roofs and towers inside each panel. Thin straight grid dividers only. No text, letters, captions, labels, panel numbers, logos, watermark, modern buildings or modern machines.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-7a8ce602-995f-440c-9a37-0f91603915bb.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "files": [
+        "images/discoveries/constbaths.gif",
+        "images/discovery-ends/constbaths.jpg",
+        "images/discovery-sheets/constbaths.webp"
+      ]
+    },
+    {
+      "id": "septizodium",
+      "name": "셉티조디움",
+      "kind": "ruin",
+      "description": "팔라티노 언덕 남쪽 끝, 아피아 가도로 들어오는 사람들을 맞으려고 셉티미우스 세베루스 황제가 세운 거대한 기둥 벽. 대리석 기둥이 세 층으로 겹겹이 서서 극장 무대의 뒷벽처럼 보인다. 이름은 일곱 행성의 신을 모셨다는 데서 나왔다고 한다. 뒤에 아무 건물도 없는 「앞모습뿐인 건물」이다.",
+      "target": "tools/ruin_gifs/v3/master/septizodium-v3.png",
+      "prompt": "Use case: historical-scene. Make a NEW 4-column x 4-row regular storyboard, 16 equal rectangular panels, overall landscape 4:3. Depict the Septizodium of Rome as a tall shallow freestanding THREE-STORIED marble colonnade facade, no enclosed building behind it. CRITICAL VISUAL: THREE distinct equal-height levels of full-height Corinthian columns, one above another. Bottom level: columns on the ground. Middle level: columns on the first elevated balcony. TOP THIRD LEVEL: another full row of tall columns on a second elevated balcony. Total THREE separate horizontal cornices and THREE rows of columns, no roof. The height of the complete facade is roughly as large as its width, making space for all THREE stories. In complete frontal views show six columns on EACH of the three levels, eighteen columns altogether. Keep this exact three-tier silhouette in every completed panel. Do not create a two-story building. Sequence reading order: 1 foundations of miniature on wooden drafting table, 2 bottom colonnade built, 3 middle colonnade built, 4 THIRD TOP COLONNADE being completed, 5 complete THREE-STORY model; 6 complete real-size marble THREE-STORY facade standing at the ancient Palatine edge; 7 approach the lowest columns; 8 look upward through the open colonnades showing THREE stories; 9 walk along ground floor, 10 look out through columns; 11 distant whole THREE-STORY facade in daylight, 12 different view late afternoon, 13 three-tier whole facade at sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. Richly detailed painterly historical exploration game art, warm stone and cypress scenery. No text, labels, panel numbers or watermarks. Entire structure visible with generous space in all wide shots.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-c556a76a-98d5-4a1e-8950-51af36a1a736.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "previous_versions": [
+        {
+          "target": "tools/ruin_gifs/v3/master/septizodium.png",
+          "prompt": "Use case: historical-scene. Asset type: game discovery animation master storyboard. Create ONE EXACT 4-column by 4-row regular grid, exactly 16 equally sized rectangular panels, overall landscape 4:3 image at least 2048x1536. Read left to right, top to bottom. All panels depict the SAME coherent historical site: Septizodium at the southern Palatine in Rome: a tall freestanding three-storey theatrical facade of stacked Corinthian marble columns and entablatures, no building behind it, partly ruined as it stood before demolition in 1588. Do not replace it with the Colosseum or a round temple. Panels 1-5 only: tabletop miniature construction on an old wooden drafting desk with parchment architectural drawings: 1 foundations laid out, 2 masonry rising, 3 structure, 4 facade and roof details, 5 complete model. Panel 6: match-cut to the full-scale actual historical site in its period condition. 7 approach its entrance, 8 eye-level view through its actual central space, 9 a second interior view or open ruined precinct if no surviving interior, 10 exit looking out. Panels 11-16: wide full-building views progressing around the site from different angles, 11 midday, 12 late afternoon, 13 sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. No invented rooms for ruins, facades or walls. Keep historical materials, building silhouette and geography consistent. Richly detailed painterly historical illustration, warm cinematic natural light, convincing materials. Keep whole roofs and towers inside each panel. Thin straight grid dividers only. No text, letters, captions, labels, panel numbers, logos, watermark, modern buildings or modern machines.",
+          "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-0f978f29-f1d9-4413-ab6b-3dbc2e8d59f1.png"
+        },
+        {
+          "target": "tools/ruin_gifs/v3/master/septizodium-v2.png",
+          "prompt": "Edit target: the supplied 4x4 historical storyboard of the Roman Septizodium. Correct only the architectural floor count in every panel: the fully built facade must have exactly THREE complete vertically stacked colonnaded storeys, THREE separate rows of tall Corinthian columns, with THREE full entablatures. Ground-floor columns support a first full entablature, second-floor columns rise above that to a second entablature, THIRD-FLOOR COLUMNS stand above the second entablature and support the third top cornice. The third storey must be a real full-height colonnaded floor, not a parapet, statue row or tiny attic. Keep the facade freestanding and shallow with no rooms behind it. Construction panels progress toward this same three-storey facade. Pull the camera back enough to contain all three storeys fully in every completed model and exterior view. Preserve the EXACT regular 4 columns x 4 rows, 16 equally sized panels, tabletop-to-real-scale progression, entrance and passage views and midday-sunset-night-dawn-sunrise sequence. Painterly realistic historical illustration. Overall landscape 4:3, 2048x1536 or larger. No panel labels, no writing, no watermarks. Do not retain the incorrect two-storey facade.",
+          "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-8662612d-e558-4043-b44e-e021a7b9bd52.png"
+        }
+      ],
+      "files": [
+        "images/discoveries/septizodium.gif",
+        "images/discovery-ends/septizodium.jpg",
+        "images/discovery-sheets/septizodium.webp"
+      ]
+    },
+    {
+      "id": "worcesterwall",
+      "name": "우스터 성벽",
+      "kind": "ruin",
+      "description": "세번 강가의 우스터를 두른 성벽. 로마 사람들이 처음 흙벽을 쌓았고, 뒤에 붉은 사암 돌벽과 일곱 성문을 올렸다. 강 쪽에는 대성당이 성벽에 기대어 섰고, 성문마다 통행세를 걷는 문지기가 지킨다. 장미 전쟁 때도 이 벽이 도시를 지켰다.",
+      "target": "tools/ruin_gifs/v3/master/worcesterwall.png",
+      "prompt": "Use case: historical-scene. Asset type: game discovery animation master storyboard. Create ONE EXACT 4-column by 4-row regular grid, exactly 16 equally sized rectangular panels, overall landscape 4:3 image at least 2048x1536. Read left to right, top to bottom. All panels depict the SAME coherent historical site: Medieval Worcester city walls: red sandstone curtain walls with battlements and a fortified arched town gate beside the River Severn, Worcester Cathedral behind the river-facing wall, late medieval English town. No fantasy castle. Panels 1-5 only: tabletop miniature construction on an old wooden drafting desk with parchment architectural drawings: 1 foundations laid out, 2 masonry rising, 3 structure, 4 facade and roof details, 5 complete model. Panel 6: match-cut to the full-scale actual historical site in its period condition. 7 approach its entrance, 8 eye-level view through its actual central space, 9 a second interior view or open ruined precinct if no surviving interior, 10 exit looking out. Panels 11-16: wide full-building views progressing around the site from different angles, 11 midday, 12 late afternoon, 13 sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. No invented rooms for ruins, facades or walls. Keep historical materials, building silhouette and geography consistent. Richly detailed painterly historical illustration, warm cinematic natural light, convincing materials. Keep whole roofs and towers inside each panel. Thin straight grid dividers only. No text, letters, captions, labels, panel numbers, logos, watermark, modern buildings or modern machines.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6d0e17b9-9e54-47b0-88de-6a3036e10aba.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "files": [
+        "images/discoveries/worcesterwall.gif",
+        "images/discovery-ends/worcesterwall.jpg",
+        "images/discovery-sheets/worcesterwall.webp"
+      ]
+    },
+    {
+      "id": "manwoldae",
+      "name": "만월대",
+      "kind": "ruin",
+      "description": "송악산 남쪽 기슭, 고려 왕조 사백칠십 년의 도읍 개경의 왕궁 터. 산비탈을 따라 돌계단과 축대가 겹겹이 올라가고, 그 위에 정전 회경전의 주춧돌이 줄지어 남아 있다. 홍건적의 난(1361)에 불탄 뒤 다시 세우지 못했다. 보름달이 뜨면 빈 궁터에 달빛이 가득 찬다 하여 「만월대」라 부른다.",
+      "target": "tools/ruin_gifs/v3/master/manwoldae.png",
+      "prompt": "Use case: historical-scene. Asset type: game discovery animation master storyboard. Create ONE EXACT 4-column by 4-row regular grid, exactly 16 equally sized rectangular panels, overall landscape 4:3 image at least 2048x1536. Read left to right, top to bottom. All panels depict the SAME coherent historical site: Manwoldae Goryeo palace site at Kaesong below Songaksan: tiered grey stone terraces, grand stone stairways and rows of bare foundation stones on a green hillside. Model construction may reconstruct a restrained Goryeo palace with grey tiled hipped roofs; all full-scale views must show the empty ruined palace foundations after the 1361 fire, no standing modern Joseon palace. Panels 1-5 only: tabletop miniature construction on an old wooden drafting desk with parchment architectural drawings: 1 foundations laid out, 2 masonry rising, 3 structure, 4 facade and roof details, 5 complete model. Panel 6: match-cut to the full-scale actual historical site in its period condition. 7 approach its entrance, 8 eye-level view through its actual central space, 9 a second interior view or open ruined precinct if no surviving interior, 10 exit looking out. Panels 11-16: wide full-building views progressing around the site from different angles, 11 midday, 12 late afternoon, 13 sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. No invented rooms for ruins, facades or walls. Keep historical materials, building silhouette and geography consistent. Richly detailed painterly historical illustration, warm cinematic natural light, convincing materials. Keep whole roofs and towers inside each panel. Thin straight grid dividers only. No text, letters, captions, labels, panel numbers, logos, watermark, modern buildings or modern machines.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-70482010-5b37-43e7-8bd7-065031f326a7.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "files": [
+        "images/discoveries/manwoldae.gif",
+        "images/discovery-ends/manwoldae.jpg",
+        "images/discovery-sheets/manwoldae.webp"
+      ]
+    },
+    {
+      "id": "somnath",
+      "name": "솜나트 사원",
+      "kind": "ruin",
+      "description": "구자라트 남쪽 바닷가, 시바 신의 열두 빛기둥 가운데 첫째로 꼽히는 사원. 달의 신 소마가 시바에게 빌어 병을 고친 곳이라 「달의 주인」이라는 이름이 붙었다. 가즈니의 마흐무드를 비롯한 정복자들이 몇 번이나 부수고 약탈했지만, 그때마다 사람들이 다시 쌓았다. 사원 앞바다에서 남극까지 땅이 하나도 없다는 말이 전해진다.",
+      "target": "tools/ruin_gifs/v3/master/somnath.png",
+      "prompt": "Use case: historical-scene. Asset type: game discovery animation master storyboard. Create ONE EXACT 4-column by 4-row regular grid, exactly 16 equally sized rectangular panels, overall landscape 4:3 image at least 2048x1536. Read left to right, top to bottom. All panels depict the SAME coherent historical site: Somnath temple on the Gujarat Arabian Sea coast as a modest medieval Hindu stone temple repeatedly damaged and rebuilt: carved sandstone mandapa, shikhara shrine tower, waves and sea-facing enclosure; restrained medieval interpretation, not the modern twentieth-century monumental reconstruction. Panels 1-5 only: tabletop miniature construction on an old wooden drafting desk with parchment architectural drawings: 1 foundations laid out, 2 masonry rising, 3 structure, 4 facade and roof details, 5 complete model. Panel 6: match-cut to the full-scale actual historical site in its period condition. 7 approach its entrance, 8 eye-level view through its actual central space, 9 a second interior view or open ruined precinct if no surviving interior, 10 exit looking out. Panels 11-16: wide full-building views progressing around the site from different angles, 11 midday, 12 late afternoon, 13 sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. No invented rooms for ruins, facades or walls. Keep historical materials, building silhouette and geography consistent. Richly detailed painterly historical illustration, warm cinematic natural light, convincing materials. Keep whole roofs and towers inside each panel. Thin straight grid dividers only. No text, letters, captions, labels, panel numbers, logos, watermark, modern buildings or modern machines.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-4fa7dee2-4161-40cf-ba67-beba9c155476.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "files": [
+        "images/discoveries/somnath.gif",
+        "images/discovery-ends/somnath.jpg",
+        "images/discovery-sheets/somnath.webp"
+      ]
+    },
+    {
+      "id": "alnuri",
+      "name": "알 누리 대모스크",
+      "kind": "ruin",
+      "description": "티그리스 강가 모술의 대모스크. 장기 왕조의 누르 앗딘이 세웠다. 벽돌 무늬를 일곱 띠로 쌓아 올린 첨탑이 한쪽으로 눈에 띄게 기울어 「알 합바(곱사등이)」라고 부른다. 예언자가 하늘로 오를 때 첨탑이 고개 숙여 인사한 뒤로 그렇게 되었다고 사람들은 말한다.",
+      "target": "tools/ruin_gifs/v3/master/alnuri.png",
+      "prompt": "Use case: historical-scene. Asset type: game discovery animation master storyboard. Create ONE EXACT 4-column by 4-row regular grid, exactly 16 equally sized rectangular panels, overall landscape 4:3 image at least 2048x1536. Read left to right, top to bottom. All panels depict the SAME coherent historical site: Great al-Nuri Mosque in medieval Mosul: distinctive visibly leaning tall cylindrical brick al-Hadba minaret with seven decorative geometric bands, a low prayer hall and courtyard, old warm-toned Tigris city. Show its intact premodern appearance, not the modern destroyed ruins. Panels 1-5 only: tabletop miniature construction on an old wooden drafting desk with parchment architectural drawings: 1 foundations laid out, 2 masonry rising, 3 structure, 4 facade and roof details, 5 complete model. Panel 6: match-cut to the full-scale actual historical site in its period condition. 7 approach its entrance, 8 eye-level view through its actual central space, 9 a second interior view or open ruined precinct if no surviving interior, 10 exit looking out. Panels 11-16: wide full-building views progressing around the site from different angles, 11 midday, 12 late afternoon, 13 sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. No invented rooms for ruins, facades or walls. Keep historical materials, building silhouette and geography consistent. Richly detailed painterly historical illustration, warm cinematic natural light, convincing materials. Keep whole roofs and towers inside each panel. Thin straight grid dividers only. No text, letters, captions, labels, panel numbers, logos, watermark, modern buildings or modern machines.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-ef213d33-2004-49ec-a4e7-4b715bc45e32.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "files": [
+        "images/discoveries/alnuri.gif",
+        "images/discovery-ends/alnuri.jpg",
+        "images/discovery-sheets/alnuri.webp"
+      ]
+    },
+    {
+      "id": "aleppomosque",
+      "name": "알레포 대모스크",
+      "kind": "ruin",
+      "description": "알레포 성채 아래 시장 한가운데 선 우마이야 왕조의 대모스크. 세례자 요한의 아버지 즈가리야의 머리를 모셨다고 전해 「즈가리야 모스크」라고도 한다. 네모난 돌 첨탑은 다섯 층마다 무늬가 달라 이 도시에서 가장 아름다운 탑으로 꼽힌다. 넓은 안뜰의 흑백 대리석 바닥이 햇빛에 반짝인다.",
+      "target": "tools/ruin_gifs/v3/master/aleppomosque.png",
+      "prompt": "Use case: historical-scene. Asset type: game discovery animation master storyboard. Create ONE EXACT 4-column by 4-row regular grid, exactly 16 equally sized rectangular panels, overall landscape 4:3 image at least 2048x1536. Read left to right, top to bottom. All panels depict the SAME coherent historical site: Great Mosque of Aleppo before modern destruction: tall square five-tier carved stone Seljuk minaret, immense courtyard of alternating dark and pale geometric paving, arcaded prayer hall with low roofs, old Aleppo bazaar and citadel beyond. Never use a cylindrical minaret. Panels 1-5 only: tabletop miniature construction on an old wooden drafting desk with parchment architectural drawings: 1 foundations laid out, 2 masonry rising, 3 structure, 4 facade and roof details, 5 complete model. Panel 6: match-cut to the full-scale actual historical site in its period condition. 7 approach its entrance, 8 eye-level view through its actual central space, 9 a second interior view or open ruined precinct if no surviving interior, 10 exit looking out. Panels 11-16: wide full-building views progressing around the site from different angles, 11 midday, 12 late afternoon, 13 sunset, 14 moonlit night, 15 blue dawn, 16 sunrise. No invented rooms for ruins, facades or walls. Keep historical materials, building silhouette and geography consistent. Richly detailed painterly historical illustration, warm cinematic natural light, convincing materials. Keep whole roofs and towers inside each panel. Thin straight grid dividers only. No text, letters, captions, labels, panel numbers, logos, watermark, modern buildings or modern machines.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-5f9a559f-fda1-4470-9603-19e9006c796e.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "files": [
+        "images/discoveries/aleppomosque.gif",
+        "images/discovery-ends/aleppomosque.jpg",
+        "images/discovery-sheets/aleppomosque.webp"
+      ]
+    },
+    {
+      "id": "redshoes",
+      "name": "게르다의 빨간 구두",
+      "kind": "item",
+      "description": "동생을 찾아 북쪽 끝까지 걸어온 소녀가 「길을 잃은 아이를 만나면 그 아이 발에 맞을지도 몰라요」 하며 두고 간 빨간 구두 한 켤레.",
+      "target": "tools/addition_art/sources/redshoes.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a pair of worn little red leather shoes with rounded toes and simple straps, lovingly preserved medieval Scandinavian keepsake. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-9e7af2b8-129b-499a-8cd3-5ad568d9d37e.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/redshoes.webp"
+      ]
+    },
+    {
+      "id": "pinocchio_doll",
+      "name": "피노키오 인형",
+      "kind": "item",
+      "description": "제페토가 고래 배 속에서 난파선 판자로 깎은 나무 인형. 아들을 다시 못 볼까 봐 그 얼굴을 떠올리며 깎았다고 한다. 코가 조금 길다. 선실에서 뱃노래가 울리면 이따금 실에 매달린 팔다리를 들썩이며 춤을 춘다 — 그 춤사위에 노래가 더 신이 난다 (뱃노래 때 50% · 피로 풀림·규율 오름 ×1.5).",
+      "target": "tools/addition_art/sources/pinocchio_doll-v2.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small jointed carved wooden boy marionette with a long wooden nose, simple painted cap and clothes, visible wooden joints, handcrafted old Italian toy. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "tools/procedural_art/run_puppet.js",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "files": [
+        "images/items/pinocchio_doll.webp"
+      ],
+      "previous_versions": [
+        {
+          "target": "tools/addition_art/sources/pinocchio_doll.png",
+          "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small jointed carved wooden boy marionette with a long wooden nose, simple painted cap and clothes, visible wooden joints, handcrafted old Italian toy. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+          "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1350a-80af-7362-80cf-87f7d0c6c186\\exec-d0423e34-b47e-48c6-8090-14d927653889.png"
+        }
+      ],
+      "generator": "three.js (프로젝트의 기존 절차적 아이콘 제작기)",
+      "generation_note": "내장 이미지 생성 도구가 목각 인형 요청을 세 차례 거절하여 기존 3D 제작기로 나뭇결·관절·의복을 모델링했다.",
+      "generator_script": "tools/procedural_art/run_puppet.js"
+    },
+    {
+      "id": "buwaya_pearl",
+      "name": "누노의 흑진주",
+      "kind": "item",
+      "description": "라구나 호수의 늙은 악어가 물속에서 물어 올린 엄지손가락만 한 흑진주. 옛날 가라앉은 배의 보물이라고도, 호수 여신의 눈물이라고도 한다.",
+      "target": "tools/addition_art/sources/buwaya_pearl.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint one magnificent lustrous black pearl with subtle green-violet iridescence, large round smooth pearl, no jewelry setting. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6783c302-bdf0-4446-9830-84c9d9432b0d.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/buwaya_pearl.webp"
+      ]
+    },
+    {
+      "id": "babur_page",
+      "name": "바부르의 회고록 한 장",
+      "kind": "item",
+      "description": "무굴 제국을 세운 바부르가 손수 적은 회고록(『바부르나마』)의 한 장. 카불의 정원과 멜론, 파니파트의 화포 이야기가 차가타이 튀르크어로 빼곡하다. 「대포는 프랑크 사람의 것이 으뜸이라 들었다」는 줄이 보인다.",
+      "target": "tools/addition_art/sources/babur_page.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint one aged cream manuscript leaf with fine flowing Chagatai calligraphic ink marks and a small Mughal garden illustration, rolled corner, no modern notebook. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-fc7124f5-2c20-4399-8841-87dee8da4caa.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/babur_page.webp"
+      ]
+    },
+    {
+      "id": "colon_egg",
+      "name": "콜론의 달걀",
+      "kind": "item",
+      "description": "바르셀로나의 잔치에서 가져온 삶은 달걀. 밑동이 살짝 깨져 탁자 위에 꼿꼿이 선다. 「누군가 한 번 해 보이면 그 뒤엔 누구나 쉽다고 한다」는 이야기의 증거다. 먹으면 안 된다 — 이야깃거리니까.",
+      "target": "tools/addition_art/sources/colon_egg.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint one ordinary boiled white egg standing upright on its slightly cracked flattened bottom, subtle shell crack at base, no cup or stand. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-46d06630-97a4-4bf7-9b09-7b3541e96a4d.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/colon_egg.webp"
+      ]
+    },
+    {
+      "id": "cemi",
+      "name": "타이노의 세미",
+      "kind": "item",
+      "description": "히스파니올라의 타이노 사람들이 조상과 신령을 모시던 작은 돌 신상(세미). 세 꼭지 모양 돌에 커다란 눈이 새겨져 있다. 천연두가 휩쓸던 해, 제독의 의원이 돌본 마을의 추장 엔리키요가 건넸다.",
+      "target": "tools/addition_art/sources/cemi.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small ancient Taino three-pointed stone cemi idol, triangular rounded grey carved stone body and prominent large carved eyes, museum artifact. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-f88f4671-cae4-4050-ac35-ecd6716feef7.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/cemi.webp"
+      ]
+    },
+    {
+      "id": "luther_note",
+      "name": "루터의 수첩 한 장",
+      "kind": "item",
+      "description": "마그데부르크 사건을 함께 푼 젊은 루터가 찢어 준 수첩 한 장. 「면죄받은 자들은 왜 다시 죄를 짓는가 — 죄를 돈으로 미리 샀으니 죄가 아니라 여긴다. 참된 뉘우침은 금고에 떨어지는 동전 소리가 아니라 가슴에서 난다.」 아래쪽에 서툰 글씨로 「언젠가 이것을 교회 문에 붙이리라」라고 적혀 있다.",
+      "target": "tools/addition_art/sources/luther_note.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint one torn handwritten cream notebook leaf with dense sixteenth-century German ink marks, folded corner and uneven torn binding edge, no readable writing required. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-df767ecc-5e5f-4984-ba07-87933185f50b.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/luther_note.webp"
+      ]
+    },
+    {
+      "id": "principia",
+      "name": "『프린키피아』 초판",
+      "kind": "item",
+      "description": "1687년 런던에서 나온 아이작 뉴턴의 『자연철학의 수학적 원리』 초판. 라틴어로 빽빽이 적힌 세 권 — 운동의 법칙, 저항하는 매질 속의 운동, 그리고 「세계의 체계」. 달이 바다를 끌어당겨 밀물과 썰물이 생긴다는 장이 뱃사람의 눈을 끈다. 속표지에 「인쇄를 도운 바다의 벗에게 — I. N.」이라는 서명이 있다.",
+      "target": "tools/addition_art/sources/principia.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small group of three seventeenth-century brown leather-bound mathematical volumes, one open at an engraved geometric diagram of an orbit, gilt tooling and worn cream pages; no invented readable titles. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-dc5f1660-1e53-4f3d-aa1b-ab90be36f50f.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/principia.webp"
+      ]
+    },
+    {
+      "id": "fish_history",
+      "name": "『물고기의 역사』",
+      "kind": "item",
+      "description": "왕립 학회가 큰돈을 들여 찍었다가 하나도 팔리지 않은 윌러비의 물고기 도감. 그림은 아름답지만 아무도 사지 않았다. 이 책 때문에 학회 금고가 비어 『프린키피아』를 찍을 돈이 없었다.",
+      "target": "tools/addition_art/sources/fish_history-v2.png",
+      "prompt": "Edit target: the supplied transparent historical fish-book inventory icon. Preserve the exact illustrated fish, warm aged paper and brown leather binding. ZOOM OUT to show the whole book from its leftmost spine to its rightmost cover corner with all four cover corners fully visible. Restore the tiny cropped right cover edge naturally. Center it at only 70 percent of the square canvas width, leaving at least 15 percent completely transparent empty space on ALL four sides. No other objects, no floor, no backdrop, no drop shadow, no added text. Keep true transparent alpha, warm detailed hand-painted historical exploration game style.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-ef7402ce-5a33-4c38-873c-06c6b05dbeed.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "previous_versions": [
+        {
+          "target": "tools/addition_art/sources/fish_history.png",
+          "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a large open seventeenth-century natural-history folio showing beautifully engraved full fish specimens on aged cream paper, worn brown leather binding, no modern photographs. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+          "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6b06155f-4ecb-406f-9867-a4ebb788e868.png"
+        }
+      ],
+      "files": [
+        "images/items/fish_history.webp"
+      ]
+    },
+    {
+      "id": "teppo_chaire",
+      "name": "노부나가의 명물 차통",
+      "kind": "item",
+      "description": "오다 노부나가가 철포 삼백 자루의 값에 얹어 내린 작은 차통(차이레). 그 무렵 무장들은 공을 세우면 땅 대신 이런 다기를 받았고, 차통 하나를 성 하나보다 귀하게 여겼다.",
+      "target": "tools/addition_art/sources/teppo_chaire.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a tiny precious Japanese Sengoku tea caddy chaire: rounded dark brown glazed ceramic jar with a small ivory-colored lid, restrained irregular glaze, no handle or spout. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6d245f47-cb3b-46ef-9543-2b2264399eb4.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/teppo_chaire.webp"
+      ]
+    },
+    {
+      "id": "teppo_gourd",
+      "name": "히데요시의 금 표주박",
+      "kind": "item",
+      "description": "하시바 히데요시가 철포 삼백 자루의 값에 얹어 준 손바닥만 한 금 표주박. 싸움에 이길 때마다 깃대에 표주박을 하나씩 더 달았다는 그의 깃발 표지를 본떴다.",
+      "target": "tools/addition_art/sources/teppo_gourd.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a palm-sized brilliant gold double-lobed Japanese hyotan gourd ornament with narrow waist, red cord at the neck, finely worked hammered metal. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-29fddfb7-f06b-423f-bb4c-b2539380227a.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/teppo_gourd.webp"
+      ]
+    },
+    {
+      "id": "kongo_raffia",
+      "name": "콩고 왕의 라피아 천",
+      "kind": "item",
+      "description": "라피아 야자 잎의 실로 짠 천. 콩고 사람들은 이 천을 돈처럼 쓰고, 왕실 직조공이 짠 것은 벨벳처럼 부드럽고 무늬가 촘촘하다. 콩고 왕이 처음 사귄 남쪽 바다의 선장에게 보낸 선물.",
+      "target": "tools/addition_art/sources/kongo_raffia.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a folded royal Kongo raffia cloth, rich ochre-brown natural fibers with dense dark geometric zigzag and diamond patterns, soft velvet-like woven texture. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-2ae5deb6-d1f7-4a4b-9922-bf2b187d09bd.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/kongo_raffia.webp"
+      ]
+    },
+    {
+      "id": "kongo_horn",
+      "name": "주앙 1세의 상아 뿔피리",
+      "kind": "item",
+      "description": "통 상아를 깎아 만든 콩고 왕실의 뿔피리(음풍기). 왕이 행차할 때 앞에서 분다. 세례를 받은 주앙 1세가 두 왕국을 이은 제독에게 내린 것으로, 십자가 무늬가 새로 새겨져 있다.",
+      "target": "tools/addition_art/sources/kongo_horn.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint an old royal Kongo side-blown ivory oliphant horn carved from one curved tusk, small side mouthpiece and incised geometric ornament with a small cross, aged warm ivory. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-5bc08ef3-43cd-4a74-847f-a6bfc7d4944a.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/kongo_horn.webp"
+      ]
+    },
+    {
+      "id": "sky_derev",
+      "name": "『천구의 회전에 관하여』 초판",
+      "kind": "item",
+      "description": "1543년 뉘른베르크 페트레이우스 인쇄소에서 찍은 코페르니쿠스의 책. 해가 한가운데 있고 땅이 그 둘레를 돈다고 썼다. 제독이 원고를 실어 날랐고, 첫 책 가운데 하나를 받았다.",
+      "target": "tools/addition_art/sources/sky_derev.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint an open sixteenth-century brown leather astronomy book with a simple heliocentric diagram of concentric circular planetary orbits around a small central sun, cream paper and red page edges. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-717e8649-27cf-48e3-b4ff-b76599b672a5.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/sky_derev.webp"
+      ]
+    },
+    {
+      "id": "sky_kcompass",
+      "name": "케플러의 편차 나침반",
+      "kind": "item",
+      "description": "바늘 둘레에 바다마다 북극성에서 비켜 가는 각도를 새긴 놋쇠 고리를 덧댄 나침반. 제독이 네 바다에서 잰 값을 케플러가 손수 새겼다. 「바늘은 땅이 큰 자석이라는 것을 안다」.",
+      "target": "tools/addition_art/sources/sky_kcompass.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a Renaissance maritime compass in a worn wooden box, fine brass magnetic needle and compass rose, an additional precisely engraved brass declination ring surrounding the dial. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-52838504-5847-4414-8789-e9eba9c47f1f.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/sky_kcompass.webp"
+      ]
+    },
+    {
+      "id": "sky_rudolph",
+      "name": "루돌프 표",
+      "kind": "item",
+      "description": "1627년 울름에서 찍은 케플러의 행성 표. 티코 브라헤의 관측과 케플러의 법칙으로 별과 행성의 자리를 셈해 두어, 뱃사람들이 바다에서 자리를 셈하는 데 쓴다. 케플러가 보낸 한 권.",
+      "target": "tools/addition_art/sources/sky_rudolph-v2.png",
+      "prompt": "Edit target: the supplied transparent open astronomical-tables book icon. Preserve its exact aged pages, ruled numerical tables, circular star chart and brown leather binding. ZOOM OUT to show the ENTIRE book including the currently clipped far-right cover edge. Restore the missing small cover corner naturally. Center the complete object at only 70 percent of the square canvas width, leaving at least 15 percent completely transparent empty space on ALL four sides. Do not crop any part of the spine, pages or cover. No other objects, no floor, no scenery, no drop shadow or added writing. True transparent alpha and the same warm detailed historical illustration.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-55e2246f-50e1-46fb-a69d-145c79db00e7.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "previous_versions": [
+        {
+          "target": "tools/addition_art/sources/sky_rudolph.png",
+          "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint an open seventeenth-century astronomical tables folio, densely ruled orderly columns of tiny numbers, a small star chart in one corner, brown leather binding and aged ivory paper. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+          "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-123054c9-965e-4112-91d0-5581d66d0300.png"
+        }
+      ],
+      "files": [
+        "images/items/sky_rudolph.webp"
+      ]
+    },
+    {
+      "id": "sky_gscope",
+      "name": "갈릴레이의 망원경",
+      "kind": "item",
+      "description": "갈릴레이가 손수 렌즈를 갈아 만든 스무 배 망원경. 가죽을 씌운 나무 통 끝에 「갈릴레오가 제독에게」라고 새겨져 있다. 보통 망원경보다 수평선 너머를 더 멀리 본다.",
+      "target": "tools/addition_art/sources/sky_gscope.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint Galileo-style early seventeenth-century long narrow wooden refracting telescope wrapped in dark russet leather, simple brass lens rims at both ends, diagonal composition, no modern mount. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-8419834a-313d-4dbb-9149-91578d00ff09.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/sky_gscope.webp"
+      ]
+    },
+    {
+      "id": "sky_twosci",
+      "name": "『새로운 두 과학』",
+      "kind": "item",
+      "description": "1638년 레이던 엘제비르 인쇄소에서 찍은 갈릴레이의 마지막 책. 물체가 떨어지는 법칙과 재료의 힘을 다룬다. 이탈리아에서는 찍을 수 없어 제독이 원고를 몰래 실어 날랐다.",
+      "target": "tools/addition_art/sources/sky_twosci.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint an open seventeenth-century leather-bound scientific book showing simple geometric falling-body and inclined-plane diagrams on warm cream pages, subtle black letterpress marks. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-a857752b-f22f-414e-9c52-d4d0dabb8a1a.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/sky_twosci.webp"
+      ]
+    },
+    {
+      "id": "glory_banner",
+      "name": "오라녜 공의 깃발",
+      "kind": "item",
+      "description": "1688년 토베이에 오른 오라녜 공 빌럼의 깃발. 「잉글랜드의 자유와 개신교」, 그 아래 오라녜 가문의 말 「나는 지키리라」가 수놓여 있다. 함께 해협을 건넌 제독에게 내렸다.",
+      "target": "tools/addition_art/sources/glory_banner.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a folded late-seventeenth-century orange silk House of Orange military banner with a modest crowned blue heraldic shield and small gold lion motif, embroidered edges and natural heavy fabric folds, no invented readable lettering. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-20aba2cd-5733-480d-8f4c-550a5072078c.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/glory_banner.webp"
+      ]
+    },
+    {
+      "id": "glory_ring",
+      "name": "제임스 2세의 인장 반지",
+      "kind": "item",
+      "description": "왕관도 국새도 잃은 제임스 2세가 프랑스 땅에 내리며 손가락에서 빼어 준 금 반지. 왕실 문장이 새겨져 있다. 「짐이 다시 돌아가는 날 이것을 보이라.」",
+      "target": "tools/addition_art/sources/glory_ring.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a seventeenth-century English royal gold signet ring, broad oval face engraved with a crowned heraldic shield, deep rich gold patina, three-quarter view showing ring band. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-01ef6015-bd64-4db8-bc36-a3778aac49e3.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/glory_ring.webp"
+      ]
+    },
+    {
+      "id": "glory_decl",
+      "name": "권리 선언 인쇄본",
+      "kind": "item",
+      "description": "1689년 화이트홀 연회장에서 읽힌 권리 선언을 찍은 종이. 국왕은 의회의 동의 없이 법을 멈추거나 세금을 걷거나 군대를 둘 수 없다고 적혀 있다.",
+      "target": "tools/addition_art/sources/glory_decl.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a single folded seventeenth-century English printed declaration sheet, fine orderly letterpress ink marks on cream rag paper, modest ornamental headpiece, no readable words needed. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-b02f3a3f-448a-4d20-9d5c-9eb8fb7952d4.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/glory_decl.webp"
+      ]
+    },
+    {
+      "id": "globe_papers",
+      "name": "불길에서 건진 원고 궤짝",
+      "kind": "item",
+      "description": "1613년 6월 29일 글로브 극장이 불탈 때 분장실에서 건져 낸 참나무 궤짝. 셰익스피어가 손으로 쓴 극 원고 묶음이 들어 있다 — 『템페스트』, 『겨울 이야기』, 『맥베스』…. 군데군데 그을음과 앤의 손자국이 남았다.",
+      "target": "tools/addition_art/sources/globe_papers.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small open oak manuscript chest rescued from a seventeenth-century theater fire, dark scorched corners and iron straps, bundles of handwritten drama pages tied with ribbon inside, a faint soot handprint. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-acf0b5a9-43b3-41f1-a1fb-6c510cf2d9f5.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/globe_papers.webp"
+      ]
+    },
+    {
+      "id": "imjin_silk",
+      "name": "김시민이 맡긴 비단 궤짝",
+      "kind": "item",
+      "description": "동래성의 김시민이 「여비 삼아 들고 가되, 팔지는 마시오」라며 맡긴 조선 비단 스무 필. 북쪽의 권율 장군에게 전하면 군량과 화살이 된다. 팔 수 없다.",
+      "target": "tools/addition_art/sources/imjin_silk.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small open late-sixteenth-century Korean wooden travel chest containing tightly rolled fine silk bolts in muted ivory, indigo, jade and red, iron hinges and traditional Korean clasp, no Chinese dragon motif. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-7beddb8e-a1a0-4179-843e-d2898ae682f6.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/imjin_silk.webp"
+      ]
+    },
+    {
+      "id": "imjin_gat",
+      "name": "갓 (흑립)",
+      "kind": "item",
+      "description": "말총을 엮어 옻칠한 조선 선비의 검은 갓. 이것을 쓰면 조선의 선비와 의병들이 「예를 아는 사람」으로 대해 준다.",
+      "target": "tools/addition_art/sources/imjin_gat.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint one traditional Korean Joseon black gat headdress: tall narrow cylindrical translucent woven horsehair crown and very broad thin circular brim, delicate black chin cords, lightweight black lacquer mesh, no feather. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-89ed0b04-a49c-45e7-a15f-6bd4132d4258.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/items/imjin_gat.webp"
+      ]
+    },
+    {
+      "id": "r_constbaths",
+      "name": "욕장 바닥의 모자이크 조각",
+      "kind": "relic",
+      "description": "푸른 바다 물결 속을 헤엄치는 돌고래를 작은 대리석 조각으로 이어 붙였다. 목욕하는 사람들 발밑에 깔려 있던 것이다.",
+      "target": "tools/addition_art/sources/r_constbaths.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint 욕장 바닥의 모자이크 조각: 푸른 바다 물결 속을 헤엄치는 돌고래를 작은 대리석 조각으로 이어 붙였다. 목욕하는 사람들 발밑에 깔려 있던 것이다.. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-5215028c-ef69-4384-b2a3-f22df7c80999.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/relics/r_constbaths.webp"
+      ]
+    },
+    {
+      "id": "r_septizodium",
+      "name": "행성 신의 대리석 기둥머리",
+      "kind": "relic",
+      "description": "아칸서스 잎을 겹겹이 새긴 코린트식 기둥머리. 한쪽에 둥근 해와 초승달이 작게 새겨져 있다.",
+      "target": "tools/addition_art/sources/r_septizodium.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint 행성 신의 대리석 기둥머리: 아칸서스 잎을 겹겹이 새긴 코린트식 기둥머리. 한쪽에 둥근 해와 초승달이 작게 새겨져 있다.. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-d1cbb81a-50a4-4f62-9aec-a052d9327caa.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/relics/r_septizodium.webp"
+      ]
+    },
+    {
+      "id": "r_worcesterwall",
+      "name": "성문의 쇠 열쇠",
+      "kind": "relic",
+      "description": "팔뚝만 한 쇠 열쇠. 해 질 녘이면 이 열쇠로 성문을 잠갔다고 한다.",
+      "target": "tools/addition_art/sources/r_worcesterwall.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint 성문의 쇠 열쇠: 팔뚝만 한 쇠 열쇠. 해 질 녘이면 이 열쇠로 성문을 잠갔다고 한다.. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-6bbcd72a-579e-4efd-b079-70737a41cd5a.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/relics/r_worcesterwall.webp"
+      ]
+    },
+    {
+      "id": "r_manwoldae",
+      "name": "고려 청자 기와 조각",
+      "kind": "relic",
+      "description": "비취빛 유약을 입힌 기와 끝 조각. 궁궐 지붕을 청자로 덮었다는 옛이야기가 사실이었다.",
+      "target": "tools/addition_art/sources/r_manwoldae.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint 고려 청자 기와 조각: 비취빛 유약을 입힌 기와 끝 조각. 궁궐 지붕을 청자로 덮었다는 옛이야기가 사실이었다.. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-eb7235d1-c726-47c1-aa00-449de5878d2c.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/relics/r_manwoldae.webp"
+      ]
+    },
+    {
+      "id": "r_somnath",
+      "name": "시바의 링가 받침돌 조각",
+      "kind": "relic",
+      "description": "검은 돌을 매끄럽게 갈아 만든 받침의 한 귀퉁이. 연꽃잎 무늬가 둘려 있다.",
+      "target": "tools/addition_art/sources/r_somnath.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint 시바의 링가 받침돌 조각: 검은 돌을 매끄럽게 갈아 만든 받침의 한 귀퉁이. 연꽃잎 무늬가 둘려 있다.. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-484d7fa3-bf7a-48ab-a098-f8c4fbedb8be.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/relics/r_somnath.webp"
+      ]
+    },
+    {
+      "id": "r_alnuri",
+      "name": "첨탑의 벽돌 무늬 조각",
+      "kind": "relic",
+      "description": "구운 벽돌을 비스듬히 엇갈려 쌓아 그물 무늬를 만든 조각. 첨탑 허리띠에서 떨어진 것이다.",
+      "target": "tools/addition_art/sources/r_alnuri.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint 첨탑의 벽돌 무늬 조각: 구운 벽돌을 비스듬히 엇갈려 쌓아 그물 무늬를 만든 조각. 첨탑 허리띠에서 떨어진 것이다.. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-ae58fd38-ecbf-403e-b51d-90d055a328d4.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/relics/r_alnuri.webp"
+      ]
+    },
+    {
+      "id": "r_aleppomosque",
+      "name": "안뜰의 흑백 대리석 조각",
+      "kind": "relic",
+      "description": "검은 돌과 흰 돌을 별 모양으로 짜 맞춘 바닥 조각. 알레포 석공의 솜씨다.",
+      "target": "tools/addition_art/sources/r_aleppomosque.png",
+      "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint 안뜰의 흑백 대리석 조각: 검은 돌과 흰 돌을 별 모양으로 짜 맞춘 바닥 조각. 알레포 석공의 솜씨다.. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a18cca-5ec4-7bc0-a831-570f58c2a3d9\\exec-c5ac9351-b970-49d2-a71c-299fda2a1531.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "files": [
+        "images/relics/r_aleppomosque.webp"
+      ]
+    }
+  ]
+}

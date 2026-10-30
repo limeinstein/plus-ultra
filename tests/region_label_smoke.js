@@ -7,9 +7,12 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
-const KR = ['muryeong', 'bulguksa', 'seokguram', 'munmu', 'muyeol', 'hwangnyong', 'emille', 'jongmyo', 'sillacrown', 'cheonmado', 'baekjecenser', 'goryeoceladon', 'moonjar', 'tripitaka', 'hunmin',
+const KR = ['jeju', 'bangudae', 'ganghwadolmen', 'janggunchong', 'jisandong', 'namsantower', 'manwoldae',   // 2026-10-30 휴양지 제주도·송악산 옛 궁터 · 빠져 있던 조선 땅 발견물 (장군총은 압록강 건너 옛 고구려 땅 — 게임은 조선으로 적는다)
+  'muryeong', 'bulguksa', 'seokguram', 'munmu', 'muyeol', 'hwangnyong', 'emille', 'jongmyo', 'sillacrown', 'cheonmado', 'baekjecenser', 'goryeoceladon', 'moonjar', 'tripitaka', 'hunmin',
   'seongsan', 'koreancat', 'moonbear', 'squirrel', 'vinousbird', 'crane', 'shiri', 'dragon', 'haeinsa', 'mireuksa', 'yonggung', 'dokkaebi', 'gumiho', 'gwisin', 'hyeonmu', 'seobul', 'hwaseong',
   'persimmon', 'omija', 'redpine', 'azalea', 'ft_hanyang'];
 (async function () {

@@ -511,6 +511,7 @@
     questLate: { k: 0.5, min: 20, max: 60 },
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
     birdRevisit: { years: 2, fameK: 0.10, radius: 0.65 }, // 조류: 마지막 관찰로부터 2년 뒤 현장 재방문, 최초 발견 명성의 10%
+    chartSurvey: { max: 4 }, // 재탐사: 윤곽 → 강 → 산 → 지형. 시야 밖으로 나갔다 돌아와야 한 번 더 센다.
     clueStack: { max: 4, sense: [1, 1.4, 1.7, 2.0, 2.3], find: [1, 1, 1.2, 1.35, 1.5], zone: [1, 1, 0.72, 0.5, 0.34], fish: 0.75, stackW: 0.35 },
     // 발견의 여파: 발견 갈래에 따라 피로·규율이 즉시 달라진다 (discovery.js).
     // (예전의 '스트레스'는 피로 하나로 합쳤다 — 옛 저장의 스트레스는 불러올 때 절반을 피로에 더한다, main.js)
@@ -520,7 +521,8 @@
       delight: { fatigue: -9,  discipline: 3 },
       wonder:  { fatigue: -7,  discipline: 2 },
       fear:    { fatigue: 14,  discipline: -4 },
-      grief:   { fatigue: 4,   discipline: 3 }       // 숙연함 — 노예무역의 현장 같은 곳 (moredisc.js 고레 섬)
+      grief:   { fatigue: 4,   discipline: 3 },      // 숙연함 — 노예무역의 현장 같은 곳 (moredisc.js 고레 섬)
+      rest:    { fatigue: -25, discipline: 8 }       // 휴양 — 휴양지 섬 40곳 (resortdisc.js · 2026-10-30): 감동보다 피로가 더 풀리고 규율이 오른다
     },
     // 발견의 여파로 규율이 0에, 피로가 100에 닿으면 규율 recover 이상·피로 100−recover 이하로 돌아올 때까지 야외 발견 반경이 줄어든다. (피로 0은 푹 쉰 상태라 벌칙 아님 — QA 2026-10-23)
     discoveryStrain: { recover: 10, findK: 0.35 },
@@ -542,6 +544,9 @@
     // 식당 한 끼: 값 = base + 도시 등급×size + 음식 등급×tier, 하루 한 번 피로·체력을 회복 (js/city/restaurant.js)
     //   minSize = 식당이 서는 가장 작은 도시 등급 (그보다 작아도 이름난 음식이 있으면 선다 — js/data/cuisine_place.js)
     restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2, disc: [0, 2, 3, 4], so: [0, 1, 1, 2] },   // disc: 규율이 오르는 만큼 · so: 사교 명성이 살짝(사교 배수 ×3 전) (음식 등급별, 2026-10-17)
+    // 커피 메뉴 (js/systems/coffee.js · 2026-10-30): 커피를 한 번에 minQty통 넘게 팔면 그 문화권 식당에 메뉴 하나 · 한 잔 값 = base + 도시 크기×size + 등급×tier
+    //   so: 등급별 사교 명성(화면에는 3배) · first: 처음 맛보는 메뉴에 더 얹는 명성 · rest: 풀리는 피로
+    coffee: { minQty: 10, base: 4, size: 2, tier: 3, so: [0, 2, 3, 4], first: 8, rest: 2 },
     // 시세의 출렁임: 도시·품목 갈래마다 천천히 오르내린다 (최대 ± driftAmp, 주기 driftPeriod[0]~[1]일)
     driftAmp: [0.08, 0.15], driftPeriod: [70, 200],
     // 후원자의 대가 바뀔 때 (succession.js): 그 자리의 신뢰는 sponsorKeep만 남고, 제독의 자녀가 뒤를 이으면 모든 신뢰가 heirKeep만 남는다.

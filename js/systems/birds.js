@@ -40,10 +40,10 @@
     return img;
   }
   function surface(lon, lat, land) { return G.Geo.isLand(lon, lat) === land; }
-  function surfacePoint(lon, lat, land) {
+  function surfacePoint(lon, lat, land, limit, step) {
     if (surface(lon, lat, land)) return [lon, lat];
     var c = fx();
-    for (var r = c.groundStep; r <= c.surfaceSearch; r += c.groundStep) {
+    for (var r = step || c.groundStep; r <= (limit || c.surfaceSearch); r += step || c.groundStep) {
       for (var i = 0; i < c.surfaceAngles; i++) {
         var a = i * Math.PI * 2 / c.surfaceAngles, x = lon + Math.cos(a) * r, y = lat + Math.sin(a) * r;
         if (surface(x, y, land)) return [x, y];
@@ -52,11 +52,11 @@
     return null;
   }
   /** 달리기는 땅, 헤엄은 물을 따라 간다. 해안에서 멈추거나 방향을 바꾼다. */
-  B.groundPath = function (p, kind, member) {
+  B.groundPath = function (p, kind, member, direction) {
     var c = fx(), land = kind === 'run';
     var q = surfacePoint(p.lon + (member % 3) * c.groundSpacing, p.lat + Math.floor(member / 3) * c.groundSpacing, land);
     if (!q) return [];
-    var path = [q], heading = 0;
+    var path = [q], heading = direction || 0;
     for (var n = 0; n < c.groundSteps; n++) {
       var found = null;
       for (var k = 0; k < c.surfaceAngles; k++) {
@@ -69,15 +69,64 @@
     }
     return path;
   };
+  B.count = function (d, rng) {
+    var c = fx(), special = c.countById && c.countById[d.id];
+    if (special != null) return special;
+    if (B.kinds[d.id] === 'run') return c.runCount[0] + Math.floor((rng || Math.random)() * (c.runCount[1] - c.runCount[0] + 1));
+    return c.count;
+  };
+  /** 바다에서 발견한 펭귄도 가까운 해안에서 출발한다. 걸음 → 입수 → 헤엄을 잇는다. */
+  B.entryPath = function (p, member) {
+    var c = fx(), land = surfacePoint(p.lon, p.lat, true, c.coastSearch, c.coastSearchStep);
+    if (!land) return null;
+    land = surfacePoint(land[0], land[1] + member * c.shoreSpacing, true) || land;
+    var water = surfacePoint(land[0], land[1], false, c.coastSearch, c.coastSearchStep);
+    if (!water) return null;
+    for (var i = 0; i < c.coastBisect; i++) {
+      var mid = [(land[0] + water[0]) / 2, (land[1] + water[1]) / 2];
+      if (surface(mid[0], mid[1], true)) land = mid; else water = mid;
+    }
+    var dx = water[0] - land[0], dy = water[1] - land[1], len = Math.hypot(dx, dy);
+    if (!len) return null; dx /= len; dy /= len;
+    var walk = [land], q = land;
+    for (var back = c.groundStep; back <= c.shoreWalk; back += c.groundStep) {
+      var a = [land[0] - dx * back, land[1] - dy * back];
+      if (!surface(a[0], a[1], true)) break;
+      walk.push(a);
+    }
+    walk.reverse();
+    // 바닷가의 첫 물 칸에서 시작해 땅을 가로지르지 않고 물속으로 나아간다.
+    var swim = B.groundPath({ lon: water[0], lat: water[1] }, 'swim', 0, Math.atan2(dy, dx));
+    return { walk: walk, swim: swim, land: land, water: water };
+  };
+  function sample(path, u, land) {
+    var at = U.clamp(u, 0, 1) * (path.length - 1), i = Math.floor(at), a = path[i], z = path[Math.min(i + 1, path.length - 1)];
+    var mix = at - i, x = a[0] + (z[0] - a[0]) * mix, y = a[1] + (z[1] - a[1]) * mix;
+    if (!surface(x, y, land)) { x = a[0]; y = a[1]; }
+    return { lon: x, lat: y, flip: z[0] < a[0] };
+  }
+  B.entryPose = function (entry, u) {
+    var c = fx(), o;
+    if (u < c.entryWalk) { o = sample(entry.walk, u / c.entryWalk, true); o.phase = 'walk'; return o; }
+    if (u < c.entryWalk + c.entryDive) {
+      var t = (u - c.entryWalk) / c.entryDive;
+      return { lon: entry.land[0] + (entry.water[0] - entry.land[0]) * t,
+        lat: entry.land[1] + (entry.water[1] - entry.land[1]) * t, phase: 'dive', progress: t, flip: entry.water[0] < entry.land[0] };
+    }
+    o = sample(entry.swim, (u - c.entryWalk - c.entryDive) / (1 - c.entryWalk - c.entryDive), false); o.phase = 'swim'; return o;
+  };
   B.show = function (d, st) {
     reset();
-    image(d.id);
+    image(d.id); if (B.kinds[d.id] === 'swim') image(d.id + '_shore');
     var rng = U.makeRng(U.strHash(d.id) + U.dateNum(S().date)), members = [], c = fx();
-    for (var i = 0; i < c.count; i++) members.push({ delay: rng() * c.stagger, phase: Math.floor(rng() * 8),
-      x: (i % 3) * c.spacing, y: Math.floor(i / 3) * c.spacing * 0.55 + (rng() - 0.5) * c.spacing,
+    var count = B.count(d, rng), columns = count > c.count ? c.largeColumns : 3;
+    for (var i = 0; i < count; i++) members.push({ delay: rng() * c.stagger, phase: Math.floor(rng() * 8),
+      x: (i % columns) * c.spacing, y: Math.floor(i / columns) * c.spacing * 0.55 + (rng() - 0.5) * c.spacing,
       scale: 0.75 + rng() * 0.5, flap: 0.8 + rng() * 0.4,
-      path: B.kinds[d.id] === 'fly' ? null : B.groundPath(place(d, st), B.kinds[d.id], i) });
-    flocks.push({ id: d.id, kind: B.kinds[d.id], place: place(d, st), t: 0, members: members, mode: S().loc.mode });
+      path: B.kinds[d.id] === 'run' ? B.groundPath(place(d, st), 'run', i) : null,
+      entry: B.kinds[d.id] === 'swim' ? B.entryPath(place(d, st), i) : null });
+    var flock = { id: d.id, kind: B.kinds[d.id], place: place(d, st), t: 0, members: members, mode: S().loc.mode };
+    flocks.push(flock); return flock;
   };
   B.record = function (d, fame) {
     if (!B.isBird(d)) return;
@@ -96,9 +145,9 @@
       var here = near(d, st, s.loc), entered = here && !inside[id]; inside[id] = here;
       if (!entered || now < B.dueDate(st)) return;
       var fame = B.reward(d, st); st.birdSeen = now;  // 보상보다 먼저 기록하여 재진입·저장 시 중복을 막는다.
-      G.Fame.add('ex', fame); B.show(d, st); got.push({ id: id, fame: fame });
+      G.Fame.add('ex', fame); var flock = B.show(d, st); got.push({ id: id, fame: fame });
       var action = B.kinds[id] === 'fly' ? '하늘을 나는' : B.kinds[id] === 'run' ? '달리는' : '헤엄치는';
-      var line = d.name + ' 무리가 ' + action + ' 모습을 다시 관찰했다. 탐험 명성 +' + fame;
+      var line = d.name + (flock.members.length === 1 ? U.jx(d.name, '이/가') : ' 무리가') + ' ' + action + ' 모습을 다시 관찰했다. 탐험 명성 +' + fame;
       G.State.log(line); G.UI.toast(line + ' · 다음 관찰 보상은 ' + rules().years + '년 뒤', 'compass', 5500);
     });
     if (got.length && G.Game.refreshHud) G.Game.refreshHud();
@@ -115,20 +164,32 @@
         var u = t / c.duration, fly = f.kind === 'fly';
         var x = p[0] - c.travel * 0.3 + u * c.travel - b.x;
         var y = p[1] + (fly ? -c.height - Math.sin(u * Math.PI) * c.arc : c.groundOffset) + b.y;
-        var flip = false;
+        var flip = false, pose = null, sprite = img;
         if (!fly && mode !== 'city') {
-          if (!b.path || !b.path.length) return;
-          var at = u * (b.path.length - 1), ai = Math.floor(at), a = b.path[ai], z = b.path[Math.min(ai + 1, b.path.length - 1)];
-          var mix = at - ai, gx = a[0] + (z[0] - a[0]) * mix, gy = a[1] + (z[1] - a[1]) * mix;
-          if (!surface(gx, gy, f.kind === 'run')) { gx = a[0]; gy = a[1]; }
-          var gp = project(gx, gy); x = gp[0]; y = gp[1]; flip = z[0] < a[0];
+          if (f.kind === 'swim') {
+            if (!b.entry || !b.entry.swim.length) return;
+            pose = B.entryPose(b.entry, u);
+            if (pose.phase !== 'swim') { sprite = image(f.id + '_shore'); if (!sprite) return; }
+          } else {
+            if (!b.path || !b.path.length) return;
+            pose = sample(b.path, u, true);
+          }
+          var gp = project(pose.lon, pose.lat); x = gp[0]; y = gp[1]; flip = pose.flip;
+          if (pose.phase === 'dive') y -= Math.sin(pose.progress * Math.PI) * c.diveHeight;
         }
         var w = c.size * b.scale * ((c.sizeById && c.sizeById[f.id]) || 1), h = w * ch / cw;
         var frameMs = (c.frameById && c.frameById[f.id]) || c.frameMs;
         var frame = (b.phase + Math.floor(t * 1000 / (frameMs * b.flap))) % 8;
+        if (pose && pose.phase === 'walk') frame %= 4;
+        if (pose && pose.phase === 'dive') frame = 4 + Math.min(3, Math.floor(pose.progress * 4));
         ctx.save(); ctx.globalAlpha = Math.min(1, t / c.fade, (c.duration - t) / c.fade);
         ctx.translate(x, y); if (flip) ctx.scale(-1, 1);
-        ctx.drawImage(img, (frame % 4) * cw, Math.floor(frame / 4) * ch, cw, ch, -w / 2, -h / 2, w, h);
+        ctx.drawImage(sprite, (frame % 4) * cw, Math.floor(frame / 4) * ch, cw, ch, -w / 2, -h / 2, w, h);
+        if (pose && pose.phase === 'dive') {
+          var splash = Math.max(0, (pose.progress - 0.45) / 0.55), r = c.splashSize * splash;
+          ctx.globalAlpha *= 1 - splash; ctx.strokeStyle = '#e6fbff'; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.ellipse(0, h * 0.2, r, r * 0.3, 0, 0, Math.PI * 2); ctx.stroke();
+        }
         ctx.restore();
       });
     });
@@ -148,7 +209,7 @@
     B.check();
     var project = mode === 'sea' ? G.Scenes.sea.toScreen : mode === 'land' ? G.Scenes.land.toScreen : function () { return [620, 420]; };
     B.draw(ctx, project, mode);
-    flocks.forEach(function (f) { if (image(f.id)) f.t += dt; });
+    flocks.forEach(function (f) { if (image(f.id) && (f.kind !== 'swim' || image(f.id + '_shore'))) f.t += dt; });
     flocks = flocks.filter(function (f) { return f.t <= fx().duration + fx().stagger && f.mode === mode; });
   };
 })(window.G = window.G || {});
