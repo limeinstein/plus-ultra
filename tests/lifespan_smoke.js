@@ -128,9 +128,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       if (s.date.m !== 6 || s.date.d !== 10) throw new Error('후계가 있어도 수명이 다한 날에 멈춰야 한다');
     });
     let heirName = null;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 60; i++) {
+      // 대를 잇는 동안 창이 여럿 뜬다 (세대 교체 장면·성 묻기·노장·보관함…) — 단추 창도, 대사 창도 넘긴다
       const has = await page.evaluate(() => { const b = document.querySelector('.win .foot button'); return b ? b.textContent : null; });
-      if (has) { await clickWin(); await page.waitForTimeout(400); }
+      if (has) { await clickWin(); await page.waitForTimeout(300); }
+      else await page.evaluate(() => { const m = [...document.querySelectorAll('.modal-back')].pop(); if (!m) return; const b = m.querySelector('.askrow button') || m.querySelector('.choices .choice') || m.querySelector('.dlg'); if (b) b.click(); });
+      await page.waitForTimeout(150);
       heirName = await page.evaluate(() => G.Game.state.player.name);
       if (/주앙/.test(heirName)) break;
     }

@@ -650,13 +650,20 @@
     var found = G.DISCOVERIES.filter(function (d) { return G.Disc.foundByMe(d.id); }).length;
     if (found >= G.DISCOVERIES.length && !s.flags.allFound) { s.flags.allFound = true; await UI.alert('세상의 모든 발견을 이루었다! 그대의 이름은 영원히 역사에 남으리라.', '위업 달성'); }
   };
+  /** 생을 마친 곳 — 예전에는 도시의 여관에서 눈을 감아도 늘 「바다 위에서」였다 (2026-10-31 QA) */
+  function deathPlace(s) {
+    var l = s.loc || {}, c = l.mode === 'city' ? G.CITY_DATA[l.city] : null;
+    if (c) return c.name + '에서 생을 마치다';
+    if (l.mode === 'land') return '탐험 길에서 생을 마치다';
+    return '바다 위에서 생을 마치다';
+  }
   E.show = async function (reason) {
     var s = S(), p = s.player;
     var found = G.DISCOVERIES.filter(function (d) { return G.Disc.foundByMe(d.id); });
     var title = R.fameTitle(p.fame);
     var html = '<div class="center" style="font-family:var(--latin);letter-spacing:.4em;color:#7a5c33;font-size:20px">FINIS</div>' +
       '<div class="center" style="font-size:34px;font-weight:800;margin:10px 0">' + U.esc(p.name) + '</div>' +
-      '<div class="center muted" style="font-size:18px">' + (reason === 'death' ? '바다 위에서 생을 마치다' : '은퇴하여 여생을 보내다') + ' · ' + U.fmtDate(s.date) + '</div>' +
+      '<div class="center muted" style="font-size:18px">' + (reason === 'death' ? deathPlace(s) : '은퇴하여 여생을 보내다') + ' · ' + U.fmtDate(s.date) + '</div>' +
       '<div class="sep brass"></div><div class="kv" style="grid-template-columns:200px 1fr;font-size:19px">' +
       '<div>칭호</div><div><b>' + title + '</b></div><div>명성</div><div>' + U.num(p.fame) + '</div>' +
       '<div>발견</div><div>' + found.length + ' / ' + G.DISCOVERIES.length + '</div>' +

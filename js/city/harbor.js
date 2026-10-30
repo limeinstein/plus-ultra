@@ -570,8 +570,23 @@
   function dumpCargo(n) {
     var f = S().fleet;
     for (var id in f.cargo) { if (n <= 0) break; var t = Math.min(n, f.cargo[id].q); f.cargo[id].q -= t; n -= t; if (!f.cargo[id].q) delete f.cargo[id]; }
-    if (n > 0) { var w = Math.min(n, f.water); f.water -= w; n -= w; f.food = Math.max(0, f.food - n); }
-    UI.toast('실을 곳이 없는 짐을 내렸습니다.', 'sack');
+    // 그래도 넘치면 자재부터, 그다음 식량·물을 함께 덜어 낸다 (2026-10-31 QA)
+    //   예전에는 물을 먼저 모두 버려서, 사냥·원주민 선물로 짐칸이 넘친 채 폭풍을 만나면 물이 0이 되어 선원이 목말라 쓰러졌다.
+    //   이제는 많은 쪽부터 줄여 식량과 물의 양을 맞춘 뒤 둘을 똑같이 줄인다 — 어느 한쪽만 바닥나지 않게.
+    var gone = { mat: 0, food: 0, water: 0 };
+    if (n > 0 && (f.mat || 0) > 0) { var m = Math.min(n, f.mat); f.mat -= m; n -= m; gone.mat = m; }
+    if (n > 0) {
+      var fd = Math.max(0, f.food), wt = Math.max(0, f.water), cut = Math.min(n, fd + wt);
+      var gap = Math.min(cut, Math.abs(fd - wt));
+      if (fd > wt) fd -= gap; else wt -= gap;
+      var half = (cut - gap) / 2;
+      fd = Math.max(0, fd - half); wt = Math.max(0, wt - half);
+      gone.food = Math.round(f.food - fd); gone.water = Math.round(f.water - wt);
+      f.food = fd; f.water = wt;
+    }
+    var what = [gone.food ? '식량 ' + gone.food + '통' : '', gone.water ? '물 ' + gone.water + '통' : '', gone.mat ? '자재 ' + Math.round(gone.mat) + '통' : ''].filter(Boolean).join(' · ');
+    UI.toast('실을 곳이 없는 짐을 내렸습니다.' + (what ? ' (' + what + ')' : ''), 'sack', what ? 5000 : undefined);
+    if (what) G.State.log('짐칸이 넘쳐 ' + what + U.jx(what, '을/를') + ' 바다에 내렸다.');
   }
   H.trimCrew = trimCrew;
   function shipRow(sh, tag) {
