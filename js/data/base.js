@@ -521,7 +521,8 @@
       delight: { fatigue: -9,  discipline: 3 },
       wonder:  { fatigue: -7,  discipline: 2 },
       fear:    { fatigue: 14,  discipline: -4 },
-      grief:   { fatigue: 4,   discipline: 3 }       // 숙연함 — 노예무역의 현장 같은 곳 (moredisc.js 고레 섬)
+      grief:   { fatigue: 4,   discipline: 3 },      // 숙연함 — 노예무역의 현장 같은 곳 (moredisc.js 고레 섬)
+      rest:    { fatigue: -25, discipline: 8 }       // 휴양 — 휴양지 섬 40곳 (resortdisc.js · 2026-10-30): 감동보다 피로가 더 풀리고 규율이 오른다
     },
     // 발견의 여파로 규율이 0에, 피로가 100에 닿으면 규율 recover 이상·피로 100−recover 이하로 돌아올 때까지 야외 발견 반경이 줄어든다. (피로 0은 푹 쉰 상태라 벌칙 아님 — QA 2026-10-23)
     discoveryStrain: { recover: 10, findK: 0.35 },

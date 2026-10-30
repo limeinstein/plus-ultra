@@ -998,6 +998,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .disc-folk dd { margin: 0; color: var(--ink-2); }
 .disc-impact { margin: 12px auto; padding: 10px 14px; max-width: 610px; border: 1px solid rgba(94,67,34,.38); border-radius: 6px; background: rgba(255,248,222,.56); text-align: left; }
 .disc-impact.fear { border-color: rgba(126,32,28,.55); background: rgba(126,32,28,.09); }
+.disc-impact.rest { border-color: rgba(40,128,140,.55); background: rgba(60,160,170,.10); }   /* 휴양지 섬 (2026-10-30) */
 .disc-impact .di-title { display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 18px; color: var(--ink); }
 .disc-impact .di-title svg { width: 20px; height: 20px; }
 .disc-impact .di-line { margin: 5px 0 8px; text-align: center; font-size: 15px; color: var(--ink-2); }

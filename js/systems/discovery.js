@@ -203,7 +203,8 @@
     delight: { name: '흥분', icon: 'chest', line: '귀한 발견을 손에 넣었다는 기쁨이 대원들에게 번졌다.' },
     wonder:  { name: '경이', icon: 'compass', line: '처음 보는 존재를 마주한 놀라움이 마음을 환기했다.' },
     fear:    { name: '공포', icon: 'skull', line: '기괴하고 두려운 광경이 대원들의 마음에 오래 남았다.' },
-    grief:   { name: '숙연함', icon: 'skull', line: '사람이 사람을 사고판 자리 앞에서 대원들은 한동안 말을 잃었다. 웃고 떠드는 이가 없었다.' }
+    grief:   { name: '숙연함', icon: 'skull', line: '사람이 사람을 사고판 자리 앞에서 대원들은 한동안 말을 잃었다. 웃고 떠드는 이가 없었다.' },
+    rest:    { name: '휴양', icon: 'sun', line: '맑은 바다와 고운 모래, 그늘진 나무 아래에서 대원들이 모처럼 몸과 마음을 쉬었다. 웃음소리가 다시 갑판에 돌아왔다.' }   // 휴양지 섬 (js/data/resortdisc.js · 2026-10-30)
   };
   var FEAR_IDS = { bermuda: 1, f_giantsquid: 1, tarantula: 1, roc: 1, minotaur: 1, cannibal: 1, crystalskull: 1, antarctic: 1 };
   function strainCfg() { return (G.BALANCE && G.BALANCE.discoveryStrain) || { recover: 10, findK: 0.35 }; }
