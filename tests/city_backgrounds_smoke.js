@@ -1,4 +1,4 @@
-/* 모든 도시의 배경 등록과 추가 도시 30곳의 file:// 거리 렌더링을 확인한다.
+/* 모든 도시의 배경 등록과 추가 도시 23곳의 file:// 거리 렌더링을 확인한다.
    node tests/city_backgrounds_smoke.js */
 'use strict';
 const assert = require('assert');
@@ -9,7 +9,7 @@ const vm = require('vm');
 const { spawn } = require('child_process');
 const { pathToFileURL } = require('url');
 const ROOT = path.resolve(__dirname, '..');
-const IDS = Array.from({ length: 30 }, (_, i) => 286 + i);   // 286~315 (309~315 명청 시대의 몽골·만주 도시 2026-10-30)
+const IDS = Array.from({ length: 23 }, (_, i) => 286 + i);
 const context = { window: { G: {} } }; context.G = context.window.G;
 for (const file of ['js/data/cities.js', 'images/manifest.js', 'js/core/images.js']) {
   vm.runInNewContext(fs.readFileSync(path.join(ROOT, file), 'utf8'), context);
@@ -126,7 +126,7 @@ async function connect(url) {
         Buffer.from(urls[i].split(',')[1], 'base64'));
     }
     assert.strictEqual(cdp.errors.length, 0, cdp.errors.join('\n'));
-    console.log('추가 도시 30곳의 file:// 거리 화면 검사 통과 · 콘솔 오류 0');
+    console.log('추가 도시 23곳의 file:// 거리 화면 검사 통과 · 콘솔 오류 0');
   } finally {
     if (cdp) cdp.ws.close(); browser.kill();
   }

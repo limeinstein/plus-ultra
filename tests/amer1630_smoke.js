@@ -77,7 +77,7 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     ok(r.feMirage && r.feReal, '카르타헤나 산펠리페 요새: 세운 해(1657) 전에는 신기루, 그 뒤에는 여느 발견물');
     ok(!r.uniBefore && r.uniAt && r.harvardLater, '대학 10곳은 1650년부터 · 하버드(1636)도 스탠퍼드(1885)도 언제나 신기루로 본 발견');
     ok(r.wish && /배울 수 있는 학교라니/.test(r.wish.text) && !/\{나\}/.test(r.wish.text) && r.wish.who !== r.wish.scholar && r.noWish === null, '대학을 보면 배운 것이 적은 부하가 바람을 말한다: 「' + (r.wish && r.wish.text) + '」');
-    ok(r.voices >= 2 && r.said.some(t => /학교|배우|배울|공부|책/.test(t)), '발견 카드 뒤 부하들의 관찰·바람 (장면 그림이 생긴 뒤에도 — ' + r.voices + '마디)\n      ' + r.said.join('\n      '));
+    ok(!r.hasReveal && r.voices >= 2 && r.said.some(t => /학교|배우|배울|공부|책/.test(t)), '장면 그림이 없어도 관찰·바람을 말한다 (' + r.voices + '마디)\n      ' + r.said.join('\n      '));
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 2).join(' | '));
     console.log(fail ? '\n실패 ' + fail : '\n통과');
     process.exitCode = fail ? 1 : 0;
