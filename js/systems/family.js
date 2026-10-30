@@ -579,7 +579,11 @@
     // 아버지의 아내들은 모두 아버지를 따라간다 — 배에 타 있던 부하 출신 아내도 함대에서 내리고, 여급 출신 아내의 술집에는 새 여급이 (js/systems/maidswap.js)
     var wifeIds = (p.wife ? [p.wife] : []).concat((p.wives2 || []).map(function (w) { return w.id; }));
     var leftW = G.MaidSwap ? G.MaidSwap.retire(wifeIds) : [];
-    var wifeNote = leftW.length ? '<br>' + leftW.map(function (x) { return x.name; }).join('·') + U.jx(leftW[leftW.length - 1].name, '은/는') + (forced ? ' ' + old + '의 장례를 치른 뒤 함대를 떠나 그를 기리며 조용히 살기로 했다.' : ' 은퇴한 ' + old + U.jx(old, '을/를') + ' 따라 함께 떠났다.') : '';
+    // 이야기 모드: 본처(1부인)는 고향 집에 남아 새 제독의 어머니로 집을 지킨다 (js/systems/story.js — 2026-10-30)
+    var stayMain = s.story && p.wife && G.Wives ? G.Wives.name(p.wife) : null, homeC = G.CITY_DATA[p.home];
+    var goneW = stayMain ? leftW.filter(function (x) { return x.name !== stayMain; }) : leftW;
+    var wifeNote = (goneW.length ? '<br>' + goneW.map(function (x) { return x.name; }).join('·') + U.jx(goneW[goneW.length - 1].name, '은/는') + (forced ? ' ' + old + '의 장례를 치른 뒤 함대를 떠나 그를 기리며 조용히 살기로 했다.' : ' 은퇴한 ' + old + U.jx(old, '을/를') + ' 따라 함께 떠났다.') : '') +
+      (stayMain ? '<br>' + stayMain + U.jx(stayMain, '은/는') + ' ' + (homeC ? homeC.name + '의 ' : '') + '집에 남아 ' + k.name + '의 어머니로 집을 지킨다.' : '');
     var said = bd >= 65 ? '「아버지께 배운 모든 것을 바다에서 증명하겠습니다.」' : bd >= 30 ? '「아버지의 이름에 부끄럽지 않게 하겠습니다.」' : '「…이제 제 방식대로 하겠습니다.」';
     var sev = F.successorEvent(k), spic = null;
     if (G.FamEv && G.FamEv.showPic) {

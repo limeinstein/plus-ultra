@@ -830,7 +830,7 @@
     var away0 = G.FamEv && G.FamEv.awayDays ? G.FamEv.awayDays() : 0;
     if (s.player.wife && s.player.wifeAboard) await UI.say(away0 >= 30 ? U.pick(['드디어 우리 집이에요. …' + away0 + '일 만이네요. 같이 문을 여니까 기분이 이상해요.', '집 냄새예요! 바다 냄새만 맡다가 오니까 눈물이 날 것 같아요.', '당신이랑 같이 돌아오니까, 이번엔 기다린 사람이 없네요. 그게 좋아요.']) : U.pick(['잠깐 들렀다 가요. 창은 열어 둘게요.', '짐 좀 풀고 가요. 다음 항해 준비는 같이 해요.']), G.Family.wifeSpeaker());
     else if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
-    if (story) { try { await G.Story.motherGreet(c); await G.Story.allowance(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금
+    if (story) { try { var intro = await G.Story.motherGreet(c); await G.Story.allowance(c); if (G.Story.grandmaVisit && !(G.Story.heirMode && G.Story.heirMode() && intro === 'intro')) await G.Story.grandmaVisit(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금, 대를 이은 뒤면 할머니가 가끔 들른다
     else if (!s.player.wife) await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
@@ -843,7 +843,7 @@
     var s = S();
     return [
       { label: '쉰다', icon: 'bed', onClick: function () { return HM.rest(c); } },
-      G.Story && G.Story.atHome && G.Story.atHome(c) ? { label: '어머니와 이야기', icon: 'heart', sub: G.STORY.mother.name, onClick: function () { return G.Story.motherTalk(); } } : null,
+      G.Story && G.Story.atHome && G.Story.atHome(c) ? { label: '어머니와 이야기', icon: 'heart', sub: G.Story.motherName ? G.Story.motherName() : G.STORY.mother.name, onClick: function () { return G.Story.motherTalk(); } } : null,
       s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length + (G.Family.aboard().length ? ' (견습 ' + G.Family.aboard().length + ')' : '') : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
       G.Siblings && G.Siblings.home().length ? { label: G.Siblings.menuLabel ? G.Siblings.menuLabel() : '동생들', icon: 'people', sub: G.Siblings.home().length + '명 · 함께 항해 ' + G.Siblings.aboard().length + '/' + G.Siblings.K().maxHire, onClick: function () { return G.Siblings.menu(c); } } : null,
       G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,

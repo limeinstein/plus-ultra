@@ -7,7 +7,11 @@
        마지막 편지(한양)는 아틀란티스 사슬(크노소스·지브롤터·『티마이오스』)의 단서를 준다. 아틀란티스를 찾으면 아버지를 만난다(끝).
      · tale: true 가 붙은 발견물·동료·후원자는 이야기 모드가 아니면 소문·술집·저택에 나오지 않는다 (Disc.available·addHint·Frontier.mateReady·Sponsor.present 를 감쌈).
      · 자코모는 말을 두 배로 빨리 배운다 (G.MATE.giacomo.lgk — js/systems/cabins.js).
-   ■ 수첩 「아버지의 사진」 탭(js/ui/info.js): 사진의 생김새, 찾은 흔적과 아버지가 다녀간 해, 다음 단서, 편지. */
+   ■ 수첩 「아버지의 사진」 탭(js/ui/info.js): 사진의 생김새, 찾은 흔적과 아버지가 다녀간 해, 다음 단서, 편지.
+   ■ 대를 이은 뒤 (2026-10-30): G.Family.succeed를 감싸 s.story.line에 {gen, dad, dadGiven, forced, mom} 을 적는다.
+     · 어머니 = 물러난 제독의 본처(1부인)가 리스본 자택을 지킨다 — 맞이·「어머니와 이야기」·비상금·아내와 어머니의 장면을 맡는다 (ST.mother).
+     · 할머니 = 둘째 대는 레오노르(신트라·알파마 옛집에서 지내며 가끔 들른다 — ST.grandmaVisit), 셋째 대부터는 선선대의 본처 (ST.grandma).
+     · 「아버지」의 흔적은 「할아버지」(ST.kin)의 흔적 — 흔적 장면의 제독 대사는 G.STORY.heirTrace, 다른 사람 대사의 「아버지」는 {gf}로, 아틀란티스의 만남은 heirMeet. */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -27,6 +31,54 @@
   ST.isTrace = function (id) { return D.traces.some(function (t) { return t[0] === id; }); };
   /** 아버지 / 할아버지 (대를 이었을 때) */
   ST.kin = function () { var s = S(), g = s && s.player.generation || 1; return g >= 3 ? '증조할아버지' : g === 2 ? '할아버지' : '아버지'; };
+  /** 사진·시계·편지의 이름 — 「아버지의 사진」 → 대를 이으면 「할아버지의 사진」 */
+  ST.photoName = function () { return ST.kin() + '의 사진'; };
+
+  // ================================================================ 대를 이은 뒤 — 어머니(물러난 제독의 본처)·할머니
+  function gen() { var s = S(); return (s && s.player.generation) || 1; }
+  /** 이번 대가 이어받을 때의 기록 {gen, dad, dadGiven, forced, mom} (옛 저장이면 선대의 부인 명단에서 어림) */
+  function lineRec() {
+    var t = T(); if (!t || gen() < 2) return null;
+    var L = (t.line || []).filter(function (r) { return r.gen === gen(); })[0];
+    if (L) return L;
+    var el = (S().player.elders || []), e = el.filter(function (x) { return x.gen === 1 && x.kind === 'main'; })[0] || el.filter(function (x) { return x.gen === 1 && x.title === '어머니'; })[0];
+    return { gen: gen(), dad: '', dadGiven: '', forced: false, mom: e ? e.id : null };
+  }
+  ST.heirMode = function () { return !!T() && gen() >= 2; };
+  ST.line = lineRec;
+  function speakerOfId(id) {
+    var W = G.Wives;
+    try { if (W && W.speaker) { var sp = W.speaker({ id: id }); if (!sp.name || sp.name === '부인') sp.name = W.name(id); return sp; } } catch (e) { console.error(e); }
+    return { name: G.MAID[id] ? G.MAID[id].name : G.MATE[id] ? G.MATE[id].name : '어머니' };
+  }
+  /** 할머니: 둘째 대는 레오노르(visitTill세까지), 셋째 대부터는 선선대의 본처. 없으면 null */
+  function gmInfo() {
+    if (gen() < 2) return null;
+    if (gen() === 2) { var age = S().date.y - (D.mother.born || 1438); return age <= (D.mother.visitTill || 90) ? { leonor: true } : null; }
+    var t = T(), prev = (t.line || []).filter(function (r) { return r.gen === gen() - 1; })[0];
+    var id = prev && prev.mom || ((S().player.elders || []).filter(function (x) { return x.gen === 2 && x.kind === 'main'; })[0] || {}).id;
+    return id ? { id: id } : null;
+  }
+  ST.hasGrandma = function () { return !!gmInfo(); };
+  /** 할머니의 얼굴: 전용 그림(portraits/npc/story_mother_old)이 있으면 그것, 없으면 이베리아 할머니 그림 (레오노르의 젊은 초상 대신 나이 든 모습으로) */
+  function oldFace(seed) {
+    var file = G.Img && G.Img.has && G.Img.has('portraits/npc/story_mother_old') ? 'story_mother_old' : 'street-folk/grandmother_ib';
+    return npcFace(seed, 'noble', 'ib', 'f', file);
+  }
+  ST.grandma = function () {
+    var g = gmInfo(), o;
+    if (!g || g.leonor) { o = oldFace('story_grandmother'); o.name = D.mother.name.split(' ')[0] + ' 할머니'; return o; }
+    o = oldFace('story_grandmother_' + g.id); o.name = speakerOfId(g.id).name + ' 할머니'; return o;
+  };
+  /** 어머니 역할: 첫 대는 레오노르, 대를 이으면 물러난 제독의 본처 (본처가 없으면 할머니가 집을 지킨다) */
+  ST.mother = function () {
+    if (!ST.heirMode()) return ST.leonor();
+    var L = lineRec();
+    if (L && L.mom) return speakerOfId(L.mom);
+    return ST.grandma();
+  };
+  ST.motherName = function () { var m = ST.mother(); return (m && m.name) || D.mother.name; };
+  function hasMom() { var L = lineRec(); return !ST.heirMode() || !!(L && L.mom); }
 
   // ================================================================ 자료 등록 (읽어 들일 때 한 번)
   function register() {
@@ -75,7 +127,7 @@
     } catch (e) { /* 그림이 없어도 말은 한다 */ }
     return sp;
   }
-  ST.mother = function () { var o = npcFace('story_mother', 'noble', 'ib', 'f', 'story_mother'); o.name = D.mother.name; return o; };
+  ST.leonor = function () { var o = npcFace('story_mother', 'noble', 'ib', 'f', 'story_mother'); o.name = D.mother.name; return o; };
   ST.father = function () { var o = npcFace('story_father', 'scholar', 'kr', 'm', 'story_father'); o.name = D.father.name + ' (' + D.father.alias + ')'; return o; };
   // 흔적마다 이야기해 주는 고장 사람 [마을 사람 id, 부르는 말]
   // [역할, 부르는 말, 얼굴(portraits/street-folk)] — 이름에 맞는 사람으로 선다 (예전에는 그 도시 시장 상인 그림이라 「늙은 안내인」이 젊은 여인으로 나왔다)
@@ -89,6 +141,7 @@
       if (k === 'A') return mateWho('anselmo');
       if (k === 'E') return mateWho('estevao');
       if (k === 'M') return ST.mother();
+      if (k === 'O') return ST.grandma();
       if (k === 'F') return ST.father();
       if (k === 'W') { var w = G.Family.wifeSpeaker(); w.name = w.name || G.Family.wifeName(); return w; }
       if (k === 'B') { var sp = G.SPONSOR[D.sponsor]; return G.Sponsor.speaker(sp); }   // 도시 밖(편지·회상)에서도 얼굴과 무릎상으로 선다
@@ -106,8 +159,16 @@
   function fmt(t) {
     var p = S().player;
     var wife = G.Family && p.wife ? G.Family.wifeName() : '', k0 = homeKid() || (p.kids || [])[0], kid = k0 && G.Family ? G.Family.kidName(k0) : '';
+    // 대를 이은 뒤: {dad} 아버지(물러난 제독) · {mom} 어머니 · {gm} 할머니 · {gf} 도앙과의 촌수 · {dadNote}·{dadNote2}·{gmFrom} 아버지의 형편
+    var L = lineRec(), hh = (D.homeLife && D.homeLife.heir) || {}, gone = !!(L && L.forced);
+    var dad = L ? (L.dadGiven || L.dad || '아버지') : D.father.alias, mom = ST.heirMode() ? ST.motherName() : D.mother.name;
+    var gm = ST.heirMode() ? ST.grandma().name.replace(/ 할머니$/, '') : '';
+    var en = D.ending || {};
     return String(t).replace(/\{name\}/g, p.name).replace(/\{kin\}/g, ST.kin()).replace(/\{kinCall\}/g, ST.kin()).replace(/\{father\}/g, D.father.alias).replace(/\{mother\}/g, D.mother.call)
-      .replace(/\{(wife|kid)([^}]+)\}/g, function (m0, w, pair) { return U.jx(w === 'wife' ? wife : kid, pair); })   // {wife이/가} → 조사만
+      .replace(/\{dadNote2\}/g, (gone ? en.dadNote2Gone : en.dadNote2Alive) || '').replace(/\{dadNote\}/g, (gone ? hh.dadGone : hh.dadAlive) || '')
+      .replace(/\{gmFrom\}/g, (gone ? hh.gmFromGone : hh.gmFromAlive) || '').replace(/\{gf\}/g, ST.kin())
+      .replace(/\{(wife|kid|dad|mom|gm)([^}\/]*\/[^}]+)\}/g, function (m0, w, pair) { return U.jx({ wife: wife, kid: kid, dad: dad, mom: mom, gm: gm }[w], pair); })   // {wife이/가} → 조사만
+      .replace(/\{dad\}/g, dad).replace(/\{mom\}/g, mom).replace(/\{gm\}/g, gm)
       .replace(/\{wife\}/g, wife).replace(/\{kid\}/g, kid).replace(/\{given\}/g, p.given || p.name);
   }
 
@@ -254,25 +315,45 @@
     var s = S(), t = T(); if (!t) return;
     if (ST.isTrace(d.id)) {
       if (t.found.indexOf(d.id) < 0) t.found.push(d.id);
-      var sc = D.scenes[d.id] || {};
+      var sc = D.scenes[d.id] || {}, scene = sc.scene, mem = sc.memory;
+      if (ST.heirMode()) {   // 대를 이은 뒤: 제독의 대사는 손자의 것으로, 다른 사람의 「아버지」는 할아버지로, 기억은 아버지에게서 들은 이야기로
+        scene = heirScene(d.id, scene);
+        if (mem && mem.length && HD0().heir) mem = [['N', HD0().heir.memoryLead]].concat(mem);
+      }
       curTrace = d.id;
       try {
         await ST.cut(d.id);
-        await play(sc.scene);
-        if (sc.memory && sc.memory.length) await play(sc.memory);
+        await play(scene);
+        if (mem && mem.length) await play(mem);
       } catch (e) { console.error(e); }
       curTrace = null;
       (sc.next || []).forEach(function (id) { ST.hint(id); });
       if (d.id === 'ft_hanyang') {
         t.letter = U.dateNum(s.date);
-        s.player.items.push({ id: 'watch', kind: 'keepsake', name: '아버지의 시계', desc: '바늘이 멈춘 작은 시계. 편지에는 아틀란티스에 가져오면 다시 돌지도 모른다고 적혀 있다.', tale: true });
-        UI.toast('아버지의 편지와 멈춘 시계를 얻었다. 아틀란티스의 실마리를 따라가자.', 'scroll', 5200);
+        s.player.items.push({ id: 'watch', kind: 'keepsake', name: ST.kin() + '의 시계', desc: '바늘이 멈춘 작은 시계. 편지에는 아틀란티스에 가져오면 다시 돌지도 모른다고 적혀 있다.', tale: true });
+        UI.toast(ST.kin() + '의 편지와 멈춘 시계를 얻었다. 아틀란티스의 실마리를 따라가자.', 'scroll', 5200);
       }
       G.State.log('「' + d.name + '」 — ' + ST.kin() + '의 흔적을 찾았다. (' + d.year + '년의 자취)');
       return;
     }
     if (d.id === D.endDisc && !t.end) await ST.ending();
   };
+  /** 대를 이은 뒤의 흔적 장면: 제독(P)의 대사는 G.STORY.heirTrace 로 차례대로 바꾸고, 다른 사람·내레이션의 「아버지」는 {gf}(할아버지)로.
+      「남작 아버지」(자코모의 아버지)와 도앙의 편지(F)는 그대로 둔다 */
+  function heirText(t) {
+    return String(t).replace(/남작 아버지/g, '\u0001').replace(/자네가 태어난 지/g, '자네 아버지가 태어난 지').replace(/네가 아버지를/g, '네 아버지가 {gf}를')
+      .replace(/그 사람 아들이라면/g, '그 사람의 핏줄이라면').replace(/아버지/g, '{gf}').replace(/\u0001/g, '남작 아버지');
+  }
+  function heirScene(id, lines) {
+    var ps = (D.heirTrace || {})[id] || [], pi = 0;
+    return (lines || []).map(function (l) {
+      if (!Array.isArray(l)) return l;
+      if (l[0] === 'P') { var alt = ps[pi++]; return ['P', alt != null ? alt : heirText(l[1])]; }
+      if (l[0] === 'F') return l;
+      return [l[0], heirText(l[1])];
+    });
+  }
+  ST._heirScene = heirScene;   // 시험용
   /** 아틀란티스 — 아버지와의 만남 */
   ST.ending = async function () {
     var s = S(), t = T(); if (!t || t.end) return;
@@ -284,13 +365,14 @@
     }
     t.end = 'done'; t.endDate = U.dateNum(s.date);
     await ST.cut('atlantis');
-    await play(D.ending.meet);
-    s.player.items.forEach(function (it) { if (it.id === 'watch') { it.desc = '다시 돌기 시작한 작은 시계. 두 해마다 한 번, 아틀란티스에서 아버지를 만날 수 있다.'; } });
+    var heir = ST.heirMode() && D.ending.heirMeet, done = fmt(heir ? D.ending.heirDone : D.ending.done);
+    await play(heir ? D.ending.heirMeet : D.ending.meet);
+    s.player.items.forEach(function (it) { if (it.id === 'watch') { it.desc = '다시 돌기 시작한 작은 시계. 두 해마다 한 번, 아틀란티스에서 ' + ST.kin() + '를 만날 수 있다.'; } });
     G.Fame.add('ex', 1200);
-    G.State.log(D.ending.done + ' (명성 +1,200)');
-    var html = '<div style="font-size:19px;line-height:1.7">' + U.esc(D.ending.done) + '<br><span class="muted">걸린 날: ' + U.num(dnDay(t.endDate) - dnDay(t.started)) + '일 · 찾은 흔적 ' + t.found.length + ' / ' + D.traces.length + '</span>' +
+    G.State.log(done + ' (명성 +1,200)');
+    var html = '<div style="font-size:19px;line-height:1.7">' + U.esc(done) + '<br><span class="muted">걸린 날: ' + U.num(dnDay(t.endDate) - dnDay(t.started)) + '일 · 찾은 흔적 ' + t.found.length + ' / ' + D.traces.length + '</span>' +
       '<div class="sep"></div>이야기는 여기서 한 매듭을 짓습니다. 항해는 그대로 이어집니다 — 두 해마다 한 번 아틀란티스에 들르면 ' + ST.kin() + '를 다시 만날 수 있습니다.</div>';
-    await UI.window({ title: '아버지의 사진 — 끝', icon: 'laurel', width: 680, html: html, buttons: [{ label: '항해를 이어 간다', value: 'ok', cls: 'navy' }] }).result;
+    await UI.window({ title: ST.photoName() + ' — 끝', icon: 'laurel', width: 680, html: html, buttons: [{ label: '항해를 이어 간다', value: 'ok', cls: 'navy' }] }).result;
     G.Game.refreshHud();
   };
   /** 아틀란티스에 다시 들렀을 때(끝난 뒤) — 두 해에 한 번 */
@@ -308,10 +390,10 @@
   // ================================================================ 수첩 「아버지의 사진」
   /** 크게 보는 사진. 소지품의 팬던트와 수첩의 사진이 함께 쓴다. */
   ST.showPhoto = function () {
-    var ph = D.photo;
-    var win = UI.window({ title: ph.name, icon: 'book', width: 1030, height: 820, clickAny: false,
+    var ph = D.photo, pn = ST.photoName();
+    var win = UI.window({ title: pn, icon: 'book', width: 1030, height: 820, clickAny: false,
       html: '<div class="story-photo-view" role="img" aria-label="' + U.esc(ph.desc) + '"><div class="story-photo-locket"></div></div>' +
-        '<div class="story-photo-caption"><b>' + U.esc(ph.name) + '</b><span>' + U.esc(ph.desc) + '</span></div>',
+        '<div class="story-photo-caption"><b>' + U.esc(pn) + '</b><span>' + U.esc(ph.desc) + '</span></div>',
       buttons: [{ label: '사진을 넣는다', value: true, cls: 'navy' }] });
     var cv = G.Img.make(['story/photo'], 600, 750, function () {
       var c = document.createElement('canvas'); c.width = 600; c.height = 750;
@@ -325,7 +407,7 @@
   /** 소지품에 달 작은 팬던트 — 안에는 큰 사진과 같은 그림을 접어 넣는다. */
   ST.photoPendant = function (host) {
     var b = U.el('button', 'story-photo-pendant');
-    b.type = 'button'; b.title = '아버지의 사진을 크게 본다'; b.setAttribute('aria-label', b.title);
+    b.type = 'button'; b.title = ST.photoName() + '을 크게 본다'; b.setAttribute('aria-label', b.title);
     var cv = G.Img.make(['story/photo'], 72, 82, function () {
       var c = document.createElement('canvas'); c.width = 72; c.height = 82;
       drawPhotoFallback(c.getContext('2d'), 72, 82); return c;
@@ -343,7 +425,7 @@
     if (!s.hints[next[0]]) return [];
     var tc = G.CITY_DATA[next[2]];
     if (tc.id === c.id) { var f = R.facilities(c), k = f.tavern ? 'tavern' : f.market ? 'market' : null; return [{ kind: k, icon: 'star', hot: true, text: ST.kin() + '의 흔적 — 이 도시의 건물에 들어서면 알아볼 수 있다', onClick: k ? null : open }]; }
-    return [{ icon: 'scroll', text: ST.kin() + '의 흔적 — 다음은 <b>' + U.esc(tc.name) + '</b> (수첩 「아버지의 사진」)', onClick: open }];
+    return [{ icon: 'scroll', text: ST.kin() + '의 흔적 — 다음은 <b>' + U.esc(tc.name) + '</b> (수첩 「' + ST.photoName() + '」)', onClick: open }];
   };
   ST.page = function (el) {
     var s = S(), t = T(); if (!t) { el.innerHTML = '<div class="muted">이야기 모드가 아니다.</div>'; return; }
@@ -363,7 +445,7 @@
       : '앞의 흔적을 찾으면 다음 단서가 열린다.';
     el.innerHTML = '<div class="grid2" style="grid-template-columns:320px 1fr;gap:26px"><div>' +
       '<div class="story-photo"></div>' +
-      '<h4 style="margin:12px 0 6px">' + U.esc(ph.name) + '</h4><div class="muted" style="font-size:15px;line-height:1.6">' + U.esc(ph.desc) + '</div>' +
+      '<h4 style="margin:12px 0 6px">' + U.esc(ST.photoName()) + '</h4><div class="muted" style="font-size:15px;line-height:1.6">' + U.esc(ph.desc) + '</div>' +
       '<div class="sep"></div><div style="font-size:15px;line-height:1.6"><b>사람</b> — ' + U.esc(ph.look) + '<br><b>뒤편</b> — ' + U.esc(ph.back) + '<br><b>틈새</b> — ' + U.esc(ph.people) + '</div>' +
       '</div><div>' +
       '<h4 style="margin:0 0 8px">' + kin + '의 흔적 <small class="muted">두 해마다 한 번, 머물렀던 자리로 다시 떨어진다</small></h4>' +
@@ -404,7 +486,19 @@
   }
 
   // ================================================================ 자택의 어머니 · 아내와 어머니 (자료: G.STORY.homeLife)
-  function HD() { return D.homeLife || {}; }
+  function HD0() { return D.homeLife || {}; }
+  /** 이번 대의 집안 대사: 첫 대는 레오노르의 것, 대를 이으면 어머니(본처)의 것 — 본처가 없으면 할머니가 집을 지킨다 */
+  function HD() {
+    var h = HD0(); if (!ST.heirMode() || !h.heir) return h;
+    var hh = h.heir, o = {}, k;
+    for (k in h) o[k] = h[k];
+    ['greet', 'greetEnd', 'talk', 'talkFound', 'allowance', 'allowanceAgain', 'allowanceSoon'].forEach(function (x) { if (hh[x]) o[x] = hh[x]; });
+    if (!hasMom()) { o.greet = hh.gmGreet || o.greet; o.talk = hh.gmTalk || o.talk; o.talkFound = []; o.greetEnd = null; }
+    o.family = (h.family || []).filter(function (e) { return !e.gen1; }).concat(hh.family || []);
+    return o;
+  }
+  /** 할머니가 없으면(셋째 대에 기록이 없거나 레오노르가 너무 늙었으면) 할머니(O)의 대사는 건너뛴다 */
+  function dropMissing(lines) { return ST.hasGrandma() ? lines : (lines || []).filter(function (l) { return !(Array.isArray(l) && l[0] === 'O'); }); }
   /** 이야기 모드에서 이 도시가 제독의 고향(어머니가 사는 집)인가 */
   ST.atHome = function (c) { var s = S(); return !!(T() && s && c && c.id === s.player.home); };
   function pickLines(list, key) {
@@ -416,6 +510,12 @@
   /** 집에 들어설 때 어머니가 맞는다 (아내가 있으면 아내 다음에) */
   ST.motherGreet = async function (c) {
     var t = T(); if (!ST.atHome(c)) return false;
+    // 대를 이은 뒤 처음 집에 들어설 때: 어머니(본처)와 할머니가 맞고, 사진(과 시계)을 물려준다 — 대마다 한 번
+    if (ST.heirMode() && t.heirIntro !== gen() && HD0().heir) {
+      t.heirIntro = gen(); t.gmLast = U.dateNum(S().date);
+      await play(dropMissing(t.end === 'done' ? HD0().heir.introEnd : HD0().heir.intro));
+      return 'intro';
+    }
     var L = HD().greet; if (t.end === 'done' && U.chance(0.4)) L = HD().greetEnd;
     await play(pickLines(L, 'greetI'));
     return true;
@@ -438,8 +538,9 @@
     }
     await play(t.allowN ? HD().allowanceAgain : HD().allowance);
     s.player.gold += cf.gift || 7777; t.allowLast = now; t.allowN = (t.allowN || 0) + 1;
-    G.State.log('어머니 ' + D.mother.name + U.jx(D.mother.name, '이/가') + ' 비상금으로 금화 ' + U.num(cf.gift || 7777) + '닢을 주었다.');
-    UI.toast('어머니의 비상금 — 금화 ' + U.num(cf.gift || 7777) + '닢', 'coin', 4200);
+    var mn = ST.motherName();
+    G.State.log((hasMom() ? '어머니 ' : '') + mn + U.jx(mn, '이/가') + ' 비상금으로 금화 ' + U.num(cf.gift || 7777) + '닢을 주었다.');
+    UI.toast((hasMom() ? '어머니' : '할머니') + '의 비상금 — 금화 ' + U.num(cf.gift || 7777) + '닢', 'coin', 4200);
     G.Game.refreshHud();
     return true;
   };
@@ -455,8 +556,26 @@
     if (e.need === 'preg') return !!(p.preg && p.preg.told);
     if (e.need === 'found') return !!(t.found && t.found.length);
     if (e.need === 'end') return t.end === 'done';
+    if (e.need === 'leonor') { var g = gmInfo(); return !!(g && g.leonor); }
+    if (e.need === 'wife') return !!p.wife;
+    if (e.need === 'dadAlive' || e.need === 'dadGone') { var L = lineRec(); return !!L && (e.need === 'dadGone') === !!L.forced; }
     return true;
   }
+  /** 할머니가 잠깐 들른다 (대를 이은 뒤 · 어머니가 집을 지킬 때) — 집에 들어설 때 visitCfg.chance, 들른 뒤 gap일 동안은 오지 않는다. 들렀으면 true */
+  ST.grandmaVisit = async function (c, force) {
+    var s = S(), t = T(), hh = HD0().heir;
+    if (!ST.heirMode() || !ST.atHome(c) || !hh || !hh.visits || !ST.hasGrandma() || !hasMom()) return false;
+    var cf = hh.visitCfg || {}, now = U.dateNum(s.date);
+    if (!force && t.gmLast != null && daysSince(t.gmLast) < (cf.gap || 30)) return false;
+    var seen = t.gmSeen || (t.gmSeen = {});
+    var cand = hh.visits.filter(famOk), fresh = cand.filter(function (e) { return !seen[e.id]; }), pool = fresh.length ? fresh : cand;
+    if (!pool.length) return false;
+    if (!force && !U.chance((cf.chance || 0.35) * (fresh.length ? 1 : 0.4))) return false;
+    var e = pool[Math.floor(Math.random() * pool.length)];
+    seen[e.id] = (seen[e.id] || 0) + 1; t.gmLast = now;
+    await play(e.lines, ['O', 'M']);
+    return true;
+  };
   /** 아내와 어머니가 함께 있는 장면 — at: home · inn · mansion. 일어났으면 true */
   ST.family = async function (c, at, force) {
     var s = S(), t = T(), h = HD(); if (!ST.atHome(c) || !s.player.wife || !h.family) return false;
@@ -473,6 +592,17 @@
     seen[e.id] = (seen[e.id] || 0) + 1; t.famLast = now;
     await play(e.lines, ['W', 'M']);
     return true;
+  };
+
+  /** 대를 이은 직후: 사진·시계의 이름을 이번 대의 촌수로, 일지에 어머니가 집을 지킨다고 적는다 (장면은 처음 집에 들어설 때 — ST.motherGreet) */
+  ST.afterSucceed = function (rec) {
+    var s = S(), kin = ST.kin();
+    (s.player.items || []).forEach(function (it) {
+      if (it.id === 'photo' && it.tale) it.name = kin + '의 사진';
+      if (it.id === 'watch' && it.tale) { it.name = kin + '의 시계'; if (T().end === 'done') it.desc = '다시 돌기 시작한 작은 시계. 두 해마다 한 번, 아틀란티스에서 ' + kin + '를 만날 수 있다.'; }
+    });
+    var mn = rec.mom ? ST.motherName() : null, g = gmInfo();
+    if (mn) G.State.log('어머니 ' + mn + U.jx(mn, '이/가') + ' 리스본 집을 지킨다.' + (g ? ' ' + ST.grandma().name + '는 ' + ((rec.forced ? HD0().heir.gmFromGone : HD0().heir.gmFromAlive) || '') + ' 지내며 가끔 들른다.' : ''));
   };
 
   // ================================================================ 게임 함수 감싸기
@@ -492,6 +622,16 @@
         };
       });
     }
+    // 대를 이을 때: 누가 물러나고 누가 어머니(본처)가 되는지 적어 두고, 사진·시계 이름을 「할아버지의 …」로 (2026-10-30)
+    if (G.Family) wrap(G.Family, 'succeed', function (orig) {
+      return async function (k, forced) {
+        var t = T(), p0 = S() && S().player;
+        var rec = t && p0 ? { gen: (p0.generation || 1) + 1, dad: p0.name, dadGiven: p0.given || p0.name, forced: !!forced, mom: p0.wife || (k && k.mother) || null, y: S().date.y } : null;
+        var r = await orig.apply(this, arguments);
+        try { if (T() && rec && gen() === rec.gen) { (T().line || (T().line = [])).push(rec); ST.afterSucceed(rec); } } catch (e) { console.error(e); }
+        return r;
+      };
+    });
     if (G.Frontier) wrap(G.Frontier, 'mateReady', function (orig) { return function (m) { if (m && m.tale && !T()) return false; return orig.apply(this, arguments); }; });
     if (SP) wrap(SP, 'present', function (orig) { return function (sp) { if (sp && sp.tale && !T()) return false; return orig.apply(this, arguments); }; });
     // 자코모의 무릎상: 카사노바 그림

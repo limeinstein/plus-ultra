@@ -47,7 +47,7 @@
     if (tab === 'menu') return I.settings();
     // 지난번 탭은 같은 항해(저장)에서만 — 다른 저장을 불러오면, 또는 지금 수첩에 없는 탭(이야기 모드의 「아버지의 사진」 등)이면 제독 탭 (QA 2026-10-23)
     if (lastTabOf !== S()) lastTab = null;
-    var tabList = TABS.concat(S().story && G.Story ? [['story', '아버지의 사진']] : []);   // 이야기 모드 (js/systems/story.js)
+    var tabList = TABS.concat(S().story && G.Story ? [['story', G.Story.photoName ? G.Story.photoName() : '아버지의 사진']] : []);   // 이야기 모드 (js/systems/story.js)
     if (!tab && lastTab && !tabList.some(function (t) { return t[0] === lastTab; })) lastTab = null;
     tab = tab || lastTab || 'admiral';
     var win = UI.window({ title: '항해 수첩', icon: 'book', width: 1180, height: 780, html: '' });
