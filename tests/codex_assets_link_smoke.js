@@ -1,5 +1,5 @@
 /* 그림 연결 점검 (2026-10-10)
-   · 유물 664종과 교역품 158종이 모두 전용 그림으로(노예는 끊어진 족쇄)
+   · 기존 유물 664종과 교역품 158종은 전용 그림으로, 새 곤충 표본 16종은 동물 갈래 공용 그림으로
    · 새 항해사 얼굴 6명(보쿠덴·첸·김·키스크·말린체·투팍) 흉상·무릎상
    · 얼굴 묶음(images/portraits/pools) 760장마다 무릎상 _half는 보존하되, 얼굴과 다른 몸을 포갠 옛 합성본은 부하 표시에 쓰지 않는다
    · 역사·종교 발견물 216곳(GIF·끝 장면·시트) · 대화창에 완성된 얼굴상·무릎상 한 쌍이 실제로 선다 · 콘솔 오류 0
@@ -52,7 +52,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         borrowN: borrowers.length, badBorrowedPair, pairedId: borrowedPairs.length ? borrowedPairs[0].id : null, ruinN: ruins.length, discMiss,
         slaves: I.pick(K.good(G.GOOD.slaves)) };
     }, CINEMATIC_IDS);
-    ok(r.relicN === 664 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 그림 ' + r.relicMiss.join(','));
+    const insectSpecimens = ['r_morpho','r_hercules','r_titanus','r_silverscarab','r_lunamoth','r_emeraldswallow','r_birdwing','r_atlasmoth','r_bhutanglory','r_chalcosoma','r_tamamushi','r_rainbowstag','r_sunsetmoth','r_cometmoth','r_goliath','r_sacredscarab'];
+    ok(r.relicN === 680 && JSON.stringify([...r.relicMiss].sort()) === JSON.stringify(insectSpecimens.sort()), '기존 유물 664종 전용 그림 · 신규 곤충 표본 16종 공용 그림 ' + r.relicMiss.join(','));
     ok(r.goodN === 158 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
     ok(!r.mateMiss.length, '새 항해사 얼굴 6명 흉상·무릎상 ' + r.mateMiss.join(','));
     ok(r.poolN === 760 && !r.poolNoHalf.length, '얼굴 묶음 ' + r.poolN + '장 모두 무릎상이 있다 ' + r.poolNoHalf.slice(0, 5).join(','));

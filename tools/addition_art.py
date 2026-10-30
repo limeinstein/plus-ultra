@@ -11,7 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
@@ -200,7 +200,28 @@ def module(name, directory, filename):
     return obj
 
 
-def build():
+def cinematic_cells(path, fit):
+    """생성 원화의 실제 흰 칸막이를 찾아 옆 장면이 끼어들지 않게 자른다."""
+    with Image.open(path) as raw:
+        src = raw.convert('RGB')
+    red, green, blue = src.split()
+    white = ImageChops.darker(ImageChops.darker(red, green), blue).point(lambda p: 255 if p > 200 else 0)
+    def boundaries(vertical):
+        size = src.width if vertical else src.height
+        points = [0]
+        for i in (1, 2, 3):
+            center = size*i/4
+            def score(p):
+                line = white.crop((p, 0, p+1, src.height) if vertical else (0, p, src.width, p+1))
+                return line.histogram()[255], -abs(p-center)
+            points.append(max(range(int(center-size*.06), int(center+size*.06)), key=score))
+        return points + [size]
+    xs, ys = boundaries(True), boundaries(False)
+    boxes = [(xs[x]+2, ys[y]+2, xs[x+1]-2, ys[y+1]-2) for y in range(4) for x in range(4)]
+    return [fit(src.crop(box)) for box in boxes], boxes
+
+
+def build(refresh=False):
     data = json.loads(SPEC.read_text(encoding='utf-8'))
     missing = [r['id'] for r in data['assets'] if not (ROOT / r['target']).is_file()]
     if missing:
@@ -210,10 +231,24 @@ def build():
     sheets = module('addition_sheets', 'tools/ruin_gifs', 'sheets.py')
     for row in data['assets']:
         iid, kind = row['id'], row['kind']
+        source = ROOT / row['target']
+        expected = ([ROOT / f'images/discoveries/{iid}.gif', ROOT / f'images/discovery-ends/{iid}.jpg', ROOT / f'images/discovery-sheets/{iid}.webp']
+                    if kind in ('nature', 'ruin') else [ROOT / f'images/{"items" if kind == "item" else "relics"}/{iid}.webp'])
+        if any(p.exists() for p in expected):
+            recorded = [ROOT / f for f in row.get('files', [])]
+            if expected != recorded or not all(p.exists() for p in expected):
+                raise FileExistsError('이번 제작 기록에 없는 기존 게임 그림: ' + iid)
+            recut = kind == 'ruin' and row.get('grid_version') != 1
+            if not refresh or (not recut and source.stat().st_mtime <= min(p.stat().st_mtime for p in expected)):
+                print(iid, '기존 제작 결과 유지', flush=True)
+                continue
+            for p in expected:
+                backup = ART / 'before-refresh' / p.relative_to(ROOT)
+                backup.parent.mkdir(parents=True, exist_ok=True)
+                if not backup.exists():
+                    shutil.copy2(p, backup)
         if kind in ('nature', 'ruin'):
-            destinations = [ROOT / f'images/discoveries/{iid}.gif', ROOT / f'images/discovery-ends/{iid}.jpg', ROOT / f'images/discovery-sheets/{iid}.webp']
-            if any(p.exists() for p in destinations):
-                raise FileExistsError('기존 게임 그림은 덮지 않음: ' + iid)
+            destinations = expected
             if kind == 'nature':
                 if iid == 'capri':
                     # 푸른 동굴 천장에는 해·달·별을 겹쳐 그리지 않는다.
@@ -227,13 +262,15 @@ def build():
                 else:
                     nature.build_one(iid)
             else:
+                frames, boxes = cinematic_cells(source, ruin.fit_whole)
+                ruin.storyboard_cells = lambda _path, frames=frames: frames
                 ruin.build_one(iid, ruin.LIVE_OUT, ruin.LIVE_ENDS)
+                row['grid_version'] = 1
+                row['source_boxes'] = boxes
             sheets.build(iid, True)
             row['files'] = [p.relative_to(ROOT).as_posix() for p in destinations]
         else:
             destination = ROOT / f'images/{"items" if kind == "item" else "relics"}/{iid}.webp'
-            if destination.exists():
-                raise FileExistsError('기존 소지품 그림은 덮지 않음: ' + iid)
             destination.parent.mkdir(parents=True, exist_ok=True)
             with Image.open(ROOT / row['target']) as raw:
                 if 'A' not in raw.getbands() or raw.getchannel('A').getextrema()[0] != 0:
@@ -261,11 +298,12 @@ def register(rows):
             rel = filename.removeprefix('images/')
             files[str(Path(rel).with_suffix('')).replace('\\', '/')] = rel
     replacement = 'G.IMAGE_FILES = ' + json.dumps(dict(sorted(files.items())), ensure_ascii=False, indent=2) + ';'
-    path.write_text(text[:match.start()] + replacement + text[match.end():], encoding='utf-8')
+    path.write_text(text[:match.start()] + replacement + text[match.end():], encoding='utf-8', newline='\n')
 
 
 def preview(rows):
     font = ImageFont.truetype('C:/Windows/Fonts/malgun.ttf', 18)
+    small = ImageFont.truetype('C:/Windows/Fonts/malgun.ttf', 15)
     for group, kinds, width, height, columns in [('discoveries', ('nature', 'ruin'), 288, 164, 5), ('items', ('item', 'relic'), 192, 216, 6)]:
         selected = [r for r in rows if r['kind'] in kinds]
         out = Image.new('RGB', (columns*width, ((len(selected)+columns-1)//columns)*height), '#283039')
@@ -279,7 +317,18 @@ def preview(rows):
             with Image.open(path) as im:
                 im = ImageOps.contain(im.convert('RGBA'), (width-12, height-36), Image.Resampling.LANCZOS)
                 out.paste(im, (x+(width-im.width)//2, y+6), im)
-            draw.text((x+8, y+height-28), row['name'], font=font, fill='#f4e7c8')
+            if group == 'items':
+                lines, line = [], ''
+                for char in row['name']:
+                    if draw.textlength(line+char, font=small) > width-16:
+                        lines.append(line); line = char
+                    else:
+                        line += char
+                lines.append(line)
+                for j, line in enumerate(lines[:2]):
+                    draw.text((x+8, y+height-36+j*17), line, font=small, fill='#f4e7c8')
+            else:
+                draw.text((x+8, y+height-28), row['name'], font=font, fill='#f4e7c8')
         out.save(ROOT / f'docs/art/additions-20261030-{group}.jpg', quality=92)
 
 
@@ -288,12 +337,13 @@ if __name__ == '__main__':
     parser.add_argument('action', choices=['prepare', 'record', 'revise', 'build', 'preview'])
     parser.add_argument('--id')
     parser.add_argument('--source', type=Path)
+    parser.add_argument('--refresh', action='store_true', help='이 제작 기록의 원화가 새로 바뀐 결과만 보관 후 다시 굽기')
     args = parser.parse_args()
     if args.action == 'prepare':
         prepare()
     elif args.action in ('record', 'revise'):
         record(args.id, args.source, args.action == 'revise')
     elif args.action == 'build':
-        build()
+        build(args.refresh)
     else:
         preview(json.loads(SPEC.read_text(encoding='utf-8'))['assets'])

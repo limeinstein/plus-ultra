@@ -15,7 +15,7 @@
 
 | 인물 | 그림 경로 | 자세·표정 |
 | --- | --- | --- |
-| 이순신 | `mates/h_yisunsin` | 참고 검을 하늘 높이 치켜드는 모습, 20년 젊은 얼굴과 힘찬 외침 |
+| 이순신 | `mates/h_yisunsin` | 검을 높이 들되 칼끝은 잘라 상체를 크게 강조, 20년 젊은 얼굴과 준엄한 표정 |
 | 허준 | `mates/h_heojun` | 의서를 안은 모습, 온화한 걱정 |
 | 곽재우 | `legendary/gwak_jaeu` | 활을 당기는 모습, 집중한 시선 |
 | 사명대사 유정 | `legendary/samyeong_daesa` | 석장·염주, 온화한 미소 |
@@ -28,7 +28,7 @@
 | 광해군 | `history/gwanghae` | 생각에 잠긴 모습, 젊고 진지한 인상 |
 | 고니시 유키나가 | `legendary/konishi_yukinaga` | 검과 펼친 손, 경계하는 시선 |
 | 진린 | `history/chenlin` | 지휘하는 손짓, 자신감 있는 외침 |
-| 논개 | `legendary/nongae` | 삿갓을 든 모습, 미소와 또렷한 눈빛 |
+| 논개 | `legendary/nongae` | 삿갓을 아래로 들고 머리 옆에 손을 올린 모습, 참고 사진의 부드러운 표정을 반영한 반실사화 |
 | 김덕령 | `legendary/kim_deokryeong` | 철퇴를 든 모습, 젊은 장수의 외침 |
 
 ## 원화와 다시 만드는 법
@@ -38,6 +38,8 @@
 `node tools/package_imjin_portraits.js`는 원화를 보존하고 WebP를 내보내며 그림 목록과 비교판을 만든다. 제작 도구에만 `sharp`를 쓰며 게임에는 새 의존성을 더하지 않았다.
 
 이순신 추가 수정: 사용자의 검 사진을 참고해 지휘봉을 검으로 바꾸고 약 20년 젊은 얼굴로 수정했다. 투구 꼭대기의 삼지창 모양 장식도 둥근 장식으로 바꿨다. `tools/imjin_yisunsin_sword_revision.json`에 수정 지시문을, `artifacts/imjin-portraits-20261030/revisions/yisunsin-sword/`에 검 참고와 수정 전 원화를 보관했다. 이순신만 다시 내보낼 때는 `node tools/package_imjin_portraits.js yisunsin`을 쓴다.
+
+최종 구도 수정: 이순신은 칼 전체를 넣는 대신 상체·얼굴을 크게 잡고 입을 다문 준엄한 표정으로 바꿨다. `_half` 파일도 무릎까지 내려가는 전신 구도 대신 상체 중심으로 쓴다. 논개는 사용자가 첨부한 얼굴 사진의 분위기와 표정을 반실사 그림체로 반영했다. 체형·가슴 크기·의상 노출은 늘리지 않았다. 두 사람의 얼굴상도 같은 새 표정으로 맞췄다. 지시문은 `tools/imjin_upperbody_nongae_revision.json`, 수정 전 원화와 얼굴 참고는 `artifacts/imjin-portraits-20261030/revisions/upperbody-nongae/`에 보관했다.
 
 그림 교체 뒤 `tools/portrait_faces.py --key <그림 키> --merge`로 대상 30장의 눈·입·얼굴 상자를 다시 계산했다. 다른 인물의 기존 좌표는 유지했다.
 

@@ -53,7 +53,7 @@ const selected = new Set(process.argv.slice(2));
   }
   // 기존 등록 내용은 유지하며 새 역사 인물 그림만 덧붙인다.
   const manifest = path.join(ROOT, 'images', 'manifest.js');
-  let manifestText = fs.readFileSync(manifest, 'utf8');
+  let manifestText = fs.readFileSync(manifest, 'utf8').replace(/\r\n/g, '\n');
   const match = /G\.IMAGE_FILES = (\{[\s\S]*?\});/.exec(manifestText);
   if (!match) throw new Error('그림 목록 형식 확인 필요');
   const files = JSON.parse(match[1]);

@@ -4,7 +4,7 @@
    ■ 모두 배로 그 섬 가까이 가면 찾는다(how 'sea', 반경 r). 큰 섬은 이름난 바닷가 한 곳을 자리로 잡았다 (예: 시칠리아 → 타오르미나, 제주도 → 서쪽 협재 바닷가 — 성산일출봉·정방폭포와 겹치지 않게)
    ■ 발견의 여파 「휴양」(impact 'rest' — js/systems/discovery.js IMPACT · G.BALANCE.discoveryImpact.rest): 피로가 크게 풀리고 규율이 오른다
    ■ 단서 이름(G.DISC_NAMES — 12자 안)과 특기별 관찰 3개(G.DISC_FACTS), 가족의 한마디(resortdisc_fam.js)를 함께 넣는다
-   ■ 그림은 아직 없다 — 발견 장면은 기본 그림으로 보이고, discoveries/<ID>.gif 등을 넣으면 바뀐다 (G.RESORTS 목록)
+   ■ 38곳의 전용 그림을 discoveries/<ID>.gif · discovery-ends/<ID>.jpg · discovery-sheets/<ID>.webp에 연결했다 (G.RESORTS 목록)
    글은 실제 자료를 바탕으로 이 게임을 위해 새로 썼다. 게임 시대(1480~)에 맞게 쓰고, 훗날의 나라 이름은 쓰지 않았다. */
 (function (G) {
   'use strict';
