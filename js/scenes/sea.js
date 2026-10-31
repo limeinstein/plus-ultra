@@ -171,9 +171,15 @@
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     hudEl.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
-    var zb = U.el('div', 'zoomctl');
-    [['＋', 1.25], ['－', 0.8]].forEach(function (z) { var b = U.el('button', 'btn small', z[0]); b.onclick = function (e) { e.stopPropagation(); zoomBy(z[1]); }; zb.appendChild(b); });
-    bar.appendChild(zb);
+    // 긴 하단 메뉴에 가려지지 않도록 지도 확대 단추는 오른쪽 위에 둔다.
+    var zb = U.el('div', 'sea-zoom wood brass-frame'); zb.setAttribute('role', 'group'); zb.setAttribute('aria-label', '지도 확대');
+    function zoomButton(label, title, fn) { var b = U.el('button', 'btn small', label); b.title = title; b.setAttribute('aria-label', title); b.onclick = function (e) { e.stopPropagation(); b.blur(); fn(); }; zb.appendChild(b); }
+    zoomButton('－', '지도 축소', function () { zoomBy(0.8); });
+    hudEl.zoom = U.el('output', '', '1.0×'); hudEl.zoom.title = '지도 배율 · 휠 또는 +/− 키로 조절'; zb.appendChild(hudEl.zoom);
+    zoomButton('＋', '지도 확대', function () { zoomBy(1.25); });
+    zoomButton('선박 확대', '선박을 가까이 보기', function () { st.cam.zoomT = FXS().zoom.max; });
+    zoomButton('기본', '기본 배율로 돌아가기', function () { st.cam.zoomT = FXS().zoom.reference; });
+    UI.add(zb);
     bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
     hudEl.bar = bar; st.followArmed = false; refreshFollow();
@@ -266,7 +272,7 @@
     var k = e.deltaY > 0 ? 1 / 1.15 : 1.15;
     zoomBy(k);
   }
-  function zoomBy(k) { st.cam.zoomT = U.clamp((st.cam.zoomT || st.cam.zoom) * k, 26, 420); }
+  function zoomBy(k) { var z = FXS().zoom; st.cam.zoomT = U.clamp((st.cam.zoomT || st.cam.zoom) * k, z.min, z.max); }
   function onDown(e) {
     if (e.button !== 0 || UI.busy() || st.busy) return;
     var p = stagePos(e);
@@ -574,7 +580,7 @@
   }
   function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1) : null; }
   function npcAt(x, y) {
-    var best = null, bd = Math.pow(npcPx() * 0.6, 2);
+    var best = null, bd = Math.pow(npcViewPx() * 0.6, 2);
     st.npcs.forEach(function (n) { var p = toScreen(n.lon, n.lat); var d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y); if (d < bd) { bd = d; best = n; } });
     return best;
   }
@@ -1028,6 +1034,7 @@
     // 카메라: 진행 방향으로 조금 앞서 (속력에 비례, 최대 0.3°) — 흔들기·급한 확대는 쓰지 않는다
     //   배는 그대로 따라가고(속도만큼 뒤처지지 않아 배속을 올려도 배가 화면에서 떠밀리지 않는다), 어긋난 만큼만 부드럽게 좁힌다
     var P = FXS(), vsp = shipSpeed(), lead = Math.min(0.3, vsp * P.camLead * (sens().leadK || 1));   // 조작 감도: 느리게면 화면이 덜 내다본다
+    lead = Math.min(lead, P.zoom.leadMaxPx / Math.max(st.cam.zoom, st.cam.zoomT || 0));
     if (G.Audio && G.Audio.travel) G.Audio.travel('sea', !frozen && !st.paused && vsp > 0.03 ? Math.min(1, 0.22 + vsp) : 0);   // 선체가 물을 가르는 소리
     if (G.Audio && G.Audio.amb && Date.now() >= (st.ambAt || 0)) {   // 배경 소리: 물결(멈추면 바닷새도) · 센 바람 · 폭풍 (0.3초마다)
       st.ambAt = Date.now() + 300;
@@ -1039,6 +1046,8 @@
     var kl = ease(dt, 1.2);
     st.camLead[0] += (Math.cos(ld) * lead - st.camLead[0]) * kl;
     st.camLead[1] += (Math.sin(ld) * lead - st.camLead[1]) * kl;
+    var leadLen = Math.hypot(st.camLead[0], st.camLead[1]), leadMax = P.zoom.leadMaxPx / Math.max(st.cam.zoom, st.cam.zoomT || 0);
+    if (leadLen > leadMax) { st.camLead[0] *= leadMax / leadLen; st.camLead[1] *= leadMax / leadLen; }
     var cx = l.lon + st.camLead[0], cy = l.lat + st.camLead[1];
     var ex = G.Geo.wrapLon(st.cam.lon - cx), ey = st.cam.lat - cy, keep = 1 - ease(dt, P.camCatch || 4);
     if (Math.abs(ex) > 4 || Math.abs(ey) > 4) keep = 0;             // 멀리 떨어졌으면(출항 직후 등) 바로 옮긴다
@@ -1109,7 +1118,7 @@
     if (RD && RD.on !== false && WV && dt > 0) {
       // 보이는 파도를 탄다: 화면의 바다 셰이더와 같은 식으로 선체 위 다섯 점의 높이를 재고, 용수철-감쇠로 따라간다
       var l = S().loc, stK = st.storm > 0 ? RD.storm : 1;
-      var w = rideWave(l.lon, l.lat, l.heading, shipPx());
+      var w = rideWave(l.lon, l.lat, l.heading, shipViewPx());
       var tgt = { roll: P.roll * (turnHeel + windHeel + w.roll * stK), pitch: P.pitch * (w.pitch * stK + accPitch), heave: P.heave * w.heave * stK };
       st.ride = st.ride || WV.newRide();
       var R = st.ride, vp0 = R.vp;
@@ -1127,7 +1136,7 @@
       st.rideF = st.rideF || [];
       for (var si = 1; si < fsR.length; si++) {
         var sp0 = st.slotPos && st.slotPos[si]; if (!sp0) continue;
-        var wf = rideWave(l.lon + sp0[0] / z, l.lat - sp0[1] / z, l.heading, followPx()), fk = RD.follow * stK;
+        var wf = rideWave(l.lon + sp0[0] / z, l.lat - sp0[1] / z, l.heading, followViewPx()), fk = RD.follow * stK;
         var RF = st.rideF[si] = st.rideF[si] || WV.newRide();
         WV.spring(RF, { roll: P.roll * (turnHeel * 0.9 + windHeel + wf.roll * fk), pitch: P.pitch * (wf.pitch * fk + accPitch), heave: P.heave * wf.heave * fk }, RD, Math.min(dt, 0.1));
       }
@@ -1353,16 +1362,25 @@
     st.path = null; st.dirCrs = null; st.paused = true; st.vel = [0, 0]; st.prog = null; refreshBar();
     UI.toast('뱃길이 막혀 배를 세웠습니다. ' + (tg.city ? U.j(tg.city.name, '을/를') + ' 다시 누르면 뱃길을 새로 찾습니다.' : '목적지를 다시 잡아 주십시오.'), 'map', 6000);
   }
-  /** 기함의 크기 (세상 좌표 °): 화면의 배 그림 크기 ÷ 확대 */
-  function shipGeom() { var z = st.cam ? st.cam.zoom : 110, L = shipPx() / z; return { len: L, wid: L * 0.34, ref: FXS().refSpeed, zoom: z }; }
-  /** 배 그림 크기(px): 기함 · 따르는 배 · 다른 배 (조정값 G.FX.ship.size·followSize·npcSize) */
+  /** 물보라·항적용 기함 크기 (세상 좌표 °): 화면의 배 그림 크기 ÷ 확대 */
+  function shipGeom() { var z = st.cam ? st.cam.zoom : 110, L = shipViewPx() / z; return { len: L, wid: L * 0.34, ref: FXS().refSpeed, zoom: z }; }
+  /** 기본 크기: 기존 충돌·해안 접근과 육상 표시에서 쓰는 값은 확대 연출과 분리한다. */
   function shipPx() { return FXS().size || 95; }
   function followPx() { return FXS().followSize || 76; }
   function npcPx() { return FXS().npcSize || 54; }
   SEA.shipPx = shipPx;
-  /** 손으로 몰 때 뱃머리가 뭍에 닿는지 (그림의 뱃머리 끝과 멈추는 자리를 맞춘다 — 아주 좁은 물길을 막지 않게 최대 0.3°, 확대하면 배 그림이 세상에서 작아지므로 더 붙을 수 있다) */
+  function shipViewScale() {
+    var z = FXS().zoom;
+    return U.clamp(Math.pow((st.cam ? st.cam.zoom : z.reference) / z.reference, z.power), z.minScale, z.maxScale);
+  }
+  function navigationZoom() { return Math.min(st.cam ? st.cam.zoom : FXS().zoom.reference, FXS().zoom.navigationMax); }
+  function shipViewPx() { return shipPx() * shipViewScale(); }
+  function followViewPx() { return followPx() * shipViewScale(); }
+  function npcViewPx() { return npcPx() * shipViewScale(); }
+  function fleetGap() { var z = FXS().zoom; return 1 + (z.fleetGap - 1) * U.clamp((shipViewScale() - 1) / (z.maxScale - 1), 0, 1); }
+  /** 손으로 몰 때 뱃머리가 뭍에 닿는지. 종전 26~420 배율의 판정을 유지하고 새 근접 구간은 420의 판정을 쓴다. */
   function bowClear(x, y, h) {
-    var L = shipPx() / (st.cam ? st.cam.zoom : 110), a = Math.min(0.3, L * 0.42);
+    var L = shipPx() / navigationZoom(), a = Math.min(0.3, L * 0.42);
     return G.Geo.isSea(x + Math.cos(h) * a, y + Math.sin(h) * a, 0.2);
   }
   /** 뱃머리 앞의 뭍이 아주 얇은가 (자료 해상도에서 생긴 모래톱 같은 것) */
@@ -1839,6 +1857,8 @@
   }
   function render(dt) {
     var s = S(), l = s.loc, r = G.Game.renderer;
+    var zoomText = (st.cam.zoom / FXS().zoom.reference).toFixed(1) + '×';
+    if (hudEl.zoom && hudEl.zoom.textContent !== zoomText) hudEl.zoom.textContent = zoomText;
     var idle = st.busy > 0 || UI.busy();
     var clouds = cloudStep(dt || 0.016);
     st.rframe = (st.rframe || 0) + 1;
@@ -1998,7 +2018,7 @@
       ctx.beginPath(); ctx.moveTo(c0[0], c0[1]); ctx.lineTo(c1[0], c1[1]); ctx.stroke(); ctx.setLineDash([]);
     }
     // 항적·물보라 (배가 실제로 지나간 바다에 남는다)
-    if (st.fx && G.SeaFX) G.SeaFX.draw(st.fx, ctx, toScreen, z, shipPx());
+    if (st.fx && G.SeaFX) G.SeaFX.draw(st.fx, ctx, toScreen, z, shipViewPx());
     // 망루가 본 것 (가까울수록 원이 좁혀진다)
     if ((st.frame3 = (st.frame3 || 0) + 1) % 20 === 1 || !st.marks || st.marksVer !== G.Explore.ver) { st.marks = G.Explore.markers(l.lon, l.lat, 'sea'); st.marksVer = G.Explore.ver; }
     st.marks.forEach(function (m) {
@@ -2014,15 +2034,16 @@
     // npcs
     st.npcs.forEach(function (n) {
       if (G.ShipSprite && n.ships) G.ShipSprite.want(n.ships);
-      var p = toScreen(n.lon, n.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;
+      var NP = npcViewPx(), margin = Math.max(50, NP * 3);
+      var p = toScreen(n.lon, n.lat); if (p[0] < -margin || p[0] > 1600 + margin || p[1] < -margin || p[1] > 900 + margin) return;
       var kk = NPC_KIND[n.kind];
       for (var j = 0; j < Math.min(3, n.n); j++) {
         var nty = n.ships && n.ships[j], nlook = nty ? A.shipLook(nty, { flag: kk.flag, cross: false }) : { sails: ['sq', 'sq', 'lat'], hull: kk.hull, sail: kk.sail, flag: kk.flag };
         if (n.kind === 'pirate') { nlook.hull = kk.hull; if (nlook.hullType === 'west' || nlook.hullType === 'galley' || nlook.hullType === 'dhow') nlook.sail = kk.sail; }
-        var nk = npcPx() / 30;
+        var nk = NP / 30;
         // 다른 배도 제 자리의 파도를 타고(용수철 없이 바로), 돛·깃발이 바람을 따른다
         if (G.FX.ride && G.FX.ride.on !== false && G.Waves && j === 0) {
-          var nw = rideWave(n.lon, n.lat, n.heading, npcPx());
+          var nw = rideWave(n.lon, n.lat, n.heading, NP);
           n.pose = n.pose || { roll: 0, pitch: 0, heave: 0 }; var nkk = Math.min(1, (st.dtLast || 0.016) * 3);
           n.pose.roll += (U.clamp(nw.roll, -0.2, 0.2) - n.pose.roll) * nkk; n.pose.pitch += (U.clamp(nw.pitch, -0.08, 0.08) - n.pose.pitch) * nkk; n.pose.heave += (U.clamp(nw.heave, -0.05, 0.05) - n.pose.heave) * nkk;
           if (st.windVis) n.rig = G.Waves.rigStep(n.rig || {}, G.Waves.apparent({ dir: st.windVis.dir, spd: st.windVis.spd * 1.6 }, Math.cos(n.heading) * 0.3, Math.sin(n.heading) * 0.3, n.heading), Math.min(0.1, st.dtLast || 0.016), 0);
@@ -2038,23 +2059,27 @@
         if (nqf) { nx0 += nqf.dx; ny0 += nqf.dy; nlook.pose = { roll: (nlook.pose ? nlook.pose.roll : 0) + nqf.roll, pitch: (nlook.pose ? nlook.pose.pitch : 0) + nqf.pitch, heave: (nlook.pose ? nlook.pose.heave : 0) + nqf.heave }; }
         nlook.light = weatherParams();
         if (n.kind === 'pirate' && (nlook.hullType === 'west' || nlook.hullType === 'galley' || nlook.hullType === 'dhow')) nlook.sailTint = G.FX.ship3d.pirateSailTint;
-        if (!(G.Ship3D && G.Ship3D.draw(ctx, nx0, ny0, nsv.ang, npcPx(), nlook, st.t + j))) A.shipTop(ctx, nx0, ny0, nsv.ang, npcPx(), nlook, st.t + j);
+        if (!(G.Ship3D && G.Ship3D.draw(ctx, nx0, ny0, nsv.ang, NP, nlook, st.t + j))) A.shipTop(ctx, nx0, ny0, nsv.ang, NP, nlook, st.t + j);
       }
-      if ((n.kind === 'pirate' && !n.awed) || n.hostile || n.exp) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.label || n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - npcPx() * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = n.exp && !n.hostile ? '#ffe08a' : '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - npcPx() * 0.72); ctx.textAlign = 'left'; }
+      if ((n.kind === 'pirate' && !n.awed) || n.hostile || n.exp) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.label || n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - NP * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = n.exp && !n.hostile ? '#ffe08a' : '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - NP * 0.72); ctx.textAlign = 'left'; }
     });
     // player fleet
     var pp = toScreen(l.lon, l.lat);
     var f = s.fleet;
     var sr = Math.min(1.4, shipSpeed() / FXS().refSpeed), slip = Math.min(1.2, Math.abs(st.lat || 0) / FXS().refSpeed * 2.2), sideS = (st.lat || 0) >= 0 ? 1 : -1;
-    var SP = shipPx(), FP = followPx();
+    var SP = shipViewPx(), FP = followViewPx(), gap = fleetGap();
     var sv = sideView('flag', l.heading), ha = sv.ang;      // 그림에 쓰는 뱃머리 방향 (옆모습)
     selectionRing(ctx, pp, ha, SP);
     var FS = seaShips();                                   // 내 함대 + 호위하는 상선 (맨 뒤)
     var slots = followSlots(FS.length, ha), fc = Math.cos(ha), fs = Math.sin(ha);
     st.slotPos = st.slotPos || [];
+    // 배와 대열을 같은 프레임에 확대한다. 자리 보간 때문에 커진 배끼리 겹치지 않게 한다.
+    var slotScale = shipViewScale() * gap;
+    if (st.slotScale) st.slotPos.forEach(function (p) { if (p) { p[0] *= slotScale / st.slotScale; p[1] *= slotScale / st.slotScale; } });
+    st.slotScale = slotScale;
     for (var si = FS.length - 1; si >= 0; si--) {
       var sh = FS[si], sl = si ? slots[si] : [0, 0];
-      var tx = pp[0] + (fc * sl[0] - fs * sl[1]) * SP, ty = pp[1] - (fs * sl[0] + fc * sl[1]) * SP;
+      var tx = pp[0] + (fc * sl[0] - fs * sl[1]) * SP * gap, ty = pp[1] - (fs * sl[0] + fc * sl[1]) * SP * gap;
       // 자리를 바꿀 때는 미끄러지듯 옮겨 간다
       var sp0 = st.slotPos[si];
       if (!sp0 || !si) sp0 = st.slotPos[si] = [tx - pp[0], ty - pp[1]];
@@ -2098,7 +2123,7 @@
     }
   }
   function alongCoast(dt) {
-    var l = S().loc, halfT = shipPx() / (st.cam ? st.cam.zoom : 110) * 0.5 * G.Geo.TEX_PER_DEG, d = G.Geo.sdf(l.lon, l.lat);
+    var l = S().loc, halfT = shipPx() / navigationZoom() * 0.5 * G.Geo.TEX_PER_DEG, d = G.Geo.sdf(l.lon, l.lat);
     if (d < -halfT * 1.1 || d > 0) return;
     var e = 0.06, gx = G.Geo.sdf(l.lon + e, l.lat) - G.Geo.sdf(l.lon - e, l.lat), gy = G.Geo.sdf(l.lon, l.lat + e) - G.Geo.sdf(l.lon, l.lat - e);
     if (Math.abs(gx) + Math.abs(gy) < 1e-4) return;
@@ -2124,11 +2149,11 @@
   /* 따르는 배의 자리: 기함 뒤로 비스듬히 줄지어 — 그 자리가 뭍이면 바다 쪽 다른 자리로 (자주 바뀌지 않게 잠시 기억) */
   var SLOTS = [[-0.52, 0.27], [-0.52, -0.27], [-1.04, 0.27], [-1.04, -0.27], [0.0, 0.55], [0.0, -0.55], [-0.52, 0.8], [-0.52, -0.8], [0.52, 0.55], [0.52, -0.55]];
   function followSlots(n, ang) {
-    var l = S().loc, z = st.cam.zoom, SPx = shipPx(), out = [], used = {};
+    var l = S().loc, z = st.cam.zoom, SPx = shipViewPx() * fleetGap(), out = [], used = {};
     st.slotMem = st.slotMem || {};
     if (ang == null) ang = l.heading;
     var c = Math.cos(ang), sn = Math.sin(ang);
-    var hl = followPx() * 0.42;
+    var hl = followViewPx() * 0.42;
     function sea(k) {
       var sl = SLOTS[k];
       for (var j = -1; j <= 1; j++) { var bx = sl[0] * SPx + j * hl, by = sl[1] * SPx; if (G.Geo.sdf(l.lon + (c * bx - sn * by) / z, l.lat + (sn * bx + c * by) / z) > -0.25) return false; }

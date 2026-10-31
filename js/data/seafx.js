@@ -115,6 +115,12 @@
       camLead: 0.22,      // 카메라가 진행 방향으로 앞서 보여 주는 정도 (속력 1°/d 당 °, 최대 0.3°)
       camCatch: 4,        // 카메라: 배를 그대로 따라가고, 어긋난 만큼(앞서 보기가 바뀔 때 등)만 이 빠르기(1/초)로 좁힌다
       zoomEase: 12,       // 확대·축소가 목표에 다가가는 빠르기 (1/초) — 휠 한 칸이 한 번에 뛰지 않고 부드럽게
+      zoom: {
+        min: 26, max: 2400, reference: 110, navigationMax: 420, // 새 확대 구간에서도 기존 해안 판정 크기 유지
+        power: 0.55, minScale: 0.45, maxScale: 5.5, // 지도와 함께 커지는 배 그림 — 충돌 크기와 별개
+        fleetGap: 2.2,     // 가장 가까이 볼 때 동행선 사이 간격 배수
+        leadMaxPx: 90      // 확대해도 카메라가 기함보다 너무 앞서가지 않게
+      },
       refSpeed: 1.1,      // 물보라 세기를 셀 때의 기준 속력 (°/d)
       size: 66,           // 기함 그림 길이 (px, 2026-10 0.7배로 줄임 — 전 95) — 항적·물보라·선체의 물도 이 크기에 맞춘다
       followSize: 53,     // 따르는 배 (0.7배, 전 76)
@@ -155,8 +161,8 @@
     galleon3d: {           // 항해 기함 갤리온 한 척의 실시간 3D 시제품
       enabled: true,      // false면 기존 8방향 그림. 규칙·저장 파일과 무관하다
       span: 256, anchorY: 164, baseLen: 158, elevation: 0.52,
-      minBuffer: 192, maxBuffer: 768, supersample: 1.5,
-      shadows: true, shadowSize: 512, shadowMinLen: 100, // 작은 지도 표시에는 자체 그림자 계산을 생략
+      minBuffer: 256, maxBuffer: 1280, supersample: 2, // 기본 크기도 더 촘촘하게 그린 뒤 줄인다
+      shadows: true, shadowSize: 512, shadowMinLen: 48, // 기본 기함·동행선에도 망루·난간의 자체 그림자
       exposure: 1.22, sunLight: 1.65, skyLight: 0.9, rimLight: 0.35,
       waterline: 0.65, heave: 65,
       maxBrace: 0.75, billRate: 1.3, billPulse: 0.045,

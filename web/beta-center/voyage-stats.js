@@ -5,6 +5,12 @@
   var pins = document.getElementById('voyage-map-pins');
   var empty = document.getElementById('voyage-map-empty');
 
+  // 내려받은 포털을 file://로 확인할 때 원격 통계 요청이 CORS 오류를 만들지 않게 한다.
+  if (location.protocol === 'file:') {
+    if (status) status.textContent = '실시간 항해 통계는 배포된 베타 센터에서 확인할 수 있습니다.';
+    return;
+  }
+
   function num(value) { return Number(value || 0).toLocaleString('ko-KR'); }
   function days(value) {
     var n = Math.max(0, Number(value) || 0), years = Math.floor(n / 365), rest = n % 365;

@@ -588,6 +588,9 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .sailbar.land-bar .speedctl .opt { padding: 6px 8px; }
 .zoomctl { display: flex; flex-direction: column; gap: 2px; justify-content: center; }
 .zoomctl .btn { min-height: 21px; padding: 0 9px; font-size: 14px; line-height: 1; }
+.sea-zoom { position: absolute; right: 18px; top: 80px; z-index: 18; display: flex; align-items: center; gap: 5px; padding: 6px; }
+.sea-zoom .btn { min-height: 32px; padding: 4px 9px; font-size: 14px; }
+.sea-zoom output { min-width: 46px; text-align: center; color: var(--cream); font-size: 14px; font-variant-numeric: tabular-nums; }
 
 /* ---------------------------------------------------------------- 항해사 등용 명부 */
 .hirebox { display: flex; gap: 14px; height: 100%; min-height: 0; }

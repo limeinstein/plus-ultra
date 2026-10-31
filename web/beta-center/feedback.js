@@ -16,6 +16,15 @@
   var activeFilter = 'all';
   var startedAt = Date.now();
 
+  // 내려받은 포털을 file://로 확인할 때 원격 API 요청이 CORS 오류를 만들지 않게 한다.
+  if (location.protocol === 'file:') {
+    status.textContent = '배포된 베타 센터에서 공개 피드백을 확인할 수 있습니다.';
+    formStatus.textContent = '피드백 등록은 배포된 베타 센터에서 이용해 주세요.';
+    refresh.disabled = true;
+    submit.disabled = true;
+    return;
+  }
+
   var CATEGORY_LABELS = {
     bug: '오류 제보', suggestion: '개선 제안', balance: '밸런스', question: '질문', other: '기타'
   };
