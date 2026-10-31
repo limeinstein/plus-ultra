@@ -1,5 +1,7 @@
 (function () {
   'use strict';
+  // 내려받은 포털을 file://로 열 때는 CORS 오류 없이 안내 내용만 보여 준다.
+  if (location.protocol === 'file:') return;
   var endpoint = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event';
   var presenceEndpoint = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/presence';
   var version = '{{VERSION}}';

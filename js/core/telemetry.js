@@ -1,7 +1,8 @@
 /* Privacy-first aggregate telemetry for the public beta only. */
 (function (G) {
   'use strict';
-  if (window.PU_WEB_CHANNEL !== 'beta' || !window.PU_TELEMETRY_ENDPOINT) return;
+  // 내려받은 베타판을 file://로 열 때는 출처가 없어 통계 서버가 받을 수 없다.
+  if (location.protocol === 'file:' || window.PU_WEB_CHANNEL !== 'beta' || !window.PU_TELEMETRY_ENDPOINT) return;
 
   var endpoint = window.PU_TELEMETRY_ENDPOINT;
   var presenceEndpoint = endpoint.replace(/\/api\/event(?:\?.*)?$/, '/api/presence');
