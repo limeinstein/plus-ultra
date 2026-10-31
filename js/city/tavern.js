@@ -956,7 +956,12 @@
         var holder = s.mates.filter(function (x) { return x.role === r.id && x !== m; })[0];
         return { label: '기함 ' + r.name, right: holder ? G.MATE[holder.id].name + '와 교대' : '', value: r.id };
       });
-      // 다른 배의 선장은 여기서 고르지 않는다 — 능력에 맞게 저절로 (js/systems/crewauto.js · 2026-10-28 사용자 요청)
+      // 다른 배의 선장: 평소에는 능력에 맞게 저절로 정해지지만 손으로 정할 수도 있다 — 손으로 정하면 자동 배치가 바꾸지 않는다 (js/systems/crewauto.js · 2026-10-31 사용자 요청)
+      if (G.CrewAuto) G.CrewAuto.others().forEach(function (sh) {
+        var cap = G.CrewAuto.crewOf(sh).captain;
+        opts.push({ label: U.esc(sh.name) + '호 선장', icon: 'crown', value: 'ocap:' + sh.uid,
+          right: cap === m ? '지금 이 배의 선장' + (G.CrewAuto.locked(m) ? ' (손으로 정함)' : '') : cap ? G.MATE[cap.id].name + '와 교대' : '선장 없음' });
+      });
       opts = opts.concat([{ label: '역할 없음', right: '빈 선실이나 다른 배 자리에 저절로', value: 'none' }, { label: '해고한다', value: 'fire', icon: 'boot' }]);
       var v = await UI.choose(d.name + '의 역할', opts, { width: 600 });
       if (!v) continue;
@@ -965,6 +970,11 @@
         // 로코는 해고할 수 없다 — 말하는 사람은 로코 자신 (지금 부관이 다른 사람이면 그 사람 얼굴·이름이 뜨던 버그 — 2026-10-28 피드백)
         if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', { name: d.name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 }); continue; }
         if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; if (!wf && G.OldGuard) G.OldGuard.left(m.id, 'fire'); for (var fi = s.mates.length - 1; fi >= 0; fi--) if (s.mates[fi].id === m.id) s.mates.splice(fi, 1); R.tidyCaptains(); if (G.Cabins) G.Cabins.tidy(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
+        continue;
+      }
+      if (String(v).indexOf('ocap:') === 0) {   // 다른 배의 선장으로 (손으로 정함)
+        var osh = G.CrewAuto.shipByUid(v.slice(5));
+        if (osh) { var prev = G.CrewAuto.setCaptain(osh.uid, m); UI.toast(d.name + U.jx(d.name, '이/가') + ' ' + osh.name + '호의 선장이 되었다.' + (prev ? ' ' + G.MATE[prev.id].name + ' → ' + G.Cabins.placeName(prev) : ''), 'crown', 4500); }
         continue;
       }
       T.assign(m, v);

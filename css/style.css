@@ -1906,6 +1906,11 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .cb-oseat.empty { opacity: .7; border-style: dashed; }
 .cb-oseat.empty i { color: var(--ink-soft); }
 .cb-oseat.cabins { display: block; flex-basis: 100%; white-space: normal; }
+/* 다른 배의 선장 자리 — 눌러서 바꾼다 (js/ui/cabinview.js CV.pickCaptain) */
+.cb-oseat.cap { cursor: pointer; border-color: rgba(150,110,40,.6); }
+.cb-oseat.cap:hover, .cb-oseat.cap:focus { background: rgba(255,236,180,.9); outline: none; }
+.cb-oseat.cap .cb-ochg { margin-left: 6px; padding: 0 5px; font-size: 12px; color: #5a3a14; border: 1px solid rgba(110,80,40,.45); border-radius: 3px; background: rgba(240,220,170,.7); }
+.cb-oseat .cb-lock { margin-left: 4px; padding: 0 4px; font-size: 11px; color: #fff; background: #8a5a1e; border-radius: 3px; }
 .cb-oseat b, .cb-oseat .ic { flex: none; }
 
 /* 수첩 동료의 능력치 · 철새(아는 항해사)의 흐린 옛 소식 (2026-10-28, js/ui/info.js · js/systems/mateknow.js) */
