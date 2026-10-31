@@ -221,6 +221,7 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
+    navalField: { radius: 3200, separation: 1800, spacing: 180, monsterSeparation: 1100, lakeSeparation: 760 }, // 넓은 해전 전장·교전 전 접근 거리
     // 직업의 잠재 특성: 새 발견·실제 거래·실제 전투에만 적용한다. 하루 한도는 저장에 남는다.
     career: {
       explorer: { fatigue: 2, daily: 4 },

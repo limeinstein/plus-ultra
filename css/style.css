@@ -403,6 +403,8 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 .windbox canvas { position: static !important; }
 .sailbar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 18; display: flex; gap: 8px; padding: 8px 10px; width: calc(100% - 20px); box-sizing: border-box; }
 .sailbar .btn { min-height: 44px; padding: 6px 14px; font-size: 17px; }
+.sailbar > * { flex-shrink: 0; }
+.sailbar .btn.follow { width: 44px; min-width: 44px; padding: 6px; justify-content: center; }
 /* 입항 단추는 너비가 늘 같다 — 항구 이름이 길면 말줄임 (하단 메뉴가 커졌다 작아졌다 하며 단추가 밀리지 않게, 2026-10-25) */
 .sailbar .btn.portbtn { flex: 0 0 214px; width: 214px; min-width: 214px; max-width: 214px; box-sizing: border-box; text-align: center; }
 .sailbar .btn.portbtn .pn { display: inline-block; max-width: 158px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
@@ -561,6 +563,17 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .cmdmenu.many .cmd { padding: 8px 10px; font-size: 18px; gap: 9px; }
 .cmdmenu.many .cmd.exit { grid-column: 1 / -1; }
 .battlepanel { position: absolute; left: 18px; top: 66px; width: 300px; padding: 12px 14px; z-index: 14; font-size: 15px; color: var(--cream); }
+.battlepanel { max-height: calc(100% - 180px); overflow-y: auto; }
+.battle-chart { position: absolute; right: 18px; bottom: 94px; width: 240px; padding: 10px; z-index: 14; color: var(--cream); }
+.battle-chart .fp-h { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 6px; }
+.battle-chart small, .battle-chart .chart-status { font-size: 12px; color: #d8c79d; }
+.battle-chart canvas { position: static !important; display: block; width: 100%; height: auto; aspect-ratio: 1; cursor: crosshair; }
+.battle-chart .chart-status { margin-top: 5px; }
+#ui.at-battle .toasts { gap: 5px; }
+#ui.at-battle .toast { min-width: 0; max-width: 400px; font-size: 13px; padding: 6px 10px; gap: 6px; }
+#ui.at-battle .toast svg { width: 18px; height: 18px; flex: 0 0 18px; }
+#ui.at-battle .toast:nth-last-child(n+3) { display: none; }
+.at-battle .sailbar .btn.on { box-shadow: inset 0 0 0 2px #e8c35a; color: #ffe7aa; }
 .battlepanel .fp-h { display: flex; gap: 8px; align-items: center; color: var(--brass-hi); font-size: 17px; margin-bottom: 8px; }
 .battlepanel .fp-ship { margin-bottom: 6px; }
 .status-strip { line-height: 1.5; }
@@ -1372,6 +1385,7 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 /* 지진·해일 흔들림은 CSS로 화면 요소를 옮기지 않는다 — 탐험·항해 화면이 그릴 때 카메라만 옮긴다 (js/art/quakefx.js) */
 /* 해전 함대 명령판 (js/scenes/battle.js — 기함을 뺀 배들에게 학익진·일제 공격·포격전·호위…) */
 .ordpanel { position: absolute; right: 18px; top: 66px; width: 336px; padding: 10px 12px; z-index: 14; font-size: 14px; color: var(--cream); }
+.ordpanel { max-height: calc(100% - 490px); overflow-y: auto; }
 .ordpanel .fp-h { display: flex; gap: 6px; align-items: center; color: var(--brass-hi); font-size: 16px; margin-bottom: 7px; flex-wrap: wrap; }
 .ordpanel .fp-h small { font-size: 12.5px; }
 .ord-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }

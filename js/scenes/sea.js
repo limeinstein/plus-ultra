@@ -170,7 +170,7 @@
     if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { if (!G.Rain.raining()) return; st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.classList.toggle('disabled', !G.Rain.raining()); }   // 비가 오는 동안만 누를 수 있다 (자리는 늘 그대로)
     btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
-    hudEl.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');   // 수첩 옆: 마우스 따라가기 켬/끔 (Shift)
+    hudEl.follow = btn('', 'mouse', function () { toggleFollow(); }, 'follow');   // 설명·켬/끔·단축키는 풍선 도움말
     // 긴 하단 메뉴에 가려지지 않도록 지도 확대 단추는 오른쪽 위에 둔다.
     var zb = U.el('div', 'sea-zoom wood brass-frame'); zb.setAttribute('role', 'group'); zb.setAttribute('aria-label', '지도 확대');
     function zoomButton(label, title, fn) { var b = U.el('button', 'btn small', label); b.title = title; b.setAttribute('aria-label', title); b.onclick = function (e) { e.stopPropagation(); b.blur(); fn(); }; zb.appendChild(b); }
@@ -971,6 +971,7 @@
     if (st) st.dtLast = dt;
     if (!st || !st.alive) return;
     var s = S(), l = s.loc;
+    var cameraFromLon = l.lon, cameraFromLat = l.lat;
     st.t += dt;
     var frozen = st.busy > 0 || UI.busy();
     // 도시를 직접 골라(누르기·해도·자동항해) 닿았으면 묻지 않고 곧장 입항한다 (QA 2026-10-16 — 예전에는 닿은 뒤 「입항하시겠습니까?」를 또 물었다)
@@ -1033,6 +1034,8 @@
     if (!st.manual && !st.path && st.dirCrs == null && shipSpeed() < 0.05 && !UI.busy()) alongCoast(dt);
     // 카메라: 진행 방향으로 조금 앞서 (속력에 비례, 최대 0.3°) — 흔들기·급한 확대는 쓰지 않는다
     //   배는 그대로 따라가고(속도만큼 뒤처지지 않아 배속을 올려도 배가 화면에서 떠밀리지 않는다), 어긋난 만큼만 부드럽게 좁힌다
+    st.cam.lon = G.Geo.wrapLon(st.cam.lon + G.Geo.wrapLon(l.lon - cameraFromLon));
+    st.cam.lat += l.lat - cameraFromLat;
     var P = FXS(), vsp = shipSpeed(), lead = Math.min(0.3, vsp * P.camLead * (sens().leadK || 1));   // 조작 감도: 느리게면 화면이 덜 내다본다
     lead = Math.min(lead, P.zoom.leadMaxPx / Math.max(st.cam.zoom, st.cam.zoomT || 0));
     if (G.Audio && G.Audio.travel) G.Audio.travel('sea', !frozen && !st.paused && vsp > 0.03 ? Math.min(1, 0.22 + vsp) : 0);   // 선체가 물을 가르는 소리
@@ -1059,6 +1062,10 @@
       if (Math.abs(zr - 1) < 0.004) { st.cam.zoom = st.cam.zoomT; st.cam.zoomT = 0; }
       else st.cam.zoom *= Math.pow(zr, ease(dt, P.zoomEase || 12));
     }
+    // 급한 확대·출항 직후에도 남은 추적 오차가 화면 밖까지 커지지 않는다.
+    var camDx = G.Geo.wrapLon(st.cam.lon - l.lon), camDy = st.cam.lat - l.lat, camDist = Math.hypot(camDx, camDy);
+    var camMax = P.zoom.leadMaxPx / st.cam.zoom;
+    if (camDist > camMax) { st.cam.lon = G.Geo.wrapLon(l.lon + camDx * camMax / camDist); st.cam.lat = l.lat + camDy * camMax / camDist; }
     // wind visual smoothing
     var wd = U.angDiff(st.windVis.dir, st.wind.dir), kw = ease(dt, 1.5);
     st.windVis.dir += wd * kw; st.windVis.spd += (st.wind.spd - st.windVis.spd) * kw;
@@ -1874,7 +1881,7 @@
     if (G.Ship3D) G.Ship3D.beginFrame();
     try { drawOverlay(); } finally { if (G.Ship3D) G.Ship3D.endFrame(); }
     if ((st.frame2 = (st.frame2 || 0) + 1) % 6 === 0) { drawWind(); refreshButtons(); }
-    if (st.lastMini < 0) drawMini();
+    if (st.lastMini < 0 || (st.t - (st.lastMiniT || 0) >= FXS().miniRefresh && st.lastMiniLoc && Math.hypot(G.Geo.wrapLon(l.lon - st.lastMiniLoc[0]), l.lat - st.lastMiniLoc[1]) >= FXS().miniMove)) drawMini();
   }
   /** 경로가 남은 거리(°) */
   function pathLeft() {
@@ -2255,6 +2262,7 @@
     if (!hudEl.mini) return;
     var s = S(), l = s.loc;
     st.lastMini = st.dayCount;
+    st.lastMiniT = st.t; st.lastMiniLoc = [l.lon, l.lat];
     var w = 40, h = w * 388 / 568;
     var cv = G.Info.chartCanvas(284, 194, { lon0: l.lon - w / 2, lon1: l.lon + w / 2, lat0: l.lat - h / 2, lat1: l.lat + h / 2, labels: false, ship: l });
     var ctx = hudEl.mini.getContext('2d');

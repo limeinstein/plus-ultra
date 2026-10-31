@@ -2,6 +2,7 @@
 (function (G) {
   'use strict';
   var P = {
+    mouse: '<rect x="6" y="2.5" width="12" height="19" rx="6"/><path d="M12 3v7M6 10h12"/><path d="M12 5v2" stroke-width="2.5"/>',
     leaf: '<path d="M5 19C5 10.5 10.5 4.5 20 4c-.5 9.5-6.5 15-15 15z"/><path d="M5 19l9-9M10 14.5h3.5M12.5 12V8.5"/>',
     compass: '<circle cx="12" cy="12" r="9"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
     rose: '<path d="M12 2l1.8 8.2L22 12l-8.2 1.8L12 22l-1.8-8.2L2 12l8.2-1.8z"/><path d="M12 7l.9 4.1L17 12l-4.1.9L12 17l-.9-4.1L7 12l4.1-.9z" fill="currentColor" opacity=".35"/>',

@@ -125,8 +125,9 @@
     paintButton: function (b) {
       if (!b) return; var on = this.follow(); if (b._on === on) return;
       b._on = on; b.classList.toggle('on', on);
-      b.innerHTML = G.icon('target') + '마우스 따라가기<small class="tog">' + (on ? '켬' : '끔') + '</small>';
-      b.title = (on ? '켜짐: 가려는 쪽을 한 번 누르면 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다' : '꺼짐: 누른 곳까지 갑니다') + ' — 단축키 ' + keyLabel(keySettings().mouseFollow);
+      b.innerHTML = G.icon('mouse');
+      b.title = '마우스 따라가기 ' + (on ? '켜짐: 가려는 쪽을 한 번 누르면 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다' : '꺼짐: 누른 곳까지 갑니다') + ' — 단축키 ' + keyLabel(keySettings().mouseFollow);
+      b.setAttribute('aria-label', b.title); b.setAttribute('aria-pressed', String(on));
     },
     /** 하단 메뉴가 화면보다 넓으면(작은 화면 · 큰 글씨 · 긴 항구 이름) 통째로 줄여 넣는다 */
     fitBar: function (bar) {
@@ -135,7 +136,13 @@
       var sig = window.innerWidth + 'x' + window.innerHeight + '|' + (document.fonts ? document.fonts.status : '') + '|' + bar.parentNode.style.zoom;
       for (var ci = 0; ci < bar.children.length; ci++) { var ch = bar.children[ci]; sig += '|' + ch.style.display + ':' + ch.className + ':' + ch.textContent; }
       if (bar._sig === sig) return;
-      var pw = bar.parentNode.clientWidth, w = bar.offsetWidth; if (!pw || !w) return;
+      bar.style.width = '';
+      var pw = bar.parentNode.clientWidth, style = getComputedStyle(bar), w = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + 4;
+      var shown = 0;
+      Array.prototype.forEach.call(bar.children, function (ch) { var cs = getComputedStyle(ch); if (cs.display === 'none') return; w += Math.max(ch.offsetWidth, ch.scrollWidth) + (parseFloat(cs.marginLeft) || 0) + (parseFloat(cs.marginRight) || 0); shown++; });
+      w += Math.max(0, shown - 1) * (parseFloat(style.columnGap) || 0);
+      w = Math.max(w, bar.offsetWidth); if (!pw || !w) return;
+      bar.style.width = Math.ceil(w) + 'px';
       bar._sig = sig;
       var k = w > pw - 16 ? Math.round((pw - 16) / w * 1000) / 1000 : 1;
       if (bar._k === k) return; bar._k = k;
