@@ -6,7 +6,7 @@
 </style></head><body><main>
 <h1>돛의 배치부터 망루의 난간까지</h1>
 <p>갤리온·대형 갤리온의 범장과 장식을 보강하고 36종의 돛을 다시 배치했습니다. 아래 사진은 게임에서 사용하는 실제 3D 모형을 촬영한 결과입니다.</p>
-<nav><a href="../../test_ship_details.html">선박 작업실 · 자유 회전과 부분 확대</a><a href="../../test_ships_3d.html">항해 시점 비교</a><a href="#tops">망루 확대</a><a href="#turtle">거북선 용두</a><a href="#fleet">전체 선박 비교</a><a href="rig3d-references.md">자료와 검증 기록</a></nav>
+<nav><a href="../../index.html">게임에서 항해하기</a><a href="../../test_ship_details.html">선박 작업실 · 자유 회전과 부분 확대</a><a href="../../test_ships_3d.html">항해 시점 비교</a><a href="#tops">망루 확대</a><a href="#turtle">거북선 용두</a><a href="#fleet">전체 선박 비교</a><a href="rig3d-references.md">자료와 검증 기록</a></nav>
 <div class="grid">
 <figure><img src="../../artifacts/rig3d-20261031/gpu/galleon-hero.png" alt="3개 돛대, 앞·중앙의 2층 사각돛과 뒤 라틴돛을 가진 갤리온"><figcaption>갤리온 · 앞·중앙의 2층 사각돛, 뒤 라틴돛, 이물 아래 보조 돛</figcaption></figure>
 <figure><img src="../../artifacts/rig3d-20261031/gpu/lgalleon-hero.png" alt="4개 돛대, 앞·중앙의 3층 사각돛을 가진 대형 갤리온"><figcaption>대형 갤리온 · 3층 사각돛과 뒤쪽의 라틴돛, 정밀 선미 회랑</figcaption></figure>
@@ -32,7 +32,7 @@
 <h2 id="fleet">36종 전체 비교</h2>
 <div class="controls"><label>선박 묶음 <select id="group"><option value="1">서양 범선 9종</option><option value="2">갤리온·갤리 9종</option><option value="3">지중해·인도양·동남아 9종</option><option value="4">동아시아·발사 9종</option></select></label><button type="button" id="before" aria-pressed="false">보강 전 보기</button><span id="label">이번 보강 후</span></div>
 <figure><img id="fleetImage" alt="선박 9종의 범장 비교"><figcaption>같은 시점·조명으로 촬영한 36종 · 묶음을 바꿔 확인하세요.</figcaption></figure>
-<footer>참고: <a href="https://www.gamecity.ne.jp/dol/sscontest/result03.htm">대항해시대 Online 공식 화면</a> · <a href="https://dg.linekongkorea.co.kr/">대항해의길 공식 갤러리</a> · <a href="https://exploration.marinersmuseum.org/watercraft/galleon/">Mariners’ Museum</a> · <a href="https://www.vasamuseet.se/en/visit/exhibitions/sailing-ship">Vasa Museum</a><p class="small">시대·지역별 자료를 반영한 게임용 해석입니다. 특정 실선의 실측 복원은 아닙니다. 적용은 항해 기함이며 선박 성능과 저장 자료는 유지됩니다.</p></footer>
+<footer>참고: <a href="https://www.gamecity.ne.jp/dol/sscontest/result03.htm">대항해시대 Online 공식 화면</a> · <a href="https://dg.linekongkorea.co.kr/">대항해의길 공식 갤러리</a> · <a href="https://exploration.marinersmuseum.org/watercraft/galleon/">Mariners’ Museum</a> · <a href="https://www.vasamuseet.se/en/visit/exhibitions/sailing-ship">Vasa Museum</a><p class="small">시대·지역별 자료를 반영한 게임용 해석입니다. 특정 실선의 실측 복원은 아닙니다. 항해 기함·동행선·주변 선박에 적용하며 선박 성능과 저장 자료는 유지됩니다.</p></footer>
 </main><script>
 (function(){'use strict';var group=document.getElementById('group'),button=document.getElementById('before'),old=false;
 function show(){document.getElementById('fleetImage').src='../../artifacts/'+(old?'rig3d-20261031':'craft3d-20261031')+'/gpu/fleet-'+group.value+'.png';document.getElementById('label').textContent=old?'이번 정밀 보강 전':'이번 정밀 보강 후';button.textContent=old?'보강 후 보기':'보강 전 보기';button.setAttribute('aria-pressed',String(old));}

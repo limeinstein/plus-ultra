@@ -1,14 +1,14 @@
-/* 항해 기함 36종의 실시간 3D. 한 그래픽 장치에서 현재 선종만 유지한다. */
+/* 항해 선박 36종의 실시간 3D. 한 그래픽 장치에서 보이는 선종을 재사용한다. */
 (function(G){
   'use strict';
   var P=G.Ship3D={},rt=null,failure=null,failedTypes={};
   function cfg(){return G.FX.ship3d;}
   function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
-  function release(root){
+  function release(root,keptTextures){
     var gs=new Set(),ms=new Set(),ts=new Set();
     root.traverse(function(o){if(o.geometry)gs.add(o.geometry);if(o.material)ms.add(o.material);});
     ms.forEach(function(m){Object.keys(m).forEach(function(k){if(m[k]&&m[k].isTexture)ts.add(m[k]);});});
-    gs.forEach(function(g){g.dispose();});ts.forEach(function(t){t.dispose();});ms.forEach(function(m){m.dispose();});
+    gs.forEach(function(g){g.dispose();});ts.forEach(function(t){if(!keptTextures||!keptTextures.has(t))t.dispose();});ms.forEach(function(m){m.dispose();});
   }
   function batch(root,T){
     root.updateMatrixWorld(true);var bins={},result=new T.Group(),im=new T.Matrix4(),world=new T.Matrix4(),originals=new Set();
@@ -43,15 +43,34 @@
       var rim=new T.DirectionalLight(0xb7d8ff,c.rimLight);rim.position.set(220,100,-180);scene.add(rim);
       var yaw=new T.Group(),body=new T.Group();yaw.scale.y=.92/Math.cos(theta);yaw.add(body);scene.add(yaw);
       var state=rt={renderer:renderer,scene:scene,camera:camera,yaw:yaw,body:body,sun:sun,hemi:hemi,rim:rim,type:null,
-        lost:false,buffer:c.minBuffer,frames:0,switches:0,stats:{},span:c.span,anchor:c.anchorY};
+        lost:false,buffer:c.minBuffer,frames:0,switches:0,builds:0,models:{},frame:0,inFrame:false,drawn:0,tint:new T.Color(),stats:{},span:c.span,anchor:c.anchorY};
       canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();state.lost=true;});
       canvas.addEventListener('webglcontextrestored',function(){state.lost=false;});return rt;
     }catch(e){failure=e.message;if(renderer)renderer.dispose();return null;}
   }
+  function dropModel(r,id){
+    var m=r.models[id];if(!m)return;
+    // 정크·일본선 등의 지붕 지도는 다른 선종도 쓴다. 남아 있는 모형의 지도를 해제하지 않는다.
+    var kept=new Set();Object.keys(r.models).forEach(function(other){if(other===id)return;r.models[other].body.traverse(function(o){if(o.material)Object.keys(o.material).forEach(function(k){var t=o.material[k];if(t&&t.isTexture)kept.add(t);});});});
+    r.yaw.remove(m.body);release(m.body,kept);m.body.clear();delete r.models[id];
+    if(r.type===id){r.type=null;r.ship=r.rig=r.flag=null;}
+  }
+  function trimModels(r,keep){
+    var idle=Object.keys(r.models).filter(function(id){return id!==r.type&&(!r.inFrame||r.models[id].seen!==r.frame);});
+    idle.sort(function(a,b){return r.models[b].seen-r.models[a].seen;});
+    if(idle.length>keep){idle.slice(keep).forEach(function(id){dropModel(r,id);});r.renderer.renderLists.dispose();}
+  }
   function select(r,id){
-    if(r.type===id)return true;if(failedTypes[id])return false;
+    if(r.type===id){r.models[id].seen=r.frame;return true;}if(failedTypes[id])return false;
     var T=G.Three,c=cfg();
-    release(r.body);r.body.clear();r.renderer.renderLists.dispose();r.type=null;r.ship=r.rig=r.flag=null;
+    r.yaw.remove(r.body);r.type=null;r.ship=r.rig=r.flag=null;
+    var cached=r.models[id];
+    if(cached){
+      r.body=cached.body;r.yaw.add(r.body);r.ship=cached.ship;r.rig=cached.rig;r.flag=cached.flag;r.span=cached.span;r.anchor=cached.anchor;r.buildMs=cached.buildMs;r.type=id;r.switches++;cached.seen=r.frame;
+      Object.assign(r.camera,{left:-r.span/2,right:r.span/2,top:r.anchor,bottom:r.anchor-r.span});r.camera.updateProjectionMatrix();
+      if(!r.inFrame)trimModels(r,0);return true;
+    }
+    r.body=new T.Group();r.yaw.add(r.body);
     try{
       var started=performance.now(),ship=G.ShipModels.create(T,id),hull=ship.buildHull(),rig=G.ShipModels.makeRig(ship,T,batch,c);
       r.body.add(batch(hull,T));r.body.add(rig.root);
@@ -66,7 +85,9 @@
       var anchor=Math.max(c.anchorY,bb.max.y*Math.sqrt(1-c.elevation*c.elevation)+rad*c.elevation+c.boundsPadding);
       r.span=Math.max(c.span,rad*2+c.boundsPadding*2,anchor+rad*c.elevation+c.boundsPadding);r.anchor=anchor;
       Object.assign(r.camera,{left:-r.span/2,right:r.span/2,top:r.anchor,bottom:r.anchor-r.span});r.camera.updateProjectionMatrix();
-      r.ship=ship;r.rig=rig;r.flag=flag;r.type=id;r.switches++;r.buildMs=performance.now()-started;return true;
+      r.ship=ship;r.rig=rig;r.flag=flag;r.type=id;r.switches++;r.builds++;r.buildMs=performance.now()-started;
+      r.models[id]={body:r.body,ship:ship,rig:rig,flag:flag,span:r.span,anchor:r.anchor,buildMs:r.buildMs,seen:r.frame};
+      if(!r.inFrame)trimModels(r,0);return true;
     }catch(e){failedTypes[id]=e.message;release(r.body);r.body.clear();r.ship=r.rig=r.flag=null;return false;}
   }
   function animate(r,spec,t){
@@ -74,12 +95,23 @@
     var fp=r.flag.geometry.attributes.position,uv=r.flag.geometry.attributes.uv,strength=clamp(rig.aws==null?.6:rig.aws,.05,2);
     var flagScale=clamp(r.ship.s.L/156,.65,1.15);r.flag.rotation.y=-(rig.wind||0);
     for(var i=0;i<fp.count;i++){var a=uv.getX(i),b=uv.getY(i);fp.setXYZ(i,a*c.flagLength*flagScale,((b-1)*c.flagHeight-a/(1+strength)*1.5)*flagScale,Math.sin(a*8-t*c.flagRate)*a*c.flagWave*strength);}
-    fp.needsUpdate=true;r.flag.geometry.computeVertexNormals();if(spec.flag)r.flag.material.color.set(spec.flag).convertSRGBToLinear();
+    fp.needsUpdate=true;r.flag.geometry.computeVertexNormals();r.flag.visible=spec.flag!==null;r.flag.material.color.set(spec.flag||'#315c99').convertSRGBToLinear();
+    // 같은 선종의 해적선과 아군을 번갈아 그려도 돛 색이 서로 묻지 않는다.
+    r.tint.set(spec.sailTint||'#ffffff').convertSRGBToLinear();
+    r.rig.sails.forEach(function(a){var m=a.mesh.material;if(!m.userData.shipBaseColor)m.userData.shipBaseColor=m.color.clone();m.color.copy(m.userData.shipBaseColor).multiply(r.tint);});
     var pose=spec.pose||{};r.body.rotation.set(clamp(pose.roll||0,-.3,.3),0,clamp(pose.pitch||0,-.16,.16));r.body.position.y=clamp(pose.heave||0,-.1,.1)*c.heave;
     var light=spec.light||{},cloud=clamp(light.cloud||0,0,1),dusk=clamp(light.dusk||0,0,1);
     r.sun.intensity=c.sunLight*(1-cloud*.65)*(1-dusk*.7);r.hemi.intensity=c.skyLight*(1-dusk*.45);r.rim.intensity=c.rimLight*(1-cloud*.5);r.sun.color.set(dusk>.25?0xffb77b:0xffecd1);
   }
   P.supports=function(id){return !!(G.ShipModels&&G.ShipModels.has(id));};
+  P.beginFrame=function(){
+    var c=cfg();if(!c||!c.enabled)return false;
+    var r=setup();if(!r||r.lost)return false;r.frame++;r.inFrame=true;r.drawn=0;return true;
+  };
+  P.endFrame=function(){
+    if(!rt||!rt.inFrame)return;
+    trimModels(rt,Math.max(0,cfg().idleModels||0));rt.inFrame=false;
+  };
   // 상세 감상 화면도 항해와 같은 생성·묶음·자원 해제 경로를 사용한다.
   P.buildInspection=function(id){
     if(!P.supports(id))throw new Error('지원하지 않는 선박');
@@ -103,13 +135,13 @@
     ctx.save();ctx.translate(x,y);ctx.rotate(-Math.atan2(Math.sin(angle)*c.elevation,Math.cos(angle)));ctx.fillStyle='rgba(0,14,28,.24)';ctx.beginPath();
     ctx.ellipse(0,len*.035,len*(r.ship.s.L/c.baseLen)*.47,len*(r.ship.s.W/48)*.13,0,0,PI2);ctx.fill();ctx.restore();
     ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(r.renderer.domElement,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();
-    r.frames++;r.stats={type:r.type,frames:r.frames,switches:r.switches,calls:r.renderer.info.render.calls,triangles:r.renderer.info.render.triangles,
+    r.frames++;r.drawn++;r.stats={type:r.type,frames:r.frames,switches:r.switches,calls:r.renderer.info.render.calls,triangles:r.renderer.info.render.triangles,
       geometries:r.renderer.info.memory.geometries,textures:r.renderer.info.memory.textures,programs:r.renderer.info.programs.length,buffer:r.buffer,span:r.span,
       cpuMs:performance.now()-start,buildMs:r.buildMs,heading:angle,furl:spec.furl||0,sails:r.rig.sails.length,oars:r.rig.oars};return true;
   };
   var PI2=Math.PI*2;
-  P.stats=function(){return rt?Object.assign({ready:!!rt.type,lost:rt.lost,failures:Object.assign({},failedTypes)},rt.stats):{ready:false,failure:failure,failures:Object.assign({},failedTypes)};};
-  P.dispose=function(){if(rt){release(rt.scene);if(rt.sun.shadow.map)rt.sun.shadow.map.dispose();if(rt.sun.shadow.mapPass)rt.sun.shadow.mapPass.dispose();rt.renderer.dispose();rt.renderer.forceContextLoss();rt=null;}failure=null;failedTypes={};};
+  P.stats=function(){return rt?Object.assign({},rt.stats,{ready:!!rt.type,lost:rt.lost,failures:Object.assign({},failedTypes),builds:rt.builds,cachedTypes:Object.keys(rt.models),drawn:rt.drawn,geometries:rt.renderer.info.memory.geometries,textures:rt.renderer.info.memory.textures}):{ready:false,failure:failure,failures:Object.assign({},failedTypes)};};
+  P.dispose=function(){if(rt){Object.keys(rt.models).forEach(function(id){dropModel(rt,id);});release(rt.scene);if(rt.sun.shadow.map)rt.sun.shadow.map.dispose();if(rt.sun.shadow.mapPass)rt.sun.shadow.mapPass.dispose();rt.renderer.dispose();rt.renderer.forceContextLoss();rt=null;}failure=null;failedTypes={};};
   window.addEventListener('pagehide',P.dispose);
   // 초기 갤리온 시제품의 공개 이름은 범위를 유지한 채 호환한다.
   G.Galleon3D={draw:function(ctx,x,y,a,len,spec,t){return spec&&spec.type==='galleon'?P.draw(ctx,x,y,a,len,spec,t):false;},stats:P.stats,dispose:P.dispose};

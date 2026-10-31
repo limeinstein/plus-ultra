@@ -1850,7 +1850,9 @@
     st.qo = G.Quake ? G.Quake.camera() : null;
     var qx = st.qo ? st.qo[0] : 0, qy = st.qo ? st.qo[1] : 0;
     if (r) r.draw({ lon: st.cam.lon - qx / st.cam.zoom, lat: st.cam.lat + qy / st.cam.zoom, zoom: st.cam.zoom, time: st.t, wind: [Math.cos(st.windVis.dir) * st.windVis.spd, Math.sin(st.windVis.dir) * st.windVis.spd], cloud: wp.cloud, edge: 0.75, mode: 0, dusk: 0, storm: wp.storm, quality: s.settings.res && s.settings.res < 1 ? 0.5 : 1, cssWidth: 1600, clouds: clouds });
-    drawOverlay();
+    // 기함·동행선·주변 함대를 한 장치로 그리며 이번 화면에서 쓰는 선종을 보관한다.
+    if (G.Ship3D) G.Ship3D.beginFrame();
+    try { drawOverlay(); } finally { if (G.Ship3D) G.Ship3D.endFrame(); }
     if ((st.frame2 = (st.frame2 || 0) + 1) % 6 === 0) { drawWind(); refreshButtons(); }
     if (st.lastMini < 0) drawMini();
   }
@@ -2034,7 +2036,9 @@
         var nx0 = p[0] - Math.cos(nsv.ang) * j * 18 * nk + j * 6 * nk, ny0 = p[1] + Math.sin(nsv.ang) * j * 18 * nk + j * 8 * nk;
         var nqf = tsu ? G.Quake.shipFx(nx0, ny0, n.heading) : null;      // 해일: 다른 배도 물결에 들리고 밀린다 (그림만)
         if (nqf) { nx0 += nqf.dx; ny0 += nqf.dy; nlook.pose = { roll: (nlook.pose ? nlook.pose.roll : 0) + nqf.roll, pitch: (nlook.pose ? nlook.pose.pitch : 0) + nqf.pitch, heave: (nlook.pose ? nlook.pose.heave : 0) + nqf.heave }; }
-        A.shipTop(ctx, nx0, ny0, nsv.ang, npcPx(), nlook, st.t + j);
+        nlook.light = weatherParams();
+        if (n.kind === 'pirate' && (nlook.hullType === 'west' || nlook.hullType === 'galley' || nlook.hullType === 'dhow')) nlook.sailTint = G.FX.ship3d.pirateSailTint;
+        if (!(G.Ship3D && G.Ship3D.draw(ctx, nx0, ny0, nsv.ang, npcPx(), nlook, st.t + j))) A.shipTop(ctx, nx0, ny0, nsv.ang, npcPx(), nlook, st.t + j);
       }
       if ((n.kind === 'pirate' && !n.awed) || n.hostile || n.exp) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.label || n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - npcPx() * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = n.exp && !n.hostile ? '#ffe08a' : '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - npcPx() * 0.72); ctx.textAlign = 'left'; }
     });
@@ -2069,9 +2073,9 @@
       if (qf) lk.pose = { roll: lk.pose.roll + qf.roll, pitch: lk.pose.pitch + qf.pitch, heave: lk.pose.heave + qf.heave };
       lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null; lk.sid = 'f' + si; lk.face = sv.face; lk.squash = sv.squash;
       lk.motionSpeed = sr * (si ? 0.92 : 1); lk.motionRate = 0.78 + Math.min(1.4, sr) * 0.28;
-      // 모든 선종의 항해 기함을 실시간으로 그린다. 그림 장치를 못 쓰면 기존 시트.
-      if (si === 0 && G.Ship3D) lk.light = weatherParams();
-      if (!(si === 0 && G.Ship3D && G.Ship3D.draw(ctx, bx, by, ha, lenS, lk, st.t + si))) A.shipTop(ctx, bx, by, ha, lenS, lk, st.t + si);
+      // 동행선·호위 상선도 보강한 모형을 쓴다. 그림 장치를 못 쓰면 기존 시트.
+      lk.light = weatherParams();
+      if (!(G.Ship3D && G.Ship3D.draw(ctx, bx, by, ha, lenS, lk, st.t + si))) A.shipTop(ctx, bx, by, ha, lenS, lk, st.t + si);
       if (G.VoyageFX) G.VoyageFX.drawSpray(st, ctx, bx, by, ha, lenS, si);   // 속력을 낼 때 선수 물보라
     }
     drawCities(ctx);

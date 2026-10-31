@@ -460,7 +460,9 @@
   G.FX.ship3d = G.FX.galleon3d;
   Object.assign(G.FX.ship3d, {
     boundsPadding: 10, oarRate: 2.8, oarSweep: .42, oarLift: 3,
-    sailRopeRadius: .19, reefRopeLength: 1.25, sailWrinkle: .32
+    sailRopeRadius: .19, reefRopeLength: 1.25, sailWrinkle: .32,
+    idleModels: 3,            // 화면에서 사라진 선종은 최근 3종만 보관. 보이는 배는 같은 모형을 재사용한다.
+    pirateSailTint: '#766c62' // 주변 해적선의 어두운 돛. 같은 선종의 아군 돛에는 적용하지 않는다.
   });
   // 거북선: 첨부 복원선 사진을 기준으로 한 미술 배치. 게임의 배 성능과 무관하다.
   G.FX.turtle3d = {
