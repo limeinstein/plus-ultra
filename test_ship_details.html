@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>선박 작업실 · 36종 상세 보기</title><style>
+*{box-sizing:border-box}body{margin:0;background:#102531;color:#eee4d1;font:15px/1.6 system-ui,sans-serif}header{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:18px 28px;border-bottom:1px solid #3a5261;background:#14212b}h1{font-size:22px;margin:0}a{color:#dfbc7b}.app{display:grid;grid-template-columns:285px 1fr;height:calc(100vh - 78px);min-height:620px}aside{padding:24px;background:#162b38;overflow:auto}label{display:block;margin:0 0 17px;color:#c1d0d5}select,button{font:inherit;background:#223d4c;border:1px solid #617681;border-radius:6px;color:#fff;padding:9px 12px}select{width:100%;margin-top:8px}button{cursor:pointer}.views{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:20px 0}.views button[aria-pressed=true]{border-color:#dbb56f;background:#745d37}input{width:100%;accent-color:#d7b576}output{float:right;color:#e7c789}p{color:#b3c6cf}#stage{position:relative;overflow:hidden;background:#193747}canvas{display:block;width:100%;height:100%;touch-action:none}#hint{position:absolute;bottom:20px;left:24px;right:24px;color:#bfd0d8;pointer-events:none;text-shadow:0 1px 3px #000}#status{font-size:13px;margin-top:20px;color:#a9c1cf}.badge{color:#e5c78b;font-size:12px;letter-spacing:.08em}.controls{border-top:1px solid #3d5360;margin-top:24px;padding-top:20px}@media(max-width:760px){header{padding:14px;gap:12px}.app{grid-template-columns:1fr;height:auto;min-height:0}aside{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}aside>p,#status{grid-column:1/-1;margin:0}.views,.controls{margin:0}.controls{padding:0;border:0}#stage{height:68vh;min-height:430px}.badge{display:none}}
+</style></head><body>
+<header><h1>선박 작업실</h1><span class="badge">36 SHIPS · LIVE 3D</span><a href="test_ships_3d.html">항해 시점 비교</a><a href="docs/art/rig3d-review.html">보강 기록과 참고 자료</a></header>
+<div class="app"><aside>
+<label>살펴볼 배<select id="ship"></select></label><p id="description"></p>
+<div class="views" aria-label="살펴볼 부분"><button data-view="whole" aria-pressed="true">전체</button><button data-view="mast" aria-pressed="false">돛대·망루</button><button data-view="deck" aria-pressed="false">갑판</button><button data-view="bow" aria-pressed="false">선수</button><button data-view="stern" aria-pressed="false">선미</button><button data-view="feature" aria-pressed="false">특징 확대</button></div>
+<div class="controls"><label>돛 접기 <output id="foldValue">0%</output><input id="fold" type="range" min="0" max="100" value="0"></label><label>바람에 맞춰 돛 돌리기<input id="brace" type="range" min="-65" max="65" value="0"></label><button id="pause" aria-pressed="false">움직임 멈추기</button></div><div id="status" role="status">선박을 불러옵니다.</div>
+</aside><section id="stage" aria-label="선박 3D 감상 화면"><div id="hint">드래그해서 돌려 보기 · 마우스 휠로 확대 · 부분 버튼으로 가까이 보기</div></section></div>
+<script src="js/data/ships.js"></script><script src="js/data/seafx.js"></script><script src="js/vendor/three-r147.js"></script><script src="js/art/ship-models.js"></script><script src="js/art/ship3d.js"></script>
+<script>
+(function(G){'use strict';
+  var T=G.Three,$=function(id){return document.getElementById(id);},host=$('stage'),scene=new T.Scene(),camera=new T.OrthographicCamera(-100,100,100,-100,.1,3000),renderer,model=null,target=new T.Vector3(),span=120,azimuth=.8,elevation=.38,paused=false,lost=false,disposed=false,time=1.25,last=0,view='whole',drag=null;
+  var descriptions={west:'층별 돛과 활대, 돛대 받침과 줄사다리를 살펴보세요.',galley:'길고 낮은 선체, 라틴돛과 노 받침을 살펴보세요.',dhow:'기울어진 활대, 솟은 선수와 선미의 목공 구조를 살펴보세요.',junk:'대나무 돛살과 여러 갈래 조임줄, 선미 작업대를 살펴보세요.',korean:'횡방향 돛과 방패벽, 조선 전선의 지휘 공간을 살펴보세요.',japanese:'위·아래 활대가 있는 돛, 방패벽과 선루를 살펴보세요.',jong:'기울어진 직조 돛과 야자 지붕의 골조를 살펴보세요.',outrigger:'삼각 돛대와 부판을 잇는 가로대·결박을 살펴보세요.',raft:'통나무 결박과 두 갈래 돛대, 목제 조향판을 살펴보세요.'};
+  try{renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});}catch(e){$('status').textContent='3D를 열지 못했습니다. 항해 시점 비교 화면을 이용해 주세요.';return;}
+  renderer.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));renderer.setClearColor('#193747');renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.10;host.prepend(renderer.domElement);
+  scene.add(new T.HemisphereLight(0xe9f1f7,0x524333,.95));var light=new T.DirectionalLight(0xffe4be,1.8);light.position.set(90,180,140);scene.add(light);var rim=new T.DirectionalLight(0xb3d1ee,.6);rim.position.set(-100,80,-100);scene.add(rim);
+  G.SHIP_TYPES.forEach(function(s){var o=document.createElement('option');o.value=s.id;o.textContent=s.name;$('ship').appendChild(o);});
+  function aim(box,padding){var size=box.getSize(new T.Vector3());box.getCenter(target);span=Math.max(size.y,size.x*.78,size.z*.9,7)*(padding||.8);}
+  function focus(name){if(!model)return;view=name;var s=model.ship.s,h=model.ship.h,f=model.features,b;
+    if(name==='whole'){aim(new T.Box3().setFromObject(model.root),.72);azimuth=.85;elevation=.34;}
+    else if(name==='mast'){if(model.tops.length){aim(model.tops[Math.min(model.tops.length-1,model.tops.length>2?2:1)],1.1);azimuth=-.67;elevation=.32;}else{var i=s.masts.length>1?1:0;target.set(s.masts[i],s.H+s.heights[i]*.87,0);span=s.W*.45;azimuth=.75;elevation=.25;}}
+    else if(name==='feature'){
+      b=f.dragon||f['command-platform']||f['baghlah-gallery']||f['yagura-balcony']||f['stern-working-stage']||f['beam-lashing']||f['steering-board'];
+      if(b){aim(b,1.05);azimuth=f.dragon?.66:-.85;elevation=f.dragon?.18:.35;}else{focus(model.tops.length?'mast':'deck');return;}
+    }else if(name==='deck'){aim(model.hullBox,.45);target.y=h.H*1.2;azimuth=.6;elevation=.85;}
+    else{var stern=name==='stern';target.set(s.L*(stern?-.38:.43),h.sheer(stern?.1:.9)+h.H*.3,0);span=s.W*.65;azimuth=stern?-1.1:1.1;elevation=.35;}
+    document.querySelectorAll('[data-view]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.view===view));});render(time);
+  }
+  function select(id){if(model){scene.remove(model.root);model.dispose();renderer.renderLists.dispose();}model=G.Ship3D.buildInspection(id);scene.add(model.root);$('ship').value=id;$('description').textContent=id==='geobukseon'?'새로 깎은 용머리의 입가·눈썹·볼 비늘과 뿔을 가까이 살펴보세요.':descriptions[G.FX.shipArt.profiles[id].family];$('status').textContent=G.SHIP[id].name+' · 돛대 '+model.ship.s.masts.length+'개';focus(view);return stats();}
+  function render(t){if(disposed||lost||!model)return;time=t;var width=host.clientWidth,height=host.clientHeight,aspect=width/height;if(renderer.domElement.width!==Math.round(width*renderer.getPixelRatio())||renderer.domElement.height!==Math.round(height*renderer.getPixelRatio()))renderer.setSize(width,height,false);
+    model.rig.update({furl:Number($('fold').value)/100,rig:{brace:Number($('brace').value)/100,fill:.9,lee:1},oarPower:.6},time);
+    camera.left=-span*aspect;camera.right=span*aspect;camera.top=span;camera.bottom=-span;camera.updateProjectionMatrix();camera.position.copy(target).add(new T.Vector3(Math.sin(azimuth)*Math.cos(elevation),Math.sin(elevation),Math.cos(azimuth)*Math.cos(elevation)).multiplyScalar(800));camera.lookAt(target);renderer.render(scene,camera);$('foldValue').textContent=$('fold').value+'%';
+  }
+  function stats(){return{type:model&&model.ship.s.id,view:view,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,lost:lost};}
+  function dispose(){if(disposed)return;disposed=true;if(model){model.dispose();model=null;}renderer.dispose();renderer.forceContextLoss();}
+  $('ship').onchange=function(){select(this.value);};document.querySelectorAll('[data-view]').forEach(function(b){b.onclick=function(){focus(b.dataset.view);};});$('fold').oninput=$('brace').oninput=function(){render(time);};$('pause').onclick=function(){paused=!paused;this.textContent=paused?'움직임 다시 보기':'움직임 멈추기';this.setAttribute('aria-pressed',String(paused));};
+  renderer.domElement.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};this.setPointerCapture(e.pointerId);});renderer.domElement.addEventListener('pointermove',function(e){if(!drag)return;azimuth-=(e.clientX-drag.x)*.007;elevation=Math.max(-.15,Math.min(1.45,elevation+(e.clientY-drag.y)*.006));drag={x:e.clientX,y:e.clientY};render(time);});renderer.domElement.addEventListener('pointerup',function(){drag=null;});renderer.domElement.addEventListener('pointercancel',function(){drag=null;});
+  renderer.domElement.addEventListener('wheel',function(e){e.preventDefault();span=Math.max(3,Math.min(350,span*Math.exp(e.deltaY*.001)));render(time);},{passive:false});
+  renderer.domElement.addEventListener('webglcontextlost',function(e){e.preventDefault();lost=true;$('status').textContent='그래픽 장치를 복구하고 있습니다.';});renderer.domElement.addEventListener('webglcontextrestored',function(){lost=false;select($('ship').value);});
+  window.addEventListener('resize',function(){render(time);});window.addEventListener('pagehide',dispose);
+  G.ShipInspection={select:select,focus:focus,render:render,stats:stats,dispose:dispose};select('galleon');
+  function loop(now){if(disposed)return;var dt=Math.min(.05,(now-last)/1000||0);last=now;if(!paused)time+=dt;render(time);requestAnimationFrame(loop);}requestAnimationFrame(loop);
+})(window.G=window.G||{});
+</script></body></html>

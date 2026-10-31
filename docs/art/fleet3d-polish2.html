@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>선박 미술 · 추가 보강 전후</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101e29;color:#e8e0cf;font:16px/1.6 system-ui,sans-serif}main{max-width:1500px;margin:auto;padding:28px}h1{margin:0;font-size:28px}p{color:#adc0cb;max-width:1000px}a{color:#e6c083}nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:24px 0}select{font:inherit;background:#234354;color:#fff;border:1px solid #607886;padding:8px 12px;border-radius:5px}label{display:flex;align-items:center;gap:12px}input{width:min(38vw,400px);accent-color:#e3b875}figure{margin:0;position:relative;border:1px solid #4c6674;overflow:hidden}img{display:block;width:100%;height:auto}#after{position:absolute;inset:0;clip-path:inset(0 50% 0 0)}#divider{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#f1d3a3;pointer-events:none}.key{display:flex;justify-content:space-between;color:#d9c39e;margin-bottom:8px}.note{font-size:14px;margin-top:14px}@media(max-width:700px){main{padding:16px}h1{font-size:24px}label{width:100%}input{flex:1;width:auto}}
+</style></head><body><main>
+<h1>선박 미술 · 추가 보강 전후</h1>
+<p>36종의 돛에 입체 테두리 밧줄·보강천·잔주름을 더하고, 갑판 해치의 깊이와 닻줄 설비를 보강했습니다. 선종에 맞춰 타·조타 손잡이, 지붕의 처마와 문틀, 거북선 등판 이음도 다듬었습니다.</p>
+<nav><a href="../../test_ships_3d.html">36종 직접 돌려 보기</a><label>선박 묶음 <select id="group"><option value="1">서양 범선 9종</option><option value="2">갤리온·갤리 9종</option><option value="3">지중해·인도양·동남아 9종</option><option value="4">동아시아·발사 9종</option></select></label>
+<label for="split">추가 보강 표시 <input id="split" type="range" min="0" max="100" value="50"><output id="amount">50%</output></label></nav>
+<div class="key"><span>← 이번 보강 후</span><span>이전 보강 결과 →</span></div>
+<figure aria-label="같은 방향과 조명으로 촬영한 선박 미술 보강 전후"><img id="before" alt="추가 보강 전 선박 9종"><img id="after" alt="추가 보강 후 같은 선박 9종"><div id="divider"></div></figure>
+<p class="note">슬라이더를 0%나 100%로 옮기면 전체를 전후로 바꿔 볼 수 있습니다. <a href="../../artifacts/fleet3d-polish2-20261031/gpu/sail-folds.png">네 가지 돛의 전개·반 접기·접기 비교</a> · <a href="fleet3d-polish.md">제작과 검증 기록</a></p>
+</main><script>
+(function(){'use strict';var group=document.getElementById('group'),split=document.getElementById('split');
+function select(){var n=group.value,root='../../artifacts/fleet3d-polish2-20261031/';document.getElementById('before').src=root+'before/fleet-'+n+'.png';document.getElementById('after').src=root+'gpu/fleet-'+n+'.png';}
+function update(){document.getElementById('after').style.clipPath='inset(0 '+(100-Number(split.value))+'% 0 0)';document.getElementById('divider').style.left=split.value+'%';document.getElementById('amount').textContent=split.value+'%';}
+group.addEventListener('change',select);split.addEventListener('input',update);select();update();})();
+</script></body></html>

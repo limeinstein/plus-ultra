@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>선박 미술 · 36종 실시간 3D</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101c26;color:#e9e4d9;font:15px/1.5 system-ui,sans-serif}main{max-width:1320px;margin:auto;padding:28px}h1{font-size:27px;margin:0 0 6px}p{color:#afbfca;margin:0 0 22px}.panels{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{border:1px solid #364d5c;border-radius:12px;overflow:hidden;background:#183448}.label{padding:12px 18px;background:#172936;font-weight:650}.label small{float:right;color:#a8bbc8;font-weight:400}canvas{width:100%;height:auto;display:block}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;background:#182a37;border-radius:12px;padding:20px;margin-top:18px}label{display:block;color:#bfd0da}input[type=range]{width:100%;accent-color:#d9b778}button,select{padding:9px 14px;background:#294454;color:#fff;border:1px solid #5d7481;border-radius:6px;font:inherit}button{cursor:pointer}output{float:right;color:#f0d4a0}.actions{display:flex;align-items:center;gap:12px;margin:18px 0}#status{color:#96b1c1;font-size:13px;font-variant-numeric:tabular-nums}a{color:#e4c48c}@media(max-width:760px){main{padding:16px}.panels{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}.label small{float:none;display:block}}
+</style></head>
+<body><main>
+<h1>선박 미술 · 36종 실시간 3D</h1>
+<p>36종의 돛과 선종별 구조를 보강했습니다. <a href="test_ship_details.html">선박 작업실에서 망루·갑판·용머리를 자유롭게 확대</a>하거나 <a href="docs/art/rig3d-review.html">보강 전후와 자료</a>를 확인하세요.</p>
+<div class="actions"><label for="ship">선박 선택</label><select id="ship" style="min-width:220px"></select><button id="prev" type="button">이전 배</button><button id="next" type="button">다음 배</button><span id="family"></span></div>
+<div class="panels">
+<section class="panel"><div class="label">기존 선박 이미지 <small>8방향 · 미리 촬영한 동작</small></div><canvas id="old" width="600" height="500"></canvas></section>
+<section class="panel"><div class="label">보강된 실시간 3D <small>연속 선회 · 돛과 노의 움직임</small></div><canvas id="live" width="600" height="500"></canvas></section>
+</div>
+<div class="controls">
+<label>배 방향 <output id="headingValue"></output><input id="heading" type="range" min="0" max="360" value="35"></label>
+<label>바람 방향 <output id="windValue"></output><input id="wind" type="range" min="0" max="360" value="35"></label>
+<label>돛 접기 <output id="furlValue"></output><input id="furl" type="range" min="0" max="100" value="0"></label>
+<label>파도 세기 <output id="waveValue"></output><input id="wave" type="range" min="0" max="100" value="28"></label>
+<label>구름 <output id="cloudValue"></output><input id="cloud" type="range" min="0" max="100" value="15"></label>
+<label>배 표시 크기 <select id="size"><option value="240">확대해서 보기</option><option value="360">세부 장식 살펴보기</option><option value="66">항해 화면 크기</option></select></label>
+</div>
+<div class="actions"><button id="rotate" type="button" aria-pressed="false">자동 선회</button><button id="pause" type="button" aria-pressed="false">동작 멈추기</button><a href="index.html">게임 열기</a></div>
+<div id="status">선박을 준비하고 있습니다.</div>
+</main>
+<script src="js/core/util.js"></script><script src="images/manifest.js"></script><script src="js/core/images.js"></script>
+<script src="js/data/ships.js"></script><script src="js/data/shipart.js"></script><script src="js/data/seafx.js"></script>
+<script src="js/world/waves.js"></script><script src="js/art/paint.js"></script><script src="js/art/ships.js"></script><script src="js/art/shipsprite.js"></script>
+<script src="js/vendor/three-r147.js"></script><script src="js/art/ship-models.js"></script><script src="js/art/ship3d.js"></script>
+<script>
+(function(G){'use strict';
+var $=function(id){return document.getElementById(id);}, old=$('old').getContext('2d'), live=$('live').getContext('2d'), t=0,last=0,paused=false,rotate=false,rig={};
+var fields=['heading','wind','furl','wave','cloud'], selected='galleon';
+var familyNames={west:'서양 범선',galley:'갤리·노선',dhow:'인도양 범선',jong:'자바 범선',outrigger:'부판선',junk:'중국 범선',korean:'조선 전선',japanese:'일본 전선',raft:'뗏목'};
+G.SHIP_TYPES.forEach(function(s){var o=document.createElement('option');o.value=s.id;o.textContent=s.name;$('ship').appendChild(o);});$('ship').value=selected;
+function choose(id){selected=id;$('ship').value=id;rig={};$('family').textContent=familyNames[G.FX.shipArt.profiles[id].family];render(t,1);return G.ShipSprite.preload([id],30000).then(function(){return render(t,1);});}
+$('ship').onchange=function(){choose(this.value);};
+function step(n){var ids=G.ShipModels.ids;choose(ids[(ids.indexOf(selected)+n+ids.length)%ids.length]);}
+$('prev').onclick=function(){step(-1);};$('next').onclick=function(){step(1);};
+function back(ctx){var g=ctx.createLinearGradient(0,0,0,500);g.addColorStop(0,'#23495f');g.addColorStop(1,'#102c3e');ctx.fillStyle=g;ctx.fillRect(0,0,600,500);ctx.strokeStyle='rgba(149,209,226,.07)';ctx.lineWidth=1;for(var y=24;y<500;y+=24){ctx.beginPath();for(var x=0;x<=600;x+=8){var yy=y+Math.sin(x*.026+y*.02-t*.5)*4;if(!x)ctx.moveTo(x,yy);else ctx.lineTo(x,yy);}ctx.stroke();}}
+function render(time,dt){t=time;fields.forEach(function(id){$(id+'Value').textContent=$(id).value+(id==='heading'||id==='wind'?'°':'%');});
+var a=Number($('heading').value)*Math.PI/180,w=Number($('wind').value)*Math.PI/180,f=Number($('furl').value)/100,q=Number($('wave').value)/100,len=Number($('size').value);
+rig=G.Waves.rigStep(rig,{a:w-a,spd:.8},dt==null?1/30:dt,f);
+var spec=G.Art.shipLook(selected,{flag:'#315c99'});spec.rig=rig;spec.furl=f;spec.sid='preview';spec.motion='dash';spec.noWake=true;spec.motionSpeed=1;
+spec.pose={roll:Math.sin(t*1.7)*q*.18,pitch:Math.cos(t*1.1)*q*.08,heave:Math.sin(t*1.35)*q*.035};spec.light={cloud:Number($('cloud').value)/100};
+back(old);back(live);G.Art.shipTop(old,300,330,a,len,spec,t);
+if(!G.Ship3D.draw(live,300,330,a,len,spec,t)){G.Art.shipTop(live,300,330,a,len,spec,t);$('status').textContent='3D를 사용할 수 없어 기존 그림으로 표시합니다. '+(G.Ship3D.stats().failure||'');}
+else {var s=G.Ship3D.stats();$('status').textContent='실시간 3D · '+s.calls+'회 그리기 · '+s.triangles.toLocaleString()+'개 삼각형 · '+s.buffer+'px 작업 화면 · 모형 '+s.geometries+'개';}
+return G.Ship3D.stats();}
+function loop(now){var dt=Math.min(.05,(now-last)/1000||0);last=now;if(!paused){t+=dt;if(rotate)$('heading').value=(Number($('heading').value)+dt*12)%360;}render(t,paused?0:dt);requestAnimationFrame(loop);}
+$('rotate').onclick=function(){rotate=!rotate;this.textContent=rotate?'자동 선회 멈추기':'자동 선회';this.setAttribute('aria-pressed',String(rotate));};
+$('pause').onclick=function(){paused=!paused;this.textContent=paused?'동작 재개':'동작 멈추기';this.setAttribute('aria-pressed',String(paused));};
+G.ShipPreview={render:render,select:choose};choose(selected);requestAnimationFrame(loop);
+})(window.G=window.G||{});
+</script></body></html>

@@ -152,6 +152,23 @@
         emerge: { frames: [4, 5, 0], seconds: 1.6, loop: false }
       }
     },
+    galleon3d: {           // 항해 기함 갤리온 한 척의 실시간 3D 시제품
+      enabled: true,      // false면 기존 8방향 그림. 규칙·저장 파일과 무관하다
+      span: 256, anchorY: 164, baseLen: 158, elevation: 0.52,
+      minBuffer: 192, maxBuffer: 768, supersample: 1.5,
+      shadows: true, shadowSize: 512, shadowMinLen: 100, // 작은 지도 표시에는 자체 그림자 계산을 생략
+      exposure: 1.22, sunLight: 1.65, skyLight: 0.9, rimLight: 0.35,
+      waterline: 0.65, heave: 65,
+      maxBrace: 0.75, billRate: 1.3, billPulse: 0.045,
+      flutterRate: 7.5, flutter: 0.75, foldHeight: 0.045, foldDepth: 0.65,
+      sailFoot: 2.3, sailLeech: 0.035, sailCrease: 0.22, // 돛 아랫자락·옆선·당겨진 주름
+      flagLength: 13, flagHeight: 5.5, flagRate: 6, flagWave: 1.3,
+      art: {              // 갤리온 전용 색·표면 깊이. 바꾸면 장면에 재진입할 때 반영된다.
+        hull: '#73482e', deck: '#ac8956', inner: '#88613b', wales: '#302319',
+        paint: '#24484c', mast: '#68462d', rope: '#4c3e29', sail: '#e8ddc1',
+        woodRelief: 0.13, clothRelief: 0.07
+      }
+    },
     sprite: {             // 8방향 동작 배 그림 시트 (js/art/shipsprite.js, images/ships-nav/)
       halfBelow: 0.55,    // 화면에 그리는 배율(장치 픽셀 기준)이 이보다 작으면 반 크기 사본을 쓴다 — 0이면 늘 원본
       hold: 0.12,         // 방위 칸이 바뀌는 경계에서 먼저 쓰던 칸을 칸 폭의 이만큼 더 붙잡는다 (뱃머리가 흔들려도 깜박이지 않게)
@@ -359,6 +376,15 @@
         enabled: true, maxMembers: 4, lateralY: 0.72, turnRate: 4.8,
         groundMinGap: 20, groundAngles: 24, groundRadii: [1, 0.85, 0.7, 0.55, 0.4, 0.25, 0.1],
         phaseOffsets: [0, 0.21, 0.48, 0.73],
+        tracks: {      // 대원마다 구두·발굽·발바닥과 바퀴·썰매 자국을 구분한다.
+          enabled: true, life: 45, maxMarks: 1600, opacity: 0.36, groundSquash: 0.7,
+          humanWidth: 2.8, animalWidth: 3.6, animalStride: 5.5,
+          packAnimalSide: 7, packHumanSide: 10, draftForward: 22, cartBack: 12, rutWidth: 10,
+          wheelLine: 1.5, runnerLine: 1.1,
+          colors: { soil: '#3c2c1d', sand: '#79542e', snow: '#536978' },
+          spacing: { foot: 10, porter: 10, horse: 14, camel: 17, camel2: 17, donkey: 12,
+            llama: 12, yak: 13, wagon: 11, oxwagon: 11, elephant: 19, reindeer: 11 }
+        },
         follow: {       // 자리로 옮겨 붙이지 않고 각 대원이 제독의 지나온 길을 쫓는다.
           maxDelta: 0.1, teleportPx: 120, trailStep: 0.7, trailPoints: 600,
           backSlots: [0, 1, 1.3, 2.15], lineSlots: [0, 1, 2, 3], sideSlots: [0, -0.8, 0.8, 0],
@@ -430,4 +456,117 @@
     aide: { heirX: 0.18, oldX: 0.40, mateX: [0.64, 0.84], h: 1.01, y: 0.05 },
     mourning: { heirX: 0.25, mateX: [0.56, 0.80], h: 1.02, y: 0.04 }
   };
+  // 전 선종 렌더러. 기존 갤리온 비교 페이지도 같은 조정값을 사용한다.
+  G.FX.ship3d = G.FX.galleon3d;
+  Object.assign(G.FX.ship3d, {
+    boundsPadding: 10, oarRate: 2.8, oarSweep: .42, oarLift: 3,
+    sailRopeRadius: .19, reefRopeLength: 1.25, sailWrinkle: .32
+  });
+  // 거북선: 첨부 복원선 사진을 기준으로 한 미술 배치. 게임의 배 성능과 무관하다.
+  G.FX.turtle3d = {
+    mastX: [.20, -.18], sailHeight: [58, 52], sailWidth: [.76, .67],
+    sailClearance: 4.5, sailYaw: Math.PI / 2, sailPanels: 8,
+    roofStart: .06, roofEnd: .94, wallHeight: .62, roofRise: .46,
+    dragonScale: 1.05
+  };
+  // 선종별 미술용 범장. [길이 방향 위치/L, 돛대 높이/L, 돛 형식, 층수, 폭/W].
+  // sq 사각돛, lat 라틴돛, bat 정크돛, kr 조선 돛, jp 일본 사각돛, tanja 탄자돛.
+  // 자료와 시대 선택 근거: docs/art/rig3d-references.md. 배 성능·저장 자료에는 적용하지 않는다.
+  G.FX.shipRig = {
+    clearance: 4, yardGap: 2, sailOffset: 1.1, sheetRadius: .12,
+    deadeyeRadius: .52, blockRadius: .48, topRailPosts: 16,
+    courseFoot: .10, topFoot: .055, leech: .075,
+    bands: {
+      1: [[.94, .06, 1, .93]],
+      2: [[.60, .04, 1, .94], [.95, .69, .52, .88]],
+      3: [[.51, .03, 1, .94], [.78, .59, .53, .84], [.96, .85, .32, .49]]
+    },
+    profiles: {
+      barca: [[.04,.58,'sq',1,1.30]], cog: [[.02,.66,'sq',1,1.50]],
+      hulk: [[.22,.69,'sq',2,1.45],[-.22,.53,'sq',1,1.05]],
+      caravel: [[.20,.58,'lat',1,1.05],[-.24,.46,'lat',1,.85]],
+      lcaravel: [[.29,.65,'sq',2,1.55],[0,.62,'lat',1,1.05],[-.29,.43,'lat',1,.75]],
+      pinnace: [[.20,.67,'sq',2,1.65],[-.27,.49,'lat',1,.88]],
+      carrack: [[.27,.70,'sq',2,1.60],[-.05,.80,'sq',2,1.80],[-.34,.53,'lat',1,.85]],
+      lcarrack: [[.28,.73,'sq',2,1.63],[0,.84,'sq',2,1.82],[-.25,.56,'lat',1,.83],[-.40,.40,'lat',1,.58]],
+      hcarrack: [[.28,.78,'sq',3,1.68],[0,.88,'sq',3,1.85],[-.25,.58,'lat',1,.85],[-.40,.42,'lat',1,.60]],
+      galleon: [[.28,.70,'sq',2,1.65],[-.04,.80,'sq',2,1.85],[-.33,.54,'lat',1,.95]],
+      lgalleon: [[.29,.77,'sq',3,1.68],[0,.88,'sq',3,1.90],[-.26,.57,'lat',1,.85],[-.41,.39,'lat',1,.58]],
+      fluyt: [[.26,.69,'sq',2,1.48],[-.04,.79,'sq',2,1.65],[-.33,.52,'lat',1,.84]],
+      frigate: [[.28,.75,'sq',3,1.83],[-.04,.85,'sq',3,2.0],[-.32,.58,'lat',1,1.05]],
+      tartane: [[.06,.62,'lat',1,1.30]], galley: [[.12,.55,'lat',1,1.7]],
+      greatgalley: [[.23,.58,'lat',1,1.55],[-.22,.70,'lat',1,1.85]],
+      galleass: [[.28,.56,'lat',1,1.30],[-.03,.67,'lat',1,1.55],[-.34,.45,'lat',1,.95]],
+      fusta: [[.12,.55,'lat',1,1.8]], xebec: [[.29,.54,'lat',1,1.7],[-.04,.63,'lat',1,1.95],[-.35,.41,'lat',1,1.15]],
+      dhow: [[.15,.62,'lat',1,1.45],[-.29,.43,'lat',1,.87]],
+      sambuk: [[.15,.63,'lat',1,1.5],[-.29,.44,'lat',1,.9]],
+      baghlah: [[.13,.71,'lat',1,1.40],[-.30,.49,'lat',1,.85]],
+      parau: [[.09,.54,'lat',1,2.0]],
+      jong: [[.30,.59,'tanja',1,.64],[.07,.77,'tanja',1,.80],[-.18,.65,'tanja',1,.66],[-.39,.49,'tanja',1,.48]],
+      korakora: [[.05,.49,'tanja',1,2.1]],
+      junk: [[.24,.65,'bat',1,.70],[-.23,.54,'bat',1,.65]],
+      shachuan: [[.30,.57,'bat',1,.65],[0,.72,'bat',1,.85],[-.31,.50,'bat',1,.62]],
+      ljunk: [[.30,.62,'bat',1,.62],[0,.76,'bat',1,.79],[-.31,.53,'bat',1,.58]],
+      baochuan: [[.33,.52,'bat',1,.43],[.17,.67,'bat',1,.51],[-.02,.78,'bat',1,.58],[-.22,.63,'bat',1,.48],[-.40,.45,'bat',1,.36]],
+      maengseon: [[.22,.64,'kr',1,.85],[-.21,.54,'kr',1,.75]],
+      panokseon: [[.24,.71,'kr',1,.86],[-.24,.63,'kr',1,.75]],
+      geobukseon: [[.20,.65,'kr',1,.76],[-.18,.60,'kr',1,.67]],
+      kobaya: [[.04,.60,'jp',1,1.45]], sekibune: [[.04,.65,'jp',1,1.25]],
+      atakebune: [[.10,.77,'jp',1,1.10]], balsa: [[.08,.55,'sq',1,.86]]
+    }
+  };
+  G.FX.shipArt = {
+    families: {
+      west: { hull: '#73482e', deck: '#ac8956', inner: '#88613b', wales: '#302319', paint: '#24484c', mast: '#68462d', rope: '#4c3e29', boltRope: '#9b8055', sail: '#e8ddc1', woodRelief: .13, clothRelief: .07 },
+      galley: { hull: '#78432a', deck: '#ac8153', inner: '#93663c', paint: '#78322b', sail: '#e8d9b9' },
+      dhow: { hull: '#8d5f38', deck: '#c09a62', inner: '#9e774d', paint: '#315e60', sail: '#e3d0aa' },
+      jong: { hull: '#68432b', deck: '#a78650', inner: '#8a693b', paint: '#73432a', sail: '#c1a16a' },
+      outrigger: { hull: '#916137', deck: '#b28b53', inner: '#a47e4b', paint: '#8f3e26', sail: '#c9ac74' },
+      junk: { hull: '#6d4030', deck: '#a57848', inner: '#91633d', paint: '#833a2d', sail: '#c49c63' },
+      korean: { hull: '#795737', deck: '#b58e5c', inner: '#947046', paint: '#3e6861', sail: '#e2d3ad' },
+      japanese: { hull: '#55402d', deck: '#a68a61', inner: '#80643e', paint: '#302c27', sail: '#e7dcc3' },
+      raft: { hull: '#997140', deck: '#c09c5e', inner: '#ac8649', paint: '#70502c', sail: '#c6ad7d' }
+    },
+    profiles: {
+      barca: { family: 'west', paint: '#41565c', kit: 'open', cargo: 1 },
+      cog: { family: 'west', paint: '#823d2d', kit: 'merchant', cargo: 3 },
+      hulk: { family: 'west', paint: '#534638', kit: 'merchant', cargo: 4 },
+      caravel: { family: 'west', paint: '#81533a', kit: 'explorer', cargo: 2 },
+      lcaravel: { family: 'west', paint: '#6c4131', kit: 'explorer', cargo: 2 },
+      pinnace: { family: 'west', paint: '#355e63', kit: 'open', cargo: 1 },
+      carrack: { family: 'west', paint: '#8a3e32', kit: 'castle', cargo: 3 },
+      lcarrack: { family: 'west', paint: '#31545e', kit: 'castle', cargo: 4 },
+      hcarrack: { family: 'west', paint: '#66342e', kit: 'castle', cargo: 4 },
+      galleon: { family: 'west', paint: '#24484c', kit: 'galleon', cargo: 3 },
+      lgalleon: { family: 'west', paint: '#233c55', kit: 'gallery', cargo: 3 },
+      fluyt: { family: 'west', paint: '#3f6555', kit: 'merchant', cargo: 5 },
+      frigate: { family: 'west', paint: '#303c48', kit: 'gallery', cargo: 1 },
+      tartane: { family: 'west', paint: '#566c70', kit: 'open', cargo: 2 },
+      galley: { family: 'galley', kit: 'oared', cargo: 0 },
+      greatgalley: { family: 'galley', paint: '#643249', kit: 'oared', cargo: 2 },
+      galleass: { family: 'galley', paint: '#315658', kit: 'oared', cargo: 1 },
+      fusta: { family: 'galley', paint: '#654832', kit: 'oared', cargo: 0 },
+      xebec: { family: 'galley', paint: '#38564c', kit: 'oared', cargo: 1 },
+      dhow: { family: 'dhow', kit: 'sewn', cargo: 3 },
+      sambuk: { family: 'dhow', paint: '#656f68', kit: 'sewn', cargo: 2 },
+      baghlah: { family: 'dhow', paint: '#346369', kit: 'sewn', cargo: 4 },
+      parau: { family: 'galley', hull: '#8e613a', paint: '#715136', kit: 'oared', cargo: 0 },
+      jong: { family: 'jong', kit: 'woven', cargo: 4 },
+      korakora: { family: 'outrigger', kit: 'lashed', cargo: 0 },
+      junk: { family: 'junk', kit: 'lattice', cargo: 3 },
+      shachuan: { family: 'junk', hull: '#79583b', paint: '#415e5c', kit: 'lattice', cargo: 4 },
+      ljunk: { family: 'junk', paint: '#6c2e29', kit: 'lattice', cargo: 4 },
+      baochuan: { family: 'junk', paint: '#a13b2a', sail: '#d3b071', kit: 'lattice', cargo: 4 },
+      maengseon: { family: 'korean', kit: 'korean', cargo: 1 },
+      panokseon: { family: 'korean', paint: '#3c6258', kit: 'korean', cargo: 1 },
+      geobukseon: { family: 'korean', hull: '#765036', inner: '#9d7046', paint: '#684332', sail: '#d5b473', kit: 'armored', cargo: 0 },
+      kobaya: { family: 'japanese', kit: 'shield', cargo: 0 },
+      sekibune: { family: 'japanese', paint: '#6b3b2e', kit: 'shield', cargo: 1 },
+      atakebune: { family: 'japanese', paint: '#242f32', kit: 'castle-jp', cargo: 1 },
+      balsa: { family: 'raft', kit: 'lashed', cargo: 3 }
+    }
+  };
+  // 초기 갤리온 팔레트 조정도 새 선종 프로필과 같은 곳을 가리킨다.
+  Object.assign(G.FX.shipArt.profiles.galleon, G.FX.ship3d.art);
+  G.FX.ship3d.art = G.FX.shipArt.profiles.galleon;
 })(window.G = window.G || {});

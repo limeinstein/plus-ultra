@@ -21,7 +21,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 IMG = os.path.join(ROOT, 'images')
 OUT = os.path.join(ROOT, 'js', 'data', 'portraitfaces.js')
-DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/building-managers', 'portraits/gardeners', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/history', 'portraits/fairy-tales', 'portraits/street-folk', 'portraits/medici', 'portraits/witches', 'portraits/childhood-friends']
+DIRS = ['portraits/maids', 'maid-styles', 'portraits/rivals', 'portraits/npc', 'portraits/npc-roles', 'portraits/building-managers', 'portraits/gardeners', 'portraits/mates', 'portraits/sponsors', 'portraits/legendary', 'portraits/history', 'portraits/fairy-tales', 'portraits/street-folk', 'portraits/medici', 'portraits/witches', 'portraits/childhood-friends', 'portraits/pools']
 
 def main():
     try:
@@ -39,6 +39,9 @@ def main():
         prefix = sys.argv[sys.argv.index('--prefix') + 1].strip('/')
     merge = '--merge' in sys.argv
     exact_keys = set()
+    if '--keys-file' in sys.argv:
+        with open(sys.argv[sys.argv.index('--keys-file') + 1],encoding='utf-8') as fh:
+            exact_keys.update(key.strip('/') for key in json.load(fh))
     for index, arg in enumerate(sys.argv[:-1]):
         if arg == '--key':
             exact_keys.add(sys.argv[index + 1].strip('/'))

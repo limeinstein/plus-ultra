@@ -241,6 +241,8 @@
   UI.clearScreen = function () { screenEl.innerHTML = ''; };
   UI.add = function (el) { el.style.pointerEvents = 'auto'; screenEl.appendChild(el); return el; };
   UI.busy = function () { return modalRoot.children.length > 0; };
+  /** 창이 올라가는 층 — 여기에 붙인 것이 있으면 UI.busy() (js/systems/eraend.js 온 화면 나레이션) */
+  UI.modalRoot = function () { return modalRoot; };
 
   function usable(el) { return !!(el && el.isConnected && !el.classList.contains('dis') && !el.classList.contains('disabled') && !el.disabled && el.offsetParent !== null); }
   function selectKeyItem(items, current, step) {

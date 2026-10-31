@@ -9,7 +9,9 @@
      첫 항해 안내(튜토리얼) 중에는 저절로 채우지 않는다 — 제독이 선실에 앉혀 보는 단계가 있다.
      이때는 자리가 없는 부하와 다른 배의 사람만 움직이고, 기함 선실에 앉은 사람은 그대로 둔다(기함의 빈 방은 채운다).
    · 「자동 배치」(CA.autoAll): 술집에서 정한 역할이 없는 부하 모두를 기함 선실과 다른 배 자리에 다시 앉힌다.
-   저장: 다른 배의 자리 — m.role = 'crew', m.ship = 배 uid, m.post = 'helm' | 'deck' | 'lookout' | 'cabin'. 선장은 예전처럼 m.role = 'captain', m.ship.
+   · 다른 배의 선장은 손으로 바꿀 수 있다 (2026-10-31 사용자 요청): 「다른 배의 사람들」에서 선장 자리를 누르거나, 술집 부하편성에서 「○○호 선장」.
+     손으로 정한 선장(m.capLock)은 자동 채우기·「자동 배치」가 바꾸지 않는다 — 「능력에 맞게 저절로」를 고르면 다시 자동.
+   저장: 다른 배의 자리 — m.role = 'crew', m.ship = 배 uid, m.post = 'helm' | 'deck' | 'lookout' | 'cabin'. 선장은 예전처럼 m.role = 'captain', m.ship (손으로 정했으면 m.capLock = 1).
    옛 저장에는 'crew'가 없다 — 처음 채울 때 만든다. 조정값 G.BALANCE.crewAuto */
 (function (G) {
   'use strict';
@@ -60,6 +62,7 @@
     s.fleet.ships.forEach(function (sh, k) { idx[sh.uid] = k; });
     s.mates.forEach(function (m) {
       if (!m) return;
+      if (m.capLock && m.role !== 'captain') delete m.capLock;   // 선장 자리를 떠났으면 손으로 정한 표시도 끝
       if (m.role !== 'crew') { if (m.post != null) delete m.post; return; }
       var k = idx[m.ship], sh = s.fleet.ships[k], bad = !(k > 0) || !(m.post === 'cabin' || CA.POST[m.post]);
       if (!bad && m.post === 'cabin') { berth[m.ship] = (berth[m.ship] || 0) + 1; bad = berth[m.ship] > CA.berths(sh); }
@@ -116,11 +119,13 @@
     if (st.k === 'post') return (k.post == null ? 0.3 : k.post) + 0.1 * CA.postFit(m, st.post) + keep;
     return (k.berth == null ? 0.1 : k.berth) + keep;
   }
-  /** 움직일 사람: fill — 자리 없는 사람과 다른 배 사람 · all — 술집 역할이 없는 모두. 둘째 부인처럼 숨어 있는 사람은 빼고 */
+  /** 손으로 정한 다른 배 선장 (자동 채우기·자동 배치가 건드리지 않는다) */
+  CA.locked = function (m) { return !!(m && m.capLock && m.role === 'captain'); };
+  /** 움직일 사람: fill — 자리 없는 사람과 다른 배 사람 · all — 술집 역할이 없는 모두. 둘째 부인처럼 숨어 있는 사람·손으로 정한 선장은 빼고 */
   function poolOf(mode) {
     var s = S();
     return s.mates.filter(function (m) {
-      if (!m || !G.MATE[m.id] || CA.tavernRole(m)) return false;
+      if (!m || !G.MATE[m.id] || CA.tavernRole(m) || CA.locked(m)) return false;
       if (R().mateHidden && R().mateHidden(m)) return false;
       if (mode === 'all') return true;
       return CA.idle(m) || m.role === 'captain' || m.role === 'crew';
@@ -139,7 +144,7 @@
     }
     // 다른 배: 선장들 → 조타수들 → 갑판들 → 파수꾼들 → 선실 (값이 같으면 앞의 자리부터 — 사람이 모자라도 배마다 고르게)
     var ships = CA.others().filter(function (sh) { return sh && sh.uid != null; });
-    ships.forEach(function (sh) { out.push({ k: 'captain', sh: sh }); });
+    ships.forEach(function (sh) { if (!CA.locked(CA.crewOf(sh).captain)) out.push({ k: 'captain', sh: sh }); });   // 손으로 정한 선장의 배는 그 자리를 빼고
     CA.POSTS.forEach(function (p) { ships.forEach(function (sh) { out.push({ k: 'post', sh: sh, post: p.id }); }); });
     var most = 0; ships.forEach(function (sh) { most = Math.max(most, CA.berths(sh)); });
     for (var b = 0; b < most; b++) ships.forEach(function (sh) { if (b < CA.berths(sh)) out.push({ k: 'berth', sh: sh, n: b }); });
@@ -189,6 +194,28 @@
   CA.autoAll = function () {
     var s = S(); if (!s || !s.mates || !s.fleet || !s.fleet.ships.length) return [];
     CA.tidy(); return CA.apply('all');
+  };
+  /** 다른 배의 선장을 손으로 정한다 (m = null이면 그 배 선장을 다시 「능력에 맞게 저절로」).
+      m이 다른 배에 있었으면 밀려난 선장이 m의 자리로 바꿔 앉고, 그 밖이면(기함 선실·술집 역할·대기) 밀려난 선장은 빈 자리를 저절로 찾는다.
+      돌려주는 값: 밀려난 선장 (없으면 null) */
+  CA.setCaptain = function (uid, m) {
+    var s = S(), sh = CA.shipByUid(uid); if (!s || !sh || s.fleet.ships[0] === sh) return null;
+    var prev = CA.crewOf(sh).captain;
+    if (!m) { if (prev) delete prev.capLock; CA.refresh(); return null; }
+    if (prev === m) { m.capLock = 1; return null; }
+    var from = { role: m.role, ship: m.ship, post: m.post, lock: m.capLock };
+    if (m.room != null && CB()) CB().place(m, null);
+    m.role = 'captain'; m.ship = uid; m.capLock = 1; delete m.post;
+    if (prev) {
+      delete prev.capLock;
+      if (from.role === 'captain' && from.ship != null) { prev.role = 'captain'; prev.ship = from.ship; if (from.lock) prev.capLock = 1; }   // 두 배의 선장을 맞바꾼다
+      else if (from.role === 'crew' && from.ship != null) { prev.role = 'crew'; prev.ship = from.ship; prev.post = from.post; }
+      else { prev.role = 'none'; delete prev.ship; delete prev.post; }
+    }
+    if (R().tidyCaptains) R().tidyCaptains();
+    if (CB()) CB().tidy();
+    CA.refresh();   // 비운 자리(기함 선실·다른 배)와 밀려난 사람을 저절로
+    return prev && prev !== m ? prev : null;
   };
   /** 자리를 얻은 사람 알림 한 줄 (없으면 null): 「자리가 없던 ○○ → 조타수 · △△호」 */
   CA.notice = function (moved) {

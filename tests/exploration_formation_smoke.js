@@ -37,7 +37,7 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/exploratio
       u.head=-Math.PI/2;for(let i=0;i<50;i++){u.t+=0.05;E.draw(ctx,u);}ok(Math.abs(E.sample(u).heading+Math.PI/2)<0.02,'최단 방향 회전 완료');
       for(let n=1;n<=4;n++){u.party=n;ok(E.draw(ctx,u).length===n,'소규모 인원 '+n);}
       u.party=4;u.mount.n=1;ok(F.roles(u).filter(r=>r==='foot').length===3,'말 한 필이면 동료는 도보');
-      u.mount={id:'wagon',n:1};ok(F.roles(u).filter(r=>r==='wagon').length===0,'없는 두 번째 마차를 표시하지 않음');
+      u.mount={id:'wagon',n:1};ok(F.roles(u).slice(1).every(r=>r==='wagon'),'마차 탑승자를 도보 호위와 섞지 않음');
       u.mount={id:'wagon',n:2};ok(F.roles(u)[3]==='wagon','두 번째 마차는 후미');
       u.draft='ox';ok(F.roles(u)[0]==='oxwagon'&&F.roles(u)[3]==='oxwagon','소 마차 연결');
       u.mount={id:'camel',n:4};u.region='st';ok(F.roles(u).every(r=>r==='camel2'),'쌍봉낙타 연결');

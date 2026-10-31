@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 
 from PIL import Image
@@ -12,6 +13,8 @@ from build_v2 import H, W, fit_whole
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'tools'))
+import storyboard_layout
 MASTER = ROOT / "tools" / "ruin_gifs" / "v3" / "master"
 LIVE_OUT = ROOT / "images" / "discoveries"
 LIVE_ENDS = ROOT / "images" / "discovery-ends"
@@ -27,14 +30,7 @@ def storyboard_cells(path: Path) -> list[Image.Image]:
     source = Image.open(path).convert("RGB")
     if source.width < 1024 or source.height < 768:
         raise ValueError(f"원화가 너무 작음: {path} ({source.width}×{source.height})")
-    cells = []
-    cell_w, cell_h = source.width // 4, source.height // 4
-    for row in range(4):
-        for col in range(4):
-            right = (col + 1) * cell_w if col < 3 else source.width
-            bottom = (row + 1) * cell_h if row < 3 else source.height
-            cells.append(fit_whole(source.crop((col * cell_w, row * cell_h, right, bottom))))
-    return cells
+    return [fit_whole(cell) for cell in storyboard_layout.cells(path)]
 
 
 def master_path(did: str) -> Path:
@@ -54,8 +50,9 @@ def build_one(did: str, out_dir: Path, ends_dir: Path) -> Path:
     if not source.exists():
         raise FileNotFoundError(f"시네마틱 원화 없음: {source}")
     frames = storyboard_cells(source)
-    if len(frames) != 16 or len(DURATIONS) != 16:
-        raise AssertionError("시네마틱 원화와 재생 시간은 반드시 16칸이어야 함")
+    if not 12<=len(frames)<=24:
+        raise AssertionError("시네마틱 원화의 실제 칸 수를 확인하세요")
+    frame_ms=DURATIONS if len(frames)==16 else storyboard_layout.durations(len(frames))
 
     out_dir.mkdir(parents=True, exist_ok=True)
     ends_dir.mkdir(parents=True, exist_ok=True)
@@ -64,7 +61,7 @@ def build_one(did: str, out_dir: Path, ends_dir: Path) -> Path:
     quantized = [frame.quantize(palette=palette, dither=Image.Dither.FLOYDSTEINBERG)
                  for frame in frames]
     quantized[0].save(destination, save_all=True, append_images=quantized[1:],
-                      duration=DURATIONS, loop=0, disposal=1, optimize=True)
+                      duration=frame_ms, loop=0, disposal=1, optimize=True)
     frames[-1].save(ends_dir / f"{did}.jpg", quality=92, optimize=True)
     return destination
 

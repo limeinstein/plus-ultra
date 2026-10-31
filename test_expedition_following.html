@@ -5,7 +5,7 @@
 <main><h1>제독을 따라가는 탐험대</h1><p>대열을 고정하지 않고 각 동료가 지나온 길을 쫓습니다. 모퉁이에서는 줄이 좁아지고, 넓은 곳에서는 서서히 벌어집니다.</p>
 <div class="bar"><select id="mount"></select><select id="road"><option value="wide">넓은 땅</option><option value="narrow">좁은 굽은 길</option></select><button id="pause">제독 멈춤</button><button id="turn">멈춰서 90° 회전</button><button id="reset">출발부터</button><label><input id="trails" type="checkbox" checked>발자국</label><label><input id="camera" type="checkbox">카메라만 이동</label><select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></div>
 <canvas id="stage" width="1120" height="640"></canvas><p id="status" class="note"></p><p class="note"><a href="test_expedition_formation.html">모든 이동 수단의 원화·자세 비교</a></p></main>
-<script src="images/manifest.js"></script><script src="js/core/images.js"></script><script src="js/data/seafx.js"></script><script src="js/data/expedition_motion.js"></script><script src="js/data/expedition_followers.js"></script><script src="js/art/party.js"></script><script src="js/art/expedition_motion.js"></script><script src="js/art/expedition_formation.js"></script>
+<script src="images/manifest.js"></script><script src="js/core/images.js"></script><script src="js/data/seafx.js"></script><script src="js/data/expedition_motion.js"></script><script src="js/data/expedition_followers.js"></script><script src="js/data/expedition_crew.js"></script><script src="js/art/party.js"></script><script src="js/art/expedition_motion.js"></script><script src="js/art/expedition_formation.js"></script><script src="js/art/expedition_tracks.js"></script>
 <script>
 (function(){'use strict';
   var $=function(id){return document.getElementById(id);},cv=$('stage'),ctx=cv.getContext('2d'),state;
@@ -21,8 +21,7 @@
     function project(x,y){return[cv.width/2+x-camX,cv.height/2+y-camY];}
     ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle=$('road').value==='narrow'?'#294b59':'#869d6e';ctx.fillRect(0,0,cv.width,cv.height);
     ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#aeaa78';ctx.lineWidth=$('road').value==='narrow'?44:86;ctx.beginPath();route.forEach(function(p,i){var q=project(p[0],p[1]);if(i)ctx.lineTo(q[0],q[1]);else ctx.moveTo(q[0],q[1]);});ctx.closePath();ctx.stroke();
-    if($('trails').checked){ctx.strokeStyle='rgba(52,53,32,.4)';ctx.lineWidth=2;ctx.setLineDash([3,7]);ctx.beginPath();state.points.forEach(function(p,i){var q=project(p[0],p[1]);if(i)ctx.lineTo(q[0],q[1]);else ctx.moveTo(q[0],q[1]);});ctx.stroke();ctx.setLineDash([]);}
-    var p=project(state.x,state.y),u={pts:[p],follow:{x:state.x,y:state.y,zoom:1},mount:{id:$('mount').value,n:20},party:4,head:state.head,moving:distance>0,phase:state.phase,t:state.time,size:1.1,cache:state.cache,ring:true,canStand:function(x,y){return land(x-cv.width/2+camX,y-cv.height/2+camY);}};
+    var p=project(state.x,state.y),u={pts:[p],follow:{x:state.x,y:state.y,zoom:1},mount:{id:$('mount').value,n:20},party:4,head:state.head,moving:distance>0,phase:state.phase,t:state.time,size:1.1,cache:state.cache,ring:true,tracks:document.getElementById("trails").checked,canStand:function(x,y){return land(x-cv.width/2+camX,y-cv.height/2+camY);}};
     state.items=G.ExpeditionMotion.draw(ctx,u)||[];
     $('status').textContent=(state.paused?'제독 정지':'제독 이동')+' · 동료 '+state.items.filter(function(it){return!it.leader&&it.moving;}).length+'명 걷는 중 · 각자 돌아서고 따라온 뒤 멈춥니다.';
     return state.items;

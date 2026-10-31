@@ -1064,7 +1064,7 @@
     var mt = MT(), terrNow = G.Geo.terrain(l.lon, l.lat), psz = (G.FX && G.FX.party && G.FX.party.size) || 1;
     var tp = [toScreen(l.lon, l.lat)];
     for (var ti = st.trail.length - 1; ti >= 0 && tp.length < 220; ti--) { var q = toScreen(st.trail[ti][0], st.trail[ti][1]), pv = tp[tp.length - 1]; if (Math.abs(q[0] - pv[0]) + Math.abs(q[1] - pv[1]) > 40) break; tp.push(q); }
-    G.Party.drawTracks(ctx, tp.slice(0, 140), mt.id, terrNow, psz);
+    if (!G.ExpeditionTracks || G.FX.sprites.expedition.formation.enabled === false) G.Party.drawTracks(ctx, tp.slice(0, 140), mt.id, terrNow, psz);
     // destination
     if (st.path) { var dp = toScreen(st.path[0], st.path[1]), pp0 = toScreen(l.lon, l.lat); ctx.strokeStyle = 'rgba(255,245,220,.8)'; ctx.setLineDash([6, 7]); ctx.beginPath(); ctx.moveTo(pp0[0], pp0[1]); ctx.lineTo(dp[0], dp[1]); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.arc(dp[0], dp[1], 8, 0, 7); ctx.stroke(); }
     // 지진: 땅에서 피어오르는 먼지 · 튀는 잔돌 · 떨리는 우듬지와 풀 (탐험대 아래)
@@ -1074,7 +1074,7 @@
     // 탐험대 모형: 발밑 먼지 → 고리 → 줄지어 선 대원들
     var pp = tp[0], mvg = (st.movT || 0) > 0;
     G.Party.drawFx(ctx, st.pfx, toScreen);
-    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), cache: st.unit, canStand: expeditionGround, follow: { x: l.lon, y: -l.lat, zoom: st.cam.zoom, wrap: 360 } });
+    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), terr: terrNow, cache: st.unit, canStand: expeditionGround, follow: { x: l.lon, y: -l.lat, zoom: st.cam.zoom, wrap: 360 } });
     // 도시 이름은 탐험대 위에 (가려지지 않게)
     knownInland().forEach(function (c) {
       var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;

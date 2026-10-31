@@ -68,7 +68,7 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function (next) { if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
+  SEA.exit = function (next) { if (G.Ship3D) G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
@@ -2069,7 +2069,9 @@
       if (qf) lk.pose = { roll: lk.pose.roll + qf.roll, pitch: lk.pose.pitch + qf.pitch, heave: lk.pose.heave + qf.heave };
       lk.noWake = true; lk.furl = st.furl || 0; lk.rig = st.rig || null; lk.sid = 'f' + si; lk.face = sv.face; lk.squash = sv.squash;
       lk.motionSpeed = sr * (si ? 0.92 : 1); lk.motionRate = 0.78 + Math.min(1.4, sr) * 0.28;
-      A.shipTop(ctx, bx, by, ha, lenS, lk, st.t + si);
+      // 모든 선종의 항해 기함을 실시간으로 그린다. 그림 장치를 못 쓰면 기존 시트.
+      if (si === 0 && G.Ship3D) lk.light = weatherParams();
+      if (!(si === 0 && G.Ship3D && G.Ship3D.draw(ctx, bx, by, ha, lenS, lk, st.t + si))) A.shipTop(ctx, bx, by, ha, lenS, lk, st.t + si);
       if (G.VoyageFX) G.VoyageFX.drawSpray(st, ctx, bx, by, ha, lenS, si);   // 속력을 낼 때 선수 물보라
     }
     drawCities(ctx);

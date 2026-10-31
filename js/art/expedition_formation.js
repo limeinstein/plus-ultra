@@ -4,6 +4,7 @@
   var F = G.ExpeditionFormation = {}, TAU = Math.PI * 2;
   function cfg() { return (G.FX && G.FX.sprites && G.FX.sprites.expedition && G.FX.sprites.expedition.formation) || {}; }
   function sheets() { return (G.EXPEDITION_FOLLOWERS || {}).sheets || {}; }
+  function crewSheets() { return (G.EXPEDITION_CREW || {}).sheets || {}; }
   function mod(n, d) { return ((n % d) + d) % d; }
   function image(id) {
     var s = sheets()[id], I = G.Img;
@@ -31,8 +32,8 @@
       if (id === 'walk') role = 'foot';
       else if (id === 'porter') role = i <= n ? 'porter' : 'foot';
       else if (['wagon', 'elephant', 'reindeer'].indexOf(id) >= 0) {
-        // 큰 수레·썰매·코끼리는 후미에 두고 좌우에는 걸어서 호위한다.
-        role = i === count - 1 && n > 1 ? kind : 'foot';
+        // 각 자리는 대원을 대표하는 표시다. 큰 탈것도 도보 호위와 섞지 않는다.
+        role = kind;
       } else if (i < n) role = kind;
       out.push(role);
     }
@@ -43,8 +44,14 @@
     if (id === 'camel') list.push('camel2');
     if (id === 'wagon') list.push('oxwagon');
     list.forEach(image);
+    list.forEach(function (kind) {
+      ['female_', 'captain_'].forEach(function (prefix) { var s = crewSheets()[prefix + kind]; if (s && G.Img) G.Img.want(s.key); });
+    });
+    // 짐꾼 원화는 두 사람이므로 제독은 단독 도보 원화를 미리 준비한다.
+    if (id === 'porter' && G.ExpeditionMotion) G.ExpeditionMotion.preload('walk');
   };
   F.ready = function (id) { return !!image(id); };
+  F.crewReady = function () { return Object.keys(crewSheets()).every(function (id) { var s = crewSheets()[id]; G.Img.want(s.key); return !!G.Img.get(s.key); }); };
   function along(pts, distance, heading) {
     var acc = 0;
     for (var i = 1; i < pts.length; i++) {
@@ -235,7 +242,7 @@
     });
     return roles.map(function (role, i) {
       var m = state.members[i], p = toScreen(m);
-      return { index: i, role: role, leader: i === 0, x: p.x, y: p.y, heading: m.heading, phase: m.phase, moving: m.moving,
+      return { index: i, role: role, leader: i === 0, gender: i === 3 ? 'f' : 'm', x: p.x, y: p.y, heading: m.heading, phase: m.phase, moving: m.moving,
         worldX: m.x, worldY: m.y, m: { t: role === 'foot' || role === 'porter' ? 'person' : 'beast' } };
     });
   };
@@ -245,29 +252,45 @@
     ctx.restore();
   }
   F.draw = function (ctx, u, chosen, captainImage) {
-    if (cfg().enabled === false || chosen.action === 'camp' || (F.count(u.party) < 2 && F.roles(u)[0] === 'captain')) return false;
+    if (cfg().enabled === false || chosen.action === 'camp') return false;
     var s = u.size || (G.FX && G.FX.party && G.FX.party.size) || 1, items = F.follow(u, chosen, s);
+    if (G.ExpeditionTracks) { G.ExpeditionTracks.update(u, items, s); G.ExpeditionTracks.draw(ctx, u); }
     if (u.ring && G.Party.ring) G.Party.ring(ctx, u.pts[0][0], u.pts[0][1], chosen.heading, u.moving, u.t || 0, s);
     items.forEach(function (it) {
       var target = it.heading;
-      var sheet = sheets()[it.role], im = sheet && image(it.role);
+      var kind = it.leader ? variant(u) : it.role;
+      var appearance = it.leader ? 'captain_' + kind : it.gender === 'f' ? 'female_' + kind : null;
+      var sheet = appearance && crewSheets()[appearance];
+      // 아직 전용 제독·여성 원화가 없는 이동 수단은 같은 이동 수단의 공용 원화를 쓴다.
+      // 이전 동작 시트로 내려가면 짐꾼·마차처럼 자세와 크기가 다른 역할이 순간적으로 바뀐다.
+      if (!sheet) {
+        sheet = crewSheets()['male_' + kind] || sheets()[kind];
+        if (sheet) appearance = crewSheets()['male_' + kind] ? 'male_' + kind : null;
+      }
+      var im = sheet && G.Img.get(sheet.key); if (!im && sheet && G.Img.has(sheet.key)) G.Img.want(sheet.key);
+      // 의상 변형이 로딩 중이어도 같은 동물의 크기와 자세는 유지한다.
+      if (!im && it.leader && kind !== 'foot' && kind !== 'porter') {
+        var sameMount = crewSheets()['male_' + kind] || sheets()[kind];
+        if (sameMount) { var sameImage = G.Img.get(sameMount.key); if (sameImage) { sheet = sameMount; im = sameImage; appearance = 'male_' + kind; } }
+      }
       if (im) {
         var dir = mod(Math.round((Math.PI / 2 - target) / (Math.PI / 4)), 8);
         var directionRow = sheet.directionRows ? sheet.directionRows[dir] : [dir, false], row = directionRow[0];
         var frame = mod(Math.floor(it.phase * 4), 4);
         it.sheet = sheet; it.im = im; it.cell = sheet.cells[row * 4 + frame]; it.frame = frame; it.row = row; it.flip = directionRow[1];
-        it.scale = s * sheet.targetHeight / sheet.bodyHeight;
+        it.scale = s * sheet.targetHeight / ((sheet.rowHeights || [])[row] || sheet.bodyHeight);
+        it.appearance = appearance || 'male_' + kind;
       } else {
         // 파일이 늦거나 없어도 편대는 남긴다. 같은 탈것의 기존 원화를 안전하게 쓴다.
-        var fallbackId = it.role === 'foot' ? 'walk' : it.role === 'camel2' ? 'camel' : it.role === 'oxwagon' ? 'wagon' : it.role;
-        var fallback = it.role === 'captain' ? chosen : G.ExpeditionMotion.sample({ mount: { id: fallbackId }, head: target, moving: it.moving, phase: it.phase, t: u.t || 0, cache: {} });
+        var fallbackId = kind === 'foot' || kind === 'porter' && it.leader ? 'walk' : kind === 'camel2' ? 'camel' : kind === 'oxwagon' ? 'wagon' : kind;
+        var fallback = it.leader && kind !== 'porter' ? chosen : G.ExpeditionMotion.sample({ mount: { id: fallbackId }, head: target, moving: it.moving, phase: it.phase, t: u.t || 0, cache: {} });
         var base = fallback && fallback.sheet, oldImage = base && G.Img.get(base.key);
         if (!oldImage) { fallback = chosen; base = chosen.sheet; oldImage = captainImage; }
         it.sheet = base; it.im = oldImage; it.cell = base.cells[fallback.index]; it.flip = fallback.flip;
-        it.scale = G.ExpeditionMotion.scale(base, s); it.fallback = it.role !== 'captain';
+        it.scale = G.ExpeditionMotion.scale(base, s); it.fallback = !it.leader;
       }
     });
-    // 선장 고정 원화를 유지하고, 땅에서 뒤쪽인 대원부터 그려 앞뒤 가림을 맞춘다.
+    // 땅에서 뒤쪽인 대원부터 그려 앞뒤 가림을 맞춘다.
     items.sort(function (a, b) { return a.y - b.y || a.index - b.index; });
     items.forEach(function (it) { drawCell(ctx, it.im, it.cell, it.x, it.y, it.scale, it.flip); });
     return items;

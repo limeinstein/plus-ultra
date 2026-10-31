@@ -156,7 +156,6 @@ G.HALF_EDGE = {
 "portraits/pools/mates/ot/m/09_half": "lr",
 "portraits/pools/mates/ot/m/10_half": "r",
 "portraits/pools/mates/pe/f/08_half": "r",
-"portraits/pools/mates/pt/m/09_half": "lr",
 "portraits/pools/mates/vn/m/08_half": "lr",
 "portraits/pools/mates/vn/m/09_half": "lr",
 "portraits/pools/sponsors/en/m/05_half": "lr",

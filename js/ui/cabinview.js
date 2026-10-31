@@ -556,35 +556,72 @@
     return '짐칸 +' + U.num(Math.floor(((t && t.cap) || 0) * (k.per != null ? k.per : 0.05))) + '통';
   }
   // ---------------------------------------------------------------- 다른 배의 사람들 · 자동 배치 (2026-10-28)
-  /* 기함 말고 다른 배는 선장 · 조타수 · 갑판 · 파수꾼과 그 배 크기만큼의 선실 — 사람은 G.CrewAuto 가 능력에 맞게 저절로 앉힌다(읽기만).
-     「자동 배치」는 술집 역할(부관·항해사·측량사·통역·경리)이 없는 부하 모두를 기함 선실과 다른 배 자리에 다시 앉힌다. */
+  /* 기함 말고 다른 배는 선장 · 조타수 · 갑판 · 파수꾼과 그 배 크기만큼의 선실 — 사람은 G.CrewAuto 가 능력에 맞게 저절로 앉힌다.
+     선장 자리는 눌러서 손으로 바꿀 수 있다(2026-10-31) — 손으로 정한 선장은 「손」 표시, 자동 채우기가 바꾸지 않는다.
+     「자동 배치」는 술집 역할(부관·항해사·측량사·통역·경리)이 없는 부하 모두를 기함 선실과 다른 배 자리에 다시 앉힌다 (손으로 정한 선장은 그대로). */
   function othersHtml(width) {
     var CA = G.CrewAuto, ships = CA ? CA.others() : [];
     if (!ships.length) return '';
     function nm(m) { return U.esc(G.MATE[m.id].name); }
-    function seat(m, ic, label, tip) {
-      return '<span class="cb-oseat' + (m ? '' : ' empty') + '" title="' + U.esc(tip) + '">' + G.icon(ic) + '<b>' + label + '</b>' + (m ? nm(m) : '<i>비어 있음</i>') + '</span>';
+    function seat(m, ic, label, tip, uid) {
+      var cap = uid != null, lock = cap && CA.locked && CA.locked(m);
+      return '<span class="cb-oseat' + (m ? '' : ' empty') + (cap ? ' cap' : '') + '"' + (cap ? ' data-uid="' + U.esc(String(uid)) + '" role="button" tabindex="0"' : '') + ' title="' + U.esc(tip + (cap ? '\n누르면 선장을 바꿉니다.' : '')) + '">' + G.icon(ic) + '<b>' + label + '</b>' + (m ? nm(m) : '<i>비어 있음</i>') +
+        (lock ? '<small class="cb-lock" title="손으로 정한 선장 — 자동 배치가 바꾸지 않는다">손</small>' : '') + (cap ? '<span class="cb-ochg">바꾸기</span>' : '') + '</span>';
     }
-    return '<div class="cb-others"' + (width ? ' style="width:' + width + 'px"' : '') + '><div class="cb-sub">다른 배 <small class="muted">— 능력에 맞게 저절로 앉는다 · 선장은 그 배를 몰고, 조타수·갑판·파수꾼·선실은 충성이 떨어지지 않게 할 뿐</small></div>' +
+    return '<div class="cb-others"' + (width ? ' style="width:' + width + 'px"' : '') + '><div class="cb-sub">다른 배 <small class="muted">— 능력에 맞게 저절로 앉는다(선장 자리는 눌러서 바꾼다) · 선장은 그 배를 몰고, 조타수·갑판·파수꾼·선실은 충성이 떨어지지 않게 할 뿐</small></div>' +
       ships.map(function (sh) {
         var o = CA.crewOf(sh), n = CA.berths(sh), cap = o.captain;
         return '<div class="cb-oship"><div class="cb-oname">' + G.icon('ship') + U.esc(sh.name) + '호 <small class="muted">' + U.esc(G.SHIP[sh.type].name) + '</small></div>' +
-          seat(cap, 'crown', '선장', cap ? '항해술 ' + G.R.mateSkill(cap, 'nav') + ' · 포술 ' + G.R.mateSkill(cap, 'gun') + ' · 검술 ' + G.R.mateSkill(cap, 'sword') + ' · 조선기술 ' + G.R.mateSkill(cap, 'ship') + ' — 이 배에만 쓰인다' : '선장이 없으면 갑판장이 몬다 (속도 −4%, 재장전 +10%, 백병전 ×0.9)') +
+          seat(cap, 'crown', '선장', cap ? '항해술 ' + G.R.mateSkill(cap, 'nav') + ' · 포술 ' + G.R.mateSkill(cap, 'gun') + ' · 검술 ' + G.R.mateSkill(cap, 'sword') + ' · 조선기술 ' + G.R.mateSkill(cap, 'ship') + ' — 이 배에만 쓰인다' : '선장이 없으면 갑판장이 몬다 (속도 −4%, 재장전 +10%, 백병전 ×0.9)', sh.uid) +
           CA.POSTS.map(function (p) { return seat(o[p.id], p.icon, p.name, p.desc + ' 보는 특기: ' + CB().skillLabel(p).replace(/<[^>]+>/g, '') + ' — 충성이 떨어지지 않는다.'); }).join('') +
           '<span class="cb-oseat cabins" title="이 배의 선실 — 자리가 없는 부하가 머문다. 충성이 떨어지지 않는다.">' + G.icon('bed') + '<b>선실</b>' + o.cabin.length + '/' + n + (o.cabin.length ? ' · ' + o.cabin.map(nm).join('·') : '') + '</span></div>';
       }).join('') + '</div>';
   }
   CV._othersHtml = othersHtml;   // 시험용
-  /** 다른 배의 사람들을 보여 준다 (술집 부하편성·조선소 함대편성에서) */
+  /** 다른 배 선장 자리를 누르면 그 uid로 창을 닫는다 */
+  function wireCaptains(root, win) {
+    [].forEach.call(root.querySelectorAll('.cb-oseat.cap[data-uid]'), function (el) {
+      var go = function (e) { if (e) { e.preventDefault(); e.stopPropagation(); } win.close({ k: 'ocap', uid: el.getAttribute('data-uid') }); };
+      el.onclick = go;
+      el.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') go(e); };
+    });
+  }
+  /** 다른 배의 선장을 고른다 — 맨 위 「능력에 맞게 저절로」, 그 아래 부하들(선장에 맞는 순) */
+  CV.pickCaptain = async function (uid) {
+    var s = S(), CA = G.CrewAuto, sh = CA && CA.shipByUid(uid); if (!sh) return;
+    var cur = CA.crewOf(sh).captain, Rr = G.R;
+    var list = s.mates.filter(function (m) { return G.MATE[m.id] && !(Rr.mateHidden && Rr.mateHidden(m)); })
+      .sort(function (a, b) { return CA.captainFit(b) - CA.captainFit(a); });
+    var opts = [{ label: '능력에 맞게 저절로', right: CA.locked(cur) ? '지금은 손으로 정함' : '지금 이대로', value: 'auto', icon: 'people' }].concat(list.map(function (m) {
+      var d = G.MATE[m.id], here = m === cur;
+      return { label: U.esc(d.name) + (here ? ' <small class="muted">(지금 선장)</small>' : ''), value: m.id,
+        right: '항해술 ' + Rr.mateSkill(m, 'nav') + ' · 포술 ' + Rr.mateSkill(m, 'gun') + ' · 검술 ' + Rr.mateSkill(m, 'sword') + ' — ' + U.esc(CB().placeName(m)) };
+    }));
+    var v = await UI.choose(U.esc(sh.name) + '호의 선장', opts, { width: 760, text: '<span class="muted" style="font-size:15px">선장은 그 배를 몹니다 — 항해술(속력·폭풍)·포술·검술·조선기술·무력이 이 배에만 쓰입니다. 손으로 정한 선장은 자동 배치가 바꾸지 않습니다.</span>' });
+    if (v == null) return;
+    if (v === 'auto') { CA.setCaptain(uid, null); UI.toast(sh.name + '호의 선장은 다시 능력에 맞게 저절로 정해집니다.', 'people'); return; }
+    var m = mateById(v); if (!m) return;
+    if (CA.tavernRole(m) && !await UI.confirm(G.MATE[m.id].name + '은(는) 지금 기함의 ' + Rr.roleName(m) + '입니다. 그 자리를 비우고 ' + U.esc(sh.name) + '호의 선장으로 보내겠습니까?', '보낸다', '그만둔다')) return;
+    var prev = CA.setCaptain(uid, m);
+    UI.toast(G.MATE[m.id].name + U.jx(G.MATE[m.id].name, '이/가') + ' ' + sh.name + '호의 선장이 되었다.' + (prev ? ' ' + G.MATE[prev.id].name + ' → ' + CB().placeName(prev) : ''), 'crown', 4500);
+  };
+  /** 다른 배의 사람들을 보여 준다 (술집 부하편성·조선소 함대편성에서) — 선장 자리를 누르면 바꾼다 */
   CV.showOthers = async function () {
     if (G.CrewAuto) G.CrewAuto.refresh();
-    var h = othersHtml() || '<div class="muted">기함 말고 다른 배가 없습니다.</div>';
-    await UI.window({ title: '다른 배의 사람들', icon: 'ship', width: 820, html: h, buttons: [{ label: '닫는다', value: null }] }).result;
+    for (;;) {
+      var h = othersHtml() || '<div class="muted">기함 말고 다른 배가 없습니다.</div>';
+      var win = UI.window({ title: '다른 배의 사람들', icon: 'ship', width: 820, html: h, buttons: [{ label: '닫는다', value: null }] });
+      wireCaptains(win.content, win);
+      var a = await win.result;
+      if (!a || a.k !== 'ocap') return;
+      await CV.pickCaptain(a.uid);
+    }
   };
+
   /** 「자동 배치」 — 물어본 뒤 다시 앉히고 알린다. 바뀐 사람 목록(그만두면 null) */
   CV.autoAll = async function (ask) {
     var CA = G.CrewAuto; if (!CA) return null;
-    if (ask !== false && !await UI.confirm('술집에서 정한 역할(부관·항해사·측량사·통역·경리)이 없는 부하를 모두 능력에 맞게 다시 앉힐까요?<br><small class="muted">기함 선실은 그 방에 맞는 특기를 가진 사람부터, 다른 배는 선장 → 조타수·갑판·파수꾼 → 선실 차례로 채웁니다.</small>', '자동 배치', '그만둔다', '자동 배치')) return null;
+    if (ask !== false && !await UI.confirm('술집에서 정한 역할(부관·항해사·측량사·통역·경리)이 없는 부하를 모두 능력에 맞게 다시 앉힐까요?<br><small class="muted">손으로 정한 다른 배 선장은 그대로 둡니다.</small><br><small class="muted">기함 선실은 그 방에 맞는 특기를 가진 사람부터, 다른 배는 선장 → 조타수·갑판·파수꾼 → 선실 차례로 채웁니다.</small>', '자동 배치', '그만둔다', '자동 배치')) return null;
     var moved = CA.autoAll(), idle = CA.idleCount();
     UI.toast((moved.length ? moved.length + '명의 자리를 능력에 맞게 바꿨다.' : '지금 배치가 이미 능력에 맞습니다.') + (idle ? ' 자리가 모자라 ' + idle + '명은 대기 — 큰 배를 들이거나 선실을 늘리십시오.' : ''), 'people', idle ? 6000 : 4000);
     return moved;
@@ -624,6 +661,7 @@
       var win = UI.window({ title: '기함 선실 — ' + U.esc(sh.name) + '호', icon: 'ship', width: l.stageW + (l.side || 300) + 66, html: html, buttons: [{ label: '닫는다', value: null }], clickAny: false });
       var stage = win.content.querySelector('.cb-stage'), cards = win.content.querySelector('.cb-cards');
       win.content.querySelector('.cb-auto').onclick = function () { win.close({ k: 'auto' }); };
+      wireCaptains(win.content, win);   // 아래 「다른 배」의 선장 자리
       drawFallback(stage.querySelector('.cb-stage-base'), v, sp);
       if (hasArt) placeShipArt(stage, sh, v);
 
@@ -699,6 +737,7 @@
       try { a = await win.result; } finally { window.removeEventListener('keydown', esc, true); document.removeEventListener('mousedown', outside, true); }
       if (!a) return;
       if (a.k === 'auto') await CV.autoAll();
+      else if (a.k === 'ocap') await CV.pickCaptain(a.uid);
       else if (a.k === 'set') await setFromPop(a);
       else if (a.k === 'clear') { if (ROLE_OF[a.type]) { var rm = CB().roleMate(ROLE_OF[a.type]); if (rm) rm.role = 'none'; } else { var oc = CB().occupant(a.i); if (oc) CB().place(oc, null); } }
       else if (a.k === 'remodel') await remodel(a.i, opts.yard);

@@ -7,7 +7,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-import images  # noqa: E402
+from complete_discovery_art import complete_runtime  # noqa: E402
 
 
 def ids(pattern, rel, flags=re.M):
@@ -15,8 +15,9 @@ def ids(pattern, rel, flags=re.M):
     return {match[0] if isinstance(match, tuple) else match for match in re.findall(pattern, text, flags)}
 
 
-data = images.game_data()
-rows = data["discoveries"]
+# 정규식으로 일부 자료 파일만 읽으면 신규 발견물 255종이 검사에서 빠진다.
+# 실제 index.html의 자료 로딩 순서와 이야기 전용 흔적을 함께 읽는다.
+rows = complete_runtime()
 all_ids = [row["id"] for row in rows]
 assert len(all_ids) == len(set(all_ids)), "발견물 ID 중복: " + ", ".join(sorted({x for x in all_ids if all_ids.count(x) > 1}))
 
@@ -28,7 +29,7 @@ known = set(all_ids)
 assert len(sea_ids) == 24 and sea_ids <= known, "본편 해양 발견물 누락: " + ", ".join(sorted(sea_ids - known))
 assert tutorial_ids == {"herc_cave"} and tutorial_ids <= known, "튜토리얼 발견물 누락"
 assert len(story_ids) == 7 and story_ids <= known, "이야기 발견물 누락: " + ", ".join(sorted(story_ids - known))
-assert len(known) == 923, f"전체 발견물 수가 예상과 다름: {len(known)}"
+assert len(known) == 1233, f"전체 발견물 수가 예상과 다름: {len(known)}"
 
 folders = {
     "discoveries": ".gif",
@@ -52,7 +53,7 @@ orphaned = set.intersection(*asset_sets) - known
 assert not orphaned, "자료에 없는 발견물 그림: " + ", ".join(sorted(orphaned))
 
 print(
-    "PASS: discoveries 923 "
+    f"PASS: discoveries {len(known)} "
     f"(main {len(known - story_ids)}, story-only {len(story_ids)}, tutorial {len(tutorial_ids)}); "
     "GIF/end/sheet/manifest complete"
 )

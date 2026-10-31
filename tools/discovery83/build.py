@@ -9,6 +9,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageSequence
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / 'tools/ruin_gifs'))
+sys.path.insert(0, str(ROOT / 'tools'))
+import storyboard_layout
 
 def module(name, path):
     spec = importlib.util.spec_from_file_location(name, ROOT / path)
@@ -35,13 +37,7 @@ def source_cells(source):
     # 수채화 원화의 투명 가장자리를 종이 위에 얹는다. 알파를 버리면 색 잡음이 드러난다.
     with Image.open(source) as raw:
         src = Image.alpha_composite(Image.new('RGBA', raw.size, (244,236,216,255)), raw.convert('RGBA')).convert('RGB')
-    frames = []
-    for y in range(4):
-        for x in range(4):
-            box=(round(x*src.width/4)+3, round(y*src.height/4)+3,
-                 round((x+1)*src.width/4)-3, round((y+1)*src.height/4)-3)
-            frames.append(ruin.fit_whole(src.crop(box)))
-    return frames
+    return [ruin.fit_whole(cell) for cell in storyboard_layout.cells(source)]
 
 ruin.cells = source_cells
 
@@ -54,6 +50,7 @@ def people(row):
     palette = palette_image.quantize(colors=128)
     encoded = [frame.quantize(palette=palette, dither=Image.Dither.FLOYDSTEINBERG) for frame in frames]
     durations = [430]*4 + [480]*8 + [1000]*3 + [1260]
+    if len(frames)!=16:durations=storyboard_layout.durations(len(frames))
     assert sum(durations) == 9820
     dest = ROOT / 'images/discoveries' / (row['id']+'.gif')
     encoded[0].save(dest, save_all=True, append_images=encoded[1:], duration=durations,
