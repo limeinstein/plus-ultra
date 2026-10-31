@@ -185,6 +185,7 @@
       if (G.NewWorld && G.NewWorld.pending()) await G.NewWorld.check();   // 콜럼버스의 신대륙 발견과 그 뒤 — 세비야·그라나다·바르셀로나·산토도밍고·산티아고·자메이카 (js/systems/newworld.js)
       if (G.Reform && G.Reform.pending()) await G.Reform.check();   // 루터의 종교 개혁 — 면죄받은 자들 (추리 수사극), 마그데부르크 (js/systems/reformation.js)
       if (G.Newton && G.Newton.pending()) await G.Newton.check();   // 아이작 뉴턴 — 『프린키피아』(1686~87) · 남해 회사 주식(1720), 런던 (js/systems/newton.js)
+      if (G.Romeo && G.Romeo.pending()) await G.Romeo.check();   // 로미오와 줄리엣 — 베니스·밀라노에서 하루 거리의 베로나 (js/systems/romeojuliet.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
