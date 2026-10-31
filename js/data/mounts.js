@@ -137,6 +137,7 @@
   M.get = function (id) { return G.MOUNTS[id] || G.MOUNTS.walk; };
   /** 이 도시 성문 마구간에서 파는 것 (연도·위도에 맞게) */
   M.offers = function (c, year) {
+    if (c && c.outpost) return [];   // 사람이 살지 않는 바위섬(독도): 구할 짐승이 없다 — 걸어서 오른다
     var list = (G.MOUNT_MARKET.city[c.id] || G.MOUNT_MARKET.style[c.style] || ['horse', 'donkey']);
     var out = [];
     list.forEach(function (o) {

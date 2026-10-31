@@ -239,7 +239,7 @@
   function onDown(e) {
     if (e.button !== 0 || UI.busy() || st.busy) return;
     var p = pos(e), w = toWorld(p[0], p[1]);
-    var c = cityAt(p[0], p[1]); if (c) w = [c.lon, c.lat];
+    var c = cityAt(p[0], p[1]); if (c) w = landPoint(c.lon, c.lat);   // 도시 자리가 물가의 물 위인 곳(말라카·브레멘)은 성문 앞 뭍으로 걸어간다 — 도시를 눌렀는데 「물입니다」가 뜨지 않게 (QA 2026-10-31)
     var landmark = !c && landmarkAt(p[0], p[1]); if (landmark) w = [landmark.lon, landmark.lat];
     var mk = !c && !landmark && G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
     if (mk) w = [mk.lon, mk.lat];
@@ -950,7 +950,7 @@
     var s = S(), l = s.loc, b = l.base;
     if (!atBase()) {
       var v = await UI.ask('출발 지점까지 걸어서 돌아갑니다.', [{ label: '돌아간다', value: 1 }, { label: '그만둔다', value: 0 }], G.Scenes.mateSpeaker('first'));
-      if (v) { st.path = [b.lon + (b.type === 'ship' ? 0 : 0), b.lat]; if (b.type === 'ship') { var lp = nearestLand(b.lon, b.lat); if (lp) st.path = lp; } st.paused = false; refreshBar(); }
+      if (v) { st.path = b.type === 'ship' ? (nearestLand(b.lon, b.lat) || [b.lon, b.lat]) : landPoint(b.lon, b.lat); st.paused = false; refreshBar(); }   // 출발한 성문: 도시 자리가 물 위여도(말라카·브레멘) 성문 앞 뭍까지 걷는다
       return;
     }
     await returnToBase(false);

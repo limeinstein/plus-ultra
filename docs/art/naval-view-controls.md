@@ -24,6 +24,20 @@
 
 ## 조정과 검증
 
+### 기함 포격 사거리·장전 게이지 추가
+
+쉬움(`easy`)·보통(`normal`)에서는 기함의 좌현·우현 포와, 장착된 경우 선수 포의 범위를 표시한다. 어려움에 해당하는 엄격 규칙(`original`)과 `hard` 등 나머지 난이도에서는 범위와 안내를 모두 숨긴다. 포가 없거나 기함을 잃었을 때도 표시하지 않는다.
+
+- 실제 `gunnery`와 안내가 같은 `gunZones`를 사용한다. 일반 현측 포·갤리의 좁은 선수 포·거북선의 용머리 포구뿐 아니라 약한 근접·추격 사격 범위도 구별한다. 기존 사거리·사격 각도·위력·장전 시간은 그대로다.
+- 황금색 면과 호가 장전량에 맞춰 차오르고, 준비되면 청록색 **발사 준비**가 된다. 좌현·우현·선수는 각자의 장전 시간을 사용한다. 사거리 끝을 실제보다 줄이지 않으며, 가까운 호와 남은 시간 안내로 확대 상태에서도 진행도를 읽을 수 있다.
+- 포격 정지 중에도 장전은 이어지지만, 표시를 회색으로 하고 **장전 완료 / 포격 정지**로 구분한다. 일시정지 중에는 장전 게이지도 멈춘다.
+- 발사 시점의 전체 장전 시간을 `reloadTotal`로 기록한다. 그 주기의 남은 시간과 비교하므로 장전 도중 선원이 줄어도 게이지가 튀지 않는다. 저장·복원에도 유지하며, 해당 값이 없는 옛 해전 저장은 기존 장전 계산식으로 표시한다.
+- 색·불투명도·선 두께·가까운 호의 크기는 `G.FX.battleGunnery`에 모았다. HTML 안내는 색 외에도 장전율·남은 시간·준비 여부를 글로 표시한다.
+
+`tests/battle_gunnery_guide.cjs`는 실제 본편에서 난이도별 표시, 양현/선수 포의 범위, 장전·일시정지·포격 정지, 장전 주기 저장과 옛 저장, 12가지 거리·방향에서 실제 포탄 발사를 검사한다. GPU·소프트웨어 결과와 화면은 `artifacts/battle-gunnery-20261031/gpu/`와 `software/`에 나눠 남긴다.
+
+검증 결과: GPU·소프트웨어 렌더링 모두 통과, 콘솔 오류 0. 1600×900과 960×540에서 확인했으며 왼쪽 아래 안내가 함대 정보·기함 이름·하단 메뉴를 가리지 않는다. [쉬움·보통 화면](../../artifacts/battle-gunnery-20261031/gpu/normal-half-ready.png), [작은 화면](../../artifacts/battle-gunnery-20261031/gpu/small-screen.png), [엄격 규칙에서 숨김](../../artifacts/battle-gunnery-20261031/gpu/hard-hidden.png).
+
 - 연출: `js/data/seafx.js`의 `G.FX.ship.miniRefresh/miniMove`, `G.FX.ship.zoom.leadMaxPx`, `G.FX.battleView`
 - 전장 규칙: `js/data/base.js`의 `G.BALANCE.navalField`
 - 동작: `js/scenes/sea.js`, `js/scenes/battle.js`, `js/ui/ui.js`, `js/ui/icons.js`, `css/style.css`

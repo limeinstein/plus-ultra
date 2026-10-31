@@ -493,6 +493,8 @@
     // 오를레앙의 처녀 잔 (js/systems/joan.js): 못 본 척하거나 일기토에 지면 coolDays일 뒤에 다시 (태우기를 거절하면 그 두 배)
     joan: { coolDays: 30 },
     strand: { farDeg: 3, keepDays: 730, findR: 1.0, warn: [365, 90, 30] },
+    // 도크 (js/systems/dock.js): 모항 home척 · 다른 항구 other척까지. 모항이 아닌 도크에 keepDays일 넘게 두면 폐기. warn = 남은 날이 이만큼일 때 일러 줌
+    dock: { home: 10, other: 3, keepDays: 730, warn: [90, 30] },
     sneak: { base: { holy: 0.1, islam: 0.4, closed: 0.25, treaty: 0.35, wanted: 0.3 },
       turban: 0.35, turbanHoly: 0.45, turbanChinaPort: 0.12, turbanChina: 0.04, mingrobe: 0.35, flag: 0.35,
       lang0: -0.1, langLv: 0.06, speech: 0.05, native: 0.1, noto: 0.003, notoMax: 0.2, alertDays: 30, alert: -0.15,

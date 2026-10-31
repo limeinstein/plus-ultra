@@ -26,6 +26,7 @@
       (G.Monsoon && G.Monsoon.rim(c)) ? { label: '계절풍 형편', icon: 'wind', sub: G.Monsoon.NAME[G.Monsoon.portNote(c).phase], onClick: function () { return H.monsoon(c); } } : null,
       { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : R.daysOfFood() + '·' + R.daysOfWater() + '일 · 자재 ' + Math.floor(S().fleet.mat || 0), onClick: function () { return H.supply(c); } },
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
+      { label: '도크', icon: 'anchor', sub: G.Dock.note(c) + (G.Dock.isHome(c) ? ' · 모항' : ''), onClick: function () { return H.dock(c); } },   // 모항 10척 · 다른 항구 3척(2년 뒤 폐기) — js/systems/dock.js
       { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } },
       G.SeaMonsters ? { label: '해상 괴물 소식', icon: 'skull', sub: G.SeaMonsters.news(c).length + '건', onClick: function () { return G.SeaMonsters.tell(c, G.Scenes.mateSpeaker('first'), true); } } : null,
       { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } }
@@ -33,8 +34,61 @@
   };
   H.panel = function () { return G.Info.fleetPanel(); };
 
-  function moored(c) { var s = S(); if (!s.moored) s.moored = {}; return s.moored[c.id] || (s.moored[c.id] = []); }
+  function moored(c) { return G.Dock.list(c); }   // 도크에 맡긴 배 (예전 이름 「계류」 — 저장 자리 s.moored는 그대로)
   H.moored = moored;
+
+  // ---------------------------------------------------------------- dock (도크 · 선거)
+  /** 함대의 배 하나를 이 항구 도크에 맡긴다 */
+  async function dockIn(c) {
+    var s = S(), D = G.Dock;
+    if (s.fleet.ships.length < 2) { UI.toast('기함은 도크에 맡길 수 없습니다. 맡길 배가 없습니다.', 'info'); return false; }
+    if (D.full(c)) { UI.toast('이 항구 도크가 가득 찼습니다. (' + D.note(c) + ')', 'info'); return false; }
+    var k = await pickShip('도크에 맡길 배 (' + D.note(c) + (D.isHome(c) ? ' · 모항' : ' · ' + Math.round(D.keepDays() / 365) + '년 뒤 폐기') + ')', s.fleet.ships.slice(1)); if (k == null) return false;
+    var rs = s.fleet.ships[k + 1];
+    if (R.used() > R.fleetCap() - R.shipCargoCap(rs)) { UI.toast('짐이 너무 많아 이 배를 뺄 수 없습니다.', 'info'); return false; }
+    s.fleet.ships.splice(k + 1, 1);
+    D.put(c, rs);
+    trimCrew();
+    UI.toast(rs.name + '호를 ' + c.name + ' 도크에 맡겼다.' + (D.isHome(c) ? '' : ' ' + Math.round(D.keepDays() / 365) + '년 안에 찾으러 오지 않으면 폐기된다.'), 'anchor', 4200);
+    return true;
+  }
+  /** 이 항구 도크의 배 하나를 함대에 넣는다 */
+  async function dockOut(c) {
+    var s = S(), D = G.Dock, dock = D.list(c);
+    if (!dock.length) { UI.toast('이 항구 도크에 맡긴 배가 없습니다.', 'info'); return false; }
+    if (s.fleet.ships.length >= MAX_SHIPS) { UI.toast('함대가 가득 찼습니다. (' + MAX_SHIPS + '척)', 'info'); return false; }
+    var j = await UI.choose('도크에서 꺼낼 배', dock.map(function (sh, i) { return { label: U.esc(sh.name) + '호', right: G.SHIP[sh.type].name + ' · 내구 ' + Math.round(sh.hp) + '/' + sh.maxHp, desc: D.leftText(c, sh), value: i, icon: 'ship' }; }), { width: 620 });
+    if (j == null) return false;
+    var sh = D.take(c, j);
+    s.fleet.ships.push(sh);
+    if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes());
+    R.tidyCaptains(); if (G.CrewAuto) G.CrewAuto.refresh();
+    UI.toast(sh.name + '호를 도크에서 꺼내 함대에 넣었다.', 'ship');
+    return true;
+  }
+  H.dockIn = dockIn; H.dockOut = dockOut;
+  /** 「도크」 창: 이 항구 도크의 배와 남은 기한, 다른 항구 도크 목록 */
+  H.dock = async function (c) {
+    var s = S(), D = G.Dock;
+    for (;;) {
+      var dock = D.list(c), yrs = Math.round(D.keepDays() / 365);
+      var html = '<div style="font-size:16px;margin-bottom:8px" class="muted">함대에서 뺀 배를 도크에 맡겨 둡니다. 모항(' + U.esc((G.CITY_DATA[s.player.home] || {}).name || '') + ') 도크에는 ' + D.cap(s.player.home) + '척까지 기한 없이, 다른 항구 도크에는 ' + (D.isHome(c) ? D.cap(-1) : D.cap(c)) + '척까지 맡길 수 있고 ' + yrs + '년이 지나면 폐기됩니다.</div>' +
+        '<h4 style="margin:4px 0 6px">' + U.esc(c.name) + ' 도크 — ' + dock.length + '/' + D.cap(c) + '척' + (D.isHome(c) ? ' <span class="tag">모항</span>' : '') + '</h4>' +
+        (dock.length ? '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>기한</th><th class="num">내구력</th><th class="num">선원</th><th class="num">적재</th><th class="num">대포</th></tr>' +
+          dock.map(function (sh) { return shipRow(sh, '도크', D.leftText(c, sh)); }).join('') + '</table>' : '<div class="muted">맡긴 배가 없습니다.</div>');
+      var others = Object.keys(s.moored || {}).filter(function (k) { return +k !== c.id && s.moored[k] && s.moored[k].length; });
+      if (others.length) {
+        html += '<div class="sep"></div><h4 style="margin:0 0 6px">다른 항구의 도크</h4><div style="font-size:16px;line-height:1.7">' + others.map(function (k) {
+          var oc = G.CITY_DATA[k];
+          return '<b>' + U.esc(oc ? oc.name : '?') + '</b>' + (D.isHome(+k) ? ' <span class="tag">모항</span>' : '') + ' — ' + s.moored[k].map(function (sh) { var l = D.left(+k, sh); return U.esc(sh.name) + '호' + (l != null ? ' <span class="' + (l <= 90 ? 'warn-text' : 'muted') + '">(' + D.leftText(+k, sh) + ')</span>' : ''); }).join(' · ');
+        }).join('<br>') + '</div>';
+      }
+      var v = await UI.window({ title: '도크 — ' + c.name, icon: 'anchor', width: 980, html: html, buttons: [
+        { label: '도크에서 꺼낸다', value: 'out' }, { label: '도크에 맡긴다', value: 'in' }, { label: '닫는다', value: null, cls: 'navy' }] }).result;
+      if (!v) break;
+      if (v === 'out') await dockOut(c); else if (v === 'in') await dockIn(c);
+    }
+  };
 
   // ---------------------------------------------------------------- depart
   H.depart = async function (c) {
@@ -511,43 +565,23 @@
       var dock = moored(c);
       R.tidyCaptains();
       if (G.CrewAuto) G.CrewAuto.refresh();   // 편입·계류한 배의 선장·조타수·갑판·파수꾼 (능력에 맞게 저절로)
-      var html = '<div style="font-size:16px;margin-bottom:8px" class="muted">함대에는 최대 ' + MAX_SHIPS + '척까지 편성할 수 있습니다. 맨 위의 배가 기함이고 제독이 지휘합니다. 다른 배의 선장·조타수·갑판·파수꾼은 동료 가운데 능력에 맞는 사람이 저절로 맡고, 선장이 없으면 갑판장이 몹니다. 편성에서 뺀 배는 이 항구에 계류됩니다.</div>' +
+      var html = '<div style="font-size:16px;margin-bottom:8px" class="muted">함대에는 최대 ' + MAX_SHIPS + '척까지 편성할 수 있습니다. 맨 위의 배가 기함이고 제독이 지휘합니다. 다른 배의 선장·조타수·갑판·파수꾼은 동료 가운데 능력에 맞는 사람이 저절로 맡고, 선장이 없으면 갑판장이 몹니다. 편성에서 뺀 배는 이 항구 도크에 맡깁니다 (' + G.Dock.note(c) + (G.Dock.isHome(c) ? ' · 모항' : ' · ' + Math.round(G.Dock.keepDays() / 365) + '년 뒤 폐기') + ').</div>' +
         '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>선장</th><th class="num">내구력</th><th class="num">선원</th><th class="num">적재</th><th class="num">대포</th></tr>' +
         s.fleet.ships.map(function (sh, i) { return shipRow(sh, i === 0 ? '기함' : '함대'); }).join('') +
-        dock.map(function (sh) { return shipRow(sh, '계류'); }).join('') + '</table>';
+        dock.map(function (sh) { return shipRow(sh, '도크', G.Dock.leftText(c, sh)); }).join('') + '</table>';
       var v = await UI.window({ title: '함대편성', icon: 'ship', width: 980, html: html, buttons: [
-        { label: '기함 변경', value: 'flag' }, { label: '배마다 사람', value: 'cap' }, { label: '선박 편입', value: 'add' }, { label: '선박 삭제', value: 'remove' }, { label: '선박 파기', value: 'scrap', cls: 'red' }, { label: '편성 종료', value: null, cls: 'navy' }] }).result;
+        { label: '기함 변경', value: 'flag' }, { label: '배마다 사람', value: 'cap' }, { label: '도크에서 편입', value: 'add' }, { label: '도크에 맡김', value: 'remove' }, { label: '선박 파기', value: 'scrap', cls: 'red' }, { label: '편성 종료', value: null, cls: 'navy' }] }).result;
       if (!v) break;
       if (v === 'flag') {
-        if (s.fleet.ships.length < 2) { UI.toast('기함을 바꿀 배가 없습니다.', 'info'); continue; }
-        var i = await pickShip('기함으로 할 배', s.fleet.ships.slice(1)); if (i == null) continue;
-        var sh = s.fleet.ships.splice(i + 1, 1)[0];
-        if (await UI.confirm('기함을 ' + sh.name + '호로 변경하겠습니다. 좋습니까?')) {
-          // 새 기함을 맡던 선장은 옛 기함으로 옮겨 간다
-          var oldFlag = s.fleet.ships[0];
-          s.mates.forEach(function (m) { if (m.role === 'captain' && m.ship === sh.uid) m.ship = oldFlag.uid; });
-          s.fleet.ships.unshift(sh);
-          if (G.Cabins) G.Cabins.rooms();   // 부하들이 새 기함의 같은 방으로 옮겨 간다 (맞는 방이 없으면 다시 배치해야 한다)
-          if (G.R.tidyCaptains) G.R.tidyCaptains();
-          if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
-        } else s.fleet.ships.splice(i + 1, 0, sh);
+        await H.changeFlag();
       } else if (v === 'cap') {
         // 다른 배의 선장·조타수·갑판·파수꾼은 능력에 맞게 저절로 (js/systems/crewauto.js · 2026-10-28 사용자 요청) — 여기서는 보여 주기만
         if (s.fleet.ships.length < 2) { UI.toast('기함은 제독이 지휘합니다. 다른 배가 없습니다.', 'info'); continue; }
         await G.CabinView.showOthers();
       } else if (v === 'add') {
-        if (!dock.length) { UI.toast('이 항구에 계류된 배가 없습니다.', 'info'); continue; }
-        if (s.fleet.ships.length >= MAX_SHIPS) { UI.toast('이 이상 편입할 수 없습니다.', 'info'); continue; }
-        var j = await pickShip('편입선박 선택', dock); if (j == null) continue;
-        s.fleet.ships.push(dock.splice(j, 1)[0]);
-        if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes());
+        await dockOut(c);
       } else if (v === 'remove') {
-        if (s.fleet.ships.length < 2) { UI.toast('이 이상 삭제할 수 없습니다.', 'info'); continue; }
-        var k = await pickShip('계류할 배 선택', s.fleet.ships.slice(1)); if (k == null) continue;
-        var rs = s.fleet.ships[k + 1];
-        if (R.used() - (R.shipCargoCap(rs)) > R.fleetCap() - R.shipCargoCap(rs) && R.used() > R.fleetCap() - R.shipCargoCap(rs)) { UI.toast('짐이 너무 많아 이 배를 뺄 수 없습니다.', 'info'); continue; }
-        dock.push(s.fleet.ships.splice(k + 1, 1)[0]);
-        trimCrew();
+        await dockIn(c);
       } else if (v === 'scrap') {
         var all = s.fleet.ships.slice(1).concat(dock).filter(function (x) { return !x.loan; });   // 빌린 배는 파기할 수 없다
         if (!all.length) { UI.toast('이 이상 파기할 수 없습니다. (빌린 배는 파기할 수 없습니다)', 'info'); continue; }
@@ -560,6 +594,26 @@
       }
     }
   };
+  /** 기함 변경: 함대의 다른 배 하나를 맨 위(기함)로 올린다. 항구 「함대편성」과 조선소 메뉴에서 같이 쓴다 (2026-10-31 사용자 요청) */
+  H.changeFlag = async function () {
+    var s = S();
+    if (s.fleet.ships.length < 2) { UI.toast('기함을 바꿀 배가 없습니다.', 'info'); return false; }
+    var i = await pickShip('기함으로 할 배', s.fleet.ships.slice(1)); if (i == null) return false;
+    var sh = s.fleet.ships.splice(i + 1, 1)[0];
+    if (!(await UI.confirm('기함을 ' + sh.name + '호로 변경하겠습니다. 좋습니까?'))) { s.fleet.ships.splice(i + 1, 0, sh); return false; }
+    // 새 기함을 맡던 선장은 옛 기함으로 옮겨 간다
+    var oldFlag = s.fleet.ships[0];
+    s.mates.forEach(function (m) { if (m.role === 'captain' && m.ship === sh.uid) m.ship = oldFlag.uid; });
+    s.fleet.ships.unshift(sh);
+    if (G.Cabins) G.Cabins.rooms();   // 부하들이 새 기함의 같은 방으로 옮겨 간다 (맞는 방이 없으면 다시 배치해야 한다)
+    if (G.R.tidyCaptains) G.R.tidyCaptains();
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
+    if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes());
+    G.Game.refreshHud();
+    UI.toast(sh.name + '호가 기함이 되었다.', 'ship');
+    return true;
+  };
+
   function trimCrew() {
     R.tidyCaptains();
     var s = S(), mx = R.crewMax();
@@ -589,9 +643,9 @@
     if (what) G.State.log('짐칸이 넘쳐 ' + what + U.jx(what, '을/를') + ' 바다에 내렸다.');
   }
   H.trimCrew = trimCrew;
-  function shipRow(sh, tag) {
+  function shipRow(sh, tag, note) {
     var t = G.SHIP[sh.type];
-    return '<tr><td><span class="tag">' + tag + '</span></td><td><b>' + U.esc(sh.name) + '</b>' + (sh.loan ? ' <small class="muted">(빌린 배)</small>' : '') + '</td><td>' + t.name + (sh.wood && G.TIMBER[sh.wood] ? ' <small class="muted">' + G.TIMBER[sh.wood].name + '</small>' : '') + '</td><td>' + (tag === '계류' ? '<span class="muted">—</span>' : U.esc(R.captainName(sh))) + '</td><td class="num">' + Math.round(sh.hp) + '/' + sh.maxHp + '</td><td class="num">' + sh.crewMin + '~' + sh.crewMax + '</td><td class="num">' + R.shipCargoCap(sh) + '</td><td class="num">' + (G.CANNON[sh.guns.type] ? G.CANNON[sh.guns.type].name + ' ' : '') + sh.guns.n + '/' + sh.ports + '</td></tr>';
+    return '<tr><td><span class="tag">' + tag + '</span></td><td><b>' + U.esc(sh.name) + '</b>' + (sh.loan ? ' <small class="muted">(빌린 배)</small>' : '') + '</td><td>' + t.name + (sh.wood && G.TIMBER[sh.wood] ? ' <small class="muted">' + G.TIMBER[sh.wood].name + '</small>' : '') + '</td><td>' + (tag === '도크' ? '<span class="' + (/일 남음/.test(note || '') ? 'warn-text' : 'muted') + '">' + (note || '—') + '</span>' : U.esc(R.captainName(sh))) + '</td><td class="num">' + Math.round(sh.hp) + '/' + sh.maxHp + '</td><td class="num">' + sh.crewMin + '~' + sh.crewMax + '</td><td class="num">' + R.shipCargoCap(sh) + '</td><td class="num">' + (G.CANNON[sh.guns.type] ? G.CANNON[sh.guns.type].name + ' ' : '') + sh.guns.n + '/' + sh.ports + '</td></tr>';
   }
   function pickShip(title, list) {
     return UI.choose(title, list.map(function (sh, i) { return { label: U.esc(sh.name) + '호', right: G.SHIP[sh.type].name + ' · 내구 ' + Math.round(sh.hp) + '/' + sh.maxHp, value: i, icon: 'ship' }; }), { width: 620 });

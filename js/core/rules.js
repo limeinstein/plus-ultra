@@ -33,7 +33,7 @@
   R.SMALL_YARDS = [191, 171, 172, 220, 221, 151, 125, 106, 166, 167, 189, 205, 229];
   R.facilities = function (c) {
     if (c.colony != null && G.Colony) return G.Colony.facilities(c);   // 제독이 세운 개척 도시 (js/systems/colony.js)
-    if (c.outpost) return { harbor: true, trade: false, tavern: false, inn: false, gate: false, church: false, market: false, shipyard: false, palace: false, library: false, guild: false, mansion: [] };   // 무인도(독도)
+    if (c.outpost) return { harbor: true, trade: false, tavern: false, inn: false, gate: true, church: false, market: false, shipyard: false, palace: false, library: false, guild: false, mansion: [] };   // 무인도(독도) — 성문(바윗길로 섬에 오르는 탐험 출입구)은 연다 (2026-10-31 사용자 요청)
     var f = { harbor: !!c.port, trade: true, tavern: true, inn: true, gate: true, church: true, market: c.size >= 2, shipyard: !!c.port && (c.size >= 2 || R.SMALL_YARDS.indexOf(c.id) >= 0), palace: false, library: false, guild: false, mansion: [] };
     if (c.flags.indexOf('P') >= 0) f.palace = true;
     if (c.flags.indexOf('L') >= 0) f.library = true;

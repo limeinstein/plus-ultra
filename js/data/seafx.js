@@ -224,6 +224,11 @@
       anchor: [800, 560], free: [350, 100, 1220, 790], pad: 150, label: 0.92,
       cull: 1.8, labelGap: 32, chartSize: 288, chartGrid: 96
     },
+    battleGunnery: { // 기함 사거리 안의 장전 게이지 (쉬움·보통)
+      loading: '#e7bd72', ready: '#89e5c6', held: '#a9b1b8',
+      fill: 0.045, progressFill: 0.085, weakFill: 0.018,
+      edge: 0.46, line: 1.5, gauge: 3, dash: [7, 7], inner: 115
+    },
     battle: {             // 해전 (px·초 단위 — 해전 화면 1px ≈ 선체 길이의 1/120)
       accel: 1.6,         // 속력이 붙는 시간 (초)
       decel: 2.4,         // 속력이 줄어드는 시간 (초)

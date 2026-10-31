@@ -237,6 +237,7 @@
       vel: null, spd: 0, lat: 0, turnRate: 0,
       fx: G.SeaFX ? G.SeaFX.create({ spacing: BFX.wakeSpacing, life: BFX.wakeLife, maxPoints: 280, kz: 1 }) : null   // 해전 좌표(px)와 해전 시간(1.5초 = 물보라의 하루)으로
     };
+    b.reloadTotal = b.reload.slice();
     if (src.monster && G.SeaMonsters) G.SeaMonsters.decorate(b, src);
     return b;
   }
@@ -393,6 +394,8 @@
     el.panel = UI.add(U.el('div', 'battlepanel wood brass-frame', ''));
     buildOrders();
     buildBattleChart();
+    el.gunnery = UI.add(U.el('div', 'gunnery-readout', ''));
+    el.gunnery.hidden = true;
     if (st.unkey) st.unkey();
     st.arrows = {};
     // 방향키·WASD = 기함을 그 방위로 몬다 (두 키 = 대각선) · Space = 기함 정지 · P = 일시정지 · B = 백병전
@@ -1161,37 +1164,62 @@
   /** 기함의 선실(포격실·해병 대기실)이 보태는 힘 — 사람을 배치한 방만 (G.BALANCE.cabins.fx) */
   function cabinK(b, type) { return b.side === 'me' && G.Cabins && b.src === G.Cabins.flagship() ? G.Cabins.fx(type, type) : 0; }
   function gunRange(b) { var c = G.CANNON[b.guns.type] || G.CANNON.saker; return 90 + c.range * 55; }
+  /** 실제 발사 판정과 사거리 안내가 함께 쓰는 포별 범위. 약한 근접·추격포도 같은 재장전을 쓴다. */
+  function gunZones(b, side) {
+    var rng = gunRange(b), bow = has(b, 'bow') && !has(b, 'dragon'), dragon = has(b, 'dragon');
+    var angle = b.heading + (side === 2 ? 0 : side === 0 ? -Math.PI / 2 : Math.PI / 2);
+    if (side === 2) return bow || dragon ? [{ angle: angle, half: 0.6, range: rng, part: bow ? 2 : 1 }] : [];
+    if (bow) return [{ angle: angle, half: 1.2, range: Math.min(90, rng), part: 0.25, strict: true }];
+    var zones = [{ angle: angle, half: 0.95, range: rng, part: 1 }, { angle: angle, half: Math.PI, range: Math.min(90, rng), part: 0.5, strict: true }];
+    if (side === 0 && !dragon) zones.push({ angle: angle, half: Math.PI, range: rng * 0.7, part: 0.2, strict: true });
+    return zones;
+  }
+  function gunPower(zones, distance, angle) {
+    for (var i = 0; i < zones.length; i++) {
+      var z = zones[i];
+      if ((z.strict ? distance < z.range : distance <= z.range) && Math.abs(U.angDiff(z.angle, angle)) <= z.half) return z.part;
+    }
+    return 0;
+  }
+  function gunReloadTime(b, gunSk) {
+    var c = G.CANNON[b.guns.type] || G.CANNON.saker;
+    return 5.5 * (1.25 - gunSk * 0.12) / (1 + cabinK(b, 'gun') * 0.5) * (1 + c.load * 0.12) * (1.4 - 0.4 * Math.min(1, b.crew / Math.max(1, b.crew0))) * (has(b, 'gundeck') ? 0.85 : 1) * (b.side === 'me' && !R.captain(b.src) ? 1.1 : 1);
+  }
+  function gunneryGuide() {
+    var diff = S().settings && S().settings.diff || 'normal', b = flagship();
+    if ((diff !== 'easy' && diff !== 'normal') || !b || b.monster || b.guns.n <= 0) return null;
+    var total = gunReloadTime(b, R.shipSkill(b.src, 'gun'));
+    return { ship: b, held: !!st.holdFire, mounts: [0, 1, 2].map(function (side) {
+      var left = Math.max(0, b.reload[side] || 0), cycle = b.reloadTotal && b.reloadTotal[side] || Math.max(total, left);
+      return { side: side, zones: gunZones(b, side), left: left, progress: left <= 0 ? 1 : U.clamp(1 - left / Math.max(cycle, left), 0, 1), ready: left <= 0 };
+    }).filter(function (m) { return m.zones.length; }) };
+  }
   function gunnery(b, dt) {
     if (st.holdFire && b.side === 'me') { b.reload = b.reload.map(function (t) { return Math.max(0, t - dt); }); return; }
     var c = G.CANNON[b.guns.type] || G.CANNON.saker;
     // 포술은 그 배 선장의 것 (기함은 제독·부관, 다른 배는 선장, 선장이 없으면 갑판장 — 재장전이 느리다)
     var gunSk = b.side === 'me' ? R.shipSkill(b.src, 'gun') : (st.npc.kind === 'navy' ? 2 : 1);
-    var reloadT = 5.5 * (1.25 - gunSk * 0.12) / (1 + cabinK(b, 'gun') * 0.5) * (1 + c.load * 0.12) * (1.4 - 0.4 * Math.min(1, b.crew / Math.max(1, b.crew0))) * (has(b, 'gundeck') ? 0.85 : 1) * (b.side === 'me' && !R.captain(b.src) ? 1.1 : 1);
-    var rng = gunRange(b), bow = has(b, 'bow') && !has(b, 'dragon'), dragon = has(b, 'dragon');
+    var reloadT = gunReloadTime(b, gunSk), rng = gunRange(b);
     // 0·1: 왼쪽·오른쪽 현측 / 2: 뱃머리 (뱃머리 포·용머리 포구)
     for (var side = 0; side < 3; side++) {
-      if (side === 2 && !bow && !dragon) continue;
+      var zones = gunZones(b, side); if (!zones.length) continue;
       b.reload[side] -= dt;
       if (b.reload[side] > 0 || b.guns.n <= 0) continue;
-      var sAng = side === 2 ? b.heading : b.heading + (side === 0 ? -Math.PI / 2 : Math.PI / 2);
+      var sAng = zones[0].angle;
       var tgt = null, best = 1e9, part = 1;
       st.ships.forEach(function (o) {
         if (!targetable(o) || o.side === b.side) return;
         var dx = o.x - b.x, dy = o.y - b.y, d = Math.hypot(dx, dy);
         if (d > rng) return;
-        var a = Math.abs(U.angDiff(sAng, Math.atan2(dy, dx))), k;
-        if (side === 2) k = a <= 0.6 ? (bow ? 2 : 1) : 0;                    // 뱃머리: 뱃머리 포는 모든 포를, 용머리는 한쪽 현측만큼
-        else if (bow) k = d < 90 && a <= 1.2 ? 0.25 : 0;                      // 뱃머리 포 배는 옆으로 거의 못 쏜다
-        else {
-          k = a <= 0.95 ? 1 : d < 90 ? 0.5 : 0;                              // broadside arc, or point-blank
-          if (!k && side === 0 && d < rng * 0.7 && !dragon) k = 0.2;         // bow/stern chasers
-        }
+        var k = gunPower(zones, d, Math.atan2(dy, dx));
         if (!k) return;
         var dk = d / k * (o === b.target ? 0.6 : 1);          // 명령으로 노리는 적을 먼저 쏜다
         if (dk < best) { best = dk; tgt = o; part = k; }
       });
       if (!tgt) continue;
       b.reload[side] = reloadT;
+      if (!b.reloadTotal) b.reloadTotal = b.reload.slice();
+      b.reloadTotal[side] = reloadT; // 이번 장전 주기: 도중에 선원 수가 달라져도 게이지가 튀지 않는다.
       var dist = Math.hypot(tgt.x - b.x, tgt.y - b.y);
       fire(b, tgt, c, dist, rng, gunSk, part < 1 || side === 2 ? Math.atan2(tgt.y - b.y, tgt.x - b.x) : sAng, part);
     }
@@ -2044,6 +2072,50 @@
   function drawShipModel(ctx, p, heading, length, spec) {
     if (!(G.Ship3D && G.Ship3D.draw(ctx, p[0], p[1], heading, length, spec, st.t))) A.shipTop(ctx, p[0], p[1], heading, length, spec, st.t);
   }
+  /** 사거리는 실제 거리 그대로, 장전량은 그 안에서 차오르는 면과 가장자리 게이지로 표시한다. */
+  function drawGunneryGuide(ctx, guide, zoom) {
+    if (!guide) return;
+    var K = G.FX.battleGunnery, b = guide.ship, p = toScreen(b.x, b.y), z = Math.max(0.01, zoom);
+    ctx.save(); ctx.translate(p[0], p[1]); ctx.lineCap = 'round';
+    function sector(zone, radius) {
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, radius, zone.angle - zone.half, zone.angle + zone.half); ctx.closePath();
+    }
+    guide.mounts.forEach(function (m) {
+      var color = guide.held ? K.held : m.ready ? K.ready : K.loading;
+      ctx.fillStyle = ctx.strokeStyle = color;
+      // 약한 근접·추격 사격 범위는 점선으로, 주 포대 사거리는 부채꼴로 구별한다.
+      m.zones.slice().reverse().forEach(function (zone) {
+        var weak = zone !== m.zones[0];
+        ctx.globalAlpha = weak ? K.weakFill : K.fill; sector(zone, zone.range); ctx.fill();
+        if (!weak && m.progress > 0) { ctx.globalAlpha = K.progressFill; sector(zone, zone.range * m.progress); ctx.fill(); }
+        ctx.globalAlpha = weak ? K.edge * 0.5 : K.edge; ctx.lineWidth = K.line / z;
+        ctx.setLineDash(K.dash.map(function (d) { return d / z; })); sector(zone, zone.range); ctx.stroke();
+      });
+      var main = m.zones[0], from = main.angle - main.half;
+      ctx.setLineDash([]); ctx.globalAlpha = 0.95; ctx.lineWidth = K.gauge / z;
+      if (m.progress > 0) {
+        ctx.beginPath(); ctx.arc(0, 0, main.range, from, from + main.half * 2 * m.progress); ctx.stroke();
+        // 멀리 쏘는 포의 사거리 끝이 화면 밖에 있어도 가까운 호에서 장전량을 읽을 수 있다.
+        var inner = Math.min(main.range, Math.max(b.len * 0.4, K.inner / z));
+        ctx.beginPath(); ctx.arc(0, 0, inner, from, from + main.half * 2 * m.progress); ctx.stroke();
+      }
+    });
+    ctx.restore();
+  }
+  function refreshGunneryReadout(guide) {
+    if (!el.gunnery) return;
+    el.gunnery.hidden = !guide;
+    if (el.panel) el.panel.classList.toggle('with-gun-guide', !!guide);
+    if (!guide) return;
+    var K = G.FX.battleGunnery, names = ['좌현', '우현', '선수'];
+    var html = '<small>기함 포격' + (guide.held ? ' · 포격 정지' : '') + '</small><div class="gun-states">' + guide.mounts.map(function (m) {
+      var text = m.ready ? (guide.held ? '장전 완료' : '발사 준비') : '장전 ' + Math.floor(m.progress * 100) + '% · ' + m.left.toFixed(1) + '초';
+      var color = guide.held ? K.held : m.ready ? K.ready : K.loading;
+      return '<span class="gun-state" data-side="' + m.side + '" style="color:' + color + '"><b>' + names[m.side] + '</b> ' + text + '</span>';
+    }).join('') + '</div>';
+    if (el.gunnery._html !== html) { el.gunnery._html = html; el.gunnery.innerHTML = html; }
+    el.gunnery.title = '부채꼴은 사거리와 사격 방향, 차오르는 면과 호는 장전 진행도입니다. 점선 원은 약한 근접·추격 사격 범위입니다.';
+  }
   function renderScene() {
     var s = S(), r = G.Game.renderer;
     var zk = (st.vz || 1) * (1 + (st.zoomK || 0));   // 화면 배율(st.vz) × 큰 명중·침몰 때 살짝 다가옴 (바다와 배를 같은 배율로)
@@ -2058,6 +2130,9 @@
     // 항적·물보라 (배가 지나간 바다에 남는다)
     var toW = function (x, y) { return toScreen(x, -y); };
     st.ships.forEach(function (b) { if (b.fx && !b.fled) G.SeaFX.draw(b.fx, ctx, toW, 1, b.len); });
+    var guide = gunneryGuide();
+    drawGunneryGuide(ctx, guide, zk);
+    refreshGunneryReadout(guide);
     // 물 위의 흔적: 포탄이 떨어진 자리의 거품, 가라앉는 배의 거품과 소용돌이
     st.fx.forEach(function (f) {
       var p = toScreen(f.x, f.y), u = f.t / f.life;

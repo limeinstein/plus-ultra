@@ -167,8 +167,8 @@
     var ids = Object.keys(f.cargo);
     html += '<div class="sep"></div><h4 style="margin:0 0 8px">적재 교역품</h4>' + (ids.length ? '<table class="tbl"><tr><th>품목</th><th class="num">수량</th><th class="num">산 값</th><th>산 곳</th></tr>' + ids.map(function (id) { var c = f.cargo[id]; return '<tr><td>' + G.goodDot(id) + G.GOOD[id].name + '</td><td class="num">' + c.q + '</td><td class="num">' + U.num(c.cost) + '</td><td>' + U.esc(R.cargoFromText(c)) + '</td></tr>'; }).join('') + '</table>' : '<div class="muted">없음</div>');
     if (s.moored) {
-      var ms = []; for (var cid in s.moored) s.moored[cid].forEach(function (sh) { ms.push(U.esc(sh.name) + '호 (' + G.SHIP[sh.type].name + ') — ' + G.CITY_DATA[cid].name); });
-      if (ms.length) html += '<div class="sep"></div><h4 style="margin:0 0 8px">계류 중인 배</h4><div style="font-size:17px;line-height:1.7">' + ms.join('<br>') + '</div>';
+      var ms = []; for (var cid in s.moored) s.moored[cid].forEach(function (sh) { ms.push(U.esc(sh.name) + '호 (' + G.SHIP[sh.type].name + ') — ' + G.CITY_DATA[cid].name + (G.Dock ? ' <span class="muted">· ' + G.Dock.leftText(+cid, sh) + '</span>' : '')); });
+      if (ms.length) html += '<div class="sep"></div><h4 style="margin:0 0 8px">도크에 맡긴 배</h4><div style="font-size:17px;line-height:1.7">' + ms.join('<br>') + '</div>';
     }
     el.innerHTML = html;
     cabinButton(el, true);

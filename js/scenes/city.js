@@ -88,7 +88,7 @@
 
   // ---------------------------------------------------------------- buildings
   C.buildings = function (c) {
-    if (c.outpost) return [{ kind: 'harbor', name: '항구', icon: 'anchor' }];   // 사람이 살지 않는 섬(독도): 배를 대는 곳만
+    if (c.outpost) return [{ kind: 'harbor', name: '항구', icon: 'anchor' }, { kind: 'gate', name: '성문', icon: 'gate' }];   // 사람이 살지 않는 섬(독도): 배를 대는 곳과 섬 위로 오르는 성문(육로 탐험)만 (성문 2026-10-31 사용자 요청)
     if (c.colony != null && G.Colony) return G.Colony.buildings(c);   // 제독이 세운 개척 도시: 단계마다 건물이 는다
     var f = R.facilities(c), out = [], s = S();
     if (f.harbor) out.push({ kind: 'harbor', name: '항구', icon: 'anchor' });
@@ -204,7 +204,8 @@
   /** processing when the fleet arrives in port */
   C.arrival = async function (c, arg) {
     var s = S();
-    if (arg.arrive && G.Audio) G.Audio.sfx('dock');
+    var byLand = s.loc.via === 'land';   // 육상 탐험대가 성문으로 걸어 들어왔다 — 「입항」이 아니다
+    if (arg.arrive && G.Audio && !byLand) G.Audio.sfx('dock');
     var first = s.known.indexOf(c.id) < 0 || !(s.visited && s.visited[c.id]);
     if (!s.visited) s.visited = {};
     if (s.known.indexOf(c.id) < 0) s.known.push(c.id);
@@ -222,7 +223,7 @@
     if (G.Econ) G.Econ.visit(c).forEach(function (e) { msgs.push({ icon: 'scales', text: c.name + ' — ' + G.Econ.headline(e) }); });
     var news = msgs.filter(function (m) { return m.history; });
     msgs.filter(function (m) { return !m.history; }).forEach(function (m) { UI.toast(m.text, m.icon); });
-    if (first && arg.arrive) UI.toast(c.name + '에 처음으로 입항했다.', 'anchor');
+    if (first && arg.arrive) UI.toast(byLand ? c.name + '에 처음으로 성문을 지나 들어섰다.' : c.name + '에 처음으로 입항했다.', byLand ? 'castle' : 'anchor');
     var tb = G.TRIBES && G.TRIBES[c.id];   // 아프리카 부족 마을: 처음 들르면 부관이 그 부족을 일러 준다
     if (first && arg.arrive && tb && tb.hello) { try { await C.mate(tb.hello + (tb.after && s.date.y >= tb.after[0] ? ' ' + tb.after[1] : '')); } catch (e) { console.error(e); } }
     // 항해를 돌아본다

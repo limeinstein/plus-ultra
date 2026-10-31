@@ -33,6 +33,7 @@
     if (G.Leo) out = out.concat(G.Leo.daily());          // 레오나르도의 발명품 (js/systems/leonardo.js)
     if (G.Tudor) out = out.concat(G.Tudor.daily());
     if (G.Barb) out = out.concat(G.Barb.daily());        // 하이레딘 바르바로사의 습격 (js/systems/barbarossa.js)
+    if (G.Dock) out = out.concat(G.Dock.daily());         // 도크: 모항이 아닌 항구에 2년 넘게 맡긴 배는 폐기 (js/systems/dock.js)
     if (G.Strand) out = out.concat(G.Strand.daily());     // 남겨 둔 함대: 남은 날 알림 · 기한이 지나면 폐기 (js/systems/strandfleet.js)
     if (G.IncaFall) out = out.concat(G.IncaFall.daily());
     if (G.Medici) out = out.concat(G.Medici.daily());     // 메디치 은행의 위기 — 기한·로렌초의 죽음 (js/systems/medici.js)

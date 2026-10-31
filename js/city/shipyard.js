@@ -87,6 +87,7 @@
       { label: '매각', icon: 'coin', onClick: function () { return Y.sell(c); } },
       { label: '수리', icon: 'tools', sub: dmg ? '손상 있음' : '', onClick: function () { return Y.repair(c); } },
       { label: '개조', icon: 'gear', onClick: function () { return Y.refit(c); } },
+      { label: '기함 변경', icon: 'flag', sub: '기함 ' + U.esc(S().fleet.ships[0] ? S().fleet.ships[0].name : '') + '호', dim: S().fleet.ships.length < 2, onClick: function () { return C.B.harbor.changeFlag(); } },   // 항구 「함대편성」의 기함 변경과 같다 (2026-10-31)
       { label: '기술 투자', icon: 'coin', sub: '조선 기술 ' + SH().tech(c) + '등급', onClick: function () { return Y.invest(c); } }
     ];
   };
@@ -145,6 +146,8 @@
       var fv = await C.mateAsk(G.Strand.askText(c, far), [{ label: '새 배를 지어 여기서 떠난다', value: 'go' }, { label: '그만둔다', value: null }]);
       if (fv !== 'go') return;
     }
+    // 함대가 가득 차면 새 배는 이 항구 도크로 — 도크도 가득이면 살 수 없다 (js/systems/dock.js)
+    if (!far && s.fleet.ships.length >= G.MAX_SHIPS && G.Dock && G.Dock.full(c)) { await C.say(keeper(), '함대도 가득 찼고 이 항구 도크도 ' + G.Dock.note(c) + '로 꽉 찼네. 배를 하나 팔거나 도크에서 빼고 오게나.'); return; }
     if (!(await UI.confirm(wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + U.jx(t.name, '을/를') + ' 금화 ' + U.num(price) + '닢에 사겠습니까? (내구력 ' + hpWith(t, opt.id) + ')', '산다', '그만둔다'))) return;
     var name = await UI.prompt('새 배의 이름', U.pick(G.SHIP_NAMES), 12);
     if (!name) name = U.pick(G.SHIP_NAMES);
@@ -160,7 +163,7 @@
       return;
     }
     if (s.fleet.ships.length < G.MAX_SHIPS) { s.fleet.ships.push(sh); UI.toast(name + '호가 함대에 편입되었다.', 'ship'); }
-    else { C.B.harbor.moored(c).push(sh); UI.toast(name + '호는 이 항구에 계류되었다. (함대가 가득 참)', 'anchor'); }
+    else { G.Dock.put(c, sh); UI.toast(name + '호는 이 항구 도크에 맡겼다. (함대가 가득 참 · ' + G.Dock.note(c) + ')', 'anchor'); }
     G.State.log(c.name + '에서 ' + wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + ' ' + name + '호를 샀다.');
     await C.say(keeper(), opt.how === 'local' ? '고맙네! 좋은 배일세. 아껴 주게나.' : '먼 곳의 ' + wood.name + U.jx(wood.name, '으로/로') + ' 지었네. 좋은 나무는 배를 오래 살게 하지.');
   };

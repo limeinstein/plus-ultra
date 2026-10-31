@@ -639,6 +639,10 @@
   var GT = { title: '성문', icon: 'gate', paint: 'gate', exitLabel: '마을로 돌아간다' };
   C.B.gate = GT;
   GT.enter = async function (c) {
+    if (c.outpost) {   // 사람이 살지 않는 섬(독도): 위병 대신 부관이 섬 위로 오르는 바윗길을 안내한다 (2026-10-31)
+      await C.mate(U.pick(['제독, 이 섬에는 성벽도 위병도 없습니다. 배를 댄 바위에서 섬 꼭대기로 오르는 이 바윗길이 성문 노릇을 하지요. 짐승은 데려갈 수 없으니 걸어서 오릅시다.', '바위가 가파르고 미끄럽습니다. 갈매기 떼만 사는 섬이니, 걸어서 천천히 오르시지요.']));
+      return;
+    }
     var style = G.Img.folkStyle(c), key = 'portraits/npc-roles/' + style + '/soldier';
     // 유럽 공통 위병보다 이 고장의 실제 병사 그림을 쓴다. 얼굴상과 무릎상도 반드시 같은 사람이다.
     var guard = C.npc('gatekeeper', '수위');
@@ -653,8 +657,8 @@
     return [
       s.loc.via === 'land' && s.landReturn ? { label: '탐험대로 돌아간다', icon: 'tent', sub: '탈것을 바꿀 수 있다', onClick: function () { return GT.backToParty(c); } }
         : { label: '탐험을 떠난다', icon: 'boot', sub: '탈것을 고른다', onClick: function () { return GT.explore(c); } },
-      { label: '마구간', icon: 'horse', sub: sb ? G.Mounts.get(sb.id).name + ' ' + sb.n + unitOf(sb.id) : '둘러본다', onClick: function () { return GT.stableMenu(c); } }
-    ];
+      c.outpost ? null : { label: '마구간', icon: 'horse', sub: sb ? G.Mounts.get(sb.id).name + ' ' + sb.n + unitOf(sb.id) : '둘러본다', onClick: function () { return GT.stableMenu(c); } }
+    ].filter(Boolean);   // 독도(outpost)에는 마구간이 없다
   };
   function unitOf(id) { return id === 'porter' ? '패' : id === 'wagon' ? '대' : id === 'reindeer' ? '대' : '필'; }
   /** 탐험대 인원: 선원 모두가 나선다 */

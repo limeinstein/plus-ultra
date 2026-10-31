@@ -116,7 +116,7 @@ async function connect(url) {
       assert(row.applied && row.width >= 1600 && row.height >= 900, row.name + ': 고해상도 배경 실제 적용');
       assert(Math.abs(row.width / row.height - 16 / 9) < .01, row.name + ': 16:9 구도');
       assert.strictEqual(row.buildings, row.expected, row.name + ': 건물 유지');
-      if (row.outpost) assert.strictEqual(row.buildings, 1, '독도는 선착장만 표시');
+      if (row.outpost) assert.strictEqual(row.buildings, 2, '독도는 선착장과 성문만 표시');
       assert.deepStrictEqual(row.times, ['day', 'golden', 'dusk'], row.name + ': 시간대 렌더링');
       console.log(row.id + ' ' + row.name + ': 배경·건물·시간대 검사 통과');
     }
