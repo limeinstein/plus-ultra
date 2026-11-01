@@ -292,6 +292,31 @@
       burnAt: 0.55,       // 내구가 이만큼 아래로 떨어진 배는 검은 연기를 뿜는다
       fireAt: 0.3         // 이만큼 아래면 불길이 보인다
     },
+    cannonImpact: {        // 포의 실제 성능은 base.js, 아래 값은 그림에만 쓴다.
+      maxFx: 650, busyFx: 380, busyBudget: 0.3,
+      blastLife: 0.24, flameLife: 0.68, smokeLife: 2.8, smokeRise: 30, smokeGrow: 24,
+      blastRadius: 32, flameRadius: 24, smokeRadius: 17, smokePuffs: 4,
+      debris: 10, sparks: 12, embers: 5, impactPower: 0.16, maxPower: 1.45,
+      muzzleLife: 0.17, muzzleSmokeLife: 1.9, muzzleSmokeRadius: 15,
+      numberLife: 1.65, numberMerge: 0.38, numberMaxHits: 16, numberPop: 0.2,
+      numberRise: 46, numberSize: 34, numberMaxSize: 54, numberHeavy: 0.16,
+      hitSoundGap: 0.16,
+      flameLobes: 9, flameEdges: 19, flameReach: 1.8, flameRoughness: 0.32,
+      sprayLife: 1.05, sprayHeight: 100, sprayWidth: 46, sprayJets: 7, sprayDrops: 32,
+      // 작은 포: 작은 불꽃 / 장포: 가늘고 낮은 탄도 / 산탄포: 넓은 파편 / 중포: 큰 화염과 연기.
+      profiles: {
+        saker:     { size: 0.68, muzzle: 0.72, smoke: 0.7,  spread: 0.7,  arc: 1.05, ball: 2.8 },
+        bsaker:    { size: 0.8,  muzzle: 0.8,  smoke: 0.75, spread: 0.75, arc: 0.9,  ball: 3 },
+        culverin:  { size: 0.86, muzzle: 1.05, smoke: 0.8,  spread: 0.48, arc: 0.55, ball: 3 },
+        lculverin: { size: 0.98, muzzle: 1.2,  smoke: 0.9,  spread: 0.42, arc: 0.4,  ball: 3.2 },
+        perrier:   { size: 1,    muzzle: 1,    smoke: 1,    spread: 0.85, arc: 0.9,  ball: 3.5 },
+        pedrero:   { size: 1.05, muzzle: 0.85, smoke: 1.1,  spread: 1.65, arc: 1.1,  ball: 3.8 },
+        cannon:    { size: 1.3,  muzzle: 1.25, smoke: 1.2,  spread: 1,    arc: 1,    ball: 4.2 },
+        bcannon:   { size: 1.4,  muzzle: 1.35, smoke: 1.3,  spread: 1.1,  arc: 0.85, ball: 4.5 },
+        hcannon:   { size: 1.75, muzzle: 1.65, smoke: 1.65, spread: 1.2,  arc: 1.15, ball: 5.5 },
+        carronade: { size: 1.55, muzzle: 1.1,  smoke: 1.5,  spread: 1.7,  arc: 0.75, ball: 5 }
+      }
+    },
     duel: {               // 일기토 스프라이트와 타격감 (js/games/duel.js)
       spriteSize: 230,    // 256px 셀을 화면에 그리는 크기
       idleFrame: 0,       // 대기할 때 행동 줄의 안정된 전투 자세 한 장을 쓴다(프레임 순환은 고개가 까닥여 보임)
@@ -386,6 +411,14 @@
       sacredibis: 24, ploverbird: 24, albatross: 16, frigatebird: 16, snowyowl: 16 },
     runCount: [1, 2], largeColumns: 6,
     frameMs: 105, travel: 1000, height: 120, arc: 130, groundOffset: 35, fade: 0.7,
+    // 날아오른 뒤 천천히 멀어지는 시간. 달리기·입수의 시간과는 별개다.
+    flightDuration: 14, flightStagger: 1.8, flightTravel: 520, flightRise: 300, flightSpreadX: 1.9,
+    flightFade: 1.8, distantScale: 0.46, glideSway: 9, glideRate: 0.8,
+    view: { anchorX: [650, 950], anchorY: [450, 480], top: 54, ceiling: 124, bottom: 650,
+      fade: 1.8, maxDelta: 0.1, spreadY: 0.55,
+      sky: ['rgba(123,183,207,0.98)', 'rgba(190,220,224,0.94)', 'rgba(226,237,222,0)'],
+      cloudAlpha: 0.16, cloudDrift: 2.5,
+      clouds: [[310, 180, 240, 22], [1050, 270, 310, 26], [1430, 135, 200, 18]] },
     groundStep: 0.025, groundSteps: 100, groundSpacing: 0.24, surfaceSearch: 2, surfaceAngles: 16,
     coastSearch: 12, coastSearchStep: 0.15, coastBisect: 16, shoreSpacing: 0.07, shoreWalk: 0.45,
     entryWalk: 0.30, entryDive: 0.12, diveHeight: 24, splashSize: 22,
@@ -394,8 +427,9 @@
   // 나비·나방: 조류보다 작게, 무리·개체마다 등장과 퇴장 시점을 달리한다.
   G.FX.butterflies = { count: [30, 60], duration: 11, stagger: 2.4, life: [7, 11], size: 32,
     frameMs: 75, height: 110, scale: [0.65, 1.1], flap: [0.7, 1.4], fadeRange: [0.35, 0.85],
-    spreadX: [-330, 270], spreadY: [-140, 100], drift: [-25, 45], rise: [4, 15],
-    swayX: [12, 35], swayY: [14, 45], frequency: [1.1, 2.8], swayRatio: 0.73, tilt: 0.25 };
+    spreadX: [-300, 260], spreadY: [-110, 80], drift: [-12, 24], rise: [16, 25],
+    distantScale: 0.68,
+    swayX: [12, 30], swayY: [10, 24], frequency: [0.8, 1.7], swayRatio: 0.73, tilt: 0.18 };
   // 그린 스프라이트 시트 (js/art/sprites.js · images/sprites/ — tools/sprite_repack.py 가 만든다)
   G.FX.sprites = {
     party: true,         // 육상 탐험대를 8방향 그림 시트로 (탈것마다 천천히·빨리 두 장 — 시트가 없는 탈것은 코드 그림)

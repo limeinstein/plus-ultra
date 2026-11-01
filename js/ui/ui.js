@@ -368,6 +368,7 @@
   function zoneNow() {
     if (!root) return 'top';
     if (root.querySelector('.modal-back > .win') || root.classList.contains('colony-show')) return 'corner';
+    if (root.classList.contains('watching-nature')) return root.classList.contains('at-sea') ? 'sea' : 'bottom';
     var pos = NS().noticePos;
     if (pos === 'top') return 'top';
     if (pos === 'bottom') return root.classList.contains('at-sea') ? 'sea' : 'bottom';
@@ -402,6 +403,7 @@
     // 한꺼번에 둘까지 (큰 일이 끼면 셋) — 오래된 여느 소식부터 걷는다
     var maxT = [].some.call(toastEl.children, function (x) { return x.classList.contains('t-big'); }) ? 3 : 2;
     while (toastEl.children.length > maxT) { var old = [].filter.call(toastEl.children, function (x) { return !x.classList.contains('t-big'); })[0] || toastEl.firstChild; toastEl.removeChild(old); }
+    if (root.classList.contains('watching-nature')) toastEl.scrollTop = toastEl.scrollHeight;
     setTimeout(close, lifeMs(text, ms));
   }
   var flushTimer = null;

@@ -1,10 +1,13 @@
 /* 7종 RGBA 시트와 실제 해전의 발사·착수·피격·돌진·잠수·복원을 확인한다. */
 'use strict';
-const assert=require('assert/strict'),fs=require('fs'),path=require('path'),sharp=require('sharp'),{pathToFileURL}=require('url'),{chromium}=require('playwright');
+const assert=require('assert/strict'),fs=require('fs'),path=require('path'),{pathToFileURL}=require('url');
+let chromium;try{({chromium}=require('playwright'));}catch(_){({chromium}=require('../tools/procedural_art/node_modules/playwright-core'));}
+const runtimeOnly=process.argv.includes('--runtime');
 const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'docs/art/water-splash-battle');
 async function run(){
   fs.mkdirSync(OUT,{recursive:true});
-  const ids=['cannon','hull','volley','wake','ram','dive','emerge'];
+  if(!runtimeOnly){
+  const sharp=require('sharp'),ids=['cannon','hull','volley','wake','ram','dive','emerge'];
   for(const id of ids){
     const file=path.join(ROOT,'images/effects/water',id+'.webp'),meta=await sharp(file).metadata();
     assert.equal(meta.width,1024);assert.equal(meta.height,512);assert(meta.hasAlpha);
@@ -20,6 +23,7 @@ async function run(){
     }
   }
   console.log('7종 × 8프레임 = 56칸 · 투명도·칸 여백 확인');
+  }
   const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
   const errors=[];
   try{
@@ -59,10 +63,10 @@ async function run(){
       ok(B.feel().shake>0&&en.trem&&!en.trem.idle(),'괴물의 공격 시작에 화면과 공격자 떨림');
       st.balls=[];en.attackCd=999;st.hitstop=0;
       st.balls.push({x:me.x,y:me.y,tx:0,ty:100,t:0,dur:.01,hit:false,target:null,from:me});B.update(.05);
-      ok(waterEvents.includes('cannon'),'빗나간 포탄의 실제 착수 물기둥');
+      ok(st.fx.some(x=>x.kind==='powderSpray'),'빗나간 포탄은 원형 그림 대신 솟는 물줄기와 물방울');
       ok(!st.fx.some(x=>x.kind==='ring'),'착수 물보라에도 원형 고리를 겹치지 않음');
       st.balls.push({x:en.x,y:en.y,tx:me.x,ty:me.y,t:0,dur:.01,hit:true,dmg:5,target:me,from:en});B.update(.05);
-      ok(waterEvents.includes('hull')&&me.hp<5000,'실제 명중 위치의 선체 물보라와 피해');
+      ok(st.fx.some(x=>x.kind==='powderFlame')&&!waterEvents.includes('hull')&&me.hp<5000,'실제 명중은 선체 물보라 대신 화염 폭발과 피해');
       st.hitstop=0;en.phaseTime=G.BALANCE.seaMonsters.surfaceSeconds-.01;B.update(.05);
       ok(waterEvents.includes('dive')&&en.monsterPhase==='dive'&&!M.targetable(en),'잠수 시작 물보라와 기존 무적 규칙');
       en.monsterPhase='submerged';en.phaseTime=G.BALANCE.seaMonsters.hiddenSeconds-.01;B.update(.05);

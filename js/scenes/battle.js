@@ -589,12 +589,12 @@
     b.trem.kick(px * 0.6, { t0: (performance.now() / 1000) + 0.05 + Math.random() * 0.06, yk: 0.6 });
   }
   /** 공격 한 번에 반동 한 번. 사방 포탄 수만큼 흔들림을 중첩하지 않는다. */
-  function attackFeel(b, action) {
-    var c = G.FX.waterSplash;
+  function attackFeel(b, action, strength) {
+    var c = G.FX.waterSplash, sk = strength == null ? 1 : strength;
     if (st.attackFeelT == null || st.t - st.attackFeelT >= c.attackGap) {
-      shake(c.shake[action] || 0); st.attackFeelT = st.t;
+      shake((c.shake[action] || 0) * sk); st.attackFeelT = st.t;
     }
-    tremor(b, c.tremor[action] || 0);
+    tremor(b, (c.tremor[action] || 0) * sk);
   }
   function waterFx(id, b, angle) {
     if (!G.WaterSplash) return;
@@ -608,29 +608,44 @@
   function jolt(b, dx, dy, px) { var d = Math.hypot(dx, dy) || 1; b.jx = (b.jx || 0) + dx / d * px; b.jy = (b.jy || 0) + dy / d * px; }
   /** 화면이 살짝 다가온다 (큰 명중·침몰) */
   function zoomKick(z) { if (st && feelOn() && z > 0) st.zoomK = Math.max(st.zoomK || 0, z); }
-  /** 피해 숫자: 같은 배에 0.4초 안에 맞은 포탄은 한 숫자로 합친다 (현측 한 번 = 숫자 하나) */
-  function dmgNumber(t, dmg, kill) {
+  function cannonFX() { return G.FX.cannonImpact; }
+  function gunLook(id) { return cannonFX().profiles[id] || cannonFX().profiles.perrier; }
+  // 입자는 제한하되 피해 숫자와 다른 전투 상태는 버리지 않는다.
+  function cannonParticle(f) { if (st.fx.length < cannonFX().maxFx) st.fx.push(f); }
+  /** 연속 명중은 합산하며 다시 튄다. 긴 연사에는 새 숫자 칸을 열어 겹침을 줄인다. */
+  function dmgNumber(t, dmg, kill, gun) {
     if (!IMP().numbers) return;
-    var f = null;
-    for (var i = st.fx.length - 1; i >= 0; i--) { var o = st.fx[i]; if (o.kind === 'dmg' && o.ship === t && o.t < 0.4) { f = o; break; } }
-    if (!f) { f = { kind: 'dmg', ship: t, x: t.x, y: t.y, dx: U.rf(-12, 12), val: 0, crew: 0, t: 0, life: 1.3 }; st.fx.push(f); }
-    f.val += dmg; f.crew += kill || 0; f.popT = f.t; f.big = f.val >= t.maxHp * 0.2;
+    var K = cannonFX(), f = null, lane = 0;
+    for (var i = st.fx.length - 1; i >= 0; i--) {
+      var o = st.fx[i];
+      if (o.kind !== 'dmg' || o.ship !== t) continue;
+      lane++;
+      if (o.t < K.numberMerge && o.hits < K.numberMaxHits) { f = o; break; }
+    }
+    if (!f) { f = { kind: 'dmg', ship: t, x: t.x, y: t.y, dx: lane % 2 ? 30 : -16, lane: lane % 2, val: 0, crew: 0, hits: 0, t: 0, life: K.numberLife }; st.fx.push(f); }
+    f.val += dmg; f.crew += kill || 0; f.hits++; f.t = 0; f.seen = 0;
+    f.gun = f.gun && f.gun !== gun ? 'mixed' : gun;
+    f.big = f.val >= t.maxHp * K.numberHeavy;
   }
   /** 포탄이 선체에 맞은 자리: 불덩이·섬광·충격파·나뭇조각·불티·검은 연기 */
-  function hitBurst(x, y, dirx, diry, power) {
-    var I = IMP(), d = Math.hypot(dirx, diry) || 1, ux = dirx / d, uy = diry / d;
-    var budget = st.fx.length > 500 ? 0.3 : 1;          // 큰 해전에서 효과가 너무 쌓이면 조각·불티를 줄인다
-    st.fx.push({ kind: 'blast', x: x, y: y, t: 0, life: 0.34, r: 30 + power * 5 });
-    st.fx.push({ kind: 'fireball', x: x, y: y, t: 0, life: 0.5, r: 16 + power * 3 });
-    for (var i = 0; i < Math.round(I.debris * (0.6 + power * 0.08) * budget); i++) {
-      var a = Math.atan2(uy, ux) + U.rf(-1.3, 1.3), sp = U.rf(60, 190);
-      st.fx.push({ kind: 'debris', x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, h: U.rf(40, 110), rot: U.rf(0, 6.28), vr: U.rf(-12, 12), w: U.rf(3, 8), t: 0, life: U.rf(0.7, 1.15), dark: U.chance(0.4) });
+  function hitBurst(x, y, dirx, diry, power, gun) {
+    var K = cannonFX(), look = gunLook(gun), ang = Math.atan2(diry, dirx);
+    var size = look.size * U.clamp(0.85 + Math.sqrt(Math.max(0, power)) * K.impactPower, 0.85, K.maxPower);
+    var budget = st.fx.length > K.busyFx ? K.busyBudget : 1, wd = windDrift();
+    cannonParticle({ kind: 'blast', x: x, y: y, t: 0, life: K.blastLife, r: K.blastRadius * size });
+    cannonParticle({ kind: 'powderFlame', x: x, y: y, t: 0, life: K.flameLife, r: K.flameRadius * size, ang: ang, spread: look.spread, seed: U.rf(0, 6.28) });
+    for (var i = 0; i < Math.round(K.debris * size * budget); i++) {
+      var a = ang + U.rf(-1.3, 1.3) * look.spread, sp = U.rf(60, 190) * Math.sqrt(size);
+      cannonParticle({ kind: 'debris', x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, h: U.rf(40, 110), rot: U.rf(0, 6.28), vr: U.rf(-12, 12), w: U.rf(3, 8) * Math.sqrt(size), t: 0, life: U.rf(0.7, 1.15), dark: U.chance(0.4) });
     }
-    for (var j = 0; j < Math.round(I.sparks * budget); j++) {
-      var b2 = Math.atan2(uy, ux) + U.rf(-1.6, 1.6), sp2 = U.rf(140, 320);
-      st.fx.push({ kind: 'spark', x: x, y: y, vx: Math.cos(b2) * sp2, vy: Math.sin(b2) * sp2, t: 0, life: U.rf(0.22, 0.45) });
+    for (var j = 0; j < Math.round((K.sparks + K.embers) * size * budget); j++) {
+      var ember = j >= K.sparks * size * budget, b2 = ang + U.rf(-1.6, 1.6) * look.spread, sp2 = U.rf(140, 320) * Math.sqrt(size);
+      cannonParticle({ kind: 'spark', x: x, y: y, vx: Math.cos(b2) * sp2, vy: Math.sin(b2) * sp2, t: 0, life: ember ? U.rf(0.65, 1.15) : U.rf(0.22, 0.45), ember: ember });
     }
-    for (var k = 0; k < 2; k++) st.fx.push({ kind: 'dsmoke', x: x + U.rf(-6, 6), y: y + U.rf(-6, 6), vx: windDrift()[0] + U.rf(-6, 6), vy: windDrift()[1] + U.rf(-6, 6), r: 8 + power * 1.2, t: 0, life: U.rf(1.8, 2.8) });
+    for (var k = 0; k < Math.max(1, Math.round(K.smokePuffs * budget)); k++) {
+      var sa = ang + U.rf(-1, 1) * look.spread, sv = U.rf(8, 30) * size;
+      cannonParticle({ kind: 'powderSmoke', x: x + U.rf(-6, 6), y: y + U.rf(-6, 6), vx: wd[0] + Math.cos(sa) * sv, vy: wd[1] + Math.sin(sa) * sv, r: K.smokeRadius * look.smoke * U.rf(0.8, 1.15), t: 0, delay: 0.06 + k * 0.045, life: K.smokeLife * U.rf(0.85, 1.15), seed: U.rf(0, 6.28) });
+    }
   }
   /** 연기가 바람에 밀려가는 방향 (px/초, 화면 좌표) */
   function windDrift() { return [Math.cos(st.wind.dir) * (8 + 18 * st.wind.spd), -Math.sin(st.wind.dir) * (8 + 18 * st.wind.spd)]; }
@@ -1297,6 +1312,7 @@
   }
   function fire(b, t, c, d, rng, gunSk, sAng, part) {
     if (!targetable(t)) return;
+    var look = gunLook(c.id), K = cannonFX(), wd = windDrift();
     var shots = Math.max(1, Math.round(b.guns.n / 2 * (part || 1)));
     var acc = c.acc * (1 + gunSk * 0.1) * (1.15 - 0.5 * d / rng);
     if (b.side === 'me') { var bonus = R.fleetBonus('battle'); acc *= 1 + bonus; if (R.hasItem('shells')) acc *= 1.05; }
@@ -1304,20 +1320,19 @@
     var careerBaseAcc = acc;
     if (b.side === 'me' && G.SkillCombos) acc *= G.SkillCombos.factor('cannonAccuracy');
     if (b.side === 'me' && G.Career) acc += G.Career.accuracy(b.src === S().fleet.ships[0], careerBaseAcc);
-    if (G.Audio && st.sfxT !== Math.floor(st.t * 4)) { st.sfxT = Math.floor(st.t * 4); G.Audio.sfx('cannon'); }
-    attackFeel(b, 'fire');
-    if (b.side === 'me') { var I0 = IMP(); flash(I0.flashFire, '255,226,170'); }
-    jolt(b, -Math.cos(sAng), -Math.sin(sAng), 2 + Math.min(3, shots * 0.4));             // 포를 쏜 반동으로 배가 반대쪽으로 밀린다
-    st.fx.push({ kind: 'ring', x: b.x + Math.cos(sAng) * b.len * 0.22, y: b.y + Math.sin(sAng) * b.len * 0.22, t: 0, life: 0.55, r: b.len * 0.55 });   // 물 위에 퍼지는 충격파
+    if (G.Audio && st.sfxT !== Math.floor(st.t * 4)) { st.sfxT = Math.floor(st.t * 4); G.Audio.sfx('cannon', look.size >= 1.3 ? 0 : 2); }
+    attackFeel(b, 'fire', look.size);
+    if (b.side === 'me') { var I0 = IMP(); flash(I0.flashFire * look.size, '255,226,170'); }
+    jolt(b, -Math.cos(sAng), -Math.sin(sAng), (2 + Math.min(3, shots * 0.4)) * look.size); // 무거운 포일수록 보이는 반동이 크다.
     for (var i = 0; i < shots; i++) {
       var hit = U.chance(U.clamp(acc, 0.05, 0.95));
       var fwd = part >= 1 && sAng === b.heading ? b.len * 0.45 : 0;
       var ox = b.x + Math.cos(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd), oy = b.y + Math.sin(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd);
       var tx = t.x + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
-      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' && G.SkillCombos ? G.SkillCombos.factor('cannonPower') : 1) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // kill: 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다
-      st.fx.push({ kind: 'smoke', x: ox + Math.cos(sAng) * 14, y: oy + Math.sin(sAng) * 14, vx: Math.cos(sAng) * 18, vy: Math.sin(sAng) * 18, t: 0, life: 2.4, r: 10 + U.rf(0, 8) });
-      st.fx.push({ kind: 'muzzle', x: ox + Math.cos(sAng) * 10, y: oy + Math.sin(sAng) * 10, ang: sAng, t: 0, life: 0.2, s: U.rf(1.1, 1.5) });
-      for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35), v3 = U.rf(160, 280); st.fx.push({ kind: 'spark', x: ox + Math.cos(sAng) * 12, y: oy + Math.sin(sAng) * 12, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: 0, life: U.rf(0.15, 0.3) }); }
+      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, gun: c.id, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' && G.SkillCombos ? G.SkillCombos.factor('cannonPower') : 1) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // kill: 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다
+      cannonParticle({ kind: 'powderSmoke', pale: true, x: ox + Math.cos(sAng) * 14, y: oy + Math.sin(sAng) * 14, vx: wd[0] + Math.cos(sAng) * 24, vy: wd[1] + Math.sin(sAng) * 24, t: 0, delay: 0.035, life: K.muzzleSmokeLife, r: K.muzzleSmokeRadius * look.smoke, seed: U.rf(0, 6.28) });
+      cannonParticle({ kind: 'muzzle', x: ox + Math.cos(sAng) * 10, y: oy + Math.sin(sAng) * 10, ang: sAng, t: 0, life: K.muzzleLife, s: U.rf(1.1, 1.5) * look.muzzle });
+      for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35) * look.spread, v3 = U.rf(160, 280); cannonParticle({ kind: 'spark', x: ox + Math.cos(sAng) * 12, y: oy + Math.sin(sAng) * 12, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: 0, life: U.rf(0.15, 0.3) }); }
     }
   }
   function updateBalls(dt) {
@@ -1335,10 +1350,12 @@
           var dmg = k.dmg * (1 - (k.target.side === 'me' ? R.fleetBonus('hp') : 0)) * 1.1 * armorK(t) * (k.radial && t.side === 'me' ? Math.max(0.5, 1 - R.fleetBonus('monster')) : 1);
           t.hp -= dmg;
           var kill = !t.monster && Math.random() < 0.5 ? Math.ceil(dmg * 0.35 * (k.kill || 1) * (has(t, 'armor') ? 0.4 : has(t, 'raft') ? 1.5 : 1)) : 0; t.crew = Math.max(0, t.crew - kill);
-          st.fx.push({ kind: 'hit', x: k.tx, y: k.ty, t: 0, life: 0.6 });
-          hitBurst(k.tx, k.ty, k.tx - k.x, k.ty - k.y, dmg);
-          if (G.WaterSplash) G.WaterSplash.emit(st, 'hull', k.tx, k.ty, 1, Math.atan2(k.ty - k.y, k.tx - k.x));
-          dmgNumber(t, dmg, kill);
+          hitBurst(k.tx, k.ty, k.tx - k.x, k.ty - k.y, dmg, k.gun);
+          dmgNumber(t, dmg, kill, k.gun);
+          if (G.Audio && (!st.impactSoundAt || st.t >= st.impactSoundAt)) {
+            var heavySound = gunLook(k.gun).size >= 1.3;
+            G.Audio.sfx(heavySound ? 'boom' : 'hit', heavySound ? 0 : 2); st.impactSoundAt = st.t + cannonFX().hitSoundGap;
+          }
           // 타격감: 맞은 배가 번쩍이며 포탄 방향으로 밀리고, 잠깐 멈추고, 화면이 흔들린다
           var I1 = IMP(), mine = t.side === 'me', big = Math.min(1, dmg / Math.max(1, t.maxHp) * 8);
           t.hitT = I1.shipFlash; jolt(t, k.tx - k.x, k.ty - k.y, I1.recoil * (0.7 + big));
@@ -1355,8 +1372,7 @@
             else log(t.name + '의 선원이 전멸했다.');
           }
         } else {
-          if (G.WaterSplash) G.WaterSplash.emit(st, 'cannon', k.tx, k.ty);
-          else st.fx.push({ kind: 'splash', x: k.tx, y: k.ty, t: 0, life: 2.2, seed: Math.random() });
+          cannonParticle({ kind: 'powderSpray', x: k.tx, y: k.ty, t: 0, life: cannonFX().sprayLife, s: k.gun ? gunLook(k.gun).size : 1, seed: U.rf(0, 6.28) });
         }
       }
     }
@@ -1982,10 +1998,9 @@
      day = 물보라의 '하루'(초) — 바다 장면의 항적·물보라 수치를 그대로 쓰기 위한 시간 환산, ref = 물보라 세기 기준 속력(px/하루) */
   var BFX = (G.FX && G.FX.battle) || { accel: 1.6, decel: 2.4, lateral: 0.45, day: 3.0, ref: 105, wakeLife: 2.2, wakeSpacing: 5 };
   function rs(f, i) { return ((f.seed * 9301 + i * 49297) % 233280) / 233280; }
-  /** 포탄이 물에 떨어진 자리: 퍼지는 고리와 옅어지는 거품 자국 (배 아래에) */
+  /** 옛 효과의 포탄 착수: 물방울만 남기고 수면 고리는 그리지 않는다. */
   function splashUnder(ctx, p, f, u) {
     var a = 1 - u;
-    if (G.WaterSplash) G.WaterSplash.ripple(ctx, p[0], p[1], 28, u, f.seed);
     for (var i = 0; i < 5; i++) { var r0 = rs(f, i), ang = r0 * 6.2832, d = (4 + u * 16) * (0.3 + rs(f, i + 7)); ctx.fillStyle = 'rgba(240,248,250,' + (0.35 * a).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(p[0] + Math.cos(ang) * d, p[1] + Math.sin(ang) * d * 0.75, 1 + rs(f, i + 3) * 2.2, 0, 6.2832); ctx.fill(); }
   }
   /** 물기둥: 솟았다가 떨어지는 물방울 (배 위에 그린다) */
@@ -2004,18 +2019,28 @@
   /** 가라앉는 배: 거품이 넓게 번지고 소용돌이가 돌며 잔해 조각이 떠돈다 */
   function sinkFoam(ctx, p, f, u) {
     var a = 1 - u, R0 = (f.len || 100) * 0.5;
-    ctx.strokeStyle = 'rgba(166,197,207,' + (G.FX.waterSplash.rippleOpacity * a).toFixed(3) + ')'; ctx.lineWidth = G.FX.waterSplash.rippleLine;
-    for (var k = 0; k < 3; k++) { var r = R0 * (0.25 + k * 0.22) * (1 + u * 0.6), a0 = f.t * (1.2 - k * 0.3) + k * 2; ctx.beginPath(); ctx.arc(p[0], p[1], r, a0, a0 + 2.2); ctx.stroke(); }
     for (var i = 0; i < 14; i++) {
       var ang = rs(f, i) * 6.2832 + f.t * 0.15, d = R0 * (0.2 + rs(f, i + 20) * (0.8 + u)), bx = p[0] + Math.cos(ang) * d, by = p[1] + Math.sin(ang) * d * 0.8;
       if (i < 6) { ctx.fillStyle = 'rgba(92,64,38,' + (0.8 * a).toFixed(3) + ')'; ctx.save(); ctx.translate(bx, by); ctx.rotate(rs(f, i + 40) * 3); ctx.fillRect(-4 - rs(f, i) * 5, -1.2, 8 + rs(f, i) * 10, 2.4); ctx.restore(); }
       else { ctx.fillStyle = 'rgba(244,250,252,' + (0.5 * a * (0.5 + 0.5 * Math.sin(f.t * 4 + i))).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(bx, by, 1.2 + rs(f, i) * 2, 0, 6.2832); ctx.fill(); }
     }
-    if (G.WaterSplash) G.WaterSplash.ripple(ctx, p[0], p[1], R0, u, f.seed);
   }
 
   // ---------------------------------------------------------------- rendering
-  var IMPACT_KINDS = { muzzle: 1, blast: 1, clash: 1, float: 1, fireball: 1, debris: 1, spark: 1, dsmoke: 1, dmg: 1 };   // 배 위에 그리는 것 (ring은 배 아래)
+  var IMPACT_KINDS = { muzzle: 1, blast: 1, clash: 1, float: 1, fireball: 1, powderFlame: 1, powderSpray: 1, debris: 1, spark: 1, dsmoke: 1 }; // 숫자는 맨 위, 연기는 불꽃 뒤에 그린다.
+  /** 시간에 따라 일그러지는 불규칙한 윤곽. 원이나 원호를 폭발의 테두리로 쓰지 않는다. */
+  function blastContour(ctx, x, y, r, seed, age) {
+    var K = cannonFX(), n = K.flameEdges, points = [];
+    for (var i = 0; i < n; i++) {
+      var an = i / n * Math.PI * 2;
+      var edge = 0.8 + K.flameRoughness * (Math.sin(i * 2.37 + seed) * 0.65 + Math.sin(i * 5.13 + seed * 3 + age * 4) * 0.35);
+      var px = x + Math.cos(an) * r * edge, py = y + Math.sin(an) * r * edge;
+      points.push([px, py]);
+    }
+    ctx.beginPath(); ctx.moveTo((points[n - 1][0] + points[0][0]) * 0.5, (points[n - 1][1] + points[0][1]) * 0.5);
+    for (var j = 0; j < n; j++) { var p = points[j], next = points[(j + 1) % n]; ctx.quadraticCurveTo(p[0], p[1], (p[0] + next[0]) * 0.5, (p[1] + next[1]) * 0.5); }
+    ctx.closePath(); ctx.fill();
+  }
   /** 불타는 배: 갑판 몇 곳에서 불길이 일렁인다 */
   function burnGlow(ctx, b, p) {
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
@@ -2032,6 +2057,23 @@
   /** 번쩍이는 효과: 포구 화염 · 맞은 자리의 섬광·불덩이·나뭇조각·불티·검은 연기·충격파 · 칼 부딪치는 불꽃 · 피해 숫자 */
   function impactFx(ctx, f, a) {
     var q = toScreen(f.x, f.y), u = f.t / f.life;
+    if (f.kind === 'powderSmoke') {
+      var age = f.t - f.delay; if (age <= 0) return;
+      var K = cannonFX(), su = age / f.life, drift = toScreen(f.x + f.vx * age, f.y + f.vy * age);
+      var grow = f.r + Math.sqrt(age) * K.smokeGrow, opacity = Math.min(1, age * 7) * Math.pow(1 - su, 1.35);
+      ctx.save();
+      // 어긋난 연기 덩어리가 부풀고, 열로 솟으며 바람에 흩어진다.
+      for (var si = 0; si < 4; si++) {
+        var sa = f.seed + si * 2.4 + age * 0.25, sr = grow * (0.66 + si * 0.09);
+        var sx = drift[0] + Math.cos(sa) * grow * 0.32, sy = drift[1] - age * K.smokeRise + Math.sin(sa) * grow * 0.22;
+        var sg = ctx.createRadialGradient(sx - sr * 0.18, sy - sr * 0.22, 0, sx, sy, sr);
+        sg.addColorStop(0, f.pale ? 'rgba(222,215,198,' + opacity * 0.32 + ')' : 'rgba(72,62,51,' + opacity * 0.5 + ')');
+        sg.addColorStop(0.55, f.pale ? 'rgba(174,171,160,' + opacity * 0.24 + ')' : 'rgba(112,104,92,' + opacity * 0.38 + ')');
+        sg.addColorStop(1, 'rgba(128,122,112,0)'); ctx.fillStyle = sg;
+        blastContour(ctx, sx, sy, sr, f.seed + si * 1.7, age * 0.25);
+      }
+      ctx.restore(); return;
+    }
     if (f.kind === 'dsmoke') {        // 검은 연기 (위로 퍼지며 바람에 밀린다)
       var ps = toScreen(f.x + f.vx * f.t, f.y + f.vy * f.t), rr = f.r + f.t * 18, al = (f.thin ? 0.42 : 0.66) * Math.min(1, f.t * 6) * (1 - u);
       ctx.save(); ctx.globalCompositeOperation = 'source-over';
@@ -2042,9 +2084,32 @@
       ctx.restore();
       return;
     }
-    if (f.kind === 'ring') {          // 포격 반동의 잔물결은 닫힌 원 없이 옅게 끊어 그린다
-      if (G.WaterSplash) G.WaterSplash.ripple(ctx, q[0], q[1], f.r, u, f.x + f.y);
-      return;
+    if (f.kind === 'powderSpray') {
+      var SK = cannonFX(), height = SK.sprayHeight * f.s, width = SK.sprayWidth * f.s, lift = 4 * u * (1 - u);
+      ctx.save(); var sprayAlpha = ctx.globalAlpha * Math.pow(1 - u, 0.65);
+      // 충돌로 찢겨 솟는 물줄기와 떨어지는 물방울만 그린다.
+      for (var sj = 0; sj < SK.sprayJets; sj++) {
+        var jn = Math.sin(f.seed + sj * 13.7), ju = Math.min(1, u / (0.5 + 0.5 * Math.abs(Math.cos(sj * 5.1 + f.seed))));
+        var jh = height * 4 * ju * (1 - ju) * (0.25 + 0.75 * Math.abs(Math.sin(sj * 4.1 + f.seed)));
+        var jx = q[0] + jn * width * (0.15 + ju * 1.6), jy = q[1] - jh;
+        ctx.globalAlpha = sprayAlpha * (1 - ju);
+        var jw = f.s * (1.5 + Math.abs(jn) * 3) * (1 - u);
+        var jg = ctx.createLinearGradient(0, q[1], 0, jy - 1);
+        jg.addColorStop(0, 'rgba(114,174,182,0)'); jg.addColorStop(0.32, 'rgba(166,214,218,0.35)'); jg.addColorStop(1, 'rgba(237,253,249,0.85)');
+        ctx.fillStyle = jg; ctx.beginPath(); ctx.moveTo(q[0] + jn * width * 0.12 - jw, q[1]);
+        ctx.quadraticCurveTo(jx - jw * 2, jy + jh * 0.45, jx, jy);
+        ctx.lineTo(jx + jw * 0.4, jy + 4 * f.s);
+        ctx.quadraticCurveTo(jx + jw, jy + jh * 0.6, q[0] + jn * width * 0.12 + jw, q[1]); ctx.closePath(); ctx.fill();
+      }
+      ctx.globalAlpha = sprayAlpha;
+      for (var sd = 0; sd < SK.sprayDrops; sd++) {
+        var dn = Math.sin(f.seed * 2 + sd * 9.73), dx = q[0] + dn * width * u * 2;
+        var du = u / (0.55 + Math.abs(Math.sin(sd * 1.7 + f.seed)) * 0.55);
+        var dy = q[1] - height * (0.3 + Math.abs(Math.cos(sd * 3.2)) * 0.75) * 4 * du * (1 - du);
+        ctx.strokeStyle = 'rgba(218,249,247,0.8)'; ctx.lineWidth = f.s * (0.8 + (sd % 3) * 0.35);
+        ctx.beginPath(); ctx.moveTo(dx, dy); ctx.lineTo(dx + dn * 2 * f.s, dy + (2 + u * 6) * f.s); ctx.stroke();
+      }
+      ctx.restore(); return;
     }
     if (f.kind === 'debris') {        // 나뭇조각: 튀어 올랐다가 물에 떨어진다
       var dr = 2.4, k1 = (1 - Math.exp(-f.t * dr)) / dr, hh = Math.max(0, f.h * f.t - 180 * f.t * f.t);
@@ -2057,40 +2122,70 @@
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     if (f.kind === 'spark') {         // 불티: 짧은 빛줄기
       var k2 = (1 - Math.exp(-f.t * 5)) / 5, sp = toScreen(f.x + f.vx * k2, f.y + f.vy * k2), sl = Math.exp(-f.t * 5) * 0.035;
+      if (f.ember) { sp[1] += 60 * f.t * f.t - 48 * f.t; sl *= 0.45; }
       ctx.strokeStyle = 'rgba(255,' + Math.round(200 + 55 * a) + ',' + Math.round(90 + 120 * a) + ',' + a.toFixed(3) + ')'; ctx.lineWidth = 1.8;
       ctx.beginPath(); ctx.moveTo(sp[0], sp[1]); ctx.lineTo(sp[0] - f.vx * sl, sp[1] - f.vy * sl); ctx.stroke();
+    } else if (f.kind === 'powderFlame') {
+      // 고온의 화염 덩어리가 빠르게 갈라져 솟고, 가장자리부터 붉게 식는다.
+      ctx.globalCompositeOperation = 'source-over';
+      var FK = cannonFX(), expand = 1 - Math.exp(-u * 14), cool = Math.pow(1 - u, 1.45);
+      for (var fi = 0; fi < FK.flameLobes; fi++) {
+        var fa = f.ang + Math.sin(f.seed + fi * 2.3) * f.spread * FK.flameReach;
+        var reach = f.r * expand * (0.15 + fi * 0.13), fr = f.r * (0.35 + (fi % 3) * 0.08) * (0.55 + expand * 0.8);
+        var fx = q[0] + Math.cos(fa) * reach, fy = q[1] + Math.sin(fa) * reach - u * f.r;
+        var fg = ctx.createRadialGradient(fx, fy, fr * 0.08, fx, fy, fr);
+        fg.addColorStop(0, 'rgba(255,250,192,' + cool + ')'); fg.addColorStop(0.25, 'rgba(255,202,62,' + cool + ')');
+        fg.addColorStop(0.62, 'rgba(255,112,17,' + cool * 0.95 + ')'); fg.addColorStop(0.9, 'rgba(198,45,9,' + cool * 0.7 + ')'); fg.addColorStop(1, 'rgba(93,26,9,0)');
+        ctx.fillStyle = fg; blastContour(ctx, fx, fy, fr, f.seed + fi * 7.3, u);
+        // 작은 속불과 그을음이 엇갈려 화염 덩어리의 깊이를 만든다.
+        ctx.fillStyle = 'rgba(255,229,126,' + cool * 0.35 + ')';
+        blastContour(ctx, fx - fr * 0.12, fy - fr * 0.08, fr * 0.4, f.seed + fi * 1.3, u * 2);
+        if (fi % 2 && u > 0.12) {
+          ctx.fillStyle = 'rgba(54,36,25,' + Math.min(0.28, u * 0.6) * cool + ')';
+          blastContour(ctx, fx + Math.cos(fa) * fr * 0.45, fy + Math.sin(fa) * fr * 0.45, fr * 0.48, f.seed + fi, u);
+        }
+      }
     } else if (f.kind === 'fireball') {   // 불덩이: 하얗게 터졌다가 붉게 식는다
       var R1 = f.r * (0.55 + u * 0.9), aa = Math.pow(1 - u, 1.4);
       var gf = ctx.createRadialGradient(q[0], q[1], 0, q[0], q[1], R1);
       gf.addColorStop(0, 'rgba(255,255,230,' + aa.toFixed(3) + ')'); gf.addColorStop(0.3, 'rgba(255,196,90,' + (aa * 0.95).toFixed(3) + ')'); gf.addColorStop(0.7, 'rgba(230,80,20,' + (aa * 0.6).toFixed(3) + ')'); gf.addColorStop(1, 'rgba(120,20,0,0)');
-      ctx.fillStyle = gf; ctx.beginPath(); ctx.arc(q[0], q[1], R1, 0, 7); ctx.fill();
+      ctx.fillStyle = gf; blastContour(ctx, q[0], q[1], R1, f.x + f.y, u);
     } else if (f.kind === 'dmg') {        // 피해 숫자 (배를 따라 떠오르고, 새 포탄이 더해지면 다시 튄다)
       ctx.globalCompositeOperation = 'source-over';
       var sh = f.ship; if (sh && sh.alive) { f.x = sh.x + (sh.jx || 0); f.y = sh.y + (sh.jy || 0); f.len = sh.len; }
-      var base = toScreen(f.x + f.dx, f.y), ux2 = Math.min(1, f.t / f.life), fade = ux2 < 0.7 ? 1 : 1 - (ux2 - 0.7) / 0.3;
-      var pop = 1 + 0.55 * Math.max(0, 1 - (f.t - (f.popT || 0)) / 0.16);
-      var mineS = sh && sh.side === 'me', col = mineS ? '255,110,90' : f.big ? '255,246,200' : '255,214,110';
-      var dk = labelK(), size = Math.round((24 + Math.min(20, f.val * 0.9)) * pop * dk), yy = base[1] - (sh ? halfH(sh) : (f.len || 90) * 0.5) - (64 + ux2 * 30) * dk;   // 배 이름표(위 24px) 위로 — 화면 배율과 상관없이 같은 크기
-      ctx.font = '800 ' + size + 'px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
+      var NK = cannonFX(), base = toScreen(f.x + f.dx, f.y), ux2 = Math.min(1, f.t / f.life), fade = ux2 < 0.65 ? 1 : (1 - ux2) / 0.35;
+      var pop = feelOn() ? 1 + 0.42 * Math.pow(Math.max(0, 1 - f.t / NK.numberPop), 2) : 1;
+      var mineS = sh && sh.side === 'me', dk = labelK(), size = Math.min(NK.numberMaxSize, NK.numberSize + Math.sqrt(f.val) * 1.8) * pop;
+      var yy = base[1] - (sh ? halfH(sh) : (f.len || 90) * 0.5) - (70 + (f.lane || 0) * 44 + Math.sqrt(ux2) * NK.numberRise) * dk;
+      // 단위 배율에서 그려 멀리 보아도 숫자가 작아지지 않고 연기에 묻히지 않는다.
+      ctx.translate(base[0], yy); ctx.scale(dk, dk); ctx.globalAlpha = fade;
+      if (feelOn()) ctx.rotate((mineS ? 1 : -1) * 0.055 * Math.max(0, 1 - ux2 * 3));
+      ctx.font = '900 ' + size + 'px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
       var txt = '−' + Math.max(1, Math.round(f.val));
-      ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(24,12,4,' + (0.85 * fade).toFixed(3) + ')'; ctx.strokeText(txt, base[0], yy);
-      ctx.fillStyle = 'rgba(' + col + ',' + fade.toFixed(3) + ')'; ctx.fillText(txt, base[0], yy);
-      if (f.big) { ctx.font = '700 15px ' + getComputedStyle(document.body).fontFamily; ctx.lineWidth = 3; ctx.strokeText('강타', base[0], yy - size * 0.8); ctx.fillText('강타', base[0], yy - size * 0.8); }
+      ctx.shadowColor = mineS ? '#ff3924' : '#ff9b24'; ctx.shadowBlur = f.big ? 16 : 7;
+      ctx.lineWidth = 7; ctx.strokeStyle = '#24150e'; ctx.strokeText(txt, 0, 0);
+      var ink = ctx.createLinearGradient(0, -size, 0, 4);
+      ink.addColorStop(0, '#fffce6'); ink.addColorStop(0.4, mineS ? '#ffb7a0' : '#fff2b8'); ink.addColorStop(1, mineS ? '#ff5241' : f.big ? '#ff9e32' : '#ffc75d');
+      ctx.fillStyle = ink; ctx.fillText(txt, 0, 0); ctx.shadowBlur = 0;
+      var caption = f.big ? '강타!' : '명중';
+      if (f.hits > 1) caption += ' ×' + f.hits;
+      if (f.gun && G.CANNON[f.gun]) caption = G.CANNON[f.gun].name + ' · ' + caption;
+      ctx.font = '800 14px ' + getComputedStyle(document.body).fontFamily; ctx.lineWidth = 4;
+      ctx.strokeText(caption, 0, -size - 5); ctx.fillStyle = mineS ? '#ffd0c3' : '#fff1c5'; ctx.fillText(caption, 0, -size - 5);
       if (f.crew > 0) {
         ctx.font = '700 15px ' + getComputedStyle(document.body).fontFamily; var ct = '선원 −' + f.crew;
-        ctx.lineWidth = 3; ctx.strokeText(ct, base[0], yy + 17); ctx.fillStyle = 'rgba(240,228,205,' + fade.toFixed(3) + ')'; ctx.fillText(ct, base[0], yy + 17);
+        ctx.lineWidth = 4; ctx.strokeText(ct, 0, 21); ctx.fillStyle = '#e9dfc9'; ctx.fillText(ct, 0, 21);
       }
     } else if (f.kind === 'muzzle') {
       var L = 36 * f.s * (0.6 + u * 0.8), c = Math.cos(f.ang), sn = Math.sin(f.ang);
       var g = ctx.createRadialGradient(q[0], q[1], 0, q[0], q[1], L * 1.5);
       g.addColorStop(0, 'rgba(255,252,230,' + a + ')'); g.addColorStop(0.25, 'rgba(255,214,110,' + a + ')'); g.addColorStop(0.6, 'rgba(255,130,40,' + a * 0.7 + ')'); g.addColorStop(1, 'rgba(200,60,10,0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(q[0] - sn * 6, q[1] + c * 6); ctx.lineTo(q[0] + c * L * 1.5, q[1] + sn * L * 1.5); ctx.lineTo(q[0] + sn * 6, q[1] - c * 6); ctx.closePath(); ctx.fill();
-      ctx.beginPath(); ctx.arc(q[0], q[1], L * 0.45, 0, 7); ctx.fill();
+      blastContour(ctx, q[0], q[1], L * 0.45, f.ang, u);
     } else if (f.kind === 'blast') {
       var R0 = f.r * (0.4 + u * 0.9), g2 = ctx.createRadialGradient(q[0], q[1], 0, q[0], q[1], R0);
       g2.addColorStop(0, 'rgba(255,255,235,' + a + ')'); g2.addColorStop(0.35, 'rgba(255,200,110,' + a * 0.85 + ')'); g2.addColorStop(1, 'rgba(255,90,20,0)');
-      ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(q[0], q[1], R0, 0, 7); ctx.fill();
-      ctx.strokeStyle = 'rgba(255,240,200,' + a * 0.7 + ')'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(q[0], q[1], f.r * (0.5 + u * 1.4), 0, 7); ctx.stroke();   // 퍼지는 충격파 고리
+      ctx.fillStyle = g2; blastContour(ctx, q[0], q[1], R0, f.x + f.y, u);
     } else if (f.kind === 'clash') {
       var rnd = U.makeRng(Math.floor(f.seed * 1e6)), n = 9;
       ctx.strokeStyle = 'rgba(255,245,210,' + a + ')'; ctx.lineWidth = 2;
@@ -2220,7 +2315,6 @@
       var p = toScreen(f.x, f.y), u = f.t / f.life;
       if (f.kind === 'splash') splashUnder(ctx, p, f, u);
       if (f.kind === 'bigsplash') sinkFoam(ctx, p, f, u);
-      if (f.kind === 'ring') impactFx(ctx, f, 1 - u);          // 물 위의 충격파 고리는 배 아래에
       if (f.kind === 'waterSprite' && G.FX.waterSplash.types[f.style].under) G.WaterSplash.draw(ctx, f, p[0], p[1]);
     });
     // ships
@@ -2282,24 +2376,27 @@
     // 포탄: 물 위의 그림자, 뒤로 끌리는 연기 꼬리, 막 떠난 포탄의 달군 빛
     var arcH = IMP().ballArc || 14;
     st.balls.forEach(function (k2) {
+      var look = gunLook(k2.gun), br = k2.gun ? look.ball : k2.radial ? 5 : 3.3;
       var u = Math.min(1, k2.t / k2.dur);
-      var at = function (uu) { var q = toScreen(k2.x + (k2.tx - k2.x) * uu, k2.y + (k2.ty - k2.y) * uu); return [q[0], q[1] - Math.sin(uu * Math.PI) * arcH, q[0], q[1]]; };
+      var at = function (uu) { var q = toScreen(k2.x + (k2.tx - k2.x) * uu, k2.y + (k2.ty - k2.y) * uu); return [q[0], q[1] - Math.sin(uu * Math.PI) * arcH * (k2.gun ? look.arc : 1), q[0], q[1]]; };
       var c = at(u);
       ctx.fillStyle = 'rgba(0,18,28,0.28)'; ctx.beginPath(); ctx.ellipse(c[2], c[3], 3.4, 2, 0, 0, 7); ctx.fill();
-      for (var i = 5; i >= 1; i--) { var q2 = at(Math.max(0, u - i * 0.04)); ctx.fillStyle = 'rgba(214,210,200,' + (0.3 * (1 - i / 6)).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(q2[0], q2[1], 1.8 + i * 0.7, 0, 7); ctx.fill(); }
+      for (var i = 5; i >= 1; i--) { var q2 = at(Math.max(0, u - i * 0.025)); ctx.fillStyle = 'rgba(214,210,200,' + (0.3 * (1 - i / 6)).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(q2[0], q2[1], (1.4 + i * 0.65) * (k2.gun ? look.smoke : 1), 0, 7); ctx.fill(); }
       if (u < 0.4) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; var gb = ctx.createRadialGradient(c[0], c[1], 0, c[0], c[1], 9); gb.addColorStop(0, 'rgba(255,200,120,' + (0.8 * (1 - u / 0.4)).toFixed(3) + ')'); gb.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = gb; ctx.beginPath(); ctx.arc(c[0], c[1], 9, 0, 7); ctx.fill(); ctx.restore(); }
-      ctx.fillStyle = k2.element === 'water' ? '#88e4ff' : k2.element === 'ghost' ? '#8cf9bb' : '#151210'; ctx.beginPath(); ctx.arc(c[0], c[1], k2.radial ? 5 : 3.3, 0, 7); ctx.fill();
+      ctx.fillStyle = k2.element === 'water' ? '#88e4ff' : k2.element === 'ghost' ? '#8cf9bb' : '#151210'; ctx.beginPath(); ctx.arc(c[0], c[1], br, 0, 7); ctx.fill();
       ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.arc(c[0] - 1, c[1] - 1, 1.1, 0, 7); ctx.fill();
     });
     // smoke & hits over ships
+    st.fx.forEach(function (f) { if (f.kind === 'powderSmoke' || f.kind === 'dsmoke') impactFx(ctx, f, 1 - f.t / f.life); });
     st.fx.forEach(function (f) {
       var a = 1 - f.t / f.life;
       if (f.kind === 'smoke') { var p = toScreen(f.x + f.vx * f.t, f.y + f.vy * f.t); ctx.fillStyle = 'rgba(230,230,225,' + a * 0.55 + ')'; ctx.beginPath(); ctx.arc(p[0], p[1], f.r + f.t * 14, 0, 7); ctx.fill(); }
       if (f.kind === 'hit') { var q = toScreen(f.x, f.y); ctx.fillStyle = 'rgba(255,170,60,' + a + ')'; ctx.beginPath(); ctx.arc(q[0], q[1], 6 + f.t * 20, 0, 7); ctx.fill(); }
-      if (IMPACT_KINDS[f.kind]) impactFx(ctx, f, a);
+      if (IMPACT_KINDS[f.kind] && f.kind !== 'dsmoke') impactFx(ctx, f, a);
       if (f.kind === 'splash') splashColumn(ctx, toScreen(f.x, f.y), f);
       if (f.kind === 'waterSprite' && !G.FX.waterSplash.types[f.style].under) { var wp = toScreen(f.x, f.y); G.WaterSplash.draw(ctx, f, wp[0], wp[1]); }
     });
+    st.fx.forEach(function (f) { if (f.kind === 'dmg') impactFx(ctx, f, 1 - f.t / f.life); });
     // 항해 중 내리던 비는 전투에 들어와도 끊기지 않는다. 화면 공간으로 그려 카메라 확대·타격 흔들림에 빗줄기가 늘어나지 않게 한다.
     if (G.Rain && G.Rain.raining()) G.Rain.draw(ctx, st.t, st.wind.dir, false, function (x, y) { var w = toWorld(x, y); return !terrainBlocked(w[0], w[1], null); });
     drawBattleChart();

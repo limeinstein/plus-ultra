@@ -133,7 +133,7 @@
     reset();
     image(d.id); if (B.kinds[d.id] === 'swim') image(d.id + '_shore');
     var butterfly = B.isButterfly(d), rng = butterfly ? Math.random : U.makeRng(U.strHash(d.id) + U.dateNum(S().date)), members = [], c = settings(d);
-    var count = B.count(d, rng), columns = !butterfly && count > c.count ? c.largeColumns : 3;
+    var flying = kind(d) === 'fly', count = B.count(d, rng), columns = !butterfly && count > c.count ? c.largeColumns : 3;
     for (var i = 0; i < count; i++) {
       if (butterfly) {
         members.push({ delay: rng() * c.stagger, life: between(c.life, rng), phase: Math.floor(rng() * 8),
@@ -143,14 +143,19 @@
           angle: rng() * Math.PI * 2, fade: between(c.fadeRange, rng) });
         continue;
       }
-      members.push({ delay: rng() * c.stagger, phase: Math.floor(rng() * 8),
+      members.push({ delay: rng() * (flying ? c.flightStagger : c.stagger), phase: Math.floor(rng() * 8),
+      life: flying ? c.flightDuration : c.duration,
       x: (i % columns) * c.spacing, y: Math.floor(i / columns) * c.spacing * 0.55 + (rng() - 0.5) * c.spacing,
       scale: 0.75 + rng() * 0.5, flap: 0.8 + rng() * 0.4,
       path: B.kinds[d.id] === 'run' ? B.groundPath(place(d, st), 'run', i) : null,
       entry: B.kinds[d.id] === 'swim' ? B.entryPath(place(d, st), i) : null });
     }
-    var limit = butterfly ? Math.max.apply(null, members.map(function (b) { return b.delay + b.life; })) : c.duration + c.stagger;
+    var limit = butterfly || flying ? Math.max.apply(null, members.map(function (b) { return b.delay + b.life; })) : c.duration + c.stagger;
     var flock = { id: d.id, kind: kind(d), place: place(d, st), t: 0, limit: limit, members: members, mode: S().loc.mode };
+    if (flying) {
+      flock.centerX = (Math.min(columns, count) - 1) * c.spacing / 2;
+      flock.centerY = (Math.ceil(count / columns) - 1) * c.spacing * 0.55 / 2;
+    }
     flocks.push(flock); return flock;
   };
   B.record = function (d, fame) {
@@ -174,28 +179,75 @@
       G.Fame.add('ex', fame); var flock = B.show(d, st); got.push({ id: id, fame: fame });
       var action = B.isButterfly(d) || B.kinds[id] === 'fly' ? '하늘을 나는' : B.kinds[id] === 'run' ? '달리는' : '헤엄치는';
       var line = d.name + (flock.members.length === 1 ? U.jx(d.name, '이/가') : ' 무리가') + ' ' + action + ' 모습을 다시 관찰했다. 탐험 명성 +' + fame;
-      G.State.log(line); G.UI.toast(line + ' · 다음 관찰 보상은 ' + rules().years + '년 뒤', 'compass', 5500);
+      G.State.log(line); G.UI.toast(line + ' · 다음 관찰 보상은 ' + rules().years + '년 뒤', 'compass', 5500, { tier: 'line' });
     });
     if (got.length && G.Game.refreshHud) G.Game.refreshHud();
     return got;
   };
+  function airborne(f) { return f.kind === 'fly' || f.kind === 'flutter'; }
+  function ready(f) { return image(f.id) && (f.kind !== 'swim' || image(f.id + '_shore')); }
+  function smooth(u) { u = U.clamp(u, 0, 1); return u * u * (3 - 2 * u); }
+  function watching(ui, on) {
+    if (ui.classList.contains('watching-nature') === on) return;
+    ui.classList.toggle('watching-nature', on);
+    if (G.UI.noticeZone) G.UI.noticeZone();
+    if (on) { var notices = ui.querySelector('.toasts'); if (notices) notices.scrollTop = notices.scrollHeight; }
+  }
+  // 지도의 이동을 좇아 튀지 않도록 첫 현장 위치에서 하늘 구도를 잡는다.
+  function anchor(f, p) {
+    var c = fx().view;
+    if (!f.anchor) f.anchor = [U.clamp(p[0], c.anchorX[0], c.anchorX[1]), U.clamp(p[1], c.anchorY[0], c.anchorY[1])];
+    return f.anchor;
+  }
+  function sky(ctx, mode) {
+    var c = fx().view, alpha = 0, time = 0;
+    flocks.forEach(function (f) {
+      if (f.mode !== mode || !airborne(f) || !ready(f)) return;
+      var a = smooth(Math.min(f.t, f.limit - f.t) / c.fade);
+      if (a > alpha) { alpha = a; time = f.t; }
+    });
+    if (!alpha) return;
+    ctx.save(); ctx.globalAlpha = alpha;
+    var g = ctx.createLinearGradient(0, c.top, 0, c.bottom);
+    g.addColorStop(0, c.sky[0]); g.addColorStop(0.5, c.sky[1]); g.addColorStop(1, c.sky[2]);
+    ctx.fillStyle = g; ctx.fillRect(0, c.top, 1600, c.bottom - c.top);
+    c.clouds.forEach(function (p) {
+      ctx.save(); ctx.translate(p[0] + time * c.cloudDrift, p[1]); ctx.scale(p[2], p[3]);
+      var cloud = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      cloud.addColorStop(0, 'rgba(255,255,245,' + c.cloudAlpha + ')'); cloud.addColorStop(1, 'rgba(255,255,245,0)');
+      ctx.fillStyle = cloud; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
+    });
+    ctx.restore();
+  }
   B.draw = function (ctx, project, mode) {
+    sky(ctx, mode);
     flocks.forEach(function (f) {
       if (f.mode !== mode) return;
       var flutter = f.kind === 'flutter', c = flutter ? G.FX.butterflies : fx();
       var img = image(f.id); if (!img) return;
       var p = project(f.place.lon, f.place.lat), cw = img.width / 4, ch = img.height / 2;
+      if (airborne(f)) p = anchor(f, p);
       f.members.forEach(function (b) {
         var t = f.t - b.delay, life = b.life || c.duration; if (t < 0 || t > life) return;
         var u = t / life, fly = f.kind === 'fly' || flutter;
-        var x, y;
+        var x, y, distanceScale = 1;
         var flip = false, pose = null, sprite = img;
         if (flutter) {
           x = p[0] + b.x + t * b.drift + Math.sin(t * b.frequency + b.angle) * b.swayX;
-          y = p[1] - c.height + b.y - t * b.rise + Math.cos(t * b.frequency * c.swayRatio + b.angle) * b.swayY;
+          var startY = p[1] - c.height + b.y;
+          var climb = Math.min(life * b.rise, startY - fx().view.ceiling - b.swayY - c.size * b.scale / 2);
+          y = startY - Math.sin(u * Math.PI / 2) * climb + Math.cos(t * b.frequency * c.swayRatio + b.angle) * b.swayY;
+          distanceScale = 1 - (1 - c.distantScale) * smooth(u);
+        } else if (fly) {
+          // 계속 높아지는 완만한 곡선과 작아지는 날개로 상승·거리감을 만든다.
+          var rise = Math.sin(u * Math.PI / 2);
+          distanceScale = 1 - (1 - c.distantScale) * smooth(u);
+          x = p[0] + (u - 0.5) * c.flightTravel + (f.centerX - b.x) * c.flightSpreadX * distanceScale;
+          y = p[1] - rise * c.flightRise + (b.y - f.centerY) * fx().view.spreadY * distanceScale
+            + Math.sin(t * c.glideRate + b.phase) * c.glideSway;
         } else {
           x = p[0] - c.travel * 0.3 + u * c.travel - b.x;
-          y = p[1] + (fly ? -c.height - Math.sin(u * Math.PI) * c.arc : c.groundOffset) + b.y;
+          y = p[1] + c.groundOffset + b.y;
         }
         if (!fly && mode !== 'city') {
           if (f.kind === 'swim') {
@@ -209,13 +261,13 @@
           var gp = project(pose.lon, pose.lat); x = gp[0]; y = gp[1]; flip = pose.flip;
           if (pose.phase === 'dive') y -= Math.sin(pose.progress * Math.PI) * c.diveHeight;
         }
-        var w = c.size * b.scale * ((c.sizeById && c.sizeById[f.id]) || 1), h = w * ch / cw;
+        var w = c.size * b.scale * ((c.sizeById && c.sizeById[f.id]) || 1) * distanceScale, h = w * ch / cw;
         var frameMs = (c.frameById && c.frameById[f.id]) || c.frameMs;
         var frame = (b.phase + Math.floor(t * 1000 / (frameMs * b.flap))) % 8;
         if (pose && pose.phase === 'walk') frame %= 4;
         if (pose && pose.phase === 'dive') frame = 4 + Math.min(3, Math.floor(pose.progress * 4));
-        var fade = b.fade || c.fade;
-        ctx.save(); ctx.globalAlpha = Math.min(1, t / fade, (life - t) / fade);
+        var fade = b.fade || (fly ? c.flightFade : c.fade);
+        ctx.save(); ctx.globalAlpha = smooth(Math.min(1, t / fade, (life - t) / fade));
         ctx.translate(x, y); if (flip) ctx.scale(-1, 1);
         if (flutter) ctx.rotate(Math.sin(t * b.frequency + b.angle) * c.tilt);
         ctx.drawImage(sprite, (frame % 4) * cw, Math.floor(frame / 4) * ch, cw, ch, -w / 2, -h / 2, w, h);
@@ -230,20 +282,24 @@
   };
   B.update = function (dt) {
     reset(); var s = S(), mode = G.Game.sceneName, visible = s && s.loc && /^(sea|land|city)$/.test(mode);
+    var ui = document.getElementById('ui'); if (!ui) return;
     if (!canvas) {
-      var ui = document.getElementById('ui'); if (!ui) return;
       canvas = document.createElement('canvas'); canvas.id = 'bird-flocks'; canvas.width = 1600; canvas.height = 900;
       canvas.style.cssText = 'width:1600px;height:900px;pointer-events:none'; ui.parentNode.insertBefore(canvas, ui);
     }
     var ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, 1600, 900);
     canvas.style.display = visible ? 'block' : 'none';
-    if (!visible) { flocks = []; return; }
-    var blocked = G.UI.busy() || (G.Loader && G.Loader.shown()) || (mode === 'city' && G.Town.active() && G.Town.hidden());
-    if (blocked) return; // 발견 카드·건물 안에서는 기다렸다가 현장 화면에서 보여 준다.
+    if (!visible) { flocks = []; watching(ui, false); return; }
+    flocks = flocks.filter(function (f) { return f.t <= f.limit && f.mode === mode; });
+    var blocked = G.UI.busy() || ui.classList.contains('talking') || ui.querySelector('.dlg-stage, .dlg, .reveal:not(.report)')
+      || (G.Loader && G.Loader.shown()) || (mode === 'city' && G.Town.active() && G.Town.hidden());
+    if (blocked) { watching(ui, false); return; } // 발견 카드·대화·건물 안에서는 기다렸다가 현장 화면에서 보여 준다.
     B.check();
+    watching(ui, flocks.some(function (f) { return airborne(f) && ready(f); }));
     var project = mode === 'sea' ? G.Scenes.sea.toScreen : mode === 'land' ? G.Scenes.land.toScreen : function () { return [620, 420]; };
     B.draw(ctx, project, mode);
-    flocks.forEach(function (f) { if (image(f.id) && (f.kind !== 'swim' || image(f.id + '_shore'))) f.t += dt; });
+    flocks.forEach(function (f) { if (ready(f)) f.t += Math.min(Math.max(0, dt), fx().view.maxDelta); });
     flocks = flocks.filter(function (f) { return f.t <= f.limit && f.mode === mode; });
+    watching(ui, flocks.some(function (f) { return airborne(f) && ready(f); }));
   };
 })(window.G = window.G || {});
