@@ -457,6 +457,8 @@
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)
     life: { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2, kidBond: 3 },
+    // 알림(갈색 쪽지 — js/ui/ui.js UI.toast): 보이는 시간 = baseMs + 글자 수×perChar (minMs~maxMs) · 같은 말 다시 띄우지 않는 시간 · 「지난 소식」에 남기는 수
+    notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, keep: 40 },
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다
     eraEnd: { y: 1700, m: 1, d: 1 },
     // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.

@@ -629,6 +629,12 @@
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
+      '<div>알림</div><div><div class="opt-row">' + [['normal', '보통 크기'], ['small', '작게']].map(function (o) { return '<div class="opt' + ((st.noticeSize || 'normal') === o[0] ? ' on' : '') + '" data-nsz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
+        '<div class="opt-row" style="margin-top:4px">' + [['auto', '장면에 맞춰'], ['top', '늘 위'], ['bottom', '늘 아래']].map(function (o) { return '<div class="opt' + ((st.noticePos || 'auto') === o[0] ? ' on' : '') + '" data-npos="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
+        '<div class="opt-row" style="margin-top:4px"><div class="opt' + (!st.noticeHideLine ? ' on' : '') + '" data-nhl="0">여느 소식도 띄움</div><div class="opt' + (st.noticeHideLine ? ' on' : '') + '" data-nhl="1">큰 일만 띄움</div></div>' +
+        '<small class="muted">장면에 맞춰: 도시는 윗줄 아래 · 바다는 아래 단추줄 위 · 창이 열리면 왼쪽 아래. 대화 중 소식은 모아 두었다가 대화가 끝나면 띄웁니다. 비가 오고 그침·노 젓기는 바람 판에, 먼 나라 해전 소문은 띄우지 않습니다 — 모두 윗줄 왼쪽 나침반(지난 소식)에 남습니다.</small></div>' +
+      '<div>항해 상태판</div><div><div class="opt-row"><div class="opt' + (!st.statusOpen ? ' on' : '') + '" data-sop="0">한 줄로 접기</div><div class="opt' + (st.statusOpen ? ' on' : '') + '" data-sop="1">늘 펼침</div></div>' +
+        '<small class="muted">접으면 목적지·도착·보급 한 줄만 — 마우스를 올리거나 누르면 속력·진로·항해 날수까지 펼칩니다.</small></div>' +
       '<div>바다의 방향키</div><div><div class="opt-row"><div class="opt' + (st.keyMode !== 'helm' ? ' on' : '') + '" data-km="dir">방위로 가기</div><div class="opt' + (st.keyMode === 'helm' ? ' on' : '') + '" data-km="helm">손으로 키 잡기</div></div>' +
         '<small class="muted">' + (st.keyMode === 'helm' ? kl('up') + ' 누르는 동안 나아감 · ' + kl('left') + '/' + kl('right') + ' 뱃머리 돌리기 · ' + kl('down') + ' 멈춤 · ' + kl('confirmAlt') + ' 순항/정지' : kl('up') + ' 북 · ' + kl('down') + ' 남 · ' + kl('left') + ' 서 · ' + kl('right') + ' 동 (두 키 동시 입력은 대각선) · ' + kl('confirmAlt') + ' 정지') + '</small></div>' +
       '<div>마우스 따라가기</div><div><div class="opt-row"><div class="opt' + (st.mouseFollow ? ' on' : '') + '" data-mf="1">켬</div><div class="opt' + (!st.mouseFollow ? ' on' : '') + '" data-mf="0">끔</div></div>' +
@@ -657,6 +663,10 @@
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
+    U.$$('[data-nsz]', el).forEach(function (o) { o.onclick = function () { st.noticeSize = o.dataset.nsz; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); UI.toast('알림을 이 크기로 띄웁니다.', 'info', 2600, { tier: 'line' }); PAGES.menu(el, win); }; });
+    U.$$('[data-npos]', el).forEach(function (o) { o.onclick = function () { st.noticePos = o.dataset.npos; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); PAGES.menu(el, win); }; });
+    U.$$('[data-nhl]', el).forEach(function (o) { o.onclick = function () { st.noticeHideLine = o.dataset.nhl === '1'; G.State.rememberSettings(st); PAGES.menu(el, win); }; });
+    U.$$('[data-sop]', el).forEach(function (o) { o.onclick = function () { st.statusOpen = o.dataset.sop === '1'; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); PAGES.menu(el, win); }; });
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
     U.$$('[data-mf]', el).forEach(function (o) { o.onclick = function () { st.mouseFollow = o.dataset.mf === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-cs]', el).forEach(function (o) { o.onclick = function () { st.ctrlSens = o.dataset.cs; PAGES.menu(el, win); }; });

@@ -2256,7 +2256,10 @@
     var mz = G.Monsoon ? G.Monsoon.at(l.lon, l.lat) : null, mtxt = '';
     if (mz) { var mph = G.Monsoon.phase(mz), mnx = G.Monsoon.next(mz); mtxt = '<div style="font-size:12.5px;color:#9fd0c8" title="' + mz.name + '의 계절풍">' + (mph === 'sw' ? '남서' : '북동') + ' 계절풍 ~' + mnx.date.m + '/' + mnx.date.d + '</div>'; }
     var crg = st.cl && st.cl.regime, ctxt = crg ? '<div style="font-size:12.5px;color:#bfe6ff" title="구름이 흘러가는 쪽이 바람이 부는 쪽 — 그쪽으로 달리면 순풍을 탄다">☁ ' + crg.name + '</div>' : '';
-    setHtml(hudEl.wtxt, '<div style="font-size:15px;color:#e3c68d">' + from + '풍</div><div style="font-size:14px">풍속 ' + '●●●●●'.slice(0, Math.max(1, Math.round(ws * 5))) + '</div><div style="font-size:14px;color:#d9c9a6">' + rn + '</div>' + mtxt + ctxt);
+    // 비·노 젓기는 알림으로 띄우지 않고 여기에 늘 보인다 (알림 정리 2026-11-01 — js/ui/ui.js UI.toastTier의 state)
+    var rtxt = G.Rain && G.Rain.raining() ? '<div style="font-size:12.5px;color:#a9c7e8" title="비 대책: ' + (G.Rain.ORDERS && S().rain && G.Rain.ORDERS[S().rain.order] ? G.Rain.ORDERS[S().rain.order].name : '') + '">☂ ' + G.Rain.name() + '</div>' : '';
+    var otxt = R.rowing || (R.fleetInfo && R.fleetInfo.row) ? '<div style="font-size:12.5px;color:#e8c9a0" title="돛이 바람을 못 받아 선원들이 노를 젓는다 — 오래 저으면 지친다">노 젓는 중</div>' : '';
+    setHtml(hudEl.wtxt, '<div style="font-size:15px;color:#e3c68d">' + from + '풍</div><div style="font-size:14px">풍속 ' + '●●●●●'.slice(0, Math.max(1, Math.round(ws * 5))) + '</div><div style="font-size:14px;color:#d9c9a6">' + rn + '</div>' + mtxt + ctxt + rtxt + otxt);
   }
   function drawMini() {
     if (!hudEl.mini) return;

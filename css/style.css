@@ -1167,8 +1167,6 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .reveal.talk .rv-title { top: 47%; font-size: 58px; }
 .reveal.out { opacity: 0; transition: opacity .45s ease; }
 /* 발견 뒤 대화하는 동안: 알림은 그림(가운데 위)을 가리지 않게 오른쪽 위로 */
-#ui:has(> .reveal.talk:not(.report)) > .toasts { left: auto; right: 16px; transform: none; align-items: flex-end; }
-#ui:has(> .reveal.talk:not(.report)) > .toasts .toast { max-width: 380px; font-size: 16px; padding: 8px 14px 8px 10px; }
 /* 보고·발표 자리에서 다시 띄우는 발견물 그림 (SC.discoveryShow · js/systems/pitch.js): 빛줄기 없이, 대화창 위쪽에 작게 */
 .reveal.report { cursor: default; pointer-events: none; z-index: 12; }   /* 대화하는 사람들(.dlg-actors z 13) 뒤 — 그림을 사이에 두고 선다 */
 .reveal.report .rv-frame { animation: none !important; }
@@ -1242,7 +1240,6 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 #ui.at-sea .toasts { gap: 5px; }
 #ui.at-sea .toast { min-width: 0; max-width: 440px; padding: 6px 12px 6px 10px; font-size: 15px; gap: 8px; opacity: .92; }
 #ui.at-sea .toast svg { width: 20px; height: 20px; flex: 0 0 20px; }
-#ui.at-sea .toasts .toast:nth-last-child(n+4) { display: none; }
 
 /* 제독 만들기: 특기 17가지와 어학 16가지를 스크롤 없이 한 화면에 — 세 칸으로 촘촘하게 */
 .create .cr-skills { overflow: hidden; padding: 12px 16px; }
@@ -1441,7 +1438,6 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 #ui.talking .tutbox .tb-btns { margin-left: 0; width: 100%; gap: 2px 10px; flex-wrap: wrap; }   /* 「로코에게 키를 맡긴다」까지 넷이면 340px 상자 밖으로 삐져나갔다 */
 #ui.talking .tutbox .tb-g { font-size: 14px; }
 #ui.talking .tutbox .tb-g svg { width: 16px; height: 16px; margin-top: 2px; }
-#ui.talking.tut-on .toasts { top: 62px !important; }
 .tutbox .tb-h b { font-size: 18px; }
 .tutbox .tb-n { font-size: 13px; padding: 1px 8px; background: #1e3552; color: #f3e2bd; border-radius: 10px; white-space: nowrap; }
 .tutbox .tb-btns { margin-left: auto; display: flex; gap: 12px; white-space: nowrap; }
@@ -1523,7 +1519,6 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 /* 라틴 글자를 쓰는 유럽 말(에스파냐·포르투갈·로망스·게르만)을 못 알아들을 때: 기울인 낱말로 */
 .dlg .foreign.lat_es, .dlg .foreign.lat_pt, .dlg .foreign.lat_rom, .dlg .foreign.lat_ger { font-style: italic; letter-spacing: .01em; }
 /* 대화 중의 알림: 가운데 위(인물 머리 자리)를 비우고 오른쪽 위에 작게 */
-#ui.talking .toasts { left: auto; right: 22px; transform: none; align-items: flex-end; top: 62px; }
 #ui.talking .toast { max-width: 380px; min-width: 0; font-size: 15px; padding: 7px 12px 7px 10px; opacity: .93; }
 #ui.talking .toast svg { width: 22px; height: 22px; flex: 0 0 22px; }
 
@@ -1563,9 +1558,6 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 #ui { word-break: keep-all; overflow-wrap: anywhere; }
 
 /* 2 알림이 창(수첩·교역표…) 위를 덮지 않게: 창이 열려 있는 동안 알림은 왼쪽 아래 구석에 작게 */
-#ui:has(.modal-back > .win) > .toasts { top: auto !important; bottom: 16px; left: 16px; transform: none; align-items: flex-start; }
-#ui:has(.modal-back > .win) > .toasts .toast { min-width: 0; max-width: 400px; font-size: 16px; padding: 8px 14px 8px 10px; }
-#ui:has(.modal-back > .win) > .toasts .toast svg { width: 24px; height: 24px; flex-basis: 24px; }
 
 /* 3 두 칸 명령 메뉴: 오른쪽 작은 글(값·조건)을 이름 아래 줄로 — 이름이 한 줄에 다 들어가게 */
 .cmdmenu.many .cmd { display: grid; grid-template-columns: 24px 1fr; column-gap: 9px; row-gap: 1px; align-items: center; }
@@ -1593,7 +1585,6 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .hud-pin.hp-drag { cursor: grabbing !important; box-shadow: 0 0 0 2px rgba(232,195,90,.75), 0 12px 28px rgba(0,0,0,.55); opacity: .92; transition: none; }
 .hud-pin .hp-reset { position: absolute; right: 4px; top: 4px; z-index: 3; width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 1px solid rgba(217,180,95,.7); background: rgba(28,19,11,.85); color: #f2e2b6; font-size: 15px; line-height: 22px; cursor: pointer; display: none; }
 .hud-pin.hp-moved:hover .hp-reset { display: block; }
-.ui-zoomed #ui.at-sea .toasts { left: 18px; top: 168px; transform: none; align-items: flex-start; }
 
 /* ---------------------------------------------------------------- 개척 도시 (js/systems/colony.js · js/city/colonyhall.js) */
 /* 새 건물이 선 거리 위의 금빛 글귀 (그림이 있으면 그림과 함께) */
@@ -1611,8 +1602,6 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .colony-banner .cb-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .colony-banner.with-pic { top: 64px; }
 #ui.colony-show .todo, #ui.colony-show .cmdmenu, #ui.colony-show .infobar, #ui.colony-show .caption, #ui.colony-show .city-banner { opacity: 0; pointer-events: none; transition: opacity .35s; }
-#ui.colony-show > .toasts { top: auto !important; bottom: 16px; left: 16px; transform: none; align-items: flex-start; }   /* 글귀를 가리지 않게 알림은 왼쪽 아래로 */
-#ui.colony-show > .toasts .toast { min-width: 0; max-width: 400px; font-size: 16px; padding: 8px 14px 8px 10px; }
 @keyframes cb-in { from { opacity: 0; transform: translate(-50%, -16px); } to { opacity: 1; transform: translate(-50%, 0); } }
 @keyframes cb-out { to { opacity: 0; transform: translate(-50%, -16px); } }
 /* 세울 곳 고르기 */
@@ -2013,3 +2002,43 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .era-end .ee-next[hidden], .era-end .ee-skip[hidden] { display: none; }
 @keyframes eeglow { 50% { box-shadow: 0 0 22px rgba(227,198,141,.55), 0 4px 18px rgba(0,0,0,.6); } }
 @media (prefers-reduced-motion: reduce) { .era-end .ee-bg { transition: filter 2s ease; transform: none !important; } }
+
+/* ---------------------------------------------------------------- 알림 (2026-11-01 정리 — js/ui/ui.js UI.toast)
+   한 자리(data-zone): top = 윗줄 바로 아래 가운데 · sea = 바다에서 아래 단추줄 바로 위 가운데(해도·바람 판 사이) · corner = 창이 열려 있을 때 왼쪽 아래.
+   대화 중에는 띄우지 않고 모아 둔다(나침반 단추의 수). 예전의 장면별 자리 규칙(대화 중 오른쪽 위·확대 바다 왼쪽 위 등)은 모두 이것으로 바꿨다. */
+#ui > .toasts[data-zone="sea"] { top: auto; bottom: 96px; }
+#ui > .toasts[data-zone="corner"] { top: auto; bottom: 16px; left: 16px; transform: none; align-items: flex-start; }
+#ui > .toasts[data-zone="corner"] .toast { max-width: 420px; }
+.toast { pointer-events: auto; cursor: pointer; }
+.toast.t-line { min-width: 0; max-width: 560px; padding: 7px 14px 7px 10px; font-size: 16px; gap: 9px; opacity: .95; }
+.toast.t-line svg { width: 22px; height: 22px; flex: 0 0 22px; }
+.toast.t-big { max-width: 560px; font-size: 18px; }
+#ui.at-sea .toast.t-big { font-size: 16px; padding: 8px 14px 8px 10px; }
+/* 윗줄 왼쪽 나침반 = 「지난 소식」 단추 — 모아 둔 소식의 수 */
+.hud .notice-btn { position: relative; background: none; border: 0; padding: 0; margin: 0 8px 0 0; cursor: pointer; display: flex; flex: 0 0 46px; }
+.hud .notice-btn .emb { margin-right: 0; }
+.hud .notice-btn:hover .emb { filter: brightness(1.25) drop-shadow(0 0 4px rgba(227,198,141,.6)); }
+.hud .notice-btn .nb-n { position: absolute; right: -6px; top: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #9b3a2c; color: #fff3d6; font: 700 11px/18px var(--serif); font-style: normal; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.6); display: none; }
+.hud .notice-btn.has .nb-n { display: block; }
+.notice-list { max-height: 560px; overflow-y: auto; }
+.notice-list .nl-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 4px; border-bottom: 1px solid rgba(122,92,51,.25); font-size: 16px; line-height: 1.45; }
+.notice-list .nl-row svg { width: 20px; height: 20px; flex: 0 0 20px; margin-top: 3px; color: var(--brass-dk); }
+.notice-list .nl-row small { color: var(--ink-soft); font-size: 13px; }
+.notice-list .nl-state, .notice-list .nl-quiet { opacity: .62; }
+.notice-list .nl-big div > div { font-weight: 700; }
+
+/* ④ 한 줄로 접기 · 반투명 (2026-11-01) — 여느 소식은 한 줄, 마우스를 올리면 펼친다(누르면 닫힌다 · 지난 소식에 그대로) */
+.toast { opacity: .9; transition: opacity .15s; }
+.toast:hover { opacity: 1; }
+.toast.t-line .tt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
+.toast.t-line:hover .tt { white-space: normal; }
+#ui > .toasts[data-zone="bottom"] { top: auto; bottom: 110px; }
+#ui > .toasts[data-size="small"] .toast { font-size: 14px; padding: 5px 11px 5px 9px; gap: 7px; }
+#ui > .toasts[data-size="small"] .toast svg { width: 18px; height: 18px; flex-basis: 18px; }
+#ui > .toasts[data-size="small"] .toast.t-line .tt { max-width: 420px; }
+/* 항해·탐험 상태판: 한 줄로 접는다 (목적지·도착·보급) — 마우스를 올리거나 누르면 펼친다 · 설정에서 늘 펼침 */
+.status-strip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 560px; cursor: pointer; opacity: .92; }
+.status-strip br, .status-strip .coord { display: none; }
+.status-strip:hover, .status-strip.open, #ui.status-open .status-strip { white-space: normal; opacity: 1; }
+.status-strip:hover br, .status-strip.open br, #ui.status-open .status-strip br { display: inline; }
+.status-strip:hover .coord, .status-strip.open .coord, #ui.status-open .status-strip .coord { display: inline; }
