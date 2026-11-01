@@ -42,11 +42,12 @@ fs.mkdirSync(out, { recursive: true });
       ctx.drawImage = (...a) => { const m = ctx.getTransform(); draws.push({ x: m.e, y: m.f, w: a[7], h: a[8], alpha: ctx.globalAlpha }); };
       const sample = (f, t, p = [800, 450]) => { f.t = t; draws = []; G.Birds.draw(ctx, () => p, 'land'); return draws.slice(); };
       let f = fresh('flamingo'); f.members.forEach(b => { b.delay = 0; });
-      const low = sample(f, 2), middle = sample(f, 7), high = sample(f, 12);
-      ok(low.length === 32 && middle.length === 32 && high.length === 32, '홍학 32마리를 긴 관찰 구간에 유지');
+      const duration = G.FX.birds.flightDuration;
+      const low = sample(f, duration * .15), middle = sample(f, duration * .5), high = sample(f, duration * .85);
+      ok(low.length === 32 && middle.length === 32 && high.length === 32, '홍학 32마리를 비행 초반·중반·후반에 유지');
       ok(high.every((p, i) => p.y < middle[i].y && middle[i].y < low[i].y), '날아오른 새가 다시 내려오지 않고 하늘로 상승');
       ok(high.every((p, i) => p.w < middle[i].w && middle[i].w < low[i].w), '멀어지는 날개가 부드럽게 작아짐');
-      const stable = sample(f, 7, [-5000, 6000]);
+      const stable = sample(f, duration * .5, [-5000, 6000]);
       ok(stable.every((p, i) => p.x === middle[i].x && p.y === middle[i].y), '지도·카메라 이동에도 비행 구도 유지');
       let tested = 0;
       for (const id of ['flamingo', 'morpho']) {
@@ -58,7 +59,12 @@ fs.mkdirSync(out, { recursive: true });
           }
         }
       }
-      f = fresh('flamingo'); f.t = 7;
+      f = fresh('flamingo'); f.t = duration * .5;
+      const backdrop = document.createElement('canvas'); backdrop.width = 1600; backdrop.height = 900;
+      const backdropCtx = backdrop.getContext('2d');
+      G.Birds.draw(backdropCtx, () => [800, 450], 'land');
+      ok([[32, 160], [1568, 160], [32, 500], [1568, 500]].every(([x, y]) => backdropCtx.getImageData(x, y, 1, 1).data[3] === 0),
+        '새 주변은 투명하게 유지해 큰 구름·하늘 배경이 게임 화면을 덮지 않음');
       G.Game.state.settings.noticePos = 'top'; G.UI.noticeSettings();
       box.innerHTML = '';
       G.UI.toast('새들이 바람을 타고 먼 하늘로 날아오른다. 탐험 명성 +75', 'compass', 5500, { tier: 'line' });
@@ -80,8 +86,8 @@ fs.mkdirSync(out, { recursive: true });
       ok(f.t === time && !ui.classList.contains('watching-nature'), '대화 중 비행 시계를 멈추고 관찰 구도 해제');
       ui.classList.remove('talking'); G.Birds.update(0);
       ok(ui.classList.contains('watching-nature') && f.t === time, '대화 뒤 같은 비행 시점부터 복귀');
-      f.t = f.limit + 1; G.Birds.update(0);
-      ok(!ui.classList.contains('watching-nature') && box.dataset.zone === 'top', '연출 종료 뒤 원래 알림 설정 복원');
+      f.t = 8.01; G.Birds.update(0);
+      ok(!ui.classList.contains('watching-nature') && box.dataset.zone === 'top', '출발 지연까지 8초 안에 연출 종료·원래 알림 설정 복원');
       f = fresh('kiwi'); f.t = 2; G.Birds.update(0);
       ok(!ui.classList.contains('watching-nature'), '달리는 새에는 하늘 구도를 적용하지 않음');
       f = fresh('morpho'); f.t = 3; G.Birds.update(0);
@@ -102,19 +108,23 @@ fs.mkdirSync(out, { recursive: true });
       for (const id of ['flamingo', 'morpho']) {
         await page.evaluate(({ id, mode }) => {
           document.querySelector('#ui > .toasts').innerHTML = '';
-          const f = window.__natureFresh(id); f.t = id === 'morpho' ? 4 : 7;
+          const f = window.__natureFresh(id); f.t = id === 'morpho' ? 4 : G.FX.birds.flightDuration * .5;
           const label = { land: '탐험길', sea: '바다', city: '거리' }[mode];
           G.UI.toast(label + ' — ' + G.DISC[id].name + ' 무리가 하늘로 날아오른다. 탐험 명성 +75', 'compass', 5500, { tier: 'line' });
           G.Birds.update(0);
         }, { id, mode });
         await page.waitForTimeout(1300);
+        await page.evaluate(() => {
+          const panels = [...document.querySelectorAll('#ui .cmdmenu, #ui .sea-zoom, #ui .city-banner, #ui .todo')];
+          if (panels.some(el => Number(getComputedStyle(el).opacity) < .8)) throw Error('비행 중 메뉴·상태판 선명도 유지');
+        });
         await page.screenshot({ path: path.join(out, mode + '-' + id + '.png') });
       }
     }
     await page.setViewportSize({ width: 540, height: 960 });
     await page.evaluate(() => {
       document.querySelector('#ui > .toasts').innerHTML = '';
-      const f = window.__natureFresh('flamingo'); f.t = 7;
+      const f = window.__natureFresh('flamingo'); f.t = G.FX.birds.flightDuration * .5;
       G.UI.toast('홍학 무리가 바람을 타고 먼 하늘로 날아오른다.', 'compass', 5500, { tier: 'line' });
       G.Birds.update(0);
     });

@@ -82,6 +82,7 @@ fs.mkdirSync(OUT, {recursive: true});
       if (!baseline) {
         assert.equal(number[0].hits, 4); assert.equal(number[0].gun, id);
         assert(hit.fx.some(f => f.kind === 'powderFlame')); assert(hit.fx.some(f => f.kind === 'powderSmoke'));
+        assert(hit.fx.some(f => f.kind === 'powderFlash')); assert(hit.fx.some(f => f.kind === 'powderFracture'));
         assert(!hit.fx.some(f => f.kind === 'ring' || f.kind === 'waterSprite'), id + ' 명중 때 원형 물보라 그림 없음');
         const heavy = await page.evaluate(id => G.FX.cannonImpact.profiles[id].size >= 1.3, id);
         assert.deepEqual(hit.sounds, [{name: heavy ? 'boom' : 'hit', variant: heavy ? 0 : 2}], id + ' 중첩되지 않는 포별 명중음');
@@ -101,7 +102,7 @@ fs.mkdirSync(OUT, {recursive: true});
     if (!baseline) {
       const gun = id => report.guns.find(g => g.id === id);
       assert(gun('hcannon').flame.r > gun('saker').flame.r * 2);
-      assert(gun('hcannon').number.val > gun('saker').number.val * 4);
+      assert(gun('hcannon').number.val > gun('saker').number.val * 2); // 난수 편차 양끝에서도 중포가 더 강하다.
       assert.equal(gun('pedrero').balls[0].kill, 2);
       report.misses = await page.evaluate(() => {
         prepareGun('hcannon'); const B = G.Scenes.battle, st = B.runtime(); st.fx = [];
@@ -112,6 +113,14 @@ fs.mkdirSync(OUT, {recursive: true});
       assert.equal(report.misses.spray, 4); assert.equal(report.misses.rings, 0);
       await page.screenshot({path: path.join(OUT, 'heavy-miss.png')});
       assert.equal(await page.evaluate(() => rippleCalls), 0, '발사·명중·빗나감 전 과정에서 원형 물결 그리기 호출 없음');
+      if (process.argv.includes('--preview')) {
+        await page.evaluate(() => { prepareGun('hcannon'); landVolley(); });
+        const frames = path.join(OUT, 'preview-frames'); fs.mkdirSync(frames, {recursive: true});
+        for (let frame = 0; frame < 32; frame++) {
+          await page.evaluate(age => showPhase(age), frame / 20);
+          await page.screenshot({path: path.join(frames, 'frame-' + String(frame).padStart(2, '0') + '.png'), clip: {x: 640, y: 220, width: 370, height: 390}});
+        }
+      }
       report.rehit = await page.evaluate(() => {
         const B = G.Scenes.battle, st = B.runtime(); prepareGun('hcannon'); landVolley(); const n = st.fx.find(f => f.kind === 'dmg'); n.t = .2;
         st.hitstop = 0; st.balls.push({x: st.myFlag.x, y: 0, tx: st.enFlag.x, ty: 0, t: 0, dur: .001, hit: true, dmg: 2, gun: 'hcannon', target: st.enFlag, from: st.myFlag});

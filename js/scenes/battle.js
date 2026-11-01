@@ -632,14 +632,15 @@
     var K = cannonFX(), look = gunLook(gun), ang = Math.atan2(diry, dirx);
     var size = look.size * U.clamp(0.85 + Math.sqrt(Math.max(0, power)) * K.impactPower, 0.85, K.maxPower);
     var budget = st.fx.length > K.busyFx ? K.busyBudget : 1, wd = windDrift();
-    cannonParticle({ kind: 'blast', x: x, y: y, t: 0, life: K.blastLife, r: K.blastRadius * size });
+    cannonParticle({ kind: 'powderFlash', x: x, y: y, t: 0, life: K.blastLife, r: K.blastRadius * size, ang: ang, seed: U.rf(0, 6.28) });
+    cannonParticle({ kind: 'powderFracture', x: x, y: y, t: 0, life: K.fractureLife, r: K.flameRadius * size, ang: ang, spread: look.spread, seed: U.rf(0, 6.28) });
     cannonParticle({ kind: 'powderFlame', x: x, y: y, t: 0, life: K.flameLife, r: K.flameRadius * size, ang: ang, spread: look.spread, seed: U.rf(0, 6.28) });
     for (var i = 0; i < Math.round(K.debris * size * budget); i++) {
       var a = ang + U.rf(-1.3, 1.3) * look.spread, sp = U.rf(60, 190) * Math.sqrt(size);
       cannonParticle({ kind: 'debris', x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, h: U.rf(40, 110), rot: U.rf(0, 6.28), vr: U.rf(-12, 12), w: U.rf(3, 8) * Math.sqrt(size), t: 0, life: U.rf(0.7, 1.15), dark: U.chance(0.4) });
     }
     for (var j = 0; j < Math.round((K.sparks + K.embers) * size * budget); j++) {
-      var ember = j >= K.sparks * size * budget, b2 = ang + U.rf(-1.6, 1.6) * look.spread, sp2 = U.rf(140, 320) * Math.sqrt(size);
+      var ember = j >= K.sparks * size * budget, b2 = ang + U.rf(-1.6, 1.6) * look.spread, sp2 = U.rf(K.sparkSpeed[0], K.sparkSpeed[1]) * Math.sqrt(size);
       cannonParticle({ kind: 'spark', x: x, y: y, vx: Math.cos(b2) * sp2, vy: Math.sin(b2) * sp2, t: 0, life: ember ? U.rf(0.65, 1.15) : U.rf(0.22, 0.45), ember: ember });
     }
     for (var k = 0; k < Math.max(1, Math.round(K.smokePuffs * budget)); k++) {
@@ -2027,7 +2028,42 @@
   }
 
   // ---------------------------------------------------------------- rendering
-  var IMPACT_KINDS = { muzzle: 1, blast: 1, clash: 1, float: 1, fireball: 1, powderFlame: 1, powderSpray: 1, debris: 1, spark: 1, dsmoke: 1 }; // 숫자는 맨 위, 연기는 불꽃 뒤에 그린다.
+  var IMPACT_KINDS = { muzzle: 1, blast: 1, clash: 1, float: 1, fireball: 1, powderFlash: 1, powderFracture: 1, powderFlame: 1, powderSpray: 1, debris: 1, spark: 1, dsmoke: 1 }; // 숫자는 맨 위, 연기는 불꽃 뒤에 그린다.
+  var powderTextures = null;
+  /** 여러 크기의 난류를 겹친 불꽃·연기 질감. 처음에만 만들고 매 장면은 그림만 재사용한다. */
+  function powderTexture(smoke, variant) {
+    if (!powderTextures) {
+      powderTextures = { fire: [], smoke: [] };
+      var K = cannonFX(), N = K.textureSize;
+      for (var v = 0; v < K.textureVariants; v++) {
+        var rnd = U.makeRng(7319 + v * 1741), layers = [4, 8, 16, 32].map(function (n) {
+          var grid = []; for (var k = 0; k < (n + 1) * (n + 1); k++) grid.push(rnd());
+          return { n: n, data: grid };
+        });
+        var fire = document.createElement('canvas'), soot = document.createElement('canvas'); fire.width = soot.width = N; fire.height = soot.height = N;
+        var fc = fire.getContext('2d'), sc = soot.getContext('2d'), fd = fc.createImageData(N, N), sd = sc.createImageData(N, N);
+        for (var y = 0; y < N; y++) for (var x = 0; x < N; x++) {
+          var noise = 0, total = 0;
+          for (var l = 0; l < layers.length; l++) {
+            var layer = layers[l], xx = x / N * layer.n, yy = y / N * layer.n, ix = Math.floor(xx), iy = Math.floor(yy), fx = xx - ix, fy = yy - iy;
+            fx = fx * fx * (3 - 2 * fx); fy = fy * fy * (3 - 2 * fy);
+            var off = iy * (layer.n + 1) + ix, row = layer.n + 1, w = 1 / (1 << l), g = layer.data;
+            noise += ((g[off] * (1 - fx) + g[off + 1] * fx) * (1 - fy) + (g[off + row] * (1 - fx) + g[off + row + 1] * fx) * fy) * w; total += w;
+          }
+          noise /= total;
+          var dx = (x - N / 2) / (N / 2), dy = (y - N / 2) / (N / 2), dist = Math.sqrt(dx * dx + dy * dy);
+          var mask = U.clamp((0.85 - dist + (noise - 0.5) * 0.75) * 5, 0, 1), at = (y * N + x) * 4;
+          var heat = U.clamp(noise * 1.5 + (1 - dist) * 0.3 - 0.28, 0, 1), alpha = mask * U.clamp((noise - 0.2) * 2.4, 0, 1);
+          fd.data[at] = 190 + heat * 65; fd.data[at + 1] = 34 + Math.pow(heat, 1.3) * 215; fd.data[at + 2] = 5 + Math.pow(heat, 3.3) * 170; fd.data[at + 3] = alpha * 235;
+          var gray = 48 + noise * 110;
+          sd.data[at] = gray; sd.data[at + 1] = gray * 0.94; sd.data[at + 2] = gray * 0.84; sd.data[at + 3] = mask * (0.2 + noise * 0.65) * 255;
+        }
+        fc.putImageData(fd, 0, 0); sc.putImageData(sd, 0, 0); powderTextures.fire.push(fire); powderTextures.smoke.push(soot);
+      }
+    }
+    var list = smoke ? powderTextures.smoke : powderTextures.fire;
+    return list[Math.abs(variant | 0) % list.length];
+  }
   /** 시간에 따라 일그러지는 불규칙한 윤곽. 원이나 원호를 폭발의 테두리로 쓰지 않는다. */
   function blastContour(ctx, x, y, r, seed, age) {
     var K = cannonFX(), n = K.flameEdges, points = [];
@@ -2066,11 +2102,8 @@
       for (var si = 0; si < 4; si++) {
         var sa = f.seed + si * 2.4 + age * 0.25, sr = grow * (0.66 + si * 0.09);
         var sx = drift[0] + Math.cos(sa) * grow * 0.32, sy = drift[1] - age * K.smokeRise + Math.sin(sa) * grow * 0.22;
-        var sg = ctx.createRadialGradient(sx - sr * 0.18, sy - sr * 0.22, 0, sx, sy, sr);
-        sg.addColorStop(0, f.pale ? 'rgba(222,215,198,' + opacity * 0.32 + ')' : 'rgba(72,62,51,' + opacity * 0.5 + ')');
-        sg.addColorStop(0.55, f.pale ? 'rgba(174,171,160,' + opacity * 0.24 + ')' : 'rgba(112,104,92,' + opacity * 0.38 + ')');
-        sg.addColorStop(1, 'rgba(128,122,112,0)'); ctx.fillStyle = sg;
-        blastContour(ctx, sx, sy, sr, f.seed + si * 1.7, age * 0.25);
+        ctx.save(); ctx.translate(sx, sy); ctx.rotate(sa * 0.2); ctx.globalAlpha *= opacity * (f.pale ? 0.38 : 0.62);
+        ctx.drawImage(powderTexture(true, Math.floor(f.seed) + si), -sr, -sr, sr * 2, sr * 2); ctx.restore();
       }
       ctx.restore(); return;
     }
@@ -2085,7 +2118,7 @@
       return;
     }
     if (f.kind === 'powderSpray') {
-      var SK = cannonFX(), height = SK.sprayHeight * f.s, width = SK.sprayWidth * f.s, lift = 4 * u * (1 - u);
+      var SK = cannonFX(), height = SK.sprayHeight * f.s, width = SK.sprayWidth * f.s;
       ctx.save(); var sprayAlpha = ctx.globalAlpha * Math.pow(1 - u, 0.65);
       // 충돌로 찢겨 솟는 물줄기와 떨어지는 물방울만 그린다.
       for (var sj = 0; sj < SK.sprayJets; sj++) {
@@ -2121,10 +2154,39 @@
     }
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     if (f.kind === 'spark') {         // 불티: 짧은 빛줄기
-      var k2 = (1 - Math.exp(-f.t * 5)) / 5, sp = toScreen(f.x + f.vx * k2, f.y + f.vy * k2), sl = Math.exp(-f.t * 5) * 0.035;
+      var SD = cannonFX().sparkDrag, k2 = (1 - Math.exp(-f.t * SD)) / SD, sp = toScreen(f.x + f.vx * k2, f.y + f.vy * k2), sl = Math.exp(-f.t * SD) * cannonFX().sparkTrail;
       if (f.ember) { sp[1] += 60 * f.t * f.t - 48 * f.t; sl *= 0.45; }
       ctx.strokeStyle = 'rgba(255,' + Math.round(200 + 55 * a) + ',' + Math.round(90 + 120 * a) + ',' + a.toFixed(3) + ')'; ctx.lineWidth = 1.8;
       ctx.beginPath(); ctx.moveTo(sp[0], sp[1]); ctx.lineTo(sp[0] - f.vx * sl, sp[1] - f.vy * sl); ctx.stroke();
+    } else if (f.kind === 'powderFlash') {
+      var PK = cannonFX(), pulse = Math.pow(1 - u, 2), pr = f.r * (0.7 + u * 0.5);
+      // 짧은 흰 속불과 길게 번쩍이는 빛. 물결 테두리 없이 한 점이 찢어지듯 터진다.
+      var pg = ctx.createRadialGradient(q[0], q[1], 0, q[0], q[1], pr);
+      pg.addColorStop(0, 'rgba(255,255,243,' + pulse + ')'); pg.addColorStop(0.25, 'rgba(255,239,148,' + pulse + ')');
+      pg.addColorStop(0.65, 'rgba(255,123,26,' + pulse * 0.7 + ')'); pg.addColorStop(1, 'rgba(225,58,8,0)');
+      ctx.fillStyle = pg; blastContour(ctx, q[0], q[1], pr, f.seed, u);
+      var reach = pr * PK.flashReach, flare = ctx.createLinearGradient(q[0] - reach, 0, q[0] + reach, 0);
+      flare.addColorStop(0, 'rgba(255,154,49,0)'); flare.addColorStop(0.43, 'rgba(255,205,92,' + pulse * 0.55 + ')');
+      flare.addColorStop(0.5, 'rgba(255,255,232,' + pulse + ')'); flare.addColorStop(0.57, 'rgba(255,205,92,' + pulse * 0.55 + ')'); flare.addColorStop(1, 'rgba(255,154,49,0)');
+      ctx.fillStyle = flare; ctx.beginPath(); ctx.moveTo(q[0] - reach, q[1]); ctx.lineTo(q[0], q[1] - 3); ctx.lineTo(q[0] + reach, q[1]); ctx.lineTo(q[0], q[1] + 3); ctx.closePath(); ctx.fill();
+      var jet = pr * PK.flashHeight, jg = ctx.createLinearGradient(0, q[1] - jet, 0, q[1]);
+      jg.addColorStop(0, 'rgba(255,167,38,0)'); jg.addColorStop(0.7, 'rgba(255,225,119,' + pulse + ')'); jg.addColorStop(1, 'rgba(255,255,240,' + pulse + ')');
+      ctx.fillStyle = jg; ctx.beginPath(); ctx.moveTo(q[0] - pr * 0.23, q[1]); ctx.lineTo(q[0] - pr * 0.1, q[1] - jet * 0.5);
+      ctx.lineTo(q[0] + Math.sin(f.seed) * pr * 0.25, q[1] - jet); ctx.lineTo(q[0] + pr * 0.17, q[1] - jet * 0.4); ctx.lineTo(q[0] + pr * 0.25, q[1]); ctx.closePath(); ctx.fill();
+    } else if (f.kind === 'powderFracture') {
+      var FK0 = cannonFX(), visible = Math.min(1, u * 12), fade0 = Math.pow(1 - u, 1.8);
+      ctx.lineWidth = 1.4; ctx.lineJoin = 'round';
+      for (var fb = 0; fb < FK0.fractureBranches; fb++) {
+        var fang = f.ang + Math.sin(f.seed + fb * 5.7) * f.spread * 2, length = f.r * (0.65 + Math.abs(Math.cos(fb * 2.9 + f.seed))) * visible;
+        var lx = q[0], ly = q[1]; ctx.beginPath(); ctx.moveTo(lx, ly);
+        for (var fs = 1; fs <= 4; fs++) {
+          var dist = length * fs / 4, bend = Math.sin(fs * 4.1 + fb + f.seed) * length * 0.12;
+          lx = q[0] + Math.cos(fang) * dist - Math.sin(fang) * bend; ly = q[1] + Math.sin(fang) * dist * 0.7 + Math.cos(fang) * bend;
+          ctx.lineTo(lx, ly);
+          if (fs === 2) { ctx.lineTo(lx + Math.cos(fang - 0.8) * length * 0.28, ly + Math.sin(fang - 0.8) * length * 0.22); ctx.moveTo(lx, ly); }
+        }
+        ctx.strokeStyle = 'rgba(255,133,32,' + fade0 * 0.75 + ')'; ctx.stroke();
+      }
     } else if (f.kind === 'powderFlame') {
       // 고온의 화염 덩어리가 빠르게 갈라져 솟고, 가장자리부터 붉게 식는다.
       ctx.globalCompositeOperation = 'source-over';
@@ -2133,17 +2195,10 @@
         var fa = f.ang + Math.sin(f.seed + fi * 2.3) * f.spread * FK.flameReach;
         var reach = f.r * expand * (0.15 + fi * 0.13), fr = f.r * (0.35 + (fi % 3) * 0.08) * (0.55 + expand * 0.8);
         var fx = q[0] + Math.cos(fa) * reach, fy = q[1] + Math.sin(fa) * reach - u * f.r;
-        var fg = ctx.createRadialGradient(fx, fy, fr * 0.08, fx, fy, fr);
-        fg.addColorStop(0, 'rgba(255,250,192,' + cool + ')'); fg.addColorStop(0.25, 'rgba(255,202,62,' + cool + ')');
-        fg.addColorStop(0.62, 'rgba(255,112,17,' + cool * 0.95 + ')'); fg.addColorStop(0.9, 'rgba(198,45,9,' + cool * 0.7 + ')'); fg.addColorStop(1, 'rgba(93,26,9,0)');
-        ctx.fillStyle = fg; blastContour(ctx, fx, fy, fr, f.seed + fi * 7.3, u);
-        // 작은 속불과 그을음이 엇갈려 화염 덩어리의 깊이를 만든다.
-        ctx.fillStyle = 'rgba(255,229,126,' + cool * 0.35 + ')';
-        blastContour(ctx, fx - fr * 0.12, fy - fr * 0.08, fr * 0.4, f.seed + fi * 1.3, u * 2);
-        if (fi % 2 && u > 0.12) {
-          ctx.fillStyle = 'rgba(54,36,25,' + Math.min(0.28, u * 0.6) * cool + ')';
-          blastContour(ctx, fx + Math.cos(fa) * fr * 0.45, fy + Math.sin(fa) * fr * 0.45, fr * 0.48, f.seed + fi, u);
-        }
+        ctx.save(); ctx.translate(fx, fy); ctx.rotate(fa + Math.sin(f.seed + fi) * u); ctx.globalAlpha *= cool;
+        ctx.drawImage(powderTexture(false, Math.floor(f.seed) + fi), -fr, -fr, fr * 2, fr * 2);
+        if (fi % 2 && u > 0.12) { ctx.globalAlpha *= u * 0.7; ctx.drawImage(powderTexture(true, fi), -fr * 0.9, -fr * 0.8, fr * 2, fr * 2); }
+        ctx.restore();
       }
     } else if (f.kind === 'fireball') {   // 불덩이: 하얗게 터졌다가 붉게 식는다
       var R1 = f.r * (0.55 + u * 0.9), aa = Math.pow(1 - u, 1.4);

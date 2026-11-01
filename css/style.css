@@ -2038,13 +2038,6 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 /* 새·나비를 바라보는 동안 하늘을 비운다. 위험 알림도 아래에서 그대로 읽는다. */
 #ui.watching-nature > .toasts { top: auto; bottom: calc(110px * var(--unz, 1)); max-height: calc(140px * var(--unz, 1)); overflow-y: auto; scrollbar-width: thin; }
 #ui.watching-nature > .toasts .toast { flex-shrink: 0; }
-#ui .status-strip, #ui .sea-zoom, #ui .city-banner, #ui .todo, #ui .cmdmenu { transition: opacity 1.2s ease; }
-#ui.watching-nature .status-strip, #ui.watching-nature .sea-zoom,
-#ui.watching-nature .city-banner, #ui.watching-nature .todo { opacity: .18; }
-#ui.watching-nature .cmdmenu { opacity: .08; }
-#ui.watching-nature .status-strip:hover, #ui.watching-nature .sea-zoom:hover,
-#ui.watching-nature .city-banner:hover, #ui.watching-nature .todo:hover,
-#ui.watching-nature .cmdmenu:hover, #ui.watching-nature .cmdmenu:focus-within { opacity: 1; }
 #ui > .toasts[data-size="small"] .toast { font-size: 14px; padding: 5px 11px 5px 9px; gap: 7px; }
 #ui > .toasts[data-size="small"] .toast svg { width: 18px; height: 18px; flex-basis: 18px; }
 #ui > .toasts[data-size="small"] .toast.t-line .tt { max-width: 420px; }

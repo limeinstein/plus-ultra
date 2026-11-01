@@ -199,28 +199,7 @@
     if (!f.anchor) f.anchor = [U.clamp(p[0], c.anchorX[0], c.anchorX[1]), U.clamp(p[1], c.anchorY[0], c.anchorY[1])];
     return f.anchor;
   }
-  function sky(ctx, mode) {
-    var c = fx().view, alpha = 0, time = 0;
-    flocks.forEach(function (f) {
-      if (f.mode !== mode || !airborne(f) || !ready(f)) return;
-      var a = smooth(Math.min(f.t, f.limit - f.t) / c.fade);
-      if (a > alpha) { alpha = a; time = f.t; }
-    });
-    if (!alpha) return;
-    ctx.save(); ctx.globalAlpha = alpha;
-    var g = ctx.createLinearGradient(0, c.top, 0, c.bottom);
-    g.addColorStop(0, c.sky[0]); g.addColorStop(0.5, c.sky[1]); g.addColorStop(1, c.sky[2]);
-    ctx.fillStyle = g; ctx.fillRect(0, c.top, 1600, c.bottom - c.top);
-    c.clouds.forEach(function (p) {
-      ctx.save(); ctx.translate(p[0] + time * c.cloudDrift, p[1]); ctx.scale(p[2], p[3]);
-      var cloud = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
-      cloud.addColorStop(0, 'rgba(255,255,245,' + c.cloudAlpha + ')'); cloud.addColorStop(1, 'rgba(255,255,245,0)');
-      ctx.fillStyle = cloud; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
-    });
-    ctx.restore();
-  }
   B.draw = function (ctx, project, mode) {
-    sky(ctx, mode);
     flocks.forEach(function (f) {
       if (f.mode !== mode) return;
       var flutter = f.kind === 'flutter', c = flutter ? G.FX.butterflies : fx();

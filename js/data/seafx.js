@@ -294,7 +294,7 @@
     },
     cannonImpact: {        // 포의 실제 성능은 base.js, 아래 값은 그림에만 쓴다.
       maxFx: 650, busyFx: 380, busyBudget: 0.3,
-      blastLife: 0.24, flameLife: 0.68, smokeLife: 2.8, smokeRise: 30, smokeGrow: 24,
+      blastLife: 0.14, flameLife: 0.56, smokeLife: 2.8, smokeRise: 30, smokeGrow: 24,
       blastRadius: 32, flameRadius: 24, smokeRadius: 17, smokePuffs: 4,
       debris: 10, sparks: 12, embers: 5, impactPower: 0.16, maxPower: 1.45,
       muzzleLife: 0.17, muzzleSmokeLife: 1.9, muzzleSmokeRadius: 15,
@@ -303,6 +303,9 @@
       hitSoundGap: 0.16,
       flameLobes: 9, flameEdges: 19, flameReach: 1.8, flameRoughness: 0.32,
       sprayLife: 1.05, sprayHeight: 100, sprayWidth: 46, sprayJets: 7, sprayDrops: 32,
+      flashReach: 2.4, flashHeight: 1.7, fractureLife: 0.55, fractureBranches: 6,
+      sparkSpeed: [190, 430], sparkDrag: 4.5, sparkTrail: 0.055,
+      textureSize: 96, textureVariants: 3,
       // 작은 포: 작은 불꽃 / 장포: 가늘고 낮은 탄도 / 산탄포: 넓은 파편 / 중포: 큰 화염과 연기.
       profiles: {
         saker:     { size: 0.68, muzzle: 0.72, smoke: 0.7,  spread: 0.7,  arc: 1.05, ball: 2.8 },
@@ -412,13 +415,9 @@
     runCount: [1, 2], largeColumns: 6,
     frameMs: 105, travel: 1000, height: 120, arc: 130, groundOffset: 35, fade: 0.7,
     // 날아오른 뒤 천천히 멀어지는 시간. 달리기·입수의 시간과는 별개다.
-    flightDuration: 14, flightStagger: 1.8, flightTravel: 520, flightRise: 300, flightSpreadX: 1.9,
-    flightFade: 1.8, distantScale: 0.46, glideSway: 9, glideRate: 0.8,
-    view: { anchorX: [650, 950], anchorY: [450, 480], top: 54, ceiling: 124, bottom: 650,
-      fade: 1.8, maxDelta: 0.1, spreadY: 0.55,
-      sky: ['rgba(123,183,207,0.98)', 'rgba(190,220,224,0.94)', 'rgba(226,237,222,0)'],
-      cloudAlpha: 0.16, cloudDrift: 2.5,
-      clouds: [[310, 180, 240, 22], [1050, 270, 310, 26], [1430, 135, 200, 18]] },
+    flightDuration: 7, flightStagger: 1, flightTravel: 520, flightRise: 300, flightSpreadX: 1.9,
+    flightFade: 1, distantScale: 0.46, glideSway: 9, glideRate: 0.8,
+    view: { anchorX: [650, 950], anchorY: [450, 480], ceiling: 124, maxDelta: 0.1, spreadY: 0.55 },
     groundStep: 0.025, groundSteps: 100, groundSpacing: 0.24, surfaceSearch: 2, surfaceAngles: 16,
     coastSearch: 12, coastSearchStep: 0.15, coastBisect: 16, shoreSpacing: 0.07, shoreWalk: 0.45,
     entryWalk: 0.30, entryDive: 0.12, diveHeight: 24, splashSize: 22,
