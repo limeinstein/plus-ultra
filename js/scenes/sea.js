@@ -61,7 +61,7 @@
     if (arg.resume && arg.msg) UI.toast(arg.msg, 'info');
     st.wind = R.wind(s.loc.lon, s.loc.lat, s.date, 0);
     st.windVis = { dir: st.wind.dir, spd: st.wind.spd };
-    if (G.ShipSprite) G.ShipSprite.preload(seaShips().map(function (sh) { return sh.type; }), 3000);
+    if (G.ShipSprite) G.ShipSprite.preload(seaShips().map(function (sh) { return sh.type; }), 3000, true);
     buildUI();
     // 항구에서 자동항해할 곳을 정하고 출항했으면 바로 그 항구로 (js/city/harbor.js H.depart)
     if (arg.depart != null && arg.autoTo != null && G.CITY_DATA[arg.autoTo]) setCityTarget(G.CITY_DATA[arg.autoTo]);
@@ -774,14 +774,14 @@
   function spawnNpcs() {
     var s = S(), l = s.loc;
     // 탐험가의 함대(항로 위)·적대국의 추격 함대 (js/systems/seafolk.js)
-    if (G.Fakes) { var chN = G.Fakes.spawnChaser(st.npcs); if (chN) { st.npcs.push(chN); if (G.ShipSprite) G.ShipSprite.want(chN.ships); return; } }   // 이중 계약에 화난 후원자의 추격자
-    if (G.SeaFolk) { var sfN = G.SeaFolk.spawn(st.npcs); if (sfN) { st.npcs.push(sfN); if (G.ShipSprite) G.ShipSprite.want(sfN.ships); return; } }
+    if (G.Fakes) { var chN = G.Fakes.spawnChaser(st.npcs); if (chN) { st.npcs.push(chN); if (G.ShipSprite) G.ShipSprite.want(chN.ships, true); return; } }   // 이중 계약에 화난 후원자의 추격자
+    if (G.SeaFolk) { var sfN = G.SeaFolk.spawn(st.npcs); if (sfN) { st.npcs.push(sfN); if (G.ShipSprite) G.ShipSprite.want(sfN.ships, true); return; } }
     // 왕명: 왕녀를 붙잡아 간 해적단(소굴 앞바다)·나포할 나라의 배 (js/systems/court.js)
-    if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships); return; } }
+    if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships, true); return; } }
     // 사라진 왕녀: 레반트의 바르바리 해적 함대·홍해 요새의 함대 (js/systems/princess.js)
-    if (G.Princess) { var prN = G.Princess.spawn(st.npcs); if (prN) { st.npcs.push(prN); if (G.ShipSprite) G.ShipSprite.want(prN.ships); return; } }
+    if (G.Princess) { var prN = G.Princess.spawn(st.npcs); if (prN) { st.npcs.push(prN); if (G.ShipSprite) G.ShipSprite.want(prN.ships, true); return; } }
     // 여급의 귀띔: 그 앞바다에 들어서면 일러 준 상선대·군함대·해적이 나타난다 (js/systems/maidtip.js)
-    if (G.MaidTip) { var mtN = G.MaidTip.spawn(st.npcs); if (mtN) { st.npcs.push(mtN); if (G.ShipSprite) G.ShipSprite.want(mtN.ships); return; } }
+    if (G.MaidTip) { var mtN = G.MaidTip.spawn(st.npcs); if (mtN) { st.npcs.push(mtN); if (G.ShipSprite) G.ShipSprite.want(mtN.ships, true); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
     var pr = pirateChance(l.lon, l.lat);
@@ -804,7 +804,7 @@
       if (G.TradeFleet) G.TradeFleet.decorate(npc);       // 뱃길 위의 상선은 그 항로의 상선대 (js/systems/tradefleets.js)
       if (G.SeaFolk) G.SeaFolk.decorate(npc, st.npcs);   // 상선의 나라·선장(항해사), 적대국 함대는 덤빈다
       st.npcs.push(npc);
-      if (G.ShipSprite) G.ShipSprite.want(ships);   // 화면에 들어오기 전에 그 배 그림을 풀어 둔다
+      if (G.ShipSprite) G.ShipSprite.want(ships, true);   // 3D 대체용 시트가 필요한 배만 미리 푼다
       return;
     }
   }
@@ -2057,7 +2057,7 @@
     if (G.SeaMonsters) G.SeaMonsters.drawSea(ctx, toScreen, z, st.t);
     // npcs
     st.npcs.forEach(function (n) {
-      if (G.ShipSprite && n.ships) G.ShipSprite.want(n.ships);
+      if (G.ShipSprite && n.ships) G.ShipSprite.want(n.ships, true);
       var NP = npcViewPx(), margin = Math.max(50, NP * 3);
       var p = toScreen(n.lon, n.lat); if (p[0] < -margin || p[0] > 1600 + margin || p[1] < -margin || p[1] > 900 + margin) return;
       var kk = NPC_KIND[n.kind];

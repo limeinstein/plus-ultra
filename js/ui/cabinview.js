@@ -232,9 +232,10 @@
   /** 추천 순위 (맞는 특기가 있는 사람 가운데 세 명까지) {부하 id: 1~3} */
   function recRanks(c) { var r = {}; recommend(c).filter(function (o) { return o.score > 0; }).slice(0, 3).forEach(function (o, k) { r[o.m.id] = k + 1; }); return r; }
   function recTag(rank) { return rank === 1 ? ' <span class="tag cb-rec">★ 추천</span>' : rank ? ' <span class="tag">추천 ' + rank + '</span>' : ''; }
-  function fitNote(m, c) { return c.lang ? langNote(m) : skillNote(m, c); }
+  function fitNote(m, c) { return c.id === 'hold' ? '거주용' : c.lang ? langNote(m) : skillNote(m, c); }
   /** 방을 눌렀을 때 보여 줄 추천 한 줄 */
   function recLine(c) {
+    if (c.id === 'hold') return '<br><span class="muted">보직이 없는 부하가 머무는 선실입니다.</span>';
     var top = recommend(c).filter(function (o) { return o.score > 0; }).slice(0, 3);
     if (!top.length) return '<br><span class="muted">추천: 이 방에 맞는 ' + (c.lang ? '말(제독이 모르는 말)' : '특기') + '을 가진 부하가 없습니다.</span>';
     return '<br>★ <b>추천</b> ' + top.map(function (o, k) {
@@ -288,7 +289,7 @@
     el.title = roomTitle(c);
     var h = '<div class="cb-h"><i class="cb-no">' + i + '</i>' + G.icon(c.icon) + '<b>' + c.name + '</b>' + powTag(o.pow) + '</div>';
     if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + skillNote(m, c) + '</small>' + growShort(m) + '</span></div>';
-    else h += '<div class="cb-none">' + (c.id === 'hold' ? (o.yard ? '눌러서 쓰임을 정한다' : '조선소에서 고친다') : c.noStaff ? (o.storeLine || '짐칸') : '비어 있음') + '</div>';
+    else h += '<div class="cb-none">' + (c.id === 'hold' ? (o.yard ? '부하 배치 · 선실 개조' : '비어 있음 · 부하 배치 가능') : c.noStaff ? (o.storeLine || '짐칸') : '비어 있음') + '</div>';
     el.innerHTML = h;
     var art = artImage('cabins/' + c.id, 'cb-card-art', '') || (c.art ? artImage('cabins/' + c.art, 'cb-card-art', '') : null);   // 전용 그림이 없는 새 방은 비슷한 방 그림을 빌린다
     if (art) { el.classList.add('has-art'); el.insertBefore(art, el.firstChild); }
@@ -329,7 +330,7 @@
       opts.push({ label: c.name + fitTag(m, c), right: fitNote(m, c) + (o && o !== m ? ' · ' + G.MATE[o.id].name + '와 교대' : o === m ? ' · 지금 이 자리' : ''), value: 'r:' + t, icon: c.icon, desc: c.desc, disabled: o === m });
     });
     rooms.forEach(function (t, i) {
-      if (t === 'hold' || CB().noStaff(t)) return;
+      if (CB().noStaff(t)) return;
       var c = G.CABIN[t], o = CB().occupant(i);
       opts.push({ label: c.name + fitTag(m, c), right: fitNote(m, c) + (o && o !== m ? ' · ' + G.MATE[o.id].name + ' 대신' : o === m ? ' · 지금 이 자리' : ''), value: 'c:' + i, icon: c.icon, desc: c.desc + (c.fx ? ' — ' + c.fx : ''), disabled: o === m });
     });
@@ -447,7 +448,6 @@
     if (to.k === 'none') { if (m.room != null) CB().place(m, null); if (ROLE_OF_INV(m.role)) m.role = 'none'; return; }
     if (to.k === 'captain') { UI.toast('함장실은 제독의 방입니다.', 'crown'); return; }
     if (to.k === 'room' && CB().noStaff(CB().rooms()[to.i])) { UI.toast('창고에는 사람을 두지 않습니다.', 'chest'); return; }
-    if (to.k === 'room' && CB().rooms()[to.i] === 'hold') { UI.toast('빈 선실입니다. 조선소의 「선실 개조」에서 쓰임을 정하면 사람을 둘 수 있습니다.', 'hammer'); return; }
     if (m.role === 'captain' && !await UI.confirm(G.MATE[m.id].name + '은(는) 지금 다른 배의 선장입니다. 기함으로 데려오겠습니까?', '데려온다', '그만둔다')) return;
     if (to.k === 'fixed') setRole(m, ROLE_OF[to.type]);
     else if (to.k === 'room') CB().place(m, to.i);
@@ -486,7 +486,7 @@
     var pop = U.el('div', 'cb-pop');
     pop.innerHTML = '<div class="cb-pop-h">' + G.icon(c.icon) + '<b>' + (i ? i + '. ' : '') + c.name + '</b>' + powTag(pw) + '<button class="cb-pop-x" title="닫기 (Esc)">×</button></div>' +
       '<div class="cb-pop-d">' + c.desc + skillLine(c) + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') +
-      (rec.some(function (x) { return x.score > 0; }) ? '' : '<br><span class="warn-text">이 방에 맞는 ' + (c.lang ? '말(제독이 모르는 말)' : '특기') + '을 가진 부하가 없습니다.</span>') + '</div>' +
+      (c.id === 'hold' || rec.some(function (x) { return x.score > 0; }) ? '' : '<br><span class="warn-text">이 방에 맞는 ' + (c.lang ? '말(제독이 모르는 말)' : '특기') + '을 가진 부하가 없습니다.</span>') + '</div>' +
       '<div class="cb-pop-list"></div><div class="cb-pop-f"></div>';
     var list = pop.querySelector('.cb-pop-list');
     if (!rec.length) list.innerHTML = '<div class="muted">부하가 없습니다. 술집에서 부하를 찾아보십시오.</div>';
@@ -513,7 +513,7 @@
     closePop(win);
     var d = G.MATE[m.id], rooms = CB().rooms(), ent = [];
     ['adjutant', 'helm', 'lookout'].forEach(function (t) { ent.push({ type: t, i: null, c: G.CABIN[t], o: CB().roleMate(ROLE_OF[t]) }); });
-    rooms.forEach(function (t, i) { if (t !== 'hold' && !CB().noStaff(t)) ent.push({ type: t, i: i, c: G.CABIN[t], o: CB().occupant(i) }); });
+    rooms.forEach(function (t, i) { if (!CB().noStaff(t)) ent.push({ type: t, i: i, c: G.CABIN[t], o: CB().occupant(i) }); });
     ent.forEach(function (e, k) { e.k = k; e.score = fitScore(m, e.c); });
     ent.sort(function (a, b) { return (b.score - a.score) || (a.k - b.k); });
     var pop = U.el('div', 'cb-pop cb-pop-mate');
@@ -705,7 +705,7 @@
         var c = G.CABIN[t], m = CB().occupant(i), act = { k: 'room', i: i };
         var p = pin(c, i, spots[i - 1], m), cd = card(c, i, m, { pow: CB().powerAt(i), yard: opts.yard, storeLine: c.noStaff ? storeLine(i) : null });
         [p, cd].forEach(function (el) {
-          el.onclick = function () { if (t === 'hold' || CB().noStaff(t)) win.close(act); else popRoom(win, el, t, i, opts); };   // 빈 선실·창고는 고치기(조선소)·알림
+          el.onclick = function () { if (CB().noStaff(t)) win.close(act); else popRoom(win, el, t, i, opts); };   // 빈 선실도 부하 배치 팝업을 연다
           dragFrom(el, m); dropOn(el, act); hover(el, i);
         });
         stage.appendChild(p); cards.appendChild(cd);
@@ -748,8 +748,8 @@
       else if (a.k === 'room') {
         var type = rooms[a.i];
         if (a.i === 0) await pickFor('deck', 0);
-        else if (!opts.yard) { if (type === 'hold') UI.toast('빈 선실입니다. 조선소의 「선실 개조」에서 쓰임을 정할 수 있습니다.', 'hammer'); else if (CB().noStaff(type)) UI.toast('창고 — ' + storeLine(a.i) + '. 사람을 두지 않는 방입니다. 다른 방으로 고치는 일은 조선소에서.', 'chest', 5200); else await pickFor(type, a.i); }
-        else if (type === 'hold' || CB().noStaff(type)) await remodel(a.i, opts.yard);
+        else if (!opts.yard) { if (CB().noStaff(type)) UI.toast('창고 — ' + storeLine(a.i) + '. 사람을 두지 않는 방입니다. 다른 방으로 고치는 일은 조선소에서.', 'chest', 5200); else await pickFor(type, a.i); }
+        else if (CB().noStaff(type)) await remodel(a.i, opts.yard);
         else {
           var w = await UI.choose(G.CABIN[type].name, [{ label: '부하를 배치한다', right: recShort(G.CABIN[type]), value: 'p', icon: 'people' }, { label: '다른 방으로 고친다', value: 'r', icon: 'hammer' }], { width: 420 });
           if (w === 'p') await pickFor(type, a.i); else if (w === 'r') await remodel(a.i, opts.yard);

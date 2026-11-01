@@ -385,7 +385,7 @@
       var here = st;
       G.Img.load('battle/rough-sea').then(function (im) { if (im && st === here) { st.seaArt = im; st.seaArtRect = artRect(im); } });
     }
-    if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000);
+    if (G.ShipSprite) G.ShipSprite.preload(st.ships.map(function (b) { return b.type; }), 3000, true);
     if (G.SeaMonsterSprite) G.SeaMonsterSprite.preload(st.ships.filter(function (b) { return b.monster; }).map(function (b) { return b.monster; }));
     if (G.WaterSplash) G.WaterSplash.preload();
     buildUI();

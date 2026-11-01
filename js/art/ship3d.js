@@ -110,13 +110,19 @@
     }
   }
   P.supports=function(id){return !!(G.ShipModels&&G.ShipModels.has(id));};
+  // 미리 읽을 대체 시트 판정용. 실제 생성·그리기 실패는 draw의 반환값으로 처리한다.
+  P.canRender=function(id){var c=cfg();return !!(c&&c.enabled&&P.supports(id)&&!failure&&!failedTypes[id]&&(!rt||(!rt.lost&&!rt.renderer.getContext().isContextLost())));};
   P.beginFrame=function(){
     var c=cfg();if(!c||!c.enabled)return false;
-    var r=setup();if(!r||r.lost)return false;r.frame++;r.inFrame=true;r.drawn=0;return true;
+    var r=setup();if(!r||r.lost)return false;r.frame++;r.inFrame=true;r.drawn=0;r.neededPixels=0;return true;
   };
   P.endFrame=function(){
     if(!rt||!rt.inFrame)return;
-    trimModels(rt,Math.max(0,cfg().idleModels||0));rt.inFrame=false;
+    var c=cfg();
+    // 확대를 줄인 뒤에는 화면 전체의 최대 크기가 안정됐을 때 한 번만 줄인다.
+    rt.smallFrames=rt.neededPixels>0&&rt.neededPixels<rt.buffer*c.bufferShrinkRatio?(rt.smallFrames||0)+1:0;
+    if(rt.smallFrames>=c.bufferShrinkFrames){rt.renderer.setSize(rt.neededPixels,rt.neededPixels,false);rt.buffer=rt.neededPixels;rt.smallFrames=0;}
+    trimModels(rt,Math.max(0,c.idleModels||0));rt.inFrame=false;
   };
   // 상세 감상 화면도 항해와 같은 생성·묶음·자원 해제 경로를 사용한다.
   P.buildInspection=function(id){
@@ -136,13 +142,17 @@
     var r=setup();if(!r||r.lost||r.renderer.getContext().isContextLost()||!select(r,spec.type))return false;
     var start=performance.now(),tx=ctx.getTransform(),dev=Math.hypot(tx.a,tx.b),scale=len/c.baseLen;
     var pixels=clamp(Math.ceil(r.span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);
-    if(pixels!==r.buffer){r.renderer.setSize(pixels,pixels,false);r.buffer=pixels;}
+    // 큰 배에 맞춰 확보한 버퍼를 재사용한다. 배마다 캔버스를 줄였다 늘리면 GPU가 앞선 그림을 기다리며 멈칫한다.
+    // 작은 배는 필요한 영역에 같은 해상도로 그려 잘라 옮긴다(돛·망루의 픽셀 밀도는 그대로).
+    if(pixels>r.buffer||(!r.inFrame&&pixels!==r.buffer)){r.renderer.setSize(pixels,pixels,false);r.buffer=pixels;}
+    r.neededPixels=Math.max(r.neededPixels||0,pixels);
+    r.renderer.setViewport(0,0,pixels,pixels);r.renderer.setScissor(0,0,pixels,pixels);r.renderer.setScissorTest(true);
     r.sun.castShadow=c.shadows&&len>=c.shadowMinLen;animate(r,spec,t||0);r.yaw.rotation.y=angle;r.renderer.render(r.scene,r.camera);
     ctx.save();ctx.translate(x,y);ctx.rotate(-Math.atan2(Math.sin(angle)*c.elevation,Math.cos(angle)));ctx.fillStyle='rgba(0,14,28,.24)';ctx.beginPath();
     ctx.ellipse(0,len*.035,len*(r.ship.s.L/c.baseLen)*.47,len*(r.ship.s.W/48)*.13,0,0,PI2);ctx.fill();ctx.restore();
-    ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(r.renderer.domElement,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();
+    ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();
     r.frames++;r.drawn++;r.stats={type:r.type,frames:r.frames,switches:r.switches,calls:r.renderer.info.render.calls,triangles:r.renderer.info.render.triangles,
-      geometries:r.renderer.info.memory.geometries,textures:r.renderer.info.memory.textures,programs:r.renderer.info.programs.length,buffer:r.buffer,span:r.span,
+      geometries:r.renderer.info.memory.geometries,textures:r.renderer.info.memory.textures,programs:r.renderer.info.programs.length,buffer:r.buffer,renderPixels:pixels,span:r.span,
       cpuMs:performance.now()-start,buildMs:r.buildMs,heading:angle,furl:spec.furl||0,sails:r.rig.sails.length,oars:r.rig.oars};return true;
   };
   var PI2=Math.PI*2;

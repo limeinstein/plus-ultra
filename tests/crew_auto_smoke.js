@@ -76,15 +76,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const onShip = s.mates.filter(m => m.role === 'crew')[0], lo0 = onShip.loyal;
       CB.monthly(false);
       const kept = onShip.loyal;
-      // 배 한 척만 남기고 기함 선실을 모두 빈 선실로 → 자리가 모자란다
+      // 배 한 척만 남기고 기함 선실을 모두 빈 선실로 → 빈 선실까지 채운 뒤 남는 사람만 대기
       s.fleet.ships.length = 1; const rooms = CB.rooms(); for (let i = 1; i < rooms.length; i++) rooms[i] = 'hold';
       G.R.tidyCaptains(); CB.tidy(); CA.refresh();
       const idle = s.mates.filter(m => CA.idle(m)); const lo1 = idle.map(m => m.loyal);
       CB.monthly(false);
-      return { lo0, kept, n: idle.length, drop: idle.map((m, k) => lo1[k] - m.loyal), deck: !!CB.occupant(0), crewLeft: s.mates.filter(m => m.role === 'crew' || m.role === 'captain').length };
+      return { lo0, kept, n: idle.length, expected: Math.max(0, s.mates.filter(m => !CA.tavernRole(m)).length - rooms.length), drop: idle.map((m, k) => lo1[k] - m.loyal), deck: !!CB.occupant(0), holdsFull: rooms.slice(1).every((t, i) => CB.occupant(i + 1)), crewLeft: s.mates.filter(m => m.role === 'crew' || m.role === 'captain').length };
     });
     ok(b.kept === b.lo0, '다른 배 자리의 부하는 한 달 뒤에도 충성 그대로 (' + b.lo0 + ' → ' + b.kept + ')');
-    ok(b.crewLeft === 0 && b.deck && b.n > 0 && b.drop.every(d => d === 2), '배를 잃고 빈 선실뿐이면 갑판 1명만 자리 · 대기 ' + b.n + '명은 충성 −2');
+    ok(b.crewLeft === 0 && b.deck && b.n === b.expected && (!b.n || b.holdsFull) && b.drop.every(d => d === 2), '배를 잃어도 빈 선실에 먼저 배치 · 자리 부족으로 남은 대기 ' + b.n + '명만 충성 −2');
 
     console.log('— 기함 「자동 배치」 · 기함 바꾸기 · 옛 저장');
     const c = await E(() => {

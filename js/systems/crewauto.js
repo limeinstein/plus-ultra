@@ -1,6 +1,6 @@
 /* 배마다의 자리와 자동 배치 (G.CrewAuto) — 2026-10-28 사용자 요청
    · 기함: 제독이 선장(함장실). 부관·항해사·측량사·통역·경리는 술집 「부하편성」에서 정한다.
-           그 밖의 선실(갑판·요리실 …)은 손으로 두거나 선실 화면의 「자동 배치」로 능력에 맞게 채운다.
+           그 밖의 선실(갑판·요리실 …)은 능력에 맞게 채우고, 남는 부하는 빈 선실에 한 명씩 둔다.
    · 다른 배: 선장 · 조타수 · 갑판 · 파수꾼 네 자리와 그 배 크기만큼의 선실(G.Cabins.slots). 사람은 늘 자동으로, 능력에 맞게 앉힌다.
      선장은 예전처럼 그 배를 몬다(R.captain — 항해술·포술·검술·조선기술·무력).
      조타수·갑판·선실은 함대 효과가 없다 — 「할 일 없는 부하」가 되지 않게 해 달마다 충성이 떨어지지 않을 뿐이다.
@@ -114,6 +114,7 @@
   /** 한 사람을 한 자리에 앉혔을 때의 값: 기함 방(효과) > 다른 배 선장 > 조타수·갑판·파수꾼 > 선실. 같으면 지금 자리 그대로 */
   function value(m, st) {
     var k = K(), keep = isAt(m, st) ? 0.01 : 0;
+    if (st.k === 'room' && st.type === 'hold') return (k.berth == null ? 0.1 : k.berth) + keep;   // 직무 배치 뒤 남은 부하는 빈 선실로
     if (st.k === 'room') return (k.flag == null ? 1 : k.flag) + CA.roomFit(m, st.type) + keep;
     if (st.k === 'captain') return (k.cap == null ? 1.5 : k.cap) + CA.captainFit(m) + keep;
     if (st.k === 'post') return (k.post == null ? 0.3 : k.post) + 0.1 * CA.postFit(m, st.post) + keep;
@@ -121,24 +122,24 @@
   }
   /** 손으로 정한 다른 배 선장 (자동 채우기·자동 배치가 건드리지 않는다) */
   CA.locked = function (m) { return !!(m && m.capLock && m.role === 'captain'); };
-  /** 움직일 사람: fill — 자리 없는 사람과 다른 배 사람 · all — 술집 역할이 없는 모두. 둘째 부인처럼 숨어 있는 사람·손으로 정한 선장은 빼고 */
+  /** 움직일 사람: fill — 자리 없는 사람·빈 선실 거주자·다른 배 사람 · all — 술집 역할이 없는 모두. 숨어 있는 사람·손으로 정한 선장은 빼고 */
   function poolOf(mode) {
     var s = S();
     return s.mates.filter(function (m) {
       if (!m || !G.MATE[m.id] || CA.tavernRole(m) || CA.locked(m)) return false;
       if (R().mateHidden && R().mateHidden(m)) return false;
       if (mode === 'all') return true;
-      return CA.idle(m) || m.role === 'captain' || m.role === 'crew';
+      return CA.idle(m) || m.roomType === 'hold' || m.role === 'captain' || m.role === 'crew';
     });
   }
-  /** 앉힐 자리: 기함의 사람을 둘 수 있는 방(회계실은 경리의 방이라 뺀다) — fill이면 빈 방만 · 다른 배마다 선장·조타수·갑판·파수꾼·선실 */
+  /** 앉힐 자리: 기함 직무 선실·거주용 빈 선실(회계실은 제외) — 기존 직무 선실 배치는 유지 · 다른 배마다 선장·조타수·갑판·파수꾼·선실 */
   function seatsOf(mode, pool) {
     var out = [];
     if (CB()) {
       CB().rooms().forEach(function (t, i) {
-        if (t === 'hold' || t === 'account' || CB().noStaff(t)) return;
+        if (t === 'account' || CB().noStaff(t)) return;
         var occ = CB().occupant(i);
-        if (occ && (mode === 'fill' || pool.indexOf(occ) < 0)) return;
+        if (occ && pool.indexOf(occ) < 0) return;
         out.push({ k: 'room', i: i, type: t });
       });
     }

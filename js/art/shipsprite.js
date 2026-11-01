@@ -92,11 +92,12 @@
   };
 
   /** 미리 읽기: 배 종류 목록(중복·없는 것은 건너뜀). 다 준비되면(또는 ms가 지나면) 풀린다 */
-  S.preload = function (ids, ms) {
+  function uses3D(id, prefer3d) { return prefer3d && G.Ship3D && G.Ship3D.canRender && G.Ship3D.canRender(id); }
+  S.preload = function (ids, ms, prefer3d) {
     var seen = {}, ps = [];
     (ids || []).forEach(function (id) {
       var meta = G.SHIP_ART && G.SHIP_ART[id];
-      if (!id || seen[id] || !meta || !I || !I.has(meta.key)) return;
+      if (!id || seen[id] || !meta || !I || !I.has(meta.key) || uses3D(id, prefer3d)) return;
       seen[id] = true; ps.push(prepare(meta.key));
     });
     if (!ps.length) return Promise.resolve();
@@ -104,11 +105,11 @@
     return ms ? Promise.race([all, new Promise(function (r) { setTimeout(r, ms); })]) : all;
   };
   /** 곧 그릴 배(화면 밖에서 다가오는 배 등): 기다리지 않고 읽기만 시작한다. 매 장면 불러도 가볍다 */
-  S.want = function (ids) {
+  S.want = function (ids, prefer3d) {
     if (!ids) return;
     for (var i = 0; i < ids.length; i++) {
       var meta = G.SHIP_ART && G.SHIP_ART[ids[i]];
-      if (!meta || !I) continue;
+      if (!meta || !I || uses3D(ids[i], prefer3d)) continue;
       var sh = sheets[meta.key];
       if (sh) sh.used = nowS(); else if (I.has(meta.key)) prepare(meta.key);
     }

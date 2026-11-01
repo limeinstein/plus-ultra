@@ -161,7 +161,7 @@
     if (LD) LD.text('배와 탐험대를 꾸리는 중…');
     await sleepFrame();
     var ps = [], fl = s && s.fleet;
-    if (G.ShipSprite && fl) ps.push(G.ShipSprite.preload(fl.ships.map(function (sh) { return sh.type; }), 4000));
+    if (G.ShipSprite && fl) ps.push(G.ShipSprite.preload(fl.ships.map(function (sh) { return sh.type; }), 4000, true));
     if (G.VoyageFX && G.VoyageFX.preload) G.VoyageFX.preload();
     if (G.EventFx) { G.EventFx.preload('sea'); G.EventFx.preload('land'); }
     if (G.Party && G.Party.preloadSprites) G.Party.preloadSprites((s.loc && s.loc.mount && s.loc.mount.id) || 'walk');
@@ -211,7 +211,7 @@
     if (Game.scene && Game.scene.exit) Game.scene.exit(name);   // 바다↔해전처럼 장면 사이에 이어져야 하는 날씨·소리를 위해 다음 장면을 알려 준다
     UI.clearScreen();
     Game.sceneName = name;
-    if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes());   // 함대 배 그림을 미리 풀어 둔다 (바다에 나가기 전에)
+    if (G.ShipSprite) G.ShipSprite.want(G.ShipSprite.fleetTypes(), true);   // 3D를 쓸 수 없을 때만 대체 배 그림을 미리 푼다
     Game.scene = Game.scenes[name];
     if (Game.scene && Game.scene.enter) Game.scene.enter(arg);
   };

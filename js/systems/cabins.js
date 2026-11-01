@@ -48,7 +48,7 @@
         if (m.room == null) return;
         var want = m.roomType, i = -1;
         for (var k = 0; k < rooms.length; k++) if (rooms[k] === want && !taken[k]) { i = k; break; }
-        if (i >= 0 && want !== 'hold') { m.room = i; taken[i] = 1; }
+        if (i >= 0 && !CB.noStaff(want)) { m.room = i; taken[i] = 1; }
         else { delete m.room; delete m.roomType; if (m.role === 'purser' && want === 'account') m.role = 'none'; lost.push(m); }
       });
       if (!first && lost.length && G.UI) G.UI.toast('기함이 바뀌어 ' + lost.map(function (m) { return G.MATE[m.id].name; }).join('·') + '의 방이 없어졌다 — 선실에서 다시 배치하십시오.', 'people', 6500);
@@ -61,7 +61,7 @@
     var rooms = CB.rooms(), seen = {};
     s.mates.forEach(function (m) {
       if (m.room == null) return;
-      if (FIXED_ROLE[m.role] || m.role === 'captain' || m.role === 'crew' || m.room >= rooms.length || seen[m.room] || rooms[m.room] === 'hold' || CB.noStaff(rooms[m.room]) || (rooms[m.room] === 'account' && m.role !== 'purser')) { delete m.room; delete m.roomType; return; }
+      if (FIXED_ROLE[m.role] || m.role === 'captain' || m.role === 'crew' || m.room >= rooms.length || seen[m.room] || CB.noStaff(rooms[m.room]) || (rooms[m.room] === 'account' && m.role !== 'purser')) { delete m.room; delete m.roomType; return; }
       seen[m.room] = 1; m.roomType = rooms[m.room];
     });
   };
@@ -94,7 +94,7 @@
   CB.place = function (m, i) {
     var s = S(), rooms = CB.rooms();
     if (i == null) { if (m.role === 'purser' && m.roomType === 'account') m.role = 'none'; delete m.room; delete m.roomType; return; }
-    var type = rooms[i]; if (!type || type === 'hold' || CB.noStaff(type)) return;   // 창고처럼 사람을 두지 않는 방
+    var type = rooms[i]; if (!type || CB.noStaff(type)) return;   // 빈 선실에는 거주할 수 있고, 창고에는 사람을 두지 않는다
     var old = CB.occupant(i);
     if (old && old !== m) CB.place(old, null);
     if (m.roomType === 'account' && type !== 'account' && m.role === 'purser') m.role = 'none';
@@ -111,7 +111,7 @@
     var rooms = CB.rooms(); if (i <= 0 || i >= rooms.length || !G.CABIN[type] || G.CABIN[type].fixed) return false;
     var m = CB.occupant(i);
     rooms[i] = type;
-    if (m) { if (type === 'hold' || CB.noStaff(type)) CB.place(m, null); else CB.place(m, i); }
+    if (m) { if (CB.noStaff(type)) CB.place(m, null); else CB.place(m, i); }
     return true;
   };
 
@@ -195,10 +195,10 @@
     return rs.main.map(function (k) { return '★' + nm(k); }).concat(rs.sub.map(function (k) { return '☆' + nm(k); })).join(' · ') + (rs.sub.length ? ' <small class="muted">(☆는 절반만 친다)</small>' : '');
   };
   function roomPower(c, m) {
-    if (!m || !G.MATE[m.id]) return 0;
+    if (!m || !G.MATE[m.id] || c.id === 'hold') return 0;   // 빈 선실은 거주용이며 직무 효과는 없다
     return (1 + CB.roomLevel(c, m)) * CB.eff(m);   // 주 특기는 그대로, 보조 특기는 절반 (예전: 방의 특기 가운데 가장 높은 것 — 갑판의 검술과 운용술이 같게 쳐졌다)
   }
-  /** 방 하나의 힘: 비었으면 0, 사람이 있으면 (1 + 특기 단계) × 충성 효율 */
+  /** 방 하나의 힘: 비었거나 거주용 빈 선실이면 0, 직무 선실에 사람이 있으면 (1 + 특기 단계) × 충성 효율 */
   CB.powerAt = function (i) { var rooms = CB.rooms(), c = G.CABIN[rooms[i]]; return c ? roomPower(c, CB.occupant(i)) : 0; };
   /** 이 종류 방의 힘을 모두 더한 값 (상한 G.BALANCE.cabins.cap). 고정 자리는 그 역할을 맡은 사람으로 센다 */
   CB.power = function (type) {
