@@ -221,7 +221,32 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
-    navalField: { radius: 3200, separation: 1800, spacing: 180, monsterSeparation: 1100, lakeSeparation: 760 }, // 넓은 해전 전장·교전 전 접근 거리
+    navalField: { startMargin: 120, radius: 3200, separation: 520, spacing: 160, monsterSeparation: 700, lakeSeparation: 520 }, // 전장은 넓게, 두 함대는 접현할 수 있게 가까이서 시작
+    navalControl: { turn: 1.1, accel: 0.8, decel: 1, lateral: 0.22, turnSlow: 0.35, slowRadius: 100 },
+    pirateSurrender: { base: 0.22, damage: 0.3, crewLoss: 0.18, pressure: 0.12, near: 800, min: 0.12, max: 0.8 },
+    // 산지에서 먼 시장의 운송·희소 가치. 가까운 산지가 있으면 그 거리만 쓰므로 우회 항해로 값이 뛰지 않는다.
+    oceanTrade: { premium: [1, 1, 1.08, 1.3, 1.85, 2.5], bulkDemand: 0.5 },
+    sakoku: { restrict: 16350101, portuguese: 16390801, dejima: 16410501, silverBan: 16680101, nagasaki: 191, stock: 0.6, routeK: 0.35, transitionK: 0.2 },
+    imjinEnd: 15990101, // 노량은 1598년. 1599년부터 새 전쟁 사건·봉쇄를 끝낸다.
+    // 도시 점령은 성문 돌파와 별개. 첫 수비대와 두 차례 증원군을 모두 격퇴해야 한다.
+    conquest: {
+      from: 15101125, joseonFrom: 15920523, notoriety: 15,
+      // 지역 항로가 먼저 알려져야 점령을 시도한다. 지중해·중근동·서아프리카는 처음부터 알려진 땅.
+      regionRoutes: { 5: 'indiaroute', 6: 'china', 7: 'indiaroute', 8: 'malacca', 9: 'zipang', 10: 'westroute' },
+      // 같은 문화권 번호 안의 바다를 구별한다. 위에서부터 먼저 맞는 구역을 쓴다.
+      routeAreas: [
+        { region: 3, lat: [-90, -10], disc: 'capegood' },
+        { region: 3, lon: [30, 180], disc: 'capegood' },
+        { region: 8, lon: [130, 180], lat: [-90, -10], disc: 'australia' },
+        { region: 8, lon: [110, 180], disc: 'spiceis' },
+        { region: 8, lon: [104, 180], lat: [-90, 0], disc: 'spiceis' },
+        { region: 10, lon: [-180, -110], disc: 'newstrait' },
+        { region: 10, lon: [-180, -65], lat: [-90, 0], disc: 'newstrait' }
+      ],
+      waves: { small: [1000, 500, 500], medium: [8000, 4000, 4000], large: [25000, 15000, 15000], capital: [40000, 30000, 30000], holy: [40000, 40000, 40000] },
+      // 주요 수도는 국가 방위군이 계속 집결하므로 점령할 수 없다. 교역항의 궁전(P)과 구별한다.
+      capitals: ['북경', '남경', '한양', '쿄토', '이스탄불', '카이로', '델리', '비자야나가르', '아유타야', '타브리즈', '이스파한', '사마르칸트', '테노치티틀란', '쿠스코']
+    },
     // 직업의 잠재 특성: 새 발견·실제 거래·실제 전투에만 적용한다. 하루 한도는 저장에 남는다.
     career: {
       explorer: { fatigue: 2, daily: 4 },
@@ -346,6 +371,8 @@
     // 부하 후보 특기 늘리기 (js/data/renown.js): base = 모든 후보에게 얹는 단계, byTier[지명도 0~4] = 실존 인물에게 더, wander = 철새·고장 사람 [최소, 최대], wanderLucky = 한 단계 더 받을 확률, cap = 한 특기 최고 단계
     mateSkills: { base: 1, byTier: [0, 1, 2, 3, 4], wander: [1, 2], wanderLucky: 0.2, cap: 3 },
     mates: { warnMonths: 6, low: 40, lowEff: 0.75, veryLow: 20, veryLowEff: 0.5, idleLoyal: 2, adjutantLoyal: 1, settle: 70, treatLoyal: 3, persuade: 0.25, persuadeSpeech: 0.12, persuadeLoyal: 25 },
+    // 해고: 0.5% 충성 서약. 함께한 기간 5년 미만이면 항구에 다시 등장, 재등용 급료 +25%(최소 +10).
+    mateDismiss: { devotionChance: 0.005, devotionWage: 10, returnMaxDays: 1825, returnStayDays: 60, rehireRate: 0.25, rehireMin: 10 },
     // 해적 세기가 가득 차는 명성(예전 4000 — 첫해에 이미 가득 찼다), 해적선 수가 한 척 느는 명성 간격(예전 1200), 해적선 한 척을 꺾은 명성(예전 25)
     pirateFame: 8000, pirateCountFame: 2000, pirateFameGain: 40,
     supplyWarn: { critical: 7, toastGap: 10, toastDays: 15 },   // 항해 중 보급 경고: 창은 한 항해에 한 번 + 급할 때(남은 보급 critical일 아래) 한 번, 그 사이는 크게 벌어졌을 때만 귀퉁이 알림 (2026-10-25)
@@ -457,6 +484,8 @@
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)
     life: { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2, kidBond: 3 },
+    // 알림(갈색 쪽지 — js/ui/ui.js UI.toast): 보이는 시간 = baseMs + 글자 수×perChar (minMs~maxMs) · 같은 말 다시 띄우지 않는 시간 · 「지난 소식」에 남기는 수
+    notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, keep: 40 },
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다
     eraEnd: { y: 1700, m: 1, d: 1 },
     // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.
@@ -514,6 +543,10 @@
     seaAuto: { on: true, ms: 5000 },
     batchDeal: { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8, floor: 0.8, ceil: 1.2 },   // floor·ceil: 값 깎기와 일괄 흥정을 합쳐 사는 값은 시세 ×0.8 아래로, 파는 값은 ×1.2 위로 가지 않는다 (QA 2026-10-23)
     questLate: { k: 0.5, min: 20, max: 60 },
+    // 늦게 나온 책의 필사본: 1700년 전부터 있던 발견물인데 실린 책이 모두 after년 뒤에 나오면, 그 가운데 첫 책을 from년부터 도서관에서 읽는다 (js/data/clues.js G.bookOpenY)
+    bookEarly: { from: 1580, after: 1700 },
+    // 거절해도 다시 찾아오는 사건(돈키호테·심청·포카혼타스·무굴 디우의 포술장)이 다시 묻기까지의 날 수 — 첫 거절 뒤 30일, 두 번째 90일, 세 번째 1년, 그 뒤로는 5년마다 (js/core/util.js U.reaskDays)
+    reask: [30, 90, 365, 1825],
     noClueFind: { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 },
     birdRevisit: { years: 2, fameK: 0.10, radius: 0.65 }, // 조류·나비: 마지막 관찰로부터 2년 뒤 현장 재방문마다 최초 발견 명성의 10%
     chartSurvey: { max: 4 }, // 재탐사: 윤곽 → 강 → 산 → 지형. 시야 밖으로 나갔다 돌아와야 한 번 더 센다.
@@ -579,7 +612,7 @@
     //  envSpread: 우리 배들이 적을 감싼 각(라디안)이 이만큼(2척 / 3척 이상)이면 포위 · envelop: 포위한 적에게 포격 피해 + [2척, 3척 이상]
     //  focusR: 일제 공격에서 붙는 거리(사정거리 배수) · volley: 두 척 넘게 한 적을 함께 쏘면 피해 + · board: 선원이 적의 이만큼 배면 올라탄다
     //  gunR: 포격전에서 서는 거리(사정거리 배수) · gunKeep: 적이 이만큼 다가오면 물러난다 · guardR: 호위하는 배가 기함에서 떨어진 거리 · slotR: 자리에 왔다고 보는 거리
-    fleetOrders: { craneStep: 0.62, craneMax: 1.45, craneR: 0.72, envSpread: [1.6, 2.6], envelop: [0.2, 0.35], focusR: 0.55, volley: 0.15, board: 1.5, gunR: 1.05, gunKeep: 170, guardR: 120, slotR: 70 },
+    fleetOrders: { craneStep: 0.62, craneMax: 1.45, craneR: 0.72, envSpread: [1.6, 2.6], envelop: [0.2, 0.35], focusR: 0.55, volley: 0.15, board: 1.5, gunR: 0.82, gunKeep: 170, guardR: 120, slotR: 35 },
     // 시대의 유행·세상의 유행 (js/systems/era.js · js/data/eratrade.js)
     //  strength: 시대 수요 배수의 세기(1 = 자료 그대로) · worldPerYear: 저절로 이는 유행이 한 해에 몇 번 · worldMin: 그 시대 수요가 이만큼 넘는 물건만 · worldMult/worldDays: 그 유행의 값 배수·날
     //  discChance/discGoods/discMult/discDays: 발견이 알려졌을 때 유행이 일 확률·물건 수·배수·날 · spreadDays/spreadChance: 세상의 유행이 이웃 유럽 지역으로 번지는 때·확률

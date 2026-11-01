@@ -21,6 +21,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     await page.evaluate(() => {
       const UI = G.UI; UI.toast = () => {}; UI.say = async () => {}; UI.alert = async () => {}; G.State.save = () => {}; G.Game.refreshHud = () => {};
+      const chance = G.U.chance; G.U.chance = p => p === G.BALANCE.mateDismiss.devotionChance ? false : chance(p);
       window.__fresh = function (rows) {
         const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 1; });
         const s = G.Game.state = G.State.newGame({ name: '주앙', nation: 'PT', job: 'explorer', age: 24, birth: { m: 3, d: 2 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 1), diff: 'normal' });
@@ -39,7 +40,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       await page.waitForSelector(win + ' .choice');
       await page.locator(win + ' .choice', { hasText: name }).first().click();
       await page.locator(win + ' .choice', { hasText: '해고한다' }).first().click();
-      await page.locator(win + ' .foot button', { hasText: '예' }).last().click();
+      await page.locator(win + ' .foot button', { hasText: '해고한다' }).last().click();
       await page.waitForTimeout(300);
       const listed = await page.evaluate(n => [...document.querySelectorAll('.modal-back .choice')].map(e => e.innerText.replace(/\s+/g, ' ')).filter(t => t.indexOf(n) >= 0), name);
       await page.screenshot({ path: path.join(OUT, 'after_' + id + '.png') });
@@ -51,8 +52,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // 1) 보통 해고 — 명단에서 빠지고 다음 달 급료에서 빠진다
     await page.evaluate(() => __fresh([{ id: 'duarte', role: 'nav' }, { id: 'lacosa', role: 'none' }, { id: 'pinzon_m', role: 'none' }]));
     let listed = await fire('lacosa');
-    let r = await page.evaluate(() => { const s = G.Game.state, g0 = s.player.gold; G.World.newMonth(); return { rows: __rows('lacosa'), gone: !!s.flags.gone_lacosa, paid: g0 - s.player.gold, want: Math.round(G.Cabins.wages()), wage: __wageOf(['rocco', 'duarte', 'pinzon_m']) }; });
-    ok(!listed.length && r.rows === 0 && r.gone, '해고하면 명단에서 빠지고 「대기」로 남지 않는다');
+    let r = await page.evaluate(() => { const s = G.Game.state, g0 = s.player.gold; G.World.newMonth(); return { rows: __rows('lacosa'), returning: G.MateDismiss.returning('lacosa'), paid: g0 - s.player.gold, want: G.Cabins.totalWages(), wage: (__wageOf(['rocco', 'duarte', 'pinzon_m']) + G.World.crewWage()) }; });
+    ok(!listed.length && r.rows === 0 && r.returning, '해고하면 명단에서 빠지고 「대기」로 남지 않으며, 짧게 함께한 동료는 철새로 돌아온다');
     ok(r.paid === r.want && r.want <= r.wage, '다음 달 급료는 남은 사람 몫만 (' + r.paid + '닢)');
 
     // 2) 같은 부하가 두 줄 (항해사 + 대기) — 해고하면 둘 다 빠진다
@@ -69,7 +70,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = __fresh([{ id: 'pinzon_v', role: 'none' }, { id: 'pinzon_v', role: 'purser' }, { id: 'torres', role: 'none' }, { id: 'torres', role: 'none' }]);
       const S2 = G.State.deserialize(G.State.serialize()); G.Game.state = S2;
       const before = S2.mates.length, g0 = S2.player.gold; G.World.newMonth();
-      return { before, after: S2.mates.map(m => m.id + ':' + m.role).join(','), paid: g0 - S2.player.gold, want: G.Cabins.wages(), wage: __wageOf(['rocco', 'pinzon_v', 'torres']) };
+      return { before, after: S2.mates.map(m => m.id + ':' + m.role).join(','), paid: g0 - S2.player.gold, want: G.Cabins.totalWages(), wage: (__wageOf(['rocco', 'pinzon_v', 'torres']) + G.World.crewWage()) };
     });
     ok(r.before === 5 && r.after === 'rocco:first,pinzon_v:purser,torres:none', '옛 저장의 겹친 줄은 달이 바뀔 때 하나로 — 일을 맡은 줄이 남는다 (' + r.after + ')');
     ok(r.paid === r.want && r.want <= r.wage, '겹쳤던 사람의 급료도 한 번만 (' + r.paid + '닢)');

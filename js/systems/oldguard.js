@@ -3,6 +3,7 @@
      달마다의 이별(사망·고향으로)도 이 부하들만 겪는다 (js/systems/mateleave.js MLV.weight).
    ■ 세대 교체(G.Family.succeed → OG.atSucceed): 노장들은 물러나는 제독과 함께 배에서 내린다. 그 가운데 둘(keep)까지 새 제독 곁에 남길 수 있다 —
      남은 노장은 충성 100, aideCalm일 동안 배를 떠나지 않는다(m.aide = {gen, y}).
+     부부는 함께(2026-11-01 사용자 피드백): 남기로 한 사람의 짝은 노장이어도 함께 남고, 내리는 노장의 짝은 노장이 아니어도 함께 내린다(G.MateLeave.spouseOf).
      kinChance의 확률로 새 제독의 친족(사촌·외삼촌)이나 소꿉친구가 함께 하겠다고 찾아온다 — 고르면 두 자리 가운데 하나를 쓴다.
      친족·소꿉친구는 새로 짓는 항해사다: 정의는 s.oldGuard.defs 에 두고 불러올 때 G.MATES 에 다시 올린다(OG.apply — 철새와 같은 때).
    ■ 사건 동료(옛이야기·전설·사건으로 얻은 부하 — MLV.eventMate)는 죽지 않는다. 이별(고향으로)·해고·떠남·세대 교체로 배에서 내리면(OG.left)
@@ -330,6 +331,19 @@
     }
     // 내리는 노장
     var leave = vets.filter(function (m) { return kept.indexOf(m.id) < 0; });
+    // 부부는 함께 (2026-11-01 사용자 피드백): 남기로 한 사람(후견)의 짝이면 함께 남고, 내리는 노장의 짝은 노장이 아니어도 함께 내린다 (js/systems/mateleave.js)
+    var spOf = MLV() && MLV().spouseOf ? MLV().spouseOf : function () { return null; }, pair = {}, follow = [];
+    (s.mates || []).forEach(function (m) { var sp = spOf(m.id); if (sp) pair[m.id] = sp; });   // 떠나는 사람을 빼기 전에 짝을 찾아 둔다
+    leave = leave.filter(function (m) {
+      var sp = pair[m.id]; if (!sp || kept.indexOf(sp) < 0) return true;
+      m.leaveCd = Math.max(m.leaveCd || 0, (s.day || 0) + c0.aideCalm);   // 후견으로 남는 짝 곁에 — 한동안 배를 떠나지 않는다
+      G.State.log(fill(D().stayWith, { name: G.MATE[m.id].name, mate: G.MATE[sp].name, heir: k.name }));
+      return false;
+    });
+    leave.forEach(function (m) {
+      var sp = pair[m.id], r = sp ? (s.mates || []).filter(function (x) { return x.id === sp; })[0] : null;
+      if (r && leave.indexOf(r) < 0 && kept.indexOf(sp) < 0 && !follow.some(function (f) { return f.r === r; })) follow.push({ r: r, lead: m.id });
+    });
     leave.forEach(function (m) {
       var d = G.MATE[m.id], yrs = years(m), h = city((G.MATE_RANGE && G.MATE_RANGE[m.id] && G.MATE_RANGE[m.id].home) != null ? G.MATE_RANGE[m.id].home : (m.from != null ? m.from : p.home));
       OG.left(m.id, 'retire');
@@ -339,6 +353,9 @@
       if (G.MateKnow) G.MateKnow.know(m.id, h ? h.id : null, 'fate');
       G.State.log(fill(D().log, { name: d.name, old: p.name, home: h ? h.name : '고향', yrs: yrs }));
       gone.push(m.id);
+    });
+    follow.forEach(function (f) {   // 노장의 짝 — 먼저 내린 노장의 고향으로 함께
+      if (MLV().goWith(f.r.id, f.lead, 'retire', MLV().spouseWords(f.r.id, f.lead), true)) { leave.push(f.r); gone.push(f.r.id); }
     });
     if (gone.length) {
       if (R().tidyCaptains) R().tidyCaptains();

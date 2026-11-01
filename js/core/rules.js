@@ -8,13 +8,20 @@
   R.S = function () { return G.Game.state; };
   // 충성을 바꾸는 공통 입구: 열셋의 마녀가 함께하면 마녀의 충성 하락을 막는다.
   R.setLoyal = function (m, value) {
+    if (m.devoted) { m.loyal = 100; return 100; }
     var old = m.loyal == null ? 70 : m.loyal;
     m.loyal = U.clamp(G.Coven && G.Coven.protected(m) ? Math.max(old, value) : value, 0, 100);
     return m.loyal;
   };
   // 제독의 행운(s.player.luck, 기본 50): 50을 넘는 만큼 바다의 나쁜 일을 피할 가능성이 오른다 (99면 +0.098 — 여신상 하나쯤). 마녀의 저주(js/systems/coven.js)·가족 사건이 올린다
   R.playerLuck = function () { var p = R.S() && R.S().player, l = p && p.luck != null ? p.luck : 50; return Math.max(0, l - 50) / 500; };
-  R.mateWage = function (id) { var d = G.MATE[id]; return !d || (G.Coven && G.Coven.freeWage(id)) ? 0 : (d.wage || 0); };
+  R.mateWage = function (id) {
+    var d = G.MATE[id], s = R.S(), m = s && (s.mates || []).filter(function (x) { return x.id === id; })[0];
+    if (!d) return 0;
+    if (m && m.devoted) return G.BALANCE.mateDismiss.devotionWage;
+    var base = G.Coven && G.Coven.freeWage(id) ? 0 : (d.wage || 0);
+    return G.MateDismiss && s ? G.MateDismiss.wage(id, base) : base;
+  };
 
   // ---------------------------------------------------------------- city helpers
   R.city = function (id) { return G.CITY_DATA[id]; };
@@ -600,6 +607,8 @@
     var m = 1 + (DIST_MULT[d] - 1) * g.el;
     var dm = G.GOOD_DEMAND[goodId]; if (dm && dm[region]) m *= dm[region];
     if (g.nw && region !== 10) m *= 1.15;
+    var ocean = G.BALANCE.oceanTrade;
+    if (ocean && ocean.premium) m *= 1 + (ocean.premium[d] - 1) * g.el;
     return m;
   };
   // ---------------------------------------------------------------- 이번 입항 (도시에 들어온 한 번 — js/scenes/city.js C.enter에서 하나씩 늘린다)
@@ -670,6 +679,7 @@
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행하는 물건은 사는 값도 뛴다 (js/systems/fad.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요: 1480~1700년 유럽 시장이 찾던 물건 (js/systems/era.js)
+    if (G.Era && G.Era.source) p *= G.Era.source(c, goodId); // 산지의 생산 확대·독점·공급 단절
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'buy');   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'buy');   // 교역 항로의 상선대: 실어 오는 쪽은 싸지고 나는 쪽은 비싸진다 (js/systems/tradefleets.js)
     if (G.Kongo) p *= G.Kongo.mult(c, goodId, 'buy');   // 콩고 왕국과 맺은 교역 (js/systems/kongo.js)
@@ -729,10 +739,11 @@
     var extra = lv >= 4 ? 2 : lv >= 2 ? 1 : 0;
     var relay = G.TradeGoods ? G.TradeGoods.relayGoods(c) : [];
     var base = relay.length ? c.goods.concat(relay.filter(function (id) { return c.goods.indexOf(id) < 0; })) : c.goods;
+    if (G.Sakoku) base = base.filter(function (id) { return !G.Sakoku.tradeBlock(c, id, 'buy'); });
     if (!extra) return base;
     var rng = U.makeRng(U.strHash('inv' + c.id));
     var pool = G.GOODS.filter(function (g) {
-      return base.indexOf(g.id) < 0 && !g.nw && !g.plant && R.regionalMult(g.id, c.region) < 1.25;   // plant: 식물 특산물은 제독이 심어야 생긴다 (js/systems/plantrade.js)
+      return base.indexOf(g.id) < 0 && !g.nw && !g.plant && R.regionalMult(g.id, c.region) < 1.25 && !(G.Sakoku && G.Sakoku.tradeBlock(c, g.id, 'buy'));   // 식물 특산물·금수품은 투자로 생기지 않는다
     });
     var out = base.slice();
     for (var i = 0; i < extra && pool.length; i++) {
@@ -749,6 +760,8 @@
     var K = MK(), cap = K.sat[0] + c.size * K.sat[1];
     if (R.isRelay(c, goodId)) cap *= K.relayCap == null ? 1 : K.relayCap;
     else if (R.sells(c, goodId)) cap *= K.prodCap == null ? 1 : K.prodCap;
+    var ocean = G.BALANCE.oceanTrade;
+    if (ocean && !R.sells(c, goodId)) cap *= 1 + ocean.bulkDemand * Math.max(0, (G.Era ? G.Era.mult(c, goodId) : 1) - 1); // 유행 시장은 값뿐 아니라 받아 줄 물량도 커진다
     return cap;
   };
   /** 포화에 따른 파는 값 배수: 받아 줄 양까지는 완만히, 넘기면 폭락 (G.BALANCE.market.satPrice·crash) */
@@ -768,7 +781,11 @@
       sx.sat += q * share * (1 - dd / rad) / R.satCap(t, goodId);
     });
   };
-  R.supply = function (c, goodId) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)) * (G.Econ ? G.Econ.mult(c, goodId, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, goodId, 'stock') : 1))); };
+  R.supply = function (c, goodId) {
+    if (G.Sakoku && G.Sakoku.tradeBlock(c, goodId, 'buy')) return 0;
+    var m = R.market(c.id), st = mg(m, goodId), K = MK();
+    return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)) * (G.Econ ? G.Econ.mult(c, goodId, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, goodId, 'stock') : 1) / (G.Era && G.Era.source ? G.Era.source(c, goodId) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1)));
+  };
   R.maybeMarketEvent = function (c) {
     var m = R.market(c.id), S = R.S();
     if (m.ev) return;

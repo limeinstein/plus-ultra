@@ -27,6 +27,7 @@ require('fs').mkdirSync(OUT, { recursive: true });
       const ask = G.UI.ask; let n = 0;
       G.UI.ask = async (q, opts) => { window.__asks.push(opts.map(o => o.label)); n++; return n === 1 ? 'card' : n === 2 ? 'card' : null; };
       G.UI.say = async () => {}; G.UI.confirm = async () => true;
+      G.Achieve.afterHire = async () => {};
       window.__done = T.talkMate(G.CITY_DATA[1], m, true).then(() => 'done');
       return { id: m.id, name: m.name };
     });

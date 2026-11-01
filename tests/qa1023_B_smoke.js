@@ -48,7 +48,7 @@ const ROOT = path.resolve(__dirname, '..');
     const story = Object.assign(at(), { id: 'storyP', kind: 'pirate', princess: 'levant', ships: ['caravel'] });
     st.npcs.push(story);
     let met = false;
-    for (let i = 0; i < 30 && !met; i++) { SEA.update(0.05); await sleep(20); met = prMet > 0; }
+    for (let i = 0; i < 120 && !met; i++) { SEA.update(0.05); await sleep(20); met = prMet > 0; }   // 컴퓨터가 바쁘면 30번으로는 모자라 가끔 실패했다 (QA 2026-11-01)
     G.Pace.ok = pace0; G.Princess.encounterText = pet0;
     for (let i = 0; i < 40 && st.busy; i++) await sleep(25); UI.ask = ask0;
     ok(!busy0 && blocked, '사건 간격이 막으면 보통 해적은 덤비지 않는다 (cooldown ' + plain.cooldown + ' · 처음 창 ' + busy0 + ' ' + JSON.stringify(dbg) + ')');
@@ -126,8 +126,18 @@ const ROOT = path.resolve(__dirname, '..');
 
     // ---- [33a] 일기토가 끝나면 시작할 때의 곡으로
     if (G.Audio && G.Games && G.Games.duel) {
+      // 앞의 제노바 해전이 끝나고 도시에 들어서는 중이면 그 들어서기가 거리의 곡을 틀어 시험이 흔들린다 — 들어서기가 끝날 때까지 기다린다 (QA 2026-11-01)
+      for (let i = 0; i < 400 && ((G.Scenes.city.isBusy && G.Scenes.city.isBusy()) || UI.busy() || document.querySelector('.modal-back')); i++) { await closeAll(); await sleep(50); }
+      window.requestAnimationFrame = cb => setTimeout(() => cb(performance.now()), 16); // 착지 동작이 끝나야 창을 닫는 실제 흐름을 진행한다.
       G.Audio.music('land'); const w0 = G.Audio.want;
-      await Promise.race([G.Games.duel({ name: '해적 두목', look: 'pirate', str: 30, mar: 20, skill: 0, atk: 2, def: 0 }, { fastEnd: true, stance: 'allout' }), sleep(40000)]).catch(() => null);
+      const duelRun = G.Games.duel({ name: '해적 두목', look: 'pirate', str: 30, mar: 20, skill: 0, atk: 2, def: 0 }, { fastEnd: true, stance: 'allout' });
+      if (G.Games._duelDebug) {
+        G.Games._duelDebug.fast = true;
+        G.Games._duelDebug.me.atk = 999;
+        G.Games._duelDebug.en.hp = 0;
+        await G.Games._duelDebug.step();
+      }
+      await Promise.race([duelRun, sleep(40000)]).catch(() => null);
       ok(w0 === 'land' && G.Audio.want === 'land', '일기토가 끝나면 시작할 때의 곡(뭍)으로 돌아간다 (' + G.Audio.want + ')');
     }
     return R;

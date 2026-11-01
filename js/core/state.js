@@ -10,8 +10,8 @@
 
   // 회차 규칙(diff·speed)은 저장에, 개인 취향은 이 기기에 따로 둔다. 옛 저장에는 새 필드가 필요 없다.
   var PREF_KEY = 'plusultra_preferences', prefs = null;
-  var prefBools = ['autosave', 'shake', 'banter', 'mouseFollow'];
-  var prefEnums = { musicSrc: ['base', 'ost'], keyMode: ['dir', 'helm'], ctrlSens: ['slow', 'normal', 'fast'], portAsk: ['notify', 'stop', 'ask'], tackMode: ['off', 'open', 'on'] };
+  var prefBools = ['autosave', 'shake', 'banter', 'mouseFollow', 'noticeHideLine', 'statusOpen'];   // 알림·상태판 설정 (js/ui/ui.js — 2026-11-01)
+  var prefEnums = { musicSrc: ['base', 'ost'], keyMode: ['dir', 'helm'], ctrlSens: ['slow', 'normal', 'fast'], portAsk: ['notify', 'stop', 'ask'], tackMode: ['off', 'open', 'on'], noticeSize: ['normal', 'small'], noticePos: ['auto', 'top', 'bottom'] };
   function readPrefs() {
     if (prefs) return prefs;
     prefs = {};

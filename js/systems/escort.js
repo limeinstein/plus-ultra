@@ -1,13 +1,16 @@
 /* 상선 호위 (G.Escort) — 자료·조정값: js/data/escort.js (G.BALANCE.escort)
    ■ 흐름
-     ① 교역소에 들어서면 가끔 그 고장 상인이 다가와 호위를 청한다 (도시마다 열흘 단위로 정해진다. 교역소 메뉴 「호위 요청」으로 다시 들을 수 있다).
+     ① 호위를 청하는 상인은 도시마다 열흘 단위로 정해진다(E.offer). 교역소에 들어설 때 상인이 먼저 다가오는 것은 사건처럼 가끔만 —
+        모든 교역소를 통틀어 한 해 pitchPerYear(2)번 · 앞선 때에서 pitchGap(180)일 뒤 · pitchChance 확률 (이 일지의 첫 번째만 확률 없이) (2026-10-26 사용자 요청).
+        제독이 교역소 메뉴 「호위 요청」으로 찾는 것은 언제나 된다(E.seek — 청하는 상인이 없는 열흘이어도, 호위를 마친 뒤 쉬는 날이어도. 거절하면 다른 상인).
      ② 맡으면 상인의 배가 함대에 들어와 함께 다닌다 — 내 배가 아니라 따라오는 배다(state.escort.now.ship). 짐칸·선원·함대 5척 제한과 상관없다.
         · 함대는 상인 배보다 빨리 가지 못한다 (R.fleetMotion → E.speedK)   · 바다 그림에 함께 그려진다 (E.seaShips)
         · 해전에서는 기함 뒤에 숨는 아군 배로 나온다 (battle.js). 가라앉거나 적에게 넘어가면 호위는 실패.
         · 상선과 함께면 해적이 더 꾄다 (E.pirateK) — 짐을 실은 뒤에는 더.
      ③ 상인이 정한 항구에 닿으면 상인이 제 돈으로 물건을 싣는다 (그 도시의 재고·값을 따른다).
      ④ 기한 안에 떠난 항구로 데려오면 상인이 그 물건을 팔고, 남긴 이익의 일부(share)를 준다. 이익이 적어도 품삯(왕복 날수 × feeDay)은 준다. 기한을 넘기면 절반.
-   ■ 저장: state.escort = { now: 지금 호위(없으면 null), cool: 다음 요청이 나오는 날, no: 거절한 요청, said: 들은 요청, done, lost }. 옛 저장에는 없으므로 E.st()가 만든다. */
+   ■ 저장: state.escort = { now: 지금 호위(없으면 null), cool: 상인이 먼저 청하지 않는 날까지, no: 거절한 요청, skip: {key, n} 그 열흘에 거절한 상인 수, said: 들은 요청,
+           pitch: {y, n, last, all} 상인이 먼저 다가온 해·횟수·날, done, lost }. 옛 저장에는 없으므로 E.st()·pitches()가 만든다. */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -50,17 +53,19 @@
     var y = S().date.y;
     return (c.goods || []).filter(function (id) { var g = G.GOOD[id]; return g && !(G.Slave && G.Slave.is(id)) && (!g.nw || c.region === 10 || y >= 1520); });
   }
-  /** 이 도시 교역소에서 지금 나와 있는 호위 요청 (없으면 null). 열흘 단위로 같은 요청이 유지된다 */
-  E.offer = function (c) {
+  /** 이 도시 교역소에서 지금 나와 있는 호위 요청 (없으면 null). 열흘 단위로 같은 요청이 유지된다.
+      ask = true: 제독이 직접 찾는다(E.seek) — 청하는 상인이 없는 열흘이어도, 호위를 마친 뒤 쉬는 날이어도 찾고, 거절한 상인 대신 다른 상인 */
+  E.offer = function (c, ask) {
     var s = S(), e = E.st(), B = K();
-    if (!s || e.now || !c || !c.port || s.day < (e.cool || 0)) return null;
+    if (!s || e.now || !c || !c.port || (!ask && s.day < (e.cool || 0))) return null;
     if (G.Tutorial && G.Tutorial.active && G.Tutorial.active()) return null;
     if (!s.fleet.ships.length) return null;
     var key = c.id + ':' + Math.floor(s.day / 10);
-    if (e.no === key) return null;
-    if (e.off && e.off.key === key) return e.off.offer;
+    if (ask) { var sk = e.skip && e.skip.key === key ? e.skip.n : e.no === key ? 1 : 0; if (sk) key += '#' + sk; }
+    else if (e.no === key) return null;
+    if (e.off && e.off.key === key && (e.off.offer || !ask)) return e.off.offer;
     var rng = U.makeRng(U.strHash('escort' + key)), offer = null;
-    if (rng() < B.chance) {
+    if (rng() < B.chance || ask) {
       var known = s.known || [];
       var all = G.CITY_DATA.filter(function (d) {
         if (d.id === c.id || !d.port || !R.cityExists(d, s.date) || !goodsOf(d).length) return false;
@@ -119,13 +124,18 @@
     while (n-- > 0) { d.d++; if (d.d > md[d.m - 1]) { d.d = 1; d.m++; if (d.m > 12) { d.m = 1; d.y++; } } }
     return d;
   }
-  /** 호위를 맡을지 묻는다 → 맡으면 true */
+  /** 호위를 맡을지 묻는다 → 맡으면 true. pitch: false(말 없이 조건 창만) · 'seek'(제독이 찾아서 만난 상인) · 그 밖(상인이 먼저 청함) */
   E.propose = async function (c, o, pitch) {
     var e = E.st(), n = draft(o), who = E.speaker(n);
-    if (pitch !== false) await UI.say(line('ask', n), who);
+    if (pitch !== false) await UI.say(line(pitch === 'seek' && G.ESCORT_LINES.seek ? 'seek' : 'ask', n), who);
     var v = await UI.window({ title: '호위 요청 — ' + city(n.to).name + '까지', icon: 'ship', width: 760, html: termsHtml(n),
       buttons: [{ label: '거절한다', value: 'no' }, { label: '다음에 답한다', value: null }, { label: '호위를 맡는다', value: 'yes', cls: 'navy' }] }).result;
-    if (v === 'no') { e.no = o.key; await UI.say(line('no', n), who); return false; }
+    if (v === 'no') {
+      var base = String(o.key).split('#')[0];
+      e.no = base;                                           // 그 열흘 동안 상인이 먼저 청하지 않는다
+      e.skip = { key: base, n: (e.skip && e.skip.key === base ? e.skip.n : 0) + 1 };   // 제독이 다시 찾으면 다른 상인
+      await UI.say(line('no', n), who); return false;
+    }
     if (v !== 'yes') return false;
     e.now = n; e.off = null;
     var s = S(); if ((s.known || []).indexOf(n.to) < 0) { s.known.push(n.to); UI.toast('상인이 해도에 ' + city(n.to).name + U.jx(city(n.to).name, '을/를') + ' 적어 주었다.', 'map', 4200); }
@@ -136,19 +146,52 @@
     G.Game.refreshHud();
     return true;
   };
-  /** 교역소에 들어섰을 때: 처음 보는 요청이면 상인이 다가온다 */
+  /** 상인이 먼저 다가온 기록 (한 해 횟수·마지막 날) — 옛 저장에는 없으니 새로 */
+  function pitches() {
+    var e = E.st(), y = S().date.y;
+    var p = e.pitch || (e.pitch = { y: y, n: 0, last: null, all: 0 });
+    if (p.y !== y) { p.y = y; p.n = 0; }
+    return p;
+  }
+  /** 지금 상인이 먼저 다가올 수 있는가 (한 해 횟수·간격 — 확률은 빼고) */
+  E.canPitch = function () {
+    var p = pitches(), B = K();
+    if (p.n >= (B.pitchPerYear != null ? B.pitchPerYear : 2)) return false;
+    return p.last == null || S().day - p.last >= (B.pitchGap != null ? B.pitchGap : 180);
+  };
+  /** 교역소에 들어섰을 때: 처음 보는 요청이면 상인이 다가온다 — 사건처럼 가끔만 (머리말 ①) */
   E.atTrade = async function (c) {
     var e = E.st(), o = E.offer(c);
     if (!o || e.said === o.key) return;
+    if (!E.canPitch()) return;
+    var p = pitches(), B = K();
+    if (p.all && !U.chance(B.pitchChance != null ? B.pitchChance : 0.5)) return;   // 이 일지의 첫 번째는 확률 없이
+    p.n++; p.all = (p.all || 0) + 1; p.last = S().day;
     e.said = o.key;
     await E.propose(c, o);
   };
-  /** 교역소 메뉴에 붙는 줄 (없으면 null) */
+  /** 제독이 호위할 상선을 찾을 수 있는가 (메뉴에 늘 보인다 — 호위 중·배 없음·튜토리얼만 빼고) */
+  E.canSeek = function (c) {
+    var s = S();
+    return !!(s && c && c.port && !E.now() && s.fleet.ships.length && !(G.Tutorial && G.Tutorial.active && G.Tutorial.active()));
+  };
+  /** 제독이 교역소에서 호위할 상선을 찾는다 → 맡으면 true */
+  E.seek = async function (c) {
+    var o = E.offer(c, true);
+    if (!o) {
+      var C = G.Scenes && G.Scenes.city, k = C && C.npc ? C.npc('trader', '교역소 주인') : { name: '교역소 주인' };
+      await UI.say(U.pick(G.ESCORT_LINES.seekNone || ['지금은 호위를 구하는 상인이 없네.']), k);
+      return false;
+    }
+    return E.propose(c, o, 'seek');
+  };
+  /** 교역소 메뉴에 붙는 줄 (없으면 null) — 호위 중이 아니면 늘 「호위 요청」 */
   E.menuItem = function (c) {
     var n = E.now();
     if (n) return { label: '호위 중인 상인', icon: 'ship', sub: E.statusText(n), onClick: function () { return E.statusWindow(); } };
     var o = E.offer(c);
     if (o) return { label: '호위 요청', icon: 'ship', sub: city(o.to).name + '까지 · 상인 ' + o.name, onClick: function () { return E.propose(c, o); } };
+    if (E.canSeek(c)) return { label: '호위 요청', icon: 'ship', sub: '호위할 상선을 찾아본다', onClick: function () { return E.seek(c); } };
     return null;
   };
   /** 「이 도시에서 할 일」 판 */

@@ -3,6 +3,7 @@
   'use strict';
   var T=G.ExpeditionTracks={};
   function config(){return G.FX.sprites.expedition.formation.tracks;}
+  T.fade=function(age){var c=config(),v=Math.max(0,Math.min(1,(age-c.hold)/(c.life-c.hold)));return 1-v*v*(3-2*v);};
   function shift(p,h,fwd,side,unit){return{x:p.x+(Math.cos(h)*fwd+Math.sin(h)*side)*unit,y:p.y+(-Math.sin(h)*fwd+Math.cos(h)*side)*unit};}
   T.kind=function(role){return role==='foot'||role==='porter'?'boot':role==='horse'||role==='donkey'?'hoof':role==='elephant'?'elephant':role==='camel'||role==='camel2'?'pad':'split';};
   T.update=function(u,items,size){
@@ -57,7 +58,7 @@
     var colors=c.colors,ink=/snow|ice|tundra/.test(terr)?colors.snow:terr==='desert'?colors.sand:colors.soil;
     ctx.save();ctx.fillStyle=ink;ctx.strokeStyle=ink;ctx.lineCap='round';
     (state.tracks||[]).forEach(function(mark){
-      var age=Math.max(0,time-mark.time);ctx.globalAlpha=c.opacity*Math.max(0,1-age/c.life);
+      var age=Math.max(0,time-mark.time),fade=T.fade(age);if(!fade)return;ctx.globalAlpha=c.opacity*fade;
       var x=u.pts[0][0]+(mark.x-root.x)*zoom,y=u.pts[0][1]+(mark.y-root.y)*zoom;
       if(mark.x2!=null){ctx.lineWidth=(mark.type==='runner'?c.runnerLine:c.wheelLine)*mark.size;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(u.pts[0][0]+(mark.x2-root.x)*zoom,u.pts[0][1]+(mark.y2-root.y)*zoom);ctx.stroke();}
       else{ctx.save();ctx.translate(x,y);ctx.rotate(-mark.heading);ctx.scale(mark.size,mark.size*c.groundSquash);T.glyph(ctx,mark.type);ctx.restore();}

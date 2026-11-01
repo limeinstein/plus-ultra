@@ -240,9 +240,9 @@
   async function court(e) {
     var s = S(), p = s.player, who = RL.speaker(e.who || L0), a = e.ask;
     var tt = String(e.title).replace(/\s*\(\d{3,4}\)\s*$/, '');   // 「신성 동맹 (1571)」 → 「신성 동맹」 (대화창은 괄호 속 숫자를 알림으로 떼어 낸다)
-    // 왕녀가 직접 전하는 혼인 소식: 이벤트 샷 (js/art/eventshot.js)
+    // 왕녀가 직접 전하는 혼인 소식: 이벤트 샷 (js/art/eventshot.js) — 혼례일 때만. 「귀부인들의 평화」 같은 다른 소식에 혼례 그림이 뜨던 것 (2026-10-26)
     var pr = e.who && e.who.princess && G.EventShot ? ((G.COURT && G.COURT.princesses) || []).filter(function (x) { return x.id === e.who.princess; })[0] : null;
-    var pc = pr ? await G.EventShot.princess('royal_wedding', { realm: pr.realm, name: pr.name, title: tt, city: (function () { var r = G.COURT.realms[pr.realm], sp = r && r.sponsors && G.SPONSOR[r.sponsors[0]]; return sp ? G.CITY_DATA[sp.city] : null; })() }) : null;
+    var pc = pr && (/혼례/.test(e.title) || e.icon === 'heart') ? await G.EventShot.princess('royal_wedding', { realm: pr.realm, name: pr.name, title: tt, city: (function () { var r = G.COURT.realms[pr.realm], sp = r && r.sponsors && G.SPONSOR[r.sponsors[0]]; return sp ? G.CITY_DATA[sp.city] : null; })() }) : null;
     try { await courtIn(e, s, p, who, a, tt); } finally { if (pc) await pc.stop(); }
   }
   async function courtIn(e, s, p, who, a, tt) {

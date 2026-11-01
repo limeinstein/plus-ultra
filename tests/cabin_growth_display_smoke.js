@@ -85,19 +85,19 @@ function ok(v, msg) { res.push([!!v, msg]); console.log((v ? '  ✓ ' : '  ✗ '
 
     // ---- 수첩 「동료」
     await page.evaluate(() => { G.Info.open('mates'); });
-    await page.waitForSelector('.modal-back .mates .shipcard');
-    await page.waitForTimeout(400);
+    await page.waitForSelector('.mb-table tbody tr');
     const nb = await page.evaluate(names => {
-      const cards = [...document.querySelectorAll('.modal-back .mates .shipcard')];
-      const of = n => { const c = cards.filter(e => e.innerText.indexOf(n) >= 0)[0]; return c ? c.innerText.replace(/\s+/g, ' ') : ''; };
-      const pipsOf = n => { const c = cards.filter(e => e.innerText.indexOf(n) >= 0)[0]; if (!c) return null; const row = [...c.querySelectorAll('div')].filter(d => /측량/.test(d.textContent) && d.querySelector('.pips'))[0]; if (!row) return null;
-        const html = row.innerHTML, i = html.indexOf('측량'); const tmp = document.createElement('div'); tmp.innerHTML = html.slice(i); const pp = tmp.querySelector('.pips'); return pp ? pp.querySelectorAll('i.on').length : null; };
-      return { a: of(names[0]), low: of(names[1]), mv: of(names[2]), aPips: pipsOf(names[0]), lowPips: pipsOf(names[1]) };
+      function read(name, first) {
+        const selector = first ? '.mb-person' : '.mb-nav-person';
+        [...document.querySelectorAll(selector)].find(e => e.textContent.includes(name)).click();
+        const chip = document.querySelector('.mb-all-skills [data-skill="survey"]');
+        return { text: document.querySelector('.mb-story').textContent, level: +chip.dataset.level, title: chip.title, grown: !!chip.querySelector('sup') };
+      }
+      return { a: read(names[0], true), low: read(names[1], false), mv: read(names[2], false) };
     }, [A.name, L.name, M.name]);
-    console.log(JSON.stringify(nb, null, 1));
-    ok(nb.aPips === 1 && /측량.*★/.test(nb.a), '수첩: ' + A.name + ' 측량 칸 1개 + ★');
-    ok(/선실 수련 · 측량 3년( \d+일)? · 다음 단계 9년/.test(nb.a), '수첩: 선실 수련 진행이 보인다');
-    ok(nb.lowPips === 1 && /\(본디 2\)/.test(nb.low), '수첩: 충성 낮은 ' + L.name + ' 측량 칸 1개 (본디 2)');
+    ok(nb.a.level === 1 && nb.a.grown, '수첩: ' + A.name + ' 측량 1단계 + ★');
+    ok(/선실 수련 · 측량 3년( \d+일)? · 다음 단계 9년/.test(nb.a.text), '수첩: 선실 수련 진행이 보인다');
+    ok(nb.low.level === 1 && /본디 2단계/.test(nb.low.title), '수첩: 충성 낮은 ' + L.name + ' 측량 1단계 (본디 2)');
     await page.screenshot({ path: path.join(OUT, 'notebook_mates.png') });
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);

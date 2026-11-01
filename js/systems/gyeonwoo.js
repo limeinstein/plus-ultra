@@ -102,8 +102,11 @@
   }
   async function hansan(c) {
     var D = L(), g = GW.st(), s = S(), b = K(), UI = G.UI;
-    var pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'romance-events/05_harbor_wedding', title: '한산도의 칠석 혼례' }) : null;
-    try { await lines(D.hs); } finally { if (pc) await pc.stop(); }
+    // 칠석 혼례는 아직 전용 그림이 없어 그림 없이 한산도 거리에서 펼친다 (2026-10-26).
+    //   예전에 뜨던 공용 항구 혼례 그림(romance-events/05_harbor_wedding — 서양 복색의 부부)은 견우·직녀 대사와 어긋나 뺐다.
+    //   사카이 상봉 그림(jiknyeo_sakai)도 방 안 장면이라 「노을 진 한산도 앞바다 · 거북선의 붉은 깃발」과 맞지 않는다.
+    //   그림이 생기면(주문서 images/legend-events/GYEONWOO_PROMPT.md) 여기서 G.FamEv.showPic({ img: 'legend-events/gyeonwoo_wedding', title: '한산도의 칠석 혼례' })로 띄운다.
+    await lines(D.hs);
     g.wed = U.dateNum(s.date); g.aboard = [];
     if (G.Fame) G.Fame.add('so', b.fame || 0);
     if (G.Audio) G.Audio.sfx('cheer');

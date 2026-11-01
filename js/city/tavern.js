@@ -420,6 +420,7 @@
     var pool = G.MateMove ? G.MateMove.here(c.id) : G.MATES.filter(function (m) { return m.reg.indexOf(c.region) >= 0; });
     return pool.filter(function (m) {
       if (s.mates.some(function (x) { return x.id === m.id; }) || s.flags['gone_' + m.id]) return false;
+      if (G.MateDismiss && G.MateDismiss.returning(m.id)) return true;
       // 해가 맞고, 그 사람이 활약한 바닷길이 알려진 뒤에야 나타난다
       return G.Frontier ? G.Frontier.mateReady(m, y) : (y >= m.y[0] && y <= m.y[1]);
     });
@@ -564,6 +565,7 @@
     var nm = { id: m.id, role: role, joined: U.dateNum(s.date), loyal: 40 + cm.lv * 10, from: c.id };   // from: 처음 만난 도시 (둘째 부인의 집 — wives.js)
     if (role === 'none') { var free = s.fleet.ships.slice(1).filter(function (x) { return !R.captain(x); })[0]; if (free) { nm.role = 'captain'; nm.ship = free.uid; } }   // 빈 배가 있으면 선장으로
     s.mates.push(nm); role = nm;
+    if (G.MateDismiss) G.MateDismiss.hired(nm);
     if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     G.State.log(U.j(m.name, '이/가') + ' 동료가 되었다.');
     await UI.say(U.pick(['좋소, 당신과 함께 가지. 실망시키지 마시오.', '재미있겠군. 잘 부탁하오, 제독.', '당신의 배에 오르겠소. 세상 끝까지라도.']), who);
@@ -620,9 +622,10 @@
     list.forEach(function (d) {
       var lock = !d.rival && s.player.fame < d.fame, cm = comm(d);
       var row = U.el('div', 'hire-row' + (lock ? ' lock' : ''),
-        '<span class="nm">' + U.esc(d.name) + '</span>' +
+        '<span class="nm"><span class="mb-face"></span>' + U.esc(d.name) + '</span>' +
         '<span class="rt">' + (d.rival ? '고용 불가' : lock ? '명성 ' + U.num(d.fame) : U.num(R.mateWage(d.id)) + '닢') + '</span>' +
         '<span class="sk">' + U.esc(skillLine(d)) + (cm.lv ? '' : ' · <b>말 안 통함</b>') + '</span>');
+      row.querySelector('.mb-face').appendChild(A.portraitCanvas(d.rival ? A.rivalSpec(d.rival) : G.Scenes.mateSpec(d.id), 40));
       row.onclick = function () { sel = d; render(); };
       row.ondblclick = function () { win.close(d); };
       d._row = row;
@@ -966,10 +969,7 @@
       var v = await UI.choose(d.name + '의 역할', opts, { width: 600 });
       if (!v) continue;
       if (v === 'fire') {
-        // 해고: 그 사람의 줄을 모두 지운다 — 같은 사람이 두 줄이면 하나가 「대기」로 남아 급료가 계속 나갔다 (2026-10-22)
-        // 로코는 해고할 수 없다 — 말하는 사람은 로코 자신 (지금 부관이 다른 사람이면 그 사람 얼굴·이름이 뜨던 버그 — 2026-10-28 피드백)
-        if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', { name: d.name, portrait: G.Scenes.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 }); continue; }
-        if (await UI.confirm(d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 해고하겠습니까?')) { var wf = G.Wives && G.Wives.of ? G.Wives.of(m.id) : null; if (!wf && G.OldGuard) G.OldGuard.left(m.id, 'fire'); for (var fi = s.mates.length - 1; fi >= 0; fi--) if (s.mates[fi].id === m.id) s.mates.splice(fi, 1); R.tidyCaptains(); if (G.Cabins) G.Cabins.tidy(); if (!wf) s.flags['gone_' + m.id] = 1; if (G.Wives && G.Wives.sync) G.Wives.sync(); UI.toast(wf ? d.name + U.jx(d.name, '이/가') + ' 배에서 내려 ' + G.Wives.cityName(wf) + '의 집으로 돌아갔다.' : d.name + U.j(d.name, '이/가').slice(d.name.length) + ' 떠났다.', wf ? 'house' : 'boot'); }
+        await G.MateDismiss.fire(m);
         continue;
       }
       if (String(v).indexOf('ocap:') === 0) {   // 다른 배의 선장으로 (손으로 정함)

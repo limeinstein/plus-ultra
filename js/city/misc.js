@@ -657,7 +657,8 @@
     return [
       s.loc.via === 'land' && s.landReturn ? { label: '탐험대로 돌아간다', icon: 'tent', sub: '탈것을 바꿀 수 있다', onClick: function () { return GT.backToParty(c); } }
         : { label: '탐험을 떠난다', icon: 'boot', sub: '탈것을 고른다', onClick: function () { return GT.explore(c); } },
-      c.outpost ? null : { label: '마구간', icon: 'horse', sub: sb ? G.Mounts.get(sb.id).name + ' ' + sb.n + unitOf(sb.id) : '둘러본다', onClick: function () { return GT.stableMenu(c); } }
+      c.outpost ? null : { label: '마구간', icon: 'horse', sub: sb ? G.Mounts.get(sb.id).name + ' ' + sb.n + unitOf(sb.id) : '둘러본다', onClick: function () { return GT.stableMenu(c); } },
+      G.Conquest ? G.Conquest.menuItem(c) : null
     ].filter(Boolean);   // 독도(outpost)에는 마구간이 없다
   };
   function unitOf(id) { return id === 'porter' ? '패' : id === 'wagon' ? '대' : id === 'reindeer' ? '대' : '필'; }

@@ -142,6 +142,9 @@
   };
   U.dayOfYear = function (dt) { var n = 0; for (var m = 1; m < dt.m; m++) n += U.daysInMonth(dt.y, m); return n + dt.d; };
   U.fmtDate = function (dt) { return dt.y + '년 ' + dt.m + '월 ' + dt.d + '일'; };
+  /** 거절한 부탁을 다시 꺼내기까지의 날 수 — n번째 거절 뒤 (G.BALANCE.reask: 30일 → 90일 → 1년 → 그 뒤로는 5년마다).
+      돈키호테·심청·포카혼타스·무굴의 포술장처럼 거절해도 다시 찾아오는 사건이 같은 간격을 쓴다 (2026-11-01 사용자 요청) */
+  U.reaskDays = function (n) { var a = (G.BALANCE && G.BALANCE.reask) || [30, 90, 365, 1825]; return a[Math.min(Math.max(1, n || 1), a.length) - 1]; };
   U.monthsBetween = function (a, b) { return (b.y - a.y) * 12 + (b.m - a.m) + (b.d - a.d) / 30; };
 
   // ---------------------------------------------------------------- coordinates

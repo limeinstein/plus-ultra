@@ -379,8 +379,16 @@
     } else {
       var leave = [];
       s.mates.forEach(function (m) { G.R.setLoyal(m, (m.loyal || 70) - 6); if (m.loyal < 25 && m.id !== 'rocco') leave.push(m); });
+      // 부부는 함께 (2026-11-01 사용자 피드백): 떠나는 사람의 짝도 함께 내린다 — 짝은 떠나는 사람을 빼기 전에 찾는다 (js/systems/mateleave.js)
+      var ML = G.MateLeave, follow = [];
+      if (ML && ML.spouseOf) leave.forEach(function (m) {
+        var sp = ML.spouseOf(m.id);
+        if (sp && !leave.some(function (x) { return x.id === sp; }) && !follow.some(function (f) { return f.sp === sp; })) follow.push({ sp: sp, lead: m.id, w: ML.spouseWords(sp, m.id) });
+      });
       leave.forEach(function (m) { s.mates.splice(s.mates.indexOf(m), 1); s.flags['gone_' + m.id] = 1; });
-      if (leave.length) await UI.say(leave.map(function (m) { return G.MATE[m.id].name; }).join('·') + U.jx(G.MATE[leave[leave.length - 1].id].name, '이/가') + ' 서운하다며 함대를 떠났다.', {});
+      follow.forEach(function (f) { ML.goWith(f.sp, f.lead, 'quit', f.w, true); });
+      if (leave.length) await UI.say(leave.map(function (m) { return G.MATE[m.id].name; }).join('·') + U.jx(G.MATE[leave[leave.length - 1].id].name, '이/가') + ' 서운하다며 함대를 떠났다.' +
+        (follow.length ? ' ' + G.MATE_LEAVE.spouse.share.replace('{names}', follow.map(function (f) { return G.MATE[f.sp].name; }).join('·')) : ''), {});
       else UI.toast('동료들이 조금 서운해한다. (충성심 −6)', 'people');
     }
     G.Game.refreshHud();

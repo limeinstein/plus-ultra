@@ -20,7 +20,10 @@
     return out;
   };
   /** 지금 이 도시의 주인 */
-  D.owner = function (c) { var s = S(); return s ? D.ownerAt(c, s.date.y, s.date.m) : D.first(c); };
+  D.owner = function (c) {
+    var s = S(), id = c && c.id != null ? c.id : c, held = s && s.conquests && s.conquests[id];
+    return held ? held.owner : s ? D.ownerAt(c, s.date.y, s.date.m) : D.first(c);
+  };
   /** 게임이 시작할 때(또는 도시가 세워질 때) 주인 */
   D.first = function (c) { var l = list(c); return l ? l[0][1] : null; };
   /** 이 도시의 주인 내력 [{y, m, n}] */
@@ -77,7 +80,7 @@
     // 같은 해 역사 사건(HISTORY)에서 이미 알린 도시는 빼고
     var told = {};
     (G.HISTORY || []).forEach(function (h) { if (h.city && h.y === y) told[h.city[0]] = true; });   // 같은 해(달이 조금 달라도)
-    ch = ch.filter(function (x) { return !told[x.c.id] && x.to !== '원주민'; });   // 마을이 비어 원주민 땅으로 돌아간 것은 소식으로 내지 않는다
+    ch = ch.filter(function (x) { return !(s.conquests && s.conquests[x.c.id]) && !told[x.c.id] && x.to !== '원주민'; });   // 제독이 점령한 도시는 역사 소유권 변경에서 뺀다
     if (!ch.length) return [];
     var by = {}, order = [];
     ch.forEach(function (x) { if (!by[x.to]) { by[x.to] = []; order.push(x.to); } by[x.to].push(x); });

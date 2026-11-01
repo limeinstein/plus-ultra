@@ -207,48 +207,10 @@
     return '<div class="ibook"><b>통역 장부</b> <small class="muted">— 통역관 ' + U.esc(nm) + U.jx(nm, '이/가') + ' 통역실에서 일행이 아는 말을 모아 옮긴다 (모르는 말은 아는 사람에게 물어서 · 말을 빨리 배운다)</small><div class="ibook-list">' +
       book.map(function (e) { return '<span>' + G.LANGS[e.li] + ' ' + pips(e.lv) + ' <small class="muted">' + (e.src === 'self' ? '직접' : U.esc(e.name) + '에게 물어' + (e.own ? ' (스스로 ' + e.own + ')' : '')) + '</small></span>'; }).join('') + '</div></div>';
   }
-  /** 부하가 하는 말: 타고난 말과 배에서 익힌 말(★) */
-  function mateLangs(m, d) {
-    var ks = {}; Object.keys(d.lg || {}).forEach(function (k) { ks[k] = 1; }); Object.keys(m.lgx || {}).forEach(function (k) { ks[k] = 1; });
-    return Object.keys(ks).map(function (k) { var lv = R.mateLang(m, +k); return lv ? G.LANGS[k] + ' ' + G.LANG_LV[lv] + (lv > ((d.lg || {})[k] || 0) ? '★' : '') : ''; }).filter(Boolean).join(' · ');
-  }
-  /** 부하의 특기: 타고난 것 + 선실에서 는 것(★) — 칸은 지금 쓰는 단계(충성이 낮거나 다치면 줄어든다), 줄었으면 (본디 n) (2026-10-23 QA 26) */
-  function mateSkills(m, d) {
-    var l = G.Cabins && G.Cabins.skillList ? G.Cabins.skillList(m, true) : Object.keys(d.sk).map(function (k) { return { id: k, name: G.SKILL_BY_ID[k].name, lv: R.mateSkill(m, k), raw: R.mateSkill(m, k), grown: 0 }; });
-    return l.map(function (x) {
-      return x.name + ' ' + pips(x.lv) + (x.grown > 0 ? '<b title="선실에서 지내며 ' + x.grown + '단계 늘었다" style="color:var(--gold)">★</b>' : '') + (x.lv < x.raw ? ' <small class="muted" title="충성이 낮거나 다쳐서 지금은 덜 쓴다">(본디 ' + x.raw + ')</small>' : '');
-    }).join(' &nbsp; ') || '<span class="muted">특기 없음</span>';
-  }
-  /** 부하의 능력치 네 가지 — 체력·지력·무력·매력 (2026-10-28) */
-  function mateStats(d) {
-    var st = d.st || [];
-    return '<div class="mate-st">' + (G.STATS || []).map(function (x, i) {
-      var v = st[i] == null ? 0 : st[i];
-      return '<span title="' + U.esc(x.name) + ' ' + v + '"><b>' + U.esc(x.name) + '</b> ' + (st[i] == null ? '—' : v) + '<em class="bar"><i style="width:' + Math.max(0, Math.min(100, v)) + '%"></i></em></span>';
-    }).join('') + '</div>';
-  }
   PAGES.mates = function (el) {
-    var s = S();
-    if (!s.mates.length) { el.innerHTML = '<div class="muted">동료가 없습니다. 술집에서 동료를 찾아보십시오.</div>'; return; }
-    el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">기함의 부관은 전투·교섭·의학 등을, 항해사는 항해술·운용술을, 측량사는 측량·역사학을 대신 맡습니다. 통역은 언어를 대신합니다. 경리는 회계로 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 냅니다. 그림·세공은 누가 가졌든(자리와 상관없이) 발견물의 가치를 올립니다. 선실에서 오래 지내면 그 방의 특기가 늘어납니다(★). 다른 배의 선장은 자기 배에서만 항해술(속도·폭풍)·포술·검술·조선기술을 씁니다. 역할은 술집·여관의 「부하편성」에서 바꿉니다. 다른 배의 선장·조타수·갑판·파수꾼·선실은 능력에 맞게 저절로 정해지고(조타수·갑판·파수꾼·선실은 충성만 지킨다), 자리가 없는 부하는 붉은 바탕으로 보입니다. 그 밖의 부하는 「기함 선실」에서 방(요리실·진료실·포격실…)에 두면 그 방의 특기가 함대에 쓰입니다. 자리가 없는 부하는 달마다 충성이 떨어지고, 충성이 40 아래면 일을 건성으로 하며, 0이 되면 배에서 내리려 합니다.</div><div class="mates"></div>';
-    var box2 = el.querySelector('.mates');
     R.tidyCaptains();
     if (G.CrewAuto) G.CrewAuto.refresh();
-    s.mates.forEach(function (m) {
-      var d = G.MATE[m.id]; if (!d) return;
-      var rc = G.CabinView && G.CabinView.rowClass ? G.CabinView.rowClass(m) : '';   // 대기(자리 없음)는 붉은 바탕, 다른 배 사람은 푸른 바탕 (2026-10-28)
-      var row = U.el('div', 'shipcard' + (rc ? ' mate-' + rc : ''), '<div class="pp"></div><div><div class="flex"><b style="font-size:21px">' + d.name + '</b>' + (G.Bio ? G.Bio.link(d.name) : '') + (d.witch ? '<span class="tag">마녀</span>' : d.wd ? '<span class="tag">철새 · ' + U.esc(d.natName || '') + '</span>' : '') + (G.OldGuard && G.OldGuard.tags ? G.OldGuard.tags(m, d) : '') + (rc === 'idle' ? '<span class="tag cb-idle-tag" title="자리가 없는 부하는 달마다 충성이 떨어진다 — 기함 선실에 두거나 술집 「부하편성」의 자동 배치">대기 · 자리 없음</span>' : '<span class="tag">' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '</span>') + (G.Banter ? '<span class="tag" title="생김새로 정해진 말투 — 동물·식물을 발견하면 이 말투로 수다를 떤다">말투 · ' + U.esc(G.Banter.toneName(m.id)) + '</span>' : '') + (G.Cabins && G.Cabins.eff(m) < 1 ? '<span class="tag hurt">일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%</span>' : '') + (R.mateHurt(m) ? '<span class="tag hurt">부상 ' + R.mateHurt(m) + '일</span>' : '') + '<span class="right muted">월급 ' + R.mateWage(m.id) + '닢 · 충성 ' + Math.round(m.loyal || 70) + '</span></div>' +
-        '<div class="muted" style="font-size:16px;margin:4px 0">' + d.desc + '</div>' +
-        mateStats(d) +
-        '<div style="font-size:16px">' + mateSkills(m, d) + '</div>' +
-        (G.Cabins && G.Cabins.growNote(m) ? '<div style="font-size:15px;margin-top:2px" class="muted">선실 수련 · ' + U.esc(G.Cabins.growNote(m)) + '</div>' : '') +
-        '<div style="font-size:15px;margin-top:4px" class="muted">' + mateLangs(m, d) + '</div></div>');
-      row.style.gridTemplateColumns = '96px 1fr';
-      row.querySelector('.pp').appendChild(A.portraitCanvas(G.Scenes.mateSpec(m.id), 96));
-      box2.appendChild(row);
-    });
-    if (G.Romance) el.insertAdjacentHTML('beforeend', G.Romance.html());   // 부하들 사이 (js/systems/romance.js)
-    cabinButton(el, false);
+    G.MateBook.mount(el);
   };
 
   /** 철새 명부: 지금 항구를 떠도는 떠돌이 항해사와 마녀 (소문으로 들은 머무는 곳) */
@@ -618,7 +580,10 @@
     G.State.rememberSettings(st);
     var kl = function (a) { return G.Keys.label(a, st); };
     var diffName = { easy: '쉬움', normal: '보통', original: '엄격 규칙' }[st.diff] || st.diff;
-    el.innerHTML = '<div class="kv" style="grid-template-columns:160px 1fr;align-items:center">' +
+    el.innerHTML = '<div class="flex" style="gap:12px">' +
+      (st.diff === 'easy' ? '<button class="btn navy" data-act="save">항해 일지 기록</button>' : '') +
+      '<button class="btn" data-act="title">타이틀로 돌아가기</button></div><div class="sep"></div>' +
+      '<div class="kv" style="grid-template-columns:160px 1fr;align-items:center">' +
       '<div>난이도</div><div>' + diffName + ' <small class="muted">(' + (st.diff === 'original' ? '저장은 모국 도시의 여관에서만' : st.diff === 'easy' ? '어디서나 저장 가능' : '저장은 여관에서') + ')</small></div>' +
       '<div>효과음</div><div><input type="range" min="0" max="100" data-k="sound" value="' + Math.round((st.sound != null ? st.sound : 0.5) * 100) + '"></div>' +
       '<div>음악</div><div><input type="range" min="0" max="100" data-k="music" value="' + Math.round((st.music != null ? st.music : 0.35) * 100) + '"></div>' +
@@ -629,6 +594,12 @@
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
+      '<div>알림</div><div><div class="opt-row">' + [['normal', '보통 크기'], ['small', '작게']].map(function (o) { return '<div class="opt' + ((st.noticeSize || 'normal') === o[0] ? ' on' : '') + '" data-nsz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
+        '<div class="opt-row" style="margin-top:4px">' + [['auto', '장면에 맞춰'], ['top', '늘 위'], ['bottom', '늘 아래']].map(function (o) { return '<div class="opt' + ((st.noticePos || 'auto') === o[0] ? ' on' : '') + '" data-npos="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
+        '<div class="opt-row" style="margin-top:4px"><div class="opt' + (!st.noticeHideLine ? ' on' : '') + '" data-nhl="0">여느 소식도 띄움</div><div class="opt' + (st.noticeHideLine ? ' on' : '') + '" data-nhl="1">큰 일만 띄움</div></div>' +
+        '<small class="muted">장면에 맞춰: 도시는 윗줄 아래 · 바다는 아래 단추줄 위 · 창이 열리면 왼쪽 아래. 대화 중 소식은 모아 두었다가 대화가 끝나면 띄웁니다. 비가 오고 그침·노 젓기는 바람 판에, 먼 나라 해전 소문은 띄우지 않습니다 — 모두 윗줄 왼쪽 나침반(지난 소식)에 남습니다.</small></div>' +
+      '<div>항해 상태판</div><div><div class="opt-row"><div class="opt' + (!st.statusOpen ? ' on' : '') + '" data-sop="0">한 줄로 접기</div><div class="opt' + (st.statusOpen ? ' on' : '') + '" data-sop="1">늘 펼침</div></div>' +
+        '<small class="muted">접으면 목적지·도착·보급 한 줄만 — 마우스를 올리거나 누르면 속력·진로·항해 날수까지 펼칩니다.</small></div>' +
       '<div>바다의 방향키</div><div><div class="opt-row"><div class="opt' + (st.keyMode !== 'helm' ? ' on' : '') + '" data-km="dir">방위로 가기</div><div class="opt' + (st.keyMode === 'helm' ? ' on' : '') + '" data-km="helm">손으로 키 잡기</div></div>' +
         '<small class="muted">' + (st.keyMode === 'helm' ? kl('up') + ' 누르는 동안 나아감 · ' + kl('left') + '/' + kl('right') + ' 뱃머리 돌리기 · ' + kl('down') + ' 멈춤 · ' + kl('confirmAlt') + ' 순항/정지' : kl('up') + ' 북 · ' + kl('down') + ' 남 · ' + kl('left') + ' 서 · ' + kl('right') + ' 동 (두 키 동시 입력은 대각선) · ' + kl('confirmAlt') + ' 정지') + '</small></div>' +
       '<div>마우스 따라가기</div><div><div class="opt-row"><div class="opt' + (st.mouseFollow ? ' on' : '') + '" data-mf="1">켬</div><div class="opt' + (!st.mouseFollow ? ' on' : '') + '" data-mf="0">끔</div></div>' +
@@ -647,9 +618,7 @@
           (a.optional && !none ? '<button class="btn small ghost keybind-clr" data-keyclr="' + a.id + '" title="이 단축키를 뺍니다">빼기</button>' : '') +
           '<button class="btn small keybind-btn" data-keyact="' + a.id + '">' + U.esc(G.Keys.label(a.id, st)) + '</button></div>';
       }).join('') + '</div><div class="flex" style="gap:8px;margin-top:8px"><button class="btn small ghost" data-act="keyreset">기본 키로 되돌리기</button><small class="muted">바꿀 항목을 누른 뒤 새 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다. 수첩 단축키는 「빼기」로 뺄 수 있습니다(키를 기다릴 때 Delete도 뺍니다).</small></div></div>' +
-      '</div><div class="sep"></div><div class="flex" style="gap:12px">' +
-      (st.diff === 'easy' ? '<button class="btn navy" data-act="save">항해 일지 기록</button>' : '') +
-      '<button class="btn" data-act="title">타이틀로 돌아가기</button></div>';
+      '</div>';
     U.$$('input[type=range]', el).forEach(function (r) { r.oninput = function () { st[r.dataset.k] = r.value / 100; G.State.rememberSettings(st); if (G.Audio) G.Audio.setVolume(); }; });
     U.$$('[data-fs]', el).forEach(function (o) { o.onclick = function () { var want = o.dataset.fs === '1'; (want === UI.fs.on() ? Promise.resolve() : want ? UI.fs.enter() : UI.fs.exit()).then(function () { setTimeout(function () { PAGES.menu(el, win); }, 120); }); }; });
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
@@ -657,6 +626,10 @@
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
+    U.$$('[data-nsz]', el).forEach(function (o) { o.onclick = function () { st.noticeSize = o.dataset.nsz; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); UI.toast('알림을 이 크기로 띄웁니다.', 'info', 2600, { tier: 'line' }); PAGES.menu(el, win); }; });
+    U.$$('[data-npos]', el).forEach(function (o) { o.onclick = function () { st.noticePos = o.dataset.npos; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); PAGES.menu(el, win); }; });
+    U.$$('[data-nhl]', el).forEach(function (o) { o.onclick = function () { st.noticeHideLine = o.dataset.nhl === '1'; G.State.rememberSettings(st); PAGES.menu(el, win); }; });
+    U.$$('[data-sop]', el).forEach(function (o) { o.onclick = function () { st.statusOpen = o.dataset.sop === '1'; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); PAGES.menu(el, win); }; });
     U.$$('[data-km]', el).forEach(function (o) { o.onclick = function () { st.keyMode = o.dataset.km; PAGES.menu(el, win); }; });
     U.$$('[data-mf]', el).forEach(function (o) { o.onclick = function () { st.mouseFollow = o.dataset.mf === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-cs]', el).forEach(function (o) { o.onclick = function () { st.ctrlSens = o.dataset.cs; PAGES.menu(el, win); }; });

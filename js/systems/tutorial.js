@@ -211,7 +211,7 @@
         (goal ? '<div class="tb-g">' + G.icon('check') + '<span>' + goal + '</span></div>' : '');
     }
     root.classList.add('tut-on');
-    if (toasts) toasts.style.top = (box.offsetTop + box.offsetHeight + 8) + 'px';
+    if (toasts) toasts.style.top = (toasts.getAttribute('data-zone') || 'top') === 'top' ? (box.offsetTop + box.offsetHeight + 8) + 'px' : '';   // 알림이 아래·왼쪽 아래 자리일 때는 건드리지 않는다 (js/ui/ui.js 알림 자리)
   }
   var GLOW_SEL = '.cmd, .choice, .btn, .hire-row, tr.click, .todo .tr';
   function labelOf(el) {

@@ -5,7 +5,7 @@
    · 세운 해가 되면 여느 발견물처럼 찾을 수 있다.
    조정값 G.BALANCE.mirage — from: 이 해부터 신기루가 보인다, after: 이 해보다 뒤에 세워지는 것만, again: 다시 보이는 간격(일),
    fame: 처음 볼 때 명성, show: 떠 있는 시간(초)
-   · 미래의 건물 (2026-10-18): 세운 해가 future(1800)년 이후인 건물은 그 자리·그 도시에 가면 언제든 「신기루로 본 발견」으로 끝난다
+   · 미래의 건물 (2026-10-18): 세운 해가 future(1700 — 2026-11-01 사용자 요청으로 1800에서 낮춤: 게임이 1700년에 끝나 그 뒤의 발견물을 못 찾던 것)년 이후인 것은 그 자리·그 도시에 가면 언제든 「신기루로 본 발견」으로 끝난다
      (js/systems/discovery.js D.isFuture·D.mirageNow). 명성·가치는 futureK만 (거리·위치에 비해 적게), 유물은 없다.
      발견 카드를 닫으면 그 신기루가 흩어져 사라지는 장면(M.vanish, vanish초)이 이어진다. */
 (function (G) {
@@ -14,7 +14,7 @@
   var M = {};
   G.Mirage = M;
   G.BALANCE = G.BALANCE || {};
-  G.BALANCE.mirage = G.BALANCE.mirage || { from: 1600, after: 1600, again: 45, fame: 12, show: 7, future: 1800, futureK: 0.2, vanish: 3.2 };
+  G.BALANCE.mirage = G.BALANCE.mirage || { from: 1600, after: 1600, again: 45, fame: 12, show: 7, future: 1700, futureK: 0.2, vanish: 3.2 };
   // 도시의 신기루 (2026-10-29 사용자 요청): cityFrom년 전에는 도시 안에 신기루 건물이 나오지 않고, 그 뒤로는 도시에 들어설 때마다 cityChance 확률로 나타난다 (js/systems/discovery.js D.inTown)
   if (G.BALANCE.mirage.cityFrom == null) G.BALANCE.mirage.cityFrom = 1486;
   if (G.BALANCE.mirage.cityChance == null) G.BALANCE.mirage.cityChance = 0.1;
@@ -123,7 +123,7 @@
     if (src) { var im = new Image(); im.src = src; im.alt = d.name; pic.appendChild(im); }
     else if (G.Art && G.Art.discoveryArt) { try { pic.appendChild(G.Art.discoveryArt(d, 720, 320)); } catch (e) { /* 그림이 없으면 글만 */ } }
     el.appendChild(pic);
-    el.appendChild(U.el('div', 'mirage-cap', '<b>신기루</b> — ' + U.esc(d.name) + '<small>손을 뻗자 아지랑이처럼 흩어져 사라졌다. ' + (d.built ? d.built + '년에야 세워질 것이다.' : '') + '</small>'));
+    el.appendChild(U.el('div', 'mirage-cap', '<b>신기루</b> — ' + U.esc(d.name) + '<small>손을 뻗자 아지랑이처럼 흩어져 사라졌다. ' + (d.built ? d.built + (d.cat === 'ruin' ? '년에야 세워질 것이다.' : '년에야 세상에 나올 것이다.') : '') + '</small>'));
     root.appendChild(el);
     if (G.Audio && G.Audio.sfx) { try { G.Audio.sfx('wake'); } catch (e) { /* 소리가 없어도 된다 */ } }
     return new Promise(function (res) { setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); res(); }, ms + 150); });

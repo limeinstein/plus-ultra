@@ -1,4 +1,4 @@
-/* 항구: 출항, 보급, 함대편성, 마을정보, 발표 (선원 모집·내림은 술집 — H.crew를 술집이 부른다) */
+/* 항구: 출항, 보급, 함대편성, 마을정보, 발표 (선원 모집·내림은 항구와 술집에서 같은 H.crew를 부른다) */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R, C = G.Scenes.city;
@@ -23,6 +23,7 @@
     return [
       { label: '출항 준비', icon: 'check', sub: H.prepNote(c), onClick: function () { return H.prep(c); } },
       { label: '출항', icon: 'sail', onClick: function () { return H.depart(c); } },
+      { label: '선원을 모은다', icon: 'people', sub: C.B.tavern.crewSub(), onClick: function () { return H.crew(c); } },
       (G.Monsoon && G.Monsoon.rim(c)) ? { label: '계절풍 형편', icon: 'wind', sub: G.Monsoon.NAME[G.Monsoon.portNote(c).phase], onClick: function () { return H.monsoon(c); } } : null,
       { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : R.daysOfFood() + '·' + R.daysOfWater() + '일 · 자재 ' + Math.floor(S().fleet.mat || 0), onClick: function () { return H.supply(c); } },
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
@@ -654,7 +655,7 @@
 
   // ---------------------------------------------------------------- crew
   /** 선원 수 조정: 목표 인원을 정하면 모자란 만큼 고용하고 남는 만큼 내린다 (한 번에).
-      술집의 「선원을 모은다」에서 부른다 (항구 메뉴에서는 빠졌다 — 자동 플레이는 이 함수를 바로 부른다).
+      항구·술집의 「선원을 모은다」에서 함께 부른다. 모집 비용과 승원 한도는 같다.
       탐험대가 뭍길로 들어온 도시(s.loc.via === 'land')에서는 모은 선원이 탐험대에 합류하고, 내린 선원은 탐험대에서 빠진다.
       배에 다시 태울 수 있어야 하므로 최대는 언제나 함대의 최대 승원 수다 */
   H.crew = async function (c) {

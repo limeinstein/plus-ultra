@@ -339,7 +339,7 @@
         }
       }
       }
-      if (!st.trail.length || G.Geo.dist(st.trail[st.trail.length - 1][0], st.trail[st.trail.length - 1][1], l.lon, l.lat) > 0.02) { st.trail.push([l.lon, l.lat]); if (st.trail.length > 400) st.trail.shift(); }
+      if (!st.trail.length || G.Geo.dist(st.trail[st.trail.length - 1][0], st.trail[st.trail.length - 1][1], l.lon, l.lat) > 0.02) { st.trail.push([l.lon, l.lat, st.t]); if (st.trail.length > 400) st.trail.shift(); }
       st.dayAcc += days;
       if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); }
     }
@@ -635,7 +635,7 @@
     var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');
     var terr = l.lon != null ? G.Geo.terrain(l.lon, l.lat) : 'grass';
     if (terr === 'sea') terr = 'grass';
-    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader, beast: o.beast, leaderLook: o.leaderLook, noSpecial: o.noSpecial }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt });   // leader·hold·flee: 이야기 사건의 싸움 (js/systems/aztec.js)
+    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader, beast: o.beast, leaderLook: o.leaderLook, noSpecial: o.noSpecial }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt, conquest: o.conquest });   // conquest: 점령전은 지휘관 저격만으로 끝나지 않는다
     var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
     var res = r.res;
     if (res === 'win') {
@@ -1057,14 +1057,17 @@
       if (mp[0] < -300 || mp[0] > 1900 || mp[1] < -300 || mp[1] > 1200) return;
       G.Explore.drawMarker(ctx, m, mp, m.r * st.cam.zoom, st.t, ff);
     });
-    // 지나온 길 (멀리는 옅은 점선, 가까이는 발자국·바퀴 자국)
-    ctx.strokeStyle = 'rgba(90,40,20,.30)'; ctx.lineWidth = 2; ctx.setLineDash([3, 6]); ctx.beginPath();
+    // 지나온 길도 발자국과 같이 사라진다. 편대가 따라갈 경로 기록은 지우지 않는다.
+    ctx.lineWidth = 2; ctx.setLineDash([3, 6]);
     var lastP = null;
-    st.trail.forEach(function (t, i) { var p = toScreen(t[0], t[1]); if (lastP && Math.abs(p[0] - lastP[0]) + Math.abs(p[1] - lastP[1]) < 80) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); lastP = p; }); ctx.stroke(); ctx.setLineDash([]);
+    st.trail.forEach(function (t) {
+      var p=toScreen(t[0],t[1]),fade=G.Party.trackFade(t[2]==null?Infinity:st.t-t[2]);
+      if(fade&&lastP&&Math.abs(p[0]-lastP[0])+Math.abs(p[1]-lastP[1])<80){ctx.strokeStyle='rgba(90,40,20,'+(.3*fade).toFixed(3)+')';ctx.beginPath();ctx.moveTo(lastP[0],lastP[1]);ctx.lineTo(p[0],p[1]);ctx.stroke();}lastP=p;
+    });ctx.setLineDash([]);
     var mt = MT(), terrNow = G.Geo.terrain(l.lon, l.lat), psz = (G.FX && G.FX.party && G.FX.party.size) || 1;
-    var tp = [toScreen(l.lon, l.lat)];
-    for (var ti = st.trail.length - 1; ti >= 0 && tp.length < 220; ti--) { var q = toScreen(st.trail[ti][0], st.trail[ti][1]), pv = tp[tp.length - 1]; if (Math.abs(q[0] - pv[0]) + Math.abs(q[1] - pv[1]) > 40) break; tp.push(q); }
-    if (!G.ExpeditionTracks || G.FX.sprites.expedition.formation.enabled === false) G.Party.drawTracks(ctx, tp.slice(0, 140), mt.id, terrNow, psz);
+    var tp = [toScreen(l.lon, l.lat)];tp[0][2]=st.t;
+    for (var ti = st.trail.length - 1; ti >= 0 && tp.length < 220; ti--) { var q = toScreen(st.trail[ti][0], st.trail[ti][1]), pv = tp[tp.length - 1]; if (Math.abs(q[0] - pv[0]) + Math.abs(q[1] - pv[1]) > 40) break; q[2]=st.trail[ti][2];tp.push(q); }
+    if (!G.ExpeditionTracks || G.FX.sprites.expedition.formation.enabled === false) G.Party.drawTracks(ctx, tp.slice(0, 140), mt.id, terrNow, psz, st.t);
     // destination
     if (st.path) { var dp = toScreen(st.path[0], st.path[1]), pp0 = toScreen(l.lon, l.lat); ctx.strokeStyle = 'rgba(255,245,220,.8)'; ctx.setLineDash([6, 7]); ctx.beginPath(); ctx.moveTo(pp0[0], pp0[1]); ctx.lineTo(dp[0], dp[1]); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.arc(dp[0], dp[1], 8, 0, 7); ctx.stroke(); }
     // 지진: 땅에서 피어오르는 먼지 · 튀는 잔돌 · 떨리는 우듬지와 풀 (탐험대 아래)

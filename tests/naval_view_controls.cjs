@@ -1,6 +1,6 @@
-/* 확대 항해 추적·좁은 화면 메뉴·넓은 해전·아군 포격 정지의 실제 브라우저 검사. */
+/* 확대 항해 추적·좁은 화면 메뉴·짧은 교전 거리·아군 포격 정지의 실제 브라우저 검사. */
 const fs=require('fs'),path=require('path'),assert=require('assert'),{pathToFileURL}=require('url'),{chromium}=require('playwright');
-const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU==='1',OUT=path.join(ROOT,'artifacts/naval-view-20261031',GPU?'gpu':'software');fs.mkdirSync(OUT,{recursive:true});
+const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU==='1',OUT=path.join(ROOT,'artifacts/naval-view-20261101',GPU?'gpu':'software');fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:GPU?['--use-angle=d3d11','--enable-gpu','--ignore-gpu-blocklist']:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-sandbox']});
  const errors=[],report={mode:GPU?'GPU':'SwiftShader'};
@@ -16,6 +16,9 @@ const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU==='1',OUT=pat
    const draw=G.Ship3D.draw;window.__draws=[];G.Ship3D.draw=function(ctx,x,y,a,len,spec,t){const ok=draw.apply(this,arguments);window.__draws.push({type:spec.type,sid:spec.sid,ok,length:len,pixelLength:len*Math.hypot(ctx.getTransform().a,ctx.getTransform().b)});return ok;};
   });
   console.log('실제 항해 준비 완료');
+  await page.getByRole('button',{name:'선박을 3배율로 보기',exact:true}).click();
+  assert.equal(await page.evaluate(()=>G.Scenes.sea.runtime().cam.zoomT),330);
+
   report.tracking=await page.evaluate(()=>{
    const B=G.Scenes.sea,st=B.runtime(),s=G.Game.state,out=[];
    for(const speed of [1,4])for(const heading of [0,Math.PI/2,Math.PI,-Math.PI/2]){
@@ -38,10 +41,10 @@ const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU==='1',OUT=pat
   report.initial=await page.evaluate(()=>{
    const s=G.Game.state;s.fleet.ships=['galleon','geobukseon','lgalleon'].map(id=>G.R.newShip(id));s.fleet.crew=400;s.loc={mode:'sea',lon:-30,lat:30,heading:0};
    G.Game.go('battle',{npc:{kind:'navy',nation:'ES',n:3,ships:['galleon','frigate','galley'],K:.4}});const B=G.Scenes.battle,st=B.runtime();st.paused=true;window.__draws=[];B.update(0);
-   return{zoom:st.vz,arena:st.arena,separation:Math.hypot(st.enFlag.x-st.myFlag.x,st.enFlag.y-st.myFlag.y),draws:window.__draws.slice(),chart:document.querySelector('.chart-status').textContent};
-  });assert.equal(report.initial.zoom,2.2);assert.equal(report.initial.arena,3200);assert(report.initial.separation>1600);assert(/화면 밖 3척/.test(report.initial.chart));assert(report.initial.draws.every(d=>d.ok));assert(report.initial.draws.some(d=>d.pixelLength>250));
+   return{mode:st.cameraMode,bounds:st.ships.map(b=>({x:800+(b.x-st.cx)*st.vz,y:450+(b.y-st.cy)*st.vz,len:b.len*st.vz})),zoom:st.vz,arena:st.arena,separation:Math.hypot(st.enFlag.x-st.myFlag.x,st.enFlag.y-st.myFlag.y),draws:window.__draws.slice(),chart:document.querySelector('.chart-status').textContent};
+  });assert.equal(report.initial.mode,'combat');assert(report.initial.zoom>0&&report.initial.zoom<=1.35);assert(report.initial.bounds.every(b=>b.x-b.len*.75>=350&&b.x+b.len*.75<=1220&&b.y-b.len*1.35>=100&&b.y+b.len*.65+32*report.initial.zoom<=790));assert.equal(report.initial.arena,3200);assert(report.initial.separation>400&&report.initial.separation<650);assert(/적함 3척/.test(report.initial.chart));assert(report.initial.draws.every(d=>d.ok));assert(report.initial.draws.length>=6);assert(report.initial.draws.some(d=>d.pixelLength>100));
   report.chartBounds=await page.evaluate(()=>{const b=document.querySelector('.battle-chart').getBoundingClientRect(),c=document.querySelector('.battle-chart canvas').getBoundingClientRect();return{box:[b.left,b.right,b.top,b.bottom],canvas:[c.left,c.right,c.top,c.bottom]};});assert(report.chartBounds.canvas[0]>=report.chartBounds.box[0]&&report.chartBounds.canvas[1]<=report.chartBounds.box[1]);
-  await page.screenshot({path:path.join(OUT,'battle-start.png')});console.log('확대 추적·메뉴 경계·멀리서 시작하는 해전 확인');
+  await page.screenshot({path:path.join(OUT,'battle-start.png')});console.log('확대 추적·메뉴 경계·가까이서 시작하는 해전 확인');
   await page.getByRole('button',{name:'전장 전체',exact:true}).click();await page.evaluate(()=>{G.Scenes.battle.update(2);});await page.screenshot({path:path.join(OUT,'battle-overview.png')});
   assert(await page.evaluate(()=>G.Scenes.battle.runtime().vz<.2));
   const chart=page.locator('.battle-chart canvas');await chart.click({position:{x:160,y:120}});assert.equal(await page.evaluate(()=>G.Scenes.battle.runtime().cameraMode),'chart');

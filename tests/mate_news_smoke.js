@@ -45,9 +45,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     let r = await page.evaluate(() => {
       const el = document.createElement('div'); document.body.appendChild(el);
       G.Info.open('mates'); const w = [...document.querySelectorAll('.win')].pop();
-      const txt = [...w.querySelectorAll('.mate-st')].map(e => e.innerText.replace(/\s+/g, ' '));
-      w.querySelector('.close') ? w.querySelector('.close').click() : null;
-      document.querySelectorAll('#ui .modal-back').forEach(e => e.remove());
+      const txt = [...w.querySelectorAll('.mb-table tbody tr')].map(e => [...e.querySelectorAll('.mb-number')].slice(0, 4).map((c, i) => G.STATS[i].name + ' ' + c.textContent).join(' '));
+      w.querySelector('.title .x').click();
       return { n: txt.length, first: txt[0], stats: G.STATS.map(x => x.name).join(',') };
     });
     ok(r.n === 6 && /체력 \d+ 지력 \d+ 무력 \d+ 매력 \d+/.test(r.first), '수첩 「동료」에 체력·지력·무력·매력 — ' + r.first);

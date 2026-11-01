@@ -13,6 +13,11 @@
   };
 
   function keeper() { return C.npc('trader', '교역소 주인'); }
+  async function blocked(c, id, side) {
+    var why = G.Sakoku && G.Sakoku.tradeBlock(c, id, side);
+    if (!why) return false;
+    await C.say(keeper(), why); return true;
+  }
   T.enter = async function (c) {
     var cur = C.current(), mk0 = R.market(c.id); cur.talked = false;
     // 같은 날 다시 들어와도 값 깎기를 새로 굴릴 수 없다 (나갔다 들어오기만 하면 되던 것)
@@ -58,6 +63,12 @@
     var v = G.Era.mult(c, id); if (v < 1.15 && v > 0.87) return '';
     var nt = (G.ERA_DEMAND[id] || {}).note || '';
     return ' <span class="tag ' + (v >= 1 ? 'era-up' : 'era-down') + '" title="' + U.esc('유럽 시장의 시대 수요 ×' + v.toFixed(2) + (nt ? ' — ' + nt : '')) + '">시대 ' + (v >= 1 ? '▲' : '▼') + '</span>';
+  }
+  function sourceTag(c, id) {
+    var k = G.Era && G.Era.source ? G.Era.source(c, id) : 1;
+    if (k > 1.15) return ' <span class="tag era-up" title="산지의 전란·교역 독점으로 공급이 줄어 매입가가 높고 재고가 적다. 중계항도 영향을 받는다.">공급 부족</span>';
+    if (k < 0.9) return ' <span class="tag era-down" title="수출 생산이 늘어 매입가가 내리고 재고가 넉넉해졌다.">생산 확대</span>';
+    return '';
   }
   /** 살아 있는 경제의 꼬리표 (js/systems/economy.js · js/data/econ.js): 세상의 시장 사건 ▲▼ */
   function evTag(c, id) { return (G.Econ ? G.Econ.tag(c, id) : '') + (G.TradeFleet ? G.TradeFleet.tag(c, id) : ''); }   // + 교역 항로의 상선대 ▼▲ (js/systems/tradefleets.js)
@@ -123,6 +134,7 @@
 
   // ---------------------------------------------------------------- buy
   T.buy = async function (c) {
+    if (await blocked(c, null, 'buy')) return;
     var s = S(), sel = {};
     for (;;) {
       var goods = R.cityGoods(c).filter(function (id) { return G.GOOD[id] && (!G.GOOD[id].nw || c.region === 10 || R.S().date.y >= 1520); });
@@ -130,7 +142,7 @@
         var g = G.GOOD[id], have = s.fleet.cargo[id] ? s.fleet.cargo[id].q : 0;
         var bs = G.Ledger ? G.Ledger.bestSell(id, c.id) : null, gain = bs ? bs.price - buyP(c, id) : null;
         var relay = R.isRelay(c, id) ? ' <span class="tag relay" title="이 항구는 산지가 아니라 먼 곳(' + G.TradeGoods.originRegions(id).join('·') + ')에서 들여와 판다 — 산지보다 비싸지만 더 먼 곳에 팔면 남는다">중계</span>' : '';
-        return '<tr class="click" data-id="' + id + '"><td class="pick"><input type="checkbox" class="bpick" data-id="' + id + '"' + (sel[id] ? ' checked' : '') + ' title="골라서 한꺼번에 산다"></td><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + relay + specTag(c, id) + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="유행하는 물건 — 값이 뛰었다">유행</span>' : '') + eraTag(c, id) + evTag(c, id) + '</td><td class="muted">' + G.GOOD_CATS[g.cat] + (G.Cargo ? ' <small title="1통의 무게 — 배가 버티는 무게에 들어간다">· 무게 ' + G.Cargo.wt(id) + '</small>' : '') + '</td><td class="num">' + U.num(buyP(c, id)) + '</td><td class="num">' + R.supply(c, id) + '</td><td class="num">' + (have || '') + '</td>' +
+        return '<tr class="click" data-id="' + id + '"><td class="pick"><input type="checkbox" class="bpick" data-id="' + id + '"' + (sel[id] ? ' checked' : '') + ' title="골라서 한꺼번에 산다"></td><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + relay + specTag(c, id) + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="유행하는 물건 — 값이 뛰었다">유행</span>' : '') + eraTag(c, id) + sourceTag(c, id) + evTag(c, id) + '</td><td class="muted">' + G.GOOD_CATS[g.cat] + (G.Cargo ? ' <small title="1통의 무게 — 배가 버티는 무게에 들어간다">· 무게 ' + G.Cargo.wt(id) + '</small>' : '') + '</td><td class="num">' + U.num(buyP(c, id)) + '</td><td class="num">' + R.supply(c, id) + '</td><td class="num">' + (have || '') + '</td>' +
           '<td class="num">' + where(bs) + '</td><td class="num ' + (gain > 0 ? 'down' : 'up') + '">' + (gain == null ? '' : (gain > 0 ? '+' : '') + U.num(gain)) + '</td></tr>';
       }).join('');
       var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, Math.floor(R.freeVol())) + '</b>통' + (G.Cargo ? ' · 무게 여유 <b>' + Math.max(0, Math.floor(G.Cargo.wfree())) + '</b>' : '') + ' · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
@@ -166,6 +178,7 @@
   }
   T.offerUnload = offerUnload;
   async function buyOne(c, id) {
+    if (await blocked(c, id, 'buy')) return;
     var s = S(), g = G.GOOD[id], price = buyP(c, id), f = s.fleet;
     if (!f.cargo[id] && Object.keys(f.cargo).length >= R.maxKinds()) { await C.say(keeper(), '자네 배에는 더 이상 다른 종류의 짐을 실을 곳이 없어 보이는군. (품목 ' + R.maxKinds() + '종까지)'); return; }
     var stock = R.supply(c, id), free = G.Cargo ? G.Cargo.room(id) : Math.max(0, R.free()), byGold = Math.floor(s.player.gold / price);
@@ -210,6 +223,7 @@
 
   // ---------------------------------------------------------------- sell
   T.sell = async function (c) {
+    if (await blocked(c, null, 'sell')) return;
     var s = S(), soldAny = false, sel = {};
     for (;;) {
       var ids = Object.keys(s.fleet.cargo);
@@ -563,8 +577,9 @@
   }
   /** 일괄 거래 창. mode = 'buy' | 'sell', ids = 고른 품목 */
   T.batch = async function (c, mode, ids) {
+    if (await blocked(c, null, mode)) return false;
     var s = S(), buy = mode === 'buy', k = keeper();
-    ids = ids.filter(function (id) { return G.GOOD[id] && (buy || s.fleet.cargo[id]); });
+    ids = ids.filter(function (id) { return G.GOOD[id] && (buy || s.fleet.cargo[id]) && !(G.Sakoku && G.Sakoku.tradeBlock(c, id, mode)); });
     if (!ids.length) return false;
     if (buy && G.Slave && ids.some(function (id) { return G.Slave.is(id); }) && !(await G.Slave.confirm(c))) ids = ids.filter(function (id) { return !G.Slave.is(id); });
     if (!ids.length) return false;

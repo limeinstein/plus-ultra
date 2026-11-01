@@ -103,11 +103,12 @@
   /** 세워진 건물인가 (불가사의의 built 해) */
   /** 앞 고리를 모두 찾았는가 (꼬리에 꼬리를 무는 발견 — 열리기 전에는 그 자리에 가도 찾지 못한다) */
   D.needMet = function (d) { return !d || !d.need || d.need.every(function (id) { return D.foundByMe(id); }); };
-  /* 미래의 건물 (2026-10-18): 1800년 이후에 세워질 건물(유적)은 그 자리·그 도시에 가면 언제든 「신기루로 본 발견」으로 끝난다.
+  /* 미래의 건물 (2026-10-18): 1700년 이후에 세워질 건물(유적)은 그 자리·그 도시에 가면 언제든 「신기루로 본 발견」으로 끝난다.
      아직 없는 것을 잠깐 본 것이라 유물·노획은 없고, 발견 명성·가치는 거리·위치에 비해 적다 (G.BALANCE.mirage.futureK).
-     도시 안 건물은 발견하기 전까지 거리에 일렁이며 서 있다가, 발견하는 순간 흩어져 사라진다 (js/scenes/town.js T.vanish). */
+     도시 안 건물은 발견하기 전까지 거리에 일렁이며 서 있다가, 발견하는 순간 흩어져 사라진다 (js/scenes/town.js T.vanish).
+     2026-11-01: 게임이 1700년에 끝나므로 기준을 1700년으로 낮추고, 건물만이 아니라 생물(견종·공룡)·자연(쉬르트세이)도 세상에 나온 해(built)가 그 뒤면 신기루로 본다. */
   function MC() { return (G.BALANCE && G.BALANCE.mirage) || {}; }
-  D.isFuture = function (d) { return !!(d && d.cat === 'ruin' && d.built && (d.alwaysMirage || d.built >= (MC().future || 1800))); };   // alwaysMirage: 세운 해와 상관없이 늘 신기루로 본다 (아메리카의 대학 — js/data/amer1630.js)
+  D.isFuture = function (d) { return !!(d && d.built && (d.alwaysMirage || d.built >= (MC().future || 1700))); };   // alwaysMirage: 세운 해와 상관없이 늘 신기루로 본다 (아메리카의 대학 — js/data/amer1630.js)
   /** 지금은 아직 세워지지 않은 미래의 건물인가 (그 해가 지나면 여느 발견물) */
   D.mirageNow = function (d) { return D.isFuture(d) && (d.alwaysMirage || S().date.y < d.built); };
   /** 신기루로 본 발견인가 (이미 찾았으면 찾을 때의 기록, 아니면 지금 해) */

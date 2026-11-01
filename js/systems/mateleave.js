@@ -12,6 +12,9 @@
      사망·건강은 위기를 넘길 수 있다 — 짐칸의 약재(교역품 herbs 1통) · 배의 의원(의학 특기, 진료실이 있으면 더) · 제독의 의학 · 항구의 의원(도시에서만, 금화).
      넘기면 그 부하는 calm일 동안 다시 겪지 않고, 한 해 셈에도 들지 않는다. 다른 일로 떠나는 부하는 충성이 holdLoyal 이상이면 붙잡아 볼 수 있다.
    ■ 떠난 부하: 함대에서 빠지고 술집에 다시 나타나지 않는다(gone_). 남은 이야기는 s.mateFate[id] = {kind, why, y, home, at} — 여급에게 행방을 물으면 이것을 알려 준다.
+   ■ 부부는 함께(2026-11-01 사용자 피드백): 떠나는 부하에게 배에 함께 탄 짝(MLV.spouseOf)이 있으면 그 짝도 한마디 하고 함께 내린다(MLV.follow — why 'spouse', with).
+     죽음은 빼고. 해고(js/city/tavern.js)·충성이 바닥나 떠남(js/systems/cabins.js)·사례금(js/systems/sponsor.js)·세대 교체(js/systems/oldguard.js)도 같다.
+     짝이 떠나지 않기로 한 사람(후계 약속·후견·붙잡힘)이면 둘 다 이별을 겪지 않고, 짝이 있는 부하는 수도원으로 떠나지 않는다.
    ■ 저장: s.mateLeave = {y: 해, n: 그해 일어난 수, pend: [{id, kind, why}], life: {gen, n}, last: 마지막 사건 날, td: 선실 날을 센 날} · s.mates[i].leaveCd · s.mates[i].cabRec */
 (function (G) {
   'use strict';
@@ -75,11 +78,14 @@
   };
   /** 이 부하가 이별을 겪을 수 있나 — 배수(0이면 아니다) */
   MLV.weight = function (m) {
-    var s = S(), k = K(), d = G.MATE[m.id]; if (!d || d.sib || isWife(m.id)) return 0;
+    var s = S(), k = K(), d = G.MATE[m.id]; if (!d || d.sib || m.devoted || isWife(m.id)) return 0;
     if (m.role === 'captain' || MLV.inCabin(m)) return 0;
     if (G.HeirPlan && G.HeirPlan.pledged(m)) return 0;                             // 후계를 맡기로 약속한 부하는 그날까지 떠나지 않는다 (js/systems/heirplan.js)                          // 기함의 선실에 들었거나 다른 배의 선장이면 아니다 (2026-10-29)
     if (m.leaveCd && s.day < m.leaveCd) return 0;
     if (st().pend.some(function (x) { return x.id === m.id; })) return 0;
+    // 부부는 함께 떠나니(MLV.follow) — 짝이 떠나지 않기로 한 사람(후계를 위한 약속 · 후견 · 붙잡힌 사람)이거나 짝의 이별이 이미 정해졌으면 둘 다 남는다 (2026-11-01)
+    var sp = MLV.spouseOf(m.id), sr = sp ? row(sp) : null;
+    if (sr && (sr.devoted || (G.HeirPlan && G.HeirPlan.pledged(sr)) || (sr.leaveCd && s.day < sr.leaveCd) || st().pend.some(function (x) { return x.id === sp; }))) return 0;
     if (MLV.years(m) < k.longYears) return 0;                                      // 40년 넘게 함께한 노장만
     var w = R().age() >= k.oldAge ? k.bothK : 1;
     if (MLV.past(d)) w *= k.pastK;
@@ -104,7 +110,7 @@
       var d = G.MATE[m.id], kw = { death: MLV.eventMate(m) ? 0 : k.kinds.death * (MLV.past(d) ? 2 : 1), health: k.kinds.health, other: k.kinds.other };   // 사건 동료는 죽지 않고 고향으로
       var kind = U.weighted(Object.keys(kw), function (x) { return kw[x]; });
       var e = { id: m.id, kind: kind };
-      if (kind === 'other') e.why = U.pick(D().other.reasons.filter(function (r) { return r.pick !== false; })).id;
+      if (kind === 'other') { var wed = !!MLV.spouseOf(m.id); e.why = U.pick(D().other.reasons.filter(function (r) { return r.pick !== false && !(wed && r.couple === false); })).id; }   // 짝이 있는 부하는 수도원으로 가지 않는다
       if (kind === 'health') e.line = U.ri(0, D().health.lines.length - 1);
       o.pend.push(e); o.n++; L.n++; o.last = s.day;
     });
@@ -142,6 +148,69 @@
     }
   }
 
+  // ---------------------------------------------------------------- 부부는 함께 — 2026-11-01 사용자 피드백 「손주를 보러 떠난 항해사의 짝이 배에 그대로 남았다」
+  //   부부 한쪽이 배를 떠나면(이별의 「다른 일로」·「몸이 상해」, 해고, 충성이 바닥나 떠남, 사례금을 못 받아 떠남, 세대 교체) 짝도 함께 내린다.
+  //   죽음은 빼고 — 남은 짝은 배에 남아 슬퍼한다 (js/systems/romance.js widow). 잠시 자리를 비우는 이야기(이순신이 전라좌수영으로 — 노량 뒤에 돌아온다)도 빼고.
+  /** 배에 함께 탄 짝의 id — 부하끼리 혼례를 올린 부부(G.Romance 부부 단계 · 견우와 직녀)와 처음부터 짝인 사람(d.wed: 셰익스피어와 앤 · 로미오와 줄리엣). 없으면 null
+      두 사람이 모두 배에 있을 때 불러야 한다(견우와 직녀는 둘 다 있어야 부부로 본다) — 떠나는 사람을 함대에서 빼기 전에 */
+  MLV.spouseOf = function (id) {
+    var s = S(); if (!s || !s.mates || !id) return null;
+    var p = G.Romance && G.Romance.pairOf ? G.Romance.pairOf(id) : null, o = null;
+    if (p && p.stage === 'wed' && (p.m === id || p.f === id)) o = p.m === id ? p.f : p.m;
+    var d = G.MATE[id]; if (!o && d && d.wed && G.MATE[d.wed]) o = d.wed;
+    return o && o !== id && row(o) ? o : null;
+  };
+  function callOf(id) { var d = G.MATE[id]; return d && d.g === 'f' ? '아내' : d && d.g === 'm' ? '남편' : '짝'; }
+  /** 짝 대사의 낱말 — {name} 따라 내리는 사람 · {mate} 먼저 떠나는 사람 · {who} 그를 부르는 말 · {self} 떠나는 사람이 따라 내리는 사람을 부르는 말 · {home} 두 사람이 가는 곳 */
+  MLV.spouseWords = function (sp, goneId, homeId) {
+    var s = S(), gd = G.MATE[goneId] || {}, fate = (s.mateFate || {})[goneId], hc = null;
+    if (homeId != null) hc = G.CITY_DATA[homeId];
+    else if (fate && fate.home != null) hc = G.CITY_DATA[fate.home];
+    else hc = homeOf(goneId);
+    return { mate: gd.name || '', who: callOf(goneId), self: callOf(sp), home: hc ? hc.name : '고향', homeId: hc ? hc.id : null };
+  };
+  /** 떠나려는 부하에게 무엇을 해 줄지 물을 때 덧붙이는 말 「(아내 ○○도 함께 떠난다)」 — 짝이 없으면 '' */
+  MLV.spouseNote = function (goneId, sp) {
+    sp = sp || MLV.spouseOf(goneId); if (!sp) return '';
+    return ' ' + fill(D().spouse.note, sp, MLV.spouseWords(sp, goneId));
+  };
+  /** 해고를 물을 때 덧붙이는 말 — 짝이 없으면 '' */
+  MLV.fireWarn = function (goneId, sp) {
+    sp = sp || MLV.spouseOf(goneId); if (!sp) return '';
+    return fill(D().spouse.fireWarn, sp, MLV.spouseWords(sp, goneId));
+  };
+  /** 짝을 따라 함대에서 뺀다 (대사 없이) — 남은 이야기는 「짝을 따라」(s.mateFate[id] = {kind:'other', why:'spouse', with: 먼저 떠난 사람})
+      동생(d.sib)은 집으로 돌아간다 — 그 뒤는 js/systems/siblings.js 가 맡는다. quiet: 알림 없이 (여럿을 한 줄로 알릴 때) */
+  MLV.goWith = function (sp, goneId, how, w, quiet) {
+    var s = S(), d = G.MATE[sp], m = row(sp), c = here(); if (!d || !m) return false;
+    w = w || MLV.spouseWords(sp, goneId);
+    var yrs = MLV.years(m), hc = w.homeId != null ? G.CITY_DATA[w.homeId] : null;
+    if (G.OldGuard && !d.sib) G.OldGuard.left(sp, how === 'fire' || how === 'quit' ? how : 'spouse');   // 사건 동료는 스무 해 뒤 철새로 (js/systems/oldguard.js)
+    s.mates = s.mates.filter(function (x) { return x.id !== sp; });
+    if (R().tidyCaptains) R().tidyCaptains();
+    if (G.Cabins && G.Cabins.tidy) G.Cabins.tidy();
+    if (!d.sib) {
+      s.flags['gone_' + sp] = 1;
+      (s.mateFate || (s.mateFate = {}))[sp] = { kind: 'other', why: 'spouse', with: goneId, y: s.date.y, home: hc ? hc.id : null, at: c ? c.id : null, sea: !c, yrs: yrs };
+      if (G.MateKnow) G.MateKnow.know(sp, hc ? hc.id : null, 'fate');
+    }
+    if (G.Wives && G.Wives.sync) G.Wives.sync();
+    G.State.log(fill(D().spouse.log, sp, Object.assign({ yrs: yrs }, w)));
+    if (!quiet) G.UI.toast(fill(D().spouse.toast, sp, w), 'heart', 5500);
+    return true;
+  };
+  /** 짝이 떠날 때 함께 내린다 — 한두 마디 하고 함대에서 빠진다. how: 'other'(o.why: 떠나는 까닭) · 'health' · 'fire' · 'quit'
+      o.spouse: 미리 찾아 둔 짝(떠나는 사람을 빼기 전에 MLV.spouseOf로) · o.words: 미리 만든 낱말 → 함께 내린 짝의 id (없으면 null) */
+  MLV.follow = async function (goneId, how, o) {
+    o = o || {};
+    var sp = o.spouse || MLV.spouseOf(goneId); if (!sp || !row(sp)) return null;
+    var P = D().spouse, w = o.words || MLV.spouseWords(sp, goneId);
+    await lines((how === 'other' && o.why && P.why[o.why]) || P[how] || P.other, sp, w);
+    MLV.goWith(sp, goneId, how, w);
+    if (G.Game.refreshHud) G.Game.refreshHud();
+    return sp;
+  };
+
   // ---------------------------------------------------------------- 위기를 넘기는 길
   /** 배의 의원: 의학이 가장 높은 다른 부하 {id, lv} (없으면 null) */
   MLV.doctor = function (exceptId) {
@@ -167,9 +236,9 @@
     return out;
   };
   /** 위기 — 넘겼으면 true */
-  async function crisis(id, ask) {
+  async function crisis(id, ask, note) {
     var UI = G.UI, s = S(), C = D().cure, opts = MLV.cures(id);
-    var v = await UI.ask(fill(ask, id), opts.map(function (o) { return { label: o.label, value: o.value, dis: o.dis }; }), mateSp(id));
+    var v = await UI.ask(fill(ask, id) + (note || ''), opts.map(function (o) { return { label: o.label, value: o.value, dis: o.dis }; }), mateSp(id));
     var o = opts.filter(function (x) { return x.value === v; })[0] || opts[opts.length - 1];
     if (o.value === 'herbs') { var h = herbs(); if (h) { h.q -= 1; if (h.q <= 0) delete s.fleet.cargo.herbs; } await lines([C.herbsSay], id); }
     else if (o.value === 'doctor') await lines([C.doctorSay], id, null, o.doc);
@@ -217,36 +286,38 @@
       S().mates.forEach(function (x) { x.loyal = Math.min(100, (x.loyal || 70) + 2); });   // 남은 부하들이 마음을 다잡는다
       UI.toast(d.name + U.jx(d.name, '이/가') + ' 세상을 떠났다. 함께한 ' + yrs + '년.', 'skull', 6000);
     } else if (e.kind === 'health') {
-      var H = D().health;
+      var H = D().health, spH = MLV.spouseOf(e.id);   // 짝은 떠나는 사람을 빼기 전에 찾아 둔다 — 함께 내린다 (2026-11-01)
       await lines(H.lines[e.line || 0] || H.lines[0], e.id);
-      var ok2 = await crisis(e.id, H.ask);
+      var ok2 = await crisis(e.id, H.ask, MLV.spouseNote(e.id, spH));
       if (ok2) { await lines(H.saved, e.id); saved(e.id, ok2); return; }
       await lines(H.bye, e.id);
-      await severance(e.id, H.title);
+      await severance(e.id, H.title, spH);
       leave(e.id, 'health');
+      if (spH) await MLV.follow(e.id, 'health', { spouse: spH });
       UI.toast(d.name + U.jx(d.name, '이/가') + ' 배에서 내렸다. 함께한 ' + yrs + '년.', 'boot', 6000);
     } else {
-      var O = D().other, r = O.reasons.filter(function (x) { return x.id === e.why; })[0] || O.reasons[0];
+      var O = D().other, r = O.reasons.filter(function (x) { return x.id === e.why; })[0] || O.reasons[0], spO = MLV.spouseOf(e.id);
       await lines(r.lines, e.id);
       var gift = R().mateWage(e.id) * k.severance, canHold = (m.loyal || 0) >= k.holdLoyal;
       var opts = [{ label: fill(O.gift, e.id, { gift: U.num(gift) }), value: 'gift', dis: s.player.gold < gift }];
       if (canHold) opts.push({ label: O.hold, value: 'hold' });
       opts.push({ label: O.go, value: 'go' });
-      var v = await UI.ask(fill(O.ask, e.id, { why: r.t }), opts, mateSp(e.id));
+      var v = await UI.ask(fill(O.ask, e.id, { why: r.t }) + MLV.spouseNote(e.id, spO), opts, mateSp(e.id));
       if (v === 'hold') {
         if (U.chance(k.holdChance)) { await lines(O.held, e.id); m.leaveCd = s.day + k.calm; st().n = Math.max(0, st().n - 1); G.State.log(d.name + U.jx(d.name, '을/를') + ' 붙잡았다.'); return; }
         await lines(O.notHeld, e.id); v = 'go';
       }
       if (v === 'gift' && s.player.gold >= gift) { s.player.gold -= gift; await lines(O.giftSay, e.id); } else await lines(O.goSay, e.id);
       leave(e.id, 'other', r.id);
+      if (spO) await MLV.follow(e.id, 'other', { spouse: spO, why: r.id });
       UI.toast(d.name + ' — ' + r.t + ' 배를 떠났다. 함께한 ' + yrs + '년.', 'boot', 6000);
     }
     if (G.Game.refreshHud) G.Game.refreshHud();
   };
   /** 건강으로 내리는 부하: 퇴직금을 챙겨 줄지 */
-  async function severance(id, title) {
+  async function severance(id, title, sp) {
     var s = S(), O = D().other, gift = R().mateWage(id) * K().severance;
-    var v = await G.UI.ask(fill('{name}에게 무엇을 해 줄까?', id), [{ label: fill(O.gift, id, { gift: U.num(gift) }), value: 'gift', dis: s.player.gold < gift }, { label: O.go, value: 'go' }], mateSp(id));
+    var v = await G.UI.ask(fill('{name}에게 무엇을 해 줄까?', id) + MLV.spouseNote(id, sp), [{ label: fill(O.gift, id, { gift: U.num(gift) }), value: 'gift', dis: s.player.gold < gift }, { label: O.go, value: 'go' }], mateSp(id));
     if (v === 'gift' && s.player.gold >= gift) { s.player.gold -= gift; await lines(O.giftSay, id); } else await lines(O.goSay, id);
     void title;
   }

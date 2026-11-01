@@ -73,8 +73,10 @@
     function row(k, v, src, hint) { rows.push({ k: k, v: v, src: src || '', hint: hint || '' }); }
     // 국가·규모
     var orig = (G.Dominion && G.Dominion.first(c)) || c.nation, since = G.Dominion ? G.Dominion.history(c).filter(function (h) { return h.y <= s.date.y; }).pop() : null;
+    var held = G.Conquest && G.Conquest.holding(c); if (held) since = { y: held.date.y };
     row('국가', U.esc(owner) + (since && since.y > 1480 ? ' <small class="muted">' + since.y + '년부터' + (owner !== orig ? ' · 원래 ' + U.esc(orig) : '') + '</small>' : owner !== orig ? ' <small class="muted">(원래 ' + U.esc(orig) + ')</small>' : ''));
     row('도시 규모', (G.CityIcon ? G.CityIcon.label(c) : CI.SIZE[c.size]) + ' · ' + (c.port ? '항구' : '내륙 도시') + (R.facilities(c).shipyard ? ' · 조선소' : ''));
+    if (G.Conquest) row('도시 점령', held ? '제독이 ' + U.fmtDate(held.date) + '에 점령' : U.esc(G.Conquest.note(c)));
     if (G.CityIcon) row('도시 양식', G.CityIcon.cultureName(c));
     var tb = G.TRIBES && G.TRIBES[c.id];
     if (tb) row('부족', U.esc(tb.tribe) + (tb.nomad ? ' <small class="muted">떠도는 사람들</small>' : '') + '<br><small class="muted">' + U.esc(tb.note) + '</small>');

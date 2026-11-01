@@ -139,7 +139,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.Info.open('politics');
     });
     await page.waitForSelector('.rel-tbl', { timeout: 15000 }); await page.waitForTimeout(600);
-    await page.screenshot({ path: path.join(OUT, '1_politics.png') });
+    await page.screenshot({ path: path.join(OUT, '1_politics.png'), timeout: 90000 });   // 컴퓨터가 바쁘면 30초 안에 못 찍어 실패하던 것 (QA 2026-11-01)
     const cells = await page.evaluate(() => document.querySelectorAll('.rel-tbl td').length);
     ok(cells > 100, '수첩 「유럽 정세」 표 (' + cells + '칸)');
     await page.evaluate(() => { const b = [...document.querySelectorAll('.modal-back .win-x, .modal-back .x, .modal-back .close')][0]; if (b) b.click(); document.querySelectorAll('.modal-back').forEach(m => m.remove()); });
@@ -152,7 +152,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     await page.waitForTimeout(3000);
     const bt = await page.evaluate(() => { const d = G.Scenes.battle.debug(); return d ? { list: d.ships.map(b => b.side + (b.ally ? ':ally' : '') + ':' + b.name).join(', '), me: d.ships.filter(b => b.side === 'me').map(b => b.guns.type), en: d.ships.filter(b => b.side === 'en').map(b => b.guns.type), mine: G.Game.state.fleet.ships[0].guns.type } : null; });
-    await page.screenshot({ path: path.join(OUT, '2_armada.png') });
+    await page.screenshot({ path: path.join(OUT, '2_armada.png'), timeout: 90000 });   // 컴퓨터가 바쁘면 30초 안에 못 찍어 실패하던 것 (QA 2026-11-01)
     ok(bt && /me:ally:리벤지호/.test(bt.list) && bt.en.length === 12 && bt.en.every(g => g === 'cannon') && bt.me.every(g => g === 'culverin') && bt.mine === 'saker',
       '무적함대 해전: 우리 ' + (bt && bt.me.length) + '척 모두 캘버린포 · 적 ' + (bt && bt.en.length) + '척 모두 카논포 · 내 배의 원래 대포(세이커포)는 그대로');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));

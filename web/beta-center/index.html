@@ -14,6 +14,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nanum+Myeongjo:wght@400;700;800&family=Song+Myung&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v={{ASSET_HASH}}">
+  <style>
+    .beta-notice { margin: 28px 0 0; padding: 18px 22px; border: 1px solid var(--gold); background: rgba(197, 154, 83, .1); }
+    .beta-notice h2 { margin: 0 0 6px; color: var(--gold-bright); font: 400 1.5rem "Song Myung", serif; }
+    .beta-notice p { margin: 0; color: var(--ink); font-size: .95rem; }
+    .beta-notice time { font-weight: 800; white-space: nowrap; }
+    .beta-notice .thanks { margin-top: 4px; color: var(--muted); font-size: .85rem; }
+  </style>
 </head>
 <body>
   <a class="skip" href="#feedback">피드백 게시판으로 건너뛰기</a>
@@ -35,6 +42,12 @@
   </header>
 
   <main>
+    <aside class="beta-notice" role="note" aria-labelledby="beta-notice-title">
+      <h2 id="beta-notice-title">1차 베타 테스트 종료 안내</h2>
+      <p>1차 베타 테스트는 <time datetime="2026-11-20">2026년 11월 20일</time>에 종료됩니다.</p>
+      <p class="thanks">테스트에 참여해 주셔서 감사합니다.</p>
+    </aside>
+
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="eyebrow"><span></span> 공개 베타 · VERSION {{VERSION}}</p>
@@ -141,6 +154,44 @@
       </div>
       <div class="release-list">
         <details open>
+          <summary><span><b>VERSION 0.298</b><small>2026-11-01 · 정식·베타</small></span><i>도시 점령·동료 명부·수면과 항적·해전 전술·시대 교역·장기 사건</i></summary>
+          <div class="release-body">
+            <h3>기능 수정 및 추가</h3>
+            <ul>
+              <li>1510년 11월 25일부터 성문 통과 전투와 별개의 도시 점령을 추가했습니다. 비유럽·아랍 도시를 세 차례 공략해 자국 영토로 만들 수 있으며 점령 결과는 저장됩니다.</li>
+              <li>수첩과 술집·여관에 얼굴·능력치·충성·애정·특기·언어·이야기를 비교하는 동료 명부를 추가했습니다. 검색·정렬·해고와 단기 동료의 철새 복귀·월급 25% 인상 재고용을 지원합니다.</li>
+              <li>선박 확대를 3배로 맞추고 해전을 교전 보기로 시작합니다. 모든 항해 선박의 물길·물보라와 탐험대 발자국은 실제 시간 기준으로 남았다가 사라집니다.</li>
+              <li>해전 시작 거리와 아군 기동·학익진·포격전·목표 우선순위를 개선하고, 남은 해적선의 항복 판정을 추가했습니다.</li>
+              <li>산지 희소 가치와 시대 수요·생산·독점·공급 단절, 일본의 네 단계 쇄국을 교역에 반영했습니다. 임진왜란의 새 사건과 동래 봉쇄는 1599년부터 종료됩니다.</li>
+              <li>미로 벽, 이사한 가족의 관저 마중, 항구 선원 모집, 설정 단추 순서, 잔 문제 문구와 탐험대 간격을 개선했습니다.</li>
+              <li>1700년 이후의 건물·생물·자연은 신기루로 찾고, 늦게 간행되는 책만 단서였던 옛 발견물은 1580년부터 초고 필사본으로 읽을 수 있습니다.</li>
+              <li>부부 동료의 동반 하선·후견 잔류, 거절한 장기 사건의 단계별 재제안, 교역소의 상선 호위 요청 찾기를 추가했습니다.</li>
+              <li>알림을 큰 일·일반·상태·먼 소문으로 나눴습니다. 대화 중에는 나침반에 모아 두고 최근 40개를 다시 보며 크기·위치·큰 일만 표시·상태판 펼침을 설정할 수 있습니다.</li>
+            </ul>
+            <h3>오류 수정 및 최적화</h3>
+            <ul>
+              <li>연안 물결이 과도하게 압축되던 문제를 고치고 수면·선박 조명과 각 선박 위치의 흔들림을 맞췄습니다.</li>
+              <li>해전 함대가 반도의 서로 다른 해안에 갈라지던 문제를 고쳐 같은 물길에서 시작합니다.</li>
+              <li>로미오·줄리엣 중 한 명만 해고되어 배우자가 남던 문제와 960×540에서 동료 명부 창이 화면 밖으로 넘치던 문제를 고쳤습니다.</li>
+              <li>1700년 이후 발견물이 완성 업적을 막던 문제, 시드니의 미래 건물과 아마존 보아뱀에 닿기 어려웠던 문제를 바로잡았습니다.</li>
+              <li>반복 상태와 먼 해전 소문이 화면을 가리거나, 대화·창 위에 알림이 겹치고 같은 문구가 되풀이되던 문제를 고쳤습니다.</li>
+            </ul>
+            <h3>검증</h3>
+            <ul>
+              <li>도시 점령 75개 조건과 동료 명부·해고·재고용·옛 저장을 실제 브라우저에서 확인했습니다.</li>
+              <li>NVIDIA GPU와 소프트웨어 렌더링에서 수면, 36종 선박 흔들림·항적·자원 해제와 해전 시점·저장 복원을 검사했습니다.</li>
+              <li>교역·쇄국·임진왜란 종료·해적 항복, 초상 14장과 사건 장면 5장을 검사했습니다. 관련 화면의 콘솔 오류는 0건이며 그림은 원본 해상도를 유지합니다.</li>
+              <li>완성 업적 13종, 미래 신기루 50종, 도서관 연작·필사본, 상선 호위, 부부 동반 하선과 사건 재제안을 실제 브라우저에서 확인했습니다.</li>
+              <li>알림 등급·동시 표시·반복 억제·대화 보류·지난 소식·바다 위치·상태판 접기와 설정 저장을 960×540에서 확인했습니다.</li>
+            </ul>
+            <h3>사건 및 장면 추가</h3>
+            <ul>
+              <li>로미오와 줄리엣 이야기의 일곱 인물 전용 초상과 베로나 거리 싸움부터 캐풀렛가 무덤까지 다섯 장면을 연결했습니다.</li>
+              <li>1529년 빈 포위부터 프레베자·호르무즈·무스카트·1683년 빈과 칼렌베르크·1698년 카를로비츠까지 이어지는 오스만–유럽 장기 사건을 추가했습니다.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
           <summary><span><b>VERSION 0.297</b><small>2026-10-31 · 정식·베타</small></span><i>베로나 장기 이야기·성배 문제·로미오와 줄리엣 동료·후대 작품 소식</i></summary>
           <div class="release-body">
             <h3>기능 수정 및 추가</h3>

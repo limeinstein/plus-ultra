@@ -143,7 +143,7 @@
   };
 
   // ================================================================ 미궁 64 (8×8 방)
-  // ★1 지도가 다 보인다 · ★2 어둠 속 — 지나온 방과 문 너머 한 칸만 보인다 · ★3 어둠 + 지나온 방만 보이고, 열쇠를 찾아야 나가는 문이 열린다
+  // ★1 밝은 지도 · ★2 미방문 방도 벽·통로가 어둡게 보인다 · ★3 같은 지도에서 열쇠를 찾아야 출구가 열린다
   var DIRS = [[0, -1, 1, 'n'], [1, 0, 2, 'e'], [0, 1, 4, 's'], [-1, 0, 8, 'w']];   // dx dy 비트 이름
   function opp(bit) { return bit === 1 ? 4 : bit === 4 ? 1 : bit === 2 ? 8 : 2; }
   function makeMaze(N, rng) {
@@ -189,7 +189,7 @@
       : '입구의 석판: 「예순네 개의 방이 서로 얽혀 있다. 횃불이 다 타기 전에 빛이 드는 문으로 나가라.」';
     return new Promise(function (resolve) {
       var win = UI.window({ title: T('미궁 64', lv), icon: 'gate', width: 900, closable: false, html:
-        '<div class="pz-intro">' + intro + '<br><span class="muted">방향키(또는 W·A·S·D)로 움직이거나 옆방을 누르십시오. 한 칸 움직일 때마다 횃불이 한 걸음씩 탑니다.' +
+        '<div class="pz-intro">' + intro + '<br><span class="muted">방향키(또는 W·A·S·D)로 움직이거나 옆방을 누르십시오. 어두운 방의 벽과 통로도 살펴 길을 고르십시오. 한 칸 움직일 때마다 횃불이 한 걸음씩 탑니다.' +
         (lv === 3 ? ' 출구는 열쇠가 있어야 열립니다.' : '') + '</span></div>' +
         '<div class="maze-wrap"><div class="maze"></div><div class="maze-side"></div></div><div class="pz-stat"></div>',
         buttons: [{ label: '포기한다', value: 'g', cls: 'ghost', onClick: function () { resolve(false); } }],
@@ -200,12 +200,8 @@
       var box = win.content.querySelector('.maze'), side = win.content.querySelector('.maze-side'), stat = win.content.querySelector('.pz-stat');
       if (G.MinigameArt) G.MinigameArt.mount(win.content, 'maze');
       function visible(k) {
-        if (lv === 1 || seen[k]) return 'seen';
-        if (lv === 2) {   // 지나온 방에서 문이 열린 옆방은 어렴풋이 보인다
-          var x = k % N, y = (k / N) | 0;
-          for (var i = 0; i < 4; i++) { var dd = DIRS[i], nx = x - dd[0], ny = y - dd[1]; if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue; if (seen[ny * N + nx] && (open[ny * N + nx] & dd[2])) return 'near'; }
-        }
-        return '';
+        // 모든 방의 벽과 통로를 읽고 길을 고른다. 횃불과 지나온 길만 밝게 표시한다.
+        return lv === 1 || seen[k] ? 'seen' : 'near';
       }
       function draw() {
         var h = '';

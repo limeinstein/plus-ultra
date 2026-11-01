@@ -142,7 +142,7 @@
     var q = st(); if (q.stage !== 'stow' || S().day <= (q.stowDay || 0)) return false;
     await narrate('짐을 다시 묶던 선원이 소리를 지른다. 모피 꾸러미 하나가 꿈틀거린다 — 흰 담비 털옷의 여인이 아무렇지도 않게 일어나 옷깃의 먼지를 턴다.');
     await say('elizaveta', '놀랄 것 없소. 아이 둘의 거짓말에도 속아 넘어가는 사람이 바다에서 장사를 하고 지도를 그린다니, 아무래도 마음이 놓이지 않아서.\f내가 아니면 누가 당신을 지켜 주겠소?');
-    await say('elizaveta', '장부는 내가 보겠소. 별도, 해도도. 품삯은 필요 없소 — 크렘린에서 받을 만큼 받았으니.');
+    await say('elizaveta', '장부는 내가 보겠소. 별도, 해도도. 품삯은 다른 이들과 똑같이 받겠소. 공주라고 더 받을 생각은 없으니.');
     var nm = G.Legend && G.Legend.join ? G.Legend.join('elizaveta', moscow()) : null;
     q.stage = 'done'; q.doneDay = S().day;
     if (nm) {

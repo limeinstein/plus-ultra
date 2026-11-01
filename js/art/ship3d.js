@@ -102,6 +102,12 @@
     var pose=spec.pose||{};r.body.rotation.set(clamp(pose.roll||0,-.3,.3),0,clamp(pose.pitch||0,-.16,.16));r.body.position.y=clamp(pose.heave||0,-.1,.1)*c.heave;
     var light=spec.light||{},cloud=clamp(light.cloud||0,0,1),dusk=clamp(light.dusk||0,0,1);
     r.sun.intensity=c.sunLight*(1-cloud*.65)*(1-dusk*.7);r.hemi.intensity=c.skyLight*(1-dusk*.45);r.rim.intensity=c.rimLight*(1-cloud*.5);r.sun.color.set(dusk>.25?0xffb77b:0xffecd1);
+    if(G.WaterLight){
+      var wl=G.WaterLight(light),sun=wl.sun,warm=wl.warmth;
+      // 수면의 북쪽(+y)은 선박 모형의 -z. 같은 방향에서 돛·갑판을 비춘다.
+      r.sun.position.set(sun[0]*420,sun[2]*420,-sun[1]*420);
+      r.sun.color.setRGB(1,.925-.20*warm,.82-.37*warm);
+    }
   }
   P.supports=function(id){return !!(G.ShipModels&&G.ShipModels.has(id));};
   P.beginFrame=function(){

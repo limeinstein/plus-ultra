@@ -37,7 +37,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       at(1500); o.tea1500 = G.Era.mult(lon, 'tea'); o.coffee1500 = G.Era.mult(lon, 'coffee'); o.pep1500 = G.Era.mult(lon, 'pepper'); o.p1500 = G.R.sellPrice(lon, 'tea');
       at(1690); o.tea1690 = G.Era.mult(lon, 'tea'); o.coffee1690 = G.Era.mult(lon, 'coffee'); o.pep1690 = G.Era.mult(lon, 'pepper'); o.p1690 = G.R.sellPrice(lon, 'tea'); o.cal = G.Era.mult(cal, 'tea');
       // 소식
-      G.BALANCE.era.worldPerYear = 0; s.era = null; s.fad = null; s.date = { y: 1652, m: 4, d: 29 };
+      G.BALANCE.era.worldPerYear = 0; s.era = null; s.fad = null; s.date = { y: 1652, m: 4, d: 29 }; s.player.born.y = 1630; // 수명 종료가 시장 소식 검사를 막지 않게
       var news = G.Game.passDays(4).filter(function (m) { return /커피하우스/.test(m.text) && m.history; });
       o.news = news.length;
       // 발견의 유행: 북유럽 후원자에게 「중국」 발견을 보고했다

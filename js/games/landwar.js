@@ -1232,7 +1232,7 @@
         eventDone = true;
         var ev = LD().EVENTS.filter(function (x) { return !x.need || (x.need === 'gun' && alive(mine).some(function (u) { return u.type === 'gun'; })); });
         if (weather === 'rain') ev = ev.filter(function (x) { return x.id !== 'rain'; });
-        if (e.kind === 'beast') ev = ev.filter(function (x) { return x.id !== 'reinforce'; });
+        if (e.kind === 'beast' || opt.conquest) ev = ev.filter(function (x) { return x.id !== 'reinforce'; });   // 점령전의 증원군은 별도의 차수로 반드시 도착한다
         var x = U.weighted ? U.weighted(ev, function (q) { return q.w || 1; }) : U.pick(ev); if (!x) return;
         banner(x.banner, 1.3); say('<b>' + x.text + '</b>');
         if (x.id === 'allies') {
@@ -1252,7 +1252,7 @@
       }
       function outcome() {
         var lead = foes.filter(function (u) { return u.leader; })[0], adm = mine.filter(function (u) { return u.leader; })[0];
-        if (lead.n <= 0 || !alive(foes).length) return 'win';
+        if ((!opt.conquest && lead.n <= 0) || !alive(foes).length) return 'win';
         if (adm.n <= 0) return 'lose';
         var tot = U.sum(mine, function (u) { return u.ally ? 0 : u.n; });
         if (tot < P0 * 0.2) return 'lose';
@@ -1295,7 +1295,7 @@
         if (G.LandKit && dead > 0) G.LandKit.lose(dead / P0);
         // 전리품
         var sp = { gold: 0, horses: 0, muskets: 0, prisoners: 0, ransom: 0, freed: false };
-        if (res === 'win') {
+        if (res === 'win' && !opt.conquest) {
           var nn = foe0, F = e.kind;
           if (F === 'bandit') sp.gold = nn * U.ri(8, 15) * (fled ? 0.5 : 1);
           if (F === 'garrison') sp.gold = nn * U.ri(5, 9);

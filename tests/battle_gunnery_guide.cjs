@@ -14,7 +14,7 @@ const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU==='1',OUT=pat
    const s=G.Game.state=G.State.newGame({name:'포격 안내 검사',nation:'PT',job:'explorer',age:22,birth:{m:4,d:12},st:{str:60,int:60,mar:60,cha:60},sk,lg:G.LANGS.map(()=>1),diff:'normal'});
    s.settings.res=.35;s.fleet.ships=[G.R.newShip('galleon')];s.fleet.crew=100;s.loc={mode:'sea',lon:-30,lat:30,heading:0};
    G.Game.go('battle',{npc:{kind:'navy',nation:'ES',n:1,ships:['galleon'],K:.4}});
-   const B=G.Scenes.battle,st=B.runtime(),b=st.myFlag;st.paused=true;b.heading=-Math.PI/2;b.reload=[3,0,6];b.reloadTotal=[6,6,6];
+   const B=G.Scenes.battle,st=B.runtime(),b=st.myFlag;st.paused=true;st.cameraMode='ship';st.viewZoom=G.FX.battleView.close;B.update(2);b.heading=-Math.PI/2;b.reload=[3,0,6];b.reloadTotal=[6,6,6];
    const ctx=G.Game.canvases().overlay.getContext('2d'),arc=ctx.arc;window.__guideArcs=[];
    ctx.arc=function(x,y,r,a,z){if([G.FX.battleGunnery.ready,G.FX.battleGunnery.loading,G.FX.battleGunnery.held].includes(this.strokeStyle))window.__guideArcs.push({r,a,z,color:this.strokeStyle,alpha:this.globalAlpha});return arc.apply(this,arguments);};
    window.__readGuide=()=>{window.__guideArcs=[];B.update(0);const e=document.querySelector('.gunnery-readout');return{hidden:e.hidden,text:e.textContent,sides:[...e.querySelectorAll('.gun-state')].map(c=>c.textContent),arcs:window.__guideArcs.slice()};};

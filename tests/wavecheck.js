@@ -15,6 +15,7 @@ const seaBody = cut('vec3 waterCol(', 'float wstr');
 const w2 = src.indexOf('vec3 battleSea('); const bw = src.slice(src.indexOf('float wstr', w2), src.indexOf('\n', src.indexOf('float wstr', w2)));
 const batLoop = cut('vec3 battleSea(', 'vec2 grad = vec2(0.0); float hs');
 const fs1 = head + `
+uniform float uTestCoast;
 float hsSea(vec2 ll, vec2 p, float d, vec2 gS, float pxD){ float t = uTime; float battle = 0.0;
 ${seaBody}
   return hs; }
@@ -23,11 +24,12 @@ ${bw}
 ${batLoop}
   return hs; }
 void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/uZoom; vec2 p = ll + vec2(180.0,90.0);
-  float a = hsSea(ll, p, 100.0, vec2(1.0,0.0), uZoom);
+  float a = hsSea(ll, p, uTestCoast, vec2(1.0,0.0), uZoom);
   vec2 q = (frag - uRes*0.5)/uZoom * 30.0; float b = hsBat(q, 100.0);
   outColor = vec4(a, b, 0.0, 1.0); }`;
 (async () => {
   const br = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader'] });
+  try {
   const pg = await br.newPage();
   pg.on('pageerror', e => console.log('ERR', e.message));
   await pg.setContent('<html><body></body></html>');
@@ -45,7 +47,9 @@ void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/
     gl.viewport(0, 0, W, H); gl.useProgram(pr);
     const u = n => gl.getUniformLocation(pr, n);
     const out = [];
-    [[-25.3, 37.1, 110, 1234.5, [0.5, 0.2]], [120.2, 12.4, 300, 51.25, [-0.3, 0.7]], [-40, -20, 60, 98765.4, [0.9, -0.1]]].forEach(([lon, lat, zoom, t, wind]) => {
+    [[-25.3, 37.1, 110, 1234.5, [0.5, 0.2],100], [120.2, 12.4, 300, 51.25, [-0.3, 0.7],100], [-40, -20, 60, 98765.4, [0.9, -0.1],100],
+     [-9.6,38,330,24,[.57,.26],2],[-9.6,38,2400,80,[.1,.05],6],[-12.5,36.5,110,24,[-.7,.3],20]].forEach(([lon, lat, zoom, t, wind,coastD]) => {
+      gl.uniform1f(u('uTestCoast'),coastD);
       gl.uniform2f(u('uRes'), W, H); gl.uniform2f(u('uCenter'), lon, lat); gl.uniform1f(u('uZoom'), zoom); gl.uniform1f(u('uTime'), t); gl.uniform2f(u('uWind'), wind[0], wind[1]);
       gl.uniform4f(u('uW0'), 1, 1, 1, 1); gl.uniform4f(u('uW4'), 0, 0, 0, 1);   // rough 1 · d=100 → 먼바다 (JS는 cst=null → 먼바다)
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -53,11 +57,13 @@ void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/
       let eA = 0, mA = 0, eB = 0, mB = 0;
       for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
         const fx = x + 0.5, fy = y + 0.5, ll = [lon + (fx - W / 2) / zoom, lat + (fy - H / 2) / zoom];
-        const a = G.Waves.sea(ll[0], ll[1], t, wind, zoom, null).h, g = px[(y * W + x) * 4];
+        const f=Math.max(0,Math.min(1,(coastD-6)/50));
+        const cst={near:Math.exp(-coastD/5),abyss:f*f*(3-2*f),gx:1,gy:0};
+        const a = G.Waves.sea(ll[0], ll[1], t, wind, zoom, cst).h, g = px[(y * W + x) * 4];
         const q = [(fx - W / 2) / zoom * 30, (fy - H / 2) / zoom * 30], b = G.Waves.battle(q[0], q[1], t, wind, 100).h, gb = px[(y * W + x) * 4 + 1];
         eA = Math.max(eA, Math.abs(a - g)); mA = Math.max(mA, Math.abs(g)); eB = Math.max(eB, Math.abs(b - gb)); mB = Math.max(mB, Math.abs(gb));
       }
-      out.push({ lon, t, seaErr: eA, seaMax: mA, batErr: eB, batMax: mB });
+      out.push({ lon, t, zoom,coastD, seaErr: eA, seaMax: mA, batErr: eB, batMax: mB });
     });
     return out;
   }, { fsrc: fs1 });
@@ -66,5 +72,5 @@ void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/
   const bad = r.filter(x => x.seaErr > x.seaMax * 0.06 || x.batErr > x.batMax * 0.06);
   console.log(bad.length ? 'FAIL' : 'OK');
   if (bad.length) process.exitCode = 1;
-  await br.close();
+  } finally { await br.close(); }
 })();

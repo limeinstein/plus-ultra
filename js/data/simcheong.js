@@ -1,6 +1,6 @@
-/* 심청 — 공양미 삼백 석의 효녀, 무급 항해사 (만나는 일은 js/systems/simcheong.js). 2026-10-19 사용자 요청
+/* 심청 — 공양미 삼백 석의 효녀, 항해사 (만나는 일은 js/systems/simcheong.js). 2026-10-19 사용자 요청
    · 쌀 300을 교역품으로 싣고 조선의 항구(한양·동래·한산도)에 들어서면, 인당수 제물로 몸을 판 그녀를 만난다
-   · 쌀 300으로 남경 뱃사람들과의 약조를 풀어 주면 품삯 없이 합류한다
+   · 쌀 300으로 남경 뱃사람들과의 약조를 풀어 주면 합류한다 (품삯은 이야기 동료 규칙 G.taleWage — 월 250닢, 「뱃사람들 받는 만큼만」)
    · 요리·음악·세공·항해·운용·웅변·회계 3단계, 조선어·일본어 능숙
    그림: images/portraits/legendary/sim_cheong(.webp · _half.webp) · 장면 images/legend-events/simcheong_*.webp
    항해사 한 사람의 꼴은 js/data/people.js 의 G.MATES 와 같다 (st = [체력, 지력, 무력, 매력], lg = {말 번호: 단계}). */

@@ -31,6 +31,17 @@
   };
   /** 값에 곱할 배수 (R.buyPrice·R.sellPrice) */
   E.mult = function (c, goodId) { if (!c || cfg().on === false) return 1; return E.raw(goodId, c.region); };
+  /** 산지의 생산비·공급 압력과 지정한 중계항으로 전달되는 영향. */
+  E.source = function (c, id) {
+    if (!c || cfg().on === false) return 1;
+    var relay = G.R.isRelay && G.R.isRelay(c, id), v = 1, y = yearNow();
+    if (!relay && c.goods.indexOf(id) < 0) return 1;
+    (G.ERA_SUPPLY || []).forEach(function (d) {
+      var affected = relay ? (d.relay || []).indexOf(c.region) >= 0 : d.regions.indexOf(c.region) >= 0 && (!d.style || c.style === d.style);
+      if (affected && d.goods.indexOf(id) >= 0) v *= curve(d.curve, y);
+    });
+    return 1 + (v - 1) * (cfg().strength == null ? 1 : cfg().strength);
+  };
   /** 수첩: 유럽 세 지역 가운데 가장 높은·낮은 시대 수요 + 10년 뒤 흐름 */
   E.list = function () {
     var y = yearNow(), out = [];

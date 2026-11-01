@@ -515,7 +515,8 @@
     });
   };
   /** 지나온 길의 자국: 사람·짐승은 발자국 점, 마차·썰매는 두 줄 바퀴 자국 (오래될수록 옅게) */
-  P.drawTracks = function (ctx, pts, kind, terr, s) {
+  P.trackFade = function(age) {var c=G.FX.sprites.expedition.formation.tracks,v=Math.max(0,Math.min(1,(age-c.hold)/(c.life-c.hold)));return 1-v*v*(3-2*v);};
+  P.drawTracks = function (ctx, pts, kind, terr, s, time) {
     if (pts.length < 2) return;
     var wheel = kind === 'wagon' || kind === 'reindeer', snow = terr === 'snow' || terr === 'ice' || terr === 'tundra', sand = terr === 'desert';
     var col = snow ? '90,110,130' : sand ? '120,86,48' : '60,40,20', base = snow ? 0.45 : 0.32;
@@ -524,7 +525,7 @@
     for (var i = 1; i < n; i++) {
       var a = pts[i - 1], b = pts[i], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy);
       if (l < 0.01 || l > 60) continue;
-      var fade = base * Math.max(0, 1 - i / n);
+      var fade = base * (time == null ? Math.max(0, 1 - i / n) : P.trackFade(b[2]==null?Infinity:time-b[2]));
       if (fade < 0.02) break;
       var nx = -dy / l, ny = dx / l;
       if (wheel) {

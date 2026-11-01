@@ -90,7 +90,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg +
       const pay = s.player.gold - gold0;
       out.home = pay + ':' + fee + ':' + (pay >= fee) + ':' + late0 + ':' + (G.Fame.get('tr') - tr0) + ':' + (G.Fame.get('so') - so0) + ':' + !E.now() + ':' + (s.escort.cool - s.day) + ':' + s.escort.done;
       out.homeSaid = said.join(' / ').slice(0, 110);
-      out.cool = E.offer(lis) === null && E.menuItem(lis) === null;
+      out.cool = E.offer(lis) === null && !!E.menuItem(lis) && /찾아본다/.test(E.menuItem(lis).sub) && !!E.offer(lis, true);   // 쉬는 25일: 상인이 먼저 청하지 않지만 메뉴로 찾는 것은 언제나 (2026-10-26)
       out.payNum = pay; out.cost = n.cost; out.q = n.q;
       // ---- 기한을 넘기면 절반
       const again = async () => { s.escort = null; s.day += 40; winAns = 'yes'; const of = E.offer(lis); await E.propose(lis, of, false); return E.now(); };
@@ -111,6 +111,21 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg +
       E.afterBattle([{ escort: true, alive: true, hp: 7.4 }], 'win', lines); out.batKeep = !!E.now() && E.now().ship.hp === 7 && lines.length === 0;
       E.afterBattle([{ escort: true, alive: false, sunk: true, hp: 0 }], 'win', lines); out.batLost = !E.now() + ':' + (s.player.fame - fm4) + ':' + lines.length + ':' + /호위 실패/.test(lines[0] || '');
       m = await again(); const fm5 = s.player.fame; E.afterBattle([{ escort: true, alive: true, hp: 20 }], 'flaglost', []); out.batScatter = !E.now() + ':' + (s.player.fame - fm5);
+      // ---- 상인이 먼저 다가오는 것은 사건처럼 가끔 (2026-10-26): 한 해 2번 · 반년 간격 — 메뉴로 찾는 것은 언제나
+      s.escort = null; s.day += 40; winAns = null;   // 「다음에 답한다」
+      const pitch = async () => { const k0 = said.length; E.st().said = null; await E.atTrade(lis); return said.length > k0; };
+      const pc0 = B.pitchChance, p1 = await pitch(), p2 = await pitch();   // 첫 번째는 확률 없이 · 반년 안에는 조용
+      s.day += B.pitchGap; B.pitchChance = 1; const p3 = await pitch();
+      s.day += B.pitchGap; const p4 = await pitch();   // 날짜(s.date)는 그대로라 같은 해 — 세 번째는 조용
+      B.pitchChance = pc0;
+      out.pitchRule = [p1, p2, p3, p4].join(':');
+      // 청하는 상인이 없는 열흘·쉬는 날에도 메뉴 「호위 요청」으로 찾아 맡는다 · 거절하면 다른 상인
+      s.escort = null; s.day += 40; B.chance = 0; E.st().cool = s.day + 25;
+      const nat0 = E.offer(lis) === null, mi2 = E.menuItem(lis), k1 = E.offer(lis, true).key;
+      winAns = 'no'; await mi2.onClick(); const k2 = E.offer(lis, true).key;
+      winAns = 'yes'; said.length = 0; const took = await E.menuItem(lis).onClick();
+      out.seek = [nat0, /찾아본다/.test(mi2.sub), took, !!E.now() && E.now().key === k2, said.some(t => /호위할 배를 찾는다/.test(t)), k1 !== k2].join(':');
+      B.chance = 1;
       // ---- 튜토리얼·옛 저장
       s.escort = null; s.day += 40; s.tut = { step: 0, f: {} }; out.tut = E.offer(lis) === null; delete s.tut;
       delete s.escort; out.old = E.now() === null && E.pirateK() === 1 && E.speedK(1, 0, wind, env) === 1 && E.html() === '' && E.panelHtml() === '' && E.seaShips(s.fleet.ships) === s.fleet.ships && E.daily().length === 0;
@@ -129,10 +144,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg +
     ok(r.pirate === 1.3 && r.pirate2 === 1.9, '해적이 더 꾄다: 빈 상선 ×' + r.pirate + ' → 짐을 실으면 ×' + r.pirate2);
     ok(r.save, '저장·불러오기에 호위가 남는다');
     ok(/^back:\d+:\d+:true:true$/.test(r.load) && r.q > 0 && r.cost > 0 && r.other, '목적지: 상인이 제 돈으로 싣는다 (' + r.load + ') — ' + r.loadSaid + ' · ' + r.status);
-    ok(/:true:false:\d+:12:true:25:1$/.test(r.home) && r.payNum > 0 && r.cool, '귀환: 몫 ' + r.payNum + '닢 (품삯 이상 · 교역·사교 명성) → 호위 끝, 25일 동안은 새 요청 없음 — ' + r.homeSaid);
+    ok(/:true:false:\d+:12:true:25:1$/.test(r.home) && r.payNum > 0 && r.cool, '귀환: 몫 ' + r.payNum + '닢 (품삯 이상 · 교역·사교 명성) → 호위 끝, 25일 동안은 상인이 먼저 청하지 않음(메뉴로 찾기는 됨) — ' + r.homeSaid);
     ok(/^1:0:/.test(r.warn) && r.late.split(':')[0] === r.late.split(':')[1] && r.late.split(':')[2] === '0', '기한을 넘기면 한 번 알리고 몫은 절반, 명성 없음 (' + r.late + ')');
     ok(/^true:-6:/.test(r.gone) && /^true:true:-10$/.test(r.quit), '너무 늦으면 상인이 떠난다(명성 −6) · 그만두면 명성 −10');
     ok(r.batKeep && /^true:-20:1:true$/.test(r.batLost) && /^true:-10$/.test(r.batScatter), '해전: 살아남으면 내구만 옮기고, 잃으면 실패(명성 −20), 져서 흩어지면 실패(−10)');
+    ok(r.pitchRule === 'true:false:true:false', '상인이 먼저 다가오는 것은 사건처럼 가끔 — 첫 번째 · 반년 안에는 조용 · 반년 뒤 · 한 해 2번까지 (' + r.pitchRule + ')');
+    ok(r.seek === 'true:true:true:true:true:true', '청하는 상인이 없어도 메뉴 「호위 요청」으로 찾아 맡는다 · 거절하면 다른 상인 (' + r.seek + ')');
     ok(r.tut && r.old && r.ready, '튜토리얼에서는 나오지 않는다 · 옛 저장(state.escort 없음)에서도 탈 없다');
 
     // ---- 실제 바다: 상선이 함께 그려진다

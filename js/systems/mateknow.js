@@ -98,7 +98,7 @@
       var hc = city(fate.home), at = city(fate.at);
       var t = fate.kind === 'death' ? d.name + '… 세상을 떠나셨대요. ' + (fate.sea ? '바다에서 장례를 치렀다고' : (at ? at.name + '의 언덕에 묻혔다고' : '')) + ' 하더라고요.' :
         fate.kind === 'health' ? d.name + U.jx(d.name, '은/는') + ' 몸이 상해서 배에서 내렸대요. ' + (hc ? hc.name + '에서 바다를 보며 지낸다고' : '고향에서 지낸다고') + ' 하던데요.' :
-        d.name + U.jx(d.name, '은/는') + ' 배를 떠나 ' + (hc ? hc.name + '에서' : '고향에서') + ' 지낸대요. ' + otherWhy(fate.why);
+        d.name + U.jx(d.name, '은/는') + ' 배를 떠나 ' + (hc ? hc.name + '에서' : '고향에서') + ' 지낸대요. ' + otherWhy(fate.why, fate);
       await say('부탁하신 소식이요. ' + t, fate.kind === 'death' ? 'sad' : 'warm');
       MK.know(q.id, fate.home, 'fate');
       G.State.log(m.name + '의 소식: ' + t);
@@ -116,8 +116,11 @@
     G.UI.toast(d.name + ' — ' + at2.name + ' · ' + stay + '일 머문다', 'people', 5000);
     return true;
   };
-  function otherWhy(id) {
+  function otherWhy(id, fate) {
     var r = G.MATE_LEAVE ? G.MATE_LEAVE.other.reasons.filter(function (x) { return x.id === id; })[0] : null;
+    // 짝을 따라 내린 부하 (부부는 함께 — js/systems/mateleave.js MLV.goWith): 「(남편 ○○를 따라 떠났다고 하더라고요.)」
+    var w = id === 'spouse' && fate && fate.with && G.MATE[fate.with], P = G.MATE_LEAVE && G.MATE_LEAVE.spouse;
+    if (w && P && P.maid) return P.maid.replace('{who}', w.g === 'f' ? '아내' : w.g === 'm' ? '남편' : '짝').replace('{mate:을/를}', U.j(w.name, '을/를'));
     return r ? '(' + r.t + ' 떠났다고 하더라고요.)' : '';
   }
   /** 「항해사의 행방을 부탁한다」 — say(text, emotion)는 tavern.js T.maid 의 것 */
@@ -205,7 +208,7 @@
   /** 지금 항구를 떠도는 철새·마녀 (함대에 없고, 떠나지 않았고, 이 해에 나타날 수 있는 사람) */
   function wanderers() {
     var s = S(), y = s.date.y;
-    return G.MATES.filter(function (m) { return (m.wd || m.witch) && !m.sib && !hired(m.id) && !s.flags['gone_' + m.id] && (G.Frontier ? G.Frontier.mateReady(m, y) : true); });
+    return G.MATES.filter(function (m) { return G.MateDismiss && G.MateDismiss.returning(m.id) || ((m.wd || m.witch) && !m.sib && !hired(m.id) && !s.flags['gone_' + m.id] && (G.Frontier ? G.Frontier.mateReady(m, y) : true)); });
   }
   MK.wanderers = wanderers;
   /** 날마다: 처음 닿은 대륙이 있으면 그 대륙 철새 소식이 열렸다고 알린다 (처음 부를 때는 알리지 않고 지금 닿은 대륙만 적는다) */
@@ -232,7 +235,7 @@
     var s = S(), R = G.R, A = G.Art, k = K(), reached = MK.reached();
     var all = wanderers(), list = all.filter(function (m) { return MK.shown(m, reached); });
     var hid = {}; all.forEach(function (m) { if (!MK.shown(m, reached)) { var c = MK.mateCont(m); hid[c] = (hid[c] || 0) + 1; } });
-    var others = MK.list().filter(function (d) { return !d.wd && !d.witch; });   // 철새가 아닌 항해사 — 소식을 들은 사람만
+    var others = MK.list().filter(function (d) { return !d.wd && !d.witch && !(G.MateDismiss && G.MateDismiss.returning(d.id)); });   // 철새가 아닌 항해사 — 소식을 들은 사람만
     var c0 = G.BALANCE.wander || {};
     var hidTxt = Object.keys(hid).map(function (c) { return MK.contName(c) + ' ' + hid[c] + '명'; }).join(' · ');
     el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 ' + (c0.perYear || 5) + '명씩 새로 항구에 나타나고, ' + (c0.cycle || 30) + '년마다 세대가 바뀝니다. ' +
@@ -248,7 +251,7 @@
     list.sort(function (a, b) { return (b.witch ? 1 : 0) - (a.witch ? 1 : 0) || (a.fame || 0) - (b.fame || 0); });
     list.forEach(function (m) {
       var at = G.MateMove && G.MateMove.where(m.id), left = G.MateMove ? G.MateMove.rumorStayLeft(m.id) : 0;
-      var kind = m.witch ? '<span class="tag">' + (m.legend ? '전설의 마녀' : '마녀') + '</span>' : U.esc((m.natName || '') + ' · ' + (m.typeName || '')) + (m.prevName ? ' <small class="muted">(' + (m.gen + 1) + '세대)</small>' : '');
+      var kind = G.MateDismiss && G.MateDismiss.returning(m.id) ? '<span class="tag">철새 · 옛 동료</span>' : m.witch ? '<span class="tag">' + (m.legend ? '전설의 마녀' : '마녀') + '</span>' : U.esc((m.natName || '') + ' · ' + (m.typeName || '')) + (m.prevName ? ' <small class="muted">(' + (m.gen + 1) + '세대)</small>' : '');
       var tr = U.el('tr', '', '<td class="pp"></td><td>' + nameCell(m) + '</td><td style="white-space:nowrap">' + kind + '</td><td style="white-space:nowrap">' + stats(m) + '</td><td>' + skills(m) + '</td>' +
         '<td style="white-space:nowrap">' + U.num(m.fame || 0) + '</td><td style="white-space:nowrap">' + R.mateWage(m.id) + '닢</td><td>' + (at ? U.esc(at.name) : '—') + (left ? '<br><small class="muted">체류 ' + left + '일 남음</small>' : '') + '</td>');
       face(tr, m); tb.appendChild(tr);

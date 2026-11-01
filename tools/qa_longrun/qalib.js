@@ -23,6 +23,7 @@
   // 화면에 내보내지 않는 머리 없는 소프트웨어 GPU에서는 WebGL 그리기가 명령이 쌓여 몇 초씩 멈춘다 — 시험에서는 바다 셰이더를 그리지 않는다
   document.addEventListener('DOMContentLoaded', function () {
     var t = setInterval(function () { if (window.G && G.WorldRenderer && G.WorldRenderer.prototype.draw) { G.WorldRenderer.prototype.draw = function () {}; clearInterval(t); } }, 50);
+    var t3 = setInterval(function () { if (window.G && G.Ship3D && G.Ship3D.draw) { G.Ship3D.draw = function () { return false; }; if (G.FX && G.FX.ship3d) G.FX.ship3d.enabled = false; clearInterval(t3); } }, 50);   // 실시간 3D 배(three.js)는 시험에서 그리지 않는다 — 한 틱 450ms
   });
   var Q = window.QA = { prompts: {}, stuckUI: [], fights: { duel: 0, land: 0, sea: 0 }, want: null, picks: {}, notes: [] };
   var sleep = Q.sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
@@ -42,7 +43,7 @@
   function label(b) { return (b.textContent || '').replace(/\s+/g, ' ').trim(); }
   function choose(btns) {
     if (!btns.length) return null;
-    var ok = btns.filter(function (b) { return !b.disabled && !b.classList.contains('dis') && !NEVER.test(label(b)); });
+    var ok = btns.filter(function (b) { return !b.disabled && !b.classList.contains('dis') && !b.classList.contains('disabled') && !NEVER.test(label(b)); });
     if (!ok.length) return null;
     if (Q.want) { var w = ok.filter(function (b) { return Q.want.test(label(b)); })[0]; if (w) return w; }
     for (var i = 0; i < PRI.length; i++) { var p = ok.filter(function (b) { return PRI[i].test(label(b)) && !BAD.test(label(b)); })[0]; if (p) return p; }

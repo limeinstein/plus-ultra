@@ -38,6 +38,7 @@
     if (G.IncaFall) out = out.concat(G.IncaFall.daily());
     if (G.Medici) out = out.concat(G.Medici.daily());     // 메디치 은행의 위기 — 기한·로렌초의 죽음 (js/systems/medici.js)
     if (G.Imjin) out = out.concat(G.Imjin.daily());       // 임진왜란 — 부산진에서 노량까지 (js/systems/imjin.js)
+    if (G.Sakoku) out = out.concat(G.Sakoku.daily());      // 일본의 대외 통제·남만 교역 단절·데지마
     if (G.Globe) out = out.concat(G.Globe.daily());       // 셰익스피어와 글로브의 불 — 템페스트·장례·첫 전집 (js/systems/globe.js)
     if (G.GalPisa) out = out.concat(G.GalPisa.daily());     // 갈릴레오와 피사의 사탑 — 파도바·코레시오·비비아니 (js/systems/galpisa.js)
     if (G.RomeSack) out = out.concat(G.RomeSack.daily());   // 1527년 로마 약탈 — 교황의 항복·마키아벨리·탈출 (js/systems/romesack.js)
@@ -157,6 +158,9 @@
       var libs = b.libs.map(function (id) { return G.CITY_DATA[id].name; }).join('·');
       out.push({ icon: 'book', history: true, text: b.title + U.jx(b.title, '이/가') + ' 새로 나왔다. ' + libs + '의 도서관에 들어왔다고 한다.' });
     });
+    // 늦게 나온 책의 필사본이 한꺼번에 돌기 시작하는 해 — 책마다 알리면 너무 많아 한 줄로 (js/data/clues.js G.bookEarlyList)
+    var eb = G.bookEarlyList ? G.bookEarlyList() : [], ek = (G.BALANCE && G.BALANCE.bookEarly) || {};
+    if (eb.length && s.date.y === ek.from) out.push({ icon: 'book', history: true, text: '먼 땅의 옛 유적과 짐승을 적은 초고 필사본 ' + eb.length + '권이 학자들 사이에 돌기 시작했다. 여러 도서관에 들어왔다고 한다 (예: ' + eb.slice(0, 2).map(function (b) { return b.title; }).join(', ') + ').' });
     // 새로 세워진 도시·사라진 마을 (cities.js 의 founded / until): 개척 도시가 역사 연도에 맞춰 열린다
     var born = [], gone = [];
     G.CITY_DATA.forEach(function (c) {

@@ -45,7 +45,8 @@
   LB.shelfState = function (b) {
     if (b.jv) return { kind: 'jv', read: true, text: G.LogBooks.stateText(b.vol) + ' — 모항 도서관에 맡겨 둔 제독의 항해일지' };   // 항해일지 (js/systems/logbooks.js)
     var s = S(), y = s.date.y, read = !!s.flags['read_' + b.id];
-    if ((b.y || 0) > y) return { kind: 'lock', why: 'era', read: read, text: '아직 쓰이지 않은 책 — ' + b.y + '년 무렵에야 나온다' };
+    var oy = G.bookOpenY ? G.bookOpenY(b) : (b.y || 0);   // 필사본이 먼저 도는 책은 그 해부터 (js/data/clues.js)
+    if (oy > y) return { kind: 'lock', why: 'era', read: read, text: G.bookEarly && G.bookEarly(b) ? '아직 필사본이 돌지 않는 책 — ' + oy + '년 무렵부터 읽을 수 있다' : '아직 쓰이지 않은 책 — ' + b.y + '년 무렵에야 나온다' };
     // 연작의 차례: 앞 책에 적힌 곳을 다 찾아야 이 책의 뜻이 이어진다 (js/data/cluebooks.js)
     var SQ = G.BookSeq, pv = SQ && SQ.prev(b);
     if (pv && !SQ.open(b)) return { kind: 'lock', why: 'seq', read: read, text: '「' + SQ.seriesName(b) + '」 연작 — 앞선 책 ' + pv.title + '에 적힌 곳을 먼저 찾아야 이 책의 뜻이 이어진다' };
@@ -252,7 +253,7 @@
   }
   function metaLine(b) {
     var lb = R.langBest(b.lang), bits = [langNm(b) + ' ' + C.langPips(lb.lv) + (lb.who ? ' (' + lb.who + ')' : '')];
-    bits.push(b.y > 1480 ? b.y + '년 무렵' : '옛 책');
+    bits.push(b.y > 1480 ? b.y + '년 무렵' + (G.bookEarly && G.bookEarly(b) && S().date.y < b.y ? ' (초고 필사본)' : '') : '옛 책');
     if (b.sk) bits.push(G.SKILL_BY_ID[b.sk].name + ' ' + (b.lv || 1));
     return bits.join(' · ');
   }

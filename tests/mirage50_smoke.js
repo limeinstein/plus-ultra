@@ -26,6 +26,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       await G.Game.ensureGeo();
       G.State.newGame({ name: '디오구 페헤이라', nation: 'PT', job: 'explorer', age: 30, birth: { m: 4, d: 12 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
       const s = G.Game.state; s.prologueDone = true; s.date = { y: 1609, m: 6, d: 1 };
+      G.BALANCE.mirage.cityChance = 1; // 위치·발견 경로 검사에서는 입항별 10% 추첨을 고정한다.
       const D = G.Disc, M = G.Mirage, ids = G.MIRAGE50, L = ids.map(id => G.DISC[id]);
       const out = { n: ids.length, missing: ids.filter(id => !G.DISC[id]), reg: {}, notFuture: [], noClue: [], noFacts: [], dupName: [], bad: [] };
       L.forEach(d => { if (!d) return; out.reg[d.reg] = (out.reg[d.reg] || 0) + 1;

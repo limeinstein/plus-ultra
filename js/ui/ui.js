@@ -196,6 +196,8 @@
     modalRoot = U.el('div', 'layer'); modalRoot.style.pointerEvents = 'none'; modalRoot.style.zIndex = 60; root.appendChild(modalRoot);
     toastEl = U.el('div', 'toasts'); root.appendChild(toastEl);
     fadeEl = U.el('div', 'fade-black'); root.appendChild(fadeEl);
+    // 창이 열리고 닫히거나 바다·도시가 바뀌면 떠 있는 알림도 그 장면의 자리로 옮긴다 (알림 정리 2026-11-01)
+    if (window.MutationObserver) { var zmo = new MutationObserver(function () { if (UI.noticeZone && toastEl.children.length) UI.noticeZone(); }); zmo.observe(modalRoot, { childList: true }); zmo.observe(root, { attributes: true, attributeFilter: ['class'] }); }
     document.addEventListener('keydown', function (e) { if (routeKey(e)) e.preventDefault(); });
     // 우클릭은 Esc와 같은 "돌아간다" 입력이다. 선택 대화에서는 떠나고, 창은 닫고,
     // 건물 기본 메뉴에서는 그 건물을 나온다. 아무도 받지 않은 우클릭은 브라우저 메뉴를 그대로 둔다.
@@ -282,7 +284,7 @@
   UI.hud = {
     show: function (cells) {
       hudEl.classList.remove('hidden');
-      var h = '<svg class="emb" viewBox="0 0 48 48">' + emblemSvg() + '</svg>';
+      var h = '<button class="notice-btn" type="button" title="지난 소식 — 띄우지 않은 상태·먼 소문과 대화 중에 모아 둔 소식도 여기에"><svg class="emb" viewBox="0 0 48 48">' + emblemSvg() + '</svg><i class="nb-n"></i></button>';
       cells.forEach(function (c) {
         if (c.grow) { h += '<div class="grow"></div>'; return; }
         // label이 있으면 두 줄 칸 (작은 이름 + 값)
@@ -290,6 +292,8 @@
         else h += '<div class="cell' + (c.cls ? ' ' + c.cls : '') + '" data-k="' + (c.k || '') + '">' + (c.icon ? G.icon(c.icon) : '') + '<span>' + c.text + '</span></div>';
       });
       hudEl.innerHTML = h;
+      var nb = hudEl.querySelector('.notice-btn'); if (nb) { nb.addEventListener('click', function (e) { e.stopPropagation(); if (!UI.busy()) UI.openNotices(); }); badge(); }
+      if (UI.noticeSettings) UI.noticeSettings();
       hudEl.classList.toggle('dense', cells.length > 9);
       fitHud();
       // 칸을 한 번만 찾아 두고(hud.set 이 하루에도 열 번 넘게 불린다), 값이 그대로면 DOM을 건드리지 않는다
@@ -334,17 +338,113 @@
   }
   UI.emblemSvg = emblemSvg;
 
-  // ---------------------------------------------------------------- toasts
-  /** icon: 아이콘 이름, 또는 {src: 그림 주소, icon: 그림이 없을 때 아이콘} — 물건을 얻었을 때 그 물건 그림 */
-  UI.toast = function (text, icon, ms) {
-    var lead = icon && typeof icon === 'object' ? (icon.src ? '<img class="toast-pic" src="' + icon.src + '" alt="">' : G.icon(icon.icon || 'chest')) : G.icon(icon || 'rose');
-    var t = U.el('div', 'toast wood', lead + '<div>' + text + '</div>');
-    toastEl.appendChild(t);
-    // 알림이 쌓여 대화 중 인물·대화창을 덮지 않게: 평소 3개, 대화 중에는 2개까지만 (오래된 것부터 걷는다). 대화 중에는 오른쪽 위로 비켜 작게 (css #ui.talking .toasts)
-    var talkingNow = !!document.querySelector('.dlg-stage, .dlg'), maxT = talkingNow ? 2 : 3;
-    while (toastEl.children.length > maxT) toastEl.removeChild(toastEl.firstChild);
-    setTimeout(function () { t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }, ms || 3200);
+  // ---------------------------------------------------------------- toasts (알림) — 2026-11-01 정리: 등급 · 한 자리 · 대화 중 보류 · 읽는 시간 · 지난 소식
+  /* 알림(갈색 쪽지)이 인물 얼굴·대화창·바다를 가리던 것을 고쳤다 (사용자 요청 2026-11-01, 1+2+3+5안).
+     ① 등급 (UI.toastTier): big = 큰 일(위험·손실·느낌표·그림 알림·오래 보이라고 한 것) — 카드 · line = 여느 소식 — 작은 카드 ·
+        state = 상태가 바뀐 것(비가 오고 그침 · 노 젓기) — 띄우지 않는다, 바람 판·항해 상태판에 이미 보인다 ·
+        quiet = 먼 나라 해전 소문 — 띄우지 않는다. 넷 다 「지난 소식」(윗줄 왼쪽 나침반 단추)에 남는다.
+        부르는 쪽에서 정하려면 UI.toast(text, icon, ms, { tier: 'big' | 'line' | 'state' | 'quiet' }).
+     ② 한 자리 (zone): 창이 열려 있으면 왼쪽 아래 · 바다에서는 아래 단추줄 바로 위 가운데 · 그 밖에는 윗줄 바로 아래 가운데. 한꺼번에 둘(큰 일 셋)까지.
+     ③ 대화 중 보류: 사람이 말하는 동안(대화창·발견 뒤 대화)에는 띄우지 않고 모아 두었다가(나침반 단추에 수) 대화가 끝나면 최근 것부터 셋까지.
+     ⑤ 읽는 시간: 글자 수에 맞춰 2.5~8초. 누르면 바로 닫힌다. 같은 말이 1분 안에 또 오면 다시 띄우지 않는다.
+     조정값: G.BALANCE.notice */
+  function NK() { return (G.BALANCE && G.BALANCE.notice) || {}; }
+  var TIER_STATE = /^(비가 그쳤다|소나기가 내리기 시작했다|먹구름이 몰려와 폭우가 쏟아진다|돛이 바람을 못 받아)/;
+  var TIER_QUIET = /맞붙었다는 소식이 들려온다|의 배를 쫓아 포를 쏘았다고 한다|의 싸움이 바다로 번졌다/;
+  var TIER_BIG_ICON = { skull: 1, laurel: 1, crown: 1, heart: 1, baby: 1, ring: 1, cannon: 1, warn: 1, alert: 1 };
+  UI.toastTier = function (text, icon, ms, opt) {
+    if (opt && opt.tier) return opt.tier;
+    var plain = String(text == null ? '' : text).replace(/<[^>]+>/g, '');
+    if (TIER_STATE.test(plain)) return 'state';
+    if (TIER_QUIET.test(plain)) return 'quiet';
+    if ((icon && typeof icon === 'object' && icon.src) || (ms && ms >= 5000) || /[!！]/.test(plain) || (typeof icon === 'string' && TIER_BIG_ICON[icon])) return 'big';
+    return 'line';
   };
+  var recent = [], held = [], seenAt = {}, unseen = 0;
+  function noticeDate() { var s = G.Game && G.Game.state; return s && s.date ? s.date.y + '.' + s.date.m + '.' + s.date.d : ''; }
+  function talkingNow() { return !!(root && (root.classList.contains('talking') || root.querySelector('.dlg-stage, .dlg, :scope > .reveal.talk:not(.report)'))); }
+  /* ⑥ 설정 (수첩 설정 — js/ui/info.js): noticeSize 'small'|'normal' · noticePos 'auto'|'top'|'bottom' · noticeHideLine(여느 소식 숨기기) · statusOpen(항해·탐험 상태판 늘 펼침) */
+  function NS() { var s = G.Game && G.Game.state; return (s && s.settings) || {}; }
+  function zoneNow() {
+    if (!root) return 'top';
+    if (root.querySelector('.modal-back > .win') || root.classList.contains('colony-show')) return 'corner';
+    var pos = NS().noticePos;
+    if (pos === 'top') return 'top';
+    if (pos === 'bottom') return root.classList.contains('at-sea') ? 'sea' : 'bottom';
+    if (root.classList.contains('at-sea')) return 'sea';
+    return 'top';
+  }
+  function setZone() {
+    var z = zoneNow(); if (toastEl.getAttribute('data-zone') !== z) toastEl.setAttribute('data-zone', z);
+    var sz = NS().noticeSize === 'small' ? 'small' : 'normal'; if (toastEl.getAttribute('data-size') !== sz) toastEl.setAttribute('data-size', sz);
+  }
+  UI.noticeZone = setZone;
+  UI.noticeSettings = function () { setZone(); if (root) root.classList.toggle('status-open', !!NS().statusOpen); };
+  function badge() {
+    var b = document.querySelector('.hud .notice-btn .nb-n'); if (!b) return;
+    b.textContent = unseen > 99 ? '99+' : unseen ? String(unseen) : '';
+    b.parentNode.classList.toggle('has', unseen > 0);
+  }
+  function lifeMs(text, ms) {
+    var k = NK(), n = String(text).replace(/<[^>]+>/g, '').length;
+    var auto = Math.min(k.maxMs || 8000, Math.max(k.minMs || 2500, (k.baseMs || 1800) + n * (k.perChar || 60)));
+    return Math.min(k.maxMs || 8000, Math.max(auto, ms || 0));
+  }
+  function showToast(text, icon, ms, tier) {
+    setZone();
+    var lead = icon && typeof icon === 'object' ? (icon.src ? '<img class="toast-pic" src="' + icon.src + '" alt="">' : G.icon(icon.icon || 'chest')) : G.icon(icon || 'rose');
+    var t = U.el('div', 'toast wood t-' + tier, lead + '<div class="tt">' + text + '</div>');
+    var gone = false;
+    function close() { if (gone) return; gone = true; t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }
+    t.addEventListener('click', function (e) { e.stopPropagation(); close(); });
+    t.title = '누르면 닫힙니다 · 지난 소식은 윗줄 왼쪽 나침반';
+    toastEl.appendChild(t);
+    // 한꺼번에 둘까지 (큰 일이 끼면 셋) — 오래된 여느 소식부터 걷는다
+    var maxT = [].some.call(toastEl.children, function (x) { return x.classList.contains('t-big'); }) ? 3 : 2;
+    while (toastEl.children.length > maxT) { var old = [].filter.call(toastEl.children, function (x) { return !x.classList.contains('t-big'); })[0] || toastEl.firstChild; toastEl.removeChild(old); }
+    setTimeout(close, lifeMs(text, ms));
+  }
+  var flushTimer = null;
+  function flushLater() {
+    if (flushTimer) return;
+    flushTimer = setInterval(function () {
+      if (!held.length) { clearInterval(flushTimer); flushTimer = null; return; }
+      if (talkingNow()) return;
+      // 대화가 끝났다 — 최근 것부터 셋까지 (큰 일 먼저), 나머지는 「지난 소식」에
+      var list = held.splice(0), pick = list.filter(function (x) { return x.tier === 'big'; }).concat(list.filter(function (x) { return x.tier !== 'big'; })).slice(0, 3);
+      pick.forEach(function (x, i) { setTimeout(function () { showToast(x.text, x.icon, x.ms, x.tier); }, i * 350); });
+      unseen = Math.max(0, unseen - pick.length); badge();   // 띄우지 못한 것은 수로 남아 나침반 단추에서 본다
+      clearInterval(flushTimer); flushTimer = null;
+    }, 400);
+  }
+  /** icon: 아이콘 이름, 또는 {src: 그림 주소, icon: 그림이 없을 때 아이콘} — 물건을 얻었을 때 그 물건 그림 · opt.tier: 등급을 정해 줄 때 */
+  UI.toast = function (text, icon, ms, opt) {
+    if (text == null || text === '') return;
+    var tier = UI.toastTier(text, icon, ms, opt), plain = String(text).replace(/<[^>]+>/g, '');
+    recent.push({ d: noticeDate(), text: plain, icon: typeof icon === 'string' ? icon : (icon && icon.icon) || 'chest', tier: tier });
+    if (recent.length > (NK().keep || 40)) recent.shift();
+    if (tier === 'state' || tier === 'quiet') return;
+    if (tier === 'line' && NS().noticeHideLine) return;   // 설정: 여느 소식은 「지난 소식」에만
+    // 같은 말(숫자만 다른 것 포함)이 1분 안에 또 오면 다시 띄우지 않는다
+    var key = plain.replace(/[0-9,.]+/g, '#').slice(0, 80), now = Date.now();
+    if (seenAt[key] && now - seenAt[key] < (NK().repeatMs || 60000) && tier !== 'big') return;
+    seenAt[key] = now;
+    if (talkingNow()) { held.push({ text: text, icon: icon, ms: ms, tier: tier }); unseen++; badge(); flushLater(); return; }
+    showToast(text, icon, ms, tier);
+  };
+  /** 지난 소식 (최근 것부터) — 윗줄 왼쪽 나침반 단추 */
+  UI.recentNotices = function () { return recent.slice().reverse(); };
+  UI.openNotices = function () {
+    unseen = 0; badge();
+    var TN = { big: '큰 일', line: '', state: '상태', quiet: '먼 소문' };
+    var rows = UI.recentNotices().map(function (x) {
+      return '<div class="nl-row nl-' + x.tier + '">' + G.icon(x.icon || 'chest') + '<div><small>' + U.esc(x.d) + (TN[x.tier] ? ' · ' + TN[x.tier] : '') + '</small><div>' + U.esc(x.text) + '</div></div></div>';
+    }).join('') || '<div class="muted">아직 소식이 없습니다.</div>';
+    return UI.window({ title: '지난 소식', icon: 'scroll', width: 720, html: '<div class="notice-list">' + rows + '</div><div class="muted" style="margin-top:8px;font-size:14px">최근 ' + (NK().keep || 40) + '개까지 · 오래된 소식과 큰 사건은 일지에 남습니다.</div>', buttons: [{ label: '닫기', value: 1, cls: 'navy' }] }).result;
+  };
+  UI.noticeBadge = badge;
+  // ④ 항해·탐험 상태판은 한 줄로 접혀 있다 — 마우스를 올리거나 누르면 펼친다 (css .status-strip)
+  document.addEventListener('click', function (e) { var sb = e.target && e.target.closest ? e.target.closest('.status-strip') : null; if (sb) sb.classList.toggle('open'); }, true);
 
   /* 검은 막을 덮고 fn 을 한 뒤 다음 장면이 그려지면 걷는다. fn 이 오래 걸리면(G.FX.loader.fadeAfter ms) 검은 막 위에 불러오는 그림을 작게 (js/ui/loader.js) */
   UI.fade = function (fn) {
@@ -794,10 +894,13 @@
     // 끝에 붙은 안내: 「\n\n— 새 단서: …」, 「\n— …」
     t = t.replace(/\n+\s*—\s*([^\n]+)\s*$/, function (m, x) { notes.push(x.trim()); return ''; });
     // 괄호 안의 셈·규칙 (이름 괄호 「피달구 (Fidalgo)」나 「(한참 뒤)」 같은 지문은 남긴다)
+    var t0 = t, n0 = notes.length;
     t = t.replace(/\s*\(([^()]*)\)/g, function (m, x) {
       if (!NOTE_RE.test(x)) return m;
       notes.push(x.replace(/^\s+|\s+$/g, '')); return '';
     });
+    // 그 쪽이 괄호 지문 하나뿐이었으면 다 빠져 빈 대화창이 된다 — 숫자가 없는 지문(「(…금화 상자 앞에서 한참을 서 있다)」)은 남긴다 (2026-10-26 메디치 정산)
+    if (!/[가-힣A-Za-z0-9]/.test(t) && notes.slice(n0).every(function (x) { return !/\d/.test(x); })) { t = t0; notes.length = n0; }
     // 말 가운데 줄표 — 「」『』 밖에서만, 이름 속 줄표(「별의 길 — 쿠페의 항로」 같은 발견·물건 이름)도 건드리지 않는다
     t = t.split(dashSplitter()).map(function (part, i) {
       if (i % 2) return part;

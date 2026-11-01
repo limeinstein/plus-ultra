@@ -20,19 +20,8 @@
     return { label: '부하와 이야기', icon: 'people', sub: n ? n + '명' : '없다', dim: !n, onClick: function () { return MT.open(c); } };
   };
 
-  MT.open = async function (c) {
-    var s = S();
-    for (;;) {
-      if (!s.mates.length) { UI.toast('데리고 다니는 부하가 없습니다.', 'people'); return; }
-      var i = await UI.choose('부하와 이야기', s.mates.map(function (m, k) {
-        var d = G.MATE[m.id]; if (!d) return { label: '—', value: -1, disabled: true };
-        var tag = d.witch ? ' <span class="tag">마녀</span>' : d.wd ? ' <span class="tag">철새</span>' : '';
-        return { label: U.esc(d.name) + tag, value: k, icon: d.g === 'f' ? 'heart' : 'people',
-          right: R.roleName(m) + ' · 충성 ' + Math.round(m.loyal || 70) + (d.g === 'f' && !d.sib && !d.minor ? ' · ' + heart(m.aff) : '') + (G.Romance && G.Romance.tag(m.id) ? ' · ' + U.esc(G.Romance.tag(m.id)) : '') };
-      }), { width: 620, icon: 'people', text: '누구와 이야기할까?' });
-      if (i == null || i < 0) return;
-      await MT.talk(c, s.mates[i]);
-    }
+  MT.open = function (c) {
+    return G.MateBook.open(c);
   };
 
   function lines(d, m) {

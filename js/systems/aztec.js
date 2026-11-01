@@ -705,7 +705,7 @@
     var down = s.player.nation === 'ES' ? titleStep(-1) : null;
     trust(['es_crown', 'es_cuba', 'es_newspain'], -25);
     b.ban = K.banTo;
-    var lines = [['cortes', '(편지로) 제독, 그대는 폐하의 적과 한편이 되었소. 누에바 에스파냐의 항구 — 베라크루스와 멕시코 — 에는 앞으로 몇 해 동안 그대의 배를 들이지 않을 것이오.' + (down ? ' 폐하께서 그대의 작위 한 칸을 거두셨소.' : '')]];
+    var lines = [['cortes', '(편지로) 제독, 그대는 폐하의 적과 한편이 되었소. 누에바 에스파냐의 항구인 베라크루스와 멕시코에는 앞으로 몇 해 동안 그대의 배를 들이지 않을 것이오.' + (down ? ' 폐하께서 그대의 작위 한 칸을 거두셨소.' : '')]];
     if (hasMate('marina')) lines.push(['marina', '제독, 여기서 헤어지겠습니다. 저는 코르테스의 편도, 메시카의 편도 아니었습니다. 두 말 사이에 서 있었을 뿐이지요. …이제 그 다리를 거두어야겠습니다.']);
     await play(lines);
     if (hasMate('marina')) { leaveMate('marina'); b.marina = 'left'; }

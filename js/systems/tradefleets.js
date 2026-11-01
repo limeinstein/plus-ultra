@@ -70,10 +70,10 @@
   var CACHE = {}, CKEY = '';
   function levels() {
     var s = S(); if (!s || !st()) return {};
-    var key = s.day + ':' + JSON.stringify((s.tfleet || {}).open || {});
+    var key = s.day + ':' + U.dateNum(s.date) + ':' + JSON.stringify((s.tfleet || {}).open || {});
     if (key === CKEY) return CACHE;
     CKEY = key; CACHE = {};
-    routes().forEach(function (r) { var t = TF.level(r.id); if (t > 0) CACHE[r.id] = t; });
+    routes().forEach(function (r) { var t = TF.level(r.id); if (r.id === 'japan' && G.Sakoku) t *= G.Sakoku.routeK(); if (t > 0) CACHE[r.id] = t; });
     return CACHE;
   }
   /** 도시 c의 물건 g에 상선대가 거는 배수 — side: 'buy'·'sell'(값) · 'stock'(재고) */
@@ -82,6 +82,7 @@
     var L = levels(), k = K(), v = 1, any = false, w = c.port ? 1 : k.inland;
     for (var id in L) {
       var r = TF.route(id), t = L[id] * w; if (!r) continue;
+      if (id === 'japan' && G.Sakoku && !G.Sakoku.routeGood(g)) continue;
       var home = r.home.indexOf(c.region) >= 0, far = r.far.indexOf(c.region) >= 0;
       if (!home && !far) continue;
       var inG = r.goods.indexOf(g) >= 0, inB = r.back.indexOf(g) >= 0;
@@ -168,7 +169,8 @@
     if (!npc || npc.kind !== 'merchant') return npc;
     var r = TF.laneAt(npc.lon, npc.lat); if (!r) return npc;
     npc.route = r.id;
-    if (!npc.nation && U.chance(0.6)) npc.nation = r.nat;
+    if (r.id === 'japan' && G.Sakoku) npc.nation = G.Sakoku.routeNation();
+    else if (!npc.nation && U.chance(0.6)) npc.nation = r.nat;
     return npc;
   };
   TF.greet = function (n) {
@@ -179,7 +181,8 @@
   // ---------------------------------------------------------------- 수첩
   TF.list = function () {
     return routes().filter(function (r) { return TF.isOpen(r.id); }).map(function (r) {
-      return { id: r.id, name: r.name, nat: r.nat, from: r.from, to: r.to, n: TF.fleets(r.id), years: TF.years(r.id), next: TF.nextIn(r.id), goods: r.goods, back: r.back, home: homeName(r), far: regionsName(r.far) };
+      var jp = r.id === 'japan' && G.Sakoku;
+      return { id: r.id, name: r.name + (jp && G.Sakoku.routeK() < 1 ? ' (교역 제한)' : ''), nat: jp ? G.Sakoku.routeNation() : r.nat, from: r.from, to: r.to, n: TF.fleets(r.id), years: TF.years(r.id), next: TF.nextIn(r.id), goods: jp ? r.goods.filter(G.Sakoku.routeGood) : r.goods, back: r.back, home: homeName(r), far: regionsName(r.far) };
     });
   };
   TF.box = function () {

@@ -30,9 +30,16 @@
     var p = S().player, id = p.nation === 'ES' ? 'es_crown' : 'pt_king';
     return G.SPONSOR && G.SPONSOR[id] || null;
   }
+  /** 해를 세는 우리말 (열여덟 해 · 스무 해 · 스물한 해) — 아버지의 마지막 말이 딸의 나이를 따라가게 */
+  function hae(n) {
+    n = Math.max(1, Math.round(n || 0)); if (n >= 100) return String(n);
+    var T = ['', '열', '스물', '서른', '마흔', '쉰', '예순', '일흔', '여든', '아흔'], O = ['', '한', '두', '세', '네', '다섯', '여섯', '일곱', '여덟', '아홉'], t = Math.floor(n / 10), o = n % 10;
+    return t === 2 && o === 0 ? '스무' : T[t] + O[o];
+  }
+  KW.hae = hae;
   function fill(t, k, extra) {
     var s = S(), p = s.player, sp = crown(), o = {
-      name: k ? k.name : '', father: p.name, mother: F().wifeName ? F().wifeName() : '',
+      name: k ? k.name : '', years: k ? hae(F().kidAge(k)) : '열여덟', father: p.name, mother: F().wifeName ? F().wifeName() : '',
       king: sp && G.Sponsor ? G.Sponsor.holderName(sp) : '국왕 전하', court: sp ? G.CITY_DATA[sp.city].name : '',
       nation: G.R.nationName ? G.R.nationName(p.nation) : ''
     };

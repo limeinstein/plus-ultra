@@ -80,7 +80,7 @@
   };
 
   // ================================================================ ① 디우의 포술장 (1519~1526.3)
-  function aliOpen() { var b = st(), t = today(); return !!(b && !b.sold && b.side !== 'lodi' && cityNow() === DIU && t >= K.aliFrom && t <= K.aliTo && !(b.aliSeen && !armsOk())); }
+  function aliOpen() { var b = st(), t = today(); return !!(b && !b.sold && b.side !== 'lodi' && cityNow() === DIU && t >= K.aliFrom && t <= K.aliTo && !(b.aliSeen && !armsOk()) && !(b.aliNext && S().day < b.aliNext)); }
   async function aliQuli() {
     var b = st(); b.met = 1;
     await withPic('mughal_gunner', '디우의 포술장', function () { return play([
@@ -104,7 +104,10 @@
     var v = await UI.ask((who === 'babur' ? '바부르' : '알리 쿨리') + U.jx(who === 'babur' ? '바부르' : '알리 쿨리', '이/가') + ' 짐칸의 ' + armsText(a) + U.jx(armsText(a), '을/를') + ' 금화 ' + U.num(gold) + '닢에 사겠다고 한다. (시세의 ' + K.premium + '배)', [
       { label: '판다 — 금화 ' + U.num(gold) + '닢', value: 'sell', icon: 'coin' },
       { label: '남의 나라 싸움에 총을 대지 않겠다', value: 'no' }], me());
-    if (v !== 'sell') { if (where === 'ali') await play([['aliquli', '…아쉽군. 그래도 마음이 바뀌면 봄이 오기 전에 오시오.']]); return; }
+    if (v !== 'sell') {
+      if (where === 'ali') { b.aliNo = (b.aliNo || 0) + 1; b.aliNext = S().day + U.reaskDays(b.aliNo); await play([['aliquli', '…아쉽군. 그래도 마음이 바뀌면 봄이 오기 전에 오시오.']]); }   // 거절할수록 뜸하게 (G.BALANCE.reask)
+      return;
+    }
     var got = sellArms(a, K.premium);
     b.sold = where; b.side = 'babur';
     await play([

@@ -42,6 +42,8 @@
   /** 그 항해사가 다니는 도시 번호들 (고장 순서대로, 겹치면 한 번) */
   var rangeCache = {};
   MM.range = function (id) {
+    var returned = G.MateDismiss && G.MateDismiss.range(id);
+    if (returned && returned.length) return returned;
     if (rangeCache[id]) return rangeCache[id];
     var r = G.MATE_RANGE && G.MATE_RANGE[id], out = [], seen = {};
     if (r) r.zones.forEach(function (z) { ((G.MATE_ZONES[z] || {}).ids || []).forEach(function (cid) { if (!seen[cid]) { seen[cid] = 1; out.push(cid); } }); });

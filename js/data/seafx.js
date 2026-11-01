@@ -89,8 +89,19 @@
       abyss: [0.018, 0.12, 0.22],       // 가장 깊은 바다 색 — 짙은 남청색 안에서도 청록 기운이 죽지 않게 한다
       rough: 0.56,                      // 먼바다일수록 거칠어지는 정도 (물결 높이·물마루 그늘·흰 물마루). 0이면 예전처럼 어디나 같다
       flow: 0.74,                       // 큰 너울을 따라 흐르는 넓은 청록 명암 (0이면 끔)
-      ripple: 0.52,                     // 가까이서만 보이는 잔물결 법선의 세기
-      crest: 0.56                       // 배경 물마루 선의 세기 — 흰 반달 조각 대신 얇고 끊어진 선으로만 보인다
+      ripple: 0.32,                     // 가까이서만 보이는 잔물결 법선의 세기
+      crest: 0.56,                      // 강풍의 파도 꼭대기에서만 부서지는 포말
+      surface: {                       // 수면 명암·빛 전용. 파도 높이·항해 속력은 바꾸지 않는다
+        seaNormal: 0.22, battleNormal: 1.5,
+        reflection: 0.30, sky: 0.30,     // 파면 반사와 하늘빛
+        coastNormal: 0.35, coastDetail: 0.14, openDetail: 0.70, coastFade: 24, // 연안은 잔잔하게, 해안 거리 2→24텍셀에서 먼바다로 부드럽게 전환
+        mapDetail: 0.30,                // 기본 지도에서는 수면 대비를 낮춰 배·항로를 먼저 읽는다
+        gloss: 0.18,                    // 0=넓고 부드러운 반사, 1=좁은 반짝임
+        maxGlint: 0.16, battleGlint: 0.12, // 돛·적함·사거리 표시를 읽을 수 있는 상한
+        warmth: 0,                     // 0=낮의 은빛, 1=해질녘 금빛. 장면의 dusk도 함께 반영
+        sun: [-0.55, 0.50, 0.67],       // 동쪽·북쪽·높이. 선박 조명에도 같은 방향을 쓴다
+        battleArt: 0                   // 정적인 격랑 그림은 실시간 파면을 덮지 않는다
+      }
     },
     landSea: {            // 육상 탐험 중 화면 속 바다를 오가는 배 (js/systems/landsea.js — 그림만, 마주침 없음)
       on: true,
@@ -118,6 +129,7 @@
       zoomEase: 12,       // 확대·축소가 목표에 다가가는 빠르기 (1/초) — 휠 한 칸이 한 번에 뛰지 않고 부드럽게
       zoom: {
         min: 26, max: 2400, reference: 110, navigationMax: 420, // 새 확대 구간에서도 기존 해안 판정 크기 유지
+        shipPreset: 3,     // 선박 확대 단추의 기본 배율
         power: 0.55, minScale: 0.45, maxScale: 5.5, // 지도와 함께 커지는 배 그림 — 충돌 크기와 별개
         fleetGap: 2.2,     // 가장 가까이 볼 때 동행선 사이 간격 배수
         leadMaxPx: 90      // 확대해도 카메라가 기함보다 너무 앞서가지 않게
@@ -135,13 +147,20 @@
     },
     wake: {
       spacing: 0.012,     // 항적 점 간격 (°)
-      life: 3.0,          // 항적이 남는 시간 (d) — 가는 선이 길게 이어졌다 서서히 물빛에 섞인다
+      hold: 1, life: 2.4, // 실제 초: 1초 유지한 뒤 1.4초 동안 물빛에 섞인다 (배속과 무관)
       spread: 0.31,       // 선미 V자 파문이 옆으로 퍼지는 빠르기 (배 속력에 대한 비, 켈빈 파 ≈ 0.35)
       foamWidth: 0.34,    // 가운데 거품 물길의 처음 폭 (선체 폭에 대한 비)
       foamGrow: 0.82,     // 가운데 물길이 퍼지는 빠르기 (선체 폭/d)
       alpha: 0.72,        // V자 파문과 가운데 포말의 전체 진하기
       bubbles: 0.7,       // 가운데 물길에서 흩어지는 작은 거품 양
-      maxPoints: 420
+      maxPoints: 180, shipParticles: 100, motionSeconds: 0.32,
+      profiles: { // 선체 크기·형태별 물결. 선박 성능에는 영향을 주지 않는다.
+        light: { width: 0.27, spread: 0.8, foam: 0.72, bow: 0.8, oars: 0 },
+        slender: { width: 0.25, spread: 0.72, foam: 0.8, bow: 1.1, oars: 0 },
+        heavy: { width: 0.36, spread: 1.2, foam: 1.25, bow: 1.2, oars: 0 },
+        broad: { width: 0.39, spread: 1.1, foam: 1.08, bow: 1, oars: 0 },
+        oared: { width: 0.31, spread: 0.9, foam: 0.9, bow: 0.85, oars: 5 }
+      }
     },
     party: {              // 육상 탐험대 모형 (js/art/party.js) — 지원 동물의 속력·피로 수치는 js/data/mounts.js
       size: 1.3,          // 크기 (1 = 사람 키 약 34px — 1.3이면 사람 44px, 말 탄 대원 약 70px: 예전 탐험대의 약 2.5배)
@@ -222,7 +241,8 @@
     battleView: {
       min: 0.45, max: 2.6, close: 2.2, zoomEase: 10,
       anchor: [800, 560], free: [350, 100, 1220, 790], pad: 150, label: 0.92,
-      cull: 1.8, labelGap: 32, chartSize: 288, chartGrid: 96
+      cull: 1.8, labelGap: 32, chartSize: 288, chartGrid: 96,
+      combatMax: 1.35, combatPad: 28, combatHull: [0.75, 1.35, 0.65] // 교전 보기: 선체 옆·돛 위·이름표 아래 여유
     },
     battleGunnery: { // 기함 사거리 안의 장전 게이지 (쉬움·보통)
       loading: '#e7bd72', ready: '#89e5c6', held: '#a9b1b8',
@@ -235,7 +255,6 @@
       lateral: 0.45,      // 옆 미끄러짐이 37%로 줄어드는 시간 (초)
       day: 3.0,           // 물보라의 '하루' = 3초 (바다 장면의 항적·물보라 수치를 그대로 쓰기 위한 환산)
       ref: 105,           // 물보라 세기 기준 속력 (px/하루 — 보통 배 속력 35px/초)
-      wakeLife: 2.2,      // 항적이 남는 시간 (하루 — 약 6.6초)
       wakeSpacing: 5      // 항적 점 간격 (px)
     },
     impact: {             // 해전의 타격감 (초·px) — 히트스톱(잠깐 멈춤)·화면 흔들림·번쩍임·백병전 넉백. 설정 「화면 흔들림·번쩍임」을 끄면 흔들림과 번쩍임만 빠진다
@@ -302,14 +321,14 @@
     },
     ride: {               // 배가 보이는 파도를 탄다 (js/world/waves.js — 셰이더와 같은 파도 식으로 선체 위 다섯 점의 높이를 잰다)
       on: true,           // 끄면 예전처럼 사인 곡선으로만 흔들린다
-      sea: { roll: 0.18, pitch: 0.10, heave: 0.56, chop: 0.13 },       // 항해 지도: 물 기울기·높이 → 흔들림 (바람 0.5에서 좌우 약 ±0.05, 앞뒤 ±0.025)
+      sea: { roll: 0.28, pitch: 0.18, heave: 1.10, chop: 0.06 },       // 항해 지도: 긴 너울의 오르내림을 살리고 잔물결의 떨림은 줄인다
       battle: { roll: 0.93, pitch: 0.66, heave: 0.33, chop: 0.23 },   // 해전 바다 (chop = 배 가운데 한 점의 잔물결 기울기를 섞는 비율 — 긴 너울의 느린 흔들림 위의 잔 흔들림)
       follow: 0.9,        // 따르는 배는 제 자리의 파도를 탄다 (1 = 기함과 같은 세기)
       storm: 1.6,         // 폭풍이면 이만큼 더
       maxRoll: 0.22, maxPitch: 0.09, maxHeave: 0.05,
-      rollW: 2.1, rollZ: 0.22,     // 좌우 흔들림의 고유 진동(rad/초)과 감쇠 — 감쇠가 작으면 한 번 기울면 몇 번 되흔들린다
-      pitchW: 3.0, pitchZ: 0.45,   // 앞뒤 (좌우보다 빠르고 금방 멎는다)
-      heaveW: 2.6, heaveZ: 0.55,   // 오르내림
+      rollW: 1.65, rollZ: 0.48,    // 좌우: 큰 물결을 천천히 따라가고 과한 되흔들림은 누른다
+      pitchW: 2.15, pitchZ: 0.65,  // 앞뒤: 잔물결보다 선체 전체가 받는 너울을 따른다
+      heaveW: 1.8, heaveZ: 0.70,   // 오르내림
       slam: 0.10,         // 선수가 파도에 박히는 판정 (앞뒤 기울기가 내려가는 빠르기, /초) — 넘으면 선수 물보라가 크게 튄다
       slamCool: 0.7,      // 물보라 뒤 쉬는 시간 (초)
       slamSpray: 1.28,    // 파도를 찍을 때는 짧고 시원하게 크게 튄다
@@ -394,7 +413,7 @@
         groundMinGap: 20, groundAngles: 24, groundRadii: [1, 0.85, 0.7, 0.55, 0.4, 0.25, 0.1],
         phaseOffsets: [0, 0.21, 0.48, 0.73],
         tracks: {      // 대원마다 구두·발굽·발바닥과 바퀴·썰매 자국을 구분한다.
-          enabled: true, life: 45, maxMarks: 1600, opacity: 0.36, groundSquash: 0.7,
+          enabled: true, hold: 1, life: 2.4, maxMarks: 1600, opacity: 0.36, groundSquash: 0.7,
           humanWidth: 2.8, animalWidth: 3.6, animalStride: 5.5,
           packAnimalSide: 7, packHumanSide: 10, draftForward: 22, cartBack: 12, rutWidth: 10,
           wheelLine: 1.5, runnerLine: 1.1,
@@ -413,8 +432,9 @@
           strides: { foot: 20, porter: 20, horse: 40, camel: 46, camel2: 46, donkey: 22,
             llama: 24, yak: 30, wagon: 34, oxwagon: 34, elephant: 50, reindeer: 36 }
         },
-        gaps: { walk: [44, 34], porter: [48, 38], horse: [64, 56], camel: [72, 62],
-          donkey: [60, 50], llama: [60, 50], yak: [64, 56], wagon: [100, 86], elephant: [100, 88], reindeer: [94, 80] }
+        // 인원수는 유지하고 앞뒤·좌우 간격을 약 25% 줄인다. 큰 마차·코끼리는 여유를 더 둔다.
+        gaps: { walk: [32, 26], porter: [36, 28], horse: [48, 42], camel: [54, 46],
+          donkey: [44, 36], llama: [44, 36], yak: [48, 42], wagon: [78, 66], elephant: [78, 68], reindeer: [72, 60] }
       }
     },
     battle: true,        // 육상전 부대를 그림 시트로

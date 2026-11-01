@@ -1,7 +1,7 @@
 /* 파도 높이 (G.Waves) — 화면의 바다 셰이더(renderer.js의 waterCol·battleSea)와 같은 식을 JS로 옮긴 것.
    배가 "보이는 파도"를 타게 한다: 선체 위 몇 점의 물 높이로 앞뒤 기울기(pitch)·좌우 기울기(roll)·오르내림(heave)을 정하고,
    그 값을 용수철-감쇠(2차)로 따라가 배마다 관성과 되흔들림이 생긴다.
-   · sea(lon, lat, t, wind, pxD)   항해 지도: 너울 2 + 풍랑 5 (해안 가까이 물결이 뭍 쪽으로 휘는 것까지)
+   · sea(lon, lat, t, wind, pxD)   항해 지도: 너울 2 + 풍랑 5 (연안에서는 너울의 높이를 낮춘다)
    · battle(qx, qy, t, wind, pxU)  해전: 너울 2 + 풍랑 6 (q = 해전 좌표 100px 단위, 위가 +)
    두 함수 모두 {h, gx, gy} (높이와 기울기)를 돌려준다. 셰이더와 같은 해시·값 잡음을 써서 물마루 자리가 화면과 맞는다.
    조정값은 G.FX.ride (seafx.js). */
@@ -44,8 +44,7 @@
     var px = lon + 180, py = lat + 90;
     var wx = wind[0], wy = wind[1], wl = Math.sqrt(wx * wx + wy * wy), wstr = Math.min(1, wl);
     var nx = wx + 1e-4, nl = Math.sqrt(nx * nx + wy * wy), wdx = nx / nl, wdy = wy / nl, wpx = -wdy, wpy = wdx;
-    var nearC = 0, tlx = 1, tly = 0;
-    if (cst) { nearC = cst.near; var gl = Math.sqrt((cst.gx + 1e-5) * (cst.gx + 1e-5) + cst.gy * cst.gy); tlx = (cst.gx + 1e-5) / gl; tly = cst.gy / gl; }
+    var nearC = cst ? cst.near : 0;
     var nW1 = vnoise(px * 1.3 + 5, py * 1.3 + 5), nW2 = vnoise(px * 0.9 + 3.1, py * 0.9 + 3.1);
     var wk = waveK(), h = 0, gx = 0, gy = 0;
     var rough = roughK() * (cst && cst.abyss != null ? cst.abyss : 1);   // 먼바다일수록 물결이 높다
@@ -53,9 +52,7 @@
       var lam = (i < 2 ? (0.62 - i * 0.22) : (0.17 / (1 + (i - 2) * 0.42))) * wk;
       var spr = i < 2 ? (i * 0.45 - 0.25) : ((i - 4) * 0.45 + 0.1);
       var dx = wdx * Math.cos(spr) + wpx * Math.sin(spr), dy = wdy * Math.cos(spr) + wpy * Math.sin(spr), dl = Math.sqrt(dx * dx + dy * dy); dx /= dl; dy /= dl;
-      var mk = nearC * (i < 2 ? 0.75 : 0.45);
-      dx += (tlx - dx) * mk; dy += (tly - dy) * mk; dl = Math.sqrt(dx * dx + dy * dy); dx /= dl; dy /= dl;
-      lam *= 1 + (0.6 - 1) * nearC;
+      // 세계 좌표의 방향·파장은 연안에서도 고정: 거리마다 위상이 압축되는 현상을 막는다.
       var lf = smooth(3, 10, lam * pxD);
       if (lf <= 0) continue;
       var k = 6.2832 / lam, omega = 0.020 * Math.sqrt(lam / 0.5) * k * (i < 2 ? 1 : 1.3);
@@ -109,11 +106,15 @@
   /** 2차 흔들림(용수철-감쇠): 물이 미는 기울기를 배가 관성을 가지고 따라간다 — 되흔들림·늦은 반응.
       R = {roll, pitch, heave, vr, vp, vh} 상태, tgt = {roll, pitch, heave}, P = G.FX.ride, dt = 실제 초 */
   WV.spring = function (R, tgt, P, dt) {
+    // 목표부터 부드럽게 제한한다. 렌더 단계에서만 자르면 큰 물결 위에서 한 각도에 붙어 멈춰 보인다.
+    var tr = P.maxRoll > 0 ? P.maxRoll * Math.tanh(tgt.roll / P.maxRoll) : tgt.roll;
+    var tp = P.maxPitch > 0 ? P.maxPitch * Math.tanh(tgt.pitch / P.maxPitch) : tgt.pitch;
+    var th = P.maxHeave > 0 ? P.maxHeave * Math.tanh(tgt.heave / P.maxHeave) : tgt.heave;
     var n = Math.max(1, Math.ceil(dt / 0.02)), h = dt / n;
     for (var i = 0; i < n; i++) {
-      R.vr += (P.rollW * P.rollW * (tgt.roll - R.roll) - 2 * P.rollZ * P.rollW * R.vr) * h; R.roll += R.vr * h;
-      R.vp += (P.pitchW * P.pitchW * (tgt.pitch - R.pitch) - 2 * P.pitchZ * P.pitchW * R.vp) * h; R.pitch += R.vp * h;
-      R.vh += (P.heaveW * P.heaveW * (tgt.heave - R.heave) - 2 * P.heaveZ * P.heaveW * R.vh) * h; R.heave += R.vh * h;
+      R.vr += (P.rollW * P.rollW * (tr - R.roll) - 2 * P.rollZ * P.rollW * R.vr) * h; R.roll += R.vr * h;
+      R.vp += (P.pitchW * P.pitchW * (tp - R.pitch) - 2 * P.pitchZ * P.pitchW * R.vp) * h; R.pitch += R.vp * h;
+      R.vh += (P.heaveW * P.heaveW * (th - R.heave) - 2 * P.heaveZ * P.heaveW * R.vh) * h; R.heave += R.vh * h;
     }
   };
   WV.newRide = function () { return { roll: 0, pitch: 0, heave: 0, vr: 0, vp: 0, vh: 0, bow: 0, bowV: 0, cool: 0 }; };

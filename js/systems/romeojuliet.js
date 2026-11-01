@@ -129,13 +129,13 @@
     await withPic('rj_grail', '로렌스 수사의 암자 — 성배 문제', function () { return play([
       [null, '말을 달려 베로나 성 밖, 로렌스 수사의 암자. 말린 약초 다발이 천장에 매달리고, 증류 그릇에서 김이 오른다. 로미오가 창백한 얼굴로 기다리고 있다.'],
       ['romeo', '와 주셨군요! 해독제는 수사님과 제가 다시 달였습니다. 그런데 처방 끝에 이렇게 적혀 있습니다. 「이 물은 참된 잔에 담아야만 잠을 깨운다. 그릇된 잔에 담으면 그저 물일 뿐.」'],
-      ['laurence', '(떨리는 손으로 탁자 위 네 잔을 가리키며) 옛 스승이 남긴 잔들이오. 저마다 글귀가 새겨져 있지. 스승은 말했소 — 「네 글귀 가운데 참은 단 하나뿐」이라고. 늙은 내 머리로는 도무지… 줄리엣이 잠든 지 벌써 열네 시간이오. 남은 건 스물여덟 시간.'],
+      ['laurence', '(떨리는 손으로 탁자 위 네 잔을 가리키며) 옛 스승이 남긴 잔들이오. 저마다 글귀가 새겨져 있지. 스승은 말했소 — 「네 글귀 가운데 참은 단 하나뿐」이라고. 참인 글귀가 새겨진 잔이 아니라, 그 글귀들을 따져 해독제가 효력을 내는 잔을 찾아야 하오. 늙은 내 머리로는 도무지… 줄리엣이 잠든 지 벌써 열네 시간이오. 남은 건 스물여덟 시간.'],
       [null, '금잔: ' + CUPS[0].text + '\n은잔: ' + CUPS[1].text + '\n납잔: ' + CUPS[2].text + '\n나무잔: ' + CUPS[3].text + '\n\n— 네 글귀 가운데 참은 단 하나다.']
     ]); });
     var left = 28, solved = false, tries = 0;
     while (tries < K().tries && !solved) {
       tries++;
-      var v = await UI.ask('참된 잔은 어느 것일까? (남은 시간 ' + left + '시간 · 기회 ' + (K().tries - tries + 1) + '번)', CUPS.map(function (c) { return { label: c.name + ' — ' + c.text, value: c.id, icon: c.id === 'gold' ? 'coin' : c.id === 'lead' ? 'shield' : 'mug' }; }), me());
+      var v = await UI.ask('해독제가 효력을 내는 잔은 어느 것일까? (남은 시간 ' + left + '시간 · 기회 ' + (K().tries - tries + 1) + '번)', CUPS.map(function (c) { return { label: c.name + ' — ' + c.text, value: c.id, icon: c.id === 'gold' ? 'coin' : c.id === 'lead' ? 'shield' : 'mug' }; }), me());
       if (v === 'lead') { solved = true; break; }
       left -= 14;
       var hint = tries === 1
@@ -166,7 +166,7 @@
       if (row(id)) return;
       var nm = G.Legend && G.Legend.join ? G.Legend.join(id, G.CITY_DATA[cityNow()]) : null;
       if (!nm) { nm = { id: id, role: 'none', joined: today(), loyal: 80 }; s.mates.push(nm); }
-      var r0 = row(id); if (r0 && !solved && id === 'juliet') r0.loyal = Math.max(40, (r0.loyal || 80) - 15);
+      var r0 = row(id); if (r0 && !solved && id === 'juliet') G.R.setLoyal(r0, Math.max(40, (r0.loyal || 80) - 15));
     });
     b.joined = 1;
     var so = fame('so', solved ? K().fame : Math.round(K().fame / 2));

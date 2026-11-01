@@ -4,7 +4,7 @@
    ■ 흐름: 항구 밖 옥수수밭 가장자리에서 정착민 민병대와 원주민 전사들이 맞선다 — 제독은 (가) 정착민 편 (나) 원주민 편 (다) 사이에서 말린다.
           어느 쪽이든 활시위와 화승이 먼저 당겨져 싸움(육상전)이 벌어지고, 첫 차례의 화살과 총알이 오간 뒤(그 전에 끝나도) 사슴 가죽 옷의 소녀가 두 줄 사이로 달려 나와
           제 몸으로 싸움을 막는다 — 포와탄의 성인 딸 마토아카, 사람들이 「포카혼타스(장난꾸러기)」라 부르는 여성. 양쪽이 무기를 내리고, 그녀가 두 세계 사이의 말을 옮겨 화해시킨다.
-          그녀는 바다 건너 이방인의 나라를 보고 싶다며 제독의 배에 오르기를 청한다 → 동료로 합류 (거절하면 coolDays 뒤 다른 항구에서 다시).
+          그녀는 바다 건너 이방인의 나라를 보고 싶다며 제독의 배에 오르기를 청한다 → 동료로 합류 (거절하면 30일·90일·1년 뒤, 그 뒤로는 5년마다 다른 항구에서 다시 — G.BALANCE.reask).
    ■ 동료: 요리·웅변·세공·음악·조선 3단계, 검술 2단계 (지역 사람 h_pocahontas — 술집에는 나오지 않고 이 사건으로만 만난다: eventOnly)
    ■ 장면 그림 (없으면 건너뜀): images/legend-events/pocahontas_*.webp — images/legend-events/POCAHONTAS_PROMPT.md
    ■ 저장: s.poca = { done, side: 'settler'|'native'|'between', res, cool, declined } */
@@ -158,7 +158,7 @@
         await play([['POCA', '고마워요! 아버지께는 바닷가 마을 사람들 편에 말을 남길게요. 이제부터 나는 당신 배의 사람이에요.', 'happy']]);
         G.State.log('포카혼타스가 동료가 되었다. 두 세계 사이의 말을 옮기겠다고 한다.');
       } else {
-        p.cool = S().day + PC.K.coolDays; p.declined = (p.declined || 0) + 1;
+        p.declined = (p.declined || 0) + 1; p.cool = S().day + U.reaskDays(p.declined);   // 거절할수록 뜸하게 — 30일 → 90일 → 1년 → 5년마다 (G.BALANCE.reask)
         await play([['POCA', '…그래요. 그럼 다음에 또 바닷가 어딘가에서 만나요. 그때는 꼭 데려가 줘요.']]);
       }
     } finally { await pc2.stop(); }

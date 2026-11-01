@@ -186,6 +186,7 @@
       if (G.Reform && G.Reform.pending()) await G.Reform.check();   // 루터의 종교 개혁 — 면죄받은 자들 (추리 수사극), 마그데부르크 (js/systems/reformation.js)
       if (G.Newton && G.Newton.pending()) await G.Newton.check();   // 아이작 뉴턴 — 『프린키피아』(1686~87) · 남해 회사 주식(1720), 런던 (js/systems/newton.js)
       if (G.Romeo && G.Romeo.pending()) await G.Romeo.check();   // 로미오와 줄리엣 — 베니스·밀라노에서 하루 거리의 베로나 (js/systems/romeojuliet.js)
+      if (G.OttoEu && G.OttoEu.pending()) await G.OttoEu.check();   // 오스만과 유럽의 다툼 — 빈 포위·호르무즈·무스카트·칼렌베르크·카를로비츠 (js/systems/ottomaneurope.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -575,7 +576,9 @@
   C.entryWelcome = function (c) { var b = entryBlock(c); return b && G.Sneak && G.Sneak.welcome ? G.Sneak.welcome(c, b) : null; };
   function entryBlock(c) {
     var s = S(), own = R.cityOwner(c);
+    var jp = G.Sakoku && G.Sakoku.entryBlock(c); if (jp) return jp;
     if (s.player.notoriety >= 60 && R.isHomeNation(c)) return { reason: 'wanted', text: '너 같은 악당을 마을에 들여보낼 수는 없다!!' };
+    if (G.Conquest && G.Conquest.holding(c)) return null;   // 점령지는 예전의 외국인 출입 금지를 거두지만 수배 규칙은 유지한다
     // 이슬람 성지·내륙·지중해 이슬람 도시는 이슬람 왕조가 다스리는 동안 이교도를 막는다 (js/systems/sneak.js G.Sneak)
     var SN = G.Sneak, zone = SN ? SN.islamZone(c) : (c.flags.indexOf('H') >= 0 ? 'holy' : null), pass = SN ? SN.hasPass(c) : false;
     if (zone === 'holy' && (!SN || SN.islamRuled(c, own))) return { reason: 'holy', text: '이교도는 이 성스러운 도시에 들어올 수 없다.' };
@@ -607,6 +610,7 @@
       var sch = G.Sneak ? G.Sneak.chance(c, chk.reason) : null;
       opts.push({ label: '잠입한다' + (sch ? ' (가망 ' + Math.round(sch.p * 100) + '%' + (sch.dz ? ' · ' + G.ITEM[sch.dz].name + (R.itemCount(sch.dz) > 1 ? ' ×' + R.itemCount(sch.dz) : '') : '') + ')' : ''), value: 'sneak' });
       if (chk.reason !== 'holy') opts.push({ label: '공격한다', value: 'attack' });
+      if (G.Conquest && !G.Conquest.block(c)) opts.push({ label: '도시 점령 (성문 공격과 별개)', value: 'occupy' });
       opts.push({ label: '떠난다', value: 'leave' });
       var v = await C.mateAsk('제독, 어떻게 할까요?', opts);
       if (v == null || v === 'leave') { await C.mate('할 수 없군요. 포기합시다.'); return false; }
@@ -652,6 +656,7 @@
         await UI.say('벌금형 또는 추방을 명한다. 목숨을 구한 것을 감사히 여겨라.\n(금화 ' + U.num(fine) + '닢을 빼앗겼다)', guard);
         return false;
       }
+      if (v === 'occupy' && G.Conquest) return G.Conquest.assault(c);
       if (v === 'attack') {
         var sure = await UI.confirm('정말로 ' + c.name + U.j(c.name, '을/를').slice(c.name.length) + ' 공격하겠습니까? 악명이 크게 오릅니다.', '공격한다', '그만둔다');
         if (!sure) continue;

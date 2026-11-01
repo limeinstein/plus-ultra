@@ -86,7 +86,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         log: s2.log.slice(-14).map(x => x.t).join('\n')
       };
       out.tagAide = OG.tags(out.after.aideA, G.MATE[A.id]);
-      G.Info.open('mates'); const iw = [...document.querySelectorAll('.win')].pop(); out.infoTags = iw ? [...iw.querySelectorAll('.tag')].map(e => e.textContent).join(',') : '';
+      G.Info.open('mates'); const iw = [...document.querySelectorAll('.win')].pop();
+      iw.querySelector('[data-mate="' + A.id + '"] .mb-person').click();
+      out.infoTags = [...iw.querySelectorAll('.mb-trait')].map(e => e.textContent).join(',');
       document.querySelectorAll('#ui .modal-back, .win').forEach(e => e.remove());
       // 사촌 없이 고르면 (A·F를 남기고 사촌을 누르면 막힌다) → 사촌은 오지 않는다. 다시: 사촌을 먼저 누르는 경우를 따로 본다
       out.kinTry = { kinRow: !!kinRow };

@@ -26,6 +26,7 @@
   var IJ = G.Imjin = {};
   function S() { return G.Game && G.Game.state; }
   function K() { return (G.BALANCE && G.BALANCE.imjin) || {}; }
+  IJ.active = function () { return !!(S() && U.dateNum(S().date) < G.BALANCE.imjinEnd); };
   var DONGNAE = 226, HANYANG = 190, HANSAN = 229, KOREA = [190, 226, 227, 228, 229];
   var TANGEUM = [127.90, 36.99], HAENGJU = [126.82, 37.60];
   IJ.PLACES = { tangeum: TANGEUM, haengju: HAENGJU };
@@ -208,6 +209,14 @@
 
   // ================================================================ 날마다 — 소식
   IJ.daily = function () {
+    if (!IJ.active()) {
+      var old = S() && S().imjin;
+      if (old && !old.ended) {
+        old.ended = 1;
+        if (S().date.y === 1599 && (old.call || old.sea || old.north || old.hansan)) return [{ icon: 'scroll', history: true, text: '【조선의 전후】 1599년, 왜군이 물러난 바다에 뱃길이 다시 열렸다. 임진왜란의 부름과 전투는 끝났다.' }];
+      }
+      return [];
+    }
     var s = S(), b = st(), out = []; if (!b) return out;
     var t = today(), told = b.told, met = !!(b.call || b.sea), east = met || !!(s.loc && s.loc.lon != null && s.loc.lon > 95);
     function news(key, ok, icon, text) { if (!told[key] && t >= NEWS_AT[key] && ok) { told[key] = 1; out.push({ icon: icon, history: true, text: text }); } }
@@ -341,11 +350,12 @@
     refresh();
   }
   /** 동래 포구가 막혔는가 (js/city/harbor.js 출항) */
-  IJ.portShut = function (c) { var b = S() && S().imjin; return !!(b && c && c.id === DONGNAE && b.north && !b.delivered); };
+  IJ.portShut = function (c) { var b = S() && S().imjin; return !!(IJ.active() && b && c && c.id === DONGNAE && b.north && !b.delivered); };
   IJ.portShutSay = function () { return UI.say('제독, 부산포 어귀는 왜선이 겹겹이 막았습니다. 북쪽에 소식을 전하기 전에는 배를 낼 수 없습니다 — 성문으로 나가 뭍길로 가셔야 합니다.', first()); };
 
   // ================================================================ 뭍 (js/scenes/land.js 하루가 끝날 때)
   function landDue(lon, lat) {
+    if (!IJ.active()) return null;
     var b = st(); if (!b) return null;
     if (b.north && !b.breakout && G.Geo.dist(lon, lat, city(DONGNAE).lon, city(DONGNAE).lat) < 0.7) return 'breakout';
     if (b.breakout && !b.tangeum && !b.seoul && dist(lon, lat, TANGEUM) < 0.5) return 'tangeum';
@@ -715,8 +725,9 @@
   // ================================================================ 도시에 들어설 때 (js/scenes/city.js)
   var STEPS = [[nongaeOpen, nongae], [seoulOpen, seoul], [wongyunOpen, wongyun], [okpoOpen, okpoAgain], [hansanAfterOpen, hansanAfter], [hansanOpen, hansan],
     [chilAfterOpen, chilAfter], [chilOpen, chil], [shotOpen, shot], [noryangOpen, noryang], [callOpen, call]];
-  IJ.pending = function () { if (!S()) return false; return STEPS.some(function (x) { return x[0](); }); };
+  IJ.pending = function () { if (!IJ.active()) return false; return STEPS.some(function (x) { return x[0](); }); };
   IJ.check = async function () {
+    if (!IJ.active()) return false;
     if (IJ._busy) return false; IJ._busy = true;
     try { for (var i = 0; i < STEPS.length; i++) if (STEPS[i][0]()) { await STEPS[i][1](); break; } } catch (e) { console.error(e); }
     IJ._busy = false; refresh();

@@ -181,7 +181,10 @@
   };
   async function dieNow(s, T, name, age) {
     var heirs = G.Family && G.Family.heirs ? G.Family.heirs() : [];
-    var where = s.loc.mode === 'sea' ? '흔들리는 선실에서' : s.loc.mode === 'land' ? '야영지의 모닥불 곁에서' : (G.CITY_DATA[s.loc.city] ? G.CITY_DATA[s.loc.city].name + '의 여관 방에서' : '조용한 방에서');
+    var seat = R.seat ? R.seat() : s.player.home, cc = G.CITY_DATA[s.loc.city];
+    var where = s.loc.mode === 'sea' ? '흔들리는 선실에서' : s.loc.mode === 'land' ? '야영지의 모닥불 곁에서' : !cc ? '조용한 방에서'
+      : s.loc.city === seat ? cc.name + '의 ' + (cc.colony != null ? '총독 관저' : '자택') + ' 침상에서'   // 가족이 사는 도시에서는 집에서 (2026-10-26 — 고향에서도 「여관 방」이던 것)
+      : cc.name + '의 여관 방에서';
     G.State.log(name + U.j(name, '이/가').slice(name.length) + ' ' + age + '세로 세상을 떠났다.');
     await UI.alert(age + '세 생일이 지난 어느 밤, ' + name + U.jx(name, '은/는') + ' ' + where + ' 조용히 눈을 감았다.<br>' +
       '평생을 바다와 함께한 제독이었다. 곁을 지키던 이들이 마지막으로 들은 말은 바람과 물때에 관한 것이었다고 한다.<br><br>' +

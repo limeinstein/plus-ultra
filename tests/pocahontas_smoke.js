@@ -1,7 +1,7 @@
 /* 포카혼타스의 중재 (2026-10-20) — js/systems/pocahontas.js · js/games/landwar.js halt
    · 조건: 아즈텍 멸망(1521.8.13) 뒤 · 북·중앙아메리카(카리브 포함) 항구 · 노예 무역을 한 적 없음 — 하나라도 어기면 나오지 않는다. 술집에는 나오지 않는다
    · 흐름: 정착민·원주민이 맞서고 → 편을 고르면 육상전 → 첫 차례 뒤 포카혼타스가 끼어들어 싸움이 멈춘다(truce) → 화해 → 동료로 합류
-   · 동료: 요리·웅변·세공·음악·조선 3, 검술 2 · 거절하면 90일 뒤 다른 항구의 부두로 다시 찾아온다(싸움 없이) · 콘솔 오류 0
+   · 동료: 요리·웅변·세공·음악·조선 3, 검술 2 · 거절하면 30일 뒤(거절할수록 90일·1년·5년으로 뜸해진다) 다른 항구의 부두로 다시 찾아온다(싸움 없이) · 콘솔 오류 0
    node tests/pocahontas_smoke.js */
 'use strict';
 const path = require('path');
@@ -48,7 +48,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(a.tavern === false, '술집 항해사 후보로는 나오지 않는다 (사건으로만)');
     ok(JSON.stringify(a.sk) === JSON.stringify({ cook: 3, speech: 3, craft: 3, music: 3, ship: 3, sword: 2 }), '능력: 요리·웅변·세공·음악·조선 3, 검술 2');
 
-    // ---------------- 사건: 원주민 편 → 육상전 → 두 차례 뒤 중재 → 거절 → 90일 뒤 부두에서 다시 → 합류
+    // ---------------- 사건: 원주민 편 → 육상전 → 두 차례 뒤 중재 → 거절 → 30일 뒤 부두에서 다시 → 합류
     await page.evaluate((hv) => {
       const s = G.Game.state, UI = G.UI; s.loc = { mode: 'city', city: hv }; s.date = { y: 1610, m: 5, d: 1 };
       window.__said = []; window.__ask = ['native', 0];
@@ -69,11 +69,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const mid = await page.evaluate(() => document.body.innerText.match(/(여성이 두 줄 사이에 버티고 서자[^\n]*)/) ? 1 : 0);
     await page.evaluate(() => Array.from(document.querySelectorAll('button')).filter(b => b.offsetParent && b.textContent.trim() === '확인')[0].click());
     await page.evaluate(() => window.__p);
-    const b = await page.evaluate(() => { const s = G.Game.state; return { p: s.poca, joined: s.mates.some(x => x.id === 'h_pocahontas'), fame: s.player.fame - window.__fame0, said: window.__said.join('\n') }; });
+    const b = await page.evaluate(() => { const s = G.Game.state; return { p: s.poca, day0: s.day, joined: s.mates.some(x => x.id === 'h_pocahontas'), fame: s.player.fame - window.__fame0, said: window.__said.join('\n') }; });
     console.log('   ' + JSON.stringify(b.p) + ' · 명성 +' + b.fame);
     ok(b.p.side === 'native' && b.p.res === 'truce' && mid, '원주민 편 → 육상전 첫 차례 뒤 포카혼타스가 끼어들어 싸움이 멈춘다 (truce)');
     ok(/마토아카/.test(b.said) && /담배를 나누자/.test(b.said) && b.fame > 0, '화해 장면 — 포와탄의 딸 마토아카, 사교 명성 +' + b.fame);
-    ok(!b.joined && b.p.cool > 0, '거절하면 동료가 되지 않고 90일 쉰다');
+    ok(!b.joined && b.p.cool > 0 && b.p.cool - b.day0 === 30, '거절하면 동료가 되지 않고 30일 쉰다 (' + (b.p.cool - b.day0) + '일)');
     const c = await page.evaluate(async () => {
       const s = G.Game.state, PC = G.Pocahontas; window.__said = []; window.__ask = [1];
       const still = PC.pending();

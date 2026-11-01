@@ -65,7 +65,8 @@
   function byAge(a, b) { return Fm().kidAge(b) - Fm().kidAge(a); }
   /** 집에 있는 아이들 [이름 있는 3살 넘은 아이, 갓난아기] — w 가 있으면 그 둘째 부인의 집 */
   FE.homeKids = function (w) {
-    var p = P(), list = w ? (G.Wives ? G.Wives.kidsOf(w).filter(function (k) { return !k.married; }) : []) : (p.kids || []).filter(function (k) { return !k.aboard && k.house == null && !k.married; });   // 시집간 딸은 집에 없다
+    var p = P(), list = (w ? (G.Wives ? G.Wives.kidsOf(w) : []) : (p.kids || []).filter(function (k) { return !k.aboard && k.house == null; }))
+      .filter(function (k) { return !k.married && !k.lost; });   // 시집간 딸·섬에서 사라진 아이는 집 장면에 나오지 않는다 (2026-10-26)
     return { kids: list.filter(named).sort(byAge), babies: list.filter(function (k) { return !named(k); }) };
   };
   FE.aboardKids = function () { return (Fm().aboard() || []).filter(named).sort(byAge); };
@@ -75,8 +76,9 @@
   FE.cast = function (o) {
     o = o || {};
     var s = S(), p = P(), c = o.city != null ? G.CITY_DATA[o.city] : (s.loc && s.loc.mode === 'city' ? G.CITY_DATA[s.loc.city] : null);
+    var home = G.CITY_DATA[G.R.seat ? G.R.seat() : p.home];
     return { at: o.at, love: o.love || null, kids: (o.kids || []).slice(), babies: o.babies || [], aboard: !!o.aboard, mate: o.mate == null ? false : !!o.mate,
-      city: c ? c.name : '', home: G.CITY_DATA[p.home] ? G.CITY_DATA[p.home].name : '', days: o.days || 0, witness: !!o.witness, second: !!o.second, npc: o.npc || null, together: !!o.together };   // together: 아내와 함께 항해하고 같이 집에 돌아왔다
+      city: c ? c.name : '', home: home ? home.name : '', days: o.days || 0, witness: !!o.witness, second: !!o.second, npc: o.npc || null, together: !!o.together };   // together: 아내와 함께 항해하고 같이 집에 돌아왔다
   };
 
   // ---------------------------------------------------------------- 조건
@@ -333,7 +335,7 @@
   FE.arrive = async function (c) {
     var s = S(), p = P(), k = K(), m = mem();
     if (G.Tutorial && G.Tutorial.active && G.Tutorial.active()) return false;
-    if (c.id === p.home && p.wife && !p.wifeAboard) {
+    if (c.id === (G.R.seat ? G.R.seat() : p.home) && p.wife && !p.wifeAboard) {
       var away = awayDays();
       if (away >= (k.dockDays == null ? 120 : k.dockDays) && U.chance(k.dockChance == null ? 0.7 : k.dockChance)) {
         var hk = FE.homeKids();
