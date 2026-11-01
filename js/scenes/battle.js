@@ -651,7 +651,7 @@
   /** 연기가 바람에 밀려가는 방향 (px/초, 화면 좌표) */
   function windDrift() { return [Math.cos(st.wind.dir) * (8 + 18 * st.wind.spd), -Math.sin(st.wind.dir) * (8 + 18 * st.wind.spd)]; }
   B.runtime = function () { return st; };
-  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen, geoAt: geoAt, terrainBlocked: terrainBlocked, terrainInfo: terrainInfo, resolveTerrain: resolveTerrain, geoScale: GEO_SCALE, arena: ARENA, navPath: navPath, lineClear: lineClear, shorePad: shorePad, inArena: inArena, seize: seize, checkEnd: checkEnd }; };   // 시험용
+  B._t = function () { return { prizeFleet: prizeFleet, prizeShip: prizeShip, pirateDrops: pirateDrops, prizeHolds: prizeHolds, prizeLoot: prizeLoot, finish: finish, shake: shake, tremor: tremor, toWorld: toWorld, toScreen: toScreen, projectilePose: projectilePose, geoAt: geoAt, terrainBlocked: terrainBlocked, terrainInfo: terrainInfo, resolveTerrain: resolveTerrain, geoScale: GEO_SCALE, arena: ARENA, navPath: navPath, lineClear: lineClear, shorePad: shorePad, inArena: inArena, seize: seize, checkEnd: checkEnd }; };   // 시험용
   B.feel = function () { return st ? { shake: st.shake || 0, flash: st.flash ? st.flash.a : 0, hitstop: st.hitstop || 0 } : null; };
 
   // ---------------------------------------------------------------- 함대 명령 (기함을 뺀 배들 — 전체 또는 고른 한 척)
@@ -1313,7 +1313,7 @@
   }
   function fire(b, t, c, d, rng, gunSk, sAng, part) {
     if (!targetable(t)) return;
-    var look = gunLook(c.id), K = cannonFX(), wd = windDrift();
+    var look = gunLook(c.id), K = cannonFX(), FL = K.flight, wd = windDrift();
     var shots = Math.max(1, Math.round(b.guns.n / 2 * (part || 1)));
     var acc = c.acc * (1 + gunSk * 0.1) * (1.15 - 0.5 * d / rng);
     if (b.side === 'me') { var bonus = R.fleetBonus('battle'); acc *= 1 + bonus; if (R.hasItem('shells')) acc *= 1.05; }
@@ -1330,10 +1330,12 @@
       var fwd = part >= 1 && sAng === b.heading ? b.len * 0.45 : 0;
       var ox = b.x + Math.cos(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd), oy = b.y + Math.sin(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd);
       var tx = t.x + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
-      st.balls.push({ x: ox, y: oy, tx: tx, ty: ty, t: 0, dur: 0.35 + d / 900 + i * 0.03, hit: hit, gun: c.id, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' && G.SkillCombos ? G.SkillCombos.factor('cannonPower') : 1) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // kill: 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다
-      cannonParticle({ kind: 'powderSmoke', pale: true, x: ox + Math.cos(sAng) * 14, y: oy + Math.sin(sAng) * 14, vx: wd[0] + Math.cos(sAng) * 24, vy: wd[1] + Math.sin(sAng) * 24, t: 0, delay: 0.035, life: K.muzzleSmokeLife, r: K.muzzleSmokeRadius * look.smoke, seed: U.rf(0, 6.28) });
-      cannonParticle({ kind: 'muzzle', x: ox + Math.cos(sAng) * 10, y: oy + Math.sin(sAng) * 10, ang: sAng, t: 0, life: K.muzzleLife, s: U.rf(1.1, 1.5) * look.muzzle });
-      for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35) * look.spread, v3 = U.rf(160, 280); cannonParticle({ kind: 'spark', x: ox + Math.cos(sAng) * 12, y: oy + Math.sin(sAng) * 12, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: 0, life: U.rf(0.15, 0.3) }); }
+      var mx = ox + Math.cos(sAng) * b.len * FL.muzzleOffset, my = oy + Math.sin(sAng) * b.len * FL.muzzleOffset;
+      var dur = 0.35 + d / 900 + i * 0.03, launch = Math.min(i * FL.stagger, dur * FL.maxDelay), smokeDelay = launch / battleSpeed();
+      st.balls.push({ x: ox, y: oy, mx: mx, my: my, launch: launch, tx: tx, ty: ty, t: 0, dur: dur, hit: hit, gun: c.id, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' && G.SkillCombos ? G.SkillCombos.factor('cannonPower') : 1) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // mx·my·launch는 그림 전용. 도착·피해 계산은 기존 x·y·dur를 쓴다.
+      cannonParticle({ kind: 'powderSmoke', pale: true, x: mx + Math.cos(sAng) * 4, y: my + Math.sin(sAng) * 4, vx: wd[0] + Math.cos(sAng) * 24, vy: wd[1] + Math.sin(sAng) * 24, t: -smokeDelay, delay: 0.035, life: K.muzzleSmokeLife, r: K.muzzleSmokeRadius * look.smoke, seed: U.rf(0, 6.28) });
+      cannonParticle({ kind: 'muzzle', x: mx, y: my, ang: sAng, t: -smokeDelay, life: K.muzzleLife, s: U.rf(1.1, 1.5) * look.muzzle });
+      for (var sp3 = 0; sp3 < 3; sp3++) { var a3 = sAng + U.rf(-0.35, 0.35) * look.spread, v3 = U.rf(160, 280); cannonParticle({ kind: 'spark', x: mx, y: my, vx: Math.cos(a3) * v3, vy: Math.sin(a3) * v3, t: -smokeDelay, life: U.rf(0.15, 0.3) }); }
     }
   }
   function updateBalls(dt) {
@@ -2027,6 +2029,67 @@
     }
   }
 
+  /** 포탄 그림의 위치·높이·접선. 끝은 반드시 원래 도착 시각과 명중 좌표에 맞춘다. */
+  function projectilePose(ball, time) {
+    var F = cannonFX().flight, look = gunLook(ball.gun), duration = Math.max(0.001, ball.dur || 0.001);
+    var launch = U.clamp(ball.launch || 0, 0, duration * F.maxDelay), span = duration - launch;
+    var u = U.clamp((time - launch) / span, 0, 1), d = F.drag;
+    var travel = (1 + d) * u - d * u * u, velocity = (1 + d - 2 * d * u) / span;
+    var sx = ball.mx == null ? ball.x : ball.mx, sy = ball.my == null ? ball.y : ball.my;
+    var dx = ball.tx - sx, dy = ball.ty - sy, height = U.clamp(Math.hypot(dx, dy) * F.arcPerDistance * look.arc, F.minArc, F.maxArc);
+    return { x: sx + dx * travel, y: sy + dy * travel, z: height * 4 * u * (1 - u),
+      vx: dx * velocity, vy: dy * velocity, vz: height * 4 * (1 - 2 * u) / span,
+      u: u, launch: launch, visible: time >= launch && time < duration };
+  }
+  /** 무거운 쇳덩이·짧은 속도 잔상·얇은 공기 흔적. 떠다니는 연기 구슬은 쓰지 않는다. */
+  function drawCannonBall(ctx, ball) {
+    var F = cannonFX().flight, look = gunLook(ball.gun), p = projectilePose(ball, ball.t);
+    if (!p.visible) return;
+    var q = toScreen(p.x, p.y - p.z), ground = toScreen(p.x, p.y), zoom = st.zkShown || st.vz || 1;
+    if (Math.abs((q[0] - 800) * zoom) > 800 + F.cullPad || Math.abs((q[1] - 450) * zoom) > 450 + F.cullPad) return;
+    var r = Math.max(look.ball * F.radius, F.minPixelRadius / Math.max(0.4, zoom)), hot = Math.max(0, 1 - p.u / F.hotUntil);
+    var angle = Math.atan2(p.vy - p.vz, p.vx), nx = -Math.sin(angle), ny = Math.cos(angle);
+    ctx.save();
+    // 높이가 올라갈수록 그림자가 넓고 옅어진다. 포탄과 수면이 떨어져 보이게 한다.
+    ctx.fillStyle = 'rgba(0,10,19,' + (0.27 / (1 + p.z * 0.05)) + ')';
+    ctx.beginPath(); ctx.ellipse(ground[0], ground[1] + 2, r * (1.1 + p.z * 0.018), r * 0.4, angle * 0.15, 0, Math.PI * 2); ctx.fill();
+    var start = Math.max(p.launch, ball.t - F.airTime), air = projectilePose(ball, start), aq = toScreen(air.x, air.y - air.z);
+    var ag = ctx.createLinearGradient(aq[0], aq[1], q[0] + 0.001, q[1]);
+    ag.addColorStop(0, 'rgba(203,212,209,0)'); ag.addColorStop(0.5, 'rgba(203,212,209,' + F.airOpacity + ')'); ag.addColorStop(1, 'rgba(231,230,213,0.06)');
+    ctx.strokeStyle = ag; ctx.lineWidth = F.airWidth * look.smoke; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.beginPath();
+    for (var i = 0; i < F.airSamples; i++) {
+      var f = i / (F.airSamples - 1), sample = projectilePose(ball, start + (ball.t - start) * f), s = toScreen(sample.x, sample.y - sample.z);
+      var wobble = Math.sin(ball.x * 0.07 + ball.y * 0.11 + i * 1.7 + ball.t * 2) * F.airWobble * (1 - f);
+      if (i) ctx.lineTo(s[0] + nx * wobble, s[1] + ny * wobble); else ctx.moveTo(s[0], s[1]);
+    }
+    ctx.stroke();
+    // 바로 직전 궤도를 짧게 남겨 빠르게 스치는 쇳덩이의 잔상을 그린다.
+    var prev = projectilePose(ball, Math.max(p.launch, ball.t - F.shutter)), tail = toScreen(prev.x, prev.y - prev.z);
+    var length = Math.hypot(q[0] - tail[0], q[1] - tail[1]);
+    if (length > F.maxStreak) { tail[0] = q[0] + (tail[0] - q[0]) * F.maxStreak / length; tail[1] = q[1] + (tail[1] - q[1]) * F.maxStreak / length; }
+    var streak = ctx.createLinearGradient(tail[0], tail[1], q[0] + 0.001, q[1]);
+    streak.addColorStop(0, 'rgba(215,214,197,0)'); streak.addColorStop(0.65, 'rgba(235,226,192,0.32)'); streak.addColorStop(1, 'rgba(255,240,194,0.62)');
+    ctx.fillStyle = streak; ctx.beginPath(); ctx.moveTo(tail[0], tail[1]); ctx.lineTo(q[0] + nx * r * 0.55, q[1] + ny * r * 0.55);
+    ctx.lineTo(q[0] - nx * r * 0.55, q[1] - ny * r * 0.55); ctx.closePath(); ctx.fill();
+    if (hot > 0) {
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = 'rgba(255,163,62,' + hot * 0.7 + ')'; ctx.lineWidth = r * 1.2;
+      ctx.beginPath(); ctx.moveTo(q[0] - Math.cos(angle) * r * 2.2, q[1] - Math.sin(angle) * r * 2.2); ctx.lineTo(q[0], q[1]); ctx.stroke(); ctx.restore();
+    }
+    var metal = ctx.createRadialGradient(q[0] - r * 0.32, q[1] - r * 0.4, r * 0.08, q[0], q[1], r);
+    metal.addColorStop(0, look.stone ? '#c3b29a' : '#b5b7b0'); metal.addColorStop(0.25, look.stone ? '#8d7a61' : '#626870');
+    metal.addColorStop(0.65, look.stone ? '#504638' : '#2c323b'); metal.addColorStop(1, '#0b111a');
+    ctx.fillStyle = metal; ctx.strokeStyle = hot ? 'rgba(255,198,106,' + (0.45 + hot * 0.4) + ')' : 'rgba(209,217,211,0.55)'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.arc(q[0], q[1], r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // 페드레로의 작은 돌·산탄은 그림만 흩어진다. 추가 명중이나 피해를 만들지 않는다.
+    for (var j = 1; j < (look.pellets || 1); j++) {
+      var fan = Math.sin(j * 7.3 + ball.x) * F.pelletSpread * (1 - Math.exp(-p.u * 5));
+      var back = Math.cos(j * 3.7 + ball.y) * F.pelletSpread * 0.5;
+      var px = q[0] + nx * fan - Math.cos(angle) * back, py = q[1] + ny * fan - Math.sin(angle) * back;
+      ctx.fillStyle = '#b9ab8f'; ctx.strokeStyle = '#33352e'; ctx.lineWidth = 0.7; ctx.beginPath(); ctx.arc(px, py, r * 0.38, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   // ---------------------------------------------------------------- rendering
   var IMPACT_KINDS = { muzzle: 1, blast: 1, clash: 1, float: 1, fireball: 1, powderFlash: 1, powderFracture: 1, powderFlame: 1, powderSpray: 1, debris: 1, spark: 1, dsmoke: 1 }; // 숫자는 맨 위, 연기는 불꽃 뒤에 그린다.
   var powderTextures = null;
@@ -2092,6 +2155,7 @@
   }
   /** 번쩍이는 효과: 포구 화염 · 맞은 자리의 섬광·불덩이·나뭇조각·불티·검은 연기·충격파 · 칼 부딪치는 불꽃 · 피해 숫자 */
   function impactFx(ctx, f, a) {
+    if (f.t < 0) return; // 현측 포문이 차례로 불을 뿜기 전에는 그리지 않는다.
     var q = toScreen(f.x, f.y), u = f.t / f.life;
     if (f.kind === 'powderSmoke') {
       var age = f.t - f.delay; if (age <= 0) return;
@@ -2431,6 +2495,7 @@
     // 포탄: 물 위의 그림자, 뒤로 끌리는 연기 꼬리, 막 떠난 포탄의 달군 빛
     var arcH = IMP().ballArc || 14;
     st.balls.forEach(function (k2) {
+      if (!k2.radial && !k2.element) { drawCannonBall(ctx, k2); return; }
       var look = gunLook(k2.gun), br = k2.gun ? look.ball : k2.radial ? 5 : 3.3;
       var u = Math.min(1, k2.t / k2.dur);
       var at = function (uu) { var q = toScreen(k2.x + (k2.tx - k2.x) * uu, k2.y + (k2.ty - k2.y) * uu); return [q[0], q[1] - Math.sin(uu * Math.PI) * arcH * (k2.gun ? look.arc : 1), q[0], q[1]]; };

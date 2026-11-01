@@ -6,7 +6,7 @@
      들은 지 fresh(30)일이 지나면 「예전에 ○○ (1503년 5월)」로 흐리게 적고 지금은 떠났을지도 모른다고 한다(실제로는 한 달에 한 번 옮겨 다닌다, js/systems/matemove.js).
      행방을 들어 그 항구에 머무는 동안(s.mateRumorStay)은 「체류 N일 남음」.
    ■ 여급에게 「항해사의 행방을 부탁한다」(js/city/tavern.js T.maid): 이름을 적는다 →
-     · 정확한 이름이 아니면 모른다 · 만났거나 인연이 있던(위의 아는 항해사) 사람이어야 한다 · 지금 제독의 배에 있으면 그렇다고 한다
+     · 이름을 세 글자 이상 적으면 현재 인물 중 부분 일치 후보를 셋까지 보여 준다 · 만났거나 인연이 있던 사람이어야 한다 · 지금 제독의 배에 있으면 그렇다고 한다
      · 그 사람이 지금 있는 곳이 이 도시에서 farDeg(30°) 넘게 멀면 소식이 닿지 않는다
      · 아니면 「주변 뱃사람들에게 물어 행방을 찾아 놓겠다 — 20일쯤」 (사례금, 여급마다 하나씩). 날이 차기 전에 가면 아직이라고 한다.
      · 날이 찬 뒤 그 여급을 찾아가면 그때 있는 곳을 알려 주고, 그 항구에서 stay(30)일 머문다. 배를 떠난 부하(s.mateFate)는 그 뒤의 이야기를 들려준다.
@@ -81,6 +81,62 @@
     if (!n) return [];
     return G.MATES.filter(function (d) { var x = norm(d.name); return x === n || x.replace(/ /g, '') === n2; });
   };
+  function searchName(t) { return norm(t).replace(/ /g, '').toLowerCase(); }
+  /** LIKE '%이름%': 현재 등장할 수 있는 인물만, 완전 일치·앞부분 일치·짧은 이름 순. */
+  MK.suggest = function (name) {
+    var n = searchName(name), cfg = G.BALANCE.mateSeekSearch, s = S();
+    if (!s || n.length < cfg.min) return [];
+    return G.MATES.filter(function (d) {
+      if (searchName(d.name).indexOf(n) < 0 || d.sib || s.flags['gone_' + d.id] ||
+          (s.mateFate && s.mateFate[d.id]) || (G.MatePower && G.MatePower.blocked(d))) return false;
+      return hired(d.id) || (G.MateDismiss && G.MateDismiss.returning(d.id)) ||
+        (G.Frontier ? G.Frontier.mateReady(d, s.date.y) : (!d.y || (s.date.y >= d.y[0] && s.date.y <= d.y[1])));
+    }).sort(function (a, b) {
+      var x = searchName(a.name), y = searchName(b.name);
+      function rank(t) { return t === n ? 0 : t.indexOf(n) === 0 ? 1 : 2; }
+      return rank(x) - rank(y) || x.length - y.length || x.indexOf(n) - y.indexOf(n) ||
+        a.name.localeCompare(b.name, 'ko') || a.id.localeCompare(b.id);
+    }).slice(0, cfg.limit);
+  };
+  /** 입력하는 동안 후보를 갱신한다. 같은 이름도 선택한 인물의 ID로 구별한다. */
+  MK.promptSeek = function () {
+    var UI = G.UI, cfg = G.BALANCE.mateSeekSearch, hits = [], composing = false;
+    function submit() {
+      if (composing) return false;
+      var d = hits[0];
+      win.close({ name: field.value.trim(), id: d ? d.id : null });
+      return false;
+    }
+    var win = UI.window({ title: '찾을 항해사의 이름', icon: 'people', width: 600,
+      html: '<input class="nfield mk-seek-name" type="text" maxlength="60" aria-label="찾을 항해사의 이름" autocomplete="off" style="width:100%" placeholder="이름을 ' + cfg.min + '글자 이상 적으세요">' +
+        '<div class="muted mk-seek-hint" aria-live="polite" style="margin:12px 0"></div><div class="choices mk-seek-hits"></div>',
+      buttons: [{ label: '취소', value: null }, { label: '결정', cls: 'navy', onClick: submit }] });
+    var field = win.content.querySelector('input'), hint = win.content.querySelector('.mk-seek-hint'), box = win.content.querySelector('.mk-seek-hits');
+    function draw() {
+      hits = MK.suggest(field.value); box.innerHTML = '';
+      hint.textContent = searchName(field.value).length < cfg.min ? '이름 일부를 ' + cfg.min + '글자 이상 적으면 후보가 나옵니다. 짧은 이름은 정확히 적고 결정하세요.' :
+        hits.length ? '이름이 가까운 후보 ' + hits.length + '명 — 찾는 사람을 고르세요.' : '일치하는 인물이 없습니다.';
+      hits.forEach(function (d) {
+        var row = U.el('button', 'choice', '<span>' + U.esc(d.name) + '</span><span class="r">' +
+          (hired(d.id) ? '함께 항해 중' : MK.known(d.id) ? '인연 있는 항해사' : '아직 인연 없음') + '</span>');
+        row.type = 'button'; row.dataset.mateId = d.id;
+        row.onclick = function () { win.close({ name: d.name, id: d.id }); };
+        row.onkeydown = function (e) { if (!e.isComposing && G.Keys.is(e, 'confirm')) { e.preventDefault(); e.stopPropagation(); row.click(); } };
+        box.appendChild(row);
+      });
+    }
+    field.oninput = function () { if (!composing) draw(); };
+    field.oncompositionstart = function () { composing = true; };
+    field.oncompositionend = function () { composing = false; draw(); };
+    field.onkeydown = function (e) {
+      e.stopPropagation(); if (e.isComposing || composing) return;
+      if (G.Keys.is(e, 'confirm')) { e.preventDefault(); submit(); }
+      else if (G.Keys.is(e, 'cancel')) { e.preventDefault(); win.close(null); }
+      else if (e.key === 'ArrowDown') { var first = box.querySelector('button'); if (first) { e.preventDefault(); first.focus(); } }
+    };
+    draw(); setTimeout(function () { if (field.isConnected) field.focus(); }, 30);
+    return win.result;
+  };
   /** 메뉴의 꼬리글 */
   MK.seekSub = function (m) {
     var q = MK.seekOf(m.id); if (!q) return '';
@@ -130,10 +186,10 @@
     var q = MK.seekOf(m.id);
     if (q) { await say(q.name + ' 말이죠? 아직 소식이 안 왔어요. ' + (q.due - s.day) + '일쯤 더 기다려 주세요.', 'warm'); return; }
     if (G.MaidTip && G.MaidTip.canAsk && !G.MaidTip.canAsk(st)) { await say('사람을 찾아 달라고요? …아직 잘 모르는 분 부탁은 좀 그래요. 우리 좀 더 친해지면요.', 'warm'); return; }
-    await say('어떤 분을 찾으세요? 이름을 정확히 알려 주시면, 주변 뱃사람들한테 물어볼게요. 만나 보셨거나 인연이 있는 분이면 좋겠어요.', 'warm');
-    var name = await UI.prompt('찾을 항해사의 이름 (정확히)', '', 30);
+    await say('어떤 분을 찾으세요? 이름을 세 글자 이상 알려 주시면 비슷한 이름을 짚어 볼게요. 만나 보셨거나 인연이 있는 분이면 좋겠어요.', 'warm');
+    var picked = await MK.promptSeek(), name = picked && picked.name;
     if (!name) return;
-    var hit = MK.byName(name);
+    var hit = picked.id && G.MATE[picked.id] ? [G.MATE[picked.id]] : MK.byName(name);
     if (!hit.length) { await say('「' + norm(name) + '」… 그런 이름은 처음 들어요. 이름을 정확히 아세요?', 'warm'); return; }
     var known = hit.filter(function (d) { return MK.known(d.id) || hired(d.id); });
     if (!known.length) { await say(norm(name) + '… 어떤 분인지 짐작이 안 가요. 직접 만나 보셨거나 함께 지낸 분이어야 손님들한테 물어볼 수 있어요.', 'warm'); return; }

@@ -7,12 +7,13 @@
      oneReg       : { cats: [분류…], n } — 한 지역에서 분류마다 n가지씩
      crew + n     : 이 항해사들 가운데 n명(없으면 모두)을 한 번이라도 동료로 들였다 (state.crewEver — 떠나거나 죽어도 센다)
      wed + n      : 이 사람들 가운데 n명(없으면 모두)과 혼인했다 (본처·둘째 부인 — state.wedEver, 사별·이혼해도 센다)
+     goldRule     : { min } — 재산(소지금 + 금고 예금)이 min닢에 이른다 (G.BALANCE.wealthAchievements)
      collectionRule: 종류 ID — 현재 등록된 해당 종류의 발견물을 모두 직접 찾는다 (빈 목록은 미달성)
    보상: fame(탐험 명성) · gold(금화) · title(칭호 — 수첩 「업적」에 모인다). 금액은 크게 잡았다. */
 (function (G) {
   'use strict';
   var A = G.ACHIEVEMENTS = [];
-  G.ACHV_GROUPS = ['발견물 완성', '명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '전설과 사슬', '조합', '동료'];
+  G.ACHV_GROUPS = ['발견물 완성', '명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '재산', '전설과 사슬', '조합', '동료'];
   function a(group, id, name, desc, rule, fame, gold, title) {
     var o = { group: group, id: id, name: name, desc: desc, fame: fame, gold: gold, title: title || null };
     for (var k in rule) o[k] = rule[k];
@@ -37,6 +38,13 @@
   });
   a('명성 갈래', 'fame_balanced', '네 바다의 조화', '탐험·교역·전투·사교 명성이 각각 ' + FK.balanced.toLocaleString('ko-KR') + ' 이상이다.',
     { fameRule: { all: true, min: FK.balanced } }, 0, FK.balancedGold, '균형 잡힌 제독');
+
+  // 재산 업적 (사용자 요청 2026-11-01): 백만장자 > 천만장자 > 억을 번 부자 > 100억의 부자. 소지금 + 금고 예금으로 센다
+  var WK = G.BALANCE.wealthAchievements;
+  [['wealth_1m', '백만장자', '백만장자'], ['wealth_10m', '천만장자', '천만장자'], ['wealth_100m', '억을 번 부자', '억만장자'], ['wealth_10b', '100억의 부자', '바다의 거부']].forEach(function (w, i) {
+    a('재산', w[0], w[1], '소지금과 금고 예금을 합한 재산이 금화 ' + WK.steps[i].toLocaleString('ko-KR') + '닢에 이른다.',
+      { goldRule: { min: WK.steps[i] }, fameCat: 'tr' }, WK.fame[i], 0, w[2]);
+  });
 
   // 발견물 완성은 기본 일곱 갈래를 모두 포함한다. 동물·식물과 세 관심사는 겹쳐 셀 수 있다.
   // 분모는 달성 검사 때 G.DISC에서 읽는다. 시대·개척 단계로 아직 닫힌 발견물도 빠뜨리지 않는다.

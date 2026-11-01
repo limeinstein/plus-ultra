@@ -1,5 +1,9 @@
 # images — 그림 교체 폴더
 
+종 계열·소형 타악기 18종도 `items/<악기ID>.webp`의 256×256 투명 원화를 쓴다. 신규 16종과 기존 캐스터네츠·트라이앵글이며 전체 파일·원본·생성 지시문은 [제작 기록](../docs/art/bells-small-percussion-20261101.md)에 있다.
+
+하모니카·아쟁·꽹과리·징·싱잉볼·팬플루트·목탁은 `items/harmonica.webp`, `ajaeng.webp`, `kkwaenggwari.webp`, `jing.webp`, `singingbowl.webp`, `panflute.webp`, `moktak.webp`의 256×256 투명 전용 원화를 쓴다. 교역품처럼 금속·목재·현·채의 재질을 표현했다. [전후 비교·원본·생성 지시문](../docs/art/instrument-item-art-20261101.md).
+
 식당 커피 20종은 `drinks/<커피ID>.webp`의 512×512 투명 그림을 쓴다(예: `drinks/iced_americano.webp`). 기존 음식 120종은 `foods/<음식ID>.webp`다. 커피 차림표에 각 잔의 그림을 표시하며, 원본·지시문·미리보기·검사는 `../docs/art/coffee-menu-20261031.md`에 있다.
 
 나비·나방 17종은 `effects/butterflies/<발견물ID>.webp`의 투명 4열×2행 비행 시트를 쓴다(1024×512, 8프레임). 조류보다 작은 30~60마리의 무작위 무리로 표시한다. 제작·생성 지시문·재관찰 보상은 `docs/art/butterfly-flocks-20261031.md`에 있다.

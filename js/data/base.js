@@ -221,6 +221,7 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
+    mateSeekSearch: { min: 3, limit: 3 }, // 여급의 항해사 수색: 이름 일부로 후보를 보여 준다.
     navalField: { startMargin: 120, radius: 3200, separation: 520, spacing: 160, monsterSeparation: 700, lakeSeparation: 520 }, // 전장은 넓게, 두 함대는 접현할 수 있게 가까이서 시작
     navalControl: { turn: 1.1, accel: 0.8, decel: 1, lateral: 0.22, turnSlow: 0.35, slowRadius: 100 },
     pirateSurrender: { base: 0.22, damage: 0.3, crewLoss: 0.18, pressure: 0.12, near: 800, min: 0.12, max: 0.8 },
@@ -258,6 +259,8 @@
       soldier: { discipline: 80, accuracy: 0.02 }
     },
     // 명성 업적은 일회성 금화·칭호만 준다. 명성/능력 배수는 없어 연쇄 보상과 힘의 격차를 막는다.
+    // 재산 업적 (사용자 요청 2026-11-01): 소지금 + 금고 예금이 문턱에 이르면. 보상은 교역 명성과 칭호 — 금화를 주면 다음 문턱을 밀어 주므로 주지 않는다
+    wealthAchievements: { steps: [1000000, 10000000, 100000000, 10000000000], fame: [300, 800, 2000, 5000] },
     fameAchievements: {
       totalGold: [300, 600, 1200, 2000, 3000, 4000, 6000, 8000, 10000],
       branchSteps: [20000, 150000, 650000], branchGold: [300, 1000, 2500],
@@ -313,6 +316,7 @@
       }
     },
     homeTools: ['compass', 'sextant'],   // 처음 떠나는 도시(제독의 고향) 시장에 늘 있는 항해 도구 — 연도(from)·지역·그날 물량과 상관없이 (js/city/misc.js MK.stock)
+    marketInstrumentMin: 5,   // 시장마다 실제로 진열하는 악기 최소 종류 수. 그 도시의 판매 조건을 만족하는 악기에서만 보충한다.
     // 선수상: 함대에서 가장 센 덕 + 나머지 배의 덕 × figRest (R.fleetBonus). 폭풍 빈도는 stormFloor 아래로 줄지 않는다 (sea.js)
     figRest: 0.25, stormFloor: 0.35, stormDmgCut: 0.3,
     // 피로 60을 넘으면 속력 × (1 − (피로 − 60) / fatigueDiv) → 피로 100에서 75% (R.fleetMotion)

@@ -123,7 +123,14 @@
     // 라임 절임은 파는 고장이면 늘 있다 (긴 항해의 목숨줄)
     // 처음 떠나는 도시(고향)에는 나침반·육분의가 늘 있다 (G.BALANCE.homeTools)
     var always = s.player && s.player.home === c.id ? ((G.BALANCE && G.BALANCE.homeTools) || []) : [];
-    return G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && (always.indexOf(it.id) >= 0 || (it.reg.indexOf(c.region) >= 0 && (!it.from || s.date.y >= it.from))); }).filter(function (it) { return rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; });
+    var eligible = G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && (always.indexOf(it.id) >= 0 || (it.reg.indexOf(c.region) >= 0 && (!it.subRegion || G.subRegion(c) === it.subRegion) && (!it.marketRel || c.rel === it.marketRel) && (!it.from || s.date.y >= it.from))); });
+    var stock = eligible.filter(function (it) { return rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; });
+    // 추첨 뒤에도 악기는 최소 다섯 종류. 다른 문화권·종교·연도의 물건을 끌어오지는 않는다.
+    var minimum = Math.max(0, Math.floor((G.BALANCE && G.BALANCE.marketInstrumentMin) || 0));
+    var count = stock.filter(function (it) { return it.kind === 'instrument'; }).length;
+    var spare = eligible.filter(function (it) { return it.kind === 'instrument' && stock.indexOf(it) < 0; });
+    while (count < minimum && spare.length) { stock.push(spare.splice(Math.floor(rng() * spare.length), 1)[0]); count++; }
+    return stock;
   };
   /** 경리가 흥정해 둔 값 (이번 방문): {ok, buy, sell} */
   function mkDeal() { var cur = C.current(); return cur && cur.mk && cur.mk.buy ? cur.mk : null; }
@@ -136,25 +143,25 @@
   /** 물건의 능력치 한 줄 (구입·매각 목록과 확인 창) */
   function itemStat(it) {
     var d = G.ITEM[it.id] || {}, k = d.kind || it.kind;
-    return k === 'weapon' ? '공격 ' + d.atk : k === 'armor' ? '방어 ' + d.def : k === 'gift' && d.gv ? '호감 ' + d.gv : k === 'mgift' && d.gv ? '남자 선물 ' + d.gv : (G.ITEM_KIND[k] || '');
+    return k === 'weapon' ? '공격 ' + d.atk : k === 'armor' ? '방어 ' + d.def : k === 'gift' && d.gv ? '호감 ' + d.gv : k === 'mgift' && d.gv ? '남자 선물 ' + d.gv : k === 'instrument' ? '악기' + (d.military ? ' · 군악' : '') : (G.ITEM_KIND[k] || '');
   }
   MK.itemStat = itemStat;
   MK.sellValue = mkSell;
   function mkThumb(it) {
     if (!it || !G.Img) return null;
     var rl = G.RELIC && G.RELIC[it.id], key = G.Img.pick(rl ? G.Img.chain.relic(rl) : G.Img.chain.item(it));
-    return key ? G.Img.src(key) : null;
+    return key ? G.Img.src(key) : it.kind === 'instrument' && G.Art && G.Art.relicArt ? G.Art.relicArt(it, 128, 128, { transparent: true }).toDataURL() : null;
   }
   MK.price = mkBuy;
   /** 값이 보통보다 5% 넘게 비싸면 ▲, 싸면 ▼ */
   function mkTrend(it) { var k = R.itemMult(C.city(), it); return k > 1.05 ? ' <span class="warn-text" title="시세 ' + Math.round(k * 100) + '%">▲</span>' : k < 0.95 ? ' <span class="good-text" title="시세 ' + Math.round(k * 100) + '%">▼</span>' : ''; }
   MK.enter = async function (c) { var cur = C.current(); if (cur) { cur.mk = null; cur.mkBuyDeals = 0; } await C.say(vendor(), C.hail(c, 'market', ['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
-  MK.sub = function () { return '무기·도구·장신구'; };
+  MK.sub = function () { return '무기·도구·장신구·악기'; };
   MK.menu = function (c) {
     return [
       { label: '구입', icon: 'coin', onClick: function () { return MK.buy(c); } },
       { label: '매각', icon: 'sack', onClick: function () { return MK.sell(c); } },
-      { label: '시세', icon: 'chart', sub: '물건 값 ' + Math.round(U.sum(Object.keys(R.ITEM_CATS), function (k) { return R.itemMult(c, { id: '_', kind: k }); }) / 4 * 100) + '%', onClick: function () { return C.B.trade.quotes(c); } },
+      { label: '시세', icon: 'chart', sub: '물건 값 ' + Math.round(U.sum(Object.keys(R.ITEM_CATS), function (k) { return R.itemMult(c, { id: '_', kind: k }); }) / Object.keys(R.ITEM_CATS).length * 100) + '%', onClick: function () { return C.B.trade.quotes(c); } },
       acctLv() ? { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: mkDeal() ? (mkDeal().ok ? '성공 · 결제 협상 ' + Math.max(0, (G.Acct ? G.Acct.marketDeals() : acctLv()) - ((C.current() && C.current().mkBuyDeals) || 0)) + '번' : '실패') : R.purser() ? '경리 ' + R.purser().name : '회계 ' + acctLv(), dim: !!(C.current() && C.current().mk), onClick: function () { return MK.haggle(c); } } : null,
       { label: '소지품', icon: 'chest', sub: R.slotsUsed() + '/' + R.ITEM_MAX, onClick: function () { return G.Info.open('items'); } },
       // 발견물이 있을 것으로 짐작되는 고장의 시장: 그 발견물의 모조품 (js/systems/fakes.js) — 달마다 7일, 중도시 이상, 한 번에 2개
@@ -201,8 +208,8 @@
       if (!st.length) { await C.say(vendor(), '미안하네, 지금 물건이 떨어지고 없네.'); return; }
       var v = await UI.choose('구입 아이템 선택 — 소지금 ' + U.num(s.player.gold) + '닢', st.map(function (it) {
         var ex = itemStat(it);
-        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, desc: it.desc, thumb: mkThumb(it), icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : 'compass', disabled: mkBuy(it) > s.player.gold };
-      }), { width: 700 });
+        return { label: it.name + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, cat: it.kind, desc: it.desc, thumb: mkThumb(it), icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : it.kind === 'instrument' ? 'note' : 'compass', disabled: mkBuy(it) > s.player.gold };
+      }), { width: 700, catName: function (k) { return G.ITEM_KIND[k] || k; }, catOrder: G.ItemCat && G.ItemCat.ORDER });
       if (!v) return;
       var it = G.ITEM[v];
       var pr = mkBuy(it);

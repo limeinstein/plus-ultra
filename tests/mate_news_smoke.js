@@ -31,14 +31,23 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       UI.confirm = async () => true; UI.fade = async (fn) => { if (fn) fn(); };
       UI.ask = async (t, opts) => { window.__asks.push({ t, opts: opts.map(o => (o.dis ? '(막힘)' : '') + o.label) }); const w = window.__pick.length ? window.__pick.shift() : undefined; const o = w !== undefined ? opts.find(x => x.value === w) : opts.find(x => !x.dis); return o ? o.value : null; };
       UI.prompt = async () => window.__name;
+      G.MateKnow.promptSeek = async () => ({ name: window.__name });
       G.Game.go = () => {}; G.Game.refreshHud = () => {}; G.State.save = () => {};
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 1; });
       const s = G.Game.state = G.State.newGame({ name: '노제독', nation: 'PT', job: 'explorer', age: 40, birth: { m: 1, d: 1 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 1), diff: 'normal' });
       s.date = { y: 1520, m: 2, d: 1 }; s.player.born = { y: 1455, m: 1, d: 1 }; s.player.gold = 50000;
-      const pick = G.MATES.filter(m => !m.wd && !m.witch && !m.sib && m.st && m.y && m.y[1] < 9000).slice(0, 6);
+      // 고정 배우자 쌍을 한 함대에 함께 넣으면 「부부는 함께 떠난다」 보호 규칙이
+      // 장기 동행 경계값 시험과 섞이므로, 이 시험은 서로 짝이 아닌 노장 여섯을 고른다.
+      const pick = [];
+      G.MATES.filter(m => !m.wd && !m.witch && !m.sib && m.st && m.y && m.y[1] < 9000).some(m => {
+        if (pick.some(x => x.id === m.wed || x.wed === m.id)) return false;
+        pick.push(m); return pick.length === 6;
+      });
       window.__ids = pick.map(m => m.id);
       s.mates = pick.map((m, i) => ({ id: m.id, role: 'none', joined: i < 5 ? 14750101 : 14850101, loyal: 90 }));   // 다섯은 45년, 하나는 35년 (40년 넘은 노장만 — 2026-10-29)
       if (G.Wander) G.Wander.apply();
+      // 새 게임의 빈 선실 자동 배치는 별도 기능이다. 여기서는 갑판 대기 노장의 경계값만 본다.
+      s.mates.forEach(m => { delete m.room; delete m.roomType; });
     });
 
     // ① 수첩 「동료」 능력치
@@ -55,6 +64,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // ② 이별: 제독이 80세가 될 때까지 모두 3번 · 사건 사이 3년 넘게 · 최근 선실에 덜 머문 부하부터 (2026-10-29 사용자 요청)
     r = await page.evaluate(() => {
       const ML = G.MateLeave, k = G.BALANCE.mateLeave, s = G.Game.state; k.monthly = 1;
+      s.mates.forEach(m => { delete m.room; delete m.roomType; });
       const keep = { mates: JSON.parse(JSON.stringify(s.mates)), date: Object.assign({}, s.date), day: s.day };
       const w = s.mates.map(m => ML.weight(m));
       // 최근 선실에 머문 날: 0번 300 · 1번 40 · 나머지 0 (3번은 예전에 선실에서 500일을 지냈다)
@@ -104,6 +114,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.legEv, 'G.Legend.join으로 맞은 부하에는 사건 표시(ev)가 붙는다');
     r = await page.evaluate(() => {
       const s = G.Game.state, ML = G.MateLeave; s.player.born.y = 1500;   // 제독 21세여도 40년 넘은 부하는 (옛 기록의 부하)
+      s.mates.forEach(m => { delete m.room; delete m.roomType; });
       const w = s.mates.map(m => ML.weight(m)); s.player.born.y = 1455; return w;
     });
     ok(r.slice(0, 5).every(x => x > 0) && r[5] === 0, '제독이 젊어도 40년 넘게 함께한 부하는 겪을 수 있다');

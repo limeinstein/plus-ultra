@@ -31,7 +31,7 @@
 
   // ---------------------------------------------------------------- 소지품: 갈래
   var IC = G.ItemCat = {};
-  IC.ORDER = ['weapon', 'armor', 'tool', 'gift', 'mgift', 'fig', 'special', 'treasure', 'keepsake', 'relic', 'evidence', 'etc'];
+  IC.ORDER = ['weapon', 'armor', 'tool', 'gift', 'mgift', 'instrument', 'fig', 'special', 'treasure', 'keepsake', 'relic', 'evidence', 'etc'];
   var EXTRA = { relic: '발견 유물', fig: '선수상', evidence: '증거품', keepsake: '소중한 물건', etc: '그 밖' };
   /** 물건의 갈래 열쇠 */
   IC.of = function (it) {

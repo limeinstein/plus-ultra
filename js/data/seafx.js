@@ -306,6 +306,13 @@
       flashReach: 2.4, flashHeight: 1.7, fractureLife: 0.55, fractureBranches: 6,
       sparkSpeed: [190, 430], sparkDrag: 4.5, sparkTrail: 0.055,
       textureSize: 96, textureVariants: 3,
+      flight: {           // 비행 그림만 조정한다. 포탄의 도착 시각과 피해 판정은 유지한다.
+        muzzleOffset: 0.16, stagger: 0.025, maxDelay: 0.22,
+        arcPerDistance: 0.075, minArc: 4, maxArc: 44, drag: 0.18,
+        radius: 1.15, minPixelRadius: 2.2, shutter: 0.032, maxStreak: 42,
+        airTime: 0.12, airSamples: 7, airWidth: 1.3, airWobble: 1.6, airOpacity: 0.22,
+        hotUntil: 0.22, pelletSpread: 11, cullPad: 110
+      },
       // 작은 포: 작은 불꽃 / 장포: 가늘고 낮은 탄도 / 산탄포: 넓은 파편 / 중포: 큰 화염과 연기.
       profiles: {
         saker:     { size: 0.68, muzzle: 0.72, smoke: 0.7,  spread: 0.7,  arc: 1.05, ball: 2.8 },
@@ -313,7 +320,7 @@
         culverin:  { size: 0.86, muzzle: 1.05, smoke: 0.8,  spread: 0.48, arc: 0.55, ball: 3 },
         lculverin: { size: 0.98, muzzle: 1.2,  smoke: 0.9,  spread: 0.42, arc: 0.4,  ball: 3.2 },
         perrier:   { size: 1,    muzzle: 1,    smoke: 1,    spread: 0.85, arc: 0.9,  ball: 3.5 },
-        pedrero:   { size: 1.05, muzzle: 0.85, smoke: 1.1,  spread: 1.65, arc: 1.1,  ball: 3.8 },
+        pedrero:   { size: 1.05, muzzle: 0.85, smoke: 1.1,  spread: 1.65, arc: 1.1,  ball: 3.8, pellets: 5, stone: true },
         cannon:    { size: 1.3,  muzzle: 1.25, smoke: 1.2,  spread: 1,    arc: 1,    ball: 4.2 },
         bcannon:   { size: 1.4,  muzzle: 1.35, smoke: 1.3,  spread: 1.1,  arc: 0.85, ball: 4.5 },
         hcannon:   { size: 1.75, muzzle: 1.65, smoke: 1.65, spread: 1.2,  arc: 1.15, ball: 5.5 },

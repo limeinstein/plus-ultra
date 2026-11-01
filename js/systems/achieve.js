@@ -32,6 +32,8 @@
   AC.wedEver = wedEver;
 
   AC.list = function () { return G.ACHIEVEMENTS || []; };
+  /** 재산 = 소지금 + 금고 예금 (재산 업적 goldRule) */
+  AC.wealth = function () { var p = (S() && S().player) || {}; return Math.max(0, (p.gold || 0) + (p.bank || 0)); };
   AC.get = function (id) { return AC.list().filter(function (a) { return a.id === id; })[0] || null; };
   AC.done = function (id) { return !!store()[id]; };
   /** 현재 자료에서 종류별 목록을 만든다. 경쟁자의 발견·시대·단서 유무로 분모를 줄이지 않는다. */
@@ -53,6 +55,7 @@
       var fr = a.fameRule, cats = fr.all ? ['ex', 'tr', 'bt', 'so'] : [fr.cat || null];
       cats.forEach(function (cat) { rows.push({ label: (cat ? G.Fame.NAME[cat] : '통합') + ' 명성', count: G.Fame.get(cat), n: fr.min }); });
     }
+    if (a.goldRule) rows.push({ label: '재산 (소지금+예금)', count: AC.wealth(), n: a.goldRule.min, money: true });
     if (a.collectionRule) {
       var pool = AC.collectionPool(a.collectionRule), got = pool.filter(found);
       rows.push({ collection: true, label: '직접 발견', ids: pool, got: got, count: got.length, n: pool.length });
@@ -90,7 +93,7 @@
     // 보상보다 먼저 기록하여 명성을 주는 기존 업적과 함께 처리해도 중복 지급하지 않는다.
     store()[a.id] = { d: U.dateNum(s.date) };
     if (a.gold) s.player.gold += a.gold;
-    if (a.fame && G.Fame) G.Fame.add('ex', a.fame);
+    if (a.fame && G.Fame) G.Fame.add(a.fameCat || 'ex', a.fame);   // 재산 업적은 교역 명성
     G.State.log('업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다' + (a.title ? ' — 칭호 「' + a.title + '」' : '') + ' (금화 ' + U.num(a.gold || 0) + ', 명성 +' + (a.fame || 0) + ')');
   }
   AC.check = function () {
@@ -112,7 +115,19 @@
       UI.toast('명성 업적 달성 · ' + a.name + ' (금화 ' + U.num(a.gold) + '닢)', 'crown', 4800);
     });
   };
-  function rewardText(a) { return '금화 ' + U.num(a.gold || 0) + '닢 · 명성 +' + U.num(a.fame || 0) + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
+  function rewardText(a) { return (a.gold || !a.fame ? '금화 ' + U.num(a.gold || 0) + '닢 · ' : '') + (a.fameCat && G.Fame && G.Fame.NAME && G.Fame.NAME[a.fameCat] ? G.Fame.NAME[a.fameCat] + ' ' : '') + '명성 +' + U.num(a.fame || 0) + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
+  /** 재산 업적: 문턱을 넘었으면 곧바로 기록·보상하고 알린다. 장면은 대기열(achvPend)로 → 거리로 나오거나 다음 항구에서 */
+  AC.onWealth = function () {
+    var s = S(), st = store(), got = [];
+    if (!s || !s.player) return got;
+    AC.list().forEach(function (a) {
+      if (!a.goldRule || st[a.id] || !AC.progress(a, []).done) return;
+      grant(a); got.push(a);
+      var pend = s.achvPend || (s.achvPend = []); if (pend.indexOf(a.id) < 0) pend.push(a.id);
+      UI.toast('재산 업적 달성 · ' + a.name + ' (' + rewardText(a) + ')', 'crown', 4800);
+    });
+    return got;
+  };
 
   // ---------------------------------------------------------------- 업적 장면 (2026-10-23 사용자 요청 「모든 업적 달성할 때 개별 이벤트처럼」)
   // 업적마다 하나의 사건처럼: 종소리·환호 → 금빛 띠 → 이 업적에 든 발견물 그림을 차례로 띄우며 이야기 → 알맞은 부하의 한마디 → 제독의 한마디 → 보상 창
@@ -273,6 +288,16 @@
     var Cc = G.Scenes && G.Scenes.city; if (!Cc || !Cc.arrival || AC.hooked) return;
     AC.hooked = true;
     var oa = Cc.arrival;
+    var om = Cc.main;
+    if (om) Cc.main = function () {
+      var r = om.apply(this, arguments);
+      try {
+        if (AC.onWealth().length) setTimeout(function () {
+          if (G.Game.scene === Cc && !(Cc.isBusy && Cc.isBusy()) && !UI.busy()) announce([]).catch(function (e) { console.error(e); });
+        }, 60);
+      } catch (e) { console.error(e); }
+      return r;
+    };
     Cc.arrival = async function () {
       var r = await oa.apply(this, arguments);
       try { var s = S(); if (s && s.achvPend && s.achvPend.length) await announce([]); } catch (e) { console.error(e); }
@@ -359,13 +384,13 @@
         var pct = Math.round(100 * p.have / Math.max(1, p.need));
         h += '<div class="hint-item achv-row' + (done ? ' done' : '') + '"><div class="flex"><span class="nm">' + (done ? '★ ' : '') + U.esc(a.name) + '</span>' +
           (a.title ? '<span class="tag">' + U.esc(a.title) + '</span>' : '') +
-          '<span class="right muted" style="font-size:14px">' + (done ? U.fmtDate({ y: Math.floor(done.d / 10000), m: Math.floor(done.d / 100) % 100, d: done.d % 100 }) + ' 달성' : p.have + ' / ' + p.need) + '</span></div>' +
+          '<span class="right muted" style="font-size:14px">' + (done ? U.fmtDate({ y: Math.floor(done.d / 10000), m: Math.floor(done.d / 100) % 100, d: done.d % 100 }) + ' 달성' : U.num(p.have) + ' / ' + U.num(p.need)) + '</span></div>' +
           '<div class="tx">' + U.esc(a.desc) + ' <span class="muted">— ' + rewardText(a) + '</span></div>' +
           '<div class="achv-bar"><i style="width:' + pct + '%"></i></div>' +
           '<div class="achv-items">' + p.rows.map(function (r) {
             if (r.crew) return r.ids.map(function (id) { return '<span class="ach-i' + (r.got.indexOf(id) >= 0 ? ' ok' : '') + '">' + U.esc(mateName(id)) + '</span>'; }).join(' ');
             if (r.ids) return (r.n < r.ids.length ? '<span class="muted">' + r.n + '가지:</span> ' : '') + r.ids.map(itemHtml).join(' ');
-            return '<span class="ach-i' + (r.count >= r.n ? ' ok' : '') + '">' + U.esc(r.label) + ' ' + Math.min(r.count, r.n) + '/' + r.n + '</span>';
+            return '<span class="ach-i' + (r.count >= r.n ? ' ok' : '') + '">' + U.esc(r.label) + ' ' + U.num(Math.min(r.count, r.n)) + '/' + U.num(r.n) + (r.money ? '닢' : '') + '</span>';
           }).join(' <span class="muted">+</span> ') + '</div></div>';
       });
     });

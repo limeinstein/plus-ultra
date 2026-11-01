@@ -49,7 +49,7 @@ fs.mkdirSync(OUT, {recursive: true});
         // 실제 발사 뒤 화면 검수용 간격만 벌린다. 피해 판정·장전 시간은 위의 실제 발사 값을 쓴다.
         const shift = 150; b.x -= shift; e.x += shift;
         st.fx.forEach(f => { f.x -= shift; });
-        st.balls.forEach((k, i) => { k.x -= shift; k.tx = e.x + (i - 1.5) * 8; k.ty = e.y + (i - 1.5) * 6; });
+        st.balls.forEach((k, i) => { k.x -= shift; if (k.mx != null) k.mx -= shift; k.tx = e.x + (i - 1.5) * 8; k.ty = e.y + (i - 1.5) * 6; });
         return st.balls.map(k => ({gun: k.gun, dmg: k.dmg, kill: k.kill, dur: k.dur}));
       };
       window.landVolley = function () {
