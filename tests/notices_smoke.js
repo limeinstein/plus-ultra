@@ -39,7 +39,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       UI.toast('교황령 함대와 덴마크 함대가 외레순 해협에서 맞붙었다는 소식이 들려온다.', 'cannon');
       UI.toast('비가 그쳤다. 젖은 돛과 옷을 말린다.', 'sun');
       await sleep(50);
-      out.tiers = shown(); out.zoneCity = box().getAttribute('data-zone');
+      // 도시 진입 안내는 장면 초기화 속도에 따라 0.6초 뒤 도착할 수 있다.
+      // 알림 등급 자체를 검증하는 이 항목에서는 게임 안내를 제외한다.
+      out.tiers = shown().filter(x => !/\|거리 —/.test(x)); out.zoneCity = box().getAttribute('data-zone');
       out.recent = UI.recentNotices().map(x => x.tier + ':' + x.text.slice(0, 8));
       // 한꺼번에 둘(큰 일이 끼면 셋)까지
       UI.toast('첫째 소식', 'scroll'); UI.toast('둘째 소식', 'scroll'); UI.toast('셋째 소식', 'scroll');
