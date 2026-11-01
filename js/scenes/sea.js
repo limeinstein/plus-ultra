@@ -2285,13 +2285,32 @@
     var otxt = R.rowing || (R.fleetInfo && R.fleetInfo.row) ? '<div style="font-size:12.5px;color:#e8c9a0" title="돛이 바람을 못 받아 선원들이 노를 젓는다 — 오래 저으면 지친다">노 젓는 중</div>' : '';
     setHtml(hudEl.wtxt, '<div style="font-size:15px;color:#e3c68d">' + from + '풍</div><div style="font-size:14px">풍속 ' + '●●●●●'.slice(0, Math.max(1, Math.round(ws * 5))) + '</div><div style="font-size:14px;color:#d9c9a6">' + rn + '</div>' + mtxt + ctxt + rtxt + otxt);
   }
+  /* 작은 해도 — 양피지 지형(G.ChartArt.terrain)은 한 번 그리는 데 20ms 넘게 걸려, 0.3초마다 통째로 다시 그리면 항해가 툭툭 끊겼다 (2026-11-01).
+     지형은 따로 담아 두고 배가 조금 움직일 때는 담아 둔 지형을 그만큼 옮겨 그린다. 도시·표식·배·가장자리는 늘 새로 그린다.
+     지형을 새로 그리는 때: 처음 · 멀리(miniTerrMove°) 움직였을 때 · 새로 살핀 바다가 생기고 miniTerrAge초가 지났을 때 · 해도 그림이 새로 들어왔을 때 */
   function drawMini() {
     if (!hudEl.mini) return;
-    var s = S(), l = s.loc;
+    var s = S(), l = s.loc, P = FXS();
     st.lastMini = st.dayCount;
     st.lastMiniT = st.t; st.lastMiniLoc = [l.lon, l.lat];
-    var w = 40, h = w * 388 / 568;
-    var cv = G.Info.chartCanvas(284, 194, { lon0: l.lon - w / 2, lon1: l.lon + w / 2, lat0: l.lat - h / 2, lat1: l.lat + h / 2, labels: false, ship: l });
+    var W = 284, H = 194, w = 40, h = w * 388 / 568;
+    var box = { lon0: l.lon - w / 2, lon1: l.lon + w / 2, lat0: l.lat - h / 2, lat1: l.lat + h / 2 };
+    var mt = st.miniTerr, rev = s.chartRevision || 0, art = G.ChartArt ? G.ChartArt.revision : 0;
+    var mdx = mt ? G.Geo.wrapLon(mt.lon - l.lon) : 0, mdy = mt ? mt.lat - l.lat : 0;
+    if (!mt || mt.s !== s || mt.art !== art || Math.abs(mdx) >= (P.miniTerrMove || 4) || Math.abs(mdy) >= (P.miniTerrMove || 4) ||
+        (mt.rev !== rev && st.t - mt.t >= (P.miniTerrAge != null ? P.miniTerrAge : 1.5))) {
+      mt = st.miniTerr = { cv: G.Info.chartTerrain(W, H, box), lon: l.lon, lat: l.lat, t: st.t, rev: rev, art: art, s: s };
+      mdx = mdy = 0;
+    }
+    var cv = st.miniCv || (st.miniCv = document.createElement('canvas'));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    var cx = cv.getContext('2d'), paper = (G.FX.chart && G.FX.chart.paper) || [226, 206, 160];
+    cx.fillStyle = 'rgb(' + paper[0] + ',' + paper[1] + ',' + paper[2] + ')'; cx.fillRect(0, 0, W, H);   // 옮겨 그려 비는 가장자리는 종이 빛
+    cx.drawImage(mt.cv, Math.round(mdx / w * W), Math.round(-mdy / h * H));
+    G.ChartArt.finish(cx, W, H);
+    G.Info.chartOverlay(cx, W, H, box, { labels: false, ship: l });
+    var g2 = cx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.4, W / 2, H / 2, Math.max(W, H) * 0.7);   // 가장자리 그늘 (G.Info.chartCanvas와 같다)
+    g2.addColorStop(0, 'rgba(0,0,0,0)'); g2.addColorStop(1, 'rgba(90,60,20,.35)'); cx.fillStyle = g2; cx.fillRect(0, 0, W, H);
     var ctx = hudEl.mini.getContext('2d');
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(cv, 0, 0, 568, 388);

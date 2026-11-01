@@ -133,8 +133,16 @@
   // 2026-10-31 누락 외관 자동 등록 끝
 
   DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && POS[d.id]); };
+  /* 지도 위에 남는 발견물 — 매 프레임 발견물 1,200여 개를 다 훑던 것(1~2ms)을 0.25초 동안 다시 쓴다 (항해 버벅임 2026-11-01) */
+  var visMemo = null;
   DI.visible = function () {
     if (!G.DISCOVERIES || !G.Disc) return [];
+    var now = performance.now(), s = G.Game && G.Game.state;
+    if (visMemo && visMemo.s === s && now - visMemo.at < 250) return visMemo.list;
+    visMemo = { s: s, at: now, list: visibleNow() };
+    return visMemo.list;
+  };
+  function visibleNow() {
     return G.DISCOVERIES.filter(function (d) {
       if (!DI.isMapLandmark(d)) return false;
       // 미래의 신기루 외관은 출현·소멸하는 동안만 보이고 지도에 영구히 남지 않는다.
@@ -143,7 +151,7 @@
       }
       return G.Disc.foundByMe(d.id);
     });
-  };
+  }
   DI.count = function () { return Object.keys(POS).length; };
   DI.key = function (d) { var p = d && POS[d.id]; return p ? p.key : null; };
 

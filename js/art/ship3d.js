@@ -114,7 +114,7 @@
   P.canRender=function(id){var c=cfg();return !!(c&&c.enabled&&P.supports(id)&&!failure&&!failedTypes[id]&&(!rt||(!rt.lost&&!rt.renderer.getContext().isContextLost())));};
   P.beginFrame=function(){
     var c=cfg();if(!c||!c.enabled)return false;
-    var r=setup();if(!r||r.lost)return false;r.frame++;r.inFrame=true;r.drawn=0;r.neededPixels=0;return true;
+    var r=setup();if(!r||r.lost)return false;r.frame++;r.inFrame=true;r.drawn=0;r.neededPixels=0;r.renders=0;return true;
   };
   P.endFrame=function(){
     if(!rt||!rt.inFrame)return;
@@ -137,11 +137,33 @@
     body.add(batch(hull,T),rig.root);body.updateMatrixWorld(true);
     return{root:body,ship:ship,rig:rig,hullBox:hullBox,tops:tops,features:features,dispose:function(){release(body);body.clear();}};
   };
+  /* 다시 쓰는 그림 (2026-11-01 항해 버벅임): 항해 화면은 배마다(spec.sid) 3D로 그린 그림을 잠깐(reuseMs) 담아 두고 그 사이 프레임에는 자리만 옮겨 다시 쓴다.
+     144Hz 화면이면 배 한 척을 1초에 144번 3D로 그리던 것. 한 프레임에 새로 그리는 배는 기함 말고 reuseBudget척까지 — 나머지는 reuseMax ms까지 먼저 그린 그림으로,
+     다음 프레임에 차례가 온다. 선종·크기·깃발·돛 빛깔이 바뀌거나 뱃머리가 돌면 바로 새로 그린다. sid가 없는 그림(해전·감상)은 예전처럼 매번 그린다. */
+  var reuse={};
+  function reusable(k,spec,angle,len,pixels,c,now,r){
+    if(!k||k.type!==spec.type||k.pixels!==pixels||Math.abs(len-k.len)>len*.01||(spec.flag||null)!==k.flag||(spec.sailTint||null)!==k.tint)return false;
+    var da=Math.abs(angle-k.angle)%PI2;if(da>Math.PI)da=PI2-da;
+    var age=now-k.at,fu=Math.abs((spec.furl||0)-k.furl);
+    if(age<c.reuseMs&&da<(c.reuseTurn||.02)&&fu<.04)return true;                       // 방금 그린 그림
+    return r.inFrame&&r.renders>=(c.reuseBudget||2)&&spec.sid!=='f0'&&age<(c.reuseMax||120)&&da<.08&&fu<.1;   // 이 프레임 몫을 다 썼으면 조금 묵은 그림으로
+  }
   P.draw=function(ctx,x,y,angle,len,spec,t){
     var c=cfg();if(!c||!c.enabled||!spec||!P.supports(spec.type))return false;
-    var r=setup();if(!r||r.lost||r.renderer.getContext().isContextLost()||!select(r,spec.type))return false;
+    var r=setup();if(!r||r.lost||r.renderer.getContext().isContextLost())return false;
     var start=performance.now(),tx=ctx.getTransform(),dev=Math.hypot(tx.a,tx.b),scale=len/c.baseLen;
-    var pixels=clamp(Math.ceil(r.span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);
+    var naturalPixels=clamp(Math.ceil(r.span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);
+    var key=c.reuseMs>0&&spec.sid!=null?String(spec.sid):null,k=key?reuse[key]:null,pixels=naturalPixels;
+    // 파도에 따른 길이 변화가 32px 경계를 오갈 때 캐시 캔버스를 매번 다시 만들지 않는다. 처음·실제 배율 변경 때 한 단계 여유를 두며 해상도는 낮추지 않는다.
+    if(key){if(!k||naturalPixels>k.pixels||naturalPixels<k.pixels-64)pixels=clamp(naturalPixels+32,c.minBuffer,c.maxBuffer);else pixels=k.pixels;}
+    if(key&&reusable(k,spec,angle,len,pixels,c,start,r)){
+      r.neededPixels=Math.max(r.neededPixels||0,pixels);if(r.models[spec.type])r.models[spec.type].seen=r.frame;   // 버퍼 줄이기·모형 정리가 이 배를 빼먹지 않게
+      ctx.save();ctx.translate(x,y);ctx.rotate(-Math.atan2(Math.sin(angle)*c.elevation,Math.cos(angle)));ctx.fillStyle='rgba(0,14,28,.24)';ctx.beginPath();
+      ctx.ellipse(0,len*.035,len*(k.L/c.baseLen)*.47,len*(k.W/48)*.13,0,0,PI2);ctx.fill();ctx.restore();
+      ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(k.cv,x-k.span*.5*scale,y-k.anchor*scale,k.span*scale,k.span*scale);ctx.restore();
+      k.seen=start;r.reused=(r.reused||0)+1;r.drawn++;return true;
+    }
+    if(!select(r,spec.type))return false;
     // 큰 배에 맞춰 확보한 버퍼를 재사용한다. 배마다 캔버스를 줄였다 늘리면 GPU가 앞선 그림을 기다리며 멈칫한다.
     // 작은 배는 필요한 영역에 같은 해상도로 그려 잘라 옮긴다(돛·망루의 픽셀 밀도는 그대로).
     if(pixels>r.buffer||(!r.inFrame&&pixels!==r.buffer)){r.renderer.setSize(pixels,pixels,false);r.buffer=pixels;}
@@ -150,14 +172,22 @@
     r.sun.castShadow=c.shadows&&len>=c.shadowMinLen;animate(r,spec,t||0);r.yaw.rotation.y=angle;r.renderer.render(r.scene,r.camera);
     ctx.save();ctx.translate(x,y);ctx.rotate(-Math.atan2(Math.sin(angle)*c.elevation,Math.cos(angle)));ctx.fillStyle='rgba(0,14,28,.24)';ctx.beginPath();
     ctx.ellipse(0,len*.035,len*(r.ship.s.L/c.baseLen)*.47,len*(r.ship.s.W/48)*.13,0,0,PI2);ctx.fill();ctx.restore();
-    ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();
-    r.frames++;r.drawn++;r.stats={type:r.type,frames:r.frames,switches:r.switches,calls:r.renderer.info.render.calls,triangles:r.renderer.info.render.triangles,
+    if(key){
+      if(!k){k=reuse[key]={cv:document.createElement('canvas')};
+        if(Object.keys(reuse).length>24)Object.keys(reuse).forEach(function(id){if(start-(reuse[id].seen||0)>5000)delete reuse[id];});}   // 오래 안 보인 배의 그림은 버린다
+      if(k.cv.width!==pixels){k.cv.width=pixels;k.cv.height=pixels;}
+      var kc=k.cv.getContext('2d');kc.clearRect(0,0,pixels,pixels);kc.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,0,0,pixels,pixels);
+      k.type=spec.type;k.pixels=pixels;k.at=k.seen=start;k.angle=angle;k.len=len;k.furl=spec.furl||0;k.flag=spec.flag||null;k.tint=spec.sailTint||null;
+      k.L=r.ship.s.L;k.W=r.ship.s.W;k.span=r.span;k.anchor=r.anchor;
+      ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(k.cv,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();
+    }else{ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();}
+    r.renders=(r.renders||0)+1;r.frames++;r.drawn++;r.stats={type:r.type,frames:r.frames,switches:r.switches,calls:r.renderer.info.render.calls,triangles:r.renderer.info.render.triangles,
       geometries:r.renderer.info.memory.geometries,textures:r.renderer.info.memory.textures,programs:r.renderer.info.programs.length,buffer:r.buffer,renderPixels:pixels,span:r.span,
       cpuMs:performance.now()-start,buildMs:r.buildMs,heading:angle,furl:spec.furl||0,sails:r.rig.sails.length,oars:r.rig.oars};return true;
   };
   var PI2=Math.PI*2;
   P.stats=function(){return rt?Object.assign({},rt.stats,{ready:!!rt.type,lost:rt.lost,failures:Object.assign({},failedTypes),builds:rt.builds,cachedTypes:Object.keys(rt.models),drawn:rt.drawn,geometries:rt.renderer.info.memory.geometries,textures:rt.renderer.info.memory.textures}):{ready:false,failure:failure,failures:Object.assign({},failedTypes)};};
-  P.dispose=function(){if(rt){Object.keys(rt.models).forEach(function(id){dropModel(rt,id);});release(rt.scene);if(rt.sun.shadow.map)rt.sun.shadow.map.dispose();if(rt.sun.shadow.mapPass)rt.sun.shadow.mapPass.dispose();rt.renderer.dispose();rt.renderer.forceContextLoss();rt=null;}failure=null;failedTypes={};};
+  P.dispose=function(){reuse={};if(rt){Object.keys(rt.models).forEach(function(id){dropModel(rt,id);});release(rt.scene);if(rt.sun.shadow.map)rt.sun.shadow.map.dispose();if(rt.sun.shadow.mapPass)rt.sun.shadow.mapPass.dispose();rt.renderer.dispose();rt.renderer.forceContextLoss();rt=null;}failure=null;failedTypes={};};
   window.addEventListener('pagehide',P.dispose);
   // 초기 갤리온 시제품의 공개 이름은 범위를 유지한 채 호환한다.
   G.Galleon3D={draw:function(ctx,x,y,a,len,spec,t){return spec&&spec.type==='galleon'?P.draw(ctx,x,y,a,len,spec,t):false;},stats:P.stats,dispose:P.dispose};

@@ -153,6 +153,21 @@
     var refV = F.ref || 1.1;
     ctx.save();
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // 같은 빛깔·굵기의 선은 한 번에 긋는다 (항해 버벅임 2026-11-01): 마디마다 stroke()를 부르면 배 4척에 한 프레임 수백~천 번이라
+    //   그래픽 장치가 밀려 초당 30장 안팎으로 떨어졌다. 빛깔과 굵기를 몇 단계로 맞춰 묶고, 층(layer) 차례대로 그린다.
+    var BK = [], BI = {};
+    function bk(style, w, layer, fill) {
+      var key = layer + (fill ? 'f' : 's') + style + '|' + w, b = BI[key];
+      if (!b) { b = BI[key] = { s: style, w: w, f: fill, l: layer, i: BK.length, p: new Path2D() }; BK.push(b); }
+      return b.p;
+    }
+    function flush() {
+      BK.sort(function (a, b) { return a.l - b.l || a.i - b.i; });
+      for (var bi = 0; bi < BK.length; bi++) { var b = BK[bi]; if (b.f) { ctx.fillStyle = b.s; ctx.fill(b.p); } else { ctx.strokeStyle = b.s; ctx.lineWidth = b.w; ctx.stroke(b.p); } }
+      BK = []; BI = {};
+    }
+    function aq(a) { var st = a < 0.03 ? 200 : a < 0.12 ? 100 : 40; return (Math.round(a * st) / st).toFixed(3); }   // 옅을수록 잘게, 짙을수록 굵게 나눈다
+    function qw(w) { return w < 2 ? Math.max(0.25, Math.round(w * 4) / 4) : Math.round(w * (w < 6 ? 2 : 1)) / (w < 6 ? 2 : 1); }
     if (n > 1) {
       var pts = new Array(n);
       for (var i = 0; i < n; i++) {
@@ -174,17 +189,14 @@
           for (var j = c0 + 1; j <= c1; j++) if (Math.abs(pts[j].c[0] - pts[j - 1].c[0]) > 200) wrapJump = true;
           if (wrapJump) continue;
           for (var pass = 0; pass < 2; pass++) {
-            ctx.strokeStyle = pass ? 'rgba(206,237,239,' + (al * 0.78).toFixed(3) + ')' : 'rgba(32,107,128,' + (al * 0.16).toFixed(3) + ')';
-            ctx.lineWidth = (pass ? 0.9 + qa.s * 0.7 : 2.2) * lk;
-            ctx.beginPath();
+            var pth = bk(pass ? 'rgba(206,237,239,' + aq(al * 0.78) + ')' : 'rgba(32,107,128,' + aq(al * 0.16) + ')', qw((pass ? 0.9 + qa.s * 0.7 : 2.2) * lk), pass);
             var e0 = side < 0 ? pts[c0].l : pts[c0].r, sh = pass ? 0 : side * 1.3;
-            ctx.moveTo(e0[0] + sh, e0[1]);
+            pth.moveTo(e0[0] + sh, e0[1]);
             for (var j2 = c0 + 1; j2 < c1; j2++) {
               var ea = side < 0 ? pts[j2].l : pts[j2].r, eb = side < 0 ? pts[j2 + 1].l : pts[j2 + 1].r;
-              ctx.quadraticCurveTo(ea[0] + sh, ea[1], (ea[0] + eb[0]) / 2 + sh, (ea[1] + eb[1]) / 2);
+              pth.quadraticCurveTo(ea[0] + sh, ea[1], (ea[0] + eb[0]) / 2 + sh, (ea[1] + eb[1]) / 2);
             }
-            var eL = side < 0 ? pts[c1].l : pts[c1].r; ctx.lineTo(eL[0] + sh, eL[1]);
-            ctx.stroke();
+            var eL = side < 0 ? pts[c1].l : pts[c1].r; pth.lineTo(eL[0] + sh, eL[1]);
           }
         }
       }
@@ -199,10 +211,11 @@
           var E = sd4 < 0 ? Pq.l : Pq.r, ix = Pq.c[0] - E[0], iy = Pq.c[1] - E[1], il = Math.hypot(ix, iy) || 1;
           var len4 = Math.min((3 + qq.seed * 3) * lk, il * 0.25);
           ix /= il; iy /= il;
-          ctx.strokeStyle = 'rgba(232,244,250,' + (0.16 * fq).toFixed(3) + ')'; ctx.lineWidth = lk * .7;
-          ctx.beginPath(); ctx.moveTo(E[0], E[1]); ctx.quadraticCurveTo(E[0]-dxv*len4*.4,E[1]-dyv*len4*.4,E[0] + (ix * 0.8 - dxv * 0.6) * len4, E[1] + (iy * 0.8 - dyv * 0.6) * len4); ctx.stroke();
+          var pf = bk('rgba(232,244,250,' + aq(0.16 * fq) + ')', qw(lk * .7), 2);
+          pf.moveTo(E[0], E[1]); pf.quadraticCurveTo(E[0]-dxv*len4*.4,E[1]-dyv*len4*.4,E[0] + (ix * 0.8 - dxv * 0.6) * len4, E[1] + (iy * 0.8 - dyv * 0.6) * len4);
         }
       }
+      flush();
       // 2) 가운데 거품 물길: 겹친 원 대신 가늘고 끊어진 두 겹의 선으로 이어진다.
       //    선미 가까이는 청백색 중심이 또렷하고, 멀어질수록 청록빛 가장자리와 작은 거품만 남는다.
       for (var i3 = 1; i3 < n; i3++) {
@@ -214,10 +227,8 @@
         var wpx = halfW * zoom * (Wk.foamWidth + Wk.foamGrow * ag1 * kz) * (0.6 + 0.5 * q1.s) * (1 + q1.slip * 0.45) * profile.foam;
         var strong = Math.min(1, q1.s * 1.4 + 0.1);
         var pulse = 0.82 + 0.18 * ((q1.seed * 7.13) % 1), baseA = Wk.alpha * fa * strong * pulse;
-        ctx.strokeStyle = 'rgba(92,176,192,' + (baseA * 0.18).toFixed(3) + ')';
-        ctx.lineWidth = Math.max(0.9, wpx * 0.76); ctx.beginPath(); ctx.moveTo(P0.c[0], P0.c[1]); ctx.lineTo(P1.c[0], P1.c[1]); ctx.stroke();
-        ctx.strokeStyle = 'rgba(226,243,244,' + (baseA * 0.44).toFixed(3) + ')';
-        ctx.lineWidth = Math.max(0.7, wpx * (0.20 + 0.08 * strong)); ctx.beginPath(); ctx.moveTo(P0.c[0], P0.c[1]); ctx.lineTo(P1.c[0], P1.c[1]); ctx.stroke();
+        var pw = bk('rgba(92,176,192,' + aq(baseA * 0.18) + ')', qw(Math.max(0.9, wpx * 0.76)), 0); pw.moveTo(P0.c[0], P0.c[1]); pw.lineTo(P1.c[0], P1.c[1]);
+        var pc = bk('rgba(226,243,244,' + aq(baseA * 0.44) + ')', qw(Math.max(0.7, wpx * (0.20 + 0.08 * strong))), 1); pc.moveTo(P0.c[0], P0.c[1]); pc.lineTo(P1.c[0], P1.c[1]);
 
         // 중심선 가장자리에서 떨어져 나오는 작은 거품. 나이가 들수록 수가 줄고 폭은 조금 퍼진다.
         var nb = Math.floor((Wk.bubbles == null ? 0.7 : Wk.bubbles) * (q1.seed * 2.2 * strong + (ag1 < 0.18 ? 1.2 : 0.15)));
@@ -227,17 +238,18 @@
           var ofs = (ss - 0.5) * wpx * 1.5;
           var bx = P1.c[0] + nx * ofs, by = P1.c[1] + ny * ofs;
           var rad = Math.max(0.55, (0.45 + ss2 * 0.75) * lk * (1 + ag1 * 0.55 * kz) * Math.min(1.2, 0.45 + q1.s));
-          ctx.fillStyle = 'rgba(235,247,247,' + (baseA * 0.44 * (0.35 + 0.65 * ss2)).toFixed(3) + ')';
-          ctx.beginPath(); ctx.arc(bx, by, rad, 0, 6.2832); ctx.fill();
+          var pb = bk('rgba(235,247,247,' + aq(baseA * 0.44 * (0.35 + 0.65 * ss2)) + ')', 0, 3, true);
+          pb.moveTo(bx + rad, by); pb.arc(bx, by, rad, 0, 6.2832);
         }
         // 선회 때 바깥쪽의 두꺼운 포말
         var tk = Math.min(1, Math.max(q1.slip, q1.turn));
         if (tk > 0.12) {
           var sd = q1.side, ex = P1.c[0] + nx * sd * wpx * 0.9, ey = P1.c[1] + ny * sd * wpx * 0.9;
-          ctx.strokeStyle = 'rgba(226,244,245,' + (0.28 * tk * fa).toFixed(3) + ')'; ctx.lineWidth = Math.max(0.8, wpx * (0.18 + 0.25 * tk));
-          ctx.beginPath(); ctx.moveTo(P1.c[0], P1.c[1]); ctx.lineTo(ex, ey); ctx.stroke();
+          var pt = bk('rgba(226,244,245,' + aq(0.28 * tk * fa) + ')', qw(Math.max(0.8, wpx * (0.18 + 0.25 * tk))), 2);
+          pt.moveTo(P1.c[0], P1.c[1]); pt.lineTo(ex, ey);
         }
       }
+      flush();
     }
     // 3) 입자 (선수 물보라·선측 물살·선미 거품·선회 물보라)
     var Pp = F.parts;
