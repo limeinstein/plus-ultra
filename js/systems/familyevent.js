@@ -203,6 +203,13 @@
     if (cover) root.classList.add('scenepic-on');
     requestAnimationFrame(function () { box.classList.add('on'); });
     var hd = { box: box, cover: cover, stopped: false, pending: !ev.canvas };
+    // 건물 창(도서관 서가·교역소·왕궁 메뉴 등)이 열린 채 사건이 시작되면 장면 그림(#ui 안, 창보다 아래 층)이 그 창에 가려 보이지 않았다
+    //   (셰헤라자드: 서가에서 다섯 번째 책을 덮는 순간 — 2026-11-02 사용자 피드백). 그림을 띄우는 동안 이미 열린 창은 잠깐 감추고, 그림을 걷을 때 되돌린다.
+    //   대화창은 창(.win)이 아니라 그대로 보이고, 장면 도중에 새로 뜨는 창(부하로 맞을지 묻기 등)도 감추지 않는다.
+    hd.under = [].slice.call(document.querySelectorAll('.modal-back')).filter(function (m) {
+      return m.querySelector(':scope > .win') && m.style.visibility !== 'hidden';
+    });
+    hd.under.forEach(function (m) { m.style.visibility = 'hidden'; });
     // 처음 보는 장면도 공용 로더의 재시도·미리 풀기를 거친다. 대화는 준비가 끝난 뒤 시작한다.
     hd.ready = ev.canvas ? Promise.resolve(ev.canvas) : I.wait(I.load(ev.img).then(function (loaded) {
       if (!loaded || hd.stopped) return loaded;
@@ -216,6 +223,8 @@
     hd.stop = function () {
       if (hd.stopping) return hd.stopping;
       hd.stopped = true;
+      (hd.under || []).forEach(function (m) { if (m.isConnected) m.style.visibility = ''; });   // 감춰 둔 창을 되돌린다
+      hd.under = null;
       if (curPic === hd) { curPic = null; root.classList.remove('homeart-on'); root.classList.remove('scenepic-on'); }
       box.classList.remove('on');
       hd.stopping = new Promise(function (res) { setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); res(); }, 260); });

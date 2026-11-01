@@ -29,7 +29,7 @@
     // 2026-10-16 화실·음악실·참모실·조각실 (art는 파일 누락 때만 쓰는 안전용 대체 그림)
     { id: 'studio', main: ['art'], sub: [], name: '화실', icon: 'palette', skills: ['art'], cost: 1300, days: 2, art: 'chart', desc: '이젤과 물감을 둔 밝은 방. 그림에 밝은 사람이 바다를 그린다.', fx: '미술품을 그려 짐칸에 싣는다 · 이름난 화가는 명작을 남긴다(사교 명성)' },
     { id: 'sculpt', main: ['craft'], sub: [], name: '조각실', icon: 'bust', skills: ['craft'], cost: 1500, days: 3, art: 'repair', desc: '돌과 나무, 정과 끌을 둔 방. 세공에 밝은 사람이 깎고 빚는다.', fx: '조각품을 깎아 짐칸에 싣는다 · 이름난 조각가는 명작을 남긴다(사교 명성)' },
-    { id: 'musicroom', main: ['music'], sub: [], name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '류트와 북을 둔 방. 음악에 밝은 사람이 날마다 가락을 들려준다.', fx: '날마다 쌓이는 피로가 준다' },
+    { id: 'musicroom', main: ['music'], sub: [], name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '음악에 밝은 사람이 날마다 가락을 들려준다. 담당자가 악기를 소지하면 효과가 1.5배, 브루노의 바이올린·인어공주의 나각은 3배가 된다. 여러 악기는 중첩하지 않는다.', fx: '날마다 쌓이는 피로가 준다' },
     { id: 'staff', main: ['ops'], sub: ['hist', 'survey'], name: '참모실', icon: 'strategy', skills: ['ops', 'hist', 'survey'], cost: 1400, days: 2, art: 'captain', desc: '지도와 병법서를 펼친 작전 회의실. 운용·역사·측량에 밝은 참모가 앉는다.', fx: '육상전의 계략(기습·함정·저격·작렬탄)이 잘 통하고 더 세진다' },
     // 2026-10-21 창고: 사람을 두지 않는 방(noStaff). 기함 짐칸이 는다 — art는 파일 누락 때만 쓰는 안전용 대체 그림
     { id: 'store', name: '창고', icon: 'chest', noStaff: true, cost: 1200, days: 2, art: 'repair', desc: '칸막이를 걷어 내고 선반과 고정 끈을 단 짐칸. 사람이 머물지 않는다.', fx: '기함 짐칸이 배 적재량의 5%씩 는다 (4칸까지) · 무게 한도는 그대로라 가벼운 짐에 좋다' },

@@ -194,9 +194,19 @@
     if (!rs.main.length && !rs.sub.length) return '';
     return rs.main.map(function (k) { return '★' + nm(k); }).concat(rs.sub.map(function (k) { return '☆' + nm(k); })).join(' · ') + (rs.sub.length ? ' <small class="muted">(☆는 절반만 친다)</small>' : '');
   };
-  function roomPower(c, m) {
+  /** 음악실에서 이 동료가 쓰는 악기와 배율. 여러 개·여러 종류라도 중첩하지 않는다. */
+  CB.musicInstrument = function (m) {
+    var k = B().musicInstrument || {}, best = { mult: 1, item: null }, special = (k.special || {})[m && m.id];
+    R().mateItems(m).forEach(function (it) {
+      var d = G.ITEM[it.id]; if (!d || d.kind !== 'instrument') return;
+      var mult = special && special.item === it.id ? special.mult : k.mult;
+      if (mult > best.mult) best = { mult: mult, item: it.id };
+    });
+    return best;
+  };
+  function roomPower(c, m, plain) {
     if (!m || !G.MATE[m.id] || c.id === 'hold') return 0;   // 빈 선실은 거주용이며 직무 효과는 없다
-    return (1 + CB.roomLevel(c, m)) * CB.eff(m);   // 주 특기는 그대로, 보조 특기는 절반 (예전: 방의 특기 가운데 가장 높은 것 — 갑판의 검술과 운용술이 같게 쳐졌다)
+    return (1 + CB.roomLevel(c, m)) * CB.eff(m) * (!plain && c.id === 'musicroom' ? CB.musicInstrument(m).mult : 1);
   }
   /** 방 하나의 힘: 비었거나 거주용 빈 선실이면 0, 직무 선실에 사람이 있으면 (1 + 특기 단계) × 충성 효율 */
   CB.powerAt = function (i) { var rooms = CB.rooms(), c = G.CABIN[rooms[i]]; return c ? roomPower(c, CB.occupant(i)) : 0; };
@@ -204,11 +214,11 @@
   CB.power = function (type) {
     var s = S(); if (!s || !s.fleet || !s.fleet.ships.length) return 0;
     var c = G.CABIN[type]; if (!c) return 0;
-    var sum = 0;
+    var sum = 0, weighted = 0;
     if (c.fixed && c.role) sum = roomPower(c, CB.roleMate(c.role));
-    else { var rooms = CB.rooms(); for (var i = 0; i < rooms.length; i++) if (rooms[i] === type) sum += roomPower(c, CB.occupant(i)); }
+    else { var rooms = CB.rooms(); for (var i = 0; i < rooms.length; i++) if (rooms[i] === type) { var m = CB.occupant(i); sum += roomPower(c, m, true); if (type === 'musicroom') weighted += roomPower(c, m); } }
     var caps = B().caps || {};
-    return Math.min(caps[type] || B().cap || 8, sum);   // 방 종류마다 다른 상한 (조범실 caps.rig 64 — 16칸을 3단계 항해사로 채우면 속력 2배)
+    return Math.min(caps[type] || B().cap || 8, sum) * (type === 'musicroom' && sum ? weighted / sum : 1);
   };
   /** 효과 값: G.BALANCE.cabins.fx[key] × 그 방의 힘 */
   CB.fx = function (type, key) { var v = ((B().fx || {})[key]) || 0; return v ? v * CB.power(type) : 0; };

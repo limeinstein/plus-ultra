@@ -29,10 +29,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const find = (f, box) => { for (let x = box[0]; x <= box[1]; x += 0.1) for (let y = box[2]; y <= box[3]; y += 0.1) if (!G.Geo.isSea(x, y, 1) && f(x, y)) return [x, y]; return null; };
       const FR = find((x, y) => G.Tale.frenchForest(x, y), [-1, 6, 43, 50]), DE = find((x, y) => G.Tale.germanForest(x, y), [6, 15, 47, 55]);
       out.FR = FR;
-      const said = [], asks = []; let answers = [];
+      const said = [], asks = [], pics = []; let answers = [];
       UI.say = async (t, w) => { said.push(((w && w.name) || '') + ': ' + t); }; UI.toast = (t) => { said.push('TOAST ' + t); };
       UI.ask = async (t, opts) => { asks.push(t + ' || ' + opts.map(o => o.label).join('|')); const a = answers.shift(); return a === undefined ? opts[0].value : a; };
-      if (G.FamEv) G.FamEv.showPic = () => null;
+      if (G.FamEv) G.FamEv.showPic = (ev) => { pics.push(ev.img); return null; };
       let duelRes = 'win', duelArgs = null; G.Games.duel = async (en, o) => { duelArgs = [en.name, o && o.place]; return duelRes; };
       s.loc.mode = 'land';
       const rooms = CB.rooms(), slot = 1;   // 처음 배(기함)는 갑판과 짐칸뿐 — 짐칸 하나를 고친다
@@ -61,7 +61,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.row = row && { role: row.role, room: row.room, roomType: row.roomType };
       out.said = said.filter(x => /^오를레앙|^잔/.test(x)).map(x => x.slice(0, 70));
       out.tsun = said.some(x => /내가 이길 수 있었어/.test(x));
-      out.duel = duelArgs; out.asks = asks;
+      out.duel = duelArgs; out.asks = asks; out.pics = pics;
       out.after = J.ready();
       // 7) 실제 야영 메뉴: 약초를 캔다 → 찾으면 이어진다 (새 판에서)
       return out;
@@ -75,6 +75,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.pass === false && r.cool === 30 && r.again === false, '못 본 척하면 30일 뒤에 다시');
     ok(r.lose === false && r.loseSaid >= 1, '일기토에 지면 감옥으로 끌려간다 — 다시 기회');
     ok(r.win === true && r.duel[0] === '마녀 사냥꾼 고셰' && r.duel[1] === 'land' && r.tsun, '화형대 앞 일기토(마녀 사냥꾼 고셰)에 이기면 「손만 묶여 있지 않았어도 내가 이길 수 있었어」');
+    ok(r.pics.includes('legend-events/joan_of_arc_stake') && r.pics.includes('legend-events/joan_of_arc_accused'), '화형대와 광장 심문 원화를 차례로 표시');
     ok(r.row && r.row.roomType === 'chapel', '합류해 비어 있던 예배실에 든다 (' + JSON.stringify(r.row) + ')');
     ok(r.after === false, '한 번 합류하면 다시 나오지 않는다');
     // 실제 야영 메뉴에서

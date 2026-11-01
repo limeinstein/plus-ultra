@@ -51,7 +51,7 @@
       var r = { count: (old ? old.count : 0) + 1, day: s.day, city: c.id, available: true,
         wage: Math.max((d.wage || 0) + K().rehireMin, wage + Math.max(K().rehireMin, Math.ceil(wage * K().rehireRate))) };
       r.kept = {};
-      ['sk', 'skg', 'skd', 'skw', 'lgx', 'aff', 'ev', 'vtale', 'taleHeard', 'hurt'].forEach(function (k) { if (m[k] != null) r.kept[k] = U.clone(m[k]); });
+      ['sk', 'skg', 'skd', 'skw', 'lgx', 'aff', 'ev', 'vtale', 'taleHeard', 'hurt', 'items'].forEach(function (k) { if (m[k] != null) r.kept[k] = U.clone(m[k]); });
       (s.mateDismiss || (s.mateDismiss = {}))[m.id] = r;
       if (s.oldGuard && s.oldGuard.ret) s.oldGuard.ret = s.oldGuard.ret.filter(function (x) { return x.id !== m.id || x.done; });
       delete s.flags['gone_' + m.id];

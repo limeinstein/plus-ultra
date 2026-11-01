@@ -357,6 +357,8 @@
     // 자동 배치 (js/systems/crewauto.js): 자리마다의 기본값 — 기함 방 flag · 다른 배 선장 cap · 조타수·갑판·파수꾼 post · 다른 배 선실 berth (+ 그 자리에 맞는 정도). capW = 선장에 맞는 정도의 특기 무게
     crewAuto: { flag: 1, cap: 1.5, post: 0.3, berth: 0.1, capW: { nav: 1, gun: 0.6, sword: 0.6, ship: 0.3 } },
     cabins: { growDays: [1095, 3285, 9855], galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
+      // 음악실 담당자가 소지한 악기 가운데 가장 높은 배율 하나. 방 기본 힘의 상한을 적용한 뒤 증폭한다.
+      musicInstrument: { mult: 1.5, special: { rosenthal: { item: 'violin', mult: 3 }, little_mermaid: { item: 'nagak', mult: 3 } } },
       slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, caps: { rig: 64 }, cols: 6, rigMax: 1.0, langDays: [90, 270, 730], farRate: 0.3,
       interpRate: 2, interpAsk: 1,   // 통역관(통역으로 임명해 통역실에 둔 사람, 2026-10-25): 말을 배우는 속도 ×interpRate · 일행이 아는 말을 물어 가며 하루 interpAsk씩 (가르쳐 준 사람의 단계까지)
       fx: { lookout: 0.12, chart: 0.15, galley: 0.05, mess: 0.04, messD: 0.03, helm: 0.03, chapel: 0.06, rec: 0.05, deck: 0.04, sick: 0.07, rig: 0.015625, repair: 0.1, pen: 0.12,
@@ -650,7 +652,7 @@
     // 부하와 이야기 (matetalk.js): 하루 한 번 이야기(충성 chatLoyal·호감 chatAff), 한잔(값 drinkCost × 도시 크기, 충성 drinkLoyal·호감 drinkAff).
     // 여성 부하는 호감이 wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다. 마녀의 점괘는 fortuneDays일에 한 번
     //   이성 부하에게 선물: 충성 + max(giftLoyalMin, 선물 값(♥) × giftLoyal) — 여자 제독 → 여자 부하는 +2
-    //   남자 부하에게 남자 선물·검·방어구: 제독이 남자여도 같은 셈으로 충성만 (호감은 오르지 않는다)
+    //   남자 선물은 충성만. 무기·방어구는 남녀 모두에게 보관시키고 기존 충성 보너스 유지, 도구·악기 등은 보관만 한다.
     mateTalk: { chatLoyal: 1, chatAff: 2, drinkCost: 8, drinkLoyal: 2, drinkAff: 3, wedAff: 90, fortuneDays: 30, giftLoyal: 0.6, giftLoyalMin: 3 }
   };
 

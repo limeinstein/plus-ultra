@@ -220,7 +220,7 @@
     }
     var rs = CB().roomSkills(c), best = CB().roomLevel(c, m), sum = 0;   // 방의 힘과 같은 셈 (주 특기 그대로 · 보조 특기 절반) — 동점이면 다른 특기를 조금 더 친다
     rs.main.concat(rs.sub).forEach(function (k) { sum += G.R.mateSkill(m, k); });
-    return best ? (best + sum * 0.05) * CB().eff(m) : 0;
+    return best ? (best + sum * 0.05) * CB().eff(m) * (c.id === 'musicroom' ? CB().musicInstrument(m).mult : 1) : 0;
   }
   /** 이 방에 맞는 순서로 늘어선 부하들. 같으면 자리 없는 사람 먼저, 다른 배 선장은 나중 */
   function recommend(c) {
@@ -232,7 +232,11 @@
   /** 추천 순위 (맞는 특기가 있는 사람 가운데 세 명까지) {부하 id: 1~3} */
   function recRanks(c) { var r = {}; recommend(c).filter(function (o) { return o.score > 0; }).slice(0, 3).forEach(function (o, k) { r[o.m.id] = k + 1; }); return r; }
   function recTag(rank) { return rank === 1 ? ' <span class="tag cb-rec">★ 추천</span>' : rank ? ' <span class="tag">추천 ' + rank + '</span>' : ''; }
-  function fitNote(m, c) { return c.id === 'hold' ? '거주용' : c.lang ? langNote(m) : skillNote(m, c); }
+  function fitNote(m, c) {
+    var note = c.id === 'hold' ? '거주용' : c.lang ? langNote(m) : skillNote(m, c);
+    var boost = c.id === 'musicroom' && CB().musicInstrument(m);
+    return note + (boost && boost.item ? ' · ' + U.esc(G.ITEM[boost.item].name) + ' ' + boost.mult + '배' : '');
+  }
   /** 방을 눌렀을 때 보여 줄 추천 한 줄 */
   function recLine(c) {
     if (c.id === 'hold') return '<br><span class="muted">보직이 없는 부하가 머무는 선실입니다.</span>';
@@ -288,7 +292,7 @@
     el.dataset.i = i;
     el.title = roomTitle(c);
     var h = '<div class="cb-h"><i class="cb-no">' + i + '</i>' + G.icon(c.icon) + '<b>' + c.name + '</b>' + powTag(o.pow) + '</div>';
-    if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + skillNote(m, c) + '</small>' + growShort(m) + '</span></div>';
+    if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + fitNote(m, c) + '</small>' + growShort(m) + '</span></div>';
     else h += '<div class="cb-none">' + (c.id === 'hold' ? (o.yard ? '부하 배치 · 선실 개조' : '비어 있음 · 부하 배치 가능') : c.noStaff ? (o.storeLine || '짐칸') : '비어 있음') + '</div>';
     el.innerHTML = h;
     var art = artImage('cabins/' + c.id, 'cb-card-art', '') || (c.art ? artImage('cabins/' + c.art, 'cb-card-art', '') : null);   // 전용 그림이 없는 새 방은 비슷한 방 그림을 빌린다

@@ -230,6 +230,24 @@
     return false;
   };
   R.itemName = function (it) { if (it.name) return it.name; var d = G.ITEM[it.id]; return d ? d.name : it.id; };
+  /** 동료의 소지품. 옛 저장에는 없으므로 읽을 때는 빈 목록으로 취급한다. */
+  R.mateItems = function (m) { return m && Array.isArray(m.items) ? m.items : []; };
+  R.affinityGift = function (it) { var d = it && G.ITEM[it.id]; return !!(d && (d.kind === 'gift' || d.kind === 'mgift') && d.gv > 0); };
+  /** 증거품·청혼 반지·가족 사진과 제독이 착용한 마지막 한 벌은 남긴다. */
+  R.canGiveMateItem = function (m, it) {
+    var s = R.S(), d = it && G.ITEM[it.id], md = m && G.MATE[m.id], eq = s && s.player.equip || {};
+    if (!s || !md || s.mates.indexOf(m) < 0 || !d || s.player.items.indexOf(it) < 0 || R.isProof(it) || it.kind === 'evidence' || it.kind === 'clue' || d.ring || it.id === 'photo') return false;
+    if (R.affinityGift(it) && (md.g === 'f' ? d.kind !== 'gift' : d.kind !== 'mgift')) return false;
+    return !((d.kind === 'weapon' || d.kind === 'armor') && eq[d.kind] === it.id && R.itemCount(it.id) <= 1);
+  };
+  /** 한 개만 넘긴다. 산 곳·이름·남은 사용 횟수 등 개별 상태를 그대로 보존한다. */
+  R.giveMateItem = function (m, it) {
+    if (!R.canGiveMateItem(m, it)) return null;
+    var one = U.clone(it), consumed = R.affinityGift(it); one.qty = 1;
+    if (!R.removeItemObject(it)) return null;
+    if (!consumed) { if (!Array.isArray(m.items)) m.items = []; m.items.push(one); R.mergeItemList(m.items); }
+    return { item: one, consumed: consumed };
+  };
   R.atk = function () { var S = R.S(); var w = S.player.equip.weapon && G.ITEM[S.player.equip.weapon]; return (w ? w.atk : 2); };
   R.def = function () { var S = R.S(); var a = S.player.equip.armor && G.ITEM[S.player.equip.armor]; return (a ? a.def : 0); };
 

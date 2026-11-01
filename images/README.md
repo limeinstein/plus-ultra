@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+나각은 `items/nagak.webp`의 256×256 투명 전용 원화를 쓴다. 소라 껍질·취구·휴대 끈을 표현했으며 시장·소지품·동료 소지품·도감에 연결한다. [화면·내장 image_gen 생성 지시문·검증](../docs/qa/companion-inventory-music-20261101.md).
+
 종 계열·소형 타악기 18종도 `items/<악기ID>.webp`의 256×256 투명 원화를 쓴다. 신규 16종과 기존 캐스터네츠·트라이앵글이며 전체 파일·원본·생성 지시문은 [제작 기록](../docs/art/bells-small-percussion-20261101.md)에 있다.
 
 하모니카·아쟁·꽹과리·징·싱잉볼·팬플루트·목탁은 `items/harmonica.webp`, `ajaeng.webp`, `kkwaenggwari.webp`, `jing.webp`, `singingbowl.webp`, `panflute.webp`, `moktak.webp`의 256×256 투명 전용 원화를 쓴다. 교역품처럼 금속·목재·현·채의 재질을 표현했다. [전후 비교·원본·생성 지시문](../docs/art/instrument-item-art-20261101.md).

@@ -175,6 +175,26 @@
         detail.querySelector('.mb-nav-list').appendChild(btn);
       });
       face(detail.querySelector('.mb-portrait'), m, 234, true);
+      var owned = U.el('section', 'mb-owned'), held = R.mateItems(m);
+      owned.setAttribute('aria-label', '동료 소지품');
+      owned.innerHTML = '<div class="mb-section-title">소지품 <small>' + held.reduce(function (n, it) { return n + R.itemQty(it); }, 0) + '개</small></div><div class="mb-owned-list"></div>';
+      var ownedList = owned.querySelector('.mb-owned-list');
+      if (!held.length) ownedList.innerHTML = '<span class="mb-empty">가지고 있는 물건이 없습니다.</span>';
+      held.forEach(function (it) {
+        var def = G.ITEM[it.id] || it, rl = G.RELIC && G.RELIC[it.id], note = G.ITEM_KIND[def.kind] || '물건';
+        if (def.kind === 'instrument' && G.Cabins) {
+          var boost = G.Cabins.musicInstrument({ id: m.id, items: [it] });
+          note += ' · 음악실 배치 시 효과 ' + boost.mult + '배';
+        }
+        var row = U.el('div', 'mb-owned-item', '<span class="mb-owned-pic"></span><span><b>' + U.esc(R.itemName(it)) + '</b> <span class="mb-owned-qty">×' + R.itemQty(it) + '</span><small>' + U.esc(note) + '</small></span>');
+        row.dataset.item = it.id; row.title = def.desc || '';
+        if (G.Img && G.Art.relicArt) row.querySelector('.mb-owned-pic').appendChild(G.Img.make(rl ? G.Img.chain.relic(rl) : G.Img.chain.item(def), 48, 48, function () { return G.Art.relicArt(rl || def, 48, 48, { transparent: true }); }, { fit: 'contain' }));
+        ownedList.appendChild(row);
+      });
+      var music = G.Cabins && G.Cabins.musicInstrument(m);
+      if (music && music.item) owned.insertAdjacentHTML('beforeend', '<p class="mb-owned-music">음악실 배치 시 ' + U.esc((G.ITEM[music.item] || {}).name || music.item) + ' 효과 <b>' + music.mult + '배</b> · 여러 악기는 중첩하지 않습니다.</p>');
+      var storyHeading = detail.querySelector('.mb-story').previousElementSibling;
+      storyHeading.parentNode.insertBefore(owned, storyHeading);
       detail.querySelector('.mb-story').innerHTML = '<p class="mb-appearance">' + U.esc(d.desc || '') + '</p>' + MB.story(m).map(function (t) { return '<p>' + U.esc(t) + '</p>'; }).join('') + (G.Romance && G.Romance.tag(m.id) ? '<p class="mb-relationship">인연 · ' + U.esc(G.Romance.tag(m.id)) + '</p>' : '');
       var notes = [];
       if (G.Cabins && G.Cabins.eff(m) < 1) notes.push('일을 건성으로 · 효율 ' + Math.round(G.Cabins.eff(m) * 100) + '%');
@@ -186,10 +206,15 @@
       var i = L.indexOf(m);
       button('‹ 이전', function () { choose(L[(i + L.length - 1) % L.length]); });
       button('다음 ›', function () { choose(L[(i + 1) % L.length]); });
+      if (G.MateTalk) button('물건을 준다', function () { return action(function () { return G.MateTalk.give(m); }); }, 'navy').dataset.action = 'give-item';
       if (opts.city && G.MateTalk) button('이야기한다', function () { return action(function () { return G.MateTalk.talk(opts.city, m); }); }, 'navy');
       var city = opts.city || (S().loc && S().loc.mode === 'city' && G.CITY_DATA[S().loc.city]);
       var fire = button('해고', function () { return action(function () { return G.MateDismiss.fire(m, city); }); }, 'mb-fire');
       fire.disabled = !city || working; fire.title = city ? '이 동료를 해고한다' : '항구에서 해고할 수 있습니다';
+      // 소지품이 많아도 전달·이전·다음 단추는 화면 안에 남긴다.
+      var record = detail.querySelector('.mb-record'), recordScroll = U.el('div', 'mb-record-scroll');
+      while (record.firstChild && record.firstChild !== actions) recordScroll.appendChild(record.firstChild);
+      record.insertBefore(recordScroll, actions);
       body.appendChild(detail); body.scrollTop = 0;
       detail.querySelector('.mb-nav-list').scrollTop = navScroll;
       detail.querySelector('.mb-nav-person.on').scrollIntoView({ block: 'nearest' });

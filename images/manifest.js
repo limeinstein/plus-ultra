@@ -5655,6 +5655,7 @@ G.IMAGE_FILES = {
   "items/mingrobe": "items/mingrobe.webp",
   "items/moktak": "items/moktak.webp",
   "items/muramasa": "items/muramasa.webp",
+  "items/nagak": "items/nagak.webp",
   "items/oyoroi": "items/oyoroi.webp",
   "items/paladin": "items/paladin.webp",
   "items/panflute": "items/panflute.webp",

@@ -49,7 +49,7 @@ const ROOT = path.resolve(__dirname, '..');
       const seq = ['gift', null]; const ask0 = G.UI.ask, ch0 = G.UI.choose, say0 = G.UI.say;
       let shown = null;
       G.UI.ask = async (t, opts) => { if (shown == null) shown = opts.map(o => o && o.label).filter(Boolean); const v = seq.length ? seq.shift() : null; return v === 'gift' && shown.indexOf('선물한다') < 0 ? null : v; };
-      G.UI.choose = async () => 0; G.UI.say = async () => {};
+      G.UI.choose = async (title, choices) => { const name = G.ITEM[itemId] && G.ITEM[itemId].name; const pick = name && choices.find(x => x.label.includes(name)); return pick ? pick.value : 0; }; G.UI.say = async () => {};
       const lo0 = mate.loyal; try { await G.MateTalk.talk(G.CITY_DATA[0], mate); } finally { G.UI.ask = ask0; G.UI.choose = ch0; G.UI.say = say0; }
       return { d: mate.loyal - lo0, shown };
     };
@@ -69,7 +69,7 @@ const ROOT = path.resolve(__dirname, '..');
     s.player.equip = { weapon: 'rapier', armor: 'plate' };
     const forMan = G.MateTalk.giftsFor(G.MATE[male.id]).map(x => x.id), forWoman = G.MateTalk.giftsFor(MM).map(x => x.id);
     ok(JSON.stringify(forMan) === JSON.stringify(['brandy', 'cards', 'rapier']), '남자 부하에게 줄 것: 술·카드·검(차고 있는 한 벌은 남김) — ' + forMan.join('·'));
-    ok(JSON.stringify(forWoman) === JSON.stringify(['pearlnk']), '여자 부하에게 줄 것: 장신구만(반지 빼고) — ' + forWoman.join('·'));
+    ok(JSON.stringify(forWoman) === JSON.stringify(['pearlnk', 'rapier']), '여자 부하도 남는 검을 소지할 수 있다(장신구는 소비, 반지와 착용한 한 벌은 남김) — ' + forWoman.join('·'));
     ok(['cards', 'dice', 'sack', 'arak', 'huangjiu', 'sake', 'brandy', 'tarocchi', 'shipmodel', 'chess', 'automaton'].every(id => G.ITEM[id] && G.ITEM[id].kind === 'mgift' && G.ITEM[id].reg.length), '남자 선물 11가지(술·카드·장난감)를 시장에서 판다');
     s.player.items = [{ id: 'brandy' }];
     const g3 = await gift(mm, 'nothing_extra');

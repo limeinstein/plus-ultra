@@ -1,6 +1,6 @@
 /* 부하와 이야기 — 술집·여관의 「부하와 이야기」 (G.MateTalk)
    · 데리고 다니는 부하 한 사람과 마주 앉는다: 요즘 이야기(하루 한 번 충성↑), 살아온 이야기(실존 인물은 인물 이야기, 철새는 제 이야기),
-     한잔 사기(하루 한 번), 이성 부하에게는 선물(충성이 선물 값만큼 오른다 — BALANCE.mateTalk.giftLoyal), 여성 부하에게는 청혼, 마녀에게는 점괘.
+     한잔 사기(하루 한 번), 물건 전달(호감용 선물은 소비·그 밖의 물건은 동료가 보관), 여성 부하에게는 청혼, 마녀에게는 점괘.
    · 여성 부하의 호감: s.mates[i].aff (0~100). 호감이 BALANCE.mateTalk.wedAff 이상이고 약속 반지가 있으면 청혼할 수 있다.
      결혼하면 부하에서 물러나 고향 자택에서 기다린다 (s.player.wife = 그 항해사 ID — family.js가 여급과 똑같이 다룬다). */
 (function (G) {
@@ -69,24 +69,43 @@
     return o;
   }
 
-  /* 선물 (「선물한다」): 받는 사람에 따라 고를 수 있는 것이 다르다
-     · 여자 부하 = 장신구(kind 'gift', 약속 반지는 청혼용이라 뺀다)
-     · 남자 부하 = 남자 선물(kind 'mgift': 술·카드·주사위·체스·장난감) + 검·방어구(제독이 차고 있는 것 한 벌은 남긴다)
-     보고하지 않은 발견의 증거품은 내놓지 않는다 */
+  /* 호감용 선물은 기존 남녀 분류대로 소비한다. 무기·도구·악기 등은 남녀 모두 소지품으로 받는다. */
   MT.giftValue = function (d) {
     if (d.kind === 'weapon' || d.kind === 'armor') return d.rare && !d.price ? 30 : Math.min(30, Math.max(4, Math.round((d.price || 0) / 250)));   // 검·방어구: 값 250닢마다 1 (4~30)
     return d.gv || 0;
   };
   MT.giftsFor = function (md) {
-    var s = S(), eq = s.player.equip || {}, keep = {};
+    var s = S(), eq = s.player.equip || {}, keep = {}, m = s.mates.filter(function (x) { return x.id === md.id; })[0];
     if (eq.weapon) keep[eq.weapon] = 1; if (eq.armor) keep[eq.armor] = 1;
     return s.player.items.filter(function (it) {
-      var d = G.ITEM[it.id]; if (!d || R.isProof(it)) return false;
-      if (md.g === 'f') return d.kind === 'gift' && !d.ring;
-      if (d.kind === 'mgift') return true;
-      if (d.kind === 'weapon' || d.kind === 'armor') { if (keep[it.id]) { keep[it.id] = 0; return false; } return true; }
-      return false;
+      if (keep[it.id]) { keep[it.id] = 0; if (R.itemQty(it) <= 1) return false; }
+      return R.canGiveMateItem(m, it);
     });
+  };
+  /** 수첩과 술집이 함께 쓰는 물건 전달 창. 제독 소지품의 한 개만 넘긴다. */
+  MT.give = async function (m) {
+    var d = m && G.MATE[m.id]; if (!d || S().mates.indexOf(m) < 0) return null;
+    var gifts = MT.giftsFor(d), cf = cfg();
+    if (!gifts.length) { UI.toast('줄 수 있는 물건이 없습니다. 착용 중인 마지막 장비·증거품·청혼 반지는 남깁니다.', 'info', 4200); return null; }
+    var gi = await UI.choose(d.name + '에게 물건을 준다', gifts.map(function (it, i) {
+      var gd = G.ITEM[it.id], qty = R.itemQty(it);
+      return { label: U.esc(R.itemName(it)) + (qty > 1 ? ' <small>보유 ' + qty + '개</small>' : '') + ' <small class="muted">' + U.esc(G.ITEM_KIND[gd.kind] || gd.kind) + '</small>', right: R.affinityGift(it) ? '선물로 소모' : '동료가 보관', value: i, icon: R.affinityGift(it) ? 'heart' : 'chest', thumb: G.Img.itemSrc(it) };
+    }), { width: 620 });
+    if (gi == null) return null;
+    var it = gifts[gi], result = R.giveMateItem(m, it); if (!result) return null;
+    var gd = G.ITEM[it.id], gv = MT.giftValue(gd), f = d.g === 'f', opp = f !== (S().player.g === 'f'), lo0 = m.loyal == null ? 70 : m.loyal, af0 = m.aff || 0;
+    // 무기·갑옷은 예전처럼 충성만, 호감은 소모한 호감용 선물에서만 오른다.
+    if (gv > 0 && (result.consumed || gd.kind === 'weapon' || gd.kind === 'armor')) {
+      R.setLoyal(m, lo0 + (opp || !f ? Math.max(cf.giftLoyalMin || 3, Math.round(gv * (cf.giftLoyal == null ? 0.6 : cf.giftLoyal))) : 2));
+      if (result.consumed && f && !d.sib && !d.minor && !d.wed) m.aff = Math.min(100, af0 + gv + R.skill('craft'));
+    }
+    var note = result.consumed ? '선물로 사용했다' : '소지품으로 보관한다';
+    if (m.loyal > lo0) note += ' · 충성 +' + (m.loyal - lo0);
+    if ((m.aff || 0) > af0) note += ' · 호감 +' + (m.aff - af0);
+    UI.toast(d.name + ' — ' + R.itemName(result.item) + ' 1개 · ' + note, result.consumed ? 'heart' : 'chest', 4200);
+    G.State.log(d.name + '에게 ' + R.itemName(result.item) + ' 1개를 주었다 — ' + note + '.');
+    if (G.Game.refreshHud) G.Game.refreshHud();
+    return result;
   };
   var MEN_THANKS = {
     weapon: ['이건… 좋은 칼이군. 제독의 이름에 먹칠하지 않게 쓰겠소.', '손에 착 감기는구려. 다음 싸움에서는 이걸로 제독 곁을 지키겠소.'],
@@ -115,8 +134,7 @@
       opts.push({ label: '한잔 산다', value: 'drink' });
       if (d.witch) opts.push({ label: '점괘를 본다', value: 'fortune' });
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
-      var opp = (d.g === 'f') !== (s.player.g === 'f');      // 제독과 다른 성(이성)
-      opts.push({ label: '선물한다', value: 'gift' });   // 남자 부하에게도 늘 — 남자 선물은 애정 없이 충성만 오른다 (2026-10-20)
+      opts.push({ label: '선물한다', value: 'gift' });   // 수첩의 물건 전달과 같은 창
       if (f && !noLove) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
       var v = await ask(turn++ ? ((VO() && VO().again(d)) || U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?'])) : ((VO() && VO().greet(d, m)) || greet(d, m, f)), opts);
@@ -163,22 +181,11 @@
           UI.toast('행운이 조금 올랐다.', 'star');
         }
       } else if (v === 'gift') {
-        var gifts = MT.giftsFor(d);
-        if (!gifts.length) { UI.toast(f ? '선물할 장신구가 없습니다. 시장에서 살 수 있습니다.' : '선물할 것이 없습니다 — 술·카드·장난감은 시장에서 사고, 남는 검이나 방어구도 줄 수 있습니다.', 'info', 4200); continue; }
-        var gloy = function (gv) { return opp || !f ? Math.max(cf.giftLoyalMin || 3, Math.round(gv * (cf.giftLoyal == null ? 0.6 : cf.giftLoyal))) : 2; };   // 남자 부하(남자 선물·검·방어구)는 제독이 남자여도 선물 값만큼 충성
-        var gi = await UI.choose(f ? '선물 — 장신구' : '선물 — 술·카드·장난감·검·방어구', gifts.map(function (it, i) { var dd = G.ITEM[it.id], v0 = MT.giftValue(dd); return { label: dd.name + (f ? '' : ' <small class="muted">' + (G.ITEM_KIND[dd.kind] || '') + '</small>'), right: f ? '♥' + v0 : '충성 +' + gloy(v0), value: i, icon: f ? 'heart' : 'handshake', thumb: G.Img.itemSrc(it) }; }), { width: 520 });
-        if (gi == null) continue;
-        var it = gifts[gi], gd = G.ITEM[it.id], gv = MT.giftValue(gd);
-        if ((gd.kind === 'weapon' || gd.kind === 'armor') && s.player.equip && s.player.equip[gd.kind] === it.id && !s.player.items.some(function (x) { return x !== it && x.id === it.id; })) s.player.equip[gd.kind] = null;   // (차고 있던 마지막 한 벌이면 벗는다)
-        R.removeItemObject(it);
-        var af0 = m.aff || 0, lo0 = m.loyal || 70;
-        gainAff(gv + R.skill('craft'));
-        // 이성 부하: 선물 값만큼 충성도 오른다 (리본 +3 · 향수 +5 · 머리장식 +7 · 케이프 +8 · 진주 목걸이 +12), 여자 제독 → 여자 부하는 예전처럼 +2
-        // 남자 부하: 남자 선물(술·카드·장난감)·검·방어구 — 애정(호감)은 오르지 않고 충성만 선물 값만큼 (제독이 남자여도)
-        var gl = gloy(gv);
-        m.loyal = Math.min(100, lo0 + gl);
-        UI.toast(d.name + ' — 충성 +' + (m.loyal - lo0) + (f && !noLove ? ' · 호감 +' + ((m.aff || 0) - af0) : ''), 'heart', 3200);
-        await say(U.pick(f ? ['어머, 이걸 저에게요? 소중히 할게요.', '배 위에서 이런 선물을 받을 줄은 몰랐어요. 고마워요.'] : MEN_THANKS[gd.kind === 'weapon' || gd.kind === 'armor' ? gd.kind : gd.mg] || ['이걸 내게? …고맙소, 제독. 이 은혜는 잊지 않겠소.']), 'happy');
+        var result = await MT.give(m);
+        if (result) {
+          var gd = G.ITEM[result.item.id];
+          await say(U.pick(f ? ['고마워요. 잘 받을게요.', '저에게 주시는 거예요? 고마워요, 제독.'] : MEN_THANKS[gd.kind === 'weapon' || gd.kind === 'armor' ? gd.kind : gd.mg] || ['고맙소, 제독. 잘 간직하겠소.']), 'happy');
+        }
       } else if (v === 'w2home') {
         var wv = G.Wives.of(d.id), here = s.loc.mode === 'city' && s.loc.city === wv.city;
         var okH = await UI.confirm(d.name + U.jx(d.name, '을/를') + ' ' + G.CITY_DATA[wv.city].name + '의 집으로 보낼까요?<br><small class="muted">' + (here ? '여기서 배에서 내려 그 집에서 삽니다.' : '혼자 먼저 가서 그 집에서 기다립니다.') + ' 그 집에서 다시 배에 태울 수 있습니다.</small>', '보낸다', '그만둔다');

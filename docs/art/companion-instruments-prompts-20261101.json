@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-01",
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "size": 256,
+  "margin": 16,
+  "assets": [
+    {
+      "id": "nagak",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a196ad-fe4f-7ce0-99fb-b32c494a4ee1\\exec-2f4eb1c4-b384-4575-8d05-077f962168c1.png",
+      "prompt": "Use case: stylized-concept. Asset type: premium inventory icon for a historical maritime merchant RPG, matching finely hand-painted realistic antique trade commodity illustrations. Subject: one traditional Korean NAGAK conch-shell trumpet: a large natural spiraling ivory-and-warm-brown sea conch shell, the broad curved pinkish-orange aperture clearly visible at one end, a small aged brass blowing mouthpiece fitted to the narrow cut spiral tip, a simple braided dark-red carrying cord attached around the body. Beautiful layered spiral ridges, fine natural shell striations, slightly worn cream shell highlights and subtle brass reflections. The body must clearly be a REAL SEA CONCH SHELL wind instrument, not a metal horn, not a wooden trumpet, no hands. Three-quarter slightly elevated diagonal still life, entirely visible including mouthpiece, lip and carrying cord, centered with generous 12 percent transparent empty margin. Dimensional realistic material shading, soft warm upper-left lighting, crisp silhouette readable at 256 pixels. True transparent RGBA background, no floor or setting. Square composition. No letters, musical notes, logos, watermark, frame or border. Not flat vector, not cartoon.",
+      "output": "images/items/nagak.webp"
+    }
+  ]
+}

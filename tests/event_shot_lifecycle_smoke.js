@@ -81,6 +81,26 @@ const ROOT = path.resolve(__dirname, '..');
       await window.__slowShot.stop();
     });
 
+    // 도서관 서가처럼 이미 열린 건물 창은 사건 그림을 가리지 않도록 잠깐 감추고,
+    // 장면이 끝나면 같은 창을 원래 상태로 되돌린다.
+    const coveredWindow = await page.evaluate(async () => {
+      const back = document.createElement('div'); back.className = 'modal-back';
+      const win = document.createElement('section'); win.className = 'win'; win.textContent = '열린 서가';
+      back.appendChild(win); document.querySelector('#ui').appendChild(back);
+      const shot = G.FamEv.showPic({ img: 'legend-events/peach_garden_brothers', title: '창 가림 검사' });
+      await shot.ready;
+      const hiddenWhileOpen = getComputedStyle(back).visibility === 'hidden';
+      const fresh = document.createElement('div'); fresh.className = 'modal-back'; fresh.textContent = '사건 뒤 새 대화';
+      document.querySelector('#ui').appendChild(fresh);
+      const freshVisible = getComputedStyle(fresh).visibility !== 'hidden';
+      await shot.stop();
+      const restored = getComputedStyle(back).visibility !== 'hidden';
+      back.remove(); fresh.remove();
+      return { hiddenWhileOpen, freshVisible, restored };
+    });
+    assert.deepStrictEqual(coveredWindow, { hiddenWhileOpen: true, freshVisible: true, restored: true },
+      '기존 건물 창만 감추고 사건 중 새 창은 보이며, 사건 뒤 기존 창을 복원해야 한다');
+
     // 가족·연애·혼례 36장과 연애 사건 5장의 원본도 실제로 읽어 본다.
     const familyImages = await page.evaluate(async () => {
       const keys = G.Img.list('family-events/').concat(G.Img.list('romance-events/'));
@@ -118,6 +138,6 @@ const ROOT = path.resolve(__dirname, '..');
     assert(familyShown, '실제 가족·연애 사건에도 그림이 표시된다');
     await page.waitForFunction(() => window.__familyDone && !document.querySelector('.famscene'));
     assert.deepStrictEqual(errors, []);
-    console.log('통과 — 전설 영입→업적→원래 그림 복귀, 느린 로딩, 가족·연애·혼례 그림 ' + familyImages.length + '장과 실제 사건, 정리·콘솔 오류 0');
+    console.log('통과 — 전설 영입→업적→원래 그림 복귀, 느린 로딩, 기존 건물 창 가림·복원, 가족·연애·혼례 그림 ' + familyImages.length + '장과 실제 사건, 정리·콘솔 오류 0');
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });
