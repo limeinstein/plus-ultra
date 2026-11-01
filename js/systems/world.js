@@ -37,6 +37,13 @@
     if (G.Strand) out = out.concat(G.Strand.daily());     // 남겨 둔 함대: 남은 날 알림 · 기한이 지나면 폐기 (js/systems/strandfleet.js)
     if (G.IncaFall) out = out.concat(G.IncaFall.daily());
     if (G.Medici) out = out.concat(G.Medici.daily());     // 메디치 은행의 위기 — 기한·로렌초의 죽음 (js/systems/medici.js)
+    if (G.Macao) out = out.concat(G.Macao.daily());       // 마카오 — 상천도·관갑·마테오 리치 (js/systems/macao.js)
+    if (G.Odawara) out = out.concat(G.Odawara.daily());   // 오다와라 정벌 — 에도성·마사무네·천하 통일 (js/systems/odawara.js)
+    if (G.Sekigahara) out = out.concat(G.Sekigahara.daily());   // 세키가하라·에도 막부 소식 (js/systems/sekigahara.js)
+    if (G.Houjin) out = out.concat(G.Houjin.daily());   // 후금·대청 소식 (js/systems/houjin.js)
+    if (G.Horan) out = out.concat(G.Horan.daily());       // 정묘·병자호란 — 형제의 맹약·남한산성·삼전도 (js/systems/horan.js)
+    if (G.Taiwan) out = out.concat(G.Taiwan.daily());       // 타이완 — 질란디아·국성야·팽호·대만부 (js/systems/taiwan.js)
+    if (G.Nerchinsk) out = out.concat(G.Nerchinsk.daily());       // 네르친스크 조약 — 알바진·사절단·조약 (js/systems/nerchinsk.js)
     if (G.Imjin) out = out.concat(G.Imjin.daily());       // 임진왜란 — 부산진에서 노량까지 (js/systems/imjin.js)
     if (G.Sakoku) out = out.concat(G.Sakoku.daily());      // 일본의 대외 통제·남만 교역 단절·데지마
     if (G.Globe) out = out.concat(G.Globe.daily());       // 셰익스피어와 글로브의 불 — 템페스트·장례·첫 전집 (js/systems/globe.js)

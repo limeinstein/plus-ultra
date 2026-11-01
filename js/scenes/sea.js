@@ -666,6 +666,7 @@
     if (G.Img.prefetchCity) G.Img.prefetchCity(c, 'near');
     st.busy++;
     try {
+      if (G.Macao && G.Macao.beforePort) { try { await G.Macao.beforePort(c); } catch (e) { console.error(e); } }   // 마카오: 광주 앞바다의 레오넬 드 소자 (js/systems/macao.js)
       if (G.Imjin && G.Imjin.beforePort) { var ijGo = false; try { ijGo = await G.Imjin.beforePort(c); } catch (e) { console.error(e); } if (ijGo) { st.busy = Math.max(0, st.busy - 1); st.paused = true; refreshBar(); return true; } }   // 임진왜란: 부산포 앞바다의 왜선 (js/systems/imjin.js)
       var ok = await G.Scenes.city.handleEntry(c);
       if (!ok) { st.busy = Math.max(0, st.busy - 1); st.paused = true; coolPortPrompt(c); refreshBar(); return false; }

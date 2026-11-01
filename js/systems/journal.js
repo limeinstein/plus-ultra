@@ -206,6 +206,13 @@
     ['Potosi', 'daily', 'B'],                // 포토시 은광
     ['RomeSack', 'daily', 'B'],              // 1527년 로마 약탈
     ['GalPisa', 'daily', 'B'],               // 갈릴레오와 피사의 사탑
+    ['Macao', 'daily', 'B'],                 // 포르투갈의 마카오 거점
+    ['Odawara', 'daily', 'B'],               // 오다와라 정벌 · 천하 통일
+    ['Sekigahara', 'daily', 'B'],   // 세키가하라·에도 막부
+    ['Houjin', 'daily', 'B'],   // 후금·대청
+    ['Horan', 'daily', 'B'],                 // 정묘·병자호란
+    ['Taiwan', 'daily', 'B'],                   // 타이완
+    ['Nerchinsk', 'daily', 'B'],                // 네르친스크 조약
     ['Imjin', 'daily', 'B'],                 // 임진왜란
     ['Globe', 'daily', 'B'],                 // 셰익스피어와 글로브의 불
     ['Succession', 'year', function (m) { return m && m.icon === 'crown' ? 'B' : null; }],   // 군주·후원자의 대가 바뀜 (유품·기억은 일상)

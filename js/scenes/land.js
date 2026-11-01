@@ -468,6 +468,9 @@
       if (G.Mowgli) await G.Mowgli.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 정글북: 델리 근처 숲의 바나나 도둑과 모글리 (js/systems/junglebook.js)
       if (G.Newton) await G.Newton.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 뉴턴과 사과: 링컨셔 울즈소프의 과수원 (js/systems/newton.js)
       if (G.Imjin) await G.Imjin.onLand(l.lon, l.lat, { battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 임진왜란: 동래 성문 밖·탄금대·곽재우·행주산성 (js/systems/imjin.js)
+      if (G.Horan) await G.Horan.onLand(l.lon, l.lat, { battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 정묘·병자호란: 용골산성·남한산성·백마산성 (js/systems/horan.js)
+      if (G.Houjin) await G.Houjin.onLand(l.lon, l.lat, { battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 허투알라의 칸 (js/systems/houjin.js)
+      if (G.Sekigahara) await G.Sekigahara.onLand(l.lon, l.lat, { battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 세키가하라의 들판 (js/systems/sekigahara.js)
       if (G.Princess) await G.Princess.onLand({ battle: function (nm, n, o) { return landBattle(nm, n, false, o); }, stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });
       // 정찰대: 가까운 발견물을 알아채고 지도에 표식을 남긴다
       var sensed = G.Explore.sense('land', l.lon, l.lat, Math.max(st.scoutBoost || 1, 1 + G.Mounts.scout(MT(), l.party)));

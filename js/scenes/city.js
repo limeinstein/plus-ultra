@@ -167,6 +167,13 @@
       if (G.Sim && G.Sim.pending()) await G.Sim.check();         // 공양미 삼백 석 — 심청 (js/systems/simcheong.js)
       if (G.IncaFall && G.IncaFall.pending()) await G.IncaFall.check();   // 잉카 제국의 멸망 — 파나마·카하마르카·쿠스코 (js/systems/incafall.js)
       if (G.Aztec && G.Aztec.pending()) await G.Aztec.check();
+      if (G.Macao && G.Macao.pending()) await G.Macao.check();   // 포르투갈의 마카오 거점 — 광주·오문 (js/systems/macao.js)
+      if (G.Odawara && G.Odawara.pending()) await G.Odawara.check();   // 히데요시의 일본 통일 — 사카이·에도 (js/systems/odawara.js)
+      if (G.Sekigahara && G.Sekigahara.pending()) await G.Sekigahara.check();   // 세키가하라 전투·에도 막부 — 사카이·쿄토·에도 (js/systems/sekigahara.js)
+      if (G.Houjin && G.Houjin.pending()) await G.Houjin.check();   // 후금 건국·청 국호 — 국내성·길림·요동·북경·오문·심양 (js/systems/houjin.js)
+      if (G.Horan && G.Horan.pending()) await G.Horan.check();   // 정묘·병자호란 — 조선 도시·한양(강화도 바다) (js/systems/horan.js)
+      if (G.Taiwan && G.Taiwan.pending()) await G.Taiwan.check();   // 타이완 — 녹이문·질란디아·팽호 (하문·천주·나가사키·반탐) (js/systems/taiwan.js)
+      if (G.Nerchinsk && G.Nerchinsk.pending()) await G.Nerchinsk.check();   // 네르친스크 조약 — 북경·이르쿠츠크 (js/systems/nerchinsk.js)
       if (G.Imjin && G.Imjin.pending()) await G.Imjin.check();   // 임진왜란 — 동래·한양·한산도 (js/systems/imjin.js)
       if (G.Globe && G.Globe.pending()) await G.Globe.check();   // 셰익스피어와 글로브의 불 — 앤 해서웨이 (js/systems/globe.js)
       if (G.GalPisa && G.GalPisa.pending()) await G.GalPisa.check();   // 갈릴레오와 피사의 사탑 (js/systems/galpisa.js)
