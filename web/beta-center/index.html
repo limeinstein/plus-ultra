@@ -14,6 +14,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nanum+Myeongjo:wght@400;700;800&family=Song+Myung&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v={{ASSET_HASH}}">
+  <style>
+    .beta-notice { margin: 28px 0 0; padding: 18px 22px; border: 1px solid var(--gold); background: rgba(197, 154, 83, .1); }
+    .beta-notice h2 { margin: 0 0 6px; color: var(--gold-bright); font: 400 1.5rem "Song Myung", serif; }
+    .beta-notice p { margin: 0; color: var(--ink); font-size: .95rem; }
+    .beta-notice time { font-weight: 800; white-space: nowrap; }
+    .beta-notice .thanks { margin-top: 4px; color: var(--muted); font-size: .85rem; }
+  </style>
 </head>
 <body>
   <a class="skip" href="#feedback">피드백 게시판으로 건너뛰기</a>
@@ -35,6 +42,12 @@
   </header>
 
   <main>
+    <aside class="beta-notice" role="note" aria-labelledby="beta-notice-title">
+      <h2 id="beta-notice-title">1차 베타 테스트 종료 안내</h2>
+      <p>1차 베타 테스트는 <time datetime="2026-11-20">2026년 11월 20일</time>에 종료됩니다.</p>
+      <p class="thanks">테스트에 참여해 주셔서 감사합니다.</p>
+    </aside>
+
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="eyebrow"><span></span> 공개 베타 · VERSION {{VERSION}}</p>
