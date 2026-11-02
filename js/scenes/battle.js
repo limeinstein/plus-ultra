@@ -100,9 +100,79 @@
     });
     return best || [x, y];
   }
-  /** 진형째 옮긴다: 한쪽 함대가 해안에 걸리면 그 함대 전체를 가장 가까운 열린 바다로 밀어 진형을 지킨다. 안 되면 한 척씩. */
+  /** 두 함대 사이의 거리 (G.BALANCE.navalField): 호수의 큰 싸움·바다 괴물·달아나는 상선·그 밖 */
+  function startSeparation() {
+    var F = G.BALANCE.navalField, npc = st.npc || {};
+    return npc.lake ? F.lakeSeparation : npc.monster ? F.monsterSeparation : npc.kind === 'merchant' ? (F.merchantSeparation || F.separation) : F.separation;
+  }
+  /** 줄의 j번째 배가 설 옆자리(간격 단위): 가운데 → 오른쪽 → 왼쪽 → … (기함은 줄 가운데) */
+  function slotLat(j, m) {
+    var p = []; for (var i = 0; i < m; i++) p.push(i - (m - 1) / 2);
+    p.sort(function (x, y) { return Math.abs(x) - Math.abs(y) || y - x; });
+    return p[j];
+  }
+  /** 한 함대의 자리들: 가운데(cx,cy)에서 축 방향으로 간격의 반만큼 떨어져 축과 직각인 줄(가로대형)로 선다. 한 줄 perRow척, 넘치면 뒤에 엇갈린 둘째 줄 */
+  function startSlots(list, sep, a, cx, cy, side) {
+    var F = G.BALANCE.navalField, per = F.perRow || 6, n = list.length, ux = Math.cos(a), uy = Math.sin(a), sgn = side === 'me' ? -1 : 1;
+    var room = Math.max.apply(null, list.map(function (b) { return b.len; })) * 0.84 + 3 * (F.startJitter == null ? 14 : F.startJitter);   // 큰 배끼리도 흩뜨린 뒤에 겹치지 않게 (sepOK)
+    var gap = Math.max(F.spacing || 170, room), rowGap = Math.max(F.rowGap || 170, room);
+    return list.map(function (b, k) {
+      var row = Math.floor(k / per), inRow = Math.min(per, n - row * per);
+      var lat = slotLat(k - row * per, inRow) * gap + (row % 2 ? gap / 2 : 0), along = sgn * (sep / 2 + row * rowGap);
+      return [cx + ux * along - uy * lat + b.jit[0], cy + uy * along + ux * lat + b.jit[1]];
+    });
+  }
+  function slotsFit(list, pos, water, placed) {
+    var lim = ARENA - G.BALANCE.navalField.startMargin;
+    for (var i = 0; i < list.length; i++) {
+      var b = list[i], p = pos[i];
+      if (Math.hypot(p[0], p[1]) > lim || (water && !water.contains(p[0], p[1])) || startBlocked(p[0], p[1], b)) return false;
+      for (var k = 0; k < placed.length; k++) if (Math.hypot(placed[k][0] - p[0], placed[k][1] - p[1]) < Math.max(55, (placed[k][2] + b.len) * 0.42)) return false;
+      placed.push([p[0], p[1], b.len]);
+    }
+    return true;
+  }
+  /* 두 함대의 첫 자리 (2026-11-02 사용자 요청 「해전 시작 거리를 넓혀서 처음부터 백병전으로 안 들어가게, 균형 있게 적군·아군 배치」)
+     · 두 함대를 가운데에서 같은 거리(간격의 반)만큼 떨어진 곳에 마주 세운다. 예전에는 해안에 걸린 함대만 통째로 옮겨 상대 코앞에 붙기도 했다.
+     · 우리는 왼쪽(서쪽), 적은 오른쪽(동쪽) — 교전 보기 화면이 가로로 넓어 두 함대가 함께 보여도 배가 작아지지 않는다.
+       해안이 막으면 간격은 그대로 두고 좌우를 바꾸거나 축을 15°씩 돌리거나 가운데를 옮긴다. 그래도 안 되면 간격을 조금씩 줄인다(minSeparation까지).
+     · 조우 지점이 뭍에 둘린 작은 물(석호·좁은 만)이라 두 함대가 들어갈 수 없으면, 전장 안의 다른 넓은 물에서 — 두 함대 사이에 뭍이 없는 자리로 — 다시 찾는다.
+       끝내 자리가 없으면 예전 방식(legacySettle). */
   function settleStartingShips() {
-    var placed = [], water = startingWater();
+    var F = G.BALANCE.navalField, water = startingWater();
+    var me = st.ships.filter(function (b) { return b.side === 'me'; }), en = st.ships.filter(function (b) { return b.side === 'en'; });
+    if (!me.length || !en.length) { legacySettle(water); return; }
+    var jit = F.startJitter == null ? 14 : F.startJitter;
+    st.ships.forEach(function (b) { b.jit = [U.rf(-jit, jit), U.rf(-jit, jit)]; });
+    var full = startSeparation(), a0 = 0, turns = [0, Math.PI], ref ={ len: Math.max.apply(null, st.ships.map(function (b) { return b.len; })) };
+    for (var d = 1; d <= 6; d++) { var o = d * Math.PI / 12; turns.push(o, -o, Math.PI + o, Math.PI - o); }
+    function search(wat, rMax, rStep, nAng, clear) {
+      var found = null, tried = {};
+      (F.sepSteps || [1]).forEach(function (k) {
+        var sep = Math.round(Math.max(Math.min(full, F.minSeparation || full), full * k));
+        if (found || tried[sep]) return; tried[sep] = 1;
+        for (var ti = 0; ti < turns.length && !found; ti++) {
+          var a = a0 + turns[ti], ux = Math.cos(a) * sep / 2, uy = Math.sin(a) * sep / 2;
+          for (var r = 0; r <= rMax && !found; r += rStep) for (var ci = 0; ci < (r ? nAng : 1) && !found; ci++) {
+            var ca = ci / nAng * Math.PI * 2, cx = Math.cos(ca) * r, cy = Math.sin(ca) * r;
+            if (clear && !lineClear({ x: cx - ux, y: cy - uy, len: ref.len }, cx + ux, cy + uy)) continue;   // 두 함대 사이에 뭍이 없게
+            var pm = startSlots(me, sep, a, cx, cy, 'me'), pe = startSlots(en, sep, a, cx, cy, 'en'), placed = [];
+            if (slotsFit(me, pm, wat, placed) && slotsFit(en, pe, wat, placed)) found = { pm: pm, pe: pe, a: a, sep: sep };
+          }
+        }
+      });
+      return found;
+    }
+    var found = search(water, 1000, 125, 16, false) || (water ? search(null, 2400, 150, 24, true) : null);
+    st.ships.forEach(function (b) { delete b.jit; });
+    if (!found) { legacySettle(water); return; }
+    me.forEach(function (b, i) { b.x = found.pm[i][0]; b.y = found.pm[i][1]; b.heading = found.a; });
+    en.forEach(function (b, i) { b.x = found.pe[i][0]; b.y = found.pe[i][1]; b.heading = found.a + Math.PI; });
+    st.startSep = found.sep;
+  }
+  /** 예전 방식: 진형째 옮긴다 — 한쪽 함대가 해안에 걸리면 그 함대 전체를 가장 가까운 열린 바다로 밀어 진형을 지킨다. 안 되면 한 척씩. */
+  function legacySettle(water) {
+    var placed = [];
     ['me', 'en'].forEach(function (side) {
       var grp = st.ships.filter(function (b) { return b.side === side; }), best = null;
       function fits(tx, ty) {
@@ -264,7 +334,7 @@
   function makeShip(src, side, i, n) {
     var t = G.SHIP[src.type];
     var len = (58 + Math.min(1000, t.cap) / 14) * 1.5 * (t.len || 1);
-    var field = G.BALANCE.navalField, sep = st.npc.lake ? field.lakeSeparation : st.npc.monster ? field.monsterSeparation : field.separation;
+    var field = G.BALANCE.navalField, sep = startSeparation();   // 첫 자리는 settleStartingShips가 다시 고른다 (여기 자리는 그것이 실패할 때의 예전 방식용)
     var x = (side === 'me' ? -1 : 1) * sep / 2, y = (i - (n - 1) / 2) * field.spacing;
     var b = {
       side: side, src: src, name: src.name, type: src.type, x: x + U.rf(-30, 30), y: y + U.rf(-20, 20), heading: side === 'me' ? 0 : Math.PI,
@@ -320,6 +390,7 @@
       b.fx = G.SeaFX ? G.SeaFX.create({ spacing: BFX.wakeSpacing, kz: 1 }) : null;
     });
     st.fx = []; st.busy = 0;
+    if (st.simT == null) st.simT = st.t || 0;   // 해전 시간이 없던 옛 저장 (boardReady)
     delete S().battle;
   }
 
@@ -952,6 +1023,7 @@
       var left = Math.min(dt, 0.25) * battleSpeed();   // 해전 배속 ×1·×2·×3 (2026-10-18) — 한 걸음은 그대로 0.05초씩 잘라 셈한다
       while (left > 1e-4 && !st.busy && !st.over) {
         var sdt = Math.min(left, 0.05); left -= sdt;
+        st.simT = (st.simT || 0) + sdt;   // 멈춤·백병전·배속을 뺀 해전 시간 (boardReady)
         st.ships.forEach(function (b) { if (b.alive) think(b, sdt); });
         st.ships.forEach(function (b) { if (b.alive && !b.monster) moveShip(b, sdt); });
         st.ships.forEach(function (b) { if (b.alive && !b.monster) gunnery(b, sdt); });
@@ -1080,8 +1152,10 @@
     var hpF = 0.5 + 0.5 * b.hp / b.maxHp, crF = 0.4 + 0.6 * crewF;
     var sail = 34 * t.spd * (0.35 + th * 0.9) * hpF * crF;
     if (t.oar) sail = Math.max(sail, 34 * t.oar * 1.5 * hpF * crF);     // 노: 바람과 상관없이 움직인다
-    return sail;
+    return sail * battleSpeedK();
   }
+  /** 해전의 배 속력 배수 (G.BALANCE.navalControl.speed — 2026-11-02 「해전의 배의 속도감을 높여줘」, 양쪽 모두) */
+  function battleSpeedK() { return (G.BALANCE.navalControl && G.BALANCE.navalControl.speed) || 1; }
   function has(b, k) { return b.tr.indexOf(k) >= 0; }
   function targetable(b) { return G.SeaMonsters ? G.SeaMonsters.targetable(b) : b && b.alive; }
   function boardRange(b) { return has(b, 'grapple') ? 80 : 55; }
@@ -1111,8 +1185,14 @@
     if (kind === 'merchant' || (b.hp < b.maxHp * 0.25 && kind !== 'navy')) { b.moveTo = [b.x + (b.x - near.x) * 3, b.y + (b.y - near.y) * 3]; b.target = null; b.fleeing = true; return; }
     var awe = st.ships.some(function (o) { return o.side === 'me' && o.flag && o.alive && has(o, 'awe'); });
     var boardK = (awe ? 2.0 : 1.3) * (has(near, 'spikes') ? 99 : 1) / (has(b, 'grapple') ? 1.25 : 1);
-    if ((kind === 'pirate' || has(b, 'grapple')) && myCrew > theirCrew * boardK) { b.board = near; b.moveTo = [near.x, near.y]; b.target = near; return; }
+    if ((kind === 'pirate' || has(b, 'grapple')) && myCrew > theirCrew * boardK && boardReady()) { b.board = near; b.moveTo = [near.x, near.y]; b.target = near; return; }
     b.target = near; b.moveTo = null;
+  }
+  /** 해전 첫머리에는 적이 갈고리를 걸지 않고 포격전부터 한다 (2026-11-02 「처음부터 백병전으로 안 들어가게」):
+      시작하고 boardDelay초가 지나고, 첫 포성이 울린 뒤로도 boardAfterFire초가 지나야 (아무도 쏘지 않았으면 boardDelay+boardAfterFire초) */
+  function boardReady() {
+    var F = G.BALANCE.navalField || {}, d = F.boardDelay || 0, ff = st.firstFireT != null ? st.firstFireT : d;
+    return (st.simT || 0) >= Math.max(d, ff + (F.boardAfterFire || 0));
   }
   /** 이름난 해적의 전술 — true면 이번 생각은 끝
       swarm(아랍 해적): 부하 배는 갈고리를 걸고 뛰어든다 · 기함은 뒤에서 포를 쏘다가 부하가 다 없어지면 돌진
@@ -1130,7 +1210,7 @@
     if (tac === 'swarm') {
       if (!b.flag) {
         var tg = has(near, 'spikes') ? T : near;                            // 쇠못 지붕에는 못 뛰어든다 — 다른 배를 노린다
-        if (has(tg, 'spikes')) { b.target = tg; b.moveTo = null; return true; }
+        if (has(tg, 'spikes') || !boardReady()) { b.target = tg; b.moveTo = null; return true; }   // 첫머리에는 쏘면서 다가온다
         b.board = tg; b.target = tg; b.moveTo = [tg.x, tg.y]; return true;
       }
       if (mates.length) {
@@ -1141,6 +1221,7 @@
         else { b.target = T; b.moveTo = null; b.close = 1.0; }
         return true;
       }
+      if (!boardReady()) { b.target = T; b.moveTo = null; return true; }
       if (!st.charged) { st.charged = true; log('적 기함 ' + b.name + U.jx(b.name, '이/가') + ' 돛과 노를 다 써서 돌진해 온다!'); }
       if (has(T, 'spikes')) { b.target = T; b.moveTo = null; b.close = 0.5; return true; }
       b.board = T; b.target = T; b.moveTo = [T.x, T.y];
@@ -1177,7 +1258,9 @@
       // stand off at gun range and present the broadside
       var t = b.target, d = Math.hypot(t.x - b.x, t.y - b.y), rng = gunRange(b) * (b.close || 1);   // b.close: 함대 명령마다 붙는 거리 (일제 공격은 가까이, 포격전은 멀리)
       var ang = Math.atan2(t.y - b.y, t.x - b.x);
-      if (b.board === t || (b.boardIntent && b.side === 'me') || d > rng * 0.85) goal = [t.x, t.y];
+      // 달아나는 적(부서진 해적·상선)을 쫓을 때: 양현 포를 재는 동안은 곧장 쫓고, 장전이 끝나면 옆을 대어 쏜다 — 속력이 비슷하면 거리 끝에서 맴돌기만 하던 것 (2026-11-02)
+      var chase = t.fleeing && b.reload && Math.min(b.reload[0], b.reload[1]) > 0.4;
+      if (b.board === t || (b.boardIntent && b.side === 'me') || d > rng * 0.85 || chase) goal = [t.x, t.y];
       else if (has(b, 'ram') || (has(b, 'bow') && !has(b, 'dragon'))) goal = [t.x, t.y];      // 뱃머리를 적에게 겨눈다 (충파·뱃머리 포)
       else { var side = U.angDiff(ang, b.heading) > 0 ? 1 : -1; goal = [b.x + Math.cos(ang - side * Math.PI / 2) * 100, b.y + Math.sin(ang - side * Math.PI / 2) * 100]; }
     }
@@ -1187,9 +1270,14 @@
     else if (goal) {
       var want = Math.atan2(goal[1] - b.y, goal[0] - b.x);
       var dd = Math.hypot(goal[0] - b.x, goal[1] - b.y);
+      var slowR = ctl.slowRadius * battleSpeedK();   // 빨라진 만큼 일찍 줄인다
       if (b.moveTo && !b.boardIntent && !b.board && (!b.flag || b.tactic)) {
-        v *= Math.min(1, dd / ctl.slowRadius);
+        v *= Math.min(1, dd / slowR);
         if (b.face != null && dd < FO().slotR) { v = 0; want = b.face; }
+      } else if (b.moveTo && b.flag && own && !b.boardIntent && !b.board) {
+        // 바다를 눌러 보낸 기함: 그 자리에 다가가며 속력을 줄여 크게 지나치지 않는다 (2026-11-02 — 해전 속력을 올리며 함께)
+        var dm = Math.hypot(b.moveTo[0] - b.x, b.moveTo[1] - b.y);
+        if (dm < 20) { b.moveTo = null; v = 0; } else v *= Math.min(1, Math.max(0.35, dm / slowR));   // 0.35: 닿은 뒤 천천히 나아가는 속력과 같게
       } else if (b.moveTo && dd < 20) { b.moveTo = null; v = 0; }
       var diff = U.angDiff(b.heading, want);
       var turn = (own ? ctl.turn : 0.7) * b.turn * dt;
@@ -1313,6 +1401,7 @@
   }
   function fire(b, t, c, d, rng, gunSk, sAng, part) {
     if (!targetable(t)) return;
+    if (st.firstFireT == null) st.firstFireT = st.simT || 0;   // 첫 포성 (boardReady)
     var look = gunLook(c.id), K = cannonFX(), FL = K.flight, wd = windDrift();
     var shots = Math.max(1, Math.round(b.guns.n / 2 * (part || 1)));
     var acc = c.acc * (1 + gunSk * 0.1) * (1.15 - 0.5 * d / rng);
@@ -1329,9 +1418,11 @@
       var hit = U.chance(U.clamp(acc, 0.05, 0.95));
       var fwd = part >= 1 && sAng === b.heading ? b.len * 0.45 : 0;
       var ox = b.x + Math.cos(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd), oy = b.y + Math.sin(b.heading) * ((i - shots / 2) * (b.len / shots) * (fwd ? 0.1 : 0.8) + fwd);
-      var tx = t.x + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
+      var dur = 0.35 + d / 900 + i * 0.03;
+      var lx = t.vel ? t.vel[0] * dur : 0, ly = t.vel ? t.vel[1] * dur : 0;   // 움직이는 배는 포탄이 닿을 때의 자리를 겨눈다 (빨라진 배 뒤에 물기둥이 서지 않게)
+      var tx = t.x + lx + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50)), ty = t.y + ly + U.rf(-18, 18) + (hit ? 0 : U.rf(-50, 50));
       var mx = ox + Math.cos(sAng) * b.len * FL.muzzleOffset, my = oy + Math.sin(sAng) * b.len * FL.muzzleOffset;
-      var dur = 0.35 + d / 900 + i * 0.03, launch = Math.min(i * FL.stagger, dur * FL.maxDelay), smokeDelay = launch / battleSpeed();
+      var launch = Math.min(i * FL.stagger, dur * FL.maxDelay), smokeDelay = launch / battleSpeed();
       st.balls.push({ x: ox, y: oy, mx: mx, my: my, launch: launch, tx: tx, ty: ty, t: 0, dur: dur, hit: hit, gun: c.id, dmg: c.dmg * U.rf(0.6, 1.2) * (b.side === 'me' && R.hasItem('shells') ? 1.4 : 1) * (has(b, 'heavygun') ? 1.2 : 1) * (1 + cabinK(b, 'gun')) * (b.side === 'me' && G.SkillCombos ? G.SkillCombos.factor('cannonPower') : 1) * (b.side === 'me' ? orderDmg(b, t) : st.npc.tactic === 'crane' ? envelop(t, 'en') : 1), kill: c.kill || 1, target: t, from: b });   // mx·my·launch는 그림 전용. 도착·피해 계산은 기존 x·y·dur를 쓴다.
       cannonParticle({ kind: 'powderSmoke', pale: true, x: mx + Math.cos(sAng) * 4, y: my + Math.sin(sAng) * 4, vx: wd[0] + Math.cos(sAng) * 24, vy: wd[1] + Math.sin(sAng) * 24, t: -smokeDelay, delay: 0.035, life: K.muzzleSmokeLife, r: K.muzzleSmokeRadius * look.smoke, seed: U.rf(0, 6.28) });
       cannonParticle({ kind: 'muzzle', x: mx, y: my, ang: sAng, t: -smokeDelay, life: K.muzzleLife, s: U.rf(1.1, 1.5) * look.muzzle });

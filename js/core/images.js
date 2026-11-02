@@ -6,14 +6,14 @@
   var I = {};
   G.Img = I;
   var BASE = 'images/';
-  var files = null;
+  var files = null, fileKeys = null, lists = new Map();
   var imgs = {}, state = {}, waiters = {};
   var failAt = {}, askedAt = {};        // 못 읽은 때 · 읽기 시작한 때 (ms)
   /* 그림 읽기 조정값 (js/data/seafx.js 의 G.FX.img — 이 파일이 먼저 읽히므로 쓸 때마다 본다)
      tries: 한 그림을 몇 번까지 다시 받나 · retryMs: 다시 받기 전 쉬는 시간 · stallMs: 이만큼 소식이 없으면 끊고 다시
      failHold: 끝내 못 받은 그림을 이만큼 지난 뒤 다시 받아 본다(그동안만 코드 그림) · waitMs: 장면이 그림을 기다리는 가장 긴 시간
      slowMs: 이보다 오래 걸리면 「그림을 불러오는 중」 표시 · decodeMs: 미리 풀기를 기다리는 가장 긴 시간 · graceMs: 움직이는 그림(배·부대)이 코드 그림 대신 비워 두고 기다리는 시간 */
-  var DEF = { tries: 3, retryMs: [400, 1500], stallMs: 45000, failHold: 20000, waitMs: 12000, slowMs: 500, graceMs: 8000, decodeMs: 1200, keep: 900 };
+  var DEF = { tries: 3, retryMs: [400, 1500], stallMs: 45000, failHold: 20000, waitMs: 12000, slowMs: 500, graceMs: 8000, decodeMs: 1200, keep: 900, keepBytes: 256 * 1024 * 1024, trimRatio: 0.8, listKeep: 64 };
   function CF(k) { var c = G.FX && G.FX.img; return c && c[k] != null ? c[k] : DEF[k]; }
   function now() { return window.performance && performance.now ? performance.now() : Date.now(); }
 
@@ -22,6 +22,7 @@
       files = {};
       var m = G.IMAGE_FILES || {};
       for (var k in m) if (Object.prototype.hasOwnProperty.call(m, k) && m[k]) files[k] = m[k];
+      fileKeys = Object.keys(files);
     }
     return files;
   }
@@ -29,11 +30,19 @@
   /** re-read G.IMAGE_FILES (e.g. after the manifest changed) */
   I.reset = function () {
     for (var b in blobs) { try { URL.revokeObjectURL(blobs[b]); } catch (e) { /* 무시 */ } }
-    files = null; imgs = {}; state = {}; waiters = {}; blobs = {}; cityAsked = {}; failAt = {}; askedAt = {}; packs = {}; used = {}; okN = 0;
+    files = null; fileKeys = null; lists.clear(); imgs = {}; state = {}; waiters = {}; blobs = {}; cityAsked = {}; failAt = {}; askedAt = {}; packs = {}; used = {}; bytes = {}; okN = 0; cacheBytes = 0; evictions = 0;
   };
-  I.count = function () { return Object.keys(man()).length; };
+  I.count = function () { man(); return fileKeys.length; };
   /** sorted keys that start with prefix */
-  I.list = function (prefix) { return Object.keys(man()).filter(function (k) { return !prefix || k.indexOf(prefix) === 0; }).sort(natural); };
+  I.list = function (prefix) {
+    man(); prefix = prefix || '';
+    var list = lists.get(prefix);
+    if (list) lists.delete(prefix);
+    else list = fileKeys.filter(function (k) { return !prefix || k.indexOf(prefix) === 0; }).sort(natural);
+    lists.set(prefix, list);
+    while (lists.size > Math.max(1, CF('listKeep'))) lists.delete(lists.keys().next().value);
+    return list.slice();     // 호출한 쪽에서 정렬·추가해도 다음 화면의 목록은 바뀌지 않는다
+  };
   function natural(a, b) { return a.localeCompare(b, undefined, { numeric: true }); }
   /** 이 그림 파일이 있나. 끝내 못 받은 그림은 얼마 동안(failHold) 없는 것으로 치고(코드 그림·다음 후보), 그 뒤에는 다시 받아 본다 */
   I.has = function (k) {
@@ -207,14 +216,24 @@
     return BASE + f.split('/').map(encodeURIComponent).join('/');
   };
   I.get = function (k) { if (state[k] !== 'ok') return null; used[k] = ++clock; return imgs[k]; };
-  /* 읽어 둔 그림이 keep 장을 넘으면 가장 오래 안 쓴 것부터 놓아 준다 (오래 놀수록 메모리가 끝없이 불어나지 않게).
-     놓아 준 그림은 다음에 쓸 때 다시 읽는다 — 브라우저 캐시에 있어 금방이다. 그리고 있는 쪽이 쥐고 있는 그림은 그대로 남는다. */
-  var used = {}, clock = 0, okN = 0;
-  function trimCache() {
-    var keep = CF('keep'); if (okN <= keep) return;
-    var ks = Object.keys(imgs).sort(function (a, b) { return (used[a] || 0) - (used[b] || 0); }), drop = Math.min(ks.length, okN - Math.round(keep * 0.8));
-    for (var i = 0; i < drop; i++) { var k = ks[i]; if (clock - (used[k] || 0) < 40) break; delete imgs[k]; delete state[k]; delete used[k]; delete askedAt[k]; okN--; }
+  /* 장수와 원본 픽셀의 메모리(가로×세로×4)를 함께 제한한다. 큰 장면 판 수십 장도 수백 MB가 된다.
+     캐시의 참조만 놓는다. 재생 중인 쪽이 가진 그림·주소·해상도는 그대로 유지한다. */
+  var used = {}, bytes = {}, clock = 0, okN = 0, cacheBytes = 0, evictions = 0;
+  function trimCache(newest) {
+    var keep = Math.max(1, CF('keep')), budget = Math.max(1, CF('keepBytes'));
+    if (okN <= keep && cacheBytes <= budget) return;
+    var ratio = CF('trimRatio');
+    var countTarget = okN > keep ? Math.max(1, Math.floor(keep * ratio)) : keep;
+    var byteTarget = cacheBytes > budget ? budget * ratio : budget;
+    var ks = Object.keys(imgs).sort(function (a, b) { return (used[a] || 0) - (used[b] || 0); });
+    for (var i = 0; i < ks.length && (okN > countTarget || cacheBytes > byteTarget); i++) {
+      var k = ks[i]; if (k === newest) continue;   // 한 장이 예산보다 커도 읽자마자 다시 읽는 반복은 막는다
+      cacheBytes -= bytes[k] || 0;
+      delete imgs[k]; delete state[k]; delete used[k]; delete bytes[k]; delete askedAt[k]; okN--; evictions++;
+    }
   }
+  /** 그림 캐시가 보유한 원본 픽셀의 추정 메모리. 재생 중인 그림·브라우저 내부 메모리는 별도다. */
+  I.cacheStats = function () { return { count: okN, bytes: cacheBytes, limitBytes: CF('keepBytes'), evictions: evictions }; };
   I.status = function (k) { return state[k] || (man()[k] ? 'idle' : 'none'); };
   /** 그림 하나를 읽는다 → Promise<img|null>. 못 받으면 몇 번 다시 받고(tries), 받은 뒤에는 미리 풀어 둔다(decode —
       처음 그릴 때 멈칫하거나 덜 풀린 채 그려지지 않게). 끝내 못 받아야 null (그때에만 코드 그림으로 돌아간다) */
@@ -245,7 +264,11 @@
       if (timer) clearTimeout(timer);
       im.onload = im.onerror = null;
       if (state[k] !== 'loading') return;                       // 그 사이 I.reset
-      if (ok) { state[k] = 'ok'; imgs[k] = im; used[k] = ++clock; okN++; flush(k, im); trimCache(); return; }
+      if (ok) {
+        state[k] = 'ok'; imgs[k] = im; used[k] = ++clock; okN++;
+        bytes[k] = (im.naturalWidth || im.width) * (im.naturalHeight || im.height) * 4; cacheBytes += bytes[k];
+        trimCache(k); flush(k, im); return;
+      }
       if (n + 1 < CF('tries')) { setTimeout(function () { if (state[k] === 'loading') fetchImg(k, n + 1); }, retryDelay(n + 1)); return; }
       failed(k);
       if (window.console) console.warn('[그림 교체] 파일을 불러오지 못했습니다: ' + (I.path(k) || k));
@@ -836,7 +859,7 @@
     }
     return out.filter(function (k, i) { return out.indexOf(k) === i; });
   };
-  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary|witches|fairy-tales|childhood-friends)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
+  K.halfOf = function (chain) { return [].concat(chain || []).filter(function (k) { return /^portraits\/(history|rivals|npc|npc-roles|mates|sponsors|courtiers|maids|pools|legendary|witches|fairy-tales|childhood-friends)\//.test(k) && !/_half$/.test(k); }).map(function (k) { return k + '_half'; }); };
   /** 마을 사람 무릎상: 지금 보이는 얼굴과 같은 기존 무릎상을 먼저 쓴다. */
   K.npcHalf = function (id, c) {
     var own = K.halfOf(K.npc(id, c));

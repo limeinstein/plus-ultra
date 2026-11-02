@@ -242,6 +242,11 @@
   SH.techAmt = function (c) { var s = S(); return (s.tech && s.tech[c.id]) || 0; };
   SH.techBonus = function (c) { var a = SH.techAmt(c), b = 0; for (var i = 1; i < SH.TECH_INV.length; i++) if (a >= SH.TECH_INV[i]) b = i; return b; };
   SH.tech = function (c) { return Math.min(5, SH.techBase(c) + SH.techBonus(c)); };
+  /** 이 조선소가 오를 수 있는 마지막 등급까지 필요한 나머지 투자액 */
+  SH.techRemaining = function (c) {
+    var bonus = Math.min(5 - SH.techBase(c), SH.TECH_INV.length - 1);
+    return Math.max(0, SH.TECH_INV[bonus] - SH.techAmt(c));
+  };
   /** 다음 등급까지 더 넣어야 할 돈 (더 오를 수 없으면 null) */
   SH.techNext = function (c) {
     var b = SH.techBonus(c); if (b >= SH.TECH_INV.length - 1 || SH.tech(c) >= 5) return null;

@@ -78,7 +78,7 @@
   Game.uiH = function () { return 900 / (Game.uiZoom || 1); };
   function resizeCanvases() {
     var s = Game.scale || 1, dpr = window.devicePixelRatio || 1;
-    var q = (Game.state && Game.state.settings ? (Game.state.settings.res || 1) : 1) * (Game.autoRes || 1);
+    var q = Game.state && Game.state.settings ? (Game.state.settings.res || 1) : 1;
     var k = Math.min(2, s * dpr) * q;
     var w = Math.round(1600 * k), h = Math.round(900 * k);
     if (w > 2880) { h = Math.round(h * 2880 / w); w = 2880; }
@@ -207,7 +207,6 @@
 
   // ---------------------------------------------------------------- scenes
   Game.go = function (name, arg) {
-    Game.ftGrace = performance.now() + (((G.FX && G.FX.loop) || {}).sceneGrace || 1500);   // 장면을 막 바꾼 동안은 해상도 자동 조절이 재지 않는다
     if (Game.scene && Game.scene.exit) Game.scene.exit(name);   // 바다↔해전처럼 장면 사이에 이어져야 하는 날씨·소리를 위해 다음 장면을 알려 준다
     UI.clearScreen();
     Game.sceneName = name;
@@ -218,34 +217,12 @@
   Game.onKey = function (e) { return Game.scene && Game.scene.onKey ? Game.scene.onKey(e) === true : false; };
 
   var last = 0;
-  function LP() { return (G.FX && G.FX.loop) || { maxDt: 0.1, resDown: 0.028, resUp: 0.0185, resMin: 0.45, resStep: 0.1, resHold: 40 }; }
+  function LP() { return (G.FX && G.FX.loop) || { maxDt: 0.1 }; }
   function loop(t) {
     var raw = (t - last) / 1000 || 0; last = t;
     var K = LP(), dt = Math.min(K.maxDt, Math.max(0, raw));   // 오래 멈췄던 장면(탭 전환·무거운 일) 뒤에 배가 순간 이동하지 않게
     Game.time += dt;
-    // 바다(WebGL) 해상도 자동 조절: 평균 장면 시간을 보고 한 단계씩.
-    //   · 버벅여 내려온 단계는 한동안(resHold초) 다시 올리지 않는다 (올렸다 내렸다 하며 화면을 새로 만드는 끊김 방지)
-    //   · 낮췄는데도 빨라지지 않으면(화면 주사율이 30Hz로 묶인 기기 등) 원래대로 되돌리고 그 아래로는 내리지 않는다
-    if (worldCanvas && worldCanvas.style.display !== 'none' && raw > 0 && raw < 0.25 && !(Game.ftGrace && t < Game.ftGrace) && !(G.Loader && G.Loader.shown())) {
-      Game.ftAvg = (Game.ftAvg || 0.016) * 0.96 + raw * 0.04;
-      Game.ftN = (Game.ftN || 0) + 1;
-      var ar = Game.autoRes || 1, now = t / 1000, tr = Game.resTry;
-      Game.resBad = Game.resBad || {};
-      if (tr) {
-        if (Game.ftN > 60) {
-          if (Game.ftAvg > tr.ft * 0.9) { Game.resFloor = tr.from; Game.autoRes = tr.from; Game.ftAvg = tr.ft; resizeCanvases(); }
-          Game.resTry = null; Game.ftN = 0;
-        }
-      } else if (Game.ftN > 30 && Game.ftAvg > K.resDown && ar > Math.max(K.resMin, Game.resFloor || 0) + 1e-6) {
-        Game.resBad[ar.toFixed(2)] = now;
-        Game.resTry = { from: ar, ft: Game.ftAvg };
-        Game.autoRes = Math.max(K.resMin, ar - K.resStep); Game.ftN = 0; resizeCanvases();
-      } else if (Game.ftN > 300 && Game.ftAvg < K.resUp && ar < 1) {
-        var up = Math.min(1, ar + K.resStep), bad = Game.resBad[up.toFixed(2)];
-        if (bad == null || now - bad > K.resHold) { Game.autoRes = up; resizeCanvases(); }
-        Game.ftN = 0;
-      }
-    }
+    // 느린 프레임에서도 사용자가 고른 해상도를 유지한다. 버퍼 크기 왕복으로 생기는 끊김도 피한다.
     if (Game.scene && Game.scene.update) {
       try { Game.scene.update(dt); } catch (e) { console.error(e); }
     }

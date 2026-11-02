@@ -699,10 +699,16 @@
     if (pr.back.length) setTimeout(function () { UI.toast('돌려받았다: ' + pr.back.map(function (it) { return R.itemName(it); }).join(', ') + ' — 이제 제독의 것', 'book', 4200); }, 600);
   };
 
+  /** 교섭에 쓰는 웅변: 함대의 웅변(제독·부관·선실)과 경리 자신의 웅변 가운데 높은 쪽 — 교섭 자리에서 말하는 사람이 경리라서 (2026-11-02) */
+  SP.negoSpeech = function (purser) {
+    var sk = R.skill('speech');
+    if (purser && purser.m && R.mateSkill) sk = Math.max(sk, R.mateSkill(purser.m, 'speech'));
+    return sk;
+  };
   /** 계약 조건 교섭 성공률: 웅변·매력·신뢰·경리 회계가 함께 돕는다. */
   SP.negotiationChance = function (sp, what, asked, purser) {
     var K = (G.BALANCE && G.BALANCE.sponsorNego) || {}, rel = SP.rel(sp.id), tp = SP.temper(sp);
-    var p = (K.base == null ? 0.55 : K.base) + R.skill('speech') * (K.speech == null ? 0.12 : K.speech) +
+    var p = (K.base == null ? 0.55 : K.base) + SP.negoSpeech(purser) * (K.speech == null ? 0.12 : K.speech) +
       (R.stat('cha') - 50) * (K.cha == null ? 0.006 : K.cha) + rel.trust * (K.trust == null ? 0.004 : K.trust) -
       Math.max(0, (asked || 1) - 1) * (K.retry == null ? 0.25 : K.retry) +
       (purser ? (K.purser == null ? 0.10 : K.purser) + purser.acct * (K.purserAcct == null ? 0.05 : K.purserAcct) : 0);
@@ -741,14 +747,16 @@
     if (o.liked) await UI.say(L('likedFund'), who);    // 경리가 있으면 한 번 더 교섭하고, 줄 것 없이 더 받아 낸다
     for (;;) {
       await UI.say(L('offer', { adv: U.num(o.advance), yrs: o.years, rew: U.num(o.reward) }), who);
-      var speech = R.skill('speech');
+      var speech = SP.negoSpeech(pu);
       var opts = [{ label: '승낙한다', value: 'ok' }, { label: '교섭한다' + (pu ? ' (경리 ' + pu.name + (speech ? ' · 웅변 ' + speech : '') + ')' : speech ? ' (웅변 ' + speech + ')' : ''), value: 'nego', dis: asked >= maxAsk }, { label: '그만둔다', value: 'no' }];
       if (tutDuke(sp) && asked >= 1) opts = [opts[0]];      // 튜토리얼: 한 번 교섭했으면 승낙만 남는다
       var v = await UI.ask('기간 ' + o.years + '년 · 선금 ' + U.num(o.advance) + '닢 · 성공 보수 ' + U.num(o.reward) + '닢' + (tm ? '\n' + SP.holderName(sp) + U.jx(SP.holderName(sp), '은/는') + ' ' + tm.like + '. ' + tm.desc : ''), opts, Object.assign(SP.me(sp), tutDuke(sp) && asked >= 1 ? { cancel: false } : {}));
       if (v == null && tutDuke(sp) && asked >= 1) v = 'ok';
       if (v === 'ok') break;
       if (v === 'no' || v == null) { await UI.say(L('negoNo'), who); return; }
-      var w = await UI.choose('무엇을 요구할까?', [{ label: '자금 증가', value: 'money', icon: 'coin' }, { label: '기간 연장', value: 'time', icon: 'hourglass' }, { label: '변경 없음', value: 'none', icon: 'check' }], { width: 420 });
+      // 고르기 전에 성공 가능성을 보여 준다 — 요구를 거듭할수록 떨어지고, 실패하면 계약이 없던 일이 된다
+      var pct = function (what) { return tutDuke(sp) ? '' : ' (성공 약 ' + Math.round(SP.negotiationChance(sp, what, asked + 1, pu) * 100) + '%)'; };
+      var w = await UI.choose('무엇을 요구할까?' + (asked ? ' — 요구를 거듭할수록 욕심으로 보인다' : ''), [{ label: '자금 증가' + pct('money'), value: 'money', icon: 'coin' }, { label: '기간 연장' + pct('time'), value: 'time', icon: 'hourglass' }, { label: '변경 없음', value: 'none', icon: 'check' }], { width: 460 });
       if (!w || w === 'none') continue;
       asked++;
       var hon = SP.honor(sp);

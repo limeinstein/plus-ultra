@@ -157,7 +157,8 @@
     var foes = st.ships.filter(function (o) { return o.side !== b.side && o.alive; });
     if (!foes.length) return;
     var target = foes.sort(function (a, c) { return Math.hypot(a.x - b.x, a.y - b.y) - Math.hypot(c.x - b.x, c.y - b.y); })[0];
-    var angle = Math.atan2(target.y - b.y, target.x - b.x), speed = cfg.speed * (profile.speed || 1), startedRush = false;
+    var shipK = (G.BALANCE.navalControl && G.BALANCE.navalControl.speed) || 1;   // 해전의 배가 빨라진 만큼 헤엄도 (돌진 속력은 그대로)
+    var angle = Math.atan2(target.y - b.y, target.x - b.x), speed = cfg.speed * (profile.speed || 1) * shipK, startedRush = false;
     b.attackCd -= dt;
     if (!M.targetable(b)) { speed *= 0.5; b.attackTime = 0; }
     else if (profile.attack === 'volley') {
@@ -181,7 +182,7 @@
       }
       if (b.chargeStage === 'rush') {
         angle = b.chargeHeading; speed = cfg.chargeSpeed;
-        if (b.chargeTime <= 0) { b.chargeStage = 'wait'; b.attackCd = cfg.chargeRecovery; speed = cfg.speed; }
+        if (b.chargeTime <= 0) { b.chargeStage = 'wait'; b.attackCd = cfg.chargeRecovery; speed = cfg.speed * shipK; }
       }
     }
     if (b.chargeStage === 'rush') b.heading = angle;

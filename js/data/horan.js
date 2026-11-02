@@ -12,9 +12,9 @@
   fig('kimsangheon', { name: '김상헌', title: '예조 판서 — 척화의 대신', st: 'kr', role: 'official', born: 1570, look: '60대, 흰 수염, 꼿꼿한 등, 손에 찢어진 국서' });
   fig('hongtaiji', { name: '홍타이지', title: '청의 황제 (숭덕제)', st: 'cn', role: 'noble', born: 1592, look: '40대 중반, 변발, 누런 비단 갑옷, 탄천 가 황옥 장막 안의 높은 자리' });
   fig('yonggoldae', { name: '용골대', title: '청의 장수 (잉굴다이)', st: 'cn', role: 'soldier', born: 1596, look: '40대, 변발, 털 달린 투구, 조선 말을 조금 하는 사신 겸 장수' });
-  fig('bongrim', { name: '봉림대군', title: '임금의 둘째 아들', st: 'kr', role: 'noble', born: 1619, look: '열여덟 살, 갑옷 위에 도포, 강화도 갑곶 나루의 젊은 왕자' });
+  fig('bongrim', { name: '봉림대군', title: '임금의 둘째 아들', st: 'kr', role: 'noble', born: 1619, look: '열여덟 살, 검은 갓과 담백한 청자색 도포, 흰 속깃과 넓은 흰 소매, 강화도 갑곶 나루의 젊은 왕자' });
   fig('jeongbongsu', { name: '정봉수', title: '용골산성의 의병장', st: 'kr', role: 'soldier', born: 1572, look: '50대, 낡은 철릭, 활을 멘 늙은 무관, 산성 성벽 위' });
-  fig('kimgyeongjing', { name: '김경징', title: '강화도 검찰사', st: 'kr', role: 'official', born: 1589, look: '40대 후반, 비단 도포, 술잔, 「강화는 하늘이 낸 요새」라 자신하는 얼굴' });
+  fig('kimgyeongjing', { name: '김경징', title: '강화도 검찰사', st: 'kr', role: 'official', born: 1589, look: '40대 후반, 검은 사모와 자주색 사또 관복, 가슴 흉배 하나 외에는 담백한 옷감, 술잔, 「강화는 하늘이 낸 요새」라 자신하는 얼굴' });
   fig('amin', { name: '아민', title: '후금의 패륵 (정묘년 침공의 대장)', st: 'cn', role: 'soldier', born: 1586, look: '40대, 변발, 털옷 위 갑옷, 말 위에서 내려다보는 눈' });
   G.HORAN_FIGS = ['injo', 'kimsangheon', 'hongtaiji', 'yonggoldae', 'bongrim', 'jeongbongsu', 'kimgyeongjing', 'amin'];
 

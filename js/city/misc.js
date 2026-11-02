@@ -124,12 +124,19 @@
     // 처음 떠나는 도시(고향)에는 나침반·육분의가 늘 있다 (G.BALANCE.homeTools)
     var always = s.player && s.player.home === c.id ? ((G.BALANCE && G.BALANCE.homeTools) || []) : [];
     var eligible = G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && (always.indexOf(it.id) >= 0 || (it.reg.indexOf(c.region) >= 0 && (!it.subRegion || G.subRegion(c) === it.subRegion) && (!it.marketRel || c.rel === it.marketRel) && (!it.from || s.date.y >= it.from))); });
-    var stock = eligible.filter(function (it) { return rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; });
-    // 추첨 뒤에도 악기는 최소 다섯 종류. 다른 문화권·종교·연도의 물건을 끌어오지는 않는다.
-    var minimum = Math.max(0, Math.floor((G.BALANCE && G.BALANCE.marketInstrumentMin) || 0));
-    var count = stock.filter(function (it) { return it.kind === 'instrument'; }).length;
-    var spare = eligible.filter(function (it) { return it.kind === 'instrument' && stock.indexOf(it) < 0; });
-    while (count < minimum && spare.length) { stock.push(spare.splice(Math.floor(rng() * spare.length), 1)[0]); count++; }
+    // 다른 물건의 45일 추첨 순서는 유지한다. 악기만 별도의 주간 입고 목록으로 고른다.
+    var stock = eligible.filter(function (it) { var picked = rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; return picked && it.kind !== 'instrument'; });
+    var pool = eligible.filter(function (it) { return it.kind === 'instrument'; });
+    var max = Math.max(0, Math.floor(G.BALANCE.marketInstrumentMax)), days = Math.max(1, G.BALANCE.marketInstrumentDays);
+    if (!pool.length || !max) return stock;
+    var week = Math.floor(s.day / days), order = U.makeRng(c.id * 7717), pick = U.makeRng(c.id * 7717 + week);
+    for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(order() * (i + 1)), tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp; }
+    // 도시마다 섞은 차례에서 하나는 꼭 진열한다. 지난주의 그 악기는 빼서, 후보가 넉넉하면 같은 목록이 연속되지 않는다.
+    // 나머지는 주마다 무작위로 고른다. 모든 악기가 언젠가는 입고되며, 재방문·불러오기로 다시 추첨하지 않는다.
+    var head = pool[week % pool.length], previous = pool[(week + pool.length - 1) % pool.length];
+    var instruments = [head], spare = pool.filter(function (it) { return it !== head && (pool.length <= max || it !== previous); });
+    while (instruments.length < max && spare.length) instruments.push(spare.splice(Math.floor(pick() * spare.length), 1)[0]);
+    stock = stock.concat(instruments);
     return stock;
   };
   /** 경리가 흥정해 둔 값 (이번 방문): {ok, buy, sell} */
@@ -143,7 +150,8 @@
   /** 물건의 능력치 한 줄 (구입·매각 목록과 확인 창) */
   function itemStat(it) {
     var d = G.ITEM[it.id] || {}, k = d.kind || it.kind;
-    return k === 'weapon' ? '공격 ' + d.atk : k === 'armor' ? '방어 ' + d.def : k === 'gift' && d.gv ? '호감 ' + d.gv : k === 'mgift' && d.gv ? '남자 선물 ' + d.gv : k === 'instrument' ? '악기' + (d.military ? ' · 군악' : '') : (G.ITEM_KIND[k] || '');
+    var ist = R.itemStatText ? R.itemStatText(it.id) : '', base = k === 'weapon' ? '공격 ' + d.atk : k === 'armor' ? '방어 ' + d.def : k === 'gift' && d.gv ? '호감 ' + d.gv : k === 'mgift' && d.gv ? '남자 선물 ' + d.gv : k === 'instrument' ? '악기' + (d.military ? ' · 군악' : '') : (G.ITEM_KIND[k] || '');
+    return ist ? (base ? base + ' · ' : '') + ist : base;   // 책 → 지력, 악기·장신구·놀이 도구 → 매력
   }
   MK.itemStat = itemStat;
   MK.sellValue = mkSell;
@@ -156,7 +164,7 @@
   /** 값이 보통보다 5% 넘게 비싸면 ▲, 싸면 ▼ */
   function mkTrend(it) { var k = R.itemMult(C.city(), it); return k > 1.05 ? ' <span class="warn-text" title="시세 ' + Math.round(k * 100) + '%">▲</span>' : k < 0.95 ? ' <span class="good-text" title="시세 ' + Math.round(k * 100) + '%">▼</span>' : ''; }
   MK.enter = async function (c) { var cur = C.current(); if (cur) { cur.mk = null; cur.mkBuyDeals = 0; } await C.say(vendor(), C.hail(c, 'market', ['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!'])); };
-  MK.sub = function () { return '무기·도구·장신구·악기'; };
+  MK.sub = function () { return '무기·도구·장신구 · 악기 최대 ' + G.BALANCE.marketInstrumentMax + '종(' + G.BALANCE.marketInstrumentDays + '일마다 교체)'; };
   MK.menu = function (c) {
     return [
       { label: '구입', icon: 'coin', onClick: function () { return MK.buy(c); } },
@@ -606,7 +614,7 @@
     }
   };
   GU.train = async function (c) {
-    var s = S(), p = s.player, cap = R.skillCap(p.st.int);
+    var s = S(), p = s.player, cap = R.skillCap(R.stat('int'));
     var v = await UI.choose('수행할 특기 (지력에 따라 최대 ' + Math.min(3, cap) + '단계)', G.SKILLS.map(function (sk) {
       var lv = p.sk[sk.id] || 0, cost = (lv + 1) * 1500, days = (lv + 1) * 10;
       return { label: sk.name + ' ' + G.Info.pips(lv), right: lv >= Math.min(3, cap) ? '한계' : U.num(cost) + '닢 · ' + days + '일', value: sk.id, disabled: lv >= Math.min(3, cap), desc: sk.desc };
@@ -619,12 +627,12 @@
     await UI.fade(function () { G.Game.passDays(days); });
     if (S() !== s || (s.life && s.life.end)) return;
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
-    var ch = 0.45 + p.st.int / 200 - lv * 0.08;
+    var ch = 0.45 + R.stat('int') / 200 - lv * 0.08;
     if (U.chance(ch)) { p.sk[v] = lv + 1; await C.say(master(c), '훌륭하네! ' + U.j(G.SKILL_BY_ID[v].name, '이/가') + ' 한 단계 올랐네.'); G.State.log(G.SKILL_BY_ID[v].name + ' 수행을 마쳤다. (' + (lv + 1) + '단계)'); }
     else await C.say(master(c), '아직 멀었군. 다음에 다시 도전하게.');
   };
   GU.lang = async function (c) {
-    var s = S(), p = s.player, cap = Math.min(3, R.langCap(p.st.int));
+    var s = S(), p = s.player, cap = Math.min(3, R.langCap(R.stat('int')));
     var teach = [c.lang]; G.CITY_DATA.forEach(function (x) { if (G.REGION_DIST[c.region][x.region] <= 1 && teach.indexOf(x.lang) < 0) teach.push(x.lang); });
     var v = await UI.choose('배울 언어', teach.map(function (li) {
       var lv = p.lg[li] || 0, cost = (lv + 1) * 1000, days = (lv + 1) * 15;
@@ -638,7 +646,7 @@
     await UI.fade(function () { G.Game.passDays(days); });
     if (S() !== s || (s.life && s.life.end)) return;
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
-    if (U.chance(0.55 + p.st.int / 250 - lv * 0.08)) { p.lg[v] = lv + 1; await C.say(master(c), G.LANGS[v] + '를 제법 하게 되었군! (' + G.LANG_LV[lv + 1] + ')'); }
+    if (U.chance(0.55 + R.stat('int') / 250 - lv * 0.08)) { p.lg[v] = lv + 1; await C.say(master(c), G.LANGS[v] + '를 제법 하게 되었군! (' + G.LANG_LV[lv + 1] + ')'); }
     else await C.say(master(c), '말이란 하루아침에 느는 것이 아니지. 다음에 또 오게.');
   };
 

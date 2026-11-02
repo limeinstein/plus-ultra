@@ -1288,7 +1288,7 @@
         if (res === 'win' && captured > 0) { back0 = captured; say('사로잡혀 갔던 대원 ' + captured + '명을 되찾았다!'); }
         left = Math.min(P0, left + back0);
         var dead = P0 - left;
-        var back = res === 'flee' && dead === 0 ? 0 : Math.min(dead, Math.round(dead * U.clamp(0.25 + sk('med') * 0.15 + (S().player.st.int > 70 ? 0.05 : 0), 0, 1)));
+        var back = res === 'flee' && dead === 0 ? 0 : Math.min(dead, Math.round(dead * U.clamp(0.25 + sk('med') * 0.15 + (R.stat('int') > 70 ? 0.05 : 0), 0, 1)));
         var adm = mine.filter(function (u) { return u.leader; })[0];
         if (G.Growth) G.Growth.land(res);
         if (!opt.noHurt) S().player.hp = Math.max(10, Math.round(S().player.hp - 40 * (1 - adm.n / adm.n0)));

@@ -222,8 +222,29 @@
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
     mateSeekSearch: { min: 3, limit: 3 }, // 여급의 항해사 수색: 이름 일부로 후보를 보여 준다.
-    navalField: { startMargin: 120, radius: 3200, separation: 520, spacing: 160, monsterSeparation: 700, lakeSeparation: 520 }, // 전장은 넓게, 두 함대는 접현할 수 있게 가까이서 시작
-    navalControl: { turn: 1.1, accel: 0.8, decel: 1, lateral: 0.22, turnSlow: 0.35, slowRadius: 100 },
+    // 물건이 주는 능력치 (2026-11-02 베타 피드백 — rules.js R.itemStatOf). 제독은 소지품, 동료는 그 동료가 지닌 물건. 같은 능력치는 가장 높은 하나만 오른다(겹치지 않음), 능력치는 cap을 넘지 않는다.
+    // 책 → 지력: bookBase에서 값(금화)이 bookSteps 단계를 하나 넘을 때마다 +1 · 값이 없는 기념품 책은 bookNoPrice · greatBooks(역사에 남은 귀한 책)는 +greatBonus · 최대 bookMax
+    //   책이 아닌 갈래(기념품·특별품·도구·보물)라도 이름에 bookWords가 있으면 책으로 친다
+    // 악기·장신구(jewelWords)·놀이 도구(toyIds, 보물이 아닌 물건은 이름의 toyWords) → 매력: chaBase에서 chaSteps 단계마다 +1 · 값이 없으면 chaNoPrice · 최대 chaMax
+    // mateWeapon·mateArmor: 동료가 지닌 무기 가운데 공격이 가장 높은 것·갑옷 가운데 방어가 가장 높은 것을 이 배수로 결투·백병전 공격·방어에 더한다
+    itemStats: { cap: 100, bookBase: 2, bookSteps: [800, 1200, 1600, 2000, 2500, 3000], bookNoPrice: 5, bookMax: 10, greatBonus: 2,
+      greatBooks: ['r_bulguksa', 'r_rosetta', 'r_qumranscrolls', 'r_greatlib', 'r_wisdom', 'r_louvre', 'principia', 'il_principe', 'r_hwaseong', 'r_mawangdui', 'r_celsus',
+        'mh_corvina', 'r_reykholt', 'r_sankore', 'r_brendan', 'babur_page', 'luther_note', 'r_globe', 'r_sagres', 'r_casacontrat', 'r_potala', 'r_kharakhoto', 'fish_history',
+        'r_haeinsa', 'sky_derev', 'sky_twosci', 'leo_notebook'],
+      bookWords: ['『', '필사본', '경전', '두루마리', '사본', '수첩', '시집', '회고록', '조약문', '항해기', '표류기', '원고', '책', '탁본'],
+      chaBase: 1, chaSteps: [600, 1200, 2000, 3000, 4500], chaNoPrice: 3, chaMax: 6,
+      toyIds: ['cards', 'dice', 'tarocchi', 'chess', 'automaton', 'shipmodel'],
+      toyWords: ['카드', '주사위', '체스', '장기판', '바둑', '인형', '장난감', '팽이', '윷', '쌍륙', '마작', '투호', '제기'],
+      jewelWords: ['목걸이', '귀걸이', '귀고리', '반지', '팔찌', '브로치', '머리장식', '가슴장식', '관꾸미개', '왕관', '카메오', '구슬', '목고리', '비녀', '노리개', '리본',
+        '목도리', '깃털 장식', '부채', '향수', '진주', '루비', '에메랄드', '사파이어', '장신구'],
+      mateWeapon: 1, mateArmor: 1 },
+    // 해전의 첫 자리 (2026-11-02 사용자 요청 「해전 시작 거리를 넓혀서 처음부터 백병전으로 안 들어가게 균형 있게 배치」 — battle.js settleStartingShips)
+    // separation: 두 함대 사이 (예전 1800은 상선을 못 잡았고 520은 붙자마자 백병전) · merchantSeparation: 달아나는 상선은 조금 가까이 (나포할 수 있게)
+    // sepSteps·minSeparation: 해안이 좁아 자리가 없을 때 간격을 이 비율로 차례로 줄이되 이 끝까지만 · spacing·rowGap·perRow: 줄의 배 간격·두 줄 사이·한 줄 척수 · startJitter: 자리마다 흩뜨림(px)
+    // boardDelay·boardAfterFire: 해전이 시작되고 boardDelay초, 첫 포성 뒤로 boardAfterFire초(멈춤을 뺀 해전 시간)가 지나기 전에는 적이 갈고리를 걸지 않고 포격전부터 한다
+    navalField: { startMargin: 120, radius: 3200, separation: 1050, merchantSeparation: 550, minSeparation: 700, sepSteps: [1, 0.85, 0.72, 0.6], spacing: 170, rowGap: 170, perRow: 6, startJitter: 14, monsterSeparation: 1050, lakeSeparation: 900, boardDelay: 10, boardAfterFire: 5 },
+    // speed: 해전의 배 속력 배수 (2026-11-02 사용자 요청 「해전의 배의 속도감을 높여줘」 — 양쪽 모두, 바다 장면 항해와는 별개)
+    navalControl: { turn: 1.1, accel: 0.8, decel: 1, lateral: 0.22, turnSlow: 0.35, slowRadius: 100, speed: 1.4 },
     pirateSurrender: { base: 0.22, damage: 0.3, crewLoss: 0.18, pressure: 0.12, near: 800, min: 0.12, max: 0.8 },
     // 산지에서 먼 시장의 운송·희소 가치. 가까운 산지가 있으면 그 거리만 쓰므로 우회 항해로 값이 뛰지 않는다.
     oceanTrade: { premium: [1, 1, 1.08, 1.3, 1.85, 2.5], bulkDemand: 0.5 },
@@ -316,7 +337,7 @@
       }
     },
     homeTools: ['compass', 'sextant'],   // 처음 떠나는 도시(제독의 고향) 시장에 늘 있는 항해 도구 — 연도(from)·지역·그날 물량과 상관없이 (js/city/misc.js MK.stock)
-    marketInstrumentMin: 5,   // 시장마다 실제로 진열하는 악기 최소 종류 수. 그 도시의 판매 조건을 만족하는 악기에서만 보충한다.
+    marketInstrumentMax: 3, marketInstrumentDays: 7, // 악기는 시장마다 최대 세 종류만 진열하고, 게임 속 일주일마다 무작위로 교체한다.
     // 선수상: 함대에서 가장 센 덕 + 나머지 배의 덕 × figRest (R.fleetBonus). 폭풍 빈도는 stormFloor 아래로 줄지 않는다 (sea.js)
     figRest: 0.25, stormFloor: 0.35, stormDmgCut: 0.3,
     // 피로 60을 넘으면 속력 × (1 − (피로 − 60) / fatigueDiv) → 피로 100에서 75% (R.fleetMotion)
@@ -366,7 +387,14 @@
         musicroom: 0.07, staff: 0.03, staffDmg: 0.06 },
       // 창고 (2026-10-21): 방 하나마다 기함 짐칸(부피)을 배 본래 적재량 × per 만큼 늘린다. max칸까지만 센다(그 뒤 칸은 헛방).
       //   무게 한도(G.BALANCE.cargo.shipWt × 본래 적재량)는 그대로 — 향신료·비단처럼 가벼운 짐에만 쓸모가 크고 광석·금속은 무게에 먼저 걸린다.
-      store: { per: 0.05, max: 4 } },   // 2026-10-16 음악실: 하루 피로 · 참모실: 육상전 계략(기습·함정·저격·작렬탄) 성공률 · 계략 피해 비율
+      store: { per: 0.05, max: 4 },
+      // 요리실과 식당이 위·아래·왼쪽·오른쪽으로 맞닿으면 「따끈한 밥상」 (2026-11-02): 두 방의 피로·규율·별미 효과 × (1 + fx) · 요리실 차림 배율 + meal
+      kitchen: { fx: 0.25, meal: 0.25 },
+      // 음악실 앙상블 (2026-11-02): 맞닿은 음악실의 음악 특기자 min명부터. names = [사람 수, 이름] (그 수 이상이면 그 이름)
+      //   mus = 음악 단계 합, spk = 웅변 단계 합 (충성 효율을 곱함), syn = 1 + size × (사람 − 2)
+      //   하루 피로 −fat × (mus + spk/2) × syn (모두 합쳐 fatMax까지) · 하루 규율 +disc × (mus/2 + spk) × syn (discMax까지)
+      //   입항한 도시에서 유행하는 물건을 팔 때 유행의 몫(배수 − 1)을 +fad × (mus + spk) × syn 만큼 (fadMax까지 — 0.75면 1.6배 유행이 2.05배)
+      ensemble: { min: 2, names: [[2, '듀엣'], [3, '트리오'], [4, '콰트로'], [5, '밴드'], [7, '그룹']], size: 0.15, fat: 0.05, disc: 0.03, fad: 0.03, fatMax: 1.2, discMax: 0.8, fadMax: 0.75 } },   // 2026-10-16 음악실: 하루 피로 · 참모실: 육상전 계략(기습·함정·저격·작렬탄) 성공률 · 계략 피해 비율
     // 화실·조각실 (js/systems/studio.js, 명작 표 js/data/masterworks.js). 방의 힘(1 + 그림·세공 단계)만큼 날마다 일이 쌓여 need가 차면 미술품·조각품 qty[단계]통을 짐칸에 싣는다.
     //   실존 화가·조각가는 따로 mwNeed만큼 쌓이면(힘 4면 90일) 명작 하나 — 값 = value[0] + 그 사람의 지명도 × value[1] (조각은 × sculptK), 사교 명성 = fame[0] + 지명도 × fame[1]
     //   예술가마다 그림·조각을 세 점씩 (js/data/masterworks.js). generic: 표에 없는 실존 화가가 남기는 명작 수

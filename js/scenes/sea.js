@@ -183,7 +183,7 @@
     bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); }));   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
     hudEl.bar = bar; st.followArmed = false; refreshFollow();
-    if (G.HudPin) { G.HudPin.pin(mm, 'minimap', '해도'); G.HudPin.pin(wb, 'windbox', '바람 판'); }   // 단추줄 위에 · 끌어서 옮기기 (js/ui/hudpin.js — 2026-10-30)
+    if (G.HudPin) { G.HudPin.pin(mm, 'minimap', '해도'); G.HudPin.pin(wb, 'windbox', '바람 판'); G.HudPin.pin(hudEl.status, 'seastatus', '항해 상태판'); }   // 상태판도 끌어서 옮긴다 (베타 피드백 2026-11-02)   // 단추줄 위에 · 끌어서 옮기기 (js/ui/hudpin.js — 2026-10-30)
     refreshBar(); refreshHud();
     if (st.unkey) st.unkey();
     st.unkey = UI.pushKey(onKey);
@@ -987,11 +987,19 @@
       if (st.manual && turnKey() && spd > 1) { spd = 1; st.handSteer = true; }
       var daysDt = dt * spd / DAY_SEC;
       var nsub = Math.max(1, Math.ceil(daysDt / 0.08)), subD = daysDt / nsub, subT = dt / nsub;
+      if (st.path && !st.direct) {
+        // 날수뿐 아니라 이동 거리도 쪼갠다. 빠른 함대가 한 걸음에 좁은 물길·길목을 뛰어넘지 않게 한다.
+        var motion = R.fleetMotion(st.crs != null ? st.crs : l.heading, curWind());
+        var maxSpeed = Math.max(shipSpeed(), motion.vmg, motion.legP, motion.legM) * (1 + G.FX.clouds.tail);
+        nsub = Math.max(nsub, Math.ceil(daysDt * maxSpeed / FXS().pathStep));
+        subD = daysDt / nsub; subT = dt / nsub;
+      }
       var dayDue = false;
       for (var k = 0; k < nsub && !st.busy && !st.paused; k++) {
         var h0 = l.heading;
         var chartLon = l.lon, chartLat = l.lat;
         steer(subT, spd);
+        if (st.paused) break;   // 마지막 길목에서 입항을 예약했으면 이전 관성으로 한 걸음 더 가지 않는다
         st.turnRate = st.turnRate * 0.7 + (U.angDiff(h0, l.heading) / Math.max(subD, 1e-4)) * 0.3;   // 선회율 (rad/일)
         move(subD, subT);
         if (l.lon !== chartLon || l.lat !== chartLat) G.State.surveyChart(l.lon, l.lat, chartR());
@@ -1093,7 +1101,7 @@
     }
     st.turnHeld = 0;
     var crs = null, dW = Infinity;
-    if (st.path && st.pathI < st.path.length) {
+    while (st.path && st.pathI < st.path.length) {
       var wp = st.path[st.pathI];
       var dx = G.Geo.wrapLon(wp[0] - l.lon), dy = wp[1] - l.lat;
       var d = Math.sqrt(dx * dx + dy * dy);
@@ -1102,11 +1110,13 @@
       if (st.pathI === st.path.length - 1 && st.target && st.target.city) rad = Math.max(rad, 0.15);   // 항구 앞 마지막 길목은 넉넉히 (부두가 물가에 붙어 있어도 닿게)
       if (d < rad) {
         st.pathI++; st.repath = 0; st.xt = 0;
-        if (st.pathI >= st.path.length) arrived();
-        return;
+        if (st.pathI >= st.path.length) { arrived(); return; }
+        continue;   // 새 길목의 방향을 이 걸음부터 쓴다. 이전 침로로 만의 물가를 향하지 않는다
       }
       crs = Math.atan2(dy, dx); dW = d;
-    } else if (st.dirCrs != null) crs = st.dirCrs;
+      break;
+    }
+    if (crs == null && st.dirCrs != null) crs = st.dirCrs;
     if (crs == null) return;
     st.crs = crs; st.dW = dW;
     var want = crs + (st.tackTheta ? st.tackSide * st.tackTheta : 0);
@@ -1212,7 +1222,7 @@
     st.sailT = (st.sailT || 0) + days;
     if (st.noTack > 0) st.noTack -= days;
     var wind = curWind(), k0 = (st.storm > 0 ? 0.6 : 1) * (st.slowDays > 0 ? 0.7 : 1) * (G.Rain ? G.Rain.speedK() : 1), v = 0, m = null;   // 비: 대책에 따라 조금 느려진다 (js/systems/searain.js)
-    var h = l.heading;
+    var h = l.heading, pathLimit = Infinity;
     // ---------------- 목표 속력 (돛·바람이 주는 힘) — 실제 속력은 선체의 관성으로 이것을 뒤따른다
     if (st.stopping) {
       v = 0;
@@ -1251,6 +1261,11 @@
       // 길목이 코앞인데 뱃머리가 크게 틀어져 있으면 속력을 줄여 선회 반경을 좁힌다 (길목을 맴돌지 않게)
       var off = Math.abs(U.angDiff(h, crs + (st.tackTheta ? st.tackSide * st.tackTheta : 0)));
       if (st.dW != null && st.dW < 0.6 && off > 0.6) v *= U.clamp(st.dW / 0.6, 0.35, 1);
+      // 빠른 배도 길목보다 작은 반경으로 돌게 한다. 목표 속력만 낮추면 감속 관성 때문에 계속 원을 그린다.
+      if (st.path && !st.direct && !st.tackTheta && off > P.pathTurnAngle) {
+        pathLimit = Math.max(P.stopSpeed, st.dW * 2.6 * DAY_SEC * turnAbility() * P.pathTurnBrake / off);
+        v = Math.min(v, pathLimit);
+      }
       // 마지막 목적지에 다가가면 돛을 줄인다
       if (st.path && st.pathI === st.path.length - 1 && st.dW != null) v *= U.clamp(st.dW / P.arriveSlow, 0.3, 1);
     }
@@ -1268,6 +1283,8 @@
     if (Math.abs(lt) > maxLt) lt = lt > 0 ? maxLt : -maxLt;
     var prevSp = shipSpeed();
     vel[0] = fw * hx - lt * hy; vel[1] = fw * hy + lt * hx;
+    var navSp = shipSpeed();
+    if (navSp > pathLimit) { var brakeK = pathLimit / navSp; vel[0] *= brakeK; vel[1] *= brakeK; fw *= brakeK; lt *= brakeK; }
     st.lat = lt; st.fwd = fw;
     var sp = shipSpeed();
     st.accel = st.accel * 0.8 + ((sp - prevSp) / Math.max(days, 1e-4)) * 0.2;
@@ -1291,8 +1308,19 @@
       step(nx, ny, dist);
       if (!st.manual && st.crs != null) st.xt = (st.xt || 0) + dist * Math.sin(U.angDiff(st.crs, md));
     } else {
+      // 선회 관성으로 물가에 밀려도, 현재 길목까지 물로 이어져 있으면 항로 쪽으로 먼저 바로잡는다.
+      // 해안을 무작정 따라 미끄러지면 같은 곶 안쪽으로 돌아들어 3일짜리 재탐색을 반복했다.
+      var guided = false;
+      if (st.path && !st.direct && st.crs != null) {
+        var wp = st.path[st.pathI];
+        if (wp && G.Nav.clear([l.lon, l.lat], [l.lon + G.Geo.wrapLon(wp[0] - l.lon), wp[1]])) {
+          var gd = Math.min(dist, Math.hypot(G.Geo.wrapLon(wp[0] - l.lon), wp[1] - l.lat));
+          var gx = l.lon + Math.cos(st.crs) * gd, gy = l.lat + Math.sin(st.crs) * gd;
+          if (G.Geo.isSea(gx, gy, 0.2)) { step(gx, gy, gd); vel[0] = Math.cos(st.crs) * sp; vel[1] = Math.sin(st.crs) * sp; st.xt = 0; st.noTack = 1; guided = true; }
+        }
+      }
       // 뭍을 따라 미끄러진다 (그만큼 속력을 잃는다)
-      var ok = false;
+      var ok = guided;
       for (var a = 1; a <= 6 && !ok; a++) {
         for (var sgn = -1; sgn <= 1; sgn += 2) {
           var h2 = md + sgn * a * 0.25;
@@ -1472,6 +1500,8 @@
       fb -= R.skillRead('cook') * (CC.cookFatigue || 0.12);       // 요리: 따뜻한 끼니가 고단함을 덜어 준다
       var CBN = G.Cabins;                                          // 기함의 선실 (사람을 배치한 방만 힘을 낸다)
       if (CBN) fb -= CBN.fx('galley', 'galley') + CBN.fx('mess', 'mess') + CBN.fx('helm', 'helm') + CBN.fx('musicroom', 'musicroom');   // 음악실: 날마다 가락을 들려준다
+      var ENS = CBN && CBN.ensembleFx ? CBN.ensembleFx() : null;   // 맞닿은 음악실의 앙상블 (듀엣·트리오·콰트로·밴드·그룹) — 음악·웅변 단계만큼 피로와 규율을 돌본다
+      if (ENS) fb -= ENS.fat;
       // 요리실의 차림: 요리사 고장의 음식으로 피로를 덜고 규율을 돋운다 (식당이 있으면 더) — 차림이 바뀌면 알린다
       var GM = CBN && CBN.galleyMeal ? CBN.galleyMeal() : null;
       if (GM) {
@@ -1484,7 +1514,7 @@
       var morale = R.fleetBonus('morale');
       var discLoss = (f.fatigue > 60 ? 0.9 : 0.25) * (G.SkillCombos ? G.SkillCombos.factor('disciplineLoss') : 1);
       f.discipline = U.clamp(f.discipline - discLoss + R.skill('ops') * 0.18 + R.skill('theo') * 0.08 + R.skillRead('music') * (CC.musicDiscipline || 0.15) + morale * 2
-        + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0) + (GM ? GM.disc : 0) + (G.Rain ? G.Rain.discipline() : 0), 0, 100);
+        + (CBN ? CBN.fx('chapel', 'chapel') + CBN.fx('rec', 'rec') + CBN.fx('deck', 'deck') + CBN.fx('mess', 'messD') : 0) + (GM ? GM.disc : 0) + (ENS ? ENS.disc : 0) + (G.Rain ? G.Rain.discipline() : 0), 0, 100);
       if (G.FigFx) G.FigFx.daily(msgs);   // 선수상: 아무는 등딱지·저주·세상 끝의 속삭임 (js/systems/figfx.js)
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
@@ -1578,6 +1608,7 @@
       if (G.Sky && G.Sky.seaPending()) await G.Sky.atSea();   // 나침반의 비켜 감을 잰다(케플러) · 망원경으로 목성의 달(갈릴레이) (js/systems/skylore.js)
       if (G.Glory && G.Glory.seaPending()) await G.Glory.atSea();   // 영국 해협: 개신교의 바람 (js/systems/glory.js)
       if (G.OttoEu && G.OttoEu.seaPending()) await G.OttoEu.atSea();   // 프레베자 앞바다: 바르바로사와 신성 동맹 (js/systems/ottomaneurope.js)
+      if (G.WangMerch && G.WangMerch.seaPending()) await G.WangMerch.atSea();   // 중국 근해: 마대인·지나 부부와 비단 장수 왕서방의 금봉호 (js/systems/wangmerchant.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

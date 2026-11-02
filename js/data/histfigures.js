@@ -71,6 +71,13 @@
     var f = F[id]; if (!f) return [];
     var short = f.name.replace(/\s*\(.*\)\s*$/, '');
     var out = ['portraits/history/' + id];
+    // 청소년 시절 사건은 해당 시기의 얼굴·무릎상을 함께 고른다.
+    var date = G.Game && G.Game.state && G.Game.state.date;
+    if (date && f.periodFaces) {
+      var period = f.periodFaces.filter(function (p) { return date.y >= p.from; }).slice(-1)[0];
+      if (period) out.unshift(period.face);
+    }
+    if (f.youngFace && date && date.y <= f.youngUntil) out.unshift(f.youngFace);
     if (f.portraitName) out.push('portraits/rivals/' + f.portraitName);
     out.push('portraits/rivals/' + f.name, 'portraits/rivals/' + short);
     if (f.mate) out.push('portraits/mates/' + f.mate);

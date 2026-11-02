@@ -107,12 +107,12 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
       });
       fail(G.ItemCat.ORDER.includes('instrument') && G.ITEM_KIND.instrument === '악기', '악기 분류 순서');
       const seen = new Set(), regions = new Set(), originalDay = s.day, regionalMinimum = {};
-      fail(G.BALANCE.marketInstrumentMin === 5, '시장 악기 최소 진열 5종');
-      for (let cycle = 0; cycle < 5; cycle++) {
-        s.day = originalDay + cycle * 45;
+      fail(G.BALANCE.marketInstrumentMax === 3 && G.BALANCE.marketInstrumentDays === 7, '시장 악기 최대 3종·7일 교체');
+      for (let cycle = 0; cycle < instruments.length; cycle++) {
+        s.day = originalDay + cycle * 7;
         G.CITY_DATA.forEach(c => {
           const stock = MK.stock(c), arts = stock.filter(it => it.kind === 'instrument'), label = G.regionLabel(c);
-          fail(arts.length >= G.BALANCE.marketInstrumentMin, '실제 시장 최소 5종: ' + c.name + ' / ' + arts.length);
+          fail(arts.length > 0 && arts.length <= G.BALANCE.marketInstrumentMax, '실제 시장 최대 3종: ' + c.name + ' / ' + arts.length);
           fail(new Set(stock.map(it => it.id)).size === stock.length, '중복 진열 없음: ' + c.name);
           fail(stock.map(it => it.id).join(',') === MK.stock(c).map(it => it.id).join(','), '같은 도시·입고 주기는 같은 진열: ' + c.name);
           regionalMinimum[label] = Math.min(regionalMinimum[label] == null ? Infinity : regionalMinimum[label], arts.length);
@@ -126,7 +126,8 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
       }
       fail(seen.size === 186 && regions.size === 11 && Object.keys(regionalMinimum).length === 12, '모든 악기와 12개 문화권 입고');
       s.day = originalDay;
-      while (!MK.stock(G.CITY_DATA[14]).some(it => it.id === 'trumpet')) s.day += 45;
+      for (let week = 0; week < instruments.length && !MK.stock(G.CITY_DATA[14]).some(it => it.id === 'trumpet'); week++) s.day += 7;
+      fail(MK.stock(G.CITY_DATA[14]).some(it => it.id === 'trumpet'), '시험용 트럼펫 주간 입고');
       s.player.gold = 300000;
       G.Game.go('city', { cityId: 14, load: true });
       return { total: instruments.length, regions: regions.size, requested, artIds, percussionNew, regionalCore, regionalNew, regionalMinimum, orchestra, traditions, militaryNew, militaryIds, shapes: new Set(instruments.map(it => it.shape)).size, names: instruments.map(it => it.name) };
@@ -189,17 +190,21 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
       await page.evaluate(data => {
         const MK = G.Scenes.city.B.market, s = G.Game.state;
         let attempts = 0;
-        while (!MK.stock(G.CITY_DATA[data.city]).some(it => it.id === data.id) && attempts++ < 20) s.day += 45;
-        if (attempts >= 20) throw new Error('시험 악기 입고 실패: ' + data.id);
+        while (!MK.stock(G.CITY_DATA[data.city]).some(it => it.id === data.id) && attempts++ < 186) s.day += 7;
+        if (!MK.stock(G.CITY_DATA[data.city]).some(it => it.id === data.id)) throw new Error('시험 악기 입고 실패: ' + data.id);
         G.Game.go('city', { cityId: data.city, load: true });
         if (G.Scenes.city.city().id !== data.city) throw new Error('시험 시장 위치 불일치: ' + data.id);
         window.__goldBefore = s.player.gold;
         window.__unit = MK.price(G.ITEM[data.id]);
         MK.buy(G.CITY_DATA[data.city]);
       }, item);
-      await page.locator('.choice-cats [data-cat="instrument"]').click();
+      await page.locator('.choices').waitFor();
+      // 악기만 입고된 작은 시장은 분류 탭 없이 곧바로 목록을 보여 준다.
+      const instrumentTab = page.locator('.choice-cats [data-cat="instrument"]');
+      if (await instrumentTab.count()) await instrumentTab.click();
+      assert(await page.locator('.choices .choice:visible').count() <= 3);
       if (item.id === 'kendang' || item.id === 'shekere') {
-        assert(await page.locator('.choices .choice:visible').count() >= 5);
+        assert(await page.locator('.choices .choice:visible').count() <= 3);
         await page.screenshot({ path: path.join(out, 'market-buy-' + item.id + '.png') });
       }
       await page.locator('.choice:visible').filter({ hasText: new RegExp('^' + item.name + ' ') }).click();
@@ -313,7 +318,7 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
     await page.locator('#grid .card').filter({ hasText: '가야금' }).click();
     await page.locator('#dHero canvas').waitFor();
     assert((await page.locator('#dBody').innerText()).includes('조선'));
-    assert((await page.locator('#dBody').innerText()).includes('45일마다'));
+    assert((await page.locator('#dBody').innerText()).includes('7일마다 품목 변경 · 시장마다 악기 최대 3종'));
     await page.screenshot({ path: path.join(out, 'catalog-gayageum.png') });
     await page.locator('#detail').evaluate(el => el.close());
     await page.locator('#grid .card').filter({ hasText: '트럼펫' }).click();
@@ -368,7 +373,7 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
     }
     assert.deepEqual(errors, []);
     fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ ...report, bought, traditionTrades, errors }, null, 2));
-    console.log('통과: 악기 186종·종/소형 타악기 거래·어쟁/팬플룻 검색·12개 문화권 최소 5종·군악/전통/오케스트라·저장·그림·도감·콘솔 오류 0');
+    console.log('통과: 악기 186종·종/소형 타악기 거래·어쟁/팬플룻 검색·12개 문화권 최대 3종 주간 진열·군악/전통/오케스트라·저장·그림·도감·콘솔 오류 0');
     console.log(out);
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

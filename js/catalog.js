@@ -457,7 +457,7 @@
       group: it.kind, name: it.name, sub: (ITEM_KIND[it.kind] || it.kind) + ' · ' + it.id,
       meta: stat + (it.military ? ' · 군악' : '') + (it.price ? ' · ' + num(it.price) + '닢' : ''), key: 'items/' + it.id, kind: 'webp', chain: I.chain.item(it), ar: '1 / 1', extra: [it.desc, it.tradition, (it.aliases || []).join(' '), it.military ? '군악 ' + it.military : ''].filter(Boolean).join(' '),
       pic: () => I.make(I.chain.item(it), 256, 256, () => A.relicArt(it, 256, 256), { fit: 'contain' }),
-      detail: () => ({ text: it.desc, facts: [['종류', ITEM_KIND[it.kind] || it.kind], ['효과', stat], ['기준값', it.price ? num(it.price) + '닢' : '팔지 않음']].concat(it.kind === 'instrument' ? [['판매 시장', (it.subRegion || it.reg.map(k => G.REGIONS[k]).join(' · ')) + (it.marketRel === 'I' ? '의 이슬람 문화권 도시' : '')], it.tradition ? ['음악 전통', it.tradition] : null, it.military ? ['군악 용도', it.military] : null, ['입고', '45일마다 품목 변경 · 시장마다 악기 최소 ' + G.BALANCE.marketInstrumentMin + '종']] : []),
+      detail: () => ({ text: it.desc, facts: [['종류', ITEM_KIND[it.kind] || it.kind], ['효과', stat], ['기준값', it.price ? num(it.price) + '닢' : '팔지 않음']].concat(it.kind === 'instrument' ? [['판매 시장', (it.subRegion || it.reg.map(k => G.REGIONS[k]).join(' · ')) + (it.marketRel === 'I' ? '의 이슬람 문화권 도시' : '')], it.tradition ? ['음악 전통', it.tradition] : null, it.military ? ['군악 용도', it.military] : null, ['입고', G.BALANCE.marketInstrumentDays + '일마다 품목 변경 · 시장마다 악기 최대 ' + G.BALANCE.marketInstrumentMax + '종']] : []),
         files: [{ key: 'items/' + it.id, kind: 'webp', note: '이 소지품의 그림 (256×256, 투명 배경)' }, { key: 'item-kinds/' + it.kind, kind: 'webp', note: (ITEM_KIND[it.kind] || it.kind) + ' 공통' }] })
     });
   });

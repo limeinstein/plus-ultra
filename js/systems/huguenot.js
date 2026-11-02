@@ -189,7 +189,7 @@
 
   // ---------------------------------------------------------------- 화평
   HG.peaceChance = function () {
-    var p = S().player, cha = ((p.st && p.st.cha) || 50) / 100, ar = row('aramis');
+    var p = S().player, cha = ((p.st && R.stat('cha')) || 50) / 100, ar = row('aramis');
     var theo = ar ? R.mateSkill(ar, 'theo') : 0;
     return U.clamp(0.2 + (R.skill ? R.skill('speech') : 0) * 0.12 + theo * 0.08 + cha * 0.25, 0.1, 0.9);
   };

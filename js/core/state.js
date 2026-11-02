@@ -48,6 +48,7 @@
     var home = p.nation === 'PT' ? 0 : 7;
     var S = {
       version: 1,
+      tradeGoodsVersion: 1,   // 이미 나뉜 교역품의 ID는 불러올 때 다시 추정하지 않는다.
       seed: Math.floor(U.rand() * 1e9),
       date: { y: 1480, m: 5, d: 1 },
       day: 0,

@@ -125,7 +125,8 @@
   };
   R.skillCap = function (intel) { return 2 + Math.floor(intel / 20); };
   R.langCap = function (intel) { return 2 + Math.floor(intel / 25); };
-  R.stat = function (k) { return R.S().player.st[k]; };
+  /** 제독의 능력치 — 본래 값(player.st)에 지닌 물건이 주는 만큼(R.statBonus)을 더한 값. 성장·나이 듦은 본래 값을 바꾼다. */
+  R.stat = function (k) { var v = R.S().player.st[k]; return v == null ? v : v + R.statBonus(k); };
   R.age = function () { var S = R.S(); return S.date.y - S.player.born.y - ((S.date.m < S.player.born.m || (S.date.m === S.player.born.m && S.date.d < S.player.born.d)) ? 1 : 0); };
   R.fullName = function () { return R.S().player.name; };
   R.nationName = function (n) { return n === 'PT' ? '포르투갈' : n === 'ES' ? '에스파냐' : n; };
@@ -250,6 +251,68 @@
   };
   R.atk = function () { var S = R.S(); var w = S.player.equip.weapon && G.ITEM[S.player.equip.weapon]; return (w ? w.atk : 2); };
   R.def = function () { var S = R.S(); var a = S.player.equip.armor && G.ITEM[S.player.equip.armor]; return (a ? a.def : 0); };
+
+  // ---------------------------------------------------------------- 물건이 주는 능력치 (2026-11-02 베타 피드백)
+  /* 책 → 지력(값이 높고 귀한 책일수록), 악기·장신구·놀이 도구 → 매력. 같은 능력치는 지닌 물건 가운데 가장 높은 하나만 오른다.
+     본래 능력치(player.st · G.MATE[id].st)는 건드리지 않고 읽을 때 더한다 — 물건을 넘기거나 팔면 바로 돌아가고, 옛 저장도 그대로 맞는다.
+     값은 G.BALANCE.itemStats. 화면에는 「67(+7)」(본래 60 + 물건 7)로 보인다. */
+  var itemStatMemo = {}, wordRe = {};
+  function IS() { return (G.BALANCE && G.BALANCE.itemStats) || {}; }
+  function words(list) { var key = (list || []).join('|'); if (!wordRe[key]) wordRe[key] = key ? new RegExp(key.replace(/[.*+?^${}()[\]\\]/g, '\\$&')) : /$^/; return wordRe[key]; }
+  /** 물건 하나가 주는 능력치 {k: 'int'|'cha', v} 또는 null */
+  R.itemStatOf = function (id) {
+    if (id && typeof id === 'object') id = id.id;
+    if (Object.prototype.hasOwnProperty.call(itemStatMemo, id)) return itemStatMemo[id];
+    var d = G.ITEM && G.ITEM[id], K = IS(); if (!d) return null;
+    var k = d.kind, nm = d.name || '', what = null;
+    if (k === 'book') what = 'int';
+    else if (k === 'instrument') what = 'cha';
+    else if (k === 'mgift') what = (K.toyIds || []).indexOf(id) >= 0 ? 'cha' : null;
+    else if (k === 'weapon' || k === 'armor' || k === 'animal' || k === 'fig') what = null;
+    else if (words(K.bookWords).test(nm)) what = 'int';
+    else if (words(K.jewelWords).test(nm) || (k !== 'treasure' && words(K.toyWords).test(nm))) what = 'cha';   // 보물의 「인형」은 장난감이 아니다 (우샤브티 등)
+    var out = null;
+    if (what) {
+      var book = what === 'int', v;
+      if (!(d.price > 0)) v = book ? (K.bookNoPrice || 5) : (K.chaNoPrice || 3);
+      else { v = book ? (K.bookBase || 2) : (K.chaBase || 1); ((book ? K.bookSteps : K.chaSteps) || []).forEach(function (p) { if (d.price >= p) v++; }); }
+      if (book && (K.greatBooks || []).indexOf(id) >= 0) v += K.greatBonus || 0;
+      v = Math.min(book ? (K.bookMax || 10) : (K.chaMax || 6), v);
+      if (v > 0) out = { k: what, v: v };
+    }
+    return (itemStatMemo[id] = out);
+  };
+  /** 물건 하나의 능력치 한 줄: 「지력 +5」 (없으면 '') */
+  R.itemStatText = function (id) { var o = R.itemStatOf(id), n = o && (G.STATS || []).filter(function (s) { return s.id === o.k; })[0]; return o ? (n ? n.name : o.k) + ' +' + o.v : ''; };
+  /** 물건 목록이 주는 능력치 — 능력치마다 가장 높은 하나만: { b: {str,int,mar,cha}, src: {int: 물건 id, …} } */
+  R.itemStatBonus = function (items) {
+    var b = { str: 0, int: 0, mar: 0, cha: 0 }, src = {};
+    (items || []).forEach(function (it) { var o = it && R.itemStatOf(it.id); if (o && o.v > (b[o.k] || 0)) { b[o.k] = o.v; src[o.k] = it.id; } });
+    return { b: b, src: src };
+  };
+  function capped(base, v) { return base == null ? 0 : Math.max(0, Math.min(v || 0, (IS().cap || 100) - base)); }
+  /** 제독의 소지품이 이 능력치에 더하는 값 */
+  R.statBonus = function (k) { var S = R.S(); if (!S || !S.player || !S.player.st) return 0; return capped(S.player.st[k], R.itemStatBonus(S.player.items).b[k]); };
+  /** 능력치를 이 물건이 올렸는지: 물건 이름 (없으면 '') */
+  R.statSource = function (k, items) { var S = R.S(), id = R.itemStatBonus(items || (S && S.player.items)).src[k]; return id ? R.itemName({ id: id }) : ''; };
+  /** 「67(+7)」 — 본래 값과 물건이 더한 값 */
+  R.statText = function (base, bonus) { if (base == null) return '—'; return bonus > 0 ? (base + bonus) + '(+' + bonus + ')' : String(base); };
+  /** 동료의 능력치 [체력, 지력, 무력, 매력] — base 본래 값, bonus 그 동료가 지닌 물건이 더한 값, st 둘을 더한 값 */
+  R.mateStats = function (m) {
+    var d = m && G.MATE[m.id], base = ((d && d.st) || []).slice(0, 4), bo = R.itemStatBonus(R.mateItems(m)).b;
+    var bonus = ['str', 'int', 'mar', 'cha'].map(function (k, i) { return capped(base[i], bo[k]); });
+    return { base: base, bonus: bonus, st: base.map(function (v, i) { return v == null ? v : v + bonus[i]; }) };
+  };
+  /** 동료가 지닌 무기(공격이 가장 높은 것)·갑옷(방어가 가장 높은 것)과 결투·백병전에 더하는 값 */
+  R.mateGear = function (m) {
+    var K = IS(), w = null, a = null;
+    R.mateItems(m).forEach(function (it) {
+      var d = G.ITEM[it.id]; if (!d) return;
+      if (d.kind === 'weapon' && (d.atk || 0) > (w ? w.atk || 0 : 0)) w = d;
+      if (d.kind === 'armor' && (d.def || 0) > (a ? a.def || 0 : 0)) a = d;
+    });
+    return { weapon: w, armor: a, atk: w ? Math.round((w.atk || 0) * (K.mateWeapon == null ? 1 : K.mateWeapon)) : 0, def: a ? Math.round((a.def || 0) * (K.mateArmor == null ? 1 : K.mateArmor)) : 0 };
+  };
 
   // ---------------------------------------------------------------- ships & fleet
   /** 새 배. wood: 목재 id (G.TIMBER) — 내구력과 속도가 목재에 따라 달라진다 */
@@ -489,7 +552,7 @@
   };
   R.captainName = function (sh) { var c = R.captain(sh); return c === 'admiral' ? '제독' : c ? G.MATE[c.id].name : '갑판장'; };
   /** 백병전 공격력: 제독은 차고 있는 무기, 동료 선장은 무력, 갑판장은 맨손 */
-  R.shipAtk = function (sh) { var c = R.captain(sh); if (c === 'admiral') return R.atk(); if (!c) return 2; var d = G.MATE[c.id]; return 3 + Math.round(((d && d.st && d.st[2]) || 50) * (G.Cabins ? G.Cabins.eff(c) : 1) / 10); };
+  R.shipAtk = function (sh) { var c = R.captain(sh); if (c === 'admiral') return R.atk(); if (!c) return 2; var d = G.MATE[c.id]; return 3 + Math.round(((d && d.st && d.st[2]) || 50) * (G.Cabins ? G.Cabins.eff(c) : 1) / 10) + R.mateGear(c).atk; };   // 선장이 지닌 무기도 더한다
 
   // ---------------------------------------------------------------- 함대 속력 (편대 규칙)
   /* 1) 배마다 선속을 따로 구한다 = 돛·노 성능 × 바람 × 선체 손상 × 목재 × 조함(그 배 선장의 항해술) × 그 배의 짐
@@ -710,7 +773,7 @@
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var base = R.isRelay(c, goodId) ? g.p * R.relayMult(c, goodId, 'sell') : R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
     var p = base * R.satFactor(st.sat) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
-    if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행: 그 나라·지역에서 값이 몇 배 (js/systems/fad.js)
+    if (G.Fad) { var fm = G.Fad.mult(c, goodId); p *= fm; if (fm > 1 && G.Cabins && G.Cabins.fadBoost) p *= G.Cabins.fadBoost(c, fm); }   // 유행: 그 나라·지역에서 값이 몇 배 (js/systems/fad.js) · 기함 음악실의 앙상블이 유행을 키운다 (js/systems/cabins.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'sell');   // 세상의 시장 사건 (js/systems/economy.js)
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'sell');   // 교역 항로의 상선대 (js/systems/tradefleets.js)

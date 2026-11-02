@@ -8,7 +8,9 @@
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); } catch (_) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 
 const ROOT = path.resolve(__dirname, '..');
 const GAME = pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href;
@@ -25,7 +27,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::/.test(m.text() + ' ' + ((m.location() || {}).url || ''))) errors.push('console: ' + m.text()); });
   try {
-    await page.goto(GAME);
+    await page.goto(GAME, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.TradeGoods && G.R, null, { timeout: 90000 });
     const r = await page.evaluate(() => {
       G.State.newGame({ name: '주앙', nation: 'PT', job: 'merchant', age: 20, birth: { m: 1, d: 1 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
@@ -68,7 +70,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const mig = await page.evaluate(() => {
       const s = G.Game.state, v = G.CITY_DATA.find(c => c && c.name === '발렌시아');
       s.fleet.cargo = { porcelain: { q: 12, cost: 70, from: v.id, d: s.day } };
-      const back = G.State.deserialize(G.State.serialize());
+      const raw = JSON.parse(G.State.serialize()); delete raw.tradeGoodsVersion; // 교역품 분리 이전의 저장
+      const back = G.State.deserialize(JSON.stringify(raw));
       return Object.keys(back.fleet.cargo);
     });
     ok(mig.length === 1 && mig[0] === 'faience', '옛 저장 파일: 발렌시아산 「도자기」 → 유럽 도기');
@@ -76,7 +79,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // 도감
     const cat = await browser.newPage({ viewport: { width: 1400, height: 900 } });
     cat.on('pageerror', e => errors.push('catalog: ' + e.message));
-    await cat.goto(CAT);
+    await cat.goto(CAT, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await cat.waitForFunction(() => window.G && G.TradeGoods && G.GOOD.cnsilk, null, { timeout: 60000 });
     ok(true, '도감이 열리고 새 교역품(중국 비단 …)을 안다');
     await cat.close();

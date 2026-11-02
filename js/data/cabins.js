@@ -15,8 +15,8 @@
     { id: 'deck', main: ['ops'], sub: ['sword'], name: '갑판', icon: 'ship', fixed: true, skills: ['ops', 'sword'], desc: '갑판을 맡은 사람이 선원들을 부린다.', fx: '규율이 덜 떨어진다' },
     { id: 'hold', name: '빈 선실', icon: 'sack', cost: 0, days: 0, desc: '보직을 맡지 않은 부하가 한 명씩 머무는 방. 남은 부하부터 자동으로 배치하며, 빈자리가 없을 때만 대기로 둔다. 조선소에서 다른 방으로 고칠 수 있다.' },
     { id: 'chart', main: ['survey'], sub: ['art'], name: '지도 제작실', icon: 'chart', skills: ['survey', 'art'], cost: 1400, days: 3, desc: '측량한 것을 해도로 옮긴다. 솜씨 좋은 사람이 있으면 한 번 지나간 바다도 강·산·지형까지 빨리 채운다 — 왕이나 학자에게 바치는 해도의 값이 오른다.', fx: '해도에 밝혀지는 넓이가 늘고, 지도 제작 속도 +10% × 방의 힘' },
-    { id: 'galley', main: ['cook'], sub: [], name: '요리실', icon: 'bread', skills: ['cook'], cost: 900, days: 2, desc: '따뜻한 끼니를 짓는 부엌.', fx: '피로가 덜 쌓이고, 별미를 차리는 일이 잦아진다 · 요리에 밝은 사람이면 그 사람 고장(모국어)의 음식을 차려 날마다 피로를 덜고 규율을 돋운다 — 요리 단계가 높을수록 값비싼 음식, 식당·향신료·식자재가 있으면 더' },
-    { id: 'mess', main: ['cook'], sub: ['speech'], name: '식당', icon: 'mug', skills: ['cook', 'speech'], cost: 800, days: 2, desc: '선원들이 둘러앉아 먹고 쉬는 곳.', fx: '피로와 규율을 조금씩 돌본다 · 요리실의 차림이 더 효과를 낸다' },
+    { id: 'galley', main: ['cook'], sub: [], name: '요리실', icon: 'bread', skills: ['cook'], cost: 900, days: 2, desc: '따뜻한 끼니를 짓는 부엌.', fx: '피로가 덜 쌓이고, 별미를 차리는 일이 잦아진다 · 요리에 밝은 사람이면 그 사람 고장(모국어)의 음식을 차려 날마다 피로를 덜고 규율을 돋운다 — 요리 단계가 높을수록 값비싼 음식, 식당·향신료·식자재가 있으면 더 · 식당과 맞닿으면 「따끈한 밥상」' },
+    { id: 'mess', main: ['cook'], sub: ['speech'], name: '식당', icon: 'mug', skills: ['cook', 'speech'], cost: 800, days: 2, desc: '선원들이 둘러앉아 먹고 쉬는 곳.', fx: '피로와 규율을 조금씩 돌본다 · 요리실의 차림이 더 효과를 낸다 · 요리실과 맞닿으면 「따끈한 밥상」 — 두 방의 효과가 오른다' },
     { id: 'account', main: ['acct'], sub: [], name: '회계실', icon: 'coin', skills: ['acct'], role: 'purser', cost: 1200, days: 2, desc: '경리가 장부를 맞춘다. 이 방에 앉은 사람이 경리다.', fx: '값 깎기가 잘 통하고 급료가 덜 든다' },
     { id: 'chapel', main: ['theo'], sub: [], name: '예배실', icon: 'pray', skills: ['theo'], cost: 1000, days: 2, desc: '기도하고 마음을 다잡는 방.', fx: '규율이 덜 떨어진다' },
     { id: 'sick', main: ['med'], sub: ['sci'], name: '진료실', icon: 'cross', skills: ['med', 'sci'], cost: 1500, days: 3, desc: '아픈 선원을 누이고 돌본다.', fx: '괴혈병이 느리게 번진다' },
@@ -29,7 +29,7 @@
     // 2026-10-16 화실·음악실·참모실·조각실 (art는 파일 누락 때만 쓰는 안전용 대체 그림)
     { id: 'studio', main: ['art'], sub: [], name: '화실', icon: 'palette', skills: ['art'], cost: 1300, days: 2, art: 'chart', desc: '이젤과 물감을 둔 밝은 방. 그림에 밝은 사람이 바다를 그린다.', fx: '미술품을 그려 짐칸에 싣는다 · 이름난 화가는 명작을 남긴다(사교 명성)' },
     { id: 'sculpt', main: ['craft'], sub: [], name: '조각실', icon: 'bust', skills: ['craft'], cost: 1500, days: 3, art: 'repair', desc: '돌과 나무, 정과 끌을 둔 방. 세공에 밝은 사람이 깎고 빚는다.', fx: '조각품을 깎아 짐칸에 싣는다 · 이름난 조각가는 명작을 남긴다(사교 명성)' },
-    { id: 'musicroom', main: ['music'], sub: [], name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '음악에 밝은 사람이 날마다 가락을 들려준다. 담당자가 악기를 소지하면 효과가 1.5배, 브루노의 바이올린·인어공주의 나각은 3배가 된다. 여러 악기는 중첩하지 않는다.', fx: '날마다 쌓이는 피로가 준다' },
+    { id: 'musicroom', main: ['music'], sub: [], name: '음악실', icon: 'note', skills: ['music'], cost: 1000, days: 2, art: 'rec', desc: '음악에 밝은 사람이 날마다 가락을 들려준다. 담당자가 악기를 소지하면 효과가 1.5배, 브루노의 바이올린·인어공주의 나각은 3배가 된다. 여러 악기는 중첩하지 않는다. 음악실끼리 위·아래·왼쪽·오른쪽으로 맞닿으면 음악에 밝은 사람들이 함께 연주한다 — 2명 듀엣 · 3명 트리오 · 4명 콰트로 · 5명 밴드 · 7명부터 그룹.', fx: '날마다 쌓이는 피로가 준다 · 맞닿은 음악실에 2명부터 앙상블 — 음악·웅변 단계만큼 항해 중 피로·규율을 돌보고, 입항한 도시의 유행을 키운다' },
     { id: 'staff', main: ['ops'], sub: ['hist', 'survey'], name: '참모실', icon: 'strategy', skills: ['ops', 'hist', 'survey'], cost: 1400, days: 2, art: 'captain', desc: '지도와 병법서를 펼친 작전 회의실. 운용·역사·측량에 밝은 참모가 앉는다.', fx: '육상전의 계략(기습·함정·저격·작렬탄)이 잘 통하고 더 세진다' },
     // 2026-10-21 창고: 사람을 두지 않는 방(noStaff). 기함 짐칸이 는다 — art는 파일 누락 때만 쓰는 안전용 대체 그림
     { id: 'store', name: '창고', icon: 'chest', noStaff: true, cost: 1200, days: 2, art: 'repair', desc: '칸막이를 걷어 내고 선반과 고정 끈을 단 짐칸. 사람이 머물지 않는다.', fx: '기함 짐칸이 배 적재량의 5%씩 는다 (4칸까지) · 무게 한도는 그대로라 가벼운 짐에 좋다' },

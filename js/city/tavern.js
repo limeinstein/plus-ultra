@@ -934,7 +934,7 @@
     if (k === 'fame') return p.fame > 1500 ? 3 : p.fame > 400 ? 1 : 0;
     if (k === 'gold') return p.gold > 20000 ? 3 : p.gold > 6000 ? 1 : 0;
     if (k === 'bank') return p.bank > 20000 ? 3 : p.bank > 5000 ? 1 : 0;
-    var v = p.st[k] || 50; return v > 75 ? 3 : v > 60 ? 1 : 0;
+    var v = R.stat(k) || 50; return v > 75 ? 3 : v > 60 ? 1 : 0;
   }
 
   // ---------------------------------------------------------------- companion roles

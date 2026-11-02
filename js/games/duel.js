@@ -74,9 +74,14 @@
   };
 
   /** 부관 등 동료가 싸울 때의 능력 (st: 체력·지력·무력·매력) */
+  /** 「15(+4)」 — 지닌 물건이 더한 만큼을 괄호로 */
+  function bt(v, b) { return b > 0 ? v + '(+' + b + ')' : String(v); }
+  // 동료가 지닌 무기·갑옷·책·장신구도 결투에 든다 (2026-11-02 베타 피드백 「모건에게 검을 줬는데 결투 능력치가 그대로」 — rules.js R.mateGear·R.mateStats)
   G.Games.mateFighter = function (m) {
-    var d = G.MATE[m.id], st = (d && d.st) || [55, 50, 55, 50];
-    return { name: d ? d.name : '부관', portrait: G.Scenes.mateSpec(m.id), maxHp: Math.round(60 + st[0] * 0.6), atk: 3 + Math.round(st[2] / 10), def: 1 + Math.floor(st[0] / 30),
+    var d = G.MATE[m.id], ms = R.mateStats ? R.mateStats(m) : null, gear = R.mateGear ? R.mateGear(m) : { atk: 0, def: 0 };
+    var st = (ms && ms.st.length === 4 && ms.st[0] != null && ms.st) || (d && d.st) || [55, 50, 55, 50];
+    return { name: d ? d.name : '부관', portrait: G.Scenes.mateSpec(m.id), maxHp: Math.round(60 + st[0] * 0.6), atk: 3 + Math.round(st[2] / 10) + gear.atk, def: 1 + Math.floor(st[0] / 30) + gear.def,
+      atkB: gear.atk, defB: gear.def, weapon: gear.weapon ? gear.weapon.name : null,
       skill: R.mateSkill(m, 'sword'), sword: R.mateSkill(m, 'sword'), might: st[2], int: st[1], cha: st[3], speech: R.mateSkill(m, 'speech') || 0, shoot: R.mateSkill(m, 'shoot') || 0,
       mar: st[2], style: 'slash', m: m, look: 'mate' };
   };
@@ -98,7 +103,8 @@
   }
   function playerFighter() {
     var s = G.Game.state, p = s.player;
-    var f = { name: p.name, portrait: p.portrait, maxHp: Math.round(60 + p.st.str * 0.6), atk: R.atk(), def: R.def(), sword: p.sk.sword || 0, might: p.st.mar, int: p.st.int, cha: p.st.cha,
+    var f = { name: p.name, portrait: p.portrait, maxHp: Math.round(60 + R.stat('str') * 0.6), atk: R.atk(), def: R.def(), sword: p.sk.sword || 0, might: R.stat('mar'), int: R.stat('int'), cha: R.stat('cha'),
+      atkB: p.equip.weapon && G.ITEM[p.equip.weapon] ? Math.max(0, R.atk() - 2) : 0, defB: R.def(),   // 맨손 공격 2·맨몸 방어 0에서 무기·갑옷이 더한 만큼
       speech: R.skill('speech'), shoot: R.skill('shoot'), style: G.Games.weaponStyle(p.equip.weapon), look: 'admiral', admiral: true };
     // 생김새에 맞는 전투원 시트(이강희 → duel/fighters/ganghui), 없으면 main_admiral
     var hk = G.Img && G.Img.pick(G.Img.chain.heroDuel());
@@ -218,7 +224,7 @@
           b.querySelector('.nm').innerHTML = U.esc(f.name) + (f.m ? ' <small>(동료)</small>' : '');
           b.querySelector('.bar.hp i').style.width = Math.max(0, f.hp / f.maxHp * 100) + '%'; b.querySelector('.bar.hp b').textContent = '체력 ' + Math.max(0, Math.round(f.hp)) + ' / ' + f.maxHp;
           b.querySelector('.bar.sp i').style.width = f.spirit + '%'; b.querySelector('.bar.sp b').textContent = '기세 ' + Math.round(f.spirit);
-          b.querySelector('.sub').innerHTML = '무력 ' + f.might + ' · 검술 ' + f.sword + ' · 공격 ' + f.atk + ' · 방어 ' + f.def + ' · 장기 ' + MOVE[f.style] + (f === me && stance ? ' · <b>' + STANCE[stance].name + '</b>' : '');
+          b.querySelector('.sub').innerHTML = '무력 ' + f.might + ' · 검술 ' + f.sword + ' · 공격 ' + bt(f.atk, f.atkB) + ' · 방어 ' + bt(f.def, f.defB) + ' · 장기 ' + MOVE[f.style] + (f === me && stance ? ' · <b>' + STANCE[stance].name + '</b>' : '');
         });
         el.querySelector('.rd-round').innerHTML = stance ? '제 ' + (round + 1) + ' 합' : '방침을 고르십시오';
       }
@@ -800,8 +806,8 @@
       function stancePanel() {
         var box = el.querySelector('.rd-stance');
         box.innerHTML = '<div class="st-h">방침을 고르십시오</div><div class="st-cmp">' +
-          '<div><b>' + U.esc(me.name) + '</b> 무력 ' + me.might + ' · 검술 ' + me.sword + ' · 공격 ' + me.atk + ' · 방어 ' + me.def + ' · 장기 ' + MOVE[me.style] + '</div>' +
-          '<div><b>' + U.esc(en.name) + '</b> 무력 ' + en.might + ' · 검술 ' + en.sword + ' · 공격 ' + en.atk + ' · 방어 ' + en.def + ' · 장기 ' + MOVE[en.style] + '</div></div><div class="st-row"></div>';
+          '<div><b>' + U.esc(me.name) + '</b> 무력 ' + me.might + ' · 검술 ' + me.sword + ' · 공격 ' + bt(me.atk, me.atkB) + ' · 방어 ' + bt(me.def, me.defB) + ' · 장기 ' + MOVE[me.style] + '</div>' +
+          '<div><b>' + U.esc(en.name) + '</b> 무력 ' + en.might + ' · 검술 ' + en.sword + ' · 공격 ' + bt(en.atk, en.atkB) + ' · 방어 ' + bt(en.def, en.defB) + ' · 장기 ' + MOVE[en.style] + '</div></div><div class="st-row"></div>';
         var row = box.querySelector('.st-row');
         Object.keys(STANCE).forEach(function (k, i) {
           var S2 = STANCE[k], b = U.el('button', 'btn st-btn' + (k === 'allout' ? ' red' : k === 'guard' ? ' navy' : ''), '<b>' + (i + 1) + '. ' + S2.name + '</b><small>' + S2.en + '</small><span>' + S2.desc + '</span>');

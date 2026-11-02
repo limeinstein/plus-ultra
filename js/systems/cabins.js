@@ -115,6 +115,65 @@
     return true;
   };
 
+  /** 여러 선실의 완성 배치와 견적. 실제 방·금화·부하 배치는 건드리지 않는다. */
+  CB.planRemodel = function (types) {
+    var s = S(), sh = CB.flagship(), rooms = CB.rooms();
+    var p = { ok: false, error: '', cost: 0, days: 0, changes: [], placements: [], idle: 0 };
+    if (!sh || !Array.isArray(types) || types.length !== rooms.length || types[0] !== 'deck') { p.error = '선실 수가 맞지 않습니다. 선실 화면을 다시 여십시오.'; return p; }
+    for (var i = 1; i < types.length; i++) {
+      var c = G.CABIN[types[i]];
+      if (!c || c.fixed) { p.error = '고칠 수 없는 선실 종류입니다.'; return p; }
+      if (types[i] !== rooms[i]) { p.changes.push(i); p.cost += c.cost || 0; p.days += c.days || 0; }
+    }
+    p.rooms = types.slice();
+    var before = sh.cabins, capacityBefore = R().fleetCap();
+    try { sh.cabins = p.rooms; p.capacity = R().fleetCap(); }
+    finally { sh.cabins = before; }
+    p.over = Math.max(0, R().used() - p.capacity);
+    var taken = {}, accountTaken = s.mates.some(function (m) { return m.role === 'purser' && m.room == null; });
+    s.mates.forEach(function (m) {
+      if (m.room == null || !rooms[m.room] || FIXED_ROLE[m.role] || m.role === 'captain' || m.role === 'crew') return;
+      p.placements.push({ id: m.id, from: m.room, type: rooms[m.room], to: null });
+    });
+    function seat(a, i) {
+      if (i == null || taken[i] || !p.rooms[i] || CB.noStaff(p.rooms[i]) || (p.rooms[i] === 'account' && accountTaken)) return false;
+      a.to = i; taken[i] = true;
+      if (p.rooms[i] === 'account') accountTaken = true;
+      return true;
+    }
+    // 바꾸지 않는 방은 그대로, 옮긴 같은 종류의 방 → 원래 자리 → 나머지 빈자리 순서로 둔다.
+    p.placements.forEach(function (a) { if (p.rooms[a.from] === a.type) seat(a, a.from); });
+    p.placements.forEach(function (a) {
+      if (a.to != null) return;
+      for (var k = 0; k < p.rooms.length; k++) if (p.rooms[k] === a.type && seat(a, k)) break;
+    });
+    p.placements.forEach(function (a) { if (a.to == null) seat(a, a.from); });
+    p.placements.forEach(function (a) {
+      if (a.to != null) return;
+      for (var k = 0; k < p.rooms.length; k++) if (seat(a, k)) break;
+      if (a.to == null) p.idle++;
+    });
+    if (p.over > 0 && p.capacity < capacityBefore) p.error = '완성 뒤 짐칸이 부족합니다. 짐을 ' + U.num(p.over) + '통 비운 뒤 고치십시오.';
+    else if (p.cost > s.player.gold) p.error = '돈이 모자랍니다.';
+    p.ok = !p.error;
+    return p;
+  };
+  /** 견적을 다시 검사한 뒤 방·금화·거주자를 한 번에 바꾼다. 공사 날짜는 화면에서 넘긴다. */
+  CB.remodelAll = function (types, expected) {
+    var sh = CB.flagship(), rooms = CB.rooms();
+    if (expected && (sh !== expected.ship || rooms.join(',') !== expected.rooms.join(','))) return { ok: false, error: '기함이나 선실이 바뀌었습니다. 선실 화면을 다시 여십시오.' };
+    var p = CB.planRemodel(types); if (!p.ok || !p.changes.length) return p;
+    var s = S();
+    sh.cabins = p.rooms.slice(); s.player.gold -= p.cost;
+    p.placements.forEach(function (a) {
+      var m = s.mates.filter(function (x) { return x.id === a.id; })[0];
+      if (m.role === 'purser' && (a.to == null || p.rooms[a.to] !== 'account')) m.role = 'none';
+      delete m.room; delete m.roomType;
+      if (a.to != null) { m.room = a.to; m.roomType = p.rooms[a.to]; if (m.roomType === 'account') m.role = 'purser'; }
+    });
+    return p;
+  };
+
   // ---------------------------------------------------------------- 충성과 효율
   /** 충성이 낮으면 일을 건성으로 한다: 특기·능력의 효율 (1 = 온전히) */
   CB.eff = function (m) {
@@ -221,7 +280,91 @@
     return Math.min(caps[type] || B().cap || 8, sum) * (type === 'musicroom' && sum ? weighted / sum : 1);
   };
   /** 효과 값: G.BALANCE.cabins.fx[key] × 그 방의 힘 */
-  CB.fx = function (type, key) { var v = ((B().fx || {})[key]) || 0; return v ? v * CB.power(type) : 0; };
+  CB.fx = function (type, key) {
+    var v = ((B().fx || {})[key]) || 0; if (!v) return 0;
+    var hot = (type === 'galley' || type === 'mess') && CB.kitchenLink() ? 1 + num0((B().kitchen || {}).fx, 0.25) : 1;   // 요리실과 식당이 붙어 있으면 (아래)
+    return v * CB.power(type) * hot;
+  };
+  function num0(v, d) { return v == null ? d : v; }
+
+  // ---------------------------------------------------------------- 맞닿은 방 (2026-11-02 사용자 요청)
+  // 선실 카드는 G.BALANCE.cabins.cols(6)칸씩 줄을 지어 놓인다 — 선실 번호 i(1부터) → [칸, 줄]. 위·아래·왼쪽·오른쪽이 맞닿은 방이다 (대각선은 아님).
+  CB.roomCell = function (i) { var c = CB.cols(); return [(i - 1) % c, Math.floor((i - 1) / c)]; };
+  CB.roomsTouch = function (i, j) {
+    if (!(i >= 1) || !(j >= 1) || i === j) return false;
+    var a = CB.roomCell(i), b = CB.roomCell(j);
+    return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) === 1;
+  };
+  /** type 방들이 맞닿아 이룬 덩어리들 [[선실 번호…]…] */
+  CB.roomGroups = function (type) {
+    var rooms = CB.rooms(), idx = [], seen = {}, out = [];
+    for (var i = 1; i < rooms.length; i++) if (rooms[i] === type) idx.push(i);
+    idx.forEach(function (st) {
+      if (seen[st]) return;
+      var grp = [], q = [st]; seen[st] = 1;
+      while (q.length) { var x = q.shift(); grp.push(x); idx.forEach(function (y) { if (!seen[y] && CB.roomsTouch(x, y)) { seen[y] = 1; q.push(y); } }); }
+      out.push(grp.sort(function (a, b) { return a - b; }));
+    });
+    return out;
+  };
+
+  // 요리실 + 식당: 맞닿아 있으면 「따끈한 밥상」 — 갓 지은 끼니가 식기 전에 나간다.
+  //   요리실·식당의 피로·규율 효과(와 별미) × (1 + kitchen.fx), 요리실 차림의 배율 + kitchen.meal. 조정값 G.BALANCE.cabins.kitchen
+  /** 맞닿은 요리실·식당 한 쌍 {galley, mess} (없으면 null) */
+  CB.kitchenPair = function () {
+    var rooms = CB.rooms();
+    for (var i = 1; i < rooms.length; i++) if (rooms[i] === 'galley')
+      for (var j = 1; j < rooms.length; j++) if (rooms[j] === 'mess' && CB.roomsTouch(i, j)) return { galley: i, mess: j };
+    return null;
+  };
+  CB.kitchenLink = function () { return !!CB.kitchenPair(); };
+
+  // 음악실 앙상블: 사람이 있는 음악실이 맞닿아 있으면 함께 연주한다 — 음악 특기(1단계 이상)를 가진 사람이 2명부터.
+  //   2 듀엣 · 3 트리오 · 4 콰트로 · 5~6 밴드 · 7~ 그룹 (G.BALANCE.cabins.ensemble.names)
+  //   음악 단계(mus)와 웅변 단계(spk)를 충성 효율로 더하고, 사람이 많을수록 어울림(syn = 1 + size × (사람 − 2))이 붙는다.
+  //   · 항해 중 하루 피로 −fat × (mus + spk/2) × syn · 하루 규율 +disc × (mus/2 + spk) × syn (합계 fatMax·discMax까지)
+  //   · 입항한 도시의 유행: 파는 값에 붙는 유행의 몫(배수 − 1)을 fad × (mus + spk) × syn 만큼 키운다 (fadMax까지) — js/core/rules.js R.sellPrice
+  //     (이 교역소에서 산 몫은 산 값보다 비싸게 팔 수 없으니 그 자리에서 되파는 장사는 막혀 있다)
+  function EK() { return B().ensemble || {}; }
+  CB.ensembleName = function (n) {
+    var names = EK().names || [[2, '듀엣'], [3, '트리오'], [4, '콰트로'], [5, '밴드'], [7, '그룹']], nm = '';
+    names.forEach(function (x) { if (n >= x[0]) nm = x[1]; });
+    return nm;
+  };
+  /** 앙상블들 [{rooms, members, n, name, mus, spk, syn, fat, disc, fad}] — 2명이 안 되는 덩어리는 빠진다 */
+  CB.ensembles = function () {
+    var s = S(); if (!s || !s.fleet || !s.fleet.ships.length) return [];
+    var K = EK(), min = num0(K.min, 2), out = [];
+    CB.roomGroups('musicroom').forEach(function (grp) {
+      var members = [], mus = 0, spk = 0;
+      grp.forEach(function (i) {
+        var m = CB.occupant(i); if (!m || !G.MATE[m.id]) return;
+        var mv = R().mateSkill(m, 'music'); if (mv < 1) return;   // 음악을 모르는 사람은 함께 연주하지 못한다
+        var e = CB.eff(m);
+        members.push(m); mus += mv * e; spk += R().mateSkill(m, 'speech') * e;
+      });
+      if (members.length < min) return;
+      var n = members.length, syn = 1 + num0(K.size, 0.15) * (n - 2);
+      out.push({ rooms: grp, members: members, n: n, name: CB.ensembleName(n), mus: mus, spk: spk, syn: syn,
+        fat: num0(K.fat, 0.05) * (mus + spk / 2) * syn, disc: num0(K.disc, 0.03) * (mus / 2 + spk) * syn, fad: num0(K.fad, 0.03) * (mus + spk) * syn });
+    });
+    return out;
+  };
+  /** 앙상블 효과의 합 {fat, disc, fad, list} (상한을 친 뒤) */
+  CB.ensembleFx = function () {
+    var K = EK(), list = CB.ensembles(), o = { fat: 0, disc: 0, fad: 0, list: list };
+    list.forEach(function (e) { o.fat += e.fat; o.disc += e.disc; o.fad += e.fad; });
+    o.fat = Math.min(num0(K.fatMax, 1.2), o.fat); o.disc = Math.min(num0(K.discMax, 0.8), o.disc); o.fad = Math.min(num0(K.fadMax, 0.75), o.fad);
+    return o;
+  };
+  /** 선실 i가 속한 앙상블 (없으면 null) */
+  CB.ensembleAt = function (i) { var l = CB.ensembles(); for (var k = 0; k < l.length; k++) if (l[k].rooms.indexOf(i) >= 0) return l[k]; return null; };
+  /** 유행하는 물건을 팔 때 값에 더 곱할 것: 함대가 이 도시 항구에 있을 때만 (탐험대로 뭍길로 왔으면 악사들은 배에 있다) */
+  CB.fadBoost = function (c, fm) {
+    var s = S(); if (!(fm > 1) || !s || !s.loc || s.loc.city !== c.id || s.loc.via === 'land') return 1;
+    var amp = CB.ensembleFx().fad; if (!amp) return 1;
+    return (1 + (fm - 1) * (1 + amp)) / fm;
+  };
 
   // ---------------------------------------------------------------- 요리실의 차림 (2026-10-19)
   // 요리실에 요리 특기자를 두면 그 사람의 말(모국어)에 맞는 고장의 음식(js/data/cuisine.js)을 차린다 — 바다에서 날마다 피로를 덜고 규율을 돋운다.
@@ -272,7 +415,8 @@
     }
     var s = S(), wk = Math.floor((s.day || 0) / 7), dish = pool[Math.abs(wk + U.strHash(ck.m.id)) % pool.length];
     var K = B().galleyMeal || {}, rooms = CB.rooms(), mess = rooms.indexOf('mess') >= 0;
-    var mult = 1 + (mess ? (K.messHas == null ? 0.3 : K.messHas) : 0) + CB.power('mess') * (K.messPow == null ? 0.1 : K.messPow);
+    var hot = CB.kitchenLink();   // 요리실과 식당이 맞닿아 있다 — 「따끈한 밥상」
+    var mult = 1 + (mess ? (K.messHas == null ? 0.3 : K.messHas) : 0) + CB.power('mess') * (K.messPow == null ? 0.1 : K.messPow) + (hot ? num0((B().kitchen || {}).meal, 0.25) : 0);
     var homeC = s.player && G.CITY_DATA[s.player.home], home = !!(homeC && G.CUISINE.zone && G.CUISINE.zone(homeC) === zone);
     var tier = dish === borrowed ? Math.min(dish.tier || 1, poolTop) : (dish.tier || 1), eff = CB.eff(ck.m) * (1 + Math.max(0, lv - 1) * (K.skill == null ? 0.1 : K.skill));   // 충성 효율 × 솜씨
     // 풍미: 짐칸의 향신료·식자재 (가장 많이 실은 것을 쓴다)
@@ -280,7 +424,7 @@
     Object.keys(cargo).forEach(function (id) { var g = G.GOOD[id], q = cargo[id] && cargo[id].q; if (!g || !(q > 0)) return;
       if (g.cat === 'spice' && (!spice || q > cargo[spice].q)) spice = id; else if (g.cat === 'food' && (!food || q > cargo[food].q)) food = id; });
     var flavor = 1 + (spice ? (K.spice == null ? 0.25 : K.spice) : 0) + (food ? (K.food == null ? 0.1 : K.food) : 0);
-    return { cook: ck.m, name: G.MATE[ck.m.id].name, lv: ck.lv, zone: zone, zoneName: ZONE_NAME[zone] || zone, dish: dish, mess: mess, mult: mult, home: home,
+    return { cook: ck.m, name: G.MATE[ck.m.id].name, lv: ck.lv, zone: zone, zoneName: ZONE_NAME[zone] || zone, dish: dish, mess: mess, hot: hot, mult: mult, home: home,
       spice: spice, food: food, flavor: flavor, flavorText: [spice, food].filter(Boolean).map(function (id) { return G.GOOD[id].name; }).join('·'),
       fat: ((K.fat0 == null ? 0.1 : K.fat0) + (K.fatTier == null ? 0.08 : K.fatTier) * tier) * mult * eff * flavor,
       disc: ((K.disc0 == null ? 0.04 : K.disc0) + (K.discTier == null ? 0.04 : K.discTier) * tier) * mult * eff * flavor * (home ? (K.home || 1.25) : 1) };

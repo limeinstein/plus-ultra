@@ -123,10 +123,13 @@
 
   /** 옛 저장 파일: 나뉘기 전에 산 짐을 산지에 맞는 새 물건으로 바꾼다 (발렌시아에서 산 '도자기' → 유럽 도기) */
   TG.migrate = function (S) {
+    if (!S || S.tradeGoodsVersion >= 1) return;
     var cargo = S && S.fleet && S.fleet.cargo; if (!cargo) return;
     Object.keys(cargo).forEach(function (id) {
       var cg = cargo[id], c = cg && cg.from != null ? G.CITY_DATA[cg.from] : null;
       if (!SPLIT[id] || !c) return;
+      // 중계항은 산지가 아니다. 캘리컷·호르무즈에서 산 중국 도자기도 원래 품목을 유지한다.
+      if (TG.isRelay(c, id, S.date && S.date.y)) return;
       var to = SPLIT[id](c);
       if (!to || to === id) return;
       var dst = cargo[to];
@@ -134,5 +137,6 @@
       else cargo[to] = cg;
       delete cargo[id];
     });
+    S.tradeGoodsVersion = 1;
   };
 })(window.G = window.G || {});

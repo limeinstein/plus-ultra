@@ -92,7 +92,7 @@
         var sc = lv * P.fit(a, d) + P.aff(a, sp, d) * 2;
         if (!best || sc > best.score) best = { m: m, id: m.id, name: md.name, angle: a, lv: lv, score: sc };
       });
-      var st = md.st || [50, 50, 50, 50];
+      var st = (R.mateStats && md.st ? R.mateStats(m).st : md.st) || [50, 50, 50, 50];   // 지닌 장신구·책이 더한 만큼까지
       // 이렇다 할 지식은 없는데 입담만 좋은 부하: 이야기를 부풀린다
       if ((!best || best.lv <= 1) && st[3] >= 60 && st[1] < 60) best = { m: m, id: m.id, name: md.name, angle: 'legend', lv: 1, score: 0.6 + P.aff('legend', sp, d) * 2 + (st[3] - 60) / 40 };
       if (best && best.score > 0.3) out.push(best);
@@ -107,7 +107,7 @@
 
   /** 나이·성별의 궁합: {k: 확률 보정, tag: 후원자가 덧붙일 말의 갈래} */
   P.demo = function (c, sp) {
-    var md = G.MATE[c.id] || {}, ma = AGE_N[P.mateAge(c.id)], st = md.st || [50, 50, 50, 50];
+    var md = G.MATE[c.id] || {}, ma = AGE_N[P.mateAge(c.id)], st = (R.mateStats && md.st ? R.mateStats(c).st : md.st) || [50, 50, 50, 50];
     if (!sp) return { k: (ma === 0 ? 0.03 : 0) + (st[3] >= 66 ? 0.04 : 0), tag: null };     // 광장: 젊고 말솜씨 좋은 사람이 사람을 모은다
     var sa = AGE_N[P.sponsorAge(sp)], fem = G.Sponsor.female(sp), mfem = md.g === 'f', tp = G.Sponsor.temper(sp), k = 0, tag = null;
     if (ma === 0 && sa === 2) { k += 0.08; tag = 'youngToOld'; }

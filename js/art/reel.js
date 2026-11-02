@@ -21,28 +21,32 @@
   };
   R.has = function (d) { return !!R.key(d); };
 
-  /* 판 준비: 키 → Promise<{img, cols, rows, n, cw, ch}> — 받은 뒤 decode()로 미리 풀어 둔다 (처음 그릴 때 멈칫하지 않게) */
-  var ready = {}, info = {};
+  /* 진행 중인 읽기만 공유한다. 완료 Promise·판을 영구 보관하면 공통 그림 캐시가 비워져도 원본이 남는다.
+     칸 정보는 그림에 약하게 연결하고, 원본의 보관·미리 풀기는 G.Img 한곳에 맡긴다. */
+  var ready = {}, info = new WeakMap();
   function layout(img) {
+    if (info.has(img)) return info.get(img);
     var W = img.naturalWidth || img.width, H = img.naturalHeight || img.height;
     var cw = W / COLS, rows = Math.max(1, Math.round(H / (cw / ASPECT)));
-    return { img: img, cols: COLS, rows: rows, n: COLS * rows, cw: cw, ch: H / rows };
+    var L = { img: img, cols: COLS, rows: rows, n: COLS * rows, cw: cw, ch: H / rows };
+    info.set(img, L); return L;
   }
   R.load = function (key) {
     if (!key) return Promise.resolve(null);
+    var cached = R.now(key); if (cached) return Promise.resolve(cached);
     if (ready[key]) return ready[key];
     ready[key] = I().load(key).then(function (img) {
-      if (!img) { delete ready[key]; return null; }
-      var done = function () { return (info[key] = layout(img)); };
-      return img.decode ? img.decode().then(done, done) : done();
+      delete ready[key]; return img ? layout(img) : null;
+    }, function (err) {
+      delete ready[key]; throw err;
     });
     return ready[key];
   };
   /** 이미 풀어 둔 판 (없으면 null) — 기다리지 않는다 */
-  R.now = function (key) { return info[key] || null; };
+  R.now = function (key) { var img = key && I().get(key); return img ? layout(img) : null; };
   /** 곧 볼지도 모르는 발견물: 기다리지 않고 받기만 시작한다. 여러 번 불러도 한 번만 받는다 */
   R.prefetch = function (d) {
-    var k = R.key(d); if (k && !ready[k]) R.load(k);
+    var k = R.key(d); if (k && !R.now(k) && !ready[k]) R.load(k);
     if (d && I() && I().prefetchKeys) I().prefetchKeys(['discovery-ends/' + d.id]);   // 발견 카드·신기루의 마지막 장면 그림 (아티팩트판은 묶음에 있다)
   };
 

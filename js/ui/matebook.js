@@ -61,11 +61,15 @@
     }
     el.appendChild(G.Art.portraitCanvas(G.Scenes.mateSpec(m.id), size));
   }
-  function square(d) {
-    var v = (d.st || []).map(function (x) { return Math.max(0, Math.min(100, x)); });
+  /** 동료의 능력치 — 지닌 물건이 더한 값까지 (R.mateStats). t(i): 「67(+7)」 */
+  function stats(m) { var o = R.mateStats ? R.mateStats(m) : null, d = data(m); return o && o.base.length ? o : { base: d.st || [], bonus: [0, 0, 0, 0], st: d.st || [] }; }
+  function stText(o, i) { return o.base[i] == null ? '—' : R.statText ? R.statText(o.base[i], o.bonus[i]) : String(o.base[i]); }
+  function square(d, m) {
+    var o = stats(m), t = function (i) { return stText(o, i); };
+    var v = o.st.map(function (x) { return Math.max(0, Math.min(100, x)); });
     var points = [[100, 80 - v[0] * .55], [100 + v[1] * .55, 80], [100, 80 + v[2] * .55], [100 - v[3] * .55, 80]].map(function (p) { return p.join(','); }).join(' ');
-    return '<div class="mb-stats" aria-label="능력치"><svg viewBox="0 0 200 160" role="img" aria-label="체력 ' + (d.st || [])[0] + ', 지력 ' + (d.st || [])[1] + ', 무력 ' + (d.st || [])[2] + ', 매력 ' + (d.st || [])[3] + '"><rect x="45" y="25" width="110" height="110"/><rect x="72.5" y="52.5" width="55" height="55"/><path d="M100 25V135M45 80H155"/><polygon points="' + points + '"/>' +
-      '<text x="100" y="17" text-anchor="middle">체력 ' + (d.st[0] == null ? '—' : d.st[0]) + '</text><text x="160" y="76">지력</text><text x="160" y="94">' + d.st[1] + '</text><text x="100" y="154" text-anchor="middle">무력 ' + d.st[2] + '</text><text x="40" y="76" text-anchor="end">매력</text><text x="40" y="94" text-anchor="end">' + d.st[3] + '</text></svg></div>';
+    return '<div class="mb-stats" aria-label="능력치"><svg viewBox="0 0 200 160" role="img" aria-label="체력 ' + t(0) + ', 지력 ' + t(1) + ', 무력 ' + t(2) + ', 매력 ' + t(3) + '"><rect x="45" y="25" width="110" height="110"/><rect x="72.5" y="52.5" width="55" height="55"/><path d="M100 25V135M45 80H155"/><polygon points="' + points + '"/>' +
+      '<text x="100" y="17" text-anchor="middle">체력 ' + t(0) + '</text><text x="160" y="76">지력</text><text x="160" y="94">' + t(1) + '</text><text x="100" y="154" text-anchor="middle">무력 ' + t(2) + '</text><text x="40" y="76" text-anchor="end">매력</text><text x="40" y="94" text-anchor="end">' + t(3) + '</text></svg></div>';
   }
   MB.story = function (m) {
     var d = data(m), bio = G.Bio && G.Bio.find(d.name), own = (G.VOICES || {})[m.id], out = [];
@@ -82,7 +86,7 @@
   function sortValue(m, key) {
     if (key === 'name') return data(m).name;
     if (key === 'role') return R.roleName(m);
-    if (key.indexOf('st:') === 0) return (data(m).st || [])[+key.slice(3)] || 0;
+    if (key.indexOf('st:') === 0) return stats(m).st[+key.slice(3)] || 0;
     if (key.indexOf('sk:') === 0) return skill(m, key.slice(3));
     if (key.indexOf('lg:') === 0) return lang(m, key.slice(3));
     if (key === 'loyal') return loyal(m);
@@ -156,7 +160,7 @@
         table.querySelectorAll('[data-sort]').forEach(function (b) { b.onclick = function () { setSort(b.dataset.sort); }; });
         L.forEach(function (m) {
           var d = data(m), rc = G.CabinView && G.CabinView.rowClass(m);
-          var tr = U.el('tr', (rc === 'idle' ? 'mb-idle' : '') + (m.id === selected ? ' on' : ''), '<td><button type="button" class="mb-person" title="' + U.esc(d.name) + '"><span class="mb-face"></span><span><b>' + U.esc(d.name) + '</b></span></button></td><td class="mb-role" title="' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '">' + U.esc(R.roleName(m)) + '</td>' + (d.st || [0, 0, 0, 0]).map(function (n) { return '<td class="mb-number">' + n + '</td>'; }).join('') + '<td class="mb-number mb-loyal-cell">' + loyalty(m) + '</td><td class="mb-aff-cell">' + affection(m, d) + '</td><td><div class="mb-tiles">' + skills(m, false, 4) + '</div></td><td><div class="mb-tiles">' + languages(m, false, 3) + '</div></td>');
+          var tr = U.el('tr', (rc === 'idle' ? 'mb-idle' : '') + (m.id === selected ? ' on' : ''), '<td><button type="button" class="mb-person" title="' + U.esc(d.name) + '"><span class="mb-face"></span><span><b>' + U.esc(d.name) + '</b></span></button></td><td class="mb-role" title="' + U.esc(G.Cabins ? G.Cabins.placeName(m) : R.roleName(m)) + '">' + U.esc(R.roleName(m)) + '</td>' + [0, 1, 2, 3].map(function (i) { var o = stats(m); return '<td class="mb-number">' + (o.base[i] == null ? 0 : stText(o, i)) + '</td>'; }).join('') + '<td class="mb-number mb-loyal-cell">' + loyalty(m) + '</td><td class="mb-aff-cell">' + affection(m, d) + '</td><td><div class="mb-tiles">' + skills(m, false, 4) + '</div></td><td><div class="mb-tiles">' + languages(m, false, 3) + '</div></td>');
           tr.dataset.mate = m.id; tr.onclick = function () { if (!working) choose(m); };
           tr.querySelector('.mb-person').setAttribute('aria-label', d.name + ' 상세 보기');
           face(tr.querySelector('.mb-face'), m, 44, false);
@@ -166,7 +170,7 @@
       }
       var m = L.filter(function (x) { return x.id === selected; })[0] || L[0], d = data(m); selected = m.id;
       root.dataset.selected = m.id;
-      var detail = U.el('div', 'mb-detail', '<nav class="mb-nav" aria-label="다른 동료 선택"><div class="mb-section-title">함께 항해하는 사람들</div><div class="mb-nav-list" tabindex="0" aria-label="동료 선택 목록"></div></nav><section class="mb-profile"><div class="mb-portrait"></div><div class="mb-name">' + U.esc(d.name) + '</div><div class="mb-traits">' + tags(m) + '</div><dl class="mb-facts"><dt>직위</dt><dd>' + U.esc(R.roleName(m)) + '</dd><dt>선실</dt><dd>' + U.esc(G.Cabins ? G.Cabins.placeName(m) : '—') + '</dd><dt>말투</dt><dd>' + U.esc(G.Banter ? G.Banter.toneName(m.id) : '—') + '</dd><dt>충성</dt><dd class="mb-loyal-value">' + loyalty(m) + (m.devoted ? ' · 계속 유지' : '') + '</dd><dt>애정</dt><dd>' + affection(m, d) + '</dd><dt>월급</dt><dd>금화 ' + U.num(R.mateWage(m.id)) + '닢</dd></dl>' + square(d) + '</section><section class="mb-record"><div class="mb-section-title">특기 <small>0 미숙 · 1 기초 · 2 숙련 · 3 달인</small></div><div class="mb-tiles mb-all-skills">' + skills(m, true) + '</div><div class="mb-section-title mb-language-title">언어 <small>0 모름 · 1 기초 · 2 보통 · 3 능숙</small></div><div class="mb-tiles mb-all-languages">' + languages(m, true) + '</div><div class="mb-section-title">살아온 이야기</div><div class="mb-story" tabindex="0" aria-label="살아온 이야기"></div><div class="mb-actions"></div></section>');
+      var detail = U.el('div', 'mb-detail', '<nav class="mb-nav" aria-label="다른 동료 선택"><div class="mb-section-title">함께 항해하는 사람들</div><div class="mb-nav-list" tabindex="0" aria-label="동료 선택 목록"></div></nav><section class="mb-profile"><div class="mb-portrait"></div><div class="mb-name">' + U.esc(d.name) + '</div><div class="mb-traits">' + tags(m) + '</div><dl class="mb-facts"><dt>직위</dt><dd>' + U.esc(R.roleName(m)) + '</dd><dt>선실</dt><dd>' + U.esc(G.Cabins ? G.Cabins.placeName(m) : '—') + '</dd><dt>말투</dt><dd>' + U.esc(G.Banter ? G.Banter.toneName(m.id) : '—') + '</dd><dt>충성</dt><dd class="mb-loyal-value">' + loyalty(m) + (m.devoted ? ' · 계속 유지' : '') + '</dd><dt>애정</dt><dd>' + affection(m, d) + '</dd><dt>월급</dt><dd>금화 ' + U.num(R.mateWage(m.id)) + '닢</dd></dl>' + square(d, m) + '</section><section class="mb-record"><div class="mb-section-title">특기 <small>0 미숙 · 1 기초 · 2 숙련 · 3 달인</small></div><div class="mb-tiles mb-all-skills">' + skills(m, true) + '</div><div class="mb-section-title mb-language-title">언어 <small>0 모름 · 1 기초 · 2 보통 · 3 능숙</small></div><div class="mb-tiles mb-all-languages">' + languages(m, true) + '</div><div class="mb-section-title">살아온 이야기</div><div class="mb-story" tabindex="0" aria-label="살아온 이야기"></div><div class="mb-actions"></div></section>');
       L.forEach(function (x) {
         var btn = U.el('button', 'mb-nav-person' + (x.id === m.id ? ' on' : ''), '<span class="mb-face"></span><span>' + U.esc(data(x).name) + '</span>');
         btn.type = 'button'; btn.dataset.mate = x.id; btn.setAttribute('aria-pressed', x.id === m.id ? 'true' : 'false');
@@ -186,6 +190,8 @@
           var boost = G.Cabins.musicInstrument({ id: m.id, items: [it] });
           note += ' · 음악실 배치 시 효과 ' + boost.mult + '배';
         }
+        var ist = R.itemStatText ? R.itemStatText(it.id) : '', wg = def.kind === 'weapon' ? '결투 공격 +' + (def.atk || 0) : def.kind === 'armor' ? '결투 방어 +' + (def.def || 0) : '';
+        if (ist || wg) note += ' · ' + (ist || wg);   // 같은 능력치는 가장 높은 물건 하나만 오른다
         var row = U.el('div', 'mb-owned-item', '<span class="mb-owned-pic"></span><span><b>' + U.esc(R.itemName(it)) + '</b> <span class="mb-owned-qty">×' + R.itemQty(it) + '</span><small>' + U.esc(note) + '</small></span>');
         row.dataset.item = it.id; row.title = def.desc || '';
         if (G.Img && G.Art.relicArt) row.querySelector('.mb-owned-pic').appendChild(G.Img.make(rl ? G.Img.chain.relic(rl) : G.Img.chain.item(def), 48, 48, function () { return G.Art.relicArt(rl || def, 48, 48, { transparent: true }); }, { fit: 'contain' }));

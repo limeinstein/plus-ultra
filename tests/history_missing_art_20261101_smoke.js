@@ -13,7 +13,7 @@ const OUT=path.join(WORK,'runtime');
  try{
   const page=await browser.newPage({viewport:{width:1280,height:720}});
   page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/fonts\.(googleapis|gstatic)/.test(m.text()+(m.location().url||'')))errors.push(m.text());});
-  await page.goto(pathToFileURL(path.join(ROOT,'index.html')).href);
+  await page.goto(pathToFileURL(path.join(ROOT,'index.html')).href,{waitUntil:'domcontentloaded',timeout:90000});
   await page.waitForFunction(()=>window.G&&G.Game&&G.Hist&&G.FamEv&&G.Game.sceneName==='title',null,{timeout:90000});
   const result=await page.evaluate(async({people,scenes})=>{
    const keys=people.flatMap(p=>['portraits/history/'+p.id,'portraits/history/'+p.id+'_half']).concat(scenes.map(s=>'legend-events/'+s.id));
@@ -33,17 +33,21 @@ const OUT=path.join(WORK,'runtime');
   assert.strictEqual(result.decoded.length,people.length*2+scenes.length);
   for(const im of result.decoded){const expected=im.key.startsWith('legend-events/')?[1881,836]:im.key.endsWith('_half')?[1024,1536]:[1024,1024];assert.deepStrictEqual([im.width,im.height],expected,im.key);}
   for(const sp of result.speakers){assert.strictEqual(sp.name,people.find(p=>p.id===sp.id).name);assert.strictEqual(sp.face,'portraits/history/'+sp.id);assert.strictEqual(sp.half,'portraits/history/'+sp.id+'_half');}
-  const seen=new Set();await page.waitForTimeout(500);
+  const seen=new Set();await page.waitForFunction(()=>G.Game.sceneName==='city'&&!G.UI.busy(),null,{timeout:90000});
   for(const p of people){
    await page.evaluate(id=>{const sp=G.Hist.speaker(id);G.UI.say('역사 사건 — '+sp.name,sp).catch(e=>console.error(e));},p.id);
-   await page.waitForTimeout(160);assert((await page.locator('body').innerText()).includes(p.name),p.id);
+   await page.waitForTimeout(300);assert((await page.locator('body').innerText()).includes(p.name),p.id);
+   assert.strictEqual(await page.locator('.modal-back.catch').count(),1,p.id+' 대화 중첩');
    const group=p.id.startsWith('ot_')?'ottomaneurope':p.id.startsWith('nc_')?'nerchinsk':p.id.startsWith('tw_')?'taiwan':p.id.startsWith('hj_')?'houjin':p.id.startsWith('sk_')?'sekigahara':p.id.startsWith('od_')?'odawara':p.id.startsWith('mc_')?'macao':'horan';
    if(!seen.has(group)){seen.add(group);await page.waitForTimeout(450);await page.screenshot({path:path.join(OUT,'portrait-'+group+'.png')});}
-   await page.keyboard.press('Escape');await page.waitForTimeout(100);
+   await page.keyboard.press('Escape');await page.waitForFunction(()=>!G.UI.busy(),null,{timeout:10000});
   }
   for(const s of scenes){
    await page.evaluate(async row=>{window.__historyPic=G.FamEv.showPic({img:'legend-events/'+row.id,title:row.title});if(!window.__historyPic.box)throw new Error('장면 액자 누락: '+row.id);await window.__historyPic.ready;},s);
    await page.waitForTimeout(350);assert.strictEqual(await page.locator('.famscene img').count(),1,s.id);
+   assert.strictEqual(await page.locator('.famscene img').getAttribute('alt'),s.title,s.id+' 장면 제목');
+   assert(await page.locator('.famscene img').isVisible(),s.id+' 액자 표시');
+   assert.strictEqual(await page.locator('.dlg').count(),0,s.id+' 이전 대화 종료');
    await page.screenshot({path:path.join(OUT,s.id+'.png')});
    await page.evaluate(async()=>{await window.__historyPic.stop();});
   }

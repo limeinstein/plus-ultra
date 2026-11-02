@@ -25,20 +25,30 @@
   /** 판 하나를 놓는다 (기억한 자리 → 없으면 기본 자리) */
   function place(p) {
     var el = p.el; if (!el || !el.isConnected) return;
+    if (drag && drag.el === el && drag.moved) return;
     var l = layer(); if (l) l.style.setProperty('--sea-bar-top', HP.barTop() + 'px');
-    var pos = get(p.key);
+    if (p.options.layout) p.options.layout();
+    var pos = !p.options.enabled || p.options.enabled() ? get(p.key) : null;
     if (!pos) { el.style.left = el.style.top = el.style.right = el.style.bottom = ''; el.classList.remove('hp-moved'); return; }
     var sz = size(), w = el.offsetWidth || 300, h = el.offsetHeight || 200;
     var x = Math.max(0, Math.min(sz.w - w, pos.x * sz.w)), y = Math.max(MIN_VIS, Math.min(sz.h - h, pos.y * sz.h));
     el.style.left = Math.round(x) + 'px'; el.style.top = Math.round(y) + 'px'; el.style.right = 'auto'; el.style.bottom = 'auto';
     el.classList.add('hp-moved');
   }
-  HP.fit = function () { pins = pins.filter(function (p) { return p.el && p.el.isConnected; }); pins.forEach(place); };
+  /** 화면을 걷은 직후 이전 판과 듣개의 참조를 놓는다. 창 크기를 바꿀 때까지 쌓아 두지 않는다. */
+  HP.prune = function () {
+    pins = pins.filter(function (p) { return p.el && p.el.isConnected; });
+    if (drag && !drag.el.isConnected) { drag.el.classList.remove('hp-drag'); drag = null; }
+  };
+  HP.fit = function () { HP.prune(); pins.forEach(place); };
+  HP.refresh = function (key) { pins.forEach(function (p) { if (p.key === key) place(p); }); };
   HP.reset = function (key) { put(key, null); HP.fit(); };
   /** 판을 옮길 수 있게 — key: 기억할 이름 · 판의 onclick(누르기)은 끌지 않았을 때만 */
-  HP.pin = function (el, key, label) {
+  HP.pin = function (el, key, label, options) {
     if (!el) return el;
-    var p = { el: el, key: key };
+    HP.prune();
+    for (var i = 0; i < pins.length; i++) if (pins[i].el === el) return el;
+    var p = { el: el, key: key, options: options || {} };
     pins.push(p);
     el.classList.add('hud-pin');
     el.title = (el.title ? el.title + ' · ' : '') + '끌어서 옮기기 · 오른쪽 클릭: 제자리로';
@@ -47,9 +57,10 @@
     rs.addEventListener('mousedown', function (e) { e.stopPropagation(); });
     rs.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
     rs.onclick = function (e) { e.stopPropagation(); e.preventDefault(); HP.reset(key); };
-    el.appendChild(rs);
+    if (p.options.reset !== false) el.appendChild(rs);
     el.addEventListener('pointerdown', function (e) {
       if (e.button !== 0) return;
+      if (p.options.enabled && !p.options.enabled()) return;
       var r = el.getBoundingClientRect(), L = layer().getBoundingClientRect(), k = L.width / (layer().clientWidth || 1600) || 1;
       drag = { el: el, key: key, sx: e.clientX, sy: e.clientY, x0: (r.left - L.left) / k, y0: (r.top - L.top) / k, k: k, id: e.pointerId, moved: false };
     });
@@ -82,6 +93,7 @@
       setTimeout(function () { el._hpMoved = false; }, 400);
     }
     drag = null;
+    HP.fit();
   }
   window.addEventListener('pointerup', end);
   window.addEventListener('pointercancel', end);

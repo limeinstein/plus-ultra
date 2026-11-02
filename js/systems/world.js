@@ -44,6 +44,9 @@
     if (G.Horan) out = out.concat(G.Horan.daily());       // 정묘·병자호란 — 형제의 맹약·남한산성·삼전도 (js/systems/horan.js)
     if (G.Taiwan) out = out.concat(G.Taiwan.daily());       // 타이완 — 질란디아·국성야·팽호·대만부 (js/systems/taiwan.js)
     if (G.Nerchinsk) out = out.concat(G.Nerchinsk.daily());       // 네르친스크 조약 — 알바진·사절단·조약 (js/systems/nerchinsk.js)
+    if (G.Safavid) out = out.concat(G.Safavid.daily());       // 사파비 왕조·찰디란 (js/systems/safavid.js)
+    if (G.Mohacs) out = out.concat(G.Mohacs.daily());       // 모하치 전투 (js/systems/mohacs.js)
+    if (G.Brothers) out = out.concat(G.Brothers.daily());       // 두 왕자 — 세자 책봉·교동도·반정·제주 (js/systems/brothers.js)
     if (G.Imjin) out = out.concat(G.Imjin.daily());       // 임진왜란 — 부산진에서 노량까지 (js/systems/imjin.js)
     if (G.Sakoku) out = out.concat(G.Sakoku.daily());      // 일본의 대외 통제·남만 교역 단절·데지마
     if (G.Globe) out = out.concat(G.Globe.daily());       // 셰익스피어와 글로브의 불 — 템페스트·장례·첫 전집 (js/systems/globe.js)

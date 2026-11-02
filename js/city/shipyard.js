@@ -186,10 +186,16 @@
     await C.say(keeper(), head + ' 금화 ' + U.num(next) + '닢을 더 대 주면 도크를 넓히고 장인을 불러 ' + (tech + 1) + '등급 배를 지을 수 있네.' + (nextShips.length ? ' (' + nextShips.join('·') + ')' : ' 다만 이 고장에서 짓는 배 가운데 그 등급 배는 아직 없네.') +
       (nextGear ? ' 주물장과 목각장도 늘어 ' + nextGear + '도 만들 수 있게 되지.' : ''));
     if (s.player.gold < 1000) { await C.say(keeper(), '투자는 금화 1,000닢부터 받네.'); return; }
-    var n = await UI.number({ title: '조선 기술 투자 (천 닢 단위)', min: 1, max: Math.floor(s.player.gold / 1000), value: Math.min(Math.floor(s.player.gold / 1000), Math.ceil(next / 1000)), unit: '천 닢',
-      info: function (k) { var a = SHp.techAmt(c) + k * 1000, b = 0; for (var i = 1; i < SHp.TECH_INV.length; i++) if (a >= SHp.TECH_INV[i]) b = i; return '금화 ' + U.num(k * 1000) + '닢 → 조선 기술 ' + Math.min(5, SHp.techBase(c) + b) + '등급'; } });
-    if (!n) return;
-    var amt = n * 1000; s.player.gold -= amt;
+    var remaining = SHp.techRemaining(c), max = Math.min(Math.floor(s.player.gold / 1000), Math.ceil(remaining / 1000));
+    var n = await UI.number({ title: '조선 기술 투자 (천 닢 단위)', min: 1, max: max, value: Math.min(max, Math.ceil(next / 1000)), unit: '천 닢',
+      text: '한 단위는 금화 1,000닢입니다. 이 조선소의 마지막 등급까지 필요한 금액만 받습니다.',
+      info: function (k) { var amt = Math.min(k * 1000, remaining), a = SHp.techAmt(c) + amt, b = 0; for (var i = 1; i < SHp.TECH_INV.length; i++) if (a >= SHp.TECH_INV[i]) b = i; return '금화 ' + U.num(amt) + '닢 → 조선 기술 ' + Math.min(5, SHp.techBase(c) + b) + '등급 · 남는 돈 ' + U.num(s.player.gold - amt) + '닢'; } });
+    if (typeof n !== 'number' || !isFinite(n) || n !== Math.floor(n) || n < 1 || n > max) return;
+    var amt = Math.min(n * 1000, SHp.techRemaining(c));
+    if (amt <= 0) return;
+    if (!(await UI.confirm(c.name + ' 조선소에 금화 ' + U.num(amt) + '닢을 투자하겠습니까? (투자 후 소지금 ' + U.num(s.player.gold - amt) + '닢)', '투자한다', '그만둔다'))) return;
+    if (s.player.gold < amt) { await C.say(keeper(), '투자할 돈이 모자라는군.'); return; }
+    s.player.gold -= amt;
     var up = SHp.techInvest(c, amt);
     G.Fame.add('tr', Math.round(amt / 2000));
     if (up > 0) {

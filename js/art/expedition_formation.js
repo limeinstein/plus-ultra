@@ -199,7 +199,7 @@
       }
       if (!dt) return;
       if (m.arrived) { m.speed = 0; m.moving = false; return; }
-      var goal = m.goal, distance = Math.hypot(goal.x - m.x, goal.y - m.y), stop = fc.stopDistance * size / zoom;
+      var goal = m.goal, distance = Math.hypot(goal.x - m.x, goal.y - m.y), stop = fc.stopDistance * size / zoom, ford = false;
       if (!clear(m, goal)) {
         // 안전하게 갈 수 있는 앞쪽 발자국으로 향한다. 물 건너로 옆걸음치지 않는다.
         var best = null;
@@ -209,7 +209,17 @@
           var score = Math.hypot(q.x - goal.x, q.y - goal.y) + d * 0.25;
           if (!best || score < best.score) best = { x: q.x, y: q.y, score: score };
         });
-        if (best) goal = best; else { m.speed = 0; m.moving = false; return; }
+        // 마른 땅의 발자국이 목표에 실제로 가까워질 때만 그리로 — 강가에서 뒤쪽 발자국 사이를 맴돌며 멈춰 서지 않게
+        if (best && Math.hypot(best.x - goal.x, best.y - goal.y) < distance - stop) goal = best;
+        else {
+          // 물(강·호수·좁은 물목)을 사이에 두고 마른 땅으로는 갈 데가 없다 — 제독이 건넌 길이니 그 발자국을 그대로 밟아 건넌다.
+          //   예전에는 여기서 멈춰 제독이 강을 건너면 낙타·말·대원이 강가에 남았다 (베타 피드백 2026-11-02). 옆걸음으로 물에 들어가지는 않는다.
+          var ni = -1, nd = Infinity;
+          for (var ti = 0; ti < trail.length; ti++) { var td = Math.hypot(trail[ti][0] - m.x, trail[ti][1] - m.y); if (td < nd) { nd = td; ni = ti; } }
+          var ti2 = ni; while (ti2 > 0 && Math.hypot(trail[ti2][0] - m.x, trail[ti2][1] - m.y) < stop * 2) ti2--;
+          if (ni < 0 || Math.hypot(trail[ti2][0] - m.x, trail[ti2][1] - m.y) < stop) { m.speed = 0; m.moving = false; return; }
+          goal = { x: trail[ti2][0], y: trail[ti2][1] }; ford = true;
+        }
       }
       distance = Math.hypot(goal.x - m.x, goal.y - m.y);
       var vx = goal.x - m.x, vy = goal.y - m.y;
@@ -231,7 +241,8 @@
       // 가려는 쪽으로 돌아선 뒤 걷는다. 뒤나 옆으로 미끄러지지 않게 한다.
       var advance = Math.min(distance, m.speed * dt / zoom) * Math.max(0, Math.cos(angle(targetHeading - m.heading)));
       var next = { x: m.x + Math.cos(m.heading) * advance, y: m.y - Math.sin(m.heading) * advance };
-      if (distance <= stop || !clear(m, next)) advance = 0;
+      if (!ford && !stand(m)) ford = true;   // 이미 물에 들어서 있으면 마저 건너 나온다 (물가에서 한 걸음도 못 떼고 서 있지 않게)
+      if (distance <= stop || (!ford && !clear(m, next))) advance = 0;
       if (advance > 0) {
         m.x = next.x; m.y = next.y;
         var stride = (fc.strides[roles[i + 1]] || fc.strides.foot) * size;

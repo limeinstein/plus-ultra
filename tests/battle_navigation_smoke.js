@@ -64,16 +64,21 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       }
       out.goal = goal && { ratio: +best.toFixed(2) }; console.log('##목표 ' + JSON.stringify(out.goal));
       async function sail(speed) {
-        me.x = sx; me.y = sy; me.vel = [0, 0]; me.heading = Math.atan2(goal[1] - sy, goal[0] - sx); me.moveTo = goal.slice(); me.target = null; me.steer = null; me.halt = false; me.route = null; me.detour = null; me.stk = null;
+        // 해전 시작 연출의 창과 새 배치에서 남은 접현·전술 상태를 지운 뒤, 기함 클릭 이동만 재생한다.
+        G.UI.modalRoot().replaceChildren(); st.over = false; st.busy = 0;
+        st.ships.forEach(b => { b.alive = true; b.fled = false; b.sunk = false; b.captured = false; b.hp = b.maxHp = 10000; if (b.guns) b.guns.n = 0; });
+        me.x = sx; me.y = sy; me.vel = [0, 0]; me.heading = Math.atan2(goal[1] - sy, goal[0] - sx); me.moveTo = goal.slice(); me.target = null; me.steer = null; me.halt = false; me.route = null; me.detour = null; me.stk = null; me.board = null; me.boardIntent = false; me.tactic = null;
         B.speed(speed);
         let t = 0, min = 1e9;
+        B.headless = true;
         for (let i = 0; i < 450; i++) {
-          en.x = 1000; en.y = 1000; en.vel = [0, 0]; en.moveTo = null; en.target = null; en.alive = true;
+          en.x = 1000; en.y = 1000; en.vel = [0, 0]; en.moveTo = null; en.target = null; en.alive = true; en.fled = false; en.halt = true;
           if (!me.moveTo) me.moveTo = goal.slice();
           st.paused = false; st.busy = 0; B.update(0.2); t += 0.2;
           const d = Math.hypot(me.x - goal[0], me.y - goal[1]); if (d < min) min = d;
           if (d < 45) break;
         }
+        B.headless = false; B.update(0);
         return { t: +t.toFixed(1), min: Math.round(min) };
       }
       const tt = performance.now(); if (goal) { out.x1 = await sail(1); console.log('##×1 ' + JSON.stringify(out.x1) + ' ' + Math.round(performance.now() - tt) + 'ms'); out.x3 = await sail(3); console.log('##×3 ' + JSON.stringify(out.x3)); }

@@ -54,7 +54,7 @@
   MC.renewPass = renewPass;
   function talkP() {
     var k = K().talk || {}, p = S().player;
-    return U.clamp((k.base || 0.3) + (R.skill ? R.skill('speech') || 0 : 0) * (k.speech || 0.15) + ((p.st && p.st.cha) || 50) / 100 * (k.cha || 0.25), 0.05, 0.95);
+    return U.clamp((k.base || 0.3) + (R.skill ? R.skill('speech') || 0 : 0) * (k.speech || 0.15) + ((p.st && R.stat('cha')) || 50) / 100 * (k.cha || 0.25), 0.05, 0.95);
   }
   MC.talkP = talkP;
 

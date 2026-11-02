@@ -197,7 +197,12 @@
     toastEl = U.el('div', 'toasts'); root.appendChild(toastEl);
     fadeEl = U.el('div', 'fade-black'); root.appendChild(fadeEl);
     // 창이 열리고 닫히거나 바다·도시가 바뀌면 떠 있는 알림도 그 장면의 자리로 옮긴다 (알림 정리 2026-11-01)
-    if (window.MutationObserver) { var zmo = new MutationObserver(function () { if (UI.noticeZone && toastEl.children.length) UI.noticeZone(); }); zmo.observe(modalRoot, { childList: true }); zmo.observe(root, { attributes: true, attributeFilter: ['class'] }); }
+    if (window.MutationObserver) { var zmo = new MutationObserver(function () { if (UI.noticeZone && toastEl.children.length) UI.noticeZone(); }); zmo.observe(modalRoot, { childList: true }); zmo.observe(root, { attributes: true, attributeFilter: ['class'] }); zmo.observe(toastEl, { childList: true }); }
+    if (G.HudPin) G.HudPin.pin(toastEl, 'notices', '알림', { reset: false, layout: noticeLayout, enabled: noticeMovable });
+    if (window.ResizeObserver) { var nro = new ResizeObserver(function () { if (toastEl.children.length) setZone(); }); nro.observe(root); nro.observe(toastEl); }
+    // 상태판을 펼치거나 접으면 알림도 그 아래의 빈 공간을 다시 찾는다.
+    root.addEventListener('pointerover', noticeStatusChanged);
+    root.addEventListener('pointerout', noticeStatusChanged);
     document.addEventListener('keydown', function (e) { if (routeKey(e)) e.preventDefault(); });
     // 우클릭은 Esc와 같은 "돌아간다" 입력이다. 선택 대화에서는 떠나고, 창은 닫고,
     // 건물 기본 메뉴에서는 그 건물을 나온다. 아무도 받지 않은 우클릭은 브라우저 메뉴를 그대로 둔다.
@@ -247,7 +252,7 @@
 
   /** screen-level container (cleared per mode) */
   UI.screen = function () { return screenEl; };
-  UI.clearScreen = function () { screenEl.innerHTML = ''; };
+  UI.clearScreen = function () { screenEl.innerHTML = ''; if (G.HudPin) G.HudPin.prune(); };
   UI.add = function (el) { el.style.pointerEvents = 'auto'; screenEl.appendChild(el); return el; };
   UI.busy = function () { return modalRoot.children.length > 0; };
   /** 창이 올라가는 층 — 여기에 붙인 것이 있으면 UI.busy() (js/systems/eraend.js 온 화면 나레이션) */
@@ -344,7 +349,7 @@
         state = 상태가 바뀐 것(비가 오고 그침 · 노 젓기) — 띄우지 않는다, 바람 판·항해 상태판에 이미 보인다 ·
         quiet = 먼 나라 해전 소문 — 띄우지 않는다. 넷 다 「지난 소식」(윗줄 왼쪽 나침반 단추)에 남는다.
         부르는 쪽에서 정하려면 UI.toast(text, icon, ms, { tier: 'big' | 'line' | 'state' | 'quiet' }).
-     ② 한 자리 (zone): 창이 열려 있으면 왼쪽 아래 · 바다에서는 아래 단추줄 바로 위 가운데 · 그 밖에는 윗줄 바로 아래 가운데. 한꺼번에 둘(큰 일 셋)까지.
+     ② 한 자리 (zone): 왼쪽 빈 공간에서 상태판·해도·조작줄을 피한다. 끌어서 옮기면 이 기기에 기억하고 오른쪽 클릭으로 되돌린다. 한꺼번에 둘(큰 일 셋)까지.
      ③ 대화 중 보류: 사람이 말하는 동안(대화창·발견 뒤 대화)에는 띄우지 않고 모아 두었다가(나침반 단추에 수) 대화가 끝나면 최근 것부터 셋까지.
      ⑤ 읽는 시간: 글자 수에 맞춰 2.5~8초. 누르면 바로 닫힌다. 같은 말이 1분 안에 또 오면 다시 띄우지 않는다.
      조정값: G.BALANCE.notice */
@@ -375,9 +380,40 @@
     if (root.classList.contains('at-sea')) return 'sea';
     return 'top';
   }
+  function noticeMovable() { return root && !talkingNow() && !root.classList.contains('watching-nature') && zoneNow() !== 'corner'; }
+  function noticeStatusChanged(e) {
+    if (e.target && e.target.closest && e.target.closest('.status-strip')) setTimeout(setZone, 0);
+  }
+  /** 왼쪽 띠에서 가장 넓은 빈 세로 공간을 쓴다. 알림이 길어져도 해도·버튼·상태판을 덮지 않는다. */
+  function noticeLayout() {
+    if (!root || !toastEl) return;
+    var k = G.FX.noticeLayout, gap = k.gap, h = root.clientHeight, w = Math.min(k.width, root.clientWidth - k.left - gap);
+    var rr = root.getBoundingClientRect(), scale = rr.width / root.clientWidth || 1;
+    var spans = [], start = gap, end = h - gap;
+    [].forEach.call(root.querySelectorAll('.hud, .status-strip, .minimap, .windbox, .sailbar, .sea-zoom, .dlg'), function (el) {
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height || getComputedStyle(el).visibility === 'hidden') return;
+      var left = (r.left - rr.left) / scale, right = (r.right - rr.left) / scale;
+      if (right <= k.left || left >= k.left + w) return;
+      spans.push([Math.max(start, (r.top - rr.top) / scale - gap), Math.min(end, (r.bottom - rr.top) / scale + gap)]);
+    });
+    spans.sort(function (a, b) { return a[0] - b[0]; });
+    var top = start, room = 0, cursor = start;
+    spans.concat([[end, end]]).forEach(function (s) {
+      if (s[0] - cursor > room) { top = cursor; room = s[0] - cursor; }
+      cursor = Math.max(cursor, s[1]);
+    });
+    toastEl.style.setProperty('--notice-left', k.left + 'px');
+    toastEl.style.setProperty('--notice-top', Math.round(top) + 'px');
+    toastEl.style.setProperty('--notice-room', Math.max(0, Math.floor(room)) + 'px');
+    toastEl.style.setProperty('--notice-bottom', Math.max(0, Math.round(h - top - room)) + 'px');
+    toastEl.style.setProperty('--notice-width', w + 'px');
+  }
   function setZone() {
     var z = zoneNow(); if (toastEl.getAttribute('data-zone') !== z) toastEl.setAttribute('data-zone', z);
     var sz = NS().noticeSize === 'small' ? 'small' : 'normal'; if (toastEl.getAttribute('data-size') !== sz) toastEl.setAttribute('data-size', sz);
+    toastEl.setAttribute('data-align', NS().noticePos === 'bottom' && noticeMovable() ? 'bottom' : 'top');
+    if (G.HudPin) G.HudPin.refresh('notices');
   }
   UI.noticeZone = setZone;
   UI.noticeSettings = function () { setZone(); if (root) root.classList.toggle('status-open', !!NS().statusOpen); };
@@ -398,12 +434,13 @@
     var gone = false;
     function close() { if (gone) return; gone = true; t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }
     t.addEventListener('click', function (e) { e.stopPropagation(); close(); });
-    t.title = '누르면 닫힙니다 · 지난 소식은 윗줄 왼쪽 나침반';
+    t.title = '끌어서 알림 위치 옮기기 · 누르면 닫기 · 오른쪽 클릭: 제자리로 · 지난 소식은 윗줄 왼쪽 나침반';
     toastEl.appendChild(t);
     // 한꺼번에 둘까지 (큰 일이 끼면 셋) — 오래된 여느 소식부터 걷는다
     var maxT = [].some.call(toastEl.children, function (x) { return x.classList.contains('t-big'); }) ? 3 : 2;
     while (toastEl.children.length > maxT) { var old = [].filter.call(toastEl.children, function (x) { return !x.classList.contains('t-big'); })[0] || toastEl.firstChild; toastEl.removeChild(old); }
-    if (root.classList.contains('watching-nature')) toastEl.scrollTop = toastEl.scrollHeight;
+    setZone();
+    if (toastEl.scrollHeight > toastEl.clientHeight) toastEl.scrollTop = toastEl.scrollHeight;   // 공간이 작아도 새 소식부터 읽을 수 있게
     setTimeout(close, lifeMs(text, ms));
   }
   var flushTimer = null;
@@ -446,7 +483,7 @@
   };
   UI.noticeBadge = badge;
   // ④ 항해·탐험 상태판은 한 줄로 접혀 있다 — 마우스를 올리거나 누르면 펼친다 (css .status-strip)
-  document.addEventListener('click', function (e) { var sb = e.target && e.target.closest ? e.target.closest('.status-strip') : null; if (sb) sb.classList.toggle('open'); }, true);
+  document.addEventListener('click', function (e) { var sb = e.target && e.target.closest ? e.target.closest('.status-strip') : null; if (sb && !sb._hpMoved) { sb.classList.toggle('open'); setTimeout(setZone, 0); } }, true);   // 끌어서 옮긴 뒤의 누르기는 펼치지 않는다 (js/ui/hudpin.js)
 
   /* 검은 막을 덮고 fn 을 한 뒤 다음 장면이 그려지면 걷는다. fn 이 오래 걸리면(G.FX.loader.fadeAfter ms) 검은 막 위에 불러오는 그림을 작게 (js/ui/loader.js) */
   UI.fade = function (fn) {

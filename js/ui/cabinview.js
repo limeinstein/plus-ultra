@@ -189,8 +189,8 @@
   }
   /** 능력치 네 가지 (short: 「체62 지71 …」) */
   function statsOf(m, short) {
-    var st = (G.MATE[m.id] && G.MATE[m.id].st) || [];
-    return (short ? ST_SHORT : ST_NAME).map(function (n, k) { return n + (short ? '' : ' ') + (st[k] == null ? '—' : st[k]); }).join(short ? ' ' : ' · ');
+    var o = G.R.mateStats ? G.R.mateStats(m) : { base: (G.MATE[m.id] && G.MATE[m.id].st) || [], bonus: [] };   // 지닌 물건이 더한 만큼은 「67(+7)」
+    return (short ? ST_SHORT : ST_NAME).map(function (n, k) { return n + (short ? '' : ' ') + (G.R.statText ? G.R.statText(o.base[k], o.bonus[k]) : (o.base[k] == null ? '—' : o.base[k])); }).join(short ? ' ' : ' · ');
   }
   function langCount() { var L = G.LANGS || []; return L.length || Object.keys(L).length; }
   /** 통역실: 제독보다 잘하는 말 — 「아랍어 3 · 페르시아어 2(제독 1)」 (숫자는 그 사람의 말 단계, 괄호는 제독의 단계) */
@@ -251,6 +251,13 @@
   /** 이 부하가 이 방에 가장 잘 맞는 사람인가 (부하의 자리 고르기 목록) */
   function fitTag(m, c) { var t = recommend(c)[0]; return t && t.m === m && t.score > 0 ? ' <span class="tag cb-rec">★ 잘 맞음</span>' : ''; }
 
+  /** 맞닿은 방 꼬리표: 음악실 앙상블(듀엣·트리오·…) · 요리실+식당 「따끈한 밥상」 (js/systems/cabins.js) */
+  function linkTag(c, i) {
+    var cb = CB();
+    if (c.id === 'musicroom' && cb.ensembleAt) { var e = cb.ensembleAt(i); if (e) return '<span class="cb-link" title="' + U.esc('맞닿은 음악실의 ' + e.n + '명이 함께 연주한다: ' + e.members.map(function (m) { return G.MATE[m.id].name; }).join('·')) + '">' + e.name + '</span>'; }
+    if ((c.id === 'galley' || c.id === 'mess') && cb.kitchenPair) { var k = cb.kitchenPair(); if (k && (k.galley === i || k.mess === i)) return '<span class="cb-link" title="요리실과 식당이 맞닿아 갓 지은 끼니가 식기 전에 나간다">따끈한 밥상</span>'; }
+    return '';
+  }
   function powTag(pow) { return pow > 0 ? '<i class="cb-pow" title="방의 힘 (1 + 특기 단계, 충성이 낮으면 줄어든다)">' + (Math.round(pow * 10) / 10) + '</i>' : ''; }
   function adminFace(size) {
     try { if (S().player.portrait) return G.Art.portraitCanvas(S().player.portrait, size); } catch (e) { /* 얼굴 그림이 없으면 왕관 */ }
@@ -291,7 +298,7 @@
     var el = U.el('div', 'cb-card' + (m ? ' on' : '') + (c.id === 'hold' ? ' hold' : ''));
     el.dataset.i = i;
     el.title = roomTitle(c);
-    var h = '<div class="cb-h"><i class="cb-no">' + i + '</i>' + G.icon(c.icon) + '<b>' + c.name + '</b>' + powTag(o.pow) + '</div>';
+    var h = '<div class="cb-h"><i class="cb-no">' + i + '</i>' + G.icon(c.icon) + '<b>' + c.name + '</b>' + powTag(o.pow) + '</div>' + linkTag(c, i);
     if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + fitNote(m, c) + '</small>' + growShort(m) + '</span></div>';
     else h += '<div class="cb-none">' + (c.id === 'hold' ? (o.yard ? '부하 배치 · 선실 개조' : '비어 있음 · 부하 배치 가능') : c.noStaff ? (o.storeLine || '짐칸') : '비어 있음') + '</div>';
     el.innerHTML = h;
@@ -370,6 +377,58 @@
     if (G.Game.cityHud && c0) G.Game.cityHud(); else if (G.Game.refreshHud) G.Game.refreshHud();
   }
 
+  /** 조선소에서 여러 방의 용도를 정하고 견적을 확인한 뒤 한 번에 적용한다. */
+  CV.remodelAll = async function (c0) {
+    var sh = CB().flagship(), original = CB().rooms().slice(), draft = original.slice();
+    if (!sh) return;
+    var choices = G.CABINS.filter(function (c) { return !c.fixed; });
+    function options(value) { return choices.map(function (c) { return '<option value="' + c.id + '"' + (c.id === value ? ' selected' : '') + '>' + U.esc(c.name) + '</option>'; }).join(''); }
+    var html = '<div class="cb-remodel"><p>여러 방의 용도를 정한 뒤 한 번에 고칩니다. 부하는 같은 종류의 방을 먼저 찾아 옮기고, 남은 사람은 빈자리에 배치합니다.</p>' +
+      '<div class="cb-remodel-tools"><label>모든 선실을 <select class="cb-remodel-fill" aria-label="전체 선실 종류">' + options('hold') + '</select></label> <button class="btn small cb-remodel-fill-btn">전체에 지정</button> <button class="btn small cb-remodel-reset">원래대로</button></div>' +
+      '<div class="cb-remodel-grid">' + original.slice(1).map(function (t, n) { var i = n + 1; return '<div class="cb-remodel-room" data-room="' + i + '"><label><b>' + i + '번 · ' + U.esc(G.CABIN[t].name) + '</b><select data-remodel="' + i + '" aria-label="' + i + '번 선실 종류">' + options(t) + '</select></label><small class="cb-remodel-desc"></small><small class="cb-remodel-person"></small></div>'; }).join('') + '</div><div class="cb-remodel-summary" aria-live="polite"></div></div>';
+    var win = UI.window({ title: '선실 한꺼번에 개조 — ' + U.esc(sh.name) + '호', icon: 'hammer', width: 900, html: html, clickAny: false,
+      buttons: [{ label: '취소', value: null }, { label: '견적 확인 후 개조', id: 'apply', cls: 'navy', value: 'apply' }] });
+    var busy = false;
+    function draw() {
+      var p = CB().planRemodel(draft);
+      win.content.querySelectorAll('[data-remodel]').forEach(function (el) {
+        var i = +el.dataset.remodel, c = G.CABIN[draft[i]], row = el.closest('.cb-remodel-room'); el.value = draft[i];
+        row.classList.toggle('changed', draft[i] !== original[i]);
+        row.querySelector('.cb-remodel-desc').textContent = c.desc;
+        var a = p.placements.filter(function (a) { return a.to === i; })[0], m = a && G.MATE[a.id];
+        row.querySelector('.cb-remodel-person').textContent = '개조 뒤: ' + (m ? m.name + (a.from !== i ? ' (' + a.from + '번에서 이동)' : '') : c.noStaff ? '사람을 두지 않음' : '빈자리');
+      });
+      win.content.querySelector('.cb-remodel-summary').innerHTML = '<b>변경 ' + p.changes.length + '칸 · 금화 ' + U.num(p.cost) + '닢 · 공사 ' + p.days + '일</b><br><small>소지금 ' + U.num(S().player.gold) + '닢 · 바꾼 방의 비용과 기간을 합산합니다.</small>' +
+        (p.idle ? '<div class="warn-text">자리가 모자라 ' + p.idle + '명은 대기합니다: ' + p.placements.filter(function (a) { return a.to == null; }).map(function (a) { return U.esc(G.MATE[a.id] ? G.MATE[a.id].name : a.id); }).join('·') + '</div>' : '') +
+        (p.error ? '<div class="warn-text">' + U.esc(p.error) + '</div>' : '');
+      win.apply.disabled = busy || !p.ok || !p.changes.length;
+      return p;
+    }
+    win.content.querySelectorAll('[data-remodel]').forEach(function (el) { el.onchange = function () { draft[+el.dataset.remodel] = el.value; draw(); }; });
+    win.content.querySelector('.cb-remodel-fill-btn').onclick = function () { var t = win.content.querySelector('.cb-remodel-fill').value; draft = draft.map(function (x, i) { return i ? t : x; }); draw(); };
+    win.content.querySelector('.cb-remodel-reset').onclick = function () { draft = original.slice(); draw(); };
+    win.apply.onclick = async function () {
+      if (busy) return;
+      var p = draw(); if (!p.ok || !p.changes.length) return;
+      busy = true; win.apply.disabled = true;
+      var changes = p.changes.map(function (i) { return i + '번: ' + G.CABIN[original[i]].name + ' → ' + G.CABIN[draft[i]].name; }).join('<br>');
+      var yes = await UI.confirm(changes + '<br><br><b>금화 ' + U.num(p.cost) + '닢 · 공사 ' + p.days + '일</b><br>부하는 개조 뒤 배치로 함께 옮깁니다.' + (p.idle ? '<br><span class="warn-text">' + p.idle + '명은 자리가 없어 대기합니다.</span>' : ''), '한꺼번에 고친다', '계속 편집');
+      if (!win.el.isConnected) return;
+      if (yes) {
+        var result = CB().remodelAll(draft, { ship: sh, rooms: original });
+        if (result.ok) { win.close(result); return; }
+        UI.toast(result.error, 'hammer');
+      }
+      busy = false; draw();
+    };
+    draw();
+    var done = await win.result;
+    if (!done || !done.ok) return;
+    if (done.days) await UI.fade(function () { G.Game.passDays(done.days); });
+    UI.toast('선실 ' + done.changes.length + '칸을 한꺼번에 고쳤습니다.' + (done.idle ? ' ' + done.idle + '명은 대기 중입니다.' : ''), 'hammer');
+    if (G.Game.cityHud && c0) G.Game.cityHud(); else if (G.Game.refreshHud) G.Game.refreshHud();
+  };
+
   // ---------------------------------------------------------------- 함대에 적용되는 능력 합계 (2026-10-19)
   /* 오른쪽 아래 판: 지금 배치로 함대가 실제로 쓰는 특기 단계(R.skill — 제독·부관·항해사·측량사·경리·특기를 쓰는 방)와
      선실이 내는 효과의 수치(G.Cabins.fx — 쓰는 곳의 계산 그대로). 배치를 바꾸면 바로 전과 달라진 줄에 ▲▼를 붙인다. */
@@ -397,9 +456,16 @@
     var dis = F('chapel', 'chapel') + F('rec', 'rec') + F('deck', 'deck') + F('mess', 'messD');
     var gm = cb.galleyMeal ? cb.galleyMeal() : null;   // 요리실의 차림: 요리사 고장의 음식 (식당이 있으면 더) — js/systems/cabins.js
     if (gm) { fat += gm.fat; dis += gm.disc; }
+    var ens = cb.ensembleFx ? cb.ensembleFx() : { fat: 0, disc: 0, fad: 0, list: [] }, KB = B.kitchen || {};   // 맞닿은 방 (js/systems/cabins.js)
+    fat += ens.fat; dis += ens.disc;
     var fx = [
-      { k: 'fat', ic: 'bed', label: '하루 피로', v: fat, text: fat ? '−' + num(fat) : '', rooms: '요리실·식당·조타실·음악실' },
-      { k: 'dis', ic: 'flag', label: '하루 규율', v: dis, text: dis ? '+' + num(dis) : '', rooms: '예배실·오락실·갑판·식당' },
+      { k: 'fat', ic: 'bed', label: '하루 피로', v: fat, text: fat ? '−' + num(fat) : '', rooms: '요리실·식당·조타실·음악실·앙상블' },
+      { k: 'dis', ic: 'flag', label: '하루 규율', v: dis, text: dis ? '+' + num(dis) : '', rooms: '예배실·오락실·갑판·식당·앙상블' },
+      { k: 'ens', ic: 'note', label: '음악실 앙상블', v: ens.list.length ? ens.fat + ens.disc + ens.fad : 0, text: ens.list.map(function (e) { return e.name; }).join(' · '),
+        rooms: ens.list.map(function (e) { return e.name + ' ' + e.n + '명 (' + e.members.map(function (m) { return G.MATE[m.id].name; }).join('·') + ') — 음악 ' + num(e.mus) + ' · 웅변 ' + num(e.spk) + ' · 어울림 ×' + num(e.syn); }).join(' / ') +
+          ' — 하루 피로 −' + num(ens.fat) + ' · 규율 +' + num(ens.disc) + ' · 입항한 도시의 유행 +' + pct(ens.fad) + '% (맞닿은 음악실에 음악 특기자 2명부터)' },
+      { k: 'fadb', ic: 'scales', label: '유행 효과 (입항한 도시)', v: ens.fad, rooms: '음악실 앙상블 — 유행하는 물건을 팔 때 유행으로 오른 몫이 커진다', fmt: function (v) { return '+' + pct(v) + '%'; } },
+      { k: 'hot', ic: 'bread', label: '따끈한 밥상', v: cb.kitchenLink && cb.kitchenLink() ? 1 : 0, rooms: '요리실과 식당이 맞닿아 있다 — 두 방의 피로·규율·별미 효과 ×' + num(1 + (KB.fx == null ? 0.25 : KB.fx)) + ' · 요리실 차림 +' + num(KB.meal == null ? 0.25 : KB.meal), fmt: function () { return '요리실·식당 ×' + num(1 + (KB.fx == null ? 0.25 : KB.fx)); } },
       { k: 'meal', ic: 'bread', label: '요리실의 차림', v: gm ? gm.fat + gm.disc : 0, text: gm ? '「' + gm.dish.name + '」' : '',
         rooms: gm ? gm.zoneName + ' 음식 · 요리사 ' + gm.name + ' (요리 ' + gm.lv + ') · 7일마다 바뀜 · 하루 피로 −' + num(gm.fat) + ' · 규율 +' + num(gm.disc) + (gm.mess ? ' · 식당 ×' + num(gm.mult) : ' · 식당이 있으면 더 좋아진다') + (gm.home ? ' · 고향의 맛' : '') + (gm.flavorText ? ' · 풍미 ×' + num(gm.flavor) + ' (' + gm.flavorText + ' — 차림이 바뀔 때 1통씩)' : ' · 짐칸에 후추 같은 향신료나 식자재가 있으면 풍미가 더해진다') + ' · 요리 단계가 높을수록 값비싼 음식' : '요리실' },
       { k: 'spd', ic: 'sail', label: '함대 속도', v: Math.min(B.rigMax || 1, F('rig', 'rig')), rooms: '조범실', fmt: function (v) { return '+' + pct(v) + '%'; } },
@@ -651,6 +717,7 @@
       var html = '<div class="cb-top"><span>' + G.icon('bed') + '선실 <b>' + n + '</b>칸 <small class="muted">(큰 배일수록 많다)</small></span>' +
         '<span>' + G.icon('people') + '부하 <b>' + s.mates.length + '</b>명' + (idle ? ' <small class="warn-text cb-idle-n" title="자리가 없는 부하는 달마다 충성이 떨어진다 — 명단에 붉은 바탕으로 보인다">· 대기 ' + idle + '</small>' : '') + '</span>' +
         '<button class="btn small cb-auto" title="술집 역할(부관·항해사·측량사·통역·경리)이 없는 부하를 능력에 맞게 기함 선실과 다른 배 자리에 앉힌다">' + G.icon('people') + '자동 배치</button>' +
+        (opts.yard ? '<button class="btn small cb-remodel-all">' + G.icon('hammer') + '한꺼번에 개조</button>' : '') +
         '<span title="동료·선원 급료는 소지금에서 지급합니다. 예금은 금고에서 미리 찾으십시오."' + (warn ? ' class="warn-text"' : '') + '>' + G.icon('coin') + '동료·선원 급료 한 달 <b>' + U.num(wage) + '</b>닢' + (warn ? ' — 소지금으로 ' + Math.max(0, warn.months) + '달' : '') + '</span>' +
         '<span class="muted cb-tip">' + (opts.yard ? '방을 누르면 사람을 두거나 고칩니다.' : '방을 누르면 사람을 둡니다 · 방을 고치는 일은 조선소에서.') + ' 부하를 끌어다 방에 놓아도 됩니다.</span></div>' +
         '<div class="cb-body"><div class="cb-main">' +
@@ -665,6 +732,8 @@
       var win = UI.window({ title: '기함 선실 — ' + U.esc(sh.name) + '호', icon: 'ship', width: l.stageW + (l.side || 300) + 66, html: html, buttons: [{ label: '닫는다', value: null }], clickAny: false });
       var stage = win.content.querySelector('.cb-stage'), cards = win.content.querySelector('.cb-cards');
       win.content.querySelector('.cb-auto').onclick = function () { win.close({ k: 'auto' }); };
+      var allRemodel = win.content.querySelector('.cb-remodel-all');
+      if (allRemodel) allRemodel.onclick = function () { win.close({ k: 'remodelAll' }); };
       wireCaptains(win.content, win);   // 아래 「다른 배」의 선장 자리
       drawFallback(stage.querySelector('.cb-stage-base'), v, sp);
       if (hasArt) placeShipArt(stage, sh, v);
@@ -741,6 +810,7 @@
       try { a = await win.result; } finally { window.removeEventListener('keydown', esc, true); document.removeEventListener('mousedown', outside, true); }
       if (!a) return;
       if (a.k === 'auto') await CV.autoAll();
+      else if (a.k === 'remodelAll' && opts.yard) await CV.remodelAll(opts.yard);
       else if (a.k === 'ocap') await CV.pickCaptain(a.uid);
       else if (a.k === 'set') await setFromPop(a);
       else if (a.k === 'clear') { if (ROLE_OF[a.type]) { var rm = CB().roleMate(ROLE_OF[a.type]); if (rm) rm.role = 'none'; } else { var oc = CB().occupant(a.i); if (oc) CB().place(oc, null); } }

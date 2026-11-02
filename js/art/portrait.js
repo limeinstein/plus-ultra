@@ -198,6 +198,8 @@
       묶음 얼굴을 빌린 부하는 같은 양식·성별의 완성된 얼굴상/무릎상 한 쌍으로 바꿔 그린다. */
   A.pairedMateFace = function (d, role, style) {
     var own = d && d.face;
+    var date = G.Game && G.Game.state && G.Game.state.date;
+    if (d && d.youngFace && date && date.y <= d.youngUntil) own = d.youngFace;
     if (!/^portraits\/pools\//.test(own || '')) return own;
     var g = d.g === 'f' ? 'f' : 'm';
     var female = ['maid', 'keeper', 'merchant', 'scholar', 'noble', 'official'];
@@ -224,7 +226,7 @@
   A.mateSpec = function (id) {
     var d = G.MATE[id]; if (!d) return null;
     // 불러온 게임에서는 같은 철새·친족 ID라도 정의와 얼굴이 달라질 수 있다.
-    if (mateSpecCache[id] && !d.wd && !d.kin) return mateSpecCache[id];
+    if (mateSpecCache[id] && !d.wd && !d.kin && !d.youngFace) return mateSpecCache[id];
     if (d.wd && G.Wander && G.Wander.fixPortrait) G.Wander.fixPortrait(d);
     var sk = d.sk || {}, role = 'sailor';
     if (d.role) role = d.role;

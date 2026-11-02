@@ -213,6 +213,9 @@
     ['Horan', 'daily', 'B'],                 // 정묘·병자호란
     ['Taiwan', 'daily', 'B'],                   // 타이완
     ['Nerchinsk', 'daily', 'B'],                // 네르친스크 조약
+    ['Safavid', 'daily', 'B'],                 // 사파비 왕조·찰디란
+    ['Mohacs', 'daily', 'B'],                 // 모하치 전투
+    ['Brothers', 'daily', 'B'],              // 두 왕자
     ['Imjin', 'daily', 'B'],                 // 임진왜란
     ['Globe', 'daily', 'B'],                 // 셰익스피어와 글로브의 불
     ['Succession', 'year', function (m) { return m && m.icon === 'crown' ? 'B' : null; }],   // 군주·후원자의 대가 바뀜 (유품·기억은 일상)
