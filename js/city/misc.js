@@ -900,10 +900,39 @@
     ['weapon', 'armor'].forEach(function (k) { if (p.equip[k] === it.id && !p.items.some(function (x) { return x.id === it.id; })) p.equip[k] = null; });
     return true;
   };
-  HM.takeOne = function (it) {
-    var st = R.storage(), i = st.indexOf(it); if (i < 0 || (R.slotsUsed() >= R.ITEM_MAX && !(R.stackFor && R.stackFor(it)))) return false;   // 같은 물건이 있으면 칸이 차도 그 칸에
-    st.splice(i, 1); S().player.items.push(it); if (R.mergeItems) R.mergeItems(); return true;   // 같은 물건이 있으면 그 칸에 합친다
+  /** 선택한 수량 전체가 들어가는지 먼저 확인한다. 실패하면 양쪽 목록 모두 바꾸지 않는다. */
+  HM.takePlan = function (rows) {
+    var stored = R.storage(), bag = S().player.items.slice(), used = R.slotsUsed(), plan = [];
+    if (!rows || !rows.length) return { ok: false, reason: '꺼낼 물건을 먼저 골라 주십시오.' };
+    for (var i = 0; i < rows.length; i++) {
+      var it = rows[i].it, qty = rows[i].qty;
+      if (!it || stored.indexOf(it) < 0 || !Number.isFinite(qty) || qty < 1 || Math.floor(qty) !== qty) return { ok: false, reason: '보관 중인 물건과 꺼낼 수량을 확인해 주십시오.' };
+      var same = plan.filter(function (x) { return x.it === it; })[0];
+      if (same) same.qty += qty; else plan.push({ it: it, qty: qty });
+    }
+    var count = 0;
+    for (var j = 0; j < plan.length; j++) {
+      var row = plan[j];
+      if (row.qty > R.itemQty(row.it)) return { ok: false, reason: R.itemName(row.it) + '의 보관 수량은 ' + R.itemQty(row.it) + '개입니다.' };
+      var moved = U.clone(row.it); moved.qty = row.qty;
+      var stack = R.stackable(moved) && bag.some(function (x) { return x.id === moved.id && R.stackable(x); });
+      if (!stack) bag.push(moved); count += row.qty;
+    }
+    var after = bag.filter(function (it) { return !R.isProof(it); }).length, added = after - used;
+    if (after > R.ITEM_MAX && added > 0) return { ok: false, reason: '소지품 칸이 모자라 꺼낼 수 없습니다. 선택한 물건에 ' + added + '칸이 필요하지만, 남은 칸은 ' + Math.max(0, R.ITEM_MAX - used) + '칸입니다. 수량이나 선택한 물건을 줄여 주십시오.', slots: added };
+    return { ok: true, rows: plan, count: count, slots: added, used: after };
   };
+  HM.takeMany = function (rows) {
+    var plan = HM.takePlan(rows); if (!plan.ok) return plan;
+    plan.rows.forEach(function (row) {
+      var it = row.it, qty = row.qty, moved = it;
+      if (qty < R.itemQty(it)) { moved = U.clone(it); moved.qty = qty; it.qty = R.itemQty(it) - qty; }
+      else R.storage().splice(R.storage().indexOf(it), 1);
+      S().player.items.push(moved);
+    });
+    if (R.mergeItems) R.mergeItems(); return plan;
+  };
+  HM.takeOne = function (it, qty) { if (!it) return false; return HM.takeMany([{ it: it, qty: qty == null ? R.itemQty(it) : qty }]).ok; };
   /* 2026-10-29 피드백: 소지품 쪽에 종류 단추(전체·무기·항해도구 … · 고정)와 정렬, 물건마다 고정(📌) 단추.
      「모두 맡긴다」는 장비 중·증거·고정한 것과 항해도구(라임·고양이·육분의 …)를 빼고 맡긴다 — 종류 단추로 한 종류만 보이면 그 종류를 모두(항해도구도).
      맡기거나 꺼내도 두 칸의 스크롤 자리는 그대로 (G.KeepScroll). */
@@ -919,15 +948,37 @@
   };
   HM.storage = async function (c) {
     var s = S(), p = s.player, IC = G.ItemCat, IP = G.ItemPin, st = HM._st;
+    var storedSt = HM._storedSt || (HM._storedSt = { cat: '', sort: 'base' }), selected = [], quantities = new Map();
+    function storedKind(it) { return (G.ITEM[it.id] || {}).kind || it.kind || (G.RELIC && G.RELIC[it.id] || {}).kind || 'etc'; }
+    function typeName(k) { return G.ITEM_KIND[k] || (G.RELIC_KIND || {})[k] || (k === 'keepsake' ? '소중한 물건' : IC ? IC.name(k) : k); }
+    function storedRows() {
+      var rows = R.storage().map(function (it, i) { return { it: it, i: i, k: storedKind(it) }; });
+      if (storedSt.cat) rows = rows.filter(function (x) { return x.k === storedSt.cat; });
+      if (storedSt.sort === 'name' || storedSt.sort === 'kind') rows.sort(function (a, b) {
+        return (storedSt.sort === 'kind' ? typeName(a.k).localeCompare(typeName(b.k), 'ko') : 0) || R.itemName(a.it).localeCompare(R.itemName(b.it), 'ko');
+      });
+      return rows;
+    }
+    function storedFilters() {
+      var counts = {}; R.storage().forEach(function (it) { var k = storedKind(it); counts[k] = (counts[k] || 0) + 1; });
+      if (storedSt.cat && !counts[storedSt.cat]) storedSt.cat = '';
+      return '<div class="ck-cats st-storage-cats"><button class="ck-cat' + (!storedSt.cat ? ' on' : '') + '" data-storecat="">전체 <small>' + R.storage().length + '</small></button>' +
+        Object.keys(counts).map(function (k) { return '<button class="ck-cat' + (storedSt.cat === k ? ' on' : '') + '" data-storecat="' + U.esc(k) + '">' + U.esc(typeName(k)) + ' <small>' + counts[k] + '</small></button>'; }).join('') + '</div>' +
+        '<label class="ck-sortl">정렬 <select class="st-storage-sort">' + [['base', '맡긴 차례'], ['kind', '종류'], ['name', '이름']].map(function (x) { return '<option value="' + x[0] + '"' + (storedSt.sort === x[0] ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></label>';
+    }
+    function chosen() { return selected.filter(function (it) { return R.storage().indexOf(it) >= 0; }).map(function (it) { return { it: it, qty: quantities.has(it) ? quantities.get(it) : 1 }; }); }
+
     function row(it, i, side) {
-      var d = G.ITEM[it.id] || {}, rl = G.RELIC && G.RELIC[it.id], kind = d.kind || it.kind || (rl ? 'relic' : '');
-      var src = G.Img && G.Img.itemSrc ? G.Img.itemSrc(it) : null, eq = side === 'p' && ((p.equip.weapon === it.id) || (p.equip.armor === it.id));
-      var proof = side === 'p' && R.isProof(it);
-      var btn = side === 'p' ? (proof ? '<span class="tag warn-text" title="아직 보고·발표하지 않은 발견의 증거 — 칸을 차지하지 않는다">증거</span>' : '<button class="btn small" data-st="' + i + '">맡긴다</button>')
-        : '<button class="btn small' + (R.slotsUsed() >= R.ITEM_MAX ? ' disabled' : '') + '" data-tk="' + i + '">꺼낸다</button>';
-      var catName = IC ? IC.name(IC.of(it)) : (G.ITEM_KIND[kind] || (rl ? '발견 유물' : ''));
-      return '<tr' + (IC ? IC.attrs(it, 0) : '') + '><td style="width:40px">' + (src ? '<img src="' + src + '" alt="" style="width:34px;height:34px;object-fit:contain">' : '') + '</td><td>' + (IP ? IP.button(it) + ' ' : '') + '<b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') +
-        (eq ? ' <span class="tag">장비 중</span>' : '') + (rl && !proof ? ' <span class="tag">유물</span>' : '') + '<div class="muted" style="font-size:13px">' + U.esc(catName) + '</div></td><td style="text-align:right">' + btn + '</td></tr>';
+      var detail = G.Info.itemInfo(it), src = G.Img && G.Img.itemSrc ? G.Img.itemSrc(it) : null;
+      var eq = side === 'p' && ((p.equip.weapon === it.id) || (p.equip.armor === it.id)), proof = side === 'p' && R.isProof(it);
+      var btn = side === 'p' ? (proof ? '<span class="tag warn-text">증거</span>' : '<button class="btn small" data-st="' + i + '">맡긴다</button>')
+        : '<button class="btn small" data-tk="' + i + '">꺼낸다</button>';
+      var qty = quantities.has(it) ? quantities.get(it) : 1;
+      var pick = side === 's' ? '<td style="width:22px"><input type="checkbox" class="st-take-pick" data-storage-pick="' + i + '"' + (selected.indexOf(it) >= 0 ? ' checked' : '') + ' aria-label="' + U.esc(R.itemName(it)) + ' 선택"></td>' : '';
+      var amount = side === 's' && R.itemQty(it) > 1 ? '<label style="display:block;white-space:nowrap;font-size:13px">수량 <input type="number" data-storage-qty="' + i + '" min="1" max="' + R.itemQty(it) + '" value="' + qty + '" style="width:54px" aria-label="' + U.esc(R.itemName(it)) + ' 꺼낼 수량"></label>' : '';
+      return '<tr' + (IC ? IC.attrs(it, 0) : '') + '>' + pick + '<td style="width:40px;vertical-align:top">' + (src ? '<img src="' + src + '" alt="" style="width:34px;height:34px;object-fit:contain">' : '') + '</td><td>' +
+        (IP ? IP.button(it) + ' ' : '') + '<b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + detail.remaining + detail.tags +
+        (eq ? ' <span class="tag">장비 중</span>' : '') + '<div class="muted" style="font-size:13px"><b>' + U.esc(detail.kindName) + '</b></div><div style="font-size:14px">' + detail.description + '</div></td><td style="text-align:right;vertical-align:top;white-space:nowrap">' + amount + btn + '</td></tr>';
     }
     /** 소지품 쪽: 종류로 거르고 정렬한 [{it, i}] */
     function shownItems() {
@@ -959,15 +1010,18 @@
         (st.cat ? '보이는 ' + U.esc(IC.name(st.cat)) + ' 모두 맡긴다' : '장비 중·증거·고정·항해도구 말고 모두 맡긴다') + ' <small>(' + n + ')</small></button>';
     }
     function html() {
-      var stor = R.storage(), used = R.slotsUsed(), over = used > R.ITEM_MAX, vis = shownItems();
+      var stor = R.storage(), used = R.slotsUsed(), over = used > R.ITEM_MAX, vis = shownItems(), filters = storedFilters(), stored = storedRows();
       return '<div class="muted" style="margin-bottom:8px">맡긴 물건은 몇 개든 둘 수 있고 소지품 칸을 차지하지 않습니다. 아직 보고·발표하지 않은 발견의 <b>증거</b>는 칸을 차지하지 않으니 들고 다니십시오 — 보고·발표하면 그때부터 칸을 차지합니다.' + (IP ? ' 물건 앞 ' + G.icon('pin') + '을 누르면 <b>고정</b> — 「모두 맡긴다」와 시장의 「전체 선택」에서 빠집니다.' : '') + '</div>' +
         '<div style="display:flex;gap:18px;align-items:flex-start">' +
         '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">소지품 <span class="' + (over ? 'warn-text' : 'muted') + '">' + used + '/' + R.ITEM_MAX + '</span>' + (over ? ' <small class="warn-text">넘침 — 맡겨 주십시오</small>' : '') + '</h4>' + chips() +
-        '<div class="st-scroll st-p" style="max-height:48vh;overflow:auto"><table class="tbl">' +
+        '<div class="st-scroll st-p" style="max-height:36vh;overflow:auto"><table class="tbl">' +
         (vis.length ? vis.map(function (x) { return row(x.it, x.i, 'p'); }).join('') : '<tr><td class="muted">' + (p.items.length ? '이 종류의 물건이 없다' : '비어 있다') + '</td></tr>') + '</table></div>' +
         '<div style="margin-top:8px">' + allLabel() + '</div></div>' +
-        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">보관함 <span class="muted">' + stor.length + '점</span></h4><div class="st-scroll st-s" style="max-height:52vh;overflow:auto"><table class="tbl">' +
-        (stor.length ? stor.map(function (it, i) { return row(it, i, 's'); }).join('') : '<tr><td class="muted">맡긴 물건이 없다</td></tr>') + '</table></div></div></div>';
+        '<div style="flex:1;min-width:0"><h4 style="margin:0 0 6px">보관함 <span class="muted">' + stor.length + '점</span></h4>' + filters +
+        '<div style="margin:6px 0"><button class="btn small" data-storage-all>보이는 것 선택</button> <button class="btn small" data-storage-none>선택 해제</button></div><div class="st-scroll st-s" style="max-height:28vh;overflow:auto"><table class="tbl">' +
+        (stored.length ? stored.map(function (x) { return row(x.it, x.i, 's'); }).join('') : '<tr><td class="muted">맡긴 물건이 없다</td></tr>') + '</table></div>' +
+        '<div class="muted st-take-summary" style="margin:8px 0"></div><button class="btn green" data-storage-take>고른 수량 꺼내기</button>' +
+        '<div class="muted" style="font-size:13px;margin-top:5px">같은 일반 물건은 한 칸에 합칩니다. 유물처럼 개별 상태가 있는 물건은 각각 칸이 필요합니다.</div></div></div>';
     }
     var win = UI.window({ title: (HM.title(c)) + ' — 보관함', icon: 'chest', width: 1020, html: html(), buttons: [{ label: '닫기', value: 1 }],
       onBuild: function (el, w) {
@@ -975,7 +1029,36 @@
         function wire() {
           var bx = box();
           U.$$('[data-st]', bx).forEach(function (b) { b.onclick = function () { HM.storeOne(p.items[+b.dataset.st]); redraw(); }; });
-          U.$$('[data-tk]', bx).forEach(function (b) { b.onclick = function () { if (!HM.takeOne(R.storage()[+b.dataset.tk])) UI.toast('소지품 칸이 모자랍니다.', 'chest'); redraw(); }; });
+          function summary() {
+            var rows = chosen(), plan = HM.takePlan(rows), out = bx.querySelector('.st-take-summary');
+            if (out) out.textContent = rows.length ? (plan.ok ? rows.length + '가지 · ' + plan.count + '개 선택 · 추가 ' + plan.slots + '칸 / 남은 ' + Math.max(0, R.ITEM_MAX - R.slotsUsed()) + '칸' : plan.reason) : '꺼낼 물건과 수량을 골라 주십시오.';
+          }
+          async function take(rows) {
+            var plan = HM.takeMany(rows);
+            if (!plan.ok) { await UI.alert(U.esc(plan.reason), '꺼낼 수 없습니다'); return; }
+            selected = selected.filter(function (it) { return !plan.rows.some(function (x) { return x.it === it; }); });
+            UI.toast(plan.count + '개를 꺼냈습니다.', 'chest'); redraw();
+          }
+          U.$$('[data-tk]', bx).forEach(function (b) { b.onclick = async function () {
+            var it = R.storage()[+b.dataset.tk]; if (!it) return;
+            var qty = quantities.has(it) ? quantities.get(it) : 1;
+            if (R.itemQty(it) > 1) {
+              qty = await UI.number({ title: R.itemName(it) + ' — 꺼낼 수량', min: 1, max: R.itemQty(it), value: qty, unit: '개', text: '보관 ' + R.itemQty(it) + '개 · 소지품 남은 칸 ' + Math.max(0, R.ITEM_MAX - R.slotsUsed()) + '칸',
+                info: function (n) { var plan = HM.takePlan([{ it: it, qty: n }]); return U.esc(plan.ok ? '추가 ' + plan.slots + '칸 사용 · 꺼낸 뒤 ' + plan.used + '/' + R.ITEM_MAX + '칸' : plan.reason); } });
+              if (qty == null) return;
+            }
+            await take([{ it: it, qty: qty }]);
+          }; });
+          U.$$('[data-storage-pick]', bx).forEach(function (b) { b.onchange = function () {
+            var it = R.storage()[+b.dataset.storagePick]; selected = selected.filter(function (x) { return x !== it; }); if (b.checked) selected.push(it); summary();
+          }; });
+          U.$$('[data-storage-qty]', bx).forEach(function (f) { f.oninput = function () { var it = R.storage()[+f.dataset.storageQty]; quantities.set(it, Number(f.value)); summary(); }; f.onkeydown = function (e) { e.stopPropagation(); }; });
+          bx.querySelector('[data-storage-take]').onclick = function () { return take(chosen()); };
+          bx.querySelector('[data-storage-all]').onclick = function () { storedRows().forEach(function (x) { if (selected.indexOf(x.it) < 0) selected.push(x.it); }); redraw(); };
+          bx.querySelector('[data-storage-none]').onclick = function () { selected = []; redraw(); };
+          U.$$('[data-storecat]', bx).forEach(function (b) { b.onclick = function () { storedSt.cat = b.dataset.storecat; redraw(false, true); }; });
+          var storedSort = bx.querySelector('.st-storage-sort'); if (storedSort) { storedSort.onchange = function () { storedSt.sort = storedSort.value; redraw(false, true); }; storedSort.onkeydown = function (e) { e.stopPropagation(); }; }
+          summary();
           U.$$('[data-all]', bx).forEach(function (b) { b.onclick = function () {
             var list = HM.storeAllList(st.cat), n = 0;
             list.forEach(function (it) { if (HM.storeOne(it)) n++; });
@@ -987,11 +1070,12 @@
           if (IP) IP.wire(bx, function () { redraw(); });
         }
         /** 다시 그린다 — 종류·정렬을 바꾼 때(top)만 소지품 칸을 맨 위로, 맡기기·꺼내기·고정은 보던 자리 그대로 */
-        function redraw(top) {
+        function redraw(top, storedTop) {
           var bx = box(), back = G.KeepScroll ? G.KeepScroll(bx, '.st-scroll') : null;
           bx.innerHTML = html(); wire();
           if (back) back();
           if (top) { var sp = bx.querySelector('.st-p'); if (sp) sp.scrollTop = 0; }
+          if (storedTop) { var ss = bx.querySelector('.st-s'); if (ss) ss.scrollTop = 0; }
           if (G.Game.refreshHud) G.Game.refreshHud();
         }
         wire();

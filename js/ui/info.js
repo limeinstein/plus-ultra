@@ -239,6 +239,21 @@
     if (!list.length) el.appendChild(U.el('div', 'muted', '지금은 소문난 철새가 없습니다.'));
   };
 
+  /** 소지품·자택 보관함에서 같은 정보를 표시한다. 보관 중에는 장비·읽기 효과를 실행하지 않는다. */
+  I.itemInfo = function (it) {
+    var d = G.ITEM[it.id] || {}, rl = G.RELIC && G.RELIC[it.id], kind = d.kind || it.kind || (rl && rl.kind) || '';
+    var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : kind === 'mgift' && d.gv ? '남자 선물 ' + d.gv : '';
+    var ist = R.itemStatText ? R.itemStatText(it.id) : ''; if (ist) stat = stat ? stat + ' · ' + ist : ist;   // 책 → 지력, 악기·장신구·놀이 도구 → 매력
+    var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '') + (G.FigFx && G.FIGUREHEAD[it.id] ? G.FigFx.tag(G.FIGUREHEAD[it.id]) : '') + (function () { var b = R.buysOf ? R.buysOf(it) : {}, ks = Object.keys(b).filter(function (k) { return G.CITY_DATA[k]; }); if (!ks.length && it.from != null && G.CITY_DATA[it.from]) return ' <small class="muted">' + G.CITY_DATA[it.from].name + '에서 삼</small>'; return ks.length ? ' <small class="muted">' + ks.map(function (k) { return G.CITY_DATA[k].name; }).join('·') + '에서 삼' + (ks.length === 1 ? ' · ' + U.num(b[ks[0]]) + '닢' : '') + '</small>' : ''; })();
+    var ob = rl && rl.real && rl.real.obj;
+    var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (kind === 'fig' && G.FIGUREHEAD[it.id] ? (G.FigFx ? G.FigFx.html(G.FIGUREHEAD[it.id], true) : '') + '<div class="muted" style="font-size:14px">조선소의 「개조 → 선수상」에서 배에 달 수 있다 (품삯 150닢).</div>' : '');
+    var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
+    var itemDesc = it.id === 'photo' && G.STORY && G.STORY.photo ? G.STORY.photo.desc : (it.desc || d.desc || '');
+    return { kind: kind, kindName: G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '') || (G.RELIC_KIND && G.RELIC_KIND[kind]) || '그 밖',
+      tags: tags, remaining: it.n > 1 ? ' <small class="muted">(남은 사용 ' + it.n + '회)</small>' : '',
+      description: U.esc(itemDesc) + val + extra };
+  };
+
   PAGES.items = function (el, win) {
     var s = S(), p = s.player;
     function mountUnit(id) { return id === 'porter' ? '패' : (id === 'wagon' || id === 'reindeer') ? '대' : '필'; }
@@ -273,14 +288,8 @@
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
           if (it.id === 'photo' && G.Story && G.Story.showPhoto) act += ' <button class="btn small" data-story-photo="' + i + '">사진을 본다</button>';
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
-          var stat = kind === 'weapon' ? '공격 ' + d.atk : kind === 'armor' ? '방어 ' + d.def : kind === 'gift' && d.gv ? '호감 ' + d.gv : kind === 'mgift' && d.gv ? '남자 선물 ' + d.gv : '';
-          var ist = R.itemStatText ? R.itemStatText(it.id) : ''; if (ist) stat = stat ? stat + ' · ' + ist : ist;   // 책 → 지력, 악기·장신구·놀이 도구 → 매력
-          var tags = (R.isProof(it) ? ' <span class="tag warn-text">「' + U.esc(G.DISC[it.disc] ? G.DISC[it.disc].name : '') + '」 증거</span>' : rl ? ' <span class="tag">유물</span>' : '') + (it.read ? ' <span class="tag">읽음</span>' : '') + (G.FigFx && G.FIGUREHEAD[it.id] ? G.FigFx.tag(G.FIGUREHEAD[it.id]) : '') + (function () { var b = R.buysOf ? R.buysOf(it) : {}, ks = Object.keys(b).filter(function (k) { return G.CITY_DATA[k]; }); if (!ks.length && it.from != null && G.CITY_DATA[it.from]) return ' <small class="muted">' + G.CITY_DATA[it.from].name + '에서 삼</small>'; return ks.length ? ' <small class="muted">' + ks.map(function (k) { return G.CITY_DATA[k].name; }).join('·') + '에서 삼' + (ks.length === 1 ? ' · ' + U.num(b[ks[0]]) + '닢' : '') + '</small>' : ''; })();
-          var ob = rl && rl.real && rl.real.obj;
-          var extra = (ob ? '<div class="muted" style="font-size:13px">실존 유물 — ' + U.esc(ob.museum) + (ob.no ? ' ' + U.esc(ob.no) : '') + '</div>' : '') + (kind === 'fig' && G.FIGUREHEAD[it.id] ? (G.FigFx ? G.FigFx.html(G.FIGUREHEAD[it.id], true) : '') + '<div class="muted" style="font-size:14px">조선소의 「개조 → 선수상」에서 배에 달 수 있다 (품삯 150닢).</div>' : '');
-          var val = rl ? '<div class="muted" style="font-size:14px">값 ' + U.num(G.Disc.relicValue(it)) + '닢' + (stat ? ' · ' + stat : '') + '</div>' : stat ? '<div class="muted" style="font-size:14px">' + stat + '</div>' : '';
-          var itemDesc = it.id === 'photo' && G.STORY && G.STORY.photo ? G.STORY.photo.desc : (it.desc || d.desc || '');
-          return '<tr><td class="ic" data-ic="' + i + '"></td><td>' + (G.ItemPin ? G.ItemPin.button(it) + ' ' : '') + '<b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + (it.n > 1 ? ' <small class="muted">(남은 사용 ' + it.n + '회)</small>' : '') + tags + '</td><td>' + (G.ITEM_KIND[kind] || (kind === 'keepsake' ? '소중한 물건' : '')) + '</td><td style="font-size:16px">' + U.esc(itemDesc) + val + extra + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
+          var detail = I.itemInfo(it);
+          return '<tr><td class="ic" data-ic="' + i + '"></td><td>' + (G.ItemPin ? G.ItemPin.button(it) + ' ' : '') + '<b>' + U.esc(R.itemName(it)) + '</b>' + (R.itemQty(it) > 1 ? ' ×' + R.itemQty(it) : '') + detail.remaining + detail.tags + '</td><td>' + detail.kindName + '</td><td style="font-size:16px">' + detail.description + '</td><td style="white-space:nowrap">' + act + (eq ? '' : ' <button class="btn small red" data-del="' + i + '">버림</button>') + '</td></tr>';
         }).join('') + '</table>';
       if (G.ItemCat && ist.cat && !G.ItemCat.view(p.items, ist).length) el.querySelector('.items-tbl').insertAdjacentHTML('beforeend', '<tr><td colspan="5" class="muted">이 종류의 물건이 없다</td></tr>');
       if (G.ItemCat) G.ItemCat.wireBar(el, ist, function (t) { render(t); });
