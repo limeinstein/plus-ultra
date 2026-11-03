@@ -499,10 +499,8 @@
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
   //   fps: 거리 사람만 움직일 때 거리를 다시 그리는 횟수(초당) — 낮출수록 가볍다 · imgH: 걷는 그림(380×444 한 장)을 그리는 높이 px (제독 178)
   G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100, fps: 60, imgH: 158 };
-  // 거리의 혼잣말은 한 번에 한 사람만. 소식의 거리·기간도 대사에만 쓰며 실제 정세·값은 바꾸지 않는다.
-  G.FX.streetFolk.culture = { firstDelay: 2, stagger: 2.8, duration: 4.5, interval: 17,
-    edge: 24, maxWidth: 360, pad: 18, height: 64, lift: 16, radius: 10, font: 19,
-    historyDays: 1095, historyCount: 2, neighborRange: 16, neighborCount: 2 };
+  // 주민에게 직접 들을 소식의 거리·기간. 실제 정세·값은 바꾸지 않는다.
+  G.FX.streetFolk.culture = { historyDays: 1095, historyCount: 2, neighborRange: 16, neighborCount: 2 };
   // 제독이 거리의 건물 문으로 들어가는 연출 (js/scenes/town.js): sec 전체 시간,
   // rise 문턱까지 올라가는 높이의 상한 px (실제로는 그 건물 문턱 높이만큼 — js/data/exteriordoors.js), scale 마지막 크기 비율, fadeAt 이 진행도부터 사라진다.
   G.FX.townHeroEnter = { sec: 0.62, rise: 70, scale: 0.66, fadeAt: 0.5 };

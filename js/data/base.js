@@ -273,11 +273,7 @@
         intervals: [120, 180, 240, 300, 365, 450, 540, 720], globalInterval: 90,
         diplomaticFunds: [0, 2000, 8000, 18000, 40000, 80000, 140000, 220000],
         supply: [40, 70, 110, 160, 220, 300, 400, 520], ships: [2, 3, 3, 4, 5, 6, 7, 8],
-        exhibitStep: 2, exhibitMax: 3, offerDays: 120, taskYears: [2, 2, 2, 3, 3, 3, 4, 4] },
-      patronage: { costs: [30000, 80000, 200000, 500000, 1200000], names: ['기초 후원', '확장 후원', '도시의 자랑', '대양의 유산', '가문의 기념비'],
-        projects: [ { id: 'sailors', name: '뱃사람 쉼터', icon: 'anchor', desc: '긴 항해를 마친 뱃사람들이 쉴 뜰과 기념 회랑을 후원한다.' },
-          { id: 'atlas', name: '해도 서고', icon: 'book', desc: '항해기·옛 해도와 바다 이야기를 모아 시민에게 공개한다.' },
-          { id: 'memorial', name: '항해 기념관', icon: 'seal', desc: '제독과 가문의 항해를 기리는 전시실과 명판을 세운다.' } ] }
+        exhibitStep: 2, exhibitMax: 3, offerDays: 120, taskYears: [2, 2, 2, 3, 3, 3, 4, 4] }
     },
     sakoku: { restrict: 16350101, portuguese: 16390801, dejima: 16410501, silverBan: 16680101, nagasaki: 191, stock: 0.6, routeK: 0.35, transitionK: 0.2 },
     imjinEnd: 15990101, // 노량은 1598년. 1599년부터 새 전쟁 사건·봉쇄를 끝낸다.

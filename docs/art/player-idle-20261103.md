@@ -8,9 +8,9 @@
 
 아무 입력 없이 4.5초 쉬면 경치를 바라보며 눈가에 손을 댄다. 이후 동작이 끝나고 8~13초 뒤에 경치 구경과 스트레칭을 번갈아 한다. 스트레칭은 어깨를 풀고 두 손을 머리 위로 올려 몸을 늘이는 모습이다.
 
-가까운 거리 주민이 170px 이내에 0.65초 머물면 상대를 향해 돌아서 가슴에 손을 얹고 허리를 숙인다. 같은 사람 곁에서 계속 인사하지 않는다. 상대가 240px 밖으로 나갔다가 돌아오고 30초가 지나면 다시 인사할 수 있다. 동물은 이 인사 대상에서 제외한다.
+주인공이 멈춰 있을 때 성인 이성이 170px 이내를 0.65초 이상 걸어 지나가면 상대를 향해 돌아서 가슴에 손을 얹고 허리를 숙인다. 같은 사람 곁에서 계속 인사하지 않는다. 상대가 240px 밖으로 나갔다가 돌아오고 30초가 지나면 다시 인사할 수 있다. 동성·아이·동물·서 있는 주민은 이 인사 대상에서 제외한다.
 
-주민을 직접 눌러 말을 걸면 다가간 뒤 1.65초의 인사를 마치고 대화를 연다. 이동 입력이 들어오면 인사와 대화 대기를 취소한다. 다른 대화·문 입장·화면 전환도 대기 동작보다 우선한다. 화면을 닫거나 배경을 다시 만들 때 기다리는 인사도 해제한다.
+주민을 직접 눌러 말을 걸면 다가간 뒤 바로 대화를 연다. 인사 중이더라도 즉시 취소하고 대화를 우선한다. 대화를 준비하는 동안에는 자동 인사를 시작하지 않는다. 다른 대화·문 입장·화면 전환도 대기 동작보다 우선한다.
 
 ## 자산과 외형
 
@@ -22,8 +22,8 @@
 
 ## 파일과 재현
 
-- 동작 선택·인사 대기·취소·렌더링: `js/scenes/town.js`
-- 말을 걸기 전에 인사를 기다리는 연결: `js/scenes/city.js`
+- 동작 선택·인사 조건·취소·렌더링: `js/scenes/town.js`
+- 인사를 기다리지 않고 바로 대화를 여는 연결: `js/scenes/city.js`
 - 시간·거리·프레임 조정값: `G.FX.townHeroGestures`, `js/data/seafx.js`
 - [원화 생성 지시문 14종](../../tools/player_idle_20261103_prompts.json), [두 시트의 배경 정리 지시문](../../tools/player_idle_20261103_background_prompt.json): 내장 image_gen 사용
 - [포장·보간 도구](../../tools/prepare_player_gestures.py), [미리보기 도구](../../tools/preview_player_gestures.py)
@@ -34,7 +34,7 @@
 ## 검증
 
 - `python -X utf8 tests/player_idle_gestures.py`: 14종·504칸의 투명 배경, 발밑, 가장자리, 몸을 숙이는 인사와 팔을 올리는 스트레칭, 걷기 원본 해시 통과.
-- `node tests/player_idle_gestures_browser.cjs`: 실제 `file://` 거리에서 14종의 세 동작 36칸 선택, 자동 시작·완료, 상대 방향, 같은 NPC에게 반복 인사 방지, 이동·대화 우선권 통과. 인사 완료 뒤 대화를 여는 연결과 화면을 떠날 때 대기 해제도 통과. 콘솔 오류 0.
+- `node tests/player_idle_gestures_browser.cjs`: 실제 `file://` 거리에서 14종의 세 동작 36칸 선택, 자동 시작·완료, 상대 방향, 같은 NPC에게 반복 인사 방지, 이동·대화 우선권 통과. 지나가는 성인 이성 조건, 연속 대화 즉시 시작, 화면을 떠날 때 동작 취소도 통과. 콘솔 오류 0.
 - `python -X utf8 tests/player_motion_frames.py`, `python -X utf8 tests/player_motion_faces.py`, `node tests/player_motion_atlas_smoke.js`: 기존 걷기·달리기·얼굴·문 입장 검사 통과.
 - `node tests/player_walk_loops_browser.js`, `node tests/player_run_loops_browser.js`, `node tests/navigator_walk49_browser.js`: 기존 14종 보행·달리기와 실제 화살표 조작·정지 호흡 통과. 콘솔 오류 0.
 - 실제 거리 화면: `artifacts/player-idle-20261103/browser/{admiral,navigator_white,ganghui}-{look,greet,stretch}.png`.

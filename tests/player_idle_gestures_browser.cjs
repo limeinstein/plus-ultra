@@ -77,8 +77,18 @@ const ok = (v, message) => { if (!v) throw new Error(message); };
         const lookFrames = sample();
         G.Town.update(fx.seconds.look);
         const rested = !h.gesture;
-        folk.x = h.x+110; folk.y = 802; folk.state = 'idle'; folk.timer = 999;
+        h.nextGestureAt = s.t+1000;
+        const gender = G.Game.state.player.g || 'm';
+        folk.spec = Object.assign({}, folk.spec, { sex: gender, child: false });
+        folk.x = h.x+110; folk.y = 802; folk.state = 'walk'; folk.v = 1; folk.target = h.x+1000;
         s.folks = [folk]; G.Town.update(fx.greetDwell+.1);
+        const sameSexIgnored = !h.gesture;
+        folk.spec.sex = gender === 'm' ? 'f' : 'm'; folk.state = 'idle'; folk.timer = 999;
+        G.Town.update(fx.greetDwell+.1);
+        const standingIgnored = !h.gesture;
+        folk.state = 'walk'; folk.spec.child = true; G.Town.update(fx.greetDwell+.1);
+        const childIgnored = !h.gesture;
+        folk.spec.child = false; G.Town.update(fx.greetDwell+.1);
         const greeting = h.gesture && h.gesture.kind, right = h.dir;
         const greetFrames = sample();
         G.Town.update(fx.seconds.greet);
@@ -99,12 +109,8 @@ const ok = (v, message) => { if (!v) throw new Error(message); };
         G.Town.update(.01);
         const busyCancelled = !h.gesture;
         G.UI.busy = busy;
-        folk.x = h.x+100; s.folks = [folk];
-        window.__greetDone = null;
-        G.Town.greet(folk).then(v => { window.__greetDone = v; });
-        s.keys = { right: true }; G.Town.update(1/30); s.keys = {};
         return { premature, first, rested, greeting, right, repeated, returnGreeting, left,
-          interrupted, stretching, busyCancelled, lookFrames, greetFrames, stretchFrames,
+          interrupted, stretching, busyCancelled, sameSexIgnored, standingIgnored, childIgnored, lookFrames, greetFrames, stretchFrames,
           atlas: [atlas.naturalWidth, atlas.naturalHeight] };
       });
       ok(!result.premature && result.first === 'look' && result.rested, look+' 경치 구경 시작·완료');
@@ -113,7 +119,7 @@ const ok = (v, message) => { if (!v) throw new Error(message); };
       for (const [row, key] of ['lookFrames','greetFrames','stretchFrames'].entries()) {
         ok(result[key].length === 12 && result[key].every((f,i) => f === row*12+i), look+' '+key+' 재생 순서');
       }
-      ok(await page.evaluate(() => window.__greetDone === false), look+' 취소된 인사 대기 해제');
+      ok(result.sameSexIgnored && result.standingIgnored && result.childIgnored, look+' 지나가는 성인 이성에게만 인사');
       if (['admiral','navigator_white','ganghui'].includes(look)) {
         for (const kind of ['look','greet','stretch']) {
           await page.evaluate(kind => {
@@ -130,30 +136,26 @@ const ok = (v, message) => { if (!v) throw new Error(message); };
       results.push({ look, ...result });
       console.log(look+': 구경·인사·스트레칭 36칸, 방향·중복 제한·취소 통과');
       if (look === 'admiral') {
-        await page.evaluate(() => {
-          const s = G.Town.runtime(), h = s.hero;
-          h.gesture = null; s.keys = {}; h.walking = false; h.running = false; h.keyRun = null;
-          const type = Object.keys(G.STREET_FOLK.types).find(k => !G.STREET_FOLK.types[k].animal);
-          const f = G.StreetFolk.make(type, s.city, s.streetW, h.x, 768, '대화인사검수');
+        const chat = await page.evaluate(async () => {
+          const s = G.Town.runtime(), h = s.hero, fx = G.FX.townHeroGestures;
+          s.keys = {}; h.to = null; h.walking = false; h.running = false; h.keyRun = null;
+          const f = G.StreetFolk.make('woman', s.city, s.streetW, h.x, 768, '즉시대화검수');
           f.x = h.x+100; f.y = 802; s.folks = [f];
-          window.__oldFolkTalk = G.StreetFolk.talk; window.__talkCalls = 0;
-          G.StreetFolk.talk = async () => { window.__talkCalls++; };
-          window.__chatPromise = G.Scenes.city.chatFolk(f);
+          h.gesture = { kind: 'greet', row: 1, t: 0, seconds: fx.seconds.greet, target: f };
+          const oldTalk = G.StreetFolk.talk; let calls = 0;
+          G.StreetFolk.talk = async () => { calls++; };
+          const start = performance.now();
+          try {
+            await G.Scenes.city.chatFolk(f);
+            await G.Scenes.city.chatFolk(f);
+            const result = { calls, elapsed: performance.now()-start, gesture: !!h.gesture };
+            h.gesture = { kind: 'greet', row: 1, t: 0, seconds: fx.seconds.greet, target: f };
+            G.Town.hidden(true); result.hiddenCancelled = !h.gesture;
+            G.Town.hidden(false); return result;
+          } finally { G.StreetFolk.talk = oldTalk; }
         });
-        await page.waitForFunction(() => G.Town.runtime().hero.gesture && G.Town.runtime().hero.gesture.kind === 'greet');
-        ok(await page.evaluate(() => window.__talkCalls === 0), '인사를 마치기 전에 대화가 열림');
-        await page.evaluate(() => { G.Town.update(G.FX.townHeroGestures.seconds.greet+.1); });
-        await page.waitForFunction(() => window.__talkCalls === 1);
-        await page.evaluate(async () => {
-          await window.__chatPromise;
-          G.StreetFolk.talk = window.__oldFolkTalk;
-          const s = G.Town.runtime();
-          window.__hiddenGreet = null;
-          G.Town.greet(s.folks[0]).then(v => { window.__hiddenGreet = v; });
-          G.Town.hidden(true);
-        });
-        ok(await page.evaluate(() => window.__hiddenGreet === false), '화면을 떠날 때 인사 대기가 남음');
-        await page.evaluate(() => G.Town.hidden(false));
+        ok(chat.calls === 2 && chat.elapsed < 500 && !chat.gesture, '두 번 연속 대화도 인사 대기 없이 즉시 열림: '+JSON.stringify(chat));
+        ok(chat.hiddenCancelled, '화면을 떠나면 대기 동작 취소');
       }
     }
     ok(!errors.length, errors.join('\n'));

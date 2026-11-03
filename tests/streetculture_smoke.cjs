@@ -128,8 +128,8 @@ const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/str
           G.StreetCulture.attach(f, c, i); f.state = 'walk'; f.target = f.x + 100; f.v = 40; return f;
         });
         await Promise.all(st.folks.flatMap(f => f.frames ? [G.Img.resolve([f.frames[0].k])] : []));
-        G.StreetCulture.update(st.folks, 2.1, st.cam);
-        if (!st.folks.some(f => f.bubble)) throw Error('거리 말풍선 없음: ' + name);
+        G.Town.update(20);
+        if (st.folks.some(f => f.bubble)) throw Error('거리 말풍선이 자동 표시됨: ' + name);
         st.hover = st.folks[0]; st.dirty = true; G.Town.update(0);
         out.push({ name, url: G.Game.canvases().scene.toDataURL('image/jpeg', .9) });
       }

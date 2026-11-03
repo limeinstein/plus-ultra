@@ -1,6 +1,6 @@
-/* 교역 성장·회복 재고·왕실 승급·기념 사업을 실제 file:// 게임에서 검증한다. */
+/* 교역 성장·회복 재고·왕실 승급을 실제 file:// 게임에서 검증한다. */
 'use strict';
-const assert = require('assert'), fs = require('fs'), path = require('path'), cp = require('child_process');
+const assert = require('assert'), fs = require('fs'), path = require('path');
 const {pathToFileURL} = require('url');
 let chromium; try { ({chromium} = require('playwright')); } catch (_) { ({chromium} = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/commerce-progression-20261103');
@@ -9,14 +9,9 @@ fs.mkdirSync(OUT, {recursive:true});
   const browser = await chromium.launch({executablePath:process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe', args:['--no-sandbox','--use-gl=swiftshader','--enable-unsafe-swiftshader','--allow-file-access-from-files']});
   const errors = [], report = {};
   try {
-    // 이전 규칙과 같은 전체 자료·게임 시작 조건에서 비교한다.
-    const oldPage = await browser.newPage({viewport:{width:960,height:640}});
-    const prior = new Map();
-    for (const f of ['index.html','js/data/base.js','js/data/ships.js','js/data/eratrade.js','js/core/rules.js','js/systems/era.js','js/city/trade.js','js/systems/court.js','js/systems/matedismiss.js','js/city/misc.js','js/city/shipyard.js','js/ui/info.js']) prior.set(f, cp.execFileSync('git',['show','HEAD:'+f],{cwd:ROOT,encoding:'utf8',maxBuffer:8e6}));
-    await oldPage.route('**/*', route => { const url=decodeURIComponent(route.request().url()), rel=url.slice(url.indexOf('/WebGame/')+9); return prior.has(rel) ? route.fulfill({body:prior.get(rel),contentType:rel.endsWith('.html')?'text/html':'application/javascript'}) : route.continue(); });
-    await oldPage.addInitScript(()=>{requestAnimationFrame=()=>0;});
-    await oldPage.goto(pathToFileURL(path.join(ROOT,'index.html')).href,{waitUntil:'domcontentloaded',timeout:90000});
-    await oldPage.waitForFunction(()=>window.G&&G.State&&G.Court);
+    // 0.305의 고정 기준값. 현재 HEAD를 이전판처럼 불러오면 기능을 커밋한 뒤
+    // 급료 3배 등을 다시 3배로 기대하게 되어 회귀 시험이 거짓 실패한다.
+    report.before={largeCarrack:31500,caravel:7800,fluyt:26000,crew100:200,prizeValue:17433,firstExpansion:12000,rareStock:220,rareGrossMargin:50020};
     const metrics = () => {
       const s=G.Game.state=G.State.newGame({name:'교역검사',nation:'PT',job:'merchant',age:22,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:G.LANGS.map(()=>3),diff:'normal'});
       s.date={y:1480,m:1,d:1};s.day=0;s.invest={};s.econ={ev:[],seq:0,seeded:1};s.tfleet={open:{},told:{}};
@@ -27,13 +22,12 @@ fs.mkdirSync(OUT, {recursive:true});
       return {largeCarrack:G.SHIP.lcarrack.price,caravel:G.SHIP.caravel.price,fluyt:G.SHIP.fluyt.price,crew100:G.BALANCE.crewWage.per*100,
         prizeValue:G.R.shipValue(G.R.newShip('lcarrack')),firstExpansion:G.R.investLevels?G.R.investLevels(c.id)[2]:G.R.INVEST_LV[2],rareStock:q,buy,rareGrossMargin:sellTotal-q*buy};
     };
-    report.before=await oldPage.evaluate(metrics);await oldPage.close();
     const page=await browser.newPage({viewport:{width:960,height:720}});
     page.on('pageerror',e=>errors.push('pageerror: '+e.stack));
     page.on('console',m=>{if(m.type()==='error') errors.push(m.text());});
     await page.addInitScript(()=>{const raf=requestAnimationFrame.bind(window);requestAnimationFrame=cb=>window.__pauseFrames?0:raf(cb);});
     await page.goto(pathToFileURL(path.join(ROOT,'index.html')).href,{waitUntil:'domcontentloaded',timeout:90000});
-    await page.waitForFunction(()=>window.G&&G.Patronage&&G.Court&&G.Scenes.city.B.trade&&G.Game.sceneName==='title'&&!document.querySelector('#boot-loader.on'),null,{timeout:120000});
+    await page.waitForFunction(()=>window.G&&G.Court&&G.Scenes.city.B.trade&&G.Game.sceneName==='title'&&!document.querySelector('#boot-loader.on'),null,{timeout:120000});
     await page.evaluate(()=>{window.__pauseFrames=true;});
     report.after=await page.evaluate(metrics);
     assert.equal(report.after.crew100,report.before.crew100*3);assert.equal(report.after.prizeValue,report.before.prizeValue,'나포선·기존 배의 매각 수익은 새 배값으로 급증하지 않는다');
@@ -65,10 +59,6 @@ fs.mkdirSync(OUT, {recursive:true});
       const mate=G.MATES.find(m=>m.wage>0&&!m.rival);ok(R.mateWage(mate.id)===mate.wage*3,'동료 급료 정확히 세 배');
       s.mateDismiss={[mate.id]:{count:1,wage:mate.wage+10}};ok(R.mateWage(mate.id)===(mate.wage+10)*3,'재고용 급료 중복 배율 방지');
       s.mates=[{id:mate.id,loyal:80,role:'crew'}];const wage=G.Cabins.totalWages(),cash=s.player.gold;G.World.newMonth();ok(s.player.gold===cash-wage,'실제 월말 급료 결제와 안내 일치');
-      s.player.gold=10000000;const fame=s.player.fame,money=s.player.gold,cost=G.Patronage.cost(lis,'atlas');
-      ok(G.Patronage.contribute(lis,'atlas'),'기념 사업 후원');ok(s.player.gold===money-cost&&s.player.fame===fame,'후원은 명성·금화 수익 없이 비용과 명판만');
-      s.patronage=JSON.parse(JSON.stringify(s.patronage));ok(G.Patronage.records()[0].record.plaques[0].name==='경제검사','후원 저장 호환');
-      for(let i=0;i<10;i++)G.Patronage.contribute(lis,'atlas');ok(G.Patronage.level(lis,'atlas')===5&&!G.Patronage.contribute(lis,'atlas'),'기념 사업 최고 단계·재결제 방지');
       const saved={say:UI.say,alert:UI.alert,toast:UI.toast,confirm:UI.confirm,choose:UI.choose,ask:UI.ask,refresh:G.Game.refreshHud,onFame:G.Achieve.onFame};
       G.Achieve.onFame=()=>{}; // 헌납 결제 검사는 별도 업적 하사금과 분리한다.
       UI.say=async()=>{};UI.alert=async()=>{};UI.toast=()=>{};UI.confirm=async()=>true;UI.ask=async()=>0;G.Game.refreshHud=()=>{};
@@ -102,7 +92,7 @@ fs.mkdirSync(OUT, {recursive:true});
         s.fleet.cargo[task.good]={q:total-15+3,cost:10,from:10,d:s.day};await CT.report(king);
         ok(CT.rank(realm)===1&&!CT.task()&&s.fleet.cargo[task.good].q===3,'분할 납품 완결·남은 짐 보존');
         s=fresh();s.court={titles:{PT:7}};ok(!CT.pending(king)&&CT.rank(realm)===7,'옛 저장 작위 보존·대기 최초 적용');
-        return {recovery,rankLog,finalPromotionYears:rankLog[7].day/365,checks:'재고·투자·임금·후원·8단계 승급·분할 납품·옛 저장 통과'};
+        return {recovery,rankLog,finalPromotionYears:rankLog[7].day/365,checks:'재고·투자·임금·8단계 승급·분할 납품·옛 저장 통과'};
       }finally{Object.assign(UI,{say:saved.say,alert:saved.alert,toast:saved.toast,confirm:saved.confirm,choose:saved.choose,ask:saved.ask});G.Game.refreshHud=saved.refresh;G.Achieve.onFame=saved.onFame;}
     });
     report.history=await page.evaluate(()=>{
@@ -121,8 +111,6 @@ fs.mkdirSync(OUT, {recursive:true});
     // 대화창을 실제로 열어 화면과 버튼을 확인한다.
     await page.evaluate(()=>{const s=G.Game.state;s.loc={mode:'city',city:0};s.player.gold=3000000;s.date={y:1650,m:1,d:1};s.player.born.y=1628;s.day=0;s.market={};s.invest={};G.Scenes.city.B.trade.invest(G.CITY_DATA[0]);});
     await page.getByText('품목 확장 계획',{exact:true}).waitFor();await page.screenshot({path:path.join(OUT,'investment.png')});
-    await page.getByRole('button',{name:'돌아간다',exact:true}).last().click();
-    await page.evaluate(()=>{G.Patronage.open(G.CITY_DATA[0]);});await page.getByText('모든 도시의 명판',{exact:true}).waitFor();await page.screenshot({path:path.join(OUT,'patronage.png')});
     await page.getByRole('button',{name:'돌아간다',exact:true}).last().click();
     await page.evaluate(()=>{G.Scenes.city.B.trade.buy(G.CITY_DATA[0]);});await page.getByText('고른 것 한꺼번에 산다',{exact:true}).waitFor();await page.screenshot({path:path.join(OUT,'supply.png')});
     assert(await page.locator('small').filter({hasText:'하루 +'}).count()>0);

@@ -1,4 +1,4 @@
-/* 고장별 주민 성격·현재 소식·거리 말풍선. 저장 필드는 만들지 않는다. */
+/* 고장별 주민 성격·직접 대화에서 듣는 현재 소식. 저장 필드는 만들지 않는다. */
 (function (G) {
   'use strict';
   var U = G.U, R = G.R, SC = G.StreetCulture = {};
@@ -125,51 +125,11 @@
     if (choice) { heard[choice.id] = true; f.cultureTalks = count + 1; f.mood = choice.mood; }
     return choice;
   };
-  SC.attach = function (f, c, index) {
+  SC.attach = function (f, c) {
     if (f.animal) return;
     var p = D().cultures[SC.region(c)] || D().cultures.europe;
     f.cultureCity = c;
     f.name = c.name + '의 ' + ((p.roles || {})[f.type] || f.name.replace(/\s*\([^)]*\)/g, ''));
     if (f.face) f.face.name = f.name;
-    f.bubbleWait = K().firstDelay + index * K().stagger;
-  };
-  SC.update = function (list, dt, cam) {
-    var changed = false, active = list.some(function (f) { return f.bubbleLeft > 0; });
-    list.forEach(function (f) {
-      if (f.animal || !f.cultureCity) return;
-      if (f.bubbleLeft > 0) { f.bubbleLeft = Math.max(0, f.bubbleLeft - dt); changed = true; }
-      f.bubbleWait -= dt;
-      if (f.bubbleWait > 0 || active || f.state === 'talk' || f.x - cam < K().edge || f.x - cam > 1600 - K().edge || G.UI.busy()) return;
-      var urgent = SC.context(f, f.cultureCity).filter(function (e) { return e.urgent; });
-      var lines = SC.localLines(f, f.cultureCity), idx = f.bubbleCount || 0;
-      var line = urgent.length ? urgent[idx % urgent.length] : lines[(Math.abs(U.strHash(String(f.seed))) + idx) % lines.length];
-      f.bubble = line; f.bubbleLeft = K().duration; f.bubbleWait = K().interval; f.bubbleCount = idx + 1;
-      active = true; changed = true;
-    });
-    return changed;
-  };
-  SC.draw = function (ctx, list, cam, hover) {
-    list.forEach(function (f) {
-      if (f.animal || !f.cultureCity || f.state === 'talk') return;
-      if (hover && hover.cultureCity && hover !== f) return;
-      var focused = hover === f, line = f.bubbleLeft > 0 && f.bubble;
-      if (!focused && !line) return;
-      var x = f.x - cam, h = (f.frames ? G.FX.streetFolk.imgH : f.spec.h) * f.sc;
-      if (x < 0 || x > 1600) return;
-      var mood = line ? line.mood : f.mood || 'calm';
-      var colors = { worry: '#c7a16e', sad: '#8da6b6', happy: '#dbc482', proud: '#d9ac59', calm: '#b6c4ad' };
-      var labels = { worry: '걱정', sad: '그리움', happy: '기쁨', proud: '자부심', calm: '이야기' };
-      ctx.save(); ctx.font = K().font + 'px "Noto Sans KR", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      var speech = line ? line.brief : '말을 건다';
-      if (line) { var cl = R.cityLang(f.cultureCity); if (cl.lv < 3) speech = G.UI.garble(speech, cl.lv).replace(/<[^>]*>/g, ''); }
-      var title = focused ? f.name : labels[mood], width = Math.min(K().maxWidth, Math.max(ctx.measureText(title).width, ctx.measureText(speech).width) + K().pad * 2);
-      var bx = U.clamp(x - width / 2, K().edge, 1600 - width - K().edge), by = f.y - h - K().height - K().lift;
-      ctx.fillStyle = 'rgba(30,27,23,.94)'; ctx.strokeStyle = colors[mood]; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.roundRect(bx, by, width, K().height, K().radius); ctx.fill(); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x - 5, by + K().height); ctx.lineTo(x, by + K().height + 7); ctx.lineTo(x + 5, by + K().height); ctx.fill();
-      ctx.fillStyle = colors[mood]; ctx.fillText(title, bx + width / 2, by + K().height * 0.28, width - K().pad);
-      ctx.fillStyle = '#f6edd9'; ctx.fillText(speech, bx + width / 2, by + K().height * 0.7, width - K().pad);
-      ctx.restore();
-    });
   };
 })(window.G = window.G || {});

@@ -170,13 +170,13 @@
       return st;
     });
   };
-  T.close = function () { finishHeroGesture(false); if (G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); } st = null; };
+  T.close = function () { finishHeroGesture(); if (G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); } st = null; };
   T.active = function () { return !!st; };
   T.runtime = function () { return st; };   // 시험용
   T.city = function () { return st && st.city; };
   T.hidden = function (v) {
     if (st && v != null) {
-      if (v) finishHeroGesture(false);
+      if (v) finishHeroGesture();
       var back = st.hidden && !v;          // 건물에서 거리로 나왔다 — 거리를 오가는 사람이 바뀐다
       st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.enterT = 0; st.hero.entering = false; st.dirty = true; }
       if (st.hidden && G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); }
@@ -340,7 +340,7 @@
   }
 
   function build(c, buildings, landmarks) {
-    finishHeroGesture(false);
+    finishHeroGesture();
     var rng = rngOf(c);
     var bgKey = I.pick(I.chain.bg(c));
     var es = I.extStyle && I.extStyle(c);
@@ -869,6 +869,7 @@
   /** 말을 걸 사람 앞까지 제독이 걸어간다 (js/scenes/city.js C.chatFolk) */
   T.approach = function (f) {
     if (!st || st.hidden) return Promise.resolve();
+    finishHeroGesture();
     var gap = ((G.FX && G.FX.streetFolk) || {}).talkGap || 95, side = st.hero.x <= f.x ? -1 : 1;
     var to = U.clamp(f.x + side * gap * (f.animal ? 0.8 : 1), 40, st.streetW - 40);
     st.hover = null;
@@ -884,18 +885,6 @@
         setTimeout(wait, 30);
       })();
     });
-  };
-
-  /** 말을 걸기 직전에 상대를 향해 예를 갖춘다. 이동하면 인사와 대화 대기를 함께 취소한다. */
-  T.greet = function (f) {
-    if (!st || st.hidden || !f || f.animal || !st.heroMotion.idle) return Promise.resolve(true);
-    if (st.hero.to != null || st.hero.walking || st.hero.running || st.hero.entering) return Promise.resolve(false);
-    var action = st.hero.gesture;
-    if (!action || action.kind !== 'greet' || action.target !== f) {
-      finishHeroGesture(false);
-      action = startHeroGesture('greet', f);
-    }
-    return new Promise(function (resolve) { action.resolvers.push(resolve); });
   };
 
   function hitAt(x, y) {
@@ -1138,13 +1127,12 @@
     // 아무 입력이 없을 때에는 걷기 칸을 넘기지 않고, 발밑을 고정한 호흡만 낮은 빈도로 다시 그린다.
     var idleFx = townHeroIdleFx(), idle = !hero.walking && !hero.running && !hero.entering && hero.to == null;
     hero.idleT = idle ? (hero.idleT || 0) + dt : 0;                         // 멈추는 순간 원래 크기에서 호흡을 시작한다
-    if (updateHeroGestures(dt, idle, busyNow)) moved = true;
+    if (updateHeroGestures(dt, idle, busyNow || (G.Scenes.city.isBusy && G.Scenes.city.isBusy()))) moved = true;
     st.idleAcc = idle ? (st.idleAcc || 0) + dt : 0;
     var idleFps = hero.gesture ? G.FX.townHeroGestures.fps : idleFx.fps;
     if (idle && st.idleAcc >= 1 / idleFps) { st.idleAcc %= 1 / idleFps; moved = true; }
     // 거리를 걷는 사람들: 그들만 움직일 때는 초당 folkFps번만 다시 그린다 (거리 전체를 매 틀 다시 그리지 않게 — 끊김 방지)
     var folkMoved = !!(st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x));
-    if (G.StreetCulture && st.folks && G.StreetCulture.update(st.folks, dt, st.cam)) folkMoved = true;
     st.folkAcc = (st.folkAcc || 0) + dt;
     // 신기루 건물: 일렁임은 초당 몇 번만, 흩어지는 동안은 매 틀 바탕을 다시 그린다 — 다 흩어지면 거리에서 뺀다
     if (st.marks.some(function (m) { return m.vanish; })) {
@@ -1247,7 +1235,6 @@
     // 주인공 (그림이 있을 때만)
     drawHero(ctx, cam);
     folks.forEach(function (f) { if (f.y > heroY) G.StreetFolk.draw(ctx, f, cam, st.hover === f); });
-    if (G.StreetCulture) G.StreetCulture.draw(ctx, folks, cam, st.hover);
     // 건물 이름표
     st.items.forEach(function (it) {
       var x = it.x - cam;
@@ -1279,7 +1266,7 @@
     }
     // 거리 사람 이름표 (마우스를 올렸을 때)
     var hf = st.hover;
-    if (hf && hf.spec && !(G.StreetCulture && hf.cultureCity)) {
+    if (hf && hf.spec) {
       var ft = hf.tag || (hf.tag = plaqueCanvas(hf.name + ' — 말 걸기', true));
       ctx.drawImage(ft, Math.round(hf.x - cam - ft.width / 2), Math.round(hf.y - hf.spec.h * hf.sc * (hf.animal ? 1.25 : 1.12) - ft.height));
     }
@@ -1398,7 +1385,7 @@
   function startHeroGesture(kind, target) {
     var hero = st.hero, fx = G.FX.townHeroGestures;
     var action = hero.gesture = { kind: kind, row: ['look', 'greet', 'stretch'].indexOf(kind),
-      t: 0, seconds: fx.seconds[kind], target: target || null, resolvers: [] };
+      t: 0, seconds: fx.seconds[kind], target: target || null };
     if (target) {
       hero.dir = target.x < hero.x ? -1 : 1;
       hero.greeted = (hero.greeted || []).filter(function (r) { return r.npc !== target; });
@@ -1407,12 +1394,11 @@
     st.dirty = true;
     return action;
   }
-  function finishHeroGesture(completed) {
+  function finishHeroGesture() {
     if (!st || !st.hero.gesture) return;
-    var hero = st.hero, action = hero.gesture, gap = G.FX.townHeroGestures.interval;
+    var hero = st.hero, gap = G.FX.townHeroGestures.interval;
     hero.gesture = null;
     hero.nextGestureAt = st.t + gap[0] + Math.random() * (gap[1] - gap[0]);
-    action.resolvers.forEach(function (resolve) { resolve(completed); });
     st.dirty = true;
   }
   function updateHeroGestures(dt, idle, busy) {
@@ -1420,7 +1406,7 @@
     if (!st.heroMotion.idle) return false;
     if (!idle || busy || st.keys.left || st.keys.right) {
       var cancelled = !!hero.gesture;
-      finishHeroGesture(false);
+      finishHeroGesture();
       hero.nextGestureAt = st.t + fx.firstDelay;
       hero.greetCandidate = null; hero.greetDwell = 0;
       return cancelled;
@@ -1430,15 +1416,18 @@
     });
     if (hero.gesture) {
       var action = hero.gesture;
-      if (action.target && Math.abs(action.target.x - hero.x) > fx.greetExit) { finishHeroGesture(false); return true; }
+      if (action.target && Math.abs(action.target.x - hero.x) > fx.greetExit) { finishHeroGesture(); return true; }
       var before = heroGestureFrame();
       action.t += dt;
-      if (action.t >= action.seconds) { finishHeroGesture(true); return true; }
+      if (action.t >= action.seconds) { finishHeroGesture(); return true; }
       return before !== heroGestureFrame();
     }
     var target = null, distance = fx.greetRange;
     (st.folks || []).forEach(function (f) {
-      if (f.animal || Math.abs(f.y - (GROUND + 34)) > fx.greetDepth) return;
+      // 멈춘 제독 곁을 지나가는 성인 이성에게만 인사한다. 대화에는 인사를 끼우지 않는다.
+      var sex = f.spec && f.spec.sex;
+      if (f.animal || !f.spec || f.spec.child || (sex !== 'm' && sex !== 'f') || sex === (S().player.g || 'm') ||
+          f.state !== 'walk' || !(f.v > 0) || Math.abs(f.y - (GROUND + 34)) > fx.greetDepth) return;
       var record = (hero.greeted || []).filter(function (r) { return r.npc === f; })[0];
       if (record && (record.near || record.until > st.t)) return;
       var dx = Math.abs(f.x - hero.x);

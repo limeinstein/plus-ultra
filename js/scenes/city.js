@@ -495,8 +495,7 @@
       if (f.animal && G.Audio && (f.type === 'cat' || f.type === 'dog')) G.Audio.sfx(f.type);
       f.state = 'talk';
       if (G.Town.active() && !G.Town.hidden() && G.Town.approach) await G.Town.approach(f);
-      var greeted = !G.Town.active() || !G.Town.greet || await G.Town.greet(f);
-      if (greeted) await G.StreetFolk.talk(f, c);
+      await G.StreetFolk.talk(f, c);
     } catch (e) { console.error(e); }
     f.state = 'idle'; f.timer = U.rf(1, 2.5);
     busy = false;
