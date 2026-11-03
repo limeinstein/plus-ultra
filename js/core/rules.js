@@ -15,13 +15,14 @@
   };
   // 제독의 행운(s.player.luck, 기본 50): 50을 넘는 만큼 바다의 나쁜 일을 피할 가능성이 오른다 (99면 +0.098 — 여신상 하나쯤). 마녀의 저주(js/systems/coven.js)·가족 사건이 올린다
   R.playerLuck = function () { var p = R.S() && R.S().player, l = p && p.luck != null ? p.luck : 50; return Math.max(0, l - 50) / 500; };
-  R.mateWage = function (id) {
+  R.mateBaseWage = function (id) {
     var d = G.MATE[id], s = R.S(), m = s && (s.mates || []).filter(function (x) { return x.id === id; })[0];
     if (!d) return 0;
     if (m && m.devoted) return G.BALANCE.mateDismiss.devotionWage;
     var base = G.Coven && G.Coven.freeWage(id) ? 0 : (d.wage || 0);
     return G.MateDismiss && s ? G.MateDismiss.wage(id, base) : base;
   };
+  R.mateWage = function (id) { return R.mateBaseWage(id) * ((G.BALANCE.commerce || {}).mateWageK || 1); };
 
   // ---------------------------------------------------------------- city helpers
   R.city = function (id) { return G.CITY_DATA[id]; };
@@ -397,7 +398,7 @@
   R.daysOfFood = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.food + R.provisionCargo('food')) / R.dailyUse() + 1e-6) : 999; };
   R.daysOfWater = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.water + R.provisionCargo('water')) / R.dailyUse() + 1e-6) : 999; };
   R.shipValue = function (s) {
-    var t = G.SHIP[s.type]; var v = t.price * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
+    var t = G.SHIP[s.type]; var basis = s.paidPrice != null ? Math.min(t.price, s.paidPrice) : (t.basePrice || t.price); var v = basis * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
     v += s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].price : 0) * 0.3;
     v += (s.rigPaid || 0) * 0.4;                         // 삭구 개량에 들인 돈의 일부
     return Math.floor(v);
@@ -680,7 +681,7 @@
     return ORIGINS;
   };
   // 산지 캐시를 비운다 — 개척 도시·식물 특산물로 특산물 목록이 바뀌면 다시 센다 (비우는 곳이 없어 판마다 산지 판정이 달랐다 · QA 2026-10-23)
-  R.resetOrigins = function () { ORIGINS = null; };
+  R.resetOrigins = function () { ORIGINS = null; INVEST_LEVEL_CACHE = {}; };
   R.regionalMult = function (goodId, region) {
     var o = R.origins()[goodId] || {}, d = 5;
     for (var r in o) d = Math.min(d, G.REGION_DIST[region][+r]);
@@ -704,8 +705,12 @@
     // decay saturation since last access
     var dt = S.day - (m.t == null ? S.day : m.t);   // 첫날(0일)에 만든 시장도 회복된다 — 예전에는 0을 '없음'으로 읽어 모항 시장만 품귀·포화가 영영 풀리지 않았다
     if (dt > 0) {
-      var k = Math.pow(0.5, dt / 25);
-      for (var id in m.g) { m.g[id].sat *= k; m.g[id].dep *= k; if (m.g[id].sat < 0.01 && m.g[id].dep < 0.01) delete m.g[id]; }
+      var k = Math.pow(0.5, dt / G.BALANCE.commerce.priceHalfDays);
+      for (var id in m.g) {
+        var entry = m.g[id]; entry.sat *= k; entry.dep *= k;
+        if (entry.stockOut != null && R.stockRate && G.GOOD[id]) entry.stockOut = Math.max(0, entry.stockOut - dt * R.stockRate(G.CITY_DATA[cityId], id));
+        if (entry.sat < 0.01 && entry.dep < 0.01 && !(entry.stockOut > 0)) delete m.g[id];
+      }
       m.t = S.day;
     }
     if (m.ev && S.day > m.evEnd) m.ev = null;
@@ -783,21 +788,42 @@
     return Math.max(1, Math.round(p));
   };
   // ---------------------------------------------------------------- 투자
-  R.INVEST_LV = [0, 4000, 12000, 30000, 70000, 150000];   // 등급 1~5 문턱
+  R.INVEST_LV = G.BALANCE.commerce.investLevels;
+  var INVEST_LEVEL_CACHE = {};
+  R.cityInvestK = function (c) { return 1 + Math.max(0, c.size - 1) * G.BALANCE.commerce.cityStep; };
+  R.investLevels = function (cityId) {
+    var c = G.CITY_DATA[cityId], cfg = G.BALANCE.commerce, state = R.S();
+    var key = state.date.y + ':' + state.player.nation + ':' + R.cityOwner(c) + ':' + c.goods.join(','), saved = INVEST_LEVEL_CACHE[cityId];
+    if (saved && saved.key === key) return saved.levels.slice();
+    var base = R.cityGoods(c, 0), extra = R.cityGoods(c, 4).filter(function (id) { return base.indexOf(id) < 0; });
+    var levels = R.INVEST_LV.map(function (n, lv) {
+      var opened = lv >= 4 ? extra : lv >= 2 ? extra.slice(0, 1) : [];
+      var rare = opened.some(function (id) { var p = cfg.supply.goods[id]; return p && p.cap <= cfg.supply.rareInvestCap; });
+      return Math.round(n * R.cityInvestK(c) * (rare ? cfg.rareInvestK : 1));
+    });
+    INVEST_LEVEL_CACHE[cityId] = { key: key, levels: levels }; return levels.slice();
+  };
   R.invest = function (cityId) {
     var S = R.S();
     if (!S.invest) S.invest = {};
-    return S.invest[cityId] || (S.invest[cityId] = { amt: 0, div: 0, t: S.day });
+    var iv = S.invest[cityId];
+    if (!iv) iv = S.invest[cityId] = { amt: 0, div: 0, t: S.day, version: 2 };
+    if (iv.version !== 2) {
+      var old = G.BALANCE.commerce.oldLevels; iv.earnedLv = 0;
+      old.forEach(function (n, i) { if (iv.amt >= n) iv.earnedLv = i; }); iv.version = 2;
+    }
+    if (!iv.projects) iv.projects = {};
+    return iv;
   };
   /** 투자 등급 0~5 */
   R.investLv = function (cityId) {
-    var a = R.invest(cityId).amt, lv = 0;
-    for (var i = 1; i < R.INVEST_LV.length; i++) if (a >= R.INVEST_LV[i]) lv = i;
-    return lv;
+    var iv = R.invest(cityId), a = iv.amt, lv = iv.earnedLv || 0, levels = R.investLevels(cityId);
+    for (var i = 1; i < levels.length; i++) if (a >= levels[i]) lv = Math.max(lv, i);
+    iv.earnedLv = lv; return lv;
   };
   R.investNext = function (cityId) {
     var lv = R.investLv(cityId);
-    return lv >= 5 ? null : R.INVEST_LV[lv + 1] - R.invest(cityId).amt;
+    return lv >= R.INVEST_LV.length - 1 ? null : Math.max(0, R.investLevels(cityId)[lv + 1] - R.invest(cityId).amt);
   };
   /** 쌓인 배당을 지금 날짜까지 계산해 둔다 */
   R.investTick = function (c) {
@@ -811,12 +837,28 @@
     return iv;
   };
   /** 이 도시에 투자해 두면 사고파는 값이 조금 유리해진다 */
-  R.investBuyMult = function (cityId) { return 1 - 0.03 * R.investLv(cityId); };
-  R.investSellMult = function (cityId) { return 1 + 0.03 * R.investLv(cityId); };
+  R.investBuyMult = function (cityId) { return 1 - G.BALANCE.commerce.buyPerLv * R.investLv(cityId); };
+  R.investSellMult = function (cityId) { return 1 + G.BALANCE.commerce.sellPerLv * R.investLv(cityId); };
+  R.projectLv = function (c, key) { var d = G.BALANCE.commerce.projects[key]; return d ? U.clamp(R.invest(c.id).projects[key] || 0, 0, d.costs.length) : 0; };
+  R.projectEffect = function (c, effect) {
+    var all = G.BALANCE.commerce.projects, total = 0;
+    Object.keys(all).forEach(function (key) { total += R.projectLv(c, key) * (all[key][effect] || 0); }); return total;
+  };
+  R.projectCost = function (c, key) {
+    var d = G.BALANCE.commerce.projects[key], lv = R.projectLv(c, key);
+    return !d || lv >= d.costs.length ? null : Math.round(d.costs[lv] * R.cityInvestK(c));
+  };
+  R.buildProject = function (c, key) {
+    var cost = R.projectCost(c, key), s = R.S();
+    if (cost == null || R.investLv(c.id) < 1 || s.player.gold < cost) return false;
+    R.market(c.id); // 입하 경과를 공사 전 시설로 먼저 계산한다.
+    s.player.gold -= cost; R.invest(c.id).projects[key] = R.projectLv(c, key) + 1;
+    s.stats.invested = (s.stats.invested || 0) + cost; return true;
+  };
   /** 투자한 도시는 다루는 교역품이 늘어난다 */
   /** 이 도시 교역소에서 살 수 있는 물건: 특산물 + 들여와 파는 물건(중계무역, js/data/tradegoods.js) + 출자로 늘어난 물건 */
-  R.cityGoods = function (c) {
-    var lv = R.investLv(c.id);
+  R.cityGoods = function (c, previewLv) {
+    var lv = previewLv == null ? R.investLv(c.id) : previewLv;
     var extra = lv >= 4 ? 2 : lv >= 2 ? 1 : 0;
     var relay = G.TradeGoods ? G.TradeGoods.relayGoods(c) : [];
     var base = relay.length ? c.goods.concat(relay.filter(function (id) { return c.goods.indexOf(id) < 0; })) : c.goods;
@@ -835,7 +877,11 @@
   };
   // 물량·기울기는 G.BALANCE.market (큰 배로 많이 사고팔수록 남게)
   function MK() { return (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }); }
-  R.onBuy = function (c, goodId, q) { var m = R.market(c.id), st = mg(m, goodId), K = MK(); st.dep += q / (K.dep[0] + c.size * K.dep[1]); };
+  R.onBuy = function (c, goodId, q) {
+    var m = R.market(c.id), st = mg(m, goodId), K = MK();
+    if (st.stockOut == null) st.stockOut = R.stockCapacity(c, goodId) * Math.min(0.95, st.dep * 0.9);
+    st.stockOut += Math.max(0, q); st.dep += q / (K.dep[0] + c.size * K.dep[1]);
+  };
   /** 이 시장이 이 물건을 받아 줄 양 (포화 1에 해당하는 통 수): 그 고장 산물이면 적게(prodCap), 들여와 파는 물건이면 조금 적게(relayCap) */
   R.satCap = function (c, goodId) {
     var K = MK(), cap = K.sat[0] + c.size * K.sat[1];
@@ -843,7 +889,7 @@
     else if (R.sells(c, goodId)) cap *= K.prodCap == null ? 1 : K.prodCap;
     var ocean = G.BALANCE.oceanTrade;
     if (ocean && !R.sells(c, goodId)) cap *= 1 + ocean.bulkDemand * Math.max(0, (G.Era ? G.Era.mult(c, goodId) : 1) - 1); // 유행 시장은 값뿐 아니라 받아 줄 물량도 커진다
-    return cap;
+    return cap * (1 + R.projectEffect(c, 'demand'));
   };
   /** 포화에 따른 파는 값 배수: 받아 줄 양까지는 완만히, 넘기면 폭락 (G.BALANCE.market.satPrice·crash) */
   R.satFactor = function (sat) { var K = MK(); return Math.exp(-sat * K.satPrice - (K.crash || 0) * Math.max(0, sat - 1)); };
@@ -862,11 +908,24 @@
       sx.sat += q * share * (1 - dd / rad) / R.satCap(t, goodId);
     });
   };
-  R.supply = function (c, goodId) {
-    if (G.Sakoku && G.Sakoku.tradeBlock(c, goodId, 'buy')) return 0;
-    var m = R.market(c.id), st = mg(m, goodId), K = MK();
-    return Math.max(0, Math.round((K.stock[0] + c.size * K.stock[1]) * (R.isRelay(c, goodId) ? RELAY().stock : 1) * (1 - Math.min(0.95, st.dep * 0.9)) * (G.Econ ? G.Econ.mult(c, goodId, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, goodId, 'stock') : 1) / (G.Era && G.Era.source ? G.Era.source(c, goodId) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1)));
+  R.stockProfile = function (id) { var k = G.BALANCE.commerce.supply, g = G.GOOD[id]; return k.goods[id] || k.cats[g.cat] || k.default; };
+  R.stockCapacity = function (c, id, baseOnly) {
+    if (G.Sakoku && G.Sakoku.tradeBlock(c, id, 'buy')) return 0;
+    var k = MK(), sk = G.BALANCE.commerce.supply;
+    var cap = (k.stock[0] + c.size * k.stock[1]) * R.stockProfile(id).cap * (R.isRelay(c, id) ? RELAY().stock : 1) *
+      (G.Econ ? G.Econ.mult(c, id, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, id, 'stock') : 1) /
+      (G.Era && G.Era.source ? G.Era.source(c, id) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1);
+    return Math.round(Math.max(sk.goods[id] ? sk.rareMin : sk.min, cap) * (baseOnly ? 1 : 1 + R.projectEffect(c, 'stock')));
   };
+  R.stockRate = function (c, id) { return R.stockCapacity(c, id, true) / R.stockProfile(id).days * (1 + R.projectEffect(c, 'recovery')); };
+  R.supplyInfo = function (c, id) {
+    var st = mg(R.market(c.id), id), cap = R.stockCapacity(c, id), rate = R.stockRate(c, id);
+    if (st.stockOut == null) st.stockOut = cap * Math.min(0.95, st.dep * 0.9);
+    if (cap > 0) st.stockOut = Math.min(cap, st.stockOut); // 사건으로 한도가 줄어도 품귀 부채가 여러 해 쌓이지 않게 한다.
+    var q = Math.max(0, Math.floor(cap - st.stockOut));
+    return { qty: q, cap: cap, perDay: rate, fullDays: rate ? Math.ceil(Math.max(0, st.stockOut) / rate) : null };
+  };
+  R.supply = function (c, goodId) { return R.supplyInfo(c, goodId).qty; };
   R.maybeMarketEvent = function (c) {
     var m = R.market(c.id), S = R.S();
     if (m.ev) return;

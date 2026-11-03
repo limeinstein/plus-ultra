@@ -59,7 +59,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.kinds = {};
       const realm = CT.realmOf(king);
       for (const kind of kinds) {
-        s = fresh('PT'); F.add('ex', 10500 + 10000 * 3); s.court = { titles: { PT: 3 } };   // 자작에서 백작으로
+        s = fresh('PT'); F.add('ex', 10500 + 10000 * 3); s.court = { titles: { PT: 3 }, pacingVersion: 1, promotions: { PT: { rank: 3, day: -G.BALANCE.commerce.court.intervals[2] } } };   // 자작에서 백작으로
         s.player.gold = 500000;
         // 그 종류가 나올 때까지 제안을 새로 굴린다
         let o = null;
@@ -106,7 +106,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s = fresh('PT'); s.player.gold = 5000000; want = 'tribute';
       const ladder = [];
       // 왕명은 무작위 셋 — 비용 지불이 나올 때까지 새로 굴린다
-      const rollFor = (sp, kind) => { for (let k = 0; k < 300; k++) { s.court && (s.court.offers = {}); s.seed = 3000 + k; if (CT.offers(sp).some(x => x.kind === kind)) return true; } return false; };
+      const rollFor = (sp, kind) => { const days = CT.waitDays(CT.realmOf(sp)); s.day += days; s.date = G.U.addDays(s.date, days); for (let k = 0; k < 300; k++) { s.court && (s.court.offers = {}); s.seed = 3000 + k; if (CT.offers(sp).some(x => x.kind === kind)) return true; } return false; };
       for (let i = 0; i < 9; i++) { F.add('ex', 10000); rollFor(king, 'tribute'); await CT.audience(king); const tt = CT.title(realm); ladder.push(tt ? tt.ko + '(' + tt.native + ')' : '-'); }
       out.ladder = ladder.join(' → '); out.top = CT.pending(king);
       out.hudTitle = CT.best().ko;
@@ -117,12 +117,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const hl = []; for (let i = 0; i < 4; i++) { rollFor(emp, 'tribute'); await CT.audience(emp); const tt = CT.title(hre); hl.push(tt ? tt.ko : '-'); }
       out.hre = hl.join(' → ');
       out.titles = CT.titles().map(t => CT.fullName(t, true)).join(' / ');
+      s.date = { y: 1480, m: 6, d: 1 }; // 호칭 검사는 승급 대기 동안 바뀐 영토와 분리해 같은 기준일로 비교한다.
       // 공손한 인사: 리스본(제 나라)·이스탄불(이슬람)·비엔나(제국)·한양(유교 — 그대로)
       out.adr = [0, 112, 54, 190].map(id => G.CITY_DATA[id].name + '=' + CT.address(G.CITY_DATA[id])).join(' | ');
       // 특허장: 사략허가장(오스만 제국)·면세증 — 포르투갈 공작(값 절반)
       {
         const T = G.Scenes.city.B.trade, lis = G.CITY_DATA[0], chooseOld = UI.choose, g0 = s.player.gold;
-        const good = lis.goods[0], imp = Object.keys(G.GOOD).filter(id => !G.R.sells(lis, id))[0];
+        const good = lis.goods[0], imp = Object.keys(G.GOOD).filter(id => !G.R.sells(lis, id) && G.GOOD[id].p >= 50)[0];
         const b0 = T.buyP(lis, good), s0 = T.sellP(lis, imp), n0 = { kind: 'merchant', nation: '오스만 제국' };
         out.lawful0 = CT.lawful(n0);
         let step = 0; UI.choose = async (title, opts) => { step++; if (step === 1) return opts[0].value; if (step === 2) return opts.filter(o => o.value.nation === '오스만 제국')[0].value; if (step === 3) return opts[1].value; return null; };

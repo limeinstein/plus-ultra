@@ -19,6 +19,7 @@
     G.Game.showLayers(true, true, false);
     G.Game.ensureRenderer();
     if (arg.from != null || arg.landing) {
+      delete s.landReturn;   // 새 탐험에는 앞선 성문 방문의 복귀 좌표를 쓰지 않는다.
       var base;
       if (arg.from != null) { var c = G.CITY_DATA[arg.from]; base = { type: 'city', city: c.id, lon: c.lon, lat: c.lat }; }
       else base = { type: 'ship', lon: arg.landing.shipLon, lat: arg.landing.shipLat, heading: arg.landing.shipHeading };   // 뱃머리도 그대로 두고 내린다 (돌아오면 같은 쪽을 본다)
@@ -34,6 +35,7 @@
       UI.toast('탐험대 ' + party + '명이 ' + (mt.id === 'walk' ? '걸어서' : G.Mounts.get(mt.id).name + U.jx(G.Mounts.get(mt.id).name, '과/와') + ' 함께') + ' 출발했다.', 'boot');
     } else {
       if (arg.resumeFrom != null) L.resumeFromCity(G.CITY_DATA[arg.resumeFrom], arg.mount);
+      else recoverCityReturn();
       var lp0 = landPoint(s.loc.lon, s.loc.lat); s.loc.lon = lp0[0]; s.loc.lat = lp0[1];   // 성문으로 다시 나설 때·옛 저장 파일: 물 위면 가까운 뭍으로
       if (!st) st = newSt([s.loc.lon, s.loc.lat]);
       st.cam.lon = s.loc.lon; st.cam.lat = s.loc.lat; st.paused = true; st.path = null;
@@ -931,7 +933,7 @@
     st.busy = Math.max(0, st.busy - 1);
     if (!ok) { coolCityPrompt(c); return false; }
     if (s.known.indexOf(c.id) < 0) s.known.push(c.id);
-    s.landReturn = { lon: s.loc.lon, lat: s.loc.lat, base: s.loc.base, party: s.loc.party, days: s.loc.days, mount: MT() };
+    s.landReturn = Object.assign({}, s.loc, { mount: cleanMount(MT()), entryCity: c.id });
     var isBaseCity = s.loc.base.type === 'city' && s.loc.base.city === c.id;
     // 출발한 성문으로 바로 들어와도 산 탈것은 사라지지 않고 마구간 장비로 돌아간다.
     if (isBaseCity) {
@@ -947,9 +949,51 @@
   L.resumeFromCity = function (c, mount) {
     var s = S(), r = s.landReturn;
     if (!r) return false;
-    s.loc = { mode: 'land', lon: c.lon, lat: c.lat, heading: 0, base: r.base, party: r.party, days: r.days, mount: cleanMount(mount || r.mount) };
+    // 도시는 섬·강 건너편일 수 있다. 입장 전에 서 있던 탐험대 자리로 돌려보낸다.
+    // 좌표가 없는 아주 옛 저장만 도시 앞의 뭍을 쓴다.
+    var saved = savedReturnPoint(r), p = saved || landPoint(c.lon, c.lat);
+    s.loc = Object.assign({}, r, { mode: 'land', lon: p[0], lat: p[1], heading: r.heading || 0, mount: cleanMount(mount || r.mount) });
+    delete s.loc.entryCity;
+    delete s.landReturn;
     return true;
   };
+  function savedReturnPoint(r) { return r && typeof r.lon === 'number' && isFinite(r.lon) && typeof r.lat === 'number' && isFinite(r.lat) ? [r.lon, r.lat] : null; }
+  /** 옛 판에서 성문을 나서며 가까운 섬으로 옮겨진 저장: 남아 있는 입장 전 좌표로 복구한다. */
+  function recoverCityReturn() {
+    var s = S(), l = s.loc, r = s.landReturn, p = savedReturnPoint(r);
+    if (!l || l.mode !== 'land' || !p || !r.base || !l.base) return false;
+    var sameBase = r.base.type === l.base.type && r.base.city === l.base.city && r.base.lon === l.base.lon && r.base.lat === l.base.lat;
+    var city = sameBase && G.CITY_DATA.filter(function (c) { return G.Geo.dist(p[0], p[1], c.lon, c.lat) < 0.3 && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.3; })[0];
+    delete s.landReturn;   // 정상 탐험을 계속 걷는 뒤에는 오래된 방문 위치를 다시 쓰지 않는다.
+    if (!city || landConnected(p, [l.lon, l.lat])) return false;
+    l.lon = p[0]; l.lat = p[1];
+    UI.toast('성문에 들어가기 전 탐험대 위치로 돌아왔습니다. 원래 배와 짐은 그대로입니다.', 'boot', 6000);
+    return true;
+  }
+  // 복구 때만 쓰는 작은 뭍 연결 검사. 곧은 선이 물을 건너도 가까운 둑길로 이어졌으면 정상 위치다.
+  function landConnected(a, b) {
+    var dx = G.Geo.wrapLon(b[0] - a[0]), dy = b[1] - a[1], step = 0.02, pad = 0.12;
+    function segment(x, y, xx, yy) {
+      var n = Math.max(1, Math.ceil(Math.hypot(xx - x, yy - y) / 0.01));
+      for (var k = 0; k <= n; k++) if (!G.Geo.isLand(G.Geo.wrapLon(x + (xx - x) * k / n), y + (yy - y) * k / n)) return false;
+      return true;
+    }
+    var bx = a[0] + dx;
+    if (segment(a[0], a[1], bx, b[1])) return true;
+    var minX = Math.floor((Math.min(0, dx) - pad) / step), maxX = Math.ceil((Math.max(0, dx) + pad) / step);
+    var minY = Math.floor((Math.min(0, dy) - pad) / step), maxY = Math.ceil((Math.max(0, dy) + pad) / step);
+    var queue = [[0, 0]], seen = { '0,0': true };
+    for (var head = 0; head < queue.length; head++) {
+      var q = queue[head], x = a[0] + q[0] * step, y = a[1] + q[1] * step;
+      if (Math.hypot(x - bx, y - b[1]) <= step * 1.5 && segment(x, y, bx, b[1])) return true;
+      for (var ox = -1; ox <= 1; ox++) for (var oy = -1; oy <= 1; oy++) {
+        var ix = q[0] + ox, iy = q[1] + oy, key = ix + ',' + iy;
+        if ((!ox && !oy) || ix < minX || ix > maxX || iy < minY || iy > maxY || seen[key]) continue;
+        if (segment(x, y, a[0] + ix * step, a[1] + iy * step)) { seen[key] = true; queue.push([ix, iy]); }
+      }
+    }
+    return false;
+  }
   async function goBack() {
     var s = S(), l = s.loc, b = l.base;
     if (!atBase()) {

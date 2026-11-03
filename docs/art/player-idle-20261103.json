@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "cols": 6,
+  "rows": 6,
+  "frames_per_motion": 12,
+  "cell_height": 420,
+  "foot": 414,
+  "motions": [
+    "look",
+    "greet",
+    "stretch"
+  ],
+  "characters": {
+    "admiral": {
+      "source_sha256": "9cf6fd209548e26f67153810f399d4b8cd16db7a181f5a74f86532d81550af22",
+      "walk_sha256": "e2d76c3ce0afa88425d621f1f5d6ba31597f9b4b33c4bb81ced04be1e2137490",
+      "standing_height": 280,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "bb9bb69fa4b957c671c6eb1e6f950d49e0b8332c89f61531498deabaf3ae65fd",
+      "rejected_middle_frames": 8
+    },
+    "armored_navigator": {
+      "source_sha256": "c8df18506ba987c7b1193c3e8759e37a5220d5b35cbec7fc1722a5bc6f5cf095",
+      "walk_sha256": "1f9d60504dd962e97424c94b91426d4b1e6f8eda71976f6f82793d8e312aa106",
+      "standing_height": 268,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "01997bc722d2381d96904975fe8002753430a28a26f28464ee1f21015f1c77d5",
+      "rejected_middle_frames": 7
+    },
+    "army_officer": {
+      "source_sha256": "9d661d2acd1c6dd64d0a3ddf1a54dbf0ddd82f5b32e2d8041f25b89913f4911d",
+      "walk_sha256": "5aaf9827f2780177d3b20407d3a28ed6f28140a27f8ad740042b32deca1d57f8",
+      "standing_height": 264,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "1d3b3c0fcfead78512f68772d690816b722aec9f50462cb68297fb8992226d00",
+      "rejected_middle_frames": 7
+    },
+    "battle_vanguard": {
+      "source_sha256": "79fcfc1bdf855298ea16733ad3b45efbf68072739b1208f98745d63698f3f147",
+      "walk_sha256": "e2e243d856c11e7ae77d0331699cd0f84f197eaa4bff958bf7d88d3ad5dcd316",
+      "standing_height": 266,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "c22dc5cb7882a11a7fd77150010bfe3f88b96923c6c732058e78e9b51a2a677a",
+      "rejected_middle_frames": 6
+    },
+    "blackcoat_captain": {
+      "source_sha256": "793b8338baa0d326fba0bdcb35caa2580e02a2be9a50b55e64cc2cfec6e38fa7",
+      "walk_sha256": "11711a3c6593ecfacdafc556a3ab18cd78edef9b1c910d71cf97c8926e67116e",
+      "standing_height": 280,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "5e14be575ac93150cd9832072b84c8f7283376b17bcf0a35b6dfa71d9454d163",
+      "rejected_middle_frames": 4
+    },
+    "casanova": {
+      "source_sha256": "152353196a80e494ff47a0627ea91d02886911a174f85daf1ebf0b86521f73b7",
+      "walk_sha256": "327e05cc9cd349e4194940f7d3b8635599d7f3359bc9050773d95a72c4e07f55",
+      "standing_height": 272,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "d9578554a2b4769f6cdcb5761f44d917bec0ff0d656743b70363013d45deb67b",
+      "rejected_middle_frames": 6
+    },
+    "charismatic_admiral": {
+      "source_sha256": "fe5b367ef66e7e2319180372c8011a74d76758b9a19e80d75983394fcb760b98",
+      "walk_sha256": "64b0a4da7fd1d2248d589dfbbd5671b5c99d71d881adbfeab5a4ab9baace6e00",
+      "standing_height": 268,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "34d52e81d5e464806108a3cf6afad0de61da3ba4069e77e78ef8bc9d98a15256",
+      "rejected_middle_frames": 7
+    },
+    "ganghui": {
+      "source_sha256": "e345ea7fda7e5f1b8b1ef1a07241fb39771612c6716065a12e12221f53dd6b17",
+      "walk_sha256": "a5b800f62e1531d5138e25f09b7de7ac50dd59f70b1c8a688c792afd80075f2b",
+      "standing_height": 268,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "1b675a7a21fc06df62b186ccd94ecbceac15bca70908f102806f8339d75947a2",
+      "rejected_middle_frames": 7
+    },
+    "hat_spinner": {
+      "source_sha256": "9f37439d87da5b5df91d0fbcd004829760cfe5fff03e5f26a22cfbcd10c1189b",
+      "walk_sha256": "72cbbedbfe0884e43927e54af1101bdff74dfc3351bb2498105cb955f3f3c941",
+      "standing_height": 266,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "f36e209633dd25450ebc126693348b9ab46ca6fb92a78c4953714308ca437928",
+      "rejected_middle_frames": 9
+    },
+    "muscle_swordsman": {
+      "source_sha256": "b7764a59e3a258f47b00838bdc67cd40f4f7e921c47d4b800f6c6bcf2e8a6bf1",
+      "walk_sha256": "7f3ce16ad4981a974412a61e2692f86e997f5f759c2c3f9c78168ad62b511570",
+      "standing_height": 268,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "7cb5c4d7ce6dafa660fa85a2695c32df89d3495e8b94e36ecb56102bca6d3af4",
+      "rejected_middle_frames": 10
+    },
+    "navigator_white": {
+      "source_sha256": "fdfdcb7b0fe2de25bce4e18272d6902073c0384cdf365c68054afd2566b3691d",
+      "walk_sha256": "cf1ace1756b058cf0b73e451a4952c867b73a336d3ff14be4f8ee43410b66952",
+      "standing_height": 268,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "54c045ff10f9507225d28bf29504bd66db7205e2ab57400cfbb87e29e53c5c31",
+      "rejected_middle_frames": 4
+    },
+    "noble_scholar": {
+      "source_sha256": "485de0466fa4c65f70a7f04f203476d46a3bc8e92591471a2fe4cb503a74155c",
+      "walk_sha256": "59e716702140c9536a8596a19dfd6038c8e85381d6a3902d3793bfa12fd29539",
+      "standing_height": 276,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "3a4777267f157a94787e60bdf78ab4275986a4cbfbde995df32ed50240118e9a",
+      "rejected_middle_frames": 4
+    },
+    "sea_dog": {
+      "source_sha256": "21fde1aae22e062b84ed497b9f4af64c698ff6bb81a6b6a357b5ceb2a373f627",
+      "walk_sha256": "0aac22fb062da3ca9c87c2b619afe455d480406e933eb2527b66bc9f9b456201",
+      "standing_height": 273,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "5c98b92a4ef08a254168912130da8f01d5127e12ea4e7fd9a370827d25d56b8a",
+      "rejected_middle_frames": 7
+    },
+    "sky_adventurer": {
+      "source_sha256": "6011c8ef7afa41fe769dfa87eb53e22afd8478080792c8c0bf3b599d8ed97b02",
+      "walk_sha256": "b7599c8b32c82cafa8ed170d892612772b480d8e1e952f82772ccf2e1efd4616",
+      "standing_height": 280,
+      "cell": [
+        260,
+        420
+      ],
+      "output_sha256": "975ee0448ee5445dfea43ff291e0fe60cae14767fa277a10b6f4eba8b790cfd2",
+      "rejected_middle_frames": 8
+    }
+  }
+}

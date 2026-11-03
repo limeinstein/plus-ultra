@@ -39,6 +39,7 @@
       { label: '구입', icon: 'coin', onClick: function () { return T.buy(c); } },
       { label: '매각', icon: 'sack', sub: R.cargoQty() ? R.cargoQty() + '통' : '', onClick: function () { return T.sell(c); } },
       { label: '투자', icon: 'seal', sub: lv ? '출자 ' + lv + '등급' + (div >= 1 ? ' · 배당 ' + U.num(div) + '닢' : '') : '', onClick: function () { return T.invest(c); } },
+      G.Patronage ? G.Patronage.menuItem(c) : null,
       { label: '회화', icon: 'people', onClick: function () { return T.talk(c); } },
       { label: '시세', icon: 'chart', sub: R.market(c.id).ev ? R.market(c.id).ev : '품목 갈래별 값', onClick: function () { return T.quotes(c); } },
       { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : (T.hagLeft(c) < T.hagMax() ? '남은 흥정 ' + T.hagLeft(c) + '번' : R.purser() ? '경리 ' + R.purser().name : G.Court && G.Court.haggle(c) ? '귀족의 권한' : G.Acct && T.hagMax() > 1 ? '흥정 ' + T.hagMax() + '번' : ''), dim: !!h, onClick: function () { return T.haggle(c); } },
@@ -61,8 +62,14 @@
   function eraTag(c, id) {
     if (!G.Era) return '';
     var v = G.Era.mult(c, id); if (v < 1.15 && v > 0.87) return '';
-    var nt = (G.ERA_DEMAND[id] || {}).note || '';
-    return ' <span class="tag ' + (v >= 1 ? 'era-up' : 'era-down') + '" title="' + U.esc('유럽 시장의 시대 수요 ×' + v.toFixed(2) + (nt ? ' — ' + nt : '')) + '">시대 ' + (v >= 1 ? '▲' : '▼') + '</span>';
+    var nt = G.Era.marketNote ? G.Era.marketNote(c, id) : (G.ERA_DEMAND[id] || {}).note || '';
+    return ' <span class="tag ' + (v >= 1 ? 'era-up' : 'era-down') + '" title="' + U.esc('이 시장의 시대 수요 ×' + v.toFixed(2) + (nt ? ' — ' + nt : '')) + '">시대 ' + (v >= 1 ? '▲' : '▼') + '</span>';
+  }
+  function supplyCell(c, id) {
+    var info = R.supplyInfo(c, id);
+    if (!info.cap) return '<span class="muted">거래 중단</span>';
+    return '<b>' + info.qty + '</b><small class="muted" style="display:block;white-space:nowrap" title="' +
+      U.esc('공급 한도 ' + info.cap + '통 · 가득 회복까지 ' + info.fullDays + '일. 날짜가 지나야 입하하며, 같은 날 재방문으로 새 물량이 생기지 않습니다.') + '">하루 +' + info.perDay.toFixed(1) + '통</small>';
   }
   function sourceTag(c, id) {
     var k = G.Era && G.Era.source ? G.Era.source(c, id) : 1;
@@ -142,19 +149,26 @@
         var g = G.GOOD[id], have = s.fleet.cargo[id] ? s.fleet.cargo[id].q : 0;
         var bs = G.Ledger ? G.Ledger.bestSell(id, c.id) : null, gain = bs ? bs.price - buyP(c, id) : null;
         var relay = R.isRelay(c, id) ? ' <span class="tag relay" title="이 항구는 산지가 아니라 먼 곳(' + G.TradeGoods.originRegions(id).join('·') + ')에서 들여와 판다 — 산지보다 비싸지만 더 먼 곳에 팔면 남는다">중계</span>' : '';
-        return '<tr class="click" data-id="' + id + '"><td class="pick"><input type="checkbox" class="bpick" data-id="' + id + '"' + (sel[id] ? ' checked' : '') + ' title="골라서 한꺼번에 산다"></td><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + relay + specTag(c, id) + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="유행하는 물건 — 값이 뛰었다">유행</span>' : '') + eraTag(c, id) + sourceTag(c, id) + evTag(c, id) + '</td><td class="muted">' + G.GOOD_CATS[g.cat] + (G.Cargo ? ' <small title="1통의 무게 — 배가 버티는 무게에 들어간다">· 무게 ' + G.Cargo.wt(id) + '</small>' : '') + '</td><td class="num">' + U.num(buyP(c, id)) + '</td><td class="num">' + R.supply(c, id) + '</td><td class="num">' + (have || '') + '</td>' +
+        return '<tr class="click" data-id="' + id + '"><td class="pick"><input type="checkbox" class="bpick" data-id="' + id + '"' + (sel[id] ? ' checked' : '') + ' title="골라서 한꺼번에 산다"></td><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + relay + specTag(c, id) + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="유행하는 물건 — 값이 뛰었다">유행</span>' : '') + eraTag(c, id) + sourceTag(c, id) + evTag(c, id) + '</td><td class="muted">' + G.GOOD_CATS[g.cat] + (G.Cargo ? ' <small title="1통의 무게 — 배가 버티는 무게에 들어간다">· 무게 ' + G.Cargo.wt(id) + '</small>' : '') + '</td><td class="num">' + U.num(buyP(c, id)) + '</td><td class="num">' + supplyCell(c, id) + '</td><td class="num">' + (have || '') + '</td>' +
           '<td class="num">' + where(bs) + '</td><td class="num ' + (gain > 0 ? 'down' : 'up') + '">' + (gain == null ? '' : (gain > 0 ? '+' : '') + U.num(gain)) + '</td></tr>';
       }).join('');
       var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, Math.floor(R.freeVol())) + '</b>통' + (G.Cargo ? ' · 무게 여유 <b>' + Math.max(0, Math.floor(G.Cargo.wfree())) + '</b>' : '') + ' · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
         '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl"><tr><th title="골라서 한꺼번에 산다">✓</th><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table></div>' +
-        '<div class="muted" style="margin-top:6px;font-size:14px">매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다.' + (R.cityGoods(c).some(function (id) { return R.isRelay(c, id); }) ? ' 「중계」는 이 항구가 먼 산지에서 들여온 물건이라 산지보다 비쌉니다.' : '') + ' 「특산 ×N」은 이 고장 산물 — 산지에서 먼 곳에서는 약 N배에 팔립니다. ▲▼는 세상의 시장 사건(가뭄·전쟁·풍작…)으로 모자라거나 넘치는 물건입니다.</div>' +
+        '<div class="muted" style="margin-top:6px;font-size:14px">입하는 품목마다 다릅니다. 일반품은 빠르게, 희귀품은 천천히 회복합니다. 생산시설·상관 투자로 공급을 늘릴 수 있습니다. 매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다.' + (R.cityGoods(c).some(function (id) { return R.isRelay(c, id); }) ? ' 「중계」는 이 항구가 먼 산지에서 들여온 물건이라 산지보다 비쌉니다.' : '') + ' 「특산 ×N」은 이 고장 산물 — 산지에서 먼 곳에서는 약 N배에 팔립니다. ▲▼는 세상의 시장 사건(가뭄·전쟁·풍작…)으로 모자라거나 넘치는 물건입니다.</div>' +
         (hag() ? '<div class="good-text" style="margin-top:8px">값 깎기에 성공해 ' + Math.round((1 - hag().buy) * 100) + '% 싸게 살 수 있습니다.</div>' : '') +
         (duty(c) ? '<div class="good-text" style="margin-top:6px">면세증 — 관세 없이 ' + Math.round(duty(c) * 100) + '% 싸게 삽니다. 들여온 물건은 ' + Math.round(duty(c) * 100) + '% 비싸게 팝니다.</div>' : '') + (G.Rel ? G.Rel.tradeNote(c) : '');
       var picked = null;
       var win = UI.window({ title: '구입 — ' + c.name, icon: 'coin', width: 1080, html: html,
-        buttons: [{ label: '고른 것 한꺼번에 산다', value: 'batch', cls: 'green', icon: 'coin' }, { label: '돌아간다', value: null }],
+        buttons: [{ label: '고른 것 한꺼번에 산다', value: 'batch', cls: 'green', icon: 'coin' }, { label: '입하를 기다린다 (' + G.BALANCE.commerce.supplyWaitDays + '일)', value: 'wait' }, { label: '돌아간다', value: null }],
         onBuild: function (el, w) { pickWire(el, w, sel, function (id) { picked = id; }); } });
       var v = await win.result;
+      if (v === 'wait') {
+        if (!(await UI.confirm('입하를 기다리며 ' + G.BALANCE.commerce.supplyWaitDays + '일을 보냅니다. 그동안 급료와 왕명 기한도 흐릅니다.', '기다린다', '그만둔다'))) continue;
+        var msgs = []; await UI.fade(function () { msgs = G.Game.passDays(G.BALANCE.commerce.supplyWaitDays); });
+        (msgs || []).forEach(function (m) { UI.toast(m.text, m.icon); }); G.Game.refreshHud();
+        if ((s.life && s.life.end) || (G.EraEnd && G.EraEnd.over(s))) return;
+        continue;
+      }
       if (v === 'batch') {
         var bs2 = Object.keys(sel).filter(function (id) { return sel[id] && goods.indexOf(id) >= 0; });
         if (!bs2.length) { UI.toast('한꺼번에 살 품목을 먼저 고르십시오 (줄 왼쪽의 네모를 누름).', 'info', 4200); continue; }
@@ -384,56 +398,49 @@
   // ---------------------------------------------------------------- 투자
   var LVNAME = ['없음', '출자자', '단골 출자자', '주요 출자자', '대주주', '조합 명예회원'];
   T.invest = async function (c) {
-    var s = S(), k = keeper();
+    var s = S(), k = keeper(), cfg = G.BALANCE.commerce;
     for (;;) {
-      var iv = R.investTick(c), lv = R.investLv(c.id), div = Math.floor(iv.div), next = R.investNext(c.id);
-      var extra = R.cityGoods(c).filter(function (id) { return c.goods.indexOf(id) < 0; });
-      var html = '<div class="kv" style="margin-bottom:10px">' +
-        '<div>지금까지 낸 돈</div><div><b>금화 ' + U.num(iv.amt) + '닢</b></div>' +
-        '<div>등급</div><div><b>' + lv + '등급 · ' + LVNAME[lv] + '</b>' + (next ? ' <span class="muted">(다음 등급까지 ' + U.num(next) + '닢)</span>' : ' <span class="muted">(끝까지 올랐다)</span>') + '</div>' +
-        '<div>사는 값 · 파는 값</div><div>' + Math.round((1 - R.investBuyMult(c.id)) * 100) + '% 싸게 · ' + Math.round((R.investSellMult(c.id) - 1) * 100) + '% 비싸게</div>' +
-        '<div>보급 값</div><div>' + Math.round(6 * lv) + '% 싸게</div>' +
-        '<div>늘어난 취급 품목</div><div>' + (extra.length ? extra.map(function (id) { return G.GOOD[id].name; }).join(', ') : '<span class="muted">2등급부터 늘어납니다</span>') + '</div>' +
-        '<div>쌓인 배당</div><div><b>금화 ' + U.num(div) + '닢</b> <span class="muted">(90일마다 낸 돈의 ' + (0.75 + 0.22 * c.size).toFixed(1) + '%)</span></div>' +
-        '</div>';
-      var win = UI.window({ title: c.name + ' 교역소 출자', icon: 'seal', width: 660, html: html,
-        buttons: [{ label: '돌아간다', value: null }, { label: '배당을 받는다', value: 'take', cls: div >= 1 ? 'green' : '' }, { label: '출자한다', value: 'put', cls: 'navy' }] });
-      var v = await win.result;
-      if (!v) return;
-      if (v === 'take') {
-        if (div < 1) { UI.toast('아직 받을 배당이 없습니다.', 'coin'); continue; }
-        iv.div -= div; s.player.gold += div;
-        await C.say(k, '이번 몫일세. 금화 ' + U.num(div) + '닢, 세어 보게.');
-        G.State.log(c.name + ' 교역소에서 배당 ' + U.num(div) + '닢을 받았다.');
-        G.Game.refreshHud();
+      var iv = R.investTick(c), lv = R.investLv(c.id), div = Math.floor(iv.div), next = R.investNext(c.id), levels = R.investLevels(c.id);
+      var preview = R.cityGoods(c, 4).filter(function (id) { return R.cityGoods(c, 0).indexOf(id) < 0; });
+      var extras = preview.map(function (id, i) { var needLv = i ? 4 : 2; return G.GOOD[id].name + ' (' + needLv + '등급 · 누적 ' + U.num(levels[needLv]) + '닢' + (lv >= needLv ? ' · 개방' : '') + ')'; }).join('<br>');
+      var projects = cfg.projects, buttons = [{ label: '돌아간다', value: null }, { label: '배당을 받는다', value: 'take' }, { label: '출자한다', value: 'put', cls: 'navy' }];
+      var html = '<div class="kv"><div>누적 출자</div><div>' + U.num(iv.amt) + '닢 · ' + lv + '등급 ' + LVNAME[lv] + '</div>' +
+        '<div>다음 등급</div><div>' + (next == null ? '최고 등급' : U.num(next) + '닢 추가') + '</div>' +
+        '<div>거래 우대</div><div>매입 ' + Math.round((1 - R.investBuyMult(c.id)) * 100) + '% 할인 · 매각 ' + Math.round((R.investSellMult(c.id) - 1) * 100) + '% 우대</div>' +
+        '<div>품목 확장 계획</div><div>' + (extras || '추가 품목 없음') + '</div>' +
+        '<div>쌓인 배당</div><div>' + U.num(div) + '닢</div></div>' +
+        '<p class="muted">출자금과 시설 공사비는 돌려받지 못합니다. 출자는 거래 우대·품목 확장·배당, 시설 공사는 물량에 쓰입니다. 시설은 출자 1등급부터 각각 세 단계까지 짓습니다.</p><table class="tbl"><tr><th>도시 사업</th><th>현재</th><th>다음 공사비</th></tr>';
+      Object.keys(projects).forEach(function (key) {
+        var def = projects[key], cost = R.projectCost(c, key);
+        html += '<tr><td><b>' + def.name + '</b><br><small>' + def.desc + '</small></td><td>' + R.projectLv(c, key) + '/3</td><td>' + (cost == null ? '완공' : U.num(cost) + '닢') + '</td></tr>';
+        if (cost != null) buttons.push({ label: def.name + ' 확장', value: key, disabled: lv < 1 });
+      });
+      var win = UI.window({ title: c.name + ' 출자·도시 사업', icon: 'seal', width: 820, html: html + '</table>', buttons: buttons });
+      var v = await win.result; if (!v) return;
+      if (projects[v]) {
+        var price = R.projectCost(c, v);
+        if (price == null || lv < 1) continue;
+        if (s.player.gold < price) { UI.toast('공사비가 모자랍니다.', 'coin'); continue; }
+        if (!(await UI.confirm(projects[v].name + '을 한 단계 확장합니다. 공사비 ' + U.num(price) + '닢 · 남는 금화 ' + U.num(s.player.gold - price) + '닢.<br>' + projects[v].desc, '확장한다', '그만둔다'))) continue;
+        if (R.buildProject(c, v)) { G.State.log(c.name + ' ' + projects[v].name + ' ' + R.projectLv(c, v) + '단계 완공.'); UI.toast(projects[v].name + ' 확장 완료', 'seal'); G.Game.refreshHud(); }
         continue;
       }
-      var max = Math.min(s.player.gold, 200000);
-      if (max < 1000) { await C.say(k, '출자는 금화 1,000닢부터 받네.'); continue; }
-      var n = await UI.number({ title: '출자', text: '이 도시 교역소에 얼마를 대겠습니까? 낸 돈은 돌려받지 못하지만, 값이 유리해지고 배당이 나옵니다.',
-        min: 1000, max: max, value: Math.min(max, 5000), unit: '닢',
-        quick: [{ label: '1,000', value: 1000 }, { label: '5,000', value: 5000 }, { label: '2만', value: 20000 }, { label: '전부', value: max }],
-        info: function (d) {
-          var a = iv.amt + d, l = 0;
-          for (var i = 1; i < R.INVEST_LV.length; i++) if (a >= R.INVEST_LV[i]) l = i;
-          return '출자 뒤 ' + l + '등급 (' + LVNAME[l] + ')';
-        } });
-      if (!n) continue;
-      if (s.player.gold < n) { UI.toast('소지금이 모자랍니다.', 'coin'); continue; }
-      var before = lv;
-      s.player.gold -= n; iv.amt += n;
-      var after = R.investLv(c.id);
-      var ifame = n / 4000; G.Fame.add('tr', Math.floor(ifame) + (U.chance(ifame % 1) ? 1 : 0));   // 잘게 나눠 넣어도 같은 명성 (예전에는 1,000닢씩 넣으면 4배)
-      R.S().stats.invested = (R.S().stats.invested || 0) + n;
-      G.State.log(c.name + ' 교역소에 금화 ' + U.num(n) + '닢을 출자했다.');
-      if (after > before) {
-        await C.say(k, '이만한 돈을 대 주시다니! 이제 자네는 이 고장의 ' + LVNAME[after] + '일세.\f앞으로 값은 자네에게 맞춰 주겠네.');
-        UI.toast(c.name + ' 출자 ' + after + '등급 — ' + LVNAME[after], 'seal', 4500);
-      } else {
-        await C.say(k, '잘 맡아 두겠네. 장부에 올려 두지.');
-        UI.toast('출자 금화 ' + U.num(n) + '닢', 'seal');
+      if (v === 'take') {
+        if (div < 1) { UI.toast('아직 받을 배당이 없습니다.', 'coin'); continue; }
+        iv.div -= div; s.player.gold += div; G.State.log(c.name + ' 교역소 배당 ' + U.num(div) + '닢을 받았다.'); G.Game.refreshHud(); continue;
       }
-      G.Game.refreshHud();
+      if (v !== 'put') continue;
+      var max = Math.min(s.player.gold, cfg.putMax);
+      if (max < 1000) { await C.say(k, '출자는 금화 1,000닢부터 받네.'); continue; }
+      var n = await UI.number({ title: '출자', text: '도시 규모와 개방할 희귀품 사업에 따라 출자 문턱이 다릅니다. 낸 돈은 돌려받지 못합니다.', min: 1000, max: max,
+        value: Math.min(max, next || 1000), unit: '닢', quick: [{ label: '1만', value: 10000 }, { label: '다음 등급', value: Math.min(max, next || max) }],
+        info: function (d) { var l = lv; levels.forEach(function (a, i) { if (iv.amt + d >= a) l = Math.max(l, i); }); return '출자 뒤 ' + l + '등급 · 남는 금화 ' + U.num(s.player.gold - d) + '닢'; } });
+      if (!n || n < 1000 || n > max || s.player.gold < n) continue;
+      R.market(c.id); s.player.gold -= n; iv.amt += n;
+      var ifame = n / cfg.fameDiv; G.Fame.add('tr', Math.floor(ifame) + (U.chance(ifame % 1) ? 1 : 0));
+      s.stats.invested = (s.stats.invested || 0) + n;
+      G.State.log(c.name + ' 교역소에 금화 ' + U.num(n) + '닢을 출자했다.');
+      UI.toast(c.name + ' 출자 ' + R.investLv(c.id) + '등급 · ' + LVNAME[R.investLv(c.id)], 'seal'); G.Game.refreshHud();
     }
   };
 

@@ -873,6 +873,7 @@
       { label: '항해 일지 기록 (저장)', icon: 'save', onClick: function () { return G.Info.saveMenu(); } },
       G.LogBooks ? { label: '서고', icon: 'book', sub: '항해일지 ' + G.LogBooks.volumes().length + '권' + (G.LogBooks.study().length + G.LogBooks.copies().length ? ' · 책 ' + (G.LogBooks.study().length + G.LogBooks.copies().length) + '권' : '') + (G.LogBooks.copyCandidates().length ? ' · 꽂을 책 ' + G.LogBooks.copyCandidates().length + '권' : ''), onClick: function () { return G.LogBooks.open(c, HM.title(c)); } } : null,   // 항해일지(40년마다 한 권)와 발견물의 책 (js/systems/logbooks.js — 2026-10-24)
       G.Encyc ? G.Encyc.menuItem(c) : null,   // 발견물 백과사전 (js/systems/encyclopedia.js)
+      G.Patronage ? G.Patronage.menuItem(c) : null,
       { label: '금고', icon: 'chest', sub: U.num(s.player.bank) + '닢', onClick: function () { return HM.bank(c); } },
       { label: '보관함', icon: 'chest', sub: '맡긴 물건 ' + R.storage().length + '점 · 소지품 ' + R.slotsUsed() + '/' + R.ITEM_MAX, onClick: function () { return HM.storage(c); } },
       G.HeirPlan && G.HeirPlan.canArrange() ? { label: G.HEIR_PLAN.council.menu, icon: 'people', sub: G.HeirPlan.menuSub(), onClick: function () { return G.HeirPlan.arrange(c); } } : null,   // 옛 부하에게 아들의 앞날을 부탁한다 (js/systems/heirplan.js)

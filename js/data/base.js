@@ -248,6 +248,37 @@
     pirateSurrender: { base: 0.22, damage: 0.3, crewLoss: 0.18, pressure: 0.12, near: 800, min: 0.12, max: 0.8 },
     // 산지에서 먼 시장의 운송·희소 가치. 가까운 산지가 있으면 그 거리만 쓰므로 우회 항해로 값이 뛰지 않는다.
     oceanTrade: { premium: [1, 1, 1.08, 1.3, 1.85, 2.5], bulkDemand: 0.5 },
+    // 교역 성장·도시 사업·왕실 승급의 조정값. 선박 성능은 그대로 두고 가격만 바꾼다.
+    shipPrices: { hulk: 42000, caravel: 11000, lcaravel: 21000, pinnace: 10500, carrack: 52000, lcarrack: 110000,
+      hcarrack: 170000, galleon: 200000, lgalleon: 320000, fluyt: 115000, frigate: 185000,
+      galley: 22000, greatgalley: 60000, galleass: 165000, xebec: 35000, baghlah: 55000, jong: 145000,
+      junk: 27000, shachuan: 30000, ljunk: 105000, baochuan: 380000, maengseon: 16000,
+      panokseon: 120000, geobukseon: 200000, sekibune: 20000, atakebune: 165000 },
+    commerce: {
+      investLevels: [0, 10000, 35000, 90000, 200000, 450000], oldLevels: [0, 4000, 12000, 30000, 70000, 150000],
+      cityStep: 0.3, rareInvestK: 2.5, buyPerLv: 0.02, sellPerLv: 0.02, putMax: 1000000, fameDiv: 8000, operatingReserve: 0.25,
+      projects: {
+        production: { name: '생산시설', costs: [25000, 65000, 160000], stock: 0.1, recovery: 0.18, demand: 0, desc: '산지·중계 공급망을 보강한다. 단계마다 공급 한도 10%, 하루 입하량 18% 증가' },
+        warehouse: { name: '상관·창고', costs: [20000, 55000, 140000], stock: 0.25, recovery: 0, demand: 0, desc: '교역소 저장 시설을 넓힌다. 단계마다 공급 한도 25% 증가. 제독의 화물 보관함과는 별개' },
+        distribution: { name: '판로 개척', costs: [30000, 80000, 190000], stock: 0, recovery: 0, demand: 0.18, desc: '상인·공방과 판로를 넓힌다. 단계마다 시장이 받아 줄 물량 18% 증가' }
+      },
+      supply: { default: { cap: 1, days: 22 }, min: 50, rareMin: 24, rareInvestCap: 0.5,
+        cats: { food: { cap: 1.4, days: 12 }, drink: { cap: 1.15, days: 16 }, fiber: { cap: 1.25, days: 16 },
+          ore: { cap: 1.2, days: 20 }, metal: { cap: 1, days: 24 }, arms: { cap: 0.9, days: 28 },
+          gem: { cap: 0.65, days: 32 }, lux: { cap: 0.8, days: 28 } },
+        goods: { ambergris: { cap: 0.32, days: 42 }, rhino: { cap: 0.32, days: 42 }, musk: { cap: 0.4, days: 38 },
+          gold: { cap: 0.65, days: 32 }, silver: { cap: 0.8, days: 28 }, gems: { cap: 0.45, days: 38 }, pearl: { cap: 0.5, days: 35 } } },
+      priceHalfDays: 25, supplyWaitDays: 3, mateWageK: 3,
+      court: { tribute: [30000, 65000, 120000, 220000, 380000, 650000, 1000000, 1500000], honorK: 0.65,
+        intervals: [120, 180, 240, 300, 365, 450, 540, 720], globalInterval: 90,
+        diplomaticFunds: [0, 2000, 8000, 18000, 40000, 80000, 140000, 220000],
+        supply: [40, 70, 110, 160, 220, 300, 400, 520], ships: [2, 3, 3, 4, 5, 6, 7, 8],
+        exhibitStep: 2, exhibitMax: 3, offerDays: 120, taskYears: [2, 2, 2, 3, 3, 3, 4, 4] },
+      patronage: { costs: [30000, 80000, 200000, 500000, 1200000], names: ['기초 후원', '확장 후원', '도시의 자랑', '대양의 유산', '가문의 기념비'],
+        projects: [ { id: 'sailors', name: '뱃사람 쉼터', icon: 'anchor', desc: '긴 항해를 마친 뱃사람들이 쉴 뜰과 기념 회랑을 후원한다.' },
+          { id: 'atlas', name: '해도 서고', icon: 'book', desc: '항해기·옛 해도와 바다 이야기를 모아 시민에게 공개한다.' },
+          { id: 'memorial', name: '항해 기념관', icon: 'seal', desc: '제독과 가문의 항해를 기리는 전시실과 명판을 세운다.' } ] }
+    },
     sakoku: { restrict: 16350101, portuguese: 16390801, dejima: 16410501, silverBan: 16680101, nagasaki: 191, stock: 0.6, routeK: 0.35, transitionK: 0.2 },
     imjinEnd: 15990101, // 노량은 1598년. 1599년부터 새 전쟁 사건·봉쇄를 끝낸다.
     // 도시 점령은 성문 돌파와 별개. 첫 수비대와 두 차례 증원군을 모두 격퇴해야 한다.
@@ -414,7 +445,7 @@
     fameTitles: [5000, 20000, 60000, 150000, 400000, 650000, 1000000, 1500000, 2000000],
     fameTitleNames: ['무명의 항해자', '신참 모험가', '이름난 모험가', '저명한 항해가', '위대한 탐험가', '대항해자', '세계적인 대항해자', '전설의 대항해자', '바다의 영웅', '불멸의 항해자'],
     tradeFameDiv: 800,   // 교역 이익 이만큼에 교역 명성 1 (예전 2,500 — 교역만으로는 궁정·작위가 막히던 것)
-    crewWage: { per: 2, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)
+    crewWage: { per: 6, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)
     duelArmor: { k: 60, cap: 0.4 },   // 일기토 방어: 피해 × (1 − 방어/(방어+k)), 최대 cap까지만 줄인다 (예전: 방어×0.5를 빼서 방어 30이면 피해가 절반 넘게 줄던 것)
     oarK: 0.8,   // 노 젓는 속력 배수 (코라코라·소조 같은 노배가 돛배보다 빠르던 것 — QA 2026-10-23)
     taleWage: { from: 11, base: 20, per: 11, max: 250 },   // 이야기 부하: 특기 합이 from 이상이면 품삯 = base + per×특기 합 (최대 max, 5닢 단위)

@@ -23,14 +23,26 @@
     return a[a.length - 1][1];
   }
   function yearNow() { var s = S(); return s ? s.date.y + (s.date.m - 1) / 12 + (s.date.d - 1) / 365 : 1480; }
-  /** 그 지역·그 해의 시대 수요 (유럽이 아니거나 자료가 없으면 1) */
+  /** 그 지역·그 해의 시대 수요 (자료가 없는 품목·지역은 1) */
   E.raw = function (goodId, region, y) {
-    var d = G.ERA_DEMAND && G.ERA_DEMAND[goodId]; if (!d || EU[region] == null) return 1;
+    var d = G.ERA_DEMAND && G.ERA_DEMAND[goodId]; if (!d) return 1;
+    var a = d[EU[region] || ('r' + region)] || (EU[region] != null ? d.eu : null); if (!a) return 1;
     var k = cfg().strength == null ? 1 : cfg().strength;
-    return 1 + (curve(d[EU[region]] || d.eu, y == null ? yearNow() : y) - 1) * k;
+    return 1 + (curve(a, y == null ? yearNow() : y) - 1) * k;
   };
   /** 값에 곱할 배수 (R.buyPrice·R.sellPrice) */
-  E.mult = function (c, goodId) { if (!c || cfg().on === false) return 1; return E.raw(goodId, c.region); };
+  E.marketRule = function (c, id) {
+    var owner = G.R.cityOwner(c);
+    return (G.ERA_MARKETS || []).filter(function (d) { return d.goods.indexOf(id) >= 0 &&
+      ((d.cities && d.cities.indexOf(c.name) >= 0) || (d.owners && d.owners.indexOf(owner) >= 0)); })[0] || null;
+  };
+  E.marketNote = function (c, id) { var rule = E.marketRule(c, id); return rule ? rule.note : (G.ERA_DEMAND[id] || {}).note || ''; };
+  E.multAt = function (c, id, y) {
+    if (!c || cfg().on === false) return 1;
+    var rule = E.marketRule(c, id), k = cfg().strength == null ? 1 : cfg().strength;
+    return rule ? 1 + (curve(rule.curve, y) - 1) * k : E.raw(id, c.region, y);
+  };
+  E.mult = function (c, id) { return E.multAt(c, id, yearNow()); };
   /** 산지의 생산비·공급 압력과 지정한 중계항으로 전달되는 영향. */
   E.source = function (c, id) {
     if (!c || cfg().on === false) return 1;
@@ -42,14 +54,17 @@
     });
     return 1 + (v - 1) * (cfg().strength == null ? 1 : cfg().strength);
   };
-  /** 수첩: 유럽 세 지역 가운데 가장 높은·낮은 시대 수요 + 10년 뒤 흐름 */
+  /** 수첩: 실제 소비 항구의 가장 높은·낮은 시대 수요 + 10년 뒤 흐름 */
   E.list = function () {
     var y = yearNow(), out = [];
+    var cities = G.CITY_DATA.filter(function (c) { return c.port && G.R.cityExists(c); });
     Object.keys(G.ERA_DEMAND || {}).forEach(function (id) {
-      if (!G.GOOD[id]) return;
-      var vs = E.EUROPE.map(function (r) { return E.raw(id, r, y); }), hi = Math.max.apply(null, vs), lo = Math.min.apply(null, vs);
-      var fut = Math.max.apply(null, E.EUROPE.map(function (r) { return E.raw(id, r, y + 10); }));
-      out.push({ g: id, name: G.GOOD[id].name, hi: hi, lo: lo, best: E.EUROPE[vs.indexOf(hi)], worst: E.EUROPE[vs.indexOf(lo)], trend: fut - hi, note: G.ERA_DEMAND[id].note || '' });
+      if (!G.GOOD[id] || !cities.length) return;
+      var vs = cities.map(function (c) { return E.multAt(c, id, y); }), hi = Math.max.apply(null, vs), lo = Math.min.apply(null, vs);
+      var best = cities[vs.indexOf(hi)], worst = cities[vs.indexOf(lo)];
+      var fut = Math.max.apply(null, cities.map(function (c) { return E.multAt(c, id, y + 10); }));
+      out.push({ g: id, name: G.GOOD[id].name, hi: hi, lo: lo, best: best.region, worst: worst.region, bestName: best.name, worstName: worst.name,
+        trend: fut - hi, note: E.marketNote(best, id) });
     });
     return out;
   };

@@ -1,8 +1,8 @@
 /* 궁정 — 국왕의 부름, 왕명(작은 임무), 작위 (자료: js/data/court.js, 조정값: G.BALANCE.court)
    ■ 흐름
      · 통합 명성이 10,000 오를 때마다(step) 제 나라 국왕이 제독을 부른다 — 소식으로 알리고, 수도에 들어서면 전령이 찾아온다.
-     · 왕궁에서 알현하면 국왕이 왕명 넷(탐험·교역·전투·사교에서 하나씩)을 내놓는다. 하나를 골라 해내고 돌아와 아뢰면 작위가 한 칸 오른다.
-       제 나라: 피달구/이달고 → 영주 → 남작 → 자작 → 백작 → 후작 → 공작 → 대공 (명성 10,000마다 한 칸, 70,000이면 공작, 80,000이면 대공 — 「대공 전하」)
+     · 왕궁에서 알현하면 국왕이 납품·헌납과 탐험·전투·외교 왕명을 내놓는다. 하나를 골라 해내고 돌아와 아뢰면 작위가 한 칸 오른다.
+       제 나라: 피달구/이달고 → 영주 → 남작 → 자작 → 백작 → 후작 → 공작 → 대공 (명성 10,000마다 한 칸의 자격, 각 승급 사이 준비 기간 필요 — 「대공 전하」)
      · 다른 나라 군주를 알현해도 같은 일이 벌어진다 — 그 나라의 명예 작위(제국 기사 → 제국 남작 → 제국 백작 …)를 받는다.
      · 왕명은 한 번에 하나만 맡는다. 기한(years)을 넘기거나 내려놓으면 신뢰·명성이 깎이고 again일 뒤에 다시 부른다.
    ■ 왕명: 지리상의 발견·보물 발견·동물원 건설 / 교역품 납품·비용 지불 / 적국 선박 나포·왕녀 구출·해적 토벌 / 외교 문서·외교 특사
@@ -22,13 +22,23 @@
   G.Court = CT;
   function S() { return G.Game.state; }
   function B() { return G.BALANCE.court; }
+  function CB() { return G.BALANCE.commerce.court; }
+  function stepValue(a, n) { return a[Math.min(n, a.length - 1)]; }
   function SP() { return G.Sponsor; }
   function st() {
     var s = S(); if (!s.court) s.court = {};
     var c = s.court;
-    ['titles', 'offers', 'called', 'herald', 'seen', 'wait', 'zoo', 'zooUsed', 'zooAt', 'museum', 'gallery', 'garden', 'gardenUsed', 'gardenDone'].forEach(function (k) { if (!c[k]) c[k] = {}; });
+    ['titles', 'offers', 'called', 'herald', 'seen', 'wait', 'zoo', 'zooUsed', 'zooAt', 'museum', 'gallery', 'garden', 'gardenUsed', 'gardenDone', 'promotions'].forEach(function (k) { if (!c[k]) c[k] = {}; });
     if (!c.gmig) gardenMigrate(c);
     fixTitles(c);
+    if (!c.pacingVersion) {
+      Object.keys(c.titles).forEach(function (k) { if (c.titles[k] > 0 && !c.promotions[k]) c.promotions[k] = { day: s.day, rank: c.titles[k] }; });
+      c.pacingVersion = 1;
+    }
+    Object.keys(c.titles).forEach(function (k) {
+      var rank = c.titles[k], p = c.promotions[k];
+      if (rank > 0 && (!p || p.rank !== rank)) { c.promotions[k] = { day: s.day, rank: rank }; c.lastAward = s.day; }
+    });
     return c;
   }
   /** 사다리보다 높은 칸은 맨 위 칸으로 — 왕녀와 혼인해 특진한 뒤 그 전에 받은 왕명을 아뢰면 칸이 사다리를 넘어
@@ -80,12 +90,20 @@
   };
   /** 통합 명성의 단계 (10,000마다 1) */
   CT.level = function () { return Math.floor((S().player.fame || 0) / B().step); };
+  CT.waitDays = function (realm) {
+    var c = st(), day = S().day, p = c.promotions[realm.id], until = c.wait[realm.id] || 0;
+    if (p) until = Math.max(until, p.day + stepValue(CB().intervals, Math.max(0, p.rank - 1)));
+    if (c.lastAward != null) until = Math.max(until, c.lastAward + CB().globalInterval);
+    return Math.max(0, Math.ceil(until - day));
+  };
+  CT.tributeCost = function (realm, rank) { return Math.round(stepValue(CB().tribute, rank) * (CT.isHome(realm) ? 1 : CB().honorK)); };
+  CT.taskYears = function (realm) { return stepValue(CB().taskYears, CT.rank(realm)); };
   /** 이 군주가 지금 왕명을 내릴 수 있는가 (알현하면 일이 벌어진다) */
   CT.pending = function (sp) {
     var realm = CT.realmOf(sp); if (!realm || !SP().present(sp)) return false;
     var c = st(), rank = CT.rank(realm);
     if (rank >= CT.ladder(realm).length) return false;
-    if (c.wait[realm.id] && S().day < c.wait[realm.id]) return false;
+    if (CT.waitDays(realm) > 0) return false;
     return CT.level() > rank;
   };
   function homeSponsor() {
@@ -234,13 +252,14 @@
   /** 미술관에는 화실·조각실에서 나온 명작만 바친다. */
   function galleryItems() { return museumItems().filter(function (it) { return !!it.mw; }); }
   CT.galleryItems = galleryItems;
+  function sYear() { return S().date.y; }
   function supplyGoods(sp, n) {
     var here = G.CITY_DATA[sp.city], best = {};
     G.CITY_DATA.forEach(function (c) {
-      if (!c.goods || !R.cityExists(c)) return;
+      if (!c.goods || !c.port || !R.cityExists(c)) return;
       var rd = (G.REGION_DIST[here.region] || [])[c.region]; if (rd == null) return;
       var d = G.Geo.dist(here.lon, here.lat, c.lon, c.lat);
-      c.goods.forEach(function (id) { if (!G.GOOD[id] || (G.Slave && G.Slave.is(id))) return; var b = best[id]; if (!b || rd < b.rd || (rd === b.rd && d < b.d)) best[id] = { id: id, rd: rd, d: d, city: c.id }; });
+      c.goods.forEach(function (id) { if (!G.GOOD[id] || (G.GOOD[id].nw && sYear() < 1520) || (G.Sakoku && G.Sakoku.tradeBlock(c, id, 'buy')) || (G.Slave && G.Slave.is(id))) return; var b = best[id]; if (!b || rd < b.rd || (rd === b.rd && d < b.d)) best[id] = { id: id, rd: rd, d: d, city: c.id }; });
     });
     var need = n < 2 ? 1 : n < 4 ? 2 : 3, list = [];
     for (; need >= 1 && !list.length; need--) list = Object.keys(best).map(function (k) { return best[k]; }).filter(function (b) { return b.rd >= need && G.GOOD[b.id].p >= 30; });
@@ -267,46 +286,46 @@
       t.desc = '왕명을 받은 뒤 새로 찾은 보물 발견물 ' + t.n + '건.';
     } else if (kind === 'zoo') {
       if (st().zoo[realm.id]) return null;
-      t.n = b.zooN;
+      t.n = b.zooN + Math.min(CB().exhibitMax, Math.floor(n / CB().exhibitStep));
       if (zooAnimals().length + discCands(['creature']).filter(function (d) { return !isPlant(d); }).length < t.n) return null;
       t.title = '왕립 동물원을 세울 신기한 동물 ' + t.n + '종을 찾아 그려 온다';
       t.desc = '제독이 직접 찾아낸 신기한 동물(생물 발견물 — 도시의 개·고양이·말과 식물은 빼고) ' + t.n + '종. 이미 찾아 둔 것도 쳐 준다. 다 모이면 ' + G.CITY_DATA[sp.city].name + '에 왕립 동물원이 선다.';
       t.fame += 150;
     } else if (kind === 'garden') {
       if (st().gardenDone[realm.id]) return null;
-      t.n = b.gardenN || 3; t.got = 0;
+      t.n = (b.gardenN || 3) + Math.min(CB().exhibitMax, Math.floor(n / CB().exhibitStep)); t.got = 0;
       if (gardenPlants().length + plantCands().length < t.n) return null;
       t.title = '왕실 정원에 심을 진귀한 식물 ' + t.n + '종을 바친다';
       t.desc = '제독이 찾아낸 먼 땅의 식물(생물 발견물 가운데 나무·꽃·풀)이나, 발견한 자리에서 가져온 씨앗·묘목·분재를 ' + t.n + '종. 왕궁 안 「왕실 정원」에서 정원사에게 넘긴다 — 이미 찾아 둔 것도 쳐 준다. 다 넘기면 ' + realm.name + '의 군주가 정원으로 나와 작위를 내린다.';
       t.fame += 120;
     } else if (kind === 'museum') {
       if (st().museum[realm.id]) return null;
-      t.n = b.museumN || 3;
+      t.n = (b.museumN || 3) + Math.min(CB().exhibitMax, Math.floor(n / CB().exhibitStep));
       t.title = '왕립 박물관에 둘 발견 유물이나 명작 ' + t.n + '점을 바친다';
       t.desc = '소지품의 발견 유물(발견한 자리에서 손에 넣은 보물·장신구·서적 등 — 증거품은 빼고)이나, 함께 탄 화가·조각가가 바친 명작을 ' + t.n + '점 골라 바친다. 다 바치면 ' + G.CITY_DATA[sp.city].name + '에 왕립 박물관이 서고, 바친 것들을 그곳에서 볼 수 있다.';
       t.fame += 150;
     } else if (kind === 'gallery') {
       if (st().gallery[realm.id]) return null;
-      t.n = b.galleryN || 3;
+      t.n = (b.galleryN || 3) + Math.min(CB().exhibitMax, Math.floor(n / CB().exhibitStep));
       t.title = '왕립 미술관에 걸 명작 ' + t.n + '점을 바친다';
       t.desc = '함께 탄 화가·조각가가 화실·조각실에서 완성해 바친 명작을 ' + t.n + '점 골라 바친다. 다 바치면 ' + G.CITY_DATA[sp.city].name + '에 왕립 미술관이 서고 작품들을 전시한다.';
       t.fame += 150;
     } else if (kind === 'supply') {
       var gl = supplyGoods(sp, n); if (!gl.length) return null;
       var g = pick(gl), good = G.GOOD[g.id];
-      t.good = g.id; t.qty = lin(b.supplyQty, n); t.from = g.city;
+      t.good = g.id; t.qty = stepValue(CB().supply, n); t.from = g.city; t.got = 0;
       t.gold = Math.round(good.p * t.qty * b.supplyPay / 100) * 100;
       t.title = good.name + ' ' + t.qty + '통을 궁정에 바친다';
-      t.desc = good.name + ' ' + t.qty + '통을 배에 싣고 와 아뢴다. ' + G.CITY_DATA[g.city].name + ' 쪽에서 난다고 한다. 값은 넉넉히 쳐 준다.';
+      t.desc = good.name + ' ' + t.qty + '통을 배에 싣고 와 아뢴다. 여러 번 나누어 납품해도 된다. ' + G.CITY_DATA[g.city].name + ' 쪽에서 난다고 한다. 값은 넉넉히 쳐 준다.';
     } else if (kind === 'tribute') {
-      t.amount = Math.round((b.tribute[0] + b.tribute[1] * n) * (home ? 1 : 0.5));
+      t.amount = CT.tributeCost(realm, n);
       t.why = pick(COST_WHY[realm.kind] || COST_WHY.eu);
       t.gold = 0; t.fame = Math.round(t.fame * 0.5);
       t.title = t.why + ' 금화 ' + U.num(t.amount) + '닢을 바친다';
       t.desc = '그 자리에서 금화 ' + U.num(t.amount) + '닢을 낸다. 가장 빠르지만 하사금이 없고 명성도 절반이다.';
     } else if (kind === 'capture') {
       var foes = foesNow(realm); if (!foes.length) return null;
-      t.nation = pick(foes); t.n = lin(b.shipsN, n); t.got = 0;
+      t.nation = pick(foes); t.n = stepValue(CB().ships, n); t.got = 0;
       t.title = t.nation + '의 배 ' + t.n + '척을 나포하거나 가라앉힌다';
       t.desc = t.nation + '의 상선·군함을 ' + t.n + '척. 그 나라 항구 가까운 바다에 자주 나타난다. 왕의 이름으로 하는 싸움이라 악명은 오르지 않지만, ' + t.nation + '의 적대는 오른다.';
     } else if (kind === 'rescue') {
@@ -317,10 +336,11 @@
       t.desc = t.who + U.jx(t.who, '이/가') + ' 탄 배가 해적에게 붙잡혔다. 해적단은 ' + G.CITY_DATA[t.den].name + ' 앞바다에 숨어 있다고 한다. 그 바다로 가서 해적단(' + t.ships + '척쯤)을 쳐부수고 모셔 온다.';
       t.fame += 200;
     } else if (kind === 'pirates') {
-      t.n = lin(b.shipsN, n) + 1; t.got = 0;
+      t.n = stepValue(CB().ships, n) + 1; t.got = 0;
       t.title = '바다를 어지럽히는 해적선 ' + t.n + '척을 쳐부순다';
       t.desc = '어느 바다에서든 해적선 ' + t.n + '척을 나포하거나 가라앉힌다.';
     } else if (kind === 'letter' || kind === 'envoy') {
+      t.funds = Math.round(stepValue(CB().diplomaticFunds, n) * (home ? 1 : CB().honorK));
       var cs = courtsFor(sp); if (!cs.length) return null;
       var pool;
       if (kind === 'letter') pool = cs.slice(0, Math.min(cs.length, 3 + n));
@@ -340,19 +360,22 @@
         t.fame += 250; t.gold += 2000;
       }
     } else return null;
+    if (t.funds) t.desc += ' 왕실 의전·사절단 준비금 ' + U.num(t.funds) + '닢은 왕명을 맡을 때 낸다. 내려놓아도 돌려받지 못한다.';
     return t;
   }
   /** 이 군주가 내놓는 왕명들 (알현할 때 정해 두고, 맡을 때까지 그대로) */
   CT.offers = function (sp) {
     var realm = CT.realmOf(sp), c = st(), n = CT.rank(realm), s = S();
     var o = c.offers[realm.id];
-    if (o && o.rank === n && s.day - o.day < 120 && o.list.length) return o.list;
-    var rng = U.makeRng(U.strHash('court:' + realm.id + ':' + n + ':' + s.seed + ':' + Math.floor(s.day / 120)));
-    // 모든 왕명을 섞어서 만들 수 있는 것부터 choices(3)개 — 셋 가운데 하나를 맡는다
-    var kinds = Object.keys(G.COURT.kinds), list = [];
+    if (o && o.rank === n && o.version === 2 && s.day - o.day < CB().offerDays && o.list.length) return o.list;
+    var rng = U.makeRng(U.strHash('court:' + realm.id + ':' + n + ':' + s.seed + ':' + Math.floor(s.day / CB().offerDays)));
+    // 발견물이 소진돼도 마지막 작위까지 갈 수 있도록 헌납·분할 납품을 함께 남긴다.
+    var assured = ['supply', 'tribute'].map(function (kind) { return make(kind, sp, realm, n, rng); }).filter(Boolean);
+    // 나머지는 탐험·전투·외교 등에서 고른다.
+    var kinds = Object.keys(G.COURT.kinds).filter(function (kind) { return kind !== 'supply' && kind !== 'tribute'; }), list = assured;
     for (var i = kinds.length - 1; i > 0; i--) { var j = Math.floor(rng() * (i + 1)), x = kinds[i]; kinds[i] = kinds[j]; kinds[j] = x; }
     for (var k = 0; k < kinds.length && list.length < (B().choices || 3); k++) { var got = make(kinds[k], sp, realm, n, rng); if (got) list.push(got); }
-    c.offers[realm.id] = { rank: n, day: s.day, list: list };
+    c.offers[realm.id] = { rank: n, day: s.day, list: list, version: 2 };
     return list;
   };
 
@@ -370,7 +393,7 @@
     if (t.kind === 'garden') { var gg = Math.min(t.n, t.got || 0); return { done: gg >= t.n, text: '정원에 바친 식물 ' + gg + '/' + t.n + '종 (지금 가진 것 ' + gardenPlants().length + '종)' }; }
     if (t.kind === 'museum') { var mu = Math.min(t.n, museumItems().length); return { done: mu >= t.n, text: '바칠 유물·명작 ' + mu + '/' + t.n + '점' }; }
     if (t.kind === 'gallery') { var ga = Math.min(t.n, galleryItems().length); return { done: ga >= t.n, text: '바칠 명작 ' + ga + '/' + t.n + '점' }; }
-    if (t.kind === 'supply') { var cg = s.fleet.cargo[t.good], q = cg ? cg.q : 0; return { done: q >= t.qty, text: G.GOOD[t.good].name + ' ' + Math.min(q, t.qty) + '/' + t.qty + '통' }; }
+    if (t.kind === 'supply') { var cg = s.fleet.cargo[t.good], q = cg ? cg.q : 0, got = t.got || 0; return { done: got + q >= t.qty, text: G.GOOD[t.good].name + ' 납품 ' + got + '/' + t.qty + '통 · 보유 ' + q + '통' }; }
     if (t.kind === 'capture' || t.kind === 'pirates') return { done: t.got >= t.n, text: (t.kind === 'capture' ? t.nation + ' 배 ' : '해적선 ') + Math.min(t.got, t.n) + '/' + t.n + '척' };
     if (t.kind === 'rescue') return { done: t.stage >= 1, text: t.stage >= 1 ? t.who + U.jx(t.who, '을/를') + ' 배에 모셨다' : G.CITY_DATA[t.den].name + ' 앞바다의 해적단을 찾는다' };
     if (t.kind === 'letter') return { done: t.stage >= 1, text: t.stage >= 1 ? '답서를 받았다' : G.CITY_DATA[G.SPONSOR[t.to].city].name + ' 왕궁으로' };
@@ -392,7 +415,7 @@
     if (t) { await UI.say('그대는 지금 ' + G.SPONSOR[t.sp].title + '의 일을 맡고 있다 들었소. 한 번에 두 군주를 섬길 수는 없는 법이오. 그 일부터 마치고 오시오.', who); return; }
     if (!CT.pending(sp)) {
       if (n >= lad.length) await UI.say(home ? me + ', 그대는 이미 이 나라에서 오를 수 있는 가장 높은 자리에 있소. 이제 그 이름에 걸맞게 살아가시오.' : '그대에게는 이미 이 나라가 이방인에게 내릴 수 있는 가장 큰 영예를 내렸소.', who);
-      else if (c.wait[realm.id] && s.day < c.wait[realm.id]) await UI.say('지난번 일은 아직 잊지 않았소. 때가 되면 다시 부르겠소.', who);
+      else if (CT.waitDays(realm) > 0) await UI.say('새 일을 맡기기까지 준비할 시간이 필요하오. 그동안 항로와 사업을 돌보시오.\n(다음 왕명까지 ' + CT.waitDays(realm) + '일)', who);
       else await UI.say((n ? '그대의 공은 잘 알고 있소. ' : '') + '허나 더 큰 일을 맡기기에는 아직 이르구려. 그대의 이름이 더 널리 알려지거든 다시 이야기합시다.\n(통합 명성 ' + U.num((n + 1) * B().step) + '이 되면 왕명을 받을 수 있습니다 — 지금 ' + U.num(s.player.fame) + ')', who);
       return;
     }
@@ -415,7 +438,7 @@
         var K = kindOf(o);
         return { value: o, icon: K.icon, label: '<b>' + U.esc(o.title) + '</b><br><small class="muted">' + K.name + ' · ' + G.Fame.NAME[o.cat] + ' 명성 +' + G.Fame.mul(o.cat, o.fame) + '</small>',
           right: o.gold ? U.num(o.gold) + '닢' : '—' };
-      }), { width: 860, icon: 'crown', text: '하나를 골라 해내고 돌아와 아뢰면 <b>' + U.esc(CT.fullName(next, true)) + '</b>의 작위를 받습니다. 왕명은 한 번에 하나만 맡을 수 있고, 기한은 ' + B().years + '년입니다.' });
+      }), { width: 860, icon: 'crown', text: '하나를 골라 해내고 돌아와 아뢰면 <b>' + U.esc(CT.fullName(next, true)) + '</b>의 작위를 받습니다. 왕명은 한 번에 하나만 맡을 수 있고, 기한은 ' + CT.taskYears(realm) + '년입니다.' });
       if (!pickd) { if (!auto) await UI.say('마음이 정해지거든 다시 오시오.', who); return; }
       var K = kindOf(pickd);
       if (pickd.kind === 'tribute') {
@@ -429,8 +452,12 @@
         await finish(sp, realm, pickd);
         return;
       }
-      var ok = await UI.confirm('<b>' + U.esc(pickd.title) + '</b><br><br>' + U.esc(pickd.desc) + '<br><br>하사금 금화 ' + U.num(pickd.gold) + '닢 · ' + G.Fame.NAME[pickd.cat] + ' 명성 +' + G.Fame.mul(pickd.cat, pickd.fame) + ' · 기한 ' + B().years + '년<br>해내면 <b>' + U.esc(CT.fullName(next, true)) + '</b>', '맡는다', '다른 왕명을 본다', '왕명 — ' + K.name);
+      var ok = await UI.confirm('<b>' + U.esc(pickd.title) + '</b><br><br>' + U.esc(pickd.desc) + '<br><br>하사금 금화 ' + U.num(pickd.gold) + '닢 · ' + G.Fame.NAME[pickd.cat] + ' 명성 +' + G.Fame.mul(pickd.cat, pickd.fame) + ' · 기한 ' + CT.taskYears(realm) + '년<br>해내면 <b>' + U.esc(CT.fullName(next, true)) + '</b>', '맡는다', '다른 왕명을 본다', '왕명 — ' + K.name);
       if (!ok) continue;
+      if (pickd.funds) {
+        if (s.player.gold < pickd.funds) { UI.toast('사절단 준비금 ' + U.num(pickd.funds) + '닢이 필요합니다.', 'coin'); continue; }
+        s.player.gold -= pickd.funds; G.Game.refreshHud();
+      }
       accept(sp, realm, pickd);
       await UI.say(acceptLine(pickd, realm), who);
       UI.toast('왕명을 받았다 — ' + pickd.title, 'crown', 5000);
@@ -454,7 +481,7 @@
   function accept(sp, realm, o) {
     var c = st(), s = S(), t = U.clone(o);
     t.sp = sp.id; t.realm = realm.id; t.taken = today(); t.day0 = s.day;
-    t.due = U.dateNum(U.addDays(s.date, Math.round(B().years * 365)));
+    t.due = U.dateNum(U.addDays(s.date, Math.round(CT.taskYears(realm) * 365)));
     c.task = t; delete c.offers[realm.id];
     // 발견 왕명: 실마리를 하나 쥐여 준다
     if (t.cats) {
@@ -464,10 +491,27 @@
     G.State.log(SP().holderName(sp) + '의 왕명을 받았다 — ' + t.title + ' (기한 ' + U.fmtDate(CT.dueDate(t)) + ')');
     return t;
   }
+  /** 실제 보유량만 받는다. 납품분은 매입 원산지 장부에서도 제거한다. */
+  CT.deliverSupply = function (t, qty) {
+    if (!t || t.kind !== 'supply' || st().task !== t) return 0;
+    var cargo = S().fleet.cargo, cg = cargo[t.good]; if (!cg) return 0;
+    var n = Math.max(0, Math.min(Math.floor(qty), cg.q, t.qty - (t.got || 0))); if (!n) return 0;
+    R.takeCargoLots(cg, -1, n, 0); cg.q -= n; t.got = (t.got || 0) + n;
+    if (cg.q <= 0) delete cargo[t.good]; if (G.Cargo && G.Cargo.touch) G.Cargo.touch();
+    G.State.log('왕실에 ' + G.GOOD[t.good].name + ' ' + n + '통 납품 (' + t.got + '/' + t.qty + ').'); G.Game.refreshHud(); return n;
+  };
   /** 맡은 왕명을 그 군주에게 아뢴다 */
   CT.report = async function (sp) {
     var c = st(), s = S(), t = c.task, realm = CT.realmOf(sp), who = SP().speaker(sp);
     if (!t || t.sp !== sp.id) return;
+    if (CT.waitDays(realm) > 0) { await UI.say('지난 서임 뒤의 준비 기간이 아직 끝나지 않았소. ' + CT.waitDays(realm) + '일 뒤 다시 아뢰시오.', who); return; }
+    if (t.kind === 'supply') {
+      var held = s.fleet.cargo[t.good], left = Math.max(0, t.qty - (t.got || 0)), canGive = Math.min(left, held ? held.q : 0);
+      if (canGive > 0) {
+        if (!(await UI.confirm(G.GOOD[t.good].name + ' ' + canGive + '통을 납품합니다. 누적 ' + ((t.got || 0) + canGive) + '/' + t.qty + '통. 하사금은 전량 납품 후 받습니다.', '납품한다', '그만둔다'))) return;
+        CT.deliverSupply(t, canGive);
+      }
+    }
     var p = CT.progress(t);
     if (!p.done) {
       var v = await UI.ask('맡긴 일은 어찌 되었소?\n(' + t.title + ' — ' + p.text + ' · 남은 ' + Math.max(0, CT.remain(t)) + '일)' + (t.kind === 'garden' ? '\n식물은 이 왕궁 안 「왕실 정원」에서 정원사에게 넘기시오.' : ''), [
@@ -480,7 +524,6 @@
       } else await UI.say('서두르되 그르치지는 마시오. 좋은 소식을 기다리겠소.', who);
       return;
     }
-    if (t.kind === 'supply') { var cg = s.fleet.cargo[t.good]; cg.q -= t.qty; if (cg.q <= 0) delete s.fleet.cargo[t.good]; if (G.Cargo && G.Cargo.touch) G.Cargo.touch(); }
     if (t.kind === 'museum') {
       var gave = await pickMuseum(t, who, false); if (!gave) return;
       c.museum[realm.id] = { city: sp.city, y: s.date.y, sp: sp.id, items: gave };
@@ -653,7 +696,8 @@
     var n = CT.rank(realm) + 1, tt = titleObj(realm, n), home = CT.isHome(realm), me = s.player.name;
     // 이미 이 나라의 맨 위 작위 (왕명을 받은 뒤 왕녀와의 혼인으로 특진한 경우 등): 작위 대신 하사금을 더 내린다
     if (!tt) { await topReward(sp, realm, t, gold, fame, late); return; }
-    c.titles[realm.id] = n;
+    c.titles[realm.id] = n; c.promotions[realm.id] = { day: s.day, rank: n }; c.lastAward = s.day;
+    delete c.offers[realm.id];
     if (G.Growth) G.Growth.event('cha', 1, (tt ? tt.ko : '작위') + ' 서임 — 궁정의 예법을 몸에 익혔다');   // 작위가 오를 때마다 매력 +1 (85부터는 경험으로)
     delete c.called[realm.id]; delete c.herald[realm.id];
     G.Game.refreshHud();
@@ -668,7 +712,7 @@
       SP().holderName(sp) + '의 명에 따라 선포합니다. ' + me + U.jx(me, '은/는') + ' 오늘부터 ' + CT.fullName(tt, true) + '의 지위와 예우를 받습니다.',
       SP().holderName(sp) + '의 교지입니다. ' + me + U.jx(me, '을/를') + ' ' + CT.fullName(tt, true) + U.jx(CT.fullName(tt, true), '으로/로') + ' 삼았음을 널리 알립니다.'), courtier);
     G.State.log(SP().holderName(sp) + '에게서 ' + CT.fullName(tt, true) + '의 작위를 받았다. (' + kindOf(t).name + ' — 하사금 ' + U.num(gold) + '닢, ' + G.Fame.NAME[t.cat] + ' 명성 +' + fame + ')');
-    var more = n < CT.ladder(realm).length ? '<br><span class="muted">다음 작위: ' + U.esc(CT.ladder(realm)[n][0]) + ' — 통합 명성 ' + U.num((n + 1) * B().step) + '부터</span>' : '<br><span class="muted">이 나라에서 받을 수 있는 가장 높은 작위입니다.</span>';
+    var more = n < CT.ladder(realm).length ? '<br><span class="muted">다음 작위: ' + U.esc(CT.ladder(realm)[n][0]) + ' — 통합 명성 ' + U.num((n + 1) * B().step) + '부터 · 다음 왕명까지 ' + CT.waitDays(realm) + '일</span>' : '<br><span class="muted">이 나라에서 받을 수 있는 가장 높은 작위입니다.</span>';
     await UI.alert('<div class="center"><div style="font-size:17px" class="muted">' + U.esc(realm.name) + (home ? '' : ' · 명예 작위') + '</div>' +
       '<div style="font-size:34px;font-weight:800;margin:6px 0">' + U.esc(tt.ko) + '</div><div style="font-size:20px;font-style:italic">' + U.esc(tt.native) + '</div></div><br>' +
       (gold ? '하사금 금화 <b>' + U.num(gold) + '</b>닢 · ' : '') + G.Fame.NAME[t.cat] + ' 명성 <b>+' + fame + '</b> · 신뢰 +' + B().trust + (late ? '<br><span class="muted">기한을 넘겨 보상이 줄었다</span>' : '') +
@@ -780,7 +824,7 @@
       var sub = '', dim = false;
       if (t && t.sp === sp.id) sub = CT.progress(t).done ? '아뢸 수 있다' : '수행 중';
       else if (CT.pending(sp) && !t) sub = CT.isHome(realm) ? '부르심' : '명예 작위';
-      else { var tt = CT.title(realm); sub = tt ? tt.ko : ''; dim = true; }
+      else { var tt = CT.title(realm), wait = CT.rank(realm) < CT.ladder(realm).length ? CT.waitDays(realm) : 0; sub = wait ? '다음 왕명까지 ' + wait + '일' : tt ? tt.ko : ''; dim = true; }
       out.push({ label: '왕명', icon: 'crown', sub: sub, dim: dim, onClick: function () { return CT.audience(sp); } });
       if (G.Garden) out.push(G.Garden.menuItem(sp, realm));   // 왕궁 안의 왕실 정원 — 식물을 바치는 곳 (js/city/garden.js)
       var held = CT.marques().filter(function (x) { return x.realm === realm; }).length + CT.exempts().filter(function (x) { return x.realm === realm; }).length;
@@ -1044,7 +1088,7 @@
     } else {
       var hs = homeSponsor(), msg = '맡은 왕명이 없습니다. ';
       if (hs && CT.pending(hs)) msg = '<span class="good-text">' + SP().holderName(hs) + ' ' + SP().honor(hs) + '께서 부르십니다 — ' + G.CITY_DATA[hs.city].name + ' 왕궁에서 알현하십시오.</span> ';
-      else if (hs) { var r = CT.realmOf(hs), n = CT.rank(r); if (n < CT.ladder(r).length) msg += '통합 명성 ' + U.num((n + 1) * B().step) + '이 되면 국왕이 부릅니다. '; }
+      else if (hs) { var r = CT.realmOf(hs), n = CT.rank(r); if (n < CT.ladder(r).length) msg += '통합 명성 ' + U.num((n + 1) * B().step) + '부터' + (CT.waitDays(r) ? ' · 다음 왕명까지 ' + CT.waitDays(r) + '일' : '') + '. '; }
       html += '<div class="muted">' + msg + '다른 나라의 군주를 알현해도 명예 작위가 걸린 왕명을 받을 수 있습니다.</div>';
     }
     var ph = CT.papersHtml();

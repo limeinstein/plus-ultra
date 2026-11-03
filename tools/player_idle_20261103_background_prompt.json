@@ -1,0 +1,5 @@
+{
+  "tool": "built-in image_gen",
+  "characters": ["casanova", "sky_adventurer"],
+  "prompt": "Precise background extraction ONLY. Keep the attached 6-column x 3-row sheet's 18 character drawings EXACTLY as they are: same poses, identity, clothing, scale, positions and full image canvas. Remove ALL white/gray background, gray painted shadows, haze, and edge halos from between and around the18 sprites. Replace with true transparent alpha=0 everywhere outside each character, including between legs, inside bent arms and above raised hands. Preserve opaque character pixels. Do NOT redraw, rearrange, resize, crop or add characters. No cast ground shadows, no checkerboard painting. Output true RGBA transparent sprite sheet,18 fully intact separated figures."
+}

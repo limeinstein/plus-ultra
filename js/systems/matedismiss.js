@@ -43,7 +43,7 @@
     if (s.mateLeave && s.mateLeave.pend) s.mateLeave.pend = s.mateLeave.pend.filter(function (x) { return x.id !== id; });
   }
   function register(m, c) {
-    var s = S(), d = G.MATE[m.id], old = MD.record(m.id), wage = G.R.mateWage(m.id);
+    var s = S(), d = G.MATE[m.id], old = MD.record(m.id), wage = G.R.mateBaseWage(m.id);
     var wife = G.Wives && G.Wives.of && G.Wives.of(m.id);
     var canReturn = !wife && s.player.wife !== m.id && !d.sib && MD.days(m) < K().returnMaxDays &&
       !(G.MatePower && G.MatePower.blocked(d));
@@ -79,12 +79,12 @@
     var note = short ? '짧게 함께한 동료는 다시 항구를 떠돕니다. 재등용할 때는 월급이 오릅니다.' : '오래 함께한 동료와 작별합니다.';
     if (!await UI.confirm(U.esc(U.j(d.name, '을/를')) + ' 해고하겠습니까?<br><small>' + U.esc(note) + (sp ? '<br>' + U.esc(ML.fireWarn(m.id, sp)) : '') + '</small>', '해고한다', '그만둔다')) return false;
     if (!m.devoted && U.chance(K().devotionChance)) {
-      var keep = await UI.ask('제독, 저는 계속 따라가고 싶습니다. 월급은 금화 ' + K().devotionWage + '닢이면 됩니다. 어떤 일이 있어도 끝까지 충성을 다하겠습니다.',
+      var keep = await UI.ask('제독, 저는 계속 따라가고 싶습니다. 월급은 금화 ' + (K().devotionWage * G.BALANCE.commerce.mateWageK) + '닢이면 됩니다. 어떤 일이 있어도 끝까지 충성을 다하겠습니다.',
         [{ label: '함께 항해한다', value: true }, { label: '뜻을 거절하고 해고한다', value: false }], speaker(d));
       if (keep) {
         m.devoted = true; G.R.setLoyal(m, 100); clearPending(m.id);
-        G.State.log(d.name + '의 충성 서약 — 월급 금화 ' + K().devotionWage + '닢, 충성 100 유지.');
-        UI.toast(d.name + ' — 월급 ' + K().devotionWage + '닢 · 충성 100 유지', 'heart', 5000);
+        G.State.log(d.name + '의 충성 서약 — 월급 금화 ' + (K().devotionWage * G.BALANCE.commerce.mateWageK) + '닢, 충성 100 유지.');
+        UI.toast(d.name + ' — 월급 ' + (K().devotionWage * G.BALANCE.commerce.mateWageK) + '닢 · 충성 100 유지', 'heart', 5000);
         if (G.Game.refreshHud) G.Game.refreshHud();
         return false;
       }
@@ -97,7 +97,7 @@
       if (sr) register(sr, c);
     }
     if (G.Wives && G.Wives.sync) G.Wives.sync();
-    G.State.log(d.name + ' 해고' + (returns ? ' — ' + c.name + '에서 철새로 다시 만날 수 있다. 재등용 월급 ' + MD.record(m.id).wage + '닢.' : '.'));
+    G.State.log(d.name + ' 해고' + (returns ? ' — ' + c.name + '에서 철새로 다시 만날 수 있다. 재등용 월급 ' + G.R.mateWage(m.id) + '닢.' : '.'));
     UI.toast(wife ? d.name + ' — 집으로 돌아갔다.' : d.name + ' — 배에서 내렸다.' + (returns ? ' ' + c.name + ' 술집에서 다시 만날 수 있다.' : ''), 'boot', 5000);
     if (G.Game.refreshHud) G.Game.refreshHud();
     return true;

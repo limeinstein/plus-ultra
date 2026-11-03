@@ -499,13 +499,31 @@
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
   //   fps: 거리 사람만 움직일 때 거리를 다시 그리는 횟수(초당) — 낮출수록 가볍다 · imgH: 걷는 그림(380×444 한 장)을 그리는 높이 px (제독 178)
   G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100, fps: 60, imgH: 158 };
+  // 거리의 혼잣말은 한 번에 한 사람만. 소식의 거리·기간도 대사에만 쓰며 실제 정세·값은 바꾸지 않는다.
+  G.FX.streetFolk.culture = { firstDelay: 2, stagger: 2.8, duration: 4.5, interval: 17,
+    edge: 24, maxWidth: 360, pad: 18, height: 64, lift: 16, radius: 10, font: 19,
+    historyDays: 1095, historyCount: 2, neighborRange: 16, neighborCount: 2 };
   // 제독이 거리의 건물 문으로 들어가는 연출 (js/scenes/town.js): sec 전체 시간,
   // rise 문턱까지 올라가는 높이의 상한 px (실제로는 그 건물 문턱 높이만큼 — js/data/exteriordoors.js), scale 마지막 크기 비율, fadeAt 이 진행도부터 사라진다.
   G.FX.townHeroEnter = { sec: 0.62, rise: 70, scale: 0.66, fadeAt: 0.5 };
   // 거리에서 멈춘 제독의 아주 약한 호흡. 발밑은 고정하고 세로 길이만 1픽셀 안팎으로 바꾼다.
   G.FX.townHeroIdle = { fps: 12, sec: 2.4, scaleY: 0.004 };
-  // 제독 달리기 아틀라스(49칸에 약 4걸음)를 넘기는 빠르기 칸/초 — 62면 한 걸음이 0.19초쯤 (js/scenes/town.js)
-  G.FX.heroRun = { fps: 62 };
+  // 플레이어가 쉬는 동안의 경치 구경·귀족식 인사·스트레칭. 이동 입력·대화·문 입장은 즉시 우선한다.
+  G.FX.townHeroGestures = {
+    cols: 6, rows: 6, frames: 12, baseHeight: 300, fps: 24,
+    firstDelay: 4.5, interval: [8, 13], greetRange: 170, greetDepth: 90,
+    greetDwell: 0.65, greetCooldown: 30, greetExit: 240,
+    seconds: { look: 3.2, greet: 1.65, stretch: 3.4 },
+    keyTimes: [0, 0.07, 0.14, 0.21, 0.28, 0.35, 0.43, 0.49, 0.55, 0.78, 0.88, 0.95]
+  };
+  // 제독 보행: 두 걸음의 실제 이동 거리(px)로 자세를 넘긴다. 먼 건물 자동 이동은 다리가 과하게 빨라지지 않게 제한한다.
+  // down은 접지 뒤 무게를 받는 눌림, rise는 발을 밀어 올릴 때의 높이(px). 얼굴·복장과 이동 속도는 그대로 쓴다.
+  G.FX.heroGait = {
+    supportEnd: 0.42,
+    walk: { stride: 240, maxCycles: 1.8, down: 2.2, rise: 1.5 },
+    run: { stride: 360, maxCycles: 2.6, down: 3.2, rise: 5.5 },
+    shadowLift: 0.035
+  };
   // 해전 물보라: 4×2칸, 각 256px. 크기는 해전 화면의 기준 px, 수명은 전투 초.
   G.FX.waterSplash = {
     on: true, cell: 256, cols: 4, frames: 8, anchor: [128, 176], max: 48,

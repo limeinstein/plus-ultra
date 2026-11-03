@@ -32,10 +32,14 @@ def feet_gap(c):
 
 def main():
     out = {}
+    config = ROOT/'js/data/heromotion.js'
+    old = json.loads(config.read_text(encoding='utf-8').split('G.HERO_MOTION = ')[1].split(';')[0]) if config.exists() else {}
     for d in sorted(glob.glob(str(ROOT / 'images/characters/*/motion'))):
         im = Image.open(f'{d}/walk.webp').convert('RGBA'); cw, ch = im.width // 7, im.height // 7
         g = [feet_gap(im.crop(((i % 7) * cw, (i // 7) * ch, (i % 7 + 1) * cw, (i // 7 + 1) * ch))) for i in range(49)]
         look = Path(d).parent.name; rec = {'idle': int(np.argmin(g))}
+        for key in ('walkCycles', 'runCycles', 'walkStart', 'runStart'):
+            if key in old.get(look, {}): rec[key] = old[look][key]
         if look in SKIP: rec['skip'] = SKIP[look]
         out[look] = rec
     js = ('/* 제독 걷기 아틀라스에서 서 있을 때 쓸 칸 · 얼굴과 다른 사람으로 그려져 쓰지 않는 동작 — tools/player_motion_cycles.py 가 만든다 (js/scenes/town.js) */\n'

@@ -601,7 +601,7 @@
     var id = I.heroLook();
     return I.list(id === 'admiral' ? 'characters/run_' : 'characters/' + id + '/run_');
   };
-  /** 20대 제독의 7×7 동작 아틀라스. kind: walk · run · back */
+  /** 제독 동작 아틀라스. walk·run·back은 7×7, idle은 구경·인사·스트레칭을 담은 6×6. */
   K.heroMotion = function (kind) {
     var id = I.heroLook();
     return ['characters/' + id + '/motion/' + kind];

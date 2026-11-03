@@ -17,12 +17,9 @@
   var WALK_V = 380;          // 가까운 건물로 걸어갈 때 빠르기 (px/초) — 뛰는 그림이 있을 때만
   var RUN_DIST = 420;        // 이보다 먼 건물은 뛰어간다 (뛰는 그림 characters/<이름>/run_N 이 있을 때)
   var RUN_V = 900;           // 뛰는 빠르기 (px/초). 아주 먼 건물은 1초 남짓에 닿도록 더 빨라진다
-  var WALK_STRIDE = 52;      // 걷는 그림 한 장이 넘어가는 걸음 거리 (px)
   var KEY_WALK_V = 300;      // ←→로 걸을 때 빠르기 (px/초)
   var KEY_RUN_V = 680;       // Shift를 누르고 뛸 때 빠르기 (px/초)
-  var RUN_FPS = 14;          // 뛰는 그림이 넘어가는 빠르기 (장/초) — 먼 길은 아주 빨리 지나가므로 거리 대신 시간으로 넘긴다
   var MOTION_COLS = 7, MOTION_ROWS = 7, MOTION_FRAMES = MOTION_COLS * MOTION_ROWS;
-  var LEGACY_MOTION_FRAMES = 8; // 기존 낱장 동작의 한 주기 길이 — 49장 아틀라스의 재생 속도를 맞춘다
 
   // 건물 묶음과 같은 분류를 쓰는 거리 바닥. 패턴은 같아도 돌·흙·나무의 빛을 달리해
   // 어두운 남색·적갈색 제독 그림이 어느 고장에서도 바닥에 묻히지 않게 한다.
@@ -147,7 +144,7 @@
     var landmarks = landmarksFor(c), chains = [I.chain.bg(c), I.chain.hero()];
     I.chain.heroWalk().forEach(function (k) { chains.push([k]); });
     I.chain.heroRun().forEach(function (k) { chains.push([k]); });
-    ['walk', 'run', 'back'].forEach(function (kind) { chains.push(I.chain.heroMotion(kind)); });
+    ['walk', 'run', 'back', 'idle'].forEach(function (kind) { chains.push(I.chain.heroMotion(kind)); });
     buildings.forEach(function (b) {
       var homeTier = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
       var homeKind = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.baseKind(homeTier, c) : b.kind;
@@ -173,12 +170,13 @@
       return st;
     });
   };
-  T.close = function () { if (G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); } st = null; };
+  T.close = function () { finishHeroGesture(false); if (G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); } st = null; };
   T.active = function () { return !!st; };
   T.runtime = function () { return st; };   // 시험용
   T.city = function () { return st && st.city; };
   T.hidden = function (v) {
     if (st && v != null) {
+      if (v) finishHeroGesture(false);
       var back = st.hidden && !v;          // 건물에서 거리로 나왔다 — 거리를 오가는 사람이 바뀐다
       st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.enterT = 0; st.hero.entering = false; st.dirty = true; }
       if (st.hidden && G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); }
@@ -342,6 +340,7 @@
   }
 
   function build(c, buildings, landmarks) {
+    finishHeroGesture(false);
     var rng = rngOf(c);
     var bgKey = I.pick(I.chain.bg(c));
     var es = I.extStyle && I.extStyle(c);
@@ -485,7 +484,7 @@
   }
   function heroMotionAtlases() {
     var out = {}, hm = G.HERO_MOTION && G.HERO_MOTION[I.heroLook()], skip = (hm && hm.skip) || [];
-    ['walk', 'run', 'back'].forEach(function (kind) {
+    ['walk', 'run', 'back', 'idle'].forEach(function (kind) {
       // 얼굴과 다른 사람(모자·옷이 다른 그림)으로 그려진 동작은 쓰지 않는다 — 그 생김새의 예전 걷는 그림으로 (js/data/heromotion.js skip)
       if (skip.indexOf(kind) >= 0) { out[kind] = null; return; }
       var k = I.pick(I.chain.heroMotion(kind));
@@ -887,6 +886,18 @@
     });
   };
 
+  /** 말을 걸기 직전에 상대를 향해 예를 갖춘다. 이동하면 인사와 대화 대기를 함께 취소한다. */
+  T.greet = function (f) {
+    if (!st || st.hidden || !f || f.animal || !st.heroMotion.idle) return Promise.resolve(true);
+    if (st.hero.to != null || st.hero.walking || st.hero.running || st.hero.entering) return Promise.resolve(false);
+    var action = st.hero.gesture;
+    if (!action || action.kind !== 'greet' || action.target !== f) {
+      finishHeroGesture(false);
+      action = startHeroGesture('greet', f);
+    }
+    return new Promise(function (resolve) { action.resolvers.push(resolve); });
+  };
+
   function hitAt(x, y) {
     if (!st) return null;
     for (var i = st.items.length - 1; i >= 0; i--) {
@@ -1072,14 +1083,14 @@
     var k = 1 - Math.pow(0.0009, Math.min(0.05, dt));
     var d0 = st.camTo - st.cam;
     if (Math.abs(d0) > 0.3) { st.cam += d0 * k; moved = true; } else if (st.cam !== st.camTo) { st.cam = st.camTo; moved = true; }
-    var hero = st.hero, kd = (st.keys.right ? 1 : 0) - (st.keys.left ? 1 : 0);
+    var hero = st.hero, oldX = hero.x, kd = (st.keys.right ? 1 : 0) - (st.keys.left ? 1 : 0);
     if (kd && hero.to == null && !hero.entering) {
       // 손으로 걷기·뛰기
       var run = !!st.keys.shift, v = run ? KEY_RUN_V : KEY_WALK_V, lo = 40, hi = st.streetW - 40;
       var nx = U.clamp(hero.x + kd * v * dt, lo, hi);
       hero.dist += Math.abs(nx - hero.x); hero.x = nx; hero.dir = kd;
-      hero.walking = st.heroFrames.length > 0 || !!st.heroMotion.walk;
-      hero.running = run && (st.runFrames.length > 0 || !!st.heroMotion.run); hero.keyRun = run;
+      hero.walking = (kd > 0 ? nx < hi : nx > lo) && (st.heroFrames.length > 0 || !!st.heroMotion.walk);
+      hero.running = hero.walking && run && (st.runFrames.length > 0 || !!st.heroMotion.run); hero.keyRun = run;
       st.camTo = clampCam(hero.x - W / 2);
       moved = true;
     } else if (hero.keyRun != null && hero.to == null) {
@@ -1110,6 +1121,7 @@
       if (hero.free) st.camTo = clampCam(hero.x - W / 2);
       moved = true;
     }
+    advanceHeroGait(hero, Math.abs(hero.x - oldX), dt);
     if (hero.entering) {
       var enterFx = townHeroEnterFx();
       hero.enterT = Math.min(1, hero.enterT + dt / enterFx.sec);
@@ -1126,10 +1138,13 @@
     // 아무 입력이 없을 때에는 걷기 칸을 넘기지 않고, 발밑을 고정한 호흡만 낮은 빈도로 다시 그린다.
     var idleFx = townHeroIdleFx(), idle = !hero.walking && !hero.running && !hero.entering && hero.to == null;
     hero.idleT = idle ? (hero.idleT || 0) + dt : 0;                         // 멈추는 순간 원래 크기에서 호흡을 시작한다
+    if (updateHeroGestures(dt, idle, busyNow)) moved = true;
     st.idleAcc = idle ? (st.idleAcc || 0) + dt : 0;
-    if (idle && st.idleAcc >= 1 / idleFx.fps) { st.idleAcc %= 1 / idleFx.fps; moved = true; }
+    var idleFps = hero.gesture ? G.FX.townHeroGestures.fps : idleFx.fps;
+    if (idle && st.idleAcc >= 1 / idleFps) { st.idleAcc %= 1 / idleFps; moved = true; }
     // 거리를 걷는 사람들: 그들만 움직일 때는 초당 folkFps번만 다시 그린다 (거리 전체를 매 틀 다시 그리지 않게 — 끊김 방지)
     var folkMoved = !!(st.folks && st.folks.length && G.StreetFolk && G.StreetFolk.update(st.folks, dt, hero.x));
+    if (G.StreetCulture && st.folks && G.StreetCulture.update(st.folks, dt, st.cam)) folkMoved = true;
     st.folkAcc = (st.folkAcc || 0) + dt;
     // 신기루 건물: 일렁임은 초당 몇 번만, 흩어지는 동안은 매 틀 바탕을 다시 그린다 — 다 흩어지면 거리에서 뺀다
     if (st.marks.some(function (m) { return m.vanish; })) {
@@ -1232,6 +1247,7 @@
     // 주인공 (그림이 있을 때만)
     drawHero(ctx, cam);
     folks.forEach(function (f) { if (f.y > heroY) G.StreetFolk.draw(ctx, f, cam, st.hover === f); });
+    if (G.StreetCulture) G.StreetCulture.draw(ctx, folks, cam, st.hover);
     // 건물 이름표
     st.items.forEach(function (it) {
       var x = it.x - cam;
@@ -1263,7 +1279,7 @@
     }
     // 거리 사람 이름표 (마우스를 올렸을 때)
     var hf = st.hover;
-    if (hf && hf.spec) {
+    if (hf && hf.spec && !(G.StreetCulture && hf.cultureCity)) {
       var ft = hf.tag || (hf.tag = plaqueCanvas(hf.name + ' — 말 걸기', true));
       ctx.drawImage(ft, Math.round(hf.x - cam - ft.width / 2), Math.round(hf.y - hf.spec.h * hf.sc * (hf.animal ? 1.25 : 1.12) - ft.height));
     }
@@ -1304,6 +1320,7 @@
   function drawHero(ctx, cam) {
     var motion = st.heroMotion || {}, atlas = null, kind = '';
     if (st.hero.entering && motion.back) { atlas = motion.back; kind = 'back'; }
+    else if (st.hero.gesture && motion.idle) { atlas = motion.idle; kind = 'gesture'; }
     else if (st.hero.running && motion.run) { atlas = motion.run; kind = 'run'; }
     else if (motion.walk) { atlas = motion.walk; kind = 'walk'; }
     var run = !atlas && st.hero.running && st.runFrames.length && !st.hero.entering;
@@ -1311,25 +1328,30 @@
     if (atlas) {
       var count = MOTION_FRAMES, ai;
       if (kind === 'back') ai = Math.min(count - 1, Math.floor(st.hero.enterT * count));
-      else if (kind === 'run') ai = Math.floor(st.t * heroRunFps()) % count;   // 49칸에 약 4걸음 — 한 걸음 0.2초 안팎
-      else ai = st.hero.walking ? Math.floor(st.hero.dist / (WALK_STRIDE * LEGACY_MOTION_FRAMES / count)) % count : heroIdleFrame();
-      var aw = (atlas.naturalWidth || atlas.width) / MOTION_COLS, ah = (atlas.naturalHeight || atlas.height) / MOTION_ROWS;
+      else if (kind === 'gesture') ai = heroGestureFrame();
+      else ai = st.hero.walking || st.hero.running ? heroGaitFrame(kind, count) : heroIdleFrame();
+      var cols = kind === 'gesture' ? G.FX.townHeroGestures.cols : MOTION_COLS;
+      var rows = kind === 'gesture' ? G.FX.townHeroGestures.rows : MOTION_ROWS;
+      var aw = (atlas.naturalWidth || atlas.width) / cols, ah = (atlas.naturalHeight || atlas.height) / rows;
       var enterFx = townHeroEnterFx(), enterEase = smooth01(st.hero.enterT);
-      var h = HERO_H * (kind === 'back' ? 1 - (1 - enterFx.scale) * enterEase : 1), w = aw * h / ah;
+      var h = HERO_H * (kind === 'gesture' ? ah / G.FX.townHeroGestures.baseHeight : kind === 'back' ? 1 - (1 - enterFx.scale) * enterEase : 1), w = aw * h / ah;
       var rise = st.hero.enterRise != null ? st.hero.enterRise : enterFx.rise;
       var x = st.hero.x - cam, y = GROUND + 34 - (kind === 'back' ? rise * enterEase : 0);
       ctx.save();
       ctx.globalAlpha = st.hero.fade;
       ctx.fillStyle = 'rgba(40,26,12,.28)';
-      ctx.beginPath(); ctx.ellipse(x, y - 2, w * 0.3, 8, 0, 0, 7); ctx.fill();
-      ctx.translate(x, y);
-      ctx.scale(st.hero.dir < 0 ? -1 : 1, heroIdleBreath());
-      ctx.drawImage(atlas, (ai % MOTION_COLS) * aw, Math.floor(ai / MOTION_COLS) * ah, aw, ah, -w / 2, -h, w, h);
+      var gait = kind === 'back' || kind === 'gesture' ? { squash: 1, lift: 0 } : heroGaitPose(kind);
+      var shadow = 1 / (1 + gait.lift * G.FX.heroGait.shadowLift);
+      var shadowW = kind === 'gesture' && motion.walk ? motion.walk.naturalWidth / MOTION_COLS * HERO_H / G.FX.townHeroGestures.baseHeight : w;
+      ctx.beginPath(); ctx.ellipse(x, y - 2, shadowW * 0.3 * shadow, 8 * shadow, 0, 0, 7); ctx.fill();
+      ctx.translate(x, y - gait.lift);
+      ctx.scale(st.hero.dir < 0 ? -1 : 1, heroIdleBreath() * gait.squash);
+      ctx.drawImage(atlas, (ai % cols) * aw, Math.floor(ai / cols) * ah, aw, ah, -w / 2, -h, w, h);
       ctx.restore();
       return;
     }
     if (!fr.length || st.hero.fade <= 0.01) return;
-    var i = run ? Math.floor(st.t * RUN_FPS) % fr.length : st.hero.walking || st.hero.entering ? Math.floor(st.hero.dist / WALK_STRIDE) % fr.length : 0;
+    var i = st.hero.walking || st.hero.running ? heroGaitFrame(run ? 'run' : 'walk', fr.length, true) : 0;
     var img = fr[i];
     var h = HERO_H, w = (img.naturalWidth || img.width) * h / (img.naturalHeight || img.height);
     var x = st.hero.x - cam, y = GROUND + 34;
@@ -1346,14 +1368,107 @@
     x = U.clamp(x, 0, 1);
     return x * x * (3 - 2 * x);
   }
-  /** 달리기 아틀라스를 넘기는 빠르기 (칸/초, G.FX.heroRun.fps) — 예전엔 초당 86칸이라 한 걸음이 0.14초(초당 7걸음)로 다리가 헛돌았다 */
-  function heroRunFps() { return (G.FX && G.FX.heroRun && G.FX.heroRun.fps) || 62; }
+  function heroMotionConfig() { return (G.HERO_MOTION || {})[I.heroLook ? I.heroLook() : ''] || {}; }
+  function heroGaitFx(kind) { return G.FX.heroGait[kind]; }
+  /** 장면 시간 대신 실제로 이동한 거리로만 보행 자세를 넘긴다. */
+  function advanceHeroGait(hero, distance, dt) {
+    if (!distance || !dt || hero.entering) return;
+    if (hero.gaitPhase == null) hero.gaitPhase = heroIdleFrame() / MOTION_FRAMES;
+    var fx = heroGaitFx(hero.running ? 'run' : 'walk');
+    // 두 주기짜리 기존 시트도 끝까지 재생하고, 걷기와 뛰기 사이에 같은 쪽 발을 이어받는다.
+    hero.gaitPhase = (hero.gaitPhase + Math.min(distance / fx.stride, dt * fx.maxCycles)) % 2;
+  }
+  function heroGaitFrame(kind, count, legacy) {
+    var cfg = heroMotionConfig(), cycles = legacy ? 1 : (cfg[kind + 'Cycles'] || (kind === 'run' ? 2 : 1));
+    var phase = (st.hero.gaitPhase || 0) / cycles;
+    var start = legacy ? 0 : (cfg[kind + 'Start'] || 0);
+    return start + Math.floor((phase % 1) * (count - start)) % (count - start);
+  }
+  /** 접지→내려앉기→발 교차→밀어 올리기. 걷기는 발밑을 유지하고 달리기는 밀어낸 뒤에만 뜬다. */
+  function heroGaitPose(kind) {
+    if (!st.hero.walking && !st.hero.running) return { squash: 1, lift: 0 };
+    var fx = heroGaitFx(kind), p = ((st.hero.gaitPhase || 0) * 2) % 1, contact = G.FX.heroGait.supportEnd;
+    var down = Math.sin(Math.PI * U.clamp(p / contact, 0, 1));
+    var up = Math.sin(Math.PI * U.clamp((p - contact) / (1 - contact), 0, 1));
+    return { squash: 1 - down * fx.down / HERO_H + (kind === 'walk' ? up * fx.rise / HERO_H : 0),
+      lift: kind === 'run' ? up * fx.rise : 0 };
+  }
   /** 서 있을 때 보여 줄 걷기 칸 — 두 발을 모은 칸 (js/data/heromotion.js · tools/player_motion_cycles.py). 예전엔 첫 칸이라 다리를 벌린 채 섰다 */
   function heroIdleFrame() { var m = G.HERO_MOTION && G.HERO_MOTION[I.heroLook ? I.heroLook() : '']; return (m && m.idle) || 0; }
+  function startHeroGesture(kind, target) {
+    var hero = st.hero, fx = G.FX.townHeroGestures;
+    var action = hero.gesture = { kind: kind, row: ['look', 'greet', 'stretch'].indexOf(kind),
+      t: 0, seconds: fx.seconds[kind], target: target || null, resolvers: [] };
+    if (target) {
+      hero.dir = target.x < hero.x ? -1 : 1;
+      hero.greeted = (hero.greeted || []).filter(function (r) { return r.npc !== target; });
+      hero.greeted.push({ npc: target, until: st.t + fx.greetCooldown, near: true });
+    }
+    st.dirty = true;
+    return action;
+  }
+  function finishHeroGesture(completed) {
+    if (!st || !st.hero.gesture) return;
+    var hero = st.hero, action = hero.gesture, gap = G.FX.townHeroGestures.interval;
+    hero.gesture = null;
+    hero.nextGestureAt = st.t + gap[0] + Math.random() * (gap[1] - gap[0]);
+    action.resolvers.forEach(function (resolve) { resolve(completed); });
+    st.dirty = true;
+  }
+  function updateHeroGestures(dt, idle, busy) {
+    var hero = st.hero, fx = G.FX.townHeroGestures;
+    if (!st.heroMotion.idle) return false;
+    if (!idle || busy || st.keys.left || st.keys.right) {
+      var cancelled = !!hero.gesture;
+      finishHeroGesture(false);
+      hero.nextGestureAt = st.t + fx.firstDelay;
+      hero.greetCandidate = null; hero.greetDwell = 0;
+      return cancelled;
+    }
+    (hero.greeted || []).forEach(function (r) {
+      if (Math.abs(r.npc.x - hero.x) > fx.greetExit) r.near = false;
+    });
+    if (hero.gesture) {
+      var action = hero.gesture;
+      if (action.target && Math.abs(action.target.x - hero.x) > fx.greetExit) { finishHeroGesture(false); return true; }
+      var before = heroGestureFrame();
+      action.t += dt;
+      if (action.t >= action.seconds) { finishHeroGesture(true); return true; }
+      return before !== heroGestureFrame();
+    }
+    var target = null, distance = fx.greetRange;
+    (st.folks || []).forEach(function (f) {
+      if (f.animal || Math.abs(f.y - (GROUND + 34)) > fx.greetDepth) return;
+      var record = (hero.greeted || []).filter(function (r) { return r.npc === f; })[0];
+      if (record && (record.near || record.until > st.t)) return;
+      var dx = Math.abs(f.x - hero.x);
+      if (dx < distance) { target = f; distance = dx; }
+    });
+    if (target !== hero.greetCandidate) { hero.greetCandidate = target; hero.greetDwell = 0; }
+    if (target) {
+      hero.greetDwell = (hero.greetDwell || 0) + dt;
+      if (hero.greetDwell >= fx.greetDwell) { startHeroGesture('greet', target); return true; }
+    }
+    if (hero.nextGestureAt == null) hero.nextGestureAt = st.t + fx.firstDelay;
+    if (st.t >= hero.nextGestureAt) {
+      var turn = hero.restTurn || 0;
+      hero.restTurn = turn + 1;
+      startHeroGesture(turn % 2 ? 'stretch' : 'look');
+      return true;
+    }
+    return false;
+  }
+  function heroGestureFrame() {
+    var action = st.hero.gesture, fx = G.FX.townHeroGestures, phase = action.t / action.seconds;
+    for (var i = fx.keyTimes.length - 1; i > 0; --i) {
+      if (phase >= fx.keyTimes[i]) return action.row * fx.frames + i;
+    }
+    return action.row * fx.frames;
+  }
   function townHeroIdleFx() { return (G.FX && G.FX.townHeroIdle) || { fps: 12, sec: 2.4, scaleY: 0.004 }; }
   /** 발밑 피벗은 그대로 두고 머리만 1픽셀 안팎으로 오르내리는 숨결. 걷기·달리기·입장 중에는 적용하지 않는다. */
   function heroIdleBreath() {
-    if (st.hero.walking || st.hero.running || st.hero.entering || st.hero.to != null) return 1;
+    if (st.hero.walking || st.hero.running || st.hero.entering || st.hero.to != null || st.hero.gesture) return 1;
     var fx = townHeroIdleFx();
     return 1 + Math.sin((st.hero.idleT || 0) * Math.PI * 2 / fx.sec) * fx.scaleY;
   }

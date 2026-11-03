@@ -163,7 +163,7 @@
       traits: ['raft', 'shallow'], feat: '가라앉지 않는 잉카의 뗏목배', where: '잉카 해안',
       desc: '발사나무 통나무를 엮고 돛을 단 잉카의 뗏목배. 대포는 못 싣지만 결코 가라앉지 않는다.' }
   ];
-  G.SHIP = {}; G.SHIP_TYPES.forEach(function (s) { s.traits = s.traits || []; s.cult = s.cult || 'eu'; G.SHIP[s.id] = s; });
+  G.SHIP = {}; G.SHIP_TYPES.forEach(function (s) { s.basePrice = s.price; if ((G.BALANCE.shipPrices || {})[s.id]) s.price = G.BALANCE.shipPrices[s.id]; s.traits = s.traits || []; s.cult = s.cult || 'eu'; G.SHIP[s.id] = s; });
   G.SHIP_CULT = { eu: '유럽', is: '이슬람·인도양', sa: '동남아시아', ea: '동아시아', am: '아메리카' };
   G.SAIL_NAME = { sq: '사각돛', lat: '삼각돛', bat: '대나무 살 돛' };
   G.SHIP_LV = ['', '작은 배', '중형선', '대형선', '원양 대형선', '거함·특수선'];

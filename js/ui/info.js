@@ -448,15 +448,15 @@
     var cl = (st && st.claim) || G.Treaty.claimOf(d); if (!cl) return '';
     return ' · <span class="tr-claim ' + (cl === 'ES' ? 'es' : 'pt') + '" title="토르데시야스' + (G.Treaty.zaragoza() ? '·사라고사' : '') + ' 조약으로 정해진 이 땅의 몫">' + G.Treaty.crownName(cl) + '의 땅' + (st && st.claim ? '' : ' (조약)') + '</span>';
   }
-  /** 수첩 교역: 유럽 시장의 시대 수요 (js/systems/era.js) — 많이 찾는 것·덜 찾는 것·곧 오를 것 */
+  /** 수첩 교역: 소비시장의 시대 수요 (js/systems/era.js) — 많이 찾는 것·덜 찾는 것·곧 오를 것 */
   function eraBox() {
     if (!G.Era) return '';
     var L = G.Era.list(), RN = G.REGIONS;
     var up = L.filter(function (x) { return x.hi >= 1.15; }).sort(function (a, b) { return b.hi - a.hi; }).slice(0, 8);
     var down = L.filter(function (x) { return x.lo <= 0.87; }).sort(function (a, b) { return a.lo - b.lo; }).slice(0, 5);
     var soon = L.filter(function (x) { return x.trend >= 0.15; }).sort(function (a, b) { return b.trend - a.trend; }).slice(0, 4);
-    function chip(x, v, r, cls) { return '<span class="era-chip ' + cls + '" title="' + U.esc(x.note) + '">' + G.goodDot(x.g) + x.name + ' <small>×' + v.toFixed(2) + (r != null && x.hi - x.lo > 0.02 ? ' ' + RN[r] : '') + '</small></span>'; }
-    return '<div class="era-box"><b>' + G.icon('scales') + ' 유럽 시장의 시대 수요 (' + S().date.y + '년)</b> <small class="muted">— 이베리아·북유럽·지중해 도시의 값에 곱한다. 이름 위에 마우스를 올리면 까닭</small>' +
+    function chip(x, v, r, cls) { return '<span class="era-chip ' + cls + '" title="' + U.esc(x.note) + '">' + G.goodDot(x.g) + x.name + ' <small>×' + v.toFixed(2) + (r != null && x.hi - x.lo > 0.02 ? ' ' + (v === x.hi ? x.bestName : x.worstName) : '') + '</small></span>'; }
+    return '<div class="era-box"><b>' + G.icon('scales') + ' 소비시장의 시대 수요 (' + S().date.y + '년)</b> <small class="muted">— 도시·지역과 시대에 따라 달라지는 소비 수요. 이름 위에 마우스를 올리면 까닭</small>' +
       (up.length ? '<div class="era-row"><span class="era-lbl up">많이 찾는다</span>' + up.map(function (x) { return chip(x, x.hi, x.best, 'up'); }).join('') + '</div>' : '') +
       (down.length ? '<div class="era-row"><span class="era-lbl down">덜 찾는다</span>' + down.map(function (x) { return chip(x, x.lo, x.worst, 'down'); }).join('') + '</div>' : '') +
       (soon.length ? '<div class="era-row"><span class="era-lbl soon">곧 오른다</span>' + soon.map(function (x) { return chip(x, x.hi + x.trend, null, 'soon'); }).join('') + '<small class="muted"> (10년 뒤)</small></div>' : '') + '</div>';

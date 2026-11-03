@@ -208,9 +208,10 @@
   E.daily = function () {
     var s = S(), out = [], k = K(); if (!s || k.on === false) return out;
     var T = st(), d = day();
+    var firstDay = !T.seeded;
     T.ev = T.ev.filter(function (e) { return d < e.end; });
     // 처음: 세상에는 이미 몇 가지 일이 벌어지고 있다 (소식 없이, 한창인 채로)
-    if (!T.seeded) {
+    if (firstDay) {
       T.seeded = 1;
       for (var i = 0; i < (k.seed == null ? 7 : k.seed); i++) {
         var e0 = E.spawn(); if (!e0) continue;
@@ -219,11 +220,15 @@
       }
       E.wars().forEach(function (w) { if (U.chance(0.5)) { var ew = E.spawnWar(w); if (ew) { var l2 = ew.end - ew.start, b2 = Math.round(l2 * U.rf(0.1, 0.5)); ew.ann = ew.start = d - b2; ew.end = ew.start + l2; ew.told = 1; } } });
     }
-    // 실제 전쟁이 벌어지는 해
-    E.wars().forEach(function (w) { if (U.chance(k.warPerDay == null ? 0.02 : k.warPerDay)) E.spawnWar(w); });
-    // 저절로 일어나는 사건
-    var live = T.ev.filter(function (e) { return e.type !== 'war'; }).length;
-    if (live < (k.max || 14) && U.chance(k.perDay == null ? 0.1 : k.perDay)) E.spawn();
+    // 초기 사건을 만든 날에는 일반 일일 사건을 겹쳐 만들지 않는다.
+    // 그렇지 않으면 첫 화면에 아직 알리지 않은 사건이 섞일 수 있다.
+    if (!firstDay) {
+      // 실제 전쟁이 벌어지는 해
+      E.wars().forEach(function (w) { if (U.chance(k.warPerDay == null ? 0.02 : k.warPerDay)) E.spawnWar(w); });
+      // 저절로 일어나는 사건
+      var live = T.ev.filter(function (e) { return e.type !== 'war'; }).length;
+      if (live < (k.max || 14) && U.chance(k.perDay == null ? 0.1 : k.perDay)) E.spawn();
+    }
     // 가까이 있으면 소식을 듣는다 — 조짐부터, 일어날 때 한 번 더
     T.ev.forEach(function (e) {
       var D = def(e), c = city(e.at); if (!D || !c || e.told === 'on' || e.told === 1) return;

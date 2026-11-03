@@ -9,6 +9,7 @@ catch (_) { playwright = require('../tools/procedural_art/node_modules/playwrigh
 const ROOT = path.resolve(__dirname, '..');
 const MOTION = process.env.HERO_MOTION || 'walk';
 const OUT = process.env.HERO_MOTION_OUT || path.join(ROOT, 'artifacts', MOTION === 'run' ? 'run-loop-update-20261027' : 'walk-loop-update-20261027');
+fs.mkdirSync(OUT, { recursive: true });
 const EXE = process.env.BROWSER_EXE || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 function ok(v, label) { if (!v) throw new Error(label); }
 
@@ -95,36 +96,68 @@ function ok(v, label) { if (!v) throw new Error(label); }
         try {
           s.hero.x = Math.min(450, s.streetW/2); s.hero.to = null; s.hero.entering = false;
           s.hero.fade = 1; s.keys = { right: true, shift: motion === 'run' }; s.hero.walkV = null;
+          const start = cfg[motion + 'Start'] || 0, n = 49 - start;
+          const cycles = cfg[motion + 'Cycles'] || (motion === 'run' ? 2 : 1);
           for (let i = 0; i < 50; ++i) {
-            s.hero.dist = (i % 49 + .25)*416/49;
-            if (motion === 'run') s.t = (i % 49 + .25)/((G.FX.heroRun || {}).fps || 62);
+            s.hero.gaitPhase = ((i % n + .25) / n) * cycles;
             s.dirty = true; G.Town.update(0);
           }
           if (motion === 'run') {
-            s.keys = { right: true }; s.hero.dist = 7.25*416/49;
+            const walkStart = cfg.walkStart || 0;
+            s.keys = { right: true }; s.hero.gaitPhase = (7-walkStart+.25)/(49-walkStart)*(cfg.walkCycles || 1);
             s.dirty = true; G.Town.update(0);
           }
           s.keys = {}; s.hero.walking = false; s.hero.running = false; s.hero.keyRun = null;
           s.dirty = true; G.Town.update(0);
         } finally { CanvasRenderingContext2D.prototype.drawImage = original; }
+        // 실제 이동을 통해 벽 앞 제자리 달리기, 장면 시간에 따른 자세 튐,
+        // Shift 전환의 발 교대 초기화를 검사한다.
+        const movement = (() => {
+          s.hero.x = 600; s.hero.to = null; s.hero.entering = false;
+          s.keys = { right: true }; s.hero.keyRun = null; s.hero.gaitPhase = 0;
+          G.Town.update(1/30);
+          const walking = s.hero.gaitPhase, x = s.hero.x;
+          s.keys.shift = true; G.Town.update(1/30);
+          const running = s.hero.gaitPhase;
+          s.keys = {}; G.Town.update(1/30);
+          const stopped = s.hero.gaitPhase;
+          s.t += 600; s.dirty = true; G.Town.update(1/30);
+          const afterWait = s.hero.gaitPhase;
+          s.hero.x = s.streetW-40; s.keys = { right: true, shift: true };
+          G.Town.update(1/30);
+          const wall = { phase: s.hero.gaitPhase, walking: s.hero.walking, running: s.hero.running };
+          s.hero.x = 600; s.keys = {}; s.hero.walking = false; s.hero.running = false;
+          s.hero.keyRun = null; s.dirty = true; G.Town.update(0);
+          return { walking, running, stopped, afterWait, wall, walkDistance: x-600 };
+        })();
         return { look, width: w, height: h, heightMin: Math.min(...heights), heightMax: Math.max(...heights),
           bottomMin: Math.min(...bottoms), bottomMax: Math.max(...bottoms), edges,
           unique: new Set(hashes).size, selected, walkTransitions, renderedRunHeights, renderedWalkHeights,
-          idle: cfg.idle, skip: cfg.skip || [] };
+          idle: cfg.idle, start: cfg[motion + 'Start'] || 0, movement, skip: cfg.skip || [] };
       }, { look, motion: MOTION });
       ok(!result.skip.includes(MOTION), look + ' 새 동작 시트가 제외됨');
       ok(result.heightMax-result.heightMin <= 2, look + ' 크기 변화');
       ok(result.bottomMin === result.bottomMax, look + ' 발밑 흔들림');
       ok(!result.edges.length, look + ' 가장자리 잘림');
       ok(result.unique >= 8, look + ' 보행 자세 누락');
-      ok(result.selected.length === (MOTION === 'run' ? 50 : 51) && result.selected.slice(0,50).every((v,i) => v === i%49), look + ' 프레임 순서/루프 경계');
+      ok(result.selected.length === (MOTION === 'run' ? 50 : 51) && result.selected.slice(0,50).every((v,i) => v === result.start+i%(49-result.start)), look + ' 프레임 순서/루프 경계');
+      const m = result.movement;
+      ok(m.walkDistance > 0 && m.walking > 0 && m.running > m.walking, look + ' 이동에 따른 걷기·뛰기 재생');
+      ok(m.running-m.walking < .2, look + ' Shift 전환 때 보행 주기 초기화');
+      ok(m.stopped === m.afterWait && m.wall.phase === m.afterWait && !m.wall.walking && !m.wall.running, look + ' 정지·벽 앞에서 제자리 달리기');
       if (MOTION === 'run') {
         ok(result.walkTransitions[0] === 7 && result.walkTransitions[1] === result.idle, look + ' 달리기→걷기→대기 전환');
         const hs = result.renderedRunHeights.concat(result.renderedWalkHeights);
         ok(Math.max(...hs)-Math.min(...hs) <= .65, look + ' 걷기/달리기 실제 표시 크기 차이');
       }
       else ok(result.selected[50] === result.idle, look + ' 대기 자세');
-      if (['armored_navigator', 'navigator_white', 'hat_spinner'].includes(look)) {
+      if (['admiral', 'armored_navigator', 'navigator_white', 'hat_spinner'].includes(look)) {
+        await page.evaluate(motion => {
+          const s = G.Town.runtime();
+          s.hero.x = 600; s.cam = s.camTo = 0;
+          s.keys = { right: true, shift: motion === 'run' };
+          s.hero.gaitPhase = .38; s.dirty = true; G.Town.update(0);
+        }, MOTION);
         await page.screenshot({ path: path.join(OUT, look + '-town.png') });
       }
       results.push(result);

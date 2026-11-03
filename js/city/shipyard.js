@@ -111,6 +111,7 @@
       '<div class="muted" style="margin:4px 0 8px;font-size:16px">' + t.desc + '</div>' +
       '<div class="kv" style="font-size:16px;grid-template-columns:auto 1fr auto 1fr auto 1fr"><div>적재량</div><div>' + t.cap + '통</div><div>내구력</div><div>' + hpWith(t, lw) + (hpWith(t, lw) !== t.hp ? ' <small class="muted">(기본 ' + t.hp + ')</small>' : '') + '</div><div>선원</div><div>' + t.crew[0] + '~' + t.crew[1] + '명</div>' +
       '<div>포문</div><div>' + t.ports + '문</div><div>돛</div><div>' + t.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k]; }).join('·') + '</div><div>속도</div><div>' + stars(t.spd) + '</div>' + upwindCell(t) + (t.oar ? '<div>노</div><div>' + stars(t.oar + 0.35) + '</div>' : '') + '</div>' +
+      '<div class="muted small">권장 여유자금 약 ' + U.num(Math.round(Y.priceOf(c, id) * G.BALANCE.commerce.operatingReserve)) + '닢 (화물·보급·급료 준비, 실제 비용은 항로·선원에 따라 다릅니다)</div>' +
       (lock ? '<div class="warn-text" style="margin-top:6px">' + G.icon('seal') + lock + '</div>' : '') +
       '</div></div>';
   }
@@ -153,7 +154,7 @@
     if (!name) name = U.pick(G.SHIP_NAMES);
     s.player.gold -= price;
     if (opt.how === 'cargo') SH().useCargoWood(opt.id, opt.need);
-    var sh = R.newShip(picked, name, opt.id);
+    var sh = R.newShip(picked, name, opt.id); sh.paidPrice = price;
     if (G.ShipSprite) G.ShipSprite.want([sh.type]);
     if (far) {
       await G.Strand.leaveAndBoard(c, sh, far);

@@ -83,6 +83,7 @@
         f.x = x;
       }
       f.target = f.x;
+      if (G.StreetCulture) G.StreetCulture.attach(f, c, i);
     });
     SF.warm(out);
     return out;
@@ -328,8 +329,13 @@
     var fest = G.Fest && !deaf ? G.Fest.line(f.type, c) : null;
     // 사건·전설 부하의 소문 (js/systems/eventrumor.js — 5%): 이 고장 둘레에서 누군가 조건을 맞추면 일어날 일을 두루뭉술하게
     var rum = !deaf && G.EventRumor ? G.EventRumor.pick(f, c) : null;
+    // 고장의 인사를 한 번 들은 뒤에는 기존 실용 정보도 전한다. 소문이 끼어들어도 다음 대화에서 기회를 잃지 않는다.
+    var usefulTurn = info && !f.animal && (f.cultureTalks || 0) > 0;
+    if (usefulTurn) useInfo = true;
+    var regional = !f.animal && !deaf && G.StreetCulture && !usefulTurn && !rum && !fest ? G.StreetCulture.next(f, c) : null;
     if (rum) { useInfo = false; f.rumored = true; text = rum.text; }
     else if (fest && (f.animal || U.chance(0.75))) { useInfo = false; text = fest; }
+    else if (regional) { useInfo = false; text = regional.text; }
     else if (useInfo) { f.used = true; text = info.text; }
     else text = fill(U.pick(lines), c);
     if (f.talked > 1 && !f.animal && !useInfo) text = U.pick(['또 만났군요. ', '아까 그 분이시군요. ', '']) + text;

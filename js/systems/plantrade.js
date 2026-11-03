@@ -117,7 +117,7 @@
     return oc;
   };
   var baseCityGoods = R.cityGoods;
-  R.cityGoods = function (c) { ensure(); return baseCityGoods(c); };
+  R.cityGoods = function (c, previewLv) { ensure(); return baseCityGoods(c, previewLv); };
 
   /** 심는다 */
   PT.plant = function (d, c) {

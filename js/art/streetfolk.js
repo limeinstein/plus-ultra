@@ -31,8 +31,9 @@
   }
   /** 문화권: europe·islam·south·eastasia·native, 아프리카 사람은 skin 'africa' */
   function culOf(c) {
-    var cul = A.cultureOf ? A.cultureOf(c) : 'europe', st = G.Img && G.Img.folkStyle ? G.Img.folkStyle(c) : c.style;
-    var afr = st === 'af' || st === 'sw' || st === 'tr' || (c.region === 3 && cul !== 'islam');
+    var st = G.Img && G.Img.folkStyle ? G.Img.folkStyle(c) : c.style;
+    var cul = A.cultureOf ? A.cultureOf(Object.assign({}, c, { style: st })) : 'europe';
+    var afr = st === 'af' || st === 'sw' || (c.region === 3 && cul !== 'islam');
     return { cul: cul, st: st, afr: afr };
   }
   A.folkCulture = culOf;
@@ -97,6 +98,10 @@
       if (/beret|cap|plume|kufi|gauze/.test(s.hat)) s.hat = isl ? 'hijab' : asia ? 'none' : 'coif';
       if (s.prop === 'rapier') s.prop = 'fan';
     }
+    // 코드 그림으로 대신할 때도 중국의 옷을 한복으로, 아프리카의 어른을 아메리카 깃털 장식으로 그리지 않는다.
+    if (st === 'cn' && s.garment === 'hanbok') s.garment = 'robe';
+    if (K.afr && s.hat === 'feather') s.hat = 'headwrap';
+    if (K.afr && s.garment === 'sari') s.garment = 'dress';
     if (s.grey) s.hair = pick(rng, ['#c8c4bc', '#e0dcd4', '#a8a49c']);
     s.h = Math.round(s.h * (0.96 + rng() * 0.08));
     return s;
@@ -181,6 +186,18 @@
       // 허리띠
       ctx.fillStyle = s.sash || '#3a2414'; ctx.fillRect(hipX - wH * 1.02, hipY - H * 0.035, wH * 2.05, H * 0.03);
       if (s.trim) { ctx.strokeStyle = s.trim; ctx.lineWidth = 3; line(ctx, [[shX + wT * 0.9, shY + H * 0.03], [hipX + wH * 1.05, tailY - 2]]); }
+    }
+    // 작은 크기에서도 고장의 옷감이 구별되도록 띠·깃·스티치를 그린다. 갑옷과 앞치마는 원래 모양을 지킨다.
+    if (!s.apron && !/armor/.test(s.garment)) {
+      ctx.save(); ctx.strokeStyle = s.accent; ctx.lineWidth = H * 0.014;
+      if (s.afr || s.st === 'an') {
+        for (var tr = 0; tr < 3; tr++) line(ctx, [[shX - wT * 0.75, shY + H * (0.1 + tr * 0.045)], [shX + wT * 0.75, shY + H * (0.1 + tr * 0.045)]]);
+      } else if (s.st === 'az' || s.st === 'na' || s.st === 'tr') {
+        ctx.setLineDash([H * 0.018, H * 0.012]); line(ctx, [[shX - wT * 0.8, shY + H * 0.06], [hipX - wH * 0.8, hipY]]);
+      } else if (s.st === 'cn' || s.st === 'kr' || s.st === 'jp') {
+        ctx.strokeStyle = '#eee5ce'; line(ctx, [[shX - wT * 0.4, shY + H * 0.025], [shX + wT * 0.6, shY + H * 0.12]]);
+      }
+      ctx.restore();
     }
     if (s.apron) fillPath(ctx, [[shX + wT * 0.2, shY + H * 0.08], [shX + wT * 1.0, shY + H * 0.08], [hipX + wH * 1.2, hipY + H * 0.24], [hipX + wH * 0.1, hipY + H * 0.24]], '#ece4d0');
     if (s.ruff) { ctx.fillStyle = '#f2ece0'; ctx.beginPath(); ctx.ellipse(shX + H * 0.01, shY - H * 0.005, H * 0.045, H * 0.02, 0, 0, 7); ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.stroke(); }

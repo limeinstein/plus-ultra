@@ -1,0 +1,90 @@
+{
+  "tool": "built-in image_gen",
+  "template": "Use case: identity-preserve. Asset: transparent 2D RPG character gesture sprite sheet. The attached image is the ONLY character identity/costume reference. Create the EXACT SAME man with his exact hair, facial identity, build, age, clothes, colors, cape and boots. Even if the reference is walking, EVERY pose here stands on BOTH feet planted shoulder-width, NO walking. No additional character. One uniform 6-COLUMN x 3-ROW grid, exactly18 separate complete full-body figures, all facing screen-right in consistent side view except subtle head turns. Same camera, lighting and body scale throughout. Real alpha transparency, no background, no ground, no shadow, no labels/grid/text. Leave generous blank padding between each cell, above raised hands and around cape. Thin separated transparent accessories should not detach. Soft painted realistic historical RPG art matching reference. Row-major, each row is one 6-keyframe action, left-to-right chronological:\nROW1 SCENERY: 0 relaxed upright neutral both arms down; 1 turn head gently toward distant viewer-right horizon; 2 chin lifts eyes follow distant skyline and near arm starts rising; 3 near hand reaches forehead as shade to eyes; 4 hand shades brow and gaze scans slightly upward while torso remains standing; 5 hand lowers almost fully and head returns near neutral. Feet planted exactly same positions throughout.\nROW2 NOBLE GREETING: 0 neutral upright arms down; 1 near hand rises toward heart; 2 palm over heart, other arm relaxed behind waist; 3 begin dignified waist bow15degrees chin inclines; 4 full graceful courtly bow28degrees with palm over heart and other arm behind waist, back straight, knees soft, both boots fully planted; 5 torso mostly rises with hand still near heart returning to neutral. Respectful elegant greeting, NOT kneeling, NOT military salute, NOT religious prayer.\nROW3 STRETCH: 0 upright relaxed neutral; 1 roll shoulders and bring forearms together in front of chest; 2 clasp hands then arms rise above head; 3 fully extend both arms overhead hands interlocked with slight backward shoulder stretch; 4 arms still overhead lean gently sideways, hips fixed; 5 arms lower outward to sides almost neutral. Keep BOTH feet grounded. Hands anatomically correct, no extra limbs. If reference has a hand-held small object or hat, securely hang it at belt throughout ALL poses to free the hands; do not add new items or put a hat on his head. Preserve cape and all clothing exactly. Avoid cropped limbs, growing head, changing costume, duplicated figures, walking legs, detached blobs. All18 figures must fit inside their18 separate equal cells. Wide sheet with enough space for six figures per row.",
+  "characters": [
+    {
+      "look": "admiral",
+      "reference": "artifacts/player-idle-20261103/admiral-reference.png",
+      "raw": "artifacts/player-idle-20261103/admiral-generated.png",
+      "suffix": "Character identity key: admiral. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "battle_vanguard",
+      "reference": "artifacts/player-idle-20261103/battle_vanguard-reference.png",
+      "raw": "artifacts/player-idle-20261103/battle_vanguard-generated.png",
+      "suffix": "Character identity key: battle_vanguard. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "armored_navigator",
+      "reference": "artifacts/player-idle-20261103/armored_navigator-reference.png",
+      "raw": "artifacts/player-idle-20261103/armored_navigator-generated.png",
+      "suffix": "Character identity key: armored_navigator. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "army_officer",
+      "reference": "artifacts/player-idle-20261103/army_officer-reference.png",
+      "raw": "artifacts/player-idle-20261103/army_officer-generated.png",
+      "suffix": "Character identity key: army_officer. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "blackcoat_captain",
+      "reference": "artifacts/player-idle-20261103/blackcoat_captain-reference.png",
+      "raw": "artifacts/player-idle-20261103/blackcoat_captain-generated.png",
+      "suffix": "Character identity key: blackcoat_captain. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "charismatic_admiral",
+      "reference": "artifacts/player-idle-20261103/charismatic_admiral-reference.png",
+      "raw": "artifacts/player-idle-20261103/charismatic_admiral-generated.png",
+      "suffix": "Character identity key: charismatic_admiral. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "casanova",
+      "reference": "artifacts/player-idle-20261103/casanova-reference.png",
+      "raw": "artifacts/player-idle-20261103/casanova-generated.png",
+      "suffix": "Character identity key: casanova. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "hat_spinner",
+      "reference": "artifacts/player-idle-20261103/hat_spinner-reference.png",
+      "raw": "artifacts/player-idle-20261103/hat_spinner-generated.png",
+      "suffix": "Character identity key: hat_spinner. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "ganghui",
+      "reference": "artifacts/player-idle-20261103/ganghui-reference.png",
+      "raw": "artifacts/player-idle-20261103/ganghui-generated.png",
+      "suffix": "Character identity key: ganghui. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "muscle_swordsman",
+      "reference": "artifacts/player-idle-20261103/muscle_swordsman-reference.png",
+      "raw": "artifacts/player-idle-20261103/muscle_swordsman-generated.png",
+      "suffix": "Character identity key: muscle_swordsman. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "navigator_white",
+      "reference": "artifacts/player-idle-20261103/navigator_white-reference.png",
+      "raw": "artifacts/player-idle-20261103/navigator_white-generated.png",
+      "suffix": "Character identity key: navigator_white. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "noble_scholar",
+      "reference": "artifacts/player-idle-20261103/noble_scholar-reference.png",
+      "raw": "artifacts/player-idle-20261103/noble_scholar-generated.png",
+      "suffix": "Character identity key: noble_scholar. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "sea_dog",
+      "reference": "artifacts/player-idle-20261103/sea_dog-reference.png",
+      "raw": "artifacts/player-idle-20261103/sea_dog-generated.png",
+      "suffix": "Character identity key: sea_dog. Match this particular attached character, not a generic admiral."
+    },
+    {
+      "look": "sky_adventurer",
+      "reference": "artifacts/player-idle-20261103/sky_adventurer-reference.png",
+      "raw": "artifacts/player-idle-20261103/sky_adventurer-generated.png",
+      "suffix": "Character identity key: sky_adventurer. Match this particular attached character, not a generic admiral."
+    }
+  ]
+}

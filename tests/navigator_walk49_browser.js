@@ -63,7 +63,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
           const frame = Math.round(a[0] / 200) + Math.round(a[1] / 300) * 7;
           const q = window.__navigatorFrames;
           const st = G.Town && G.Town.runtime();
-          const expected = st ? Math.floor(st.hero.dist / (52 * 8 / 49)) % 49 : -1;
+          const expected = st ? Math.floor(((st.hero.gaitPhase || 0) % 1) * 49) : -1;
           if (!q.length || q[q.length - 1].frame !== frame) q.push({ frame, expected, moving: !!(st && st.hero.walking) });
           if (st && !st.hero.walking && !st.hero.running && !st.hero.entering) {
             const t = this.getTransform();
@@ -77,6 +77,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       document.querySelectorAll('.cmdmenu, .todo').forEach(el => { el.style.visibility = 'hidden'; });
       st.hero.x = Math.min(300, st.streetW / 3);
       st.hero.dist = 0;
+      st.hero.gaitPhase = 0;
+      st.folks = [];   // 보행 검수에서는 별도 기능인 가까운 주민 인사를 제외한다.
       st.cam = st.camTo = Math.max(0, Math.min(st.streetW - 1600, st.hero.x - 800));
       // 먼 목적지는 달리기로 바뀌므로, 49칸 걷기 시트를 검사할 때는 RUN_DIST(420px) 안쪽을 걷게 한다.
       G.Town.walkTo(Math.min(st.streetW - 180, st.hero.x + 320));
