@@ -253,7 +253,13 @@
     var s = S();
     var list = s.fleet.ships.concat(C.B.harbor.moored(c));
     if (!list.length) return;
-    var i = await C.B.harbor.pickShip('개조할 배', list); if (i == null) return;
+    // 여러 척 한꺼번에 개조 (2026-11-04 사용자 요청 — 종선도 같이 강화해야 함대 속력이 떨어지지 않는다)
+    var own = list.filter(function (x) { return !x.loan; });
+    var i = await UI.choose('개조할 배', (own.length >= 2 ? [{ label: '여러 척 한꺼번에 개조', right: '돛 · 대포 · 삭구', value: -1, icon: 'gear', desc: '배를 골라 같은 개조를 한 번에 합니다' }] : []).concat(list.map(function (x, k) {
+      return { label: U.esc(x.name) + '호', right: G.SHIP[x.type].name + ' · 내구 ' + Math.round(x.hp) + '/' + x.maxHp, value: k, icon: 'ship' };
+    })), { width: 620 });
+    if (i == null) return;
+    if (i === -1) return Y.batch(c);
     var sh = list[i];
     if (sh.loan) { await C.say(keeper(), '빌린 배는 함부로 뜯어고칠 수 없네. 돌려줄 때 원래 모습 그대로여야 하지 않겠나. 수리라면 해 주지.'); return; }
     for (;;) {
@@ -278,6 +284,147 @@
       else if (v === 'name') { var nm = await UI.prompt('새 이름', sh.name, 12); if (nm) { sh.name = nm; UI.toast('선명을 ' + nm + '호로 바꾸었다.', 'scroll'); } }
     }
   };
+  // ---------------------------------------------------------------- 여러 척 한꺼번에 개조 (2026-11-04 사용자 요청)
+  // 개조 → 「여러 척 한꺼번에 개조」: 배를 골라(빌린 배는 빠진다) 돛 · 대포 · 삭구를 한 번에. 배마다 값을 보여 주고 한 번 묻는다.
+  // 할 수 없는 배(조선 기술이 모자람 · 짐이 너무 많음 · 다 해 둠)는 까닭을 적고 건너뛴다. 값은 한 척씩 개조할 때와 같다.
+  function sailTxt(sh) { return sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join('·'); }
+  function gunTxt(sh) { return ((G.CANNON[sh.guns.type] || {}).name || '대포') + ' ' + sh.guns.n + '/' + sh.ports + '문'; }
+  Y.batch = async function (c) {
+    var s = S(), all = s.fleet.ships.concat(C.B.harbor.moored(c)).filter(function (x) { return !x.loan; });
+    if (all.length < 2) return;
+    var sel = all.map(function () { return true; });
+    for (;;) {
+      var html = '<div class="muted" style="font-size:16px;margin-bottom:8px">개조할 배를 고르고 아래 단추를 누르십시오. 고른 배 모두에 같은 개조를 합니다. 종선도 함께 손보아야 함대가 가장 느린 배에 발이 묶이지 않습니다. (빌린 배는 뺍니다)</div>' +
+        '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>돛</th><th>대포</th><th>삭구</th></tr>' +
+        all.map(function (sh, k) {
+          var tag = sh === s.fleet.ships[0] ? ' <span class="tag">기함</span>' : s.fleet.ships.indexOf(sh) < 0 ? ' <span class="tag">계류</span>' : '';
+          return '<tr class="click" data-i="' + k + '"><td class="pick"><input type="checkbox" class="ypick" data-i="' + k + '"' + (sel[k] ? ' checked' : '') + '></td><td><b>' + U.esc(sh.name) + '</b>' + tag + '</td><td>' + G.SHIP[sh.type].name + '</td><td>' + sailTxt(sh) + '</td><td>' + gunTxt(sh) + '</td><td>' + rigLabel(sh) + '</td></tr>';
+        }).join('') + '</table>';
+      var need = function () { if (!sel.some(Boolean)) { UI.toast('개조할 배를 하나 이상 고르십시오.', 'info'); return false; } };
+      var v = await UI.window({ title: '여러 척 한꺼번에 개조 — 소지금 ' + U.num(s.player.gold) + '닢', icon: 'gear', width: 940, html: html, buttons: [
+        { label: '돛 일괄 변경', value: 'sail', onClick: need }, { label: '대포 일괄 변경', value: 'gun', onClick: need }, { label: '삭구 일괄 개량', value: 'rig', onClick: need }, { label: '돌아간다', value: null, cls: 'navy' }],
+        onBuild: function (el) {
+          U.$$('.ypick', el).forEach(function (cb) { cb.onclick = function (e) { e.stopPropagation(); sel[+cb.dataset.i] = cb.checked; }; });
+          U.$$('tr.click', el).forEach(function (tr) { tr.onclick = function () { var k = +tr.dataset.i, cb = tr.querySelector('.ypick'); sel[k] = !sel[k]; cb.checked = sel[k]; }; });
+        } }).result;
+      if (!v) return;
+      var ships = all.filter(function (x, k) { return sel[k]; });
+      if (!ships.length) continue;
+      if (v === 'sail') await batchSails(c, ships); else if (v === 'gun') await batchGuns(c, ships); else if (v === 'rig') await batchRig(c, ships);
+    }
+  };
+  /** 배마다 할 일을 보여 주고 묻는다 — lines: [{sh, text, cost, skip}] */
+  function planConfirm(title, lines) {
+    var tot = U.sum(lines, function (l) { return l.skip ? 0 : l.cost; });
+    var body = lines.map(function (l) { return (l.skip ? '<span class="muted">· ' : '· ') + '<b>' + U.esc(l.sh.name) + '호</b> — ' + l.text + (l.skip ? '</span>' : (l.cost > 0 ? ' · 금화 ' + U.num(l.cost) + '닢' : l.cost < 0 ? ' · 환급 ' + U.num(-l.cost) + '닢' : '')); }).join('<br>');
+    return { tot: tot, ask: function () { return UI.confirm('<b>' + title + '</b><br>' + body + '<br><br>' + (tot >= 0 ? '모두 금화 <b>' + U.num(tot) + '</b>닢' : '모두 환급 <b>' + U.num(-tot) + '</b>닢') + ' · 소지금 ' + U.num(S().player.gold) + '닢', '개조한다', '그만둔다'); } };
+  }
+  async function batchDone(title, done, skipped) {
+    UI.toast(title + ' — ' + done.length + '척' + (skipped.length ? ' (' + skipped.length + '척 건너뜀)' : ''), 'gear', 4200);
+    if (skipped.length) await C.mate(skipped.join('<br>'));
+    else if (done.length) await C.say(keeper(), U.pick(['다 됐네. 함대가 한 몸처럼 움직일 걸세.', '모두 손봤네. 이제 느린 배 때문에 기다릴 일은 줄겠지.', '한꺼번에 하니 일꾼들도 신이 났다네.']));
+  }
+  async function batchSails(c, ships) {
+    var s = S(), price = 300, kinds = sailKinds(c);
+    var choices = kinds.slice(); if (kinds.indexOf('lat') >= 0) choices.push('mix');
+    function want(sh, i, k) { return k === 'mix' ? (i === 0 && sh.sails.length > 1 ? 'lat' : 'sq') : k; }
+    function count(sh, k) { var n = 0; sh.sails.forEach(function (x, i) { if (x !== want(sh, i, k)) n++; }); return n; }
+    var k = await UI.choose('돛 일괄 변경 — ' + ships.length + '척 (1개 ' + price + '닢)', choices.map(function (x) {
+      var n = U.sum(ships, function (sh) { return count(sh, x); });
+      return { label: x === 'mix' ? '앞 돛대는 삼각돛, 나머지는 사각돛' : '모든 돛대를 ' + G.SAIL_NAME[x] + U.jx(G.SAIL_NAME[x], '으로/로'), right: n ? n + '개 · 금화 ' + U.num(n * price) + '닢' : '이미 모두 그렇다',
+        value: x, icon: 'sail', disabled: !n, desc: x === 'mix' ? '순풍과 맞바람의 절충 — 돛대가 하나뿐인 배는 사각돛' : '' };
+    }), { width: 680, text: '사각돛은 순풍에서 빠르고, 삼각돛은 옆바람과 맞바람에 강합니다.' + (kinds.length > 2 ? ' 대나무 살 돛은 그 사이입니다.' : '') });
+    if (!k) return;
+    var lines = ships.map(function (sh) { var n = count(sh, k); return { sh: sh, n: n, cost: n * price, skip: !n, text: n ? sailTxt(sh) + ' → ' + sh.sails.map(function (x, i) { return { sq: '사각', lat: '삼각', bat: '살돛' }[want(sh, i, k)]; }).join('·') : '바꿀 돛이 없다' }; });
+    var pc = planConfirm('돛 일괄 변경', lines);
+    if (pc.tot > s.player.gold) { await C.say(keeper(), '금화 ' + U.num(pc.tot) + '닢 필요하네. 돈이 모자라는군.'); return; }
+    if (!(await pc.ask())) return;
+    var done = [];
+    lines.forEach(function (l) { if (l.skip) return; l.sh.sails = l.sh.sails.map(function (x, i) { return want(l.sh, i, k); }); s.player.gold -= l.cost; done.push(l.sh); });
+    await batchDone('돛을 바꾸었다', done, []);
+  }
+  function gunCost(sh, ty, n) {
+    var g = G.CANNON[ty], old = G.CANNON[sh.guns.type], cur = sh.guns.n;
+    var refund = function (x) { return old ? Math.floor(old.price * 0.5 * x) : 0; };
+    return ty === sh.guns.type ? Math.max(0, n - cur) * g.price - (n < cur ? refund(cur - n) : 0) : n * g.price - refund(cur);
+  }
+  async function batchGuns(c, ships) {
+    var s = S();
+    var ty = await UI.choose('대포 일괄 변경 — ' + ships.length + '척', G.CANNONS.map(function (g) {
+      var ok = Y.gunOk(c, g);
+      return { label: g.name + ((g.lv || 1) > 1 ? ' <span class="tag">기술 ' + g.lv + '</span>' : ''), right: ok ? '1문 ' + g.price + '닢 · 사정 ' + g.range + ' · 위력 ' + g.dmg + ' · 무게 ' + g.load : '조선 기술 ' + g.lv + '등급 필요',
+        value: g.id, desc: g.desc, icon: 'cannon', disabled: !ok };
+    }), { width: 760, text: '고른 배 모두에 같은 대포를 답니다. 떼어낸 대포는 반값에 사들입니다. 이 조선소의 조선 기술은 ' + SH().tech(c) + '등급입니다.' });
+    if (!ty) return;
+    var g = G.CANNON[ty], maxP = Math.max.apply(null, ships.map(function (sh) { return sh.ports; }));
+    var mode = await UI.choose(g.name + ' — 배마다 몇 문', [
+      { label: '포문을 가득 채운다', right: '배마다 포문 수만큼', value: 'full', icon: 'cannon' },
+      { label: '지금 탑재한 수 그대로 종류만 바꾼다', value: 'same', icon: 'cannon' },
+      { label: '수를 정한다', right: '포문보다 많으면 포문 수만큼', value: 'num', icon: 'cannon' }], { width: 620 });
+    if (!mode) return;
+    var fix = null;
+    if (mode === 'num') { fix = await UI.number({ title: g.name + ' — 배마다 몇 문', min: 0, max: maxP, value: maxP, unit: '문' }); if (fix == null) return; }
+    var lines = ships.map(function (sh) {
+      var n = mode === 'full' ? sh.ports : mode === 'same' ? Math.min(sh.ports, sh.guns.n) : Math.min(sh.ports, fix);
+      var same = ty === sh.guns.type && n === sh.guns.n;
+      return { sh: sh, n: n, cost: same ? 0 : gunCost(sh, ty, n), skip: same, text: same ? '이미 ' + g.name + ' ' + n + '문' : gunTxt(sh) + ' → ' + g.name + ' ' + n + '/' + sh.ports + '문' };
+    });
+    if (lines.every(function (l) { return l.skip; })) { UI.toast('바꿀 배가 없습니다.', 'info'); return; }
+    var pc = planConfirm('대포 일괄 변경', lines);
+    if (pc.tot > s.player.gold) { await C.say(keeper(), '금화 ' + U.num(pc.tot) + '닢 필요하네. 돈이 모자라는군.'); return; }
+    if (!(await pc.ask())) return;
+    var done = [], skipped = [];
+    lines.forEach(function (l) {
+      if (l.skip) return;
+      var sh = l.sh, capAfter = Math.floor(sh.cap - l.n * g.load);
+      if (s.fleet.ships.indexOf(sh) >= 0 && R.used() > R.fleetCap() - R.shipCargoCap(sh) + Math.max(0, capAfter)) { skipped.push(sh.name + '호 — 짐이 너무 많아 대포를 더 실을 수 없습니다.'); return; }
+      if (l.cost > s.player.gold) { skipped.push(sh.name + '호 — 돈이 모자랍니다.'); return; }
+      s.player.gold -= l.cost; sh.guns = { type: ty, n: l.n }; done.push(sh);
+    });
+    await batchDone(g.name + U.jx(g.name, '을/를') + ' 달았다', done, skipped);
+  }
+  function rigPrice(sh, i) { return Math.round(G.SHIP[sh.type].price * rigTiers()[i].cost / 10) * 10; }
+  async function batchRig(c, ships) {
+    var s = S(), T = rigTiers(), tech = SH().tech(c);
+    var mode = await UI.choose('삭구 일괄 개량 — ' + ships.length + '척', [
+      { label: '한 단씩 올린다', value: 'one', icon: 'gear' },
+      { label: '이 조선소에서 할 수 있는 데까지 올린다', right: '조선 기술 ' + tech + '등급', value: 'max', icon: 'gear' }], { width: 640,
+      text: '바람을 거슬러 오르는 힘을 키웁니다(앞삼각돛 → 돛 재단·밧줄 → 용골). 사각돛이 많은 배일수록 효과가 큽니다. 값은 배값에 따라 다릅니다.' });
+    if (!mode) return;
+    var lines = ships.map(function (sh) {
+      var from = sh.rig || 0, to = from, cost = 0, why = '';
+      while (to < T.length) {
+        if (tech < T[to].lv) { why = (to + 1) + '단은 조선 기술 ' + T[to].lv + '등급 필요'; break; }
+        cost += rigPrice(sh, to); to++;
+        if (mode === 'one') break;
+      }
+      if (from >= T.length) why = '다 해 둠';
+      return { sh: sh, from: from, to: to, cost: cost, skip: to === from, text: to === from ? why : rigLabel(sh) + ' → ' + to + '단 · ' + T[to - 1].name + (why && mode === 'max' ? ' (' + why + ')' : '') };
+    });
+    if (lines.every(function (l) { return l.skip; })) { await C.say(keeper(), '고른 배들은 이 조선소에서 더 손볼 삭구가 없네. ' + (lines[0] ? lines[0].text : '')); return; }
+    var pc = planConfirm('삭구 일괄 개량', lines);
+    if (pc.tot > s.player.gold) { await C.say(keeper(), '금화 ' + U.num(pc.tot) + '닢 필요하네. 돈이 모자라는군.'); return; }
+    if (!(await pc.ask())) return;
+    var done = [], skipped = [];
+    lines.forEach(function (l) {
+      if (l.skip) return;
+      var sh = l.sh;
+      for (var i = l.from; i < l.to; i++) {
+        var r = T[i], price = rigPrice(sh, i);
+        if (price > s.player.gold) { skipped.push(sh.name + '호 — ' + (i + 1) + '단: 돈이 모자랍니다.'); break; }
+        if (r.cap) {
+          var capAfter = Math.round(sh.cap * (1 + r.cap));
+          if (s.fleet.ships.indexOf(sh) >= 0 && R.used() > R.fleetCap() - R.shipCargoCap(sh) + Math.max(0, capAfter - R.gunLoad(sh))) { skipped.push(sh.name + '호 — ' + (i + 1) + '단: 짐이 너무 많아 용골에 바닥짐을 더 실을 수 없습니다.'); break; }
+          sh.cap = capAfter;
+        }
+        s.player.gold -= price; sh.rig = i + 1; sh.rigPaid = (sh.rigPaid || 0) + price;
+      }
+      if ((sh.rig || 0) > l.from) done.push(sh);
+    });
+    await batchDone('삭구를 개량했다', done, skipped);
+  }
+  Y._batch = { sails: batchSails, guns: batchGuns, rig: batchRig, gunCost: gunCost };   // 시험용
+
   /** 이 조선소에서 부어 달 수 있는 대포인가 — 조선 기술 등급(기술 투자로 오른다)이 대포의 lv 이상이어야 한다 */
   Y.gunOk = function (c, g) { return (g.lv || 1) <= SH().tech(c); };
   /** 조선 기술 lv등급이 되면 새로 달 수 있는 대포·선수상 이름 (투자 안내용) */
