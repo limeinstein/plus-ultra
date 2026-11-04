@@ -39,7 +39,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.n > 150 && !r.bad.length, '대사 ' + r.n + '줄 — 자리표가 모두 풀린다 ' + r.bad.join(' | '));
     ok(r.v.lacosa.nav > r.v.P.nav, '라 코사를 항해사로 두면 항해술 ' + r.v.P.nav + ' → ' + r.v.lacosa.nav + ' (「오르니 손해는 아닙니다」가 맞다)');
     ok(r.v.lacosa.survey > r.v.P.survey, '측량사로 두면 측량 ' + r.v.P.survey + ' → ' + r.v.lacosa.survey);
-    ok(r.v.arana.sword <= r.v.rocco.sword && r.v.arana.ops <= r.v.P.ops, '아라나: 검술 ' + r.v.arana.sword + '(라울 ' + r.v.rocco.sword + ') · 운용술 ' + r.v.arana.ops + '(제독 ' + r.v.P.ops + ') — 남은 자리에서 늘려 줄 것이 없다');
+    ok(r.v.arana.sword <= r.v.rocco.sword && r.v.arana.ops <= r.v.P.ops, '아라나: 검술 ' + r.v.arana.sword + '(루카 ' + r.v.rocco.sword + ') · 운용술 ' + r.v.arana.ops + '(제독 ' + r.v.P.ops + ') — 남은 자리에서 늘려 줄 것이 없다');
     ok(!r.old.length, '옛 표현이 남아 있지 않다 ' + r.old.join(' | '));
 
     // 선실 창: 파란 숫자 = 1 + 특기 단계 · 부관 줄
@@ -59,7 +59,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log('   ' + JSON.stringify(cab));
     await page.screenshot({ path: path.join(process.env.OUT || require('os').tmpdir(), 'tutorial_cabin.png') });
-    ok(cab.pow === 1 + r.v.rocco.speech && cab.badge.indexOf(String(1 + r.v.rocco.speech)) >= 0, '부관실의 파란 숫자 ' + cab.pow + ' = 1 + 라울 웅변술 ' + r.v.rocco.speech);
+    ok(cab.pow === 1 + r.v.rocco.speech && cab.badge.indexOf(String(1 + r.v.rocco.speech)) >= 0, '부관실의 파란 숫자 ' + cab.pow + ' = 1 + 루카 웅변술 ' + r.v.rocco.speech);
     ok(cab.fx.some(t => /불만 다독이기 \(충성 70 아래 부하\) 충성 \+1\/달/.test(t)), '선실 효과: 「불만 다독이기 (충성 70 아래 부하) · 충성 +1/달」');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }

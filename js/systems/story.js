@@ -262,7 +262,7 @@
       s.player.portrait = A.withImg(A.portraitSpec({ seed: 'player0PT', culture: 'med', g: 'm', age: 'young', cloth: '#e8e2d2', beard: 0 }), face);
       s.player.look = D.look;
     } catch (e) { console.error(e); }
-    // 동료: 라울 대신 이야기의 세 사람
+    // 동료: 루카 대신 이야기의 세 사람
     s.mates = [];
     (D.mates || []).forEach(function (m) { s.mates.push({ id: m.id, role: (D.roles || {})[m.id] || 'none', joined: 0, loyal: 85 }); });
     // 사진

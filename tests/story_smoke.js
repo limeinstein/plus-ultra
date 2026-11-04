@@ -100,7 +100,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
         mate: G.Frontier.mateReady(G.MATE.giacomo, 1480), baron: G.Sponsor.present(G.SPONSOR.pt_casanova), rocco: s.mates.some(m => m.id === 'rocco'),
         cap: G.Captains && G.Captains.natOfMate ? true : true };
     });
-    ok(!c.story && !c.avail && !c.hint && !c.hinted && !c.mate && !c.baron && c.rocco, '보통 항해: 흔적·동료 셋·남작이 나오지 않고 라울이 부관');
+    ok(!c.story && !c.avail && !c.hint && !c.hinted && !c.mate && !c.baron && c.rocco, '보통 항해: 흔적·동료 셋·남작이 나오지 않고 루카가 부관');
     ok(errors.length === 0, '콘솔 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));
     console.log('통과 ' + passed);
   } catch (e) { console.log('실패: ' + e.message); if (errors.length) console.log(errors.join('\n')); process.exitCode = 1; }

@@ -37,7 +37,7 @@
 
   // 항해사마다 돌아다니는 고장과 처음 머무는 도시
   G.MATE_RANGE = {
-    rocco:        { zones: ['iberia', 'italy'], home: 0 },          // 제노바에서 자란 카스티야 뱃사람 루카, 리스본에서 만나 첫 부관이 된다
+    rocco:        { zones: ['iberia', 'italy'], home: 0 },          // 제노바 뱃사람 루카, 리스본에서 만나 첫 부관이 된다
     duarte:       { zones: ['iberia', 'wafrica'], home: 0 },
     lacosa:       { zones: ['iberia', 'antilles'], home: 8 },
     pinzon_m:     { zones: ['iberia'], home: 8 },                   // 팔로스 — 카디스·세비야 근방

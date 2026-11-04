@@ -102,7 +102,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     r = await ev(async () => {
       await TT.until(() => !!G.Game.state.tut.f.in_prologue && !G.UI.busy() && !G.Tutorial.busy(), { what: '프롤로그 대사' });
       const box = document.querySelector('.tutbox'); const o = { box0: box ? box.textContent.slice(0, 80) : '' };
-      // 순서에 없는 건물: 라울이 말린다
+      // 순서에 없는 건물: 루카가 말린다
       const n0 = TT.log.length; G.Scenes.city.visit('tavern'); await TT.sleep(80);
       await TT.until(() => !G.UI.busy() && !G.Tutorial.busy(), {});
       o.blocked = TT.log.slice(n0).join(' / ') + ' → ' + (G.Scenes.city.current() ? G.Scenes.city.current().kind : '거리');
@@ -117,8 +117,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       o.again = new Set(TT.log.slice(n1).filter(x => /책등 색을 보십시오|두 가지가 있어야/.test(x)).map(x => x.slice(0, 12))).size;
       return o;
     });
-    ok(r.teach && !r.tipList && /다시 듣기/.test(r.box) && r.again === 2, '설명은 부하가 말로 한다(라울: 서가·책등 색·읽는 조건) · 안내판에는 할 일만 · 「다시 듣기」 (' + r.again + '줄 다시)');
-    ok(/첫 항해/.test(r.box0) && /도서관이 먼저/.test(r.blocked) && /거리$/.test(r.blocked), '0 프롤로그: 안내 상자 · 다른 건물은 라울이 말린다 (' + r.blocked.slice(0, 60) + ')');
+    ok(r.teach && !r.tipList && /다시 듣기/.test(r.box) && r.again === 2, '설명은 부하가 말로 한다(루카: 서가·책등 색·읽는 조건) · 안내판에는 할 일만 · 「다시 듣기」 (' + r.again + '줄 다시)');
+    ok(/첫 항해/.test(r.box0) && /도서관이 먼저/.test(r.blocked) && /거리$/.test(r.blocked), '0 프롤로그: 안내 상자 · 다른 건물은 루카가 말린다 (' + r.blocked.slice(0, 60) + ')');
     ok(/열람/.test(r.glow), '빛나는 단추: ' + r.glow);
     await page.screenshot({ path: SHOTS + '/01_library.png' });
 

@@ -2,10 +2,10 @@
    ■ 하는 일
      · 타이틀 「첫 항해 (튜토리얼)」 → 이름만 묻고 고정된 제독(에스파냐·탐험가·세빌리아·22세·카라벨·쉬움)으로 시작한다. 저장 상태에 s.tut = {step, f:{}}.
      · 0.35초마다 지금 단계가 끝났는지(done) 살피고, 끝났으면 맺는 대사 → 다음 단계의 여는 대사.
-     · 설명은 모두 부하들(라울·라 코사·아라나)이 대화창에서 말로 한다(단계의 teach — 여는 대사에 이어서, 또는 그 건물에 들어섰을 때).
+     · 설명은 모두 부하들(루카·라 코사·아라나)이 대화창에서 말로 한다(단계의 teach — 여는 대사에 이어서, 또는 그 건물에 들어섰을 때).
        화면 위 안내판에는 「지금 할 일」 한 줄과 「다시 듣기」만 두고, 눌러야 할 단추를 빛나게 한다.
      · 게임의 원래 기능(도서관·술집·후원자·항해·해전·탐험·교역·보고·여관)을 그대로 쓴다. 여기서는 그 함수들을 감싸(wrap) 튜토리얼일 때만
-       ① 순서에 없는 건물은 라울이 말리고 ② 필요한 사람·명성을 열어 주고 ③ 일이 끝난 것을 적는다. s.tut가 없으면 아무것도 바꾸지 않는다.
+       ① 순서에 없는 건물은 루카가 말리고 ② 필요한 사람·명성을 열어 주고 ③ 일이 끝난 것을 적는다. s.tut가 없으면 아무것도 바꾸지 않는다.
      · 고정 사건: 트라팔가르 곶 앞의 해적 푸스타, 산길의 도적 떼, 돌아오는 길의 돌고래. 해전·육상전에서 지면 「다시 해 본다」로 되돌린다(게임 오버 없음).
      · 발견은 헤라클레스의 동굴 하나만(지브롤터 바위 같은 다른 발견은 튜토리얼이 끝난 뒤에).
      · 자동 저장은 튜토리얼 칸(G.TUTORIAL.slot)에 — 본 게임의 자동 저장을 덮지 않는다.
@@ -167,7 +167,7 @@
   function applyData() {
     if (saved) return;
     saved = { fame: {}, risk: null };
-    D.mates.forEach(function (id) { saved.fame[id] = G.MATE[id].fame; G.MATE[id].fame = 0; });   // 필요 명성 면제 (라울의 보증)
+    D.mates.forEach(function (id) { saved.fame[id] = G.MATE[id].fame; G.MATE[id].fame = 0; });   // 필요 명성 면제 (루카의 보증)
     if (G.SEA_RISK) { saved.risk = { pirate: G.SEA_RISK.pirate, storm: G.SEA_RISK.storm }; G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; }   // 우연한 해적·폭풍은 재운다
   }
   function restoreData() {
@@ -188,7 +188,7 @@
     var goal = st.goal || '';
     if (st.id === 'library' && !C().current()) goal = '거리에서 <b>도서관</b>으로 들어가 「열람」을 고른다';
     if (st.id === 'gate' && scene() === 'land') goal = '뭍에서 <b>서쪽 곶</b>으로 걸어간다 (땅을 누르면 걷는다)';
-    if (st.id === 'auto' && scene() === 'sea') goal = '<b>세빌리아</b>까지 자동항해 (풀렸으면 「라울에게 키를 맡긴다」)';
+    if (st.id === 'auto' && scene() === 'sea') goal = '<b>세빌리아</b>까지 자동항해 (풀렸으면 「루카에게 키를 맡긴다」)';
     var helm = scene() === 'sea' && !!helmCity(), again = !!againLines();
     var key = (helm ? 'h' : '') + (again ? 'a' : '') + st.id + '|' + goal + '|' + scene();
     if (!box) {
@@ -207,7 +207,7 @@
     if (key !== shown) {
       shown = key;
       box.innerHTML = '<div class="tb-h"><span class="tb-n">첫 항해 ' + (st.no <= 18 ? st.no + '/18' : '') + '</span><b>' + st.title + '</b>' +
-        '<span class="tb-btns">' + (helm ? '<a data-act="helm" class="tb-helm">라울에게 키를 맡긴다</a>' : '') + (again ? '<a data-act="again">다시 듣기</a>' : '') + (SKIP[st.id] ? '<a data-act="skip">이 단계 건너뛰기</a>' : '') + '<a data-act="quit">튜토리얼 끝내기</a></span></div>' +
+        '<span class="tb-btns">' + (helm ? '<a data-act="helm" class="tb-helm">루카에게 키를 맡긴다</a>' : '') + (again ? '<a data-act="again">다시 듣기</a>' : '') + (SKIP[st.id] ? '<a data-act="skip">이 단계 건너뛰기</a>' : '') + '<a data-act="quit">튜토리얼 끝내기</a></span></div>' +
         (goal ? '<div class="tb-g">' + G.icon('check') + '<span>' + goal + '</span></div>' : '');
     }
     root.classList.add('tut-on');
@@ -252,20 +252,20 @@
     }
   }
 
-  /** 라울이 키를 잡으면 갈 항구: 가는 길(6~9단계)은 세우타, 돌아오는 길(15단계)은 세빌리아. 그 밖에는 null */
+  /** 루카가 키를 잡으면 갈 항구: 가는 길(6~9단계)은 세우타, 돌아오는 길(15단계)은 세빌리아. 그 밖에는 null */
   function helmCity() {
     var st = step(); if (!st) return null;
     if (['sail', 'cabin', 'battle', 'port'].indexOf(st.id) >= 0) return G.CITY_DATA[D.port];
     if (st.id === 'auto') return G.CITY_DATA[D.home];
     return null;
   }
-  /** 「라울에게 키를 맡긴다」: 그 항구 앞까지 뱃길을 찾아 가서 입항한다 (자동항해가 아니라 가까운 바다의 뱃길 찾기 — 처음 가는 길에서도 된다) */
+  /** 「루카에게 키를 맡긴다」: 그 항구 앞까지 뱃길을 찾아 가서 입항한다 (자동항해가 아니라 가까운 바다의 뱃길 찾기 — 처음 가는 길에서도 된다) */
   TU.helm = function () {
     var ss = seaSt(), SEA = G.Scenes.sea, c = helmCity(); if (!T() || !ss || ss.busy || UI.busy() || !c) return false;
     var d = c.dock || [c.lat, c.lon];
     SEA.setTarget(d[1], d[0], null);
     if (ss.path && ss.target && (at('port') || at('auto'))) ss.target.city = c;      // 닿으면 그대로 입항 (해적을 만나기 전에는 앞바다에서 멈춘다)
-    UI.toast('라울이 키를 잡았다 — ' + c.name + U.jx(c.name, '으로/로') + ' 간다.', 'wheel', 3600);
+    UI.toast('루카가 키를 잡았다 — ' + c.name + U.jx(c.name, '으로/로') + ' 간다.', 'wheel', 3600);
     return true;
   };
   /** 안내판 「다시 듣기」: 지금 자리에서 부하들이 한 설명을 다시 듣는다 */
@@ -547,7 +547,7 @@
     if (st.id === 'gate' && d < D.ambush) { ls.paused = true; G.Scenes.land.refreshBar(); }
     else if (st.id === 'find' && d < D.legs.find && !G.Disc.foundByMe(D.disc)) { t.f.findDue = 1; ls.paused = true; ls.path = null; ls.dir = null; G.Scenes.land.refreshBar(); }
   }
-  /** 배가 한참(실제 시간 stuckSec초) 서 있으면 라울이 한마디 (한 번) */
+  /** 배가 한참(실제 시간 stuckSec초) 서 있으면 루카가 한마디 (한 번) */
   var stillAt = 0;
   async function stuckHint(t, ss) {
     if (!ss.paused || ss.path || ss.dirCrs != null) { stillAt = 0; return false; }
@@ -647,7 +647,7 @@
   function wrap(obj, name, fn) { var orig = obj && obj[name]; if (typeof orig !== 'function') return; obj[name] = fn(orig); obj[name]._tut = true; }
   function install() {
     var Cy = C(), TV = Cy.B.tavern, LB = Cy.B.library, SP = G.Sponsor, DS = G.Disc;
-    // 건물: 순서에 없는 곳은 라울이 말린다
+    // 건물: 순서에 없는 곳은 루카가 말린다
     wrap(Cy, 'visit', function (orig) {
       return async function (kind, arg) {
         if (T() && !allowed(kind, arg)) {

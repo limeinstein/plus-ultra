@@ -155,7 +155,7 @@
   // sk: skills ; lg: languages ; fame: required fame ; wage: monthly ; y: [from,to] ; reg: regions where found ; g: gender
   // after: 이 발견물이 알려진 뒤에야 술집에 나타난다 (개척 단계에 맞춘 등장)
   G.MATES = [
-    { id: 'rocco', name: '라울 이니에스타', g: 'm', st: [62, 45, 60, 48], sk: { sword: 2, ops: 1 }, lg: { 2: 3, 1: 2, 0: 2 }, fame: 0, wage: 40, y: [1480, 1540], reg: [0], desc: '제노바 항구에서 잔뼈가 굵은 카스티야 출신의 거친 뱃사람. 의리는 누구보다 두텁다.' },
+    { id: 'rocco', name: '루카 카타네오', g: 'm', st: [62, 45, 60, 48], sk: { sword: 2, ops: 1 }, lg: { 2: 3, 1: 2, 0: 2 }, fame: 0, wage: 40, y: [1480, 1540], reg: [0], desc: '제노바 항구에서 잔뼈가 굵은 거친 뱃사람. 의리는 누구보다 두텁다.' },
     { id: 'duarte', name: '두아르테 파셰쿠 페레이라', g: 'm', st: [58, 72, 64, 50], sk: { survey: 3, nav: 2, sword: 1 }, lg: { 1: 3, 0: 2, 5: 1 }, fame: 600, wage: 120, y: [1480, 1530], reg: [0, 5], desc: '포르투갈의 뛰어난 항해가이자 지리학자.' },
     { id: 'lacosa', name: '후안 데 라 코사', g: 'm', st: [55, 70, 50, 52], sk: { survey: 3, nav: 2 }, lg: { 0: 3, 1: 1 }, fame: 300, wage: 100, y: [1480, 1510], reg: [0, 10], desc: '바스크 출신의 지도 제작자. 누구보다 정확한 해도를 그린다.' },
     { id: 'pinzon_m', name: '마르틴 알론소 핀손', g: 'm', st: [60, 60, 58, 62], sk: { nav: 3, ops: 2 }, lg: { 0: 3 }, fame: 400, wage: 110, y: [1480, 1493], reg: [0], desc: '팔로스의 노련한 선장. 선원들의 신망이 두텁다.' },
