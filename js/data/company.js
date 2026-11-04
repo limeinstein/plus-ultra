@@ -1,0 +1,161 @@
+/* 특허 회사 — 자료·조정값 (규칙: js/systems/company.js · 건물: js/city/company.js) — 2026-11-04 사용자 요청
+   「동인도 회사 같은 회사를 16세기부터: 출자금을 받는 회원제 · 한 회사에 속하면 다른 회사의 이점은 준다 ·
+     교역소 시장과는 다른 특이점(독점·중개 무역) · 호위보다 굵직한 수익 임무 · 주식 투자 · 단추는 8개 이하」
+   ■ 회사마다: 본부 도시(hq) · 세운 날(from) · 입회 출자금(fee) · 주식 액면(face) · 해마다 배당률(yld) · 주가 곡선(curve: [해, 액면의 배수])
+     · 독점품(mono — 본부 항구 세관이 비회원의 짐을 뒤진다) · 상관(posts: c 도시, y 연 해, to 닫는 해, g 회사 창고가 원가로 내주는 물건)
+     · 새 상관 후보(cand — 「상관 건설」 임무) · 배(navy 습격·호위 함대, ship 큰 화물선 종류, names 화물선 이름) · 계급 이름(ranks)
+   ■ 도시 번호는 js/data/cities.js. 없는 도시(마닐라·수라트·마드라스·바타비아)는 가까운 도시가 대신한다:
+     수라트 → 디우 · 바타비아 → 반탐 · 반다 → 암보이나 · 히라도·데지마 → 나가사키 · 찬다르나고르 → 캘커타 · 마닐라 갤리온 → 아카풀코 · 나르바 → 리가 · 로리앙 → 낭트 */
+(function (G) {
+  'use strict';
+  G.BALANCE = G.BALANCE || {};
+  G.BALANCE.company = {
+    // 계급: 0 외부인 · 1 사원 · 2 선장 · 3 이사 · 4 총독 — merit 공헌, shares 지녀야 할 자기 회사 주식
+    ranks: [
+      { merit: 0, shares: 0, quota: 0, chain: 0, premium: 1, payK: 0.6, salary: 0 },
+      { merit: 0, shares: 0, quota: 40, chain: 3, premium: 1.25, payK: 1, salary: 0 },
+      { merit: 400, shares: 0, quota: 90, chain: 4, premium: 1.3, payK: 1.15, salary: 0 },
+      { merit: 1500, shares: 60, quota: 160, chain: 5, premium: 1.35, payK: 1.3, salary: 5000 },
+      { merit: 4000, shares: 200, quota: 260, chain: 5, premium: 1.4, payK: 1.5, salary: 18000 }
+    ],
+    rankNames: ['외부인', '사원', '선장', '이사', '총독'],
+    joinFame: 200,          // 입회에 드는 통합 명성
+    foreignK: 1.4,          // 다른 나라 회사에 들 때 출자금 배수
+    joinShare: 0.8,         // 출자금 가운데 주식으로 돌려받는 몫 (나머지는 입회금)
+    founderMerit: 100,      // 설립 때 출자했던 사람(eastindia·colonyco)은 출자금 없이 들고 공헌을 이만큼 안고 시작한다
+    leaveCool: 365,         // 탈퇴하면 이만큼 어느 회사에도 들 수 없다
+    smuggleFeeK: 0.25,      // 밀수로 걸린 횟수마다 입회 출자금 +25%
+    // 회사 창고: 원가 = 이 도시 교역소 사는 값 × costK · 할당량은 상관마다 quotaDays일마다 새로
+    costK: 0.6, quotaDays: 60,
+    // 중개 주문서: 고리마다 배수(뒤로 갈수록) · 끝까지 이으면 쌓인 보너스 × jackpot · 기한 = 날수 × legDayK + legDayAdd
+    chainMult: [1.2, 1.4, 1.65, 1.95, 2.3], jackpot: 1.5, legDayK: 1.6, legDayAdd: 12, legDist: [4, 34],
+    chainQty: [0, 100, 160, 240, 320], chainMerit: 10, jackpotMerit: 60,
+    // 세관 (회사 본부 항구에 비회원이 독점품을 싣고 들어올 때)
+    customs: { chance: 0.4, rival: 0.65, duty: 0.2, bribe: 0.12, bribeMin: 300, bribeOk: 0.65, hideOk: 0.45, fine: 0.15, fineMin: 500, noto: 6 },
+    // 회사 임무 — 굵직한 것 (값은 시대 배수 eraK × 계급 배수 payK)
+    eraK: [[1500, 0.6], [1550, 0.8], [1600, 1], [1650, 1.2], [1700, 1.4]],
+    offerDays: 30, offers: 3, failMerit: 30,
+    patrol: { n: [2, 4], pay: [5000, 3500], merit: [30, 15], near: 6, spawn: 0.35, cd: 3, dist: 25 },
+    convoy: { rank: 1, ships: [3, 5], value: [35000, 55000], fee: 0.2, safe: 0.25, merit: [60, 25], raids: 2, raid: 0.14, gap: 10, minDist: 18 },
+    found: { rank: 2, timber: [40, 100], cannon: [8, 18], guns: [15, 35], pay: [30000, 50000], merit: 220, gift: 0.4 },
+    prize: { rank: 2, value: [50000, 120000], sunk: 0.35, merit: 150, bonus: 0.2, near: 7, spawn: 0.3, cd: 6, noto: 3 },
+    // 주식
+    stock: { spread: 0.02, sigma: 0.07, pull: 0.25, hDecay: 0.96, hMin: 0.35, hMax: 2.2, cap: 3000, hist: 48, evChance: 0.07, evLead: [20, 70],
+      tip: 300, tipOk: 0.85, tipDays: 120 },
+    // 플레이어의 일이 주가를 움직이는 정도 (h = 회사의 형편, 1이 보통)
+    moves: { convoy: 0.08, convoyLost: -0.03, convoyFail: -0.1, prizeVictim: -0.12, prizeOwn: 0.04, found: 0.08, patrol: 0.03, chain: 0.02 },
+    // 거래소 (주식은 회사 본부의 「주식 창구」에서도 그 회사 것만 사고판다)
+    exchanges: [
+      { c: 23, from: 15310101, to: 15850817, name: '앤트워프 거래소' },
+      { c: 38, from: 15710123, to: 99999999, name: '왕립 거래소' },
+      { c: 24, from: 16020320, to: 99999999, name: '암스테르담 거래소' }
+    ]
+  };
+
+  G.COMPANIES = [
+    { id: 'pt', name: '포르투갈 인도청', short: '인도청', nation: '포르투갈', hq: 0, from: 15010101, fee: 8000, face: 500, yld: 0.12,
+      hqName: '인도청', hqFull: '인도청 (카사 다 인디아)', cert: '출자증서',
+      desc: '리스본 강가의 왕실 기관. 희망봉을 도는 인도 항로(카헤이라 다 인디아)의 후추·계피는 모두 이곳을 거쳐 앤트워프로 팔려 나간다.',
+      curve: [[1501, 1], [1520, 1.6], [1550, 1.3], [1580, 0.9], [1600, 0.7], [1640, 0.45], [1700, 0.4]],
+      mono: ['pepper', 'cinnamon', 'ginger'],
+      posts: [{ c: 97, y: 1501, g: ['gold', 'ivory'] }, { c: 154, y: 1503, g: ['pepper', 'ginger'] }, { c: 103, y: 1507, g: ['gold', 'ivory'] },
+        { c: 150, y: 1510, g: ['pepper', 'cottoncloth'] }, { c: 160, y: 1511, to: 1641, g: ['clove', 'nutmeg'] }, { c: 152, y: 1513, to: 1525, g: ['pepper', 'ginger'] },
+        { c: 128, y: 1515, to: 1622, g: ['horses', 'carpet'] }, { c: 155, y: 1518, to: 1656, g: ['cinnamon', 'gems'] }, { c: 171, y: 1522, to: 1575, g: ['clove'] },
+        { c: 148, y: 1535, g: ['cottoncloth', 'chintz'] }, { c: 173, y: 1557, g: ['silk', 'porcelain'] }, { c: 191, y: 1571, to: 1639, g: ['silver'] }],
+      cand: [172, 168, 174, 124, 108, 157, 162],
+      navy: ['carrack', 'lcarrack', 'hcarrack', 'galleon'], ship: 'hcarrack', names: ['산타 카타리나', '마드레 드 데우스', '노사 세뇨라 다 그라사', '상 벤투'],
+      ranks: ['외부인', '계약 상인', '함장', '인도청 이사', '인도 부왕'] },
+    { id: 'es', name: '에스파냐 통상원', short: '통상원', nation: '카스티야', hq: 7, from: 15030120, fee: 8000, face: 500, yld: 0.10,
+      hqName: '통상원', hqFull: '통상원 (카사 데 콘트라타시온)', cert: '출자증서',
+      desc: '세비야의 왕실 통상원. 신대륙으로 가는 배와 사람, 돌아오는 은과 금은 모두 이곳의 장부에 오른다. 해마다 은 선단(플로타)이 대서양을 건넌다.',
+      curve: [[1503, 1], [1550, 1.5], [1590, 1.9], [1620, 1.2], [1650, 0.7], [1700, 0.6]],
+      mono: ['silver', 'gold', 'dye'],
+      posts: [{ c: 194, y: 1503, g: ['sugar', 'hides'] }, { c: 196, y: 1519, g: ['sugar', 'tobacco'] }, { c: 210, y: 1519, g: ['silver', 'pearl'] },
+        { c: 199, y: 1520, g: ['silver', 'dye'] }, { c: 272, y: 1533, g: ['gold', 'gems'] }, { c: 222, y: 1535, g: ['silver'] },
+        { c: 205, y: 1565, g: ['silk', 'porcelain'] }, { c: 270, y: 1597, g: ['silver'] }],
+      cand: [217, 246, 198, 213, 268],
+      navy: ['carrack', 'galleon', 'lgalleon'], ship: 'lgalleon', names: ['누에스트라 세뇨라 데 아토차', '산타아나', '산 호세', '누에스트라 세뇨라 데 라 콘셉시온'],
+      ranks: ['외부인', '등록 상인', '선단 선장', '통상원 판사', '인디아스 총독'] },
+    { id: 'mus', name: '머스코비 회사', short: '머스코비', nation: '잉글랜드', hq: 38, from: 15550226, fee: 6000, face: 500, yld: 0.08,
+      hqName: '머스코비 회사', hqFull: '머스코비 회사', cert: '주식',
+      desc: '세상에서 처음으로 몫을 나눠 판 회사. 북쪽 바다를 돌아 차르의 나라로 가는 길을 찾다가, 볼가 강을 따라 페르시아의 비단까지 손을 뻗었다.',
+      curve: [[1555, 1], [1570, 1.4], [1600, 0.9], [1650, 0.6], [1700, 0.5]],
+      mono: ['fur', 'hemp'],
+      posts: [{ c: 60, y: 1555, g: ['fur', 'hemp'] }, { c: 58, y: 1558, to: 1582, g: ['hemp', 'timber'] }, { c: 140, y: 1558, g: ['silkraw', 'fur'] }, { c: 59, y: 1567, g: ['fur', 'hemp'] }],
+      cand: [141, 130, 131],
+      navy: ['carrack', 'galleon'], ship: 'lcarrack', names: ['에드워드 보나벤처', '바나비', '필립 앤 메리'] },
+    { id: 'lev', name: '레반트 회사', short: '레반트', nation: '잉글랜드', hq: 38, from: 15920107, fee: 10000, face: 500, yld: 0.10,
+      hqName: '레반트 회사', hqFull: '레반트 회사', cert: '주식',
+      desc: '오스만의 술탄에게서 교역 허가를 받은 런던 상인들. 알레포의 생사와 페르시아 융단을 모직물과 바꾼다.',
+      curve: [[1592, 1], [1620, 1.5], [1660, 1.8], [1700, 1.3]],
+      mono: ['silkraw', 'carpet'],
+      posts: [{ c: 112, y: 1592, g: ['silkraw', 'carpet'] }, { c: 118, y: 1592, g: ['silkraw', 'cotton'] }, { c: 78, y: 1592, g: ['pepper', 'coffee'] }],
+      cand: [126, 124, 74, 75, 73],
+      navy: ['galleon', 'lgalleon'], ship: 'lgalleon', names: ['머천트 로열', '헥터', '어센션'] },
+    { id: 'eic', name: '잉글랜드 동인도 회사', short: 'EIC', nation: '잉글랜드', hq: 38, from: 16001231, fee: 15000, face: 500, yld: 0.10,
+      hqName: '동인도 회사', hqFull: '잉글랜드 동인도 회사 (레든홀 거리)', cert: '주식',
+      desc: '엘리자베스 여왕의 특허장을 받은 런던 상인들의 회사. 희망봉에서 마젤란 해협까지의 장사를 혼자 맡았다. 인도의 면직물과 편사가 런던을 휩쓴다.',
+      curve: [[1601, 1], [1620, 1.6], [1640, 1.1], [1660, 1.3], [1680, 2.4], [1692, 3], [1698, 1.5], [1700, 1.6]],
+      mono: ['cottoncloth', 'chintz', 'tea'],
+      posts: [{ c: 168, y: 1602, to: 1683, g: ['pepper'] }, { c: 148, y: 1612, g: ['cottoncloth', 'chintz', 'dye'] }, { c: 191, y: 1613, to: 1623, g: ['silver'] },
+        { c: 172, y: 1615, to: 1623, g: ['clove'] }, { c: 157, y: 1690, g: ['cottoncloth', 'silkraw', 'sugar'] }],
+      cand: [162, 159, 128, 124, 174],
+      navy: ['galleon', 'lgalleon', 'frigate'], ship: 'lgalleon', names: ['레드 드래건', '트레이드 인크리스', '로열 제임스', '헥터'] },
+    { id: 'voc', name: '연합 동인도 회사', short: 'VOC', nation: '네덜란드', hq: 24, from: 16020320, fee: 20000, face: 500, yld: 0.18,
+      hqName: 'VOC 본부', hqFull: '연합 동인도 회사 (오스트인디스 하위스)', cert: '주식',
+      desc: '여섯 도시의 회사가 하나로 묶인 세상에서 가장 큰 회사. 자기 군대와 요새를 두고, 향료 제도의 육두구·정향을 혼자 쥐려 한다.',
+      curve: [[1602, 1], [1607, 2], [1620, 1.8], [1640, 4], [1660, 4.5], [1671, 5.5], [1672, 2.5], [1690, 4.5], [1700, 5]],
+      mono: ['nutmeg', 'clove', 'cinnamon'],
+      posts: [{ c: 168, y: 1603, g: ['pepper', 'sugar'] }, { c: 172, y: 1605, g: ['clove', 'nutmeg'] }, { c: 171, y: 1607, g: ['clove'] },
+        { c: 191, y: 1609, g: ['silver', 'porcelain'] }, { c: 148, y: 1616, g: ['cottoncloth', 'dye'] }, { c: 160, y: 1641, g: ['pepper', 'tin'] },
+        { c: 101, y: 1652, g: ['wine', 'beef'] }, { c: 155, y: 1656, g: ['cinnamon', 'gems'] }, { c: 154, y: 1663, g: ['pepper'] }],
+      cand: [174, 287, 162, 157, 169, 170],
+      navy: ['fluyt', 'galleon', 'lgalleon', 'frigate'], ship: 'lgalleon', names: ['바타비아', '마우리티우스', '헬데를란트', '암스테르담'],
+      ranks: ['외부인', '사원', '선장', '열일곱 이사회', '동인도 총독'] },
+    { id: 'wic', name: '네덜란드 서인도 회사', short: 'WIC', nation: '네덜란드', hq: 24, from: 16210603, fee: 12000, face: 500, yld: 0.08,
+      hqName: 'WIC 본부', hqFull: '네덜란드 서인도 회사 (베스트인디스 하위스)', cert: '주식',
+      desc: '대서양의 장사와 사략을 함께 하는 회사. 에스파냐의 은 선단을 노리고, 신대륙의 설탕과 모피를 실어 온다.',
+      curve: [[1621, 1], [1629, 2], [1640, 1.2], [1654, 0.5], [1674, 0.3], [1700, 0.3]],
+      mono: ['sugar', 'fur'],
+      posts: [{ c: 254, y: 1625, to: 1665, g: ['fur', 'timber'] }, { c: 214, y: 1630, to: 1654, g: ['sugar', 'dye'] }, { c: 97, y: 1637, g: ['gold', 'ivory'] }, { c: 280, y: 1667, g: ['sugar'] }],
+      cand: [215, 100, 212, 197],
+      navy: ['fluyt', 'galleon', 'frigate'], ship: 'galleon', names: ['아멜리아', '브레데로데', '하를럼'] },
+    { id: 'fr', name: '프랑스 동인도 회사', short: '프랑스 회사', nation: '프랑스', hq: 17, from: 16640827, fee: 15000, face: 500, yld: 0.07,
+      hqName: '프랑스 동인도 회사', hqFull: '프랑스 동인도 회사 (낭트 사무소)', cert: '주식',
+      desc: '콜베르가 왕의 이름으로 세운 회사. 늦게 뛰어든 만큼 수라트와 벵골에서 잉글랜드·네덜란드 사람들과 거칠게 다툰다.',
+      curve: [[1664, 1], [1675, 0.6], [1700, 0.5]],
+      mono: ['coffee', 'chintz'],
+      posts: [{ c: 148, y: 1668, g: ['cottoncloth', 'chintz'] }, { c: 157, y: 1673, g: ['cottoncloth', 'silkraw'] }, { c: 162, y: 1680, to: 1689, g: ['sandalwood', 'tin'] }],
+      cand: [124, 174, 154, 155],
+      navy: ['galleon', 'frigate'], ship: 'galleon', names: ['솔레이 도리앙', '아를캥', '랭 데 인드'] }
+  ];
+  G.COMPANY = {}; G.COMPANIES.forEach(function (c) { G.COMPANY[c.id] = c; });
+
+  // 세상의 큰 사건 — 그날이 지나면 그 회사의 형편(h)이 한 번 출렁인다 [회사, 날, 출렁임, 소식]
+  G.COMPANY_SHOCKS = [
+    ['mus', 15710524, -0.15, '크림 칸의 군대가 모스크바를 불태웠다. 머스코비 회사의 창고도 잿더미가 되었다.'],
+    ['pt', 15800825, -0.12, '펠리페 2세가 포르투갈 왕위를 잇는다. 인도청도 에스파냐 왕의 손에 들어갔다.'],
+    ['es', 15880808, -0.1, '무적함대가 잉글랜드 앞바다에서 무너졌다.'],
+    ['eic', 16230309, -0.12, '암보이나에서 잉글랜드 상관 사람들이 처형되었다. 잉글랜드 회사는 향료 제도에서 물러난다.'],
+    ['voc', 16230309, 0.06, '암보이나 사건 — VOC가 향료 제도를 혼자 쥐었다.'],
+    ['es', 16280908, -0.15, '피트 헤인이 마탄사스 만에서 에스파냐 은 선단을 통째로 빼앗았다.'],
+    ['wic', 16280908, 0.35, '피트 헤인이 마탄사스 만에서 에스파냐 은 선단을 통째로 빼앗았다! 서인도 회사가 큰 배당을 약속한다.'],
+    ['voc', 16410114, 0.1, 'VOC가 포르투갈의 말라카를 손에 넣었다.'],
+    ['pt', 16410114, -0.15, '말라카를 VOC에 빼앗겼다.'],
+    ['wic', 16540126, -0.25, '서인도 회사가 페르남부쿠를 포르투갈에 내주었다.'],
+    ['wic', 16640908, -0.15, '뉴암스테르담이 잉글랜드에 넘어갔다.'],
+    ['voc', 16720601, -0.4, '재앙의 해 — 프랑스와 잉글랜드가 한꺼번에 네덜란드를 친다. 암스테르담 거래소가 무너진다.'],
+    ['fr', 16740204, 0.1, '마르탱이 퐁디셰리에 자리를 잡았다.'],
+    ['eic', 16960301, -0.25, '스코틀랜드 회사와 새 동인도 회사가 특허를 노린다. 옛 동인도 회사의 주가가 무너진다.']
+  ];
+  // 회사의 형편을 흔드는 그때그때의 일 — {co} 회사 이름, {post} 그 회사 상관 하나
+  G.COMPANY_EVENTS = [
+    { id: 'fleet', d: 0.12, text: '{co}의 귀환 선단이 {post}에서 싣고 온 짐과 함께 무사히 돌아왔다.', tip: '{co}의 배들이 {post}에서 짐을 가득 실었다더군. 곧 돌아올 걸세.' },
+    { id: 'wreck', d: -0.12, text: '{co}의 배 두 척이 {post}로 가는 길에 폭풍을 만나 가라앉았다.', tip: '{post} 쪽 바다가 사납다더군. {co}의 배들이 걱정이야.' },
+    { id: 'war', d: -0.08, text: '{co}가 {post} 앞바다에서 경쟁국 함대와 맞붙어 손해를 보았다.', tip: '{post} 앞바다에 낯선 군함들이 모인다더군. {co}에겐 좋은 소식이 아니야.' },
+    { id: 'boom', d: 0.08, text: '{co}가 실어 오는 물건 값이 유럽에서 크게 뛰었다.', tip: '요즘 {co}의 물건을 찾는 사람이 늘었어. 값이 오를 걸세.' },
+    { id: 'scandal', d: -0.1, text: '{co} 이사들의 횡령이 드러났다.', tip: '{co} 장부에 구멍이 있다는 말이 돌아. 조심하게.' },
+    { id: 'charter', d: 0.06, text: '{co}의 특허장이 새로 갱신되었다.', tip: '궁정에서 {co}의 특허를 늘려 준다더군.' },
+    { id: 'treaty', d: 0.07, text: '{co}가 {post}의 군주와 관세를 덜어 주는 조약을 맺었다.', tip: '{post}의 군주가 {co} 사람들을 반긴다더군. 좋은 조약이 나올 걸세.' }
+  ];
+})(window.G = window.G || {});

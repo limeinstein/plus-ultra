@@ -1907,6 +1907,9 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .ck-scroll { max-height: 50vh; overflow: auto; }
 .ck-scroll table.tbl tr:first-child th { position: sticky; top: 0; z-index: 1; background: var(--parch); }
 .ck-scroll tr[data-ck] { cursor: pointer; }
+/* 구입·매각 창: 수량·값·이익 숫자가 두 줄로 꺾이지 않게 (다른 곳 최고가처럼 글이 긴 칸만 .wrap으로 꺾인다) 2026-11-04 */
+.ck-scroll table.tbl td.num, .ck-scroll table.tbl th.num { white-space: nowrap; }
+.ck-scroll table.tbl td.num.wrap { white-space: normal; min-width: 130px; }
 .ck-scroll input[type=checkbox], .cktools + .ck-scroll input[type=checkbox] { transform: scale(1.25); cursor: pointer; }
 /* 일괄 구입·매각 창의 수량 막대 — 끌어서 수량을 정한다 */
 .tbl.batch .bqwrap { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }

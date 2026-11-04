@@ -19,6 +19,7 @@
       }).join('') || '<div class="cream-muted">배가 없습니다</div>';
       if (G.Escort) h += G.Escort.panelHtml();   // 호위하는 상선
       if (G.Strand) h += G.Strand.panelHtml();   // 남겨 둔 함대 (js/systems/strandfleet.js)
+      if (G.Company) h += G.Company.panelHtml();   // 회사의 귀환 대선단 (js/systems/company.js)
     }
     var days = f.ships.length ? Math.min(R.daysOfFood(), R.daysOfWater()) : 0;
     h += '<div class="fp-kv">' +
@@ -420,6 +421,7 @@
     if (G.Teppo) html += G.Teppo.html();         // 철포 삼백 자루 — 총 300을 사카이로
     if (G.Gyeonwoo) html += G.Gyeonwoo.html();   // 견우와 직녀 — 항주 → 사카이 → 한산도
     if (G.Court) html += G.Court.taskHtml();
+    if (G.VoyagePlans) html += G.VoyagePlans.summaryHtml();
     if (G.Escort) html += G.Escort.html();     // 상선 호위
     if (G.TreasureHunt) html += G.TreasureHunt.html();   // 조합의 보물 지도 — 「지도를 펼친다」
     if (G.LittlePrince) html += G.LittlePrince.html();   // 어린 왕자의 지도 (js/systems/littleprince.js)
@@ -475,6 +477,7 @@
     var s = S();
     var econ = G.Econ ? G.Econ.box() : '';
     if (G.TradeFleet) econ += G.TradeFleet.box();   // 교역 항로의 상선대 (js/systems/tradefleets.js)
+    if (G.Company) econ = G.Company.box() + econ;   // 특허 회사: 계급·주식·회사 일 (js/systems/company.js)
     if (!G.Ledger || !G.Ledger.count()) { el.innerHTML = econ + eraBox() + '<div class="muted">아직 적어 둔 시세가 없습니다. 교역소에 들를 때마다 그 도시의 사는 값·파는 값이 이 수첩에 적힙니다.</div>'; return; }
     var rows = G.Ledger.table();
     var br = G.Ledger.bestRoute();

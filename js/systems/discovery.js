@@ -36,8 +36,7 @@
     return G.REGIONS[d.reg] || '';
   };
   D.foundByMe = function (id) { var d = S().disc[id]; return !!(d && d.found && d.me); };
-  /** 경쟁자가 먼저 발표했다 — 제독은 이제 이 발견물을 찾을 수 없다 (js/data/rivals.js) */
-  /** 경쟁자가 먼저 발표했다 (제독은 아직 못 찾음) — 새 단서·후원 계약은 없지만, 그 자리에 가면 뒤늦게라도 찾을 수 있다 (2026-10-23) */
+  /** 경쟁자가 먼저 발표했다 (제독은 아직 못 찾음) — 최초 발표 계약과는 별개로 단서·재조사·연쇄를 계속할 수 있다 (2026-10-23) */
   D.taken = function (id) { var d = S().disc[id]; return !!(d && d.rival && !d.me); };
   D.hasHint = function (id) { return !!S().hints[id]; };
   /** 단서의 갈래: 'talk'(주점·교역소·후원자의 이야기) · 'book'(도서관 사료) — js/data/clues.js */
@@ -77,7 +76,6 @@
     // 실제 항구 목격은 책 전용·개척 단계와 무관한 단서다. 다른 발견물에는 적용하지 않는다.
     var monsterNews = G.SeaMonsters && G.SeaMonsters.is(id) && /^monster:\d+:\d+$/.test(sr);
     if (s.hints[id] && !D.canStack(id, sr)) return false;
-    if (D.taken(id)) return false;                                                                // 경쟁자가 먼저 발표했다
     if (d0 && d0.bookOnly && !monsterNews && !/^(book|relic|chain|contract|lead|legacy|rival)/.test(sr)) return false;   // 전설·희귀 동물·공룡: 책에서만
     if (d0 && !D.clueOk(d0, sr)) return false;                                                    // 주점·교역소·후원자의 이야기 ↔ 도서관 사료 (js/data/clues.js)
     var here = d0 && (d0.animal || d0.folkLocal || d0.plantLocal) && /^(local|town):/.test(sr) && D.built(d0);   // 그 고장에 와서 들은 동물·부족 이야기
@@ -283,6 +281,7 @@
 
   /** player discovers d (object). returns promise after showing the event */
   D.find = async function (d, how) {
+    if (G.VoyagePlans) G.VoyagePlans.state();
     var s = S();
     var st = s.disc[d.id] || (s.disc[d.id] = {});
     if (st.me) return false;
@@ -499,7 +498,7 @@
     var ids = (r.lead || []).filter(function (id) { return G.DISC[id] && !D.foundByMe(id) && !s.hints[id]; });
     if (!ids.length) {
       var reg = G.DISC[r.relic] ? G.DISC[r.relic].reg : -1;
-      var pool = G.DISCOVERIES.filter(function (d) { return d.reg === reg && d.how !== 'trade' && d.how !== 'special' && !D.foundByMe(d.id) && !s.hints[d.id] && D.available(d) && !(s.disc[d.id] && s.disc[d.id].rival); });
+      var pool = G.DISCOVERIES.filter(function (d) { return d.reg === reg && d.how !== 'trade' && d.how !== 'special' && !D.foundByMe(d.id) && !s.hints[d.id] && D.available(d); });
       if (pool.length) ids = [pool[Math.abs(U.strHash(it.id + (s.player.name || ''))) % pool.length].id];
     }
     var got = ids.filter(function (id) { return D.addHint(id, 'relic:' + r.id); });
@@ -638,16 +637,16 @@
         st = s.disc[d.id] || (s.disc[d.id] = {});
         st.rival = d.rival[2];
         if (st.me) st.late = true;               // 먼저 찾았지만 알리지 않았다 → 늦은 발표
-        else {                                   // 새 단서는 사라진다 (후원자에게 제안할 수 없다). 이미 맺은 계약은 그대로 — 기한 안에 찾아 보고하면 된다 (2026-10-23)
+        else {                                   // 발표 기록이 후발 탐험가의 재조사 단서가 된다. 이미 맺은 계약도 유지한다.
           var kc = s.contract && s.contract.disc === d.id && !s.contract.circ ? s.contract : null;
-          if (!kc) delete s.hints[d.id];
+          D.addHint(d.id, 'rival-report:' + d.id);
           if (kc) out.push({ icon: 'seal', text: '「' + d.name + '」' + U.jx(d.name, '은/는') + ' ' + d.rival[2] + '의 발표로 세상에 알려졌지만, 후원자와 맺은 계약은 그대로다. 기한 안에 찾아 보고하면 사례금을 받는다 (명성은 뒤늦은 몫).' });
         }
         if (!st.found) st.found = U.dateNum(s.date);
         var at = G.SeaFolk && G.SeaFolk.rivalCity ? G.SeaFolk.rivalCity(d.rival[2]) : null, wh = at ? at.name + '에서 ' : '';   // 머무는 도시가 있는 경쟁자는 그곳에서 발표
         var nn = G.Names ? G.Names.onRival(d) : null, oldName = G.Names && G.DISC[d.id].aka ? G.DISC[d.id].aka : d.name;
         if (st.me) out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다. 제독이 먼저 찾아 두고도 알리지 않은 사이의 일이다 — 이제 알려도 명성도 사례금도 절반만 받는다.' + (nn ? ' ' + nn : '') });
-        else out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다. 뒤늦게 찾아도 첫 발견의 영예는 그의 것이다.' + (nn ? ' ' + nn : '') });
+        else out.push({ icon: 'flag', text: d.rival[2] + U.j(d.rival[2], '이/가').slice(d.rival[2].length) + ' ' + wh + '「' + oldName + '」의 발견을 발표했다. 첫 발표의 영예는 그의 것이지만, 발표 기록을 따라 직접 탐험할 수 있다. 단서를 수첩에 남겼다.' + (nn ? ' ' + nn : '') });
         G.State.log(d.rival[2] + ': 「' + d.name + '」 발견 발표' + (st.me ? ' (먼저 찾아 두었지만 알리지 않았다 — 늦은 발표는 명성 절반)' : ''));
       }
     });
@@ -668,6 +667,7 @@
     if (mul > 0 && mul !== 1) fame = Math.round(fame * mul);       // 부하들이 값어치를 띄웠다 (js/systems/pitch.js)
     D.lastAnnounce = { kept: kept, noProof: D.needsProof(d) && !proof };
     G.Fame.add('ex', fame);
+    if (G.VoyagePlans) G.VoyagePlans.first(d);
     G.State.log('「' + d.name + '」의 발견을 발표했다. (명성 +' + fame + (D.isLate(id) ? ', 늦은 발표라 절반' : '') + (kept.length ? ', 유물 ' + kept.map(function (it) { return R.itemName(it); }).join('·') + U.jx(R.itemName(kept[kept.length - 1]), '은/는') + ' 제독의 것' : '') + ')');
     return fame;
   };
@@ -774,7 +774,7 @@
     G.DISCOVERIES.forEach(function (d) { if (d.how === 'city' && d.city === cityId && !D.foundByMe(d.id) && D.built(d)) G.Reel.prefetch(d); });
   };
   D.checkTrade = function (goodId, city) {
-    return G.DISCOVERIES.filter(function (d) { return d.how === 'trade' && d.good === goodId && d.regions.indexOf(city.region) >= 0 && !D.foundByMe(d.id) && !D.taken(d.id); });
+    return G.DISCOVERIES.filter(function (d) { return d.how === 'trade' && d.good === goodId && d.regions.indexOf(city.region) >= 0 && !D.foundByMe(d.id); });
   };
 
   // ---------------------------------------------------------------- circumnavigation tracking

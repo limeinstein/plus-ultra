@@ -11,6 +11,8 @@
 
   W.daily = function () {
     var s = S(), out = [];
+    if (G.VoyagePlans) out = out.concat(G.VoyagePlans.daily());
+    if (s.pendingNotice && s.pendingNotice.length) { s.pendingNotice.forEach(function (t) { out.push({ icon: 'coin', text: t }); }); delete s.pendingNotice; }   // 불러올 때 생긴 안내 (배값 차액 등 — R.refundShipOverprice)
     // history
     while (s.history < G.HISTORY.length) {
       var h = G.HISTORY[s.history];

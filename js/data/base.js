@@ -248,27 +248,29 @@
     pirateSurrender: { base: 0.22, damage: 0.3, crewLoss: 0.18, pressure: 0.12, near: 800, min: 0.12, max: 0.8 },
     // 산지에서 먼 시장의 운송·희소 가치. 가까운 산지가 있으면 그 거리만 쓰므로 우회 항해로 값이 뛰지 않는다.
     oceanTrade: { premium: [1, 1, 1.08, 1.3, 1.85, 2.5], bulkDemand: 0.5 },
-    // 교역 성장·도시 사업·왕실 승급의 조정값. 선박 성능은 그대로 두고 가격만 바꾼다.
-    shipPrices: { hulk: 42000, caravel: 11000, lcaravel: 21000, pinnace: 10500, carrack: 52000, lcarrack: 110000,
-      hcarrack: 170000, galleon: 200000, lgalleon: 320000, fluyt: 115000, frigate: 185000,
-      galley: 22000, greatgalley: 60000, galleass: 165000, xebec: 35000, baghlah: 55000, jong: 145000,
-      junk: 27000, shachuan: 30000, ljunk: 105000, baochuan: 380000, maengseon: 16000,
-      panokseon: 120000, geobukseon: 200000, sekibune: 20000, atakebune: 165000 },
+    // 교역 성장·도시 사업·왕실 승급의 조정값.
+    // shipPrices: 배 종류별 값 덮어쓰기 {id: 값}. 0.306에서 중대형 배를 2.5~4배로 올렸다가 0.310에서 되돌렸다 —
+    //   돈이 곧 발견 경쟁의 시간이라 새로 시작한 제독만 묶였다(베타 피드백 #138·#139). 비워 두면 js/data/ships.js의 값.
+    shipPrices: {},
     commerce: {
-      investLevels: [0, 10000, 35000, 90000, 200000, 450000], oldLevels: [0, 4000, 12000, 30000, 70000, 150000],
-      cityStep: 0.3, rareInvestK: 2.5, buyPerLv: 0.02, sellPerLv: 0.02, putMax: 1000000, fameDiv: 8000, operatingReserve: 0.25,
+      // 출자 문턱: 0.310에서 0.305 값으로 되돌렸다. 가까운 희귀품 반복(카사블랑카 용연향)은 rareInvestK(희귀품을 여는 등급 ×2.5)와 재고 한도가 막는다.
+      investLevels: [0, 4000, 12000, 30000, 70000, 150000], oldLevels: [0, 4000, 12000, 30000, 70000, 150000],
+      cityStep: 0, rareInvestK: 2.5, buyPerLv: 0.03, sellPerLv: 0.03, putMax: 1000000, fameDiv: 8000, operatingReserve: 0.25,
       projects: {
         production: { name: '생산시설', costs: [25000, 65000, 160000], stock: 0.1, recovery: 0.18, demand: 0, desc: '산지·중계 공급망을 보강한다. 단계마다 공급 한도 10%, 하루 입하량 18% 증가' },
         warehouse: { name: '상관·창고', costs: [20000, 55000, 140000], stock: 0.25, recovery: 0, demand: 0, desc: '교역소 저장 시설을 넓힌다. 단계마다 공급 한도 25% 증가. 제독의 화물 보관함과는 별개' },
         distribution: { name: '판로 개척', costs: [30000, 80000, 190000], stock: 0, recovery: 0, demand: 0.18, desc: '상인·공방과 판로를 넓힌다. 단계마다 시장이 받아 줄 물량 18% 증가' }
       },
-      supply: { default: { cap: 1, days: 22 }, min: 50, rareMin: 24, rareInvestCap: 0.5,
+      // farK: 유럽(이베리아·북유럽·지중해)에서 먼 산지의 공급 한도 배수 — 거리 0~5 (아프리카 2 · 인도·아메리카 3 · 중국·동남아 4 · 일본 5).
+      //   원양 항해는 몇 달을 들여 가므로 한 항구에서 짐칸을 채울 수 있어야 한다 (베타 피드백 #139). 회복 속도도 같은 비율로 빨라진다.
+      //   한도가 farRareCap 이하인 희귀품(용연향·코뿔소 뿔·사향)은 늘리지 않는다.
+      supply: { default: { cap: 1, days: 22 }, min: 50, rareMin: 24, rareInvestCap: 0.5, farK: [1, 1, 1, 1.6, 1.8, 2.2], farRareCap: 0.4,
         cats: { food: { cap: 1.4, days: 12 }, drink: { cap: 1.15, days: 16 }, fiber: { cap: 1.25, days: 16 },
           ore: { cap: 1.2, days: 20 }, metal: { cap: 1, days: 24 }, arms: { cap: 0.9, days: 28 },
           gem: { cap: 0.65, days: 32 }, lux: { cap: 0.8, days: 28 } },
         goods: { ambergris: { cap: 0.32, days: 42 }, rhino: { cap: 0.32, days: 42 }, musk: { cap: 0.4, days: 38 },
           gold: { cap: 0.65, days: 32 }, silver: { cap: 0.8, days: 28 }, gems: { cap: 0.45, days: 38 }, pearl: { cap: 0.5, days: 35 } } },
-      priceHalfDays: 25, supplyWaitDays: 3, mateWageK: 3,
+      priceHalfDays: 25, supplyWaitDays: 3, mateWageK: 1,   // 동료 급료 배수 (0.306의 3배를 0.310에서 되돌림)
       court: { tribute: [30000, 65000, 120000, 220000, 380000, 650000, 1000000, 1500000], honorK: 0.65,
         intervals: [120, 180, 240, 300, 365, 450, 540, 720], globalInterval: 90,
         diplomaticFunds: [0, 2000, 8000, 18000, 40000, 80000, 140000, 220000],
@@ -441,7 +443,7 @@
     fameTitles: [5000, 20000, 60000, 150000, 400000, 650000, 1000000, 1500000, 2000000],
     fameTitleNames: ['무명의 항해자', '신참 모험가', '이름난 모험가', '저명한 항해가', '위대한 탐험가', '대항해자', '세계적인 대항해자', '전설의 대항해자', '바다의 영웅', '불멸의 항해자'],
     tradeFameDiv: 800,   // 교역 이익 이만큼에 교역 명성 1 (예전 2,500 — 교역만으로는 궁정·작위가 막히던 것)
-    crewWage: { per: 6, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)
+    crewWage: { per: 2, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢 — 0.306의 6닢을 0.310에서 2닢으로 되돌림) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)
     duelArmor: { k: 60, cap: 0.4 },   // 일기토 방어: 피해 × (1 − 방어/(방어+k)), 최대 cap까지만 줄인다 (예전: 방어×0.5를 빼서 방어 30이면 피해가 절반 넘게 줄던 것)
     oarK: 0.8,   // 노 젓는 속력 배수 (코라코라·소조 같은 노배가 돛배보다 빠르던 것 — QA 2026-10-23)
     taleWage: { from: 11, base: 20, per: 11, max: 250 },   // 이야기 부하: 특기 합이 from 이상이면 품삯 = base + per×특기 합 (최대 max, 5닢 단위)
@@ -545,6 +547,10 @@
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)
     life: { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2, kidBond: 3 },
+    voyagePlans: { noticeDays: 730, subscriptionDays: 730, deferDays: 30, investigationDays: 730,
+      investigationGold: 600, investigationFame: 15, maxTasks: 3, firstGold: 1000, firstFame: 30,
+      tradeQty: 8, tradeValue: 300, contactDays: 14, contactLevels: [1, 3, 6], archiveFame: 5,
+      heirAge: 20, heirStat: 55, heirSkill: 1, inheritSkill: 0.5, inheritFame: 0.5 },
     // 알림(갈색 쪽지 — js/ui/ui.js UI.toast): 보이는 시간 = baseMs + 글자 수×perChar (minMs~maxMs) · 같은 말 다시 띄우지 않는 시간 · 「지난 소식」에 남기는 수
     notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, keep: 40 },
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다

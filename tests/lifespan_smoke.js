@@ -81,7 +81,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     ok(wf.a.indexOf('wife:main') >= 0 && wf.none === 0, '본처가 타면 본처 선물 (' + wf.a.join(',') + '), 충성 90 넘는 부하도 가족도 없으면 선물 없음');
 
-    // ② 수명: 80세 생일에 세상을 떠남 — 아들이 없으면 끝
+    // ② 수명: 80세 생일에 세상을 떠남 — 아들이 없으면 성인 친족 계승 또는 이야기 마치기
     await newGame();
     await page.evaluate(() => { const s = G.Game.state; s.player.born = { y: 1480 - 80, m: 6, d: 10 }; s.date = { y: 1480, m: 6, d: 9 }; });
     const a79 = await page.evaluate(() => G.R.age());
@@ -112,12 +112,17 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.screenshot({ path: path.join(OUT, 'life_end.png') });
     const deathTxt = await page.evaluate(() => document.querySelector('.win .content').innerText);
     await clickWin();
+    // 아들이 없으면 「가문의 항해를 이어 갈 사람」 — 성인 친족 계승 · 이야기 마치기 (2026-11-04)
+    await page.locator('.win .choice', { hasText: '성인 친족을 양자로' }).first().waitFor({ timeout: 10000 });
+    const kinChoice = await page.locator('.win .choice').allTextContents();
+    await page.locator('.win .choice', { hasText: '이야기로 마친다' }).first().click();
     await page.waitForTimeout(1500);
     const end = await page.evaluate(() => ({ html: document.body.innerText.slice(0, 4000) }));
     await page.screenshot({ path: path.join(OUT, 'life_end_ending.png') });
     ok(a79 === 79 && warn === 1, '79세 생일 앞: 79세, 75세 넘은 생일에는 「남은 날이 많지 않다」 귀띔');
-    ok(/80세 생일/.test(deathTxt) && /막을 내린다/.test(deathTxt), '80세 생일: 「' + deathTxt.split('\n')[0].slice(0, 50) + '…」');
-    ok(/생을 마치다/.test(end.html), '뒤를 이을 아들이 없으면 마지막 장면 (생을 마치다)');
+    ok(/80세 생일/.test(deathTxt) && /성인 친족/.test(deathTxt), '80세 생일: 「' + deathTxt.split('\n')[0].slice(0, 50) + '…」');
+    ok(kinChoice.some(t => /성인 친족/.test(t)) && kinChoice.some(t => /이야기로 마친다/.test(t)), '아들이 없으면 성인 친족 계승과 이야기 마치기를 고른다');
+    ok(/생을 마치다/.test(end.html), '이야기 마치기를 고르면 마지막 장면 (생을 마치다)');
 
     // ③ 아들이 있으면 뒤를 잇는다
     await newGame();
@@ -144,7 +149,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     // ④ 옛 저장: 이미 85세 — 다음 날 세상을 떠난다
     await newGame();
-    const old = await page.evaluate(() => { const s = G.Game.state; delete s.life; s.player.born = { y: 1395, m: 1, d: 1 }; s.date = { y: 1480, m: 6, d: 1 }; G.UI.alert = async () => true; G.Ending.show = async (r) => { window.__end = r; }; G.Game.passDays(1); return { age: G.R.age(), end: s.life && s.life.end }; });
+    const old = await page.evaluate(() => { const s = G.Game.state; delete s.life; s.player.born = { y: 1395, m: 1, d: 1 }; s.date = { y: 1480, m: 6, d: 1 }; G.UI.alert = async () => true; G.UI.choose = async (t) => t === '가문의 항해를 이어 갈 사람' ? 'end' : null; G.Ending.show = async (r) => { window.__end = r; }; G.Game.passDays(1); return { age: G.R.age(), end: s.life && s.life.end }; });
     await page.waitForFunction(() => window.__end, null, { timeout: 10000 });
     ok(old.end === 85, '옛 저장 85세: 다음 날 수명이 다함 (' + old.end + '세)');
 

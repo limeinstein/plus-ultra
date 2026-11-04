@@ -1,6 +1,6 @@
 /* 제독의 수명과 생일 선물 (G.Life)
    · 수명: 제독은 maxAge세(80)를 넘겨 살지 못한다. maxAge세 생일(옛 저장이면 그 나이를 넘긴 날)에 조용히 눈을 감고,
-     어른이 된 아들이 있으면 뒤를 잇고(G.Family.retire(true) → succeed) 없으면 모험이 끝난다.
+     어른이 된 아들 또는 성인 친족이 뒤를 잇는다(G.Family.retire(true) → succeed). 어린 아들을 기다리거나 이야기를 마칠 수도 있다.
      warnFrom세부터는 생일마다 남은 날이 많지 않다고 알린다 (후계를 준비하라는 귀띔).
    · 생일 선물: 충성이 giftLoyal(90) 이상인 항해사(부하) 가운데 가장 충성스러운 한 사람이 잘하는 일에 맞는 선물 하나를 준다 —
      항해 도구·무기·라임·장신구·잔치·노래·금화 등. 고맙다는 말에 충성이 giftLoyalUp 오른다.
@@ -188,7 +188,7 @@
     G.State.log(name + U.j(name, '이/가').slice(name.length) + ' ' + age + '세로 세상을 떠났다.');
     await UI.alert(age + '세 생일이 지난 어느 밤, ' + name + U.jx(name, '은/는') + ' ' + where + ' 조용히 눈을 감았다.<br>' +
       '평생을 바다와 함께한 제독이었다. 곁을 지키던 이들이 마지막으로 들은 말은 바람과 물때에 관한 것이었다고 한다.<br><br>' +
-      (heirs.length ? '<span class="muted">이제 뜻을 이을 아들이 나설 차례다.</span>' : G.Family.minorSon && G.Family.minorSon() ? '<span class="muted">뒤를 이을 맏아들은 아직 어리다 — 그 아이가 자라기를 기다린다.</span>' : '<span class="warn-text">뒤를 이을 아들이 없어 모험은 여기서 막을 내린다.</span>'), '세월');
+      (heirs.length ? '<span class="muted">이제 뜻을 이을 아들이 나설 차례다.</span>' : G.Family.minorSon && G.Family.minorSon() ? '<span class="muted">뒤를 이을 맏아들은 아직 어리다 — 그 아이를 기다릴지, 성인 친족에게 맡길지 정할 수 있다.</span>' : '<span class="warn-text">성인 친족에게 함대와 항해 기록을 맡겨 가문의 모험을 이어 갈 수 있다.</span>'), '세월');
     await G.Family.retire(true);
   };
 })(window.G = window.G || {});

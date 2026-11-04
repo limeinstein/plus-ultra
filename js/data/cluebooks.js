@@ -234,8 +234,8 @@
 
   // ================================================================ 차례 (서가·후원자·옛 열람 창이 함께 쓴다)
   var SQ = G.BookSeq = {};
-  /** 이 발견은 끝났는가 — 내가 찾았거나, 경쟁자가 먼저 찾았다(더는 찾을 수 없다). 없는 발견은 끝난 것으로 */
-  SQ.done = function (id) { var D = G.Disc; return !G.DISC[id] || !D || D.foundByMe(id) || D.taken(id); };
+  /** 이 발견은 끝났는가 — 내가 직접 찾았다. 경쟁자의 발표로 독서·탐험 순서를 건너뛰지 않는다. 없는 발견은 끝난 것으로 */
+  SQ.done = function (id) { var D = G.Disc; return !G.DISC[id] || !D || D.foundByMe(id); };
   /** 연작의 앞 책 (없으면 null) */
   SQ.prev = function (b) { return b && b.after && G.BOOK ? G.BOOK[b.after] || null : null; };
   /** 연작에서 이 책이 열렸는가: 앞 책에 적힌 곳을 모두 찾았다 */

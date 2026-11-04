@@ -310,6 +310,34 @@
     return true;
   };
 
+  // ================================================================ 아틀란티스 사슬 길잡이 (2026-11-04 피드백: 편지 뒤에 어디로 가야 할지 모르겠다)
+  // 편지를 받은 뒤 「지금 할 일」에 다음 고리를 곳과 함께 적고, 고리를 찾을 때마다 다음 단서를 이야기가 직접 준다 (개척 단계에 막히지 않게)
+  var ATL_PATH = ['knossos', 'akrotiri', 'timaeus', 'gibraltar', 'gadir', 'azoresridge', 'atlantis'];
+  var ATL_WHERE = {
+    knossos: '크레타 섬, 간디아 가까운 안쪽 (뭍 탐험)',
+    akrotiri: '크레타 북쪽 반달 모양 화산섬(테라) 남쪽 기슭 (뭍 탐험)',
+    timaeus: '아테네 (뭍 탐험)',
+    gibraltar: '지브롤터 해협 (바다)',
+    gadir: '카디스 앞바다 작은 섬 (뭍 탐험)',
+    azoresridge: '아소르스 제도 둘레 바다 (바다)',
+    atlantis: '아소르스 남서쪽 바다 (바다)'
+  };
+  ST.ATL_PATH = ATL_PATH;
+  /** 지금 찾으러 갈 수 있는 아틀란티스 사슬의 고리들 (앞 고리를 다 찾은 것) */
+  ST.atlNext = function () {
+    return ATL_PATH.filter(function (id) { var d = G.DISC[id]; return d && !G.Disc.foundByMe(id) && G.Disc.needMet(d); });
+  };
+  /** 지금 갈 수 있는 고리에 단서를 적는다 */
+  ST.atlHints = function () { ST.atlNext().forEach(function (id) { ST.hint(id); }); };
+  /** 「지금 할 일」에 쓸 글: 아틀란티스로 가는 다음 고리 (html) */
+  ST.atlGuide = function () {
+    if (G.Disc.foundByMe(D.endDisc)) return '아틀란티스는 이미 찾아 두었다 — <b>' + ATL_WHERE.atlantis.replace(/ \(.*\)$/, '') + '</b>의 그 자리로 다시 가면 ' + ST.kin() + '를 만날 수 있다.';
+    var nx = ST.atlNext();
+    if (!nx.length) return '편지의 실마리를 따라 아틀란티스로 (수첩 「단서」).';
+    return '아틀란티스로 가는 다음 고리 — ' + nx.map(function (id) { return '<b>' + U.esc(G.DISC[id].name) + '</b>: ' + U.esc(ATL_WHERE[id] || ''); }).join(' · ') +
+      ' <span class="muted">(크노소스 → 아크로티리 → 『티마이오스』, 지브롤터 → 가디르 → 아소르스 해저 고원 → 아틀란티스)</span>';
+  };
+
   // ================================================================ 흔적을 찾았을 때
   ST.onFind = async function (d) {
     var s = S(), t = T(); if (!t) return;
@@ -331,12 +359,15 @@
       if (d.id === 'ft_hanyang') {
         t.letter = U.dateNum(s.date);
         s.player.items.push({ id: 'watch', kind: 'keepsake', name: ST.kin() + '의 시계', desc: '바늘이 멈춘 작은 시계. 편지에는 아틀란티스에 가져오면 다시 돌지도 모른다고 적혀 있다.', tale: true });
-        UI.toast(ST.kin() + '의 편지와 멈춘 시계를 얻었다. 아틀란티스의 실마리를 따라가자.', 'scroll', 5200);
+        ST.atlHints();
+        if (G.Disc.foundByMe(D.endDisc)) UI.toast(ST.kin() + '의 편지와 멈춘 시계를 얻었다. 전에 찾은 아틀란티스(아소르스 남서쪽 바다)로 다시 가 보자.', 'scroll', 6500);
+        else UI.toast(ST.kin() + '의 편지와 멈춘 시계를 얻었다. 아틀란티스의 실마리를 따라가자 — 다음 갈 곳은 「지금 할 일」에.', 'scroll', 5200);
       }
       G.State.log('「' + d.name + '」 — ' + ST.kin() + '의 흔적을 찾았다. (' + d.year + '년의 자취)');
       return;
     }
-    if (d.id === D.endDisc && !t.end) await ST.ending();
+    if (d.id === D.endDisc && !t.end) { await ST.ending(); return; }
+    if (t.letter && !t.end && ATL_PATH.indexOf(d.id) >= 0) ST.atlHints();
   };
   /** 대를 이은 뒤의 흔적 장면: 제독(P)의 대사는 G.STORY.heirTrace 로 차례대로 바꾸고, 다른 사람·내레이션의 「아버지」는 {gf}(할아버지)로.
       「남작 아버지」(자코모의 아버지)와 도앙의 편지(F)는 그대로 둔다 */
@@ -360,6 +391,7 @@
     var hasLetter = !!t.letter;
     if (!hasLetter) {      // 편지 없이 아틀란티스에 먼저 닿았다 — 아버지는 아직 여기 묶이기 전
       await UI.say('물빛 아래 동심원의 성벽. 그러나 돌섬 위에는 아무도 없다. ……아직은.', {});
+      UI.toast(ST.kin() + '의 흔적을 끝까지 따라간 뒤 이곳에 다시 오면 무언가 달라질지 모른다.', 'scroll', 5200);
       t.earlyAtlantis = U.dateNum(s.date);
       return;
     }
@@ -421,7 +453,7 @@
   ST.todo = function (c) {
     var s = S(), t = T(); if (!t || t.end === 'done' || !t.prologue) return [];
     var next = D.traces.filter(function (tr) { return !G.Disc.foundByMe(tr[0]); })[0], open = function () { G.Info.open('story'); };
-    if (!next) return t.letter ? [{ icon: 'scroll', hot: false, text: ST.kin() + '의 편지 — 아틀란티스의 실마리를 따라간다 (크노소스·지브롤터·『티마이오스』)', onClick: open }] : [];
+    if (!next) return t.letter ? [{ icon: 'scroll', hot: false, text: ST.kin() + '의 편지 — ' + ST.atlGuide(), onClick: open }] : [];
     if (!s.hints[next[0]]) return [];
     var tc = G.CITY_DATA[next[2]];
     if (tc.id === c.id) { var f = R.facilities(c), k = f.tavern ? 'tavern' : f.market ? 'market' : null; return [{ kind: k, icon: 'star', hot: true, text: ST.kin() + '의 흔적 — 이 도시의 건물에 들어서면 알아볼 수 있다', onClick: k ? null : open }]; }
@@ -440,7 +472,7 @@
     }).join('');
     var next = D.traces.filter(function (tr) { return !G.Disc.foundByMe(tr[0]); })[0];
     var nextTxt = t.end === 'done' ? kin + '를 찾았다. 두 해마다 한 번 아틀란티스에서 만날 수 있다.'
-      : !next ? '편지의 실마리를 따라 아틀란티스로 — 크노소스·지브롤터·『티마이오스』에서 꼬리를 물고 간다 (수첩 「단서」).'
+      : !next ? ST.atlGuide()
       : s.hints[next[0]] ? G.CITY_DATA[next[2]].name + '의 건물에 들어서면 ' + kin + '의 자취를 알아볼 수 있다.'
       : '앞의 흔적을 찾으면 다음 단서가 열린다.';
     el.innerHTML = '<div class="grid2" style="grid-template-columns:320px 1fr;gap:26px"><div>' +
@@ -617,7 +649,7 @@
       wrap(DS, 'find', function (orig) {
         return async function (d, how) {
           var r = await orig.apply(this, arguments);
-          if (r !== false && T() && d && (d.tale || d.id === D.endDisc)) { try { await ST.onFind(d); } catch (e) { console.error(e); } }
+          if (r !== false && T() && d && (d.tale || d.id === D.endDisc || ATL_PATH.indexOf(d.id) >= 0)) { try { await ST.onFind(d); } catch (e) { console.error(e); } }
           return r;
         };
       });
@@ -640,9 +672,12 @@
     if (G.Scenes.sea && G.Scenes.sea.update) wrap(G.Scenes.sea, 'update', function (orig) {
       return function () {
         var r = orig.apply(this, arguments), t = T();
-        if (t && t.end === 'done' && !UI.busy()) {
+        if (t && !UI.busy() && (t.end === 'done' || (t.letter && !t.end && G.Disc.foundByMe(D.endDisc)))) {
           var s = S(), d = G.DISC[D.endDisc];
-          if (d && s.loc.mode === 'sea' && G.Geo.dist(s.loc.lon, s.loc.lat, d.lon, d.lat) < (d.r || 1.6) * 0.5) ST.revisit();
+          if (d && s.loc.mode === 'sea' && G.Geo.dist(s.loc.lon, s.loc.lat, d.lon, d.lat) < (d.r || 1.6) * 0.5) {
+            if (t.end === 'done') ST.revisit();
+            else ST.ending();   // 편지 전에 먼저 찾아 발표한 아틀란티스 — 편지를 받고 다시 오면 그때 만난다 (2026-11-04 피드백)
+          }
         }
         return r;
       };

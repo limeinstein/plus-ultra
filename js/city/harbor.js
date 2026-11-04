@@ -28,6 +28,7 @@
       { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : R.daysOfFood() + '·' + R.daysOfWater() + '일 · 자재 ' + Math.floor(S().fleet.mat || 0), onClick: function () { return H.supply(c); } },
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
       { label: '도크', icon: 'anchor', sub: G.Dock.note(c) + (G.Dock.isHome(c) ? ' · 모항' : ''), onClick: function () { return H.dock(c); } },   // 모항 10척 · 다른 항구 3척(2년 뒤 폐기) — js/systems/dock.js
+      G.VoyagePlans ? { label: '탐험·교역 계획', icon: 'map', sub: '사건 예고·기한·재조사', onClick: function () { return G.VoyagePlans.open(); } } : null,
       { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } },
       G.SeaMonsters ? { label: '해상 괴물 소식', icon: 'skull', sub: G.SeaMonsters.news(c).length + '건', onClick: function () { return G.SeaMonsters.tell(c, G.Scenes.mateSpeaker('first'), true); } } : null,
       { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } }
@@ -379,7 +380,7 @@
     if (plan) quick.unshift({ label: '목표까지 ' + Math.min(probe.maxDays, plan.oneWaySafe) + '일', value: Math.min(probe.maxDays, plan.oneWaySafe) }, { label: '왕복 ' + Math.min(probe.maxDays, plan.need) + '일', value: Math.min(probe.maxDays, plan.need) });
     var d = await UI.number({
       title: '출항 준비', width: plan ? 720 : 560,
-      text: (plan ? G.Plan.html(plan, probe.maxDays) : '') + (planWind(plan) ? '' : monsoonNote(c)) + cargoNote(probe) + scurvyNote(c, probe, plan) + routesFrom(c) + '부관이 선원을 채우고' + (probe.yard ? ' 배를 고치고' : '') + ' 식량·물과 수리 자재(' + probe.matTo + '통까지)를 싣습니다. 따로 정하려면 항구의 「보급」을 쓰십시오. 며칠 항해할 만큼 준비할까요?',
+      text: (G.VoyagePlans ? G.VoyagePlans.departureHtml() : '') + (plan ? G.Plan.html(plan, probe.maxDays) : '') + (planWind(plan) ? '' : monsoonNote(c)) + cargoNote(probe) + scurvyNote(c, probe, plan) + routesFrom(c) + '부관이 선원을 채우고' + (probe.yard ? ' 배를 고치고' : '') + ' 식량·물과 수리 자재(' + probe.matTo + '통까지)를 싣습니다. 따로 정하려면 항구의 「보급」을 쓰십시오. 며칠 항해할 만큼 준비할까요?',
       min: 5, max: probe.maxDays, value: Math.min(probe.maxDays, plan ? Math.max(20, plan.need) : Math.max(20, last)), unit: '일분',
       quick: quick,
       info: function (v) {

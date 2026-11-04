@@ -397,6 +397,25 @@
   };
   R.daysOfFood = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.food + R.provisionCargo('food')) / R.dailyUse() + 1e-6) : 999; };
   R.daysOfWater = function () { var f = R.S().fleet; return f.crew > 0 ? Math.floor((f.water + R.provisionCargo('water')) / R.dailyUse() + 1e-6) : 999; };
+  /** 0.306~0.309에 오른 값으로 산 배: 지금 배값과의 차액을 한 번 돌려준다 (옛 저장을 불러올 때 — js/core/state.js).
+      함대·도크의 배만. 돌려준 금액(없으면 0)을 낸다. */
+  R.refundShipOverprice = function (S) {
+    if (!S || !S.player || (S.flags && S.flags.shipRefund0310)) return 0;
+    var total = 0, n = 0, ships = ((S.fleet && S.fleet.ships) || []).slice();
+    Object.keys(S.moored || {}).forEach(function (k) { ships = ships.concat(S.moored[k] || []); });
+    ships.forEach(function (sh) {
+      var t = sh && G.SHIP[sh.type]; if (!t || sh.paidPrice == null || sh.paidPrice <= t.price) return;
+      total += Math.round(sh.paidPrice - t.price); n++; sh.paidPrice = t.price;
+    });
+    S.flags = S.flags || {}; S.flags.shipRefund0310 = total || -1;
+    if (total > 0) {
+      S.player.gold += total;
+      var text = '조선소 조합이 배값을 예전대로 되돌리고, 그동안 비싸게 산 배 ' + n + '척의 차액 금화 ' + U.num(total) + '닢을 돌려주었다.';
+      if (Array.isArray(S.log) && S.date) S.log.push({ d: U.dateNum(S.date), t: text, g: G.Journal && G.Journal.grade ? G.Journal.grade(text) : 'D' });
+      S.pendingNotice = (S.pendingNotice || []).concat([text]);
+    }
+    return total;
+  };
   R.shipValue = function (s) {
     var t = G.SHIP[s.type]; var basis = s.paidPrice != null ? Math.min(t.price, s.paidPrice) : (t.basePrice || t.price); var v = basis * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
     v += s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].price : 0) * 0.3;
@@ -909,12 +928,19 @@
     });
   };
   R.stockProfile = function (id) { var k = G.BALANCE.commerce.supply, g = G.GOOD[id]; return k.goods[id] || k.cats[g.cat] || k.default; };
+  /** 유럽에서 먼 산지는 공급 한도를 늘린다 (G.BALANCE.commerce.supply.farK) — 희귀품(farRareCap 이하)은 그대로 */
+  R.farStockK = function (c, id) {
+    var sk = G.BALANCE.commerce.supply, far = sk.farK; if (!far || !c || !G.REGION_DIST[c.region]) return 1;
+    if (R.stockProfile(id).cap <= (sk.farRareCap == null ? 0.4 : sk.farRareCap)) return 1;
+    var d = Math.min(G.REGION_DIST[c.region][0], G.REGION_DIST[c.region][1], G.REGION_DIST[c.region][2]);
+    return far[Math.min(far.length - 1, d)] || 1;
+  };
   R.stockCapacity = function (c, id, baseOnly) {
     if (G.Sakoku && G.Sakoku.tradeBlock(c, id, 'buy')) return 0;
     var k = MK(), sk = G.BALANCE.commerce.supply;
     var cap = (k.stock[0] + c.size * k.stock[1]) * R.stockProfile(id).cap * (R.isRelay(c, id) ? RELAY().stock : 1) *
       (G.Econ ? G.Econ.mult(c, id, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, id, 'stock') : 1) /
-      (G.Era && G.Era.source ? G.Era.source(c, id) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1);
+      (G.Era && G.Era.source ? G.Era.source(c, id) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1) * R.farStockK(c, id);
     return Math.round(Math.max(sk.goods[id] ? sk.rareMin : sk.min, cap) * (baseOnly ? 1 : 1 + R.projectEffect(c, 'stock')));
   };
   R.stockRate = function (c, id) { return R.stockCapacity(c, id, true) / R.stockProfile(id).days * (1 + R.projectEffect(c, 'recovery')); };

@@ -39,6 +39,7 @@
       { label: '구입', icon: 'coin', onClick: function () { return T.buy(c); } },
       { label: '매각', icon: 'sack', sub: R.cargoQty() ? R.cargoQty() + '통' : '', onClick: function () { return T.sell(c); } },
       { label: '투자', icon: 'seal', sub: lv ? '출자 ' + lv + '등급' + (div >= 1 ? ' · 배당 ' + U.num(div) + '닢' : '') : '', onClick: function () { return T.invest(c); } },
+      G.VoyagePlans ? { label: '탐험·교역 계획', icon: 'map', sub: '거래처 정보·역사적 교역 기회', onClick: function () { return G.VoyagePlans.open(); } } : null,
       { label: '회화', icon: 'people', onClick: function () { return T.talk(c); } },
       { label: '시세', icon: 'chart', sub: R.market(c.id).ev ? R.market(c.id).ev : '품목 갈래별 값', onClick: function () { return T.quotes(c); } },
       { label: R.purser() ? '값 후려치기' : '값 깎기', icon: 'scales', sub: h ? (h.ok ? '성공' : '실패') : (T.hagLeft(c) < T.hagMax() ? '남은 흥정 ' + T.hagLeft(c) + '번' : R.purser() ? '경리 ' + R.purser().name : G.Court && G.Court.haggle(c) ? '귀족의 권한' : G.Acct && T.hagMax() > 1 ? '흥정 ' + T.hagMax() + '번' : ''), dim: !!h, onClick: function () { return T.haggle(c); } },
@@ -149,7 +150,7 @@
         var bs = G.Ledger ? G.Ledger.bestSell(id, c.id) : null, gain = bs ? bs.price - buyP(c, id) : null;
         var relay = R.isRelay(c, id) ? ' <span class="tag relay" title="이 항구는 산지가 아니라 먼 곳(' + G.TradeGoods.originRegions(id).join('·') + ')에서 들여와 판다 — 산지보다 비싸지만 더 먼 곳에 팔면 남는다">중계</span>' : '';
         return '<tr class="click" data-id="' + id + '"><td class="pick"><input type="checkbox" class="bpick" data-id="' + id + '"' + (sel[id] ? ' checked' : '') + ' title="골라서 한꺼번에 산다"></td><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + relay + specTag(c, id) + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="유행하는 물건 — 값이 뛰었다">유행</span>' : '') + eraTag(c, id) + sourceTag(c, id) + evTag(c, id) + '</td><td class="muted">' + G.GOOD_CATS[g.cat] + (G.Cargo ? ' <small title="1통의 무게 — 배가 버티는 무게에 들어간다">· 무게 ' + G.Cargo.wt(id) + '</small>' : '') + '</td><td class="num">' + U.num(buyP(c, id)) + '</td><td class="num">' + supplyCell(c, id) + '</td><td class="num">' + (have || '') + '</td>' +
-          '<td class="num">' + where(bs) + '</td><td class="num ' + (gain > 0 ? 'down' : 'up') + '">' + (gain == null ? '' : (gain > 0 ? '+' : '') + U.num(gain)) + '</td></tr>';
+          '<td class="num wrap">' + where(bs) + '</td><td class="num ' + (gain > 0 ? 'down' : 'up') + '">' + (gain == null ? '' : (gain > 0 ? '+' : '') + U.num(gain)) + '</td></tr>';
       }).join('');
       var html = '<div class="flex" style="margin-bottom:10px;font-size:17px"><span>소지금 <b>' + U.num(s.player.gold) + '</b>닢</span><span class="right">적재 여유 <b>' + Math.max(0, Math.floor(R.freeVol())) + '</b>통' + (G.Cargo ? ' · 무게 여유 <b>' + Math.max(0, Math.floor(G.Cargo.wfree())) + '</b>' : '') + ' · 품목 ' + Object.keys(s.fleet.cargo).length + '/' + R.maxKinds() + '</span></div>' +
         '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl"><tr><th title="골라서 한꺼번에 산다">✓</th><th>품목</th><th>분류</th><th class="num">가격(1통)</th><th class="num">재고</th><th class="num">보유</th><th class="num">알려진 최고 매각가</th><th class="num">1통 이익</th></tr>' + rows + '</table></div>' +
@@ -229,6 +230,7 @@
     if (G.Growth) G.Growth.buy(q * price);   // 거래 경험 (js/systems/growth.js)
     if (G.Slave && G.Slave.is(id)) G.Slave.onBuy(c, q);   // 노예 무역: 악명·「노예 상인」
     if (G.Hostile) G.Hostile.trade(c, q * price);   // 그 나라와 교역하면 적대가 줄어든다
+    if (G.VoyagePlans) G.VoyagePlans.trade(c, q, q * price);
     if (G.Ledger) G.Ledger.record(c);
     G.Game.refreshHud();
   }
@@ -255,7 +257,7 @@
         var bs = G.Ledger ? G.Ledger.bestSell(id, c.id) : null;
         var better = bs && bs.price > p * 1.08;
         return '<tr class="click" data-id="' + id + '"><td class="pick"><input type="checkbox" class="bpick" data-id="' + id + '"' + (sel[id] ? ' checked' : '') + ' title="골라서 한꺼번에 판다"></td><td>' + G.goodDot(id) + '<b>' + g.name + '</b>' + (G.Fad && G.Fad.at(c, id) ? ' <span class="tag" title="' + U.esc('이 나라·지역에서 유행하는 물건 — 값이 ' + (G.Fad.at(c, id).m || (G.BALANCE.fad || {}).mult || 3) + '배' + (G.Fad.at(c, id).why ? ' (' + G.Fad.at(c, id).why + ')' : '')) + '">유행 · ' + (G.Fad.at(c, id).until - s.day) + '일</span>' : '') + rareTag(c, id) + eraTag(c, id) + evTag(c, id) + (spoil != null && spoil < 30 ? ' <span class="warn-text" style="font-size:14px">(' + spoil + '일 후 상함)</span>' : '') + (fs && fs.text ? ' <span class="' + (fs.f < 1 ? 'warn-text' : 'muted') + '" style="font-size:14px" title="산 지 ' + fs.age + '일 · 신선하게 파는 기간 ' + fs.keep + '일">(' + fs.text + ')</span>' : '') + ownTag + '</td><td style="font-size:14px">' + U.esc(R.cargoFromText(cg)) + '</td><td class="num">' + cg.q + '</td><td class="num">' + U.num(cg.cost) + '</td><td class="num"><b>' + U.num(p) + '</b></td><td class="num ' + (pr >= 0 ? 'down' : 'up') + '">' + (pr >= 0 ? '+' : '') + Math.round(pr * 100) + '%</td>' +
-          '<td class="num" style="font-size:14px">' + demandCell(c, id) + '</td><td class="num' + (better ? ' warn-text' : '') + '">' + (bs ? where(bs) : '<span class="muted">—</span>') + '</td></tr>';
+          '<td class="num" style="font-size:14px">' + demandCell(c, id) + '</td><td class="num wrap' + (better ? ' warn-text' : '') + '">' + (bs ? where(bs) : '<span class="muted">—</span>') + '</td></tr>';
       }).join('');
       var html = '<div class="ck-bar"></div><div class="ck-scroll"><table class="tbl"><tr><th title="골라서 한꺼번에 판다">✓</th><th>품목</th><th>산 곳</th><th class="num">수량</th><th class="num">산 값</th><th class="num">여기 시세</th><th class="num">이익</th><th class="num" title="값이 무너지기 전에 이 시장이 더 받아 줄 양">받아 줄 양</th><th class="num">다른 곳 최고가</th></tr>' + rows + '</table></div>' +
         '<div class="muted" style="margin-top:8px;font-size:15px">이 교역소에서 산 물건은 산 값보다 비싸게 되팔 수 없습니다(「여기서 산」 표시 — 다른 곳에서 산 몫부터 팝니다). 같은 물건을 한꺼번에 많이 팔면 값이 떨어지고, 「받아 줄 양」을 넘기면 폭락합니다(이웃 항구 값도 조금 떨어집니다). 그 물건이 나는 고장(「산지」)은 조금만 받아 줍니다. 산지에서 멀리 떨어진 곳(「귀함」)일수록 비싸게 팔립니다. 먹을거리·향신료·기호품은 오래 실어 두면 묵어서 값이 떨어지고, 더 오래되면 상해 줄어듭니다.</div>';
@@ -323,6 +325,7 @@
     var fad = G.Fad ? G.Fad.sold(c, id, q, total, cost0) : null;
     if (fad) { var fb = (G.BALANCE.fad || {}); UI.toast(G.Fad.where(fad) + '에서 ' + G.GOOD[id].name + U.jx(G.GOOD[id].name, '이/가') + ' 유행을 탔다! ' + (fb.days || 60) + '일 동안 값이 ' + (fb.mult || 3) + '배로 뛴다.', 'star', 7000); }
     if (G.Hostile) G.Hostile.trade(c, total);
+    if (G.VoyagePlans) G.VoyagePlans.trade(c, q, total);
     if (G.Slave && G.Slave.is(id)) G.Slave.onSell(c, q);   // 노예 무역: 악명·「노예 상인」
     // 커피를 팔면 그 문화권 식당에 커피 메뉴가 하나씩 생긴다 (js/systems/coffee.js)
     var cafe = G.Coffee ? G.Coffee.sold(c, id, q) : null;

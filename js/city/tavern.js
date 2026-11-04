@@ -517,7 +517,7 @@
     var s = S(), cats = { geo: 1, nature: 1 }, src = 'mate:' + m.id;
     for (var k in m.sk) if (m.sk[k] > 0 && MATE_KNOWS[k]) MATE_KNOWS[k].forEach(function (x) { cats[x] = 1; });
     return G.DISCOVERIES.filter(function (d) {
-      if (d.id === 'circum' || d.bookOnly || G.Disc.foundByMe(d.id) || G.Disc.taken(d.id)) return false;
+      if (d.id === 'circum' || d.bookOnly || G.Disc.foundByMe(d.id)) return false;
       if (d.reg !== c.region) return false;                                            // 지금 머무는 지역의 이야기만
       if (!(cats[d.cat] || d.by === m.id)) return false;                                // 그 사람이 아는 갈래만
       if (s.hints[d.id] && !G.Disc.canStack(d.id, src)) return false;                   // 이 사람에게 이미 들은 것

@@ -1,6 +1,6 @@
 /* 경쟁 탐험가의 발견 경쟁 점검 (js/data/rivals.js):
    ① 자료 — 새로 경쟁하는 34곳에 d.rival, 경쟁자마다 머무는 도시·카드·대사(계획·발표·졌을 때), 탐험 함대 항로는 바다 위
-   ② 차례 — 발표 12달 전 「떠날 채비」 소문 + 단서 → 발표 달: 경쟁자의 발견(st.rival), 단서는 지워지고 제독은 찾을 수 없다
+   ② 차례 — 발표 12달 전 「떠날 채비」 소문 + 단서 → 발표 달: 경쟁자의 발견(st.rival), 단서는 이어지고 제독도 재조사할 수 있다
    ③ 늦은 보고 — 먼저 찾고 늦게 알리면 명성과 사례금이 절반
    ④ 동료와 같은 사람(베스푸치 등)은 다툴 발견이 남은 동안 고용할 수 없고, 끝나면 항해사로 돌아온다
    ⑤ 술집 — 베르겐의 피닝(명부·카드·계획·단서), 바다 — 탐험 함대에 신호를 보내면 그 사람의 말
@@ -75,7 +75,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     console.log('    뭍에 걸린 항로 점: ' + (d1.landPts.length ? d1.landPts.join(' · ') : '없음'));
     ok(!d1.landPts.length, '항로 점은 모두 배가 다닐 수 있는 바다');
 
-    // ② 차례: 발표 12달 전 소문 + 단서 → 발표 달에 경쟁자의 발견, 단서 지움, 찾을 수 없음
+    // ② 차례: 발표 12달 전 소문 + 단서 → 발표 달에 경쟁자의 발견, 단서 보존, 재조사 가능
     const d2 = await page.evaluate(() => {
       const s = G.Game.state, out = { prep: [], noPrep: [], took: [], notTook: [], findBlocked: true, seaHit: false, landHit: false };
       const ids = Object.keys(G.RIVAL_PLAN);
@@ -90,7 +90,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         s.date = { y: ry, m: rm, d: 1 };
         G.Disc.rivals();
         const st = s.disc[id];
-        (st && st.rival === d.rival[2] && !s.hints[id] && G.Disc.taken(id) && !G.Disc.available(d) ? out.took : out.notTook).push(id);
+        (st && st.rival === d.rival[2] && !!s.hints[id] && G.Disc.taken(id) && G.Disc.available(d) ? out.took : out.notTook).push(id);
       });
       // 찾을 수 없다: 바다·뭍 검사에 걸리지 않고, D.find도 거절
       const sea = G.DISC.maelstrom, land = G.DISC.mandrill;
@@ -99,10 +99,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return out;
     });
     ok(!d2.noPrep.length, '발표 12달 전: 「떠날 채비」 소문과 함께 단서 — ' + d2.prep.length + '곳 (' + d2.noPrep.join(',') + ')');
-    ok(!d2.notTook.length, '발표 달: 경쟁자의 발견이 되고, 단서는 지워지고, 이제 찾을 수 없다 — ' + d2.took.length + '곳 (' + d2.notTook.join(',') + ')');
+    ok(!d2.notTook.length, '발표 달: 경쟁자의 발견이 되고, 단서는 유지되고, 뒤늦게도 직접 찾을 수 있다 — ' + d2.took.length + '곳 (' + d2.notTook.join(',') + ')');
     ok(d2.seaHit && d2.landHit, '경쟁자가 발표한 뒤에도 바다(모스켄 소용돌이)·뭍(인면수)에 가면 뒤늦게 찾을 수 있다 (2026-10-23)');
-    const late = await page.evaluate(async () => { window.__noRaf = true; const tick = setInterval(() => { document.querySelectorAll('.modal-back, .win, .disc-card').forEach(m => { const b = m.querySelector('.askrow .btn, .btn, button'); if (b) b.click(); else m.click(); }); }, 300); G.Disc.find(G.DISC.maelstrom, 'sea').catch(() => {}); for (let i = 0; i < 60 && !(G.Game.state.disc.maelstrom && G.Game.state.disc.maelstrom.me); i++) await new Promise(r => setTimeout(r, 250)); clearInterval(tick); const st = G.Game.state.disc.maelstrom; return { me: !!st.me, rival: st.rival, hint: !!G.Game.state.hints.maelstrom, newHint: G.Disc.addHint('mandrill', 'tavern:0') }; });
-    ok(late.me && late.rival && !late.hint && late.newHint === false, '뒤늦은 발견: 제독의 것이 되지만 첫 발견은 그대로 ' + late.rival + ' · 새 단서(후원 제안)는 생기지 않는다');
+    const late = await page.evaluate(async () => { window.__noRaf = true; const tick = setInterval(() => { document.querySelectorAll('.modal-back, .win, .disc-card').forEach(m => { const b = m.querySelector('.askrow .btn, .btn, button'); if (b) b.click(); else m.click(); }); }, 300); G.Disc.find(G.DISC.maelstrom, 'sea').catch(() => {}); for (let i = 0; i < 60 && !(G.Game.state.disc.maelstrom && G.Game.state.disc.maelstrom.me); i++) await new Promise(r => setTimeout(r, 250)); clearInterval(tick); const st = G.Game.state.disc.maelstrom; return { me: !!st.me, rival: st.rival, hint: !!G.Game.state.hints.maelstrom, newHint: (G.Disc.addHint('mandrill', 'tavern:0'), !!G.Game.state.hints.mandrill) }; });
+    ok(late.me && late.rival && !late.hint && late.newHint === true, '뒤늦은 발견: 제독의 것이 되지만 첫 발견은 그대로 ' + late.rival + ' · 재조사의 새 단서도 이어진다');
 
     // ③ 늦은 보고: 먼저 찾아 두고 알리지 않았는데 경쟁자가 발표 → 명성·사례금 절반
     const d3 = await page.evaluate(async () => {

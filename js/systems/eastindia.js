@@ -78,7 +78,8 @@
   /** 출자·청약 고르기 — 소지금 안에서 */
   async function invest(opts, title, sp) {
     var g = S().player.gold;
-    var v = await UI.ask(title + ' — 소지금 ' + num(g) + '닢', opts.map(function (n) { return { label: '금화 ' + num(n) + '닢을 낸다', value: n, dis: g < n }; }).concat([{ label: '내지 않는다', value: 0 }]), sp);
+    var v = await UI.ask(title + ' — 소지금 ' + num(g) + '닢', opts.map(function (n) { return { label: '금화 ' + num(n) + '닢을 낸다', value: n, dis: g < n }; }).concat([{ label: '준비한 뒤 다시 결정한다', value: -1 }, { label: '참여하지 않는다', value: 0 }]), sp);
+    if (v == null || v === -1) return null;
     v = +v || 0;
     if (v > 0 && g >= v) { S().player.gold -= v; return v; }
     return 0;
@@ -87,6 +88,7 @@
   // ================================================================ ① 잉글랜드 동인도 회사 (1600)
   EI.eic = async function () {
     var b = st(), k = K().eic; b.eicMet = 1;
+    if (G.VoyagePlans) await G.VoyagePlans.subscriptionIntro(k);
     await withPic('ei_eic_founders', '런던 상인들의 출자 (1600)', function () { return play([
       [null, '런던, 레든홀 거리의 한 저택. 털옷을 입은 상인들이 긴 탁자에 둘러앉아 서로의 이름을 명부에 적고 있다. 지난해 네덜란드 배들이 향료 제도에서 후추를 가득 싣고 돌아와 값을 세 배로 올렸다는 소식이 런던을 뒤흔들었다.'],
       ['smythe', '바다에서 오신 분이로군. 나는 토머스 스마이스, 이 모임의 총재를 맡았소. 우리 잉글랜드 상인들도 희망봉 너머로 직접 배를 보내려 하오. 네덜란드 놈들 손에 후추 값을 맡길 수는 없지.'],
@@ -95,6 +97,7 @@
       ['smythe', '어떻소, 그대도 한 몫 넣겠소? 배가 돌아오면 원금과 이익을 나누오. 돌아오지 못하면 — 바다의 일이지.']
     ]); });
     var paid = await invest(k.opts, '잉글랜드 동인도 회사에 출자할까?', who('smythe'));
+    if (paid == null) { b.eicCool = S().day + G.BALANCE.voyagePlans.deferDays; log('출자 결정을 미루었다 — 참여 기한 안에 다시 방문할 수 있다.'); return false; }
     if (paid) {
       b.eic = paid; item('eic_charter');
       await play([['smythe', '좋소! 명부에 그대 이름을 적겠소. 랭커스터의 레드 드래건호가 후추를 싣고 돌아오는 날, 그대 몫을 셈해 보내리다.']]);
@@ -116,12 +119,14 @@
   };
   EI.voc = async function () {
     var b = st(), k = K().voc; b.vocMet = 1;
+    if (G.VoyagePlans) await G.VoyagePlans.subscriptionIntro(k);
     await withPic('ei_voc_house', '연합 동인도 회사 (1602)', function () { return play([
       [null, '암스테르담. 운하 옆 회사 사무소 앞에 줄이 늘어섰다. 상인, 목수, 하녀, 목사 — 누구든 몫을 살 수 있다는 소문에 도시가 들썩인다. 여섯 도시의 작은 회사들이 서로 값을 깎아 먹다 못해 하나로 묶였다. 「연합 동인도 회사」, VOC다.'],
       ['lemaire', '나는 이삭 르메르. 이 회사에 가장 많이 넣은 사람 가운데 하나지. 잘 보시오 — 이건 배 한 번에 몫을 거는 장사가 아니오. 회사가 스물한 해 동안 계속 배를 보내고, 몫을 가진 자는 그 몫을 남에게 팔 수도 있소. 세상에 처음 생긴 물건이지.'],
       ['lemaire', '「주식」이라고들 부르더군. 몫을 쥔 사람은 배가 돌아올 때마다 이익을 나누어 받고, 급하면 거래소에서 팔면 그만이오. …물론 값은 오르기도 하고 내리기도 하지. 하하.']
     ]); });
     var paid = await invest(k.opts, 'VOC 주식을 청약할까?', who('lemaire'));
+    if (paid == null) { b.vocCool = S().day + G.BALANCE.voyagePlans.deferDays; log('출자 결정을 미루었다 — 참여 기한 안에 다시 방문할 수 있다.'); return false; }
     if (paid) {
       b.voc = paid; item('voc_share');
       await play([['lemaire', '좋소! 그대 이름이 장부에 올랐소. 몇 해 기다리시오. 그동안 몫이 필요 없어지면 암스테르담 거래소에서 사겠다는 사람을 찾을 수 있을 거요.']]);
@@ -301,8 +306,8 @@
   };
 
   // ================================================================ 도시에 들어설 때 · 수첩
-  function eicOpen() { var b = st(), k = K().eic, t = today(); return !!(b && !b.eic && cityNow() === k.city && t >= k.from && t <= k.to); }
-  function vocOpen() { var b = st(), k = K().voc, t = today(); return !!(b && !b.voc && cityNow() === k.city && t >= k.from && t <= k.to); }
+  function eicOpen() { var b = st(), k = K().eic, t = today(), win = G.VoyagePlans ? G.VoyagePlans.window(k, true) : k; return !!(b && !b.eic && cooled('eic') && cityNow() === k.city && t >= win.from && t <= win.to); }
+  function vocOpen() { var b = st(), k = K().voc, t = today(), win = G.VoyagePlans ? G.VoyagePlans.window(k, true) : k; return !!(b && !b.voc && cooled('voc') && cityNow() === k.city && t >= win.from && t <= win.to); }
   EI.pending = function () {
     var s = S(); if (!s || !s.loc || s.loc.mode !== 'city') return false;
     return eicOpen() || vocOpen() || vocSellOpen() || open('swally', 'mariam') || open('jakatra', 'kancana') || open('amboyna', 'edmund') || open('banda', 'idris');

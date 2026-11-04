@@ -38,10 +38,14 @@
   function say(x, reg) { return typeof x === 'string' ? x : (x[reg] || x.y || x.o); }
 
   /** 이 소문의 사건이 아직 일어날 수 있는가 */
+  function rumorEnd(r) {
+    var keys = { ei_eic: ['eindia', 'eic'], ei_voc: ['eindia', 'voc'], cw_wic: ['colonyCo', 'wic'], cw_fr: ['colonyCo', 'fr'] }, pair = keys[r.id];
+    return pair && G.VoyagePlans ? G.VoyagePlans.window(G.BALANCE[pair[0]][pair[1]], true).to : r.d ? r.d[1] : r.y ? r.y[1] * 10000 + 1231 : null;
+  }
   ER.live = function (r) {
     var s = S(); if (!s) return false;
     if (r.y && (s.date.y < r.y[0] || s.date.y > r.y[1])) return false;
-    if (r.d && (dn(s) < r.d[0] || dn(s) > r.d[1])) return false;
+    if (r.d && (dn(s) < r.d[0] || dn(s) > rumorEnd(r))) return false;
     if (r.mates && r.mates.length) {
       var fin = function (id) { return ER.done(id, s); };
       if (r.anyDone ? r.mates.some(fin) : r.mates.every(fin)) return false;   // 모두(anyDone: 한 사람이라도) 만났거나 떠났거나 혼인했다
@@ -72,9 +76,16 @@
   /** 마을 사람 f가 들려줄 소문 한 마디 (없으면 null). force: 확률을 건너뛴다 (시험) */
   ER.pick = function (f, c, force) {
     if (!f || f.animal || f.rumored) return null;
-    if (!force && !U.chance(K().chance == null ? 0.05 : K().chance)) return null;
     var list = ER.at(c); if (!list.length) return null;
-    var r = U.pick(list), lead = U.pick(LEAD[f.type] || ['소문인데요, ']), body = say(U.pick(ER.texts(r)), REG[f.type] || 'y');
+    var chance = K().chance == null ? 0.05 : K().chance;
+    // 소문이 나오는 빈도는 그대로 두고, 뽑힌 경우에만 기한이 가까운 현지 이야기를 우선한다.
+    var urgent = G.VoyagePlans ? list.filter(function (r) {
+      var end = rumorEnd(r); if (!end) return false;
+      var left = U.dayIndex({ y: Math.floor(end / 10000), m: Math.floor(end / 100) % 100, d: end % 100 }) - U.dayIndex(S().date);
+      return left >= 0 && left <= G.BALANCE.voyagePlans.noticeDays;
+    }) : [];
+    if (!force && (chance <= 0 || !U.chance(chance))) return null;
+    var r = U.pick(urgent.length ? urgent : list), lead = U.pick(LEAD[f.type] || ['소문인데요, ']), body = say(U.pick(ER.texts(r)), REG[f.type] || 'y');
     return { r: r, body: body, text: lead + body };
   };
   /** 들었다고 적는다 */
@@ -82,6 +93,7 @@
     var s = S(); st().heard[r.id] = s.day;
     (st().log = st().log || []).unshift({ id: r.id, day: s.day, date: dn(s), city: c ? c.id : null, text: body });
     st().log = st().log.slice(0, 12);
+    if (G.VoyagePlans) G.VoyagePlans.learnRumor(r, body, c);
     G.State.log('소문 (' + (c ? c.name + '의 마을 사람' : '마을 사람') + '): ' + body);
   };
   /** 수첩 「할 일」 아래 — 들은 소문 (아직 일어날 수 있는 것만) */

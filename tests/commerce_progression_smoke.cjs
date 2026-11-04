@@ -30,9 +30,11 @@ fs.mkdirSync(OUT, {recursive:true});
     await page.waitForFunction(()=>window.G&&G.Court&&G.Scenes.city.B.trade&&G.Game.sceneName==='title'&&!document.querySelector('#boot-loader.on'),null,{timeout:120000});
     await page.evaluate(()=>{window.__pauseFrames=true;});
     report.after=await page.evaluate(metrics);
-    assert.equal(report.after.crew100,report.before.crew100*3);assert.equal(report.after.prizeValue,report.before.prizeValue,'나포선·기존 배의 매각 수익은 새 배값으로 급증하지 않는다');
-    assert(report.after.firstExpansion>report.before.firstExpansion*2);
-    assert(report.after.largeCarrack/report.after.rareGrossMargin>report.before.largeCarrack/report.before.rareGrossMargin*3);
+    // 0.310: 0.306의 배값·급료·출자 문턱 일괄 인상을 되돌렸다. 가까운 희귀품 반복만 재고 한도와 희귀품 출자 배수로 막는다.
+    assert.equal(report.after.crew100,report.before.crew100,'선원 급료 0.305 값');assert.equal(report.after.prizeValue,report.before.prizeValue,'나포선·기존 배의 매각 수익 그대로');
+    assert.equal(report.after.largeCarrack,report.before.largeCarrack,'대형카락 0.305 값');assert.equal(report.after.caravel,report.before.caravel);assert.equal(report.after.fluyt,report.before.fluyt);
+    assert(report.after.firstExpansion>report.before.firstExpansion*2,'용연향을 여는 출자는 희귀품 배수로 여전히 비싸다');
+    assert(report.after.rareGrossMargin<report.before.rareGrossMargin*0.5,'용연향 한 번 완판 차익은 0.305의 절반 아래 (재고 한도)');
     report.rules=await page.evaluate(async()=>{
       function ok(v,m){if(!v)throw Error(m);}
       const R=G.R,CT=G.Court,UI=G.UI,B=G.BALANCE;
@@ -56,8 +58,8 @@ fs.mkdirSync(OUT, {recursive:true});
       ok(R.buildProject(casa,'production'),'생산시설 건설');ok(R.stockRate(casa,'ambergris')>base&&R.stockCapacity(casa,'ambergris')>cap,'생산 투자 효과');
       ok(R.buildProject(casa,'warehouse'),'상관 건설');ok(R.buildProject(casa,'distribution')&&R.satCap(casa,'guns')>demand,'판로 투자 효과');
       for(let i=0;i<6;i++)R.buildProject(casa,'production');ok(R.projectLv(casa,'production')===3&&!R.buildProject(casa,'production'),'시설 한도');
-      const mate=G.MATES.find(m=>m.wage>0&&!m.rival);ok(R.mateWage(mate.id)===mate.wage*3,'동료 급료 정확히 세 배');
-      s.mateDismiss={[mate.id]:{count:1,wage:mate.wage+10}};ok(R.mateWage(mate.id)===(mate.wage+10)*3,'재고용 급료 중복 배율 방지');
+      const WK=B.commerce.mateWageK;const mate=G.MATES.find(m=>m.wage>0&&!m.rival);ok(R.mateWage(mate.id)===mate.wage*WK,'동료 급료 배수');
+      s.mateDismiss={[mate.id]:{count:1,wage:mate.wage+10}};ok(R.mateWage(mate.id)===(mate.wage+10)*WK,'재고용 급료 중복 배율 방지');
       s.mates=[{id:mate.id,loyal:80,role:'crew'}];const wage=G.Cabins.totalWages(),cash=s.player.gold;G.World.newMonth();ok(s.player.gold===cash-wage,'실제 월말 급료 결제와 안내 일치');
       const saved={say:UI.say,alert:UI.alert,toast:UI.toast,confirm:UI.confirm,choose:UI.choose,ask:UI.ask,refresh:G.Game.refreshHud,onFame:G.Achieve.onFame};
       G.Achieve.onFame=()=>{}; // 헌납 결제 검사는 별도 업적 하사금과 분리한다.
@@ -92,6 +94,16 @@ fs.mkdirSync(OUT, {recursive:true});
         s.fleet.cargo[task.good]={q:total-15+3,cost:10,from:10,d:s.day};await CT.report(king);
         ok(CT.rank(realm)===1&&!CT.task()&&s.fleet.cargo[task.good].q===3,'분할 납품 완결·남은 짐 보존');
         s=fresh();s.court={titles:{PT:7}};ok(!CT.pending(king)&&CT.rank(realm)===7,'옛 저장 작위 보존·대기 최초 적용');
+        // 먼 산지 공급 한도 (0.310): 캘리컷 후추는 유럽 거리 3 → ×1.6, 용연향 같은 희귀품·아프리카는 그대로
+        s=fresh();const cal=G.CITY_DATA.find(c=>c.name==='캘리컷'),arg=G.CITY_DATA.find(c=>c.name==='아르킨');
+        ok(cal&&R.farStockK(cal,'pepper')===1.6,'먼 산지(인도) 공급 한도 ×1.6');ok(R.farStockK(cal,'ambergris')===1&&R.farStockK(cal,'musk')===1,'희귀품은 늘리지 않는다');
+        ok(arg&&R.farStockK(arg,'gold')===1,'아프리카(가까운 산지)는 그대로');
+        // 0.306~0.309에 비싸게 산 배의 차액은 불러올 때 한 번 돌려준다
+        s=fresh();const sh=s.fleet.ships[0],t=G.SHIP[sh.type];sh.paidPrice=t.price+50000;s.moored={0:[Object.assign(R.newShip('carrack'),{paidPrice:G.SHIP.carrack.price+31500})]};
+        const g0=s.player.gold,loaded=G.State.deserialize(JSON.stringify(s));
+        ok(loaded.player.gold===g0+81500&&loaded.fleet.ships[0].paidPrice===t.price&&loaded.flags.shipRefund0310===81500,'비싸게 산 배 2척 차액 81,500닢 환급');
+        const again=G.State.deserialize(JSON.stringify(loaded));ok(again.player.gold===loaded.player.gold,'환급은 한 번만');
+        ok((loaded.pendingNotice||[]).length===1,'환급 안내 한 줄');
         return {recovery,rankLog,finalPromotionYears:rankLog[7].day/365,checks:'재고·투자·임금·8단계 승급·분할 납품·옛 저장 통과'};
       }finally{Object.assign(UI,{say:saved.say,alert:saved.alert,toast:saved.toast,confirm:saved.confirm,choose:saved.choose,ask:saved.ask});G.Game.refreshHud=saved.refresh;G.Achieve.onFame=saved.onFame;}
     });

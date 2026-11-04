@@ -74,7 +74,7 @@
     if (d.openY && S().date.y < d.openY) return false;                                           // 미스터리 유적: 그 해(1600년)가 되어야 증거가 나온다 (js/data/mysterydisc.js)
     if (d.built && S().date.y < d.built && !(G.Mirage && G.Mirage.active(d))) return false;      // 아직 세워지지 않은 건물 (1600년부터는 신기루로 소문이 돈다)
     if (d.need && !d.need.every(function (id) { return G.Disc.foundByMe(id); })) return false;   // 발견의 연쇄
-    if (G.Disc.taken && G.Disc.taken(d.id)) return false;                                        // 경쟁자가 먼저 발표했다 — 이제 찾을 수 없다
+    if (G.Disc.taken && G.Disc.taken(d.id)) return true;                                         // 세상에 알려진 곳도 직접 재조사할 수 있다
     // 꼬리에 꼬리를 무는 사슬(js/data/chaindisc.js): 앞 고리를 모두 직접 찾았으면 개척 단계와 상관없이 열린다 (무 제국은 쿠페의 별길을 찾으면)
     if (d.need && d.need.length && (d.chain || (G.CHAIN_OVERRIDE && G.CHAIN_OVERRIDE[d.id]))) return true;
     var rl = F.rivalLeft(d); if (rl != null && rl > 0 && rl <= RB().lead) return true;           // 경쟁자가 곧 떠난다 — 단계와 상관없이 소문이 돈다
@@ -111,7 +111,7 @@
     var road = (G.LEAD_ROAD || {})[cityId];
     return G.GEO_LEADS.filter(function (l) {
       var d = G.DISC[l.disc], st = s.disc[l.disc];
-      if (!d || s.hints[l.disc] || (st && (st.me || st.rival))) return false;
+      if (!d || s.hints[l.disc] || (st && st.me)) return false;
       return l.after.every(F.known);
     }).sort(function (a, b) {
       // 이 도시의 길이 먼저, 그다음 막 열린(앞선 발견이 많은) 이야기가 먼저

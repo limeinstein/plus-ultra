@@ -182,6 +182,7 @@
     (s.player.kids || []).forEach(function (k) {
       if (!k.st) k.st = inborn();
       var age = F.kidAge(k);
+      F.prepareHeir(k);
       if (age >= 3) ['str', 'int', 'mar', 'cha'].forEach(function (x) { if (U.chance(0.5)) k.st[x] = Math.min(90, k.st[x] + 1); });
       if (!k.unnamed && (age === 6 || age === 12)) out.push({ icon: 'heart', text: k.name + U.jx(k.name, '이/가') + ' ' + age + '살이 되었다. ' + (age === 6 ? '글을 배우기 시작할 나이다.' : '바다를 동경하는 눈빛이 제법 날카롭다.') });
       if (!k.unnamed && age === (c.adult || 16)) out.push({ icon: 'star', text: k.name + U.jx(k.name, '이/가') + ' 어른이 되었다. 이제 제독의 뒤를 이을 수 있다.' });
@@ -418,6 +419,26 @@
   };
 
   /** 뒤를 이을 수 있는 아이: 어른이 된 아들 (딸은 뒤를 잇지 않는다) */
+  /** 집안의 항해 일지로 기초를 배운다. 직접 교육한 능력은 이 기본 보장에 더해진다. */
+  F.prepareHeir = function (k) {
+    var c = G.BALANCE.voyagePlans, p = S().player;
+    k.sk = k.sk || {}; k.lg = k.lg || []; k.edu = k.edu || {};
+    k.st = k.st || inborn();
+    if (F.kidAge(k) < (cfg().adult || 16)) return k;
+    if (k.unnamed && !k.lost) { var names = F.names(k.sex).filter(function (n) { return n !== F.given(p) && !(p.kids || []).some(function (x) { return !x.unnamed && F.given(x) === n; }); }); F.setKidName(k, names[0] || F.names(k.sex)[0]); }
+    ['str', 'int', 'mar', 'cha'].forEach(function (id) { k.st[id] = Math.max(k.st[id] || 0, c.heirStat); });
+    ['nav', 'survey', 'hist', 'acct'].forEach(function (id) { k.sk[id] = Math.max(k.sk[id] || 0, c.heirSkill); });
+    k.lg[R.nativeLang(p.nation)] = 3; return k;
+  };
+  /** 결혼·출산 시기와 상관없이 성인 친족에게 가문의 항해를 맡길 수 있다. */
+  F.kinHeir = function () {
+    var p = S().player, c = G.BALANCE.voyagePlans;
+    if (p.kinHeir) return F.prepareHeir(p.kinHeir);
+    var given = F.names('m').filter(function (n) { return n !== F.given(p); })[0], surname = p.surname == null ? null : p.surname;
+    var k = { given: given, surname: surname, name: F.fullName(given, surname || ''), sex: 'm', kin: true, adopted: true,
+      born: { y: S().date.y - c.heirAge, m: S().date.m, d: S().date.d }, st: {}, sk: {}, lg: [], edu: {}, bond: 50, met: true };
+    p.kinHeir = k; return F.prepareHeir(k);
+  };
   F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && !k.lost && k.sex !== 'f' && F.kidAge(k) >= ad; }); };
 
   F.retire = async function (forced) {
@@ -437,7 +458,7 @@
     if (!forced) {
       var ok = await UI.confirm('제독의 자리에서 물러나 은퇴하겠습니까?' + (F.heirs().length ? '<br>어른이 된 아들에게 뒤를 잇게 할 수 있습니다.'
         : young ? '<br>맏아들 ' + F.kidName(young) + U.jx(F.kidName(young), '은/는') + ' 아직 ' + F.kidAge(young) + '세입니다. 열여섯 살이 될 때까지 약 ' + F.waitText(young) + ' 세월이 흐른 뒤, 그날 뒤를 잇습니다.'
-        : '<br><span class="warn-text">뒤를 이을 아들이 없으면 모험은 여기서 끝납니다.</span>'), '은퇴한다', '그만둔다');
+        : '<br>성인 친족에게 가문의 함대와 항해 기록을 맡겨 계속할 수도 있습니다.'), '은퇴한다', '그만둔다');
       if (!ok) return;
     }
     var heirs = F.heirs();
@@ -446,10 +467,20 @@
       if (i == null) i = 0;
       return F.succeed(heirs[i], forced);
     }
-    // 맏아들이 아직 어리면 열여섯 살이 될 때까지 세월이 흐른 뒤 뒤를 잇는다 · 아들이 하나도 없으면 모험이 끝난다
+    // 맏아들이 아직 어리면 열여섯 살이 될 때까지 세월이 흐른 뒤 뒤를 잇는다 · 아들이 없어도 성인 친족 계승을 선택할 수 있다
     young = F.minorSon();
-    if (young) return F.regency(young, forced);
-    return G.Ending.show(forced ? 'death' : 'retire');
+    return F.continueFamily(young, forced);
+  };
+
+  F.continueFamily = async function (young, forced) {
+    var next = await UI.choose('가문의 항해를 이어 갈 사람', [
+      { label: '성인 친족을 양자로 맞아 함대와 항해 기록을 맡긴다', value: 'kin' },
+      young ? { label: '어린 아들이 자랄 때까지 기다린다 (' + F.waitText(young) + ')', value: 'wait' } : null,
+      { label: '이 제독의 이야기로 마친다', value: 'end' }
+    ].filter(Boolean), { width: 620, cancel: false });
+    if (next === 'end') return G.Ending.show(forced ? 'death' : 'retire');
+    if (next === 'wait' && young) return F.regency(young, forced);
+    return F.succeed(F.kinHeir(), forced);
   };
 
   /* 어린 맏아들의 계승 (2026-10-25 사용자 요청)
@@ -457,7 +488,7 @@
      · 맏아들(가장 먼저 태어난 아들 — 둘째 부인의 아들도 셈한다, 섬에서 사라진 아이는 빼고)이 열여섯 살이 되는 날까지 세월이 그냥 흐른다.
        그동안 함대는 고향 항구에 닻을 내리고(급료·선실 충성은 멈춘다 — js/systems/world.js s.regency), 세상은 그대로 움직인다(역사·경쟁자·시세·조약…).
      · 그날 맏아들이 뒤를 잇는다(F.succeed) — 이름이 없던 갓난아기면 집안 어른들이 이름을 지어 둔다.
-     · 아들이 하나도 없으면 예전처럼 모험이 끝난다. */
+     · 아들이 하나도 없으면 성인 친족을 양자로 맞아 계속할 수 있다. */
   F.minorSon = function () {
     var ad = cfg().adult || 16;
     return S().player.kids.filter(function (k) { return !k.lost && k.sex !== 'f' && (k.unnamed || F.kidAge(k) < ad); })
@@ -510,7 +541,7 @@
     if (k.lost || F.kidAge(k) < ad) {   // 기다리는 동안 아이를 잃었다면 다음 아들 · 없으면 끝
       var next = F.heirs()[0] || F.minorSon();
       if (next && next !== k) return next.unnamed || F.kidAge(next) < ad ? F.regency(next, forced) : F.succeed(next, forced);
-      return G.Ending.show(forced ? 'death' : 'retire');
+      return F.continueFamily(null, forced);
     }
     var news = []; for (var ni = 0, nn = Math.min(6, hist.length); ni < nn; ni++) news.push(hist[Math.floor((ni + 0.5) * hist.length / nn)]);   // 흐른 세월 전체에서 고르게 몇 가지
     await UI.alert(U.fmtDate(from) + '부터 ' + U.fmtDate(s.date) + '까지, 세월이 흘렀다.<br><b>' + k.name + U.jx(k.name, '이/가') + ' 열여섯 살이 되었다.</b>' +
@@ -575,12 +606,13 @@
 
   F.succeed = async function (k, forced) {
     var s = S(), p = s.player;
+    F.prepareHeir(k);
     var sur = await F.askSurname();   // 뒤를 잇는 아이는 아버지의 성을 그대로 (옛 일지면 이때 한 번 묻는다 — 지금 제독·아이들 이름에도 붙는다)
     var old = p.name;
     G.State.log(old + U.j(old, '이/가').slice(old.length) + ' 은퇴하고 ' + k.name + U.j(k.name, '이/가').slice(k.name.length) + ' 뒤를 이었다.');
     // 아버지와의 사이가 물려받는 것을 정한다 — 가까울수록 명성(40~70%)과 특기(절반~3/4)를 많이, 견습으로 함께 다닌 해만큼 더
     var bd = F.bond(k), sea = k.sea || 0, c = cfg();
-    var fameK = Math.min(0.8, 0.4 + 0.3 * bd / 100 + (sea >= 12 ? 0.05 : 0)), skK = bd >= 70 ? 0.75 : bd >= 40 ? 0.5 : 0.35;
+    var fameK = Math.max(G.BALANCE.voyagePlans.inheritFame, Math.min(0.8, 0.4 + 0.3 * bd / 100 + (sea >= 12 ? 0.05 : 0))), skK = Math.max(G.BALANCE.voyagePlans.inheritSkill, bd >= 70 ? 0.75 : bd >= 40 ? 0.5 : 0.35);
     // 아버지의 아내들은 모두 아버지를 따라간다 — 배에 타 있던 부하 출신 아내도 함대에서 내리고, 여급 출신 아내의 술집에는 새 여급이 (js/systems/maidswap.js)
     var wifeIds = (p.wife ? [p.wife] : []).concat((p.wives2 || []).map(function (w) { return w.id; }));
     var leftW = G.MaidSwap ? G.MaidSwap.retire(wifeIds) : [];

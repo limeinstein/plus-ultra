@@ -31,7 +31,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     G.UI.confirm = async (t) => { window.__said.push('Q|' + String(t).replace(/<[^>]+>/g, ' ')); return true; };
     G.UI.say = async () => true;
     G.UI.ask = async (t, ch) => (ch && ch[0] ? (ch[0].value !== undefined ? ch[0].value : 0) : null);
-    G.UI.choose = async (t, ch) => (ch && ch[0] ? (ch[0].value !== undefined ? ch[0].value : 0) : null);
+    G.UI.choose = async (t, ch) => t === '가문의 항해를 이어 갈 사람' ? (G.Family.minorSon() ? 'wait' : 'end') : (ch && ch[0] ? (ch[0].value !== undefined ? ch[0].value : 0) : null);
     window.__end = null; G.Ending.show = async (r) => { window.__end = r; return 'end'; };
   });
   try {
@@ -90,7 +90,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await newGame();
     await stubUI();
     const c1 = await page.evaluate(async () => { const s = G.Game.state; s.player.kids = [{ name: '이네스', sex: 'f', born: { y: s.date.y - 3, m: 1, d: 1 }, sk: {}, lg: {}, st: {}, edu: {} }]; const y = s.date.y; await G.Family.retire(false); return { end: window.__end, same: s.date.y === y, said: window.__said.join('\n') }; });
-    ok(c1.end === 'retire' && c1.same && /뒤를 이을 아들이 없으면/.test(c1.said), '뒤를 이을 아들이 없으면 예전처럼 모험이 끝난다');
+    ok(c1.end === 'retire' && c1.same && /성인 친족/.test(c1.said), '친족 계승 대신 이야기 마치기를 직접 고르면 끝난다');
 
     // ④ 어른이 된 아들이 있으면 예전처럼 바로 잇는다
     await newGame();

@@ -111,6 +111,7 @@
       out.push({ kind: 'mansion', arg: sid, name: C.mansionName(sp), icon: 'mansion' });
     });
     if (f.guild) out.push({ kind: 'guild', name: '조합', icon: 'seal' });
+    if (G.Company) G.Company.buildings(c).forEach(function (x) { out.push(x); });   // 특허 회사: 본부·상관·거래소 (js/systems/company.js)
     if (G.Tudor && G.Tudor.buildings) G.Tudor.buildings(c).forEach(function (x) { out.push(x); });   // 런던 탑 (메리 1세 시절 — js/systems/tudor.js)
     if (G.Court && G.Court.buildingsAt) G.Court.buildingsAt(c.id).forEach(function (x) {
       var info = x.kind === 'museum' ? ['왕립 박물관', 'bust'] : x.kind === 'gallery' ? ['왕립 미술관', 'palette'] : ['왕립 동물원', 'horse'];
@@ -201,6 +202,8 @@
       if (G.OttoEu && G.OttoEu.pending()) await G.OttoEu.check();   // 오스만과 유럽의 다툼 — 빈 포위·호르무즈·무스카트·칼렌베르크·카를로비츠 (js/systems/ottomaneurope.js)
       if (G.Afr17 && G.Afr17.pending()) await G.Afr17.check();   // 17세기 아프리카 — 곤다르(악숨)·케이프·음빌라 뒤 루안다·몸바사 포위 (js/systems/africa17.js)
       if (G.EIndia && G.EIndia.pending()) await G.EIndia.check();   // 동인도 회사 — 런던·암스테르담의 설립과 수왈리·자야카르타·반다·암보이나의 위기 (js/systems/eastindia.js)
+      if (G.ColonyCo && G.ColonyCo.pending()) await G.ColonyCo.check();   // 식민지 경쟁의 회사들 — 서인도 회사·프랑스 동인도 회사·신스웨덴·다리엔 청약 (js/systems/colonyco.js)
+      if (G.Rovers && G.Rovers.pending()) await G.Rovers.check();   // 메이플라워(물자·첫 겨울·왐파노아그·추수 잔치) · 한양의 박연 (js/systems/rovers.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -266,6 +269,7 @@
     if (G.Court) { try { await G.Court.arrival(c); } catch (e) { console.error(e); } }
     if (G.Romance) { try { await G.Romance.arrival(c); } catch (e) { console.error(e); } }   // 부하들 사이의 썸 — 혼례는 항구에서
     if (G.Escort) { try { await G.Escort.arrival(c); } catch (e) { console.error(e); } }   // 호위하는 상인이 물건을 싣거나, 팔고 몫을 준다
+    if (G.Company) { try { await G.Company.arrival(c, arg); } catch (e) { console.error(e); } }   // 특허 회사: 세관 · 귀환 대선단 · 상관 건설 (js/systems/company.js)
     if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }
     if (G.Glory) { try { await G.Glory.arrival(c); } catch (e) { console.error(e); } }   // 명예혁명: 암스테르담(오라녜 공) · 런던(제임스 2세·권리 선언) · 프랑스 항구(망명)
     if (G.Sky) { try { await G.Sky.arrival(c); } catch (e) { console.error(e); } }   // 하늘을 재는 사람들: 단치히·뉘른베르크(코페르니쿠스) · 프라하(케플러) · 베니스·피렌체·로마·암스테르담(갈릴레이)
@@ -364,6 +368,7 @@
         if (dt.length) out.push({ kind: 'trade', icon: 'scroll', hot: true, text: dt[0].who + '에게서 빚을 받아 낸다 (교역소)' });
       }
       if (G.Escort && f.trade) out = out.concat(G.Escort.todo(c));   // 교역소에서 호위를 청하는 상인
+      if (G.Company) out = out.concat(G.Company.todo(c));   // 특허 회사: 주문서 납품 · 임무 보고 · 승진 심사
       if (G.WangMoon && G.WangMoon.todo) out = out.concat(G.WangMoon.todo(c));
       if (G.Princess && f.palace) out = out.concat(G.Princess.todo(c));
       if (G.Medici) out = out.concat(G.Medici.todo(c));   // 메디치 은행의 위기: 빚쟁이 · 잉글랜드 국왕 · 로렌초에게 전한다

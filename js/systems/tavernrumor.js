@@ -65,7 +65,7 @@
     var s = S(), n = num(B().n, 3), days = num(B().days, 30);
     var all = s.tavernRumor || (s.tavernRumor = {}), p = all[c.id];
     if (!p || s.day - p.d >= days || s.day < p.d) p = all[c.id] = { d: s.day, ids: [] };
-    p.ids = p.ids.filter(function (id) { return G.DISC[id] && !G.Disc.foundByMe(id) && !(G.Disc.taken && G.Disc.taken(id)); });
+    p.ids = p.ids.filter(function (id) { return G.DISC[id] && !G.Disc.foundByMe(id); });
     if (p.ids.length < n) fill(c, p, n);
     return p;
   };
@@ -87,7 +87,7 @@
     var s = S();
     return TR.specialsAt(c).filter(function (t) {
       var d = G.DISC[t.disc];
-      return d && !G.Disc.foundByMe(d.id) && !(G.Disc.taken && G.Disc.taken(d.id)) && G.Disc.available(d) && !hasEv(t);
+      return d && !G.Disc.foundByMe(d.id) && G.Disc.available(d) && !hasEv(t);
     })[0] || null;
   };
   TR.evPrice = function (t) { return Math.round((t.ev.price || 800) * num(B().evK, 1)); };

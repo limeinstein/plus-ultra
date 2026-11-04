@@ -781,6 +781,8 @@
     // 사라진 왕녀: 레반트의 바르바리 해적 함대·홍해 요새의 함대 (js/systems/princess.js)
     if (G.Princess) { var prN = G.Princess.spawn(st.npcs); if (prN) { st.npcs.push(prN); if (G.ShipSprite) G.ShipSprite.want(prN.ships, true); return; } }
     // 여급의 귀띔: 그 앞바다에 들어서면 일러 준 상선대·군함대·해적이 나타난다 (js/systems/maidtip.js)
+    // 특허 회사의 임무: 밀수선·경쟁사 무장 상선 · 귀환 선단을 노리는 습격대 · 경쟁사의 큰 화물선 (js/systems/company.js)
+    if (G.Company) { var coN = G.Company.spawn(st.npcs); if (coN) { st.npcs.push(coN); if (G.ShipSprite) G.ShipSprite.want(coN.ships, true); return; } }
     if (G.MaidTip) { var mtN = G.MaidTip.spawn(st.npcs); if (mtN) { st.npcs.push(mtN); if (G.ShipSprite) G.ShipSprite.want(mtN.ships, true); return; } }
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
@@ -884,6 +886,7 @@
     if (n.war && G.Rel) text = G.Rel.encounterText(n) || text;   // 제독의 나라와 전쟁 중인 나라의 군함 (js/systems/relations.js)
     if (n.princess && G.Princess) text = G.Princess.encounterText(n) || text;   // 사라진 왕녀   // 왕명: 왕녀를 붙잡아 간 해적단
     if (n.cap && G.Captains) text = G.Captains.encounterText(n, text, byMe) || text;   // 이름난 해적의 해적단 (seacaptains.js)
+    if (n.co && G.Company) text = G.Company.encounterText(n) || text;   // 특허 회사의 임무와 얽힌 배
     // 회피는 전투의 실패가 아니라 따로 고르는 운영 선택이다 — 가능성을 미리 보여 준다
     var fleeP = U.clamp(0.35 + (R.fleetSpeed(S().loc.heading, curWind()) - n.spd) * 0.5 + R.skill('nav') * 0.08, 0.1, 0.9);
     var opts = [{ label: '싸운다', value: 'fight' }, { label: '도망친다 (약 ' + Math.round(fleeP * 100) + '%)', value: 'flee' }];
@@ -911,12 +914,12 @@
       UI.toast('줄 돈이 없다!', 'coin'); v = 'fight';
     }
     if (v === 'flee') {
-      if (U.chance(fleeP)) { UI.toast('간신히 따돌렸다!', 'sail'); n.cooldown = 4; n.fled = true; n.heading += Math.PI; goOnAfter(wasSailing); return; }
+      if (U.chance(fleeP)) { UI.toast('간신히 따돌렸다!', 'sail'); n.cooldown = 4; n.fled = true; n.heading += Math.PI; if (G.Company) G.Company.fled(n); goOnAfter(wasSailing); return; }
       UI.toast('따라잡혔다! 싸울 수밖에 없다!', 'sword');
     }
     // battle
     if (!byMe && n.kind !== 'pirate') s.player.notoriety += 0;
-    if (byMe && n.kind !== 'pirate' && !(G.Court && G.Court.lawful(n))) s.player.notoriety += n.kind === 'navy' ? 12 : 8;   // 왕명으로 치는 적국의 배는 악명이 오르지 않는다
+    if (byMe && n.kind !== 'pirate' && !(G.Court && G.Court.lawful(n)) && !(G.Company && G.Company.lawful(n))) s.player.notoriety += n.kind === 'navy' ? 12 : 8;   // 왕명으로 치는 적국의 배는 악명이 오르지 않는다
     if (byMe && G.SeaFolk) G.SeaFolk.attacked(n);   // 먼저 공격하면 그 나라의 적대가 오른다
     st.npcs.splice(st.npcs.indexOf(n), 1);
     await UI.fade(function () { G.Game.go('battle', { npc: n }); });
@@ -942,7 +945,7 @@
       if (G.SeaFolk && G.SeaFolk.canTalk(n)) opts.unshift({ label: '선장과 이야기한다', value: 'talk' });
       if (n.kind === 'merchant') opts.push({ label: '식량·물을 산다', value: 'buy' });
       opts.push({ label: '공격한다', value: 'attack' }, { label: '인사만 하고 지나간다', value: null });
-      var v = await UI.ask((G.SeaFolk && G.SeaFolk.greet(n)) || (n.kind === 'merchant' ? '상선' : '함대') + '이 신호에 답했다. "좋은 바람이오! 무슨 일이오?"', opts, who);
+      var v = await UI.ask((G.Company && G.Company.greet(n)) || (G.SeaFolk && G.SeaFolk.greet(n)) || (n.kind === 'merchant' ? '상선' : '함대') + '이 신호에 답했다. "좋은 바람이오! 무슨 일이오?"', opts, who);
       if (v === 'talk') await G.SeaFolk.talk(n, who);
       else if (v === 'news') {
         if (n.talked) { await UI.say('더 해 줄 이야기는 없소. 좋은 항해 되시오.', who); }
@@ -1609,6 +1612,8 @@
       if (G.Glory && G.Glory.seaPending()) await G.Glory.atSea();   // 영국 해협: 개신교의 바람 (js/systems/glory.js)
       if (G.OttoEu && G.OttoEu.seaPending()) await G.OttoEu.atSea();   // 프레베자 앞바다: 바르바로사와 신성 동맹 (js/systems/ottomaneurope.js)
       if (G.WangMerch && G.WangMerch.seaPending()) await G.WangMerch.atSea();   // 중국 근해: 마대인과 딸 지나의 금봉호 (js/systems/wangmerchant.js)
+      if (G.ColonyCo && G.ColonyCo.seaPending()) await G.ColonyCo.atSea();   // 트랑케바르·퐁디셰리·토바고·다리엔 앞바다 (js/systems/colonyco.js)
+      if (G.Rovers && G.Rovers.seaPending()) await G.Rovers.atSea();   // 스페르베르·하멜 · 해적(오말리·보니와 리드·검은 수염) (js/systems/rovers.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

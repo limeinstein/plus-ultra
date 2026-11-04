@@ -73,7 +73,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.galleass === 45000 && r.oarK === 0.8 && r.kora && Math.abs(r.kora.up - r.koraOar * 0.8) < 0.02, '갤리어스 45,000닢 · 코라코라 맞바람(노) ' + (r.kora && r.kora.up.toFixed(2)) + ' = 노 ' + r.koraOar + ' × 0.8');
     ok(r.items.join() === 'excalibur:250000,claymore:60000,shivablade:70000,runeblade:70000,paladin:90000,muramasa:80000,achilles:80000' && r.armor.k === 60 && r.armor.cap === 0.4, '엑스칼리버 25만 · 명검 6만~9만 · 갑옷 방어는 비율(최대 40%)');
     ok(r.after1.rival && r.after1.contract && r.after1.hint && /계약은 그대로/.test(r.after1.news), '경쟁자가 발표해도 맺은 계약과 그 단서는 그대로');
-    ok(r.after2.rival && !r.after2.hint && r.after2.taken && r.after2.addHint === false, '계약 없는 발견은 단서가 사라지고 새 단서도 안 붙는다');
+    ok(r.after2.rival && r.after2.hint && r.after2.taken, '계약 없는 발견도 경쟁자의 발표 기록이 재조사 단서로 남는다 (탐험 계획 2026-11-04)');
     ok(r.hit.indexOf('capegood') >= 0 && r.found.me && r.found.foundByMe, '발표된 아프리카 남단도 그 바다에 가면 뒤늦게 찾는다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
   } finally { await browser.close(); }

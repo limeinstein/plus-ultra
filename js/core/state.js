@@ -309,9 +309,11 @@
   };
   ST.deserialize = function (json) {
     var S = JSON.parse(json);
+    if (G.VoyagePlans) G.VoyagePlans.migrate(S);   // 옛 일지에서 지워졌던 경쟁자 발표 단서를 재조사 정보로 복구한다.
     if (G.TradeGoods) G.TradeGoods.migrate(S);     // 나뉜 교역품 (도자기 → 중국 도자기·유럽 도기 …)
     if (G.R && G.R.mergeItemList && S.player && S.player.items) G.R.mergeItemList(S.player.items);   // 같은 물건은 한 칸 (2026-10-20)
     if (G.R && G.R.mergeItemList) (S.mates || []).forEach(function (m) { if (Array.isArray(m.items)) G.R.mergeItemList(m.items); });
+    if (G.R && G.R.refundShipOverprice) { try { G.R.refundShipOverprice(S); } catch (e) { console.warn(e); } }   // 0.306~0.309의 비싼 배값 차액 (0.310, 한 번)
     if (G.applyShipBuffs && S.fleet) G.applyShipBuffs(S);     // 성능을 올린 배 종류(프리깃·플류트 2026-10-21)를 이미 가진 배에도
     if (G.Journal && G.Journal.migrate) { try { G.Journal.migrate(S); } catch (e) { console.warn(e); } }   // 일지 줄마다 등급 · 가문 줄 (한 번 — 2026-10-23)
     if (G.FamilyTree && G.FamilyTree.migrate) { try { G.FamilyTree.migrate(S); } catch (e) { console.warn(e); } }   // 옛 저장의 선대를 일지에서 한 번 찾아 s.lineage 에 (한 번)

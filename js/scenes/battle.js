@@ -1740,6 +1740,7 @@
       if (G.SeaFolk) G.SeaFolk.afterBattle(st.npc, res, lines);   // 탐험 함대를 꺾으면 그 항해가 한 해 늦어진다
       if (G.Captains) G.Captains.afterBattle(st.npc, res, st.ships, lines);   // 이름난 선장·해적의 기함을 나포하면 사로잡는다 (seacaptains.js)
       if (G.Court) G.Court.afterBattle(st.npc, res, st.ships, lines);   // 왕명: 나포·해적 토벌·왕녀 구출
+      if (G.Company) G.Company.afterBattle(st.npc, res, st.ships, lines);   // 특허 회사의 임무: 단속·선단 지키기·경쟁사 나포 (js/systems/company.js)
       if (G.Princess) G.Princess.afterBattle(st.npc, res, st.ships, lines);   // 사라진 왕녀: 레반트의 해적 함대·요새의 함대
       if (G.Napoleon) G.Napoleon.afterBattle(st.npc, res, st.ships, lines);   // 코르시카 바다의 소년 나폴레옹 (포격으로) · 사로잡힌 가족 (백병전으로) — js/systems/napoleon.js
       if (G.Rel) G.Rel.afterBattle(st.npc, res, lines);   // 큰 해전(무적함대·레판토)의 보상
@@ -1751,7 +1752,7 @@
       });
       s.player.gold += gold;
       var fame = st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateFameGain) || 25) * Math.max(1, st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length) : 10;   // 달아난 배는 치지 않는다
-      fame = G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !st.npc.great && !(G.Court && G.Court.lawful(st.npc))) s.player.notoriety += 5;   // 큰 해전(무적함대·레판토·제노바·아즈텍 호수)은 나라 편에 선 싸움 — 악명을 붙이지 않는다 (QA 2026-10-23)
+      fame = G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !st.npc.great && !(G.Court && G.Court.lawful(st.npc)) && !(G.Company && G.Company.lawful(st.npc))) s.player.notoriety += 5;   // 큰 해전(무적함대·레판토·제노바·아즈텍 호수)은 나라 편에 선 싸움 — 악명을 붙이지 않는다 (QA 2026-10-23)
       s.stats.sunk += st.ships.filter(function (b) { return b.side === 'en' && b.sunk; }).length;
       // 조합의 해적 퇴치 의뢰
       if (st.npc.kind === 'pirate' && G.Quest) {
@@ -1796,6 +1797,7 @@
       }
     }
     if (res !== 'win' && G.Princess) G.Princess.afterBattle(st.npc, res, st.ships, null);
+    if (res !== 'win' && G.Company) G.Company.afterBattle(st.npc, res, st.ships, null);   // 귀환 선단을 노린 습격에 지면 회사선을 잃는다
     if (res !== 'win' && st.npc.great && G.Rel) G.Rel.afterBattle(st.npc, res, null);   // 큰 해전에서 물러났다   // 사라진 왕녀: 놓친 함대는 며칠 뒤에 다시
     if (f.crew <= 0 && f.ships.length) f.crew = Math.max(3, Math.round(R.crewMin() * 0.3));
     G.Scenes.city.B.harbor.trimCrew && G.Scenes.city.B.harbor.trimCrew();
