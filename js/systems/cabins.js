@@ -21,8 +21,10 @@
 
   // ---------------------------------------------------------------- 방의 수와 기함 맞추기
   /** 이 배에서 고칠 수 있는 선실 수 (갑판·조타실·함장실·부관실·파수대는 따로 늘 있다) — 큰 배일수록 많다 */
-  CB.slots = function (sh) {
-    var t = sh && G.SHIP[sh.type]; if (!t) return 0;
+  CB.slots = function (sh) { return sh ? CB.slotsOf(sh.type) : 0; };
+  /** 선종의 선실 수 — 조선소의 배 고르기·기함 변경에서도 보여 준다 (2026-11-05 피드백 「살 때 선실 수를 알고 싶다」) */
+  CB.slotsOf = function (typeId) {
+    var t = G.SHIP[typeId]; if (!t) return 0;
     if (t.cabins != null) return t.cabins;
     var b = B();
     return U.clamp(Math.round((t.crew[1] + t.hp) / (b.slotDiv || 22)), b.slotMin || 2, b.slotMax || 16);
@@ -67,13 +69,34 @@
   };
   /** 사람을 두지 않는 방인가 (창고) */
   CB.noStaff = function (type) { var c = G.CABIN[type]; return !!(c && c.noStaff); };
-  /** 창고가 늘려 주는 짐칸(통): 기함만, 창고 한 칸마다 배 본래 적재량 × per, max칸까지 (G.BALANCE.cabins.store) */
+  /** 창고가 늘려 주는 짐칸(통) (G.BALANCE.cabins.store · storeOther)
+      · 기함: 창고 한 칸마다 배 본래 적재량 × per, max칸까지
+      · 기함이 아닌 배 (2026-11-05 피드백 — 대항해시대4처럼): 선실을 창고로 고친 만큼 한 칸마다 적재량 × storeOther.per, 칸 수 제한 없음 */
   CB.storeBonus = function (sh) {
     var s = S(), f = s && s.fleet; if (!f || !f.ships.length) return 0;
-    sh = sh || f.ships[0]; if (sh !== f.ships[0] || !sh.cabins) return 0;
+    sh = sh || f.ships[0]; if (!sh || !sh.cabins) return 0;
     var t = G.SHIP[sh.type]; if (!t) return 0;
-    var k = B().store || {}, n = sh.cabins.filter(function (x) { return x === 'store'; }).length;
-    return Math.floor(t.cap * (k.per != null ? k.per : 0.05) * Math.min(n, k.max != null ? k.max : 4));
+    var n = CB.storeCount(sh);
+    if (sh === f.ships[0]) { var k = B().store || {}; return Math.floor(t.cap * (k.per != null ? k.per : 0.05) * Math.min(n, k.max != null ? k.max : 4)); }
+    return CB.otherStoreBonus(sh, n);
+  };
+  /** 기함이 아닌 배에서 창고 n칸이 늘려 주는 짐칸(통) */
+  CB.otherStoreBonus = function (sh, n) {
+    var t = sh && G.SHIP[sh.type]; if (!t) return 0;
+    var k = B().storeOther || {};
+    return Math.floor(t.cap * (k.per != null ? k.per : 0.03) * Math.max(0, Math.min(n, CB.slots(sh))));
+  };
+  /** 이 배의 창고 칸 수 */
+  CB.storeCount = function (sh) { if (!sh || !sh.cabins) return 0; var n = 0, m = CB.slots(sh) + 1; for (var i = 1; i < sh.cabins.length && i < m; i++) if (sh.cabins[i] === 'store') n++; return n; };
+  /** 기함이 아닌 배에서 부하가 머물 수 있는 선실 수 (창고로 고친 칸은 빠진다) */
+  CB.berths = function (sh) { return Math.max(0, CB.slots(sh) - CB.storeCount(sh)); };
+  /** 기함이 아닌 배의 선실을 창고 n칸으로 맞춘다 (값·날짜는 조선소가 치른다). 늘릴 때는 뒤쪽 칸부터, 줄일 때는 창고를 빈 선실로 */
+  CB.setStore = function (sh, n) {
+    var rooms = ensure(sh), cur = CB.storeCount(sh);
+    n = U.clamp(Math.round(n), 0, rooms.length - 1);
+    for (var i = rooms.length - 1; i >= 1 && cur < n; i--) if (rooms[i] !== 'store') { rooms[i] = 'store'; cur++; }
+    for (var j = 1; j < rooms.length && cur > n; j++) if (rooms[j] === 'store') { rooms[j] = 'hold'; cur--; }
+    return cur;
   };
   /** 창고 칸 수 (센 것 / 있는 것) */
   CB.storeRooms = function () { var sh = CB.flagship(), k = B().store || {}, n = sh && sh.cabins ? sh.cabins.filter(function (x) { return x === 'store'; }).length : 0; return { n: n, used: Math.min(n, k.max != null ? k.max : 4) }; };

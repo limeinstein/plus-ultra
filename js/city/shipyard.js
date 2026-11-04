@@ -110,10 +110,17 @@
       '<div class="traits"><span class="trait lvchip">' + t.lv + '등급</span>' + SH().traitChips(t) + '<span class="cult">' + G.SHIP_CULT[t.cult] + '의 배' + (foreign ? ' · 이 고장 배가 아님(값 +20%)' : '') + '</span></div>' +
       '<div class="muted" style="margin:4px 0 8px;font-size:16px">' + t.desc + '</div>' +
       '<div class="kv" style="font-size:16px;grid-template-columns:auto 1fr auto 1fr auto 1fr"><div>적재량</div><div>' + t.cap + '통</div><div>내구력</div><div>' + hpWith(t, lw) + (hpWith(t, lw) !== t.hp ? ' <small class="muted">(기본 ' + t.hp + ')</small>' : '') + '</div><div>선원</div><div>' + t.crew[0] + '~' + t.crew[1] + '명</div>' +
-      '<div>포문</div><div>' + t.ports + '문</div><div>돛</div><div>' + t.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k]; }).join('·') + '</div><div>속도</div><div>' + stars(t.spd) + '</div>' + upwindCell(t) + (t.oar ? '<div>노</div><div>' + stars(t.oar + 0.35) + '</div>' : '') + '</div>' +
+      '<div>포문</div><div>' + t.ports + '문</div><div>돛</div><div>' + t.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k]; }).join('·') + '</div><div>속도</div><div>' + stars(t.spd) + '</div>' + upwindCell(t) + (t.oar ? '<div>노</div><div>' + stars(t.oar + 0.35) + '</div>' : '') + cabinCell(id) + '</div>' +
       '<div class="muted small">권장 여유자금 약 ' + U.num(Math.round(Y.priceOf(c, id) * G.BALANCE.commerce.operatingReserve)) + '닢 (화물·보급·급료 준비, 실제 비용은 항로·선원에 따라 다릅니다)</div>' +
       (lock ? '<div class="warn-text" style="margin-top:6px">' + G.icon('seal') + lock + '</div>' : '') +
       '</div></div>';
+  }
+  /** 선실 칸 수 — 기함으로 쓸 때 부하를 둘 방 (지금 기함보다 적으면 붉게) · 2026-11-05 피드백 */
+  function cabinCell(id) {
+    var CBx = G.Cabins; if (!CBx || !CBx.slotsOf) return '';
+    var n = CBx.slotsOf(id), fl = S().fleet.ships[0], m = fl ? CBx.slots(fl) : 0, d = n - m;
+    var cmp = !fl ? '' : d < 0 ? ' <small class="warn-text">(기함 ' + U.esc(fl.name) + '호보다 ' + (-d) + '칸 적음)</small>' : d > 0 ? ' <small class="good-text">(기함보다 ' + d + '칸 많음)</small>' : ' <small class="muted">(기함과 같음)</small>';
+    return '<div title="기함으로 쓰면 부하를 배치할 방 수 · 종선이면 창고로 고쳐 짐칸을 늘릴 수 있다">선실</div><div>' + n + '칸' + cmp + '</div>';
   }
   Y.buy = async function (c) {
     var s = S(), types = Y.types(c);
@@ -272,9 +279,12 @@
         { label: '선수상', right: sh.fig ? G.FIGUREHEAD[sh.fig].name : '없음', value: 'fig', icon: 'feather', thumb: G.Img.figureheadSrc(sh.fig), desc: sh.fig && G.FigFx ? G.FigFx.short(G.FIGUREHEAD[sh.fig]) : '' },
         { label: '선체 다시 짓기 (목재)', right: (SH().wood(sh) || { name: '보통 목재' }).name, value: 'wood', icon: 'hammer' },
         { label: '선명 변경', right: sh.name, value: 'name', icon: 'scroll' }
-      ].concat(sh === s.fleet.ships[0] && G.CabinView ? [{ label: '선실 개조', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }] : []), { width: 600, text: '소지금 ' + U.num(s.player.gold) + '닢' });
+      ].concat(sh === s.fleet.ships[0] && G.CabinView ? [{ label: '선실 개조', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }]
+        : G.Cabins && G.Cabins.setStore ? [{ label: '선실 → 창고 개조', right: '창고 ' + G.Cabins.storeCount(sh) + '/' + G.Cabins.slots(sh) + '칸 · 짐칸 +' + U.num(G.Cabins.otherStoreBonus(sh, G.Cabins.storeCount(sh))) + '통', value: 'store', icon: 'chest',
+            desc: '기함이 아닌 배의 선실을 창고로 고쳐 짐칸을 늘린다 (한 칸마다 적재량의 ' + Math.round(storeK().per * 100) + '%). 창고로 고친 칸에는 부하가 머물지 않는다.' }] : []), { width: 600, text: '소지금 ' + U.num(s.player.gold) + '닢' });
       if (v == null) return;
       if (v === 'cabin') await G.CabinView.open({ yard: c });
+      else if (v === 'store') await refitStore(c, sh);
       else if (v === 'gun') await refitGuns(c, sh);
       else if (v === 'sail') await refitSails(c, sh);
       else if (v === 'rig') await refitRig(c, sh);
@@ -302,7 +312,7 @@
         }).join('') + '</table>';
       var need = function () { if (!sel.some(Boolean)) { UI.toast('개조할 배를 하나 이상 고르십시오.', 'info'); return false; } };
       var v = await UI.window({ title: '여러 척 한꺼번에 개조 — 소지금 ' + U.num(s.player.gold) + '닢', icon: 'gear', width: 940, html: html, buttons: [
-        { label: '돛 일괄 변경', value: 'sail', onClick: need }, { label: '대포 일괄 변경', value: 'gun', onClick: need }, { label: '삭구 일괄 개량', value: 'rig', onClick: need }, { label: '돌아간다', value: null, cls: 'navy' }],
+        { label: '돛 일괄 변경', value: 'sail', onClick: need }, { label: '대포 일괄 변경', value: 'gun', onClick: need }, { label: '삭구 일괄 개량', value: 'rig', onClick: need }, { label: '선실 → 창고', value: 'store', onClick: need }, { label: '돌아간다', value: null, cls: 'navy' }],
         onBuild: function (el) {
           U.$$('.ypick', el).forEach(function (cb) { cb.onclick = function (e) { e.stopPropagation(); sel[+cb.dataset.i] = cb.checked; }; });
           U.$$('tr.click', el).forEach(function (tr) { tr.onclick = function () { var k = +tr.dataset.i, cb = tr.querySelector('.ypick'); sel[k] = !sel[k]; cb.checked = sel[k]; }; });
@@ -310,7 +320,7 @@
       if (!v) return;
       var ships = all.filter(function (x, k) { return sel[k]; });
       if (!ships.length) continue;
-      if (v === 'sail') await batchSails(c, ships); else if (v === 'gun') await batchGuns(c, ships); else if (v === 'rig') await batchRig(c, ships);
+      if (v === 'sail') await batchSails(c, ships); else if (v === 'gun') await batchGuns(c, ships); else if (v === 'rig') await batchRig(c, ships); else if (v === 'store') await batchStore(c, ships);
     }
   };
   /** 배마다 할 일을 보여 주고 묻는다 — lines: [{sh, text, cost, skip}] */
@@ -531,6 +541,58 @@
     sh.spdMod = (sh.spdMod || 0) - (old ? old.spd : 0) + w.spd;
     sh.maxHp = Math.max(1, Math.round(t.hp * w.hp)); sh.hp = Math.max(1, Math.round(sh.maxHp * ratio)); sh.wood = o.id;
     UI.toast(sh.name + '호를 ' + w.name + U.jx(w.name, '으로/로') + ' 다시 지었다. (내구력 ' + sh.maxHp + ')', 'hammer');
+  }
+  // ---------------------------------------------------------------- 기함이 아닌 배의 선실 → 창고 (2026-11-05 피드백 — 대항해시대4처럼)
+  // 한 칸마다 값 G.CABIN.store.cost, 공사 날 store.days × storeOther.daysK. 창고를 빈 선실로 되돌리는 것은 값이 들지 않는다.
+  // 기함은 「선실 개조」 화면에서 방마다 고친다 (창고는 4칸까지 센다). 이 배가 나중에 기함이 되면 창고 칸은 그대로 창고다.
+  function storeK() { var b = (G.BALANCE.cabins || {}), o = b.storeOther || {}, c0 = G.CABIN.store || {}; return { per: o.per != null ? o.per : 0.03, cost: c0.cost || 1200, days: (c0.days || 2) * (o.daysK != null ? o.daysK : 0.5) }; }
+  function storeDays(n) { return n > 0 ? Math.max(1, Math.ceil(n * storeK().days)) : 0; }
+  /** 창고를 to칸으로 맞추면: 값·날·짐칸 변화·쫓겨날 부하 수 */
+  function storePlan(sh, to) {
+    var CBx = G.Cabins, cur = CBx.storeCount(sh), add = Math.max(0, to - cur), k = storeK();
+    var dCap = CBx.otherStoreBonus(sh, to) - CBx.otherStoreBonus(sh, cur);
+    var lodgers = G.CrewAuto ? G.CrewAuto.crewOf(sh).cabin.length : 0, berths = CBx.slots(sh) - to;
+    return { cur: cur, to: to, add: add, cost: add * k.cost, days: storeDays(add), dCap: dCap, out: Math.max(0, lodgers - berths) };
+  }
+  function storeApply(list) {
+    var s = S(), days = 0;
+    list.forEach(function (x) { G.Cabins.setStore(x.sh, x.p.to); s.player.gold -= x.p.cost; days = Math.max(days, x.p.days); });
+    if (R.tidyCaptains) R.tidyCaptains();
+    if (G.CrewAuto && G.CrewAuto.refresh) G.CrewAuto.refresh();
+    G.Game.refreshHud && G.Game.refreshHud();
+    return days;
+  }
+  async function refitStore(c, sh) {
+    var s = S(), CBx = G.Cabins, N = CBx.slots(sh), cur = CBx.storeCount(sh), k = storeK();
+    if (sh === s.fleet.ships[0]) return;
+    var n = await UI.number({ title: sh.name + '호 — 선실을 창고로 (한 칸 ' + U.num(k.cost) + '닢)', min: 0, max: N, value: N, unit: '칸',
+      text: G.SHIP[sh.type].name + '의 선실 ' + N + '칸 가운데 몇 칸을 창고로 쓸지 정하십시오. 지금 창고 ' + cur + '칸.<br><small class="muted">창고 한 칸마다 짐칸이 적재량(' + U.num(G.SHIP[sh.type].cap) + '통)의 ' + Math.round(k.per * 100) + '%씩 늡니다. 무게 한도는 그대로입니다. 창고로 고친 칸에는 부하가 머물지 않고, 창고를 빈 선실로 되돌리는 데는 돈이 들지 않습니다.</small>',
+      info: function (v) { var p = storePlan(sh, v); return '짐칸 ' + (p.dCap >= 0 ? '+' : '') + U.num(p.dCap) + '통 · ' + (p.cost ? '금화 ' + U.num(p.cost) + '닢 · 공사 ' + p.days + '일' : '비용 없음') + (p.out ? ' · <span class="warn-text">이 배 선실의 부하 ' + p.out + '명은 대기로</span>' : ''); } });
+    if (n == null || n === cur) return;
+    var p = storePlan(sh, n);
+    if (s.player.gold < p.cost) { await C.say(keeper(), '돈이 모자라는군.'); return; }
+    if (p.dCap < 0 && R.used() > R.fleetCap() + p.dCap) { await C.say(keeper(), '짐이 꽉 차 있어 창고를 뜯어낼 수 없네. 짐을 ' + U.num(Math.ceil(R.used() - R.fleetCap() - p.dCap)) + '통 덜어 내고 오게.'); return; }
+    if (p.cost && !(await UI.confirm(sh.name + '호의 선실 ' + p.add + '칸을 창고로 고치겠습니까? (금화 ' + U.num(p.cost) + '닢 · 공사 ' + p.days + '일 · 짐칸 +' + U.num(p.dCap) + '통)', '고친다', '그만둔다'))) return;
+    var days = storeApply([{ sh: sh, p: p }]);
+    if (days) await UI.fade(function () { G.Game.passDays(days); });
+    UI.toast(sh.name + '호 — 창고 ' + n + '/' + N + '칸 · 짐칸 ' + (p.dCap >= 0 ? '+' : '') + U.num(p.dCap) + '통', 'chest', 4200);
+    if (p.add) await C.say(keeper(), U.pick(['칸막이를 걷어 내고 선반을 짰네. 이제 그 배는 통째로 짐배일세.', '선실 자리에 고정 끈과 선반을 달았네. 짐이 꽤 더 들어갈 걸세.']));
+  }
+  async function batchStore(c, ships) {
+    var s = S(), list = ships.filter(function (sh) { return sh !== s.fleet.ships[0]; });
+    var lines = ships.map(function (sh) {
+      if (sh === s.fleet.ships[0]) return { sh: sh, cost: 0, skip: true, text: '기함은 「선실 개조」에서 방마다 고친다' };
+      var p = storePlan(sh, G.Cabins.slots(sh));
+      return { sh: sh, p: p, cost: p.cost, skip: !p.add, text: p.add ? '선실 ' + p.add + '칸 → 창고 (창고 ' + p.to + '칸) · 짐칸 +' + U.num(p.dCap) + '통 · ' + p.days + '일' + (p.out ? ' · 부하 ' + p.out + '명 대기로' : '') : '이미 모든 선실이 창고' };
+    });
+    var todo = lines.filter(function (l) { return !l.skip; });
+    if (!todo.length) { await C.say(keeper(), list.length ? '고른 배들은 선실이 이미 모두 창고일세.' : '기함의 선실은 「선실 개조」에서 방마다 고치게.'); return; }
+    var pc = planConfirm('선실 → 창고 — 기함이 아닌 배의 선실을 모두 창고로', lines);
+    if (s.player.gold < pc.tot) { await C.say(keeper(), '돈이 모자라는군. 모두 금화 ' + U.num(pc.tot) + '닢이 드네.'); return; }
+    if (!(await pc.ask())) return;
+    var days = storeApply(todo);
+    if (days) await UI.fade(function () { G.Game.passDays(days); });
+    await batchDone('선실 → 창고', todo.map(function (l) { return l.sh; }), []);
   }
   async function refitPorts(c, sh) {
     var s = S(), t = G.SHIP[sh.type], price = 250;

@@ -1,5 +1,5 @@
 /* 2026-10-28 피드백
-   ① 로코 알베르티: 술집 부하편성에서 해고할 수 없다는 말 — 지금 부관이 다른 사람이면 그 사람 얼굴·이름이 뜨던 것 → 로코 자신이 말한다
+   ① 라울 이니에스타: 술집 부하편성에서 해고할 수 없다는 말 — 지금 부관이 다른 사람이면 그 사람 얼굴·이름이 뜨던 것 → 라울 자신이 말한다
    ② 자택: 시집간 딸이 「가족」 이야기에 집에 있는 것처럼 나오고, 집을 비운 달마다 사이가 식는데 가까워질 방법이 없던 것
       → 시집간 딸은 집에 없고(가족 이야기·여관·가족 사건), 사이가 식지 않으며, 아내가 전하는 편지에 해마다 답장(사이 +6 · 선물 +12)
    ③ 「아직은 품에 두고 싶다」(k.wedNext)가 주석 안에 들어가 먹지 않던 것 */
@@ -24,7 +24,7 @@ const ROOT = path.resolve(__dirname, '..');
       G.State.newGame({ name: '시험', nation: 'PT', job: 'explorer', age: 24, birth: { m: 1, d: 1 }, st: { str: 70, int: 60, mar: 70, cha: 60 }, sk: {}, lg: [], diff: 'normal' });
       const s = G.Game.state, p = s.player, out = {}; s.settings.sound = 0; s.settings.music = 0;
       const said = []; G.UI.say = async (t, sp) => { said.push(((sp && sp.name) || '') + '|' + String(t).slice(0, 60)); };
-      // ① 다른 사람을 부관으로, 로코는 대기
+      // ① 다른 사람을 부관으로, 라울은 대기
       const other = G.MATES.find(m => m.id !== 'rocco' && !m.eventOnly && !m.tale && m.g === 'm');
       const rocco = s.mates.find(m => m.id === 'rocco'); rocco.role = 'none';
       s.mates.push({ id: other.id, role: 'first', loyal: 80, joined: 14800101 });
@@ -61,7 +61,7 @@ const ROOT = path.resolve(__dirname, '..');
       return out;
     });
     console.log(JSON.stringify(r, null, 2));
-    assert(r.rocco.said.length === 1 && /^로코 알베르티\|/.test(r.rocco.said[0]), '로코 자신이 말한다: ' + r.rocco.said.join(' / ') + ' (부관: ' + r.rocco.first + ')');
+    assert(r.rocco.said.length === 1 && /^라울 이니에스타\|/.test(r.rocco.said[0]), '라울 자신이 말한다: ' + r.rocco.said.join(' / ') + ' (부관: ' + r.rocco.first + ')');
     assert.strictEqual(r.rocco.still, true);
     assert.deepStrictEqual(r.home.kidsHome, ['주앙']); if (r.home.famev) assert.deepStrictEqual(r.home.famev, ['주앙']);
     assert.strictEqual(r.month.dau, 25, '시집간 딸은 사이가 식지 않는다'); assert(r.month.son < 50, '집에 있는 아이는 그대로 식는다');

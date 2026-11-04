@@ -69,7 +69,7 @@ def build(channel: str, no_minify: bool) -> None:
     if no_minify:
         command.append('--no-minify')
     if channel == 'beta':
-        command += ['--channel', 'beta', '--out', 'dist/web-beta', '--zip', 'dist/PLUS_ULTRA_web_beta.zip']
+        command += ['--channel', 'beta', '--out', 'dist/web-beta', '--zip', 'dist/Loop_of_Good_Hope_web_beta.zip']
     subprocess.run(command, cwd=ROOT, check=True)
 
 

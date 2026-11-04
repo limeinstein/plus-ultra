@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""게임을 파일 하나(PLUS_ULTRA.html)로 묶습니다. images 폴더의 교체 그림도 파일 안에 넣습니다.
+"""게임을 파일 하나(Loop_of_Good_Hope.html)로 묶습니다. images 폴더의 교체 그림도 파일 안에 넣습니다.
 
 사용법 (WebGame 폴더에서):
-    python tools/bundle.py                      # PLUS_ULTRA.html 다시 만들기
+    python tools/bundle.py                      # Loop_of_Good_Hope.html 다시 만들기
     python tools/bundle.py --artifact 폴더       # Claude 아티팩트용 게임(game.html)·도감(catalog.html)도 만들기
                                                 #   그림은 폴더/img/pack-NN-해시.js 묶음으로 따로 — 페이지를 열 때 읽지 않고, 그 묶음의 그림이 처음 필요할 때 읽는다
                                                 #   (그래서 화면 크기에 맞는 큰 그림(slim.HQ)을 쓸 수 있다. 한도는 아티팩트 한 판 256MB 안에서 PACK_BUDGET)
@@ -213,7 +213,7 @@ def image_packs(found, base, out_dir, places=None):
     out = []
     for i, (_, pk0, _) in enumerate(packs, 1):
         pk = {k: pages.data_uri(os.path.join(base or os.path.join(pages.ROOT, 'images'), found[k])) for k in pk0}
-        js = ('/* PLUS ULTRA 그림 묶음 %d/%d (tools/bundle.py가 만듦) */\nwindow.G = window.G || {};\n'
+        js = ('/* Loop of Good Hope 그림 묶음 %d/%d (tools/bundle.py가 만듦) */\nwindow.G = window.G || {};\n'
               'G.IMAGE_FILES = Object.assign(G.IMAGE_FILES || {}, %s);\n') % (i, len(packs), json.dumps(pk, ensure_ascii=False))
         rel = 'img/pack-%03d-%s.js' % (i, pages.short_hash(js))
         with open(os.path.join(out_dir, rel), 'w', encoding='utf-8', newline='\n') as f:
@@ -387,7 +387,7 @@ def main():
     import slim
     slim_dir = os.path.join(pages.ROOT, 'dist', 'slim-images')
     sfound = slim.build(found, slim_dir, 1.0)
-    if not os.environ.get('NO_SINGLE'): write(os.path.join(pages.ROOT, 'PLUS_ULTRA.html'), inline('index.html', sfound, False, base=slim_dir))
+    if not os.environ.get('NO_SINGLE'): write(os.path.join(pages.ROOT, 'Loop_of_Good_Hope.html'), inline('index.html', sfound, False, base=slim_dir))
     if '--artifact' in sys.argv:
         i = sys.argv.index('--artifact')
         out = sys.argv[i + 1] if i + 1 < len(sys.argv) else os.path.join(pages.ROOT, 'dist', 'artifact')

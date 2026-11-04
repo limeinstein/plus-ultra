@@ -36,8 +36,8 @@
   CA.idle = function (m) { return !!m && (!m.role || m.role === 'none') && m.room == null; };
   CA.others = function () { var s = S(); return s && s.fleet ? s.fleet.ships.slice(1) : []; };
   CA.shipByUid = function (uid) { var s = S(); return s && s.fleet ? s.fleet.ships.filter(function (x) { return x.uid === uid; })[0] || null : null; };
-  /** 이 배의 선실 수 (기함과 같은 셈 — 큰 배일수록 많다) */
-  CA.berths = function (sh) { return CB() && sh ? CB().slots(sh) : 0; };
+  /** 이 배의 선실 수 (기함과 같은 셈 — 큰 배일수록 많다). 창고로 고친 칸은 사람이 머물지 않는다 (2026-11-05) */
+  CA.berths = function (sh) { return CB() && sh ? (CB().berths ? CB().berths(sh) : CB().slots(sh)) : 0; };
   /** 이 배의 사람들 {captain, helm, deck, lookout, cabin: [..]} */
   CA.crewOf = function (sh) {
     var s = S(), o = { captain: null, helm: null, deck: null, lookout: null, cabin: [] };

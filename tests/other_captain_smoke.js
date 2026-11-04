@@ -26,7 +26,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = G.Game.state, R = G.R;
       s.fleet.ships.push(R.newShip('caravel', '비토리아'), R.newShip('carrack', '트리니다드'));
       s.fleet.crew = R.crewMin() + 10;
-      // 동료 다섯 (로코 + 넷)
+      // 동료 다섯 (라울 + 넷)
       const ids = Object.keys(G.MATE).filter(id => id !== 'rocco' && !s.mates.some(m => m.id === id)).slice(0, 4);
       ids.forEach(id => s.mates.push({ id, loyal: 80, role: 'none' }));
       G.CrewAuto.refresh();

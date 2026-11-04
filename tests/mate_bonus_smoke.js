@@ -34,7 +34,7 @@ const SHOTS = process.env.SHOT_DIR || '';
       out.menuLow = { dim: out.menuLow.dim, sub: out.menuLow.sub };
       await T.bonus(c);
       out.low = { gold: p.gold, said: said.slice() };
-      // 전원 보너스: 충성 100이 아닌 3명 (로코 70 · 20 · 60) → 20만 + 15만
+      // 전원 보너스: 충성 100이 아닌 3명 (라울 70 · 20 · 60) → 20만 + 15만
       p.gold = 1200000; said.length = 0; s.fleet.discipline = 50;
       out.cost = T.bonusAllCost();
       let n = 0; G.UI.choose = async (t, o) => (n++ === 0 ? 'all' : null);

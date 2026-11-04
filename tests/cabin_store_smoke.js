@@ -1,5 +1,6 @@
 /* 기함 선실 「창고」 — node tests/cabin_store_smoke.js   (BROWSER_EXE=크롬 경로)
-   · 창고 한 칸마다 기함 짐칸 + 배 적재량 × 5%, 4칸까지 (5칸째는 헛방) · 기함에만
+   · 창고 한 칸마다 기함 짐칸 + 배 적재량 × 5%, 4칸까지 (5칸째는 헛방)
+   · 비기함은 조선소에서 선실마다 적재량 × 3%, 모든 선실까지
    · 무게 한도는 그대로: 가벼운 짐(후추)은 더 싣고, 무거운 짐(광석)은 늘지 않는다
    · 창고에는 사람을 둘 수 없다 · 짐이 넘치면 창고를 다른 방으로 못 고친다 · 기함을 바꾸면 창고 몫은 새 기함 기준
    · 선실 화면: 카드에 「짐칸 +N통」, 함대 능력 판에 「기함 짐칸」 · 콘솔 오류 0 */
@@ -38,9 +39,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 사람을 둘 수 없다
       s.mates.push({ id: Object.keys(G.MATE)[5], role: 'none', loyal: 80 }); const m = s.mates[s.mates.length - 1];
       CB.place(m, 1); out.placed = m.room;
-      // 기함을 바꾸면: 새 기함에 창고가 없으면 몫이 사라진다
+      // 같은 창고 수라도 비기함 규칙은 3%씩, 기함 규칙은 5%씩 최대 네 칸이다
       const other = JSON.parse(JSON.stringify(sh)); other.uid = 'z2'; other.cabins = null; s.fleet.ships.push(other);
-      out.otherCap = R.shipCargoCap(other) === Math.floor(other.cap - R.gunLoad(other));
+      G.Cabins.setStore(other, 2);
+      out.otherBonus = R.shipCargoCap(other) - Math.floor(other.cap - R.gunLoad(other));
       s.fleet.ships.pop();
       // 짐을 가득 싣고 창고를 없애려 하면 화면에서 막는다
       s.fleet.cargo.pepper = { q: R.fleetCap() - 5, cost: 10, from: null, d: s.day };
@@ -53,7 +55,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.wtSame, '무게 한도는 그대로');
     ok(r.pep > 0 && r.ore === 0, '가벼운 후추는 ' + r.pep + '통 더, 무거운 철광석은 그대로 (' + r.ore + ')');
     ok(r.placed == null, '창고에는 사람을 둘 수 없다');
-    ok(r.otherCap, '기함이 아닌 배는 창고 몫이 없다');
+    ok(r.otherBonus === Math.floor(r.tcap * 0.03 * 2), '기함이 아닌 배는 창고 두 칸에 적재량 3%씩 (+' + r.otherBonus + '통)');
     await page.waitForFunction(() => G.Game.sceneName === 'city', null, { timeout: 30000 });
     await page.waitForTimeout(600);
     await page.evaluate(() => { window.__noRaf = true; G.CabinView.open({ yard: G.CITY_DATA[0] }); });

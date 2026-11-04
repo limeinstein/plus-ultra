@@ -466,7 +466,7 @@
       if (G.Legend) await G.Legend.onLand(l.lon, l.lat);
       if (G.Tale) await G.Tale.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 옛이야기의 아가씨들: 프랑스 숲의 신데렐라·백설공주 (js/systems/fairytales.js)
       if (G.TreasureHunt) await G.TreasureHunt.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 조합의 보물 지도: X 자리에 서면 판다 (js/systems/treasurehunt.js)
-      if (G.LittlePrince) await G.LittlePrince.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 어린 왕자의 지도: 사막 속 숨은 우물 (js/systems/littleprince.js)
+      if (G.LittlePrince) await G.LittlePrince.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 별에서 온 소년의 지도: 사막 속 숨은 우물 (js/systems/littleprince.js)
       if (G.Mowgli) await G.Mowgli.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 정글북: 델리 근처 숲의 바나나 도둑과 모글리 (js/systems/junglebook.js)
       if (G.Newton) await G.Newton.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 뉴턴과 사과: 링컨셔 울즈소프의 과수원 (js/systems/newton.js)
       if (G.Beauty) await G.Beauty.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 미녀와 야수: 장미를 지니고 보르네오 밀림을 걸으면 짐승 가면의 사내 (js/systems/beautybeast.js)
@@ -596,7 +596,7 @@
     refreshHud();
   }
   /** 모닥불 그림 (밤하늘·불꽃·둘러앉은 그림자) */
-  function drawCampfire(x, w, h, t, lon, o) {   // o.desert: 나무 대신 모래 언덕 (어린 왕자 — js/systems/littleprince.js)
+  function drawCampfire(x, w, h, t, lon, o) {   // o.desert: 나무 대신 모래 언덕 (별에서 온 소년 — js/systems/littleprince.js)
     var g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#070b1e'); g.addColorStop(0.7, '#1a1426'); g.addColorStop(1, '#2a160c'); x.fillStyle = g; x.fillRect(0, 0, w, h);
     var rng = U.makeRng(7);
     for (var i = 0; i < 90; i++) { var sx = rng() * w, sy = rng() * h * 0.6, tw = 0.5 + 0.5 * Math.sin(t * 2 + i); x.fillStyle = 'rgba(255,255,240,' + (0.25 + tw * 0.5) * rng() + ')'; x.fillRect(sx, sy, 1.5, 1.5); }
@@ -673,7 +673,7 @@
     return res;
   }
   L.landBattle = landBattle;
-  L.drawCampfire = drawCampfire;   // 모닥불 그림 — 어린 왕자의 캠프파이어 (js/systems/littleprince.js)
+  L.drawCampfire = drawCampfire;   // 모닥불 그림 — 별에서 온 소년의 캠프파이어 (js/systems/littleprince.js)
   L._test = { encounter: function (t) { return encounter(t); }, terrainEvent: function (t) { return terrainEvent(t); }, nativeGift: function (w) { return nativeGift(w); }, campfire: function (w) { return campfire(w); }, runDay: function () { return runDay(); }, camp: function () { return camp(); } };
 
   // ---------------------------------------------------------------- actions
@@ -785,7 +785,7 @@
       if (v && G.Tale && G.Game.scene === L && S().loc.mode === 'land') { await G.Tale.onCamp(v, l.lon, l.lat); refreshHud(); }
       // 스코틀랜드의 섬에서 약초를 캐면 피터 팬이 사라진 아이를 데려온다 (js/systems/peterpan.js)
       if (v && G.Peter && G.Game.scene === L && S().loc.mode === 'land') { await G.Peter.onCamp(v, l.lon, l.lat); refreshHud(); }
-      // 명성 7만 이상, 사막에서 정찰하면 — 배고픈 어린 왕자와 그가 말하는 우물의 지도 (js/systems/littleprince.js)
+      // 명성 7만 이상, 사막에서 정찰하면 — 배고픈 별에서 온 소년과 그가 말하는 우물의 지도 (js/systems/littleprince.js)
       if (v === 'scout' && G.LittlePrince && G.Game.scene === L && S().loc.mode === 'land') { await G.LittlePrince.onCamp(v, l.lon, l.lat); refreshHud(); }
       // 프랑스의 숲에서 약초를 찾으면 — 마녀로 몰린 오를레앙의 처녀 잔 (기함에 빈 예배실이 있을 때 · js/systems/joan.js)
       if (v === 'herb' && G.Joan && G.Game.scene === L && S().loc.mode === 'land') { await G.Joan.onCamp(v, l.lon, l.lat, !!st.herbFound); refreshHud(); }

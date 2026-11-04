@@ -12,16 +12,16 @@ python tools/images.py --list   # 쓸 수 있는 파일 이름 전체 목록
 ## bundle.py — 단일 파일 다시 만들기
 
 ```
-python tools/bundle.py                     # PLUS_ULTRA.html (교체 그림도 파일 안에 넣음)
+python tools/bundle.py                     # Loop_of_Good_Hope.html (교체 그림도 파일 안에 넣음)
 python tools/bundle.py --artifact 폴더      # Claude 아티팩트용 game.html · catalog.html 도 만들기
 ```
 
 ## build_web.py — 웹 배포판
 
 ```
-python tools/build_web.py              # dist/web 폴더 + dist/PLUS_ULTRA_web.zip
+python tools/build_web.py              # dist/web 폴더 + dist/Loop_of_Good_Hope_web.zip
 python tools/build_web.py --no-minify  # 코드를 줄이지 않고 묶기
-python tools/build_web.py --channel beta --out dist/web-beta --zip dist/PLUS_ULTRA_web_beta.zip
+python tools/build_web.py --channel beta --out dist/web-beta --zip dist/Loop_of_Good_Hope_web_beta.zip
 ```
 
 베타판에는 `web/beta-center/`의 공개 안내·피드백 게시판도 `center/` 경로로 함께 들어갑니다. 게시글과 답변은 GitHub Issues의 `beta-feedback` 표를 사용하므로, 배포 페이지에 비밀키를 넣지 않습니다.

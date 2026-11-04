@@ -27,7 +27,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForTimeout(2500);
     const r = await page.evaluate(async () => {
       const T = G.Scenes.city.B.tavern, me = T.playerSpeaker();
-      const who = { name: '로코 알베르티', portrait: G.Scenes.mateSpec('rocco'), half: ['portraits/mates/rocco_half'], layout: 'duo', side: 'right', partner: me, lang: 3 };
+      const who = { name: '라울 이니에스타', portrait: G.Scenes.mateSpec('rocco'), half: ['portraits/mates/rocco_half'], layout: 'duo', side: 'right', partner: me, lang: 3 };
       const p = G.UI.say('덕분에 무사히 왔소, 제독!', who);
       await new Promise(r => setTimeout(r, 1800));
       const acts = [...document.querySelectorAll('.dlg-actor.tall')].map(el => { const top = parseFloat(el.style.top), h = parseFloat(el.style.height); return { side: el.classList.contains('left') ? 'left' : 'right', top, h, w: parseFloat(el.style.width), bottom: top + h, fit: +el.dataset.fit, top0: +el.dataset.top0 }; });

@@ -44,7 +44,7 @@ Constraints: one person only; no text; no border; no frame; no watermark; no mod
 
 | 파일 | 이름 | 한 줄 |
 |---|---|---|
-| `portraits/mates/rocco_half` | 로코 알베르티 | 제노바 출신의 거친 뱃사람. 의리는 누구보다 두텁다. |
+| `portraits/mates/rocco_half` | 라울 이니에스타 | 제노바 출신의 거친 뱃사람. 의리는 누구보다 두텁다. |
 | `portraits/mates/duarte_half` | 두아르테 파셰쿠 페레이라 | 포르투갈의 뛰어난 항해가이자 지리학자. |
 | `portraits/mates/lacosa_half` | 후안 데 라 코사 | 바스크 출신의 지도 제작자. 누구보다 정확한 해도를 그린다. |
 | `portraits/mates/pinzon_m_half` | 마르틴 알론소 핀손 | 팔로스의 노련한 선장. 선원들의 신망이 두텁다. |

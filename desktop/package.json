@@ -1,8 +1,8 @@
 {
   "name": "plus-ultra",
-  "productName": "PLUS ULTRA",
+  "productName": "Loop of Good Hope",
   "version": "1.0.0",
-  "description": "PLUS ULTRA — Loop of Good Hope: 대항해 시대를 무대로 한 모험·교역·해전 게임",
+  "description": "Loop of Good Hope: 탐험과 발견의 시대(1480~1860)를 무대로 한 모험·교역·해전 게임",
   "author": "limeinstein",
   "license": "UNLICENSED",
   "private": true,
@@ -21,7 +21,7 @@
   },
   "build": {
     "appId": "io.github.limeinstein.plusultra",
-    "productName": "PLUS ULTRA",
+    "productName": "Loop of Good Hope",
     "copyright": "limeinstein",
     "asar": false,
     "files": [
@@ -45,7 +45,7 @@
         }
       ],
       "icon": "icon.png",
-      "artifactName": "PLUS-ULTRA-Setup-${version}.${ext}"
+      "artifactName": "Loop-of-Good-Hope-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -53,7 +53,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "PLUS ULTRA",
+      "shortcutName": "Loop of Good Hope",
       "deleteAppDataOnUninstall": false,
       "differentialPackage": true
     },

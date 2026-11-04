@@ -18,17 +18,19 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Audio && G.SFX_FILES, null, { timeout: 90000 });
+    await page.evaluate(() => G.Audio.loadPacks && G.Audio.loadPacks());   // 게임 전용 효과음 묶음 (sounds/nature.pack.js — 2026-11-04)
     const F = await page.evaluate(() => G.SFX_FILES);
+    const bank = await page.evaluate(() => Object.keys(G.SFX_BANK || {}).filter(k => k.indexOf('/') > 0));
     const files = [...new Set(Object.values(F.sets).flatMap(e => e.f).concat(Object.values(F.amb).map(e => e.f)))];
-    const all = ['rpg', 'nature'].flatMap(d => fs.readdirSync(path.join(ROOT, F.dir, d)).filter(f => /\.ogg$/.test(f)).map(f => d + '/' + f.replace(/\.ogg$/, '')));
+    const all = fs.readdirSync(path.join(ROOT, F.dir, 'rpg')).filter(f => /\.ogg$/.test(f)).map(f => 'rpg/' + f.replace(/\.ogg$/, '')).concat(bank);
     const unused = all.filter(f => files.indexOf(f) < 0);
     ok(!unused.length, '녹음 ' + all.length + '개(rpg ' + all.filter(f => /^rpg/.test(f)).length + ' · nature ' + all.filter(f => /^nature/.test(f)).length + ')를 모두 어딘가에 쓴다' + (unused.length ? ' — 안 씀: ' + unused.join(', ') : ''));
     ok(fs.existsSync(path.join(ROOT, 'sounds/rpg/License.txt')) && fs.existsSync(path.join(ROOT, 'sounds/nature/License.txt')), '출처·허가 안내문이 함께 있다');
-    ok(files.every(f => fs.existsSync(path.join(ROOT, F.dir + f + F.ext))), '녹음 파일 ' + files.length + '개가 모두 sounds/에 있다');
+    ok(files.every(f => bank.indexOf(f) >= 0 || fs.existsSync(path.join(ROOT, F.dir + f + F.ext))), '녹음 ' + files.length + '개가 모두 sounds/(rpg 낱개 · nature 묶음 ' + bank.length + '개)에 있다');
     // 파일마다 실제로 풀리는가 (길이를 읽는다)
     const durs = await page.evaluate(async (files) => {
       const out = {};
-      await Promise.all(files.map(f => new Promise(res => { const a = new Audio(); a.preload = 'auto'; a.onloadedmetadata = () => { out[f] = a.duration; res(); }; a.onerror = () => { out[f] = -1; res(); }; a.src = G.SFX_FILES.dir + f + G.SFX_FILES.ext; setTimeout(res, 8000); })));
+      await Promise.all(files.map(f => new Promise(res => { const a = new Audio(); a.preload = 'auto'; a.onloadedmetadata = () => { out[f] = a.duration; res(); }; a.onerror = () => { out[f] = -1; res(); }; a.src = G.Audio.srcOf ? G.Audio.srcOf(f) : G.SFX_FILES.dir + f + G.SFX_FILES.ext; setTimeout(res, 8000); })));
       return out;
     }, files);
     ok(files.every(f => durs[f] > 0.05), '모든 녹음이 풀린다 (가장 짧은 ' + Math.min(...files.map(f => durs[f])).toFixed(2) + '초)');
@@ -36,7 +38,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const played = await page.evaluate(async () => {
       G.Audio.unlock(); await new Promise(r => setTimeout(r, 120));
       const log = []; const P = HTMLMediaElement.prototype.play;
-      HTMLMediaElement.prototype.play = function () { log.push({ src: decodeURIComponent(this.src.split('/').pop()), rate: this.playbackRate, vol: this.volume }); return P.call(this); };
+      HTMLMediaElement.prototype.play = function () { log.push({ src: G.Audio.srcName ? G.Audio.srcName(this.src) : decodeURIComponent(this.src.split('/').pop()), rate: this.playbackRate, vol: this.volume }); return P.call(this); };
       const out = {};
       for (const name of Object.keys(G.SFX_FILES.sets)) {
         const n0 = log.length; const r = G.Audio.sfx(name);

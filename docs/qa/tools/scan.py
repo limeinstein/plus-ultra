@@ -1,4 +1,4 @@
-"""PLUS ULTRA 에셋 전수 검사 — 해독·크기·투명도·흐림·단색·중복(바이트·지각 해시)·매니페스트
+"""Loop of Good Hope 에셋 전수 검사 — 해독·크기·투명도·흐림·단색·중복(바이트·지각 해시)·매니페스트
 python3 scan.py <repo> <out.json>"""
 import sys, os, json, hashlib, re
 from multiprocessing import Pool

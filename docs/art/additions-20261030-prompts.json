@@ -1537,9 +1537,9 @@
       "name": "피노키오 인형",
       "kind": "item",
       "description": "제페토가 고래 배 속에서 난파선 판자로 깎은 나무 인형. 아들을 다시 못 볼까 봐 그 얼굴을 떠올리며 깎았다고 한다. 코가 조금 길다. 선실에서 뱃노래가 울리면 이따금 실에 매달린 팔다리를 들썩이며 춤을 춘다 — 그 춤사위에 노래가 더 신이 난다 (뱃노래 때 50% · 피로 풀림·규율 오름 ×1.5).",
-      "target": "tools/addition_art/sources/pinocchio_doll-v2.png",
+      "target": "tools/addition_art/sources/pinocchio_doll-v3.png",
       "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small jointed carved wooden boy marionette with a long wooden nose, simple painted cap and clothes, visible wooden joints, handcrafted old Italian toy. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
-      "generated_source": "tools/procedural_art/run_puppet.js",
+      "generated_source": "tools/procedural_art/run_puppet3.js",
       "source_size": [
         1024,
         1024
@@ -1552,11 +1552,16 @@
           "target": "tools/addition_art/sources/pinocchio_doll.png",
           "prompt": "Use case: historical-scene. Asset type: isolated transparent inventory icon for a richly illustrated historical exploration game. Paint a small jointed carved wooden boy marionette with a long wooden nose, simple painted cap and clothes, visible wooden joints, handcrafted old Italian toy. One object or the specified coherent set only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink with convincing worn materials, warm natural highlights, crisp readable silhouette at small icon sizes, matching an old maritime adventure inventory. Genuinely transparent background, no floor, no scenery, no hands or people, no stand, no cast shadow outside the object, no frame, no border, no labels, no readable text, no logo, no watermark. Square image.",
           "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1350a-80af-7362-80cf-87f7d0c6c186\\exec-d0423e34-b47e-48c6-8090-14d927653889.png"
+        },
+        {
+          "target": "tools/addition_art/sources/pinocchio_doll-v2.png",
+          "generator_script": "tools/procedural_art/run_puppet.js",
+          "note": "v2: 깃털 모자·흰 옷깃 — 디즈니판 특징이라 v3에서 뺌"
         }
       ],
       "generator": "three.js (프로젝트의 기존 절차적 아이콘 제작기)",
-      "generation_note": "내장 이미지 생성 도구가 목각 인형 요청을 세 차례 거절하여 기존 3D 제작기로 나뭇결·관절·의복을 모델링했다.",
-      "generator_script": "tools/procedural_art/run_puppet.js"
+      "generation_note": "콜로디 원작(1883)의 차림: 빵 속살 모자·꽃무늬 종이옷·나무 단추. 깃털·모자 띠·흰 옷깃(디즈니판 특징)은 넣지 않는다 (2026-11-04 저작권 QA).",
+      "generator_script": "tools/procedural_art/run_puppet3.js"
     },
     {
       "id": "buwaya_pearl",

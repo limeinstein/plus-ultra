@@ -69,6 +69,50 @@
   // 이름에 녹음이 있으면 그것을 내고(빠르기·파일을 조금씩 바꿔 매번 다르게), 'layer'면 합성음도 함께 낸다.
   // ogg를 못 트는 브라우저이거나 파일을 못 읽으면 예전 합성음으로 돌아간다.
   var smpCan = null, smpPool = {}, smpLast = {}, smpBad = {};
+  /* 게임 전용 효과음 묶음 (2026-11-04 저작권 QA): Mixkit·Pixabay 소리(sounds/nature/)는 낱개 파일로 배포하지 않고
+     sounds/nature.pack.js 한 묶음(tools/sfx_pack.py)으로만 싣는다 — 그 라이선스가 소리를 따로 떼어 배포하는 것을 막기 때문.
+     소리가 처음 필요할 때 <script>로 묶음을 읽고(file://에서도 된다), 읽기 전에는 합성음을 낸다. 묶음을 못 읽으면 예전처럼 낱개 파일을 찾는다. */
+  var SFX_PACKS = { 'nature/': 'sounds/nature.pack.js' }, packState = {}, packWait = {}, blobUrl = {}, blobName = {};
+  function packOf(f) { for (var k in SFX_PACKS) if (f.indexOf(k) === 0) return k; return null; }
+  function loadPack(k) {
+    if (packWait[k]) return packWait[k];
+    packState[k] = 'loading';
+    packWait[k] = new Promise(function (res) {
+      try {
+        var sc = document.createElement('script'); sc.src = SFX_PACKS[k]; sc.async = true;
+        sc.onload = function () { packState[k] = 'ok'; res(true); };
+        sc.onerror = function () { packState[k] = 'bad'; res(false); };
+        (document.head || document.documentElement).appendChild(sc);
+      } catch (e) { packState[k] = 'bad'; res(false); }
+    });
+    return packWait[k];
+  }
+  /** 이 녹음을 지금 낼 수 있게 준비됐는가 — 묶음에 든 소리면 묶음을 읽기 시작하고, 다 읽기 전에는 false */
+  function sReady(f) {
+    var k = packOf(f); if (!k) return true;
+    var B = G.SFX_BANK; if (B && B[f]) return true;
+    if (!packState[k]) loadPack(k);
+    return packState[k] === 'bad';   // 묶음이 없으면 낱개 파일(제작자 컴퓨터의 원본)을 찾는다
+  }
+  /** 녹음 주소: 묶음에 든 소리는 Blob 주소로 (한 번만 풀어 둔다) */
+  function srcOf(f) {
+    var F = G.SFX_FILES, B = G.SFX_BANK;
+    if (blobUrl[f]) return blobUrl[f];
+    if (B && B[f] && typeof Blob !== 'undefined' && typeof URL !== 'undefined' && URL.createObjectURL) {
+      try {
+        var bin = atob(B[f]), n = bin.length, u8 = new Uint8Array(n);
+        for (var i = 0; i < n; i++) u8[i] = bin.charCodeAt(i);
+        var url = URL.createObjectURL(new Blob([u8], { type: 'audio/ogg' }));
+        blobUrl[f] = url; blobName[url] = f; B[f] = 1;   // 풀었으니 긴 글자는 놓아 준다 (있다는 표시만 남긴다)
+        return url;
+      } catch (e) { /* 아래 낱개 파일로 */ }
+    }
+    return F.dir + f + (F.ext || '.ogg');
+  }
+  AU.loadPacks = function () { return Promise.all(Object.keys(SFX_PACKS).map(loadPack)); };   // 시험·미리 읽기용
+  AU.srcOf = srcOf;
+  /** 재생 주소 → 녹음 이름 (시험용) */
+  AU.srcName = function (src) { return blobName[src] || decodeURIComponent(String(src).split('/').slice(-2).join('/')).replace(/\.ogg$/, ''); };
   function canOgg() {
     if (smpCan == null) { try { var a = document.createElement('audio'); smpCan = !!(a.canPlayType && a.canPlayType('audio/ogg; codecs="vorbis"')); } catch (e) { smpCan = false; } }
     return smpCan;
@@ -80,16 +124,16 @@
     var F = G.SFX_FILES, a = new Audio();
     a.preload = 'auto'; a.addEventListener('error', function () { smpBad[f] = true; });
     if ('preservesPitch' in a) a.preservesPitch = false; else if ('webkitPreservesPitch' in a) a.webkitPreservesPitch = false;   // 빠르기와 함께 음높이도 바뀌게
-    a.src = F.dir + f + (F.ext || '.ogg');
+    a.src = srcOf(f);
     pool.push(a); return a;
   }
   /** 이 이름의 녹음을 낼 수 있는가 */
   AU.hasSample = function (name) {
     var F = G.SFX_FILES, e = F && F.sets && F.sets[name];
-    return !!(e && canOgg() && e.f.some(function (f) { return !smpBad[f]; }));
+    return !!(e && canOgg() && e.f.some(function (f) { return !smpBad[f] && sReady(f); }));
   };
   function playOne(e, name) {
-    var fs = e.f.filter(function (f) { return !smpBad[f]; }); if (!fs.length) return false;
+    var fs = e.f.filter(function (f) { return !smpBad[f] && sReady(f); }); if (!fs.length) return false;
     var pick = fs.length > 1 ? fs.filter(function (x) { return x !== smpLast[name]; }) : fs, f = pick[Math.floor(Math.random() * pick.length)];
     smpLast[name] = f;
     var a = smpEl(f), r = e.rate ? e.rate[0] + Math.random() * (e.rate[1] - e.rate[0]) : 1;
@@ -115,7 +159,7 @@
   // 장면이 매 순간 G.Audio.amb({이름: 0~1})로 크기를 알려 준다. 2.5초 넘게 소식이 없으면 그 소리는 서서히 사라진다
   // (장면이 바뀌거나 건물에 들어가면 저절로 꺼진다). 크기는 실제 시간으로 부드럽게 옮겨 간다.
   var ambEl = {}, ambCur = {}, ambWant = {}, ambSeen = {}, ambTimer = 0, ambBad = {};
-  AU.hasAmb = function (name) { var F = G.SFX_FILES, e = F && F.amb && F.amb[name]; return !!(e && canOgg() && !ambBad[name]); };
+  AU.hasAmb = function (name) { var F = G.SFX_FILES, e = F && F.amb && F.amb[name]; return !!(e && canOgg() && !ambBad[name] && sReady(e.f)); };
   function ambTick() {
     if (typeof document !== 'undefined' && document.hidden) { ambHush(); return; }   // 탭을 숨긴 사이에는 울리지 않는다 (QA 2026-10-23)
     var now = Date.now(), live = 0, F = G.SFX_FILES || {}, master = vol('sound', 0.5) * 0.8 * (F.ambVol == null ? 1 : F.ambVol) * (F.vol == null ? 1 : F.vol);
@@ -155,7 +199,7 @@
         if (!(v > 0)) return;
         var a = new Audio(); a.loop = true; a.preload = 'auto'; a.volume = 0;
         a.addEventListener('error', function () { ambBad[k] = true; });
-        a.src = F.dir + F.amb[k].f + (F.ext || '.ogg');
+        a.src = srcOf(F.amb[k].f);
         ambEl[k] = a; ambCur[k] = 0;
       }
       ambWant[k] = v; ambSeen[k] = now; any = true;

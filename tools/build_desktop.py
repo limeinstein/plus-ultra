@@ -30,7 +30,7 @@ IMG_CACHE = os.path.join(pages.ROOT, 'desktop', '.imgcache')
 HALF_SIDE, HALF_Q = 1280, 82
 LIMIT = 1900 * 1000 * 1000   # GitHub 릴리스 파일·NSIS 설치 파일 한도(2GB)보다 조금 아래
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
-DESC = '대항해 시대를 무대로 한 모험·교역·해전 게임.'
+DESC = '탐험과 발견의 시대(1480~1860)를 무대로 한 모험·교역·해전 게임.'
 
 
 def pick_images(found):
@@ -191,6 +191,11 @@ def main():
     keep.add(os.path.normpath(os.path.join(APP, 'images', 'manifest.js')))
     manifest_rel = 'images/manifest.js?v=' + pages.short_hash(mjs)
     W.copy_if_changed(os.path.join(pages.ROOT, 'favicon.svg'), os.path.join(APP, 'favicon.svg'))
+    # 출처·라이선스 (2026-11-04 저작권 QA) — 설치판은 글꼴 파일을 함께 넣으므로 OFL 원문(licenses/)도 반드시 싣는다
+    for rel in ['THIRD_PARTY_NOTICES.md', 'music/CREDITS.md'] + (['licenses/' + fn for fn in sorted(os.listdir(os.path.join(pages.ROOT, 'licenses')))] if os.path.isdir(os.path.join(pages.ROOT, 'licenses')) else []):
+        if os.path.isfile(os.path.join(pages.ROOT, rel)):
+            keep.add(os.path.normpath(os.path.join(APP, rel)))
+            W.copy_if_changed(os.path.join(pages.ROOT, rel), os.path.join(APP, rel))
     keep.add(os.path.normpath(os.path.join(APP, 'favicon.svg')))
     mdir = os.path.join(pages.ROOT, 'music')
     if os.path.isdir(mdir):
@@ -201,16 +206,20 @@ def main():
                 keep.add(os.path.normpath(dst))
                 W.copy_if_changed(src, dst)
     # 녹음 효과음 (sounds/<묶음>/*.ogg — js/data/sfxfiles.js)
+    #   sounds/<묶음>.pack.js 가 있는 묶음은 낱개 소리 파일 대신 묶음만 싣는다 (2026-11-04 저작권 QA — tools/sfx_pack.py)
     sdir = os.path.join(pages.ROOT, 'sounds')
     if os.path.isdir(sdir):
+        packed = set(fn[:-len('.pack.js')] for fn in os.listdir(sdir) if fn.endswith('.pack.js'))
         for dirpath, _, files in os.walk(sdir):
             for fn in sorted(files):
-                if fn.lower().endswith(('.ogg', '.mp3', '.m4a', '.wav', '.txt')):
+                if os.path.basename(dirpath) in packed and not fn.lower().endswith('.txt'):
+                    continue
+                if fn.lower().endswith(('.ogg', '.mp3', '.m4a', '.wav', '.txt', '.pack.js')):
                     rel = os.path.relpath(os.path.join(dirpath, fn), pages.ROOT)
                     dst = os.path.join(APP, rel)
                     keep.add(os.path.normpath(dst))
                     W.copy_if_changed(os.path.join(dirpath, fn), dst)
-    js_rel, css_rel = W.build_page('index.html', 'game', 'index.html', 'PLUS ULTRA — Loop of Good Hope', DESC, esbuild, manifest_rel)
+    js_rel, css_rel = W.build_page('index.html', 'game', 'index.html', 'Loop of Good Hope', DESC, esbuild, manifest_rel)
     # GIF 팩 문: 설치형 게임에 「GIF 팩」(tools/build_gifpack.py)을 깔았으면 desktop/preload.js가 위치(PU_DESKTOP.gifpack)를 알려 주고,
     # 이 작은 파일이 그 목록(gifpack-list.js)을 읽어 발견물 GIF를 원본으로 쓰게 한다. 팩이 없으면 아무것도 하지 않는다.
     W.emit('images/gifpack.js', GIFPACK_DOOR)

@@ -42,7 +42,7 @@ Avoid: tall tower, monastery, cloister, cathedral, palace, giant school building
 function ruinPrompt(r) {
   if (r.id === 'sagres') return SAGRES_RUIN_PROMPT;
   return `Use case: historical-scene
-Asset type: 4x4 cinematic discovery storyboard source for the PLUS ULTRA browser game's ruin GIF pipeline
+Asset type: 4x4 cinematic discovery storyboard source for the Loop of Good Hope browser game's ruin GIF pipeline
 Primary request: Create one exact 4-column by 4-row storyboard sheet (16 equal panels, read left-to-right then top-to-bottom) for ${r.name}. It must be the same site and consistent architecture in every panel.
 Scene/backdrop: ${clean(r.desc)} Location cue: ${clean(r.hint)}
 Style/medium: polished photorealistic historical reconstruction concept art, cinematic natural light, high detail, coherent production storyboard.
@@ -53,7 +53,7 @@ Avoid: fantasy redesign, modern tourists, signs, roads or vehicles, inconsistent
 
 function naturePrompt(r) {
   return `Use case: photorealistic-natural
-Asset type: extra-wide panoramic source for the PLUS ULTRA browser game's nature discovery GIF
+Asset type: extra-wide panoramic source for the Loop of Good Hope browser game's nature discovery GIF
 Primary request: a geographically faithful, majestic panorama of ${r.name}.
 Scene/backdrop: ${clean(r.desc)} Location cue: ${clean(r.hint)}
 Style/medium: photorealistic natural-history landscape photography, documentary realism, rich but believable detail.
@@ -65,7 +65,7 @@ Avoid: generic scenery, surreal colors, fantasy forms, heavy HDR, montage or spl
 
 function animalPrompt(r) {
   return `Use case: photorealistic-natural
-Asset type: exact 2x2 animal discovery storyboard source for the PLUS ULTRA browser game's animal GIF pipeline
+Asset type: exact 2x2 animal discovery storyboard source for the Loop of Good Hope browser game's animal GIF pipeline
 Primary request: create four sequential wildlife-photo panels of ${r.name}, with the same juvenile and same protective adult in the same habitat.
 Scene/backdrop: ${clean(r.desc)} Habitat and location cue: ${clean(r.hint)}
 Style/medium: photorealistic wildlife documentary photography, natural anatomy, detailed fur, feathers, scales or skin, believable habitat and light.
@@ -76,7 +76,7 @@ Avoid: anthropomorphic smiles, pet accessories, hybrid animals, extra limbs, dup
 
 function treasurePrompt(r) {
   return `Use case: product-mockup
-Asset type: exact 4x2 museum turntable storyboard source for the PLUS ULTRA browser game's treasure discovery GIF
+Asset type: exact 4x2 museum turntable storyboard source for the Loop of Good Hope browser game's treasure discovery GIF
 Primary request: eight consistent 45-degree turntable views of ${r.name}. ${clean(r.desc)}
 Scene/backdrop: dark neutral museum studio with a nearly black seamless background and subtle pedestal reflection.
 Subject: one historically plausible ancient Egyptian ankh amulet, blue-green faience, looped cross form, worn excavated surface, no chain unless structurally necessary.
@@ -123,7 +123,7 @@ for (const cat of ['ruin', 'nature']) {
     iconSheets.push({
       id: `${prefix}-${no}`, cat: 'map-sheet', target: `images/map-discoveries/${prefix}-${no}.png`,
       ids: chunk.map(r => r.id), transparent: true,
-      prompt: `Use case: stylized-concept\nAsset type: transparent 4x4 sprite sheet of miniature world-map discovery icons for a historical exploration game\nPrimary request: Create exactly ${chunk.length} distinct miniature ${cat === 'ruin' ? 'historical site and monument' : 'natural landmark'} icons in the listed order, filled left-to-right then top-to-bottom in an exact 4-column by 4-row grid. Empty remaining cells must stay fully transparent.\n${cells}\nStyle/medium: consistent hand-painted isometric 3D game miniatures, realistic materials, crisp silhouettes, warm natural light, matching the existing PLUS ULTRA map-discovery sheets.\nComposition/framing: every icon is centered in its own equal square cell, complete silhouette, same visual scale, slightly elevated three-quarter view, small integral ground/rock/water base, generous clear separation.\nConstraints: genuinely transparent background; exact 4x4 grid alignment; no cell borders, captions, letters, numbers, people, logo, or watermark; do not merge neighboring icons; preserve the exact listed order.\nAvoid: opaque backdrop, flat pictograms, photorealistic rectangular photos, cropped structures, overlapping cells, duplicate icons.`
+      prompt: `Use case: stylized-concept\nAsset type: transparent 4x4 sprite sheet of miniature world-map discovery icons for a historical exploration game\nPrimary request: Create exactly ${chunk.length} distinct miniature ${cat === 'ruin' ? 'historical site and monument' : 'natural landmark'} icons in the listed order, filled left-to-right then top-to-bottom in an exact 4-column by 4-row grid. Empty remaining cells must stay fully transparent.\n${cells}\nStyle/medium: consistent hand-painted isometric 3D game miniatures, realistic materials, crisp silhouettes, warm natural light, matching the existing Loop of Good Hope map-discovery sheets.\nComposition/framing: every icon is centered in its own equal square cell, complete silhouette, same visual scale, slightly elevated three-quarter view, small integral ground/rock/water base, generous clear separation.\nConstraints: genuinely transparent background; exact 4x4 grid alignment; no cell borders, captions, letters, numbers, people, logo, or watermark; do not merge neighboring icons; preserve the exact listed order.\nAvoid: opaque backdrop, flat pictograms, photorealistic rectangular photos, cropped structures, overlapping cells, duplicate icons.`
     });
   }
 }
@@ -156,7 +156,7 @@ for (let offset = 0; offset < mysteryMapRows.length; offset += 16) {
     id: `mystery-ruins-${no}`, cat: 'map-sheet',
     target: `images/map-discoveries/mystery-ruins-${no}.png`,
     ids: chunk.map(r => r.id), transparent: true,
-    prompt: `Use case: stylized-concept\nAsset type: transparent 4x4 sprite sheet of miniature world-map discovery icons for a historical exploration game\nPrimary request: Create exactly ${chunk.length} distinct miniature archaeological mystery-site icons in the listed order, filled left-to-right then top-to-bottom in an exact 4-column by 4-row grid. ${chunk.length < 16 ? `Cells ${chunk.length + 1}-16 must stay fully transparent.` : ''}\n${cells}\nStyle/medium: consistent hand-painted isometric 3D game miniatures, realistic historical materials, crisp silhouettes, warm natural light, matching the existing PLUS ULTRA map-discovery sheets.\nComposition/framing: every icon is centered in its own equal square cell, complete silhouette, same visual scale, slightly elevated three-quarter view, small integral ground, rock, cave, wreck or water base as appropriate, generous clear separation.\nConstraints: genuinely transparent background; exact 4x4 grid alignment; no cell borders, captions, letters, numbers, people, logo, or watermark; do not merge neighboring icons; preserve the exact listed order.\nAvoid: opaque backdrop, flat pictograms, photorealistic rectangular photos, cropped structures, overlapping cells, duplicate icons.`
+    prompt: `Use case: stylized-concept\nAsset type: transparent 4x4 sprite sheet of miniature world-map discovery icons for a historical exploration game\nPrimary request: Create exactly ${chunk.length} distinct miniature archaeological mystery-site icons in the listed order, filled left-to-right then top-to-bottom in an exact 4-column by 4-row grid. ${chunk.length < 16 ? `Cells ${chunk.length + 1}-16 must stay fully transparent.` : ''}\n${cells}\nStyle/medium: consistent hand-painted isometric 3D game miniatures, realistic historical materials, crisp silhouettes, warm natural light, matching the existing Loop of Good Hope map-discovery sheets.\nComposition/framing: every icon is centered in its own equal square cell, complete silhouette, same visual scale, slightly elevated three-quarter view, small integral ground, rock, cave, wreck or water base as appropriate, generous clear separation.\nConstraints: genuinely transparent background; exact 4x4 grid alignment; no cell borders, captions, letters, numbers, people, logo, or watermark; do not merge neighboring icons; preserve the exact listed order.\nAvoid: opaque backdrop, flat pictograms, photorealistic rectangular photos, cropped structures, overlapping cells, duplicate icons.`
   });
 }
 

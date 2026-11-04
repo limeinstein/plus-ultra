@@ -1,5 +1,5 @@
-/* 사막에서 만난 어린 왕자 — js/systems/littleprince.js (2026-10-24)
-   · 명성 7만 미만이면 없다 · 사막에서 야영하며 정찰 → 남장한 어린 왕자 · 그냥 보내면 다음에 또 · 음식과 고기를 나눠 주면 캠프파이어
+/* 사막에서 만난 별에서 온 소년 — js/systems/littleprince.js (2026-10-24)
+   · 명성 7만 미만이면 없다 · 사막에서 야영하며 정찰 → 남장한 별에서 온 소년 · 그냥 보내면 다음에 또 · 음식과 고기를 나눠 주면 캠프파이어
    · 「지도를 그려 줘」 — 숫자 지도는 퇴짜, 그림 지도는 좋아한다 → 동료 · 지도의 우물가(사막)에서 금화 10만 닢 */
 'use strict';
 const assert = require('assert');
@@ -86,7 +86,7 @@ const SHOTS = process.env.SHOT_DIR || '';
     await page.evaluate(() => { [...document.querySelectorAll('.win .foot button')].filter(b => /이야기를 듣는다/.test(b.textContent))[0].click(); });
     await page.waitForSelector('.tmap-cv', { timeout: 20000 });
     await page.waitForTimeout(300);
-    await shot('02_어린왕자의_지도.png');
+    await shot('02_별에서온소년의_지도.png');
     const mapNote = await page.evaluate(() => document.querySelector('.tmap-note').textContent);
     await page.evaluate(() => { [...document.querySelectorAll('.win .foot button')].filter(b => /접는다/.test(b.textContent))[0].click(); });
     // 명성이 오르며 뜨는 「업적 달성」 창은 닫아 준다 (2026-10-29 — 창이 떠 있으면 야영이 끝나지 않는다)
@@ -115,19 +115,19 @@ const SHOTS = process.env.SHOT_DIR || '';
     const rt = await page.evaluate(() => { const S2 = G.State.deserialize(G.State.serialize()); return { phase: S2.lprince.phase, mate: S2.mates.some(m => m.id === 'little_prince'), revealed: !!S2.lprince.revealed }; });
 
     assert.strictEqual(setup.terr, 'desert');
-    assert(setup.art.every(x => x[1]), '어린 왕자의 얼굴·무릎상·이벤트샷 5장 등록: ' + JSON.stringify(setup.art));
+    assert(setup.art.every(x => x[1]), '별에서 온 소년의 얼굴·무릎상·이벤트샷 5장 등록: ' + JSON.stringify(setup.art));
     assert.strictEqual(low.seen, 0, '명성 7만 미만이면 만나지 않는다'); assert(!low.phase);
     assert(leave.fame >= 70000);
     assert.strictEqual(leave.phase, 'met'); assert.strictEqual(leave.met, 1); assert.strictEqual(leave.joined, false, '그냥 보내면 동료가 아니다');
-    assert(leave.seen.some(x => /어른들은 늘 바쁘지/.test(x)));
+    assert(leave.seen.some(x => /다들 갈 길이 있지/.test(x)));
     assert.strictEqual(notDesert, false);
     assert.strictEqual(met.phase, 'map'); assert.strictEqual(met.joined, true, '지도를 받고 동료가 된다');
     assert(before.food - met.food >= Math.round(before.use * 2) - 1 && before.food - met.food <= Math.round(before.use * 2) + Math.ceil(before.use * 3), '식량 2일분을 나눴다 (+야영 이틀치): ' + (before.food - met.food));
-    assert(met.seen.some(x => /배가 고파/.test(x)) && met.seen.some(x => /지도를 그려 줘/.test(x)));
+    assert(met.seen.some(x => /배가 고파/.test(x)) && met.seen.some(x => /지도를 하나 부탁해도 돼/.test(x)));
     assert(met.seen.some(x => /숫자뿐이잖아/.test(x)), '숫자만 적은 지도는 퇴짜');
     assert(!met.seen.some(x => /사실 나 여자야/.test(x)), '우물을 찾기 전에는 밝히지 않는다');
     assert(met.face === 'portraits/legendary/little_prince' && met.g === 'm', '새 인물화와 공개 전 소년 설정');
-    assert(dig.seen.some(x => /사실 나 여자야/.test(x)) && dig.seen.some(x => /어린 왕자」라고 불러 줘/.test(x)), '마지막, 우물가에서 밝힌다');
+    assert(dig.seen.some(x => /사실 나 여자야/.test(x)) && dig.seen.some(x => /별에서 온 소년」이라고 불러 줘/.test(x)), '마지막, 우물가에서 밝힌다');
     assert.strictEqual(dig.g, 'f', '밝힌 뒤에는 여성'); assert(/소녀/.test(dig.desc), dig.desc); assert(dig.revealed);
     assert(met.seen.some(x => /바로 이거야/.test(x)), '그림 지도는 좋아한다');
     assert(met.dist >= 2.4 && met.dist <= 6.2, '우물은 2.5~6° 떨어진 곳: ' + met.dist);
@@ -135,14 +135,14 @@ const SHOTS = process.env.SHOT_DIR || '';
     assert.deepStrictEqual(met.sk, { survey: 3, nav: 3, sci: 3, ship: 3 });
     assert.deepStrictEqual(Object.keys(met.lg).map(Number).sort((a, b) => a - b), [2, 5, 6, 7, 8, 9, 10, 11, 15]);
     assert(met.minor && met.eventOnly);
-    assert(/어린 왕자의 지도/.test(met.info) && /지도를 펼친다/.test(met.info));
+    assert(/별에서 온 소년의 지도/.test(met.info) && /지도를 펼친다/.test(met.info));
     assert(/모래 언덕 셋/.test(mapNote));
-    assert(met.log.some(t => /어린 왕자가 따라왔다/.test(t)));
-    assert.strictEqual(dig.r1, false); assert(dig.toasts.some(t => /쪽/.test(t) && /어린 왕자/.test(t)), '가까우면 소년이 방향을 일러 준다: ' + dig.toasts.join(' / '));
+    assert(met.log.some(t => /별에서 온 소년이 따라왔다/.test(t)));
+    assert.strictEqual(dig.r1, false); assert(dig.toasts.some(t => /쪽/.test(t) && /별에서 온 소년/.test(t)), '가까우면 소년이 방향을 일러 준다: ' + dig.toasts.join(' / '));
     assert.strictEqual(dig.r2, true); assert.strictEqual(dig.gain, 100000, '금화 10만 닢'); assert.strictEqual(dig.phase, 'done');
     assert.strictEqual(dig.r3, false, '한 번만'); assert.strictEqual(dig.info, '');
     assert(dig.seen.some(x => /ALERT .*100,000/.test(x)));
-    assert(/금화 100,000닢/.test(dig.log) && /왕자로 다니던 소녀였다/.test(dig.log));
+    assert(/금화 100,000닢/.test(dig.log) && /소년으로 다니던 소녀였다/.test(dig.log));
     for (const key of ['meet', 'campfire', 'map', 'well', 'reveal']) assert(dig.pics.some(x => x.includes('little_prince_' + key)), '이벤트샷 표시: ' + key);
     assert.deepStrictEqual(rt, { phase: 'done', mate: true, revealed: true });
     assert.deepStrictEqual(errors, [], '콘솔 오류 0');

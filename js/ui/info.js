@@ -424,7 +424,7 @@
     if (G.VoyagePlans) html += G.VoyagePlans.summaryHtml();
     if (G.Escort) html += G.Escort.html();     // 상선 호위
     if (G.TreasureHunt) html += G.TreasureHunt.html();   // 조합의 보물 지도 — 「지도를 펼친다」
-    if (G.LittlePrince) html += G.LittlePrince.html();   // 어린 왕자의 지도 (js/systems/littleprince.js)
+    if (G.LittlePrince) html += G.LittlePrince.html();   // 별에서 온 소년의 지도 (js/systems/littleprince.js)
     // 조합 의뢰
     var qs = G.Quest ? G.Quest.list() : [];
     html += '<div class="sep"></div><h4 style="margin:0 0 8px">맡은 조합 의뢰</h4>';
@@ -596,7 +596,7 @@
     var diffName = { easy: '쉬움', normal: '보통', original: '엄격 규칙' }[st.diff] || st.diff;
     el.innerHTML = '<div class="flex" style="gap:12px">' +
       (st.diff === 'easy' ? '<button class="btn navy" data-act="save">항해 일지 기록</button>' : '') +
-      '<button class="btn" data-act="title">타이틀로 돌아가기</button></div><div class="sep"></div>' +
+      '<button class="btn" data-act="title">타이틀로 돌아가기</button>' + (G.Credits ? '<button class="btn ghost" data-act="credits">만든 사람들 · 출처</button>' : '') + '</div><div class="sep"></div>' +
       '<div class="kv" style="grid-template-columns:160px 1fr;align-items:center">' +
       '<div>난이도</div><div>' + diffName + ' <small class="muted">(' + (st.diff === 'original' ? '저장은 모국 도시의 여관에서만' : st.diff === 'easy' ? '어디서나 저장 가능' : '저장은 여관에서') + ')</small></div>' +
       '<div>효과음</div><div><input type="range" min="0" max="100" data-k="sound" value="' + Math.round((st.sound != null ? st.sound : 0.5) * 100) + '"></div>' +
@@ -665,6 +665,7 @@
     U.$$('[data-keyclr]', el).forEach(function (o) { o.onclick = function () { G.Keys.clear(st, o.dataset.keyclr); G.State.rememberSettings(st); PAGES.menu(el, win); }; });
     var kr = el.querySelector('[data-act=keyreset]'); if (kr) kr.onclick = function () { G.Keys.reset(st); PAGES.menu(el, win); };
     var sv = el.querySelector('[data-act=save]'); if (sv) sv.onclick = async function () { await I.saveMenu(); };
+    var cr = el.querySelector('[data-act=credits]'); if (cr) cr.onclick = function () { G.Credits.open(); };   // js/ui/credits.js
     el.querySelector('[data-act=title]').onclick = async function () {
       if (await UI.confirm('저장하지 않은 진행은 사라집니다. 타이틀로 돌아가겠습니까?')) { win.close(null); UI.fade(function () { G.Game.go('title'); }); }
     };

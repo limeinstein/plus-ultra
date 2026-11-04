@@ -1,17 +1,17 @@
-/* 사막에서 만난 어린 왕자 (G.LittlePrince) — 2026-10-24 사용자 요청. 사람은 js/data/littleprince.js
+/* 사막에서 만난 별에서 온 소년 (G.LittlePrince) — 2026-10-24 사용자 요청 · 2026-11-04 「어린 왕자」에서 이름과 책 장면을 바꿈(저작권 QA). 사람은 js/data/littleprince.js
    ■ 언제: 명성 7만(G.BALANCE.littlePrince.minFame) 이상의 제독이 사막(G.Geo.terrain 'desert')에서 야영하며 「정찰한다」를 마쳤을 때 (js/scenes/land.js camp)
-   ■ 남장 여자 컨셉: 푸른 꽃무늬 두건과 아이보리색 여행옷 차림으로 소년 왕자라 소개한다. 마지막 우물가에서 여자임을 밝힌다.
+   ■ 남장 여자 컨셉: 푸른 꽃무늬 두건과 아이보리색 여행옷 차림으로 「별에서 온 소년」이라 소개한다. 마지막 우물가에서 여자임을 밝힌다.
      (밝히기 전까지는 남자로 다룬다 — 성별 G.MATE.little_prince.g 는 s.lprince.revealed 를 따른다 · 그 자리에 없으면 지도 뒷면의 글씨로 밝힌다)
-     혼자 여행하는 여자아이에게는 다들 집에 가라고만 해서, 별을 떠날 때부터 왕자로 다녔다. 밝힌 뒤에도 「어린 왕자」로 불러 달라며 옷과 말투는 그대로.
+     혼자 여행하는 여자아이에게는 다들 집에 가라고만 해서, 별을 떠날 때부터 소년으로 다녔다. 밝힌 뒤에도 「별에서 온 소년」으로 불러 달라며 옷과 말투는 그대로.
    ■ 흐름: ① 정찰대가 모래 언덕 위에 혼자 선 배고픈 소년을 데려온다.
             · 「모닥불 곁에서 음식과 고기를 나눠 준다」(식량 2일분) → 캠프파이어 (G.Scenes.land.drawCampfire)
-            · 「갈 길이 바쁘다」 → 소년은 해 지는 쪽으로 사라진다 (다음에 사막에서 정찰하면 또 만난다)
-          ② 배를 채운 소년이 「지도를 그려 줘」 — 그가 내려온 곳에서 걸어서 며칠, 모래 언덕 셋 사이에 숨은 우물.
-            제독이 경위도만 빼곡한 어른의 지도를 그리면 퇴짜, 언덕과 별을 그림으로 그리면 좋아한다 (몇 번이든 다시 그릴 수 있다).
+            · 「갈 길이 바쁘다」 → 소년은 모래 언덕 너머로 사라진다 (다음에 사막에서 정찰하면 또 만난다)
+          ② 배를 채운 소년이 「우물까지 가는 지도」를 부탁 — 그가 내려온 곳에서 걸어서 며칠, 모래 언덕 셋 사이에 숨은 우물.
+            제독이 경위도만 빼곡한 지도를 그리면 알아보지 못하고, 언덕과 별을 그림으로 그리면 좋아한다 (몇 번이든 다시 그릴 수 있다).
           ③ 지도를 받아 든 소년은 이 탐험이 재미있다며 따라나선다 — 동료가 된다 (G.Legend.join).
           ④ 지도의 X(사막 속 숨은 우물 — 야영한 곳에서 뭍으로 이어진 사막 2.5~6°)에 서면 우물가를 판다: 금화 10만 닢 (G.BALANCE.littlePrince.reward)
             1.6° 안에 들면 날마다 방향을 일러 준다 (소년이 함께 있으면 소년이, 아니면 측량사가).
-   · 수첩 「계약·의뢰」에 「어린 왕자의 지도」(js/ui/info.js — TreasureHunt.html 곁)
+   · 수첩 「계약·의뢰」에 「별에서 온 소년의 지도」(js/ui/info.js — TreasureHunt.html 곁)
    · 저장: s.lprince = { phase: 'met'(지나쳐 보냄)|'map'(지도를 받음)|'done', met: 만난 횟수, tlon, tlat, seed, at: 날번호 } */
 (function (G) {
   'use strict';
@@ -36,7 +36,7 @@
   LP.state = st;
   function row() { return S().mates.filter(function (x) { return x.id === ID; })[0] || null; }
   function me() { var p = S().player; return { name: p.name, portrait: p.portrait, rigId: 'player' }; }
-  function boy(emo) { return G.Legend && G.Legend.speaker ? G.Legend.speaker(ID, emo) : { name: '어린 왕자', portrait: G.Art.mateSpec(ID), lang: 3 }; }
+  function boy(emo) { return G.Legend && G.Legend.speaker ? G.Legend.speaker(ID, emo) : { name: '별에서 온 소년', portrait: G.Art.mateSpec(ID), lang: 3 }; }
   function stranger() { var sp = boy(); return { name: '푸른 두건의 소년', portrait: sp.portrait, half: sp.half, lang: 3, special: true }; }
   function first() { return G.Scenes.mateSpeaker('first'); }
   function narrate(t) { return UI.say(t, {}); }
@@ -92,21 +92,21 @@
     p.met = (p.met || 0) + 1;
     var v, pc = shot('meet', '모래 언덕의 낯선 여행자');
     try {
-      if (again) await narrate('정찰대가 돌아오며 또 그 이야기를 한다 — 모래 언덕 꼭대기에 푸른 꽃무늬 두건을 쓴 아이가 혼자 서서 해 지는 쪽을 보고 있더라고. 지난번 사막에서 자신을 왕자라고 소개한 그 아이다. 이번에도 정찰대를 따라 야영지까지 걸어왔다.');
+      if (again) await narrate('정찰대가 돌아오며 또 그 이야기를 한다 — 모래 언덕 꼭대기에 푸른 꽃무늬 두건을 쓴 아이가 혼자 서서 하늘을 올려다보고 있더라고. 지난번 사막에서 자신을 「별에서 온 소년」이라고 소개한 그 아이다. 이번에도 정찰대를 따라 야영지까지 걸어왔다.');
       else {
-        await narrate('해 질 녘, 사흘 걸음 거리를 둘러본 정찰대가 이상한 손님을 데리고 돌아왔다. 아이보리색 여행옷 위에 푸른 꽃무늬 두건과 숄을 두른 가냘픈 아이가, 끝없는 모래 언덕 한가운데 혼자 서 있었다고 한다. 정찰대에게는 자신을 「어린 왕자」라고 소개했다.');
-        await UI.say('물 한 방울 없는 데서 혼자 무얼 하느냐고 물었더니, 「해 지는 걸 보고 있었어」라고만 합니다. 어디서 왔느냐니까 하늘을 가리키고요. …제독, 아무래도 며칠 굶은 것 같습니다.', first());
+        await narrate('해 질 녘, 사흘 걸음 거리를 둘러본 정찰대가 이상한 손님을 데리고 돌아왔다. 아이보리색 여행옷 위에 푸른 꽃무늬 두건과 숄을 두른 가냘픈 아이가, 끝없는 모래 언덕 한가운데 혼자 서 있었다고 한다. 정찰대에게는 자신을 「별에서 온 소년」이라고 소개했다.');
+        await UI.say('물 한 방울 없는 데서 혼자 무얼 하느냐고 물었더니, 「별이 뜨기를 기다리고 있었어」라고만 합니다. 어디서 왔느냐니까 하늘을 가리키고요. …제독, 아무래도 며칠 굶은 것 같습니다.', first());
       }
-      await UI.say('안녕. 나는 어린 왕자야. 너희 모닥불 냄새를 따라왔어.\f…배가 고파. 별에서 내려온 뒤로 아무것도 못 먹었거든.', stranger());
-      v = await UI.ask('푸른 두건의 어린 왕자가 모닥불 쪽을 바라본다. 어떻게 할까?', [
+      await UI.say('안녕. 나는 별에서 온 소년이야. 너희 모닥불 냄새를 따라왔어.\f…배가 고파. 별에서 내려온 뒤로 아무것도 못 먹었거든.', stranger());
+      v = await UI.ask('푸른 두건의 소년이 모닥불 쪽을 바라본다. 어떻게 할까?', [
         { label: '모닥불 곁에 앉히고 음식과 고기를 나눠 준다 (식량 ' + K().food + '일분)', value: 'share' },
         { label: '갈 길이 바쁘다', value: 'leave' }], me());
     } finally { if (pc) await pc.stop(); }
     if (v !== 'share') {
       p.phase = 'met';
-      await UI.say('그래, 어른들은 늘 바쁘지. 바빠서 해 지는 것도 못 보고.\f괜찮아. 나는 저 언덕에서 해 지는 걸 마저 볼게.', stranger());
+      await UI.say('그래, 다들 갈 길이 있지.\f괜찮아. 나는 저 언덕에서 별이 뜨는 걸 마저 볼게.', stranger());
       await narrate('소년은 모래 언덕 너머로 걸어가 보이지 않게 되었다. 이 사막 어딘가에서 또 만날지도 모른다.');
-      G.State.log('사막의 야영지에서 배고픈 어린 왕자를 만났지만 그냥 보냈다.');
+      G.State.log('사막의 야영지에서 별에서 왔다는 배고픈 소년을 만났지만 그냥 보냈다.');
       return true;
     }
     var f = s.fleet, use = (R.dailyUse ? R.dailyUse() : 1) * K().food, gave = Math.min(f.food || 0, Math.max(1, Math.round(use)));
@@ -114,7 +114,7 @@
     pc = shot('campfire', '별빛 아래 모닥불');
     try {
       await campfire();
-      await UI.say('(입가에 기름을 묻힌 채) 맛있다! 별에서는 이런 걸 먹어 본 적이 없어. 내 별은 아주 작아서, 의자를 조금만 옮기면 하루에 해 지는 걸 마흔 번도 넘게 볼 수 있어.\f그런데 너희는 왜 이렇게 많아? 배에서 왔다고? 배는 뭘 먹고 바다를 건너? 바람? 바람은 어디서 와?', boy('happy'));
+      await UI.say('(입가에 기름을 묻힌 채) 맛있다! 별에서는 이런 걸 먹어 본 적이 없어. 내가 살던 별에서는 밤마다 별똥별을 주워서 등불로 썼거든.\f그런데 너희는 왜 이렇게 많아? 배에서 왔다고? 배는 뭘 먹고 바다를 건너? 바람? 바람은 어디서 와?', boy('happy'));
       await UI.say('바람은 바다 건너에서 오지. 우리는 그 바람으로 세상 끝까지 가 보려는 사람들이다.', me());
       await UI.say('세상 끝! 그거 정말 멋지다.\f…있잖아, 부탁이 하나 있어.', boy());
     } finally { if (pc) await pc.stop(); }
@@ -123,8 +123,8 @@
   async function campfire() {
     var A = G.Art, cv = A && A.canvas ? A.canvas(720, 300) : null, l = S().loc, LS = G.Scenes.land;
     var win = UI.window({ title: '캠프파이어', icon: 'tent', width: 780, html: '<div class="campfire"><div class="cf-art"></div><div class="cf-text">' +
-      '대원들이 모닥불에 말린 고기를 굽고 빵과 대추야자를 꺼냈다. 어린 왕자는 고기 한 점을 두 손으로 받아 들고 한참 들여다보더니 조심조심 먹기 시작한다. 모닥불 위로 사막의 별이 쏟아진다.' +
-      '</div><div class="cf-res">식량을 나누어 주었다 — 어린 왕자가 모닥불 곁에서 배를 채운다</div></div>', buttons: [{ label: '어린 왕자의 이야기를 듣는다', value: 1, cls: 'navy' }] });
+      '대원들이 모닥불에 말린 고기를 굽고 빵과 대추야자를 꺼냈다. 소년은 고기 한 점을 두 손으로 받아 들고 한참 들여다보더니 조심조심 먹기 시작한다. 모닥불 위로 사막의 별이 쏟아진다.' +
+      '</div><div class="cf-res">식량을 나누어 주었다 — 별에서 온 소년이 모닥불 곁에서 배를 채운다</div></div>', buttons: [{ label: '소년의 이야기를 듣는다', value: 1, cls: 'navy' }] });
     var live = true, t0 = performance.now();
     if (cv && LS && LS.drawCampfire) {
       win.content.querySelector('.cf-art').appendChild(cv);
@@ -135,36 +135,36 @@
     await win.result;
   }
 
-  // ---------------------------------------------------------------- ② 지도를 그려 줘
+  // ---------------------------------------------------------------- ② 우물까지 가는 지도
   async function drawMap(lon, lat) {
     var s = S(), p = st(), seed = U.strHash('lprince:' + s.day + ':' + Math.round(lon * 10) + ':' + Math.round(lat * 10));
     var sp = LP.pickSpot(lon, lat, seed), d = G.Geo.dist(lon, lat, sp.lon, sp.lat);
     var dw = dirWord(G.Geo.wrapLon(sp.lon - lon), sp.lat - lat), days = walkDays(d);
     var pc = shot('map', '별과 우물이 있는 지도');
     try {
-      await UI.say('지도를 그려 줘!\f여기서 ' + dw + '쪽으로 ' + days + '밤쯤 걸어가면, 모래 언덕 셋이 나란히 누워 있는 데가 있어. 가운데 언덕 그늘에 우물이 숨어 있어. 도르래도 있고, 물이 아주 달아.\f우물가에 옛날 낙타 상인들이 묻어 두고 간 궤짝이 있어. 나는 무거워서 못 꺼냈어. 그런데 나는 지도를 못 그려. 네가 그려 줘.', boy());
+      await UI.say('있잖아, 지도를 하나 부탁해도 돼?\f여기서 ' + dw + '쪽으로 ' + days + '밤쯤 걸어가면, 모래 언덕 셋이 나란히 누워 있는 데가 있어. 가운데 언덕 그늘에 우물이 숨어 있어. 도르래도 있고, 물이 아주 달아.\f우물가에 옛날 낙타 상인들이 묻어 두고 간 궤짝이 있어. 나는 무거워서 못 꺼냈어. 그런데 나는 지도를 못 그려. 네가 그려 줘.', boy());
       var sv = R.skillBest ? R.skillBest('survey') : null, svWho = sv && sv.who && sv.who !== '제독' ? sv.who : null;
       for (var n = 0; ; n++) {
-        var v = await UI.ask('어린 왕자의 이야기를 듣고 지도를 그린다. 어떻게 그릴까?', [
+        var v = await UI.ask('소년의 이야기를 듣고 지도를 그린다. 어떻게 그릴까?', [
           { label: '위도·경도와 방위, 걸음 수를 빼곡히 적은 정확한 지도', value: 'grown' },
           { label: '모래 언덕 셋과 우물, 그 위의 별을 그림으로 그린 지도', value: 'child' }], me());
         if (v === 'child' || n >= 2) break;
-        if (n === 0) await UI.say((svWho ? '(' + svWho + U.jx(svWho, '이/가') + ' 옆에서 거들어 숫자를 적어 넣었다)\f' : '') + '…이건 숫자뿐이잖아. 어른들 지도는 다 이래. 우물이 몇 도 몇 분에 있는지는 적으면서, 물맛이 어떤지, 도르래가 무슨 소리를 내는지는 하나도 안 적어.\f다시 그려 줘. 그 우물이 어떻게 생겼는지 알 수 있게.', boy());
-        else await UI.say('또 숫자야! …그래도 너 참 열심히 그린다. 마지막으로 한 번만 더 그려 줘.', boy());
+        if (n === 0) await UI.say((svWho ? '(' + svWho + U.jx(svWho, '이/가') + ' 옆에서 거들어 숫자를 적어 넣었다)\f' : '') + '…이건 숫자뿐이잖아. 나는 숫자로는 길을 못 찾아. 사막에서는 언덕 모양이랑 별 자리를 봐야 우물이 보여.\f다시 그려 줘. 언덕이 어떻게 생겼는지 알아볼 수 있게.', boy());
+        else await UI.say('또 숫자야! …그래도 너 참 열심히 그린다. 언덕 셋만 그려 주면 돼, 한 번만 더.', boy());
       }
       p.phase = 'map'; p.tlon = sp.lon; p.tlat = sp.lat; p.seed = seed; p.at = s.day; p.dir = dw; p.days = days;
-      await UI.say('바로 이거야! 언덕 셋, 우물, 그리고 내 별!\f봐, 이 지도 예쁘지? 사막도 그래 — 어딘가에 우물이 숨어 있으니까 그렇게 예쁜 거야.', boy('happy'));
+      await UI.say('바로 이거야! 언덕 셋, 우물, 그리고 내 별!\f이제 이 지도만 있으면 길을 잃을 걱정이 없어. 별이 뜨면 내 별이 우물 쪽을 가리키거든.', boy('happy'));
     } finally { if (pc) await pc.stop(); }
     await LP.showMap();
     await UI.say('있잖아… 나도 같이 가도 돼? 지도를 따라가서 진짜로 우물을 찾는 거, 한 번도 해 본 적 없어. 정말 재미있을 것 같아!\f그리고 너희 배도 보고 싶어. 바람으로 가는 집이라니, 그런 건 어느 별에서도 못 봤어.', boy('happy'));
     var nmRow = G.Legend && G.Legend.join ? G.Legend.join(ID, null) : null;
-    G.State.log('사막의 야영지에서 별에서 왔다는 어린 왕자에게 음식을 나눠 주고, 그가 말하는 우물의 지도를 그려 주었다. 어린 왕자가 따라왔다.', 'A');
+    G.State.log('사막의 야영지에서 별에서 왔다는 소년에게 음식을 나눠 주고, 그가 말하는 우물의 지도를 그려 주었다. 별에서 온 소년이 따라왔다.', 'A');
     if (nmRow) {
-      UI.toast('어린 왕자 — 동료가 되었다 (' + G.wageNote(ID) + ')', 'heart', 4200);
+      UI.toast('별에서 온 소년 — 동료가 되었다 (' + G.wageNote(ID) + ')', 'heart', 4200);
       if (G.Achieve && G.Achieve.afterHire) { try { await G.Achieve.afterHire(ID); } catch (e) { console.error(e); } }
-      await UI.say('좋아, 이제 나는 너희 배의 선원이야. 이 두건을 쓰고 왕자로 다니는 이유는… 우물을 찾으면 말해 줄게. 길은 내가 별을 보고 찾아 줄게.\f우물은 ' + dw + '쪽이야. 빨리 가자!', boy('happy'));
+      await UI.say('좋아, 이제 나는 너희 배의 선원이야. 이 두건을 쓰고 다니는 이유는… 우물을 찾으면 말해 줄게. 길은 내가 별을 보고 찾아 줄게.\f우물은 ' + dw + '쪽이야. 빨리 가자!', boy('happy'));
     }
-    UI.toast('어린 왕자의 지도 — 우물은 여기서 ' + dw + '쪽, 걸어서 ' + days + '밤쯤 (수첩 「계약·의뢰」에서 지도를 펼칠 수 있다)', 'chest', 6500);
+    UI.toast('별에서 온 소년의 지도 — 우물은 여기서 ' + dw + '쪽, 걸어서 ' + days + '밤쯤 (수첩 「계약·의뢰」에서 지도를 펼칠 수 있다)', 'chest', 6500);
     return true;
   }
 
@@ -200,7 +200,7 @@
     var p = st(); if (p.tlon == null) return;
     var s = S(), l = s.loc, here = l && l.mode === 'land' && l.lon != null;
     var where = here ? '지금 자리에서 ' + dirWord(G.Geo.wrapLon(p.tlon - l.lon), p.tlat - l.lat) + '쪽, 약 ' + walkDays(G.Geo.dist(l.lon, l.lat, p.tlon, p.tlat)) + '밤 거리' : '만난 야영지에서 ' + (p.dir || '') + '쪽, 걸어서 ' + (p.days || '') + '밤쯤';
-    var win = UI.window({ title: '어린 왕자의 지도', icon: 'chest', width: 780, clickAny: true,
+    var win = UI.window({ title: '별에서 온 소년의 지도', icon: 'chest', width: 780, clickAny: true,
       html: '<div class="tmap-wrap"></div><div class="tmap-note">' + (p.phase === 'done' ? '<b>우물가의 보물을 찾았다.</b>' : '<b>모래 언덕 셋 사이의 숨은 우물</b> — ' + where + '<br><span class="muted">우물가를 파면 옛 낙타 상인들이 묻어 둔 궤짝이 나온다고 한다 (금화 약 ' + U.num(K().reward) + '닢). 가까이 가면 날마다 방향을 일러 준다.</span>') + '</div>',
       buttons: [{ label: '지도를 접는다', value: 1, cls: 'navy' }] });
     var cv = LP.mapCanvas(720, 480); cv.className = 'tmap-cv';
@@ -210,7 +210,7 @@
   /** 수첩 「계약·의뢰」에 붙는 줄 (js/ui/info.js) */
   LP.html = function () {
     var p = S() && st(); if (!p || p.phase !== 'map') return '';
-    return '<div class="sep"></div><h4 style="margin:0 0 8px">어린 왕자의 지도</h4><div class="hint-item"><div class="flex"><span class="nm">' + G.icon('chest') + ' 사막에 숨은 우물</span><span class="right muted" style="font-size:14px">보물 약 ' + U.num(K().reward) + '닢</span></div>' +
+    return '<div class="sep"></div><h4 style="margin:0 0 8px">별에서 온 소년의 지도</h4><div class="hint-item"><div class="flex"><span class="nm">' + G.icon('chest') + ' 사막에 숨은 우물</span><span class="right muted" style="font-size:14px">보물 약 ' + U.num(K().reward) + '닢</span></div>' +
       '<div class="tx">만난 야영지에서 ' + U.esc(p.dir || '') + '쪽, 걸어서 ' + (p.days || '') + '밤쯤 — 모래 언덕 셋 사이 <button class="btn small" onclick="G.LittlePrince.showMap()">지도를 펼친다</button></div></div>';
   };
 
@@ -223,7 +223,7 @@
     var with_ = !!row(), sp = with_ ? boy() : (G.Scenes.mateSpeaker ? G.Scenes.mateSpeaker('surveyor') : { name: '측량사' });
     if (d > k.digR) {
       var dw = dirWord(G.Geo.wrapLon(p.tlon - lon), p.tlat - lat), far = d < 0.7 ? '바로 코앞' : d < 1.1 ? '반나절 거리' : '하루 남짓 거리';
-      if (p.lastHint !== dw + far) { p.lastHint = dw + far; UI.toast(sp.name + ': ' + (with_ ? '저기 봐! 언덕이 지도랑 닮았어. 우물은 ' + dw + '쪽, ' + far + '야!' : '어린 왕자의 지도에 그린 언덕이 보입니다. 우물은 ' + dw + '쪽, ' + far + '입니다.'), 'chest', 5200); }
+      if (p.lastHint !== dw + far) { p.lastHint = dw + far; UI.toast(sp.name + ': ' + (with_ ? '저기 봐! 언덕이 지도랑 닮았어. 우물은 ' + dw + '쪽, ' + far + '야!' : '별에서 온 소년의 지도에 그린 언덕이 보입니다. 우물은 ' + dw + '쪽, ' + far + '입니다.'), 'chest', 5200); }
       return false;
     }
     if (hooks && hooks.stop) hooks.stop();
@@ -234,47 +234,47 @@
     var s = S(), p = st(), gold = K().reward, pc = shot('well', '사막에 숨은 우물');
     try {
       await narrate('모래 언덕 셋이 나란히 누운 곳 — 가운데 언덕 그늘에 돌을 둥글게 쌓은 우물이 있다. 낡은 도르래와 밧줄, 두레박까지 그대로다. 마을도 대상의 길도 없는 사막 한가운데에.');
-      if (with_) await UI.say('찾았다! 내가 말한 그대로지?\f도르래를 돌려 봐. 우물이 노래해! …물맛 좀 봐, 아주 달아. 걸어서 온 다음이라 더 단 거야.', boy('happy'));
-      else await UI.say('어린 왕자가 말한 그대로입니다, 제독. 언덕 셋, 도르래 우물… 우물가를 파 보겠습니다.', first());
+      if (with_) await UI.say('찾았다! 내가 말한 그대로지?\f도르래를 돌려 봐. 두레박이 올라온다! …물이 시원해. 낙타 상인들이 왜 여기를 숨겨 뒀는지 알겠다.', boy('happy'));
+      else await UI.say('별에서 온 소년이 말한 그대로입니다, 제독. 언덕 셋, 도르래 우물… 우물가를 파 보겠습니다.', first());
       s.player.gold += gold;
       var fame = G.Fame && G.Fame.add ? G.Fame.add('ex', 30) : 0;
       s.stats.treasures = (s.stats.treasures || 0) + 1;
       p.phase = 'done'; p.found = s.day;
       if (G.Audio) { G.Audio.sfx('latch'); setTimeout(function () { if (G.Audio) G.Audio.sfx('prize'); }, 330); }
-      await UI.alert('<div style="font-size:19px;line-height:1.7">우물가 모래 밑에서 쇠띠를 두른 궤짝 세 개가 나왔다!<br>옛 낙타 상인들이 모래 폭풍을 피해 묻어 두고 끝내 찾으러 오지 못한 금화와 은괴다.<br><br><b>금화 ' + U.num(gold) + '닢</b>을 손에 넣었다.' + (fame ? ' (명성 +' + fame + ')' : '') + '</div>', '어린 왕자의 우물');
-      G.State.log('어린 왕자의 지도를 따라 사막 속 숨은 우물을 찾아, 우물가에서 금화 ' + U.num(gold) + '닢을 파냈다.', 'A');
-      if (with_) await UI.say('금화가 이렇게 많은데, 나는 아까 그 물 한 모금이 더 좋았어. 이상하지?\f…그래도 너희가 기뻐하니까 나도 좋아.', boy('happy'));
+      await UI.alert('<div style="font-size:19px;line-height:1.7">우물가 모래 밑에서 쇠띠를 두른 궤짝 세 개가 나왔다!<br>옛 낙타 상인들이 모래 폭풍을 피해 묻어 두고 끝내 찾으러 오지 못한 금화와 은괴다.<br><br><b>금화 ' + U.num(gold) + '닢</b>을 손에 넣었다.' + (fame ? ' (명성 +' + fame + ')' : '') + '</div>', '별에서 온 소년의 우물');
+      G.State.log('별에서 온 소년의 지도를 따라 사막 속 숨은 우물을 찾아, 우물가에서 금화 ' + U.num(gold) + '닢을 파냈다.', 'A');
+      if (with_) await UI.say('와, 금화가 이렇게나 많아! 별에서는 이런 반짝이는 걸 돌멩이처럼 굴리고 놀았는데.\f…그래도 너희가 기뻐하니까 나도 좋아.', boy('happy'));
     } finally { if (pc) await pc.stop(); }
     await reveal(with_);
     if (G.Game.refreshHud) G.Game.refreshHud();
   }
 
-  // ---------------------------------------------------------------- ⑤ 마지막: 남장 여자인 어린 왕자
+  // ---------------------------------------------------------------- ⑤ 마지막: 남장 여자인 별에서 온 소년
   /** 우물을 찾은 뒤에 정체를 밝힌다. 그 자리에 없으면 지도 뒷면의 글씨로 */
   async function reveal(with_) {
     var p = st(); if (p.revealed) return;
     p.revealed = true;
     if (!with_) {
-      await narrate('지도를 접다가 뒷면에 가느다란 글씨가 적혀 있는 것을 보았다. 지도를 그리던 밤, 어린 왕자가 몰래 써 둔 것이다.\f「우물을 찾으면 말하려고 했어. 사실 나 여자야. 혼자 별을 여행하는 여자아이한테는 다들 집에 가라고만 해서, 두건으로 머리를 가리고 왕자로 다녔어. 그래도 계속 「어린 왕자」라고 불러 줘. — 어린 왕자」');
-      G.State.log('어린 왕자의 지도 뒷면에서 그 아이가 남긴 글을 보았다 — 왕자로 다니던 소녀였다.', 'D');
+      await narrate('지도를 접다가 뒷면에 가느다란 글씨가 적혀 있는 것을 보았다. 지도를 그리던 밤, 별에서 온 소년이 몰래 써 둔 것이다.\f「우물을 찾으면 말하려고 했어. 사실 나 여자야. 혼자 별을 여행하는 여자아이한테는 다들 집에 가라고만 해서, 두건으로 머리를 가리고 소년으로 다녔어. 그래도 계속 「별에서 온 소년」이라고 불러 줘. — 별에서 온 소년」');
+      G.State.log('별에서 온 소년의 지도 뒷면에서 그 아이가 남긴 글을 보았다 — 소년으로 다니던 소녀였다.', 'D');
       return;
     }
-    var pc = shot('reveal', '어린 왕자의 비밀');
+    var pc = shot('reveal', '별에서 온 소년의 비밀');
     try {
       await UI.say('…있잖아. 우물을 찾으면 말하려고 한 게 있어. 거짓말하는 선원은 안 되잖아.', boy());
-      await narrate('어린 왕자가 늘 머리에 둘렀던 푸른 꽃무늬 두건을 뒤로 젖힌다. 감춰 두었던 머리칼을 쓸어 넘기고 우물물로 얼굴을 씻는다. 제독 일행은 그제야 소년 왕자라 믿었던 이가 소녀였음을 알아본다.');
-      await UI.say('사실 나 여자야.\f혼자 별을 여행하는 여자아이한테는 다들 「집에 가라」고만 해. 그런데 왕자라고 하면 길을 물어봐 주고 지도 이야기도 해 줘. 그래서 별을 떠날 때부터 두건으로 머리를 가리고 왕자로 다녔어.', boy());
+      await narrate('별에서 온 소년이 늘 머리에 둘렀던 푸른 꽃무늬 두건을 뒤로 젖힌다. 감춰 두었던 머리칼을 쓸어 넘기고 우물물로 얼굴을 씻는다. 제독 일행은 그제야 소년이라 믿었던 아이가 소녀였음을 알아본다.');
+      await UI.say('사실 나 여자야.\f혼자 별을 여행하는 여자아이한테는 다들 「집에 가라」고만 해. 그런데 소년이라고 하면 길을 물어봐 주고 지도 이야기도 해 줘. 그래서 별을 떠날 때부터 두건으로 머리를 가리고 소년으로 다녔어.', boy());
       await UI.say('…그, 그럼 사막을 건너는 내내 「꼬마 녀석」이라고 부른 건 전부… 실례했습니다, 아가씨.', first());
-      await UI.say('아가씨 말고 「어린 왕자」라고 불러 줘. 두건과 옷도 이대로 입을 거야 — 이 차림이 제일 편하고, 제일 멋지거든.', boy('happy'));
-      var v = await UI.ask('「여자라서 이제 배에서 내리라고 할 거야?」 — 어린 왕자가 두건 자락을 쥔 채 올려다본다.', [
-        { label: '「어린 왕자든 아가씨든, 별을 보고 길을 찾는 선원이면 우리 배에 있어야지.」', value: 'yes' },
+      await UI.say('아가씨 말고 「별에서 온 소년」이라고 불러 줘. 두건과 옷도 이대로 입을 거야 — 이 차림이 제일 편하고, 제일 멋지거든.', boy('happy'));
+      var v = await UI.ask('「여자라서 이제 배에서 내리라고 할 거야?」 — 별에서 온 소년이 두건 자락을 쥔 채 올려다본다.', [
+        { label: '「소년이든 아가씨든, 별을 보고 길을 찾는 선원이면 우리 배에 있어야지.」', value: 'yes' },
         { label: '「배 위는 험하다. 그래도 남겠다면 말리지 않겠다.」', value: 'ok' }], me());
-      if (v === 'ok') await UI.say('험한 건 괜찮아. 내 별에서는 바오바브나무 싹이 날마다 올라와서, 그걸 뽑느라 손이 다 거칠어졌는걸.\f…그래도 고마워. 집에 가라고 안 해서.', boy());
-      else await UI.say('…거봐, 너는 숫자만 좋아하는 어른이 아니라니까!\f다음엔 어디 가? 바다 끝? 같이 가자!', boy('happy'));
+      if (v === 'ok') await UI.say('험한 건 괜찮아. 내 별에서는 날마다 별똥별이 떨어져서, 그걸 주우러 다니느라 무릎이 성할 날이 없었는걸.\f…그래도 고마워. 집에 가라고 안 해서.', boy());
+      else await UI.say('…거봐, 너라면 그렇게 말할 줄 알았어!\f다음엔 어디 가? 바다 끝? 같이 가자!', boy('happy'));
       var m = (S().mates || []).filter(function (x) { return x.id === ID; })[0];
       if (m) m.loyal = Math.min(100, (m.loyal || 80) + 10);
-      UI.toast('어린 왕자 — 왕자로 다니던 소녀였다 (충성 +10)', 'heart', 4600);
-      G.State.log('사막의 우물가에서 어린 왕자가 두건을 젖혔다 — 왕자로 다니던 소녀였다.', 'D');
+      UI.toast('별에서 온 소년 — 소년으로 다니던 소녀였다 (충성 +10)', 'heart', 4600);
+      G.State.log('사막의 우물가에서 별에서 온 소년이 두건을 젖혔다 — 소년으로 다니던 소녀였다.', 'D');
     } finally { if (pc) await pc.stop(); }
   }
   LP.reveal = reveal;

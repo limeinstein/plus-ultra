@@ -1,0 +1,253 @@
+{
+  "date": "2026-11-04",
+  "mode": "built-in image_gen",
+  "scenes": [
+    {
+      "id": "rv_supply",
+      "title": "메이플라워 — 런던의 물자 조달",
+      "speaker": "rv_cmartin",
+      "refs": [
+        "rv_cmartin"
+      ],
+      "description": "London riverside wharf in late summer 1620, weathered merchant sailing ship Mayflower moored broadside behind stacks of wheat sacks and wooden beer casks, dockworkers carrying supplies up a plank. Reference Christopher Martin is foreground slightly left: black cap and black merchant clothes, short beard, checking a cargo list and gesturing to a barrel, a small coin purse in other hand. Lively period timber warehouses, ropes, tackle and Thames river light; salt-worn practical ship with three masts, square sails furled, no gigantic fantasy vessel. Warm overcast morning, medium-wide narrative shot.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_cmartin.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. London riverside wharf in late summer 1620, weathered merchant sailing ship Mayflower moored broadside behind stacks of wheat sacks and wooden beer casks, dockworkers carrying supplies up a plank. Reference Christopher Martin is foreground slightly left: black cap and black merchant clothes, short beard, checking a cargo list and gesturing to a barrel, a small coin purse in other hand. Lively period timber warehouses, ropes, tackle and Thames river light; salt-worn practical ship with three masts, square sails furled, no gigantic fantasy vessel. Warm overcast morning, medium-wide narrative shot.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-1e4c4730-7e9e-4538-ac34-1ae37040cfd4.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_supply.png",
+      "file": "images/legend-events/rv_supply.webp"
+    },
+    {
+      "id": "rv_winter",
+      "title": "메이플라워 — 플리머스의 첫 겨울",
+      "speaker": "rv_bradford",
+      "refs": [
+        "rv_bradford"
+      ],
+      "description": "Plymouth New England in the bitter first winter of 1620-1621. A snow-covered bay and Mayflower anchored close offshore, small unfinished timber cabins and several modest wooden grave markers on distant hillside. Foreground adult English settlers in plain wool winter clothes receive sacks of food and a small medicine box; reference William Bradford in black pilgrim hat and wide white collar stands beside them with a worried resilient expression and closed Bible held close. Some exhausted adults wrapped in blankets near cabin doorway, no gore. Cold blue-grey sky with small warm hearth light visible through door, humane restrained mood.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_bradford.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Plymouth New England in the bitter first winter of 1620-1621. A snow-covered bay and Mayflower anchored close offshore, small unfinished timber cabins and several modest wooden grave markers on distant hillside. Foreground adult English settlers in plain wool winter clothes receive sacks of food and a small medicine box; reference William Bradford in black pilgrim hat and wide white collar stands beside them with a worried resilient expression and closed Bible held close. Some exhausted adults wrapped in blankets near cabin doorway, no gore. Cold blue-grey sky with small warm hearth light visible through door, humane restrained mood.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-e88b5b4d-af26-45e6-a651-665ceb2b1822.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_winter.png",
+      "file": "images/legend-events/rv_winter.webp"
+    },
+    {
+      "id": "rv_samoset",
+      "title": "메이플라워 — 사모셋과의 첫 만남",
+      "speaker": "rv_samoset",
+      "refs": [
+        "rv_samoset",
+        "rv_bradford"
+      ],
+      "description": "Early spring 1621 at the edge of Plymouth settlement beside a bare budding New England forest. Samoset from reference 1 walks openly into a clearing with a broad friendly smile, one open palm raised in greeting and wooden bow lowered safely in other hand. William Bradford from reference 2 and two adult pilgrims beside a rough timber palisade hold lowered matchlock muskets in surprise but do not aim or fire. Spring mud, last patches of snow, primitive log cabins, tension dissolving into curiosity. Respectful individuals, realistic northeastern woodland hide clothing exactly as reference, no Plains feather headdress.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_samoset.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_bradford.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Early spring 1621 at the edge of Plymouth settlement beside a bare budding New England forest. Samoset from reference 1 walks openly into a clearing with a broad friendly smile, one open palm raised in greeting and wooden bow lowered safely in other hand. William Bradford from reference 2 and two adult pilgrims beside a rough timber palisade hold lowered matchlock muskets in surprise but do not aim or fire. Spring mud, last patches of snow, primitive log cabins, tension dissolving into curiosity. Respectful individuals, realistic northeastern woodland hide clothing exactly as reference, no Plains feather headdress.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-3b47a8a2-4a84-4b10-a8c4-dfb8c9f86846.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_samoset.png",
+      "file": "images/legend-events/rv_samoset.webp"
+    },
+    {
+      "id": "rv_treaty",
+      "title": "메이플라워 — 마사소이트와의 약속",
+      "speaker": "rv_massasoit",
+      "refs": [
+        "rv_massasoit",
+        "rv_squanto",
+        "rv_bradford"
+      ],
+      "description": "Spring 1621, one coherent scene at the edge of a coastal corn field on a grassy Plymouth hillside. Foreground Massasoit (reference 1, broad dignified face, dark fur mantle, shell beads) and Bradford (reference 3, black clothes and white collar) exchange cloth and a small copper gift respectfully across a low wooden table. A few steps to right Squanto (reference 2, deer-hide shoulder cape, thoughtful face) kneels by newly dug soil to show an adult settler how to bury a small fish beside corn seeds. Bay and modest cabins beyond. Diplomatic trust, warm green-grey spring light, no staged group portrait, no flags with writing.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_massasoit.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_squanto.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_bradford.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Spring 1621, one coherent scene at the edge of a coastal corn field on a grassy Plymouth hillside. Foreground Massasoit (reference 1, broad dignified face, dark fur mantle, shell beads) and Bradford (reference 3, black clothes and white collar) exchange cloth and a small copper gift respectfully across a low wooden table. A few steps to right Squanto (reference 2, deer-hide shoulder cape, thoughtful face) kneels by newly dug soil to show an adult settler how to bury a small fish beside corn seeds. Bay and modest cabins beyond. Diplomatic trust, warm green-grey spring light, no staged group portrait, no flags with writing.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-cb03e94a-f7d7-48ab-a3fa-7db54787c21f.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_treaty.png",
+      "file": "images/legend-events/rv_treaty.webp"
+    },
+    {
+      "id": "rv_feast",
+      "title": "메이플라워 — 첫 추수 잔치",
+      "speaker": "rv_massasoit",
+      "refs": [
+        "rv_massasoit",
+        "rv_squanto",
+        "rv_bradford"
+      ],
+      "description": "Autumn harvest gathering near Plymouth in 1621, orange and gold New England foliage, open fire, humble wooden tables and people seated together on logs. Adult Wampanoag guests and English settlers share roasted vegetables, corn, bread and venison, talking as equals. In foreground Massasoit from reference 1 sits with Bradford from reference 3, a warm conversation; Squanto from reference 2 brings a basket of corn. In distance hunters carry a wrapped deer bundle, no blood or butchery. Modest settlement and sheltered bay beyond, late afternoon gold light and natural welcoming community, no modern American Thanksgiving decorations.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_massasoit.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_squanto.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_bradford.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Autumn harvest gathering near Plymouth in 1621, orange and gold New England foliage, open fire, humble wooden tables and people seated together on logs. Adult Wampanoag guests and English settlers share roasted vegetables, corn, bread and venison, talking as equals. In foreground Massasoit from reference 1 sits with Bradford from reference 3, a warm conversation; Squanto from reference 2 brings a basket of corn. In distance hunters carry a wrapped deer bundle, no blood or butchery. Modest settlement and sheltered bay beyond, late afternoon gold light and natural welcoming community, no modern American Thanksgiving decorations.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-273a1a76-dae3-4fd4-8737-93d5f9caf2ea.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_feast.png",
+      "file": "images/legend-events/rv_feast.webp"
+    },
+    {
+      "id": "rv_weltevree",
+      "title": "한양 — 훈련도감의 박연",
+      "speaker": "rv_weltevree",
+      "refs": [
+        "rv_weltevree"
+      ],
+      "description": "Hanyang Joseon military training yard around 1640, authentic Korean tiled-roof wooden buildings and packed earth courtyard. Jan Weltevree/Pak Yeon from reference, older tall European man with blue eyes and full reddish-grey beard in blue/teal Joseon cheollik and black military hat with modest red tassel, stands beside a cast bronze/iron European-style cannon on a timber carriage. He holds an unrolled technical diagram with indistinct marks and uses a measuring tool to explain the gun to three adult Korean military craftsmen in Joseon uniforms, who attend thoughtfully. Cannon balls, bellows, timber tools and a small distant smithy. Soft daylight, medium-wide scene, unmistakably Korean setting and clothing.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_weltevree.png"
+      ],
+      "prompt": "Use case: historical-scene. One peaceful historical RPG event illustration, hand-painted semi-realistic art matching supplied identity reference. Panoramic 1888x848, opaque scenic background, all important faces and hands kept inside middle 70% height. Reference image identifies Pak Yeon / Jan Weltevree ONLY: preserve his mature European face, reddish-grey beard, blue eyes, dark Korean military hat and teal/indigo Joseon cheollik robe; redraw him naturally in the scene, no isolated pasted cutout. Hanyang around 1640, peaceful Korean tiled-roof courtyard on a bright ordinary workday. Pak Yeon stands beside a wooden table explaining a rolled mechanical sketch to three adult Korean colleagues in plain Joseon work robes; they discuss attentively and one holds a brush above a notebook. Diagram is only vague lines, NO readable engineering details or instructions. A large cloth-covered wheeled object stands completely in the rear under an awning, its contents not visible. Simple wooden crates, water jar, canvas rolls, pavilion and workshop timber beams add setting. Friendly scholarly exchange and cultural cooperation. No fighting, no gunfire, no weapon use, no exposed weapons, no injuries or violence. No soldiers aiming anything. No writing, titles, captions, logo, watermark or frame.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-dc981ef2-a74e-4fb8-bfe1-0607db15b04f.png",
+      "initial_prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Hanyang Joseon military training yard around 1640, authentic Korean tiled-roof wooden buildings and packed earth courtyard. Jan Weltevree/Pak Yeon from reference, older tall European man with blue eyes and full reddish-grey beard in blue/teal Joseon cheollik and black military hat with modest red tassel, stands beside a cast bronze/iron European-style cannon on a timber carriage. He holds an unrolled technical diagram with indistinct marks and uses a measuring tool to explain the gun to three adult Korean military craftsmen in Joseon uniforms, who attend thoughtfully. Cannon balls, bellows, timber tools and a small distant smithy. Soft daylight, medium-wide scene, unmistakably Korean setting and clothing.",
+      "revision_note": "초기 출력이 도구 안전 검사에서 거절되어, 대화를 중심으로 하고 장비는 뒤쪽에 천으로 덮은 비폭력 장면으로 조정.",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_weltevree.png",
+      "file": "images/legend-events/rv_weltevree.webp"
+    },
+    {
+      "id": "rv_sperwer",
+      "title": "제주 — 스페르베르호의 난파",
+      "speaker": "rv_hamel",
+      "refs": [
+        "hamel",
+        "rv_yiwonjin"
+      ],
+      "description": "After a violent storm near southern Jeju coast in 1653, dawn light breaks over dark wet basalt rocks and rolling sea. A shattered Dutch merchant ship Sperwer with broken mast tilts offshore; surviving adult sailors cling to safe rock shelves or help each other reach a rescue rowing boat. In foreground Hendrick Hamel from reference 1, wet sandy-brown hair, faded brown Dutch coat over humble pale Joseon-style layers, hugs a water-stained journal and reaches toward rescuers. On higher shore behind, Jeju magistrate Yi Won-jin from reference 2 arrives with two Korean guards: correct red official robe, large CENTERED crane rank badge, black samo with slender side wings and plaque belt. Hopeful rescue, dramatic ocean without drowning closeups, blood or corpses. Faces and rescuing hands clearly visible.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/hamel.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_yiwonjin.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. After a violent storm near southern Jeju coast in 1653, dawn light breaks over dark wet basalt rocks and rolling sea. A shattered Dutch merchant ship Sperwer with broken mast tilts offshore; surviving adult sailors cling to safe rock shelves or help each other reach a rescue rowing boat. In foreground Hendrick Hamel from reference 1, wet sandy-brown hair, faded brown Dutch coat over humble pale Joseon-style layers, hugs a water-stained journal and reaches toward rescuers. On higher shore behind, Jeju magistrate Yi Won-jin from reference 2 arrives with two Korean guards: correct red official robe, large CENTERED crane rank badge, black samo with slender side wings and plaque belt. Hopeful rescue, dramatic ocean without drowning closeups, blood or corpses. Faces and rescuing hands clearly visible.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-8223401e-d2b1-43b1-9cb8-e7b02a6edc81.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_sperwer.png",
+      "file": "images/legend-events/rv_sperwer.webp"
+    },
+    {
+      "id": "rv_hamel",
+      "title": "여수 — 하멜의 탈출",
+      "speaker": "rv_hamel",
+      "refs": [
+        "hamel"
+      ],
+      "description": "Moonless night off Yeosu in 1666. A small Korean single-mast fishing boat quietly rows south out of a dark sheltered bay, exactly eight adult Dutch men in humble worn Joseon clothing aboard, countable distinct people. Foreground boat viewed obliquely at water level; Hamel from reference stands low near bow clutching his closed travel journal, sandy-brown hair and lean observant face recognizable, looking with startled hope toward a larger friendly vessel just outside frame. Several men row, others hold a small furled sail or crouch together. Faint warm covered lantern illuminates faces; distant Korean rocky coastline and a few dim harbor lights. Deep indigo sea, restrained cinematic escape tension; no modern boat, no bright full moon.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/hamel.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Moonless night off Yeosu in 1666. A small Korean single-mast fishing boat quietly rows south out of a dark sheltered bay, exactly eight adult Dutch men in humble worn Joseon clothing aboard, countable distinct people. Foreground boat viewed obliquely at water level; Hamel from reference stands low near bow clutching his closed travel journal, sandy-brown hair and lean observant face recognizable, looking with startled hope toward a larger friendly vessel just outside frame. Several men row, others hold a small furled sail or crouch together. Faint warm covered lantern illuminates faces; distant Korean rocky coastline and a few dim harbor lights. Deep indigo sea, restrained cinematic escape tension; no modern boat, no bright full moon.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-4a0b62b6-bf84-41ad-8f53-37c306e74033.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_hamel.png",
+      "file": "images/legend-events/rv_hamel.webp"
+    },
+    {
+      "id": "rv_omalley",
+      "title": "클루 만 — 그라누알의 갤리선",
+      "speaker": "rv_grace",
+      "refs": [
+        "omalley"
+      ],
+      "description": "Foggy Clew Bay west Ireland in the late 16th century. Grace O'Malley from reference commands the prow of her galley in foreground, short copper-red hair, mature confident freckled face, green cloak and blouse, gold Celtic brooch, russet fitted corset and layered green skirt retained. One hand holds ship rail, other gestures authoritatively for approaching ship to stop; lowered cutlass at her belt. Three Irish galleys with many long oars and lateen sails are visible emerging from mist behind, rocky green coastline and a distant tower. Wind catches cloak, cool sea mist contrasts warm face light. Bold captain encounter, no erotic framing, composition shows boats and environment as much as captain.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/omalley.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Foggy Clew Bay west Ireland in the late 16th century. Grace O'Malley from reference commands the prow of her galley in foreground, short copper-red hair, mature confident freckled face, green cloak and blouse, gold Celtic brooch, russet fitted corset and layered green skirt retained. One hand holds ship rail, other gestures authoritatively for approaching ship to stop; lowered cutlass at her belt. Three Irish galleys with many long oars and lateen sails are visible emerging from mist behind, rocky green coastline and a distant tower. Wind catches cloak, cool sea mist contrasts warm face light. Bold captain encounter, no erotic framing, composition shows boats and environment as much as captain.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-44023520-b705-46fa-9db4-05202133bff4.png",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-194839a4-945b-4eaa-9350-5fb9fb194626.png",
+      "revision_prompt": "Edit ONLY the SHIP DESIGNS in the provided historical game event illustration. Keep Grace O'Malley, her exact face, red hair, hat, green costume and brooch, pose, all people, camera framing, foggy Clew Bay scenery, sea and painterly style unchanged. Correct all foreground and background small oared vessels into late-16th-century Renaissance GALLEYS: long low timber hulls with a straight projecting beak at the bow, a small raised stern deck, multiple long oars along each side, and one or two tall masts carrying large plain TRIANGULAR LATeEN sails. Do not use Viking longship designs, no curled dragon-head or swan-head prows, no Celtic spiral sail logos, no square Viking sails. Replace the foreground dragon-like carving near right rail with a simple straight galley bow rail and projecting timber beak; keep perspective and Grace's hand placement on rail natural. Background other large merchant sailing ship at far right stays unchanged. This is a peaceful sailing encounter with no weapons being fired or people injured. Preserve all other image details. Landscape panoramic 1888x848 with opaque scenic background. No text, watermark, border or UI.",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_omalley.png",
+      "file": "images/legend-events/rv_omalley.webp"
+    },
+    {
+      "id": "rv_omalley_friends",
+      "title": "록플리트 성 — 그라누알과의 술잔",
+      "speaker": "rv_grace",
+      "refs": [
+        "omalley"
+      ],
+      "description": "Night inside the rough stone chamber of Rockfleet Castle overlooking Clew Bay. Grace O'Malley from reference sits comfortably sideways at a heavy timber table near arched window, short copper-red hair and mature amused smile recognizable, wearing same green blouse, russet corset, Celtic gold brooch and cloak draped behind shoulder. She raises a small pewter whiskey cup toward a visiting captain whose gloved hand and shoulder are only partly visible at left frame, warm friendly equals after a hard-won sea battle. Bread, a dark jug and rolled sea chart on table; candle and fireplace glow, ships' lanterns in bay beyond. Natural storytelling atmosphere, not an isolated portrait, no bedroom or suggestive posing.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/omalley.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Night inside the rough stone chamber of Rockfleet Castle overlooking Clew Bay. Grace O'Malley from reference sits comfortably sideways at a heavy timber table near arched window, short copper-red hair and mature amused smile recognizable, wearing same green blouse, russet corset, Celtic gold brooch and cloak draped behind shoulder. She raises a small pewter whiskey cup toward a visiting captain whose gloved hand and shoulder are only partly visible at left frame, warm friendly equals after a hard-won sea battle. Bread, a dark jug and rolled sea chart on table; candle and fireplace glow, ships' lanterns in bay beyond. Natural storytelling atmosphere, not an isolated portrait, no bedroom or suggestive posing.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-7ecfdfad-9ff5-457d-b3ae-3a5e0776e811.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_omalley_friends.png",
+      "file": "images/legend-events/rv_omalley_friends.webp"
+    },
+    {
+      "id": "rv_bonny",
+      "title": "카리브 — 래컴의 슬루프",
+      "speaker": "rv_bonny",
+      "refs": [
+        "bonny",
+        "mread",
+        "rv_rackham"
+      ],
+      "description": "Clear turquoise Caribbean sea around Jamaica and Bahamas, pirate sloop deck at bright late afternoon, blue coast and two smaller sailboats behind. Anne Bonny from reference 1 leads at front left, EXACT approved copper-red hair, dark tricorn, defiant under-brow gaze, rust-red fitted waistcoat and cream blouse, navy knee breeches, twin pistols on belt; she grips cutlass lowered outward. Mary Read from reference 2 stands at front right: black tousled bob with fringe, languid eyes and slightly parted lips, cream blouse and brown corset under weathered brown coat, burgundy sash and tan layered skirt; one hand at sword hilt and other holding a short hand-rolled tobacco cigarette with a thin wisp of smoke. Calico Jack from reference 3, striped calico coat and crooked smile, stands a few steps behind holding a rum bottle. They hail an approaching merchant vessel, confident deck encounter, all adults, no graphic combat or erotic framing. Calico cloth pennant with no lettering.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/bonny.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/mread.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/rv_rackham.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Clear turquoise Caribbean sea around Jamaica and Bahamas, pirate sloop deck at bright late afternoon, blue coast and two smaller sailboats behind. Anne Bonny from reference 1 leads at front left, EXACT approved copper-red hair, dark tricorn, defiant under-brow gaze, rust-red fitted waistcoat and cream blouse, navy knee breeches, twin pistols on belt; she grips cutlass lowered outward. Mary Read from reference 2 stands at front right: black tousled bob with fringe, languid eyes and slightly parted lips, cream blouse and brown corset under weathered brown coat, burgundy sash and tan layered skirt; one hand at sword hilt and other holding a short hand-rolled tobacco cigarette with a thin wisp of smoke. Calico Jack from reference 3, striped calico coat and crooked smile, stands a few steps behind holding a rum bottle. They hail an approaching merchant vessel, confident deck encounter, all adults, no graphic combat or erotic framing. Calico cloth pennant with no lettering.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-2c67b8d8-78dc-4143-a7ad-b25da313b4b6.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_bonny.png",
+      "file": "images/legend-events/rv_bonny.webp"
+    },
+    {
+      "id": "rv_bonny_friends",
+      "title": "카리브 — 앤과 메리의 동료 합류",
+      "speaker": "rv_bonny",
+      "refs": [
+        "bonny",
+        "mread"
+      ],
+      "description": "Twilight Caribbean sloop deck after battle, two friendly crews celebrating together without any fighting. Foreground Anne Bonny from reference 1, copper-red hair, dark tricorn, defiant expressive face, approved rust-red waistcoat, cream blouse and navy breeches, leans on a barrel and lifts a pewter rum cup toward a visiting captain's gloved hand at edge. Beside her Mary Read from reference 2, black bob and languid expression, cream blouse, brown leather corset, weathered coat and layered skirt, looks calmly amused, a short rolled tobacco cigarette between fingers with fine smoke and a cup resting near her other hand. Rope coils, covered lanterns, salt-worn rigging, warm orange lights and deep blue sea; background adult crews exchange cups and food. Preserve both distinct faces and costumes; game friendship scene, no bedroom atmosphere, no erotic framing, no lettering.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/bonny.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/mread.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Twilight Caribbean sloop deck after battle, two friendly crews celebrating together without any fighting. Foreground Anne Bonny from reference 1, copper-red hair, dark tricorn, defiant expressive face, approved rust-red waistcoat, cream blouse and navy breeches, leans on a barrel and lifts a pewter rum cup toward a visiting captain's gloved hand at edge. Beside her Mary Read from reference 2, black bob and languid expression, cream blouse, brown leather corset, weathered coat and layered skirt, looks calmly amused, a short rolled tobacco cigarette between fingers with fine smoke and a cup resting near her other hand. Rope coils, covered lanterns, salt-worn rigging, warm orange lights and deep blue sea; background adult crews exchange cups and food. Preserve both distinct faces and costumes; game friendship scene, no bedroom atmosphere, no erotic framing, no lettering.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-e8a32681-bad3-4fd5-9ad6-8b99f1e68081.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_bonny_friends.png",
+      "file": "images/legend-events/rv_bonny_friends.webp"
+    },
+    {
+      "id": "rv_teach",
+      "title": "캐롤라이나 — 검은 수염의 조우",
+      "speaker": "rv_teach",
+      "refs": [
+        "blackbeard"
+      ],
+      "description": "Dramatic encounter off Ocracoke, Carolina coast. Queen Anne's Revenge, a large armed sailing frigate under a plain black flag, approaches through drifting gunpowder haze at dusk. Foreground low-angle medium-wide view of Edward Teach from reference on the quarterdeck, unmistakable large black beard in ribbon-tied braids, dark tricorn with smoldering slow-match cords, dark long coat, red sash and six pistols in cross-belts. He spreads one commanding hand toward the opposing ship, other on rail, terrifying theatrical presence without blood or supernatural traits. Thin fuse smoke curls around hat but face remains readable. Four ships across background with square sails and coastal shoals, grey-green sea and fiery late sun. No skull overlay or floating ghost imagery, no firing at people.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/blackbeard.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Dramatic encounter off Ocracoke, Carolina coast. Queen Anne's Revenge, a large armed sailing frigate under a plain black flag, approaches through drifting gunpowder haze at dusk. Foreground low-angle medium-wide view of Edward Teach from reference on the quarterdeck, unmistakable large black beard in ribbon-tied braids, dark tricorn with smoldering slow-match cords, dark long coat, red sash and six pistols in cross-belts. He spreads one commanding hand toward the opposing ship, other on rail, terrifying theatrical presence without blood or supernatural traits. Thin fuse smoke curls around hat but face remains readable. Four ships across background with square sails and coastal shoals, grey-green sea and fiery late sun. No skull overlay or floating ghost imagery, no firing at people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-d681d4a2-6779-44a3-b96f-f6b75dd74278.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_teach.png",
+      "file": "images/legend-events/rv_teach.webp"
+    },
+    {
+      "id": "rv_teach_friends",
+      "title": "선실 — 검은 수염의 항해 일지",
+      "speaker": "rv_teach",
+      "refs": [
+        "blackbeard"
+      ],
+      "description": "Warm candlelit captain's cabin after a sea battle, Edward Teach from reference sits at a wooden chart table, long ribbon-tied black beard, tricorn resting on table with slow-match cords extinguished, dark coat, red sash and pistol bandoliers recognizable. His expression is a broad knowing human grin rather than terror as he turns a page in a ship's log to explain a course to a visiting captain whose shoulder appears at left edge. Ink pot, compass dividers, rolled charts, pewter cup and small bottle, documents have only indistinct marks. Blue night sea visible through stern windows, creaking wooden beams and gentle lantern glow. Friendship and trust after the intimidating encounter, natural environmental storytelling, no clear text.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/rovers-portraits-20261104/sources/blackbeard.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: wide story event illustration for Loop of Good Hope, historical sailing RPG. Create ONE coherent cinematic scene, finely hand-painted semi-realistic game key art with visible brushwork, rich natural materials and atmospheric light, matching the character reference illustrations. Landscape PANORAMIC 2.25:1 composition, 1888x848 pixels. Keep key faces, hands and actions comfortably inside the central 85% width and central 65% height so it crops safely to 1881x836. Full scenic opaque background, no transparency. Reference images are character IDENTITY / COSTUME / PAINTERLY STYLE guides ONLY: preserve recognizable facial features and clothes but redraw people naturally in the scene; do not paste isolated portraits, do not create a collage or split panels. All featured characters are adults. No captions, legible writing, titles, frames, watermarks, UI or modern objects. Warm candlelit captain's cabin after a sea battle, Edward Teach from reference sits at a wooden chart table, long ribbon-tied black beard, tricorn resting on table with slow-match cords extinguished, dark coat, red sash and pistol bandoliers recognizable. His expression is a broad knowing human grin rather than terror as he turns a page in a ship's log to explain a course to a visiting captain whose shoulder appears at left edge. Ink pot, compass dividers, rolled charts, pewter cup and small bottle, documents have only indistinct marks. Blue night sea visible through stern windows, creaking wooden beams and gentle lantern glow. Friendship and trust after the intimidating encounter, natural environmental storytelling, no clear text.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-1667ca94-c4f8-4735-b434-cb6bf506f2f2.png",
+      "workspace_source": "artifacts/rovers-event-shots-20261104/sources/rv_teach_friends.png",
+      "file": "images/legend-events/rv_teach_friends.webp"
+    }
+  ],
+  "completed_date": "2026-11-05"
+}

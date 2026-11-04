@@ -9,7 +9,7 @@
 
 ```text
 Use case: historical-scene.
-Asset type: 2x2 cinematic discovery storyboard source for the PLUS ULTRA historical
+Asset type: 2x2 cinematic discovery storyboard source for the Loop of Good Hope historical
 exploration game. Create one 3:2 landscape sheet containing EXACTLY FOUR equal
 panels in a clean 2x2 grid with thin straight white gutters. No text, captions,
 numbers, logo, watermark, border, or UI. Show the same individual, anatomy, location,

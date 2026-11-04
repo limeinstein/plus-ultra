@@ -100,7 +100,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     r = await ev(async () => {
       await TT.until(() => !!G.Game.state.tut.f.in_prologue && !G.UI.busy() && !G.Tutorial.busy(), { what: '프롤로그 대사' });
       const box = document.querySelector('.tutbox'); const o = { box0: box ? box.textContent.slice(0, 80) : '' };
-      // 순서에 없는 건물: 로코가 말린다
+      // 순서에 없는 건물: 라울이 말린다
       const n0 = TT.log.length; G.Scenes.city.visit('tavern'); await TT.sleep(80);
       await TT.until(() => !G.UI.busy() && !G.Tutorial.busy(), {});
       o.blocked = TT.log.slice(n0).join(' / ') + ' → ' + (G.Scenes.city.current() ? G.Scenes.city.current().kind : '거리');
@@ -115,8 +115,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       o.again = new Set(TT.log.slice(n1).filter(x => /책등 색을 보십시오|두 가지가 있어야/.test(x)).map(x => x.slice(0, 12))).size;
       return o;
     });
-    ok(r.teach && !r.tipList && /다시 듣기/.test(r.box) && r.again === 2, '설명은 부하가 말로 한다(로코: 서가·책등 색·읽는 조건) · 안내판에는 할 일만 · 「다시 듣기」 (' + r.again + '줄 다시)');
-    ok(/첫 항해/.test(r.box0) && /도서관이 먼저/.test(r.blocked) && /거리$/.test(r.blocked), '0 프롤로그: 안내 상자 · 다른 건물은 로코가 말린다 (' + r.blocked.slice(0, 60) + ')');
+    ok(r.teach && !r.tipList && /다시 듣기/.test(r.box) && r.again === 2, '설명은 부하가 말로 한다(라울: 서가·책등 색·읽는 조건) · 안내판에는 할 일만 · 「다시 듣기」 (' + r.again + '줄 다시)');
+    ok(/첫 항해/.test(r.box0) && /도서관이 먼저/.test(r.blocked) && /거리$/.test(r.blocked), '0 프롤로그: 안내 상자 · 다른 건물은 라울이 말린다 (' + r.blocked.slice(0, 60) + ')');
     ok(/열람/.test(r.glow), '빛나는 단추: ' + r.glow);
     await page.screenshot({ path: SHOTS + '/01_library.png' });
 
@@ -181,9 +181,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     r = await ev(async () => {
       const C = G.Scenes.city, s = G.Game.state, o = {};
       await TT.menu('술집을 나온다');
-      // 다른 저택은 로코가 말린다
+      // 다른 저택은 라울이 말린다
       const n0 = TT.log.length; C.visit('palace'); await TT.sleep(80); await TT.until(() => !G.UI.busy() && !G.Tutorial.busy(), {});
-      o.other = TT.log.slice(n0).join('/').slice(0, 40);
+      o.other = TT.log.slice(n0).join('/').slice(0, 60);   // 말하는 사람 이름이 길어도 (라울 이니에스타)
       await TT.visit('mansion', 'es_medinaceli');
       await TT.until(() => !!s.tut.f.dukeIn && !G.UI.busy() && !C.isBusy() && !G.Tutorial.busy(), { what: '공작 알현' });
       o.in = C.current() && C.current().kind;
@@ -259,7 +259,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     });
     ok(r.sighted && r.paused && r.tips && /fusta/.test(r.enemy), '8 해전: 해적 푸스타가 나타나 덤비고, 해전은 멈춘 채 시작 (' + r.enemy + ', ' + r.day + '일째) ' + JSON.stringify([r.sighted, r.paused, r.tips]));
     ok(!r.err && /^1:true:/.test(r.again) && /:true$/.test(r.again), '   물러나면 「다시」 — 상태를 되돌리고 적을 약하게 (' + r.again + ')');
-    ok(/^1:true$/.test(r.won), '   승리 → 바다로 돌아와 로코의 한마디');
+    ok(/^1:true$/.test(r.won), '   승리 → 바다로 돌아와 라울의 한마디');
 
     // ---- 9 세우타 입항
     r = await ev(async () => {
@@ -356,7 +356,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       o.sellAt = G.Scenes.city.B.trade.quoteTable ? 0 : 0;
       return o;
     });
-    ok(r.teach && /^18:\d+:\d+$/.test(r.coral) && /산호/.test(r.glow), '13 귀환(' + r.day + '일째) · 14 구입: 로코·아라나의 설명 뒤 산호 18통 (' + r.coral + ') · 빛나는 것 ' + r.glow);
+    ok(r.teach && /^18:\d+:\d+$/.test(r.coral) && /산호/.test(r.glow), '13 귀환(' + r.day + '일째) · 14 구입: 라울·아라나의 설명 뒤 산호 18통 (' + r.coral + ') · 빛나는 것 ' + r.glow);
 
     // ---- 15 자동항해 → 16 판매
     r = await ev(async () => {
@@ -416,7 +416,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       const st1 = await G.State.loadAsync('journal1'); o.saved = !!(st1 && st1.tut && st1.tut.f.saved);
       // 끝난 뒤에는 아무것도 막지 않는다
       const n9 = TT.log.length; C.visit('tavern'); await TT.sleep(900);
-      o.free = (C.current() || G.UI.busy() || C.isBusy()) && !TT.log.slice(n9).some(x => /로코 알베르티/.test(x)) ? 'tavern' : '';
+      o.free = (C.current() || G.UI.busy() || C.isBusy()) && !TT.log.slice(n9).some(x => /라울 이니에스타/.test(x)) ? 'tavern' : '';
       o.fameBy = G.Fame.text();
       return o;
     });

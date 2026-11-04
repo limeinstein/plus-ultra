@@ -396,7 +396,7 @@
     var n = e && (e.name || ''), m = String(e && e.message || e || '');
     if (/Quota|quota|exceed/i.test(n + m)) {
       var r = ST.storageReport();
-      return '브라우저 저장 공간이 가득 찼습니다 (이 주소에서 PLUS ULTRA 일지 ' + man(r.ours) + '자 · 같은 github.io의 다른 페이지 ' + man(r.others) + '자' + (r.top.length ? ' — 가장 큰 것: ' + r.top[0][0] : '') + ')';
+      return '브라우저 저장 공간이 가득 찼습니다 (이 주소에서 Loop of Good Hope 일지 ' + man(r.ours) + '자 · 같은 github.io의 다른 페이지 ' + man(r.others) + '자' + (r.top.length ? ' — 가장 큰 것: ' + r.top[0][0] : '') + ')';
     }
     if (/Security|denied|access/i.test(n + m)) return '이 브라우저(사생활 보호 창·앱 안 브라우저 등)가 저장을 막고 있습니다';
     return '브라우저 저장소에 쓰지 못했습니다 (' + (n || m).slice(0, 60) + ')';
@@ -546,7 +546,7 @@
     var d = new Date(meta.t || Date.now()), pad = function (n) { return (n < 10 ? '0' : '') + n; };
     // 파일 이름은 영문·숫자만 (한글 이름은 브라우저에 따라 「download」로 바뀌어 버린다): 게임 날짜 + 저장한 날
     var slotName = slot == null ? 'now' : /^auto[1-5]$/.test(String(slot)) ? String(slot).replace('auto', 'auto-') : /^journal[1-5]$/.test(String(slot)) ? String(slot).replace('journal', 'journal-') : slot === 0 ? 'auto' : 'slot' + slot;
-    var name = 'PLUS_ULTRA_' + slotName + '_' + String(meta.date || '').replace(/[^0-9]+/g, '-').replace(/^-|-$/g, '') + '_' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json';
+    var name = 'LoopOfGoodHope_' + slotName + '_' + String(meta.date || '').replace(/[^0-9]+/g, '-').replace(/^-|-$/g, '') + '_' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json';
     try {
       var url = URL.createObjectURL(new Blob([body], { type: 'application/json' }));
       var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click();

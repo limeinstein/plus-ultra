@@ -49,7 +49,7 @@ from sources import DISC, RELIC  # noqa: E402
 CACHE = os.path.join(HERE, 'cache')
 OUT = os.path.join(HERE, 'out')
 IMG = os.path.join(ROOT, 'images')
-UA = 'PLUS-ULTRA-game heritage fetcher/1.0 (https://github.com/limeinstein/plus-ultra; educational game)'
+UA = 'LoopOfGoodHope-game heritage fetcher/1.0 (https://github.com/limeinstein/plus-ultra; educational game)'
 SI_KEY = os.environ.get('SI_API_KEY', 'DEMO_KEY')
 OK_LICENSE = re.compile(r'public domain|cc0|cc[- ]by|creativecommons\.org/(licenses/by|publicdomain)|pdm|no restrictions|kogl type 1|공공누리 제1유형', re.I)
 NC_ND = re.compile(r'\b(nc|nd)\b|noncommercial|noderiv', re.I)

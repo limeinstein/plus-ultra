@@ -1,9 +1,9 @@
-/* PLUS ULTRA 설치형 게임 (Windows) — Electron 껍데기.
+/* Loop of Good Hope 설치형 게임 (Windows) — Electron 껍데기. (2026-11-04 게임 이름을 바꿈 — 저장 폴더는 옛 이름 그대로)
    게임 자체는 웹판과 같은 파일(tools/build_desktop.py가 desktop/app에 만든다)을 file://로 연다.
    · 창: 1600×900에서 시작해 화면을 채운다(최대화) · F11 전체 화면 · F12 개발자 도구(개발판·점검에서만 — 출시판은 막는다)
-   · 저장: 게임이 쓰는 localStorage는 사용자 폴더(%APPDATA%\PLUS ULTRA)에 남아 업데이트·재설치에도 그대로
+   · 저장: 게임이 쓰는 localStorage는 사용자 폴더(%APPDATA%\PLUS ULTRA — 옛 이름 그대로 둔다)에 남아 업데이트·재설치에도 그대로
    · 업데이트: 켤 때 GitHub 릴리스(limeinstein/plus-ultra)에서 새 판을 찾아 뒤에서 받고(바뀐 조각만), 받으면 다시 시작할지 묻는다
-   · GIF 팩: 「PLUS ULTRA GIF 팩」(desktop/gifpack.nsi)이 %APPDATA%\PLUS ULTRA\gifpack 에 깔려 있으면 preload.js로 위치를 알려 주고,
+   · GIF 팩: 「Loop of Good Hope GIF 팩」(desktop/gifpack.nsi)이 %APPDATA%\PLUS ULTRA\gifpack 에 깔려 있으면 preload.js로 위치를 알려 주고,
      게임(app/images/gifpack.js)이 그 목록을 읽어 발견물 원본 GIF를 쓴다. --gifpack=<폴더>로 다른 곳을 줄 수도 있다(점검용)
    · --smoke: 창을 띄우지 않고 타이틀 화면까지 열어 본 뒤 결과(JSON)를 찍고 끝난다 (GitHub Actions 점검용) */
 'use strict';
@@ -11,6 +11,10 @@ const { app, BrowserWindow, Menu, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL, fileURLToPath } = require('url');
+
+// 게임 이름을 바꿔도(2026-11-04 옛 이름 → Loop of Good Hope) 저장이 있던 사용자 폴더는 그대로 쓴다.
+//   Electron은 productName으로 %APPDATA%\<이름> 폴더를 정하므로, 바꾸지 않으면 옛 저장이 보이지 않는다. 잠금(requestSingleInstanceLock)보다 먼저.
+app.setPath('userData', path.join(app.getPath('appData'), 'PLUS ULTRA'));
 
 const SMOKE = process.argv.includes('--smoke');
 // 출시판(설치본)에서는 개발자 도구를 막는다 — 점검(--smoke)·개발 실행에서는 그대로 (QA 2026-10-23)
@@ -44,7 +48,7 @@ function createWindow() {
   const pack = gifPackDir();
   win = new BrowserWindow({
     width: 1600, height: 900, minWidth: 960, minHeight: 540,
-    backgroundColor: '#07050a', title: 'PLUS ULTRA — Loop of Good Hope',
+    backgroundColor: '#07050a', title: 'Loop of Good Hope',
     icon: path.join(__dirname, 'icon.png'), show: false, autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true, sandbox: true, backgroundThrottling: false, spellcheck: false, devTools: DEVTOOLS,
@@ -109,7 +113,7 @@ function checkUpdates() {
   updater.autoInstallOnAppQuit = true;
   updater.on('update-downloaded', async (info) => {
     const r = await dialog.showMessageBox(win, {
-      type: 'info', buttons: ['지금 다시 시작', '나중에'], defaultId: 0, cancelId: 1, title: 'PLUS ULTRA 업데이트',
+      type: 'info', buttons: ['지금 다시 시작', '나중에'], defaultId: 0, cancelId: 1, title: 'Loop of Good Hope 업데이트',
       message: '새 판 ' + info.version + '을(를) 받았습니다.',
       detail: '지금 다시 시작하면 바로 적용됩니다. 「나중에」를 고르면 게임을 끌 때 적용됩니다.\n저장한 항해는 그대로 남습니다 — 다시 시작하기 전에 저장해 두세요.'
     });

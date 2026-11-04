@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.312';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.313';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
@@ -21,10 +21,12 @@
       '<div class="title-menu"></div><div class="loading" role="status">' +
       (loadingSrc ? '<img src="' + loadingSrc + '" alt="지구 둘레를 항해하는 갤리온">' : '') +
       '<span>해도를 펼치는 중...</span></div>' +
-      '<div class="title-bottom"><div class="title-foot">대항해의 시대, 1480 — 이베리아 반도</div>' +
+      '<div class="title-bottom"><div class="title-foot">탐험의 시대, 1480 — 이베리아 반도</div>' +
       '<div class="title-version" aria-label="게임 버전">VERSION ' + T.version + (window.PU_WEB_CHANNEL === 'beta' ? ' · BETA' : '') + '</div>' +
-      (window.PU_WEB_CHANNEL === 'beta' ? '<a class="title-beta-center" href="center/">베타 안내 · 피드백</a>' : '') + '</div>';
+      (window.PU_WEB_CHANNEL === 'beta' ? '<a class="title-beta-center" href="center/">베타 안내 · 피드백</a>' : '') +
+      (G.Credits ? '<button type="button" class="title-credits">만든 사람들 · 출처</button>' : '') + '</div>';   // js/ui/credits.js (2026-11-04)
     UI.add(wrap);
+    var bCred = wrap.querySelector('.title-credits'); if (bCred) bCred.onclick = function () { if (!UI.busy()) G.Credits.open(); };
     var menu = wrap.querySelector('.title-menu');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = fn; menu.appendChild(b); return b; }
     var bCont = null;

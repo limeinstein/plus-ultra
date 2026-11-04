@@ -1,5 +1,5 @@
 /* 조선소 대포·선수상 늘리기 (tests/shipyard_gear_smoke.js) — node tests/shipyard_gear_smoke.js
-   · 대포 10종: 세이커·캘버린·페리에·카논(1등급) + 청동 세이커·페드레로(2) · 롱 캘버린·청동 카논(3) · 중카논(4) · 캐로네이드(5)
+   · 대포 11종: 세이커·캘버린·페리에·카논(1등급) + 청동 세이커·페드레로(2) · 롱 캘버린·청동 카논(3) · 중카논·데미캘버린(4) · 캐로네이드(5)
    · 조선 기술이 모자라면 대포 목록에서 잠기고, 「기술 투자」로 올리면 풀린다 (지금 달린 대포는 줄이거나 뗄 수만 있다)
    · 선수상: 조선 기술 1~5등급으로 해금(2026-10-29 — 신화의 짐승은 위대한 발견, 전설은 바다 괴물에서만: tests/figurehead_smoke.js) · 발견에 딸려 오는 선수상 33가지 (js/data/figrelics.js)
    · 페드레로·캐로네이드는 갑판 선원을 더 쓰러뜨린다 (kill). 콘솔 오류 0 */
@@ -24,7 +24,7 @@ const ROOT = path.resolve(__dirname, '..');
 
     // 1) 자료
     const ids = G.CANNONS.map(c => c.id + '/' + c.lv);
-    ok(G.CANNONS.length === 10 && ids.join(' ') === 'saker/1 culverin/1 perrier/1 cannon/1 bsaker/2 lculverin/3 pedrero/2 bcannon/3 hcannon/4 carronade/5', '대포 10종: ' + G.CANNONS.map(c => c.name).join('·'));
+    ok(G.CANNONS.length === 11 && ids.join(' ') === 'saker/1 culverin/1 perrier/1 cannon/1 bsaker/2 lculverin/3 pedrero/2 bcannon/3 hcannon/4 demiculverin/4 carronade/5', '대포 11종: ' + G.CANNONS.map(c => c.name).join('·'));
     const shop = G.FIGUREHEADS.filter(f => !f.rare && !f.relic), hi = shop.filter(f => (f.lv || 1) > 1);
     ok(hi.length >= 12 && [2, 3, 4, 5].every(lv => hi.filter(f => f.lv === lv).length >= 2), '조선 기술 2~5등급 선수상 ' + hi.length + '가지 (등급마다 둘 이상): ' + hi.map(f => f.name + f.lv).join(' '));
     const rel = G.FIGUREHEADS.filter(f => f.relic);
@@ -56,7 +56,7 @@ const ROOT = path.resolve(__dirname, '..');
     }
     let m = await gunMenu();
     const lockedNames = m.rows.filter(r => r.dis).map(r => r.t.split(' ')[0]);
-    ok(m.rows.length === 10 && lockedNames.length === 4, '2등급 조선소: 대포 10종 가운데 4종 잠김 — ' + lockedNames.join('·'));
+    ok(m.rows.length === 11 && lockedNames.length === 5, '2등급 조선소: 대포 11종 가운데 5종 잠김 — ' + lockedNames.join('·'));
     ok(/기술 투자/.test(m.text) && /캐로네이드포/.test(m.text), '잠긴 대포는 「기술 투자」로 풀린다고 알려 준다');
     ok(!m.rows.find(r => /페드레로/.test(r.t)).dis && m.rows.find(r => /중카논/.test(r.t)).dis, '페드레로포(2)는 열려 있고 중카논포(4)는 잠김');
     await closeAll(); await Promise.race([m.p.catch(() => {}), sleep(1500)]); await closeAll();
@@ -66,7 +66,7 @@ const ROOT = path.resolve(__dirname, '..');
     SH.techInvest(city, 70000);
     ok(SH.tech(city) === 5, '기술 투자 7만 닢 → 조선 기술 ' + SH.tech(city) + '등급');
     m = await gunMenu();
-    ok(m.rows.length === 10 && m.rows.every(r => !r.dis), '5등급 조선소: 대포 10종 모두 고를 수 있다');
+    ok(m.rows.length === 11 && m.rows.every(r => !r.dis), '5등급 조선소: 대포 11종 모두 고를 수 있다');
     await click('캐로네이드포');
     await sleep(150);
     const num = document.querySelector('.modal-back input[type=number], .modal-back input');

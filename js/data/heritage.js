@@ -1,6 +1,7 @@
 /* 발견물·유물의 실제 자료 — tools/heritage/build.py 가 만든다. 손으로 고치지 말고 tools/heritage/ko.json 을 고친 뒤 다시 만든다.
    출처: UNESCO 세계유산센터(CC BY-SA 3.0 IGO), 위키백과·위키미디어 공용(CC BY-SA 등), The Met·Smithsonian Open Access(CC0),
-   GBIF.org·OBIS(CC BY 4.0). 한국어 글은 이 자료를 바탕으로 게임에 맞게 새로 쓴 것이며 같은 조건(CC BY-SA)으로 공개한다. */
+   GBIF.org·OBIS(CC BY 4.0). 한국어 글은 이 자료를 바탕으로 게임에 맞게 새로 쓴 것이며 같은 조건(CC BY-SA)으로 공개한다.
+   photo: 발견 그림이 참고한 원본 사진(게임 그림은 사진이 아니라 이를 참고해 새로 그린 것 — CC BY-SA 원본을 참고한 그림은 같은 조건으로 공개). */
 (function (G) {
   G.HERITAGE = {"disc":{"abusimbel":{"whc":{"no":"88","name":"Nubian Monuments from Abu Simbel to Philae","year":1979,"crit":"c1, c3","states":["Egypt"],"danger":false,"url":"https://whc.unesco.org/en/list/88"},
 "wiki":{"title":"Abu Simbel","ko":"아부 심벨 신전","url":"https://en.wikipedia.org/wiki/Abu_Simbel"},

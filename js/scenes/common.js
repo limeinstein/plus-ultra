@@ -26,7 +26,8 @@
     if (H.bio) p.push(link(H.bio.url, 'GBIF.org'));
     if (H.sea) p.push(link(H.sea.url, 'OBIS'));
     if (H.obj) p.push(link(H.obj.url, H.obj.museum) + ' (CC0)');
-    var ph = H.photo ? '사진: ' + link(H.photo.url, [H.photo.by, H.photo.src].filter(Boolean).join(' · ') || '출처') + (H.photo.lic ? ' (' + U.esc(H.photo.lic) + ')' : '') : '';
+    // 발견 그림은 사진이 아니라 이 원본 사진을 참고해 새로 그린 것이다 — 「참고한 원본 사진」으로 밝히고, CC BY-SA 원본을 참고한 그림은 같은 조건으로 공개한다 (2026-11-04 저작권 QA)
+    var ph = H.photo ? '그림이 참고한 원본 사진: ' + link(H.photo.url, [H.photo.by, H.photo.src].filter(Boolean).join(' · ') || '출처') + (H.photo.lic ? ' (' + U.esc(H.photo.lic) + ')' : '') + (/BY-SA/.test(H.photo.lic || '') ? ' — 이 그림도 같은 조건(' + U.esc(H.photo.lic) + ')으로 공개' : '') : '';
     if (!p.length && !ph) return '';
     return '<div class="real-credit">' + (p.length ? '자료: ' + p.join(' · ') + (H.desc || H.record ? ' — 한국어 글은 이를 바탕으로 새로 씀' : '') : '') + (p.length && ph ? '<br>' : '') + ph + '</div>';
   };

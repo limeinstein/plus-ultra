@@ -406,7 +406,7 @@ tr.wp td{{color:var(--muted)}} tr.jn td{{background:var(--soft)}} tr.lg2 td{{fon
 
 <h2><span class="no">09</span>이렇게 돌렸습니다</h2>
 <div class="box"><div class="kv">
-<b>게임</b><span>개발 중인 PLUS ULTRA 그대로 (규칙·확률·경쟁자·사건은 손대지 않음). 화면 그리기만 끄고 바다 장면의 하루를 직접 돌림.</span>
+<b>게임</b><span>개발 중인 Loop of Good Hope 그대로 (규칙·확률·경쟁자·사건은 손대지 않음). 화면 그리기만 끄고 바다 장면의 하루를 직접 돌림.</span>
 <b>선택</b><span>대화·선택지·숫자 입력·창을 봇이 규칙대로 골랐습니다. 모든 고른 내용은 기록에 남았습니다.</span>
 <b>뱃길</b><span>자동항해(익숙한 항로)는 쓰지 않았습니다. 사람이 해도 위 바다 지점을 차례로 찍듯이 경로점을 잡아 직항 침로로 몰았습니다.</span>
 <b>결투</b><span>그림 결투 대신 힘·검술을 견주어 판정했습니다. 이 판에서는 결투가 없었습니다.</span>

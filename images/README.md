@@ -21,7 +21,7 @@
 2. 그 이름으로 이 폴더에 그림을 넣습니다. PNG·JPG·WEBP 모두 됩니다. (예: `images/cities/0.jpg`)
 3. WebGame 폴더에서 `python tools/images.py`를 실행합니다. `images/manifest.js`가 새로 만들어지고, 이름이 틀린 파일이 있으면 알려 줍니다.
 4. `index.html`을 새로 고치면 바로 보입니다.
-   - 한 파일짜리 `PLUS_ULTRA.html`에 넣으려면 `python tools/bundle.py`
+   - 한 파일짜리 `Loop_of_Good_Hope.html`에 넣으려면 `python tools/bundle.py`
    - 웹 배포판(`dist/web`)에 넣으려면 `python tools/build_web.py`
 
 ## 파일 이름 규칙

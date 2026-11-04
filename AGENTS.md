@@ -1,4 +1,4 @@
-# AGENTS.md — PLUS ULTRA 저장소에서 일하는 AI(Codex·Claude) 공통 규칙
+# AGENTS.md — Loop of Good Hope 저장소에서 일하는 AI(Codex·Claude) 공통 규칙
 
 모험·교역·해전을 다루는 웹 브라우저 게임입니다. 코드를 고치기 전에 이 문서와 `README.md`를 읽으세요.
 게임 설계·변경 기록은 Claude 프로젝트의 「PLUS_ULTRA_개발노트」에 있습니다(사람이 필요한 부분을 작업 지시서에 옮겨 줍니다).
@@ -35,4 +35,4 @@
 
 - 한 작업(PR) = 한 영역의 파일. 여러 영역에 걸치면 나눠서 올립니다.
 - PR 설명에 ① 바꾼 것 ② 조정값 ③ 시험한 것(명령·결과·스크린샷) ④ 하지 않은 것 을 적습니다.
-- `dist/`, `PLUS_ULTRA.html`, `images/_extra/`는 올리지 않습니다(.gitignore).
+- `dist/`, `Loop_of_Good_Hope.html`, `images/_extra/`는 올리지 않습니다(.gitignore).

@@ -602,9 +602,22 @@
     if (s.fleet.ships.length < 2) { UI.toast('기함을 바꿀 배가 없습니다.', 'info'); return false; }
     var i = await pickShip('기함으로 할 배', s.fleet.ships.slice(1)); if (i == null) return false;
     var sh = s.fleet.ships.splice(i + 1, 1)[0];
-    if (!(await UI.confirm('기함을 ' + sh.name + '호로 변경하겠습니다. 좋습니까?'))) { s.fleet.ships.splice(i + 1, 0, sh); return false; }
+    // 선실 칸 수를 미리 보여 준다 (2026-11-05 피드백: 갤리온으로 바꿨더니 선실이 2칸 모자랐다)
+    var oldFlag = s.fleet.ships[0], CBx = G.Cabins, cabTxt = '';
+    if (CBx && CBx.slots) {
+      var nNew = CBx.slots(sh), nOld = CBx.slots(oldFlag), st = CBx.storeCount ? CBx.storeCount(sh) : 0;
+      cabTxt = '<br><small>선실 ' + nOld + '칸 → <b>' + nNew + '칸</b>' + (st ? ' (그 가운데 창고 ' + st + '칸)' : '') + (nNew < nOld ? ' <span class="warn-text">— ' + (nOld - nNew) + '칸 줄어 방이 모자라는 부하는 대기로 갑니다</span>' : '') + '</small>';
+    }
+    if (!(await UI.confirm('기함을 ' + sh.name + '호로 변경하겠습니다. 좋습니까?' + cabTxt))) { s.fleet.ships.splice(i + 1, 0, sh); return false; }
+    // 창고 셈이 바뀌어(기함은 4칸까지·종선은 모든 칸) 짐칸이 모자라면 바꾸지 않는다
+    s.fleet.ships.splice(i + 1, 0, sh);
+    var capBefore = R.fleetCap();
+    s.fleet.ships.splice(i + 1, 1);
+    s.fleet.ships.unshift(sh);
+    var capAfter = R.fleetCap();
+    s.fleet.ships.shift();
+    if (capAfter < capBefore && R.used() > capAfter) { s.fleet.ships.splice(i + 1, 0, sh); UI.toast('기함을 바꾸면 창고 셈이 달라져 짐칸이 ' + U.num(capBefore - capAfter) + '통 줄어듭니다. 짐을 ' + U.num(Math.ceil(R.used() - capAfter)) + '통 덜어 낸 뒤 바꾸십시오.', 'sack', 6000); return false; }
     // 새 기함을 맡던 선장은 옛 기함으로 옮겨 간다
-    var oldFlag = s.fleet.ships[0];
     s.mates.forEach(function (m) { if (m.role === 'captain' && m.ship === sh.uid) m.ship = oldFlag.uid; });
     s.fleet.ships.unshift(sh);
     if (G.Cabins) G.Cabins.rooms();   // 부하들이 새 기함의 같은 방으로 옮겨 간다 (맞는 방이 없으면 다시 배치해야 한다)

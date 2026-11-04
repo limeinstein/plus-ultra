@@ -2,9 +2,9 @@
 """웹 서버에 올릴 배포판을 dist/web 폴더에 만듭니다. (GitHub Pages, Netlify, itch.io 등)
 
 사용법 (WebGame 폴더에서):
-    python tools/build_web.py              # dist/web + dist/PLUS_ULTRA_web.zip
+    python tools/build_web.py              # dist/web + dist/Loop_of_Good_Hope_web.zip
     python tools/build_web.py --no-minify  # 코드를 줄이지 않고 그대로 묶기
-    python tools/build_web.py --channel beta --out dist/web-beta --zip dist/PLUS_ULTRA_web_beta.zip
+    python tools/build_web.py --channel beta --out dist/web-beta --zip dist/Loop_of_Good_Hope_web_beta.zip
 
 esbuild가 설치되어 있으면(npm i -g esbuild) 자바스크립트와 CSS를 줄여서 더 작게 만듭니다.
 """
@@ -25,10 +25,10 @@ def output_path(value):
 
 
 OUT = output_path(option('--out', os.path.join('dist', 'web')))
-ZIP = output_path(option('--zip', os.path.join('dist', 'PLUS_ULTRA_web.zip')))
+ZIP = output_path(option('--zip', os.path.join('dist', 'Loop_of_Good_Hope_web.zip')))
 CHANNEL = option('--channel', 'stable')
 NO_ZIP = '--no-zip' in sys.argv
-DESC = '대항해 시대를 무대로 한 모험·교역·해전 브라우저 게임. 후원자의 의뢰를 받아 세계의 발견물을 찾아 떠나세요.'
+DESC = '탐험과 발견의 시대(1480~1860)를 무대로 한 모험·교역·해전 브라우저 게임. 후원자의 의뢰를 받아 세계의 발견물을 찾아 떠나세요.'
 TELEMETRY_ENDPOINT = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event'
 
 
@@ -188,6 +188,11 @@ def main():
         manifest_rel = 'images/manifest.js?v=' + pages.short_hash(mjs)
         keep.add(os.path.normpath(os.path.join(OUT, 'favicon.svg')))
         copy_if_changed(os.path.join(pages.ROOT, 'favicon.svg'), os.path.join(OUT, 'favicon.svg'))
+        # 출처·라이선스 (2026-11-04 저작권 QA): THIRD_PARTY_NOTICES.md · licenses/ · music/CREDITS.md
+        for rel in ['THIRD_PARTY_NOTICES.md', 'music/CREDITS.md'] + (['licenses/' + fn for fn in sorted(os.listdir(os.path.join(pages.ROOT, 'licenses')))] if os.path.isdir(os.path.join(pages.ROOT, 'licenses')) else []):
+            if os.path.isfile(os.path.join(pages.ROOT, rel)):
+                keep.add(os.path.normpath(os.path.join(OUT, rel)))
+                copy_if_changed(os.path.join(pages.ROOT, rel), os.path.join(OUT, rel))
         # 배경 음악 (music/*.mp3) — 그대로 복사
         mdir = os.path.join(pages.ROOT, 'music')
         if os.path.isdir(mdir):
@@ -198,11 +203,15 @@ def main():
                 keep.add(os.path.normpath(dst))
                 copy_if_changed(os.path.join(mdir, fn), dst)
         # 녹음 효과음 (sounds/<묶음>/*.ogg — js/data/sfxfiles.js) — 그대로 복사 (안내문 License.txt도 함께)
+        #   sounds/<묶음>.pack.js 가 있는 묶음(Mixkit·Pixabay — tools/sfx_pack.py)은 낱개 소리 파일을 싣지 않고 묶음만 싣는다 (2026-11-04 저작권 QA)
         sdir = os.path.join(pages.ROOT, 'sounds')
         if os.path.isdir(sdir):
+            packed = set(fn[:-len('.pack.js')] for fn in os.listdir(sdir) if fn.endswith('.pack.js'))
             for dirpath, _, files in os.walk(sdir):
                 for fn in sorted(files):
-                    if not fn.lower().endswith(('.ogg', '.mp3', '.m4a', '.wav', '.txt')):
+                    if not fn.lower().endswith(('.ogg', '.mp3', '.m4a', '.wav', '.txt', '.pack.js')):
+                        continue
+                    if os.path.basename(dirpath) in packed and not fn.lower().endswith('.txt'):
                         continue
                     rel = os.path.relpath(os.path.join(dirpath, fn), pages.ROOT)
                     dst = os.path.join(OUT, rel)

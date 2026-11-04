@@ -803,9 +803,9 @@
     if (H.sea) rows.push(['바다 기록 (OBIS)', a(H.sea.url, num(H.sea.records || 0) + '건') + (H.sea.depth ? ' · 깊이 ' + H.sea.depth[0] + '–' + H.sea.depth[2] + 'm (가운데 ' + H.sea.depth[1] + 'm)' : '') + (H.sea.lat ? ' · 위도 ' + H.sea.lat[0] + '°~' + H.sea.lat[1] + '°' : '')]);
     if (H.obj) rows.push(['실존 소장품', a(H.obj.url, H.obj.title || '') + [H.obj.museum, H.obj.date, H.obj.culture, H.obj.place, H.obj.medium, H.obj.no ? '소장 번호 ' + H.obj.no : ''].filter(Boolean).map(x => ' · ' + esc(x)).join('')]);
     if (H.wiki) rows.push(['위키백과', a(H.wiki.url, H.wiki.title) + (H.wiki.ko ? ' · 한국어: ' + esc(H.wiki.ko) : '')]);
-    if (H.photo) rows.push(['사진', a(H.photo.url, [H.photo.by, H.photo.src].filter(Boolean).join(' · ') || '출처') + (H.photo.lic ? ' · ' + esc(H.photo.lic) : '')]);
+    if (H.photo) rows.push(['그림이 참고한 원본 사진', a(H.photo.url, [H.photo.by, H.photo.src].filter(Boolean).join(' · ') || '출처') + (H.photo.lic ? ' · ' + esc(H.photo.lic) : '') + (/BY-SA/.test(H.photo.lic || '') ? ' — 이 그림도 같은 조건으로 공개' : '')]);   // 그림은 사진을 참고해 새로 그린 것 (2026-11-04 저작권 QA)
     return '<h3>실제 자료</h3><dl class="facts">' + rows.map(r => '<dt>' + esc(r[0]) + '</dt><dd>' + r[1] + '</dd>').join('') + '</dl>' +
-      '<p class="d-text hint">설명은 UNESCO 세계유산센터(CC BY-SA 3.0 IGO)·위키백과(CC BY-SA 4.0)를 바탕으로 새로 쓴 글이며, 소장품 자료는 The Met·Smithsonian Open Access(CC0), 생물 자료는 GBIF.org·OBIS에서 가져왔습니다. 다시 모으려면 <code>python tools/heritage/fetch.py</code>.</p>';
+      '<p class="d-text hint">설명은 UNESCO 세계유산센터(CC BY-SA 3.0 IGO)·위키백과(CC BY-SA 4.0)를 바탕으로 새로 쓴 글이며, 소장품 자료는 The Met·Smithsonian Open Access(CC0), 생물 자료는 GBIF.org·OBIS에서 가져왔습니다. 발견 그림은 사진이 아니라, 적어 둔 원본 사진을 참고해 새로 그린 것입니다(CC BY-SA 사진을 참고한 그림은 같은 조건으로 공개). 다시 모으려면 <code>python tools/heritage/fetch.py</code>.</p>';
   }
   async function openDetail(it) {
     const d = it.detail ? it.detail() : {};

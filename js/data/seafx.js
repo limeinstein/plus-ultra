@@ -324,6 +324,7 @@
         pedrero:   { size: 1.05, muzzle: 0.85, smoke: 1.1,  spread: 1.65, arc: 1.1,  ball: 3.8, pellets: 5, stone: true },
         cannon:    { size: 1.3,  muzzle: 1.25, smoke: 1.2,  spread: 1,    arc: 1,    ball: 4.2 },
         bcannon:   { size: 1.4,  muzzle: 1.35, smoke: 1.3,  spread: 1.1,  arc: 0.85, ball: 4.5 },
+        demiculverin: { size: 1.15, muzzle: 1.2, smoke: 1.1, spread: 0.6, arc: 0.7, ball: 3.9 },
         hcannon:   { size: 1.75, muzzle: 1.65, smoke: 1.65, spread: 1.2,  arc: 1.15, ball: 5.5 },
         carronade: { size: 1.55, muzzle: 1.1,  smoke: 1.5,  spread: 1.7,  arc: 0.75, ball: 5 }
       }

@@ -68,7 +68,7 @@
   };
 
   // ---------------------------------------------------------------- 부하들
-  var SHORT = { rocco: '로코', duarte: '두아르테', pinzon_m: '마르틴', pinzon_v: '비센테', lacosa: '라 코사', ibnmajid: '이븐 마지드', hasan: '하산',
+  var SHORT = { rocco: '라울', duarte: '두아르테', pinzon_m: '마르틴', pinzon_v: '비센테', lacosa: '라 코사', ibnmajid: '이븐 마지드', hasan: '하산',
     leonardo: '레오나르도', michelangelo: '미켈란젤로', raffaello: '라파엘로', piri: '피리 레이스', leoafricanus: '레오', manuel: '마누엘', ahmad: '아흐마드' };
   function short(id) { if (SHORT[id]) return SHORT[id]; var d = G.MATE[id]; if (!d) return '그 사람'; var p = d.name.split(' '); return p[p.length - 1]; }
   function inFleet(id) { return S().mates.some(function (m) { return m.id === id; }); }

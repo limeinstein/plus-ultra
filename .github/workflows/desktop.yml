@@ -76,9 +76,9 @@ jobs:
           echo "makensis: $MAKENSIS"
           "$MAKENSIS" -V3 -DVERSION=$VERSION gifpack.nsi
           ls -la dist
-          OUTF=$(ls -t dist/PLUS-ULTRA-GIF-Pack-*.exe | head -1)
-          [ "$OUTF" = "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe" ] || mv "$OUTF" "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe"
-          ls -la "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe"
+          OUTF=$(ls -t dist/Loop-of-Good-Hope-GIF-Pack-*.exe | head -1)
+          [ "$OUTF" = "dist/Loop-of-Good-Hope-GIF-Pack-$VERSION.exe" ] || mv "$OUTF" "dist/Loop-of-Good-Hope-GIF-Pack-$VERSION.exe"
+          ls -la "dist/Loop-of-Good-Hope-GIF-Pack-$VERSION.exe"
       - name: 점검 — 타이틀 화면까지 열어 보기
         working-directory: desktop
         run: |
@@ -95,14 +95,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ls -la dist
-          SIZE=$(du -m "dist/PLUS-ULTRA-Setup-$VERSION.exe" | cut -f1)
-          GSIZE=$(du -m "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe" | cut -f1)
+          SIZE=$(du -m "dist/Loop-of-Good-Hope-Setup-$VERSION.exe" | cut -f1)
+          GSIZE=$(du -m "dist/Loop-of-Good-Hope-GIF-Pack-$VERSION.exe" | cut -f1)
           GN=$(python -c "import json;print(json.load(open('gifpack/pack.json'))['count'])")
           MSG=$(git log -1 --format='%s')
           INFO=$(python -c "import json;d=json.load(open('app-info.json'));print('게임 파일 %d개 %dMB · 뺀 그림 %d장 %dMB · 가볍게 한 무릎상 %d장 · 글꼴 %s' % (d['files'], d['bytes']//1000000, d['dropped'], d['saved']//1000000, d['halves'], ('%d개 내장' % d['fonts']) if d['fonts'] is not None else '온라인'))")
-          printf '설치형 게임 %s (%sMB)\n\n- 커밋 %s: %s\n- %s\n- 설치: PLUS-ULTRA-Setup-%s.exe 를 받아 실행합니다. 이미 깔려 있으면 게임을 켤 때 스스로 업데이트합니다(바뀐 조각만 받음).\n- 저장한 항해는 업데이트·재설치에도 그대로 남습니다.\n\n**GIF 팩 (선택)** PLUS-ULTRA-GIF-Pack-%s.exe (%sMB) — 본 설치 파일에서 뺀 발견물 원본 GIF %s개. 본 게임을 깐 뒤 실행하면 발견 장면을 원본 GIF로 보여 줍니다. 게임을 업데이트해도 팩은 남고, 새 발견물 GIF가 생기면 새 팩을 다시 깔면 됩니다.\n' "$VERSION" "$SIZE" "${GITHUB_SHA:0:7}" "$MSG" "$INFO" "$VERSION" "$VERSION" "$GSIZE" "$GN" > notes.md
-          gh release create "v$VERSION" "dist/PLUS-ULTRA-Setup-$VERSION.exe" "dist/PLUS-ULTRA-Setup-$VERSION.exe.blockmap" dist/latest.yml "dist/PLUS-ULTRA-GIF-Pack-$VERSION.exe" \
-            --repo "$GITHUB_REPOSITORY" --title "PLUS ULTRA $VERSION (Windows 설치형)" --notes-file notes.md --target "$GITHUB_SHA" --latest
+          printf '설치형 게임 %s (%sMB)\n\n- 커밋 %s: %s\n- %s\n- 설치: Loop-of-Good-Hope-Setup-%s.exe 를 받아 실행합니다. 이미 깔려 있으면 게임을 켤 때 스스로 업데이트합니다(바뀐 조각만 받음).\n- 저장한 항해는 업데이트·재설치에도 그대로 남습니다.\n\n**GIF 팩 (선택)** Loop-of-Good-Hope-GIF-Pack-%s.exe (%sMB) — 본 설치 파일에서 뺀 발견물 원본 GIF %s개. 본 게임을 깐 뒤 실행하면 발견 장면을 원본 GIF로 보여 줍니다. 게임을 업데이트해도 팩은 남고, 새 발견물 GIF가 생기면 새 팩을 다시 깔면 됩니다.\n' "$VERSION" "$SIZE" "${GITHUB_SHA:0:7}" "$MSG" "$INFO" "$VERSION" "$VERSION" "$GSIZE" "$GN" > notes.md
+          gh release create "v$VERSION" "dist/Loop-of-Good-Hope-Setup-$VERSION.exe" "dist/Loop-of-Good-Hope-Setup-$VERSION.exe.blockmap" dist/latest.yml "dist/Loop-of-Good-Hope-GIF-Pack-$VERSION.exe" \
+            --repo "$GITHUB_REPOSITORY" --title "Loop of Good Hope $VERSION (Windows 설치형)" --notes-file notes.md --target "$GITHUB_SHA" --latest
       - name: 옛 릴리스 정리 (최근 3개만)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
