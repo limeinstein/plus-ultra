@@ -855,7 +855,8 @@
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
     if (G.HomeLife) await G.HomeLife.happen();                                    // 가끔 아이와 얽힌 일이 생긴다 (homelife.js)
-    if (G.HeirPlan) { try { await G.HeirPlan.homeEvents(c); } catch (e) { console.error(e); } }   // 아들의 소꿉친구가 찾아온다 · 후계를 위한 안배를 권한다 (js/systems/heirplan.js)
+    if (G.HeirPlan) { try { await G.HeirPlan.homeEvents(c); } catch (e) { console.error(e); } }
+    if (G.Ball) { try { await G.Ball.homeHint(c); } catch (e) { console.error(e); } }   // 작위를 받으면 집사가 무도회를, 딸이 열다섯이 되면 아내가 데뷔탕트를 귀띔한다 (js/systems/ball.js)   // 아들의 소꿉친구가 찾아온다 · 후계를 위한 안배를 권한다 (js/systems/heirplan.js)
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상 (familyevent.js)
     if (story) { try { await G.Story.family(c, 'home'); } catch (e) { console.error(e); } }                  // 아내와 어머니 (이야기 모드)
   };
@@ -870,6 +871,8 @@
       G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,
       G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,
       G.FamilyTree && G.FamilyTree.has() ? { label: '가계도', icon: 'people', sub: (s.player.generation || 1) + '대째 가문', onClick: function () { return G.FamilyTree.open(); } } : null,
+      G.Ball ? G.Ball.menuItem(c) : null,    // 귀족의 무도회 (js/systems/ball.js — 2026-11-03)
+      G.Ball ? G.Ball.debutItem(c) : null,   // 딸의 데뷔탕트
       { label: '항해 일지 기록 (저장)', icon: 'save', onClick: function () { return G.Info.saveMenu(); } },
       G.LogBooks ? { label: '서고', icon: 'book', sub: '항해일지 ' + G.LogBooks.volumes().length + '권' + (G.LogBooks.study().length + G.LogBooks.copies().length ? ' · 책 ' + (G.LogBooks.study().length + G.LogBooks.copies().length) + '권' : '') + (G.LogBooks.copyCandidates().length ? ' · 꽂을 책 ' + G.LogBooks.copyCandidates().length + '권' : ''), onClick: function () { return G.LogBooks.open(c, HM.title(c)); } } : null,   // 항해일지(40년마다 한 권)와 발견물의 책 (js/systems/logbooks.js — 2026-10-24)
       G.Encyc ? G.Encyc.menuItem(c) : null,   // 발견물 백과사전 (js/systems/encyclopedia.js)

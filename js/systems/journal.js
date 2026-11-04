@@ -216,6 +216,7 @@
     ['Safavid', 'daily', 'B'],                 // 사파비 왕조·찰디란
     ['Mohacs', 'daily', 'B'],                 // 모하치 전투
     ['Brothers', 'daily', 'B'],              // 두 왕자
+    ['Yeonsan', 'daily', 'B'],               // 연산군과 장녹수
     ['Imjin', 'daily', 'B'],                 // 임진왜란
     ['Globe', 'daily', 'B'],                 // 셰익스피어와 글로브의 불
     ['Succession', 'year', function (m) { return m && m.icon === 'crown' ? 'B' : null; }],   // 군주·후원자의 대가 바뀜 (유품·기억은 일상)

@@ -1608,7 +1608,7 @@
       if (G.Sky && G.Sky.seaPending()) await G.Sky.atSea();   // 나침반의 비켜 감을 잰다(케플러) · 망원경으로 목성의 달(갈릴레이) (js/systems/skylore.js)
       if (G.Glory && G.Glory.seaPending()) await G.Glory.atSea();   // 영국 해협: 개신교의 바람 (js/systems/glory.js)
       if (G.OttoEu && G.OttoEu.seaPending()) await G.OttoEu.atSea();   // 프레베자 앞바다: 바르바로사와 신성 동맹 (js/systems/ottomaneurope.js)
-      if (G.WangMerch && G.WangMerch.seaPending()) await G.WangMerch.atSea();   // 중국 근해: 마대인·지나 부부와 비단 장수 왕서방의 금봉호 (js/systems/wangmerchant.js)
+      if (G.WangMerch && G.WangMerch.seaPending()) await G.WangMerch.atSea();   // 중국 근해: 마대인과 딸 지나의 금봉호 (js/systems/wangmerchant.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

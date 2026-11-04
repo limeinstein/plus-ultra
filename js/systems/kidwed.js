@@ -23,7 +23,7 @@
     })[0] || null;
   };
   // 이미 왕세자비가 된 딸이 있으면(p.royalKin) 다음 딸은 보통 혼처로 — 딸마다 왕세자비가 되던 것 (QA 2026-10-23)
-  KW.royal = function (k) { var p = S() && S().player; if (p && p.royalKin) return false; return HL().touch(k) >= (K().touch || 50); };
+  KW.royal = function (k) { var p = S() && S().player; if (p && p.royalKin) return false; return HL().touch(k) + (k.debut && k.debut.belle ? ((G.BALANCE.ball || {}).debutTouch || 20) : 0) >= (K().touch || 50); };   // 데뷔탕트에서 「사교계의 꽃」이었으면 쉽다 (js/systems/ball.js)
 
   function crown() {
     try { if (G.Colony && G.Colony.crown) { var sp = G.Colony.crown(); if (sp) return sp; } } catch (e) { /* */ }

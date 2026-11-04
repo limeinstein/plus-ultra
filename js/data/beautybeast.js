@@ -5,7 +5,7 @@
        랜던 아이작: 과학 3 · 운용술 3 (「힘쓰는 일」 — 밧줄을 당기고 돛을 다루는 운용술에 담았다) · 체력 92
        에이미 벨라지오: 회계 3 · 역사학 3 · 신학 3 (책 관련 일) — 장미를 다루는 꽃집 아가씨 (성인)
    · 옛이야기 동료(tale) — 술집에는 나오지 않고 사건으로만 만난다 (eventOnly). 품삯은 옛이야기 동료 규칙(G.taleWage)
-   그림: images/legend-events/BEAUTYBEAST_PROMPT.md — 초상 portraits/legendary/landon·amy, 장면 legend-events/bb_* */
+   그림: images/legend-events/BEAUTYBEAST_PROMPT.md — 사용자 선택 초상 portraits/legendary/beast·beauty를 랜던·에이미에 연결, 장면 legend-events/bb_* */
 (function (G) {
   'use strict';
   G.BALANCE = G.BALANCE || {};
@@ -20,10 +20,10 @@
     loyal: 80
   };
   var M = [
-    { id: 'landon', name: '랜던 아이작', short: '아이작', g: 'm', style: 'ne', role: 'noble', tone: 'plain', pic: 'landon', age: 'young',
+    { id: 'landon', name: '랜던 아이작', short: '아이작', g: 'm', style: 'ne', role: 'noble', tone: 'plain', pic: 'beast', age: 'young',
       st: [92, 84, 78, 52], sk: { sci: 3, ops: 3 }, skBoost: 1, lg: { 3: 3, 12: 2, 1: 1 },
       desc: '보르네오 밀림 속 낡은 장미 정원에 숨어 사는 거구의 사내. 바다 건너 어느 왕가의 사생아로 태어났으나, 그 왕가가 무너진 뒤 이복형들이 보낸 자객을 피해 어머니와 함께 이 섬까지 흘러왔다. 멧돼지 엄니와 곰 가죽으로 만든 짐승 가면으로 얼굴을 가린다. 산의 찬물을 물레바퀴로 끌어 열대에서 장미를 살려 낸 자연철학자이자, 혼자서 통나무 다리를 놓는 장사. 말이 짧고 무뚝뚝하다.' },
-    { id: 'amy', name: '에이미 벨라지오', short: '벨라지오', g: 'f', style: 'it', role: 'merchant', tone: 'polite', pic: 'amy', age: 'young',
+    { id: 'amy', name: '에이미 벨라지오', short: '벨라지오', g: 'f', style: 'it', role: 'merchant', tone: 'polite', pic: 'beauty', age: 'young',
       st: [55, 88, 30, 92], sk: { acct: 3, hist: 3, theo: 3 }, skBoost: 1, lg: { 2: 3, 12: 2, 1: 2 },
       desc: '브루나이 항구에서 작은 꽃집을 하는 이탈리아 출신 아가씨. 코모 호숫가 벨라지오 마을에서 책 장수였던 아버지를 따라 동방까지 왔다. 장미 접붙이기와 꽃꽂이에 능하고, 아버지가 남긴 책 상자를 끼고 살아 장부·옛 역사·교부들의 글에 두루 밝다. 상냥하지만 할 말은 다 한다. 열대에서 시드는 장미를 살릴 길을 찾아 밀림에 들어갔다가 짐승 떼를 만났다.' }
   ];

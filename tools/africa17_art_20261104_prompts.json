@@ -1,0 +1,352 @@
+{
+  "date": "2026-11-04",
+  "mode": "built-in image_gen",
+  "portraits": [
+    {
+      "id": "kasha",
+      "name": "카샤",
+      "dir": "legendary",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Original fictional character, not a recognizable real person or celebrity. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. A clearly adult 23-year-old Kuba woman, dark warm brown skin, long oval face, softly defined cheekbones, dark almond eyes, gracefully arched brows, a wide natural tooth-showing joyful smile with cheek dimples; confident warm pageant-like poise but entirely original facial identity. Long black hair partly arranged in fine raised braids adorned with small cowrie shells and partly falling over one shoulder. Slim waist, slender arms, generous full bust, graceful natural proportions. Seventeenth-century Kuba-inspired raffia woven one-shoulder fitted wrap bodice with a low neckline and opaque full coverage, geometric gold brown and rust motifs, bare other shoulder and arms, long raffia skirt extending below knees. No modern crown, sash or contemporary items. Hold a half-finished finely embroidered velvet-like geometric raffia textile over one forearm, a large blunt weaving needle in the other hand, a little cloth wrapped on two fingertips. Copper bangles and modest cowrie necklace. Bright welcoming expression is the priority.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-204c5ea5-8d8d-4fea-9e17-373de4aadf1d.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/kasha.png",
+      "face_file": "images/portraits/legendary/kasha.webp",
+      "half_file": "images/portraits/legendary/kasha_half.webp"
+    },
+    {
+      "id": "senait",
+      "name": "세나이트",
+      "dir": "legendary",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Original fictional character, not a recognizable real person or celebrity. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. A clearly adult 21-year-old Ethiopian woman, deep dark brown skin, elongated softly tapered oval face, very large expressive dark almond eyes, thick gently curved eyebrows, full softly parted lips, serious thoughtful gaze and quiet dignity, entirely original identity. Center-parted glossy black hair in many very long fine braids falling past the knees, small silver forehead cross. Slender body and arms with a generous full bust. An elegant white cotton Habesha kemis adapted into a sleeveless gown with low square neckline showing natural upper cleavage while fully covering breasts with opaque fabric, colored woven red green gold cross-pattern border, fitted waist and long flowing skirt; bare shoulders, a light shamma draped loosely behind elbows. Holds a small traditional Ethiopian ten-string begena lyre upright beside torso, wood frame and ten distinct strings. Expression takes priority: solemn, alert, slightly vulnerable adult confidence, not smiling.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-3586e5ae-37e3-46f0-a28b-cba7a730d48a.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/senait.png",
+      "face_file": "images/portraits/legendary/senait.webp",
+      "half_file": "images/portraits/legendary/senait_half.webp"
+    },
+    {
+      "id": "koa",
+      "name": "코아",
+      "dir": "legendary",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Original fictional character, not a recognizable real person or celebrity. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. A clearly adult 24-year-old Khoikhoi woman from the Cape, warm copper brown sun-kissed skin, softly oval heart-shaped face with high cheekbones, large hazel-brown eyes looking directly toward viewer, curved expressive brows, full softly closed mauve lips, slight playful smile in the eyes. Black natural curly hair gathered in a high textured updo with a few loose curls. Entirely original face. Slender athletic healthy body, narrow waist and generous full bust. Respectful seventeenth-century Khoikhoi-inspired practical wrap clothing: opaque warm ochre leather wrap bodice with a low gently curved neckline showing upper cleavage, bare arms and shoulders, a small soft kaross hide cloak folded over one shoulder, long reddish tan wrap skirt down below knees. Several strands of ostrich eggshell bead necklace, leather waist belt and small pouch. One hand holds a fresh bunch of buchu leaves, other hand rests naturally on belt. Independent intelligent and welcoming adult herder, no weapons, no caricature.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-59b29055-87e4-4bcd-9c0a-156d302e14b3.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/koa.png",
+      "face_file": "images/portraits/legendary/koa.webp",
+      "half_file": "images/portraits/legendary/koa_half.webp"
+    },
+    {
+      "id": "luzia",
+      "name": "도나 루지아",
+      "dir": "legendary",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Original fictional character, not a recognizable real person or celebrity. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. A clearly adult 26-year-old noblewoman of the Kingdom of Kongo with warm medium brown complexion, elongated softly angular oval face, strong straight eyebrows, clear gray-green eyes with a direct self-possessed intense gaze, defined cheekbones, a graceful straight nose and full closed lips; calm proud serious expression. Original fictional facial identity. Dark hair swept into an elegant high updo with loose strands. Slim graceful body with slender arms, narrow waist and generous full bust. A seventeenth-century Kongo-Portuguese court-inspired fitted burgundy bodice with low square neckline, opaque fabric with delicate ivory lace edging and open shoulders, short dropped sleeves, long ivory skirt with burgundy raffia geometric panels. Raffia-silk shawl gathered around forearms rather than covering neckline. Holds a removed simple laundry headscarf in one hand and a small historical ivory-colored rosary in the other; slender sheathed sword at waist. Proud upright posture and visible noble dignity.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-385b75f3-34a0-4ef1-bb07-0483b52f495c.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/luzia.png",
+      "face_file": "images/portraits/legendary/luzia.webp",
+      "half_file": "images/portraits/legendary/luzia_half.webp"
+    },
+    {
+      "id": "zahra",
+      "name": "음와나 자흐라",
+      "dir": "legendary",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Original fictional character, not a recognizable real person or celebrity. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. A clearly adult 25-year-old Swahili poet of Mombasa, deep warm dark brown skin, softly rounded oval face with sculpted cheeks, luminous hazel-brown eyes, arched dark brows and an exceptionally bright natural tooth-showing smile, joyful expressive eyes; original fictional identity. Voluminous black curly hair in high updo, delicate silver forehead chain, large silver hoop earrings, translucent golden saffron shawl framing the hair and draped behind shoulders. Slim elegant body, slender arms, narrow waist and generous full bust. Late seventeenth-century Swahili-inspired black silk dress with rich gold embroidered edges, sleeveless, a low but fully opaque sweetheart neckline showing upper cleavage, elegant fitted waist, long flowing skirt below knees. Open black and gold buibui mantle folded loosely behind arms, face and shoulders visible. Henna on fingertips; holds an aged manuscript bundle bound in red cord at waist, no readable writing. Warm approachable and intellectually lively expression.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-3ea622c1-8f46-421b-904a-77fe3dc280c3.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/zahra.png",
+      "face_file": "images/portraits/legendary/zahra.webp",
+      "half_file": "images/portraits/legendary/zahra_half.webp"
+    },
+    {
+      "id": "af_shyaam",
+      "name": "샤암 왕",
+      "dir": "history",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Historically inspired character illustration, no assertion of an authenticated likeness. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. Shyaam aMbul a Ngoong, Kuba king in 1625, adult African man late thirties, dark brown skin, imposing dignified square face, broad nose, calm commanding dark eyes, short neat black beard, regal body. Elaborate Kuba royal shody-inspired headdress woven with geometric layers of small white cowries and blue glass beads, no European crown. Rich layered geometric raffia regalia in brown gold red black, cowrie and bead broad sash, woven knee-length royal wrap, bare lower forearms. Holds carved wooden royal staff upright. Solemn but benevolent authority; no fantasy armor.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-1347d985-ebff-443f-b010-924039e2885b.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/af_shyaam.png",
+      "face_file": "images/portraits/history/af_shyaam.webp",
+      "half_file": "images/portraits/history/af_shyaam_half.webp"
+    },
+    {
+      "id": "af_fasilides",
+      "name": "파실리다스 황제",
+      "dir": "history",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Historically inspired character illustration, no assertion of an authenticated likeness. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. Emperor Fasilides of Ethiopia in 1636 aged33, dark brown complexion, lean decisive oval face, alert deep-set dark eyes, short curly black hair and short neatly shaped curly beard and mustache. Ethiopian gold crown with small crosses, white cotton shamma and white tunic, scarlet cape embroidered in gold and subtle green, silver Ethiopian processional cross held in right hand, left hand resting at sash. Regal upright posture, calm determined expression. Historically grounded Ethiopian highland royal textiles, not European plate armor.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-a7f2bb04-f9fc-44df-822a-5b46ca5ede2a.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/af_fasilides.png",
+      "face_file": "images/portraits/history/af_fasilides.webp",
+      "half_file": "images/portraits/history/af_fasilides_half.webp"
+    },
+    {
+      "id": "af_riebeeck",
+      "name": "얀 판리베크",
+      "dir": "history",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Historically inspired character illustration, no assertion of an authenticated likeness. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. Jan van Riebeeck at the Cape in1652, Dutch man aged33, pale lightly weathered skin, oval face, shoulder-length brown curls, short thin mustache and tiny chin beard, observant gray eyes and serious calculating expression. Modest black seventeenth-century doublet with row of buttons, broad flat white linen collar and white cuffs, dark brown breeches and leather belt visible to knees. Holds a leather-bound account ledger in one arm and a white quill in other hand. Practical VOC administrator, no royal crown or medals.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-96266bf0-4659-4fc0-b229-c1eb905f49da.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/af_riebeeck.png",
+      "face_file": "images/portraits/history/af_riebeeck.webp",
+      "half_file": "images/portraits/history/af_riebeeck_half.webp"
+    },
+    {
+      "id": "af_vidal",
+      "name": "비달 드 네그레이루스",
+      "dir": "history",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Historically inspired character illustration, no assertion of an authenticated likeness. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. André Vidal de Negreiros, Portuguese governor in Angola1665, man aged59, sun-tanned weathered angular face, graying short dark hair, short gray-streaked beard and mustache, deep-set brown eyes and severe veteran expression. Seventeenth-century black doublet under worn dark steel breastplate, white narrow collar, red military sash across chest, dark knee breeches, leather gauntlets tucked into belt, sheathed period sword, holds a plain wooden walking cane in right hand. Practical seasoned older commander with signs of age.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-8744ba33-dbf8-4688-998a-b630ec5e88cb.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/af_vidal.png",
+      "face_file": "images/portraits/history/af_vidal.webp",
+      "half_file": "images/portraits/history/af_vidal_half.webp"
+    },
+    {
+      "id": "af_saif",
+      "name": "사이프 빈 술탄",
+      "dir": "history",
+      "prompt": "Use case: stylized-concept. Asset: one single character illustration for an illustrated historical seafaring RPG. Painterly premium hand-painted game art, elegant controlled shapes, soft brushwork and crisp facial detail, natural anatomy, not photographic, not a collage. Historically inspired character illustration, no assertion of an authenticated likeness. Transparent background with real alpha, no scenery, no shadow rectangle, no text or watermark. Vertical 1024x1536, show the entire head and hair ornaments and body down to just below both knees with 7% safe padding. Neutral upright three-quarter conversational pose, look at viewer, all hands visible with anatomically correct fingers. Face should be large enough for a matching square face crop. Saif bin Sultan of Oman in1696, Arabian man aged36, warm medium brown skin, dark almond eyes, strong long face, black neatly trimmed full beard and mustache, poised restrained expression. Richly wrapped deep navy Omani turban, long white opaque cotton dishdasha with subtle embroidery, dark blue and gold mantle open in front, broad woven belt, ornate silver Omani khanjar in curved sheath clearly visible at waist. One hand rests on belt near sheathed dagger, other holds rolled naval dispatch. Regal naval commander, no European crown.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-c2834e4a-c5f9-4ee4-94e4-716f84e85d68.png",
+      "workspace_source": "artifacts/africa17-art-20261104/sources/portraits/af_saif.png",
+      "face_file": "images/portraits/history/af_saif.webp",
+      "half_file": "images/portraits/history/af_saif_half.webp"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "af_kuba_court",
+      "name": "쿠바 왕국의 궁정",
+      "refs": [
+        "af_shyaam"
+      ],
+      "speaker": "af_shyaam",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Shyaam, Kuba king, an adult man. Kuba royal capital near the Kasai region in1625, warm afternoon light through palms, a broad packed-earth court surrounded by elaborately woven reed walls and palm-thatched halls. King Shyaam seated on a carved wooden throne beneath the shaded royal veranda, keep cowrie-bead royal headdress and layered geometric raffia regalia from reference, staff in hand. Courtiers in woven raffia garments and cowrie adornments listen respectfully, two drummers at foreground left with carved wooden drums. Lush tropical green distant landscape; believable Central African architectural materials, no European stone palace. Balanced scene of courtly unity, king face readable in right-center, not a tiny anonymous figure.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-79a51fdc-9e71-40cd-b81b-22ec49105640.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "af_shyaam",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-1347d985-ebff-443f-b010-924039e2885b.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_kuba_court.png",
+      "file": "images/legend-events/af_kuba_court.webp"
+    },
+    {
+      "id": "af_kuba_loom",
+      "name": "그늘 아래 라피아 직녀",
+      "refs": [
+        "kasha"
+      ],
+      "speaker": "kasha",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Kasha, a fictional adult23-year-old woman. A shaded courtyard of a Kuba weaving workshop1625, palm leaf roof, woven reed wall, baskets of raffia fibers and small dye bowls, dappled tropical sunlight. Kasha seated comfortably on a low stool at right-center, a large tactile velvet-like raffia textile spread over her lap, gold brown and rust geometrical embroidery, holding weaving needle and thread, talking warmly to a traveler outside frame. Clearly retain her long braids with cowries, dimples and warm tooth-showing smile, fitted one-shoulder geometric raffia dress from reference. Close environmental mid shot with both hands and textile visible; scene concerns skill and curiosity about the sea.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-44833a5e-bbcb-480b-ab8c-c7292c4bd973.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "kasha",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-204c5ea5-8d8d-4fea-9e17-373de4aadf1d.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_kuba_loom.png",
+      "file": "images/legend-events/af_kuba_loom.webp"
+    },
+    {
+      "id": "af_kuba_peek",
+      "name": "거적문 너머의 등잔불",
+      "refs": [
+        "kasha"
+      ],
+      "speaker": "kasha",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Kasha, a fictional adult23-year-old woman. At night inside a modest Kuba weaving hut, viewed through a slightly open reed mat doorway with doorway edges at either side, simple clay oil lamp casting amber light on the woman and textile. Kasha seated working on an intricate wave-pattern raffia cloth, exhausted but dignified, tiny cloth bandages on fingertips, a tear glinting near her eye, she has just raised her head to meet viewer with a startled vulnerable disappointed expression. Preserve same original facial structure, dark skin, cowrie braids, gold rust single-shoulder opaque raffia dress. No injuries shown, no blood, no nudity, no voyeuristic body angle. Focus on face, bandaged hands and cloth, respectful emotional storytelling with blue night shadows.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-3ae3d4da-8690-4d60-81cb-b6e5c7354269.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "kasha",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-204c5ea5-8d8d-4fea-9e17-373de4aadf1d.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_kuba_peek.png",
+      "file": "images/legend-events/af_kuba_peek.webp"
+    },
+    {
+      "id": "af_kuba_dawn",
+      "name": "새벽의 물결 무늬 천",
+      "refs": [
+        "kasha",
+        "af_shyaam"
+      ],
+      "speaker": "kasha",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Kasha, an adult23-year-old fictional woman; reference2 is Shyaam the Kuba king, adult man. Early dawn in the Kuba royal courtyard, soft rose and gold sun emerging behind palm-thatched roof. Kasha stands left-center with a proud gentle joyful smile, unfolds a finished raffia velvet cloth bearing a newly invented blue-gold curving wave design, keep her same cowrie braids and gold brown rust one-shoulder dress. Shyaam in matching cowrie-bead headdress and raffia royal robes stands right-center, touches the cloth edge admiringly with one hand, other holds carved royal staff. Courtiers smile in soft focus behind, hint of a route toward distant forest. The central cloth and both faces clearly readable, a hopeful farewell and approval to sail.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-ae11604f-ce07-4048-89e9-018eb1ca391a.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "kasha",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-204c5ea5-8d8d-4fea-9e17-373de4aadf1d.png"
+        },
+        {
+          "index": 2,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "af_shyaam",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-1347d985-ebff-443f-b010-924039e2885b.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_kuba_dawn.png",
+      "file": "images/legend-events/af_kuba_dawn.webp"
+    },
+    {
+      "id": "af_gondar_castle",
+      "name": "곤다르에 쌓는 돌성",
+      "refs": [
+        "af_fasilides"
+      ],
+      "speaker": "af_fasilides",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Ethiopian Emperor Fasilides, adult33-year-old man in1636. Panoramic view of early Fasil Ghebbi palace construction in Gondar on lush Ethiopian highlands, squared stone keep with characteristic round corner towers rising above timber scaffolds; masons carry stones, wood scaffolding is primitive not metal. Emperor foreground right-center wearing the same Ethiopian golden crown, white shamma and scarlet gold-embroidered cape, holds silver Ethiopian cross and observes plans discussed with a local master mason. Distant blue-green highland ridges beneath immense cloudy sky, warm late afternoon sunlight, architectural dignity, no European cathedral and no massive fantasy fortifications.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-0e9e62f6-4961-4746-a5cd-94156ee0b631.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "af_fasilides",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-a7f2bb04-f9fc-44df-822a-5b46ca5ede2a.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_gondar_castle.png",
+      "file": "images/legend-events/af_gondar_castle.webp"
+    },
+    {
+      "id": "af_gondar_wehni",
+      "name": "웨흐니 산꼭대기의 창",
+      "refs": [
+        "senait"
+      ],
+      "speaker": "senait",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Senait, a fictional fully adult21-year-old Ethiopian woman. Dusk at the remote Wehni mountain prison, dramatic Ethiopian highlands with a tall flat-topped amba cliff rising above misty valleys, a small rough stone building on top. Compose with a nearby upper-right stone window ledge, Senait visibly leaning only slightly from the securely framed window, her face lit amber from inside, hopeful alert expression, same silver forehead cross, very long fine black braids, same embroidered white cotton sleeveless square-neck dress. She lowers one thick rope braided from cut hair and cotton over the cliff edge; loose long braids also visible. The rope follows gravity down rock face at right into shadow. No other people climbing, no dangerous leaning or nudity, begena lyre resting beside inside wall. Close enough to recognize her, sweeping mountain vista on left.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-58827667-ded6-4a13-8445-ad7e9a14c093.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "senait",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-3586e5ae-37e3-46f0-a28b-cba7a730d48a.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_gondar_wehni.png",
+      "file": "images/legend-events/af_gondar_wehni.webp"
+    },
+    {
+      "id": "af_cape_fort",
+      "name": "희망봉 요새와 소 떼",
+      "refs": [
+        "koa",
+        "af_riebeeck"
+      ],
+      "speaker": "koa",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Koa, original adult24-year-old Khoikhoi woman; reference2 Jan van Riebeeck adult33-year-old Dutch administrator. Cape1652 beneath broad flat-topped Table Mountain, EARLY modest earthwork and timber palisade fort, a small vegetable garden, captured cattle in rough wooden enclosure, a coastal bay and small sailing ship beyond. Foreground Koa confronts Riebeeck across an open stockade gate, she gestures earnestly toward cattle; he holds ledger, cautious formal expression, same black doublet and broad white collar. Keep Koa's copper complexion, curly updo, eggshell beads, ochre wrap bodice, red-tan skirt and kaross over one shoulder. Two Dutch musketeers in period plain garments watch behind, no combat. Sunny windy Cape landscape, no later huge stone Castle of Good Hope, no modern uniforms.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-6ceff3bd-5af5-4412-a0e4-5920bcc37e80.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "koa",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-59b29055-87e4-4bcd-9c0a-156d302e14b3.png"
+        },
+        {
+          "index": 2,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "af_riebeeck",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-96266bf0-4659-4fc0-b229-c1eb905f49da.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_cape_fort.png",
+      "file": "images/legend-events/af_cape_fort.webp"
+    },
+    {
+      "id": "af_cape_night",
+      "name": "모닥불과 돌아오지 못하는 배",
+      "refs": [
+        "koa"
+      ],
+      "speaker": "koa",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Koa, a fictional adult24-year-old Khoikhoi woman. Quiet night on the Cape shore, Koa seated in right foreground beside small campfire on rocky sand, same curly hair updo, ostrich eggshell necklaces, ochre wrap bodice, reddish tan skirt and kaross cloak. Her face is gentle and thoughtful while she tells a sea legend, one hand gestures toward horizon. A calm cow resting safely in distant background. On left horizon across moonlit dark Atlantic waves appears a barely solid seventeenth-century ghostly three-masted ship with faint eerie green lights and ragged sails amid sea mist, Flying Dutchman legend, not an enormous neon fantasy monster. Amber firelight on face and fabric contrasts blue-gray moonlight, wistful mysterious storytelling.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-2fb354ba-cb9b-445c-9d28-7730f6aa9c51.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "koa",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-59b29055-87e4-4bcd-9c0a-156d302e14b3.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_cape_night.png",
+      "file": "images/legend-events/af_cape_night.webp"
+    },
+    {
+      "id": "af_mbwila_chapel",
+      "name": "나자레 성당 담에 기대어",
+      "refs": [
+        "luzia"
+      ],
+      "speaker": "luzia",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Luzia, fictional adult26-year-old Kongo noblewoman. Luanda on Angolan Atlantic coast in1665, night beside a modest seventeenth-century Portuguese whitewashed seaside chapel, rough pale plaster wall, small cross silhouette and simple bell gable, waves and distant ship lanterns behind. Luzia in right foreground lowers a wicker laundry basket filled with folded linen onto stone ground, rests her forehead and one palm gently against chapel wall in grief, ivory-colored rosary hanging from other hand. Retain her original face in three-quarter profile with strong brows, green-gray eyes, high dark updo and dignified neck, burgundy low-square lace bodice and ivory patterned skirt, a plain laundry headscarf loosely draped back from hair; sword mostly hidden under shawl. Restrained sorrow and proud bearing, soft warm lamp near doorway and blue moonlight, no corpses or severed heads.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-0890b549-6631-4a0d-acd5-c30809ff5760.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "luzia",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-385b75f3-34a0-4ef1-bb07-0483b52f495c.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_mbwila_chapel.png",
+      "file": "images/legend-events/af_mbwila_chapel.webp"
+    },
+    {
+      "id": "af_mombasa_siege",
+      "name": "몸바사 포위와 지켜 낸 노래",
+      "refs": [
+        "zahra",
+        "af_saif"
+      ],
+      "speaker": "zahra",
+      "prompt": "Use case: historical-scene. Asset: full narrative event illustration for a painterly historical seafaring RPG. Wide landscape 9:4 composition, 2304x1024 target, complete environment, richly painted brushwork and controlled detailed faces like premium hand-painted game key art, not a photograph. No lettering, captions, frame, UI or watermark. References are character-design references ONLY: preserve the same original illustrated adult person's face, hair, skin tone, clothing and accessories. Place characters naturally within the environment, do not paste portraits on a blank background. Coherent seventeenth-century setting, no modern objects or ancient Egyptian regalia, no sexual activity, no gore. Reference1 is Zahra, fictional adult25-year-old Swahili poet; reference2 is Saif bin Sultan adult36-year-old Omani ruler. Mombasa1696–98 during siege of Fort Jesus, accurate coral-stone bastioned fort with angular sea walls and modest Portuguese banner on distant headland; several Omani dhows with lateen sails blockade turquoise sea under hazy sunset smoke. Near foreground right, Zahra stands in shaded Swahili coral-stone alley with carved wood door, holds red-cord-bound old manuscript bundle protectively, same curly updo and silver forehead chain, earrings, black gold sleeveless dress and saffron shawl, alert determined expression replacing her usual smile. At left on a coastal overlook, Saif with same navy turban and white robe points across bay while two Omani sailors listen; silver sheathed khanjar visible. Environment conveys siege and endangered cultural memory, no gore, no fires consuming people, no modern rifles.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-b2d8f743-980d-41b0-a386-3908643703a1.png",
+      "input_images": [
+        {
+          "index": 1,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "zahra",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-3ea622c1-8f46-421b-904a-77fe3dc280c3.png"
+        },
+        {
+          "index": 2,
+          "role": "일관된 인물·복식용 참조 원화",
+          "id": "af_saif",
+          "path": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-c2834e4a-c5f9-4ee4-94e4-716f84e85d68.png"
+        }
+      ],
+      "workspace_source": "artifacts/africa17-art-20261104/sources/scenes/af_mombasa_siege.png",
+      "file": "images/legend-events/af_mombasa_siege.webp"
+    }
+  ],
+  "reference_policy": "실제 사진은 표정·헤어·윤곽의 일반적인 특징만 참고한 성인 가상 인물. 추가 이집트풍 자료는 얼굴형·표정·눈매의 방향만 참고하며 고대 복식을 복제하지 않는다.",
+  "provided_reference_roles": [
+    {
+      "role": "표정·얼굴형·눈매·헤어의 일반적 특징을 참고, 직접적인 실존 얼굴 복제나 신체 변형의 입력으로 쓰지 않음",
+      "files": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-cfe3576c-b1cc-4c66-ae26-56d0ee4d4c77.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-613f9f64-8432-4234-9979-3b5744677481.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d55a5046-67b0-420f-b9f9-714d4d929ba6.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1562589d-87c9-4ff3-ab43-1b81d1d95e56.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d266d20f-9b3f-452e-981f-d1b13f1ee1fe.png"
+      ]
+    },
+    {
+      "role": "추가 이집트풍 자료: 향후 여성 얼굴 디자인의 표정·얼굴형·눈매 방향. 왕관·복식·배경·워터마크는 옮기지 않음.",
+      "files": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-927fd61c-d3ab-4d35-b11a-49f79fad1597.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0b2777d8-c343-4a2c-a5f9-81923fd4078e.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-be974279-172f-45f0-ac26-269e70154a25.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-46962be9-8b2d-481e-a31e-8ae4e59e71d9.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3e8df485-e086-4d00-a6a6-9459a47ad16d.png"
+      ]
+    }
+  ]
+}

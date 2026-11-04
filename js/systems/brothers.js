@@ -57,6 +57,8 @@
   // 분기는 그대로 두고, 옷을 바꿔 입은 대사에서만 전용 그림을 앞세운다.
   BR.speaker = function (id, variant, crew, emo) {
     var sp = crew && G.Legend && G.MATE[id] ? G.Legend.speaker(id, emo) : G.Hist ? G.Hist.speaker(id) : { name: id, lang: 3 };
+    // 설화의 사건 대사는 장면 그림이 떠 있어도 새 무릎상으로 등장한다.
+    if (id === 'br_seolhwa') sp.standInScene = true;
     var key = variant === 'beggar' && id === 'br_gwanghae' ? 'portraits/history/br_gwanghae_beggar'
       : variant === 'prince' && id === 'br_makdong' ? 'portraits/history/br_makdong_prince' : null;
     if (key && G.Art && G.Img && G.Img.has(key)) {

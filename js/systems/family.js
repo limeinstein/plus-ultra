@@ -628,6 +628,8 @@
       portrait: F.kidSpec(k)
     };
     s.player.portrait.age = 'young';
+    // 무도회에서 혼약한 신부가 있으면 새 제독의 아내가 된다 (js/systems/ball.js — 2026-11-03)
+    if (k.bride && G.MAID && G.MAID[k.bride.id]) { s.player.wife = k.bride.id; s.maids = s.maids || {}; s.maids[k.bride.id] = { aff: 100 }; }
     s.contract = null;
     s.life = {};   // 수명·생일 선물 기록은 새 제독으로 새로 (옛 제독의 「수명이 다함」이 남아 새 제독이 곧바로 세상을 떠나던 것 — 2026-10-23)
     // 선원이 모두 쓰러져 뒤를 이었다면 배는 주인 없이 떠돈다 — 새 제독은 고향에서 작은 배 한 척으로 다시 시작한다

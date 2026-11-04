@@ -1,0 +1,153 @@
+{
+  "date": "2026-11-04",
+  "mode": "내장 ImageGen",
+  "scope": "이 채팅에서 요청한 사건의 미생성 샷 보완",
+  "portraits": {
+    "wm_ma": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_ma_half.webp",
+    "wm_jina": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_jina_half.webp",
+    "wm_wang": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_wang_half.webp",
+    "wm_myeongwol": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_myeongwol_half.webp"
+  },
+  "scenes": [
+    {
+      "id": "wm_junk",
+      "title": "중국 근해의 금봉호",
+      "system": "wangmerchant",
+      "speaker": "wm_ma",
+      "refs": [
+        "wm_ma",
+        "wm_jina"
+      ],
+      "prompt": "Use case: illustration-story. Asset: one finished narrative event scene for an illustrated historical seafaring RPG, landscape 9:4, 1881x836. Match the supplied character illustrations: colorful hand-painted game art, expressive drawn eyes, soft defined brushwork and gentle line accents, warm atmospheric light, not a live-action photograph, no skin pores, no 3D render. Input images are character-design references ONLY, maintain each adult character's face, age, hair, outfit and accessories, unchanged clothing coverage and unchanged body proportions. Natural conversational merchant scene, coherent detailed environment, no text, no watermark, no UI or border. Faces and hands readable with safe margins. No modern objects, no romantic or sexual framing. Reference1 Master Ma is the stout middle-aged Chinese merchant in navy robe holding a folding fan; reference2 Jina is his clearly adult twenty-something daughter, with bright open-mouth smile, black updo and aqua floral ornaments/ribbons, pale blue floral high-collared SHORT-SLEEVED blouse and matching long blue skirt, ledger in arms. They are father and daughter, never a couple. Establishing scene on the broad polished wooden foredeck of the trading junk Golden Phoenix in the South China Sea, three tall red battened bamboo sails visible behind, impressive golden phoenix carving at bow, turquoise waves and distant hazy Chinese coast. Ma welcomes visiting traders from near right railing, daughter beside him cheerfully raises an open palm, both faces clearly recognizable at mid shot in right-center, a rope mooring between this junk and the edge of a visiting merchant ship at left. The junk should read as a large credible Chinese merchant ship, not an enormous palace or warship. No Wang or Myeongwol.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-a9eb8a48-7726-490b-9407-62956e0c2bf8.png",
+      "input_images": [
+        {
+          "index": 1,
+          "id": "wm_ma",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_ma_half.webp"
+        },
+        {
+          "index": 2,
+          "id": "wm_jina",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_jina_half.webp"
+        }
+      ],
+      "workspace_source": "artifacts/merchant-event-shots-20261104/sources/wm_junk.png",
+      "file": "images/legend-events/wm_junk.webp"
+    },
+    {
+      "id": "wm_deal",
+      "title": "금봉호 갑판의 흥정",
+      "system": "wangmerchant",
+      "speaker": "wm_jina",
+      "refs": [
+        "wm_ma",
+        "wm_jina"
+      ],
+      "prompt": "Use case: illustration-story. Asset: one finished narrative event scene for an illustrated historical seafaring RPG, landscape 9:4, 1881x836. Match the supplied character illustrations: colorful hand-painted game art, expressive drawn eyes, soft defined brushwork and gentle line accents, warm atmospheric light, not a live-action photograph, no skin pores, no 3D render. Input images are character-design references ONLY, maintain each adult character's face, age, hair, outfit and accessories, unchanged clothing coverage and unchanged body proportions. Natural conversational merchant scene, coherent detailed environment, no text, no watermark, no UI or border. Faces and hands readable with safe margins. No modern objects, no romantic or sexual framing. Reference1 is Master Ma the middle-aged father in navy; reference2 is Jina his clearly adult daughter in pale blue SHORT-SLEEVED high-collared floral blouse, floral hairpins and long blue skirt. On the shaded deck of their Chinese trading junk, red battened sails and rigging above, neatly arranged bolts of pink teal and ivory silk, blue-and-white porcelain bowls carefully packed in straw, sealed wooden tea chests. Jina at right-center checks a small ledger and abacus on waist-high table with lively clever smile, looking toward a visiting sailor shown only from behind and partially cropped at far left; Ma next to her watches with a comically shrewd sidelong expression, closed folding fan at waist. Old balance scales and a modest stack of period silver coins on table, fair bargaining and trade skill, no readable ledger writing or labels. Keep original faces and all existing costume details, no Wang or Myeongwol.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-ce7f8aad-3b67-4a71-a365-5fd69d1eab60.png",
+      "input_images": [
+        {
+          "index": 1,
+          "id": "wm_ma",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_ma_half.webp"
+        },
+        {
+          "index": 2,
+          "id": "wm_jina",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_jina_half.webp"
+        }
+      ],
+      "workspace_source": "artifacts/merchant-event-shots-20261104/sources/wm_deal.png",
+      "file": "images/legend-events/wm_deal.webp"
+    },
+    {
+      "id": "wm_jina_leave",
+      "title": "지나의 새로운 바닷길",
+      "system": "wangmerchant",
+      "speaker": "wm_jina",
+      "refs": [
+        "wm_ma",
+        "wm_jina"
+      ],
+      "prompt": "Use case: illustration-story. Asset: one finished narrative event scene for an illustrated historical seafaring RPG, landscape 9:4, 1881x836. Match the supplied character illustrations: colorful hand-painted game art, expressive drawn eyes, soft defined brushwork and gentle line accents, warm atmospheric light, not a live-action photograph, no skin pores, no 3D render. Input images are character-design references ONLY, maintain each adult character's face, age, hair, outfit and accessories, unchanged clothing coverage and unchanged body proportions. Natural conversational merchant scene, coherent detailed environment, no text, no watermark, no UI or border. Faces and hands readable with safe margins. No modern objects, no romantic or sexual framing. Reference1 is middle-aged Master Ma; reference2 his clearly adult twenty-something daughter Jina in the exact pale blue SHORT-SLEEVED high-collared floral blouse and long matching skirt, floral hairpins/ribbons. An emotional respectful father-daughter farewell between two merchant ships anchored in calm Chinese coastal water. At right-center Jina stands securely at the near end of a broad wooden gangplank with rope handrails, holds her closed ledger and a small cloth travel bundle against waist, looks back over shoulder toward father with her recognizable bright open-mouth hopeful smile. Ma stands on the Golden Phoenix junk deck behind her at left-center, clasps his folding fan with a worried but proud loving expression, one hand lifted in farewell. Red battened sails and golden phoenix bow carving behind father, cream canvas sails of her new seafaring ship on right, warm dawn sky and distant coast. No perilous gap or jumping, no romantic gestures, no Wang or Myeongwol.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-ffca7721-b5e9-40c4-96d5-451a0b200bde.png",
+      "input_images": [
+        {
+          "index": 1,
+          "id": "wm_ma",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_ma_half.webp"
+        },
+        {
+          "index": 2,
+          "id": "wm_jina",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_jina_half.webp"
+        }
+      ],
+      "workspace_source": "artifacts/merchant-event-shots-20261104/sources/wm_jina_leave.png",
+      "file": "images/legend-events/wm_jina_leave.webp"
+    },
+    {
+      "id": "wangmoon_port",
+      "title": "조선 포구의 왕서방과 명월",
+      "system": "wangmoon",
+      "speaker": "wm_wang",
+      "refs": [
+        "wm_wang",
+        "wm_myeongwol"
+      ],
+      "prompt": "Use case: illustration-story. Asset: one finished narrative event scene for an illustrated historical seafaring RPG, landscape 9:4, 1881x836. Match the supplied character illustrations: colorful hand-painted game art, expressive drawn eyes, soft defined brushwork and gentle line accents, warm atmospheric light, not a live-action photograph, no skin pores, no 3D render. Input images are character-design references ONLY, maintain each adult character's face, age, hair, outfit and accessories, unchanged clothing coverage and unchanged body proportions. Natural conversational merchant scene, coherent detailed environment, no text, no watermark, no UI or border. Faces and hands readable with safe margins. No modern objects, no romantic or sexual framing. Reference1 is Wang, a plump middle-aged Chinese silk merchant with pale sage-beige robe, scroll embroidery and long wispy beard, silk samples under arm. Reference2 Myeongwol is a clearly adult Korean merchant woman in her twenties with dark low chignon, silver hairpin, pearl earrings, ivory white Korean chima tied high at chest with ivory sash and jade norigae, bare shoulders as in the existing reference, opaque fabric fully covers breasts; keep exact original outfit coverage, no added exposure or body changes. They are independent business partners, not father and daughter. A bustling early-modern Joseon coastal port marketplace, low tiled and thatched warehouses, Korean wooden trading boats with plain tan rectangular sails, rocky green hills and sheltered water; no modern port, no identifiable Hanyang/Dongnae landmark so works in both. Wang stands left-center displaying a folded silk sample with kind slightly bashful smile, Myeongwol at right-center smiles calmly as she examines tied cloth bundles and straw-packed porcelain on a wooden merchant table, a passing porter with a load in soft-focus background. Warm afternoon sunshine, competent welcoming merchants. No Ma, Jina or Golden Phoenix red junk.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-fd845dd2-f076-4786-b360-d438e9d7e0b8.png",
+      "input_images": [
+        {
+          "index": 1,
+          "id": "wm_wang",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_wang_half.webp"
+        },
+        {
+          "index": 2,
+          "id": "wm_myeongwol",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_myeongwol_half.webp"
+        }
+      ],
+      "workspace_source": "artifacts/merchant-event-shots-20261104/sources/wangmoon_port.png",
+      "file": "images/legend-events/wangmoon_port.webp"
+    },
+    {
+      "id": "wangmoon_deal",
+      "title": "명월의 품질 확인과 왕서방의 대금",
+      "system": "wangmoon",
+      "speaker": "wm_myeongwol",
+      "refs": [
+        "wm_wang",
+        "wm_myeongwol"
+      ],
+      "prompt": "Use case: illustration-story. Asset: one finished narrative event scene for an illustrated historical seafaring RPG, landscape 9:4, 1881x836. Match the supplied character illustrations: colorful hand-painted game art, expressive drawn eyes, soft defined brushwork and gentle line accents, warm atmospheric light, not a live-action photograph, no skin pores, no 3D render. Input images are character-design references ONLY, maintain each adult character's face, age, hair, outfit and accessories, unchanged clothing coverage and unchanged body proportions. Natural conversational merchant scene, coherent detailed environment, no text, no watermark, no UI or border. Faces and hands readable with safe margins. No modern objects, no romantic or sexual framing. Reference1 Wang is a stout middle-aged Chinese merchant in pale sage-beige embroidered robe, topknot, long wispy beard; reference2 Myeongwol is his clearly adult Korean business partner in her twenties, dark low chignon, silver hairpin, pearl earrings, same ivory white chest-tied Korean chima and jade norigae with bare shoulders exactly as original, unchanged fully opaque coverage and unchanged physique. Under an awning at an early-modern Joseon port trading stall, Myeongwol at right-center leans only slightly toward a waist-high wooden table to inspect the fiber texture and knotted origin seal of a Korean linen or ramie cloth bolt using both hands, calm confident smile and attentive eyes. Wang at left-center opens a modest wooden cash box and counts payment onto brass balance pan, generous delighted expression. Packed herbal medicine bundles, pale ceramics in straw and folded cloth nearby suggest diverse Korean goods without making them mandatory for every sale. Korean fishing boats and traditional warehouse courtyard visible beyond, sunlight through awning. No readable labels, no modern paper banknotes, no Ma, Jina or red-sailed Golden Phoenix.",
+      "source": "C:/Users/User/.codex/generated_images/01a19c79-8f24-7830-9e6f-7ef255fd1eba/exec-cdf58970-4c8d-4c63-839a-38f5a7b5faa2.png",
+      "input_images": [
+        {
+          "index": 1,
+          "id": "wm_wang",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_wang_half.webp"
+        },
+        {
+          "index": 2,
+          "id": "wm_myeongwol",
+          "role": "기존 인물·복식·표정 참조",
+          "path": "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/history/wm_myeongwol_half.webp"
+        }
+      ],
+      "workspace_source": "artifacts/merchant-event-shots-20261104/sources/wangmoon_deal.png",
+      "file": "images/legend-events/wangmoon_deal.webp"
+    }
+  ]
+}

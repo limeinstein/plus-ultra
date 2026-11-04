@@ -176,7 +176,9 @@
       if (G.Nerchinsk && G.Nerchinsk.pending()) await G.Nerchinsk.check();   // 네르친스크 조약 — 북경·이르쿠츠크 (js/systems/nerchinsk.js)
       if (G.Safavid && G.Safavid.pending()) await G.Safavid.check();   // 사파비 왕조·찰디란 (js/systems/safavid.js)
       if (G.Mohacs && G.Mohacs.pending()) await G.Mohacs.check();   // 모하치 전투 (js/systems/mohacs.js)
+      if (G.WangMoon && G.WangMoon.pending()) await G.WangMoon.check();   // 한양·동래의 왕서방·명월 — 금봉호와 별개의 거래
       if (G.Brothers && G.Brothers.pending()) await G.Brothers.check();   // 두 왕자 — 왕자와 거지·지킬과 하이드 (js/systems/brothers.js)
+      if (G.Yeonsan && G.Yeonsan.pending()) await G.Yeonsan.check();   // 연산군과 장녹수 — 흥청망청 (js/systems/yeonsan.js)
       if (G.Imjin && G.Imjin.pending()) await G.Imjin.check();   // 임진왜란 — 동래·한양·한산도 (js/systems/imjin.js)
       if (G.Globe && G.Globe.pending()) await G.Globe.check();   // 셰익스피어와 글로브의 불 — 앤 해서웨이 (js/systems/globe.js)
       if (G.GalPisa && G.GalPisa.pending()) await G.GalPisa.check();   // 갈릴레오와 피사의 사탑 (js/systems/galpisa.js)
@@ -197,6 +199,8 @@
       if (G.Newton && G.Newton.pending()) await G.Newton.check();   // 아이작 뉴턴 — 『프린키피아』(1686~87) · 남해 회사 주식(1720), 런던 (js/systems/newton.js)
       if (G.Romeo && G.Romeo.pending()) await G.Romeo.check();   // 로미오와 줄리엣 — 베니스·밀라노에서 하루 거리의 베로나 (js/systems/romeojuliet.js)
       if (G.OttoEu && G.OttoEu.pending()) await G.OttoEu.check();   // 오스만과 유럽의 다툼 — 빈 포위·호르무즈·무스카트·칼렌베르크·카를로비츠 (js/systems/ottomaneurope.js)
+      if (G.Afr17 && G.Afr17.pending()) await G.Afr17.check();   // 17세기 아프리카 — 곤다르(악숨)·케이프·음빌라 뒤 루안다·몸바사 포위 (js/systems/africa17.js)
+      if (G.EIndia && G.EIndia.pending()) await G.EIndia.check();   // 동인도 회사 — 런던·암스테르담의 설립과 수왈리·자야카르타·반다·암보이나의 위기 (js/systems/eastindia.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;
@@ -360,6 +364,7 @@
         if (dt.length) out.push({ kind: 'trade', icon: 'scroll', hot: true, text: dt[0].who + '에게서 빚을 받아 낸다 (교역소)' });
       }
       if (G.Escort && f.trade) out = out.concat(G.Escort.todo(c));   // 교역소에서 호위를 청하는 상인
+      if (G.WangMoon && G.WangMoon.todo) out = out.concat(G.WangMoon.todo(c));
       if (G.Princess && f.palace) out = out.concat(G.Princess.todo(c));
       if (G.Medici) out = out.concat(G.Medici.todo(c));   // 메디치 은행의 위기: 빚쟁이 · 잉글랜드 국왕 · 로렌초에게 전한다
       if (G.Story && G.Story.todo) out = G.Story.todo(c).concat(out);   // 이야기 모드: 아버지의 흔적 — 다음 갈 곳 (맨 위에)

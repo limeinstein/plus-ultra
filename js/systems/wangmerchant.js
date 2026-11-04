@@ -1,16 +1,8 @@
-/* 중국 근해의 떠돌이 상선 — 마대인과 딸 지나, 비단 장수 왕서방 (G.WangMerch) 2026-11-02 사용자 요청. 사람·조정값: js/data/wangmerchant.js (G.BALANCE.wangMerch)
-   ■ 만남: 중국 근해(box)를 항해하는 바다의 하루 끝마다 chance (처음엔 firstChance) — 한 번 만나면 cool일 동안은 없다. (js/scenes/sea.js 가 부른다)
-   ■ 흐름
-     ① 금봉호가 다가온다. 마대인과 딸 지나, 비단 장수 왕서방. (1567년 해금이 풀리기 전에는 몰래 하는 바다 장사라고 귀띔한다)
-     ② 왕서방: 짐칸에 조선 항구에서 산 몫이 있으면 「명월이 사는 동네 물건」이라며 최근에 본 값의 korea배로 사 준다 (팔지 말지 고른다)
-     ③ 금봉호의 짐: 견직물·도자기·차를 품목마다 stock(700~1000)통 — 제독이 「최근에 본 값」(시세 수첩에 적힌 가장 최근의 사는 값, 없으면 파는 값, 그것도 없으면 본디 값)의 ratio(70%)
-     ④ 후려치기 교섭 (고르면): 수법마다 한 번씩 —
-          흠을 잡는다(세공) −6%p · 금화 상자를 연다(소지금이 넉넉해야) −5%p · 마대인을 치켜세운다(웅변) −7%p · 돌아서는 척한다 −9%p (들키면 값이 도로 오른다)
-        성공률: 회계(일행에서 가장 잘하는 사람)·매력·중국어·경리. 거절이 patience번(경리가 있으면 +1) 쌓이면 지나가 장부를 덮는다. floor(45%) 아래로는 안 내려간다.
-     ⑤ 산다: 품목을 골라 실을 수 있는 만큼(짐칸·무게·소지금·재고·품목 수) — 산 곳은 가장 가까운 명나라 항구로 적는다.
-     ⑥ 거래(사거나 조선 물건을 판 만남)가 joinDeals(3)번이 되면 지나가 「장부 너머의 세상을 보고 싶다」며 제독을 따라온다(동료).
-        그 뒤로 금봉호를 만나면 값은 마대인이 부르고, 지나는 제독 편에서 아버지의 값을 후려친다(성공률 +jinaOdds).
-   ■ 저장: s.wangMerch = { met, cool, day: 굴린 날, hit, deals: 거래한 만남 수, korea: 조선 물건을 판 번 수, jina: 지나가 따라온 날 } */
+/* 금봉호 — 마대인과 딸 지나 (G.WangMerch). 사람·조정값: js/data/wangmerchant.js.
+   중국 근해에서 견직물·도자기·차를 최근에 본 값의 70%에 판다. 후려치기로 더 깎을 수 있다.
+   금봉호에서 물건을 산 만남이 joinDeals번이면 지나가 동료가 되고, 이후에는 제독 편에서 아버지와 교섭한다.
+   저장 s.wangMerch의 met·cool·day·hit·deals·jina를 유지한다. 옛 deals도 줄이지 않는다.
+   왕서방·명월의 조선 물건 거래는 js/systems/wangmoon.js에서 독립 진행한다. */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -57,38 +49,6 @@
   /** 금봉호가 부르는 1통 값 */
   WM.price = function (id, ratio) { return Math.max(1, Math.round(WM.seen(id).p * ratio)); };
 
-  // ================================================================ 조선 물건 (왕서방)
-  function koreaCity(cid) { var c = G.CITY_DATA[cid]; return !!(c && /조선/.test(c.nation || '')); }
-  /** 짐칸 가운데 조선 항구에서 산 몫 [{id, q, cost}] */
-  WM.koreaLots = function () {
-    var c = S().fleet.cargo || {}, out = [];
-    for (var id in c) {
-      var cg = c[id]; if (!cg || !(cg.q > 0) || !G.GOOD[id]) continue;
-      var L = R.cargoLots(cg), q = 0, cost = 0;
-      for (var k in L) if (koreaCity(+k) && L[k].q > 0) { q += L[k].q; cost += L[k].q * L[k].cost; }
-      q = Math.min(q, cg.q);
-      if (q > 0) out.push({ id: id, q: q, cost: cost });
-    }
-    return out;
-  };
-  /** 왕서방이 사 주는 1통 값 */
-  WM.koreaPrice = function (id) { var sn = WM.seen(id); return Math.max(1, Math.round(Math.max(sn.p, G.GOOD[id].p) * K().korea)); };
-  function sellKorea(lots) {
-    var s = S(), gold = 0, profit = 0, parts = [];
-    lots.forEach(function (x) {
-      var cg = s.fleet.cargo[x.id]; if (!cg) return;
-      var L = R.cargoLots(cg), left = x.q, cost = 0;
-      for (var k in L) { if (!left) break; if (!koreaCity(+k)) continue; var t = Math.min(left, L[k].q); L[k].q -= t; cost += t * L[k].cost; left -= t; if (!(L[k].q > 0)) delete L[k]; }
-      var q = x.q - left, p = WM.koreaPrice(x.id), got = q * p;
-      cg.q -= q;
-      if (cg.q <= 0) delete s.fleet.cargo[x.id];
-      else { var n = 0, c2 = 0; for (var k2 in L) { n += L[k2].q; c2 += L[k2].q * L[k2].cost; } if (n) cg.cost = Math.round(c2 / n); }
-      gold += got; profit += got - cost; parts.push(G.GOOD[x.id].name + ' ' + q + '통');
-    });
-    s.player.gold += gold; if (s.stats) s.stats.profit = (s.stats.profit || 0) + profit;
-    return { gold: gold, profit: profit, text: parts.join(' · ') };
-  }
-
   // ================================================================ 후려치기 교섭
   var TACTICS = [
     { id: 'flaw', label: '흠을 잡는다 — 비단 올이 굵고 찻잎에 줄기가 섞였다', cut: 0.06, skill: 'craft' },
@@ -109,13 +69,13 @@
   var JINA_NO = {
     flaw: ['jina', '(비단을 불빛에 비춰 보이며) 올이 굵다고요? 이건 항주 비단이에요. 제 장부에 거짓말은 한 줄도 없답니다.'],
     cash: ['jina', '금화 냄새는 좋네요. 하지만 금화는 광주에도 있어요, 제독님.'],
-    flatter: ['wang', '(킥킥 웃으며) 대인 형님, 칭찬은 공짜인데 비단은 공짜가 아니지요. 지나 아가씨가 다 듣고 계십니다.'],
+    flatter: ['jina', '(웃으며) 아버지 칭찬은 고맙지만 비단까지 공짜가 되지는 않아요. 제 장부는 제가 지켜요.'],
     walk: ['jina', '(부채로 입을 가리며) 가세요, 가세요. 광주 세관에서 웃돈 얹어 사시면 되겠네요. …돌아오실 줄 알았어요.']
   };
   var MA_NO = {   // 지나가 제독의 배에 오른 뒤 — 값은 마대인이 부른다
     flaw: ['ma', '흠? 그 눈썰미, 우리 지나한테 배웠구려. 그래도 이건 항주 비단이오. 깎을 데가 없소.'],
     cash: ['ma', '금화는 좋지. 하지만 내 딸이 그쪽 배에 탔다고 값까지 내려 줄 줄 아시오?'],
-    flatter: ['wang', '(킥킥) 형님, 칭찬은 공짜인데 비단은 공짜가 아니지요. 저쪽 배에서 지나 아가씨가 웃고 있습니다.'],
+    flatter: ['ma', '(딸을 힐끔 보며) 칭찬은 고맙소만 비단은 공짜가 아니오. 저쪽 배에서 지나가 내 값을 다 듣고 있구먼.'],
     walk: ['ma', '가시오, 가시오! …(딸을 힐끔 보며) 정말 가는 거요? 지나야, 너도 가는 거냐?']
   };
   var MA_YES = {
@@ -234,7 +194,6 @@
           ['first', '제독님, 해적은 아닌 것 같습니다. 짐을 잔뜩 실어 흘수가 깊습니다.'],
           ['ma', '어이, 바다 건너 오신 손님! 나는 금봉호의 주인, 사람들은 마대인이라 부르오. 이쪽은 내 딸 지나, 우리 배의 장부는 전부 이 아이 손에 있소.'],
           ['jina', '반가워요. 아버지 말은 반만 믿으세요 — 값은 제가 정하거든요.'],
-          ['wang', '그리고 저는 이 배에 얹혀 다니는 비단 장수 왕서방이올시다. 항주 비단이라면 올 하나까지 제가 압니다.'],
           today() < 15670101 ? ['ma', '(목소리를 낮추며) 황제 폐하께서 바다를 막아 두셨으니, 우리 장사는 이렇게 바다 위에서 조용히 하오. 세관 나리들 눈을 피하면 값이 싸질 수밖에.'] :
             ['ma', '월항이 열린 뒤로 바다 장사가 한결 편해졌소. 그래도 세관을 거치면 값이 붙지 — 바다 위에서 바로 사면 그만큼 싸오.']
         ]);
@@ -242,29 +201,11 @@
         await play([
           [null, '붉은 돛 세 장, 금빛 봉황 — 금봉호다. 마대인이 뱃전에서 접부채를 흔든다.'],
           ['ma', '오오, 또 만났구려! 바다가 넓다지만 장사꾼 길은 좁은 법이지.' + (WM.jinaAboard() ? ' …지나야! 잘 지내느냐? 제독, 내 딸 밥은 잘 먹이시오?' : '')],
-          WM.jinaAboard() ? ['jina', '아버지도 참. 저 이 배 장부 보느라 바빠요. 왕서방 아저씨, 아버지 셈 틀리지 않게 잘 봐 드려요.'] : null
+          WM.jinaAboard() ? ['jina', '아버지도 참. 저 이 배 장부 보느라 바빠요. 아버지도 셈 틀리지 않게 장부를 꼭 확인하세요.'] : null
         ]);
       }
       if (pc) { await pc.stop(); pc = null; }
-      // ② 왕서방 — 조선 물건
-      var kl = WM.koreaLots(), traded = false;
-      if (kl.length) {
-        var kt = kl.map(function (x) { return G.GOOD[x.id].name + ' ' + x.q + '통(1통 ' + num(WM.koreaPrice(x.id)) + '닢)'; }).join(' · ');
-        var ktot = kl.reduce(function (a, x) { return a + x.q * WM.koreaPrice(x.id); }, 0);
-        await play([['wang', '(짐 꾸러미의 표식을 보더니 눈이 동그래진다) 이, 이건 조선 물건 아니오? 한양에서, 동래에서… 명월이 사는 동네 물건이구려!'],
-          ['wang', '내 이 장사 길에 조선에서 명월이라는 사람을 만났소. 그 뒤로 조선 물건만 보면 값을 따질 수가 없다오. 최근에 보신 값보다 훨씬 쳐 드리리다. 저한테 넘기시오!'],
-          ['jina', '(한숨) 또 시작이네. 왕서방, 그 돈이면 비단이 몇 필인데요.']]);
-        var kv = await UI.ask('왕서방이 조선에서 산 짐을 사겠다 — ' + kt + ' · 모두 금화 ' + num(ktot) + '닢', [
-          { label: '왕서방에게 판다 (금화 ' + num(ktot) + '닢)', value: 'sell' }, { label: '팔지 않는다', value: 'no' }], who('wang'));
-        if (kv === 'sell') {
-          var sold = sellKorea(kl); o.korea = (o.korea || 0) + 1; traded = true;
-          await play([['wang', '하하! 이 고운 결 좀 보시오. 명월이 손길이 닿았을지도 모르지. 고맙소, 제독!']]);
-          G.State.log('중국 근해에서 비단 장수 왕서방에게 조선에서 산 짐(' + sold.text + ')을 금화 ' + num(sold.gold) + '닢에 넘겼다.');
-          UI.toast('왕서방에게 조선 물건을 넘겼다 — 금화 +' + num(sold.gold) + ' (남는 몫 ' + (sold.profit >= 0 ? '+' : '') + num(sold.profit) + ')', 'coin', 5200);
-          if (G.Game.refreshHud) G.Game.refreshHud();
-        } else await play([['wang', '…아쉽구려. 다음에 만나면 꼭 넘기시오. 명월이 동네 물건은 내가 제일 비싸게 쳐 주니까.']]);
-      }
-      // ③ 금봉호의 짐
+      // 금봉호의 짐
       var ratio0 = k.ratio, list = k.goods.map(function (id) { var sn = WM.seen(id); return G.GOOD[id].name + ' ' + stock[id] + '통 — 1통 ' + num(WM.price(id, ratio0)) + '닢 (최근에 보신 값 ' + num(sn.p) + '닢의 ' + pct(ratio0) + ')'; });
       pc = pic('wm_deal', '금봉호의 짐');
       await play([WM.jinaAboard() ? ['ma', '우리 배 짐을 보시오. ' + list.join(' · ') + '. 제독이 최근에 본 값의 일곱 할이오. 딸 둔 집이라고 더 싸지는 않소!'] : ['jina', '우리 배 짐을 보세요. ' + list.join(' · ') + '. 제독님이 최근에 보신 값의 일곱 할이에요. 어디서 이 값을 보시겠어요?']]);
@@ -278,13 +219,13 @@
       var bought = v === 'buy' ? await shop(deal) : [];
       if (bought.length) {
         var tr = G.Fame ? G.Fame.add('tr', 10) : 0;
-        await play([['ma', '좋은 장사였소! 바닷길에서 또 봅시다. 다음엔 조금 더 비싸게 팔 거요, 하하!'], WM.jinaAboard() ? ['wang', '형님, 지나 아가씨 없으니 셈이 자꾸 틀리십니다그려.'] : ['jina', '(장부에 적으며) 아버지 말은 반만 믿으세요.']]);
+        await play([['ma', '좋은 장사였소! 바닷길에서 또 봅시다. 다음엔 조금 더 비싸게 팔 거요, 하하!'], WM.jinaAboard() ? ['jina', '아버지, 장부에 정확히 적으세요. 다음 거래에서도 제가 확인할 거예요.'] : ['jina', '(장부에 적으며) 아버지 말은 반만 믿으세요.']]);
         G.State.log('중국 근해에서 금봉호(마대인과 딸 지나)에게 ' + bought.join(' · ') + '을 최근에 본 값의 ' + pct(deal.ratio) + '에 샀다.' + (tr ? ' (교역 명성 +' + tr + ')' : ''));
-      } else if (!traded) {
+      } else {
         await play([['ma', '그럼 다음에 또 봅시다! 바다 위에서 금봉호를 보거든 손을 흔드시오.']]);
-        G.State.log('중국 근해에서 마대인과 딸 지나, 비단 장수 왕서방의 정크선 금봉호를 만났다.');
+        G.State.log('중국 근해에서 마대인과 딸 지나의 정크선 금봉호를 만났다.');
       }
-      if (bought.length || traded) {
+      if (bought.length) {
         o.deals = (o.deals || 0) + 1;
         if (o.deals >= (k.joinDeals || 3) && WM.jinaReady()) await jinaJoins();
       }
@@ -304,7 +245,6 @@
         ['ma', '…뭐, 뭐라고? 지나야, 그게 무슨 소리냐!'],
         ['jina', '세 번이나 이 손님과 셈을 해 봤어요. 이분들은 바다 건너 서쪽 끝에서 왔대요. 거기 사람들은 장부를 어떻게 적는지, 거기 시장에서는 비단이 얼마에 팔리는지 — 금봉호 장부 너머가 보고 싶어요.'],
         ['ma', '(한참 부채만 쥐었다 폈다 하더니) …네 어미를 닮아 한번 마음먹으면 못 말리지. 제독! 내 딸을 맡기오. 장부는 세상 누구보다 잘 보지만, 바다는 아직 모르는 아이요. 셈이 틀리면 지나 탓이 아니라 그대 탓이오!'],
-        ['wang', '(코를 훌쩍이며) 아가씨, 조선에 가거든… 아니오, 아니오. 잘 가시오!'],
         ['jina', '아버지 말은 반만 믿으세요, 제독님. 그래도 오늘 말은 다 믿으셔도 돼요. …잘 부탁드려요.']
       ]);
     } finally { if (pc) await pc.stop(); }
@@ -317,5 +257,5 @@
     UI.toast('지나가 동료가 되었다 — 회계 3 · 웅변·세공 2 · 중국어 3', 'heart', 5200);
     if (G.Achieve && G.Achieve.afterHire) { try { await G.Achieve.afterHire('jina'); } catch (e) { console.error(e); } }
   }
-  WM._t = { haggle: haggle, shop: shop, sellKorea: sellKorea, jinaJoins: jinaJoins };
+  WM._t = { haggle: haggle, shop: shop, jinaJoins: jinaJoins };
 })(window.G = window.G || {});

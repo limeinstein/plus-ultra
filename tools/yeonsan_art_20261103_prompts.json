@@ -1,0 +1,188 @@
+{
+  "started": "2026-11-03",
+  "completed": "2026-11-04",
+  "mode": "built-in image_gen",
+  "face_export": "same knee portrait source",
+  "portraits": [
+    {
+      "id": "jang_noksu",
+      "name": "장녹수",
+      "folder": "legendary",
+      "prompt": "첨부 38959.jpg의 성인 여성 얼굴·반쯤 내리뜬 시선·고개 기울임·입술과 든 손을 보존. 조선 녹색 저고리·붉은 치마, 비녀와 흘러내리는 검은 머리카락, 담배 대신 작은 접부채, 은가락지. 회화풍 투명 무릎상 1024x1536. 얼굴상은 같은 원화에서 추출.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-175e10d1-5e0c-450b-89e3-852edfb5fe9f.png",
+      "outputs": [
+        "images/portraits/legendary/jang_noksu.webp",
+        "images/portraits/legendary/jang_noksu_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/jang_noksu.png"
+    },
+    {
+      "id": "yeonsangun",
+      "name": "연산군",
+      "folder": "legendary",
+      "prompt": "첨부 38960.jpg의 젊고 수염 없는 남성 얼굴·눈매·입술·어깨 너머 뒤돌아보는 자세를 보존. 붉은 곤룡포·망건·상투·옥대·작은 술잔. 회화풍 투명 무릎상 1024x1536. 얼굴상은 같은 원화에서 추출.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-f27fb564-3276-48f7-b0ec-3c60310be3b0.png",
+      "outputs": [
+        "images/portraits/legendary/yeonsangun.webp",
+        "images/portraits/legendary/yeonsangun_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/yeonsangun.png"
+    },
+    {
+      "id": "ys_jean",
+      "name": "제안대군",
+      "folder": "history",
+      "prompt": "서른다섯 조선 제안대군, 통통한 볼과 어수룩한 웃음, 황금색 비단 도포·갓·청자 술잔, 한량의 편안한 앉은 자세. 회화풍 투명 무릎상.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-5955562c-2637-4426-a1c6-ce20eb955f2d.png",
+      "outputs": [
+        "images/portraits/history/ys_jean.webp",
+        "images/portraits/history/ys_jean_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_jean.png"
+    },
+    {
+      "id": "ys_cheoseon",
+      "name": "김처선",
+      "folder": "history",
+      "prompt": "여든넷 조선 내시 김처선, 수염 없는 깊은 주름·흰 눈썹·굽은 등과 꼿꼿한 목. 남색 관복·사모, 두 손에 접은 상소. 회화풍 투명 무릎상.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-0336f606-a698-436d-96d7-8926153820cf.png",
+      "outputs": [
+        "images/portraits/history/ys_cheoseon.webp",
+        "images/portraits/history/ys_cheoseon_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_cheoseon.png"
+    },
+    {
+      "id": "ys_sungjae",
+      "name": "임숭재",
+      "folder": "history",
+      "prompt": "서른 살 조선 채홍사 임숭재, 거만한 미소·가는 콧수염, 자주색 비단 도포·검은 갓·남색 띠, 손에 말아 든 명령서. 회화풍 투명 무릎상.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-c3ffdaae-a044-45d1-a38b-9841bf9b5eee.png",
+      "outputs": [
+        "images/portraits/history/ys_sungjae.webp",
+        "images/portraits/history/ys_sungjae_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_sungjae.png"
+    },
+    {
+      "id": "ys_wonjong",
+      "name": "박원종",
+      "folder": "history",
+      "prompt": "서른아홉 조선 무신 박원종, 짧은 수염과 굳은 얼굴, 붉은 철릭 위 찰갑·조선 투구·칼집, 손에 횃불. 회화풍 투명 무릎상.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-d7acd7a9-7fd9-48ba-90ee-97d60dd1bc15.png",
+      "outputs": [
+        "images/portraits/history/ys_wonjong.webp",
+        "images/portraits/history/ys_wonjong_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_wonjong.png"
+    },
+    {
+      "id": "ys_hc",
+      "name": "흥청",
+      "folder": "history",
+      "prompt": "Use case: historical-scene. Single early-1500s Korean Joseon supporting character for premium historical adventure RPG, finely painted realistic digital illustration with subtle brushwork, expressive Korean face, detailed textile. 1024x1536 vertical KNEE portrait, entire headgear to just below both knees, no feet. Complete hands and sleeves. Transparent alpha background, isolated cutout, no background color, no glow, no vignette, no surrounding shadows, no scene, no text or watermark. Heungcheong, fictional Korean adult court musician aged eighteen, youthful oval Korean face distinct from Jang Noksu, dark braided hair pinned with restrained floral binyeo. Modest long pale-pink Joseon jeogori with white collar and flowing muted plum-red chima, sleeves fully cover arms. Hands loosely hold folded silk dance scarf at waist. Polite stage smile but wet sad eyes, dignified posture. Fully clothed respectful narrative character portrait.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-2c1a2ce2-589e-44a3-b708-0806a20515e8.png",
+      "outputs": [
+        "images/portraits/history/ys_hc.webp",
+        "images/portraits/history/ys_hc_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_hc.png"
+    },
+    {
+      "id": "ys_bride",
+      "name": "분이",
+      "folder": "history",
+      "prompt": "Use case: historical-scene. Single Joseon Korean story character Buni, gentle youthful round Korean face, dark eyes glistening with tears, worried expression, braided black hair and small black jokduri ceremonial headpiece slightly askew. She wears a traditional green wonsam ceremonial robe with long broad striped sleeves and white collar, red full chima covering lower body. Both hands hold the sleeve fabric at chest height. Dignified, modest, completely covered layered historical clothing. Realistic painted illustration with delicate textile detail for a historical adventure game. Vertical 1024x1536 knee portrait, entire headpiece and both hands visible down to just below knees, no feet. One person isolated on genuinely transparent alpha background, no surroundings, no color backdrop, no halo, no lettering or watermark.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-9b69ceaf-3d20-473d-8b16-130e7f02d7a9.png",
+      "outputs": [
+        "images/portraits/history/ys_bride.webp",
+        "images/portraits/history/ys_bride_half.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_bride.png"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "ys_song",
+      "title": "노비의 노래",
+      "references": [
+        "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-175e10d1-5e0c-450b-89e3-852edfb5fe9f.png",
+        "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-5955562c-2637-4426-a1c6-ce20eb955f2d.png"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: narrative event shot for historical adventure RPG. ONE cinematic ultra-wide 2.25:1 landscape, 2304x1024. Finely painted realistic digital illustration, subtle brushwork, natural expressive Korean faces, textured silk and timber. Early 1500s Joseon Korea. Full continuous environment, no panels, no text, no UI, no border, no watermark, no modern objects. Keep principal faces in central 85% for final 1881x836 export. Lantern-lit courtyard banquet at Prince Jean's house, Hanyang 1501. Reference 1 Jang Noksu FACE identity, reference 2 Prince Jean face/costume. Center foreground: adult Jang Noksu age thirty sings softly wearing plain ivory cotton long jeogori and dusty maroon cotton chima, modest pinned hair with loose strands, same half-lidded eyes and full lips as reference, tilted head, one hand raised gently. Left: plump amused prince in gold silk sits beside low banquet table lifting celadon cup. Behind her musicians play gayageum and janggu, seated Korean guests listening, paper lanterns. Wistful intimacy, warm evening amber against cool courtyard shadows. Not royal palace, no king, no extravagant court jewelry. Do not copy references' transparent backgrounds.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-874343f1-f79a-4652-8cc2-a8839accc0b0.png",
+      "outputs": [
+        "images/legend-events/ys_song.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_song.png"
+    },
+    {
+      "id": "ys_feast",
+      "title": "흥청의 잔치",
+      "references": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-55deade6-e201-4ba1-a61e-8b77db683e0d.png"
+      ],
+      "prompt": "Use case: identity-preserve expression and gaze edit. Edit the supplied palace banquet painting. The two principal characters are adults, Yeonsangun age 29 on the left and Jang Noksu age 30 on the right. Change their expressions and eye contact to convey MUTUAL subtle flirtation and attraction, an intimate knowing exchange amidst the grand banquet. Preserve their recognizable identities, distinctive Korean facial anatomy, youthful clean-shaven king, woman's full lips and loose face-framing black strands. Preserve the same elaborate crimson and gold royal robe, green and wine-red hanbok, hair, jewelry, ceramic wine pot and cup, hand positions, seated bodies, musicians, dancers, pavilion, pond, lanterns, moon, food, and warm painted style. Same 2.25:1 wide 1881x836 composition.\nSpecific facial direction: the king must STOP looking toward the viewer. Gently turn his head and adjust neck naturally toward the woman at image right so his eyes meet HERS; use a relaxed three-quarter side profile with face still visible. His gaze softens and lingers on her, eyes slightly narrowed with a restrained teasing smile, one corner of his mouth faintly lifted; regal self-confidence tempered by fascination. Jang Noksu must STOP looking toward the viewer. Slightly angle her face toward him at image left, eyes looking directly into HIS eyes beneath gently lowered lids, a small warm knowing smile at the corners of her mouth, brows relaxed, gentle head tilt that invites his attention. Both visibly reacting to EACH OTHER, clearly readable mutual eye contact. Subtle romantic chemistry through eyes and mouth, fully clothed period drama. No exaggerated grin, no teeth-baring, no blank sleepy look, no aggressive leer. Only modest head rotations needed for eye contact; keep body and shoulder positions natural. Their cup and pouring pot remain in place, maintain correct hands, no extra limbs. Keep surrounding environment and lighting unchanged as closely as possible. No text or watermark.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-f397395e-0f16-4493-8c6b-67e16f2bd9e2.png",
+      "outputs": [
+        "images/legend-events/ys_feast.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_feast.png",
+      "revision": "2026-11-04 표정 수정"
+    },
+    {
+      "id": "ys_chae",
+      "title": "채홍사",
+      "references": [
+        "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-c3ffdaae-a044-45d1-a38b-9841bf9b5eee.png",
+        "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-9b69ceaf-3d20-473d-8b16-130e7f02d7a9.png"
+      ],
+      "prompt": "Use case: historical-scene. Create ONE finished ultra-wide cinematic narrative illustration 2.25:1, 2304x1024 for a historical adventure game, realistic finely painted digital illustration, subtle brushwork, detailed early-1500s Joseon Korean clothing and timber marketplace. Full continuous environment no panels. Scene: a royal official has stopped a wedding procession at the entrance to a provincial market in Joseon. Reference image 1 is official Im Sungjae, preserve his arrogant narrow-eyed face, thin moustache and small chin beard, purple silk robe, blue sash and black horsehair gat. Reference image 2 is Buni, preserve her face, anxious teary eyes, braided black hair, green wonsam ceremonial robe with wide striped sleeves, red chima and small black jokduri headpiece. Foreground left: Im Sungjae stands rigidly, one hand holding rolled paper order, the other gesturing toward the road. Center-right: Buni stands beside the open doorway of a traditional red wooden palanquin, clutching her sleeve in both hands and looking toward family. Her headpiece slightly askew. Near her, a young Korean groom in blue ceremonial robe pleads with open hands. Several helmeted guards stand across the road holding upright spears; worried village people watch from market stalls in background. No one touches Buni, no injury or combat. Dramatic interruption and fear told through expressions and blocking. Warm dusty afternoon sunlight, muted wood and clay, rich green and violet costume accents. Respectful fully clothed historical drama, no text, labels, watermark or modern objects. Keep all principal faces and hands inside central 85% for final 1881x836 export.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-877ba198-0279-439f-8d43-3afdd26b832e.png",
+      "outputs": [
+        "images/legend-events/ys_chae.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_chae.png"
+    },
+    {
+      "id": "ys_coup",
+      "title": "반정의 밤",
+      "references": [
+        "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-d7acd7a9-7fd9-48ba-90ee-97d60dd1bc15.png"
+      ],
+      "prompt": "Use case: historical-scene. One cinematic ultra-wide 2.25:1 2304x1024 narrative event shot for early-1500s Joseon historical RPG, refined realistic digital painting, subtle brushwork, expressive Korean faces, detailed textiles and architecture. Full scene no panels, no text, no UI, no border, no watermark, no modern objects. Main faces/hands within central 85% for final 1881x836 crop. 1506 coup at Donhwamun palace gate before dawn. Reference image is Park Wonjong identity/costume, retain squared face, short beard, Joseon armor over red cheollik and metal helmet. Foreground slightly left he grips burning torch, looks resolutely toward palace entrance, other hand on sheathed sword. Behind him disciplined Korean soldiers with helmets, spears and torches mass in the courtyard, wooden palace gate and tiled tower rise on the right against deep blue predawn sky, anxious guards at closed entrance. Smoke and golden sparks catch cold air. Dynamic diagonal composition, ominous collective resolve, no battle injuries, no fantasy armor, no explosions. Not Chinese imperial architecture.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-50fc94d1-bd44-4840-a5bf-f8fc25906d9a.png",
+      "outputs": [
+        "images/legend-events/ys_coup.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_coup.png"
+    },
+    {
+      "id": "ys_ash",
+      "title": "불타는 장례원",
+      "references": [
+        "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-175e10d1-5e0c-450b-89e3-852edfb5fe9f.png"
+      ],
+      "prompt": "Use case: historical-scene. One cinematic ultra-wide 2.25:1 2304x1024 narrative event shot for early-1500s Joseon historical RPG, refined realistic digital painting, subtle brushwork, expressive Korean faces, detailed textiles and architecture. Full scene no panels, no text, no UI, no border, no watermark, no modern objects. Main faces/hands within central 85% for final 1881x836 crop. Emotional escape during 1506 coup: Jang Noksu at burning government registry building where her old slave papers were kept. Reference image is her exact FACE and green jeogori/red chima; preserve Korean face, full lips and loose black strands. Medium-wide composition, foreground center-right she kneels beside scattered charred papers, holds a small handful of cool gray ash carefully above open silk pouch in other hand. A single humble silver ring visible, no gold rings or elaborate fan. Face lit by distant flames with tears and a tiny relieved smile, weary defiance. Behind, traditional Korean timber registry burns in controlled orange flames and drifting ash; roof silhouettes, discarded blank scorched hanji, no victims. An open dark passage to left suggests escape. Two principal hands readable, no injury, no readable text.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-7b2a2b01-9635-47b5-a274-9d8664834361.png",
+      "outputs": [
+        "images/legend-events/ys_ash.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_ash.png"
+    },
+    {
+      "id": "ys_last",
+      "title": "마지막 잔치",
+      "references": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5abb5b09-5d52-4d18-88ef-e59fd73f0b7c.png"
+      ],
+      "prompt": "Use case: identity-preserve / precise pose correction. EDIT TARGET: the supplied image of Yeonsangun writing in an empty Joseon palace. Fix the awkward acting and anatomy by replacing ONLY the king's body pose, arms and head direction and repositioning the wine bottle. Preserve the same recognizable youthful clean-shaven Korean man's face, eyes, nose, lips, black manggeon and topknot, crimson gold-dragon robe, and the same empty palace chamber, writing table, paper, inkstone, candle, landscape screen, scattered cups, open doors and distant approaching torchbearers. Keep the existing realistic painted finish, palette and cold dawn / warm candle lighting. Keep the same wide 2.25:1 1881x836 composition and scene scale.\nNEW ACTION: a tired man genuinely writing a final poem, not posing for a portrait. He sits comfortably on the floor on a flat cushion with legs naturally folded beneath his long robe beside the low desk. Reposition his pelvis and torso so his chest, shoulders and hips are aligned naturally toward the desk on image right; show him from a relaxed three-quarter side angle, NOT a twisted rear view. His back is gently rounded forward, shoulders relaxed and level, head follows his torso, chin slightly lowered and eyes looking at the paper; let his recognizable face be clearly readable in three-quarter profile with quiet exhaustion, no camera-facing glamour look. His RIGHT upper arm hangs naturally near the torso, elbow softly bent, forearm reaches only a comfortable distance to the paper; wrist straight and relaxed, a correctly articulated five-finger hand holds the calligraphy brush near vertical in a believable light grip, brush tip touching the paper near the front edge within comfortable reach. His LEFT elbow stays close to the torso and left hand rests flat on a blank near corner of the paper to steady it. Both hands fully visible with anatomically correct thumbs/fingers, connected plausibly to their sleeves, elbows and shoulders. Move the ceramic wine bottle OUT of his arms and set it upright on the floor beside his cushion, within reach. No arm hugs the bottle. Both arms do a single coherent writing action. Adjust robe folds to the new seated pose with believable weight and lap volume. Preserve all background objects and lighting as closely as possible. No added people, extra limbs, dislocated shoulders, overextended reach, extreme neck turn, slanted impossible wrist, readable captions, border or watermark.",
+      "source": "C:/Users/User/.codex/generated_images/01a1a1c5-cc16-7e81-bacd-941177c3662a/exec-3c29c70d-880e-42d0-b9f0-3a129c010ae7.png",
+      "outputs": [
+        "images/legend-events/ys_last.webp"
+      ],
+      "workspace_source": "artifacts/yeonsan-art-20261103/sources/ys_last.png",
+      "revision": "2026-11-04 자세 수정"
+    }
+  ]
+}
