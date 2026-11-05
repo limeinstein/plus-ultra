@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-06",
+  "mode": "built-in image_gen",
+  "scope": "동림당·영원성·숭정제 성인 여성 동료 5명; 첨부 이미지 9장 참고",
+  "portraits": [
+    {
+      "id": "dl_cuiyan",
+      "name": "취연",
+      "references": [
+        "38077.jpg",
+        "38988.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. Asset: ONE finished individual knee-length transparent character portrait for historical sailing RPG Loop of Good Hope, vertical 1024x1536. Character CUIYAN / 취연, adult Chinese palace maid aged 25, early 1620s. Reference image 1 supplies the warm almond eyes, delicate oval face, affectionate subtle asymmetrical smile and cheek dimple; reference image 2 supplies poised chin and refined jewelry detail only, NO crown or royal insignia. Create an original illustrated character inspired by those facial features. Long glossy dark hair in an elegant partly pinned Ming hairstyle with one jade hairpin and loose face framing strands. Warm observant intelligent expression, looking toward viewer. Slim waist and full voluptuous bust; fashionable daring Ming-inspired outfit: low square neckline opaque ivory embroidered fitted bodice, loosely worn jade silk outer robe off one shoulder, visible collarbones, wide celadon sash, flowing long skirt. Tasteful adult adventure costume, all intimate areas fully clothed in opaque fabric. Small palace keyring held at waist in one hand, a slim ledger in the other. Both hands fully visible with believable fingers. Beautiful polished semi-realistic painterly 2D game illustration, sculpted natural facial anatomy, finely painted silk and metal, coherent soft warm light, no photography or 3D or anime. Framing: entire hair to knees, cut naturally at knee height, no lower legs or feet. Centered upright standing relaxed three-quarter pose, head large enough for a matching square face crop, 5% clear safety margins around head, arms, props. Actual transparent background/alpha, no scene, floor, cast shadow, writing, UI, borders, watermark, duplicate character.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ae0e-396b-7873-9a51-556cfede426c\\exec-7c4aeeba-ff6a-4606-89d1-b1b69a8a428e.png",
+      "workspace_source": "artifacts/event-companion-refs-20261106/sources/dl_cuiyan.png",
+      "face_file": "images/portraits/mates/dl_cuiyan_ref20261106.webp",
+      "half_file": "images/portraits/mates/dl_cuiyan_ref20261106_half.webp"
+    },
+    {
+      "id": "dl_xiaoman",
+      "name": "소만",
+      "references": [
+        "38959.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. ONE individual transparent knee portrait for historical sailing RPG Loop of Good Hope, 1024x1536 vertical. XIAOMAN / 소만, clearly adult Chinese female mounted-archery student aged 26 in 1625. Attached image is facial/expression reference only: capture the striking long narrow dark eyes, slightly half-lidded confident gaze, parted full lips, loose black strands and cool self-possessed attitude, transform into original semi-realistic painted historical heroine. Hair: long black high ponytail with red cord and wind-tossed face strands. Strong graceful body with narrow waist and pronounced full bust. Bold stylish practical red-and-black Ming-inspired riding outfit: short sleeveless black fitted leather vest open over an opaque deep V red wrap bodice, bare shoulders and upper arms, red silk sash, dark riding trousers, one loose silk sleeve tied around waist, fitted leather bracers. Entire intimate areas covered by opaque fabric. Hold a traditional small Chinese pellet bow lowered near hip, compact quiver at belt, no modern weapon. Resolute closed mouth with faint challenging half smile. Standing three-quarter pose, one hand rests at belt, anatomically correct relaxed hands. Beautiful premium painterly 2D game illustration with credible anatomy, nuanced face planes, silk/leather brush textures, warm soft edge lighting, cohesive with other historical character portraits. Entire hairstyle through knees only; bottom cuts trouser legs AT knees, no calves or feet. Safe clear side margins, head and bow fully within canvas. GENUINE transparent alpha background, completely empty outside character, no backdrop/glow/gradient/floor/shadow/scenery. No labels, frame, text, watermark, UI, cigarettes, photograph or 3D.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ae0e-396b-7873-9a51-556cfede426c\\exec-81881507-0156-4d8f-b10a-94c7172a8d6a.png",
+      "workspace_source": "artifacts/event-companion-refs-20261106/sources/dl_xiaoman.png",
+      "face_file": "images/portraits/mates/dl_xiaoman_ref20261106.webp",
+      "half_file": "images/portraits/mates/dl_xiaoman_ref20261106_half.webp"
+    },
+    {
+      "id": "dl_wangwei",
+      "name": "왕미",
+      "references": [
+        "38472.jpg",
+        "38985.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. Asset: ONE original illustrated adult female knee portrait, historical sailing RPG Loop of Good Hope, 1024x1536 transparent canvas. WANG WEI / 왕미, Chinese woman poet and wandering scholar aged 29 in 1626, elegant calm intelligence. Reference image 1 provides refined oval face, pensive distant gaze, confident raised chin and soft parted lips; reference image 2 provides the large dark expressive eyes and poised cool expression only, no crown. Face clearly East Asian with dark brown eyes, black hair in relaxed low bun held by one plain jade pin, long side strands and subtle lifted chin, gentle restrained knowing smile. Slim elegant body with noticeably full bust. Bold cultured Ming-inspired green silk outfit: low open cross neckline on an opaque pale jade fitted wrap bodice, moss green robe draped below shoulders with generous falling sleeves, visible collarbones and shoulders, silk waist sash and long flowing skirt. Covered opaque bust; beautifully detailed embroidered orchids, no modern lingerie. Holding a folded bamboo fan at waist with one hand and a small stack of thread-bound books against hip in other hand, no lettering on books. Entire hands inside margins. High-end semi-realistic painterly 2D game art: delicate painted skin with natural facial planes, luxurious silk textures, soft brushwork, cohesive soft warm directional light. Stand naturally, gently turned torso, face toward viewer, not sitting. Exact framing entire hair to knees ONLY, no calves/ankles/feet or complete skirt hem. Actual fully transparent alpha background with nothing outside silhouette, no gradient or scenery or halo or shadow or floor, no UI, words, borders, watermark. Individual character only.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ae0e-396b-7873-9a51-556cfede426c\\exec-e04abe94-0940-4705-b9ef-a78a5a6d00a4.png",
+      "workspace_source": "artifacts/event-companion-refs-20261106/sources/dl_wangwei.png",
+      "face_file": "images/portraits/mates/dl_wangwei_ref20261106.webp",
+      "half_file": "images/portraits/mates/dl_wangwei_ref20261106_half.webp"
+    },
+    {
+      "id": "nc_ines",
+      "name": "이네스",
+      "references": [
+        "38075.jpg",
+        "38994.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. ONE finished individual knee-length portrait for historical sailing RPG Loop of Good Hope, 1024x1536 vertical genuine transparent background. INES CORREIA / 이네스 코헤이아, adult 27 year old mixed Portuguese-Chinese woman cannon gunner from Macau, 1626. Reference image 1: oval face, bold sideward alert gaze, loose shoulder-length auburn hair and calm assertive lips; reference image 2: short black bob with soft bangs, luminous expressive eyes, refined delicate face. Blend these as inspiration into original mixed-heritage adult heroine: tousled dark chestnut shoulder-length bob with auburn highlights, brown dark eyes, strong brows, a tiny freckle and soot smear on one cheek, confident wry smile, alert watchful eyes near camera. Athletic yet feminine, large full bust and slim waist. Bold practical early 17th century Portuguese naval costume: fitted oxblood leather waistcoat over opaque cream linen blouse with an open low neckline and rolled sleeves; one shoulder exposed, dark narrow trousers, teal silk sash, powder horn and bronze gunner tools attached to wide leather belt, small iron cannonball held securely near hip, small match cord unlit in other gloved hand, no modern guns. Large shell fragment pendant on cord at neck. All bust opaque fully covered. Warm expressive polished semi-realistic 2D painterly game portrait with natural anatomy, careful cloth/leather detail, fine softly painted face and cohesive warm lighting. Standing relaxed contrapposto slight three-quarter turn, entire hands and tools in safe margins. Frame from complete head to knees ONLY, trouser legs continue past bottom edge at knees, no calves, feet, boots. Actual alpha outside character, no scenery, gradient, glow, cast shadow, floor, writing, text, watermark, borders, screenshots, or photo-realism.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ae0e-396b-7873-9a51-556cfede426c\\exec-4aae5f11-b6d8-481c-b3ea-40001039d59f.png",
+      "workspace_source": "artifacts/event-companion-refs-20261106/sources/nc_ines.png",
+      "face_file": "images/portraits/mates/nc_ines_ref20261106.webp",
+      "half_file": "images/portraits/mates/nc_ines_ref20261106_half.webp"
+    },
+    {
+      "id": "nc_okran",
+      "name": "옥란",
+      "references": [
+        "37434.jpg",
+        "38990.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. ONE individual finished knee-length adult female portrait for historical sailing RPG Loop of Good Hope. Vertical 1024x1536 with actual transparent background. SHEN YULAN / 심옥란 (옥란), Chinese palace embroiderer aged 24 in 1627, clearly adult. Reference image 1 supplies elegant East Asian face, gently serious expression, long neck, low black updo with loose cheek strands and pearl drop earrings. Reference image 2 supplies warm tender restrained smile, large luminous eyes, rich long wavy dark hair and intricate lace texture; reference ONLY face and style, ignore all UI/text. Create an original illustrated character combining these: soft composed smile with a trace of relief, dark brown almond eyes lowered slightly yet still readable, beautiful warm face, long black hair partly swept into low bun with ivory magnolia hairpin. Slim graceful waist and large full bust. Fashionable daring ivory-and-plum Ming-inspired silk ensemble: fitted opaque ivory floral embroidered low square-neck bodice, open shoulders and collarbones, soft plum silk robe loosely draped over arms, wide rose sash with hanging tassel, long pale skirt with gold magnolia embroidery. Natural flattering adult silhouette, all intimate areas fully clothed in opaque material. Embroidery hoop with small stitched magnolia held at waist, a closed slim ledger tucked under other arm, golden needle and thread pouch at belt. Fingers accurate and readable, props fully within safe side margins. Premium semi-realistic painterly 2D game illustration, natural skin and facial anatomy, soft brushwork, exquisite embroidered textile detail, warm soft light, not a photograph or 3D. Stand in relaxed three-quarter pose, entire hair through knees ONLY, skirt continues below bottom edge at knee height, no calves, shoes or feet, no full hem. No scenery, floor, shadow, glow, gradient background, frame, words, UI, watermark; transparent alpha outside character.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ae0e-396b-7873-9a51-556cfede426c\\exec-daed7291-fe1c-4543-8e04-f55d49106e84.png",
+      "workspace_source": "artifacts/event-companion-refs-20261106/sources/nc_okran.png",
+      "face_file": "images/portraits/mates/nc_okran_ref20261106.webp",
+      "half_file": "images/portraits/mates/nc_okran_ref20261106_half.webp"
+    }
+  ]
+}
