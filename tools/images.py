@@ -16,6 +16,21 @@ EXTS = ('.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif')
 TIMES = ('golden', 'dusk')
 DISC_CATS = ['geo', 'nature', 'ruin', 'treasure', 'creature', 'people', 'trade']
 
+# 기존 원본을 보존하면서 검증된 교체본을 게임의 기존 키로 사용한다.
+# scan() 뒤에 적용해야 manifest 재생성·웹 빌드에서도 연결이 되돌아가지 않는다.
+PREFERRED_FILES = {
+    'portraits/mates/dl_cuiyan': 'portraits/mates/dl_cuiyan_ref20261106.webp',
+    'portraits/mates/dl_cuiyan_half': 'portraits/mates/dl_cuiyan_ref20261106_half.webp',
+    'portraits/mates/dl_wangwei': 'portraits/mates/dl_wangwei_ref20261106.webp',
+    'portraits/mates/dl_wangwei_half': 'portraits/mates/dl_wangwei_ref20261106_half.webp',
+    'portraits/mates/dl_xiaoman': 'portraits/mates/dl_xiaoman_ref20261106.webp',
+    'portraits/mates/dl_xiaoman_half': 'portraits/mates/dl_xiaoman_ref20261106_half.webp',
+    'portraits/mates/nc_ines': 'portraits/mates/nc_ines_ref20261106.webp',
+    'portraits/mates/nc_ines_half': 'portraits/mates/nc_ines_ref20261106_half.webp',
+    'portraits/mates/nc_okran': 'portraits/mates/nc_okran_ref20261106.webp',
+    'portraits/mates/nc_okran_half': 'portraits/mates/nc_okran_ref20261106_half.webp',
+}
+
 
 def read(rel):
     with open(os.path.join(ROOT, rel), encoding='utf-8') as f:
@@ -409,6 +424,10 @@ def scan():
                 dups.append((key, found[key], rel))
                 continue
             found[key] = unicodedata.normalize('NFC', rel)
+    for key, rel in PREFERRED_FILES.items():
+        if not os.path.isfile(os.path.join(IMG, rel.replace('/', os.sep))):
+            raise FileNotFoundError('우선 교체 그림이 없습니다: ' + rel)
+        found[key] = rel
     return found, dups
 
 
