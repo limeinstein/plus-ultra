@@ -287,6 +287,20 @@
       증액을 청했다가 결렬되면 공작이 90일 동안 문전박대해 튜토리얼이 막혔다) */
   function tutDuke(sp) { return !!(sp && G.TUTORIAL && sp.id === G.TUTORIAL.sponsor && G.Tutorial && G.Tutorial.active && G.Tutorial.active()); }
   SP.tutDuke = tutDuke;
+  /** 노여움 (rel.anger = 풀리는 날 YYYYMMDD) — 남은 날 · 풀리는 날 · 까닭 · 사죄의 값 */
+  SP.angerUntil = function (sp) { var a = SP.rel(sp.id).anger || 0; return { y: Math.floor(a / 10000), m: Math.floor(a / 100) % 100, d: a % 100 }; };
+  SP.angerLeft = function (sp) {
+    var s = S(), rel = SP.rel(sp.id);
+    if (tutDuke(sp) || !(rel.anger > 0) || U.dateNum(s.date) >= rel.anger) return 0;
+    return Math.max(1, U.dayIndex(SP.angerUntil(sp)) - U.dayIndex(s.date));
+  };
+  SP.angerText = function (sp) {
+    var w = SP.rel(sp.id).angerWhy || {}, h = SP.holderName(sp), hj = h + U.jx(h, '은/는'), nm = w.name ? '「' + w.name + '」 ' : '';
+    var why = w.why === 'quit' ? nm + '계약을 기한 전에 포기한 일' : w.why === 'late' ? nm + '계약을 기한 안에 해내지 못한 일' : w.why === 'announce' ? nm + '계약을 어기고 스스로 발표한 일'
+      : w.why === 'small' ? '맡은 일거리를 그만둔 일' : w.why === 'dbl' ? nm + '발견을 두 후원자에게 보고한 일' : w.why === 'greed' ? '계약 교섭에서 욕심을 부린 일' : '지난 계약의 일';
+    return hj + ' ' + why + '로 아직 노여워하고 있습니다';
+  };
+  SP.apologyCost = function (sp, left) { return Math.max(2000, Math.round((left == null ? SP.angerLeft(sp) : left) * 100 * Math.max(1, sp.pw || 1) / 100) * 100); };
   SP.propose = async function (sp) {
     var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
     var L = function (k, ctx) { return SP.line(sp, k, ctx); };
@@ -305,7 +319,18 @@
       await UI.say(L('debtPaid'), who);
     }
     if (tutDuke(sp)) rel.anger = 0;
-    if (rel.anger > 0 && U.dateNum(s.date) < rel.anger) { await UI.say(L('rude'), who); return; }
+    if (SP.angerLeft(sp) > 0) {
+      // 노여움: 까닭과 풀리는 날을 알리고, 사죄의 선물로 바로 풀 수도 있다 (2026-11-05 피드백 — 「단서가 보이지 않고 무례하다는 말만 나온다」)
+      await UI.say(L('rude'), who);
+      var left = SP.angerLeft(sp), cost = SP.apologyCost(sp, left);
+      var av = await UI.ask(SP.angerText(sp) + ' — ' + U.fmtDate(SP.angerUntil(sp)) + '(앞으로 ' + left + '일)부터 다시 모험을 제안할 수 있습니다.',
+        [{ label: '사죄의 뜻으로 금화 ' + U.num(cost) + '닢을 바친다', value: 'pay', dis: s.player.gold < cost }, { label: '물러난다', value: 'go' }], SP.me(sp));
+      if (av !== 'pay' || s.player.gold < cost) return;
+      s.player.gold -= cost; rel.anger = 0; delete rel.angerWhy;
+      G.Game.refreshHud();
+      G.State.log(SP.holderName(sp) + '에게 금화 ' + U.num(cost) + '닢을 바쳐 사죄했다 — 노여움이 풀렸다.');
+      await UI.say(L('jealousSorry'), who);
+    }
     await UI.say(L(rel.done ? 'openAgain' : 'openNew'), who);
     // candidate proposals: hinted (not yet found by me), or found-but-unreported
     var list = [];
@@ -590,8 +615,8 @@
       var cost = Math.max(800, sp.pw * 600);
       var v = await UI.ask('어떻게 할까?', [{ label: '사죄의 뜻으로 금화 ' + U.num(cost) + '닢을 바친다', value: 'pay', dis: s.player.gold < cost }, { label: '아무 말 없이 물러난다', value: 'go' }], SP.me(sp));
       if (v === 'pay' && s.player.gold >= cost) { s.player.gold -= cost; SP.addTrust(rel, 6); G.Game.refreshHud(); await UI.say(SP.line(sp, 'jealousSorry'), who); return true; }
-      rel.anger = U.dateNum(U.addDays(s.date, 60));
-      G.State.log(SP.holderName(sp) + U.jx(SP.holderName(sp), '이/가') + ' 「' + d.name + '」 이중 보고를 알고 크게 노했다.');
+      rel.anger = U.dateNum(U.addDays(s.date, 60)); rel.angerWhy = { why: 'dbl', name: d.name };
+      G.State.log(SP.holderName(sp) + U.jx(SP.holderName(sp), '이/가') + ' 「' + d.name + '」 이중 보고를 알고 크게 노했다 — 60일 동안 새 모험을 제안할 수 없다.');
       return false;
     }
     await UI.say(SP.line(sp, 'jealous', ctx), who);
@@ -768,7 +793,7 @@
       if (!nOk) {
         if (G.Outcome) await G.Outcome.show('lose', { title: '교섭 결렬…', sub: '욕심이 지나쳤다 — 계약이 없던 일이 되었다' });
         await UI.say(L('greed'), who);
-        rel.trust = Math.max(0, rel.trust - 10); rel.anger = U.dateNum(U.addDays(s.date, tp === 'generous' ? 45 : tp === 'hasty' || tp === 'greedy' ? 120 : 90));
+        rel.trust = Math.max(0, rel.trust - 10); rel.anger = U.dateNum(U.addDays(s.date, tp === 'generous' ? 45 : tp === 'hasty' || tp === 'greedy' ? 120 : 90)); rel.angerWhy = { why: 'greed' };
         return;
       }
       if (G.Outcome) await G.Outcome.show('win', { title: '교섭 성공!', sub: w === 'money' ? '자금을 더 받아 냈다' : '기한을 늘려 받았다' });
@@ -832,9 +857,11 @@
     var ret0 = SP.returnLoan(k);
     if (ret0.returned) lines.push(SP.line(sp, 'brkLoanBack', { ship: ret0.returned.name }));
     else if (ret0.lost) { var pay0 = Math.min(s.player.gold, ret0.cost); s.player.gold -= pay0; SP.addTrust(rel, -8); lines.push(SP.line(sp, 'brkLoanLost', { pay: U.num(pay0) })); }
-    rel.anger = U.dateNum(U.addDays(s.date, k.small ? 30 : why === 'announce' ? 180 : why === 'quit' ? 90 : 60));
+    var angerDays = k.small ? 30 : why === 'announce' ? 180 : why === 'quit' ? 90 : 60;
+    rel.anger = U.dateNum(U.addDays(s.date, angerDays)); rel.angerWhy = { why: k.small ? 'small' : why, name: name };
     if (lines.length) await UI.say(lines.join('\n'), who);
-    G.State.log('「' + name + '」 계약' + (why === 'announce' ? '을 어기고 스스로 발표했다.' : why === 'quit' ? '을 기한 전에 포기했다. (선금 반환)' : '에 실패했다.'));
+    G.State.log('「' + name + '」 계약' + (why === 'announce' ? '을 어기고 스스로 발표했다.' : why === 'quit' ? '을 기한 전에 포기했다. (선금 반환)' : '에 실패했다.') + ' — ' + angerDays + '일 동안 ' + SP.holderName(sp) + '에게 새 모험을 제안할 수 없다.');
+    UI.toast(SP.holderName(sp) + U.jx(SP.holderName(sp), '이/가') + ' 노여워한다 — ' + angerDays + '일 동안 새 모험을 제안할 수 없다 (사죄의 선물로 풀 수 있다)', 'seal', 6500);
     s.contract = null;
     G.Game.refreshHud();
   };

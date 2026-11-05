@@ -6,7 +6,7 @@
    ■ 아가씨마다: like(좋아하는 다가감) · rival(맞수 — 한 사람을 아끼면 맞수가 시샘한다) · scheme(시샘이 쌓이면 하는 짓)
        like: dance 춤 · sea 바다 이야기 · talk 정치·학문 이야기 · music 음악
        scheme: gossip 뒷말(사교 명성 −) · politics 아버지·후원자에게 고자질(그 나라 군주의 신뢰 −) · spill 술잔 엎기(맞수 아가씨의 호감 −) · sulk 토라져 먼저 돌아감(제 호감 −)
-   ■ 그림: 얼굴 portraits/princesses/ball_<id> (+ _half) — 없으면 궁정 공주 그림(pic)을 빌린다. 장면 events/ball/* — 없으면 건너뛴다. 주문서 images/events/ball/BALL_PROMPT.md
+   ■ 그림: 얼굴 portraits/maids/<id> (+ _half) — 없으면 궁정 공주 그림(pic)을 빌린다. 장면 events/ball/* — 없으면 건너뛴다. 주문서 images/events/ball/BALL_PROMPT.md
    ■ 대사의 {P} = 제독 이름, {call} = 제독을 부르는 말(백작님·제독님), {son} = 아들 이름, {d} = 딸 이름, {rival} = 맞수 이름, {fav} = 제독이 아낀 아가씨 이름 */
 (function (G) {
   'use strict';

@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-05",
+  "mode": "built-in image_gen",
+  "scope": "무도회 마녀 그리젤다 얼굴상·무릎상",
+  "portraits": [
+    {
+      "id": "w_thistle",
+      "name": "엉겅퀴 마녀 그리젤다",
+      "short": "그리젤다",
+      "group": "legendary",
+      "adult_age": 28,
+      "prompt": "Create ONE individual portrait of Griselda the Thistle Witch, an ADULT woman in her late twenties, for a historical sailing RPG ballroom event. Use reference1 for the moody cool green-grey eyes, reserved serious expression, ash-blonde long loosely tied hair and delicate face-framing strands, interpreted as a mature original adult fantasy character. Use reference2 for CLOTHING design: dramatic black and deep EMERALD GREEN asymmetric evening gown, single voluminous emerald puff sleeve, black opaque fitted bodice edged in fine gold, diagonal shoulder strap, broad gold waist belt, draped black skirt and cascading green side ruffles. Elegant fully clothed court fashion portrait with natural adult proportions; no body exaggeration or erotic framing. Add a small thistle-shaped emerald pendant and a slender dark wooden wand in relaxed hand at waist, other hand on hip, controlled haughty gaze at viewer. No school uniform, tie, school insignia or school context. Beautiful refined painterly SEMI-REALISTIC 2D game illustration, smooth softly brushed skin and luminous cloth, expressive idealized facial features, natural volume, not photographic, no hyperreal pores, not 3D. CRITICAL composition:1024x1536 vertical KNEE-LENGTH portrait, full hairstyle/head to knees only. Crop the skirt through KNEE HEIGHT at lower canvas edge so fabric continues beyond image. Entire hands and wand in frame with margins. NO calves, ankles, feet, shoes or full skirt hem, no full-body figure. Genuine transparent background, no scene, no floor shadow, no text, no watermark. No witch hat; elegant witch attending a court ball.",
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/ball-witch-portraits-20261105/references/ref-1.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/ball-witch-portraits-20261105/references/ref-2.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-7703b126-958f-4cec-940f-d5741cfa5069.png",
+      "workspace_source": "artifacts/ball-witch-portraits-20261105/sources/w_thistle.png",
+      "face_file": "images/portraits/legendary/w_thistle.webp",
+      "half_file": "images/portraits/legendary/w_thistle_half.webp"
+    }
+  ]
+}

@@ -142,6 +142,7 @@
     var phase = 'form', over = false, busy = false, auto = false, skipping = false, sel = null, turnNo = 0, turnsDone = 0;
     var formation = 'line', scouted = false, scoutTried = false, revealed = false, hiddenMe = false, ambushBonus = 1, parleyTried = false;
     var used = {}, trapOn = false, stunEn = false, cryOn = false, ammoT = 0, fogT = 0, eventDone = false, roared = false, duelDone = false, onceUsed = {};
+    var randDuel = null;   // 확률로 일어나는 일기토 — 우리 장수가 거는 쪽 {ours, foe} (planEnemy가 정하고 turn이 치른다)
     var HOLD = Math.max(0, opt.hold || 0), rounds = 0, captured = 0;
     var fx = [], fxS = [], decals = [], shakeT = 0, freezeT = 0, t0 = performance.now(), log = [], cam = null, finalRes = null, hover = null, formSaid = false;   // fxS: 화면에 붙는 연출(배너·차례 카드·번쩍임) · decals: 땅에 남는 자국
     var mi = mountInfo();
@@ -152,13 +153,19 @@
     feat = U.shuffle ? U.shuffle(feat) : feat;
     var hillSide = feat.map(function () { return U.chance(0.5) ? 'me' : 'en'; });
     var weather = terr === 'desert' ? 'heat' : (G.Rain && G.Rain.raining && G.Rain.raining()) || (terr === 'jungle' && U.chance(0.35)) ? 'rain' : 'clear';
-    var SPR = G.Sprites, SFX = (G.FX && G.FX.sprites) || {}, useSpr = !!(SPR && LA && reg) && SFX.battle !== false;
+    var SPR = G.Sprites, SFX = (G.FX && G.FX.sprites) || {}, LFX = G.FX.landwar, WFX = G.LandWarFx;
+    var useSpr = !!(SPR && LA && reg) && SFX.battle !== false;
+    var regionalHD = (G.LANDWAR_REGIONAL_HD || {})[regKey];
     var bgImg = null, bgChain = I && I.chain && I.chain.landWarBackground ? I.chain.landWarBackground(terr) : [];
     if (I && bgChain.length) I.resolve(bgChain).then(function (res) { if (res) bgImg = res.img; });
     if (useSpr) {
       var need = ['swordsmen', 'musketeers', 'cannons', 'officers', 'animals', 'crocodile'];
       if (e.kind === 'bandit' || e.kind === 'garrison') ['swordsmen_enemy', 'musketeers_enemy', 'cannons_enemy', 'officers_enemy'].forEach(function (id) { if (need.indexOf(id) < 0) need.push(id); });
-      ['m', 'r', 'l', 'c', 'bandit'].forEach(function (k) { if (reg[k] && need.indexOf(reg[k][0]) < 0) need.push(reg[k][0]); });
+      var preloadArt = regionalHD && e.kind === 'native' ? regionalHD : reg;
+      ['m', 'r', 'l', 'c', 'bandit'].forEach(function (k) { if (preloadArt[k] && need.indexOf(preloadArt[k][0]) < 0) need.push(preloadArt[k][0]); });
+      if (regionalHD) ['m', 'r', 'l'].forEach(function (k) { if (regionalHD[k] && need.indexOf(regionalHD[k][0]) < 0) need.push(regionalHD[k][0]); });
+      ['cavalry_horse', 'cavalry_camel', 'cavalry_elephant'].forEach(function (id) { if (foes.some(function (u) { return u.cls === 'cav' || u.cls === 'elephant' || u.cls === 'horsearcher'; })) need.push(id); });
+      if (SPR.meta('regional_mounts') && foes.some(function (u) { return u.special && (u.cls === 'cav' || u.cls === 'elephant' || u.cls === 'horsearcher'); })) need.push('regional_mounts');
       if (LA.cav[mi.name] && need.indexOf(LA.cav[mi.name]) < 0) need.push(LA.cav[mi.name]);
       SPR.preload(need);
       foes.forEach(function (u) { if (u.special && u.special.party) SPR.partyReady(u.special.party); });
@@ -178,6 +185,9 @@
         '<div class="lw-bar"><div class="lw-log"></div><div class="lw-btns"></div></div></div>';
       var win = UI.window({ title: '육상전 — ' + e.name, icon: 'sword', width: 1080, html: html, closable: false });
       var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), btns = el.querySelector('.lw-btns'), logEl = el.querySelector('.lw-log');
+      // 함선처럼 크게 그린 뒤 줄여 보여 준다. 전장과 클릭 좌표는 기존 1000×440이다.
+      var pixelRatio = Math.max(1, LFX.resolution);
+      cv.width = W * pixelRatio; cv.height = H * pixelRatio; ctx.scale(pixelRatio, pixelRatio); ctx.imageSmoothingQuality = 'high';
       var popEl = el.querySelector('.lw-pop'), tipEl = el.querySelector('.lw-tip'), unitsEl = popEl;   // 부대 명령은 그림 위에 뜨는 작은 창에서 한다
       function say(t) { log.push(t); logEl.innerHTML = log.slice(-2).map(function (x, i, a) { return '<div' + (i < a.length - 1 ? ' class="old"' : '') + '>' + x + '</div>'; }).join(''); }
       function finishBattle(result) {
@@ -296,7 +306,9 @@
         var me = u.side === 'me', r = null, L = null;
         if (me && u.type === 'cav') r = LA.cav[u.ride] ? { id: LA.cav[u.ride], row: tierOf(u), mounted: u.ride } : null;
         else if (me) { var mm = LA.mine[u.type]; if (mm) r = { id: mm[0], row: tierOf(u) }; }
-        else if (u.special && u.special.party) r = { party: u.special.party };
+        else if (u.special && u.cls === 'elephant') r = SPR.meta('regional_mounts') ? { id: 'regional_mounts', row: regKey === 'india' ? 1 : 2, mounted: '코끼리' } : { id: 'cavalry_elephant', row: Math.max(2, enemyTier), mounted: '코끼리' };
+        else if (u.special && u.cls === 'cav') r = regKey === 'sahel' && SPR.meta('regional_mounts') ? { id: 'regional_mounts', row: 0, mounted: '말' } : { id: 'west_europe', row: SPR.row('west_europe', 'stradiot'), mounted: '말' };
+        else if (u.special && u.cls === 'horsearcher' && regKey === 'persia' && SPR.meta('regional_mounts')) r = { id: 'regional_mounts', row: 3, mounted: '말' };
         else if (u.look === 'beast') {
           // e.beast: 이야기 사건의 짐승 이름들. 전용 시트가 없으면 그 고장 짐승을 쓴다.
           var names = [].concat(e.beast || []), bn = null;
@@ -311,22 +323,44 @@
           r = { id: enemySheet, row: enemyTier };
         }
         else {
-          L = u.special ? (reg[u.special.look] || reg.m)
-            : u.leader ? reg.l
+          var localArt = regionalHD && e.kind === 'native' ? regionalHD : reg;
+          L = u.special ? (localArt[u.special.look] || localArt.m)
+            : u.leader ? localArt.l
             : u.look === 'cannon' ? (reg.c || reg.m)
-            : u.look === 'bow' || u.look === 'musket' ? reg.r
+            : u.look === 'bow' || u.look === 'musket' ? localArt.r
             : u.look === 'blade' && reg.bandit ? reg.bandit
-            : reg.m;
+            : localArt.m;
           if (L) r = { id: L[0], row: SPR.row(L[0], L[1]) };
         }
         if (r && r.id && !(r.row >= 0)) r = null;
+        if (r && r.id) { var rm = SPR.meta(r.id); if (rm && rm.mounts && rm.mounts[r.row]) r.mounted = rm.mounts[r.row]; }
         u._spr = r; u._sprType = cacheType;
         return r;
       }
       function actOf(u) {
         if (u.n <= 0) return 'dead';
-        if (u.act && u.actT < (u.act === 'attack' ? 0.75 : 0.45)) return u.act;
+        if (u.rush && u.rush.t < LFX.chargeContact) return 'charge';
+        if (u.act && u.actT < (u.act === 'attack' ? (u.actLife || LFX.attackLife) : 0.45)) return u.act;
         return Math.abs(u.tx - u.x) + Math.abs(u.ty - u.y) > 4 ? 'walk' : 'idle';
+      }
+      function weaponOf(u) {
+        var sp = sprOf(u), m = sp && sp.id && SPR.meta(sp.id);
+        if (m && m.weapons && m.weapons[sp.row]) return m.weapons[sp.row];
+        return u.side === 'me' ? u.type === 'gun' ? 'gun' : u.type === 'art' ? 'cannon' : 'sword' : u.look === 'musket' ? 'gun' : u.look === 'cannon' ? 'cannon' : u.look;
+      }
+      function sprLayout(u, sp, x, y, face) {
+        var big = weaponOf(u) === 'cannon' || sp.mounted, mountN = sp.mounted && (SFX.mountN || {})[sp.mounted];
+        var nf = U.clamp(Math.ceil(u.n / 4), 1, sp.mounted ? (mountN || 2) : big ? 2 : sp.beast ? 3 : 6);
+        var gap = sp.mounted ? (((SFX.mountGap || {})[sp.mounted]) || 58) : big ? LFX.artilleryGap : sp.beast ? LFX.beastGap : LFX.infantryGap, out = [];
+        for (var i = 0; i < nf; i++) { var col = i % 3, back = i >= 3, inRow = back ? nf - 3 : Math.min(nf, 3); out.push([x + (col - (inRow - 1) / 2) * gap * face - (back ? 10 * face : 0), y - (back ? 14 : 0) + (col === 1 ? 5 : 0)]); }
+        return out;
+      }
+      function shotOrigins(u, art) {
+        var face = u.side === 'me' ? 1 : -1, sp = sprOf(u), sm = sp && sp.id && SPR.meta(sp.id), port = sm && sm.ports && sm.ports[sp.row];
+        var height = sp && sp.mounted ? (SFX.mountH || {})[sp.mounted] : SFX.unitH;
+        var scale = sp && sp.id ? (height || 56) / SPR.bodyH(sp.id, sp.row) * (u.leader ? 1.22 : 1) : 1;
+        var units = sp && sp.id ? sprLayout(u, sp, u.x, u.y, face) : [[u.x, u.y]];
+        return units.map(function (p) { return [p[0] + face * (port ? port[0] * scale : art ? LFX.cannonForward : LFX.muzzleForward), p[1] + (port ? port[1] * scale : -(art ? LFX.cannonHeight : LFX.muzzleHeight))]; });
       }
       /** 그림 시트로 부대를 그린다 — 그림이 없거나 끝내 못 받았으면 false (코드 그림으로) */
       function drawSprUnit(u, sp, x, y, face, t) {
@@ -341,25 +375,29 @@
         var id = sp.id, row = sp.row;
         if (!SPR.ready(id)) return SPR.pending(id);
         var mountH = sp.mounted && (SFX.mountH || {})[sp.mounted];
-        var k = ((mountH || (sp.beast ? SFX.beastH : SFX.unitH)) || 46) / SPR.bodyH(id) * k0 * ((SFX.sheetK || {})[id] || 1);
-        var big = id === 'cannons' || id === 'cannons_enemy' || (id === 'ottoman' && row === 1) || sp.mounted;
-        var mountN = sp.mounted && (SFX.mountN || {})[sp.mounted];
-        var nf = U.clamp(Math.ceil(u.n / 4), 1, sp.mounted ? (mountN || 2) : big ? 2 : sp.beast ? 3 : 6);
-        var gap = sp.mounted ? (((SFX.mountGap || {})[sp.mounted]) || 58) : big ? 58 : sp.beast ? 42 : 24;
-        for (var i = 0; i < nf; i++) {
-          var col = i % 3, back = i >= 3, inRow = back ? nf - 3 : Math.min(nf, 3);
-          var fx0 = x + (col - (inRow - 1) / 2) * gap * face - (back ? 10 * face : 0), fy0 = y - (back ? 14 : 0) + (col === 1 ? 5 : 0);
+        var k = ((mountH || (sp.beast ? SFX.beastH : SFX.unitH)) || 46) / SPR.bodyH(id, row) * k0 * ((SFX.sheetK || {})[id] || 1);
+        var layout = sprLayout(u, sp, x, y, face), m = SPR.meta(id);
+        for (var i = 0; i < layout.length; i++) {
+          var fx0 = layout[i][0], fy0 = layout[i][1], at = Math.max(0, (u.actT || 0) - (u.attackStart || 0) - i * LFX.volleyGap);
+          var stride = act === 'charge' || act === 'run';
           var fr = act === 'dead' ? SPR.at(id, row, 'dead', 99, 1, false)
-            : act === 'idle' || act === 'walk' ? SPR.at(id, row, act, t + i * 0.37, fps[act] || 6)
-            : SPR.at(id, row, act, (u.actT || 0) - i * 0.04, fps[act] || 10, false);
-          SPR.draw(ctx, id, row, fr, fx0, fy0, k, face < 0);
+            : act === 'idle' || act === 'walk' ? SPR.at(id, row, act, t + i * 0.37, act === 'walk' && m.hd ? LFX.strideFps : fps[act] || 6)
+            : stride ? SPR.at(id, row, 'charge', (u.rush ? u.rush.t : t) + i * .07, LFX.chargeFps)
+            : m.hd && act === 'attack' ? m.acts.attack[at < LFX.release ? 0 : at < LFX.release + LFX.recoilHold ? 1 : at < LFX.reloadAt ? 2 : 3]
+            : SPR.at(id, row, act, at, fps[act] || 10, false);
+          if (stride) fy0 -= Math.abs(Math.sin((u.rush ? u.rush.t : t) * LFX.chargeFps * Math.PI + i)) * LFX.gaitBob;
+          ctx.save();
+          if (m.hd && act === 'dead') { ctx.translate(fx0, fy0); ctx.rotate(-face * Math.min(1, 1 - (u.fade || 0)) * LFX.deathTilt); SPR.draw(ctx, id, row, fr, 0, 0, k, face < 0); }
+          else SPR.draw(ctx, id, row, fr, fx0, fy0, k, face < 0);
+          ctx.restore();
         }
         return true;
       }
-      /** 부대가 달려 나가 부딪히는 몸놀림: u.rush = {dx, dy, t} — 0.55초 동안 목표 쪽으로 갔다가 돌아온다 */
+      /** 부대가 달려 나가 접촉한 뒤 돌아오는 몸놀림. 소요 시간·접촉 시점은 G.FX.landwar에서 정한다. */
       function rushOff(u) {
         if (!u.rush) return [0, 0];
-        var p = U.clamp(u.rush.t / 0.55, 0, 1), k = Math.sin(p * Math.PI);
+        var p = U.clamp(u.rush.t / LFX.chargeLife, 0, 1), contact = LFX.chargeContact / LFX.chargeLife;
+        var k = p < contact ? 1 - Math.pow(1 - p / contact, 2) : 1 - Math.pow((p - contact) / (1 - contact), 2);
         return [u.rush.dx * k, u.rush.dy * k];
       }
       function drawUnit(u, t) {
@@ -472,12 +510,21 @@
       function drawWorldFx() {
         fx.forEach(function (e) {
           var k2 = e.t / e.life; if (e.t < 0) return;
-          if (e.kind === 'ball' || e.kind === 'arrow' || e.kind === 'shot') {
+          if (WFX && WFX.draw(ctx, e)) return;
+          if (['ball', 'arrow', 'shot', 'stone', 'javelin', 'dart', 'boomerang'].indexOf(e.kind) >= 0) {
             var gx = e.x0 + (e.x1 - e.x0) * k2, gy = e.y0 + (e.y1 - e.y0) * k2;
-            var px = gx, py = gy - Math.sin(k2 * Math.PI) * (e.kind === 'ball' ? 120 : e.kind === 'arrow' ? 60 : 4);
+            var arc = e.kind === 'ball' ? 120 : e.kind === 'shot' || e.kind === 'dart' ? 4 : e.kind === 'javelin' ? 32 : 60;
+            var px = gx, py = gy - Math.sin(k2 * Math.PI) * arc;
             if (e.kind !== 'shot') { ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(gx, gy + 26, e.kind === 'ball' ? 7 : 4, e.kind === 'ball' ? 2.5 : 1.5, 0, 0, 7); ctx.fill(); }   // 땅 그림자
             if (e.kind === 'ball') { ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.arc(px, py, 5.5, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(255,160,60,.5)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - (e.x1 - e.x0) * 0.04, py + 6); ctx.stroke(); }
-            else if (e.kind === 'arrow') { var ang = Math.atan2((e.y1 - e.y0) - Math.cos(k2 * Math.PI) * 60 * Math.PI, e.x1 - e.x0); ctx.strokeStyle = '#3a2a1a'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - Math.cos(ang) * 14, py - Math.sin(ang) * 14); ctx.stroke(); }
+            else if (e.kind === 'arrow' || e.kind === 'javelin' || e.kind === 'dart') {
+              var ang = Math.atan2((e.y1 - e.y0) - Math.cos(k2 * Math.PI) * arc * Math.PI, e.x1 - e.x0), len = e.kind === 'javelin' ? 34 : e.kind === 'dart' ? 9 : 16;
+              ctx.save(); ctx.translate(px, py); ctx.rotate(ang); ctx.strokeStyle = '#694d2c'; ctx.lineWidth = e.kind === 'javelin' ? 2 : 1.3;
+              ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-len, 0); ctx.stroke(); ctx.fillStyle = '#cad2cb'; ctx.beginPath(); ctx.moveTo(3, 0); ctx.lineTo(-3, -2); ctx.lineTo(-3, 2); ctx.fill();
+              if (e.kind === 'arrow') { ctx.strokeStyle = '#d6c49e'; ctx.beginPath(); ctx.moveTo(-len, -3); ctx.lineTo(-len + 5, 0); ctx.lineTo(-len, 3); ctx.stroke(); } ctx.restore();
+            }
+            else if (e.kind === 'stone') { ctx.fillStyle = '#81796b'; ctx.beginPath(); ctx.ellipse(px, py, 3.3, 2.5, k2 * 8, 0, 7); ctx.fill(); }
+            else if (e.kind === 'boomerang') { ctx.save(); ctx.translate(px, py); ctx.rotate(k2 * Math.PI * 9); ctx.strokeStyle = '#ae7c41'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-8, -5); ctx.quadraticCurveTo(0, 2, 8, -5); ctx.stroke(); ctx.restore(); }
             else { ctx.strokeStyle = 'rgba(255,240,180,' + (1 - k2) + ')'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - (e.x1 - e.x0) * 0.06, py - (e.y1 - e.y0) * 0.06); ctx.stroke(); }
           } else if (e.kind === 'smoke') { ctx.fillStyle = 'rgba(232,232,226,' + 0.55 * (1 - k2) + ')'; ctx.beginPath(); ctx.arc(e.x + k2 * 26 * e.d, e.y - k2 * 18, 8 + k2 * 22, 0, 7); ctx.fill(); }
           else if (e.kind === 'dust') { ctx.fillStyle = 'rgba(170,150,110,' + 0.5 * (1 - k2) + ')'; ctx.beginPath(); ctx.arc(e.x + e.vx * e.t, e.y + e.vy * e.t, e.r * (1 + k2 * 1.4), 0, 7); ctx.fill(); }
@@ -598,7 +645,14 @@
         mine.concat(foes).forEach(function (u) {
           if (u.tx != null) { var sp = u.march ? 1.6 : 4; u.x += (u.tx - u.x) * Math.min(1, dt * sp); u.y += (u.ty - u.y) * Math.min(1, dt * sp); if (u.march && Math.abs(u.tx - u.x) < 6) u.march = false; }
           if (u.hitT > 0) u.hitT = Math.max(0, u.hitT - dt * 2.5);
-          if (u.rush) { u.rush.t += dt; if (u.rush.t > 0.55) u.rush = null; }
+          if (u.rush) {
+            u.rush.t += dt;
+            if (u.rush.t < LFX.chargeContact && (u.rush.dustAt == null || u.rush.t - u.rush.dustAt >= LFX.chargeDustGap)) {
+              u.rush.dustAt = u.rush.t; var off = rushOff(u), face = u.side === 'me' ? 1 : -1;
+              WFX.push(fx, { kind: 'dust', x: u.x + off[0] - face * 24, y: u.y + off[1] + 3, vx: -face * 30, vy: -5, r: clsOf(u) === 'elephant' ? 15 : 8, t: 0, life: LFX.dustLife });
+            }
+            if (u.rush.t > LFX.chargeLife) u.rush = null;
+          }
           if (u.recoil) u.recoil = Math.max(0, u.recoil - dt * 3);
           if (u.act) u.actT = (u.actT || 0) + dt;
           if (u.n <= 0 && u.fade > 0) u.fade = Math.max(0, u.fade - dt * 1.2);
@@ -613,7 +667,8 @@
       requestAnimationFrame(loop);
       G.Games._landDebug = { mine: mine, foes: foes, step: function (n) { for (var i = 0; i < (n || 1); i++) { mine.concat(foes).forEach(function (u) { if (u.tx != null) { u.x = u.tx; u.y = u.ty; } }); fx.forEach(function (e) { e.t += 0.1; }); } draw(); }, draw: draw, tier: tierOf, sprite: sprOf,
         state: function () { return { phase: phase, turn: turnNo, formation: formation, weather: weather, feat: feat, revealed: revealed, scouted: scouted, used: used, sel: sel, captured: captured }; },
-        run: function () { return turn(); }, setOrder: function (u, act, tg) { setOrder(u, act, tg); }, plan: function () { planEnemy(); } };
+        run: function () { return turn(); }, setOrder: function (u, act, tg) { setOrder(u, act, tg); }, plan: function () { planEnemy(); },
+        motion: actOf, weapon: weaponOf, strike: strike, special: runSpecial, effects: function () { return fx; }, close: function () { finishBattle({ res: 'skip', dead: 0, back: 0, left: P0, spoils: {} }); } };
 
       // ------------------------------------------------ 힘 계산
       function myMul(u) {
@@ -733,6 +788,15 @@
         function score(t) { return vsK(a, t) * (t.leader ? (alive(foes).filter(function (x) { return !x.leader; }).length >= 2 ? 0.45 : 1.6) : 1) * (1.3 - t.n / Math.max(1, t.n0) * 0.5); }
       }
       function sleep(ms) { return new Promise(function (r) { setTimeout(r, opt.fastEnd ? Math.min(ms, 5) : ms); }); }
+      // 화면이 느리거나 결정적인 순간에 시간이 느려져도, 동작·탄의 도착보다 피해가 앞서지 않는다.
+      function waitMotion(u, at) {
+        if (opt.fastEnd) return sleep(5);
+        return new Promise(function (resolve) { function check() { if (!live || over || u.actT >= at) resolve(); else setTimeout(check, 16); } check(); });
+      }
+      function waitProjectiles(list) {
+        if (opt.fastEnd) return sleep(5);
+        return new Promise(function (resolve) { function check() { if (!live || over || list.every(function (e) { return e.t >= e.life; })) resolve(); else setTimeout(check, 16); } check(); });
+      }
 
       // ------------------------------------------------ 우리 편 명령
       function autoOrder(u) {
@@ -794,6 +858,20 @@
         if (L && e.kind === 'beast' && !roared && turnNo % 3 === 2) L.intent = { act: 'roar' };
         // 도적: 불리하면 두목이 달아날 채비를 한다
         if (L && e.kind === 'bandit' && tot < foe0 * 0.35) L.intent = { act: 'flee' };
+        // 확률로 일어나는 일기토 (2026-11-05 사용자 요청 — 조정값 G.BALANCE.landwar.duel): 짐승이 아니면 차례마다 chance로
+        //   적장(우두머리, 없으면 가장 큰 근접 부대의 장수)이 우리 장수(제독대·동료가 이끄는 부대)에게 일기토를 청한다. mine 비율만큼은 우리 장수가 먼저 건다.
+        //   튜토리얼(opt.skip)·중재(halt)·퇴각 판(hold)에서는 없다 · 한 판에 한 번(duelDone) · 받지 않으면 부대끼리 싸운다 · 이기면 그 적 부대가 무너지고, 지면 우리 부대가 흔들린다 (maybeDuel)
+        randDuel = null;
+        var DK = K.duel || {};
+        if (!duelDone && !opt.fastEnd && !opt.skip && !opt.halt && !HOLD && e.kind !== 'beast' && turnNo >= (DK.from || 2) && U.chance(DK.chance == null ? 0.12 : DK.chance)) {
+          var champs = alive(mine).filter(function (u) { return u.type === 'adm' || (u.cmdr && mateRow(u.cmdr)); });
+          var rivals = L && !(L.intent && L.intent.act === 'flee') ? [L] : alive(foes).filter(function (u) { return reachOf(u) === 'melee' || reachOf(u) === 'cav'; }).sort(function (a, b) { return b.n - a.n; });
+          if (champs.length && rivals.length) {
+            var ch = U.pick(champs), rv = rivals[0];
+            if (U.chance(DK.mine == null ? 0.35 : DK.mine)) randDuel = { ours: ch, foe: rv };
+            else rv.intent = { act: 'duel', target: ch, rand: true };
+          }
+        }
       }
 
       // ------------------------------------------------ 버튼
@@ -1018,17 +1096,18 @@
       async function strike(u, t, mode) {
         if (u.n <= 0 || !t || t.n <= 0) return;
         var me = u.side === 'me', r = reachOf(u), look = me ? u.type : u.look, face = me ? 1 : -1;
-        u.act = 'attack'; u.actT = 0;
+        u.act = 'attack'; u.actT = 0; u.attackStart = 0; u.actLife = LFX.attackLife;
         // 지휘관의 첫 외침
         var cried = false;
         if (me && u.cmdr && !u.cried) { u.cried = cried = true; bubble(u, CMDR_CRY[u.cmdr] || '나를 따르라!', 1.8); }
         if (r === 'melee' || r === 'cav') {
           var heavy = mode === 'charge' || r === 'cav' || clsOf(u) === 'elephant' || (clsOf(u) === 'beast' && roared);
-          u.rush = { dx: (t.x - u.x) * (heavy ? 0.78 : 0.55), dy: (t.y - u.y) * (heavy ? 0.78 : 0.55), t: 0 };
+          u.attackStart = LFX.chargeContact; u.actLife += LFX.chargeContact;
+          u.rush = { dx: (t.x - u.x) * (heavy ? LFX.chargeReach : LFX.meleeReach), dy: (t.y - u.y) * (heavy ? LFX.chargeReach : LFX.meleeReach), t: 0 };
           if (heavy) for (var di = 0; di < 9; di++) fx.push({ kind: 'dust', x: u.x + U.rf(-34, 34), y: u.y + U.rf(-2, 10), vx: -face * U.rf(20, 60), vy: U.rf(-18, -4), r: U.rf(6, 12), t: -di * 0.035, life: 0.9 });
           if (!cried) { if (!me) shout(u, e.kind, 0.35); else if (mode === 'charge') shout(u, 'charge'); else shout(u, 'attack', 0.25); }
           if (G.Audio) { if (look === 'cav' || clsOf(u) === 'cav' || clsOf(u) === 'elephant') { G.Audio.sfx('horse'); setTimeout(function () { if (G.Audio) G.Audio.sfx('sword'); }, 95); } else G.Audio.sfx('sword'); }
-          await sleep(heavy ? 330 : 260);
+          await waitMotion(u, LFX.chargeContact);
           var cx = (u.x + t.x) / 2 + (me ? 30 : -30);
           fx.push({ kind: 'clash', x: cx, y: t.y - 20, seed: U.rand() * 6, t: 0, life: 0.45 });
           fx.push({ kind: 'slash', x: t.x - face * 10, y: t.y - 26, a0: me ? -2.4 : -0.8, t: 0, life: 0.35 });
@@ -1053,32 +1132,39 @@
             }
           }
         } else {
-          var art = clsOf(u) === 'art' || look === 'art' || look === 'cannon', bow = !art && (look === 'bow' || (u.cls === 'missile' && !isGunLike(u)));
+          var weapon = weaponOf(u), art = clsOf(u) === 'art' || look === 'art' || look === 'cannon', bow = !art && weapon !== 'gun';
+          // 겨눔·점화 장면이 먼저 나온 뒤 실제 포구에서 탄이 출발한다.
+          await waitMotion(u, LFX.release);
+          var units = shotOrigins(u, art), origin = function (i) { return units[i]; };
+          var projectiles = [];
+          function launch(e) { if (WFX.push(fx, e)) projectiles.push(e); }
           if (art) {
-            u.recoil = 1; fx.push({ kind: 'flash', x: u.x + face * 30, y: u.y - 18, r: 14, t: 0, life: 0.22 }); fx.push({ kind: 'smoke', x: u.x + face * 34, y: u.y - 18, d: face, t: 0, life: 2.2 });
-            fx.push({ kind: 'ball', x0: u.x + face * 30, y0: u.y - 20, x1: t.x, y1: t.y - 10, t: 0, life: 0.7 });
-          } else if (bow) for (var a = 0; a < 8; a++) fx.push({ kind: 'arrow', x0: u.x + U.rf(-30, 30), y0: u.y - 24, x1: t.x + U.rf(-40, 40), y1: t.y - 14 + U.rf(-8, 8), t: -a * 0.04, life: 0.6 });
+            u.recoil = 1; u.actLife = LFX.release + LFX.cannonFlight + LFX.recovery;
+            units.forEach(function (_, i) { var o = origin(i); WFX.muzzle(fx, o[0], o[1], face, true, i * LFX.volleyGap); launch({ kind: 'ball', x0: o[0], y0: o[1], x1: t.x + i * 9, y1: t.y - 10, t: -i * LFX.volleyGap, life: LFX.cannonFlight }); });
+          } else if (bow) {
+            var projectile = weapon === 'sling' ? 'stone' : weapon === 'javelin' ? 'javelin' : weapon === 'boomerang' ? 'boomerang' : weapon === 'blowpipe' ? 'dart' : 'arrow';
+            for (var a = 0; a < units.length; a++) { var o = origin(a); launch({ kind: projectile, x0: o[0], y0: o[1], x1: t.x + U.rf(-30, 30), y1: t.y - 14 + U.rf(-8, 8), t: -a * LFX.volleyGap, life: LFX.bowFlight }); }
+          }
           else {
             if (me && mode !== 'volley') shout(u, 'shoot', 0.35);
-            for (var m = 0; m < 5; m++) { var mx = u.x + face * 22 + (m % 3 - 1) * 16, my = u.y - 22 - (m >= 3 ? 12 : 0); fx.push({ kind: 'flash', x: mx, y: my, t: -m * 0.06, life: 0.18 }); fx.push({ kind: 'smoke', x: mx + face * 4, y: my, d: face, t: -m * 0.06, life: 2.0 }); fx.push({ kind: 'shot', x0: mx, y0: my, x1: t.x + U.rf(-30, 30), y1: t.y - 20 + U.rf(-10, 10), t: -m * 0.06, life: 0.25 }); }
+            units.forEach(function (_, i) { var o = origin(i); WFX.muzzle(fx, o[0], o[1], face, false, i * LFX.volleyGap); launch({ kind: 'shot', x0: o[0], y0: o[1], x1: t.x + U.rf(-30, 30), y1: t.y - 20 + U.rf(-10, 10), t: -i * LFX.volleyGap, life: LFX.gunFlight }); });
           }
           if (isGunLike(u) && clsOf(u) !== 'art') look = 'musket';
           if (G.Audio) { if (clsOf(u) === 'art') G.Audio.sfx('cannon'); else if (look === 'gun' || look === 'musket') G.Audio.sfx('gun'); }
-          await sleep(art ? 620 : 420);
+          await waitProjectiles(projectiles);
           if (art) {
-            fx.push({ kind: 'boom', x: t.x, y: t.y - 10, t: 0, life: 0.7 }); addDecal('crater', t.x + U.rf(-20, 20), t.y + 8);
-            for (var q = 0; q < 12; q++) fx.push({ kind: 'debris', x: t.x, y: t.y - 10, vx: U.rf(-140, 140), vy: U.rf(-260, -90), t: 0, life: 0.9 });
+            WFX.blast(fx, t.x, t.y - 10, 1); addDecal('crater', t.x + U.rf(-20, 20), t.y + 8);
             shakeT = Math.min(1, shakeT + 0.4);
           } else {
             for (var p2 = 0; p2 < 4; p2++) fx.push({ kind: 'dust', x: t.x + U.rf(-40, 40), y: t.y + U.rf(-4, 6), vx: U.rf(-10, 10), vy: U.rf(-14, -4), r: U.rf(3, 6), t: 0, life: 0.6 });
-            if (bow) for (var p3 = 0; p3 < 3; p3++) addDecal('arrow', t.x + U.rf(-50, 50), t.y + U.rf(0, 14), { r: U.rf(-1, 1) });
+            if (bow && (weapon === 'bow' || weapon === 'crossbow' || weapon === 'javelin')) for (var p3 = 0; p3 < 3; p3++) addDecal('arrow', t.x + U.rf(-50, 50), t.y + U.rf(0, 14), { r: U.rf(-1, 1) });
           }
           var nn = crit(kills(u, t, (mode === 'volley' ? 1.3 : mode === 'ambush' ? 1.4 : 1)), t);
           hurt(t, nn, clsOf(u) === 'art');
-          if (abil(u) === 'rocket') { alive(sideOf(t)).filter(function (x) { return x !== t; }).forEach(function (x) { fx.push({ kind: 'boom', x: x.x, y: x.y - 10, t: 0, life: 0.6 }); hurt(x, Math.round(kills(u, x) * 0.35), false); }); }
+          if (abil(u) === 'rocket') { alive(sideOf(t)).filter(function (x) { return x !== t; }).forEach(function (x) { WFX.blast(fx, x.x, x.y - 10, .7); hurt(x, Math.round(kills(u, x) * 0.35), false); }); }
           if (abil(u) === 'poison' && t.n > 0) t.poison = 2;
         }
-        await sleep(140);
+        await sleep(LFX.recovery * 1000);
       }
       function moveUnit(u, dir) {
         var list = sideOf(u), nl = u.line + dir; if (nl < 0 || nl > 2) return false;
@@ -1120,19 +1206,26 @@
           if (ok) { trapOn = true; say('앞길에 함정을 팠다. 다음에 달려드는 적이 걸려들 것이다.'); banner('함정', 1); } else say('함정을 팔 틈이 없었다.');
         } else if (id === 'snipe') {
           var L = foes.filter(function (u) { return u.leader; })[0];
-          fx.push({ kind: 'flash', x: 200, y: 180, t: 0, life: 0.2 }); fx.push({ kind: 'shot', x0: 200, y0: 180, x1: L.x, y1: L.y - 24, t: 0, life: 0.3 });
+          var sniper = alive(mine).filter(function (u) { return u.type === 'gun'; })[0], point = [200, 180];
+          if (sniper) { sniper.act = 'attack'; sniper.actT = 0; sniper.attackStart = 0; sniper.actLife = LFX.attackLife; await waitMotion(sniper, LFX.release); point = shotOrigins(sniper, false)[0]; }
+          WFX.muzzle(fx, point[0], point[1], 1, false, 0);
+          var bullet = { kind: 'shot', x0: point[0], y0: point[1], x1: L.x, y1: L.y - 24, t: 0, life: LFX.gunFlight };
+          WFX.push(fx, bullet);
           if (G.Audio) G.Audio.sfx('gun');
-          await sleep(320);
+          await waitProjectiles([bullet]);
           if (ok) { var sn = Math.max(1, Math.round(L.n * (L.n <= 3 ? 1 : Math.min(1, 0.5 * STAFF_DMG)))); hurt(L, sn, true); say('저격 성공! ' + L.name + '에게 명중했다!'); }
           else { hurt(L, 0); say('저격이 빗나갔다...'); }
         } else if (id === 'shells') {
           R.useCharge('shells');
           var art = alive(mine).filter(function (u) { return u.type === 'art'; })[0];
           banner('작렬탄!', 1.2);
-          alive(foes).forEach(function (t, i) { fx.push({ kind: 'ball', x0: art.x, y0: art.y - 20, x1: t.x, y1: t.y - 10, t: -i * 0.06, life: 0.7 }); });
+          art.act = 'attack'; art.actT = 0; art.attackStart = 0; art.actLife = LFX.attackLife + foes.length * LFX.volleyGap;
+          await waitMotion(art, LFX.release); art.recoil = 1;
+          var muzzle = shotOrigins(art, true), rounds = [];
+          alive(foes).forEach(function (t, i) { var o = muzzle[i % muzzle.length], ball = { kind: 'ball', x0: o[0], y0: o[1], x1: t.x, y1: t.y - 10, t: -i * LFX.volleyGap, life: LFX.cannonFlight }; WFX.muzzle(fx, o[0], o[1], 1, true, i * LFX.volleyGap); if (WFX.push(fx, ball)) rounds.push(ball); });
           if (G.Audio) G.Audio.sfx('cannon');
-          await sleep(700);
-          alive(foes).forEach(function (t) { fx.push({ kind: 'boom', x: t.x, y: t.y - 10, t: 0, life: 0.9 }); hurt(t, Math.max(1, Math.round(t.n * Math.min(0.95, U.rf(0.35, 0.5) * STAFF_DMG))), true); });
+          await waitProjectiles(rounds);
+          alive(foes).forEach(function (t) { WFX.blast(fx, t.x, t.y - 10, 1.15); hurt(t, Math.max(1, Math.round(t.n * Math.min(0.95, U.rf(0.35, 0.5) * STAFF_DMG))), true); });
           say('작렬탄이 적진 한가운데서 터졌다!');
         } else if (id === 'volley') {
           var gs = alive(mine).filter(function (u) { return u.type === 'gun'; });
@@ -1162,7 +1255,8 @@
             if (a === 'charge') { var ms = msk(u); if (ms && ms.kind === 'charge' && (!ms.once || !onceUsed[u.cmdr])) { u.chargeK = Math.max(1, ms.k / ((K.charge || [1.5])[0])); u.chargeRisk = ms.risk || 1; if (ms.once) onceUsed[u.cmdr] = 1; } } });
           alive(mine).forEach(function (u) { var a = mainAct(u); if (a === 'adv') { if (!moveUnit(u, -1) && !u.ord.auto) say(unitName(u) + ' — 앞에 자리가 없다.'); } else if (a === 'back') moveUnit(u, 1); });
           place(); await sleep(300);
-          // 2) 우리 편 공격 (앞줄부터)
+          // 2) 우리 편 공격 (앞줄부터) — 확률로 우리 장수가 적장에게 일기토를 거는 차례면 먼저 (planEnemy randDuel)
+          if (randDuel) { var rdm = randDuel; randDuel = null; if (!duelDone && rdm.ours.n > 0 && rdm.foe.n > 0) { bubble(rdm.ours, '나와라, 적장!', 1.4); await maybeDuel(rdm.ours, rdm.foe, 'me'); } }
           var order = alive(mine).slice().sort(function (a, b) { return a.line - b.line; });
           for (var i = 0; i < order.length; i++) {
             var u = order[i], a = mainAct(u); if (u.ordDone) { u.ordDone = false; continue; }
@@ -1218,6 +1312,7 @@
         for (var j = 0; j < al.length; j++) {
           var u = al[j], it = u.intent || {}; if (u.n <= 0 || !alive(mine).length || outcome()) continue;
           if (['attack', 'charge', 'volley', 'ambush', 'duel'].indexOf(it.act) < 0) continue;
+          if (it.rand) { if (!duelDone && it.target && it.target.n > 0 && await maybeDuel(it.target, u, 'en')) continue; it = { act: 'attack' }; }   // 확률로 청한 일기토 — 받지 않으면 그냥 친다
           var t = it.target && canHit(u, it.target) ? it.target : (function () { var ts = targetsOf(u); return ts.length ? (e.kind === 'bandit' ? weakest(ts) : bestTarget(u, ts)) : null; })();
           if (!t) continue;
           if (it.act === 'duel' && !opt.fastEnd) { if (await maybeDuel(t, u, 'en')) continue; }

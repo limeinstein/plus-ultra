@@ -6,6 +6,10 @@
   function K() { return G.BALANCE.seaMonsters; }
   function data(id) { return G.SEA_MONSTERS && G.SEA_MONSTERS[id]; }
   function name(id) { return G.SEA_MONSTER_ART[id].name; }
+  function ghostHull(e) {
+    var hulls = K().ghost.hulls;
+    return e && hulls.indexOf(e.ghostHull) >= 0 ? e.ghostHull : hulls[Math.max(0, ((e && e.cycle) || 1) - 1) % hulls.length];
+  }
   function store() { var s = S(); return s.seaMonsters || (s.seaMonsters = { v: 1, entries: {} }); }
   M.is = function (id) { return !!data(id); };
   M.strongest = function (year) {
@@ -103,14 +107,16 @@
   };
   M.enemy = function (npc) {
     var t = M.strongest(S().date.y), e = M.sync()[npc.monster], max = t.hp * K().hpK;
+    var form = npc.monster === 'ghost-ship' ? G.SHIP[ghostHull(e)] : t;
     var hp = e && e.maxHp > 0 && e.hp != null ? Math.max(1, Math.min(max, max * e.hp / e.maxHp)) : max;
-    return { type: t.id, monster: npc.monster, name: name(npc.monster), hp: hp, maxHp: max,
-      crew: t.crew[1], crewMax: t.crew[1], guns: { type: 'saker', n: t.ports }, sails: t.sails.slice() };
+    return { type: form.id, ghostHull: npc.monster === 'ghost-ship' ? form.id : null, monster: npc.monster, name: name(npc.monster), hp: hp, maxHp: max,
+      crew: form.crew[1], crewMax: form.crew[1], guns: { type: 'saker', n: t.ports }, sails: form.sails.slice() };
   };
   M.decorate = function (b, src) {
     b.monster = src.monster; b.tr = []; b.monsterPhase = 'surface'; b.phaseTime = 0;
+    if (b.monster === 'ghost-ship') { b.ghostHull = src.ghostHull || ghostHull({cycle: 1}); b.monsterPhase = 'emerge'; }
     b.attackTime = 0; b.attackCd = K().firstAttack; b.chargeStage = 'wait'; b.chargeTime = 0;
-    var t = G.SHIP.baochuan;
+    var t = b.monster === 'ghost-ship' ? G.SHIP[b.ghostHull] : G.SHIP.baochuan;
     b.len = (58 + Math.min(1000, t.cap) / 14) * 1.5 * (t.len || 1);
   };
   M.targetable = function (b) { return !!b && b.alive && (!b.monster || b.monsterPhase === 'surface'); };
@@ -143,9 +149,10 @@
   M.step = function (b, dt, st, api) {
     var cfg = K(), profile = data(b.monster); b.phaseTime += dt;
     var durations = { surface: cfg.surfaceSeconds, dive: cfg.diveSeconds, submerged: cfg.hiddenSeconds, emerge: cfg.emergeSeconds };
+    if (b.monster === 'ghost-ship') durations.emerge = cfg.ghost.emergeSeconds;
     var next = { surface: 'dive', dive: 'submerged', submerged: 'emerge', emerge: 'surface' };
-    while (b.phaseTime >= durations[b.monsterPhase]) {
-      b.phaseTime -= durations[b.monsterPhase]; b.monsterPhase = next[b.monsterPhase];
+    while (b.phaseTime + 1e-8 >= durations[b.monsterPhase]) {
+      b.phaseTime = Math.max(0, b.phaseTime - durations[b.monsterPhase]); b.monsterPhase = next[b.monsterPhase];
       b.chargeStage = 'wait'; b.chargeTime = 0;
       if (api.effect && (b.monsterPhase === 'dive' || b.monsterPhase === 'emerge')) api.effect(b.monsterPhase);
       if (b.monsterPhase === 'dive') {
@@ -210,19 +217,66 @@
       if (o.hp <= 0) api.hullBreak(o);
     });
   };
+  M.ghostVisual = function (b) {
+    var phase = b.monsterPhase || 'surface', progress = 1;
+    if (phase === 'submerged') progress = 0;
+    else if (phase === 'emerge') progress = U.clamp((b.phaseTime || 0) / K().ghost.emergeSeconds, 0, 1);
+    else if (phase === 'dive') progress = 1 - U.clamp((b.phaseTime || 0) / K().diveSeconds, 0, 1);
+    if (b.alive === false) progress = 1 - U.clamp(b.sink || 0, 0, 1);
+    return { hull: b.ghostHull || ghostHull({cycle: 1}), progress: progress * progress * (3 - 2 * progress) };
+  };
+  function drawGhost(ctx, b, x, y, time) {
+    var F = G.FX.ghostShip, visual = M.ghostVisual(b), q = visual.progress, len = b.len;
+    // 같은 그래픽 장치와 모형을 재사용하며, 물 아래에 남은 부분은 수면 선에서 자른다.
+    ctx.save(); ctx.beginPath(); ctx.rect(x - len * 2, y - len * 3, len * 4, len * (3 + F.waterline)); ctx.clip();
+    if (q > 0) {
+      var spec = G.Art.shipLook(visual.hull, {flag: null, sails: G.SHIP[visual.hull].sails});
+      spec.sailTint = F.sailTint; spec.noWake = true; spec.motionSpeed = 0.25; spec.pose = {pitch: -(1 - q) * 0.12, roll: Math.sin(time) * 0.025, heave: 0};
+      ctx.globalAlpha *= F.alpha * (0.25 + q * 0.75); ctx.filter = F.filter;
+      var sy = y + len * F.depth * (1 - q);
+      if (!(G.Ship3D && G.Ship3D.draw(ctx, x, sy, -b.heading, len, spec, time))) G.Art.shipTop(ctx, x, sy, -b.heading, len, spec, time);
+    }
+    ctx.restore();
+    if (q <= 0 || q >= 1) return true;
+    // 떠오르는 선체에서 흐르는 물줄기와 옅은 안개를 그린다. 닫힌 물결 고리는 쓰지 않는다.
+    ctx.save(); var strength = Math.sin(q * Math.PI);
+    for (var i = 0; i < F.drains; i++) {
+      var along = (i / (F.drains - 1) - 0.5) * len * 0.8, sx = x + Math.cos(b.heading) * along, sy0 = y + Math.sin(b.heading) * along * 0.5;
+      var drop = len * (0.03 + 0.08 * Math.abs(Math.sin(i * 3.7 + time * 4))) * strength;
+      ctx.strokeStyle = 'rgba(171,231,224,' + strength * 0.5 + ')'; ctx.lineWidth = 1.1;
+      ctx.beginPath(); ctx.moveTo(sx, sy0 - drop); ctx.lineTo(sx + Math.sin(i) * 2, sy0 + len * F.waterline); ctx.stroke();
+    }
+    for (var m = 0; m < 4; m++) {
+      var yy = y + len * (0.02 + m * 0.02), shift = Math.sin(time * 0.8 + m) * len * 0.08;
+      var fog = ctx.createLinearGradient(x - len * 0.6, 0, x + len * 0.6, 0);
+      fog.addColorStop(0, 'rgba(144,224,205,0)'); fog.addColorStop(0.5, 'rgba(144,224,205,' + strength * F.mist + ')'); fog.addColorStop(1, 'rgba(144,224,205,0)');
+      ctx.strokeStyle = fog; ctx.lineWidth = len * 0.035; ctx.beginPath(); ctx.moveTo(x - len * 0.6 + shift, yy);
+      ctx.bezierCurveTo(x - len * 0.15, yy - len * 0.07, x + len * 0.2, yy + len * 0.02, x + len * 0.6 + shift, yy); ctx.stroke();
+    }
+    ctx.restore(); return true;
+  }
   M.draw = function (ctx, b, x, y, time) {
+    if (b.monster === 'ghost-ship') return drawGhost(ctx, b, x, y, time);
     var state = b.monsterPhase === 'surface' ? ((b.attackTime || 0) > 0 ? 'attack' : b.spd > 0 ? 'swim' : 'idle') : b.monsterPhase;
     if (state === 'surface') state = 'idle';
     var elapsed = state === 'attack' ? b.attackAnim || 0 : b.phaseTime || time || 0;
     if (!b.alive) { state = 'dive'; elapsed = (b.sink || 0) * K().diveSeconds; }
     return G.SeaMonsterSprite.draw(ctx, x, y, -b.heading, b.len, { type: b.monster, state: state, elapsed: elapsed }, time);
   };
+  var ghostSight = {};
   M.drawSea = function (ctx, project, zoom, time) {
     var s = S(), near = M.near(s.loc.lon, s.loc.lat, K().sight);
     near.forEach(function (e) {
       var p = project(e.lon, e.lat), size = zoom * K().mapLen;
+      if (e.id === 'ghost-ship') {
+        var key = e.id + ':' + e.cycle, start = ghostSight[key];
+        if (start == null || time < start) start = ghostSight[key] = time;
+        var age = time - start;
+        drawGhost(ctx, {ghostHull: ghostHull(e), len: size, heading: -Math.atan2(s.loc.lat - e.lat, G.Geo.wrapLon(s.loc.lon - e.lon)), monsterPhase: age < K().ghost.emergeSeconds ? 'emerge' : 'surface', phaseTime: age}, p[0], p[1], time);
+      } else {
       G.SeaMonsterSprite.draw(ctx, p[0], p[1], Math.atan2(s.loc.lat - e.lat, G.Geo.wrapLon(s.loc.lon - e.lon)), size,
         { type: e.id, state: 'idle', elapsed: time }, time);
+      }
       ctx.save(); ctx.fillStyle = '#ffc0a5'; ctx.textAlign = 'center'; ctx.font = 'bold 17px sans-serif'; ctx.fillText(name(e.id), p[0], p[1] - size * 0.65); ctx.restore();
     });
   };
@@ -233,7 +287,10 @@
       e.active = false; e.hp = 0; e.killed = U.clone(S().date);
       var date = S().date, year = date.y + data(e.id).years;
       e.next = { y: year, m: date.m, d: Math.min(date.d, U.daysInMonth(year, date.m)) };
+      var gold = 0;
+      if (e.id === 'ghost-ship') { gold = U.ri(K().ghost.gold[0], K().ghost.gold[1]); S().player.gold += gold; e.rewardGold = gold; }
       G.State.log(name(e.id) + U.jx(name(e.id), '을/를') + ' 무찔렀다. 다음 출몰은 ' + data(e.id).years + '년 뒤다.');
+      delete root.checked; return {gold: gold};
     } else { e.hp = Math.max(1, b.hp); e.maxHp = b.maxHp; M.avoid(e); }
     delete root.checked;
   };

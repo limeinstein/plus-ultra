@@ -1,0 +1,1529 @@
+{
+  "date": "2026-11-05",
+  "mode": "built-in image_gen",
+  "scenes": [
+    {
+      "id": "bx_kyoto",
+      "key": "legend-events/bx_kyoto",
+      "title": "교토의 시동 (1582)",
+      "speaker": "bx_ranmaru",
+      "ref_ids": [
+        "bx_ranmaru"
+      ],
+      "description": "1582 Kyoto Shijo market. Fully clothed seventeen-year-old page Ran in neat white kimono and dark hakama has dismounted beside a horse, speaking politely to a foreign sea captain seen from behind; market townspeople turn to look, traditional shops and temple roofs. Ordinary modest nonsexual historical scene.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1582 Kyoto Shijo market. Fully clothed seventeen-year-old page Ran in neat white kimono and dark hakama has dismounted beside a horse, speaking politely to a foreign sea captain seen from behind; market townspeople turn to look, traditional shops and temple roofs. Ordinary modest nonsexual historical scene.",
+      "files": [
+        "js/systems/beauxea.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_ranmaru.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-9e1f770d-8980-470c-8db7-9ae8256c3d70.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_kyoto.png",
+      "file": "images/legend-events/bx_kyoto.webp"
+    },
+    {
+      "id": "bx_honnoji",
+      "key": "legend-events/bx_honnoji",
+      "title": "혼노지의 새벽 (1582.6.21)",
+      "speaker": "bx_akechi",
+      "ref_ids": [
+        "bx_akechi"
+      ],
+      "description": "Dawn1582 outside Honnoji temple Kyoto. Armored Akechi soldiers with bellflower banners gather outside its walls. Smoke and orange glow behind the distant temple roof, a captain and companions search for a safe entry. Dramatic wide historical crisis, no wounded people, no direct attacks.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Dawn1582 outside Honnoji temple Kyoto. Armored Akechi soldiers with bellflower banners gather outside its walls. Smoke and orange glow behind the distant temple roof, a captain and companions search for a safe entry. Dramatic wide historical crisis, no wounded people, no direct attacks.",
+      "files": [
+        "js/systems/beauxea.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_akechi.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-8ca45477-9861-4120-ab20-2ea2d89d776a.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_honnoji.png",
+      "file": "images/legend-events/bx_honnoji.webp"
+    },
+    {
+      "id": "bx_ran_sea",
+      "key": "legend-events/bx_ran_sea",
+      "title": "가모가와의 새벽",
+      "speaker": "bx_ranmaru",
+      "ref_ids": [
+        "bx_ranmaru"
+      ],
+      "description": "Quiet sunrise on Kyoto Kamo riverbank after the smoky night. Ran, fully clothed seventeen-year-old page in white robes and dark hakama, sits with a bandaged hand looking at the river beside an adult sea captain whose back faces us. Golden river mist, hopeful calm, no injuries shown, no romance.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Quiet sunrise on Kyoto Kamo riverbank after the smoky night. Ran, fully clothed seventeen-year-old page in white robes and dark hakama, sits with a bandaged hand looking at the river beside an adult sea captain whose back faces us. Golden river mist, hopeful calm, no injuries shown, no romance.",
+      "files": [
+        "js/systems/beauxea.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_ranmaru.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-fe9f09db-9626-4c0b-8ad5-c32fca18f8b3.png",
+      "revision": {
+        "prompt": "Edit only the tiny nonsensical white text at bottom center: completely remove that lettering and restore continuous natural riverbank grass and stones. Preserve every person, both faces, modest clothes, pose, hands, dawn lighting, river and Kyoto buildings exactly as shown. This is an ordinary nonsexual historical dialogue scene. Keep1881x836 panoramic painted game illustration. No text or watermark anywhere.",
+        "reference": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-0a03ff58-04e0-492d-8811-f2eee063a0e7.png"
+      },
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_ran_sea.png",
+      "file": "images/legend-events/bx_ran_sea.webp"
+    },
+    {
+      "id": "bx_peony",
+      "key": "legend-events/bx_peony",
+      "title": "모란정 「경몽」 (소주)",
+      "speaker": "bx_okrang",
+      "ref_ids": [
+        "bx_okrang",
+        "bx_banzhu"
+      ],
+      "description": "Ming Suzhou garden theatre at night. Adult male opera performer Okrang in flowing white scholar stage robes sings with a willow branch and open fan above a lantern-lit pond. Troupe leader watches from side of stage, entranced audience across foreground, elegant opera scene.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Ming Suzhou garden theatre at night. Adult male opera performer Okrang in flowing white scholar stage robes sings with a willow branch and open fan above a lantern-lit pond. Troupe leader watches from side of stage, entranced audience across foreground, elegant opera scene.",
+      "files": [
+        "js/systems/beauxea.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_okrang.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_banzhu.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-abe974d8-53b3-40e4-8e89-d8394d724ca1.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_peony.png",
+      "file": "images/legend-events/bx_peony.webp"
+    },
+    {
+      "id": "bx_bajeong",
+      "key": "legend-events/bx_bajeong",
+      "title": "에도의 마상재",
+      "speaker": "bx_mujin",
+      "ref_ids": [
+        "bx_mujin",
+        "bx_envoy"
+      ],
+      "description": "Edo castle riding ground. Adult Korean equestrian performer Mujin in white Joseon garments balances standing on a cantering horse, Korean diplomatic banners and dignitaries watching in the background, admiring Edo crowd. Graceful athletic display, no horse injury.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Edo castle riding ground. Adult Korean equestrian performer Mujin in white Joseon garments balances standing on a cantering horse, Korean diplomatic banners and dignitaries watching in the background, admiring Edo crowd. Graceful athletic display, no horse injury.",
+      "files": [
+        "js/systems/beauxea.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_mujin.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_envoy.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-48a94c9f-be36-4cea-8827-520833c43987.png",
+      "revision": {
+        "prompt": "Edit only the three vertical white flags behind the horse on the left. Replace their modern Korean taegeuk and four-trigram designs with period Joseon diplomatic ceremonial flags: deep crimson silk with simple golden curling dragon/cloud ornaments, no modern flag symbols and no lettering. Preserve every person, the smiling white-robed male acrobat standing on the horse, the horse, crowd, castle and entire composition. Keep1881x836 panoramic hand-painted historical game art.",
+        "reference": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-9b7e315f-c2bf-4d49-ab10-c70e64b05dde.png"
+      },
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_bajeong.png",
+      "file": "images/legend-events/bx_bajeong.webp"
+    },
+    {
+      "id": "bx_yard",
+      "key": "legend-events/bx_yard",
+      "title": "대성당 작업장의 거인 (1501~1504)",
+      "speaker": "bx_tommaso",
+      "ref_ids": [
+        "bx_tommaso",
+        "michelangelo"
+      ],
+      "description": "Florence cathedral sculptor yard1503. Adult model Tommaso in a cream sleeveless tunic and dark trousers holds a leather sling on a low platform. Michelangelo works with chisel beside a huge unfinished marble David statue and wooden scaffold. Sculpture lower torso obscured by scaffolding cloth, dust in sunlight. Focus on faces and craft.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Florence cathedral sculptor yard1503. Adult model Tommaso in a cream sleeveless tunic and dark trousers holds a leather sling on a low platform. Michelangelo works with chisel beside a huge unfinished marble David statue and wooden scaffold. Sculpture lower torso obscured by scaffolding cloth, dust in sunlight. Focus on faces and craft.",
+      "files": [
+        "js/systems/beauxeu.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_tommaso.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/michelangelo.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-59b5e082-cb82-4b14-b7b4-1527470aa313.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_yard.png",
+      "file": "images/legend-events/bx_yard.webp"
+    },
+    {
+      "id": "bx_move",
+      "key": "legend-events/bx_move",
+      "title": "광장으로 가는 거인 (1504.5)",
+      "speaker": "bx_tommaso",
+      "ref_ids": [
+        "bx_tommaso",
+        "bx_slinger"
+      ],
+      "description": "Florence1504 at night. Large marble statue of David lies securely in a timber transport cradle on log rollers, clothed workers pull ropes through a narrow street. Tommaso watches by torchlight while a distant red-hooded group waits in alley. All people clothed, statue pelvis covered by transport padding, no attacks.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Florence1504 at night. Large marble statue of David lies securely in a timber transport cradle on log rollers, clothed workers pull ropes through a narrow street. Tommaso watches by torchlight while a distant red-hooded group waits in alley. All people clothed, statue pelvis covered by transport padding, no attacks.",
+      "files": [
+        "js/systems/beauxeu.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_tommaso.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_slinger.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-aee86dd0-1194-4df6-b1b7-341b3d01f134.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_move.png",
+      "file": "images/legend-events/bx_move.webp"
+    },
+    {
+      "id": "bx_tommaso",
+      "key": "legend-events/bx_tommaso",
+      "title": "광장의 새벽",
+      "speaker": "bx_tommaso",
+      "ref_ids": [
+        "bx_tommaso",
+        "michelangelo"
+      ],
+      "description": "Dawn Florence Piazza della Signoria1504. Adult Tommaso in his cream tunic looks up at finished David while Michelangelo rests a reassuring hand on his shoulder. Captain seen from behind listens. Monument upper torso and head glow in morning light, lower torso outside scene or obscured by crowd, historic palace background.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Dawn Florence Piazza della Signoria1504. Adult Tommaso in his cream tunic looks up at finished David while Michelangelo rests a reassuring hand on his shoulder. Captain seen from behind listens. Monument upper torso and head glow in morning light, lower torso outside scene or obscured by crowd, historic palace background.",
+      "files": [
+        "js/systems/beauxeu.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_tommaso.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/michelangelo.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-2544a0b8-61ba-4bf8-8969-a1c803111f60.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_tommaso.png",
+      "file": "images/legend-events/bx_tommaso.webp"
+    },
+    {
+      "id": "bx_carnival",
+      "key": "legend-events/bx_carnival",
+      "title": "베네치아 카니발의 밤",
+      "speaker": "bx_lorenzo",
+      "ref_ids": [
+        "bx_lorenzo",
+        "bx_maskmaker",
+        "bx_notte"
+      ],
+      "description": "Venice carnival night1570s, lantern-lit quay beside Rialto canal. Adult gondolier Lorenzo in rolled-sleeve white shirt and burgundy sash stands with a black-cloaked night-watch officer, while middle-aged maskmaker Cecilia holding an empty gilded mask case explains that her gold-leaf Moretta mask has vanished. Crowds of masked adult revelers, candlelit gondolas. Tense mystery conversation, no assault, all fully clothed.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Venice carnival night1570s, lantern-lit quay beside Rialto canal. Adult gondolier Lorenzo in rolled-sleeve white shirt and burgundy sash stands with a black-cloaked night-watch officer, while middle-aged maskmaker Cecilia holding an empty gilded mask case explains that her gold-leaf Moretta mask has vanished. Crowds of masked adult revelers, candlelit gondolas. Tense mystery conversation, no assault, all fully clothed.",
+      "files": [
+        "js/systems/beauxeu.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_lorenzo.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_maskmaker.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_notte.png"
+      ],
+      "initial_prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Renaissance Venice carnival night at Rialto bridge. Handsome adult gondolier Lorenzo with dark curls and open-neck white shirt holds a half mask, Cecilia in rich evening dress beside him, her merchant husband watching from shadow. Lanterns reflected in canal, masked adult revelers, elegant intrigue without sexual contact.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-a201bf46-d2af-4cac-9146-de7c8c0b74bd.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_carnival.png",
+      "file": "images/legend-events/bx_carnival.webp"
+    },
+    {
+      "id": "bx_lorenzo",
+      "key": "legend-events/bx_lorenzo",
+      "title": "리알토의 새벽",
+      "speaker": "bx_lorenzo",
+      "ref_ids": [
+        "bx_lorenzo"
+      ],
+      "description": "Quiet dawn by Rialto canal Venice. Lorenzo sits on mooring steps beside a gondola and an adult captain seen from rear; his white rolled-sleeve shirt and burgundy sash catch pink dawn, an unused carnival mask on a nearby post. Calm departure and yearning for sea.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Quiet dawn by Rialto canal Venice. Lorenzo sits on mooring steps beside a gondola and an adult captain seen from rear; his white rolled-sleeve shirt and burgundy sash catch pink dawn, an unused carnival mask on a nearby post. Calm departure and yearning for sea.",
+      "files": [
+        "js/systems/beauxeu.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_lorenzo.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-0eb66c56-edda-491a-be70-41be8059f50b.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_lorenzo.png",
+      "file": "images/legend-events/bx_lorenzo.webp"
+    },
+    {
+      "id": "bx_said",
+      "key": "legend-events/bx_said",
+      "title": "무스카트의 길잡이",
+      "speaker": "bx_said",
+      "ref_ids": [
+        "bx_said",
+        "bx_oldman"
+      ],
+      "description": "Sunset Arabian coast harbor stone steps. Adult navigator Said in white turban studies a wooden kamal navigation board with knotted string, old fisherman beside nets observes a sea captain approaching from rear. Dhows, coral-stone waterfront and tranquil gold sea.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Sunset Arabian coast harbor stone steps. Adult navigator Said in white turban studies a wooden kamal navigation board with knotted string, old fisherman beside nets observes a sea captain approaching from rear. Dhows, coral-stone waterfront and tranquil gold sea.",
+      "files": [
+        "js/systems/beauxis.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_said.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_oldman.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-eae04f29-31ea-4e72-bb53-4e874033b0e7.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_said.png",
+      "file": "images/legend-events/bx_said.webp"
+    },
+    {
+      "id": "bx_pt",
+      "key": "legend-events/bx_pt",
+      "title": "붙잡힌 길잡이",
+      "speaker": "bx_said",
+      "ref_ids": [
+        "bx_said",
+        "bx_pt"
+      ],
+      "description": "Arabian harbor quay. Said with white turban stands calm while a Portuguese captain in a red-cross cloak demands his service, hand resting on sheathed sword; a foreign sea captain seen from behind interposes with open palm. Tense conversation, no assault, no restraint, no violence.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Arabian harbor quay. Said with white turban stands calm while a Portuguese captain in a red-cross cloak demands his service, hand resting on sheathed sword; a foreign sea captain seen from behind interposes with open palm. Tense conversation, no assault, no restraint, no violence.",
+      "files": [
+        "js/systems/beauxis.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_said.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_pt.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-9785331e-8aea-4940-8cc5-5e834ee35fd0.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_pt.png",
+      "file": "images/legend-events/bx_pt.webp"
+    },
+    {
+      "id": "bx_said_deck",
+      "key": "legend-events/bx_said_deck",
+      "title": "갑판의 길잡이",
+      "speaker": "bx_said",
+      "ref_ids": [
+        "bx_said"
+      ],
+      "description": "Moonlit wooden sailing ship deck. Said in white turban measures the North Star with small wooden kamal board and knotted string, offering a handwritten nautical manuscript to the captain seen from behind. Rigging silhouettes, luminous stars and deep blue sea, scholarly navigation scene.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Moonlit wooden sailing ship deck. Said in white turban measures the North Star with small wooden kamal board and knotted string, offering a handwritten nautical manuscript to the captain seen from behind. Rigging silhouettes, luminous stars and deep blue sea, scholarly navigation scene.",
+      "files": [
+        "js/systems/beauxis.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_said.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-f56af9b2-de92-4df3-9606-1c0b01299190.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_said_deck.png",
+      "file": "images/legend-events/bx_said_deck.webp"
+    },
+    {
+      "id": "bx_panama",
+      "key": "legend-events/bx_panama",
+      "title": "파나마의 부두",
+      "speaker": "bx_wayna",
+      "ref_ids": [
+        "bx_wayna",
+        "bx_bosun"
+      ],
+      "description": "Panama dock1527. Indigenous adult balsa raft navigator Wayna in woven coastal clothing stands beside a tall ship mast speaking with a Spanish boatswain and captain. Large seized balsa-log trading raft with cotton sail tied alongside, gold-colored bowls and emerald cargo on deck. Negotiation before release; no chains or abuse.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Panama dock1527. Indigenous adult balsa raft navigator Wayna in woven coastal clothing stands beside a tall ship mast speaking with a Spanish boatswain and captain. Large seized balsa-log trading raft with cotton sail tied alongside, gold-colored bowls and emerald cargo on deck. Negotiation before release; no chains or abuse.",
+      "files": [
+        "js/systems/beauxis.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_wayna.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_bosun.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-59095d5d-fe97-4b5a-9e28-a10e78c7903e.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_panama.png",
+      "file": "images/legend-events/bx_panama.webp"
+    },
+    {
+      "id": "bx_tumbes",
+      "key": "legend-events/bx_tumbes",
+      "title": "툼베스의 해변",
+      "speaker": "bx_wayna",
+      "ref_ids": [
+        "bx_wayna",
+        "bx_curaca"
+      ],
+      "description": "Tumbes beach1528, mangroves and Andean coastal settlement. Wayna returns beside his large balsa trading raft with cotton sail, chief Curaca in gold ear ornaments and woven mantle welcomes him. Families wave from respectful distance. Warm celebratory homecoming, no stereotypes.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Tumbes beach1528, mangroves and Andean coastal settlement. Wayna returns beside his large balsa trading raft with cotton sail, chief Curaca in gold ear ornaments and woven mantle welcomes him. Families wave from respectful distance. Warm celebratory homecoming, no stereotypes.",
+      "files": [
+        "js/systems/beauxis.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_wayna.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_curaca.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-4658bed5-203c-478e-8753-200deb3de230.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_tumbes.png",
+      "file": "images/legend-events/bx_tumbes.webp"
+    },
+    {
+      "id": "bx_horizon",
+      "key": "legend-events/bx_horizon",
+      "title": "수평선 너머",
+      "speaker": "bx_wayna",
+      "ref_ids": [
+        "bx_wayna"
+      ],
+      "description": "Pacific beach at Tumbes in soft evening light. Wayna and a sea captain seen from rear stand beside a large balsa raft; Wayna holds a guara steering board and points across horizon toward a distant sailing ship. Woven sail and village in background, anticipation of a voyage.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Pacific beach at Tumbes in soft evening light. Wayna and a sea captain seen from rear stand beside a large balsa raft; Wayna holds a guara steering board and points across horizon toward a distant sailing ship. Woven sail and village in background, anticipation of a voyage.",
+      "files": [
+        "js/systems/beauxis.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/beaux-portraits-20261105/sources/bx_wayna.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-a8872262-2c9a-4930-b549-17ce53015b69.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/bx_horizon.png",
+      "file": "images/legend-events/bx_horizon.webp"
+    },
+    {
+      "id": "cw_wic",
+      "key": "legend-events/cw_wic",
+      "title": "서인도 회사 (1621)",
+      "speaker": "cw_usselincx",
+      "ref_ids": [
+        "cw_usselincx",
+        "cw_heeren"
+      ],
+      "description": "Amsterdam1621 canal-side company meeting room. Elderly Usselincx holding settlement plans argues across a long dark oak table with several directors in black doublets and white ruffs, silver inkwell and ledgers, cloudy canal through tall window. No legible text.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Amsterdam1621 canal-side company meeting room. Elderly Usselincx holding settlement plans argues across a long dark oak table with several directors in black doublets and white ruffs, silver inkwell and ledgers, cloudy canal through tall window. No legible text.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_usselincx.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_heeren.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-29369485-5ccc-498d-a84d-6089b2a2e986.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_wic.png",
+      "file": "images/legend-events/cw_wic.webp"
+    },
+    {
+      "id": "cw_fr_eic",
+      "key": "legend-events/cw_fr_eic",
+      "title": "프랑스 동인도 회사 (1664)",
+      "speaker": "cw_colbert",
+      "ref_ids": [
+        "cw_colbert"
+      ],
+      "description": "Paris1664 finance office beside Louvre. Colbert with long black curled wig stands behind a desk with open subscription register, court nobles line up to invest, maps and a globe, sunlit French stone palace window. Luxurious but serious administrative scene.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Paris1664 finance office beside Louvre. Colbert with long black curled wig stands behind a desk with open subscription register, court nobles line up to invest, maps and a globe, sunlit French stone palace window. Luxurious but serious administrative scene.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_colbert.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-34f0db99-baf8-47f7-ae59-66aef671b89f.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_fr_eic.png",
+      "file": "images/legend-events/cw_fr_eic.webp"
+    },
+    {
+      "id": "cw_pondy",
+      "key": "legend-events/cw_pondy",
+      "title": "퐁디셰리 (1674)",
+      "speaker": "cw_martin",
+      "ref_ids": [
+        "cw_martin"
+      ],
+      "description": "Pondicherry1674 Coromandel palm-lined sandy settlement. Martin with sleeves rolled studies a fort plan drawn on sand with local Indian builders, low thatched houses and small white lily banner, quiet sea with anchored merchant ship. Collaborative detailed construction scene.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Pondicherry1674 Coromandel palm-lined sandy settlement. Martin with sleeves rolled studies a fort plan drawn on sand with local Indian builders, low thatched houses and small white lily banner, quiet sea with anchored merchant ship. Collaborative detailed construction scene.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_martin.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-2f14ecdf-089a-47dd-bcd5-2455eeee0804.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_pondy.png",
+      "file": "images/legend-events/cw_pondy.webp"
+    },
+    {
+      "id": "cw_tranq",
+      "key": "legend-events/cw_tranq",
+      "title": "트랑케바르 (1620)",
+      "speaker": "cw_crappe",
+      "ref_ids": [
+        "cw_crappe",
+        "cw_gjedde"
+      ],
+      "description": "Tranquebar1620 Indian coastal fishing village. European merchant Crappe wearing Indian turban comes ashore carrying treaty parchment to young Danish admiral Gjedde; local Nayak envoys watch. Danish ships offshore with red flags white cross, palm coast and river mouth.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Tranquebar1620 Indian coastal fishing village. European merchant Crappe wearing Indian turban comes ashore carrying treaty parchment to young Danish admiral Gjedde; local Nayak envoys watch. Danish ships offshore with red flags white cross, palm coast and river mouth.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_crappe.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_gjedde.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-14f99589-db64-43cb-b67f-34b4850e8e98.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_tranq.png",
+      "file": "images/legend-events/cw_tranq.webp"
+    },
+    {
+      "id": "cw_nswe",
+      "key": "legend-events/cw_nswe",
+      "title": "신스웨덴 (1638)",
+      "speaker": "cw_minuit",
+      "ref_ids": [
+        "cw_minuit",
+        "cw_mattahorn"
+      ],
+      "description": "Delaware river1638. Minuit with broad hat and land parchment sits opposite Lenape chief Mattahorn with wampum belt and deerhide mantle, respectful equal negotiation beside new timber palisade at rocky river point. Small Swedish ship behind, no conquest poses.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Delaware river1638. Minuit with broad hat and land parchment sits opposite Lenape chief Mattahorn with wampum belt and deerhide mantle, respectful equal negotiation beside new timber palisade at rocky river point. Small Swedish ship behind, no conquest poses.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_minuit.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_mattahorn.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-3d08f7d8-2c43-4e00-bec8-404a30ca7167.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_nswe.png",
+      "file": "images/legend-events/cw_nswe.webp"
+    },
+    {
+      "id": "cw_tobago",
+      "key": "legend-events/cw_tobago",
+      "title": "새 쿠를란트 (1654)",
+      "speaker": "cw_mollens",
+      "ref_ids": [
+        "cw_mollens"
+      ],
+      "description": "Tobago1654 Caribbean turquoise bay. Captain Mollens welcomes a provisioning boat to a small Baltic settler camp among palms; tired but living settlers carry water and food. Courland ship flying RED flag with BLACK lobster emblem. Compassionate aid, no corpses or graphic sickness.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Tobago1654 Caribbean turquoise bay. Captain Mollens welcomes a provisioning boat to a small Baltic settler camp among palms; tired but living settlers carry water and food. Courland ship flying RED flag with BLACK lobster emblem. Compassionate aid, no corpses or graphic sickness.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_mollens.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-0a4f3cdf-39c2-4c4c-99bf-7c34a782fa2b.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_tobago.png",
+      "file": "images/legend-events/cw_tobago.webp"
+    },
+    {
+      "id": "cw_darien_sub",
+      "key": "legend-events/cw_darien_sub",
+      "title": "스코틀랜드 회사 (1696)",
+      "speaker": "cw_paterson",
+      "ref_ids": [
+        "cw_paterson"
+      ],
+      "description": "Edinburgh1696. Company office queue of adult nobles, merchants, artisans and household workers with subscription coins; enthusiastic Paterson in brown wig unfolds a Panama isthmus map before them. Stone street, dramatic Scottish daylight, no legible text.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Edinburgh1696. Company office queue of adult nobles, merchants, artisans and household workers with subscription coins; enthusiastic Paterson in brown wig unfolds a Panama isthmus map before them. Stone street, dramatic Scottish daylight, no legible text.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_paterson.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-31a1e1ec-6a6a-473c-a1c5-f33588e2ac22.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_darien_sub.png",
+      "file": "images/legend-events/cw_darien_sub.webp"
+    },
+    {
+      "id": "cw_darien",
+      "key": "legend-events/cw_darien",
+      "title": "칼레도니아 만 (1698~1699)",
+      "speaker": "cw_paterson",
+      "ref_ids": [
+        "cw_paterson"
+      ],
+      "description": "Darien Panama1698 humid mangrove bay. Struggling Scottish settlement with rough earthen fort and palm huts, weary adults share food and drink clean water; a passing sailboat offshore. Compassionate non-graphic account of an ill-fated colony, no death or injury.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Darien Panama1698 humid mangrove bay. Struggling Scottish settlement with rough earthen fort and palm huts, weary adults share food and drink clean water; a passing sailboat offshore. Compassionate non-graphic account of an ill-fated colony, no death or injury.",
+      "files": [
+        "js/systems/colonyco.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/cw_paterson.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-f38f9d6d-292d-4576-8c34-8e66da776a46.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/cw_darien.png",
+      "file": "images/legend-events/cw_darien.webp"
+    },
+    {
+      "id": "ei_eic_founders",
+      "key": "legend-events/ei_eic_founders",
+      "title": "런던 상인들의 출자 (1600)",
+      "speaker": "ei_smythe",
+      "ref_ids": [
+        "ei_smythe"
+      ],
+      "description": "London1600 merchant mansion beside Thames. Thomas Smythe with brown beard black silk doublet and broad ruff presides over merchants seated at long table with subscription roll and wax seals. View of Elizabethan river shipping outside, warm candlelight, no readable writing.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. London1600 merchant mansion beside Thames. Thomas Smythe with brown beard black silk doublet and broad ruff presides over merchants seated at long table with subscription roll and wax seals. View of Elizabethan river shipping outside, warm candlelight, no readable writing.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/ei_smythe.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-7dddddc0-53a4-4382-af95-09932ca00f51.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_eic_founders.png",
+      "file": "images/legend-events/ei_eic_founders.webp"
+    },
+    {
+      "id": "ei_voc_house",
+      "key": "legend-events/ei_voc_house",
+      "title": "연합 동인도 회사 (1602)",
+      "speaker": "ei_lemaire",
+      "ref_ids": [
+        "ei_lemaire"
+      ],
+      "description": "Amsterdam1602 canal-side VOC office. Isaac Le Maire in black doublet and ruff holds a share register near a queue of varied adult investors including merchant, carpenter, servant and pastor. Gabled houses, moored boats, active early stock subscription, no readable signs.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Amsterdam1602 canal-side VOC office. Isaac Le Maire in black doublet and ruff holds a share register near a queue of varied adult investors including merchant, carpenter, servant and pastor. Gabled houses, moored boats, active early stock subscription, no readable signs.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/ei_lemaire.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-215a1cb4-62b4-47dd-8dfe-798c5110818a.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_voc_house.png",
+      "file": "images/legend-events/ei_voc_house.webp"
+    },
+    {
+      "id": "ei_swally",
+      "key": "legend-events/ei_swally",
+      "title": "수왈리 앞바다 (1612)",
+      "speaker": "ei_best",
+      "ref_ids": [
+        "ei_best"
+      ],
+      "description": "Swally1612 shallow Indian coastal sea. Two English sailing warships and a Portuguese galleon face one another under billowing sails, cannon smoke drifting far between hulls, small pirate lateen craft near a becalmed merchant ship in distance. Dramatic naval panorama, no blood or falling people.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Swally1612 shallow Indian coastal sea. Two English sailing warships and a Portuguese galleon face one another under billowing sails, cannon smoke drifting far between hulls, small pirate lateen craft near a becalmed merchant ship in distance. Dramatic naval panorama, no blood or falling people.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/ei_best.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-2c9c51a4-693c-4c98-a339-5c9ee32a6e4b.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_swally.png",
+      "file": "images/legend-events/ei_swally.webp"
+    },
+    {
+      "id": "ei_swally_mariam",
+      "key": "legend-events/ei_swally_mariam",
+      "title": "수왈리의 밤",
+      "speaker": "mariam",
+      "ref_ids": [
+        "mariam"
+      ],
+      "description": "Night after danger aboard Armenian merchant ship off Surat1612. Mariam in crimson silk embroidered with gold rests a sheathed small sword on a table, her elderly father holds a garnet ring, both safe and relieved beside lantern. Captain seen from behind, calm sea and merchant rigging.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Night after danger aboard Armenian merchant ship off Surat1612. Mariam in crimson silk embroidered with gold rests a sheathed small sword on a table, her elderly father holds a garnet ring, both safe and relieved beside lantern. Captain seen from behind, calm sea and merchant rigging.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/mariam.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-5cb08f16-4221-4279-9069-716aa104cf50.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_swally_mariam.png",
+      "file": "images/legend-events/ei_swally_mariam.webp"
+    },
+    {
+      "id": "ei_jakatra_fire",
+      "key": "legend-events/ei_jakatra_fire",
+      "title": "자야카르타의 불 (1619)",
+      "speaker": "kancana",
+      "ref_ids": [
+        "kancana"
+      ],
+      "description": "Jakarta1619. Adult Kancana in batik kain and silk shoulder shawl calmly guides clothed families along a wide exit lane toward harbor; distant skyline smoke and orange light indicate fire, soldiers distant silhouettes. Focus on safe evacuation and solidarity, no active attacks or distressing injuries.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Jakarta1619. Adult Kancana in batik kain and silk shoulder shawl calmly guides clothed families along a wide exit lane toward harbor; distant skyline smoke and orange light indicate fire, soldiers distant silhouettes. Focus on safe evacuation and solidarity, no active attacks or distressing injuries.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/kancana.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-5a1b54fa-3c22-4e72-b231-d7b65218bf45.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_jakatra_fire.png",
+      "file": "images/legend-events/ei_jakatra_fire.webp"
+    },
+    {
+      "id": "ei_jakatra_kancana",
+      "key": "legend-events/ei_jakatra_kancana",
+      "title": "반텐 가는 길",
+      "speaker": "kancana",
+      "ref_ids": [
+        "kancana"
+      ],
+      "description": "Quiet Banten shoreline1619 after evacuation. Kancana in batik kain and silk shoulder shawl holds a small smoke-darkened gamelan gong and speaks with a captain seen from back. Boats of safe families on water, golden dusk, dignified resolve and continuity of music.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Quiet Banten shoreline1619 after evacuation. Kancana in batik kain and silk shoulder shawl holds a small smoke-darkened gamelan gong and speaks with a captain seen from back. Boats of safe families on water, golden dusk, dignified resolve and continuity of music.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/kancana.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-f7642cfc-335c-4160-93a9-65159311bfec.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_jakatra_kancana.png",
+      "file": "images/legend-events/ei_jakatra_kancana.webp"
+    },
+    {
+      "id": "ei_banda",
+      "key": "legend-events/ei_banda",
+      "title": "반다의 비극 (1621)",
+      "speaker": "ei_coen",
+      "ref_ids": [
+        "ei_coen"
+      ],
+      "description": "Banda Islands1621 wide volcanic harbor panorama. Dutch VOC vessels anchored near nutmeg forest coast, armed officials at a distant fort, local villagers gathered around small boats preparing to depart. Somber historical atmosphere with smoke on distant ridge, no violence, no abuse, no bodies.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Banda Islands1621 wide volcanic harbor panorama. Dutch VOC vessels anchored near nutmeg forest coast, armed officials at a distant fort, local villagers gathered around small boats preparing to depart. Somber historical atmosphere with smoke on distant ridge, no violence, no abuse, no bodies.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/ei_coen.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-d5695c23-38ec-4a2a-870e-981d86fd2ab2.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_banda.png",
+      "file": "images/legend-events/ei_banda.webp"
+    },
+    {
+      "id": "ei_banda_idris",
+      "key": "legend-events/ei_banda_idris",
+      "title": "육두구 묘목",
+      "speaker": "idris",
+      "ref_ids": [
+        "idris"
+      ],
+      "description": "Night on a Banda beach1621. Adult navigator Idris in white headband shirt and sarong holds a nutmeg sapling with roots wrapped in earth and cloth, boarding a small canoe beside a captain seen from back. Quiet moonlit sea and nutmeg forest silhouettes, hopeful escape, no violence.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Night on a Banda beach1621. Adult navigator Idris in white headband shirt and sarong holds a nutmeg sapling with roots wrapped in earth and cloth, boarding a small canoe beside a captain seen from back. Quiet moonlit sea and nutmeg forest silhouettes, hopeful escape, no violence.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/idris.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-d7c7dd37-cf97-44e8-99c9-c3bd830720b7.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_banda_idris.png",
+      "file": "images/legend-events/ei_banda_idris.webp"
+    },
+    {
+      "id": "ei_amboyna",
+      "key": "legend-events/ei_amboyna",
+      "title": "암보이나 (1623)",
+      "speaker": "ei_speult",
+      "ref_ids": [
+        "ei_speult"
+      ],
+      "description": "Ambon1623 colonial fort office. Governor Speult wearing breastplate and orange sash interrogates an unopened ledger on his desk while worried adult English merchants wait under guard by an open doorway. Somber legal dispute; no torture, no restraints, no injury or weapon threatening a person.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Ambon1623 colonial fort office. Governor Speult wearing breastplate and orange sash interrogates an unopened ledger on his desk while worried adult English merchants wait under guard by an open doorway. Somber legal dispute; no torture, no restraints, no injury or weapon threatening a person.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/ei_speult.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-ec35ec7c-9d12-45db-bc08-fdbec81274b2.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_amboyna.png",
+      "file": "images/legend-events/ei_amboyna.webp"
+    },
+    {
+      "id": "ei_amboyna_edmund",
+      "key": "legend-events/ei_amboyna_edmund",
+      "title": "살아남은 서기",
+      "speaker": "edmund",
+      "ref_ids": [
+        "edmund"
+      ],
+      "description": "Rainy dawn at Ambon harbor1623. Safe newly released adult clerk Edmund in worn black doublet holds a damp leather account book on ship deck, a captain offers him a dry cloak. Resolute weary face, no wounds or torture marks, colonial fort hazy in background.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Rainy dawn at Ambon harbor1623. Safe newly released adult clerk Edmund in worn black doublet holds a damp leather account book on ship deck, a captain offers him a dry cloak. Resolute weary face, no wounds or torture marks, colonial fort hazy in background.",
+      "files": [
+        "js/systems/eastindia.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/edmund.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-bbbfeb66-f945-458e-a66a-be3f3858e35b.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/ei_amboyna_edmund.png",
+      "file": "images/legend-events/ei_amboyna_edmund.webp"
+    },
+    {
+      "id": "gyeonwoo_wedding",
+      "key": "legend-events/gyeonwoo_wedding",
+      "title": "한산도의 칠석 혼례",
+      "speaker": "gyeonwoo",
+      "ref_ids": [
+        "gyeonwoo",
+        "jiknyeo"
+      ],
+      "description": "Hansando Korea on seventh lunar month evening, sunset harbor wedding. Young ADULT bride Jiknyeo in elegant Japanese bridal robes and ADULT groom Gyeonwoo in Ming military formal attire bow to one another at a ceremonial table, elderly Korean matchmaker in hanbok presides. Islanders and sailors celebrate in circle, turtle ship with red flags offshore, Milky Way begins above and magpies form distant arch. No Western wedding clothes.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Hansando Korea on seventh lunar month evening, sunset harbor wedding. Young ADULT bride Jiknyeo in elegant Japanese bridal robes and ADULT groom Gyeonwoo in Ming military formal attire bow to one another at a ceremonial table, elderly Korean matchmaker in hanbok presides. Islanders and sailors celebrate in circle, turtle ship with red flags offshore, Milky Way begins above and magpies form distant arch. No Western wedding clothes.",
+      "files": [
+        "js/systems/gyeonwoo.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/gyeonwoo.webp",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/jiknyeo.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-c24e0917-5b00-493e-be6b-71782a4b9032.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/gyeonwoo_wedding.png",
+      "file": "images/legend-events/gyeonwoo_wedding.webp"
+    },
+    {
+      "id": "jj_eunuch",
+      "key": "legend-events/jj_eunuch",
+      "title": "사례감의 내관",
+      "speaker": "jj_eunuch",
+      "ref_ids": [
+        "jj_eunuch"
+      ],
+      "description": "Ming China1540 harbor quay. Round beardless palace eunuch Gao in red robes steps from sedan chair examining merchants' ambergris cargo, assistant works an abacus, an ivory palace pass offered to captain seen from rear. Cargo jars and junks, ceremonial but transactional encounter.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Ming China1540 harbor quay. Round beardless palace eunuch Gao in red robes steps from sedan chair examining merchants' ambergris cargo, assistant works an abacus, an ivory palace pass offered to captain seen from rear. Cargo jars and junks, ceremonial but transactional encounter.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_eunuch.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-7107ca64-ad86-4d23-bd0a-d8cd327629c7.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_eunuch.png",
+      "file": "images/legend-events/jj_eunuch.webp"
+    },
+    {
+      "id": "jj_xiyuan",
+      "key": "legend-events/jj_xiyuan",
+      "title": "서원의 단 (1542)",
+      "speaker": "jj_tao",
+      "ref_ids": [
+        "jj_tao",
+        "jj_eunuch"
+      ],
+      "description": "Beijing Western Garden1542 lakeside Daoist pavilion. Elderly Tao Zhongwen in black bagua robe examines a piece of ambergris beside a bronze incense burner, eunuch Gao in red robes offers a payment chest. Roofed shrines, willow lake and curling incense, contemplative scene.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Beijing Western Garden1542 lakeside Daoist pavilion. Elderly Tao Zhongwen in black bagua robe examines a piece of ambergris beside a bronze incense burner, eunuch Gao in red robes offers a payment chest. Roofed shrines, willow lake and curling incense, contemplative scene.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_tao.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_eunuch.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-722fb1fa-4b96-4d70-9990-57ef8fbf9da6.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_xiyuan.png",
+      "file": "images/legend-events/jj_xiyuan.webp"
+    },
+    {
+      "id": "jj_dew",
+      "key": "legend-events/jj_dew",
+      "title": "서원의 새벽 이슬",
+      "speaker": "jj_maid",
+      "ref_ids": [
+        "jj_maid"
+      ],
+      "description": "Frosty dawn1542 Ming palace Western Garden courtyard. Fifteen-year-old servant Soran and other fully clothed young servants in plain high-collar long-sleeved robes quietly collect dewdrops from grass into small silver bowls. Gentle natural age-appropriate documentary scene, no erotic framing, no punishment or injuries, no bare shoulders.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Frosty dawn1542 Ming palace Western Garden courtyard. Fifteen-year-old servant Soran and other fully clothed young servants in plain high-collar long-sleeved robes quietly collect dewdrops from grass into small silver bowls. Gentle natural age-appropriate documentary scene, no erotic framing, no punishment or injuries, no bare shoulders.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_maid.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-ad2a55a5-d13a-4c8c-a5aa-a31f4b179dd1.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_dew.png",
+      "file": "images/legend-events/jj_dew.webp"
+    },
+    {
+      "id": "jj_night",
+      "key": "legend-events/jj_night",
+      "title": "임인년의 밤 (1542)",
+      "speaker": "jj_eunuch",
+      "ref_ids": [
+        "jj_eunuch",
+        "jj_maid"
+      ],
+      "description": "Midnight1542 courtyard lodging near Beijing palace. Red-robed eunuch Gao opens a small back door for fully clothed servant Soran holding a silver bowl, captain with back to viewer offers a travel cloak. Distant palace wall torches and muted alarm, focus on shelter and compassion, no assault or injury.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Midnight1542 courtyard lodging near Beijing palace. Red-robed eunuch Gao opens a small back door for fully clothed servant Soran holding a silver bowl, captain with back to viewer offers a travel cloak. Distant palace wall torches and muted alarm, focus on shelter and compassion, no assault or injury.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_eunuch.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_maid.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-3d60f05f-63f4-43e8-8aec-b6390218f6df.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_night.png",
+      "file": "images/legend-events/jj_night.webp"
+    },
+    {
+      "id": "jj_border",
+      "key": "legend-events/jj_border",
+      "title": "장가구 (1550)",
+      "speaker": "jj_qiu",
+      "ref_ids": [
+        "jj_qiu"
+      ],
+      "description": "Zhangjiakou1550 Great Wall frontier gate. Ming general Qiu Luan in bright armor sits on a horse by a dusty gate, wary gaze as merchants and horse traders wait outside. Wide mountain passes, flags and military store wagons, tense negotiations without fighting.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Zhangjiakou1550 Great Wall frontier gate. Ming general Qiu Luan in bright armor sits on a horse by a dusty gate, wary gaze as merchants and horse traders wait outside. Wide mountain passes, flags and military store wagons, tense negotiations without fighting.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_qiu.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-a8a3b6af-b0fc-49ba-ae31-726ad5b63f05.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_border.png",
+      "file": "images/legend-events/jj_border.webp"
+    },
+    {
+      "id": "jj_altan",
+      "key": "legend-events/jj_altan",
+      "title": "알탄 칸의 천막 (1550)",
+      "speaker": "jj_altan",
+      "ref_ids": [
+        "jj_altan"
+      ],
+      "description": "1550 Mongol felt tent interior. Altan Khan in fox-fur cap and deep red deel sits with silver bow case, offering a folded diplomatic letter to a captain whose back faces us. Tent lattice, saddle gear, tea bowl, Mongol attendants, stern but peaceful negotiation.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1550 Mongol felt tent interior. Altan Khan in fox-fur cap and deep red deel sits with silver bow case, offering a folded diplomatic letter to a captain whose back faces us. Tent lattice, saddle gear, tea bowl, Mongol attendants, stern but peaceful negotiation.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_altan.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-ec1658e0-a5a4-40a9-9c8d-2584814f04c8.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_altan.png",
+      "file": "images/legend-events/jj_altan.webp"
+    },
+    {
+      "id": "jj_raid",
+      "key": "legend-events/jj_raid",
+      "title": "경술년의 가을 (1550)",
+      "speaker": "jj_qiu",
+      "ref_ids": [
+        "jj_qiu"
+      ],
+      "description": "Autumn1550 outside Beijing city wall. Dusty Mongol cavalry banners far across plain, Ming soldiers watch from battlements, Qiu Luan in bright armor supervises gate while civilian wagons enter in orderly line. Historical siege anxiety, no active attacks, no blood or hurt civilians.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Autumn1550 outside Beijing city wall. Dusty Mongol cavalry banners far across plain, Ming soldiers watch from battlements, Qiu Luan in bright armor supervises gate while civilian wagons enter in orderly line. Historical siege anxiety, no active attacks, no blood or hurt civilians.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_qiu.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-004eb7ce-c82e-47fa-9254-7f63a30f17d3.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_raid.png",
+      "file": "images/legend-events/jj_raid.webp"
+    },
+    {
+      "id": "jj_guihua",
+      "key": "legend-events/jj_guihua",
+      "title": "귀화성의 칸 (1572)",
+      "speaker": "jj_altan",
+      "ref_ids": [
+        "jj_altan_late",
+        "jj_sanniang"
+      ],
+      "description": "Guihua1572 newly building Mongol-Chinese market city. Elderly grey-bearded Altan Khan gives a horn bow to a visiting captain, adult Sanniang Khutun in coral and silver headdress reads a trade ledger nearby. Horse pens, tea bales, blue-grey brick buildings and steppe hills, peaceful exchange.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Guihua1572 newly building Mongol-Chinese market city. Elderly grey-bearded Altan Khan gives a horn bow to a visiting captain, adult Sanniang Khutun in coral and silver headdress reads a trade ledger nearby. Horse pens, tea bales, blue-grey brick buildings and steppe hills, peaceful exchange.",
+      "files": [
+        "js/systems/jiajing.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_altan_late.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/jj_sanniang.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-cf25f23f-a8ec-44ee-b416-577ac726bb2d.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/jj_guihua.png",
+      "file": "images/legend-events/jj_guihua.webp"
+    },
+    {
+      "id": "rc_macao",
+      "key": "legend-events/rc_macao",
+      "title": "두 신부 (1583)",
+      "speaker": "rc_ricci",
+      "ref_ids": [
+        "rc_ricci",
+        "rc_ruggieri"
+      ],
+      "description": "Macao1583 harbor lodging. Two adult Italian Jesuits Matteo Ricci age31 and Michele Ruggieri age40 with shaved heads wear plain grey Chinese monk robes, examine Chinese books beside a small mechanical clock and maritime map. Chinese and Portuguese boats outside window, intellectual anticipation.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Macao1583 harbor lodging. Two adult Italian Jesuits Matteo Ricci age31 and Michele Ruggieri age40 with shaved heads wear plain grey Chinese monk robes, examine Chinese books beside a small mechanical clock and maritime map. Chinese and Portuguese boats outside window, intellectual anticipation.",
+      "files": [
+        "js/systems/ricci.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_ricci.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_ruggieri.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-e272ef14-51ec-4e32-af0e-160ea408447c.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/rc_macao.png",
+      "file": "images/legend-events/rc_macao.webp"
+    },
+    {
+      "id": "rc_zhaoqing",
+      "key": "legend-events/rc_zhaoqing",
+      "title": "조경 (1583.9.10)",
+      "speaker": "rc_wangpan",
+      "ref_ids": [
+        "rc_ricci",
+        "rc_ruggieri",
+        "rc_wangpan"
+      ],
+      "description": "Zhaoqing1583 prefect office. Ricci and Ruggieri in plain grey monk robes present a small mechanical clock to Ming prefect Wang Pan in black official hat and centered embroidered rank badge. Prefect leans forward curious, open courtyard beyond, respectful encounter.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Zhaoqing1583 prefect office. Ricci and Ruggieri in plain grey monk robes present a small mechanical clock to Ming prefect Wang Pan in black official hat and centered embroidered rank badge. Prefect leans forward curious, open courtyard beyond, respectful encounter.",
+      "files": [
+        "js/systems/ricci.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_ricci.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_ruggieri.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_wangpan.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-b0216777-5f15-4755-ad6c-3ac9a37bcbf3.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/rc_zhaoqing.png",
+      "file": "images/legend-events/rc_zhaoqing.webp"
+    },
+    {
+      "id": "rc_map",
+      "key": "legend-events/rc_map",
+      "title": "산해여지도 (1584)",
+      "speaker": "rc_scholar",
+      "ref_ids": [
+        "rc_ricci",
+        "rc_scholar"
+      ],
+      "description": "Zhaoqing1584 scholar hall. Early Ricci in grey monk robe points at a large wall world map while Chinese scholar wearing square cap holds a folded fan and studies it thoughtfully. Wooden columns, brushes and maritime charts on desk, discussion rather than argument, no readable labels.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Zhaoqing1584 scholar hall. Early Ricci in grey monk robe points at a large wall world map while Chinese scholar wearing square cap holds a folded fan and studies it thoughtfully. Wooden columns, brushes and maritime charts on desk, discussion rather than argument, no readable labels.",
+      "files": [
+        "js/systems/ricci.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_ricci.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_scholar.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-45275900-6c82-4ced-9a2e-c9a7c40f3647.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/rc_map.png",
+      "file": "images/legend-events/rc_map.webp"
+    },
+    {
+      "id": "rc_peking",
+      "key": "legend-events/rc_peking",
+      "title": "북경의 두 사람",
+      "speaker": "rc_xu",
+      "ref_ids": [
+        "rc_ricci_late",
+        "h_xuguangqi"
+      ],
+      "description": "Beijing1607 scholarly study. Older Ricci with long beard in dark blue scholar robe and black square cap collaborates with Xu Guangqi in Ming official robes over geometry book, brush-drawn circles and brass measuring compass. Mechanical clock, globe and cool window light, warm intellectual friendship.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Beijing1607 scholarly study. Older Ricci with long beard in dark blue scholar robe and black square cap collaborates with Xu Guangqi in Ming official robes over geometry book, brush-drawn circles and brass measuring compass. Mechanical clock, globe and cool window light, warm intellectual friendship.",
+      "files": [
+        "js/systems/ricci.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/rc_ricci_late.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_xuguangqi.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-22fc725d-d61e-4130-b1d9-0d0418947b65.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/rc_peking.png",
+      "file": "images/legend-events/rc_peking.webp"
+    },
+    {
+      "id": "wk_raid",
+      "key": "legend-events/wk_raid",
+      "title": "불타는 절강의 포구",
+      "speaker": "wk_refugee",
+      "ref_ids": [
+        "wk_refugee"
+      ],
+      "description": "Zhejiang coastal village1553 after an alarm. Fully clothed mother carrying sleeping child walks with villagers toward a waiting safe boat; smoky roofs far behind and moored Chinese junks in bay. Focus on aid and evacuation, no wounds, bodies or active attacks.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Zhejiang coastal village1553 after an alarm. Fully clothed mother carrying sleeping child walks with villagers toward a waiting safe boat; smoky roofs far behind and moored Chinese junks in bay. Focus on aid and evacuation, no wounds, bodies or active attacks.",
+      "files": [
+        "js/systems/wokou.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/wk_refugee.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-4cea2472-53e9-41cb-9b35-e5b5717103ff.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/wk_raid.png",
+      "file": "images/legend-events/wk_raid.webp"
+    },
+    {
+      "id": "wk_hirado",
+      "key": "legend-events/wk_hirado",
+      "title": "정해왕의 잔치 (히라도)",
+      "speaker": "h_wangzhi",
+      "ref_ids": [
+        "h_wangzhi",
+        "wk_mao"
+      ],
+      "description": "Hirado Japan1555 Chinese merchant captain Wang Zhi hosts a trading banquet in a timber harbor hall, young Mao Haifeng with Japanese styled hair beside him, Chinese silk bales and maps on side tables, Chinese and Japanese merchants, junks beyond sliding screens.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Hirado Japan1555 Chinese merchant captain Wang Zhi hosts a trading banquet in a timber harbor hall, young Mao Haifeng with Japanese styled hair beside him, Chinese silk bales and maps on side tables, Chinese and Japanese merchants, junks beyond sliding screens.",
+      "files": [
+        "js/systems/wokou.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_wangzhi.webp",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/wk_mao.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-497e8cf8-7069-4bbc-989a-8e5f9896aaed.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/wk_hirado.png",
+      "file": "images/legend-events/wk_hirado.webp"
+    },
+    {
+      "id": "wk_cengang",
+      "key": "legend-events/wk_cengang",
+      "title": "잠항의 깃발 (1557)",
+      "speaker": "wk_hu",
+      "ref_ids": [
+        "wk_hu",
+        "wk_xuhai",
+        "wk_mao"
+      ],
+      "description": "Cengang1557 coastal stronghold. Red-robed official Hu Zongxian inspects a safe-conduct letter at a camp table with bald pirate leader Xu Hai and young Mao Haifeng, layered Chinese-Japanese armor and folded silk. Offshore junks, quiet wary parley, all swords sheathed.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Cengang1557 coastal stronghold. Red-robed official Hu Zongxian inspects a safe-conduct letter at a camp table with bald pirate leader Xu Hai and young Mao Haifeng, layered Chinese-Japanese armor and folded silk. Offshore junks, quiet wary parley, all swords sheathed.",
+      "files": [
+        "js/systems/wokou.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/wk_hu.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/wk_xuhai.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/wk_mao.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-685efc49-5d35-4c09-a949-2640fdcae76e.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/wk_cengang.png",
+      "file": "images/legend-events/wk_cengang.webp"
+    },
+    {
+      "id": "wk_yiwu",
+      "key": "legend-events/wk_yiwu",
+      "title": "의오의 광부들 (1559)",
+      "speaker": "wk_miner",
+      "ref_ids": [
+        "wk_miner",
+        "h_qijiguang"
+      ],
+      "description": "Yiwu1559 military training ground. General Qi Jiguang in Ming armor instructs adult former miners holding tall bamboo langxian, shields and practice spears in a clear cooperative formation. One sun-darkened muscular miner foreground, red training flags and green hills, training only.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Yiwu1559 military training ground. General Qi Jiguang in Ming armor instructs adult former miners holding tall bamboo langxian, shields and practice spears in a clear cooperative formation. One sun-darkened muscular miner foreground, red training flags and green hills, training only.",
+      "files": [
+        "js/systems/wokou.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/wk_miner.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_qijiguang.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-286667d8-7f26-4bd2-939b-c6e6c44abd25.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/wk_yiwu.png",
+      "file": "images/legend-events/wk_yiwu.webp"
+    },
+    {
+      "id": "wk_taizhou",
+      "key": "legend-events/wk_taizhou",
+      "title": "태주의 싸움 (1561)",
+      "speaker": "h_qijiguang",
+      "ref_ids": [
+        "h_qijiguang",
+        "wk_officer"
+      ],
+      "description": "Taizhou1561. Commander Qi Jiguang and a worn-armored officer observe disciplined Ming mandarin-duck formation moving through a green rice field toward a distant coastal ridge. Wicker shields bamboo langxian and long spears visible as ranks, no clashing blades, no wounded people.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Taizhou1561. Commander Qi Jiguang and a worn-armored officer observe disciplined Ming mandarin-duck formation moving through a green rice field toward a distant coastal ridge. Wicker shields bamboo langxian and long spears visible as ranks, no clashing blades, no wounded people.",
+      "files": [
+        "js/systems/wokou.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_qijiguang.webp",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/wk_officer.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-c76218f5-51ae-4205-9c12-6c70f85c3fe0.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/wk_taizhou.png",
+      "file": "images/legend-events/wk_taizhou.webp"
+    },
+    {
+      "id": "wk_pinghai",
+      "key": "legend-events/wk_pinghai",
+      "title": "평해위 (1563)",
+      "speaker": "h_yudayou",
+      "ref_ids": [
+        "h_yudayou"
+      ],
+      "description": "Pinghai1563 Fujian sea. Ming admiral Yu Dayou stands on a Chinese war-junk command deck, signal flags raised above distant coastal fort and several approaching traditional Chinese-junk ships. Sea spray and smoke far from people, dramatic fleet maneuver, no active killings.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Pinghai1563 Fujian sea. Ming admiral Yu Dayou stands on a Chinese war-junk command deck, signal flags raised above distant coastal fort and several approaching traditional Chinese-junk ships. Sea spray and smoke far from people, dramatic fleet maneuver, no active killings.",
+      "files": [
+        "js/systems/wokou.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_yudayou.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-b5c92e40-a92d-4127-a855-0738e1e2acd4.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/wk_pinghai.png",
+      "file": "images/legend-events/wk_pinghai.webp"
+    },
+    {
+      "id": "yg_night",
+      "key": "legend-events/yg_night",
+      "title": "월항의 밤배",
+      "speaker": "yg_smuggler",
+      "ref_ids": [
+        "yg_smuggler"
+      ],
+      "description": "Yuegang Fujian1560 moonlit tidal creek. Headscarved adult boat owner in short robe quietly supervises silk bales and ceramic jars being loaded onto a shallow junk, reed banks and distant watch lantern, captain seen from behind. Clandestine trade, no violence.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Yuegang Fujian1560 moonlit tidal creek. Headscarved adult boat owner in short robe quietly supervises silk bales and ceramic jars being loaded onto a shallow junk, reed banks and distant watch lantern, captain seen from behind. Clandestine trade, no violence.",
+      "files": [
+        "js/systems/yuegang.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/yg_smuggler.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-a96c8f20-455b-432f-9257-2fcdb6ce8834.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/yg_night.png",
+      "file": "images/legend-events/yg_night.webp"
+    },
+    {
+      "id": "yg_open",
+      "key": "legend-events/yg_open",
+      "title": "월항이 열리다 (1567)",
+      "speaker": "yg_tu",
+      "ref_ids": [
+        "yg_tu",
+        "yg_clerk",
+        "yg_chen"
+      ],
+      "description": "Yuegang1567 newly opened maritime customs office. Governor Tu Zemin in proper Ming official robe and black hat observes strict clerk stamping a shipping license while smiling merchant Chen waits with an abacus. Busy harbor junks and silk cargo outside, hopeful lawful trade, no readable text.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Yuegang1567 newly opened maritime customs office. Governor Tu Zemin in proper Ming official robe and black hat observes strict clerk stamping a shipping license while smiling merchant Chen waits with an abacus. Busy harbor junks and silk cargo outside, hopeful lawful trade, no readable text.",
+      "files": [
+        "js/systems/yuegang.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/yg_tu.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/yg_clerk.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/yg_chen.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-7bc05564-f7f0-48a2-9a76-2082bd239251.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/yg_open.png",
+      "file": "images/legend-events/yg_open.webp"
+    },
+    {
+      "id": "yg_silver",
+      "key": "legend-events/yg_silver",
+      "title": "은의 바다",
+      "speaker": "yg_chen",
+      "ref_ids": [
+        "yg_chen"
+      ],
+      "description": "Yuegang after1571 in warm daylight. Merchant Chen with a single gold tooth weighs Spanish silver coins on a balance beside Chinese silk and porcelain cargo, sea captain seen from rear, busy Fujian-Manila trade junks in harbor and open account ledger.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Yuegang after1571 in warm daylight. Merchant Chen with a single gold tooth weighs Spanish silver coins on a balance beside Chinese silk and porcelain cargo, sea captain seen from rear, busy Fujian-Manila trade junks in harbor and open account ledger.",
+      "files": [
+        "js/systems/yuegang.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/yg_chen.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-2dfda70e-058c-4ebb-ad39-b7062512fd29.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/yg_silver.png",
+      "file": "images/legend-events/yg_silver.webp"
+    },
+    {
+      "id": "dl_timber",
+      "key": "legend-events/dl_timber",
+      "title": "어용감의 태감",
+      "speaker": "dl_yu",
+      "ref_ids": [
+        "dl_yu"
+      ],
+      "description": "1622 Chinese harbor timber yard. Blue-robed eunuch Yu measures imported sandalwood logs with wooden ruler and smells aromatic cut wood, negotiating with foreign captain seen from behind, Chinese junks and stacked timber in background.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1622 Chinese harbor timber yard. Blue-robed eunuch Yu measures imported sandalwood logs with wooden ruler and smells aromatic cut wood, negotiating with foreign captain seen from behind, Chinese junks and stacked timber in background.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_yu.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-8e4695e9-49f8-43ff-aecc-e6283482d785.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_timber.png",
+      "file": "images/legend-events/dl_timber.webp"
+    },
+    {
+      "id": "dl_workshop",
+      "key": "legend-events/dl_workshop",
+      "title": "건청궁 뒤뜰의 공방",
+      "speaker": "dl_tianqi",
+      "ref_ids": [
+        "dl_tianqi",
+        "dl_wei",
+        "dl_ke"
+      ],
+      "description": "1625 Forbidden City carpentry workshop courtyard. Adult Tianqi emperor20 in gold robe with rolled sleeves happily planes fragrant sandalwood at a sturdy bench, piles of curls, tiny wooden pavilion. Red-robed beardless Wei reads petitions beside him, middle-aged Lady Ke observes from corridor. Captain from behind presents imported timber. No letters legible.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1625 Forbidden City carpentry workshop courtyard. Adult Tianqi emperor20 in gold robe with rolled sleeves happily planes fragrant sandalwood at a sturdy bench, piles of curls, tiny wooden pavilion. Red-robed beardless Wei reads petitions beside him, middle-aged Lady Ke observes from corridor. Captain from behind presents imported timber. No letters legible.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_tianqi.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_wei.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_ke.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-ab146d45-3992-4b79-9294-01f999fc69e4.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_workshop.png",
+      "file": "images/legend-events/dl_workshop.webp"
+    },
+    {
+      "id": "dl_wall",
+      "key": "legend-events/dl_wall",
+      "title": "성비의 궁",
+      "speaker": "dl_cuiyan",
+      "ref_ids": [
+        "dl_cuiyan",
+        "dl_chengfei"
+      ],
+      "description": "1625 Forbidden City dim covered corridor. Adult attendant Cuiyan in blue whispers to foreign captain seen from behind while gently removing one loose wall brick and concealing a small dry-food bundle in wall opening; distant pale adult Consort Chengfei glimpsed seated safely through inner doorway. Secret compassion, no violence, no restraints.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1625 Forbidden City dim covered corridor. Adult attendant Cuiyan in blue whispers to foreign captain seen from behind while gently removing one loose wall brick and concealing a small dry-food bundle in wall opening; distant pale adult Consort Chengfei glimpsed seated safely through inner doorway. Secret compassion, no violence, no restraints.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_cuiyan.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_chengfei.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-e476ec48-f267-4a60-81d1-9b80db007548.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_wall.png",
+      "file": "images/legend-events/dl_wall.webp"
+    },
+    {
+      "id": "dl_cart",
+      "key": "legend-events/dl_cart",
+      "title": "새벽의 운하",
+      "speaker": "dl_cuiyan",
+      "ref_ids": [
+        "dl_cuiyan",
+        "dl_yu"
+      ],
+      "description": "Dawn1625 Tongzhou canal landing. Adult Cuiyan rises from a large open EMPTY timber shipping chest on a moored boat, brushing harmless fragrant wood curls from sleeves, smiling with one dimple at captain seen from back. Blue-robed eunuch Yu nearby, peaceful misty canal, no entrapment or confinement.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Dawn1625 Tongzhou canal landing. Adult Cuiyan rises from a large open EMPTY timber shipping chest on a moored boat, brushing harmless fragrant wood curls from sleeves, smiling with one dimple at captain seen from back. Blue-robed eunuch Yu nearby, peaceful misty canal, no entrapment or confinement.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_cuiyan.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_yu.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-035dd15b-0e01-4d6b-badf-5fec229102e9.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_cart.png",
+      "file": "images/legend-events/dl_cart.webp"
+    },
+    {
+      "id": "dl_westlake",
+      "key": "legend-events/dl_westlake",
+      "title": "서호의 탄궁",
+      "speaker": "dl_xiaoman",
+      "ref_ids": [
+        "dl_susu",
+        "dl_xiaoman"
+      ],
+      "description": "1625 West Lake Su Causeway willow avenue. Clearly older silver-haired Xue Susu on chestnut horse teaches adult woman Xiaoman24 traditional Chinese pellet-bow trick shooting. Xiaoman prepares a small wooden curved pellet bow, clay pellet target hanging from a tree clearly AWAY from every person. Cheerful crowd and lake pavilions, respectful martial arts performance, no person targeted.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1625 West Lake Su Causeway willow avenue. Clearly older silver-haired Xue Susu on chestnut horse teaches adult woman Xiaoman24 traditional Chinese pellet-bow trick shooting. Xiaoman prepares a small wooden curved pellet bow, clay pellet target hanging from a tree clearly AWAY from every person. Cheerful crowd and lake pavilions, respectful martial arts performance, no person targeted.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_susu.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_xiaoman.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-f91e8a42-c656-45c5-b998-4c36f1767f0f.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_westlake.png",
+      "file": "images/legend-events/dl_westlake.webp"
+    },
+    {
+      "id": "dl_orchid",
+      "key": "legend-events/dl_orchid",
+      "title": "배 위의 난초",
+      "speaker": "dl_susu",
+      "ref_ids": [
+        "dl_susu",
+        "dl_xiaoman"
+      ],
+      "description": "Quiet1625 ship deck on West Lake at night. Silver-haired master Xue Susu62 paints black ink orchid on a scroll and hands it to departing adult pupil Xiaoman24 in riding clothes. Captain seen from back, two friends say farewell under warm lantern, water and willow moonlight. Painting visual orchid only, no calligraphy text.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Quiet1625 ship deck on West Lake at night. Silver-haired master Xue Susu62 paints black ink orchid on a scroll and hands it to departing adult pupil Xiaoman24 in riding clothes. Captain seen from back, two friends say farewell under warm lantern, water and willow moonlight. Painting visual orchid only, no calligraphy text.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_susu.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_xiaoman.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-63ab69ea-4c2f-43e4-b2dd-94067e0402eb.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_orchid.png",
+      "file": "images/legend-events/dl_orchid.webp"
+    },
+    {
+      "id": "dl_skiff",
+      "key": "legend-events/dl_skiff",
+      "title": "책을 실은 거룻배",
+      "speaker": "dl_wangwei",
+      "ref_ids": [
+        "dl_wangwei"
+      ],
+      "description": "1626 Suzhou canal outside Chang Gate. Adult poet Wang Wei29 in moss-green silk sits at prow of a small skiff overflowing with books and rolled maps, lifting gaze from book toward foreign captain seen from behind on quay. Elegant stone arch bridge, moonlit dark green water, quietly confident beautiful mature face.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1626 Suzhou canal outside Chang Gate. Adult poet Wang Wei29 in moss-green silk sits at prow of a small skiff overflowing with books and rolled maps, lifting gaze from book toward foreign captain seen from behind on quay. Elegant stone arch bridge, moonlit dark green water, quietly confident beautiful mature face.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_wangwei.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-0b5b9ed7-f1f1-4b15-8be5-5999f3f1eefb.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_skiff.png",
+      "file": "images/legend-events/dl_skiff.webp"
+    },
+    {
+      "id": "dl_riot",
+      "key": "legend-events/dl_riot",
+      "title": "서찰원 앞 (1626)",
+      "speaker": "dl_zhou",
+      "ref_ids": [
+        "dl_zhou",
+        "dl_tiqi",
+        "dl_yan",
+        "dl_wangwei"
+      ],
+      "description": "Rainy Suzhou1626 court gate. Upright official Zhou Shunchang40 stands unbowed beside brown-robed Dongchang officer holding red arrest document. Muscular market citizen Yan Peiwei30 at head of dense peaceful townspeople crowd raises hand in protest, poet Wang Wei observes beside captain seen from back. Dramatic social tension, NO attacks, injuries, chains or punishments shown.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Rainy Suzhou1626 court gate. Upright official Zhou Shunchang40 stands unbowed beside brown-robed Dongchang officer holding red arrest document. Muscular market citizen Yan Peiwei30 at head of dense peaceful townspeople crowd raises hand in protest, poet Wang Wei observes beside captain seen from back. Dramatic social tension, NO attacks, injuries, chains or punishments shown.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_zhou.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_tiqi.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_yan.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_wangwei.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-89bc9c88-9671-4a0d-8910-ece88ad8acbc.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_riot.png",
+      "file": "images/legend-events/dl_riot.webp"
+    },
+    {
+      "id": "dl_buxi",
+      "key": "legend-events/dl_buxi",
+      "title": "불계원의 배",
+      "speaker": "dl_wangwei",
+      "ref_ids": [
+        "dl_wangwei"
+      ],
+      "description": "1626 West Lake evening on a large ornate wooden pleasure barge named Buxiyuan, no text. Adult poet Wang Wei29 in moss-green gown sits alone by boat rail with notebook, thoughtful faint smile as foreign captain from behind softly sings. Lantern glow, distant willow shore, quiet melancholy and new journey.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1626 West Lake evening on a large ornate wooden pleasure barge named Buxiyuan, no text. Adult poet Wang Wei29 in moss-green gown sits alone by boat rail with notebook, thoughtful faint smile as foreign captain from behind softly sings. Lantern glow, distant willow shore, quiet melancholy and new journey.",
+      "files": [
+        "js/systems/donglin.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/dl_wangwei.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-8b75b75a-21ee-469f-a700-bb21c72a45a3.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/dl_buxi.png",
+      "file": "images/legend-events/dl_buxi.webp"
+    },
+    {
+      "id": "nc_wall",
+      "key": "legend-events/nc_wall",
+      "title": "영원성의 성벽 (1626)",
+      "speaker": "nc_ines",
+      "ref_ids": [
+        "nc_ines",
+        "h_yuanchonghuan"
+      ],
+      "description": "Winter1626 Ningyuan Ming fortress battlement overlooking snowy Liaodong coastline. Adult Macanese Portuguese woman gunner Ines26 in fitted leather doublet and cream shirt confidently directs a bronze Hongyipao cannon crew, Yuan Chonghuan watches. Glowing match cord beside UNLIT cannon, distant Eight Banner army flags across snow, no wounded people or direct impact. Cold wind, dramatic hope.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Winter1626 Ningyuan Ming fortress battlement overlooking snowy Liaodong coastline. Adult Macanese Portuguese woman gunner Ines26 in fitted leather doublet and cream shirt confidently directs a bronze Hongyipao cannon crew, Yuan Chonghuan watches. Glowing match cord beside UNLIT cannon, distant Eight Banner army flags across snow, no wounded people or direct impact. Cold wind, dramatic hope.",
+      "files": [
+        "js/systems/ningchong.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_ines.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_yuanchonghuan.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-cd3ed539-513a-4983-940f-387d54d703f3.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/nc_wall.png",
+      "file": "images/legend-events/nc_wall.webp"
+    },
+    {
+      "id": "nc_ines",
+      "key": "legend-events/nc_ines",
+      "title": "영원성의 여포수 (1626)",
+      "speaker": "nc_jiyong",
+      "ref_ids": [
+        "nc_ines",
+        "nc_jiyong",
+        "h_yuanchonghuan"
+      ],
+      "description": "Spring1626 Liaodong harbor near Ningyuan gate. Confident adult Ines26 stands firmly beside foreign captain seen from behind, confronting arrogant plump beardless eunuch Ji Yong holding a fan in red robe. Yuan Chonghuan approaches in stern Ming official attire, discreet brown-hood guards in background. Argument after victory, no grabbing, shackles or injury.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. Spring1626 Liaodong harbor near Ningyuan gate. Confident adult Ines26 stands firmly beside foreign captain seen from behind, confronting arrogant plump beardless eunuch Ji Yong holding a fan in red robe. Yuan Chonghuan approaches in stern Ming official attire, discreet brown-hood guards in background. Argument after victory, no grabbing, shackles or injury.",
+      "files": [
+        "js/systems/ningchong.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_ines.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_jiyong.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_yuanchonghuan.webp"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-917bc531-53fc-4b04-8b00-a5cf986d0ede.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/nc_ines.png",
+      "file": "images/legend-events/nc_ines.webp"
+    },
+    {
+      "id": "nc_okran",
+      "key": "legend-events/nc_okran",
+      "title": "수방의 장부 (1627)",
+      "speaker": "nc_okran",
+      "ref_ids": [
+        "nc_okran",
+        "nc_dangtou"
+      ],
+      "description": "1627 Liaodong dock at dusk. Beautiful adult embroiderer Okran27 approaches captain seen from behind, unfolding rich gold dragon robe and revealing tiny ledger sewn into its lining. A brown-headcloth Dongchang chief watches from safe distance near newly gilded shrine. Rich silk, boat gangplank, suspenseful escape through negotiation, no force or injury.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1627 Liaodong dock at dusk. Beautiful adult embroiderer Okran27 approaches captain seen from behind, unfolding rich gold dragon robe and revealing tiny ledger sewn into its lining. A brown-headcloth Dongchang chief watches from safe distance near newly gilded shrine. Rich silk, boat gangplank, suspenseful escape through negotiation, no force or injury.",
+      "files": [
+        "js/systems/ningchong.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_okran.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_dangtou.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-334d2500-cdc6-4dd3-a511-1f7a3e2836a9.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/nc_okran.png",
+      "file": "images/legend-events/nc_okran.webp"
+    },
+    {
+      "id": "nc_palace",
+      "key": "legend-events/nc_palace",
+      "title": "자경궁의 밤 (1627)",
+      "speaker": "nc_dangtou",
+      "ref_ids": [
+        "nc_dangtou",
+        "nc_okran"
+      ],
+      "description": "1627 Beijing Xihua Gate narrow palace lane at night. Brown-hood Dongchang chief discreetly offers a silver coin pouch for the embroidery ledger, foreign captain seen from back firmly keeps book, adult Okran27 beside him looking resolved. Silk transport carts, red palace walls, lantern shadows. Morally tense quiet negotiation, no fighting.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1627 Beijing Xihua Gate narrow palace lane at night. Brown-hood Dongchang chief discreetly offers a silver coin pouch for the embroidery ledger, foreign captain seen from back firmly keeps book, adult Okran27 beside him looking resolved. Silk transport carts, red palace walls, lantern shadows. Morally tense quiet negotiation, no fighting.",
+      "files": [
+        "js/systems/ningchong.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_dangtou.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_okran.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-0975d7c2-059e-48a6-8c6b-b2f4fd73c019.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/nc_palace.png",
+      "file": "images/legend-events/nc_palace.webp"
+    },
+    {
+      "id": "nc_freed",
+      "key": "legend-events/nc_freed",
+      "title": "옥문이 열리다 (1627)",
+      "speaker": "nc_okran",
+      "ref_ids": [
+        "nc_ines",
+        "nc_okran"
+      ],
+      "description": "1627 Beijing Dongchang prison outer gate opens onto warm sunlight. Adult Ines26 and adult Okran27 step freely into light and greet captain seen from back, wearing intact travel clothes, relieved mature faces. Other adults peacefully exit in background, guard opens wooden gate. Hopeful freedom, no restraints, injury, abuse or punishments.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1627 Beijing Dongchang prison outer gate opens onto warm sunlight. Adult Ines26 and adult Okran27 step freely into light and greet captain seen from back, wearing intact travel clothes, relieved mature faces. Other adults peacefully exit in background, guard opens wooden gate. Hopeful freedom, no restraints, injury, abuse or punishments.",
+      "files": [
+        "js/systems/ningchong.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_ines.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_okran.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-f4ce574e-ffef-4596-88b8-667a9e3ba8e7.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/nc_freed.png",
+      "file": "images/legend-events/nc_freed.webp"
+    },
+    {
+      "id": "nc_granary",
+      "key": "legend-events/nc_granary",
+      "title": "빈 곳간 (1628)",
+      "speaker": "nc_grain",
+      "ref_ids": [
+        "nc_grain",
+        "h_yuanchonghuan",
+        "nc_ines"
+      ],
+      "description": "1628 Liaodong grain warehouse at harbor with doors wide open and almost EMPTY wooden bins, a few worn burlap sacks. Tired grain official50 shows blank ledger to Yuan Chonghuan and captain seen from behind. Adult gunner Ines26 recognizes weary fully clothed soldiers resting nearby. Chinese junks, winter rations shortage, dignified appeal, no starvation bodies or injury.",
+      "prompt": "Use case: historical-scene. Asset: ONE standalone panoramic event illustration for Loop of Good Hope historical sailing RPG, ideal wide2.25:1 composition, deliver1881x836 landscape. Refined hand-painted semi-realistic game art, beautiful distinct faces and natural believable anatomy, luxurious tactile materials, coherent period dress and ships. This is a narrative scene, NOT a portrait lineup. Reference images lock the named characters' face, hair, skin tone and clothing; adapt their poses naturally to scene. Variable player captain, when present, seen from back with face obscured. Balanced scene with principal faces and hands within CENTRAL55% of image height, ample atmospheric space above and below for safe panoramic crop. No text, lettering, watermark, frame, modern objects, graphic injury or gore. 1628 Liaodong grain warehouse at harbor with doors wide open and almost EMPTY wooden bins, a few worn burlap sacks. Tired grain official50 shows blank ledger to Yuan Chonghuan and captain seen from behind. Adult gunner Ines26 recognizes weary fully clothed soldiers resting nearby. Chinese junks, winter rations shortage, dignified appeal, no starvation bodies or injury.",
+      "files": [
+        "js/systems/ningchong.js"
+      ],
+      "reference_paths": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_grain.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/mates/h_yuanchonghuan.webp",
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/missing-event-portraits-20261105/sources/nc_ines.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-dbeb0c6f-e4ee-490a-9c20-4b134785d2f7.png",
+      "workspace_source": "artifacts/missing-event-scenes-20261105/sources/nc_granary.png",
+      "file": "images/legend-events/nc_granary.webp"
+    }
+  ]
+}

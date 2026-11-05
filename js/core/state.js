@@ -104,6 +104,7 @@
     G.Game.state = S;
     if (G.Names) G.Names.apply();       // 이름(대륙·곶·해협)은 이 게임의 것으로 다시 입힌다
     if (G.Colony) G.Colony.apply();     // 지난 게임의 개척 도시를 걷어 낸다
+    if (G.ColonySp) G.ColonySp.apply();   // 식민지의 후원자 — 지난 게임의 것을 걷어 내고 이 게임의 것으로 (js/systems/colonysponsor.js)
     if (G.Wander) G.Wander.apply();     // 철새(떠돌이 항해사)를 이 게임의 것으로
     if (G.Siblings) G.Siblings.apply();   // 동생 항해사 (js/systems/siblings.js)
     ST.revealChart(-12, 38, 9);

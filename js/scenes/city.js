@@ -180,6 +180,15 @@
       if (G.WangMoon && G.WangMoon.pending()) await G.WangMoon.check();   // 한양·동래의 왕서방·명월 — 금봉호와 별개의 거래
       if (G.Brothers && G.Brothers.pending()) await G.Brothers.check();   // 두 왕자 — 왕자와 거지·지킬과 하이드 (js/systems/brothers.js)
       if (G.Yeonsan && G.Yeonsan.pending()) await G.Yeonsan.check();   // 연산군과 장녹수 — 흥청망청 (js/systems/yeonsan.js)
+      if (G.Ricci && G.Ricci.pending()) await G.Ricci.check();   // 마테오 리치의 중국 내륙 선교 (1583) (js/systems/ricci.js)
+      if (G.Yuegang && G.Yuegang.pending()) await G.Yuegang.check();   // 융경개관 — 월항 (1567) (js/systems/yuegang.js)
+      if (G.Jiajing && G.Jiajing.pending()) await G.Jiajing.check();   // 가정제의 궁궐 — 임인궁변·경술의 변 (js/systems/jiajing.js)
+      if (G.Wokou && G.Wokou.pending()) await G.Wokou.check();   // 왜구와 척계광 — 항주·상해·나가사키·복주·천주·하문 (js/systems/wokou.js)
+      if (G.BeauxEA && G.BeauxEA.pending()) await G.BeauxEA.check();   // 미남 항해사 — 란마루·옥랑·무진 (js/systems/beauxea.js)
+      if (G.BeauxEU && G.BeauxEU.pending()) await G.BeauxEU.check();   // 미남 항해사 — 유럽 (js/systems/beauxeu.js)
+      if (G.BeauxIS && G.BeauxIS.pending()) await G.BeauxIS.check();   // 미남 항해사 — 사이드(말린디)·와이나(툼베스) (js/systems/beauxis.js)
+      if (G.Donglin && G.Donglin.pending()) await G.Donglin.check();   // 천계제의 궁궐과 동림당 — 북경·항주·소주 (js/systems/donglin.js)
+      if (G.NingChong && G.NingChong.pending()) await G.NingChong.check();   // 영원성의 여포수 · 수방의 장부 — 요동·북경·오문 (js/systems/ningchong.js)
       if (G.Imjin && G.Imjin.pending()) await G.Imjin.check();   // 임진왜란 — 동래·한양·한산도 (js/systems/imjin.js)
       if (G.Globe && G.Globe.pending()) await G.Globe.check();   // 셰익스피어와 글로브의 불 — 앤 해서웨이 (js/systems/globe.js)
       if (G.GalPisa && G.GalPisa.pending()) await G.GalPisa.check();   // 갈릴레오와 피사의 사탑 (js/systems/galpisa.js)
@@ -204,6 +213,7 @@
       if (G.EIndia && G.EIndia.pending()) await G.EIndia.check();   // 동인도 회사 — 런던·암스테르담의 설립과 수왈리·자야카르타·반다·암보이나의 위기 (js/systems/eastindia.js)
       if (G.ColonyCo && G.ColonyCo.pending()) await G.ColonyCo.check();   // 식민지 경쟁의 회사들 — 서인도 회사·프랑스 동인도 회사·신스웨덴·다리엔 청약 (js/systems/colonyco.js)
       if (G.Rovers && G.Rovers.pending()) await G.Rovers.check();   // 메이플라워(물자·첫 겨울·왐파노아그·추수 잔치) · 한양의 박연 (js/systems/rovers.js)
+      if (G.WifeFeud && G.WifeFeud.pending()) await G.WifeFeud.check();   // 두 부인이 한 도시에 — 질투와 부부싸움 (js/systems/wifefeud.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;

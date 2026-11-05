@@ -91,10 +91,11 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     await waitCity();
     await page.waitForTimeout(800);
     await shot(page, 'colony_stage1');
-    const f1 = await page.evaluate(id => { const s = G.Game.state, e = s.colony.list[0], c = G.CITY_DATA[id]; return { name: c.name, stage: e.stage, need: e.need, blds: G.Scenes.city.buildings(c).map(b => b.name), town: G.Town.active(), items: G.Town.active() ? G.Town.item('tavern') != null : null, log: s.log.slice(-4).map(l => l.t || l.text || l) }; }, cid);
+    const f1 = await page.evaluate(id => { const s = G.Game.state, e = s.colony.list[0], c = G.CITY_DATA[id]; return { name: c.name, stage: e.stage, need: e.need, blds: G.Scenes.city.buildings(c).filter(b => b.kind !== 'mansion').map(b => b.name), mans: G.Scenes.city.buildings(c).filter(b => b.kind === 'mansion').map(b => b.name), town: G.Town.active(), items: G.Town.active() ? G.Town.item('tavern') != null : null, log: s.log.slice(-4).map(l => l.t || l.text || l) }; }, cid);
     ok(named && f1.name === '노바 리스보아' && f1.stage === 1, '이름 짓기 → 「' + f1.name + '」 1단계');
     ok(bannerShot, '도시를 세우는 순간: 금빛 글귀와 함께 새 거리 (그림)');
     ok(f1.blds.join(',') === '항구,교역소,술집,식당,여관,성문', '1단계 건물: ' + f1.blds.join(' · '));   // 식당은 개척 도시 1단계에도 선다 (js/systems/colony.js CO.buildings · QA 2026-10-23)
+    ok(f1.mans.length >= 2 && f1.mans.length <= 3, '도시를 세우면 본국에서 건너온 후원자의 저택 ' + f1.mans.length + '채: ' + f1.mans.join(' · '));   // 식민지의 후원자 (js/systems/colonysponsor.js · 2026-11-05)
     ok(f1.need && /wheat|timber/.test(f1.need.good) && f1.need.qty === 40, '첫 물자의 청: ' + JSON.stringify(f1.need));
     // ---- ④ 물자 3번 → 2·3·4단계
     for (let k = 1; k <= 3; k++) {
@@ -172,9 +173,9 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     ok(/개척 도시/.test(nb) && /노바 리스보아/.test(nb), '수첩 「계약·의뢰」에 개척 도시 현황');
     await drain(3);
     // 이 도시의 건물을 한 번씩 (오류가 없어야)
-    const kinds = await page.evaluate(id => G.Scenes.city.buildings(G.CITY_DATA[id]).map(b => b.kind).filter(k => k !== 'gate'), cid);
-    for (const k of kinds) {
-      await page.evaluate(k => { const C = G.Scenes.city; if (C.current()) C.run(() => C.leave()); setTimeout(() => C.visit(k), 300); }, k);
+    const kinds = await page.evaluate(id => G.Scenes.city.buildings(G.CITY_DATA[id]).filter(b => b.kind !== 'gate').map(b => [b.kind, b.arg]), cid);   // 저택은 누구의 저택인지(arg)와 함께
+    for (const [k, arg] of kinds) {
+      await page.evaluate(([k, arg]) => { const C = G.Scenes.city; if (C.current()) C.run(() => C.leave()); setTimeout(() => C.visit(k, arg), 300); }, [k, arg]);
       await page.waitForTimeout(600); await drain(15);
       for (let i = 0; i < 20 && !(await page.evaluate(() => !!document.querySelector('.cmdmenu .cmd.exit'))); i++) { await drain(2); await page.waitForTimeout(200); }
       if (k === 'inspector' || k === 'trade' || k === 'tavern') await shot(page, 'bld_' + k);

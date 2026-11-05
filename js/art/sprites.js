@@ -6,7 +6,7 @@
 (function (G) {
   'use strict';
   var SP = G.Sprites = {};
-  function meta(id) { return (G.SPRITE_SHEETS || {})[id] || null; }
+  function meta(id) { return (G.LANDWAR_HD || {})[id] || (G.SPRITE_SHEETS || {})[id] || null; }
   SP.meta = meta;
   /** 시트 그림 (아직 못 읽었으면 읽기 시작하고 null). 못 받은 그림은 G.Img 가 얼마 뒤 다시 받아 본다 */
   function sheet(key) {
@@ -16,12 +16,13 @@
     return got;
   }
   function pend(key) { var I = G.Img; return !!(I && I.pending && I.has(key) && I.pending(key)); }
-  SP.img = function (id) { return sheet('sprites/' + id); };
+  function keyOf(id) { var m = meta(id); return 'sprites/' + (m && m.image || id); }
+  SP.img = function (id) { return sheet(keyOf(id)); };
   SP.ready = function (id) { return !!(meta(id) && SP.img(id)); };
   /** 시트를 받는 중인가 — 그동안은 코드 그림을 내보이지 않고 비워 둔다 */
-  SP.pending = function (id) { return !!meta(id) && pend('sprites/' + id); };
+  SP.pending = function (id) { return !!meta(id) && pend(keyOf(id)); };
   SP.partyPending = function (mode) { var P = G.SPRITE_PARTY; return !!(P && P.sheets[mode]) && pend('sprites/party_' + mode); };
-  SP.has = function (id) { return !!(meta(id) && G.Img && G.Img.has('sprites/' + id)); };
+  SP.has = function (id) { return !!(meta(id) && G.Img && G.Img.has(keyOf(id))); };
   SP.preload = function (ids) { [].concat(ids || []).forEach(function (id) { SP.img(id); }); };
   /** 줄 번호 (이름 또는 번호) */
   SP.row = function (id, name) { var m = meta(id); if (!m) return -1; if (typeof name === 'number') return name; return m.rows.indexOf(name); };
@@ -42,19 +43,20 @@
     if (!m || !img || row < 0) return false;
     k = k || 1;
     // 배포판에서 그림이 줄어 있어도(아티팩트 묶음 등) 칸 좌표를 그림 크기에 맞춰 늘려 읽는다
-    var fx = img.width / (m.cols * m.cw), fy = img.height / (m.rows.length * m.ch);
+    var fx = img.width / (m.cols * m.cw), fy = img.height / ((m.imageRows || m.rows.length) * m.ch);
+    var sourceRow = m.sourceRows ? m.sourceRows[row] : row;
     ctx.save();
     if (alpha != null) ctx.globalAlpha *= alpha;
     ctx.translate(x, y);
     if (flip) ctx.scale(-1, 1);
-    ctx.drawImage(img, frame * m.cw * fx, row * m.ch * fy, m.cw * fx, m.ch * fy, -m.px * k, -m.py * k, m.cw * k, m.ch * k);
+    ctx.drawImage(img, frame * m.cw * fx, sourceRow * m.ch * fy, m.cw * fx, m.ch * fy, -m.px * k, -m.py * k, m.cw * k, m.ch * k);
     ctx.restore();
     return true;
   };
   /** 피벗에서 머리끝까지의 높이(시트 픽셀) — 화면 키에 맞출 배율을 셀 때 쓴다 */
   SP.height = function (id) { var m = meta(id); return m ? m.h : 1; };
   /** 몸 키: 장면들의 피벗~머리끝 높이 가운데값 (치켜든 창·뛰어오른 장면은 빼고 잰 키) — 부대 크기를 맞출 때 */
-  SP.bodyH = function (id) { var m = meta(id); return m ? (m.bh || m.h) : 1; };
+  SP.bodyH = function (id, row) { var m = meta(id); return m ? (m.bhs && row != null && m.bhs[row] || m.bh || m.h) : 1; };
 
   // ---------------------------------------------------------------- 탐험대 8방향
   var DIR_N = 8;

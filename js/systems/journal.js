@@ -217,6 +217,15 @@
     ['Mohacs', 'daily', 'B'],                 // 모하치 전투
     ['Brothers', 'daily', 'B'],              // 두 왕자
     ['Yeonsan', 'daily', 'B'],               // 연산군과 장녹수
+    ['Ricci', 'daily', 'B'],                    // 마테오 리치의 중국 내륙 선교 (1583)
+    ['Yuegang', 'daily', 'B'],                  // 융경개관 — 월항 (1567)
+    ['Jiajing', 'daily', 'B'],               // 가정제의 궁궐
+    ['Wokou', 'daily', 'B'],                 // 왜구와 척계광
+    ['BeauxEA', 'daily', 'B'],               // 미남 항해사 — 동아시아
+    ['BeauxEU', 'daily', 'B'],               // 미남 항해사 — 유럽
+    ['BeauxIS', 'daily', 'B'],               // 미남 항해사 — 인도양·신대륙
+    ['Donglin', 'daily', 'B'],               // 천계제의 궁궐과 동림당
+    ['NingChong', 'daily', 'B'],             // 영원성의 여포수 · 수방의 장부
     ['Imjin', 'daily', 'B'],                 // 임진왜란
     ['Globe', 'daily', 'B'],                 // 셰익스피어와 글로브의 불
     ['Succession', 'year', function (m) { return m && m.icon === 'crown' ? 'B' : null; }],   // 군주·후원자의 대가 바뀜 (유품·기억은 일상)

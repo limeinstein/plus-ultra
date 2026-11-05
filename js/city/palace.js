@@ -47,7 +47,7 @@
       var mine = k && k.sponsor === sp.id;
       if (SP.caretaker(sp)) return [{ label: '보고', icon: 'seal', sub: G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') + ' · 집사가 대신 받는다' : '계약 중 · 집사가 대신 받는다', onClick: function () { return SP.report(sp); } }];
       return [
-        { label: '모험 제안', icon: 'scroll', dim: !!k, onClick: function () { return SP.propose(sp); } },
+        { label: '모험 제안', icon: 'scroll', sub: !k && SP.angerLeft && SP.angerLeft(sp) ? '노여움 ' + SP.angerLeft(sp) + '일' : '', dim: !!k || !!(SP.angerLeft && SP.angerLeft(sp)), onClick: function () { return SP.propose(sp); } },   // 노여운 동안에는 까닭·풀리는 날·사죄의 선물 (2026-11-05)
         { label: '보고', icon: 'seal', sub: mine ? (G.Errand.done(k) ? (k.task ? '완료' : '발견 완료') : '계약 중') : '', dim: !mine, onClick: function () { return SP.report(sp); } },
         { label: '이야기', icon: 'people', onClick: function () { return chat(sp); } }
       ].concat(G.Carto && G.Carto.canHear(sp) ? [G.Carto.menuItem(sp)] : []).concat(G.Princess ? G.Princess.palaceItems(sp) : []).concat(G.Colony ? G.Colony.palaceItems(sp) : []).concat(G.Court ? G.Court.palaceItems(sp) : []);   // 사라진 왕녀 · 왕명·친서·특사

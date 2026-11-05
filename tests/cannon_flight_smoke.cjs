@@ -63,7 +63,7 @@ fs.mkdirSync(OUT, {recursive: true});
       const k = {x: 0, y: 0, tx: 400, ty: 0, dur: .8, gun: 'saker'}, height = pose(k, .4).z;
       k.gun = 'lculverin'; const longHeight = pose(k, .4).z;
       return {cases, bad, height, longHeight};
-    }); assert.deepEqual(report.geometry.bad, []); assert.equal(report.geometry.cases, 120); assert(report.geometry.longHeight < report.geometry.height * .5);
+    }); assert.deepEqual(report.geometry.bad, []); assert.equal(report.geometry.cases, report.types.length * 12); assert(report.geometry.longHeight < report.geometry.height * .5);
     report.arrival = await page.evaluate(() => {
       prepareFlight('hcannon', false); const B = G.Scenes.battle, st = B.runtime(), before = st.enFlag.hp;
       B.update(.24); B.update(.24); const justBefore = st.enFlag.hp, countBefore = st.balls.length;
@@ -102,7 +102,7 @@ fs.mkdirSync(OUT, {recursive: true});
     }
     assert.deepEqual(errors, []); report.errors = errors;
     fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
-    console.log('OK: 대포 10종 순차 발사 / 탄도 120조건 / 명중 시각 유지 / 저장·옛 포탄 / 확대·축소 / 실제 비행 45프레임 / 오류 0');
+    console.log('OK: 대포 ' + report.types.length + '종 순차 발사 / 탄도 ' + report.geometry.cases + '조건 / 명중 시각 유지 / 저장·옛 포탄 / 확대·축소 / 실제 비행 45프레임 / 오류 0');
   } catch (e) { fs.writeFileSync(path.join(OUT, 'failure.json'), JSON.stringify({error: e.stack, errors, report}, null, 2)); throw e; }
   finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

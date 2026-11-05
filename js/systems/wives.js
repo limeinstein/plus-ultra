@@ -195,6 +195,7 @@
       return;
     }
     if (p.preg) { await UI.say('지금은 몸이 무거워서 배에 탈 수 없어요.', ws); return; }
+    if (W.isWifeCold()) { await UI.say('당신이랑 한배에요? …지금은 싫어요.', ws); return; }   // 숨은 거처를 들킨 뒤 (W.lodgeCaught)
     var ab = W.aboard();
     var ok = await UI.confirm(Fm().wifeName() + U.jx(Fm().wifeName(), '을/를') + ' 배에 태워 함께 항해할까요?' +
       (ab.length ? '<br><span class="warn-text">배에 있는 둘째 부인(' + ab.map(W.name).join('·') + ')은 본처와 한배에 있을 수 없어 저마다의 집으로 갑니다.</span>' : '') +
@@ -217,6 +218,7 @@
     W.list().forEach(function (w) {
       if (w.aboard && w.deliver && w.city === c.id) { settle(w, false); out.push({ icon: 'house', text: c.name + '에 ' + W.name(w) + '의 집을 마련했다. ' + W.name(w) + U.jx(W.name(w), '은/는') + ' 배에서 내려 이 집에서 산다.' }); }
     });
+    lodgeArrive(c, out);   // 본부인을 태우고 숨은 거처가 있는 항구에 들어섰다 (2026-11-05)
     // 본국 항구: 함께 다니는 둘째 부인이 남의 눈을 피해 숨는다
     var homeland = R.isHomeNation ? R.isHomeNation(c) : c.id === p.home;
     W.aboard().forEach(function (w) {
@@ -329,11 +331,11 @@
   // ---------------------------------------------------------------- 둘째 부인의 집 (도시 건물)
   var H2 = { paint: 'home', icon: 'house', exitLabel: '집을 나온다' };
   W.H2 = H2;
-  H2.title = function (c, id) { return W.name(id) + '의 집'; };
+  H2.title = function (c, id) { var w = W.of(id); return w ? W.placeName(w) : W.name(id) + '의 집'; };
   H2.sub = function (c, id) {
     var w = W.of(id); if (!w) return '';
     var kids = W.kidsOf(w);
-    return W.ordinal(w) + (W.isCold(w) ? ' · 아직 마음이 풀리지 않음' : '') + (kids.length ? ' · 아이 ' + kids.length : '') + (w.preg && w.preg.told ? ' · 아기를 기다리는 중' : '');
+    return W.ordinal(w) + (w.lodge ? ' · 본부인 몰래 지내는 중' : '') + (W.isCold(w) ? ' · 아직 마음이 풀리지 않음' : '') + (kids.length ? ' · 아이 ' + kids.length : '') + (w.preg && w.preg.told ? ' · 아기를 기다리는 중' : '');
   };
   H2.enter = async function (c, id) {
     var w = W.of(id); if (!w) return false;
@@ -355,6 +357,8 @@
       { label: '이야기한다', icon: 'heart', onClick: function () { return W.talk(w); } },
       play.length && G.HomeLife ? { label: '아이와 함께', icon: 'star', sub: play.map(function (k) { return k.name; }).join('·'), onClick: function () { return H2.kids(w); } } : null,
       kids.length ? { label: '아이를 본국으로 데려간다', icon: 'ship', sub: '고향 ' + G.CITY_DATA[P().home].name + ' 자택으로', onClick: function () { return W.sendHome(w); } } : null,
+      w.lodge ? { label: '본래 집으로 돌려보낸다', icon: 'boot', sub: (G.CITY_DATA[w.lodge.from] || {}).name || '', onClick: function () { return W.lodgeBack(w); } } : null,
+      P().wife && (w.lodge || W.lodgeSpots(w).length) ? { label: w.lodge ? '다른 거처로 옮긴다' : '본부인 몰래 다른 거처에 들인다', icon: 'house', sub: !W.canLodge() ? '본부인이 배에 있다' : W.lodgeSpots(w).length ? W.lodgeSpots(w).map(function (o) { return o.name; }).join(' · ') : '옮길 곳이 없다', dim: !W.canLodge() || !W.lodgeSpots(w).length, onClick: function () { return W.lodgeAsk(w); } } : null,
       w.kind === 'mate' ? { label: '함께 항해에 나선다', icon: 'sail', sub: P().wifeAboard ? '본처가 배에 있다' : '부하로 다시 태운다', dim: !!P().wifeAboard, onClick: function () { return W.board(w); } } : null
     ];
   };
@@ -558,12 +562,139 @@
     if (G.Game.refreshHud) G.Game.refreshHud();
   };
 
+  // ---------------------------------------------------------------- 숨은 거처 — 본부인 몰래 총독 관저·빈 자택에 (2026-11-05 사용자 요청)
+  /* 본부인이 자택(R.seat — 고향 집이나 총독 관저)에 있으면, 둘째 부인부터는 본부인이 없는 곳에서 지내게 할 수 있다:
+       · 제독이 총독으로 있는 개척 도시의 총독 관저 (본부인이 사는 곳이 아닌 곳)
+       · 본부인이 총독 관저로 옮겨 비어 있는 고향 자택
+     그 부인의 아이들도 함께 옮긴다. 하지만 본부인에게 들키면 큰 다툼이 나고 큰돈을 잃는다:
+       · 달마다 들킬 수 있다 (자택은 하인·이웃이 많아 더 잘 들킨다) · 본부인을 배에 태우고 그 항구에 들어서면 더 잘 들킨다
+       · 가족을 그 거처로 옮기면(총독 관저로 모시기·고향 집으로 보내기) 반드시 들킨다
+     들키면: 위자료·친정 집안에 바치는 돈·소문을 막는 돈으로 소지금과 예금의 일부(적어도 lossMin닢)를 잃고,
+       본부인의 정이 식어 한동안(coldDays) 아이가 생기지 않고 배에 함께 타지 않으며, 숨어 지내던 부인은 본래 집으로 돌아가 한동안 마음을 닫는다.
+     저장: w.lodge = { kind: 'home'|'gov', from: 본래 집의 도시, day } (w.city는 지금 사는 곳) · p.wifeCold = 본부인이 마음을 푸는 날 · p.lodgeScene = 다음에 자택에 들렀을 때의 다툼
+     조정값: G.BALANCE.wives.lodge (js/data/base.js) */
+  function LC() { return cfg().lodge || {}; }
+  /** 본부인이 자택에 있어 숨은 거처를 마련할 수 있나 */
+  W.canLodge = function () { var p = P(); return !!(p.wife && !p.wifeAboard); };
+  /** 숨어 지낼 수 있는 곳들: [{kind, city, name}] — 그 부인이 지금 있는 곳은 뺀다 */
+  W.lodgeSpots = function (w) {
+    var p = P(), seat = R.seat ? R.seat() : p.home, out = [];
+    if (seat !== p.home && G.CITY_DATA[p.home]) out.push({ kind: 'home', city: p.home, name: '고향 ' + G.CITY_DATA[p.home].name + '의 빈 자택' });
+    if (G.Colony && G.Colony.list) G.Colony.list().forEach(function (x) {
+      var c = G.CITY_DATA[x.id]; if (!c || !x.gov || x.stage < 4 || x.id === seat) return;
+      out.push({ kind: 'gov', city: x.id, name: c.name + ' 총독 관저' });
+    });
+    return out.filter(function (o) { return !w || o.city !== w.city; });
+  };
+  /** 지금 사는 곳의 이름 (건물·수첩) */
+  W.placeName = function (w) {
+    if (!w.lodge) return W.name(w) + '의 집';
+    return (w.lodge.kind === 'home' ? '자택' : '총독 관저 별채') + ' — ' + W.name(w);
+  };
+  /** 그 부인과 아이들을 다른 도시로 옮긴다 */
+  function moveTo(w, city) {
+    var old = w.city;
+    (P().kids || []).forEach(function (k) { if (k.mother === w.id && k.house === old) k.house = city; });
+    w.city = city;
+  }
+  /** 「본부인 몰래 다른 거처에 들인다」 (둘째 부인의 집 메뉴) */
+  W.lodgeAsk = async function (w) {
+    var K = LC(), spots = W.lodgeSpots(w), nm = W.name(w), wn = Fm().wifeName();
+    if (!W.canLodge()) { UI.toast(P().wife ? '본부인이 배에 함께 있어 지금은 거처를 정할 수 없습니다.' : '본부인이 없습니다.', 'house', 4000); return; }
+    if (!spots.length) { UI.toast('본부인이 없는 자택이나 총독 관저가 없습니다. (개척 도시의 총독이 되거나, 가족을 총독 관저로 모시면 생긴다)', 'house', 5000); return; }
+    if (W.isCold(w)) { await UI.say('…지금은 당신이 정해 주는 곳에서 살고 싶지 않아요.', duo(w, 'sad')); return; }
+    var pct = function (v) { return Math.round(v * 100) + '%'; };
+    var i = await UI.choose(nm + U.jx(nm, '이/가') + ' 지낼 곳', spots.map(function (o, j) {
+      return { label: o.name, desc: '본부인에게 들킬 확률 — 달마다 ' + pct(o.kind === 'home' ? K.monthHome : K.monthGov), value: j, icon: o.kind === 'home' ? 'house' : 'crown' };
+    }), { width: 560, text: '<span class="warn-text">' + U.esc(wn) + '에게 들키면 큰 다툼이 나고 위자료·친정에 바칠 돈·소문을 막는 돈으로 <b>소지금과 예금의 ' + pct(K.lossRate) + '(적어도 금화 ' + U.num(K.lossMin) + '닢)</b>을 잃습니다.</span>' +
+      '<br><small class="muted">본부인을 배에 태우고 그 항구에 들어서면 ' + pct(K.visitWithWife) + ' 확률로 들키고, 가족을 그 거처로 옮기면 반드시 들킵니다. 아이들도 함께 옮겨 갑니다.</small>' });
+    if (i == null) return;
+    var o = spots[i];
+    if (!w.lodge) w.lodge = { from: w.city };
+    w.lodge.kind = o.kind; w.lodge.day = S().day;
+    moveTo(w, o.city);
+    await UI.say(o.kind === 'home' ? '당신의 집에서… 정말 괜찮을까요? 하인들 입단속은 당신이 해 주세요.' : '총독 관저 별채라니, 꿈만 같아요. 조용히 지낼게요.', duo(w));
+    G.State.log(nm + U.jx(nm, '을/를') + ' 본부인 몰래 ' + o.name + '에서 지내게 했다.');
+    UI.toast(nm + U.jx(nm, '이/가') + ' ' + o.name + U.jx(o.name, '으로/로') + ' 옮겨 갔다. ' + G.CITY_DATA[o.city].name + '에 들르면 「' + W.placeName(w) + '」에서 만날 수 있다.', 'house', 6000);
+  };
+  /** 본래 집으로 돌려보낸다 */
+  W.lodgeBack = async function (w) {
+    if (!w.lodge) return;
+    var from = w.lodge.from, nm = W.name(w), fc = G.CITY_DATA[from];
+    if (!(await UI.confirm(nm + U.jx(nm, '을/를') + ' 본래 집이 있는 ' + (fc ? fc.name : '고장') + U.jx(fc ? fc.name : '고장', '으로/로') + ' 돌려보낼까요?', '돌려보낸다', '그만둔다'))) return;
+    moveTo(w, from); delete w.lodge;
+    G.State.log(nm + U.jx(nm, '이/가') + ' 본래 집이 있는 ' + W.cityName(w) + U.jx(W.cityName(w), '으로/로') + ' 돌아갔다.');
+    UI.toast(nm + U.jx(nm, '이/가') + ' ' + W.cityName(w) + '의 집으로 돌아갔다.', 'house', 4500);
+  };
+  W.lodged = function () { return W.list().filter(function (w) { return w.lodge && !w.aboard; }); };
+  /** 들켰다: 큰돈을 잃고, 본부인의 정이 식고, 숨어 지내던 부인은 본래 집으로 돌아간다. 돌려주는 값: 소식 한 줄 */
+  W.lodgeCaught = function (w, how) {
+    var s = S(), p = P(), K = LC(), nm = W.name(w), wn = Fm().wifeName(), place = w.lodge.kind === 'home' ? '고향 자택' : W.cityName(w) + ' 총독 관저';
+    var have = Math.max(0, p.gold || 0) + Math.max(0, p.bank || 0), loss = Math.min(have, Math.max(K.lossMin || 0, Math.round(have * (K.lossRate || 0))));
+    var fromGold = Math.min(Math.max(0, p.gold || 0), loss); p.gold -= fromGold; p.bank = Math.max(0, (p.bank || 0) - (loss - fromGold));
+    p.wifeLove = Math.max(0, (p.wifeLove == null ? 70 : p.wifeLove) - (K.love || 40));
+    p.wifeCold = s.day + (K.coldDays || 180);
+    if (p.wifeAboard) p.wifeAboard = false;   // 화가 나서 배에서 내려 집으로 간다
+    moveTo(w, w.lodge.from); delete w.lodge;
+    w.cold = s.day + (K.sideCold || coldDays());
+    p.lodgeScene = { id: w.id, loss: loss, place: place, day: s.day };
+    var t = wn + U.jx(wn, '이/가') + ' ' + place + '에 숨겨 둔 ' + nm + '의 일을 알아 버렸다! ' + (how || '') +
+      ' 위자료와 친정 집안에 바칠 돈, 소문을 막는 돈으로 금화 ' + U.num(loss) + '닢을 잃었다. ' + nm + U.jx(nm, '은/는') + ' 본래 집이 있는 ' + W.cityName(w) + U.jx(W.cityName(w), '으로/로') + ' 쫓겨 갔다.';
+    G.State.log(wn + U.jx(wn, '이/가') + ' ' + nm + '의 일을 알았다 — 금화 ' + U.num(loss) + '닢을 잃었다.');
+    if (G.Game.refreshHud) try { G.Game.refreshHud(); } catch (e) { /* 무시 */ }
+    return t;
+  };
+  /** 달마다: 들킬 수 있다 · 가족이 그 거처로 옮겨 왔으면 반드시 들킨다 */
+  W.lodgeMonth = function () {
+    var p = P(), K = LC(), out = [], seat = R.seat ? R.seat() : p.home;
+    if (!p.wife) return out;
+    W.lodged().forEach(function (w) {
+      if (w.city === seat) out.push({ icon: 'ring', text: W.lodgeCaught(w, '같은 집에 살게 되었으니 숨길 수가 없었다.') });
+      else if (U.chance(w.lodge.kind === 'home' ? (K.monthHome || 0) : (K.monthGov || 0))) out.push({ icon: 'ring', text: W.lodgeCaught(w, w.lodge.kind === 'home' ? '입이 가벼운 하인이 편지로 일러바쳤다.' : '총독 관저를 드나드는 상인이 소문을 퍼뜨렸다.') });
+    });
+    return out;
+  };
+  /** 가족이 옮긴 뒤 (총독 관저로 모시기·고향 집으로 보내기): 그 거처에 숨은 부인이 있으면 바로 들킨다 */
+  W.lodgeSeat = async function () {
+    var p = P(), seat = R.seat ? R.seat() : p.home;
+    if (!p.wife) return;
+    var hit = W.lodged().filter(function (w) { return w.city === seat; });
+    for (var i = 0; i < hit.length; i++) await UI.alert(W.lodgeCaught(hit[i], '이삿짐을 풀던 날, 별채에서 낯선 여인과 아이들이 나왔다.'), '들켰다');
+  };
+  /** 본부인을 태우고 숨은 거처가 있는 항구에 들어섰을 때 (onArrive) */
+  function lodgeArrive(c, out) {
+    var p = P(), K = LC();
+    if (!p.wife || !p.wifeAboard) return;
+    W.lodged().forEach(function (w) {
+      if (w.city === c.id && U.chance(K.visitWithWife || 0)) out.push({ icon: 'ring', text: W.lodgeCaught(w, '함께 항구에 내린 길에 거리 사람들이 수군대는 말을 들었다.') });
+    });
+  }
+  W.isWifeCold = function () { var p = P(); return !!(p.wife && p.wifeCold != null && S().day < p.wifeCold); };
+  /** 자택에 들어설 때 (misc.js HM.enter): 들킨 일을 따지거나 아직 화가 나 있으면 그 말을 하고 true */
+  W.lodgeHome = async function (c) {
+    var p = P(); if (!p.wife) return false;
+    var ws = Fm().wifeSpeaker(), sc = p.lodgeScene;
+    if (sc) {
+      delete p.lodgeScene;
+      var nm = W.name(sc.id);
+      await UI.say('…당신, 거기 서요. ' + sc.place + '에 누가 살고 있었는지 내가 모를 줄 알았어요?', ws);
+      await UI.say(nm + U.jx(nm, '이라는/라는') + ' 여자 말이에요. 아이들까지! 우리 집안 얼굴에 먹칠을 하고, 친정에는 뭐라고 하라고요.', ws);
+      await UI.say('위자료와 친정에 드릴 돈, 소문을 막는 데 든 돈은 당신 금고에서 다 냈어요. 금화 ' + U.num(sc.loss) + '닢이에요. …한동안 내 방 문은 열지 마세요.', ws);
+      return true;
+    }
+    if (W.isWifeCold()) {
+      await UI.say(U.pick(['…오셨어요. 식사는 하인에게 일러 두었어요.', '아이들 얼굴이나 보고 가세요. 저는 할 말이 없어요.', '당신이 무슨 일을 했는지 아직 잊지 않았어요.']), ws);
+      return true;
+    }
+    return false;
+  };
+
   // ---------------------------------------------------------------- 수첩
   W.infoWife = function () {
     W.sync();
     var p = P(), list = W.list();
     var h = p.wifeAboard ? ' <small class="muted">(배에 함께)</small>' : '';
-    if (list.length) h += '<br><small>' + list.slice().sort(function (a, b) { return W.no(a) - W.no(b); }).map(function (w) { return W.ordinal(w) + ' ' + U.esc(W.name(w)) + ' <span class="muted">(' + (w.aboard ? '배에 함께' + (w.deliver ? ' · ' + W.cityName(w) + '로 가는 중' : '') : W.cityName(w) + '의 집') + (w.preg && w.preg.told ? ' · 아기를 가짐' : '') + (W.isCold(w) ? ' · 마음이 상해 있음' : '') + ')</span>'; }).join(', ') + '</small>';
+    if (list.length) h += '<br><small>' + list.slice().sort(function (a, b) { return W.no(a) - W.no(b); }).map(function (w) { return W.ordinal(w) + ' ' + U.esc(W.name(w)) + ' <span class="muted">(' + (w.aboard ? '배에 함께' + (w.deliver ? ' · ' + W.cityName(w) + '로 가는 중' : '') : w.lodge ? (w.lodge.kind === 'home' ? '고향 자택' : W.cityName(w) + ' 총독 관저') + '에서 본부인 몰래' : W.cityName(w) + '의 집') + (w.preg && w.preg.told ? ' · 아기를 가짐' : '') + (W.isCold(w) ? ' · 마음이 상해 있음' : '') + ')</span>'; }).join(', ') + '</small>';
     return h;
   };
   W.kidTag = function (k) {
@@ -585,7 +716,7 @@
       try {
         if (G.Game.state && !c.outpost) W.housesAt(c.id).forEach(function (w) {
           var gi = -1; out.forEach(function (b, i) { if (b.kind === 'gate') gi = i; });
-          var b = { kind: 'house2', arg: w.id, name: W.name(w) + '의 집', icon: 'house' };
+          var b = { kind: 'house2', arg: w.id, name: W.placeName(w), icon: 'house' };   // 숨은 거처면 「자택 — 이름」·「총독 관저 별채 — 이름」
           if (gi >= 0) out.splice(gi, 0, b); else out.push(b);
         });
       } catch (e) { console.error(e); }
@@ -598,6 +729,15 @@
       try { var news = onArrive(c); if (news.length) await Cc.news(news); } catch (e) { console.error(e); }
       return r;
     };
+    // 달마다: 숨은 거처를 들킬 수 있다 (2026-11-05)
+    var onm = F.newMonth;
+    if (onm) F.newMonth = function () { var out = onm.apply(this, arguments) || []; try { out = out.concat(W.lodgeMonth()); } catch (e) { console.error(e); } return out; };
+    // 가족을 총독 관저로 모시거나 고향 집으로 보낸 뒤: 그 거처에 숨은 부인이 있으면 들킨다
+    if (G.Colony && G.Colony.moveFamily && !G.Colony.moveFamily.lodged) {
+      var omf = G.Colony.moveFamily;
+      G.Colony.moveFamily = async function () { var r = await omf.apply(this, arguments); try { await W.lodgeSeat(); } catch (e) { console.error(e); } return r; };
+      G.Colony.moveFamily.lodged = true;
+    }
     // 날마다: 둘째 부인의 임신·출산
     var od = F.daily;
     F.daily = function () { var out = od.apply(this, arguments) || []; try { out = out.concat(W.daily()); } catch (e) { console.error(e); } return out; };

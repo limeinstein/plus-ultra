@@ -789,6 +789,7 @@
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'buy');   // 교역 항로의 상선대: 실어 오는 쪽은 싸지고 나는 쪽은 비싸진다 (js/systems/tradefleets.js)
     if (G.Kongo) p *= G.Kongo.mult(c, goodId, 'buy');   // 콩고 왕국과 맺은 교역 (js/systems/kongo.js)
     if (G.Glory) p *= G.Glory.mult(c, goodId, 'buy');   // 의회의 교역 증서 — 잉글랜드 항구 (js/systems/glory.js)
+    if (G.Influence) p *= G.Influence.mult(c, goodId, 'buy');   // 항구 영향도: 제독의 나라 힘이 큰 항구에서는 싸게 산다 (js/systems/influence.js)
     if (G.SkillCombos) p *= G.SkillCombos.factor('buyPrice');
     return Math.max(1, Math.round(p));
   };
@@ -803,6 +804,7 @@
     if (G.TradeFleet) p *= G.TradeFleet.mult(c, goodId, 'sell');   // 교역 항로의 상선대 (js/systems/tradefleets.js)
     if (G.Kongo) p *= G.Kongo.mult(c, goodId, 'sell');   // 콩고 왕국과 맺은 교역
     if (G.Glory) p *= G.Glory.mult(c, goodId, 'sell');   // 의회의 교역 증서
+    if (G.Influence) p *= G.Influence.mult(c, goodId, 'sell');   // 항구 영향도: 비싸게 판다
     if (G.SkillCombos) p *= G.SkillCombos.factor('sellPrice');
     return Math.max(1, Math.round(p));
   };
@@ -908,7 +910,7 @@
     else if (R.sells(c, goodId)) cap *= K.prodCap == null ? 1 : K.prodCap;
     var ocean = G.BALANCE.oceanTrade;
     if (ocean && !R.sells(c, goodId)) cap *= 1 + ocean.bulkDemand * Math.max(0, (G.Era ? G.Era.mult(c, goodId) : 1) - 1); // 유행 시장은 값뿐 아니라 받아 줄 물량도 커진다
-    return cap * (1 + R.projectEffect(c, 'demand'));
+    return cap * (1 + R.projectEffect(c, 'demand')) * (G.Influence ? G.Influence.mult(c, goodId, 'demand') : 1);   // 항구 영향도: 시장이 더 받아 준다
   };
   /** 포화에 따른 파는 값 배수: 받아 줄 양까지는 완만히, 넘기면 폭락 (G.BALANCE.market.satPrice·crash) */
   R.satFactor = function (sat) { var K = MK(); return Math.exp(-sat * K.satPrice - (K.crash || 0) * Math.max(0, sat - 1)); };
@@ -940,7 +942,7 @@
     var k = MK(), sk = G.BALANCE.commerce.supply;
     var cap = (k.stock[0] + c.size * k.stock[1]) * R.stockProfile(id).cap * (R.isRelay(c, id) ? RELAY().stock : 1) *
       (G.Econ ? G.Econ.mult(c, id, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, id, 'stock') : 1) /
-      (G.Era && G.Era.source ? G.Era.source(c, id) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1) * R.farStockK(c, id);
+      (G.Era && G.Era.source ? G.Era.source(c, id) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1) * R.farStockK(c, id) * (G.Influence ? G.Influence.mult(c, id, 'stock') : 1);   // 항구 영향도: 재고가 는다
     return Math.round(Math.max(sk.goods[id] ? sk.rareMin : sk.min, cap) * (baseOnly ? 1 : 1 + R.projectEffect(c, 'stock')));
   };
   R.stockRate = function (c, id) { return R.stockCapacity(c, id, true) / R.stockProfile(id).days * (1 + R.projectEffect(c, 'recovery')); };

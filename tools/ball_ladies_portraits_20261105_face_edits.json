@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-05",
+  "mode": "built-in image_gen edit",
+  "edits": [
+    {
+      "id": "bl_helene",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-beed77c7-86da-4197-b58d-9b510b872648.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-ca15798f-84d3-4fba-adc3-a523c17fd4d0.png"
+      ],
+      "prompt": "Edit IMAGE1, a fully clothed historical court character knee portrait, using IMAGE2 as FACE AND EXPRESSION reference only. Change only face, head direction and front hair strands. Replace the broad smiling rightward profile with the second reference's calm closed lips, delicate softly oval face, characteristic dark eyes and subtle sideways gaze, straight dark bangs framing the eyes. Maintain the adult character's mature proportions and the same painterly semi-realistic beautiful game illustration style throughout, avoiding photographic skin detail. Keep the original cream ribbon ponytail and its length, elegant white and gold opaque court dress, jewelry, shawl, hands, gloves, body shape and graceful pose identical to image1. Do not enhance or change the body or costume. Keep framing HEAD TO KNEES ONLY: skirt continues beyond bottom edge, NO calves, ankles, shoes or feet. Both hands visible. Transparent background, no scene, no text. 1024x1536.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-fc9590e0-01e1-42fc-8611-d51dab3370f0.png"
+    },
+    {
+      "id": "bl_alexandra",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-c3ab83ea-dcd9-4f5f-b5d1-727af3ffcaff.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a87bef48-d460-437b-a2d2-f0f535599166.png"
+      ],
+      "prompt": "Edit IMAGE1, a fully clothed historical court character knee portrait, using IMAGE2 only as FACE AND EXPRESSION reference. Replace the face and expression with reference2's softly oval elegant face, grey-blue eyes, delicately arched eyebrows, small refined nose, naturally parted lips and gently surprised attentive expression looking toward viewer. Same adult court character with mature proportions, painterly semi-realistic beautiful game illustration; smooth painted skin and natural volume, not photo or 3D. Preserve image1's blonde formal updo, floral hairpins, multirow pearl necklace, gold embroidered ivory opaque dress, fan, raised hand gesture, full hands, body shape and pose. Do not enhance or change the body or costume. Change only face and slight head orientation needed for expression. KNEE-LENGTH composition entire head to knees, skirt cut by bottom canvas edge, NO lower legs, ankles, shoes or feet. True transparent background, no scene or labels. 1024x1536.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-56199682-5dfb-485e-82cc-9ffd8760382b.png"
+    },
+    {
+      "id": "bl_antonia",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d6668fde-fc3c-495f-aec7-07968f91dca3.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f4d397df-ca00-48ed-a888-cc50c7a03138.png"
+      ],
+      "prompt": "Edit IMAGE1 adult noblewoman into the graceful romantic oil-painted court portrait feeling of IMAGE2. Main changes FACE, EXPRESSION, HAIR COLOR, rendering: beautiful refined adult oval face, luminous grey-blue eyes, delicate softly arched brows, refined straight nose, small closed lips with a gentle composed smile instead of broad teeth-showing grin. Face turned subtly toward viewer, elegant serene expression. Golden BLONDE high curled court updo with long soft ringlets, retain pink roses and ribbons. Keep image1's rose-PINK silk court gown, opaque embroidered bodice fully covering chest, abundant ivory lace ruffles and bows, same body silhouette, pose with rose held near shoulder and fan in lower hand. Render in the soft idealized romantic painterly semi-realistic style of image2 with smooth brushed skin, delicate blush and luminous silk, NOT photographic, no gritty wrinkles or hyperreal pores. Clearly adult court lady, mature body proportions, elegant nonsexual costume portrait. Preserve standing KNEE-LENGTH composition1024x1536 entire head and hands; skirt is cropped at knees by bottom edge. NO calves, ankles, feet, shoes, or full skirt hem. Do NOT add slipper prop, crown, mouse, interior, chair or scenery from image2. True transparent background only. No text.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1a592-461b-7130-aa24-c902446ab65b\\exec-81b223fc-07c9-4ce5-b688-6ef504867010.png"
+    }
+  ]
+}

@@ -307,6 +307,7 @@
   // ================================================================ 회사 창고 (상관의 원가 할당)
   CO.quotaLeft = function (co, cityId) {
     var b = st(), r = CO.rank(co), q = CO.perk(r).quota; if (!q) return 0;
+    if (G.Influence) q = Math.round(q * G.Influence.mult(city(cityId), null, 'quota'));   // 항구 영향도만큼 할당이 늘어난다 (js/systems/influence.js)
     var per = Math.floor(S().day / K().quotaDays), e = b.quota[cityId];
     if (!e || e.per !== per || e.co !== cobj(co).id) return q;
     return Math.max(0, q - e.used);
@@ -327,6 +328,7 @@
     if (!s.fleet.cargo[id] && Object.keys(s.fleet.cargo).length >= R.maxKinds()) return 0;
     s.player.gold -= q * price; addCargo(id, q, price, c.id); CO.useQuota(co, c.id, q);
     s.stats.trades = (s.stats.trades || 0) + 1;
+    if (G.Influence) { G.Influence.add(c, q / G.BALANCE.influence.act.warehouse, co); }   // 항구 영향도의 실적 (js/systems/influence.js)
     log(c.name + '의 ' + co.short + ' 회사 창고에서 ' + G.GOOD[id].name + ' ' + q + '통을 원가 금화 ' + num(q * price) + '닢에 실었다.');
     return q * price;
   };
@@ -337,6 +339,7 @@
     var price = CO.monoPrice(c, co, id), value = q * price;
     takeCargo(id, q, c); s.player.gold += value;
     var mer = CO.addMerit(Math.round(value / 1500));
+    if (G.Influence) G.Influence.add(c, value / G.BALANCE.influence.act.mono, co);
     fame('tr', Math.round(value / 8000));
     if (G.Growth && G.Growth.sell) { try { G.Growth.sell(value); } catch (e) { console.error(e); } }
     log(co.hqName + '에 독점품 ' + G.GOOD[id].name + ' ' + q + '통을 넘기고 금화 ' + num(value) + '닢을 받았다.');
@@ -448,6 +451,7 @@
     takeCargo(ch.g, ch.q, c);
     S().player.gold += value; ch.pot += bonus; ch.paid += value; ch.path.push(c.id);
     var mer = CO.addMerit(K().chainMerit * ch.leg);
+    if (G.Influence) G.Influence.add(c, G.BALANCE.influence.act.chain, ch.co);
     fame('tr', Math.round(value / 6000));
     log(G.COMPANY[ch.co].short + ' 중개 주문서 고리 ' + ch.leg + ' — ' + c.name + ' 상관에 ' + G.GOOD[ch.g].name + ' ' + ch.q + '통을 넘기고 금화 ' + num(value) + '닢 (연계 보너스 +' + num(bonus) + ').');
     return { value: value, bonus: bonus, pot: ch.pot, merit: mer, last: ch.leg >= ch.max };
@@ -564,6 +568,7 @@
     if (!m.free) mer = CO.addMerit(m.merit);
     if (m.kind === 'patrol') { f = fame('bt', 6 + m.n * 3); CO.move(co, K().moves.patrol); }
     else { f = fame('bt', 20); }
+    if (G.Influence) { var ka = G.BALANCE.influence.act; G.Influence.add(c, ka.report, co); if (m.at != null && m.at !== c.id && city(m.at)) G.Influence.add(city(m.at), ka.report / 2, co); }   // 보고한 항구 · 단속한 바다의 항구
     b.mission = null; b.done = (b.done || 0) + 1;
     log(co.short + ' 회사 임무를 마쳤다 — ' + m.title + ' (금화 ' + num(m.pay) + '닢' + (mer ? ' · 공헌 +' + mer : '') + ')');
     refresh();
@@ -586,6 +591,7 @@
     var mer = CO.addMerit(Math.round(m.merit * ratio * (m.late ? 0.5 : 1)));
     var d = CO.move(co, k.moves.convoy * ratio);
     var f = fame('tr', 15 + m.ships0 * 5);
+    if (G.Influence) { var ka = G.BALANCE.influence.act; G.Influence.add(c, ka.convoy * ratio, co); if (city(m.from)) G.Influence.add(city(m.from), ka.convoyFrom * ratio, co); }
     b.mission = null; b.done = (b.done || 0) + 1;
     var who = staff('guildmaster', co.short + ' 이사', co);
     await UI.say(c.name + ' 부두에 회사 깃발을 단 배들이 줄지어 닻을 내린다. ' + (m.ships === m.ships0 ? '한 척도 잃지 않았다! ' : m.ships0 - m.ships + '척을 잃었지만 ') + '부두의 짐꾼들이 환호하며 궤짝을 내리기 시작한다.', who);
@@ -635,6 +641,7 @@
     (b.posts[co.id] = b.posts[co.id] || []).push(post);
     s.player.gold += m.pay;
     var mer = CO.addMerit(m.merit), d = CO.move(co, K().moves.found), f = fame('tr', 30) + fame('so', 10);
+    if (G.Influence) { G.Influence.bump(); G.Influence.add(c, G.BALANCE.influence.act.found, co); }
     b.mission = null; b.done = (b.done || 0) + 1;
     await UI.alert('<b>' + U.esc(c.name) + '에 ' + U.esc(co.short) + ' 상관이 섰다!</b><br>회사 창고: ' + post.g.map(function (id) { return G.GOOD[id].name; }).join('·') + '<br>보수 금화 <b>' + num(m.pay) + '</b>닢 · 공헌 +' + mer + ' · 명성 +' + f + ' · ' + U.esc(co.short) + ' 주가 ' + pct(d), '상관 건설');
     log(c.name + '에 ' + co.name + '의 상관을 세웠다. 보수 금화 ' + num(m.pay) + '닢.');
@@ -767,6 +774,7 @@
       if (cargoQ(b.chain.g) >= b.chain.q && G.CompanyUI) await G.CompanyUI.chainArrive(c);
       else UI.toast('중개 주문서 — 이 도시에 ' + G.GOOD[b.chain.g].name + ' ' + b.chain.q + '통을 넘겨야 한다 (가진 것 ' + cargoQ(b.chain.g) + '통).', 'scroll', 5200);
     }
+    if (G.Influence) { try { G.Influence.arrival(c); } catch (e) { console.error(e); } }   // 항구 영향도의 단계가 오르면 알린다
     if (CO.reportHere(c)) UI.toast(G.COMPANY[b.mission.co].short + ' 회사 임무를 마쳤다 — 이 도시의 회사 건물에 알리자.', 'seal', 5200);
   };
   /** 할 일 판 (js/scenes/city.js C.todo) */
@@ -820,7 +828,7 @@
       : '<span class="muted">어느 회사에도 속하지 않았다' + (b.cool > S().day ? ' (다시 들 수 있기까지 ' + (b.cool - S().day) + '일)' : ' — 회사 본부에서 입회할 수 있다') + '</span>';
     var rows = hs.map(function (x) { return '<div class="era-row"><span class="era-lbl">' + U.esc(x.co.short) + '</span> ' + x.n + '주 × ' + num(x.p) + '닢 = <b>' + num(x.value) + '</b>닢 <small class="' + (x.pl >= 0 ? 'good-text' : 'bad-text') + '">(' + (x.pl >= 0 ? '+' : '') + num(x.pl) + ')</small> ' + CO.spark(x.co, 90, 20) + '</div>'; }).join('');
     var task = [CO.missionText(), CO.chainText()].filter(Boolean).map(function (t) { return '<div class="era-row"><small>' + U.esc(t) + '</small></div>'; }).join('');
-    return '<div class="era-box co-box"><b>' + G.icon('seal') + ' 특허 회사</b> <small class="muted">— 한 회사에만 속한다 · 주식은 어느 회사 것이든</small><div class="era-row">' + who + '</div>' + rows + task + '</div>';
+    return '<div class="era-box co-box"><b>' + G.icon('seal') + ' 특허 회사</b> <small class="muted">— 한 회사에만 속한다 · 주식은 어느 회사 것이든</small><div class="era-row">' + who + '</div>' + rows + task + '</div>' + (G.Influence ? G.Influence.box() : '');   // 항구 영향도 (js/systems/influence.js)
   };
 
   // ================================================================ 걸기

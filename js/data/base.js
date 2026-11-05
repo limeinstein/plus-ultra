@@ -245,6 +245,15 @@
     navalField: { startMargin: 120, radius: 3200, separation: 1050, merchantSeparation: 550, minSeparation: 700, sepSteps: [1, 0.85, 0.72, 0.6], spacing: 170, rowGap: 170, perRow: 6, startJitter: 14, monsterSeparation: 1050, lakeSeparation: 900, boardDelay: 10, boardAfterFire: 5 },
     // speed: 해전의 배 속력 배수 (2026-11-02 사용자 요청 「해전의 배의 속도감을 높여줘」 — 양쪽 모두, 바다 장면 항해와는 별개)
     navalControl: { turn: 1.1, accel: 0.8, decel: 1, lateral: 0.22, turnSlow: 0.35, slowRadius: 100, speed: 1.4 },
+    // 적의 생각 (js/scenes/battle.js enemyBrain · rakeApproach · loadedSide · spread — 2026-11-05)
+    //   표적 점수 = 거리/사거리 + 남은 내구×hpW + 이미 노리는 동료 수×crowdW − 기함이면 flagW − 지금 표적이면 stickW (작을수록 고른다), retarget초마다
+    //   guardHp: 제 기함이 이만큼 아래로 부서지면 guardR 안의 배가 기함을 때리는 배를 막는다 · boardHp: 이만큼 아래로 부서진 배에는 갈고리를 건다
+    //   routChance: 해적·상선이 기함을 잃으면 달아날 확률 · navyFlee: 해군도 이만큼 아래로 부서지면 물러난다
+    //   pirateClose: 해적이 서는 거리(사거리 배) · hurtClose: 반 넘게 부서진 배는 거리를 둔다
+    //   rake*: 우리 현측 앞(옆 ±rakeArc)이면 뱃머리·고물 쪽 사거리×rakeR 자리로 돌아 든다 (사거리×rakeFar 안에서)
+    //   swapT·readyT·swapHold: 표적 쪽 포가 swapT초 넘게 남고 반대쪽이 readyT초 안이면 돌아선다 (swapHold초 그대로) · sepR·sepK: 동료와 간격
+    navalAI: { hpW: 0.8, crowdW: 0.3, flagW: 0.5, stickW: 0.35, retarget: 1.6, guardHp: 0.5, guardR: 700, boardHp: 0.35, routChance: 0.6, navyFlee: 0.12,
+      pirateClose: 0.8, hurtClose: 1.15, rakeArc: 0.7, rakeR: 0.6, rakeFar: 2.2, swapT: 1.2, readyT: 0.3, swapHold: 3, sepR: 130, sepK: 1.2 },
     pirateSurrender: { base: 0.22, damage: 0.3, crewLoss: 0.18, pressure: 0.12, near: 800, min: 0.12, max: 0.8 },
     // 산지에서 먼 시장의 운송·희소 가치. 가까운 산지가 있으면 그 거리만 쓰므로 우회 항해로 값이 뛰지 않는다.
     oceanTrade: { premium: [1, 1, 1.08, 1.3, 1.85, 2.5], bulkDemand: 0.5 },
@@ -493,6 +502,7 @@
     cityEntryPrompt: { cooldownMs: 30000 },   // 「지나간다」를 고른 뒤 같은 항구·성문을 다시 묻기까지 (실제 시간 ms) — 그 사이에도 도시를 직접 누르면 바로 들어간다
     seaSearch: { days: 1, senseBoost: 1.8, chartBonus: 1.2 },
     // 해상 괴물: 처치한 달·날부터 자료의 years년 뒤 새 해역에 재등장한다.
+    dragonFire: { directK: 0.55, duration: 10, tick: 1, dotK: 0.08 }, // 거북선 용머리: 약한 직격 뒤 10초 연소. 중첩 없이 더 강한 불로 갱신한다.
     seaMonsters: {
       hpK: 4, spawnNear: [3, 9], spawnTries: 600, spawnMove: 18, spacing: 4,
       seaMargin: 1.2, openProbe: 0.7, newsRange: 15, sight: 5, meetRange: 0.6,
@@ -501,7 +511,8 @@
       firstAttack: 3, volleySeconds: 6, rays: 16, shotRange: 1000, shotSpeed: 460,
       shotHpK: 0.055, shotRadius: 8, chargeSpeed: 235, chargeWindup: 1.2, chargeAimTurn: 3.5,
       chargeSeconds: 2.1, chargeRecovery: 3, ramHpK: 0.16, ramRadius: 30,
-      hitRadiusK: 0.2, commonFame: 100, legendFame: 250
+      hitRadiusK: 0.2, commonFame: 100, legendFame: 250,
+      ghost: { hulls: ['galleon', 'frigate'], emergeSeconds: 3.2, gold: [80000, 150000] }
     },
     // 사건의 간격 (js/systems/pace.js): 항해·육상 탐험의 우연한 사건 사이 실제 시간 gapMs(ms), 같은 사건은 실제 시간 sameMs와 게임 날수 sameDays가 지나야 다시
     //   (하루가 실제로 1초 남짓이라 날수만으로는 화면에서 사건이 연달아 터진다). 폭풍·해적은 간격을 건너뛰되 같은 일은 sameMs 안에 되풀이되지 않는다
@@ -555,6 +566,8 @@
       tradeQty: 8, tradeValue: 300, contactDays: 14, contactLevels: [1, 3, 6], archiveFame: 5,
       heirAge: 20, heirStat: 55, heirSkill: 1, inheritSkill: 0.5, inheritFame: 0.5 },
     // 알림(갈색 쪽지 — js/ui/ui.js UI.toast): 보이는 시간 = baseMs + 글자 수×perChar (minMs~maxMs) · 같은 말 다시 띄우지 않는 시간 · 「지난 소식」에 남기는 수
+    // 민족 발견물에서 나서는 동료 (js/systems/folkjoin.js): 민족 발견마다 chance로 · 품삯은 철새 셈의 payK배
+    folkJoin: { chance: 0.03, payK: 0.8 },
     notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, keep: 40 },
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다
     eraEnd: { y: 1700, m: 1, d: 1 },
@@ -694,7 +707,11 @@
     // · 생일 앞뒤 birthdayDays일 · 집에서 일이 생기는 간격 happenGap일·확률 happenChance · 바다에서 추억의 물건: 피로 keepFatigue부터 하루 keepChance, 피로 −keepRest
     homelife: { statMax: 90, skillChance: 0.6, ledgerGold: 4, dinnerRest: 10, cold: 30, coldBonus: 2, longAway: 300, birthdayDays: 10,
       happenGap: 20, happenChance: 0.55, keepChance: 0.03, keepRest: 4, keepFatigue: 25 },
-    wives: { hideHome: 0.7, conceive: 0.3, maxSpouses: 12 },
+    // 숨은 거처 (2026-11-05 사용자 요청 — wives.js W.lodgeAsk): 본부인이 자택에 있으면 둘째 부인부터는 총독 관저·빈 고향 자택에서 지내게 할 수 있다.
+    // monthHome·monthGov: 달마다 본부인에게 들킬 확률(빈 자택 · 총독 관저) · visitWithWife: 본부인을 태우고 그 항구에 들어설 때
+    // 들키면: 소지금+예금의 lossRate(적어도 lossMin닢)를 잃고, 본부인의 정 -love · coldDays일 동안 아이가 생기지 않고 배에 타지 않는다 · 숨은 부인은 본래 집으로(sideCold일 마음을 닫음)
+    wives: { hideHome: 0.7, conceive: 0.3, maxSpouses: 12,
+      lodge: { monthHome: 0.06, monthGov: 0.03, visitWithWife: 0.5, lossRate: 0.25, lossMin: 30000, love: 40, coldDays: 180, sideCold: 120 } },
     kidVoy: { chance: 0.02, gap: 60 },   // 배에 탄 아이의 하루 (js/systems/kidvoyage.js): 바다 위 하루마다 일어날 확률 · 같은 아이는 며칠에 한 번까지
     family: { conceive: 0.35, gapDays: 300, perMother: 5, sons: 5, daughtersPer: 2, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)

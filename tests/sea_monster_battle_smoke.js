@@ -25,7 +25,7 @@ async function run() {
       const c=G.CITY_DATA.filter(c=>c.port&&G.R.cityExists(c)).sort((a,b)=>G.Geo.dist(e.lon,e.lat,a.lon,a.lat)-G.Geo.dist(e.lon,e.lat,b.lon,b.lat))[0];
       window.monsterTest.city=c.id;
       const strongest=G.SeaMonsters.strongest(s.date.y);
-      const specs=ids.every(id=>{const spec=G.SeaMonsters.enemy(G.SeaMonsters.npc(entries[id]));return spec.monster===id&&spec.maxHp===strongest.hp*4&&spec.crew===strongest.crew[1];});
+      const specs=ids.every(id=>{const spec=G.SeaMonsters.enemy(G.SeaMonsters.npc(entries[id]));return spec.monster===id&&spec.maxHp===strongest.hp*4&&spec.crew===G.SHIP[spec.type].crew[1];});
       const old=G.SHIP_TYPES.length;
       G.SHIP_TYPES.push({id:'future-test',hp:9999,ports:999,from:s.date.y+1});
       const era=G.SeaMonsters.strongest(s.date.y).id===strongest.id&&G.SeaMonsters.strongest(s.date.y+1).id==='future-test';G.SHIP_TYPES.length=old;

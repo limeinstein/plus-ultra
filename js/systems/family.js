@@ -278,7 +278,8 @@
     // 본처의 아이 5명까지 · 아들은 둘째 부인의 아이까지 모두 합쳐 5명 · 딸은 2명 (wives.js W.sexesOpen)
     var today = s.day, room = G.Wives && G.Wives.canConceive ? G.Wives.canConceive('main') : p.kids.length + (p.preg ? 1 : 0) < (c.perMother || 5), wm = F.wifeMate();
     var tooOld = wm && (wm.old || (wm.bornY && s.date.y - wm.bornY > 45));   // 늙은 마녀·나이 든 아내
-    if (!p.preg && !tooOld && room && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
+    var cold = G.Wives && G.Wives.isWifeCold && G.Wives.isWifeCold();   // 숨은 거처를 들킨 뒤 한동안 (wives.js W.lodgeCaught)
+    if (!p.preg && !tooOld && !cold && room && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
         (p.tryDay == null || today - p.tryDay >= (rest ? 3 : 20))) {
       p.tryDay = today;
       if (U.chance((c.conceive || 0.35) * (rest ? 1.2 : 1))) p.preg = G.Wives && G.Wives.newPreg ? G.Wives.newPreg('main', today, c.gestation || 266) : { since: today, due: today + (c.gestation || 266), told: false };

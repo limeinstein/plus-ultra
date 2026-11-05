@@ -253,12 +253,12 @@
     var role = sp.type === 'official' || sp.type === 'gov' ? 'noble' : sp.type;
     var c = G.CITY_DATA[sp.city];
     var female = (G.SPONSOR_FEMALE || /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/).test(name);
-    var spec = A.npcSpec('sp_' + sp.id + '_' + name, role, c.style, female ? 'f' : 'm');
+    var spec = A.npcSpec('sp_' + sp.id + '_' + name, role, sp.style || c.style, female ? 'f' : 'm');   // sp.style: 식민지에 건너온 유럽 사람은 그 나라 얼굴 (js/systems/colonysponsor.js)
     var chain = G.Img.chain.sponsor(sp, A.sponsorPic(sp, holder));
     // 자리 공통 그림(<ID>.webp)은 한 사람의 얼굴이다 — 성별이 다른 대(代)에는 쓰지 않는다 (잉글랜드 국왕 그림이 메리 1세·앤 여왕에게 붙지 않게)
     if (female !== A.sponsorBaseFemale(sp)) chain = chain.filter(function (k) { return k !== 'portraits/sponsors/' + sp.id; });
     // 그림이 없는 여왕·여제는 그 고장 귀부인 그림(npc-roles/<양식>/noble — 여성)으로
-    if (female && A.rolePortraitGender('noble', c.style) === 'f') chain = chain.concat(['portraits/npc-roles/' + c.style + '/noble']);
+    if (female && A.rolePortraitGender('noble', sp.style || c.style) === 'f') chain = chain.concat(['portraits/npc-roles/' + (sp.style || c.style) + '/noble']);
     return A.withImg(spec, chain);
   };
   /** 그 대(代) 사람의 초상 그림 번호: holders의 네 번째 값(숫자·다른 후원자 그림 이름, 0 = 공통 그림), 없으면 순번 */

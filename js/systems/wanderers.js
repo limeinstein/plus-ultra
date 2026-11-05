@@ -118,7 +118,7 @@
   };
   /** 옛 저장의 합성본·다른 성별/문화권 얼굴을 id로 고른 완성 초상 한 쌍으로 옮긴다. */
   WD.fixPortrait = function (d) {
-    if (!d || d.ret) return d;   // 스무 해 만에 돌아온 사건 동료는 제 얼굴 그대로 (js/systems/oldguard.js)
+    if (!d || d.ret || d.folk) return d;   // folk: 민족 발견에서 나선 동료는 제 고장 얼굴 그대로 (js/systems/folkjoin.js)   // 스무 해 만에 돌아온 사건 동료는 제 얼굴 그대로 (js/systems/oldguard.js)
     var pool = WD.facePool(d.style || 'ib', d.g, d.type);
     if (d.local) pool = pool.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 고장 사람은 다른 문화권 항해사의 옷을 빌리지 않는다
     if (pool.indexOf(d.face) < 0) d.face = pool.length ? pool[Math.abs(U.strHash('wander-pair:' + d.id)) % pool.length] : null;
@@ -189,7 +189,7 @@
     if (g > s.wander.gen) {
       s.wander.gen = g;
       var old = WD.list().filter(function (d) { return !busy(d.id) && d.gen < g; });
-      var keep = U.shuffle(old.filter(function (d) { return !d.local; })).slice(0, c.rebornMax == null ? 30 : c.rebornMax), born = [];   // 고장 사람(local)은 다음 셈 때 새로 채운다 (regionfolk.js)
+      var keep = U.shuffle(old.filter(function (d) { return !d.local && !d.folk; })).slice(0, c.rebornMax == null ? 30 : c.rebornMax), born = [];   // 고장 사람(local)은 다음 셈 때 새로 채운다 (regionfolk.js)
       old.forEach(function (d) { unregister(d.id); });
       keep.forEach(function (p) {
         var nat = U.chance(c.keepNation == null ? 0.55 : c.keepNation) ? p.nat : null;

@@ -293,6 +293,10 @@
       burnAt: 0.55,       // 내구가 이만큼 아래로 떨어진 배는 검은 연기를 뿜는다
       fireAt: 0.3         // 이만큼 아래면 불길이 보인다
     },
+    dragonFire: { muzzleForward: 0.58, muzzleHeight: 0.13, ballRadius: 13, tailLength: 42, burnEmit: 0.24, burnRadius: 10, burnSmoke: 9 },
+    waterImpact: { sprayLife: 1.3, sprayHeight: 155, sprayWidth: 85, sprayJets: 22, sprayDrops: 64,
+      scale: 1.15, maxScale: 1.9, shakeK: 1.25, mistAlpha: 0.38, rays: 15, max: 36 },
+    ghostShip: { alpha: 0.88, depth: 1.5, waterline: 0.08, sailTint: '#8eb9aa', filter: 'grayscale(1) sepia(0.4) hue-rotate(90deg)', mist: 0.22, drains: 14 },
     cannonImpact: {        // 포의 실제 성능은 base.js, 아래 값은 그림에만 쓴다.
       maxFx: 650, busyFx: 380, busyBudget: 0.3,
       blastLife: 0.14, flameLife: 0.56, smokeLife: 2.8, smokeRise: 30, smokeGrow: 24,
@@ -439,6 +443,18 @@
     distantScale: 0.68,
     swayX: [12, 30], swayY: [10, 24], frequency: [0.8, 1.7], swayRatio: 0.73, tilt: 0.18 };
   // 그린 스프라이트 시트 (js/art/sprites.js · images/sprites/ — tools/sprite_repack.py 가 만든다)
+  // 육상전 동작·화약 연출. 병력·위력·사거리 판정과는 분리한다. 시간은 초, 거리는 전장 px.
+  G.FX.landwar = {
+    resolution: 2, attackLife: 0.96, release: 0.30, recoilHold: 0.16, reloadAt: 0.68, recovery: 0.24, deathTilt: 1.3,
+    chargeLife: 0.86, chargeContact: 0.40, chargeReach: 0.88, meleeReach: 0.64,
+    gunFlight: 0.25, bowFlight: 0.60, cannonFlight: 0.70, volleyGap: 0.055,
+    muzzleForward: 34, muzzleHeight: 30, cannonForward: 43, cannonHeight: 20,
+    blastLife: 1.65, smokeLife: 2.6, blastRadius: 42, smokeRadius: 18, smokeRise: 43,
+    gunFlashLife: 0.12, cannonFlashLife: 0.18, gunFlashRadius: 8, cannonFlashRadius: 19,
+    sparkSpeed: [55, 210], sparkLife: [0.4, 0.9], debrisLife: 0.9, debrisGravity: 420, dustLife: 0.8,
+    debris: 14, sparks: 18, dustPuffs: 12, maxFx: 210, textureSize: 96,
+    infantryGap: 26, artilleryGap: 58, beastGap: 42, strideFps: 7, chargeFps: 11, gaitBob: 2.4, chargeDustGap: 0.075
+  };
   G.FX.sprites = {
     party: true,         // 육상 탐험대를 8방향 그림 시트로 (탈것마다 천천히·빨리 두 장 — 시트가 없는 탈것은 코드 그림)
     partyScale: 0.95,    // 탐험대 그림 배율 × G.FX.party.size (시트에서 세 사람 무리의 키가 약 50px)

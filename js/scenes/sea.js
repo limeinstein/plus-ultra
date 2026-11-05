@@ -667,6 +667,7 @@
     st.busy++;
     try {
       if (G.Macao && G.Macao.beforePort) { try { await G.Macao.beforePort(c); } catch (e) { console.error(e); } }   // 마카오: 광주 앞바다의 레오넬 드 소자 (js/systems/macao.js)
+      if (G.Wokou && G.Wokou.beforePort) { try { await G.Wokou.beforePort(c); } catch (e) { console.error(e); } }   // 왜구와 척계광: 장면이 기다리는 명의 항구·통행첩이면 길을 연다 (js/systems/wokou.js)
       if (G.Imjin && G.Imjin.beforePort) { var ijGo = false; try { ijGo = await G.Imjin.beforePort(c); } catch (e) { console.error(e); } if (ijGo) { st.busy = Math.max(0, st.busy - 1); st.paused = true; refreshBar(); return true; } }   // 임진왜란: 부산포 앞바다의 왜선 (js/systems/imjin.js)
       var ok = await G.Scenes.city.handleEntry(c);
       if (!ok) { st.busy = Math.max(0, st.busy - 1); st.paused = true; coolPortPrompt(c); refreshBar(); return false; }
