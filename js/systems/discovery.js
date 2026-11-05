@@ -380,6 +380,8 @@
     if (G.Frontier) { var fm = G.Frontier.tick(); if (fm.length && G.Scenes.city && G.Scenes.city.news) await G.Scenes.city.news(fm); }
     // 발견의 주제 조합으로 이룬 업적 (js/systems/achieve.js)
     if (G.Achieve) { try { await G.Achieve.afterFind(d); } catch (e) { console.error(e); } }
+    // 민족 발견물: 3%로 그 민족의 한 사람이 배에 태워 달라고 나선다 (js/systems/folkjoin.js)
+    if (G.FolkJoin) { try { await G.FolkJoin.afterFind(d); } catch (e) { console.error(e); } }
     if (G.Birds) G.Birds.onFind(d);
     G.Game.refreshHud && G.Game.refreshHud();
     return true;
