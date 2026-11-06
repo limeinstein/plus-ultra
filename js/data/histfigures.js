@@ -86,7 +86,9 @@
   };
   /** 대화에 세울 사람 {name, portrait, half, lang: 3} — 이 사건들의 말은 늘 알아듣게 (통역이 옮겨 준 셈) */
   H.speaker = function (id) {
-    var f = F[id]; if (!f) return { name: id, lang: 3 };
+    var f = F[id];
+    // 없는 사람: 「ei_null」처럼 코드 열쇠가 이름표에 찍히지 않게 — 이름 없는 내레이션으로 (2026-11-06 사용자 QA)
+    if (!f) return id == null || /^[\x00-\x7f]*$/.test(String(id)) ? { lang: 3 } : { name: id, lang: 3 };
     var keys = H.faceKeys(id), sp = { name: f.name, lang: 3, rigId: 'hist:' + id };
     try {
       var A = G.Art, spec = A.npcSpec('hist_' + id, f.role || 'captain', f.st || 'ib', f.g || 'm'), base = A.portraitKeys ? A.portraitKeys(spec) || [] : [];

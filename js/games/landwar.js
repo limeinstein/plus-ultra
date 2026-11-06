@@ -11,7 +11,7 @@
    ■ 싸우는 중: 판마다 한 번쯤 사건 (원군·적의 원군·소나기·안개·화약 부족·짐승 난입)
    ■ 끝: 결과 판 — 전리품·노획한 말·화승총·포로 (몸값을 받거나 풀어 준다 — 풀어 주면 그 땅 원주민이 반긴다)
    - 적 우두머리를 쓰러뜨리면 남은 적이 항복해 이긴다. 제독대가 무너지거나 대원이 2할 밑으로 줄면 진다 · 쓰러진 대원 일부는 의학 솜씨만큼 살아 돌아온다
-   G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n, leader}, party, terr, guns, flee, hold, halt, noHurt, fastEnd, skip })
+   G.Games.landWar({ enemy: {name, kind: native|bandit|beast|garrison, n, leader, portrait(일기토 적장 얼굴 — 없으면 그 땅의 사람)}, party, terr, guns, flee, hold, halt, noHurt, fastEnd, skip })
      → {res: win|lose|flee|truce|skip, dead, back, left, leaderDown, held, spoils: {gold, horses, muskets, prisoners, ransom, freed}}
    - skip: 건너뛰기 확인 함수(비동기) — true를 돌려주면 보상·손실 없이 닫는다. 튜토리얼에서만 넘긴다.
    - hold: 「퇴각 판」 — 적의 차례를 hold번 버티면(제독대가 살아 있으면) 빠져나가 이긴다 (아즈텍의 슬픈 밤 — js/systems/aztec.js)
@@ -458,27 +458,20 @@
           if (v >= 1.15 || v <= 0.87) { ctx.font = '800 18px ' + fam; ctx.fillStyle = v >= 1.15 ? '#7ae07a' : '#ff8a70'; ctx.fillText(v >= 1.15 ? '▲' : '▼', x - 46, y - 40); }
         }
       }
+      // 재질·나무 원화는 전투별로 저장하고 물살·갈대·줄기·수관의 움직임을 갱신한다.
+      var terrainArt = G.LandWarTerrain.create(terr, W, H);
       function drawField(t) {
-        // 칸마다의 지형
+        terrainArt.draw(ctx, feat, hillSide, LY, t);
         for (var ln = 0; ln < 3; ln++) {
           var ft = feat[ln], y = LY[ln];
           if (!ft) continue;
-          if (ft === 'woods') {
-            [-1, 1].forEach(function (sd) {
-              var cx = sd < 0 ? 210 : W - 210;
-              for (var k = 0; k < 7; k++) { var tx = cx - 150 + k * 50, ty = y - 30 + (k % 2) * 8; ctx.fillStyle = 'rgba(30,60,30,.55)'; ctx.beginPath(); ctx.moveTo(tx - 16, ty + 12); ctx.lineTo(tx, ty - 26); ctx.lineTo(tx + 16, ty + 12); ctx.fill(); }
-            });
-          } else if (ft === 'hill') {
-            var hx = hillSide[ln] === 'me' ? 280 : W - 280;
-            ctx.fillStyle = 'rgba(120,100,60,.32)'; ctx.beginPath(); ctx.ellipse(hx, y + 10, 190, 34, 0, Math.PI, 0); ctx.fill();
-            ctx.strokeStyle = 'rgba(80,60,30,.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(hx, y + 10, 190, 34, 0, Math.PI, 0); ctx.stroke();
-          } else if (ft === 'stream') {
-            ctx.strokeStyle = 'rgba(90,150,210,.55)'; ctx.lineWidth = 9; ctx.beginPath();
-            for (var xx = 0; xx <= 60; xx++) { var px = W / 2 - 30 + Math.sin(xx * 0.3 + t) * 10, py = y - 50 + xx * 1.7; if (!xx) ctx.moveTo(px, py); else ctx.lineTo(px, py); }
-            ctx.stroke();
-          }
-          ctx.font = '700 12px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,248,220,.85)';
-          ctx.fillText(FEAT_NAME[ft] + (ft === 'hill' ? (hillSide[ln] === 'me' ? ' (우리 쪽)' : ' (적 쪽)') : ''), ft === 'hill' ? (hillSide[ln] === 'me' ? 280 : W - 280) : W / 2, y - 60);
+          var x = ft === 'hill' ? (hillSide[ln] === 'me' ? 280 : W - 280) : ft === 'stream' ? W / 2 + 53 : W / 2;
+          var labelY = ft === 'stream' ? terrainArt.top(y) + 12 : y - 60;
+          var text = FEAT_NAME[ft] + (ft === 'hill' ? (hillSide[ln] === 'me' ? ' (우리 쪽)' : ' (적 쪽)') : '');
+          ctx.save(); ctx.font = '700 12px ' + FAM; ctx.textAlign = 'center';
+          var tw = ctx.measureText(text).width + 14;
+          ctx.fillStyle = 'rgba(26,32,22,.66)'; rrect(x - tw / 2, labelY - 12, tw, 18, 7); ctx.fill();
+          ctx.fillStyle = '#f6efd8'; ctx.fillText(text, x, labelY + 1); ctx.restore();
         }
       }
       function drawWeather(t) {
@@ -1172,6 +1165,18 @@
         for (var i = 0; i < lanes.length; i++) if (cellFree(list, nl, lanes[i], u)) { u.line = nl; u.lane = lanes[i]; return true; }
         return false;
       }
+      /* 일기토 창의 적장 얼굴 (2026-11-06 사용자 QA — 비어 있었다): 사건이 정해 준 얼굴(enemy.portrait)이 있으면 그것,
+         없으면 싸우는 땅(들어선 도시, 없으면 가장 가까운 도시)의 양식으로 그 무리에 맞는 사람 — 원주민 족장·수비대장·병사·도적 */
+      function foeFace(u) {
+        if (e.portrait) return e.portrait;
+        if (u && u.look === 'beast') return null;   // 짐승 우두머리는 사람 얼굴이 없다
+        try {
+          var c = here.mode === 'city' && G.CITY_DATA[here.city] ? G.CITY_DATA[here.city] : null, best = 1e9;
+          if (!c) Object.keys(G.CITY_DATA).forEach(function (k) { var x = G.CITY_DATA[k]; if (!x || x.lat == null) return; var d = Math.pow(x.lat - (here.lat || 0), 2) + Math.pow(x.lon - (here.lon || 0), 2); if (d < best) { best = d; c = x; } });
+          var role = e.kind === 'native' || e.kind === 'beast' ? 'native' : e.kind === 'garrison' ? (u && u.leader ? 'captain' : 'soldier') : 'sailor';
+          return G.Art.npcSpec('landduel:' + (e.name || '') + ':' + ((u && u.name) || ''), role, (c && c.style) || 'ib', 'm');
+        } catch (err) { return null; }
+      }
       async function maybeDuel(ours, theirs, challenger) {
         if (duelDone || !theirs || theirs.n <= 0 || !ours || ours.n <= 0) return false;
         var row = ours.cmdr ? mateRow(ours.cmdr) : null, d = ours.cmdr && G.MATE[ours.cmdr];
@@ -1181,7 +1186,7 @@
         if (!v) return false;
         duelDone = true;
         var ms = msk(ours), weak = ms && ms.duel ? 1 - ms.duel / 100 : 1;
-        var en = { name: foeName, look: e.kind === 'bandit' ? 'brawler' : 'rival', str: Math.round(U.ri(68, 86) * weak), atk: Math.round(U.ri(9, 14) * weak), def: U.ri(3, 7), skill: 1, mar: Math.round(U.ri(65, 85) * weak), int: 50, cha: 50 };
+        var en = { name: foeName, portrait: foeFace(theirs), look: e.kind === 'bandit' ? 'brawler' : 'rival', str: Math.round(U.ri(68, 86) * weak), atk: Math.round(U.ri(9, 14) * weak), def: U.ri(3, 7), skill: 1, mar: Math.round(U.ri(65, 85) * weak), int: 50, cha: 50 };
         var res = await G.Games.duel(en, row ? { mate: row, place: 'land', fastEnd: opt.fastEnd } : { place: 'land', fastEnd: opt.fastEnd });
         if (G.Audio) G.Audio.music('landwar');   // 일기토가 끝나면 다시 육상전 곡
         if (res === 'win') {

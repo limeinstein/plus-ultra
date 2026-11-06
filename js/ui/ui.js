@@ -640,6 +640,50 @@
     return who.portrait instanceof HTMLCanvasElement ? who.portrait : G.Art.portraitCanvas(who.portrait, size);
   }
 
+  /* 얼굴 칸이 있는 대화창(장면 그림 위의 사건 대사 · 사람이 서지 않는 화면 — .dlg .pframe)
+     글이 길어 대화창이 얼굴 칸(150px)보다 높아지면 얼굴 아래가 비었다 (2026-11-06 사용자 QA — 카니발의 밤·육두구 묘목).
+     · 말(UI.say): 얼굴 칸 높이에 들어가도록 문장 끝에서 잘라 남은 글을 다음 쪽으로 넘긴다 (cutToFit). 문장 하나가 그래도 길면 쉼표, 그다음 낱말에서
+     · 그래도 높으면(물음의 단추가 붙을 때 · 자를 수 없는 글) 얼굴을 대화창 높이만큼 키워 빈 곳을 메운다 (fitFace) */
+  var FACE_BOX = 150, FACE_MAX = 250;
+  var CUTS = [/(?<=[.?!…。」』])\s+/, /(?<=[,，、])\s+/, /\s+/];
+  function cutToFit(text, render, fits, lv) {
+    for (lv = lv || 0; lv < CUTS.length; lv++) {
+      if (lv === 2 && /</.test(text)) return null;          // 꾸밈 태그(<b> …)가 든 글은 낱말 사이에서 자르지 않는다
+      var parts = String(text).split(CUTS[lv]); if (parts.length < 2) continue;
+      var best = 0;
+      for (var k = 1; k < parts.length; k++) { render(parts.slice(0, k).join(' ')); if (fits()) best = k; else break; }
+      if (best) return [parts.slice(0, best).join(' '), parts.slice(best).join(' ')];
+      var sub = cutToFit(parts[0], render, fits, lv + 1);   // 첫 문장부터 넘친다 — 그 문장을 더 잘게
+      return sub ? [sub[0], [sub[1]].concat(parts.slice(1)).join(' ')] : null;
+    }
+    return null;
+  }
+  /** 이 쪽의 글이 얼굴 칸 높이를 넘으면 [들어가는 앞부분, 남은 글] (넘지 않거나 자를 수 없으면 null) */
+  function fitFacePage(box, body, text, render) {
+    if (!box.querySelector('.pframe') || !box.offsetHeight) return null;
+    function fits() { return box.offsetHeight <= FACE_BOX + 6; }
+    render(text); if (fits()) return null;
+    var r = cutToFit(text, render, fits, 0);
+    return r && /\S/.test(r[0]) && /\S/.test(r[1]) ? r : null;
+  }
+  /** 대화창이 얼굴 칸보다 높으면 얼굴을 그 높이만큼 키운다 (최대 FACE_MAX — 더 높으면 가운데에) */
+  function fitFace(box, opts) {
+    var pf = box.querySelector('.pframe'); if (!pf) return;
+    var nm = box.querySelector(':scope > .name');
+    for (var i = 0; i < 3; i++) {
+      var cv = pf.querySelector('canvas, img'), h = box.offsetHeight; if (!cv || !h) return;
+      var sz = h > FACE_BOX + 4 ? Math.min(FACE_MAX, h - 16) : 134, cur = parseFloat(cv.style.width) || 134;
+      if (Math.abs(sz - cur) < 2) break;
+      if (sz > 134 && opts && opts.portrait && !(opts.portrait instanceof HTMLCanvasElement) && cv.width < sz) {
+        try { var big = G.Art.portraitCanvas(opts.portrait, Math.round(sz)); if (big) { pf.replaceChild(big, cv); cv = big; } } catch (e) { /* 그대로 키운다 */ }
+      }
+      cv.style.width = cv.style.height = sz + 'px';
+      pf.style.flex = '0 0 ' + (sz + 16) + 'px'; pf.style.width = (sz + 16) + 'px';
+      pf.style.display = 'flex'; pf.style.alignItems = 'center';
+      if (nm && opts && opts.portrait) nm.style.left = (sz + 16) + 'px';
+    }
+  }
+
   // ---------------------------------------------------------------- 대화창 위에 서는 사람들
   /* 무릎상(머리부터 무릎까지 서 있는 그림)은 대화창 윗변에 발을 딛고 선다.
      · 두 사람(duo): 왼쪽 사람은 그림 왼쪽 끝이 대화창 왼쪽 끝에, 오른쪽 사람은 그림 오른쪽 끝이 대화창 오른쪽 끝에 맞는다.
@@ -809,7 +853,7 @@
       if (opts.portrait) box.querySelector('.pframe').appendChild(portraitNode(opts, 134));
       if (opts.portrait && G.Bio) G.Bio.tag(box.querySelector('.pframe'), opts);
       back.appendChild(box);
-      return { box: box, layout: function () {}, destroy: function () {} };
+      return { box: box, face: !!opts.portrait, layout: function () { if (opts.portrait) fitFace(box, opts); }, destroy: function () {} };
     }
 
     stage = U.el('div', 'dlg-stage' + (duo ? ' duo' : ' solo') + (asking ? ' ask' : ''));
@@ -1030,8 +1074,12 @@
       modalRoot.appendChild(back);
       var body = box.querySelector('.body');
       var idx = 0, finished = false;
+      function render(t) { body.innerHTML = speech(box, t, opts) + '<div class="more">▼</div>'; }
       function show() {
-        body.innerHTML = speech(box, pages[idx], opts) + '<div class="more">▼</div>'; shownAt = Date.now();
+        // 얼굴 칸이 있으면 얼굴 높이에 들어가는 만큼만 보이고 남은 글은 다음 쪽으로 (2026-11-06)
+        var cut = shell.face ? fitFacePage(box, body, pages[idx], render) : null;
+        if (cut) { pages[idx] = cut[0]; pages.splice(idx + 1, 0, cut[1]); }
+        render(pages[idx]); shownAt = Date.now();
         shell.layout();
       }
       var shownAt = 0, arm = null;

@@ -25,7 +25,7 @@ def main():
     checks, exports, tiles, keys = [], [], [], {}
     for row in spec['portraits']:
         row.update(results[row['id']])
-        original = sources / (row['id'] + '.png')
+        original = ROOT / row['workspace_source'] if row.get('workspace_source') else sources / (row['id'] + '.png')
         if not original.exists():
             shutil.copy2(row['source'], original)
         with Image.open(original) as opened:

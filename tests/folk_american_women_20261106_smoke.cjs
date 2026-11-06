@@ -32,7 +32,9 @@ const plan = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/folk_american_wom
         check(p.f.includes(d.name) && p.types.includes(d.type) && d.lg[p.lang[0]] === 3, row.id + ' 이름·솜씨·말');
         G.Game.state.wander.defs[d.id] = d;
         G.Game.state.mates.push({id: d.id, role: 'none', loyal: 80});
-        d.face = 'portraits/npc-roles/na/maid'; d.halfKey = d.face + '_half';
+        // 얼굴을 수정한 두 민족은 실제 이전 v1 전용 초상을 저장한 경우도 복원한다.
+        d.face = /_v2$/.test(base) ? base.replace(/_v2$/, '_v1') : 'portraits/npc-roles/na/maid';
+        d.halfKey = d.face + '_half';
         G.Game.state = G.State.deserialize(G.State.serialize()); G.Wander.apply();
         const restored = G.MATE[d.id];
         check(restored.face === base && restored.halfKey === base + '_half', row.id + ' 옛 저장 복원');

@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+다코타·이누이트 여성 후보는 후속 참고 얼굴을 반영한 `portraits/folk-join/folk_dakota_f_amer_v2`·`inuit_f_amer_v2`와 각각의 `_half` WebP를 쓴다. [수정 그림·발견물·소지품·교역품 누락 점검](../docs/art/american-face-revision-20261106.md).
+
 아메리카 민족 발견물 여성 후보 22종(북미 17·중미 1·남미 4)은 `portraits/folk-join/<발견물ID>_f_amer_v1.webp`(얼굴 448×448)와 `_f_amer_v1_half.webp`(무릎 1024×1536)를 쓴다. 같은 원화의 얼굴·의상이며 투명 알파를 보존한다. [대상·참고 이미지·미리보기·검증](../docs/art/folk-american-women-20261106.md).
 
 동남아 민족 발견물 여성 후보 5종은 `portraits/folk-join/<발견물ID>_f_v1.webp`(얼굴 448×448)와 `_f_v1_half.webp`(무릎 1024×1536)를 쓴다. 모두 투명 WebP이며 같은 원화의 얼굴·의상이다. [대상·참고 이미지·미리보기·검증](../docs/art/folk-seasia-women-20261106.md).

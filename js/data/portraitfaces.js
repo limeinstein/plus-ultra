@@ -4326,6 +4326,10 @@
     "portraits/folk-join/patagon_f_amer_v1": {"box":[0.3099,0.2361,0.3984,0.5196],"eyes":[0.4683,0.4305,0.6354,0.4479],"mouth":[0.5243,0.6205]},
     "portraits/folk-join/patagon_f_amer_v1_half": {"box":[0.4364,0.0508,0.1509,0.1358],"eyes":[0.498,0.0997,0.5644,0.1004],"mouth":[0.5245,0.1483]},
     "portraits/folk-join/skraeling_f_amer_v1": {"box":[0.3096,0.2121,0.3776,0.4752],"eyes":[0.381,0.4129,0.5297,0.3849],"mouth":[0.4929,0.5679]},
-    "portraits/folk-join/skraeling_f_amer_v1_half": {"box":[0.4062,0.0639,0.1617,0.1329],"eyes":[0.4328,0.1123,0.4988,0.1115],"mouth":[0.4737,0.1623]}
+    "portraits/folk-join/skraeling_f_amer_v1_half": {"box":[0.4062,0.0639,0.1617,0.1329],"eyes":[0.4328,0.1123,0.4988,0.1115],"mouth":[0.4737,0.1623]},
+    "portraits/folk-join/folk_dakota_f_amer_v2": {"box":[0.303,0.1909,0.3643,0.4843],"eyes":[0.4801,0.3981,0.612,0.3799],"mouth":[0.5639,0.5639]},
+    "portraits/folk-join/folk_dakota_f_amer_v2_half": {"box":[0.4254,0.073,0.1596,0.1312],"eyes":[0.5017,0.1209,0.5609,0.1193],"mouth":[0.5374,0.1672]},
+    "portraits/folk-join/inuit_f_amer_v2": {"box":[0.3266,0.2471,0.3614,0.4834],"eyes":[0.4247,0.4391,0.585,0.4239],"mouth":[0.5249,0.6036]},
+    "portraits/folk-join/inuit_f_amer_v2_half": {"box":[0.3809,0.052,0.1685,0.1556],"eyes":[0.4241,0.1187,0.5023,0.1179],"mouth":[0.4685,0.1683]}
   };
 })(window.G = window.G || {});

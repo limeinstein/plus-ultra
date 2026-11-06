@@ -10,6 +10,7 @@ Claude가 설계·통합·실제 플레이 검증·배포를, Codex가 떼어 �
 | 03 | [인물 리그 실행기](03_rig_runtime.md) | 3 | `js/art/rig.js`(새), `test_rig.html`(새) | 없음 |
 | 04 | [PR 자동 시험](04_ci_tests.md) | 공통 | `.github/workflows/test.yml`(새), `tests/` | 없음 |
 | 05 | [신기루 7곳 → 가상의 놀이공원](05_mirage_amusement_parks.md) (저작권 QA 2026-11-04) | 그림·글 | `js/data/miragedisc.js`, `js/data/discfam_8.js`, `images/discoveries·discovery-ends·discovery-sheets·map-discoveries`, `tools/mirage_*` | 없음 |
+| 06 | [「갑판의 길잡이」 사이드의 팔 다시 그리기](06_said_deck_redraw.md) (사용자 QA 2026-11-06) | 그림 | `images/legend-events/bx_said_deck.webp`, `tools/missing_event_scenes_20261105_prompts.json` | 없음 |
 
 1단계(파도를 타는 배·돛·깃발·선수 물보라)는 2026-09-28에 Claude가 구현했습니다 — `js/world/waves.js`, `G.FX.ride`.
 연결(바다·해전 장면에 끼워 넣기)은 모듈이 들어온 뒤 Claude가 합니다. 지시서의 "연결 지점"은 참고용입니다.

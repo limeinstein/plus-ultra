@@ -120,7 +120,9 @@
     'folk_makah', 'aztec', 'inca', 'blemmyes', 'patagon', 'folk_selknam'].forEach(function (id) {
     var p = G.FOLK_JOIN[id];
     p.portraits = p.portraits || {};
-    p.portraits.f = ['portraits/folk-join/' + id + '_f_amer_v1'];
+    // 다코타·이누이트는 후속 첨부 얼굴을 반영한 수정 원화를 쓴다.
+    var version = id === 'folk_dakota' || id === 'inuit' ? 'v2' : 'v1';
+    p.portraits.f = ['portraits/folk-join/' + id + '_f_amer_' + version];
   });
   // 갈래마다 나서며 하는 말 ({who} = 그 민족)
   G.FOLK_JOIN_LINES = {
