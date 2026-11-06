@@ -24,7 +24,7 @@ def audit() -> dict:
         for key in re.findall(r"['\"](" + PREFIXES + r"/[a-z0-9_]*[a-z0-9])['\"](?!\s*\+)", text):
             add(key, source)
         # 역사 장면 도우미와 큰 해전 자료의 짧은 이름도 실제 경로로 펼친다.
-        for key in re.findall(r"\bwithScene\(\s*'([a-z0-9_]+)'", text):
+        for key in re.findall(r"\bwithScene\(\s*'([a-z0-9_]+)'(?!\s*\+)", text):
             add('legend-events/' + key, source)
         for key in re.findall(r"\b(?:councilPic|foePic)\s*:\s*'([a-z0-9_]+)'", text):
             add('legend-events/' + key, source)
@@ -41,6 +41,11 @@ def audit() -> dict:
         if "img: 'legend-events/little_prince_' + key" in text:
             for key in re.findall(r"\bshot\('([a-z0-9_]+)'", text):
                 add('legend-events/little_prince_' + key, source)
+        # 해적 소굴은 바다 코드를 이어 붙이므로 현재 자료에서 실제 일곱 열쇠를 펼친다.
+        if "withScene('lair_' + d.zone" in text:
+            data = (ROOT / 'js/data/pirate_lairs.js').read_text(encoding='utf-8')
+            for zone in re.findall(r"\{ zone: '([a-z]+)'", data):
+                add('legend-events/lair_' + zone, source)
 
     source = ROOT / 'js/art/eventshot.js'
     for key in ('es_rescued', 'es_return', 'es_wedding', 'eliz_tower', 'eliz_safe', 'eliz_knight', 'court_rescue', 'royal_wedding'):

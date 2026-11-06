@@ -456,36 +456,36 @@
     infantryGap: 26, artilleryGap: 58, beastGap: 42, strideFps: 7, chargeFps: 11, gaitBob: 2.4, chargeDustGap: 0.075,
     terrain: { // 지형 그림 전용. 땅의 시작선·원근·물살·수풀 밀도를 한곳에서 조정한다.
       groundY: 118, resolution: 2, textureSize: 128,
-      stream: { reachBack: 48, reachFront: 70, minReach: 60, segments: 48, width: [13, 33], bend: 36, bank: 13,
+      stream: { segments: 96, width: [7, 42], foregroundBleed: 28, headFade: 0.06, bank: 13,
         flowSpeed: 0.14, textureSpeed: 32, textureOpacity: 0.55, ripples: 52, stones: 18, reeds: 30, foam: 9 },
       hill: { width: 192, height: 37, tufts: 95, stones: 12 },
       woods: { trees: 9, height: 56, spread: 168, foliage: 24, sway: 4.2, windRate: 1.65, gustRate: 0.63, bendStrips: 14 },
       regions: { // 9개 배경마다 별도 색·식생·지형. 모양과 움직임의 배율이며 전투 규칙은 바꾸지 않는다.
-        grass: { groundY: 180, name: '초원', tree: 'oak', trees: 0.8, treeHeight: 1, wind: 1, flow: 1, width: 1, bend: 1, bank: 1,
+        grass: { course: [0, -15, 18, -12, 34, 80], groundY: 180, name: '초원', tree: 'oak', trees: 0.8, treeHeight: 1, wind: 1, flow: 1, width: 1, bank: 1,
           hill: 'meadow', hillHeight: 0.9, tufts: 1, rocks: 1, reeds: 1, snow: 0,
           colors: { earth: '#6e5940', light: '#a79b6a', grass: '#74734b', leaf: '#626744', dark: '#323c28', water: '#405c59', shallow: '#92a491', rock: '#938979' } },
-        steppe: { groundY: 180, name: '초원지대', tree: 'scrub', trees: 0.65, treeHeight: 0.65, wind: 1.45, flow: 0.65, width: 0.8, bend: 0.7, bank: 1.2,
+        steppe: { course: [-8, 20, 52, 36, 6, -30], groundY: 180, name: '초원지대', tree: 'scrub', trees: 0.65, treeHeight: 0.65, wind: 1.45, flow: 0.65, width: 0.8, bank: 1.2,
           hill: 'dry', hillHeight: 0.7, tufts: 1.4, rocks: 0.8, reeds: 0.6, snow: 0,
           colors: { earth: '#80684a', light: '#b9a679', grass: '#9a8a5c', leaf: '#82784f', dark: '#4d4b32', water: '#66705a', shallow: '#a4a68b', rock: '#9f927c' } },
-        desert: { groundY: 178, name: '사막', tree: 'acacia', trees: 0.45, treeHeight: 0.8, wind: 0.8, flow: 0.55, width: 0.75, bend: 0.65, bank: 1.4,
+        desert: { course: [35, 28, 4, -22, -8, 40], groundY: 178, name: '사막', tree: 'acacia', trees: 0.45, treeHeight: 0.8, wind: 0.8, flow: 0.55, width: 0.75, bank: 1.4,
           hill: 'dune', hillHeight: 1.1, tufts: 0.08, rocks: 0.45, reeds: 0.15, snow: 0,
           colors: { earth: '#b18c65', light: '#dcc29b', grass: '#baa17b', leaf: '#7c8055', dark: '#6b5942', water: '#577b73', shallow: '#b2b394', rock: '#b7a086' } },
-        forest: { groundY: 210, name: '숲', tree: 'mixed', trees: 1, treeHeight: 1.18, wind: 0.85, flow: 0.8, width: 0.9, bend: 1.2, bank: 0.85,
+        forest: { course: [12, -38, -6, 35, -30, 15], groundY: 210, name: '숲', tree: 'mixed', trees: 1, treeHeight: 1.18, wind: 0.85, flow: 0.8, width: 0.9, bank: 0.85,
           hill: 'loam', hillHeight: 0.85, tufts: 0.8, rocks: 1, reeds: 0.7, snow: 0,
           colors: { earth: '#675842', light: '#aaa071', grass: '#74734b', leaf: '#626e43', dark: '#303c28', water: '#47594a', shallow: '#929d7b', rock: '#8d8878' } },
-        jungle: { groundY: 205, name: '밀림', tree: 'tropical', trees: 1, treeHeight: 1.25, wind: 1.15, flow: 0.8, width: 1.15, bend: 1.2, bank: 1.2,
+        jungle: { course: [28, -40, -55, 35, 62, -10], groundY: 205, name: '밀림', tree: 'tropical', trees: 1, treeHeight: 1.25, wind: 1.15, flow: 0.8, width: 1.15, bank: 1.2,
           hill: 'moss', hillHeight: 0.8, tufts: 1.25, rocks: 1, reeds: 1.2, snow: 0,
           colors: { earth: '#5b503b', light: '#8f9b62', grass: '#526541', leaf: '#456842', dark: '#203d2c', water: '#3d5f4a', shallow: '#879773', rock: '#7a8270' } },
-        mountain: { groundY: 182, name: '산지', tree: 'fir', trees: 0.8, treeHeight: 1.1, wind: 1.15, flow: 1.6, width: 0.7, bend: 0.65, bank: 0.7,
+        mountain: { course: [38, 28, 10, -5, -24, -45], groundY: 182, name: '산지', tree: 'fir', trees: 0.8, treeHeight: 1.1, wind: 1.15, flow: 1.6, width: 0.7, bank: 0.7,
           hill: 'scree', hillHeight: 1.1, tufts: 0.3, rocks: 2.6, reeds: 0.25, snow: 0,
           colors: { earth: '#777568', light: '#b2b4a2', grass: '#787f5d', leaf: '#526650', dark: '#323e35', water: '#4b6c70', shallow: '#a0b5ad', rock: '#96998d' } },
-        snow: { groundY: 180, name: '눈밭', tree: 'spruce', trees: 0.75, treeHeight: 1.1, wind: 0.75, flow: 0.7, width: 0.8, bend: 0.85, bank: 1.1,
+        snow: { course: [-35, -25, -9, 12, 31, 50], groundY: 180, name: '눈밭', tree: 'spruce', trees: 0.75, treeHeight: 1.1, wind: 0.75, flow: 0.7, width: 0.8, bank: 1.1,
           hill: 'snow', hillHeight: 0.8, tufts: 0.08, rocks: 0.7, reeds: 0.1, snow: 0.75,
           colors: { earth: '#9faab0', light: '#e6ebea', grass: '#c3cecf', leaf: '#697d72', dark: '#415953', water: '#526f7e', shallow: '#b9d0d6', rock: '#acb8bc' } },
-        tundra: { groundY: 180, name: '툰드라', tree: 'dwarf', trees: 0.65, treeHeight: 0.48, wind: 1.35, flow: 0.8, width: 1.05, bend: 1.25, bank: 1.1,
+        tundra: { course: [-12, 28, -45, 60, 10, -72, 32], groundY: 180, name: '툰드라', tree: 'dwarf', trees: 0.65, treeHeight: 0.48, wind: 1.35, flow: 0.8, width: 1.05, bank: 1.1,
           hill: 'lichen', hillHeight: 0.55, tufts: 0.8, rocks: 1.6, reeds: 0.45, snow: 0.12,
           colors: { earth: '#716d56', light: '#a8a88c', grass: '#7c7f59', leaf: '#747c58', dark: '#424c3e', water: '#52696d', shallow: '#a4b5af', rock: '#94998e' } },
-        ice: { groundY: 180, name: '얼음땅', tree: 'bare', trees: 0.35, treeHeight: 0.55, wind: 0.6, flow: 0.5, width: 0.65, bend: 0.5, bank: 1.3,
+        ice: { course: [20, 20, -24, -24, 18, 18], groundY: 180, name: '얼음땅', tree: 'bare', trees: 0.35, treeHeight: 0.55, wind: 0.6, flow: 0.5, width: 0.65, bank: 1.3,
           hill: 'ice', hillHeight: 1, tufts: 0, rocks: 1.5, reeds: 0, snow: 1,
           colors: { earth: '#91aab8', light: '#e3eff2', grass: '#b9cfd8', leaf: '#8fa8b1', dark: '#4b6576', water: '#456f86', shallow: '#b7d5df', rock: '#a7c1ce' } }
       }
@@ -568,11 +568,11 @@
     keyTimes: [0, 0.07, 0.14, 0.21, 0.28, 0.35, 0.43, 0.49, 0.55, 0.78, 0.88, 0.95]
   };
   // 제독 보행: 두 걸음의 실제 이동 거리(px)로 자세를 넘긴다. 먼 건물 자동 이동은 다리가 과하게 빨라지지 않게 제한한다.
-  // down은 접지 뒤 무게를 받는 눌림, rise는 발을 밀어 올릴 때의 높이(px). 얼굴·복장과 이동 속도는 그대로 쓴다.
+  // stride는 두 걸음의 이동 거리(px). down·rise는 옛 시트의 보조 움직임이며 고정 배율 시트에는 쓰지 않는다.
   G.FX.heroGait = {
     supportEnd: 0.42,
-    walk: { stride: 240, maxCycles: 1.8, down: 2.2, rise: 1.5 },
-    run: { stride: 360, maxCycles: 2.6, down: 3.2, rise: 5.5 },
+    walk: { stride: 300, maxCycles: 1.35, down: 2.2, rise: 1.5 },
+    run: { stride: 440, maxCycles: 2.2, down: 3.2, rise: 5.5 },
     shadowLift: 0.035
   };
   // 해전 물보라: 4×2칸, 각 256px. 크기는 해전 화면의 기준 px, 수명은 전투 초.

@@ -1,0 +1,6162 @@
+{
+  "version": 1,
+  "clips": [
+    {
+      "look": "admiral",
+      "motion": "walk",
+      "source_sha256": "bfec272e127bd5d87616517ff156fd0dde0c9ae1da2a3d8077151dcc4c139370",
+      "reference_sha256": "e2d76c3ce0afa88425d621f1f5d6ba31597f9b4b33c4bb81ced04be1e2137490",
+      "reference_frame": 0,
+      "scale": 0.9271523178807947,
+      "cell": [
+        300,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        74,
+        76,
+        75,
+        75,
+        76,
+        75,
+        77,
+        77
+      ],
+      "key_heights": [
+        281,
+        279,
+        280,
+        280,
+        279,
+        280,
+        278,
+        278
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9271523178807947,
+          "x": 50,
+          "y": 73,
+          "cut": 132,
+          "body_sha256": "cea480c843da1102de4362b2d718f7fc713fa500d3b04ae949bb1e6ab7912d61"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 60,
+          "y": 76,
+          "cut": 134,
+          "body_sha256": "c0e6b6f8af79bc8d668e4378ad1aa44c575f0312e5dda59dcbdb35e0722f8c42"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 62,
+          "y": 75,
+          "cut": 133,
+          "body_sha256": "95a16df030fee5ce0269e41af1cb4718141fa00edafef5fe5f513cc402aeb4bb"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 58,
+          "y": 73,
+          "cut": 133,
+          "body_sha256": "97313f136228f1b18cafb4ac72bfe63940a37e39105b8769240198e6f1572280"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 52,
+          "y": 75,
+          "cut": 134,
+          "body_sha256": "113025580ee7b5ba993982dfbeb2744b879872370dfed1f1e917e034a26b528b"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 54,
+          "y": 75,
+          "cut": 133,
+          "body_sha256": "6a163caa1aa51606598954e8005d3b8dc3009c0d976d046d2f7f974fd2f59aee"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 58,
+          "y": 77,
+          "cut": 135,
+          "body_sha256": "926fe2aef0ddc36e8378b6ae4b98a7e43a1e22f1cec0e734e352c5ce4884f247"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 52,
+          "y": 77,
+          "cut": 135,
+          "body_sha256": "dc0527c0800d8a92b2b0e1cce23b24f40ca6e6ff2d7528f971c6dbb33692b53a"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8774834437086092,
+      "mid_source_sha256": "c4eab41a13ea1acab609ae355dbef43e1923b83a57eef149b07a5b9f1377bbb5",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "ghost"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 14,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "c30d4c91c76ce0383597adc06d5e71313257a6529731324a69fb9aa6c2ee05cb",
+      "original_sha256": {
+        "walk": "e2d76c3ce0afa88425d621f1f5d6ba31597f9b4b33c4bb81ced04be1e2137490",
+        "run": "be4f0ade68795adb50b8b444cff364c43fb63e1d71ef0f8f3f0db86316b2c26b",
+        "idle": "bb9bb69fa4b957c671c6eb1e6f950d49e0b8332c89f61531498deabaf3ae65fd"
+      }
+    },
+    {
+      "look": "admiral",
+      "motion": "run",
+      "source_sha256": "bfec272e127bd5d87616517ff156fd0dde0c9ae1da2a3d8077151dcc4c139370",
+      "reference_sha256": "e2d76c3ce0afa88425d621f1f5d6ba31597f9b4b33c4bb81ced04be1e2137490",
+      "reference_frame": 0,
+      "scale": 0.9271523178807947,
+      "cell": [
+        300,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        80,
+        78,
+        80,
+        73,
+        77,
+        78,
+        80,
+        73
+      ],
+      "key_heights": [
+        275,
+        277,
+        275,
+        248,
+        278,
+        277,
+        275,
+        256
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9271523178807947,
+          "x": 32,
+          "y": 79,
+          "cut": 138,
+          "body_sha256": "4954a8205d486dff3aa67b77ff73fe4b462db5be7713c658a8057cb887ad8dd6"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 22,
+          "y": 78,
+          "cut": 136,
+          "body_sha256": "8d608bc6d53ff792ebde377de3aa43457fa6840d7c556d53cc56d0f733fe322c"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 22,
+          "y": 79,
+          "cut": 138,
+          "body_sha256": "a1e609f8b3acc5d7286c0a10af88da2d01053d6901a4d4d109f3b8c8a814a3fd"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 20,
+          "y": 72,
+          "cut": 131,
+          "body_sha256": "d81477e5177bbebbe28d2f4146b7659807513ae8bfd6d4657865ebf5f4747545"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 34,
+          "y": 77,
+          "cut": 135,
+          "body_sha256": "e17102e5244face4200e9e490bd5e82aa7821ca0ca95a7ac1e3b80c81f0500d5"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 20,
+          "y": 77,
+          "cut": 136,
+          "body_sha256": "469ea12853a74a7c5b0286187b65241a293f687a355d616007f55d234506825a"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 22,
+          "y": 80,
+          "cut": 138,
+          "body_sha256": "e19bff9cb88b007b547e67b035115e2f76cd603d11b60de7cedb57240c75f114"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 21,
+          "y": 73,
+          "cut": 131,
+          "body_sha256": "4c72167e91cc3c6dc994ef6ac5f137280b70accf339160b2377480ef90b8a37b"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8774834437086092,
+      "mid_source_sha256": "c4eab41a13ea1acab609ae355dbef43e1923b83a57eef149b07a5b9f1377bbb5",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          28,
+          34,
+          31,
+          0,
+          0,
+          0,
+          0,
+          0,
+          39,
+          26,
+          30
+        ]
+      },
+      "output_sha256": "a61c89895c922cff8316b32300dd69059231e1c1c2f69f0b39afb0689b5f85c5",
+      "original_sha256": {
+        "walk": "e2d76c3ce0afa88425d621f1f5d6ba31597f9b4b33c4bb81ced04be1e2137490",
+        "run": "be4f0ade68795adb50b8b444cff364c43fb63e1d71ef0f8f3f0db86316b2c26b",
+        "idle": "bb9bb69fa4b957c671c6eb1e6f950d49e0b8332c89f61531498deabaf3ae65fd"
+      }
+    },
+    {
+      "look": "armored_navigator",
+      "motion": "walk",
+      "source_sha256": "cbadf99b80762c5b3ca50b02221e29c93ede408978c22cd8f7cb546390f7a0a2",
+      "reference_sha256": "1f9d60504dd962e97424c94b91426d4b1e6f8eda71976f6f82793d8e312aa106",
+      "reference_frame": 18,
+      "scale": 0.8361934477379095,
+      "cell": [
+        252,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        88,
+        88,
+        84,
+        86,
+        86,
+        87,
+        85,
+        84
+      ],
+      "key_heights": [
+        267,
+        267,
+        271,
+        269,
+        269,
+        268,
+        270,
+        271
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8361934477379095,
+          "x": 32,
+          "y": 87,
+          "cut": 143,
+          "body_sha256": "64ba661e9311f93144d116ed0e0604f40045c70f9b71594d3a024200a9b94f46"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 46,
+          "y": 88,
+          "cut": 143,
+          "body_sha256": "11eaef1abc52c7c9b5bb46c060f009840cf32902f80607a8ed02129f39126f35"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 74,
+          "y": 84,
+          "cut": 139,
+          "body_sha256": "7f4d4b545325bd5d19ea6ca9f129215db65ef3faf9f9e881f14ff12c7e39cb68"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 35,
+          "y": 85,
+          "cut": 141,
+          "body_sha256": "4fbc485d87cc17fd78c129a17d099af75253942417b6af16be6383bbc526c570"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 34,
+          "y": 85,
+          "cut": 141,
+          "body_sha256": "0328b58ebc951dcb09f305584dfbad032e4e6e56f56adedf1e7a707dbf54e71b"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 56,
+          "y": 87,
+          "cut": 142,
+          "body_sha256": "30e89359f90bb31fd2febe2b17f1d558d72f9e660532ce5ec173af171adb03f7"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 71,
+          "y": 85,
+          "cut": 140,
+          "body_sha256": "01e15e1054ca05c68850d460a3c43d1ea391f60c88499176b9eaec30ebba7aee"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 32,
+          "y": 84,
+          "cut": 139,
+          "body_sha256": "e3ffb1800f9083766c88e1956cda6d81f9133c9039890022f32485d456ee35ff"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8361934477379095,
+      "mid_source_sha256": "55fb2e6e1a1d2b4e77c7287066a27ede0257d43618ef48be4ae934ae4ba7c6b3",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "a4001e30b47b48588c3b53f7a26fd32b7edb26f0b8b606b6b231532de65b898f",
+      "original_sha256": {
+        "walk": "1f9d60504dd962e97424c94b91426d4b1e6f8eda71976f6f82793d8e312aa106",
+        "run": "97fe8aed3107f79fcbe42ba90b8a86f68a6e2a1725edb89a42223a50c7722479",
+        "idle": "01997bc722d2381d96904975fe8002753430a28a26f28464ee1f21015f1c77d5"
+      }
+    },
+    {
+      "look": "armored_navigator",
+      "motion": "run",
+      "source_sha256": "cbadf99b80762c5b3ca50b02221e29c93ede408978c22cd8f7cb546390f7a0a2",
+      "reference_sha256": "1f9d60504dd962e97424c94b91426d4b1e6f8eda71976f6f82793d8e312aa106",
+      "reference_frame": 18,
+      "scale": 0.8361934477379095,
+      "cell": [
+        252,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        93,
+        97,
+        91,
+        85,
+        93,
+        95,
+        90,
+        85
+      ],
+      "key_heights": [
+        262,
+        258,
+        264,
+        245,
+        262,
+        260,
+        265,
+        250
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8361934477379095,
+          "x": 34,
+          "y": 92,
+          "cut": 148,
+          "body_sha256": "d17308076c1abf09aa0a2b7ae967c327ddbe460e629921c2bc6425d3dfc4051d"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 44,
+          "y": 97,
+          "cut": 152,
+          "body_sha256": "540ed2e346c6e56f2b98f8e836dc9f7ba4af2c0a5c75237fab81dce8ab597cd5"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 28,
+          "y": 91,
+          "cut": 146,
+          "body_sha256": "99d472923c66a1b0592962b08bc01fb500897f4890f4a56d9f50616a6946e666"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 32,
+          "y": 85,
+          "cut": 140,
+          "body_sha256": "c6f6679214abe44f94b424f363030e35d2b5309cca46503ff4fa0da78555e41f"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 36,
+          "y": 92,
+          "cut": 148,
+          "body_sha256": "9bc82a892a325bd762363f1202e4e21ce81d99a3b4840a3ac08f5a7441379160"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 48,
+          "y": 95,
+          "cut": 150,
+          "body_sha256": "ee9cc6ea0f24660ed39744aa9289b17af48415b24d5ca0aac21f56731dfcb74e"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 20,
+          "y": 90,
+          "cut": 145,
+          "body_sha256": "8c4adea04f7fd7a2fc1f8771a649faf2f83bdc4ae154a331b569fa81b34f25a6"
+        },
+        {
+          "scale": 0.8361934477379095,
+          "x": 33,
+          "y": 85,
+          "cut": 140,
+          "body_sha256": "bcd669181cfdd5a4cedbd281b2551286f271a6b4627b60f92e7feb922a117572"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "rife"
+      ],
+      "mid_scale": 0.8361934477379095,
+      "mid_source_sha256": "55fb2e6e1a1d2b4e77c7287066a27ede0257d43618ef48be4ae934ae4ba7c6b3",
+      "rejected": [
+        {
+          "after": 2,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 2,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        },
+        {
+          "after": 7,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          25,
+          16,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          20,
+          10
+        ]
+      },
+      "output_sha256": "6a00ea582c38e58583df6e7705242e3cdecf989ab890c370397b5a8b3af092df",
+      "original_sha256": {
+        "walk": "1f9d60504dd962e97424c94b91426d4b1e6f8eda71976f6f82793d8e312aa106",
+        "run": "97fe8aed3107f79fcbe42ba90b8a86f68a6e2a1725edb89a42223a50c7722479",
+        "idle": "01997bc722d2381d96904975fe8002753430a28a26f28464ee1f21015f1c77d5"
+      }
+    },
+    {
+      "look": "army_officer",
+      "motion": "walk",
+      "source_sha256": "6193982d1ade3f7d06f53c17a0b95c00100b86d1da951d982c5b26d5e3d9ed8a",
+      "reference_sha256": "5aaf9827f2780177d3b20407d3a28ed6f28140a27f8ad740042b32deca1d57f8",
+      "reference_frame": 6,
+      "scale": 0.8873949579831932,
+      "cell": [
+        264,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        91,
+        90,
+        92,
+        93,
+        92,
+        92,
+        91,
+        94
+      ],
+      "key_heights": [
+        264,
+        265,
+        263,
+        262,
+        263,
+        263,
+        264,
+        261
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8873949579831932,
+          "x": 33,
+          "y": 91,
+          "cut": 150,
+          "body_sha256": "7e6b56aad7eb77dbd4e11addf055b3539c66ca4a79c3a54cca4ad97a364cc154"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 48,
+          "y": 89,
+          "cut": 149,
+          "body_sha256": "61be83f809cd1587ccefc354cbf4b753e11a989d4bdb0463407dccaabcf8ad5e"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 52,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "d2f5874c4663958175c256a4f0577e3fd9d897c1c1716c105a385720053da0bb"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 30,
+          "y": 93,
+          "cut": 152,
+          "body_sha256": "fccd8641e64da5a25168c022d1e67852db1c8112dce9b492119577b2a81d125e"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 27,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "2e3b756b347f6bc897dfddc9afba56947faf51300becbfb2c9aded52e364a458"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 53,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "984428247123bed07de15f584dad52b06537cb19bf9917047daf017efe053b6c"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 58,
+          "y": 91,
+          "cut": 150,
+          "body_sha256": "26f9bd38430dad702f1d190403ab1263bbcd16d9e4a957624b0687c15c5bf044"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 30,
+          "y": 93,
+          "cut": 153,
+          "body_sha256": "044ce8a52ee445e582bb5159aca0a6275d30fdc7f2ea302688b6240a97051407"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.842273180458624,
+      "mid_source_sha256": "57064b73c74be790cc28733e25a44c9dc1ffb5ea55a2794726b905029a33ffdb",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "c28ffe9fe5733636fd88db227fcdbd59360145700c927901753086ad7e769959",
+      "original_sha256": {
+        "walk": "5aaf9827f2780177d3b20407d3a28ed6f28140a27f8ad740042b32deca1d57f8",
+        "run": "f64545fcd50e2c49a25b6bb4ca668c7551a2be97678bac453f045d92d91fdf04",
+        "idle": "1d3b3c0fcfead78512f68772d690816b722aec9f50462cb68297fb8992226d00"
+      }
+    },
+    {
+      "look": "army_officer",
+      "motion": "run",
+      "source_sha256": "6193982d1ade3f7d06f53c17a0b95c00100b86d1da951d982c5b26d5e3d9ed8a",
+      "reference_sha256": "5aaf9827f2780177d3b20407d3a28ed6f28140a27f8ad740042b32deca1d57f8",
+      "reference_frame": 6,
+      "scale": 0.8873949579831932,
+      "cell": [
+        264,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        92,
+        92,
+        88,
+        80,
+        86,
+        88,
+        83,
+        80
+      ],
+      "key_heights": [
+        263,
+        263,
+        267,
+        245,
+        269,
+        267,
+        272,
+        253
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8873949579831932,
+          "x": 36,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "91e616a10dc487816bb0252321a2a6f7bb413d33433ac97a0ae2076eaa8d8772"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 40,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "a427723ef154bbd54886ba645d3d8374473e3da45c0632da8e9f6523bf59e89d"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 27,
+          "y": 88,
+          "cut": 147,
+          "body_sha256": "e6c0b8bdae27ed5f97e50d566948a763adcb9a3b089711fc9d177096d405d636"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 29,
+          "y": 79,
+          "cut": 139,
+          "body_sha256": "ed96c4f3668c70bc839f146e62f5ec7c388440702c9793eb3fcf7df62278e05c"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 36,
+          "y": 85,
+          "cut": 145,
+          "body_sha256": "05c8f497f7b49742281266df3e1f820aa920853c02c4f8399a202655dcf2c5c0"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 40,
+          "y": 88,
+          "cut": 147,
+          "body_sha256": "911a276c2a5461917e01f29a6deab39b181cf115d979810d0c07309eb0b1b08e"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 20,
+          "y": 82,
+          "cut": 142,
+          "body_sha256": "bb673d360239e83b19a559536ee18997d1d44f8f932b9358be89acc312f05e9b"
+        },
+        {
+          "scale": 0.8873949579831932,
+          "x": 26,
+          "y": 79,
+          "cut": 139,
+          "body_sha256": "4c716242e936b5f608fd1243fab15b94722f48a9a615144e61d032ce319f3149"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.842273180458624,
+      "mid_source_sha256": "57064b73c74be790cc28733e25a44c9dc1ffb5ea55a2794726b905029a33ffdb",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          42,
+          30,
+          30,
+          0,
+          0,
+          0,
+          0,
+          0,
+          25,
+          22,
+          16
+        ]
+      },
+      "output_sha256": "1a3474923c3c2996af9e4bf6d9f076c5202e5214abe0562c10ac2cad5d247f0e",
+      "original_sha256": {
+        "walk": "5aaf9827f2780177d3b20407d3a28ed6f28140a27f8ad740042b32deca1d57f8",
+        "run": "f64545fcd50e2c49a25b6bb4ca668c7551a2be97678bac453f045d92d91fdf04",
+        "idle": "1d3b3c0fcfead78512f68772d690816b722aec9f50462cb68297fb8992226d00"
+      }
+    },
+    {
+      "look": "battle_vanguard",
+      "motion": "walk",
+      "source_sha256": "ee3f5c21bef9afb230bb9816fd8fba132fa766f4c63892de19d3691585cd6c6b",
+      "reference_sha256": "e2e243d856c11e7ae77d0331699cd0f84f197eaa4bff958bf7d88d3ad5dcd316",
+      "reference_frame": 12,
+      "scale": 0.9078498293515358,
+      "cell": [
+        268,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        87,
+        92,
+        90,
+        87,
+        91,
+        91,
+        90,
+        90
+      ],
+      "key_heights": [
+        268,
+        263,
+        265,
+        268,
+        264,
+        264,
+        265,
+        265
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9078498293515358,
+          "x": 34,
+          "y": 87,
+          "cut": 146,
+          "body_sha256": "ea3a03cccb9f22735abfc173c5e8c317edeb74c3939d277cfed8bc9801c9e134"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 46,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "b86c61c604bfea5cf6048f56fdde48fe5f774b2efd558465a22720e8d3a9b6fb"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 60,
+          "y": 89,
+          "cut": 149,
+          "body_sha256": "02c58cf38e99fd44447207adf38125704ee5c0d4898942eaff2b17df20ed0c82"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 45,
+          "y": 87,
+          "cut": 146,
+          "body_sha256": "2cead91dc137e494593affb60959678576ee84ea748f59cbd1a56ea859c30fe2"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 42,
+          "y": 91,
+          "cut": 150,
+          "body_sha256": "9ce8d6a31e4634e018c3eb0983ea7240a40428ff7293428dea0e6b840a41caba"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 58,
+          "y": 90,
+          "cut": 150,
+          "body_sha256": "8e2938ced8ba97f5c7ada4ec8044cb0911daaa7d42ec9177b1fb09c7b443ebdc"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 62,
+          "y": 90,
+          "cut": 149,
+          "body_sha256": "d5fac6dbe487508950e2cc687965f3e8db44f33d15ffac3b25d87d54338e36d1"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 45,
+          "y": 90,
+          "cut": 149,
+          "body_sha256": "b67f6e23af334be2e19e11e5d4954f9030fc0aac3361b36a0597aab168bd6eca"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.9280242700037922,
+      "mid_source_sha256": "7a5df41d7255de3eca8a27dc76ff35d9e4b17bdfbb3baee6d1c88f7d2dd082ac",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 14,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "a0dd241ba9335bbfb3e3d39a3a03f3c6f46856ae7402ddc99ad08e89f9496032",
+      "original_sha256": {
+        "walk": "e2e243d856c11e7ae77d0331699cd0f84f197eaa4bff958bf7d88d3ad5dcd316",
+        "run": "6ffc5a0edf0974f664192f5157b2955041cd694f64b5e8e81406ba1a99ee143f",
+        "idle": "c22dc5cb7882a11a7fd77150010bfe3f88b96923c6c732058e78e9b51a2a677a"
+      }
+    },
+    {
+      "look": "battle_vanguard",
+      "motion": "run",
+      "source_sha256": "ee3f5c21bef9afb230bb9816fd8fba132fa766f4c63892de19d3691585cd6c6b",
+      "reference_sha256": "e2e243d856c11e7ae77d0331699cd0f84f197eaa4bff958bf7d88d3ad5dcd316",
+      "reference_frame": 12,
+      "scale": 0.9078498293515358,
+      "cell": [
+        268,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        98,
+        102,
+        97,
+        91,
+        96,
+        103,
+        98,
+        91
+      ],
+      "key_heights": [
+        257,
+        253,
+        258,
+        242,
+        259,
+        252,
+        257,
+        249
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9078498293515358,
+          "x": 20,
+          "y": 97,
+          "cut": 157,
+          "body_sha256": "7d95ca19b41e77d4f6d6fa2e9832102fd28b9520e2309cf63d89d690d28210e6"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 36,
+          "y": 101,
+          "cut": 161,
+          "body_sha256": "29beaa0d413476baee96191b834fc81db3e2699a0a811bac449ed257ac393884"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 33,
+          "y": 96,
+          "cut": 156,
+          "body_sha256": "23166accc7f568e572ec6c0fe91ee01a08755fc40e6bb01152a9b20e809cb232"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 30,
+          "y": 91,
+          "cut": 150,
+          "body_sha256": "c1b78a342179fce16e593edf34d98494479ea5827ba7059dac9cef36d5b34e71"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 30,
+          "y": 95,
+          "cut": 155,
+          "body_sha256": "41303ce12ff27b09a709c01418c0a870c56418c9292cce3cc40f944d920a08ff"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 31,
+          "y": 103,
+          "cut": 162,
+          "body_sha256": "93cd0dcd14d34c50e41cf856eec0a1417294db5dbd8efd1ac9c6732712057b52"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 28,
+          "y": 98,
+          "cut": 157,
+          "body_sha256": "8858fbd71a5faa6147e8350f14acc6b991eb190b07feedfb048a26034c3851b8"
+        },
+        {
+          "scale": 0.9078498293515358,
+          "x": 29,
+          "y": 91,
+          "cut": 150,
+          "body_sha256": "a2a49152e278c7f5b7f10d569c38337e1ff3b1dbfe01891b33e60019793c2d21"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.9280242700037922,
+      "mid_source_sha256": "7a5df41d7255de3eca8a27dc76ff35d9e4b17bdfbb3baee6d1c88f7d2dd082ac",
+      "rejected": [
+        {
+          "after": 2,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 2,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          22,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          11,
+          15,
+          2
+        ]
+      },
+      "output_sha256": "8f4792a369832bc80a1cbfdfb090a05825ef86459667bc7822889e91555e155f",
+      "original_sha256": {
+        "walk": "e2e243d856c11e7ae77d0331699cd0f84f197eaa4bff958bf7d88d3ad5dcd316",
+        "run": "6ffc5a0edf0974f664192f5157b2955041cd694f64b5e8e81406ba1a99ee143f",
+        "idle": "c22dc5cb7882a11a7fd77150010bfe3f88b96923c6c732058e78e9b51a2a677a"
+      }
+    },
+    {
+      "look": "blackcoat_captain",
+      "motion": "walk",
+      "source_sha256": "fb72cab6bf161895a0769a21693453a7106e5028676b0f1ac064b48ebbf4a024",
+      "reference_sha256": "11711a3c6593ecfacdafc556a3ab18cd78edef9b1c910d71cf97c8926e67116e",
+      "reference_frame": 12,
+      "scale": 0.9271523178807947,
+      "cell": [
+        314,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        75,
+        76,
+        72,
+        73,
+        75,
+        79,
+        73,
+        77
+      ],
+      "key_heights": [
+        280,
+        279,
+        283,
+        282,
+        280,
+        276,
+        282,
+        278
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9271523178807947,
+          "x": 46,
+          "y": 75,
+          "cut": 138,
+          "body_sha256": "28239ecb5866b5d7dc5ed0cdd0909f49697a80f20594baf99192df4b714b85bb"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 49,
+          "y": 76,
+          "cut": 139,
+          "body_sha256": "fed3455e1ee378e0cdc874e563033b072824a6cf3fcf2c976df00990328ddccd"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 59,
+          "y": 71,
+          "cut": 135,
+          "body_sha256": "2c3fa8271c94b7feb02b9f6c013e250760b8e7791d57ef7f6be16ec3873a8da4"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 50,
+          "y": 72,
+          "cut": 136,
+          "body_sha256": "6e5eaf632129c8885b31c8cb535f7c2477419a21db7057e6d020992755640e45"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 50,
+          "y": 74,
+          "cut": 138,
+          "body_sha256": "0cf5bb48ab16b9ed1f5c30aee9bfc5617fd2c1e2647f03820cb59f464c58184c"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 52,
+          "y": 78,
+          "cut": 142,
+          "body_sha256": "5d9b2ea795e5d7df2612a026bdb21028701c7af5e259b03f7b15ef8dcc8ae657"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 64,
+          "y": 73,
+          "cut": 136,
+          "body_sha256": "abe543f39c0bc1f7204928e8e35ce8e07344baec7a706623923c2b272a2b74bf"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 51,
+          "y": 76,
+          "cut": 140,
+          "body_sha256": "fe701bba60feb84fc7e9850a3a1dff914c778c6f0bb03e7f021ad9ddecea3bb4"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8632107787166019,
+      "mid_source_sha256": "28a1011ed4e148986ead39db1e56baba5fff197950cd56c71aaa0c220436378a",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "339630a816dda4fcb39159a54d06a5d4d26aea4b690c66942ab082ae4b382abd",
+      "original_sha256": {
+        "walk": "11711a3c6593ecfacdafc556a3ab18cd78edef9b1c910d71cf97c8926e67116e",
+        "run": "c16c46a38004e16081955698d61488eb8eaa3c78501e5977d761e9003af61f18",
+        "idle": "5e14be575ac93150cd9832072b84c8f7283376b17bcf0a35b6dfa71d9454d163"
+      }
+    },
+    {
+      "look": "blackcoat_captain",
+      "motion": "run",
+      "source_sha256": "fb72cab6bf161895a0769a21693453a7106e5028676b0f1ac064b48ebbf4a024",
+      "reference_sha256": "11711a3c6593ecfacdafc556a3ab18cd78edef9b1c910d71cf97c8926e67116e",
+      "reference_frame": 12,
+      "scale": 0.9271523178807947,
+      "cell": [
+        314,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        77,
+        82,
+        80,
+        71,
+        75,
+        82,
+        78,
+        71
+      ],
+      "key_heights": [
+        278,
+        273,
+        275,
+        241,
+        280,
+        273,
+        277,
+        261
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9271523178807947,
+          "x": 26,
+          "y": 76,
+          "cut": 140,
+          "body_sha256": "6c3f5def575093a33f25a31281082158fc037c5a57a739dc00d6c9b641f84120"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 24,
+          "y": 82,
+          "cut": 145,
+          "body_sha256": "b6bc71311d9845f7457df2b35d353a6e3cf38a4705ae67cbf37ca0ce4b000e2f"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 34,
+          "y": 80,
+          "cut": 143,
+          "body_sha256": "3637eef3ae83cb1371d42196e1cec92dad50344d63fffc4ed73d87ce72f3a456"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 35,
+          "y": 71,
+          "cut": 134,
+          "body_sha256": "5059f1ba39dcedfc6ddf91e2790856b53f339d79fb85813bb10eff2618ecc42b"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 25,
+          "y": 74,
+          "cut": 138,
+          "body_sha256": "a481c4de5430a9220795f8c95551087470ba2540d1204a2c0b057b5f7388347a"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 20,
+          "y": 81,
+          "cut": 145,
+          "body_sha256": "20b2f565937ac705a3290fec82dcf1f32ee7b8fb262030f4d00a42b4e6341ca1"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 30,
+          "y": 78,
+          "cut": 141,
+          "body_sha256": "64a0c0e8dc65ceec2ab068d4cbf7336ec93f4e8d24f17810f1d6551ed2532606"
+        },
+        {
+          "scale": 0.9271523178807947,
+          "x": 34,
+          "y": 71,
+          "cut": 134,
+          "body_sha256": "49b6d3194b5cc591473b067cd7df3d6ebe95ed4cc0eed84dc0339797f138dd30"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8632107787166019,
+      "mid_source_sha256": "28a1011ed4e148986ead39db1e56baba5fff197950cd56c71aaa0c220436378a",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          39,
+          43,
+          39,
+          0,
+          0,
+          0,
+          0,
+          0,
+          38,
+          23,
+          30
+        ]
+      },
+      "output_sha256": "cb42c34b06c39fd358d9f204b64724fe2cba09ce9f94a25d0fcac18807cdcbb0",
+      "original_sha256": {
+        "walk": "11711a3c6593ecfacdafc556a3ab18cd78edef9b1c910d71cf97c8926e67116e",
+        "run": "c16c46a38004e16081955698d61488eb8eaa3c78501e5977d761e9003af61f18",
+        "idle": "5e14be575ac93150cd9832072b84c8f7283376b17bcf0a35b6dfa71d9454d163"
+      }
+    },
+    {
+      "look": "casanova",
+      "motion": "walk",
+      "source_sha256": "0eab956fbfa7cd642cabe55a269d0c12222d167b1fc1584437491014992a0ba2",
+      "reference_sha256": "327e05cc9cd349e4194940f7d3b8635599d7f3359bc9050773d95a72c4e07f55",
+      "reference_frame": 12,
+      "scale": 0.85,
+      "cell": [
+        286,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        85,
+        85,
+        82,
+        81,
+        81,
+        85,
+        83,
+        85
+      ],
+      "key_heights": [
+        270,
+        270,
+        273,
+        274,
+        274,
+        270,
+        272,
+        270
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.85,
+          "x": 44,
+          "y": 85,
+          "cut": 145,
+          "body_sha256": "33c6fc9bcc31169cb3b62a4124221555af28e55290051ce00af18300839f8e42"
+        },
+        {
+          "scale": 0.85,
+          "x": 51,
+          "y": 84,
+          "cut": 145,
+          "body_sha256": "8d03e9f3ebb0a1438b46c98366f88612256293ee9bfc833be6bc66c5deecc96e"
+        },
+        {
+          "scale": 0.85,
+          "x": 54,
+          "y": 81,
+          "cut": 142,
+          "body_sha256": "41e2f6518cbb4297ea256532b7402bfa3b43cae9cc9061ce36e69c1698599b06"
+        },
+        {
+          "scale": 0.85,
+          "x": 48,
+          "y": 80,
+          "cut": 141,
+          "body_sha256": "b6dd5f72df313368765a9fd3bff2f52c48b1e319e9b21dc4a3c10f96d18ce23b"
+        },
+        {
+          "scale": 0.85,
+          "x": 44,
+          "y": 81,
+          "cut": 141,
+          "body_sha256": "07ac909d33a1679e5215c727aeb58ec336d50ffab80c4493f86b76cedca8b28a"
+        },
+        {
+          "scale": 0.85,
+          "x": 46,
+          "y": 84,
+          "cut": 145,
+          "body_sha256": "01e77f2b00ad5b0b4f5884b3683d9b2f858770f395f8651841f9e72132b67ed8"
+        },
+        {
+          "scale": 0.85,
+          "x": 52,
+          "y": 82,
+          "cut": 143,
+          "body_sha256": "dc065f1613dc5b1430bfbe708e94114312a10b9f4ddd383dcd4dd5267f530117"
+        },
+        {
+          "scale": 0.85,
+          "x": 42,
+          "y": 85,
+          "cut": 145,
+          "body_sha256": "7fc2c1ab89418e99385e264c5bbe7fdceb10b415d7dc59d646b34b4136068048"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.7951612903225806,
+      "mid_source_sha256": "2d1a699f98c40f0b1757f3f1297ca59197189c0be118aa3ddc7ab552a092f085",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "ed154dc8d2ecf126f9bec4d91f3eac7c632cd703e595fee5118ae5457c41fa36",
+      "original_sha256": {
+        "walk": "327e05cc9cd349e4194940f7d3b8635599d7f3359bc9050773d95a72c4e07f55",
+        "run": "ce67208a672fcd891854de7d402bbcdbdb44e7b03cb75ba7b2773c40aeb69dfa",
+        "idle": "d9578554a2b4769f6cdcb5761f44d917bec0ff0d656743b70363013d45deb67b"
+      }
+    },
+    {
+      "look": "casanova",
+      "motion": "run",
+      "source_sha256": "0eab956fbfa7cd642cabe55a269d0c12222d167b1fc1584437491014992a0ba2",
+      "reference_sha256": "327e05cc9cd349e4194940f7d3b8635599d7f3359bc9050773d95a72c4e07f55",
+      "reference_frame": 12,
+      "scale": 0.85,
+      "cell": [
+        286,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        88,
+        92,
+        90,
+        82,
+        87,
+        92,
+        91,
+        82
+      ],
+      "key_heights": [
+        267,
+        263,
+        265,
+        238,
+        268,
+        263,
+        264,
+        243
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.85,
+          "x": 29,
+          "y": 86,
+          "cut": 148,
+          "body_sha256": "2f72fbbe41c80e4dbd3708c920dccb99288603dd883d06e49e7356796f3a5b97"
+        },
+        {
+          "scale": 0.85,
+          "x": 36,
+          "y": 91,
+          "cut": 152,
+          "body_sha256": "9569432e54ea01e1d2d56494d72d145652490fddf176725836af2d11b79972b5"
+        },
+        {
+          "scale": 0.85,
+          "x": 28,
+          "y": 89,
+          "cut": 150,
+          "body_sha256": "73bd403d51020bbadbbe9aedb3bf15b33f72d91628b173c0c4a171b78896c49e"
+        },
+        {
+          "scale": 0.85,
+          "x": 20,
+          "y": 82,
+          "cut": 142,
+          "body_sha256": "7aaf995ddbb39d746c43bb0812813877a8f2117f88a193651e0843fee93d4b2d"
+        },
+        {
+          "scale": 0.85,
+          "x": 26,
+          "y": 87,
+          "cut": 147,
+          "body_sha256": "ff9766b7cc16cc0a3ee1dc762a992979e6660d3600c9da1e76e0c256c6580518"
+        },
+        {
+          "scale": 0.85,
+          "x": 30,
+          "y": 91,
+          "cut": 152,
+          "body_sha256": "fe4c55330c2d89f73d9691d7cf43f6cf2b10b574478e14ae74025b1b5ecd45f4"
+        },
+        {
+          "scale": 0.85,
+          "x": 26,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "e98a4d85af381d907ba9d1a0677c9c33220fe9bc1eb0a445d38a3724124dd2d8"
+        },
+        {
+          "scale": 0.85,
+          "x": 21,
+          "y": 82,
+          "cut": 142,
+          "body_sha256": "abcb96e425929d59d3e1bc9a3c02393630e3a3da7df247ae573af732b43651f7"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.7951612903225806,
+      "mid_source_sha256": "2d1a699f98c40f0b1757f3f1297ca59197189c0be118aa3ddc7ab552a092f085",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          28,
+          35,
+          29,
+          0,
+          0,
+          0,
+          0,
+          0,
+          21,
+          30,
+          29
+        ]
+      },
+      "output_sha256": "96af815e9692f7a0e3ce07a45ea7a5a2f97f4b7d6174a1a7e766fb05bd52cfb0",
+      "original_sha256": {
+        "walk": "327e05cc9cd349e4194940f7d3b8635599d7f3359bc9050773d95a72c4e07f55",
+        "run": "ce67208a672fcd891854de7d402bbcdbdb44e7b03cb75ba7b2773c40aeb69dfa",
+        "idle": "d9578554a2b4769f6cdcb5761f44d917bec0ff0d656743b70363013d45deb67b"
+      }
+    },
+    {
+      "look": "charismatic_admiral",
+      "motion": "walk",
+      "source_sha256": "8378d196b2f539436d0731457df087c7d3336a699619968dfee1cd7e6bfe992c",
+      "reference_sha256": "64b0a4da7fd1d2248d589dfbbd5671b5c99d71d881adbfeab5a4ab9baace6e00",
+      "reference_frame": 12,
+      "scale": 0.8562300319488818,
+      "cell": [
+        328,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        86,
+        86,
+        87,
+        88,
+        88,
+        86,
+        87,
+        87
+      ],
+      "key_heights": [
+        269,
+        269,
+        268,
+        267,
+        267,
+        269,
+        268,
+        268
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8562300319488818,
+          "x": 52,
+          "y": 86,
+          "cut": 144,
+          "body_sha256": "63889da208531c437547274dc7db82a055dab6dbd94d30db2cc5c41399054014"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 60,
+          "y": 86,
+          "cut": 144,
+          "body_sha256": "f508218b1324a6f67051e97f99764345666e0928cb24ae6ef2d20b40b5e5051f"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 62,
+          "y": 86,
+          "cut": 145,
+          "body_sha256": "ff6cc2b44511931f22a1e9e90de7f05e3ab473dd85fb6a0df019c69f90ccf7da"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 61,
+          "y": 87,
+          "cut": 146,
+          "body_sha256": "f32f0d94c179a174187842af854770e9e36636a2cfabc328fe284a67fe266b9c"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 54,
+          "y": 87,
+          "cut": 146,
+          "body_sha256": "4cd479ed2cc131849fef853c52d08eb11a5502363bc0b012cd50c8ebf0cba156"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 58,
+          "y": 85,
+          "cut": 144,
+          "body_sha256": "0a2fe79b427814920e893f0546957036ffe4d4a07b16c8ebffa66c0aaed729c1"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 63,
+          "y": 87,
+          "cut": 145,
+          "body_sha256": "57ed6ed41f6cffb05bdccdc9dffd7e0ab3abf27fdd23c0f456e32601c286cae2"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 56,
+          "y": 87,
+          "cut": 145,
+          "body_sha256": "32db7b5382016f4d046a1bd83256a1ce2304c9650768cdca56456150551b447b"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8562300319488818,
+      "mid_source_sha256": "a960918eaab8bd2110715c4d2a2e86a70bbd60a56d43030d65c84ac6653804ef",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "smear",
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "0b75b5d27628d3e446249e2b16a21683780946f12ea0749c0d532e32acf3163a",
+      "original_sha256": {
+        "walk": "64b0a4da7fd1d2248d589dfbbd5671b5c99d71d881adbfeab5a4ab9baace6e00",
+        "run": "787cfc20ea44de810fc1f38d4d78e648695b388792fc63f0923af1c6e1864422",
+        "idle": "34d52e81d5e464806108a3cf6afad0de61da3ba4069e77e78ef8bc9d98a15256"
+      }
+    },
+    {
+      "look": "charismatic_admiral",
+      "motion": "run",
+      "source_sha256": "8378d196b2f539436d0731457df087c7d3336a699619968dfee1cd7e6bfe992c",
+      "reference_sha256": "64b0a4da7fd1d2248d589dfbbd5671b5c99d71d881adbfeab5a4ab9baace6e00",
+      "reference_frame": 12,
+      "scale": 0.8562300319488818,
+      "cell": [
+        328,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        102,
+        112,
+        102,
+        93,
+        98,
+        106,
+        96,
+        93
+      ],
+      "key_heights": [
+        253,
+        243,
+        253,
+        240,
+        257,
+        249,
+        259,
+        252
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8562300319488818,
+          "x": 29,
+          "y": 101,
+          "cut": 160,
+          "body_sha256": "45cec16bbc949fd54bd057b26254da39519c0b0ce42f17fc1a222178f7dd8097"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 32,
+          "y": 111,
+          "cut": 170,
+          "body_sha256": "bce096aa5c605589cd13178454cb2ee0031ddeb9f4f9346191906b7103203288"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 30,
+          "y": 102,
+          "cut": 160,
+          "body_sha256": "5e287c2c46b2c036ffd95c419c5a6c16be9dfe2296d8bbd801da897ce1cda6ab"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 20,
+          "y": 92,
+          "cut": 151,
+          "body_sha256": "866cdb3c36b322639535a2f6482bc83507891a2641b3ba7d631dc3766a201742"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 29,
+          "y": 98,
+          "cut": 156,
+          "body_sha256": "c712f4757ff0553dc0050e057f2e48713e977685e3ac2c6dff9d1644a6f46c8d"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 30,
+          "y": 105,
+          "cut": 164,
+          "body_sha256": "2baaf82d49a7eff7d8d37271bd46344ded863531ad94b353b6072499e77cc60a"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 26,
+          "y": 96,
+          "cut": 154,
+          "body_sha256": "95d43aaf9358daf5418d4ef3c22936c86cad7ea5b7a0732be3831136f5368a12"
+        },
+        {
+          "scale": 0.8562300319488818,
+          "x": 28,
+          "y": 93,
+          "cut": 151,
+          "body_sha256": "fd58c6213bf2574f7a7ed7e1cdf60a0ce4da2f3b21edc224c7e21ffbadb57585"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "rife"
+      ],
+      "mid_scale": 0.8562300319488818,
+      "mid_source_sha256": "a960918eaab8bd2110715c4d2a2e86a70bbd60a56d43030d65c84ac6653804ef",
+      "rejected": [
+        {
+          "after": 7,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          11,
+          22,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          15,
+          10,
+          6
+        ]
+      },
+      "output_sha256": "404d784f5bf9a30606f6cf8f1a393b15b17e601376265461cad0b99492fb5fe5",
+      "original_sha256": {
+        "walk": "64b0a4da7fd1d2248d589dfbbd5671b5c99d71d881adbfeab5a4ab9baace6e00",
+        "run": "787cfc20ea44de810fc1f38d4d78e648695b388792fc63f0923af1c6e1864422",
+        "idle": "34d52e81d5e464806108a3cf6afad0de61da3ba4069e77e78ef8bc9d98a15256"
+      }
+    },
+    {
+      "look": "ganghui",
+      "motion": "walk",
+      "source_sha256": "f876336e74a1a3979b7f00650eb4dd6009eba3721f54fb4d654c3825dbbc4d3a",
+      "reference_sha256": "a5b800f62e1531d5138e25f09b7de7ac50dd59f70b1c8a688c792afd80075f2b",
+      "reference_frame": 43,
+      "scale": 0.9209621993127147,
+      "cell": [
+        274,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        87,
+        88,
+        88,
+        86,
+        87,
+        90,
+        89,
+        89
+      ],
+      "key_heights": [
+        268,
+        267,
+        267,
+        269,
+        268,
+        265,
+        266,
+        266
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9209621993127147,
+          "x": 32,
+          "y": 87,
+          "cut": 145,
+          "body_sha256": "c6eb92988c43ae563425b7adaed2088bf3d455fdd2ac009f28550d22b5950fba"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 40,
+          "y": 88,
+          "cut": 146,
+          "body_sha256": "fe3595c598784536af03fa50bdf81d878d43c362f6b422e0b9876be22feac43b"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 50,
+          "y": 87,
+          "cut": 146,
+          "body_sha256": "c0a93303e5fefa7997418b59f9afe77f6ab562ab94c9e28bf38b6e7eb1acd9ed"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 41,
+          "y": 86,
+          "cut": 144,
+          "body_sha256": "d92b9cfa32dcf14704795db73e0b5bebad803caaba5708aca8e609956400683c"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 36,
+          "y": 86,
+          "cut": 145,
+          "body_sha256": "a9dcd418f50878a697a7989ed2fcd63bda6c6e9bb5b0597abeb95150180f324c"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 45,
+          "y": 90,
+          "cut": 148,
+          "body_sha256": "c17e9d022557eb8d672de52935a3f1b35ce92a29d2effbd297f74f5fd323f9f2"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 57,
+          "y": 88,
+          "cut": 147,
+          "body_sha256": "bc01da2850fb56f7f4bd5f82235c6b23d66b7dd9b88bd867d850bdb1c22be496"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 40,
+          "y": 88,
+          "cut": 147,
+          "body_sha256": "378ea27f1d3ebfab38c129b040ee031cde5188457ae587b46bde70475746d5aa"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "rife",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8501189532117367,
+      "mid_source_sha256": "1fff9f6e4a37c5812bb7586d038d16896398d4a0d909cdd5daa793924c0b3509",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        },
+        {
+          "after": 3,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 14,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "801749cef85e690ab50ebba6045555731a3fd5281b3e55b049fe08def86c9aeb",
+      "original_sha256": {
+        "walk": "a5b800f62e1531d5138e25f09b7de7ac50dd59f70b1c8a688c792afd80075f2b",
+        "run": "098956fbd25d8bfb7e0f05ffacb5b32900ccb50f426f4e0e7b39d2b534666b91",
+        "idle": "1b675a7a21fc06df62b186ccd94ecbceac15bca70908f102806f8339d75947a2"
+      }
+    },
+    {
+      "look": "ganghui",
+      "motion": "run",
+      "source_sha256": "f876336e74a1a3979b7f00650eb4dd6009eba3721f54fb4d654c3825dbbc4d3a",
+      "reference_sha256": "a5b800f62e1531d5138e25f09b7de7ac50dd59f70b1c8a688c792afd80075f2b",
+      "reference_frame": 43,
+      "scale": 0.9209621993127147,
+      "cell": [
+        274,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        99,
+        101,
+        97,
+        91,
+        97,
+        101,
+        98,
+        91
+      ],
+      "key_heights": [
+        256,
+        254,
+        258,
+        226,
+        258,
+        254,
+        257,
+        241
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9209621993127147,
+          "x": 20,
+          "y": 98,
+          "cut": 157,
+          "body_sha256": "6764b6dc6f84a6f15218422d98438fedb313fbe8813967a796c57228995a071e"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 23,
+          "y": 101,
+          "cut": 159,
+          "body_sha256": "56b8401a98c8444d2c99b5abdb14ed65ecd935f34c5e792040e15d5b83d604ac"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 24,
+          "y": 96,
+          "cut": 155,
+          "body_sha256": "4db5760420fac71aeb99260353b2bdb79c52ba70ecbf3d120ed1cdac75ddb823"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 30,
+          "y": 90,
+          "cut": 149,
+          "body_sha256": "98c8ec02faad4b0738a56802eee9b0a16db6866ccb55c4d43170ce46f773f2e6"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 23,
+          "y": 96,
+          "cut": 155,
+          "body_sha256": "34cfd7cce5c9c7da6e121de0da348605f35e276afb54d7c860230426627ee742"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 26,
+          "y": 101,
+          "cut": 159,
+          "body_sha256": "0779759db9bcb98cee595ecd92973516c4b0c279b2f8b7e92ffa2e816cfcabf4"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 24,
+          "y": 97,
+          "cut": 156,
+          "body_sha256": "6d87d0b03959d35f1ad87dd949715fa6f4967876bbb369989c5e87fb99bdf080"
+        },
+        {
+          "scale": 0.9209621993127147,
+          "x": 27,
+          "y": 90,
+          "cut": 149,
+          "body_sha256": "a55ae8c3aad1179b64742dbd5f3623a4f7043222cbf99e0076016e360508f1bf"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8501189532117367,
+      "mid_source_sha256": "1fff9f6e4a37c5812bb7586d038d16896398d4a0d909cdd5daa793924c0b3509",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          38,
+          38,
+          33,
+          0,
+          0,
+          0,
+          0,
+          0,
+          34,
+          23,
+          23
+        ]
+      },
+      "output_sha256": "7d2959035962322aa35019d43c2a445a9aa3efbfc0d29262851dac685d1c7fc2",
+      "original_sha256": {
+        "walk": "a5b800f62e1531d5138e25f09b7de7ac50dd59f70b1c8a688c792afd80075f2b",
+        "run": "098956fbd25d8bfb7e0f05ffacb5b32900ccb50f426f4e0e7b39d2b534666b91",
+        "idle": "1b675a7a21fc06df62b186ccd94ecbceac15bca70908f102806f8339d75947a2"
+      }
+    },
+    {
+      "look": "hat_spinner",
+      "motion": "walk",
+      "source_sha256": "ee25a64f779f7064151d680ae24039d4b2b636c5cedbb33fc8a80ba7fda786a4",
+      "reference_sha256": "72cbbedbfe0884e43927e54af1101bdff74dfc3351bb2498105cb955f3f3c941",
+      "reference_frame": 6,
+      "scale": 0.9016949152542373,
+      "cell": [
+        324,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        87,
+        88,
+        88,
+        92,
+        91,
+        89,
+        89,
+        90
+      ],
+      "key_heights": [
+        268,
+        267,
+        267,
+        263,
+        264,
+        266,
+        266,
+        265
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9016949152542373,
+          "x": 25,
+          "y": 87,
+          "cut": 148,
+          "body_sha256": "7529fdea077b414b9d356600c8c716e4eda9d11ca9bf8dd3258a500f9a0c83c5"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 28,
+          "y": 88,
+          "cut": 149,
+          "body_sha256": "f3ba4e20411d8f6de831166ab4cdb6655d87e8872eb87eafe816e23c63647d49"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 36,
+          "y": 88,
+          "cut": 149,
+          "body_sha256": "8794257b399aef1b7f240d45beceaf352cbe665cbcbd14bf55c60bb03a753791"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 38,
+          "y": 91,
+          "cut": 153,
+          "body_sha256": "fd23940ae06217b197eff2400fb115d10f81493589290f4be64ac188e1e5c961"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 28,
+          "y": 90,
+          "cut": 152,
+          "body_sha256": "4a12e9f5da02b3ce1d0fe0ef0d7a70bc1e8aeb25f1d11b30db072b654f58cfec"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 38,
+          "y": 88,
+          "cut": 150,
+          "body_sha256": "a575347e9fe75bdb2e66868f10b27aa3328bbc289319e29c2d637aab9e56e9d1"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 46,
+          "y": 88,
+          "cut": 150,
+          "body_sha256": "6e35daf9f098d2a03b48ee7e2e4a65f396ab414ff6988ff63a992754d6a66e65"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 37,
+          "y": 89,
+          "cut": 151,
+          "body_sha256": "98a85a4a2c3afe9d4e13083ca856f9dd57e211621016029e0281c19cc249b69a"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8676686920370963,
+      "mid_source_sha256": "82bb8e21eb893feeaaaa25ce6c073c63d971ced63c09a5dad18bcb9c72d8967e",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "c3fb2c146fc814c4f2e85e24bbfdceb45c1d20f1ead4fd4c5358499b6e4a79cb",
+      "original_sha256": {
+        "walk": "72cbbedbfe0884e43927e54af1101bdff74dfc3351bb2498105cb955f3f3c941",
+        "run": "fd449298dd3f3e735459a7d173abe5ab5c0f8cc8f0018f09a180fc40e3241198",
+        "idle": "f36e209633dd25450ebc126693348b9ab46ca6fb92a78c4953714308ca437928"
+      }
+    },
+    {
+      "look": "hat_spinner",
+      "motion": "run",
+      "source_sha256": "ee25a64f779f7064151d680ae24039d4b2b636c5cedbb33fc8a80ba7fda786a4",
+      "reference_sha256": "72cbbedbfe0884e43927e54af1101bdff74dfc3351bb2498105cb955f3f3c941",
+      "reference_frame": 6,
+      "scale": 0.9016949152542373,
+      "cell": [
+        324,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        90,
+        94,
+        94,
+        83,
+        90,
+        94,
+        90,
+        83
+      ],
+      "key_heights": [
+        265,
+        261,
+        261,
+        242,
+        265,
+        261,
+        265,
+        251
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9016949152542373,
+          "x": 24,
+          "y": 90,
+          "cut": 151,
+          "body_sha256": "4a063af65b82ec963479a5673e35a94a907069247e92e6828eb58f008ba4767a"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 31,
+          "y": 93,
+          "cut": 155,
+          "body_sha256": "1b650212d21cf71b81f55d7c53aef010a6de951b6651d81cbfe0414ff5fdd83c"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 26,
+          "y": 93,
+          "cut": 155,
+          "body_sha256": "5e8032e849d36086874aea3e9ea2850c00621f912f83923b6faf42ed02061286"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 20,
+          "y": 82,
+          "cut": 144,
+          "body_sha256": "47cf2cbda123f2a5a691cf8d1be6189e4482d2859752be32129f620b0c14d871"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 28,
+          "y": 90,
+          "cut": 151,
+          "body_sha256": "908cbfca0d9a1f4c678c2821111a1f57d34c48a7f6c2f8066442e190bd73983f"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 28,
+          "y": 94,
+          "cut": 155,
+          "body_sha256": "9b27031820dedc470fa7d63951bb387496409b89cb597702bc090ebcaf400e8e"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 30,
+          "y": 89,
+          "cut": 151,
+          "body_sha256": "c7fe5f65d3317a5c448c552697b0df798b02e22b5a4cc95d6c41e1c1736b003d"
+        },
+        {
+          "scale": 0.9016949152542373,
+          "x": 31,
+          "y": 83,
+          "cut": 144,
+          "body_sha256": "3e7d34aae5436c2a8f9f33e81a442fbb103127ef06d798d473edd4425abb145d"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8676686920370963,
+      "mid_source_sha256": "82bb8e21eb893feeaaaa25ce6c073c63d971ced63c09a5dad18bcb9c72d8967e",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          22,
+          30,
+          24,
+          0,
+          0,
+          0,
+          0,
+          0,
+          15,
+          21,
+          17
+        ]
+      },
+      "output_sha256": "157ad69e2c940665eb9e41d5a8858d7618e039f285a1942b3d5ec2e8c8b479d3",
+      "original_sha256": {
+        "walk": "72cbbedbfe0884e43927e54af1101bdff74dfc3351bb2498105cb955f3f3c941",
+        "run": "fd449298dd3f3e735459a7d173abe5ab5c0f8cc8f0018f09a180fc40e3241198",
+        "idle": "f36e209633dd25450ebc126693348b9ab46ca6fb92a78c4953714308ca437928"
+      }
+    },
+    {
+      "look": "muscle_swordsman",
+      "motion": "walk",
+      "source_sha256": "957aa4a2f8c84ff2f03bdf031002c60eb1c2ac98b6146732bc74c79fceddc7d5",
+      "reference_sha256": "7f3ce16ad4981a974412a61e2692f86e997f5f759c2c3f9c78168ad62b511570",
+      "reference_frame": 6,
+      "scale": 0.8145896656534954,
+      "cell": [
+        256,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        85,
+        91,
+        90,
+        90,
+        89,
+        90,
+        91,
+        89
+      ],
+      "key_heights": [
+        270,
+        264,
+        265,
+        265,
+        266,
+        265,
+        264,
+        266
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8145896656534954,
+          "x": 40,
+          "y": 84,
+          "cut": 145,
+          "body_sha256": "890cc2558cb594d88719886a95c0904b0b3dcdd867bd3af52f3079a91726f3db"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 51,
+          "y": 90,
+          "cut": 151,
+          "body_sha256": "d652d703d81a56ce088a8369d0cb03181f3a6614506596edfb6df25de955e2c9"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 70,
+          "y": 90,
+          "cut": 150,
+          "body_sha256": "42522504d507ccd0b8dbd5535e363908264921248847f714356805e625a2111e"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 54,
+          "y": 88,
+          "cut": 150,
+          "body_sha256": "ee06f959bf6b4e329ef8050c0f6715a26d4bb0092e96a24b3f4d8f3707b3dc40"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 38,
+          "y": 88,
+          "cut": 149,
+          "body_sha256": "18a30803d2f51784e75c9d1d64a128f1847fa59c9f355f6587d1325739b445d6"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 59,
+          "y": 90,
+          "cut": 150,
+          "body_sha256": "ed95b7148225c4bfcd88aa3de4f8f65e8126e37ae2effd0590d55a9582246f60"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 74,
+          "y": 91,
+          "cut": 151,
+          "body_sha256": "081eb7e376389fb939305f71dcb5a626aae2fd761e1b2790bc2e2899f17a72ea"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 34,
+          "y": 89,
+          "cut": 149,
+          "body_sha256": "da562307d9e4486cfc833af3486a0bdecbcb96c556b0eb439dc8bef701644d52"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.7689726443768997,
+      "mid_source_sha256": "f29abc9d52b83c93c4bc66c5bc9fecb1ddae809eb1bac56854e45bb247323961",
+      "rejected": [
+        {
+          "after": 5,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "44c3080dfb2f4b39c2f0602ca843d68da7d39ae9ab72349c16bafa435db83343",
+      "original_sha256": {
+        "walk": "7f3ce16ad4981a974412a61e2692f86e997f5f759c2c3f9c78168ad62b511570",
+        "run": "c15c5e10eb8b55a78c58704ed35ec9e38c4ac7833f6b3bfdcb077467a5848003",
+        "idle": "7cb5c4d7ce6dafa660fa85a2695c32df89d3495e8b94e36ecb56102bca6d3af4"
+      }
+    },
+    {
+      "look": "muscle_swordsman",
+      "motion": "run",
+      "source_sha256": "957aa4a2f8c84ff2f03bdf031002c60eb1c2ac98b6146732bc74c79fceddc7d5",
+      "reference_sha256": "7f3ce16ad4981a974412a61e2692f86e997f5f759c2c3f9c78168ad62b511570",
+      "reference_frame": 6,
+      "scale": 0.8145896656534954,
+      "cell": [
+        256,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        95,
+        99,
+        96,
+        89,
+        97,
+        102,
+        92,
+        89
+      ],
+      "key_heights": [
+        260,
+        256,
+        259,
+        233,
+        258,
+        253,
+        263,
+        245
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8145896656534954,
+          "x": 42,
+          "y": 94,
+          "cut": 155,
+          "body_sha256": "5b98b09eb7026ec675384e740dda99b07a68793a1c44afeac8511d63387b0b5d"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 44,
+          "y": 99,
+          "cut": 159,
+          "body_sha256": "65a583815c5ab3d7507c6242492f16bee2ffd3614acefba39ac6015b2b4f7300"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 24,
+          "y": 95,
+          "cut": 156,
+          "body_sha256": "3b2b6d0b5996ef3e60887081a335cb259bedadbc87c04f29ea33012b12523b1c"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 34,
+          "y": 88,
+          "cut": 149,
+          "body_sha256": "de908f1caa36604f91d3818ef565cd92ecccab55f538d2906e60753fb4705a06"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 42,
+          "y": 97,
+          "cut": 157,
+          "body_sha256": "73272e4fd6f29703dd17e097fcd8e034c8a54fadd13a87df814f2806f6e7afb6"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 44,
+          "y": 102,
+          "cut": 162,
+          "body_sha256": "5b00d2086a14940e033637f9c0885445695874e6f04265c2962aaf3039b2567b"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 20,
+          "y": 91,
+          "cut": 152,
+          "body_sha256": "58ac348617ddb9a38c911d6e420f7e1e51f3227812e9564eb4f69de134201c8b"
+        },
+        {
+          "scale": 0.8145896656534954,
+          "x": 32,
+          "y": 89,
+          "cut": 149,
+          "body_sha256": "b782bdfe7981214d210ae38808d89813104ad70c89cc5adeeeb47e8156c11e7f"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.7689726443768997,
+      "mid_source_sha256": "f29abc9d52b83c93c4bc66c5bc9fecb1ddae809eb1bac56854e45bb247323961",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          30,
+          33,
+          25,
+          0,
+          0,
+          0,
+          0,
+          0,
+          17,
+          21,
+          26
+        ]
+      },
+      "output_sha256": "4ff19d49a9f23d16d5a48867813b472e7e6b40b3da6dccd13e6bfb70f5b3c091",
+      "original_sha256": {
+        "walk": "7f3ce16ad4981a974412a61e2692f86e997f5f759c2c3f9c78168ad62b511570",
+        "run": "c15c5e10eb8b55a78c58704ed35ec9e38c4ac7833f6b3bfdcb077467a5848003",
+        "idle": "7cb5c4d7ce6dafa660fa85a2695c32df89d3495e8b94e36ecb56102bca6d3af4"
+      }
+    },
+    {
+      "look": "navigator_white",
+      "motion": "walk",
+      "source_sha256": "0945f7a7bf84eb5e148b2724c64742612b006d4cc60fab23a029c9355c65113f",
+      "reference_sha256": "cf1ace1756b058cf0b73e451a4952c867b73a336d3ff14be4f8ee43410b66952",
+      "reference_frame": 0,
+      "scale": 0.7870778267254038,
+      "cell": [
+        240,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        90,
+        91,
+        91,
+        86,
+        83,
+        87,
+        89,
+        84
+      ],
+      "key_heights": [
+        265,
+        264,
+        264,
+        269,
+        272,
+        268,
+        266,
+        271
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.7870778267254038,
+          "x": 40,
+          "y": 89,
+          "cut": 151,
+          "body_sha256": "69a4109ff64698cfc5327cdf84f836786eab530d321190454187f35ec881755b"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 52,
+          "y": 91,
+          "cut": 152,
+          "body_sha256": "16512a4cdfd873a845e1de0cb9be4d0ed0aaecdf0a05541aa0968a06f041a587"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 75,
+          "y": 90,
+          "cut": 152,
+          "body_sha256": "e447013a43253b5eda5e5c2378498beb7fe04381d82c3cd8f0a09897bcd192b4"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 34,
+          "y": 85,
+          "cut": 147,
+          "body_sha256": "cb8017bd1ee9de430be480c041fd8e706c12e7429b1713ef45dcc1c8e78b348f"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 30,
+          "y": 83,
+          "cut": 144,
+          "body_sha256": "001f7015d5f0c43acc54e24a92a3a54045e956cab034adfd2087d466d4d6ae9b"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 60,
+          "y": 87,
+          "cut": 148,
+          "body_sha256": "8ebd844c86ea8377a897121b988497b6b9fb3d568a71430ac4f90b3df0c9c184"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 75,
+          "y": 89,
+          "cut": 150,
+          "body_sha256": "32bde85f553afa2038656e8f13256a08e9096a20e4abe803d140e1c131295a64"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 32,
+          "y": 84,
+          "cut": 145,
+          "body_sha256": "ddbefdba11d99c961093a26bf9b1770c77a0bf06c6eb6981abf4ccde050194f6"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.7870778267254038,
+      "mid_source_sha256": "07bd69689d79f7c076d8534c15c7be2a49f3386fd646b1c836fee4f2cf3b727b",
+      "rejected": [
+        {
+          "after": 5,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "426bfbadb3c2d2e13ac28b18e98d753a088a73ef828c95683970287d95f796aa",
+      "original_sha256": {
+        "walk": "cf1ace1756b058cf0b73e451a4952c867b73a336d3ff14be4f8ee43410b66952",
+        "run": "d4c23c509533cae1c0c5c0061f29a2a5f2ddea56235ea44c9b1f3d5850f95579",
+        "idle": "54c045ff10f9507225d28bf29504bd66db7205e2ab57400cfbb87e29e53c5c31"
+      }
+    },
+    {
+      "look": "navigator_white",
+      "motion": "run",
+      "source_sha256": "0945f7a7bf84eb5e148b2724c64742612b006d4cc60fab23a029c9355c65113f",
+      "reference_sha256": "cf1ace1756b058cf0b73e451a4952c867b73a336d3ff14be4f8ee43410b66952",
+      "reference_frame": 0,
+      "scale": 0.7870778267254038,
+      "cell": [
+        240,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        96,
+        103,
+        96,
+        88,
+        94,
+        103,
+        93,
+        88
+      ],
+      "key_heights": [
+        259,
+        252,
+        259,
+        251,
+        261,
+        252,
+        262,
+        253
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.7870778267254038,
+          "x": 45,
+          "y": 96,
+          "cut": 157,
+          "body_sha256": "fbfb40c1d999ea0b1f4a0632082ea87bc64199ff3ffe69ef2cfacf4d2b2a7cd3"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 58,
+          "y": 103,
+          "cut": 164,
+          "body_sha256": "3e5626da573b63787e8eeb44fd59a37fe0b98800a2d1161cf20197e5c77ab730"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 32,
+          "y": 95,
+          "cut": 157,
+          "body_sha256": "3da641b1af63e1e6b8ae532d70e7ef9d9fa2c48138ca7678c1c08cf187415c86"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 34,
+          "y": 88,
+          "cut": 149,
+          "body_sha256": "650cf2017f4b5d19e72818be94d4cd24d5ac12f5d8b4223f24099caa2e0c4f6b"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 45,
+          "y": 94,
+          "cut": 155,
+          "body_sha256": "c4bb0a096ba297c1550dbda0ab77c62b1005aa79ca1a962e968a464e4972610b"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 52,
+          "y": 102,
+          "cut": 164,
+          "body_sha256": "697563ad05f219e24698f89b519089bca253b1de391307e6fc727870a62b9a7a"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 30,
+          "y": 92,
+          "cut": 154,
+          "body_sha256": "d8623a5aaa0338b5fc398b46e42676d931eb73e638351f960ce9bbe62e7d1df1"
+        },
+        {
+          "scale": 0.7870778267254038,
+          "x": 36,
+          "y": 88,
+          "cut": 149,
+          "body_sha256": "df1dc598f675a21e818532e544925952e7e7b195c260bd35622aef9d04b11d41"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        3.0,
+        3.5,
+        4.0,
+        5.0,
+        5.5,
+        6.0,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "rife"
+      ],
+      "mid_scale": 0.7870778267254038,
+      "mid_source_sha256": "07bd69689d79f7c076d8534c15c7be2a49f3386fd646b1c836fee4f2cf3b727b",
+      "rejected": [
+        {
+          "after": 2,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 2,
+          "method": "rife",
+          "faults": [
+            "ghost"
+          ]
+        },
+        {
+          "after": 4,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 4,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        },
+        {
+          "after": 6,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 6,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        },
+        {
+          "after": 7,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 13,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.4375,
+          0.5,
+          0.625,
+          0.6875,
+          0.75,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.4375,
+          0.5,
+          0.625,
+          0.6875,
+          0.75,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          16,
+          3,
+          0,
+          0,
+          0,
+          0,
+          14,
+          8
+        ]
+      },
+      "output_sha256": "7d9da7fcdfefaca6e8c1600ad5ffa23940d41cf14cc0ea8da47b188675a81020",
+      "original_sha256": {
+        "walk": "cf1ace1756b058cf0b73e451a4952c867b73a336d3ff14be4f8ee43410b66952",
+        "run": "d4c23c509533cae1c0c5c0061f29a2a5f2ddea56235ea44c9b1f3d5850f95579",
+        "idle": "54c045ff10f9507225d28bf29504bd66db7205e2ab57400cfbb87e29e53c5c31"
+      }
+    },
+    {
+      "look": "noble_scholar",
+      "motion": "walk",
+      "source_sha256": "c33b986fb20814bda02049997f3cac052b015a9d4a765760f5b54ab1131bd9cd",
+      "reference_sha256": "59e716702140c9536a8596a19dfd6038c8e85381d6a3902d3793bfa12fd29539",
+      "reference_frame": 12,
+      "scale": 0.8975609756097561,
+      "cell": [
+        298,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        80,
+        80,
+        80,
+        84,
+        79,
+        77,
+        80,
+        84
+      ],
+      "key_heights": [
+        275,
+        275,
+        275,
+        271,
+        276,
+        278,
+        275,
+        271
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8975609756097561,
+          "x": 54,
+          "y": 79,
+          "cut": 138,
+          "body_sha256": "ba936eedb00f875f2489a3e1e8a9a89fc07e23d864289799dce6fe450407f40f"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 62,
+          "y": 79,
+          "cut": 138,
+          "body_sha256": "bdca03d898f5cf24e98dc580e34197d9884c83440fae1dd62e758a88949c3893"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 70,
+          "y": 79,
+          "cut": 138,
+          "body_sha256": "321371e6be65b50f44aa0693d118e291ad5e643ab2781939ce77ecef33aed9ef"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 60,
+          "y": 84,
+          "cut": 142,
+          "body_sha256": "7ffd698becaba8213974919ab9b6444a897868677300a63a9e33efab2dffdce4"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 56,
+          "y": 78,
+          "cut": 137,
+          "body_sha256": "0e5a72569b533def19e1d38df6b881fb9ebb962df52e01c3d85bced24cdf293e"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 60,
+          "y": 77,
+          "cut": 135,
+          "body_sha256": "e9499baf560d909502644901d29869b74f646fb435104681a09953c307e2fcb9"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 68,
+          "y": 80,
+          "cut": 138,
+          "body_sha256": "cf88cedb7fabc034fd71a2f1cffa0d55ebc43ffe0be97bd4e1f5848db1160900"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 48,
+          "y": 83,
+          "cut": 142,
+          "body_sha256": "bdf48e84274b2f796937d5b36fdcdc94d01cf2cad4acfe8040e32d83c6b0bdc3"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "rife",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "rife",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8476964769647696,
+      "mid_source_sha256": "bff024af025ef6b0b514842b61f17bda088f00df5dbe8efa60652c097b7f40ed",
+      "rejected": [
+        {
+          "after": 0,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "ghost"
+          ]
+        },
+        {
+          "after": 4,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 5,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 14,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "8e8f8e6985fdddd63496b0b7fa6022102520b8c964cd212eb044a7ee99b5fb39",
+      "original_sha256": {
+        "walk": "59e716702140c9536a8596a19dfd6038c8e85381d6a3902d3793bfa12fd29539",
+        "run": "ed03bed57c363b002e46e22b077625c846e92083b89139479e62c4f32e87bb2b",
+        "idle": "3a4777267f157a94787e60bdf78ab4275986a4cbfbde995df32ed50240118e9a"
+      }
+    },
+    {
+      "look": "noble_scholar",
+      "motion": "run",
+      "source_sha256": "c33b986fb20814bda02049997f3cac052b015a9d4a765760f5b54ab1131bd9cd",
+      "reference_sha256": "59e716702140c9536a8596a19dfd6038c8e85381d6a3902d3793bfa12fd29539",
+      "reference_frame": 12,
+      "scale": 0.8975609756097561,
+      "cell": [
+        298,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        88,
+        89,
+        89,
+        79,
+        83,
+        83,
+        83,
+        79
+      ],
+      "key_heights": [
+        267,
+        266,
+        266,
+        243,
+        272,
+        272,
+        272,
+        249
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8975609756097561,
+          "x": 25,
+          "y": 87,
+          "cut": 146,
+          "body_sha256": "125d6aecbbcbea71104c391aef604b5810ed5581f71e52064e237da730ce8229"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 28,
+          "y": 89,
+          "cut": 147,
+          "body_sha256": "95c010b9d52ca783347461bfd68edfc33b7e4419cb8ff2a1affaa663f8a04588"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 32,
+          "y": 89,
+          "cut": 147,
+          "body_sha256": "157f939004c88d858d5593d962718caff23956564f3e488fd88d7b867a925db0"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 20,
+          "y": 78,
+          "cut": 137,
+          "body_sha256": "84445dda3714b803cd764dac3ed58ed952a6638965d0d2a246593d0a39d90465"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 29,
+          "y": 82,
+          "cut": 141,
+          "body_sha256": "004e25d8430a59d4502ec4b038420ffff3d5155b2047851b83025d6205a591ad"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 27,
+          "y": 83,
+          "cut": 141,
+          "body_sha256": "577f5292033a94edfa694839094a67f20ea04aa2979bf2585f059a2faaea2891"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 28,
+          "y": 82,
+          "cut": 141,
+          "body_sha256": "3fe433b4c58df0c46b9de52329b5da1144c3f9ab7bc9498d91d6826ca5c6f881"
+        },
+        {
+          "scale": 0.8975609756097561,
+          "x": 20,
+          "y": 78,
+          "cut": 137,
+          "body_sha256": "6e9a7ca8863bfc1fe9745a76edba18f4e3fcfc3b7785c7b49b58f009633d4374"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8476964769647696,
+      "mid_source_sha256": "bff024af025ef6b0b514842b61f17bda088f00df5dbe8efa60652c097b7f40ed",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          29,
+          33,
+          25,
+          0,
+          0,
+          0,
+          0,
+          0,
+          28,
+          27,
+          17
+        ]
+      },
+      "output_sha256": "51249229a9ea9f45d0a29d0acb0bf013eb4490186f107a1220958fca5ef222cc",
+      "original_sha256": {
+        "walk": "59e716702140c9536a8596a19dfd6038c8e85381d6a3902d3793bfa12fd29539",
+        "run": "ed03bed57c363b002e46e22b077625c846e92083b89139479e62c4f32e87bb2b",
+        "idle": "3a4777267f157a94787e60bdf78ab4275986a4cbfbde995df32ed50240118e9a"
+      }
+    },
+    {
+      "look": "sea_dog",
+      "motion": "walk",
+      "source_sha256": "e3e936d1882e36dcf9132b91bea61fba7b69dc2497ec4b052676b80781cab25b",
+      "reference_sha256": "0aac22fb062da3ca9c87c2b619afe455d480406e933eb2527b66bc9f9b456201",
+      "reference_frame": 0,
+      "scale": 0.9820143884892086,
+      "cell": [
+        256,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        81,
+        85,
+        80,
+        82,
+        83,
+        87,
+        84,
+        84
+      ],
+      "key_heights": [
+        274,
+        270,
+        275,
+        273,
+        272,
+        268,
+        271,
+        271
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9820143884892086,
+          "x": 26,
+          "y": 81,
+          "cut": 142,
+          "body_sha256": "a4ddc4d6f088b4d5baa6391a0299edd031f3b284255350bb733d0e728a977b63"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 42,
+          "y": 85,
+          "cut": 146,
+          "body_sha256": "c2bd750e0ec39069e0129509f7773a364a3435144ee443d9a595c9f120aff61d"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 80,
+          "y": 79,
+          "cut": 141,
+          "body_sha256": "dfebf8ece8b33a5d7a432c3ae9a046d6e71ffcfd2cb6657694e693eadc4b7c66"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 35,
+          "y": 81,
+          "cut": 143,
+          "body_sha256": "92398633a5fac8ea96e531c6acfc02d97124c60074e62fa1fbd24fc8b51436e9"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 20,
+          "y": 82,
+          "cut": 144,
+          "body_sha256": "76a7dcd460f8471824de3645b17382b4e9d5cb6a1f26a56f98073760db5a95c1"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 31,
+          "y": 86,
+          "cut": 148,
+          "body_sha256": "f01040df7a6ce653965446385a611708316e2a56b2a49e981e6e7a331b8dadcb"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 75,
+          "y": 83,
+          "cut": 145,
+          "body_sha256": "52fe6d1b1b6fc431186d6abf1f793ad747a7738dfdc69d799c3ef03aa7cccb68"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 28,
+          "y": 84,
+          "cut": 145,
+          "body_sha256": "95211fcb5edc792482e3d6635113404d61d333313c2775f5e02063804eb8a13b"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.9463047743623283,
+      "mid_source_sha256": "3a820f424b93c711d90deba7bcebb263de7e25f43be57f96323f763fb34333e2",
+      "rejected": [],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 16,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "9c73a166ae32188a5834c875e997fbba12600389d5c5109f316212b9e082201b",
+      "original_sha256": {
+        "walk": "0aac22fb062da3ca9c87c2b619afe455d480406e933eb2527b66bc9f9b456201",
+        "run": "257e765d8c9cb49bc66758f437799e151833a4c6b1e1e79eac6dda02aeffaf54",
+        "idle": "5c98b92a4ef08a254168912130da8f01d5127e12ea4e7fd9a370827d25d56b8a"
+      }
+    },
+    {
+      "look": "sea_dog",
+      "motion": "run",
+      "source_sha256": "e3e936d1882e36dcf9132b91bea61fba7b69dc2497ec4b052676b80781cab25b",
+      "reference_sha256": "0aac22fb062da3ca9c87c2b619afe455d480406e933eb2527b66bc9f9b456201",
+      "reference_frame": 0,
+      "scale": 0.9820143884892086,
+      "cell": [
+        256,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        93,
+        95,
+        95,
+        85,
+        91,
+        98,
+        88,
+        85
+      ],
+      "key_heights": [
+        262,
+        260,
+        260,
+        248,
+        264,
+        257,
+        267,
+        254
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.9820143884892086,
+          "x": 40,
+          "y": 93,
+          "cut": 154,
+          "body_sha256": "653f453575a293ef685e97b818246e1342fccaa18fda459c17fbb3253d4d0c16"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 56,
+          "y": 95,
+          "cut": 156,
+          "body_sha256": "f4f8994dc88d0f663e71faa8d6709dcef20ac6aaf116e61fbb44bbf10d1498b3"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 25,
+          "y": 95,
+          "cut": 156,
+          "body_sha256": "7584c33e894009795f212bf9125f86be1b8bc241a9c0640e15c6fecdb988e468"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 21,
+          "y": 85,
+          "cut": 146,
+          "body_sha256": "61aab1578416bab6df3e3e4095797e777a62be35e2c25aeb6672f948258431cc"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 36,
+          "y": 91,
+          "cut": 152,
+          "body_sha256": "85074d984f537c250192738316a6dda227aae6150ea928aac27c7f371e66ff15"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 45,
+          "y": 97,
+          "cut": 159,
+          "body_sha256": "4320fa6528208c6687d2d6ef94a0d2f0a46867b0a47286e34ba14ce92de39f8a"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 22,
+          "y": 88,
+          "cut": 149,
+          "body_sha256": "3127b39aaf472ff5062c2fc78b5c8e0bac08856fd33711cd07bf643691d52805"
+        },
+        {
+          "scale": 0.9820143884892086,
+          "x": 26,
+          "y": 85,
+          "cut": 146,
+          "body_sha256": "b3ca592a8a144e303b7d8b9d488d1a59f7d8cb997705fd874f4848ce6277225d"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.9463047743623283,
+      "mid_source_sha256": "3a820f424b93c711d90deba7bcebb263de7e25f43be57f96323f763fb34333e2",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          28,
+          22,
+          20,
+          0,
+          0,
+          0,
+          0,
+          0,
+          25,
+          16,
+          19
+        ]
+      },
+      "output_sha256": "94f5b5e69b795303bbc92f0cf44d4bc78a008c51445d4f509382cd91958ee2a9",
+      "original_sha256": {
+        "walk": "0aac22fb062da3ca9c87c2b619afe455d480406e933eb2527b66bc9f9b456201",
+        "run": "257e765d8c9cb49bc66758f437799e151833a4c6b1e1e79eac6dda02aeffaf54",
+        "idle": "5c98b92a4ef08a254168912130da8f01d5127e12ea4e7fd9a370827d25d56b8a"
+      }
+    },
+    {
+      "look": "sky_adventurer",
+      "motion": "walk",
+      "source_sha256": "c5bd9985497f2df5a30302b5aebe53de166a263efe5ff92ff52993ebe9ba8332",
+      "reference_sha256": "b7599c8b32c82cafa8ed170d892612772b480d8e1e952f82772ccf2e1efd4616",
+      "reference_frame": 12,
+      "scale": 0.8333333333333334,
+      "cell": [
+        250,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        75,
+        81,
+        78,
+        77,
+        75,
+        81,
+        77,
+        76
+      ],
+      "key_heights": [
+        280,
+        274,
+        277,
+        278,
+        280,
+        274,
+        278,
+        279
+      ],
+      "stages": [
+        "왼발 접지",
+        "왼발 무게 받기",
+        "오른발 교차",
+        "왼발 밀기",
+        "오른발 접지",
+        "오른발 무게 받기",
+        "왼발 교차",
+        "오른발 밀기"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8333333333333334,
+          "x": 32,
+          "y": 75,
+          "cut": 140,
+          "body_sha256": "0911e779ba1113ab329b8eb1b12f9c8afce2d4891505f8f92981922048832ab7"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 36,
+          "y": 81,
+          "cut": 146,
+          "body_sha256": "95c106953d11e969fe36ccb7f11b71551b1cc0c36999b14ab0ccb64b99501d29"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 76,
+          "y": 77,
+          "cut": 143,
+          "body_sha256": "e5abd74f10000a56f9206783e12b2d1ab7c10c3b666563b818cd8920ce2c096e"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 50,
+          "y": 77,
+          "cut": 142,
+          "body_sha256": "62c7dee36a9080d037a679c73ba0c915449c11b4ff88921147f9f6dab7932a77"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 32,
+          "y": 75,
+          "cut": 140,
+          "body_sha256": "cf8cd37487f174c7b61c31b64e0eeb3637b0d40fb95faf5b93d7b549551e80db"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 42,
+          "y": 80,
+          "cut": 146,
+          "body_sha256": "9b40c0744b2fe6c5a752de30c761e5da1bde58f2636acdd9570624cb7a65c120"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 72,
+          "y": 77,
+          "cut": 142,
+          "body_sha256": "56270d19101890a3b429c5bdfa106d0ec73a9a95a44603b18c4630e42156b685"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 34,
+          "y": 76,
+          "cut": 141,
+          "body_sha256": "b12f7970305c63c4685471059f3ac28b3795da7765fa0f3867bef92fbb97dc70"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        6.5,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8055555555555556,
+      "mid_source_sha256": "43fa9370211c1cd234aa0fc8b0dde8c22bd486a96d3d6e274a0bc96e0dbdf642",
+      "rejected": [
+        {
+          "after": 1,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 1,
+          "method": "rife",
+          "faults": [
+            "outline",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.8125,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output_sha256": "ef4285b9ff00af7954977776d152474cc52e98e6a881fe04d0e018880296e9c7",
+      "original_sha256": {
+        "walk": "b7599c8b32c82cafa8ed170d892612772b480d8e1e952f82772ccf2e1efd4616",
+        "run": "27502bb8631e664a1892de7f7c454f7d6cce2cb718243362f6ef2c44f6160152",
+        "idle": "975ee0448ee5445dfea43ff291e0fe60cae14767fa277a10b6f4eba8b790cfd2"
+      }
+    },
+    {
+      "look": "sky_adventurer",
+      "motion": "run",
+      "source_sha256": "c5bd9985497f2df5a30302b5aebe53de166a263efe5ff92ff52993ebe9ba8332",
+      "reference_sha256": "b7599c8b32c82cafa8ed170d892612772b480d8e1e952f82772ccf2e1efd4616",
+      "reference_frame": 12,
+      "scale": 0.8333333333333334,
+      "cell": [
+        250,
+        360
+      ],
+      "foot": 354,
+      "key_heads": [
+        84,
+        90,
+        87,
+        75,
+        81,
+        87,
+        81,
+        75
+      ],
+      "key_heights": [
+        271,
+        265,
+        268,
+        256,
+        274,
+        268,
+        274,
+        252
+      ],
+      "stages": [
+        "왼발 착지",
+        "왼발 압축",
+        "왼발 차기",
+        "오른발 향한 공중",
+        "오른발 착지",
+        "오른발 압축",
+        "오른발 차기",
+        "왼발 향한 공중"
+      ],
+      "key_transforms": [
+        {
+          "scale": 0.8333333333333334,
+          "x": 30,
+          "y": 83,
+          "cut": 149,
+          "body_sha256": "baacb143307b4dc9593f70eef1be29b94a84b6b5777519f69c2bf1be9ee10c52"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 44,
+          "y": 89,
+          "cut": 155,
+          "body_sha256": "0c4d467101a50b7e7f3f55cf2871e8d6591d96190dfad9b7f0c4a54a42ff06f3"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 21,
+          "y": 86,
+          "cut": 152,
+          "body_sha256": "f65ba704d0b5443f1bcdb28cb5e41fd51f0dea8b317851379240fb803f4deb41"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 38,
+          "y": 74,
+          "cut": 140,
+          "body_sha256": "921157f5f7b5db4adca2eaa0c4a68dcab6dc339d04e6fbdb828f07b974c18c76"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 39,
+          "y": 80,
+          "cut": 146,
+          "body_sha256": "b2bb96fa6b888a3073999b107b48192208a098fea495058489a310862b21ba0e"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 44,
+          "y": 87,
+          "cut": 152,
+          "body_sha256": "604b0d36c757780874476f7a627a4f1f30f08b7e57839c4e6a6a6388ed98ab79"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 20,
+          "y": 80,
+          "cut": 146,
+          "body_sha256": "1781249496ca274351b5d0f8e8256cb41844d70ffb5ff390c173f523b8c8d254"
+        },
+        {
+          "scale": 0.8333333333333334,
+          "x": 38,
+          "y": 74,
+          "cut": 140,
+          "body_sha256": "efef80248e6aa8679f96c75cd72561daea9d0ac0076e19f94cf25b7aa1cd0ed8"
+        }
+      ],
+      "frame_stages": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0,
+        5.5,
+        6.0,
+        7.0,
+        7.5
+      ],
+      "methods": [
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "drawn",
+        "key",
+        "key",
+        "drawn"
+      ],
+      "mid_scale": 0.8055555555555556,
+      "mid_source_sha256": "43fa9370211c1cd234aa0fc8b0dde8c22bd486a96d3d6e274a0bc96e0dbdf642",
+      "rejected": [
+        {
+          "after": 6,
+          "method": "drawn",
+          "faults": [
+            "몸통 팽창"
+          ]
+        },
+        {
+          "after": 6,
+          "method": "rife",
+          "faults": [
+            "smear",
+            "ghost"
+          ]
+        }
+      ],
+      "clip": {
+        "cols": 8,
+        "rows": 2,
+        "count": 15,
+        "cycles": 1,
+        "times": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "pose": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.3125,
+          0.375,
+          0.4375,
+          0.5,
+          0.5625,
+          0.625,
+          0.6875,
+          0.75,
+          0.875,
+          0.9375,
+          1.0
+        ],
+        "baseHeight": 300,
+        "fixedScale": true,
+        "lift": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          27,
+          24,
+          27,
+          0,
+          0,
+          0,
+          0,
+          0,
+          28,
+          21
+        ]
+      },
+      "output_sha256": "af463657b7ff8288bbddd057af8a07ee58e54c55386d28c23f2aba6dfc76a564",
+      "original_sha256": {
+        "walk": "b7599c8b32c82cafa8ed170d892612772b480d8e1e952f82772ccf2e1efd4616",
+        "run": "27502bb8631e664a1892de7f7c454f7d6cce2cb718243362f6ef2c44f6160152",
+        "idle": "975ee0448ee5445dfea43ff291e0fe60cae14767fa277a10b6f4eba8b790cfd2"
+      }
+    }
+  ]
+}

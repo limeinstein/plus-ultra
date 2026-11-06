@@ -1,0 +1,544 @@
+{
+  "walk": {
+    "errors": [],
+    "looks": [
+      {
+        "look": "admiral",
+        "count": 14,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "armored_navigator",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "army_officer",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "battle_vanguard",
+        "count": 14,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "blackcoat_captain",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "casanova",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "charismatic_admiral",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "ganghui",
+        "count": 14,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "hat_spinner",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "muscle_swordsman",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "navigator_white",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "noble_scholar",
+        "count": 14,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "sea_dog",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "sky_adventurer",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      }
+    ]
+  },
+  "run": {
+    "errors": [],
+    "looks": [
+      {
+        "look": "admiral",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "armored_navigator",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "army_officer",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "battle_vanguard",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "blackcoat_captain",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "casanova",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "charismatic_admiral",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "ganghui",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "hat_spinner",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "muscle_swordsman",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "navigator_white",
+        "count": 13,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "noble_scholar",
+        "count": 16,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "sea_dog",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      },
+      {
+        "look": "sky_adventurer",
+        "count": 15,
+        "scale_range": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "all_frames_selected": true,
+        "idle": true,
+        "wall": true,
+        "gesture": true,
+        "fixedScale": true
+      }
+    ]
+  }
+}

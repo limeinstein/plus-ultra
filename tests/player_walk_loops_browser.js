@@ -7,6 +7,11 @@ let playwright;
 try { playwright = require('playwright'); }
 catch (_) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
 const ROOT = path.resolve(__dirname, '..');
+// 새 순환 시트는 인물별 칸 수·시간표가 다르다. 원본 49칸 검사는 아래에 남긴다.
+if (fs.readFileSync(path.join(ROOT, 'js/data/heromotion.js'), 'utf8').includes('"loops"')) {
+  require('./player_loop_20261106_browser.cjs');
+  return;
+}
 const MOTION = process.env.HERO_MOTION || 'walk';
 const OUT = process.env.HERO_MOTION_OUT || path.join(ROOT, 'artifacts', MOTION === 'run' ? 'run-loop-update-20261027' : 'walk-loop-update-20261027');
 fs.mkdirSync(OUT, { recursive: true });

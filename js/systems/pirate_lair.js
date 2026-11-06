@@ -166,22 +166,25 @@
     var list = x.tell.splice(0, x.tell.length), held = false;
     for (var i = 0; i < list.length; i++) {
       var t = list[i], d = LR.data(t.zone); if (!d) continue;
-      if (t.kind === 'reveal') {
-        var who = pirateSp(t.cap, t.zone);
-        await UI.say('…좋소, 좋아. 목숨만 살려 주면 말하리다. 이 바다의 우리 같은 놈들이 모이는 곳은 ' + d.place + '요. ' + d.desc, who);
-        await UI.say('그곳엔 ' + d.chiefs[0].name + U.jx(d.chiefs[0].name, '과/와') + ' ' + d.chiefs[1].name + U.jx(d.chiefs[1].name, '이/가') + ' 버티고 있소. 소굴 앞바다에 들어서는 순간 두목들의 배가 몰려나올 거요.', who);
-        await UI.say('제독, ' + d.place + '의 자리를 해도에 적어 두었습니다. 두목 둘을 차례로 꺾으면 섬이 우리 것이 됩니다.', mate());
-      } else if (t.kind === 'chief') {
-        var nx = d.chiefs[(t.no || 0) + 1] || d.chiefs[d.chiefs.length - 1];
-        await UI.say(d.chiefs[t.no || 0].name + '의 함대가 무너졌다. 하지만 ' + d.place + ' 소굴의 깃대에는 아직 ' + nx.name + '의 깃발이 펄럭인다.', {});
-        await UI.say('제독, 남은 두목은 ' + nx.name + '입니다. 소굴 앞바다에 머물면 곧 나올 겁니다.', mate());
-      } else if (t.kind === 'hold') {
-        held = true;
-        await UI.say(d.place + '의 해적들이 하나둘 무기를 내려놓았다. 부두에 늘어선 사내들이 새 우두머리에게 모자를 벗는다.', {});
-        await UI.say('제독, ' + d.place + U.jx(d.place, '은/는') + ' 이제 우리 섬입니다! 해적 본부는 자택처럼 쓰시면 됩니다 — 쉬어 가실 수도, 금고와 보관함을 쓰실 수도 있습니다. 다른 부인들을 모셔 와 지내게 하실 수도 있고요.', mate());
-        await UI.alert('<b>' + U.esc(d.place) + U.jx(d.place, '을/를') + ' 손에 넣었다!</b><br>항구·교역소·술집·여관과 <b>해적 본부</b>가 있다. 해적 본부는 자택처럼 쓴다 — 쉬기 · 금고 · 보관함 · 항해 일지 기록, ' +
-          '그리고 둘째 부인부터 다른 부인들을 데려와 함께 지내게 할 수 있다.<br><small class="muted">일곱 바다의 소굴 가운데 ' + LR.heldCount() + '곳을 손에 넣었다. 모두 손에 넣으면 「해적왕」.</small>', '해적의 섬');
-      }
+      // 위치를 들은 순간부터 점령 결과까지, 그 바다의 소굴 원화를 대사와 함께 보여 준다.
+      await G.Hist.withScene('lair_' + d.zone, d.place + '의 해적 소굴', async function () {
+        if (t.kind === 'reveal') {
+          var who = pirateSp(t.cap, t.zone);
+          await UI.say('…좋소, 좋아. 목숨만 살려 주면 말하리다. 이 바다의 우리 같은 놈들이 모이는 곳은 ' + d.place + '요. ' + d.desc, who);
+          await UI.say('그곳엔 ' + d.chiefs[0].name + U.jx(d.chiefs[0].name, '과/와') + ' ' + d.chiefs[1].name + U.jx(d.chiefs[1].name, '이/가') + ' 버티고 있소. 소굴 앞바다에 들어서는 순간 두목들의 배가 몰려나올 거요.', who);
+          await UI.say('제독, ' + d.place + '의 자리를 해도에 적어 두었습니다. 두목 둘을 차례로 꺾으면 섬이 우리 것이 됩니다.', mate());
+        } else if (t.kind === 'chief') {
+          var nx = d.chiefs[(t.no || 0) + 1] || d.chiefs[d.chiefs.length - 1];
+          await UI.say(d.chiefs[t.no || 0].name + '의 함대가 무너졌다. 하지만 ' + d.place + ' 소굴의 깃대에는 아직 ' + nx.name + '의 깃발이 펄럭인다.', {});
+          await UI.say('제독, 남은 두목은 ' + nx.name + '입니다. 소굴 앞바다에 머물면 곧 나올 겁니다.', mate());
+        } else if (t.kind === 'hold') {
+          held = true;
+          await UI.say(d.place + '의 해적들이 하나둘 무기를 내려놓았다. 부두에 늘어선 사내들이 새 우두머리에게 모자를 벗는다.', {});
+          await UI.say('제독, ' + d.place + U.jx(d.place, '은/는') + ' 이제 우리 섬입니다! 해적 본부는 자택처럼 쓰시면 됩니다 — 쉬어 가실 수도, 금고와 보관함을 쓰실 수도 있습니다. 다른 부인들을 모셔 와 지내게 하실 수도 있고요.', mate());
+          await UI.alert('<b>' + U.esc(d.place) + U.jx(d.place, '을/를') + ' 손에 넣었다!</b><br>항구·교역소·술집·여관과 <b>해적 본부</b>가 있다. 해적 본부는 자택처럼 쓴다 — 쉬기 · 금고 · 보관함 · 항해 일지 기록, ' +
+            '그리고 둘째 부인부터 다른 부인들을 데려와 함께 지내게 할 수 있다.<br><small class="muted">일곱 바다의 소굴 가운데 ' + LR.heldCount() + '곳을 손에 넣었다. 모두 손에 넣으면 「해적왕」.</small>', '해적의 섬');
+        }
+      });
     }
     if (held && G.Achieve && G.Achieve.afterEvent) await G.Achieve.afterEvent();   // 해적왕
   };

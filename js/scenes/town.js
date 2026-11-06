@@ -144,7 +144,7 @@
     var landmarks = landmarksFor(c), chains = [I.chain.bg(c), I.chain.hero()];
     I.chain.heroWalk().forEach(function (k) { chains.push([k]); });
     I.chain.heroRun().forEach(function (k) { chains.push([k]); });
-    ['walk', 'run', 'back', 'idle'].forEach(function (kind) { chains.push(I.chain.heroMotion(kind)); });
+    ['walk', 'run', 'back', 'idle', 'stride_walk', 'stride_run'].forEach(function (kind) { chains.push(I.chain.heroMotion(kind)); });
     buildings.forEach(function (b) {
       var homeTier = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
       var homeKind = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.baseKind(homeTier, c) : b.kind;
@@ -484,7 +484,7 @@
   }
   function heroMotionAtlases() {
     var out = {}, hm = G.HERO_MOTION && G.HERO_MOTION[I.heroLook()], skip = (hm && hm.skip) || [];
-    ['walk', 'run', 'back', 'idle'].forEach(function (kind) {
+    ['walk', 'run', 'back', 'idle', 'stride_walk', 'stride_run'].forEach(function (kind) {
       // 얼굴과 다른 사람(모자·옷이 다른 그림)으로 그려진 동작은 쓰지 않는다 — 그 생김새의 예전 걷는 그림으로 (js/data/heromotion.js skip)
       if (skip.indexOf(kind) >= 0) { out[kind] = null; return; }
       var k = I.pick(I.chain.heroMotion(kind));
@@ -1306,30 +1306,35 @@
   }
   function drawHero(ctx, cam) {
     var motion = st.heroMotion || {}, atlas = null, kind = '';
+    var cfg = heroMotionConfig(), loopSet = cfg.loops || {};
     if (st.hero.entering && motion.back) { atlas = motion.back; kind = 'back'; }
     else if (st.hero.gesture && motion.idle) { atlas = motion.idle; kind = 'gesture'; }
-    else if (st.hero.running && motion.run) { atlas = motion.run; kind = 'run'; }
+    else if (st.hero.running && motion.run) { atlas = loopSet.run && motion.stride_run || motion.run; kind = 'run'; }
+    else if (st.hero.walking && loopSet.walk && motion.stride_walk) { atlas = motion.stride_walk; kind = 'walk'; }
     else if (motion.walk) { atlas = motion.walk; kind = 'walk'; }
     var run = !atlas && st.hero.running && st.runFrames.length && !st.hero.entering;
     var fr = run ? st.runFrames : st.heroFrames;
     if (atlas) {
-      var count = MOTION_FRAMES, ai;
+      var loop = loopSet[kind];
+      if (!loop || atlas !== motion['stride_' + kind]) loop = null;
+      var count = loop ? loop.count : MOTION_FRAMES, ai;
       if (kind === 'back') ai = Math.min(count - 1, Math.floor(st.hero.enterT * count));
       else if (kind === 'gesture') ai = heroGestureFrame();
-      else ai = st.hero.walking || st.hero.running ? heroGaitFrame(kind, count) : heroIdleFrame();
-      var cols = kind === 'gesture' ? G.FX.townHeroGestures.cols : MOTION_COLS;
-      var rows = kind === 'gesture' ? G.FX.townHeroGestures.rows : MOTION_ROWS;
+      else ai = st.hero.walking || st.hero.running ? heroGaitFrame(kind, count, false, loop) : heroIdleFrame();
+      var cols = loop ? loop.cols : kind === 'gesture' ? G.FX.townHeroGestures.cols : MOTION_COLS;
+      var rows = loop ? loop.rows : kind === 'gesture' ? G.FX.townHeroGestures.rows : MOTION_ROWS;
       var aw = (atlas.naturalWidth || atlas.width) / cols, ah = (atlas.naturalHeight || atlas.height) / rows;
       var enterFx = townHeroEnterFx(), enterEase = smooth01(st.hero.enterT);
-      var h = HERO_H * (kind === 'gesture' ? ah / G.FX.townHeroGestures.baseHeight : kind === 'back' ? 1 - (1 - enterFx.scale) * enterEase : 1), w = aw * h / ah;
+      var h = HERO_H * (loop ? ah / (loop.baseHeight || 300) : kind === 'gesture' ? ah / G.FX.townHeroGestures.baseHeight : kind === 'back' ? 1 - (1 - enterFx.scale) * enterEase : 1), w = aw * h / ah;
       var rise = st.hero.enterRise != null ? st.hero.enterRise : enterFx.rise;
       var x = st.hero.x - cam, y = GROUND + 34 - (kind === 'back' ? rise * enterEase : 0);
       ctx.save();
       ctx.globalAlpha = st.hero.fade;
       ctx.fillStyle = 'rgba(40,26,12,.28)';
-      var gait = kind === 'back' || kind === 'gesture' ? { squash: 1, lift: 0 } : heroGaitPose(kind);
-      var shadow = 1 / (1 + gait.lift * G.FX.heroGait.shadowLift);
-      var shadowW = kind === 'gesture' && motion.walk ? motion.walk.naturalWidth / MOTION_COLS * HERO_H / G.FX.townHeroGestures.baseHeight : w;
+      var gait = kind === 'back' || kind === 'gesture' || (loop && loop.fixedScale) ? { squash: 1, lift: 0 } : heroGaitPose(kind);
+      var shadowLift = loop && loop.fixedScale && loop.lift ? loop.lift[ai] * HERO_H / (loop.baseHeight || 300) : gait.lift;
+      var shadow = 1 / (1 + shadowLift * G.FX.heroGait.shadowLift);
+      var shadowW = (kind === 'gesture' || loop) && motion.walk ? motion.walk.naturalWidth / MOTION_COLS * HERO_H / G.FX.townHeroGestures.baseHeight : w;
       ctx.beginPath(); ctx.ellipse(x, y - 2, shadowW * 0.3 * shadow, 8 * shadow, 0, 0, 7); ctx.fill();
       ctx.translate(x, y - gait.lift);
       ctx.scale(st.hero.dir < 0 ? -1 : 1, heroIdleBreath() * gait.squash);
@@ -1360,13 +1365,55 @@
   /** 장면 시간 대신 실제로 이동한 거리로만 보행 자세를 넘긴다. */
   function advanceHeroGait(hero, distance, dt) {
     if (!distance || !dt || hero.entering) return;
-    if (hero.gaitPhase == null) hero.gaitPhase = heroIdleFrame() / MOTION_FRAMES;
-    var fx = heroGaitFx(hero.running ? 'run' : 'walk');
+    var kind = hero.running ? 'run' : 'walk', cfg = heroMotionConfig(), loops = cfg.loops || {};
+    if (hero.gaitPhase == null) {
+      hero.gaitPhase = heroIdleFrame() / MOTION_FRAMES;
+      if (loops.walk && loops.walk.pose) {
+        var start = cfg.walkStart || 0;
+        var standing = loops.walk.fixedScale ? 0.25 : Math.max(0, heroIdleFrame() - start) / (MOTION_FRAMES - start) * loops.walk.cycles;
+        hero.gaitPhase = gaitTimeAtPose(loops.walk, standing);
+      }
+    }
+    // 걷기와 달리기의 시간 배분이 달라도 같은 쪽 발의 접지 진행도를 이어받는다.
+    if (hero.gaitKind && hero.gaitKind !== kind && loops[hero.gaitKind] && loops[kind]) {
+      hero.gaitPhase = gaitTimeAtPose(loops[kind], gaitPoseAtTime(loops[hero.gaitKind], hero.gaitPhase));
+    }
+    hero.gaitKind = kind;
+    var fx = heroGaitFx(kind);
     // 두 주기짜리 기존 시트도 끝까지 재생하고, 걷기와 뛰기 사이에 같은 쪽 발을 이어받는다.
     hero.gaitPhase = (hero.gaitPhase + Math.min(distance / fx.stride, dt * fx.maxCycles)) % 2;
   }
-  function heroGaitFrame(kind, count, legacy) {
+  function gaitTimeFrame(loop, u) {
+    var lo = 0, hi = loop.count;
+    while (lo + 1 < hi) {
+      var mid = (lo + hi) >> 1;
+      if (loop.times[mid] <= u) lo = mid; else hi = mid;
+    }
+    return lo;
+  }
+  function gaitPoseAtTime(loop, phase) {
+    if (!loop.pose) return phase;
+    var u = (phase / loop.cycles) % 1, i = gaitTimeFrame(loop, u);
+    var mix = (u - loop.times[i]) / (loop.times[i + 1] - loop.times[i]);
+    return Math.floor(phase / loop.cycles) * loop.cycles + loop.pose[i] + (loop.pose[i + 1] - loop.pose[i]) * mix;
+  }
+  function gaitTimeAtPose(loop, pose) {
+    if (!loop.pose) return pose;
+    var local = pose % loop.cycles, lo = 0, hi = loop.count;
+    while (lo + 1 < hi) {
+      var mid = (lo + hi) >> 1;
+      if (loop.pose[mid] <= local) lo = mid; else hi = mid;
+    }
+    var mix = (local - loop.pose[lo]) / (loop.pose[lo + 1] - loop.pose[lo]);
+    return (Math.floor(pose / loop.cycles) * loop.cycles + (loop.times[lo] + (loop.times[lo + 1] - loop.times[lo]) * mix) * loop.cycles) % 2;
+  }
+  function heroGaitFrame(kind, count, legacy, loop) {
     var cfg = heroMotionConfig(), cycles = legacy ? 1 : (cfg[kind + 'Cycles'] || (kind === 'run' ? 2 : 1));
+    if (loop) {
+      var u = ((st.hero.gaitPhase || 0) / loop.cycles) % 1;
+      // 발 디딤 순서의 시간표를 따르고 마지막→첫 칸도 같은 박자로 넘긴다.
+      return gaitTimeFrame(loop, u);
+    }
     var phase = (st.hero.gaitPhase || 0) / cycles;
     var start = legacy ? 0 : (cfg[kind + 'Start'] || 0);
     return start + Math.floor((phase % 1) * (count - start)) % (count - start);
@@ -1374,7 +1421,12 @@
   /** 접지→내려앉기→발 교차→밀어 올리기. 걷기는 발밑을 유지하고 달리기는 밀어낸 뒤에만 뜬다. */
   function heroGaitPose(kind) {
     if (!st.hero.walking && !st.hero.running) return { squash: 1, lift: 0 };
-    var fx = heroGaitFx(kind), p = ((st.hero.gaitPhase || 0) * 2) % 1, contact = G.FX.heroGait.supportEnd;
+    var phase = st.hero.gaitPhase || 0, loop = heroMotionConfig().loops;
+    loop = loop && loop[kind];
+    if (loop && st.heroMotion['stride_' + kind] && loop.pose) {
+      phase = gaitPoseAtTime(loop, phase);
+    }
+    var fx = heroGaitFx(kind), p = (phase * 2) % 1, contact = G.FX.heroGait.supportEnd;
     var down = Math.sin(Math.PI * U.clamp(p / contact, 0, 1));
     var up = Math.sin(Math.PI * U.clamp((p - contact) / (1 - contact), 0, 1));
     return { squash: 1 - down * fx.down / HERO_H + (kind === 'walk' ? up * fx.rise / HERO_H : 0),

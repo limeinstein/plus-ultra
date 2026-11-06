@@ -15,29 +15,58 @@ const ok = (v, text) => { assert(v, text); console.log('✓ ' + text); };
     const page = await browser.newPage({ viewport: {width: 1440, height: 1000} });
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)/.test(m.text())) errors.push(m.text()); });
+    await page.addScriptTag({path:path.join(ROOT,'js/data/seafx.js')});
+    await page.addScriptTag({path:path.join(ROOT,'js/art/landwarterrain.js')});
+    // 투명 가장자리는 합성 색으로 비교한다. SwiftShader의 색상 반올림(2/255)과 경계점 4픽셀 이내 차이만 허용한다.
+    const pixels = await page.evaluate(() => {
+      const cases = [], shapes = [];
+      function different(a,b,i) {
+        const aa=a[i+3],ba=b[i+3];if(Math.abs(aa-ba)>2)return true;
+        for(let j=0;j<3;j++)if(Math.abs(a[i+j]*aa-b[i+j]*ba)>510)return true;
+        return false;
+      }
+      for (const terr of Object.keys(G.FX.landwar.terrain.regions)) {
+        const c = document.createElement('canvas'); c.width = 1000; c.height = 440;
+        const ctx = c.getContext('2d', {willReadFrequently:true}), art = G.LandWarTerrain.create(terr,1000,440);
+        const sides = ['me','en','me'], lanes = [140,262,384];
+        function draw(feats,t=0) {ctx.clearRect(0,0,1000,440);art.draw(ctx,feats,sides,lanes,t);return ctx.getImageData(0,0,1000,440).data;}
+        const a = draw(['stream',null,null]), same = draw(['stream',null,null]), moving = draw(['stream',null,null],1);
+        let unstable=0, changed=0, sky=0, gaps=0, bottom=0, duplicateDiff=0, laneDiff=0;
+        const start=G.FX.landwar.terrain.regions[terr].groundY, shape=[];
+        for(let y=0;y<440;y++) {
+          let row=0, sum=0;
+          for(let x=0;x<1000;x++) {
+            const i=(y*1000+x)*4;
+            if(y<start)sky+=a[i+3];
+            if(different(a,same,i))unstable++;
+            if(a[i]!==moving[i]||a[i+3]!==moving[i+3])changed++;
+            if(a[i+3]>230){row++;sum+=x;}
+          }
+          if(y>=start+24&&row===0)gaps++;
+          if(y===439)bottom=row;
+          if(y>=240&&y%30===0)shape.push(row?Math.round(sum/row):-1);
+        }
+        const duplicate=draw(['stream','stream','stream']);
+        for(let i=0;i<a.length;i+=4)if(Math.abs(a[i+3]-duplicate[i+3])>2)duplicateDiff++;
+        for(let lane=1;lane<3;lane++) {
+          const feats=[null,null,null];feats[lane]='stream';const moved=draw(feats);
+          for(let i=0;i<a.length;i+=4)if(Math.abs(a[i+3]-moved[i+3])>2)laneDiff++;
+        }
+        const dry=draw([null,null,null]);let dryPixels=0;
+        for(let i=3;i<dry.length;i+=4)dryPixels+=dry[i];
+        shapes.push(shape.join(','));cases.push({terr,sky,gaps,bottom,unstable,changed,duplicateDiff,laneDiff,dryPixels});
+      }
+      return {cases,uniquePaths:new Set(shapes).size};
+    });
+    fs.writeFileSync(path.join(OUT,'continuity-report.json'),JSON.stringify(pixels,null,2));
+    for(const c of pixels.cases) {
+      ok(c.sky===0&&c.gaps===0&&c.bottom>14,c.terr+': 지면부터 화면 맨 앞까지 물길이 끊기거나 흐려지지 않는다');
+      ok(c.duplicateDiff<=4&&c.laneDiff<=8,c.terr+': 개울이 어느 칸에 있든 하나의 연속된 물길을 그린다');
+      ok(c.dryPixels===0&&c.changed>200&&c.unstable<=32,c.terr+': 개울 없는 전장은 물길 없음·물살 움직임·고정 질감');
+    }
+    ok(pixels.uniquePaths===9,'9개 지형의 물길 경로가 각각 다르다');
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, {waitUntil: 'domcontentloaded', timeout: 120000});
     await page.waitForFunction(() => window.G && G.State && G.LandWarTerrain && !G.Scenes.title.bootPending, null, {timeout: 120000});
-    const pixels = await page.evaluate(() => {
-      const c = document.createElement('canvas'); c.width = 1000; c.height = 440;
-      const ctx = c.getContext('2d', {willReadFrequently: true}), art = G.LandWarTerrain.create('grass', 1000, 440);
-      const features = ['stream', 'stream', 'stream'], sides = ['me', 'en', 'me'], lanes = [140, 262, 384];
-      function draw(t) { ctx.clearRect(0, 0, 1000, 440); art.draw(ctx, features, sides, lanes, t); return ctx.getImageData(0, 0, 1000, 440).data; }
-      const a = draw(0), b = draw(0), d = draw(1);
-      let sky = 0, unstable = 0, changed = [0, 0, 0], body = [0, 0, 0];
-      for (let y = 0; y < 440; y++) for (let x = 0; x < 1000; x++) {
-        const i = (y * 1000 + x) * 4, lane = y < 201 ? 0 : y < 323 ? 1 : 2;
-        if (y < G.FX.landwar.terrain.groundY) sky += a[i + 3];
-        if (a[i] !== b[i] || a[i + 3] !== b[i + 3]) unstable++;
-        if (a[i] !== d[i] || a[i + 3] !== d[i + 3]) changed[lane]++;
-        if (a[i + 3] > 0) body[lane]++;
-      }
-      const start = performance.now(); for (let n = 0; n < 90; n++) art.draw(ctx, features, sides, lanes, n / 30);
-      return {sky, unstable, changed, body, msPerDraw: (performance.now() - start) / 90};
-    });
-    ok(pixels.sky === 0, '개울 세 줄 모두 하늘·산 위로 올라가지 않는다');
-    ok(pixels.unstable === 0, '같은 시간의 지형 질감·돌·풀이 완전히 같다');
-    ok(pixels.changed.every(n => n > 40) && pixels.body.every(n => n > 500), '세 줄의 물길이 보이고 물살·갈대가 시간에 따라 움직인다');
-    ok(pixels.msPerDraw < 20, '저장한 지형 재사용: 평균 ' + pixels.msPerDraw.toFixed(2) + 'ms');
     await page.evaluate(() => {
       G.State.newGame({name:'지형 확인',nation:'PT',job:'explorer',age:24,birth:{m:1,d:1},st:{str:70,int:70,mar:70,cha:70},sk:{sword:3,shoot:3,gun:3},lg:[],diff:'normal'});
       const s = G.Game.state; s.settings.sound = 0; s.settings.music = 0; s.settings.shake = false; s.settings.res = .35;
@@ -53,7 +82,8 @@ const ok = (v, text) => { assert(v, text); console.log('✓ ' + text); };
       await page.waitForTimeout(150);
       await page.evaluate(() => G.Games._landDebug.draw());
       await page.locator('.lwar canvas').screenshot({path:path.join(OUT,terr + '.png')});
-      const sample = await page.evaluate(terr => {
+      const actualFeatures=await page.evaluate(()=>G.Games._landDebug.state().feat.slice());
+      const sample = await page.evaluate(({terr,actualFeatures}) => {
         const c = document.createElement('canvas'); c.width = 1000; c.height = 440;
         const ctx = c.getContext('2d', {willReadFrequently:true}), art = G.LandWarTerrain.create(terr,1000,440);
         const feats = ['woods','stream','hill'], sides = ['me','en','me'], lanes = [140,262,384];
@@ -64,7 +94,7 @@ const ok = (v, text) => { assert(v, text); console.log('✓ ' + text); };
           const i=(y*1000+x)*4, changed=a[i]!==b[i]||a[i+1]!==b[i+1]||a[i+3]!==b[i+3];
           if(changed&&y<225&&(x<440||x>560))treeMotion++;
           if(changed&&y>220&&y<310&&x>460&&x<540)waterMotion++;
-          if(b[i]!==repeat[i]||b[i+3]!==repeat[i+3])unstable++;
+          if(Math.abs(b[i+3]-repeat[i+3])>2||[0,1,2].some(j=>Math.abs(b[i+j]*b[i+3]-repeat[i+j]*repeat[i+3])>510))unstable++;
         }
         const start=performance.now();for(let n=0;n<30;n++){ctx.clearRect(0,0,1000,440);art.draw(ctx,feats,sides,lanes,n/30);}
         window.__terrainPreview={canvas:c,ctx,art,feats,sides,lanes,terr};
@@ -73,10 +103,15 @@ const ok = (v, text) => { assert(v, text); console.log('✓ ' + text); };
           art.draw(ctx,feats,sides,lanes,t);return c.toDataURL('image/png').split(',')[1];
         }
         window.__terrainComposite=composite;
-        return {terr,tree:G.FX.landwar.terrain.regions[terr].tree,treeMotion,waterMotion,unstable,msPerDraw:(performance.now()-start)/30,image:composite(0)};
-      },terr);
+        const streamImage=composite(0);
+        ctx.clearRect(0,0,1000,440);G.Img.drawCover(ctx,G.Img.get('landwar/backgrounds/'+terr),-20,-20,1040,480,.5,.5);
+        art.draw(ctx,actualFeatures,sides,lanes,0);
+        return {terr,hasStream:actualFeatures.includes('stream'),tree:G.FX.landwar.terrain.regions[terr].tree,treeMotion,waterMotion,unstable,msPerDraw:(performance.now()-start)/30,image:c.toDataURL('image/png').split(',')[1],streamImage};
+      },{terr,actualFeatures});
       fs.writeFileSync(path.join(OUT,'regional-'+terr+'.png'),Buffer.from(sample.image,'base64')); delete sample.image;
-      ok(sample.treeMotion>100&&sample.waterMotion>200&&sample.unstable===0,terr+': 나무 윤곽·수면 전체가 움직이고 같은 시간의 그림은 같다');
+      fs.writeFileSync(path.join(OUT,'watercourse-'+terr+'.png'),Buffer.from(sample.streamImage,'base64')); delete sample.streamImage;
+      ok(sample.hasStream===['grass','jungle','tundra'].includes(terr),terr+': 실제 전장의 개울 유무 유지');
+      ok(sample.treeMotion>100&&sample.waterMotion>200&&sample.unstable<=32,terr+': 나무 윤곽·수면 전체가 움직이고 같은 시간의 그림은 같다');
       regional.push(sample);
       if (terr === 'forest' || terr === 'jungle') {
         const frames = path.join(OUT,'motion-'+terr);fs.mkdirSync(frames,{recursive:true});

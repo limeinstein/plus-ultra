@@ -10,6 +10,12 @@ catch (_) { playwright = require('../tools/procedural_art/node_modules/playwrigh
 const { chromium } = playwright;
 
 const ROOT = path.resolve(__dirname, '..');
+if (fs.readFileSync(path.join(ROOT, 'js/data/heromotion.js'), 'utf8').includes('"loops"')) {
+  process.env.HERO_MOTION = 'walk';
+  process.argv = process.argv.slice(0, 2).concat(['navigator_white']);
+  require('./player_loop_20261106_browser.cjs');
+  return;
+}
 const OUT = path.join(ROOT, 'artifacts', 'player-motion-sheets', 'navigator_white', 'walk49');
 const SHOT = path.join(OUT, 'navigator_white_town_walk.png');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }

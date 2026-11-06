@@ -38,7 +38,7 @@ def main():
         im = Image.open(f'{d}/walk.webp').convert('RGBA'); cw, ch = im.width // 7, im.height // 7
         g = [feet_gap(im.crop(((i % 7) * cw, (i // 7) * ch, (i % 7 + 1) * cw, (i // 7 + 1) * ch))) for i in range(49)]
         look = Path(d).parent.name; rec = {'idle': int(np.argmin(g))}
-        for key in ('walkCycles', 'runCycles', 'walkStart', 'runStart'):
+        for key in ('walkCycles', 'runCycles', 'walkStart', 'runStart', 'loops'):
             if key in old.get(look, {}): rec[key] = old[look][key]
         if look in SKIP: rec['skip'] = SKIP[look]
         out[look] = rec

@@ -51,8 +51,8 @@
   }
   function fade(c, y0, y1, left, width) {
     var g = c.createLinearGradient(0, y0, 0, y1);
-    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.14, '#fff');
-    g.addColorStop(.84, '#fff'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(G.FX.landwar.terrain.stream.headFade, '#fff');
+    g.addColorStop(1, '#fff');
     c.globalCompositeOperation = 'destination-in'; c.fillStyle = g; c.fillRect(left, y0, width, y1 - y0);
     c.globalCompositeOperation = 'source-over';
   }
@@ -68,13 +68,19 @@
   A.create = function (terr, W, H) {
     var K = G.FX.landwar.terrain, R = K.regions[terr] || K.regions.grass, P = R.colors;
     var layer = null, signature = '', streams = [], trees = [], flowingTexture = null;
-    function top(y) { return Math.max(K.groundY, R.groundY, y - K.stream.reachBack); }
-    function path(ln, y) {
-      var S = K.stream, y0 = top(y), y1 = Math.min(H, Math.max(y + S.reachFront, y0 + S.minReach)), pts = [], phase = ln * 1.7 + .6;
+    function top() { return Math.max(K.groundY, R.groundY); }
+    function course(k) {
+      var points = R.course, f = Math.max(0, Math.min(1, k)) * (points.length - 1), i = Math.min(points.length - 2, Math.floor(f)), u = f - i;
+      var a = points[Math.max(0, i - 1)], b = points[i], c = points[i + 1], d = points[Math.min(points.length - 1, i + 2)];
+      if (R.hill === 'ice') return mix(b, c, u);
+      return .5 * (2 * b + (c - a) * u + (2 * a - 5 * b + 4 * c - d) * u * u + (3 * b - a - 3 * c + d) * u * u * u);
+    }
+    function path() {
+      var S = K.stream, y0 = top(), y1 = H + S.foregroundBleed, pts = [];
       for (var i = 0; i <= S.segments; i++) {
-        var k = i / S.segments, py = mix(y0, y1, k), depth = .45 + .55 * (py - K.groundY) / (H - K.groundY);
-        pts.push({x: W / 2 + Math.sin(k * Math.PI * 1.7 + phase) * S.bend * R.bend * depth + (k - .5) * 22,
-          y: py, w: mix(S.width[0], S.width[1], depth) * R.width * (.88 + .12 * Math.sin(k * 9 + phase))});
+        var k = i / S.segments, py = mix(y0, y1, k), depth = Math.max(0, Math.min(1, (py - y0) / (H - y0)));
+        pts.push({x: W / 2 + course(depth), y: py,
+          w: mix(S.width[0], S.width[1], Math.pow(depth, .8)) * R.width * (.94 + .06 * Math.sin(depth * 15))});
       }
       return pts;
     }
@@ -82,12 +88,13 @@
       var f = Math.max(0, Math.min(.99999, k)) * (pts.length - 1), i = Math.floor(f), a = pts[i], b = pts[i + 1];
       return {x: mix(a.x, b.x, f - i), y: mix(a.y, b.y, f - i), w: mix(a.w, b.w, f - i)};
     }
-    function stream(c, ln, y) {
-      var S = K.stream, pts = path(ln, y), y0 = pts[0].y, y1 = pts[pts.length - 1].y;
-      // 별도 물길 조각에 끝 흐림을 적용하므로 다른 줄의 언덕·숲을 지우지 않는다.
+    function stream(c) {
+      var S = K.stream, pts = path(), y0 = pts[0].y, y1 = pts[pts.length - 1].y;
+      // 칸마다 자르지 않고 먼 땅에서 화면 밖까지 이어지는 물길을 한 번만 그린다.
       var patch = document.createElement('canvas'), scale = K.resolution, bank = S.bank * R.bank;
-      var left = W / 2 - S.bend * R.bend - S.width[1] * R.width - bank * 3;
-      patch.width = Math.ceil((W / 2 - left) * 2 * scale); patch.height = Math.ceil((y1 - y0) * scale);
+      var left = Math.floor(Math.min.apply(null, pts.map(function (p) { return p.x - p.w / 2; })) - bank * 2);
+      var right = Math.ceil(Math.max.apply(null, pts.map(function (p) { return p.x + p.w / 2; })) + bank * 2);
+      patch.width = Math.ceil((right - left) * scale); patch.height = Math.ceil((y1 - y0) * scale);
       var b = patch.getContext('2d'); b.scale(scale, scale); b.translate(-left, -y0);
       // 물과 둑을 픽셀 재질로 함께 만든다. 가장자리·깊이·작은 굴절이 서로 다른 크기의 난류를 쓴다.
       var surface = document.createElement('canvas'); surface.width = patch.width; surface.height = patch.height;
@@ -97,7 +104,7 @@
         var yy = y0 + py / scale, center = at(pts, py / surface.height);
         for (var px = 0; px < surface.width; px++) {
           var xx = left + px / scale, sd = xx < center.x ? -1 : 1;
-          var n = noise(xx / 9, yy / 7, ln + 3), fine = noise(xx / 1.4, yy / 1.2, 97);
+          var n = noise(xx / 9, yy / 7, 3), fine = noise(xx / 1.4, yy / 1.2, 97);
           var edge = Math.abs(xx - center.x) - center.w * .5 + (n - .5) * 4;
           var alpha = Math.max(0, Math.min(1, 1 - edge / bank)), col, light = .8 + n * .26 + (fine - .5) * .26;
           if (edge < 0) {
@@ -121,12 +128,12 @@
       sc.putImageData(im, 0, 0); b.drawImage(surface, left, y0, patch.width / scale, patch.height / scale);
       // 얕은 물가의 돌도 고정 난수로 배치하고 젖은 아랫면에 그림자를 둔다.
       for (var i = 0; i < S.stones; i++) {
-        var k = .13 + rnd(i + ln * 53) * .74, p0 = at(pts, k), side = i % 2 ? -1 : 1;
+        var k = .08 + rnd(i + 53) * .9, p0 = at(pts, k), side = i % 2 ? -1 : 1;
         rock(b, p0.x + side * (p0.w * .5 + rnd(i + 12) * bank * .65), p0.y, 1.8 + rnd(i + 31) * p0.w * .14, P, i);
       }
       b.save(); fade(b, y0, y1, left, patch.width / scale); b.restore();
       c.drawImage(patch, left, y0, patch.width / scale, patch.height / scale);
-      streams.push({pts: pts, lane: ln});
+      streams.push({pts: pts, lane: 0});
       if (!flowingTexture) flowingTexture = currentTexture(K, P);
     }
     function hill(c, ln, y, side) {
@@ -265,7 +272,8 @@
     function build(feats, sides, lanes) {
       layer = document.createElement('canvas'); layer.width = W * K.resolution; layer.height = H * K.resolution;
       var c = layer.getContext('2d'); c.scale(K.resolution, K.resolution); streams = []; trees = [];
-      feats.forEach(function (f, ln) { if (f === 'stream') stream(c, ln, lanes[ln]); else if (f === 'hill') hill(c, ln, lanes[ln], sides[ln]); else if (f === 'woods') woods(c, ln, lanes[ln]); });
+      feats.forEach(function (f, ln) { if (f === 'hill') hill(c, ln, lanes[ln], sides[ln]); else if (f === 'woods') woods(c, ln, lanes[ln]); });
+      if (feats.indexOf('stream') >= 0) stream(c);
     }
     function flowing(c, s, t) {
       var S = K.stream, pts = s.pts;
@@ -275,7 +283,7 @@
       var N = K.textureSize, period = N * 2;
       for (var row = 0; row < pts.length - 1; row++) {
         var p0 = pts[row], q0 = pts[row + 1], yy0 = p0.y, dy0 = q0.y - p0.y;
-        var age0 = row / (pts.length - 1), edge0 = Math.min(1, age0 * 7, (1 - age0) * 7);
+        var age0 = row / (pts.length - 1), edge0 = Math.min(1, age0 / S.headFade);
         var sy0 = ((yy0 * 1.3 - t * S.textureSpeed * R.flow) % period + period) % period;
         c.globalAlpha = edge0 * S.textureOpacity;
         c.drawImage(flowingTexture, 0, sy0, N, dy0 * 1.3 + 1, p0.x - p0.w * .5, yy0, p0.w, dy0 + .6);
@@ -283,7 +291,7 @@
       c.globalAlpha = 1;
       for (var i = 0; i < S.ripples; i++) {
         var k = (rnd(i * 7 + s.lane * 61) + t * S.flowSpeed * R.flow * (.7 + rnd(i + 19) * .6)) % 1;
-        var p = at(pts, k), edge = Math.min(1, k * 7, (1 - k) * 7), off = Math.sin(i * 2.3) * p.w * .36;
+        var p = at(pts, k), edge = Math.min(1, k / S.headFade), off = Math.sin(i * 2.3) * p.w * .36;
         var x = p.x + off, len = 1.2 + rnd(i + 42) * p.w * .18;
         c.strokeStyle = rgba(i % 3 ? P.light : P.dark, edge * (.20 + .28 * Math.pow(.5 + .5 * Math.sin(t * 2.5 + i), 2)));
         c.lineWidth = .6 + rnd(i + 16) * .65;

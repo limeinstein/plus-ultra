@@ -1,0 +1,441 @@
+{
+  "date": "2026-11-06",
+  "mode": "built-in image_gen",
+  "portraits": [
+    {
+      "name": "붉은 터번의 살림 바바",
+      "g": "m",
+      "desc": "제르바 해적들의 우두머리. 노예선 노꾼 출신으로, 쇠사슬 자국이 남은 팔로 갤리선을 몬다.",
+      "id": "lairchief_med_0",
+      "type": "chief",
+      "zone": "med",
+      "place": "제르바 섬",
+      "key": "portraits/rivals/붉은 터번의 살림 바바",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Man 52, weathered North African face, stocky muscular build, black beard graying at chin, red turban, open ivory linen shirt, ochre sash and sleeveless brown leather vest; faint healed shackle marks on wrists, resolute gaze. Character: 붉은 터번의 살림 바바. 제르바 해적들의 우두머리. 노예선 노꾼 출신으로, 쇠사슬 자국이 남은 팔로 갤리선을 몬다."
+    },
+    {
+      "name": "모래톱의 아이샤 레이스",
+      "g": "f",
+      "desc": "얕은 물길을 손금 보듯 아는 여해적. 뒤쫓던 군함을 모래톱에 걸리게 해 놓고 불을 지른다.",
+      "id": "lairchief_med_1",
+      "type": "chief",
+      "zone": "med",
+      "place": "제르바 섬",
+      "key": "portraits/rivals/모래톱의 아이샤 레이스",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Woman 33, North African, warm olive skin, dark almond eyes, thick black braid, indigo headwrap, sea-green linen blouse and fitted russet sleeveless coat, brass belt and sheathed curved saber; shrewd confident half-smile. Character: 모래톱의 아이샤 레이스. 얕은 물길을 손금 보듯 아는 여해적. 뒤쫓던 군함을 모래톱에 걸리게 해 놓고 불을 지른다."
+    },
+    {
+      "name": "외팔이 하산 레이스",
+      "desc": "칼에 왼팔을 잃고도 노 젓는 소리 하나로 배를 부리는 바르바리 해적.",
+      "g": "m",
+      "id": "lair_med_1",
+      "type": "officer",
+      "zone": "med",
+      "place": "제르바 섬",
+      "key": "portraits/rivals/외팔이 하산 레이스",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Man 46, North African, dark curled beard, blue turban, left arm missing below shoulder with neatly pinned sleeve, right hand at belt; sand-colored shirt, weathered brown sleeveless vest, composed strength. No wounds. Character: 외팔이 하산 레이스. 칼에 왼팔을 잃고도 노 젓는 소리 하나로 배를 부리는 바르바리 해적."
+    },
+    {
+      "name": "검은 돛의 무스타파",
+      "desc": "달 없는 밤에만 검은 돛을 올리고 나타나는 해적.",
+      "g": "m",
+      "id": "lair_med_2",
+      "type": "officer",
+      "zone": "med",
+      "place": "제르바 섬",
+      "key": "portraits/rivals/검은 돛의 무스타파",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Man 38, North African, lean face, narrow mustache, black headwrap and black indigo short kaftan, dark sash, hand on sheathed curved sword, reserved alert eyes. Character: 검은 돛의 무스타파. 달 없는 밤에만 검은 돛을 올리고 나타나는 해적."
+    },
+    {
+      "name": "독사 카심 레이스",
+      "desc": "항복한 배에서도 금붙이를 끝까지 뒤지는 욕심 많은 해적.",
+      "g": "m",
+      "id": "lair_med_3",
+      "type": "officer",
+      "zone": "med",
+      "place": "제르바 섬",
+      "key": "portraits/rivals/독사 카심 레이스",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Man 43, North African, broad nose and small curling beard, cream wrapped headcloth, plum open-collar tunic, bronze coin purse at belt, sly calculating expression. Character: 독사 카심 레이스. 항복한 배에서도 금붙이를 끝까지 뒤지는 욕심 많은 해적."
+    },
+    {
+      "name": "두 깃발의 리처드 퍼스",
+      "g": "m",
+      "desc": "마모라 해적 의회의 의장. 잉글랜드 깃발과 해골 깃발을 번갈아 단다.",
+      "id": "lairchief_atl_0",
+      "type": "chief",
+      "zone": "atl",
+      "place": "마모라",
+      "key": "portraits/rivals/두 깃발의 리처드 퍼스",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: English man 48, broad square face, graying brown beard, weathered black felt hat, faded red wool doublet over open cream shirt, leather baldric, rolled blank naval pennant held at waist, forceful gaze. Character: 두 깃발의 리처드 퍼스. 마모라 해적 의회의 의장. 잉글랜드 깃발과 해골 깃발을 번갈아 단다."
+    },
+    {
+      "name": "안개 속의 얀 데 프리스",
+      "g": "m",
+      "desc": "네덜란드에서 온 해적 선장. 안개 낀 날만 골라 상선대를 덮친다.",
+      "id": "lairchief_atl_1",
+      "type": "chief",
+      "zone": "atl",
+      "place": "마모라",
+      "key": "portraits/rivals/안개 속의 얀 데 프리스",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Dutch man 41, narrow face, sandy blond short beard, gray felt hat, slate-blue wool sailor coat, cream linen collar and brown belt, quietly appraising eyes. Character: 안개 속의 얀 데 프리스. 네덜란드에서 온 해적 선장. 안개 낀 날만 골라 상선대를 덮친다."
+    },
+    {
+      "name": "검은 개 해리",
+      "desc": "항구마다 빚을 지고 달아난 잉글랜드 해적.",
+      "g": "m",
+      "id": "lair_atl_1",
+      "type": "officer",
+      "zone": "atl",
+      "place": "마모라",
+      "key": "portraits/rivals/검은 개 해리",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: English man 34, dark tousled hair and black stubble, broad grin, worn brown leather jerkin and open ivory shirt, ochre bandana, hand resting on sheathed cutlass. Character: 검은 개 해리. 항구마다 빚을 지고 달아난 잉글랜드 해적."
+    },
+    {
+      "name": "갈고리 손 톰 크롤리",
+      "desc": "오른손 대신 쇠갈고리로 밧줄을 타는 해적.",
+      "g": "m",
+      "id": "lair_atl_2",
+      "type": "officer",
+      "zone": "atl",
+      "place": "마모라",
+      "key": "portraits/rivals/갈고리 손 톰 크롤리",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: English man 50, rugged red-brown beard, navy wool cap, pale shirt and dark blue sleeveless coat; RIGHT hand replaced by a modest iron hook, left hand rests at belt. Healed old amputation, no wound. Character: 갈고리 손 톰 크롤리. 오른손 대신 쇠갈고리로 밧줄을 타는 해적."
+    },
+    {
+      "name": "소금 눈 피터 모건",
+      "desc": "바닷물에 눈이 멀었다는 소문과 달리 누구보다 멀리 보는 망꾼 출신 해적.",
+      "g": "m",
+      "id": "lair_atl_3",
+      "type": "officer",
+      "zone": "atl",
+      "place": "마모라",
+      "key": "portraits/rivals/소금 눈 피터 모건",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: English man 57, squinting pale blue eyes, silver sideburns and stubble, sunworn freckled face, faded green sailor coat and off-white shirt, brass small spyglass held at waist. Character: 소금 눈 피터 모건. 바닷물에 눈이 멀었다는 소문과 달리 누구보다 멀리 보는 망꾼 출신 해적."
+    },
+    {
+      "name": "탑성의 여주인 브리지드 버크",
+      "g": "f",
+      "desc": "클레어 섬 탑성을 지키는 여해적. 통행세를 내지 않는 배는 바다에 돌려보내지 않는다.",
+      "id": "lairchief_north_0",
+      "type": "chief",
+      "zone": "north",
+      "place": "클레어 섬",
+      "key": "portraits/rivals/탑성의 여주인 브리지드 버크",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Irish woman 40, strong freckled face, auburn hair in a thick braid, green eyes, forest-green wool mantle clasped with bronze brooch over russet fitted linen tunic and leather belt, assured commanding expression. Character: 탑성의 여주인 브리지드 버크. 클레어 섬 탑성을 지키는 여해적. 통행세를 내지 않는 배는 바다에 돌려보내지 않는다."
+    },
+    {
+      "name": "갈매기 왕 머로 오플래허티",
+      "g": "m",
+      "desc": "갈매기 떼를 몰고 다닌다는 섬의 늙은 해적. 폭풍이 오는 날을 누구보다 먼저 안다.",
+      "id": "lairchief_north_1",
+      "type": "chief",
+      "zone": "north",
+      "place": "클레어 섬",
+      "key": "portraits/rivals/갈매기 왕 머로 오플래허티",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Irish man 64, tall lean build, long graying copper beard, windswept silver hair, dark teal wool cloak over brown tunic, carved wooden pipe held away from face, amused seasoned expression. Character: 갈매기 왕 머로 오플래허티. 갈매기 떼를 몰고 다닌다는 섬의 늙은 해적. 폭풍이 오는 날을 누구보다 먼저 안다."
+    },
+    {
+      "name": "바다 늑대 올라프",
+      "desc": "북쪽 섬에서 내려온 덩치 큰 해적. 도끼 하나로 뱃전을 넘는다.",
+      "g": "m",
+      "id": "lair_north_1",
+      "type": "officer",
+      "zone": "north",
+      "place": "클레어 섬",
+      "key": "portraits/rivals/바다 늑대 올라프",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Scandinavian man 42, very broad powerful build, long ash-blond hair and thick blond beard, plain blue wool tunic and sleeveless fur-edged brown jerkin, axe secured at hip, calm gray eyes. No horned helmet. Character: 바다 늑대 올라프. 북쪽 섬에서 내려온 덩치 큰 해적. 도끼 하나로 뱃전을 넘는다."
+    },
+    {
+      "name": "붉은 손 숀 맥넬리",
+      "desc": "피 묻은 손도장을 돛에 찍는 아일랜드 해적.",
+      "g": "m",
+      "id": "lair_north_2",
+      "type": "officer",
+      "zone": "north",
+      "place": "클레어 섬",
+      "key": "portraits/rivals/붉은 손 숀 맥넬리",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Irish man 31, lively red curls and red stubble, one open hand raised loosely with faded red pigment, burgundy wool waistcoat and cream open-collar shirt, spirited grin. Paint, no blood. Character: 붉은 손 숀 맥넬리. 피 묻은 손도장을 돛에 찍는 아일랜드 해적."
+    },
+    {
+      "name": "안개 고래 이반",
+      "desc": "청어잡이 배를 털다 해적이 된 발트해 출신 사내.",
+      "g": "m",
+      "id": "lair_north_3",
+      "type": "officer",
+      "zone": "north",
+      "place": "클레어 섬",
+      "key": "portraits/rivals/안개 고래 이반",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Baltic man 49, heavy sturdy build, long brown mustache and short beard, gray knit sailor cap, ochre wool tunic and dark gray waistcoat, thick rope loop held in one hand, contemplative gaze. Character: 안개 고래 이반. 청어잡이 배를 털다 해적이 된 발트해 출신 사내."
+    },
+    {
+      "name": "검은 앵무새 로베르 그라몽",
+      "g": "m",
+      "desc": "토르투가 해안 형제단의 두목. 어깨의 앵무새가 먼저 욕을 한다.",
+      "id": "lairchief_amer_0",
+      "type": "chief",
+      "zone": "amer",
+      "place": "토르투가",
+      "key": "portraits/rivals/검은 앵무새 로베르 그라몽",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: French Caribbean man 47, black wavy shoulder-length hair and curled mustache, dark faded burgundy coat and cream shirt, black parrot perched naturally on LEFT shoulder, wide leather belt and sheathed cutlass, mischievous grin. Character: 검은 앵무새 로베르 그라몽. 토르투가 해안 형제단의 두목. 어깨의 앵무새가 먼저 욕을 한다."
+    },
+    {
+      "name": "해골 깃발의 마리 르노",
+      "g": "f",
+      "desc": "형제단에서 가장 빠른 슬루프를 모는 여해적. 붙잡힌 적이 한 번도 없다.",
+      "id": "lairchief_amer_1",
+      "type": "chief",
+      "zone": "amer",
+      "place": "토르투가",
+      "key": "portraits/rivals/해골 깃발의 마리 르노",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: French Caribbean woman 32, windblown chestnut curls, sun-tanned face, dark red headscarf, cream open-collar blouse and fitted navy sleeveless sailor coat, plain black sash, sheathed cutlass and confident direct gaze. Character: 해골 깃발의 마리 르노. 형제단에서 가장 빠른 슬루프를 모는 여해적. 붙잡힌 적이 한 번도 없다."
+    },
+    {
+      "name": "외다리 피에르",
+      "desc": "포탄에 다리를 잃고 나무다리로 갑판을 누비는 버커니어.",
+      "g": "m",
+      "id": "lair_amer_1",
+      "type": "officer",
+      "zone": "amer",
+      "place": "토르투가",
+      "key": "portraits/rivals/외다리 피에르",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: French Caribbean man 53, graying brown beard, red wool cap, weathered teal coat over cream shirt, LEFT leg replaced BELOW KNEE with a simple wooden peg beginning at bottom crop, balanced upright pose, no injuries. Character: 외다리 피에르. 포탄에 다리를 잃고 나무다리로 갑판을 누비는 버커니어."
+    },
+    {
+      "name": "피의 자크 르바쇠르",
+      "desc": "항복한 배의 깃발을 모아 선실 벽에 거는 해적.",
+      "g": "m",
+      "id": "lair_amer_2",
+      "type": "officer",
+      "zone": "amer",
+      "place": "토르투가",
+      "key": "portraits/rivals/피의 자크 르바쇠르",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: French Caribbean man 39, slim sharp face, dark brown swept hair, black mustache and pointed beard, pale linen shirt with burgundy vest, folded captured plain pennants tucked under arm, proud expression. Character: 피의 자크 르바쇠르. 항복한 배의 깃발을 모아 선실 벽에 거는 해적."
+    },
+    {
+      "name": "럼통 바르텔레미",
+      "desc": "럼주 통 속에 숨어 상선에 올랐다는 해적.",
+      "g": "m",
+      "id": "lair_amer_3",
+      "type": "officer",
+      "zone": "amer",
+      "place": "토르투가",
+      "key": "portraits/rivals/럼통 바르텔레미",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: French Caribbean man 44, heavy round build, curly brown hair, merry ruddy cheeks and short beard, striped cream and blue sailor shirt, loose rust-red vest, small wooden rum cup in one hand. Character: 럼통 바르텔레미. 럼주 통 속에 숨어 상선에 올랐다는 해적."
+    },
+    {
+      "name": "리베르탈리아의 미송 선장",
+      "g": "m",
+      "desc": "「누구의 깃발도 아닌 자유의 나라」를 세우겠다는 해적. 부하들은 그를 선장이 아니라 동지라 부른다.",
+      "id": "lairchief_ind_0",
+      "type": "chief",
+      "zone": "ind",
+      "place": "생트마리 섬",
+      "key": "portraits/rivals/리베르탈리아의 미송 선장",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: French man 39 in Madagascar, lean idealistic face, long chestnut hair tied back and neatly trimmed beard, cream open linen shirt and blue weathered frock coat, simple leather belt, one open palm in a friendly address. Character: 리베르탈리아의 미송 선장. 「누구의 깃발도 아닌 자유의 나라」를 세우겠다는 해적. 부하들은 그를 선장이 아니라 동지라 부른다."
+    },
+    {
+      "name": "산호초의 앙브루아즈 라쿠르",
+      "g": "m",
+      "desc": "생트마리 섬 앞 산호초 사이 물길을 지키는 해적. 모르는 배는 반드시 바닥을 긁는다.",
+      "id": "lairchief_ind_1",
+      "type": "chief",
+      "zone": "ind",
+      "place": "생트마리 섬",
+      "key": "portraits/rivals/산호초의 앙브루아즈 라쿠르",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: French man 46 in Madagascar, deeply tanned face, black curled beard and shoulder-length hair, faded sand-colored scarf and green sailor coat, coral bead bracelet, hand on sheathed cutlass, stern watchful expression. Character: 산호초의 앙브루아즈 라쿠르. 생트마리 섬 앞 산호초 사이 물길을 지키는 해적. 모르는 배는 반드시 바닥을 긁는다."
+    },
+    {
+      "name": "진주 사냥꾼 압두",
+      "desc": "진주잡이 배를 털다 해적이 된 홍해 출신 잠수부.",
+      "g": "m",
+      "id": "lair_ind_1",
+      "type": "officer",
+      "zone": "ind",
+      "place": "생트마리 섬",
+      "key": "portraits/rivals/진주 사냥꾼 압두",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Red Sea Arab man 30, dark bronze skin, short black curls and close beard, open cream sleeveless linen vest and indigo wrapped trousers with simple sash, rope and small pearl pouch at belt, athletic diver build. Character: 진주 사냥꾼 압두. 진주잡이 배를 털다 해적이 된 홍해 출신 잠수부."
+    },
+    {
+      "name": "모래톱의 존 그린",
+      "desc": "뉴욕의 상인에게 해적 물건을 팔아넘기는 해적.",
+      "g": "m",
+      "id": "lair_ind_2",
+      "type": "officer",
+      "zone": "ind",
+      "place": "생트마리 섬",
+      "key": "portraits/rivals/모래톱의 존 그린",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: English man 37, angular fair freckled face and sandy stubble, brown felt hat, faded green wool coat and cream shirt, closed slim trade ledger held in left hand, calculating half-smile. Character: 모래톱의 존 그린. 뉴욕의 상인에게 해적 물건을 팔아넘기는 해적."
+    },
+    {
+      "name": "상어 이빨 라시드",
+      "desc": "목걸이에 상어 이빨을 꿰어 차고 다니는 해적.",
+      "g": "m",
+      "id": "lair_ind_3",
+      "type": "officer",
+      "zone": "ind",
+      "place": "생트마리 섬",
+      "key": "portraits/rivals/상어 이빨 라시드",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Arab man 45, bronze skin, salt-and-pepper beard, dark hair under plain cream headcloth, dark red sleeveless vest over light open shirt, distinctive shark-tooth necklace, unwavering gaze. Character: 상어 이빨 라시드. 목걸이에 상어 이빨을 꿰어 차고 다니는 해적."
+    },
+    {
+      "name": "술루 바다의 다투 아짐",
+      "g": "m",
+      "desc": "노선 서른 척을 거느린 이라눈 해적의 우두머리. 바람이 없어도 그의 배는 달린다.",
+      "id": "lairchief_sea_0",
+      "type": "chief",
+      "zone": "sea",
+      "place": "홀로 섬",
+      "key": "portraits/rivals/술루 바다의 다투 아짐",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Iranun Moro man 50, brown skin, strong cheekbones, long dark mustache and short beard, ornate wrapped maroon headcloth, patterned indigo sleeveless coat over cream collarless shirt, broad woven sash and sheathed kris, regal confidence. Character: 술루 바다의 다투 아짐. 노선 서른 척을 거느린 이라눈 해적의 우두머리. 바람이 없어도 그의 배는 달린다."
+    },
+    {
+      "name": "파랑새 깃발의 라야 알리",
+      "g": "f",
+      "desc": "파랑새를 그린 깃발을 단 여해적. 섬마다 그녀에게 바치는 공물이 있다.",
+      "id": "lairchief_sea_1",
+      "type": "chief",
+      "zone": "sea",
+      "place": "홀로 섬",
+      "key": "portraits/rivals/파랑새 깃발의 라야 알리",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Iranun Moro woman 34, warm brown skin, long black hair with blue silk headwrap, blue woven tunic with gold edging and fitted red vest, colorful sash, small kingfisher-feather ornament, sheathed kris, proud assured gaze. Character: 파랑새 깃발의 라야 알리. 파랑새를 그린 깃발을 단 여해적. 섬마다 그녀에게 바치는 공물이 있다."
+    },
+    {
+      "name": "이라눈의 다투 말라",
+      "desc": "긴 노선을 몰고 해안 마을을 덮치는 해적.",
+      "g": "m",
+      "id": "lair_sea_1",
+      "type": "officer",
+      "zone": "sea",
+      "place": "홀로 섬",
+      "key": "portraits/rivals/이라눈의 다투 말라",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Iranun Moro man 38, brown skin, black hair tied back and trimmed mustache, red wrapped headcloth, woven brown vest and dark blue collarless shirt, patterned sash, broad shoulders and severe gaze. Character: 이라눈의 다투 말라. 긴 노선을 몰고 해안 마을을 덮치는 해적."
+    },
+    {
+      "name": "바다 집시 사부",
+      "desc": "평생 배 위에서 살아 뭍에서는 걸음이 흔들리는 해적.",
+      "g": "m",
+      "id": "lair_sea_2",
+      "type": "officer",
+      "zone": "sea",
+      "place": "홀로 섬",
+      "key": "portraits/rivals/바다 집시 사부",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Bajau man 36, deep brown sun-tanned skin, lean muscular diver build, black shoulder-length wet-looking hair, open teal sleeveless woven vest, earth-colored striped sarong, shell bracelet and knotted rope at belt, relaxed smile. Character: 바다 집시 사부. 평생 배 위에서 살아 뭍에서는 걸음이 흔들리는 해적."
+    },
+    {
+      "name": "독 단검의 라자 우마르",
+      "desc": "크리스 단검 날에 독을 바른다는 해적.",
+      "g": "m",
+      "id": "lair_sea_3",
+      "type": "officer",
+      "zone": "sea",
+      "place": "홀로 섬",
+      "key": "portraits/rivals/독 단검의 라자 우마르",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Malay man 42, warm brown skin, black mustache and pointed goatee, dark wrapped headcloth, plum collarless shirt and patterned gold-brown sash, holds a wavy kris blade safely downward at side, guarded eyes. Character: 독 단검의 라자 우마르. 크리스 단검 날에 독을 바른다는 해적."
+    },
+    {
+      "name": "쌍서의 두령 허대인",
+      "g": "m",
+      "desc": "쌍서 밀무역을 쥔 큰손. 관리에게 뇌물을, 왜구에게 쌀을 대며 섬을 지킨다.",
+      "id": "lairchief_east_0",
+      "type": "chief",
+      "zone": "east",
+      "place": "쌍서",
+      "key": "portraits/rivals/쌍서의 두령 허대인",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Ming Chinese man 54, broad shrewd face, sparse black mustache and goatee, dark scholar cap, rich dark teal silk cross-collar robe and brown belt, plain folding fan closed in hand, prosperous smuggler chief. Character: 쌍서의 두령 허대인. 쌍서 밀무역을 쥔 큰손. 관리에게 뇌물을, 왜구에게 쌀을 대며 섬을 지킨다."
+    },
+    {
+      "name": "사쓰마의 고로자에몬",
+      "g": "m",
+      "desc": "쌍서에 눌러앉은 왜구의 대장. 칼을 뽑으면 배 한 척이 조용해진다는 소문이다.",
+      "id": "lairchief_east_1",
+      "type": "chief",
+      "zone": "east",
+      "place": "쌍서",
+      "key": "portraits/rivals/사쓰마의 고로자에몬",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Satsuma Japanese man 44, rugged face, tied black topknot, dark stubble, indigo kosode worn under dark red sleeveless haori, plain hakama and two sheathed swords at belt, powerful reserved expression. Character: 사쓰마의 고로자에몬. 쌍서에 눌러앉은 왜구의 대장. 칼을 뽑으면 배 한 척이 조용해진다는 소문이다."
+    },
+    {
+      "name": "외눈 진삼",
+      "desc": "외눈에 검은 천을 두른 밀무역선의 선장.",
+      "g": "m",
+      "id": "lair_east_1",
+      "type": "officer",
+      "zone": "east",
+      "place": "쌍서",
+      "key": "portraits/rivals/외눈 진삼",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Ming Chinese man 40, lean sharp face, black cloth eyepatch over LEFT eye, tied dark hair, charcoal cross-collar jacket and dark red sash, alert surviving eye, one hand on sheathed dao. Character: 외눈 진삼. 외눈에 검은 천을 두른 밀무역선의 선장."
+    },
+    {
+      "name": "검은 용 오팔",
+      "desc": "뱃머리에 검은 용을 그린 해적.",
+      "g": "m",
+      "id": "lair_east_2",
+      "type": "officer",
+      "zone": "east",
+      "place": "쌍서",
+      "key": "portraits/rivals/검은 용 오팔",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Ming Chinese man 35, powerful broad shoulders, dark tied hair and short beard, dark navy sleeveless coat over ivory cross-collar shirt, black dragon embroidered ONLY on coat hem, ochre sash and sheathed dao, fierce expression. Character: 검은 용 오팔. 뱃머리에 검은 용을 그린 해적."
+    },
+    {
+      "name": "바다 쥐 왕칠",
+      "desc": "어느 배든 몰래 숨어들어 짐을 빼내는 해적.",
+      "g": "m",
+      "id": "lair_east_3",
+      "type": "officer",
+      "zone": "east",
+      "place": "쌍서",
+      "key": "portraits/rivals/바다 쥐 왕칠",
+      "prompt": "Use case: historical-scene. Asset type: individual character knee portrait for Loop of Good Hope sailing RPG. ONE adult character only. Polished hand-painted semi-realistic 2D game illustration, subtly illustrated natural face, fine brushwork, rich restrained colors and detailed period cloth, not a photo or 3D render. Vertical 1024x1536. Centered from complete head/hat to just BELOW BOTH KNEES, hands and all props visible, face nearly forward, head in top 8-22%, small clear top and side margins. Figure and garment continue to bottom edge at knees, no floating cutout or feet. Genuine transparent background, no floor, cast shadow, scene, frame, text or watermark. Believable hands. No modern objects. Subject: Ming Chinese man 29, wiry agile build, narrow eyes, sparse mustache, brown cloth headband and tied hair, weathered gray short jacket and blue sash, small rope coil at belt, quick knowing smile. Character: 바다 쥐 왕칠. 어느 배든 몰래 숨어들어 짐을 빼내는 해적."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "lair_med",
+      "key": "legend-events/lair_med",
+      "title": "제르바 섬의 해적 소굴",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Djerba, Tunisia: shallow turquoise lagoon, sandbars, low whitewashed North African houses, Ottoman watchtower, palm trees and Mediterranean galleys with long oars and lateen sails. Wide view from the jetty toward the distinct fortified pirate haven. A few small adult pirates in local period clothes gather on the pier, lowering their weapons peacefully. A furled plain pennant is tied to a mast; no skull insignia or specific national flag. Weathered cargo, mooring ropes, seabirds and layered anchored vessels. Focus on the place, allowing the image to accompany both its location being revealed and its peaceful surrender. No recognizable protagonist or close-up faces."
+    },
+    {
+      "id": "lair_atl",
+      "key": "legend-events/lair_atl",
+      "title": "마모라의 해적 소굴",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Mamora on the Moroccan Atlantic river mouth: sandy fortified riverbank, low ochre stone ramparts, a small pirate council house, English and Dutch sailing vessels in the tidal inlet, Atlantic swell beyond. Wide view from the jetty toward the distinct fortified pirate haven. A few small adult pirates in local period clothes gather on the pier, lowering their weapons peacefully. A furled plain pennant is tied to a mast; no skull insignia or specific national flag. Weathered cargo, mooring ropes, seabirds and layered anchored vessels. Focus on the place, allowing the image to accompany both its location being revealed and its peaceful surrender. No recognizable protagonist or close-up faces."
+    },
+    {
+      "id": "lair_north",
+      "key": "legend-events/lair_north",
+      "title": "클레어 섬의 해적 소굴",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Clare Island, western Ireland: a medieval square stone tower above a small rocky harbor, emerald grass and sea cliffs, Irish sailing galleys, cool silver Atlantic mist and warm breaking sunset. Wide view from the jetty toward the distinct fortified pirate haven. A few small adult pirates in local period clothes gather on the pier, lowering their weapons peacefully. A furled plain pennant is tied to a mast; no skull insignia or specific national flag. Weathered cargo, mooring ropes, seabirds and layered anchored vessels. Focus on the place, allowing the image to accompany both its location being revealed and its peaceful surrender. No recognizable protagonist or close-up faces."
+    },
+    {
+      "id": "lair_amer",
+      "key": "legend-events/lair_amer",
+      "title": "토르투가의 해적 소굴",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Tortuga, Caribbean: lush green island slopes, a rough timber buccaneer harbor and jetty, small sloops with square and gaff sails, rum barrels and bundled hides, bright turquoise sea. Wide view from the jetty toward the distinct fortified pirate haven. A few small adult pirates in local period clothes gather on the pier, lowering their weapons peacefully. A furled plain pennant is tied to a mast; no skull insignia or specific national flag. Weathered cargo, mooring ropes, seabirds and layered anchored vessels. Focus on the place, allowing the image to accompany both its location being revealed and its peaceful surrender. No recognizable protagonist or close-up faces."
+    },
+    {
+      "id": "lair_ind",
+      "key": "legend-events/lair_ind",
+      "title": "생트마리 섬의 해적 소굴",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Ile Sainte-Marie, Madagascar: tropical palms, coral-lagoon shallows, rustic timber pirate village, wooden sailing ships being repaired on shore, anchored brigantines and Malagasy fishing canoes. Wide view from the jetty toward the distinct fortified pirate haven. A few small adult pirates in local period clothes gather on the pier, lowering their weapons peacefully. A furled plain pennant is tied to a mast; no skull insignia or specific national flag. Weathered cargo, mooring ropes, seabirds and layered anchored vessels. Focus on the place, allowing the image to accompany both its location being revealed and its peaceful surrender. No recognizable protagonist or close-up faces."
+    },
+    {
+      "id": "lair_sea",
+      "key": "legend-events/lair_sea",
+      "title": "홀로 섬의 해적 소굴",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Jolo, Sulu Sea: volcanic tropical island, stilt-built woven-bamboo waterfront, Iranun long narrow oared lanong vessels with tripod masts, woven sails and ornate high prows, tropical haze. Wide view from the jetty toward the distinct fortified pirate haven. A few small adult pirates in local period clothes gather on the pier, lowering their weapons peacefully. A furled plain pennant is tied to a mast; no skull insignia or specific national flag. Weathered cargo, mooring ropes, seabirds and layered anchored vessels. Focus on the place, allowing the image to accompany both its location being revealed and its peaceful surrender. No recognizable protagonist or close-up faces."
+    },
+    {
+      "id": "lair_east",
+      "key": "legend-events/lair_east",
+      "title": "쌍서의 해적 소굴",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Shuangyu near Ningbo, Ming China: steep wooded rocky island harbor, gray-tiled Chinese timber warehouses, bamboo moorings, Chinese junks with battened sails and a small Portuguese caravel, warm mist. Wide view from the jetty toward the distinct fortified pirate haven. A few small adult pirates in local period clothes gather on the pier, lowering their weapons peacefully. A furled plain pennant is tied to a mast; no skull insignia or specific national flag. Weathered cargo, mooring ropes, seabirds and layered anchored vessels. Focus on the place, allowing the image to accompany both its location being revealed and its peaceful surrender. No recognizable protagonist or close-up faces."
+    },
+    {
+      "id": "pirateking",
+      "key": "achievement-events/pirateking",
+      "title": "해적왕",
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic event illustration for Loop of Good Hope Age of Sail RPG. Wide 2.25:1 landscape 1881x836. Polished painterly semi-realistic 2D illustration, fine brushwork, tactile wood, sailcloth, stone and atmospheric water, warm light and cool shadows. No montage, panels, borders, lettering, captions, watermark, modern ships or objects. Keep main subjects within middle 75% vertical safe area. Scene: Triumphant gathering after unifying the seven pirate havens. View from behind and slightly above an adult sea captain in a dark weathered coat on a flagship quarterdeck, one hand calmly on the wooden railing, a varied council of adult North African, Irish, Caribbean European, Red Sea, Iranun and Ming Chinese pirate captains on the deck raising hats in respect. Beyond them an immense sunlit anchorage of Mediterranean lateen galleys, Atlantic square-rigged sailing ships, Caribbean sloops, Sulu oared lanong vessels and Chinese junks, distinct rigging and hulls. Exactly seven plain small pennants stream from a foreground signal line, no emblems or letters. Warm golden sunset breaks through clouds. Focus on shared seamanship, sea wind and earned respect; no crown, throne, treasure pile, gore or combat."
+    }
+  ]
+}

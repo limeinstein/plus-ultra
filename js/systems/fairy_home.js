@@ -67,9 +67,12 @@
       '<br><small>공주 출신이라 신분을 따지지 않으니 ' + mainTxt + '서로 다투지 않습니다. 공주들의 아이도 함께 와서 본가에서 자랍니다.</small>', '본가로 모신다', '그만둔다');
     if (!ok) return false;
     list.forEach(function (w) { settleHome(w, home); });
-    if (p.wife && !FH.isPrincess(p.wife) && G.Family.wifeSpeaker) await UI.say(U.pick(['공주님들을 한 지붕 아래 모시다니… 처음엔 어떻게 대해야 할지 몰랐는데, 다들 소탈해서 오히려 제가 편해요.', '집이 북적이니 사람 사는 것 같네요. 아이들도 언니들이 생겼다고 좋아해요.']), G.Family.wifeSpeaker());
-    var ids = FH.ids();
-    for (var i = 0; i < ids.length; i++) if (LINES[ids[i]]) await UI.say(LINES[ids[i]], speakerOf(ids[i]));
+    var pic = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'achievement-events/dreamcome', title: '네 공주가 함께 사는 집', noStand: true }) : null;
+    try {
+      if (p.wife && !FH.isPrincess(p.wife) && G.Family.wifeSpeaker) await UI.say(U.pick(['공주님들을 한 지붕 아래 모시다니… 처음엔 어떻게 대해야 할지 몰랐는데, 다들 소탈해서 오히려 제가 편해요.', '집이 북적이니 사람 사는 것 같네요. 아이들도 언니들이 생겼다고 좋아해요.']), G.Family.wifeSpeaker());
+      var ids = FH.ids();
+      for (var i = 0; i < ids.length; i++) if (LINES[ids[i]]) await UI.say(LINES[ids[i]], speakerOf(ids[i]));
+    } finally { if (pic) await pic.stop(); }
     G.State.log(names.join('·') + U.jx(lastNm, '을/를') + ' 본가에 모셨다. 네 공주가 한 지붕 아래 함께 산다.');
     UI.toast('네 공주가 본가에서 함께 지낸다 — 자택 메뉴 「공주들과 함께」', 'crown', 5200);
     if (G.Game.cityHud) G.Game.cityHud();
