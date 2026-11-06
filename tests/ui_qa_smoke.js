@@ -5,7 +5,10 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); }
+catch (_) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = process.env.PAGE ? pathToFileURL(path.resolve(process.env.PAGE)).href : pathToFileURL(path.join(ROOT, 'index.html')).href;
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
@@ -16,7 +19,7 @@ async function open(browser, vp, opt) {
   page.errors = [];
   page.on('pageerror', e => page.errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_FAILED|_blob/.test(m.text())) page.errors.push(m.text()); });
-  await page.goto(PAGE);
+  await page.goto(PAGE, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
   return { ctx, page };
 }
