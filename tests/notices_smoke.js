@@ -6,7 +6,9 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
@@ -69,6 +71,21 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.duringTalk = shown().length; out.badge = (document.querySelector('.hud .notice-btn .nb-n') || {}).textContent || '';
       const d = document.querySelector('.dlg'); if (d) d.click(); await talk; await sleep(900);
       out.afterTalk = shown().map(x => x.split('|')[1]); out.badgeAfter = (document.querySelector('.hud .notice-btn .nb-n') || {}).textContent || '';
+      // ⑦ 장면 그림이 뜨면 떠 있던 알림을 접고, 그림·대화가 끝나면 다시 띄운다 (2026-11-06 연출 QA #A)
+      box().innerHTML = ''; await sleep(1200);
+      UI.toast('그림 전에 뜬 소식', 'scroll'); await sleep(60); out.beforePic = shown().filter(x => /그림 전/.test(x)).length;
+      const pc = G.FamEv.showPic({ img: 'legend-events/nzinga_chair', title: '시험 그림' }); await sleep(120);
+      out.foldPic = shown().length; out.badgePic = (document.querySelector('.hud .notice-btn .nb-n') || {}).textContent || '';
+      UI.toast('그림 위에 온 소식!', 'skull'); await sleep(60); out.onPic = shown().length;
+      let said = false; const talk2 = UI.say('그림 앞의 한마디.', {}).then(() => { said = true; }); for (let i = 0; i < 60 && !said; i++) { await sleep(150); const d2 = document.querySelector('.dlg'); if (d2) d2.click(); }
+      await pc.stop(); await sleep(1600);
+      out.afterPic = shown().map(x => x.split('|')[1]);
+      const fs = document.querySelector('.famscene'); out.picGone = !fs;
+      // ⑧ 큰 일도 같은 말이 겹쳐 뜨지 않는다 (2026-11-06 #B) · 한 번 오른 칭호는 다시 축하하지 않는다
+      box().innerHTML = '';
+      UI.toast('명성이 드높아졌다 — 시험 칭호!', 'laurel', 6500); UI.toast('명성이 드높아졌다 — 시험 칭호!', 'laurel', 6500); await sleep(60);
+      out.bigTwice = shown().filter(x => /시험 칭호/.test(x)).length;
+      box().innerHTML = '';
       // 나침반 단추 = 지난 소식
       box().innerHTML = '';
       document.querySelector('.hud .notice-btn').click(); await sleep(200);
@@ -107,6 +124,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.Info.settings(); await sleep(300);
       const sw = [...document.querySelectorAll('.modal-back')].pop(); out.settingsUi = sw ? /알림/.test(sw.innerText) && /항해 상태판/.test(sw.innerText) && /큰 일만 띄움/.test(sw.innerText) : false;
       if (sw) { const x = sw.querySelector('.title .x'); if (x) x.click(); }
+      // ⑧ 한 번 오른 칭호는 다시 축하하지 않는다 (명성을 바꾸면 업적 알림이 따라오므로 맨 끝에)
+      const B = G.BALANCE, n0 = UI.recentNotices().filter(x => /명성이 드높아졌다/.test(x.text)).length;
+      s.titleSeen = s.titleBest = B.fameTitleNames[1]; s.player.fame = B.fameTitles[1]; G.Game.checkTitle();   // 오른다 → 축하 1
+      s.player.fame = B.fameTitles[1] - 1; G.Game.checkTitle();   // 경계 아래로
+      s.player.fame = B.fameTitles[1] + 10; G.Game.checkTitle();  // 다시 넘는다 → 축하 없음
+      out.titleToasts = UI.recentNotices().filter(x => /명성이 드높아졌다/.test(x.text)).length - n0;
       return out;
     });
     console.log(JSON.stringify(r, null, 1));
@@ -119,6 +142,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.zoneWin === 'corner', '창이 열려 있으면 왼쪽 아래');
     ok(r.duringTalk === 0 && r.badge === '1', '대화 중 온 소식은 띄우지 않고 나침반 단추에 수(1)');
     ok(r.afterTalk.some(x => /대화 중 온 소식/.test(x)) && r.badgeAfter === '', '대화가 끝나면 띄우고 수를 지운다');
+    ok(r.beforePic === 1 && r.foldPic === 0 && r.badgePic !== '' && r.onPic === 0, '⑦ 장면 그림이 뜨면 떠 있던 알림을 접고(나침반 수 ' + r.badgePic + ') 그림 위에는 새 알림을 띄우지 않는다');
+    ok(r.picGone && r.afterPic.some(x => /그림 전에 뜬/.test(x)) && r.afterPic.some(x => /그림 위에 온/.test(x)), '⑦ 그림·대화가 끝나면 접어 둔 알림을 다시 띄운다 (' + r.afterPic.join(' / ') + ')');
+    ok(r.bigTwice === 1, '⑧ 큰 일도 같은 말은 겹쳐 띄우지 않는다');
+    ok(r.titleToasts === 1, '⑧ 명성이 경계를 내려갔다 다시 넘어도 칭호 축하는 한 번');
     ok(/지난 소식/.test(r.list) && /먼 소문/.test(r.list) && /상태/.test(r.list) && /해적이 나타났다/.test(r.list), '나침반 단추 = 지난 소식 (상태·먼 소문도)');
     ok(r.zoneSea === 'sea' && (r.barTop == null || r.seaBottom <= r.barTop), '바다: 아래 단추줄 바로 위 (' + r.seaBottom + ' ≤ ' + r.barTop + ')');
     ok(/소나기/.test(r.wind), '바람 판에 비 (' + r.wind.replace(/\s+/g, ' ') + ')');

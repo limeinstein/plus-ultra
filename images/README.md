@@ -1,5 +1,11 @@
 # images — 그림 교체 폴더
 
+아메리카 민족 발견물 여성 후보 22종(북미 17·중미 1·남미 4)은 `portraits/folk-join/<발견물ID>_f_amer_v1.webp`(얼굴 448×448)와 `_f_amer_v1_half.webp`(무릎 1024×1536)를 쓴다. 같은 원화의 얼굴·의상이며 투명 알파를 보존한다. [대상·참고 이미지·미리보기·검증](../docs/art/folk-american-women-20261106.md).
+
+동남아 민족 발견물 여성 후보 5종은 `portraits/folk-join/<발견물ID>_f_v1.webp`(얼굴 448×448)와 `_f_v1_half.webp`(무릎 1024×1536)를 쓴다. 모두 투명 WebP이며 같은 원화의 얼굴·의상이다. [대상·참고 이미지·미리보기·검증](../docs/art/folk-seasia-women-20261106.md).
+
+악기 160종·사건 보상과 발명품 등 87종의 누락 원화를 `items/<아이템ID>.webp`에 추가했다. 256×256 투명 그림이며 기존 원화와 같은 물건의 유물·선수상·발견 원화도 함께 연결한다. [전체 품목·내장 ImageGen 지시문·원본·검증](../docs/art/missing-item-art-20261106.md).
+
 나각은 `items/nagak.webp`의 256×256 투명 전용 원화를 쓴다. 소라 껍질·취구·휴대 끈을 표현했으며 시장·소지품·동료 소지품·도감에 연결한다. [화면·내장 image_gen 생성 지시문·검증](../docs/qa/companion-inventory-music-20261101.md).
 
 종 계열·소형 타악기 18종도 `items/<악기ID>.webp`의 256×256 투명 원화를 쓴다. 신규 16종과 기존 캐스터네츠·트라이앵글이며 전체 파일·원본·생성 지시문은 [제작 기록](../docs/art/bells-small-percussion-20261101.md)에 있다.
@@ -25,6 +31,10 @@
    - 웹 배포판(`dist/web`)에 넣으려면 `python tools/build_web.py`
 
 ## 파일 이름 규칙
+
+인도 출신 여성 항해사 후보 8종은 `portraits/folk-indian-women/01.webp`~`08.webp`(얼굴상 512×512), 같은 번호의 `_half.webp`(무릎상 1024×1536)를 쓴다. 같은 원화에서 얼굴을 추출한 투명 그림이며 기존 인도 여성 후보에도 연결한다. [미리보기·제작 지시문·파일 묶음](../docs/art/folk-indian-women-20261106.md).
+
+아프리카계 민족 발견물의 남성 후보 12종은 `portraits/folk-african-men/<발견물 ID>.webp`(얼굴상 512×512), `<발견물 ID>_half.webp`(무릎상 1024×1536)의 투명 원화를 쓴다. 민족마다 한 쌍을 배정하며 이름·솜씨는 기존 자료에서 고른다. [미리보기·제작 지시문·파일 묶음](../docs/art/folk-african-men-20261106.md).
 
 식물을 교역소에 심어 얻는 특산물 79종은 `goods/p_교역품ID.webp`에 전용 상품 그림을 둡니다
 (예: `goods/p_rosewater.webp`, `goods/p_durian.webp`). 이 그림을 식물 발견 장면보다 먼저 표시합니다.

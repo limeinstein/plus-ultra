@@ -89,7 +89,9 @@
   // ---------------------------------------------------------------- 얼굴: 얼굴과 몸을 합성한 옛 묶음은 쓰지 않고 완성된 철새 초상 한 쌍만 쓴다
   function face(style, g, type, z, pk) {
     var fp = G.Wander && G.Wander.facePool ? G.Wander.facePool(style, g, type) : [];
-    fp = fp.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 그 고장 복식만 쓴다
+    var dedicated = G.WANDER_PORTRAITS && G.WANDER_PORTRAITS[style];
+    var own = dedicated && dedicated[g] || [];
+    fp = fp.filter(function (k) { return own.indexOf(k) >= 0 || /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 그 고장의 전용 후보나 역할 그림만 쓴다
     return fp.length ? U.pick(fp) : null;
   }
 

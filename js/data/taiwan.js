@@ -15,7 +15,7 @@
 
   if (G.ITEMS && G.ITEM) {
     [{ id: 'tw_key', name: '질란디아 성의 열쇠', kind: 'special', price: 0, reg: [], rare: true, desc: '1662년 2월 1일, 코이엣 총독이 정성공에게 넘긴 질란디아 성문의 쇠 열쇠. 국성야가 「바다가 이 섬을 돌려받은 날」을 잊지 말라며 제독에게 나누어 주었다.' },
-     { id: 'tw_medal', name: '동인도 회사의 은 메달', kind: 'special', price: 0, reg: [], rare: true, desc: '「VOC」 세 글자를 새긴 은 메달. 질란디아 포위 속으로 화약과 쌀을 들여보낸 선장에게 바타비아 평의회가 내렸다.' },
+     { id: 'tw_medal', name: '동인도 회사의 은 메달', kind: 'special', price: 0, reg: [], rare: true, desc: '네덜란드 동인도 회사의 머리글자를 엮어 새긴 은 메달. 질란디아 포위 속으로 화약과 쌀을 들여보낸 선장에게 바타비아 평의회가 내렸다.' },
      { id: 'tw_banner', name: '대명의 마지막 깃발', kind: 'special', price: 0, reg: [], rare: true, desc: '팽호 바다에서 건져 낸 정씨 수군의 깃발. 「大明」 두 글자가 그을렸다. 바다 위에서 명의 연호를 쓰던 마지막 사람들의 것이다.' }
     ].forEach(function (it) { if (!G.ITEM[it.id]) { G.ITEMS.push(it); G.ITEM[it.id] = it; } });
   }

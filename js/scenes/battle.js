@@ -444,7 +444,9 @@
       // 기함: 양쪽 모두 1번 배. 적 기함을 가라앉히거나 나포하면 이기고, 우리 기함을 잃으면 진다
       st.myFlag = st.ships.filter(function (b) { return b.side === 'me'; })[0] || null;
       st.enFlag = st.ships.filter(function (b) { return b.side === 'en'; })[0] || null;
-      st.ships.forEach(function (b) { if (b.side === 'me' && !b.flag && !b.ally) b.order = 'follow'; });   // 큰 해전의 우리 편 함대는 제멋대로 싸운다(free)
+      // 처음 명령은 기함 호위 — 기함 추종으로 기함 뒤에 줄지어 서 있으면 적의 포탄과 갈고리가 기함에만 몰려
+      // 갤리어스 해적에게 기함을 거의 매번 빼앗겼다 (QA 2026-11-06: 갤리온+프리깃 대 갤리어스 해적 — 추종 24판 모두 기함 상실, 호위 40판 중 23판)
+      st.ships.forEach(function (b) { if (b.side === 'me' && !b.flag && !b.ally) b.order = 'guard'; });   // 큰 해전의 우리 편 함대는 제멋대로 싸운다(free)
     }
     if (!st.cameraMode || (!st.viewVersion && st.cameraMode === 'ship')) st.cameraMode = 'combat';
     st.viewVersion = 1; st.viewZoom = st.viewZoom || VIEW().close;
@@ -1247,6 +1249,17 @@
      · 사기: 해적·상선은 기함을 잃으면 routChance 확률로 달아난다 · 해군도 navyFlee 아래로 부서지면 물러난다
      · 움직임(moveShip): 우리 현측 앞으로 들어오지 않고 뱃머리·고물 쪽으로 돌아 들어온다 · 한쪽 포를 재는 동안 장전된 쪽으로 돌아선다 · 동료와 간격을 둔다 */
   function NAI() { return (G.BALANCE && G.BALANCE.navalAI) || {}; }
+  /** 적이 우리 기함에 올라타려고 다가오면 알린다 — 배마다 한 번, 알림은 6초에 한 번까지 (줄줄이 뜨지 않게).
+      호위선이 호위를 안 하고 있으면 「5: 기함 호위」를 일러 준다 (QA 2026-11-06) */
+  function boardWarn(b, fs) {
+    if (b.boardWarned || !fs || !fs.alive || fs !== st.myFlag || b.side === fs.side) return;
+    if (Math.hypot(fs.x - b.x, fs.y - b.y) > gunRange(b) * 1.6) return;
+    var now = st.simT || 0;
+    if (st.boardWarnT != null && now - st.boardWarnT < 6) return;
+    b.boardWarned = true; st.boardWarnT = now;
+    var idle = allies().some(function (m) { return !m.ally && m.order !== 'guard'; });
+    log(b.name + U.jx(b.name, '이/가') + ' 기함에 올라타려고 다가온다!' + (idle ? ' — 5: 기함 호위' : ''));
+  }
   function num(v, d) { return v == null ? d : v; }
   function enemyBrain(b, foes, near, kind) {
     var K = NAI(), ef = st.enFlag, now = st.simT || 0;
@@ -1281,6 +1294,10 @@
     var boardK = (awe ? 2.0 : 1.3) / (has(b, 'grapple') ? 1.25 : 1), crippled = T.hp < T.maxHp * num(K.boardHp, 0.35);
     var canBoard = !T.monster && !has(T, 'spikes') && boardReady();
     var wants = (kind === 'pirate' || has(b, 'grapple')) ? (b.crew > T.crew * boardK || (crippled && b.crew > T.crew * 0.8)) : (kind === 'navy' && crippled && b.crew > T.crew * 1.2);
+    if (T === st.myFlag) {
+      var soonHp = T.hp < T.maxHp * (num(K.boardHp, 0.35) + 0.2);   // 조금 더 부서지면 올라탈 적도 미리 알린다
+      if (wants || ((kind === 'pirate' || has(b, 'grapple')) ? soonHp && b.crew > T.crew * 0.8 : kind === 'navy' && soonHp && b.crew > T.crew * 1.2)) boardWarn(b, T);
+    }
     if (canBoard && wants) { b.board = T; b.target = T; b.moveTo = [T.x, T.y]; return; }
     b.board = null; b.target = T; b.moveTo = null;
     if (b.hp < b.maxHp * 0.45) b.close = Math.max(b.close, num(K.hurtClose, 1.15));   // 많이 부서졌으면 거리를 둔다
@@ -1331,6 +1348,7 @@
     if (tac === 'swarm') {
       if (!b.flag) {
         var tg = has(near, 'spikes') ? T : near;                            // 쇠못 지붕에는 못 뛰어든다 — 다른 배를 노린다
+        if (!has(tg, 'spikes')) boardWarn(b, tg);
         if (has(tg, 'spikes') || !boardReady()) { b.target = tg; b.moveTo = null; return true; }   // 첫머리에는 쏘면서 다가온다
         b.board = tg; b.target = tg; b.moveTo = [tg.x, tg.y]; return true;
       }
@@ -1345,6 +1363,7 @@
       if (!boardReady()) { b.target = T; b.moveTo = null; return true; }
       if (!st.charged) { st.charged = true; log('적 기함 ' + b.name + U.jx(b.name, '이/가') + ' 돛과 노를 다 써서 돌진해 온다!'); }
       if (has(T, 'spikes')) { b.target = T; b.moveTo = null; b.close = 0.5; return true; }
+      boardWarn(b, T);
       b.board = T; b.target = T; b.moveTo = [T.x, T.y];
       return true;
     }

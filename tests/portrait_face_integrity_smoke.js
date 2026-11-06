@@ -71,17 +71,19 @@ const BROWSER = process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Appli
           };
         })
       }));
+      // 같은 얼굴을 다시 열면 이미지가 즉시 떠서 대화의 220ms 중복 클릭 방지에 걸릴 수 있다.
+      await page.waitForTimeout(250);
       await page.locator('.modal-back .dlg').click();
       await page.evaluate(() => window.__faceIntegrityPending);
       return out;
     }
 
     const knee = await probe(false);
-    assert.strictEqual(knee.tall, 2, '첨부 장면은 제독·전령 무릎상 둘');
-    assert.strictEqual(knee.bust, 0, '첨부 장면에서 얼굴상으로 잘못 대체되지 않음');
-    assert(knee.actors.every(a => a.single && a.pieces === 0), '무릎상은 원본 한 장만 표시');
-    assert(knee.actors.some(a => /player_half_navigator_white\.png/.test(a.src) && a.width === 512 && a.height === 512), '선택한 제독 무릎상 원본 유지');
-    assert(knee.actors.some(a => /portraits\/pools\/sponsors\/es\/m\/02_half\.webp/.test(a.src) && a.width >= 1024 && a.height >= 1536), '라코루냐 왕실 전령 무릎상 원본 유지');
+    assert.strictEqual(knee.tall, 0, '전령의 옛 합성 무릎상은 표시하지 않음');
+    assert.strictEqual(knee.bust, 2, '옛 합성본이 포함된 장면은 두 사람 모두 원래 얼굴상');
+    assert(knee.actors.every(a => a.single && a.pieces === 0), '얼굴상도 원본 한 장만 표시');
+    assert(knee.actors.some(a => /portraits\/player\/navigator_white\.(png|webp)/.test(a.src)), '선택한 제독 얼굴 유지');
+    assert(knee.actors.some(a => /portraits\/pools\/sponsors\/es\/m\/02\.webp/.test(a.src)), '라코루냐 왕실 전령은 같은 인물의 얼굴 유지');
 
     const bust = await probe(true);
     assert.strictEqual(bust.tall, 0, '대체 장면은 무릎상 없음');

@@ -1,0 +1,328 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-11-06",
+  "scope": "기존 인도계 일반 부하 후보 남성 8종. 얼굴상·무릎상 16장. 최종 화풍: 게임 내 마녀·후견인·플레이어 원화를 직접 참고한 부드러운 반실사 2D 게임 초상. 개방적인 의상 유지.",
+  "portraits": [
+    {
+      "id": "01",
+      "name": "흰 조끼 항해사",
+      "reference_numbers": [
+        1,
+        12
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-22bdb6f9-e687-4efb-a2db-374585115c8f.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1bcac700-c321-4fee-9018-26cb786c07b2.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 28, swept-up short black hair, refined oval face and light stubble, warm medium-brown skin, calm confident gaze. Open ivory cotton sleeveless vest exposing chest and abdomen, cream wrapped dhoti to below knees with gold border, muted red waist sash, one fine gold necklace and simple wrist cuff. Hand resting on rolled nautical chart at waist.",
+      "key": "portraits/mates/indian-men/01",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-51f8b50c-5e5a-4a8f-80df-adef576ace44.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-69a20e52-d0ce-46e9-a12e-3d8603be9aa3.png",
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep the illustrated man's identity, hairstyle, eyes, expression, ivory open vest, red sash, dhoti, gold trim, chart and pose. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png",
+          "prompt": "Edit target: attached generated character portrait. REDRAW THE ENTIRE IMAGE AS HAND-DRAWN 2D HISTORICAL ADVENTURE RPG ILLUSTRATION, visibly illustrated rather than photographic. Keep the man's recognizable face shape, hairstyle, pose, open ivory vest, gold embroidery, red waist sash, cream dhoti, rolled map, framing and transparent background. Art direction: elegant classic painted game character portrait, confident clean dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, subtly idealized facial proportions and expressive eyes. Clearly painted face with stylized planes, soft restrained palette and matte surfaces. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscle highlights, camera lighting and photographic microtexture. Not a photo, not a 3D render, not hyperrealistic. Keep fully adult masculine anatomy. Top of hair to just below both knees, both hands visible, one character, no text, no backdrop or halo, preserve true alpha transparency. The user explicitly requests LESS REALISTIC / MORE ILLUSTRATED. This must look like a drawing on first glance.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-51f8b50c-5e5a-4a8f-80df-adef576ace44.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/01.png",
+      "face_file": "images/portraits/mates/indian-men/01.webp",
+      "half_file": "images/portraits/mates/indian-men/01_half.webp"
+    },
+    {
+      "id": "02",
+      "name": "청록 조끼 통역사",
+      "reference_numbers": [
+        2,
+        4
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-9f0cfb0d-438b-40bb-8ab8-2f33138d09c9.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-882beb24-e3af-4c7f-a061-bab634db4a77.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 26, soft side-swept ear-length black hair, long elegant face, neatly trimmed short beard, friendly smile. Deeply open teal sleeveless embroidered waistcoat, bare chest and arms, dark blue loose wrapped trousers, light cream sash, small gold earring and two slim necklaces. One open hand casually inviting.",
+      "key": "portraits/mates/indian-men/02",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-554bf0b5-b7ef-4c7e-a7bf-033ba2e84865.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-d0a18f15-c4be-42c5-a685-fa6961e8112b.png",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-0beebce2-81aa-407e-9fed-daa990914bd4.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep each target illustrated man's OWN individual identity, hairstyle, beard, eyes, expression, clothing colors, open vest or draped cloth, sash, dhoti, trim, jewelry, held objects and pose. Do not change him to resemble another man. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-0beebce2-81aa-407e-9fed-daa990914bd4.png",
+          "prompt": "Use case: style-transfer. Image 1 is the EDIT TARGET, its own unique character. Image 2 is STYLE REFERENCE ONLY: match its drawn linework, simplified gouache shading and degree of stylization, do not copy the second man's identity, clothing, hair, pose or objects. REDRAW ALL OF IMAGE 1 as a clearly hand-drawn 2D historical adventure RPG illustration. Preserve Image 1's recognizable individual face shape, hair, beard, expression, pose, exact outfit color and open clothing, draping, jewelry and held objects. Art direction from image 2: elegant illustrated game character portrait, confident dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, expressive subtly idealized facial planes. Matte painted surfaces, no photo microtexture. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscles, camera highlights and photographic lighting. Must look like a drawing at first glance, not a photo or 3D render. Single adult Indian male. Keep composition 1024x1536 vertical, complete head and hands, head-to-just-below-knees framing, no feet. Preserve GENUINE ALPHA TRANSPARENT BACKGROUND, no halo, scenery or shadow plane. No text, collage or extra characters. Keep the airy exposed chest/shoulders and fully opaque lower garments. User's request: 너무 실사 느낌 나지 않게 그려줘.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-554bf0b5-b7ef-4c7e-a7bf-033ba2e84865.png",
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/02.png",
+      "face_file": "images/portraits/mates/indian-men/02.webp",
+      "half_file": "images/portraits/mates/indian-men/02_half.webp"
+    },
+    {
+      "id": "03",
+      "name": "붉은 조끼 검객",
+      "reference_numbers": [
+        3,
+        13
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-686ca982-bfd1-431f-a820-785e23c4db70.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b4e1f4e2-d8a7-4a55-94b0-9231dd956ba4.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 29, high swept-back black hair, strong square jaw, striking light hazel eyes and neat stubble, medium warm brown skin. Fully open rust-red short sleeveless brocade vest with narrow gold edging, exposed chest and shoulders, charcoal dhoti trousers and red patterned waist sash, modest gold bangle. Sheathed curved sword secured at waist, both hands relaxed and visible.",
+      "key": "portraits/mates/indian-men/03",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-6690bc09-039c-4fdf-b9a0-b3e3f6d6908c.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-2417674d-59b9-404e-9520-49b9b6cfe77d.png",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-41d8636d-6432-413e-87f0-a1a6efef90ad.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep each target illustrated man's OWN individual identity, hairstyle, beard, eyes, expression, clothing colors, open vest or draped cloth, sash, dhoti, trim, jewelry, held objects and pose. Do not change him to resemble another man. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-41d8636d-6432-413e-87f0-a1a6efef90ad.png",
+          "prompt": "Use case: style-transfer. Image 1 is the EDIT TARGET, its own unique character. Image 2 is STYLE REFERENCE ONLY: match its drawn linework, simplified gouache shading and degree of stylization, do not copy the second man's identity, clothing, hair, pose or objects. REDRAW ALL OF IMAGE 1 as a clearly hand-drawn 2D historical adventure RPG illustration. Preserve Image 1's recognizable individual face shape, hair, beard, expression, pose, exact outfit color and open clothing, draping, jewelry and held objects. Art direction from image 2: elegant illustrated game character portrait, confident dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, expressive subtly idealized facial planes. Matte painted surfaces, no photo microtexture. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscles, camera highlights and photographic lighting. Must look like a drawing at first glance, not a photo or 3D render. Single adult Indian male. Keep composition 1024x1536 vertical, complete head and hands, head-to-just-below-knees framing, no feet. Preserve GENUINE ALPHA TRANSPARENT BACKGROUND, no halo, scenery or shadow plane. No text, collage or extra characters. Keep the airy exposed chest/shoulders and fully opaque lower garments. User's request: 너무 실사 느낌 나지 않게 그려줘.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-6690bc09-039c-4fdf-b9a0-b3e3f6d6908c.png",
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/03.png",
+      "face_file": "images/portraits/mates/indian-men/03.webp",
+      "half_file": "images/portraits/mates/indian-men/03_half.webp"
+    },
+    {
+      "id": "04",
+      "name": "주황 천 길잡이",
+      "reference_numbers": [
+        5,
+        6
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-c1dd81fd-5849-4ad0-9a4a-195ff34f0738.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-86df71a6-345a-4bd5-b832-3f99c568f363.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 27, abundant tousled curly black hair and full neat beard, warm brown skin, broad smile and athletic lean build. Burnt orange loose short-sleeved cotton tunic completely open down chest to waist and tied only at waist, dark green draped lower wrap over opaque shorts, simple silver chain and woven wristbands. Resting hand on coil of rope carried at hip.",
+      "key": "portraits/mates/indian-men/04",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-2ddd7b9f-3a0c-452e-98ae-371a7005d6a7.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-b8a4e28f-f4cd-4640-8308-376cb90bee15.png",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-0f65f7d5-26e4-499d-99f4-0db1a4505929.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep each target illustrated man's OWN individual identity, hairstyle, beard, eyes, expression, clothing colors, open vest or draped cloth, sash, dhoti, trim, jewelry, held objects and pose. Do not change him to resemble another man. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-0f65f7d5-26e4-499d-99f4-0db1a4505929.png",
+          "prompt": "Use case: style-transfer. Image 1 is the EDIT TARGET, its own unique character. Image 2 is STYLE REFERENCE ONLY: match its drawn linework, simplified gouache shading and degree of stylization, do not copy the second man's identity, clothing, hair, pose or objects. REDRAW ALL OF IMAGE 1 as a clearly hand-drawn 2D historical adventure RPG illustration. Preserve Image 1's recognizable individual face shape, hair, beard, expression, pose, exact outfit color and open clothing, draping, jewelry and held objects. Art direction from image 2: elegant illustrated game character portrait, confident dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, expressive subtly idealized facial planes. Matte painted surfaces, no photo microtexture. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscles, camera highlights and photographic lighting. Must look like a drawing at first glance, not a photo or 3D render. Single adult Indian male. Keep composition 1024x1536 vertical, complete head and hands, head-to-just-below-knees framing, no feet. Preserve GENUINE ALPHA TRANSPARENT BACKGROUND, no halo, scenery or shadow plane. No text, collage or extra characters. Keep the airy exposed chest/shoulders and fully opaque lower garments. User's request: 너무 실사 느낌 나지 않게 그려줘.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-2ddd7b9f-3a0c-452e-98ae-371a7005d6a7.png",
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/04.png",
+      "face_file": "images/portraits/mates/indian-men/04.webp",
+      "half_file": "images/portraits/mates/indian-men/04_half.webp"
+    },
+    {
+      "id": "05",
+      "name": "노란 천 악사",
+      "reference_numbers": [
+        7,
+        8
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b96e5080-07e7-432e-83b5-a0011165dfa0.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-46a0e129-0907-4c1f-85e4-dc5091ae6f62.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 25, shoulder-length loose black waves with center part, clean-shaven long face, deep brown eyes and medium dark brown skin. Mustard yellow cotton cloth draped over one shoulder leaving chest and opposite shoulder completely bare, ivory gold-edged dhoti below knees, green waist sash, fine small pendant and armlet. Small wooden flute held down near waist with relaxed hands.",
+      "key": "portraits/mates/indian-men/05",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-70af6dd9-a6bc-4861-9257-3444bca38901.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-c32d26f1-6b3d-4b55-9ac4-4cdf13b85b21.png",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-fd469e78-4ae1-4003-a2e4-96a54f1beae9.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep each target illustrated man's OWN individual identity, hairstyle, beard, eyes, expression, clothing colors, open vest or draped cloth, sash, dhoti, trim, jewelry, held objects and pose. Do not change him to resemble another man. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-fd469e78-4ae1-4003-a2e4-96a54f1beae9.png",
+          "prompt": "Use case: style-transfer. Image 1 is the EDIT TARGET, its own unique character. Image 2 is STYLE REFERENCE ONLY: match its drawn linework, simplified gouache shading and degree of stylization, do not copy the second man's identity, clothing, hair, pose or objects. REDRAW ALL OF IMAGE 1 as a clearly hand-drawn 2D historical adventure RPG illustration. Preserve Image 1's recognizable individual face shape, hair, beard, expression, pose, exact outfit color and open clothing, draping, jewelry and held objects. Art direction from image 2: elegant illustrated game character portrait, confident dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, expressive subtly idealized facial planes. Matte painted surfaces, no photo microtexture. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscles, camera highlights and photographic lighting. Must look like a drawing at first glance, not a photo or 3D render. Single adult Indian male. Keep composition 1024x1536 vertical, complete head and hands, head-to-just-below-knees framing, no feet. Preserve GENUINE ALPHA TRANSPARENT BACKGROUND, no halo, scenery or shadow plane. No text, collage or extra characters. Keep the airy exposed chest/shoulders and fully opaque lower garments. User's request: 너무 실사 느낌 나지 않게 그려줘.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-70af6dd9-a6bc-4861-9257-3444bca38901.png",
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/05.png",
+      "face_file": "images/portraits/mates/indian-men/05.webp",
+      "half_file": "images/portraits/mates/indian-men/05_half.webp"
+    },
+    {
+      "id": "06",
+      "name": "연두 조끼 약초가",
+      "reference_numbers": [
+        9,
+        10
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d5b7a2ae-ca9e-4b56-b8ee-8cd3a8d44ae6.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-311f44a2-c2fa-4afa-939e-2292fc41e4a1.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 28, short textured wavy black hair, expressive thick brows, neat full short beard, rich medium brown skin, kind thoughtful eyes. Pale sage-green short open sleeveless cotton vest with subtle blockprinted edge, completely bare chest and arms, dark cream dhoti and terracotta sash, small leather herb pouches tied at waist and one copper bracelet. Natural relaxed stance with hands near sash.",
+      "key": "portraits/mates/indian-men/06",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-64939f7a-1014-45f8-8fa1-a3ab630108a5.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-9229add9-eb25-4ac2-b758-c258b134cc15.png",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-c59e07e9-6784-49e9-a389-455ac77c5b63.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep each target illustrated man's OWN individual identity, hairstyle, beard, eyes, expression, clothing colors, open vest or draped cloth, sash, dhoti, trim, jewelry, held objects and pose. Do not change him to resemble another man. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-c59e07e9-6784-49e9-a389-455ac77c5b63.png",
+          "prompt": "Use case: style-transfer. Image 1 is the EDIT TARGET, its own unique character. Image 2 is STYLE REFERENCE ONLY: match its drawn linework, simplified gouache shading and degree of stylization, do not copy the second man's identity, clothing, hair, pose or objects. REDRAW ALL OF IMAGE 1 as a clearly hand-drawn 2D historical adventure RPG illustration. Preserve Image 1's recognizable individual face shape, hair, beard, expression, pose, exact outfit color and open clothing, draping, jewelry and held objects. Art direction from image 2: elegant illustrated game character portrait, confident dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, expressive subtly idealized facial planes. Matte painted surfaces, no photo microtexture. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscles, camera highlights and photographic lighting. Must look like a drawing at first glance, not a photo or 3D render. Single adult Indian male. Keep composition 1024x1536 vertical, complete head and hands, head-to-just-below-knees framing, no feet. Preserve GENUINE ALPHA TRANSPARENT BACKGROUND, no halo, scenery or shadow plane. No text, collage or extra characters. Keep the airy exposed chest/shoulders and fully opaque lower garments. User's request: 너무 실사 느낌 나지 않게 그려줘.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-64939f7a-1014-45f8-8fa1-a3ab630108a5.png",
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/06.png",
+      "face_file": "images/portraits/mates/indian-men/06.webp",
+      "half_file": "images/portraits/mates/indian-men/06_half.webp"
+    },
+    {
+      "id": "07",
+      "name": "남색 조끼 교역가",
+      "reference_numbers": [
+        11,
+        14
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-cff05622-d2cc-4a55-be4b-057f9a73eaad.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-6beeb662-427e-43fd-9b8b-b7918165a32d.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 30, voluminous asymmetrical swept black hair, defined cheekbones and neatly shaped short black beard, medium warm brown complexion. Deep indigo sleeveless velvet waistcoat worn fully open over bare chest, restrained gold embroidery, loose off-white dhoti trousers and plum waist sash, two delicate gold chains, rings and one bangle. Confident slight three-quarter stance, holding a folded cloth sample beside hip.",
+      "key": "portraits/mates/indian-men/07",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-faf26637-716b-44ed-97e3-799d9da5a926.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-2d6e50cf-e91d-4800-8109-1a8d82ff2370.png",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-4d29ebe1-7229-4231-a39f-a7398df25d1f.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep each target illustrated man's OWN individual identity, hairstyle, beard, eyes, expression, clothing colors, open vest or draped cloth, sash, dhoti, trim, jewelry, held objects and pose. Do not change him to resemble another man. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-4d29ebe1-7229-4231-a39f-a7398df25d1f.png",
+          "prompt": "Use case: style-transfer. Image 1 is the EDIT TARGET, its own unique character. Image 2 is STYLE REFERENCE ONLY: match its drawn linework, simplified gouache shading and degree of stylization, do not copy the second man's identity, clothing, hair, pose or objects. REDRAW ALL OF IMAGE 1 as a clearly hand-drawn 2D historical adventure RPG illustration. Preserve Image 1's recognizable individual face shape, hair, beard, expression, pose, exact outfit color and open clothing, draping, jewelry and held objects. Art direction from image 2: elegant illustrated game character portrait, confident dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, expressive subtly idealized facial planes. Matte painted surfaces, no photo microtexture. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscles, camera highlights and photographic lighting. Must look like a drawing at first glance, not a photo or 3D render. Single adult Indian male. Keep composition 1024x1536 vertical, complete head and hands, head-to-just-below-knees framing, no feet. Preserve GENUINE ALPHA TRANSPARENT BACKGROUND, no halo, scenery or shadow plane. No text, collage or extra characters. Keep the airy exposed chest/shoulders and fully opaque lower garments. User's request: 너무 실사 느낌 나지 않게 그려줘.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-faf26637-716b-44ed-97e3-799d9da5a926.png",
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/07.png",
+      "face_file": "images/portraits/mates/indian-men/07.webp",
+      "half_file": "images/portraits/mates/indian-men/07_half.webp"
+    },
+    {
+      "id": "08",
+      "name": "검은 꽃조끼 탐험가",
+      "reference_numbers": [
+        15,
+        16
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-607b7f2b-d0a1-42b5-9c4f-e669a4014578.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-59f15401-15f7-4606-8664-25e71c48da0a.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: individual game-ready transparent knee-length character portrait for a Korean historical ocean exploration RPG, late 15th–17th century Indian subcontinent inspired fictional male recruit. Primary request: use the supplied two reference photographs as face shape, hairstyle, facial hair, expression and physique guides, translate them into ONE original attractive clearly adult Indian man; clothing must feel airy, daring and non-conservative as specified. Each input is an appearance/costume reference, not an edit target; remove all modern clothing and setting. Style: exquisite semi-realistic digital oil-painted historical RPG character illustration, detailed attractive face, believable anatomy and skin texture, subtle brushwork, warm soft side light with neutral fill. Single cohesive finished painting, same style throughout this series. Composition: vertical 2:3, 1024x1536, ONE standing character only, framed from top of hair to just BELOW BOTH KNEES. Whole head with margin, both shoulders, elbows and hands entirely inside canvas; knees clearly visible near bottom, no feet. Face toward viewer or slight three-quarter, eyes visible. Genuine transparent background, clean alpha silhouette, no background scenery, no shadow plane, no halo, no vignette. Costume is creative period-inspired Indian adventure clothing, not modern runway tailoring. Fully opaque secure lower garments; dignified confident adventure character presentation. No text, labels, watermark, collage, frames, photograph, sunglasses, watch, denim, modern buttons, modern western suit, crown, extra person, duplicate face or duplicate limbs. Design: Adult 31, straight shoulder-length center-parted black hair, strong angular face and light beard, rich warm brown skin, serious composed gaze. Open sleeveless black velvet short vest with elegant crimson floral embroidery and fine gold edging, exposed chest abdomen and upper arms, charcoal draped dhoti trousers with deep red sash, one gold pendant and dark bracer. Both hands relaxed at sides, no crown or court insignia.",
+      "key": "portraits/mates/indian-men/08",
+      "draft_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-16176edf-01d4-4349-b47f-bf3aeff87bdb.png",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-7d83f586-1033-453f-96fa-e332855ba426.png",
+      "final_refs": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-f3c6947f-ff13-4457-ae4f-fbd933b2dd89.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/navigator_white.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/player/charismatic_admiral.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/witches/witch_07_half.png",
+        "D:/Git/대항해2 CLAUDE/WebGame/images/portraits/sponsors/in_vakil_half.webp"
+      ],
+      "final_prompt": "STYLE HARMONIZATION, not photorealization. Image 1 is an existing DRAWN Indian male game character to repaint. Images 2–5 are ACTUAL EXISTING PORTRAITS FROM THE SAME GAME and define the exact final visual standard. Prioritize Images 2 and 3 for attractive idealized male game-face rendering and Image 4 for softly illustrated skin finish. Repaint Image 1 from its current hard outlined gouache illustration into these references' refined softly blended painterly 2D RPG portrait style. Keep each target illustrated man's OWN individual identity, hairstyle, beard, eyes, expression, clothing colors, open vest or draped cloth, sash, dhoti, trim, jewelry, held objects and pose. Do not change him to resemble another man. Preserve the stylized idealized character design rather than turning him into a real photographed actor. Replace thick dark outlines with delicate painted edges; replace angular flat shadow polygons with smooth subtle painted transitions; soften the geometric abs and shoulder shadows into naturally painted anatomy. Retain clearly illustrated facial planes and slightly idealized expressive eyes matching the PLAYER ART. Do not add photographic skin pores, dense body hair, skin shine or camera realism. Soft matte painterly skin, elegant fine hair brushstrokes, luminous painted embroidery with subtle brush texture, continuous soft shading. No comic outlines, posterized polygons, cel shading or glossy 3D. Make it look designed and painted by the same game portrait artist as references 2–5. Use only the subject and costume from image1, references2–5 style only; no female features, western facial identity, sponsor turban or elderly appearance. One adult attractive Indian man, open chest clothing unchanged. Keep 1024x1536 vertical hair-to-knees composition, complete head and hands, transparent alpha background. NO brown glow, backdrop or halo. No text or watermark.",
+      "previous_versions": [
+        {
+          "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-f3c6947f-ff13-4457-ae4f-fbd933b2dd89.png",
+          "prompt": "Use case: style-transfer. Image 1 is the EDIT TARGET, its own unique character. Image 2 is STYLE REFERENCE ONLY: match its drawn linework, simplified gouache shading and degree of stylization, do not copy the second man's identity, clothing, hair, pose or objects. REDRAW ALL OF IMAGE 1 as a clearly hand-drawn 2D historical adventure RPG illustration. Preserve Image 1's recognizable individual face shape, hair, beard, expression, pose, exact outfit color and open clothing, draping, jewelry and held objects. Art direction from image 2: elegant illustrated game character portrait, confident dark-brown contour drawing, simplified angular shadow shapes, broad opaque gouache brush strokes, two-to-three large value groups on skin, graphic hair locks, expressive subtly idealized facial planes. Matte painted surfaces, no photo microtexture. Remove skin pores, individual body hairs, photoreal fabric weave, glossy muscles, camera highlights and photographic lighting. Must look like a drawing at first glance, not a photo or 3D render. Single adult Indian male. Keep composition 1024x1536 vertical, complete head and hands, head-to-just-below-knees framing, no feet. Preserve GENUINE ALPHA TRANSPARENT BACKGROUND, no halo, scenery or shadow plane. No text, collage or extra characters. Keep the airy exposed chest/shoulders and fully opaque lower garments. User's request: 너무 실사 느낌 나지 않게 그려줘.",
+          "refs": [
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-16176edf-01d4-4349-b47f-bf3aeff87bdb.png",
+            "C:\\Users\\User\\.codex\\generated_images\\01a1b07b-c806-76b0-8a58-b5fe58cd7015\\exec-00960152-9f9a-4157-b398-4d6cf2d36b0a.png"
+          ],
+          "style": "굵은 윤곽선과 색면 버전; 사용자 최종 지시에 따라 대체"
+        }
+      ],
+      "workspace_source": "artifacts/indian-men-illustrated-20261106/sources/08.png",
+      "face_file": "images/portraits/mates/indian-men/08.webp",
+      "half_file": "images/portraits/mates/indian-men/08_half.webp"
+    }
+  ],
+  "style_references": [
+    {
+      "path": "images/portraits/player/navigator_white.png",
+      "label": "플레이어 · 백의 항해사"
+    },
+    {
+      "path": "images/portraits/player/charismatic_admiral.png",
+      "label": "플레이어 · 제독"
+    },
+    {
+      "path": "images/portraits/witches/witch_07_half.png",
+      "label": "마녀 · 07"
+    },
+    {
+      "path": "images/portraits/sponsors/in_vakil_half.webp",
+      "label": "후견인 · 인도 대사"
+    }
+  ]
+}

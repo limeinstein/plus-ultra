@@ -7,7 +7,9 @@
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 
 const ROOT = path.resolve(__dirname, '..');
 const GAME = pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href;
@@ -41,7 +43,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const step = (sec) => page.evaluate((sec) => { var B = G.Scenes.battle; B.headless = true; for (var i = 0; i < sec * 20; i++) B.update(0.05); B.headless = false; B.update(0.01); }, sec);
     const orders = () => page.evaluate(() => G.Scenes.battle.debug().ships.filter(function (b) { return b.side === 'me' && !b.flag; }).map(function (b) { return b.order; }));
     ok(await page.$('.ordpanel .ord-btn') && (await page.$$('.ordpanel .ord-btn')).length === 7, '함대 명령판과 명령 일곱 가지');
-    ok((await orders()).every(o => o === 'follow'), '처음에는 모두 기함 추종');
+    ok((await orders()).every(o => o === 'guard'), '처음에는 모두 기함 호위');
     await step(2);
     await page.keyboard.press('2'); await step(14);
     const crane = await page.evaluate(() => { var st = G.Scenes.battle.debug(); return { o: st.ships.filter(function (b) { return b.side === 'me' && !b.flag; }).map(function (b) { return b.order; }), env: st.ships.some(function (b) { return b.side === 'en' && b.envK > 1; }), log: st.log.join(' / ') }; });

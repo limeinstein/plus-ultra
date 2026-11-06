@@ -4,7 +4,8 @@
    · cost·days: 조선소에서 이 방으로 고치는 값(금화)과 날수.
    · main·sub (2026-10-29 피드백 「선실이 어떤 능력을 중요하게 보는지 표시」): 방의 힘을 정하는 특기. 주 특기(★)는 그 단계 그대로, 보조 특기(☆)는 절반(G.BALANCE.cabins.subK)만 친다.
      방의 힘 = (1 + max(주 특기 단계, 보조 특기 단계 × 0.5)) × 충성 효율 — 추천 순서도 같은 셈 (js/systems/cabins.js CB.roomLevel). skills는 함대에 쓰이는 특기(주·보조 모두)
-   · grow: 이 방에서 지내면 느는 특기 (없으면 skills의 첫 특기) — 3년·9년·27년이면 +1·+2·+3 (js/systems/cabins.js CB.grow · G.BALANCE.cabins.growDays) */
+   · grow: 이 방에서 지내면 느는 특기 (없으면 skills의 첫 특기) — 3년·9년·27년이면 +1·+2·+3 (js/systems/cabins.js CB.grow · G.BALANCE.cabins.growDays)
+     보조 특기(sub)도 1.2배 느리게 는다 — 3.6년·10.8년·32.4년 (G.BALANCE.cabins.subSlow · 2026-11-06) */
 (function (G) {
   'use strict';
   G.CABINS = [

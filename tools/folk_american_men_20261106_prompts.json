@@ -1,0 +1,453 @@
+{
+  "date": "2026-11-06",
+  "mode": "built-in image_gen",
+  "scope": "아메리카 민족 발견물 22종: 북미 17·중미 1·남미 4. 민족별 얼굴상·무릎상 총44장. 같은 민족의 남성 네 이름은 한 쌍 공용.",
+  "portraits": [
+    {
+      "id": "inuit",
+      "name": "이누이트",
+      "region": "북미",
+      "reference_numbers": [
+        1,
+        3
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-19a1a4c8-6610-415b-9c3f-6ae53ac0a235.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2ab14ab9-3464-456a-a7c5-5b1074351063.png"
+      ],
+      "design": "Arctic Inuit-inspired coastal navigator, adult man age 31, broad softly angular cheeks, strong dark brows, dark almond eyes, broad nose, calm clean-shaven face, straight black hair tied in a compact low tail. Sturdy muscular shoulders and torso. Charcoal hide trousers tucked around the knee, broad ivory hide belt, a fur-lined smoke-grey parka worn completely OPEN, pushed off one shoulder with sleeves tied at the waist, clearly visible bare chest and abdomen and arms. Restrained bone-toggle necklace and a compact carved navigation tool in his hand. Grey, ivory and sea-blue accents. This is an informal warm-season portrait, no icy setting.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Arctic Inuit-inspired coastal navigator, adult man age 31, broad softly angular cheeks, strong dark brows, dark almond eyes, broad nose, calm clean-shaven face, straight black hair tied in a compact low tail. Sturdy muscular shoulders and torso. Charcoal hide trousers tucked around the knee, broad ivory hide belt, a fur-lined smoke-grey parka worn completely OPEN, pushed off one shoulder with sleeves tied at the waist, clearly visible bare chest and abdomen and arms. Restrained bone-toggle necklace and a compact carved navigation tool in his hand. Grey, ivory and sea-blue accents. This is an informal warm-season portrait, no icy setting. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_inuit_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-59f266b7-8b5b-4088-a102-1b217efdc27e.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/inuit.png",
+      "face_file": "images/portraits/mates/folk_inuit_m.webp",
+      "half_file": "images/portraits/mates/folk_inuit_m_half.webp"
+    },
+    {
+      "id": "skraeling",
+      "name": "베오투크",
+      "region": "북미",
+      "reference_numbers": [
+        1,
+        12
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-19a1a4c8-6610-415b-9c3f-6ae53ac0a235.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-707ff5b7-f5d3-4b0a-8a90-1fb9e69bf15f.png"
+      ],
+      "design": "Beothuk-inspired tracker, adult man age 28, long narrow face, deeply set attentive brown eyes, high cheekbones, straight long black hair falling loose to upper chest, clean shaven. Lean strong build. Bare chest, abdomen and arms, loose ochre-red hide mantle draped behind one shoulder, opaque dark red knee-length hide wrap over fitted hide shorts, braided plant-fiber belt, small carved bone pendant. Restrained red ochre strokes along upper arm, no full face paint. Holds a wooden walking staff. Earth red and warm tan palette, composed expression.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Beothuk-inspired tracker, adult man age 28, long narrow face, deeply set attentive brown eyes, high cheekbones, straight long black hair falling loose to upper chest, clean shaven. Lean strong build. Bare chest, abdomen and arms, loose ochre-red hide mantle draped behind one shoulder, opaque dark red knee-length hide wrap over fitted hide shorts, braided plant-fiber belt, small carved bone pendant. Restrained red ochre strokes along upper arm, no full face paint. Holds a wooden walking staff. Earth red and warm tan palette, composed expression. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_skraeling_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-8a5a017c-0e53-4442-a0d2-810173d271bb.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/skraeling.png",
+      "face_file": "images/portraits/mates/folk_skraeling_m.webp",
+      "half_file": "images/portraits/mates/folk_skraeling_m_half.webp"
+    },
+    {
+      "id": "folk_dakota",
+      "name": "다코타",
+      "region": "북미",
+      "reference_numbers": [
+        7,
+        14
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0580c0a6-2eee-46dc-ba21-423b0156a494.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-30c6a13a-0dd9-4e13-9daf-d3eef560a7eb.png"
+      ],
+      "design": "Dakota-inspired scout, adult man age 32, strong square jaw and prominent cheekbones, confident dark eyes, long flowing black hair with one narrow braid, muscular broad shoulders. Bare chest and abdomen visible beside a SHORT narrow bone-bead chest ornament, small turquoise and cream bead necklace, red-brown knee-length hide breeches and broad woven belt. A fringed open hide shoulder drape falls behind one arm. Simple leather wrist wraps, hand holding a folded leather strap at hip. No huge feather bonnet, no horse, no modern cowboy costume. Resolute yet approachable expression.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Dakota-inspired scout, adult man age 32, strong square jaw and prominent cheekbones, confident dark eyes, long flowing black hair with one narrow braid, muscular broad shoulders. Bare chest and abdomen visible beside a SHORT narrow bone-bead chest ornament, small turquoise and cream bead necklace, red-brown knee-length hide breeches and broad woven belt. A fringed open hide shoulder drape falls behind one arm. Simple leather wrist wraps, hand holding a folded leather strap at hip. No huge feather bonnet, no horse, no modern cowboy costume. Resolute yet approachable expression. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_dakota_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-fd4f91a8-adaf-4503-9b1a-68f733c50894.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_dakota.png",
+      "face_file": "images/portraits/mates/folk_folk_dakota_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_dakota_m_half.webp"
+    },
+    {
+      "id": "folk_cherokee",
+      "name": "체로키",
+      "region": "북미",
+      "reference_numbers": [
+        3,
+        11
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2ab14ab9-3464-456a-a7c5-5b1074351063.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-75f34d5b-3e96-4d93-ad58-d4e73ff11330.png"
+      ],
+      "design": "Cherokee-inspired healer and interpreter, adult man age 27, softly angular oval face, fine full brows, expressive brown eyes, full lips, long dark hair tied half up with loose face-framing strands. Athletic elegant physique. Bare chest and midriff, short open sleeveless dark teal woven vest, muted ochre opaque knee-length wrap over short trousers, narrow red geometric cloth belt. Small shell pendant and woven medicine pouch, holds a small tied bundle of medicinal leaves at his side. Thoughtful warm expression, no warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Cherokee-inspired healer and interpreter, adult man age 27, softly angular oval face, fine full brows, expressive brown eyes, full lips, long dark hair tied half up with loose face-framing strands. Athletic elegant physique. Bare chest and midriff, short open sleeveless dark teal woven vest, muted ochre opaque knee-length wrap over short trousers, narrow red geometric cloth belt. Small shell pendant and woven medicine pouch, holds a small tied bundle of medicinal leaves at his side. Thoughtful warm expression, no warbonnet. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_cherokee_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-4b2ca38b-7586-4983-af96-ca9f485c2cdc.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_cherokee.png",
+      "face_file": "images/portraits/mates/folk_folk_cherokee_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_cherokee_m_half.webp"
+    },
+    {
+      "id": "folk_haudenosaunee",
+      "name": "하우데노쇼니",
+      "region": "북미",
+      "reference_numbers": [
+        2,
+        6
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fe2bb648-978b-488a-8f17-481db2fb0d31.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-64047235-fbbd-4149-accd-00c759f392b7.png"
+      ],
+      "design": "Haudenosaunee-inspired warrior and speaker, adult man age 30, angular face, high cheekbones, straight nose and focused brown eyes, long black hair pulled into a single thick braid with closely smoothed sides rather than modern shaved fade. Strong compact athletic body. Bare chest, shoulders, arms and abdomen. Dark brown knee-length hide leggings joined under a fully opaque overlapping red cloth apron, purple-and-ivory shell-bead belt, a narrow shell-bead bandolier and small copper pendant. Holds a simple polished wooden club pointing down beside his leg, no violence. Stern intelligent expression.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Haudenosaunee-inspired warrior and speaker, adult man age 30, angular face, high cheekbones, straight nose and focused brown eyes, long black hair pulled into a single thick braid with closely smoothed sides rather than modern shaved fade. Strong compact athletic body. Bare chest, shoulders, arms and abdomen. Dark brown knee-length hide leggings joined under a fully opaque overlapping red cloth apron, purple-and-ivory shell-bead belt, a narrow shell-bead bandolier and small copper pendant. Holds a simple polished wooden club pointing down beside his leg, no violence. Stern intelligent expression. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_haudenosaunee_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-65702b1c-6ea3-49bf-b639-c6dfa234d0c4.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_haudenosaunee.png",
+      "face_file": "images/portraits/mates/folk_folk_haudenosaunee_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_haudenosaunee_m_half.webp"
+    },
+    {
+      "id": "folk_wendat",
+      "name": "웬다트",
+      "region": "북미",
+      "reference_numbers": [
+        4,
+        8
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f2d9b29a-85ae-40c2-9a18-0c87f9a695a1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a018f7c2-d09e-4aac-a96c-d71264f8defa.png"
+      ],
+      "design": "Wendat-inspired merchant and interpreter, adult man age 29, handsome broad forehead, rounded angular jaw, dark warm eyes and straight nose, long smooth black hair pulled back with a narrow woven band, clean-shaven. Medium athletic physique. Bare chest, shoulders and abdomen, open soft tan hide vest with subtle fringed lower edge, dark umber opaque knee-length wrap and sturdy hide belt. Shell bead strands, a small bundle of trade beads and folded cloth held in one hand. Warm copper and forest-green accents, friendly reserved half-smile.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Wendat-inspired merchant and interpreter, adult man age 29, handsome broad forehead, rounded angular jaw, dark warm eyes and straight nose, long smooth black hair pulled back with a narrow woven band, clean-shaven. Medium athletic physique. Bare chest, shoulders and abdomen, open soft tan hide vest with subtle fringed lower edge, dark umber opaque knee-length wrap and sturdy hide belt. Shell bead strands, a small bundle of trade beads and folded cloth held in one hand. Warm copper and forest-green accents, friendly reserved half-smile. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_wendat_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-5d89f836-c06f-4e41-bf17-9b7a9e220fc0.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_wendat.png",
+      "face_file": "images/portraits/mates/folk_folk_wendat_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_wendat_m_half.webp"
+    },
+    {
+      "id": "folk_stlawrence",
+      "name": "세인트로렌스",
+      "region": "북미",
+      "reference_numbers": [
+        1,
+        5
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-19a1a4c8-6610-415b-9c3f-6ae53ac0a235.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1ace3a11-d390-45b9-a463-06332e0258cf.png"
+      ],
+      "design": "St Lawrence river-community-inspired canoe navigator, adult man age 28, long oval face with defined cheekbones, deep dark eyes, thick straight black hair tied behind head with two loose locks, clean-shaven. Long lean muscular body. Bare chest, abdomen and arms with a narrow soft grey hide sash over one shoulder and dark blue opaque knee-length wrap over hide breeches. White shell and dark wood bead necklace, red woven waist cord, one hand resting on a compact wooden canoe paddle held vertically at his side inside canvas. Attentive expression, river-trade character.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: St Lawrence river-community-inspired canoe navigator, adult man age 28, long oval face with defined cheekbones, deep dark eyes, thick straight black hair tied behind head with two loose locks, clean-shaven. Long lean muscular body. Bare chest, abdomen and arms with a narrow soft grey hide sash over one shoulder and dark blue opaque knee-length wrap over hide breeches. White shell and dark wood bead necklace, red woven waist cord, one hand resting on a compact wooden canoe paddle held vertically at his side inside canvas. Attentive expression, river-trade character. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_stlawrence_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-769ac966-0347-4931-8098-dc64f0d7ada2.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_stlawrence.png",
+      "face_file": "images/portraits/mates/folk_folk_stlawrence_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_stlawrence_m_half.webp"
+    },
+    {
+      "id": "folk_powhatan",
+      "name": "포와탄",
+      "region": "북미",
+      "reference_numbers": [
+        10,
+        12
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b341934c-2559-4d50-94cc-1005a5bdb49f.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-707ff5b7-f5d3-4b0a-8a90-1fb9e69bf15f.png"
+      ],
+      "design": "Powhatan-inspired tracker and interpreter, adult man age 30, strong oval face, pronounced cheekbones, broad brows, deep brown eyes, long black hair falling to shoulders with a small side braid. Athletic muscular torso. Bare chest, shoulders and abdomen, short open rust-brown woven shoulder cloth behind one arm, opaque tan knee-length hide wrap, red geometric belt with a small pouch. Three modest shell necklaces, subtle shell earrings and a slim wooden walking staff at his side. No large ceremonial crown, natural calm gaze.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Powhatan-inspired tracker and interpreter, adult man age 30, strong oval face, pronounced cheekbones, broad brows, deep brown eyes, long black hair falling to shoulders with a small side braid. Athletic muscular torso. Bare chest, shoulders and abdomen, short open rust-brown woven shoulder cloth behind one arm, opaque tan knee-length hide wrap, red geometric belt with a small pouch. Three modest shell necklaces, subtle shell earrings and a slim wooden walking staff at his side. No large ceremonial crown, natural calm gaze. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_powhatan_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-75a64a13-08a7-4454-bb89-a775d8aec853.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_powhatan.png",
+      "face_file": "images/portraits/mates/folk_folk_powhatan_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_powhatan_m_half.webp"
+    },
+    {
+      "id": "folk_wampanoag",
+      "name": "왐파노아그",
+      "region": "북미",
+      "reference_numbers": [
+        2,
+        13
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fe2bb648-978b-488a-8f17-481db2fb0d31.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fbf29a17-2999-4755-a011-7eb80d6d306f.png"
+      ],
+      "design": "Wampanoag-inspired coastal navigator, adult man age 29, slightly rounded square face, dark almond eyes, firm lips, long black hair in one thick low braid, clean-shaven. Lean swimmer physique. Bare chest and abdomen, a narrow charcoal hide mantle hanging behind one shoulder, sea-brown opaque knee-length wrap over fitted hide shorts, purple and ivory shell-bead belt and short shell-bead necklace. Holds a small coil of natural fiber fishing line at hip. Muted indigo trim, friendly attentive gaze. Use reference 13 only for facial profile and braid, remove the modern brimmed hat and denim scarf.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Wampanoag-inspired coastal navigator, adult man age 29, slightly rounded square face, dark almond eyes, firm lips, long black hair in one thick low braid, clean-shaven. Lean swimmer physique. Bare chest and abdomen, a narrow charcoal hide mantle hanging behind one shoulder, sea-brown opaque knee-length wrap over fitted hide shorts, purple and ivory shell-bead belt and short shell-bead necklace. Holds a small coil of natural fiber fishing line at hip. Muted indigo trim, friendly attentive gaze. Use reference 13 only for facial profile and braid, remove the modern brimmed hat and denim scarf. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_wampanoag_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-6152244b-7fd1-47e9-b9e9-27919f1fb14d.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_wampanoag.png",
+      "face_file": "images/portraits/mates/folk_folk_wampanoag_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_wampanoag_m_half.webp"
+    },
+    {
+      "id": "folk_muscogee",
+      "name": "머스코기",
+      "region": "북미",
+      "reference_numbers": [
+        6,
+        8
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-64047235-fbbd-4149-accd-00c759f392b7.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a018f7c2-d09e-4aac-a96c-d71264f8defa.png"
+      ],
+      "design": "Muscogee-inspired trader and warrior, adult man age 33, broad angular face, heavy dark brows, strong full lips, dark brown eyes, black hair in high tied tail, faint moustache. Broad muscular chest and shoulders. Bare torso and arms, vivid rust and cream narrow woven sash crossing ONE shoulder without covering chest, fully opaque navy knee-length short wrap and ochre belt. Simple copper gorget, dark bead bracelets, small trade pouch and rolled woven mat held under arm. Quiet authority but not a ruler, no crown or royal regalia.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Muscogee-inspired trader and warrior, adult man age 33, broad angular face, heavy dark brows, strong full lips, dark brown eyes, black hair in high tied tail, faint moustache. Broad muscular chest and shoulders. Bare torso and arms, vivid rust and cream narrow woven sash crossing ONE shoulder without covering chest, fully opaque navy knee-length short wrap and ochre belt. Simple copper gorget, dark bead bracelets, small trade pouch and rolled woven mat held under arm. Quiet authority but not a ruler, no crown or royal regalia. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_muscogee_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-787c7a1c-b9e2-4f00-954c-b667b6d6890d.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_muscogee.png",
+      "face_file": "images/portraits/mates/folk_folk_muscogee_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_muscogee_m_half.webp"
+    },
+    {
+      "id": "folk_natchez",
+      "name": "나체즈",
+      "region": "북미",
+      "reference_numbers": [
+        9,
+        14
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f1cbe1b1-6e2c-497a-9275-00c4bb6dc011.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-30c6a13a-0dd9-4e13-9daf-d3eef560a7eb.png"
+      ],
+      "design": "Natchez-inspired community ritual musician, adult man age 31, sculpted oval face, high cheekbones, medium straight nose, dark brown eyes rather than pale reference eyes, long loosely wavy black hair, neat small moustache and short chin beard. Lean defined torso. Bare chest, abdomen, arms and shoulders, small cream feather-and-shell shoulder ornament falling behind back, deep red opaque knee-length wrap over shorts with simple geometric border, copper sun-shaped pendant and restrained bead belt. Holds a compact wooden rattle down at side. No chief crown, no monumental headdress, composed thoughtful expression.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Natchez-inspired community ritual musician, adult man age 31, sculpted oval face, high cheekbones, medium straight nose, dark brown eyes rather than pale reference eyes, long loosely wavy black hair, neat small moustache and short chin beard. Lean defined torso. Bare chest, abdomen, arms and shoulders, small cream feather-and-shell shoulder ornament falling behind back, deep red opaque knee-length wrap over shorts with simple geometric border, copper sun-shaped pendant and restrained bead belt. Holds a compact wooden rattle down at side. No chief crown, no monumental headdress, composed thoughtful expression. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_natchez_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-491e9ecf-c437-4d65-9ada-ce3cf75e398e.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_natchez.png",
+      "face_file": "images/portraits/mates/folk_folk_natchez_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_natchez_m_half.webp"
+    },
+    {
+      "id": "folk_calusa",
+      "name": "칼루사",
+      "region": "북미",
+      "reference_numbers": [
+        4,
+        10
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f2d9b29a-85ae-40c2-9a18-0c87f9a695a1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b341934c-2559-4d50-94cc-1005a5bdb49f.png"
+      ],
+      "design": "Calusa-inspired fisher and sailor, adult man age 27, broad cheekbones, expressive dark brown eyes, strong jaw and clean-shaven face, shoulder-length wind-tousled black hair. Athletic swimmer body with broad back and slim waist. Entire bare chest and shoulders and abdomen. Ocean-green opaque knee-length woven wrap secured by fiber belt, a narrow cream fishing-net shawl only over one shoulder and falling behind his back, shell pendant and shell armbands, small fishing net folded in his hand. Confident slight smile. No metal breastplate or pan-tribal feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Calusa-inspired fisher and sailor, adult man age 27, broad cheekbones, expressive dark brown eyes, strong jaw and clean-shaven face, shoulder-length wind-tousled black hair. Athletic swimmer body with broad back and slim waist. Entire bare chest and shoulders and abdomen. Ocean-green opaque knee-length woven wrap secured by fiber belt, a narrow cream fishing-net shawl only over one shoulder and falling behind his back, shell pendant and shell armbands, small fishing net folded in his hand. Confident slight smile. No metal breastplate or pan-tribal feather crown. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_calusa_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-687e6493-e600-473f-bbe9-dc4f9f939eaa.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_calusa.png",
+      "face_file": "images/portraits/mates/folk_folk_calusa_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_calusa_m_half.webp"
+    },
+    {
+      "id": "folk_taos",
+      "name": "타오스",
+      "region": "북미",
+      "reference_numbers": [
+        3,
+        13
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2ab14ab9-3464-456a-a7c5-5b1074351063.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fbf29a17-2999-4755-a011-7eb80d6d306f.png"
+      ],
+      "design": "Taos Pueblo-inspired builder and community helper, adult man age 30, clear angular face, straight nose, strong brows and dark eyes, long smooth black hair tied low with one narrow braid, clean-shaven. Athletic solid arms. Bare chest and abdomen under a short OPEN ivory woven sleeveless vest, dark earthy opaque knee-length cotton wrap with red narrow borders, woven blue belt, small turquoise pendant and simple shell earrings. Holds a small carved wooden measuring stick at his side. Ivory, sky blue, terracotta, calm intelligent expression. No modern brimmed hat.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Taos Pueblo-inspired builder and community helper, adult man age 30, clear angular face, straight nose, strong brows and dark eyes, long smooth black hair tied low with one narrow braid, clean-shaven. Athletic solid arms. Bare chest and abdomen under a short OPEN ivory woven sleeveless vest, dark earthy opaque knee-length cotton wrap with red narrow borders, woven blue belt, small turquoise pendant and simple shell earrings. Holds a small carved wooden measuring stick at his side. Ivory, sky blue, terracotta, calm intelligent expression. No modern brimmed hat. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_taos_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-3761ea57-4d1f-40ea-846f-4dd34f963fe4.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_taos.png",
+      "face_file": "images/portraits/mates/folk_folk_taos_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_taos_m_half.webp"
+    },
+    {
+      "id": "folk_acoma",
+      "name": "아코마",
+      "region": "북미",
+      "reference_numbers": [
+        11,
+        12
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-75f34d5b-3e96-4d93-ad58-d4e73ff11330.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-707ff5b7-f5d3-4b0a-8a90-1fb9e69bf15f.png"
+      ],
+      "design": "Acoma Pueblo-inspired potter and cook, adult man age 28, long softly angular face, gentle dark eyes, full eyebrows and lips, black hair loosely tied at the back with shoulder-length wisps, clean-shaven. Lean graceful muscular build. Bare chest and abdomen and shoulders, a narrow striped terracotta and ivory woven shoulder drape behind one arm, opaque dark brown knee-length cotton wrap with a secure belt, small turquoise and shell necklace. Carries one small simple clay bowl held naturally near hip. Warm gentle smile, distinctive artisan appearance, no warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Acoma Pueblo-inspired potter and cook, adult man age 28, long softly angular face, gentle dark eyes, full eyebrows and lips, black hair loosely tied at the back with shoulder-length wisps, clean-shaven. Lean graceful muscular build. Bare chest and abdomen and shoulders, a narrow striped terracotta and ivory woven shoulder drape behind one arm, opaque dark brown knee-length cotton wrap with a secure belt, small turquoise and shell necklace. Carries one small simple clay bowl held naturally near hip. Warm gentle smile, distinctive artisan appearance, no warbonnet. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_acoma_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-fa5d8574-8a9a-4c70-a3bd-af8eca5e9101.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_acoma.png",
+      "face_file": "images/portraits/mates/folk_folk_acoma_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_acoma_m_half.webp"
+    },
+    {
+      "id": "folk_mandan",
+      "name": "만단",
+      "region": "북미",
+      "reference_numbers": [
+        7,
+        9
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0580c0a6-2eee-46dc-ba21-423b0156a494.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f1cbe1b1-6e2c-497a-9275-00c4bb6dc011.png"
+      ],
+      "design": "Mandan-inspired trader and cook, adult man age 34, broad mature handsome face, strong cheekbones, dark brown eyes, long black hair in two slim braids with loose lengths and slight moustache. Powerful stocky athletic body, broad shoulders. Bare chest, abdomen and arms, small cream and blue bead necklace, tan fringed hide vest completely open at sides, opaque dark red knee-length hide breeches with a blue woven belt. Holds a compact folded hide trading bundle in one hand. Warm confident expression, restrained ornaments, no large ceremonial feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Mandan-inspired trader and cook, adult man age 34, broad mature handsome face, strong cheekbones, dark brown eyes, long black hair in two slim braids with loose lengths and slight moustache. Powerful stocky athletic body, broad shoulders. Bare chest, abdomen and arms, small cream and blue bead necklace, tan fringed hide vest completely open at sides, opaque dark red knee-length hide breeches with a blue woven belt. Holds a compact folded hide trading bundle in one hand. Warm confident expression, restrained ornaments, no large ceremonial feather crown. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_mandan_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-7518350a-0ca2-43c3-bf48-c144e3e0a406.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_mandan.png",
+      "face_file": "images/portraits/mates/folk_folk_mandan_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_mandan_m_half.webp"
+    },
+    {
+      "id": "folk_chumash",
+      "name": "추마시",
+      "region": "북미",
+      "reference_numbers": [
+        5,
+        10
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1ace3a11-d390-45b9-a463-06332e0258cf.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b341934c-2559-4d50-94cc-1005a5bdb49f.png"
+      ],
+      "design": "Chumash-inspired boatbuilder and navigator, adult man age 29, sculpted oval face, pronounced brows, dark brown almond eyes and firm full lips, long straight black hair loose with woven sea-green hair cord. Lean muscular physique. Bare chest and abdomen and arms, small shell-bead necklaces, dark green opaque knee-length plant-fiber woven wrap with ivory geometric edge, soft rust-red narrow mantle draped low behind shoulder and belt with wood tool pouch. Holds a compact smooth wooden boatbuilding tool at his side. Calm curious expression, coastal artisan.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Chumash-inspired boatbuilder and navigator, adult man age 29, sculpted oval face, pronounced brows, dark brown almond eyes and firm full lips, long straight black hair loose with woven sea-green hair cord. Lean muscular physique. Bare chest and abdomen and arms, small shell-bead necklaces, dark green opaque knee-length plant-fiber woven wrap with ivory geometric edge, soft rust-red narrow mantle draped low behind shoulder and belt with wood tool pouch. Holds a compact smooth wooden boatbuilding tool at his side. Calm curious expression, coastal artisan. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_chumash_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-0a7776c7-27e9-4f79-bb33-2b6c9a7a1cd0.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_chumash.png",
+      "face_file": "images/portraits/mates/folk_folk_chumash_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_chumash_m_half.webp"
+    },
+    {
+      "id": "folk_makah",
+      "name": "마카",
+      "region": "북미",
+      "reference_numbers": [
+        1,
+        8
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-19a1a4c8-6610-415b-9c3f-6ae53ac0a235.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a018f7c2-d09e-4aac-a96c-d71264f8defa.png"
+      ],
+      "design": "Makah-inspired coastal sailor, adult man age 32, broad oval face with high cheekbones, straight nose, dark focused eyes, black hair tied high with loose shoulder lengths, clean-shaven. Strong athletic torso and arms. Bare chest and abdomen, short cedar-bark-inspired woven cape draped behind one shoulder with open front, charcoal opaque knee-length hide breeches and thick fiber sash. Carved wood pendant, a few shell beads and narrow wrist wrap. Holds a short wooden paddle at hip. Teal and reddish cedar accents, no tall woven hat blocking face, no feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Makah-inspired coastal sailor, adult man age 32, broad oval face with high cheekbones, straight nose, dark focused eyes, black hair tied high with loose shoulder lengths, clean-shaven. Strong athletic torso and arms. Bare chest and abdomen, short cedar-bark-inspired woven cape draped behind one shoulder with open front, charcoal opaque knee-length hide breeches and thick fiber sash. Carved wood pendant, a few shell beads and narrow wrist wrap. Holds a short wooden paddle at hip. Teal and reddish cedar accents, no tall woven hat blocking face, no feather crown. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_makah_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-ca962472-a0f7-4f61-8794-09078e36568d.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_makah.png",
+      "face_file": "images/portraits/mates/folk_folk_makah_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_makah_m_half.webp"
+    },
+    {
+      "id": "aztec",
+      "name": "아즈텍",
+      "region": "중미",
+      "reference_numbers": [
+        2,
+        6,
+        12
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fe2bb648-978b-488a-8f17-481db2fb0d31.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-64047235-fbbd-4149-accd-00c759f392b7.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-707ff5b7-f5d3-4b0a-8a90-1fb9e69bf15f.png"
+      ],
+      "design": "Mexica/Aztec-inspired warrior and community learner, adult man age 28, strong angular face, pronounced cheekbones, deep brown eyes, straight black hair tied high with long braid and no modern fade, clean-shaven. Powerful athletic physique. Bare muscular chest, abdomen and arms, narrow turquoise-and-gold bead necklace and simple gold ear ornaments, fully opaque cream knee-length wrap and short trousers with crimson geometric borders, broad woven crimson belt, small folded blue shoulder cloth resting behind one shoulder. Holds a compact rolled painted manuscript at his side. No emperor crown, no massive feather headdress, no skulls or gore, capable recruit rather than ruler.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Mexica/Aztec-inspired warrior and community learner, adult man age 28, strong angular face, pronounced cheekbones, deep brown eyes, straight black hair tied high with long braid and no modern fade, clean-shaven. Powerful athletic physique. Bare muscular chest, abdomen and arms, narrow turquoise-and-gold bead necklace and simple gold ear ornaments, fully opaque cream knee-length wrap and short trousers with crimson geometric borders, broad woven crimson belt, small folded blue shoulder cloth resting behind one shoulder. Holds a compact rolled painted manuscript at his side. No emperor crown, no massive feather headdress, no skulls or gore, capable recruit rather than ruler. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_aztec_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-aafbcbac-1065-4f2f-b439-9506c94dc399.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/aztec.png",
+      "face_file": "images/portraits/mates/folk_aztec_m.webp",
+      "half_file": "images/portraits/mates/folk_aztec_m_half.webp"
+    },
+    {
+      "id": "inca",
+      "name": "잉카",
+      "region": "남미",
+      "reference_numbers": [
+        4,
+        14
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f2d9b29a-85ae-40c2-9a18-0c87f9a695a1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-30c6a13a-0dd9-4e13-9daf-d3eef560a7eb.png"
+      ],
+      "design": "Andean Inca-inspired surveyor and scholar, adult man age 30, broad angular cheeks, straight nose, dark intelligent eyes, strong jaw with fine moustache, straight black hair reaching shoulders and tied with a narrow multicolor woven band. Compact muscular build. Bare shoulders and arms, chest and abdomen visible with a narrow SHORT ochre and red woven shoulder mantle hanging behind back and open front. Opaque midnight-blue knee-length woven wrap with fine stepped geometric border, simple bronze disc pendant, small gold earrings and woven belt. Holds a small knotted-cord quipu at hip. No royal sun crown or ruler insignia.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Andean Inca-inspired surveyor and scholar, adult man age 30, broad angular cheeks, straight nose, dark intelligent eyes, strong jaw with fine moustache, straight black hair reaching shoulders and tied with a narrow multicolor woven band. Compact muscular build. Bare shoulders and arms, chest and abdomen visible with a narrow SHORT ochre and red woven shoulder mantle hanging behind back and open front. Opaque midnight-blue knee-length woven wrap with fine stepped geometric border, simple bronze disc pendant, small gold earrings and woven belt. Holds a small knotted-cord quipu at hip. No royal sun crown or ruler insignia. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_inca_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-7c2fe1ac-5d34-4948-8cd4-2e4a3695a566.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/inca.png",
+      "face_file": "images/portraits/mates/folk_inca_m.webp",
+      "half_file": "images/portraits/mates/folk_inca_m_half.webp"
+    },
+    {
+      "id": "blemmyes",
+      "name": "와라오",
+      "region": "남미",
+      "reference_numbers": [
+        8,
+        10
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a018f7c2-d09e-4aac-a96c-d71264f8defa.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-b341934c-2559-4d50-94cc-1005a5bdb49f.png"
+      ],
+      "design": "Warao-inspired delta navigator and healer, adult man age 27, long softly angular face, warm dark brown eyes, prominent brows, straight full nose and expressive lips, long flowing black hair with subtle waviness, clean-shaven. Lean agile swimmer build. Fully bare chest, shoulders and abdomen. Opaque ochre and dark red knee-length plant-fiber wrap tied with braided cord, minimal pale shell-bead necklace, small red bead bracelet and woven herb pouch. Holds a slim canoe paddle at his side. Warm welcoming expression and simple practical materials, no feather crown or royal metalwork.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Warao-inspired delta navigator and healer, adult man age 27, long softly angular face, warm dark brown eyes, prominent brows, straight full nose and expressive lips, long flowing black hair with subtle waviness, clean-shaven. Lean agile swimmer build. Fully bare chest, shoulders and abdomen. Opaque ochre and dark red knee-length plant-fiber wrap tied with braided cord, minimal pale shell-bead necklace, small red bead bracelet and woven herb pouch. Holds a slim canoe paddle at his side. Warm welcoming expression and simple practical materials, no feather crown or royal metalwork. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_blemmyes_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-4376b551-0977-4fd8-948e-6cee69838243.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/blemmyes.png",
+      "face_file": "images/portraits/mates/folk_blemmyes_m.webp",
+      "half_file": "images/portraits/mates/folk_blemmyes_m_half.webp"
+    },
+    {
+      "id": "patagon",
+      "name": "테우엘체",
+      "region": "남미",
+      "reference_numbers": [
+        7,
+        12,
+        14
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0580c0a6-2eee-46dc-ba21-423b0156a494.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-707ff5b7-f5d3-4b0a-8a90-1fb9e69bf15f.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-30c6a13a-0dd9-4e13-9daf-d3eef560a7eb.png"
+      ],
+      "design": "Tehuelche Patagonian-inspired tracker, adult man age 35, tall broad powerful build, long weathered handsome face, high cheekbones, dark eyes and subtle moustache, long windswept black hair with one loose braid. Bare chest, abdomen and arms, a soft tawny fur cloak draped back from BOTH shoulders with open front and arms clear, dark umber opaque knee-length hide trousers, broad red geometric woven belt, simple carved pendant. Holds a loose coiled leather cord at hip, no weapons in action. Mature steady gaze, earth brown and charcoal palette, no plains feather bonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Tehuelche Patagonian-inspired tracker, adult man age 35, tall broad powerful build, long weathered handsome face, high cheekbones, dark eyes and subtle moustache, long windswept black hair with one loose braid. Bare chest, abdomen and arms, a soft tawny fur cloak draped back from BOTH shoulders with open front and arms clear, dark umber opaque knee-length hide trousers, broad red geometric woven belt, simple carved pendant. Holds a loose coiled leather cord at hip, no weapons in action. Mature steady gaze, earth brown and charcoal palette, no plains feather bonnet. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_patagon_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-9b94b048-a386-4f38-9d02-0e0cb8d06f8e.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/patagon.png",
+      "face_file": "images/portraits/mates/folk_patagon_m.webp",
+      "half_file": "images/portraits/mates/folk_patagon_m_half.webp"
+    },
+    {
+      "id": "folk_selknam",
+      "name": "셀크남",
+      "region": "남미",
+      "reference_numbers": [
+        1,
+        5,
+        9
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-19a1a4c8-6610-415b-9c3f-6ae53ac0a235.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1ace3a11-d390-45b9-a463-06332e0258cf.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f1cbe1b1-6e2c-497a-9275-00c4bb6dc011.png"
+      ],
+      "design": "Selk'nam-inspired southern tracker and navigator, adult man age 31, elongated face, strong cheekbones, broad brows, dark brown eyes, long straight black hair tied loosely behind head with loose strands, clean-shaven. Tall lean sinewy athletic body. Bare chest and shoulders and abdomen with a dark guanaco-hide-inspired cloak hanging from one shoulder behind back, fully opaque warm charcoal knee-length hide breeches and braided hide belt. Minimal natural bead pendant, restrained simple pale ochre stripes on upper arms only, no copied sacred ceremonial body-paint designs or masks. Holds a plain wooden walking staff at side. Calm thoughtful expression.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-length male companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional Indigenous American ADULT MAN age 27–35 as specified. Attached photos are reference images for facial impressions, hair, adult physique and expression only; do not infer or claim ethnicity of any photographed person and do not copy an exact real-person identity. DESIGN: Selk'nam-inspired southern tracker and navigator, adult man age 31, elongated face, strong cheekbones, broad brows, dark brown eyes, long straight black hair tied loosely behind head with loose strands, clean-shaven. Tall lean sinewy athletic body. Bare chest and shoulders and abdomen with a dark guanaco-hide-inspired cloak hanging from one shoulder behind back, fully opaque warm charcoal knee-length hide breeches and braided hide belt. Minimal natural bead pendant, restrained simple pale ochre stripes on upper arms only, no copied sacred ceremonial body-paint designs or masks. Holds a plain wooden walking staff at side. Calm thoughtful expression. STYLE: refined semi-realistic hand-painted digital oil game illustration with clearly painted natural skin, handsome expressive face, nuanced eyes and lips, detailed hide, fibers and woven textiles, coherent soft warm directional lighting with neutral fill. This is an independent capable recruit, not a king or chief. Every character has dark brown eyes and a distinct face, hair, build and clothing. Relaxed dignified upright standing pose, face mostly front or gentle three-quarter toward viewer, ordinary nonsexual bearing. BOLD CLOTHING: visibly uncovered masculine chest, abdomen, shoulders and arms as specified, open drapes and sleeveless layers, opaque fabric or hide securely covering entire pelvis and buttocks. COMPOSITION: vertical 2:3, ideally 1024x1536. Complete head and hair with clear top margin, both arms and all hands inside canvas. Crop immediately BELOW BOTH KNEES, both knees visible near lower edge. NO feet, shoes, full-length legs, separate face inset, second person, or horse. BACKGROUND: truly transparent alpha silhouette; absolutely NO dark or colored backdrop, gradient, halo, glow, scenery, floor or cast-shadow plane. No labels, text, borders, logos, watermarks, modern shirts, jeans, watches, zippers, modern hat, erotic pose, or nudity. Garments are creative region-inspired game adaptations rather than documentary historical reconstructions.",
+      "key": "portraits/mates/folk_folk_selknam_m",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-82dcd9d2-2274-42b5-9a4e-8fd14b0af200.png",
+      "workspace_source": "artifacts/folk-american-men-20261106/sources/folk_selknam.png",
+      "face_file": "images/portraits/mates/folk_folk_selknam_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_selknam_m_half.webp"
+    }
+  ]
+}

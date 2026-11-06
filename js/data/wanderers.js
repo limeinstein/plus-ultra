@@ -255,4 +255,14 @@
     if (G.MATE_RANGE) G.MATE_RANGE[w.id] = { zones: w.zones, home: w.home };
     if (G.BIOS) G.BIOS[w.name] = w.bio;
   });
+  // 첨부 사진의 특징을 바탕으로 그린 인도계 일반 남성 후보 전용 초상 한 쌍.
+  G.WANDER_PORTRAITS = G.WANDER_PORTRAITS || {};
+  G.WANDER_PORTRAITS.in = G.WANDER_PORTRAITS.in || {};
+  G.WANDER_PORTRAITS.in.m = ['01', '02', '03', '04', '05', '06', '07', '08'].map(function (id) {
+    return 'portraits/mates/indian-men/' + id;
+  });
+  // 첨부 참고 인도 여성 후보 8종. 같은 무릎상에서 자른 얼굴을 한 쌍으로 쓴다.
+  G.WANDER_PORTRAITS.in.f = ['01', '02', '03', '04', '05', '06', '07', '08'].map(function (id) {
+    return 'portraits/folk-indian-women/' + id;
+  });
 })(window.G = window.G || {});

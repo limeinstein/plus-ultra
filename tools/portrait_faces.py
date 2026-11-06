@@ -57,7 +57,7 @@ def main():
     R = lambda v: round(float(v), 4)
     out, miss = {}, []
     files = []
-    for d in DIRS:
+    for d in DIRS + ['portraits/folk-african-men', 'portraits/folk-join', 'portraits/folk-indian-women']:
         for ext in ('webp', 'png', 'jpg'):
             files += glob.glob(os.path.join(IMG, d, '**', '*.' + ext), recursive=True)
     if prefix:

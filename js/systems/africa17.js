@@ -227,19 +227,19 @@
         await play([[null, (sv.lv >= 2 ? sv.who + (sv.who === '제독' ? '이' : U.jx(sv.who, '이/가')) + ' 바람의 방향과 보초의 걸음을 재어 둔 덕에' : '운 좋게도') + ' 보초는 끝까지 눈치채지 못했다.']]);
       } else {
         await play([[null, '「도둑이다!」 보초가 소리치고 요새에서 병사들이 횃불을 들고 쏟아져 나왔다.']]);
-        var r = await fight('VOC 보급기지의 병사들', k.soldiers, { guns: true, leader: '하사관', noSpecial: true });
+        var r = await fight('네덜란드 동인도 회사 보급기지의 병사들', k.soldiers, { guns: true, leader: '하사관', noSpecial: true });
         b.cape = 'nightFight';
         if (r !== 'win') {
           later('cape', 'caught');
           await play([[null, '병사들에게 밀려났다. 소 떼는 다시 울타리 안으로 몰려 들어갔고, 여인은 어둠 속으로 사라졌다.']]);
-          log('케이프에서 코이코이 여인의 소를 밤에 돌려보내려다 VOC 병사들에게 밀려났다.');
+          log('케이프에서 코이코이 여인의 소를 밤에 돌려보내려다 네덜란드 동인도 회사 병사들에게 밀려났다.');
           refresh(); return true;
         }
       }
     } else {
       later('cape', 'leave');
       await play([['koa', '(제독을 한 번 쳐다보고는) 당신도 구리 막대로 소를 「사는」 사람이군요.']]);
-      log('케이프 보급기지에서 코이코이 사람들과 VOC의 소 다툼을 모른 척했다.');
+      log('케이프 보급기지에서 코이코이 사람들과 네덜란드 동인도 회사의 소 다툼을 모른 척했다.');
       refresh(); return true;
     }
     await withPic('af_cape_night', '뭍에 닿지 못하는 배', function () { return play([

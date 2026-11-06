@@ -47,6 +47,8 @@
   /** 이 그림 파일이 있나. 끝내 못 받은 그림은 얼마 동안(failHold) 없는 것으로 치고(코드 그림·다음 후보), 그 뒤에는 다시 받아 본다 */
   I.has = function (k) {
     if (!k || !man()[k]) return false;
+    // 목·어깨 합성이 확인된 옛 무릎상은 얼굴상으로 대체한다. 원본 파일은 보존한다.
+    if (G.PORTRAIT_REJECTED_HALVES && G.PORTRAIT_REJECTED_HALVES[k]) return false;
     if (state[k] !== 'fail') return true;
     if (now() - failAt[k] < CF('failHold')) return false;
     delete state[k]; delete failAt[k]; delete askedAt[k];
@@ -454,7 +456,13 @@
   /** 일반 소지품: 그 물건 그림, 없으면 종류 공통 그림 */
   K.item = function (it) {
     var lf = it.legend && G.FIGUREHEAD && G.FIGUREHEAD[it.id];   // 전설의 선수상: 그 괴물의 그림 (js/data/figlegend.js)
-    return ['items/' + it.id].concat(lf && lf.src ? ['discovery-ends/' + lf.src, 'discoveries/' + lf.src, 'sea-monsters/' + lf.src] : []).concat(['item-kinds/' + it.kind, 'relic-kinds/' + it.kind]);
+    var r = G.RELIC && G.RELIC[it.id], f = G.FIGUREHEAD && G.FIGUREHEAD[it.id];
+    // 소지품으로도 등록된 유물·선수상은 이미 있는 같은 물건의 원화를 쓴다.
+    return ['items/' + it.id].concat(r ? ['relics/' + it.id] : [])
+      .concat(f ? ['figureheads/' + it.id] : [])
+      .concat(r && r.relic ? ['discovery-ends/' + r.relic, 'discoveries/' + r.relic] : [])
+      .concat(lf && lf.src ? ['discovery-ends/' + lf.src, 'discoveries/' + lf.src, 'sea-monsters/' + lf.src] : [])
+      .concat(['item-kinds/' + it.kind, 'relic-kinds/' + it.kind]);
   };
   /** 발견 유물: 전용 유물 그림, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */
   K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'discovery-ends/' + r.relic, 'discoveries/' + r.relic, 'relic-kinds/' + r.kind]; };

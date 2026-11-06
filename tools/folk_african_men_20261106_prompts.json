@@ -1,0 +1,217 @@
+{
+  "mode": "built-in image_gen",
+  "date": "2026-11-06",
+  "scope": "아프리카계 민족 12종의 남성 후보, 민족마다 1쌍. 여성·아마지그·투아레그의 기존 선택은 유지.",
+  "portraits": [
+    {
+      "id": "khoikhoi",
+      "name": "코이코이",
+      "reference_numbers": [
+        7,
+        8
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-6ab9920c-106d-4418-8896-153019436f11.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d98e722f-eedf-470c-b719-33236a2fe031.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 코이코이 community inspired adventurer. Solid athletic build, close shaved hair, defined oval jaw, warm copper-brown skin and calm confident eyes. Bare chest and arms, supple ochre leather hip wrap layered over fully covering short woven trousers, narrow bead necklaces, leather armbands, small rolled hide map at belt. A folded soft hide cloak over one shoulder leaving torso visible. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-01d8c382-3c18-43de-9a5a-545998a97a04.png",
+      "key": "portraits/folk-african-men/khoikhoi",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/khoikhoi.png",
+      "face_file": "images/portraits/folk-african-men/khoikhoi.webp",
+      "half_file": "images/portraits/folk-african-men/khoikhoi_half.webp"
+    },
+    {
+      "id": "folk_zulu",
+      "name": "줄루",
+      "reference_numbers": [
+        2,
+        4
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-561f8c02-f17e-49b2-b1ad-402bf5b486a4.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-cc67f673-8f3f-4f24-9f85-72e61426b29a.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 줄루 community inspired adventurer. Very muscular broad-shouldered man, deep brown skin, short curls and full neat beard, friendly powerful bearing. Uncovered torso and arms, layered brown hide waist panels over fully covering woven shorts, restrained white bead ornaments, warm rust cloth tied at waist. Holds an oval hide shield by his side, no crown. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-8542ed10-e468-495a-8894-f680c99dd250.png",
+      "key": "portraits/folk-african-men/folk_zulu",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_zulu.png",
+      "face_file": "images/portraits/folk-african-men/folk_zulu.webp",
+      "half_file": "images/portraits/folk-african-men/folk_zulu_half.webp"
+    },
+    {
+      "id": "folk_maasai",
+      "name": "마사이",
+      "reference_numbers": [
+        13
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3e520814-669f-49d3-8006-583f138f50ad.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 마사이 community inspired adventurer. Tall long-limbed muscular man, very dark rich skin, shaved head, sharp cheekbones and steady dignified gaze. Red and muted indigo woven drape tied at one shoulder and low waist exposing most chest, abdomen and both arms, layered small bead neck ornaments, narrow brass cuffs. Wood walking spear upright beside his body. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-b39d1108-c636-495a-8ff9-0f9d91292f2a.png",
+      "key": "portraits/folk-african-men/folk_maasai",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_maasai.png",
+      "face_file": "images/portraits/folk-african-men/folk_maasai.webp",
+      "half_file": "images/portraits/folk-african-men/folk_maasai_half.webp"
+    },
+    {
+      "id": "folk_xhosa",
+      "name": "코사",
+      "reference_numbers": [
+        1,
+        16
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fbd654d0-b183-4a12-8686-c4124e3758d5.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-00d1c4d3-8423-4f7b-973f-c2efc385d4d2.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 코사 community inspired adventurer. Powerful athletic man, medium-deep brown skin, short natural upright curls, full black beard, broad handsome face and warm open smile. Ivory woven shawl with dark geometric trim draped loosely from one shoulder behind back, bare muscular chest and arms, deep indigo waist wrap over short trousers, fine small white bead necklace and simple wrist bands. One hand relaxed on hip. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-f94b4bd6-88b7-4450-8d9a-1d6393453d54.png",
+      "key": "portraits/folk-african-men/folk_xhosa",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_xhosa.png",
+      "face_file": "images/portraits/folk-african-men/folk_xhosa.webp",
+      "half_file": "images/portraits/folk-african-men/folk_xhosa_half.webp"
+    },
+    {
+      "id": "folk_san",
+      "name": "산",
+      "reference_numbers": [
+        10,
+        11
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d3b9c112-1cd2-492f-ad58-965cd0037870.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3a487192-2bc4-46a2-a5c9-5658a6c85702.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 산 community inspired adventurer. Lean compact adult athletic man, warm golden-brown skin, short tight curls, sculpted cheekbones, expressive amber-brown eyes, subtle stubble, composed half smile. Bare torso and arms, soft tan hide diagonal utility strap, ochre leather waist garment over fully covering short trousers, small leather pouch, restrained natural shell beads. Holds a small bow lowered at side. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-c531b78f-c730-412a-906b-e22faa00887f.png",
+      "key": "portraits/folk-african-men/folk_san",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_san.png",
+      "face_file": "images/portraits/folk-african-men/folk_san.webp",
+      "half_file": "images/portraits/folk-african-men/folk_san_half.webp"
+    },
+    {
+      "id": "folk_yoruba",
+      "name": "요루바",
+      "reference_numbers": [
+        5
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-59e077c7-6e15-4e59-accc-83db7de20523.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 요루바 community inspired adventurer. Very muscular adult man, warm dark brown skin, short textured twists, short mustache and chin beard, alert oval face. Open indigo sleeveless handwoven vest exposing chest and abdomen, saturated muted blue waist cloth over fully covering trousers, modest coral-colored bead necklace and brass wristlet. Carries a compact hand drum on a hip strap. Remove modern tattoos. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-ab773f1b-59bc-4264-91d9-584acb677f7b.png",
+      "key": "portraits/folk-african-men/folk_yoruba",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_yoruba.png",
+      "face_file": "images/portraits/folk-african-men/folk_yoruba.webp",
+      "half_file": "images/portraits/folk-african-men/folk_yoruba_half.webp"
+    },
+    {
+      "id": "folk_hausa",
+      "name": "하우사",
+      "reference_numbers": [
+        3
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5f7f61c2-e75b-41e9-b096-02695cd7ddb9.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 하우사 community inspired adventurer. Broad heavily muscled adult man, warm medium-deep brown skin, close cropped hair and substantial shaped full beard, straight serious gaze. Completely open sleeveless sand-colored merchant vest with indigo edge embroidery, bare chest and arms, loose dark ochre trousers tied by indigo sash. Light turban cloth loosely wrapped on head with face entirely visible, brass scale and leather trading pouch at hip. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-d39c0227-5408-4e6e-86cc-a93febad1d25.png",
+      "discarded_edit_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-f18b32d9-a393-44ff-a595-f754a0b0877c.png",
+      "final_prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 하우사 community inspired adventurer. Broad heavily muscled adult man, warm medium-deep brown skin, close cropped hair and substantial shaped full beard, straight serious gaze. Completely open sleeveless sand-colored merchant vest with indigo edge embroidery, bare chest and arms, loose dark ochre trousers tied by indigo sash. Light turban cloth loosely wrapped on head with face entirely visible, brass scale and leather trading pouch at hip. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor. Additional exact constraint: use only a plain small OVAL brass pendant on the necklace. NO CROSS, no religious iconography. A clean truly transparent background all around the head, turban and full body. No solid or partly opaque rectangular background remnants.",
+      "key": "portraits/folk-african-men/folk_hausa",
+      "revision_prompt": "Edit only the tiny gold cross pendant on this adult male Hausa-inspired merchant character. Replace the cross with a small plain oval brass pendant, with no religious symbol. Preserve the same face, beard, head wrap, muscular body, exposed chest, pose, all clothing and tools, exact 1024x1536 framing, digital painted style and existing transparent background. Do not change any other part.",
+      "original_source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-ac7ec442-8c75-411c-afce-67e8f1fa2b3f.png",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_hausa.png",
+      "face_file": "images/portraits/folk-african-men/folk_hausa.webp",
+      "half_file": "images/portraits/folk-african-men/folk_hausa_half.webp"
+    },
+    {
+      "id": "folk_fulani",
+      "name": "풀라니",
+      "reference_numbers": [
+        6
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0987cc9b-888f-40b7-a810-5ee7303f60db.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 풀라니 community inspired adventurer. Tall slim athletic adult man, medium-deep warm brown skin, high cheekbones, narrow refined face, textured natural coils and faint stubble, thoughtful eyes. Airy open-front indigo sleeveless travel vest, exposed chest and abdomen, ecru striped waist cloth over trousers, narrow brass earrings and leather necklace, small leather satchel and slim wooden staff. Elegant relaxed posture. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-673359f0-17cf-411f-a67a-01469fec50fc.png",
+      "key": "portraits/folk-african-men/folk_fulani",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_fulani.png",
+      "face_file": "images/portraits/folk-african-men/folk_fulani.webp",
+      "half_file": "images/portraits/folk-african-men/folk_fulani_half.webp"
+    },
+    {
+      "id": "folk_akan",
+      "name": "아칸",
+      "reference_numbers": [
+        9,
+        12
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-bf2cafbd-1bd2-4d7f-8f16-55917baea5d2.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e4da6f8e-a905-458a-b903-f47ce9dca9e6.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 아칸 community inspired adventurer. Athletic muscular adult man, luminous warm brown skin, shaved head, striking sculpted jaw and brows, hazel-brown eyes. No crown, no laurel. Rich ochre, green and rust geometric woven cloth draped around low waist and over one forearm, bare torso and shoulders, fully opaque covering below waist, small hammered gold pendant and modest gold bracelets. Belt pouch and small folded trader cloth. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-93649e70-5858-4ae6-97a0-93f7398c78ba.png",
+      "key": "portraits/folk-african-men/folk_akan",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_akan.png",
+      "face_file": "images/portraits/folk-african-men/folk_akan.webp",
+      "half_file": "images/portraits/folk-african-men/folk_akan_half.webp"
+    },
+    {
+      "id": "folk_mbuti",
+      "name": "음부티",
+      "reference_numbers": [
+        14,
+        15
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d1a570c4-0335-4434-8057-351eeefbda90.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-c7d9e39e-62f9-4fda-93ec-60e63c2c8678.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 음부티 community inspired adventurer. Compact lean athletic adult man AGE 28, clearly mature adult, warm deep brown skin, short springy natural curls, narrow oval face, intelligent curious dark eyes and gentle smile. No glasses. Bare torso, softly patterned earth-colored barkcloth tied at hips over fully covering short woven trousers, small vine-fiber shoulder bag and leather wrist tie, lightweight travel bow at side. Adult body proportions. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-39c1cae6-05e1-49f4-94d0-3746a626f7a0.png",
+      "key": "portraits/folk-african-men/folk_mbuti",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_mbuti.png",
+      "face_file": "images/portraits/folk-african-men/folk_mbuti.webp",
+      "half_file": "images/portraits/folk-african-men/folk_mbuti_half.webp"
+    },
+    {
+      "id": "folk_oromo",
+      "name": "오로모",
+      "reference_numbers": [
+        17
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1ba4e7af-794e-44d5-a52f-d82884ea913e.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 오로모 community inspired adventurer. Strong athletic adult man, deep brown skin, short upright natural curls, neatly shaped short full beard, expressive furrowed brows and reflective steady gaze. Soft cream woven cloth with rust border falling from one shoulder and around low waist, chest abdomen and arms largely exposed, fully covering dark trousers, slim leather straps and brass cuffs, a short wood staff carried at hip. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-009da4e3-3f27-4032-b657-40021dd2629f.png",
+      "key": "portraits/folk-african-men/folk_oromo",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/folk_oromo.png",
+      "face_file": "images/portraits/folk-african-men/folk_oromo.webp",
+      "half_file": "images/portraits/folk-african-men/folk_oromo_half.webp"
+    },
+    {
+      "id": "punt",
+      "name": "푼트",
+      "reference_numbers": [
+        8,
+        13
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d98e722f-eedf-470c-b719-33236a2fe031.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3e520814-669f-49d3-8006-583f138f50ad.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: finished individual transparent knee-length character portrait for a Korean historical sailing adventure RPG, matching elegant semi-realistic painted game character art. Generate ONE fictional adult male recruit inspired by the attached reference photos' face shapes, hair texture, expressions and physiques. Reference photos are appearance guides; do not copy modern clothing, logos, setting or photographic format. Design: 푼트 community inspired adventurer. Tall muscular adult man with very dark brown skin, shaved head, strong angular jaw, clean-shaven face, confident calm gaze. Open sea-teal sleeveless coastal trader vest with cream woven borders, chest abdomen and strong arms visible, rust-red sash over sand linen trousers, simple gold hoop earring, carved wood pendant. Coiled maritime rope at hip and small rolled nautical chart in hand. Costume is a creative game adaptation evoking the named community, not documentary costume reconstruction. Person is an independent, capable adventurer, with dignified individual personality. Style: exquisite semi-realistic digital oil-paint illustration, finely painted face and believable skin, subtle visible brush texture, natural anatomy, warm soft directional light and neutral fill, polished cohesive character design, no photographic background. Composition: vertical 2:3 canvas, exactly 1024x1536 if supported. Single standing man, head completely visible with top margin, entire arms and hands inside frame; framing from top of hair to JUST BELOW BOTH KNEES, knees visible at lower edge, NO feet or shoes. Face front or slight 3/4 toward viewer with face unobstructed. Comfortable upright pose. Really transparent background with clean alpha silhouette, no scenery, no ground, no shadow plane, no vignette, no halo, no text, no labels, no watermark. Below-waist garments fully opaque and securely worn. Nonsexual heroic character presentation. Chest and shoulders visibly exposed as specified. No modern sportswear, suits, gym, headphones, modern ink tattoos or European armor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b071-953a-7301-be96-55a634eacb01\\exec-0aeb5c02-5744-48b4-bd3b-4a36039e27a3.png",
+      "key": "portraits/folk-african-men/punt",
+      "workspace_source": "artifacts/folk-african-men-20261106/sources/punt.png",
+      "face_file": "images/portraits/folk-african-men/punt.webp",
+      "half_file": "images/portraits/folk-african-men/punt_half.webp"
+    }
+  ]
+}

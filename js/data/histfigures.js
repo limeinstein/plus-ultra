@@ -90,8 +90,12 @@
     var keys = H.faceKeys(id), sp = { name: f.name, lang: 3, rigId: 'hist:' + id };
     try {
       var A = G.Art, spec = A.npcSpec('hist_' + id, f.role || 'captain', f.st || 'ib', f.g || 'm'), base = A.portraitKeys ? A.portraitKeys(spec) || [] : [];
-      sp.portrait = A.withImg(spec, keys.concat(base));
-      sp.half = keys.map(function (k) { return k + '_half'; }).concat(G.Img && G.Img.chain && G.Img.chain.halfOf ? G.Img.chain.halfOf(base) : []);
+      var chain = keys.concat(base);
+      sp.portrait = A.withImg(spec, chain);
+      // 실제로 고른 얼굴과 짝인 무릎상만 쓴다. 전용 얼굴의 무릎상이 없거나
+      // 검수에서 제외되었다고 다른 역할 사람의 몸으로 바꾸지 않는다.
+      var face = G.Img && G.Img.pick ? G.Img.pick(chain) : null;
+      sp.half = face ? [face + '_half'] : [];
     } catch (e) { /* 그림이 없어도 말은 한다 */ }
     return sp;
   };

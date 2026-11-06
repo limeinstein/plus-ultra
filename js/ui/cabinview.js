@@ -726,7 +726,7 @@
         '<div class="cb-cards" style="width:' + l.stageW + 'px;grid-template-columns:repeat(' + Math.min(CB().cols(), Math.max(1, n)) + ',minmax(0,' + (l.cardMax || 180) + 'px))"></div>' +
         othersHtml(l.stageW) +
         '</div><div class="cb-side">' +
-        '<div class="cb-sub" title="맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 방마다 키우는 특기가 있어 그 방에서 ' + CB().growDays().map(CB().yd).join('·') + '을 지내면 한 단계씩 는다(3까지) — ★가 선실에서 는 특기, (본디 n)은 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기. 자리가 없는 부하는 달마다 충성이 떨어진다.">부하 <small class="muted">— 눌러서 자리를 정한다</small></div>' +
+        '<div class="cb-sub" title="맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 방마다 키우는 특기가 있어 그 방에서 ' + CB().growDays().map(CB().yd).join('·') + '을 지내면 한 단계씩 는다(3까지) · 그 방의 보조 특기(☆)도 ' + (((G.BALANCE.cabins || {}).subSlow) || 1.2) + '배 느리게 는다 — ★가 선실에서 는 특기, (본디 n)은 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기. 자리가 없는 부하는 달마다 충성이 떨어진다.">부하 <small class="muted">— 눌러서 자리를 정한다</small></div>' +
         '<div class="cb-roster" style="max-height:' + Math.min(l.rosterH || 360, 200) + 'px"></div>' +
         totalsHtml() + '</div></div>';   // 오른쪽 아래: 함대에 적용되는 능력 합계 (지금 힘을 내는 방·말 배우기 풀이는 제목에 마우스를 올리면)
       var win = UI.window({ title: '기함 선실 — ' + U.esc(sh.name) + '호', icon: 'ship', width: l.stageW + (l.side || 300) + 66, html: html, buttons: [{ label: '닫는다', value: null }], clickAny: false });

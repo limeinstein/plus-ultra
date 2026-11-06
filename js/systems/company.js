@@ -7,16 +7,21 @@
      경쟁사 주식을 사는 것은 자유지만 내 회사 주식보다 많이 쥐면 공헌이 20% 덜 쌓인다.
    ■ 교역소와 다른 것
      · 회사 창고 (상관): 회원은 그 상관의 물건을 교역소 값의 60%(원가)로 산다 — 재고와 상관없이 계급별 할당량까지, 60일마다 새로
-     · 독점품 납품 (본부): 회원이 독점품을 본부에 넘기면 시장 값 × 1.25~1.4로 사 준다 — 시장이 포화되지 않는다
+     · 독점품 납품 (본부): 회원이 독점품을 본부에 넘기면 시장 값 × 1.25~1.4로 사 준다 — 넘길수록 값이 떨어지고 날이 지나면 돌아온다 (monoSat)
      · 세관 (본부 항구): 비회원이 그 회사 독점품을 싣고 들어오면 가끔 세관원이 오른다 — 신고(관세) · 뇌물 · 숨기기(걸리면 몰수·벌금·악명)
      · 중개 주문서 (상관): 아시아 안의 상관을 잇는 사슬 — 고리마다 배수가 오르고 「연계 보너스」가 쌓인다.
        고리를 마칠 때마다 정산하거나 다음 고리를 잇는다. 기한을 넘기면 쌓인 보너스가 날아간다. 끝까지 이으면 보너스 × 1.5
      · 고리의 끝은 그 회사 상관이거나, 상관이 있는 바다의 큰 항구(거래처). 그 도시에 들어서면 바로 넘길지 묻는다
    ■ 회사 임무 (본부·상관 게시판, 30일마다 새로): 단속(밀수선·경쟁사 배 n척) · 귀환 대선단(본부까지, 습격을 막는다) · 상관 건설(물자를 싣고 가 새 상관) · 경쟁사 나포(큰 화물선)
    ■ 주식: 회사마다 주가 = 액면 × 시대 곡선 × 형편(h) 둘레를 달마다 출렁인다. 해마다 1월에 배당. 세상 사건·제독의 임무가 주가를 움직인다.
+     주식에 넣은 돈(산 값 합계)은 stock.investCap까지. 설립 사건(eastindia·colonyco)의 출자도 이 회사 주식이 된다 (CO.subscribe) — 주식은 하나뿐.
+     · 설립 출자: 역사의 청약 기간 안이면 액면 값으로, 그 뒤 「추가 출자」는 그날 시세로. 청약 기간 안에 낸 사람만 설립 출자자 (founder)
+     · 설립 출자자는 회사가 선 뒤 founderYears 안에, 그때 받은 주식을 다 쥐고 있을 때만 출자금 없이 든다 (주식을 더 주지는 않는다)
+   ■ 회사가 서는 날 소식 (news가 있는 회사 — 인도청·통상원·머스코비·레반트)
      거래소(앤트워프·런던·암스테르담)에서 모든 회사, 회사 본부의 주식 창구에서는 그 회사 것만. 중개인의 귀띔으로 다가올 일을 미리 듣는다.
    ■ 저장: s.company = { member, rank, merit, joined, cool, shares{}, basis{}, px{회사: {p, h, hist[]}}, pm(처리한 달), ev[], shock{}, quota{도시: {per, used}},
-           posts{회사: [{c, g}]}, took{}, mission, chain, smug{}, done } — 옛 저장에는 없으므로 st()가 만든다 */
+           posts{회사: [{c, g}]}, took{}, mission, chain, smug{}, done, founder{회사: 설립 때 받은 주식 수}, mono{회사:물건: {q, day}}, told{회사: 1}, subMoved }
+           — 옛 저장에는 없으므로 st()가 만든다. 옛 저장의 설립 출자(s.eindia.eic·voc, s.colonyCo.wic·fr)는 처음 볼 때 이 회사 주식으로 옮긴다 */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -30,9 +35,20 @@
   function st() {
     var s = S(); if (!s) return null;
     var b = s.company || (s.company = { member: null, rank: 0, merit: 0, joined: 0, cool: 0, done: 0 });
-    ['shares', 'basis', 'px', 'shock', 'quota', 'posts', 'took', 'smug'].forEach(function (k) { if (!b[k] || typeof b[k] !== 'object') b[k] = {}; });
+    ['shares', 'basis', 'px', 'shock', 'quota', 'posts', 'took', 'smug', 'founder', 'mono'].forEach(function (k) { if (!b[k] || typeof b[k] !== 'object') b[k] = {}; });
     if (!Array.isArray(b.ev)) b.ev = [];
+    if (!b.told || typeof b.told !== 'object') { b.told = {}; var t0 = U.dateNum(s.date); G.COMPANIES.forEach(function (co) { if (t0 >= co.from) b.told[co.id] = 1; }); }   // 이미 선 회사는 다시 알리지 않는다
+    if (!b.subMoved) { b.subMoved = 1; moveOldSubs(s, b); }
     return b;
+  }
+  /** 옛 저장: 설립 사건의 출자를 이 회사 주식으로 옮긴다 (아직 정산·매각하지 않은 것만) */
+  function moveOldSubs(s, b) {
+    var e = s.eindia || {}, w = s.colonyCo || {};
+    [['eic', e.eic, e.eicPaid], ['voc', e.voc, e.vocSold], ['wic', w.wic, 0], ['fr', w.fr, w.frPaid]].forEach(function (x) {
+      var co = G.COMPANY[x[0]]; if (!co || !(x[1] > 0) || x[2]) return;
+      var n = Math.max(1, Math.round(x[1] / co.face));
+      b.shares[co.id] = (b.shares[co.id] || 0) + n; b.basis[co.id] = (b.basis[co.id] || 0) + x[1]; b.founder[co.id] = (b.founder[co.id] || 0) + n;
+    });
   }
   CO.state = st;
   function log(t) { G.State.log(t); }
@@ -108,9 +124,28 @@
   CO.rank = function (co) { var b = st(); return CO.isMember(co) ? b.rank : 0; };
   CO.rankName = function (co, r) { co = cobj(co); return ((co && co.ranks) || K().rankNames)[r] || K().rankNames[r]; };
   CO.perk = function (r) { return K().ranks[Math.max(0, Math.min(4, r || 0))]; };
+  /** 설립 출자자의 혜택을 쓸 수 있나: 청약 기간 안에 출자했고 · 그 주식을 다 쥐고 있고 · 회사가 선 뒤 founderYears 안 */
   CO.founder = function (co) {
-    var s = S(), e = s.eindia || {}, w = s.colonyCo || {};
-    return { eic: e.eic > 0, voc: e.voc > 0, wic: w.wic > 0, fr: w.fr > 0 }[cobj(co).id] || false;
+    co = cobj(co); var b = st(); if (!co || !b) return false;
+    var n = b.founder[co.id] || 0; if (!n || (b.shares[co.id] || 0) < n) return false;
+    return today() < co.from + K().founderYears * 10000;
+  };
+  /** 설립 사건의 출자 (js/systems/eastindia.js · colonyco.js) — 금화 gold를 이미 치렀다. founding: 역사의 청약 기간 안인가
+      청약 기간 안이면 액면 값, 그 뒤 추가 출자는 그날 시세로 주식을 받는다. 돌려주는 값: 받은 주식 수 */
+  CO.subscribe = function (co, gold, founding) {
+    co = cobj(co); var b = st(); if (!co || !b || !(gold > 0)) return 0;
+    var price = founding ? co.face : CO.ask(co), n = Math.max(1, Math.round(gold / price));
+    b.shares[co.id] = (b.shares[co.id] || 0) + n; b.basis[co.id] = (b.basis[co.id] || 0) + Math.round(gold);
+    if (founding) b.founder[co.id] = (b.founder[co.id] || 0) + n;
+    log(co.name + ' ' + co.cert + ' ' + n + '주를 받았다 (' + (founding ? '설립 청약 — 액면 ' + num(co.face) + '닢' : '추가 출자 — 그날 시세 ' + num(price) + '닢') + ').');
+    refresh();
+    return n;
+  };
+  /** 회사가 사람들에게 한꺼번에 나누는 특별한 배당 (설립 사건의 첫 정산) — 1주에 per닢. 돌려주는 값: {n, gold} */
+  CO.special = function (co, per) {
+    co = cobj(co); var b = st(); if (!co || !b) return { n: 0, gold: 0 };
+    var n = b.shares[co.id] || 0, g = Math.round(n * per); if (g > 0) S().player.gold += g;
+    return { n: n, gold: g };
   };
   CO.fee = function (co) {
     co = cobj(co); var k = K(), b = st();
@@ -124,19 +159,32 @@
     if (b.member === co.id) return '이미 이 회사 사람이다.';
     if (b.member) return '이미 ' + G.COMPANY[b.member].name + U.jx(G.COMPANY[b.member].name, '에') + ' 속해 있다. 먼저 그 회사를 떠나야 한다.';
     if (b.cool > s.day) return '회사를 떠난 지 한 해가 지나지 않았다 (' + (b.cool - s.day) + '일 남음).';
+    var war = CO.warWith(co); if (war) return war;
     if (s.player.fame < k.joinFame) return '명성이 모자란다 (통합 명성 ' + num(k.joinFame) + ' 이상).';
     if (!CO.founder(co) && s.player.gold < CO.fee(co)) return '출자금 금화 ' + num(CO.fee(co)) + '닢이 모자란다.';
     return '';
   };
+  /** 제독의 나라와 이 회사가 지금 싸우고 있으면 그 까닭 (입회를 막는다 — 네덜란드·포르투갈 전쟁 중 포르투갈 제독은 VOC·WIC에 못 든다, 2026-11-06 사용자 요청)
+      두 나라가 전쟁 중(js/systems/relations.js)이거나, 제독 나라의 회사와 이 회사가 rivalWars 기간 */
+  CO.warWith = function (co) {
+    co = cobj(co); var RL = G.Rel, t = today(), me = RL && RL.mine ? RL.mine() : null; if (!co || !me) return '';
+    var them = RL.power(co.nation);
+    if (them && them !== me && RL.atWar && RL.atWar(me, them)) return co.nation + U.jx(co.nation, '와/과') + ' 전쟁 중이다 — 적국의 회사에는 들 수 없다.';
+    var w = K().rivalWars.filter(function (x) {
+      var other = x[0] === co.id ? x[1] : x[1] === co.id ? x[0] : null, oc = other && G.COMPANY[other];
+      return oc && RL.power(oc.nation) === me && t >= x[2] && t < x[3];
+    })[0];
+    return w ? w[4].split(' — ')[0] + ' 중이다 — ' + co.name + U.jx(co.name, '은/는') + ' 그대 나라의 적이라 들 수 없다 (' + Math.floor(w[3] / 10000) + '년까지).' : '';
+  };
   CO.join = function (co) {
     co = cobj(co); if (CO.joinBlock(co)) return null;
     var b = st(), s = S(), k = K(), founder = CO.founder(co), fee = founder ? 0 : CO.fee(co), p = CO.px(co.id);
-    var stake = founder ? co.fee * k.joinShare : fee * k.joinShare, n = Math.max(1, Math.floor(stake / p));
+    var n = founder ? 0 : Math.max(1, Math.floor(fee * k.joinShare / p));   // 설립 출자자는 그때 받은 주식이 곧 출자 — 더 주지 않는다
     s.player.gold -= fee;
     b.member = co.id; b.rank = 1; b.merit = founder ? k.founderMerit : 0; b.joined = s.day; b.chain = null;
     if (b.mission && b.mission.co !== co.id) b.mission = null;
-    b.shares[co.id] = (b.shares[co.id] || 0) + n; b.basis[co.id] = (b.basis[co.id] || 0) + Math.round(founder ? 0 : stake);
-    log(co.name + U.jx(co.name, '에') + ' 입회했다' + (founder ? ' (설립 때의 출자로)' : ' (출자금 금화 ' + num(fee) + '닢)') + '. ' + co.cert + ' ' + n + '주를 받았다.');
+    if (n) { b.shares[co.id] = (b.shares[co.id] || 0) + n; b.basis[co.id] = (b.basis[co.id] || 0) + Math.round(fee * k.joinShare); }
+    log(co.name + U.jx(co.name, '에') + ' 입회했다' + (founder ? ' (설립 때의 출자로 — 지닌 ' + co.cert + ' ' + (b.shares[co.id] || 0) + '주)' : ' (출자금 금화 ' + num(fee) + '닢). ' + co.cert + ' ' + n + '주를 받았다') + '.');
     refresh();
     return { fee: fee, shares: n, founder: founder };
   };
@@ -217,10 +265,22 @@
     r.h = 1 + (r.h - 1) * k.hDecay;
     if (U.chance(k.evChance)) {
       var ps = CO.posts(co), ev = U.pick(G.COMPANY_EVENTS);
+      if (ev.foreign) { ps = ps.filter(function (p) { return !homeLand(co, city(p.c)); }); if (!ps.length) ev = U.pick(G.COMPANY_EVENTS.filter(function (x) { return !x.foreign; })); }
       st().ev.push({ co: co.id, id: ev.id, at: S().day + U.ri(k.evLead[0], k.evLead[1]), post: ps.length ? U.pick(ps).c : co.hq, known: false });
     }
   }
-  function fill(t, ev) { var co = G.COMPANY[ev.co], p = city(ev.post); return t.replace(/\{co\}/g, co.short).replace(/\{post\}/g, p ? p.name : '먼 바다'); }
+  /** 그 회사 나라의 땅인가 (도시 주인이 회사 나라) */
+  function homeLand(co, c) {
+    if (!c) return true;
+    var own = R.cityOwner(c), RL = G.Rel;
+    return RL && RL.power ? (RL.power(own) || own) === (RL.power(co.nation) || co.nation) : own === co.nation;
+  }
+  CO.homeLand = homeLand;
+  /** {co} · {post} 를 채운다 — {co:이/가}처럼 쓰면 받침에 맞는 조사 */
+  function fill(t, ev) {
+    var co = G.COMPANY[ev.co], p = city(ev.post), w = { co: co.short, post: p ? p.name : '먼 바다' };
+    return t.replace(/\{(co|post)(?::([^}]+))?\}/g, function (_, k, pair) { return w[k] + (pair ? U.jx(w[k], pair) : ''); });
+  }
   CO.evText = function (ev, tip) { var d = G.COMPANY_EVENTS.filter(function (x) { return x.id === ev.id; })[0]; return d ? fill(tip ? d.tip : d.text, ev) : ''; };
   function cares(coId) { var b = st(); return b.member === coId || (b.shares[coId] || 0) > 0; }
   function pct(d) { return (d >= 0 ? '+' : '') + Math.round(d * 100) + '%'; }
@@ -235,6 +295,13 @@
       if ((b.pm + i) % 12 === 0) jan = true;
     }
     if (steps > 0) b.pm = key;
+    // 회사가 섰다는 소식 (인도청·통상원·머스코비·레반트 — 나머지는 설립 사건이 알린다)
+    var t0 = today();
+    G.COMPANIES.forEach(function (co) {
+      if (b.told[co.id] || t0 < co.from) return;
+      b.told[co.id] = 1;
+      if (co.news && t0 - co.from < 10000) out.push({ icon: 'seal', history: true, text: co.news });
+    });
     // 다가온 일
     for (var e = b.ev.length - 1; e >= 0; e--) {
       var ev = b.ev[e]; if (ev.at > s.day) continue;
@@ -267,9 +334,18 @@
     if (sal) { sal = Math.round(sal * CO.eraK()); s.player.gold += sal; out.push({ icon: 'seal', text: co.short + ' ' + CO.rankName(co, b.rank) + '의 한 해 보수 금화 ' + num(sal) + '닢' }); }
     return out;
   }
+  /** 주식에 넣은 돈(산 값 합계)과 더 넣을 수 있는 돈 */
+  CO.invested = function () { var b = st(), t = 0; if (!b) return 0; Object.keys(b.basis).forEach(function (id) { if ((b.shares[id] || 0) > 0) t += b.basis[id] || 0; }); return t; };
+  CO.room = function () { return Math.max(0, K().stock.investCap - CO.invested()); };
+  /** 지금 이 회사 주식을 몇 주까지 살 수 있나 (한 회사 cap주 · 투자 한도 · 소지금) */
+  CO.canBuy = function (co) {
+    co = cobj(co); var b = st(), k = K().stock, ask = CO.ask(co);
+    return Math.max(0, Math.min(k.cap - (b.shares[co.id] || 0), Math.floor(CO.room() / ask), Math.floor(S().player.gold / ask)));
+  };
   CO.buy = function (co, n) {
     co = cobj(co); var b = st(), s = S(), k = K().stock;
-    n = Math.max(0, Math.min(Math.floor(n), k.cap - (b.shares[co.id] || 0)));
+    if (!CO.active(co)) return 0;
+    n = Math.max(0, Math.min(Math.floor(n), k.cap - (b.shares[co.id] || 0), Math.floor(CO.room() / CO.ask(co))));
     var cost = n * CO.ask(co); if (!n || s.player.gold < cost) return 0;
     s.player.gold -= cost; b.shares[co.id] = (b.shares[co.id] || 0) + n; b.basis[co.id] = (b.basis[co.id] || 0) + cost;
     log(co.name + ' ' + co.cert + ' ' + n + '주를 금화 ' + num(cost) + '닢에 샀다.');
@@ -277,6 +353,7 @@
   };
   CO.sell = function (co, n) {
     co = cobj(co); var b = st(), s = S(), have = b.shares[co.id] || 0;
+    if (!CO.active(co)) return 0;   // 특허장 전(잉글랜드 동인도 회사의 청약 1600.9~12)에는 팔 곳이 없다
     n = Math.max(0, Math.min(Math.floor(n), have)); if (!n) return 0;
     var got = n * CO.bid(co);
     b.basis[co.id] = Math.round((b.basis[co.id] || 0) * (have - n) / have);
@@ -336,8 +413,9 @@
   CO.deliverMono = function (c, co, id, q) {
     co = cobj(co); var s = S(); if (!CO.isMember(co) || co.hq !== c.id || co.mono.indexOf(id) < 0) return { value: 0, merit: 0 };
     q = Math.min(Math.floor(q), cargoQ(id)); if (q < 1) return { value: 0, merit: 0 };
-    var price = CO.monoPrice(c, co, id), value = q * price;
+    var value = CO.monoValue(c, co, id, q), price = Math.round(value / q);
     takeCargo(id, q, c); s.player.gold += value;
+    var e = monoRow(co, id); e.q += q; e.day = s.day;
     var mer = CO.addMerit(Math.round(value / 1500));
     if (G.Influence) G.Influence.add(c, value / G.BALANCE.influence.act.mono, co);
     fame('tr', Math.round(value / 8000));
@@ -347,8 +425,23 @@
   };
 
   // ================================================================ 독점품
-  /** 회원이 본부에 넘기는 독점품 값 */
-  CO.monoPrice = function (c, co, id) { return Math.max(1, Math.round(R.sellPrice(c, id) * CO.perk(CO.rank(co)).premium)); };
+  /** 최근에 넘긴 양 (날이 지나면 half일마다 절반으로 준다) */
+  function monoRow(co, id) {
+    var b = st(), key = cobj(co).id + ':' + id, e = b.mono[key], d = S().day;
+    if (!e) e = b.mono[key] = { q: 0, day: d };
+    if (d > e.day) { e.q = e.q * Math.pow(0.5, (d - e.day) / K().monoSat.half); e.day = d; if (e.q < 0.5) e.q = 0; }
+    return e;
+  }
+  CO.monoRecent = function (co, id) { return Math.round(monoRow(co, id).q); };
+  /** 넘길수록 값이 떨어진다: 1통의 값 = 기본 값 / (1 + 최근 넘긴 양 / q) */
+  function monoBase(c, co, id) { return R.sellPrice(c, id) * CO.perk(CO.rank(co)).premium; }
+  /** 회원이 본부에 넘기는 독점품 값 — 다음 한 통 */
+  CO.monoPrice = function (c, co, id) { return Math.max(1, Math.round(monoBase(c, co, id) / (1 + monoRow(co, id).q / K().monoSat.q))); };
+  /** q통을 한꺼번에 넘기면 받는 금화 (넘기는 사이에도 값이 떨어진다) */
+  CO.monoValue = function (c, co, id, q) {
+    var Q = K().monoSat.q, r = monoRow(co, id).q; if (!(q > 0)) return 0;
+    return Math.max(q, Math.round(monoBase(c, co, id) * Q * Math.log((Q + r + q) / (Q + r))));
+  };
   CO.monoHeld = function (co) { co = cobj(co); return co.mono.filter(function (id) { return cargoQ(id) > 0; }); };
   CO.isMono = function (id) { return CO.actives().filter(function (co) { return co.mono.indexOf(id) >= 0; }); };
 
@@ -536,10 +629,10 @@
       o.title = tt.name + '에 새 ' + co.short + ' 상관을 세운다';
       o.desc = '목재 ' + o.need.timber + '통 · 대포 ' + o.need.cannon + '통 · 총 ' + o.need.guns + '통을 싣고 ' + tt.name + '에 들어가면, 그 고장 사람들과 담판을 짓고 상관을 세운다. 세운 상관은 회사의 것이 되어 창고·주문서·임무가 열린다.';
     } else if (kind === 'prize') {
-      var rivals = CO.actives().filter(function (x) { return x.id !== co.id && portPosts(x).some(function (p) { var pc = city(p.c); return pc.region >= 3 && pc.region !== 4; }); });
+      var rivals = CO.actives().filter(function (x) { return x.id !== co.id && CO.enemy(co, x) && portPosts(x).some(function (p) { var pc = city(p.c); return pc.region >= 3 && pc.region !== 4; }); });
       if (!rivals.length) return null;
       var rv = pick(rng, rivals), ps = portPosts(rv).map(function (p) { return city(p.c); }).filter(function (pc) { return pc.region >= 3 && pc.region !== 4; });
-      var at = pick(rng, ps), nm = pick(rng, rv.names);
+      var at = pick(rng, ps), nm = CO.shipName(rv, rng);
       o.rival = rv.id; o.at = at.id; o.name = nm; o.ship = rv.ship; o.got = 0;
       o.value = Math.round((k.prize.value[0] + rng() * (k.prize.value[1] - k.prize.value[0])) * CO.eraK() / 100) * 100;
       o.pay = Math.round(o.value * k.prize.bonus * CO.perk(CO.rank(co)).payK);
@@ -549,6 +642,23 @@
     }
     return o;
   }
+  /** 두 회사가 지금 적인가: 두 나라가 전쟁 중이거나(js/systems/relations.js) 회사끼리의 싸움 기간(rivalWars) */
+  CO.enemy = function (a, z) {
+    a = cobj(a); z = cobj(z); if (!a || !z || a.id === z.id) return false;
+    var t = today(), RL = G.Rel;
+    if (K().rivalWars.some(function (w) { return ((w[0] === a.id && w[1] === z.id) || (w[0] === z.id && w[1] === a.id)) && t >= w[2] && t < w[3]; })) return true;
+    if (!RL || !RL.power || !RL.atWar) return false;
+    var x = RL.power(a.nation), y = RL.power(z.nation);
+    return !!(x && y && x !== y && RL.atWar(x, y));
+  };
+  /** 그 시대에 바다에 있던 화물선 이름 하나 (names: [이름, 처음 해, 마지막 해] 또는 이름) */
+  CO.shipName = function (co, rng) {
+    co = cobj(co); var y = S().date.y, all = co.names || [];
+    var ok = all.filter(function (x) { return typeof x === 'string' || (y >= x[1] && y <= x[2]); });
+    if (!ok.length) ok = all.filter(function (x) { return typeof x === 'string'; });
+    var x = ok.length ? ok[Math.floor((rng || U.rand)() * ok.length)] : co.short + ' 화물선';
+    return typeof x === 'string' ? x : x[0];
+  };
   CO.accept = function (o) {
     var b = st(), s = S(); if (b.mission) return false;
     var m = JSON.parse(JSON.stringify(o)); m.limit = s.day + o.days; m.took = s.day;
@@ -656,7 +766,8 @@
     return null;
   }
   function dockOf(c) { var d = c.dock || [c.lat, c.lon]; return { lon: d[1], lat: d[0] }; }
-  function rivalOf(coId) { var xs = CO.actives().filter(function (x) { return x.id !== coId; }); return xs.length ? U.pick(xs) : null; }
+  /** 회사선을 노리는 경쟁사 — 그때 적인 회사만 (없으면 null: 밀수선·해적이 대신 나온다) */
+  function rivalOf(coId) { var xs = CO.actives().filter(function (x) { return CO.enemy(coId, x); }); return xs.length ? U.pick(xs) : null; }
   /** sea.js spawnNpcs: 회사 임무와 얽힌 배 (없으면 null) */
   CO.spawn = function (npcs) {
     var b = st(), s = S(), m = b && b.mission, l = s.loc; if (!m || !G.Ships || s.loc.mode !== 'sea') return null;

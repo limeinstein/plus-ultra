@@ -125,8 +125,16 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       out.patrolGot = s.company.mission.got + '/' + s.company.mission.n;
       chanceAll = null; s.loc = { mode: 'city', city: 154, lon: coc.lon, lat: coc.lat };
       const gP = s.player.gold, rp = CO.report(coc); out.patrolRep = { got: s.player.gold - gP, rp: !!rp, mission: s.company.mission };
-      // 경쟁사 나포 (통상원)
-      s.day += 40; let pz = null; for (let i = 0; i < 8 && !pz; i++) { pz = CO.offers(coc, pt).filter(o => o.kind === 'prize')[0]; if (!pz) s.day += 30; }
+      // 네덜란드·포르투갈 전쟁 중(1602~1663)에는 포르투갈 제독이 VOC·서인도 회사에 못 든다 (2026-11-06)
+      { const d0 = s.date, m0 = s.company.member, f0 = s.player.fame, g0 = s.player.gold; s.company.member = null; s.player.fame = 1e5; s.player.gold = 1e6;
+        out.warJoin = {};
+        for (const [y, co] of [[1610, 'voc'], [1630, 'wic'], [1662, 'voc'], [1665, 'voc'], [1630, 'eic'], [1640, 'eic']]) { s.date = { y, m: 6, d: 1 }; out.warJoin[y + co] = CO.joinBlock(co); }
+        s.date = { y: 1610, m: 6, d: 1 }; out.warJoin.join1610 = CO.join('voc');
+        s.date = d0; s.company.member = m0; s.player.fame = f0; s.player.gold = g0; }
+      // 경쟁사 나포 (통상원) — 1530년 두 나라는 사이가 좋아 나포 임무가 없다 · 전쟁이 나면 나온다 (2026-11-06)
+      s.day += 40; let peace = 0; for (let i = 0; i < 8; i++) { peace += CO.offers(coc, pt).filter(o => o.kind === 'prize').length; s.day += 30; }
+      out.prizePeace = peace; G.Rel.set('PT', 'ES', -90, 1540, '시험 — 전쟁');
+      let pz = null; for (let i = 0; i < 8 && !pz; i++) { pz = CO.offers(coc, pt).filter(o => o.kind === 'prize')[0]; if (!pz) s.day += 30; }
       out.prizeOffer = pz && { rival: pz.rival, at: G.CITY_DATA[pz.at].name, name: pz.name };
       if (pz) {
         CO.accept(pz); const pc = G.CITY_DATA[pz.at], pd = pc.dock || [pc.lat, pc.lon];
@@ -138,6 +146,7 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
         chanceAll = null; s.loc = { mode: 'city', city: 0, lon: lis.lon, lat: lis.lat };
         const rz = CO.report(lis); out.prizeRep = rz && rz.pay;
       }
+      G.Rel.set('PT', 'ES', 35, 1540, '시험 — 화해');
       // 상관 건설
       s.day += 40; s.loc = { mode: 'city', city: 154, lon: coc.lon, lat: coc.lat };
       let fo = null; for (let i = 0; i < 8 && !fo; i++) { fo = CO.offers(coc, pt).filter(o => o.kind === 'found')[0]; if (!fo) s.day += 30; }
@@ -202,7 +211,10 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     ok(r.cvHome.got > 0 && r.cvHome.mission === null && r.cvHome.px, '본부에 닿으면 수수료 ' + r.cvHome.got + ' · 주가 오름');
     ok(r.patrol && r.patrol.lawful && r.patrolGot && /^(\d)\/\1$/.test(r.patrolGot), '단속: 배를 쳐부숴 ' + r.patrolGot);
     ok(r.patrolRep.got > 0 && r.patrolRep.mission === null, '단속 보고 → 보수 ' + r.patrolRep.got);
-    ok(!!r.prizeOffer && (r.prize && r.prizeWin.gold > 0 && r.prizeWin.esDrop && r.prizeRep > 0), '경쟁사 나포: 화물 ' + (r.prizeWin && r.prizeWin.gold) + ' · 경쟁사 주가 하락 · 포상금 ' + r.prizeRep);
+    ok(/전쟁/.test(r.warJoin['1610voc']) && /전쟁/.test(r.warJoin['1630wic']) && /전쟁/.test(r.warJoin['1662voc']) && !/전쟁/.test(r.warJoin['1665voc']) && /싸움/.test(r.warJoin['1630eic']) && !/싸움|전쟁/.test(r.warJoin['1640eic']) && r.warJoin.join1610 === null,
+      '적국 회사에는 못 든다 — 포르투갈 제독: VOC 1610·1662 ✗ · 1665 ✓ · 서인도 1630 ✗ · 잉글랜드 동인도 1630 ✗ · 1640 ✓ (「' + r.warJoin['1610voc'] + '」)');
+    ok(r.prizePeace === 0, '사이가 좋은 나라의 회사는 나포 대상이 아니다 (1530 인도청 ↔ 통상원)');
+    ok(!!r.prizeOffer && /산티아고|트리니다드|펠리페/.test(r.prizeOffer.name) && (r.prize && r.prizeWin.gold > 0 && r.prizeWin.esDrop && r.prizeRep > 0), '전쟁 중이면 경쟁사 나포 (「' + (r.prizeOffer && r.prizeOffer.name) + '」호 — 그 시대의 배): 화물 ' + (r.prizeWin && r.prizeWin.gold) + ' · 경쟁사 주가 하락 · 포상금 ' + r.prizeRep);
     ok(!!r.foundOffer && (r.found && r.found.posts.length === 1 && r.found.mission === null && r.found.bld === 1), '상관 건설: ' + (r.foundOffer && r.foundOffer.at) + '에 새 상관');
     ok(r.bld24.indexOf('company:voc') >= 0 && r.bld24.indexOf('exchange:') >= 0, '1610 암스테르담: VOC 본부 · 거래소');
     ok(r.buy.paid === r.buy.cost && r.buy.n === 100, '주식 100주를 샀다');

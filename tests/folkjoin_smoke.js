@@ -6,7 +6,9 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
@@ -65,6 +67,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       if (m) {
         out.mate = { name: m.name, g: m.g, type: m.type, lg: m.lg, face: m.face, fame: m.fame, wage: m.wage, desc: m.desc };
         out.nameOk = (m.g === 'f' ? G.FOLK_JOIN.inuit.f : G.FOLK_JOIN.inuit.m).includes(m.name);
+        out.faceOk = G.FolkJoin.faces(G.FOLK_JOIN.inuit.style, m.g, 'inuit').includes(m.face);
         const sp = G.Scenes.mateSpec(m.id); out.portrait = JSON.stringify(sp && (sp.img || sp.keys || sp.chain || sp)).slice(0, 200);
         out.half = G.Img.pick(G.Img.chain.mateHalf(m.id));
         // ④ 저장 → 불러오기
@@ -89,8 +92,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.who.join('|') === '코이코이 사람|줄루 사람|트란실바니아 사람|아즈텍 사람', '부르는 말: ' + r.who.join(' · '));
     ok(r.zero === false && !r.zeroBusy && r.again === false, '확률 0이면 아무 일 없고, 한 민족에 한 번만 굴린다');
     ok(r.joined && r.sawOffer, '실제 발견(이누이트 사람들)에서 나서고 → 받아들이면 동료가 된다');
-    ok(r.nameOk && r.mate.lg && r.mate.lg[15] === 3 && r.mate.fame === 0 && /^portraits\/npc-roles\/na\//.test(r.mate.face), '이름은 그 민족 이름 · 북미토착어 능숙 · 명성 0 · 얼굴은 북아메리카 양식 (' + r.mate.name + ', ' + r.mate.face + ')');
-    ok(/npc-roles\/na\//.test(r.half || ''), '무릎상도 같은 얼굴 짝 (' + r.half + ')');
+    ok(r.nameOk && r.faceOk && r.mate.lg && r.mate.lg[15] === 3 && r.mate.fame === 0, '이름은 그 민족 이름 · 북미토착어 능숙 · 명성 0 · 이누이트 전용 얼굴 (' + r.mate.name + ', ' + r.mate.face + ')');
+    ok(r.half === r.mate.face + '_half', '무릎상도 같은 얼굴 짝 (' + r.half + ')');
     ok(r.afterLoad === r.mate.face && r.inMates, '저장·불러오기 뒤에도 그 얼굴·동료 그대로');
     ok(r.refused && /고향에 남으라고/.test(r.refuseLog), '거절하면 명부에서 내리고 일지에 남긴다');
     ok(r.rolled.indexOf('inuit') >= 0 && r.rolled.indexOf('folk_maori') >= 0, '굴린 민족을 기억한다');

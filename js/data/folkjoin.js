@@ -65,6 +65,63 @@
     folk_sami:    P('ne', [GER], ['survey', 'nav'], ['아슬락', '비에라', '마티', '우를로'], ['엘레', '카레', '사라', '마리엣']),
     vampire:      P('ru', [ROM, SLV], ['doctor', 'priest'], ['이온', '바실레', '미르체아', '도브레'], ['아나', '일레아나', '마리차', '플로리차'])
   };
+  // 첨부 참고 남성 전용 원화. 민족별 한 쌍이며 이름·솜씨는 기존처럼 따로 뽑는다.
+  ['khoikhoi', 'folk_zulu', 'folk_maasai', 'folk_xhosa', 'folk_san', 'folk_yoruba',
+    'folk_hausa', 'folk_fulani', 'folk_akan', 'folk_mbuti', 'folk_oromo', 'punt'].forEach(function (id) {
+    var p = G.FOLK_JOIN[id];
+    p.portraits = p.portraits || {};
+    p.portraits.m = ['portraits/folk-african-men/' + id];
+  });
+  // 동남아 남성 전용 원화. 같은 민족의 네 이름이 얼굴·무릎상 한 쌍을 함께 쓴다.
+  ['padaung', 'cannibal', 'orangutan', 'folk_bajau', 'folk_andaman'].forEach(function (id) {
+    var p = G.FOLK_JOIN[id];
+    p.portraits = p.portraits || {};
+    p.portraits.m = ['portraits/mates/folk_' + id + '_m'];
+  });
+  // 첨부 참고 동남아 여성 전용 원화. 남성 선택을 보존하고 이름 넷이 한 쌍을 함께 쓴다.
+  ['padaung', 'cannibal', 'orangutan', 'folk_bajau', 'folk_andaman'].forEach(function (id) {
+    var p = G.FOLK_JOIN[id];
+    p.portraits = p.portraits || {};
+    p.portraits.f = ['portraits/folk-join/' + id + '_f_v1'];
+  });
+  // 아프리카계·안다만·아넘랜드 여성 전용 얼굴상·무릎상. 첨부 참고는 얼굴·머리·표정만 빌리고
+  // 민족마다 복식·장신구·역할 소품을 새로 그렸다. 안다만은 위 동남아 공용 설정보다 이 전용 원화를 우선한다.
+  var BLACK_FEMALE_PORTRAITS = {
+    khoikhoi: 'fj_khoikhoi_f_v1', folk_zulu: 'fj_zulu_f_v1', folk_maasai: 'fj_maasai_f_v1',
+    folk_xhosa: 'fj_xhosa_f_v1', folk_san: 'fj_san_f_v1', folk_yoruba: 'fj_yoruba_f_v1',
+    folk_hausa: 'fj_hausa_f_v1', folk_fulani: 'fj_fulani_f_v1', folk_akan: 'fj_akan_f_v1',
+    folk_mbuti: 'fj_mbuti_f_v1', folk_oromo: 'fj_oromo_f_v1', punt: 'fj_punt_f_v1',
+    folk_tuareg: 'fj_tuareg_f_v1', folk_andaman: 'fj_andaman_f_v1', aborigine: 'fj_aborigine_f_v1'
+  };
+  Object.keys(BLACK_FEMALE_PORTRAITS).forEach(function (id) {
+    var p = G.FOLK_JOIN[id];
+    p.portraits = p.portraits || {};
+    var key = 'portraits/mates/' + BLACK_FEMALE_PORTRAITS[id];
+    // 안다만 여성은 앞서 만든 동남아 계열 후보도 함께 남겨 두어 두 원화가 모두 실제 후보로 쓰이게 한다.
+    // 나머지 민족은 이번 전용 원화 한 쌍을 사용한다.
+    p.portraits.f = id === 'folk_andaman'
+      ? [key].concat((p.portraits.f || []).filter(function (old) { return old !== key; }))
+      : [key];
+  });
+  // 아메리카 남성 전용 원화. 네 이름은 민족별 같은 얼굴상·무릎상 한 쌍을 쓴다.
+  ['inuit', 'skraeling', 'folk_dakota', 'folk_cherokee', 'folk_haudenosaunee', 'folk_wendat',
+    'folk_stlawrence', 'folk_powhatan', 'folk_wampanoag', 'folk_muscogee', 'folk_natchez',
+    'folk_calusa', 'folk_taos', 'folk_acoma', 'folk_mandan', 'folk_chumash', 'folk_makah',
+    'aztec', 'inca', 'blemmyes', 'patagon', 'folk_selknam'].forEach(function (id) {
+    var p = G.FOLK_JOIN[id];
+    p.portraits = p.portraits || {};
+    p.portraits.m = ['portraits/mates/folk_' + id + '_m'];
+  });
+  // 첨부 참고 아메리카 성인 여성 전용 원화: 북미 17·중미 1·남미 4종.
+  // 같은 민족의 여성 이름 넷이 한 쌍을 공용한다. 남성 초상 설정은 보존한다.
+  ['inuit', 'skraeling', 'folk_dakota', 'folk_cherokee', 'folk_haudenosaunee',
+    'folk_wendat', 'folk_stlawrence', 'folk_powhatan', 'folk_wampanoag', 'folk_muscogee',
+    'folk_natchez', 'folk_calusa', 'folk_taos', 'folk_acoma', 'folk_mandan', 'folk_chumash',
+    'folk_makah', 'aztec', 'inca', 'blemmyes', 'patagon', 'folk_selknam'].forEach(function (id) {
+    var p = G.FOLK_JOIN[id];
+    p.portraits = p.portraits || {};
+    p.portraits.f = ['portraits/folk-join/' + id + '_f_amer_v1'];
+  });
   // 갈래마다 나서며 하는 말 ({who} = 그 민족)
   G.FOLK_JOIN_LINES = {
     nav: '우리 {who}는 어려서부터 물 위에서 자랍니다. 바람과 물결을 읽는 눈이라면 누구에게도 지지 않아요.',

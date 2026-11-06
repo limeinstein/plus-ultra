@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-06",
+  "mode": "built-in image_gen",
+  "scope": "동남아 민족 발견물 5종 남성 후보, 민족별 얼굴상·무릎상 한 쌍. 같은 민족의 네 이름이 공용.",
+  "portraits": [
+    {
+      "id": "padaung",
+      "name": "카얀",
+      "reference_numbers": [
+        1,
+        10,
+        11
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-4550c967-e429-4cee-ae40-7e41bc34fa34.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3f382444-1711-406f-9322-b21285b03158.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1cc4bb1f-1d07-4e5c-b630-4743f76d8b25.png"
+      ],
+      "design": "Kayan-inspired artisan and musician. Adult male age 28, lean athletic physique, warm tan skin, elegant elongated face, focused dark almond eyes, long black hair tied in a high loose bun, fine moustache and small goatee, reference-inspired refined facial features. Entire bare chest, abdomen, shoulders and arms clearly visible; a narrow burgundy and indigo geometric woven shawl draped over ONE shoulder falling behind the back, red woven waist sash and opaque dark indigo knee-length wrap with angular red borders. Small brass earrings, simple brass torque and bangles, carved bamboo flute held casually down at his side. He wears no tall neck coils. Calm intelligent expression.",
+      "prompt": "Use case: stylized-concept. Asset type: transparent knee-length companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional adult Southeast Asian male recruit; reference photos are appearance and material inspiration only, not edit targets or evidence of anyone's ethnicity. Kayan-inspired artisan and musician. Adult male age 28, lean athletic physique, warm tan skin, elegant elongated face, focused dark almond eyes, long black hair tied in a high loose bun, fine moustache and small goatee, reference-inspired refined facial features. Entire bare chest, abdomen, shoulders and arms clearly visible; a narrow burgundy and indigo geometric woven shawl draped over ONE shoulder falling behind the back, red woven waist sash and opaque dark indigo knee-length wrap with angular red borders. Small brass earrings, simple brass torque and bangles, carved bamboo flute held casually down at his side. He wears no tall neck coils. Calm intelligent expression. Style: exquisite semi-realistic digital oil-painted RPG character illustration, detailed and beautiful natural face, painterly skin and textile texture, coherent warm directional light with soft neutral fill. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view, eyes visible. Bold revealing clothing appropriate for tropical adventure, uncovered masculine torso, no erotic posing. Composition: vertical 2:3 canvas, ideally 1024x1536; show full head and hair with 5 percent top margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible near lower edge. NO feet or shoes. Single continuous original painting, ONE figure only, no face inset. Genuine transparent background with clean alpha silhouette. No scenery, floor, cast-shadow plane, gradient, halo, border, labels, text, logos, watermarks, jeans, watches, modern styling or zipper. Opaque cloth fully covers pelvis. Costume is a creative community-inspired game adaptation, not a documentary reconstruction.",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-590f5a0f-0c94-4a24-b22a-aa9aa7476dcf.png",
+      "key": "portraits/mates/folk_padaung_m",
+      "workspace_source": "artifacts/folk-seasia-men-20261106/sources/padaung.png",
+      "face_file": "images/portraits/mates/folk_padaung_m.webp",
+      "half_file": "images/portraits/mates/folk_padaung_m_half.webp"
+    },
+    {
+      "id": "cannibal",
+      "name": "토바 바탁",
+      "reference_numbers": [
+        2,
+        3,
+        7,
+        8,
+        9
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-c0a173fd-ae4c-4715-97a4-95271fb30737.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-be87439e-0021-49b0-b663-c0c74edacbeb.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fa0bc262-a4c8-4f9c-b7c8-208760f13ff2.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-bdc3ec2e-d855-43c6-ac24-7aea56e7fed4.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-ee865ed5-a522-4bfe-aa8f-ee25d70035fe.png"
+      ],
+      "design": "Toba Batak-inspired healer and storyteller. Adult male age 30, powerfully athletic build, bronze tan skin, broad handsome square face, strong brows, short swept-up black hair, subtle stubble, poised thoughtful gaze. Bare muscular chest and abdomen, both shoulders exposed. Red black and ivory ulos-inspired woven cloth over one shoulder with most of torso uncovered, richly textured knee-length opaque red-black wrap, restrained gold-brass belt buckle, dark wrist cuffs. Cloth headband with a simple geometric band, NO Khmer crown or royal regalia. Small wooden medicine container suspended at his waist. Use photos for strong facial proportions and warm metallic/cloth material detail, reinterpret costume for this community rather than copying ceremonial dress.",
+      "prompt": "Use case: stylized-concept. Asset type: transparent knee-length companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional adult Southeast Asian male recruit; reference photos are appearance and material inspiration only, not edit targets or evidence of anyone's ethnicity. Toba Batak-inspired healer and storyteller. Adult male age 30, powerfully athletic build, bronze tan skin, broad handsome square face, strong brows, short swept-up black hair, subtle stubble, poised thoughtful gaze. Bare muscular chest and abdomen, both shoulders exposed. Red black and ivory ulos-inspired woven cloth over one shoulder with most of torso uncovered, richly textured knee-length opaque red-black wrap, restrained gold-brass belt buckle, dark wrist cuffs. Cloth headband with a simple geometric band, NO Khmer crown or royal regalia. Small wooden medicine container suspended at his waist. Use photos for strong facial proportions and warm metallic/cloth material detail, reinterpret costume for this community rather than copying ceremonial dress. Style: exquisite semi-realistic digital oil-painted RPG character illustration, detailed and beautiful natural face, painterly skin and textile texture, coherent warm directional light with soft neutral fill. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view, eyes visible. Bold revealing clothing appropriate for tropical adventure, uncovered masculine torso, no erotic posing. Composition: vertical 2:3 canvas, ideally 1024x1536; show full head and hair with 5 percent top margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible near lower edge. NO feet or shoes. Single continuous original painting, ONE figure only, no face inset. Genuine transparent background with clean alpha silhouette. No scenery, floor, cast-shadow plane, gradient, halo, border, labels, text, logos, watermarks, jeans, watches, modern styling or zipper. Opaque cloth fully covers pelvis. Costume is a creative community-inspired game adaptation, not a documentary reconstruction.",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-7f67e703-8e46-4db2-bba3-aea742047ef0.png",
+      "key": "portraits/mates/folk_cannibal_m",
+      "workspace_source": "artifacts/folk-seasia-men-20261106/sources/cannibal.png",
+      "face_file": "images/portraits/mates/folk_cannibal_m.webp",
+      "half_file": "images/portraits/mates/folk_cannibal_m_half.webp"
+    },
+    {
+      "id": "orangutan",
+      "name": "이반 · 긴집",
+      "reference_numbers": [
+        4,
+        10,
+        15
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1afd387f-9c45-45b5-850b-8808ec007af8.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3f382444-1711-406f-9322-b21285b03158.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2e181b39-1b4d-4e75-90c6-91744089335a.png"
+      ],
+      "design": "Borneo Iban longhouse-inspired scout and warrior. Adult male age 29, tall muscular agile build, sun-browned skin, angular cheekbones, strong jaw, shoulder-length slightly wavy black hair, faint moustache, direct confident eyes. Fully bare chest, shoulders, abdomen and arms. Restrained stylized dark curvilinear tattoos on the shoulder and upper arms, original decorative motifs without copied sacred text or literal modern photo tattoos. Opaque short red-and-black woven wrapped battle cloth ending just above the knees, securely overlapping front, bead belt, beaded necklace and brass arm cuff. One hand rests near a small sheathed forest knife on the belt, the other relaxed. No headdress. Rugged appealing adult face.",
+      "prompt": "Use case: stylized-concept. Asset type: transparent knee-length companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional adult Southeast Asian male recruit; reference photos are appearance and material inspiration only, not edit targets or evidence of anyone's ethnicity. Borneo Iban longhouse-inspired scout and warrior. Adult male age 29, tall muscular agile build, sun-browned skin, angular cheekbones, strong jaw, shoulder-length slightly wavy black hair, faint moustache, direct confident eyes. Fully bare chest, shoulders, abdomen and arms. Restrained stylized dark curvilinear tattoos on the shoulder and upper arms, original decorative motifs without copied sacred text or literal modern photo tattoos. Opaque short red-and-black woven wrapped battle cloth ending just above the knees, securely overlapping front, bead belt, beaded necklace and brass arm cuff. One hand rests near a small sheathed forest knife on the belt, the other relaxed. No headdress. Rugged appealing adult face. Style: exquisite semi-realistic digital oil-painted RPG character illustration, detailed and beautiful natural face, painterly skin and textile texture, coherent warm directional light with soft neutral fill. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view, eyes visible. Bold revealing clothing appropriate for tropical adventure, uncovered masculine torso, no erotic posing. Composition: vertical 2:3 canvas, ideally 1024x1536; show full head and hair with 5 percent top margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible near lower edge. NO feet or shoes. Single continuous original painting, ONE figure only, no face inset. Genuine transparent background with clean alpha silhouette. No scenery, floor, cast-shadow plane, gradient, halo, border, labels, text, logos, watermarks, jeans, watches, modern styling or zipper. Opaque cloth fully covers pelvis. Costume is a creative community-inspired game adaptation, not a documentary reconstruction.",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-f7a6076b-f2c8-497b-aebf-99fa8c73a741.png",
+      "key": "portraits/mates/folk_orangutan_m",
+      "workspace_source": "artifacts/folk-seasia-men-20261106/sources/orangutan.png",
+      "face_file": "images/portraits/mates/folk_orangutan_m.webp",
+      "half_file": "images/portraits/mates/folk_orangutan_m_half.webp"
+    },
+    {
+      "id": "folk_bajau",
+      "name": "바자우",
+      "reference_numbers": [
+        5,
+        6,
+        12
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-11d51665-3370-44ac-aac0-14bedf031432.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0a4df367-d6de-4141-aedb-8cadb72a16b1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-7a447916-99ac-489c-9640-7eabffc2bb41.png"
+      ],
+      "design": "Bajau-inspired seafarer and navigator. Adult male age 27, lean muscular swimmer physique, rich sun-warmed brown skin, balanced oval face, thick softly parted short black hair, alert dark eyes, small friendly smile and clean shaven jaw. Bare chest, abdominal muscles, shoulders and arms, small open loose teal sleeveless vest falling to the sides without covering torso, ocean-blue woven waist sash, opaque indigo and teal knee-length sarong tied securely at hip with one knee visible. Simple shell and pearl necklace, brass bangle and coiled boat cord attached to belt. Upright relaxed stance with one hand holding a compact wooden paddle shaft at his side; all prop ends inside canvas. Hands anatomically correct.",
+      "prompt": "Use case: stylized-concept. Asset type: transparent knee-length companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional adult Southeast Asian male recruit; reference photos are appearance and material inspiration only, not edit targets or evidence of anyone's ethnicity. Bajau-inspired seafarer and navigator. Adult male age 27, lean muscular swimmer physique, rich sun-warmed brown skin, balanced oval face, thick softly parted short black hair, alert dark eyes, small friendly smile and clean shaven jaw. Bare chest, abdominal muscles, shoulders and arms, small open loose teal sleeveless vest falling to the sides without covering torso, ocean-blue woven waist sash, opaque indigo and teal knee-length sarong tied securely at hip with one knee visible. Simple shell and pearl necklace, brass bangle and coiled boat cord attached to belt. Upright relaxed stance with one hand holding a compact wooden paddle shaft at his side; all prop ends inside canvas. Hands anatomically correct. Style: exquisite semi-realistic digital oil-painted RPG character illustration, detailed and beautiful natural face, painterly skin and textile texture, coherent warm directional light with soft neutral fill. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view, eyes visible. Bold revealing clothing appropriate for tropical adventure, uncovered masculine torso, no erotic posing. Composition: vertical 2:3 canvas, ideally 1024x1536; show full head and hair with 5 percent top margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible near lower edge. NO feet or shoes. Single continuous original painting, ONE figure only, no face inset. Genuine transparent background with clean alpha silhouette. No scenery, floor, cast-shadow plane, gradient, halo, border, labels, text, logos, watermarks, jeans, watches, modern styling or zipper. Opaque cloth fully covers pelvis. Costume is a creative community-inspired game adaptation, not a documentary reconstruction.",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-f9ef7bcb-789b-4275-b223-5a84e150c0ea.png",
+      "key": "portraits/mates/folk_folk_bajau_m",
+      "workspace_source": "artifacts/folk-seasia-men-20261106/sources/folk_bajau.png",
+      "face_file": "images/portraits/mates/folk_folk_bajau_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_bajau_m_half.webp"
+    },
+    {
+      "id": "folk_andaman",
+      "name": "안다만",
+      "reference_numbers": [
+        13,
+        14,
+        16,
+        17
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e8757034-755d-4ca5-9d74-ee47092b9af6.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-9f1c9f08-9daf-4764-b6c0-052130a972bc.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1720ee23-d6f3-42a1-b643-0b7e5617e3af.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-32f5a9b6-076d-41ef-a405-854690683a61.png"
+      ],
+      "design": "Andaman island-inspired tracker and navigator. Adult male age 26, compact athletic build, deep warm brown complexion, rounded yet defined face, broad cheekbones, expressive dark eyes, short dense curly black hair, clean shaven, quietly welcoming mature expression. Use reference photos only for appealing facial expression, body proportion and confident bearing; make an original community-inspired character. Entire bare chest, shoulders, abdomen and arms. Opaque earth-red knee-length woven wrapped cloth secured by a natural fiber cord with fully covered pelvis, simple shell beads, small woven belt pouch and light ivory decorative paint strokes on upper arms only. Holds a slim plain wooden walking staff beside him. Minimal ornament, no royal gold costume.",
+      "prompt": "Use case: stylized-concept. Asset type: transparent knee-length companion portrait for an Age-of-Sail Korean adventure RPG. Create ONE original fictional adult Southeast Asian male recruit; reference photos are appearance and material inspiration only, not edit targets or evidence of anyone's ethnicity. Andaman island-inspired tracker and navigator. Adult male age 26, compact athletic build, deep warm brown complexion, rounded yet defined face, broad cheekbones, expressive dark eyes, short dense curly black hair, clean shaven, quietly welcoming mature expression. Use reference photos only for appealing facial expression, body proportion and confident bearing; make an original community-inspired character. Entire bare chest, shoulders, abdomen and arms. Opaque earth-red knee-length woven wrapped cloth secured by a natural fiber cord with fully covered pelvis, simple shell beads, small woven belt pouch and light ivory decorative paint strokes on upper arms only. Holds a slim plain wooden walking staff beside him. Minimal ornament, no royal gold costume. Style: exquisite semi-realistic digital oil-painted RPG character illustration, detailed and beautiful natural face, painterly skin and textile texture, coherent warm directional light with soft neutral fill. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view, eyes visible. Bold revealing clothing appropriate for tropical adventure, uncovered masculine torso, no erotic posing. Composition: vertical 2:3 canvas, ideally 1024x1536; show full head and hair with 5 percent top margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible near lower edge. NO feet or shoes. Single continuous original painting, ONE figure only, no face inset. Genuine transparent background with clean alpha silhouette. No scenery, floor, cast-shadow plane, gradient, halo, border, labels, text, logos, watermarks, jeans, watches, modern styling or zipper. Opaque cloth fully covers pelvis. Costume is a creative community-inspired game adaptation, not a documentary reconstruction.",
+      "source": "C:/Users/User/.codex/generated_images/01a1b079-9787-7552-ad54-74cea6b00e80/exec-c3b10b79-38d3-4841-9078-4f6f304335d4.png",
+      "key": "portraits/mates/folk_folk_andaman_m",
+      "workspace_source": "artifacts/folk-seasia-men-20261106/sources/folk_andaman.png",
+      "face_file": "images/portraits/mates/folk_folk_andaman_m.webp",
+      "half_file": "images/portraits/mates/folk_folk_andaman_m_half.webp"
+    }
+  ]
+}

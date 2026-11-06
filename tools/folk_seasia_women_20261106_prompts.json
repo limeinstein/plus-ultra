@@ -1,0 +1,124 @@
+{
+  "date": "2026-11-06",
+  "mode": "built-in image_gen",
+  "scope": "동남아 민족 발견물 5종 여성 후보, 민족별 얼굴상·무릎상 한 쌍. 같은 민족의 네 이름이 공용.",
+  "portraits": [
+    {
+      "id": "padaung",
+      "name": "카얀",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-39290020-10f8-4789-ac0a-e5269fe1b5ee.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-f3bbf359-4946-4740-a580-c1c1056a6a89.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2b180b95-6648-47dd-9355-224a6276ca00.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3eb6e454-d229-4fc7-858b-2a8db448678f.png"
+      ],
+      "design": "Kayan-inspired musician and craftswoman. Warm tan complexion, long voluminous dark brown wavy hair swept over one shoulder, gracefully arched brows, almond eyes, composed inviting smile. Burgundy and indigo woven fitted low sweetheart neckline wrap top with narrow straps, bare midriff, patterned sarong with a side opening ending at the knee, modest brass neck coil collar of believable height and brass bangles. A folded red geometric woven shawl at her elbow. Rich wine red, indigo and brass, practical cloth sash with a small artisan pouch.",
+      "reference_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: single transparent knee-length companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional adult woman aged 27, inspired by reference photos' facial impressions, hairstyle and elegant expressions, rather than an exact real-person likeness. Reference photos guide appearance only; all depicted characters are mature adults. She is a capable independent recruit. Kayan-inspired musician and craftswoman. Warm tan complexion, long voluminous dark brown wavy hair swept over one shoulder, gracefully arched brows, almond eyes, composed inviting smile. Burgundy and indigo woven fitted low sweetheart neckline wrap top with narrow straps, bare midriff, patterned sarong with a side opening ending at the knee, modest brass neck coil collar of believable height and brass bangles. A folded red geometric woven shawl at her elbow. Rich wine red, indigo and brass, practical cloth sash with a small artisan pouch. Style: exquisite semi-realistic digital oil-painted game character illustration, softly painted natural skin, nuanced eyes and lips, fine fabric detail, cohesive warm directional light with neutral fill. Adult curvy physique with a visibly large full bust, proportional anatomy. Bold revealing fashion with uncovered shoulders, arms, neckline and some midriff, but chest and pelvis securely covered by opaque cloth. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view toward viewer, eyes visible and hands relaxed. Composition: vertical 2:3 canvas, 1024x1536 if supported; full head and hair with clear margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible at the lower edge. NO feet or shoes. ONE figure only, no separate face inset. Genuinely transparent background and clean alpha silhouette. No scenery, floor, shadow plane, gradient, halo, labels, logos, watermark, modern fashion accessories, nudity or erotic pose. Costume is a creative community-inspired fantasy adaptation, not documentary reconstruction.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b076-952d-7a43-9ebc-852e30eac214\\exec-d3e4544d-46c0-44c0-ab79-08293be1a1cd.png",
+      "face_key": "portraits/folk-join/padaung_f_v1",
+      "workspace_source": "artifacts/folk-seasia-women-20261106/sources/padaung.png",
+      "face_file": "images/portraits/folk-join/padaung_f_v1.webp",
+      "half_file": "images/portraits/folk-join/padaung_f_v1_half.webp"
+    },
+    {
+      "id": "cannibal",
+      "name": "토바 바탁",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-cb6828ed-0b13-43fb-8e76-912b4c5cab9d.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5cd9ce6a-f3b5-43f9-ab76-db3b60e5ece8.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2d87ddb0-a01a-42c7-8240-ed2b2df91280.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e70ca629-9b68-4ebc-96d6-fb9fad22aaa1.png"
+      ],
+      "design": "Toba Batak-inspired healer and storyteller. Soft oval face, dark expressive eyes, long chestnut-black wavy hair, kind confident smile. Black and vermilion ulos-inspired geometric handwoven cloth fashioned into an asymmetrical low neckline fitted shoulder wrap top, a strip of bare waist, dark red sarong with side slit to the knee, a narrow red woven headband and restrained warm brass ear ornaments. Small closed herbal pouch held loosely at hip. Strong woven border motifs, no modern conical hat or ao-dai.",
+      "reference_numbers": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: single transparent knee-length companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional adult woman aged 27, inspired by reference photos' facial impressions, hairstyle and elegant expressions, rather than an exact real-person likeness. Reference photos guide appearance only; all depicted characters are mature adults. She is a capable independent recruit. Toba Batak-inspired healer and storyteller. Soft oval face, dark expressive eyes, long chestnut-black wavy hair, kind confident smile. Black and vermilion ulos-inspired geometric handwoven cloth fashioned into an asymmetrical fitted shoulder wrap top with a gently curved neckline, a strip of bare waist, dark red sarong with side slit to the knee, a narrow red woven headband and restrained warm brass ear ornaments. Small closed herbal pouch held loosely at hip. Strong woven border motifs, no modern conical hat or ao-dai. Style: exquisite semi-realistic digital oil-painted game character illustration, softly painted natural skin, nuanced eyes and lips, fine fabric detail, cohesive warm directional light with neutral fill. Full-figured mature adult build with natural proportions. Sleeveless fitted woven fashion with uncovered shoulders, arms and a small strip of waist, opaque securely fitted fabric. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view toward viewer, eyes visible and hands relaxed. Composition: vertical 2:3 canvas, 1024x1536 if supported; full head and hair with clear margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible at the lower edge. NO feet or shoes. ONE figure only, no separate face inset. Genuinely transparent background and clean alpha silhouette. No scenery, floor, shadow plane, gradient, halo, labels, logos, watermark, modern fashion accessories, nudity or erotic pose. Costume is a creative community-inspired fantasy adaptation, not documentary reconstruction.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b076-952d-7a43-9ebc-852e30eac214\\exec-26afc860-3521-44b7-b1e9-ac3d4995ddd8.png",
+      "face_key": "portraits/folk-join/cannibal_f_v1",
+      "workspace_source": "artifacts/folk-seasia-women-20261106/sources/cannibal.png",
+      "face_file": "images/portraits/folk-join/cannibal_f_v1.webp",
+      "half_file": "images/portraits/folk-join/cannibal_f_v1_half.webp"
+    },
+    {
+      "id": "orangutan",
+      "name": "보르네오 긴집",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-310b4c31-4f19-4e18-a548-8451fa48999d.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5bd0a7d1-14b9-4e83-8925-8110b51efbab.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-953c35d2-f14f-41e5-a058-f6068325422d.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a4483159-cd3b-413b-9cc7-b350f615d63e.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-bba27576-c061-4ed2-aa52-42123dc98a46.png"
+      ],
+      "design": "Borneo Dayak longhouse-inspired forest guide. Distinct sculpted cheekbones, warm copper-tan skin, dark almond eyes, black hair in an elegant high bun with loose side tendrils. Emerald and black handwoven fitted low neckline sleeveless wrap bodice, bare midriff, dark green knee-length wrap skirt with small geometric red and ivory bead trim, brass belt, carved bead earrings and narrow stacked bangles. A single restrained hornbill-feather hair accent, a small closed woven trail pouch at hip. Refined confident expression, one hand loosely on belt.",
+      "reference_numbers": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: single transparent knee-length companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional adult woman aged 27, inspired by reference photos' facial impressions, hairstyle and elegant expressions, rather than an exact real-person likeness. Reference photos guide appearance only; all depicted characters are mature adults. She is a capable independent recruit. Borneo Dayak longhouse-inspired forest guide. Distinct sculpted cheekbones, warm copper-tan skin, dark almond eyes, black hair in an elegant high bun with loose side tendrils. Emerald and black handwoven fitted low neckline sleeveless wrap bodice, bare midriff, dark green knee-length wrap skirt with small geometric red and ivory bead trim, brass belt, carved bead earrings and narrow stacked bangles. A single restrained hornbill-feather hair accent, a small closed woven trail pouch at hip. Refined confident expression, one hand loosely on belt. Style: exquisite semi-realistic digital oil-painted game character illustration, softly painted natural skin, nuanced eyes and lips, fine fabric detail, cohesive warm directional light with neutral fill. Adult curvy physique with a visibly large full bust, proportional anatomy. Bold revealing fashion with uncovered shoulders, arms, neckline and some midriff, but chest and pelvis securely covered by opaque cloth. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view toward viewer, eyes visible and hands relaxed. Composition: vertical 2:3 canvas, 1024x1536 if supported; full head and hair with clear margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible at the lower edge. NO feet or shoes. ONE figure only, no separate face inset. Genuinely transparent background and clean alpha silhouette. No scenery, floor, shadow plane, gradient, halo, labels, logos, watermark, modern fashion accessories, nudity or erotic pose. Costume is a creative community-inspired fantasy adaptation, not documentary reconstruction.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b076-952d-7a43-9ebc-852e30eac214\\exec-fd2c36a0-7565-4532-9dba-e682552ce3dd.png",
+      "face_key": "portraits/folk-join/orangutan_f_v1",
+      "workspace_source": "artifacts/folk-seasia-women-20261106/sources/orangutan.png",
+      "face_file": "images/portraits/folk-join/orangutan_f_v1.webp",
+      "half_file": "images/portraits/folk-join/orangutan_f_v1_half.webp"
+    },
+    {
+      "id": "folk_bajau",
+      "name": "바자우",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2ffe6777-67ec-4de8-bf02-b65180390902.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-1c1b62e9-7a36-44f1-9744-d8e15b8551d9.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-fd8cdd59-2248-4797-a493-f3cd829cf03a.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-34006421-add9-401f-8f74-250ccaeafdcd.png"
+      ],
+      "design": "Bajau sea-voyager inspired navigator. Sun-warmed bronze skin, gently angular oval face, dark brown eyes, sleek long black hair flowing over one shoulder, confident friendly smile. Ocean teal fitted low neckline narrow-strap wrap top with opaque panels and decorative shell edging, exposed shoulders and waist, indigo and sea-green layered sarong with a side slit to knee, narrow brass belt, delicate pearl and shell necklaces that do not obscure the face. Small coiled boat cord at belt and simple brass bracelets; elegant sailing-adventure fashion.",
+      "reference_numbers": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: single transparent knee-length companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional adult woman aged 27, inspired by reference photos' facial impressions, hairstyle and elegant expressions, rather than an exact real-person likeness. Reference photos guide appearance only; all depicted characters are mature adults. She is a capable independent recruit. Bajau sea-voyager inspired navigator. Sun-warmed bronze skin, gently angular oval face, dark brown eyes, sleek long black hair flowing over one shoulder, confident friendly smile. Ocean teal fitted low neckline narrow-strap wrap top with opaque panels and decorative shell edging, exposed shoulders and waist, indigo and sea-green layered sarong with a side slit to knee, narrow brass belt, delicate pearl and shell necklaces that do not obscure the face. Small coiled boat cord at belt and simple brass bracelets; elegant sailing-adventure fashion. Style: exquisite semi-realistic digital oil-painted game character illustration, softly painted natural skin, nuanced eyes and lips, fine fabric detail, cohesive warm directional light with neutral fill. Adult curvy physique with a visibly large full bust, proportional anatomy. Bold revealing fashion with uncovered shoulders, arms, neckline and some midriff, but chest and pelvis securely covered by opaque cloth. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view toward viewer, eyes visible and hands relaxed. Composition: vertical 2:3 canvas, 1024x1536 if supported; full head and hair with clear margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible at the lower edge. NO feet or shoes. ONE figure only, no separate face inset. Genuinely transparent background and clean alpha silhouette. No scenery, floor, shadow plane, gradient, halo, labels, logos, watermark, modern fashion accessories, nudity or erotic pose. Costume is a creative community-inspired fantasy adaptation, not documentary reconstruction.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b076-952d-7a43-9ebc-852e30eac214\\exec-ebdaa0c2-573c-4565-a8c2-d7f5e9db2888.png",
+      "face_key": "portraits/folk-join/folk_bajau_f_v1",
+      "workspace_source": "artifacts/folk-seasia-women-20261106/sources/folk_bajau.png",
+      "face_file": "images/portraits/folk-join/folk_bajau_f_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_bajau_f_v1_half.webp"
+    },
+    {
+      "id": "folk_andaman",
+      "name": "안다만",
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-9e57c8b7-1ab7-4a3c-9b37-96f6e90a1a86.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2d844ebe-2e14-40f6-9c4f-ba426b2a3bb2.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-ea3a5ac4-7326-41d2-99ad-96c5bb2570f0.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-14061ac6-271c-48ab-8765-0f638282a0db.png"
+      ],
+      "design": "Andaman island-inspired tracker. Deep warm brown skin, soft oval facial contours, expressive dark brown eyes, black hair drawn back into a loose low bun with wisps framing face, calm gentle adult expression. Earth ochre and ivory narrow-strap low neckline woven cropped wrap top, bare midriff and arms, dark terracotta opaque knee-length wrapped skirt with a side opening to knee and woven waist cord. Restrained shell earrings and pale shell bead necklace, woven herb pouch, holds a slim plain wooden walking staff beside her body within canvas. Natural cloth and fiber textures, minimal ornament.",
+      "reference_numbers": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: single transparent knee-length companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional adult woman aged 27, inspired by reference photos' facial impressions, hairstyle and elegant expressions, rather than an exact real-person likeness. Reference photos guide appearance only; all depicted characters are mature adults. She is a capable independent recruit. Andaman island-inspired tracker. Deep warm brown skin, soft oval facial contours, expressive dark brown eyes, black hair drawn back into a loose low bun with wisps framing face, calm gentle adult expression. Earth ochre and ivory wide-strap gently curved neckline woven cropped wrap top, bare midriff and arms, dark terracotta opaque knee-length wrapped skirt with a side opening to knee and woven waist cord. Restrained shell earrings and pale shell bead necklace, woven herb pouch, holds a slim plain wooden walking staff beside her body within canvas. Natural cloth and fiber textures, minimal ornament. Style: exquisite semi-realistic digital oil-painted game character illustration, softly painted natural skin, nuanced eyes and lips, fine fabric detail, cohesive warm directional light with neutral fill. Full-figured mature adult build with natural proportions. A securely fitted opaque woven outfit with uncovered shoulders and arms and a small strip of waist. Calm ordinary character presentation. Proud relaxed upright standing pose, face mostly front or gentle three-quarter view toward viewer, eyes visible and hands relaxed. Composition: vertical 2:3 canvas, 1024x1536 if supported; full head and hair with clear margin, both arms and hands inside frame, crop just BELOW BOTH KNEES with knees visible at the lower edge. NO feet or shoes. ONE figure only, no separate face inset. Genuinely transparent background and clean alpha silhouette. No scenery, floor, shadow plane, gradient, halo, labels, logos, watermark, modern fashion accessories, nudity or erotic pose. Costume is a creative community-inspired fantasy adaptation, not documentary reconstruction.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b076-952d-7a43-9ebc-852e30eac214\\exec-4cbb2213-75e6-4e1a-89e7-a35a38f2fdf8.png",
+      "face_key": "portraits/folk-join/folk_andaman_f_v1",
+      "workspace_source": "artifacts/folk-seasia-women-20261106/sources/folk_andaman.png",
+      "face_file": "images/portraits/folk-join/folk_andaman_f_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_andaman_f_v1_half.webp"
+    }
+  ]
+}

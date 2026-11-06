@@ -15,6 +15,7 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
   const executablePath = process.env.BROWSER_EXE || (process.platform === 'win32' ? 'C:/Program Files/Google/Chrome/Application/chrome.exe' : undefined);
   const browser = await chromium.launch({ executablePath, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 960, height: 720 } });
+  await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ status: 200, contentType: 'text/css', body: '' }));
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
@@ -25,6 +26,8 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
       await G.Game.ensureGeo();
       G.State.newGame({ name: '악기 시험', nation: 'PT', job: 'explorer', age: 24, birth: { m: 1, d: 1 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk: {}, lg: [], diff: 'normal' });
       const s = G.Game.state, R = G.R, MK = G.Scenes.city.B.market;
+      // 시장의 원화·구매·매각만 검사한다. 도시를 옮길 때 다른 사건의 대기 대화는 열지 않는다.
+      Object.values(G).forEach(system => { if (system && typeof system.pending === 'function') system.pending = () => false; });
       s.settings.res = 0.35;
       const instruments = G.ITEMS.filter(it => it.kind === 'instrument');
       const fail = (ok, message) => { if (!ok) throw new Error(message); };
@@ -132,7 +135,7 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
       G.Game.go('city', { cityId: 14, load: true });
       return { total: instruments.length, regions: regions.size, requested, artIds, percussionNew, regionalCore, regionalNew, regionalMinimum, orchestra, traditions, militaryNew, militaryIds, shapes: new Set(instruments.map(it => it.shape)).size, names: instruments.map(it => it.name) };
     });
-    await page.waitForFunction(() => G.Game.sceneName === 'city');
+    await page.waitForFunction(() => G.Game.sceneName === 'city' && !G.Scenes.city.isBusy(), null, { timeout: 120000 });
     await page.evaluate(() => {
       // 인사 대화만 생략하고 구입·수량·확인·매각 창은 실제 화면으로 조작한다.
       G.Scenes.city.say = async () => {};
@@ -196,8 +199,10 @@ const extraTrades = [{ id: 'handbell', name: '핸드벨', city: 14 }, { id: 'sle
         if (G.Scenes.city.city().id !== data.city) throw new Error('시험 시장 위치 불일치: ' + data.id);
         window.__goldBefore = s.player.gold;
         window.__unit = MK.price(G.ITEM[data.id]);
-        MK.buy(G.CITY_DATA[data.city]);
       }, item);
+      // 도시 원화 읽기·거리 열기가 끝나야 창을 연다. 입항 처리가 뒤늦게 창을 닫는 경합을 막는다.
+      await page.waitForFunction(data => G.Game.sceneName === 'city' && G.Scenes.city.city().id === data.city && !G.Scenes.city.isBusy(), item, { timeout: 120000 });
+      await page.evaluate(data => { G.Scenes.city.B.market.buy(G.CITY_DATA[data.city]); }, item);
       await page.locator('.choices').waitFor();
       // 악기만 입고된 작은 시장은 분류 탭 없이 곧바로 목록을 보여 준다.
       const instrumentTab = page.locator('.choice-cats [data-cat="instrument"]');

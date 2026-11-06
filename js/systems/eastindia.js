@@ -2,9 +2,10 @@
    사람·조정값: js/data/eastindia.js (G.BALANCE.eindia). 역사는 바뀌지 않는다 — 제독이 그 자리에 있었고, 한 사람을 건져 왔을 뿐이다.
    ■ 설립
      ① 잉글랜드 (1600.9.22~1601.2.13, 런던): 토머스 스마이스가 출자 명부를 돌린다 · 12월 31일 엘리자베스 여왕의 특허장.
-        출자(opts 가운데 하나) → 1604년 봄, 랭커스터의 첫 항해가 후추를 싣고 돌아와 원금의 ret배를 돌려준다 (소식과 함께 금화).
+        출자(opts 가운데 하나) → 잉글랜드 동인도 회사 주식 (G.Company.subscribe — 청약 기간 안이면 액면, 그 뒤 추가 출자는 그날 시세)
+        1604년 봄, 랭커스터의 첫 항해가 후추를 싣고 돌아와 이익(액면의 ret−1)을 1주마다 나눈다 — 그때 주식을 쥔 사람 모두 (2026-11-06 주식 하나로)
      ② 네덜란드 (1602.3.20~8.31, 암스테르담): 연합 동인도 회사(VOC) — 누구나 살 수 있는 세상의 첫 주식. 이삭 르메르.
-        청약 → 1610년 첫 배당(액면의 div — 메이스로 받아 팔아 금화) · 1603년부터 암스테르담에 들르면 그해 주가(curve)로 팔 수 있다.
+        청약 → VOC 주식 (G.Company와 같은 주식 — 거래소·VOC 본부에서 사고판다) · 1610년 첫 배당(1주에 액면의 div — 메이스로 받아 팔아 금화)
    ■ 위기의 절정 — 동료가 되는 네 사람
      ③ 1612 수왈리 해전 (10~12월, 디우): 베스트의 레드 드래건호와 포르투갈 함대가 맞붙은 혼란 속, 바람이 멎은 아르메니아 배를 말라바르 해적이 덮친다.
         갑판의 싸움(육상전)에 이기면 마리암 하코비안 · 지면 다음에(again일)
@@ -16,7 +17,8 @@
         (가) 판스페울트 앞에서 그를 변호한다 (웅변 speech 이상 — 역사에서도 두 사람은 사면받았다) (나) 처형 전날 밤 감옥을 깬다(육상전) (다) 떠난다
    ■ 소식 (누구나): 동인도 회사 특허장 · VOC(네덜란드 독립 전쟁에서 이미 들은 사람은 빼고) · 수왈리 해전 · 바타비아 · 반다 · 암보이나
    ■ 물러서거나 막히면 again일 뒤 다시(기한 안에서). 장면 그림: images/legend-events/ei_* — EASTINDIA_PROMPT.md
-   ■ 저장: s.eindia = { told: {}, eic: 낸 돈, eicPaid, voc: 낸 돈(액면), vocDiv, vocSold, swally, jakatra, banda, amboyna, <열쇠>How, <열쇠>Cool } */
+   ■ 저장: s.eindia = { told: {}, eic: 낸 돈, eicPaid, voc: 낸 돈(액면), vocDiv, vocSold(옛 저장 — 예전 따로 팔던 VOC 몫), swally, jakatra, banda, amboyna, <열쇠>How, <열쇠>Cool }
+     주식 자체는 s.company.shares (js/systems/company.js) */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R;
@@ -55,6 +57,9 @@
   function log(t) { G.State.log(t); }
   function skill(id) { var b = R.skillBest ? R.skillBest(id) : { lv: R.skill(id), who: null }; return { lv: (b && b.lv) || 0, who: (b && b.who) || '제독' }; }
   function item(id) { return R.addItem ? R.addItem(id) !== false : false; }
+  /** 출자를 회사 주식으로 — 역사의 청약 기간(k.to) 안이면 설립 출자 */
+  function subscribe(coId, paid, k) { return G.Company && G.Company.subscribe ? G.Company.subscribe(coId, paid, today() <= k.to) : 0; }
+  function shares(coId) { var b = G.Company && G.Company.state ? G.Company.state() : null; return b ? b.shares[coId] || 0 : 0; }
   function num(n) { return U.num(Math.round(n)); }
   function join(id, cityId) {
     var s = S(), c = G.CITY_DATA[cityId];
@@ -99,10 +104,10 @@
     var paid = await invest(k.opts, '잉글랜드 동인도 회사에 출자할까?', who('smythe'));
     if (paid == null) { b.eicCool = S().day + G.BALANCE.voyagePlans.deferDays; log('출자 결정을 미루었다 — 참여 기한 안에 다시 방문할 수 있다.'); return false; }
     if (paid) {
-      b.eic = paid; item('eic_charter');
-      await play([['smythe', '좋소! 명부에 그대 이름을 적겠소. 랭커스터의 레드 드래건호가 후추를 싣고 돌아오는 날, 그대 몫을 셈해 보내리다.']]);
-      log('런던에서 잉글랜드 동인도 회사에 금화 ' + num(paid) + '닢을 출자했다. 랭커스터의 첫 항해가 돌아오면 셈해 준다.');
-      UI.toast('동인도 회사에 출자했다 — 금화 ' + num(paid) + '닢 (첫 항해가 돌아오면 정산)', 'coin', 5200);
+      var n = subscribe('eic', paid, k); b.eic = paid; item('eic_charter');
+      await play([['smythe', '좋소! 명부에 그대 이름을 적겠소. 랭커스터의 레드 드래건호가 후추를 싣고 돌아오는 날, 그대 몫의 이익을 셈해 보내리다.']]);
+      log('런던에서 잉글랜드 동인도 회사에 금화 ' + num(paid) + '닢을 출자했다 — 주식 ' + n + '주. 랭커스터의 첫 항해가 돌아오면 이익을 나눈다.');
+      UI.toast('동인도 회사에 출자했다 — 금화 ' + num(paid) + '닢 · 주식 ' + n + '주 (첫 항해가 돌아오면 이익 배당)', 'coin', 5200);
     } else {
       b.eic = -1;
       await play([['smythe', '하하, 신중한 분이로군. 바다의 장사는 원래 그런 거요.']]);
@@ -111,46 +116,30 @@
   };
 
   // ================================================================ ② 네덜란드 연합 동인도 회사 (1602)
-  EI.vocPrice = function (y) {
-    var c = K().voc.curve; y = y || S().date.y;
-    if (y <= c[0][0]) return c[0][1];
-    for (var i = 1; i < c.length; i++) if (y <= c[i][0]) { var a = c[i - 1], z = c[i]; return a[1] + (z[1] - a[1]) * (y - a[0]) / (z[0] - a[0]); }
-    return c[c.length - 1][1];
-  };
+  /** VOC 주가 — 액면의 몇 배 (G.Company의 VOC 주가 하나뿐) */
+  EI.vocPrice = function () { var co = G.COMPANY && G.COMPANY.voc; return co && G.Company ? G.Company.px(co) / co.face : 1; };
   EI.voc = async function () {
     var b = st(), k = K().voc; b.vocMet = 1;
     if (G.VoyagePlans) await G.VoyagePlans.subscriptionIntro(k);
     await withPic('ei_voc_house', '연합 동인도 회사 (1602)', function () { return play([
-      [null, '암스테르담. 운하 옆 회사 사무소 앞에 줄이 늘어섰다. 상인, 목수, 하녀, 목사 — 누구든 몫을 살 수 있다는 소문에 도시가 들썩인다. 여섯 도시의 작은 회사들이 서로 값을 깎아 먹다 못해 하나로 묶였다. 「연합 동인도 회사」, VOC다.'],
+      [null, '암스테르담. 운하 옆 회사 사무소 앞에 줄이 늘어섰다. 상인, 목수, 하녀, 목사 — 누구든 몫을 살 수 있다는 소문에 도시가 들썩인다. 여섯 도시의 작은 회사들이 서로 값을 깎아 먹다 못해 하나로 묶였다. 「연합 동인도 회사」다.'],
       ['lemaire', '나는 이삭 르메르. 이 회사에 가장 많이 넣은 사람 가운데 하나지. 잘 보시오 — 이건 배 한 번에 몫을 거는 장사가 아니오. 회사가 스물한 해 동안 계속 배를 보내고, 몫을 가진 자는 그 몫을 남에게 팔 수도 있소. 세상에 처음 생긴 물건이지.'],
       ['lemaire', '「주식」이라고들 부르더군. 몫을 쥔 사람은 배가 돌아올 때마다 이익을 나누어 받고, 급하면 거래소에서 팔면 그만이오. …물론 값은 오르기도 하고 내리기도 하지. 하하.']
     ]); });
-    var paid = await invest(k.opts, 'VOC 주식을 청약할까?', who('lemaire'));
+    var paid = await invest(k.opts, '네덜란드 동인도 회사 주식을 청약할까?', who('lemaire'));
     if (paid == null) { b.vocCool = S().day + G.BALANCE.voyagePlans.deferDays; log('출자 결정을 미루었다 — 참여 기한 안에 다시 방문할 수 있다.'); return false; }
     if (paid) {
-      b.voc = paid; item('voc_share');
+      var n = subscribe('voc', paid, k); b.voc = paid; item('voc_share');
       await play([['lemaire', '좋소! 그대 이름이 장부에 올랐소. 몇 해 기다리시오. 그동안 몫이 필요 없어지면 암스테르담 거래소에서 사겠다는 사람을 찾을 수 있을 거요.']]);
-      log('암스테르담에서 연합 동인도 회사(VOC) 주식을 금화 ' + num(paid) + '닢어치 청약했다.');
-      UI.toast('VOC 주식 청약 — 액면 금화 ' + num(paid) + '닢 (1610년 첫 배당 · 암스테르담에서 팔 수 있다)', 'coin', 5200);
+      log('암스테르담에서 연합 동인도 회사 주식을 금화 ' + num(paid) + '닢어치 청약했다 — ' + n + '주.');
+      UI.toast('네덜란드 동인도 회사 주식 청약 — ' + n + '주 (금화 ' + num(paid) + '닢 · 1610년 첫 배당 · 거래소에서 사고판다)', 'coin', 5200);
     } else {
       b.voc = -1;
       await play([['lemaire', '아쉽구려. 언젠가 이 종이 한 장이 배 한 척보다 비싸지는 날이 올 거요.']]);
     }
     refresh(); return true;
   };
-  function vocSellOpen() { var b = st(), t = today(); return !!(b && b.voc > 0 && !b.vocSold && cityNow() === K().voc.city && t >= 16030101 && b.vocAsk !== S().day); }
-  EI.vocSell = async function () {
-    var b = st(); b.vocAsk = S().day;
-    var px = EI.vocPrice(), val = Math.round(b.voc * px);
-    var v = await UI.ask('암스테르담 거래소 — VOC 주식(액면 ' + num(b.voc) + '닢)의 오늘 값은 액면의 ' + px.toFixed(2) + '배, 금화 ' + num(val) + '닢', [{ label: '판다 (금화 ' + num(val) + '닢)', value: 'sell' }, { label: '계속 쥐고 있는다', value: 'keep' }], who('lemaire'));
-    if (v === 'sell') {
-      b.vocSold = val; S().player.gold += val;
-      log('암스테르담 거래소에서 VOC 주식(액면 ' + num(b.voc) + '닢)을 금화 ' + num(val) + '닢에 팔았다.');
-      UI.toast('VOC 주식을 팔았다 — 금화 +' + num(val), 'coin', 5200);
-      refresh();
-    }
-    return true;
-  };
+  // 예전의 따로 팔던 VOC 몫(EI.vocSell)은 2026-11-06 회사 주식으로 합쳤다 — 거래소·VOC 본부의 주식 창구에서 판다
 
   // ================================================================ ③ 1612 수왈리 해전 — 마리암 하코비안
   EI.swally = async function () {
@@ -186,20 +175,20 @@
     await withPic('ei_jakatra_fire', '자야카르타의 불 (1619)', function () { return play([
       [null, '반탐에서 하루 뱃길 동쪽, 칠리웅 강 어귀의 자야카르타. 강 건너 네덜란드 요새를 잉글랜드 함대와 반텐 군사가 몇 달째 에워쌌지만, 요새는 버텼다. 그리고 지금 — 암보이나에서 함대를 끌고 돌아온 쿤이 도시에 불을 놓고 있다.'],
       ['coen', '이 땅 위에 회사의 도시를 세운다. 바타비아 — 조상의 이름을 붙이겠다. 이 바다의 장사는 우리가 정한다. 저 잉글랜드 놈들도, 반텐의 술탄도 아니다.'],
-      [null, '불길 사이 좁은 길로 사람들이 밀려 나온다. 그 맨 앞에서, 금 장식을 머리에 꽂은 젊은 여인이 아이들의 손을 잡고 노인들을 이끈다. 길 끝을 VOC 병사들이 창으로 막아섰다.'],
+      [null, '불길 사이 좁은 길로 사람들이 밀려 나온다. 그 맨 앞에서, 금 장식을 머리에 꽂은 젊은 여인이 아이들의 손을 잡고 노인들을 이끈다. 길 끝을 네덜란드 동인도 회사 병사들이 창으로 막아섰다.'],
       ['kancana', '(자바 말로, 이어 포르투갈어로) 비켜 주세요! 이 사람들은 군사가 아니에요. 반텐으로 가는 길을 열어 주세요!']
     ]); });
-    var v = await UI.ask('피란민의 길을 VOC 병사들이 막았다', [
+    var v = await UI.ask('피란민의 길을 네덜란드 동인도 회사 병사들이 막았다', [
       { label: '병사들을 밀어내고 길을 연다', value: 'fight' },
-      { label: 'VOC 대위에게 금화 ' + num(k.bribe) + '닢을 쥐여 준다', value: 'bribe', dis: s.player.gold < k.bribe },
+      { label: '네덜란드 동인도 회사 대위에게 금화 ' + num(k.bribe) + '닢을 쥐여 준다', value: 'bribe', dis: s.player.gold < k.bribe },
       { label: '떠난다', value: 'leave' }], who('kancana'));
     if (v === 'leave') { later('jakatra', 'leave'); await play([[null, '제독의 배는 연기를 등지고 반탐으로 돌아갔다.']]); log('1619년 불타는 자야카르타를 두고 떠났다.'); refresh(); return true; }
     if (v === 'bribe' && s.player.gold >= k.bribe) {
       s.player.gold -= k.bribe;
-      await play([[null, 'VOC 대위가 금화 자루의 무게를 손으로 가늠하더니, 병사들에게 턱짓했다. 「밤이 되기 전에 다 지나가게 해라. 우리는 아무것도 보지 못했다.」']]);
+      await play([[null, '네덜란드 동인도 회사 대위가 금화 자루의 무게를 손으로 가늠하더니, 병사들에게 턱짓했다. 「밤이 되기 전에 다 지나가게 해라. 우리는 아무것도 보지 못했다.」']]);
     } else {
-      var r = await fight('자야카르타의 VOC 병사들', k.soldiers, { guns: true, leader: 'VOC 대위', noSpecial: true });
-      if (r !== 'win') { later('jakatra', 'lost'); await play([[null, '병사들에게 밀려났다. 여인은 사람들을 이끌고 강가의 다른 길을 찾아 연기 속으로 사라졌다.']]); log('1619년 자야카르타에서 VOC 병사들과 싸웠지만 밀려났다.'); refresh(); return true; }
+      var r = await fight('자야카르타의 네덜란드 동인도 회사 병사들', k.soldiers, { guns: true, leader: '네덜란드 동인도 회사 대위', noSpecial: true });
+      if (r !== 'win') { later('jakatra', 'lost'); await play([[null, '병사들에게 밀려났다. 여인은 사람들을 이끌고 강가의 다른 길을 찾아 연기 속으로 사라졌다.']]); log('1619년 자야카르타에서 네덜란드 동인도 회사 병사들과 싸웠지만 밀려났다.'); refresh(); return true; }
     }
     b.jakatra = v === 'bribe' ? 'bribe' : 'won';
     await withPic('ei_jakatra_kancana', '반텐 가는 길', function () { return play([
@@ -220,13 +209,13 @@
     await withPic('ei_banda', '반다의 비극 (1621)', function () { return play([
       [null, '암보이나에서 남쪽으로 사흘 뱃길, 화산이 솟은 작은 반다 제도. 세상의 육두구는 모두 이 몇 개의 섬에서만 자란다. 그리고 지금 — 쿤의 함대가 섬들을 에워쌌다. 반다 사람들이 잉글랜드와도 육두구를 거래했다는 까닭이다.'],
       ['coen', '이 섬들의 오랑 카야들은 약속을 어겼다. 육두구는 회사에만 판다고 하지 않았던가. 본보기를 보여야 한다.'],
-      [null, '— 해 질 녘, 반다네이라 섬의 요새 앞에서 원로들이 끌려 나갔다. 숲 쪽 해안에서 한 사내가 젖은 자루를 품에 안고 바다로 뛰어든다. VOC 병사들이 해안을 따라 쫓는다.'],
+      [null, '— 해 질 녘, 반다네이라 섬의 요새 앞에서 원로들이 끌려 나갔다. 숲 쪽 해안에서 한 사내가 젖은 자루를 품에 안고 바다로 뛰어든다. 네덜란드 동인도 회사 병사들이 해안을 따라 쫓는다.'],
       ['idris', '(헤엄쳐 제독의 거룻배에 매달리며) 부탁이오, 이 자루만은 — 이 나무들만은 지켜야 하오!']
     ]); });
-    var v = await UI.ask('묘목을 안은 사내가 거룻배에 매달렸다. 해안에서 VOC 병사들이 다가온다', [{ label: '그를 끌어올리고 병사들을 막는다', value: 'save' }, { label: '못 본 척 노를 돌린다', value: 'no' }], me());
+    var v = await UI.ask('묘목을 안은 사내가 거룻배에 매달렸다. 해안에서 네덜란드 동인도 회사 병사들이 다가온다', [{ label: '그를 끌어올리고 병사들을 막는다', value: 'save' }, { label: '못 본 척 노를 돌린다', value: 'no' }], me());
     if (v !== 'save') { later('banda', 'leave'); await play([[null, '거룻배를 돌렸다. 손이 미끄러져 사내는 물속으로 가라앉았다가, 멀리 바위 쪽으로 헤엄쳐 갔다.']]); log('1621년 반다에서 묘목을 안고 달아나던 사내를 못 본 척했다.'); refresh(); return true; }
-    var r = await fight('반다 해안의 VOC 병사들', k.soldiers, { guns: true, leader: 'VOC 하사관', noSpecial: true });
-    if (r !== 'win') { later('banda', 'lost'); await play([[null, '해안의 병사들에게 밀렸다. 사내는 자루를 안은 채 숲속으로 몸을 숨겼다.']]); log('1621년 반다 해안에서 VOC 병사들에게 밀려났다.'); refresh(); return true; }
+    var r = await fight('반다 해안의 네덜란드 동인도 회사 병사들', k.soldiers, { guns: true, leader: '네덜란드 동인도 회사 하사관', noSpecial: true });
+    if (r !== 'win') { later('banda', 'lost'); await play([[null, '해안의 병사들에게 밀렸다. 사내는 자루를 안은 채 숲속으로 몸을 숨겼다.']]); log('1621년 반다 해안에서 네덜란드 동인도 회사 병사들에게 밀려났다.'); refresh(); return true; }
     b.banda = 'won';
     await withPic('ei_banda_idris', '육두구 묘목', function () { return play([
       [null, '배가 반다를 멀리 벗어났을 때, 사내는 젖은 자루를 풀었다. 흙을 감싼 잎 속에서 어린 육두구 묘목 여섯 그루가 나왔다. 그는 그제야 무릎을 꿇고 오래 울었다.'],
@@ -244,7 +233,7 @@
   EI.amboyna = async function () {
     var b = st(), k = K().amboyna; b.amboyna = 'met';
     await withPic('ei_amboyna', '암보이나 (1623)', function () { return play([
-      [null, '암보이나의 빅토리아 요새. VOC 총독 판스페울트가 잉글랜드 상관 사람들을 반역 혐의로 붙잡았다 — 일본인 용병 하나가 성벽을 묻고 다녔다는 것이 시작이었다. 감옥에서는 밤마다 물고문의 비명이 새어 나온다.'],
+      [null, '암보이나의 빅토리아 요새. 네덜란드 동인도 회사 총독 판스페울트가 잉글랜드 상관 사람들을 반역 혐의로 붙잡았다 — 일본인 용병 하나가 성벽을 묻고 다녔다는 것이 시작이었다. 감옥에서는 밤마다 물고문의 비명이 새어 나온다.'],
       ['speult', '저들이 요새를 빼앗으려 했다. 자백도 받았다. 사흘 뒤 처형한다. …그대는 이 일에 끼어들 까닭이 없을 텐데.'],
       [null, '— 감옥 창살 너머, 사슬에 묶인 금발의 젊은이가 피 묻은 장부를 끌어안고 있다. 물에 젖은 얼굴이 창백하지만 눈빛은 꺾이지 않았다.'],
       ['edmund', '그들이 원하는 말을 하면 물을 멈춘다고 했소. 다른 사람들은 그렇게 했지. 나는 하지 않았소. 장부에는 거짓을 적지 않는다 — 그것이 내가 아는 단 하나의 맹세요.'],
@@ -288,19 +277,20 @@
     news('eic', 'scroll', '【동인도 회사 특허장】 12월 31일, 엘리자베스 여왕이 「동인도 무역 런던 상인 회사」에 특허장을 내렸다. 희망봉에서 마젤란 해협까지 동쪽 바다의 장사를 열다섯 해 동안 이 회사만 한다. 첫 함대는 제임스 랭커스터가 이끈다.' + (b.eic > 0 ? ' 그대의 이름도 출자 명부에 있다.' : ''));
     var heard = s.dutchwar && s.dutchwar.told && s.dutchwar.told.voc;
     if (heard && !told.voc) told.voc = 1;   // 네덜란드 독립 전쟁 소식으로 이미 들었다
-    news('voc', 'ship', '【연합 동인도 회사】 3월 20일, 네덜란드의 여섯 도시 회사가 하나로 묶여 「연합 동인도 회사(VOC)」가 섰다. 스물한 해의 특허 — 누구든 몫(주식)을 사서 배와 장사에 걸 수 있고, 그 몫을 남에게 팔 수도 있다. 세상의 첫 주식회사다.');
+    news('voc', 'ship', '【연합 동인도 회사】 3월 20일, 네덜란드의 여섯 도시 회사가 하나로 묶여 「연합 동인도 회사」가 섰다. 스물한 해의 특허 — 누구든 몫(주식)을 사서 배와 장사에 걸 수 있고, 그 몫을 남에게 팔 수도 있다. 세상의 첫 주식회사다.');
     news('swally', 'cannon', '【수왈리 해전】 수라트 앞 수왈리에서 잉글랜드 동인도 회사의 두 배가 포르투갈 갤리온들을 물리쳤다. 이를 지켜본 무굴 황제 자한기르가 잉글랜드에 수라트 상관을 허락한다.');
-    news('batavia', 'skull', '【바타비아】 VOC의 쿤이 자야카르타를 불태우고 그 자리에 회사의 도시를 세웠다. 이름은 바타비아. 동쪽 바다 VOC의 머리가 된다.');
+    news('batavia', 'skull', '【바타비아】 네덜란드 동인도 회사의 쿤이 자야카르타를 불태우고 그 자리에 회사의 도시를 세웠다. 이름은 바타비아. 동쪽 바다 네덜란드 동인도 회사의 머리가 된다.');
     news('banda', 'skull', '【반다의 비극】 쿤의 함대가 반다 제도를 정복했다. 오랑 카야들이 처형되고 섬사람 대부분이 죽거나 끌려가거나 달아났다. 육두구 숲은 회사가 들여온 노예들이 일구게 된다.');
-    news('amboyna', 'skull', '【암보이나 사건】 암보이나의 VOC 총독이 잉글랜드 상관 사람들을 반역 혐의로 고문하고 열 명을 처형했다. 런던이 들끓는다. 잉글랜드 동인도 회사는 향료 제도에서 물러나 인도로 눈을 돌린다.');
-    // 정산: 잉글랜드 첫 항해의 귀환 · VOC 첫 배당 (메이스로 받아 팔아)
-    if (b.eic > 0 && !b.eicPaid && t >= K().eic.payAt) {
-      var pay = Math.round(b.eic * K().eic.ret); b.eicPaid = pay; s.player.gold += pay;
-      out.push({ icon: 'coin', history: true, text: '【동인도 회사의 정산】 랭커스터의 첫 함대가 후추를 가득 싣고 돌아왔다. 출자자들에게 원금과 이익이 돌아간다 — 그대 몫 금화 ' + num(pay) + '닢(출자 ' + num(b.eic) + '닢).' });
+    news('amboyna', 'skull', '【암보이나 사건】 암보이나의 네덜란드 동인도 회사 총독이 잉글랜드 상관 사람들을 반역 혐의로 고문하고 열 명을 처형했다. 런던이 들끓는다. 잉글랜드 동인도 회사는 향료 제도에서 물러나 인도로 눈을 돌린다.');
+    // 정산: 잉글랜드 첫 항해의 귀환 · VOC 첫 배당 (메이스로 받아 팔아) — 그날 회사 주식을 쥔 만큼 (G.Company.special)
+    var CO = G.Company, ce = G.COMPANY && G.COMPANY.eic, cv = G.COMPANY && G.COMPANY.voc;
+    if (CO && ce && !b.eicPaid && t >= K().eic.payAt) {
+      var r1 = CO.special(ce, ce.face * (K().eic.ret - 1)); b.eicPaid = r1.gold || -1;
+      if (r1.gold) out.push({ icon: 'coin', history: true, text: '【동인도 회사의 정산】 랭커스터의 첫 함대가 후추를 가득 싣고 돌아왔다. 주주들에게 이익을 나눈다 — 1주에 금화 ' + num(ce.face * (K().eic.ret - 1)) + '닢, 그대의 ' + r1.n + '주에 금화 ' + num(r1.gold) + '닢. 주식은 그대로 쥐고 있다.' });
     }
-    if (b.voc > 0 && !b.vocDiv && t >= K().voc.divAt) {
-      var dv = b.vocSold ? 0 : Math.round(b.voc * K().voc.div); b.vocDiv = dv || -1;
-      if (dv) { s.player.gold += dv; out.push({ icon: 'coin', history: true, text: '【VOC의 첫 배당】 연합 동인도 회사가 처음으로 배당을 냈다 — 액면의 75%를 돈이 아니라 메이스(육두구 껍질)로! 그대 몫을 상인에게 넘겨 금화 ' + num(dv) + '닢을 받았다.' }); }
+    if (CO && cv && !b.vocDiv && t >= K().voc.divAt) {
+      var r2 = CO.special(cv, cv.face * K().voc.div); b.vocDiv = r2.gold || -1;
+      if (r2.gold) out.push({ icon: 'coin', history: true, text: '【네덜란드 동인도 회사의 첫 배당】 연합 동인도 회사가 처음으로 배당을 냈다 — 액면의 75%를 돈이 아니라 메이스(육두구 껍질)로! 그대의 ' + r2.n + '주 몫을 상인에게 넘겨 금화 ' + num(r2.gold) + '닢을 받았다.' });
     }
     return out;
   };
@@ -310,7 +300,7 @@
   function vocOpen() { var b = st(), k = K().voc, t = today(), win = G.VoyagePlans ? G.VoyagePlans.window(k, true) : k; return !!(b && !b.voc && cooled('voc') && cityNow() === k.city && t >= win.from && t <= win.to); }
   EI.pending = function () {
     var s = S(); if (!s || !s.loc || s.loc.mode !== 'city') return false;
-    return eicOpen() || vocOpen() || vocSellOpen() || open('swally', 'mariam') || open('jakatra', 'kancana') || open('amboyna', 'edmund') || open('banda', 'idris');
+    return eicOpen() || vocOpen() || open('swally', 'mariam') || open('jakatra', 'kancana') || open('amboyna', 'edmund') || open('banda', 'idris');
   };
   EI.check = async function () {
     if (EI._busy) return false; EI._busy = true;
@@ -321,7 +311,6 @@
       else if (open('jakatra', 'kancana')) await EI.jakatra();
       else if (open('amboyna', 'edmund')) await EI.amboyna();
       else if (open('banda', 'idris')) await EI.banda();
-      else if (vocSellOpen()) await EI.vocSell();
     } catch (e) { console.error(e); }
     EI._busy = false;
     return true;
@@ -329,8 +318,8 @@
   EI.html = function () {
     var s = S(), b = s && s.eindia; if (!b) return '';
     var li = [];
-    if (b.eic > 0 && !b.eicPaid) li.push('잉글랜드 동인도 회사 출자 금화 ' + num(b.eic) + '닢 — 랭커스터의 첫 함대가 돌아오면 정산');
-    if (b.voc > 0 && !b.vocSold) li.push('VOC 주식 액면 금화 ' + num(b.voc) + '닢 — 오늘 값 약 ' + num(b.voc * EI.vocPrice()) + '닢 (암스테르담에서 팔 수 있다)');
+    if (b.eic > 0 && !b.eicPaid && shares('eic')) li.push('잉글랜드 동인도 회사 출자 금화 ' + num(b.eic) + '닢 · 주식 ' + shares('eic') + '주 — 랭커스터의 첫 함대가 돌아오면 이익 배당');
+    if (b.voc > 0 && !b.vocDiv && shares('voc')) li.push('네덜란드 동인도 회사 주식 ' + shares('voc') + '주 (청약 금화 ' + num(b.voc) + '닢) — 1610년 첫 배당을 기다린다');
     if (!li.length) return '';
     return '<div class="sep"></div><h4 style="margin:0 0 8px">동인도 회사의 몫</h4><ul>' + li.map(function (x) { return '<li>' + U.esc(x) + '</li>'; }).join('') + '</ul>';
   };

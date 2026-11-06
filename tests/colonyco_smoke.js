@@ -3,7 +3,9 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 let fail = 0;
 function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail++; }
@@ -42,7 +44,8 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       // ② 파리 1,000 → 1675 600 · 퐁디셰리 총 10정
       s = fresh(1664, 9, 1, 14); const t0 = G.Sponsor.rel('fr_king').trust; picks = [1000]; await CC.check();
       out.fr = { inv: s.colonyCo.fr, trust: G.Sponsor.rel('fr_king').trust - t0, colbert: said.some(t => t.startsWith('장바티스트 콜베르|')) };
-      s.loc = { mode: 'sea', lon: 0, lat: 50 }; const g1 = s.player.gold; run(s, 16750201); out.fr.ret = s.player.gold - g1;
+      out.fr.sh = G.Company.state().shares.fr;
+      s.loc = { mode: 'sea', lon: 0, lat: 50 }; const g1 = s.player.gold; const nf = run(s, 16750201); out.fr.ret = s.player.gold - g1; out.fr.news = nf.some(t => /프랑스 동인도 회사의 장사/.test(t));
       s = fresh(1675, 3, 1, [79.9, 11.9], { cargo: { guns: lot(12) } }); out.pSea = CC.seaPending(); picks = ['guns']; await CC.atSea();
       out.pondy = { st: s.colonyCo.pondy, guns: s.fleet.cargo.guns ? s.fleet.cargo.guns.q : 0, plan: hasItem('pondy_plan'), martin: said.some(t => t.startsWith('프랑수아 마르탱|')) };
       // ③ 트랑케바르 — 힌두어 2로 통역 / 아무것도 없으면 떠난다 → 180일 뒤
@@ -70,8 +73,8 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     });
     console.log('   ' + JSON.stringify(r));
     ok(r.figs, '인물 (생김새 포함)');
-    ok(r.wPend && r.wic.inv === 3000 && r.wic.item && r.wic.uss && r.wic.heyn && r.wic.div === 1500, '① 서인도 회사 — 우셀링크스와 열아홉 이사 · 청약 3,000 · 마탄사스의 은 선단 → 1629 배당 50%');
-    ok(r.fr.inv === 1000 && r.fr.trust === 8 && r.fr.colbert && r.fr.ret === 600, '② 프랑스 동인도 회사 — 콜베르 · 출자하면 왕의 신뢰 · 1675 원금의 60%만');
+    ok(r.wPend && r.wic.inv === 3000 && r.wic.item && r.wic.uss && r.wic.heyn && r.wic.div === 1500, '① 서인도 회사 — 우셀링크스와 열아홉 이사 · 청약 3,000(주식 6주) · 마탄사스의 은 선단 → 1629 1주에 250 = 1,500');
+    ok(r.fr.inv === 1000 && r.fr.sh === 2 && r.fr.trust === 8 && r.fr.colbert && r.fr.ret === 0 && r.fr.news, '② 프랑스 동인도 회사 — 콜베르 · 출자하면 왕의 신뢰 · 주식 2주 · 1675 장사가 시원치 않다는 소식 (돈을 따로 돌려주지 않는다)');
     ok(r.pSea && r.pondy.st === 'guns' && r.pondy.guns === 2 && r.pondy.plan && r.pondy.martin, '② 퐁디셰리 앞바다 — 마르탱에게 총 10정 · 첫 설계도');
     ok(r.tq.st === 'lang' && r.tq.seal && r.tq.dk === 10 && r.tq.crappe && r.tq.gold === 20000, '③ 트랑케바르 — 힌두어로 나야크 궁정의 말을 옮겨 조약 · 덴마크 국왕의 신뢰');
     ok(r.tq2.how === 'leave' && r.tq2.opts.includes('lang!') && r.tq2.opts.includes('gold!') && r.tq2.again === false && r.tq2.later && r.tqOther === false, '③ 말도 돈도 없으면 떠난다 → 180일 뒤 다시 · 다른 바다엔 없다');

@@ -26,7 +26,10 @@
 
   // ---------------------------------------------------------------- 얼굴: 그 고장 양식의 완성 초상 (부족 사람 그림 → 같은 성별의 역할 그림)
   function pairOk(k) { return !G.Img || !G.Img.has || (G.Img.has(k) && G.Img.has(k + '_half')); }
-  FJ.faces = function (style, g) {
+  FJ.faces = function (style, g, folk) {
+    var P = G.FOLK_JOIN && G.FOLK_JOIN[folk], own = P && P.portraits && P.portraits[g];
+    var ready = own && own.filter(pairOk);
+    if (ready && ready.length) return ready;
     var A = G.Art, roles = g === 'f' ? ['native', 'maid', 'keeper', 'merchant'] : ['native', 'sailor', 'soldier', 'captain'];
     return roles.map(function (r) { return 'portraits/npc-roles/' + style + '/' + r; })
       .filter(function (k) { var r = k.split('/').pop(); return pairOk(k) && (!A || !A.rolePortraitGender || A.rolePortraitGender(r, style) === g); });
@@ -45,7 +48,7 @@
     var sk = {}, skSum = 0;
     T.sk.forEach(function (x) { var lv = U.ri(Math.max(1, x[1]), x[2]); if (lv > 0) { sk[x[0]] = lv; skSum += lv; } });
     var lg = {}; lg[P.lang[0]] = 3; if (P.lang[1] != null) lg[P.lang[1]] = tk === 'tongue' ? 2 : 1;
-    var faces = FJ.faces(P.style, g), face = faces.length ? faces[Math.abs(U.strHash(d.id + ':' + g + ':' + s.day)) % faces.length] : null;
+    var faces = FJ.faces(P.style, g, d.id), face = faces.length ? faces[Math.abs(U.strHash(d.id + ':' + g + ':' + s.day)) % faces.length] : null;
     var stSum = stv[0] + stv[1] + stv[2] + stv[3];
     var wage = Math.max(20, Math.round((28 + skSum * 12 + (stSum - 200) / 3) * (K().payK || 0.8) / 5) * 5);
     s.wander = s.wander || { seq: 0, gen: G.Wander && G.Wander.genOf ? G.Wander.genOf(s.date.y) : 0, defs: {} };
@@ -59,6 +62,16 @@
       face: face, halfKey: face ? face + '_half' : null, zones: [], home: null, gen: G.Wander && G.Wander.genOf ? G.Wander.genOf(s.date.y) : 0, born: s.date.y, line: id
     };
     return G.MateSkills && G.MateSkills.wander ? G.MateSkills.wander(def) : def;
+  };
+  // 옛 저장에서 이미 합류한 대상도 같은 민족의 새 얼굴·무릎상으로 함께 바꾼다.
+  // 전용 초상 설정이 없거나 원화 한 쪽이 없는 경우에는 저장된 얼굴을 유지한다.
+  FJ.fixPortrait = function (def) {
+    var P = def && G.FOLK_JOIN[def.folk], own = P && P.portraits && P.portraits[def.g];
+    var ready = own && own.filter(pairOk);
+    if (!ready || !ready.length) return def;
+    var face = ready.indexOf(def.face) >= 0 ? def.face : ready[Math.abs(U.strHash(def.id)) % ready.length];
+    def.face = face; def.halfKey = face + '_half';
+    return def;
   };
   function register(def) {
     var s = S();

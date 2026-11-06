@@ -415,7 +415,8 @@
     //   growDays: 선실(조타실·파수대·부관실·갑판 포함)에서 지낸 날이 이만큼 쌓이면 그 방의 특기(G.CABINS grow) +1·+2·+3 — 3년·9년·27년 (특기는 3까지)
     // 자동 배치 (js/systems/crewauto.js): 자리마다의 기본값 — 기함 방 flag · 다른 배 선장 cap · 조타수·갑판·파수꾼 post · 다른 배 선실 berth (+ 그 자리에 맞는 정도). capW = 선장에 맞는 정도의 특기 무게
     crewAuto: { flag: 1, cap: 1.5, post: 0.3, berth: 0.1, capW: { nav: 1, gun: 0.6, sword: 0.6, ship: 0.3 } },
-    cabins: { growDays: [1095, 3285, 9855], galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
+    //   subSlow: 방의 보조 특기(☆)도 는다 — 주 특기보다 이만큼 느리게 (1.2 = 3.6년·10.8년·32.4년 · 2026-11-06)
+    cabins: { growDays: [1095, 3285, 9855], subSlow: 1.2, galleyMeal: { fat0: 0.1, fatTier: 0.08, disc0: 0.04, discTier: 0.04, messHas: 0.3, messPow: 0.1, home: 1.25, skill: 0.1, spice: 0.25, food: 0.1 },
       // 음악실 담당자가 소지한 악기 가운데 가장 높은 배율 하나. 방 기본 힘의 상한을 적용한 뒤 증폭한다.
       musicInstrument: { mult: 1.5, special: { rosenthal: { item: 'violin', mult: 3 }, little_mermaid: { item: 'nagak', mult: 3 } } },
       slotDiv: 22, slotMin: 2, slotMax: 16, cap: 8, caps: { rig: 64 }, cols: 6, rigMax: 1.0, langDays: [90, 270, 730], farRate: 0.3,
@@ -568,7 +569,7 @@
     // 알림(갈색 쪽지 — js/ui/ui.js UI.toast): 보이는 시간 = baseMs + 글자 수×perChar (minMs~maxMs) · 같은 말 다시 띄우지 않는 시간 · 「지난 소식」에 남기는 수
     // 민족 발견물에서 나서는 동료 (js/systems/folkjoin.js): 민족 발견마다 chance로 · 품삯은 철새 셈의 payK배
     folkJoin: { chance: 0.03, payK: 0.8 },
-    notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, keep: 40 },
+    notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, bigRepeatMs: 10000, picQuietMs: 5000, keep: 40 },
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다
     eraEnd: { y: 1700, m: 1, d: 1 },
     // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.

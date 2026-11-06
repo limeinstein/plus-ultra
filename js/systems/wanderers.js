@@ -103,6 +103,9 @@
   /** 그 양식·성별의 얼굴 후보 (역할 그림 + 같은 문화권 항해사의 초상) */
   WD.facePool = function (style, g, type) {
     var A = G.Art, T = G.WANDER_TYPES[type] || {}, out = [];
+    var dedicated = G.WANDER_PORTRAITS && G.WANDER_PORTRAITS[style];
+    var ready = dedicated && dedicated[g] && dedicated[g].filter(facePairOk);
+    if (ready && ready.length) return ready;
     var roles = (g === 'f' ? FEMALE_ROLES : MALE_ROLES).filter(function (r) { return !A || !A.rolePortraitGender || A.rolePortraitGender(r, style) === g; });
     var pref = (T.role || []).filter(function (r) { return roles.indexOf(r) >= 0; });
     (pref.length ? pref.concat(pref) : []).concat(roles).forEach(function (r) { var k = 'portraits/npc-roles/' + style + '/' + r; if (facePairOk(k)) out.push(k); });
@@ -118,9 +121,14 @@
   };
   /** 옛 저장의 합성본·다른 성별/문화권 얼굴을 id로 고른 완성 초상 한 쌍으로 옮긴다. */
   WD.fixPortrait = function (d) {
-    if (!d || d.ret || d.folk) return d;   // folk: 민족 발견에서 나선 동료는 제 고장 얼굴 그대로 (js/systems/folkjoin.js)   // 스무 해 만에 돌아온 사건 동료는 제 얼굴 그대로 (js/systems/oldguard.js)
+    if (!d || d.ret) return d;   // 스무 해 만에 돌아온 사건 동료는 제 얼굴 그대로 (js/systems/oldguard.js)
+    if (d.folk) return G.FolkJoin && G.FolkJoin.fixPortrait ? G.FolkJoin.fixPortrait(d) : d;
     var pool = WD.facePool(d.style || 'ib', d.g, d.type);
-    if (d.local) pool = pool.filter(function (k) { return /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 고장 사람은 다른 문화권 항해사의 옷을 빌리지 않는다
+    if (d.local) {
+      var dedicated = G.WANDER_PORTRAITS && G.WANDER_PORTRAITS[d.style];
+      var own = dedicated && dedicated[d.g] || [];
+      pool = pool.filter(function (k) { return own.indexOf(k) >= 0 || /^portraits\/(npc-roles|fairy-tales)\//.test(k); });
+    }   // 고장 사람은 같은 문화권의 전용 후보나 역할 그림을 쓴다.
     if (pool.indexOf(d.face) < 0) d.face = pool.length ? pool[Math.abs(U.strHash('wander-pair:' + d.id)) % pool.length] : null;
     if (d.face && facePairOk(d.face)) d.halfKey = d.face + '_half';
     else if (d.wd) d.halfKey = null;

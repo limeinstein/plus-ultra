@@ -1,0 +1,564 @@
+{
+  "date": "2026-11-06",
+  "mode": "built-in image_gen",
+  "scope": "북미 17·중미 1·남미 4, 민족별 얼굴상·무릎상 44장. 여성 이름 넷은 민족별 한 쌍을 공용.",
+  "portraits": [
+    {
+      "id": "inuit",
+      "name": "이누이트",
+      "region": "북미",
+      "reference_numbers": [
+        1,
+        5
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2020cc64-eef1-4471-b57c-beab85ed89e1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-8accf982-7d8b-4d20-a5fb-14894e2a4224.png"
+      ],
+      "design": "Arctic coastal navigator. Broad mature cheeks, dark almond eyes, warm reserved smile, black hair in two compact braids. Ivory and charcoal fitted hide wrap bodice with a low neckline, bare shoulders, sleeveless warm-weather underlayer; caribou-fur outer parka draped over one forearm, dark hide knee-length wrap skirt, small bone pendants and carved toggle belt. Hold a small rolled hide chart at hip. Natural ivory, smoke grey and muted sea blue. No feather crown.",
+      "prompt": "Use case: stylized-concept. Create ONE original fictional Indigenous American ADULT WOMAN AGE 32, a capable recruit in an Age-of-Sail adventure RPG. Photos are visual inspiration for hairstyle, face and accessories only. Character design: Arctic coastal navigator. Broad mature cheeks, dark almond eyes, warm reserved smile, black hair in two compact braids. Ivory and charcoal fitted hide wrap bodice with a moderate neckline, bare shoulders, sleeveless warm-weather underlayer; caribou-fur outer parka draped over one forearm, dark hide knee-length wrap skirt, small bone pendants and carved toggle belt. Hold a small rolled hide chart at hip. Natural ivory, smoke grey and muted sea blue. No feather crown. Mature adult curvy build, naturally full bust under securely fitted opaque fabric. Fashionable sleeveless and shoulder-baring adventure costume, moderate neckline with full opaque chest coverage, natural waist fit. Friendly confident neutral standing pose, no glamour posing. Semi-realistic hand-painted 2D game illustration, soft natural skin, detailed fabric and hair, rich elegant colours. Portrait 1024x1536, frame head through both knees only, both hands fully visible, no feet. Genuinely transparent alpha background, no scenic or coloured background, glow or shadows behind her. One figure, no inset, text, border or watermark. Regional-inspired creative fantasy clothing, not a historical reconstruction.",
+      "face_key": "portraits/folk-join/inuit_f_amer_v1",
+      "initial_prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Arctic coastal navigator. Broad mature cheeks, dark almond eyes, warm reserved smile, black hair in two compact braids. Ivory and charcoal fitted hide wrap bodice with a low neckline, bare shoulders, sleeveless warm-weather underlayer; caribou-fur outer parka draped over one forearm, dark hide knee-length wrap skirt, small bone pendants and carved toggle belt. Hold a small rolled hide chart at hip. Natural ivory, smoke grey and muted sea blue. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "revision_note": "초기 생성 미완료 또는 도구 거절 뒤 가슴선과 체형 강조를 완화하고 성숙한 성인·불투명 복식을 명시.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-ca6997a6-2a87-48e1-8a66-203e733c51ec.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/inuit.png",
+      "face_file": "images/portraits/folk-join/inuit_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/inuit_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-2020cc64-eef1-4471-b57c-beab85ed89e1.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-8accf982-7d8b-4d20-a5fb-14894e2a4224.png"
+      ]
+    },
+    {
+      "id": "skraeling",
+      "name": "베오투크·빈랜드",
+      "region": "북미",
+      "reference_numbers": [
+        2,
+        9
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5dfa221f-3657-4dfc-bc8f-22802e6d2f18.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-01974062-4dfd-4ff9-bc15-e56ce8d36c70.png"
+      ],
+      "design": "Vinland / Beothuk-inspired coastal explorer. Long narrow adult face, prominent straight nose, quiet half-smile, thick loose black waves. Red-ochre dyed hide asymmetrical fitted wrap top with one bare shoulder and open neckline, small midriff gap, rust red knee-length hide skirt, fur strip over one elbow, shell necklaces and ochre leather pouch. Warm copper brown skin, subtle red ochre at temple. No large feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Vinland / Beothuk-inspired coastal explorer. Long narrow adult face, prominent straight nose, quiet half-smile, thick loose black waves. Red-ochre dyed hide asymmetrical fitted wrap top with one bare shoulder and open neckline, small midriff gap, rust red knee-length hide skirt, fur strip over one elbow, shell necklaces and ochre leather pouch. Warm copper brown skin, subtle red ochre at temple. No large feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/skraeling_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-8abad284-1870-40b5-b4c9-08e6dc07985a.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/skraeling.png",
+      "face_file": "images/portraits/folk-join/skraeling_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/skraeling_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-5dfa221f-3657-4dfc-bc8f-22802e6d2f18.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-01974062-4dfd-4ff9-bc15-e56ce8d36c70.png"
+      ]
+    },
+    {
+      "id": "folk_dakota",
+      "name": "다코타",
+      "region": "북미",
+      "reference_numbers": [
+        14,
+        15,
+        19
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-33637f4b-7544-4dc7-b0b4-fe7b9017ec3b.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0c13a1ea-3a1b-4482-91db-a022f899a7a6.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-62329a12-dfc6-4648-a9ee-7d82b15efe3c.png"
+      ],
+      "design": "Dakota-inspired plains scout. Angular mature face, high cheekbones, confident challenging smile, long black twin braids. Tan fitted sleeveless deerskin top with a low square neckline, turquoise and brick red geometric quillwork borders, narrow exposed waist, fringed split wrap skirt ending at knees. Small woven hairband with ONE modest feather, beaded earrings and armlets. One hand lightly rests on a short bow held safely downward inside the canvas. No ceremonial warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Dakota-inspired plains scout. Angular mature face, high cheekbones, confident challenging smile, long black twin braids. Tan fitted sleeveless deerskin top with a low square neckline, turquoise and brick red geometric quillwork borders, narrow exposed waist, fringed split wrap skirt ending at knees. Small woven hairband with ONE modest feather, beaded earrings and armlets. One hand lightly rests on a short bow held safely downward inside the canvas. No ceremonial warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_dakota_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-ca77fc93-06e4-445c-bcb8-94578e07a554.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_dakota.png",
+      "face_file": "images/portraits/folk-join/folk_dakota_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_dakota_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-33637f4b-7544-4dc7-b0b4-fe7b9017ec3b.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-0c13a1ea-3a1b-4482-91db-a022f899a7a6.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-62329a12-dfc6-4648-a9ee-7d82b15efe3c.png"
+      ]
+    },
+    {
+      "id": "folk_cherokee",
+      "name": "체로키",
+      "region": "북미",
+      "reference_numbers": [
+        3,
+        16
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a7502e86-b1cf-4de5-a52a-d4469a940ce0.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-4f289154-e0c8-414e-8a02-8f850e23a1d7.png"
+      ],
+      "design": "Cherokee-inspired herbalist and interpreter. Soft square mature face, dark brown expressive eyes, open warm smile, long dark chestnut wavy hair partly tied back. Moss green and warm brown low-neck fitted woven wrap top, bare shoulders and arms, short open drape hanging from elbows, knee-length woven skirt with red trim. Shell earrings, small copper medallion, woven medicine pouch and a sprig of herbs held low. No feather crown.",
+      "prompt": "Use case: stylized-concept. Create ONE original fictional Indigenous American ADULT WOMAN AGE 32, a capable recruit in an Age-of-Sail adventure RPG. Photos are visual inspiration for hairstyle, face and accessories only. Character design: Cherokee-inspired herbalist and interpreter. Soft square mature face, dark brown expressive eyes, open warm smile, long dark chestnut wavy hair partly tied back. Moss green and warm brown moderate neckline fitted woven wrap top, bare shoulders and arms, short open drape hanging from elbows, knee-length woven skirt with red trim. Shell earrings, small copper medallion, woven medicine pouch and a sprig of herbs held low. No feather crown. Mature adult curvy build, naturally full bust under securely fitted opaque fabric. Fashionable sleeveless and shoulder-baring adventure costume, moderate neckline with full opaque chest coverage, natural waist fit. Friendly confident neutral standing pose, no glamour posing. Semi-realistic hand-painted 2D game illustration, soft natural skin, detailed fabric and hair, rich elegant colours. Portrait 1024x1536, frame head through both knees only, both hands fully visible, no feet. Genuinely transparent alpha background, no scenic or coloured background, glow or shadows behind her. One figure, no inset, text, border or watermark. Regional-inspired creative fantasy clothing, not a historical reconstruction.",
+      "face_key": "portraits/folk-join/folk_cherokee_f_amer_v1",
+      "initial_prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Cherokee-inspired herbalist and interpreter. Soft square mature face, dark brown expressive eyes, open warm smile, long dark chestnut wavy hair partly tied back. Moss green and warm brown low-neck fitted woven wrap top, bare shoulders and arms, short open drape hanging from elbows, knee-length woven skirt with red trim. Shell earrings, small copper medallion, woven medicine pouch and a sprig of herbs held low. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "revision_note": "초기 생성 미완료 또는 도구 거절 뒤 가슴선과 체형 강조를 완화하고 성숙한 성인·불투명 복식을 명시.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-fc7b95ea-891d-42c1-b61c-c0514f3b2a3c.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_cherokee.png",
+      "face_file": "images/portraits/folk-join/folk_cherokee_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_cherokee_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-a7502e86-b1cf-4de5-a52a-d4469a940ce0.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-4f289154-e0c8-414e-8a02-8f850e23a1d7.png"
+      ]
+    },
+    {
+      "id": "folk_haudenosaunee",
+      "name": "하우데노쇼니",
+      "region": "북미",
+      "reference_numbers": [
+        8,
+        20
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-c752d713-61ac-4899-a65d-58499a80fa0b.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-63d123e6-b3a9-4c84-9b30-b4a8068c88f1.png"
+      ],
+      "design": "Haudenosaunee-inspired diplomat. Elegant long adult face, strong cheekbones, direct composed dark-eyed gaze, long straight centre-parted black hair in one braid. Plum and cream woven fitted sleeveless top with broad open neckline, small exposed waist, knee-length dark wrap skirt. Purple and white shell-bead strands and a wampum-inspired belt, small copper earrings, folded woven strip in one hand. No feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Haudenosaunee-inspired diplomat. Elegant long adult face, strong cheekbones, direct composed dark-eyed gaze, long straight centre-parted black hair in one braid. Plum and cream woven fitted sleeveless top with broad open neckline, small exposed waist, knee-length dark wrap skirt. Purple and white shell-bead strands and a wampum-inspired belt, small copper earrings, folded woven strip in one hand. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_haudenosaunee_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-9b76ef3a-cec8-4cbc-a948-3eaa5fc4aa98.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_haudenosaunee.png",
+      "face_file": "images/portraits/folk-join/folk_haudenosaunee_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_haudenosaunee_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-c752d713-61ac-4899-a65d-58499a80fa0b.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-63d123e6-b3a9-4c84-9b30-b4a8068c88f1.png"
+      ]
+    },
+    {
+      "id": "folk_wendat",
+      "name": "웬다트",
+      "region": "북미",
+      "reference_numbers": [
+        7,
+        13
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3e03e4e7-951a-405e-ad9a-2e1f14eb8ea1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-7f0ec86a-4ca5-4753-b6e9-429186323897.png"
+      ],
+      "design": "Wendat-inspired trader. Broad adult cheekbones, slightly upturned nose, lively confident grin, high dark ponytail with loose face-framing strands. Honey ochre fitted soft hide top with open V neckline, bare arms, indigo sash, short fringe at hem and knee-length tobacco brown skirt. Shell and copper trade bead strands, small cylindrical birchbark container carried beside hip. Rust, honey and deep blue. No feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Wendat-inspired trader. Broad adult cheekbones, slightly upturned nose, lively confident grin, high dark ponytail with loose face-framing strands. Honey ochre fitted soft hide top with open V neckline, bare arms, indigo sash, short fringe at hem and knee-length tobacco brown skirt. Shell and copper trade bead strands, small cylindrical birchbark container carried beside hip. Rust, honey and deep blue. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_wendat_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-78f7e28d-4e0c-4adc-b245-28209d190740.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_wendat.png",
+      "face_file": "images/portraits/folk-join/folk_wendat_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_wendat_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-3e03e4e7-951a-405e-ad9a-2e1f14eb8ea1.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-7f0ec86a-4ca5-4753-b6e9-429186323897.png"
+      ]
+    },
+    {
+      "id": "folk_stlawrence",
+      "name": "세인트로렌스",
+      "region": "북미",
+      "reference_numbers": [
+        4,
+        24
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0c005ea5-8b7b-4de8-ae1a-e83cb658cf2e.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d6d6ab1a-de2b-47bc-8e52-2895b403ed4b.png"
+      ],
+      "design": "Saint Lawrence river navigator. Mature oval face with firm chin, full lips, focused gentle smile; long black hair half braided over one shoulder. Deep river blue and pale tan fitted wrap bodice, low neckline with broad straps, bare upper arms, visible waist, knee-length soft hide skirt. Shell disc earrings and a woven sash, small coiled river rope held near hip. No feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Saint Lawrence river navigator. Mature oval face with firm chin, full lips, focused gentle smile; long black hair half braided over one shoulder. Deep river blue and pale tan fitted wrap bodice, low neckline with broad straps, bare upper arms, visible waist, knee-length soft hide skirt. Shell disc earrings and a woven sash, small coiled river rope held near hip. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_stlawrence_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-c4490573-164d-4083-995e-185f5541c12b.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_stlawrence.png",
+      "face_file": "images/portraits/folk-join/folk_stlawrence_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_stlawrence_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-0c005ea5-8b7b-4de8-ae1a-e83cb658cf2e.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-d6d6ab1a-de2b-47bc-8e52-2895b403ed4b.png"
+      ]
+    },
+    {
+      "id": "folk_powhatan",
+      "name": "포와탄",
+      "region": "북미",
+      "reference_numbers": [
+        11,
+        25
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-7c78ab59-74c2-45ca-9fe7-1d5b149a242b.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e02faacf-97a4-4b0b-aa92-c4932fc8b340.png"
+      ],
+      "design": "Powhatan-inspired woodland scout. Mature heart-shaped face, broad smile with lifted cheeks, brown eyes; black hair in two long braids with loose strands. Copper rust fitted deerskin top with shoulder-baring neckline, short separate upper-arm wraps, open collar and narrow exposed waist, knee-length fringed skirt. Shell pearl strands, small copper pendant and turquoise accents. Relaxed capable standing pose. No ceremonial warbonnet.",
+      "prompt": "Use case: stylized-concept. Create ONE original fictional Indigenous American ADULT WOMAN AGE 32, a capable recruit in an Age-of-Sail adventure RPG. Photos are visual inspiration for hairstyle, face and accessories only. Character design: Powhatan-inspired woodland scout. Mature heart-shaped face, broad smile with lifted cheeks, brown eyes; black hair in two long braids with loose strands. Copper rust fitted deerskin top with shoulder-baring neckline, short separate upper-arm wraps, open collar and fitted waist, knee-length fringed skirt. Shell pearl strands, small copper pendant and turquoise accents. Relaxed capable standing pose. No ceremonial warbonnet. Mature adult curvy build, naturally full bust under securely fitted opaque fabric. Fashionable sleeveless and shoulder-baring adventure costume, moderate neckline with full opaque chest coverage, natural waist fit. Friendly confident neutral standing pose, no glamour posing. Semi-realistic hand-painted 2D game illustration, soft natural skin, detailed fabric and hair, rich elegant colours. Portrait 1024x1536, frame head through both knees only, both hands fully visible, no feet. Genuinely transparent alpha background, no scenic or coloured background, glow or shadows behind her. One figure, no inset, text, border or watermark. Regional-inspired creative fantasy clothing, not a historical reconstruction.",
+      "face_key": "portraits/folk-join/folk_powhatan_f_amer_v1",
+      "initial_prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Powhatan-inspired woodland scout. Mature heart-shaped face, broad smile with lifted cheeks, brown eyes; black hair in two long braids with loose strands. Copper rust fitted deerskin top with shoulder-baring neckline, short separate upper-arm wraps, open collar and narrow exposed waist, knee-length fringed skirt. Shell pearl strands, small copper pendant and turquoise accents. Relaxed capable standing pose. No ceremonial warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "revision_note": "초기 생성 미완료 또는 도구 거절 뒤 가슴선과 체형 강조를 완화하고 성숙한 성인·불투명 복식을 명시.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-700f4166-d55e-4111-ad1a-96f02845d2a7.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_powhatan.png",
+      "face_file": "images/portraits/folk-join/folk_powhatan_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_powhatan_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-7c78ab59-74c2-45ca-9fe7-1d5b149a242b.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-e02faacf-97a4-4b0b-aa92-c4932fc8b340.png"
+      ]
+    },
+    {
+      "id": "folk_wampanoag",
+      "name": "왐파노아그",
+      "region": "북미",
+      "reference_numbers": [
+        6,
+        21
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a102d34f-ffe2-4b27-8c7b-6b37ba5f5708.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e5b2c767-8761-452d-86e1-42054a96990c.png"
+      ],
+      "design": "Wampanoag-inspired coastal navigator. Mature round face, wide cheekbones, deep warm brown eyes, friendly asymmetric smile, dark wavy hair tied low. Warm sand and marine teal fitted sleeveless top with a low scoop neckline, bare midriff and shoulders, knee-length woven wrap skirt. Purple-white shell beads, small shell earrings, practical plant-fibre cord belt and compact woven basket held at hip. No feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Wampanoag-inspired coastal navigator. Mature round face, wide cheekbones, deep warm brown eyes, friendly asymmetric smile, dark wavy hair tied low. Warm sand and marine teal fitted sleeveless top with a low scoop neckline, bare midriff and shoulders, knee-length woven wrap skirt. Purple-white shell beads, small shell earrings, practical plant-fibre cord belt and compact woven basket held at hip. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_wampanoag_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-03f1ee74-08a5-45ad-90c6-46735dba36ea.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_wampanoag.png",
+      "face_file": "images/portraits/folk-join/folk_wampanoag_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_wampanoag_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-a102d34f-ffe2-4b27-8c7b-6b37ba5f5708.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-e5b2c767-8761-452d-86e1-42054a96990c.png"
+      ]
+    },
+    {
+      "id": "folk_muscogee",
+      "name": "머스코기",
+      "region": "북미",
+      "reference_numbers": [
+        10,
+        23
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a13166d0-c723-41da-8086-fde3e4470967.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-bb7cd458-6397-4044-822b-a70ab966e646.png"
+      ],
+      "design": "Muscogee-inspired trader and defender. Strong mature jaw, long dark almond eyes, playful bright smile; long black hair swept up in a high ponytail with red woven ribbon. Scarlet and cream fitted woven crop wrap with an open neckline and bare arms, dark brown knee-length wrap skirt, copper discs and shell bead necklace, broad patterned sash and small trade pouch. No feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Muscogee-inspired trader and defender. Strong mature jaw, long dark almond eyes, playful bright smile; long black hair swept up in a high ponytail with red woven ribbon. Scarlet and cream fitted woven crop wrap with an open neckline and bare arms, dark brown knee-length wrap skirt, copper discs and shell bead necklace, broad patterned sash and small trade pouch. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_muscogee_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-98413c46-cb77-45de-9448-f31ce02d2110.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_muscogee.png",
+      "face_file": "images/portraits/folk-join/folk_muscogee_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_muscogee_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-a13166d0-c723-41da-8086-fde3e4470967.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-bb7cd458-6397-4044-822b-a70ab966e646.png"
+      ]
+    },
+    {
+      "id": "folk_natchez",
+      "name": "나체즈",
+      "region": "북미",
+      "reference_numbers": [
+        12,
+        18
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-4245d680-1944-449d-bc8f-5513bb6a2a38.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0d55e9a5-817e-4b60-ae0f-a4405acbb389.png"
+      ],
+      "design": "Natchez-inspired community ritual storyteller, not a ruler. Mature angular oval face, arched brows, composed subtle smile, long straight black hair with small copper hair ornaments. Warm gold and dark maroon fitted sleeveless woven top with a low V neckline, short waist opening, richly patterned knee-length wrap skirt. Layered copper sun-disc pendants and shell strands, a small gourd rattle held at hip. No ceremonial warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Natchez-inspired community ritual storyteller, not a ruler. Mature angular oval face, arched brows, composed subtle smile, long straight black hair with small copper hair ornaments. Warm gold and dark maroon fitted sleeveless woven top with a low V neckline, short waist opening, richly patterned knee-length wrap skirt. Layered copper sun-disc pendants and shell strands, a small gourd rattle held at hip. No ceremonial warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_natchez_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-534f5698-dfc0-4178-a28b-a4c5d447bcf5.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_natchez.png",
+      "face_file": "images/portraits/folk-join/folk_natchez_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_natchez_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-4245d680-1944-449d-bc8f-5513bb6a2a38.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-0d55e9a5-817e-4b60-ae0f-a4405acbb389.png"
+      ]
+    },
+    {
+      "id": "folk_calusa",
+      "name": "칼루사",
+      "region": "북미",
+      "reference_numbers": [
+        22,
+        26
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-4dc3710c-194c-4422-8dab-3bbb222488eb.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-ce3df1cf-3bef-476b-ac30-ab23855f37da.png"
+      ],
+      "design": "Calusa-inspired subtropical boat navigator. Mature broad face with high cheeks, full lips, dark alert eyes, bold relaxed smile, long glossy black hair with a low side braid. Sea turquoise fitted woven halter top with open neckline, bare shoulders and midriff, coral rust knee-length wrap skirt with a side opening. Shell and tiny amber bead strands, shell earrings and fibre sash, a compact coil of fishing line in hand. No feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Calusa-inspired subtropical boat navigator. Mature broad face with high cheeks, full lips, dark alert eyes, bold relaxed smile, long glossy black hair with a low side braid. Sea turquoise fitted woven halter top with open neckline, bare shoulders and midriff, coral rust knee-length wrap skirt with a side opening. Shell and tiny amber bead strands, shell earrings and fibre sash, a compact coil of fishing line in hand. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_calusa_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-241901dd-6378-477f-8a5c-0c32da89fe7a.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_calusa.png",
+      "face_file": "images/portraits/folk-join/folk_calusa_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_calusa_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-4dc3710c-194c-4422-8dab-3bbb222488eb.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-ce3df1cf-3bef-476b-ac30-ab23855f37da.png"
+      ]
+    },
+    {
+      "id": "folk_taos",
+      "name": "타오스",
+      "region": "북미",
+      "reference_numbers": [
+        15,
+        20
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0c13a1ea-3a1b-4482-91db-a022f899a7a6.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-63d123e6-b3a9-4c84-9b30-b4a8068c88f1.png"
+      ],
+      "design": "Taos Pueblo-inspired craftswoman. Mature broad oval face, straight strong nose, thoughtful subtle smile, long black hair tied back with a narrow woven ribbon. Black and deep red fitted one-shoulder woven wrap dress with an open neckline, bare other shoulder, woven cream sash and a side opening ending at knees. Restrained turquoise necklace, small shell earrings, a small plain clay cup held low. No feather crown or sacred ceremonial objects.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Taos Pueblo-inspired craftswoman. Mature broad oval face, straight strong nose, thoughtful subtle smile, long black hair tied back with a narrow woven ribbon. Black and deep red fitted one-shoulder woven wrap dress with an open neckline, bare other shoulder, woven cream sash and a side opening ending at knees. Restrained turquoise necklace, small shell earrings, a small plain clay cup held low. No feather crown or sacred ceremonial objects. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_taos_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-b5b78f5d-5824-488f-b816-58693f8b3e53.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_taos.png",
+      "face_file": "images/portraits/folk-join/folk_taos_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_taos_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-0c13a1ea-3a1b-4482-91db-a022f899a7a6.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-63d123e6-b3a9-4c84-9b30-b4a8068c88f1.png"
+      ]
+    },
+    {
+      "id": "folk_acoma",
+      "name": "아코마",
+      "region": "북미",
+      "reference_numbers": [
+        1,
+        17
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-2020cc64-eef1-4471-b57c-beab85ed89e1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-8ec75a2b-c6aa-4f46-a835-852fb970ded4.png"
+      ],
+      "design": "Acoma Pueblo-inspired potter and cook. Mature soft square face, broad generous smile, black hair in a low loose bun with stray waves. Cream fitted sleeveless woven top with a low square neckline, bare shoulders and small midriff gap, burnt orange knee-length skirt with black stepped geometric borders. Turquoise earrings, shell bead necklaces, woven sash and a small black-and-white geometric pottery bowl held at waist. No feather crown.",
+      "prompt": "Use case: stylized-concept. Create ONE original fictional Indigenous American ADULT WOMAN AGE 32, a capable recruit in an Age-of-Sail adventure RPG. Photos are visual inspiration for hairstyle, face and accessories only. Character design: Acoma Pueblo-inspired potter and cook. Mature soft square face, broad generous smile, black hair in a low loose bun with stray waves. Cream fitted sleeveless woven top with a moderate neckline, bare shoulders and fitted waist, burnt orange knee-length skirt with black stepped geometric borders. Turquoise earrings, shell bead necklaces, woven sash and a small black-and-white geometric pottery bowl held at waist. No feather crown. Mature adult curvy build, naturally full bust under securely fitted opaque fabric. Fashionable sleeveless and shoulder-baring adventure costume, moderate neckline with full opaque chest coverage, natural waist fit. Friendly confident neutral standing pose, no glamour posing. Semi-realistic hand-painted 2D game illustration, soft natural skin, detailed fabric and hair, rich elegant colours. Portrait 1024x1536, frame head through both knees only, both hands fully visible, no feet. Genuinely transparent alpha background, no scenic or coloured background, glow or shadows behind her. One figure, no inset, text, border or watermark. Regional-inspired creative fantasy clothing, not a historical reconstruction.",
+      "face_key": "portraits/folk-join/folk_acoma_f_amer_v1",
+      "initial_prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Acoma Pueblo-inspired potter and cook. Mature soft square face, broad generous smile, black hair in a low loose bun with stray waves. Cream fitted sleeveless woven top with a low square neckline, bare shoulders and small midriff gap, burnt orange knee-length skirt with black stepped geometric borders. Turquoise earrings, shell bead necklaces, woven sash and a small black-and-white geometric pottery bowl held at waist. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "revision_note": "초기 생성 미완료 또는 도구 거절 뒤 가슴선과 체형 강조를 완화하고 성숙한 성인·불투명 복식을 명시.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-1e678ae4-7a64-48ca-b3da-dd93191541bd.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_acoma.png",
+      "face_file": "images/portraits/folk-join/folk_acoma_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_acoma_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-2020cc64-eef1-4471-b57c-beab85ed89e1.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-8ec75a2b-c6aa-4f46-a835-852fb970ded4.png"
+      ]
+    },
+    {
+      "id": "folk_mandan",
+      "name": "만단",
+      "region": "북미",
+      "reference_numbers": [
+        2,
+        14
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5dfa221f-3657-4dfc-bc8f-22802e6d2f18.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-33637f4b-7544-4dc7-b0b4-fe7b9017ec3b.png"
+      ],
+      "design": "Mandan-inspired river trader. Mature oval face with defined cheekbones and dimples, amused smile, long dark hair with two thin braids and loose waves. Saffron and warm beige fitted soft hide sleeveless top with open neckline, short fringe, exposed waist; knee-length wrap skirt with indigo and red quillwork-style geometric panels. Shell-bead earrings, copper bracelet, a compact woven seed pouch at belt. No ceremonial warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Mandan-inspired river trader. Mature oval face with defined cheekbones and dimples, amused smile, long dark hair with two thin braids and loose waves. Saffron and warm beige fitted soft hide sleeveless top with open neckline, short fringe, exposed waist; knee-length wrap skirt with indigo and red quillwork-style geometric panels. Shell-bead earrings, copper bracelet, a compact woven seed pouch at belt. No ceremonial warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_mandan_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-2089964e-9aad-4b4e-b117-512eca94a6ae.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_mandan.png",
+      "face_file": "images/portraits/folk-join/folk_mandan_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_mandan_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-5dfa221f-3657-4dfc-bc8f-22802e6d2f18.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-33637f4b-7544-4dc7-b0b4-fe7b9017ec3b.png"
+      ]
+    },
+    {
+      "id": "folk_chumash",
+      "name": "추마시",
+      "region": "북미",
+      "reference_numbers": [
+        4,
+        16
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0c005ea5-8b7b-4de8-ae1a-e83cb658cf2e.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-4f289154-e0c8-414e-8a02-8f850e23a1d7.png"
+      ],
+      "design": "Chumash-inspired Pacific canoe builder. Mature oval face, wide dark eyes, confident slightly tilted smile, long loose black waves with one narrow braid. Sand and sea-green fitted woven wrap top with low neckline, bare arms and midriff, brown knee-length plant-fibre wrap skirt with woven waistband. Olivella-like small shell disc strands, shell earrings, a little polished wooden hand tool held safely at hip. No feather crown.",
+      "prompt": "Use case: stylized-concept. Create ONE original fictional Indigenous American ADULT WOMAN AGE 32, a capable recruit in an Age-of-Sail adventure RPG. Photos are visual inspiration for hairstyle, face and accessories only. Character design: Chumash-inspired Pacific canoe builder. Mature oval face, wide dark eyes, confident slightly tilted smile, long loose black waves with one narrow braid. Sand and sea-green fitted woven wrap top with moderate neckline, bare arms and midriff, brown knee-length plant-fibre wrap skirt with woven waistband. Olivella-like small shell disc strands, shell earrings, a little polished wooden hand tool held safely at hip. No feather crown. Mature adult curvy build, naturally full bust under securely fitted opaque fabric. Fashionable sleeveless and shoulder-baring adventure costume, moderate neckline with full opaque chest coverage, natural waist fit. Friendly confident neutral standing pose, no glamour posing. Semi-realistic hand-painted 2D game illustration, soft natural skin, detailed fabric and hair, rich elegant colours. Portrait 1024x1536, frame head through both knees only, both hands fully visible, no feet. Genuinely transparent alpha background, no scenic or coloured background, glow or shadows behind her. One figure, no inset, text, border or watermark. Regional-inspired creative fantasy clothing, not a historical reconstruction.",
+      "face_key": "portraits/folk-join/folk_chumash_f_amer_v1",
+      "initial_prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Chumash-inspired Pacific canoe builder. Mature oval face, wide dark eyes, confident slightly tilted smile, long loose black waves with one narrow braid. Sand and sea-green fitted woven wrap top with low neckline, bare arms and midriff, brown knee-length plant-fibre wrap skirt with woven waistband. Olivella-like small shell disc strands, shell earrings, a little polished wooden hand tool held safely at hip. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "revision_note": "초기 생성 미완료 또는 도구 거절 뒤 가슴선과 체형 강조를 완화하고 성숙한 성인·불투명 복식을 명시.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-e1f3e0bf-869a-4a38-b553-9c34dac90cdd.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_chumash.png",
+      "face_file": "images/portraits/folk-join/folk_chumash_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_chumash_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-0c005ea5-8b7b-4de8-ae1a-e83cb658cf2e.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-4f289154-e0c8-414e-8a02-8f850e23a1d7.png"
+      ]
+    },
+    {
+      "id": "folk_makah",
+      "name": "마카",
+      "region": "북미",
+      "reference_numbers": [
+        5,
+        26
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-8accf982-7d8b-4d20-a5fb-14894e2a4224.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-ce3df1cf-3bef-476b-ac30-ab23855f37da.png"
+      ],
+      "design": "Makah-inspired northwest coastal navigator. Mature broad cheekbones, strong straight nose, calm proud smile, long black hair in thick twin braids. Cedar brown and storm teal fitted fibre wrap bodice with an open neckline, bare shoulders, a woven cedar-bark-inspired shawl hanging behind elbows; knee-length dark woven skirt with cream geometric trim. Shell and carved bone pendants, a small coil of rope at belt. No feather crown.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Makah-inspired northwest coastal navigator. Mature broad cheekbones, strong straight nose, calm proud smile, long black hair in thick twin braids. Cedar brown and storm teal fitted fibre wrap bodice with an open neckline, bare shoulders, a woven cedar-bark-inspired shawl hanging behind elbows; knee-length dark woven skirt with cream geometric trim. Shell and carved bone pendants, a small coil of rope at belt. No feather crown. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_makah_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-c2e553cc-1c9a-45de-b59b-72168e08fa12.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_makah.png",
+      "face_file": "images/portraits/folk-join/folk_makah_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_makah_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-8accf982-7d8b-4d20-a5fb-14894e2a4224.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-ce3df1cf-3bef-476b-ac30-ab23855f37da.png"
+      ]
+    },
+    {
+      "id": "aztec",
+      "name": "아즈텍·메시카",
+      "region": "중미",
+      "reference_numbers": [
+        8,
+        12,
+        23
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-c752d713-61ac-4899-a65d-58499a80fa0b.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-4245d680-1944-449d-bc8f-5513bb6a2a38.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-bb7cd458-6397-4044-822b-a70ab966e646.png"
+      ],
+      "design": "Mexica / Aztec-inspired explorer and scholar, an ordinary recruit not royalty. Mature angular face, high cheeks, dark brown almond eyes and assured slight smile, black hair in an elaborate braided updo with small woven red ribbons. Jade green and cream fitted cotton sleeveless wrap top with open V neckline, bare shoulders and narrow waist, knee-length red woven skirt with stepped geometric trim. Jade ear pendants, small gold-coloured copper disc necklace, red sash and a folded painted paper record at hip. No plains warbonnet.",
+      "prompt": "Use case: stylized-concept. Create ONE original fictional Indigenous American ADULT WOMAN AGE 32, a capable recruit in an Age-of-Sail adventure RPG. Photos are visual inspiration for hairstyle, face and accessories only. Character design: Mexica / Aztec-inspired explorer and scholar, an ordinary recruit not royalty. Mature angular face, high cheeks, dark brown almond eyes and assured slight smile, black hair in an elaborate braided updo with small woven red ribbons. Jade green and cream fitted cotton sleeveless wrap top with moderate neckline, bare shoulders and narrow waist, knee-length red woven skirt with stepped geometric trim. Jade ear pendants, small gold-coloured copper disc necklace, red sash and a folded painted paper record at hip. No plains warbonnet. Mature adult curvy build, naturally full bust under securely fitted opaque fabric. Fashionable sleeveless and shoulder-baring adventure costume, moderate neckline with full opaque chest coverage, natural waist fit. Friendly confident neutral standing pose, no glamour posing. Semi-realistic hand-painted 2D game illustration, soft natural skin, detailed fabric and hair, rich elegant colours. Portrait 1024x1536, frame head through both knees only, both hands fully visible, no feet. Genuinely transparent alpha background, no scenic or coloured background, glow or shadows behind her. One figure, no inset, text, border or watermark. Regional-inspired creative fantasy clothing, not a historical reconstruction.",
+      "face_key": "portraits/folk-join/aztec_f_amer_v1",
+      "initial_prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Mexica / Aztec-inspired explorer and scholar, an ordinary recruit not royalty. Mature angular face, high cheeks, dark brown almond eyes and assured slight smile, black hair in an elaborate braided updo with small woven red ribbons. Jade green and cream fitted cotton sleeveless wrap top with open V neckline, bare shoulders and narrow waist, knee-length red woven skirt with stepped geometric trim. Jade ear pendants, small gold-coloured copper disc necklace, red sash and a folded painted paper record at hip. No plains warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "revision_note": "초기 생성 미완료 또는 도구 거절 뒤 가슴선과 체형 강조를 완화하고 성숙한 성인·불투명 복식을 명시.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-ac352402-d9f9-4b7a-a3d6-103cc1ce7052.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/aztec.png",
+      "face_file": "images/portraits/folk-join/aztec_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/aztec_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-c752d713-61ac-4899-a65d-58499a80fa0b.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-4245d680-1944-449d-bc8f-5513bb6a2a38.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-bb7cd458-6397-4044-822b-a70ab966e646.png"
+      ]
+    },
+    {
+      "id": "inca",
+      "name": "잉카·안데스",
+      "region": "남미",
+      "reference_numbers": [
+        7,
+        20,
+        25
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-3e03e4e7-951a-405e-ad9a-2e1f14eb8ea1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-63d123e6-b3a9-4c84-9b30-b4a8068c88f1.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e02faacf-97a4-4b0b-aa92-c4932fc8b340.png"
+      ],
+      "design": "Inca / Andean-inspired surveyor and scholar, ordinary recruit not royalty. Mature high cheekbones, broad straight nose, dark eyes, gentle knowing smile, long black twin braids. Wine red and black fitted sleeveless woven wrap dress with open neckline, one small silver tupu-inspired shawl pin, narrow exposed waist and golden ochre patterned knee-length wrap skirt. Silver disc earrings, bright woven sash, a small bundle of knotted recording cords at hip. No plains warbonnet.",
+      "prompt": "Use case: stylized-concept. Create ONE original fictional Indigenous American ADULT WOMAN AGE 32, a capable recruit in an Age-of-Sail adventure RPG. Photos are visual inspiration for hairstyle, face and accessories only. Character design: Inca / Andean-inspired surveyor and scholar, ordinary recruit not royalty. Mature high cheekbones, broad straight nose, dark eyes, gentle knowing smile, long black twin braids. Wine red and black fitted sleeveless woven wrap dress with moderate neckline, one small silver tupu-inspired shawl pin, fitted waist and golden ochre patterned knee-length wrap skirt. Silver disc earrings, bright woven sash, a small bundle of knotted recording cords at hip. No plains warbonnet. Mature adult curvy build, naturally full bust under securely fitted opaque fabric. Fashionable sleeveless and shoulder-baring adventure costume, moderate neckline with full opaque chest coverage, natural waist fit. Friendly confident neutral standing pose, no glamour posing. Semi-realistic hand-painted 2D game illustration, soft natural skin, detailed fabric and hair, rich elegant colours. Portrait 1024x1536, frame head through both knees only, both hands fully visible, no feet. Genuinely transparent alpha background, no scenic or coloured background, glow or shadows behind her. One figure, no inset, text, border or watermark. Regional-inspired creative fantasy clothing, not a historical reconstruction.",
+      "face_key": "portraits/folk-join/inca_f_amer_v1",
+      "initial_prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Inca / Andean-inspired surveyor and scholar, ordinary recruit not royalty. Mature high cheekbones, broad straight nose, dark eyes, gentle knowing smile, long black twin braids. Wine red and black fitted sleeveless woven wrap dress with open neckline, one small silver tupu-inspired shawl pin, narrow exposed waist and golden ochre patterned knee-length wrap skirt. Silver disc earrings, bright woven sash, a small bundle of knotted recording cords at hip. No plains warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "revision_note": "초기 생성 미완료 또는 도구 거절 뒤 가슴선과 체형 강조를 완화하고 성숙한 성인·불투명 복식을 명시.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-3bae5f9f-2406-40ac-b786-6139b008c252.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/inca.png",
+      "face_file": "images/portraits/folk-join/inca_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/inca_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-3e03e4e7-951a-405e-ad9a-2e1f14eb8ea1.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-63d123e6-b3a9-4c84-9b30-b4a8068c88f1.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-e02faacf-97a4-4b0b-aa92-c4932fc8b340.png"
+      ]
+    },
+    {
+      "id": "blemmyes",
+      "name": "와라오",
+      "region": "남미",
+      "reference_numbers": [
+        6,
+        21,
+        22
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a102d34f-ffe2-4b27-8c7b-6b37ba5f5708.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-e5b2c767-8761-452d-86e1-42054a96990c.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-4dc3710c-194c-4422-8dab-3bbb222488eb.png"
+      ],
+      "design": "Warao-inspired Orinoco delta boat navigator and healer. Mature warm brown face, softly squared jaw, full lips, welcoming smile, long straight black hair loosely half tied. Orange-red fitted woven halter wrap with low neckline, bare shoulders and midriff, dark terracotta knee-length palm-fibre woven skirt with a side opening, colourful small seed-bead necklaces and shell pendants. Small gourd container at hip. Human anatomy and normal head on shoulders. No warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Warao-inspired Orinoco delta boat navigator and healer. Mature warm brown face, softly squared jaw, full lips, welcoming smile, long straight black hair loosely half tied. Orange-red fitted woven halter wrap with low neckline, bare shoulders and midriff, dark terracotta knee-length palm-fibre woven skirt with a side opening, colourful small seed-bead necklaces and shell pendants. Small gourd container at hip. Human anatomy and normal head on shoulders. No warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/blemmyes_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-0fc89e98-8928-435b-90fb-f346ae14b208.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/blemmyes.png",
+      "face_file": "images/portraits/folk-join/blemmyes_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/blemmyes_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-a102d34f-ffe2-4b27-8c7b-6b37ba5f5708.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-e5b2c767-8761-452d-86e1-42054a96990c.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-4dc3710c-194c-4422-8dab-3bbb222488eb.png"
+      ]
+    },
+    {
+      "id": "patagon",
+      "name": "테우엘체",
+      "region": "남미",
+      "reference_numbers": [
+        9,
+        13,
+        24
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-01974062-4dfd-4ff9-bc15-e56ce8d36c70.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-7f0ec86a-4ca5-4753-b6e9-429186323897.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-d6d6ab1a-de2b-47bc-8e52-2895b403ed4b.png"
+      ],
+      "design": "Tehuelche-inspired Patagonian scout. Tall robust adult woman, mature strong jaw and high cheeks, focused confident half-smile, long black hair in a loose thick braid. Warm brown fitted hide sleeveless wrap top with open neckline, bare arms, small waist gap, knee-length ochre wrap skirt. Guanaco-fur cloak hanging behind one shoulder, painted geometric leather belt, simple stone and shell pendants, compact safely tied bolas at belt. No warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Tehuelche-inspired Patagonian scout. Tall robust adult woman, mature strong jaw and high cheeks, focused confident half-smile, long black hair in a loose thick braid. Warm brown fitted hide sleeveless wrap top with open neckline, bare arms, small waist gap, knee-length ochre wrap skirt. Guanaco-fur cloak hanging behind one shoulder, painted geometric leather belt, simple stone and shell pendants, compact safely tied bolas at belt. No warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/patagon_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-721c57ac-3f8f-4ed3-9409-958beb709de6.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/patagon.png",
+      "face_file": "images/portraits/folk-join/patagon_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/patagon_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-01974062-4dfd-4ff9-bc15-e56ce8d36c70.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-7f0ec86a-4ca5-4753-b6e9-429186323897.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-d6d6ab1a-de2b-47bc-8e52-2895b403ed4b.png"
+      ]
+    },
+    {
+      "id": "folk_selknam",
+      "name": "셀크남",
+      "region": "남미",
+      "reference_numbers": [
+        3,
+        18
+      ],
+      "refs": [
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-a7502e86-b1cf-4de5-a52a-d4469a940ce0.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-0d55e9a5-817e-4b60-ae0f-a4405acbb389.png"
+      ],
+      "design": "Selknam-inspired Tierra del Fuego scout. Mature broad cheekbones and a defined adult chin, deep brown eyes, composed warm smile; long dark windswept hair with one narrow braid. Russet fitted soft hide wrap top with open neckline and bare shoulder, narrow waist gap, charcoal brown knee-length hide wrap skirt, warm guanaco-fur cloak draped behind elbow. Restrained red ochre on temple, small shell and bone pendants, simple leather cord belt. No sacred ceremonial masks, no warbonnet.",
+      "prompt": "Use case: stylized-concept. Asset type: one transparent knee-up female companion portrait for a Korean Age-of-Sail adventure RPG. Create ONE original fictional Indigenous American ADULT WOMAN aged 29 to 34. Attached images are appearance and costume reference only, not edit targets: draw inspiration from face shape, eyes, hair and expression without copying a real person's exact identity. All characters must clearly look mature adults. DESIGN: Selknam-inspired Tierra del Fuego scout. Mature broad cheekbones and a defined adult chin, deep brown eyes, composed warm smile; long dark windswept hair with one narrow braid. Russet fitted soft hide wrap top with open neckline and bare shoulder, narrow waist gap, charcoal brown knee-length hide wrap skirt, warm guanaco-fur cloak draped behind elbow. Restrained red ochre on temple, small shell and bone pendants, simple leather cord belt. No sacred ceremonial masks, no warbonnet. STYLE: beautiful semi-realistic hand-painted digital oil illustration, nuanced expressive eyes and lips, softly painted natural skin and visible fabric/hide texture, refined game portrait quality, soft warm directional lighting with neutral fill. BODY AND CLOTHING: voluptuous mature adult figure with a large full bust and proportional anatomy. Bold open neckline, exposed shoulders and arms and some waist as specified, flattering practical fantasy adventure clothing; opaque fabric fully covers breasts and pelvis. Confident ordinary upright standing pose. COMPOSITION: portrait 2:3, ideally 1024x1536. Full head/hair and all hands inside frame with margin, head visible and face large enough for a face portrait crop. Frame from head to JUST BELOW BOTH KNEES, knees near lower edge, no shins, feet or shoes. One figure only, no alternate face inset. BACKGROUND: truly transparent alpha, absolutely no coloured or dark backdrop, gradient, halo, glow, scenic background or shadow plane. Constraints: distinct identity and costume, dark brown eyes, no generic repeated face. Costume is creative regional-inspired fantasy, not documentary historical reconstruction. No text, labels, border, watermark, logos, nudity or sexual pose.",
+      "face_key": "portraits/folk-join/folk_selknam_f_amer_v1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b086-6161-7e73-8ede-326e618cb5f0\\exec-dbaa0df4-692d-45ed-b35a-89bfc0905a21.png",
+      "workspace_source": "artifacts/folk-american-women-20261106/sources/folk_selknam.png",
+      "face_file": "images/portraits/folk-join/folk_selknam_f_amer_v1.webp",
+      "half_file": "images/portraits/folk-join/folk_selknam_f_amer_v1_half.webp",
+      "workspace_refs": [
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-a7502e86-b1cf-4de5-a52a-d4469a940ce0.png",
+        "artifacts/folk-american-women-20261106/references/codex-clipboard-0d55e9a5-817e-4b60-ae0f-a4405acbb389.png"
+      ]
+    }
+  ]
+}

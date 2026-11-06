@@ -4,7 +4,9 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 
 const PAGE = process.env.PAGE || pathToFileURL(path.resolve(__dirname, '..', 'index.html')).href;
 const FAKE_BETA = !process.env.PAGE;

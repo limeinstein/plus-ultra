@@ -3,7 +3,9 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); }
+catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const ROOT = path.resolve(__dirname, '..');
 let fail = 0;
 function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail++; }
@@ -35,17 +37,21 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       const hasItem = id => G.Game.state.player.items.some(x => x.id === id);
       function run(s, until) { const news = []; for (let i = 0; i < 20000 && G.U.dateNum(s.date) < until; i++) { s.date = G.U.addDays(s.date, 1); s.day++; EI.daily().forEach(x => news.push(x.text)); } return news; }
       out.data = { mates: G.EINDIA_MATES.map(id => G.MATE[id].g).join(''), figs: G.EINDIA_FIGS.every(id => G.HIST_FIG[id]) };
-      // ① 런던 출자 3,000 → 1604 정산 ×1.95
+      // ① 런던 출자 3,000 → 잉글랜드 동인도 회사 주식 6주(액면) → 1604 이익 배당 1주 475 (2026-11-06 주식 하나로)
       let s = fresh(1600, 10, 1, 38); out.ePend = EI.pending(); picks = [3000]; await EI.check();
-      out.eic = { inv: s.eindia.eic, gold: s.player.gold, item: hasItem('eic_charter'), smythe: said.some(t => t.startsWith('토머스 스마이스|')), lan: said.some(t => /레몬 즙/.test(t)), task: EI.html().replace(/<[^>]+>/g, ' '), again: EI.pending() };
+      out.eic = { inv: s.eindia.eic, gold: s.player.gold, sh: G.Company.state().shares.eic, founder: G.Company.state().founder.eic, item: hasItem('eic_charter'), smythe: said.some(t => t.startsWith('토머스 스마이스|')), lan: said.some(t => /레몬 즙/.test(t)), task: EI.html().replace(/<[^>]+>/g, ' '), again: EI.pending() };
       s.loc = { mode: 'sea', lon: 0, lat: 50 }; const n1 = run(s, 16040401);
       out.eicPay = { gold: s.player.gold, paid: s.eindia.eicPaid, news: n1.map(t => (t.match(/【([^】]+)】/) || [])[1]) };
-      // ② 암스테르담 VOC 10,000 → 1610 배당 75% → 1640 매도 (값 ×4)
+      // ② 암스테르담 VOC 10,000 → VOC 주식 20주 → 1610 배당 75% → 설립 출자자 혜택은 10년 안 · 주식을 다 쥐고 있을 때만 → 1640 거래소에서 판다
       s = fresh(1602, 5, 1, 24); picks = [10000]; await EI.check();
-      out.voc = { inv: s.eindia.voc, item: hasItem('voc_share'), lemaire: said.some(t => t.startsWith('이삭 르메르|')) };
+      out.voc = { inv: s.eindia.voc, item: hasItem('voc_share'), lemaire: said.some(t => t.startsWith('이삭 르메르|')), sh: G.Company.state().shares.voc };
       s.loc = { mode: 'sea', lon: 0, lat: 50 }; run(s, 16100501); out.vocDiv = s.eindia.vocDiv;
+      out.fdr = { y1610: G.Company.founder('voc') };
+      s.date = { y: 1640, m: 1, d: 1 }; out.fdr.y1640 = G.Company.founder('voc');
+      s.date = { y: 1605, m: 1, d: 1 }; G.Company.sell('voc', 1); out.fdr.sold1 = G.Company.founder('voc');
       s.date = { y: 1640, m: 1, d: 1 }; s.loc = { mode: 'city', city: 24, lon: G.CITY_DATA[24].lon, lat: G.CITY_DATA[24].lat }; const g1 = s.player.gold;
-      out.sellPend = EI.pending(); picks = ['sell']; await EI.check(); out.vocSell = { got: s.player.gold - g1, sold: s.eindia.vocSold, px: EI.vocPrice(1640) };
+      out.sellPend = EI.pending(); const n19 = G.Company.state().shares.voc, bid = G.Company.bid('voc'); G.Company.sell('voc', n19);
+      out.vocSell = { got: s.player.gold - g1, want: n19 * bid, left: G.Company.state().shares.voc || 0, px: EI.vocPrice() };
       // ③ 수왈리 — 해적과 싸워 마리암
       s = fresh(1612, 11, 1, 148); picks = ['help']; await EI.check();
       out.sw = { st: s.eindia.swally, mariam: has('mariam'), ring: hasItem('armenian_ring'), best: said.some(t => t.startsWith('토머스 베스트|')), alias: said.some(t => t.startsWith('아르메니아 아가씨|')), b: battles[0] && battles[0].name };
@@ -71,10 +77,11 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     });
     console.log('   ' + JSON.stringify(r));
     ok(r.data.mates === 'ffmm' && r.data.figs, '미인 둘(마리암·칸차나) · 미남 둘(이드리스·에드먼드) · 실존 인물');
-    ok(r.ePend && r.eic.inv === 3000 && r.eic.gold === 17000 && r.eic.item && r.eic.smythe && r.eic.lan && /3,000/.test(r.eic.task) && !r.eic.again, '① 런던: 스마이스의 출자 명부 · 랭커스터의 레몬 즙 · 금화 3,000 출자 · 수첩에 몫');
-    ok(r.eicPay.paid === 5850 && r.eicPay.gold === 22850 && r.eicPay.news.includes('동인도 회사 특허장') && r.eicPay.news.includes('동인도 회사의 정산'), '① 특허장 소식 · 1604년 첫 항해 정산 — 원금의 1.95배 (5,850)');
-    ok(r.voc.inv === 10000 && r.voc.item && r.voc.lemaire && r.vocDiv === 7500, '② 암스테르담: 이삭 르메르 · VOC 청약 10,000 · 1610년 첫 배당 75%(메이스) = 7,500');
-    ok(r.sellPend && r.vocSell.got === 40000 && r.vocSell.sold === 40000 && Math.abs(r.vocSell.px - 4) < 1e-9, '② 1640년 암스테르담 거래소 — 주가 ×4.0으로 40,000에 판다');
+    ok(r.ePend && r.eic.inv === 3000 && r.eic.gold === 17000 && r.eic.sh === 6 && r.eic.founder === 6 && r.eic.item && r.eic.smythe && r.eic.lan && /3,000/.test(r.eic.task) && /6주/.test(r.eic.task) && !r.eic.again, '① 런던: 스마이스의 출자 명부 · 랭커스터의 레몬 즙 · 금화 3,000 → 회사 주식 6주(액면) · 수첩에 몫');
+    ok(r.eicPay.paid === 2850 && r.eicPay.gold === 19850 && r.eicPay.news.includes('동인도 회사 특허장') && r.eicPay.news.includes('동인도 회사의 정산'), '① 특허장 소식 · 1604년 첫 항해 — 1주에 이익 475 (6주 → 2,850), 주식은 그대로');
+    ok(r.voc.inv === 10000 && r.voc.sh === 20 && r.voc.item && r.voc.lemaire && r.vocDiv === 7500, '② 암스테르담: 이삭 르메르 · VOC 청약 10,000 → 20주 · 1610년 첫 배당 75%(메이스) = 7,500');
+    ok(r.fdr.y1610 === true && r.fdr.y1640 === false && r.fdr.sold1 === false, '② 설립 출자자 혜택: 1610 있음 · 1640(10년 넘음) 없음 · 한 주라도 팔면 없음');
+    ok(!r.sellPend && r.vocSell.got === r.vocSell.want && r.vocSell.got > 0 && r.vocSell.left === 0 && r.vocSell.px > 1, '② VOC 주식은 하나 — 따로 팔던 몫은 없고 회사 주식으로 판다 (' + r.vocSell.got + '닢 · 액면의 ' + r.vocSell.px.toFixed(2) + '배)');
     ok(r.sw.st === 'won' && r.sw.mariam && r.sw.ring && r.sw.best && r.sw.alias && /해적/.test(r.sw.b) && r.swNo.how === 'leave' && r.swNo.again === false && r.swNo.later === true, '③ 수왈리 해전의 혼란 — 해적과 싸워 마리암 하코비안 · 물러서면 180일 뒤 다시');
     ok(r.jk.st === 'bribe' && r.jk.kancana && r.jk.gong && r.jk.gold === 17500 && r.jk.coen && r.jk.fights === 0 && r.jkLost.how === 'lost' && !r.jkLost.kancana, '④ 자야카르타의 불 — 금화로 피란길을 열어 칸차나 · 싸움에 지면 다음에');
     ok(r.bd.st === 'won' && r.bd.idris && r.bd.seed && /반다/.test(r.bd.b), '⑤ 반다의 비극 — 육두구 묘목을 안은 이드리스');

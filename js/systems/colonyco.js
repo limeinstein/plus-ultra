@@ -2,8 +2,9 @@
    「네덜란드 서인도 회사(1621) · 프랑스 동인도 회사와 퐁디셰리(1664~1674) · 덴마크의 트랑케바르(1620) · 신스웨덴(1638) · 쿠를란트의 토바고(1654) · 스코틀랜드의 다리엔(1698) 생성 이벤트」
    사람·조정값: js/data/colonyco.js (G.BALANCE.colonyCo). 역사는 바뀌지 않는다.
    ■ 도시에 들어설 때 (js/scenes/city.js)
-     ① 암스테르담 1621.6.3~1623: 우셀링크스(정착지)와 열아홉 이사(사략)의 다툼 · 청약 → 1628.9.8 피트 헤인이 마탄사스에서 에스파냐 은 선단을 빼앗고 → 1629년 배당 div
-     ② 파리 1664.8.27~1665: 콜베르의 프랑스 동인도 회사 · 출자(왕의 신뢰) → 1675년 원금의 ret만 돌아온다
+     ① 암스테르담 1621.6.3~1623: 우셀링크스(정착지)와 열아홉 이사(사략)의 다툼 · 청약 → 1628.9.8 피트 헤인이 마탄사스에서 에스파냐 은 선단을 빼앗고 → 1629년 1주에 액면의 div 배당
+     ② 파리 1664.8.27~1665: 콜베르의 프랑스 동인도 회사 · 출자(왕의 신뢰) → 1675년 장사가 시원치 않다는 소식 (주가가 곡선대로 떨어진다)
+     청약·출자는 서인도 회사·프랑스 동인도 회사의 주식이 된다 (G.Company.subscribe — 청약 기간 안이면 액면, 그 뒤 추가 출자는 그날 시세) 2026-11-06
      ④ 크리스티나 요새 1638.3.29~1641: 미누이트가 레나페의 마타호른에게서 땅을 산다
         (가) 공정한 흥정을 돕는다(웅변 speech면 더 좋게) (나) 뉴암스테르담에 알린다 — 네덜란드가 금화 bounty (다) 지켜본다
      ⑥ 에든버러 1696.2.26~8.31: 패터슨의 스코틀랜드 회사 · 출자 → 돌아오지 않는다 (다리엔의 실패)
@@ -56,6 +57,8 @@
   function later(key, how) { var b = st(); b[key] = null; b[key + 'How'] = how; b[key + 'Cool'] = S().day + 180; }
   function cooled(key) { var b = st(); return !(b[key + 'Cool'] > S().day); }
   function inWin(k) { var t = today(); return t >= k.from && t <= k.to; }
+  function subscribe(coId, paid, k) { return G.Company && G.Company.subscribe ? G.Company.subscribe(coId, paid, today() <= k.to) : 0; }
+  function shares(coId) { var b = G.Company && G.Company.state ? G.Company.state() : null; return b ? b.shares[coId] || 0 : 0; }
   function cityOpen(key) { var b = st(), k = K()[key], win = G.VoyagePlans ? G.VoyagePlans.window(k, G.VoyagePlans.isSubscription(key)) : k; return !!(b && !b[key] && cooled(key) && cityNow() === k.city && today() >= win.from && today() <= win.to); }
   function seaOpen(key) {
     var b = st(), k = K()[key], s = S(), l = s && s.loc; if (!b || b[key] || !cooled(key) || !l || l.mode !== 'sea' || l.lon == null || !inWin(k)) return false;
@@ -82,8 +85,9 @@
     ]); });
     var paid = await invest(k.opts, '서인도 회사 주식을 청약할까?', who('heeren'));
     if (paid == null) { b.wicCool = S().day + G.BALANCE.voyagePlans.deferDays; log('출자 결정을 미루었다 — 참여 기한 안에 다시 방문할 수 있다.'); return false; }
+    var n = paid ? subscribe('wic', paid, k) : 0;
     b.wic = paid || -1;
-    if (paid) { item('wic_share'); log('암스테르담에서 네덜란드 서인도 회사 주식을 금화 ' + num(paid) + '닢어치 청약했다.'); UI.toast('서인도 회사 청약 — 금화 ' + num(paid) + '닢', 'coin', 4800); }
+    if (paid) { item('wic_share'); log('암스테르담에서 네덜란드 서인도 회사 주식을 금화 ' + num(paid) + '닢어치 청약했다 — ' + n + '주.'); UI.toast('서인도 회사 청약 — ' + n + '주 (금화 ' + num(paid) + '닢)', 'coin', 4800); }
     refresh(); return true;
   };
 
@@ -98,8 +102,9 @@
     ]); });
     var paid = await invest(k.opts, '프랑스 동인도 회사에 출자할까?', who('colbert'));
     if (paid == null) { b.frCool = S().day + G.BALANCE.voyagePlans.deferDays; log('출자 결정을 미루었다 — 참여 기한 안에 다시 방문할 수 있다.'); return false; }
+    var n = paid ? subscribe('fr', paid, k) : 0;
     b.fr = paid || -1;
-    if (paid) { item('fr_eic_share'); trust('fr_king', k.trust); log('파리에서 콜베르의 프랑스 동인도 회사에 금화 ' + num(paid) + '닢을 출자했다. (프랑스 국왕의 신뢰 +' + k.trust + ')'); UI.toast('프랑스 동인도 회사 출자 — 프랑스 국왕의 신뢰 +' + k.trust, 'coin', 4800); }
+    if (paid) { item('fr_eic_share'); UI.toast('프랑스 동인도 회사 주식 ' + n + '주', 'seal', 4200); trust('fr_king', k.trust); log('파리에서 콜베르의 프랑스 동인도 회사에 금화 ' + num(paid) + '닢을 출자했다. (프랑스 국왕의 신뢰 +' + k.trust + ')'); UI.toast('프랑스 동인도 회사 출자 — 프랑스 국왕의 신뢰 +' + k.trust, 'coin', 4800); }
     else await play([['colbert', '…그렇소? 폐하께는 그대가 「신중한 분」이라고 아뢰겠소.']]);
     refresh(); return true;
   };
@@ -271,8 +276,10 @@
     news('darien', 'ship', '【다리엔】 스코틀랜드 회사의 배 다섯 척이 파나마 지협 다리엔의 칼레도니아 만에 닿아 「뉴에든버러」를 세웠다. 스코틀랜드가 제 손으로 세운 첫 식민지다.');
     news('darienFail', 'skull', '【다리엔의 실패】 열병과 굶주림, 잉글랜드 왕의 거래 금지령 끝에 다리엔의 스코틀랜드 이주민들이 정착지를 버리고 떠났다. 나라 돈의 4분의 1이 늪에 가라앉았다.' + (b.darienSub > 0 ? ' 그대가 낸 금화 ' + num(b.darienSub) + '닢도 돌아오지 않는다.' : ''));
     // 정산
-    if (b.wic > 0 && !b.wicDiv && t >= K().wic.divAt) { var d = Math.round(b.wic * K().wic.div); b.wicDiv = d; s.player.gold += d; out.push({ icon: 'coin', history: true, text: '【서인도 회사의 배당】 피트 헤인이 빼앗은 은 선단 덕에 서인도 회사가 액면의 50%를 배당했다 — 그대 몫 금화 ' + num(d) + '닢.' }); }
-    if (b.fr > 0 && !b.frPaid && t >= K().fr.payAt) { var p = Math.round(b.fr * K().fr.ret); b.frPaid = p; s.player.gold += p; out.push({ icon: 'coin', history: true, text: '【프랑스 동인도 회사의 정산】 회사의 장사는 시원치 않았다. 출자자들에게 원금의 일부만 돌아간다 — 그대 몫 금화 ' + num(p) + '닢(출자 ' + num(b.fr) + '닢).' }); }
+    // 정산 — 그날 회사 주식을 쥔 만큼 (G.Company.special)
+    var CO = G.Company, cw = G.COMPANY && G.COMPANY.wic, cf = G.COMPANY && G.COMPANY.fr;
+    if (CO && cw && !b.wicDiv && t >= K().wic.divAt) { var r1 = CO.special(cw, cw.face * K().wic.div); b.wicDiv = r1.gold || -1; if (r1.gold) out.push({ icon: 'coin', history: true, text: '【서인도 회사의 배당】 피트 헤인이 빼앗은 은 선단 덕에 서인도 회사가 1주에 액면의 50%를 배당했다 — 그대의 ' + r1.n + '주에 금화 ' + num(r1.gold) + '닢.' }); }
+    if (CO && cf && !b.frPaid && t >= K().fr.payAt) { var n2 = shares('fr'); b.frPaid = n2 ? 1 : -1; if (n2) out.push({ icon: 'chart', history: true, text: '【프랑스 동인도 회사의 장사】 회사의 장사는 시원치 않다. 첫 출자자들의 몫은 액면에 한참 못 미친다 — 그대의 ' + n2 + '주는 오늘 1주에 금화 ' + num(CO.px(cf)) + '닢 (액면 ' + num(cf.face) + '닢).' }); }
     return out;
   };
 
@@ -304,8 +311,7 @@
   CC.html = function () {
     var s = S(), b = s && s.colonyCo; if (!b) return '';
     var li = [];
-    if (b.wic > 0 && !b.wicDiv) li.push('네덜란드 서인도 회사 주식 금화 ' + num(b.wic) + '닢어치 — 배당을 기다린다');
-    if (b.fr > 0 && !b.frPaid) li.push('프랑스 동인도 회사 출자 금화 ' + num(b.fr) + '닢');
+    if (b.wic > 0 && !b.wicDiv && shares('wic')) li.push('네덜란드 서인도 회사 주식 ' + shares('wic') + '주 (청약 금화 ' + num(b.wic) + '닢) — 배당을 기다린다');
     if (b.darienSub > 0 && !b.told.darienFail) li.push('스코틀랜드 회사(다리엔) 출자 금화 ' + num(b.darienSub) + '닢');
     if (!li.length) return '';
     return '<div class="sep"></div><h4 style="margin:0 0 8px">회사의 몫</h4><ul>' + li.map(function (x) { return '<li>' + U.esc(x) + '</li>'; }).join('') + '</ul>';

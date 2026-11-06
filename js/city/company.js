@@ -55,9 +55,9 @@
       var v = await UI.choose('주식을 산다 — 소지금 ' + num(s.player.gold) + '닢', list.map(function (x) { return { label: U.esc(x.name), icon: 'seal', right: num(X.ask(x)) + '닢 ' + pct(X.change(x)), value: x.id }; }).concat([{ label: '돌아간다', icon: 'boot', value: null }]), { icon: 'chart', width: 720 });
       if (!v) return; co = G.COMPANY[v];
     }
-    var ask = X.ask(co), have = X.state().shares[co.id] || 0, mx = Math.min(Math.floor(s.player.gold / ask), G.BALANCE.company.stock.cap - have);
-    if (mx < 1) { UI.toast(have >= G.BALANCE.company.stock.cap ? '이 회사 주식은 더 살 수 없다 (' + G.BALANCE.company.stock.cap + '주까지).' : '금화가 모자란다 (1주 ' + num(ask) + '닢).', 'coin'); return; }
-    var n = await UI.number({ title: co.name + ' ' + co.cert + ' 사기', text: '1주에 금화 ' + num(ask) + '닢 (액면 ' + num(co.face) + ' · 한 해 배당 약 ' + num(X.divPer(co)) + '닢). 가진 주식 ' + have + '주.', min: 1, max: mx, value: Math.min(mx, 10), unit: '주',
+    var ask = X.ask(co), have = X.state().shares[co.id] || 0, mx = X.canBuy(co), K2 = G.BALANCE.company.stock;
+    if (mx < 1) { UI.toast(have >= K2.cap ? '이 회사 주식은 더 살 수 없다 (' + K2.cap + '주까지).' : X.room() < ask ? '투자 한도에 닿았다 — 주식에 넣은 돈은 금화 ' + num(K2.investCap) + '닢까지 (지금 ' + num(X.invested()) + '닢). 팔면 다시 살 수 있다.' : '금화가 모자란다 (1주 ' + num(ask) + '닢).', 'coin', 5200); return; }
+    var n = await UI.number({ title: co.name + ' ' + co.cert + ' 사기', text: '1주에 금화 ' + num(ask) + '닢 (액면 ' + num(co.face) + ' · 한 해 배당 약 ' + num(X.divPer(co)) + '닢). 가진 주식 ' + have + '주. 투자 한도 남은 금화 ' + num(X.room()) + '닢.', min: 1, max: mx, value: Math.min(mx, 10), unit: '주',
       info: function (k) { return '합계 금화 <b>' + num(k * ask) + '</b>닢 · 남는 돈 ' + num(s.player.gold - k * ask) + '닢'; } });
     if (!n) return;
     var cost = X.buy(co, n);
@@ -90,7 +90,8 @@
         '<td style="text-align:right">' + (X.divPer(co) / p * 100).toFixed(1) + '%</td><td>' + X.spark(co, 140, 30) + '</td>' +
         '<td style="text-align:right">' + (n ? n + '주<br><small>' + num(n * p) + '닢</small>' : '<span class="muted">—</span>') + '</td></tr>';
     }).join('');
-    return '<table class="tbl co-quotes" style="width:100%;font-size:17px">' + th + tr + '</table><div class="muted" style="margin-top:8px;font-size:15px">사는 값은 주가보다 ' + Math.round(G.BALANCE.company.stock.spread * 100) + '% 비싸고 파는 값은 ' + Math.round(G.BALANCE.company.stock.spread * 100) + '% 싸다. 배당은 해마다 1월에 저절로 들어온다. 선단의 귀환·침몰, 세상의 큰 사건, 제독의 회사 임무가 주가를 움직인다.</div>';
+    var cap = G.BALANCE.company.stock.investCap;
+    return '<table class="tbl co-quotes" style="width:100%;font-size:17px">' + th + tr + '</table><div style="margin-top:8px;font-size:16px">주식에 넣은 돈 <b>' + num(X.invested()) + '</b> / ' + num(cap) + '닢 <small class="muted">(산 값의 합계 — 입회·설립 출자 몫 포함. 팔면 그만큼 다시 살 수 있다)</small></div><div class="muted" style="margin-top:4px;font-size:15px">사는 값은 주가보다 ' + Math.round(G.BALANCE.company.stock.spread * 100) + '% 비싸고 파는 값은 ' + Math.round(G.BALANCE.company.stock.spread * 100) + '% 싸다. 배당은 해마다 1월에 저절로 들어온다. 선단의 귀환·침몰, 세상의 큰 사건, 제독의 회사 임무가 주가를 움직인다.</div>';
   }
   async function quotes(only) { await UI.window({ title: only ? only.name + ' 주가' : '주식 시세표 — ' + U.fmtDate(S().date), icon: 'chart', width: 1080, html: quoteHtml(only), buttons: [{ label: '닫는다', value: 1, cls: 'navy' }] }).result; }
 
@@ -155,15 +156,15 @@
       return;
     }
     var why = X.joinBlock(co), founder = X.founder(co), fee = founder ? 0 : X.fee(co), p = X.px(co);
-    var stake = (founder ? co.fee : fee) * G.BALANCE.company.joinShare, n = Math.max(1, Math.floor(stake / p));
-    var html = ladderHtml(co) + '<div style="font-size:18px;margin-top:12px;line-height:1.6">' + (founder ? '<b class="good-text">설립 때 출자한 분이구려 — 출자금 없이 장부에 올리겠소.</b><br>' : '') +
-      '입회 출자금 금화 <b>' + num(fee) + '</b>닢 → ' + U.esc(co.cert) + ' <b>' + n + '</b>주(주당 ' + num(p) + '닢)를 받고 나머지는 입회금.' + (co.nation !== ({ PT: '포르투갈', ES: '카스티야' }[s.player.nation] || s.player.nation) ? ' <small class="muted">(다른 나라 사람이라 ' + G.BALANCE.company.foreignK + '배)</small>' : '') + (b.smug[co.id] ? ' <small class="bad-text">(밀수 전과 ' + b.smug[co.id] + '번)</small>' : '') +
+    var n = Math.max(1, Math.floor(fee * G.BALANCE.company.joinShare / p)), fy = G.BALANCE.company.founderYears;
+    var html = ladderHtml(co) + '<div style="font-size:18px;margin-top:12px;line-height:1.6">' + (founder ? '<b class="good-text">설립 때 출자한 분이구려 — 그때의 ' + U.esc(co.cert) + ' ' + (b.shares[co.id] || 0) + '주가 곧 출자이니, 출자금 없이 장부에 올리겠소.</b> <small class="muted">(회사가 선 뒤 ' + fy + '년 안, 설립 때 받은 주식을 다 쥐고 있을 때만)</small>' :
+      '입회 출자금 금화 <b>' + num(fee) + '</b>닢 → ' + U.esc(co.cert) + ' <b>' + n + '</b>주(주당 ' + num(p) + '닢)를 받고 나머지는 입회금.') + (!founder && co.nation !== ({ PT: '포르투갈', ES: '카스티야' }[s.player.nation] || s.player.nation) ? ' <small class="muted">(다른 나라 사람이라 ' + G.BALANCE.company.foreignK + '배)</small>' : '') + (!founder && b.smug[co.id] ? ' <small class="bad-text">(밀수 전과 ' + b.smug[co.id] + '번)</small>' : '') +
       '<br><small class="muted">한 회사에만 속할 수 있다. 다른 회사의 상관 창고·주문서·임무는 쓸 수 없고 그 회사 세관에 더 자주 걸린다.</small>' + (why ? '<br><span class="bad-text">' + U.esc(why) + '</span>' : '') + '</div>';
     var w = await UI.window({ title: co.name + ' 입회', icon: 'book', width: 1020, html: html, buttons: [{ label: '돌아간다', value: null }, { label: '입회한다', value: 'join', cls: 'green', disabled: !!why }] }).result;
     if (w !== 'join' || X.joinBlock(co)) return;
     var r2 = X.join(co); if (!r2) return;
     await UI.say('좋소! ' + U.esc(s.player.name) + ', 오늘부터 그대는 ' + co.name + '의 ' + X.rankName(co, 1) + '이오. 바다 건너 상관에 가면 회사 창고를 열어 줄 것이고, 중개 주문서도 맡길 수 있소. 무엇보다 — 이제 ' + G.CITY_DATA[co.hq].name + ' 세관은 그대 짐을 뒤지지 않소.', who);
-    UI.toast(co.name + '에 입회했다 — ' + co.cert + ' ' + r2.shares + '주', 'seal', 5600);
+    UI.toast(co.name + '에 입회했다' + (r2.shares ? ' — ' + co.cert + ' ' + r2.shares + '주' : ' (설립 출자자)'), 'seal', 5600);
     if (G.Audio) G.Audio.sfx('coin');
   }
   async function deliver(c, co) {
@@ -171,15 +172,16 @@
     if (!X.isMember(co)) { await UI.say('독점품은 회사 사람에게서만 사들이오.', who); return; }
     var held = X.monoHeld(co);
     if (!held.length) { await UI.say('짐칸에 우리 독점품이 없구려. ' + co.mono.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[co.mono[co.mono.length - 1]].name, '을/를') + ' 가져오면 시장보다 후하게 쳐주겠소.', who); return; }
-    var rows = held.map(function (id) { var q = S().fleet.cargo[id].q, pr = X.monoPrice(c, co, id); return { label: G.goodDot(id) + G.GOOD[id].name + ' ' + q + '통', right: '1통 ' + num(pr) + '닢 <small class="muted">(시장 ' + num(R.sellPrice(c, id)) + ')</small>', value: id }; });
+    var rows = held.map(function (id) { var q = S().fleet.cargo[id].q, pr = X.monoPrice(c, co, id), rc = X.monoRecent(co, id); return { label: G.goodDot(id) + G.GOOD[id].name + ' ' + q + '통', right: '1통 ' + num(pr) + '닢 <small class="muted">(시장 ' + num(R.sellPrice(c, id)) + (rc ? ' · 요즘 넘긴 ' + rc + '통' : '') + ')</small>', value: id }; });
     if (held.length > 1) rows.unshift({ label: '모두 넘긴다', icon: 'sack', value: '*' });
     rows.push({ label: '돌아간다', icon: 'boot', value: null });
-    var v = await UI.choose('독점품 납품 — ' + X.rankName(co, X.rank(co)) + ' 값 ×' + X.perk(X.rank(co)).premium, rows, { icon: 'sack', width: 760, text: '회사가 시장 값보다 후하게 사들이고, 시장 값은 무너지지 않는다.' });
+    var v = await UI.choose('독점품 납품 — ' + X.rankName(co, X.rank(co)) + ' 값 ×' + X.perk(X.rank(co)).premium, rows, { icon: 'sack', width: 760, text: '회사가 시장 값보다 후하게 사들인다. 한꺼번에 많이 넘길수록 값이 떨어지고, 한두 달 지나면 값이 돌아온다.' });
     if (!v) return;
     var ids = v === '*' ? held : [v], tot = 0, mer = 0;
     for (var i = 0; i < ids.length; i++) {
       var id = ids[i], have = S().fleet.cargo[id] ? S().fleet.cargo[id].q : 0, q = have;
-      if (v !== '*') { q = await UI.number({ title: G.GOOD[id].name + ' 납품', text: '1통에 금화 ' + num(X.monoPrice(c, co, id)) + '닢', min: 1, max: have, value: have, unit: '통' }); if (!q) return; }
+      if (v !== '*') { q = await UI.number({ title: G.GOOD[id].name + ' 납품', text: '첫 1통에 금화 ' + num(X.monoPrice(c, co, id)) + '닢 — 넘길수록 값이 떨어진다 (시장 ' + num(R.sellPrice(c, id)) + ')', min: 1, max: have, value: have, unit: '통',
+        info: (function (gid) { return function (k) { var g = X.monoValue(c, co, gid, k); return '받을 금화 <b>' + num(g) + '</b>닢 · 1통 평균 ' + num(g / Math.max(1, k)) + '닢'; }; })(id) }); if (!q) return; }
       var r = X.deliverMono(c, co, id, q); tot += r.value; mer += r.merit;
     }
     if (tot) { await UI.say(U.pick(['좋은 물건이오. 앤트워프 상인들이 줄을 서겠군.', '장부에 적었소. 회사가 그대를 잊지 않을 것이오.', '이만하면 이번 배당이 두둑하겠소!']), who); UI.toast('독점품을 넘겼다 — 금화 +' + num(tot) + (mer ? ' · 공헌 +' + mer : ''), 'coin', 5000); if (G.Audio) G.Audio.sfx('coin'); }

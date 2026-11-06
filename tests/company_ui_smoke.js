@@ -104,7 +104,7 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     await page.waitForTimeout(400);
     const title2 = await page.evaluate(() => document.querySelector('.cmdmenu h3') && document.querySelector('.cmdmenu h3').textContent);
     cmds = await page.evaluate(() => [...document.querySelectorAll('.cmdmenu .cmd')].map(d => d.textContent.trim()));
-    ok(/VOC/.test(title2 || '') && !cmds.some(t => /회사 창고/.test(t)), 'VOC 상관으로 바꾸면 경쟁사라 창고가 없다: ' + title2);
+    ok(/네덜란드 동인도|VOC/.test(title2 || '') && !cmds.some(t => /회사 창고/.test(t)), '네덜란드 동인도 상관으로 바꾸면 경쟁사라 창고가 없다: ' + title2);
     await page.screenshot({ path: path.join(OUT, 'company_factory_rival.png') });
     ok(errors.length === 0, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
   } catch (e) { console.error(e); fail++; }
