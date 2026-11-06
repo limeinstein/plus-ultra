@@ -19,6 +19,14 @@ DISC_CATS = ['geo', 'nature', 'ruin', 'treasure', 'creature', 'people', 'trade']
 # 기존 원본을 보존하면서 검증된 교체본을 게임의 기존 키로 사용한다.
 # scan() 뒤에 적용해야 manifest 재생성·웹 빌드에서도 연결이 되돌아가지 않는다.
 PREFERRED_FILES = {
+    'portraits/rivals/파랑새 깃발의 라야 알리': 'portraits/rivals/파랑새 깃발의 라야 알리_ref20261107.webp',
+    'portraits/rivals/파랑새 깃발의 라야 알리_half': 'portraits/rivals/파랑새 깃발의 라야 알리_ref20261107_half.webp',
+    'portraits/rivals/해골 깃발의 마리 르노': 'portraits/rivals/해골 깃발의 마리 르노_ref20261107.webp',
+    'portraits/rivals/해골 깃발의 마리 르노_half': 'portraits/rivals/해골 깃발의 마리 르노_ref20261107_half.webp',
+    'portraits/rivals/모래톱의 아이샤 레이스': 'portraits/rivals/모래톱의 아이샤 레이스_ref20261107.webp',
+    'portraits/rivals/모래톱의 아이샤 레이스_half': 'portraits/rivals/모래톱의 아이샤 레이스_ref20261107_half.webp',
+    'portraits/rivals/탑성의 여주인 브리지드 버크': 'portraits/rivals/탑성의 여주인 브리지드 버크_ref20261107.webp',
+    'portraits/rivals/탑성의 여주인 브리지드 버크_half': 'portraits/rivals/탑성의 여주인 브리지드 버크_ref20261107_half.webp',
     'portraits/mates/dl_cuiyan': 'portraits/mates/dl_cuiyan_ref20261106.webp',
     'portraits/mates/dl_cuiyan_half': 'portraits/mates/dl_cuiyan_ref20261106_half.webp',
     'portraits/mates/dl_wangwei': 'portraits/mates/dl_wangwei_ref20261106.webp',
