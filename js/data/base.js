@@ -562,6 +562,11 @@
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)
     life: { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2, kidBond: 3 },
+    // 해적의 소굴 (js/systems/pirate_lair.js · 자료 js/data/pirate_lairs.js — 2026-11-06 사용자 요청)
+    //   kills: 한 바다에서 이름난 해적을 몇 명(서로 다른 사람) 무찌르면 소굴이 드러나나 · chiefs: 소굴을 지키는 두목 수(차례로 무찌른다)
+    //   near: 소굴 앞바다(배를 대는 곳에서 °) · spawn: 두목 함대가 나타나는 거리(°) · cool: 두목 함대를 놓치거나 졌을 때 다시 나올 때까지(일)
+    //   nextChief: 첫 두목을 이긴 뒤 둘째가 나오기까지(일) · ships·K: 두목 함대 척수(둘째 두목은 +1)·세기 · fame(해전 명성)·gold: 소굴을 손에 넣었을 때
+    lair: { kills: 3, chiefs: 2, near: 2.5, spawn: [0.9, 1.6], cool: 20, nextChief: 2, ships: [4, 5], K: [0.75, 0.9], fame: 300, gold: 20000 },
     voyagePlans: { noticeDays: 730, subscriptionDays: 730, deferDays: 30, investigationDays: 730,
       investigationGold: 600, investigationFame: 15, maxTasks: 3, firstGold: 1000, firstFame: 30,
       tradeQty: 8, tradeValue: 300, contactDays: 14, contactLevels: [1, 3, 6], archiveFame: 5,
@@ -712,7 +717,8 @@
     // monthHome·monthGov: 달마다 본부인에게 들킬 확률(빈 자택 · 총독 관저) · visitWithWife: 본부인을 태우고 그 항구에 들어설 때
     // 들키면: 소지금+예금의 lossRate(적어도 lossMin닢)를 잃고, 본부인의 정 -love · coldDays일 동안 아이가 생기지 않고 배에 타지 않는다 · 숨은 부인은 본래 집으로(sideCold일 마음을 닫음)
     wives: { hideHome: 0.7, conceive: 0.3, maxSpouses: 12,
-      lodge: { monthHome: 0.06, monthGov: 0.03, visitWithWife: 0.5, lossRate: 0.25, lossMin: 30000, love: 40, coldDays: 180, sideCold: 120 } },
+      // monthLair: 해적 본부에 데려온 부인을 본부인이 알아챌 달마다 확률 (외딴 해적 섬이라 0 — 본부인을 태우고 들어가면 visitWithWife)
+      lodge: { monthHome: 0.06, monthGov: 0.03, monthLair: 0, visitWithWife: 0.5, lossRate: 0.25, lossMin: 30000, love: 40, coldDays: 180, sideCold: 120 } },
     kidVoy: { chance: 0.02, gap: 60 },   // 배에 탄 아이의 하루 (js/systems/kidvoyage.js): 바다 위 하루마다 일어날 확률 · 같은 아이는 며칠에 한 번까지
     family: { conceive: 0.35, gapDays: 300, perMother: 5, sons: 5, daughtersPer: 2, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)

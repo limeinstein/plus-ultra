@@ -70,6 +70,7 @@
     if (a.crew) { var ev = crewEver(), had = a.crew.filter(function (id) { return !!ev[id]; }); rows.push({ crew: true, ids: a.crew, got: had, count: had.length, n: a.n || a.crew.length }); }
     if (a.wed) { var we = wedEver(), wd = a.wed.filter(function (id) { return !!we[id]; }); rows.push({ crew: true, wed: true, ids: a.wed, got: wd, count: wd.length, n: a.n || a.wed.length }); }
     if (a.chains) rows.push({ label: '끝까지 푼 사슬', count: AC.chainsDone().length, n: a.chains });
+    if (a.custom) rows = rows.concat(AC.rules[a.custom] ? AC.rules[a.custom]() : [{ label: a.desc, count: 0, n: 1 }]);   // 다른 파일이 셈을 맡는 업적 (해적왕 — pirate_lair.js · Dream Come True — fairy_home.js)
     if (a.everyReg) (G.REGIONS || []).forEach(function (rn, r) {
       rows.push({ label: rn, count: my.filter(function (d) { return d.reg === r; }).length, n: a.everyReg, small: true });
     });
@@ -255,6 +256,10 @@
   };
 
   /** 혼인 직후: 혼인 업적을 바로 알린다. 옛이야기의 네 아가씨를 모두 맞으면 전용 사건 그림도 함께 뜬다. */
+  /** 다른 파일이 셈을 맡는 업적(custom)의 규칙: AC.rules[이름] = function () { return [{ label, count, n }] } */
+  AC.rules = AC.rules || {};
+  /** 사건 뒤에 업적을 살피고 장면을 띄운다 (해적의 소굴을 손에 넣었을 때 등) */
+  AC.afterEvent = async function () { var got = AC.check(); await announce(got); return got; };
   AC.afterWed = async function (id) {
     var ev = wedEver();
     if (id && !ev[id]) ev[id] = U.dateNum(S().date);

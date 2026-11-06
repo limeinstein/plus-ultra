@@ -781,6 +781,8 @@
     if (G.Court) { var ctN = G.Court.spawn(st.npcs); if (ctN) { st.npcs.push(ctN); if (G.ShipSprite) G.ShipSprite.want(ctN.ships, true); return; } }
     // 사라진 왕녀: 레반트의 바르바리 해적 함대·홍해 요새의 함대 (js/systems/princess.js)
     if (G.Princess) { var prN = G.Princess.spawn(st.npcs); if (prN) { st.npcs.push(prN); if (G.ShipSprite) G.ShipSprite.want(prN.ships, true); return; } }
+    // 해적의 소굴: 찾아낸 소굴 앞바다에 들어서면 소굴의 두목이 함대를 몰고 나온다 (js/systems/pirate_lair.js)
+    if (G.Lair) { var lrN = G.Lair.spawn(st.npcs); if (lrN) { st.npcs.push(lrN); if (G.ShipSprite) G.ShipSprite.want(lrN.ships, true); return; } }
     // 여급의 귀띔: 그 앞바다에 들어서면 일러 준 상선대·군함대·해적이 나타난다 (js/systems/maidtip.js)
     // 특허 회사의 임무: 밀수선·경쟁사 무장 상선 · 귀환 선단을 노리는 습격대 · 경쟁사의 큰 화물선 (js/systems/company.js)
     if (G.Company) { var coN = G.Company.spawn(st.npcs); if (coN) { st.npcs.push(coN); if (G.ShipSprite) G.ShipSprite.want(coN.ships, true); return; } }

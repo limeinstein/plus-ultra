@@ -589,7 +589,7 @@
   /** 지금 사는 곳의 이름 (건물·수첩) */
   W.placeName = function (w) {
     if (!w.lodge) return W.name(w) + '의 집';
-    return (w.lodge.kind === 'home' ? '자택' : '총독 관저 별채') + ' — ' + W.name(w);
+    return (w.lodge.kind === 'home' ? '자택' : w.lodge.kind === 'lair' ? '해적 본부' : '총독 관저 별채') + ' — ' + W.name(w);   // lair: 해적 본부에 데려온 부인 (js/systems/pirate_lair.js)
   };
   /** 그 부인과 아이들을 다른 도시로 옮긴다 */
   function moveTo(w, city) {
@@ -629,7 +629,7 @@
   W.lodged = function () { return W.list().filter(function (w) { return w.lodge && !w.aboard; }); };
   /** 들켰다: 큰돈을 잃고, 본부인의 정이 식고, 숨어 지내던 부인은 본래 집으로 돌아간다. 돌려주는 값: 소식 한 줄 */
   W.lodgeCaught = function (w, how) {
-    var s = S(), p = P(), K = LC(), nm = W.name(w), wn = Fm().wifeName(), place = w.lodge.kind === 'home' ? '고향 자택' : W.cityName(w) + ' 총독 관저';
+    var s = S(), p = P(), K = LC(), nm = W.name(w), wn = Fm().wifeName(), place = w.lodge.kind === 'home' ? '고향 자택' : W.cityName(w) + (w.lodge.kind === 'lair' ? ' 해적 본부' : ' 총독 관저');
     var have = Math.max(0, p.gold || 0) + Math.max(0, p.bank || 0), loss = Math.min(have, Math.max(K.lossMin || 0, Math.round(have * (K.lossRate || 0))));
     var fromGold = Math.min(Math.max(0, p.gold || 0), loss); p.gold -= fromGold; p.bank = Math.max(0, (p.bank || 0) - (loss - fromGold));
     p.wifeLove = Math.max(0, (p.wifeLove == null ? 70 : p.wifeLove) - (K.love || 40));
@@ -650,7 +650,7 @@
     if (!p.wife) return out;
     W.lodged().forEach(function (w) {
       if (w.city === seat) out.push({ icon: 'ring', text: W.lodgeCaught(w, '같은 집에 살게 되었으니 숨길 수가 없었다.') });
-      else if (U.chance(w.lodge.kind === 'home' ? (K.monthHome || 0) : (K.monthGov || 0))) out.push({ icon: 'ring', text: W.lodgeCaught(w, w.lodge.kind === 'home' ? '입이 가벼운 하인이 편지로 일러바쳤다.' : '총독 관저를 드나드는 상인이 소문을 퍼뜨렸다.') });
+      else if (U.chance(w.lodge.kind === 'home' ? (K.monthHome || 0) : w.lodge.kind === 'lair' ? (K.monthLair || 0) : (K.monthGov || 0))) out.push({ icon: 'ring', text: W.lodgeCaught(w, w.lodge.kind === 'home' ? '입이 가벼운 하인이 편지로 일러바쳤다.' : w.lodge.kind === 'lair' ? '해적 섬을 드나드는 밀수꾼이 소문을 퍼뜨렸다.' : '총독 관저를 드나드는 상인이 소문을 퍼뜨렸다.') });
     });
     return out;
   };

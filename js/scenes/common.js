@@ -528,6 +528,7 @@
   // ---------------------------------------------------------------- resume from a loaded save
   G.Game.resume = function () {
     if (G.Colony) G.Colony.apply();      // 이 일지의 개척 도시를 도시 자료에 넣는다 (다른 것보다 먼저 — 개척 도시에 머물던 일지)
+    if (G.Lair) G.Lair.apply();          // 이 일지에서 찾은 해적 소굴 (js/systems/pirate_lair.js — 소굴에 머물던 일지)
     if (G.ColonySp) G.ColonySp.apply();   // 식민지의 후원자 (개척 도시 다음 — js/systems/colonysponsor.js)
     if (G.Names) G.Names.apply();
     if (G.Wander) G.Wander.apply();      // 철새 — 옛 저장에는 처음 불러올 때 생긴다

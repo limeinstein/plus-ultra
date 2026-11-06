@@ -422,6 +422,7 @@
     if (G.Gyeonwoo) html += G.Gyeonwoo.html();   // 견우와 직녀 — 항주 → 사카이 → 한산도
     if (G.Court) html += G.Court.taskHtml();
     if (G.VoyagePlans) html += G.VoyagePlans.summaryHtml();
+    if (G.Lair) html += G.Lair.html();   // 해적의 소굴: 바다마다 무찌른 이름난 해적·찾은 소굴·손에 넣은 섬 (js/systems/pirate_lair.js)
     if (G.Escort) html += G.Escort.html();     // 상선 호위
     if (G.TreasureHunt) html += G.TreasureHunt.html();   // 조합의 보물 지도 — 「지도를 펼친다」
     if (G.LittlePrince) html += G.LittlePrince.html();   // 별에서 온 소년의 지도 (js/systems/littleprince.js)

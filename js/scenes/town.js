@@ -53,12 +53,12 @@
 
   // 건물마다 화면에 그릴 높이
   var SIZE = { harbor: 405, shipyard: 385, trade: 360, market: 320, tavern: 345, inn: 352, church: 425,
-    library: 365, restaurant: 350, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372, inspector: 372, govhall: 445, museum: 380, gallery: 390, zoo: 360, tower: 400, company: 400, factory: 360, exchange: 410 };
+    library: 365, restaurant: 350, palace: 430, mansion: 372, guild: 362, home: 340, house2: 310, gate: 372, inspector: 372, govhall: 445, museum: 380, gallery: 390, zoo: 360, tower: 400, company: 400, factory: 360, exchange: 410, lairhq: 380 };
   // 거리에 늘어서는 차례 (왼쪽 = 바다 쪽, 오른쪽 = 성문 쪽)
-  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'restaurant', 'inn', 'guild', 'library', 'museum', 'gallery', 'church', 'mansion', 'inspector', 'palace', 'zoo', 'tower', 'company', 'factory', 'exchange', 'govhall', 'house2', 'home', 'gate'];
+  var ORDER = ['harbor', 'shipyard', 'trade', 'market', 'tavern', 'restaurant', 'inn', 'guild', 'library', 'museum', 'gallery', 'church', 'mansion', 'inspector', 'palace', 'zoo', 'tower', 'company', 'factory', 'exchange', 'lairhq', 'govhall', 'house2', 'home', 'gate'];
   // 도시마다 거리 한쪽에 서 있는 볼거리 (발견물이면 눌러서 설명을 본다 — T.inspect)
   // 아직 전용 그림이 없는 건물은 비슷한 건물 그림을 좌우로 뒤집어 쓴다
-  var SUBSTITUTE = { house2: 'home', inspector: 'mansion', govhall: 'palace', restaurant: 'inn', museum: 'library', gallery: 'library', zoo: 'mansion', tower: 'gate', company: 'guild', factory: 'trade', exchange: 'mansion' };   // 특허 회사의 본부·상관·거래소 (js/systems/company.js)   // 런던 탑(js/systems/tudor.js)은 성문 그림   // 전용 그림이 없으면 닮은 건물을 뒤집어 쓴다
+  var SUBSTITUTE = { house2: 'home', inspector: 'mansion', govhall: 'palace', restaurant: 'inn', museum: 'library', gallery: 'library', zoo: 'mansion', tower: 'gate', company: 'guild', factory: 'trade', exchange: 'mansion', lairhq: 'mansion' };   // lairhq: 해적 본부 (js/systems/pirate_lair.js)   // 특허 회사의 본부·상관·거래소 (js/systems/company.js)   // 런던 탑(js/systems/tudor.js)은 성문 그림   // 전용 그림이 없으면 닮은 건물을 뒤집어 쓴다
   var LANDMARKS = { 7: [['giralda', 0.60, 430], ['columns', 0.10, 250]] };
   // 발견물 자료(G.DISC)가 없는 볼거리의 설명
   var MARK_INFO = {

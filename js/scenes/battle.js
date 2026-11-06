@@ -1896,6 +1896,7 @@
       s.stats.wins++;
       if (G.SeaFolk) G.SeaFolk.afterBattle(st.npc, res, lines);   // 탐험 함대를 꺾으면 그 항해가 한 해 늦어진다
       if (G.Captains) G.Captains.afterBattle(st.npc, res, st.ships, lines);   // 이름난 선장·해적의 기함을 나포하면 사로잡는다 (seacaptains.js)
+      if (G.Lair) G.Lair.afterBattle(st.npc, res, st.ships, lines);   // 해적의 소굴: 이름난 해적 셋 → 소굴이 드러난다 · 소굴의 두목 둘 → 섬을 손에 넣는다 (pirate_lair.js)
       if (G.Court) G.Court.afterBattle(st.npc, res, st.ships, lines);   // 왕명: 나포·해적 토벌·왕녀 구출
       if (G.Company) G.Company.afterBattle(st.npc, res, st.ships, lines);   // 특허 회사의 임무: 단속·선단 지키기·경쟁사 나포 (js/systems/company.js)
       if (G.Princess) G.Princess.afterBattle(st.npc, res, st.ships, lines);   // 사라진 왕녀: 레반트의 해적 함대·요새의 함대
@@ -1928,6 +1929,7 @@
       if (caps.length) await prizeHolds(caps);     // 나포선의 식량·물·자재·교역품·따르겠다는 선원을 옮겨 싣는다
       if (G.Princess) { try { await G.Princess.tell(); } catch (e) { console.error(e); } }   // 사로잡은 두목의 실토 · 왕녀와의 만남
       if (G.Napoleon) { try { await G.Napoleon.tell(); } catch (e) { console.error(e); } }   // 바다에서 건진 소년 · 짐칸의 가족
+      if (G.Lair) { try { await G.Lair.tell(); } catch (e) { console.error(e); } }   // 해적이 털어놓은 소굴 · 소굴을 손에 넣은 날 (pirate_lair.js)
     } else if (res === 'flaglost') {
       // 기함을 잃고 흩어져 달아났다: 쫓기며 짐 절반을 버렸다
       var lostK = 0;

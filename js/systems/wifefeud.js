@@ -54,7 +54,7 @@
   /** 다툴 두 사람: 배에서 내린 사람과 그 도시에서 기다리던 사람을 먼저, 아니면 같은 도시에 사는 두 사람 */
   WF.pair = function (cid) {
     var ps = WF.present(cid), m = mem(), day = S().day, K0 = K();
-    function ok(a, b) { var d = m.pairs[pairKey(a, b)]; return d == null || day - d >= K0.pairCool; }
+    function ok(a, b) { if (WF.peace && WF.peace(a, b)) return false; var d = m.pairs[pairKey(a, b)]; return d == null || day - d >= K0.pairCool; }   // WF.peace: 다투지 않는 두 사람 (본가에서 함께 사는 동화의 공주들 — js/systems/fairy_home.js)
     var best = null;
     for (var i = 0; i < ps.length; i++) for (var j = i + 1; j < ps.length; j++) {
       var a = ps[i], b = ps[j]; if (!ok(a, b)) continue;

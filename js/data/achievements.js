@@ -13,7 +13,7 @@
 (function (G) {
   'use strict';
   var A = G.ACHIEVEMENTS = [];
-  G.ACHV_GROUPS = ['발견물 완성', '명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '재산', '전설과 사슬', '조합', '동료'];
+  G.ACHV_GROUPS = ['발견물 완성', '명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '재산', '전설과 사슬', '조합', '동료', '해적'];
   function a(group, id, name, desc, rule, fame, gold, title) {
     var o = { group: group, id: id, name: name, desc: desc, fame: fame, gold: gold, title: title || null };
     for (var k in rule) o[k] = rule[k];
@@ -238,4 +238,9 @@
     { crew: ['cinderella', 'snow_white', 'sleeping_beauty', 'little_mermaid'] }, 600, 30000, '옛이야기의 제독');
   a('동료', 'happily', 'Happily Ever After', '옛이야기의 네 아가씨와 모두 혼인했다. 그리고 오래오래 행복하게 살았답니다.',
     { wed: ['cinderella', 'snow_white', 'sleeping_beauty', 'little_mermaid'] }, 800, 50000, '동화의 끝');
+  a('동료', 'dreamcome', 'Dream Come True', '옛이야기의 네 공주와 본가에서 한 지붕 아래 함께 산다. 공주 출신이라 신분을 따지지 않아 아무도 다투지 않는다.',
+    { custom: 'fairyhome' }, 800, 50000, '꿈이 이루어진 집');   // js/systems/fairy_home.js
+  // ------------------------------------------------------------------ 해적 (2026-11-06) — js/systems/pirate_lair.js · js/data/pirate_lairs.js
+  a('해적', 'pirateking', '해적왕', '일곱 바다의 해적 소굴을 모두 손에 넣었다 — 지중해·대서양·북해·카리브·인도양·동남아시아·동아시아.',
+    { custom: 'lairs' }, 1500, 150000, '해적왕');
 })(window.G = window.G || {});
