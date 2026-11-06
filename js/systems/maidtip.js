@@ -82,7 +82,8 @@
     else ports = candPorts(c);
     if (!ports.length) return null;
     if (kind === 'pirate' && G.Scenes.sea && G.Scenes.sea.pirateChance) {
-      ports = ports.map(function (p) { return { p: p, w: G.Scenes.sea.pirateChance(p.lon, p.lat) }; }).sort(function (a, b) { return b.w - a.w; }).slice(0, 5).map(function (x) { return x.p; });
+      ports = ports.map(function (p) { return { p: p, w: G.Scenes.sea.pirateChance(p.lon, p.lat) }; }).filter(function (x) { return x.w > 0; }).sort(function (a, b) { return b.w - a.w; }).slice(0, 5).map(function (x) { return x.p; });   // 해적이 아직 없는 바다는 빼고 (pirate_activity.js)
+      if (!ports.length) return null;
     } else if (kind === 'merchant') {
       ports = ports.sort(function (a, b) { return (b.size || 1) - (a.size || 1); }).slice(0, 8);   // 큰 항구를 드나드는 상선대
     }

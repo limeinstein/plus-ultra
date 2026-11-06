@@ -229,6 +229,10 @@
       if (n.tip || !cand.length || !U.chance(B().namedPirate)) return n;   // 여급이 알려 준 해적 떼는 이름 없는 해적 (알려 준 대로)
       n.cap = U.pick(cand); boost(n, 0.2);
       n.label = CP.label(n);
+      if (G.PirateAct && G.PirateAct.calm() && !n.lairChief) {
+        n.hostile = false; n.calm = true;
+        if (G.UI && G.UI.toast) G.UI.toast(n.cap.name + '의 해적단이 수평선에 보인다 — 아직은 우리를 건드리지 않는다.', 'skull', 4200);
+      }   // 게임을 시작하고 몇 해: 보여도 먼저 덤비지 않는다 (pirate_activity.js)
       return n;
     }
     if (n.kind !== 'merchant' && n.kind !== 'navy') return n;
@@ -278,7 +282,7 @@
   };
   CP.encounterText = function (n, text, byMe) {
     var c = n.cap; if (!c) return null;
-    if (n.kind === 'pirate') return byMe ? c.name + '의 해적단 ' + n.n + '척이 있다. 어떻게 할까요?' : '제독! ' + c.name + '의 해적단입니다! ' + n.n + '척이 다가옵니다! — ' + c.desc;
+    if (n.kind === 'pirate') return byMe ? c.name + '의 해적단 ' + n.n + '척이 있다.' + (n.calm ? ' 아직은 우리를 건드리지 않고 지켜보기만 한다.' : '') + ' 어떻게 할까요?' : '제독! ' + c.name + '의 해적단입니다! ' + n.n + '척이 다가옵니다! — ' + c.desc;
     return null;
   };
 

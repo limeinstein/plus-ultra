@@ -566,6 +566,10 @@
     //   kills: 한 바다에서 이름난 해적을 몇 명(서로 다른 사람) 무찌르면 소굴이 드러나나 · chiefs: 소굴을 지키는 두목 수(차례로 무찌른다)
     //   near: 소굴 앞바다(배를 대는 곳에서 °) · spawn: 두목 함대가 나타나는 거리(°) · cool: 두목 함대를 놓치거나 졌을 때 다시 나올 때까지(일)
     //   nextChief: 첫 두목을 이긴 뒤 둘째가 나오기까지(일) · ships·K: 두목 함대 척수(둘째 두목은 +1)·세기 · fame(해전 명성)·gold: 소굴을 손에 넣었을 때
+    // 해적이 활동하는 바다 (js/systems/pirate_activity.js — 2026-11-07 사용자 요청)
+    //   reports: 그 바다의 발견물이 몇 개 보고되어야 해적이 나타나기 시작하나 · start: 처음 빈도(본래의 몇 배) · rampYears: 본래 빈도가 될 때까지(년)
+    //   always: 처음부터 활동하는 바다(왜구 · 바르바리 해적 · 모로코의 해적) · gate: 그 바다의 지리상 발견(이 발견물이 알려져야) · calmYears: 이름난 해적이 먼저 덤비지 않는 해(게임 시작부터)
+    pirateAct: { reports: 5, start: 0.2, rampYears: 10, always: ['east', 'med', 'atl'], gate: { amer: 'westroute', ind: 'indiaroute', sea: 'malacca' }, calmYears: 5 },
     lair: { kills: 3, chiefs: 2, near: 2.5, spawn: [0.9, 1.6], cool: 20, nextChief: 2, ships: [4, 5], K: [0.75, 0.9], fame: 300, gold: 20000 },
     voyagePlans: { noticeDays: 730, subscriptionDays: 730, deferDays: 30, investigationDays: 730,
       investigationGold: 600, investigationFame: 15, maxTasks: 3, firstGold: 1000, firstFame: 30,

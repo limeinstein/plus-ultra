@@ -30,6 +30,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // ① 허가장 전
     const r0 = await page.evaluate(() => {
       const SEA = G.Scenes.sea;
+      // 카리브는 서쪽 항로와 발견물 보고 다섯이 쌓여야 해적이 나온다 (js/systems/pirate_activity.js) — 이 시험은 사략선장 배수만 보므로 해적이 활동하는 바다로 둔다
+      G.PirateAct.kAt = () => 1;
       return { priv: G.Court.privateer(), k: G.Court.pirateK(), med: SEA.pirateChance(15, 38), car: SEA.pirateChance(-75, 18) };
     });
     ok(!r0.priv && r0.k === 1 && r0.med > 0 && r0.med > r0.car * 0.5, '허가장 전: 사략선장 아님 · 해적 확률 지중해 ' + r0.med.toFixed(3) + ' · 카리브 ' + r0.car.toFixed(3));

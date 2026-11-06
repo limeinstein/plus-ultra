@@ -766,7 +766,8 @@
   /** 하루에 해적 떼가 나타날 확률: 바다의 해적 빈도 × 난이도 × 상선 호위(해적이 더 꾄다) × 사략선장(같은 패로 여겨 덜 덤빈다 — js/systems/court.js) */
   function pirateChance(lon, lat) {
     var s = S();
-    return pirateRate(lon, lat) * (s.settings.diff === 'easy' ? 0.6 : 1) * (G.Escort ? G.Escort.pirateK() : 1) * (G.Court && G.Court.pirateK ? G.Court.pirateK() : 1);
+    return pirateRate(lon, lat) * (s.settings.diff === 'easy' ? 0.6 : 1) * (G.Escort ? G.Escort.pirateK() : 1) * (G.Court && G.Court.pirateK ? G.Court.pirateK() : 1) *
+      (G.PirateAct ? G.PirateAct.kAt(lon, lat) : 1);   // 지리상 발견과 보고가 쌓인 바다부터 해적이 점점 늘어난다 (js/systems/pirate_activity.js)
   }
   SEA.pirateChance = pirateChance;
   SEA.spawnNpcsForTest = function () { spawnNpcs(); };   // 시험용 (tests/privateer_smoke.js)
@@ -801,6 +802,7 @@
       // 해적 떼의 크기는 명성과 우리 함대 척수를 따른다 (배 한 척에 네 척이 몰려오지는 않는다)
       var n = kind === 'pirate' ? U.ri(1, Math.min(4, 1 + Math.floor(s.player.fame / ((G.BALANCE && G.BALANCE.pirateCountFame) || 1200)), s.fleet.ships.length + 1)) : U.ri(1, 3);
       var zone = G.Ships.zone(lon, lat), nation = kind === 'navy' ? G.Ships.navyNation(zone, s.date.y) : null;
+      if (kind === 'pirate' && G.PirateAct && !G.PirateAct.k(zone)) continue;   // 아직 해적이 활동하지 않는 바다 쪽에서는 솟아나지 않는다
       var K = kind === 'pirate' ? pirateK() : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));
       var ships = G.Ships.enemyTypes(kind, zone, nation, n, K, s.date.y);
       var npc = { id: Math.random().toString(36).slice(2), kind: kind, lon: lon, lat: lat, heading: U.rf(0, 6.28), n: n, K: K, spd: U.rf(0.9, 1.4), life: U.ri(6, 14), hostile: NPC_KIND[kind].hostile || (kind === 'navy' && s.player.notoriety > 40), nation: nation, zone: zone, ships: ships };
@@ -893,6 +895,7 @@
     // 회피는 전투의 실패가 아니라 따로 고르는 운영 선택이다 — 가능성을 미리 보여 준다
     var fleeP = U.clamp(0.35 + (R.fleetSpeed(S().loc.heading, curWind()) - n.spd) * 0.5 + R.skill('nav') * 0.08, 0.1, 0.9);
     var opts = [{ label: '싸운다', value: 'fight' }, { label: '도망친다 (약 ' + Math.round(fleeP * 100) + '%)', value: 'flee' }];
+    if (byMe && n.calm) opts = [{ label: '싸운다', value: 'fight' }];   // 먼저 덤비지 않는 이름난 해적: 싸우거나 그냥 둔다
     if (!byMe && n.kind === 'pirate' && !n.court && !n.princess) {
       opts.push({ label: '통행료를 낸다 (금화 ' + U.num(tollOf()) + '닢)', value: 'pay' });
       if (canPlead()) opts.push({ label: '사정한다 (털어 갈 것이 없다)', value: 'plead' });
@@ -930,7 +933,7 @@
   function approachNpc(n) {
     var s = S();
     if (G.Geo.dist(s.loc.lon, s.loc.lat, n.lon, n.lat) > 0.8) { setTarget(n.lon, n.lat, null); return; }
-    if (!n.hostile && !n.awed) { hail(n); return; }
+    if (!n.hostile && !n.awed && !n.calm) { hail(n); return; }   // calm: 처음 몇 해 먼저 덤비지 않는 이름난 해적 — 다가가면 싸울지 고른다
     encounter(n, true);
   }
   /** 적의가 없는 배와 신호를 주고받는다: 소식·시세·보급, 또는 공격 */
