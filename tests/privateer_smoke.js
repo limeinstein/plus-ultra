@@ -6,7 +6,10 @@
 'use strict';
 const path = require('path'), fs = require('fs');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); }
+catch (_) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
+const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = process.env.PAGE ? pathToFileURL(path.resolve(process.env.PAGE)).href : pathToFileURL(path.join(ROOT, 'index.html')).href;
 const OUT = process.env.OUT || path.join(ROOT, 'tmp', 'privateer');

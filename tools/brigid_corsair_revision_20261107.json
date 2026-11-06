@@ -1,0 +1,22 @@
+{
+  "id": "lairchief_north_0",
+  "name": "탑성의 여주인 브리지드 버크",
+  "key": "portraits/rivals/탑성의 여주인 브리지드 버크",
+  "date": "2026-11-07",
+  "mode": "built-in image_gen",
+  "prompt": "Create a revised fully clothed adult pirate-captain character illustration for Loop of Good Hope, based on the three references. Image 1 is the target Brigid Burke character: keep her established adult figure proportions and historical RPG painting style. Image 2 supplies the new facial proportions, blue-eyed upward gaze, gently parted lips, light natural freckles, soft facial expression, copper-red hair and loose side braid with face-framing strands. The character is an adult captain in her thirties. Give her a natural smooth complexion without the target's exaggerated weathering. Image 3 supplies the new costume and relaxed one-hand-on-hip pose: dark teal tricorn with bronze edging and a small ivory feather, ivory linen pirate blouse, red broad waist sash, diagonal brown leather weapon belts with ornate buckle, engraved leather bracers, dark teal knee breeches, long open split coat panels and sheathed cutlass. Follow that outfit's tailoring and neckline, with opaque linen and leather and natural fabric folds. Keep the copper side braid visible beneath the hat and her face turned slightly upward as in image 2. One hand on hip and the other at the cutlass belt. Polished detailed semi-realistic hand-painted 2D historical RPG art, consistent light and anatomy from face through neck and body, realistic woven cloth and leather, no photo collage or compositing seams. Vertical 1024x1536, complete hat/hair and hands safe inside frame, crop from head to just below both knees, figure continues to bottom edge; no feet. Genuine transparent alpha background, clean silhouette. No background, floor, cast shadow, writing, borders, watermark or additional people.",
+  "inputs": [
+    "C:/Users/User/AppData/Local/Temp/codex-clipboard-216c502f-3769-4a33-a8d1-1cb4dbc0a7e5.png",
+    "C:/Users/User/AppData/Local/Temp/codex-clipboard-586703e8-4dcb-48e6-afbf-90d77d4c3d7b.png",
+    "C:/Users/User/AppData/Local/Temp/codex-clipboard-b87156ec-ec30-4878-962e-5893618a98d6.png"
+  ],
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b157-0492-7a62-8e5b-7de5b85fb722\\exec-7b1cfbff-224b-4526-859a-6a6ea46f58d5.png",
+  "workspace_source": "artifacts/brigid-corsair-20261107/brigid.png",
+  "workspace_references": [
+    "artifacts/brigid-corsair-20261107/reference-1.png",
+    "artifacts/brigid-corsair-20261107/reference-2.png",
+    "artifacts/brigid-corsair-20261107/reference-3.png"
+  ],
+  "face_file": "images/portraits/rivals/탑성의 여주인 브리지드 버크_corsair20261107.webp",
+  "half_file": "images/portraits/rivals/탑성의 여주인 브리지드 버크_corsair20261107_half.webp"
+}
